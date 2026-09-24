@@ -119,6 +119,10 @@ export const gunnerAbilities: AbilityDef[] = [
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible', 'adds-equipment-crit'],
+    // The one magic-formula row that DOES roll the hit check: combat-core §2.9's Gunner table gives
+    // it Accuracy `Stat` ("use the §2.6 hit equation"). Every other magical action never rolls
+    // (hard rule 5, `hit.ts`), so this row must say so explicitly [single source: pbirdman].
+    canMiss: true,
     messageTemplate: '{user} uses Enchanted Ammo',
   },
   {

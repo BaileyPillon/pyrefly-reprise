@@ -7,6 +7,13 @@
  * §2.9.1 tables that carry an Accuracy column mark every ally-support row "—" (no check).
  * FFX makes the same carve-out in `battle/ffx/accuracy.ts` [ffx-combat-core §2.11].
  * Preflight: `docs/plans/ffx2-item-accuracy-review.md`.
+ *
+ * **Magic never rolls** (AGENTS.md hard rule 5; combat-fixes-0924 (a), FFX-2 only). Every §2.6 rule
+ * is about physical attacks ("physical attacks always connect", "party physicals never miss",
+ * Darkness: "physical attacks frequently miss"), and the §2.9 magic tables carry no Accuracy
+ * column. The one magic-formula row §2.9 marks `Stat` (Gunner's Enchanted Ammo) opts back in with
+ * `canMiss: true` on its data row. A numeric `accuracy` still wins: §2.9 calls it "a flat override".
+ * Preflight: `docs/plans/combat-fixes-0924-review.md`.
  */
 
 import type { AbilityDef, FFX2Combatant, StatusId } from '../common/types.ts';
@@ -38,6 +45,8 @@ export function isRestorative(ability: AbilityDef): boolean {
 export function hitPercent(user: FFX2Combatant, target: FFX2Combatant, ability: AbilityDef): number {
   if (typeof ability.accuracy === 'number') return Math.max(0, Math.min(100, ability.accuracy));
   if (ability.canMiss === false) return 100;
+  // Magic always hits, on either side; only a sourced `Stat` row opts back in (see the header).
+  if (ability.damageType === 'magical' && ability.canMiss !== true) return 100;
   // Status-only actions are gated by the §2.6a infliction formulas, not by the
   // physical hit check — the same carve-out §2.6 makes for Death and Eject.
   if (ability.formula === 'none') return 100;

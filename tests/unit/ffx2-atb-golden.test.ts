@@ -44,6 +44,20 @@
  * the Head and Tail in the same commit are inert here — nothing under
  * `src/battle/ffx2` reads `rewards.steal` (only the FFX-1 engine and two
  * unrelated FFX-2 tactics files for Leblanc/Seymour do).
+ *
+ * **Re-pinned a third time, for combat-fixes-0924 (a)** (branch
+ * `combat-fixes-0924`, 2026-09-24, `docs/plans/combat-fixes-0924-review.md`): a
+ * magical action no longer rolls the §2.6 hit check (hard rule 5), so it no longer
+ * draws from the seeded stream, and chapter 5's Nodes, Vegnagun, Shuyin and the
+ * party's Black Sky used to. Measured before re-pinning:
+ * under the old engine chapter 5 D=0 had evaded magic on 17 of 20 seeds and
+ * D=1500 on 9 of 10; with the roll still drawn and only the miss ignored (a
+ * throwaway probe, not shipped) exactly the seeds with **no** evaded magic
+ * (D=0 seeds 3, 15, 18; D=1500 seed 4) were byte-identical to the old hashes,
+ * so the only behaviour that moved is the magic miss. Chapter 4 casts no rolling
+ * magic, so `CH4_D0` and `CH4_D1500` are unchanged (recomputed, equal). After:
+ * zero evaded magic on every seed, D=0 still 20/20. The Active D=1500 arm moved
+ * from 2/10 to 0/10 wins (it pins hashes, not outcomes; disclosed in the plan).
  */
 
 import { describe, expect, it } from 'vitest';
@@ -59,12 +73,12 @@ const CH4_D0 = [
   '6a153f98a05af5cf', '5764b43c5c6b9c94', '2649ce030cbd66bc', 'de6d7169d7f08905', '7b311b79d378648d',
 ];
 
-/** Re-pinned for the Leg's drop id (commit 697c0380); see the file doc comment. */
+/** Re-pinned for combat-fixes-0924 (a), magic never rolls; see the file doc comment. */
 const CH5_D0 = [
-  '4060e4a504994063', 'd33a44317cede76e', '575152a11bb51f84', '1bf84d82749730e6', '51c9ee466cf972c6',
-  '595f91c4535f4404', '97b07648dda58a83', '645c967512a26409', 'ad14f28922cfdafd', 'd4937de1646a6724',
-  '0b3e5c50c402dea9', '61163b3e0e2a9eeb', 'f4e7d0a5cabdcd81', '2f1f597a16644f84', '935f83d4d32986e5',
-  'f286fa548be8d139', 'f499f3cd0d294b50', 'dce3a65478e9a1b6', 'e84edf58e2644b97', '728eec0cf1e60228',
+  'f5874befbb32bca2', '3d936ba1a11afdd9', '6e4e0fb5790b3f6a', '65a2f90ebd84a0a3', '5bcf9bc9c12b4f79',
+  '1f317c664da2fa56', 'f2bbb405d2f7559a', '2460bc9767b55825', '15798d31533b4ce0', 'b784d1b4630ce0af',
+  '1614585c2e961713', '1618b9ad2cbddc13', '5518e6ac6da67ffd', '00afb8e0097c71b9', '3d2f30a7ec6129ab',
+  'cdc6e3b1150fcdfa', '9a1120dac00c3a94', '80c71a5ec0bb6309', '9e3fcd2c8121445a', 'd4a565da312c37c1',
 ];
 
 /** Recorded after the hold / owner fixes (commit 1 of the track), before the speed lever. */
@@ -72,10 +86,10 @@ const CH4_D1500 = [
   'f7184d7b87948e2c', 'e162970a86a2268f', 'fc6c4f4b8b7cb240', '7f9abbf856f2464a', '4439b76d4c54cc7d',
   '51f22c7af66239a8', 'd73d41236dc23eb0', '042fd279eda61cb1', '82058d0ebeeadaeb', '4ec0c1f9c35887d7',
 ];
-/** Re-pinned for the Leg's drop id (commit 697c0380); see the file doc comment. */
+/** Re-pinned for combat-fixes-0924 (a), magic never rolls; see the file doc comment. */
 const CH5_D1500 = [
-  '42c0f14af18208fc', '8073b10b38c7f176', '7fbeccbf6e77cbcb', 'a70c9fdcaf9da8e1', '5b70805ce277e637',
-  '821d0a8767f86901', '61b47c12a565fe93', 'c836220858ca4677', 'af17a1e9675c1c38', '6323edf2656e86c4',
+  '236e6bcb26a247f3', 'a49c69b47306d7e3', 'ffea4915e5c151c0', 'a70c9fdcaf9da8e1', '7468cb4e44e99042',
+  'c151f9764f59a886', 'c4b8430493fbd119', 'e1574f1b0f92b4fc', '3701ee228cd5f640', 'ebe5074a81fc5dd8',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 
