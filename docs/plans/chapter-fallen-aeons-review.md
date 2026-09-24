@@ -255,5 +255,108 @@ first perceivable line: Bailey answers FA1–FA19 and picks O-1 to O-4 (O-5 and 
 
 ## Review
 
-Owed: an adversarial reviewer re-fetches the revids (Shiva 3980319, Anima 3980331, Cindy 3980350,
-Mindy 3980352, Sandy 3980354) and checks §4 against the code, the Yojimbo review's method.
+Adversarial review, 2026-09-24, by a sub-agent of the driver. **Game case: FFX-2 only.** The method
+follows the Yojimbo review:
+- re-fetch the wiki through `api.php?action=parse&prop=wikitext|revid` with a browser user agent;
+- read the engine;
+- open every option sheet and read it at phone width (780 px, twice a 390 px screen).
+
+GameFAQs, FFExodus and GamerGuides were **not** re-read, so claims that rest only on them are marked
+"not re-checked". Nothing under `src/`, `tests/`, `critic/`, `public/art` or `docs/target/` was touched,
+and no GPU was used.
+
+### R1. Sources (re-fetched)
+
+| Claim | Verdict | Evidence |
+|---|---|---|
+| Revids: Shiva 3980319, Anima 3980331, Cindy 3980350, Mindy 3980352, Sandy 3980354; *Magus Sisters (Final Fantasy X)* 4045223 | **CONFIRMED** | The same revids came back today |
+| HP 14,800 / 36,000 / 9,788 / 12,240 / 10,330. Mindy Eva 76, Luck 4. Cindy DEF 172 / MDEF 133. AP 8 on the wiki. Shiva's Agility is 124 on the wiki (F-3) | **CONFIRMED** | The infoboxes |
+| Shiva's AI: bands 0–64 and 65–99, the weights, +3 on her own attack, +5 when attacked, Diamond Dust at 100 and then back to 0. The wiki calls Diamond Dust non-elemental (F-5) | **CONFIRMED** | Shiva's `<pre class="ai">` block and prose. The wiki gives no Stop chance for Heavenly Strike: **the 30 is SinirothX only** |
+| Anima's AI: 4/5 Stare, 1/5 Pain, Oblivion at 100. Pain costs one level on six stats. Holy weak, four elements halved. The wiki prints Gravity as *Absorb* | **CONFIRMED** | The Anima page. Its prose contradicts itself: it calls Stare both "physical" and "magical damage that bypasses Magic Defense" |
+| Delta Attack needs all three sisters alive and every AC at 100 or more. It takes HP to 1 and MP to 0. The first kill disarms it. Kill Mindy first | **CONFIRMED** | The Cindy, Mindy and Sandy pages |
+| Research §3: every story aeon is immune to fractional damage `[verified: 2 sources]` | **CORRECTED** | Anima and all three sisters list `fract damage = Immune`. **Shiva's infobox does not**, and it lists no Reflect immunity either. For Shiva the claim is SinirothX only, and T2 must tag it that way |
+| Research §4.2: the sources agree on "every threshold" of the Sisters' AI `[verified: 2 sources]` | **CORRECTED** | The wiki says Not-So-Mighty Guard is "her first move", and Action 1 runs on "her second to eighth turns". Only SinirothX says the cycle **repeats** (Not-So-Mighty Guard again on turns 9, 17 and so on) |
+| AC +5 "when attacked" for every aeon (research §4, plan §2; FA8 tagged `[estimate]`) | **CORRECTED: a source conflict, not an estimate** | The wiki words the trigger three ways. Cindy and Mindy: "**targeted** by a character". Sandy: she "**receives damage** from an attack". Anima's AI dump: she attacks or "**receives damage**". Shiva: "receiving an attack". Put FA8 to Bailey tagged `[conflict]`. Sandy's and Anima's wording supports today's "landed damage" (FA8 b); Cindy's and Mindy's supports "every hostile action" (FA8 a). T10 still measures both |
+| Research §4.2 and §5: "Darkness cannot be evaded" | **Unsourced (backs FA-G6)** | None of the five wiki pages says so. The Mindy page recommends Darkness but says nothing about evasion. T0 still goes first |
+| The Sisters' looks: "insectoid armor". Sandy tall and slim, red, a mantis. Cindy rotund, blue and red, a ladybug. Mindy the smallest, orange, a bee, and she hovers | **CONFIRMED** | Revid 4045223 §Profile. The page adds that their fayth statue shows them "only with blonde hair" |
+| Spare Change at about 300,000 gil on Mindy; the guides' damage figures; F-1 (a Save Sphere per GamerGuides, none per FFExodus) | not re-checked | GameFAQs and walkthroughs only |
+| Plan FA15: the game plays one "Aeons" track for **every** aeon fight | **CORRECTED** | Research §6.3 has one source for this, and Bahamut is the exception ("Yuna's Ballad"). Say: "the aeon fights except Bahamut `[single source]`" |
+
+**Checked for invented numbers.** The `[derived]` figures hold:
+- 100 / 3 rounds up to 34 of Shiva's own actions, and 5 / 3 is about 1.7.
+- 3 hits × 5 + 3 = 18 a turn, so Diamond Dust comes about her sixth turn (the 3 hits is an `[estimate]`).
+- (15/16)^15 = 0.379.
+
+The build numbers in §3 match `src/data/ffx2/builds/farplane.ts`: Lv 46 / 48 / 50, 15 Remedies,
+12 Light Curtains, 12 Lunar Curtains and 200,000 gil. The concepts README labels its world-unit heights
+(Sandy 2.3, Cindy 1.7, Mindy 1.2, Shiva 2.6) as "ours". **No invented game number was found.**
+
+### R2. Engine claims (§4) against `src/battle/**`
+
+| # | Verdict | Evidence |
+|---|---|---|
+| 4.1 #1, the action counter | **CORRECTED: the mechanism is right, the example is wrong** | `mem`/`setMem` and `AiScript.onDamaged` exist (`engineHooks.ts:104`, `engine.ts:599`). But `bumpNodeCounter` (`vegnagun.ts:130`) is the Node's own colour counter: +1, rolling over at 4. It is a pattern to copy, not a counter to reuse, so T3 writes its own +3/+5 helper |
+| 4.1 #2, a group-level script through `EnemyGroupDef.aiScriptId` | **REFUTED for FFX-2** | Only the FFX setup applies the override (`battle/ffx/setup.ts:349`). The FFX-2 setup copies `enemy.aiScriptId` and never reads the group's (`battle/ffx2/setup.ts:147`), and every hook calls `aiScriptFor(unit.enemy?.aiScriptId)`. The data-only route is the Vegnagun precedent: the three sisters ship **one shared `aiScriptId`**, and the script branches on the unit's id (`vegnagun-head.ts:213`). The other route is to wire the group override into the FFX-2 setup. That is shared engine work and needs an absence test (T1) |
+| 4.1 #3, the chain carries HP, MP and statuses through `setupForNextLink` | **CONFIRMED** | `BattleScreenSetup.ts:80`, `BattleEncounterChain.ts:182` |
+| 4.1 #4 to #11 | **CONFIRMED** | Read at the cited lines: Stop (`statuses.ts:205`); the `str-down` to `eva-down` stacks, capped at `STAT_STACK_MAX` (`statuses.ts:176–183`); Itchy cleared by a spherechange; `percent-current` (`formulas.ts:178`); `piercing-magic`; a new random target for each hit (`resolve.ts:117`); `holy` in `ElementId`; `percent-total`; `gil` |
+| FA-G1 (nothing leaves exactly 1 HP) and FA-G2 (`percent-current` bases on `target.hp`; `extra.mpOnly` at `resolve.ts:339`) | **CONFIRMED** | One more thing for T1: `formulas.ts:330–337` sets every `percent-*` or `fractional` hit to 0 on a target that has `immune-to-percentage-damage`. The new Delta Attack key must stay clear of that check |
+| FA-G3: `notifyEnemiesDamaged` skips any amount of 0 or less | **CONFIRMED** | `engineHooks.ts:114` |
+| FA-G4: Regen heals with no AI hook | **CONFIRMED** | `heal(…, 'regen')` at `engineHooks.ts:34`. The only hooks are `onTurnResolved` and `onDamaged` (`internal.ts:222–224`) |
+| FA-G5: a defeat restarts from link 1 | **CONFIRMED** | In `BattleScreenFlow.ts:333–393`, a retry builds a new `BattleScreen` for the whole chapter |
+| FA-G6: Darkness has `canMiss: true` and races the target's Eva + Luck | **CONFIRMED** | `dark-knight.ts:65`; `hit.ts:38–71`, where `canMiss === false` is the only way past the race |
+| FA-G7: the guide lookup takes the first match | **CONFIRMED** | `src/engine/tactics/guide.ts:145` |
+| FA6: accessories model stats only, and Remedy cures Stop | **CONFIRMED** | `accessories.ts:28`; the Remedy entry in `effects-status.ts` lists `stop` |
+| "Not needed: Thinking Period"; F-10 says its meaning is undocumented | **CONFIRMED, with a correction** | The field already exists. `types.ts:2513` defines `thinkingPeriod` as the ATB ticks an enemy waits after its gauge fills; `setup.ts:152` copies it; `active.ts:96` reads `thinkingTicks`. Nothing ever sets `thinkingTicks`, so the field does nothing. `ffx2-vegnagun-shuyin.md` glosses 0 as "acts immediately", with no source. Leaving the Sisters at 0 matches today's behaviour. Say that, and do not claim the engine lacks the field |
+
+### R3. The option sheets (`docs/concepts/chapters/fallen-aeons/`, commit 91c4c05f)
+
+- **They exist: CONFIRMED.** `o1-sisters`, `o2-possessed`, `o3-road` and `o4-transitions` each have
+  a `sheet.jpg` 2,400 px wide and 1600x900 frames under the real Chapter V HUD. The withdrawn pilots are
+  kept, and each file name says why it was dropped.
+- **They match the research: CONFIRMED.**
+  - O-1 A: a red mantis with a scythe, a rotund blue-and-red Cindy, and the smallest sister, an orange
+    bee, hovering on her wings.
+  - O-2 B uses the house violet: the `ffx2-bahamut/idle.json` prompt has "violet eyes, glowing purple
+    veins, dark violet".
+  - O-3: a platform over a bright void, with the approved sky and spire kept.
+  - O-4: three storyboards, with the Save Sphere drawn as a placeholder.
+
+  The possessed look is labelled "not canon" (F-12). This review did **not** diff the O-2 pixels to test
+  the provenance claims (B keeps the line work, C keeps every figure pixel).
+- **On a phone, the sheets fail.** At 390 px wide, a three-across row leaves each frame about 120 px
+  wide. Captions shrink to about 4 px and the HUD cannot be read. Two things the recommendations depend
+  on disappear: O-3 B's two far platforms, and O-2's Farplane contrast row, which is the whole reason the
+  O-2 recommendation is conditional. The single 1600x900 frames read fine. When the driver shows Bailey,
+  send single frames or a one-column phone sheet, not the 2,400 px sheet alone.
+- **A README citation is wrong.** The quote "floating stone paths over a bright void" is from research
+  **§6.1**, not §9. CORRECTED.
+
+### R4. Presented as settled, but Bailey's call or an agent's guess
+
+1. **O-1 A's "clean pass" notes** (in the README). "Cindy's shell should have **black spots on red**"
+   is invented. The wiki says only "blue and red armor, modeled after a ladybug", and
+   `visual-bible.md` §1.22.6 asks for **red spots on blue**. The scythe growing from the forearm and the
+   abdomen behind Mindy come from the bible's shapes, which it tags `[estimate]`; no source gives them.
+   All three go to Bailey as `inferred`, not as fixes.
+2. **FA11: is the Anima painting approved?** The only "board-approved" wording is an agent's note in
+   `targets.json` (the Macalania tile, D-019). Anima is not in `approved-hashes.json`. The README rightly
+   shows Anima "pending FA11"; keep it that way. No final may be derived from it before Bailey says yes.
+3. **FA8 is a conflict between sourced wordings, not an `[estimate]`** (R1). Put both wiki wordings
+   to Bailey.
+4. **O-4 C's card says "HP and MP restored".** FA2 b promises a "full restore", but no source says
+   whether statuses (Stop, Pain's stacks, Itchy) clear at the Save Sphere; F-1 covers only healing. Ask
+   this together with FA2.
+5. **Two recommendations depend on other picks.** O-2's depends on O-3 and FA14, and O-4 B needs a Road
+   scene that does not exist yet (T5). The README says both. The driver should put O-2, O-3 and FA14 to
+   Bailey on one sheet.
+6. The contract files named in §4 and the `x2-*` ids are engineering choices that Bailey never sees,
+   so they are fine as stated.
+
+**Verdict: the preflight stands, with four corrections before T1 to T3 start:**
+1. Give the Sisters one shared per-enemy `aiScriptId` (4.1 #2 is refuted for FFX-2).
+2. Tag FA8 `[conflict]`.
+3. Make Shiva's fractional-damage immunity SinirothX only.
+4. Mark the Sisters' 8-turn repeat SinirothX only.
+
+The option sheets exist and match the sources. They need a phone-sized presentation, and the colour of
+Cindy's spots is Bailey's call.
