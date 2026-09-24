@@ -462,6 +462,54 @@
               "lenne/portrait: candidate 1 chosen by the install agent for canon and consistency"
             ]
           }
+        },
+        {
+          "label": "Speaker portrait: Nooj (FFX-2)",
+          "src": "docs/concepts/portraits/nooj-brother/card-nooj-C.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "note": "FFX-2 only. Nooj speaks first in chapter 5 (ffx2-vegnagun-shuyin), on a text-only card until installed. Independent 1:1 judge, 2026-09-24: C 7.1 (\"yes, just\"), A 6.6 and B 5.3 below the bar of 7. docs/target/decisions.json D-043.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll take all of your recommendations",
+            "how": "Bailey answered five option sheets sent together 2026-09-24 ~00:20 EDT with one reply, taking the recommended option on each",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "option C's sourced silhouette: both hair loops with red bands, blue glasses, machina hand on his left"
+            ],
+            "mustChange": [
+              "one repair pass on C: red suit (renders purple), a neutral or closed mouth (his chapter-5 beat is \"flat, resolved, suicidal\"), more ink weight toward the house style"
+            ],
+            "undecided": [],
+            "inferred": [
+              "options A and B were not picked; nothing on record says Bailey disliked any part of them"
+            ]
+          }
+        },
+        {
+          "label": "Speaker portrait: Brother (FFX-2)",
+          "src": "docs/concepts/portraits/nooj-brother/card-brother-A.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "note": "FFX-2 only, speaker id brother-x2 (not the shared brother id, which keeps the FFX evrae-airship lines on the text card until his FFX look is sourced). Brother has three comm lines in chapter 6 (ffx2-leblanc). Independent 1:1 judge, 2026-09-24: A 7.9, C 7.4, B 6.8 below the bar of 7. docs/target/decisions.json D-043.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll take all of your recommendations",
+            "how": "Bailey answered five option sheets sent together 2026-09-24 ~00:20 EDT with one reply, taking the recommended option on each",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "option A's pilot render as shown, no repair named"
+            ],
+            "mustChange": [
+              "his FFX-2 lines speak under a new speaker id, brother-x2, so the X-2 face never shows on the shared brother id's FFX lines"
+            ],
+            "undecided": [],
+            "inferred": [
+              "options B and C were not picked; nothing on record says Bailey disliked any part of them"
+            ]
+          }
         }
       ]
     },
@@ -738,6 +786,78 @@
           "state": "rejected",
           "pill": "Not chosen",
           "note": "No interruption at all: one line on the hint bar and a HOW TO PLAY page on demand. Not picked on 20 Sep 2026; kept for the record, not rejected art."
+        },
+        {
+          "label": "PR-0002: Yuna's slot moves clear of the FFX command stack",
+          "src": "docs/concepts/layout/pr-0002/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "note": "FFX only, chapters 1 and 3: the approved 5-row Ink & Gold command cascade covers more than a third of Yuna's quad at 1600x900 (round-09). A 2-row cap fixed it once but shrank approved chrome and was reverted (4b2cafc, rule 9). docs/target/decisions.json D-041.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll take all of your recommendations",
+            "how": "Bailey answered five option sheets sent together 2026-09-24 ~00:20 EDT with one reply, taking the recommended option on each",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "the approved 5-row command stack's own proportions, untouched"
+            ],
+            "mustChange": [
+              "option A: move party slot 0 (Yuna) right in per-chapter scene layout data, so her quad clears the stack's footprint"
+            ],
+            "undecided": [],
+            "inferred": [
+              "options B, C and D were not picked; nothing on record says Bailey disliked any part of them"
+            ]
+          }
+        },
+        {
+          "label": "PR-0012: the FFX-2 command-help slab",
+          "src": "docs/concepts/layout/pr-0012/sheet.png",
+          "state": "approved",
+          "delivery": "implemented",
+          "deliveryNote": "Built in src/ui/ffx2/FFX2BattleHud.ts and src/ui/ffx2/ffx2-hud.css (FFX2_COMMAND_HELP_PLACEMENT_RESOLVED); gated on the existing BATTLE HELP setting. Built by another session in this shared tree; not yet matched by a review.",
+          "note": "FFX-2 only. The description logic (src/ui/ffx2/commandHelp.ts) was built and correct; the slab that shows it was switched off (194fa87) because every placement inside .ffx2hud__command's cramped column drew over the party rows. docs/target/decisions.json D-040.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll take all of your recommendations",
+            "how": "Bailey answered five option sheets sent together 2026-09-24 ~00:20 EDT with one reply, taking the recommended option on each",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "option A: a full-width band at the top of the screen, pink bottom rule, printing the highlighted row's label and description on one line — FFX-2's own real Config menu has a Battle Help entry at this HUD level"
+            ],
+            "undecided": [],
+            "inferred": [
+              "options B, C and D were not picked; nothing on record says Bailey disliked any part of them"
+            ]
+          }
+        },
+        {
+          "label": "PR-0005-ffx: the turn cut-in slab covers the command menu",
+          "src": "docs/concepts/layout/pr-0005-ffx/sheet.png",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "note": "FFX only, chapters 1-3: the command menu takes keys while the approved Turn cut-in slab plays, but the slab sits over the same bottom-left region the FFX command cascade draws in, covering it for the ~0.76s hold. FFX-2's own ATB cut-in has no approved mockup and is unbuilt, so this sheet is FFX-only. docs/target/decisions.json D-042.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll take all of your recommendations",
+            "how": "Bailey answered five option sheets sent together 2026-09-24 ~00:20 EDT with one reply, taking the recommended option on each",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "the approved 620x880 turn cut-in slab's own geometry and art, untouched",
+              "the cut-in's existing frequency: one per party member per battle, unchanged"
+            ],
+            "mustChange": [
+              "option B: the live command cascade draws in a stacking layer above the full-size slab, a stacking-order change only"
+            ],
+            "undecided": [],
+            "inferred": [
+              "options A, C and D were not picked; nothing on record says Bailey disliked any part of them"
+            ]
+          }
         }
       ]
     },
@@ -958,6 +1078,34 @@
             ],
             "inferred": [
               "Round 09 PR-0093 (major, visual): the trio was staged at boss scale (worldHeight 4.1, `src/scenes/index.ts`'s `fromSceneBuild` hard-coded that for every scene), so 'short and stout' Ormi was the tallest figure on the field. Fixed by publishing this scene's own `partyHeight`/`enemyHeight` (`src/scenes/leblanc-last-room.ts`'s `LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna`/`.leblanc`) through `fromSceneBuild`, with 1.82/4.1 kept as the fallback for every scene that does not publish its own (chapters 1-5 unaffected, pinned by `tests/unit/chapters/leblanc-scene.test.ts`). A single scalar cannot give Ormi and Logos their own distinct heights — every Syndicate member is `isBoss`, so `BattlePresenterStage.ts`'s `worldHeightFor` scales all three off this one number — that would need a per-slot height table read by that file, which is out of this fix's scope (agent's inference, not asked of Bailey). Screenshot: docs/screenshots/chapters/pr-0093-scale.png (chapter 6, seed 1, real gotoChapter, PYREFLY_BROWSER=gpu)."
+            ]
+          }
+        },
+        {
+          "label": "Vegnagun's parts, chapter V (FFX-2)",
+          "src": "docs/concepts/chapters/vegnagun/parts/options.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "note": "FFX-2 only (chapter 5, Vegnagun with Shuyin). Fixes round-09/10 PR-0095 (the Bulwark, Redoubt and Node draw as hooded-cone placeholders) and PR-0015 (the green tail tip). Independent 1:1 judge, 2026-09-24: Bulwark C* 8.0, Redoubt C* 7.6, Node C 8.1, Tail A 8.6, all at or above the bar of 7; every separate-figure A/B option scored below it. docs/target/decisions.json D-044.",
+          "reaction": {
+            "date": "2026-09-24",
+            "words": "I'll take all of your recommendations",
+            "how": "Bailey answered five option sheets sent together 2026-09-24 ~00:20 EDT with one reply, taking the recommended option on each",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "Bulwark: option C*, rings on the body painting's own forelegs, not a separate figure",
+              "Redoubt: option C*, rings on the head painting's own tusk, with the \"LEFT REDOUBT\" label moved clear of the command menu",
+              "Node: option C, no separate figure — the HUD bars and intent card carry the Nodes, moved off the ground row to hang far overhead per research",
+              "Tail tip: option A, the shipped green blade recoloured to steel from its own luminance"
+            ],
+            "undecided": [
+              "whether the shipped art3 Vegnagun part paintings (tail, leg, body, head) are themselves an approved reference — not asked by this pick, no hash pins them",
+              "Redoubt C*'s Left Redoubt tusk position, a guess in the option (the painting shows one tusk, research describes two pairs)"
+            ],
+            "inferred": [
+              "every A and B figure option was not picked; nothing on record says Bailey disliked any part of them beyond the judge's structural findings"
             ]
           }
         }
