@@ -257,3 +257,78 @@ deploy while a deep review is owed needs Bailey's words.
 
 **Verdict: PROCEED.** Eighteen mechanics already work (§4.1), shatter included; new: the drain seam,
 a stored phase, the combo, Desperado. Nothing perceivable until B1–B16 and O-1 to O-6 are picked.
+
+## Review (adversarial, 2026-09-24, FFX only)
+
+Checked by a sub-agent of the driver against (a) the FF Wiki re-fetched through `api.php`
+(revids: *Seymour Natus* 4017136, *Mortibody* 4017446, *Trigger Command* 4004212,
+*Final Fantasy X enemy abilities* 4008011; all four **match** the research's Sources list,
+so the text is the text the research read), (b) `src/battle/**` on main at 20a97838,
+(c) the option sheets in `docs/concepts/chapters/natus/`, looked at scaled to a 390 px
+phone (1170 device px). The decompile was not re-run (no download, rule 11).
+
+### Research claims against the sources
+
+| Claim | Verdict | Evidence |
+|---|---|---|
+| Natus HP 36,000, MP 200, Overkill 3,500, AP 6,300/9,450, Gil 3,500, STR 30, MAG 25, AGI 21, Def/MDef printed 1, Luck 15 | CONFIRMED | wiki Natus infobox |
+| Natus Poison 50, poison% 4 (1,440 a tick), zanmato 4; immune Petrify, Slow, Doom, Delay, Magic/Armor/Mental Break, Threaten, demi, bribe; cannot escape | CONFIRMED | same (Threaten immune is the N-3 conflict, as stated) |
+| Mortibody HP 4,000, Def 50, MAG 20, AGI 28, Overkill 36,000, Armor Break 50, Provoke immune; wiki Luck 15 | CONFIRMED | wiki Mortibody infobox (N-4 as stated) |
+| Multi-ra DC 36 "Two allies", reflectable; Flare 60 (Flux 80), rank 5; Break Petrify infinite, reflectable; Banish Eject, only on aeons, immunity removed first | CONFIRMED | enemy-abilities table |
+| Desperado 468~529, strips Haste, Nul x4, Protect, Reflect, Regen, Shell; Shattering Claw 16 / 100 / 90 % PDR; Mortibsorption 4,000 / 3,000 / 2,000 / 1,000 onward | CONFIRMED | enemy-abilities table |
+| Thresholds, phase actions, Poison does not move the phase but Mortibsorption does, fires even if lethal; Talk Tidus/Auron +10 STR, Yuna +10 MDEF | CONFIRMED | wiki Natus "Battle" and "Strategy"; Trigger Command row (Tidus, Yuna, Auron) |
+| Phase boundaries "at 24,000" / "12,000 and below" (pseudocode `<=`) | CORRECTED | Both wiki pages say "drops **below** 24,000" and "**below** 12,000". The inclusive edge is ours, not sourced; T3 follows "below" or labels the edge `[estimate]` |
+| B7 lists "Multi-ra's two targets" as unsourced; N-G4 cites only "two allies" | CORRECTED | wiki Natus: "targeting two **different** party members **if possible**" (single source). B7's third part is sourced: distinct per hit with a same-target fallback, not a Bailey call |
+| N-5: what the Desperado ladder counts is unstated, "whether Protect or Regen count" | CORRECTED (partly) | wiki Mortibody names the counted statuses: Haste, Shell, Reflect, NulElement (Protect and Regen are not in the list). Per character vs party-wide is still unstated; single source. B6 = a still stands |
+| Research §4.4 / §4.6: Mortibody "revives with that HP", pseudocode sets `mortibody.hp = mortiMax` **before** the decrement (4,000 back at 4,000) | CORRECTED | Contradicts research §2.1 ("then 3,000 / 2,000 / 1,000 / 1,000 after each") and the engine (`scripted.ts#mortibsorption`: drains the current max, then `maxHp = max(1000, max - 1000)`, `hp = maxHp`, so it returns at 3,000). The wiki sentence fits both. The O-2 strip shows "max 3,000" (the engine reading). Not a Bailey call: take the engine reading and label the revive HP `[derived]` |
+
+### Plan engine claims against `src/battle/**`
+
+| Claim | Verdict | Evidence |
+|---|---|---|
+| §4.1 #1 shatter ships: flag + `shatterChance`, eject, no Switch refill | CONFIRMED | `abilities.ts:354-358`, `hp.ts:251` comment and `ejectActor`, `commands.ts:222`, `predicates.ts:100 canSwitchIn`, Evrae Swooping Scythe `shatterChance: 50` |
+| #2 defeat when every active member is KO'd or petrified | CONFIRMED | `engine.ts:437-446` |
+| #3 drain, revive, 1,000 floor | CONFIRMED | `scripted.ts:35, 38, 131` (revive HP: see the Mortibsorption row above) |
+| #4 Banish after one aeon turn, overrides eject immunity | CONFIRMED | `seymour-flux.ts:154` `aeonTurns >= 1`; `hp.ts:257` skips the immunity only for `'banish'` |
+| #5, N-G2 counters after actions only; an enemy-side attacker returns early | CONFIRMED | `reactions.ts` `if (attacker.side === 'enemy') return out`; `seymourThresholdCounters(ai, fromPoison)` returns `[]` on Poison. Note for T1: Mortibsorption's damage has an **enemy** source, so the N-G1 seam cannot route it through `collectBossCounters` as it stands |
+| N-G1 drain wired to `mortiorchis` / `seymour-flux`, counters computed then dropped | CONFIRMED | `reactions.ts:145-156`, `void command` |
+| #8 Provoke at `targeting.ts:219` | CORRECTED | line 219 is enemy **Cover**; Provoke redirection is `targeting.ts:245-248` |
+| #12 `ai/seymour-anima-macalania.ts#nextElement` | CORRECTED | defined in `ai/macalania-rules.ts:340` (`ELEMENT_CYCLE` line 87: ice, lightning, water, fire). It steps the shared flag `MAC_ELEMENT_STEP`, so Natus needs its own key |
+| #10 type `'other'`, no `'special'`; `'fixed'`, `'user-max-hp'`, `can-target-dead`, `poisonTickPercent`, Stone Ward / Stoneproof, `canEscape` default false, `UNLISTED_CHAPTERS`, the Talk functions | CONFIRMED | `types.ts:1195`, `formulas.ts:209, 217`, `targeting.ts:109`, `ticks.ts:136`, `equipment.ts:226, 241`, `setup.ts:307`, `chapters-unlisted.ts:22`, `ai/index.ts:90, 107` |
+| N-G6 guide leak | CONFIRMED (by reading) | `guideForState` returns the first guide whose `bossIds` is on the board, and `ffx2-bahamut` lists `bahamut`. Not run (rule 3): T7 proves it with the party's Bahamut summoned |
+| Contract: `encounters.ts` `number` widened to 1..10 | CONFIRMED | today `1 ... 9` (`encounters.ts:117`) |
+
+### Option sheets: they exist, a phone read, a match against the research
+
+All seven sheets named by the options builder exist and are in 20a97838. At phone width the
+sheet headings and captions read; the HUD text inside the engine frames needs a zoom, as
+expected for a sheet. The per-frame `fight/*-phone.jpg` files are the legible phone read.
+
+| Finding | Verdict |
+|---|---|
+| O-4 B phase 2 puts **"Claw → Kimahri"** on the queue, and B and C print **"90 %"** as the next-turn risk | REFUTED as drawn. Shattering Claw hits a **random** character (research §4.1; GameFAQs: "not necessarily" the petrified one). The target is not known in advance, and 90 % applies only if the Claw lands on him (about 1 in 3 with three members up). The chip invents a target; the label should read "if the Claw hits him: 90 %". A's sentence says "would", which is right |
+| O-4 phone frames: Mortibody sits behind the "Kimahri COMMAND" plate and Natus | Flag: the second combatant hardly reads at 390 px (staging, not data) |
+| Desktop frames (O-1 to O-4) still show **FLEE**, and the enemy-move panel says **"Physical damage"** | Flag: both are Chapter VII leftovers. The party cannot escape (sourced) and Natus has no physical action. The phone set already drops Flee |
+| O-2 sheet: "at Natus's left" labelled sourced, with Mortibody at **screen**-left | Flag: Jegged's "left" (single source) does not say whose left; facing the camera, his left is screen-right. Check against the reference before the finals |
+| O-2 KO strip "back weaker, max 3,000" | Matches the engine, not research §4.6 (see above) |
+| O-3 C recommended, while the README says B matches the one FFX screenshot seen | Taste over fidelity is **Bailey's call** ("faithful core, showpiece surface"). C's plate is also a gate facade rather than a bridge, and no plate shows the green runner or the crimson canopies the README itself describes |
+| O-5 A described as "O-1 A's look" | CORRECTED: portrait A has a gold spiked halo and facial marks that O-1 A does not; picking portrait A approves a different look |
+| O-1 ring rotation, Natus at 1.3x, Mortibody's height | CONFIRMED labelled as ours |
+
+### Presented as settled but actually Bailey's call
+
+1. §3 "carry forward Chapter VIII's **Stone Ward** bracer and Reflect on Rikku" and "remove
+   Mighty Guard / White Wind": Stone Ward blunts the Break + Claw threat (the brute-force
+   line), so it is a difficulty decision, and it is not in B2 to B5. Add it to B5 or give it
+   its own row.
+2. B8's recommendation "a" (Natus's reflected spells move his phase) needs an exception to
+   the engine's player-side-only rule and is an estimate: correctly asked, keep it asked.
+3. Every O-4 frame uses the line-up Tidus / Yuna / Kimahri. That is B2 = a, still unpicked.
+
+**No invented numbers found in the plan.** Every number traces to the wiki revisions above,
+a decompile tag, or an `[estimate]` label. The sheet number that misreads (O-4's "90 %" as
+next-turn odds) is presentation, not data.
+
+**Review verdict: PROCEED**, with four corrections folded in before T1 and T3 start (the
+phase edge, the sourced distinct targets, the revive-HP reading, a separate element-step key)
+and the O-4 Claw chip and "90 %" label fixed before the sheet goes to Bailey.
