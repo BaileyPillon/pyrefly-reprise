@@ -8,9 +8,10 @@
  * both modes, **Wait by default** ({@link AtbMode}). The mechanic is
  * `research/ffx2-combat-core.md` §1.5: Active *"Time never stops, including
  * while browsing the item list or a magic submenu"*; Wait freezes time in a
- * submenu (the reading shipped — the whole menu, top level included — and why:
- * `docs/plans/ffx2-wait-mode-review.md` §2; the faithful top-level/submenu
- * split is built behind {@link DEFAULT_WAIT_SPLIT}). FFX is CTB and has no clock to run
+ * submenu: the clock runs at the top-level command list and holds in a
+ * submenu or the target cursor, {@link DEFAULT_WAIT_SPLIT} (the whole-menu
+ * hold shipped first, `docs/plans/ffx2-wait-mode-review.md` §2, and is still
+ * one `?wait=hold` away). FFX is CTB and has no clock to run
  * (`research/ffx-vs-ffx2-presentation.md` §4.3), so none of this reaches it —
  * `tests/unit/ffx-no-active-clock.test.ts` is the absence test (AGENTS.md
  * rule 14 / CHK-021).
@@ -51,19 +52,19 @@ export const DEFAULT_ATB_MODE: AtbMode = 'wait';
 export type MenuLevel = 'top' | 'deep';
 
 /**
- * **The Wait split is built and switched off by default** (D-029 follow-up 2,
- * built 2026-09-24 after Bailey's live report: *"none of the attacks/moves i
- * select take place until after i select moves for all 3 girls then all of
- * them go at once? is it supposed to be like that?"*). Off = the whole-menu
- * hold the live build ships, the dark launch `docs/plans/ffx2-wait-split-review.md`
- * recommends until Bailey answers A (faithful split) or B (keep the hold) with
- * its measured cost in front of him (chapters 5 and 6 get harder for a player
- * who thinks on the top list; the table is in `docs/handoff/ffx2-wait-mode.md`
- * §10), and until the Wait copy that would turn false is ruled on. `true` is
- * the one-constant switch for **A**; `?wait=split` tries it on any build
- * (`BattleScreenWiring.applyAtbMode`).
+ * **The Wait split is the default** (D-029 follow-up 2). Built 2026-09-24 after
+ * Bailey's live report: *"none of the attacks/moves i select take place until
+ * after i select moves for all 3 girls then all of them go at once? is it
+ * supposed to be like that?"*; shipped dark in hotfix 12.2 (dc2669ac); turned
+ * on by Bailey the same day: *"I'll go ahead with all your recommendations"*
+ * (A, the faithful split, and B, aiming at a target holds too, which is **our
+ * reading**: §1.5 says only "submenu"), then *"I'll go with all of your
+ * recommendations full speed"* for the three Wait lines that the split would
+ * otherwise have made untrue (`ui/coach/coachCopy.ts`, D-121). `?wait=hold`
+ * still forces the old whole-menu hold on any build, `?wait=split` the split
+ * (`BattleScreenWiring.applyAtbMode`). FFX-2 only.
  */
-export const DEFAULT_WAIT_SPLIT = false;
+export const DEFAULT_WAIT_SPLIT = true;
 
 /**
  * Whether the clock is held still by an open command menu: **Wait mode** with a

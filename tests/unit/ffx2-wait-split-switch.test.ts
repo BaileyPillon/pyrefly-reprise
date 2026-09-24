@@ -1,14 +1,13 @@
 // @vitest-environment jsdom
 /**
- * **FFX-2 Wait's split ships switched off, with a URL switch to try it**
- * (repair pass, 2026-09-24). FFX-2 only (AGENTS.md rule 14).
+ * **FFX-2 Wait's split is the default, with a URL switch back to the hold**
+ * (2026-09-24). FFX-2 only (AGENTS.md rule 14).
  *
- * The split (`research/ffx2-combat-core.md` §1.5) is built, but its measured
- * cost (chapters 5 and 6 harder for a player who thinks on the top list) and
- * the Wait copy it would make false are Bailey's call (D-029 follow-up 2, the
- * adversarial review in `docs/plans/ffx2-wait-split-review.md`). So the
- * default is the whole-menu hold the live build ships, `?wait=split` turns the
- * split on for a try, and `?wait=hold` pins the hold. Also covers the two
+ * The split (`research/ffx2-combat-core.md` §1.5) shipped dark in hotfix 12.2;
+ * Bailey then took it as the default (D-029 follow-up 2: *"I'll go ahead with
+ * all your recommendations"*, aiming holds too, our reading) together with the
+ * three Wait lines it needed (D-121). `?wait=hold` forces the old whole-menu
+ * hold on any build and `?wait=split` the split. Also covers the two
  * small pieces split out of over-cap files: `MenuWaker` and `MenuLevelRelay`.
  */
 
@@ -46,17 +45,26 @@ afterEach(() => {
   history.replaceState(null, '', '/');
 });
 
-describe('the default is the live whole-menu hold', () => {
-  it('a default engine under Wait holds the clock at the top list', () => {
+describe('the default is the faithful split', () => {
+  it('a default engine under Wait runs the clock at the top list and holds it in a submenu or while aiming', () => {
     const engine = ch4(new FFX2Engine({ atbMode: 'wait' }));
-    expect(engine.waitSplit()).toBe(false);
-    expect(topListTicks(engine)).toBe(0);
+    expect(engine.waitSplit()).toBe(true);
+    expect(topListTicks(engine)).toBeGreaterThan(0);
+    // 'deep' is what the HUD reports for a submenu and for the target cursor
+    // (ui/ffx2/CommandMenu.ts renderSub / renderTargets).
+    engine.setMenuLevel('deep');
+    const t = engine.state().ticks;
+    engine.tick(2000, { throughInput: true });
+    expect(engine.state().ticks).toBe(t);
   });
 
   it('applyAtbMode with no URL switch leaves the engine setting alone', () => {
-    const engine = new FFX2Engine({ waitSplit: true });
+    const engine = new FFX2Engine({ waitSplit: false });
     applyAtbMode(engine);
-    expect(engine.waitSplit()).toBe(true);
+    expect(engine.waitSplit()).toBe(false);
+    const on = new FFX2Engine({ waitSplit: true });
+    applyAtbMode(on);
+    expect(on.waitSplit()).toBe(true);
   });
 });
 
@@ -70,7 +78,7 @@ describe('?wait=split / ?wait=hold', () => {
 
   it('?wait=split turns the split on: the top list runs the clock, a submenu holds it', () => {
     history.replaceState(null, '', '/?wait=split');
-    const engine = new FFX2Engine({ atbMode: 'wait' });
+    const engine = new FFX2Engine({ atbMode: 'wait', waitSplit: false });
     applyAtbMode(engine);
     expect(engine.waitSplit()).toBe(true);
     expect(topListTicks(ch4(engine))).toBeGreaterThan(0);
@@ -80,9 +88,10 @@ describe('?wait=split / ?wait=hold', () => {
     expect(engine.state().ticks).toBe(t);
   });
 
-  it('?wait=hold pins the whole-menu hold', () => {
+  it('?wait=hold pins the whole-menu hold over the default split', () => {
     history.replaceState(null, '', '/?wait=hold');
-    const engine = new FFX2Engine({ atbMode: 'wait', waitSplit: true });
+    const engine = new FFX2Engine({ atbMode: 'wait' });
+    expect(engine.waitSplit()).toBe(true);
     applyAtbMode(engine);
     expect(engine.waitSplit()).toBe(false);
     expect(topListTicks(ch4(engine))).toBe(0);

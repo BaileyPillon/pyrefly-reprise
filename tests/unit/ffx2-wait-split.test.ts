@@ -57,9 +57,10 @@ function pick(engine: FFX2Engine, d: Input): Command {
 }
 
 describe('the policy', () => {
-  it('the split ships switched off (dark launch until Bailey answers A or B), and clockHeldByMenu reads it', () => {
-    expect(DEFAULT_WAIT_SPLIT).toBe(false);
-    expect(new FFX2Engine().waitSplit()).toBe(false);
+  it('the split is the default (Bailey took A and B, D-029 follow-up 2), and clockHeldByMenu reads it', () => {
+    expect(DEFAULT_WAIT_SPLIT).toBe(true);
+    expect(new FFX2Engine().waitSplit()).toBe(true);
+    expect(new FFX2Engine({ waitSplit: false }).waitSplit()).toBe(false);
     expect(new FFX2Engine({ waitSplit: true }).waitSplit()).toBe(true);
     // Wait with a menu open: the top level runs only with the split; a submenu always holds.
     expect(clockHeldByMenu('wait', 'yuna', 'top', true)).toBe(false);

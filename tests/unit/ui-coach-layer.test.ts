@@ -317,7 +317,10 @@ describe('the coach layer', () => {
     const line = markEl(root);
     expect(line, 'the mark shows under the Wait default too, with the Wait body').not.toBeNull();
     expect(line?.dataset['mark']).toBe('ffx2-gauge');
-    expect(line?.textContent).toContain("nobody moves while you're picking");
+    // Bailey's Wait body since the split (2026-09-24, draft 1a, D-121): the
+    // bubble goes up on the top-level list, where the clock runs.
+    expect(line?.textContent).toContain("Bar's full, she's up! Open a list and take your time, nobody moves.");
+    expect(line?.textContent).not.toContain("while you're picking");
     expect(line?.textContent, 'not the Active-only advice').not.toContain("don't wait for me");
   });
 
@@ -330,6 +333,23 @@ describe('the coach layer', () => {
     expect(line, 'the mark shows under Active too — the body picks, nothing is skipped').not.toBeNull();
     expect(line?.dataset['mark']).toBe('ffx2-gauge');
     expect(line?.textContent).toContain("don't wait for me");
+  });
+
+  it('FFX-2: an enemy acting under her top-level list leaves the line up; her own action takes it down', async () => {
+    // The clock runs under the top list (Active, and Wait's split, the default
+    // since D-029 follow-up 2), so an enemy can act while the line is up. Any
+    // action-start used to clear it: 0.8 s on screen in chapter 6 (measured).
+    const spy = new SpyHud();
+    const hud = withCoach('ffx2', spy, { reduceMotion: true, ffx2AtbMode: 'wait' });
+    hud.mount(root);
+    await hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);
+    expect(markEl(root)?.dataset['mark']).toBe('ffx2-gauge');
+    const start = (actorId: string): BattleEvent =>
+      ({ type: 'action-start', actorId, command: { kind: 'attack', targets: [] }, targets: [] }) as unknown as BattleEvent;
+    hud.onEvent(start('dr-goon'));
+    expect(markEl(root), 'an enemy action does not take her line down').not.toBeNull();
+    hud.onEvent(start('yuna'));
+    expect(markEl(root), 'her own action does').toBeNull();
   });
 
   // The Active-mode half of this pin ("Nothing paused · gauges running" comes

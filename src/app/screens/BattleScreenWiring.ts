@@ -99,10 +99,10 @@ export function applyAtbMode(engine: BattleEngine | null): void {
 }
 
 /**
- * `?wait=split` / `?wait=hold`: try Wait's faithful split (the clock runs at
+ * `?wait=split` / `?wait=hold`: force Wait's faithful split (the clock runs at
  * the top-level command list, holds in a submenu or the target cursor;
- * `research/ffx2-combat-core.md` §1.5) or the whole-menu hold on any build,
- * so Bailey can feel both before he rules on D-029 follow-up 2. Anything else
+ * `research/ffx2-combat-core.md` §1.5; the default since D-029 follow-up 2)
+ * or the old whole-menu hold on any build, to compare the two. Anything else
  * (or no parameter) keeps the engine default, `DEFAULT_WAIT_SPLIT`. A URL
  * switch for a decision, not a setting: it is read at chapter start and at
  * every pause close, never saved. FFX-2 only (FFX has no `setWaitSplit`).

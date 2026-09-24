@@ -92,20 +92,22 @@ export const BRIEFING_LINES: readonly BriefingLine[] = [
 ];
 
 /**
- * The fourth line under FFX-2's **Wait** mode (D-029 follow-up 3, Bailey
- * 2026-09-23: *"1, 2, 3 I'll take your recommendations on all please"*).
+ * The fourth line under FFX-2's **Wait** mode — **Bailey's pick, verbatim**
+ * (2026-09-24, *"I'll go with all of your recommendations full speed"*: draft
+ * 2a of `docs/concepts/coach/wait-split-lines.md`, D-121). It replaced the
+ * agent's inferred "the clock holds while you choose", which the Wait split
+ * (`battle/ffx2/active.ts` `DEFAULT_WAIT_SPLIT`) made untrue: the clock runs
+ * at the top-level command list and holds once a list is open or a target is
+ * being aimed at. The gold half is his approved C1 wording, word for word; the
+ * four plain words after it make it true under Wait.
  *
- * His approved line is true only when the X-2 clock runs under an open menu,
- * so it is shown only when `Settings.ffx2Atb` is `'active'`. Under Wait the
- * engine moves nothing while a command menu is open and runs between turns
- * (`docs/handoff/ffx2-wait-mode.md` §1); this line says exactly that and no
- * more. **Drafted by the agent, awaiting Bailey** (tile C1 `reaction.inferred`
- * in `docs/target/targets.json`). FFX-2 only in content; lines 1-3 never change.
+ * His approved line is shown only when `Settings.ffx2Atb` is `'active'`.
+ * FFX-2 only in content; lines 1-3 never change.
  */
 export const BRIEFING_WAIT_LINE: BriefingLine = {
   lead: 'In hers, ',
-  strong: 'the clock holds while you choose',
-  tail: '.”',
+  strong: 'the clock does not wait',
+  tail: '. A list stops it.”',
 };
 
 /** The four lines for the player's X-2 clock: Bailey's words under Active, the Wait line under Wait. */
@@ -128,16 +130,17 @@ export const BRIEFING_MS = 20_000;
  * open (`docs/handoff/ffx2-wait-mode.md` §1;
  * `tests/unit/ffx2-wait-mode.test.ts` "6 s with a menu open — no tick").
  *
- * {@link COACH_RUNNING_BADGE_WAIT} is the agent's draft, not Bailey's words —
- * recorded INFERRED on tile "Onboarding C1: Auron's briefing" in
- * `docs/target/targets.json` (rule 9), the same way {@link BRIEFING_WAIT_LINE}
- * was. It keeps Rikku's badge voice and shape ("phrase &middot; phrase") and
- * says only what the engine does: the menu itself is what is holding things.
+ * {@link COACH_RUNNING_BADGE_WAIT} is **Bailey's pick, verbatim** (2026-09-24,
+ * draft 3a of `docs/concepts/coach/wait-split-lines.md`, D-121), replacing the
+ * agent's inferred "Menu's up · gauges holding", which the Wait split made
+ * untrue: on the top-level list the gauges run. It keeps "gauges running" from
+ * his Active badge and states a rule, not a status, because the badge stays up
+ * for its whole fade even after the player opens a list.
  *
  * FFX-2 only — `CoachMark.ts` never shows this badge for an FFX mark.
  */
 export const COACH_RUNNING_BADGE_ACTIVE = 'Nothing paused &middot; gauges running';
-export const COACH_RUNNING_BADGE_WAIT = 'Menu&rsquo;s up &middot; gauges holding';
+export const COACH_RUNNING_BADGE_WAIT = 'Gauges running &middot; a list holds them';
 
 /** The FFX-2 running badge for the save's current clock mode. */
 export function coachRunningBadge(ffx2Atb: 'active' | 'wait'): string {
@@ -185,19 +188,24 @@ export const FFX_MARKS: readonly CoachMark[] = [
  * Bailey 2026-09-23). {@link FFX2_GAUGE_BODY_ACTIVE} is the original line,
  * true only under Active — every character really does "go at once". Under
  * Wait that is backwards advice, since the whole point of the mode is that
- * nobody moves while a menu is open (`docs/handoff/ffx2-wait-mode.md` §1).
+ * nobody moves while a list is open (`docs/handoff/ffx2-wait-mode.md` §1).
  * Commit 21f6270 (earlier the same day) skipped the whole mark under Wait
  * rather than invent the missing wording (hard rule 9: "never invent"
  * extends to teaching copy, not just game numbers). Bailey has since picked
  * one of three offered drafts, verbatim ("Wait line 1" —
- * `docs/target/decisions.json`), so {@link FFX2_GAUGE_BODY_WAIT} is now his
- * own words, not an inferred draft. `CoachLayer.chooseCommand` shows the mark
+ * `docs/target/decisions.json`). The Wait split then made "nobody moves while
+ * you're picking" untrue on the top-level list, where she is picking and the
+ * clock runs, so on 2026-09-24 Bailey took draft 1a of
+ * `docs/concepts/coach/wait-split-lines.md` (D-121), verbatim: every phrase of
+ * his D-030 pick, with the calm moved inside a list, where it is true. The
+ * bubble goes up as the top-level list opens, and it tells the player what to
+ * do there. `CoachLayer.chooseCommand` shows the mark
  * under **both** modes now, reading whichever body is true through
  * {@link ffx2GaugeBody}, and marks it seen the first time it is shown — in
  * whichever mode that was.
  */
 export const FFX2_GAUGE_BODY_ACTIVE = "“Bar's full, she's up — don't wait for me, we all go at once!”";
-export const FFX2_GAUGE_BODY_WAIT = "“Bar's full, she's up! Take your time, nobody moves while you're picking.”";
+export const FFX2_GAUGE_BODY_WAIT = "“Bar's full, she's up! Open a list and take your time, nobody moves.”";
 
 /**
  * `ffx2-gauge`'s body for the save's current clock mode — the only line in

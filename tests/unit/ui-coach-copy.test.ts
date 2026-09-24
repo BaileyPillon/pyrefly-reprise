@@ -20,6 +20,9 @@ import {
   COACH_RUNNING_BADGE_ACTIVE,
   COACH_RUNNING_BADGE_WAIT,
   coachRunningBadge,
+  FFX2_GAUGE_BODY_ACTIVE,
+  FFX2_GAUGE_BODY_WAIT,
+  ffx2GaugeBody,
   FFX2_MARKS,
   FFX_MARKS,
   markById,
@@ -32,6 +35,7 @@ function everyPlayerString(): string[] {
   const out: string[] = [];
   for (const l of [...BRIEFING_LINES, BRIEFING_WAIT_LINE]) out.push(l.lead, l.strong, l.tail);
   for (const m of ALL_MARKS) out.push(m.speaker, m.body);
+  out.push(FFX2_GAUGE_BODY_WAIT);
   // Strip the badges' HTML entities before the vocabulary grep (they are markup,
   // not player-facing spelling) but still catch a stray research id or acronym.
   out.push(COACH_RUNNING_BADGE_ACTIVE.replace(/&\w+;/g, ' '), COACH_RUNNING_BADGE_WAIT.replace(/&\w+;/g, ' '));
@@ -120,19 +124,29 @@ describe('onboarding copy deck', () => {
     expect(COACH_RUNNING_BADGE_ACTIVE).toMatch(/nothing paused/i);
     expect(COACH_RUNNING_BADGE_ACTIVE).toMatch(/running/i);
 
-    // Wait (the default since D-029): the engine holds every gauge while a
-    // command menu is open (tests/unit/ffx2-wait-mode.test.ts), so the badge
-    // must say the opposite of "nothing paused / gauges running" here.
+    // Wait (the default since D-029) with its split (the default since D-029
+    // follow-up 2): the gauges run on the top-level list and hold once a list
+    // is open (tests/unit/ffx2-wait-split.test.ts). Bailey's pick, verbatim
+    // (2026-09-24, draft 3a, D-121): a rule true in both places, not a status.
     expect(coachRunningBadge('wait')).toBe(COACH_RUNNING_BADGE_WAIT);
+    expect(COACH_RUNNING_BADGE_WAIT).toBe('Gauges running &middot; a list holds them');
     expect(COACH_RUNNING_BADGE_WAIT).not.toMatch(/nothing paused/i);
-    expect(COACH_RUNNING_BADGE_WAIT).not.toMatch(/gauges running/i);
-    expect(COACH_RUNNING_BADGE_WAIT.toLowerCase()).toMatch(/hold|paus|wait/);
+    expect(COACH_RUNNING_BADGE_WAIT.toLowerCase()).toMatch(/a list holds/);
 
     // Still the same badge shape: two short phrases joined by a middle dot.
     for (const badge of [COACH_RUNNING_BADGE_ACTIVE, COACH_RUNNING_BADGE_WAIT]) {
       expect(badge).toMatch(/&middot;/);
       expect(badge.replace(/&\w+;/g, ' ').length).toBeLessThan(48);
     }
+  });
+
+  it('the FFX-2 gauge line is Bailey’s words in each mode: D-030 under Active, draft 1a under Wait (D-121)', () => {
+    expect(ffx2GaugeBody('active')).toBe(FFX2_GAUGE_BODY_ACTIVE);
+    expect(FFX2_GAUGE_BODY_ACTIVE).toBe("“Bar's full, she's up — don't wait for me, we all go at once!”");
+    expect(ffx2GaugeBody('wait')).toBe(FFX2_GAUGE_BODY_WAIT);
+    expect(FFX2_GAUGE_BODY_WAIT).toBe("“Bar's full, she's up! Open a list and take your time, nobody moves.”");
+    // The old Wait body claimed a hold on the top-level list, untrue under the split.
+    expect(FFX2_GAUGE_BODY_WAIT).not.toMatch(/while you're picking/);
   });
 
   it('no player-facing string carries developer or wiki vocabulary (CHK-007, REQUIRED 14)', () => {

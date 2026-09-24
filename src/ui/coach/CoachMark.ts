@@ -137,7 +137,10 @@ export class CoachMark {
     // opposite of what the words above say. The badge is now mode-aware
     // (`coachRunningBadge` in `coachCopy.ts`), read at show time so a flip in
     // the same pause session is honoured, the same way the briefing's fourth
-    // line already reads `ffx2AtbMode()` (`Briefing.ts`).
+    // line already reads `ffx2AtbMode()` (`Briefing.ts`). Since the Wait split
+    // became the default (D-029 follow-up 2) the clock runs on the top-level
+    // list and holds once a list is open, and the Wait badge says so in
+    // Bailey's words (D-121): "Gauges running · a list holds them".
     // FFX-2 only: FFX is CTB and its line holds the menu by design.
     const running =
       mark.game === 'ffx2'

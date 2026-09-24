@@ -8,7 +8,9 @@
  * share `T` are **authored measurement inputs, not game data**. Before = the
  * live Wait (the whole-menu hold, split off); after = the split, with `T` of the
  * `D` spent on the top-level list (the clock runs) and the rest inside a
- * submenu (held). Active at the same `D` is the control. Nothing here tunes a
+ * submenu (held). The split is the engine default since D-029 follow-up 2, so
+ * its arms pass no `waitSplit`; `?wait=hold` is the old default, kept as the
+ * comparison. Active at the same `D` is the control. Nothing here tunes a
  * boss (hard rule 6). `docs/plans/ffx2-wait-split-review.md` §4 and build pass.
  *
  * ```
@@ -33,12 +35,16 @@ interface Arm {
 }
 
 const ARMS: Arm[] = [
-  { label: 'before: Wait, whole-menu hold', d: 0, extra: { atbMode: 'wait', waitSplit: false } },
-  { label: 'before: Wait, whole-menu hold', d: 1500, extra: { atbMode: 'wait', waitSplit: false } },
-  { label: 'after: Wait split, T 0', d: 0, extra: { atbMode: 'wait', waitSplit: true }, topMs: 0 },
-  { label: 'after: Wait split, T 0', d: 1500, extra: { atbMode: 'wait', waitSplit: true }, topMs: 0 },
-  { label: 'after: Wait split, T 500', d: 1500, extra: { atbMode: 'wait', waitSplit: true }, topMs: 500 },
-  { label: 'after: Wait split, T 1500', d: 1500, extra: { atbMode: 'wait', waitSplit: true }, topMs: 1500 },
+  // `?wait=hold`: the whole-menu hold hotfix 12.2 shipped by default.
+  { label: '?wait=hold: whole-menu hold', d: 0, extra: { atbMode: 'wait', waitSplit: false } },
+  { label: '?wait=hold: whole-menu hold', d: 1500, extra: { atbMode: 'wait', waitSplit: false } },
+  // The default since D-029 follow-up 2: no `waitSplit` passed, so the engine's
+  // own DEFAULT_WAIT_SPLIT (the split) is what is measured.
+  { label: 'default: Wait split, T 0', d: 0, extra: { atbMode: 'wait' }, topMs: 0 },
+  { label: 'default: Wait split, T 0', d: 1500, extra: { atbMode: 'wait' }, topMs: 0 },
+  { label: 'default: Wait split, T 500', d: 1500, extra: { atbMode: 'wait' }, topMs: 500 },
+  { label: 'default: Wait split, T 1500', d: 1500, extra: { atbMode: 'wait' }, topMs: 1500 },
+  { label: 'control: Active', d: 0, extra: { atbMode: 'active' } },
   { label: 'control: Active', d: 1500, extra: { atbMode: 'active' } },
 ];
 

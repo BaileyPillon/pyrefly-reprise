@@ -55,17 +55,22 @@ describe('copy: the mode-aware fourth line', () => {
     expect(wait).toHaveLength(4);
     expect(wait.slice(0, 3)).toStrictEqual(BRIEFING_LINES.slice(0, 3));
     expect(wait[3]).toStrictEqual(BRIEFING_WAIT_LINE);
-    expect(text(BRIEFING_WAIT_LINE)).toBe('In hers, the clock holds while you choose.”');
-    expect(text(BRIEFING_WAIT_LINE)).not.toContain('does not wait');
+    // Bailey's pick, verbatim (2026-09-24, draft 2a, D-121): his approved
+    // gold half, then four plain words that make it true under the Wait split.
+    expect(text(BRIEFING_WAIT_LINE)).toBe('In hers, the clock does not wait. A list stops it.”');
+    expect(BRIEFING_WAIT_LINE.strong).toBe(BRIEFING_LINES[3]!.strong);
+    expect(BRIEFING_WAIT_LINE).not.toStrictEqual(BRIEFING_LINES[3]);
   });
 
-  it('the Wait line has the approved line’s shape: same lead, a gold half, the closing quote', () => {
+  it('the Wait line has the approved line’s shape: same lead, the same gold half, the closing quote', () => {
     const approved = BRIEFING_LINES[3]!;
     expect(BRIEFING_WAIT_LINE.lead).toBe(approved.lead);
-    expect(BRIEFING_WAIT_LINE.tail).toBe(approved.tail);
-    expect(BRIEFING_WAIT_LINE.strong.length).toBeGreaterThan(0);
-    // Same length class: within a few characters of his line.
-    expect(Math.abs(text(BRIEFING_WAIT_LINE).length - text(approved).length)).toBeLessThanOrEqual(12);
+    expect(BRIEFING_WAIT_LINE.strong).toBe(approved.strong);
+    expect(BRIEFING_WAIT_LINE.tail.startsWith(approved.tail.slice(0, 1))).toBe(true);
+    expect(BRIEFING_WAIT_LINE.tail.endsWith('”')).toBe(true);
+    // Still one briefing line: the 60-character cap the drafts were written to
+    // (docs/concepts/coach/wait-split-lines.md, "Constraints used").
+    expect(text(BRIEFING_WAIT_LINE).length).toBeLessThanOrEqual(60);
   });
 });
 
@@ -89,7 +94,7 @@ describe('the briefing reads the mode when it is shown', () => {
     const lines = shownLines(root);
     expect(lines).toHaveLength(4);
     expect(lines[3]).toBe(text(BRIEFING_WAIT_LINE));
-    expect(root.textContent).not.toContain('the clock does not wait');
+    expect(lines[3]).toBe('In hers, the clock does not wait. A list stops it.”');
     b.skip();
   });
 

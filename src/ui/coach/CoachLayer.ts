@@ -149,6 +149,8 @@ export function markForEvent(
 class CoachedHud implements HudPort {
   private layer: HTMLElement | null = null;
   private live: CoachMark | null = null;
+  /** The girl whose X-2 command menu raised {@link live}, if a menu raised it. */
+  private liveOwner: CombatantId | null = null;
 
   constructor(
     private readonly game: GameId,
@@ -297,6 +299,7 @@ class CoachedHud implements HudPort {
     if (mark) {
       markSeen(mark.id);
       void this.raise(this.withResolvedBody(mark));
+      if (this.game === 'ffx2') this.liveOwner = actorId;
     }
     return this.inner.chooseCommand(actorId, commands, previewRank);
   }
@@ -334,7 +337,16 @@ class CoachedHud implements HudPort {
     // The menu was answered by something other than the player (`setAutoPlay`
     // racing the HUD's promise): a held FFX line would otherwise sit there
     // forever with nobody to press confirm.
-    if (event.type === 'action-start' && this.live?.finished === false) this.clear();
+    //
+    // FFX-2's menu line is the exception: the clock runs under her top-level
+    // list (Active, and Wait's split, the default since D-029 follow-up 2), so
+    // an enemy can act while the line is up, and that used to take the line
+    // down in 0.8 s in chapter 6. It fades on its own, so only her own action
+    // (her menu answered) ends it early. FFX-2 only: every FFX line holds.
+    if (event.type === 'action-start' && this.live?.finished === false) {
+      const otherActor = this.liveOwner !== null && event.actorId !== this.liveOwner;
+      if (!otherActor) this.clear();
+    }
     const mark = this.due(markForEvent(this.game, event, (id) => !shouldShow(id)));
     if (mark) {
       markSeen(mark.id);
@@ -362,12 +374,14 @@ class CoachedHud implements HudPort {
       ...(this.opts.clearTimer ? { clearTimer: this.opts.clearTimer } : {}),
     });
     this.live = line;
+    this.liveOwner = null;
     return line.show();
   }
 
   private clear(): void {
     this.live?.dismiss();
     this.live = null;
+    this.liveOwner = null;
   }
 }
 
