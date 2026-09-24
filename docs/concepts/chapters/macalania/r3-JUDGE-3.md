@@ -107,3 +107,71 @@ The crops were made in `D:/Tools/pyrefly-scratch/judge3/tmp` and deleted afterwa
 regenerated with PIL from the candidate paths above. Crop boxes (idle | candidate): Seymour hand `(235,225,335,350)` at 4x,
 hair `(380,40,660,300)` at 2x, waist `(180,380,520,640)` at 2x. Guardian fist `(230,420,580,720)` at 2x for cast and
 `(250,380,560,720)` at 2x for hurt. Portrait faces `(110,180,540,740)` at 1:1 and eyes `(150,380,370,600)` at 2x.
+
+## Re-judge of the two repaired casts (judge 4, 2026-09-24; FFX only, D-045 option A)
+
+Judge: an independent sub-agent that made none of the repairs and none of the r3 art. **Both files are still CANDIDATES**
+for Bailey; nothing was installed, rendered or repainted, and ComfyUI was not used.
+
+**What was judged.** `D:/Tools/pyrefly-art-backup/candidates/2026-09-24-ch7-casts/{seymour-macalania,guado-guardian}/cast.png`
+(commit 4b62f5ec, masked repaints on top of the r3 casts above), each beside its r3 idle
+(`public/art/characters/<subject>/idle.png`) and the r3 cast judged in section 1 and 3.
+
+**Method.** My own PIL crops, idle | r3 cast | repaired cast, at 1:1, 2x, 3x, 4x and 6x (nearest neighbour) on grey and dark
+navy grounds, plus a whole-figure strip scaled to 300 px tall on navy for the read at game size (an approximation: I did not
+re-run the battle, and the builder's in-battle frames on `sheet.jpg` predate the repair). **Re-measured myself:** the
+repaired file differs from the r3 cast only inside `cast.repair-mask.png` (Seymour 3,477 px changed, Guardian 4,851 px;
+**0 px changed outside the mask**); alpha is binary (0/255 only); every opaque pixel inside the mask lies within 12 RGB of
+a colour already in the idle (maximum distance 8.7 for Seymour, 11.4 for the Guardian), which agrees with the builder's
+"0 invented colours". Canvas equals the idle for both. **Bar 7 on every criterion; the worst criterion decides.**
+
+### Verdict table
+
+| Candidate | Worst criterion | Worst | At bar? | Was (judge 3) |
+|---|---|---|---|---|
+| Seymour `cast` (repaired) | hands (violet nail caps, glove-like flat white; fingers parted only by lines) | **7** | **Yes** | 5 (hands) |
+| Guardian `cast` (repaired) | finish / seams (the forearm veins go soft and smudged in the repainted wrist; a thick dark rim under the wrist) | **7** | **Yes** | 6 (anatomy, seams) |
+
+**Worst of the two: a tie at 7, both at the bar and neither above it.** Seymour's hand is the weaker by a small margin.
+
+### Seymour `cast` (repaired)
+
+| Criterion | 1:1 | 2x | Evidence |
+|---|---|---|---|
+| Identity | 9 | 9 | Face, fringe, ear, tattoo, sash and hem are the idle's pixels; nothing outside the hand changed since section 1. |
+| Anatomy | 7 | 7 | The open palm rises before the chest from the sleeve with a plausible heel; at about 85 px long it is a little large for the head but not wrong. The lean is the smooth waist bend judge 3 scored 7. |
+| Hands | **7** | **7** | A raised open hand: four fingers parted by lavender lines, a short thumb on the party side with its own nail, a thin ink outline on the thumb and heel. The jagged black paddle outline is gone. Below the bar-plus: the nails are small violet caps (robe colour), not the idle's pointed ink claws, and at 3x and above they read as blobs; the palm is a flat white, a little glove-like, with no knuckle cues; the fingertips have no outline where they meet the red collar. The idle's own crossed hands are slimmer and more articulated. |
+| Costume | 8 | 8 | Unchanged apart from the sleeve. |
+| Seams | 7 | 7 | The hand now sits in the chest with a thin, clean outline; no halo, no jag. The 1 to 2 px dark speck on the sleeve at about (344, 284) that judge 3 noted is still there (outside the repair mask); invisible at game size. |
+| Edges | 7 | 7 | Hair locks as in section 1: pale 1 px fringe dots and small stair steps on the warped tips at 2x. I score 7 at 2x rather than judge 3's 6 because the idle's own lock tips carry the same pale fringe at 2x; the warp adds a few more dots, not a new defect. Not repaired, not required. |
+| Finish | 7 | 7 | The hand matches the idle's skin language (pale lavender, lavender shading lines); the violet nails and the flat white keep it at 7. |
+| Read at game size | 8 | | The streaming hair and a clear pale open palm before the chest read as casting at once; the hand is now a hand, not a blob. |
+
+### Guado Guardian `cast` (repaired)
+
+| Criterion | 1:1 | 2x | Evidence |
+|---|---|---|---|
+| Identity | 9 | 9 | Head, hair ribbons, ears and eye glow are the idle's pixels. |
+| Anatomy | 7 | 7 | The forearm now turns into the fist in one smooth curve; the broken-wrist kink is gone. The wrist reads bent under load, which suits the raised spear. |
+| Hands | 7 | 7 | The idle's fist, turned rigidly; the dark notch under the knuckles is gone, leaving a darker blue shadow there that reads as shading. |
+| Costume | 7 | 7 | Spear intact; crescent head at knee height as before (legible). |
+| Seams | 7 | 7 | The green hooked fragment above the fist and the dark specks along the shaft are gone at 1:1 and 2x; the shaft's edge over the robe is cleaner than the r3 cast. At 4x only, a thick dark rim under the wrist (the recoloured sampler line) and a small dark gap at the forearm's left edge just above the shaft. |
+| Edges | 7 | 7 | Clean binary cut, no halo. |
+| Finish | 7 | **7** | Robe repaint follows the idle's folds and palette. In the repainted wrist the forearm's vein line-work goes soft and smudged over about 40 px, less crisp than the idle's veins above it; visible at 2x, not at 1:1. |
+| Read at game size | 7 | | The near-vertical raised spear differs clearly from the idle; "staff raised" more than a spell, as judge 3 said, and the engine's flash carries the spell. |
+
+### Recommendation
+
+Both repaired casts are at the bar (worst 7) and may be offered to Bailey as the cast state for Chapter VII, replacing the
+installed non-r3 Seymour `cast.png` and giving the Guardian its cast. Neither is above the bar. If one more masked pass is
+ever wanted: Seymour's nails as the idle's ink points and a little knuckle shading on the palm; the Guardian's vein
+line-work through the wrist. The Guardian `hurt` stays "none" and the Seymour `hurt` verdict is unchanged (section 2).
+
+**Evidence.** Crops made in `D:/Tools/pyrefly-scratch/ch7-casts/tmp/judge4/` (scripts `info.py`, `crops.py`, `col.py`;
+regenerable from the candidate paths). Crop boxes (idle | r3 | repaired): Seymour hand `(215,225,335,350)` at 3x on grey and
+navy and `(235,235,315,345)` at 6x, hair `(420,60,720,300)` at 2x, sleeve speck `(320,255,380,315)` at 5x; Guardian wrist
+`(180,340,500,620)` at 2x and `(260,440,420,580)` at 4x, shaft `(230,560,500,870)` at 2x on navy; both whole figures at
+300 px tall on navy.
+
+SEYMOUR-CAST: PASS
+GUARDIAN-CAST: PASS
