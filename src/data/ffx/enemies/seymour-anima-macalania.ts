@@ -397,9 +397,10 @@ export const seymourAnimaMacalaniaGroup: EnemyGroupDef = {
   enemies: [guardian(GUADO_GUARDIAN_A_ID, 0, 'A'), seymour, guardian(GUADO_GUARDIAN_B_ID, 2, 'B')],
   parts: [anima],
   musicCues: [
-    // STOPGAP: §9.8 wants its OWN cue (`boss-seymour-macalania`, unbuilt), NOT the
-    // Flux chapter's `boss-seymour` [docs/handoff/chapter-macalania.md]; swap when it lands.
-    { at: 'start', track: 'boss-seymour', fadeMs: 800 },
+    // The fight's own cue, §9.8 ("The Courtesy", Bailey's pick of sketch A,
+    // 2026-09-24), NOT the Flux chapter's `boss-seymour`. A CANDIDATE until
+    // Bailey's ear rules on the full cue (rule 13). FFX only.
+    { at: 'start', track: 'boss-seymour-macalania', fadeMs: 800 },
   ],
 };
 

@@ -58,6 +58,16 @@
       "lufs": -15.99,
       "truePeakDb": -1.47
     },
+    "boss-seymour-macalania": {
+      "file": "music/boss-seymour-macalania.mp3",
+      "loopStart": 7.619048,
+      "loopEnd": 121.904762,
+      "duration": 124.9048,
+      "bytes": 1901430,
+      "lufs": -15.99,
+      "truePeakDb": -1.79,
+      "score": "90c06f737af9686a"
+    },
     "boss-shuyin": {
       "file": "music/boss-shuyin.mp3",
       "loopStart": 12.551406,

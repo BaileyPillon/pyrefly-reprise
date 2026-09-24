@@ -22,15 +22,15 @@
  * Narratively this fight comes before Chapter 1 (Seymour Flux is the same
  * man, unsent, later in the story) [research §9.7 beat 11].
  *
- * `music`: no cue for this chapter is routed yet. The preflight
- * (`docs/plans/chapter-macalania-review.md` §6.3) and research §9.8 call for
- * two NEW compositions (`scene-macalania-temple`, `boss-seymour-macalania`);
- * neither `docs/audio/THEMES.md` nor `docs/plans/music-modern-sound.md` has
- * one, and Bailey judges audio by ear (hard rule 13). Until one is picked
- * this falls back to the cues Chapter 1 uses — `scene-gagazet` and
- * `boss-seymour` — and the shared FFX fanfare `victory-ffx`. §9.8 is explicit
- * that `boss-seymour` is NOT this fight's own theme; the stopgap is recorded,
- * not claimed.
+ * `music`: the battle has its own cue, `boss-seymour-macalania` ("The
+ * Courtesy", cue map row 24), built 2026-09-24 from the mood sketch Bailey
+ * picked (A) to the preflight's brief (`docs/plans/chapter-macalania-review.md`
+ * §6.3, research §9.8: this fight's own theme, NOT the Flux chapter's
+ * `boss-seymour`). A CANDIDATE until Bailey's ear rules on the full cue (hard
+ * rule 13). The scene cue the preflight also names, `scene-macalania-temple`,
+ * does not exist yet, so the scene still falls back to Chapter 1's
+ * `scene-gagazet` — a recorded stopgap, not a claim — and the victory is the
+ * shared FFX fanfare `victory-ffx`.
  */
 
 import type { Chapter } from './encounters.ts';
@@ -59,9 +59,10 @@ export const SEYMOUR_ANIMA_MACALANIA: Chapter = {
   enemyGroupRef: seymourAnimaMacalaniaGroup,
   scriptsRef: seymourAnimaMacalaniaScripts,
   music: {
-    // Fallback to Chapter 1's cues — see the file doc above.
+    // Scene: Chapter 1's cue as a recorded stopgap — see the file doc above.
     scene: 'scene-gagazet',
-    battle: 'boss-seymour',
+    // The chapter's own battle cue (FFX only), Bailey's pick of sketch A.
+    battle: 'boss-seymour-macalania',
     victory: 'victory-ffx',
   },
   // Duplicated from the enemy records' own `sensorText`, as the `Chapter`

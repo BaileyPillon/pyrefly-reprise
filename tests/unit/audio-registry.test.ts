@@ -32,10 +32,11 @@ const SFX_CATALOG = [
 ];
 
 describe('music registry', () => {
-  it('lists the twenty final keys exactly once', () => {
-    // Eighteen, plus Chapter VIII's scene-fahrenheit and boss-evrae (2026-09-23).
-    expect(MUSIC_KEYS).toHaveLength(20);
-    expect(new Set(MUSIC_KEYS).size).toBe(20);
+  it('lists the twenty-one final keys exactly once', () => {
+    // Eighteen, plus Chapter VIII's scene-fahrenheit and boss-evrae (2026-09-23)
+    // and Chapter VII's boss-seymour-macalania (2026-09-24).
+    expect(MUSIC_KEYS).toHaveLength(21);
+    expect(new Set(MUSIC_KEYS).size).toBe(21);
   });
 
   it('resolves every final key and keeps the original stand-ins playable', () => {

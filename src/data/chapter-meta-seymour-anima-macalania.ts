@@ -21,12 +21,10 @@
  * portrait. These are CANDIDATE assets (`docs/target/targets.json`): none of
  * Macalania's art is Bailey-approved yet.
  *
- * `musicKeys` name the cues the chapter actually routes today
- * (`./chapter-seymour-anima-macalania.ts` `music`): Chapter 1's
- * `scene-gagazet` and `boss-seymour` as a recorded stopgap, plus the shared
- * `victory-ffx`. The chapter's own two cues (`scene-macalania-temple`,
- * `boss-seymour-macalania`, preflight §6.3) are new compositions that do not
- * exist yet; when the audio track lands them, swap both here and there.
+ * `musicKeys` name the cues the chapter routes (`./chapter-seymour-anima-macalania.ts`
+ * `music`): Chapter 1's `scene-gagazet` as a recorded stopgap for the unbuilt
+ * `scene-macalania-temple` (preflight §6.3), the chapter's own battle cue
+ * `boss-seymour-macalania` (2026-09-24, FFX only), and the shared `victory-ffx`.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
@@ -79,7 +77,7 @@ export const SEYMOUR_ANIMA_MACALANIA_META: ChapterMeta = {
     { image: 'characters/seymour-macalania/idle.png', caption: 'unhurried, still unhurried' },
   ],
   focalCharacterId: 'seymour',
-  musicKeys: ['scene-gagazet', 'boss-seymour', 'victory-ffx'],
+  musicKeys: ['scene-gagazet', 'boss-seymour-macalania', 'victory-ffx'],
 };
 
 export default SEYMOUR_ANIMA_MACALANIA_META;

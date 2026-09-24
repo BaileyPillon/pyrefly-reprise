@@ -89,6 +89,8 @@ const CUE_MAP = {
   // Chapter VIII, FFX only (cue map rows 22-23, 2026-09-23).
   'boss-evrae': { key: 'A minor', bpm: 144, meter: [4, 4], themes: ['FAREWELL_RISE', 'FAREWELL_FALL'] },
   'scene-fahrenheit': { key: 'D minor', bpm: 104, meter: [4, 4], themes: ['FAREWELL_RISE', 'FAREWELL_FALL'] },
+  // Chapter VII, FFX only (cue map row 24, 2026-09-24).
+  'boss-seymour-macalania': { key: 'C# minor', bpm: 126, meter: [4, 4], themes: ['SEYMOUR', 'SEYMOUR_MIRROR'] },
 };
 
 /**

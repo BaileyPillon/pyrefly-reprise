@@ -24,6 +24,7 @@ import { bossFfx2AeonTrack } from './boss-ffx2-aeon.ts';
 import { endingFfx2Track } from './ending-ffx2.ts';
 import { sceneFahrenheitTrack } from './scene-fahrenheit.ts';
 import { bossEvraeTrack } from './boss-evrae.ts';
+import { bossSeymourMacalaniaTrack } from './boss-seymour-macalania.ts';
 
 /** The final music keys (CONTRACT-CHANGES §8). `playMusic` resolves every one. */
 export const MUSIC_KEYS = [
@@ -48,6 +49,8 @@ export const MUSIC_KEYS = [
   // Chapter VIII, Evrae on the Fahrenheit (FFX only): CONTRACT-CHANGES 2026-09-23.
   'scene-fahrenheit',
   'boss-evrae',
+  // Chapter VII, Seymour and Anima at Macalania (FFX only): CONTRACT-CHANGES 2026-09-24.
+  'boss-seymour-macalania',
 ] as const;
 
 export type FinalMusicKey = (typeof MUSIC_KEYS)[number];
@@ -77,6 +80,7 @@ const COMPOSED: Record<string, Track> = {
   'ending-ffx2': endingFfx2Track,
   'scene-fahrenheit': sceneFahrenheitTrack,
   'boss-evrae': bossEvraeTrack,
+  'boss-seymour-macalania': bossSeymourMacalaniaTrack,
 };
 
 /**
@@ -270,6 +274,13 @@ export const TRACK_NOTES: Record<string, TrackNote> = {
     themes:
       'FAREWELL_RISE and FAREWELL_FALL at double length on violins; the ship figure foreshadowed on flute; the peak closes on the AMEN',
     intent: 'no time, and no way back',
+  },
+  'boss-seymour-macalania': {
+    title: 'The Courtesy',
+    key: 'C# minor',
+    themes:
+      'SEYMOUR an octave up on oboe over a harpsichord pavane that bows every fourth bar; SEYMOUR_MIRROR in the cellos; a chromatic decline that will not stop; the sequence takes one extra step at the summon, then a plagal amen to the wrong chord',
+    intent: 'polite, and wrong',
   },
 };
 

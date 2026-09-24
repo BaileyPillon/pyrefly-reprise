@@ -83,6 +83,18 @@ export const INSTRUMENTS: Record<string, Voice> = {
   clap,
   'snare-909': snare909,
   'metal-hit': metalHit,
+  // Runtime stand-ins for sampled-only voices a shipped cue names. The offline
+  // render plays the real sampled preset of the same name; these only answer
+  // when the browser falls back to synthesis (MusicLoader: a missing or
+  // undecodable MP3), so the cue synthesises instead of throwing. Each points
+  // at the voice `sfx/design.ts` RUNTIME_STAND_INS already uses for the same
+  // name, so no sound effect's fallback changes. Added 2026-09-24 for Chapter
+  // VII's `boss-seymour-macalania` (request #1 in
+  // docs/audio/requests-menus-clair-obscur.md). Both games: shared plumbing.
+  harpsichord: pluck,
+  oboe: flute,
+  clarinet: flute,
+  'string-quartet': strings,
 };
 
 export const INSTRUMENT_NOTES: Record<string, string> = {
@@ -126,6 +138,10 @@ export const INSTRUMENT_NOTES: Record<string, string> = {
   clap: 'Three flammed noise bursts plus a short band-passed tail.',
   'snare-909': 'Tight electronic snare: tuned sine body under bright noise.',
   'metal-hit': 'Industrial inharmonic FM anvil hit; pitch follows the note.',
+  harpsichord: 'Runtime stand-in: the pluck voice (the sampled harpsichord plays offline).',
+  oboe: 'Runtime stand-in: the flute voice (the sampled oboe plays offline).',
+  clarinet: 'Runtime stand-in: the flute voice (the sampled clarinet plays offline).',
+  'string-quartet': 'Runtime stand-in: the string ensemble (the sampled quartet plays offline).',
 };
 
 export function instrumentNames(): string[] {

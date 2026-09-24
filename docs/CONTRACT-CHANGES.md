@@ -6,6 +6,29 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — Music key `boss-seymour-macalania` (Chapter VII); four runtime instrument stand-ins
+
+**The key: FFX only** [AGENTS.md hard rule 14]: Seymour and the Guado Guardians at
+Macalania is an FFX encounter (research/ffx-seymour-anima-macalania.md). Additive:
+`MUSIC_KEYS` in `src/audio/tracks/index.ts` (§8's list) gains the key the Chapter VII
+preflight reserved (`docs/plans/chapter-macalania-review.md` §6.3), composed in
+`boss-seymour-macalania.ts` ("The Courtesy", from the sketch A Bailey picked on
+2026-09-24), registered in `COMPOSED` and rendered into `public/audio/manifest.json`.
+`MusicKey` stays a plain `string`. The chapter's `music.battle`, the formation's
+`musicCues` and the chapter meta's `musicKeys` now name it instead of Chapter 1's
+`boss-seymour`. Not changed: the story script's pre-battle `music('boss-seymour', 1000)`
+(`src/story/scripts/seymour-anima-macalania.ts`, another agent's folder) still plays
+the Flux theme under the reveal until the battle-start cue replaces it.
+
+**The stand-ins: both games** (shared plumbing). `INSTRUMENTS` in
+`src/audio/instruments.ts` gains `harpsichord`, `oboe`, `clarinet` and
+`string-quartet`, each pointing at an existing synthesised voice (`pluck`, `flute`,
+`flute`, `strings`), so a cue that names these sampled presets synthesises instead of
+throwing when the browser falls back (request #1 in
+`docs/audio/requests-menus-clair-obscur.md`). Each points at the same voice
+`sfx/design.ts` `RUNTIME_STAND_INS` already used for the name, so no sound effect's
+fallback changes; the offline render still plays the real sampled preset.
+
 ## 2026-09-24 — `SpeakerId` gains `'brother-x2'`: FFX-2 Brother's own voice and portrait id
 
 **FFX-2 only** [AGENTS.md hard rule 14]: Brother's look is sourced only for X-2

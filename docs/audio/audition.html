@@ -75,10 +75,66 @@
 <div class="wrap">
 
 <h1>Pyrefly Reprise — the score</h1>
-<p class="sub">Twenty-three cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
+<p class="sub">Twenty-four cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
+
+<!-- macalania:begin — Chapter VII's battle cue, 2026-09-24 (FFX only). Written by hand; audition.mjs does not generate it. -->
+<h2 style="margin-top:0">Chapter VII, Seymour at Macalania (new)</h2>
+<p class="group-note">
+  <strong>You picked sketch A, &ldquo;The Courtesy&rdquo;, and this is it grown into the fight&rsquo;s own music.</strong>
+  It already plays in the game when the battle starts (until today the chapter borrowed Chapter 1&rsquo;s Seymour
+  theme). Same dance, same oboe on Seymour&rsquo;s six-note theme, same slither, same wrong note at the end &mdash;
+  stretched from 45 seconds to a two-minute loop and given one rise, for the summon. It is a candidate: nothing is
+  approved until you have listened. I cannot hear any of this &mdash; every number below is a measurement, not a
+  judgement. FFX only. Both files are levelled to the same loudness (&minus;16 LUFS).
+</p>
+
+<article class="cue">
+  <h4>boss-seymour-macalania &mdash; &ldquo;The Courtesy&rdquo;</h4>
+  <p class="emotion">Polite, and wrong.</p>
+  <p class="blurb">
+    Harpsichord and pizzicato alone for four bars, then at <strong>0:08</strong> the oboe states the theme
+    (the bow up, the slow chromatic fall), climbing in minor thirds and coming home having proved nothing. At
+    <strong>0:23</strong> the violins take it and the cellos answer upside down. At <strong>0:38</strong> the
+    harpsichord bows and the oboe finishes its sentence for it. At <strong>0:53</strong> the fall refuses to stop:
+    the violins slide down a semitone at a time for six bars, the clarinet carries on when they run out, and it
+    never arrives on the home note. At <strong>1:16</strong> the rise (the summon): the theme goes one step higher
+    than it ever has, low brass, a temple bell, and at <strong>1:35</strong> a church &ldquo;amen&rdquo; that
+    resolves to the wrong chord. Then composure, and at <strong>1:55</strong> the one wrong note held under the
+    dance. No organ, no choir, no drums: the harpsichord stops and bows at the end of every four bars, so it is never
+    a machine. C# minor, 126 bpm, loops from 0:08 to 2:02.
+  </p>
+  <audio controls preload="none" src="../../public/audio/music/boss-seymour-macalania.mp3"></audio>
+  <p class="stats"><span>2:05</span><span>1.90 MB</span><span>-16.0 LUFS</span><span>-1.8 dBTP</span><span>LRA 5.9 LU</span><span>loop seam ok</span><span>all gates pass</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-macalania="The Courtesy (full cue)"></label></p>
+</article>
+
+<article class="cue">
+  <h4>The sketch you picked, for comparison</h4>
+  <p class="blurb">Sketch A as you heard it on 2026-09-23: 45 seconds, the same instruments and the same room.</p>
+  <audio controls preload="none" src="sketches/2026-09-21/macalania-a-court-dance.mp3"></audio>
+</article>
+
+<div class="check">
+  <p style="margin-top:0"><strong>When you have listened</strong> &mdash; press the button and send back the text. A score is enough; a sentence about what to change is better.</p>
+  <p><button type="button" id="macalania-collect" style="font:inherit;padding:8px 16px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Collect my Macalania score</button></p>
+  <textarea id="macalania-out" rows="5" style="width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:10px" readonly placeholder="Your score appears here."></textarea>
+  <p style="margin-bottom:0"><em>Nothing is saved or sent; the button only writes the text into the box.</em></p>
+</div>
+<script>
+  document.getElementById('macalania-collect').addEventListener('click', function () {
+    var lines = ['Pyrefly Reprise — Chapter VII, Macalania battle music, 2026-09-24', ''];
+    document.querySelectorAll('input[data-macalania]').forEach(function (input) {
+      var v = input.value.trim();
+      lines.push(input.dataset.macalania + ': ' + (v === '' ? '(not scored)' : v + '/10'));
+    });
+    lines.push('', 'Keep / change: ', 'Notes: ');
+    document.getElementById('macalania-out').value = lines.join('\n');
+  });
+</script>
+<!-- macalania:end -->
 
 <!-- evrae:begin — Chapter VIII's two cues, 2026-09-23 (FFX only). Written by hand; audition.mjs does not generate it. -->
-<h2 style="margin-top:0">Chapter VIII, Evrae (new)</h2>
+<h2>Chapter VIII, Evrae (new)</h2>
 <p class="group-note">
   <strong>The airship chapter now has its own music, and both pieces already play in the game</strong>
   (until today it borrowed Chapter 1&rsquo;s). Both are original and both are candidates: nothing is

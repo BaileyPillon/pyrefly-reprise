@@ -125,11 +125,13 @@ describe('SEYMOUR_ANIMA_MACALANIA_META', () => {
     expect(SEYMOUR_ANIMA_MACALANIA_META.focalCharacterId.length).toBeGreaterThan(0);
   });
 
-  it('musicKeys are the cues the story script actually calls, plus the shared FFX fanfare', () => {
-    // Chapter 1's pair, the recorded stopgap until the chapter's own two cues
-    // exist (docs/handoff/chapter-macalania.md).
+  it("musicKeys are the chapter's own battle cue, the scene stopgap and the shared FFX fanfare", () => {
+    // `boss-seymour-macalania` is the fight's own cue (2026-09-24); the scene
+    // still borrows Chapter 1's `scene-gagazet` until `scene-macalania-temple`
+    // exists (docs/handoff/chapter-macalania.md).
     expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).toContain('scene-gagazet');
-    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).toContain('boss-seymour');
-    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys.length).toBeGreaterThan(0);
+    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).toContain('boss-seymour-macalania');
+    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).not.toContain('boss-seymour');
+    expect(SEYMOUR_ANIMA_MACALANIA_META.musicKeys).toContain('victory-ffx');
   });
 });
