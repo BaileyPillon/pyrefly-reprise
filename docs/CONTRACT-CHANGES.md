@@ -6,6 +6,36 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — `ChapterId` gains `'yojimbo-cavern'`; `Chapter.number` gains `9`; `UNLISTED_CHAPTERS`; `getChapter` reaches it
+
+`src/data/encounters.ts`, additive. **FFX only** for the chapter (Chapter IX, Lady
+Ginnem's Yojimbo in the Cavern of the Stolen Fayth, `research/ffx-yojimbo.md`
+candidate A); **both** for the plumbing, which is inert for every listed chapter.
+
+- `ChapterId` gains `'yojimbo-cavern'`; `Chapter.number` widens from `1..8` to `1..9`.
+  Any `Record<ChapterId, …>` literal needs the key (the two in `learn/atlas/cites.ts`
+  and `tests/unit/learn-atlas-data.test.ts` have it).
+- New export `UNLISTED_CHAPTERS: readonly Chapter[]` — chapters that are **registered
+  but not listed**. They are not in `CHAPTERS` or `CHAPTER_IDS`, so chapter select,
+  the jukebox, `__pyrefly.chapters()` and every chapter-generic suite do not see
+  them; `getChapter(id)` now falls back to this list, so the flow and
+  `window.__pyrefly.gotoChapter('yojimbo-cavern')` run it end to end. No card of any
+  kind shows (not even COMING): its picks are Bailey's (AGENTS.md hard rule 9).
+  Listing it later is moving the record into `CHAPTERS` and the id into `CHAPTER_IDS`.
+- `YOJIMBO_CAVERN` is re-exported beside `EVRAE_AIRSHIP`; the record lives in
+  `src/data/chapter-yojimbo-cavern.ts` with a placeholder scene (`gagazet`),
+  placeholder music (Chapter 1's cues) and placeholder scripts (battle start and
+  results only), each labelled as such.
+
+Not contract files, recorded because the FFX engine is shared: `ActorRuntime` gains
+`ordersOnly?: boolean` (`src/battle/ffx/state.ts`; `turnQueue.ts#queueMembers`
+skips such an actor, so it is on the field with no CTB turn), and an `AbilityDef`
+whose `extra` carries `ordersActor` + `orderedAbility` makes that actor act on the
+orderer's turn (`src/battle/ffx/orders.ts`, hooked at the end of
+`execute.ts#executeCommand`). Only the Yojimbo formation sets either, and the FFX
+chapters' event logs at fixed seeds were measured byte-identical before and after
+(45 runs: Chapters 1, 2, 3, 7, 8 × seeds 1, 7, 42 × attack / defend / intended).
+
 ## 2026-09-24 — `SpeakerId` gains `'seymour-macalania'`
 
 `src/story/dsl.ts`, additive. **FFX only** (Chapter VII, Macalania Temple): Bailey picked

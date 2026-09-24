@@ -49,8 +49,13 @@ import { ffx2LeblancScripts } from '../story/scripts/ffx2-leblanc.ts';
 import { SEYMOUR_ANIMA_MACALANIA } from './chapter-seymour-anima-macalania.ts';
 // Chapter 8's record, same reason and the same type-only import.
 import { EVRAE_AIRSHIP } from './chapter-evrae-airship.ts';
+// Chapter 9's record — registered but UNLISTED (see `UNLISTED_CHAPTERS`).
+import { YOJIMBO_CAVERN } from './chapter-yojimbo-cavern.ts';
 
-/** The eight chapter ids. Also the keys used in `SaveData.chapters`. */
+/**
+ * Every registered chapter id. Also the keys used in `SaveData.chapters`.
+ * `'yojimbo-cavern'` is registered but unlisted: see {@link UNLISTED_CHAPTERS}.
+ */
 export type ChapterId =
   | 'seymour-flux'
   | 'yunalesca'
@@ -59,7 +64,8 @@ export type ChapterId =
   | 'ffx2-vegnagun-shuyin'
   | 'ffx2-leblanc'
   | 'seymour-anima-macalania'
-  | 'evrae-airship';
+  | 'evrae-airship'
+  | 'yojimbo-cavern';
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -106,8 +112,8 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on the chapter-select screen, 1–8. */
-  number: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+  /** Display order on the chapter-select screen, 1–9. */
+  number: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   /** Card title. The encounter's name. */
   title: string;
   /** Card subtitle. One clause, no period. */
@@ -351,7 +357,7 @@ export const FFX2_LEBLANC: Chapter = {
   },
 };
 
-export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP };
+export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN };
 
 /**
  * All eight, in play order. Chapters 7 (Macalania) and 8 (Evrae) are
@@ -383,7 +389,23 @@ export const CHAPTER_IDS: readonly ChapterId[] = [
   'evrae-airship',
 ] as const;
 
-/** Look a chapter up by id. Returns `undefined` for an unknown id. */
+/**
+ * Chapters that are **registered but not listed**: `getChapter` finds them, so
+ * the battle flow and `window.__pyrefly.gotoChapter` run them end to end, but
+ * they are not in {@link CHAPTERS} or {@link CHAPTER_IDS}, so chapter select,
+ * the jukebox and every chapter-generic suite do not see them.
+ *
+ * This is one step short of Chapters 7 and 8's "registered and LOCKED as a
+ * COMING card": it shows **no card at all**, because a card is perceivable and
+ * the chapter's picks are still Bailey's to make (AGENTS.md hard rule 9).
+ * Listing a chapter is moving its record from here into `CHAPTERS` (and its id
+ * into `CHAPTER_IDS`), once its story, meta, scene, tactic and card exist.
+ *
+ * Chapter IX, Yojimbo (FFX only) — `src/data/chapter-yojimbo-cavern.ts`.
+ */
+export const UNLISTED_CHAPTERS: readonly Chapter[] = [YOJIMBO_CAVERN] as const;
+
+/** Look a chapter up by id, listed or not. Returns `undefined` for an unknown id. */
 export function getChapter(id: string): Chapter | undefined {
-  return CHAPTERS.find((c) => c.id === id);
+  return CHAPTERS.find((c) => c.id === id) ?? UNLISTED_CHAPTERS.find((c) => c.id === id);
 }

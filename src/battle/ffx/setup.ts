@@ -30,6 +30,7 @@ import { refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
+import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 
 /** A permanent, undispellable instance of `status`. */
 function permanentStatus(status: StatusId): StatusInstance {
@@ -392,5 +393,6 @@ export function buildBattle(
   // The airship opens NEAR, Cid becomes a non-combatant turn-taker and Wakka's
   // blitzball becomes a ranged weapon [ffx-evrae-airship §4.1, §2.1, §4.3].
   applyEvraeSetup(ctx);
+  applyYojimboSetup(ctx); // Yojimbo's gauge; Ginnem and Daigoro take no turns [ffx-yojimbo §2.5, §4.1]
   return ctx;
 }

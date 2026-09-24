@@ -44,6 +44,7 @@ import { ormiAbilities, logosAbilities, goonAbilities } from '../../src/data/ffx
 import { leblancAbilities } from '../../src/data/ffx2/enemies/leblanc-syndicate-leblanc-abilities.ts';
 import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from '../../src/data/ffx/enemies/seymour-anima-macalania-abilities.ts';
 import { EVRAE_ABILITIES } from '../../src/data/ffx/enemies/evrae-abilities.ts';
+import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -105,6 +106,13 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     evrae: 'research/ffx-evrae-airship.md §1.1 (src/data/ffx/enemies/evrae.ts)',
     cid: 'research/ffx-evrae-airship.md §2.1 (src/data/ffx/enemies/evrae.ts)',
   },
+  // Chapter IX is registered but unlisted (`UNLISTED_CHAPTERS`), so the atlas,
+  // which walks `CHAPTER_IDS`, never builds it yet; the cites are ready for the day it is listed.
+  'yojimbo-cavern': {
+    ginnem: 'research/ffx-yojimbo.md §2.5 (src/data/ffx/enemies/yojimbo.ts)',
+    yojimbo: 'research/ffx-yojimbo.md §2.1 (src/data/ffx/enemies/yojimbo.ts)',
+    daigoro: 'research/ffx-yojimbo.md §2.5 (src/data/ffx/enemies/yojimbo.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -164,6 +172,9 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
   'evrae-airship': [
     fileCite(EVRAE_ABILITIES, 'research/ffx-evrae-airship.md §2.2, §3.1, §3.2 (src/data/ffx/enemies/evrae-abilities.ts)'),
   ],
+  'yojimbo-cavern': [
+    fileCite(YOJIMBO_ABILITIES, 'research/ffx-yojimbo.md §3.1 (src/data/ffx/enemies/yojimbo-abilities.ts)'),
+  ],
 };
 
 /**
@@ -202,6 +213,9 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
   // Every Evrae and Cid ability id is `evrae-`/`cid-`-prefixed and defined in
   // the chapter's own ability file (no shared player-catalog reuse).
   'evrae-airship': {},
+  // Every Yojimbo and Daigoro ability id is `yojimbo-`/`daigoro-`-prefixed and
+  // defined in the chapter's own ability file (no shared player-catalog reuse).
+  'yojimbo-cavern': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

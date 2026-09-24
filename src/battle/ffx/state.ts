@@ -134,6 +134,8 @@ export interface ActorRuntime {
    */
   countsPartyTargetings?: boolean;
   partyTargetings?: number;
+  /** On the field, but never in the CTB queue: acts only when ordered (`orders.ts`; Daigoro) [ffx-yojimbo §2.5]. */
+  ordersOnly?: boolean;
 }
 
 /** Battle-level engine bookkeeping. */
@@ -311,7 +313,6 @@ export function allCombatants(ctx: Ctx): FFXCombatant[] {
   }
   return out;
 }
-
 
 /** Party side while no aeon is out; the aeon alone while one is. */
 export function friendlySide(ctx: Ctx): Side {

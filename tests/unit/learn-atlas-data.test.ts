@@ -41,6 +41,8 @@ describe('buildChapterSpecimen', () => {
       'ffx2-leblanc': 'pink',
       'seymour-anima-macalania': 'gold',
       'evrae-airship': 'gold',
+      // Registered but unlisted (not in CHAPTER_IDS); FFX, so gold the day it is listed.
+      'yojimbo-cavern': 'gold',
     };
     for (const id of CHAPTER_IDS) {
       const specimen = buildChapterSpecimen(id);

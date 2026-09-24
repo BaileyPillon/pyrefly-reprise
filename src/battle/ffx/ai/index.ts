@@ -32,6 +32,7 @@ import './braskas-final-aeon.ts';
 import './yu-yevon.ts';
 import './seymour-anima-macalania.ts';
 import './evrae.ts';
+import './yojimbo.ts';
 
 export * from './types.ts';
 export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
@@ -53,6 +54,7 @@ export {
   runMacalaniaPhaseHooks,
 } from './seymour-anima-macalania.ts';
 export * from './evrae.ts';
+export * from './yojimbo.ts';
 
 /** True for any of the three actors in the Macalania formation. */
 function isMacalaniaScript(script: string): boolean {

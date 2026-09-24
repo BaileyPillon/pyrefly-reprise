@@ -114,10 +114,13 @@ import { YUNALESCA_ABILITIES } from './enemies/yunalesca-abilities.ts';
 import { BRASKAS_FINAL_AEON_ABILITIES } from './enemies/braskas-final-aeon-abilities.ts';
 import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from './enemies/seymour-anima-macalania-abilities.ts';
 import { EVRAE_ABILITIES } from './enemies/evrae-abilities.ts';
+// Chapter IX, Yojimbo in the Cavern of the Stolen Fayth (FFX only) — registered but unlisted.
+import { YOJIMBO_ABILITIES } from './enemies/yojimbo-abilities.ts';
 import { seymourFluxGroup } from './enemies/seymour-flux.ts';
 import { yunalescaGroup } from './enemies/yunalesca.ts';
 import { seymourAnimaMacalaniaGroup } from './enemies/seymour-anima-macalania.ts';
 import { evraeGroup } from './enemies/evrae.ts';
+import { yojimboGroup } from './enemies/yojimbo.ts';
 import {
   braskasFinalAeonGroup,
   possessedAeonGroups,
@@ -129,6 +132,7 @@ import { zanarkandBuild } from './builds/zanarkand.ts';
 import { dreamsEndBuild } from './builds/dreams-end.ts';
 import { macalaniaBuild } from './builds/macalania.ts';
 import { fahrenheitBuild } from './builds/fahrenheit.ts';
+import { yojimboCavernBuild } from './builds/yojimbo-cavern.ts';
 
 // ---------------------------------------------------------------------------
 // Ability catalog
@@ -233,6 +237,7 @@ const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...Object.values(BRASKAS_FINAL_AEON_ABILITIES),
   ...Object.values(SEYMOUR_ANIMA_MACALANIA_ABILITIES),
   ...Object.values(EVRAE_ABILITIES),
+  ...Object.values(YOJIMBO_ABILITIES),
 ];
 
 // Fold item-effect and boss abilities into the merged ABILITIES record.
@@ -287,6 +292,10 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   // its art [docs/handoff/chapter-evrae.md]. The unit and strategy suites
   // still look the formation up here by id.
   [evraeGroup.id]: evraeGroup,
+  // Chapter IX (`yojimbo-cavern`, src/data/chapter-yojimbo-cavern.ts) is
+  // registered by id but UNLISTED: not on chapter select until Bailey picks
+  // its art, story and gauge widget [docs/plans/chapter-yojimbo-review.md].
+  [yojimboGroup.id]: yojimboGroup,
 };
 
 /** Convenience alias for the first group of the possessed-aeon gauntlet. */
@@ -313,6 +322,7 @@ export {
   // Dev-only, like the formations above: neither chapter is registered yet.
   macalaniaBuild,
   fahrenheitBuild,
+  yojimboCavernBuild,
 };
 
 export type { AeonCatalogDef, OverdriveModeDef, FFXStatusDef, FFXCharacterDef };

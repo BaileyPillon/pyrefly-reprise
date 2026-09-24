@@ -67,9 +67,16 @@ export function tieBreakRank(ctx: Ctx, c: FFXCombatant): number {
  * counter and still reaches the front of the queue — it just loses the turn
  * when it gets there, which is the only place Sleep's duration is paid
  * [ffx-combat-core §1.1, §4.1].
+ *
+ * An actor marked `ActorRuntime.ordersOnly` is **on the field but owns no
+ * counter**: Yojimbo's dog acts only when Yojimbo's own turn orders it
+ * (`orders.ts`) [ffx-yojimbo §2.5]. Unset on every other actor, so every other
+ * battle's queue is unchanged. FFX only.
  */
 export function queueMembers(ctx: Ctx): FFXCombatant[] {
-  return [...friendlies(ctx), ...enemies(ctx)].filter((c) => onField(c) && inTurnQueue(c));
+  return [...friendlies(ctx), ...enemies(ctx)].filter(
+    (c) => onField(c) && inTurnQueue(c) && ctx.rt.actors.get(c.id)?.ordersOnly !== true,
+  );
 }
 
 /**

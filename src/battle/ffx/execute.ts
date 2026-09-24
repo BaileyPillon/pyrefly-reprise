@@ -29,6 +29,7 @@ import { triggerHandler } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 import { revealForSensorAuto } from './sensor.ts';
 import { resolveDoublecast } from './doublecast.ts';
+import { carryOutOrder } from './orders.ts';
 
 /** What executing a command did, so the engine loop knows how to proceed. */
 export interface ExecutionResult {
@@ -386,6 +387,8 @@ export function executeCommand(
 
   const damageDealt = resolveAbility(ctx, actor, def, command.targets, options);
   ctx.emit({ type: 'action-end', actorId: actor.id });
+  // A row that orders another actor to act (Yojimbo -> Daigoro): inert unless `extra.ordersActor` is set [orders.ts].
+  carryOutOrder(ctx, actor, def, (who, cmd) => executeCommand(ctx, who, cmd, true).damageDealt);
   return { rank: rankOf(def), damageDealt, def };
 }
 
