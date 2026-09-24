@@ -1,0 +1,8 @@
+{
+ "A": { "dr": { "png": "D:/Tools/pyrefly-lora/goons/r3/out/dr-A.72304r.png", "facing": "left" },
+        "fem": { "png": "D:/Tools/pyrefly-lora/goons/r3/out/fem-A.73303.png", "facing": "right" } },
+ "B": { "dr": { "png": "D:/Tools/pyrefly-lora/goons/r3/out/dr-B.72313.png", "facing": "left" },
+        "fem": { "png": "D:/Tools/pyrefly-lora/goons/r3/out/fem-B.73313r.png", "facing": "right" } },
+ "C": { "dr": { "png": "D:/Tools/pyrefly-lora/goons/r3/out/dr-C.72324.png", "facing": "right" },
+        "fem": { "png": "D:/Tools/pyrefly-lora/goons/r3/out/fem-C.73323.png", "facing": "right" } }
+}

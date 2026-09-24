@@ -1,0 +1,48 @@
+{
+ "title": "Dr. Goon + Fem-Goon: battle idle OPTIONS (FFX-2 only, Chapter VI Act I). Candidates, nothing installed",
+ "subtitle": "Pick one per goon, or a matched pair (A/A, B/B, C/C). Whole figures at 0.42x, the same scale as the trio's locked idles; faces at 1:1 native pixels; in-battle crops at 1:1 from a 1600x900 frame (RTX 5070 Ti, D3D11).",
+ "trio": [
+  ["Leblanc", "D:/Final Fantasy/public/art/characters/leblanc/idle.png"],
+  ["Logos", "D:/Final Fantasy/public/art/characters/logos/idle.png"],
+  ["Ormi", "D:/Final Fantasy/public/art/characters/ormi/idle.png"]
+ ],
+ "research": [
+  "\"Goons: masks and skin-tight suits; pink for the women, army green for the men.\" (sec 10.1, verified: 2 sources)",
+  "Act I: \"Ormi #220 ... + Dr. Goon (232 HP) + Fem-Goon (167 HP)\" (sec 4). Dr. Goon: \"Strike (physical, single)\". Fem-Goon: the four elements and \"Fan Slap\" (sec 4.6).",
+  "\"The Syndicate heart: the one shape that appears at every scale\" (sec 10.2, interpretive).",
+  "Not in the sources: the mask's shape, how much face shows, hair, build. A/B/C vary exactly those; every option keeps the suit colours and the heart."
+ ],
+ "installed": "D:/Tools/pyrefly-lora/goons/r3/ingame/shipped-enemies.png",
+ "rows": [
+  {
+   "title": "Dr. Goon",
+   "note": "army green suit, mask (sec 10.1). In battle every option stands 95 to 104 px tall against Ormi 123 px: the engine scale for the goons, not the art, sets that.",
+   "options": [
+    { "label": "A", "name": "Full balaclava", "png": "D:/Tools/pyrefly-lora/goons/r3/out/dr-A.72304r.png",
+      "line": "Full olive balaclava, fists up in a boxer's guard: the most faceless henchman. Pixel repair, no re-render: the tan loincloth is recoloured to a suit-olive waist sash and the bead necklace is painted out. The mask is a shade darker than the suit.",
+      "crops": { "face": [240, 10, 190, 200] }, "ingame": "D:/Tools/pyrefly-lora/goons/r3/ingame/A-enemies-frame.png" },
+    { "label": "B", "name": "Hood + face mask", "png": "D:/Tools/pyrefly-lora/goons/r3/out/dr-B.72313.png",
+      "line": "Olive hood and cloth mask over nose and mouth, eyes showing; low brawler stance. Extras the sources do not give are kept as rendered: a front cloth tabard, a brown belt buckle, heeled boots.",
+      "crops": { "face": [240, 10, 210, 220] }, "ingame": "D:/Tools/pyrefly-lora/goons/r3/ingame/B-enemies-frame.png" },
+    { "label": "C", "name": "Domino mask, face shown", "png": "D:/Tools/pyrefly-lora/goons/r3/out/dr-C.72324.png",
+      "line": "Black domino mask, dark hair, cocky grin, hand on hip: the most personality and the least masked. Very muscular (the sources give no build). Nearly front-on, so the engine's mirror matters least.",
+      "crops": { "face": [180, 10, 200, 210] }, "ingame": "D:/Tools/pyrefly-lora/goons/r3/ingame/C-enemies-frame.png" }
+   ]
+  },
+  {
+   "title": "Fem-Goon",
+   "note": "pink suit, mask (sec 10.1); casts elements, Fan Slap (sec 4.6)",
+   "options": [
+    { "label": "A", "name": "Full balaclava", "png": "D:/Tools/pyrefly-lora/goons/r3/out/fem-A.73303.png",
+      "line": "Full pink balaclava with a heart on the brow, hand on hip; pairs with Dr. Goon A. The pink runs hot magenta, stronger than the other two.",
+      "crops": { "face": [50, 10, 190, 200] }, "ingame": "D:/Tools/pyrefly-lora/goons/r3/ingame/A-enemies-frame.png" },
+    { "label": "B", "name": "Hood + face mask", "png": "D:/Tools/pyrefly-lora/goons/r3/out/fem-B.73313r.png",
+      "line": "Pink hood and cloth mask, hand at the hood; pairs with Dr. Goon B. Pixel repair, no re-render: the white face mask, white chest panel and blue arm bands are recoloured to the suit pink. Flag: the chest emblem is a red splash, not a clean heart.",
+      "crops": { "face": [100, 10, 200, 220] }, "ingame": "D:/Tools/pyrefly-lora/goons/r3/ingame/B-enemies-frame.png" },
+    { "label": "C", "name": "Domino mask, bob, fan", "png": "D:/Tools/pyrefly-lora/goons/r3/out/fem-C.73323.png",
+      "line": "Brown bob, pink domino mask, closed fan held at the chin (a nod to Fan Slap; the fan itself is not sourced), heart on the upper arm; pairs with Dr. Goon C.",
+      "crops": { "face": [60, 5, 200, 210] }, "ingame": "D:/Tools/pyrefly-lora/goons/r3/ingame/C-enemies-frame.png" }
+   ]
+  }
+ ]
+}

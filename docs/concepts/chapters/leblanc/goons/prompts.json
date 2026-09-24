@@ -1,0 +1,40 @@
+{
+ "dr": {
+  "base": "1boy, final fantasy x-2, safe, solo, male focus, a leblanc syndicate goon, an adult man of average build, wearing a skin-tight matte olive drab army green cloth bodysuit that covers him from neck to wrists and ankles, the suit fitted close to the body with only seam lines and soft fold shading, a pink heart emblem printed on the center of his chest, black gloves, black boots, (olive green bodysuit:1.3), (skin tight:1.2), (small pink heart emblem:1.05)",
+  "A": {
+   "mask": "a full-head olive green balaclava of the same stretch cloth as the suit, covering his whole head and face, two eye holes side by side showing both of his eyes, no hair visible, (olive green balaclava:1.3), (full face mask:1.15)",
+   "pose": "fighting stance, clenched hands, both fists raised in front of the chest, feet apart, knees slightly bent, looking at viewer",
+   "neg": "loincloth, pelvic curtain, apron, waist cloth, necklace, beads, chain, jewelry"
+  },
+  "B": {
+   "mask": "an olive green hood covering his hair and ears, the lower half of his face covered by an olive green cloth face mask of the same fabric as the suit pulled up over his nose, his eyes and the skin around them visible between hood and mask, two narrow dark eyes with eyebrows, (olive green face mask covering nose and mouth:1.25), (visible eyes:1.2), (hood:1.1)",
+   "pose": "fighting stance, clenched hands, both fists raised in front of the chest, feet apart, knees slightly bent, looking at viewer",
+   "neg": "shadowed face, faceless, glowing eyes, dark face, red lining, blue boots, two-tone, long scarf, hanging cloth, loincloth, pelvic curtain, high heels"
+  },
+  "C": {
+   "mask": "short dark hair, a black domino eye mask over his eyes, a toothy grin, the olive green bodysuit zipped closed up to the neck, (domino mask:1.3), (black eye mask:1.1), (closed bodysuit:1.2)",
+   "pose": "standing, one fist raised in front of the chest, the other fist at his hip, feet apart, a cocky grin, looking at viewer",
+   "neg": "jacket, open jacket, open clothes, coat, bare chest, pectorals, cleavage, scarf, sash, loincloth, swirl, ribbon, heart symbol, background heart"
+  }
+ },
+ "fem": {
+  "base": "1girl, final fantasy x-2, safe, solo, a leblanc syndicate goon, a young woman of slim build, wearing a skin-tight matte pink cloth bodysuit, the same pink on both arms and both legs that covers her from neck to wrists and ankles, the suit fitted close to the body with only seam lines and soft fold shading, a red heart emblem printed on the center of her chest, pink gloves, pink boots, (pink bodysuit:1.3), (skin tight:1.2), (small red heart emblem:1.05)",
+  "A": {
+   "mask": "a full-head pink balaclava of the same stretch cloth as the suit, covering her whole head and face, two eye holes side by side showing both of her eyes, no hair visible, (pink balaclava:1.3), (full face mask:1.15)",
+   "pose": "standing, weight on one hip, one hand on her hip, the other hand raised at shoulder height with the palm open, looking at viewer"
+  },
+  "B": {
+   "mask": "a pink hood covering her hair and ears, the lower half of her face covered by a pink cloth face mask of the same fabric as the suit pulled up over her nose, only her eyes visible between hood and mask, large eyes, (pink cloth face mask covering nose and mouth:1.35), (hood:1.1)",
+   "pose": "standing, weight on one hip, one hand on her hip, the other hand raised at shoulder height with the palm open, looking at viewer",
+   "neg": "floating heart, grey skin, pale face, exposed face, mouth, lips, arm patch, necktie, collar, white mask, white face mask, white chest, white panel, blue, armband, blue boots, cross"
+  },
+  "C": {
+   "mask": "(short hair:1.45), (bob cut:1.3), brown hair cut above the shoulders, a white domino eye mask over her eyes, a sly smile, the pink bodysuit covering her chest, shoulders and both arms to the wrists, (domino mask:1.4), (white eye mask:1.3), (long sleeves:1.2)",
+   "pose": "standing, weight on one hip, one hand on her hip, the other hand holding a closed pink folding fan raised at shoulder height, (holding folding fan:1.2), looking at viewer",
+   "neg": "long hair, very long hair, hair over shoulder, white bodysuit, white chest, two-tone, glasses, bare shoulders, sleeveless, halterneck, bare arms, black panels, high heels, blush"
+  }
+ },
+ "negAdd": "armor, shoulder armor, pauldrons, helmet, visor, metal mask, gold mask, plate armor, cape, cloak, hooded cloak, robe, coat, from behind, ass, arms crossed, weapon, text, letters, latex, shiny clothes, glossy, asymmetrical legwear, mismatched legwear, single leg pantyhose, cyclops, one eye, sneakers, shoulder patch, arm badge, surgical mask, medical mask, animal ears, cat ears, animal hood, orange, white leotard, two-tone bodysuit, scarf, sash, boxing gloves",
+ "negFullMask": "hair, long hair, exposed hair, headless",
+ "negC": ", long hair"
+}
