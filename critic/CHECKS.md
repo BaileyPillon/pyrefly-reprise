@@ -138,7 +138,10 @@ tests.
 3840x2160, **each in a fresh browser context** (a browser upgrades an `srcset`
 pick and never downgrades it, so resizing one page proves nothing about the
 small sizes). At each size measure: the painting's `getBoundingClientRect`
-equals the viewport rect exactly; `currentSrc` is the 2x master above roughly
+equals the viewport rect exactly (**exception, D-070, Bailey 2026-09-24:** a plate
+carrying `.pause__plate--slid` is option B, slid under the dark falloff on the
+chrome side on purpose; for it, check instead that the uncovered side is the
+feathered falloff, never a hard bar, and that the face stays wholly on screen); `currentSrc` is the 2x master above roughly
 1600 css px; `documentElement.scrollWidth === clientWidth`; the only transform
 between the `<img>` and the document is the drift's own matrix (any layer scale
 means text is being resampled). Then look at the screenshot: no bars, no soft
