@@ -163,6 +163,13 @@ export class BattleScreen extends Screen {
   /** The approved battle-start boss card while it is up. See {@link showBattleStart}. */
   private battleStartBanner: BattleStartBanner | null = null;
 
+  /**
+   * Set by {@link exit}. `App.replace` can tear this screen down while `enter()`
+   * is still awaiting its loads or the battle-start card is up, and both carry
+   * on afterwards: every await below checks this before touching anything.
+   */
+  private exited = false;
+
   /** Resolves when the encounter ends (victory, defeat, escape or exit). */
   readonly finished: Promise<BattleScreenResult>;
 
@@ -182,7 +189,9 @@ export class BattleScreen extends Screen {
     this.root.className = 'screen battle-screen';
 
     // --- diorama -----------------------------------------------------------
-    this.scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
+    const scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
+    if (this.exited) return void scene.dispose();
+    this.scene = scene;
     this.app.renderer.applyPalette(this.scene.palette);
     this.scene.hideOwnActors();
     this.syncPixelScale();
@@ -202,10 +211,13 @@ export class BattleScreen extends Screen {
     this.setup = resume ? resumeSetup(resume, this.opts.seed ?? 1) : setupForChapter(chapter, this.opts.seed ?? 1);
     this.group = resume ? resume.group : chapter.enemyGroupRef;
     this.engine = await createEngine(chapter.game, this.setup, { automated: this.opts.auto != null });
+    if (this.exited) return this.releaseParts();
     this.preview = this.engine === null;
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
+    if (this.exited) return this.releaseParts();
     this.airship = await attachAirshipBattle(this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8 only
+    if (this.exited) return this.releaseParts();
 
     // --- HUD + ports -------------------------------------------------------
     this.hud = createHud(chapter.game);
@@ -376,6 +388,9 @@ export class BattleScreen extends Screen {
 
   /** The chain loop. One iteration per formation. */
   private async runEncounter(): Promise<void> {
+    // Torn down while the card was up: `exit()` dismissed it (which is what
+    // resumed this chain) and already resolved `finished` as aborted.
+    if (this.exited) return;
     const presenter = this.presenter!;
     if (this.preview) {
       // No engine yet: play the canned reel so the scene is still alive.
@@ -896,10 +911,10 @@ export class BattleScreen extends Screen {
   // -------------------------------------------------------------------- exit
 
   override exit(): void {
+    this.exited = true;
     window.removeEventListener('keydown', this.onPauseKey);
-    // A screen torn down while the card is up must settle its promise, or the
-    // `.then(() => this.runEncounter())` chain in `enter` would never run and
-    // the encounter would never finish.
+    // Settle the card's promise so nothing stays parked on it; `runEncounter`
+    // sees `exited` and does not start the fight.
     this.battleStartBanner?.dismiss();
     this.battleStartBanner = null;
     this.pauseChip?.remove();
@@ -917,6 +932,12 @@ export class BattleScreen extends Screen {
     this.app.save.flushPlayTime();
     this.presenter?.abort();
     this.finish({ kind: 'aborted' });
+    this.releaseParts();
+    audio.stopMusic(0.6);
+  }
+
+  /** Dispose what `enter()` built; also where an `enter()` overtaken by {@link exit} stops. */
+  private releaseParts(): void {
     this.hud?.unmount();
     this.hud = null;
     this.cutscenes?.dispose();
@@ -931,6 +952,5 @@ export class BattleScreen extends Screen {
     this.scene = null;
     this.presenter = null;
     this.engine = null;
-    audio.stopMusic(0.6);
   }
 }
