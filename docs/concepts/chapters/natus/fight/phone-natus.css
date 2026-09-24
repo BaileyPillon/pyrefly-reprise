@@ -1,0 +1,19 @@
+/* Chapter X (FFX only) O-4 overlays at phone width, on top of the Yojimbo round's phone.css layout
+   and the shared chip/sigil styles in fight.css. Every label that carries fight information is >= 12 CSS px. */
+html, body { width: 390px; height: 844px; }
+.ph .ph__ctb-row { width: 56px; position: relative; }
+.nx-pc { position: absolute; top: 244px; z-index: 20; display: block; line-height: 1.25; padding: 2px 4px; font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; white-space: nowrap; }
+.nx-pc--ice { background: #9fd6f2; color: var(--ig-ink); }
+.nx-pc--warn { background: var(--ig-blood); color: #fff; }
+.nx-pb { display: inline-block; line-height: 1.25; height: auto; margin-left: 6px; padding: 1px 5px; font-family: var(--ig-font-display); font-style: normal; font-weight: 700; font-size: 12px; vertical-align: middle; }
+.nx-pb--haste { background: var(--ig-gold); color: var(--ig-ink); }
+.nx-pb--stone { background: #b8b2a6; color: var(--ig-ink); }
+.nx-pi { position: absolute; left: 16px; right: 16px; top: 452px; z-index: 8; padding: 8px 12px; background: rgba(11,10,18,0.9); border-left: 3px solid var(--ig-blood); }
+.nx-pi h4 { margin: 0 0 4px; font-family: var(--ig-font-display); font-size: 12px; letter-spacing: 0.18em; color: #e86a6a; text-transform: uppercase; }
+.nx-pi p { margin: 0; font-size: 15px; line-height: 1.3; }
+.nx-pi b { color: var(--ig-gold); }
+.nx-pw { position: absolute; left: 16px; top: 506px; z-index: 8; padding: 6px 10px; background: var(--ig-blood); color: #fff; font-family: var(--ig-font-display); font-weight: 700; font-size: 14px; }
+.nx-pw .pip { width: 11px; height: 11px; }
+.sg-ph { width: 46px !important; height: 46px !important; font-size: 13px !important; }
+.fl-ph { font-size: 13px !important; }
+.ph .ph__turn { top: 280px; }

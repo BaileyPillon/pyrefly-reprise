@@ -1,0 +1,299 @@
+{
+ "highbridge-a": {
+  "seed": 913101,
+  "prompt": "no humans, scenery, final fantasy x, scenery, no humans, bevelle highbridge, low level eye-height view straight along a wide stone bridge toward a tall ornate palace gate at the far end, the main gate of a holy city with tall golden doors, a wide plaza of pale cream stone paving in the foreground, crimson carpet borders with gold zigzag patterns, a green and dark blue diamond patterned runner down the middle, rows of huge crimson draped canopy pillars shaped like inverted cones along both sides, olive bronze arches between them, shallow water channels beside the walkway, tall crimson and gold temple spires rising behind the gate, the open sea far below, deep perspective, symmetrical composition, overcast grey noon sky, flat cool daylight, soft shadows, calm, quiet, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, sunset, night",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "generatedAt": "2026-09-24T18:10:04.020Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "highbridge-a2": {
+  "seed": 913102,
+  "prompt": "no humans, scenery, final fantasy x, scenery, no humans, bevelle highbridge, low level eye-height view along a wide stone bridge toward a tall ornate palace gate at the far end, the main gate of a holy city with tall golden doors, \\(a wide plaza of pale cream stone paving filling the foreground:1.3\\), crimson carpet borders with gold zigzag patterns, a green diamond patterned runner down the middle, \\(giant crimson fabric canopies shaped like inverted cones on tall pillars along both sides:1.3\\), olive bronze arches, shallow water channels beside the walkway, tall crimson and gold temple spires rising behind the gate, deep perspective, symmetrical composition, \\(overcast grey sky:1.3\\), flat cool grey daylight, no sun, soft shadows, muted colors, calm, quiet, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, sunset, night, sunlight, sunbeams",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "generatedAt": "2026-09-24T18:10:36.731Z",
+  "use": "O-3 A"
+ },
+ "highbridge-b": {
+  "seed": 913201,
+  "prompt": "no humans, scenery, final fantasy x, scenery, no humans, bevelle highbridge, low level eye-height view along a wide stone bridge toward a tall ornate palace gate at the far end, the main gate of a holy city with tall golden doors, \\(a wide plaza of pale cream stone paving filling the foreground:1.3\\), crimson carpet borders with gold zigzag patterns, a green diamond patterned runner down the middle, \\(giant crimson fabric canopies shaped like inverted cones on tall pillars along both sides:1.3\\), olive bronze arches, shallow water channels beside the walkway, tall crimson and gold temple spires rising behind the gate, deep perspective, symmetrical composition, \\(stormy dusk:1.3\\), heavy dark storm clouds lit orange and violet by the last of the setting sun, wind, rain in the distance, dramatic light, long shadows, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, clear sky, noon",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "generatedAt": "2026-09-24T18:10:52.523Z",
+  "use": "O-3 B"
+ },
+ "highbridge-c": {
+  "seed": 913301,
+  "prompt": "no humans, scenery, final fantasy x, scenery, no humans, bevelle highbridge, low level eye-height view along a wide stone bridge toward a tall ornate palace gate at the far end, the main gate of a holy city with tall golden doors, \\(a wide plaza of pale cream stone paving filling the foreground:1.3\\), crimson carpet borders with gold zigzag patterns, a green diamond patterned runner down the middle, \\(giant crimson fabric canopies shaped like inverted cones on tall pillars along both sides:1.3\\), olive bronze arches, shallow water channels beside the walkway, tall crimson and gold temple spires rising behind the gate, deep perspective, symmetrical composition, \\(night:1.3\\), deep blue night sky with stars, the city's windows and lanterns lit warm gold, lamps along the bridge, warm light reflecting in the dark water channels, quiet, moody, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, daylight, sun, noon",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "generatedAt": "2026-09-24T18:11:07.312Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "highbridge-c2": {
+  "seed": 913302,
+  "prompt": "no humans, scenery, final fantasy x, scenery, no humans, bevelle highbridge, low level eye-height view along a wide stone bridge toward a tall ornate palace gate at the far end, the main gate of a holy city with tall golden doors, \\(a wide plaza of pale cream stone paving filling the foreground:1.3\\), crimson carpet borders with gold zigzag patterns, a green diamond patterned runner down the middle, \\(giant crimson fabric canopies shaped like inverted cones on tall pillars along both sides:1.3\\), olive bronze arches, shallow water channels beside the walkway, tall crimson and gold temple spires rising behind the gate, deep perspective, symmetrical composition, \\(open air, open night sky above:1.3\\), \\(night:1.3\\), deep blue night sky with stars, the spires and windows of the city behind the gate lit warm gold, lamps along the bridge, warm light reflecting in the dark water channels, quiet, moody, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, daylight, sun, noon, ceiling, roof, corridor, hallway, indoors, interior",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "generatedAt": "2026-09-24T18:11:34.710Z",
+  "use": "O-3 C and the plate for the O-1/O-2/O-4 frames"
+ },
+ "morti-a": {
+  "seed": 912101,
+  "prompt": "no humans, monster, final fantasy x, floating biomechanical fiend, \\(dark bronze carapace shaped like a horned skull:1.3\\), hollow eye sockets, row of teeth, curved black horn spikes on top, \\(two long jointed blade legs hanging straight down ending in sharp points:1.3\\), a segmented scorpion tail curling up over its back, hovering, part machine part bone, ominous, full body, standing at ease, relaxed posture, weapon lowered or sheathed, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, people, character, humanoid, face on a human, text",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:07:26.853Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "morti-a2": {
+  "seed": 912102,
+  "prompt": "no humans, monster, final fantasy x, small floating fiend, \\(compact round body shaped like a giant horned skull:1.4\\), dark bronze and brown bone shell, hollow eye sockets, bared teeth on the underside, a few curved black horn spikes on top, \\(two long thin jointed blade legs hanging straight down below the skull ending in sharp points:1.3\\), a short segmented tail curling over the top, hovering, part machine part bone, ominous, standing at ease, relaxed posture, weapon lowered or sheathed, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, people, character, humanoid, face on a human, text, dragon, serpent, snake, long body, wyrm, red scales, wings",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:08:11.780Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "morti-a3": {
+  "seed": 912103,
+  "prompt": "no humans, monster, final fantasy x, small floating fiend, \\(compact round body shaped like a giant horned skull:1.4\\), dark bronze and brown bone shell, hollow eye sockets, bared teeth, curved black horn spikes on top, \\(two long thin blade legs hanging straight down below the skull:1.4\\), sharp pointed tips, segmented tail curling over the top, hovering, part machine part bone, ominous, cel shading, clean lineart, standing at ease, relaxed posture, weapon lowered or sheathed, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, people, character, humanoid, face on a human, text, dragon, serpent, snake, long body, wyrm, red scales, wings",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:08:40.967Z",
+  "use": "O-2 A"
+ },
+ "morti-b": {
+  "seed": 912201,
+  "prompt": "no humans, monster, final fantasy x, small floating fiend, \\(compact round body shaped like a horned skull:1.4\\), \\(pale ivory white bone shell:1.3\\), smooth porcelain bone, thin violet and teal cracks across the shell, hollow eye sockets, two long thin pale bone blade legs hanging straight down, segmented tail curling over the top, hovering, eerie, ghostly, cel shading, clean lineart, standing at ease, relaxed posture, weapon lowered or sheathed, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, people, character, humanoid, face on a human, text, dragon, serpent, snake, long body, wyrm, red scales, wings, bronze, brown",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:08:53.583Z",
+  "use": "O-2 B (pyrefly rim and motes added in PIL)"
+ },
+ "morti-c": {
+  "seed": 912301,
+  "prompt": "no humans, machine, mecha, final fantasy x, small floating war machine, \\(compact spherical body of dark iron plates:1.3\\), \\(gold filigree trim:1.2\\), ornate temple machina, a single round lens eye, curved iron horn spikes on top, \\(two long thin iron blade arms hanging straight down:1.3\\), segmented iron tail curling over the top, hovering, cel shading, clean lineart, standing at ease, relaxed posture, weapon lowered or sheathed, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, people, character, humanoid, face on a human, text, dragon, serpent, snake, long body, wyrm, red scales, wings, robot, humanoid robot, gun, cannon",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:09:10.499Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "morti-c2": {
+  "seed": 912302,
+  "prompt": "no humans, machine, final fantasy x, small floating war machine, \\(a single hovering iron sphere:1.4\\), round dark iron shell with gold filigree bands, one round lens eye, three curved iron horn spikes on top, \\(two long thin iron blade arms hanging straight down from the sphere:1.3\\), short segmented tail curling over the top, no legs, hovering, cel shading, clean lineart, standing at ease, relaxed posture, weapon lowered or sheathed, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, people, character, humanoid, face on a human, text, dragon, serpent, snake, long body, wyrm, red scales, wings, robot, humanoid, knight, armor, shoulder pads, shield, torso, gun, cannon, rainbow",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:09:33.027Z",
+  "use": "O-2 C"
+ },
+ "natus-a": {
+  "seed": 911101,
+  "prompt": "1boy, solo, male focus, seymour guado, final fantasy x, transformed demonic sorcerer, tall lean body, ashen blue grey skin, bare chest and abdomen with ridged ribs, long silver blue hair swept up into tall spikes, violet armored shoulders, dark violet armored forearms and shins with purple plating, clawed hands, long tattered cape of layered grey lavender blade-like feathers fanning down to the ground, a huge ornate carved grey stone ring behind his back like a halo, cold smile, imposing, hovering above the ground, arms held slightly out at his sides, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, wings, bird wings, angel, sword, weapon, staff, spear, blue robe, kimono, coat, background, scenery, sky, 2boys",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 832,
+   "height": 1216
+  },
+  "generatedAt": "2026-09-24T17:59:23.235Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "natus-a2": {
+  "seed": 911102,
+  "prompt": "1boy, solo, male focus, final fantasy x, transformed demonic sorcerer, tall lean body, pale ashen lavender grey skin, bare chest and abdomen with ridged ribs, \\(silver white hair swept upward into tall spikes:1.3\\), violet armored shoulders, dark violet armored forearms and shins with purple plating, clawed hands, \\(long skirt of many long grey lavender blade-shaped plates fanning out down to the floor:1.2\\), \\(huge round carved grey stone ring behind his back framing his whole body:1.3\\), engraved stone disc, cold smile, imposing, levitating, legs together, feet pointed down, arms held slightly out at his sides, palms down, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, wings, bird wings, angel, sword, weapon, staff, spear, blue robe, kimono, coat, cape, ribbons, blue hair, dark hair, background, scenery, sky, 2boys, latex, shiny clothes",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 832,
+   "height": 1216
+  },
+  "generatedAt": "2026-09-24T18:01:02.004Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "natus-a3": {
+  "seed": 911103,
+  "prompt": "1boy, seymour guado, final fantasy x, solo, male focus, demonic transformed form, pale grey blue skin, light blue silver hair swept up into a tall spiked crest, purple eyes, dark veins on his face, bare chest and abdomen with ridged ribs, broad violet armored pauldrons, dark violet armored arms and legs, clawed hands, long skirt of grey lavender blade-shaped feathers fanning down to a wide hem, \\(huge round carved grey stone ring standing behind him:1.35\\), stone ring larger than his body, \\(1boy:1.3\\), floating in midair, feet pointed down, arms spread at his sides, head turned toward the viewer, cold smile, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, wings, bird wings, angel, sword, weapon, staff, spear, shield, holding, robe, blue robe, kimono, coat, cape, ribbons, background, scenery, sky, 2boys, latex, shiny clothes",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:01:30.939Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "natus-a4": {
+  "seed": 911104,
+  "prompt": "1boy, seymour guado, final fantasy x, solo, male focus, demonic transformed form, pale grey blue skin, light blue silver hair swept up into a tall spiked crest, purple eyes, dark veins on his face, bare chest and abdomen with ridged ribs, broad violet armored pauldrons, dark violet armored arms and legs, clawed hands, \\(long skirt of grey lavender blade-shaped feathers fanning down to a wide jagged hem:1.2\\), \\(1boy:1.3\\), floating in midair, feet pointed down below the hem, arms spread slightly at his sides, head turned toward the viewer, cold smile, (three-quarter view:1.1), body turned slightly to the left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, wings, bird wings, angel, sword, weapon, staff, spear, shield, holding, robe, blue robe, kimono, coat, cape, ribbons, background, scenery, sky, 2boys, latex, shiny clothes, halo",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 832,
+   "height": 1216
+  },
+  "generatedAt": "2026-09-24T18:02:05.962Z",
+  "use": "O-1 A (and C, graded in PIL)"
+ },
+ "natus-b": {
+  "seed": 911104,
+  "prompt": "1boy, seymour guado, final fantasy x, solo, male focus, demonic transformed form, pale grey blue skin, light blue silver hair swept up into a tall spiked crest, purple eyes, dark veins on his face, bare chest and abdomen with ridged ribs, broad violet armored pauldrons, dark violet armored arms and legs, clawed hands, \\(long skirt of grey lavender blade-shaped feathers fanning down to a wide jagged hem:1.2\\), \\(1boy:1.3\\), floating in midair, feet pointed down below the hem, arms spread slightly at his sides, head turned toward the viewer, cold smile, (three-quarter view:1.1), body turned slightly to the left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, wings, bird wings, angel, sword, weapon, staff, spear, shield, holding, robe, blue robe, kimono, coat, cape, ribbons, background, scenery, sky, 2boys, latex, shiny clothes, halo",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 832,
+   "height": 1216
+  },
+  "ref": "D:/Tools/pyrefly-scratch/natus-options/tmp/ref-seymour-face.png",
+  "refWeight": 0.35,
+  "generatedAt": "2026-09-24T18:06:23.706Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "natus-b2": {
+  "seed": 911104,
+  "prompt": "1boy, seymour guado, final fantasy x, solo, male focus, demonic transformed form, pale grey blue skin, \\(very long straight light blue hair falling past the shoulders:1.3\\), side-swept bangs, sharp nose, pointed ears, purple eyes, dark veins on his face, bare chest and abdomen with ridged ribs, broad violet armored pauldrons, dark violet armored arms and legs, clawed hands, \\(long skirt of grey lavender blade-shaped feathers fanning down to a wide jagged hem:1.2\\), \\(1boy:1.3\\), floating in midair, feet pointed down below the hem, arms spread slightly at his sides, head turned toward the viewer, cold smile, (three-quarter view:1.1), body turned slightly to the left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, wings, bird wings, angel, sword, weapon, staff, spear, shield, holding, robe, blue robe, kimono, coat, cape, ribbons, background, scenery, sky, 2boys, latex, shiny clothes, halo, spiky hair, white hair",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 832,
+   "height": 1216
+  },
+  "ref": "D:/Tools/pyrefly-scratch/natus-options/tmp/ref-seymour-face.png",
+  "refWeight": 0.5,
+  "generatedAt": "2026-09-24T18:06:56.047Z",
+  "use": "O-1 B"
+ },
+ "natus-c": {
+  "seed": 911104,
+  "prompt": "1boy, seymour guado, final fantasy x, solo, male focus, demonic transformed form, dusky grey violet skin, light blue silver hair swept up into a tall spiked crest, purple eyes, dark veins on his face, bare chest and abdomen with ridged ribs, broad violet armored pauldrons, dark violet armored arms and legs, clawed hands, \\(long skirt of grey lavender blade-shaped feathers fanning down to a wide jagged hem:1.2\\), \\(1boy:1.3\\), \\(dark palette:1.2\\), deep indigo and near-black armor, low key lighting, cold violet and teal rim light, dim, ominous, floating in midair, feet pointed down below the hem, arms spread slightly at his sides, head turned toward the viewer, cold smile, (three-quarter view:1.1), body turned slightly to the left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, wings, bird wings, angel, sword, weapon, staff, spear, shield, holding, robe, blue robe, kimono, coat, cape, ribbons, background, scenery, sky, 2boys, latex, shiny clothes, halo, bright colors, pastel",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 832,
+   "height": 1216
+  },
+  "generatedAt": "2026-09-24T18:04:22.394Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "natus-ring-911202": {
+  "seed": 911202,
+  "prompt": "no humans, object focus, \\(a huge flat circular stone wheel:1.4\\), round carved grey stone disc with a large round hole in the centre, mandala, engraved swirling knotwork around the whole circle, weathered pale grey stone with violet shadows, ornate, symmetrical, full circle visible, isolated object, final fantasy x, standing at ease, relaxed posture, weapon lowered or sheathed, (front view:1.3), straight-on, flat, full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, character, statue, face, clock, jewelry, staff, sceptre, wand, handle, pole, tassels, shaft, spike",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:03:01.468Z",
+  "use": "withdrawn or superseded (see README)"
+ },
+ "natus-ring-911203": {
+  "seed": 911203,
+  "prompt": "no humans, object focus, \\(a huge flat circular stone wheel:1.4\\), round carved grey stone disc with a large round hole in the centre, mandala, engraved swirling knotwork around the whole circle, weathered pale grey stone with violet shadows, ornate, symmetrical, full circle visible, isolated object, final fantasy x, standing at ease, relaxed posture, weapon lowered or sheathed, (front view:1.3), straight-on, flat, full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, character, statue, face, clock, jewelry, staff, sceptre, wand, handle, pole, tassels, shaft, spike",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "source": {
+   "width": 1024,
+   "height": 1024
+  },
+  "generatedAt": "2026-09-24T18:03:23.744Z",
+  "use": "the stone ring behind O-1 A/B/C (outer band kept, centre cut out, greyed in PIL)"
+ },
+ "natus-ring-911201": {
+  "seed": 911201,
+  "use": "withdrawn: came out as a sceptre; the cut-out guard also rejected it"
+ },
+ "natus-portrait-a": {
+  "seed": 914101,
+  "use": "O-5 A; the cut-out guard rejected the matte, the raw render is shown",
+  "prompt": "see natus/README; character preset, --pose portrait, --ref the O-1 A head crop at 0.35 (forced)"
+ },
+ "_notes": {
+  "tool": "tools/gen/comfy.mjs presets character / boss / backdrop via gen.sh (submit only when /queue pending < 3; restart sentinel in a private log dir, ComfyUI never restarted)",
+  "O-1 C, O-2 B, O-5 B": "no render of their own: PIL grades of existing pixels (O-5 B from the approved seymour-macalania portrait)"
+ }
+}
