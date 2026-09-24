@@ -64,6 +64,20 @@ export function departureKindOf(id: CombatantId): DepartureKind {
 }
 
 /**
+ * `poses` with no painted `ko` for a figure that leaves some other way than
+ * being sent: `ko` points at its `hurt` painting (or `idle`), so a falls-away or
+ * yields figure can only ever draw an approved standing state, and the `ko`
+ * PNG is never even fetched. Evrae's `ko.png` sits outside the approved set
+ * (`docs/target/approved-hashes.json` chapter:evrae:2026-09-23; D-031: "not
+ * sent, not killed on screen"). A dissolving fiend keeps its map unchanged.
+ */
+export function departurePoses(id: CombatantId, poses: Record<string, string>): Record<string, string> {
+  const standing = poses['hurt'] ?? poses['idle'];
+  if (departureKindOf(id) === 'dissolve' || !('ko' in poses) || !standing) return poses;
+  return { ...poses, ko: standing };
+}
+
+/**
  * The fall, in milliseconds at timeScale 1: a lurch as it breaks, then the
  * drop: two KO beats (`TIMING.ko` 620) end to end, so the anticlimax has time
  * to read. Literals, not `TIMING.ko * 2`: this module and

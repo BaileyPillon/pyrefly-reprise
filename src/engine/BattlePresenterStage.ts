@@ -29,6 +29,7 @@ import {
 } from './ScreenRects.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
+import { departurePoses } from './BattlePresenterDepartures.ts';
 import { layProneFigures } from './ProneLay.ts';
 
 export interface PaintedStageOptions {
@@ -188,7 +189,9 @@ export class PaintedStage implements BattleStage {
     const kind: 'party' | 'enemy' = c.side === 'enemy' ? 'enemy' : 'party';
     // The mapped id first, then the raw ones, so a figure whose art has not
     // been renamed yet still shows its painting instead of a silhouette.
-    const { artId, poses } = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
+    const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
+    const { artId } = art;
+    const poses = departurePoses(c.id, art.poses); // no ko painting for Evrae's fall (D-031)
     const heights = {
       party: this.opts.slots.partyHeight ?? 1.82,
       enemy: this.opts.slots.enemyHeight ?? 4.1,
