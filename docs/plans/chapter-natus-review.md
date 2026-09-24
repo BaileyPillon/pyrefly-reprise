@@ -255,6 +255,5 @@ deploy while a deep review is owed needs Bailey's words.
 | R5 | Scope creep into the wedding, the trial, Isaaru, Evrae Altana | B11 = a, B14 = no |
 | R6 | Copyright pull toward "Run!!" and the original script | original cue and lines; the audition page and the draft say so |
 
-**Verdict: PROCEED.** Eighteen mechanics already work (§4.1), the shatter included; the new
-surface is the Mortibsorption seam, a stored phase, the combo and the Desperado trigger.
-Before the first perceivable line: B1–B16 answered, O-1 to O-6 picked. *Preflight only.*
+**Verdict: PROCEED.** Eighteen mechanics already work (§4.1), shatter included; new: the drain seam,
+a stored phase, the combo, Desperado. Nothing perceivable until B1–B16 and O-1 to O-6 are picked.
