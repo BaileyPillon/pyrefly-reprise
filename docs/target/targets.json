@@ -1201,7 +1201,11 @@
               "Lady Ginnem and Daigoro both untargetable (B3, D-051)",
               "no hiring or haggling this release (B4, D-052)",
               "chapter title \"Yojimbo\", location \"Cavern of the Stolen Fayth\" (B5, D-053)",
-              "Threaten fails on him until sourced (B9, D-057)"
+              "Threaten fails on him until sourced (B9, D-057)",
+              "the opening line-up: Lulu, Kimahri, Yuna (magic, Doom, the aeon that takes Zanmato), Tidus, Auron, Wakka, Rikku on the bench — answered 2026-09-24 ~12:50 EDT, \"All your recommendations\" (§3 Review item 1, D-066)",
+              "the Candle of Life is left out; Kimahri's Doom is the sourced route — answered 2026-09-24 ~12:50 EDT, \"All your recommendations\" (§3 Review item 1, D-067)",
+              "the four mid-battle callouts are in: gauge crosses 50% with Lulu reading the blade, \"Zanmato next turn\", Doom lands, an aeon takes Zanmato — gated on Bailey reading the story draft (docs/plans/yojimbo-story-draft.md) before they are built; answered 2026-09-24 ~12:50 EDT, \"All your recommendations\" (§7 Review item 2, D-068)",
+              "if the art picks are late, ship registered and LOCKED rather than hold the release (the Chapters VII/VIII precedent) — answered 2026-09-24 ~12:50 EDT, \"All your recommendations\" (R2 Review item 3, D-069)"
             ],
             "mustChange": [
               "the unsourced gauge-band odds split evenly, labelled our own estimate, not invented weights (B2, D-050)",
@@ -1211,12 +1215,7 @@
               "the Zanmato gauge is a bar under his name with the 25/50/80 bands, plus a one-shot full-gauge banner (O-5, D-062)"
             ],
             "undecided": [],
-            "inferred": [
-              "the opening line-up Lulu, Kimahri, Yuna — the research itself calls 'Lulu leads' a presentation choice, not a rule; never put to Bailey",
-              "leaving out the Candle of Life (the item exists but no source places one in this party at this point); never put to Bailey",
-              "the four mid-battle callouts (gauge past 50%, \"Zanmato next turn\", Doom lands, an aeon takes Zanmato) are new perceivable content with no option sheet of their own; never put to Bailey",
-              "shipping the chapter registered and LOCKED as a coming card if the art picks arrive too late for the build (the Chapter VII/VIII precedent); never put to Bailey — the preflight says this must be asked before the cut, not defaulted"
-            ]
+            "inferred": []
           }
         },
         {
