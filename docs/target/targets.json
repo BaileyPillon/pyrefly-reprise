@@ -1362,7 +1362,7 @@
           "label": "The Zanmato gauge (FFX)",
           "src": "docs/concepts/chapters/yojimbo/gauge/sheet.jpg",
           "state": "approved",
-          "delivery": "not-scheduled",
+          "delivery": "implemented",
           "game": "ffx",
           "note": "Option A, a bar under his name with the 25/50/80 bands, plus option C's one-shot full-gauge \"Zanmato\" banner (O-5, D-062). Highest-risk pick in the chapter (plan risk R1): if the built widget's stills alone do not settle the feel, a small clickable prototype comes before it ships. The mockups shipped at 1600x900 only; a phone-width mockup is still owed before the real widget is built.",
           "reactionOf": "Yojimbo, Chapter IX (FFX)",
@@ -1370,17 +1370,22 @@
             "date": "2026-09-24",
             "words": "All your recommendations",
             "how": "Answered as one line of the Yojimbo B1-B10/O-1..O-5 sheet, 2026-09-24.",
-            "liked": [],
+            "liked": [
+              "the built widget's mockup stills settled the feel on their own; no clickable prototype was needed (resolves R1) — answered 2026-09-24 ~19:20 EDT, \"I'll go with all your recommendations\" (D-124)"
+            ],
             "disliked": [],
-            "mustRemain": [],
+            "mustRemain": [
+              "no HP line, since Yojimbo cannot be Sensored — answered 2026-09-24 ~19:20 EDT, \"I'll go with all your recommendations\" (D-124)",
+              "the panel sits a little right and higher — answered 2026-09-24 ~19:20 EDT, \"I'll go with all your recommendations\" (D-124)",
+              "the band labels are one size bigger, for the 12px floor — answered 2026-09-24 ~19:20 EDT, \"I'll go with all your recommendations\" (D-124)",
+              "the banner's red line runs only as wide as its text — answered 2026-09-24 ~19:20 EDT, \"I'll go with all your recommendations\" (D-124)"
+            ],
             "mustChange": [
               "option A for the information (a bar under his name, the 25/50/80 bands) — not B (a ring round his CTB tile)",
               "option C's full-gauge banner folded onto A when the gauge reaches 100%",
               "the phone layout ships as drawn (docs/concepts/chapters/yojimbo/gauge/sheet-phone.jpg) — answered 2026-09-24 ~13:35 EDT, \"All your recommendations\" (O-5, D-073)"
             ],
-            "undecided": [
-              "whether the stills alone settle the feel, or a small clickable prototype is needed first (R1)"
-            ],
+            "undecided": [],
             "inferred": []
           }
         },
