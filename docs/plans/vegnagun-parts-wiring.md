@@ -82,11 +82,12 @@ Anchors are in the parent's `idle.png` pixel space, normalised:
 - World position: `parent.position + ((u - 0.5) * parent.worldWidth, v * parent.worldHeight, +0.05 toward the camera)`. `worldWidth` is `worldHeight * width / (baselineY - contentTop)`. Re-read the parent every frame so breathe, sway and hop carry the ring.
 - **Which part is which.** The part list order in `vegnagun-body.ts` and `vegnagun-head.ts` decides Right and Left. Map by id, not by slot index.
 - The Bulwark ground ring is also where the research's **5 m counter decal** (`research/ffx2-vegnagun-shuyin.md` §4.3.5) should be centred when that is built. The counter is positional, which is why off-screen was not offered for the Bulwarks.
+- **Redoubt C\* is at the bar only once its label is fixed.** The judge scored it 7.6 "(fix the label)": in the C\* mock the "LEFT REDOUBT" label was clipped to "LEFT REDOUB" by the command menu at 1600x900 (`docs/concepts/portraits/nooj-brother/JUDGE.md`, Vegnagun section; D-044 records the same condition). Whatever names a ring (the target plate or a ring label) must be placed on the side away from `.ffx2hud__command`, or dodge it the way the intent slab does; the phase-2 check measures the label's full text box against the command window at all four sizes, 0 px² overlap and no ellipsis.
 - Ring look: reuse `TargetHighlight` / `turnRing` styling (violet `0xc8a0ff`, as the C\* mock used), shown while the part is targeted, acting or selectable. A KO'd part's ring fades out; the parent painting stays.
 
 ### 4. Node C: overhead, off-frame
 
-Research §2 says "Nodes hang far overhead", and §4.3.2 gives the anchors:
+Research §2 says "Nodes hang far overhead" (the only sourced claim about where the Nodes are). §4.3.2 gives anchors, but they are a **Pyrefly design decision, not a source**: the research's own open-issues row 14 says the §4.3 battlefield geometry is "entirely unsourced" apart from the 5 m radius and the 2 s chain window (AGENTS.md rule 6).
 
 | Node | x | z | y |
 |---|---|---|---|
@@ -94,9 +95,11 @@ Research §2 says "Nodes hang far overhead", and §4.3.2 gives the anchors:
 | B | +6.0 | 0.0 | **+10.5** |
 | C | +5.0 | −6.0 | **+9.0** |
 
-- The research values are in its wide-field frame (party at x −5..−6). This scene uses its own frame, with the leg on `ENEMY_SLOTS[0] = [0.8, 0, -5.0]`. Place the Nodes **relative to the leg**: `leg.position + (dx, y, dz)` with dx ≈ +2 / +3 / +2, the research's y (9 / 10.5 / 9), and dz ≈ −1.5 / 0 / +1.5. Those dx and dz values are staging, not sourced; the y values are sourced.
+- The research values are in its wide-field frame (party at x −5..−6). This scene uses its own frame, with the leg on `ENEMY_SLOTS[0] = [0.8, 0, -5.0]`. Place the Nodes **relative to the leg**: `leg.position + (dx, y, dz)` with dx ≈ +2 / +3 / +2, the research's y (9 / 10.5 / 9), and dz ≈ −1.5 / 0 / +1.5. None of these numbers is sourced: dx and dz are staging chosen here, and the y values are §4.3.2's own design decision. Re-tune all three against the camera; do not cite them as game data.
 - Check that all three project **above the top edge** (screen y < 0) at the chapter's camera. If one does not, raise it rather than lower the others.
-- **Edge marker (the C mock):** for each live Node whose projected point is off-frame, draw a small arrow plus the name ("NODE A") at the top edge. Clamp its x to the projection and colour it by the Node's colour state (red, green, yellow, from the §3.2 state machine the engine already runs). This is DOM chrome in the FFX-2 HUD, so a later agent owns it: `src/ui/ffx2`, not `src/ui/ffx`.
+- **Edge marker (the C mock):** for each live Node whose projected point is off-frame, draw a small arrow plus the name ("NODE A") at the top of the frame. Clamp its x to the projection and colour it by the Node's colour state (red, green, yellow, from the §3.2 state machine the engine already runs). This is DOM chrome in the FFX-2 HUD, so a later agent owns it: `src/ui/ffx2`, not `src/ui/ffx`.
+  - **Arrow and plate are one unit.** The judge found the C mock's Node C arrow about 90 px right of its "NODE C" plate (`docs/concepts/portraits/nooj-brother/JUDGE.md`, Vegnagun section). Build the arrow as a child of the plate, centred on it, and clamp the pair together; the test below checks the arrow's centre x is within the plate's box.
+  - **Do not collide with the command-help band (D-040, PR-0012).** Since 3fc3a931 / 9d3653b7 a full-width band sits at the top of the FFX-2 stage (`.ffx2-cmd-info`, 17.33 grid units tall, `top: 0`, left edge after the PAUSE chip) whenever a command menu is open and BATTLE HELP is on; on a portrait letterbox it sits in the bar just above the stage (`src/ui/ffx2/commandHelpBand.ts`). The markers must sit **under** that band's reserved strip, not in it: put their top at `bandReserve()` (the same value the intent slab uses as headroom, from `commandHelpBand.ts`) plus a 2-unit gap, at all times while BATTLE HELP is on, so they do not jump when a menu opens. They must also stay clear of the boss strip (`.ffx2hud__enemies`, top 41) and the Active/Wait chip (`--x2-atbmode-top`, 22): the free row between them is narrow, so check at 1280x720, 1600x900, 2000x1012 and 390x844 and add the markers to `intentObstacles()` so the intent slab dodges them.
 - The HUD bars (Node A/B/C) and the intent card already carry the Nodes. Keep them.
 - The Nodes' long-range-only gating is engine data (`reachableBy`, §4.3.4), and placement must not change it.
 - `ENEMY_SLOTS` keeps four entries. Its comment about Node C landing on Node B stops mattering once the Nodes are anchored.
@@ -107,7 +110,8 @@ Research §2 says "Nodes hang far overhead", and §4.3.2 gives the anchors:
 - A Chapter 5 visual check at links 2, 3 and 4 (GPU, real keys):
   - no hooded cones;
   - rings on the forelegs and on the tusk and jaw when targeting;
-  - three edge markers at the top for the Nodes;
+  - three edge markers at the top for the Nodes, each arrow inside its own plate, none overlapping the command-help band, the boss strip, the Active/Wait chip or the intent slab;
+  - both Redoubt labels shown whole (no clipping by the command window);
   - the target cursor lands on the ring.
 - Re-run `tests/unit/engine/formation.test.ts` and `tests/unit/strategy-ffx2-vegnagun-shuyin.test.ts`.
 
