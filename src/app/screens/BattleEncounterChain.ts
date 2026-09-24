@@ -205,7 +205,15 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
     const state = engine.state();
     setup = setupForNextLink(setup, nextGroup, state, opts.seed + links);
     group = nextGroup;
+    // The screen can be left from the pause menu (RESTART ENCOUNTER, CHAPTER
+    // SELECT, QUIT) while the next link is being staged or the Save Sphere card
+    // plays: the exit aborts the presenter and releases the pause gate, so the
+    // card resumes and returns here on a screen that is gone. Nothing below may
+    // touch the engine, the stage or the music after that (fa-flow repair: the
+    // Sisters' theme used to start on chapter select).
+    const aborted = (): boolean => presenter.isAborted === true;
     const restage = async (): Promise<void> => {
+      if (aborted()) return;
       engine.setSeed(setup.seed);
       engine.init(setup);
       await stage.stage(engine.state());
@@ -215,7 +223,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
       // refilled HP and MP before the wash clears.
       let swapped = false;
       await opts.saveSphere(async () => {
-        if (swapped) return;
+        if (swapped || aborted()) return;
         swapped = true;
         await restage();
         presenter.syncHud(engine);
@@ -224,6 +232,10 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
       if (!swapped) await restage();
     } else {
       await restage();
+    }
+    if (aborted()) {
+      outcome = { kind: 'aborted' };
+      break;
     }
 
     const cue = cueForGroup(chapter, group, 'next');

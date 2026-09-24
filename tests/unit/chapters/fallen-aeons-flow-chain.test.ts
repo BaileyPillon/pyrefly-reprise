@@ -266,3 +266,104 @@ describe('the chain data behind it', () => {
     expect((await findEnemyGroup(ROAD_ANIMA))?.restoresPartyOnEntry).toBe(true);
   });
 });
+
+describe('leaving the screen from the pause menu mid-transition stages and scores nothing (fa-flow repair)', () => {
+  /**
+   * The verifier's regression: pause during the Save Sphere card, pick CHAPTER
+   * SELECT, and the Sisters' boss theme started on chapter select. The exit
+   * aborts the presenter and releases the pause gate, so the card returned and
+   * the loop went on to the next cue. Here the "screen exit" is an abort of the
+   * scripted presenter at the named moment.
+   */
+  async function exitDuring(when: 'before-swap' | 'after-swap') {
+    const setup = battered(7);
+    const engine = await ffx2Engine(setup);
+    const { presenter } = scriptedPresenter(['victory', 'victory', 'victory']);
+    let aborted = false;
+    Object.defineProperty(presenter, 'isAborted', { get: () => aborted });
+    const music: string[] = [];
+    const staged: string[][] = [];
+    let swapCalls = 0;
+    const result = await runEncounterChain({
+      chapter: CHAPTER,
+      presenter,
+      engine,
+      stage: { stage: async (s) => void staged.push(s.enemyIds.slice()) },
+      group: CHAPTER.enemyGroupRef,
+      setup,
+      seed: 7,
+      findGroup: findEnemyGroup,
+      audio: { playMusic: (name: string) => void music.push(name) },
+      saveSphere: async (swap) => {
+        swapCalls++;
+        if (when === 'before-swap') aborted = true;
+        await swap();
+        if (when === 'after-swap') aborted = true;
+      },
+    });
+    return { result, music, staged, swapCalls, enemies: engine.state().enemyIds.slice() };
+  }
+
+  it('exit during the wash-in: no swap, no re-stage, no next cue, the chain ends aborted', async () => {
+    const run = await exitDuring('before-swap');
+    expect(run.swapCalls).toBe(1);
+    expect(run.staged).toEqual([]);
+    // The engine is left on Shiva: nothing was initialised on the exited screen.
+    expect(run.enemies).toEqual(['x2-shiva']);
+    // Only the opening cue; the Sisters' cue never plays.
+    expect(run.music.length).toBe(1);
+    expect(run.result.outcome.kind).toBe('aborted');
+    expect(run.result.links).toBe(1);
+  });
+
+  it('exit under the card (after the swap): no next cue, the chain ends aborted', async () => {
+    const run = await exitDuring('after-swap');
+    expect(run.staged).toEqual([['sandy', 'cindy', 'mindy']]);
+    expect(run.music.length).toBe(1);
+    expect(run.result.outcome.kind).toBe('aborted');
+  });
+
+  it('the same guard holds on a plain re-stage (both games): an exit mid-restage plays no next cue', async () => {
+    const chained = [...CHAPTERS, ...UNLISTED_CHAPTERS].filter((c) => c.id !== CHAPTER.id && c.enemyGroupRef.nextGroupId);
+    expect(chained.length).toBeGreaterThan(0);
+    for (const chapter of chained) {
+      const { presenter } = scriptedPresenter(['victory', 'victory', 'victory', 'victory', 'victory']);
+      let aborted = false;
+      Object.defineProperty(presenter, 'isAborted', { get: () => aborted });
+      const setup = setupForChapter(chapter, 3);
+      const music: string[] = [];
+      let stages = 0;
+      const engine = {
+        setSeed: () => {},
+        init: () => {},
+        state: () => ({ combatants: {}, flags: {}, enemyIds: [] }) as unknown as BattleState,
+      } as unknown as BattleEngine;
+      const result = await runEncounterChain({
+        chapter,
+        presenter,
+        engine,
+        stage: {
+          stage: async () => {
+            stages++;
+            aborted = true; // the pause's CHAPTER SELECT lands while the next link stages
+          },
+        },
+        group: chapter.enemyGroupRef,
+        setup,
+        seed: 3,
+        findGroup: findEnemyGroup,
+        audio: { playMusic: (name: string) => void music.push(name) },
+      });
+      expect(stages, chapter.id).toBe(1);
+      expect(music.length, chapter.id).toBeLessThanOrEqual(1);
+      expect(result.outcome.kind, chapter.id).toBe('aborted');
+      expect(result.links, chapter.id).toBe(1);
+    }
+  });
+
+  it('a run nobody leaves is untouched by the guard: all three links, three cues or fewer, victory', async () => {
+    const run = await road(['victory', 'victory', 'victory']);
+    expect(run.outcome.kind).toBe('victory');
+    expect(run.fought.length).toBe(3);
+  });
+});

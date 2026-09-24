@@ -39,6 +39,12 @@ export interface SaveSphereCardOptions {
   sleep?: (ms: number) => Promise<void>;
   /** `speed: 'skip'`: swap and return, draw nothing. */
   instant?: boolean;
+  /**
+   * True once the screen has been left (the presenter aborted). Checked after
+   * every beat: the card then takes itself down at once, and a card cancelled
+   * before the swap never swaps, so nothing is staged on a screen that is gone.
+   */
+  cancelled?: () => boolean;
 }
 
 /** The card's words, exactly as c-2 draws them. */
@@ -70,10 +76,12 @@ export function buildSaveSphereCard(doc: Document = document): HTMLElement {
 /**
  * Wash in, swap the link under the cover, hold the card, wash out.
  *
- * Always resolves, and always calls `swap` exactly once: a torn-down root only
- * cuts the show short, never the fight.
+ * Always resolves, and calls `swap` exactly once unless `cancelled` turns true
+ * before it: a torn-down root only cuts the show short, never the fight.
  */
 export async function playSaveSphereCard(opts: SaveSphereCardOptions): Promise<void> {
+  const cancelled = (): boolean => opts.cancelled?.() === true;
+  if (cancelled()) return;
   if (opts.instant) {
     await opts.swap();
     return;
@@ -86,9 +94,11 @@ export async function playSaveSphereCard(opts: SaveSphereCardOptions): Promise<v
     void el.offsetWidth;
     el.classList.add('ssphere--in');
     await sleep(SAVE_SPHERE_TIMING.washIn);
+    if (cancelled()) return;
     await opts.swap();
     el.classList.add('ssphere--card');
     await sleep(SAVE_SPHERE_TIMING.hold);
+    if (cancelled()) return;
     el.classList.remove('ssphere--in');
     el.classList.add('ssphere--out');
     await sleep(SAVE_SPHERE_TIMING.washOut);

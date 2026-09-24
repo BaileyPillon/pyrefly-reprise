@@ -398,7 +398,13 @@ export class BattleScreen extends Screen {
       audio,
       startLink: this.opts.resumeAt?.link ?? 1,
       saveSphere: (swap) =>
-        playSaveSphereCard({ root: this.root, swap, sleep: this.pauseGate, instant: presenter.playbackSpeed === 'skip' }),
+        playSaveSphereCard({
+          root: this.root,
+          swap,
+          sleep: this.pauseGate,
+          instant: presenter.playbackSpeed === 'skip',
+          cancelled: () => presenter.isAborted,
+        }),
       onLink: ({ links, group, setup }) => {
         this.links = links;
         this.checkpoint = checkpointAt(links, group, setup) ?? this.checkpoint;

@@ -103,3 +103,53 @@ describe('the beat', () => {
     expect(card()).toBeNull();
   });
 });
+
+describe('leaving the screen during the card (fa-flow repair)', () => {
+  it('cancelled during the wash-in: never swaps, and the overlay is gone at once', async () => {
+    let cancelled = false;
+    let swaps = 0;
+    const slept: number[] = [];
+    await playSaveSphereCard({
+      root,
+      swap: async () => {
+        swaps++;
+      },
+      sleep: async (ms) => {
+        slept.push(ms);
+        cancelled = true; // the pause's CHAPTER SELECT, during the wash-in
+      },
+      cancelled: () => cancelled,
+    });
+    expect(swaps).toBe(0);
+    expect(slept).toEqual([SAVE_SPHERE_TIMING.washIn]);
+    expect(card()).toBeNull();
+  });
+
+  it('cancelled under the card: swapped once, no wash-out wait, overlay gone', async () => {
+    let cancelled = false;
+    let swaps = 0;
+    const slept: number[] = [];
+    await playSaveSphereCard({
+      root,
+      swap: async () => {
+        swaps++;
+      },
+      sleep: async (ms) => {
+        slept.push(ms);
+        if (ms === SAVE_SPHERE_TIMING.hold) cancelled = true;
+      },
+      cancelled: () => cancelled,
+    });
+    expect(swaps).toBe(1);
+    expect(slept).toEqual([SAVE_SPHERE_TIMING.washIn, SAVE_SPHERE_TIMING.hold]);
+    expect(card()).toBeNull();
+  });
+
+  it('already cancelled: draws nothing and swaps nothing, even at skip speed', async () => {
+    let swaps = 0;
+    await playSaveSphereCard({ root, instant: true, swap: async () => void swaps++, cancelled: () => true });
+    await playSaveSphereCard({ root, swap: async () => void swaps++, cancelled: () => true });
+    expect(swaps).toBe(0);
+    expect(root.children.length).toBe(0);
+  });
+});
