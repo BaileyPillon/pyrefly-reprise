@@ -42,12 +42,11 @@ import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
-import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
+import { BODY_HALF_WIDTH, boardRects, fighterBoxes, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
 import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
-import { TargetPlates, targetPlateText } from './TargetPlates.ts';
-import type { GridRect } from './targetPlateGeometry.ts';
+import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
 
 /**
  * PR-0012 (round 09 built the description logic, round 10 gated the slab off
@@ -105,25 +104,6 @@ const TELEGRAPH_HOLD_MS = 2400;
 /** How often the HUD re-measures its own panels for the field, in ms. */
 const PANEL_PUBLISH_MS = 250;
 
-/** One rectangle the intent slab must not cover. */
-type IntentAvoidRect = SlabRect;
-
-/**
- * A fighter's body half-width as a fraction of its projected height. See
- * `fighterBoxes` for why this is a ratio and not a measurement.
- */
-const BODY_HALF_WIDTH = 0.28;
-
-/**
- * `EnemyIntent.ts`'s own placement constants, mirrored so the slab's natural
- * position can be reproduced here before it is solved for. They are grid px and
- * scale with the letterbox, exactly as they do there.
- */
-const INTENT_HEAD_GAP = 10;
-const INTENT_EDGE_MARGIN = 4;
-const INTENT_FALLBACK_W = 150;
-const INTENT_FALLBACK_H = 40;
-
 /** The guide rail's own column in stage px (`strategy-guide.css`: left 21.33, width 132). */
 const GUIDE_RAIL_LEFT = 21.33;
 const GUIDE_RAIL_RIGHT = GUIDE_RAIL_LEFT + 132;
@@ -140,9 +120,6 @@ const ADVISOR_BOTTOM = 26;
  * back by hand.
  */
 const SKEW_TANGENT = Math.tan((12 * Math.PI) / 180);
-
-/** PR-0150: the target-select plates, which the intent slab steers around with a margin. */
-const PLATE_SELECTORS: ReadonlySet<string> = new Set(['.ffx2-tplate', '.ffx2-aplate', '.ffx2-ctlhint']);
 
 function isAtbSnapshot(p: TurnPreview[] | AtbSnapshot): p is AtbSnapshot {
   return !Array.isArray(p);
@@ -482,46 +459,8 @@ export class FFX2BattleHud implements HudPort {
 
   /** Every box on the board the slab would rather not cover, in viewport px. */
   private intentObstacles(opts: { skipChainChip?: boolean; addIntentPanel?: boolean } = {}): IntentAvoidRect[] {
-    const out: IntentAvoidRect[] = [];
-    const selectors = [
-      '.ffx2hud__enemies',
-      '.ffx2hud__party',
-      '.ffx2hud__command',
-      '.ffx2hud__telegraph',
-      '.mad__card',
-      '.mad__toggle',
-      '.sgd__panel',
-      '.sgd__toggle',
-      '.ffx2-chain-chip',
-      // PR-0150: the target-select plates (`TargetPlates.ts`).
-      '.ffx2-tplate',
-      '.ffx2-aplate',
-      '.ffx2-ctlhint',
-      // Not `.ffx2sc`: the spherechange wheel is a modal sized to the whole
-      // overlay, so listing it would make every placement "covered" and send
-      // the solver hunting for a spot that does not exist. It is *meant* to be
-      // over the slab, and it takes input while it is up.
-    ] as const;
-    const all = opts.addIntentPanel ? [...selectors, '.eint__panel', '.eint__toggle'] : selectors;
-    for (const selector of all) {
-      if (opts.skipChainChip && selector === '.ffx2-chain-chip') continue;
-      for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
-        // Size alone: a zero-size box already means "not laid out", and it
-        // covers `[hidden]` (forced to `display: none` by `tokens.css`) and a
-        // hidden ancestor too. See the FFX twin.
-        const r = el.getBoundingClientRect();
-        if (r.width <= 0 || r.height <= 0) continue;
-        // The PR-0150 plates keep a gap, and reach down by the slab's `E HIDE`
-        // chip: the solver places the slab's own box, and the chip rides above
-        // that box's top-right corner, so a slab parked right under a plate
-        // wore its chip across the plate.
-        const plate = PLATE_SELECTORS.has(selector);
-        const pad = plate ? 3 * (this.stageScale || 1) : 0;
-        const below = plate ? pad + this.intentChipHeight() : 0;
-        out.push({ left: r.left - pad, top: r.top - pad, right: r.right + pad, bottom: r.bottom + below });
-      }
-    }
-    for (const box of this.fighterBoxes()) out.push(box);
+    const out = boardRects(this.el, { ...opts, scale: this.stageScale || 1, chipReach: this.intentChipHeight() });
+    for (const box of fighterBoxes(this.lastState, this.project)) out.push(box);
     // PR-0012: in a portrait letterbox the help band sits in the bar above the
     // stage, outside the headroom `solveIntentPlacement` reserves; name it.
     if (battleHelpOn()) {
@@ -569,77 +508,19 @@ export class FFX2BattleHud implements HudPort {
     const head = this.project(view.enemyId, 'head');
     if (!head) return null;
 
-    const scale = this.stageScale || 1;
     const chip = this.el.querySelector<HTMLElement>('.eint__toggle');
     const box = this.intent.isVisible ? this.el.querySelector<HTMLElement>('.eint__panel') : chip;
-    const rect = box?.getBoundingClientRect();
-    const w = rect?.width || INTENT_FALLBACK_W * scale;
-    const h = rect?.height || INTENT_FALLBACK_H * scale;
-    // The chip rides the panel's top-right corner and is clamped into the
-    // frame, so a slab flush with the top edge wears its own `E HIDE` across
-    // its first line. Reserve the chip's band while the panel is up.
-    const chipRoom = this.intent.isVisible ? (chip?.getBoundingClientRect().height ?? 8 * scale) + scale : 0;
-    // PR-0012: while BATTLE HELP is on, the top band owns the stage's first
-    // 17.33 grid rows whenever a menu is open; the slab (and its chip) start
-    // under it at all times, so opening a menu never makes the slab jump.
     const bandIn = this.bandInput();
-    const bandTop = battleHelpOn() ? bandReserve(bandGeometry(bandIn), bandIn) : 0;
-    const headroom = chipRoom + Math.max(0, bandTop - layer.top);
-
-    const edge = INTENT_EDGE_MARGIN * scale;
-    const cx = head.x - layer.left;
-    const cy = head.y - layer.top;
-    const natural = { left: cx - w / 2, top: cy - INTENT_HEAD_GAP * scale - h };
-
-    const local = obstacles.map((o) => ({
-      left: o.left - layer.left,
-      top: o.top - layer.top,
-      right: o.right - layer.left,
-      bottom: o.bottom - layer.top,
-    }));
-    const target = placeSlab(natural, { w, h }, local, { width: layer.width, height: layer.height }, edge, headroom);
-    const clampedNatural = {
-      left: Math.max(edge, Math.min(Math.max(edge, layer.width - w - edge), natural.left)),
-      top: Math.max(edge, Math.min(Math.max(edge, layer.height - h - edge), natural.top)),
-    };
-    return steerRects(clampedNatural, target, { w, h }, { width: layer.width, height: layer.height }).map((r) => ({
-      left: r.left + layer.left,
-      top: r.top + layer.top,
-      right: r.right + layer.left,
-      bottom: r.bottom + layer.top,
-    }));
-  }
-
-  /**
-   * Every living fighter's body box, in viewport pixels.
-   *
-   * There are no sprite bounds to ask for — `PaintedStage.snapshot()` reports
-   * poses, not extents — so a box is the projected head-to-feet span with a
-   * half-width of {@link BODY_HALF_WIDTH} of that height. That is about right
-   * for the girls and deliberately narrow for a spread dragon: a box that
-   * claimed Bahamut's whole wingspan would leave the slab nowhere to stand.
-   */
-  private fighterBoxes(): IntentAvoidRect[] {
-    const state = this.lastState;
-    if (!state) return [];
-    const out: IntentAvoidRect[] = [];
-    for (const id of Object.keys(state.combatants)) {
-      const c = state.combatants[id];
-      if (!c || c.hp <= 0) continue;
-      const head = this.project(id, 'head');
-      const feet = this.project(id, 'feet');
-      if (!head || !feet) continue;
-      const height = Math.abs(feet.y - head.y);
-      if (height <= 0) continue;
-      const half = height * BODY_HALF_WIDTH;
-      out.push({
-        left: head.x - half,
-        right: head.x + half,
-        top: Math.min(head.y, feet.y),
-        bottom: Math.max(head.y, feet.y),
-      });
-    }
-    return out;
+    return solveSlab({
+      obstacles,
+      layer,
+      head,
+      scale: this.stageScale || 1,
+      box: box?.getBoundingClientRect() ?? null,
+      panelUp: this.intent.isVisible,
+      chipHeight: chip?.getBoundingClientRect().height ?? null,
+      bandTop: battleHelpOn() ? bandReserve(bandGeometry(bandIn), bandIn) : 0,
+    });
   }
 
   /**
@@ -1098,28 +979,21 @@ export class FFX2BattleHud implements HudPort {
    */
   private layoutPlates(): void {
     if (!this.mounted || !this.plates.visible) return;
-    const host = this.el.getBoundingClientRect();
-    const scale = this.stageScale || 1;
-    const grid = (el: HTMLElement | null): GridRect | null => {
-      const r = el?.getBoundingClientRect();
-      if (!r || r.width <= 0 || r.height <= 0) return null;
-      const x = host.left + this.stageX;
-      const y = host.top + this.stageY;
-      return { left: (r.left - x) / scale, top: (r.top - y) / scale, right: (r.right - x) / scale, bottom: (r.bottom - y) / scale };
-    };
-    const bandShown = !!this.commandInfoEl && !this.commandInfoEl.hidden;
-    const bandInBar = bandShown && this.commandInfoEl.classList.contains('ffx2-cmd-info--bar');
-    const partyLeft = parseFloat(this.fenceColumnEl?.style.left ?? '');
-    this.plates.layout({
-      scale,
-      stageY: host.top + this.stageY,
-      chip: grid(this.activeWaitEl),
-      command: grid(this.commandEl),
-      telegraph: grid(this.telegraphEl),
-      bandBottom: bandShown && !bandInBar ? BAND_GRID_HEIGHT : 0,
-      bandBarHeight: bandInBar ? this.commandInfoEl.getBoundingClientRect().height / scale : 0,
-      partyLeft: Number.isFinite(partyLeft) ? partyLeft : null,
-    });
+    this.plates.layout(
+      plateInputFromDom({
+        host: this.el.getBoundingClientRect(),
+        stageX: this.stageX,
+        stageY: this.stageY,
+        scale: this.stageScale || 1,
+        chip: this.activeWaitEl,
+        command: this.commandEl,
+        telegraph: this.telegraphEl,
+        band: this.commandInfoEl ?? null,
+        bandGridHeight: BAND_GRID_HEIGHT,
+        partyFence: this.fenceColumnEl ?? null,
+        overlay: this.overlay,
+      }),
+    );
   }
 
   /**

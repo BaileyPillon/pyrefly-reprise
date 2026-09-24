@@ -167,17 +167,98 @@ export interface HintInput {
   width: number;
   /** The party column's leftmost row edge on the grid (the HUD's column fence), or null. */
   partyLeft: number | null;
+  /**
+   * The field cursor's own name plates and group label (`TargetCursor`'s
+   * `.ffx-target__plate` / `.ffx-target__all`), on the grid. They dock off the
+   * figure they name, so a figure standing low docks its plate on the hint's
+   * row; the hint moves off them, they never move for the hint (one side
+   * adapts, so the two cannot chase each other).
+   */
+  field?: readonly GridRect[];
 }
 
-/** The controls hint, bottom centre, never under the party column. `null` = no room. */
+/** The hint's row on the grid for a given left edge and width. */
+function hintBox(left: number, width: number): GridRect {
+  const top = GRID_H - HINT_BOTTOM - HINT_HEIGHT;
+  return { left, top, right: left + width, bottom: top + HINT_HEIGHT };
+}
+
+/**
+ * The controls hint, bottom centre, never under the party column and never
+ * under a field name plate: centred when that is clear, else slid along its
+ * row to the clear spot nearest the centre. `null` = no room.
+ */
 export function hintPlacement(input: HintInput): PlacedPlate | null {
   const wall = (input.partyLeft ?? HINT_FALLBACK_WALL) - GAP;
   const spanL = LEFT_EDGE;
   const room = wall - spanL;
   if (input.width <= 0 || room <= 0) return null;
   const w = Math.min(input.width, room);
-  const left = Math.max(spanL, Math.min(wall - w, GRID_W / 2 - w / 2));
-  return { left, top: GRID_H - HINT_BOTTOM - HINT_HEIGHT, width: w };
+  const centred = Math.max(spanL, Math.min(wall - w, GRID_W / 2 - w / 2));
+  const field = input.field ?? [];
+  const lefts = [centred];
+  for (const f of field) lefts.push(f.right + GAP, f.left - GAP - w);
+  const clear = lefts
+    .filter((l) => l >= spanL - 0.01 && l + w <= wall + 0.01)
+    .filter((l) => !field.some((f) => overlaps(hintBox(l, w), f)))
+    .sort((a, b) => Math.abs(a - centred) - Math.abs(b - centred));
+  const left = clear[0];
+  if (left === undefined) return null;
+  return { left, top: hintBox(left, w).top, width: w };
+}
+
+/** The hint's top edge on the grid in the bar under a portrait stage (`.ffx2-ctlhint--bar`'s `top`). */
+export const BAR_HINT_TOP = GRID_H + 2;
+
+export interface HintBarInput {
+  /** The hint's height on the grid (its box times the bar zoom). */
+  height: number;
+  /** The grid y of the viewport's bottom edge: how far down the bar reaches. */
+  viewBottom: number;
+  /** The field cursor's name plates and group label, on the grid (see {@link HintInput.field}). */
+  field: readonly GridRect[];
+  /**
+   * The drop already taken during this target select. The hint never climbs
+   * back while the cursor steps (Dr. Goon's plate hangs lower than Ormi's), so
+   * it settles once instead of hopping with every arrow key.
+   */
+  from?: number;
+}
+
+/**
+ * How far the hint drops inside the bar under a portrait stage so that no
+ * field name plate lands on it, in grid units; `null` when the bar runs out
+ * first (the hint then hides). The bar hint spans the whole grid width, so a
+ * plate docked under a figure standing near the bottom of the stage (Dr. Goon
+ * and Ormi in chapter 6 at 390x844) reaches into it.
+ */
+export function hintBarDrop(input: HintBarInput): number | null {
+  const box = (top: number): GridRect => ({ left: 0, top, right: GRID_W, bottom: top + input.height });
+  let top = BAR_HINT_TOP + Math.max(0, input.from ?? 0);
+  for (let pass = 0; pass <= input.field.length; pass++) {
+    const hit = input.field.find((f) => overlaps(box(top), f));
+    if (!hit) break;
+    top = hit.bottom + GAP;
+  }
+  if (input.field.some((f) => overlaps(box(top), f))) return null;
+  if (top + input.height > input.viewBottom) return null;
+  return top - BAR_HINT_TOP;
+}
+
+/** A viewport rect expressed on the stage grid, given the grid's origin and scale. `null` when not laid out. */
+export function toGrid(
+  r: { left: number; top: number; right: number; bottom: number; width: number; height: number } | undefined,
+  originX: number,
+  originY: number,
+  scale: number,
+): GridRect | null {
+  if (!r || r.width <= 0 || r.height <= 0) return null;
+  return {
+    left: (r.left - originX) / scale,
+    top: (r.top - originY) / scale,
+    right: (r.right - originX) / scale,
+    bottom: (r.bottom - originY) / scale,
+  };
 }
 
 export interface PlateModeInput {

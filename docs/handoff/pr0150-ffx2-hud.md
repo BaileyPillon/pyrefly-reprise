@@ -45,6 +45,39 @@ The presenter half (hold the frame, keep the party in shot) is afb1657a / 56fecb
   and reticle were still up at +900 ms, in the victory pose. After, they are gone by +250 ms.
   See `docs/screenshots/pr0150-hud/victory-under-menu-*.jpg`.
 
+## Repair pass (after the verifier)
+
+- **Refuted: the phone hint under a field name plate.** In chapter 6 at 390x844 the field
+  cursor's own name plate (`.ffx-target__plate`, docked under Dr. Goon or Ormi, who stand low
+  on the stage) reached into the bar under the stage and covered the middle of the hint. The
+  first pass never measured the field plates. Now `plateInputFromDom` (`TargetPlates.ts`) reads
+  the field plates and the group label off the overlay each frame. In the bar, `hintBarDrop`
+  (`targetPlateGeometry.ts`) drops the hint just under any plate that reaches into it, or hides
+  it if the bar runs out. On the stage, `hintPlacement` slides the hint along its row to the
+  clear spot nearest the centre, or hides it. Only the hint adapts. The field plate never moves
+  for the hint, so the two cannot chase each other. During one target select the bar hint never
+  climbs back up, so it settles once and does not hop with each arrow key (Dr. Goon's plate
+  hangs lower than Ormi's). The same defect was also in chapter 4 on the phone (Bahamut's
+  plate, 102x14 px). The verifier's list did not include that case. It is fixed by the same change.
+- **Found in the repair pass: the petals over the plates.** The first pass made the plates
+  layer a later sibling of the overlay, but `.ffx-target__plate`'s layer `.ffx-targeting`
+  carries `z-index: 36` (`ffx-hud.css`), so a sibling without a z-index lost. On the phone
+  Bahamut's ring reached into the bar and a petal covered the actor plate's `WARRIOR` tag.
+  `.ffx2hud__plates` now takes `z-index: 36` too. A test compares the two stylesheets.
+- **Rule 7:** the intent-slab board (`boardRects`, `fighterBoxes`, `solveSlab`) moved unchanged
+  into `src/ui/ffx2/intentBoard.ts`, and the plates' DOM read moved into `TargetPlates.ts`.
+  `FFX2BattleHud.ts` is 1215 lines, down from 1341 and below its 1259 before PR-0150. It is
+  still over 400. Splitting the rest is its own job.
+- Tests: six new cases in `tests/unit/ui-ffx2-target-plates.test.ts` use the refuted frame's own
+  measured boxes. With the field plates cut from the layout, the wiring case fails.
+- Browser proof. Real keys, GPU (RTX 5070 Ti, D3D11), own vite with HMR off. Chapters 4, 5 and 6 at
+  1280x720, 1600x900, 2000x1012 and 390x844, measured in the page against the chrome and now
+  also the field name plates: 0 overlaps in 12 of 12. Phone target stepping with ArrowRight
+  (chapter 6: Dr. Goon, Ormi, Fem-Goon; chapter 4: Bahamut) found 0 overlaps, and Esc takes the
+  plates down. The side-by-side images `side-by-side-*.jpg` were regenerated on the repaired
+  build. `repair-before-*` and `repair-after-*` show the chapter 6 phone frame before and after,
+  and the chapter 4 phone frame with the petals under the plates.
+
 ## Open
 
 - The tile's "Vegnagun — Head" is concept text. Every Vegnagun link's boss is named "Vegnagun"

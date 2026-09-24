@@ -9,9 +9,17 @@
  * `.ffx2hud__plates` is a second grid layer, transformed exactly like
  * `.ffx2hud__stage` (`FFX2BattleHud.layout`) but stacked above the overlay, so
  * the six-petal reticle (on the overlay) never paints over a plate.
+ *
+ * DOM order alone does not do that: the reticle lives in `.ffx-targeting`,
+ * which carries `z-index: 36` (`ffx-hud.css`) and so out-ranks any later
+ * sibling with no z-index. On a portrait phone the ring (up to a third of the
+ * short edge) reached up into the bar and painted a petal across the actor
+ * plate's `WARRIOR` tag. The plates layer takes the same 36, and as the later
+ * sibling it paints over the reticle. It only has content during target select.
  */
 .ffx2hud__plates {
   position: absolute;
+  z-index: 36;
   top: 0;
   left: 0;
   width: 640px;
@@ -173,7 +181,8 @@
   margin-left: auto;
 }
 .ffx2-ctlhint--bar {
-  top: calc(100% + 2px);
+  /* `--tp-drop`: pushed down the bar past a field name plate (`hintBarDrop`). */
+  top: calc(100% + 2px + var(--tp-drop, 0px));
   left: 0;
   width: calc(640px / var(--tp-zoom, 1));
   height: auto;

@@ -3,9 +3,11 @@ import type { BattleState, CombatantId, FFX2Combatant } from '../../battle/commo
 import type { CursorSelection } from '../ffx/TargetCursor.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
 import {
+  hintBarDrop,
   hintPlacement,
   plateMode,
   plateRow,
+  toGrid,
   type GridRect,
   type PlacedPlate,
   type PlateMode,
@@ -84,6 +86,56 @@ export interface PlateLayoutInput {
   bandBarHeight: number;
   /** The party column's leftmost row edge on the grid. */
   partyLeft: number | null;
+  /** The field cursor's name plates and group label on the grid: the hint moves off them. */
+  field: GridRect[];
+  /** The grid y of the viewport's bottom edge (how far the bar under a portrait stage reaches). */
+  viewBottom: number;
+}
+
+/** The live DOM the HUD owns, from which {@link plateInputFromDom} reads one frame's {@link PlateLayoutInput}. */
+export interface PlateSources {
+  /** The HUD root's viewport rect, and the stage's offset inside it and scale (`FFX2BattleHud.layout`). */
+  host: DOMRect;
+  stageX: number;
+  stageY: number;
+  scale: number;
+  chip: HTMLElement | null;
+  command: HTMLElement | null;
+  telegraph: HTMLElement | null;
+  /** The PR-0012 help band, and its height on the grid while it sits on the stage. */
+  band: HTMLElement | null;
+  bandGridHeight: number;
+  /** The party column fence (`style.left` = the column's leftmost row edge on the grid). */
+  partyFence: HTMLElement | null;
+  /** The reticle overlay the field cursor draws its name plates on. */
+  overlay: HTMLElement;
+}
+
+/** Where the plates' neighbours are this frame, on the stage grid. */
+export function plateInputFromDom(src: PlateSources): PlateLayoutInput {
+  const x = src.host.left + src.stageX;
+  const y = src.host.top + src.stageY;
+  const grid = (el: Element | null): GridRect | null => toGrid(el?.getBoundingClientRect(), x, y, src.scale);
+  const bandShown = !!src.band && !src.band.hidden;
+  const bandInBar = bandShown && src.band!.classList.contains('ffx2-cmd-info--bar');
+  const partyLeft = parseFloat(src.partyFence?.style.left ?? '');
+  const field: GridRect[] = [];
+  for (const el of src.overlay.querySelectorAll('.ffx-target__plate, .ffx-target__all')) {
+    const r = grid(el);
+    if (r) field.push(r);
+  }
+  return {
+    scale: src.scale,
+    stageY: y,
+    chip: grid(src.chip),
+    command: grid(src.command),
+    telegraph: grid(src.telegraph),
+    bandBottom: bandShown && !bandInBar ? src.bandGridHeight : 0,
+    bandBarHeight: bandInBar ? src.band!.getBoundingClientRect().height / src.scale : 0,
+    partyLeft: Number.isFinite(partyLeft) ? partyLeft : null,
+    field,
+    viewBottom: (src.host.height - src.stageY) / src.scale,
+  };
 }
 
 /** Mounts the plates into the FFX-2 HUD's stage and keeps them placed. */
@@ -96,6 +148,8 @@ export class TargetPlates {
   /** Natural widths in grid units, measured once per content change. */
   private natural = { target: 0, actor: 0, hint: 0 };
   private mode: PlateMode = { mode: 'stage', zoom: 1 };
+  /** How far the bar hint has dropped during this target select (`hintBarDrop`'s `from`). */
+  private barDrop = 0;
 
   constructor() {
     this.row = document.createElement('div');
@@ -132,6 +186,7 @@ export class TargetPlates {
 
   /** Paint the text for a live selection. Placement follows on the next {@link layout}. */
   show(text: TargetPlateText): void {
+    if (!this.shown) this.barDrop = 0;
     this.shown = true;
     this.target.querySelector('.ffx2-tplate__name')!.textContent = text.target.name;
     const tag = this.target.querySelector<HTMLElement>('.ffx2-tplate__tag')!;
@@ -223,6 +278,18 @@ export class TargetPlates {
         el.style.width = '';
         el.classList.remove('ffx2-tplate--off');
       }
+      // The hint drops down the bar past any field name plate docked there
+      // (a figure standing low on the stage), or hides if the bar runs out.
+      this.hint.style.setProperty('--tp-drop', '0px');
+      const height = this.hint.offsetHeight * this.mode.zoom;
+      let drop = hintBarDrop({ height, viewBottom: input.viewBottom, field: input.field, from: this.barDrop });
+      // Out of bar below the settled spot: try again from the top of the bar before hiding.
+      if (drop === null && this.barDrop > 0) drop = hintBarDrop({ height, viewBottom: input.viewBottom, field: input.field });
+      this.hint.classList.toggle('ffx2-tplate--off', drop === null);
+      if (drop !== null) {
+        this.barDrop = drop;
+        this.hint.style.setProperty('--tp-drop', `${drop.toFixed(2)}px`);
+      }
       return;
     }
     this.refreshNatural();
@@ -236,7 +303,8 @@ export class TargetPlates {
     });
     place(this.target, row.target);
     place(this.actor, this.actor.hidden ? null : row.actor);
-    place(this.hint, hintPlacement({ width: this.natural.hint, partyLeft: input.partyLeft }));
+    this.hint.style.removeProperty('--tp-drop');
+    place(this.hint, hintPlacement({ width: this.natural.hint, partyLeft: input.partyLeft, field: input.field }));
   }
 }
 

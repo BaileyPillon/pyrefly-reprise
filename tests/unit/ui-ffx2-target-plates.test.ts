@@ -1,12 +1,16 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
-import { targetPlateText } from '../../src/ui/ffx2/TargetPlates.ts';
+import { plateInputFromDom, TargetPlates, targetPlateText } from '../../src/ui/ffx2/TargetPlates.ts';
 import {
+  BAR_HINT_TOP,
   GAP,
   GRID_H,
+  GRID_W,
+  HINT_HEIGHT,
   RIGHT_EDGE,
   ROW_HEIGHT,
+  hintBarDrop,
   hintPlacement,
   plateMode,
   plateRow,
@@ -185,6 +189,113 @@ describe('the s3 plates on the 640x360 grid (targetPlateGeometry)', () => {
   });
 });
 
+/**
+ * Verifier finding on 21154c36: in chapter 6 at 390x844 the field cursor's own
+ * name plate (`.ffx-target__plate`, docked under Dr. Goon, who stands low on
+ * the stage) reached into the bar under the stage and covered the middle of
+ * the controls hint ("ENTER CONFI ... ANGE TARGET", 101x18 px). The measured
+ * boxes below are that frame's, converted to the grid (scale 390/640, stage
+ * top 312.19 px).
+ */
+describe('the controls hint never sits under a field name plate', () => {
+  const PHONE_SCALE = 390 / 640;
+  const PHONE_Y = (844 - 360 * PHONE_SCALE) / 2;
+  const g = (top: number, bottom: number, left: number, right: number): GridRect => ({
+    left: left / PHONE_SCALE,
+    right: right / PHONE_SCALE,
+    top: (top - PHONE_Y) / PHONE_SCALE,
+    bottom: (bottom - PHONE_Y) / PHONE_SCALE,
+  });
+  /** "Dr. Goon" docked below the figure: viewport 106..204 x 545..575. */
+  const DR_GOON = g(545, 575, 106, 204);
+  const VIEW_BOTTOM = (844 - PHONE_Y) / PHONE_SCALE;
+  /** The bar hint's box at 390x844: 26 px high. */
+  const HINT_H = 26 / PHONE_SCALE;
+  const hintAt = (drop: number): GridRect => ({ left: 0, right: GRID_W, top: BAR_HINT_TOP + drop, bottom: BAR_HINT_TOP + drop + HINT_H });
+
+  it('drops the bar hint under Dr. Goon\'s plate on a portrait phone (chapter 6, 390x844)', () => {
+    expect(overlaps(hintAt(0), DR_GOON)).toBe(true); // the refuted frame
+    const drop = hintBarDrop({ height: HINT_H, viewBottom: VIEW_BOTTOM, field: [DR_GOON] });
+    expect(drop).not.toBeNull();
+    expect(overlaps(hintAt(drop!), DR_GOON)).toBe(false);
+    expect(BAR_HINT_TOP + drop! + HINT_H).toBeLessThanOrEqual(VIEW_BOTTOM);
+    // Still right under the plate, not flung to the bottom of the screen.
+    expect(BAR_HINT_TOP + drop!).toBeCloseTo(DR_GOON.bottom + GAP);
+  });
+
+  it('stays put when nothing reaches into the bar, and clears two stacked plates', () => {
+    expect(hintBarDrop({ height: HINT_H, viewBottom: VIEW_BOTTOM, field: [] })).toBe(0);
+    const high: GridRect = { left: 100, right: 200, top: 300, bottom: 350 }; // on the stage, above the bar
+    expect(hintBarDrop({ height: HINT_H, viewBottom: VIEW_BOTTOM, field: [high] })).toBe(0);
+    const lower: GridRect = { left: 300, right: 420, top: DR_GOON.bottom + 10, bottom: DR_GOON.bottom + 40 };
+    const drop = hintBarDrop({ height: HINT_H, viewBottom: VIEW_BOTTOM, field: [lower, DR_GOON] })!;
+    for (const f of [DR_GOON, lower]) expect(overlaps(hintAt(drop), f)).toBe(false);
+  });
+
+  it('hides the bar hint rather than cover a plate when the bar runs out', () => {
+    expect(hintBarDrop({ height: HINT_H, viewBottom: DR_GOON.bottom + 10, field: [DR_GOON] })).toBeNull();
+  });
+
+  it('slides the on-stage hint off a field plate on its row, or hides it with no clear spot', () => {
+    const row = GRID_H - 3 - HINT_HEIGHT;
+    const plate: GridRect = { left: 250, right: 330, top: row - 5, bottom: row + 8 };
+    const h = hintPlacement({ width: 180, partyLeft: 455, field: [plate] })!;
+    expect(h).not.toBeNull();
+    expect(overlaps(box(h, HINT_HEIGHT), plate)).toBe(false);
+    expect(h.left + h.width).toBeLessThanOrEqual(455 - GAP + 1e-9);
+    const wide: GridRect = { left: 0, right: 640, top: row, bottom: row + 4 };
+    expect(hintPlacement({ width: 180, partyLeft: 455, field: [wide] })).toBeNull();
+    // A plate off the hint's row changes nothing.
+    const above: GridRect = { left: 250, right: 330, top: 200, bottom: 230 };
+    expect(hintPlacement({ width: 180, partyLeft: 455, field: [above] })).toEqual(hintPlacement({ width: 180, partyLeft: 455 }));
+  });
+
+  it('reads the field cursor\'s name plates off the overlay, on the grid', () => {
+    const overlay = document.createElement('div');
+    const fieldPlate = document.createElement('div');
+    fieldPlate.className = 'ffx-target__plate ffx-target__plate--enemy ffx-target__plate--below';
+    fieldPlate.getBoundingClientRect = () => ({ left: 106, right: 204, top: 545, bottom: 575, width: 98, height: 30, x: 106, y: 545, toJSON: () => ({}) }) as DOMRect;
+    overlay.append(fieldPlate);
+    const host = { left: 0, top: 0, right: 390, bottom: 844, width: 390, height: 844, x: 0, y: 0, toJSON: () => ({}) } as DOMRect;
+    const input = plateInputFromDom({
+      host, stageX: 0, stageY: PHONE_Y, scale: PHONE_SCALE,
+      chip: null, command: null, telegraph: null, band: null, bandGridHeight: 17.33, partyFence: null, overlay,
+    });
+    expect(input.field).toHaveLength(1);
+    expect(input.field[0]!.top).toBeCloseTo(DR_GOON.top);
+    expect(input.field[0]!.bottom).toBeCloseTo(DR_GOON.bottom);
+    expect(input.viewBottom).toBeCloseTo(VIEW_BOTTOM);
+  });
+
+  it('TargetPlates.layout pushes the bar hint down past the plate, keeps it there while the cursor steps, and resets it next time', () => {
+    const stage = document.createElement('div');
+    const plates = new TargetPlates();
+    plates.mount(stage);
+    plates.show({ target: { name: 'Dr. Goon', tag: null }, actor: { name: 'Yuna', job: 'GUNNER' }, canStep: true });
+    Object.defineProperty(plates.hint, 'offsetHeight', { configurable: true, get: () => 26 / PHONE_SCALE / 1.4 });
+    const base = {
+      scale: PHONE_SCALE, stageY: PHONE_Y, chip: null, command: null, telegraph: null,
+      bandBottom: 0, bandBarHeight: 30, partyLeft: 455, viewBottom: VIEW_BOTTOM,
+    };
+    plates.layout({ ...base, field: [DR_GOON] });
+    expect(plates.hint.classList.contains('ffx2-ctlhint--bar')).toBe(true);
+    const drop = parseFloat(plates.hint.style.getPropertyValue('--tp-drop'));
+    expect(drop).toBeGreaterThan(0);
+    expect(plates.hint.classList.contains('ffx2-tplate--off')).toBe(false);
+    // The cursor steps to a target whose plate is higher (Ormi): the hint stays settled, it does not hop.
+    plates.layout({ ...base, field: [] });
+    expect(parseFloat(plates.hint.style.getPropertyValue('--tp-drop'))).toBeCloseTo(drop);
+    // A new target select starts from the top of the bar again.
+    plates.hide();
+    plates.show({ target: { name: 'Ormi', tag: null }, actor: { name: 'Yuna', job: 'GUNNER' }, canStep: true });
+    plates.layout({ ...base, field: [] });
+    expect(parseFloat(plates.hint.style.getPropertyValue('--tp-drop'))).toBe(0);
+    plates.layout({ ...base, field: [DR_GOON], viewBottom: DR_GOON.bottom + 5 });
+    expect(plates.hint.classList.contains('ffx2-tplate--off')).toBe(true);
+    plates.unmount();
+  });
+});
+
 describe('what the plates say (targetPlateText)', () => {
   it('names the target from data, tags a part PART, and names the actor with her dressphere', () => {
     const s = state();
@@ -254,6 +365,24 @@ describe('the FFX-2 HUD during target select', () => {
     const layers = [...root.querySelector('.ffx2hud')!.children].map((c) => c.className);
     expect(layers.indexOf('ffx2hud__plates')).toBeGreaterThan(layers.indexOf('ffx2hud__overlay'));
     expect(root.querySelector('.ffx2hud__plates [data-role="target-plate"]')).not.toBeNull();
+  });
+
+  it('the plates layer is stacked at least as high as the reticle layer, not just later in the DOM', async () => {
+    // `.ffx-targeting` carries a z-index, so DOM order alone lost: a petal painted
+    // across the actor plate on a portrait phone (repair pass, chapter 4, 390x844).
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const z = (file: string[], selector: string): number => {
+      const sheet = readFileSync(join(process.cwd(), 'src', 'ui', ...file), 'utf8');
+      const at = sheet.indexOf(`\n${selector} {`);
+      if (at < 0) return 0;
+      const body = sheet.slice(at, sheet.indexOf('}', at));
+      const m = /z-index:\s*(\d+)/.exec(body);
+      return m ? Number(m[1]) : 0;
+    };
+    const reticle = z(['ffx', 'ffx-hud.css'], '.ffx-targeting');
+    expect(reticle).toBeGreaterThan(0);
+    expect(z(['ffx2', 'target-plates.css'], '.ffx2hud__plates')).toBeGreaterThanOrEqual(reticle);
   });
 
   it('a victory under an open menu closes the command stack, the reticle and the plates before the shot plays', () => {
