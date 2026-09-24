@@ -211,9 +211,8 @@ the cure"); Kimahri 3–8 words, third person, after the silence (§1.7).
 | T10 tests + measure | `tests/unit/chapters/natus-*.test.ts`, 200-seed bench | T1–T4, T7 | 1.5 | sonnet / opus |
 | **Total** | | | **~11.5 agent hours**, plus judging and the review | |
 
-**GPU `[estimate]`:** options sheets O-1 to O-3 and O-5 about 50 minutes; finals (Natus
-idle, cast, hurt; Mortibody idle, hurt, KO; the backdrop; a portrait) about 100 minutes;
-**about 2½ hours** with rerolls, only while NOW.md says art generation is on.
+**GPU `[estimate]`:** options sheets ~50 min; finals (Natus and Mortibody poses, backdrop,
+portrait) ~100 min; **~2½ hours** with rerolls, only while NOW.md says art generation is on.
 
 ```
 NOW   Bailey answers B1–B16 (one sheet) · O-1…O-6 go out together
@@ -243,10 +242,9 @@ LAST  integrator wiring commit · node tools/orphans.mjs · real-input win and l
 
 ## 10. Review, risks, verdict
 
-`critic-plan --paths` on `encounters.ts`, `ai/reactions.ts`, `engine.ts` returns **DEEP**
-(chapter registry, FFX CTB engine): focused before deploy, deep after on live; not save-data
-class unless the `ChapterId` needs a migration. **Deploy cap:** a third deploy while a deep
-review is owed needs Bailey's words.
+`critic-plan --paths` (encounters, reactions, engine) returns **DEEP**: focused before deploy,
+deep after on live; not save-data class unless the `ChapterId` needs a migration. A third
+deploy while a deep review is owed needs Bailey's words.
 
 | # | Risk | Mitigation |
 |---:|---|---|
