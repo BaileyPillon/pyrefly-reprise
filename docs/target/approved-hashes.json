@@ -563,6 +563,18 @@
     "sha256": "4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af",
     "mtime": "2026-09-22T20:39:50.946Z"
    }
+  },
+  "chapter:leblanc-goons:2026-09-24": {
+   "words": "All your recommendations",
+   "note": "Bailey, 2026-09-24, answering the driver's recommendation: the goons = Dr. Goon C and Fem-Goon C (docs/concepts/chapters/leblanc/goons/options.jpg; judge 815314a). FFX-2 only, Chapter VI Act I. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-goons/.",
+   "public/art/characters/ffx2-dr-goon/idle.png": {
+    "sha256": "f01f1e0583d286544491f4aa12381b43866e433c6fdbcf6388271352bd5d23ad",
+    "mtime": "2026-09-24T04:32:34.126Z"
+   },
+   "public/art/characters/ffx2-fem-goon/idle.png": {
+    "sha256": "151b35dc0986738044641838fc61a58e2f8d4caa84a2ebba25eb471a2a99fc24",
+    "mtime": "2026-09-24T04:32:34.141Z"
+   }
   }
  }
 }
