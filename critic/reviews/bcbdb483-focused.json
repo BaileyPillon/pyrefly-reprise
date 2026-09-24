@@ -1,0 +1,248 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-09-24T17:41:52.491Z",
+  "build": {
+    "mainSha": "bcbdb483",
+    "candidateTree": "D:/pyrefly-hotfix",
+    "artifact": "dist-gate built from bcbdb483 with npx vite build --outDir dist-gate --emptyOutDir (index-D_Y69PMP.js)",
+    "servedAt": "http://127.0.0.1:5912/pyrefly-reprise/ (vite preview, production base; stopped after the review)",
+    "previousLiveBuild": "76f587c3 (bundle index-81kxOXnv.js, live artifactHash b1924762cdc2ab4467d61b6f39c97f26cc37ac1f28e8fd59787ee2824ecd6a2a)",
+    "renderer": "PYREFLY_BROWSER=gpu: headless Chromium, ANGLE D3D11 on NVIDIA GeForce RTX 5070 Ti; no black-canvas fallback needed"
+  },
+  "targetVersion": "dd884b4c55daa27c423a683882b8d3a5a725885e046f163068b9440a42c27745",
+  "targetVersionNote": "sha256 of docs/target/targets.json in the candidate D:/pyrefly-hotfix; the main tree currently holds fe7bd64f... (newer records, not part of this candidate)",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "PASS",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "The owner-reported defect is fixed: on live the Chapter II snapshot portraits/auron.png is adopted (data-face-crop=auron) and draws 1921x1441 at 2000x897 (1581x1186 at 1600x900) across the CHAPTER tab; on the candidate it carries data-face-crop-manual, stays static and draws 130x98 (4:3) inside its 130x147 figure at 2000x897.",
+    "No regression against live: 196 portrait <img> records (chapter select, party prep faces, cutscene dialogue card, battle HUD in both games, pause, results) were compared build against build in all eight reachable chapters; the only crop difference is the Auron snapshot. Four other diffs were height 0 on live for images still loading over the network, with identical crop, host and position.",
+    "No critical defect: every reachable chapter reached battle, opened the pause with a real Escape, reached CHAPTER with real E presses, resumed with a real Escape and played on to its results screen; zero console errors and zero responses >= 400 on the candidate.",
+    "The one major recorded (HF-BCB-01, phone CHAPTER tab text overlap) is pixel-identical on live, was neither introduced nor made reachable by this change, and is disclosed and carried."
+  ],
+  "checks": [
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "reason": "The pause owns the window on the CHAPTER tab in chapters 1-6 and 8 at 2000x897, 1600x900, 1280x720, 390x844 and 2000x1012; opened with a real Escape, CHAPTER reached with real E presses, closed with a real Escape. The 2560x1080 and 3840x2160 legs are outside this focused scope (deep review).",
+      "game": "both",
+      "chapter": "1-6, 8 (7 is locked on both builds)",
+      "state": "battle -> Esc -> pause CHAPTER tab",
+      "evidence": [
+        "critic/reviews/bcbdb483-focused/cand/yunalesca-pause-chapter-2000x897.jpg",
+        "critic/reviews/bcbdb483-focused/cand/yunalesca-pause-chapter-1600x900.jpg",
+        "critic/reviews/bcbdb483-focused/cand/result.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 6,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    },
+    {
+      "id": "CHK-003",
+      "result": "PASS",
+      "reason": "Scoped to the changed element: the snapshot captions render at the same size as live (unchanged CSS); nothing the change touches shrinks text. The pre-existing phone overlap on the CHAPTER tab (HF-BCB-01) is identical on live and disclosed.",
+      "game": "both",
+      "chapter": "1-6, 8 (7 is locked on both builds)",
+      "state": "pause CHAPTER tab",
+      "evidence": [
+        "critic/reviews/bcbdb483-focused/cand/yunalesca-pause-chapter-390x844.jpg",
+        "critic/reviews/bcbdb483-focused/live/yunalesca-pause-chapter-390x844.jpg"
+      ],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 1,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    },
+    {
+      "id": "CHK-008",
+      "result": "NOT APPLICABLE",
+      "reason": "The change moves no HUD panel and no actor; HUD portrait tiles were inventoried in every chapter and are identical to live (same data-face-crop, host and geometry).",
+      "game": "both",
+      "chapter": "1-6, 8 (7 is locked on both builds)",
+      "state": "battle, first command menu",
+      "evidence": [],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "reason": "The three snapshot captions (including \"it isn't over\") show in full at 2000x897, 1600x900 and 2000x1012. The pre-existing 'BOSS HP 100...' ellipsis at 390x844 is identical on live and untouched by this change (part of HF-BCB-01).",
+      "game": "both",
+      "chapter": "1-6, 8 (7 is locked on both builds)",
+      "state": "pause CHAPTER tab",
+      "evidence": [
+        "critic/reviews/bcbdb483-focused/cand/yunalesca-pause-chapter-2000x897.jpg"
+      ],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 1,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Every player step is real input: Enter from the title, Escape to open the pause at the first command menu, E to walk the tab strip to CHAPTER, Escape to resume; all eight reachable chapters on both builds. The debug API only selected the chapter, began prep, skipped cutscenes and set battle speed.",
+      "game": "both",
+      "chapter": "1-6, 8 (7 is locked on both builds)",
+      "state": "battle -> pause -> resume",
+      "evidence": [
+        "critic/reviews/bcbdb483-focused/cand/result.json",
+        "critic/reviews/bcbdb483-focused/live/result.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 4,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Before every capture the harness asserted screen=pause, pause on the stack and active tab data-tab=chapter; a failed wait threw and was recorded as an error with an ERROR capture (only chapter 7, locked, which never reached party-prep on either build).",
+      "game": "both",
+      "chapter": "1-6, 8 (7 is locked on both builds)",
+      "state": "every capture",
+      "evidence": [
+        "critic/reviews/bcbdb483-focused/cand/result.json",
+        "critic/reviews/bcbdb483-focused/live/result.json",
+        "critic/reviews/bcbdb483-focused/cand/seymour-anima-macalania-ERROR.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 1,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "reason": "Pre-deploy focused review; live verification of the new artifact is a separate obligation. The live site served only as the comparison baseline and was confirmed to be 76f587c3 (bundle index-81kxOXnv.js, artifactHash b1924762...).",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "evidence": [],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 0,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "Parity: the fix sits in the shared pause markup and the shared adopter; the CHAPTER tab was checked in both games (FFX ch 1, 2, 3, 8; FFX-2 ch 4, 5, 6) and every snapshot is unadopted, inside its figure and 4:3 in both.",
+      "game": "both",
+      "chapter": "1-6, 8 (7 is locked on both builds)",
+      "state": "pause CHAPTER tab",
+      "evidence": [
+        "critic/reviews/bcbdb483-focused/cand/ffx2-bahamut-pause-chapter-1600x900.jpg",
+        "critic/reviews/bcbdb483-focused/cand/seymour-flux-pause-chapter-1600x900.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 1,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "Case: both. The commit message and the portraitHost.ts header say both (shared pause and portrait plumbing); an image-sizing bug in shared chrome has no game-specific source, and CHK-020 classes shared plumbing and bug fixes as both. Presence verified in both games; no game-specific behaviour was added, so there is no absence to verify.",
+      "game": "both",
+      "chapter": "1-6, 8 (7 is locked on both builds)",
+      "state": "-",
+      "evidence": [
+        "critic/reviews/bcbdb483-focused/cand/result.json"
+      ],
+      "mode": "manual",
+      "mandatory": true,
+      "minutes": 1,
+      "artifact": "bcbdb483 dist-gate",
+      "targetVersion": "dd884b4c",
+      "environment": "vite preview of D:/pyrefly-hotfix/dist-gate (bcbdb483, index-D_Y69PMP.js) at http://127.0.0.1:5912/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (76f587c3, index-81kxOXnv.js); headless Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no fallback needed"
+    }
+  ],
+  "targets": {
+    "required": 2,
+    "matched": 2,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0,
+    "detail": [
+      {
+        "tile": "Pause remade on the Until Dawn character screen (docs/concepts/pause-until-dawn/sheet.png)",
+        "result": "matched for the properties this change can affect: full-bleed close-up, thin tab strip, meters on the picture, objective bottom-left, RESUME and H bottom-right; nothing drawn over the painting",
+        "composite": "critic/reviews/bcbdb483-focused/pause-until-dawn-sheet.jpg"
+      },
+      {
+        "tile": "Pre-battle dialogue with the speaker portrait (docs/screenshots/mockups/A-dialogue.jpg)",
+        "result": "matched: the dialogue portrait keeps its framed crop (data-face-crop-manual on both builds, untouched by the guard)",
+        "composite": "critic/reviews/bcbdb483-focused/A-dialogue.jpg"
+      }
+    ]
+  },
+  "issues": [
+    {
+      "id": "HF-BCB-01",
+      "severity": "major",
+      "title": "At 390x844 the pause CHAPTER tab prints the chapter objective line over THE PARTY rows, and ENCOUNTER reads \"BOSS HP 100...\"",
+      "game": "both (observed in FFX chapter 2; the same phone block serves every chapter)",
+      "chapter": "yunalesca (and, suspected, all)",
+      "expected": "At phone width the CHAPTER tab stacks so the objective, the party list and the encounter values are each readable (pause target tile (f): the meters stack).",
+      "observed": "The CHAPTER II eyebrow and the REACH FORM III WITH A ZOMBIE STILL STANDING line are drawn over the TIDUS / WEAPON / YUNA rows; the ENCOUNTER value is ellipsised. Identical on the live build.",
+      "repro": "Chapter II, first command menu, Esc, E until CHAPTER, viewport 390x844.",
+      "evidence": [
+        "critic/reviews/bcbdb483-focused/cand/yunalesca-pause-chapter-390x844.jpg",
+        "critic/reviews/bcbdb483-focused/live/yunalesca-pause-chapter-390x844.jpg"
+      ],
+      "confidence": "high: seen on both builds, same pixels",
+      "requirement": "CHK-003 / CHK-009; RUBRIC section 2 pause usability; pause target tile (f)",
+      "where": "src/ui/common/pause-screen.css phone media block (suspected, not traced)",
+      "fix": "In the phone block give the objective its own row below the columns (or let the CHAPTER columns scroll above it) and let the ENCOUNTER value wrap.",
+      "acceptanceCheck": "At 390x844 in chapters 1 and 4, no text box inside .pause__body intersects another and no value engages text-overflow ellipsis.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Pause CHAPTER tab with real Escape / E / Escape in chapters 1-6 and 8 at 2000x897, 1600x900, 1280x720, 390x844 and 2000x1012, candidate and live",
+      "Snapshot geometry per viewport: inside its figure, 4:3, not adopted (no data-face-crop, data-face-crop-manual present)",
+      "Portrait inventory (data-face-crop, manual flag, host, position, size, escape from host) on chapter select, party prep, cutscene dialogue card, battle HUD, pause and results, every reachable chapter, both builds",
+      "Unit tests pause-snap-portrait and ui-portrait-face-crop (115 pass) and tsc --noEmit clean in D:/pyrefly-hotfix",
+      "Live build identity 76f587c3 via its artifact-manifest.json and bundle name"
+    ],
+    "reused": [],
+    "notTested": [
+      "Chapter 7 (seymour-anima-macalania) is locked on both builds (never reached party-prep)",
+      "The snapshots are display:none at 1280x720 and 390x844 on both builds by design (pause-screen.css), so the 4:3 framing was measured at the three wide sizes only",
+      "2560x1080, 1440p, 4K and 4:3 shapes (deep review)",
+      "Gamepad and touch input to the CHAPTER tab",
+      "Portraits on screens reached only through retry or defeat; a portrait inserted into a still-detached host (code read: getComputedStyle on a detached parent returns an empty position, which the guard treats as positioned, so adoption there is unchanged)"
+    ]
+  },
+  "regressions": [],
+  "nextReview": "Live verification of the deployed artifact (CHK-017), then the deep review owed after the deploy on the live build (global layout and screens are a shared system: deepAfterDeploy), with the deep carried from d9decadb.",
+  "elapsedMinutes": 28
+}

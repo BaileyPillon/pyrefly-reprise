@@ -87,12 +87,14 @@
     },
     {
       "kind": "focused",
-      "status": "pending",
-      "requires": "acceptance of the changed area"
+      "status": "superseded-unverified",
+      "requires": "acceptance of the changed area",
+      "note": "never verified: the build was replaced by bcbdb483",
+      "at": "2026-09-24T17:52:00.647Z"
     },
     {
       "kind": "deep",
-      "status": "pending",
+      "status": "carried",
       "requires": "deep review of every affected chapter and system",
       "carriedFrom": [
         "fd0ae96",
@@ -101,7 +103,9 @@
         "5ddfde3",
         "5348c2e3",
         "d9decadb"
-      ]
+      ],
+      "carriedTo": "bcbdb483",
+      "at": "2026-09-24T17:52:00.647Z"
     }
   ],
   "ownerOverride": {
@@ -109,5 +113,6 @@
     "date": "2026-09-24T05:36:35.655Z",
     "report": null,
     "changedArea": null
-  }
+  },
+  "supersededBy": "bcbdb483"
 }

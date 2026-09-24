@@ -1,0 +1,110 @@
+{
+  "mainSha": "bcbdb483",
+  "bundle": "D_Y69PMP",
+  "deployedAt": "2026-09-24T17:52:00.647Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 582,
+  "policyVersion": 2,
+  "artifactHash": "7265cb2b2db5a458cb8a9461f41d7e81f6aaef6ef02901bd81493291aadb8e1a",
+  "review": "deep",
+  "reasons": [
+    "src/ui/common/portrait.ts: global layout, input and boot is a shared system",
+    "src/ui/common/portraitHost.ts: global layout, input and boot is a shared system",
+    "public/art/manifest.json: asset loader and manifests is a shared system",
+    "public/audio/manifest.json: asset loader and manifests is a shared system",
+    "public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2: unclassified product path is a shared system",
+    "public/fonts/chakra-petch/ChakraPetch-BoldItalic-700.woff2: unclassified product path is a shared system",
+    "public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2: unclassified product path is a shared system",
+    "public/fonts/chakra-petch/ChakraPetch-Regular-400.woff2: unclassified product path is a shared system",
+    "public/fonts/chakra-petch/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2: unclassified product path is a shared system",
+    "public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2: unclassified product path is a shared system",
+    "public/fonts/cormorant-garamond/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/exo2/Exo2-Italic-400.woff2: unclassified product path is a shared system",
+    "public/fonts/exo2/Exo2-Variable-wght.woff2: unclassified product path is a shared system",
+    "public/fonts/exo2/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/rajdhani/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/rajdhani/Rajdhani-Bold-700.woff2: unclassified product path is a shared system",
+    "public/fonts/rajdhani/Rajdhani-Medium-500.woff2: unclassified product path is a shared system",
+    "public/fonts/rajdhani/Rajdhani-Regular-400.woff2: unclassified product path is a shared system",
+    "public/fonts/rajdhani/Rajdhani-SemiBold-600.woff2: unclassified product path is a shared system",
+    "public/fonts/silkscreen/OFL.txt: unclassified product path is a shared system",
+    "public/fonts/silkscreen/Silkscreen-Bold-700.woff2: unclassified product path is a shared system",
+    "public/fonts/silkscreen/Silkscreen-Regular-400.woff2: unclassified product path is a shared system",
+    "no artifact manifest exists for the previous build, so changed art and audio could not be listed: treat shipped media as unverified until the live check"
+  ],
+  "systems": [
+    "asset loader and manifests",
+    "global layout, input and boot",
+    "music and sound files",
+    "painted artwork",
+    "title, chapter select, prep, pause and results screens",
+    "unclassified product path"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin"
+  ],
+  "checks": [
+    "CHK-001",
+    "CHK-002",
+    "CHK-003",
+    "CHK-008",
+    "CHK-009",
+    "CHK-012",
+    "CHK-013",
+    "CHK-014",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-018",
+    "CHK-019",
+    "CHK-020",
+    "CHK-021",
+    "CHK-022",
+    "CHK-B1"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 47,
+    "at": "2026-09-24T17:52:00.647Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
+    },
+    {
+      "kind": "focused",
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "PASS",
+      "settledBy": "critic/reviews/bcbdb483-focused.json",
+      "settledAt": "2026-09-24T17:41:52.491Z"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "ship the hotfixes",
+    "date": "2026-09-24T17:52:00.647Z",
+    "report": "critic/reviews/bcbdb483-focused.json",
+    "changedArea": null
+  }
+}
