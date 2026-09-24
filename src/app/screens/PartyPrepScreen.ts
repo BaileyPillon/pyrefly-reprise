@@ -32,6 +32,7 @@ import { romanNumeral } from '../../ui/common/roman.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { rosterHtml, slotsHtml, statSheetHtml } from './PartyPrepContent.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
+import { installPhonePrep, type PhonePrep } from './party-prep/phonePrep.ts';
 
 /** One tab in the prep menu, supplied by a UI agent. */
 export interface PrepPanel {
@@ -118,6 +119,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
   private readonly mounted = new Set<string>();
   private body: HTMLElement | null = null;
   private stage: Stage | null = null;
+  private phone: PhonePrep | null = null; // PR-0127: the phone-width stacked CHAPTER page
   /** Which roster member the sheet is showing. Up/Down moves it. */
   private member = 0;
 
@@ -183,6 +185,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
     `;
 
     this.body = this.stage.stage.querySelector('[data-role="body"]');
+    this.phone = installPhonePrep(this.stage.el, this.stage.stage, this.chapter);
     this.renderRoster();
     this.renderTabs();
     this.renderBody();
@@ -245,6 +248,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
     const body = this.body;
     if (!body) return;
     const panel = this.tabs[this.index];
+    this.phone?.setTab(panel?.id ?? null);
     if (!panel) {
       body.classList.remove('prep__sheet-inner--panel');
       body.innerHTML = statSheetHtml(this.chapter.buildRef, this.member);
@@ -375,6 +379,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
       if (this.mounted.has(panel.id)) panel.unmount?.();
     }
     this.mounted.clear();
+    this.phone?.destroy();
     this.stage?.destroy();
     this.stage = null;
     this.settle(false);

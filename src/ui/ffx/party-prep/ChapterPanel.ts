@@ -33,6 +33,7 @@ import {
   watchHeroBackground,
 } from '../../common/chapterPanel.ts';
 import './chapter-panel-tab.css';
+import './chapter-panel-phone.css';
 
 /**
  * The hero art as the tab's background slab.
@@ -86,12 +87,18 @@ function wireScrollCue(col: HTMLElement, wrap: HTMLElement): void {
  */
 const PAGE_FRACTION = 0.8;
 
-/** The columns that currently hold more copy than they show. */
+/**
+ * The columns that currently hold more copy than they show. At phone width
+ * (PR-0127 option A) the card is one stacked page and the columns never
+ * scroll; the page does, so the prep page itself (`.prep`, scrollable only
+ * there) is the one thing L1 / R1 page.
+ */
 function scrollableCols(root: HTMLElement | null): HTMLElement[] {
   if (!root) return [];
-  return [...root.querySelectorAll<HTMLElement>('[data-scrollcol]')].filter(
-    (c) => c.scrollHeight - c.clientHeight > 1,
-  );
+  const page = root.closest<HTMLElement>(".prep[data-tab='chapter']");
+  const candidates = [...root.querySelectorAll<HTMLElement>('[data-scrollcol]')];
+  if (page && getComputedStyle(page).overflowY === 'auto') candidates.push(page);
+  return candidates.filter((c) => c.scrollHeight - c.clientHeight > 1);
 }
 
 /** Page every scrollable column by `dir`; true when any of them moved. */

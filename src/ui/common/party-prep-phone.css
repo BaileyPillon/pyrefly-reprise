@@ -1,0 +1,294 @@
+/*
+ * PR-0127 at phone width, option A "stacked cards" (Bailey, D-071; both
+ * games). Target: docs/concepts/layout/pr-0127-phone/sheet.jpg, option A.
+ * Driven by `src/app/screens/party-prep/phonePrep.ts`, which keeps
+ * `data-tab` on `.prep` and adds the four `.prep__phone-*` elements.
+ *
+ * Only the CHAPTER tab, only under 600 CSS px wide. Everything here is inside
+ * that media query and keyed on `[data-tab='chapter']`, so every desktop size
+ * and every other tab keeps the 640x360 letterboxed stage exactly as it was.
+ *
+ * On the phone the stage stops being a scaled board: its inline transform,
+ * size and `--lb-scale` (all written by `LetterboxStage.layout`) are overridden
+ * so one CSS px is one CSS px, and it lays its children out as one grid column
+ * that `.prep` scrolls. The copy's own rules are the card's
+ * (`src/ui/ffx/party-prep/chapter-panel-phone.css`). Nothing a player reads is
+ * under 14 CSS px (CHK-003): the sheet drew its small caps at 12, the floor
+ * wins.
+ */
+
+/* The chrome the helper adds is phone-only. */
+.prep__phone-where,
+.prep__phone-party,
+.prep__phone-dock,
+.prep__phone-cue {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .prep[data-tab='chapter'] {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* `body` says `touch-action: none` for the game canvas; this page is a
+       scroller of its own and a finger has to be able to move it. */
+    touch-action: pan-y;
+    pointer-events: auto;
+    scrollbar-width: none;
+    background: #04060b;
+  }
+  .prep[data-tab='chapter']::-webkit-scrollbar {
+    display: none;
+  }
+
+  .prep[data-tab='chapter'] > .prep__stage {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100%;
+    transform: none !important;
+    --lb-scale: 1 !important;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-content: start;
+    /* Room under the party for the pinned START BATTLE dock. */
+    padding-bottom: 92px;
+    box-sizing: border-box;
+    /* Its own stacking context, so the fixed ground below can sit under the
+       in-flow page (z-index -1) instead of painting over it. */
+    z-index: 0;
+  }
+  .prep[data-tab='chapter'] > .prep__stage > * {
+    grid-column: 1 / -1;
+  }
+
+  /* The ground stays put while the page moves over it. */
+  .prep[data-tab='chapter'] .prep__wash,
+  .prep[data-tab='chapter'] .prep__veil {
+    position: fixed;
+    z-index: -1;
+  }
+  .prep[data-tab='chapter'] .prep__wash {
+    filter: blur(6px) brightness(0.28) saturate(0.6);
+  }
+
+  /* What the stacked page does not show: the roster column (the party below
+     says who walks in) and the desktop controls line, and the long location
+     line (the card prints the place; the corner keeps game and numeral). */
+  .prep[data-tab='chapter'] .prep__roster,
+  .prep[data-tab='chapter'] .prep__hint,
+  .prep[data-tab='chapter'] .prep__where {
+    display: none;
+  }
+
+  /* ---------------------------------------------------------- top strip */
+  .prep[data-tab='chapter'] .prep__eyebrow {
+    position: static;
+    grid-column: 1;
+    grid-row: 1;
+    padding: 18px 0 8px 16px;
+    gap: 8px;
+  }
+  .prep[data-tab='chapter'] .prep__eyebrow-rule {
+    width: 18px;
+    height: 1.5px;
+  }
+  .prep[data-tab='chapter'] .prep__eyebrow-label {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+  }
+  .prep[data-tab='chapter'] .prep__phone-where {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    padding: 18px 16px 8px 8px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(244, 241, 232, 0.62);
+    white-space: nowrap;
+  }
+
+  /* The tab strip: one row, its own horizontal scroller, faded at the right
+     where it runs on. Every tab stays reachable by touch. */
+  .prep[data-tab='chapter'] .prep__tabs {
+    position: static;
+    grid-row: 2;
+    gap: 18px;
+    padding: 6px 16px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    touch-action: pan-x;
+    pointer-events: auto;
+    border-bottom: 1px solid rgba(244, 241, 232, 0.12);
+    -webkit-mask-image: linear-gradient(to right, #000 82%, transparent);
+    mask-image: linear-gradient(to right, #000 82%, transparent);
+  }
+  .prep[data-tab='chapter'] .prep__tab {
+    flex: none;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    padding: 8px 0 9px;
+    border-bottom-width: 2px;
+  }
+  .prep[data-tab='chapter'] .prep__tab:last-child {
+    margin-right: 40px;
+  }
+
+  /* -------------------------------------------------------------- card */
+  /* Static, so the Sphere Grid / CHAPTER `top` raises on the desktop sheet
+     (`:has()` rules that outrank this one) have nothing to move. */
+  .prep[data-tab='chapter'] .prep__sheet {
+    position: static;
+    grid-row: 3;
+    width: auto;
+    min-height: 0;
+    margin: 12px 12px 0;
+    padding: 0;
+    transform: none;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  }
+  .prep[data-tab='chapter'] .prep__sheet-inner {
+    transform: none;
+  }
+
+  /* ------------------------------------------------------------- party */
+  .prep[data-tab='chapter'] .prep__phone-party {
+    display: flex;
+    grid-row: 4;
+    align-items: center;
+    gap: 8px;
+    margin: 18px 12px 0;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    color: rgba(244, 241, 232, 0.55);
+  }
+  .prep[data-tab='chapter'] .prep__phone-party::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(244, 241, 232, 0.16);
+  }
+  .prep[data-tab='chapter'] .prep__slots {
+    position: static;
+    grid-row: 5;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 8px 12px 0;
+  }
+  .prep[data-tab='chapter'] .prep__slot {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    align-items: center;
+    gap: 2px 6px;
+    width: auto;
+    height: auto;
+    padding: 6px 6px 7px;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  }
+  .prep[data-tab='chapter'] .prep__slot > * {
+    transform: none;
+    min-width: 0;
+  }
+  /* Name beside the face; the job and the numbers get the tile's full width
+     below it, where the 14 px floor still fits "FESTIVALIST". */
+  .prep[data-tab='chapter'] .prep__slot > div:not(.prep__face):not(.prep__slot-role) {
+    display: contents;
+  }
+  .prep[data-tab='chapter'] .prep__slot .prep__face {
+    grid-column: 1;
+    grid-row: 1;
+    width: 34px;
+    height: 34px;
+    margin: 0;
+    font-size: 14px;
+  }
+  .prep[data-tab='chapter'] .prep__slot-name {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 18px;
+    overflow-wrap: anywhere;
+  }
+  .prep[data-tab='chapter'] .prep__slot-role {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin: 2px 0 0;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .prep[data-tab='chapter'] .prep__slot-sub {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.1;
+    white-space: normal;
+  }
+
+  /* ---------------------------------------- START BATTLE, pinned bottom */
+  .prep[data-tab='chapter'] .prep__phone-dock {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 92px;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to top, #04060b 60%, rgba(4, 6, 11, 0));
+  }
+  .prep[data-tab='chapter'] .prep__start {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    z-index: 3;
+    justify-content: center;
+    padding: 14px 0;
+    font-size: 14px;
+    letter-spacing: 0.24em;
+  }
+  .prep[data-tab='chapter'] .prep__start > span {
+    gap: 10px;
+  }
+  .prep[data-tab='chapter'] .prep__start-tri {
+    border-top-width: 6px;
+    border-bottom-width: 6px;
+    border-left-width: 9px;
+  }
+
+  .prep[data-tab='chapter'] .prep__phone-cue {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 84px;
+    z-index: 4;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 120ms ease-out;
+  }
+  .prep[data-tab='chapter'] .prep__phone-cue.is-visible {
+    opacity: 1;
+  }
+  .prep[data-tab='chapter'] .prep__phone-cue > span {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--ig-accent, #e3b94a);
+    background: rgba(11, 10, 18, 0.88);
+    border: 1px solid color-mix(in srgb, var(--ig-accent, #e3b94a) 50%, transparent);
+  }
+}

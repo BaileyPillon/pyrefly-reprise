@@ -1,0 +1,125 @@
+/*
+ * The CHAPTER card at phone width: PR-0127 option A "stacked cards" (Bailey,
+ * D-071; both games, the card is shared). Target:
+ * docs/concepts/layout/pr-0127-phone/sheet.jpg, option A. The page around it
+ * is `src/ui/common/party-prep-phone.css`.
+ *
+ * Under 600 CSS px the card is one column in plain CSS px (the stage is no
+ * longer scaled there): the hero painting as a 150 px title strip fading into
+ * the paper, then the place, the story, the three photos, the objectives and
+ * the TIP, all at their full height, with the page doing the scrolling. The
+ * desktop's two fixed-height scrolling columns and their edge cues are not
+ * used. Type follows the sheet, raised to the 14 px floor (CHK-003) where the
+ * sheet drew 12.
+ */
+
+@media (max-width: 599px) {
+  .prep[data-tab='chapter'] .prepchap {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  /* The painting becomes the title strip. */
+  .prep[data-tab='chapter'] .prepchap__hero {
+    inset: 0 0 auto 0;
+    height: 150px;
+    background-position: 60% 28%;
+  }
+  .prep[data-tab='chapter'] .prepchap__wash {
+    inset: 0 0 auto 0;
+    height: 151px;
+    background: linear-gradient(
+      to top,
+      rgba(244, 241, 232, 1) 0%,
+      rgba(244, 241, 232, 0.95) 42%,
+      rgba(244, 241, 232, 0.25) 78%,
+      rgba(244, 241, 232, 0) 100%
+    );
+  }
+
+  .prep[data-tab='chapter'] .prepchap__cols {
+    display: block;
+    width: auto;
+    height: auto;
+    /* The title block sits on the strip's lower, paper-washed half. */
+    padding: 64px 16px 16px;
+
+    --cp-u: 1px;
+    --cp-fs-eyebrow: 14px;
+    --cp-fs-title: 34px;
+    --cp-fs-subtitle: 17px;
+    --cp-fs-where: 14px;
+    --cp-fs-body: 14px;
+    --cp-fs-label: 14px;
+    --cp-fs-head: 14px;
+    --cp-fs-tip: 14px;
+    --cp-fs-caption: 14px;
+    --cp-snap-h: 72px;
+  }
+  .prep[data-tab='chapter'] .prepchap__colwrap,
+  .prep[data-tab='chapter'] .prepchap__col {
+    height: auto;
+    overflow: visible;
+  }
+  .prep[data-tab='chapter'] .prepchap__cue {
+    display: none;
+  }
+  .prep[data-tab='chapter'] .prepchap__col--brief {
+    padding-top: 0;
+  }
+
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__title {
+    line-height: 1;
+    margin-top: 2px;
+  }
+  /* As drawn: the subtitle in the serif, like a caption under the name. */
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__subtitle {
+    margin-top: 2px;
+    font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+    font-style: italic;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.2;
+    opacity: 0.72;
+  }
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__where {
+    display: block;
+    margin: 14px 0 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__blurb {
+    margin-top: 0;
+    line-height: 1.5;
+  }
+
+  /* The three photos, one row, as drawn. */
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__snaps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 14px 0 4px;
+  }
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__snap .cpanel__snap-img {
+    height: var(--cp-snap-h);
+  }
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__snap .cpanel__snap-cap {
+    line-height: 1.2;
+  }
+
+  .prep[data-tab='chapter'] .prepchap__col--brief .cpanel__head {
+    margin-top: 14px;
+  }
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__objective {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--cp-fg);
+  }
+  .prep[data-tab='chapter'] .prepchap__cols .cpanel__tip {
+    margin-top: 12px;
+    padding: 9px 12px;
+  }
+}

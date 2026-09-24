@@ -1,0 +1,372 @@
+{
+ "seymour-flux": {
+  "top": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterSwipeUp": {
+   "scrollTop": 117,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterSwipeDown": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterPgDn": {
+   "scrollTop": 117,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterPgUp": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "otherTab": {
+   "tab": "stats",
+   "transform": "translate(0px, 312.31px) scale(0.6094)",
+   "computed": "matrix(0.6094, 0, 0, 0.6094, 0, 312.31)"
+  },
+  "backTab": "chapter",
+  "startTap": "begin"
+ },
+ "ffx2-bahamut": {
+  "top": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterSwipeUp": {
+   "scrollTop": 117,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterSwipeDown": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterPgDn": {
+   "scrollTop": 117,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterPgUp": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "otherTab": {
+   "tab": "dresspheres",
+   "transform": "translate(0px, 312.31px) scale(0.6094)",
+   "computed": "matrix(0.6094, 0, 0, 0.6094, 0, 312.31)"
+  },
+  "backTab": "chapter",
+  "startTap": "begin"
+ },
+ "ffx2-vegnagun-shuyin": {
+  "top": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterSwipeUp": {
+   "scrollTop": 117,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterSwipeDown": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterPgDn": {
+   "scrollTop": 117,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterPgUp": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "otherTab": {
+   "tab": "dresspheres",
+   "transform": "translate(0px, 312.31px) scale(0.6094)",
+   "computed": "matrix(0.6094, 0, 0, 0.6094, 0, 312.31)"
+  },
+  "backTab": "chapter",
+  "startTap": "begin"
+ },
+ "ffx2-leblanc": {
+  "top": {
+   "scrollTop": 0,
+   "scrollH": 982,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterSwipeUp": {
+   "scrollTop": 138,
+   "scrollH": 982,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterSwipeDown": {
+   "scrollTop": 0,
+   "scrollH": 982,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterPgDn": {
+   "scrollTop": 138,
+   "scrollH": 982,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterPgUp": {
+   "scrollTop": 0,
+   "scrollH": 982,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "otherTab": {
+   "tab": "dresspheres",
+   "transform": "translate(0px, 312.31px) scale(0.6094)",
+   "computed": "matrix(0.6094, 0, 0, 0.6094, 0, 312.31)"
+  },
+  "backTab": "chapter",
+  "startTap": "begin"
+ },
+ "evrae-airship": {
+  "top": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterSwipeUp": {
+   "scrollTop": 117,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterSwipeDown": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "afterPgDn": {
+   "scrollTop": 117,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": false,
+   "tab": "chapter"
+  },
+  "afterPgUp": {
+   "scrollTop": 0,
+   "scrollH": 961,
+   "clientH": 844,
+   "docSW": 390,
+   "prepSW": 390,
+   "overlaps": [],
+   "minFont": 14,
+   "small": [],
+   "wide": [],
+   "cue": true,
+   "tab": "chapter"
+  },
+  "otherTab": {
+   "tab": "stats",
+   "transform": "translate(0px, 312.31px) scale(0.6094)",
+   "computed": "matrix(0.6094, 0, 0, 0.6094, 0, 312.31)"
+  },
+  "backTab": "chapter",
+  "startTap": "begin"
+ }
+}
