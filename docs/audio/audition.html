@@ -75,10 +75,68 @@
 <div class="wrap">
 
 <h1>Pyrefly Reprise — the score</h1>
-<p class="sub">Twenty-four cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
+<p class="sub">Twenty-five cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
+
+<!-- yojimbo-cue:begin — Chapter IX's battle cue, 2026-09-24 (FFX only). Written by hand; audition.mjs does not generate it. -->
+<h2 style="margin-top:0">Chapter IX, Yojimbo: the battle music (new)</h2>
+<p class="group-note">
+  <strong>You picked sketch A, &ldquo;The Summoner&rsquo;s Sorrow&rdquo;, and this is it grown into the fight&rsquo;s own music.</strong>
+  Every part of the sketch is still here, note for note: the cello alone, the pulse joining, the climb, the crack, the return and the amen.
+  To make a loop that does not repeat every minute, I added two sections in the middle (marked <em>my guess</em> below).
+  Those two are the parts to judge. It is original and quotes nothing: not Lulu&rsquo;s theme, and no other tune from the games.
+  It is registered but <strong>not in the game yet</strong>: the chapter&rsquo;s data belongs to another agent, who will wire it.
+  It is a candidate until you have listened. <strong>I cannot hear any of this.</strong> Every number below is a measurement, not a judgement.
+  FFX only. Both files are levelled to the same loudness (&minus;16 LUFS).
+</p>
+
+<article class="cue">
+  <h4>boss-yojimbo &mdash; &ldquo;The Summoner&rsquo;s Sorrow&rdquo;</h4>
+  <p class="emotion">Grief under control, and it cracks once.</p>
+  <p class="blurb">
+    The solo cello sings the line over felt piano, with no beat. At <strong>0:15</strong> the battle pulse joins (bowed strings, taiko),
+    the violin takes the line and the cello answers underneath. This is where the loop starts.
+    At <strong>0:29</strong>, <em>my guess</em>: &ldquo;the duty&rdquo;. The same line, moved higher inside the key, on one horn,
+    with a quiet violin above it: Lulu taking up her last duty.
+    At <strong>0:44</strong>, <em>my guess</em>: violin and cello play the line together in octaves, horns underneath, the pulse a little harder.
+    At <strong>0:58</strong> the sketch&rsquo;s climb. At <strong>1:09</strong> the crack: one full chord, the violin&rsquo;s highest note,
+    then everything stops but the piano. At <strong>1:13</strong> control returns, quieter, and at <strong>1:24</strong> it ends on the score&rsquo;s amen.
+    Then the loop goes back to 0:15. C minor, 132 bpm, loops from 0:15 to 1:27.
+    One small change inside the sketch&rsquo;s own parts: the quiet string floor now swells slightly instead of staying flat.
+  </p>
+  <audio controls preload="none" src="../../public/audio/music/boss-yojimbo.mp3"></audio>
+  <p class="stats"><span>1:30</span><span>1.32 MB</span><span>-16.0 LUFS</span><span>-1.1 dBTP</span><span>LRA 7.3 LU</span><span>loop seam ok</span><span>all gates pass</span><span>the crack is the loudest moment (-9.9 LUFS)</span></p>
+  <p class="score"><label>Score 1&ndash;10 <input type="number" min="1" max="10" step="1" data-yojimbo-cue="The Summoner's Sorrow (full cue)"></label></p>
+  <p class="score"><label>The two new sections (0:29 horn, 0:44 octaves): keep / change / cut <input type="text" size="28" data-yojimbo-cue="The two new sections (0:29, 0:44)"></label></p>
+</article>
+
+<article class="cue">
+  <h4>The sketch you picked, for comparison</h4>
+  <p class="blurb">Sketch A as you heard it: one minute, the same instruments and the same room.</p>
+  <audio controls preload="none" src="sketches/2026-09-24/yojimbo-a-summoners-sorrow.mp3"></audio>
+</article>
+
+<div class="check">
+  <p style="margin-top:0"><strong>When you have listened</strong>, press the button and send back the text. A score is enough; a sentence about what to change is better.</p>
+  <p><button type="button" id="yojimbo-cue-collect" style="font:inherit;padding:8px 16px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Collect my Yojimbo score</button></p>
+  <textarea id="yojimbo-cue-out" rows="6" style="width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:10px" readonly placeholder="Your score appears here."></textarea>
+  <p style="margin-bottom:0"><em>Nothing is saved or sent. The button only writes the text into the box.</em></p>
+</div>
+<script>
+  document.getElementById('yojimbo-cue-collect').addEventListener('click', function () {
+    var lines = ['Pyrefly Reprise — Chapter IX, Yojimbo battle music, 2026-09-24', ''];
+    document.querySelectorAll('input[data-yojimbo-cue]').forEach(function (input) {
+      var v = input.value.trim();
+      var isScore = input.type === 'number';
+      lines.push(input.dataset.yojimboCue + ': ' + (v === '' ? '(not answered)' : isScore ? v + '/10' : v));
+    });
+    lines.push('', 'Keep / change: ', 'Notes: ');
+    document.getElementById('yojimbo-cue-out').value = lines.join('\n');
+  });
+</script>
+<!-- yojimbo-cue:end -->
 
 <!-- yojimbo:begin — Chapter IX options round O-6, 2026-09-24 (FFX only). Written by hand; audition.mjs does not generate it. -->
-<h2 style="margin-top:0">Chapter IX, Yojimbo: three sketches, pick one (new)</h2>
+<h2>Chapter IX, Yojimbo: three sketches (you picked A)</h2>
 <p class="group-note">
   <strong>In the game this fight plays Lulu&rsquo;s own theme. These three sketches are original and quote nothing</strong>:
   not Lulu&rsquo;s theme, and no other tune from the games. Each one starts from a different person in the room.

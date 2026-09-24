@@ -60,3 +60,33 @@ The sheet, with 1:1 crops of every repair and of the untouched parts, is `produc
 - **Manifest:** `public/art/manifest.json` was regenerated and now lists 11 backdrops.
 - **Not wired:** the scene factory entry waits for the `src/scenes` owner.
 - **Details:** `production/chamber.md`; sheet `production/chamber.jpg`.
+
+## Battle music: `boss-yojimbo` (CANDIDATE, 2026-09-24)
+
+**Game case: FFX only.**
+
+- **Key to wire:** `boss-yojimbo` (registered in `MUSIC_KEYS`, `COMPOSED` and `TRACK_NOTES`, `src/audio/tracks/index.ts`; rendered, listed in `public/audio/manifest.json`).
+- **Title:** "The Summoner's Sorrow". It is O-6 sketch A (Bailey's pick, 2026-09-24) grown into the full cue. C minor (Aeolian), 132 bpm, 48 bars, 1:27 plus a tail. The loop runs from beat 32 to 192 (0:14.5 to 1:27.3).
+- **Not wired**, because `src/data/**yojimbo*` belongs to the chapter's data owner. Wire it the way `boss-seymour-macalania` was wired (ac0c61f, 09c3d35b):
+  - the chapter's `music.battle`;
+  - the formation's `musicCues` `start` track;
+  - the chapter meta's `musicKeys`;
+  - the story script's pre-battle `music(...)` call, if it has one.
+  - Then add a wiring assertion to a chapter test (`tests/unit/audio-yojimbo.test.ts` does not import `src/data`).
+  - Delete `'boss-yojimbo'` from `KNOWN_UNWIRED` in `tests/unit/audio-cue-reachability.test.ts`. Its honesty check fails as soon as the chapter names the cue, and that failure is the reminder.
+- **QA** (docs/audio/PIPELINE.md gates), CPU only:
+
+  | Check | Result |
+  |---|---|
+  | Render | -16.05 LUFS, -1.36 dBTP |
+  | `qa.mjs` (decoded MP3) | -1.06 dBTP, 0 clipped, seam ok, 0 findings |
+  | `ffmpeg ebur128` | I -15.9 LUFS, LRA 7.3 LU |
+  | `seam-probe` | "rounding" (a clean join) |
+  | `themes-audit` | 0 departures |
+  | Loudness by section | grief -18.9, pulse -17.0, duty -17.0, octaves -14.2, strain -13.4, **crack -9.9**, control -20.6 LUFS |
+
+- **The agent cannot hear** (hard rule 13). The cue stays a candidate until Bailey scores it on `docs/audio/audition.html` (top section).
+- **Added beyond the sketch (a guess, flagged on the audition page):**
+  - bars 17-24, "the duty": the line two steps up the mode, on a horn;
+  - bars 25-32: violin and cello in octaves;
+  - a gentle swell on the string floor.

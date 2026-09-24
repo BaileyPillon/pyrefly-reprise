@@ -25,6 +25,7 @@ import { endingFfx2Track } from './ending-ffx2.ts';
 import { sceneFahrenheitTrack } from './scene-fahrenheit.ts';
 import { bossEvraeTrack } from './boss-evrae.ts';
 import { bossSeymourMacalaniaTrack } from './boss-seymour-macalania.ts';
+import { bossYojimboTrack } from './boss-yojimbo.ts';
 
 /** The final music keys (CONTRACT-CHANGES §8). `playMusic` resolves every one. */
 export const MUSIC_KEYS = [
@@ -51,6 +52,8 @@ export const MUSIC_KEYS = [
   'boss-evrae',
   // Chapter VII, Seymour and Anima at Macalania (FFX only): CONTRACT-CHANGES 2026-09-24.
   'boss-seymour-macalania',
+  // Chapter IX, Yojimbo in the Cavern of the Stolen Fayth (FFX only): CONTRACT-CHANGES 2026-09-24.
+  'boss-yojimbo',
 ] as const;
 
 export type FinalMusicKey = (typeof MUSIC_KEYS)[number];
@@ -81,6 +84,7 @@ const COMPOSED: Record<string, Track> = {
   'scene-fahrenheit': sceneFahrenheitTrack,
   'boss-evrae': bossEvraeTrack,
   'boss-seymour-macalania': bossSeymourMacalaniaTrack,
+  'boss-yojimbo': bossYojimboTrack,
 };
 
 /**
@@ -281,6 +285,13 @@ export const TRACK_NOTES: Record<string, TrackNote> = {
     themes:
       'SEYMOUR an octave up on oboe over a harpsichord pavane that bows every fourth bar; SEYMOUR_MIRROR in the cellos; a chromatic decline that will not stop; the sequence takes one extra step at the summon, then a plagal amen to the wrong chord',
     intent: 'polite, and wrong',
+  },
+  'boss-yojimbo': {
+    title: "The Summoner's Sorrow",
+    key: 'C minor',
+    themes:
+      'its own line (a rising fifth that leans on the flat sixth) on solo cello, then violin once a bowed pulse and taiko join; the line up the mode on a horn; one crack on the flat sixth, then control and the amen. No dominant anywhere',
+    intent: 'grief under control, and it cracks once',
   },
 };
 

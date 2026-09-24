@@ -86,6 +86,16 @@
       "lufs": -15.99,
       "truePeakDb": -1.39
     },
+    "boss-yojimbo": {
+      "file": "music/boss-yojimbo.mp3",
+      "loopStart": 14.545465,
+      "loopEnd": 87.272721,
+      "duration": 90.2727,
+      "bytes": 1316423,
+      "lufs": -16.05,
+      "truePeakDb": -1.36,
+      "score": "76abbdea8b282bdc"
+    },
     "boss-yu-yevon": {
       "file": "music/boss-yu-yevon.mp3",
       "loopStart": 6,

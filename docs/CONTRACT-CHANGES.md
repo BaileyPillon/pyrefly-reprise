@@ -6,6 +6,24 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — Music key `boss-yojimbo` (Chapter IX); five runtime instrument stand-ins
+
+**The key: FFX only** [AGENTS.md hard rule 14]: Lady Ginnem's Yojimbo in the Cavern of the
+Stolen Fayth is an FFX encounter (research/ffx-yojimbo.md). Additive: `MUSIC_KEYS` in
+`src/audio/tracks/index.ts` (§8's list, 21 -> 22) gains the key the Chapter IX preflight
+reserved (`docs/plans/chapter-yojimbo-review.md` §6.1), composed in `boss-yojimbo.ts`
+("The Summoner's Sorrow", from the O-6 sketch A Bailey picked on 2026-09-24), registered in
+`COMPOSED` and `TRACK_NOTES` and rendered into `public/audio/manifest.json`. `MusicKey`
+stays a plain `string`. **Not wired yet**: no chapter, formation or meta names it; the
+wiring belongs to the Chapter IX data owner (`docs/concepts/chapters/yojimbo/INSTALLED.md`).
+
+**The stand-ins: both games** (shared plumbing). `INSTRUMENTS` in `src/audio/instruments.ts`
+gains `cello-solo` -> strings-low, `violin-solo` -> strings, `piano-felt` -> piano,
+`horn` -> brass and `cymbal-swell` -> crash, so the synthesised fallback can play the cue
+instead of throwing. The first four are the voices `sfx/design.ts` `RUNTIME_STAND_INS`
+already used for those names, so no sound effect's fallback changes; `piano-felt` was not
+in that list, and no effect names it. Offline renders still use the sampled presets.
+
 ## 2026-09-24 — `ChapterId` gains `'yojimbo-cavern'`; `Chapter.number` gains `9`; `UNLISTED_CHAPTERS`; `getChapter` reaches it
 
 `src/data/encounters.ts`, additive. **FFX only** for the chapter (Chapter IX, Lady

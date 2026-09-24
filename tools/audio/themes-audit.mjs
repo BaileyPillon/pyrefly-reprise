@@ -91,6 +91,9 @@ const CUE_MAP = {
   'scene-fahrenheit': { key: 'D minor', bpm: 104, meter: [4, 4], themes: ['FAREWELL_RISE', 'FAREWELL_FALL'] },
   // Chapter VII, FFX only (cue map row 24, 2026-09-24).
   'boss-seymour-macalania': { key: 'C# minor', bpm: 126, meter: [4, 4], themes: ['SEYMOUR', 'SEYMOUR_MIRROR'] },
+  // Chapter IX, FFX only (cue map row 25, 2026-09-24). Its own line, no shared
+  // theme cell: only the AMEN, a cadence, which the audit does not search for.
+  'boss-yojimbo': { key: 'C minor', bpm: 132, meter: [4, 4], themes: [] },
 };
 
 /**

@@ -95,6 +95,14 @@ export const INSTRUMENTS: Record<string, Voice> = {
   oboe: flute,
   clarinet: flute,
   'string-quartet': strings,
+  // Added 2026-09-24 for Chapter IX's `boss-yojimbo` (FFX only as a cue; both
+  // games as plumbing), again the voice RUNTIME_STAND_INS already uses for
+  // each name; `piano-felt` is not in that list and falls back to the piano.
+  'cello-solo': stringsLow,
+  'violin-solo': strings,
+  'piano-felt': piano,
+  horn: brass,
+  'cymbal-swell': crash,
 };
 
 export const INSTRUMENT_NOTES: Record<string, string> = {
@@ -142,6 +150,11 @@ export const INSTRUMENT_NOTES: Record<string, string> = {
   oboe: 'Runtime stand-in: the flute voice (the sampled oboe plays offline).',
   clarinet: 'Runtime stand-in: the flute voice (the sampled clarinet plays offline).',
   'string-quartet': 'Runtime stand-in: the string ensemble (the sampled quartet plays offline).',
+  'cello-solo': 'Runtime stand-in: the low string ensemble (the sampled solo cello plays offline).',
+  'violin-solo': 'Runtime stand-in: the string ensemble (the sampled solo violin plays offline).',
+  'piano-felt': 'Runtime stand-in: the piano voice (the sampled felt piano plays offline).',
+  horn: 'Runtime stand-in: the brass section (the sampled horn plays offline).',
+  'cymbal-swell': 'Runtime stand-in: the crash swell (the sampled suspended cymbal plays offline).',
 };
 
 export function instrumentNames(): string[] {

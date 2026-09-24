@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import { CHAPTERS } from '../../src/data/encounters.ts';
+import { CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { TRACKS, hasTrack } from '../../src/audio/tracks/index.ts';
 import type { ChapterScripts, Step, StoryScript } from '../../src/story/dsl.ts';
 
@@ -56,7 +56,15 @@ const MANIFEST = join(REPO_ROOT, 'public', 'audio', 'manifest.json');
  * or approach cue is Bailey's call; parking them on a chapter's `music` field
  * to keep this test quiet would have hidden the question.
  */
-const KNOWN_UNWIRED = new Set(['battle-ffx', 'boss-dread']);
+const KNOWN_UNWIRED = new Set([
+  'battle-ffx',
+  'boss-dread',
+  // Chapter IX's battle cue (FFX only, 2026-09-24): composed and rendered by the
+  // audio track, wired by the Chapter IX data owner (src/data/**yojimbo*;
+  // docs/concepts/chapters/yojimbo/INSTALLED.md). The honesty check below fails
+  // the moment the chapter names it, which is the reminder to delete this line.
+  'boss-yojimbo',
+]);
 
 // ---------------------------------------------------------------------------
 // Walking the three places a cue can be named
@@ -108,7 +116,8 @@ function referencedCues(): Map<string, string[]> {
     sources.set(key, [...(sources.get(key) ?? []), where]);
   };
 
-  for (const chapter of CHAPTERS) {
+  // Unlisted chapters (registered, reachable through getChapter) count too.
+  for (const chapter of [...CHAPTERS, ...UNLISTED_CHAPTERS]) {
     for (const [field, key] of Object.entries(chapter.music)) {
       if (typeof key === 'string') note(key, `${chapter.id}.music.${field}`);
     }
