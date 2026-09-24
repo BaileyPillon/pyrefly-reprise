@@ -103,6 +103,13 @@ export class PortraitStage {
   private disposed = false;
   /** Re-frames every plate when the window changes shape. */
   private resize: ResizeObserver | null = null;
+  /**
+   * The window's own `resize`, which fires before the frame's animation
+   * callbacks: the observer alone runs after them, so for one frame the
+   * columns stood at the new size with the old plate and layout (option A's
+   * stack undone on Paine's face; verifier, 24 Sep 2026).
+   */
+  private readonly onWindowResize = (): void => this.layout();
   private readonly chrome: (() => Rect[] | null) | undefined;
   private readonly stack: StackHost | undefined;
   /** The face-cleared framing per plate and window size, kept across fixed tabs. */
@@ -118,6 +125,7 @@ export class PortraitStage {
       this.resize = new ResizeObserver(() => this.layout());
       this.resize.observe(this.root);
     }
+    if (typeof window !== 'undefined') window.addEventListener('resize', this.onWindowResize);
   }
 
   /**
@@ -278,6 +286,7 @@ export class PortraitStage {
     this.disposed = true;
     this.resize?.disconnect();
     this.resize = null;
+    if (typeof window !== 'undefined') window.removeEventListener('resize', this.onWindowResize);
     if (this.fadeTimer !== null) clearTimeout(this.fadeTimer);
     this.fadeTimer = null;
     this.detachDriver();

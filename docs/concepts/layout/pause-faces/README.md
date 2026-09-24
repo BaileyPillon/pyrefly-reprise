@@ -153,7 +153,9 @@ the columns stack. The stack rises only as far as it must to clear the
 objective (16 px of air), never into the tab strip, and never out of the
 frame. It is kept only if the framing against it clears the face with the
 pause's full 16 px margin; otherwise the two columns come back as they were.
-A slid plate (B, 8 to 16 px of air) is not this case and keeps its columns.
+A plate B slides against the two columns (8 to 16 px of air) is not this case
+and keeps its columns, and a stack is never slid: when only B's slide would
+clear the face against the stacked column, the stack is refused (repair below).
 
 Measured with real Escape, E, Q and H presses, GPU Chromium (RTX 5070 Ti,
 D3D11), all six chapters at 1280x720, 1280x960, 1600x900 and 2000x1012,
@@ -179,3 +181,45 @@ against the same tree with the switch stubbed out:
   will.
 
 Target beside build: `docs/screenshots/pause-faces-a/sheet-target-vs-build.jpg`.
+
+### Repair (2026-09-24): the verifier's three notes
+
+The verifier confirmed every claim and measured 480 tab pairs against the
+parent commit; it noted three things, all repaired and re-measured the same
+way (real Escape, E, Q and H; GPU Chromium; the committed option A build
+against this one, all six chapters at 1280x720, 1280x960, 1600x900,
+2000x1012, 1920x1080, 1366x768, 1024x768, 390x844, 844x390 and 600x450).
+
+- **A stack is never slid.** `faceStack.clearsFace` accepted any slid
+  framing, so FFX Kimahri at 600x450 (chapter 1) was stacked and then slid
+  against the stack, and his fixed tabs followed: A and B at once, which the
+  sheet never drew. `clearsFace` now needs the full 16 px margin without a
+  slide; a stack only B could clear is refused and the columns come back.
+- **Never under the phone stylesheet.** A landscape window under 621 px wide
+  (600x450, say) gets the phone stylesheet (`pause-screen.css`,
+  `@media (max-width: 620px)`), whose chrome is approved frame f, not the
+  sheet's rows; the rule stacked FFX Yuna there in chapters 1 to 3. The stack
+  host (`stackColumn.ts`, `PHONE_LAYOUT_QUERY`) now refuses the stack under
+  that stylesheet, so 600x450 is exactly as it was before option A (all 48
+  tabs match the parent commit). Those frames were already broken before A
+  (IN THIS FIGHT runs under the objective and off the bottom); that is an
+  open issue of its own, not something A was picked for.
+- **No frame of flat columns on a resize.** The plate re-framed only from the
+  ResizeObserver, which runs after the frame's animation callbacks; resizing
+  from 1600x900 to 1280x960 on Paine's tab showed the two columns on her face
+  for one frame (-188 px). `PortraitStage` now also re-frames on the window's
+  own `resize` event, which fires first: 180 sampled frames after each resize,
+  none with a column on her face, in chapters 5 and 6.
+
+Measured after the repair: at 1600x900, 2000x1012, 1920x1080, 1366x768,
+1280x720, 1280x960, 1024x768, 390x844 and 844x390 every tab is identical to
+the committed option A build (472 of 480 tab pairs); the only 8 that differ
+are the 600x450 ones above. Paine stacks where she did (chapter 5 at 1280x960,
+17.7 px clear, and 1280x720, 20.6 px; chapter 6 at 1280x960, 17.7 px), the 17
+member tabs at 1024x768 still stack, unslid, and no tab anywhere is both
+stacked and slid. Picture: `docs/screenshots/pause-faces-a/repair-600x450-and-paine.jpg`.
+
+One thing the section above leaves out: the face-clear search also re-frames
+Paine's plate against the stack, not only the chrome. At 1280x960 it pans
+about 234 px left at 0.91x of the approved width, at 1280x720 about 304 px
+left; the sheet's row A moved only the chrome.

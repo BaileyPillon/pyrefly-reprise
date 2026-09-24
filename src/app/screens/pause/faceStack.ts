@@ -18,13 +18,18 @@
  *    of air, is not this case, and
  * 2. the stacked column fits between the tab strip and the objective, inside
  *    the frame ({@link StackHost} says so), and
- * 3. the framing against the stacked column clears the face (at zero overlap
- *    with the pause's own margin, on screen, through the whole push-in).
+ * 3. the framing against the stacked column clears the face without B's slide
+ *    (at zero overlap with the pause's full margin, on screen, through the
+ *    whole push-in): a stack and a slide together were never on the sheet
+ *    (verifier, 24 Sep 2026: FFX Kimahri at 600x450 was stacked and slid).
  *
  * Anything the plain framing or B already clears keeps its two columns, and a
  * case the stack cannot clear either keeps the layout it had before (the
  * columns come back side by side). A portrait frame (the phone, approved
- * frame f) never gets here: its chrome already stacks under the face.
+ * frame f) never gets here: its chrome already stacks under the face. Nor
+ * does any window the phone stylesheet lays out (under 621 px wide, a
+ * landscape one too): the host refuses the stack there (`stackColumn.ts`),
+ * which keeps the rule inside the layouts the sheet drew.
  *
  * Game case: both. Shared pause plumbing (CHK-020); the case that reaches it
  * today is FFX-2 Paine, and the rule does not name her.
@@ -46,12 +51,13 @@ type Framing = Pick<PlateFraming, 'x' | 'y' | 'side'>;
 export type StackHost = (on: boolean) => boolean;
 
 /**
- * Whether a framing clears the face: B's slide (which keeps at least half the
- * margin by construction), or no chrome within the pause's full margin and the
- * whole face on screen, through the push-in.
+ * Whether a framing clears the face well enough to keep the stack: no chrome
+ * within the pause's full margin and the whole face on screen, through the
+ * push-in, without B's slide. A slid framing (8 to 16 px of air) is `false`:
+ * the stack is option A alone, never A and B at once.
  */
 export function clearsFace(box: FramedBox, face: FaceBox, frameW: number, frameH: number, blocks: readonly Rect[]): boolean {
-  if (box.slid) return true;
+  if (box.slid) return false;
   return faceOverlap(faceRectOn(box, face), blocks) === 0 && faceInFrame(box, face, frameW, frameH);
 }
 

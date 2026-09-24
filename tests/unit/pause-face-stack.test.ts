@@ -9,11 +9,12 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { FACE_BOXES, type Rect } from '../../src/app/screens/pause/faceClear.ts';
 import { frameFace } from '../../src/app/screens/pause/faceSlide.ts';
 import { chromeFor, clearsFace, coversFace } from '../../src/app/screens/pause/faceStack.ts';
-import { setStacked, STACK_AIR } from '../../src/app/screens/pause/stackColumn.ts';
+import { PHONE_LAYOUT_QUERY, setStacked, STACK_AIR } from '../../src/app/screens/pause/stackColumn.ts';
+import { PortraitStage } from '../../src/app/screens/pause/PortraitStage.ts';
 import { estimateBlocks, FaceFramer } from '../../src/app/screens/pause/faceFramer.ts';
 import { framePlate, PLATE_FRAMING } from '../../src/app/screens/pause/plates.ts';
 
@@ -38,6 +39,19 @@ const PAINE_STACKED: Rect[] = [
   { left: 845, right: 1229, top: 798, bottom: 871 },
   { left: 51, right: 895, top: 58, bottom: 100 },
   { left: 51, right: 196, top: 882, bottom: 932 },
+];
+
+/** Chapter 1's member chrome at 1280x960, left side (as `pause-face-slide.test.ts`): B slides FFX Tidus against it. */
+const TIDUS_LEFT: Rect[] = [
+  { left: 51, right: 344, top: 317, bottom: 553 },
+  { left: 383, right: 700, top: 317, bottom: 553 },
+  { left: 51, right: 473, top: 28, bottom: 46 },
+  { left: 51, right: 571, top: 749, bottom: 767 },
+  { left: 51, right: 580, top: 780, bottom: 853 },
+  { left: 51, right: 922, top: 58, bottom: 100 },
+  { left: 1175, right: 1229, top: 74, bottom: 100 },
+  { left: 1087, right: 1229, top: 882, bottom: 904 },
+  { left: 1084, right: 1229, top: 914, bottom: 932 },
 ];
 
 /** A fake screen: which layout is up, and a log of the switch. */
@@ -83,18 +97,7 @@ describe('chromeFor: when the stack is used', () => {
   });
 
   it('a plate option B slides (FFX Tidus at 1280x960, 8 px of air) is not a stack case', () => {
-    // Chapter 1's member chrome at 1280x960, left side (as `pause-face-slide.test.ts`).
-    const left: Rect[] = [
-      { left: 51, right: 344, top: 317, bottom: 553 },
-      { left: 383, right: 700, top: 317, bottom: 553 },
-      { left: 51, right: 473, top: 28, bottom: 46 },
-      { left: 51, right: 571, top: 749, bottom: 767 },
-      { left: 51, right: 580, top: 780, bottom: 853 },
-      { left: 51, right: 922, top: 58, bottom: 100 },
-      { left: 1175, right: 1229, top: 74, bottom: 100 },
-      { left: 1087, right: 1229, top: 882, bottom: 904 },
-      { left: 1084, right: 1229, top: 914, bottom: 932 },
-    ];
+    const left = TIDUS_LEFT;
     const tf = PLATE_FRAMING['tidus']!;
     const tface = FACE_BOXES['tidus']!;
     const tbase = framePlate(tf, 1280, 960);
@@ -104,6 +107,24 @@ describe('chromeFor: when the stack is used', () => {
     const s = screen(left, left.slice(0, 1));
     expect(chromeFor(tbase, tf, tface, 1280, 960, s.measure, s.stack).blocks).toBe(left);
     expect(s.log).toEqual([false]);
+  });
+
+  it('a stack only the B slide could clear is not kept: option A and B never together (repair, 24 Sep 2026)', () => {
+    // FFX Kimahri at 600x450 was stacked and then slid against the stack.
+    const slidAgainstStack = { ...base, slid: true as const };
+    expect(clearsFace(slidAgainstStack, face, 1280, 960, [])).toBe(false);
+    // A face the two columns cover past any rescue, and a stacked column only
+    // B's slide clears (FFX Tidus's chrome at 1280x960): the stack is refused.
+    const tf = PLATE_FRAMING['tidus']!;
+    const tface = FACE_BOXES['tidus']!;
+    const tbase = framePlate(tf, 1280, 960);
+    const wall: Rect[] = [{ left: 0, right: 1280, top: 0, bottom: 960 }];
+    expect(coversFace(frameFace(tbase, tf, tface, 1280, 960, wall), tface, wall)).toBe(true);
+    expect(frameFace(tbase, tf, tface, 1280, 960, TIDUS_LEFT).slid).toBe(true);
+    const s = screen(wall, TIDUS_LEFT);
+    expect(chromeFor(tbase, tf, tface, 1280, 960, s.measure, s.stack).blocks).toBe(wall);
+    expect(s.on).toBe(false);
+    expect(s.log).toEqual([false, true, false]);
   });
 
   it('a stack that does not fit, or does not clear either, puts the columns back as they were', () => {
@@ -209,6 +230,42 @@ describe('setStacked: the column rises only as far as it must', () => {
     const wide = pauseRoot({ x: 900, y: 317, width: 417, height: 300 }, { x: 675, y: 749, width: 554, height: 122 }, { x: 51, y: 58, width: 844, height: 42 });
     expect(setStacked(wide, true)).toBe(false);
     wide.remove();
+  });
+});
+
+describe('setStacked: never under the phone stylesheet', () => {
+  it('refuses the stack when the phone layout applies (a 600x450 landscape window too)', () => {
+    const root = pauseRoot({ x: 312, y: 234, width: 270, height: 150 }, { x: 20, y: 369, width: 560, height: 60 }, { x: 20, y: 40, width: 560, height: 30 }, { x: 0, y: 0, width: 600, height: 450 });
+    const mm = vi.fn((q: string) => ({ matches: q === PHONE_LAYOUT_QUERY }) as MediaQueryList);
+    const had = window.matchMedia;
+    window.matchMedia = mm;
+    try {
+      expect(setStacked(root, true)).toBe(false);
+      expect(root.classList.contains('pause--stack')).toBe(false);
+      expect(mm).toHaveBeenCalledWith(PHONE_LAYOUT_QUERY);
+      expect(setStacked(root, false)).toBe(true);
+    } finally {
+      window.matchMedia = had;
+      root.remove();
+    }
+  });
+
+  it('matches the breakpoint pause-screen.css uses for the phone', () => {
+    expect(read('src', 'ui', 'common', 'pause-screen.css')).toContain(`@media ${PHONE_LAYOUT_QUERY}`);
+  });
+});
+
+describe('PortraitStage: a window resize re-frames before the next frame', () => {
+  it('re-lays out on the window resize event, and stops after dispose', () => {
+    const spy = vi.spyOn(PortraitStage.prototype, 'layout');
+    const stage = new PortraitStage({ root: document.createElement('div'), reduceMotion: true });
+    spy.mockClear();
+    window.dispatchEvent(new Event('resize'));
+    expect(spy).toHaveBeenCalledTimes(1);
+    stage.dispose();
+    window.dispatchEvent(new Event('resize'));
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
   });
 });
 
