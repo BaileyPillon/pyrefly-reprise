@@ -282,6 +282,8 @@ export interface AdvisorZoneInput {
    * because nothing in this file had ever been told a boss was there.
    */
   enemies?: readonly Rect[];
+  /** Yojimbo's Zanmato gauge panel and its banner while up (FFX, Chapter IX only; `ZanmatoGauge.ts`). */
+  enemyGauge?: readonly Rect[];
 }
 
 /** Where the advisor card's box goes. `bottom` is distance from the stage's bottom edge. */
@@ -357,6 +359,7 @@ function obstaclesOf(input: AdvisorZoneInput): Rect[] {
     input.ctb ?? null,
     ...input.sprites,
     ...(input.enemies ?? []),
+    ...(input.enemyGauge ?? []),
   ]) {
     if (r && r.right > r.left && r.bottom > r.top) out.push(r);
   }

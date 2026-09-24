@@ -26,6 +26,7 @@ import { sensorSteerDx } from './sensorSteer.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
+import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { growToGrid, panelPresence, rectKey } from './hudPlacementKeys.ts';
 import { evraeFarStreakRect, widenForEvraeFarStreak } from './evraeFarStreakBounds.ts';
 import type { CursorSelection } from './TargetCursor.ts';
@@ -135,6 +136,7 @@ export class FFXBattleHud implements HudPort {
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
   private readonly airship = new AirshipOrders(); // Evrae (FFX) only; inert without the range flag
+  private readonly zanmato = new ZanmatoGauge(); // Yojimbo (FFX, Chapter IX) only; hidden without his gauge
   /**
    * The optional strategy guide (`src/ui/common/StrategyGuide.ts`), a left rail
    * measured to sit between the action banner and the command stack.
@@ -358,6 +360,7 @@ export class FFXBattleHud implements HudPort {
     // plate got into trouble in the first place.)
     this.sensorPanel.reset();
     this.sensorPanel.mount();
+    this.zanmato.mount(this.stage, this.el);
     this.intent.mount(this.overlay, {
       host: this.el,
       scale: () => this.hudScale(),
@@ -388,6 +391,7 @@ export class FFXBattleHud implements HudPort {
     // HUD that lit it (`CommandMenu.close`).
     this.commandMenu.close();
     this.airship.dispose();
+    this.zanmato.dispose();
     this.clearTransientOverlays();
     this.el.remove();
     this.mounted = false;
@@ -412,6 +416,7 @@ export class FFXBattleHud implements HudPort {
       this.sensorPanel.hide();
     }
     this.lastState = state;
+    this.zanmato.sync(state);
     if (Array.isArray(preview)) {
       // Kept so the field's name plate can print the same letter tag the queue
       // tile shows — the only mark that tells Yu Pagoda B from Yu Pagoda C.
@@ -539,6 +544,7 @@ export class FFXBattleHud implements HudPort {
   }
 
   onEvent(event: BattleEvent): void {
+    this.zanmato.onEvent(event);
     switch (event.type) {
       case 'action-start':
         this.currentActorId = event.actorId;
@@ -1231,6 +1237,7 @@ export class FFXBattleHud implements HudPort {
       // Braska's Final Aeon: the only fighters the solver had ever been told
       // about were the party's.
       enemies: this.enemySpriteRects().map((r) => growToGrid(r, 4)!),
+      enemyGauge: this.zanmato.obstacleEls().flatMap((e) => growToGrid(this.stageRect(e), 1) ?? []),
     };
     const key = [
       this.advisorDecisionSeq,
@@ -1243,6 +1250,7 @@ export class FFXBattleHud implements HudPort {
       rectKey(input.intent),
       rectKey(input.intentChip),
       rectKey(input.ctb),
+      input.enemyGauge.map(rectKey).join(';'),
       // The cast's *positions* are deliberately absent — see below. Their
       // number is not: a KO or a switch changes it, and both are worth a fresh
       // solve on the frame they land.
@@ -1451,6 +1459,8 @@ export class FFXBattleHud implements HudPort {
       // changes nothing about how a reticle is drawn or aimed, which is issue
       // #08/#13's track, not this one.
       '.ig-reticle',
+      '.ffx-zg__panel',
+      '.ffx-zg__banner',
     ] as const) {
       for (const el of this.el.querySelectorAll<HTMLElement>(selector)) {
         // Size alone. `ffx/DamageNumbers.ts` gates on `el.hidden ||

@@ -1,0 +1,108 @@
+/*
+ * Yojimbo's Zanmato gauge (FFX only, Chapter IX only). `ZanmatoGauge.ts`.
+ *
+ * Landscape rules are copied from the picked mockup's own stylesheet
+ * (`docs/concepts/chapters/yojimbo/gauge/gauge.css`, `.mk-a` and
+ * `.mk-c__banner`) in its 1440x810 authoring space; the frame is scaled by
+ * 640/1440 into the HUD grid by the widget. Phone rules are copied from
+ * `phone.css` (`.pa`, `.pc__banner`) in CSS px. The mockups' HP line is left
+ * out on purpose: see the widget's header.
+ */
+
+.ffx-zg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--ig-paper);
+}
+.ffx-zg__frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+
+/* ---------------------------------------------------------------- landscape */
+
+.ffx-zg__panel {
+  position: absolute; left: 660px; top: 10px; width: 430px; padding: 10px 22px 12px 18px;
+  background: rgba(11,10,18,0.84); border-left: 4px solid var(--ig-blood);
+  transform: skewX(var(--ig-skew)); box-shadow: 0 10px 26px rgba(0,0,0,0.5);
+}
+.ffx-zg__panel > * { transform: skewX(var(--ig-skew-inverse)); }
+.ffx-zg__top { display: flex; align-items: baseline; gap: 14px; }
+.ffx-zg__name { font-family: var(--ig-font-serif); font-style: italic; font-weight: 700; font-size: 30px; color: var(--ig-paper); }
+.ffx-zg__pct { margin-left: auto; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 24px; color: #e8a0a0; }
+.ffx-zg__chip { margin-left: auto; padding: 4px 10px 5px; background: var(--ig-blood); color: var(--ig-paper);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  box-shadow: 0 0 16px rgba(176,42,42,0.8); }
+.ffx-zg__bar { position: relative; height: 14px; margin-top: 16px; }
+.ffx-zg__seg { position: absolute; top: 0; height: 14px; display: block; background: rgba(176,42,42,0.16);
+  border-right: 2px solid rgba(11,10,18,0.95); box-sizing: border-box; }
+.ffx-zg__seg b { position: absolute; inset: 0 auto 0 0; display: block; background: linear-gradient(to right, #7c1c1c, var(--ig-blood));
+  transition: width 320ms ease-out; }
+.ffx-zg__seg span { position: absolute; left: 2px; top: 18px; white-space: nowrap; font-family: var(--ig-font-display); font-weight: 700;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,241,232,0.62); }
+.ffx-zg__seg::before { content: ''; position: absolute; right: -2px; top: -5px; width: 2px; height: 24px; background: var(--ig-gold); opacity: 0.8; }
+.ffx-zg__seg:last-child::before { display: none; }
+.ffx-zg__now { margin-top: 26px; font-family: var(--ig-font-text); font-size: 14px; color: rgba(244,241,232,0.78); }
+.ffx-zg__panel--full { border-left-color: #e04040; box-shadow: 0 0 0 1px rgba(224,64,64,0.6), 0 0 34px rgba(176,42,42,0.55); }
+.ffx-zg__panel--full .ffx-zg__seg b { background: linear-gradient(to right, #c23232, #ff5a4a); box-shadow: 0 0 12px rgba(255,90,74,0.8); }
+.ffx-zg__panel--full .ffx-zg__now { color: #ffb0a8; font-weight: 600; }
+
+/* The one-shot banner (option C). `top` is written by the widget: under the panel.
+   Centred on the stage like the mockup, but only as wide as its own text: the
+   mockup's rule ran from 12 % to 88 % of the frame, which in this HUD crosses
+   the guide rail and reaches the turn list. */
+.ffx-zg__banner { position: absolute; left: 50%; top: 190px; width: max-content; text-align: center; pointer-events: none;
+  opacity: 0; transform: translate(-50%, -6px); transition: opacity 260ms ease-out, transform 260ms ease-out; }
+.ffx-zg__banner--on { opacity: 1; transform: translate(-50%, 0); }
+.ffx-zg__banner::before { content: ''; position: absolute; left: 0; right: 0; top: 32px; height: 2px;
+  background: linear-gradient(to right, rgba(176,42,42,0), rgba(255,74,58,0.9), rgba(176,42,42,0)); }
+.ffx-zg__banner span { position: relative; display: inline-block; padding: 6px 40px 8px; background: rgba(11,10,18,0.86);
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 700; font-size: 46px; color: var(--ig-paper);
+  border-bottom: 3px solid var(--ig-blood); }
+.ffx-zg__banner small { display: block; margin-top: 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.26em; text-transform: uppercase; color: #ffb0a8; text-shadow: 0 1px 4px #000; }
+
+/* -------------------------------------------------------------------- phone */
+
+.ffx-zg--phone .ffx-zg__frame {
+  left: 12px; right: 12px; top: 30px; max-width: 520px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.ffx-zg--phone .ffx-zg__panel {
+  position: relative; left: auto; top: auto; width: auto; z-index: 10; padding: 10px 14px 12px 14px;
+  background: rgba(11,10,18,0.9); border-left: 4px solid var(--ig-blood); box-shadow: 0 10px 24px rgba(0,0,0,0.55);
+  transform: none; font-family: var(--ig-font-text);
+}
+.ffx-zg--phone .ffx-zg__panel > * { transform: none; }
+.ffx-zg--phone .ffx-zg__top { gap: 10px; }
+.ffx-zg--phone .ffx-zg__name { font-size: 24px; }
+.ffx-zg--phone .ffx-zg__pct { font-size: 22px; color: #eaa4a4; }
+.ffx-zg--phone .ffx-zg__chip { padding: 4px 8px; font-size: 12px; letter-spacing: 0.12em; box-shadow: 0 0 14px rgba(176,42,42,0.8); }
+.ffx-zg__nums { position: relative; height: 16px; margin-top: 8px; }
+.ffx-zg__nums span { position: absolute; transform: translateX(-50%); font-family: var(--ig-font-numeral); font-weight: 700; font-size: 13px; color: var(--ig-gold); }
+.ffx-zg--phone .ffx-zg__bar { height: 16px; margin-top: 0; }
+.ffx-zg--phone .ffx-zg__seg { height: 16px; background: rgba(176,42,42,0.18); border-right: 2px solid #0b0a12; }
+.ffx-zg--phone .ffx-zg__seg::before { display: none; }
+.ffx-zg__labels { position: relative; height: 18px; margin-top: 5px; }
+.ffx-zg__labels span { position: absolute; top: 0; white-space: nowrap; font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.04em; text-transform: uppercase; color: rgba(244,241,232,0.8); }
+.ffx-zg--phone .ffx-zg__now { margin-top: 6px; font-size: 15px; color: rgba(244,241,232,0.9); }
+.ffx-zg--phone .ffx-zg__panel--full { border-left-color: #e04040; box-shadow: 0 0 0 1px rgba(224,64,64,0.6), 0 0 30px rgba(176,42,42,0.55); }
+.ffx-zg--phone .ffx-zg__panel--full .ffx-zg__seg b { background: linear-gradient(to right, #c23232, #ff5a4a); box-shadow: 0 0 10px rgba(255,90,74,0.8); }
+.ffx-zg--phone .ffx-zg__panel--full .ffx-zg__now { color: #ffb8b0; font-weight: 600; }
+
+.ffx-zg--phone .ffx-zg__banner { position: relative; left: auto; right: auto; top: auto; width: auto; z-index: 12; transform: translateY(-6px); }
+.ffx-zg--phone .ffx-zg__banner--on { transform: none; }
+.ffx-zg--phone .ffx-zg__banner::before { left: 4%; right: 4%; top: 26px; }
+.ffx-zg--phone .ffx-zg__banner span { padding: 4px 28px 6px; background: rgba(11,10,18,0.9); font-size: 36px; }
+.ffx-zg--phone .ffx-zg__banner small { margin: 8px auto 0; width: 300px; max-width: 100%; box-sizing: border-box; padding: 4px 8px;
+  background: rgba(11,10,18,0.7); font-size: 12px; letter-spacing: 0.08em; color: #ffb8b0; text-shadow: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ffx-zg__banner, .ffx-zg__seg b { transition: none; }
+  .ffx-zg__banner, .ffx-zg__banner--on { transform: translateX(-50%); }
+  .ffx-zg--phone .ffx-zg__banner, .ffx-zg--phone .ffx-zg__banner--on { transform: none; }
+}

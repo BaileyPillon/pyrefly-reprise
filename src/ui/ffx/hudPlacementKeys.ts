@@ -34,6 +34,7 @@ export function panelPresence(input: AdvisorZoneInput): string {
     on(input.ctb),
     input.sprites.length,
     input.enemies?.length ?? 0,
+    input.enemyGauge?.length ?? 0,
   ].join(':');
 }
 
