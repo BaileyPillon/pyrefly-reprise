@@ -79,3 +79,31 @@ PID; `PYREFLY_BROWSER=gpu`, renderer ANGLE NVIDIA RTX 5070 Ti D3D11; candidates 
 
 An independent 1:1 judge of the four candidates (bar 7), then Bailey's pick per state (cast
 candidate or none; hurt candidate or none) before anything is installed.
+
+## Repair of the two casts after judge 3 (2026-09-24, D-045 option A; FFX only)
+
+Judge 3 ([`../r3-JUDGE-3.md`](../r3-JUDGE-3.md)) scored Seymour `cast` 5 (hands) and Guardian `cast` 6
+(wrist, fragments). Both were repaired by **masked repaints only**, on top of the r3 candidates above:
+every pixel outside the repair mask is byte-identical to the judged candidate (measured: 0 changed px
+outside, MAD 0, alpha unchanged). **Still CANDIDATES: not installed, not approved, not independently
+re-judged.** Files: `D:/Tools/pyrefly-art-backup/candidates/2026-09-24-ch7-casts/<subject>/cast.png`
+(+ `cast.json`, `cast.gates.json`, `cast.painted.png` = r3 painted plus repair, `cast.repair-mask.png`).
+The r3 candidates in `2026-09-24-mac-r3-poses/` are untouched. Sheet: the repaired rows at the foot of
+[`sheet.jpg`](sheet.jpg) (r3 | repaired | mask tinted at 1:1, then 3x zooms).
+
+| Candidate | What changed | Pilot / re-run | Gates |
+|---|---|---|---|
+| Seymour `cast` | The raised hand only (3,481 px): the heavy black outline inpainted away; a guide drawn in the idle's skin, lavender and ink (four fingers with parting lines, pointed tips, a thumb on the party side, lavender far side, a soft cast shadow on the chest); img2img denoise 0.55. Hair and lean untouched. | Pilot (light guide, 0.55, seeds 8101-8104) lost the thumb and gave no nails: rejected. Re-run (`sey_prep2.py`, seeds 8111-8114): **seed 8112** has a thumb, four fingers, pointed violet nails and a thin outline. | idle px 98.5 %, invented colours 0 %, soft alpha 0 |
+| Guardian `cast` | The wrist bend (inner-corner fillet guide, 0.5) plus the green hook above the fist, the specks on the shaft and the dark notch under the knuckles, in one pass (seed **8201**); then, inside the mask, the sampler's gold line on the wrist's inner edge recoloured to the idle's ink, and residual specks and the shaft's pale fringe dots filled from the robe (Telea). The shaft is pasted back exactly; rotation untouched. | Pilot only (seeds 8201-8204; 8202/8203 invented green cloth, 8204 a lump at the wrist). No re-run. | idle px 95.7 %, invented colours 0 %, soft alpha 0 |
+
+**Agent's LOOK at 1:1 and 3x (self-judged, not independent):** Seymour's hand now reads as a hand
+(thumb apart, fingers, nails), no jagged outline; it is still pale against the pale chest, parted by
+the thin ink and the lavender far side. The nails are violet (a robe colour of the idle), not the
+idle's ink points. Guardian: the forearm turns into the fist in one smooth curve; the hook, the specks
+and the fringe dots are gone at 1:1. The Guardian `hurt` stays "none" per judge 3.
+
+GPU: three prompts (4 seeds each), 34.7 s, 46.0 s, 34.9 s = **1.9 GPU minutes** (cap 20); `/queue`
+empty 3 minutes before each; ComfyUI not restarted; no all-black frame. Scripts: `repair.py` (masked
+img2img with the feather inside the mask, protect pasted back), `sey_prep2.py`, `gua_prep.py`,
+`gua_clean.py`, `sheet_repair.py`. **Owed:** an independent 1:1 re-judge of the two repaired casts,
+then Bailey's pick.
