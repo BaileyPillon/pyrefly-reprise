@@ -235,3 +235,94 @@ deploy while one is owed, which needs Bailey's words or a settled deep review.
 **Verdict: PROCEED.** Eleven needed mechanics already work (§4.1); the new surface is two small
 FFX-only seams, one AI script and one widget. Before the first perceivable line: Bailey answers
 B1–B10 and picks O-1 to O-6. *Preflight only; the only file this work commits is this one.*
+
+## Review (adversarial, 2026-09-24)
+
+Written by a review sub-agent. It re-fetched three FF Wiki pages through
+`api.php?action=parse&prop=wikitext` with a browser user agent: **Yojimbo (Final Fantasy X
+boss)** revid 3980332, **Final Fantasy X enemy abilities** revid 4008011, **Ginnem (boss)**
+revid 3963152. All three revids match the research's Sources list, so the text is the same
+text the research read. It then checked the §4 engine claims against `src/battle/ffx` and
+looked at the options sheets under `docs/concepts/chapters/yojimbo/` (commit e4464ea3) at
+phone width (390 CSS px). Scratch: `D:/Tools/pyrefly-scratch/yojimbo/review/`.
+
+### Research claims against the sources
+
+| Claim (research §) | Verdict | Evidence |
+|---|---|---|
+| HP 33,000, Overkill 4,060, MP 2,000, STR 34, DEF 80, MAG 35, AGI 32, Luck 15, EVA 0, 0 AP/gil (§2.1) | **CONFIRMED** | boss infobox, section 1 (the wiki prints MDef 1 and ACC 1, as the research says) |
+| Doom count 5; only works in this encounter; Doom from the cavern's Ghosts or a Candle of Life (§2.3, §5.3) | **CONFIRMED** | boss page "Strategy" |
+| Cannot flee; Eject immune (§4.3) | **CONFIRMED** | boss infobox `info` line |
+| Threaten: the wiki says Immune (Y-3) | **CONFIRMED** | boss infobox `threaten = Immune` |
+| Immunity list `[verified: 2 sources]` (§2.3) | **CORRECTED** | The wiki infobox has no Confuse row, and it lists neither Auto-Life nor Slice. Those three are `[decompiled]` only, `[single source]`. The rest agree. |
+| Gauge +3 % targeted, +2 % "when he acts" (§4.1, plan §2) | **CORRECTED** | The wiki says "2% when **attacking**". Whether the Daigoro *order* turn and the Zanmato turn pay the +2 is not sourced. Add it to Y-1, and make the "+2 per his action" test in §9 an `[estimate]` pin. |
+| Band gates 25 / 50 / 80 "slightly", Zanmato 9,999 to all (§4.1) | **CONFIRMED** | boss page "Battle" |
+| Daigoro DC 20, crit, 10 % PDR; Kozuka 16; Wakizashi 28 "One ally"; Zanmato 200, "All allies", `Sp`, "Inflicts 10,000 damage" (§3.1) | **CONFIRMED** | enemy-ability tables. The "random" in "one random character" comes from the decompile alone; the wiki says only "One ally". |
+| Lulu's Theme is the battle music (§6.4) | **CONFIRMED** | boss page "Musical themes" (the "only place" half rests on the Lulu and OST pages, not re-fetched) |
+| Ginnem HP 10, STR 7, ACC 10, EVA 2, Luck 15, Sleep/Silence/Dark 20, Doom count 3; "internally programmed as an enemy" (§2.5) | **CONFIRMED** | Ginnem (boss) infobox. It adds Threaten, Bribe, Sensor and Scan immune, which the research leaves out (harmless while B3 = untargetable). |
+| Physical ≈ 52 % into Def 80; Fira ≈ 1,358 at Magic 35 (§3.3) | **CONFIRMED** | recomputed: 730 − ⌊(80·51 − ⌊6400/11⌋)/10⌋ = 381; 381/725 = 0.526. Fira: 24·(204+24)/4 = 1,368 × 725/730 = 1,358 |
+
+### Plan §4.1 engine claims against the code
+
+| # | Verdict | Evidence |
+|---:|---|---|
+| 1 Zanmato `dmgCon * 50` | **CONFIRMED** | `formulas.ts:211` |
+| 2 9,999 cap | **CONFIRMED** | `equipment.ts:301` |
+| 3 Protect ignored, Shield ÷4 | **CONFIRMED, with a CORRECTION** | Step 5 is physical-only and Shield (step 2/3) applies to every type. **The engine has no `'special'` damage type**: `DamageType` is `physical`, `magical` or `other` (`common/types.ts:1195`). T2 must type Zanmato `'other'`; "special" in §2 is the wiki's label. |
+| 4 an aeon takes the party-wide blow | **CONFIRMED** | `state.ts:327` |
+| 5 Doom count from `doomTurns` | **CONFIRMED** | `statuses.ts:222` |
+| 6 +3 once per action | **CONFIRMED** | `abilities.ts:137` calls `onTargeted` once per target before the hit loop; `overdrive.ts:152` counts party-side and aeon users only |
+| 7 enemy gauge and HUD event | **CONFIRMED** | `overdrive.ts#addGauge`, `BattlePresenterVitals.ts:86` |
+| 8 immunity flags | **CONFIRMED** | `common/types.ts:452` has delay, bribe, threaten, percentage, sensor and scan |
+| 9 untargetable, non-combatant | **CONFIRMED** | `predicates.ts:76`, `engine.ts:397` |
+| 10 "`flags.isBoss`: no flee" | **CORRECTED** | The type comment says so, but the FFX engine reads `ctx.rt.canEscape` (`commands.ts:113`, `execute.ts:56`), which defaults to false (`setup.ts:306`). The outcome is right; the mechanism is `canEscape`. |
+| 11 fire-at-full-gauge pattern | **CONFIRMED** | `ai/macalania-rules.ts:153, 243` |
+| Y-G1 queue admits `onField && inTurnQueue` | **CONFIRMED** | `turnQueue.ts:72`, `predicates.ts:50`. Cid (`nonCombatant`) still takes CTB turns, so no existing field covers "on the field, never in the queue". |
+| Y-G2 counters collected only after party actions | **CONFIRMED** | `ai/reactions.ts:56`, `engine.ts:334` |
+| Contract files: `number` is `1..8`; `ids.ts` is a contract | **CONFIRMED** | `encounters.ts:110`, `docs/CONTRACTS.md:11` |
+| Gagazet build has Mighty Guard and White Wind; Kimahri's `doom` row exists | **CONFIRMED** | `gagazet.ts:180`, `overdrive-kimahri-2.ts:68` |
+| Yojimbo art is unapproved | **CONFIRMED** | 0 hits in `approved-hashes.json` and `targets.json` |
+
+### Derived numbers
+
+- **"Zanmato on about his tenth turn"**: **CONFIRMED** under the plan's own assumptions
+  (start at 0, +11 a round): 9 + 11(k−1) ≥ 100 gives k = 10.
+- **"Doom must land before the gauge passes about 45 %"**: **CORRECTED.** In the engine,
+  Doom kills him *as his fifth turn opens* (`ticks.ts:82–88`, `engine.ts:213`), so he acts
+  only four more times. Under the same assumptions the threshold is **about 55 %, not 45 %**.
+  It also holds only if the party keeps hitting him after Doom lands. It is `[derived]` from
+  `[estimate]` inputs: T10 should measure it, and it should not be quoted as a fact.
+- **No invented game data found.** Every stat and damage constant in the plan traces to a
+  tagged research row. The unsourced values (the band odds, the start and reset values, and
+  per-action counting) are labelled `[estimate]` and put to Bailey as B2.
+
+### Presented as settled but actually Bailey's call
+
+1. **§3 opening line-up (Lulu, Kimahri, Yuna)** and **leaving out the Candle of Life** are
+   agent guesses, not B-questions. Either add them to the B sheet or record them under
+   `inferred` (rule 15). The research itself calls "Lulu leads" a presentation choice.
+2. **§7 the four mid-battle callouts** (gauge at 50 %, "Zanmato next turn", Doom lands, an
+   aeon takes Zanmato) are new perceivable content with no option or question attached.
+   **PLAUSIBLE** risk under rules 9 and 10: show them in T6's story options, or fold them
+   into the O-5 gauge pick.
+3. **R2 "ship registered and LOCKED"** sets Bailey's "he goes in next build" against rule 9.
+   The plan already says to tell Bailey before the cut; it must be a question, not a default.
+
+### Options sheets
+
+- **CONFIRMED:** they exist. O-1 to O-5 are in `docs/concepts/chapters/yojimbo/` with a README
+  and one question per round. O-6 music is deliberately absent (rule 13) and is still owed on
+  `docs/audio/audition.html`.
+- **Phone reading: PARTLY.** At 390 CSS px the O-1 sheet reads well: its titles, captions
+  and the three paintings are all clear. On the O-5 gauge sheet the titles and captions read,
+  but the band labels (25/50/80) and the intent text inside each mockup are too small to
+  read without zooming.
+- **CORRECTED against §6.2:** O-5 promised mockups "at 1280×960 and phone width". The
+  mockups were delivered at **1600×900 only, with no phone-width mockup**. O-4 promised one
+  plate with the night-sakura arrival overlay, and **none was made**. The chamber plates also
+  have no teleport pad; the README discloses this.
+
+**Review verdict: the preflight stands (PROCEED on engine, data, AI and story; HOLD on anything
+perceivable).** Before it drives any build, fix four things: the `'other'` damage type, the
+`canEscape` mechanism, the ~55 % Doom figure, and "+2 when attacking" added to Y-1. Add the
+line-up, Candle and callouts to Bailey's sheet. Owe a phone-width O-5 mockup.
