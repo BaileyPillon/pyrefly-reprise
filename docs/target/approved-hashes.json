@@ -584,6 +584,30 @@
     "mtime": "2026-09-24T16:35:28.737Z",
     "approved": "2026-09-24"
    }
+  },
+  "chapter:yojimbo:2026-09-24": {
+   "words": "All your recommendations",
+   "note": "Bailey, 2026-09-24, answering the driver's Yojimbo chapter recommendations (docs/plans/chapter-yojimbo-review.md B1-B10, docs/concepts/chapters/yojimbo/README.md O-1..O-5). Judge PASS for all four subjects: docs/concepts/chapters/yojimbo/production/JUDGE.md (Yojimbo 7.9, Daigoro 7.3, Ginnem 7.5, chamber 8.0). FFX only, Chapter IX. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo/.",
+   "public/art/characters/yojimbo-cavern/idle.png": {
+    "sha256": "bc8f5c1ecc8fb0a0cfa0c5a20e6ec12f3f3de71678c91ce44584050525866c1f",
+    "mtime": "2026-09-24T16:42:29.000Z",
+    "approved": "2026-09-24"
+   },
+   "public/art/characters/daigoro/idle.png": {
+    "sha256": "b9d952d377c6a2d015edc919e91f4d9176e0e868324a19a1cefdc6805b6e49c8",
+    "mtime": "2026-09-24T16:42:30.000Z",
+    "approved": "2026-09-24"
+   },
+   "public/art/characters/ginnem/idle.png": {
+    "sha256": "061d0021abc18af7263fa64923b2f6070f22de7ec0d61c673aa413f511971bee",
+    "mtime": "2026-09-24T16:42:30.000Z",
+    "approved": "2026-09-24"
+   },
+   "public/art/backdrops/cavern-stolen-fayth.png": {
+    "sha256": "cfdfe552d083bb05828a9d9fae8ea5400ae3cb2e106845b60418b8cda81b93a3",
+    "mtime": "2026-09-24T16:48:33.000Z",
+    "approved": "2026-09-24"
+   }
   }
  }
 }
