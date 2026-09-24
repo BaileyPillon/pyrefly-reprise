@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PR-0005 Option D — first turn only</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<link rel="stylesheet" href="_cutin.css">
+<style>
+  /* Option D: geometry and z-order stay exactly as the live bug (full
+     covering slab), and the fix is scope, not layout — it plays once, on
+     each member's very first turn of the whole game, and never again. The
+     inset shows what turn two looks like: no slab, menu already there. */
+  .inset { position: absolute; right: 40px; top: 40px; width: 480px; height: 270px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.6); border: 3px solid var(--ig-gold); z-index: 80; }
+  .inset img { position: absolute; left: 0; top: 0; width: 1440px; height: 810px; }
+  .inset .cap { position: absolute; left: 0; bottom: 0; width: 100%; padding: 6px 10px; background: rgba(11,10,18,.82); color: var(--ig-paper); font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="stage ig" id="stage">
+  <img class="stage__bg" id="bg" src="../../polish/_kit/before/ch1-command-menu.png" alt="">
+
+  <div class="ig-cutin">
+    <div class="ig-cutin__ghost" style="left:470px; top:60px;">Tidus</div>
+    <div class="ig-cutin__slab" style="left:-90px; top:-30px; width:620px; height:880px;">
+      <img class="ig-cutin__portrait" src="../../../../public/art/portraits/tidus.png"
+           style="left:60px; top:0; height:940px; width:460px; transform: skewX(12deg);">
+      <div class="ig-cutin__fade"></div>
+    </div>
+    <div class="ig-cutin__stripe" style="left:512px; top:-30px; width:8px; height:880px;"></div>
+    <div class="ig-cutin__label" style="left:60px; top:660px;">
+      <div class="ig-cutin__ctb">YOUR TURN &middot; CTB 1 OF 3</div>
+      <div class="ig-cutin__name">Tidus</div>
+    </div>
+  </div>
+
+  <div class="pill" style="left:48px; top:34px;">TURN 1 OF 1 &middot; this member's first ever</div>
+
+  <div class="inset">
+    <img src="../../polish/_kit/before/ch1-command-menu.png" alt="">
+    <div class="cap">Turn 2+ &middot; no cut-in, menu always clear</div>
+  </div>
+
+  <div class="ig-vignette"></div>
+  <div class="ig-grain"></div>
+  <div class="concept-tag">Concept &middot; D</div>
+</div>
+</body>
+</html>

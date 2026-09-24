@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PR-0005 Option A — slab above the menu</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<link rel="stylesheet" href="_cutin.css">
+<style>
+  /* Option A: the slab is confined to a band that ends well above the real
+     command menu's top edge (~y465 @1440), so the menu is never touched. */
+</style>
+</head>
+<body>
+<div class="stage ig" id="stage">
+  <img class="stage__bg" id="bg" src="../../polish/_kit/before/ch1-command-menu.png" alt="">
+
+  <div class="ig-cutin">
+    <div class="ig-cutin__ghost" style="left:470px; top:20px; font-size:150px;">Tidus</div>
+    <div class="ig-cutin__slab" style="left:-90px; top:-30px; width:620px; height:430px;">
+      <img class="ig-cutin__portrait" src="../../../../public/art/portraits/tidus.png"
+           style="left:60px; top:0; height:460px; width:400px; transform: skewX(12deg);">
+      <div class="ig-cutin__fade" style="height:120px;"></div>
+    </div>
+    <div class="ig-cutin__stripe" style="left:512px; top:-30px; width:8px; height:430px;"></div>
+    <div class="ig-cutin__label" style="left:60px; top:340px;">
+      <div class="ig-cutin__ctb">YOUR TURN &middot; CTB 1 OF 3</div>
+      <div class="ig-cutin__name" style="font-size:64px;">Tidus</div>
+    </div>
+  </div>
+
+  <div class="ok-tag" style="left:48px; top:468px;">Menu clear below</div>
+
+  <div class="ig-vignette"></div>
+  <div class="ig-grain"></div>
+  <div class="concept-tag">Concept &middot; A</div>
+</div>
+</body>
+</html>

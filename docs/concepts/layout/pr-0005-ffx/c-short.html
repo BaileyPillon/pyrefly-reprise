@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PR-0005 Option C — shorter hold (0.4s)</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<link rel="stylesheet" href="_cutin.css">
+<style>
+  /* Option C: same full-covering geometry as the live bug (unchanged
+     z-order, unchanged footprint) but CUT_IN_HOLD_MS drops from ~760ms to
+     400ms, so the frame we'd actually see during a real command decision is
+     the slab already sliding back out, exposing most of the menu on its own. */
+</style>
+</head>
+<body>
+<div class="stage ig" id="stage">
+  <img class="stage__bg" id="bg" src="../../polish/_kit/before/ch1-command-menu.png" alt="">
+
+  <div class="ig-cutin">
+    <div class="ig-cutin__ghost" style="left:470px; top:60px; opacity:0.08;">Tidus</div>
+    <div class="ig-cutin__slab" style="left:-90px; top:-30px; width:620px; height:880px; transform: translateX(-430px) skewX(-16deg); opacity:0.5;">
+      <img class="ig-cutin__portrait" src="../../../../public/art/portraits/tidus.png"
+           style="left:60px; top:0; height:940px; width:460px; transform: skewX(16deg);">
+      <div class="ig-cutin__fade"></div>
+    </div>
+    <div class="ig-cutin__stripe" style="left:512px; top:-30px; width:8px; height:880px; transform: translateX(-430px); opacity:0.5;"></div>
+  </div>
+
+  <div class="pill" style="left:48px; top:34px;">HOLD 0.4s &middot; exiting</div>
+  <div class="ok-tag" style="left:250px; bottom:56px;">Menu already clear</div>
+
+  <div class="ig-vignette"></div>
+  <div class="ig-grain"></div>
+  <div class="concept-tag">Concept &middot; C</div>
+</div>
+</body>
+</html>

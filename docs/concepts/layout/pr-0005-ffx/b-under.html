@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PR-0005 Option B — slab under the menu</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<link rel="stylesheet" href="_cutin.css">
+<style>
+  /* Option B: the approved 620x880 slab plays at its full, unshrunk geometry
+     (cutin.ts's real GEOM), but the live command menu is drawn in a
+     higher stacking layer, exactly as ffx-hud.css really places it, so the
+     menu always wins the pixels it needs. */
+  .menu-layer { position: absolute; inset: 0; z-index: 40; }
+</style>
+</head>
+<body>
+<div class="stage ig" id="stage">
+  <img class="stage__bg" id="bg" src="../../polish/_kit/before/ch1-command-menu.png" alt="">
+
+  <div class="ig-cutin" style="z-index:10;">
+    <div class="ig-cutin__ghost" style="left:470px; top:60px;">Tidus</div>
+    <div class="ig-cutin__slab" style="left:-90px; top:-30px; width:620px; height:880px;">
+      <img class="ig-cutin__portrait" src="../../../../public/art/portraits/tidus.png"
+           style="left:60px; top:0; height:940px; width:460px; transform: skewX(12deg);">
+      <div class="ig-cutin__fade"></div>
+    </div>
+    <div class="ig-cutin__stripe" style="left:512px; top:-30px; width:8px; height:880px;"></div>
+    <div class="ig-cutin__label" style="left:60px; top:660px;">
+      <div class="ig-cutin__ctb">YOUR TURN &middot; CTB 1 OF 3</div>
+      <div class="ig-cutin__name">Tidus</div>
+    </div>
+  </div>
+
+  <!-- The real bottom-left command cascade, redrawn above the slab. -->
+  <div class="menu-layer">
+    <div class="ig-cmd-stack ig-cmd-stack--lg" style="left:47px; bottom:56px;">
+      <div class="ig-cmd ig-cmd--selected" style="margin-left: calc(var(--ig-cascade-step) * 0)">
+        <svg class="ig-cmd__cursor" viewBox="0 0 12 16"><path d="M1 1 L11 8 L1 15 Z" fill="#0B0A12"/></svg>
+        <span>Attack</span>
+      </div>
+      <div class="ig-cmd" style="margin-left: calc(var(--ig-cascade-step) * 1)"><span>Special</span><span class="ig-cmd__ready" style="color:var(--ig-ink); opacity:.6;">&times;6</span></div>
+      <div class="ig-cmd" style="margin-left: calc(var(--ig-cascade-step) * 2)"><span>White Magic</span><span class="ig-cmd__ready" style="color:var(--ig-ink); opacity:.6;">&times;3</span></div>
+      <div class="ig-cmd" style="margin-left: calc(var(--ig-cascade-step) * 3)"><span>Items</span><span class="ig-cmd__ready" style="color:var(--ig-ink); opacity:.6;">&times;27</span></div>
+      <div class="ig-cmd" style="margin-left: calc(var(--ig-cascade-step) * 4)"><span>Switch</span><span class="ig-cmd__ready" style="color:var(--ig-ink); opacity:.6;">&times;4</span></div>
+    </div>
+  </div>
+
+  <div class="ok-tag" style="left:400px; bottom:56px;">Menu redrawn on top</div>
+
+  <div class="ig-vignette" style="z-index:41;"></div>
+  <div class="ig-grain" style="z-index:41;"></div>
+  <div class="concept-tag" style="z-index:99;">Concept &middot; B</div>
+</div>
+</body>
+</html>

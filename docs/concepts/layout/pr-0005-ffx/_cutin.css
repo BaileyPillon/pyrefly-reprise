@@ -1,0 +1,18 @@
+/* Hand-copied structural rules for the turn cut-in, from src/ui/inkgold/slabs.css
+   as of 2026-09-23 (frozen, per docs/concepts/polish/_kit/kit.css's own convention).
+   Geometry values are the literal spec numbers from src/ui/inkgold/cutin.ts's GEOM
+   comments (@1440 stage), not the runtime's /2.25 logical units. DO NOT IMPORT
+   PRODUCT CSS. */
+.ig-cutin { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.ig-cutin__ghost { position: absolute; font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; color: var(--ig-accent); opacity: 0.16; white-space: nowrap; line-height: 0.8; }
+.ig-cutin__slab { position: absolute; background: var(--ig-paper); overflow: hidden; box-shadow: 30px 0 60px rgba(0, 0, 0, 0.55); }
+.ig-cutin__portrait { position: absolute; object-fit: cover; }
+.ig-cutin__fade { position: absolute; left: 0; bottom: 0; width: 100%; height: 220px; background: linear-gradient(180deg, rgba(244, 241, 232, 0) 0%, rgba(244, 241, 232, 0.95) 70%); }
+.ig-cutin__stripe { position: absolute; background: var(--ig-accent); }
+.ig-cutin__label { position: absolute; display: flex; flex-direction: column; gap: 4px; }
+.ig-cutin__ctb { font-family: var(--ig-font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.34em; color: var(--ig-gold-on-paper); }
+.ig-cutin__name { font-family: var(--ig-font-serif); font-size: 92px; font-weight: 700; font-style: italic; line-height: 0.9; letter-spacing: -0.02em; color: var(--ig-ink); }
+
+.pill { position: absolute; padding: 8px 16px 9px; background: var(--ig-ink); color: var(--ig-gold); font-family: var(--ig-font-display); font-weight: 700; font-size: 15px; letter-spacing: 0.22em; text-transform: uppercase; border: 1.5px solid var(--ig-gold); z-index: 50; }
+.hidden-tag { position: absolute; padding: 7px 14px; background: var(--ig-blood); color: var(--ig-paper); font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; z-index: 60; }
+.ok-tag { position: absolute; padding: 7px 14px; background: #1a5c2e; color: var(--ig-paper); font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; z-index: 60; }
