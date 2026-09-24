@@ -1,0 +1,379 @@
+{
+ "chapter": "seymour-flux",
+ "size": "1600x900",
+ "tag": "r2",
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "A": {
+  "ms": 209,
+  "cut": true,
+  "slab": [
+   0,
+   0,
+   1600,
+   900
+  ],
+  "mod": true,
+  "areaParent": "ffxhud__stage ffxhud__lift",
+  "stageOrder": [
+   "ig-banner",
+   "ig-ctb",
+   "ig-cutin__info",
+   "ig-cmd-stack",
+   "ig-stat-list",
+   "ffx-sensor",
+   "ffx-telegraph",
+   "ffx-screen-border",
+   "sgd",
+   "mad"
+  ],
+  "selected": "Attack",
+  "rows": [
+   [
+    "Talk",
+    "menuAboveSlab"
+   ],
+   [
+    "Attack",
+    "menuAboveSlab"
+   ],
+   [
+    "Special▸×4",
+    "menuAboveSlab"
+   ],
+   [
+    "White Magic▸",
+    "menuAboveSlab"
+   ],
+   [
+    "Items▸×27",
+    "menuAboveSlab"
+   ],
+   [
+    "Flee",
+    "menuAboveSlab"
+   ]
+  ],
+  "under": {
+   ".sgd": {
+    "above": 0,
+    "underSlab": 8,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".mad": {
+    "above": 0,
+    "underSlab": 11,
+    "other": 3,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-cmd-info": {
+    "above": 0,
+    "underSlab": 1,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-ctb": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 12,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-sensor": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 4,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-stat-list": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 15,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-telegraph": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   }
+  },
+  "z": {
+   "lift": "37",
+   "stage": "auto",
+   "grain": "38",
+   "vig": "38"
+  }
+ },
+ "B": {
+  "ms": 522,
+  "cut": true,
+  "slab": [
+   0,
+   0,
+   1600,
+   900
+  ],
+  "mod": true,
+  "areaParent": "ffxhud__stage ffxhud__lift",
+  "stageOrder": [
+   "ig-banner",
+   "ig-ctb",
+   "ig-cutin__info",
+   "ig-cmd-stack",
+   "ig-stat-list",
+   "ffx-sensor",
+   "ffx-telegraph",
+   "ffx-screen-border",
+   "sgd",
+   "mad"
+  ],
+  "selected": "Special▸×4",
+  "rows": [
+   [
+    "Talk",
+    "menuAboveSlab"
+   ],
+   [
+    "Attack",
+    "menuAboveSlab"
+   ],
+   [
+    "Special▸×4",
+    "menuAboveSlab"
+   ],
+   [
+    "White Magic▸",
+    "menuAboveSlab"
+   ],
+   [
+    "Items▸×27",
+    "menuAboveSlab"
+   ],
+   [
+    "Flee",
+    "menuAboveSlab"
+   ]
+  ],
+  "under": {
+   ".sgd": {
+    "above": 0,
+    "underSlab": 8,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".mad": {
+    "above": 0,
+    "underSlab": 11,
+    "other": 3,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-cmd-info": {
+    "above": 0,
+    "underSlab": 1,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-ctb": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 12,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-sensor": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 4,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-stat-list": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 15,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-telegraph": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   }
+  },
+  "z": {
+   "lift": "37",
+   "stage": "auto",
+   "grain": "38",
+   "vig": "38"
+  }
+ },
+ "C": {
+  "ms": 1186,
+  "cut": false,
+  "slab": null,
+  "mod": false,
+  "areaParent": "ffxhud__stage",
+  "stageOrder": [
+   "ig-banner",
+   "ig-ctb",
+   "ffx-cmd-area",
+   "ig-cutin__info",
+   "ig-cmd-stack",
+   "ig-stat-list",
+   "ffx-sensor",
+   "ffx-telegraph",
+   "ffx-screen-border",
+   "sgd",
+   "mad"
+  ],
+  "selected": "Special▸×4",
+  "rows": [
+   [
+    "Talk",
+    "noSlabHere"
+   ],
+   [
+    "Attack",
+    "noSlabHere"
+   ],
+   [
+    "Special▸×4",
+    "noSlabHere"
+   ],
+   [
+    "White Magic▸",
+    "noSlabHere"
+   ],
+   [
+    "Items▸×27",
+    "noSlabHere"
+   ],
+   [
+    "Flee",
+    "noSlabHere"
+   ]
+  ],
+  "under": {
+   ".sgd": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 8,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".mad": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 14,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-cmd-info": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 1,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-ctb": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 12,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-sensor": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 4,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-stat-list": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 15,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-telegraph": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   }
+  },
+  "z": {
+   "lift": "auto",
+   "stage": "auto",
+   "grain": "auto",
+   "vig": "auto"
+  }
+ },
+ "cutinMs": 731,
+ "frames": 31,
+ "badFrames": [],
+ "firstFrames": [
+  {
+   "t": 0,
+   "cut": true,
+   "mod": true,
+   "inLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 7,
+   "cut": true,
+   "mod": true,
+   "inLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 14,
+   "cut": true,
+   "mod": true,
+   "inLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  }
+ ]
+}

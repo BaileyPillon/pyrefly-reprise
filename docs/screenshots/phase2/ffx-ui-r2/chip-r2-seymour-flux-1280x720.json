@@ -1,0 +1,87 @@
+{
+ "log": [
+  [
+   "coach",
+   true
+  ],
+  [
+   "SEEK:Special",
+   "Special▸×4"
+  ],
+  [
+   "Enter",
+   "Cheer"
+  ],
+  [
+   "SEEK:Cheer",
+   "Cheer"
+  ],
+  [
+   "Enter",
+   "Cheer"
+  ]
+ ],
+ "chip": {
+  "text": "ALL ALLIES",
+  "rect": [
+   376,
+   469,
+   513,
+   502
+  ],
+  "cls": "ffx-target__all ffx-target__all--ally ffx-target__all--row"
+ },
+ "selectedRow": {
+  "t": "Cheer",
+  "r": [
+   56,
+   462,
+   369,
+   509
+  ]
+ },
+ "levelWith": [
+  "Cheer"
+ ],
+ "rows": [
+  {
+   "t": "Cheer",
+   "r": [
+    56,
+    462,
+    369,
+    509
+   ]
+  },
+  {
+   "t": "Provoke4MP",
+   "r": [
+    70,
+    516,
+    384,
+    562
+   ]
+  },
+  {
+   "t": "Delay Attack8MP",
+   "r": [
+    84,
+    569,
+    398,
+    615
+   ]
+  },
+  {
+   "t": "Delay Buster18MP",
+   "r": [
+    98,
+    622,
+    412,
+    668
+   ]
+  }
+ ],
+ "overlaps": {},
+ "help": "Inflicts Cheer. Hits the whole party.",
+ "vw": 1280
+}

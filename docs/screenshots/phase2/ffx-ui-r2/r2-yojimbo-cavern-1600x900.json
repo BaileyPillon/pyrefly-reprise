@@ -1,0 +1,367 @@
+{
+ "chapter": "yojimbo-cavern",
+ "size": "1600x900",
+ "tag": "r2",
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "A": {
+  "ms": 247,
+  "cut": true,
+  "slab": [
+   0,
+   0,
+   1600,
+   900
+  ],
+  "mod": true,
+  "areaParent": "ffxhud__stage ffxhud__lift",
+  "stageOrder": [
+   "ig-banner",
+   "ig-ctb",
+   "ig-cutin__info",
+   "ig-cmd-stack",
+   "ig-stat-list",
+   "ffx-sensor",
+   "ffx-telegraph",
+   "ffx-screen-border",
+   "sgd",
+   "mad"
+  ],
+  "selected": "Attack",
+  "rows": [
+   [
+    "Attack",
+    "menuAboveSlab"
+   ],
+   [
+    "Special▸×1",
+    "menuAboveSlab"
+   ],
+   [
+    "Items▸×27",
+    "menuAboveSlab"
+   ],
+   [
+    "Overdrive▸RE",
+    "menuAboveSlab"
+   ],
+   [
+    "Switch▸×4",
+    "menuAboveSlab"
+   ]
+  ],
+  "under": {
+   ".sgd": {
+    "above": 0,
+    "underSlab": 8,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".mad": {
+    "above": 0,
+    "underSlab": 8,
+    "other": 2,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-cmd-info": {
+    "above": 0,
+    "underSlab": 1,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-ctb": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 12,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-sensor": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 5,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-stat-list": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 15,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-telegraph": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   }
+  },
+  "z": {
+   "lift": "37",
+   "stage": "auto",
+   "grain": "38",
+   "vig": "38"
+  }
+ },
+ "B": {
+  "ms": 565,
+  "cut": true,
+  "slab": [
+   0,
+   0,
+   1600,
+   900
+  ],
+  "mod": true,
+  "areaParent": "ffxhud__stage ffxhud__lift",
+  "stageOrder": [
+   "ig-banner",
+   "ig-ctb",
+   "ig-cutin__info",
+   "ig-cmd-stack",
+   "ig-stat-list",
+   "ffx-sensor",
+   "ffx-telegraph",
+   "ffx-screen-border",
+   "sgd",
+   "mad"
+  ],
+  "selected": "Special▸×1",
+  "rows": [
+   [
+    "Attack",
+    "menuAboveSlab"
+   ],
+   [
+    "Special▸×1",
+    "menuAboveSlab"
+   ],
+   [
+    "Items▸×27",
+    "menuAboveSlab"
+   ],
+   [
+    "Overdrive▸RE",
+    "menuAboveSlab"
+   ],
+   [
+    "Switch▸×4",
+    "menuAboveSlab"
+   ]
+  ],
+  "under": {
+   ".sgd": {
+    "above": 0,
+    "underSlab": 8,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".mad": {
+    "above": 0,
+    "underSlab": 8,
+    "other": 2,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-cmd-info": {
+    "above": 0,
+    "underSlab": 1,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-ctb": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 12,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-sensor": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 5,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-stat-list": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 15,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-telegraph": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   }
+  },
+  "z": {
+   "lift": "37",
+   "stage": "auto",
+   "grain": "38",
+   "vig": "38"
+  }
+ },
+ "C": {
+  "ms": 1224,
+  "cut": false,
+  "slab": null,
+  "mod": false,
+  "areaParent": "ffxhud__stage",
+  "stageOrder": [
+   "ig-banner",
+   "ig-ctb",
+   "ffx-cmd-area",
+   "ig-cutin__info",
+   "ig-cmd-stack",
+   "ig-stat-list",
+   "ffx-sensor",
+   "ffx-telegraph",
+   "ffx-screen-border",
+   "sgd",
+   "mad"
+  ],
+  "selected": "Special▸×1",
+  "rows": [
+   [
+    "Attack",
+    "noSlabHere"
+   ],
+   [
+    "Special▸×1",
+    "noSlabHere"
+   ],
+   [
+    "Items▸×27",
+    "noSlabHere"
+   ],
+   [
+    "Overdrive▸RE",
+    "noSlabHere"
+   ],
+   [
+    "Switch▸×4",
+    "noSlabHere"
+   ]
+  ],
+  "under": {
+   ".sgd": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 8,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".mad": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 10,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-cmd-info": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 1,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-ctb": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 12,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-sensor": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 5,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ig-stat-list": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 15,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   },
+   ".ffx-telegraph": {
+    "above": 0,
+    "underSlab": 0,
+    "other": 0,
+    "aboveOverSlab": 0,
+    "samples": [],
+    "vis": "visible"
+   }
+  },
+  "z": {
+   "lift": "auto",
+   "stage": "auto",
+   "grain": "auto",
+   "vig": "auto"
+  }
+ },
+ "cutinMs": 749,
+ "frames": 32,
+ "badFrames": [],
+ "firstFrames": [
+  {
+   "t": 0,
+   "cut": true,
+   "mod": true,
+   "inLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 6,
+   "cut": true,
+   "mod": true,
+   "inLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  },
+  {
+   "t": 12,
+   "cut": true,
+   "mod": true,
+   "inLift": true,
+   "ctb": "visible",
+   "stat": "visible",
+   "sensor": "visible"
+  }
+ ]
+}
