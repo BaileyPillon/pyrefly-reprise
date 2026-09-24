@@ -16,6 +16,19 @@
  *
  * Case: **both games**; FFX-2 takes its pink accent (`.ig--ffx2`). Both slam
  * in from the left, as the one approved picture does (see `engine/TurnCutIn.ts`).
+ *
+ * PR-0005 option B (FFX only, `docs/concepts/layout/pr-0005-ffx/README.md`,
+ * Bailey's D-042): this layer is a child of `MomentOverlay`'s `.pf-mom`
+ * (`transitions.css`, `z-index: 36`), so for as long as it is mounted here it
+ * covers the FFX command cascade the HUD draws underneath
+ * (`ffx-hud.css`'s `.ffxhud__stage` has no `z-index` of its own). Rather than
+ * raise the whole stage above every other moment `.pf-mom` ever shows — the
+ * fix `targetChipClear.ts` rejected for the same reason, a real regression to
+ * everything else the stage draws — this toggles a modifier class on the FFX
+ * HUD root (`data-role="ffx-battle-hud"`, `FFXBattleHud.ts`) for exactly the
+ * cut-in's own lifetime, so `ffx-hud.css` can promote just the stage, and
+ * only while nothing else competes for that space (the cut-in never plays
+ * alongside a reveal, Overdrive or telegraph moment).
  */
 
 import { showTurnCutIn } from '../../inkgold/cutin.ts';
@@ -45,9 +58,19 @@ function portraitFor(actorId: string, game: 'ffx' | 'ffx2'): string {
   return artUrl(`art/portraits/${actorId}.png`);
 }
 
+/** The FFX HUD's cut-in-below modifier — see the file header, PR-0005 B. */
+const FFX_HUD_CUTIN_BELOW = 'ffxhud--cutin-below';
+
 /** Show the cut-in inside `host`; resolves once it has left the screen. */
 export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): Promise<void> {
   const doc = host.ownerDocument;
+  // FFX only (PR-0005 B): the FFX-2 command menu is a different, unbuilt
+  // mockup (`docs/concepts/layout/pr-0005-ffx/README.md`), so there is
+  // nothing here to un-cover for `game === 'ffx2'`.
+  const hudEl =
+    req.game === 'ffx'
+      ? (host.parentElement?.querySelector<HTMLElement>('[data-role="ffx-battle-hud"]') ?? null)
+      : null;
   const layer = doc.createElement('div');
   layer.className = 'pf-cutin';
   layer.dataset['role'] = 'turn-cut-in';
@@ -67,24 +90,29 @@ export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): P
     `width:${FRAME_W}px;height:${FRAME_H}px;transform:scale(${k});transform-origin:0 0;`;
   layer.append(veil, frame);
   host.appendChild(layer);
+  hudEl?.classList.add(FFX_HUD_CUTIN_BELOW);
   void veil.getBoundingClientRect();
   veil.style.opacity = '1';
 
-  const handle = showTurnCutIn(frame, {
-    name: req.name,
-    portraitUrl: portraitFor(req.actorId, req.game),
-    ctbLabel: req.label,
-    side: req.side,
-  });
+  try {
+    const handle = showTurnCutIn(frame, {
+      name: req.name,
+      portraitUrl: portraitFor(req.actorId, req.game),
+      ctbLabel: req.label,
+      side: req.side,
+    });
 
-  // 180 ms entrance (cutin.ts SLAM_MS) plus the hold, or a Confirm press.
-  const win = doc.defaultView ?? window;
-  const press = confirmPress(win);
-  let timer = 0;
-  await Promise.race([press.pressed, new Promise<void>((r) => (timer = win.setTimeout(r, 180 + Math.max(0, req.holdMs))))]);
-  win.clearTimeout(timer);
-  press.dispose();
-  veil.style.opacity = '0';
-  await handle.dismiss();
-  layer.remove();
+    // 180 ms entrance (cutin.ts SLAM_MS) plus the hold, or a Confirm press.
+    const win = doc.defaultView ?? window;
+    const press = confirmPress(win);
+    let timer = 0;
+    await Promise.race([press.pressed, new Promise<void>((r) => (timer = win.setTimeout(r, 180 + Math.max(0, req.holdMs))))]);
+    win.clearTimeout(timer);
+    press.dispose();
+    veil.style.opacity = '0';
+    await handle.dismiss();
+    layer.remove();
+  } finally {
+    hudEl?.classList.remove(FFX_HUD_CUTIN_BELOW);
+  }
 }

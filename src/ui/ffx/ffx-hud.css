@@ -42,6 +42,24 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/* PR-0005 option B (FFX only, Bailey's D-042): while the turn cut-in slab
+   (`ui/common/transitions/TurnCutInLayer.ts`) is on screen it toggles this
+   modifier on `.ffxhud` for exactly its own lifetime. `LetterboxStage`'s
+   inline `transform` already makes `.ffxhud__stage` its own stacking
+   context (see the `.ffx-cmd-info` note below), so giving that context an
+   explicit `z-index` here lets it escape `.ffxhud` — which has none of its
+   own — straight to the root the battle screen also mounts `.pf-mom` in
+   (`transitions.css`, `z-index: 36`), and paint above it there. Scoped to
+   the modifier rather than applied unconditionally, because raising the
+   stage at all times would put every other moment `.pf-mom` ever shows
+   (reveal/Overdrive/telegraph bars and vignette) *underneath* the stage's
+   own content -- the exact regression `targetChipClear.ts` documents
+   rejecting for `.ffx-targeting`. The cut-in never plays alongside one of
+   those, so this is safe for the one window it is active. */
+.ffxhud--cutin-below .ffxhud__stage {
+  z-index: 37;
+}
+
 /* An unscaled sibling layer for screen-space elements (damage numbers, target
    cursors) positioned directly from the presenter's projector callback. */
 .ffxhud__overlay {
