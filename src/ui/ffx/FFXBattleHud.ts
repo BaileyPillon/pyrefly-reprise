@@ -342,6 +342,9 @@ export class FFXBattleHud implements HudPort {
       this.telegraph.borderEl,
     );
     this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el);
+    // PR-0019 (FFX only): so the "ALL ALLIES"/"ALL ENEMIES" chip can clear
+    // the slab instead of painting over it — src/ui/ffx/targetChipClear.ts.
+    this.commandMenu.targetCursor.setCmdInfoElement(this.infoEl);
 
     // A CTB tile doubles as a click target while aiming: routes through the
     // same confirm path as the reticle and Enter, and is a no-op — returns

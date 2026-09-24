@@ -1,4 +1,5 @@
 import type { CombatantId } from '../../battle/common/types.ts';
+import { clearChipOfSlab } from './targetChipClear.ts';
 
 export type ReticleKind = 'enemy' | 'ally' | 'self';
 
@@ -116,6 +117,8 @@ export class TargetCursor {
   private selectionHandler: ((sel: CursorSelection | null) => void) | null = null;
   /** The HUD panels the plate has to stay off. See {@link setPanels}. */
   private panels: TargetRect[] = [];
+  /** FFX only: the command help slab, so the group chip can clear it (PR-0019). */
+  private cmdInfoEl: HTMLElement | null = null;
 
   constructor() {
     this.el = document.createElement('div');
@@ -176,6 +179,11 @@ export class TargetCursor {
    */
   setPanels(panels: readonly TargetRect[]): void {
     this.panels = panels.map((p) => ({ x: p.x, y: p.y, w: p.w, h: p.h }));
+  }
+
+  /** FFX only: wire the command help slab so the group chip clears it (PR-0019). */
+  setCmdInfoElement(el: HTMLElement | null): void {
+    this.cmdInfoEl = el;
   }
 
   /**
@@ -388,6 +396,10 @@ export class TargetCursor {
 
     if (group) parts.push(this.groupLabelHtml());
     this.el.innerHTML = parts.join('');
+    if (group) {
+      const chip = this.el.querySelector<HTMLElement>('.ffx-target__all');
+      if (chip) clearChipOfSlab(chip, this.cmdInfoEl);
+    }
   }
 
   /** The ink name plate: name, letter tag, optional note, docked clear of the HUD. */

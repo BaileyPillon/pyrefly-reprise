@@ -439,24 +439,25 @@
   padding: 3px 7px;
   overflow: hidden;
   pointer-events: auto;
-  /* PR-0019 repair (round 10, both games): the "ALL ALLIES"/"ALL ENEMIES"
-     chip (`TargetCursor.ts`'s `.ffx-target__all`, mounted in `.ffxhud__overlay`,
-     which paints after `.ffxhud__stage` in DOM order) can land centred over
-     this slab when a whole-party command is aimed, covering the tail of the
-     sentence ("Inflicts Cheer. Hits the whole ~~party.~~"). Neither element's
-     own position is wrong on its own terms (the chip centres on the actual
-     target boxes; the slab is fixed per the comment above) — this is two
-     independently-anchored elements sharing the same screen band, which is a
-     real layout collision, not readable text vs. an inert decoration. A
-     positive `z-index` here (an actual stacking context, since `.ffx-cmd-info`
-     is `position: absolute`) lifts the whole sentence above the chip within
-     their nearest shared context (neither `.ffxhud__stage` nor
-     `.ffxhud__overlay` establishes its own, so this is enough) rather than
-     moving either element's tuned position. The chip itself stays exactly
-     where it was, just no longer painted on top of the words it would
-     otherwise obscure — verified live at 1280x720 and 3840x2160,
-     Chapter 1, Special > Cheer, confirmed to raise the group frame:
-     `docs/screenshots/fix10b/PR-0019-*`. */
+  /* PR-0019, round 10's attempt (kept, now dead weight, not load-bearing):
+     the "ALL ALLIES"/"ALL ENEMIES" chip (`TargetCursor.ts`'s
+     `.ffx-target__all`) can land centred over this slab and cover the tail
+     of the sentence. Round 10 gave `.ffx-cmd-info` a `z-index`, reasoning
+     that neither `.ffxhud__stage` nor `.ffxhud__overlay` establishes a
+     stacking context of its own. **That premise was wrong, and round 12's
+     live re-check refuted the fix**: `.ffxhud__stage` gets an inline
+     `transform` from `LetterboxStage` (the letterbox scale/offset), and a
+     transformed element *does* establish a stacking context — so this
+     `z-index` only reorders paint inside `.ffxhud__stage`'s own context; it
+     can never out-rank `.ffx-targeting`'s `z-index: 36` (a sibling context
+     the slab's ancestor chain never escapes), and the chip still painted
+     over "party." at 1280x720 and 1600x900. The real fix — nudging the chip
+     itself clear, measured with `getBoundingClientRect()` rather than
+     fought over in the stacking order — is
+     `src/ui/ffx/targetChipClear.ts`, wired from `TargetCursor.reposition()`.
+     This `z-index` stays only for the incidental case that fix cannot see
+     (some future non-group overlay element sharing this exact stacking
+     context); it is not the round-10 repair any more. */
   z-index: 2;
 }
 .ffx-cmd-info .ig-cutin__info-desc {
