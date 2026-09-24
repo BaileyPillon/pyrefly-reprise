@@ -39,6 +39,8 @@ import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
 import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
 import { chainLengthOf, runEncounterChain } from './BattleEncounterChain.ts';
+import { checkpointAt, resumeSetup, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
+import { playSaveSphereCard } from './SaveSphereCard.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
@@ -81,6 +83,8 @@ export interface BattleScreenOptions {
   auto?: AutoStrategy | null;
   /** Playback speed to start at. */
   speed?: PlaybackSpeed;
+  /** Open on this Save Sphere link instead of the first formation (FA3 = b). */
+  resumeAt?: ChainCheckpoint;
 }
 
 /** How the encounter ended, for the flow in `App.ts`. */
@@ -94,6 +98,8 @@ export interface BattleScreenResult {
   links: number;
   /** True when no engine existed and the screen played the demo reel instead. */
   preview: boolean;
+  /** The last Save Sphere link entered: where a defeat retries (FA3 = b). */
+  checkpoint?: ChainCheckpoint;
 }
 
 export class BattleScreen extends Screen {
@@ -111,6 +117,7 @@ export class BattleScreen extends Screen {
   private momentOverlay: MomentOverlay | null = null;
   private setup: BattleSetup | null = null;
   private group: EnemyGroupDef | null = null;
+  private checkpoint: ChainCheckpoint | null = null;
 
   private startedAt = 0;
   private links = 0;
@@ -191,8 +198,9 @@ export class BattleScreen extends Screen {
     });
 
     // --- engine ------------------------------------------------------------
-    this.setup = setupForChapter(chapter, this.opts.seed ?? 1);
-    this.group = chapter.enemyGroupRef;
+    const resume = this.opts.resumeAt;
+    this.setup = resume ? resumeSetup(resume, this.opts.seed ?? 1) : setupForChapter(chapter, this.opts.seed ?? 1);
+    this.group = resume ? resume.group : chapter.enemyGroupRef;
     this.engine = await createEngine(chapter.game, this.setup, { automated: this.opts.auto != null });
     this.preview = this.engine === null;
 
@@ -316,7 +324,7 @@ export class BattleScreen extends Screen {
     // How many formations this chapter chains through, for the pause screen's
     // ENCOUNTER PROGRESS row ("LINK 2 OF 4"). Async because resolving a
     // `nextGroupId` is, and not worth blocking the first frame for.
-    void chainLengthOf(this.group, findEnemyGroup).then((n) => (this.chainLength = n));
+    void chainLengthOf(chapter.enemyGroupRef, findEnemyGroup).then((n) => (this.chainLength = n));
 
     // Run the encounter without blocking `enter()`, so the first frame draws.
     // The approved battle-start card goes up first and the fight waits behind
@@ -388,8 +396,12 @@ export class BattleScreen extends Screen {
       seed: this.opts.seed ?? 1,
       findGroup: findEnemyGroup,
       audio,
+      startLink: this.opts.resumeAt?.link ?? 1,
+      saveSphere: (swap) =>
+        playSaveSphereCard({ root: this.root, swap, sleep: this.pauseGate, instant: presenter.playbackSpeed === 'skip' }),
       onLink: ({ links, group, setup }) => {
         this.links = links;
+        this.checkpoint = checkpointAt(links, group, setup) ?? this.checkpoint;
         this.group = group;
         this.setup = setup;
         // A new formation has been staged — Yunalesca's second form, the next
@@ -599,6 +611,7 @@ export class BattleScreen extends Screen {
       elapsedMs: Math.round(performance.now() - this.startedAt),
       links: Math.max(1, this.links),
       preview: this.preview,
+      ...(this.checkpoint ? { checkpoint: this.checkpoint } : {}),
     });
   }
 

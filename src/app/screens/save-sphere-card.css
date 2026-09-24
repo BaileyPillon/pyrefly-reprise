@@ -1,0 +1,132 @@
+/* The Save Sphere between links, Chapter XI (FFX-2 only).
+
+   Target: docs/concepts/chapters/fallen-aeons/o4-transitions/c-2.jpg, Bailey's
+   O-4 pick (option C, D-120). Geometry read off that 800x450 frame and kept
+   proportional: the orb centred at 49% x 37% and about 12.5% of the width
+   across; the card centred, from 62% to 80% of the height, 37.5% of the width,
+   an 8/800 gold bar on its left edge. Viewport units, so the proportions hold
+   from a phone to a 4K frame; the card has a floor width so its line never
+   wraps on a phone. */
+
+.ssphere {
+  position: absolute;
+  inset: 0;
+  z-index: 60; /* over the HUD and the pause chip, as c-2 washes both */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* The pale lilac-white wash over the whole frame. */
+.ssphere__wash {
+  position: absolute;
+  inset: 0;
+  background: rgba(246, 240, 250, 0.74);
+  opacity: 0;
+  transition: opacity 520ms ease-out;
+}
+
+/* The sphere: a glassy blue ball with a white glint, haloed in soft blue. */
+.ssphere__orb {
+  position: absolute;
+  left: 49%;
+  top: 37%;
+  width: min(12.5vw, 22vh);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.6);
+  opacity: 0;
+  /* c-2: a pale sky-blue body, deeper at the rim. */
+  background: radial-gradient(circle at 50% 50%, #d4ecff 0%, #b3dcff 42%, #7fbdf8 66%, #3f86ec 86%, #3274e6 100%);
+  box-shadow:
+    0 0 min(3vw, 5.5vh) min(1.8vw, 3.2vh) rgba(70, 140, 250, 0.8),
+    0 0 min(9vw, 16vh) min(3.5vw, 6vh) rgba(110, 160, 255, 0.4);
+  transition:
+    opacity 520ms ease-out,
+    transform 620ms cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+.ssphere__glint {
+  position: absolute;
+  left: 24%;
+  top: 22%;
+  width: 20%;
+  height: 20%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 min(0.8vw, 1.4vh) rgba(255, 255, 255, 0.9);
+}
+
+/* The ink card, gold bar on the left edge. */
+.ssphere__card {
+  position: absolute;
+  left: 50%;
+  top: 62%;
+  width: max(37.5vw, min(92vw, 300px));
+  box-sizing: border-box;
+  min-height: 18vh;
+  padding: 2.2vh 3vw 2.2vh 2.75vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1vh;
+  background: rgba(11, 10, 18, 0.94); /* --ig-ink-acting */
+  border-left: max(1vw, 5px) solid #e3b94a; /* --ig-gold, as drawn, not the FFX-2 pink */
+  transform: translate(-50%, 1.2vh);
+  opacity: 0;
+  transition:
+    opacity 360ms ease-out,
+    transform 420ms cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+.ssphere__label {
+  font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif; /* --ig-font-display */
+  font-weight: 600;
+  font-size: clamp(12px, 3.2vh, 40px);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  color: #e3b94a;
+}
+.ssphere__line {
+  font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  font-weight: 500;
+  font-size: clamp(16px, 4.9vh, 64px);
+  line-height: 1.1;
+  color: #f4f1e8; /* --ig-paper */
+  white-space: nowrap;
+}
+
+.ssphere--in .ssphere__wash {
+  opacity: 1;
+}
+.ssphere--in .ssphere__orb {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: ssphere-pulse 1600ms ease-in-out 620ms infinite alternate;
+}
+.ssphere--card .ssphere__card {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.ssphere--out .ssphere__wash,
+.ssphere--out .ssphere__orb,
+.ssphere--out .ssphere__card {
+  opacity: 0;
+  transition-duration: 620ms;
+}
+
+@keyframes ssphere-pulse {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ssphere__orb,
+  .ssphere__card {
+    transition: opacity 200ms linear;
+  }
+  .ssphere--in .ssphere__orb {
+    animation: none;
+  }
+}

@@ -33,6 +33,7 @@ import type { Chapter } from '../../data/encounters.ts';
 import type { BattleOutcome, BattlePresenter } from '../../engine/BattlePresenter.ts';
 import { setupForNextLink } from './BattleScreenSetup.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
+import { checkpointAt, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
 
 /**
  * How many formations the chain starting at `group` has: walk `nextGroupId` to
@@ -117,12 +118,32 @@ export interface EncounterChainOptions {
    * formations.
    */
   maxLinks?: number;
+  /**
+   * The 1-based chain position of `group`: 1 (the default) is the chapter's
+   * opening formation; more is a retry at a checkpoint (FA3 = b,
+   * `BattleChainCheckpoint.ts`). It numbers the links and their seeds exactly
+   * as if the earlier links had just been won.
+   */
+  startLink?: number;
+  /**
+   * The Save Sphere between links (O-4 = C, FA2 = b; FFX-2 Chapter XI only).
+   * Called instead of a bare re-stage when the next formation carries
+   * `restoresPartyOnEntry`; it must call `swap` exactly once, under its cover,
+   * and resolve after. Omitted, or for any other formation, the next link is
+   * re-staged exactly as before.
+   */
+  saveSphere?(swap: () => Promise<void>, info: { link: number; group: EnemyGroupDef }): Promise<void>;
 }
 
 export interface EncounterChainResult {
   outcome: BattleOutcome;
-  /** How many formations were fought. 1 unless the encounter chains. */
+  /**
+   * The 1-based position of the last formation fought: how many were fought,
+   * counting the ones a checkpoint retry skipped. 1 unless the encounter chains.
+   */
   links: number;
+  /** The last Save Sphere link entered, where a defeat retries (FA3 = b); else null. */
+  checkpoint: ChainCheckpoint | null;
 }
 
 const DEFAULT_MAX_LINKS = 16;
@@ -140,13 +161,15 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
 
   let group: EnemyGroupDef = opts.group;
   let setup = opts.setup;
-  let links = 0;
+  const startLink = Math.max(1, Math.floor(opts.startLink ?? 1));
+  let links = startLink - 1;
+  let checkpoint: ChainCheckpoint | null = null;
   let outcome: BattleOutcome = { kind: 'aborted' };
 
   // The first formation's own cue, resolved the same way a chained link's is.
   // Until this existed the pre-scene's boss theme was crossfaded straight back
   // out to `battle-ffx` on the frame the battle screen appeared (#02).
-  const opening = cueForGroup(chapter, group, 'first');
+  const opening = cueForGroup(chapter, group, startLink > 1 ? 'next' : 'first');
   // `fadeMs` (from `MusicPhaseCue.fadeMs` / the `cueForGroup` fallback) is
   // milliseconds; `ChainAudioPort.playMusic`/`AudioManager` want seconds
   // (PR-0089).
@@ -154,6 +177,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
 
   for (;;) {
     links++;
+    checkpoint = checkpointAt(links, group, setup) ?? checkpoint;
     opts.onLink?.({ links, group, setup });
     presenter.syncHud(engine);
     outcome = await presenter.run(engine);
@@ -181,13 +205,30 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
     const state = engine.state();
     setup = setupForNextLink(setup, nextGroup, state, opts.seed + links);
     group = nextGroup;
-    engine.setSeed(setup.seed);
-    engine.init(setup);
-    await stage.stage(engine.state());
+    const restage = async (): Promise<void> => {
+      engine.setSeed(setup.seed);
+      engine.init(setup);
+      await stage.stage(engine.state());
+    };
+    if (group.restoresPartyOnEntry === true && opts.saveSphere) {
+      // Under the Save Sphere's cover: re-init, re-stage, and show the HUD the
+      // refilled HP and MP before the wash clears.
+      let swapped = false;
+      await opts.saveSphere(async () => {
+        if (swapped) return;
+        swapped = true;
+        await restage();
+        presenter.syncHud(engine);
+      }, { link: links + 1, group });
+      // A card that never called `swap` must still not strand the fight.
+      if (!swapped) await restage();
+    } else {
+      await restage();
+    }
 
     const cue = cueForGroup(chapter, group, 'next');
     if (cue.track) void opts.audio?.playMusic(cue.track, { fade: fadeMsToSec(cue.fadeMs, 1200) });
   }
 
-  return { outcome, links: Math.max(1, links) };
+  return { outcome, links: Math.max(1, links), checkpoint };
 }

@@ -30,6 +30,7 @@ import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlow
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
 import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
+import { carryAfterDefeat, FRESH_RUN, type RetryCarry } from './BattleChainCheckpoint.ts';
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -298,6 +299,9 @@ export class GameFlow {
     if (!chapter) return null;
     const save = this.app.save;
     let attempt = 0;
+    // FA3 = b (FFX-2 Chapter XI only): a defeat past a Save Sphere retries at
+    // that link, not the chapter's start. Every other chapter never has one.
+    let carry: RetryCarry = FRESH_RUN;
 
     // A run started from outside {@link start}'s own loop — `main.ts` when the
     // board resolves, the debug API's `gotoChapter`, the pause menu's RESTART
@@ -321,7 +325,9 @@ export class GameFlow {
     }
 
     for (;;) {
-      if (!opts.skipPrep) {
+      // A checkpoint retry re-enters with the party it carried in, so there is
+      // no prep menu to offer: nothing picked there could reach the fight.
+      if (!opts.skipPrep && !carry.resumeAt) {
         this.step = 'party-prep';
         const prep = factories.partyPrep?.({ chapter }) ?? new PartyPrepScreen({ chapter });
         if (!(await this.show(prep))) return null;
@@ -341,6 +347,7 @@ export class GameFlow {
         seed: (opts.seed ?? 1) + attempt * 1000,
         auto: opts.auto ?? null,
         ...(opts.speed ? { speed: opts.speed } : {}),
+        ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
       };
       const battle = factories.battle?.(battleOpts) ?? new BattleScreen(battleOpts);
       // FFX spins into a battle rather than cutting. The swirl holds the frame
@@ -358,8 +365,10 @@ export class GameFlow {
       if (!(await swapped)) return null;
       // The real screen resolves `finished`; a registered stand-in (tests
       // only) resolves the `FlowScreen` contract's `done`. Same value.
-      const outcome = await ('finished' in battle ? battle.finished : battle.done);
+      const fought = await ('finished' in battle ? battle.finished : battle.done);
       attempt++;
+      // A clear through a checkpoint retry is timed from the chapter's start.
+      const outcome = carry.carriedMs > 0 ? { ...fought, elapsedMs: fought.elapsedMs + carry.carriedMs } : fought;
 
       if (outcome.outcome === 'victory') {
         // Read the record before overwriting it, so the panel can tell whether
@@ -390,6 +399,7 @@ export class GameFlow {
         // and hands the outcome back to the caller. An automated run never
         // sees the panel (`skipResults`), so it keeps the old behaviour.
         const choice = opts.skipResults ? 'continue' : await this.showResults(chapter, outcome);
+        carry = carryAfterDefeat(carry, fought);
         if (choice === 'retry' || (choice === 'continue' && !opts.skipPrep)) continue;
       }
 
