@@ -1,0 +1,102 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-24T18:47:56.000Z",
+  "build": {
+    "mainSha": "bcbdb483",
+    "bundle": "D_Y69PMP",
+    "artifactHash": "7265cb2b2db5a458cb8a9461f41d7e81f6aaef6ef02901bd81493291aadb8e1a"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/bcbdb483.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/76f587c3.json -> {result: PASS, liveManifest: match, checked: 65, mismatched: [], missing: [], wrongType: []}",
+        "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/bcbdb483.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/76f587c3.json --full -> {result: PASS, liveManifest: match, checked: 894, mismatched: [], missing: [], wrongType: []} (a first --full attempt reported one 503 on art/characters/vegnagun-body/idle.json; three direct curl re-fetches all returned 200, confirming a transient Pages hiccup, and this clean re-run followed immediately)",
+        "artifactHash 7265cb2b2db5a458cb8a9461f41d7e81f6aaef6ef02901bd81493291aadb8e1a matches critic/artifacts/bcbdb483.json and critic/pending/bcbdb483.json's liveArtifact record"
+      ],
+      "game": "both",
+      "chapter": "all",
+      "state": "n/a (static asset identity)",
+      "automated": true,
+      "environment": "artifact-manifest.mjs against the public URL"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "window.__pyrefly.screen() polled and asserted before every screenshot and state-dependent action (title, chapter-select, battle, pause, results)",
+        "window.__pyrefly.battle().canPause / canPauseOnCancel read directly (TS-private getters are not runtime-private) to diagnose an unexpected screen transition rather than assume the failure mode, exactly the CHK-016 discipline this check exists for",
+        "A real-Escape-during-idle-battle crash (see coverage/notTested and the new finding below) was isolated with a standalone control run against an UNTOUCHED chapter (seymour-flux) before concluding it was not this candidate's regression -- recorded as data, not silently discarded or misattributed to the changed pause markup",
+        "PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA GeForce RTX 5070 Ti confirmed via UNMASKED_RENDERER_WEBGL) used for the whole run; no swiftshader fallback needed"
+      ],
+      "game": "both",
+      "chapter": "II (yunalesca), I (seymour-flux), IV (ffx2-bahamut), VII (seymour-anima-macalania, locked)",
+      "state": "title, chapter-select, battle, pause (CHAPTER tab, hide/restore, resume), reload",
+      "automated": true,
+      "environment": "Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), 1600x900 and 2000x897, fresh browser context per section, cache-busting query"
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": [
+        "Lightweight reload smoke: seed 7 run of Chapter I (seymour-flux) recorded to the save (attempts: 1, playTimeMs: 18966) in localStorage key pyrefly-reprise:save:v1; a real page.reload() of the live URL produced the byte-identical save blob back (settingSurvived/survived: true).",
+        "Caveat, same as the previous live review: the runtime flag exercised (setMuted) is not itself stored in the save, so its own persistence was not proven -- only the save's own progress/settings fields were, honestly recorded rather than overclaimed."
+      ],
+      "game": "both",
+      "chapter": "I (seymour-flux)",
+      "state": "battle (idle-abort end) -> reload",
+      "automated": true,
+      "environment": "Playwright, single tab, live URL, localStorage read before/after a real page.reload()"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact identity: full manifest (894 files) diffed against the live URL, 0 mismatches/missing/wrong-type once a transient 503 was ruled out by direct re-fetch",
+      "Title -> real double Enter -> chapter select: screen() === 'chapter-select'",
+      "Chapter VII (Seymour and Anima at Macalania) confirmed still a locked COMING card, both visually (chapter-select.png shows the 'Coming' badge) and via snapshotState().screenState.coming",
+      "Chapter II (yunalesca) pause CHAPTER tab -- the changed flow: real E presses cycled the tab strip to data-tab=\"chapter\"; the three snapshot plates (the great hall / the third shape / it isn't over) all measure as small 4:3 images (104x78 in a 104x119.375 plate at 1600x900; 130x97.5 in a 130x146.69 plate at 2000x897) with no image larger than its plate -- Auron's portrait, previously blown out to 1921x1441 per Bailey's screenshot, is now the same size as its neighbours. Screenshots: D:/Tools/pyrefly-scratch/live121/ch2-chapter-tab-1600x900.png, ...-2000x897.png",
+      "Pause hide/restore: a real H hides all panels (ch2-pause-hidden.png shows only the hint strip), a second real H restores them (ch2-pause-restored.png)",
+      "Resume: a real Escape from pause returned screen() to 'battle'",
+      "ffx2-bahamut (FFX-2): onboarding dialogue card (Auron) cleanly framed, no overflow (ffx2-battle-hud.png); 6 img[src*=\"portraits/\"] elements present, consistent with face-cropped HUD portraits",
+      "Audio: audioDebug() on the FFX-2 run showed prerendered.manifest/sprite/spriteDecoded all true, 24 cues, and a real track (boss-ffx2-aeon) actively fading in music.fading -- the sampled path, not the synth fallback",
+      "Console errors and network responses >= 400 counted across all five browser contexts of the run: 0 and 0",
+      "CHK-024 lightweight reload smoke as described above"
+    ],
+    "reused": [
+      "critic/artifacts/76f587c3.json reused as the --changed-from baseline for the manifest diff rather than re-derived"
+    ],
+    "notTested": [
+      "The pause CHAPTER tab was reached via the documented debug trigger pause:open, not a real Escape, because a real Escape during an idle battle reproducibly threw TypeError: Cannot read properties of null (reading 'syncHud') and aborted the encounter to chapter-select. This was isolated with a control script against seymour-flux (a chapter this candidate does not touch) which reproduced the identical crash and timing, showing it is pre-existing and not introduced by bcbdb483 -- but it means the exact real-key path into pause was not exercised clean end-to-end this pass, and is reported as its own finding rather than re-triggered here. E, H and the resuming Escape after that point were all real keys.",
+      "Whether this Escape/syncHud crash also reproduces on the previously-live build (76f587c3) or earlier, which would date exactly when it was introduced -- not run this pass",
+      "Chapters other than I, II, IV, VII this pass -- III, V, VI, VIII were not re-verified live",
+      "The full save/settings upgrade matrix beyond the one lightweight reload smoke; a setting that actually lives in the save (e.g. masterVolume via the OPTIONS tab) was not the one flipped",
+      "Physical controller and Safari/real-device input",
+      "Combat correctness/balance beyond reaching a real battle and letting the encounter run"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 100,
+  "issues": [
+    {
+      "id": "NEW-syncHud-escape-crash",
+      "severity": "critical-looking, out of scope for this candidate",
+      "summary": "A real Escape press during an idle FFX battle (before any command is submitted) throws TypeError: Cannot read properties of null (reading 'syncHud') and aborts the encounter to chapter-select instead of opening pause.",
+      "evidence": "Reproduced identically (same error text, ~3s timing) on seymour-flux (Chapter I, untouched by bcbdb483) via a standalone control script; a battle left running with no keys at all instead abandons cleanly after ~20s with no error.",
+      "introducedByCandidate": false,
+      "regressionVsLive": "unknown - not dated against 76f587c3 or earlier this pass",
+      "inNewFeature": false,
+      "recommendation": "Worth Bailey's attention and a focused repro/fix session; does not block this deployment's verdict since it is not this candidate's change and does not touch the pause/portrait-crop code path this hotfix shipped."
+    }
+  ]
+}
