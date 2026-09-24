@@ -326,3 +326,81 @@ phone width (390 CSS px). Scratch: `D:/Tools/pyrefly-scratch/yojimbo/review/`.
 perceivable).** Before it drives any build, fix four things: the `'other'` damage type, the
 `canEscape` mechanism, the ~55 % Doom figure, and "+2 when attacking" added to Y-1. Add the
 line-up, Candle and callouts to Bailey's sheet. Owe a phone-width O-5 mockup.
+
+## Built on assumptions (yojimbo-core track, 2026-09-24)
+
+Bailey's picks on §5 are pending, so the engine, data, AI and registration were built **only
+where they do not depend on them**, on the driver's recommended assumptions. Each is one named
+constant or one data field, labelled in the code, and changes with one edit when Bailey picks.
+
+| # | Assumption (pending Bailey) | Where it lives |
+|---|---|---|
+| **B1** | The chapter is Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth (candidate A) | `src/data/ffx/enemies/yojimbo.ts` (formation `[ginnem, yojimbo, daigoro]`, research §2.5) |
+| **B2** | The odds inside each gauge band are unsourced: an **even split**, labelled "our estimate"; the ≥80 "slightly likelier" nudge is **not modelled** (the band is exposed, it changes no odds); gauge starts at 0 and returns to 0 after Zanmato | `src/battle/ffx/ai/yojimbo-rules.ts` (`yojimboPool`, `YOJIMBO_GAUGE_START`, `YOJIMBO_GAUGE_AFTER_ZANMATO`, `YOJIMBO_ODDS_NOTE`, `YOJIMBO_ASSUMPTIONS`) |
+| **B3** | Lady Ginnem and Daigoro cannot be targeted; neither is a victory condition; neither owns a CTB turn | `flags.untargetable` in the data; `ActorRuntime.nonCombatant` + `ordersOnly` from the setup hook |
+| **B4** | No hiring or haggling | nothing built (research §7 stays unused) |
+| **B8** | Kimahri starts with Doom learned (the Cavern Ghost) and a full gauge | `src/data/ffx/builds/yojimbo-cavern.ts` |
+| **B9** | Threaten fails on him until Y-3 is sourced | `threatenChance: 0` on Yojimbo |
+| **B10** | It is Chapter IX | `Chapter.number: 9` in `src/data/chapter-yojimbo-cavern.ts` |
+
+Also built on the review's four corrections: Zanmato is `damageType: 'other'`; no flee rides on
+`rt.canEscape` (`canEscape: false` on the formation); Doom kills as his **fifth** turn opens (four
+more actions; pinned by a test); the gauge pays "+2 % when **attacking**", on every non-Zanmato turn
+**including the Daigoro order** (Y-1: not sourced either way; the research's own pseudocode).
+
+Further `[estimate]`s, each labelled where it stands: every row's `rank: 3` (no rank byte in the
+research); +3 per targeting **per action, not per hit**; the Cavern build is the Gagazet preset (the
+research's named upper bound, §5.2) minus Mighty Guard, White Wind, Talk, two Mega-Potions and the
+mountain's 20,000 gil; the opening line-up Lulu / Kimahri / Yuna (INFERRED); no Candle of Life. Ginnem's
+and Daigoro's stats the research does not give are 0 and never read.
+
+### What exists now
+
+- **Three additive engine capabilities, FFX only, deterministic, DOM-free:** (1) `ActorRuntime.ordersOnly`,
+  a combatant on the field that owns no CTB turn (`turnQueue.ts#queueMembers`); (2) `src/battle/ffx/orders.ts`,
+  a row whose `extra.ordersActor` / `extra.orderedAbility` makes another actor act on the orderer's turn,
+  with its own stats (hooked at the end of `execute.ts#executeCommand`); (3) Yojimbo's gauge on the
+  published state (`combatants.yojimbo.overdrive`, `enemyGaugeRules: 'yojimbo'`), moving through ordinary
+  `overdrive-gauge` events with causes `targeted` / `attacking` / `zanmato`, plus `yojimboBand()` and the
+  band constants for the widget O-5 will pick.
+- **Sourced data:** `src/data/ffx/enemies/yojimbo{,-abilities}.ts`, every number with its research note.
+- **Registration, unlisted:** `getChapter('yojimbo-cavern')` and `window.__pyrefly.gotoChapter('yojimbo-cavern')`
+  reach it; chapter select shows **no card** (`UNLISTED_CHAPTERS`, `docs/CONTRACT-CHANGES.md`). Scene
+  (`gagazet`), music (Chapter 1's cues) and story (battle start + results only) are **placeholders**.
+- **Story draft for Bailey:** `docs/plans/yojimbo-story-draft.md`.
+
+### Measured (200 seeds each, `tests/unit/chapters/yojimbo-bench.test.ts`, real engine, Cavern build)
+
+| Line | Wins | Mean turns | Zanmatos per battle | Doom kills |
+|---|---:|---:|---:|---:|
+| **Intended** (Kimahri's Doom first, Lulu's Fira, Yuna heals and summons in front of Zanmato at ≥80 %) | **200 / 200** | 18.7 | 0.00 | 200 |
+| Magic race (the same without Doom) | 139 / 200 (69.5 %) | 110.6 | 0.94 | 0 |
+| **Credibly wrong** (everyone swings Attack every turn, Yuna heals, no Doom, no aeon) | **0 / 200** | 52.9 | 0.99 | 0 |
+
+Read with care: the party is the upper bound and the odds are B2's even split. With B8 (Doom learned,
+full gauge) the Doom route is a **certain** win, as the sources describe it ("works only for this
+encounter"); without Doom the fight is a real race; the swing-at-it habit never survives the first
+Zanmato, because 9,999 to the whole party is fatal at every preset HP (research §3.3). Nobody tuned
+anything to get these numbers.
+
+### Proof
+
+- FFX Chapters 1, 2, 3, 7 and 8: event logs byte-identical before and after the engine change (sha-256 of
+  `state().log`, seeds 1 / 7 / 42 × attack / defend / the shipped `intended` strategy, 45 runs).
+- `tests/unit/chapters/yojimbo-engine.test.ts`: 29 mechanic, capability, data, registration and absence
+  units. `node tools/orphans.mjs`: 24 orphans before and after, none of them new.
+- Browser (own Vite :5520, GPU, NVIDIA RTX 5070 Ti via ANGLE D3D11): the board shows no Yojimbo card;
+  `gotoChapter('yojimbo-cavern')` opens the battle with `[ginnem, yojimbo, daigoro]` and the gauge on
+  state; a real Enter submits a command; in the live battle Yojimbo's orders made the dog bite (2 orders,
+  2 bites, 0 dog turns).
+
+### Found on the way (not this track's files)
+
+- **The FFX-2 Bahamut guide shows up in this FFX fight.** `src/engine/tactics/guide.ts#guideForState`
+  picks the first guide whose `bossIds` names **any** combatant on the board, and the party's own aeon
+  Bahamut is a combatant, so an FFX chapter without its own guide gets the FFX-2 Bahamut guide
+  (a rule 14 leak; seen in the browser). `tacticFor` keys the same way. Chapter IX needs its own guide and
+  tactic (T7) before it is listed, and the lookup should match the enemy side and the game.
+- Headless `autoBattle` stalls at `play:action-end` right after a party Overdrive, in Chapter VIII too
+  (measured with the same script), so it is not Yojimbo's; `gotoChapter` from chapter select leaves the
+  title card drawn under the battle HUD in both chapters.
