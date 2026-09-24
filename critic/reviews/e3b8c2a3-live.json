@@ -1,0 +1,65 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-24T23:50:00.000Z",
+  "build": {
+    "mainSha": "e3b8c2a3",
+    "bundle": "CXcGU7y1",
+    "artifactHash": "ca8e6924490984e6428deff5f418b7d0d12a37587fa63e96a3cafe0d4c0dc315"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/e3b8c2a3.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/dc2669ac.json => {result: PASS, artifactHash: ca8e6924490984e6428deff5f418b7d0d12a37587fa63e96a3cafe0d4c0dc315, liveManifest: match, checked: 47, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Every assertion/screenshot in this pass was gated behind waitUntil() polling window.__pyrefly.screen()/battle().snapshot().playback.awaitingMenu/battleEngine.menuLevel()/clockHeld() before use; no capture followed a timeout. Real-input flow: title -> Enter -> briefing (verbatim Wait-mode line 4) -> chapter select -> Chapter IV prep -> battle; Wait split default confirmed ON (waitSplit true, clockHeld false at the top list); a real Enter and a real mouse click each open the top list into a submenu (menuLevel top->deep, clockHeld false->true); gauge still holds while aiming a target; Escape/Escape cancels back to the top list with the clock running again; the gauge badge 'GAUGES RUNNING · A LIST HOLDS THEM' and Rikku's coach line 'Bar's full, she's up! Open a list and take your time, nobody moves.' both render verbatim; Escape opens the pause from the top list, H hides/restores its panels, Escape resumes it; audioDebug().tracks[playing].source === 'prerendered' (not synth); ?wait=hold forces waitSplit=false; Chapter VII (seymour-anima-macalania) is still a locked COMING card in two independent contexts; Chapter IV auto-played to a real victory outcome with zero console errors and zero >=400 responses."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "A save-backed setting (Settings.masterVolume, via window.__pyrefly.app.save.setSettings) set to 0.35 before a full page reload read back as 0.35 after reload. An earlier attempt used the debug-only audio.setMuted() toggle, which is not save-backed by design and correctly did not survive; that was a test-methodology miss, not a product defect, and was corrected before this result.",
+      "reason": "Lightweight smoke only, as the task scopes it: the full CHK-024 upgrade matrix (fresh/returning/migrating-save/invalid-storage) is NOT tested here."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact-manifest verify-live (47 files, byte-identical)",
+      "title -> real Enter -> briefing (Wait-mode line 4 verbatim) -> chapter select -> Chapter IV prep -> battle",
+      "Wait split default ON at the main list (waitSplit true, clockHeld false)",
+      "a real Enter key opens a top-level group into a submenu (clockHeld true, menuLevel deep)",
+      "a real mouse click opens a top-level group into a submenu (same transition, used to disambiguate a first-time coach mark's own exclusive Enter dismiss from the menu's own confirm)",
+      "gauge holds while aiming a target",
+      "cancel path (Escape/Escape) returns to the top list with the clock running again",
+      "gauge badge and Rikku's first-use coach bubble render verbatim",
+      "Escape opens/resumes the pause from the top list; H hides/restores the pause panels",
+      "prerendered music confirmed playing via audioDebug() (source=prerendered, not synth)",
+      "?wait=hold forces the old whole-menu hold (waitSplit=false)",
+      "Chapter VII (seymour-anima-macalania) still a locked COMING card, in two independent browser contexts",
+      "Chapter IV (Bahamut) auto-played end to end to a real victory outcome",
+      "a real, save-backed setting (masterVolume) survives a full page reload",
+      "zero console errors and zero >=400 responses across all three browser contexts for the whole run"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full CHK-024 upgrade matrix (fresh player / returning player / a previous-release save migrating forward / invalid or truncated storage / reset-and-confirm) -- explicitly out of scope for this lightweight pass",
+      "Paine's Power Break through real menu navigation to her own turn specifically (the auto 'intended' strategy did not choose it during the one full Chapter IV run in this pass; the mechanism it depends on -- top list -> submenu -> confirm -> aim -> resolve -- was verified generically on Yuna's turn)",
+      "the Chapter II pause CHAPTER tab's snapshot-art dimensions -- the tab was opened with a real click but no element matched the img selectors tried (.pause__panel img / [data-tab-panel=chapter] img / .pause__chapter img), so this is unverified rather than failed; the actual DOM structure of that panel was not inspected further within this pass's time budget",
+      "an independent 'a cleared chapter survives reload' check on top of the settings check -- a second attempt (auto-playing Chapter I to victory, then reloading) crashed the headless GPU tab mid-battle and was not re-run"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 50
+}
