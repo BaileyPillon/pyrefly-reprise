@@ -1,0 +1,108 @@
+{
+ "_note": "Chapter I's visible words swapped for Chapter IX's registered ones (src/data/chapter-yojimbo-cavern.ts: title, subtitle, location, blurb) in the page DOM only. Chapter IX has no ChapterMeta yet, so its quote, handwritten line, tip, first two objectives and snapshots do not exist: they are blanked, never invented. 'Defeat Yojimbo' is the one objective the sources support (the party fights Yojimbo).",
+ "pairs": [
+  [
+   "I · Seymour Flux",
+   "IX · Yojimbo"
+  ],
+  [
+   "Chapter I ·",
+   "Chapter IX ·"
+  ],
+  [
+   "Defeat Seymour Flux",
+   "—"
+  ],
+  [
+   "DEFEAT SEYMOUR FLUX",
+   "—"
+  ],
+  [
+   "Holy Water a Zombie before Full-Life lands",
+   "Defeat Yojimbo"
+  ],
+  [
+   "HOLY WATER A ZOMBIE BEFORE FULL-LIFE LANDS",
+   "DEFEAT YOJIMBO"
+  ],
+  [
+   "Survive Total Annihilation",
+   "—"
+  ],
+  [
+   "SURVIVE TOTAL ANNIHILATION",
+   "—"
+  ],
+  [
+   "Seymour Flux",
+   "Yojimbo"
+  ],
+  [
+   "SEYMOUR FLUX",
+   "YOJIMBO"
+  ],
+  [
+   "The Prominence",
+   "A guardian's last duty to her first summoner"
+  ],
+  [
+   "THE PROMINENCE",
+   "A GUARDIAN'S LAST DUTY TO HER FIRST SUMMONER"
+  ],
+  [
+   "Mt. Gagazet",
+   "Cavern of the Stolen Fayth"
+  ],
+  [
+   "MT. GAGAZET",
+   "CAVERN OF THE STOLEN FAYTH"
+  ],
+  [
+   "CHAPTER I ·",
+   "CHAPTER IX ·"
+  ],
+  [
+   "The Ronso died holding this gate, and Seymour is still standing over the bodies when the party arrives. He is offering the pilgrimage's ending early, and he is not lying about the cost.",
+   "Lulu guarded one summoner before Yuna, and she died in this cave. She never left it. Her aeon still answers her, and it strikes harder every time it is struck."
+  ],
+  [
+   "Sorrow is honest, at least. That is more than the Ronso could say of hope.",
+   ""
+  ],
+  [
+   "the mountain remembers everything",
+   ""
+  ],
+  [
+   "Bio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late.",
+   "—"
+  ],
+  [
+   "the Prominence, at last",
+   ""
+  ],
+  [
+   "unhurried, always unhurried",
+   ""
+  ],
+  [
+   "the machine beneath him",
+   ""
+  ]
+ ],
+ "exact": {
+  "I": "IX",
+  "Seymour": "",
+  "SEYMOUR": "",
+  "“": "",
+  "”": "",
+  "GAGAZET": "—",
+  "“”": "",
+  "Gagazet": "—"
+ },
+ "hideImgs": [
+  "backdrops/gagazet",
+  "characters/seymour-flux/",
+  "characters/mortiorchis/"
+ ]
+}

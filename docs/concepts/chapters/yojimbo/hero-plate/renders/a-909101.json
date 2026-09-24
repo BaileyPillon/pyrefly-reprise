@@ -1,0 +1,24 @@
+{
+  "subject": "Lulu and the unsent Lady Ginnem",
+  "mood": "recognition and grief: she was too young",
+  "seed": 909101,
+  "prompt": "1girl, lulu \\(ff10\\), final fantasy x, safe, solo, black hair, elaborate braided updo, black beads in hair, crimson red eyes, dark lipstick, pale skin, black belt dress, thick fur collar, blue bead earring, mature female, a pale translucent ghostly woman with a white painted face and golden hair ornaments, formed from glowing pale blue pyreflies, standing in the shadows behind her, drifting glowing motes, dark cave chamber, cold grey blue stone walls, a pale shaft of daylight from above, cold blue gloom, soft bokeh background, three-quarter view, eyes downcast, sorrowful, brows drawn together, mouth closed, grief held in, head and shoulders, hands out of frame, both eyes fully drawn and unobstructed, (eyes downcast, quiet sorrow:1.25), (a pale translucent ghostly woman made of glowing pyreflies behind her:1.25), (black beaded braids falling clear of her face:1.2), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, moustache, dark stroke above the lip, smudge on the face, mark above the mouth, hair across the eye, hair over the eye, strands crossing the face, malformed iris, misshapen pupil, pink hair, blonde hair, two-tone hair, heart pupils, star pupils, spiral pupils, warm amber bokeh, candlelight, smile, smirk, grin, crying, tears, second face, face close behind her, warm light",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(eyes downcast, quiet sorrow:1.25), (a pale translucent ghostly woman made of glowing pyreflies behind her:1.25), (black beaded braids falling clear of her face:1.2)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "refSkippedMonochrome": {
+    "attempted": "public/art/characters/lulu/idle.png",
+    "top2Share": 0.46338427120356507
+  },
+  "generatedAt": "2026-09-24T17:35:41.916Z"
+}
