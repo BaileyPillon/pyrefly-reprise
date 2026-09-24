@@ -10,6 +10,7 @@ import type { AbilityDef, AvailableCommand, Command, FFXCombatant } from '../com
 import { type Ctx, abilityOf, canSwitchIn, has, isSubmenuMarker, rankOf, tryActor } from './state.ts';
 import { blockedBySilence, mpCostFor } from './abilities.ts';
 import { reachesAtRange, validTargets } from './targeting.ts';
+import { type AimDef, preferredTargetIds } from '../common/aim.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
 import { triggerHandler } from './ai/index.ts';
@@ -42,6 +43,21 @@ function markerCommand(def: AbilityDef): Command | null {
     return { kind: 'escape', targets: [], extra: { mode } };
   }
   return null;
+}
+
+/**
+ * Where the row's target cursor opens: an enemy for an attack, a party member
+ * for a cure, a KO'd one first for a revive (`battle/common/aim.ts`). Both games
+ * share the rule; this is FFX's half of it.
+ */
+function withAim(ctx: Ctx, user: FFXCombatant, def: AimDef, row: AvailableCommand): AvailableCommand {
+  const candidates = row.validTargets.flatMap((id) => {
+    const c = ctx.state.combatants[id];
+    return c ? [c] : [];
+  });
+  const preferred = preferredTargetIds(def, row.targeting, user.side, candidates);
+  if (preferred) row.preferredTargets = preferred;
+  return row;
 }
 
 function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: AvailableCommand['command']): AvailableCommand {
@@ -84,7 +100,7 @@ function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: Availabl
   // step [ffx-combat-core §7.4 row 41, "Two Blk Magic casts"]; the row's own
   // self aim is only a placeholder (PR-0125, `./doublecast.ts`). FFX only.
   if (def.extra?.['castsTwoBlackMagicSpells'] === true) row.wrapsCategory = 'blackmagic';
-  return row;
+  return withAim(ctx, user, def, row);
 }
 
 /**
@@ -201,7 +217,7 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     // every restorative does, because it targets your own party].
     if (!row.enabled) row.disabledReason = reachesAtRange(ctx, user, itemDef) ? 'No target' : 'Out of reach';
     if (item.description !== undefined) row.help = item.description;
-    rows.push(row);
+    rows.push(withAim(ctx, user, itemDef, row));
   }
 
   const defendDef = abilityOf(ctx, DEFEND_ABILITY_ID);

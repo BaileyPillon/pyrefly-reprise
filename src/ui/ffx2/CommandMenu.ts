@@ -529,7 +529,8 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       claimCancel();
       const entries = targetIds.map(entryFor);
       if (groupMode) cursor.showGroup(entries);
-      else cursor.showSingle(entries);
+      // Opens on the engine's preferred side: most X-2 skills also list the girls.
+      else cursor.showSingle(entries, 0, pending?.preferredTargets);
     }
 
     /** Opens a category. A group with nothing enabled in it (a Cursed Change) never opens. */

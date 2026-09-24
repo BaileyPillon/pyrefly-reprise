@@ -1703,6 +1703,18 @@ export interface AvailableCommand {
    * is absent, which is the behaviour that was there before.
    */
   targeting?: Targeting;
+  /**
+   * Where the target cursor **opens**: the subset of {@link validTargets} on
+   * the sensible side (an enemy for an attack or a debuff, a party member for a
+   * cure or a buff, a KO'd party member first for a revive). The menu opens on
+   * the leftmost of these on screen; the arrows still walk every valid target.
+   *
+   * Additive and optional; absent means "open on the leftmost valid target",
+   * which is what every row did before. Set only when it narrows the list —
+   * chiefly `single-any` rows, which list the party too and so opened on it
+   * (Bailey, 2026-09-24). Both engines fill it from `battle/common/aim.ts`.
+   */
+  preferredTargets?: CombatantId[];
   /** True when choosing this row opens a minigame overlay before the command resolves. */
   opensMinigame?: MinigameKind;
   /**

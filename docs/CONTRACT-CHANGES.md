@@ -6,6 +6,29 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — `AvailableCommand.preferredTargets`: where the target cursor opens
+
+**Both games** [AGENTS.md hard rule 14]: shared plumbing, the same rule in each.
+Bailey, live build: "when i click an attack it defaults to targeting my party member
+instead of the enemy". Reproduced with real keys on every unlocked chapter: Attack and
+every `single-enemy` row opened on an enemy, but a `single-any` row lists the party
+too and the cursor opened on the leftmost figure, a party member — most X-2 skills
+(Power Break, Drain, Doom, Death, Cheap Shot, Flametongue) and FFX's Dispel.
+
+**Additive, optional** in `src/battle/common/types.ts` `AvailableCommand`:
+`preferredTargets?: CombatantId[]`, the subset of `validTargets` the cursor opens on
+(the leftmost of them on screen); the arrows still walk every valid target. Set only
+when it narrows the list, so every existing row and fixture is unchanged. Filled by
+both engines (`battle/ffx/commands.ts`, `battle/ffx2/targeting.ts` via
+`battle/ffx2/aim.ts`) from the new pure `battle/common/aim.ts`: an enemy for damage,
+debuffs, drains, Dispel and rows that say nothing about themselves (Copycat, Mix); a
+party member for heals, buffs and cleanses; a KO'd party member first for a revive.
+Neither `research/ffx-combat-core.md`, `research/ffx2-combat-core.md` nor
+`research/ffx-vs-ffx2-presentation.md` says where the retail cursor opens, so this
+is the standard FF convention, not a sourced rule. Read by `TargetCursor.showSingle`'s
+new optional `prefer` argument from both command menus. Tests:
+`tests/unit/target-default-side-ffx.test.ts`, `tests/unit/target-default-side-ffx2.test.ts`.
+
 ## 2026-09-24 — Scene staging switches move to `SceneStaging`; gain `holdParty` and `enemySpots`
 
 Not a listed contract file; recorded for the same reason as the entry below. **Both games**

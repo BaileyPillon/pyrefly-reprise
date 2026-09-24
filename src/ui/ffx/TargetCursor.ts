@@ -208,13 +208,19 @@ export class TargetCursor {
    * "the first one the engine listed" is how the cursor used to land on the
    * aeon in the middle of the field while the player's eye was at the left
    * edge. Pass 0 for the leftmost, which is what every caller wants.
+   *
+   * `prefer` (the row's `AvailableCommand.preferredTargets`) opens on the
+   * leftmost of those ids instead, so an attack that may also point at the
+   * party opens on an enemy and a revive on a fallen ally; the arrows still
+   * walk every entry left to right. Ignored when none of them is listed.
    */
-  showSingle(entries: TargetEntry[], startAt = 0): void {
+  showSingle(entries: TargetEntry[], startAt = 0, prefer?: readonly CombatantId[]): void {
     this.entries = entries;
     this.mode = 'single';
     this.activeIndex = 0;
     this.refreshOrder();
-    const at = Math.max(0, Math.min(this.order.length - 1, startAt));
+    const preferredAt = prefer?.length ? this.order.findIndex((i) => prefer.includes(entries[i]!.id)) : -1;
+    const at = preferredAt >= 0 ? preferredAt : Math.max(0, Math.min(this.order.length - 1, startAt));
     this.activeIndex = this.order[at] ?? 0;
     this.reposition();
     this.publish();
