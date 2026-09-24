@@ -1,0 +1,545 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-24T22:59:35.410Z",
+ "build": {
+  "mainSha": "e3b8c2a3",
+  "candidateTree": "D:/pyrefly-hotfix3",
+  "artifact": "dist-gate built from e3b8c2a3 (index-CXcGU7y1.js, index-vNqXKJL3.css; build.log 16:48, commit 16:47; tree clean apart from dist-gate)",
+  "servedAt": "http://127.0.0.1:5921/pyrefly-reprise/ (vite preview; PIDs 12720 and 72148, each stopped by its own PID after use, port 5921 confirmed closed)",
+  "previousLiveBuild": "dc2669ac (bundle CzzK-khs, docs/deploys.log 2026-09-24T20:27Z)",
+  "renderer": "PYREFLY_BROWSER=gpu: headless Chromium, ANGLE D3D11 on NVIDIA GeForce RTX 5070 Ti; no fallback needed"
+ },
+ "targetVersion": "dd884b4c55daa27c423a683882b8d3a5a725885e046f163068b9440a42c27745",
+ "targetVersionNote": "sha256 of docs/target/targets.json in the candidate D:/pyrefly-hotfix3",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical or major issue found; nothing regresses against live dc2669ac (pause, target defaults, FFX CTB flow and outcomes all match live).",
+  "The Wait split default works as Bailey chose it in chapters 4, 5 and 6 at 1600x900 and 390x844: gauges run at the top list, hold in a submenu and while aiming, and a chosen skill plays out under the next girl's open top list. That closes DC2-01, the major disclosed with dc2669ac.",
+  "The three D-121 lines are word for word and true of the default; ?wait=hold restores the old hold and its lines; Active is unchanged.",
+  "The teardown fix holds: seven pause-menu exits and a results exit in one real flow, 0 page errors; the win-rate bench reproduces the numbers in 2b32ffe7 exactly."
+ ],
+ "checks": [
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-001",
+   "result": "NOT APPLICABLE",
+   "reason": "git diff dc2669ac..e3b8c2a3 touches no audio file, manifest or routing; the plan lists audio paths because it diffs from d9decadb, whose audio was reviewed with the builds that shipped it.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "The pause opened full-screen over the battle with real Escape / P / C (Start) at the top list, a submenu, the target cursor, a party action, an enemy action and the next menu in chapters 1, 2, 3, 8, 4, 5 and 6 of one real flow; the battle log and ticks stayed frozen for 1.5 s under it and Escape resumed with the menu, submenu or cursor intact (40 of 41 pause attempts; the exception is HF3-02, the same on live).",
+   "game": "both",
+   "chapter": "1, 2, 3, 8, 4, 5, 6",
+   "state": "every battle state -> pause -> resume",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/pauseflow-1600.json",
+    "critic/reviews/e3b8c2a3-focused/pause-1600-ffx2-bahamut-aiming.jpg",
+    "critic/reviews/e3b8c2a3-focused/pause-1600-seymour-flux-enemy-action.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "The three new lines render at the same sizes as the lines they replace: bubble body 21 px (2 lines), badge 14 px on one line with no overflow (scrollWidth = clientWidth 403 px) at 1600x900 and 2000x1012, briefing line 4 one line at 54 px like lines 1-3; at 390x844 the bubble is 2 lines and the badge fits inside the viewport.",
+   "game": "FFX-2",
+   "chapter": "4, 5, 6",
+   "state": "first top list with the coach bubble; briefing",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/split-default-ffx2-bahamut-1600-top.jpg",
+    "critic/reviews/e3b8c2a3-focused/split-default-ffx2-vegnagun-shuyin-390-top.jpg",
+    "critic/reviews/e3b8c2a3-focused/wide-2000-ch4-top.jpg",
+    "critic/reviews/e3b8c2a3-focused/brief-default.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "The bubble tells the player to \"Open a list\"; every open top list in chapters 4-6 had an enabled row with a submenu, and Enter opened it (after the first key clears the bubble, HF3-01).",
+   "game": "FFX-2",
+   "chapter": "4, 5, 6",
+   "state": "top list -> submenu",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/split-default.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-005",
+   "result": "NOT APPLICABLE",
+   "reason": "The move advisor is not changed by this hotfix.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The first-turn bubble now stays up through an enemy action and goes when her own action starts or on its own (as the commit intends). Battle teardown: seven exits by the pause menu to chapter select in one flow and a results exit in chapter 4 left no second fight, no stray HUD and 0 page errors; tests/unit/battle-screen-teardown.test.ts (6 tests) passes on the candidate.",
+   "game": "both",
+   "chapter": "1, 2, 3, 8, 4, 5, 6",
+   "state": "coach bubble; pause -> Chapter select; results -> chapter select",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/pauseflow-1600.json",
+    "critic/reviews/e3b8c2a3-focused/data/outcome-cand4.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No developer vocabulary in the new copy; the ?wait=hold switch never appears to the player.",
+   "game": "FFX-2",
+   "chapter": "4, 5, 6",
+   "state": "coach bubble, badge, briefing",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/brief-default.jpg",
+    "critic/reviews/e3b8c2a3-focused/split-default-ffx2-bahamut-1600-top.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "The bubble sits at the same place as on live (x 608-1008, y 621-767 at 1600x900) beside the party, clear of the command list and the party rows.",
+   "game": "FFX-2",
+   "chapter": "4",
+   "state": "first top list",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/split-default-ffx2-bahamut-1600-top.jpg",
+    "critic/reviews/e3b8c2a3-focused/firstenter-live-default.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Badge, bubble and briefing lines are shown in full at every tested size (no ellipsis, no overflow).",
+   "game": "FFX-2",
+   "chapter": "4, 5, 6",
+   "state": "coach bubble, briefing",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/modes.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Target defaults unchanged from dc2669ac: 123 of 123 cursor openings compared row by row (chapters 2, 4, 5, 6, real keys, ?wait=hold to match the old timing) are identical to the dc2669ac sweep; Attack walks and Enter confirms land on the aimed id.",
+   "game": "both",
+   "chapter": "2, 4, 5, 6",
+   "state": "every enabled row, 2 decisions per chapter",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/sweep-cand-summary.txt",
+    "critic/reviews/e3b8c2a3-focused/data/sweep-dc2669ac-summary.txt",
+    "critic/reviews/e3b8c2a3-focused/wide-2000-ch4-aim.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-012",
+   "result": "NOT APPLICABLE",
+   "reason": "No art or asset changes in this hotfix.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "reason": "No art changes.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Every behaviour was driven by Playwright keyboard input on the production build: top list, submenu, target cursor, confirm, pause keys, the pause menu route to chapter select, results. The debug API only started chapters 4-6 for the Wait split timing runs and handed two fights to autoBattle for the outcome leg.",
+   "game": "both",
+   "chapter": "all unlocked",
+   "state": "as above",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/split-default.json",
+    "critic/reviews/e3b8c2a3-focused/data/pauseflow-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture was taken after asserting screen(), the chapter, the menu level and the owner; a failed wait threw and was recorded as an error, not captured as evidence (one extra ch5 run timed out and is not used).",
+   "game": "both",
+   "chapter": "all",
+   "state": "n/a",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/split-default.json",
+    "critic/reviews/e3b8c2a3-focused/data/pauseflow-1600.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Pre-deploy candidate; live verification of the exact artifact is owed after the deploy.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-018",
+   "result": "NOT APPLICABLE",
+   "reason": "No shipped asset paths changed.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-019",
+   "result": "NOT APPLICABLE",
+   "reason": "No generated assets.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The two \"both\" changes were checked in both games: teardown and pause in FFX chapters 1, 2, 3, 8 and FFX-2 chapters 4, 5, 6; target defaults in FFX chapter 2 and FFX-2 chapters 4, 5, 6.",
+   "game": "both",
+   "chapter": "all unlocked",
+   "state": "as above",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/pauseflow-1600.json",
+    "critic/reviews/e3b8c2a3-focused/data/sweep-cand-summary.txt"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Game case from research/ffx2-combat-core.md 1.5 (Wait: time runs at the top-level command window, freezes on entering a submenu): the Wait split is FFX-2 only, with aiming held as Bailey's adopted reading (D-029 follow-up 2). Present in FFX-2 chapters 4-6 (ticks run at the top list, freeze in a submenu and while aiming); absent in FFX: chapter 1 shows Auron's CTB line \"He moves after you. Not before. Use it.\" with ENTER CONTINUE and no clock chip, and the CTB flow (Tidus acts, then Seymour) is unchanged.",
+   "game": "FFX-2 (absence checked in FFX)",
+   "chapter": "1, 4, 5, 6",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/pauseflow-1600.json",
+    "critic/reviews/e3b8c2a3-focused/data/split-default.json",
+    "critic/reviews/e3b8c2a3-focused/pause-1600-seymour-flux-top-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Chapter 4 victory -> cutscene -> results -> Enter -> chapter select; chapter 1 defeat -> results -> Enter (Continue) -> party prep, identical to live with the same harness; seven pause-menu exits reached chapter select.",
+   "game": "both",
+   "chapter": "1, 4",
+   "state": "outcome -> results -> destination",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/outcome-cand4.json",
+    "critic/reviews/e3b8c2a3-focused/data/outcome-live.json",
+    "critic/reviews/e3b8c2a3-focused/outcome-ffx2-bahamut-results.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "The coach lines, the Wait split and the pause were exercised through the real screens (title, briefing, chapter select, prep, battle), not by calling the subsystems.",
+   "game": "both",
+   "chapter": "all unlocked",
+   "state": "real flow",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/pauseflow-1600.json",
+    "critic/reviews/e3b8c2a3-focused/data/modes.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "artifact": "e3b8c2a3 dist-gate (index-CXcGU7y1.js)",
+   "targetVersion": "dd884b4c",
+   "environment": "vite preview of D:/pyrefly-hotfix3/dist-gate (e3b8c2a3, index-CXcGU7y1.js) at http://127.0.0.1:5921/pyrefly-reprise/ vs live https://baileypillon.github.io/pyrefly-reprise/ (dc2669ac, bundle CzzK-khs); headless Chromium via Playwright, PYREFLY_BROWSER=gpu (ANGLE D3D11, NVIDIA RTX 5070 Ti), no fallback needed",
+   "id": "CHK-B1",
+   "result": "NOT APPLICABLE",
+   "reason": "No audio change in this hotfix.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  }
+ ],
+ "targets": {
+  "required": 2,
+  "matched": 2,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "detail": [
+   {
+    "tile": "fight / Onboarding C1: Auron's briefing (c1-briefing.png)",
+    "result": "matched",
+    "evidence": "critic/reviews/e3b8c2a3-focused/c1-briefing.jpg",
+    "note": "Auron's painting and four lines; line 4 is Bailey's D-121 pick 2a with his approved gold half \"the clock does not wait\"; skip line on one row."
+   },
+   {
+    "tile": "fight / Onboarding C3: FFX-2 first-use line (c3-ffx2-replay.png)",
+    "result": "matched",
+    "evidence": "critic/reviews/e3b8c2a3-focused/c3-ffx2-replay.jpg",
+    "note": "Rikku's line beside the party rows, fades on its own, first time only; the badge and body use the D-121 words 3a and 1a in place of the frame's Active wording, by Bailey's decision."
+   }
+  ]
+ },
+ "issues": [
+  {
+   "id": "HF3-01",
+   "severity": "polish",
+   "title": "On the first FFX-2 top list the first key only clears the coach bubble, and under the new default the gauges run during that press",
+   "game": "FFX-2",
+   "chapter": "4, 5, 6",
+   "expected": "The bubble says \"Open a list\"; the first Enter opens the highlighted list.",
+   "observed": "The first Enter (or Escape) dismisses the bubble and the list stays closed; a second Enter opens it. Identical on live (default and ?wait=split), so not a regression, but under the split the clock is now running while that key is spent.",
+   "repro": "Chapter 4 seed 5, first top list with the bubble up, press Enter once: level stays top (data/firstenter).",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/firstenter-cand-default.jpg",
+    "critic/reviews/e3b8c2a3-focused/firstenter-live-default.jpg"
+   ],
+   "confidence": "high: measured on the candidate and live",
+   "requirement": "CHK-015; D-121 bubble wording",
+   "where": "src/ui/coach/CoachLayer.ts (suspected: the bubble claims the first key)",
+   "fix": "Let the first confirm pass through to the menu while the non-blocking FFX-2 bubble is up, or leave as is and let Bailey decide.",
+   "acceptanceCheck": "Chapter 4 first top list: one Enter opens the highlighted list and the bubble goes.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "HF3-02",
+   "severity": "polish",
+   "title": "Escape and P do not open the pause during the Trigger Happy minigame",
+   "game": "FFX-2",
+   "chapter": "6",
+   "expected": "Escape/P/Start pause at every battle state.",
+   "observed": "With the Trigger Happy minigame up, Escape and P leave the screen on battle; identical on live.",
+   "repro": "Chapter 6 seed 3, Yuna: Skill > Trigger Happy > Enter, then Escape.",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/minigame-cand.jpg",
+    "critic/reviews/e3b8c2a3-focused/minigame-live.jpg"
+   ],
+   "confidence": "high: measured on both builds",
+   "requirement": "CHK-002",
+   "where": "suspected: the minigame widget takes the keyboard",
+   "fix": "Route Escape/P/Start to the pause from the minigame (pausing its timer), or confirm with Bailey that the minigame is exempt.",
+   "acceptanceCheck": "Escape during Trigger Happy opens the pause, the minigame timer freezes and resumes.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "HF3-03",
+   "severity": "polish",
+   "title": "The clock chip shows only while aiming: nothing says RUNNING at the top list or HELD in a submenu under the new default",
+   "game": "FFX-2",
+   "chapter": "4, 5, 6",
+   "expected": "The player can see when the clock runs and when it holds (the badge says it once, on the first turn only).",
+   "observed": "Top list: no chip (running). Submenu: no chip (held). Target cursor: \"WAIT — ATB HELD\". Carries DC2-04, now visible to every player because the split is the default.",
+   "repro": "Chapter 4, any turn after the first: open the top list, then a submenu, then aim.",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/data/split-default.json",
+    "critic/reviews/e3b8c2a3-focused/wide-2000-ch4-aim.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "research/ffx2-combat-core.md 1.5 (the on-screen indicator flips between Active and Wait mode)",
+   "where": "src/ui/ffx2/atbClockChip.ts",
+   "fix": "Options for Bailey (hard rule 9): the chip at all three levels, or only the retail Active/Wait mode indicator.",
+   "acceptanceCheck": "A picked option is visible at the top list, in a submenu and while aiming in chapters 4-6.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "HF3-04",
+   "severity": "suggestion",
+   "title": "The candidate tree's target records for tiles C1 and C3 still describe the superseded Wait drafts",
+   "game": "FFX-2",
+   "chapter": "n/a",
+   "expected": "docs/target/targets.json C1/C3 reaction names D-121 (Bailey adopted 1a, 2a, 3a on 2026-09-24).",
+   "observed": "The candidate's records still list the agent drafts (\"clock holds while you choose\", \"Menu's up · gauges holding\") as inferred and awaiting Bailey; main's decisions.json has D-121.",
+   "repro": "Read docs/target/targets.json in D:/pyrefly-hotfix3.",
+   "evidence": [
+    "critic/reviews/e3b8c2a3-focused/c1-briefing.jpg",
+    "critic/reviews/e3b8c2a3-focused/c3-ffx2-replay.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "AGENTS.md hard rule 15 (reaction records)",
+   "where": "docs/target/targets.json",
+   "fix": "Record D-121 in the C1 tile reaction on main.",
+   "acceptanceCheck": "The C1 reaction cites D-121 and the three adopted lines.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Default Wait split with real keys in chapters 4 (seed 5), 5 (seed 4) and 6 (seed 3) at 1600x900 and 390x844: 38 turns; ticks ran on every top list (for example ch4 +4500 in 1.5 s), froze in every submenu (32 of 32) and while aiming (32 of 32, \"WAIT — ATB HELD\" chip); a previous girl's skill played under the next girl's open top list in ch4 (2 runs), ch6 (2 runs) and ch5 (Rikku's Darkness under Paine's list, 5 s watch).",
+   "2000x1012 layout of the ch4 top list with the bubble and of the aim with the chip.",
+   "?wait=hold: top list and submenu held (0 ticks), the old bubble, badge and briefing lines; Active by the pause OPTIONS row with real keys: ticks run at the top list and in a submenu, Active lines unchanged.",
+   "Briefing line 4, the bubble and the badge compared word for word with D-121 (1a, 2a, 3a).",
+   "The PR-0076 bench (tests/unit/ffx2-wait-split-measure.test.ts, PYREFLY_MEASURE=1) on the candidate: every row equals the table in 2b32ffe7.",
+   "One real flow from the title through chapters 1, 2, 3, 8, 4, 5, 6: Escape at the battle-start card, Escape at the top list, P in a submenu, C (Start) while aiming, Escape during a party action, during an enemy action (not reached in 8) and P at the next menu, then the pause menu route to chapter select; 0 page errors.",
+   "Target defaults: 123 cursor openings in chapters 2, 4, 5, 6 identical to dc2669ac.",
+   "Outcomes: ch4 victory to results to chapter select; ch1 defeat to results to party prep on the candidate and on live (same).",
+   "The Trigger Happy minigame and the first-key bubble behaviour, both compared with live.",
+   "Targeted vitest on the candidate: 8 files, 69 tests pass (teardown, debug, Wait split, switch, coach copy, layer, hold, briefing mode)."
+  ],
+  "reused": [
+   {
+    "what": "Chapter 4 briefing / hold / Active measurements (modes.json, active.json, active2.json, measure.log)",
+    "from": "an earlier, interrupted run of this same focused review on the same dist-gate (16:48-17:04 today)",
+    "why": "same artifact and harness; rerunning would repeat identical input"
+   },
+   {
+    "what": "dc2669ac target-default sweep (the baseline for the 123-row comparison)",
+    "from": "critic/reviews/dc2669ac-focused (the build now live)",
+    "why": "the live build's own measured cursor openings"
+   }
+  ],
+  "notTested": [
+   "Gamepad Start (C was used as Start); touch input.",
+   "Enemy-action pause in chapter 8 (Evrae) - no enemy action inside the harness window; its other five states passed.",
+   "Pause flow at 390x844 (the pause layout did not change in this hotfix).",
+   "Outcomes of chapters 2, 3, 5, 6 and 8.",
+   "A real-input exit while BattleScreen.enter() is still loading (covered by the unit test only; the first press on the battle-start card dismisses the card by design, so the window cannot be reached with the keyboard)."
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy, then the deep review this shared-system change owes on the live build (plan depth deep, deepBeforeDeploy false, carried deep from d9decadb).",
+ "elapsedMinutes": 50,
+ "notes": "Game case: 2b32ffe7 + 9938c266 FFX-2 only (research/ffx2-combat-core.md 1.5; aiming hold is the adopted reading, D-029 follow-up 2); e11fcdf1 + b0dd23cd and e3b8c2a3 both games. Carried, not re-tested: DC2-02 (unsourced cursor-side calls), DC2-03 (flower over HUD on Vegnagun, same as live). DC2-01 is closed by this candidate. dataAudit: no game data changed in dc2669ac..e3b8c2a3 (git diff src/data research is empty); the Wait rule matches research 1.5."
+}

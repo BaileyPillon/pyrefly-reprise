@@ -1,26 +1,24 @@
 {
-  "mainSha": "dc2669ac",
-  "bundle": "CzzK-khs",
-  "deployedAt": "2026-09-24T20:27:32.633Z",
+  "mainSha": "e3b8c2a3",
+  "bundle": "CXcGU7y1",
+  "deployedAt": "2026-09-24T23:01:41.082Z",
   "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
   "artFiles": 582,
   "policyVersion": 2,
-  "artifactHash": "867f61412521207ee7ba4499336552c42a365c0a8a75e1dc912bfc79c3dea03e",
+  "artifactHash": "ca8e6924490984e6428deff5f418b7d0d12a37587fa63e96a3cafe0d4c0dc315",
   "review": "deep",
   "reasons": [
-    "src/battle/common/aim.ts: shared combat core is a shared system",
+    "src/app/waitSplitSwitch.ts: unclassified product path is a shared system",
     "src/battle/common/types.ts: shared combat core is a shared system",
     "src/battle/ffx/commands.ts: FFX CTB engine is a shared system",
     "src/battle/ffx2/active.ts: FFX-2 ATB engine is a shared system",
     "src/battle/ffx2/aim.ts: FFX-2 ATB engine is a shared system",
-    "src/battle/ffx2/engine.ts: FFX-2 ATB engine is a shared system",
-    "src/battle/ffx2/index.ts: FFX-2 ATB engine is a shared system",
-    "src/battle/ffx2/internal.ts: FFX-2 ATB engine is a shared system",
     "src/battle/ffx2/targeting.ts: FFX-2 ATB engine is a shared system",
-    "src/engine/BattlePresenter.ts: battle presenter and lifecycle is a shared system",
-    "src/engine/BattlePresenterActive.ts: battle presenter and lifecycle is a shared system",
-    "src/engine/HudPort.ts: battle presenter and lifecycle is a shared system",
+    "src/ui/coach/Briefing.ts: unclassified product path is a shared system",
     "src/ui/coach/CoachLayer.ts: unclassified product path is a shared system",
+    "src/ui/coach/CoachMark.ts: unclassified product path is a shared system",
+    "src/ui/coach/coachCopy.ts: unclassified product path is a shared system",
+    "src/ui/coach/coachState.ts: unclassified product path is a shared system",
     "public/art/manifest.json: asset loader and manifests is a shared system",
     "public/audio/manifest.json: asset loader and manifests is a shared system",
     "public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2: unclassified product path is a shared system",
@@ -48,9 +46,7 @@
     "FFX CTB engine",
     "FFX HUD",
     "FFX-2 ATB engine",
-    "FFX-2 HUD",
     "asset loader and manifests",
-    "battle presenter and lifecycle",
     "music and sound files",
     "painted artwork",
     "shared combat core",
@@ -91,24 +87,21 @@
   "liveArtifact": {
     "result": "PASS",
     "checked": 47,
-    "at": "2026-09-24T20:27:32.633Z"
+    "at": "2026-09-24T23:01:41.082Z"
   },
   "obligations": [
     {
       "kind": "live",
-      "status": "done",
-      "requires": "exact-artifact verification and real-input smoke on the live URL",
-      "result": "PASS",
-      "settledBy": "critic/reviews/dc2669ac-live.json",
-      "settledAt": "2026-09-24T21:40:00.000Z"
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
     },
     {
       "kind": "focused",
       "status": "done",
       "requires": "acceptance of the changed area",
       "result": "PASS",
-      "settledBy": "critic/reviews/dc2669ac-focused.json",
-      "settledAt": "2026-09-24T20:25:00Z"
+      "settledBy": "critic/reviews/e3b8c2a3-focused.json",
+      "settledAt": "2026-09-24T22:59:35.410Z"
     },
     {
       "kind": "deep",
@@ -122,14 +115,15 @@
         "5348c2e3",
         "d9decadb",
         "76f587c3",
-        "bcbdb483"
+        "bcbdb483",
+        "dc2669ac"
       ]
     }
   ],
   "ownerOverride": {
-    "words": "ship the hotfixes",
-    "date": "2026-09-24T20:27:32.633Z",
-    "report": "critic/reviews/dc2669ac-focused.json",
+    "words": "I'll go with all of your recommendations full speed",
+    "date": "2026-09-24T23:01:41.082Z",
+    "report": "critic/reviews/e3b8c2a3-focused.json",
     "changedArea": null
   }
 }
