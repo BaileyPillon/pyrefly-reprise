@@ -27,6 +27,8 @@
  *   keeps the approved framing, as before the pick: a smaller plate, a face
  *   touching a column or a half-empty screen was never on the sheet
  *   (repair of the verifier's 1024x768 and 844x390 findings, 24 Sep 2026).
+ *   For that case Bailey picked option A the same day: `faceStack.chromeFor`
+ *   stacks the two columns into one and frames against that.
  * - Only a slid plate is feathered ({@link FramedBox.slid}); the feather never
  *   reaches into the face ({@link slideMask}).
  *

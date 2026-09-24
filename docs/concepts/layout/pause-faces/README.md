@@ -134,3 +134,48 @@ face. The phone (390x844) is unchanged.
 box to equal the viewport, and a slid plate fails that by design. Owed to
 `critic/` by the driver.
 
+
+## Built (2026-09-24): option A for the faces B cannot clear
+
+Bailey, 24 Sep 2026: *"I'll go with your recommendations full speed again
+please"*, answering question 5 left by the repair above: FFX-2 Paine at
+1280x960 and 1280x720 in chapters 5 and 6 takes **option A**, IN THIS FIGHT
+stacked under BATTLE STATS in one column on the chrome side, as row A of
+`sheet.jpg` draws it. Built as one rule, not for Paine by name, in
+`src/app/screens/pause/faceStack.ts` (the decision), `stackColumn.ts` (the
+switch, and how far the column rises) and `src/ui/common/pause-stack.css`;
+tests in `tests/unit/pause-face-stack.test.ts`. Game case: both (shared pause
+plumbing); the case that reaches it on the sheet's sizes is FFX-2 Paine.
+
+The rule: when the two columns still sit on the face (at zero margin, through
+the push-in) after the face-clear search and B's slide have done all they may,
+the columns stack. The stack rises only as far as it must to clear the
+objective (16 px of air), never into the tab strip, and never out of the
+frame. It is kept only if the framing against it clears the face with the
+pause's full 16 px margin; otherwise the two columns come back as they were.
+A slid plate (B, 8 to 16 px of air) is not this case and keeps its columns.
+
+Measured with real Escape, E, Q and H presses, GPU Chromium (RTX 5070 Ti,
+D3D11), all six chapters at 1280x720, 1280x960, 1600x900 and 2000x1012,
+against the same tree with the switch stubbed out:
+
+- **Changed:** Paine's tab in chapter 5 at 1280x960 (face clear by 17.7 px
+  through the push-in) and 1280x720 (20.6 px), and chapter 6 at 1280x960
+  (17.7 px). The fixed tabs keep her new framing, as they keep every member's.
+  In chapter 6 at 1280x720 the two columns already clear her (17.1 px), so she
+  keeps them.
+- **Unchanged:** every other tab, 177 of them: the same plate box and the same
+  chrome boxes to the pixel. The phone (390x844) and the landscape phone
+  (844x390) are unchanged in every chapter.
+- **At 1024x768 (not on the sheet), the rule reaches 17 member tabs**
+  (Tidus and Yuna in all three FFX chapters, Auron in chapters 2 and 3, and
+  FFX-2 Yuna, Rikku and Paine in chapters 4 to 6). Before, IN THIS FIGHT sat on
+  every one of those faces; now each is clear by 16 px or more
+  (`docs/screenshots/pause-faces-a/rule-1024x768-tidus.jpg`). FFX Kimahri keeps
+  B's slide there.
+- H, a fixed tab, a resize while bare or on a fixed tab, and Esc to resume
+  and reopen all come back to the stack; a resize on a fixed tab now estimates
+  from the two columns first (`faceFramer`), so it lands where the member tab
+  will.
+
+Target beside build: `docs/screenshots/pause-faces-a/sheet-target-vs-build.jpg`.

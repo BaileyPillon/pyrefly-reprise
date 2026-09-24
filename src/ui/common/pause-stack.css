@@ -1,0 +1,25 @@
+/*
+ * Pause faces, option A (Bailey, 24 Sep 2026, "I'll go with your
+ * recommendations full speed again please"; `docs/concepts/layout/pause-faces/`
+ * row A): where neither the face-clear framing nor option B's slide can clear
+ * a face (today FFX-2 Paine at 1280x960 and 1280x720, chapters 5 and 6),
+ * IN THIS FIGHT stacks under BATTLE STATS in one column on the chrome side
+ * (`src/app/screens/pause/faceStack.ts` decides, `stackColumn.ts` switches it
+ * and sets `--pu-stack-top` so the column rises only as far as it must to
+ * clear the objective).
+ *
+ * Scoped to a member tab: a fixed tab never stacks. Kept out of
+ * `pause-screen.css`, which is past the 400-line house rule.
+ * Game case: both (shared pause plumbing).
+ */
+.pause--stack .pause__body[data-tab^='member:'] {
+  top: var(--pu-stack-top, var(--pu-top-body));
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(14px, 2.6vh, 30px);
+}
+
+.pause--stack.pause--mirror .pause__body[data-tab^='member:'] {
+  flex-direction: column;
+  align-items: flex-end;
+}

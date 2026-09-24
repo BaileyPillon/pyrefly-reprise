@@ -40,6 +40,7 @@ import { framePlate, framingFor, type PlateFraming } from './plates.ts';
 import { FACE_BOXES, type Rect } from './faceClear.ts';
 import { FaceFramer } from './faceFramer.ts';
 import { slideMask } from './faceSlide.ts';
+import { chromeFor, type StackHost } from './faceStack.ts';
 import '../../../ui/common/pause-slide.css';
 
 /** The 1x plates the art fleet ships, and the width of their 2x masters. */
@@ -82,6 +83,8 @@ export interface PortraitStageOptions {
    * up (PR-0079): the face is framed clear of whatever this returns.
    */
   chrome?: () => Rect[] | null;
+  /** Option A's switch (`faceStack.ts`): the stacked column, for faces nothing else clears. */
+  stack?: StackHost;
 }
 
 export class PortraitStage {
@@ -101,12 +104,14 @@ export class PortraitStage {
   /** Re-frames every plate when the window changes shape. */
   private resize: ResizeObserver | null = null;
   private readonly chrome: (() => Rect[] | null) | undefined;
+  private readonly stack: StackHost | undefined;
   /** The face-cleared framing per plate and window size, kept across fixed tabs. */
   private readonly framer = new FaceFramer();
 
   constructor(opts: PortraitStageOptions) {
     this.root = opts.root;
     this.chrome = opts.chrome;
+    this.stack = opts.stack;
     this.reduceMotion = opts.reduceMotion;
     this.root.classList.toggle('pause__art--still', this.reduceMotion);
     if (typeof ResizeObserver === 'function') {
@@ -146,8 +151,10 @@ export class PortraitStage {
   /** The approved framing, then panned and scaled until the face clears the chrome. */
   private place(img: HTMLImageElement, id: string, w: number, h: number, live: boolean): void {
     const f = this.framingOf(id);
-    const blocks = live && this.chrome ? this.chrome() : null;
-    const { box, settled } = this.framer.frame(id, framePlate(f, w, h), f, w, h, blocks);
+    const base = framePlate(f, w, h);
+    // Option A (faceStack): the live plate picks the two columns or the stack first.
+    const chosen = live && this.chrome ? chromeFor(base, f, FACE_BOXES[id], w, h, this.chrome, this.stack) : null;
+    const { box, settled } = this.framer.frame(id, base, f, w, h, chosen?.blocks ?? null, chosen?.flat ?? null);
     if (settled && !this.reduceMotion) {
       img.classList.add('pause__plate--reframe');
       setTimeout(() => img.classList.remove('pause__plate--reframe'), REFRAME_MS + 60);

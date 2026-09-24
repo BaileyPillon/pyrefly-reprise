@@ -26,6 +26,7 @@ import {
 } from '../../../ui/common/chapterObjectives.ts';
 import { PortraitStage } from './PortraitStage.ts';
 import { memberChromeBoxes } from './chromeBoxes.ts';
+import { stackHost } from './stackColumn.ts';
 import { chromeSideForCombatant, plateIdFor } from './plates.ts';
 import { buildTabs, memberIdOf, type PauseTab } from './tabs.ts';
 import { memberColumns } from './meters.ts';
@@ -80,6 +81,7 @@ export class PauseView {
       root: art,
       reduceMotion: deps.save.settings.reduceMotion,
       chrome: () => memberChromeBoxes(root, art),
+      stack: stackHost(root),
     });
     this.tabs = buildTabs(deps.state());
   }
@@ -335,6 +337,8 @@ export class PauseView {
   /** `H`: every line goes, the painting stays. */
   setBare(bare: boolean): void {
     this.root.classList.toggle('pause--bare', bare);
+    // The chrome is measurable again: re-decide the stack (option A) against it.
+    if (!bare) this.portrait.layout();
   }
 
   get mirrored(): boolean {

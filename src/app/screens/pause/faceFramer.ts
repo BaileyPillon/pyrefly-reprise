@@ -17,12 +17,16 @@
  *
  * The framing itself is `faceSlide.frameFace`: `faceClear`'s search, then
  * option B (slide under the falloff) when that search cannot clear the face.
+ * The estimate starts from the two columns side by side (option A's stack is
+ * a per-size decision, `faceStack.ts`), and falls back to the last stacked
+ * column only where the two columns would cover the face.
  *
  * Game case: both (shared pause plumbing). Pure: no DOM.
  */
 
 import { FACE_BOXES, type Rect } from './faceClear.ts';
 import { frameFace, type FramedBox } from './faceSlide.ts';
+import { clearsFace, coversFace } from './faceStack.ts';
 import type { PlateBox, PlateFraming } from './plates.ts';
 
 interface Measured {
@@ -76,18 +80,30 @@ export class FaceFramer {
   private readonly cleared = new Map<string, FramedBox>();
   /** Keys whose cached framing is an estimate, not measured chrome. */
   private readonly estimated = new Set<string>();
-  /** The last member chrome each plate was framed against. */
+  /** The last member chrome each plate was measured with, two columns side by side. */
   private readonly lastChrome = new Map<string, Measured>();
+  /** The last stacked column (option A) each plate was framed against, if any. */
+  private readonly lastStack = new Map<string, Measured>();
 
   /**
    * @param blocks the member chrome as laid out now, or `null` when none is up.
+   * @param flat the two columns side by side as measured now, when `blocks` is the stack.
    */
-  frame(id: string, base: PlateBox, f: PlateFraming, w: number, h: number, blocks: readonly Rect[] | null): Framed {
+  frame(
+    id: string,
+    base: PlateBox,
+    f: PlateFraming,
+    w: number,
+    h: number,
+    blocks: readonly Rect[] | null,
+    flat: readonly Rect[] | null = blocks,
+  ): Framed {
     const key = `${id}@${Math.round(w)}x${Math.round(h)}`;
     const face = FACE_BOXES[id];
     if (blocks) {
       const box = frameFace(base, f, face, w, h, blocks);
-      this.lastChrome.set(id, { w, h, blocks });
+      this.lastChrome.set(id, { w, h, blocks: flat ?? blocks });
+      if (flat && flat !== blocks) this.lastStack.set(id, { w, h, blocks });
       const prev = this.cleared.get(key);
       const wasEstimate = this.estimated.delete(key);
       this.cleared.set(key, box);
@@ -97,7 +113,14 @@ export class FaceFramer {
     if (cached) return { box: cached, settled: false };
     const seen = this.lastChrome.get(id);
     if (!seen) return { box: base, settled: false };
-    const box = frameFace(base, f, face, w, h, estimateBlocks(seen.blocks, seen.w, seen.h, w, h));
+    const est = estimateBlocks(seen.blocks, seen.w, seen.h, w, h);
+    let box = frameFace(base, f, face, w, h, est);
+    const stack = this.lastStack.get(id);
+    if (stack && face && coversFace(box, face, est)) {
+      const stackEst = estimateBlocks(stack.blocks, stack.w, stack.h, w, h);
+      const stacked = frameFace(base, f, face, w, h, stackEst);
+      if (clearsFace(stacked, face, w, h, stackEst)) box = stacked;
+    }
     this.cleared.set(key, box);
     this.estimated.add(key);
     return { box, settled: false };
