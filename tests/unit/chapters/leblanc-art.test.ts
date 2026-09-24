@@ -24,6 +24,13 @@
  * side. It fails before the fix (every `ffx2-*` id has no folder) and passes
  * after (every id matches an installed one).
  *
+ * **Update, 2026-09-24 (D-047):** Dr. Goon and Fem-Goon shipped their
+ * approved painted idles (`docs/target/decisions.json` D-047; installed as
+ * `public/art/characters/ffx2-{dr,fem}-goon/idle.png`, locked in
+ * `approved-hashes.json`'s `chapter:leblanc-goons:2026-09-24` set). The
+ * second test below used to pin the opposite — that they fell back to the
+ * procedural placeholder — and now pins that both resolve real installed art.
+ *
  * **Game case: FFX-2 only** [AGENTS.md rule 14] — Leblanc, Ormi and Logos are
  * FFX-2-only characters; this is not shared plumbing.
  */
@@ -70,7 +77,7 @@ describe('Leblanc Syndicate — painted art resolves in every act', () => {
 
       for (const c of Object.values(engine.state().combatants)) {
         if (c.side !== 'enemy') continue;
-        if (!PAINTED_ENEMY_IDS.has(c.id)) continue; // Dr. Goon / Fem-Goon: no painted art shipped, out of scope.
+        if (!PAINTED_ENEMY_IDS.has(c.id)) continue; // Dr. Goon / Fem-Goon: checked separately below (D-047).
         seen.add(c.id);
 
         const artId = artIdFor(c);
@@ -83,15 +90,20 @@ describe('Leblanc Syndicate — painted art resolves in every act', () => {
     expect([...seen].sort()).toEqual([...PAINTED_ENEMY_IDS].sort());
   });
 
-  it('Dr. Goon and Fem-Goon are unaffected — no art shipped for them, procedural placeholder stands', () => {
+  it('Dr. Goon and Fem-Goon resolve their approved idle art (D-047)', () => {
     const engine = new FFX2Engine(engineOptions());
     const group = data.ENEMY_GROUPS_BY_ID[LEBLANC_ACT_I];
     if (!group) throw new Error(LEBLANC_ACT_I);
     engine.init({ game: 'ffx2', party: chateauBuild, enemies: group, triggers: [], seed: 7, condition: 'normal', canEscape: false });
+    const seen = new Set<string>();
     for (const c of Object.values(engine.state().combatants)) {
       if (c.id !== 'dr-goon' && c.id !== 'fem-goon') continue;
+      seen.add(c.id);
       const artId = artIdFor(c);
-      expect(hasInstalledIdleArt(artId)).toBe(false);
+      expect(hasInstalledIdleArt(artId), `${c.id} resolved art id "${artId}" has no installed idle.png`).toBe(true);
     }
+    // Sanity: both goons were actually present and checked, not zero of them
+    // because a combatant id changed out from under this test.
+    expect(seen).toEqual(new Set(['dr-goon', 'fem-goon']));
   });
 });

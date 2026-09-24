@@ -19,17 +19,23 @@
  * that never change `spriteKey` between forms), for all three chapters the
  * verifiers flagged together, and gives Chapter 7 and 8 their own coverage.
  *
- * Two combatants are enemies-in-name-only with no painted art **by design**,
- * not by omission, and are excluded rather than silently passed:
+ * One combatant is an enemy-in-name-only with no painted art **by design**,
+ * not by omission, and is excluded rather than silently passed:
  * - **Cid** (`evrae-airship`) — `flags.untargetable && flags.hideHpBar`; the
  *   scene never draws him at all (`BattleScreenAirship.ts` calls him out by
  *   name: "Cid is not drawn... with no painting").
- * - **Dr. Goon / Fem-Goon** (`ffx2-leblanc`, Act I) — no unique painting has
- *   ever been commissioned for them (`leblanc-art.test.ts`'s own
- *   `PAINTED_ENEMY_IDS` allowlist already excludes them as "out of scope").
  *
- * A combatant id showing up here that is *not* one of those two and *not* in
- * the manifest is a real regression, exactly like Seymour's was.
+ * Dr. Goon and Fem-Goon (`ffx2-leblanc`, Act I) were this kind of exception
+ * until Bailey picked their painted idles (decision D-047,
+ * `docs/target/decisions.json`): option C for each, installed 2026-09-24 as
+ * `public/art/characters/ffx2-{dr,fem}-goon/idle.png` and locked in
+ * `approved-hashes.json`'s `chapter:leblanc-goons:2026-09-24` set. Their
+ * `spriteKey`s (`ffx2-dr-goon`, `ffx2-fem-goon`) now resolve real manifest
+ * subjects, so they go through the same check as any other painted enemy
+ * below, not the exception branch.
+ *
+ * A combatant id showing up here that is *not* Cid and *not* in the manifest
+ * is a real regression, exactly like Seymour's was.
  *
  * Game case: **both** — this is shared plumbing (a data-integrity check
  * across an FFX-2 chapter and two FFX chapters), not a gameplay rule specific
@@ -56,8 +62,12 @@ const manifest = JSON.parse(
   readFileSync(resolve(ROOT, 'public/art/manifest.json'), 'utf8'),
 ) as Manifest;
 
-/** Enemies (and parts) with no painted art *by design* — see file header. */
-const NO_ART_BY_DESIGN = new Set(['cid', 'dr-goon', 'fem-goon']);
+/**
+ * Enemies (and parts) with no painted art *by design* — see file header.
+ * Dr. Goon and Fem-Goon left this set 2026-09-24 (D-047): they now ship
+ * approved idle art and resolve like any other painted enemy.
+ */
+const NO_ART_BY_DESIGN = new Set(['cid']);
 
 function allEnemyDefs(group: EnemyGroupDef): EnemyDef[] {
   return [...group.enemies, ...(group.parts ?? [])];
