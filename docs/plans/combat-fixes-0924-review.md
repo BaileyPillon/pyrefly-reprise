@@ -107,8 +107,12 @@ Chapter III today, measured, so the answer can be weighed.
 - `tests/unit/ffx2-magic-never-misses.test.ts` (a): every party-side hostile magical row and every
   enemy magical row hits at 100 % against EVA Up x10 with a blinded caster; Enchanted Ammo still
   rolls; a physical Attack still rolls; a numeric `accuracy` is still the flat override; an engine
-  run of Chapters IV-VI (20 seeds each) shows zero `evaded` misses from a magical action. Three of
-  its cases fail on main's `hit.ts` (both 100 % sweeps and the Chapter V run).
+  run of Chapters IV-VI (20 seeds each) shows zero `evaded` misses from a magical action; and the
+  set of magical rows that opt back in with `canMiss: true` is pinned to Enchanted Ammo alone.
+  Against main: with only `hit.ts` reverted, three cases fail (both 100 % sweeps and the Chapter V
+  run); with main's `hit.ts` **and** `gunner.ts`, five fail (those three, the Enchanted Ammo check
+  and the opt-in pin, since main's Enchanted Ammo row has no `canMiss`). Corrected in the repair
+  pass: the first version of this section said three without naming which files were reverted.
 - `tests/unit/chapters/seymour-flux-mortibsorption.test.ts` (b): drain Seymour across 75 % and
   50 % by killing the Mortiorchis; Protect and Reflect land from `counter` events; his next Flare
   bounces off him instead of hitting him (seeds 1-5); a Threatened Seymour does not counter; a
@@ -155,7 +159,23 @@ What the numbers say:
   `canMiss: false`; the Bevelle and Chateau builds carry no rolling party magic), so their event
   logs are **byte-identical** (20 seeds, intended line, hashed before and after), and so are
   Chapters II and III. On the Active path at 1.5 s a menu (the old golden's arm, not the default
-  mode) Chapter V goes from 2/10 to 0/10.
+  mode) Chapter V goes from 2/10 to 0/10; over 40 seeds (repair pass) it goes 5/40 -> 4/40 at
+  1.5 s a menu and 27/40 -> 25/40 at 750 ms.
+- **The 191 -> 187 is within seed noise.** On a second, independent block (seeds 201-400, same
+  line, repair pass) Chapter V goes **189 -> 191**; over the 400 seeds, 380 -> 378.
+- **Inside the chain, the Head link's long-stall tail shrinks** (measured in the repair pass; the
+  first version of this plan did not mention it). Head link, intended line, per run that reached it:
+
+  | Seeds | Party actions, median before -> after | p90 before -> after | Party KOs on the Head | Mors Certa casts |
+  |---|---:|---:|---:|---:|
+  | 1-200 | 60 -> 59 | **133 -> 72** | 37 -> 5 | 561 -> 147 |
+  | 201-400 | 59 -> 59 | **137 -> 84** | 30 -> 11 | 570 -> 219 |
+
+  Fought **on its own** from a fresh Farplane build (200 seeds), the Head gets slightly *harder*:
+  200 -> 199 wins, median party actions 100 -> 117, p90 158 -> 163, Mors Certa 1,096 -> 1,332. So
+  the in-chain effect comes from the state the chain carries into the Head (the earlier links now
+  resolve differently), not from the Head's own rows; the mechanism is not pinned further here.
+  The typical Head fight is unchanged; the rare very long one got rarer.
 - **Chapter XI (Fallen Aeons, registered, unlisted)** re-benched with its own
   `fallen-aeons-bench.test.ts`: every row identical to `docs/plans/fallen-aeons-bench.md` except
   "kill Mindy first with Drain", still 0/200 (Drain now always lands on Mindy's Eva 76; ticks
@@ -197,6 +217,20 @@ What the numbers say:
   `hitPercent` reads as a flat 0 % (never hits). The engine does not resolve those rows today (it
   uses its own fallback ids, `pallida-mors`, `force-rain` ...), so nothing plays differently; if they
   were ever wired, every one of them would miss. Recorded, not changed (outside this brief).
+- **Hard rule 5's guard direction.** `hit.ts` tests `canMiss !== true` for magical rows: an unset
+  field hits (the safe direction rule 5 asks for), and only an explicit `canMiss: true` rolls. The
+  rule's wording ("Guards test `!== false`, never `=== true`") is written for the opposite case,
+  where an unset field would silently roll. So that the opt-in can never be silent, the set of
+  magical rows carrying `canMiss: true` is pinned in `ffx2-magic-never-misses.test.ts` (today: only
+  the sourced Enchanted Ammo); a new one fails the test until its source is named.
+- **Dark Knight Darkness still rolls against evasion (pre-existing, not changed).** `x2-dark-knight-darkness`
+  (`damageType: 'other'`) carries `canMiss: true`, and `research/ffx2-fallen-aeons.md` §4.2 and §5
+  say Darkness "cannot be evaded" / "does not miss". Fix (a) does not touch it (it is not magical);
+  in the Chapter V intended line it is evaded 261 times before and 237 after over 200 seeds (re-measured in the repair pass).
+  This is the Fallen Aeons track's open item **FA-G6**: its review found that claim unsourced ("None
+  of the five wiki pages says so", `docs/plans/chapter-fallen-aeons-review.md`), and FA7 asks for two
+  sources before an FFX-2 data change that touches Chapters 4 to 6; there are none today. Left as it
+  is (rule 6); it belongs to that question, not to this branch.
 - `tests/unit/ffx2-atb-golden.test.ts` re-pins `CH5_D0` and `CH5_D1500` with the reason and the
   proof in its doc comment: with the roll still drawn and only the miss ignored, exactly the seeds
   with no evaded magic reproduce the old hashes. `CH4_*` unchanged.

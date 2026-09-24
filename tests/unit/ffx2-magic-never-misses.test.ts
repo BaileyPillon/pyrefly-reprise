@@ -105,6 +105,14 @@ describe('(a) what still rolls', () => {
     expect(hitPercent(worstAttacker(girl), dodgiest(foe), ammo)).toBeLessThan(100);
   });
 
+  // Hard rule 5 wants magic to hit unless something says otherwise, and `hit.ts` lets a magical row
+  // opt back in with `canMiss: true`. That opt-in must never be silent: this pins the whole set, so a
+  // new row that sets it fails here until its research source is named (verifier, 2026-09-24).
+  it('only the sourced rows opt magic back into the roll (the whole set, pinned)', () => {
+    const optedIn = magicalRows().filter((a) => a.canMiss === true).map((a) => a.id).sort();
+    expect(optedIn).toEqual(['x2-gunner-enchanted-ammo']); // ffx2-combat-core §2.9 Gunner: Accuracy `Stat`
+  });
+
   it('a physical Attack still races', () => {
     const attack = data.ABILITIES['x2-gunner-attack']!;
     expect(attack.damageType).toBe('physical');

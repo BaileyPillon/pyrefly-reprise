@@ -13,6 +13,9 @@
  * Darkness: "physical attacks frequently miss"), and the §2.9 magic tables carry no Accuracy
  * column. The one magic-formula row §2.9 marks `Stat` (Gunner's Enchanted Ammo) opts back in with
  * `canMiss: true` on its data row. A numeric `accuracy` still wins: §2.9 calls it "a flat override".
+ * The guard reads `canMiss !== true`, so an unset field on a magical row **hits** (rule 5's safe
+ * direction); the opt-in set is pinned in `tests/unit/ffx2-magic-never-misses.test.ts`, so a new
+ * magical row that sets `canMiss: true` fails that test until its source is named.
  * Preflight: `docs/plans/combat-fixes-0924-review.md`.
  */
 
