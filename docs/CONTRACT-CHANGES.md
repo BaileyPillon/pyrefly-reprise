@@ -6,6 +6,27 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — `encounters.ts`: Chapter XII (Seymour Omnis) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX only** [AGENTS.md hard rule 14]: Seymour Omnis in the Garden of Pain inside Sin
+(`research/ffx-seymour-omnis.md` §0.3); the listing itself is shared plumbing (both). Bailey,
+2026-09-25: "all recommendations please" on the ship order "Omnis (XII, FFX) first, then Isaaru"
+(D-162). The ring order (O-7) and the reset cycle (O-11) still play as GameFAQs' cycle labelled
+"our estimate" until Bailey confirms both (B8, D-145).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `SEYMOUR_OMNIS_SHIPPED` and `CHAPTER_IDS`
+gains `'seymour-omnis'`, both after Chapter IX and before Chapter XIII, so chapter select shows the
+card last among the built FFX chapters (I, II, III, VIII, IX, XII), before the COMING Macalania card.
+`ChapterId` and `getChapter` are unchanged (the id was already registered; its union's three
+Chapter VII to IX lines were joined to keep the file at 399 lines); `UNLISTED_CHAPTERS` keeps Natus
+and the Fallen Aeons. Alongside: `CHAPTER_META` gains `SEYMOUR_OMNIS_META` (`UNLISTED_CHAPTER_META`
+is empty again), and `src/story/registry.ts` gains the `'seymour-omnis'` key (its scripts, its nine
+AI-emitted callouts, no seam; two comments were shortened to keep it at 399 lines). Every
+chapter-generic consumer now sees eleven chapters, ten of them playable: Auron's briefing counts
+"Ten fights" by itself (D-136), and `arcCleared('ffx')` also needs Chapter XII (`ARC_FINALE.ffx`
+stays `braskas-final-aeon`: Omnis comes before Dream's End in the story). No save migration: saves
+key chapters by id string.
+
 ## 2026-09-25 — Chapter XII ship layer: `SpeakerId` gains `'seymour-omnis'`
 
 **FFX only** [AGENTS.md hard rule 14]: Seymour's last form, inside Sin

@@ -19,9 +19,10 @@
  *   Chapter I's `boss-seymour`; the scene cue is `scene-dreams-end`, the score's one cue for the
  *   inside of Sin (Chapter III's dungeon, the same one), also a stand-in. FFX cues only.
  *
- * **Unlisted.** B8 holds the listing until Bailey confirms the ring order (O-7) and the reset
- * cycle (O-11): the result sits in `UNLISTED_CHAPTERS` (`./chapters-unlisted.ts`), reached by id
- * (`getChapter`, `window.__pyrefly.gotoChapter`), not shown on chapter select.
+ * **Listed** 2026-09-25 (ship order D-162, "all recommendations please"): `./encounters.ts` puts
+ * the result in `CHAPTERS` after Chapter IX, so chapter select shows it in the FFX group. The ring
+ * order (O-7) and the reset cycle (O-11) still play as GameFAQs' cycle labelled "our estimate"
+ * until Bailey confirms both (B8, D-145).
  */
 
 import type { Chapter } from './encounters.ts';

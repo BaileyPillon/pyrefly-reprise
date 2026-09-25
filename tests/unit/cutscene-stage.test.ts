@@ -68,6 +68,10 @@ describe('which chapters the stage changes (measured, pinned)', () => {
       '9 yojimbo-cavern post': ['show ginnem', 'fx sending-dance @yuna', 'fx pyreflies-rising @ginnem', 'hide ginnem'],
       // Chapter XIII (FFX-2 only, listed 2026-09-25): Trema answers Yuna and fades (research ffx2-trema.md §2 step 4).
       '13 ffx2-trema post': ['show trema', 'hide trema'],
+      // Chapter XII (FFX only, listed 2026-09-25): Seymour Omnis stands at the top of the steps,
+      // then Yuna sends him in the post scene (docs/plans/omnis-story-draft.md beat 5).
+      '12 seymour-omnis pre': ['show seymour-omnis'],
+      '12 seymour-omnis post': ['show seymour-omnis', 'fx sending-dance @yuna', 'fx pyreflies-rising @seymour-omnis', 'hide seymour-omnis'],
       // Scenes that already called these keys, and now draw them instead of
       // a 90 ms flash. No figure appears in any of them.
       '1 seymour-flux post': ['fx sending-dance @yuna', 'fx pyreflies-rising'],
@@ -78,11 +82,15 @@ describe('which chapters the stage changes (measured, pinned)', () => {
     });
   });
 
-  it('stands only Chapters IX and XIII\'s own figures, so no other chapter\'s showActor puts anyone on stage', () => {
+  it('stands only Chapters IX, XII and XIII\'s own figures, so no other chapter\'s showActor puts anyone on stage', () => {
     // Trema (FFX-2 only, Chapter XIII, listed 2026-09-25) stands in his own post scene only.
-    // Plus Seymour Omnis (FFX only, Chapter XII, unlisted): his pre and post scenes; no listed chapter shows him.
+    // Seymour Omnis (FFX only, Chapter XII, listed 2026-09-25): his pre and post scenes, no other chapter's.
     expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis']);
-    const own: Record<string, string[]> = { 'yojimbo-cavern': ['ginnem'], 'ffx2-trema': ['trema'] };
+    const own: Record<string, string[]> = {
+      'yojimbo-cavern': ['ginnem'],
+      'ffx2-trema': ['trema'],
+      'seymour-omnis': ['seymour-omnis', 'seymour-omnis'],
+    };
     for (const c of CHAPTERS) {
       const shown = [...figuresIn(c.scriptsRef?.pre ?? []), ...figuresIn(c.scriptsRef?.post ?? [])];
       expect(shown, c.id).toEqual(own[c.id] ?? []);
