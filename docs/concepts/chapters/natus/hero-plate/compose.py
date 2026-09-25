@@ -30,7 +30,14 @@ def natus_with_ring(y0, y1, ring_alpha):
     canvas = Image.new('RGBA', (1000, fig.height + 2 * oy), (0, 0, 0, 0))
     canvas.alpha_composite(ring, (ox + 346 - 487, oy + 469 - 487))
     canvas.alpha_composite(fig, (ox, oy))
-    return canvas.crop((0, oy + y0, 1000, oy + y1)), (ox + 350, 240 - y0)
+    out = canvas.crop((0, oy + y0, 1000, oy + y1))
+    # Fade the cut edge over its last 180 px, so the figure dissolves instead of ending in a line.
+    fade = Image.new('L', out.size, 255)
+    fd = ImageDraw.Draw(fade)
+    for i in range(180):
+        fd.line([(0, out.height - 1 - i), (out.width, out.height - 1 - i)], fill=round(255 * i / 180))
+    out.putalpha(ImageChops.multiply(out.getchannel('A'), fade))
+    return out, (ox + 350, 240 - y0)
 
 
 def place(fig, head, scale, at):
