@@ -18,7 +18,7 @@
 import type { Chapter } from './encounters.ts';
 import { SEYMOUR_NATUS } from './chapter-seymour-natus.ts';
 import { FFX2_FALLEN_AEONS } from './chapter-ffx2-fallen-aeons.ts';
-import { FFX2_DEN_OF_WOE } from './chapter-ffx2-den-of-woe.ts';
+import { FFX2_DEN_OF_WOE_SHIPPED } from './chapter-den-of-woe-ship.ts';
 import { SEYMOUR_OMNIS_SHIPPED } from './chapter-omnis-ship.ts';
 
 /**
@@ -26,13 +26,14 @@ import { SEYMOUR_OMNIS_SHIPPED } from './chapter-omnis-ship.ts';
  * Chapter X, Seymour Natus (FFX only) — `./chapter-seymour-natus.ts`.
  * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts`.
  * Chapter XIII, Trema, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter IX).
- * Chapter XV, The Den of Woe (FFX-2 only) — `./chapter-ffx2-den-of-woe.ts`.
+ * Chapter XV, The Den of Woe (FFX-2 only) — `./chapter-ffx2-den-of-woe.ts` (the fight), with the ship
+ * layer (scene, story; `./chapter-den-of-woe-ship.ts`) laid over it. Still unlisted.
  * Chapter XII, Seymour Omnis (FFX only) — `./chapter-seymour-omnis.ts` (the fight), with the ship layer
  * (scene, story, music; `./chapter-omnis-ship.ts`) laid over it. Unlisted until B8 is confirmed.
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [
   SEYMOUR_NATUS,
   FFX2_FALLEN_AEONS,
-  FFX2_DEN_OF_WOE,
+  FFX2_DEN_OF_WOE_SHIPPED,
   SEYMOUR_OMNIS_SHIPPED,
 ] as const;

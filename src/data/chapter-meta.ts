@@ -25,6 +25,7 @@ import { EVRAE_META } from './chapter-meta-evrae.ts';
 import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
 import { TREMA_META } from './chapter-meta-trema.ts';
 import { SEYMOUR_OMNIS_META } from './chapter-meta-seymour-omnis.ts';
+import { DEN_OF_WOE_META } from './chapter-meta-den-of-woe.ts';
 
 /**
  * The pause screen's objective rule vocabulary. Each rule is a pure
@@ -85,7 +86,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV';
   title: string;
   subtitle: string;
   location: string;
@@ -376,7 +377,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
  * id, and `CHAPTER_META` stays one-to-one with the listed chapters. Listing a
  * chapter moves its record from here into `CHAPTER_META`.
  */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [SEYMOUR_OMNIS_META] as const; // Chapter XII (FFX)
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [SEYMOUR_OMNIS_META, DEN_OF_WOE_META] as const; // XII (FFX), XV (FFX-2)
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

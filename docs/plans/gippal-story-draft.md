@@ -1,6 +1,8 @@
 # DRAFT for Bailey — Chapter XV story beats: the Den of Woe, the three shades (FFX-2 only)
 
-**Status: a draft to read and react to. Nothing here is built.** The chapter runs today on a
+**Status: BUILT 2026-09-25 as drafted** (`src/story/scripts/ffx2-den-of-woe.ts`, unlisted chapter; see "As built" at the end). The original status line follows.
+
+**Status (at drafting): a draft to read and react to. Nothing here is built.** The chapter runs today on a
 placeholder story layer (the battle opens, results show, no lines; see
 `src/data/chapter-ffx2-den-of-woe.ts`). No file under `src/story` was written. Pick, cut or rewrite
 lines before anyone scripts them (AGENTS.md hard rules 9 and 10).
@@ -111,3 +113,11 @@ The one sincere exchange of the chapter (bible §2.2: exactly one, under 4 lines
    his emit needs the same once-flag.
 4. **Line 13's "two years"** is the research's timing (§1.1, the massacre two years before
    FFX-2, `[single source]` on the Ultimania's detail); cut it if you would rather not date it.
+
+## As built (2026-09-25, ship layer, FFX-2 only)
+
+- Every line above is scripted unchanged except one: Rikku's link-1 entrance reads "That's Baralai! Isn't it...?", the ellipsis moved because the house lint refuses a space before an ellipsis.
+- Lines 1 to 4 are Yuna's `narrate` (the Trema precedent): 1 and 2 over black, 3 and 4 as the cave comes up. `narrate` has no portrait slot, so **the Shuyin portrait is not shown** (a `say` with a borrowed portrait would print Yuna's name over Shuyin's face). Open for Bailey: show it (needs a small cutscene feature) or leave it.
+- Baralai's count-at-7 callout is emitted by his AI once, the first time the count reaches 7 (question 3's once-flag). Measured: it plays in 3 of 12 Baralai fights on the intended line (he often falls first).
+- "The last shade falls" (Paine's line) opens the post: Nooj's KO ends the battle, so no mid trigger can play it before results.
+- Open questions 1, 2 and 4 are still Bailey's; the build follows the draft as written.

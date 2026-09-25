@@ -6,6 +6,19 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XV ship layer (no contract file changes)
+
+**FFX-2 only** [AGENTS.md hard rule 14]: the Den of Woe's scene, story, pause card, guide and tactic
+(`src/data/chapter-den-of-woe-ship.ts` lays them over the engine track's record; still unlisted). No
+contract file changes: the story uses only existing speakers (`yuna-x2`, `rikku-x2`, `paine`, and
+`narrate`), so `src/story/dsl.ts` is untouched. Recorded because they are shared files:
+`ChapterMeta.numeral` (`src/data/chapter-meta.ts`, not a contract file) gains `'XIV' | 'XV'`, additive
+(XIV for Isaaru's branch); `UNLISTED_CHAPTER_META` gains `DEN_OF_WOE_META`; `src/scenes/index.ts`
+registers `den-of-woe` and compacts the Evrae entry to stay at 399 lines. Inert elsewhere: the
+shades' `spriteKey`s now name their installed paintings (`gippal-shade`, `baralai-shade`,
+`nooj-shade`), and Baralai's AI emits one `script-trigger`, `baralai-count-seven`, the first time his
+counter reaches 7 (no RNG draw, no decision changed; the bench prints the same rows).
+
 ## 2026-09-25 — Chapter XII ship layer: `SpeakerId` gains `'seymour-omnis'`
 
 **FFX only** [AGENTS.md hard rule 14]: Seymour's last form, inside Sin

@@ -48,7 +48,7 @@ const DEN_CUE = [{ at: 'start' as const, track: 'boss-shuyin' as const, fadeMs: 
 export const shadeGippal: EnemyDef = {
   id: 'shade-gippal',
   name: 'Gippal',
-  spriteKey: 'shade-gippal', // no painting yet (O-1): the stage's placeholder draws it
+  spriteKey: 'gippal-shade', // the installed painting, `characters/gippal-shade/` (O-1 B)
   slot: 0,
   stats: {
     hp: 14800, // [verified: 5 sources]
@@ -72,7 +72,7 @@ export const shadeGippal: EnemyDef = {
   // Fractional: SinirothX + Split_Infinity (`%DMG`) [verified: 2 sources]; the wiki
   // infobox has no fractional row (plan Review item 4).
   immunityFlags: ['boss', 'immune-to-percentage-damage'],
-  forms: [{ name: 'Gippal', spriteKey: 'shade-gippal', hp: 14800 }],
+  forms: [{ name: 'Gippal', spriteKey: 'gippal-shade', hp: 14800 }],
   aiScriptId: 'shade-gippal',
   rewards: {
     ap: 5, // EXP / AP / Gil / Pilfer gil [verified: 3 sources]
@@ -103,7 +103,7 @@ export const shadeGippal: EnemyDef = {
 export const shadeBaralai: EnemyDef = {
   id: 'shade-baralai',
   name: 'Baralai',
-  spriteKey: 'shade-baralai', // no painting yet (O-2)
+  spriteKey: 'baralai-shade', // the installed painting, `characters/baralai-shade/` (O-1 B)
   slot: 0,
   stats: {
     hp: 12220, // G-1: 12,220 [verified: 4 sources]; the wiki's 1,220 drops a digit
@@ -125,7 +125,7 @@ export const shadeBaralai: EnemyDef = {
   affinities: { gravity: 'immune' },
   immunities: SHADE_IMMUNITIES,
   immunityFlags: ['boss', 'immune-to-percentage-damage'],
-  forms: [{ name: 'Baralai', spriteKey: 'shade-baralai', hp: 12220 }],
+  forms: [{ name: 'Baralai', spriteKey: 'baralai-shade', hp: 12220 }],
   aiScriptId: 'shade-baralai',
   rewards: {
     ap: 5, // EXP / AP / Gil / Pilfer gil [verified: 2 sources; 5 for HP, MP, EXP, AP, gil]
@@ -155,7 +155,7 @@ export const shadeBaralai: EnemyDef = {
 export const shadeNooj: EnemyDef = {
   id: 'shade-nooj',
   name: 'Nooj',
-  spriteKey: 'shade-nooj', // no billboard yet (O-2); the D-043 portrait is a speaker portrait
+  spriteKey: 'nooj-shade', // the installed idle, `characters/nooj-shade/` (D-182: every pose on the idle)
   slot: 0,
   stats: {
     hp: 23800, // [verified: 5 sources]
@@ -177,7 +177,7 @@ export const shadeNooj: EnemyDef = {
   affinities: { gravity: 'immune' },
   immunities: SHADE_IMMUNITIES,
   immunityFlags: ['boss', 'immune-to-percentage-damage'],
-  forms: [{ name: 'Nooj', spriteKey: 'shade-nooj', hp: 23800 }],
+  forms: [{ name: 'Nooj', spriteKey: 'nooj-shade', hp: 23800 }],
   aiScriptId: 'shade-nooj',
   rewards: {
     ap: 10,

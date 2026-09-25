@@ -31,6 +31,7 @@ import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-ai
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
 import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.ts';
+import { buildDenOfWoeScene, DEN_OF_WOE_SLOTS } from './den-of-woe.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -214,13 +215,8 @@ SCENES.set('macalania-temple', {
  * is the unreachable demo diorama, as for Leblanc above
  * [docs/handoff/chapter-evrae-scene.md §6].
  */
-SCENES.set('evrae-airship-deck', {
-  key: 'evrae-airship-deck',
-  title: 'The deck of the Fahrenheit',
-  build: buildDemoScene,
-  slots: EVRAE_AIRSHIP_DECK_SLOTS,
-  placeholder: false,
-});
+SCENES.set('evrae-airship-deck', { key: 'evrae-airship-deck', title: 'The deck of the Fahrenheit',
+  build: buildDemoScene, slots: EVRAE_AIRSHIP_DECK_SLOTS, placeholder: false });
 /** The Cavern of the Stolen Fayth (Chapter IX, FFX only): real, `build` unreachable as for Leblanc [cavern-stolen-fayth.ts]. */
 SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern of the Stolen Fayth — the last chamber',
   build: buildDemoScene, slots: CAVERN_STOLEN_FAYTH_SLOTS, placeholder: false });
@@ -230,6 +226,9 @@ SCENES.set('via-infinito', { key: 'via-infinito', title: 'Via Infinito — Clois
 /** The Garden of Pain inside Sin (Chapter XII, FFX only): real, `build` unreachable as for Leblanc [garden-of-pain.ts]. */
 SCENES.set('garden-of-pain', { key: 'garden-of-pain', title: 'Inside Sin — the Garden of Pain',
   build: buildDemoScene, slots: GARDEN_OF_PAIN_SLOTS, placeholder: false });
+/** The Den of Woe (Chapter XV, FFX-2 only): real, `build` unreachable as for Leblanc [den-of-woe.ts]. */
+SCENES.set('den-of-woe', { key: 'den-of-woe', title: 'The Den of Woe',
+  build: buildDemoScene, slots: DEN_OF_WOE_SLOTS, placeholder: false });
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -273,6 +272,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
   'via-infinito': buildCloister100Scene,
   'garden-of-pain': buildGardenOfPainScene,
+  'den-of-woe': buildDenOfWoeScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */

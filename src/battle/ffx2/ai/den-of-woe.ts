@@ -21,11 +21,12 @@
  *   the Vegnagun Head precedent), and +1 per Regen payout that heals him ("or when
  *   his HP changes"); his own Absorb's drain is his own action and is not counted.
  *
- * **No `script-trigger` is emitted.** An AI-emitted name must be on
- * `src/story/registry.ts#AI_EMITTED_TRIGGERS` and resolve to a script, and the
- * story layer is a draft for Bailey (`docs/plans/gippal-story-draft.md`). GP15's
- * callouts can hang off `mid` triggers instead (`ability-used` on Mortar and
- * Lightfall, `hp-below` on Gippal), or be emitted here once the script exists.
+ * **One `script-trigger` is emitted**, {@link BARALAI_COUNT_SEVEN}, the first time
+ * Baralai's counter reaches 7 (GP15: Rikku's "He's counting us!" callout in
+ * `src/story/scripts/ffx2-den-of-woe.ts`; the draft's question 3 asks for a
+ * once-flag, because the count reaches 7 again after every Drill Shot). It draws no
+ * RNG and changes no decision. GP15's other callouts hang off `mid` triggers
+ * (`ability-used` on Mortar and Lightfall, `hp-below` on Gippal).
  */
 
 import type { Command } from '../../common/types.ts';
@@ -52,7 +53,21 @@ export const MEM = {
   hits: 'hits',
   lastAttacker: 'lastAttacker',
   lightfall: 'lightfallFired',
+  countCalled: 'countSevenCalled',
 } as const;
+
+/** The `script-trigger` name emitted once, the first time Baralai's count reaches 7 (GP15). */
+export const BARALAI_COUNT_SEVEN = 'baralai-count-seven';
+
+/** +1 on Baralai's counter; at 7 for the first time, the callout's trigger (presentation only). */
+function countOne(ctx: AiContext): void {
+  const n = mem(ctx.self, MEM.hits) + 1;
+  setMem(ctx.self, MEM.hits, n);
+  if (n === DRILL_SHOT_AT - 1 && !mem(ctx.self, MEM.countCalled)) {
+    setMem(ctx.self, MEM.countCalled, 1);
+    ctx.emit({ type: 'script-trigger', name: BARALAI_COUNT_SEVEN, payload: { who: ctx.self.id } });
+  }
+}
 
 /** Strictly below a third of max HP. */
 export function belowThird(unit: Ffx2Unit): boolean {
@@ -166,11 +181,11 @@ export const shadeBaralaiScript: AiScript = {
   },
   onDamaged(ctx, sourceId, amount) {
     if (!(amount > 0)) return;
-    setMem(ctx.self, MEM.hits, mem(ctx.self, MEM.hits) + 1);
+    countOne(ctx);
     if (sourceId) setMem(ctx.self, MEM.lastAttacker, sourceId);
   },
   onRegen(ctx) {
-    setMem(ctx.self, MEM.hits, mem(ctx.self, MEM.hits) + 1);
+    countOne(ctx);
   },
 };
 

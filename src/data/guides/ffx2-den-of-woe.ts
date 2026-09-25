@@ -139,6 +139,8 @@ export const FFX2_DEN_OF_WOE_GUIDE: ChapterGuide = {
   id: 'ffx2-den-of-woe',
   title: 'The Den of Woe',
   bossIds: [...DEN_OF_WOE_BOSS_IDS],
+  // The headline names the standing shade (FOC16-06's field, `engine/tactics/lookup.ts` `guideTitle`).
+  linkTitles: { [BARALAI]: 'Baralai', [GIPPAL]: 'Gippal', [NOOJ]: 'Nooj' },
   rules: RULES,
   hints: HINTS,
   watch: [],
