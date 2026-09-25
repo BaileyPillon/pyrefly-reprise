@@ -50,6 +50,7 @@ import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/
 import { magusSistersAbilities } from '../../src/data/ffx2/enemies/magus-sisters-abilities.ts';
 import { paragonAbilities } from '../../src/data/ffx2/enemies/paragon-abilities.ts';
 import { tremaAbilities } from '../../src/data/ffx2/enemies/trema-abilities.ts';
+import { paragonOversoulAbilities } from '../../src/data/ffx2/enemies/paragon-oversoul.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -133,7 +134,8 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
   },
   // Chapter XIII (FFX-2), registered but unlisted like Chapters IX to XI.
   'ffx2-trema': {
-    paragon: 'research/ffx2-trema.md §3.2 (src/data/ffx2/enemies/paragon.ts)',
+    // The listed chapter's Paragon is the Oversoul form (Bailey, 2026-09-25): same id, §12.2's block.
+    paragon: 'research/ffx2-trema.md §3.2, §12.2 (src/data/ffx2/enemies/paragon.ts, paragon-oversoul.ts)',
     trema: 'research/ffx2-trema.md §3.1 (src/data/ffx2/enemies/trema.ts)',
   },
 };
@@ -209,6 +211,7 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
   'ffx2-trema': [
     fileCite(paragonAbilities, 'research/ffx2-trema.md §4.1 (src/data/ffx2/enemies/paragon-abilities.ts)'),
     fileCite(tremaAbilities, 'research/ffx2-trema.md §4.2 (src/data/ffx2/enemies/trema-abilities.ts)'),
+    fileCite(paragonOversoulAbilities, 'research/ffx2-trema.md §12.2 (src/data/ffx2/enemies/paragon-oversoul.ts)'),
   ],
 };
 

@@ -284,12 +284,12 @@ describe('the link: carried state and the TR5 checkpoint', () => {
 });
 
 describe('registration (unlisted, TR18)', () => {
-  it('getChapter finds Chapter XIII; chapter select does not list it', () => {
+  it('getChapter finds Chapter XIII; chapter select lists it after Chapter IX (listed 2026-09-25)', () => {
     const ch = getChapter('ffx2-trema');
     expect(ch).toMatchObject({ game: 'ffx2', number: 13, title: 'Trema', location: 'Via Infinito — Cloister 100' });
     // Bailey's pick (2026-09-25, "Trema: 1 and 3 at 3 s"): Oversoul Paragon is link 1.
     expect(ch?.enemyGroupRef.id).toBe(CLOISTER_PARAGON_OVERSOUL);
     expect(ch?.enemyGroupRef.nextGroupId).toBe(CLOISTER_TREMA);
-    expect(CHAPTER_IDS).not.toContain('ffx2-trema');
+    expect(CHAPTER_IDS.slice(-2)).toEqual(['yojimbo-cavern', 'ffx2-trema']);
   });
 });

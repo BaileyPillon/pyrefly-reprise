@@ -6,6 +6,26 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — `encounters.ts`: Chapter XIII (Trema) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX-2 only** [AGENTS.md hard rule 14]: Trema and Oversoul Paragon on Cloister 100 of the Via
+Infinito (`research/ffx2-trema.md`); the listing itself is shared plumbing (both). Bailey,
+2026-09-25: "I'll go with all your recommendations" (Chapter XIII as "Trema: 1 and 3 at 3 s",
+its hero plate B).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `FFX2_TREMA_SHIPPED` and `CHAPTER_IDS`
+gains `'ffx2-trema'`, both after Chapter IX (registration order); chapter select groups by game,
+so the card sits after Chapter VI in the FFX-2 group with numeral XIII. `ChapterId` and
+`getChapter` are unchanged (the id was already registered); `UNLISTED_CHAPTERS` keeps Natus and
+the Fallen Aeons. Alongside: `CHAPTER_META` gains `TREMA_META` (`UNLISTED_CHAPTER_META` is empty
+again), `src/story/registry.ts` gains the `'ffx2-trema'` key (the shipped Oversoul shape's scripts,
+Trema's three AI callouts, and the `paragon-falls` link seam on the seam budget), and
+`tremaScriptsFor` now returns one object per shape so the registry and the record hold the same
+scripts. Every chapter-generic consumer now sees ten chapters, nine of them playable (Macalania
+is still a COMING card): Auron's briefing counts "Nine fights" by itself (D-136), and
+`arcCleared('ffx2')` also needs Chapter XIII (`ARC_FINALE.ffx2` stays `ffx2-vegnagun-shuyin`: Trema
+is an optional superboss, research §1). No save migration: saves key chapters by id string.
+
 ## 2026-09-25 — `ItemDef.price`: 0 may also mean "unsourced"
 
 **FFX-2 only in use; the field is shared** [AGENTS.md hard rule 14]. Doc comment only, no type

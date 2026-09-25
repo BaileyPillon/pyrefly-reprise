@@ -10,7 +10,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleSetup } from '../../../src/battle/common/types.ts';
-import { UNLISTED_CHAPTER_META, getChapterMeta } from '../../../src/data/chapter-meta.ts';
+import { CHAPTER_META, UNLISTED_CHAPTER_META, getChapterMeta } from '../../../src/data/chapter-meta.ts';
 import { TREMA_META, tremaMetaFor } from '../../../src/data/chapter-meta-trema.ts';
 import { FFX2_TREMA_GUIDE, tremaGuideFor } from '../../../src/data/guides/ffx2-trema.ts';
 import { RULE_SHORT_MAX } from '../../../src/data/guides/types.ts';
@@ -38,8 +38,10 @@ const words = (t: string): number => t.trim().split(/\s+/).filter(Boolean).lengt
 const art = (p: string): boolean => existsSync(new URL(`../../../public/art/${p}`, import.meta.url));
 
 describe('the pause card', () => {
-  it('is registered unlisted, as its chapter is', () => {
-    expect(UNLISTED_CHAPTER_META).toContain(TREMA_META);
+  it('is listed, as its chapter is (2026-09-25), with the installed hero plate B', () => {
+    expect(UNLISTED_CHAPTER_META).not.toContain(TREMA_META);
+    expect(CHAPTER_META.at(-1)).toBe(TREMA_META);
+    expect(TREMA_META.heroArt).toBe('pause/ch13-trema');
     expect(getChapterMeta('ffx2-trema')).toBe(TREMA_META);
     expect(TREMA_META).toMatchObject({ numeral: 'XIII', gameLabel: 'FFX-2', title: 'Trema', location: 'Via Infinito — Cloister 100' });
   });

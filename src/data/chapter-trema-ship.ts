@@ -17,8 +17,8 @@
  * - `music` — TR16 a as the record has it; with Trema alone, his stand-in cue
  *   (`boss-ffx2-aeon`) scores the first and only link.
  *
- * Still **UNLISTED**: `./chapters-unlisted.ts` registers the result, and chapter select does not
- * show it. Listing it is a later switch (Bailey's).
+ * **Listed** 2026-09-25 (Bailey: "I'll go with all your recommendations"): `./encounters.ts` puts
+ * the result in `CHAPTERS` after Chapter IX, so chapter select shows it in the FFX-2 group.
  */
 
 import type { Chapter } from './encounters.ts';

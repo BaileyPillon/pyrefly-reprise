@@ -126,10 +126,11 @@ describe('chapter meta', () => {
   const manifest = JSON.parse(readFileSync(join(ART, 'manifest.json'), 'utf8')) as { pause: string[] };
   const words = (t: string) => t.trim().split(/\s+/).filter(Boolean).length;
 
-  it('is found by id, and sits last in the listed CHAPTER_META, as the chapter sits last in CHAPTERS', () => {
+  it('is found by id, and sits in the listed CHAPTER_META at the same place as the chapter in CHAPTERS (after VIII)', () => {
     expect(getChapterMeta('yojimbo-cavern')).toBe(YOJIMBO_META);
-    expect(CHAPTER_META.at(-1)).toBe(YOJIMBO_META);
-    expect(CHAPTERS.at(-1)?.id).toBe('yojimbo-cavern');
+    const at = CHAPTERS.findIndex((c) => c.id === 'yojimbo-cavern');
+    expect(CHAPTERS[at - 1]?.id).toBe('evrae-airship');
+    expect(CHAPTER_META[at]).toBe(YOJIMBO_META); // Chapter XIII (Trema) follows it since 2026-09-25
   });
 
   it('agrees with the chapter record: FFX, Chapter IX, "Yojimbo" (D-053, D-058)', () => {

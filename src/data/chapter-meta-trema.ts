@@ -15,17 +15,17 @@
  *   only with a Paragon link.
  * - `quote` is line 17 of `docs/plans/trema-story-draft.md`, an `[ORIGINAL]` line in Trema's
  *   voice, which both story variants play (`src/story/scripts/ffx2-trema.ts`).
- * - `heroArt` names the plate a later round would install (`pause/ch13-trema`); **no hero plate
- *   is approved yet**, so the screen falls back to `heroArtFallback`, Yuna's approved FFX-2
- *   speaker portrait (`portraits/yuna-x2.png`), the chapter's narrator.
+ * - `heroArt` is Trema's hero plate B (`pause/ch13-trema`), Bailey's pick of 2026-09-25 ("I'll go
+ *   with all your recommendations"), installed and locked (`docs/concepts/chapters/trema/hero-plate/`).
+ *   `heroArtFallback`, Yuna's approved FFX-2 speaker portrait, shows only if the plate is missing.
  * - `snapshots` are the installed, LOCKED art (TR18): the O-3 B plate and the O-1 A / O-2 A
  *   paintings (`docs/concepts/chapters/trema/INSTALLED.md`).
  * - `musicKeys`: TR16 a, `scene-bevelle-underground` (the walk down and Paragon) and
  *   `boss-ffx2-aeon` (the stand-in for Trema until a `boss-trema` is picked), then the FFX-2
  *   fanfare.
  *
- * **Unlisted**: it sits in `./chapter-meta.ts`'s `UNLISTED_CHAPTER_META`, as its chapter sits in
- * `UNLISTED_CHAPTERS`.
+ * **Listed** 2026-09-25 with the chapter itself: it sits last in `./chapter-meta.ts`'s
+ * `CHAPTER_META`, as the chapter sits last in `CHAPTERS`.
  */
 
 import type { ChapterMeta, ChapterObjective } from './chapter-meta.ts';

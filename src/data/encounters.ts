@@ -49,13 +49,14 @@ import { ffx2LeblancScripts } from '../story/scripts/ffx2-leblanc.ts';
 import { SEYMOUR_ANIMA_MACALANIA } from './chapter-seymour-anima-macalania.ts';
 // Chapter 8's record, same reason and the same type-only import.
 import { EVRAE_AIRSHIP } from './chapter-evrae-airship.ts';
-// Chapter 9's record (listed 2026-09-24) and the registered-but-unlisted list (same reason).
+// Chapters IX and XIII (listed 2026-09-24, 2026-09-25) and the registered-but-unlisted list (same reason).
 import { YOJIMBO_CAVERN } from './chapter-yojimbo-cavern.ts';
+import { FFX2_TREMA_SHIPPED } from './chapter-trema-ship.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 
 /**
  * Every registered chapter id. Also the keys used in `SaveData.chapters`.
- * `'seymour-natus'`, `'ffx2-fallen-aeons'` and `'ffx2-trema'` are registered but unlisted: see `UNLISTED_CHAPTERS`.
+ * `'seymour-natus'` and `'ffx2-fallen-aeons'` are registered but unlisted: see `UNLISTED_CHAPTERS`.
  */
 export type ChapterId =
   | 'seymour-flux'
@@ -67,8 +68,7 @@ export type ChapterId =
   | 'seymour-anima-macalania'
   | 'evrae-airship'
   | 'yojimbo-cavern'
-  | 'seymour-natus' | 'ffx2-fallen-aeons'
-  | 'ffx2-trema';
+  | 'seymour-natus' | 'ffx2-fallen-aeons' | 'ffx2-trema';
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -363,11 +363,7 @@ export const FFX2_LEBLANC: Chapter = {
 export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN };
 export { UNLISTED_CHAPTERS }; // registered, not listed: `./chapters-unlisted.ts`
 
-/**
- * All nine, in play order (Chapter IX listed 2026-09-24). A listed chapter
- * whose id is in `LOCKED_CHAPTER_IDS` (`src/app/screens/frontend/comingChapters.ts`)
- * still shows as a COMING card on chapter select until Bailey approves its art.
- */
+/** All ten, in play order (IX listed 2026-09-24, XIII 2026-09-25); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
 export const CHAPTERS: readonly Chapter[] = [
   SEYMOUR_FLUX,
   YUNALESCA,
@@ -378,6 +374,7 @@ export const CHAPTERS: readonly Chapter[] = [
   SEYMOUR_ANIMA_MACALANIA,
   EVRAE_AIRSHIP,
   YOJIMBO_CAVERN,
+  FFX2_TREMA_SHIPPED,
 ] as const;
 
 /** Chapter ids, in play order. */
@@ -391,6 +388,7 @@ export const CHAPTER_IDS: readonly ChapterId[] = [
   'seymour-anima-macalania',
   'evrae-airship',
   'yojimbo-cavern',
+  'ffx2-trema',
 ] as const;
 
 /** Look a chapter up by id, listed or not. Returns `undefined` for an unknown id. */

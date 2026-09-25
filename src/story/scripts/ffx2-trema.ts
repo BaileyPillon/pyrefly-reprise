@@ -183,8 +183,23 @@ function post(tremaId: string): StoryScript {
   ];
 }
 
-/** The chapter's story layer for `shape`. */
+const BY_SHAPE = new Map<string, ChapterScripts>();
+
+/**
+ * The chapter's story layer for `shape`. One object per shape, so the registry
+ * (`../registry.ts`, the shipped shape) and the chapter record (`src/data/chapter-trema-ship.ts`,
+ * the shape read off its data) hold the same scripts; `story-triggers.test.ts` pins the two.
+ */
 export function tremaScriptsFor(shape: TremaStoryShape): ChapterScripts {
+  const key = [shape.paragonLink, shape.paragonBigBang, shape.paragonId ?? '', shape.tremaId].join('|');
+  const known = BY_SHAPE.get(key);
+  if (known) return known;
+  const built = buildTremaScripts(shape);
+  BY_SHAPE.set(key, built);
+  return built;
+}
+
+function buildTremaScripts(shape: TremaStoryShape): ChapterScripts {
   const { mid, midScripts } = midFor(shape);
   const pre: StoryScript = shape.paragonLink
     ? [...OPENING, battleStart()]
@@ -206,3 +221,18 @@ export const ffx2TremaScripts: ChapterScripts = tremaScriptsFor({
   paragonId: 'paragon',
   tremaId: 'trema',
 });
+
+/**
+ * The shipped shape (Bailey, 2026-09-25, "Trema: 1 and 3 at 3 s"): Oversoul Paragon, then Trema.
+ * Oversoul Paragon has no Big Bang counter (`src/data/trema-shape.ts`), so no Big Bang callout.
+ * Mirrored here so `src/story` stays out of `src/data`; the registry reads it.
+ */
+export const TREMA_SHIPPED_STORY_SHAPE: TremaStoryShape = {
+  paragonLink: true,
+  paragonBigBang: false,
+  paragonId: 'paragon',
+  tremaId: 'trema',
+};
+
+/** Chapter XIII's story as listed: the scripts the registered record carries. */
+export const ffx2TremaShippedScripts: ChapterScripts = tremaScriptsFor(TREMA_SHIPPED_STORY_SHAPE);

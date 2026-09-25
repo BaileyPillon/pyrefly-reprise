@@ -9,7 +9,7 @@
 
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleSetup, EnemyDef, EnemyGroupDef, MidBattleTrigger } from '../../../src/battle/common/types.ts';
-import { CHAPTER_IDS, getChapter } from '../../../src/data/encounters.ts';
+import { CHAPTERS, CHAPTER_IDS, getChapter } from '../../../src/data/encounters.ts';
 import { FFX2_TREMA } from '../../../src/data/chapter-ffx2-trema.ts';
 import { FFX2_TREMA_SHIPPED, shapeOfChapter, withTremaShip } from '../../../src/data/chapter-trema-ship.ts';
 import { cloisterParagonGroup, cloisterTremaGroup } from '../../../src/data/ffx2/enemies/trema.ts';
@@ -116,8 +116,8 @@ describe('the story in both shapes', () => {
   });
 });
 
-describe('the registered record: UNLISTED, with the ship layer on', () => {
-  it('getChapter finds it on the Cloister 100 scene with the story; chapter select does not', () => {
+describe('the registered record: LISTED (2026-09-25), with the ship layer on', () => {
+  it('getChapter finds it on the Cloister 100 scene with the story; chapter select lists it', () => {
     const ch = getChapter('ffx2-trema');
     expect(ch).toBe(FFX2_TREMA_SHIPPED);
     expect(ch?.sceneKey).toBe('via-infinito');
@@ -127,7 +127,8 @@ describe('the registered record: UNLISTED, with the ship layer on', () => {
     expect(ch?.scriptsRef.midScripts['paragon-big-bang']).toBeUndefined();
     expect(ch?.scriptsRef.mid.some((t) => t.id === TREMA_LINK_SEAM)).toBe(true);
     expect(ch?.music).toEqual(FFX2_TREMA.music);
-    expect(CHAPTER_IDS).not.toContain('ffx2-trema');
+    expect(CHAPTER_IDS).toContain('ffx2-trema');
+    expect(CHAPTERS.at(-1)).toBe(FFX2_TREMA_SHIPPED);
   });
 
   it('with Trema alone the stand-in cue scores the only link, and the story takes the alone shape', () => {

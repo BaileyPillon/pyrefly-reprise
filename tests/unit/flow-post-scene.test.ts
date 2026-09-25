@@ -368,8 +368,8 @@ describe('the end of an arc — critic round 02 #32', () => {
       // §12.5 beat 11), so it too is story-earlier than the FFX finale.
       // Chapter 9 (Yojimbo) too: the Cavern of the Stolen Fayth comes before
       // Mt. Gagazet and Zanarkand (research ffx-yojimbo.md §1.1, §1.2 item 5 and §5 [verified: 3 sources]; its party is
-      // the Gagazet build, docs/plans/chapter-yojimbo-review.md).
-      const storyEarlierThanFinale = new Set(['ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern']);
+      // the Gagazet build). Chapter 13 (Trema): an optional Chapter 5 superboss, "not a story boss" (ffx2-trema.md §1).
+      const storyEarlierThanFinale = new Set(['ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'ffx2-trema']);
       const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id));
       const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;
       expect(lastByDisplayOrder).toBe(id);
