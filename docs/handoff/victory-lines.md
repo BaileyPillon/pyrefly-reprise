@@ -5,6 +5,10 @@ Bailey's "all recommendations" on `docs/plans/decisions-2026-09-25.md`, item 7 =
 Method check and paper preflight: `docs/plans/victory-lines-review.md`.
 Not pushed, not deployed.
 
+**Release notes: any release that carries this branch discloses VL-1** (see "Release
+disclosure" below): a major introduced by this candidate, a regression against live for
+attribution, not a blocker, open until Bailey picks option 1 or 2.
+
 ## Game case
 
 - **Both** for the rotation: the results screen (`src/app/screens/ResultsScreen.ts`) is
@@ -78,6 +82,33 @@ shows the leader's fallen pose. Option 1 is a small text addition, and its styli
 frame is a sketch. Either fix is about 20 lines in `ResultsScreen.ts`, a file at 430
 lines that must not grow, so a helper would go in `victoryLine.ts`. Until Bailey
 picks, VL-1 is disclosed with any release that carries this branch.
+
+## Release disclosure (repair 2, 2026-09-25): copy into the release notes
+
+Repair 2 again changed no code: the sheet's recommendation A does not cover attribution,
+and hard rules 9 and 10 forbid building option 1 or 2 without Bailey's pick. The release
+notes of any build that carries commit `e26c77aa` list this entry among the **disclosed
+majors**:
+
+```json
+{
+  "id": "VL-1",
+  "severity": "major",
+  "area": "results screen victory line (src/app/screens/ResultsScreen.ts, src/ui/common/victoryLine.ts)",
+  "game": "both (shared results screen)",
+  "what": "On about two wins in three the victory line belongs to a party member other than the leader standing in the wedge, and the panel names no speaker, so e.g. Yuna's \"May they rest.\" reads as Tidus's (Chapter II, attempt 2).",
+  "introducedByCandidate": true,
+  "regressionVsLive": true,
+  "regressionNote": "Attribution only: live serves the first panel row's line (ResultsScreen.ts before e26c77aa, rows[0]) under the leader's figure (leaderId), which the handoff measurements above show is the same member in Chapters I and II; the line text itself is each chapter's existing text.",
+  "blocksShip": false,
+  "fix": "Bailey's pick: option 1 name the speaker, or option 2 stand the speaker in the wedge (frames in docs/screenshots/victory-lines/option-*.jpg). About 20 lines, helper in victoryLine.ts.",
+  "status": "open, awaiting Bailey"
+}
+```
+
+Plain-words line for the announcement: "Victory lines now rotate between the party, but
+the screen does not yet say who is speaking: a line can sit under another character's
+portrait. Two fixes are drawn for your pick."
 
 ## Verified (2026-09-25)
 
