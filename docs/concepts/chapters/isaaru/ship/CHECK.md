@@ -198,3 +198,29 @@ Frames and raw results are in scratch and are not committed:
 - **Still for the driver:** on the phone the controls hint still covers the lower half of the narration
   plate (minor 3, shared hint, now visible over black instead of hidden). `fade('white')` still draws
   black in a cutscene, as it always has; the DSL says white is for the Sending (Chapter V uses it twice).
+
+## Re-check after repair 1 (independent; nothing edited but this section)
+
+**Verdict: ISA-CHK-M1 is fixed. 0 blockers, 0 majors open. The 9 minors are unchanged. Still unlisted.**
+
+- **Code read (4bcb6de6):** `fadeScreen` in `CutsceneScreen.ts` sends `'clear'` to both `#fade` and the veil
+  and everything else to `CutsceneStage.veil(true, ms)`. The veil is the last child of `.cutscene__shake`
+  before the dialogue box. Its z-index is 5; the box's is 6 (`dialogue-box.css`). The backdrop is the
+  root's own background and the scrim is `.cutscene::after`, both under it. Figures and fx have no
+  z-index, so they are under it too. During a shake, the transform makes the shake layer its own stacking
+  context, and the box still sits over the veil inside it. The eyebrow (z 7) is hidden by `.is-veiled`.
+  The hint (z 8) and the flash (z 9) stay above it, which is expected. When a scene ends veiled, `#fade`
+  goes opaque at 0 ms, so the next screen gets the same black hand-off as before. Mid-battle beats use
+  their own ports and are unchanged. `CutsceneScreen.ts` is still 410 lines; `CutsceneStage.ts` is 260.
+- **Re-run here:** `tsc --noEmit` is clean. `cutscene-veil` and `cutscene-stage` pass (18 tests). The
+  full vitest run passes: 415 files, 3 skipped, 7721 tests (log at
+  `D:/Tools/pyrefly-scratch/chapters/isaaru-recheck1-vitest.txt`).
+- **Frames and raw results:** the three `repair1-*.jpg` frames show the lines on black, at 1600x900 and
+  390x844 for Isaaru and at 1600x900 for Chapter I ("Nobody talked."). In `res-narr-*.json`, every line
+  after the fade has `topAtText: dbox__text`, the veil at opacity 1 and `#fade` clear. The Isaaru results
+  screen follows. Port 5760 is no longer listening. I did not re-drive a browser, because the repair's
+  headless real-key results were enough together with the code read.
+- **Still open, as disclosed:** on the phone the controls hint covers the lower part of the narration box
+  (minor 3; the text line itself stays clear in the 390x844 frame). `fade('white')` still draws black,
+  unchanged; that needs a decision from the driver and Bailey. The branch-behind-main minor may have
+  grown.
