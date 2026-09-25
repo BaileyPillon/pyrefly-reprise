@@ -869,6 +869,15 @@
     "mtime": "2026-09-25T15:16:11.341Z",
     "approved": "2026-09-25"
    }
+  },
+  "bailey:2026-09-25-nooj-idle": {
+   "words": "I'll go with all your recommendations however",
+   "note": "Bailey, 2026-09-25 ~14:25 EDT, verbatim \"I'll go with all your recommendations however\". For Nooj the driver's recommendation was A: \"fix only the idle (the loops, the sleeve, the neck fringe), then judge it. If it passes, install it and let Nooj use the idle for his action moments too, with the usual motion, like several bosses already do.\" The idle was repaired (attempt 7, candidate a87ff561ef41, docs/concepts/chapters/gippal/nooj-options/idle-only/README.md) and passed an independent judge narrowly at 7.0 (docs/concepts/chapters/gippal/nooj-options/README.md, 'Independent judge (idle only)'). The installed file is that candidate through the unchanged O-1 B treatment (production/scripts/shade_b.py), byte-identical to the judged frame's look copy (869f9ae5b1d8). The candidate cast (a07ec9e35852) was removed from the served slot, so Nooj's action moments fall back to this idle. Replaced: idle 674058d32184 and cast a07ec9e35852 (CANDIDATES, never locked), kept in D:/Tools/pyrefly-art-backup/candidates/2026-09-25-nooj7/replaced/. Game: FFX-2 only (the Den of Woe shades).",
+   "public/art/characters/nooj-shade/idle.png": {
+    "sha256": "869f9ae5b1d8079fc8d5313b2363651db9f1d5dd183c2b496c4ea15e3434297f",
+    "mtime": "2026-09-25T19:00:36.080Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
