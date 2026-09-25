@@ -52,8 +52,11 @@ answered by **four switches, all at Bailey's picks** (GP6 b Hero Drinks, GP5 b l
 from the lost shade, M1 the Lightfall prep), measured at 200 seeds a row at human speed, with
 retries, in `tests/unit/chapters/den-of-woe-options-bench.test.ts` (`PYREFLY_MEASURE=1`). The 40-seed human rows above
 stay as they were measured. At 200 seeds the shipped line is 0/200, and no prep is 15/200. Both kit
-options with the prep give 52/200, the best first try. The sheet for Bailey, with the full table and
-replies, is `docs/plans/den-of-woe-options-2026-09-25.md`.
+options with the prep give 52/200, the best first try at 1.5 s only. Repair 2 swept the menu speed
+(1.0 / 1.5 / 2.5 s). Under both options, no prep wins at 1.0 s and 2.5 s and within five tries at every
+speed, and on every other kit it wins everywhere. The sheet therefore puts the prep as its own call,
+with no prep as the lean. The sheet for Bailey, with the full tables and replies, is
+`docs/plans/den-of-woe-options-2026-09-25.md`.
 
 ## Two things the bench shows about its own lines
 

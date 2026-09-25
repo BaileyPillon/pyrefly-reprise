@@ -51,8 +51,19 @@ headless check with all four switched on (then back off) showed the levels and m
 Hero Drinks drunk on Nooj, and a real-key RETRY after a Nooj loss that opened on Nooj in the entry
 state.
 
-**Recommendation in the sheet:** GP5 b + GP6 b, keep the prep, keep the retry from Baralai. That is
-52/200 on the first try and 153/200 within five. **Listing still waits for Bailey's reply.**
+**Recommendation in the sheet (corrected in repair 2):** two separate calls. The kit: GP5 b + GP6 b,
+keeping the retry from Baralai (the best kit at every speed tested). The Lightfall prep: drop it, the
+measured lean. **Listing still waits for Bailey's reply.**
+
+## Repair cycle 2 (2026-09-25): M1 re-put as its own call
+
+The re-check (`CHECK.md`, commit `2f29108a`) found that the sheet folded the prep into "Den: both" on
+one speed point. Repair 2 changed no switch and nothing under `src/`. `den-of-woe-options-bench.test.ts`
+gained a `PYREFLY_MEASURE=1` sweep at 1.0 / 1.5 / 2.5 s a menu, first try on every kit and within five
+tries under both options. It reproduces the re-check's cells exactly. Under both options, prep vs no
+prep: first try 60 vs 66, 52 vs 39, 38 vs 48; within five 170 vs 173, 153 vs 160, 126 vs 134. On every
+other kit no prep wins at every speed. The test asserts that verdict. The sheet now puts the prep as a
+separate call with no prep as the lean, and its replies name the kit and the prep separately.
 
 ## Frames (JPEG, `docs/concepts/chapters/den-of-woe/ship/`)
 

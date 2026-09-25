@@ -90,7 +90,8 @@ describe.skipIf(!MEASURE)('Chapter XV options for Bailey (human speed, 200 seeds
 
   it('what the options sheet claims', () => {
     const at = (kit: number, prep: boolean): number => first.get(`${KITS[kit]![0]}, ${prep ? 'with the Lightfall prep' : 'no prep'}`) ?? -1;
-    // M1: on the shipped kit the prep costs wins at human speed; with both options on it pays.
+    // M1 at the sheet's speed: on the shipped kit the prep costs wins. With both options on it edges
+    // ahead on the first try here only; the speed sweep below shows that is one point, not a rule.
     expect(at(0, false)).toBeGreaterThan(at(0, true));
     expect(at(3, true)).toBeGreaterThan(at(3, false));
     // Every option beats the shipped chapter, and both together beat either alone.
@@ -102,6 +103,59 @@ describe.skipIf(!MEASURE)('Chapter XV options for Bailey (human speed, 200 seeds
       ...table,
     ].join('\n'));
   });
+});
+
+/**
+ * M1 re-put (repair 2): is the Lightfall prep worth teaching? The human model's speed is our own
+ * guess, so the verdict must hold across it. First try at three menu speeds on every kit, and within
+ * five tries (retry from Baralai) under both kit options. The measured lean is **no prep**: the prep
+ * wins only at the sheet's 1.5 s point on the first try with both options on.
+ */
+const SPEEDS: Array<[number, number]> = [[1000, 300], [1500, 500], [2500, 800]];
+
+describe.skipIf(!MEASURE)('Chapter XV, the Lightfall prep across human speeds (PYREFLY_MEASURE=1)', () => {
+  it('no prep is the lean: it wins or ties everywhere but one point', () => {
+    const rows: string[] = [];
+    const firstTry = new Map<string, number>();
+    const five = new Map<string, number>();
+    for (const [ms, top] of SPEEDS) {
+      const o: DriveOptions = { decisionMs: ms, topMs: top, engine: { atbMode: 'wait', waitSplit: true } };
+      for (const [k, [kitName, party]] of KITS.entries()) {
+        const cells: string[] = [];
+        for (const prep of [true, false]) {
+          const line = lineFor(prep, party);
+          const w = den(line, party, o);
+          firstTry.set(`${ms}|${k}|${prep}`, w);
+          let cell = String(w);
+          if (k === 3) {
+            let n = 0;
+            for (let seed = 1; seed <= SEEDS; seed++) {
+              const a = driveDenAttempts(line, seed, 5, false, { ...o, party });
+              if (a !== undefined && a <= 5) n++;
+            }
+            five.set(`${ms}|${prep}`, n);
+            cell += ` (${n} within 5)`;
+          }
+          cells.push(cell);
+        }
+        rows.push(`| ${ms / 1000} s / ${top / 1000} s | ${kitName} | ${cells.join(' | ')} |`);
+      }
+    }
+    const f = (ms: number, k: number, prep: boolean): number => firstTry.get(`${ms}|${k}|${prep}`) ?? -1;
+    // On the shipped kit, Hero Drinks alone and levels alone, no prep wins at every speed.
+    for (const [ms] of SPEEDS) for (const k of [0, 1, 2]) expect(f(ms, k, false), `${ms} kit ${k}`).toBeGreaterThan(f(ms, k, true));
+    // Under both kit options, no prep wins the first try at 1.0 s and 2.5 s ...
+    expect(f(1000, 3, false)).toBeGreaterThan(f(1000, 3, true));
+    expect(f(2500, 3, false)).toBeGreaterThan(f(2500, 3, true));
+    // ... and within five tries at the sheet's 1.5 s, where the prep's only first-try lead sits.
+    expect(five.get('1500|false')!).toBeGreaterThanOrEqual(five.get('1500|true')!);
+    // 'Both' stays the best kit at every speed, with either line.
+    for (const [ms] of SPEEDS) {
+      const best = Math.max(f(ms, 3, true), f(ms, 3, false));
+      for (const k of [0, 1, 2]) expect(best, `${ms} kit ${k}`).toBeGreaterThan(Math.max(f(ms, k, true), f(ms, k, false)));
+    }
+    console.log(['| Menu / top list | Kit | Prep | No prep |', '|---|---|---:|---:|', ...rows].join('\n'));
+  }, 1_800_000);
 });
 
 describe('the options harness (always runs)', () => {
