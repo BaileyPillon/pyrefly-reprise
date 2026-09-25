@@ -179,6 +179,13 @@ export interface Ffx2EngineOptions {
    * `false` is the whole-menu hold. Changeable with `FFX2Engine.setWaitSplit`.
    */
   waitSplit?: boolean;
+  /**
+   * Seconds of **action time** each action owes before its actor's gauge refills (method check
+   * E4, `action-time.ts`): the length is an unsourced `[estimate]`. Wins over the formation's
+   * `EnemyGroupDef.actionTimeSeconds` and the global switch; absent (the default) leaves them.
+   * For measurement runs. `0` is off.
+   */
+  actionTimeSeconds?: number;
 }
 
 /** The party's live state as it crosses from one chained group to the next. */
@@ -247,6 +254,13 @@ export interface AiScript {
    * "Counter"; plan TR12 = b]. No other script defines it, so no other log changes.
    */
   counter?(ctx: AiContext, attacker: Ffx2Unit, hit: { amount: number; attackClass: string }): Command | null;
+  /**
+   * Optional hook run once after **every party action**, hit or not (`engineHooks.ts#runPartyActionAnswers`),
+   * with the ability it used and whether it was aimed at `self`. A command returned here resolves
+   * at once as a counter, like {@link counter}. Oversoul Paragon's copy-and-answer script
+   * [ffx2-trema §12.2]; an OFF option, and no other script defines it, so no other log changes.
+   */
+  onPartyAction?(ctx: AiContext, actor: Ffx2Unit, action: { abilityId: string | undefined; aimedAtSelf: boolean }): Command | null;
 }
 
 /** Read or write a numeric AI memory slot. */

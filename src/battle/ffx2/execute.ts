@@ -36,6 +36,7 @@ import { resolveTheft } from './steal.ts';
 import { attachedResult, hitsFromOutcome, rollDefault } from './minigames.ts';
 import { beginCharge, beginRecovery, chargeTicksFor, extraRecoveryTicks } from './gauges.ts';
 import { ATB_BASE_VALUE, ATB_DOUBLE_RECOVERY_VALUE } from './constants.ts';
+import { actionTimeTicks } from './action-time.ts';
 
 /** Everything `performCommand` needs from the engine. */
 export interface ExecEnv {
@@ -60,6 +61,18 @@ export interface ExecEnv {
   /** The command suspended on a timed-input overlay, if any. */
   getAwaiting(): Command | null;
   setAwaiting(command: Command | null): void;
+}
+
+/**
+ * The ability each unit resolved last, for `AiScript.onPartyAction` (`engineHooks.ts`): a charged
+ * ability's `action-start` sits in an earlier slice of drafts than its hooks. Engine-internal, keyed
+ * by the live unit object: not state, not an event, so no replay or save moves.
+ */
+const performed = new WeakMap<Ffx2Unit, string>();
+
+/** The ability `unit` resolved in its last action, if that action resolved one. */
+export function abilityPerformedBy(unit: Ffx2Unit): string | undefined {
+  return performed.get(unit);
 }
 
 /** Protect-reducible / Shell-reducible / neither — the Bulwarks answer in kind. */
@@ -111,9 +124,14 @@ function sameAction(a: Command, b: Command): boolean {
   return idA === idB;
 }
 
-/** End the action: spend the gauge, close it out, and run the hooks. */
-function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, extraRecovery = 0): void {
-  beginRecovery(actor, extraRecovery);
+/**
+ * End the action: spend the gauge, close it out, and run the hooks. `plays` adds the battle's
+ * action time (method check E4, `action-time.ts`; OFF unless a switch sets it) to what the actor
+ * owes before the refill; a spherechange passes `false` (a Short change freezes everyone, §12.4).
+ */
+function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, extraRecovery = 0, plays = true): void {
+  const acting = plays ? actionTimeTicks(env.options.actionTimeSeconds, env.state.flags) : 0;
+  beginRecovery(actor, extraRecovery + acting);
   env.emit({ type: 'action-end', actorId: actor.id });
   env.emit({ type: 'atb', snapshot: env.snapshot() });
   env.afterAction(actor, startedAt);
@@ -137,18 +155,20 @@ export function performCommand(
 
   // L1 spherechange consumes the whole turn and has no charge bar. §4.2
   if (command.kind === 'spherechange') {
+    performed.delete(actor);
     performSpherechange(
       actor,
       command,
       { grids: env.grids, dresspheres: env.dresspheres, gridNodes: env.gridNodes },
       (e) => env.emit(e),
     );
-    finishAction(env, actor, before);
+    finishAction(env, actor, before, 0, false);
     return;
   }
 
   const ability = abilityFor(env, command);
   if (!ability) {
+    performed.delete(actor);
     // Escape, Defend, Trigger and anything the registry does not know still
     // spend the turn rather than silently doing nothing.
     finishAction(env, actor, before);
@@ -208,6 +228,7 @@ export function performCommand(
 
   // The Bulwark retaliation log reads this. [ffx2-vegnagun-shuyin §3.3]
   if (actor.side === 'party') env.state.flags['lastAttackClass'] = attackClass(ability);
+  performed.set(actor, ability.id); // `AiScript.onPartyAction` (engine-internal, not state)
 
   // Step 15's halving is scoped to the *player's* Black/White Magic cast on
   // all — enemy party-wide moves are not halved. §2.1

@@ -5,7 +5,7 @@
  * modelled, `./via-infinito.ts`); these rows go beyond it, so they need Bailey's word (rule 10) and
  * the chapter ships `TREMA_KIT_OPTION = 'tr11-a'` (`../../chapter-ffx2-trema.ts`). They exist so
  * the question can be asked with measured numbers (`docs/plans/trema-bench.md`, "Kit options").
- * TR10's line-up is kept exactly: Yuna and Paine Dark Knights, Rikku Alchemist, Lv 99.
+ * TR10's line-up is kept exactly (except by `'nightmare-kit'`): Yuna and Paine Dark Knights, Rikku Alchemist, Lv 99.
  *
  * **`'sourced-kit'`** is Split_Infinity's own clear (GameFAQs FAQ 26832, G0648 / G0649; method
  * check S1–S6; `research/ffx2-trema.md` §5 "what players actually bring", `[verified: 3 sources]`):
@@ -25,17 +25,21 @@
  * "most players have 0–1", `ffx2-vegnagun-shuyin.md` §6.7) on the healer, in place of her Rabite's
  * Foot: the wiki's normal-Paragon advice is Ribbon against Itchy (method check S8).
  *
- * Not here, because nothing sources them or the engine lacks them: Oversoul Paragon (TR7), Mix
+ * **`'nightmare-kit'`** is NightMare185's Strategy 3 (`./via-infinito-nightmare.ts`, option 4): it changes TR10.
+ *
+ * Not here, because nothing sources them or the engine lacks them: Mix
  * (Dark Matter's Invincible, Chocobo Wing's Final Wall), Phoenix Downs (not in Split's list).
  */
 
 import type { FFX2MemberBuild, FFX2PartyBuild } from '../../../battle/common/types.ts';
 import { viaInfinitoBuild } from './via-infinito.ts';
+// Option 4, NightMare185's line-up (three Dark Knights; changes TR10): `./via-infinito-nightmare.ts`.
+import { viaInfinitoNightmareKitBuild } from './via-infinito-nightmare.ts';
 
 /** The kits the chapter can be built with. `'tr11-a'` is Bailey's pick and the shipped default. */
-export type TremaKitOption = 'tr11-a' | 'sourced-kit' | 'sourced-kit-one-lustre' | 'sourced-kit-ribbon';
+export type TremaKitOption = 'tr11-a' | 'sourced-kit' | 'sourced-kit-one-lustre' | 'sourced-kit-ribbon' | 'nightmare-kit';
 
-export const TREMA_KIT_OPTIONS: readonly TremaKitOption[] = ['tr11-a', 'sourced-kit', 'sourced-kit-one-lustre', 'sourced-kit-ribbon'];
+export const TREMA_KIT_OPTIONS: readonly TremaKitOption[] = ['tr11-a', 'sourced-kit', 'sourced-kit-one-lustre', 'sourced-kit-ribbon', 'nightmare-kit'];
 
 const LUSTRE = { id: 'valiant-lustre', nodePosition: 0, passedGates: [], wornThisBattle: [] };
 
@@ -88,6 +92,7 @@ export function tremaBuildFor(option: TremaKitOption): FFX2PartyBuild {
     case 'sourced-kit': return viaInfinitoSourcedKitBuild;
     case 'sourced-kit-one-lustre': return viaInfinitoOneLustreKitBuild;
     case 'sourced-kit-ribbon': return viaInfinitoRibbonKitBuild;
+    case 'nightmare-kit': return viaInfinitoNightmareKitBuild;
     case 'tr11-a':
     default: return viaInfinitoBuild;
   }

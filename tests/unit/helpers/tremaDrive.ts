@@ -20,6 +20,7 @@ import { CLOISTER_PARAGON, CLOISTER_TREMA } from '../../../src/data/ffx2/enemies
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { ffx2Options } from './ffx2ChapterDrive.ts';
 import { fallback, knightTurn, rikkuTurn, units, type LineOptions } from './tremaLines.ts';
+import { nightmareTurn } from './tremaNightmare.ts';
 export { LINES, type LineOptions } from './tremaLines.ts';
 
 export interface LinkRun {
@@ -58,7 +59,8 @@ function runLink(engine: FFX2Engine, line: LineOptions, decisionMs: number, topM
       engine.tick(decisionMs, { throughInput: true });
       if (!engine.inputValid(d.actorId)) continue;
     }
-    const picked = d.actorId === 'rikku' ? rikkuTurn(d, engine, line) : knightTurn(d, engine, line);
+    const picked = line.nightmare ? nightmareTurn(d, engine, line)
+      : d.actorId === 'rikku' ? rikkuTurn(d, engine, line) : knightTurn(d, engine, line);
     engine.submit(picked ?? fallback(d));
   }
   return summarise(engine, undefined, startTicks);
@@ -93,6 +95,9 @@ export interface DriveOptions {
    */
   paragonStats?: Partial<StatBlock>;
   hpMultiplier?: number;
+  /** Option formations (`trema-options.ts`, OFF in the chapter): link 1 in place of Paragon (Oversoul Paragon), link 2 in place of Trema (the Fiend Arena). */
+  paragonGroup?: string;
+  tremaGroup?: string;
   /** Items added to the TR11 a bag, **an option row only** (the Phoenix Downs question for Bailey). */
   extraItems?: InventoryEntry[];
 }
@@ -128,7 +133,7 @@ export function newEngine(opts: DriveOptions = {}): FFX2Engine {
 export function driveParagon(line: LineOptions, seed: number, opts: DriveOptions = {}): LinkRun {
   const engine = newEngine(opts);
   const setup: BattleSetup = {
-    game: 'ffx2', party: partyFor(opts), enemies: group(CLOISTER_PARAGON), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: partyFor(opts), enemies: group(opts.paragonGroup ?? CLOISTER_PARAGON), triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);
@@ -144,7 +149,7 @@ export function driveParagon(line: LineOptions, seed: number, opts: DriveOptions
 export function driveTremaFresh(line: LineOptions, seed: number, opts: DriveOptions = {}): LinkRun {
   const engine = newEngine(opts);
   const setup: BattleSetup = {
-    game: 'ffx2', party: partyFor(opts), enemies: group(CLOISTER_TREMA), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: partyFor(opts), enemies: group(opts.tremaGroup ?? CLOISTER_TREMA), triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);
@@ -160,14 +165,14 @@ export function driveChapter(
 ): { outcome: string | undefined; links: LinkRun[]; tremaSetup?: BattleSetup } {
   const engine = newEngine(opts);
   let setup: BattleSetup = {
-    game: 'ffx2', party: partyFor(opts), enemies: group(CLOISTER_PARAGON), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: partyFor(opts), enemies: group(opts.paragonGroup ?? CLOISTER_PARAGON), triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);
   applyOptions(engine, { ...opts, hpMultiplier: 1 }); // HP is carried and clamped at the seam: link options only
   const first = runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);
   if (first.outcome !== 'victory') return { outcome: first.outcome, links: [first] };
-  setup = setupForNextLink(setup, group(CLOISTER_TREMA), engine.state(), seed + 1) as BattleSetup;
+  setup = setupForNextLink(setup, group(opts.tremaGroup ?? CLOISTER_TREMA), engine.state(), seed + 1) as BattleSetup;
   engine.setSeed(setup.seed);
   engine.init(setup);
   const second = runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);

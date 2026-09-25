@@ -30,11 +30,11 @@ export interface Board {
   resolveCtx(seed?: number): ResolveContext;
 }
 
-/** A fresh engine at Paragon's (`'paragon'`) or Trema's (`'trema'`) link, Active ATB, from the preset. */
-export function board(link: 'paragon' | 'trema', seed = 1): Board {
+/** A fresh engine at Paragon's (`'paragon'`) or Trema's (`'trema'`) link, Active ATB, from the preset; `groupId` fields an option's formation instead. */
+export function board(link: 'paragon' | 'trema', seed = 1, groupId?: string): Board {
   const engine = new FFX2Engine(ffx2Options({ atbMode: 'active' }));
   const setup: BattleSetup = {
-    game: 'ffx2', party: viaInfinitoBuild, enemies: group(link === 'paragon' ? CLOISTER_PARAGON : CLOISTER_TREMA),
+    game: 'ffx2', party: viaInfinitoBuild, enemies: group(groupId ?? (link === 'paragon' ? CLOISTER_PARAGON : CLOISTER_TREMA)),
     triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);

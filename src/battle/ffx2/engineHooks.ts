@@ -11,6 +11,7 @@ import { advanceStatuses } from './statuses.ts';
 import { applyHpDelta, heal, resolveAbility, type ResolveContext } from './resolve.ts';
 import { berserkCommand, type MenuContext } from './targeting.ts';
 import { aiScriptFor } from './ai/index.ts';
+import { abilityPerformedBy } from './execute.ts';
 
 type Emit = (draft: EventDraft) => void;
 
@@ -198,6 +199,42 @@ export function runAfterActionHooks(produced: () => EventDraft[], actor: Ffx2Uni
     aiScriptFor(unit.enemy?.aiScriptId).onTurnResolved?.(env.aiContext(unit), actor);
   }
   runCounters(produced(), actor, env); // Paragon's Big Bang (TR12 b)
+  runPartyActionAnswers(produced(), actor, env); // Oversoul Paragon, an OFF option (§12.2)
+}
+
+/**
+ * `AiScript.onPartyAction` (FFX-2 only; Oversoul Paragon's copy-and-answer script, research
+ * ffx2-trema §12.2, an option that ships OFF): after every party action, each living enemy whose
+ * script defines the hook is told which ability the action used and whether it was aimed at it
+ * (named as a target, or hit, missed or touched by it). A command it returns resolves at once as a
+ * counter, exactly as {@link runCounters} resolves one. No shipped script defines the hook.
+ */
+function runPartyActionAnswers(produced: EventDraft[], actor: Ffx2Unit, env: CounterEnv): void {
+  if (actor.side !== 'party') return;
+  const start = produced.find((d) => d.type === 'action-start' && (d as { actorId?: CombatantId }).actorId === actor.id) as
+    { abilityId?: string; targets?: CombatantId[] } | undefined;
+  for (const unit of env.units) {
+    if (unit.side !== 'enemy' || !unit.alive || unit.removed) continue;
+    const script = aiScriptFor(unit.enemy?.aiScriptId);
+    if (!script.onPartyAction) continue;
+    const aimedAtSelf = Boolean(start?.targets?.includes(unit.id)) || produced.some((d) => {
+      const x = d as { targetId?: CombatantId; sourceId?: CombatantId };
+      return x.targetId === unit.id && x.sourceId === actor.id;
+    });
+    // A charged ability's `action-start` is in an earlier slice, so the ability comes from `execute.ts`.
+    const abilityId = abilityPerformedBy(actor) ?? start?.abilityId;
+    const command = script.onPartyAction(env.aiContext(unit), actor, { abilityId, aimedAtSelf });
+    if (command && command.kind === 'ability') resolveAsCounter(env, unit, command);
+  }
+}
+
+/** Resolve an out-of-turn command for `unit`: `action-start`, the ability as a counter, `action-end`, no ATB. */
+function resolveAsCounter(env: CounterEnv, unit: Ffx2Unit, command: Extract<Command, { kind: 'ability' }>): void {
+  const ability = env.abilities.get(command.id);
+  if (!ability) return;
+  env.emit({ type: 'action-start', actorId: unit.id, command, abilityId: ability.id, abilityName: ability.name, targets: command.targets });
+  resolveAbility(env.resolveCtx(), unit, ability, command.targets, { isCounter: true });
+  env.emit({ type: 'action-end', actorId: unit.id });
 }
 
 /** HP damage this action dealt, per target (an HP cost the caster paid is not a hit). */
@@ -252,11 +289,6 @@ export function runCounters(produced: EventDraft[], actor: Ffx2Unit, env: Counte
     const script = aiScriptFor(unit.enemy?.aiScriptId);
     if (!script.counter) continue;
     const command = script.counter(env.aiContext(unit), actor, { amount, attackClass: env.attackClass });
-    if (!command || command.kind !== 'ability') continue;
-    const ability = env.abilities.get(command.id);
-    if (!ability) continue;
-    env.emit({ type: 'action-start', actorId: unit.id, command, abilityId: ability.id, abilityName: ability.name, targets: command.targets });
-    resolveAbility(env.resolveCtx(), unit, ability, command.targets, { isCounter: true });
-    env.emit({ type: 'action-end', actorId: unit.id });
+    if (command && command.kind === 'ability') resolveAsCounter(env, unit, command);
   }
 }

@@ -81,7 +81,15 @@ export function resolveSetTo(
  */
 export function applyMpFraction(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, ability: AbilityDef, hpTaken = 0): void {
   const n = ability.extra?.['mpFractionOfCurrent'];
+  // `mpFractionOfMax` (sixteenths of **max** MP): Oversoul Paragon's Final Impact, "1/8 of max HP and MP"
+  // [ffx2-trema §12.2, SinirothX]; an OFF option (`paragon-oversoul.ts`), so no shipped replay moves.
+  const ofMax = ability.extra?.['mpFractionOfMax'];
   const matched = ability.extra?.['mpDrainMatchesHp'] === true;
+  if (typeof ofMax === 'number' && ofMax > 0 && !matched) {
+    const taken = Math.min(target.mp, Math.floor((target.stats.maxMp * ofMax) / 16));
+    if (taken > 0) { target.mp -= taken; ctx.emit({ type: 'mp-damage', targetId: target.id, sourceId: user.id, amount: taken }); }
+    return;
+  }
   if (!matched && (typeof n !== 'number' || n <= 0)) return;
   const drained = Math.min(target.mp, matched ? Math.max(0, hpTaken) : Math.floor((target.mp * (n as number)) / 16));
   if (drained <= 0) return;

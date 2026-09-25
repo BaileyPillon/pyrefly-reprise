@@ -16,6 +16,7 @@ import { AILMENT_DEFAULT_DURATION, advanceStatuses, applyStatus, durationToTicks
 import { hitPercent } from '../../../src/battle/ffx2/index.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { CLOISTER_PARAGON, CLOISTER_TREMA } from '../../../src/data/ffx2/enemies/trema.ts';
+import { CLOISTER_PARAGON_OVERSOUL, CLOISTER_TREMA_ARENA } from '../../../src/data/ffx2/enemies/trema-options.ts';
 import { board } from '../helpers/tremaUnits.ts';
 import { driveTremaFresh, LINES } from '../helpers/tremaDrive.ts';
 
@@ -46,9 +47,9 @@ describe('E1: timed ailment defaults (§2.8), Chapter XIII only', () => {
       .toBe(durationToTicks(40));
   });
 
-  it('only the two Cloister links opt in; every shipped group is untouched', () => {
+  it('only Chapter XIII opts in: its two Cloister links and its two OFF option formations; every shipped group is untouched', () => {
     const opted = Object.values(data.ENEMY_GROUPS_BY_ID).filter((g) => g.timedAilmentDefaults).map((g) => g.id).sort();
-    expect(opted).toEqual([CLOISTER_PARAGON, CLOISTER_TREMA].sort());
+    expect(opted).toEqual([CLOISTER_PARAGON, CLOISTER_TREMA, CLOISTER_PARAGON_OVERSOUL, CLOISTER_TREMA_ARENA].sort());
     expect(board('trema').engine.state().flags['timedAilmentDefaults']).toBe(true);
   });
 

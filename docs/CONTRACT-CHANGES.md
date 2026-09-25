@@ -6,6 +6,40 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XIII options, built OFF: `EnemyGroupDef.actionTimeSeconds`
+
+**FFX-2 only** [AGENTS.md hard rule 14]. From `docs/plans/trema-options-2026-09-25.md` (options 1 to
+4) and the method check's E4. Every switch ships OFF; with all of them off, Chapters 4, 5, 6 and XI,
+FFX Chapters 1 and 3 and every Chapter XIII kit, line and link replay byte-identically (event-log
+hashes over 20 to 30 seeds a line, before and after).
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef.actionTimeSeconds?: number` (seconds an
+action takes before its actor's gauge refills; method check E4). The rule is `[verified: 2 sources]`
+(research `ffx2-trema.md` §12.4), the length is an unsourced `[estimate]`
+(`ACTION_TIME_ESTIMATE_SECONDS = 1.5` in `src/battle/ffx2/action-time.ts`). `setup.ts` copies it into
+`BattleState.flags.actionTimeSeconds`; `execute.ts#finishAction` adds it to the actor's
+`atb.recovery` (not after a spherechange, a counter or a flavour turn). No shipped formation sets it:
+Chapter XIII's links set it only when `CLOISTER_ACTION_TIME_ON` (`src/data/ffx2/enemies/trema.ts`) is
+turned on. The field's comment was folded onto one line with `timedAilmentDefaults`' so the file does
+not grow.
+
+Not contract files, recorded because they are shared FFX-2 plumbing (each inert until a switch or an
+OFF option uses it):
+- `Ffx2EngineOptions.actionTimeSeconds` (per engine, wins over the formation) and the global switch
+  `ACTION_TIME_ALL_FFX2 = false` (`action-time.ts`), for measuring Chapters 4, 5, 6 and XI.
+- `AiScript.onPartyAction` (`internal.ts`, run by `engineHooks.ts#runPartyActionAnswers` after every
+  party action; a returned command resolves as a counter). Only Oversoul Paragon's script defines it.
+  `runCounters` now resolves through the same `resolveAsCounter` helper (byte-identical).
+  `execute.ts#abilityPerformedBy` (a module `WeakMap`, not state) tells it the ability of a charged
+  action, whose `action-start` sits in an earlier slice of drafts.
+- `AbilityDef.extra.mpFractionOfMax` (`aeon-effects.ts#applyMpFraction`): sixteenths of the target's
+  **max** MP a hit, for Oversoul Paragon's Final Impact.
+- `battle/ffx2/ai/trema.ts` became `makeTremaScript(id, weights)`; the story script draws exactly
+  as before (`TREMA_STORY_WEIGHTS`), the Fiend Arena script is `'trema-arena'`.
+- Registered, reachable only by id: formations `ffx2-cloister-paragon-oversoul` and
+  `ffx2-cloister-trema-arena` (`src/data/ffx2/enemies/trema-options.ts`), scripts `paragon-oversoul`
+  and `trema-arena`, abilities `paragon-os-*` and `trema-arena-beguiling-mire`.
+
 ## 2026-09-25 — Chapter XIII ship layer: `SpeakerId` gains `'trema'`
 
 **FFX-2 only** [AGENTS.md hard rule 14]. **Additive** in `src/story/dsl.ts`: `SpeakerId` gains

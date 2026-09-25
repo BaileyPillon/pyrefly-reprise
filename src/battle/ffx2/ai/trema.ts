@@ -64,39 +64,70 @@ export function tremaTriggersFired(unit: AiContext['self']): number {
   return mem(unit, FIRED);
 }
 
-export const tremaScript: AiScript = {
-  id: 'trema',
-  decide(ctx) {
-    const self = ctx.self;
-    const fired = mem(self, FIRED);
-    const due = TREMA_TRIGGERS[fired];
-    if (due && self.hp < self.stats.maxHp * due.below) {
-      setMem(self, FIRED, fired + 1);
-      // `trema-meteor-1`, `trema-meteor-2`, `trema-ultima`: the hooks for TR13's callouts.
-      const name = due.id === 'trema-ultima' ? 'trema-ultima' : `trema-meteor-${fired + 1}`;
-      ctx.emit({ type: 'script-trigger', name, payload: { who: self.id } });
-      return cast(ctx, due.id, []);
-    }
+/**
+ * One roll's weights, in 24ths, as the cumulative upper bounds of Dying Star, Demi, Flare, Choking
+ * Mist and Beguiling Mire (Waning Moon takes the rest), plus which Mire row it uses.
+ */
+export interface TremaWeights {
+  bounds: readonly [number, number, number, number, number];
+  mire: string;
+}
 
-    const stage = mem(self, CHAIN_STAGE);
-    if (stage === 1) {
-      setMem(self, CHAIN_STAGE, 2);
-      return use('trema-falling-leaf', randomGirl(ctx));
-    }
-    if (stage === 2) {
-      setMem(self, CHAIN_STAGE, 0);
-      return use('trema-thundering-wave', randomGirl(ctx));
-    }
+/** The story version [SinirothX]: 12 / 3 / 3 / 2 / 2 / 2. */
+export const TREMA_STORY_WEIGHTS: TremaWeights = { bounds: [12, 15, 18, 20, 22], mire: 'trema-beguiling-mire' };
 
-    const roll = ctx.rng.int(0, 23); // 24ths: 12 / 3 / 3 / 2 / 2 / 2
-    if (roll < 12) {
-      setMem(self, CHAIN_STAGE, 1);
-      return use('trema-dying-star', randomGirl(ctx));
-    }
-    if (roll < 15) return cast(ctx, 'trema-demi', []);
-    if (roll < 18) return cast(ctx, 'trema-flare', randomGirl(ctx));
-    if (roll < 20) return use('trema-choking-mist', randomGirl(ctx));
-    if (roll < 22) return use('trema-beguiling-mire', randomGirl(ctx));
-    return use('trema-waning-moon', randomGirl(ctx));
-  },
-};
+/**
+ * The Fiend Arena version (International / HD), **option 2 (TR1 b), OFF**: Demi **1/6**, Flare
+ * **1/12**, "the rest as story" [SinirothX Colosseum entry, `[single source]`, research §3.3], so
+ * 12 / 4 / 2 / 2 / 2 / 2; and its Beguiling Mire is 5 x3 (§4.2).
+ */
+export const TREMA_ARENA_WEIGHTS: TremaWeights = { bounds: [12, 16, 18, 20, 22], mire: 'trema-arena-beguiling-mire' };
+
+/** Trema's script for one weight table. The story version's draws are the ones it always made. */
+export function makeTremaScript(id: string, weights: TremaWeights): AiScript {
+  const [star, demi, flare, mist, mire] = weights.bounds;
+  return {
+    id,
+    decide(ctx) {
+      const self = ctx.self;
+      const fired = mem(self, FIRED);
+      const due = TREMA_TRIGGERS[fired];
+      if (due && self.hp < self.stats.maxHp * due.below) {
+        setMem(self, FIRED, fired + 1);
+        // `trema-meteor-1`, `trema-meteor-2`, `trema-ultima`: the hooks for TR13's callouts.
+        const name = due.id === 'trema-ultima' ? 'trema-ultima' : `trema-meteor-${fired + 1}`;
+        ctx.emit({ type: 'script-trigger', name, payload: { who: self.id } });
+        return cast(ctx, due.id, []);
+      }
+
+      const stage = mem(self, CHAIN_STAGE);
+      if (stage === 1) {
+        setMem(self, CHAIN_STAGE, 2);
+        return use('trema-falling-leaf', randomGirl(ctx));
+      }
+      if (stage === 2) {
+        setMem(self, CHAIN_STAGE, 0);
+        return use('trema-thundering-wave', randomGirl(ctx));
+      }
+
+      const roll = ctx.rng.int(0, 23); // 24ths
+      if (roll < star) {
+        setMem(self, CHAIN_STAGE, 1);
+        return use('trema-dying-star', randomGirl(ctx));
+      }
+      if (roll < demi) return cast(ctx, 'trema-demi', []);
+      if (roll < flare) return cast(ctx, 'trema-flare', randomGirl(ctx));
+      if (roll < mist) return use('trema-choking-mist', randomGirl(ctx));
+      if (roll < mire) return use(weights.mire, randomGirl(ctx));
+      return use('trema-waning-moon', randomGirl(ctx));
+    },
+  };
+}
+
+export const tremaScript: AiScript = makeTremaScript('trema', TREMA_STORY_WEIGHTS);
+/**
+ * Fiend Arena Trema (option 2, OFF). Its pattern text "is cut off after Waning Moon" (research
+ * §3.3), so the HP triggers are unsourced for it: it keeps the story's Meteor, Meteor, Ultima,
+ * the reading that does not make it easier, `[estimate]`.
+ */
+export const tremaArenaScript: AiScript = makeTremaScript('trema-arena', TREMA_ARENA_WEIGHTS);

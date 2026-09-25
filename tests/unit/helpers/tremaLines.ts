@@ -40,6 +40,8 @@ export interface LineOptions {
    * round the ring (+40 / +40, five changes). The ring's shape is the engine's `[estimate]`.
    */
   gates?: 'def' | 'all';
+  /** NightMare185's Strategy 3 play (`tremaNightmare.ts`, option 4): one girl throws Megalixirs, two Attack; Darkness only on Trema. */
+  nightmare?: boolean;
 }
 
 export const LINES = {
@@ -57,6 +59,8 @@ export const LINES = {
   kitDarknessOnParagon: { paragonDk: 'darkness', drainBelow: 10, curtains: true, remedy: true, kit: true, itchy: 'spherechange' },
   /** Credibly wrong with the kit, link 2: no drain, no Curtains, no Three Stars. */
   kitNoDrainNoShell: { paragonDk: 'attack', drainBelow: 0, curtains: false, remedy: true, itchy: 'spherechange' },
+  /** Option 4's play with `'nightmare-kit'`: NightMare185's Strategy 3 on Paragon, his Strategy 2 items on Trema. */
+  nightmare: { paragonDk: 'attack', drainBelow: 10, curtains: false, remedy: false, itchy: 'spherechange', nightmare: true },
 } satisfies Record<string, LineOptions>;
 
 export function units(engine: FFX2Engine): Unit[] {
@@ -69,16 +73,16 @@ function rowFor(d: Input, kind: string, id: string) {
   );
 }
 
-function use(d: Input, kind: string, id: string, targets: string[]): Command | null {
+export function use(d: Input, kind: string, id: string, targets: string[]): Command | null {
   const row = rowFor(d, kind, id);
   return row ? ({ ...row.command, targets } as Command) : null;
 }
 
-function girls(engine: FFX2Engine): Unit[] {
+export function girls(engine: FFX2Engine): Unit[] {
   return units(engine).filter((u) => u.side === 'party' && !u.removed);
 }
 
-function boss(engine: FFX2Engine): Unit | undefined {
+export function boss(engine: FFX2Engine): Unit | undefined {
   return units(engine).find((u) => u.side === 'enemy' && u.alive);
 }
 
@@ -114,7 +118,7 @@ function toNode(d: Input, node: number): Command | null {
 }
 
 /** Itchy leaves only a spherechange (§2.8): take the first one offered; once clear, go home. */
-function itchyChange(d: Input, self: Unit | undefined, home: string, line: LineOptions): Command | null {
+export function itchyChange(d: Input, self: Unit | undefined, home: string, line: LineOptions): Command | null {
   if (line.itchy !== 'spherechange' || !self) return null;
   if (self.statuses['itchy']) {
     const row = d.commands.find((c) => c.enabled && c.command.kind === 'spherechange');

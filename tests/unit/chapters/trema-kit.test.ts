@@ -45,11 +45,12 @@ function ctx(units: Ffx2Unit[], seed = 1) {
 }
 
 describe('the kit ships OFF: TR11 a is the chapter\'s build', () => {
-  it('the chapter builds with TR11 a, and every option keeps TR10\'s line-up', () => {
+  it('the chapter builds with TR11 a, and every option but NightMare185\'s keeps TR10\'s line-up', () => {
     expect(TREMA_KIT_OPTION).toBe('tr11-a');
     expect(FFX2_TREMA.buildRef).toBe(viaInfinitoBuild);
     expect(tremaBuildFor('tr11-a')).toBe(viaInfinitoBuild);
-    for (const option of TREMA_KIT_OPTIONS) {
+    // 'nightmare-kit' (option 4) is three Dark Knights by its source: `trema-options.test.ts`.
+    for (const option of TREMA_KIT_OPTIONS.filter((o) => o !== 'nightmare-kit')) {
       const b = tremaBuildFor(option);
       expect(b.members.map((m) => [m.id, m.currentDressphere, m.level])).toEqual([
         ['yuna', 'dark-knight', 99], ['rikku', 'alchemist', 99], ['paine', 'dark-knight', 99],

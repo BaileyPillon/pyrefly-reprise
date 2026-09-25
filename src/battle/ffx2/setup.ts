@@ -313,6 +313,7 @@ export function buildState(
       ...(setup.chained || options.chained ? { chained: true } : {}),
       ...(enemies.nextGroupId ? { nextGroupId: enemies.nextGroupId } : {}),
       ...(enemies.timedAilmentDefaults ? { timedAilmentDefaults: true } : {}), // `statuses.ts`, Chapter XIII
+      ...(enemies.actionTimeSeconds ? { actionTimeSeconds: enemies.actionTimeSeconds } : {}), // `action-time.ts` (E4), OFF
       canEscape: setup.canEscape ?? enemies.canEscape ?? false,
       ...inventoryFlags(party, options),
     },
