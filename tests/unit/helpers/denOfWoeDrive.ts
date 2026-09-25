@@ -276,6 +276,8 @@ export interface DriveOptions {
   party?: FFX2PartyBuild;
   /** Look at the engine as a link opens (the Den only). */
   start?: (engine: FFX2Engine) => void;
+  /** The story's mid-battle triggers (the ship layer's story test); none by default, as the benches run. */
+  triggers?: BattleSetup['triggers'];
 }
 
 function group(id: string): EnemyGroupDef {
@@ -288,7 +290,7 @@ function group(id: string): EnemyGroupDef {
 export function driveLink(linkId: string, line: LineOptions, seed: number, opts: DriveOptions = {}): LinkRun {
   const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...opts.engine }));
   const setup: BattleSetup = {
-    game: 'ffx2', party: opts.party ?? farplaneBuild, enemies: group(linkId), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: opts.party ?? farplaneBuild, enemies: group(linkId), triggers: opts.triggers ?? [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);
@@ -305,7 +307,7 @@ export function driveLink(linkId: string, line: LineOptions, seed: number, opts:
 export function driveDen(line: LineOptions, seed: number, opts: DriveOptions = {}): { outcome: string | undefined; links: LinkRun[] } {
   const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...opts.engine }));
   let setup: BattleSetup = {
-    game: 'ffx2', party: opts.party ?? farplaneBuild, enemies: group(DEN_OF_WOE_CHAIN_ORDER[0]), triggers: [], seed,
+    game: 'ffx2', party: opts.party ?? farplaneBuild, enemies: group(DEN_OF_WOE_CHAIN_ORDER[0]), triggers: opts.triggers ?? [], seed,
     condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
