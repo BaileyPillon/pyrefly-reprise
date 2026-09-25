@@ -218,3 +218,47 @@ deterministic, so this proves the table is honest output, not that the human mod
    (160 against 153) and within three nearly level (115 against 125). Fix the wording when M1 is re-put.
 
 The 7 minors above are untouched by the repair (out of its brief), as the builder disclosed.
+
+## Re-check after repair 2 (2026-09-25, commit e896604f)
+
+**Game case: FFX-2 only.** I edited nothing except this note. No switch, nothing under `src/` and no boss
+number changed between `2f29108a` and `e896604f` (`git diff --stat -- src` is empty). The prep switch is
+still `true` and every other switch is still OFF.
+
+### Reproduced on the engine
+
+`PYREFLY_MEASURE=1` on `den-of-woe-options-bench.test.ts`: 11/11 pass in 100 s. The original table is
+unchanged (shipped 0 (0/4/4), both prep 52 (52/125/153), both no prep 39 (39/115/160)). The new sweep
+prints my earlier re-check sweep cell for cell at all three speeds and on all four kits. It adds
+within-five under both options: 170/173 at 1.0 s, 153/160 at 1.5 s, 126/134 at 2.5 s (prep vs no prep).
+`tsc --noEmit` is clean. The test file is 176 lines. Log:
+`D:/Tools/pyrefly-scratch/chapters/den-of-woe-recheck2/bench.log`.
+
+### Verdict
+
+- **M1: fixed.** The sheet now puts the prep to Bailey as its own call, with "drop it" as the measured
+  lean. It has the speed table, and its replies name the kit and the prep separately. The test asserts the
+  lean: no prep wins on the three weaker kits at every speed, and under "both" at 1.0 s and 2.5 s and
+  within five at 1.5 s. It also asserts that "both" is the best kit at every speed. The handoff and the
+  bench notes agree with the sheet.
+- **B1: still open, awaiting Bailey's pick (listing only, not a defect).** Nothing is listed, and the
+  shipped chapter still wins 0/200 first tries at human speed.
+
+### Minor, residual (wording only; the lean survives all of them)
+
+1. **"Anyone who retries" is too broad.** The sheet's short version item 3 says "anyone who retries" does
+   better without the prep, and recommendation 2 says "every player who retries". The sheet's own table
+   says otherwise. Within three tries from Baralai at 1.5 s, the prep leads (125 against 115). From the lost
+   shade, it leads within three (119 against 114) and within five (160 against 158). The claim is true only
+   within five from Baralai. Say "within five tries from Baralai".
+2. **The kit's headline quotes the prep line.** Short version item 2 and recommendation 1 give "about 1 in
+   4 first try, 3 in 4 within five". Those are the numbers for both options *with* the prep (52 / 153). The
+   recommended pair, both options with no prep, is about 1 in 5 first try and 4 in 5 within five (39 /
+   160). The Replies list has the right figures.
+3. **A bare "Den: both" keeps the prep.** The sheet says that when Bailey names the kit alone, "the prep
+   stays as shipped", which means ON. That is the line the sheet advises against. The driver should read a
+   bare "Den: both" as keep-the-prep, or ask, and should not assume the lean.
+4. The test asserts within-five only at 1.5 s. The 1.0 s and 2.5 s within-five cells are printed but not
+   asserted. This is not a correctness problem, because the first-try asserts already cover those speeds.
+
+The 7 minors from the first ship check are still out of scope and unchanged.
