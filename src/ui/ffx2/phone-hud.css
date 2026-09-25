@@ -86,11 +86,11 @@ html[data-phone-battle='ffx2'] .ffx2boss__part > * {
 html[data-phone-battle='ffx2'] .ffx2hud .ig-banner {
   left: auto !important;
   right: 10px !important;
-  top: 120px !important;
+  top: calc(var(--phud-line-bottom, 114px) + 6px) !important;
   max-width: calc(100% - 20px);
 }
 html[data-phone-battle='ffx2'] .ffx2hud .ffx2hud__message {
-  top: 164px !important;
+  top: calc(var(--phud-line-bottom, 114px) + 50px) !important;
 }
 html[data-phone-battle='ffx2'] .ffx2hud .ig-banner__chip {
   font-size: 14px;
@@ -320,12 +320,32 @@ html[data-phone-battle='ffx2'] .ffx2-tplates,
 html[data-phone-battle='ffx2'] .ffx2-ctlhint {
   display: none !important;
 }
-/* The field. FFX-2's camera frames the party on the left and the boss on the
-   right for 16:9; the sheet's field (frames/B-ffx2-*.jpg) is that render at a
-   0.93 aspect, left-aligned, so the three girls stay whole and the boss's far
-   wing leaves by the right edge. The canvas is drawn that wide and the page
-   clips it; the presenter projects through the canvas rect, so the marks follow. */
-html[data-phone-battle='ffx2'] #game {
-  right: auto;
-  width: max(100%, calc((100dvh - var(--phud-field)) * 0.93));
+/* The field's home slide. FFX-2's camera frames the party on the left and the
+   boss on the right for 16:9; the sheet's field (frames/B-ffx2-*.jpg) is that
+   render at a 0.93 aspect, left-aligned. The canvas and its slide are
+   `ui/common/phone-battle.css` and `phoneFraming.ts`, which moves off this
+   home when a girl would be cut (Chapter V's Yuna stood wholly off it). */
+html[data-phone-battle='ffx2'] {
+  --phud-home-aspect: 0.93;
+}
+/* The chain counter's label (§4.6: 10 px at 1:1) meets the 14 px floor; it was 5.6 to 6.1 px here. */
+html[data-phone-battle='ffx2'] .ffx2chain__label {
+  font-size: 14px;
+}
+
+/* At 360 wide a chip's number cell is 54 px, and a four-digit HP ran into the
+   MP: the face and the padding give up 12 px there (as FFX's chips). */
+@media (max-width: 374px) {
+  html[data-phone-battle='ffx2'] .ffx2hud .ig-stat {
+    grid-template-columns: 28px minmax(0, 1fr);
+    column-gap: 5px;
+    padding: 6px 5px;
+  }
+  html[data-phone-battle='ffx2'] .ffx2stat__face {
+    width: 28px;
+    height: 28px;
+  }
+  html[data-phone-battle='ffx2'] .ffx2hud .ig-stat__value {
+    letter-spacing: -0.02em;
+  }
 }

@@ -56,13 +56,58 @@ bar on each chip, the pink accent, "girl" in the target hint (`src/ui/ffx2/phone
   swipe, advisor tap, GUIDE, the wrapper, both readers, both hooks, and that every phone rule
   is scoped under `html[data-phone-battle]` and never under 14 px.
 
+## Repair pass (2026-09-25, after the verifier's round)
+
+The verifier refuted "target step done" (ALL-target commands had no touch path) and "every
+text at least 14 px" (FFX-2 chain label 5.6 to 6.1 px, Ch. VII tag 13 px), and found the
+FFX-2 framing major (Ch. V's acting girl wholly off the frame). Fixed, game case **both**:
+
+- **Group aims** (Pray, Mega-Potion, -ga spells): `readGroup` in
+  `src/ui/common/phoneBattleText.ts` reads `.ffx-target--group` (those brackets carry no
+  `data-target-id`). The step comes up: the card names the group ("All allies"), the hint
+  says "All three girls at once" (FFX-2) or "The whole party at once" (FFX), Confirm names the
+  move, the swipe is off. The 13 px "ALL ALLIES" label (clipped at the left edge) is hidden on
+  the phone; the card carries it.
+- **The field slides** (`src/ui/common/phoneFraming.ts`): the canvas is the 16:9 render at the
+  field's height, and `--phud-left` picks which slice the window shows. With a menu up it
+  glides so the acting figure, then the party and the largest enemy, stay whole (ties go to
+  the old home: FFX centred, FFX-2 the sheet's 0.93 frame). While aiming at one figure it jumps
+  so the aimed figure is whole, and shifts the drawn bracket layer by the same amount until
+  the cursor redraws it (measured: bracket and silhouette agree within 2 px). No camera, rig,
+  scene or number changes. The pixel scale is fixed by the field's height, so when a fight is
+  wider than the window something stays off: Chapter VII (unlisted) keeps Seymour and drops
+  Yuna unless Yuna acts.
+- **CHK-003:** FFX-2 `.ffx2chain__label`, Ch. VII `.mac-tag__plate` ("Cannot be targeted";
+  the gold Anima tag is 26 px) and the battle-start skip line (`.bstart__skip`, 9 px) are
+  14 px on the phone. Desktop sizes unchanged.
+- **Minors:** the enemy-move line hangs under the rail at the rail's real height
+  (`--phud-rail-bottom`; Ch. VI's three gauges were covered) and runs to three lines at full
+  width (Ch. I's target and damage were cut); banners and Yojimbo's gauge sit under it
+  (`--phud-line-bottom`). A finger drag on FFX's paged command window steps it a row per
+  48 px. At 360 wide the chips give the numbers 12 px (face 28 px), so "6492" and "140" no
+  longer run together.
+- The observer run also caught the field plate's note ("already Hasted", `.ffx-target__note`,
+  11 px): 14 px on the phone, 11 px on the desktop as before.
+- Tests: `tests/unit/phone-battle-hud-repair.test.ts` (15).
+
+**Verified (repair):** real flow from the title (Enter, chapter card tapped, prep, cutscene
+held) in Ch. I, IV, V, VI, VIII, IX at 390x844 and 360x780, touch and keys: group aims by
+touch (Ch. I Mega-Potion and Ch. V Pray: card "All allies", Confirm tap resolves the turn),
+single aims, Back, swipe, Confirm; an observer recorded every text the phone HUD showed at its
+settled size: none under 14 px outside the results and pause screens. FFX-2 chain label
+measured 14 px on the phone (auto battle, Ch. IV). Ch. VII tag 14 px on the phone, 13 px on the
+desktop. Bracket and silhouette agree within 2 px after the aim jump. Desktop 1280x720,
+1600x900, 2000x1012 and a sideways 844x390, Ch. I, IV, V: FFX rects identical to HEAD, FFX-2
+differences the same as HEAD against itself (`repair-desktop-rects.json`). 0 console errors.
+Shots: `docs/screenshots/phone-battle-hud/repair-*.jpg` (sheet beside build).
+
 ## Open, not done here
 
 - **Chapter IX on the phone:** Yojimbo's gauge (approved phone frame, about 145 px tall) sits
   under the rail over the top of the field, where the cavern camera puts Yojimbo and Daigoro,
   so on the 390x520 field the enemies are mostly behind it. The phone framing of Chapter IX
   belongs to the Yojimbo polish track; it should be framed against the new field (390x520 /
-  360x456), not the full window.
+  360x456), not the full window. (The slide now keeps Lulu whole there.)
 - **Results screen** at 390x844 is still the desktop layout scaled down (text 4 to 9 px);
   not part of the battle HUD.
 - **Coach lines** say "Enter continue" on a touch phone; a tap works (it dismisses the line).

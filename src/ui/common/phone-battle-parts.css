@@ -136,14 +136,14 @@ html[data-phone-battle] .eint__toggle {
 html[data-phone-battle] .eint__panel {
   position: absolute !important;
   left: 10px !important;
-  top: 66px !important;
+  top: calc(var(--phud-rail-bottom, 64px) + 2px) !important;
   right: auto !important;
   bottom: auto !important;
   width: auto !important;
   min-width: 0 !important;
-  max-width: min(310px, calc(100% - 20px)) !important;
+  max-width: calc(100% - 20px) !important;
   height: auto !important;
-  max-height: 64px !important;
+  max-height: 84px !important;
   transform: none !important;
   padding: 6px 10px !important;
   overflow: hidden;
@@ -160,8 +160,8 @@ html[data-phone-battle] .eint__panel::before {
 html[data-phone-battle] .eint__body {
   display: -webkit-box !important;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  max-height: 52px !important;
+  -webkit-line-clamp: 3;
+  max-height: 72px !important;
   overflow: hidden !important;
   padding: 0 !important;
   font-size: 14px !important;
@@ -227,7 +227,7 @@ html[data-phone-battle] .eint:not(.eint--off) .eint__toggle {
 html[data-phone-battle] .eint--off .eint__toggle {
   position: absolute !important;
   left: 10px !important;
-  top: 66px !important;
+  top: calc(var(--phud-rail-bottom, 64px) + 2px) !important;
   height: 32px !important;
   padding: 0 10px !important;
   transform: none !important;
@@ -277,5 +277,23 @@ html[data-phone-battle] .dbox__text {
 html[data-phone-battle] .dbox__role,
 html[data-phone-battle] .dbox__auto,
 html[data-phone-battle] .pf-mom__slab-sub {
+  font-size: 14px;
+}
+
+/* A group aim's "ALL ALLIES" label (13 px, centred over the group, so cut at
+   the window's edge): on the phone the target card names the group and the
+   Back / Confirm bar carries the step (`phoneBattle.ts` `readGroup`). */
+html[data-phone-battle] .ffx-target__all {
+  display: none !important;
+}
+
+/* The battle-start card's skip line ("Any key", clamp(9px, 0.85vw, 12px), so
+   9 px on a phone) meets the floor; the card itself is the approved one. */
+html[data-phone-battle] .bstart__skip {
+  font-size: 14px;
+}
+
+/* The field plate's note ("already Hasted", 11 px) meets the floor (both games). */
+html[data-phone-battle] .ffx-target__note {
   font-size: 14px;
 }

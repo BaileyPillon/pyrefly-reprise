@@ -67,7 +67,7 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__toggle {
 /* ------------------------------------------------ transients, under the rail */
 html[data-phone-battle='ffx'] .ffxhud .ig-banner {
   left: 10px;
-  top: 120px;
+  top: calc(var(--phud-line-bottom, 114px) + 6px);
   max-width: calc(100% - 20px);
 }
 html[data-phone-battle='ffx'] .ffxhud .ig-banner__name {
@@ -78,7 +78,7 @@ html[data-phone-battle='ffx'] .ffxhud .ig-banner__chip {
   letter-spacing: 0.16em;
 }
 html[data-phone-battle='ffx'] .ffxhud .ffx-telegraph {
-  top: 120px;
+  top: calc(var(--phud-line-bottom, 114px) + 6px);
   max-width: calc(100% - 20px);
 }
 html[data-phone-battle='ffx'] .ffxhud .ffx-telegraph__actor {
@@ -170,7 +170,7 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__pips i {
 /* The gauge's own phone frame (`zanmato-gauge.css`, `.ffx-zg--phone`) sits
    under the rail and the enemy line; its small print meets the 14 px floor. */
 html[data-phone-battle='ffx'] .ffx-zg--phone .ffx-zg__frame {
-  top: 120px;
+  top: calc(var(--phud-line-bottom, 114px) + 6px);
 }
 html[data-phone-battle='ffx'] .ffx-zg--phone .ffx-zg__chip,
 html[data-phone-battle='ffx'] .ffx-zg__nums span,
@@ -181,4 +181,27 @@ html[data-phone-battle='ffx'] .ffx-zg--phone .ffx-zg__banner small {
 html[data-phone-battle='ffx'] .ffx-zg__nums,
 html[data-phone-battle='ffx'] .ffx-zg__labels {
   height: 20px;
+}
+
+/* Chapter VII's field tags ("Cannot be targeted", 13 px in the scene's own
+   style) meet the 14 px floor; the gold Anima tag is already 26 px. */
+html[data-phone-battle='ffx'] .mac-tag:not(.mac-tag--gold) .mac-tag__plate {
+  font-size: 14px;
+}
+
+/* At 360 wide a chip's number cell is 54 px, and a four-digit HP ran into the
+   MP ("6492140", Chapter III): the face and the padding give up 12 px there. */
+@media (max-width: 374px) {
+  html[data-phone-battle='ffx'] .ffxhud .ig-stat {
+    grid-template-columns: 28px minmax(0, 1fr);
+    column-gap: 5px;
+    padding: 6px 5px;
+  }
+  html[data-phone-battle='ffx'] .ffxhud .ig-stat__face {
+    width: 28px;
+    height: 28px;
+  }
+  html[data-phone-battle='ffx'] .ffxhud .ig-stat__value {
+    letter-spacing: -0.02em;
+  }
 }

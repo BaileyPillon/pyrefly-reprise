@@ -7,7 +7,8 @@
 
 import './phone-hud.css';
 import './phone-hud-parts.css';
-import { installPhoneBattle, textOf, type PhoneBattle, type PhoneBattleText } from '../common/phoneBattle.ts';
+import { installPhoneBattle, readGroup, textOf, type PhoneBattle, type PhoneBattleText } from '../common/phoneBattle.ts';
+import type { PhoneField } from '../common/phoneFraming.ts';
 
 /** The live target: the one bracket the cursor has not dimmed. */
 function liveTarget(hud: HTMLElement): HTMLElement | null {
@@ -17,9 +18,10 @@ function liveTarget(hud: HTMLElement): HTMLElement | null {
 /** What the FFX chrome prints, read from the FFX HUD's own DOM. */
 export function readFfxPhone(hud: HTMLElement): PhoneBattleText {
   const live = liveTarget(hud);
-  const targeting = !!hud.querySelector('.ffx-targeting [data-target-id]');
+  const group = readGroup(hud);
+  const targeting = group.on || !!hud.querySelector('.ffx-targeting [data-target-id]');
   const id = live?.dataset['targetId'] ?? '';
-  const ally = !!live && !live.classList.contains('ffx-target--enemy');
+  const ally = group.on ? group.ally : !!live && !live.classList.contains('ffx-target--enemy');
   const all = textOf(hud, '.ffx-targeting .ffx-target__all span');
   const plate = textOf(hud, '.ffx-targeting .ffx-target__plate .ffx-target__name');
   const esc = id.replace(/"/g, '');
@@ -28,7 +30,7 @@ export function readFfxPhone(hud: HTMLElement): PhoneBattleText {
   const face = row?.querySelector<HTMLImageElement>('.ig-stat__face img') ?? tile;
   const sensorEl = hud.querySelector<HTMLElement>('.ffx-sensor');
   const sensorName = sensorEl && !sensorEl.hidden ? textOf(sensorEl, '.ffx-sensor__name') : '';
-  const target = all || plate;
+  const target = group.on ? group.name : all || plate;
   let targetHp = '';
   if (row) targetHp = `HP ${textOf(row, '.ig-stat__value:not(.ig-stat__value--mp)').replace(/\s*\/\s*/, ' / ')}`;
   else if (sensorName && sensorName === target) targetHp = textOf(sensorEl!, '.ffx-sensor__hp').replace(/^HP\s*/, 'HP ');
@@ -43,10 +45,12 @@ export function readFfxPhone(hud: HTMLElement): PhoneBattleText {
     targeting,
     ally: targeting && ally,
     sensor: !!sensorName && sensorName === target && !ally,
+    group: group.on,
   };
 }
 
 /** The phone layout on a mounted FFX battle HUD (`.ffxhud`). */
-export function installFfxPhoneHud(hud: HTMLElement): PhoneBattle {
-  return installPhoneBattle(hud, 'ffx', readFfxPhone);
+export function installFfxPhoneHud(hud: HTMLElement, field?: PhoneField): PhoneBattle {
+  // FFX's command window pages by its cursor (six rows at a time): a drag on it steps the cursor.
+  return installPhoneBattle(hud, 'ffx', readFfxPhone, { field, dragList: '.ffx-cmd-area' });
 }

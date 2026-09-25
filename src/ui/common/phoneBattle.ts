@@ -32,6 +32,11 @@ import './phone-battle.css';
 import './phone-battle-parts.css';
 import type { GameId } from '../../battle/common/types.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
+import { createPhoneField, type PhoneField } from './phoneFraming.ts';
+import { confirmLabel, sendKey, targetHint, type PhoneTextReader } from './phoneBattleText.ts';
+
+export { confirmLabel, readGroup, sendKey, targetHint, textOf } from './phoneBattleText.ts';
+export type { PhoneBattleText, PhoneTextReader } from './phoneBattleText.ts';
 
 /** An upright phone. 600 is the party-prep phone breakpoint; a phone held sideways keeps today's HUD. */
 export const PHONE_BATTLE_QUERY = '(max-width: 599px) and (orientation: portrait)';
@@ -42,30 +47,6 @@ const REFRESH_MS = 120;
 /** A horizontal swipe shorter than this is a tap, not a step. */
 const SWIPE_PX = 40;
 
-export interface PhoneBattleText {
-  /** Whose turn it is, for the footer. */
-  actor: string;
-  /** The footer's second half: the selected command's help line. */
-  help: string;
-  /** The command being aimed, for the Confirm button and the card's note. */
-  command: string;
-  /** The combatant under the cursor (or "All enemies"). */
-  target: string;
-  /** Its HP line, when the HUD shows one. */
-  targetHp: string;
-  /** Its face, when the HUD has one on screen. */
-  targetFace: string;
-  /** Whether the target step is up. */
-  targeting: boolean;
-  /** Whether the step is aiming at the party. */
-  ally: boolean;
-  /** FFX: the Sensor card is up for this enemy and stands in for the target card. */
-  sensor: boolean;
-}
-
-/** Reads what the chrome prints from the HUD's own DOM; one per game. */
-export type PhoneTextReader = (hud: HTMLElement) => PhoneBattleText;
-
 export interface PhoneBattle {
   /** Whether the phone layout is on right now. */
   readonly active: boolean;
@@ -74,31 +55,23 @@ export interface PhoneBattle {
   destroy(): void;
 }
 
-/** The label for the Confirm button: `Attack → Mortiorchis`, or `Confirm` with nothing to name. */
-export function confirmLabel(text: Pick<PhoneBattleText, 'command' | 'target'>): string {
-  const cmd = text.command.trim();
-  const tgt = text.target.trim();
-  if (cmd && tgt) return `${cmd} → ${tgt}`;
-  return tgt ? `Confirm → ${tgt}` : 'Confirm';
+/**
+ * Where the field's slide sits by default, as the aspect of the frame it
+ * shows (`phoneFraming.ts`): FFX centred on the window (0), FFX-2 the sheet's
+ * left-anchored 0.93 frame (`frames/B-ffx2-*.jpg`).
+ */
+export const HOME_ASPECT: Record<GameId, number> = { ffx: 0, ffx2: 0.93 };
+
+/** Extras a game's half passes in; both optional (tests pass neither). */
+export interface PhoneBattleOptions {
+  /** Picks the field's slide at each command menu (`phoneFraming.ts`). */
+  field?: PhoneField;
+  /** A list that pages by its cursor, not by scrolling: a vertical drag on it steps the cursor a row. */
+  dragList?: string;
 }
 
-/** The hint over the Back / Confirm bar. The sheet calls FFX-2's party "girls". */
-export function targetHint(game: GameId, ally: boolean): string {
-  const who = ally ? (game === 'ffx2' ? 'girl' : 'ally') : 'enemy';
-  return `Tap another ${who} to switch · swipe ← →`;
-}
-
-/** Send a key through the path a real press takes. */
-export function sendKey(code: string, win: Window = window): void {
-  const key = code.startsWith('Arrow') || code === 'Enter' || code === 'Escape' ? code : code.replace(/^Key/, '').toLowerCase();
-  win.dispatchEvent(new KeyboardEvent('keydown', { code, key, bubbles: true, cancelable: true }));
-  win.dispatchEvent(new KeyboardEvent('keyup', { code, key, bubbles: true, cancelable: true }));
-}
-
-/** Text of the first match, trimmed and on one line. */
-export function textOf(root: ParentNode, selector: string): string {
-  return (root.querySelector(selector)?.textContent ?? '').replace(/\s+/g, ' ').trim();
-}
+/** A vertical drag this long steps the list one row (two tiles) on. */
+const ROW_PX = 48;
 
 function make(tag: string, className: string): HTMLElement {
   const el = document.createElement(tag);
@@ -124,7 +97,12 @@ function tapButton(className: string, label: string, onTap: () => void): HTMLBut
  * Put the phone layout on a mounted battle HUD. `hud` is the HUD's root
  * (`.ffxhud` / `.ffx2hud`); `read` pulls the words the chrome prints.
  */
-export function installPhoneBattle(hud: HTMLElement, game: GameId, read: PhoneTextReader): PhoneBattle {
+export function installPhoneBattle(
+  hud: HTMLElement,
+  game: GameId,
+  read: PhoneTextReader,
+  opts: PhoneBattleOptions = {},
+): PhoneBattle {
   const doc = hud.ownerDocument;
   const win = doc.defaultView ?? window;
   const html = doc.documentElement;
@@ -186,12 +164,28 @@ export function installPhoneBattle(hud: HTMLElement, game: GameId, read: PhoneTe
   // let pointer events through to it.
   let swipeX: number | null = null;
   let swipeY = 0;
+  // The list drag: a finger dragged up over a paged list brings on the rows below.
+  let dragY: number | null = null;
   const onTouchStart = (e: TouchEvent): void => {
     const t = e.touches[0];
-    swipeX = active && hud.dataset['phoneStep'] === 'target' && t ? t.clientX : null;
+    const aiming = hud.dataset['phoneStep'] === 'target' && hud.dataset['phoneGroup'] !== 'on';
+    swipeX = active && aiming && t ? t.clientX : null;
     swipeY = t?.clientY ?? 0;
+    const onList = !!opts.dragList && !!(e.target as Element | null)?.closest?.(opts.dragList);
+    dragY = active && t && onList && hud.dataset['phoneStep'] === 'menu' ? t.clientY : null;
+  };
+  const onTouchMove = (e: TouchEvent): void => {
+    const t = e.touches[0];
+    if (dragY === null || !t) return;
+    const dy = t.clientY - dragY;
+    if (Math.abs(dy) < ROW_PX) return;
+    dragY += Math.sign(dy) * ROW_PX;
+    const key = dy < 0 ? 'ArrowDown' : 'ArrowUp';
+    sendKey(key, win);
+    sendKey(key, win);
   };
   const onTouchEnd = (e: TouchEvent): void => {
+    dragY = null;
     const t = e.changedTouches[0];
     const from = swipeX;
     swipeX = null;
@@ -202,18 +196,38 @@ export function installPhoneBattle(hud: HTMLElement, game: GameId, read: PhoneTe
     sendKey(dx < 0 ? 'ArrowRight' : 'ArrowLeft', win);
   };
   win.addEventListener('touchstart', onTouchStart, { passive: true });
+  win.addEventListener('touchmove', onTouchMove, { passive: true });
   win.addEventListener('touchend', onTouchEnd, { passive: true });
 
   // -------------------------------------------------------- the mode switch
   let active = false;
   let opened = false;
   let last = '';
+  let under = '';
+  // The enemy-move line hangs under the rail, which grows with the enemy count
+  // (Chapter VI: three boss gauges; the line had covered the second), and the
+  // banners and Yojimbo's gauge under the line, which runs to three lines.
+  const placeUnderRail = (): void => {
+    const bottomOf = (sel: string): number => {
+      const el = hud.querySelector<HTMLElement>(sel);
+      return el ? Math.round(el.getBoundingClientRect().bottom) : 0;
+    };
+    const rail = bottomOf(game === 'ffx' ? '.ig-ctb' : '.ffx2hud__enemies');
+    if (rail <= 0) return;
+    const line = Math.max(rail, bottomOf('.eint:not(.eint--off) .eint__panel'), bottomOf('.eint--off .eint__toggle'));
+    const next = `${rail}/${line}`;
+    if (next === under) return;
+    under = next;
+    html.style.setProperty('--phud-rail-bottom', `${rail}px`);
+    html.style.setProperty('--phud-line-bottom', `${line}px`);
+  };
   const apply = (): void => {
     const on = mq?.matches === true;
     if (on === active) return;
     active = on;
     if (on) html.dataset['phoneBattle'] = game;
     else delete html.dataset['phoneBattle'];
+    opts.field?.reset();
     last = '';
     // The renderer, the HUD's letterbox and every solver follow the window's resize.
     win.dispatchEvent(new Event('resize'));
@@ -234,10 +248,17 @@ export function installPhoneBattle(hud: HTMLElement, game: GameId, read: PhoneTe
       }
     }
     const text = read(hud);
+    // The field's slide (`phoneFraming.ts`): with a menu up, the party and the
+    // boss; while aiming at one figure, that figure first.
+    const aimed = hud.querySelector<HTMLElement>('.ffx-targeting .ffx-target[data-target-id]:not(.ffx-target--dim)');
+    if (text.targeting && !text.group && aimed?.dataset['targetId']) opts.field?.frame(HOME_ASPECT[game], [aimed.dataset['targetId']]);
+    else if (!text.targeting && hud.querySelector('.ig-cmd')) opts.field?.frame(HOME_ASPECT[game]);
+    placeUnderRail();
     const key = JSON.stringify(text);
     if (key === last) return;
     last = key;
     hud.dataset['phoneStep'] = text.targeting ? 'target' : 'menu';
+    hud.dataset['phoneGroup'] = text.targeting && text.group ? 'on' : 'off';
     hud.classList.toggle('phud--sensor', text.targeting && text.sensor);
     footWho.textContent = text.actor;
     footHelp.textContent = text.help;
@@ -247,7 +268,7 @@ export function installPhoneBattle(hud: HTMLElement, game: GameId, read: PhoneTe
     cardNote.textContent = [text.command, text.help].filter(Boolean).join(' · ');
     cardFace.style.backgroundImage = text.targetFace ? `url("${text.targetFace}")` : '';
     cardFace.hidden = !text.targetFace;
-    hint.textContent = targetHint(game, text.ally);
+    hint.textContent = targetHint(game, text.ally, text.group === true);
     confirm.textContent = confirmLabel(text);
   };
 
@@ -265,10 +286,15 @@ export function installPhoneBattle(hud: HTMLElement, game: GameId, read: PhoneTe
       mq?.removeEventListener?.('change', apply);
       hud.removeEventListener('click', onAdvisorTap);
       win.removeEventListener('touchstart', onTouchStart);
+      win.removeEventListener('touchmove', onTouchMove);
       win.removeEventListener('touchend', onTouchEnd);
       for (const el of chrome) el.remove();
       delete hud.dataset['phoneStep'];
       delete hud.dataset['phoneGuide'];
+      delete hud.dataset['phoneGroup'];
+      html.style.removeProperty('--phud-rail-bottom');
+      html.style.removeProperty('--phud-line-bottom');
+      opts.field?.reset();
       hud.classList.remove('phud--sensor');
       if (active && html.dataset['phoneBattle'] === game) {
         delete html.dataset['phoneBattle'];
@@ -284,14 +310,44 @@ export function installPhoneBattle(hud: HTMLElement, game: GameId, read: PhoneTe
  * take it off. The HUD's files are not touched (both are past the 400-line
  * house rule); `BattleScreenWiring.createHud` is the one call site.
  */
-export function withPhoneLayout<T extends HudPort>(hud: T, install: (el: HTMLElement) => PhoneBattle): T {
+export function withPhoneLayout<T extends HudPort>(hud: T, install: (el: HTMLElement, field: PhoneField) => PhoneBattle): T {
   const mount = hud.mount.bind(hud);
   const unmount = hud.unmount.bind(hud);
   let phone: PhoneBattle | null = null;
+  // What the field's slide is picked from (`phoneFraming.ts`): the figures'
+  // boxes, who is on the field, and whose menu is up. Read, never changed.
+  // (Each guarded: test doubles implement only part of the port.)
+  const field = createPhoneField();
+  const { sync, chooseCommand, setTargetingPort, setVisible } = hud;
+  if (sync) {
+    hud.sync = (state, preview): void => {
+      field.setState(state);
+      sync.call(hud, state, preview);
+    };
+  }
+  if (chooseCommand) {
+    hud.chooseCommand = (actorId, commands, previewRank) => {
+      field.setActor(actorId);
+      return chooseCommand.call(hud, actorId, commands, previewRank);
+    };
+  }
+  if (setTargetingPort) {
+    hud.setTargetingPort = (port): void => {
+      field.setRects((id) => port.rect(id));
+      setTargetingPort.call(hud, port);
+    };
+  }
+  // A mid-battle cutscene hides the HUD: the field goes back to its default slide.
+  if (setVisible) {
+    hud.setVisible = (visible: boolean): void => {
+      if (!visible) field.reset();
+      setVisible.call(hud, visible);
+    };
+  }
   hud.mount = (root: HTMLElement): void => {
     mount(root);
     const el = root.querySelector<HTMLElement>(':scope > [data-role$="hud"]');
-    if (el && !phone) phone = install(el);
+    if (el && !phone) phone = install(el, field);
   };
   hud.unmount = (): void => {
     phone?.destroy();

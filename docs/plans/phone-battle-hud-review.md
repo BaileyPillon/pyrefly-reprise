@@ -68,3 +68,25 @@ boss gauge and the ATB on each chip; FFX-2 keeps its pink accent.
   caps, the turn cut-in's CTB line (dropped on the phone). The folded Sensor plate stays open
   as the target card. Submenu titles take the tip line's slot in both games.
 - Results: `docs/handoff/phone-battle-hud.md`.
+
+## Repair pass (2026-09-25, after the verifier's round)
+
+The verifier refuted two claims and found three majors; the method stays the same (real flow
+from the title, touch and keys), with two probes added: a group-target walk (Ch. I
+Mega-Potion, Ch. IV and V Pray) and an observer that records every text the phone HUD shows
+at its settled size, however briefly.
+
+- **ALL-target commands** had no touch path: group brackets carry no `data-target-id`, so the
+  readers never saw a target step. `readGroup` (`src/ui/common/phoneBattleText.ts`) reads
+  `.ffx-target--group`; the card names the group, the hint says Confirm or Back, and the
+  clipped 13 px "ALL ALLIES" label is hidden on the phone.
+- **Framing** (FFX-2 Ch. V Yuna wholly off the frame; left girl cut at 360 in IV and VI; Lulu
+  in IX): the pixel scale is fixed by the field's height, so no crop can shrink the fight. The
+  canvas is now the 16:9 render at the field's height and slides (`phoneFraming.ts`): at each
+  menu so the acting figure and the party stay whole, and while aiming so the aimed figure
+  does, carrying the drawn bracket layer with it. No camera, rig or scene changes.
+- **CHK-003:** the FFX-2 chain label (5.6 to 6.1 px), Ch. VII's "Cannot be targeted" tag
+  (13 px) and the battle-start skip line (9 px) meet 14 px on the phone.
+- **Minors:** the enemy-move line hangs under the rail at whatever height the rail has (Ch. VI's
+  three gauges) and runs to three lines at full width (Ch. I's target and damage were cut); a
+  finger drag steps FFX's paged command list a row; at 360 the chips give the numbers 12 px.

@@ -31,6 +31,17 @@ html[data-phone-battle] #game {
   bottom: auto;
   height: calc(100% - var(--phud-field));
 }
+/* The canvas is the 16:9 render at the field's height and slides under the
+   window (`phoneFraming.ts` writes `--phud-left` at each command menu, so the
+   acting figure and the party stay whole). The default slide is the game's
+   home: FFX centred, FFX-2 the sheet's left-anchored 0.93 frame. */
+html[data-phone-battle] #game {
+  --phud-canvas-w: max(100%, calc((100dvh - var(--phud-field)) * 16 / 9));
+  right: auto;
+  width: var(--phud-canvas-w);
+  left: var(--phud-left, calc((max(100%, calc((100dvh - var(--phud-field)) * var(--phud-home-aspect, 0))) - var(--phud-canvas-w)) / 2));
+  transition: left var(--phud-pan-time, 0.35s) ease-out;
+}
 
 /* ------------------------------------------------ the panel and the shade */
 html[data-phone-battle] .phud-panel,
