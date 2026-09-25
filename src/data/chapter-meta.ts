@@ -23,6 +23,7 @@ import { FFX2_LEBLANC_META } from './chapter-meta-ffx2-leblanc.ts';
 import { SEYMOUR_ANIMA_MACALANIA_META } from './chapter-meta-seymour-anima-macalania.ts';
 import { EVRAE_META } from './chapter-meta-evrae.ts';
 import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
+import { TREMA_META } from './chapter-meta-trema.ts';
 
 /**
  * The pause screen's objective rule vocabulary. Each rule is a pure
@@ -83,7 +84,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII';
   title: string;
   subtitle: string;
   location: string;
@@ -354,7 +355,7 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   musicKeys: ['scene-farplane', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'],
 };
 
-/** All nine listed chapters' pause-screen metadata, in play order. */
+/** All ten listed chapters' pause-screen metadata, in play order. */
 export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_FLUX_META,
   YUNALESCA_META,
@@ -365,6 +366,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_ANIMA_MACALANIA_META,
   EVRAE_META,
   YOJIMBO_META,
+  TREMA_META, // Chapter XIII (FFX-2), listed 2026-09-25
 ] as const;
 
 /**

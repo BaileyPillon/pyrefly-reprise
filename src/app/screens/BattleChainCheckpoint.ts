@@ -38,12 +38,15 @@ export interface ChainCheckpoint {
 /**
  * The checkpoint a link makes, or `null` when it makes none.
  *
- * Only a link entered through a Save Sphere (`restoresPartyOnEntry`) counts,
- * and never the opening formation: link 1 is the chapter's own start, which is
- * where a retry without a checkpoint goes anyway.
+ * Only a link entered through a Save Sphere (`restoresPartyOnEntry`) or marked
+ * `checkpointOnEntry` counts, and never the opening formation: link 1 is the
+ * chapter's own start, which is where a retry without a checkpoint goes anyway.
  */
 export function checkpointAt(link: number, group: EnemyGroupDef, setup: BattleSetup): ChainCheckpoint | null {
-  if (link < 2 || group.restoresPartyOnEntry !== true) return null;
+  if (link < 2) return null;
+  // Chapter XIII (FFX-2, TR5 = b): Trema's link is a checkpoint with no Save Sphere. The setup
+  // it was entered on already carries Paragon's end state, so a retry replays that state.
+  if (group.restoresPartyOnEntry !== true && group.checkpointOnEntry !== true) return null;
   return { group, setup, link };
 }
 

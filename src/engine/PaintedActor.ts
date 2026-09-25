@@ -43,7 +43,7 @@ import {
 } from './PaintedArt.ts';
 import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
 import { placePlane } from './PaintedRest.ts';
-import { lieOffset } from './LieFlat.ts';
+import { LIE_FLAT_TILT, lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
@@ -328,8 +328,8 @@ const HURT_TINT = 0xff9f8e;
 const FALL_MS = 300;
 /** {@link PaintedActor.lieDown}'s roll: flat on the floor (1.5 left the head tilted up, Chapter VII e2e). */
 const LIE_ANGLE = Math.PI / 2;
-/** ...then tipped back about its long axis onto the floor, radians (`LieFlat.ts`). */
-const LIE_TILT = 1.0;
+/** ...then tipped back about its long axis flat onto the floor, face up (`LieFlat.ts`). */
+const LIE_TILT = LIE_FLAT_TILT;
 /** What a petrified figure's painting is tinted toward ({@link PaintedActor.setStone}). */
 const STONE_TINT = new Color(0xb4afa6);
 

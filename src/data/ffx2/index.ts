@@ -27,17 +27,20 @@ import { GARMENT_GRIDS, ALL_GARMENT_GRIDS } from './garment-grids/index.ts';
 import { ENEMY_GROUPS, ENEMY_GROUPS_BY_ID, ALL_BOSS_ABILITIES } from './enemies/index.ts';
 import { bevelleBuild } from './builds/bevelle.ts';
 import { farplaneBuild } from './builds/farplane.ts';
+// Chapter XIII's kit-option items (Soul Spring, Three / Twin Stars, Stamina Tonic), kept out of `items/index.ts`.
+import { cloisterEffectAbilities, cloisterItems } from './items/cloister.ts';
 
 /** Every AbilityDef this project ships (standard/special dresspheres, shared, item effects, and bosses), keyed by id. */
-export const ALL_ABILITIES: readonly AbilityDef[] = [...STANDARD_ABILITY_LIST, ...itemEffectAbilities, ...ALL_BOSS_ABILITIES];
+export const ALL_ABILITIES: readonly AbilityDef[] = [...STANDARD_ABILITY_LIST, ...itemEffectAbilities, ...cloisterEffectAbilities, ...ALL_BOSS_ABILITIES];
 export const ABILITIES: Record<AbilityId, AbilityDef> = {
   ...STANDARD_ABILITIES,
   ...Object.fromEntries(itemEffectAbilities.map((a) => [a.id, a])),
+  ...Object.fromEntries(cloisterEffectAbilities.map((a) => [a.id, a])),
   ...Object.fromEntries(ALL_BOSS_ABILITIES.map((a) => [a.id, a])),
 };
 
 /** Every ItemDef this project ships, keyed by id. */
-export const ITEMS: Record<ItemId, ItemDef> = FFX2_ITEMS;
+export const ITEMS: Record<ItemId, ItemDef> = { ...FFX2_ITEMS, ...Object.fromEntries(cloisterItems.map((i) => [i.id, i])) };
 
 /** Aliases matching the FFX-2 engine's own boot-wiring names (`docs/CONTRACT-CHANGES.md`). */
 export const FFX2_ABILITIES: Record<AbilityId, AbilityDef> = ABILITIES;

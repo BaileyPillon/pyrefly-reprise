@@ -24,6 +24,7 @@ import { SEYMOUR_OMNIS } from './chapter-seymour-omnis.ts';
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
  * Chapter X, Seymour Natus (FFX only) — `./chapter-seymour-natus.ts`.
  * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts`.
+ * Chapter XIII, Trema, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter IX).
  * Chapter XII, Seymour Omnis (FFX only) — `./chapter-seymour-omnis.ts`.
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [

@@ -67,3 +67,7 @@ has a gold-tipped spike crown and facial marks that the O-1 A body does not have
 - Private Vite on port 5766 (HMR off, GPU browser), stopped by PID. Keys were pressed for real
   (Enter, G, N, I). ComfyUI was never restarted, there were no black frames, nothing was
   downloaded, and the GPU total was 76 s. Scripts are in `D:/Tools/pyrefly-scratch/natus-prod/`.
+
+## Hero plate installed, 2026-09-25 (FFX only, Chapter X)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations". Option B of `hero-plate/README.md` installed as `public/art/pause/ch10-seymour-natus.png` (sha `f802716b8c8e`) with its RealESRGAN `.2x.webp` master and `.json` sidecar; locked in set `bailey:2026-09-25-recommendations`. No `ChapterMeta` names it yet. **Ship step:** give Chapter X (`seymour-natus`) a `ChapterMeta` with `heroArt: 'pause/ch10-seymour-natus'`.

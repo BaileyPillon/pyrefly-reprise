@@ -1,0 +1,24 @@
+{
+  "subject": "Shiva, fallen, on the first platform",
+  "mood": "an old friend who does not know her",
+  "seed": 962101,
+  "prompt": "1girl, solo, shiva \\(final fantasy\\), final fantasy x-2, aeon, safe, pale blue skin, blue skin, long bright blue dreadlocks, blue dreadlocks tipped with ice crystal spikes, dark blue bodysuit, slim, elegant, the farplane abyss, floating stone paths over a bright pale void, pale violet and mint sky, a distant tall crystal spire, drifting small pale light motes, cool pastel light, soft bokeh background, a dark violet aura around her, violet rim light, glowing violet eyes, possessed, three-quarter view, looking at viewer, cold, expressionless, mouth closed, head and shoulders, upper body, one hand raised near her shoulder, frost in the air, (long bright blue dreadlocks:1.25), (pale blue skin:1.2), (glowing violet eyes, possessed:1.25), (dark violet aura:1.15), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, flowers, flower field, city, buildings, lanterns, warm light, sunset, fire, butterfly, insect, fairy, 1boy, male, brown hair, blonde hair, white hair, human skin, smile, crown, helmet, horns, weapon, sword, wings",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(long bright blue dreadlocks:1.25), (pale blue skin:1.2), (glowing violet eyes, possessed:1.25), (dark violet aura:1.15)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "refSkippedMonochrome": {
+    "attempted": "D:/Tools/pyrefly-scratch/hero-plates/fallen-aeons/refs/ref-shiva-head.png",
+    "top2Share": 0.4910294117647059
+  },
+  "generatedAt": "2026-09-25T05:08:50.893Z"
+}

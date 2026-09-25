@@ -116,6 +116,11 @@ export class HoldableCamera implements CameraPort {
     return this.inner.roll(deg, ms);
   }
 
+  /** Forwarded untouched: registering a rig moves nothing, held or not. */
+  addRig(name: string, rig: Parameters<NonNullable<CameraPort['addRig']>>[1]): void {
+    this.inner.addRig?.(name, rig);
+  }
+
   get rigNames(): string[] {
     return this.inner.rigNames;
   }

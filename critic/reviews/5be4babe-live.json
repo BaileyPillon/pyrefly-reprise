@@ -1,0 +1,63 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-25T06:16:34Z",
+  "build": {
+    "mainSha": "5be4babe",
+    "bundle": "Dat8v42m",
+    "artifactHash": "75a8050bfe31cb8e65106b4539f8137d4cccb5a0448c675ef6b7d1dbf22f1b41"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/5be4babe.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/1c22066e.json -> {result: PASS, artifactHash: 75a8050bfe31cb8e65106b4539f8137d4cccb5a0448c675ef6b7d1dbf22f1b41, liveManifest: match, checked: 111, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Built-in browser, cache-busted URL, real key/mouse input, screen/chapter/state confirmed by screenshot or read_page before each capture: title -> chapter select (Chapter IX Yojimbo card selected, boss row 'Yojimbo + Lady Ginnem + Daigoro') -> party prep ('FFX IX Yojimbo A Guardian's Last Duty') -> intro cutscene (Lulu/Wakka/Kimahri/Rikku/Tidus lines advanced) -> CTB battle (turn-order rail, party HP/MP, strategy guide citing ffx-yojimbo sections) -> real Attack on Kimahri's turn (297 dmg, gauge 0%->5%) -> real cancel path on Yuna's White Magic submenu (Escape closes submenu, second Escape opens pause) -> H toggles pause panels hidden/shown -> Escape resumes to the same command menu state -> real Attack on Yuna's turn (69 dmg, gauge ->8%). 0 console errors across the whole run."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Changed Master Volume 42->52 via a real click on the Options slider; localStorage 'pyrefly-reprise:save:v1'.settings.masterVolume read as 0.52 before reload. Reloaded the page; after reload settings.masterVolume still 0.52 and chapters['yojimbo-cavern'] shows attempts:1, playTimeMs:8783.8 (the battle just played). Both the changed setting and battle progress survived reload.",
+      "reason": "Lightweight pass only; the full upgrade matrix (older save-version migrations, cross-setting interactions) was not tested."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact manifest verify-live against previous build 1c22066e",
+      "title -> chapter select -> Chapter IX Yojimbo -> party prep -> battle start real-input flow",
+      "chapter intro cutscene advance with real input",
+      "one real Attack command (Kimahri) and one real Attack command (Yuna), positive path",
+      "cancel path on a submenu (White Magic -> Escape -> top menu)",
+      "pause open/resume with Escape, H hide/restore panels",
+      "prerendered music routing (network + AudioManager debug surface) for boss-yojimbo",
+      "console error and 404 count for the whole run",
+      "CHK-024 lightweight reload smoke: one setting change + one piece of chapter progress"
+    ],
+    "reused": [],
+    "notTested": [
+      "focused review of the changed area (systems, targets) - separate obligation, still pending",
+      "deep review carried since fd0ae96 across 12 builds - separate obligation, still pending",
+      "full CHK-024 upgrade matrix (older save versions, cross-setting interactions)",
+      "real-input smoke on the other four chapters",
+      "chapter clear / results / retry flow for Chapter IX (battle was not played to conclusion)",
+      "physical device, Safari, or real controller input",
+      "PYREFLY_BROWSER=gpu Playwright capture (this review used the built-in interactive browser instead; GPU renderer state not separately confirmed)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 30,
+  "notes": "One HEAD request to art/backdrops/cavern-stolen-fayth/sakura.png logged [FAILED: net::ERR_ABORTED] immediately followed by a successful GET 200 for the same URL - a benign HEAD-then-GET loader probe, not a missing asset or a defect; not counted in notFound. This report settles only the 'live' obligation for 5be4babe; 'focused' and 'deep' remain pending per critic/pending/5be4babe.json."
+}

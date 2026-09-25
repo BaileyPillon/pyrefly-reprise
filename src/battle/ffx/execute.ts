@@ -264,6 +264,12 @@ export function executeCommand(
   }
 
   if (command.kind === 'item') {
+    // An aeon has no Item command [ffx-combat-core §6.2]; `commands.ts` offers
+    // none, and one that arrives anyway is refused with the turn kept (PR-0155).
+    if (actor.side === 'aeon') {
+      ctx.emit({ type: 'message', text: `${actor.name} cannot use items`, kind: 'system' });
+      return { rank: 0, rejected: true, damageDealt: 0 };
+    }
     if (!spendItem(ctx, command.id)) {
       ctx.emit({ type: 'message', text: 'No items left', kind: 'system' });
       return NOTHING;

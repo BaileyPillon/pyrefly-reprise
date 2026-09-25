@@ -66,6 +66,21 @@ export const damageItems: ItemDef[] = [
     description: 'Heavy non-elemental damage to one enemy.',
   },
   {
+    // Paragon's steal and common drop in Chapter XIII [ffx2-trema §3.2: "Steal | Supreme Gem /
+    // Supreme Gem x2 (25%)", SinirothX + wiki]. Scope, element and price: ffx2-combat-core §5.5
+    // ("Supreme Gem | GRP | non-elem. | 250 / — | 2343–2646 to all"; 250 is the sell price, the
+    // same column Dark Matter's 7500 comes from); damage §2.9.3 (power 50 -> 2,500).
+    id: 'x2-supreme-gem',
+    name: 'Supreme Gem',
+    game: 'ffx2',
+    effect: 'x2-item-supreme-gem',
+    targeting: 'all-enemies',
+    usableInBattle: true,
+    usableInMenu: false,
+    price: 250,
+    description: 'Heavy non-elemental damage to all enemies.',
+  },
+  {
     id: 'x2-dark-matter',
     name: 'Dark Matter',
     game: 'ffx2',
@@ -86,6 +101,20 @@ export const damageItems: ItemDef[] = [
     usableInMenu: false,
     price: 75,
     description: 'Drains HP from an enemy to the user.',
+  },
+  {
+    // The Right / Left Bulwark rare steal in Chapter 5 [ffx2-vegnagun-shuyin §3 "Phoenix Down x1 / rare
+    // L-Bomb x1"]. Price and damage: ffx2-combat-core §5.5 ("GRP | physical | 100 / — | 421–476")
+    // and §2.9.3 (power 9 -> 450).
+    id: 'x2-l-bomb',
+    name: 'L-Bomb',
+    game: 'ffx2',
+    effect: 'x2-item-l-bomb',
+    targeting: 'all-enemies',
+    usableInBattle: true,
+    usableInMenu: false,
+    price: 100,
+    description: 'Heavy physical damage to all enemies.',
   },
 ];
 

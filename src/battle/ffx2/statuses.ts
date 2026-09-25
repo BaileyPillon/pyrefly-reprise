@@ -24,6 +24,7 @@ import type {
   StatusInstance,
 } from '../common/types.ts';
 import type { Emit, Ffx2Unit } from './internal.ts';
+import { withPoolStatuses } from './kit.ts';
 import {
   DURATION_SCALE_HASTE,
   DURATION_SCALE_SLOW,
@@ -106,6 +107,25 @@ const EXCLUSIVE: ReadonlyArray<readonly [StatusId, StatusId]> = [
   ['slow', 'haste'],
 ];
 
+/**
+ * The duration an **ailment row with no duration value** lasts when its battle opts in
+ * (`EnemyGroupDef.timedAilmentDefaults`, Chapter XIII; method check E1). Without it, `duration: 0`
+ * reads as "until cured" (the Leblanc and Chapter XI precedent, `[estimate]`), which made Beguiling
+ * Mire's Stop last the whole fight although §2.8 lists Stop, Slow, Sleep, Confuse and Berserk as
+ * **timed** `[verified: 2 sources]`. Values, §2.8 "Published duration values":
+ * - Sleep 97 and Berserk / Confuse 133: the tables' own **global defaults** `[single source]`;
+ * - Stop 100: no global default is published; 100 is what five of the eight published Stop
+ *   sources carry (Borrowed Time, Congealed Honey, Still Wing, Stop Missile, Stop Spark) `[estimate]`;
+ * - Slow 100: every published Slow source carries 100 `[estimate]` (no global default either).
+ */
+export const AILMENT_DEFAULT_DURATION: Readonly<Partial<Record<StatusId, number>>> = {
+  sleep: 97,
+  berserk: 133,
+  confuse: 133,
+  stop: 100,
+  slow: 100,
+};
+
 /** `durationValue` -> ticks at Config ATB speed = Normal. §2.8 */
 export function durationToTicks(durationValue: number): number | null {
   if (durationValue <= 0) return null;
@@ -171,6 +191,8 @@ export function applyStatus(
   application: StatusApplication,
   sourceId?: string,
   sourceAbilityId?: string,
+  /** The battle's `timedAilmentDefaults` (see {@link AILMENT_DEFAULT_DURATION}); absent everywhere else. */
+  timedAilmentDefaults = false,
 ): StatusInstance | null {
   const id = application.status;
   const stacking = application.stacks !== undefined && application.stacks > 0;
@@ -189,10 +211,11 @@ export function applyStatus(
   }
 
   const infinite = INFINITE_STATUSES.includes(id);
+  const fallback = timedAilmentDefaults && application.duration <= 0 ? AILMENT_DEFAULT_DURATION[id] : undefined;
   const instance: StatusInstance = {
     id,
     turnsRemaining: null,
-    ticksRemaining: infinite ? null : durationToTicks(application.duration),
+    ticksRemaining: infinite ? null : durationToTicks(fallback ?? application.duration),
     charges: null,
     stacks: application.stacks ?? 0,
     permanent: infinite,
@@ -207,6 +230,8 @@ export function applyStatus(
     delete target.statuses.confuse;
     delete target.statuses.berserk;
   }
+  // Stamina Tonic: the ceiling doubles, current HP does not (`kit.ts`). Nothing in FFX-2 removes it mid-battle.
+  if (id === 'max-hp-x2') target.stats = withPoolStatuses(target.stats, target.statuses);
   return instance;
 }
 

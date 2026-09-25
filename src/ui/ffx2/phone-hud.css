@@ -1,0 +1,351 @@
+/*
+ * FFX-2's battle HUD on an upright phone, option B "compact rail" (Bailey,
+ * 2026-09-25). Target: docs/concepts/layout/phone-battle-hud/frames/B-ffx2-*.jpg.
+ * Game case: FFX-2 only. FFX-2 has no turn-order list
+ * (research/ffx-vs-ffx2-presentation.md §4.2, §9 row 3): the boss gauge takes
+ * the rail where FFX draws the CTB order, and each girl's ATB rides on her
+ * chip. The pink accent is `--ig-accent` under `.ig--ffx2`.
+ *
+ * The shared geometry and the `--phud-*` tokens are `ui/common/phone-battle.css`.
+ * The stage's inline transform (`FFX2BattleHud`'s letterbox) is overridden so
+ * one CSS px is one CSS px. Nothing here applies unless `phoneBattle.ts` has
+ * set `html[data-phone-battle='ffx2']`.
+ */
+
+html[data-phone-battle='ffx2'] .ffx2hud {
+  --lb-scale: 1 !important;
+}
+html[data-phone-battle='ffx2'] .ffx2hud__stage,
+html[data-phone-battle='ffx2'] .ffx2hud__plates {
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
+/* ------------------------------------------- the rail: the boss gauge */
+html[data-phone-battle='ffx2'] .ffx2hud__enemies {
+  left: 10px;
+  right: 66px;
+  top: 10px;
+  padding: 0;
+  gap: 4px;
+  align-items: stretch;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-bosshp {
+  width: auto;
+  padding: 6px 10px;
+  transform: none;
+  background: rgba(11, 10, 18, 0.88);
+  border-left: 3px solid var(--ig-accent);
+}
+html[data-phone-battle='ffx2'] .ffx2boss__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 8px;
+  width: auto;
+  transform: none;
+}
+html[data-phone-battle='ffx2'] .ffx2boss__head > * {
+  transform: none;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-bosshp__name {
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-bosshp__track {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: auto;
+  height: 5px;
+  margin: 0;
+}
+html[data-phone-battle='ffx2'] .ffx2boss__num,
+html[data-phone-battle='ffx2'] .ffx2boss__num small,
+html[data-phone-battle='ffx2'] .ffx2boss__hint,
+html[data-phone-battle='ffx2'] .ffx2boss__partname,
+html[data-phone-battle='ffx2'] .ffx2boss__down {
+  font-size: 14px;
+}
+html[data-phone-battle='ffx2'] .ffx2boss__parts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 8px;
+}
+html[data-phone-battle='ffx2'] .ffx2boss__part {
+  width: auto;
+  transform: none;
+}
+html[data-phone-battle='ffx2'] .ffx2boss__part > * {
+  transform: none;
+}
+/* The telegraph and the battle-message line (both `.ig-banner`, placed on the
+   640x360 grid, some inline) sit under the rail and the enemy-move line. */
+html[data-phone-battle='ffx2'] .ffx2hud .ig-banner {
+  left: auto !important;
+  right: 10px !important;
+  top: calc(var(--phud-line-bottom, 114px) + 6px) !important;
+  max-width: calc(100% - 20px);
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ffx2hud__message {
+  top: calc(var(--phud-line-bottom, 114px) + 50px) !important;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-banner__chip {
+  font-size: 14px;
+  letter-spacing: 0.16em;
+}
+
+/* ------------------------------------------------------ the party chips */
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat-list {
+  left: var(--phud-side);
+  right: var(--phud-side);
+  top: auto;
+  bottom: var(--phud-chips);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  opacity: 1;
+  transform: none;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat {
+  position: relative;
+  width: auto;
+  height: 62px;
+  margin: 0 !important;
+  padding: 6px 7px;
+  transform: none;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  grid-template-rows: 17px 17px auto;
+  column-gap: 7px;
+  row-gap: 2px;
+  align-items: center;
+  background: rgba(11, 10, 18, 0.88);
+  border: 1px solid rgba(244, 241, 232, 0.16);
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat--acting {
+  border-color: var(--ig-accent);
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat > *,
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat .ffx2stat__top > * {
+  transform: none;
+}
+html[data-phone-battle='ffx2'] .ffx2stat__body,
+html[data-phone-battle='ffx2'] .ffx2stat__top {
+  display: contents;
+}
+html[data-phone-battle='ffx2'] .ffx2stat__face {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+}
+html[data-phone-battle='ffx2'] .ffx2stat__mono {
+  font-size: 14px;
+}
+html[data-phone-battle='ffx2'] .ffx2stat__job {
+  display: none;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat__name {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 17px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat__value {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: start;
+  font-size: 16px;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat__value--mp {
+  justify-self: end;
+  font-size: 14px;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat__value small {
+  display: none;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-stat__od {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  width: auto !important;
+  height: 6px;
+  margin: 2px 0 0;
+}
+/* A status tag rides on the chip's top edge, clear of the name. */
+html[data-phone-battle='ffx2'] .ffx2party__status {
+  position: absolute;
+  right: 6px;
+  top: -11px;
+  margin: 0;
+}
+html[data-phone-battle='ffx2'] .ffx2-status-chip,
+html[data-phone-battle='ffx2'] .ffx2-status-chip * {
+  font-size: 14px;
+  line-height: 1.1;
+}
+html[data-phone-battle='ffx2'] .ffx2hud--targeting-enemy .ffx2hud__party {
+  opacity: 1;
+  transform: none;
+}
+
+/* ------------------------------------------------------ the command grid */
+html[data-phone-battle='ffx2'] .ffx2hud__command {
+  left: var(--phud-side);
+  right: var(--phud-side);
+  top: calc(100% - var(--phud-grid));
+  bottom: auto;
+  width: auto;
+  max-height: calc(var(--phud-grid) - 44px);
+  touch-action: pan-y;
+}
+/* A submenu's list starts where the tip line was, under its own title. */
+html[data-phone-battle='ffx2'] .ffx2hud__command:has(.ffx2cmd__title) {
+  top: calc(100% - var(--phud-tip) - 44px);
+  max-height: calc(var(--phud-tip) + 44px - 44px);
+}
+html[data-phone-battle='ffx2'] .ffx2hud__command .ig-cmd-stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-cmd {
+  width: auto;
+  height: 56px;
+  margin: 0 !important;
+  padding: 0 14px;
+  transform: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  box-shadow: none;
+  cursor: pointer;
+}
+html[data-phone-battle='ffx2'] .ffx2hud__command:has(.ffx2cmd__title) .ig-cmd {
+  height: 48px;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-cmd > * {
+  transform: none;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-cmd--selected {
+  box-shadow: 0 0 0 2px rgba(11, 10, 18, 0.9);
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-cmd--overdrive,
+html[data-phone-battle='ffx2'] .ffx2hud .ig-cmd--disabled {
+  background: rgba(11, 10, 18, 0.86);
+  color: var(--ig-paper);
+  border: 1px solid rgba(244, 241, 232, 0.22);
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-cmd--disabled {
+  opacity: 1;
+  color: rgba(244, 241, 232, 0.6);
+}
+html[data-phone-battle='ffx2'] .ffx2cmd__label {
+  max-width: 100%;
+  font-size: 16px;
+  line-height: 1.1;
+}
+html[data-phone-battle='ffx2'] .ffx2hud .ig-cmd svg,
+html[data-phone-battle='ffx2'] .ffx2cmd__arrow {
+  display: none;
+}
+html[data-phone-battle='ffx2'] .ffx2cmd__mp,
+html[data-phone-battle='ffx2'] .ffx2cmd__grants,
+html[data-phone-battle='ffx2'] .ffx2cmd__reason {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+html[data-phone-battle='ffx2'] .ffx2cmd__mp::after {
+  content: ' MP';
+}
+html[data-phone-battle='ffx2'] .ffx2cmd__title {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  margin: 0 100px 8px 0;
+  padding: 0 12px;
+  text-align: left;
+  border-right: 0;
+  border-left: 3px solid var(--ig-accent);
+  background: rgba(11, 10, 18, 0.96);
+  font-size: 15px;
+}
+/* The submenu's title takes the tip line's slot, as FFX's breadcrumb does;
+   GUIDE keeps its place at the right end. */
+html[data-phone-battle='ffx2'] .ffx2hud:has(.ffx2cmd__title) .mad {
+  display: none !important;
+}
+html[data-phone-battle='ffx2'] .ffx2cmd__fold {
+  font-size: 14px;
+  padding: 0 8px;
+}
+/* The command help is the footer's second half now (`phoneBattle.ts`). */
+html[data-phone-battle='ffx2'] .ffx2-cmd-info {
+  display: none !important;
+}
+/* Wait / Active: a chip over the chips' right end. */
+html[data-phone-battle='ffx2'] .ffx2-atbmode {
+  left: auto !important;
+  right: var(--phud-side) !important;
+  top: auto !important;
+  bottom: calc(var(--phud-chips) + 76px) !important;
+  transform: none !important;
+  font-size: 14px;
+  padding: 4px 8px;
+}
+/* The target step: card and bar replace the grid, and the desktop's own
+   TARGET plates and key hints give way to them. */
+html[data-phone-battle='ffx2'] .ffx2hud[data-phone-step='target'] .ffx2hud__command {
+  visibility: hidden;
+}
+html[data-phone-battle='ffx2'] .ffx2-tplates,
+html[data-phone-battle='ffx2'] .ffx2-ctlhint {
+  display: none !important;
+}
+/* The field's home slide. FFX-2's camera frames the party on the left and the
+   boss on the right for 16:9; the sheet's field (frames/B-ffx2-*.jpg) is that
+   render at a 0.93 aspect, left-aligned. The canvas and its slide are
+   `ui/common/phone-battle.css` and `phoneFraming.ts`, which moves off this
+   home when a girl would be cut (Chapter V's Yuna stood wholly off it). */
+html[data-phone-battle='ffx2'] {
+  --phud-home-aspect: 0.93;
+}
+/* The chain counter's label (§4.6: 10 px at 1:1) meets the 14 px floor; it was 5.6 to 6.1 px here. */
+html[data-phone-battle='ffx2'] .ffx2chain__label {
+  font-size: 14px;
+}
+
+/* At 360 wide a chip's number cell is 54 px, and a four-digit HP ran into the
+   MP: the face and the padding give up 12 px there (as FFX's chips). */
+@media (max-width: 374px) {
+  html[data-phone-battle='ffx2'] .ffx2hud .ig-stat {
+    grid-template-columns: 28px minmax(0, 1fr);
+    column-gap: 5px;
+    padding: 6px 5px;
+  }
+  html[data-phone-battle='ffx2'] .ffx2stat__face {
+    width: 28px;
+    height: 28px;
+  }
+  html[data-phone-battle='ffx2'] .ffx2hud .ig-stat__value {
+    letter-spacing: -0.02em;
+  }
+}

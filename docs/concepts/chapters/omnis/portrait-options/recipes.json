@@ -1,0 +1,97 @@
+{
+ "game": "ffx",
+ "chapter": "XII Seymour Omnis",
+ "status": "CANDIDATE (options for Bailey; nothing installed, nothing approved)",
+ "tool": "scripts/gen.mjs (ComfyUI, animagine-xl-4.0-opt, IP-Adapter plus vit-h, ease in 0-0.8), one prompt at a time, submitted only with fewer than 3 pending; ComfyUI never restarted; no black frames",
+ "gpu": {
+  "renders": 27,
+  "minutes": 5.64
+ },
+ "options": {
+  "A": {
+   "seed": 925514,
+   "mode": "img2img",
+   "denoise": 0.6,
+   "words": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, pale lavender grey skin, long straight light blue hair, purple eyes, (thin dark purple veins branching under his eyes and across his cheekbones:1.25), cold smile, closed mouth, bare muscular chest with ridged ribs, red spiral tattoo on his shoulder, dark indigo shoulder cowls shaped like huge curved horns rising beside his head, (a large red eye set in each dark shoulder cowl:1.1), small red spikes on the cowls, three-quarter view, looking at viewer, portrait, close-up, upper body, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, horns on head, antlers, forehead mark, crown, helmet, mask, beard, stubble, 1girl, female, lipstick, weapon, staff, hands, claws, wings, halo, gold, yellow, orange, red trim, orange trim, cape lining, cone spikes, studs, neon, floating objects",
+   "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.3,
+    "type": "ease in",
+    "start": 0,
+    "end": 0.8,
+    "refs": [
+     "work/ref-crop.png"
+    ]
+   },
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 30,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "init": "init_a.py: the installed O-1 A idle (characters/seymour-omnis/idle.png, sha 91f67b3a2749) composited on white, crop (257,39)-(513,423), Lanczos to 832x1248, top 1216 kept",
+   "ref": "the same crop (work/ref-crop.png) at 0.3",
+   "matte": "matte.py work/a.q4.png opt-a.png 200 80 560 560",
+   "sha256": "614b399f1c1332110852f855b592139ad34a1b49451b3b1321bf8c712cb3fbb1"
+  },
+  "B": {
+   "seed": 925572,
+   "mode": "inpaint",
+   "denoise": 0.5,
+   "words": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, pale lavender grey skin, long straight light blue hair, purple eyes, (thin dark purple veins branching under his eyes and across his cheekbones:1.25), cold smile, closed mouth, bare muscular chest with ridged ribs, red spiral tattoo on his shoulder, (open dark blue guado robe with a tall high collar lined with red:1.3), dark indigo shoulder cowls shaped like huge curved horns rising beside his head, (a large red eye set in each dark shoulder cowl:1.1), three-quarter view, looking at viewer, portrait, close-up, upper body, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, horns on head, antlers, forehead mark, crown, helmet, mask, beard, stubble, 1girl, female, lipstick, weapon, staff, hands, claws, wings, halo, gold, yellow, orange, cone spikes, studs, neon, floating objects",
+   "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.3,
+    "type": "ease in",
+    "start": 0,
+    "end": 0.8,
+    "refs": [
+     "work/ref-crop.png"
+    ]
+   },
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 30,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "init": "draft_b.py: A (a.q4) plus a PIL-drafted red lining on the high collar and the shoulder band; masked img2img (SetLatentNoiseMask) inside a feathered box x470-810 y420-820; paste.py back into a.q4, so every pixel outside the box is A",
+   "matte": "matte.py work/b2.q2.paste.png opt-b.png 200 80 560 560",
+   "sha256": "8cd16ea5da3f0576fa01579abc2a46eefb152f2803ef0e71859b203ad0ba2821"
+  },
+  "C": {
+   "seed": 925562,
+   "mode": "inpaint",
+   "denoise": 0.58,
+   "words": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, pale lavender grey skin, long straight light blue hair, purple eyes, (thin dark purple veins branching under his eyes and across his cheekbones:1.25), cold smile, closed mouth, bare muscular chest with ridged ribs, red spiral tattoo on his shoulder, (long dark blue cloth strips embroidered with red runes hanging from his shoulders like a stole:1.3), dark high collar, dark indigo shoulder cowls shaped like huge curved horns rising beside his head, (a large red eye set in each dark shoulder cowl:1.1), three-quarter view, looking at viewer, portrait, close-up, upper body, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, horns on head, antlers, forehead mark, crown, helmet, mask, beard, stubble, 1girl, female, lipstick, weapon, staff, hands, claws, wings, halo, gold, yellow, orange, cone spikes, studs, neon, floating objects, red trim",
+   "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.3,
+    "type": "ease in",
+    "start": 0,
+    "end": 0.8,
+    "refs": [
+     "work/ref-crop.png"
+    ]
+   },
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 30,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "init": "draft_c.py: A (a.q4) plus a PIL-drafted stole in the idle strips colours with red rune marks; masked img2img inside x400-815 y490-1100 minus the chin; tattoo_mask.py keeps A s upper arm and spiral; paste.py back into a.q4",
+   "matte": "matte.py work/c2.p2.final.png opt-c.png 200 80 560 560",
+   "sha256": "81069683e27709be542ce0b2005ca8e67ee23dcdbf0609ef75fe8689e0e167ea"
+  }
+ },
+ "rejected": {
+  "A pilots a.p1-p3, a.q1-q3": "kept in the backup; a.p3 (denoise 0.65) has a blown white wedge on the forehead, the others are fine but a.q4 has the clearest veins under both eyes",
+  "frontal b.p1-p3 (txt2img, ref 0.35)": "the cowls came out as ram horns on the head; red eyes on his face (b.p1, b.p2)",
+  "frontal f.p1-p4 (txt2img, ref 0.45, beast-head wording)": "no cowl read at all, a hand in frame (f.p3), a red eye on his face (f.p2); the frontal slot failed twice, see README method check",
+  "collar by prompt only c.p1-p3 (img2img 0.6-0.7)": "no collar appeared: at that denoise the idle structure wins",
+  "B drafts b2.p1, b2.p3, b2.q1, b2.q3": "p2/p3 drip into tendrils; p1 and q1 read as a red strap, not a lining",
+  "C drafts c2.p1, c2.p3, c2.p4": "p1 pixel-pattern diamonds, p3 orange shapes, p4 too faint to read as trim"
+ },
+ "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu2/seymour-omnis-portrait/ (option-{a,b,c}.png, raw/ every render with its sidecar, inits, masks, pastes, gpu-ledger.json)"
+}

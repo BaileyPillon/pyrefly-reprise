@@ -1,0 +1,29 @@
+/* Doom's countdown over the doomed figure's head (`DoomCounters.ts`).
+   research/ffx-combat-core.md §4, Doom: "Countdown shown over the head".
+   The damage numeral's own face (`damage-numbers.css` `.dnum`: Chakra Petch
+   bold italic, white on a dark outline) so it reads as the same family of
+   field numeral, but upright and still: a numeral that bounces is a hit, a
+   number that stays is a count. A thin crimson halo (the CTB tile's Doom dot,
+   #c7343c) is the only mark that it is Doom. FFX only. */
+.ffx-doom-layer { position: absolute; inset: 0; pointer-events: none; }
+.ffx-doom {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-damage, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  color: #ffffff;
+  filter: drop-shadow(0 0 1px #141420) drop-shadow(0 1px 0 #141420) drop-shadow(1px 0 0 #141420)
+    drop-shadow(-1px 0 0 #141420) drop-shadow(0 -1px 0 #141420) drop-shadow(0 0 4px rgba(199, 52, 60, 0.9));
+}
+.ffx-doom[hidden] { display: none; }
+.ffx-doom--tick { animation: ffx-doom-tick 420ms ease-out; }
+@keyframes ffx-doom-tick {
+  0% { transform: scale(1.45); }
+  100% { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ffx-doom--tick { animation: none; }
+}

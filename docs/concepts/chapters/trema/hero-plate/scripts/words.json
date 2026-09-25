@@ -1,0 +1,151 @@
+{
+ "_note": "Chapter IV's visible words swapped for Chapter XIII's DECIDED ones (D-146: title 'Trema' TR17, location 'Via Infinito - Cloister 100' TR17, number XIII, line-up Yuna Dark Knight / Rikku Alchemist / Paine Dark Knight at Lv 99 TR10) in this page's DOM only. Chapter XIII has no ChapterMeta: no subtitle, blurb, quote, handwritten line, tip or snapshots exist, so they are blanked, never invented. 'Defeat Trema' is the one objective the sources support. Pair order matters: DARK KNIGHT becomes ALCHEMIST before WHITE MAGE and WARRIOR become DARK KNIGHT.",
+ "pairs": [
+  [
+   "Chapter IV · Bevelle Underground — Something She Named",
+   "Chapter XIII · Via Infinito — Cloister 100"
+  ],
+  [
+   "IV · BAHAMUT — BEVELLE UNDERGROUND — LIMBO",
+   "XIII · TREMA — VIA INFINITO — CLOISTER 100"
+  ],
+  [
+   "CHAPTER IV · BEVELLE UNDERGROUND — SOMETHING SHE NAMED",
+   "CHAPTER XIII · VIA INFINITO — CLOISTER 100"
+  ],
+  [
+   "1. SURVIVE A MEGA FLARE",
+   "1. DEFEAT TREMA"
+  ],
+  [
+   "2. LAND A 5-HIT CHAIN ATTACK",
+   "2. —"
+  ],
+  [
+   "3. DEFEAT BAHAMUT",
+   "3. —"
+  ],
+  [
+   "SURVIVE A MEGA FLARE",
+   "DEFEAT TREMA"
+  ],
+  [
+   "Survive a Mega Flare",
+   "Defeat Trema"
+  ],
+  [
+   "Land a 5-hit Chain Attack",
+   "—"
+  ],
+  [
+   "Defeat Bahamut",
+   "—"
+  ],
+  [
+   "Two years on, the aeon Yuna once called by name is standing in the dark with nobody home behind its eyes. She tries to talk it down anyway, because that is what she knows how to do.",
+   ""
+  ],
+  [
+   "Magic Break first, five stacks — it caps Mega Flare at a sixth of its damage and Impulse at a sixteenth, and it stacks with Shell.",
+   "—"
+  ],
+  [
+   "“Bahamut, it's me. Please — you have to hear me, just this once.”",
+   ""
+  ],
+  [
+   "no fanfare when this ends",
+   ""
+  ],
+  [
+   "Limbo, a thousand years dark",
+   ""
+  ],
+  [
+   "nobody is home",
+   ""
+  ],
+  [
+   "you don't get another option",
+   ""
+  ],
+  [
+   "Something She Named",
+   ""
+  ],
+  [
+   "BEVELLE UNDERGROUND",
+   "VIA INFINITO — CLOISTER 100"
+  ],
+  [
+   "Bevelle Underground",
+   "Via Infinito — Cloister 100"
+  ],
+  [
+   "DARK KNIGHT",
+   "ALCHEMIST"
+  ],
+  [
+   "WHITE MAGE",
+   "DARK KNIGHT"
+  ],
+  [
+   "WARRIOR",
+   "DARK KNIGHT"
+  ],
+  [
+   "LV 23",
+   "LV 99"
+  ],
+  [
+   "LV 24",
+   "LV 99"
+  ],
+  [
+   "LV 25",
+   "LV 99"
+  ],
+  [
+   "bevelle underground",
+   "via infinito — cloister 100"
+  ],
+  [
+   "Lv 23",
+   "Lv 99"
+  ],
+  [
+   "Lv 24",
+   "Lv 99"
+  ],
+  [
+   "Lv 25",
+   "Lv 99"
+  ],
+  [
+   "dark knight",
+   "alchemist"
+  ],
+  [
+   "white mage",
+   "dark knight"
+  ],
+  [
+   "warrior",
+   "dark knight"
+  ]
+ ],
+ "exact": {
+  "IV": "XIII",
+  "Bahamut": "Trema"
+ },
+ "hideImgs": [
+  "backdrops/bevelle-underground",
+  "characters/ffx2-bahamut/",
+  "characters/paine-warrior/"
+ ],
+ "hideSel": [
+  ".pause__quote-text",
+  ".pause__quote-who",
+  ".pause__hand"
+ ]
+}

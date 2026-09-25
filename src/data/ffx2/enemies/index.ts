@@ -28,6 +28,13 @@ import { leblancAbilities } from './leblanc-syndicate-leblanc-abilities.ts';
 import { fallenAeonsGroups } from './fallen-aeons-road.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from './fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from './magus-sisters-abilities.ts';
+// Chapter XIII, Paragon then Trema on Cloister 100 (registered, unlisted): `./trema.ts`.
+import { tremaGroups } from './trema.ts';
+import { paragonAbilities } from './paragon-abilities.ts';
+import { tremaAbilities } from './trema-abilities.ts';
+// Chapter XIII's OFF options (Oversoul Paragon, Fiend Arena Trema): `./trema-options.ts`.
+import { tremaArenaAbilities, tremaOptionGroups } from './trema-options.ts';
+import { paragonOversoulAbilities } from './paragon-oversoul.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -39,6 +46,8 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   shuyinGroup,
   ...leblancSyndicateGroups,
   ...fallenAeonsGroups,
+  ...tremaGroups,
+  ...tremaOptionGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -58,6 +67,10 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2ShivaAbilities,
   ...magusSistersAbilities,
   ...x2AnimaAbilities,
+  ...paragonAbilities,
+  ...tremaAbilities,
+  ...tremaArenaAbilities,
+  ...paragonOversoulAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

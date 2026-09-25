@@ -1,0 +1,393 @@
+{
+ "note": "This session's own look at 1:1 beside each shipped idle, 2026-09-25 (FFX-2 only, Chapter XIII). CANDIDATES; nothing installed, nothing approved. pick = the recommended frame, null = recommend leaving the slot empty (engine fallback). arm = the folder under D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu4/trema-poses/<girl>/<pose>/.",
+ "girls": {
+  "yuna-dark-knight": {
+   "attack": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "pick": 6,
+    "summary": "PASS: two-handed lunge, helm, cape, sash, skirt, pink thighhighs, dark-blue gold-engraved greatsword",
+    "look": {
+     "1": "cape fills frame",
+     "2": "swirl ring",
+     "3": "bronze sword",
+     "4": "slab sword",
+     "5": "cape fills frame",
+     "6": "best; eyes swapped vs idle",
+     "7": "cape + slab",
+     "8": "good alternative"
+    }
+   },
+   "cast": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 3,
+    "summary": "PASS (weak helm): arm raised, sword point-down; the helm reads as a teal cap",
+    "look": {
+     "1": "thin sword",
+     "2": "slab sword + cape",
+     "3": "best",
+     "4": "pillar sword",
+     "5": "good alternative",
+     "6": "pointing, slab"
+    }
+   },
+   "item": {
+    "arm": "r3",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": null,
+    "summary": "FAIL twice (r2, r3): arches, halos, extra armoured figure, floating helm; leave empty (falls back to cast)",
+    "look": {
+     "1": "extra figure",
+     "2": "arch behind",
+     "3": "arch + roses",
+     "4": "window arch",
+     "5": "floating helm",
+     "6": "floating helm"
+    }
+   },
+   "hurt": {
+    "arm": "r3",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": null,
+    "summary": "FAIL twice (r2, r3): sword pillars, detached pieces, or not hurt; leave empty (idle + flinch)",
+    "look": {
+     "1": "floating bouquet",
+     "2": "floating helm",
+     "3": "pillar",
+     "4": "close-up",
+     "5": "not hurt, small",
+     "6": "shell behind"
+    }
+   },
+   "ko": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 1,
+    "summary": "PASS: on her side, head toward the enemy, eyes shut, sword along the body",
+    "look": {
+     "1": "best",
+     "2": "sword above",
+     "3": "ok, face in hair",
+     "4": "face down",
+     "5": "sword upright",
+     "6": "good alternative"
+    }
+   },
+   "victory": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 2,
+    "summary": "PASS: sword over the shoulder, hand on hip; helm reads as a cap",
+    "look": {
+     "1": "slab sword",
+     "2": "best",
+     "3": "long robe",
+     "4": "staff + sword",
+     "5": "ok, sword upright",
+     "6": "cape fills frame"
+    }
+   }
+  },
+  "paine-dark-knight": {
+   "attack": {
+    "arm": "r3",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 6,
+    "summary": "PASS: lunge, swept silver hair, copper-engraved blade (closest to the idle's sword); cape is bright red",
+    "look": {
+     "1": "cape fills frame",
+     "2": "good alternative",
+     "3": "silver sword",
+     "4": "cape + frame",
+     "5": "cropped",
+     "6": "best"
+    }
+   },
+   "cast": {
+    "arm": "r3",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 2,
+    "summary": "PASS (2nd try): arm raised, one sword held low; figure about 0.78x the idle's height",
+    "look": {
+     "1": "ok",
+     "2": "best",
+     "3": "good alternative",
+     "4": "second blade up",
+     "5": "spear up",
+     "6": "dark splash"
+    }
+   },
+   "item": {
+    "arm": "r3",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 3,
+    "summary": "PASS (2nd try): bottle held out, one sword at her side",
+    "look": {
+     "1": "ok",
+     "2": "no bottle",
+     "3": "best",
+     "4": "floating sword",
+     "5": "second sword",
+     "6": "extra figure"
+    }
+   },
+   "hurt": {
+    "arm": "r3",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": null,
+    "summary": "FAIL twice (r2, r3): extra heads and figures, swords filling the frame; leave empty (idle + flinch)",
+    "look": {
+     "1": "cropped",
+     "2": "extra heads",
+     "3": "not hurt",
+     "4": "close-up",
+     "5": "floating blades",
+     "6": "pillar swords"
+    }
+   },
+   "ko": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 1,
+    "summary": "PASS: on her side, head toward the enemy, eyes shut",
+    "look": {
+     "1": "best",
+     "2": "sword upright",
+     "3": "arch sword",
+     "4": "second sword",
+     "5": "floating swords",
+     "6": "sword wall"
+    }
+   },
+   "victory": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 5,
+    "summary": "PASS (weapon wrong): weapon on the shoulder, hand on hip; the blade reads as a poleaxe (r3's single-weapon negatives changed nothing; r3 cand-3 is a smaller sword alternative)",
+    "look": {
+     "1": "sword + spear",
+     "2": "two swords",
+     "3": "good alternative",
+     "4": "two weapons",
+     "5": "best; poleaxe",
+     "6": "cropped"
+    }
+   }
+  },
+  "rikku-alchemist": {
+   "attack": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 5,
+    "summary": "PASS: a throw toward the enemy, flask in hand; the long leg strips are missing",
+    "look": {
+     "1": "good alternative",
+     "2": "ok",
+     "3": "ok",
+     "4": "two flasks",
+     "5": "best",
+     "6": "floating drops"
+    }
+   },
+   "cast": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 1,
+    "summary": "PASS: flask held high, hand on hip (Stash, Mix)",
+    "look": {
+     "1": "best",
+     "2": "small",
+     "3": "small",
+     "4": "small",
+     "5": "good alternative",
+     "6": "cape strips"
+    }
+   },
+   "item": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 3,
+    "summary": "PASS: flask held out, hand on hip",
+    "look": {
+     "1": "flask at hip",
+     "2": "ok",
+     "3": "best",
+     "4": "good alternative",
+     "5": "good alternative",
+     "6": "ok"
+    }
+   },
+   "hurt": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 3,
+    "summary": "PASS: thrown back, hand at the chest",
+    "look": {
+     "1": "small",
+     "2": "wince, big",
+     "3": "best",
+     "4": "small",
+     "5": "good alternative",
+     "6": "scarf fills frame"
+    }
+   },
+   "ko": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 4,
+    "summary": "PASS: on her side, head toward the enemy, eyes shut",
+    "look": {
+     "1": "flask by head",
+     "2": "thin",
+     "3": "thin",
+     "4": "best",
+     "5": "good alternative",
+     "6": "ok"
+    }
+   },
+   "victory": {
+    "arm": "r2",
+    "cands": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "pick": 4,
+    "summary": "PASS: both fists up, a grin",
+    "look": {
+     "1": "good alternative",
+     "2": "flasks in hands",
+     "3": "flask in hand",
+     "4": "best",
+     "5": "flasks in hands",
+     "6": "flasks in hands"
+    }
+   }
+  }
+ }
+}
