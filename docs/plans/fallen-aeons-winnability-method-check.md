@@ -1,10 +1,16 @@
-# Method check: Chapter XI (Fallen Aeons) wins 18 % at human pace, and what could move it
+# Method check: Chapter XI (Fallen Aeons) wins 15.5 % at human pace, and what could move it
 
 **Game case: FFX-2 only** (ATB, the Wait split, dresspheres). Written 2026-09-25 under AGENTS.md
 rule 15 and the ship gate's rule: the intended line's human rate is under 25 %. **Nothing here
 touches a boss number** (rule 6; memory "boss-side fix needs measured options"). **Nothing below is
 built**: every option waits for Bailey's word. Branch `chapter-fallen-aeons-ship-0925` off main
 761d3eb0; numbers from `tests/unit/chapters/fallen-aeons-ship-bench.test.ts` unless marked PROBE.
+
+**Re-measured on main 3c4cd1f6 (merge 00e49f02), after item 4 A1 (an enemy hit closes an open menu,
+07af1f90):** chapter human 31/200 (15.5 %) and 5/40 (12.5 %), was 36/200 and 8/40; option A 159/200
+(79.5 %), B 115/200, C 58/200; the habit 5/40. Bench-speed rows unchanged. The tables below keep the
+761d3eb0 figures with the new ones in brackets where the committed bench prints them; the argument
+and the question are unchanged (`fallen-aeons-bench.md`, top section).
 
 ## 1. The measurement
 
@@ -14,10 +20,10 @@ run of the Road (Shiva, then the Magus Sisters, then Anima) through the Save Sph
 
 | | Bench (D = 0), 200 seeds | Human, 40 seeds | Human, 200 seeds |
 |---|---:|---:|---:|
-| **Chapter, intended line** | 58/200 (29 %) | **8/40 (20 %)** | **36/200 (18 %)** |
+| **Chapter, intended line** | 58/200 (29 %) | **8/40 (20 %)** [5/40] | **36/200 (18 %)** [31/200, 15.5 %] |
 | 1 Shiva alone | 183/200 | 39/40 | |
 | 2 Magus Sisters alone | 84/200 (42 %) | 8/40 (20 %) | 34/200 (17 %) |
-| 3 Anima alone | 198/200 | 39/40 | |
+| 3 Anima alone | 198/200 | 39/40 [40/40] | |
 
 **The Sisters are the whole problem:** 141 of the 164 human losses on the Road happen there. Shiva
 and Anima each win about 39 in 40. With the shipped retry at the lost link (FA3), a player needs on
@@ -50,10 +56,10 @@ can cast only about nine times a minute in a loss (thirteen in a win).
 
 | # | Option | Kind | Sourced? | Chapter, human (200) | Sisters, human (200) | Chapter, bench (200) |
 |---|---|---|---|---:|---:|---:|
-| — | **As registered** | | | **36 (18 %)** | 34 (17 %) | 58 (29 %) |
-| A | **Action time 3 s** on the three Road formations (the Chapter XIII switch) | engine rule | the rule `[verified: 2]`; the length is an `[estimate]` (nothing published) | **164 (82 %)** | 155 (78 %) | 174 (87 %) |
-| B | Action time 1.5 s (the global estimate) | engine rule | as A | 117 (58.5 %) | 124 (62 %) | 147 (73.5 %) |
-| C | **Preset at Lv 52 / 52 / 52**, the top of the band research §5 cites (43 to 52) | player side (our preset) | the band is an `[estimate]` from ffx2-vegnagun-shuyin §6; so are 46 / 48 / 50 | 61 (30.5 %) | 66 (33 %) | 99 (49.5 %) |
+| — | **As registered** | | | **36 (18 %)** [31] | 34 (17 %) | 58 (29 %) |
+| A | **Action time 3 s** on the three Road formations (the Chapter XIII switch) | engine rule | the rule `[verified: 2]`; the length is an `[estimate]` (nothing published) | **164 (82 %)** [159, 79.5 %] | 155 (78 %) [155] | 174 (87 %) |
+| B | Action time 1.5 s (the global estimate) | engine rule | as A | 117 (58.5 %) [115] | 124 (62 %) [117] | 147 (73.5 %) |
+| C | **Preset at Lv 52 / 52 / 52**, the top of the band research §5 cites (43 to 52) | player side (our preset) | the band is an `[estimate]` from ffx2-vegnagun-shuyin §6; so are 46 / 48 / 50 | 61 (30.5 %) [58] | 66 (33 %) [73] | 99 (49.5 %) |
 | — | FA8 b (the Sisters' counter counts only landed damage) | boss AI reading | picked a, sourced | 37 | 35 | 75 |
 | — | The Config ATB speed at Slow (the live pause row) | player setting | sourced setting | 34 | 56 | |
 | — | The guard first, spells or curtains | player line | GamerGuides `[single source]` | 7 / 6 | 19 / 19 | 44 / 42 |
@@ -73,7 +79,7 @@ was measured: each needs a kit option like Chapter XIII's.
 ## 4. Recommendation for Bailey (one question)
 
 **A: action time 3 s on the Road formations**, the same switch and the same length Bailey picked for
-Chapter XIII this morning. It is the only measured option that crosses 1 in 4 (82 %), it rests on a
+Chapter XIII this morning. It is the strongest measured option (82 %; 79.5 % on main 3c4cd1f6; B and C also clear 1 in 4, at 57.5 % and 29 %), it rests on a
 sourced rule the engine otherwise breaks, and it touches neither a boss nor the preset. C alone
-reaches 30 %, and can stack with A if the Sisters still feel unfair in play. Reply words: "Fallen
+reaches 30 % (29 % on main), and can stack with A if the Sisters still feel unfair in play. Reply words: "Fallen
 Aeons: A", "Fallen Aeons: C", "Fallen Aeons: A and C", or "Fallen Aeons: as measured".

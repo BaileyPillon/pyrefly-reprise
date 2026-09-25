@@ -1,6 +1,30 @@
 # Chapter XI — Fallen Aeons: measured benches (FFX-2 only)
 
-## 2026-09-25: the ship gate's re-measure (read this first)
+## 2026-09-25, later: re-measured on main 3c4cd1f6 (read this first)
+
+Main moved under the first re-measure: **07af1f90 (decision sheet item 4 A1) makes an enemy hit close
+an open command menu** under Active and on the Wait split's top list, and the bench helper honours it
+(`engine.inputValid` after each menu spell, then a fresh menu). Main was merged into this branch
+(00e49f02) and `tests/unit/chapters/fallen-aeons-ship-bench.test.ts` re-run unchanged. Bench-speed rows
+do not move (no menu is open at D = 0); every human row moves down a little.
+
+| Fight | Line | Bench (D = 0) | Human, Wait split (761d3eb0) | Human, Wait split (main 3c4cd1f6) |
+|---|---|---:|---:|---:|
+| **Chapter (1-2-3), one run** | intended on each link | 58/200 (29 %) | 8/40; 36/200 (18 %) | **5/40 (12.5 %); 31/200 (15.5 %)** |
+| 1 Shiva | intended | 183/200 | 39/40 | 39/40 |
+| 2 Magus Sisters | intended | 84/200 | 8/40 | 8/40 |
+| 3 Anima | intended | 198/200 | 39/40 | 40/40 |
+| Chapter | the guide's habit (0.25 s on the top list) | | 7/40 | 5/40 |
+| 2 Sisters | the guide's habit | | | 9/40 |
+| Chapter | OPTION action time 1.5 s | 147/200 | 117/200 | 115/200 (57.5 %) |
+| Chapter | OPTION action time 3 s | 174/200 | 164/200 | **159/200 (79.5 %)** |
+| Chapter | OPTION preset at Lv 52 / 52 / 52 | 99/200 | 61/200 | 58/200 (29 %) |
+
+Human losses on the Road, 200 seeds: Shiva 22, **Sisters 146**, Anima 1. Still under the 25 % gate;
+the method check (`fallen-aeons-winnability-method-check.md`) stands with these numbers, and its one
+question for Bailey is unchanged. Nothing built; no boss number moved.
+
+## 2026-09-25: the ship gate's re-measure on 761d3eb0 (before item 4 A1)
 
 Printed by `tests/unit/chapters/fallen-aeons-ship-bench.test.ts` (branch
 `chapter-fallen-aeons-ship-0925`, main 761d3eb0), which reads the registered record (`FFX2_FALLEN_AEONS`:
