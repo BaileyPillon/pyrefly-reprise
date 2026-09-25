@@ -74,10 +74,10 @@ afterEach(() => {
 const selectedId = (rig: Rig): unknown => rig.screen.snapshot()['selectedId'];
 
 describe('the board on screen', () => {
-  it('draws eight cards in two game groups — the hero plus seven on the rail', () => {
+  it('draws nine cards in two game groups — the hero plus eight on the rail', () => {
     const { root } = mount();
     expect(root.querySelectorAll('.fe-hero')).toHaveLength(1);
-    expect(root.querySelectorAll('.fe-card')).toHaveLength(7);
+    expect(root.querySelectorAll('.fe-card')).toHaveLength(8);
     const groups = [...root.querySelectorAll('.fe-rail__group')].map((g) => g.textContent?.trim());
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
   });
@@ -129,6 +129,9 @@ describe('the keyboard', () => {
     // Evrae is unlocked now and playable, so it is not skipped.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('evrae-airship');
+    // Yojimbo (Chapter IX) was listed 2026-09-24 and is playable.
+    rig.key('ArrowRight');
+    expect(selectedId(rig)).toBe('yojimbo-cavern');
     // Macalania sits between here and FFX-2, and is stepped over.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('ffx2-bahamut');

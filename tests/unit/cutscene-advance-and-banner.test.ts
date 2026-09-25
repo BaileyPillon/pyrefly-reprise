@@ -82,6 +82,12 @@ describe('CutsceneRunner resumes past the results marker — #04', () => {
       const at = post.findIndex((s) => s.type === 'results');
       expect(at, `${chapter.id} has no results() marker`).toBeGreaterThanOrEqual(0);
       const after = post.slice(at + 1).filter((s) => s.type === 'say' || s.type === 'narrate').length;
+      // Chapter IX's draft puts `[BEAT: results()]` after its last line
+      // (docs/plans/yojimbo-story-draft.md, post-battle beat 5): nothing follows.
+      if (chapter.id === 'yojimbo-cavern') {
+        expect(after).toBe(0);
+        continue;
+      }
       expect(after, `${chapter.id} authors nothing after results()`).toBeGreaterThan(0);
     }
   });

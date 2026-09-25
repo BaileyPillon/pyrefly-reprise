@@ -123,7 +123,9 @@ const ginnem: EnemyDef = {
 const yojimbo: EnemyDef = {
   id: YOJIMBO_ID,
   name: 'Yojimbo',
-  spriteKey: 'yojimbo',
+  // Lady Ginnem's Yojimbo, not the player's aeon painting `yojimbo`: the locked
+  // O-1 A idle and the longer-blade cast (D-054, D-132), `public/art/characters/yojimbo-cavern/`.
+  spriteKey: 'yojimbo-cavern',
   slot: 1, // M2 [§2.5]
   stats: {
     hp: 33_000, // §2.1 [verified: 3 sources]
@@ -176,7 +178,7 @@ const yojimbo: EnemyDef = {
     'immune-to-delay',
     'immune-to-bribe',
   ],
-  forms: [{ name: 'Yojimbo', spriteKey: 'yojimbo', hp: 33_000 }],
+  forms: [{ name: 'Yojimbo', spriteKey: 'yojimbo-cavern', hp: 33_000 }],
   aiScriptId: YOJIMBO_SCRIPT,
   // §2.4 [decompiled] + GameFAQs [verified: 2 sources] — no AP, no gil, no
   // drop, no steal. The real reward is the Chamber of the Fayth (§2.4, §7).

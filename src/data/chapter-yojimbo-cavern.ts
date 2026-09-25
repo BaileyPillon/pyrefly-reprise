@@ -9,11 +9,11 @@
  * Kept out of `./encounters.ts` for the house 400-line rule, like Chapters 7
  * and 8; the `Chapter` import is type-only, so there is no runtime cycle.
  *
- * ## Registered, reachable, and UNLISTED
+ * ## Listed (2026-09-24)
  *
- * It sits in `UNLISTED_CHAPTERS`, not in `CHAPTERS`: `getChapter`, the battle
- * flow and `window.__pyrefly.gotoChapter` reach it by id, but **chapter select
- * does not show it**. Moving it into `CHAPTERS` is the integrator's one line.
+ * It sits in `CHAPTERS` after Chapter VIII, so chapter select shows its card
+ * (Bailey, 2026-09-24: "Is Yojimbo on the live build yet? If not work on
+ * including right away please"). Until then it was registered but unlisted.
  *
  * Bailey's picks (docs/target/decisions.json D-049 to D-076): title "Yojimbo"
  * (D-053), Chapter IX (D-058), line-up Lulu, Kimahri, Yuna (D-066), no Candle
@@ -40,7 +40,7 @@ import { yojimboCavernScripts } from '../story/scripts/yojimbo-cavern.ts';
 import { yojimboCavernBuild } from './ffx/builds/yojimbo-cavern.ts';
 import { yojimboGroup } from './ffx/enemies/yojimbo.ts';
 
-/** Chapter 9 (registered, unlisted). */
+/** Chapter 9 (listed). */
 export const YOJIMBO_CAVERN: Chapter = {
   id: 'yojimbo-cavern',
   game: 'ffx',
@@ -50,8 +50,8 @@ export const YOJIMBO_CAVERN: Chapter = {
   subtitle: "A guardian's last duty to her first summoner",
   // research §1.1 / §6.1 [verified: 2 sources]: the last chamber of the Cavern.
   location: 'Cavern of the Stolen Fayth — the last chamber',
-  // research §6.2 beats 3-4 and §4.1, summarised. Placeholder card copy; the
-  // card itself is not shown until Bailey picks it.
+  // research §6.2 beats 3-4 and §4.1, summarised. The copy on the hero plate
+  // B card Bailey picked (D-074, docs/concepts/chapters/yojimbo/hero-plate/b-card.jpg).
   blurb:
     'Lulu guarded one summoner before Yuna, and she died in this cave. She never left it. ' +
     'Her aeon still answers her, and it strikes harder every time it is struck.',

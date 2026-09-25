@@ -126,10 +126,10 @@ describe('chapter meta', () => {
   const manifest = JSON.parse(readFileSync(join(ART, 'manifest.json'), 'utf8')) as { pause: string[] };
   const words = (t: string) => t.trim().split(/\s+/).filter(Boolean).length;
 
-  it('is found by id, and stays out of the listed CHAPTER_META while the chapter is unlisted', () => {
+  it('is found by id, and sits last in the listed CHAPTER_META, as the chapter sits last in CHAPTERS', () => {
     expect(getChapterMeta('yojimbo-cavern')).toBe(YOJIMBO_META);
-    expect(CHAPTER_META.map((m) => m.id)).not.toContain('yojimbo-cavern');
-    expect(CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
+    expect(CHAPTER_META.at(-1)).toBe(YOJIMBO_META);
+    expect(CHAPTERS.at(-1)?.id).toBe('yojimbo-cavern');
   });
 
   it('agrees with the chapter record: FFX, Chapter IX, "Yojimbo" (D-053, D-058)', () => {

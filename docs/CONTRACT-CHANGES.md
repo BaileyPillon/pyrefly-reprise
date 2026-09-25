@@ -6,6 +6,22 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — `encounters.ts`: Chapter IX (Yojimbo) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX only** [AGENTS.md hard rule 14]: Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth
+(`research/ffx-yojimbo.md`); the listing itself is shared plumbing. Bailey, 2026-09-24: "Is Yojimbo
+on the live build yet? If not work on including right away please."
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `YOJIMBO_CAVERN` and `CHAPTER_IDS` gains
+`'yojimbo-cavern'`, both after Chapter VIII (registration order, D-058). `ChapterId` and
+`getChapter` are unchanged (the id was already registered); `UNLISTED_CHAPTERS` keeps Natus and the
+Fallen Aeons. Alongside: `CHAPTER_META` gains `YOJIMBO_META` (`UNLISTED_CHAPTER_META` is now empty),
+`src/story/registry.ts` gains the `'yojimbo-cavern'` key, and the formation's Yojimbo `spriteKey`
+is `yojimbo-cavern` (the locked O-1 A painting, D-054), not the player's aeon `yojimbo`. Every
+chapter-generic consumer now sees nine chapters: chapter select draws a ninth, playable card;
+`arcCleared('ffx')` also needs Chapter IX (`ARC_FINALE.ffx` stays `braskas-final-aeon`, the
+story finale). No save migration: saves key chapters by id string.
+
 ## 2026-09-24 — PR-0129: `MusicPhaseCue.track` widens to `MusicKey | null`
 
 **Both** [AGENTS.md hard rule 14]: shared plumbing, used once per game (Chapter 3, FFX;

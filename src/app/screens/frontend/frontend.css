@@ -935,13 +935,9 @@
   .fe-party {
     margin: calc(6 * var(--fe-k)) 0 calc(10 * var(--fe-k));
   }
-  .fe-party__tile,
-  .fe-party__face {
-    width: calc(44 * var(--fe-k));
-  }
-  .fe-party__face {
-    height: calc(44 * var(--fe-k));
-  }
+  /* A name wider than its 44px face widens its own tile (KIMAHRI ran into the next name at 390px). */
+  .fe-party__tile { width: auto; min-width: calc(44 * var(--fe-k)); }
+  .fe-party__face { width: calc(44 * var(--fe-k)); height: calc(44 * var(--fe-k)); margin-inline: auto; }
 }
 
 /* The system switch wins over everything: a static composition, no loop. */

@@ -31,14 +31,15 @@ describe('the board', () => {
     save = freshStore();
   });
 
-  it('holds eight cards: seven playable chapters (Leblanc and Evrae now landed) and one still coming', () => {
+  it('holds nine cards: eight playable chapters (Leblanc, Evrae and Yojimbo now landed) and one still coming', () => {
     const tiles = buildChapterTiles(save);
     // Leblanc's and Evrae's own COMING_CHAPTERS rows are filtered out by id
     // now that their real chapters are registered and unlocked, so the raw
     // `COMING_CHAPTERS.length` (3) overcounts by two — this asserts what the
     // board actually shows. Macalania (Chapter 7) is registered but still
     // LOCKED, so its real tile is withheld and its COMING row stays.
-    expect(tiles).toHaveLength(8);
+    // Chapter IX (Yojimbo) was listed 2026-09-24 with no COMING row of its own.
+    expect(tiles).toHaveLength(9);
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length - LOCKED_CHAPTER_IDS.size);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
       'Seymour and Anima',
@@ -50,9 +51,9 @@ describe('the board', () => {
     expect(groups.map((g) => g.game)).toEqual(['ffx', 'ffx2']);
     expect(groups[0]!.label).toBe('Final Fantasy X');
     expect(groups[1]!.label).toBe('Final Fantasy X-2');
-    // Five FFX cards (4 built — Evrae now landed — + 1 still coming,
-    // Macalania), three FFX-2 (3 built, Leblanc's coming row now dropped).
-    expect(groups[0]!.tiles).toHaveLength(5);
+    // Six FFX cards (5 built — Evrae and Yojimbo now landed — + 1 still
+    // coming, Macalania), three FFX-2 (3 built, Leblanc's coming row dropped).
+    expect(groups[0]!.tiles).toHaveLength(6);
     expect(groups[1]!.tiles).toHaveLength(3);
     for (const group of groups) {
       const firstComing = group.tiles.findIndex((t) => !t.playable);
@@ -181,6 +182,10 @@ describe('the board', () => {
       expect(silhouetteKeysFor(chapter).length).toBeGreaterThan(0);
     }
     expect(silhouetteKeysFor(CHAPTERS[0]!)).toEqual(['mortiorchis', 'seymour-flux-body']);
+    // Chapter IX's card cuts Lady Ginnem's Yojimbo (locked O-1 A), never the
+    // player's aeon painting `yojimbo`, which D-054 did not approve.
+    const ix = CHAPTERS.find((c) => c.id === 'yojimbo-cavern')!;
+    expect(silhouetteKeysFor(ix)).toEqual(['yojimbo-cavern']);
   });
 });
 
@@ -192,9 +197,9 @@ describe('the cursor', () => {
 
   it('skips the COMING cards rather than landing on one', () => {
     const tiles = buildChapterTiles(save);
-    // Evrae (Chapter 8) is unlocked now and is the last built FFX chapter;
+    // Yojimbo (Chapter 9) is the last built FFX chapter since 2026-09-24;
     // +1 must jump the one still-coming card (Macalania).
-    const fromLastFfx = tiles.findIndex((t) => t.id === 'evrae-airship');
+    const fromLastFfx = tiles.findIndex((t) => t.id === 'yojimbo-cavern');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
     // Wrapping backwards from the first card lands on the last *playable* one
     // — Leblanc now, since it landed as the sixth chapter.

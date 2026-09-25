@@ -249,6 +249,9 @@ afterEach(() => {
   resetFlowScreens();
 });
 
+/** Chapters whose post script authors every line before results(). */
+const ENDS_ON_RESULTS: ReadonlySet<string> = new Set(['yojimbo-cavern']);
+
 describe('the post-battle scenes play — critic round 02 #04', () => {
   it.each(CHAPTERS.map((c) => [c.id, c] as const))(
     '%s delivers every line its post script authors',
@@ -261,7 +264,12 @@ describe('the post-battle scenes play — critic round 02 #04', () => {
 
       const authoredBefore = spokenLines(post.slice(0, marker));
       const authoredAfter = spokenLines(post.slice(marker + 1));
-      expect(authoredAfter, `${chapter.id} authors no lines after results()`).toBeGreaterThan(0);
+      // Chapter IX's post scene ends on results(): the story draft
+      // (docs/plans/yojimbo-story-draft.md) closes on Lulu's last line before
+      // the tally, so there is nothing after it to deliver.
+      if (!ENDS_ON_RESULTS.has(chapter.id)) {
+        expect(authoredAfter, `${chapter.id} authors no lines after results()`).toBeGreaterThan(0);
+      }
 
       // Both halves, and only those: `pre` is skipped by `skipCutscenes`? No —
       // it runs too, so its lines are in the total as well.
@@ -358,7 +366,10 @@ describe('the end of an arc — critic round 02 #32', () => {
       // Chapter 8 (Evrae) is the same again: the approach to Bevelle, before
       // the wedding its own post scene ends on (research ffx-evrae-airship.md
       // §12.5 beat 11), so it too is story-earlier than the FFX finale.
-      const storyEarlierThanFinale = new Set(['ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship']);
+      // Chapter 9 (Yojimbo) too: the Cavern of the Stolen Fayth comes before
+      // Mt. Gagazet and Zanarkand (research ffx-yojimbo.md §1.1, §1.2 item 5 and §5 [verified: 3 sources]; its party is
+      // the Gagazet build, docs/plans/chapter-yojimbo-review.md).
+      const storyEarlierThanFinale = new Set(['ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern']);
       const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id));
       const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;
       expect(lastByDisplayOrder).toBe(id);

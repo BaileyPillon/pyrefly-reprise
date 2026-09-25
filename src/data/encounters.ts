@@ -49,13 +49,13 @@ import { ffx2LeblancScripts } from '../story/scripts/ffx2-leblanc.ts';
 import { SEYMOUR_ANIMA_MACALANIA } from './chapter-seymour-anima-macalania.ts';
 // Chapter 8's record, same reason and the same type-only import.
 import { EVRAE_AIRSHIP } from './chapter-evrae-airship.ts';
-// Chapter 9's record and the registered-but-unlisted list (same reason).
+// Chapter 9's record (listed 2026-09-24) and the registered-but-unlisted list (same reason).
 import { YOJIMBO_CAVERN } from './chapter-yojimbo-cavern.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 
 /**
  * Every registered chapter id. Also the keys used in `SaveData.chapters`.
- * `'yojimbo-cavern'`, `'seymour-natus'` and `'ffx2-fallen-aeons'` are registered but unlisted: see `UNLISTED_CHAPTERS`.
+ * `'seymour-natus'` and `'ffx2-fallen-aeons'` are registered but unlisted: see `UNLISTED_CHAPTERS`.
  */
 export type ChapterId =
   | 'seymour-flux'
@@ -360,13 +360,12 @@ export const FFX2_LEBLANC: Chapter = {
 };
 
 export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN };
+export { UNLISTED_CHAPTERS }; // registered, not listed: `./chapters-unlisted.ts`
 
 /**
- * All eight, in play order. Chapters 7 (Macalania) and 8 (Evrae) are
- * registered — the debug API, the flow and every chapter-generic test reach
- * them — but chapter select shows each as a locked COMING card until Bailey
- * approves its art (`LOCKED_CHAPTER_IDS` in
- * `src/app/screens/frontend/comingChapters.ts`).
+ * All nine, in play order (Chapter IX listed 2026-09-24). A listed chapter
+ * whose id is in `LOCKED_CHAPTER_IDS` (`src/app/screens/frontend/comingChapters.ts`)
+ * still shows as a COMING card on chapter select until Bailey approves its art.
  */
 export const CHAPTERS: readonly Chapter[] = [
   SEYMOUR_FLUX,
@@ -377,6 +376,7 @@ export const CHAPTERS: readonly Chapter[] = [
   FFX2_LEBLANC,
   SEYMOUR_ANIMA_MACALANIA,
   EVRAE_AIRSHIP,
+  YOJIMBO_CAVERN,
 ] as const;
 
 /** Chapter ids, in play order. */
@@ -389,9 +389,8 @@ export const CHAPTER_IDS: readonly ChapterId[] = [
   'ffx2-leblanc',
   'seymour-anima-macalania',
   'evrae-airship',
+  'yojimbo-cavern',
 ] as const;
-
-export { UNLISTED_CHAPTERS }; // registered, not listed: `./chapters-unlisted.ts`
 
 /** Look a chapter up by id, listed or not. Returns `undefined` for an unknown id. */
 export function getChapter(id: string): Chapter | undefined {

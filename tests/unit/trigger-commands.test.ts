@@ -163,6 +163,23 @@ function asOffered(row: AvailableCommand): Command {
   return { ...row.command, targets: row.validTargets.slice(0, 1) } as Command;
 }
 
+/**
+ * A Mix is two items thrown together, so the items exemption reaches it when
+ * the drawn recipe is a pure cleanse (Panacea: `formula: 'none'`, no status
+ * given, only `removesStatuses`) and nobody carried a status to remove. The
+ * engine draws the pair at random from the bag (`overdrive.ts#rollDefaultMinigame`),
+ * so which recipe comes out depends on the build's inventory and the seed;
+ * Chapter IX's bench (listed 2026-09-24) draws Panacea on seed 3.
+ */
+function isCleanseOnClean(events: readonly BattleEvent[]): boolean {
+  const start = events.find((e) => e.type === 'action-start') as { abilityId?: string } | undefined;
+  const def = ffxData.ALL_ABILITIES.find((a) => a.id === start?.abilityId);
+  if (!def) return false;
+  const pureCleanse =
+    def.formula === 'none' && def.statusEffects.length === 0 && (def.removesStatuses?.length ?? 0) > 0;
+  return pureCleanse && realEffects(events).length === 0;
+}
+
 /** Items are the one exemption; see the file header for why. */
 function shouldBeAsked(row: AvailableCommand): boolean {
   return row.enabled && row.command.kind !== 'item';
@@ -202,7 +219,8 @@ function auditChapter(chapter: Chapter): string[] {
           engine.submit({ kind: 'defend', targets: [] });
         }
         if (!live) continue;
-        if (realEffects(submitAndRead(engine, asOffered(live))).length === 0) inert.push(key);
+        const events = submitAndRead(engine, asOffered(live));
+        if (realEffects(events).length === 0 && !isCleanseOnClean(events)) inert.push(key);
       }
 
       walker.submit({ kind: 'defend', targets: [] });
@@ -274,7 +292,8 @@ describe('and the bench is asked too, which is where the two inert rows were hid
             (c) => c.enabled && c.label === row.label && c.command.kind === row.command.kind,
           );
           if (!live) continue;
-          if (realEffects(submitAndRead(probe, asOffered(live))).length === 0) {
+          const events = submitAndRead(probe, asOffered(live));
+          if (realEffects(events).length === 0 && !isCleanseOnClean(events)) {
             inert.push(`${who} / ${live.label} (${live.command.kind})`);
           }
         }

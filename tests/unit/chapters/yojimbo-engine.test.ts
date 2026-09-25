@@ -489,14 +489,14 @@ describe('The Cavern build and the chapter registration', () => {
     expect(gagazetBuild.members.find((m) => m.id === 'kimahri')?.learnedAbilityIds).toContain('mighty-guard');
   });
 
-  it('Chapter IX is registered by id, reachable, and not listed (no chapter-select card)', () => {
+  it('Chapter IX is registered by id, reachable, and listed after Chapter VIII (listed 2026-09-24)', () => {
     const ch = getChapter('yojimbo-cavern');
     expect(ch).toBeDefined();
     expect(ch).toMatchObject({ game: 'ffx', number: 9, title: 'Yojimbo' });
     expect(ch?.enemyGroupRef.id).toBe(GROUP_ID);
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('yojimbo-cavern'); // Chapter X joined the list on 2026-09-24
-    expect(CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
-    expect(CHAPTER_IDS).not.toContain('yojimbo-cavern');
+    expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
+    expect(CHAPTERS.map((c) => c.id).slice(-2)).toEqual(['evrae-airship', 'yojimbo-cavern']);
+    expect(CHAPTER_IDS.at(-1)).toBe('yojimbo-cavern');
     // The story layer (tests/unit/chapters/yojimbo-content.test.ts pins its lines):
     // the pre scene ends by opening the battle, the post scene shows results.
     expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' });
@@ -520,7 +520,7 @@ describe('FFX only: nothing here reaches another chapter or FFX-2', () => {
   });
 
   it('every other FFX chapter keeps every living enemy in its CTB queue and never grows an enemy gauge tagged yojimbo', () => {
-    for (const ch of CHAPTERS.filter((c) => c.game === 'ffx')) {
+    for (const ch of CHAPTERS.filter((c) => c.game === 'ffx' && c.id !== 'yojimbo-cavern')) {
       const engine = createFFXEngine({ content, autoResolveMinigames: true });
       engine.init({ game: 'ffx', party: ch.buildRef as typeof yojimboCavernBuild, enemies: ch.enemyGroupRef, triggers: [], seed: 1, condition: 'normal', canEscape: false });
       const st = engine.state();

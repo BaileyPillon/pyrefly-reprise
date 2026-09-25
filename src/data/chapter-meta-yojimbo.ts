@@ -28,9 +28,9 @@
  *   D-063; from Ginnem's appearance through the battle, research §6.4) and
  *   the shared `victory-ffx` fanfare.
  *
- * **Unlisted** like the chapter itself (`./chapters-unlisted.ts`): it lives in
- * `./chapter-meta.ts`'s `UNLISTED_CHAPTER_META`, which `getChapterMeta` also
- * reads. Listing the chapter moves this record into `CHAPTER_META`.
+ * **Listed** 2026-09-24 with the chapter itself: it sits in `./chapter-meta.ts`'s
+ * `CHAPTER_META`, after Chapter VIII's record (it was in `UNLISTED_CHAPTER_META`
+ * while the chapter was registered but unlisted).
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
