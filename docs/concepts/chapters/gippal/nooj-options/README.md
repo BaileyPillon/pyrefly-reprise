@@ -250,3 +250,13 @@ yet approved by anyone.
 2. A new cast derived from Option 1's idle, with the fur region only on the far shoulder, no grey block-in on the
    leading shoulder, the idle's machina arm colour, and the idle's loops.
 3. A fresh independent judge of the result.
+
+## Targeted repair of option 1 (2026-09-25)
+
+Bailey accepted option 1 with one targeted repair pass. The results are in [repair/README.md](repair/README.md) and
+[repair/sheet.jpg](repair/sheet.jpg).
+
+- **The idle** has been repaired: the cane hand, the machina hand and the feet.
+- **The cast** did not come right in two tries, so the pass stopped. The best try is kept, and it is not judged.
+
+Nothing was installed.
