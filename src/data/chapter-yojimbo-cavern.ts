@@ -29,8 +29,8 @@
  *   **stand-in** for the cave's own theme, which has no cue of ours (the
  *   Chapter VII precedent); the pre scene moves to `boss-yojimbo` itself when
  *   Ginnem appears.
- * - `sceneKey: 'gagazet'` — **placeholder** until the Cavern scene (O-4 A,
- *   `public/art/backdrops/cavern-stolen-fayth.png`) is wired by the scene track.
+ * - `sceneKey: 'cavern-stolen-fayth'` — the Cavern's last chamber (O-4 A, with
+ *   the night-sakura arrival), `src/scenes/cavern-stolen-fayth.ts`.
  * - Subtitle and blurb are summaries of research §6.2's sourced beats, in our
  *   own words; none is a quoted line.
  */
@@ -55,7 +55,7 @@ export const YOJIMBO_CAVERN: Chapter = {
   blurb:
     'Lulu guarded one summoner before Yuna, and she died in this cave. She never left it. ' +
     'Her aeon still answers her, and it strikes harder every time it is struck.',
-  sceneKey: 'gagazet', // PLACEHOLDER — see the file header
+  sceneKey: 'cavern-stolen-fayth', // O-4 A (D-061) + arrival (D-072), src/scenes/cavern-stolen-fayth.ts
   thumbnailKey: 'chapter-yojimbo-cavern',
   buildRef: yojimboCavernBuild,
   enemyGroupRef: yojimboGroup,

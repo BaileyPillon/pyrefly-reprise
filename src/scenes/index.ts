@@ -20,21 +20,15 @@ import { Scene, Vector3, type PerspectiveCamera } from 'three';
 import { BattleCamera } from '../engine/BattleCamera.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { buildDemoScene, type PaintedScene } from './demo.ts';
-import {
-  buildZanarkandDomeDiorama,
-  buildZanarkandDomeScene,
-  ZANARKAND_DOME_SLOTS,
-} from './zanarkand-dome.ts';
+import { buildZanarkandDomeDiorama, buildZanarkandDomeScene, ZANARKAND_DOME_SLOTS } from './zanarkand-dome.ts';
 import { buildGagazetScene } from './gagazet.ts';
-import {
-  buildBevelleUndergroundScene,
-  BEVELLE_UNDERGROUND_SLOTS,
-} from './bevelle-underground.ts';
+import { buildBevelleUndergroundScene, BEVELLE_UNDERGROUND_SLOTS } from './bevelle-underground.ts';
 import { buildDreamsEndScene, DREAMS_END_SLOTS } from './dreams-end.ts';
 import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farplane.ts';
 import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
+import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -238,6 +232,9 @@ SCENES.set('evrae-airship-deck', {
   slots: EVRAE_AIRSHIP_DECK_SLOTS,
   placeholder: false,
 });
+/** The Cavern of the Stolen Fayth (Chapter IX, FFX only): real, `build` unreachable as for Leblanc [cavern-stolen-fayth.ts]. */
+SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern of the Stolen Fayth — the last chamber',
+  build: buildDemoScene, slots: CAVERN_STOLEN_FAYTH_SLOTS, placeholder: false });
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -278,6 +275,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'leblanc-last-room': buildLeblancLastRoomScene,
   'macalania-temple': buildMacalaniaTempleScene,
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
+  'cavern-stolen-fayth': buildCavernStolenFaythScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */
