@@ -1,6 +1,6 @@
 /**
  * **Chapter XIV — the rules of the duel (FFX only)**: the mirror lock (I-G2),
- * "only aeons can fight them" (I-G4, B6 = a), no Items on an aeon (B7), the
+ * "only aeons can fight them" (I-G4, B6 = a), no Items on an aeon (every FFX battle since PR-0155), the
  * loss (I-G3, B11 = a, review E11), the solo line-up (I-G1), Isaaru the
  * bystander (I-G5), the three-link chain and its carry, the 5,000 AP (B13 = a),
  * the registration (unlisted), and the absence of every rule elsewhere
@@ -70,7 +70,7 @@ describe('the mirror lock (I-G2)', () => {
   });
 });
 
-describe('only aeons can fight them (B6 = a) and aeons carry no items (B7)', () => {
+describe('only aeons can fight them (B6 = a); aeons carry no items (every FFX battle, PR-0155)', () => {
   it("Yuna's Attack, Talk, Scan and Grenade are greyed with the reason; heals, Nul spells, Pray, Summon, Grand Summon and Defend stay open", () => {
     const d = nextInput(newEngine('isaaru-grothia', 4))!;
     for (const [kind, id] of [['attack', undefined], ['trigger', 'talk'], ['ability', 'scan'], ['item', 'grenade']] as const) {
@@ -94,7 +94,7 @@ describe('only aeons can fight them (B6 = a) and aeons carry no items (B7)', () 
     d = nextInput(engine)!;
     expect(d.actorId).toBe('shiva');
     expect(d.commands.some((c) => c.command.kind === 'item')).toBe(false);
-    expect(engine.submit({ kind: 'item', id: 'potion', targets: ['shiva'] }).some((e) => e.type === 'message' && e.text === 'Aeons cannot use items')).toBe(true);
+    expect(engine.submit({ kind: 'item', id: 'potion', targets: ['shiva'] }).some((e) => e.type === 'message' && e.text === 'Shiva cannot use items')).toBe(true);
   });
 
   it('Threaten fails on them (B10): Heavenly Strike lands no Threaten', () => {

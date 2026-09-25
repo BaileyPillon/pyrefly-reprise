@@ -50,15 +50,7 @@
  * means.
  */
 
-import type {
-  AbilityDef,
-  BattleEvent,
-  BattleState,
-  Command,
-  CombatantId,
-  FFXCombatant,
-  StatusId,
-} from '../common/types.ts';
+import type { AbilityDef, BattleEvent, BattleState, Command, CombatantId, FFXCombatant, StatusId } from '../common/types.ts';
 import { SeededRng } from '../common/rng.ts';
 import { type Ctx, type EventInput, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { FFXContentRegistry, getFFXRegistry } from './registry.ts';

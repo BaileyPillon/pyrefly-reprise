@@ -13,7 +13,7 @@ import { ejectActor } from './hp.ts';
 import { setGauge } from './overdrive.ts';
 import { normalise } from './turnQueue.ts';
 import { baseCtb } from './math.ts';
-import { lockedMirrorOf } from './aeon-duel.ts';
+import { duelLost, lockedMirrorOf } from './aeon-duel.ts';
 
 /**
  * Battles a KO'd aeon must sit out before it may be summoned again.
@@ -35,6 +35,11 @@ export function availableAeons(ctx: Ctx): FFXCombatant[] {
     out.push(aeon);
   }
   return out;
+}
+
+/** An aeon duel's sourced loss (`./aeon-duel.ts#duelLost`, B11 = a): no aeon out, none left to summon. */
+export function aeonDuelLost(ctx: Ctx): boolean {
+  return duelLost(ctx, availableAeons(ctx).length);
 }
 
 /** Freeze the party's counters so they resume exactly where they left off. */

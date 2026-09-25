@@ -8,7 +8,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { BattleEvent, FFXCombatant } from '../../../src/battle/common/types.ts';
+import type { BattleEvent, Command, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { computeDamage, createFFXEngine } from '../../../src/battle/ffx/index.ts';
 import * as rules from '../../../src/battle/ffx/ai/isaaru-rules.ts';
 import * as data from '../../../src/data/ffx/enemies/isaaru.ts';
@@ -16,8 +16,10 @@ import * as rows from '../../../src/data/ffx/enemies/isaaru-abilities.ts';
 import { ISAARU_GROUPS } from '../../../src/data/ffx/enemies/isaaru.ts';
 import { viaPurificoBuild, BAHAMUT_GAUGE, YUNA_GAUGE } from '../../../src/data/ffx/builds/via-purifico.ts';
 import { highbridgeBuild } from '../../../src/data/ffx/builds/highbridge.ts';
+import { ALL_ABILITIES } from '../../../src/data/ffx/index.ts';
+import { describeAbility } from '../../../src/battle/ffx/intent.ts';
 import {
-  GROTHIA, ISAARU, PTERYA, SPATHI, actor, defend, drive, grandSummon, newEngine, nextInput, summon,
+  GROTHIA, ISAARU, PTERYA, SPATHI, actor, content, defend, drive, grandSummon, newEngine, nextInput, summon,
 } from '../helpers/isaaruUnits.ts';
 
 const events = (log: readonly BattleEvent[], type: BattleEvent['type']) => log.filter((e) => e.type === type);
@@ -216,5 +218,38 @@ describe('Isaaru (B8)', () => {
     drive(engine, (d) => (d.actorId === 'yuna' ? summon('valefor') : { kind: 'attack', targets: [GROTHIA] }));
     expect(starts(engine.state().log, ISAARU)).toEqual([]);
     expect(actor(engine, ISAARU).hp).toBe(10);
+  });
+});
+
+describe('repairs after the engine review (2026-09-25)', () => {
+  it("the intent slab calls Countdown what it is: no damage, not 'non-elemental damage to itself'", () => {
+    const engine = newEngine('isaaru-spathi', 4) as ReturnType<typeof createFFXEngine>;
+    nextInput(engine);
+    const intent = engine.intent();
+    expect(intent?.enemyId).toBe(SPATHI);
+    expect(intent?.abilityId).toBe(rows.SPATHI_COUNTDOWN);
+    expect(intent?.description).toBe('Deals no damage.');
+  });
+
+  it('the describer: a no-effect row deals no damage, a cure-only row cures, a damage row is unchanged', () => {
+    const esuna = ALL_ABILITIES.find((a) => a.id === 'esuna')!;
+    expect(describeAbility(esuna)).toMatch(/^Cures Petrify, Poison.* on one ally\.$/);
+    expect(describeAbility(rows.spathiMegaFlare)).toContain('damage to the whole party');
+  });
+
+  it('a Grand Summon nobody chose (auto-resolved) calls the first free aeon, not nothing: roster order outside a duel, never the locked one', () => {
+    const autoGs = (): Command => ({ kind: 'overdrive', id: 'grand-summon', targets: [] });
+    const summonedBy = (out: readonly BattleEvent[]) => out.flatMap((e) => (e.type === 'summon' ? [e.aeonId] : []));
+    // Outside a duel: the Grothia formation with its duel fields stripped (no lock, no "only aeons").
+    const { aeonsOnly: _o, lockedAeons: _l, victoryBonusAp: _v, ...plain } = ISAARU_GROUPS[0]!;
+    const open = createFFXEngine({ content, autoResolveMinigames: true });
+    open.init({ game: 'ffx', party: viaPurificoBuild, enemies: plain, triggers: [], seed: 3, condition: 'normal', canEscape: false });
+    expect(nextInput(open)!.actorId).toBe('yuna');
+    expect(summonedBy(open.submit(autoGs()))).toEqual(['valefor']);
+    expect(actor(open, 'yuna').overdrive!.gauge).toBe(0);
+    // In the Grothia link, Ifrit is locked; with Valefor down the roll skips both.
+    const duel = newEngine('isaaru-grothia', 3, { ...viaPurificoBuild, aeons: viaPurificoBuild.aeons.map((a) => (a.id === 'valefor' ? { ...a, hp: 0 } : a)) });
+    expect(nextInput(duel)!.actorId).toBe('yuna');
+    expect(summonedBy(duel.submit(autoGs()))).toEqual(['ixion']);
   });
 });

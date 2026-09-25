@@ -24,12 +24,27 @@ parallel) need no second widening. `learn/atlas/cites.ts` gains the key.
   §1.2 [verified: 3 sources]). The engine always built the line-up from the list's length; every
   existing build still passes three.
 - `EnemyGroupDef.lockedAeons` (the mirror lock: `{ aeonId, mirrorOf }`), `aeonsOnly` ("can only be
-  fought by aeons": a party member's foe-aimed rows greyed and refused, no Items row on an aeon,
-  and a defeat when no aeon is left) and `victoryBonusAp` (a victory reward no enemy carries: the
+  fought by aeons": a party member's foe-aimed rows greyed and refused, and a defeat when no aeon
+  is left; an aeon's missing Items row is every FFX battle's rule since PR-0155, not the duel's) and `victoryBonusAp` (a victory reward no enemy carries: the
   duel's 5,000 AP). Read by `src/battle/ffx/aeon-duel.ts`, which copies them into `state.flags` at
   setup (`aeonDuel.only`, `aeonDuel.lock:<aeonId>`, `victory.bonusAp`) so a rebuilt runtime and an
-  intent clone see them. Absent everywhere else: Chapters 1-3 and 7-10 event logs and menus
-  measured byte-identical before and after (70 seeded runs), FFX-2 untouched.
+  intent clone see them. Absent everywhere else, reproducibly: `tests/unit/tools/ffx-chapter-hashes.test.ts`
+  (skipped unless `FFX_HASH_OUT` is set) hashes every menu, event log and result of every other FFX
+  chapter, 624 seeded runs (each chapter from its start through its chain, every later link on its
+  own; four policies). Main 8407e966 against this branch after the repair: 623 byte-identical; the one
+  that differs is a Grand Summon the engine resolved itself (below), and with that one fix undone all
+  624 are identical. FFX-2 untouched (no file under `battle/ffx2` or `data/ffx2` changes).
+
+**Also, shared FFX plumbing (FFX only; Chapter XIV engine review, 2026-09-25; not a contract file):**
+a Grand Summon with no aeon chosen (an auto-resolved or headless roll, or the bare re-submit that
+breaks the minigame loop) called `''`, which spent Yuna's gauge and summoned nothing; it now calls
+the first aeon that can take the field, in roster order (`aeon-duel.ts#defaultGrandSummonAeon`, our
+choice: FFX lets the player pick). The UI overlay and every tactic already pass a choice, so play by
+hand is unchanged. And the FFX enemy-intent sentence no longer calls a `formula: 'none'` row
+"non-elemental damage": a no-effect row reads "Deals no damage." (Spathi's Countdown, Evrae's
+Inhale, Macalania Seymour's idle, Yojimbo's Daigoro, Yu Yevon's command 254, Metamorphosis, Draws
+Sword), a cure-only row "Cures ... on ..." (the Guardians' Remedy). Menus and event logs do not
+carry this text; the hashes above are unaffected by it.
 
 No save migration: saves key chapters by id string, and the chapter is unlisted.
 

@@ -4,15 +4,15 @@
  * contest of aeons in the Via Purifico).
  *
  * Source: `research/ffx-isaaru-bevelle.md` §1.2 (the rules of the duel) and
- * `docs/plans/chapter-isaaru-review.md` §4.3 I-G2, I-G3, I-G4 and B6, B7,
- * B11, B13 — every recommendation Bailey took on 2026-09-25 ("I'll go with
+ * `docs/plans/chapter-isaaru-review.md` §4.3 I-G2, I-G3, I-G4 and B6, B11,
+ * B13 — every recommendation Bailey took on 2026-09-25 ("I'll go with
  * all your recommendations").
  *
  * | Rule | Where it bites | Confidence |
  * |---|---|---|
  * | Yuna cannot summon the aeon she is facing | {@link availableAeons} skips it; the Summon row shows greyed "Mirror of Grothia" (O-5 pick) | §1.2 [verified: 2 sources] |
  * | Only aeons can hurt his aeons | Yuna's foe-aimed rows greyed "Only an aeon can fight an aeon" and refused if submitted | the rule [verified: 2 sources]; the greyed menu is B6 = a, **our estimate** |
- * | An aeon has no Items row | dropped from an aeon's menu, refused if submitted | B7, **our estimate** (no source gives aeons an Item command) |
+ * | An aeon has no Items row | not a duel rule: no FFX aeon has one, in any battle (`commands.ts`, `execute.ts`, PR-0155) | ffx-combat-core §6.2 [from ffx_command.csv]; B7 is settled by it |
  * | Lost when no aeon is left | `engine.ts#checkEnd`, before the stalemate watch can call it an escape | §1.2 [single source: GameFAQs]; B11 = a |
  * | 5,000 AP for winning the duel | `results.ts`, on top of the enemies' 0 | §11 I-1 [single source: GameFAQs]; B13 = a |
  *
@@ -41,8 +41,6 @@ export const VICTORY_BONUS_AP_FLAG = 'victory.bonusAp';
 
 /** B6 = a's reason on a greyed row (our wording, labelled an estimate in the plan). */
 export const ONLY_AN_AEON = 'Only an aeon can fight an aeon';
-/** B7's refusal, if an Item command reaches an aeon anyway. */
-export const AEONS_CARRY_NO_ITEMS = 'Aeons cannot use items';
 
 /** Copy the formation's duel rules into the battle. A no-op for every other formation. */
 export function applyAeonDuelSetup(ctx: Ctx, group: EnemyGroupDef): void {
@@ -108,8 +106,7 @@ export function duelRefusal(ctx: Ctx, user: FFXCombatant, command: Command, def:
     }
   }
   if (!aeonsOnly(ctx)) return undefined;
-  if (user.side === 'aeon') return command.kind === 'item' ? AEONS_CARRY_NO_ITEMS : undefined;
-  if (user.side !== 'party') return undefined;
+  if (user.side !== 'party') return undefined; // an aeon's missing Item row is every battle's rule (PR-0155)
   if (command.kind === 'attack' || command.kind === 'trigger') return ONLY_AN_AEON;
   if ((command.kind === 'ability' || command.kind === 'item' || command.kind === 'overdrive') && def && actsOnFoes(def)) {
     return ONLY_AN_AEON;
@@ -146,13 +143,13 @@ function rowDef(ctx: Ctx, command: Command): AbilityDef | undefined {
 }
 
 /**
- * The menu half of the duel (B6 = a, B7): a party member's foe-aimed rows are
- * greyed with {@link ONLY_AN_AEON}, and an aeon's Items rows are dropped.
+ * The menu half of the duel (B6 = a): a party member's foe-aimed rows are
+ * greyed with {@link ONLY_AN_AEON}. (An aeon never has Items rows, in any FFX
+ * battle: `commands.ts`, PR-0155.)
  * Returns `rows` itself, untouched, unless the battle is an aeon duel.
  */
 export function applyDuelRows(ctx: Ctx, user: FFXCombatant, rows: AvailableCommand[]): AvailableCommand[] {
-  if (!aeonsOnly(ctx)) return rows;
-  if (user.side === 'aeon') return rows.filter((row) => row.command.kind !== 'item');
+  if (!aeonsOnly(ctx) || user.side !== 'party') return rows;
   for (const row of rows) {
     if (row.command.kind === 'summon') continue; // the lock already spoke
     const reason = duelRefusal(ctx, user, row.command, rowDef(ctx, row.command));
@@ -181,4 +178,19 @@ export function grandSummonChoices(ctx: Ctx): string[] {
     const aeon = ctx.rt.aeonRoster.get(k);
     return aeon !== undefined && aeon.hp > 0 && (aeon.aeon?.reviveCountdown ?? 0) <= 0 && lockedMirrorOf(ctx, k) === undefined;
   });
+}
+
+/**
+ * The aeon a Grand Summon calls when nobody chose one (an AI or headless roll,
+ * or a bare re-submit that breaks the minigame loop, `execute.ts`): the first
+ * of {@link grandSummonChoices} that can take the field, `''` when none can.
+ * Before, the roll always gave `''`, which spent Yuna's gauge and summoned
+ * nothing (seen by the Chapter XIV engine review). Our choice, not a source:
+ * FFX lets the player pick; roster order is the menu's order. FFX only.
+ */
+export function defaultGrandSummonAeon(ctx: Ctx): string {
+  return grandSummonChoices(ctx).find((k) => {
+    const aeon = ctx.rt.aeonRoster.get(k);
+    return aeon !== undefined && aeon.hp > 0 && (aeon.aeon?.reviveCountdown ?? 0) <= 0;
+  }) ?? '';
 }

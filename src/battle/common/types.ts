@@ -2583,13 +2583,13 @@ export interface EnemyGroupDef {
   lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId }>;
   /**
    * **FFX, "can only be fought by aeons"** (Chapter XIV; research §1.2
-   * [verified: 2 sources] for the rule, plan B6 / B7 / B11 for how it is
+   * [verified: 2 sources] for the rule, plan B6 / B11 for how it is
    * built, each Bailey's pick 2026-09-25). While set:
    * - a party member's rows that act on the enemy side (Attack, Talk, attack
    *   items, any foe-aimed ability) are greyed "Only an aeon can fight an
    *   aeon" and refused if submitted (B6 = a, our estimate: the sources say
    *   only aeons can fight, not what Yuna's menu shows);
-   * - an aeon has no Items row (B7, our estimate);
+   * - (no Items row on an aeon is every FFX battle's rule, §6.2, PR-0155);
    * - the battle is **lost** when no aeon holds the field and none is left to
    *   summon (B11 = a, [single source: GameFAQs]), so it never drifts into the
    *   400-turn stalemate `'escape'` (plan I-G3, review E11).
