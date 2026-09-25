@@ -58,6 +58,8 @@ Key rules `[single source: Split Infinity G0905]`:
 - Not every ability has both CT and RT. An ability is tagged `CT`, `RT`, `2xRT`, or a combination (`CT, RT` — e.g. Great Whirl, Vajra, Sword Dance).
 - **Any damage taken perturbs the bar's fill** for both party and enemies (enemy bars are not displayed).
 
+> **Real-game check, 2026-09-25 (Steam HD Remaster, FFX-2):** attempted and blocked before play (no FFX-2 save on the machine). What a hit does to an open command menu is **still open**; nothing was observed, so this section's tags stand. See `research/observed-trema-steam-2026-09-25.md`.
+
 ### 1.2 ATB fill rate from Agility — DECODED TICK MODEL
 
 > **Cross-document conflict RESOLVED.** `visual-bible.md` §4.0/§4.3 (citing StrategyWiki) states that *Agility sets the bar's **length** and the fill rate is **fixed***; earlier revisions of this section modelled a *fixed bar* with an Agility-scaled *rate*. **These are the same simulation**, and the decoded tick model below shows why: the number of ATB ticks a unit must accumulate before acting is `10000 × value / (Agility + 1)` — Agility shortens the runway — while ticks are consumed at a **fixed 3000 ticks per second**. Time-to-act is `∝ 1/(Agility+1)` under either description.
@@ -213,6 +215,8 @@ Special: **Songstress Dances** are *sustained* — the effect persists "while da
 | Automatic Wait | The game force-freezes time during certain long animations regardless of the setting. | `[single source]` |
 
 There is also an **ATB speed setting** (Slow / Normal / Fast) in Config. Notable side effect: at **Fast**, units put to Sleep never wake up on their own; at other speeds Sleep expires after a while `[single source: Split Infinity G1004]`.
+
+> **Real-game check, 2026-09-25 (Steam HD Remaster, FFX-2):** attempted and blocked before play (no FFX-2 save on the machine). Whether Wait's clock runs at the top list and stops in a submenu and while aiming is **still open**; nothing was observed, so this section's tags stand. See `research/observed-trema-steam-2026-09-25.md`.
 
 ### 1.6 Battle start
 
@@ -561,6 +565,8 @@ The sheet's own worked anchor: `durationValue 20 → 10.6 s` at Normal speed. Th
 | **Silence / Confuse** — Psychic Brainstorm | Silence `Infinite`, Confuse **120** | — / **63.6 s** | `[single source]` |
 | **Doom** — Candle of Life item | **9 turns** (turn-counted, *not* seconds) | — | `[single source]` |
 | **Doom** — Arcana Doom, Doom Kogoro | **4 turns** | — | `[single source]` |
+
+> **Real-game check, 2026-09-25 (Steam HD Remaster, FFX-2):** attempted and blocked before play (no FFX-2 save on the machine). The real length of Beguiling Mire's Stop (and of any timed status) is **still open**; nothing was observed, so this section's tags stand. See `research/observed-trema-steam-2026-09-25.md`.
 
 **Statuses with no duration value** (`Infinite` in the source tables) persist until dispelled, cured, or the battle ends: Poison, Darkness, Silence, Petrification, Curse, Pointless, Itchy, Berserk-from-Cat-Nip, Auto-Life, Spellspring, every STR/MAG/DEF/MDEF/ACCU/EVA/LUCK Up-Down stack, and all of the "Infinite"-flagged riders in §2.9. **Note this overturns the previous estimate table**, which had Berserk/Confuse at 20 s and Sleep at 15 s: the real values are 3–4× longer, and Poison/Darkness/Silence do not expire at all.
 

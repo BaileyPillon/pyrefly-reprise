@@ -46,6 +46,7 @@ Today, under the Wait split, a hit leaves her menu open (reproduced in 20 of 20 
 - B: A1 in Active only. C: leave it as it is (not faithful).
 - **Recommend A1.** It is the sourced part of the rule, and "mechanics never bend". A2 waits until a source gives the size or you accept an estimate. Honest risk: Chapters IV, V, VI, XI and XIII get harder for a player who waits at the top list. Item 3's habit avoids it.
 - A yes builds: a paper preflight first (combat core, deep class, rule 15), then the engine change in `src/battle/ffx2/active.ts` with tests, and a bench of all five chapters (IV, V, VI, XI, XIII) before and after, shown to you before release (about 4 hours). A deep review follows the deploy.
+- **Real-game check, 2026-09-25 (FFX-2 Steam HD Remaster):** blocked before play, no FFX-2 save on the machine, so what the game does on a hit to an open menu was **not observed**. Any FFX-2 save that can start a battle would answer it. Record: `research/observed-trema-steam-2026-09-25.md`.
 
 ## 5. Chapter I re-baseline and the first-attempt seed (PR-0008). FFX only, plus shared plumbing
 What: two sourced fixes (Poison phase, aeons lose Items) dropped the intended line from 26 to 17 wins in 40, and the advisor to 20. The 40-seed test floor was already lowered to 15 on 2026-09-25.
@@ -94,6 +95,7 @@ In FFX-2 it is not a pure menu change: under the Wait split aiming holds the clo
 - A: show the target step whenever the one target is not the actor herself, in both games (Defend and other self-only moves stay instant). B: keep the auto-fire. C: A in FFX only; FFX-2 decided later, with item 3's and item 4's benches run with the change in.
 - **Recommend C.** FFX gets the same flow for every command, a way back and the approved target ring, with no timing effect (FFX is turn-based). FFX-2 waits for numbers.
 - A yes builds: the change in shared menu logic behind a per-game switch, FFX tests and a real-key check (about 1 hour, focused review).
+- **Real-game check, 2026-09-25 (FFX-2 Steam HD Remaster):** blocked before play, no FFX-2 save on the machine, so whether FFX-2 shows a target cursor for one valid target was **not observed**; C's "FFX-2 decided later" still stands. Record: `research/observed-trema-steam-2026-09-25.md`.
 
 ## 10. Battle poses for Chapter XIII's line-up. FFX-2 only
 What: Yuna and Paine as Dark Knights and Rikku as Alchemist had only an idle. 15 slot picks passed the maker's own look (Yuna 4, Paine 5, Rikku 6; docs/concepts/chapters/trema/poses/README.md). Nothing is installed.

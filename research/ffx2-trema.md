@@ -201,6 +201,8 @@ Examples of attacks that trigger Big Bang: Dark Knight's Darkness, Absorb, 1000 
 
 The chained Dying Star → Falling Leaf → Thundering Wave can land on one girl or be split across the party (Split_Infinity). The three-part chain hits whatever the target's Evasion and Luck; a high Luck lets you dodge Mist, Mire and Moon (Split_Infinity; the wiki says "many of which always hit") `[verified: 2 sources]`. The wiki adds that his attacks have **no charge time and a short recovery** `[single source]`. Observed damage with a well-defended Lv 99 party: 300 to 1,500 per hit (NightMare185) `[single source; depends on the party]`.
 
+> **Real-game check, 2026-09-25 (Steam HD Remaster, FFX-2):** attempted and blocked before play (no FFX-2 save on the machine). How long Beguiling Mire's Stop lasts is **still open**; nothing was observed, so this section's tags stand. See `research/observed-trema-steam-2026-09-25.md`.
+
 **AI** `[SinirothX]`. The HP triggers agree with the wiki; §10 lists the dissent.
 
 ```
@@ -567,6 +569,8 @@ Everything else (stats, action list, DCs, copy lists, the once-only Final Impact
 
 **E3 check:** of the normal form, NightMare185 also writes, "With that luck boost from the accessory, the chance of him hitting your gunner is unlikely". That may be about targeting (his prep says fiends pick low-Luck girls) or about hitting. It is ambiguous, so E3 stays `[verified: 2 sources: Split, wiki]`, with this noted as a `[conflict, ambiguous]`.
 
+> **Real-game check, 2026-09-25 (Steam HD Remaster, FFX-2):** attempted and blocked before play (no FFX-2 save on the machine). The battle opening (how many Paragon actions come before the first girl can act) is **still open**; nothing was observed, so this section's tags stand. See `research/observed-trema-steam-2026-09-25.md`.
+
 ### 12.4 E4, action time: what is published and what is not
 
 | Question | Answer | Status |
@@ -580,6 +584,8 @@ Everything else (stats, action list, DCs, copy lists, the once-only Final Impact
 | **Seconds per action, frame counts, animation lengths** | **Nothing is published.** No source read gives the length of any FFX-2 animation (enemy or party) or the recovery value of a boss action. The closest is the wiki's "no charge time and a short recovery" for Trema (§4.2), which has no number. | **unsourced** |
 
 **What this means for E4:** the rule that an action's execution takes time before its actor's gauge refills is sourced (2 sources), and the engine breaks it. The **length** of that time is not sourced anywhere. Any N seconds (the 1.5 s and 3 s probes) is an `[estimate]`. It needs Bailey's explicit word, or a measurement from footage, which would itself be an estimate unless its method is written down. The spherechange time-freeze (2 sources) is a second sourced rule the engine should be checked against.
+
+> **Real-game check, 2026-09-25 (Steam HD Remaster, FFX-2):** attempted and blocked before play (no FFX-2 save on the machine). E4 (the length of any action, and which animations force a Wait) is **still open**; nothing was observed, so this section's tags stand. See `research/observed-trema-steam-2026-09-25.md`.
 
 ### 12.5 Answers in one place
 

@@ -107,3 +107,18 @@ Paragon answers, the best row is **about 1 in 6 (31/200, at 1.5 s)**.
 - "Trema: 1" (Oversoul only, no action time, about 1 in 70)
 - "Trema: 2" / "Trema: 4" (both measured 0 wins)
 - "Trema: 5" (park it; Omnis, Isaaru, Gippal next)
+
+## Real-game check (Trema), 2026-09-25
+
+**FFX-2 only.** The check on the Steam HD Remaster was blocked before play: the community save was
+not downloaded (the save step refused the anonymous Google Drive link as untrusted), and there is
+no FFX-2 save on the machine. FFX-2 was not launched and nothing was recorded. Record:
+`research/observed-trema-steam-2026-09-25.md`.
+
+- **Action time (option 3):** not measured. Nothing supports or contradicts the shipped 3 s
+  Cloister estimate; it stays an `[estimate]` in Bailey's name, and no measured value is suggested.
+- **Does Paragon act before the first girl?** Not observed. Still open.
+- **Does Stop's length match E1 (100 units = 53.0 s)?** Not observed. E1 stays on §2.8's
+  single-source table.
+- **To unblock:** Bailey places an FFX-2 save at Cloister 100 himself, or names one source he
+  approves. None of the options above changes because of this check.
