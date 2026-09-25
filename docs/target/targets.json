@@ -75,7 +75,7 @@
           "delivery": "verified",
           "verifiedBy": "critic/rounds/round-04.json @ bc2571c",
           "supersededBy": "showpiece-frontend",
-          "note": "docs/plans/build-b-review.md REQUIRED 11: the painted-silhouette board (polish group, 'A front end that moves') replaces this picture rather than standing beside it. Re-shot at docs/screenshots/frontend/pair-chapter-select.jpg."
+          "note": "docs/plans/build-b-review.md REQUIRED 11: the painted-silhouette board (polish group, 'A front end that moves') replaces this picture rather than standing beside it. Re-shot at docs/screenshots/frontend/pair-chapter-select.jpg. Now superseded in turn by 'Chapter select v2: victory ribbon, boss on its scene' (D-183)."
         },
         {
           "label": "Party prep",
@@ -1575,7 +1575,50 @@
           "approved": "Bailey, 19 Sep 2026",
           "build": "The moment the mockup shows; see docs/concepts/polish/showpiece-frontend/ for the before picture and the motion clip.",
           "delivery": "implemented",
-          "deliveryNote": "Supersedes the presentation-group 'Title' and 'Chapter select' tiles (docs/plans/build-b-review.md REQUIRED 11): the painted-silhouette parallax title and board replace those two approved pictures. Target/build pairs: docs/screenshots/frontend/pair-title.jpg, docs/screenshots/frontend/pair-chapter-select.jpg."
+          "deliveryNote": "Supersedes the presentation-group 'Title' and 'Chapter select' tiles (docs/plans/build-b-review.md REQUIRED 11): the painted-silhouette parallax title and board replace those two approved pictures. Target/build pairs: docs/screenshots/frontend/pair-title.jpg, docs/screenshots/frontend/pair-chapter-select.jpg.",
+          "note": "Chapter select half superseded by 'Chapter select v2: victory ribbon, boss on its scene' (D-183, 2026-09-25); the parallax title half stands."
+        },
+        {
+          "label": "Chapter select v2: victory ribbon, boss on its scene",
+          "src": "docs/concepts/chapter-select-v2/option-C/C-ch8-cleared-1600.jpg",
+          "frames": [
+            "docs/concepts/chapter-select-v2/option-C/C-ch1-open-1600.jpg",
+            "docs/concepts/chapter-select-v2/option-C/C-ch8-cleared-1600.jpg",
+            "docs/concepts/chapter-select-v2/option-C/C-ch1-open-390.jpg",
+            "docs/concepts/chapter-select-v2/option-C/C-ch8-cleared-390.jpg"
+          ],
+          "state": "approved",
+          "approved": "Bailey, 25 Sep 2026 (D-183)",
+          "game": "both",
+          "build": "Option C as the mockups show, with the boss painted on its own scene (the Evrae capture's treatment) on the plate and every card in place of the pause hero plates, the fixed list (all cards always in place, FFX then FFX-2, the selected card lit in place with the gold frame, numeral block and notch), the numeral column beside the names, the Coming Chapter VII in number order, the VICTORY sash and card ribbon on beaten chapters, the progress strip \"N of M beaten\" counting listed chapters only, and the phone as one scrolling column.",
+          "delivery": "implemented",
+          "deliveryNote": "Target/build pairs: docs/screenshots/chapter-select-c/pair-<1600|1280|2000|390>-<new|two>-<ch1|ch8>.jpg (real keys, clicks and taps from the title; capture-report.json has the geometry checks). Deviations from the mockup, all from the README critique: sash at the plate's top-left (off the boss), best time on the card ribbon, flat higher-contrast pips, strip height taken from the plate, touch wording on a phone.",
+          "reaction": {
+            "date": "2026-09-25",
+            "words": "I'll go with C a victory ribbon / All recommendations",
+            "how": "Bailey, picking option C from the README description, then answering the driver's two follow-ups with \"All recommendations\"",
+            "liked": [
+              "option C, the victory ribbon"
+            ],
+            "disliked": [
+              "boss silhouettes (the first complaint)",
+              "the list that shifts under the cursor (Evrae then Yojimbo)"
+            ],
+            "mustRemain": [
+              "Coming cards unselectable",
+              "the save's clears",
+              "the Ink & Gold chrome"
+            ],
+            "mustChange": [
+              "the plate and every card show the boss painted on its own scene, not the party pause plates",
+              "the Coming Chapter VII card in number order, between III and VIII"
+            ],
+            "undecided": [],
+            "inferred": [
+              "the README critique fixes (sash top-left, time on the card ribbon, flat pips, strip height from the plate, phone touch wording) are the reviewer's recommendations, adopted under \"All recommendations\"",
+              "the per-chapter compositions (which boss painting, where the face sits) are the agent's"
+            ]
+          }
         },
         {
           "label": "The interface stops cutting and starts moving",

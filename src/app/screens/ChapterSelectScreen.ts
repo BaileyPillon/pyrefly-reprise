@@ -1,4 +1,5 @@
 import './frontend/frontend.css';
+import './frontend/chapter-select-c.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
@@ -14,6 +15,7 @@ import {
   type ChapterTile,
 } from './frontend/chapterGrid.ts';
 import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCards.ts';
+import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
 
 export interface ChapterSelectScreenOptions {
   /** Called when the player confirms a card. The presenter wires the actual transition. */
@@ -37,20 +39,37 @@ const HINTS = [
 ];
 
 /**
- * The board of the whole game: every encounter as its boss's ink silhouette,
- * in two game groups.
+ * A touch screen has no arrows and no Enter (the chapter-select-v2 critique:
+ * "The controls strip on a phone still says UP/DOWN and ENTER"). The same
+ * two-tap rule, in its own words; the back chip stays a button.
+ */
+const TOUCH_HINTS = [
+  { keyboard: 'Tap a card', gamepad: 'D-pad', label: 'choose' },
+  { keyboard: 'Tap the plate', gamepad: 'Cross', label: 'begin', action: 'confirm' },
+  { keyboard: 'Tap here', gamepad: 'Circle', label: 'back', action: 'cancel' },
+];
+
+function isTouchScreen(): boolean {
+  try {
+    return typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * The board of the whole game: every listed encounter as its boss painted on
+ * its own scene, in a fixed list of two game groups.
  *
- * Approved end state:
- * `docs/concepts/polish/showpiece-frontend/chapter-select.png` — "every card
- * carries its boss as a silhouette, so the board reads as five encounters
- * rather than five thumbnails" (`card.json`). The base look is the approved
- * tile `docs/screenshots/mockups/A-chapter-select.jpg`.
+ * Approved end state (D-183, Bailey 2026-09-25: "I'll go with C a victory
+ * ribbon", then "All recommendations"): `docs/concepts/chapter-select-v2/`
+ * option C. The list never changes shape (the selected card lights in place),
+ * the coming card sits at its number's place, a beaten chapter wears the gold
+ * ribbon, and the strip under the plate counts "N of M beaten".
  *
- * It holds **eight**: the five built chapters plus the three Bailey approved on
- * 2026-09-19 (Macalania and Evrae for FFX, Chateau Leblanc for FFX-2), which
- * ride as locked COMING cards until their data lands. The list is derived from
- * the chapter registry (`chapterGrid.ts`), so a chapter that lands lights up by
- * itself and nothing fake is ever written into `src/data` (hard rule 6).
+ * The list is derived from the chapter registry and the save
+ * (`chapterGrid.ts`), so a chapter that lands lights up by itself and nothing
+ * fake is ever written into `src/data` (hard rule 6).
  *
  * Game-aware (AGENTS.md rule 14): **both**. The board is shared plumbing; the
  * per-game half is the group heading and its accent, which is the existing
@@ -93,16 +112,25 @@ export class ChapterSelectScreen extends Screen {
     if (this.selected < 0) this.selected = 0;
 
     this.root.className = 'screen fe fe-cselect ig';
+    // `__scroll` is the page on a phone (one scrolling column); on a desktop
+    // window it is the full-bleed frame the absolute layout sits in.
     this.root.innerHTML = `
       <div class="fe-cselect__wash"></div>
       <div class="fe-cselect__veil"></div>
-      <div class="fe-cselect__eyebrow"><i></i>Chapter select</div>
-      <div class="fe-cselect__board"></div>
-      <div class="fe-rail"></div>
-      <div class="fe-aside"></div>
+      <div class="fe-cselect__scroll">
+        <div class="fe-cselect__eyebrow"><i></i>Chapter select</div>
+        <div class="fe-cselect__board"></div>
+        <div class="fe-rail"></div>
+        <div class="fe-aside"></div>
+      </div>
     `;
-    this.hint = new ControlsHint({ root: this.root, items: HINTS });
+    this.hint = new ControlsHint({ root: this.root, items: isTouchScreen() ? TOUCH_HINTS : HINTS });
     this.hint.mount();
+    // The list is drawn once: after this only its selected mark moves.
+    const rail = this.root.querySelector('.fe-rail');
+    if (rail instanceof HTMLElement) {
+      rail.innerHTML = railHtml(groupChapterTiles(this.tiles), this.tiles, this.selected, (id) => this.bestTime(id));
+    }
     this.refresh();
     void this.app.fade('clear', 500);
   }
@@ -130,6 +158,8 @@ export class ChapterSelectScreen extends Screen {
       if (!m?.[1]) continue;
       const index = Number(m[1]);
       if (!this.tiles[index]?.playable) continue;
+      // The list is fixed, so this index is the card the player clicked, and
+      // a second click on the selected card begins it, never its neighbour.
       if (index === this.selected) this.confirm();
       else {
         this.selected = index;
@@ -161,12 +191,16 @@ export class ChapterSelectScreen extends Screen {
 
   override snapshot(): Record<string, unknown> {
     const tile = this.tiles[this.selected];
+    const progress = boardProgress(this.tiles, this.selected);
     return {
       selectedIndex: this.selected,
       selectedId: tile?.id,
       tiles: this.tiles.length,
       coming: this.tiles.filter((t) => !t.playable).map((t) => t.id),
       cleared: this.tiles.filter((t) => t.cleared).map((t) => t.id),
+      order: this.tiles.map((t) => t.id),
+      beaten: progress.beaten,
+      total: progress.total,
     };
   }
 
@@ -178,6 +212,7 @@ export class ChapterSelectScreen extends Screen {
     this.selected = next;
     audio.playSfx('cursor-move');
     this.refresh();
+    this.revealSelected();
   }
 
   private moveGroup(delta: number): void {
@@ -186,6 +221,20 @@ export class ChapterSelectScreen extends Screen {
     this.selected = next;
     audio.playSfx('cursor-move');
     this.refresh();
+    this.revealSelected();
+  }
+
+  /** On a phone the list scrolls with the page: keep a keyboard cursor in view. */
+  private revealSelected(): void {
+    const card = this.root.querySelector('.fe-card--sel');
+    if (card instanceof HTMLElement && typeof card.scrollIntoView === 'function') {
+      card.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  private bestTime(id: string): number | null {
+    const tile = this.tiles.find((t) => t.id === id);
+    return tile?.chapter ? this.app.save.chapter(id).bestTimeMs : null;
   }
 
   private confirm(): void {
@@ -235,20 +284,26 @@ export class ChapterSelectScreen extends Screen {
         : 'none';
     }
 
+    const best = this.bestTime(tile.id);
     const board = this.root.querySelector('.fe-cselect__board');
     if (board instanceof HTMLElement) {
-      board.innerHTML = heroHtml(tile, this.selected) + proseHtml(tile);
+      board.innerHTML =
+        heroHtml(tile, this.selected, best) +
+        progressStripHtml(boardProgress(this.tiles, this.selected)) +
+        proseHtml(tile);
     }
 
-    const rail = this.root.querySelector('.fe-rail');
-    if (rail instanceof HTMLElement) {
-      rail.innerHTML = railHtml(groupChapterTiles(this.tiles), this.tiles, this.selected);
+    // The fixed list: only the selected mark moves (D-183).
+    for (const card of this.root.querySelectorAll('.fe-card[data-card]')) {
+      const on = card.getAttribute('data-action') === `fe-card-${this.selected}`;
+      card.classList.toggle('fe-card--sel', on);
+      if (on) card.setAttribute('aria-current', 'true');
+      else card.removeAttribute('aria-current');
     }
 
     const aside = this.root.querySelector('.fe-aside');
     if (aside instanceof HTMLElement) {
-      const record = tile.chapter ? this.app.save.chapter(tile.id) : null;
-      aside.innerHTML = asideHtml(tile, record?.bestTimeMs ?? null);
+      aside.innerHTML = asideHtml(tile, best);
     }
   }
 }
