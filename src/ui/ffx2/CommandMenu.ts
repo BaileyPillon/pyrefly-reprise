@@ -33,11 +33,9 @@
  */
 import type { AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../ffx/cancelClaim.ts';
-// The target cursor is shared with FFX and told which chrome to wear. The
-// bracket, the name plate with its letter tag and the ALL-target label are
-// both games; only the mark itself differs, and `setChrome('ffx2')` is what
-// keeps FFX's hand out of an X-2 fight (AGENTS.md rule 14).
-import { TargetCursor, type CursorSelection, type TargetEntry } from '../ffx/TargetCursor.ts';
+// The target cursor is shared with FFX and wears its chrome: bracket, plate and ALL label are both games,
+// only the mark differs; `setChrome('ffx2')` keeps FFX's hand out of an X-2 fight (AGENTS.md rule 14).
+import { TargetCursor, type CursorSelection, type TargetEntry, type TargetRect } from '../ffx/TargetCursor.ts';
 import { resolveTargetMode } from '../ffx/CommandMenuLogic.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
 import { commandHelpText, groupHelpText } from './commandHelp.ts';
@@ -171,6 +169,8 @@ export interface CommandMenuDeps {
    * {@link CommandMenuDeps.project}'s point, which is what the HUD mock does.
    */
   projectRect?: (id: CombatantId) => { x: number; y: number; w: number; h: number } | null;
+  /** HUD panels the field plate docks clear of, as FFX's cursor is given them (D-044: Left Bulwark's plate sat on the CHANGE row). */
+  panels?: () => readonly TargetRect[];
   /** Display names, so a plate never prints a raw combatant id. */
   nameOf?: (id: CombatantId) => string;
   /** The letter that tells one identical fiend from another. */
@@ -282,9 +282,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
      * and the quiet dim are shared with FFX, which is why this is the same
      * component with setChrome('ffx2') rather than a second implementation.
      * [research/visual-bible.md 4.2 / 4.7; ffx-vs-ffx2-presentation.md 9 row 2:
-     * the two chromes must never be mixed.]
-     *
-     * It also replaces a name plate that printed the raw combatant id.
+     * the two chromes must never be mixed.] It also replaces a plate that printed the raw id.
      */
     const cursor = new TargetCursor();
     cursor.setChrome('ffx2');
@@ -504,6 +502,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       deps.onLevel?.('deep');
       claimCancel();
       const entries = targetIds.map(entryFor);
+      cursor.setPanels(deps.panels?.() ?? []);
       if (groupMode) cursor.showGroup(entries);
       // Opens on the engine's preferred side: most X-2 skills also list the girls.
       else cursor.showSingle(entries, 0, pending?.preferredTargets);

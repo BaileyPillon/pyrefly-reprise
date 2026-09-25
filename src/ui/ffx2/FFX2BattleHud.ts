@@ -46,6 +46,7 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { BODY_HALF_WIDTH, boardRects, fighterBoxes, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
+import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
 import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
 
@@ -61,9 +62,8 @@ import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates
  * corners, never row 0) and the advisor card (`advisorLane.ts` starts it
  * below `fenceTopEl`, the topmost party fighter's head, well under this
  * band's height) in every screen size checked. The description text itself
- * was always correct and game-aware (`commandHelp.ts`); this flag only
- * gated the mount point. See `docs/handoff/fix10b-repair-command-menus.md`
- * for the round-10 repair this replaces.
+ * was always correct and game-aware (`commandHelp.ts`); this flag only gated the mount point
+ * (round-10 repair: `docs/handoff/fix10b-repair-command-menus.md`).
  */
 const FFX2_COMMAND_HELP_PLACEMENT_RESOLVED = true;
 
@@ -179,12 +179,14 @@ export class FFX2BattleHud implements HudPort {
   private readonly damage = new DamageLayer();
   /** PR-0150: the s3 tile's TARGET plate, actor plate and controls hint (`TargetPlates.ts`). FFX-2 only. */
   private readonly plates = new TargetPlates();
+  /** D-044 Node C: Vegnagun's overhead Nodes marked at the top edge (`nodeEdgeMarkers.ts`). FFX-2 only. */
+  private readonly nodeMarks = new NodeEdgeMarkers();
+  /** The ids the target cursor is on, lit on every row that names them ({@link paintLit}). */
+  private lit: { ids: ReadonlySet<CombatantId>; ally: boolean } = { ids: new Set(), ally: false };
   /** A second 640x360 layer over the overlay, so the reticle's petals never paint over the plates. */
   private platesLayer!: HTMLElement;
   /**
-   * The optional strategy guide (`src/ui/common/StrategyGuide.ts`).
-   *
-   * Left rail here too, not a mirror of FFX's. FFX-2 anchors its command stack
+   * The optional strategy guide (`src/ui/common/StrategyGuide.ts`). Left rail here too, not a mirror of FFX's. FFX-2 anchors its command stack
    * bottom-**right** and its telegraph banner top-right, so the right edge is
    * the one edge the panel may not take; the left holds the boss gauge strip at
    * the top and the party column at the bottom, with the whole middle free.
@@ -350,11 +352,11 @@ export class FFX2BattleHud implements HudPort {
     // with §3.6's grid-quoted glyph sizes multiplied back up by the same
     // letterbox scale `layout()` applies to the stage.
     this.damage.mount(this.overlay, { host: this.el, scale: () => this.stageScale });
-    // Into the scaled stage, so the rail letterboxes with the rest of the
-    // chrome and its anchors' `offsetTop` are in the same 640x360 grid.
+    // Into the scaled stage: the rail letterboxes with the chrome, anchors on the same 640x360 grid.
     this.guide.mount(this.stage);
     this.advisor.mount(this.stage);
     this.plates.mount(this.platesLayer);
+    this.nodeMarks.mount(this.platesLayer, () => ({ state: this.lastState, project: this.project, host: this.el, stageX: this.stageX, stageY: this.stageY, scale: this.stageScale, bandOnStage: () => battleHelpOn() && bandGeometry(this.bandInput()).mode === 'stage' }));
     this.intent.mount(this.overlay, {
       host: this.el,
       scale: () => this.stageScale,
@@ -380,6 +382,7 @@ export class FFX2BattleHud implements HudPort {
     // Nothing the cursor lit may outlive the HUD that lit it.
     this.applySelection(null);
     this.plates.unmount();
+    this.nodeMarks.unmount();
     this.el.remove();
     this.mounted = false;
   }
@@ -388,6 +391,7 @@ export class FFX2BattleHud implements HudPort {
   update(dt: number): void {
     this.layoutFences();
     this.layoutPlates();
+    this.nodeMarks.update();
     this.damage.update(dt);
     this.guide.update(dt);
     this.advisor.update(dt);
@@ -694,16 +698,10 @@ export class FFX2BattleHud implements HudPort {
    * The party and enemy rows only, from a state the presenter has projected to
    * the event it is playing right now (`HudPort.syncVitals`).
    *
-   * Critic round 03 #9 — the rows were re-rendered once per burst, so HP, KO
-   * and status on screen trailed the engine by the length of whatever was still
-   * animating. The gauges come from the last snapshot: ATB position is the one
-   * thing that genuinely belongs to the end of the burst, and it is refreshed
-   * by the full `sync` that closes it.
-   *
-   * Cheap on purpose: no guide, no advisor, no `intent.refresh()`.
-   *
-   * Game case: both. Shared playback plumbing; FFX has the same call
-   * (AGENTS.md rule 14 / CHK-020).
+   * Critic round 03 #9: rows re-rendered once per burst trailed the engine by whatever was still
+   * animating. The gauges come from the last snapshot (ATB position belongs to the end of the burst,
+   * refreshed by the full `sync` that closes it). Cheap on purpose: no guide, advisor or
+   * `intent.refresh()`. Game case: both, shared playback plumbing (AGENTS.md rule 14 / CHK-020).
    */
   syncVitals(state: BattleState): void {
     const snapshot = this.lastSnapshot;
@@ -715,12 +713,9 @@ export class FFX2BattleHud implements HudPort {
   /**
    * The ATB bars only, from a fresh snapshot (`HudPort.syncGauges`).
    *
-   * **FFX-2 only.** The Active pump (`BattlePresenterActive.ts`) calls this at
-   * 20 Hz while a command menu is open — the clock is genuinely running under
-   * that menu now (Bailey, D-009: *"For ffx-2 I choose active"*), and this is
-   * what makes the player see it. The mirror image of {@link syncVitals}: same
-   * two renders, same reason for not being `sync`, and the numbers come from
-   * `lastState` because only the gauges moved.
+   * **FFX-2 only.** The Active pump (`BattlePresenterActive.ts`) calls this at 20 Hz while a menu
+   * is open: the clock runs under it (Bailey, D-009: *"For ffx-2 I choose active"*). The mirror of
+   * {@link syncVitals}; the numbers come from `lastState` because only the gauges moved.
    */
   syncGauges(snapshot: AtbSnapshot): void {
     this.lastSnapshot = snapshot;
@@ -795,6 +790,7 @@ export class FFX2BattleHud implements HudPort {
       // letter tag the plate prints — the plate used to print the raw
       // combatant id.
       projectRect: (id) => this.targeting?.rect(id) ?? null,
+      panels: () => this.panelRects(),
       nameOf: (id) => this.lastState?.combatants[id]?.name ?? id,
       letterTagOf: (id) => this.letterTagOf(id),
       kindOf: (id) => {
@@ -961,11 +957,8 @@ export class FFX2BattleHud implements HudPort {
       }
     }
 
-    for (const el of this.el.querySelectorAll<HTMLElement>('[data-actor-id]')) {
-      const on = ids.has(el.dataset['actorId'] ?? '');
-      el.classList.toggle('ffx2--targeted', on);
-      el.classList.toggle('ffx2--targeted-ally', on && kind !== 'enemy');
-    }
+    this.lit = { ids, ally: kind !== 'enemy' };
+    this.paintLit();
 
     // Whether the ATB runs while the player aims is the Config mode's call —
     // that is the whole point of showing the indicator — so the panel yields
@@ -976,6 +969,7 @@ export class FFX2BattleHud implements HudPort {
     if (sel) this.plates.show(targetPlateText(sel, candidates, this.lastState, this.actingId));
     else this.plates.hide();
     this.layoutPlates();
+    this.nodeMarks.select(sel?.ids);
   }
 
   /**
@@ -1000,6 +994,15 @@ export class FFX2BattleHud implements HudPort {
         overlay: this.overlay,
       }),
     );
+  }
+
+  /** The aimed-at rows, lit; re-run after every row render, which rebuilt them unlit (D-044: the first Node A aim showed no outline). */
+  private paintLit(): void {
+    for (const el of this.el.querySelectorAll<HTMLElement>('[data-actor-id]')) {
+      const on = this.lit.ids.has(el.dataset['actorId'] ?? '');
+      el.classList.toggle('ffx2--targeted', on);
+      el.classList.toggle('ffx2--targeted-ally', on && this.lit.ally);
+    }
   }
 
   /** FFX-2's **Active / Wait** indicator, shown while a target cursor is live (FFX-2 ONLY; `atbClockChip.ts`). */
@@ -1036,13 +1039,7 @@ export class FFX2BattleHud implements HudPort {
     // `visible`, i.e. the FFX-2 field was never measured against its HUD — and
     // the roots now go through `solidPanelRects`, which resolves a transparent
     // `inset: 0` wrapper to the card that actually paints.
-    return solidPanelRects([
-      this.commandEl,
-      this.partyEl,
-      this.enemyEl,
-      this.advisor.el,
-      this.guide.el,
-    ]);
+    return solidPanelRects([this.commandEl, this.partyEl, this.enemyEl, this.advisor.el, this.guide.el]);
   }
 
   // ------------------------------------------------------------- rendering
@@ -1093,6 +1090,7 @@ export class FFX2BattleHud implements HudPort {
       })
       .join('');
     this.partyEl.innerHTML = rows;
+    if (this.lit.ids.size) this.paintLit();
   }
 
   private renderEnemies(state: BattleState, snapshot: AtbSnapshot): void {
@@ -1100,6 +1098,7 @@ export class FFX2BattleHud implements HudPort {
       revealed: this.revealed,
       charging: this.chargeStages,
     });
+    if (this.lit.ids.size) this.paintLit();
   }
 
   private overlayPoint(targetId: CombatantId, fx: number, fy: number): { x: number; y: number } {

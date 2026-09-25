@@ -1,6 +1,6 @@
 import type { CombatantId } from '../../battle/common/types.ts';
 import { anchorChipToRow, clearChipOfSlab } from './targetChipClear.ts';
-import { clamp, escapeHtml, FLOWER_SVG, HAND_SVG, offFrameArea, overlapArea, plateBox, px, type PlateDock } from './targetCursorParts.ts';
+import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, px, type PlateDock } from './targetCursorParts.ts';
 
 export type { PlateDock } from './targetCursorParts.ts';
 
@@ -433,43 +433,11 @@ export class TargetCursor {
     );
   }
 
-  /**
-   * Which side of the figure the plate hangs off, and its anchor point.
-   *
-   * Four candidates in order of preference — under the figure (the approved
-   * frames' own placement), above it, then right, then left — scored by how
-   * much of the plate would land on a HUD panel. The first that lands clear
-   * wins; if none does, the least-covered one does. The anchor is a point and
-   * the CSS does the rest (`.ffx-target__plate--*` in ffx-hud.css), so the
-   * estimate here only has to be close enough to choose between sides.
-   */
+  /** Where the plate docks, clear of the HUD's panels when a side allows (`dockPlate`). */
   private dockFor(entry: TargetEntry, rect: TargetRect): { side: PlateDock; x: number; y: number } {
-    const cx = rect.x + rect.w / 2;
-    const cy = rect.y + rect.h / 2;
-    const candidates: Array<{ side: PlateDock; x: number; y: number }> = [
-      { side: 'below', x: cx, y: rect.y + rect.h },
-      { side: 'above', x: cx, y: rect.y },
-      { side: 'right', x: rect.x + rect.w, y: cy },
-      { side: 'left', x: rect.x, y: cy },
-    ];
-    if (!this.panels.length) return candidates[0]!;
-    // A rough plate box: the name is the widest part, at ~10px per glyph plus
-    // the tag chip and the padding. Only the *comparison* between sides has to
-    // be right, and a box a few pixels out cannot change which side is clear.
+    // A rough plate box: ~10px per glyph plus the tag chip and the padding.
     const w = Math.max(64, entry.name.length * 10 + (entry.tag ? 34 : 0) + 28 + (entry.note ? entry.note.length * 6 : 0));
-    const h = 34;
-    let best = candidates[0]!;
-    let bestCover = Infinity;
-    for (const c of candidates) {
-      const box = plateBox(c.side, c.x, c.y, w, h);
-      const covered = this.panels.reduce((sum, p) => sum + overlapArea(box, p), 0) + offFrameArea(box);
-      if (covered <= 1) return c;
-      if (covered < bestCover) {
-        bestCover = covered;
-        best = c;
-      }
-    }
-    return best;
+    return dockPlate(rect, w, 34, this.panels);
   }
 
   /**

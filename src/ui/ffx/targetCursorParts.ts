@@ -17,6 +17,62 @@ export function plateBox(side: PlateDock, x: number, y: number, w: number, h: nu
   return { x: x - w - gap, y: y - h / 2, w, h };
 }
 
+/** A plate dock: the side it hangs off and its anchor point (the CSS transform does the rest). */
+export interface Dock {
+  side: PlateDock;
+  x: number;
+  y: number;
+}
+
+/**
+ * Which side of the figure the plate hangs off, and its anchor point.
+ *
+ * Four candidates in order of preference: under the figure (the approved
+ * frames' own placement), above it, then right, then left, scored by how much
+ * of the plate would land on a HUD panel or off the frame. The first that
+ * lands clear wins.
+ *
+ * When none does, the figure is standing under a panel, as Vegnagun's Left
+ * Bulwark does under the FFX-2 command window at link 3 (D-044): every side
+ * of its ring is inside the window, and the least-covered side printed
+ * "Left Bulwark" over the CHANGE row, where it read as that row's own label.
+ * So each side is also tried **pushed out past the panels it lands on** (above
+ * lifts the plate to the panel's top edge, below drops it under the bottom, and
+ * so on). The clear one that moves least wins, so the plate stays by the
+ * figure it names; failing that, the least covered of all eight. Shared plumbing, both games: FFX takes the same path whenever a
+ * target is boxed in. Only the comparison between sides has to be right, so
+ * the plate box is an estimate.
+ */
+export function dockPlate(rect: TargetRect, w: number, h: number, panels: readonly TargetRect[]): Dock {
+  const cx = rect.x + rect.w / 2;
+  const cy = rect.y + rect.h / 2;
+  const near: Dock[] = [
+    { side: 'below', x: cx, y: rect.y + rect.h },
+    { side: 'above', x: cx, y: rect.y },
+    { side: 'right', x: rect.x + rect.w, y: cy },
+    { side: 'left', x: rect.x, y: cy },
+  ];
+  if (!panels.length) return near[0]!;
+  const cover = (d: Dock): number =>
+    panels.reduce((sum, p) => sum + overlapArea(plateBox(d.side, d.x, d.y, w, h), p), 0) +
+    offFrameArea(plateBox(d.side, d.x, d.y, w, h));
+  for (const d of near) if (cover(d) <= 1) return d;
+  const pushed = near.map((d): Dock => {
+    const hit = panels.filter((p) => overlapArea(plateBox(d.side, d.x, d.y, w, h), p) > 0);
+    if (!hit.length) return d;
+    if (d.side === 'below') return { ...d, y: Math.max(d.y, ...hit.map((p) => p.y + p.h)) };
+    if (d.side === 'above') return { ...d, y: Math.min(d.y, ...hit.map((p) => p.y)) };
+    if (d.side === 'right') return { ...d, x: Math.max(d.x, ...hit.map((p) => p.x + p.w)) };
+    return { ...d, x: Math.min(d.x, ...hit.map((p) => p.x)) };
+  });
+  const moved = (d: Dock, i: number): number => Math.abs(d.x - near[i]!.x) + Math.abs(d.y - near[i]!.y);
+  const shortest = pushed.map((d, i) => ({ d, m: moved(d, i) })).sort((a, b) => a.m - b.m);
+  for (const { d } of shortest) if (cover(d) <= 1) return d;
+  let best = near[0]!;
+  for (const d of [...near, ...pushed]) if (cover(d) < cover(best)) best = d;
+  return best;
+}
+
 export function overlapArea(a: TargetRect, b: TargetRect): number {
   const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
   const h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);

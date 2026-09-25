@@ -1,0 +1,64 @@
+/*
+ * D-044, Node option C (FFX-2 only): the overhead Nodes' markers at the top of
+ * the frame, per `docs/concepts/chapters/vegnagun/parts/node-c.jpg`. Placement
+ * is `nodeEdgeMarkers.ts`; every length here is on the 640x360 grid, since the
+ * markers live in `.ffx2hud__plates`. `--nm-text` is the plate's text size,
+ * raised on a small letterbox so it never renders under 11 real pixels.
+ */
+.ffx2-nodemarks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ffx2-nodemark {
+  --nm-colour: #ff5a5a;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.ffx2-nodemark--green { --nm-colour: #4fe08a; }
+.ffx2-nodemark--yellow { --nm-colour: #f6d82a; }
+/* The arrow is the plate's child, centred on it, so the pair can never part. */
+.ffx2-nodemark__arrow {
+  display: block;
+  width: calc(var(--nm-text) * 1.6);
+  height: calc(var(--nm-text) * 1.3);
+  margin-bottom: calc(var(--nm-text) * 0.18);
+  background: var(--nm-colour);
+  clip-path: polygon(evenodd, 50% 0, 100% 100%, 0 100%, 50% 0, 50% 26%, 17% 86%, 83% 86%, 50% 26%);
+  filter: drop-shadow(0 0 1.5px var(--nm-colour));
+}
+.ffx2-nodemark__name {
+  display: block;
+  padding: calc(var(--nm-text) * 0.22) calc(var(--nm-text) * 0.7);
+  background: var(--ig-ink, #0b0a12);
+  color: #fff;
+  border-bottom: 0.8px solid var(--nm-colour);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: var(--nm-text);
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transform: skewX(var(--ig-skew, 12deg));
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+/* The Node the cursor is on: its bracket is out of sight, so the marker carries the aim. */
+.ffx2-nodemark--on .ffx2-nodemark__name {
+  background: var(--ig-accent, #f7b6d9);
+  color: var(--ig-ink, #0b0a12);
+  outline: 0.8px solid var(--ig-ink, #0b0a12);
+}
+.ffx2-nodemark--on .ffx2-nodemark__arrow {
+  animation: ffx2-nodemark-pulse 0.9s ease-in-out infinite alternate;
+}
+@keyframes ffx2-nodemark-pulse {
+  from { transform: translateY(0); }
+  to { transform: translateY(-1.5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ffx2-nodemark--on .ffx2-nodemark__arrow { animation: none; }
+}
