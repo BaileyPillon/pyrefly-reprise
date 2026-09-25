@@ -617,7 +617,7 @@ export class BattleScreen extends Screen {
       // costs one dropped menu action rather than a screen that never returns.
       for (let i = 0; i < 240 && app.current === this; i++) await app.nextFrame();
 
-      if (intent === 'restart') void app.runChapter(chapterId, { skipPrep: true, skipCutscenes: true });
+      if (intent === 'restart') void app.runChapter(chapterId, { skipPrep: true, skipCutscenes: true, restart: true });
       else if (intent === 'title') void app.goto('title');
     })();
   }

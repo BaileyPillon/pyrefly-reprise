@@ -30,7 +30,8 @@ import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlow
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
 import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
-import { carryAfterDefeat, FRESH_RUN, type RetryCarry } from './BattleChainCheckpoint.ts';
+import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
+import { closeRun, openRun } from './pause/restartCarry.ts';
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -163,6 +164,7 @@ export interface RunChapterOptions {
    * debug API's `autoBattle`, an e2e spec, the critic — passes this.
    */
   skipResults?: boolean;
+  /** RESTART ENCOUNTER: re-enter where RETRY would (FA3 = b, `pause/restartCarry.ts`). */ restart?: boolean;
 }
 
 /**
@@ -298,10 +300,8 @@ export class GameFlow {
     const chapter = getChapter(id);
     if (!chapter) return null;
     const save = this.app.save;
-    let attempt = 0;
-    // FA3 = b (FFX-2 Chapter XI only): a defeat past a Save Sphere retries at
-    // that link, not the chapter's start. Every other chapter never has one.
-    let carry: RetryCarry = FRESH_RUN;
+    // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
+    let { attempt, carry } = ({ opts } = openRun(this, id, opts));
 
     // A run started from outside {@link start}'s own loop — `main.ts` when the
     // board resolves, the debug API's `gotoChapter`, the pause menu's RESTART
@@ -404,7 +404,7 @@ export class GameFlow {
       }
 
       this.step = 'idle';
-      return outcome;
+      return closeRun(this, id, { carry, attempt, opts }, fought, outcome);
     }
   }
 
