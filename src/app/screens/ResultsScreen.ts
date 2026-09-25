@@ -21,10 +21,10 @@ import {
   isNewBest,
   isSilentResultsChapter,
   leaderId,
-  pickVictoryQuip,
   victoryHeroHtml,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
+import { victoryLine, victoryTurn, type VictoryLine } from '../../ui/common/victoryLine.ts';
 
 /** How long the gil/AP counters take to roll up to their final value [visual-bible §3.8 step 6]. */
 const COUNT_UP_MS = 1150;
@@ -102,7 +102,7 @@ export class ResultsScreen extends Screen {
   private readonly rows: ResultsMemberRow[];
   /** Filled in by `enter()`, from the record as it stood before this clear. */
   private wasNewBest = false;
-  private readonly quip: string | undefined;
+  private quip: VictoryLine | undefined;
   /** FFX pays in AP, FFX-2 in EXP. The ledger heading is labelled from this. */
   private readonly awardUnit: 'AP' | 'EXP';
   /** The real clear time, not the engine's unadvanced `elapsedMs`. */
@@ -127,13 +127,6 @@ export class ResultsScreen extends Screen {
     this.awardUnit = game === 'ffx' ? 'AP' : 'EXP';
     this.clearMs = clearTimeMs(opts.result, opts.elapsedMs, game);
     this.rows = buildMemberRows(chapter, opts.result);
-
-    // A quip is a victory register. Printing "…Okay. Next one." under a
-    // 200 px "Defeat" was the tonal bug this screen was rebuilt for.
-    this.quip =
-      this.victory && !this.silent
-        ? pickVictoryQuip(chapter?.scriptsRef.victoryQuips[this.rows[0]?.id ?? ''] ?? undefined)
-        : undefined;
   }
 
   override enter(): void {
@@ -159,6 +152,13 @@ export class ResultsScreen extends Screen {
     `;
 
     const record = this.app.save.chapter(this.opts.chapterId);
+    // A quip is a victory register, never under "Defeat". PR-0021: the speaker
+    // rotates with the save's attempts and says their bank's first line (both games).
+    if (this.victory && !this.silent) {
+      const banks = chapter?.scriptsRef.victoryQuips;
+      const turn = victoryTurn(this.app.save.value.chapters);
+      this.quip = victoryLine(banks, this.rows.map((r) => r.id), turn);
+    }
     if (this.victory) {
       const previousBestMs =
         this.opts.previousBestMs !== undefined ? this.opts.previousBestMs : record.bestTimeMs;
@@ -367,7 +367,7 @@ export class ResultsScreen extends Screen {
           <div class="rres__rule"></div>
           ${tags.map((t) => `<span class="rres__tag">${escapeHtml(t)}</span>`).join('')}
         </div>
-        ${this.quip ? `<div class="rres__quip">${escapeHtml(this.quip)}</div>` : ''}
+        ${this.quip ? `<div class="rres__quip" data-speaker="${escapeHtml(this.quip.speakerId)}">${escapeHtml(this.quip.line)}</div>` : ''}
       </div>
 
       <div class="rres__ledger rres__ledger--${density.ledger}">${ledgerHtml}</div>
