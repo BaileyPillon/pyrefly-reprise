@@ -20,7 +20,7 @@
 import type { GuideRule } from './types.ts';
 
 export const WAIT_SPLIT_HABIT_RULE: GuideRule = {
-  text: 'Open a list at once. On the top list, the clock still runs.',
-  short: 'Open a list at once',
+  text: 'Pick a command at once. Until you do, the clock still runs.',
+  short: 'Pick a command at once',
   cite: 'ffx2-combat-core §1.5',
 };

@@ -40,7 +40,7 @@ const CASES = [
 
 describe('the rule itself', () => {
   it('is the sheet\'s draft, verbatim, cites §1.5 and fits the compact rail', () => {
-    expect(WAIT_SPLIT_HABIT_RULE.text).toBe('Open a list at once. On the top list, the clock still runs.');
+    expect(WAIT_SPLIT_HABIT_RULE.text).toBe('Pick a command at once. Until you do, the clock still runs.');
     expect(WAIT_SPLIT_HABIT_RULE.cite).toBe('ffx2-combat-core §1.5');
     expect(WAIT_SPLIT_HABIT_RULE.short.length).toBeLessThanOrEqual(SHORT_MAX);
   });
