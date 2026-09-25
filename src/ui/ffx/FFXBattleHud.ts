@@ -455,10 +455,10 @@ export class FFXBattleHud implements HudPort {
    * advisor keep reading the engine's own state from the last full `sync`,
    * which lands at the end of the burst a moment later.
    *
-   * Game case: both. Shared playback plumbing, FFX-2 has the same call
-   * (AGENTS.md rule 14 / CHK-020).
+   * Game case: both. Shared playback plumbing, FFX-2 has the same call (AGENTS.md rule 14 / CHK-020).
    */
   syncVitals(state: BattleState): void {
+    this.sensorPanel.release(state.combatants); // at the blow: a last enemy's fall plays with no `sync` (Evrae)
     const actingId = state.log.length ? findLastActorId(state.log) : null;
     this.partyStatus.render(state.activeIds, state.combatants, actingId);
   }
