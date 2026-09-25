@@ -118,6 +118,19 @@ export const seymourAnimaMacalania: Tactic = (actorId, commands, engine) => {
   const up = revive(commands, party);
   if (up) return up;
 
+  // 1b. **Cure Confusion.** The Guardians' harass throws Shremedy, Confusion at
+  //     50 % and no damage (§2.3, §4.2), and nothing at this point in the game
+  //     wards it: the answer is a Remedy (three in the preset, found in this
+  //     temple) or Esuna (§8.7, §8.9; §10 lesson 8). A confused ally swings at
+  //     the party. Measured on the 200-seed bench (`docs/plans/macalania-bench.md`):
+  //     without this rule confused party members took 630 actions and the
+  //     line won 168/200; with it, 188/200. Player side only; no boss number moved.
+  const confused = living.find((c) => c.id !== actorId && has(c, 'confuse'));
+  if (confused) {
+    const cure = row(commands, ['Remedy', 'Esuna'], confused.id);
+    if (cure) return aim(cure, confused.id);
+  }
+
   // 2. §5.5 — the Trigger Command, once each. Tidus +10 Strength, Yuna and
   //    Wakka +10 Magic Defense [verified: 2 sources]. Worth roughly 6-8 % off
   //    every -ra hit; the right size for a tutorial, a visible reward for
