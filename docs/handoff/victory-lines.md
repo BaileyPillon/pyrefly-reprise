@@ -54,6 +54,31 @@ save; the save schema is untouched (read through `SaveStore.value`).
 - PR-0021's larger ask (the §4 Win and Form-slot banter bank, option B) stays out of this
   milestone per the sheet.
 
+## Repair 1 (2026-09-25): VL-1, the line under someone else's portrait
+
+The focused review raised VL-1 (major, introduced by this change, not a blocker): on two
+wins in three the line belongs to a member other than the leader in the wedge, and the
+panel names no speaker. Recommendation A says nothing about attribution, and both fixes
+are visible changes, so under hard rules 9 and 10 **no code was changed**. Instead the
+two fixes were drawn as option frames at 1600x900 for Bailey's pick. Game case: both
+(shared results screen).
+
+Frames: a real Chapter II results screen (own HMR-off server on 5601, GPU, the debug API
+on a fresh page with no title key, seed 2, `auto: 'intended'`). The quip and wedge were
+then edited in the page DOM for the picture only. None of these edits are in the source.
+
+| Frame | What it shows |
+|---|---|
+| `docs/screenshots/victory-lines/option-0-as-built.jpg` | As built: Yuna's "May they rest." under Tidus's figure (the defect) |
+| `docs/screenshots/victory-lines/option-1-name-the-speaker.jpg` | 1: the line names its speaker ("YUNA", letter-spaced after the line); the wedge keeps the leader |
+| `docs/screenshots/victory-lines/option-2-speaker-in-wedge.jpg` | 2: the speaker stands in the wedge (`victoryHeroHtml('yuna')`, the helper the screen already uses); no name needed |
+
+Notes for the pick: option 2 changes the win screen's figure every time, and a loss still
+shows the leader's fallen pose. Option 1 is a small text addition, and its styling in the
+frame is a sketch. Either fix is about 20 lines in `ResultsScreen.ts`, a file at 430
+lines that must not grow, so a helper would go in `victoryLine.ts`. Until Bailey
+picks, VL-1 is disclosed with any release that carries this branch.
+
 ## Verified (2026-09-25)
 
 - `npx tsc --noEmit`: nothing from these files (the only errors in the worktree are in
