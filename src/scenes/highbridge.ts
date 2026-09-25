@@ -31,13 +31,13 @@ import { NatusRing } from './highbridge-ring.ts';
 // Review flag; taste over fidelity was Bailey's call). As at Macalania, whose
 // installed-art frames first showed this plate in battle
 // (`docs/concepts/chapters/natus/production/battle-1600.jpg`), the painting is
-// the plaza's back wall: 40 wide at z -20, its row 0.89 at y 0.25, so the
-// painted water runs into the 3D floor under the fighters.
+// the plaza's back wall: 34 wide at z -12, its row 0.89 on the floor (y 0),
+// so the painted water runs into the 3D floor under the fighters.
 
 /** Plate pixels (`bevelle-highbridge.json`) and the row set on the floor. */
 export const HIGHBRIDGE_PLATE = { w: 2688, h: 1536, floorRow: 0.89 } as const;
 
-/** Painting plane: 40 wide at z -20 (H 22.86), row 0.89 at y 0.25, so centre y 9.16 (Macalania's geometry). */
+/** Painting plane: 34 wide at z -12 (H 19.43), row 0.89 on the floor (y 0), so centre y 7.58. */
 export const HIGHBRIDGE_BACKDROP = (() => {
   const width = 34;
   const height = width / (HIGHBRIDGE_PLATE.w / HIGHBRIDGE_PLATE.h);
