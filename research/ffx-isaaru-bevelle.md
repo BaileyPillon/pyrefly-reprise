@@ -103,6 +103,7 @@ Yuna owns **Valefor, Ifrit, Ixion, Shiva and Bahamut**. Bahamut was named at Bev
 | Auto-Life | 255; Threaten byte 0 (**wiki: Immune**) | `[decompiled]`; conflict noted, moot |
 | Poison tick | 2 (the wiki's "poison% 25" of 10 HP) | `[decompiled]` + wiki |
 | Gil / AP / items | 0 / 0 / none; bribe-immune | `[decompiled]` + wiki |
+| Doom count; wiki note | 3 (wiki infobox); the infobox also says "Can only be fought by aeons" | `[single source: wiki]`; both moot, since he never acts (added 2026-09-24, plan review R3) |
 
 **How to build him:** a non-combat enemy actor that is shown but never acts. **Whether the player can target him is unsourced.** The wiki says only that "Yuna does not fight him directly" and that he is "internally programmed as an enemy". Recommend `[estimate]`: not targetable (O-4).
 
@@ -290,7 +291,7 @@ No source gives Yuna's stats or battle count at the Via Purifico. Three presets 
 | **Spathi Mega Flare** | **2,370 \| 2,332** (2,221–2,508) | **2,469 \| 2,409** | **2,203 \| 2,148** | **2,353 \| 2,315** | (locked) |
 
 **What the table means for design:**
-- **Hellfire kills every P1 aeon from full HP** (1,765 to 1,977 against 1,146 to 1,515 HP). In P2, only Bahamut survives it (2,404 HP against about 1,740), and Ixion misses surviving by a few dozen HP. Because Grothia **opens with a full gauge** (§4.1), **the first link's lesson is "Shield or NulBlaze on the first turn"**. This matches the wiki's own advice (NulBlaze on Shiva before Hellfire) and GameFAQs ("Just Shield if Hellfire is coming next").
+- **Hellfire kills every P1 aeon from full HP** (1,765 to 1,898 at roll 16 against 1,146 to 1,515 HP; the §5.2 table's cells; an earlier "1,977" here was an arithmetic slip, corrected 2026-09-24 by the plan review R9). In P2, only Bahamut survives it (2,404 HP against about 1,740), and Ixion misses surviving by a few dozen HP. Because Grothia **opens with a full gauge** (§4.1), **the first link's lesson is "Shield or NulBlaze on the first turn"**. This matches the wiki's own advice (NulBlaze on Shiva before Hellfire) and GameFAQs ("Just Shield if Hellfire is coming next").
 - **Mega Flare kills every available aeon from full HP** in every preset, so the third link's lesson is to **Shield when the count reads 1**.
 - Pterya is weak. Her Energy Ray is about a quarter of an aeon's HP, and "Bahamut… gets to full Overdrive just by eating Pterya's attacks" (GameFAQs). That is the source of Chapter X's "Bahamut full".
 
@@ -453,6 +454,7 @@ Two years later, Isaaru works for Cid as a Zanarkand tour guide. Maroda has join
 | I-6 | Wiki: "all aeons' Overdrives should be hitting the damage cap" at this point | Not reproduced (3,164 to 6,540 derived; Jegged says Mega Flare may not kill Grothia's 8,000). Keep out of the hints. |
 | I-7 | Jegged: ice is "most effective" on Grothia | Wrong: Ice is neutral (decompile + wiki + GameFAQs). Keep out of the hints. |
 | I-8 | Isaaru's Threaten byte 0 against wiki Immune | Moot (he never acts). |
+| I-9 | **Who gave the order**: Auronlu's Chapter X script has Isaaru name **Maester Kinoc**; the Personality section of the wiki's *Isaaru* page (revid 4026440) says **Mika** | Prefer the script: **Kinoc** (§8.2 beat 3). No writer should "correct" it to Mika (added 2026-09-24, plan review R10). |
 | O-1 | **Yuna's and the aeons' preset and gauges.** P1 (Chapter X's shipped set) against P2 (the formula) against P3 (the floor); and whether Chapter X's aeon gauges become this chapter's end state | **Ask Bailey.** Recommend **P1 at the start with Chapter VII's carried gauges** (Valefor 90, Ifrit 60, Ixion 60, Shiva 0, **Bahamut at an [estimate] partial**, so the Pterya link can fill him as the sources say). The end state then reproduces Chapter X's B3 `[estimate]`. |
 | O-2 | **Yuna's Grand Summon gauge at the start** (Jegged says to arrive full) | Design choice; decides whether the opening Grand Summon exists. |
 | O-3 | Can Yuna use **items** or her own magic? Is Attack greyed out? Can she escape? | Unsourced. Recommend: Summon, Grand Summon (Overdrive) and Item available; Attack and Blk Magic unavailable against the aeons ("can only be fought by aeons"); no escape. All `[estimate]`, labelled. |

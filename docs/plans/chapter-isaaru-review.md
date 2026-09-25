@@ -47,7 +47,7 @@ Yojimbo here). **D-090** (no Isaaru duel inside Chapter X) stands: this is its o
 | Unsourced | items and escape (O-3); Isaaru targetable (O-4); move splits (O-5); Spathi vs Yuna (O-6); Pterya's start gauge (O-9); counters I-4; rewards I-1; music O-8; Yuna's stats and gauges (O-1, O-2) | §11 |
 
 **The design fact (§5.2, `[derived]`):** Hellfire kills every aeon of Chapter X's shipped set
-from full HP (1,765 to 1,977 against 1,146 to 1,515), and Mega Flare kills every available aeon
+from full HP (1,765 to 1,898 at roll 16 against 1,146 to 1,515; review R9), and Mega Flare kills every available aeon
 in every preset. Our damage chain reproduces GameFAQs' "about 2,200, about 550 with Shield".
 **The thesis:** three links, one threat each. Shield or NulBlaze on turn one. Pterya is the
 breather where Bahamut fills his gauge. Shield when Spathi's count reads 1. The mirror lock
@@ -107,6 +107,9 @@ A scratch vitest file outside the repo drove the real engine: a solo Yuna from `
   read in `availableAeons`; the row shows greyed with a reason (B6). Every other chapter byte-identical.
 - **I-G3: the loss rule.** "No aeon left" is not a defeat today (P6). A formation flag read in
   `checkEnd` (`engine.ts:437`): no aeon on the field, none available after the lock → defeat.
+  **Build it whatever B6 becomes** (review E11): without it, the stalemate rule
+  (`engine.ts:423-433`, `STALEMATE_TURNS = 400`) ends a Yuna-alone battle as `'escape'` ("The
+  battle cannot be won from here"), not the sourced Game Over; B6 = b leads to the same end.
 - **I-G4: "only aeons can fight them".** P2 shows Attack, Talk and Grenade open. B6 picks the
   seam: menu rows greyed with a reason, or a new `ImmunityFlag` for damage from a non-aeon.
 - **I-G5: Isaaru as a bystander.** `nonCombatant` + `ordersOnly` + `untargetable` on one actor
@@ -132,8 +135,8 @@ A scratch vitest file outside the repo drove the real engine: a solo Yuna from `
 | **B3** | Aeon gauges at the start | a) Chapter VII's carried values (Valefor 90, Ifrit 60, Ixion 60, Shiva 0), Bahamut 0 (just named) / b) the same, Bahamut at an `[estimate]` partial / c) all full | **b**; T10 reports how often the sourced line ends with Bahamut full, to match Chapter X |
 | **B4** | Yuna's stats | a) Chapter X's Yuna (the Gagazet cells, D-natus-preset) / b) Chapter VII's | **a**, continuity with the next chapter |
 | **B5** | Yuna's Grand Summon gauge | a) full (Jegged: charge it before the hallway) / b) empty / c) Chapter VII's | **a**; it opens the sourced Grand Summon line |
-| **B6** | Yuna's own commands | a) Summon, Grand Summon, White Magic, Items, Defend; Attack, Talk, attack items **greyed** "Only an aeon can fight an aeon" / b) all open, enemy aeons take 0 from Yuna / c) Summon only | **a**, labelled estimate; the mirror-locked aeon greyed with its reason |
-| **B7** | Items | a) Chapter X's bag / b) healing only (no Grenade) / c) none | **a**, with attack items greyed under B6 = a |
+| **B6** | Yuna's own commands | a) Summon, Grand Summon, White Magic, Items, Defend; Attack, Talk, attack items **greyed** "Only an aeon can fight an aeon" / b) all open, enemy aeons take 0 from Yuna / c) Summon only | **a**, labelled estimate; the mirror-locked aeon greyed with its reason. Still a question: the O-5 frames are *shown with* a (review) |
+| **B7** | Items | a) Chapter X's bag / b) healing only (no Grenade) / c) none | **a**, with attack items greyed under B6 = a. **Also: may an aeon use Items?** Today every aeon's menu has an Items row (`commands.ts:195` has no aeon check); no research line sources it, and combat-core §6.1 says party items cannot target aeons `[single source]` (review S5). Recommend: no Items row on an aeon, `[estimate]` |
 | **B8** | Isaaru | a) on the field, no turn, never targetable / b) targetable (10 HP) | **a** `[estimate]` (O-4) |
 | **B9** | Unsourced AI | even Attack/Fira and Attack/Sonic Wings splits; Pterya's gauge starts at 0; count from **5** (I-5); Spathi keeps counting when Yuna stands alone and Mega Flares her at 0 (O-6); counter rows **not** built (I-4) | **build all, each "our estimate"**; footage check of the count before listing |
 | **B10** | Threaten (Shiva's Heavenly Strike) | immune / landable per the byte | **immune** (2 sources vs 1 byte; the Natus rule) |
@@ -203,12 +206,12 @@ transcribed line** (rule 8); the three battle cries are hooks, written fresh.
 | Integrator | `encounters.ts`, `ids.ts`, `chapter-*` meta, `chapters-unlisted.ts`, `CONTRACT-CHANGES.md` | first and last; serialised with XII, XIII, XV | 1.0 | opus |
 | T1 engine seams I-G1…I-G5 | `common/types.ts`, `aeons.ts`, `commands.ts`, `engine.ts` | ids | 1.25 | opus |
 | T2 enemy data | `src/data/ffx/enemies/isaaru{,-abilities}.ts` (three formations) | ids | 0.75 | sonnet |
-| T3 AI | `src/battle/ffx/ai/isaaru{,-rules}.ts` | T1, T2, B9 | 1.0 | opus |
+| T3 AI | `src/battle/ffx/ai/isaaru{,-rules}.ts`; a new `enemyGaugeRules` tag value (it is only a string tag, read today by the Zanmato widget alone; review E6) | T1, T2, B9 | 1.0 | opus |
 | T4 build | `src/data/ffx/builds/via-purifico.ts` | B2–B7 | 0.5 | sonnet |
 | T5 scene | `src/scenes/via-purifico-*.ts` | O-1, O-3, O-4 picks | 1.25 | sonnet |
 | T6 story | `docs/plans/isaaru-story-draft.md` first, then the script, `writing-bible.md` | B14–B17 | 1.0 | sonnet |
 | T7 guide + tactic | `src/data/guides/isaaru.ts`, `src/engine/tactics/isaaru.ts` | T2, T3 | 1.0 | opus |
-| T8 HUD + solo line-up | `src/ui/ffx/` (lock reason, count, gauge sibling), prep with one member | O-5 pick, T1 | 1.0 | sonnet |
+| T8 HUD + solo line-up | `src/ui/ffx/` (lock reason, count, a gauge sibling of the Zanmato widget that reads T3's new tag value), prep with one member | O-5 pick, T1 | 1.0 | sonnet |
 | T9 audio | `src/audio/tracks/boss-isaaru.ts`, THEMES.md row | O-6 pick | 1.0 | sonnet |
 | T10 tests + measure | `tests/unit/chapters/isaaru-*.test.ts`, 200-seed bench | T1–T4, T7 | 1.5 | sonnet / opus |
 | **Total** | | | **~11.25 agent hours**, plus judging and the review | |
@@ -229,7 +232,9 @@ LAST  integrator commit · node tools/orphans.mjs · real-input win and loss ·
   Spathi 5 → 0 → Mega Flare → 5; Shield quarters Mega Flare (537–617 band at roll 16, §5.3);
   Shell halves Energy Ray only; NulBlaze eats Hellfire; Fira on Grothia heals, his own does not
   target him; Delay and Threaten fail; the lock per link; a KO'd aeon absent in later links; HP,
-  MP and gauges carried; defeat on Yuna's KO and on "no aeon left"; Isaaru never acts, never listed.
+  MP and gauges carried; defeat on Yuna's KO and on "no aeon left"; **a Yuna who heals through
+  Pterya with no aeon left ends in defeat, never in the 400-turn stalemate `'escape'`** (review
+  E11); Isaaru never acts, never listed.
 - **Absence (rule 14, CHK-021):** Chapters 1–3 and 7–10 byte-identical at fixed seeds (I-G2, I-G3
   are inert without the flags); FFX-2 untouched.
 - **Measure, never tune:** the sourced lines (Shiva with NulBlaze into Grothia; a Grand-Summoned
@@ -346,3 +351,7 @@ frames say so.
   - Add the Agility caption (S5).
   - Disclose B6 on the O-5 sheet.
 - **F4** is a live FFX-wide defect for the driver.
+
+**Corrections applied (2026-09-24, after this review):** R9 (1,898) in research §5.2 and §2 here; R10 → research
+I-9; R3's two infobox notes in research §2.1; E11 → I-G3 and §9; E6 → T3 and T8; S5 (ii) → B7; S2, S3, S5 (i), F1
+and the B6 disclosure on the sheets and README in `docs/concepts/chapters/isaaru/`.
