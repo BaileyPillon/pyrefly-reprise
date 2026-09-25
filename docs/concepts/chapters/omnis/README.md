@@ -5,22 +5,30 @@
 `docs/plans/chapter-omnis-review.md` §6.2 says come first (hard rule 9). Pick or mix per row.
 A pick approves only the parts you name (rule 15). Every sheet is stamped `CONCEPT`.
 
+**Corrected 2026-09-24 after the adversarial review** (`docs/plans/chapter-omnis-review.md`, Review):
+O-4 C no longer calls the Ice weakness "double" (a weakness is x1.5); the O-3 sheet no longer credits
+the Sea of Sorrow's sea, walkways and waterfalls to the Garden; the discs having no turns and the reset
+timing after Ultima are now questions (6), not facts; question 1 says what the phone shows. Every sheet
+was re-cut as one column that reads on a phone: at 390 px wide no word on a sheet is below 12.5 px, and
+each phone mockup has its own row at full size.
+
 **Which game (rule 14): FFX only.** Omnis, the Mortiphasm discs and the Garden of Pain exist
 only in FFX (research §0.3). CTB queue, FFX gold accent, no `ig--ffx2`, no ATB bar. A pick
 applies to this chapter only.
 
-**The ring order is our estimate.** Nothing we read says in what order the four colours sit
-around a disc (research O-7) or what the discs reset to after Ultima (O-11). Every sheet uses
-Fire, Water, Ice, Thunder clockwise (GameFAQs' reset cycle read as a ring), as plan question
-B8 proposes. The colours themselves are sourced (research §4.1): orange Fire, purple Ice, blue
+**The ring order is our estimate, twice over.** Nothing we read says in what order the four
+colours sit around a disc (research O-7) or what the discs reset to after Ultima (O-11). Every
+sheet uses Fire, Water, Ice, Thunder clockwise: GameFAQs' *reset cycle* drawn as the *physical
+order around a disc*. That is a second guess stacked on the first, and plan question B8 must
+confirm both. The colours themselves are sourced (research §4.1): orange Fire, purple Ice, blue
 Water, yellow Thunder.
 
 | Round | Sheet | Files |
 |---|---|---|
-| **O-2 The discs (first: readability decides the rest)** | `o2-discs/sheet.jpg`, `o2-discs/sheet-phone.jpg` | `o2-discs/{a,b,c}-frame.jpg` (1600x900), `{a,b,c}-turn.jpg` (one 90° turn in four frames), `{a,c}-disc-card.jpg`, `{a,b,c}-phone.jpg` (390x844 at 2x), the `.html` for each mockup |
-| O-1 Seymour Omnis | `o1-omnis/sheet.jpg` | `o1-omnis/{a,b,c}-frame.jpg`, `{a,b,c}-glow-frame.jpg`, `{a,b,c}-card.jpg` |
-| O-3 The Garden of Pain | `o3-garden/sheet.jpg` | `o3-garden/{a,b,c}-plate.jpg`, `{a,b,c}-frame.jpg` |
-| O-4 Reading the fight (B14) | `o4-fight/sheet.jpg`, `o4-fight/sheet-phone.jpg` | `o4-fight/{a,b,c}-{i,ii,iii}.jpg` (1600x900), `-phone.jpg` (390x844 at 2x), the `.html` for each |
+| **O-2 The discs (first: readability decides the rest)** | `o2-discs/sheet.jpg`, `o2-discs/sheet-turn.jpg`, `o2-discs/sheet-phone.jpg` | `o2-discs/{a,b,c}-frame.jpg` (1600x900), `{a,b,c}-turn.jpg` (one 90° turn in four frames), `{a,c}-disc-card.jpg`, `{a,b,c}-phone.jpg` (390x844 at 2x), the `.html` for each mockup |
+| O-1 Seymour Omnis | `o1-omnis/sheet.jpg`, `o1-omnis/sheet-glow.jpg` | `o1-omnis/{a,b,c}-frame.jpg`, `{a,b,c}-glow-frame.jpg`, `{a,b,c}-card.jpg` |
+| O-3 The Garden of Pain | `o3-garden/sheet.jpg`, `o3-garden/sheet-glow.jpg` | `o3-garden/{a,b,c}-plate.jpg`, `{a,b,c}-frame.jpg` |
+| O-4 Reading the fight (B14) | `o4-fight/sheet-{i,ii,iii}.jpg`, `o4-fight/sheet-phone-{i,ii,iii}.jpg` (one per moment) | `o4-fight/{a,b,c}-{i,ii,iii}.jpg` (1600x900), `-phone.jpg` (390x844 at 2x), the `.html` for each |
 | O-5 Omnis's portrait | not in this set | Only if B17 = c, and only after O-1 is picked: it is drawn from the pick |
 | O-6 Music | not in this set | An audio sketch is its own track, judged by ear on `docs/audio/audition.html` (rule 13) |
 
@@ -35,9 +43,13 @@ Water, yellow Thunder.
    the discs are about 80 CSS px and colour alone carries the fight; the strip says it in words,
    works without colour vision and updates when a turn lands (`o2-discs/b-turn.jpg`). C reads the
    cleanest (`c-disc-card.jpg`) but puts interface graphics into the painted world (rule 9's
-   painted 2.5D), and it drops the "large discs" look the sources describe. **Follow-up (B8):** the
-   colour order around a disc is our estimate; confirm it from your memory or footage you watch
-   before the chapter is listed.
+   painted 2.5D), and it drops the "large discs" look the sources describe. **On a phone only B
+   passes** (`o2-discs/sheet-phone.jpg`): at 390 px the turn queue and the "Tidus COMMAND" label
+   cover the upper-left disc in all three, so A and C cannot show all four facings at a glance;
+   B's strip still names them. **Follow-up (B8):** the colour order around a disc is our estimate,
+   and so is the next colour after Ultima; the sheets use GameFAQs' reset cycle as the ring order,
+   two guesses in one. Confirm both from your memory or footage you watch before the chapter is
+   listed.
 2. **O-1 How should Seymour Omnis look?** A: new paint. Long light-blue hair, dark indigo
    shoulders with horn spikes, both clawed arms spread, and a long skirt of hanging dark strips
    instead of legs, so he hovers. B: the approved Macalania portrait as the face reference (long
@@ -52,15 +64,18 @@ Water, yellow Thunder.
 3. **O-3 What light in the Garden of Pain?** A: crimson dusk. B: pale day, a rose sea,
    waterfalls from floating ledges. C: deep violet. **I recommend C.** In the engine the orange
    Fire quarter, the gold rims and his red glow all stand out against violet
-   (`o3-garden/c-glow-frame.jpg`); on A the red glow sinks into the red plate; B is the most
-   faithful to "a red-tinged sea under a cloudless sky" as painted, but under Chapter III's grade
-   its bright horizon blooms behind him (`o3-garden/b-frame.jpg`). If being faithful matters more
-   here, pick B and let the scene's own grade tone the horizon down.
+   (`o3-garden/sheet-glow.jpg`); on A the red glow sinks into the red plate. For the Garden itself
+   the sources give only steps up to a platform, and no plate shows clear steps yet (a final
+   would add them). The red-tinged sea, the blue walkways and the waterfalls belong to the Sea of
+   Sorrow beside it; B is the closest to that neighbouring look, but under Chapter III's grade its
+   bright horizon blooms behind him (`o3-garden/b-frame.jpg`). If that look matters more to you
+   than the glow, pick B and let the scene's own grade tone the horizon down.
 4. **O-4 How does the player read the attack counter (B14)?** All three sit on O-2 B. A: the
    red glow only, as the game does it. B: six diamond pips beside his queue tile ("2 of 6"; three
    below 20,000 HP), full and red when he is about to act. C: one line of intent in the
    enemy-move slot (turn one: "four Firaga next, he absorbs Fire and is weak to Ice"; the glow:
-   "Dispel on the party, then Ultima"; after a turn: "three Firaga and one Thundara next").
+   "Dispel on the party, then Ultima"; after a turn: "three Firaga and one Thundara next; Ice no
+   longer hurts him extra", since a weakness is x1.5, not double).
    **I recommend C.** It says in words what the discs mean for the next turn, which is the lesson
    the fight teaches, and it matches Chapter X's pick (a chip strip plus a sentence). B's pips
    show a number the game hides; add them only if you want the counter itself on screen. No chip
@@ -71,6 +86,14 @@ Water, yellow Thunder.
    headless browser and deleted, as the Natus round did), or should the finals stay with these
    text-only designs? **I recommend the look-only pass**, before any final is painted; it needs
    your yes because it fetches images.
+6. **Two fight rules the sheets assume, which the sources do not settle (plan B22, B23).**
+   (a) **Do the discs take turns of their own?** The frames took them out of the turn queue, as
+   if they only turn when hit. The decompiled record lists no actions for them, but no source
+   says either way, so this is our estimate. **I recommend no turns** (the frames as shown); the
+   other answer puts four disc tiles in the queue. (b) **When do the discs reset after
+   Ultima?** Two sources (the wiki's *Mortiphasm* page and GamerGuides) say on his next turn; one
+   (GameFAQs) says straight after. **I recommend on his next turn**, the majority; it is one
+   constant either way.
 
 ## What is sourced and what is ours (rule 6)
 
@@ -124,8 +147,9 @@ Water, yellow Thunder.
   one composite image (Omnis plus the four discs) in place of `characters/braskas-final-aeon-1/*`.
   Dream's End's own props were hidden in the scene (floating ruins, fire rims, floor cracks,
   rocks, embers), both Yu Pagodas were hidden, the Talk and Flee rows were removed (Omnis has no
-  Talk and cannot be fled, research §4.6), the Mortiphasms were taken out of the turn queue (they
-  have no turns, §2), and the names were swapped in the DOM. Guide, advisor and target panels
+  Talk and cannot be fled, research §4.6), the Mortiphasms were taken out of the turn queue (our
+  estimate that they take no turns: question 6a, plan B22; research §2 does not say so), and the
+  names were swapped in the DOM. Guide, advisor and target panels
   were hidden with G / N / I. The boss was placed by projecting it to screen x 1000 before each
   shot. Nothing was written to `public/art`. The plates sit under Chapter III's red grade and
   lights; a Garden of Pain scene would get its own.
@@ -137,4 +161,10 @@ Water, yellow Thunder.
 - **Mockups:** `o2-discs/*.html` and `o4-fight/*.html` over the real frames, using
   `docs/concepts/polish/_kit/kit.css` and the Yojimbo round's `phone.css`, shot in Playwright
   at 1600x900 and 390x844 (2x). The script measured the smallest fight label: 13 px at 1600x900, 12 px on the phone; no sideways scroll at 390 px.
+  `o4-fight/c-iii*.html` were re-shot on 2026-09-24 after the wording fix (file:// pages, no server).
+- **Sheets:** `scripts/specs.py` builds every sheet with `scripts/sheet.py`: one column, 1,200 px
+  wide for the 1600x900 frames (every word at 12.5 px or more when shown 390 px wide), 780 px wide
+  for the phone mockups, one phone per row at its own size (its 12 CSS px labels stay 12 px). The
+  HUD text inside a 1600x900 frame cannot read on a phone at any size; those sheets rely on their
+  captions.
 - Scratch (full-size renders, scripts, composites): `D:/Tools/pyrefly-scratch/omnis-options/`.

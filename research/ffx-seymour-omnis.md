@@ -114,7 +114,7 @@ The monster record is **Neutral** to Fire, Ice, Thunder, Water and Holy `[decomp
 | Status | Immune to everything that matters (Shell, Protect, Reflect, Nul×, Haste, Regen, the Breaks, Provoke, Death, Doom and the rest are 255); Threaten 0 in the record, **Immune** on the wiki | `[decompiled]` + wiki |
 | Scan / Sensor | **Immune to both** | `[decompiled]` + wiki `[verified: 2 sources]` |
 | AP / Gil / items | none | `[decompiled]` + wiki |
-| Actions | **Turns Left** (90° counter-clockwise) and **Turns Right** (90° clockwise), self-target | `[single source: wiki enemy-ability table]`; the tracker lists no actions for `m106` (it only parses what the RNG tracker needs) |
+| Actions | **Turns Left** (90° counter-clockwise) and **Turns Right** (90° clockwise), self-target | `[single source: wiki enemy-ability table]`; the tracker lists no actions for `m106` (it only parses what the RNG tracker needs). **Whether a disc owns a turn in the CTB queue, or only turns in reaction to a hit, is unsourced** `[estimate]`: no turns (plan B22; review E6) |
 | Reach | **Out of melee range** ("flying" / back row): physical attacks can reach them only from **Wakka**, **Valefor**, **Anima** and **Mindy** (a normal Attack, not Passado) | wiki Mortiphasm (the full list) + GameFAQs ("only Wakka and certain aeons") + GamerGuides + LP ("only Wakka") `[verified: 4 sources]`. Jegged says "Wakka or Lulu" (Lulu through magic, which any caster can do). |
 | Random-target attacks | Slice & Dice, Attack Reels and similar **never pick a disc** | `[single source: GameFAQs]` |
 
@@ -160,7 +160,7 @@ Normal Ultima at Magic 35 against MDEF 25 does 4,000; Omnis's DC 64 version does
 
 - The Ultima column reproduces the play figures "around 4,000" (Jegged) and "can exceed 4,000" (wiki) at low MDEF, and GamerGuides' "keep HP above 4,000" `[derived]`.
 - **Shell halves the -ra and -ga columns only.** A matching **Nul** spell cancels one spell of that element; **Ward / -proof / Eater** armour halves, nullifies or absorbs it (Jegged, GameFAQs, wiki `[verified: 3 sources]`).
-- The opening turn is **four Firaga**: at the §6.3 preset MDEF (22 to 34) that is about **2,100 per hit, one per member plus a second on someone**, so one member takes about 4,200 on turn one `[derived]`. That is the fight's opening lesson (turn a disc, or NulBlaze).
+- The opening turn is **four Firaga**: at the §6.2 preset MDEF (22 to 34) that is about **2,100 per hit, one per member plus a second on someone**, so one member takes about 4,200 on turn one `[derived]`. That is the fight's opening lesson (turn a disc, or NulBlaze).
 
 **Outgoing into Omnis (Attack, DC 16):**
 
@@ -219,7 +219,7 @@ Consequences `[derived]`:
 | Whether hits on the **discs** count | Unstated (O-9) | open |
 | Next turn | **Dispel** on the whole party; his DEF drops to 100 | Dispel: `[verified: 4 sources]`; DEF: `[single source: wiki]` + LP partial |
 | The turn after | **Ultima** on the whole party; DEF rises to 150 | Ultima: `[verified: 4 sources]`; DEF: `[single source: wiki]` |
-| Then | **All four discs are reset to one colour, the next in the cycle**, and he goes back to casting four spells | wiki (both pages) + GameFAQs + GamerGuides + LP `[verified: 4 sources]`. **When:** GameFAQs "immediately after Ultima", GamerGuides "on the turn after Ultima" (O-10, small). |
+| Then | **All four discs are reset to one colour, the next in the cycle**, and he goes back to casting four spells | wiki (both pages) + GameFAQs + GamerGuides + LP `[verified: 4 sources]`. **When** `[conflict]`: GameFAQs "immediately after Ultima"; GamerGuides "on the turn after Ultima" and the wiki *Mortiphasm* page (revid 3981206) "on his next turn after casting Ultima". 2 sources against 1 (O-10, open; corrected 2026-09-24 by the plan review, S8). |
 | **The cycle order** `[conflict]` | GameFAQs: **Fire → Water → Ice → Thunder**. The wiki says only "the next element listed above", and its list reads Fire, Ice, Water, Thunder. | O-11: build GameFAQs' explicit order, label it, and confirm on footage |
 | Lines | He speaks before the first Dispel and before each Ultima (Auronlu Ch. XV; wiki quotes) | `[verified: 2 sources]`. Write original lines (rule 8). |
 
@@ -261,10 +261,10 @@ recomputeAffinity():
 Seymour turn:
     if state == 'red':      Dispel -> party; seymour.def = 100; state = 'dispelled'; return
     if state == 'dispelled': Ultima(6:240) -> party; seymour.def = 150; hits = 0
-                             cycleIdx += 1; discs = [ELEMENTS[cycleIdx % 4]] * 4   // O-10 timing
+                             cycleIdx += 1; discs = [ELEMENTS[cycleIdx % 4]] * 4   // O-10: here straight after Ultima (GameFAQs); wiki + GamerGuides say his next turn
                              recomputeAffinity(); state = 'normal'; return
     targets = living party members, shuffled?, + one random          // O-4
-    for i, d in enumerate(discs[: max(2, len(targets))]):            // KO rule, wiki
+    for i, d in enumerate(discs[: max(2, len(targets))]):            // KO rule, wiki; WHICH discs keep their spell is unsourced [estimate] (plan B12)
         n = count(discs == d); cast (n >= 3 ? ga(d) : ra(d)) -> targets[i]
 ```
 
@@ -398,7 +398,7 @@ Chapter I's post already closes on Seymour saying Spira's sorrow is patient (`sr
 | O-7 | **The colour order around each disc** | **Open and blocking**: turning a disc has no defined result without it. Get it from footage or reference images before the chapter is built. |
 | O-8 | Which spells turn a disc | `[estimate]`: damaging magic only. |
 | O-9 | Whether hits on the discs count toward the 6 / 3 | **Open.** `[estimate]`: no (the sources say "attacks on Seymour"). |
-| O-10 | Disc reset timing: straight after Ultima, or on his next turn | Small; build straight after Ultima (GameFAQs), label it. |
+| O-10 | Disc reset timing: straight after Ultima, or on his next turn | **Open** `[conflict]`: the wiki *Mortiphasm* page and GamerGuides say on his next turn after Ultima, GameFAQs straight after. 2 against 1, so the majority rule says **next turn**; Bailey's call (plan B23). *Corrected 2026-09-24: this row first said "build straight after Ultima"; the wiki sentence had not been counted.* |
 | O-11 | **The post-Ultima cycle order**: GameFAQs Fire → Water → Ice → Thunder; the wiki's list reads Fire, Ice, Water, Thunder | Build GameFAQs' explicit order; **confirm on footage** with O-7. |
 | O-12 | The scripted Defense changes (180 → 100 → 150) and Armor Break | `[single source]` for the values; the interaction with Armor Break is unstated. `[estimate]`: Armor Break wins while it lasts, and Dispel on the party does not remove it from him. |
 | O-13 | Optional aeons (Anima, Yojimbo, Magus Sisters) in the preset | Design choice. Anima gives the one extra story line; Yojimbo's Zanmato level 4 is sourced. **Ask Bailey.** |
@@ -488,3 +488,4 @@ Chapter I's post already closes on Seymour saying Spira's sorrow is patient (`sr
 | 14 | Steal Shining Gem / Supreme Gem; drop Lv. 3 Key Sphere | decompile + wiki + GameFAQs + Jegged | agree |
 | 15 | Garden of Pain placement, before the point of no return | wiki Inside Sin, Auronlu, Jegged 31/32, GameFAQs | agree |
 | 16 | No Omnis / Mortiphasm art exists | `public/art/characters/`, `docs/concepts/chapters/`, `approved-hashes.json` | confirmed absent |
+| 17 | Plan review (2026-09-24, `docs/plans/chapter-omnis-review.md` Review) | re-fetched revids; engine `baseDamage` | tables confirmed; corrected here: O-10 is 2 sources to 1 for *next turn*; disc turns in the queue are an `[estimate]`; §3.3 cites §6.2 (was §6.3); which disc drops its spell with a member KO'd is an `[estimate]` |

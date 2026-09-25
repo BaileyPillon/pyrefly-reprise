@@ -25,7 +25,7 @@ STATES = {
     'ii': {'discs': ['fire', 'fire', 'fire', 'fire'], 'aff': ('Absorbs', 'fire', 'Weak', 'ice'), 'pips': 6, 'glow': True,
            'intent': 'He glows red: <b>Dispel</b> on the party, then <b>Ultima</b>. After it, every disc turns to the next element.'},
     'iii': {'discs': ['thunder', 'fire', 'fire', 'fire'], 'aff': ('Absorbs', 'fire', 'Halves', 'thunder'), 'pips': 2, 'glow': False,
-            'intent': 'One disc turned to <b>Thunder</b>: three <b>Firaga</b> and one <b>Thundara</b> next. Ice no longer hurts him double.'},
+            'intent': 'One disc turned to <b>Thunder</b>: three <b>Firaga</b> and one <b>Thundara</b> next. Ice no longer hurts him extra.'},
 }
 MOMENT = {'i': 'turn one: every disc on Fire', 'ii': 'he glows red: Dispel, then Ultima', 'iii': 'a disc turned: his resistances change'}
 O4TAG = {'a': 'Red glow only (as the game)', 'b': 'Glow + attack pips', 'c': 'Glow + one line of intent'}
