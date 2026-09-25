@@ -104,12 +104,10 @@ describe('evrae-airship-deck: formation and marks', () => {
   });
 
   it('stands the party on the deck, in front of the rail', () => {
-    // R13-04 option B: the back row stands at the rail, 0.2 to 0.4 in front of its line; the front man well inside.
     for (const s of SLOTS.party) {
       expect(s[1]).toBe(0);
-      expect(s[2]).toBeGreaterThanOrEqual(DECK.edgeZ + 0.2);
+      expect(s[2]).toBeGreaterThan(DECK.edgeZ + 1);
     }
-    expect(Math.max(...SLOTS.party.map((s) => s[2]))).toBeGreaterThan(DECK.edgeZ + 3);
   });
 
   it('hangs NEAR Evrae past the rail with its coils below the deck line and its head above the rail', () => {

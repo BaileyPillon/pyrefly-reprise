@@ -73,40 +73,29 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   idle: rig(RANGE_STAGING.near.rigs.idle),
   action: rig(RANGE_STAGING.near.rigs.action),
   enemy: rig(RANGE_STAGING.near.rigs.enemy),
-  /**
-   * `party` and `victory` frame the R13-04 arc (option B): from left of it, so
-   * Wakka at the rail reads left of Tidus instead of behind him, with the
-   * three spread across 0.36..0.69 of the frame (live's arc under live's rigs:
-   * 0.31..0.72). Were [-1.2, 1.6, 7.4] -> [-2.6, 1.2, 0.4] and
-   * [-1.6, 1.7, 7.6] -> [-2.6, 1.3, 0.6], aimed at the old arc's centre.
-   */
-  party: { position: [-0.45, 1.6, 6.75], lookAt: [0.25, 1.2, 0], fov: 32, sway: 0.7 },
-  victory: { position: [-0.4, 1.7, 6.95], lookAt: [0.35, 1.3, 0.2], fov: 32, sway: 1.2 },
+  party: { position: [-1.2, 1.6, 7.4], lookAt: [-2.6, 1.2, 0.4], fov: 32, sway: 0.7 },
+  victory: { position: [-1.6, 1.7, 7.6], lookAt: [-2.6, 1.3, 0.6], fov: 32, sway: 1.2 },
   'idle-far': rig(RANGE_STAGING.far.rigs.idle),
   'action-far': rig(RANGE_STAGING.far.rigs.action),
   'enemy-far': rig(RANGE_STAGING.far.rigs.enemy),
 };
 
 /**
- * Party, then four reserve spots off frame-left. Order is the build's
- * `activeSlots` (`src/data/ffx/builds/fahrenheit.ts`): Tidus, Wakka, Rikku.
+ * Party: Chapter 1's FFX arc (`gagazet.ts`), shifted half a unit left so the
+ * front of it stays clear of Evrae's head, then four reserve spots off
+ * frame-left. Order is the build's `activeSlots`
+ * (`src/data/ffx/builds/fahrenheit.ts`): Tidus, Wakka, Rikku. The back of the
+ * arc stands a metre and a half from the rail (edge z -2.7).
  *
- * R13-04 (Bailey picked option B on 2026-09-25, "I'll go with all your
- * recommendations"; `docs/concepts/layout/r13-04-evrae/`): the D-041 recipe
- * (Chapters 1 and 3, `docs/concepts/layout/pr-0002/`) on the deck. The whole
- * arc is re-laid right of the FFX command stack's footprint, which hid Tidus
- * at NEAR (0.23 of him in frame) and Wakka at FAR (0.14). Evrae holds the
- * space right of that, so the back row stands at the rail instead, 0.2 to 0.4
- * in front of its line (edge z -2.7): Tidus front-centre, Wakka back-left,
- * Rikku back-right. Tidus stands 0.15 right of the sheet's [0.1, 0, 0.9]: there
- * he covered Wakka's right edge at FAR (0.93 of Wakka clear at 2000x1012; 1.00
- * now). The approved stack is untouched, and the deck holds the
- * arc ({@link EVRAE_AIRSHIP_DECK_STAGING}). Staging, not game data.
+ * R13-03: Tidus and Rikku stand where live e3b8c2a3's relax settled them, Wakka
+ * where a999d133's did (clear of the ORDERS row), measured at 1600x900 and
+ * 2000x1012 (were -2.05 / -3.45 / -1.55); the deck holds them there
+ * ({@link EVRAE_AIRSHIP_DECK_STAGING}).
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [0.25, 0, 0.9],
-  [-0.95, 0, -2.5],
-  [2.2, 0, -2.3],
+  [-1.89, 0, 1.55],
+  [-4.15, 0, 0.25],
+  [-1.02, 0, -1.1],
   [-11.6, 0, 2.6],
   [-12.5, 0, 1.0],
   [-13.4, 0, -0.6],
