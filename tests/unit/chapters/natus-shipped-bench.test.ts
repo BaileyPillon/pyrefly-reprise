@@ -2,22 +2,28 @@
  * Chapter X — the **shipped tactic's** bench: the registered line
  * (`src/engine/tactics/seymour-natus.ts`, found the way the game finds it, through
  * `intendedStrategy` and `tacticFor`) on the registered chapter record (`SEYMOUR_NATUS`: its build
- * and its formation), 200 seeds, beside one credibly wrong line (Haste all three, then swing).
+ * and its formation), 200 seeds, beside one credibly wrong line (Haste all three, then swing) and
+ * the line it replaced (nobody Hastes).
  * **FFX only** [AGENTS.md rule 14]. **Measure, never tune** (`docs/plans/chapter-natus-review.md`
  * §9, the `boss-side-fix-needs-measured-options` rule): the table goes to
  * `docs/plans/natus-bench.md`; nothing here pins a target rate or touches the boss.
  *
- * The wrong line is the research's strategy 7 turned around [§4.3, verified: 3 sources]: Tidus
- * Hastes every active member he can, then everyone swings at Natus; upkeep (Soft, revive, heal)
- * and the aeon's turn are the shipped tactic's, so the only difference is the Haste habit.
- * Beside them, for Bailey only, the research's own strategy 7 (Haste only two: Tidus and Auron).
+ * **The shipped line is the research's strategy 7** [§6.3 row 7, verified: 3 sources: "Haste only
+ * two party members (three triggers Desperado)"], with Tidus Hasting Tidus and Auron. Bailey picked
+ * it on 2026-09-25 ("All your recommendations") over the plan's no-Haste line (169 against 116 of
+ * 200 in the first bench).
  *
- * **Measured 2026-09-25, not acted on:** on top of the shipped line, Hasting all three wins
- * *more* seeds than the shipped line itself (153 against 116 of 200), though it calls
- * Desperado about twice a battle. The research's thesis "Haste on all three is punished" holds
- * only against a line with no Talk, aeon or Shell (`natus-bench.test.ts`'s wrong line, 0 of
- * 200). The cause is not claimed (rule 3) and the boss is not touched; it is reported in
- * `docs/plans/natus-bench.md` for Bailey. This file pins only what is true either way.
+ * The wrong line is strategy 7 turned around [§4.3, verified: 3 sources]: Tidus Hastes every
+ * active member he can, then everyone swings at Natus; upkeep (Soft, revive, heal) and the aeon's
+ * turn are the shipped tactic's, so the only difference is the Haste habit. The no-Haste line is
+ * the shipped tactic with its Haste turned back into the swing it replaced, which is exactly the
+ * tactic as first shipped (the plan's intended line).
+ *
+ * **Measured 2026-09-25:** Hasting all three still wins more seeds than the no-Haste line, though
+ * it calls Desperado about twice a battle; the research's thesis "Haste on all three is punished"
+ * holds only against a line with no Talk, aeon or Shell (`natus-bench.test.ts`'s wrong line, 0 of
+ * 200). The cause is not claimed (rule 3) and the boss is not touched; the table is in
+ * `docs/plans/natus-bench.md`. This file pins only what is true either way.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -52,16 +58,10 @@ const hasteAll: Pick = (a, c, e) => {
   return bare && row?.validTargets.includes(bare.id) ? { kind: 'ability', id: 'haste', targets: [bare.id] } : cmd;
 };
 
-/** Strategy 7 as the research gives it [§6.3 #7]: Tidus Hastes only Tidus and Auron, never a third. */
-const hasteTwo: Pick = (a, c, e) => {
+/** The line it replaced: the shipped tactic with every Haste turned back into the swing at Natus. */
+const noHaste: Pick = (a, c, e) => {
   const cmd = shipped(a, c, e);
-  if (a !== 'tidus' || cmd.kind !== 'attack') return cmd;
-  const st = e.state();
-  const active = st.activeIds.map((id) => st.combatants[id] as FFXCombatant).filter((m) => !m.removed);
-  if (active.filter((m) => m.statuses.haste !== undefined).length >= 2) return cmd;
-  const bare = active.find((m) => (m.id === 'tidus' || m.id === 'auron') && m.hp > 0 && m.statuses.haste === undefined);
-  const row = c.find((r) => r.enabled && r.command.kind === 'ability' && 'id' in r.command && r.command.id === 'haste');
-  return bare && row?.validTargets.includes(bare.id) ? { kind: 'ability', id: 'haste', targets: [bare.id] } : cmd;
+  return cmd.kind === 'ability' && cmd.id === 'haste' ? { kind: 'attack', targets: [NATUS] } : cmd;
 };
 
 interface Tally { wins: number; unfinished: number; turns: number; phase3: number; desperados: number; shatters: number; banishes: number; natusHp: number }
@@ -104,7 +104,7 @@ function row(name: string, t: Tally): string {
 describe(`Chapter X as shipped: the registered tactic on the chapter record, ${SEEDS} seeds (measured, not tuned)`, () => {
   let intended: Tally;
   let wrong: Tally;
-  let two: Tally;
+  let none: Tally;
 
   it('the game finds the shipped tactic on this board (FFX, Natus on the enemy side)', () => {
     let found: unknown = null;
@@ -114,23 +114,23 @@ describe(`Chapter X as shipped: the registered tactic on the chapter record, ${S
     expect(found).toBe(seymourNatus);
   });
 
-  it('intended line and the Haste-all-three line: every battle ends', () => {
+  it('the shipped line, the Haste-all-three line and the no-Haste line: every battle ends', () => {
     intended = bench(shipped);
     wrong = bench(hasteAll);
-    two = bench(hasteTwo);
+    none = bench(noHaste);
     console.log(['| Line | Wins | Mean turns | Reached phase 3 | Desperados / battle | Shatters / battle | Banishes | Natus HP left (mean) |',
-      '|---|---:|---:|---:|---:|---:|---:|---:|', row('Shipped tactic (intended)', intended), row('Haste all three, then swing (wrong)', wrong),
-      row('Haste only Tidus and Auron (strategy 7)', two)].join('\n'));
+      '|---|---:|---:|---:|---:|---:|---:|---:|', row('Shipped tactic: Haste only Tidus and Auron (strategy 7)', intended),
+      row('Haste all three, then swing (wrong)', wrong), row('Nobody Hastes (the line it replaced)', none)].join('\n'));
     expect(intended.unfinished).toBe(0);
     expect(wrong.unfinished).toBe(0);
-    expect(two.unfinished).toBe(0);
+    expect(none.unfinished).toBe(0);
   }, 900_000);
 
-  it('the shipped line wins and never calls Desperado; Hasting all three calls it, Hasting two never does', () => {
+  it('the shipped line Hastes two and never calls Desperado; Hasting all three calls it; nobody Hasting never does', () => {
     expect(intended.wins).toBeGreaterThan(0);
     expect(intended.desperados).toBe(0);
     expect(wrong.desperados).toBeGreaterThan(0);
-    expect(two.desperados).toBe(0);
+    expect(none.desperados).toBe(0);
     expect(intended.banishes).toBeGreaterThan(0);
   });
 });

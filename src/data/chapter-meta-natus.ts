@@ -9,7 +9,8 @@
  * - `title` "Seymour Natus" and `location`: B1 (D-077), the chapter record's own.
  * - `subtitle`, `blurb`, `handwritten` and `tip` are our own words over the
  *   research's sourced facts (§8.2 beats 7-9; §1.1 Defense 0; §3 and §5
- *   Break then the Claw's shatter; §4.3 Haste on all three calls Desperado).
+ *   Break then the Claw's shatter; §4.3 Haste on all three calls Desperado,
+ *   so the line is §6.3 row 7, Haste only two: Tidus and Auron).
  * - `quote` is line 19 of `docs/plans/natus-story-draft.md`, an `[ORIGINAL]`
  *   line in Kimahri's voice (writing-bible §1.7), and the line the pre scene
  *   (`src/story/scripts/seymour-natus.ts`) actually plays.
@@ -71,7 +72,7 @@ export const NATUS_META: ChapterMeta = {
       rule: { kind: 'victory' },
     },
   ],
-  tip: 'He has no Defense, so every swing lands in full. Soften a stone guardian at once, and never Haste all three.',
+  tip: 'He has no Defense, so every swing lands in full. Soften a stone guardian at once, and Haste only Tidus and Auron.',
   snapshots: [
     { image: 'backdrops/bevelle-highbridge.png', caption: 'the city lit at night' },
     { image: 'characters/seymour-natus/cast.png', caption: 'no longer a man' },

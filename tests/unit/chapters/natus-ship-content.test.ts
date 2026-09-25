@@ -1,5 +1,6 @@
 /**
- * Chapter X (Seymour Natus): the pause card, the guide, the tactic, the music and the
+ * Chapter X (Seymour Natus): the pause card, the guide, the tactic (strategy 7, Haste only Tidus and
+ * Auron: Bailey's pick of 2026-09-25), the music and the
  * departures. The tactic and the departures are run on the real engine (AGENTS.md rule 3); the
  * departures through the real `BattlePresenter` on a `FakeStage`.
  *
@@ -141,13 +142,32 @@ describe('the tactic, on the real engine and the chapter record', () => {
     expect(p.find((x) => x.actor === 'bahamut')?.kind).toBe('overdrive');
   });
 
-  it('Talk is taken, Kimahri makes way for Auron, and no seed of the first twenty ever casts Haste (strategy 7)', () => {
+  it('Talk is taken, Kimahri makes way for Auron, and only Tidus casts Haste, only on Tidus and Auron (strategy 7)', () => {
     const all = Array.from({ length: 20 }, (_, i) => picks(i + 1, 40)).flat();
     expect(all.some((x) => x.kind === 'trigger' && x.id === 'talk')).toBe(true);
     expect(all.some((x) => x.actor === 'kimahri' && x.kind === 'switch')).toBe(true);
-    expect(all.some((x) => x.id === 'haste')).toBe(false);
+    const hastes = all.filter((x) => x.id === 'haste');
+    expect(hastes.length).toBeGreaterThan(0);
+    expect(hastes.every((x) => x.actor === 'tidus' && (x.targets[0] === 'tidus' || x.targets[0] === 'auron'))).toBe(true);
     expect(all.filter((x) => x.kind === 'attack').every((x) => x.targets[0] === 'seymour-natus')).toBe(true);
   });
+
+  it('strategy 7 never Hastes a third: over twenty whole battles no three active members are Hasted at once and Desperado is never called', () => {
+    for (let seed = 1; seed <= 20; seed++) {
+      const engine = newEngine(SEYMOUR_NATUS, seed);
+      for (let i = 0; i < 8000; i++) {
+        const d = engine.nextDecision();
+        if (d.kind === 'battle-over') break;
+        if (d.kind !== 'player-input') continue;
+        engine.submit(intendedStrategy(d.actorId, d.commands, engine) ?? { kind: 'defend', targets: [] });
+        const st = engine.state();
+        const hasted = st.activeIds.filter((id) => (st.combatants[id] as { statuses: Record<string, unknown> }).statuses.haste !== undefined);
+        expect(hasted.length, `seed ${seed}`).toBeLessThan(3);
+      }
+      const log = engine.state().log;
+      expect(log.some((e) => e.type === 'action-start' && e.abilityId === 'mortibody-desperado'), `seed ${seed}`).toBe(false);
+    }
+  }, 120_000);
 
   it('the presenter reaches it through intendedStrategy (the auto-battle and the advisor)', () => {
     const engine = newEngine(SEYMOUR_NATUS, 3);

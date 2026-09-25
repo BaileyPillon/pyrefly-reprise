@@ -5,8 +5,12 @@
  * Written against the tactic in `src/engine/tactics/seymour-natus.ts`: every
  * hint below explains a row that file asks for (an aeon and its Overdrive,
  * Soft, Life, Phoenix Down, Cura, Hi-Potion, Talk, the switch to Auron,
- * Shell, Defend, Attack), so each line says why the command the player is
- * being told to press is the right one.
+ * Shell, Haste, Defend, Attack), so each line says why the command the player
+ * is being told to press is the right one.
+ *
+ * The line is the research's strategy 7, "Haste only two party members (three
+ * triggers Desperado)" (§6.3 row 7), with Tidus and Auron as the two: Bailey's
+ * pick of 2026-09-25 (`docs/plans/natus-bench.md`).
  *
  * **Game case: FFX only** [AGENTS.md rule 14]. CTB, aeons, Banish, Trigger
  * Commands and the FFX status set; research §0.3: FFX-2 has no Natus, no
@@ -44,8 +48,8 @@ export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
       cite: 'ffx-seymour-natus-highbridge §3, §4.1, §5',
     },
     {
-      text: 'Haste on all three active guardians calls Desperado from Mortibody: about 500 to everyone, and it strips Shell, Protect, Reflect, Haste and Regen. Never Haste all three.',
-      short: 'Never Haste all three: it calls Desperado',
+      text: 'Haste Tidus and Auron, and no one else. Two Hasted guardians are safe; Haste on all three active guardians calls Desperado from Mortibody: about 500 to everyone, and it strips Shell, Protect, Reflect, Haste and Regen.',
+      short: 'Haste Tidus and Auron, never a third',
       cite: 'ffx-seymour-natus-highbridge §3.2, §4.3, §6.3 row 7',
     },
     {
@@ -100,6 +104,11 @@ export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
       when: { labels: ['Shell'] },
       text: 'Shell halves every spell he and Mortibody cast',
       cite: 'ffx-seymour-natus-highbridge §3.3, §6.3 row 4',
+    },
+    {
+      when: { labels: ['Haste'] },
+      text: 'Haste {target}: two Hasted guardians are safe, and a third would call Desperado',
+      cite: 'ffx-seymour-natus-highbridge §4.3, §6.3 row 7',
     },
     {
       when: { kinds: ['defend'] },

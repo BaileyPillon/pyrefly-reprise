@@ -1,7 +1,8 @@
 /**
  * Chapter X — Seymour Natus and Mortibody, on the Highbridge of Bevelle: the
- * line the chapter was planned around
- * [research/ffx-seymour-natus-highbridge.md §6.3; docs/plans/chapter-natus-review.md §9].
+ * research's strategy 7 on top of the planned line
+ * [research/ffx-seymour-natus-highbridge.md §6.3; docs/plans/chapter-natus-review.md §9;
+ * docs/plans/natus-bench.md].
  *
  * **Game case: FFX only** [AGENTS.md rule 14]. CTB, aeons, Banish, Trigger
  * Commands and the FFX status set (research §0.3: FFX-2 has no Natus, no
@@ -10,10 +11,14 @@
  *
  * ## The line, and where each rule comes from
  *
- * It is the **intended** line of `tests/unit/chapters/natus-bench.test.ts`
- * (the plan's "brute force with the aeon burst": strategies 3 and 4 of §6.3,
- * with strategy 7's warning kept by never casting Haste), written as a tactic
- * over the rows the engine offers:
+ * The plan's "brute force with the aeon burst" (strategies 3 and 4 of §6.3)
+ * plus the research's strategy 7, **"Haste only two party members (three
+ * triggers Desperado)"** (§6.3 row 7, [verified: 3 sources: wiki, GameFAQs,
+ * Jegged]). The research does not name the two; this line Hastes **Tidus and
+ * Auron**, the two swords that Talk makes stronger (§6.2). Bailey picked it on
+ * 2026-09-25 ("All your recommendations"): measured 169/200 against the
+ * no-Haste line's 116/200, and it never calls Desperado
+ * (`tests/unit/chapters/natus-shipped-bench.test.ts`).
  *
  * 1. **An aeon on the field spends its one turn** [§4.3, verified: 4 sources:
  *    Natus Banishes it on his next turn]: its Overdrive on Natus when the
@@ -30,11 +35,15 @@
  *    sword; Auron starts on the bench under B2 = a).
  * 8. **Yuna Shells the three** (strategy 4: Shell halves every spell column,
  *    §3.3), then Curas anyone under 70 %, else defends.
- * 9. **Everyone else hits Natus.** Defense 0 behind 36,000 HP (§1.1): the
+ * 9. **Tidus Hastes Tidus and Auron, never a third** (strategy 7): on a turn
+ *    he would swing, while fewer than two active members have Haste, he casts
+ *    Haste on the first of Tidus and Auron without it.
+ * 10. **Everyone else hits Natus.** Defense 0 behind 36,000 HP (§1.1): the
  *    wall is the HP pool.
  *
- * **Never cast Haste** (strategy 7, §4.3 [verified: 3 sources]: Haste on all
- * three calls Desperado). The tactic has no Haste rule at all.
+ * **Never a third Haste** (§4.3 [verified: 3 sources]: Haste on all three
+ * active members calls Desperado). The Haste rule stops at two Hasted active
+ * members, whoever they are.
  *
  * The tactic only picks among the rows the engine offers and always returns a
  * command while Natus is on the field, so `intendedStrategy`'s "swing" default
@@ -92,6 +101,20 @@ function nextSummon(commands: AvailableCommand[], sent: ReadonlySet<string>): Co
     if (r) return { ...r.command, targets: [] } as Command;
   }
   return null;
+}
+
+/** Who strategy 7 Hastes: the two swords Talk makes stronger (§6.2); the research says only "two". */
+const HASTE_TWO = ['tidus', 'auron'] as const;
+
+/**
+ * Strategy 7 [§6.3 row 7]: Haste on the first of Tidus and Auron without it, while fewer than two
+ * active members are Hasted (a third calls Desperado, §4.3). Null when there is nothing to Haste.
+ */
+function hasteTwo(commands: AvailableCommand[], active: FFXCombatant[]): Command | null {
+  const members = active.filter((m) => m !== undefined && !m.removed);
+  if (members.filter((m) => m.statuses.haste !== undefined).length >= 2) return null;
+  const bare = members.find((m) => (HASTE_TWO as readonly string[]).includes(m.id) && m.hp > 0 && m.statuses.haste === undefined);
+  return bare && offered(commands, 'ability', 'haste', bare.id) ? use('ability', 'haste', bare.id) : null;
 }
 
 export const seymourNatus: Tactic = (actorId, commands, engine) => {
@@ -157,7 +180,13 @@ export const seymourNatus: Tactic = (actorId, commands, engine) => {
     return defend(commands);
   }
 
-  // 9. Swing at Natus.
+  // 9. Strategy 7: Tidus Hastes Tidus and Auron, never a third.
+  if (actorId === 'tidus' && offered(commands, 'attack', undefined, SEYMOUR_NATUS_ID)) {
+    const haste = hasteTwo(commands, state.activeIds.map((id) => state.combatants[id] as FFXCombatant));
+    if (haste) return haste;
+  }
+
+  // 10. Swing at Natus.
   return hitNatus(commands);
 };
 

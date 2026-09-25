@@ -43,3 +43,38 @@ tactic is the line the plan measured, now wired to the game.
    the guide; it needs Bailey's yes (the plan picked "nobody Hastes" as the intended line).
 3. **Provoke + Reflect still wins every seed** (plan bench, 200/200), and Poison-and-wait still
    loses every seed (0/200). Neither is a reason to touch the boss.
+
+## Re-bench after Bailey's pick (2026-09-25, strategy 7 shipped)
+
+**Bailey, 2026-09-25 ~18:30 EDT: "All your recommendations"**, which took read-out 2 above: the
+chapter's tactic and guide now teach the research's strategy 7, quoted from
+`research/ffx-seymour-natus-highbridge.md` §6.3 row 7: "**Haste only two** party members (three
+triggers Desperado)" (wiki + GameFAQs + Jegged, `[verified: 3 sources]`). The research does not
+name the two; the line Hastes **Tidus and Auron**, the two swords Talk makes stronger (§6.2). That
+pick of the two is ours, the same as the bench line Bailey saw. **Game case: FFX only** (the
+Highbridge, Mortibody's Desperado and the CTB Haste are FFX's; research §0.3).
+
+- **The change (a tactic and words, no boss number moved):** `src/engine/tactics/seymour-natus.ts`
+  gains rule 9: on a turn Tidus would swing at Natus, while fewer than two active members have Haste,
+  he casts Haste on the first of Tidus and Auron without it. The guide's rule 3 now reads "Haste
+  Tidus and Auron, and no one else" (short: "Haste Tidus and Auron, never a third"), a Haste hint
+  explains the row, and the pause tip ends "Haste only Tidus and Auron".
+- **The re-bench, 200 seeds** (`tests/unit/chapters/natus-shipped-bench.test.ts`, same record and
+  seeds as above). The wrong line is now built on the new shipped line, so it moved a little; the
+  no-Haste row is the shipped tactic with its Haste turned back into the swing, and it reproduces the
+  first table's shipped row exactly.
+
+| Line | Wins | Mean turns | Reached phase 3 | Desperados / battle | Shatters / battle | Banishes | Natus HP left (mean) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **Shipped tactic: Haste only Tidus and Auron (strategy 7)** | **169/200 (84.5 %)** | 80.2 | 175 | 0.00 | 0.49 | 1000 | 2445 |
+| Haste all three, then swing (wrong) | 157/200 (78.5 %) | 102.2 | 165 | 2.05 | 0.47 | 1000 | 3772 |
+| Nobody Hastes (the line it replaced) | 116/200 (58.0 %) | 94.8 | 137 | 0.00 | 0.71 | 1000 | 6192 |
+
+- **169/200, as expected,** and equal to the first table's strategy 7 row in every column: the
+  shipped tactic is the line Bailey picked, now reached through `intendedStrategy` (the auto-battle
+  and the advisor). It never calls Desperado.
+- `tests/unit/chapters/natus-ship-content.test.ts` pins the rule on the real engine: only Tidus casts
+  Haste, only on Tidus or Auron, and over twenty whole battles no three active members are ever Hasted
+  at once and Desperado is never called.
+- Read-out 1 still holds against the new line (Hasting all three wins 157, fewer than strategy 7's
+  169, but more than nobody Hasting). The cause is not claimed and the boss is not touched.
