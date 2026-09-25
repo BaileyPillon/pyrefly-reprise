@@ -28,6 +28,9 @@ import { leblancAbilities } from './leblanc-syndicate-leblanc-abilities.ts';
 import { fallenAeonsGroups } from './fallen-aeons-road.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from './fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from './magus-sisters-abilities.ts';
+// Chapter XV, the Den of Woe (registered, unlisted): `./den-of-woe.ts`.
+import { denOfWoeGroups } from './den-of-woe.ts';
+import { denOfWoeAbilities } from './den-of-woe-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -39,6 +42,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   shuyinGroup,
   ...leblancSyndicateGroups,
   ...fallenAeonsGroups,
+  ...denOfWoeGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -58,6 +62,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2ShivaAbilities,
   ...magusSistersAbilities,
   ...x2AnimaAbilities,
+  ...denOfWoeAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

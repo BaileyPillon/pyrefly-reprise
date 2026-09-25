@@ -27,7 +27,7 @@ import { cloneData } from '../common/clone.ts';
 import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
-import { activeGateBonuses, gateStatTotal, withStatBonus } from './garment-grids.ts';
+import { activeGateBonuses, breaksDamageLimit, gateStatTotal, waitDownPercent, withStatBonus } from './garment-grids.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 
@@ -35,8 +35,12 @@ function emptyAtb(agi: number): Ffx2Unit['atb'] {
   return { ticks: 0, required: baseRequired(agi), gauge: 0, charging: null, recovery: 0 };
 }
 
-/** Node contents: the build lists what she owns, not where it sits. `[estimate]` */
-function gridNodeContents(member: FFX2MemberBuild, nodes: number): Array<string | null> {
+/**
+ * Node contents: the build lists what she owns, not where it sits. `[estimate]`
+ * Exported for `app/screens/BattleScreenCarry.ts`, which keeps a carried girl's grid
+ * laid out as it was when her worn dressphere rides into the next link (GP3 a).
+ */
+export function gridNodeContents(member: FFX2MemberBuild, nodes: number): Array<string | null> {
   const out: Array<string | null> = new Array(nodes).fill(null);
   const ordered = [member.currentDressphere, ...member.owned.filter((d) => d !== member.currentDressphere)];
   for (let i = 0; i < nodes && i < ordered.length; i++) out[i] = ordered[i] ?? null;
@@ -55,8 +59,12 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
   const base = derive(member.currentDressphere, member.level);
   const grids = options.garmentGrids ?? defaultGarmentGrids;
   const grid = grids.get(member.garmentGrid.id);
-  // The `P-` equip effect is the `gates: []` bonus and is always on. §4.1
-  const equip = grid ? gateStatTotal(activeGateBonuses(grid, [])) : {};
+  // The `P-` equip effect is the `gates: []` bonus and is always on. §4.1 The
+  // `T-` gates she already passed count too: every shipped build starts with none,
+  // and only a full carry (Chapter XV, `carriesFullPartyState`) arrives with some.
+  const passed = member.garmentGrid.passedGates;
+  const bonuses = grid ? activeGateBonuses(grid, passed) : [];
+  const equip = grid ? gateStatTotal(bonuses) : {};
   // …then the two accessories, the fourth term this file's own header has
   // always named and nothing ever computed [accessories.ts, ffx2-combat-core
   // §5.4]. Without it the researched loadouts are inert and Chapter 5's Tail
@@ -111,6 +119,9 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
     chainWindowTicks: 0,
     // Carried in from the previous link of a chain (CONTRACT-CHANGES, additive).
     ...(member.statuses ? { statuses: { ...member.statuses } } : {}),
+    // The gate modifiers `spherechange.ts#refreshDerivedStats` caches, for a girl
+    // who arrives with gates passed (a full carry only; no shipped build has any).
+    ...(passed.length > 0 ? { aiMemory: { waitDown: waitDownPercent(bonuses), bdl: breaksDamageLimit(bonuses) } } : {}),
   };
 }
 

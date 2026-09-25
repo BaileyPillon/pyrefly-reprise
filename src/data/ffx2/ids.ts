@@ -307,8 +307,16 @@ export type VegnagunEnemyId =
   /** Battle 5. Lv 55-ish, Str 47 / Def 132 / Mag 42 / MDef 92. Biased toward targeting Yuna. */
   | 'shuyin';
 
-/** Every FFX-2 enemy combatant across the two chapters. */
-export type FFX2EnemyId = BahamutEnemyId | VegnagunEnemyId;
+/**
+ * Chapter XV — the Den of Woe under Mushroom Rock Road, the three shades fought
+ * back to back [ffx2-gippal-den-of-woe §2, §3]: Baralai (Lv 52, HP 12 220) ->
+ * Gippal (Lv 56, HP 14 800) -> Nooj (Lv 63, HP 23 800). New ids, not the men's
+ * names, so the Chapter V people (who appear in its story) never match a shade.
+ */
+export type DenOfWoeEnemyId = 'shade-baralai' | 'shade-gippal' | 'shade-nooj';
+
+/** Every FFX-2 enemy combatant these ids name (Chapters 4, 5 and XV). */
+export type FFX2EnemyId = BahamutEnemyId | VegnagunEnemyId | DenOfWoeEnemyId;
 
 /** The five battles of the Vegnagun chain, in order. */
 export const VEGNAGUN_CHAIN_ORDER: readonly VegnagunEnemyId[] = [

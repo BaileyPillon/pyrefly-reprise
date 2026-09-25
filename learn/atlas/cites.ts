@@ -48,6 +48,11 @@ import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.
 import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natus-abilities.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from '../../src/data/ffx2/enemies/magus-sisters-abilities.ts';
+import {
+  shadeBaralaiAbilities,
+  shadeGippalAbilities,
+  shadeNoojAbilities,
+} from '../../src/data/ffx2/enemies/den-of-woe-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -129,6 +134,12 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     mindy: 'research/ffx2-fallen-aeons.md §3.2 (src/data/ffx2/enemies/magus-sisters.ts)',
     'x2-anima': 'research/ffx2-fallen-aeons.md §3.3 (src/data/ffx2/enemies/fallen-aeons-road.ts)',
   },
+  // Chapter XV (FFX-2), registered but unlisted like Chapters X and XI.
+  'ffx2-den-of-woe': {
+    'shade-baralai': 'research/ffx2-gippal-den-of-woe.md §3.2 (src/data/ffx2/enemies/den-of-woe.ts)',
+    'shade-gippal': 'research/ffx2-gippal-den-of-woe.md §3.1 (src/data/ffx2/enemies/den-of-woe.ts)',
+    'shade-nooj': 'research/ffx2-gippal-den-of-woe.md §3.2 (src/data/ffx2/enemies/den-of-woe.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -199,6 +210,11 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
     fileCite(magusSistersAbilities, 'research/ffx2-fallen-aeons.md §4.2 (src/data/ffx2/enemies/magus-sisters-abilities.ts)'),
     fileCite(x2AnimaAbilities, 'research/ffx2-fallen-aeons.md §4.3 (src/data/ffx2/enemies/fallen-aeons-abilities.ts)'),
   ],
+  'ffx2-den-of-woe': [
+    fileCite(shadeBaralaiAbilities, 'research/ffx2-gippal-den-of-woe.md §4.2 (src/data/ffx2/enemies/den-of-woe-abilities.ts)'),
+    fileCite(shadeGippalAbilities, 'research/ffx2-gippal-den-of-woe.md §4.1 (src/data/ffx2/enemies/den-of-woe-abilities.ts)'),
+    fileCite(shadeNoojAbilities, 'research/ffx2-gippal-den-of-woe.md §4.3 (src/data/ffx2/enemies/den-of-woe-abilities.ts)'),
+  ],
 };
 
 /**
@@ -247,6 +263,8 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
   },
   // Every Chapter XI ability id is `x2-`-prefixed and defined in the chapter's own ability files.
   'ffx2-fallen-aeons': {},
+  // Every Chapter XV ability id is `x2-den-`-prefixed and defined in the chapter's own ability file.
+  'ffx2-den-of-woe': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

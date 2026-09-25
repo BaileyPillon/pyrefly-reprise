@@ -6,6 +6,39 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XV, The Den of Woe: `ChapterId` gains `'ffx2-den-of-woe'`, `Chapter.number` gains 15, `EnemyGroupDef.carriesFullPartyState`, `DenOfWoeEnemyId`
+
+**FFX-2 only** [AGENTS.md hard rule 14] (research `ffx2-gippal-den-of-woe.md`: ATB, dresspheres,
+the FFX-2 status set); the registration and the chain carry are shared plumbing, and every other
+chain is unchanged (the "both" case of nothing moving: `tests/unit/chapters/den-of-woe-carry.test.ts`
+pins Chapters 5, 6 and XI byte-identical to 4f2481f2). Bailey, 2026-09-25: "I'll go with all your
+recommendations" (GP1-GP18 on `docs/plans/chapter-gippal-review.md`).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'ffx2-den-of-woe'`; `Chapter.number`
+gains `15` (GP2: XV after Isaaru's XIV). Omnis (XII), Trema (XIII) and Isaaru (XIV) widen the same
+union on their own branches, so the integrator serialises the four. The record lives in
+`src/data/chapter-ffx2-den-of-woe.ts` and sits in `UNLISTED_CHAPTERS`. Every `Record<ChapterId, …>`
+gains the key (`learn/atlas/cites.ts`, `tests/unit/learn-atlas-data.test.ts`). No save migration.
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef.carriesFullPartyState?: boolean` (GP3 a,
+`[derived]`: the sources carry HP between the shades; statuses and the dressphere are our reading of
+"no break"). Read by `BattleScreenSetup.setupForNextLink` → `carryPartyForward(build, state, full)`
+→ `BattleScreenCarry.carryFfx2Full`: the girls keep their statuses, worn dressphere and grid
+progress, with `owned` re-ordered so the grid lays out exactly as before. Set only on the Den's
+links 2 and 3. `carryPartyForward`'s new third argument defaults to `false`.
+
+**Additive** in `src/data/ffx2/ids.ts`: `DenOfWoeEnemyId` (`shade-baralai`, `shade-gippal`,
+`shade-nooj`), joined into `FFX2EnemyId`.
+
+Not contract files, recorded for the same reason as the Chapter XI entry below (FFX-2 only; set
+only by the shades, so no shipped ability or replay moves): `AbilityDef.extra.noVariance` and
+`extra.cannotKill` (`src/battle/ffx2/formulas.ts`; GP10 a: Lightfall, Bullseye, Drill Shot and
+Greedy Aura exact; the roll is still drawn), `extra.mpFractionOfMax`
+(`src/battle/ffx2/aeon-effects.ts`, Greedy Aura, GP-G3); `resolve.ts` now runs an ability's
+riders after a "set to" hit (Looming Glacier's Stop; Delta Attack has none); `ffx2/setup.ts`
+applies the `T-` bonuses of gates already passed at init (every shipped build passes none) and
+exports `gridNodeContents`.
+
 ## 2026-09-24 — `encounters.ts`: Chapter IX (Yojimbo) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX only** [AGENTS.md hard rule 14]: Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth

@@ -25,6 +25,8 @@ import { leblancSyndicateScripts } from './leblanc-syndicate.ts';
 // Chapter XI, the fallen aeons on the Road to the Farplane (registered, unlisted).
 import { x2AnimaScript, x2ShivaScript } from './fallen-aeons.ts';
 import { magusSistersScript } from './magus-sisters.ts';
+// Chapter XV, the shades of the Den of Woe (registered, unlisted).
+import { denOfWoeScripts } from './den-of-woe.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -56,6 +58,7 @@ const SCRIPTS: readonly AiScript[] = [
   x2ShivaScript,
   magusSistersScript,
   x2AnimaScript,
+  ...denOfWoeScripts,
   idleScript,
   basicAttackScript,
 ];

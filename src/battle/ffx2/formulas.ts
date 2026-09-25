@@ -11,6 +11,20 @@
  * formula) returns a negative `amount`, which the engine emits as a `damage`
  * event with a negative value — never a `heal` event. `docs/CONTRACTS.md` rule
  * 5; it is what makes Absorb and Zombie-shaped effects fall out for free.
+ *
+ * **Two documented `AbilityDef.extra` keys** (`docs/CONTRACTS.md`: one-off rules
+ * go in `extra`, documented where they are read). FFX-2 only; set by Chapter XV's
+ * shades alone (`src/data/ffx2/enemies/den-of-woe-abilities.ts`), so every shipped
+ * ability and every replay at a fixed seed is unchanged:
+ * - **`extra.noVariance: true`** skips step 7's multiply. The roll is still
+ *   **drawn** by the caller, so the draw order does not move. Plan GP10 = a:
+ *   Lightfall ("constant") and the fractions Bullseye, Drill Shot and Greedy Aura
+ *   ("fractional") are exact, per SinirothX; the research's combat core says
+ *   step 7 applies to everything but menu White Magic, a sourced conflict. The
+ *   `fixed-no-variance` formula still rolls (GP-G2, a finding left as it is).
+ * - **`extra.cannotKill: true`** leaves the target at 1 HP or more (Bullseye:
+ *   "cannot kill", `[verified: 4 sources]`; 9/16 of current HP only reaches a
+ *   kill through a chain multiplier, so this is a guard, not a new rule).
  */
 
 import type {
@@ -220,6 +234,7 @@ export function computeDamage(ctx: DamageContext): DamageResult {
   const isMagical = ability.damageType === 'magical';
   const isRecovery = ability.formula === 'healing';
   const flags = ability.flags;
+  const extra = ability.extra ?? {};
 
   const { base, skipDefense, skipConstant } = stepOne(ctx);
   let value = base;
@@ -267,8 +282,9 @@ export function computeDamage(ctx: DamageContext): DamageResult {
     value = (value * constant) / PHYSICAL_CONSTANT_DIVISOR;
   }
 
-  // Step 7 — randomiser. Applies to everything except menu-cast White Magic.
-  value = (value * ctx.randomRoll) / RANDOM_DIVISOR;
+  // Step 7 — randomiser. Applies to everything except menu-cast White Magic,
+  // and except an ability carrying `extra.noVariance` (file header).
+  if (extra['noVariance'] !== true) value = (value * ctx.randomRoll) / RANDOM_DIVISOR;
 
   // Step 8 — flat addition (Finale, Momentum).
   value += ctx.flatAddition ?? 0;
@@ -336,6 +352,9 @@ export function computeDamage(ctx: DamageContext): DamageResult {
         ability.formula === 'percent-total' ||
         ability.formula === 'percent-current'));
   if (immune && amount > 0) amount = 0;
+
+  // Step 20b — `extra.cannotKill`: the hit leaves at least 1 HP (Bullseye; file header).
+  if (extra['cannotKill'] === true && amount > 0 && amount >= target.hp) amount = Math.max(0, target.hp - 1);
 
   return { amount, affinity, capped, immune };
 }
