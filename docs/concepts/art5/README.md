@@ -1,5 +1,7 @@
 # FFX-2 party battle-pose candidates, art5 (GPU batch 5), 2026-09-25
 
+> **Judged 2026-09-25 (decision sheet item 11):** an independent 1:1 judge covered the 62 reachable picks (Berserker and Samurai wait). 15 pass, each with a head-match `scale`. Scores, reasons and Bailey's sheets: [JUDGE.md](JUDGE.md). The pick column below is the maker's own look; the judge's verdicts supersede it. Still nothing installed.
+
 **FFX-2 only.** These are paintings of the FFX-2 girls' dresspheres (Yuna, Rikku, Paine), so they
 apply only where those dresspheres are used (Chapters IV, V, VI, XI and the prep screen's lists).
 **Everything here is a CANDIDATE. Nothing was installed in `public/art/`, and

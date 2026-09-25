@@ -1,5 +1,7 @@
 # Chapter XIII line-up: battle-pose candidates (FFX-2 only)
 
+> **Judged 2026-09-25 (decision sheet item 10):** an independent 1:1 judge passed 7 of these 15 picks and wrote a head-match `scale` for each. Scores, reasons and Bailey's sheets: [judge/JUDGE.md](judge/JUDGE.md). The table below is the maker's own look; the judge's verdicts supersede it. Still nothing installed.
+
 2026-09-25, GPU batch 4. Trema's approved line-up (TR10, `docs/plans/chapter-trema-review.md`):
 Yuna and Paine as Dark Knights, Rikku as Alchemist. Before this they had an idle and nothing else.
 **Everything here is a CANDIDATE: nothing is installed in `public/art/`, nothing went into
