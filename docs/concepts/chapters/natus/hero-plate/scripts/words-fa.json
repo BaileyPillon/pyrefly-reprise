@@ -1,0 +1,104 @@
+{
+ "_note": "Chapter V's visible words swapped for Chapter XI's registered ones (src/data/chapter-ffx2-fallen-aeons.ts: number 11, title, subtitle, location, blurb) in the page DOM only. Chapter XI has no ChapterMeta yet, so its quote, handwritten line, tip, snapshots and first objectives do not exist: they are blanked, never invented. The one objective is the chapter's own shape (research ffx2-fallen-aeons.md §6.2: Shiva, the Magus Sisters, Anima, one per platform), and BATTLE 1 OF 3 is its three links. The party block (Yuna White Mage 46, Rikku and Paine Dark Knight 48 / 50) is already Chapter XI's build (farplaneBuild), and SCENE FARPLANE is its registered placeholder scene.",
+ "pairs": [
+  [
+   "V · VEGNAGUN — HEART OF THE FARPLANE — VEGNAGUN’S CHAMBER",
+   "XI · FALLEN AEONS — ROAD TO THE FARPLANE"
+  ],
+  [
+   "DESTROY ALL FOUR OF VEGNAGUN'S PARTS",
+   "DEFEAT SHIVA, THE MAGUS SISTERS AND ANIMA"
+  ],
+  [
+   "Destroy all four of Vegnagun's parts",
+   "Defeat Shiva, the Magus Sisters and Anima"
+  ],
+  [
+   "SURVIVE TERROR OF ZANARKAND",
+   "—"
+  ],
+  [
+   "Survive Terror of Zanarkand",
+   "—"
+  ],
+  [
+   "FREE SHUYIN",
+   "—"
+  ],
+  [
+   "Free Shuyin",
+   "—"
+  ],
+  [
+   "BATTLE 1 OF 5",
+   "BATTLE 1 OF 3"
+  ],
+  [
+   "HEART OF THE FARPLANE",
+   "ROAD TO THE FARPLANE"
+  ],
+  [
+   "Heart of the Farplane",
+   "Road to the Farplane"
+  ],
+  [
+   "Before the Last Note",
+   "Three platforms, three of her own"
+  ],
+  [
+   "BEFORE THE LAST NOTE",
+   "THREE PLATFORMS, THREE OF HER OWN"
+  ],
+  [
+   "A thousand-year gun the size of a cathedral, and a boy inside it who has been grieving for just as long. Tail, leg, body, head — and then, finally, the boy holding the trigger.",
+   "The road down into the Farplane runs over three platforms, and an aeon Yuna once called waits on each. Shiva, then the Magus Sisters, then Anima."
+  ],
+  [
+   "A thousand years of silence, and Spira never once stopped to listen.",
+   ""
+  ],
+  [
+   "a thousand years, one note",
+   ""
+  ],
+  [
+   "Two Dark Knights spamming Darkness ignore every part’s Defense, hit every target at once, and cost HP a Mega-Potion undoes.",
+   "—"
+  ],
+  [
+   "Vegnagun's chamber",
+   ""
+  ],
+  [
+   "kill the arms first",
+   ""
+  ],
+  [
+   "the note he circles",
+   ""
+  ],
+  [
+   "CHAPTER V ·",
+   "CHAPTER XI ·"
+  ],
+  [
+   "Chapter V ·",
+   "Chapter XI ·"
+  ]
+ ],
+ "exact": {
+  "V": "XI",
+  "Vegnagun": "Fallen Aeons",
+  "VEGNAGUN": "FALLEN AEONS",
+  "SHUYIN": "",
+  "Shuyin": "",
+  "“": "",
+  "”": "",
+  "“”": ""
+ },
+ "hideImgs": [
+  "backdrops/farplane",
+  "characters/vegnagun-head/",
+  "characters/lenne/"
+ ]
+}
