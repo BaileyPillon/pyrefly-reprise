@@ -18,7 +18,7 @@
  */
 
 import type { AnyCombatant, FFX2Combatant, FFXCombatant } from '../battle/common/types.ts';
-import { artStatesFor } from './ArtManifest.ts';
+import { ART_INDEX_CACHE, artStatesFor } from './ArtManifest.ts';
 import { artUrl } from './PaintedArt.ts';
 
 /** Poses a party member is painted in. */
@@ -144,7 +144,7 @@ const exists = new Map<string, Promise<boolean>>();
 function probe(url: string): Promise<boolean> {
   const cached = exists.get(url);
   if (cached) return cached;
-  const p = fetch(url, { method: 'HEAD', cache: 'force-cache' })
+  const p = fetch(url, { method: 'HEAD', cache: ART_INDEX_CACHE })
     .then((res) => res.ok && (res.headers.get('content-type') ?? '').startsWith('image/'))
     .catch(() => false);
   exists.set(url, p);

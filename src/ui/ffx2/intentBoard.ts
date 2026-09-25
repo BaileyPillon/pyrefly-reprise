@@ -6,7 +6,8 @@ import { placeSlab, steerRects, type SlabRect } from './intentPlacement.ts';
  * viewport pixels, and the slab's solved spot on it. Moved out of
  * `FFX2BattleHud.ts` unchanged (house rule: source files under 400 lines);
  * the HUD still owns every DOM element this reads. FFX-2 only: the FFX HUD
- * keeps its own twin.
+ * keeps its own twin (FFX aims with the hand, which is docked beside the
+ * figure, so it has no reticle to steer around).
  */
 
 /** One rectangle the intent slab must not cover. */
@@ -86,6 +87,34 @@ export function boardRects(root: HTMLElement, opts: BoardOptions): IntentAvoidRe
       const below = plate ? pad + opts.chipReach : 0;
       out.push({ left: r.left - pad, top: r.top - pad, right: r.right + pad, bottom: r.bottom + below });
     }
+  }
+  for (const box of reticleBoxes(root)) out.push(box);
+  return out;
+}
+
+/**
+ * FOC16-01 (release 16 focused review, Chapter XIII): the field reticle while a
+ * target is being chosen, as soft rectangles. FFX-2's reticle is a six-petal
+ * flower (`TargetCursor.ts`, `.ffx-target__flower`) up to 0.68 of the shorter
+ * screen edge across; the slab hung over Paragon's head sat inside it, and the
+ * petals printed across the move's description at 1600x900 and 2000x1012.
+ *
+ * Soft, like a fighter: the flower is the field's mark, not chrome, so the
+ * slab moves off it whenever there is a free spot and never onto the HUD to
+ * dodge it. The box is the flower's own square, centred where it is drawn: the
+ * element spins (`ffx-flower-turn`), so its bounding box breathes by up to
+ * 41 %, while the ring and petals stay inside the circle the square holds
+ * (`FLOWER_SVG`: petal tips at 47 of a 50 radius), which does not turn.
+ */
+export function reticleBoxes(root: HTMLElement): IntentAvoidRect[] {
+  const out: IntentAvoidRect[] = [];
+  for (const el of root.querySelectorAll<HTMLElement>('.ffx-target__flower')) {
+    const r = el.getBoundingClientRect();
+    const side = parseFloat(el.style.width) || el.offsetWidth;
+    if (!(side > 0) || r.width <= 0 || r.height <= 0) continue;
+    const cx = (r.left + r.right) / 2;
+    const cy = (r.top + r.bottom) / 2;
+    out.push({ left: cx - side / 2, top: cy - side / 2, right: cx + side / 2, bottom: cy + side / 2, soft: true });
   }
   return out;
 }

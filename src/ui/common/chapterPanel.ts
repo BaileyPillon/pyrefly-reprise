@@ -19,12 +19,7 @@
 
 import './chapter-panel.css';
 import type { ChapterMeta } from '../../data/chapter-meta.ts';
-import {
-  loadArtManifest,
-  manifestKnowsAssetNow,
-  pause2xUrlFor,
-  pauseStemOf,
-} from '../../engine/ArtManifest.ts';
+import { ART_INDEX_CACHE, loadArtManifest, manifestKnowsAssetNow, pause2xUrlFor, pauseStemOf } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { escapeHtml } from './html.ts';
 import { formatPlayTime, type EncounterProgress, type ObjectiveStatus } from './chapterObjectives.ts';
@@ -255,7 +250,7 @@ export async function pauseFocal(pngUrl: string): Promise<Readonly<ArtFocal>> {
   let focal: ArtFocal | null = null;
   if (pauseStemOf(pngUrl) !== null && typeof fetch === 'function') {
     try {
-      const res = await fetch(pngUrl.replace(/\.png(?=$|[?#])/i, '.json'), { cache: 'force-cache' });
+      const res = await fetch(pngUrl.replace(/\.png(?=$|[?#])/i, '.json'), { cache: ART_INDEX_CACHE });
       if (res.ok) focal = parseArtFocal(await res.json());
     } catch {
       focal = null;

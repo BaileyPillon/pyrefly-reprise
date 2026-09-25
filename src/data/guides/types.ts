@@ -160,4 +160,13 @@ export interface ChapterGuide {
   watch: readonly GuideWatch[];
   /** Phase/form notes. First match wins. */
   phases: readonly GuidePhase[];
+  /**
+   * The headline while one link of a chained chapter stands, keyed by that
+   * link's boss id; {@link title} otherwise. Optional and additive (FOC16-06):
+   * Chapter XIII printed "Trema" over the whole Paragon fight. The first id in
+   * {@link bossIds} order that is standing (on the enemy side, not removed,
+   * HP above 0) picks the headline (`src/engine/tactics/lookup.ts`,
+   * `guideTitle`). Both games may use it; only Chapter XIII does today.
+   */
+  linkTitles?: Readonly<Record<CombatantId, string>>;
 }

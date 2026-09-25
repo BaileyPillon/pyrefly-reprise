@@ -85,6 +85,8 @@ export interface PortraitStageOptions {
   chrome?: () => Rect[] | null;
   /** Option A's switch (`faceStack.ts`): the stacked column, for faces nothing else clears. */
   stack?: StackHost;
+  /** After every re-frame, with the plates placed (FOC16-02: the CHAPTER tab's dossier). */
+  onLayout?: () => void;
 }
 
 export class PortraitStage {
@@ -112,6 +114,7 @@ export class PortraitStage {
   private readonly onWindowResize = (): void => this.layout();
   private readonly chrome: (() => Rect[] | null) | undefined;
   private readonly stack: StackHost | undefined;
+  private readonly onLayout: (() => void) | undefined;
   /** The face-cleared framing per plate and window size, kept across fixed tabs. */
   private readonly framer = new FaceFramer();
 
@@ -119,6 +122,7 @@ export class PortraitStage {
     this.root = opts.root;
     this.chrome = opts.chrome;
     this.stack = opts.stack;
+    this.onLayout = opts.onLayout;
     this.reduceMotion = opts.reduceMotion;
     this.root.classList.toggle('pause__art--still', this.reduceMotion);
     if (typeof ResizeObserver === 'function') {
@@ -148,6 +152,7 @@ export class PortraitStage {
       if (!id || img.dataset['art'] === 'fallback' || img.dataset['art'] === 'missing') continue;
       this.place(img, id, w, h, img === this.current);
     }
+    this.onLayout?.();
   }
 
   private framingOf(plateId: string): PlateFraming {

@@ -1009,6 +1009,120 @@
     "mtime": "2026-09-25T14:36:54.194984Z",
     "approved": "2026-09-25"
    }
+  },
+  "bailey:2026-09-25-poses": {
+   "words": "I'll go with your recommendations for everything",
+   "note": "Bailey, 2026-09-25 ~12:45 EDT, verbatim \"I'll go with your recommendations for everything\", answering the driver's recommendation to install all 22 judge-passed FFX-2 battle poses (Trema line-up 7 of 15, docs/concepts/chapters/trema/poses/judge/JUDGE.md; the other dresspheres 15 of 62, docs/concepts/art5/JUDGE.md) and leave the failed slots empty on the standing painting with its flinch. Each PNG is the judge's pick byte for byte from D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/<id>/<slot>.png (sha256 equal to the candidate sidecar's), with its sidecar carrying the head-matched 'scale'; every slot was empty, nothing replaced. Game: FFX-2 only (dresspheres worn or reached in Chapters IV, V/XI, VI and XIII).",
+   "public/art/characters/paine-black-mage/attack.png": {
+    "sha256": "944f89be4420cafdfa3f92ecdce346c2f00e59cb68f5bb267fa866013550ea88",
+    "mtime": "2026-09-25T15:16:11.114Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-black-mage/cast.png": {
+    "sha256": "e8f7200bc0bb52a6c35dc42baa6428fe81a67da21f4d47fc4ce36664df0fc66f",
+    "mtime": "2026-09-25T15:16:11.117Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-black-mage/item.png": {
+    "sha256": "67c4610d621f011da158ee48591e91aa2303d9ab8b5d00f3c792153728ceb245",
+    "mtime": "2026-09-25T15:16:11.118Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-black-mage/victory.png": {
+    "sha256": "5f416dfbe414927c73c63098aa853c3d64fdd46a6d1d7d81631113a2efb575ed",
+    "mtime": "2026-09-25T15:16:11.134Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-dark-knight/attack.png": {
+    "sha256": "e2ab3af4cb132e93290f8b4d75eefd6293f86d7f26b65efd978796705967b5f4",
+    "mtime": "2026-09-25T15:16:11.011Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-dark-knight/item.png": {
+    "sha256": "6c0101b02347961eb1d35713f15ab8644907135aa03a0b519f5170ea303512a7",
+    "mtime": "2026-09-25T15:16:11.021Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-warrior/victory.png": {
+    "sha256": "cb8a42412bbfdc6f495f53e266e170b442ee0bd76cac59ea896a6def2c637d60",
+    "mtime": "2026-09-25T15:16:11.088Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-alchemist/cast.png": {
+    "sha256": "1bc78194168d9e45223bc4bc96f243b383e0545831a860bf6caca61c13b735bc",
+    "mtime": "2026-09-25T15:16:11.044Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-alchemist/hurt.png": {
+    "sha256": "cdbf864aaee28dd7c6f8add5f49445c477c9dccac0355f98ce95c765a1ec7cc8",
+    "mtime": "2026-09-25T15:16:11.047Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-alchemist/item.png": {
+    "sha256": "7ed0cd7b2616e2ede9dec2e4fd5fce5aa9e167da35dc9ae5def976e554063359",
+    "mtime": "2026-09-25T15:16:11.044Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-alchemist/victory.png": {
+    "sha256": "2c3ab09b02485b7593cfebe715a93659b2bb101e16fad3e7aba227b585f6a925",
+    "mtime": "2026-09-25T15:16:11.051Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-black-mage/attack.png": {
+    "sha256": "b896affad1f3fc4fe69951369270d8c173eac4c167fbe0ca0d2089509fc4194b",
+    "mtime": "2026-09-25T15:16:11.203Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-black-mage/cast.png": {
+    "sha256": "a1007f9b73912bacc4785ddf190a0502acea1f4880c946656d1eb9aa1b9deb91",
+    "mtime": "2026-09-25T15:16:11.204Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-gunner/cast.png": {
+    "sha256": "41953bc670d7b30b8837cac54f1d0143e9d7082cc58fdd16933e68662d1a0af7",
+    "mtime": "2026-09-25T15:16:11.230Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-gunner/victory.png": {
+    "sha256": "274ea60c1c847aed9494dd49cfad92c09272a2a3715652e6847377b7364b7914",
+    "mtime": "2026-09-25T15:16:11.252Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-thief/ko.png": {
+    "sha256": "8d0b011167985a0abc2b73061f510e976b8e9def1070b411d12cc37de09e2444",
+    "mtime": "2026-09-25T15:16:11.110Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-white-mage/attack.png": {
+    "sha256": "ed917bde87bb9ad59458397019210509a5d1bc45cb2606046fa75e5791d5cd08",
+    "mtime": "2026-09-25T15:16:11.255Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-black-mage/item.png": {
+    "sha256": "cbd4f7c0889026731fbf34be10e1008afab139f5caca00cb44175b9431d423b5",
+    "mtime": "2026-09-25T15:16:11.289Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-dark-knight/attack.png": {
+    "sha256": "c2e55c0526c788c4a29585651f8c04aac6563d539f2b60df8040f876762702da",
+    "mtime": "2026-09-25T15:16:10.993Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-gunner/item.png": {
+    "sha256": "993a53574c2623ebb79ae76031f954210ac66582e4ae0c4d0de5f9396b03b7a1",
+    "mtime": "2026-09-25T15:16:11.091Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-songstress/item.png": {
+    "sha256": "4114bd7edabd7c5504d9fb09d53108a71135e65349a2a1beda45d148d1f061be",
+    "mtime": "2026-09-25T15:16:11.298Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-warrior/victory.png": {
+    "sha256": "2b846f54059e4568a754ca15e199a493c95cc48539a0c272c3a2c4f14f48f05a",
+    "mtime": "2026-09-25T15:16:11.341Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
