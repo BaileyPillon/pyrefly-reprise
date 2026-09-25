@@ -21,11 +21,13 @@
  * Pure, DOM-free and deterministic like everything under `src/battle/**`.
  *
  * See `docs/plans/ffx2-active-atb-review.md` §4 for the design this implements
- * and §3.3 for the two sourced rules it deliberately leaves out.
+ * and §3.3 for the two sourced rules it left out. One of them is now built:
+ * an enemy hit closes an open menu, with no delay ({@link closesOpenMenu},
+ * decision sheet 2026-09-25 item 4 A1); "any damage perturbs the bar" is not.
  */
 
 import type { AbilityDef, CombatantId, Command, Rng } from '../common/types.ts';
-import type { Ffx2Unit } from './internal.ts';
+import type { EventDraft, Ffx2Unit } from './internal.ts';
 import { isActionLocked, ticksUntilChainBreak } from './chain.ts';
 import { isReady, ticksUntilNextEvent } from './gauges.ts';
 import { rollDefault } from './minigames.ts';
@@ -195,22 +197,47 @@ export function withDefaultTimedInput(
  * Stopped, Slept, Petrified or Berserked, or the battle can end under her — and
  * in every one of those cases the menu has to go (preflight §4.3). A §1.7 chain
  * lock is **not** one of them (critic round 08 PR-0080): she keeps the menu, and
- * a command she confirms while chained is held ({@link HeldCommand}). Deliberately *not* implemented: the single-sourced
- * "an enemy hit closes the menu and delays her" rule (§3.3), which is an open
- * question for Bailey.
+ * a command she confirms while chained is held ({@link HeldCommand}). An enemy
+ * hit that landed on her while the menu was open closes it too
+ * (`closedByHit`, {@link closesOpenMenu}; item 4 A1).
  */
 export function inputStillValid(
   units: readonly Ffx2Unit[],
   actorId: CombatantId,
   battleOver: boolean,
   minigamePending: boolean,
+  closedByHit = false,
 ): boolean {
-  if (battleOver) return false;
+  if (battleOver || closedByHit) return false;
   const unit = units.find((u) => u.id === actorId);
   if (!unit) return false;
   // Chained is still hers: see {@link ownsInput}.
   if (!ownsInput(unit)) return false;
   return awaitsPlayerInput(unit, minigamePending);
+}
+
+/**
+ * **An enemy hit closes an open menu** (decision sheet 2026-09-25 item 4, **A1**;
+ * Bailey, 2026-09-25: *"I'll go with all your recommendations"*). FFX-2 only.
+ *
+ * `research/ffx2-combat-core.md` §1.1: *"being hit while the command menu is open
+ * cancels the menu and delays the turn"*; §1.5, Active `[single source: Split
+ * Infinity G0913]`: *"An enemy hit landing while a menu is open **closes the menu
+ * and applies Delay effect** to that character's ATB."* The **close** is built;
+ * the **delay** (A2) is not: no source gives its size for a plain hit (§2.8's
+ * "predetermined percentage" is per ability), so she keeps her full bar and is
+ * offered a fresh menu. Reachable only while the clock runs under a menu: Active,
+ * and Wait's split at the top-level list (§1.5); a held clock lets no enemy act.
+ *
+ * **A hit is our reading** (`docs/plans/ffx2-hit-closes-menu-review.md` §3): a
+ * `'damage'` draft with `amount > 0` on the menu's owner whose `sourceId` is an
+ * enemy. A miss, an immune or absorbed blow, a status tick, her own HP cost and a
+ * Confused ally's blow do not close it.
+ */
+export function closesOpenMenu(draft: EventDraft, owner: CombatantId, units: readonly Ffx2Unit[]): boolean {
+  if (draft.type !== 'damage' || draft.targetId !== owner || draft.amount <= 0 || !draft.sourceId) return false;
+  const source = draft.sourceId;
+  return units.some((u) => u.id === source && u.side === 'enemy');
 }
 
 /**
