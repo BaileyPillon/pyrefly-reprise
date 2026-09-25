@@ -44,6 +44,12 @@ export interface LineOptions {
   lightfallPrep: boolean;
   /** A Dark Knight throws a Phoenix Down (a Mega Phoenix for two) when the healer is down. */
   dkRevive: boolean;
+  /**
+   * What-if only (GP6 b, not shipped): a girl who would not survive Lightfall drinks a Hero Drink
+   * (Invincible, 10.6 s) once Nooj is at 4,500 HP or less and Lightfall is still to come. The bag
+   * must carry them ({@link withHeroDrinks}); the Chapter V bag has none.
+   */
+  heroDrink?: boolean;
 }
 
 export const LINES = {
@@ -88,6 +94,19 @@ function prepWindow(engine: FFX2Engine, line: LineOptions): boolean {
 
 const DK_FLOOR = 5000;
 
+/** GP6 b what-if: drink before Lightfall (see {@link LineOptions.heroDrink}). */
+function heroDrink(d: Input, engine: FFX2Engine, line: LineOptions, self: Unit | undefined): Command | null {
+  const n = nooj(engine);
+  if (!line.heroDrink || !self || !n || n.hp > 4500 || n.aiMemory?.['lightfallFired'] || self.statuses['invincible']) return null;
+  if (self.id !== 'yuna' && self.hp > DK_FLOOR) return null;
+  return use(d, 'item', 'x2-hero-drink', [self.id]);
+}
+
+/** The party with `count` Hero Drinks added to its bag: GP6 b as numbers, an `[estimate]` count. */
+export function withHeroDrinks(party: FFX2PartyBuild, count: number): FFX2PartyBuild {
+  return { ...party, inventory: [...party.inventory, { itemId: 'x2-hero-drink', count }] };
+}
+
 function yunaTurn(d: Input, engine: FFX2Engine, line: LineOptions, turn: number): Command | null {
   const party = girls(engine);
   const self = party.find((u) => u.id === d.actorId);
@@ -125,6 +144,8 @@ function yunaTurn(d: Input, engine: FFX2Engine, line: LineOptions, turn: number)
       if (one) return one;
     }
   }
+  const drink = heroDrink(d, engine, line, self);
+  if (drink) return drink;
   if (prepWindow(engine, line)) {
     const knights = living.filter((u) => u.id !== 'yuna' && u.hp <= DK_FLOOR);
     if (knights.length >= 2) {
@@ -179,6 +200,8 @@ function knightTurn(d: Input, engine: FFX2Engine, line: LineOptions): Command | 
     if (drain) return drain;
     return attack();
   }
+  const drink = heroDrink(d, engine, line, self);
+  if (drink) return drink;
   if (self && prepWindow(engine, line) && self.hp - Math.ceil(self.stats.maxHp / 8) <= DK_FLOOR) {
     const swing = attack();
     if (swing) return swing;
@@ -204,7 +227,7 @@ export interface LinkRun {
 
 const MAX_DECISIONS = 40_000;
 
-function runLink(engine: FFX2Engine, line: LineOptions, decisionMs: number): LinkRun {
+function runLink(engine: FFX2Engine, line: LineOptions, decisionMs: number, topMs?: number): LinkRun {
   let turn = 0;
   for (let i = 0; i < MAX_DECISIONS; i++) {
     const d = engine.nextDecision();
@@ -214,7 +237,15 @@ function runLink(engine: FFX2Engine, line: LineOptions, decisionMs: number): Lin
       continue;
     }
     if (d.kind !== 'player-input') continue;
-    if (decisionMs > 0) {
+    if (topMs !== undefined && topMs > 0) {
+      // Wait's split (`tremaDrive.ts`, `fallenAeonsDrive.ts`): the clock runs while the top-level
+      // command menu is open and holds once the cursor drops into a submenu or onto a target, so
+      // only the `topMs` part of `decisionMs` is ever ticked.
+      engine.setMenuLevel('top');
+      engine.tick(Math.min(topMs, decisionMs), { throughInput: true });
+      engine.setMenuLevel('deep');
+      if (!engine.inputValid(d.actorId)) continue;
+    } else if (decisionMs > 0) {
       engine.tick(decisionMs, { throughInput: true });
       if (!engine.inputValid(d.actorId)) continue;
     }
@@ -236,6 +267,8 @@ function summarise(engine: FFX2Engine, outcome: string | undefined): LinkRun {
 
 export interface DriveOptions {
   decisionMs?: number;
+  /** Wait split only: ms of `decisionMs` spent on the top-level command menu (clock running). */
+  topMs?: number;
   engine?: Partial<Ffx2EngineOptions>;
   /** Look at the engine once a link has ended (a test reads the log). */
   inspect?: (engine: FFX2Engine) => void;
@@ -259,7 +292,7 @@ export function driveLink(linkId: string, line: LineOptions, seed: number, opts:
   };
   engine.setSeed(seed);
   engine.init(setup);
-  const run = runLink(engine, line, opts.decisionMs ?? 0);
+  const run = runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);
   opts.inspect?.(engine);
   return run;
 }
@@ -280,7 +313,7 @@ export function driveDen(line: LineOptions, seed: number, opts: DriveOptions = {
   const links: LinkRun[] = [];
   for (let i = 0; i < DEN_OF_WOE_CHAIN_ORDER.length; i++) {
     opts.start?.(engine);
-    const run = runLink(engine, line, opts.decisionMs ?? 0);
+    const run = runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);
     opts.inspect?.(engine);
     links.push(run);
     if (run.outcome !== 'victory') return { outcome: run.outcome, links };

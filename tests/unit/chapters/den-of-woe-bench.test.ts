@@ -4,10 +4,12 @@
  * never tune: a low rate goes to Bailey as a measured option (GP4 c, GP5, GP6);
  * no boss number is changed to move it.
  *
- * Bench speed is zero decision time under the engine's default Wait (the whole-
- * menu hold a human gets too). The human-speed rows spend 1.5 s a menu under
- * Active (Bailey's pick for FFX-2, 2026-09-21), 40 seeds each. A single shade is
- * fought from the preset at full HP and MP; the Den carries everything (GP3 a).
+ * Bench speed is zero decision time under the engine's default Wait. The human-speed
+ * rows spend 1.5 s a menu, 40 seeds each: under **Wait split** (the live default:
+ * 0.5 s on the top-level command menu with the clock running, 1.0 s held in a
+ * submenu or on a target; `trema-shipped-bench.test.ts`), and under Active (the
+ * engine track's first human row). A single shade is fought from the preset at full
+ * HP and MP; the Den carries everything (GP3 a). Tables: `docs/plans/den-of-woe-bench.md`.
  *
  * One **what-if** row set, not shipped: the same preset at +8 levels (54 / 56 / 58,
  * nearer the shades' 52-63), the GP5 b question put as numbers, `[estimate]`.
@@ -15,7 +17,7 @@
 
 import { describe, expect, it } from 'vitest';
 import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
-import { driveDen, driveLink, LINES, type DriveOptions, type LineOptions } from '../helpers/denOfWoeDrive.ts';
+import { driveDen, driveLink, LINES, withHeroDrinks, type DriveOptions, type LineOptions } from '../helpers/denOfWoeDrive.ts';
 import { DEN_BARALAI, DEN_GIPPAL, DEN_NOOJ } from '../../../src/data/ffx2/enemies/den-of-woe.ts';
 import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
 
@@ -81,11 +83,15 @@ describe('Chapter XV benches (200 seeds, bench speed, Wait)', () => {
     }
   }
 
-  it('the intended line beats both credibly wrong ones on every shade', () => {
+  it('the intended line beats both credibly wrong ones on every shade but one', () => {
     for (const [link] of LINKS) {
       const at = (n: number) => wins.get(`${link}|${NAMED[n]![0]}`) ?? -1;
-      expect(at(0), link).toBeGreaterThanOrEqual(at(2));
       expect(at(0), link).toBeGreaterThan(at(3));
+      // Gippal alone, fought fresh, is the exception (den-of-woe-bench.md): since main's spherechange
+      // fix (accessories kept across a change), the magic line's silenced White Mage falls back to
+      // Gunner with her bangle's HP and outlasts him more often (162 vs 157 of 200). The whole Den
+      // still punishes it: 0 of 200, lost at Baralai.
+      if (!link.startsWith('2')) expect(at(0), link).toBeGreaterThanOrEqual(at(2));
     }
   });
 
@@ -120,6 +126,36 @@ describe('Chapter XV benches (200 seeds, bench speed, Wait)', () => {
   it('what-if, not shipped: the preset at +8 levels (GP5 b as numbers)', () => {
     for (const [link, id] of LINKS) row(link, 'intended, what-if +8 levels', 'Wait, D=0', benchLink(id, LINES.intended, SEEDS, { party: WHAT_IF }));
     row('Den (1-2-3)', 'intended, what-if +8 levels', 'Wait, D=0', benchDen(LINES.intended, SEEDS, { party: WHAT_IF }));
+  }, 600_000);
+
+  const split = { decisionMs: 1500, topMs: 500, engine: { atbMode: 'wait' as const, waitSplit: true } };
+
+  it('what-if, not shipped: GP6 b, three Hero Drinks in the bag (an [estimate] count), alone and with GP5 b', () => {
+    const hero = { ...LINES.intended, heroDrink: true };
+    const cases: Array<[string, FFX2PartyBuild]> = [
+      ['intended + 3 Hero Drinks, what-if', withHeroDrinks(farplaneBuild, 3)],
+      ['intended + 3 Hero Drinks + 8 levels, what-if', withHeroDrinks(WHAT_IF, 3)],
+    ];
+    for (const [name, party] of cases) {
+      row('3 Nooj', name, 'Wait, D=0', benchLink(DEN_NOOJ, hero, SEEDS, { party }));
+      row('Den (1-2-3)', name, 'Wait, D=0', benchDen(hero, SEEDS, { party }));
+      row('3 Nooj', name, 'Wait split, D=1.5 s', benchLink(DEN_NOOJ, hero, HUMAN_SEEDS, { ...split, party }));
+      row('Den (1-2-3)', name, 'Wait split, D=1.5 s', benchDen(hero, HUMAN_SEEDS, { ...split, party }));
+    }
+    row('Den (1-2-3)', 'intended, what-if +8 levels', 'Wait split, D=1.5 s', benchDen(LINES.intended, HUMAN_SEEDS, { ...split, party: WHAT_IF }));
+  }, 900_000);
+
+  it('human speed: 1.5 s a menu under Wait split, 0.5 s of it on the top menu (40 seeds)', () => {
+    for (const [link, id] of LINKS) {
+      const r = benchLink(id, LINES.intended, HUMAN_SEEDS, split);
+      row(link, 'intended', 'Wait split, D=1.5 s', r);
+      expect(r.unfinished).toBe(0);
+    }
+    for (const [name, line] of NAMED.slice(0, 2)) {
+      const r = benchDen(line, HUMAN_SEEDS, split);
+      row('Den (1-2-3)', name, 'Wait split, D=1.5 s', r);
+      expect(r.unfinished).toBe(0);
+    }
   }, 600_000);
 
   it('human speed: 1.5 s a menu under Active (40 seeds)', () => {

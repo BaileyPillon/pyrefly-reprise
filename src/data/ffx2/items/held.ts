@@ -15,6 +15,9 @@
  * | `white-cape` | White Cape | Cindy | `ffx2-fallen-aeons.md` §3.2; effect `ffx2-combat-core.md` §5.4 |
  * | `x2-chaos-shock` | Chaos Shock | Mindy | `ffx2-fallen-aeons.md` §3.2, SinirothX + wiki |
  * | `x2-fury-shock` | Fury Shock | Anima | `ffx2-fallen-aeons.md` §3.3, SinirothX + wiki + FFExodus |
+ * | `white-lore` | White Lore | Shade of Gippal (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.1; effect `ffx2-bahamut.md` §accessories |
+ * | `natures-lore` | Nature's Lore | Shade of Baralai (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.2; effect `ffx2-combat-core.md` Instinct |
+ * | `arcane-lore` | Arcane Lore | Shade of Nooj (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.2; effect `ffx2-combat-core.md` Arcana |
  *
  * What is **not** sourced, and so not written: an effect or description for
  * Snow Ring, Potpourri, Chaos Shock and Fury Shock (the research names them and
@@ -86,6 +89,12 @@ export const heldItems: ItemDef[] = [
   held('white-cape', 'White Cape', 3000, 'Accessory. Guards against Silence; Def +4, MDef +4.'),
   held('x2-chaos-shock', 'Chaos Shock', 'unsourced'),
   held('x2-fury-shock', 'Fury Shock', 'unsourced'),
+  // Chapter XV's steals (FFX-2 only). ffx2-combat-core §5.4 prices every Lore at "50,000 gil each to buy";
+  // the effects: White Lore Mag +12 (ffx2-bahamut accessories table), Arcane Lore Mag +12 and Nature's Lore
+  // Str +12 (ffx2-combat-core, Arcana and Instinct, verified: 2 sources), each granting that skillset's command.
+  held('white-lore', 'White Lore', 50000, 'Accessory. White Mage abilities in any dressphere; Mag +12.'),
+  held('natures-lore', "Nature's Lore", 50000, 'Accessory. Instinct in any dressphere; Str +12.'),
+  held('arcane-lore', 'Arcane Lore', 50000, 'Accessory. Arcana in any dressphere; Mag +12.'),
 ];
 
 export default heldItems;
