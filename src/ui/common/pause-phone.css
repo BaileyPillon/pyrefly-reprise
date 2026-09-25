@@ -1,0 +1,17 @@
+/*
+ * R13-05 (`critic/reviews/a999d133-focused.md`): on the phone pause the
+ * columns sit at a fixed 52vh and the objective at a fixed 82vh, so a body
+ * taller than the gap between them printed over the chapter caption (FFX-2's
+ * five IN THIS FIGHT rows ran GARMENT GRID into it, in both games the CHAPTER
+ * tab did the same). `src/app/screens/pause/phoneFit.ts` measures the overrun
+ * and sets `--pu-phone-lift`: the body rises only as far as the objective
+ * demands and never above the tab strip. Nothing here applies above 620 px.
+ *
+ * Kept out of `pause-screen.css`, which is past the 400-line house rule.
+ * Game case: both (shared pause plumbing).
+ */
+@media (max-width: 620px) {
+  .pause .pause__body {
+    top: calc(var(--pu-top-body) - var(--pu-phone-lift, 0px));
+  }
+}

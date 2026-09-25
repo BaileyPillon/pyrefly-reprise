@@ -26,7 +26,7 @@ export const STACK_AIR = 16;
 export const PHONE_LAYOUT_QUERY = '(max-width: 620px)';
 
 /** Whether the phone stylesheet lays out the window `root` is in. */
-function phoneLayout(root: HTMLElement): boolean {
+export function phoneLayout(root: HTMLElement): boolean {
   const view = root.ownerDocument.defaultView;
   return typeof view?.matchMedia === 'function' && view.matchMedia(PHONE_LAYOUT_QUERY).matches;
 }

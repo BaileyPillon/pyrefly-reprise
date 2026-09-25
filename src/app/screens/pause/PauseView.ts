@@ -27,6 +27,7 @@ import {
 import { PortraitStage } from './PortraitStage.ts';
 import { memberChromeBoxes } from './chromeBoxes.ts';
 import { stackHost } from './stackColumn.ts';
+import { fitPhoneBody } from './phoneFit.ts';
 import { chromeSideForCombatant, plateIdFor } from './plates.ts';
 import { buildTabs, memberIdOf, type PauseTab } from './tabs.ts';
 import { memberColumns } from './meters.ts';
@@ -80,7 +81,11 @@ export class PauseView {
     this.portrait = new PortraitStage({
       root: art,
       reduceMotion: deps.save.settings.reduceMotion,
-      chrome: () => memberChromeBoxes(root, art),
+      // R13-05: every re-frame (a render, a resize) measures the phone body lifted clear of the objective.
+      chrome: () => {
+        fitPhoneBody(root);
+        return memberChromeBoxes(root, art);
+      },
       stack: stackHost(root),
     });
     this.tabs = buildTabs(deps.state());
@@ -133,6 +138,7 @@ export class PauseView {
     this.renderPlate(tabId);
     const rowId = this.renderBody({ ...at, tabId });
     this.renderObjective();
+    fitPhoneBody(this.root);
     // PR-0079: frame the face clear of the chrome this render just laid out.
     this.portrait.layout();
     return { tabId, focus: at.focus, rowId };
@@ -338,7 +344,9 @@ export class PauseView {
   setBare(bare: boolean): void {
     this.root.classList.toggle('pause--bare', bare);
     // The chrome is measurable again: re-decide the stack (option A) against it.
-    if (!bare) this.portrait.layout();
+    if (bare) return;
+    fitPhoneBody(this.root);
+    this.portrait.layout();
   }
 
   get mirrored(): boolean {
