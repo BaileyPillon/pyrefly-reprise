@@ -44,8 +44,11 @@
   "obligations": [
     {
       "kind": "live",
-      "status": "pending",
-      "requires": "exact-artifact verification and real-input smoke on the live URL"
+      "status": "done",
+      "requires": "exact-artifact verification and real-input smoke on the live URL",
+      "result": "PASS",
+      "settledBy": "critic/reviews/1a680e41-live.json",
+      "settledAt": "2026-09-25T22:20:00.000Z"
     },
     {
       "kind": "focused",
