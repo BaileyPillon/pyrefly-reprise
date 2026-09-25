@@ -39,6 +39,7 @@ import { FFX2_VEGNAGUN_CHAIN_IDS, ffx2VegnagunShuyin } from './ffx2-vegnagun-shu
 import { LEBLANC_BOSS_IDS, ffx2Leblanc } from './ffx2-leblanc.ts';
 import { SEYMOUR_MACALANIA_ID, seymourAnimaMacalania } from './seymour-anima-macalania.ts';
 import { EVRAE_ID, evrae } from './evrae.ts';
+import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
 export {
@@ -66,6 +67,13 @@ export { ffx2Leblanc, LEBLANC_BOSS_IDS } from './ffx2-leblanc.ts';
 export { seymourAnimaMacalania, SEYMOUR_MACALANIA_ID } from './seymour-anima-macalania.ts';
 export { evrae, EVRAE_ID } from './evrae.ts';
 
+/** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
+export interface TacticEntry<T extends Tactic | null = Tactic> {
+  chapterId: string;
+  bossId: CombatantId;
+  tactic: T;
+}
+
 /**
  * Every chapter's slot, in encounter order. `null` = no line written yet.
  *
@@ -73,46 +81,53 @@ export { evrae, EVRAE_ID } from './evrae.ts';
  * combatant ids, the same four its guide lists as `bossIds`
  * [docs/handoff/chapter-macalania-guide.md §5].
  */
-const REGISTRY: ReadonlyArray<{ bossId: CombatantId; tactic: Tactic | null }> = [
-  { bossId: SEYMOUR_FLUX_ID, tactic: seymourFlux },
-  { bossId: YUNALESCA_ID, tactic: yunalesca },
-  { bossId: BRASKAS_FINAL_AEON_ID, tactic: braskasFinalAeon },
+const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
+  { chapterId: 'seymour-flux', bossId: SEYMOUR_FLUX_ID, tactic: seymourFlux },
+  { chapterId: 'yunalesca', bossId: YUNALESCA_ID, tactic: yunalesca },
+  { chapterId: 'braskas-final-aeon', bossId: BRASKAS_FINAL_AEON_ID, tactic: braskasFinalAeon },
   // Chapter 3 is a seven-battle chain and fields a **different** boss in every
   // link, so one registration would have left the possessed-aeon gauntlet and
   // Yu Yevon to the generic ladder — which loses Yu Yevon outright by swinging
   // into his 9,999 Curaga counter [ffx-bfa-yu-yevon §3.4.1]. Same tactic, one
   // entry per boss the chain can field.
-  ...BRASKAS_FINAL_AEON_CHAIN_IDS.map((bossId) => ({ bossId, tactic: braskasFinalAeon })),
-  { bossId: FFX2_BAHAMUT_ID, tactic: ffx2Bahamut },
+  ...BRASKAS_FINAL_AEON_CHAIN_IDS.map((bossId) => ({ chapterId: 'braskas-final-aeon', bossId, tactic: braskasFinalAeon })),
+  { chapterId: 'ffx2-bahamut', bossId: FFX2_BAHAMUT_ID, tactic: ffx2Bahamut },
   // Chapter 5 is five chained battles with a different boss id in each
   // [ffx2-vegnagun-shuyin §2], and `tacticFor` keys on the boss that is on
   // the field — so the one tactic is registered under all five ids, or four
   // of its five links would quietly fall back to the generic strategy.
-  ...FFX2_VEGNAGUN_CHAIN_IDS.map((bossId) => ({ bossId, tactic: ffx2VegnagunShuyin })),
+  ...FFX2_VEGNAGUN_CHAIN_IDS.map((bossId) => ({ chapterId: 'ffx2-vegnagun-shuyin', bossId, tactic: ffx2VegnagunShuyin })),
   // Chapter 6 is a three-act chain that fields eight distinct enemy ids
   // across its own bestiary records (`leblanc-syndicate.ts`,
   // `leblanc-syndicate-acts.ts`) — same reasoning as Chapter 5 above.
-  ...LEBLANC_BOSS_IDS.map((bossId) => ({ bossId, tactic: ffx2Leblanc })),
+  ...LEBLANC_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-leblanc', bossId, tactic: ffx2Leblanc })),
   // Chapter 7 is one battle in three acts. Seymour is in the record the
   // whole fight (untargetable in act two), so his id alone would find it; the
   // other three are listed so the tactic and guide claim the same ids.
   ...[SEYMOUR_MACALANIA_ID, 'anima-macalania', 'guado-guardian-a', 'guado-guardian-b'].map(
-    (bossId) => ({ bossId, tactic: seymourAnimaMacalania }),
+    (bossId) => ({ chapterId: 'seymour-anima-macalania', bossId, tactic: seymourAnimaMacalania }),
   ),
   // Chapter 8 is one battle against one fighter. Cid is on the enemy side as
   // a non-combatant turn-taker and is never a target, so Evrae's id alone
   // finds it — the same single id the guide lists as `bossIds`
   // [docs/handoff/chapter-evrae-engine.md].
-  { bossId: EVRAE_ID, tactic: evrae },
+  { chapterId: 'evrae-airship', bossId: EVRAE_ID, tactic: evrae },
 ];
 
-/** Keyed by a boss combatant id that only that encounter fields. */
-export const TACTICS: ReadonlyArray<{ bossId: CombatantId; tactic: Tactic }> = REGISTRY.filter(
-  (entry): entry is { bossId: CombatantId; tactic: Tactic } => entry.tactic !== null,
+/** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */
+export const TACTICS: ReadonlyArray<TacticEntry<Tactic>> = REGISTRY.filter(
+  (entry): entry is TacticEntry<Tactic> => entry.tactic !== null,
 );
 
-/** The tactic for whatever encounter is on the field, if it has one. */
+/**
+ * The tactic for whatever encounter is on the field, if it has one.
+ *
+ * The battle's game picks the chapters first and the boss must be on the enemy
+ * side (`./lookup.ts`): FFX's aeon Bahamut shares the id `'bahamut'` with
+ * Chapter IV's FFX-2 boss, and used to hand every turn of an FFX fight without
+ * a tactic of its own (IX, X) to the FFX-2 Bahamut line.
+ */
 export function tacticFor(engine: BattleEngine): Tactic | null {
-  const combatants = engine.state().combatants;
-  return TACTICS.find((t) => combatants[t.bossId] !== undefined)?.tactic ?? null;
+  const state = engine.state();
+  return TACTICS.find((t) => chapterOnBoard(state, t.chapterId, [t.bossId]))?.tactic ?? null;
 }

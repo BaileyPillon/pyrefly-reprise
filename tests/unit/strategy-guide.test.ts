@@ -42,6 +42,7 @@ import {
   stateOnlyEngine,
 } from '../../src/engine/tactics/guide.ts';
 import { GUIDES, guideForChapter } from '../../src/data/guides/index.ts';
+import { getChapter } from '../../src/data/encounters.ts';
 import { TACTICS } from '../../src/engine/tactics/index.ts';
 
 const MAX_DECISIONS = 4_000;
@@ -225,9 +226,11 @@ describe('stateOnlyEngine', () => {
 /** A state carrying nothing but the fields the WATCH reader looks at. */
 function stateWithCharges(log: BattleEvent[], hp = 40_000): BattleState {
   return {
+    game: 'ffx',
     combatants: {
       'seymour-flux': {
         id: 'seymour-flux',
+        side: 'enemy',
         name: 'Seymour Flux',
         alive: true,
         hp,
@@ -282,8 +285,9 @@ describe('WATCH', () => {
 
   it('matches Bahamut’s bare countdown through the "#" wildcard', () => {
     const bahamut = {
+      game: 'ffx2',
       combatants: {
-        bahamut: { id: 'bahamut', name: 'Bahamut', alive: true, hp: 8_400, statuses: {}, stats: { maxHp: 8_400 } },
+        bahamut: { id: 'bahamut', side: 'enemy', name: 'Bahamut', alive: true, hp: 8_400, statuses: {}, stats: { maxHp: 8_400 } },
       },
       log: [{ seq: 1, type: 'charge', enemyId: 'bahamut', name: '3', turnsLeft: 3, stage: 1 }],
     } as unknown as BattleState;
@@ -372,7 +376,8 @@ describe('src/data/guides', () => {
     for (const g of GUIDES) {
       for (const bossId of g.bossIds) {
         const state = {
-          combatants: { [bossId]: { id: bossId, name: bossId, alive: true, hp: 1, statuses: {}, stats: { maxHp: 1 } } },
+          game: getChapter(g.id)?.game,
+          combatants: { [bossId]: { id: bossId, side: 'enemy', name: bossId, alive: true, hp: 1, statuses: {}, stats: { maxHp: 1 } } },
           log: [],
         } as unknown as BattleState;
         expect(guideForState(state)?.id, bossId).toBe(g.id);

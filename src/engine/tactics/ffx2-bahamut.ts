@@ -135,10 +135,10 @@ import { type Tactic, activeParty, aim, has, hpFraction, revive, row, stacksOf }
  *
  * **It is not unique across the two games.** FFX's aeon Bahamut is also
  * `'bahamut'` (`src/data/ffx/aeons/index.ts:108`), so an FFX battle in which
- * Yuna summons him puts a combatant with this id on the field. `TACTICS` is
- * searched in encounter order and every FFX boss id sits ahead of this entry,
- * so the right tactic still wins the lookup today — but the tactic below does
- * not rely on that, and returns `null` unless the `'bahamut'` it found is an
+ * Yuna summons him puts a combatant with this id on the field. `tacticFor`
+ * and the guide lookup therefore key on the battle's game and an enemy-side
+ * id first (`./lookup.ts`; before that, FFX IX and X found this line), and
+ * the tactic below still returns `null` unless the `'bahamut'` it found is an
  * enemy.
  */
 export const FFX2_BAHAMUT_ID: CombatantId = 'bahamut';

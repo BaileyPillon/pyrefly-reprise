@@ -50,6 +50,7 @@ import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from '../../data/
 import { GUIDES } from '../../data/guides/index.ts';
 import { intendedStrategy } from '../BattlePresenterStrategies.ts';
 import { targetLabel } from './targetLabel.ts';
+import { chapterOnBoard } from './lookup.ts';
 
 /** Thrown when a tactic asks the guide's read-only engine view to do something. */
 export class GuideEngineMisuseError extends Error {
@@ -138,11 +139,10 @@ export interface GuideDecision {
   commands: AvailableCommand[];
 }
 
-// ------------------------------------------------------------------ lookup
-
-/** The chapter guide for whatever encounter is on the field, if it has one. */
+// -------------------------- lookup: the battle's game, then an enemy-side boss id (`./lookup.ts`)
+/** The chapter guide for whatever encounter is on the field, if it has one (never FFX-2's for FFX's aeon Bahamut). */
 export function guideForState(state: Readonly<BattleState>): ChapterGuide | null {
-  return GUIDES.find((g) => g.bossIds.some((id) => state.combatants[id] !== undefined)) ?? null;
+  return GUIDES.find((g) => chapterOnBoard(state, g.id, g.bossIds)) ?? null;
 }
 
 /** The chapter's primary boss (its first listed id that is actually present). */
