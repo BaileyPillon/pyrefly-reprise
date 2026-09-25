@@ -378,3 +378,87 @@ of scope for this pass.
 - repaired idle (`8e1d77e9991c`): FAIL (6.9)
 - cast 976202 (`b31df6985f14`): FAIL (6.4)
 - The pair: FAIL. Nothing was locked, and both files stay CANDIDATE.
+
+## Independent judge (idle only) (2026-09-25)
+
+**Game case (rule 14): FFX-2 only.** The judge is a sub-agent that made none of these files and changed no art. The
+rubric and bar are those of [production/JUDGE.md](../production/JUDGE.md): bar 7 overall, no category below 6.5. The
+gates are the idle gates of [METHOD-nooj-2.md](../production/METHOD-nooj-2.md). Identity is judged against the picked
+portrait `public/art/portraits/nooj.png` and visual bible §1.23.4. This is a judge's verdict, not Bailey's; nothing
+was installed or locked. `verify-approved.mjs` reported ok 224, with 0 mismatched and 0 missing, before and after.
+
+**Verdict: the idle PASSES, narrowly (7.0).** All three named faults are repaired, and so is the blade arm. The costume
+rises from 6 to 7, and no category is below the floor. The pass is at the bar, not above it.
+
+**File judged.** `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-nooj7/merge/idle-m2.png` (369x1006). I re-computed
+its sha256, and it matches [idle-only/README.md](idle-only/README.md): `a87ff561ef41`. It is not in
+`approved-hashes.json` or `judge-locked-hashes.json`.
+
+**Method.**
+
+- The cut-out was composited over mid grey and over dark blue and looked at at 1:1, beside attempt 6's idle
+  (`8e1d77e9991c`). The head, loops, shoulders, both arms, the hands, the belts and the feet were looked at at 2x
+  nearest-neighbour, and the face and ears at 4x.
+- Game size: the builder's 1600x900 engine frame [idle-only/frames/nooj7-idle.jpg](idle-only/frames/nooj7-idle.jpg)
+  (Chapter XI staging, the Den plate, Shiva's slot at factor 0.82, B treatment), cropped at 2x beside attempt 6's frame.
+  I did not re-render the scene. I did re-run `production/scripts/shade_b.py` on `a87ff561ef41`, and its output is
+  byte-identical to the look copy the frame loaded (`869f9ae5b1d8`). So the frame shows this file.
+- Fur width: on the cut-out, the fur runs from about x 52 to where it meets the collar at about x 210, per row
+  between y 100 and 260. Scaled by the figure's height in the frame (about 0.36), that is about 55 to 60 px. On the
+  2x frame crop it is about 65 px. Either figure carries about ±8 px.
+- The look-only crops are in `D:/Tools/pyrefly-scratch/nooj7-judge/`.
+
+### Scores (0 to 10; bar 7, no category below 6.5)
+
+| Painting | Identity | Anatomy | Hands | Costume | Seams | Edges | Finish | Game read | Overall |
+|---|---|---|---|---|---|---|---|---|---|
+| Attempt 6 idle (previous judge) | 6.5 | 6.5 | 7 | 6 | 7.5 | 7.5 | 7 | 7.5 | 6.9 |
+| **Attempt 7 idle `a87ff561ef41`** | 7 | 6.5 | 7 | **7** | 7 | 7 | 7 | 7.5 | **7.0 PASS** |
+
+Seams and edges each drop half a point from attempt 6. That comes from the new fur-to-sleeve join and the faint pale
+edges (see below). The costume and identity gains outweigh them.
+
+### Gates
+
+| Gate | Attempt 7 idle |
+|---|---|
+| Tall column (red before B) | yes |
+| One furred shoulder, ≥ 50 px, breaking the outline | **yes**, about 55 to 65 px, on the far shoulder only. The spiky crest rises above the shoulder line in the frame. Nothing rises behind the neck on the near side any more |
+| One thin skeletal arm | **yes**. It is a grey metal upper arm, a jointed elbow and a forearm of grey rods with gaps. The blade and the fin are gone, and it reads thinner in the frame |
+| Cane as a third leg, touching the ground | yes |
+| Two loops with ties | **yes at 1:1 and 2x**: two brown hair loops with strand lines, each with a small red tie at its base. They no longer read as horns. In the frame they read as two round hair loops with holes. The B treatment washes out the red, so the ties do not read at game size |
+| Blue glasses | yes |
+| Human ear | yes. At 4x it sits on the near side under the loop, with inner-ear shading |
+| Gloved hand, finger reads, no spur | yes: a black glove with knuckle folds, closed on the cane, with no spur. It is still large, and the cane's blue and white handle hangs below the fist rather than running into it |
+| One purple boot and one metal foot, no hoof | yes: a boxy purple boot with a toe and a sole, and a grey metal foot with a toe plate |
+| At least 3 belts | 3, narrowly: the chest harness and two crossed hip belts |
+
+### Named faults, worst first (none blocks the pass)
+
+- **Anatomy and staging, unchanged and out of this pass's scope; this is the lowest category, at the floor.** The
+  face is young, soft and frontal, with a pout, where the portrait is mature and angular. The lean does not show,
+  because the cane stands vertically. The legs are about 60 percent of his height.
+- **The sleeve.** It is purple from under the fur to the glove, with no skin showing, which fixes the worst costume
+  fault. But it is a straight tube with a flat cuff. There is a pale lavender sliver above the glove. At 2x the fur tips
+  over its top form a regular, sawtooth pale and pink fringe, so the join reads a little like trim rather than fur.
+  None of this reads in the frame.
+- **The loops.** They are rounder than the portrait's, like doughnuts, and the ties are a few pixels each.
+- **Edges.** On dark blue at 2x there is a faint pale halo along the loops' outer edge and along the near shoulder's
+  outline. There is also a tiny orange sliver left of the metal toe, at about x 245, y 974. The B glow hides both
+  in the frame.
+- **Costume leftovers.** There is a small amber plate on the machina upper arm. A red and black fold sits in the
+  armpit below the fur. The boot is boxy.
+
+### What works
+
+- In the frame, the four squint reads and the portrait anchors are all present: the tall column, one fur crest, the
+  thin metal arm, the cane as a third leg, the two loops and the glasses. It is the most complete Nooj read of any
+  attempt.
+- The masks do not show at 1:1. The loops, sleeve, near shoulder and machina arm sit in the painting's own line and
+  colour.
+
+### Verdict
+
+- Attempt 7 idle (`a87ff561ef41`): **PASS (7.0)**, narrowly. This is a judge's verdict and it is not locked here.
+- Following the driver's recommendation, the next step would be the install, through a script that refuses approved
+  hashes, with Nooj using this idle for his action moments and the usual motion. Nothing in this section does that.
