@@ -121,3 +121,87 @@ Chapter I keeps its 1.8 s sensor line, Chapter IV its 1.4 s of ATB fill before
 Yuna's first turn and Chapter VI 2.8 s of opening enemy action. Shortening any
 of those is an approved beat or the fight itself, so it is Bailey's call
 (rule 10), not built.
+
+## Repair pass after the round 11 verification (2026-09-24, later)
+
+The verifier refuted "partly fixed" for PR-0061 and found three costs of
+303d71ea. What each was, and what this pass changed (both games, shared
+loading; no approved beat touched):
+
+1. **New art 404s.** `battlePreload.ts` fetched every pose URL and every
+   party portrait without asking the art manifest: 5 x 404 for Cid's poses in
+   Chapter VIII, 3 x 404 for the FFX-2 dressphere portraits in every FFX-2
+   chapter (CHK-016, CHK-017). Now `imageWarm.warmImage` and the preload's pose
+   list skip anything the manifest says is absent (with no manifest, the
+   request goes ahead as before). `tests/unit/load-time-gates.test.ts` fails
+   on 303d71ea's code and passes now.
+2. **The bare title after the wipe.** The board (and the briefing) waited for
+   their paintings after the title's wipe had already cleared back onto the
+   title, for up to 2.5 s, ignoring keys. Now the title waits before its wipe
+   starts (`holdForNextScreen`), the screen after it spends only what is left of
+   the same ceiling, and the ceiling is 1.0 s, not 2.5 s.
+3. **What the board waited for.** 21 MB: the opening card plus every card's
+   faces, with the briefing's 4.4 MB backdrop queued first even for a player
+   who never sees the briefing. Now it waits for the opening card only (plate,
+   silhouettes, the top face layer of each party tile); every other card's
+   faces lead the background queue, then the FFX-2 body layers hidden under
+   the portraits, then the rail and the other plates. The briefing's art is
+   queued only when the briefing is due. The board list is read only after
+   the art manifest has landed: read earlier (303d71ea), it warmed plain
+   `yuna.png` / `rikku.png` where the FFX-2 cards show `yuna-x2.png` /
+   `rikku-x2.png`.
+4. **The overclaim.** 303d71ea's table came from one run per cell. This pass
+   measures three runs for the contested chapters and reports ranges.
+
+### Front end, 100 Mbit/s, 40 ms, fresh profile per run, real keys
+
+Parent 10c8888c figures are the verifier's runs; 303d71ea is HEAD 37b998c0
+(which contains it) built from a clean archive; the repair is HEAD plus this
+pass, same build method. Probe: `tools/zz-pr0061r-0065.tmp.mjs` (the
+verifier's probe, scratch).
+
+| case | parent 10c8888c | 303d71ea | repair |
+|---|---|---|---|
+| First launch, title 1.5 s, briefing dismissed 0.6 s after it appears: board up after Enter | 1.07-1.20 s, grey busts | 3.66-3.82 s (4 runs) | 1.11-1.41 s (4 runs) |
+| same: bare title on screen after the wipe | 0 | 2.50-2.52 s | 0 (4/4) |
+| Briefing's first frame has Auron and the backdrop | 0/3 | 4/4 | 4/4 |
+| Board's opening card (plate, silhouettes, three faces) on arrival | busts | complete | complete 4/4 |
+| Every card's portrait layer after each ArrowRight (350 ms apart) | busts | complete | complete 4/4 |
+| Returning player, cold cache, Enter 0.3 s after load: board up after Enter | 0.43-0.52 s, busts | 2.93-3.01 s | 1.50-1.53 s (3 runs) |
+| same: bare title after the wipe | 0 | 2.27 s | 0 (3/3); the title holds 1.25-1.28 s after Enter before its wipe |
+| same: opening card complete on arrival | no | faces yes | faces yes; the 5.5 MB plate still painting in 3/3 |
+
+The returning, cold-cache, fast-Enter case is bandwidth-bound: at 100 Mbit/s
+the opening card is 11 MB and the title's music and SFX sprite (3.8 MB) load
+alongside it, so the plate lands at about 2.2 s after load. With the 1.2 s
+ceiling tried first it made it in 1 of 3 runs and the board arrived at 1.7 s.
+
+### Battle entry: swirl start to the first live menu, Confirm presses, seed 1
+
+Probe: `tools/zz-pr0061r-probe.tmp.mjs` (the verifier's, scratch),
+production build served Pages-style, GPU, 1600x900.
+
+| chapter | 303d71ea (HEAD) cold / warm | repair cold / warm | art 4xx per entry, 303d71ea -> repair |
+|---|---|---|---|
+| I Seymour Flux (3 runs) | 3.97-4.89 / 3.47-3.79 s | 3.92-4.00 / 3.47-3.49 s | 0 -> 0 |
+| II Yunalesca | 2.04 / 1.91 s | 1.74 / 1.73 s | 0 -> 0 |
+| III Braska's Final Aeon | 2.20 / 3.09 s | 1.84 / 1.84 s | 0 -> 0 |
+| VIII Evrae | 2.29 / 2.22 s | 1.72 / 1.74 s | 5 -> 0 |
+| IV Bahamut | 3.36 / 3.14 s | 3.07 / 2.97 s | 3 -> 0 |
+| V Vegnagun (3 runs) | 2.48-2.96 / 2.44-2.93 s | 2.45-2.59 / 2.42-2.49 s | 3 -> 0 |
+| VI Leblanc (3 runs) | 4.42-4.69 / 4.37-4.64 s | 4.41-4.49 / 4.41-4.46 s | 3 -> 0 |
+
+Without presses (repair, warm, one run): 9.1, 6.8, 6.9, 6.8, 8.1, 9.6, 9.6 s
+in the order above.
+
+On HEAD, Chapter V warm is 2.4-2.9 s where the verifier measured 3.19 s on
+303d71ea, and Chapter I 3.5 s where it measured 4.1 s; the 13 commits after
+303d71ea or run variance account for that, and this pass does not claim it.
+
+Against the acceptance check (with presses, at or below an intended length
+of about 4 s): met warm in six of seven chapters; Chapter I cold sits at
+3.9-4.0 s; **Chapter VI is 4.4-4.5 s cold and warm and does not meet it.** The
+remainder there is Leblanc's opening enemy turns, not loading. No chapter's
+intended length has been recorded by Bailey, and without presses every
+chapter is still 6.8-9.6 s because of the approved card and sweep. PR-0061 is
+therefore **not fixed**; its loading share is.

@@ -23,6 +23,7 @@
 
 import type { Chapter } from '../../data/encounters.ts';
 import { artIdFor, backdropUrl, portraitUrl, resolveArt } from '../../engine/BattlePresenterArt.ts';
+import { manifestKnowsAsset } from '../../engine/ArtManifest.ts';
 import { prewarmPainted } from '../../engine/PaintedArt.ts';
 import { warmImage } from '../imageWarm.ts';
 import { setupForChapter } from './BattleScreenSetup.ts';
@@ -106,7 +107,13 @@ export function preloadBattle(chapter: Chapter, seed = 1): Promise<PreloadReport
         const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
         // Idle first: it is what the card and the opening frame show.
         const poses = Object.entries(art.poses).sort(([a], [b]) => Number(b === 'idle') - Number(a === 'idle'));
-        const urls = [...new Set(poses.map(([, u]) => u))];
+        // Only what the manifest says is on disk: a figure with no painting
+        // (Cid on the airship, an FFX-2 dressphere with no portrait) is drawn
+        // by its stand-in, and asking for its files was a 404 each (round 11).
+        const urls: string[] = [];
+        for (const u of new Set(poses.map(([, p]) => p))) {
+          if ((await manifestKnowsAsset(u)) !== false) urls.push(u);
+        }
         // The downloads run ahead in parallel (into the HTTP cache only; the
         // cache below keeps the one image it needs); the decode-and-measure
         // stays one painting at a time.

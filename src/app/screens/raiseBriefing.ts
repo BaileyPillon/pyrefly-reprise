@@ -14,8 +14,7 @@
 import type { App } from '../App.ts';
 import { Briefing, type BriefingOptions, type BriefingOutcome } from '../../ui/coach/Briefing.ts';
 import { shouldShow } from '../../ui/coach/coachState.ts';
-import { untilWarm } from '../imageWarm.ts';
-import { briefingArtUrls, FRONTEND_WARM_CEILING_MS } from './frontendWarm.ts';
+import { briefingWhenWarm } from './frontendWarm.ts';
 
 /**
  * Build a briefing bound to this `App`.
@@ -54,6 +53,11 @@ function canDriveInput(app: App): boolean {
   );
 }
 
+/** Will {@link runBriefingIfDue} show the briefing? The title asks, to know what to warm and wait for. */
+export function briefingDue(app: App): boolean {
+  return canDriveInput(app) && shouldShow('briefing');
+}
+
 /**
  * Play the briefing **only if this player has never seen it** and coaching is
  * allowed at all. Resolves to `null` when it was not due.
@@ -64,9 +68,9 @@ function canDriveInput(app: App): boolean {
  * meets is the board, exactly as before.
  */
 export async function runBriefingIfDue(app: App): Promise<BriefingOutcome | null> {
-  if (!canDriveInput(app)) return null;
-  if (!shouldShow('briefing')) return null;
-  // Auron and his backdrop decoded before the briefing goes up (PR-0065), with a ceiling.
-  await untilWarm(briefingArtUrls(), FRONTEND_WARM_CEILING_MS);
+  if (!briefingDue(app)) return null;
+  // Auron and his backdrop decoded before the briefing goes up (PR-0065), with
+  // what is left of the ceiling the title already waited on before its wipe.
+  await briefingWhenWarm();
   return await makeBriefing(app).show();
 }

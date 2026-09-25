@@ -14,8 +14,15 @@
  * {@link untilWarm} is the gate a screen waits on before its first paint,
  * always with a ceiling: a slow network may delay a screen, never hold it.
  *
+ * A URL the art manifest says is not on disk is never requested (round 11:
+ * the battle preload asked for portraits and poses nobody painted, and every
+ * one of them was a console 404 that CHK-016 and CHK-017 forbid). With no
+ * manifest to read, the request goes ahead as before.
+ *
  * DOM only (no three.js). Game case: both, shared front-end loading.
  */
+
+import { manifestKnowsAsset } from '../engine/ArtManifest.ts';
 
 /** Settled answer per URL: true once decoded, false if it failed. */
 const warmed = new Map<string, Promise<boolean>>();
@@ -49,6 +56,8 @@ export function warmImage(url: string): Promise<boolean> {
   // nothing to warm, and waiting on an `onload` that never fires would stall.
   if (typeof Image === 'undefined' || typeof Image.prototype.decode !== 'function') return Promise.resolve(false);
   const p = (async (): Promise<boolean> => {
+    // Absent by the manifest: nothing to fetch, and no 404 in the console.
+    if ((await manifestKnowsAsset(url)) === false) return false;
     await slot();
     try {
       const img = new Image();

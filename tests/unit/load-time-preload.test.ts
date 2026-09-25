@@ -90,7 +90,7 @@ describe('front-end warm lists', () => {
     expect(urls.some((u) => u.endsWith('art/backdrops/dreams-end.png'))).toBe(true);
   });
 
-  it('the board: the first card complete, and every card\'s party faces', () => {
+  it('the board: the opening card is waited on; every other card\'s faces come first after it', () => {
     const { first, rest } = boardArtUrls(save as never);
     const all = new Set([...first, ...rest]);
     expect(first.length).toBeGreaterThan(0);
@@ -99,11 +99,21 @@ describe('front-end warm lists', () => {
     const tiles = buildChapterTiles(save as never);
     const opening = tiles.find((t) => t.playable)!;
     expect(first).toContain(first.find((u) => u.endsWith(`art/backdrops/${opening.sceneKey}.png`)));
+    for (const m of asideHtml(opening, null).matchAll(/\bsrc="([^"]+)"/g)) expect(first).toContain(m[1]!);
+    // No other card's plate is waited on (round 11 verification: 21 MB held a cold board).
+    for (const t of tiles) {
+      if (t !== opening && t.sceneKey && t.sceneKey !== opening.sceneKey) {
+        expect(first.some((u) => u.endsWith(`art/backdrops/${t.sceneKey}.png`))).toBe(false);
+      }
+    }
+    // Every face is warmed, and the other cards' faces lead the rest, ahead of any backdrop.
+    const firstBackdrop = rest.findIndex((u) => u.includes('art/backdrops/'));
     let faces = 0;
     for (const t of tiles) {
       for (const m of asideHtml(t, null).matchAll(/\bsrc="([^"]+)"/g)) {
         faces++;
-        expect(first).toContain(m[1]!);
+        expect(all.has(m[1]!)).toBe(true);
+        if (!first.includes(m[1]!)) expect(rest.indexOf(m[1]!)).toBeLessThan(firstBackdrop);
       }
     }
     // Chapter VIII's Wakka and Rikku are among them (round 11's grey busts).

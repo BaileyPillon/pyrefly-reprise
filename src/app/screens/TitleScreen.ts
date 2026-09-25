@@ -10,7 +10,8 @@ import { ParallaxField, normalisePointer } from './frontend/parallax.ts';
 import { MoteField } from './frontend/motes.ts';
 import { titleMarkup, upgradeTitlePlanes } from './frontend/titleMarkup.ts';
 import { readSetting } from '../SaveData.ts';
-import { warmFrontEnd } from './frontendWarm.ts';
+import { holdForNextScreen, warmFrontEnd } from './frontendWarm.ts';
+import { briefingDue } from './raiseBriefing.ts';
 
 /**
  * The title card, in the approved "Ink & Gold" presentation and now moving.
@@ -92,7 +93,7 @@ export class TitleScreen extends Screen {
     // the 1x plate is already decoding and the screen is correct without it.
     void upgradeTitlePlanes(this.root);
     // The briefing's and the board's paintings, while the title waits for a key (PR-0065).
-    warmFrontEnd(this.app);
+    warmFrontEnd(this.app, briefingDue(this.app));
 
     const motes = this.root.querySelector('.fe-title__motes');
     if (motes instanceof HTMLElement) {
@@ -189,6 +190,8 @@ export class TitleScreen extends Screen {
     if (this.advancing) return;
     this.advancing = true;
     audio.playSfx('battle-start');
+    // PR-0065: the next screen's paintings first, so the wipe clears onto them (ceilinged).
+    await holdForNextScreen(this.app, briefingDue(this.app));
     await playWipe(this.app.uiRoot, {
       onCover: () => {
         void this.app.startFlow();
