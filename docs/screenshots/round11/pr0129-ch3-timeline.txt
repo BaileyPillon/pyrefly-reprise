@@ -1,0 +1,45 @@
+503 title link None cur None fading [] trig None
+1009 chapter-select link None cur title@0.00 fading [] trig None
+1508 chapter-select link None cur chapter-select@0.00 fading ['title@0.00'] trig None
+2009 party-prep link None cur chapter-select@0.02 fading ['title@0.00'] trig None
+3001 party-prep link None cur chapter-select@1.00 fading [] trig None
+4010 cutscene link None cur chapter-select@1.00 fading [] trig None
+4502 cutscene link None cur scene-dreams-end@0.00 fading ['chapter-select@0.23'] trig None
+6010 cutscene link None cur scene-dreams-end@1.00 fading [] trig None
+9080 battle link 0 cur boss-jecht@1.00 fading ['scene-dreams-end@1.00'] trig None
+10501 battle link 0 cur boss-jecht@1.00 fading [] trig None
+12513 battle link 1 cur boss-jecht@1.00 fading [] trig None
+69001 battle link 1 cur boss-jecht@1.00 fading [] trig bfa-low
+77002 battle link 1 cur boss-jecht@1.00 fading [] trig bfa-sword
+114006 battle link 1 cur boss-jecht@1.00 fading [] trig bfa-talk
+148005 battle link 1 cur boss-jecht@1.00 fading [] trig jecht-falls
+149520 battle link 1 cur None fading ['boss-jecht@0.09'] trig jecht-falls
+150505 battle link 1 cur None fading [] trig jecht-falls
+171003 battle link 2 cur None fading [] trig jecht-falls
+172504 battle link 2 cur None fading [] trig valefor-enters
+197002 battle link 2 cur None fading [] trig valefor-falls
+197505 battle link 2 cur boss-yu-yevon@0.00 fading [] trig valefor-falls
+203047 battle link 3 cur boss-yu-yevon@1.00 fading [] trig valefor-falls
+204518 battle link 3 cur boss-yu-yevon@1.00 fading [] trig ifrit-enters
+210501 battle link 3 cur boss-yu-yevon@1.00 fading [] trig ifrit-falls
+215502 battle link 4 cur boss-yu-yevon@1.00 fading [] trig ifrit-falls
+217003 battle link 4 cur boss-yu-yevon@1.00 fading [] trig ixion-enters
+244503 battle link 4 cur boss-yu-yevon@1.00 fading [] trig ixion-falls
+249359 battle link 5 cur boss-yu-yevon@1.00 fading [] trig ixion-falls
+251002 battle link 5 cur boss-yu-yevon@1.00 fading [] trig shiva-enters
+257012 battle link 5 cur boss-yu-yevon@1.00 fading [] trig shiva-falls
+260501 battle link 6 cur boss-yu-yevon@1.00 fading [] trig shiva-falls
+262004 battle link 6 cur boss-yu-yevon@1.00 fading [] trig bahamut-enters
+301500 battle link 6 cur boss-yu-yevon@1.00 fading [] trig bahamut-falls
+309058 battle link 7 cur boss-yu-yevon@1.00 fading [] trig bahamut-falls
+310507 battle link 7 cur boss-yu-yevon@1.00 fading [] trig yu-yevon-arrives
+324508 cutscene link None cur None fading ['boss-yu-yevon@0.19'] trig yu-yevon-arrives
+325003 results link None cur victory-ffx@0.00 fading ['boss-yu-yevon@0.00'] trig yu-yevon-arrives
+325514 results link None cur victory-ffx@1.00 fading [] trig yu-yevon-arrives
+STARTS
+title [(1009, None, None)]
+chapter-select [(1508, None, None)]
+scene-dreams-end [(4502, None, None)]
+boss-jecht [(9080, 0, None)]
+boss-yu-yevon [(197505, 2, 'valefor-falls')]
+victory-ffx [(325003, None, 'yu-yevon-arrives')]

@@ -343,9 +343,9 @@ function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): E
 }
 
 /**
- * One possessed-aeon battle: the given aeon plus the two Yu Pagodas
- * (`power-wave-aeon` variant, Agility 30). `id`/`nextGroupId` are set by
- * {@link buildPossessedAeonChain}.
+ * One possessed-aeon battle: the aeon plus the two Yu Pagodas (`power-wave-aeon`, Agility 30); ids set by
+ * {@link buildPossessedAeonChain}. Music (PR-0129): the chapter's `phase2`, `boss-yu-yevon`, which 'valefor-enters'
+ * starts; Valefor's link starts nothing, so that scene alone owns it (§5.3's own track has no cue here).
  */
 function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: string): EnemyGroupDef {
   return {
@@ -362,7 +362,7 @@ function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: strin
       yuPagoda('yu-pagoda-left', 1, 'aeon-or-yu-yevon'),
       yuPagoda('yu-pagoda-right', 2, 'aeon-or-yu-yevon'),
     ],
-    musicCues: [{ at: 'start', track: 'boss-jecht', fadeMs: 800 }],
+    musicCues: [{ at: 'start', track: aeonId === 'possessed-valefor' ? null : 'boss-yu-yevon', fadeMs: 800 }],
   };
 }
 

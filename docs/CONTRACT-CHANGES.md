@@ -6,6 +6,21 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-24 — PR-0129: `MusicPhaseCue.track` widens to `MusicKey | null`
+
+**Both** [AGENTS.md hard rule 14]: shared plumbing, used once per game (Chapter 3, FFX;
+Chapter 5, FFX-2). Critic round 11 PR-0129 (major, audio).
+
+**Additive** in `src/battle/common/types.ts`: `MusicPhaseCue.track` accepts `null`, meaning
+"the chain starts nothing at this link; whatever is playing (or the silence) carries,
+because the link's entrance scene scores it". The only reader is `cueForGroup`
+(`src/app/screens/BattleEncounterChain.ts`), which returns no track for it. Every existing
+cue is read exactly as before (a formation with no cue still falls back to the chapter's
+`battle` / `phase2`). Set on possessed Valefor's formation (its scene 'valefor-enters'
+starts `boss-yu-yevon`) and on Shuyin's (its scene 'shuyin-appears' starts `boss-shuyin`).
+The later possessed aeons now name `boss-yu-yevon` (the chapter's `phase2`) instead of
+`boss-jecht`. The line was edited in place: `types.ts` did not grow.
+
 ## 2026-09-24 — Chapter XI, Fallen Aeons: `ChapterId` gains `'ffx2-fallen-aeons'`, `Chapter.number` widens to 11, `EnemyGroupDef.restoresPartyOnEntry`
 
 **FFX-2 only** [AGENTS.md hard rule 14] (research `ffx2-fallen-aeons.md` §0: ATB,

@@ -76,7 +76,9 @@ export interface ChainStagePort {
  * `braskas-final-aeon.ts:247`/`481`, `bahamut.ts:114`, the four Vegnagun parts
  * and `shuyin.ts:90`), and it is per-formation, so a chapter's later links
  * switch cue on their own: Chapter 3 goes `boss-jecht` → `boss-yu-yevon` and
- * Chapter 5 goes `boss-vegnagun` → `boss-shuyin` without a rule here.
+ * Chapter 5 goes `boss-vegnagun` → `boss-shuyin` without a rule here. A cue of
+ * `track: null` marks a link whose entrance scene scores it (possessed Valefor's
+ * 'valefor-enters', Shuyin's 'shuyin-appears'): the chain starts nothing there.
  *
  * `phase2` is the chapter-level fallback for a chained formation that declares
  * nothing, and `battle` is the fallback for the first one. Both are per-chapter
@@ -91,6 +93,12 @@ export function cueForGroup(
 ): { track: MusicKey | undefined; fadeMs: number } {
   const cue = group?.musicCues?.find((c) => c.at === 'start') ?? group?.musicCues?.[0];
   const fallback = link === 'first' ? chapter.music.battle : (chapter.music.phase2 ?? chapter.music.battle);
+  // `track: null` (PR-0129): the link's entrance scene owns the music, so the
+  // chain starts nothing and whatever is playing (or the silence) carries into
+  // it. A chain cue here used to start the theme a few seconds before the scene
+  // faded it to silence and started it again (Chapter 3's 'valefor-enters',
+  // Chapter 5's 'shuyin-appears').
+  if (cue && cue.track === null) return { track: undefined, fadeMs: cue.fadeMs ?? 1200 };
   return { track: cue?.track ?? fallback, fadeMs: cue?.fadeMs ?? (link === 'first' ? 1200 : 1200) };
 }
 

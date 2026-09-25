@@ -59,12 +59,12 @@ describe('Vegnagun -> Shuyin chain', () => {
     expect(bahamut!.nextGroupId).toBeUndefined();
   });
 
-  it('every Vegnagun/Shuyin group carries the Vegnagun boss-vegnagun or boss-shuyin music cue', () => {
+  it('every Vegnagun group carries boss-vegnagun; Shuyin carries null, its entrance scene starts boss-shuyin (PR-0129)', () => {
     for (const id of VEGNAGUN_CHAIN_ORDER) {
       const group = ENEMY_GROUPS_BY_ID[id]!;
       const startCue = group.musicCues?.find((c) => c.at === 'start');
       expect(startCue, `${id} start music cue`).toBeDefined();
-      expect(['boss-vegnagun', 'boss-shuyin']).toContain(startCue!.track);
+      expect(startCue!.track).toBe(id === 'shuyin' ? null : 'boss-vegnagun');
     }
   });
 });

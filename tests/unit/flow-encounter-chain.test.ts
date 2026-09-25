@@ -183,13 +183,17 @@ describe('each boss fight is scored with its own cue — critic round 02 #02', (
     expect(opening).toBe(cueForGroup(chapter, chapter.enemyGroupRef, 'first').track);
   });
 
-  it('gives Chapter 3 Jecht then Yu Yevon, and Chapter 5 Vegnagun then Shuyin', async () => {
+  it('gives Chapter 3 Jecht then Yu Yevon, and Chapter 5 Vegnagun (Shuyin belongs to its entrance scene, PR-0129)', async () => {
+    // No scripts run in this harness: the chain's own cues only. Possessed
+    // Valefor's and Shuyin's links start nothing (`track: null`); their entrance
+    // scenes start boss-yu-yevon and boss-shuyin (audio-chain-entrance-owner.test.ts).
     const ch3 = await playChapter(CHAPTERS[2]!, 'skip');
     const ch5 = await playChapter(CHAPTERS[4]!, 'skip');
     expect(ch3.music[0]).toBe('boss-jecht');
     expect(ch3.music).toContain('boss-yu-yevon');
+    expect(ch3.music.filter((cue) => cue === 'boss-jecht')).toHaveLength(1);
     expect(ch5.music[0]).toBe('boss-vegnagun');
-    expect(ch5.music).toContain('boss-shuyin');
+    expect(ch5.music).not.toContain('boss-shuyin');
   });
 
   it('never plays an FFX-2 cue in an FFX chapter, or an FFX cue in an FFX-2 one', async () => {

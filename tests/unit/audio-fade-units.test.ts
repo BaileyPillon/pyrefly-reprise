@@ -231,7 +231,7 @@ describe('BattleEncounterChain: cueForGroup fadeMs (authored ms) reaches playMus
     expect(audioPort.fades[0]).toBeLessThan(5);
   });
 
-  it('chapter 5: when Vegnagun chains to Shuyin, runEncounterChain plays boss-shuyin with its authored 600 ms as 0.6 s', async () => {
+  it('chapter 5: each chained Vegnagun link plays boss-vegnagun with its authored 600 ms as 0.6 s; Shuyin starts nothing (PR-0129)', async () => {
     // The real chapter-5 chain from its first formation, through the real
     // `runEncounterChain` link loop and the real engine re-init per link. Only
     // the fight itself is stubbed (every link is won at once), because what is
@@ -266,9 +266,10 @@ describe('BattleEncounterChain: cueForGroup fadeMs (authored ms) reaches playMus
     });
 
     expect(staged, 'the chain must reach Shuyin').toContain('shuyin');
-    const at = audioPort.music.indexOf('boss-shuyin');
-    expect(at, `cues played: ${audioPort.music.join(', ')}`).toBeGreaterThanOrEqual(0);
-    expect(audioPort.fades[at]).toBeCloseTo(0.6, 6); // not 600 (seconds)
+    // Index 0 is the opening cue; then leg, body and head. Shuyin's link has
+    // `track: null`: 'shuyin-appears' starts boss-shuyin itself (PR-0129).
+    expect(audioPort.music.slice(1), `cues played: ${audioPort.music.join(', ')}`).toEqual(['boss-vegnagun', 'boss-vegnagun', 'boss-vegnagun']);
+    for (const fade of audioPort.fades.slice(1)) expect(fade).toBeCloseTo(0.6, 6); // not 600 (seconds)
     expect(result.outcome.kind).toBe('victory');
   });
 });

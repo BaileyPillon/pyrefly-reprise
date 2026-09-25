@@ -88,7 +88,11 @@ export const shuyinGroup: EnemyGroupDef = {
       thinkingPeriod: 0,
     },
   ],
-  musicCues: [{ at: 'start', track: 'boss-shuyin', fadeMs: 600 }],
+  // PR-0129: the chain starts nothing at Shuyin's seam. 'shuyin-appears' (the
+  // entrance scene, fired after the first action) fades Vegnagun's theme out and
+  // closes on music('boss-shuyin'), the chapter's `phase2`; a chain cue here
+  // started the theme a few seconds early, then the scene silenced and restarted it.
+  musicCues: [{ at: 'start', track: null, fadeMs: 600 }],
 };
 
 export default shuyinGroup;

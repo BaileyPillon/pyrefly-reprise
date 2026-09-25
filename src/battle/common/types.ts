@@ -2517,7 +2517,7 @@ export interface EnemyDef {
 export interface MusicPhaseCue {
   /** Which phase starts the cue: `'start'`, `'form:1'`, `'hp-below:0.5'`, `'part-destroyed:bulwark-r'`. */
   at: string;
-  track: MusicKey;
+  track: MusicKey | null; // null: start nothing, what plays carries; an entrance scene owns it (PR-0129)
   /** Crossfade in milliseconds, 0–4 000. */
   fadeMs?: number;
 }

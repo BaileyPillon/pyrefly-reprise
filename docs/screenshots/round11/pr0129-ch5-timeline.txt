@@ -1,0 +1,42 @@
+507 title link None cur None fading [] trig None
+1003 chapter-select link None cur title@0.00 fading [] trig None
+1501 chapter-select link None cur chapter-select@0.00 fading ['title@0.00'] trig None
+2501 party-prep link None cur chapter-select@1.00 fading [] trig None
+4507 cutscene link None cur chapter-select@1.00 fading [] trig None
+5048 cutscene link None cur scene-farplane@0.00 fading ['chapter-select@0.03'] trig None
+6014 cutscene link None cur scene-farplane@1.00 fading [] trig None
+9322 battle link 0 cur boss-vegnagun@1.00 fading ['scene-farplane@0.90'] trig None
+10510 battle link 0 cur boss-vegnagun@1.00 fading [] trig None
+12507 battle link 1 cur boss-vegnagun@1.00 fading [] trig None
+16041 battle link 1 cur boss-vegnagun@1.00 fading [] trig farplane-voice-braska
+136006 battle link 1 cur boss-vegnagun@1.00 fading [] trig vegnagun-tail-quarter
+174004 battle link 1 cur boss-vegnagun@1.00 fading [] trig tail-down
+189007 battle link 2 cur boss-vegnagun@1.00 fading [] trig tail-down
+225007 battle link 2 cur boss-vegnagun@1.00 fading [] trig farplane-voice
+277508 battle link 2 cur boss-vegnagun@1.00 fading [] trig leg-down
+297011 battle link 3 cur boss-vegnagun@1.00 fading [] trig leg-down
+483502 battle link 3 cur boss-vegnagun@1.00 fading [] trig body-down
+502295 battle link 4 cur boss-vegnagun@1.00 fading [] trig body-down
+517011 battle link 4 cur boss-vegnagun@1.00 fading [] trig shuyin-line-1
+586010 battle link 4 cur boss-vegnagun@1.00 fading [] trig shuyin-line-2
+635006 battle link 4 cur boss-vegnagun@1.00 fading [] trig jecht-no-overtime
+1039001 battle link 4 cur boss-vegnagun@1.00 fading [] trig head-down
+1048651 battle link 5 cur boss-vegnagun@1.00 fading [] trig head-down
+1052514 battle link 5 cur boss-vegnagun@1.00 fading [] trig shuyin-appears
+1054007 battle link 5 cur None fading ['boss-vegnagun@0.09'] trig shuyin-appears
+1055007 battle link 5 cur None fading [] trig shuyin-appears
+1078503 battle link 5 cur boss-shuyin@0.00 fading [] trig shuyin-appears
+1207504 battle link 5 cur boss-shuyin@1.00 fading [] trig shuyin-taunt
+1257501 battle link 5 cur boss-shuyin@1.00 fading [] trig shuyin-half
+1321000 battle link 5 cur boss-shuyin@1.00 fading [] trig shuyin-low
+1356509 cutscene link None cur None fading ['boss-shuyin@0.00'] trig shuyin-low
+1357006 cutscene link None cur None fading [] trig shuyin-low
+1357502 results link None cur None fading [] trig shuyin-low
+1358009 results link None cur victory-ffx2@0.00 fading [] trig shuyin-low
+STARTS
+title [(1003, None, None)]
+chapter-select [(1501, None, None)]
+scene-farplane [(5048, None, None)]
+boss-vegnagun [(9322, 0, None)]
+boss-shuyin [(1078503, 5, 'shuyin-appears')]
+victory-ffx2 [(1358009, None, 'shuyin-low')]
