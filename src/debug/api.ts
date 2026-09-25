@@ -1,4 +1,5 @@
 import type { App } from '../app/App.ts';
+import { pinRunSeed } from '../app/runSeed.ts';
 import { audio } from '../audio/index.ts';
 import type { BattleEvent, BattleState, Command } from '../battle/common/types.ts';
 import { CHAPTER_IDS, type ChapterId } from '../data/encounters.ts';
@@ -79,7 +80,7 @@ export interface PyreflyDebugApi {
   trigger(name: string): boolean;
   /** Everything a test might want to assert on, including the battle event log. */
   snapshotState(): Record<string, unknown>;
-  /** Seed the battle RNG. Applies to the next battle started. */
+  /** Seed the next battle: `gotoChapter`'s default, and pins runs started by real keys (PR-0008). */
   setSeed(n: number): void;
   /** The seed currently set. */
   seed(): number;
@@ -366,9 +367,8 @@ export function installDebugApi(app: App): PyreflyDebugApi {
     trigger: (name: string) => app.current?.trigger(name) ?? false,
     snapshotState: () => ({ version: VERSION, seed: currentSeed, ...app.snapshot() }),
     setSeed: (n: number) => {
-      // The engines are seeded per battle through `BattleSetup.seed`, so this
-      // is what the next `gotoChapter` / BattleScreen will be built with.
       currentSeed = n | 0;
+      pinRunSeed(currentSeed); // without it a run from real keys draws a fresh first seed
     },
     seed: () => currentSeed,
     waitReady: () => readyPromise,

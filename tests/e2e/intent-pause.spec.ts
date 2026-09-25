@@ -184,7 +184,7 @@ const screenOf = (page: Page): Promise<string> => page.evaluate(() => window.__p
 async function enterChapter(page: Page, chapterId: string): Promise<void> {
   await page.goto(url());
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 45_000 });
-
+  await page.evaluate(() => window.__pyrefly!.setSeed(1)); // real keys draw a fresh first seed (PR-0008)
   await page.keyboard.press('Enter');
   const atChapterSelect = await waitUntil(page, async () => (await screenOf(page)) === 'chapter-select', {
     timeoutMs: 60_000,

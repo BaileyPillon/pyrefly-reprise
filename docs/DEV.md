@@ -230,7 +230,7 @@ frames have rendered.
 | `goto(name)` | replace the active screen; resolves `false` if unregistered |
 | `frame()` / `frames(n)` | resolve after 1 / n rendered frames |
 | `snapshotState()` | screen name, frame count, per-screen snapshot, seed, flow step, and — in a battle — the **full ordered event log** |
-| `setSeed(n)` / `seed()` | RNG seed for the **next** battle started (engines are seeded per battle via `BattleSetup.seed`) |
+| `setSeed(n)` / `seed()` | RNG seed for the **next** battle started (engines are seeded per battle via `BattleSetup.seed`): `gotoChapter`'s default, and it also **pins every run started from real keys** to `n`. Without a `setSeed`, a run the player starts draws a fresh first seed (PR-0008, both games; `src/app/runSeed.ts`); a retry still adds 1000 per attempt. A capture or spec that walks in from the title and needs a fixed fight calls `setSeed(1)` after `waitReady()`, before its first key. `battleState().seed` reads the seed a live battle is on |
 | `waitReady()` | resolves after the first rendered frame |
 | `audioDebug()` | mixer state, tracks and all 28 SFX with cached flags |
 | `playMusic(name, fade?)` | `'title' \| 'battle-ffx' \| 'boss-dread'` |
