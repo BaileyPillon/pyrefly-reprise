@@ -21,15 +21,15 @@ import { resolveSensor, sensorKind } from './sensor.ts';
 import { applyStatus, removeStatus, statusChanceLinear } from './statuses.ts';
 import { hpCostFor, resolveTargets } from './targeting.ts';
 import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
-import { applyMpFraction, resolveSetTo, setsPoolsTo } from './aeon-effects.ts';
+import { applyMpFraction, mpOnlyTaken, resolveSetTo, setsPoolsTo } from './aeon-effects.ts';
 
 export interface ResolveContext {
   units: Ffx2Unit[];
   abilities: AbilityRegistry;
   rng: Rng;
   emit: Emit;
-  /** Per-girl Break Damage Limit, from an accessory or a Garment Grid gate. */
-  breaksDamageLimit(unit: Ffx2Unit): boolean;
+  breaksDamageLimit(unit: Ffx2Unit): boolean; // per girl: an accessory or a Garment Grid gate
+  timedAilmentDefaults?: boolean; // `EnemyGroupDef.timedAilmentDefaults` (`statuses.ts`, Chapter XIII)
 }
 
 /**
@@ -143,9 +143,7 @@ function targetForHit(
  */
 function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, ability: AbilityDef): void {
   const rollOneOf = ability.extra?.['statusRollOneOf'] === true && ability.statusEffects.length > 1;
-  const applications = rollOneOf
-    ? [ctx.rng.pick([...ability.statusEffects])]
-    : ability.statusEffects;
+  const applications = rollOneOf ? [ctx.rng.pick([...ability.statusEffects])] : ability.statusEffects;
 
   for (const application of applications) {
     const resist = target.immunities[application.status] ?? 0;
@@ -155,7 +153,7 @@ function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, abil
         ? 100
         : statusChanceLinear(user.level ?? 1, application.chance, target.level ?? 1, resist);
     if (chance < 100 && ctx.rng.int(0, 99) >= chance) continue;
-    const instance = applyStatus(target, application, user.id, ability.id);
+    const instance = applyStatus(target, application, user.id, ability.id, ctx.timedAilmentDefaults === true);
     if (!instance) continue;
     ctx.emit({
       type: 'status-add',
@@ -179,7 +177,8 @@ function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, abil
   }
 
   if (ability.flags.includes('removes-statuses')) {
-    for (const id of ability.removesStatuses as StatusId[]) {
+    // `EnemyDef.autoStatuses` (Trema's Spellspring) stay: "auto-status" read as undispellable, `[estimate]`.
+    for (const id of (ability.removesStatuses as StatusId[]).filter((s) => !target.autoStatuses?.includes(s))) {
       if (removeStatus(target, id)) {
         ctx.emit({ type: 'status-remove', targetId: target.id, status: id, reason: 'dispelled' });
       }
@@ -346,7 +345,7 @@ export function resolveAbility(
 
       const mpOnly = ability.extra?.['mpOnly'] === true;
       if (mpOnly) {
-        const drained = Math.min(target.mp, Math.abs(result.amount));
+        const drained = Math.min(target.mp, mpOnlyTaken(ability, target, result.amount)); // Waning Moon: `aeon-effects.ts`
         target.mp -= drained;
         ctx.emit({ type: 'mp-damage', targetId: target.id, sourceId: user.id, amount: drained });
         if (ability.flags.includes('drains-mp')) {
@@ -386,7 +385,7 @@ export function resolveAbility(
         }
       }
 
-      applyMpFraction(ctx, user, target, ability); // Heavenly Strike, Absorb (`aeon-effects.ts`)
+      applyMpFraction(ctx, user, target, ability, result.amount); // Heavenly Strike, Absorb, Soul Spring (`aeon-effects.ts`)
       applyRiders(ctx, user, target, ability);
       index += 1;
     }

@@ -229,7 +229,10 @@ export class ZanmatoGauge {
   private place(): void {
     if (!this.stage || !this.host) return;
     const r = this.host.getBoundingClientRect();
-    const mode = zanmatoGaugeMode(r.width || window.innerWidth, r.height || window.innerHeight);
+    // The upright-phone battle HUD (`ui/common/phoneBattle.ts`) has no letterbox
+    // band at all, so its gauge is always the phone one, at 360x780 too.
+    const phoneHud = document.documentElement.dataset['phoneBattle'] === 'ffx';
+    const mode = phoneHud ? 'phone' : zanmatoGaugeMode(r.width || window.innerWidth, r.height || window.innerHeight);
     const parent = mode === 'phone' ? this.host : this.stage;
     if (this.el.parentElement !== parent) parent.append(this.el);
     this.mode = mode;

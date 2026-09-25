@@ -1,0 +1,14 @@
+{
+ "img": "renders/c1-560302.png",
+ "mask": "maskC2.png",
+ "denoise": 0.9,
+ "seed": 560312,
+ "positive": "1boy, seymour guado, final fantasy x, safe, solo, male focus, pale light blue hair, very long hair flowing to the right, dark navy blue robe shoulder, macalania temple antechamber interior, glowing blue ice pillars, soft bokeh background, depth of field, blurry background, official art, cel shading, soft shading, vibrant colors, rim lighting, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, text, error, worst quality, low quality, jpeg artifacts, signature, watermark, multiple boys, extra person, claw, talon, gold ornament, weapon, sword, staff, hand, fingers, straight edge, rooftop, lantern",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 30,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "seconds": 25.395
+}

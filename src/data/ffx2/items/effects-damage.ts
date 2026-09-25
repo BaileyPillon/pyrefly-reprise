@@ -108,6 +108,26 @@ export const damageEffectAbilities: AbilityDef[] = [
     messageTemplate: '{user} throws a Shining Gem',
   },
   {
+    id: 'x2-item-supreme-gem',
+    name: 'Supreme Gem',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    // No per-item charge time is published; this is the Shining Gem row's (thrown gems share it).
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: 70,
+    power: 50, // 2,500 damage to all [ffx2-combat-core §2.9.3]; 2343-2646 after the randomiser [§5.5]
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'all-enemies',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['never-break-damage-limit'],
+    messageTemplate: '{user} throws a Supreme Gem',
+  },
+  {
     id: 'x2-item-dark-matter',
     name: 'Dark Matter',
     game: 'ffx2',
@@ -144,6 +164,28 @@ export const damageEffectAbilities: AbilityDef[] = [
     removesStatuses: [],
     flags: ['drains', 'never-break-damage-limit'],
     messageTemplate: '{user} uses a Stamina Spring',
+  },
+  {
+    id: 'x2-item-l-bomb',
+    name: 'L-Bomb',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    // No per-item charge time is published; this is the Grenade row's, which every
+    // thrown item in this file shares.
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: 70,
+    power: 9, // 450 damage, all [§2.9.3]; 421-476 after the randomiser [§5.5]
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'all-enemies',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    // Same crit reading as Grenade: §5.5's "always critical" rests on Split Infinity alone [§8.1].
+    flags: ['never-break-damage-limit', 'crit-eligible'],
+    messageTemplate: '{user} throws an L-Bomb',
   },
 ];
 

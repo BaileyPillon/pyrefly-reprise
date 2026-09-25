@@ -48,8 +48,29 @@ const PORTRAIT_ALIAS: Readonly<Record<string, string>> = {
   'seymour-flux': 'seymour',
 };
 
-/** The `portraits/<id>.png` key to try first for a combatant id, following {@link PORTRAIT_ALIAS}. */
-export function resolvePortraitKey(id: string): string {
+/**
+ * Enemy ids whose `portraits/<id>.png` is **somebody else's face**, so the
+ * enemy tile must skip it and take the crop of its own idle painting.
+ *
+ * `yojimbo`: Chapter IX's boss (Lady Ginnem's Yojimbo, `enemies/yojimbo.ts`)
+ * shares the plain id with Yuna's own aeon, and `portraits/yojimbo.png` is the
+ * aeon's navy-coat painting, which Bailey did not approve for this boss
+ * (D-054: "the existing navy painting is not approved and is not used"). The
+ * boss's tile is cut from his LOCKED painting,
+ * `characters/yojimbo-cavern/idle.png` (his `spriteKey`), the path every boss
+ * without a speaker portrait takes. Yuna's aeon is a party-side row that
+ * carries `portraitKey: 'yojimbo'` itself and never comes through here, so it
+ * is unchanged. FFX only (Chapter IX).
+ */
+const ENEMY_WITHOUT_PORTRAIT: ReadonlySet<string> = new Set(['yojimbo']);
+
+/**
+ * The `portraits/<id>.png` key to try first for an enemy combatant id,
+ * following {@link PORTRAIT_ALIAS}; `undefined` when that file is not this
+ * enemy's face ({@link ENEMY_WITHOUT_PORTRAIT}).
+ */
+export function resolvePortraitKey(id: string): string | undefined {
+  if (ENEMY_WITHOUT_PORTRAIT.has(id)) return undefined;
   return PORTRAIT_ALIAS[id] ?? id;
 }
 

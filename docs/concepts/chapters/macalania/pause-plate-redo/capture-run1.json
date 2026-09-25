@@ -1,0 +1,41 @@
+{
+ "url": "http://127.0.0.1:5640/",
+ "port": 5640,
+ "browser": "gpu",
+ "at": "2026-09-25T04:29:02.753Z",
+ "shots": {
+  "current": {
+   "errors": [],
+   "served": [],
+   "selectedTab": "Chapter"
+  },
+  "a": {
+   "errors": [],
+   "served": [
+    "a.json",
+    "a.png",
+    "a.2x.png"
+   ],
+   "selectedTab": "Chapter"
+  },
+  "b": {
+   "errors": [],
+   "served": [
+    "b.json",
+    "b.png",
+    "b.2x.png"
+   ],
+   "selectedTab": "Chapter"
+  },
+  "c": {
+   "errors": [],
+   "served": [
+    "c.json",
+    "c.png",
+    "c.2x.png"
+   ],
+   "selectedTab": "Chapter"
+  }
+ },
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}

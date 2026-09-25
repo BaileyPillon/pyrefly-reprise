@@ -8,7 +8,7 @@
   "waiting": [
     {
       "title": "Phone layout.",
-      "why": "At 390 × 844 every screen except pause is a letterboxed strip. It needs options before a build."
+      "why": "At 390 × 844 every screen except pause is a letterboxed strip. It needs options before a build. UPDATED 2026-09-25: the battle HUD's own options round is answered (option B, the compact rail; D-140, presentation group tile 'Battle HUD on a phone (both)'); the pause screen and the party-prep card are separately tracked tiles."
     },
     {
       "title": "Move advisor, enemy next-move panel and defeat screen.",
@@ -128,13 +128,53 @@
           "src": "docs/screenshots/mockups/A-ffx2-battle.jpg",
           "state": "approved",
           "note": "Pink replaces gold as the accent in the FFX-2 chapters.",
-          "build": "Chapter 4 (Bahamut), a party member's command menu open."
+          "build": "Chapter 4 (Bahamut), a party member's command menu open.",
+          "delivery": "implemented",
+          "deliveryNote": "Party-left, enemy-right stays as built (docs/target/decisions.json D-167, item 6 of docs/plans/decisions-2026-09-25.md); this mockup's Bahamut-left/party-right side was never something Bailey named, so the built side is recorded as an accepted adaptation rather than a target miss. research/ffx-vs-ffx2-presentation.md: FFX-2 has free battle positions, no source fixes a side.",
+          "reaction": {
+            "date": "2026-09-25",
+            "words": "all recommendations",
+            "how": "Bailey answered docs/plans/decisions-2026-09-25.md with 'all recommendations' (~11:00 EDT); item 6 recommended A, recording the built party-left side as an accepted adaptation rather than swapping sides.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "party-left layout the five FFX-2 chapters are already staged on"
+            ],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "that the mockup's Bahamut-left caption was never Bailey's own pick, so the built side needed a record rather than a swap"
+            ]
+          }
         },
         {
           "label": "Results",
           "src": "docs/screenshots/mockups/A-results.jpg",
           "state": "approved",
           "build": "The results screen after winning chapter 1."
+        },
+        {
+          "label": "Battle HUD on a phone (both)",
+          "src": "docs/concepts/layout/phone-battle-hud/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "both",
+          "gameNote": "Both: the phone battle HUD layout is shared presentation. FFX keeps the CTB rail with the target outlined in it; FFX-2 keeps Bahamut's next move / the ATB gauge reading on the chips, pink accent, chrome anchored to the other edge.",
+          "note": "docs/concepts/layout/phone-battle-hud/README.md: at 390x844 today's battle HUD is the desktop layout scaled down, unreadable (docs/concepts/chapters/macalania/e2e/size-390x844-03-first-menu.jpg). Three real-render options were measured for legibility (every text node 14px or larger): A bottom sheet, B compact rail, C landscape-only. docs/target/decisions.json D-140.",
+          "build": "Not yet built: src/ui/ffx and src/ui/ffx2 still ship the desktop layout scaled down at phone width.",
+          "reaction": {
+            "date": "2026-09-25",
+            "words": "I'll go with all your recommendations",
+            "how": "Bailey answered five option sheets sent together 2026-09-25 ~01:40 EDT, including the phone battle HUD sheet, taking the recommended option on each.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "option B, the compact rail (field 520px, a 2x3 grid of 56px thumb-reach command tiles, turn order/gauges always on screen, no rotation needed) — not A (bottom sheet) or C (landscape only, needs its own layout and forces a rotation)"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
         },
         {
           "label": "B: Pyrefly Slash",
@@ -696,28 +736,31 @@
         },
         {
           "label": "Living portrait feel (both)",
-          "src": "docs/concepts/pause-until-dawn/prototype-v2/shots/v6-pilot/clip-A-measured.mp4",
+          "src": "docs/concepts/pause-until-dawn/prototype-v2/shots/v6-pilot/clip-A2-measured.mp4",
           "state": "approved",
           "delivery": "not-scheduled",
           "game": "both",
           "gameNote": "Both: the rigged plate is Yuna X-2, but the pause portrait runtime (the parametric face rig, gaze and continuous expression) is shared plumbing (CHK-020) that every living portrait, whichever game's character, will run on.",
-          "note": "docs/plans/living-portrait-v6-method.md's options round: three 8s frontal clips from the v6 pilot rig — clip-A-measured.mp4 (Until Dawn's own numbers: idle drift, no idle saccades, the eyes leading the input), clip-B-livelier.mp4 (a glance every 3-6s, a small blink on a big one, more smiles) and clip-C-quiet.mp4 (smaller, slower). No build reaches the nine painted keys until this pick is exercised there (rule 9). docs/target/decisions.json D-064.",
+          "note": "docs/plans/living-portrait-v6-method.md's options round: three 8s frontal clips from the v6 pilot rig — clip-A-measured.mp4 (Until Dawn's own numbers: idle drift, no idle saccades, the eyes leading the input), clip-B-livelier.mp4 (a glance every 3-6s, a small blink on a big one, more smiles) and clip-C-quiet.mp4 (smaller, slower). No build reaches the nine painted keys until this pick is exercised there (rule 9). docs/target/decisions.json D-064. UPDATED 2026-09-25: Part 2 (PILOT.md) fixed the 'never still' measurement and the brow fold, offering clip-A2/B2/C2. Bailey named A2 as his own pick, not the driver's placeholder — see D-143 (supersedes D-064's driver's-choice framing).",
           "reaction": {
-            "date": "2026-09-24",
-            "words": "All your recommendations",
-            "how": "The driver had given no recommendation among the three clips and told Bailey so before he answered; his 'All your recommendations' is recorded here as the driver's own choice of clip A, made under his words, not a preference he named himself — see decisions.json D-064.",
+            "date": "2026-09-25",
+            "words": "I'll go with all your recommendations",
+            "how": "Bailey answered five option sheets sent together 2026-09-25 ~01:40 EDT, this time reacting to the living-portrait v6 pilot's Part 2 (clip-A2/B2/C2) directly and naming properties, superseding the earlier record (D-064) that the driver's pick of clip A had been made under his words without a preference of his own.",
             "liked": [],
             "disliked": [],
-            "mustRemain": [],
+            "mustRemain": [
+              "clip A2, \"measured\": Until Dawn's own reference numbers (fixation drift, no idle saccades, the eyes leading the input)",
+              "the eye lead as shown in A2",
+              "the smile as shown in A2 (an open smile swelling at 0.6s)"
+            ],
             "mustChange": [
-              "clip A, \"measured\" (Until Dawn's reference numbers) — a driver's-choice pick, not Bailey's own word, and open to revision the moment he reacts to the built keys"
+              "no worried brow (a raise-and-draw fold together): safe to drive after Part 2's det(J) fix, but not wanted; no clip should use it"
             ],
             "undecided": [
-              "the state mapping (normal/determined/hurt) and how far the eyes lead the head — INFERRED, not asked (living-portrait-v6-method.md)"
+              "the state mapping (normal/determined/hurt) — INFERRED, not asked (living-portrait-v6-method.md)",
+              "a sad corner-down mouth shape — INFERRED, not asked"
             ],
-            "inferred": [
-              "clip A over B or C: the driver picked it as the safer, more restrained baseline with nothing in Bailey's own words to go on"
-            ]
+            "inferred": []
           }
         },
         {
@@ -1054,11 +1097,13 @@
               "Seymour human form: B (arms crossed, warm brazier rim light), not A or C",
               "Chapter VII paintings: option A, fewest — Seymour and each Guado Guardian keep idle plus one hero cast, no attack painting (D-045)",
               "Chapter VII exit: the Guado Guardians get 'Yields' like the Syndicate (extends D-035); Seymour gets the new 'body' departure (falls and stays down), not Yields — build owed to the presenter pass that also owes D-035 and D-031 (D-046)",
-              "Chapter VII battle mood: A, 'The Courtesy' — accepted on the driver's recommendation, not judged by ear; no score given (D-048, docs/audio/OWNER-VERDICT.md 2026-09-24)"
+              "Chapter VII battle mood: A, 'The Courtesy' — accepted on the driver's recommendation, not judged by ear; no score given (D-048, docs/audio/OWNER-VERDICT.md 2026-09-24)",
+              "UPDATED 2026-09-25 (D-141, docs/concepts/chapters/macalania/unlock/README.md): all five battle paintings (Seymour idle/cast/hurt, Guado Guardian idle/cast) plus the backdrop are APPROVED as final art. The pause plate is EXCEPTED — redo its background as the ice antechamber and soften the facial-vein 'scar', keeping the face. Petrify option A adopted: a petrified Guado Guardian shatters (forfeits overkill AP), an ordinary defeat still yields (D-046 unaffected). Not yet built: the pause-plate repaint and the approved-hashes.json entries."
             ],
             "undecided": [
               "whether public/art/portraits/seymour.png is human-form Seymour or Seymour Flux (NEW-1) — must be opened before the portrait is called reuse or new",
-              "Tromell — only if pre/post scenes show him; ask before commissioning"
+              "Tromell — only if pre/post scenes show him; ask before commissioning",
+              "Anima's ko painting (judged 5, reads as a lean not a collapse) — flagged for a redo verdict, not itself excepted by D-141"
             ],
             "inferred": [
               "Anima’s arrival: built to the driver’s recommendation A + B’s tag, awaiting Bailey (its own tile below)",
@@ -1123,7 +1168,8 @@
               "backdrop: B (looking up at the hull from the rail), not the off-canon A or the outside-hull C",
               "Evrae's look: B's cooler teal/gold palette carried into the NEAR pose and the throat/breath-charge pose, not A's or C's own colours",
               "chapter title (Q11 — DECIDED 2026-09-23, D-037, superseding D-020's reading of Q11 for the title only): title stays 'Evrae', subtitle 'Bevelle's Doormat', location line 'Deck of the Fahrenheit — the approach to Bevelle'; the airship still names the location, the mechanic and the music brief",
-              "Evrae art APPROVED as shown on docs/concepts/chapters/evrae/r3/sheet.jpg (D-038): backdrop (public/art/backdrops/evrae-airship-deck.png, concept B, byte-identical), idle-near.png, idle-far.png, breath-charge.png, hurt.png and idle.png; actions show the idle only, no cast painting; the breath glow colour (orange) is unsourced, chosen by the team; locked in docs/target/approved-hashes.json set 'chapter:evrae:2026-09-23'"
+              "Evrae art APPROVED as shown on docs/concepts/chapters/evrae/r3/sheet.jpg (D-038): backdrop (public/art/backdrops/evrae-airship-deck.png, concept B, byte-identical), idle-near.png, idle-far.png, breath-charge.png, hurt.png and idle.png; actions show the idle only, no cast painting; the breath glow colour (orange) is unsourced, chosen by the team; locked in docs/target/approved-hashes.json set 'chapter:evrae:2026-09-23'",
+              "UPDATED 2026-09-25 (D-144, R13-04, docs/concepts/layout/r13-04-evrae/README.md): the deck's party staging is re-laid along the rail, option B (Tidus, Wakka and Rikku all moved, the D-041 recipe) — Tidus was only 0.23 visible at the first menu behind the approved command stack, and the same sweep found Wakka only 0.14 visible at FAR. Not yet built: src/scenes/evrae-airship-deck.ts PARTY_SLOTS + holdParty."
             ],
             "undecided": [],
             "inferred": [
@@ -1190,7 +1236,7 @@
             "disliked": [],
             "mustRemain": [
               "Ormi A and Logos C as the base bodies — no re-roll, only a re-render pass toward canon",
-              "Leblanc's fan stays the red leaf with silver ribs the installed cast already shows (D-036, no change)",
+              "UPDATED 2026-09-25 (D-139): the fan is fully OPEN, red leaf with silver ribs (docs/concepts/chapters/leblanc/fan-open/README.md's recommended candidate) — D-036's 'no change' assumed the idle already matched the cast; it does not, the idle's fan is shut. Not yet installed: idle.fan-open.red.png -> public/art/characters/leblanc/idle.png.",
               "Logos's shoulder disc stays as is (unsourced, idle and installed cast already agree; D-036)"
             ],
             "mustChange": [
@@ -1227,7 +1273,8 @@
               "Bulwark: option C*, rings on the body painting's own forelegs, not a separate figure",
               "Redoubt: option C*, rings on the head painting's own tusk, with the \"LEFT REDOUBT\" label moved clear of the command menu",
               "Node: option C, no separate figure — the HUD bars and intent card carry the Nodes, moved off the ground row to hang far overhead per research",
-              "Tail tip: option A, the shipped green blade recoloured to steel from its own luminance"
+              "Tail tip: option A, the shipped green blade recoloured to steel from its own luminance",
+              "UPDATED 2026-09-25 (D-142): the Body's spot at link 3 (docs/concepts/layout/ch5-vegnagun-staging/README.md) is staging option C, world position (2.8, 0, -12) — clears the Left Bulwark's ring and name plate from the FFX-2 command window by the widest margin of the four measured options; not yet built."
             ],
             "undecided": [
               "whether the shipped art3 Vegnagun part paintings (tail, leg, body, head) are themselves an approved reference — not asked by this pick, no hash pins them",
@@ -1423,7 +1470,7 @@
           "label": "Seymour Natus, Chapter X (FFX)",
           "src": "docs/concepts/chapters/natus/natus/sheet.jpg",
           "state": "approved",
-          "delivery": "not-scheduled",
+          "delivery": "in-progress",
           "game": "ffx",
           "gameNote": "FFX only: CTB, aeons, Trigger Commands and the FFX status set (research/ffx-seymour-natus-highbridge.md §0.3; docs/plans/chapter-natus-review.md §1). Chapter registration in src/data/encounters.ts is shared plumbing, case 'both' (CHK-020).",
           "note": "Seymour Natus + Mortibody, north end of the Highbridge of Bevelle, before the Main Gate, straight after the Via Purifico (docs/plans/chapter-natus-review.md, docs/target/decisions.json D-077 through D-097). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks; PROCEED on engine, data, AI and story (the plan's own verdict), HOLD everything Bailey sees or hears until this pick lands.",
@@ -1456,7 +1503,8 @@
               "O-2 Mortibody: option A beside O-1, with the KO-and-revive strip reading \"back weaker, max 3,000\" per the engine, not the wiki sentence (D-094)",
               "O-3 the Highbridge: option C, night with the city lit, over the more literally sourced option B, with the gate-facade gap disclosed (D-095)",
               "O-4 reading the fight: option B's HUD-row chips with option A's one-line text kept, and the Review's corrections applied — the Claw chip never names a target it picks at random, no FLEE control, no leftover \"Physical damage\" label, Mortibody stays visible at phone width (D-096)",
-              "O-5 Natus's portrait: option A, used only if B12 lands as its conditional b (D-097)"
+              "O-5 Natus's portrait: option A, used only if B12 lands as its conditional b (D-097)",
+              "hero-plate/pause-card composition: option B (Trema-style, the boss shown, not the Highbridge alone), 2026-09-25, D-156, docs/concepts/chapters/natus/hero-plate/README.md"
             ],
             "undecided": [
               "whether B12 actually resolves to b (Natus portrait) or falls back to a, which depends on whether O-1 lands in time"
@@ -1468,7 +1516,7 @@
           "label": "Fallen Aeons, Chapter XI (FFX-2)",
           "src": "docs/concepts/chapters/fallen-aeons/o1-sisters/sheet.jpg",
           "state": "approved",
-          "delivery": "not-scheduled",
+          "delivery": "in-progress",
           "game": "ffx2",
           "gameNote": "FFX-2 only: the Road to the Farplane gauntlet (Shiva, then the Magus Sisters, then Anima) is an FFX-2 encounter chain with no FFX counterpart (docs/plans/chapter-fallen-aeons-review.md §1). FFX-2 setup ignores EnemyGroupDef.aiScriptId: the Sisters get one shared per-enemy script, like Vegnagun (Review correction 1).",
           "note": "Three links — Shiva, Magus Sisters, Anima — with a Save Sphere full restore between them (docs/plans/chapter-fallen-aeons-review.md, docs/target/decisions.json D-098 through D-120). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks.",
@@ -1503,7 +1551,8 @@
               "O-1 the Magus Sisters: option A armoured trio, with Cindy corrected to red spots on BLUE per the visual bible (the sheet's own note was wrong) (D-117)",
               "O-2 the possessed treatment: option B, the Chapter IV violet on the Road plate (D-118)",
               "O-3 the Road: option A (single platform, foreground) as the primary plate, option B (all three platforms) as the between-links shot (D-119)",
-              "O-4 link transitions: the Save Sphere fade with the HP/MP restore shown (D-120)"
+              "O-4 link transitions: the Save Sphere fade with the HP/MP restore shown (D-120)",
+              "hero-plate/pause-card composition: option B (the boss shown, reads on both surfaces), 2026-09-25, D-157, docs/concepts/chapters/fallen-aeons/hero-plate/README.md"
             ],
             "undecided": [
               "whether statuses (Stop, Pain's stacks, Itchy) also clear at the Save Sphere, or only HP/MP — no source says either way (carried with FA2)"

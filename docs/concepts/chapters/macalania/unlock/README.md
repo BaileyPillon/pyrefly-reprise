@@ -1,5 +1,20 @@
 # Chapter VII unlock: art approval and the Petrify question (FFX only)
 
+> **Answered 2026-09-25.** Bailey: "I'll go with all your recommendations".
+> - Question 1: the five battle paintings and the backdrop are locked as set
+>   `chapter:macalania:2026-09-25` in `docs/target/approved-hashes.json` (backup
+>   `D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania/`).
+> - The pause plate is being redone. Its options sheet is `pause-plate-redo.jpg`, and the work
+>   is in `../pause-plate-redo/`. Nothing is installed yet.
+> - Question 2: option A (a petrified Guardian shatters; an ordinary defeat yields). Recording
+>   and building that answer belongs to another track, not the art track.
+> - The Anima hurt/ko hash noted below is still not recorded.
+> - Hash provenance (correction, 2026-09-25): the sheet image `art-approval.jpg` shows no
+>   hashes. The five character locks were checked against the 12-character hashes in the table
+>   below. The backdrop had no hash listed when the sheet was made; its lock was taken from the
+>   installed file (mtime 2026-09-22, older than the sheet of 09-24, so it is the painting the
+>   sheet showed) and its first 12 characters are now in the table.
+
 **Game case: FFX only.** Chapter VII (`seymour-anima-macalania`): human-form Seymour, the
 Guado Guardians and Macalania Temple exist only in FFX. No FFX-2 chapter and no shared code is
 touched.
@@ -20,7 +35,7 @@ captures. Nothing was rendered, installed or repainted, and nothing was written 
 | Seymour hurt r3 (`.../hurt.png`) | 5b16020259c5 | `../r3-JUDGE-3.md` §2 | 7 |
 | Guado Guardian idle r3 (`characters/guado-guardian/idle.png`) | 963b58eee920 | `../r3-JUDGE-2.md` §3 | pixels 7, **in-game read 6** (robe bloom; the fix recommended is the renderer's bloom, not the art) |
 | Guado Guardian cast, r3 plus the wrist repair (`.../cast.png`) | 9c7930fca598 | `../r3-JUDGE-3.md`, judge 4 | 7 (was 6) |
-| Backdrop (`backdrops/macalania-temple.png`) | | `../production/judge.md` | 7 |
+| Backdrop (`backdrops/macalania-temple.png`) | 1a83a9fcfc3d (added 2026-09-25 at lock time) | `../production/judge.md` | 7 |
 | Pause plate (`pause/macalania.png`) | | `../production/judge.md` | **6** (background is a rooftop village, not the temple; the veins read as a cheek scar) |
 | *Reference:* Anima idle (`characters/anima/idle.png`) | 9a91c5cf4545 | approved, D-108 | n/a |
 

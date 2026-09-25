@@ -27,9 +27,11 @@ import { cloneData } from '../common/clone.ts';
 import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
+import { accessoryAutoStatuses, accessoryImmunities, withPoolStatuses } from './kit.ts';
 import { activeGateBonuses, breaksDamageLimit, gateStatTotal, waitDownPercent, withStatBonus } from './garment-grids.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
+import { applyStatus } from './statuses.ts';
 
 function emptyAtb(agi: number): Ffx2Unit['atb'] {
   return { ticks: 0, required: baseRequired(agi), gauge: 0, charging: null, recovery: 0 };
@@ -69,7 +71,8 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
   // always named and nothing ever computed [accessories.ts, ffx2-combat-core
   // §5.4]. Without it the researched loadouts are inert and Chapter 5's Tail
   // kills the White Mage from full on its first Noli Me Tangere.
-  const stats: StatBlock = withAccessories(withStatBonus(base, equip), member.accessories);
+  // A carried Stamina Tonic (`kit.ts`) doubles the pool before her carried HP is clamped to it.
+  const stats: StatBlock = withPoolStatuses(withAccessories(withStatBonus(base, equip), member.accessories), member.statuses);
   // Carried across a chain seam (CONTRACT-CHANGES §6, `BattleScreenSetup.carryFfx2`)
   // as a raw number on the build, with no maximum to check against until the
   // dressphere's stats are derived, right above — so it is clamped here, not
@@ -127,7 +130,7 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
 
 function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
   const stats: StatBlock = { ...enemy.stats };
-  return {
+  const unit: Ffx2Unit = {
     id: enemy.id,
     name: enemy.name,
     side: 'enemy',
@@ -163,6 +166,20 @@ function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
       ...(enemy.thinkingPeriod !== undefined ? { thinkingPeriod: enemy.thinkingPeriod } : {}),
     },
   };
+  applyAutoStatuses(unit, enemy.autoStatuses);
+  return unit;
+}
+
+/**
+ * `EnemyDef.autoStatuses` (FFX-2, Chapter XIII's Trema: Spellspring), and a girl's Auto-Wall
+ * accessories (`kit.ts`). Applied before the
+ * first event, with no RNG draw, and remembered on the unit so a Dispel leaves them alone
+ * (`resolve.ts`). An enemy without the field is built exactly as before.
+ */
+function applyAutoStatuses(unit: Ffx2Unit, ids: EnemyDef['autoStatuses']): void {
+  if (!ids || ids.length === 0) return;
+  unit.autoStatuses = [...ids];
+  for (const id of ids) applyStatus(unit, { status: id, chance: 255, duration: 0 }, unit.id);
 }
 
 /** Restore a girl from the previous link of a chain. CONTRACT-CHANGES §6. */
@@ -274,6 +291,9 @@ export function buildState(
     gridNodes[unit.id] = gridNodeContents(member, grid?.nodes ?? 6);
     if (options.carriedParty) applyCarriedState(unit, options.carriedParty);
     if (enemies.restoresPartyOnEntry) restoreAtSaveSphere(unit);
+    // Accessories' status half (`kit.ts`): Auto-Wall and Ribbon. No shipped build before Chapter XIII's kit option wears one.
+    applyAutoStatuses(unit, accessoryAutoStatuses(unit.accessories));
+    Object.assign(unit.immunities, accessoryImmunities(unit.accessories));
     units.push(unit);
   });
 
@@ -303,6 +323,8 @@ export function buildState(
     flags: {
       ...(setup.chained || options.chained ? { chained: true } : {}),
       ...(enemies.nextGroupId ? { nextGroupId: enemies.nextGroupId } : {}),
+      ...(enemies.timedAilmentDefaults ? { timedAilmentDefaults: true } : {}), // `statuses.ts`, Chapter XIII
+      ...(enemies.actionTimeSeconds ? { actionTimeSeconds: enemies.actionTimeSeconds } : {}), // `action-time.ts` (E4), OFF
       canEscape: setup.canEscape ?? enemies.canEscape ?? false,
       ...inventoryFlags(party, options),
     },

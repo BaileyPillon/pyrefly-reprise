@@ -11,6 +11,42 @@
 > guide, tactic and meta (`27ed39e`, `chapter-macalania-guide.md`) and the
 > scene with Anima's arrival (`823450d`, `chapter-macalania-scene.md`).
 
+## Repair pass, 2026-09-25 (the verifier's two refuted items)
+
+**Game case.** The Sensor release is the FFX HUD's (every FFX chapter; FFX-2's
+boss strip already drops a departed enemy). The flat lie, the runtime body
+shot (`CameraPort.addRig`) and `TargetFrameHold`'s forwarding are presenter
+plumbing, **both**, used only by Seymour's `'body'` departure. The victory rig
+is **FFX only** (Macalania). No boss number changed; whether a petrified
+Guardian shatters is untouched (still open with Bailey).
+
+| Refuted | Root cause | Fix | Test |
+|---|---|---|---|
+| (1) "I EVRAE" stayed over empty sky for 3.5 s after Evrae fell | `release` ran only on a full HUD `sync`, and the last enemy's departure plays with no sync before the result | `FFXBattleHud.syncVitals` (the per-event projection) also calls `SensorPanel.release`, so the plate goes at the blow; `release` also treats `statuses.eject` as gone (a shatter reaches the projection as `status-add eject` before `removed` is synced) | `ch7-hud-fixes.test.ts`: KO and eject released from projected vitals alone; a non-lethal hit keeps it |
+| (2) Seymour's body a plane 32.7 degrees off the floor | `LIE_TILT` 1.0 rad | `LIE_FLAT_TILT` = pi/2 (flat, face up) and `LIE_CLEARANCE` 0.03 over the floor (`LieFlat.ts`) | `ch7-presentation-fixes.test.ts`: every corner at one height, normal straight up, middle at the station |
+| (2) the hold hid his head behind the party panel at 1280x960 | the hold kept the killing blow's near-level `enemy` framing | the body beat registers `BODY_SHOT` around where he actually lies (the field's relaxation moves his station per viewport, so no fixed rig can) and moves there under the roll: about 25 degrees down, body left of centre between the guide and the party panel | projection test at 16:9, 4:3, 21:9 for three measured stations; a camera without `addRig` keeps the old framing |
+| (2) victory shot: body at the right edge behind the turn list | the party close-up `victory` rig | Macalania's `victory` rig widened to hold the party and the body behind them, clear of the turn list and party panel | projection test at 16:9 and 4:3 for four stations |
+
+**Verified with real keys** (own Vite :5612, HMR and watcher off,
+`PYREFLY_BROWSER=gpu` on the RTX 5070 Ti, seed 1, reached by `gotoChapter`
+from a fresh title; harness `tools/zz-ch7-repair.tmp.mjs`, not committed;
+server stopped by PID): two Chapter VII wins, 1600x900 and 1280x960, 0 console
+errors, 0 HTTP errors. Seymour is flat (all four content corners at y 0.03)
+from ~0.3-0.5 s after his KO; the camera is on `body` for the whole hold, then
+`victory`, with him still down until the aftermath scene at ~3.0 s. The only
+Anima art requested is `anima/idle.png`/`.json`; banners unchanged ("Seymour |
+summons Anima", "Guado Guardian A | shatters"). Chapter VIII real-key win
+(`tools/zz-evrae-e2e.tmp.mjs`, 1600x900, 0 errors): "I EVRAE" is up at the
+last blow and gone by the time Evrae has fallen. Frames:
+`docs/screenshots/ch7-fixes/1b-*` and `2r-*`.
+
+**For Bailey.** The widened Macalania victory shot and the top-down body shot
+are agent choices on something Bailey sees, made to answer the verifier; they
+were not shown as options (AGENTS.md rule 9). Each is one constant
+(`RIGS.victory` in `macalania-temple.ts`, `BODY_SHOT` in
+`BattlePresenterDepartures.ts`). The party reads smaller in the new victory
+shot than in the old close-up.
+
 ## Fix pass 2, 2026-09-24 (the real-key e2e on 06338dbc)
 
 **Game case.** The chapter tables are **FFX only** (Seymour's body hold,
@@ -42,9 +78,7 @@ requested is `anima/idle.png`; Seymour lies tipped back on the floor from
 takes the screen at ~3.1 s. 0 console errors, 0 HTTP errors. Frames:
 `docs/screenshots/ch7-fixes/` (numbered by item).
 
-**Still open.** The body's head end sits a little higher than the hem (the
-painting's own silhouette flares at the hem; a painted `ko` would settle it).
-The shot during Guardian B's shatter frames the party, so B's break happens at
+**Still open.** (The tilted body was settled in the repair pass above.) The shot during Guardian B's shatter frames the party, so B's break happens at
 the right edge or off frame (the camera's, not this pass's). The stone look was
 built on the orchestrator's brief without an options round (AGENTS.md rule 9);
 it is presentation only and sits behind `setStone` and `vfx 'stone-shatter'`.

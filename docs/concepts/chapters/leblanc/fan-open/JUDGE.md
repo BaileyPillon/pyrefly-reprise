@@ -58,3 +58,61 @@ Both clear the bar.
    warm magenta (pick B's words). I agree with the claimant: red.
 2. Before install, optionally clean the three near-white specks at the hair tip. This
    is a masked touch-up; it does not block the pass.
+
+## Install check, 2026-09-25 (independent; I made none of the install, commit 486be04a)
+
+FFX-2 only (Chapter VI). **Verdict: the install passes, 7.8. The worst mark is still the
+seams (7.0).**
+
+- **The file.** `public/art/characters/leblanc/idle.png` hashes to 77192c23..., the same as
+  `idle.fan-open.red.png`, the candidate that scored best. I recomputed its diff against the
+  backed-up old idle: 15,232 px changed, all inside (383,54)-(549,217), 124 of them opaque
+  before, and none lost alpha. The canvas is still 591x1118.
+- **Sidecar.** `idle.json` equals the candidate's sidecar except for the added `status` and
+  `approved` keys. The width, height, canvas, baselineY 1102, cropBox and facing all match
+  the old sidecar.
+- **Backups.** `candidates/2026-09-25-picks/leblanc-fan/replaced/idle.png` hashes to
+  4fea45f9..., the old approved hash. The old idle.json and manifest.before.json are there
+  too. `approved/2026-09-25-leblanc-fan/` holds the new png (77192c23...), its json and
+  proof-run.json.
+- **Lock.** `approved-hashes.json` has the new sha under chapter:leblanc-idles with Bailey's
+  words. The old hash is under `supersedes`, with its backup path. The diff touches only that
+  entry. I ran `verify-approved` myself: 152 ok, 0 mismatched, 0 missing.
+- **Art at 1:1 and 3x, and against the anchors** (pick B `renders/leblanc-b.png` and the
+  installed `cast.png`). The red open leaf behind her head is the cast's fan, so idle and
+  cast now show one fan. Face, smile, hand and pose are unchanged. At 1:1 the fan reads as
+  one open fan. Pick B's warm-magenta round fan is not what was chosen: red follows D-036 on
+  the driver's recommendation, which Bailey accepted. **Worst:** at 3x, the two or three
+  near-white specks where the hair tip meets the leaf, and the thin matte contour along the
+  hair. They were already in the old idle, cannot be seen at game size, and were not cleaned
+  up (disclosed).
+- **In game.** `docs/screenshots/picks0925/leblanc-fan-installed-ch6-link3-1600x900.jpg`:
+  Leblanc is about 81x154 px at the link 3 command menu. The red open fan is clear beside her
+  head, and the intent card now ends above her, so the round-11 overlap is gone from this
+  frame. proof-run.json records fanHits 0 (no interception), consoleErrors [], notFound [],
+  stoppedAtLink 3, and pose idle. Nothing is listening on 5660-5679.
+- **Tests.** leblanc-art and chapters-6-7-8-enemy-sprite-manifest: 31/31 pass.
+
+## Second install check, 2026-09-25 06:30 EDT (independent; I made none of 486be04a or b9e0c581)
+
+FFX-2 only (Chapter VI). **Verdict: CONFIRMED, 7.8. Worst: seams, 7.0** (the near-white
+specks at the hair tip and the thin matte contour along the hair against the red leaf, 3x
+only; pre-existing, disclosed, not cleaned).
+
+- `public/art/characters/leblanc/idle.png` sha256 77192c23... equals
+  `candidates/2026-09-25-leblanc-fan/idle.fan-open.red.png`. Diff against the backed-up old
+  idle recomputed: 15,232 px in (383,54)-(549,217), 124 opaque before, 0 lost alpha, 591x1118.
+- Backups re-hashed: `picks/leblanc-fan/replaced/idle.png` = 4fea45f9... (the superseded
+  hash in the lock); `approved/2026-09-25-leblanc-fan/idle.png` = 77192c23..., its json
+  equals the installed sidecar (c478df23...). Sidecar keys match the old one plus metadata
+  (`status`, `method`, `derivedFrom`, `fanColour`, `game`, `approved`); canvas and
+  baselineY unchanged.
+- Lock: `supersedes` follows the yojimbo-casts convention. `verify-approved` run now:
+  185 ok, 0 mismatched, 0 missing (the count grew from 152 with other tracks' locks).
+- Art at 1:1 and 3x on grey: one open red folding fan, the cast's fan; face, smile, hand
+  and pose unchanged. Game frame (picks0925, 1600x900): the fan reads red and open at
+  about 81x154 px; the intent card ends at y about 365, above her head (y 382).
+  proof-run.json: 1600x900, gpu, no hooks, fanHits 0, consoleErrors [], notFound [],
+  stoppedAtLink 3 (the STOP_AT_LINK "error" is the planned stop), pose idle.
+- Tests: leblanc-art + chapters-6-7-8-enemy-sprite-manifest 31/31. Nothing listens on
+  5660-5679.

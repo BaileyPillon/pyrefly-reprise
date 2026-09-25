@@ -1,0 +1,111 @@
+{
+ "_note": "Chapter V's visible words swapped for Chapter XV's DECIDED ones (D-148: title 'The Den of Woe' GP2, location 'Den of Woe - under Mushroom Rock Road' GP2, number XV, three shades carried GP1; the Chapter V line-up and levels ARE this chapter's (GP5), so they stay) in this page's DOM only. Chapter XV has no ChapterMeta: no subtitle, blurb, quote, handwritten line, tip or snapshots exist, so they are blanked, never invented. The one objective is the sourced fight: the three shades.",
+ "pairs": [
+  [
+   "Chapter V · Heart of the Farplane — Before the Last Note · BATTLE 1 OF 5",
+   "Chapter XV · Den of Woe — under Mushroom Rock Road · BATTLE 1 OF 3"
+  ],
+  [
+   "V · VEGNAGUN — HEART OF THE FARPLANE — VEGNAGUN’S CHAMBER",
+   "XV · THE DEN OF WOE — UNDER MUSHROOM ROCK ROAD"
+  ],
+  [
+   "CHAPTER V · HEART OF THE FARPLANE — BEFORE THE LAST NOTE · BATTLE 1 OF 5",
+   "CHAPTER XV · DEN OF WOE — UNDER MUSHROOM ROCK ROAD · BATTLE 1 OF 3"
+  ],
+  [
+   "1. DESTROY ALL FOUR OF VEGNAGUN'S PARTS",
+   "1. DEFEAT BARALAI, GIPPAL AND NOOJ"
+  ],
+  [
+   "2. SURVIVE TERROR OF ZANARKAND",
+   "2. —"
+  ],
+  [
+   "3. FREE SHUYIN",
+   "3. —"
+  ],
+  [
+   "DESTROY ALL FOUR OF VEGNAGUN'S PARTS",
+   "DEFEAT BARALAI, GIPPAL AND NOOJ"
+  ],
+  [
+   "Destroy all four of Vegnagun's parts",
+   "Defeat Baralai, Gippal and Nooj"
+  ],
+  [
+   "Survive Terror of Zanarkand",
+   "—"
+  ],
+  [
+   "Free Shuyin",
+   "—"
+  ],
+  [
+   "A thousand-year gun the size of a cathedral, and a boy inside it who has been grieving for just as long. Tail, leg, body, head — and then, finally, the boy holding the trigger.",
+   ""
+  ],
+  [
+   "Two Dark Knights spamming Darkness ignore every part’s Defense, hit every target at once, and cost HP a Mega-Potion undoes.",
+   "—"
+  ],
+  [
+   "“A thousand years of silence, and Spira never once stopped to listen.”",
+   ""
+  ],
+  [
+   "a thousand years, one note",
+   ""
+  ],
+  [
+   "Vegnagun's chamber",
+   ""
+  ],
+  [
+   "kill the arms first",
+   ""
+  ],
+  [
+   "the note he circles",
+   ""
+  ],
+  [
+   "Before the Last Note",
+   ""
+  ],
+  [
+   "BATTLE 1 OF 5",
+   "BATTLE 1 OF 3"
+  ],
+  [
+   "HEART OF THE FARPLANE",
+   "DEN OF WOE"
+  ],
+  [
+   "Heart of the Farplane",
+   "Den of Woe"
+  ],
+  [
+   "FARPLANE",
+   "DEN OF WOE"
+  ],
+  [
+   "farplane",
+   "den of woe"
+  ]
+ ],
+ "exact": {
+  "V": "XV",
+  "Vegnagun": "The Den of Woe"
+ },
+ "hideImgs": [
+  "backdrops/farplane",
+  "characters/vegnagun-head/",
+  "characters/lenne/"
+ ],
+ "hideSel": [
+  ".pause__quote-text",
+  ".pause__quote-who",
+  ".pause__hand"
+ ]
+}

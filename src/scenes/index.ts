@@ -29,6 +29,7 @@ import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-la
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
+import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -187,16 +188,8 @@ SCENES.set('farplane', {
   placeholder: false,
 });
 /**
- * Chateau Leblanc, the Last Room — real now (`buildLeblancLastRoomScene` in
- * {@link SCENE_FACTORIES}), so it stops reporting itself as a stand-in.
- * `build` stays pointed at the demo diorama and is unreachable, same as
- * `bevelle-underground`'s and `dreams-end`'s entries above.
- *
- * **Not yet a registered chapter** (`docs/handoff/chapter-leblanc-engine.md`):
- * `src/data/encounters.ts` has no entry pointing `sceneKey` at this key. The
- * integrator adds one line, `sceneKey: 'leblanc-last-room'`, to the chapter's
- * `Chapter` record when it registers — this scene does not need to wait for
- * that to exist and be looked up by key.
+ * Chateau Leblanc, the Last Room (Chapter 6) — real (`buildLeblancLastRoomScene` in
+ * {@link SCENE_FACTORIES}); `build` is the unreachable demo diorama, as for Bevelle above.
  */
 SCENES.set('leblanc-last-room', {
   key: 'leblanc-last-room',
@@ -235,6 +228,9 @@ SCENES.set('evrae-airship-deck', {
 /** The Cavern of the Stolen Fayth (Chapter IX, FFX only): real, `build` unreachable as for Leblanc [cavern-stolen-fayth.ts]. */
 SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern of the Stolen Fayth — the last chamber',
   build: buildDemoScene, slots: CAVERN_STOLEN_FAYTH_SLOTS, placeholder: false });
+/** The Via Infinito, Cloister 100 (Chapter XIII, FFX-2 only): real, `build` unreachable as for Leblanc [cloister-100.ts]. */
+SCENES.set('via-infinito', { key: 'via-infinito', title: 'Via Infinito — Cloister 100',
+  build: buildDemoScene, slots: CLOISTER_100_SLOTS, placeholder: false });
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -276,6 +272,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'macalania-temple': buildMacalaniaTempleScene,
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
+  'via-infinito': buildCloister100Scene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */

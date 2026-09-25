@@ -190,7 +190,9 @@ function runIntended(seed: number): Run {
  *
  * It is listed rather than deleted so the next pass can try to win it back.
  */
-const KNOWN_LOSSES: readonly number[] = [1, 42, 20260916];
+// 2026-09-25, PR-0155 (FFX only): aeons lost the party's Items (ffx-combat-core §6.2), so seed 7
+// now loses (37,578 left) and seed 42 wins; the forty-seed window moved 23 -> 17.
+const KNOWN_LOSSES: readonly number[] = [1, 7, 20260916];
 
 /**
  * ### 2026-09-19, the release-prep pass — read this before trusting the list above
@@ -294,8 +296,13 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * the party are gone: 26 -> 23 of these forty (seeds 8, 11, 17 and 33 lost, 12 won), 227 -> 214 of
    * seeds 1-400. Every changed seed is a Poison-crossing run. Bailey approved the fix knowing it moves
    * difficulty; nothing on the boss was tuned (`docs/plans/combat-fixes-0924-review.md` §8).
+   *
+   * **22 -> 15 on 2026-09-25 (PR-0155, FFX only; Bailey: "I'll go with all your recommendations").**
+   * An aeon's menu has no Item row [ffx-combat-core §6.2], so Ifrit, Ixion and Shiva no longer throw
+   * Gems on their one turn: 23 -> 17 of these forty, measured with nothing else changed (26 -> 17
+   * against live a999d133, both fixes together). 17/40 is under half: this is a floor, not a promise.
    */
-  it('wins the great majority of forty contiguous seeds', () => {
+  it('keeps at least fifteen wins in forty contiguous seeds (measured 17)', () => {
     const results = Array.from({ length: 40 }, (_, i) => runIntended(i + 1));
     const wins = results.filter((r) => r.outcome === 'victory').length;
     const lost = results
@@ -304,7 +311,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
       .map((x) => `${x.seed}: ${x.r.outcome} with ${x.r.bossHp} left at turn ${x.r.turns}`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(', ') || 'none'}`);
 
-    expect(wins, 'Chapter 1 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(22);
+    expect(wins, 'Chapter 1 fell below its 15/40 floor (17/40 measured 2026-09-25, PR-0155)').toBeGreaterThanOrEqual(15);
   }, 120_000);
 
   /**
@@ -380,7 +387,9 @@ describe('killing the Mortiorchis instead of Seymour stays a losing tactic', () 
       // Mortibsorptions. That is the §2.2 correction working exactly as it is
       // written — the mount is "a damage route into Seymour, not a way to
       // remove the adds" — and it still loses every time, which is the claim.
-      expect(bossHp, 'Seymour is the win condition and this line never touches him').toBeGreaterThan(20_000);
+      // 20,000 -> 15,000 on 2026-09-25 (PR-0155): with no Gems thrown by aeons, seed 42's
+      // mount-farm runs 23 Mortibsorptions and loses with 18,919 left (the others 60,000+).
+      expect(bossHp, 'Seymour is the win condition and this line never touches him').toBeGreaterThan(15_000);
     }, 30_000);
   }
 });

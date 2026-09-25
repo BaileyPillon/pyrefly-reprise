@@ -43,7 +43,7 @@ import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
-import { BODY_HALF_WIDTH, boardRects, fighterBoxes, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
+import { BODY_HALF_WIDTH, boardRects, fighterBoxes, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
 import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
@@ -528,7 +528,7 @@ export class FFX2BattleHud implements HudPort {
       scale: this.stageScale || 1,
       box: box?.getBoundingClientRect() ?? null,
       panelUp: this.intent.isVisible,
-      chipHeight: chip?.getBoundingClientRect().height ?? null,
+      chip: chip?.getBoundingClientRect() ?? null,
       bandTop: battleHelpOn() ? bandReserve(bandGeometry(bandIn), bandIn) : 0,
     });
   }
@@ -793,7 +793,7 @@ export class FFX2BattleHud implements HudPort {
       // letter tag the plate prints — the plate used to print the raw
       // combatant id.
       projectRect: (id) => this.targeting?.rect(id) ?? null,
-      panels: () => this.panelRects(),
+      panels: () => [...this.panelRects(), ...slabPanels(this.el)],
       nameOf: (id) => this.lastState?.combatants[id]?.name ?? id,
       letterTagOf: (id) => this.letterTagOf(id),
       kindOf: (id) => {
@@ -844,11 +844,8 @@ export class FFX2BattleHud implements HudPort {
   }
 
   onEvent(event: BattleEvent): Promise<void> | void {
-    // FFX-2 only: under Active ATB a charged spell, a Poison tick or an enemy's blow can end the fight while a
-    // girl is still choosing, and the presenter tears the menu down only after the whole burst has played
-    // (`runActivePump` -> `abandon`), so the stack, reticle and plates stood through the last KO and the victory
-    // shot. The battle is already decided when the burst plays: the menu goes with the deciding KO (or the
-    // victory/defeat event, whichever the HUD sees first).
+    // FFX-2 only: Active ATB can end the fight while a girl is choosing, and the presenter drops the menu only after
+    // the burst (`runActivePump` -> `abandon`), so the menu goes with the deciding KO (or victory/defeat, if first).
     if (this.closeMenu && (event.type === 'victory' || event.type === 'defeat' || (event.type === 'ko' && this.lastState?.result))) {
       this.closeCommandMenu();
     }
@@ -863,6 +860,9 @@ export class FFX2BattleHud implements HudPort {
       case 'action-start':
       case 'message':
         return this.message.onEvent(event, this.lastState);
+      case 'ko': // A slab naming the enemy just KO'd (Paragon, as Trema's link seam starts) re-reads the engine: no dead enemy acts next.
+        if (this.intent.view()?.enemyId === event.targetId) this.intent.refresh();
+        return;
       case 'chain':
         return this.showChain(event.targetId, event.count, event.multiplier);
       case 'spherechange':

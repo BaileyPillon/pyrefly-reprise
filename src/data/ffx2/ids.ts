@@ -237,7 +237,9 @@ export type GarmentGridId =
   /** 5 nodes. Per-gate stat bonus allocated to every gate. */
   | 'strength-of-one'
   /** 4 nodes. Per-gate stat bonus allocated to every gate. */
-  | 'howling-wind';
+  | 'howling-wind'
+  /** Equip DEF +20, MDEF +20; Y, B = DEF +20 each; R, G = MDEF +20 each. Node count unpublished. Chapter XIII's kit option. */
+  | 'valiant-lustre';
 
 /**
  * Six-node Grids — the strongest SDSP hosts, since the main part's HP, MP, Str,
@@ -308,6 +310,14 @@ export type VegnagunEnemyId =
   | 'shuyin';
 
 /**
+ * Chapter XIII (registered, unlisted) — Cloister 100 of the Via Infinito, two links with
+ * the party carried between them [ffx2-trema §1.1, `[verified: 5 sources]`]: Paragon
+ * (Lv 99, HP 200 000; Lord Zaon's fiend form), then Trema (Lv 99, HP 999 999; the founder
+ * of New Yevon). FFX-2 only: no FFX combatant shares either id.
+ */
+export type TremaEnemyId = 'paragon' | 'trema';
+
+/**
  * Chapter XV — the Den of Woe under Mushroom Rock Road, the three shades fought
  * back to back [ffx2-gippal-den-of-woe §2, §3]: Baralai (Lv 52, HP 12 220) ->
  * Gippal (Lv 56, HP 14 800) -> Nooj (Lv 63, HP 23 800). New ids, not the men's
@@ -315,8 +325,11 @@ export type VegnagunEnemyId =
  */
 export type DenOfWoeEnemyId = 'shade-baralai' | 'shade-gippal' | 'shade-nooj';
 
-/** Every FFX-2 enemy combatant these ids name (Chapters 4, 5 and XV). */
-export type FFX2EnemyId = BahamutEnemyId | VegnagunEnemyId | DenOfWoeEnemyId;
+/** Every FFX-2 enemy combatant with an id in this file (Chapters 4 and 5, XIII and XV). */
+export type FFX2EnemyId = BahamutEnemyId | VegnagunEnemyId | TremaEnemyId | DenOfWoeEnemyId;
+
+/** Chapter XIII's two links, in order. */
+export const TREMA_CHAIN_ORDER: readonly TremaEnemyId[] = ['paragon', 'trema'] as const;
 
 /** The five battles of the Vegnagun chain, in order. */
 export const VEGNAGUN_CHAIN_ORDER: readonly VegnagunEnemyId[] = [

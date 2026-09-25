@@ -183,14 +183,14 @@ export class PauseView {
   private renderPlate(tabId: string): void {
     const meta = this.deps.meta;
     if (tabId === 'chapter' && meta) {
-      this.portrait.show(meta.heroArt.replace(/^pause\//, ''));
+      this.portrait.show(meta.heroArt.replace(/^pause\//, ''), undefined, meta.heroArtFallback);
       this.root.classList.toggle('pause--mirror', false);
       return;
     }
     const state = this.deps.state();
     const memberId = this.plateMemberId ?? state?.activeIds[0] ?? null;
     if (memberId) this.portrait.show(plateIdFor(memberId, this.game), memberId);
-    else if (meta) this.portrait.show(meta.heroArt.replace(/^pause\//, ''));
+    else if (meta) this.portrait.show(meta.heroArt.replace(/^pause\//, ''), undefined, meta.heroArtFallback);
     const side = memberId ? chromeSideForCombatant(memberId, this.game) : 'left';
     this.root.classList.toggle('pause--mirror', side === 'right');
   }

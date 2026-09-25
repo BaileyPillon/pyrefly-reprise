@@ -1,0 +1,60 @@
+{
+ "title": "Chapter X  Seymour Natus: hero plate options (FFX only)",
+ "subtitle": "CONCEPT, nothing installed. Plate, then pause CHAPTER tab and prep card, 1600x900.",
+ "a": "A  Kimahri's stand, Natus looming behind him",
+ "b": "B  Seymour Natus close up, his ring behind  -  RECOMMENDED",
+ "c": "C  Yuna turns back, Natus and Mortibody down the bridge",
+ "rec": "b",
+ "crops": [
+  {
+   "src": "options/a.png",
+   "box": [
+    830,
+    0,
+    1344,
+    560
+   ],
+   "label": "A: Natus from his idle + ring layer"
+  },
+  {
+   "src": "options/b.png",
+   "box": [
+    450,
+    40,
+    900,
+    500
+   ],
+   "label": "B: the face at 1:1, ring behind"
+  },
+  {
+   "src": "renders/c-953106.png",
+   "box": [
+    480,
+    130,
+    760,
+    300
+   ],
+   "label": "C before: her right eye blue"
+  },
+  {
+   "src": "options/c.png",
+   "box": [
+    480,
+    130,
+    760,
+    300
+   ],
+   "label": "C after: her right eye green, left blue"
+  },
+  {
+   "src": "options/c.png",
+   "box": [
+    0,
+    160,
+    520,
+    700
+   ],
+   "label": "C: Natus + Mortibody from idles"
+  }
+ ]
+}

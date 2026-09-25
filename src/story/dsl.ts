@@ -100,6 +100,11 @@ export type SpeakerId =
   | 'leblanc'
   | 'logos'
   | 'ormi'
+  /**
+   * Trema, founder of New Yevon, on Cloister 100 of the Via Infinito (FFX-2 only, Chapter XIII;
+   * `research/ffx2-trema.md` §7). No portrait yet (O-5 is its own round): the name plate only.
+   */
+  | 'trema'
   /** The corrupted Bahamut in the Bevelle Underground — speaks only in roars and stage directions. */
   | 'bahamut'
   // --- special ------------------------------------------------------------

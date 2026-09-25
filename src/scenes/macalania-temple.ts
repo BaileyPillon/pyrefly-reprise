@@ -56,7 +56,14 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   action: { position: [0.3, 2.1, 9.7], lookAt: [1.25, 1.85, -1.6], fov: 32, sway: 0.7 },
   party: { position: [-1.4, 1.9, 7.0], lookAt: [-2.3, 1.3, 0.4], fov: 32, sway: 0.7 },
   enemy: { position: [1.2, 2.1, 6.4], lookAt: [2.2, 1.8, -3.0], fov: 32, sway: 0.7 },
-  victory: { position: [-1.7, 1.9, 7.3], lookAt: [-2.4, 1.3, 0.9], fov: 32, sway: 1.2 },
+  /**
+   * Wide enough to hold the party and, behind them, Seymour's body (D-046: he
+   * stays down through the victory). The repair-pass verifier caught the old
+   * party close-up ([-1.7, 1.9, 7.3] at [-2.4, 1.3, 0.9]) leaving the body at
+   * the right edge behind the turn list; here it lies between the party and
+   * the turn list, above the party panel, at 16:9 and 4:3.
+   */
+  victory: { position: [-1.2, 3.6, 12.4], lookAt: [0.4, 0.7, -2.2], fov: 32, sway: 1.2 },
   /** Concept A, beat 1: floor height behind the party, the ice filling the bottom of the frame. */
   'anima-low': { position: [1.5, 0.95, 6.8], lookAt: [2.4, 1.75, -4.8], fov: 34, sway: 0.3 },
   /** Concept A, beat 4: risen with her, looking up; the move from `anima-low` to here is the rise. */

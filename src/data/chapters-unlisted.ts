@@ -24,6 +24,7 @@ import { FFX2_DEN_OF_WOE } from './chapter-ffx2-den-of-woe.ts';
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
  * Chapter X, Seymour Natus (FFX only) — `./chapter-seymour-natus.ts`.
  * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts`.
+ * Chapter XIII, Trema, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter IX).
  * Chapter XV, The Den of Woe (FFX-2 only) — `./chapter-ffx2-den-of-woe.ts`.
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [

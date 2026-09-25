@@ -118,7 +118,27 @@ export function fighterBoxes(state: BattleState | null, project: ProjectFn): Int
       right: head.x + half,
       top: Math.min(head.y, feet.y),
       bottom: Math.max(head.y, feet.y),
+      // A painting, not chrome: the slab ranks it below the HUD (`placeSlab`, tiered).
+      soft: true,
     });
+  }
+  return out;
+}
+
+/**
+ * The intent slab and its `E HIDE` chip while painted, as panels the field's
+ * target plate docks clear of (`dockPlate`). FFX-2 only. At Vegnagun's link 3
+ * (D-044, the Body on option C's spot) the slab's only free spot while aiming
+ * is right under the Body, where the Bulwark plates hang by default; docked
+ * against this, they take the side above their ring instead of printing across
+ * the slab's header. The slab never steers around the field plate, so the two
+ * cannot chase each other.
+ */
+export function slabPanels(root: HTMLElement): Array<{ x: number; y: number; w: number; h: number }> {
+  const out: Array<{ x: number; y: number; w: number; h: number }> = [];
+  for (const el of root.querySelectorAll<HTMLElement>('.eint__panel, .eint__toggle')) {
+    const r = el.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) out.push({ x: r.left, y: r.top, w: r.width, h: r.height });
   }
   return out;
 }
@@ -134,8 +154,8 @@ export interface SlabSolveInput {
   box: { width: number; height: number } | null;
   /** True while the slab's panel is up. */
   panelUp: boolean;
-  /** The `E HIDE` chip's height, if it is laid out. */
-  chipHeight: number | null;
+  /** The `E HIDE` chip's box, if it is laid out. */
+  chip: { width: number; height: number } | null;
   /** The viewport y the help band reserves down to (0 when BATTLE HELP is off). */
   bandTop: number;
 }
@@ -151,7 +171,7 @@ export function solveSlab(input: SlabSolveInput): IntentAvoidRect[] {
   // The chip rides the panel's top-right corner and is clamped into the
   // frame, so a slab flush with the top edge wears its own `E HIDE` across
   // its first line. Reserve the chip's band while the panel is up.
-  const chipRoom = input.panelUp ? (input.chipHeight ?? 8 * scale) + scale : 0;
+  const chipRoom = input.panelUp ? (input.chip ? input.chip.height : 8 * scale) + scale : 0;
   // PR-0012: while BATTLE HELP is on, the top band owns the stage's first
   // 17.33 grid rows whenever a menu is open; the slab (and its chip) start
   // under it at all times, so opening a menu never makes the slab jump.
@@ -167,8 +187,15 @@ export function solveSlab(input: SlabSolveInput): IntentAvoidRect[] {
     top: o.top - layer.top,
     right: o.right - layer.left,
     bottom: o.bottom - layer.top,
+    soft: o.soft === true,
   }));
-  const target = placeSlab(natural, { w, h }, local, { width: layer.width, height: layer.height }, edge, headroom);
+  // Tiered: the command stack, the party and the boss plate outrank the fighters, and the chip
+  // riding the panel is placed with it (M2, 2026-09-25).
+  const chip = input.panelUp ? { w: input.chip?.width || 40 * scale, h: input.chip?.height || 8 * scale, gap: scale } : undefined;
+  const target = placeSlab(natural, { w, h }, local, { width: layer.width, height: layer.height }, edge, headroom, {
+    tiered: true,
+    ...(chip ? { chip } : {}),
+  });
   const clampedNatural = {
     left: Math.max(edge, Math.min(Math.max(edge, layer.width - w - edge), natural.left)),
     top: Math.max(edge, Math.min(Math.max(edge, layer.height - h - edge), natural.top)),

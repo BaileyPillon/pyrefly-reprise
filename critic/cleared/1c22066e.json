@@ -1,0 +1,119 @@
+{
+  "mainSha": "1c22066e",
+  "bundle": "l_HXObKO",
+  "deployedAt": "2026-09-25T04:06:34.435Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 618,
+  "policyVersion": 2,
+  "artifactHash": "9aa052b823fdb68eb990a67d63d4c94d0d28c7927fddef99ed61b416c1ff9e6d",
+  "review": "deep",
+  "reasons": [
+    "src/battle/ffx/ai/index.ts: FFX CTB engine is a shared system",
+    "src/battle/ffx/ai/reactions.ts: FFX CTB engine is a shared system",
+    "src/battle/ffx/ai/seymour-flux.ts: FFX CTB engine is a shared system",
+    "src/battle/ffx/intent.ts: FFX CTB engine is a shared system",
+    "src/engine/BattlePresenterStage.ts: battle presenter and lifecycle is a shared system",
+    "src/scenes/index.ts: chapter registry or a new chapter is a shared system",
+    "src/ui/common/pause-phone.css: global layout, input and boot is a shared system",
+    "public/art/manifest.json: asset loader and manifests is a shared system"
+  ],
+  "systems": [
+    "Dream's End scene",
+    "FFX CTB engine",
+    "FFX HUD",
+    "FFX game data",
+    "FFX-2 HUD",
+    "Farplane scene",
+    "Mt. Gagazet scene",
+    "Zanarkand Dome scene",
+    "asset loader and manifests",
+    "battle presenter and lifecycle",
+    "chapter registry or a new chapter",
+    "effects, lighting and sprites",
+    "global layout, input and boot",
+    "move advisor and enemy intent",
+    "painted artwork",
+    "title, chapter select, prep, pause and results screens"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin"
+  ],
+  "checks": [
+    "CHK-002",
+    "CHK-003",
+    "CHK-004",
+    "CHK-005",
+    "CHK-006",
+    "CHK-007",
+    "CHK-008",
+    "CHK-009",
+    "CHK-010",
+    "CHK-011",
+    "CHK-012",
+    "CHK-013",
+    "CHK-014",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-018",
+    "CHK-019",
+    "CHK-020",
+    "CHK-021",
+    "CHK-022",
+    "CHK-023"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 52,
+    "at": "2026-09-25T04:06:34.435Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "done",
+      "requires": "exact-artifact verification and real-input smoke on the live URL",
+      "result": "PASS",
+      "settledBy": "critic/reviews/1c22066e-live.json",
+      "settledAt": "2026-09-25T06:30:00.000Z"
+    },
+    {
+      "kind": "focused",
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "PASS",
+      "settledBy": "critic/reviews/1c22066e-focused.json",
+      "settledAt": "2026-09-24T23:10:00-04:00"
+    },
+    {
+      "kind": "deep",
+      "status": "carried",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483",
+        "dc2669ac",
+        "e3b8c2a3",
+        "a999d133"
+      ],
+      "carriedTo": "5be4babe",
+      "at": "2026-09-25T05:54:55.313Z"
+    }
+  ],
+  "ownerOverride": {
+    "words": "Push next live build now please",
+    "date": "2026-09-25T04:06:34.435Z",
+    "report": "critic/reviews/1c22066e-focused.json",
+    "changedArea": null
+  },
+  "supersededBy": "5be4babe"
+}

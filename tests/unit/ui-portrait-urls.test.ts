@@ -67,7 +67,24 @@ describe('art URLs are built from the Vite base', () => {
   it('keeps the one id/file mismatch in the alias table, not in a caller', () => {
     expect(resolvePortraitKey('seymour-flux')).toBe('seymour');
     expect(resolvePortraitKey('yunalesca')).toBe('yunalesca');
-    expect(portraitUrl(resolvePortraitKey('seymour-flux'))).toBe(artUrl('art/portraits/seymour.png'));
+    expect(portraitUrl(resolvePortraitKey('seymour-flux') ?? '')).toBe(artUrl('art/portraits/seymour.png'));
+  });
+
+  it("never gives Chapter IX's boss Yojimbo the aeon's navy portrait (D-054)", () => {
+    // `portraits/yojimbo.png` is Yuna's aeon's painting, not approved for the
+    // boss: his enemy tile has no dedicated portrait and takes the crop of his
+    // LOCKED painting (`characters/yojimbo-cavern/idle.png`) instead.
+    expect(resolvePortraitKey('yojimbo')).toBeUndefined();
+    const chip = parse(portraitChipHtml(resolvePortraitKey('yojimbo'), 'Yojimbo', tintFor('enemy'), 'yojimbo-cavern'));
+    const srcs = [...chip.querySelectorAll('img')].map((img) => img.getAttribute('src') ?? '');
+    expect(srcs).toEqual([artUrl('art/characters/yojimbo-cavern/idle.png')]);
+    expect(srcs.join()).not.toContain('portraits/yojimbo');
+    // Yuna's own aeon Yojimbo is a party-side row carrying its portrait key, unchanged.
+    const aeon = parse(portraitChipHtml('yojimbo', 'Yojimbo', tintFor('aeon')));
+    expect(aeon.querySelector('img')?.getAttribute('src')).toBe(artUrl('art/portraits/yojimbo.png'));
+    // Daigoro and Lady Ginnem have no portrait file; their ids resolve to themselves and fall to their own crops.
+    expect(resolvePortraitKey('daigoro')).toBe('daigoro');
+    expect(resolvePortraitKey('ginnem')).toBe('ginnem');
   });
 });
 

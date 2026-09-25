@@ -15,15 +15,11 @@ import type { Object3D } from 'three';
 // never touches battle state, and on any other chapter's field it finds
 // nothing and does nothing.
 //
-// What it writes, and only on Chapter IX's own figures:
-// - Yojimbo's and Daigoro's alpha during the arrival, and Yojimbo's step out
-//   from the tree (restored exactly to where the stage put him);
-// - **Daigoro's size.** The stage sizes every non-boss fiend at 0.7 of the
-//   scene's boss height (`BattlePresenterArt.worldHeightFor`), which would
-//   stand the dog as tall as Lulu. Picked O-2 B shows him at about 0.3 of
-//   Yojimbo (INSTALLED.md: 0.73 against 2.55, the visual bible's `[estimate]`).
-//   A per-combatant height belongs in the stage; until it has one, the scene
-//   scales his figure (painting, shadow and ring together) about his feet.
+// What it writes, and only on Chapter IX's own figures: Yojimbo's and
+// Daigoro's alpha during the arrival, and Yojimbo's step out from the tree
+// (restored exactly to where the stage put him). Daigoro's size is not written
+// here: the scene publishes his height through the stage's per-combatant
+// `figureHeights` (`src/scenes/types.ts`).
 
 export const CAVERN_IDS = { yojimbo: 'yojimbo', daigoro: 'daigoro', ginnem: 'ginnem' } as const;
 
@@ -54,9 +50,4 @@ export function victoryStruck(root: Object3D | null): boolean {
     if (f.pose === 'victory' || f.lifeState === 'victory') return true;
   }
   return false;
-}
-
-/** Scale a staged figure about its feet (its origin), once. */
-export function scaleFigure(f: StagedFigure, k: number): void {
-  if (Math.abs(f.scale.x - k) > 1e-6) f.scale.setScalar(k);
 }

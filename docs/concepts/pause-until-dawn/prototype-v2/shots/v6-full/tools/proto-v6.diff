@@ -1,0 +1,118 @@
+diff -ru v51-scratch/src/compose.ts v6-scratch/src/compose.ts
+--- v51-scratch/src/compose.ts	2026-09-24 00:30:55.558229100 -0400
++++ v6-scratch/src/compose.ts	2026-09-25 00:11:03.959669700 -0400
+@@ -142,7 +142,8 @@
+   drawKey(key: RigKey, face: FaceFrame, m: Motions, gain: number, meshes: Meshes, part: KeyPart = 'all', td: TasselDraw | null = null): void {
+     const L = this.L;
+     L.beginLayers(meshes.head, meshes.body);
+-    if (key.id === 'frontal') {
++    // v6 full scratch: a rig that carries the frontal as one back + front (rig-v6.json) draws it like every key
++    if (key.id === 'frontal' && !this.art.keys.has('frontal')) {
+       this.drawFrontal(face, m, gain, part);
+       if (part !== 'back') {
+         this.drawTassel(td, 'over', gain);
+diff -ru v51-scratch/src/driver.ts v6-scratch/src/driver.ts
+--- v51-scratch/src/driver.ts	2026-09-24 01:23:03.968773400 -0400
++++ v6-scratch/src/driver.ts	2026-09-25 00:11:04.025465900 -0400
+@@ -49,6 +49,10 @@
+   debugNoWarp?: boolean;
+   /** Debug (`?paint=switch|warp`): override the rig's own paint mode (v4 default 'warp'; 'switch' = v3.3's fallback). */
+   debugPaint?: PaintMode;
++  /** v6 full scratch (`?v6=1`): the face comes from `setFace` uploads (renderer.v6). */
++  v6?: boolean;
++  /** v6 full scratch (`?manual=1`): no render loop; the capture advances the clock with `stepFrame(dt)`. */
++  manual?: boolean;
+ }
+ 
+ export class LivingPortraitDriver implements PortraitDriver {
+@@ -101,6 +105,7 @@
+         this.renderer.debugNoPost = this.opts.debugNoPost ?? false;
+         this.renderer.debugNoWarp = this.opts.debugNoWarp ?? false;
+         if (this.opts.debugPaint) this.renderer.paintMode = this.opts.debugPaint;
++        this.renderer.v6 = this.opts.v6 ?? false;
+         await this.renderer.load();
+         this.startLoop();
+       })
+@@ -136,6 +141,7 @@
+   }
+ 
+   private startLoop(): void {
++    if (this.opts.manual) return;
+     this.lastTs = performance.now();
+     const tick = (ts: number) => {
+       if (this.disposed) return;
+@@ -216,6 +222,21 @@
+     this.state.setReducedMotion(on);
+   }
+ 
++  /** v6 full scratch: advance the clock by exactly dt (the input is sampled as in the loop) and render once. */
++  stepFrame(dt: number): DriverSnapshot {
++    this.tick(dt);
++    return this.snapshot();
++  }
++
++  /** v6 full scratch: fetch a straight-RGBA PNG and put it into a key's front (or faceOver) at canvas (x, y). */
++  async setFace(keyId: string, x: number, y: number, url: string, over = false): Promise<boolean> {
++    const blob = await (await fetch(url)).blob();
++    const bmp = await createImageBitmap(blob, { premultiplyAlpha: 'none', colorSpaceConversion: 'none' });
++    const ok = this.renderer?.setFace(keyId, x, y, bmp, over) ?? false;
++    bmp.close();
++    return ok;
++  }
++
+   /** Debug/verification aid, not part of the `PortraitDriver` seam. */
+   forceHalfBlink(): void {
+     this.state.forceHalfBlink();
+diff -ru v51-scratch/src/main.ts v6-scratch/src/main.ts
+--- v51-scratch/src/main.ts	2026-09-24 00:30:55.520390500 -0400
++++ v6-scratch/src/main.ts	2026-09-25 00:11:04.025465900 -0400
+@@ -29,6 +29,8 @@
+     debugTimeScale,
+     debugNoPost: new URLSearchParams(location.search).get('post') === '0',
+     debugNoWarp: new URLSearchParams(location.search).get('warp') === '0',
++    v6: new URLSearchParams(location.search).get('v6') === '1',
++    manual: new URLSearchParams(location.search).get('manual') === '1',
+     debugPaint: ((p) => (p === 'switch' || p === 'warp' ? p : undefined))(new URLSearchParams(location.search).get('paint')),
+   });
+ 
+diff -ru v51-scratch/src/renderer.ts v6-scratch/src/renderer.ts
+--- v51-scratch/src/renderer.ts	2026-09-24 00:30:55.557223900 -0400
++++ v6-scratch/src/renderer.ts	2026-09-25 00:11:03.986818000 -0400
+@@ -67,6 +67,8 @@
+   debugNoWarp = false;
+   /** How the painted keys follow the yaw: the rig's own `artMeta.v4.paint` unless overridden (`?paint=switch`). */
+   paintMode: PaintMode = 'switch';
++  /** v6 full scratch (`?v6=1`): the face is uploaded per frame by the capture (`setFace`); the runtime's own lid frames, mouth and brow patches and iris offsets are off. */
++  v6 = false;
+   private readonly v4: V4Meta | null;
+   private readonly gl: WebGL2RenderingContext | null;
+   private readonly rig: Rig;
+@@ -228,7 +230,8 @@
+     return sel.update(frame.baseYawDeg ?? frame.yawDeg, dt);
+   }
+ 
+-  private renderArt(frame: RenderFrame): void {
++  private renderArt(frame0: RenderFrame): void {
++    const frame: RenderFrame = this.v6 ? { ...frame0, eyeState: 'open', eyeAperture: 1, mouth: 'neutral', mouthWeight: 0, brow: 'neutral', browWeight: 0, pitchNorm: 0 } : frame0;
+     const art = this.art!;
+     const C = this.composer!;
+     const [scene, ta, tb] = this.targets as [FrameBufferTarget, FrameBufferTarget, FrameBufferTarget];
+@@ -327,6 +330,18 @@
+     }
+   }
+ 
++  /** v6 full scratch: replaces a sub-rectangle (canvas px x, y) of a key's front (or its faceOver) with straight RGBA. */
++  setFace(keyId: string, x: number, y: number, img: ImageBitmap, over = false): boolean {
++    const gl = this.gl;
++    const t = over ? this.art?.faceOver.get(keyId) : this.art?.keys.get(keyId)?.front;
++    if (!gl || !t) return false;
++    gl.bindTexture(gl.TEXTURE_2D, t.tex);
++    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
++    gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
++    gl.texSubImage2D(gl.TEXTURE_2D, 0, x - t.box[0], y - t.box[1], gl.RGBA, gl.UNSIGNED_BYTE, img);
++    return true;
++  }
++
+   /** Diagnostics: which painting(s) the last frame showed. */
+   paintState(): PaintState | null {
+     return this.lastPaint;

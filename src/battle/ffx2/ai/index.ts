@@ -25,6 +25,11 @@ import { leblancSyndicateScripts } from './leblanc-syndicate.ts';
 // Chapter XI, the fallen aeons on the Road to the Farplane (registered, unlisted).
 import { x2AnimaScript, x2ShivaScript } from './fallen-aeons.ts';
 import { magusSistersScript } from './magus-sisters.ts';
+// Chapter XIII, Paragon then Trema on Cloister 100 (registered, unlisted).
+import { paragonScript } from './paragon.ts';
+import { tremaArenaScript, tremaScript } from './trema.ts';
+// Chapter XIII's OFF options: Oversoul Paragon (TR7 b) and Fiend Arena Trema (TR1 b).
+import { paragonOversoulScript } from './paragon-oversoul.ts';
 // Chapter XV, the shades of the Den of Woe (registered, unlisted).
 import { denOfWoeScripts } from './den-of-woe.ts';
 
@@ -58,6 +63,10 @@ const SCRIPTS: readonly AiScript[] = [
   x2ShivaScript,
   magusSistersScript,
   x2AnimaScript,
+  paragonScript,
+  tremaScript,
+  paragonOversoulScript,
+  tremaArenaScript,
   ...denOfWoeScripts,
   idleScript,
   basicAttackScript,

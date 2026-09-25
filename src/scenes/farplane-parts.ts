@@ -50,16 +50,35 @@ export const FARPLANE_PART_ANCHORS: PartAnchors = {
  * formation holds, so it fell to `ENEMY_SLOTS[0]`, which is solved for the
  * tail: at 1600x900 (GPU, seed 1, first menu) it ran x 479..1124, right behind
  * Rikku and Paine, and the Right Bulwark's ring and bracket landed on the
- * party. This spot is the live build's frame (76f587c3): live stood the body
- * at x 5.75..5.82, z -10 and `ProneLay` slid its wide painting +1.38 along the
- * floor, so the painting was drawn centred on x 7.13..7.20. A pinned figure is
- * never slid (`layProneFigures`), so the spot is where the painting is drawn.
- * Where the Left Bulwark's ring should sit relative to the command window is
- * an open question for Bailey: `docs/concepts/layout/ch5-vegnagun-staging/`.
+ * party. A pinned figure is never slid (`layProneFigures`), so the spot is
+ * where the painting is drawn.
+ *
+ * Bailey picked option C of `docs/concepts/layout/ch5-vegnagun-staging/` on
+ * 2026-09-25 ("I'll go with all your recommendations"): 4.35 left of live's
+ * frame (76f587c3, drawn centred on x ~7.15) and 2 deeper, so the Left
+ * Bulwark's ring and name plate, which ride the far leg's foot, stand clear of
+ * the FFX-2 command window instead of under it (measured at 1600x900 in the
+ * option sheet: ring x 1073-1153 against the window's 1246; the Body about 8%
+ * smaller than live's). Staging, not game data.
  */
 export const FARPLANE_ENEMY_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  'vegnagun-body': [7.15, 0, -10.0],
+  'vegnagun-body': [2.8, 0, -12.0],
+  // Where live a999d133's relaxation settled them (GPU, 1600x900 and 2000x1012), now that the
+  // party is held (below): Vegnagun's Leg (Chapter 5, link 2) and Shiva (Chapter XI, link 1).
+  'vegnagun-leg': [2.02, 0, -5.0],
+  'x2-shiva': [1.12, 0, -5.0],
 };
 
-/** What `buildFarplaneScene` publishes onto its `SceneBuild` (`SceneStaging`). */
-export const FARPLANE_STAGING = { partAnchors: FARPLANE_PART_ANCHORS, enemySpots: FARPLANE_ENEMY_SPOTS } as const;
+/**
+ * What `buildFarplaneScene` publishes onto its `SceneBuild` (`SceneStaging`).
+ *
+ * `holdParty` (2026-09-25, repair of 04681f5c): the girls stand exactly on
+ * `PARTY_SLOTS` (`farplane.ts`), which hold where live's relaxation settled
+ * them. The relaxation runs only in the opening settle window and stops when a
+ * menu opens, so whether it ran decided the frame: unrelaxed at link 3 (2000x1012)
+ * Paine stood 0.79 visible behind Rikku and the intent slab, while a Bulwark was
+ * aimed, fell over Yuna; relaxed at link 2 it pushed Paine across the Leg. The
+ * fiends it used to part from the party stand pinned on live's settled spots
+ * above. Staging, not game data; FFX-2 only (Chapter 5 and Chapter XI).
+ */
+export const FARPLANE_STAGING = { partAnchors: FARPLANE_PART_ANCHORS, enemySpots: FARPLANE_ENEMY_SPOTS, holdParty: true } as const;

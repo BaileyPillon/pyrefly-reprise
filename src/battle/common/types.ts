@@ -1417,7 +1417,7 @@ export interface ItemDef {
   usableInBattle: boolean;
   /** Selectable from the prep-menu Item screen. */
   usableInMenu: boolean;
-  /** Shop price in gil, 0–999 999. 0 for items that are never sold. */
+  /** Shop price in gil, 0–999 999. 0 for items never sold, or whose price is unsourced (the data file's note says which). */
   price: number;
   /** Icon key for the item list. */
   iconKey?: string;
@@ -2511,6 +2511,8 @@ export interface EnemyDef {
   level?: number;
   /** FFX-2 only: ATB ticks the enemy waits after its gauge fills before choosing. 0 = acts immediately. */
   thinkingPeriod?: number;
+  /** FFX-2: statuses held from the start that no Dispel removes (`[estimate]` reading; Trema's Spellspring; CONTRACT-CHANGES). */
+  autoStatuses?: StatusId[];
 }
 
 /** A music change wired to a battle phase. */
@@ -2572,4 +2574,10 @@ export interface EnemyGroupDef {
    * (`BattleScreenSetup.carryFfx2`). Absent everywhere else, so no other chain changes.
    */
   carriesFullPartyState?: boolean;
+  /** FFX-2: a chained link that is a retry checkpoint with no Save Sphere (Chapter XIII's Trema, TR5 b; CONTRACT-CHANGES). */
+  checkpointOnEntry?: boolean;
+  /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema; CONTRACT-CHANGES). */
+  carriesPartyState?: boolean;
+  timedAilmentDefaults?: boolean; // FFX-2: a duration-0 ailment row lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES)
+  actionTimeSeconds?: number; // FFX-2: seconds an action takes before its actor's gauge refills, an [estimate] (E4, `battle/ffx2/action-time.ts`; CONTRACT-CHANGES)
 }

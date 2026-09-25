@@ -22,6 +22,7 @@ import type { BattleState, FFXCombatant } from '../../src/battle/common/types.ts
 import { FFXBattleHud } from '../../src/ui/ffx/FFXBattleHud.ts';
 import { SensorPanel } from '../../src/ui/ffx/SensorPanel.ts';
 import { bannerSpeaker } from '../../src/ui/ffx/bannerSpeaker.ts';
+import { applyEventToVitals, captureVitals, projectState } from '../../src/engine/BattlePresenterVitals.ts';
 import { makeFakeBattleState, makeFakeCombatants, makeFakeTurnPreview } from '../../src/ui/ffx/testFixtures.ts';
 
 const hosts: HTMLElement[] = [];
@@ -79,6 +80,45 @@ describe('(1) a departed combatant takes its Sensor plate and chip with it', () 
     hud.sync(seymourGone, makeFakeTurnPreview());
     expect(hud.enemyPlate.el.hidden).toBe(false);
     expect(hud.enemyPlate.el.textContent).toContain('Mortiorchis');
+  });
+
+  // Repair pass (the verifier's Chapter VIII run): the last enemy's fall plays
+  // with no full `sync` before the result, so "I EVRAE" stayed up over empty
+  // sky for 3.5 s. The per-event projection (`syncVitals`) now releases it at
+  // the blow, for a KO and for a shatter / Eject alike.
+  const atTheBlow: Array<[string, object]> = [
+    ['a KO (the last enemy falling, no sync after it)', { type: 'ko', targetId: 'mortiorchis' }],
+    [
+      'a shatter (status-add eject, before `removed` is synced)',
+      { type: 'status-add', targetId: 'mortiorchis', status: 'eject', instance: { id: 'eject', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: true } },
+    ],
+  ];
+  for (const [how, event] of atTheBlow) {
+    it(`clears the plate at the blow, from the projected vitals alone: ${how}`, () => {
+      const { hud } = mountHud();
+      const state = makeFakeBattleState();
+      hud.sync(state, makeFakeTurnPreview());
+      hud.onEvent({ seq: 1, type: 'sensor', targetId: 'mortiorchis', text: '' } as never);
+      hud.enemyPlate.toggle();
+      expect(hud.enemyPlate.el.hidden).toBe(false);
+
+      const vitals = captureVitals(state);
+      expect(applyEventToVitals(vitals, { seq: 2, ...event } as never)).toBe(true);
+      hud.syncVitals(projectState(state, vitals)); // no `sync`: the presenter is mid-burst
+      expect(hud.enemyPlate.el.hidden).toBe(true);
+      expect(hud.enemyPlate.isScanned('mortiorchis')).toBe(true);
+    });
+  }
+
+  it('a hit that does not fell the subject keeps the plate at the blow', () => {
+    const { hud } = mountHud();
+    const state = makeFakeBattleState();
+    hud.sync(state, makeFakeTurnPreview());
+    hud.onEvent({ seq: 1, type: 'sensor', targetId: 'mortiorchis', text: '' } as never);
+    const vitals = captureVitals(state);
+    applyEventToVitals(vitals, { seq: 2, type: 'damage', targetId: 'mortiorchis', amount: 1, crit: false, hitIndex: 0, hitCount: 1 } as never);
+    hud.syncVitals(projectState(state, vitals));
+    expect(hud.enemyPlate.el.hidden).toBe(false);
   });
 
   it('SensorPanel.release on its own: nothing to release is a no-op', () => {

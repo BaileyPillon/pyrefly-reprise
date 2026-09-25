@@ -111,6 +111,36 @@
       "px": [832, 1216],
       "note": "2026-09-24: mohawk ink starts on row 0, the shouting mouth ends near row 720 and the chin near row 755. The fallback fy 0.406 started the 879-row window at row 137 and cut the mohawk in half; fy 0.02 shows rows 7 to 886, the whole mohawk down to the collarbones."
     },
+    "trema": {
+      "fx": 0.3653,
+      "fy": 0.0193,
+      "px": [824, 1182],
+      "note": "FFX-2 Chapter XIII, Bailey's pick 2026-09-25 (Trema B, \"I'll go with all your recommendations\"). Measured 2026-09-25 off a 3x grid labelled in file pixels: near-profile, the lit eye's pupil at (350, 438) and the far eye at (252, 463); fx is their midpoint. The card shows 871 of the file's 1182 rows (cover on the 19.71vw x 20.83vw box, slack 311). The eboshi's ink starts on row 16, and the unknown-id fallback (50% 29.5%) started the window at row 92, cutting the top of the hat, his one sourced silhouette. fy 0.0193 shows rows 6 to 877: 10 rows of air, the whole hat with its band and cord, the face and the beard down to the stole."
+    },
+    "gippal": {
+      "fx": 0.2632,
+      "fy": 0,
+      "px": [832, 1216],
+      "note": "FFX-2 Chapter V, Bailey's pick 2026-09-25 (Gippal A). Measured 2026-09-25 off a 2x grid labelled in file pixels: the green pupil at (273, 313), the patched eye's centre at about (165, 385) (head rolled; ipd would be the 130 px diagonal). Hair spikes reach row 0, so the fallback (window from row 99) trimmed them; fy 0 shows rows 0 to 879: every spike, the patch, the smirk, the chin near row 494 and the pauldron."
+    },
+    "baralai": {
+      "fx": 0.4945,
+      "fy": 0.02,
+      "px": [733, 1138],
+      "note": "FFX-2 Chapter V, Bailey's pick 2026-09-25 (Baralai B). Measured 2026-09-25 off a 3x grid labelled in file pixels: pupils at (310, 425) and (415, 373). The card shows 774 of the file's 1138 rows (slack 364). Hair ink starts on row 17; the fallback started the window at row 107 and cut the swept-up hair. fy 0.02 shows rows 7 to 781: the hair, the blue headband, the lowered eyes, the chin near row 516, the collar and the staff head."
+    },
+    "buddy": {
+      "fx": 0.5204,
+      "fy": 0.12,
+      "px": [832, 1216],
+      "note": "FFX-2 Chapter V, Bailey's pick 2026-09-25 (Buddy B). Measured 2026-09-25 off a 2x grid labelled in file pixels: the goggle lenses (his 'eyes', visual bible 1.23.7) centre at (309, 504) and (557, 516); the grin runs rows 740 to 800 and the chin is near row 900. Hair reaches row 0 and is cut by the frame anyway, so the window is set by the chin: fy 0.12 shows rows 40 to 919, the goggles, the grin, the chin and the headset mic; the fallback (from row 99) kept the chin too but put the lenses high."
+    },
+    "seymour-omnis": {
+      "fx": 0.4609,
+      "fy": 0.04,
+      "px": [832, 1216],
+      "note": "FFX Chapter XII, Bailey's pick 2026-09-25 (Omnis portrait A with the judge's install fixes). Measured 2026-09-25 off a 3x grid labelled in file pixels: pupils at (327, 426) and (440, 386), the same as the options round's reading. Hair and cowl ink start on row 23; fy 0.04 shows rows 13 to 892: the hair, both red cowl eyes, the veins, the smile (chin near row 575) and the spiral tattoo. Not yet a speaker id on main (B17 lives on branch chapter-omnis-0925)."
+    },
     "jecht": {
       "fx": 0.5,
       "fy": 0.0543,

@@ -59,18 +59,14 @@ import { ffx2LeblancScripts } from './scripts/ffx2-leblanc.ts';
 import { seymourAnimaMacalaniaScripts } from './scripts/seymour-anima-macalania.ts';
 import { evraeAirshipScripts } from './scripts/evrae-airship.ts';
 import { yojimboCavernScripts } from './scripts/yojimbo-cavern.ts';
+import { TREMA_AI_TRIGGERS, TREMA_LINK_SEAM, ffx2TremaShippedScripts } from './scripts/ffx2-trema.ts';
 
 /** Chapter ids, matching `data/encounters.ts`. */
 export type ChapterKey =
-  | 'seymour-flux'
-  | 'yunalesca'
-  | 'braskas-final-aeon'
-  | 'ffx2-bahamut'
-  | 'ffx2-vegnagun-shuyin'
-  | 'ffx2-leblanc'
-  | 'seymour-anima-macalania'
-  | 'evrae-airship'
-  | 'yojimbo-cavern';
+  | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
+  | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
+  | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern'
+  | 'ffx2-trema';
 
 /** Every chapter's story layer, in play order. */
 export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
@@ -83,6 +79,7 @@ export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
   'seymour-anima-macalania': seymourAnimaMacalaniaScripts,
   'evrae-airship': evraeAirshipScripts,
   'yojimbo-cavern': yojimboCavernScripts,
+  'ffx2-trema': ffx2TremaShippedScripts, // Chapter XIII as listed 2026-09-25: Oversoul Paragon, then Trema
 };
 
 export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
@@ -132,6 +129,7 @@ export const AI_EMITTED_TRIGGERS: Readonly<Record<ChapterKey, readonly string[]>
   // status-applied) [docs/handoff/chapter-evrae-script.md].
   'evrae-airship': [],
   'yojimbo-cavern': [],
+  'ffx2-trema': TREMA_AI_TRIGGERS, // Trema's Meteor and Ultima lines (`battle/ffx2/ai/trema.ts`)
   'ffx2-vegnagun-shuyin': [
     'farplane-voice',
     'farplane-voice-braska',
@@ -190,6 +188,8 @@ export const CHAIN_SEAMS: Readonly<Record<ChapterKey, readonly string[]>> = {
   // One battle, one formation: every beat is an in-fight interrupt.
   'evrae-airship': [],
   'yojimbo-cavern': [],
+  // The Paragon-to-Trema link: the seam fires off Paragon's KO, between the two formations.
+  'ffx2-trema': [TREMA_LINK_SEAM],
 };
 
 /** The budget a given script has to fit inside. */

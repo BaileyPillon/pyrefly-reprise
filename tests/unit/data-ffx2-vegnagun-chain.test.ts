@@ -165,8 +165,7 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
         { itemId: 'x2-mega-potion', count: 1, chance: 50 },
         { itemId: 'x2-x-potion', count: 1, chance: 50 },
       ]);
-      // Rare slot is `x2-l-bomb`, which resolves in no registry — see the
-      // KNOWN_UNRESOLVED exception below. Owned by another track; not fixed here.
+      // Rare slot is `x2-l-bomb`: an ItemDef row since 2026-09-25 (`items/damage.ts`).
       expect(e.rewards.steal, id).toEqual({
         baseChance: 50,
         common: { itemId: 'x2-phoenix-down', count: 1 },
@@ -227,16 +226,14 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
  * Every drops/steal item id the chain ships should name something a player
  * can look up: an `ItemDef` (`FFX2_ITEMS`) or an accessory
  * (`src/battle/ffx2/accessories.ts`'s `accessoryEffect`) — the two registries
- * `itemLabel` and the accessory stat layer draw on. `x2-l-bomb` is the one
- * confirmed exception: it is the Bulwark record's rare steal
- * (`vegnagun-body.ts`, owned by another track), and it resolves in neither
- * registry, nor under any other spelling checked here (`l-bomb`, `lbomb`,
- * `x2-lbomb` all also miss). `KNOWN_UNRESOLVED` is exhaustive on purpose —
- * the second `it` fails the moment the id starts resolving, so the exception
- * can't quietly go stale.
+ * `itemLabel` and the accessory stat layer draw on. `x2-l-bomb`, the Bulwark
+ * record's rare steal, was the one exception until 2026-09-25, when it got its
+ * sourced `ItemDef` row (`items/damage.ts`), so `KNOWN_UNRESOLVED` is empty.
+ * It stays exhaustive on purpose: the second `it` fails the moment a listed id
+ * starts resolving, so an exception can't quietly go stale.
  */
 describe('Vegnagun -> Shuyin chain: item ids resolve somewhere', () => {
-  const KNOWN_UNRESOLVED = ['x2-l-bomb'];
+  const KNOWN_UNRESOLVED: string[] = [];
 
   function resolves(itemId: string): boolean {
     return itemId in FFX2_ITEMS || accessoryEffect(itemId) !== undefined;

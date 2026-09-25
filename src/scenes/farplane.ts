@@ -91,16 +91,16 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * `bevelle-underground.ts` (see the long note on `PARTY_SLOTS` there): the old
  * zig-zag swung the middle slot out to x -2.95, which this scene's `action` rig
  * projects almost off the left edge, and the three girls collapsed into one
- * pile (`docs/screenshots/53-ffx2-vegnagun.png`). Measured at `idle`/`action`
- * with `stage.project` at 1600x900, these land at 295/498/648 and 194/408/562 —
- * staggered front to back, none closer than ~150px to her neighbour.
+ * pile (`docs/screenshots/53-ffx2-vegnagun.png`). 2026-09-25: x is where the
+ * relaxation settled them on live a999d133 (were -2.3/-1.45/-0.55), held there (`farplane-parts.ts`); unrelaxed at
+ * Ch5 link 3, Paine stood 0.79 visible behind Rikku (the Body on D-142's spot).
  *
  * Slot order is the build's `members` order: Yuna, Rikku, Paine, left to right.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [-2.3, 0, 1.45], // front-left  (Yuna)
-  [-1.45, 0, 0.1], // middle, stepped right and back (Rikku)
-  [-0.55, 0, -1.3], // back-right, furthest from camera (Paine)
+  [-2.48, 0, 1.45], // front-left  (Yuna)
+  [-1.44, 0, 0.1], // middle, stepped right and back (Rikku)
+  [-0.33, 0, -1.3], // back-right, furthest from camera (Paine)
   // Reserve — parked well outside every rig's frustum, frame-left.
   [-11.5, 0, 2.6],
   [-12.4, 0, 1.0],

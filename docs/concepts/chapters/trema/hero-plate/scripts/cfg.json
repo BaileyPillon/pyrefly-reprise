@@ -1,0 +1,55 @@
+{
+ "src": "D:/Tools/pyrefly-scratch/hero-plates/trema/options/",
+ "out": "D:/Tools/pyrefly-scratch/hero-plates/trema/shots/",
+ "host": "ch4-ffx2-bahamut",
+ "chapter": "ffx2-bahamut",
+ "port": 5821,
+ "words": "D:/Final Fantasy/docs/concepts/chapters/trema/hero-plate/scripts/words.json",
+ "focal": {
+  "a": {
+   "x": 0.62,
+   "y": 0.3
+  },
+  "b": {
+   "x": 0.62,
+   "y": 0.32
+  },
+  "c": {
+   "x": 0.45,
+   "y": 0.35
+  }
+ },
+ "docs": "D:/Final Fantasy/docs/concepts/chapters/trema/hero-plate/",
+ "title": "Chapter XIII  Trema  -  hero plate options (FFX-2 only)",
+ "names": {
+  "a": "A  Trema alone on Cloister 100",
+  "b": "B  Trema over the beaten Paragon  (RECOMMENDED)",
+  "c": "C  Yuna facing Trema"
+ },
+ "crops": [
+  [
+   "a",
+   560,
+   60,
+   1060,
+   560,
+   "A 1:1: the ear stays pink"
+  ],
+  [
+   "b",
+   900,
+   150,
+   1344,
+   650,
+   "B 1:1: Paragon breaking up"
+  ],
+  [
+   "c",
+   0,
+   0,
+   520,
+   560,
+   "C 1:1: Trema from his idle"
+  ]
+ ]
+}

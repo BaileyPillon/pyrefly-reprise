@@ -47,6 +47,12 @@ export interface SlabRect {
   top: number;
   right: number;
   bottom: number;
+  /**
+   * A painted fighter rather than HUD chrome. Under {@link placeSlab}'s
+   * `tiered` mode the slab may sit on one of these when that is the only way
+   * to stay off the chrome, never the other way round.
+   */
+  soft?: boolean;
 }
 
 /** The dodge step's own hard-coded clearance, mirrored from `EnemyIntent.layout`. */
@@ -101,6 +107,18 @@ export interface SlabPlacement {
  * With nothing free — a small frame with a big board — the candidate that
  * covers the least is returned with `free: false`, which is still strictly less
  * overlap than the greedy pass produces.
+ *
+ * **`opts.tiered`** (the intent slab; FFX-2 only): obstacles marked `soft`
+ * (the fighters) rank below the chrome. The winner covers the least chrome
+ * first, then the least fighter, then is nearest. Without it every square pixel
+ * counted the same, so a tall slab (Trema's, 375x321 at 1600x900) that could
+ * not clear both took 2,835 px² of the command stack over a larger slice of
+ * Trema's own robe, and printed across ATTACK.
+ *
+ * **`opts.chip`**: the slab's `E HIDE` chip, `w` x `h`, riding its top-right
+ * corner `gap` above its top edge (`EnemyIntent.layout`). It is placed with the
+ * slab, so it is scored with it: a slab parked just under the boss plate wore
+ * its chip across the plate (Chapter XI, 663 px² at 1280x720).
  */
 export function placeSlab(
   natural: { left: number; top: number },
@@ -116,7 +134,9 @@ export function placeSlab(
    * way to keep the two apart from out here.
    */
   headroom = 0,
+  opts: { tiered?: boolean; chip?: { w: number; h: number; gap: number } } = {},
 ): SlabPlacement {
+  const { tiered = false, chip } = opts;
   const { w, h } = size;
   const maxLeft = layer.width - w - edge;
   const floor = edge + headroom;
@@ -130,25 +150,33 @@ export function placeSlab(
     lefts.add(clamp(edge, maxLeft, o.left - w - DODGE_GAP));
     // Downward only; see the doc comment.
     tops.add(clamp(floor, maxTop, Math.max(wanted, o.bottom + DODGE_GAP)));
+    if (chip) tops.add(clamp(floor, maxTop, Math.max(wanted, o.bottom + DODGE_GAP + chip.h + chip.gap)));
   }
 
   let best: SlabPlacement | null = null;
   let bestScore = Infinity;
+  let bestHard = Infinity;
   let bestCover = Infinity;
   for (const left of lefts) {
     for (const top of tops) {
       if (top < wanted - 0.5) continue;
       const box = { left, top, right: left + w, bottom: top + h };
+      const cap = chip ? { left: box.right - chip.w, top: top - chip.gap - chip.h, right: box.right, bottom: top - chip.gap } : null;
       let cover = 0;
-      for (const o of obstacles) cover += overlapArea(box, o);
+      let hard = 0;
+      for (const o of obstacles) {
+        const a = overlapArea(box, o) + (cap ? overlapArea(cap, o) : 0);
+        cover += a;
+        if (!tiered || !o.soft) hard += a;
+      }
+      // Untiered, every obstacle is chrome, so `hard === cover` and this is the old rule.
       const score = Math.abs(left - natural.left) + VERTICAL_COST * Math.abs(top - natural.top);
-      const free = cover === 0;
-      const better = free
-        ? bestCover > 0 || score < bestScore
-        : bestCover > 0 && (cover < bestCover || (cover === bestCover && score < bestScore));
+      const better =
+        hard !== bestHard ? hard < bestHard : cover !== bestCover ? cover < bestCover : score < bestScore;
       if (!better) continue;
-      best = { left, top, free };
+      best = { left, top, free: cover === 0 };
       bestScore = score;
+      bestHard = hard;
       bestCover = cover;
     }
   }

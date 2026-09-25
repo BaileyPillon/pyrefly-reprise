@@ -74,10 +74,10 @@ afterEach(() => {
 const selectedId = (rig: Rig): unknown => rig.screen.snapshot()['selectedId'];
 
 describe('the board on screen', () => {
-  it('draws nine cards in two game groups — the hero plus eight on the rail', () => {
+  it('draws ten cards in two game groups — the hero plus nine on the rail', () => {
     const { root } = mount();
     expect(root.querySelectorAll('.fe-hero')).toHaveLength(1);
-    expect(root.querySelectorAll('.fe-card')).toHaveLength(8);
+    expect(root.querySelectorAll('.fe-card')).toHaveLength(9);
     const groups = [...root.querySelectorAll('.fe-rail__group')].map((g) => g.textContent?.trim());
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
   });
@@ -140,8 +140,8 @@ describe('the keyboard', () => {
   it('wraps left from the first card to the last playable one', () => {
     const rig = mount();
     rig.key('ArrowLeft');
-    // Leblanc now, since it landed as the sixth chapter.
-    expect(selectedId(rig)).toBe('ffx2-leblanc');
+    // Trema (Chapter XIII) now, listed 2026-09-25 after Chapter VI in the FFX-2 group.
+    expect(selectedId(rig)).toBe('ffx2-trema');
   });
 
   it('crosses between the two games with up and down', () => {

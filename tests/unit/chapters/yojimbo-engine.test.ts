@@ -495,8 +495,8 @@ describe('The Cavern build and the chapter registration', () => {
     expect(ch).toMatchObject({ game: 'ffx', number: 9, title: 'Yojimbo' });
     expect(ch?.enemyGroupRef.id).toBe(GROUP_ID);
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
-    expect(CHAPTERS.map((c) => c.id).slice(-2)).toEqual(['evrae-airship', 'yojimbo-cavern']);
-    expect(CHAPTER_IDS.at(-1)).toBe('yojimbo-cavern');
+    expect(CHAPTERS.map((c) => c.id).slice(-3)).toEqual(['evrae-airship', 'yojimbo-cavern', 'ffx2-trema']); // XIII listed 2026-09-25
+    expect(CHAPTER_IDS.slice(-2)).toEqual(['yojimbo-cavern', 'ffx2-trema']);
     // The story layer (tests/unit/chapters/yojimbo-content.test.ts pins its lines):
     // the pre scene ends by opening the battle, the post scene shows results.
     expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' });

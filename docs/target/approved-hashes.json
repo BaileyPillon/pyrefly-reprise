@@ -525,8 +525,17 @@
   },
   "chapter:leblanc-idles:2026-09-23": {
    "public/art/characters/leblanc/idle.png": {
-    "sha256": "4fea45f98bf44e7aa6aebf0004a2f845f268ebf974992bdd559b3b5258c9094b",
-    "mtime": "2026-09-21T21:48:52.369Z"
+    "sha256": "77192c23501957c6172b351dac7aa525341faef56b77d648f48a10fc4fabe248",
+    "mtime": "2026-09-25T04:03:12.758Z",
+    "approved": "2026-09-25",
+    "words": "I'll go with all your recommendations",
+    "note": "Bailey, 2026-09-25 ~01:40 EDT, answering the driver's recommendation for PR-0096: Leblanc's fan = the folding fan fully open, red leaf (D-036, the same fan as the installed cast), candidate idle.fan-open.red.png from commit 4091d809, judged PASS 7.8 (docs/concepts/chapters/leblanc/fan-open/JUDGE.md). Pixels outside the fan and matte masks are byte-identical to the superseded idle; idle.json canvas and baseline unchanged. FFX-2 only, Chapter VI. Backup of the new file: D:/Tools/pyrefly-art-backup/approved/2026-09-25-leblanc-fan/.",
+    "supersedes": {
+     "sha256": "4fea45f98bf44e7aa6aebf0004a2f845f268ebf974992bdd559b3b5258c9094b",
+     "mtime": "2026-09-21T21:48:52.369Z",
+     "approved": "2026-09-23",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/leblanc-fan/replaced/idle.png"
+    }
    },
    "public/art/characters/logos/idle.png": {
     "sha256": "7aa37e8b2873caef7ff0f85db9f267045ec70ee62e289b4692e264e25e6c45e3",
@@ -722,6 +731,283 @@
    "public/art/characters/seymour-natus/cast.png": {
     "sha256": "975fd8fd3cb1e4640234999a25a8889d7e72ec446a311715469c5023a584a419",
     "mtime": "2026-09-24T23:29:40.642Z"
+   }
+  },
+  "chapter:yojimbo-sakura:2026-09-25": {
+   "words": "All your recommendations",
+   "note": "Bailey, 2026-09-24 ~13:35 EDT, O-4 for Chapter IX: chamber A cold (D-061) with the night-sakura arrival playing at fight start (D-072, docs/concepts/chapters/yojimbo/chamber/sheet-arrival.jpg, option A bottom row). This is that option's own tree: the tree2 raw render recoloured by the overlay recipe (make_sakura.py: pink to the visual bible #8FC8F0, ground levelled to black, base faded, edges feathered; drawn additively by src/scenes/cavern-stolen-fayth-arrival.ts). Installed 2026-09-25 as public/art/backdrops/cavern-stolen-fayth/sakura.png (new file, nothing replaced). Side by side with the target: docs/screenshots/yojimbo-polish/01-sakura-target-vs-build.jpg. No independent judge report (options round only). FFX only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-yojimbo-sakura/ (with make_sakura.py).",
+   "public/art/backdrops/cavern-stolen-fayth/sakura.png": {
+    "sha256": "c3e66e3fb678ee4bc91dde2a33c58d083583aed1552ad08718460ea88ed2a675",
+    "mtime": "2026-09-25T03:44:20.535Z"
+   }
+  },
+  "chapter:macalania:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, answering the driver's Chapter VII recommendation on docs/concepts/chapters/macalania/unlock/art-approval.jpg: approve the five battle paintings and the backdrop as final art, redo the pause plate (pause/macalania.png is NOT in this set; its redo options are docs/concepts/chapters/macalania/unlock/pause-plate-redo.jpg). Judges: ../r3-JUDGE-2.md, ../r3-JUDGE-3.md, production/judge.md (Seymour idle 7, cast 7, hurt 7; Guardian idle pixels 7 / in-game read 6, the fix is the renderer's bloom, not the art; Guardian cast 7; backdrop 7). FFX only, Chapter VII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania/.",
+   "public/art/characters/seymour-macalania/idle.png": {
+    "sha256": "edb8a444172244a0ebdbb691dd9273e8bd6339fae28c151fc78f719cc34eb721",
+    "mtime": "2026-09-23T17:42:11.008Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/seymour-macalania/cast.png": {
+    "sha256": "6f40f101a6d5da45c48408fff4ed2c9636e163fda8a9a020cb762c0033f9f1e1",
+    "mtime": "2026-09-24T05:56:15.564Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/seymour-macalania/hurt.png": {
+    "sha256": "5b16020259c5fea35385ec5ee4be78d65f49f4bd83c3add61cd418d733a8d441",
+    "mtime": "2026-09-24T05:56:15.645Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/guado-guardian/idle.png": {
+    "sha256": "963b58eee9206443b108d4b9f1a3710beba382255529db3ec7c0fac3cbbb88ab",
+    "mtime": "2026-09-24T03:29:42.722Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/guado-guardian/cast.png": {
+    "sha256": "9c7930fca598fd4971a74cd0970d461a7d6db271c96cb59c37ace46ea53e9d96",
+    "mtime": "2026-09-24T05:56:15.601Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/macalania-temple.png": {
+    "sha256": "1a83a9fcfc3d95a2c10a29190b1a86f5b9cdd9878ad171fd4f0c11f2605efb42",
+    "mtime": "2026-09-22T19:43:11.807Z",
+    "approved": "2026-09-25"
+   }
+  },
+  "chapter:trema:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, answering every Chapter XIII recommendation (O-1 A priest with the review's torn robe, O-2 A gold armoured beast, O-2b link staged, O-3 B Cloister 100 repaint; Review corrections applied; docs/concepts/chapters/trema/README.md, docs/plans/chapter-trema-review.md). Installed in 6896b272 (docs/concepts/chapters/trema/INSTALLED.md). Judge: docs/concepts/chapters/trema/production/JUDGE.md, independent 1:1 judge, bar 7, all five PASS (Trema idle 7.7, Trema cast 7.1, Paragon idle 7.7, Paragon cast 7.1, plate 7.6; worst: Trema cast shoulder-seam artefacts, Paragon cast light edge fringe and rigid pitch, the plate's banners carry no Yu Yevon likeness, which stays Bailey's call). The link (O-2b) is staging, not a painting, and is not in this set. FFX-2 only, Chapter XIII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-trema/.",
+   "public/art/characters/trema/idle.png": {
+    "sha256": "77b4cba2eb4b99fb803f678ac526d0685efd31704136f0bdc8fe7de0300f0903",
+    "mtime": "2026-09-25T04:16:55.145Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/trema/cast.png": {
+    "sha256": "744cc1501f8e98be8f46974d162b4d0a1d48e957864b716161be87c50493e506",
+    "mtime": "2026-09-25T04:16:55.185Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paragon/idle.png": {
+    "sha256": "0e3972b558c07d71c70eb60f4d71752ea9b91601e81293e39673146f65e569b9",
+    "mtime": "2026-09-25T04:16:55.232Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paragon/cast.png": {
+    "sha256": "f2f2300b6f8f30e7a8021457de08cd625f7f68996b48dc99aa2f1e39d5312a7d",
+    "mtime": "2026-09-25T04:16:55.263Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/via-infinito.png": {
+    "sha256": "82eedcd375055e10fa8d537b2b1f75b4d1d68575cdb3adffe319c9e7548b47fa",
+    "mtime": "2026-09-25T04:16:55.295Z",
+    "approved": "2026-09-25"
+   }
+  },
+  "chapter:gippal:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/gippal/README.md (O-1 B translucent shade, the same treatment for Baralai and Nooj, O-3 A cold-blue Den). Locked after the independent 1:1 judge docs/concepts/chapters/gippal/production/JUDGE.md: gippal-shade idle 7.6 and cast 7.2, baralai-shade idle 7.5, den-of-woe 7.6 (byte-identical to the picked O-3 A plate). NOT in this set (judged FAIL, still CANDIDATE): baralai-shade/cast 5.7, nooj-shade/idle 6.9, nooj-shade/cast 6.8. FFX-2 only, Chapter XV (provisional). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-gippal/.",
+   "public/art/characters/gippal-shade/idle.png": {
+    "sha256": "dd3f7cffe7087b4cfc6da4dec25a182c6b4c2af128a6fdf063ac0c7c1868a901",
+    "mtime": "2026-09-25T04:26:00.234Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/gippal-shade/cast.png": {
+    "sha256": "b0c9a95ccf4718916199a6b420c37cb004f2aac2574c29238449e27cde3a2452",
+    "mtime": "2026-09-25T04:26:00.276Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/baralai-shade/idle.png": {
+    "sha256": "1b3270d74a12365cd01387af2ab9b3cde3e272a190cbefe6e99c34f0f05fbaa3",
+    "mtime": "2026-09-25T04:26:00.291Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/den-of-woe.png": {
+    "sha256": "96965cfad6dca7e12ce2004be2d643e07eea4c59b0beafd215d48b022e46c95e",
+    "mtime": "2026-09-25T04:26:00.370Z",
+    "approved": "2026-09-25"
+   }
+  },
+  "chapter:omnis:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/omnis/README.md and docs/plans/chapter-omnis-review.md (O-1 A new paint, O-2 B painted discs with the facing quarter lit, O-3 C deep violet, B17 c). Locked after the independent 1:1 judge docs/concepts/chapters/omnis/production/JUDGE.md: seymour-omnis idle 7.7 and cast 7.4, mortiphasm disc 7.8, mortiphasm-facing layer 8.3, garden-of-pain 7.5 (the picked C plate plus the sourced steps). The mortiphasm ring order (Fire, Water, Ice, Thunder clockwise) is still our estimate (plan B8): a re-ordered disc is a new file that needs its own lock, with this hash kept as superseded. NOT in this set (judged FAIL 5.9, still CANDIDATE): portraits/seymour-omnis.png (blown forehead oval, hair-crown hole, costume off the idle); B17 falls back to the approved seymour-macalania portrait. FFX only, Chapter XII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-omnis/.",
+   "public/art/characters/seymour-omnis/idle.png": {
+    "sha256": "91f67b3a27498c86195e1d352605623a78e350cbfa736c9077341d16767359f3",
+    "mtime": "2026-09-25T04:23:19.835Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/seymour-omnis/cast.png": {
+    "sha256": "98749aa066a456c0e3f3334238ccce2a3d73f2f6059206eae4b551b193225026",
+    "mtime": "2026-09-25T04:23:20.420Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/mortiphasm/idle.png": {
+    "sha256": "962416288387fdfdd998f52575af1a3e6c9c9de6755cc8758126b9afa0c08c0c",
+    "mtime": "2026-09-25T04:23:20.630Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/mortiphasm-facing/idle.png": {
+    "sha256": "0f5445a99dc8e30b301bfcb8e7032dcf09f3850a6479790b873d5f541df61be2",
+    "mtime": "2026-09-25T04:23:20.712Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/garden-of-pain.png": {
+    "sha256": "d18315b7305976c13e2bf4141ff5e79cd7b7df724441874db4f639a3d65d5d93",
+    "mtime": "2026-09-25T04:23:24.255Z",
+    "approved": "2026-09-25"
+   }
+  },
+  "chapter:isaaru:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/isaaru/README.md and docs/plans/chapter-isaaru-review.md (O-1 A with the knee-length coat and sea-green sash repairs, O-2 B, O-3 A, O-4 C his sea-green edge on the Ifrit/Valefor/Bahamut paintings, B19 KO = the dissolve). Locked after the independent 1:1 judge docs/concepts/chapters/isaaru/production/JUDGE.md: isaaru idle 7.3, isaaru portrait 7.8, via-purifico 7.6, grothia idle/attack/overdrive 8.0/7.6/7.3, pterya 7.3/7.8/7.6, spathi 7.4/7.7/7.6. Grothia, Pterya and Spathi are derived from the approved D-089 ifrit, valefor and bahamut paintings (read only); a change to those sources does not change these files. Known and disclosed: the knot is ornamental, not a bow; Pterya idle inherits Valefor idle's straight-cut wing tip; the plate has no low parapet. FFX only, Chapter XIV. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-isaaru/.",
+   "public/art/characters/isaaru/idle.png": {
+    "sha256": "c290bedc3f6fe743b9c778736aa2a50ef0ac28bd4030161dbcc69dea87e81945",
+    "mtime": "2026-09-25T04:15:22.815Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/isaaru.png": {
+    "sha256": "b5fbc12c65b404fa4f2260fc19d39f642a2d5b27a981bf3bb65b15e43e25a529",
+    "mtime": "2026-09-25T04:15:22.837Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/via-purifico.png": {
+    "sha256": "60c446c9b2457d865dabab1412d1c3c695603beae77fe90eb9d7aba5082e7afa",
+    "mtime": "2026-09-25T04:15:22.861Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/grothia/idle.png": {
+    "sha256": "ca830982fa17180fd6d5cadae47cf33e2b11764f24df2693d08d1e1cf6f0b5dc",
+    "mtime": "2026-09-25T04:15:22.883Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/grothia/attack.png": {
+    "sha256": "e7b9b00b366d2f4520f70bedad1276de852583559c2791cc4806f208d9727df4",
+    "mtime": "2026-09-25T04:15:22.903Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/grothia/overdrive.png": {
+    "sha256": "780b689239b529bff2cf1b2680f2193a217246f225c7866c18f462436cda4f66",
+    "mtime": "2026-09-25T04:15:22.922Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/pterya/idle.png": {
+    "sha256": "448f7f2a4181da13fa7934069421c139ee7ce6a8aaac6f881c1bd8695a2a20fa",
+    "mtime": "2026-09-25T04:15:22.941Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/pterya/attack.png": {
+    "sha256": "d16c31ad216602845c1a010e87ffa84d1a8b781d8bd7975811d78275be7977ec",
+    "mtime": "2026-09-25T04:15:22.961Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/pterya/overdrive.png": {
+    "sha256": "0534de30bd83be8965cfec5a18f21100c75c3620515293ea51e327dfe28a8f20",
+    "mtime": "2026-09-25T04:15:22.981Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/spathi/idle.png": {
+    "sha256": "5a692112a0e30cf5a6027284f7b48adfa7b8555da1af8981a02a7d9736933059",
+    "mtime": "2026-09-25T04:15:23.002Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/spathi/attack.png": {
+    "sha256": "fb6c6538fd72b77685f4b162996aa6c0b2f04dc765ab4277fd04dd2c69d060f9",
+    "mtime": "2026-09-25T04:15:23.023Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/spathi/overdrive.png": {
+    "sha256": "99a10a220359f14e01e0075d04d5a61cb2344d877532839a410508db5cc2da60",
+    "mtime": "2026-09-25T04:15:23.042Z",
+    "approved": "2026-09-25"
+   }
+  },
+  "bailey:2026-09-25-recommendations": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~10:20 EDT, verbatim \"I'll go with all your recommendations\", in reply to the driver's morning message. Taken as a yes to the recommended option of each sheet named there: hero plates Trema B (docs/concepts/chapters/trema/hero-plate), Omnis A, Isaaru B, Natus B, Fallen Aeons B, Den of Woe B (docs/concepts/chapters/<chapter>/hero-plate/README.md); speaker portraits Trema B, Gippal A, Baralai B, Buddy B (docs/concepts/portraits-2026-09-25/README.md); the Omnis speaker portrait A (docs/concepts/chapters/omnis/portrait-options/README.md, independent judge 7.6 PASS) with the judge's install fixes 1 (three speck pixels) and 2 (yellow-green on the shoulder band); the optional fix 3 (moving the veins) was NOT done. Plates: each PNG is the picked option byte for byte; each .2x.webp is its RealESRGAN_x4plus x4 -> lanczos 0.5 master (q88). Plate keys: pause/ch10-seymour-natus, ch11-ffx2-fallen-aeons, ch12-seymour-omnis, ch14-isaaru-via-purifico and ch15-ffx2-den-of-woe follow the pause/ch<NN>-<chapter id> pattern and are not yet named by any ChapterMeta (their ship step); pause/ch13-trema is src/data/chapter-meta-trema.ts's heroArt. Gippal's portrait had one detached 216 px alpha island erased. Game: FFX only for Natus (X), Omnis (XII), Isaaru (XIV); FFX-2 only for Fallen Aeons (XI), Trema (XIII), Den of Woe (XV), and the Trema, Gippal, Baralai, Buddy portraits. NOT covered by this yes: the battle-pose candidates (docs/concepts/chapters/trema/poses, docs/concepts/art5). Replaced file: portraits/seymour-omnis.png sha ce32e75a6031 (judged FAIL 5.9, never locked). Backups: D:/Tools/pyrefly-art-backup/approved/2026-09-25-recommendations/ (replaced/, unrepaired/, installed/).",
+   "public/art/pause/ch10-seymour-natus.png": {
+    "sha256": "f802716b8c8eb43850e5e8288b66b660a752ce7c4e7450a95a3f98cb976ed5d1",
+    "mtime": "2026-09-25T14:36:53.875668Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch10-seymour-natus.2x.webp": {
+    "sha256": "3324d1ea08dfc7d6933a410d8892b8dc1a0b0d9e6fb76000ef53c86160145f32",
+    "mtime": "2026-09-25T14:36:53.881181Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch11-ffx2-fallen-aeons.png": {
+    "sha256": "ad4f3f109f53ce35ea446d1242f6bb83484647281ab17e51108b5ffa46c46de1",
+    "mtime": "2026-09-25T14:36:53.917321Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch11-ffx2-fallen-aeons.2x.webp": {
+    "sha256": "2cfdcfca4f0649827dcb98a3c5a48d6f320499cc928b969b9788f138b479ed9c",
+    "mtime": "2026-09-25T14:36:53.921406Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch12-seymour-omnis.png": {
+    "sha256": "906175aeff124d06dd3986efb45f6138347c2fee1adef351f15cc02b4bf565e5",
+    "mtime": "2026-09-25T14:36:53.955870Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch12-seymour-omnis.2x.webp": {
+    "sha256": "cd8691fc78947354fa69ed94fcc4ed9b860a6558d10d687e7cd8d2adc9221a53",
+    "mtime": "2026-09-25T14:36:53.960375Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch13-trema.png": {
+    "sha256": "df51b9efa1e14ce2c91e670011884af9671740f8dda22a4fd31514e61886f213",
+    "mtime": "2026-09-25T14:36:53.994732Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch13-trema.2x.webp": {
+    "sha256": "770241cc0f58f657a7665e0e79f4fdf96870214bffda91d09c611b0540aad5a2",
+    "mtime": "2026-09-25T14:36:53.998915Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch14-isaaru-via-purifico.png": {
+    "sha256": "1e2d6f56a1b1c6c0a1be389fc50af02097ed2fb385ac21c5406aa9f2197b16b4",
+    "mtime": "2026-09-25T14:36:54.032785Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch14-isaaru-via-purifico.2x.webp": {
+    "sha256": "4efb21d1391f5389af072216d3454160368368ba481bdbefddd66e016a6c1d1e",
+    "mtime": "2026-09-25T14:36:54.036295Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch15-ffx2-den-of-woe.png": {
+    "sha256": "e75589cda3dbf8f2858ceb45c3f34c56db7f14b7644be476e20f0396736de298",
+    "mtime": "2026-09-25T14:36:54.070159Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch15-ffx2-den-of-woe.2x.webp": {
+    "sha256": "297dadcdcaa8873d6833cfed043bcbcb90a765b0ac39c2ab91e26e2a49873e86",
+    "mtime": "2026-09-25T14:36:54.074166Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/trema.png": {
+    "sha256": "5e924bbeb551e74637352ca7d8a34b471df954f8b247f88ba62a0e5a65c82023",
+    "mtime": "2026-09-25T14:36:54.107849Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/gippal.png": {
+    "sha256": "7c77d6f3c8d65d8536d54ebe6e4add5f8c078f37d0a7969bfe85879529c9f77c",
+    "mtime": "2026-09-25T14:36:54.130388Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/baralai.png": {
+    "sha256": "26fe078fd31f6a3aaa3daee8ab5acd0d7bb36d99c72309b12bc61fdb072f47dc",
+    "mtime": "2026-09-25T14:36:54.152763Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/buddy.png": {
+    "sha256": "d7472eaf8bceeab23d04ebdb7e7375bc4a0b000dc314e0cccd5087b7ea591836",
+    "mtime": "2026-09-25T14:36:54.173665Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/seymour-omnis.png": {
+    "sha256": "6d4fe6583771660e9251f170f15f893e72d6bba656eb63cdaa3b90716d3ef683",
+    "mtime": "2026-09-25T14:36:54.194984Z",
+    "approved": "2026-09-25"
    }
   }
  }

@@ -28,6 +28,13 @@ import { leblancAbilities } from './leblanc-syndicate-leblanc-abilities.ts';
 import { fallenAeonsGroups } from './fallen-aeons-road.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from './fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from './magus-sisters-abilities.ts';
+// Chapter XIII, Paragon then Trema on Cloister 100 (registered, unlisted): `./trema.ts`.
+import { tremaGroups } from './trema.ts';
+import { paragonAbilities } from './paragon-abilities.ts';
+import { tremaAbilities } from './trema-abilities.ts';
+// Chapter XIII's OFF options (Oversoul Paragon, Fiend Arena Trema): `./trema-options.ts`.
+import { tremaArenaAbilities, tremaOptionGroups } from './trema-options.ts';
+import { paragonOversoulAbilities } from './paragon-oversoul.ts';
 // Chapter XV, the Den of Woe (registered, unlisted): `./den-of-woe.ts`.
 import { denOfWoeGroups } from './den-of-woe.ts';
 import { denOfWoeAbilities } from './den-of-woe-abilities.ts';
@@ -42,6 +49,8 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   shuyinGroup,
   ...leblancSyndicateGroups,
   ...fallenAeonsGroups,
+  ...tremaGroups,
+  ...tremaOptionGroups,
   ...denOfWoeGroups,
 ];
 
@@ -62,6 +71,10 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2ShivaAbilities,
   ...magusSistersAbilities,
   ...x2AnimaAbilities,
+  ...paragonAbilities,
+  ...tremaAbilities,
+  ...tremaArenaAbilities,
+  ...paragonOversoulAbilities,
   ...denOfWoeAbilities,
 ];
 
