@@ -257,3 +257,92 @@ LAST  integrator commit · node tools/orphans.mjs · real-input win and loss ·
 **Verdict: PROCEED.** Fifteen needs already work (§4.1); the run found four seams (solo line-up
 type, the lock, the loss rule, aeon-only commands). Nothing perceivable until B1–B22 and O-1 to
 O-6 are picked. An adversarial review pass is still owed.
+
+## Review (adversarial pass, FFX only, 2026-09-24)
+
+A sub-agent of the driver wrote this section; nothing else in the repository was changed. Main
+was at `10c8888c`.
+
+**Method:**
+- Fetched again through `api.php?action=parse&prop=wikitext|revid` with a browser user agent:
+  *Grothia*, *Pterya*, *Spathi*, *Isaaru (Final Fantasy X boss)*, *Isaaru* and *Final Fantasy X
+  enemy abilities*. Also fetched Auronlu's Chapter X script page. All were read in scratch on D:.
+- Read every engine line that §4.1 cites.
+- Recomputed Hellfire and Mega Flare by hand with the magic-damage chain, on the aeon rows in
+  `macalania.ts` and `gagazet.ts`.
+- Viewed `isaaru/sheet.jpg`, `aeons/sheet.jpg` and `fight/sheet-phone.jpg`, and listed the
+  folder.
+
+**The engine was not re-run.** Verdicts that depend on the §4.2 run or on the options builder's
+frames say so.
+
+### Research claims (`research/ffx-isaaru-bevelle.md`)
+
+| # | Claim | Verdict | Evidence |
+|---:|---|---|---|
+| R1 | Revids: Grothia 3979432, Pterya 3979322, Spathi 4005169, Isaaru boss 3963146, Isaaru 4026440, enemy abilities 4008011 | **CONFIRMED** | Today's fetch returns the same six revids, so the text is unchanged |
+| R2 | HP 8,000 / 12,000 / 20,000; MP 600 / 1,000 / 1,500; Str, Def, Mag, MDef and Agi as in §2.2 (the wiki prints 1 for 0); Overkill 2,550; doom count 5; Pterya's "zanmato 4" | **CONFIRMED** | The three infoboxes match field for field |
+| R3 | Isaaru: 10 HP / 1 MP, Overkill 10, Luck 15, Sleep/Dark/Silence 20, poison% 25; Sensor, Scan and Bribe immune; Threaten Immune on the wiki | **CONFIRMED** | Boss infobox. The research does not record two infobox entries: **doom count 3** and "Can only be fought by aeons". Both are moot, since he never acts |
+| R4 | Grothia: absorbs Fire; casts Fira instead of Meteor Strike; does not heal himself; **starts with a full gauge**; +5 % when attacking, +3 % when targeted; his attack on Yuna has higher accuracy and gives no gauge | **CONFIRMED** (wiki, single source as tagged) | Grothia page, "Battle". The wiki's strategy puts Bahamut first but saves him for Pterya, then recommends Shiva. §6.3 reports this correctly |
+| R5 | Pterya: +10 % when attacking, +15 % when targeted; her attack on Yuna has less power and accuracy and gives no gauge; "same aeon as Valefor" | **CONFIRMED** | Pterya page |
+| R6 | Spathi: countdown **from 5** to Mega Flare; the mirror lock ("two aeons of the same type cannot fight each other"); Shield before Mega Flare; Ifrit or Ixion suggested; the wiki's 6,000 gil / 6,000 AP | **CONFIRMED** | Spathi page. The same lock sentence is on the Grothia page |
+| R7 | Damage constants (DC): Fira 24, Hellfire 70, Energy Ray 26, Sonic Wings 8, Mega Flare 44. Energy Ray is Magical (Shell applies) | **CONFIRMED** | The enemy-abilities table gives 70 "Sp", 44 "Sp", 26 "Mag", 8 "Phy" with weak Delay, and 24 "Mag". The wiki's "Sp" is the decompile's "Other". The table also lists **Countdown for Belgemine's Remiem Bahamut**. This supports §3.0: the records are shared |
+| R8 | Mega Flare about 2,200, and about 550 with Shield, reproduced | **CONFIRMED** | Ixion in P1 (MDef 46): 44 × (⌊38²/6⌋ + 44) / 4 = 3,124; × (730 − ⌊(46·51 − ⌊46²/11⌋)/10⌋) / 730 = **2,203**; ÷ 4 = 550. Both match §5.2 |
+| R9 | Hellfire against the P1 aeons, "1,765 to 1,977" (§5.2 prose, repeated in plan §2) | **CORRECTED** | By hand at roll 16: Ixion 1,765, Bahamut 1,840, Shiva 1,885, Valefor 1,898, which is also what the §5.2 table says. **1,977 is in no cell.** The range is **1,765 to 1,898**. The conclusion stands: even Ixion's lowest roll is above 1,515 |
+| R10 | §8.2 beat 3: **Maester Kinoc** gave the order to "deal with the traitors" | **CONFIRMED, with a conflict to record** | In Auronlu's Chapter X, Isaaru names Kinoc. The Personality section of the wiki's *Isaaru* page (revid 4026440) says **Mika**. Prefer the script. Add this as I-9 so that no writer "corrects" it to Mika |
+| R11 | §8.1 costume: white robe; blue blouse with long white cuffs; wide sea-green belt with strings tied in a bow; **black knee-length jacket with sea-green edging**; brown hair; half-closed eyes | **CONFIRMED** | *Isaaru* page, "Appearance". The wiki does **not** say his hair is tied up |
+| R12 | P1 aeon rows: Valefor 1,146, Ifrit 1,515, Ixion 1,513/40, Shiva 1,342, Bahamut 1,398/35 | **CONFIRMED** | `macalania.ts:276-282`, `gagazet.ts:432`, `highbridge.ts:100-165` (Bahamut at 100) |
+| R13 | A KO'd aeon stays down for the rest of the chain | **CONFIRMED** (by the plan's run) | `aeons.ts:24-31` skips `hp <= 0`; plan P4 and P5 |
+
+### Plan engine claims (§4)
+
+| # | Claim | Verdict | Evidence |
+|---:|---|---|---|
+| E1 | #1: Summon, Dismiss, Grand Summon | **CONFIRMED** | `aeons.ts:53` and `:85`, `execute.ts:238` |
+| E2 | #2: the chain carries HP, MP, gauges and the bag | **CONFIRMED** | `BattleScreenSetup.ts:80`, `:112`, `:157` `carryInventory` |
+| E3 | #4: a retry starts again at link 1 unless the formation sets `restoresPartyOnEntry` | **CONFIRMED** | `BattleChainCheckpoint.ts:45-47` |
+| E4 | #5: Isaaru never blocks victory | **CONFIRMED** | `engine.ts:397-405`. With one non-combatant and one aeon, only the aeon counts |
+| E5 | #6 and #7: `ordersOnly` and `untargetable` | **CONFIRMED** | `state.ts:138`, `turnQueue.ts:78`, `predicates.ts:76` |
+| E6 | #8: the enemy gauge | **CONFIRMED, with one note** | `state.ts:106`, `overdrive.ts:154-157`, `yojimbo-rules.ts:66-72`. `enemyGaugeRules` (`types.ts:1015`) is only a **string tag**, and only the Zanmato widget reads it (`zanmatoGaugeModel.ts:139`). T3 must set a new tag value, and T8's sibling widget must read that value |
+| E7 | #12: Shell applies only to `'magical'`; Shield quarters every type | **CONFIRMED** | `formulas.ts:301` and `:318-320` |
+| E8 | #13: NulBlaze checks the element only, and beats Absorb | **CONFIRMED** | `abilities.ts:158-160` |
+| E9 | #14: no escape by default | **CONFIRMED** | `setup.ts:307` |
+| E10 | P1: `activeSlots` is a 3-tuple | **CONFIRMED** | `types.ts:2401` |
+| E11 | I-G3: "no aeon left" is not a defeat today; the fix belongs in `checkEnd` (`engine.ts:437`) | **CONFIRMED; the plan misses a risk** | `engine.ts:437-449` ends the battle only when nobody is standing. **The stalemate rule** (`engine.ts:423-433`, `STALEMATE_TURNS = 400`) ends a battle whose enemy HP has stalled as **`'escape'`** ("The battle cannot be won from here"). So without I-G3, a Yuna with no aeon left who heals through Pterya's weak hits gets a withdrawal after 400 turns, not the sourced Game Over. B6 = b (Yuna deals 0) leads to the same outcome. **I-G3 must be built whatever B6 becomes, and T10 needs a test for this case** |
+| E12 | I-G6: the enemy aeons' ids would clash with Yuna's roster | **CONFIRMED** | `setup.ts:319-333` keys every combatant and `aeonRoster` by id |
+
+### The options builder's four frame findings
+
+| # | Finding | Verdict | Evidence |
+|---:|---|---|---|
+| F1 | While an aeon is out, the HUD shows Yuna's row and no aeon HP; "no research file says what FFX shows" | **CONFIRMED for the HUD; CORRECTED on the sources** | `ffx-combat-core.md` §6.1 `[verified: 2 sources]`: the aeon "replaces the entire active party; the party members are removed from the field". `visual-bible.md` §3.11.6 already puts "the arriving aeon's Overdrive gauge bar in the party-status window (§3.4)". So the aeon row is already in our own spec. The one unsourced part is whether Yuna's frozen row stays underneath it (option B's layout) |
+| F2 | The aeons' turn-order tiles show a letter instead of a portrait | **CONFIRMED** | The "S" tiles in `isaaru/sheet.jpg` and `aeons/sheet.jpg`. The phone mockups draw portraits there, but only in the mockup |
+| F3 | The move advisor suggests "Attack → Isaaru" | **PLAUSIBLE** (not re-run) | This is the I-G4/I-G5 seam. T7 must prove the fix by running the engine |
+| F4 | Yuna stays on stage beside her aeon | **CONFIRMED, and it predates this chapter** | `BattlePresenterStage.ts:145-149` stages `activeIds` **and** `aeonId`, and the frozen party stays in `activeIds`. **Every live FFX chapter with a summon (I, VII, VIII, X) does this.** It contradicts §6.1 (sourced). It is an FFX-wide defect for the driver's queue, not only an Isaaru one |
+
+### Option sheets (`docs/concepts/chapters/isaaru/`)
+
+| # | Claim | Verdict | Evidence |
+|---:|---|---|---|
+| S1 | Every file the README lists exists | **CONFIRMED** | All 8 sheets are there, with their frames, cards, `.html`, CSS, `recipes.json` and the withdrawn renders |
+| S2 | "Every sheet is one column, 1,200 px wide", readable on a phone | **CORRECTED** | Headings and captions read at phone width. But `fight/sheet-phone.jpg` has **three phone mockups side by side**. On a 390 px phone each is about 110 CSS px wide, and its "12 px" labels come out at about 4 px. Only the individual 390×844 files meet the 12 px claim. The HUD text inside the 1600×900 frames is also unreadable on a phone, so those sheets rely on their captions |
+| S3 | O-1: all three "wear the costume the wiki describes in words (brown hair tied up, long dark coat with sea-green lapels, blue-violet robe, white under-robe, turquoise cord)"; C is "closest to the coat the wiki describes (full-length sea-green lapels)" | **REFUTED as worded** | The wiki (R11) describes a **black knee-length** jacket edged in sea green, a **blue blouse with long white cuffs**, and a **wide sea-green belt tied in a bow**. It says nothing of tied-up hair, a blue-violet robe or a cord. C's coat reaches the ankles, and its waist is a blue knot, not a sea-green belt. The README's list mixes the wiki's words with what the images show. C may still be the right pick for its pose and mood, but "closest to the wiki" does not hold. O-2 inherits the problem, because both portraits were painted from C |
+| S4 | O-4 KO: "Pterya_defeated.jpg shows the aeon breaking into light" | **PLAUSIBLE** | One agent's reading of one image. It is correctly labelled as looked at, but it does not show that the dissolve is canon |
+| S5 | O-5 shows only sourced rules and Chapter X values; no invented numbers | **CONFIRMED, with two caveats** | Ixion 1,513/40, Bahamut 1,398/35 and Yuna 1,650/270 match the builds, and no odds or damage figures appear. (i) The **turn order** in the frames (Yuna twice before Grothia) comes from the interception that set enemy Agility to 1. The README says so, but the sheets carry no caption about it. (ii) Every frame shows an **Items** row on the aeon's own menu. That is today's engine (`commands.ts:195` has no aeon check), but no research line sources an Item command for aeons, and §6.1 says party items cannot target aeons `[single source]`. B6/B7 should ask whether that row should exist |
+
+### Shown as settled, but Bailey's call
+
+- **B6** is built into O-5. Every option greys the locked row "the same way (plan B6 = a)", and every frame shows B6 = a's menu. The sheet should say "shown with the recommended B6 = a".
+- **B2 (P1)** supplies every HUD number in O-5. The README labels it "plan B2 = a", but that is still only the recommendation, not Bailey's pick.
+- **No invented game number** was found in the research, the plan or the sheets. R9 is an arithmetic slip, not a sourced figure.
+
+### Verdict
+
+- **Research:** it stands. Fix R9 and add I-9 (Kinoc against Mika).
+- **Plan engine map:** it stands. Add E11 (a stalemate ends as an escape) to I-G3 and T10, and E6 (the tag) to T3 and T8.
+- **Sheets, before they go to Bailey:**
+  - Rewrite the O-1 rationale (S3) against the wiki's actual words.
+  - Re-cut the phone sheet with one mockup per row (S2).
+  - Add the Agility caption (S5).
+  - Disclose B6 on the O-5 sheet.
+- **F4** is a live FFX-wide defect for the driver.
