@@ -1,0 +1,91 @@
+/* Trema chapter (FFX-2 only) O-4 "Reading the fight" overlays.
+   Desktop: 1600x900 over a real engine frame with the real Chapter IV FFX-2 HUD (names, dresspheres and
+   numbers swapped in the DOM, candidate art composited). Phone: our own 390x844 layout (the game has
+   no phone layout today). Only the overlays are mockup. Tokens and fonts come from the frozen kit.css. */
+html, body { margin: 0; background: #05040a; }
+body:has(.fr) { width: 1600px; height: 900px; overflow: hidden; }
+html:has(.ph), body:has(.ph) { width: 390px; height: 844px; overflow: hidden; }
+.fr { position: relative; width: 1600px; height: 900px; overflow: hidden; color: var(--ig-paper); font-family: var(--ig-font-text); }
+.fr > img.bg { position: absolute; inset: 0; width: 1600px; height: 900px; }
+.tag { position: absolute; right: 0; top: 50px; z-index: 30; display: flex; font-family: var(--ig-font-display); font-weight: 700; }
+.tag b { background: var(--ig-pyre-pink); color: var(--ig-ink); padding: 6px 12px; font-size: 20px; }
+.tag span { background: rgba(11,10,18,0.92); padding: 8px 14px; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; }
+.note { position: absolute; left: 16px; bottom: 6px; font-family: var(--ig-font-display); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(244,241,232,0.6); }
+.cpt { position: absolute; right: 8px; bottom: 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; letter-spacing: 0.3em; color: rgba(244,241,232,0.6); }
+
+/* shared in every option: the Scan-gated numerals, now grouped with commas (TR-G7) */
+.num { position: absolute; left: 150px; top: 150px; z-index: 12; padding: 2px 10px 3px; background: rgba(11,10,18,0.86);
+  font-family: var(--ig-font-numeral); font-weight: 700; font-size: 24px; letter-spacing: 0.02em; }
+.num small { font-size: 15px; color: rgba(244,241,232,0.7); margin-left: 3px; }
+/* the command the Dark Knight is about to pick, patched over the real top row */
+.cmdpatch { position: absolute; left: 1252px; top: 424px; width: 300px; height: 44px; z-index: 11; background: #f7b6d9; color: var(--ig-ink);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 25px; letter-spacing: 0.1em; line-height: 44px; padding-left: 22px; box-sizing: border-box; }
+.hintpatch { position: absolute; left: 88px; top: 6px; width: 640px; height: 28px; z-index: 11; background: #0d0b16; font-family: var(--ig-font-text); font-size: 16px; line-height: 28px; }
+.hintpatch b { font-family: var(--ig-font-display); color: #f7b6d9; font-size: 12px; letter-spacing: 0.2em; margin-right: 14px; }
+
+/* A: intent text only, in the enemy-move panel (the E key) */
+.intent { position: absolute; left: 800px; top: 140px; width: 430px; z-index: 10; padding: 12px 16px 14px 18px; background: rgba(11,10,18,0.9);
+  border-left: 3px solid #f7b6d9; transform: skewX(var(--ig-skew)); }
+.intent > * { transform: skewX(var(--ig-skew-inverse)); }
+.intent h4 { margin: 0 0 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.2em; color: #f7b6d9; text-transform: uppercase; }
+.intent p { margin: 0 0 5px; font-size: 18px; line-height: 1.3; }
+.intent p b { color: var(--ig-gold); font-weight: 600; }
+
+/* B: chips on the HUD the player already reads */
+.chip { position: absolute; z-index: 12; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 5px; font-family: var(--ig-font-display);
+  font-weight: 700; font-size: 15px; letter-spacing: 0.06em; text-transform: uppercase; transform: skewX(var(--ig-skew)); box-shadow: 0 4px 12px rgba(0,0,0,0.6); white-space: nowrap; }
+.chip > * { transform: skewX(var(--ig-skew-inverse)); }
+.chip--warn { background: var(--ig-blood); color: #fff; }
+.chip--pink { background: #f7b6d9; color: var(--ig-ink); }
+.chip--ink { background: rgba(11,10,18,0.92); color: var(--ig-paper); border: 1px solid #f7b6d9; }
+.tick { position: absolute; z-index: 13; width: 3px; height: 26px; background: #fff; box-shadow: 0 0 6px #000; }
+.ticklbl { position: absolute; z-index: 13; font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; letter-spacing: 0.06em; color: #fff;
+  background: rgba(176,42,42,0.95); padding: 1px 5px; transform: translateX(-50%); white-space: nowrap; }
+.ticklbl--dim { background: rgba(11,10,18,0.9); color: #f4f1e8; }
+
+/* C: marks in the world */
+.ring { position: absolute; z-index: 9; border-radius: 50%; border: 3px solid var(--ig-blood); box-shadow: 0 0 22px var(--ig-blood), inset 0 0 14px rgba(176,42,42,0.6); }
+.floatlbl { position: absolute; z-index: 12; font-family: var(--ig-font-display); font-weight: 700; font-size: 17px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #fff; text-shadow: 0 2px 4px #000, 0 0 8px #000, 0 0 2px #000; white-space: nowrap; }
+.arrow { position: absolute; z-index: 11; height: 4px; background: linear-gradient(90deg, rgba(176,42,42,0.15), #e04848); transform-origin: 0 50%; }
+.arrow::after { content: ''; position: absolute; right: -10px; top: -7px; border-left: 14px solid #e04848; border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
+.star { position: absolute; z-index: 12; width: 58px; height: 58px; border-radius: 50%; border: 3px solid #ffb24a; box-shadow: 0 0 20px #ffb24a, inset 0 0 12px #ffb24a;
+  background: rgba(60,30,10,0.55); display: flex; align-items: center; justify-content: center; font-family: var(--ig-font-display); font-weight: 700; font-size: 14px; color: #ffe2b0; }
+
+/* ---------- phone, 390x844, our own layout ---------- */
+.ph { position: relative; width: 390px; height: 844px; overflow: hidden; background: #07060d; color: var(--ig-paper); font-family: var(--ig-font-text); }
+.ph__boss { position: absolute; left: 0; right: 0; top: 0; height: 74px; z-index: 20; background: rgba(11,10,18,0.96); border-bottom: 2px solid #f7b6d9; }
+.ph__boss .nm { position: absolute; left: 14px; top: 8px; font-family: var(--ig-font-serif); font-style: italic; font-weight: 600; font-size: 22px; }
+.ph__boss .bar { position: absolute; left: 14px; right: 14px; top: 42px; height: 9px; background: #2a2433; }
+.ph__boss .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #b8437e, #f7b6d9); }
+.ph__boss .pn { position: absolute; right: 14px; top: 10px; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 20px; }
+.ph__boss .pn small { font-size: 13px; color: rgba(244,241,232,0.7); }
+.ph__boss .ptk { position: absolute; top: 38px; width: 2px; height: 17px; background: #fff; }
+.ph__boss .ptl { position: absolute; top: 56px; transform: translateX(-50%); font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; background: var(--ig-blood); color: #fff; padding: 0 4px; line-height: 16px; white-space: nowrap; }
+.ph__scene { position: absolute; left: 0; top: 74px; width: 390px; height: 372px; overflow: hidden; }
+.ph__scene img { position: absolute; width: 780px; height: 439px; left: -170px; top: -40px; }
+.ph__cmds { position: absolute; right: 12px; top: 458px; width: 214px; z-index: 10; }
+.ph__cmd { height: 38px; margin-bottom: 7px; padding-left: 14px; background: rgba(11,10,18,0.94); border: 1px solid rgba(247,182,217,0.5); font-family: var(--ig-font-display);
+  font-weight: 700; font-size: 17px; letter-spacing: 0.1em; line-height: 38px; transform: skewX(12deg); }
+.ph__cmd > span { display: inline-block; transform: skewX(-12deg); }
+.ph__cmd--on { background: #f7b6d9; color: var(--ig-ink); }
+.ph__turn { position: absolute; left: 12px; top: 460px; width: 146px; font-family: var(--ig-font-display); font-size: 12px; letter-spacing: 0.16em; color: #f7b6d9; text-transform: uppercase; }
+.ph__turn b { display: block; font-family: var(--ig-font-serif); font-style: italic; font-size: 24px; letter-spacing: 0; color: var(--ig-paper); text-transform: none; }
+.ph__party { position: absolute; left: 0; right: 0; bottom: 18px; z-index: 10; }
+.ph__pm { position: relative; height: 62px; margin: 0 10px 7px; background: rgba(11,10,18,0.94); border-left: 3px solid rgba(247,182,217,0.4); }
+.ph__pm--acting { border-left-color: #f7b6d9; background: rgba(40,20,40,0.96); }
+.ph__pm img { position: absolute; left: 8px; top: 8px; width: 46px; height: 46px; object-fit: cover; }
+.ph__pm .n { position: absolute; left: 64px; top: 6px; font-family: var(--ig-font-serif); font-style: italic; font-weight: 600; font-size: 19px; }
+.ph__pm .j { position: absolute; left: 64px; top: 34px; font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; color: #f7b6d9; letter-spacing: 0.08em; }
+.ph__pm .hp { position: absolute; right: 12px; top: 6px; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 20px; }
+.ph__pm .hp em { font-style: normal; color: #7fc6e8; margin-left: 8px; font-size: 16px; }
+.ph__pm .atb { position: absolute; right: 12px; bottom: 9px; width: 150px; height: 6px; background: #2a2433; }
+.ph__pm .atb i { position: absolute; left: 0; top: 0; bottom: 0; background: #f7b6d9; }
+.pchip { position: absolute; z-index: 21; font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; padding: 2px 7px; line-height: 17px; white-space: nowrap; }
+.pchip--warn { background: var(--ig-blood); color: #fff; }
+.pchip--pink { background: #f7b6d9; color: var(--ig-ink); }
+.pint { position: absolute; left: 12px; right: 12px; top: 330px; z-index: 12; padding: 8px 12px; background: rgba(11,10,18,0.93); border-left: 3px solid #f7b6d9; }
+.pint h4 { margin: 0 0 3px; font-family: var(--ig-font-display); font-size: 12px; letter-spacing: 0.16em; color: #f7b6d9; text-transform: uppercase; }
+.pint p { margin: 0; font-size: 14px; line-height: 1.3; }
+.pint b { color: var(--ig-gold); }
+.ptag { position: absolute; left: 0; bottom: 0; right: 0; height: 16px; z-index: 30; font-family: var(--ig-font-display); font-size: 12px; line-height: 16px; letter-spacing: 0.08em; padding-left: 8px; background: #f7b6d9; color: var(--ig-ink); font-weight: 700; }
