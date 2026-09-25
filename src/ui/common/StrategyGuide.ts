@@ -1,6 +1,7 @@
 import './strategy-guide.css';
 import type { AvailableCommand, BattleState, CombatantId, GameId } from '../../battle/common/types.ts';
 import { buildGuideView, type GuideView } from '../../engine/tactics/guide.ts';
+import { ffx2CoachClock } from '../coach/coachState.ts';
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { GUIDE_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
@@ -428,16 +429,15 @@ export class StrategyGuide {
   /** The view the panel would draw right now, for tests and the debug snapshot. */
   view(): GuideView | null {
     if (!this.lastState) return null;
-    return buildGuideView(this.lastState, this.decision);
+    return buildGuideView(this.lastState, this.decision, ffx2CoachClock());
   }
 
   // -------------------------------------------------------------- rendering
 
   private render(): void {
     if (!this.mounted) return;
-    const view = this.lastState ? buildGuideView(this.lastState, this.decision) : null;
-    // No written guide for this encounter: no panel and no chip, rather than a
-    // chip that opens an empty box.
+    const view = this.lastState ? buildGuideView(this.lastState, this.decision, ffx2CoachClock()) : null;
+    // No written guide for this encounter: no panel and no chip, never a chip that opens an empty box.
     this.el.hidden = view === null;
     if (!view || !this.visible) return;
 
@@ -711,7 +711,7 @@ export class StrategyGuide {
 /** Everything that can change what the panel says, in one string. */
 function signatureOf(view: GuideView): string {
   return [
-    view.chapterId,
+    `${view.chapterId}:${view.rules.length}`, // a clock flip in the pause adds or drops the clock's rule
     view.next?.label ?? '',
     view.next?.targetId ?? '',
     view.next?.reason ?? '',

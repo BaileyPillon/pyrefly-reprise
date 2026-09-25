@@ -21,12 +21,14 @@ import { FFX2_TREMA_GUIDE } from './ffx2-trema.ts';
 
 export type {
   ChapterGuide,
+  GuideClock,
   GuideHint,
   GuideHintMatch,
   GuidePhase,
   GuideRule,
   GuideWatch,
 } from './types.ts';
+export { rulesOnClock } from './types.ts';
 
 export {
   SEYMOUR_FLUX_GUIDE,
