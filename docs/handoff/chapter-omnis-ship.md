@@ -37,12 +37,28 @@ and Auron's slots sit 0.62 and 0.4 right of Dream's End's (the art round's judge
 there the first slot stood behind the FFX command stack's lower rows (FLEE, SWITCH) at all three
 wide sizes; a scene test pins the party right of the stack at 16:9.
 
+## Built after the merge (2026-09-25): O-2 B strip, O-4 C intent line, O-8 live glow
+
+| Piece | File | Frame it follows |
+|---|---|---|
+| Disc strip (O-2 B) + intent line (O-4 C) | `src/ui/ffx/OmnisReadout.ts`, `omnisReadoutModel.ts`, `omnis-readout.css`; tapped onto the FFX HUD in `BattleScreenWiring.createHud` | `o2-discs/b-frame.jpg`, `o4-fight/c-{i,ii,iii}.jpg` (+ phones) |
+| Red glow, live (O-8) | `src/engine/OmnisGlowLook.ts` + the `PAINTED_GLOW` define in `shaders/PaintedShader.ts` | `o1-omnis/a-glow-frame.jpg` (tint and halo are its recipe; pulse and embers ours) |
+
+- The three approved sentences print word for word; the other states reuse their words (after Dispel,
+  after Ultima). No line names a party member (B12). The strip carries "Colour order: our estimate" (B8);
+  the ring stays in its single constant (`seymour-omnis-rules.ts#DISC_RING`).
+- Phone (HUD B): the strip takes the enemy-move slot under the rail (the generic enemy-move line stands
+  down while it is up, as in the frame); the line sits above the party chips; every label 14 px or more.
+- The open Sensor plate reaches into the line's slot, so the read-out lifts it (`--ffx-sensor-dy`).
+- Frames, real keys at 1600x900, 1280x720, 2000x1012 and 390x844: `docs/concepts/chapters/omnis/owed/`
+  (turn one, the target step, a disc turned by Wakka, the glow and its pulse, after Ultima, plus
+  `compare-*.jpg`, target beside build). Measured: no overlap with any FFX HUD or phone HUD B panel.
+- Disclosed: at the live staging the line's box covers the lower third of the lower-right disc at the
+  three desktop sizes (the O-2 composite stood the discs higher); the advisor card narrows beside the
+  strip (its solver); desktop type follows the frames (12 px at 1600, 9.6 px at 1280).
+
 ## Not built (owed)
 
-- **The HUD disc strip and the intent line** (O-2 B's chips, O-4 C, plan T8). The painted discs turn
-  on the field; the HUD does not list them yet.
-- **The red glow** as a live effect (O-8): the engine's telegraph message and Auron's first-glow line
-  carry it.
 - **B18's own cue** (O-6 sketches on `docs/audio/audition.html`).
 - **The listing** (B8): Bailey confirms the ring order and the reset cycle first; the listing step is
   the Trema precedent (`5c8706d6`).

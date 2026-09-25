@@ -2,7 +2,7 @@ import type { BattleEvent, BattleState, CombatantId } from '../../battle/common/
 import { DamageNumbers as SharedDamageNumbers, type NumeralAnchor } from '../common/DamageNumbers.ts';
 import type { NumeralRect } from '../common/damageLadder.ts';
 import { DoomCounters } from './DoomCounters.ts';
-import { ZANMATO_GAUGE_SELECTORS } from './hudAvoidSelectors.ts';
+import { CHAPTER_PANEL_SELECTORS } from './hudAvoidSelectors.ts';
 
 export type Projector = (
   id: CombatantId,
@@ -58,7 +58,8 @@ const PANEL_SELECTORS = [
   // Yojimbo's Zanmato panel and banner (FFX, Chapter IX only). The banner goes
   // up on the very hit that fills the gauge, so that hit's numeral printed
   // across its subtitle until these were listed (`hudAvoidSelectors.ts`).
-  ...ZANMATO_GAUGE_SELECTORS,
+  // Chapter XII's disc strip and intent line likewise.
+  ...CHAPTER_PANEL_SELECTORS,
 ] as const;
 
 /**

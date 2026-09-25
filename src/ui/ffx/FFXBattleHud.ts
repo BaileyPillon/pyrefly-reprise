@@ -28,7 +28,7 @@ import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
-import { INTENT_AVOID_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
+import { INTENT_AVOID_SELECTORS, OMNIS_READOUT_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
 import { enemyObstacleRect } from './enemyObstacleRect.ts';
@@ -1236,8 +1236,8 @@ export class FFXBattleHud implements HudPort {
       // card was printed 773 grid px² deep into Seymour Flux and 1 626 into
       // Braska's Final Aeon: the only fighters the solver had ever been told
       // about were the party's.
-      // Plus Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only): ink hung under his name, as solid as he is.
-      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...this.zanmato.obstacleEls().flatMap((e) => growToGrid(this.stageRect(e), 1) ?? [])],
+      // Plus Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only) and Omnis's disc strip and intent line (Chapter XII only): ink, as solid as a boss.
+      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...[...this.zanmato.obstacleEls(), ...this.el.querySelectorAll<HTMLElement>(OMNIS_READOUT_SELECTORS.join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? [])],
     };
     const key = [
       this.advisorDecisionSeq,

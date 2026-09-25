@@ -6,6 +6,17 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XII read-out and glow: shared plumbing only (no contract file changed)
+
+**FFX only** [AGENTS.md hard rule 14], inert outside Chapter XII. Recorded because they are shared:
+`BattleScreenWiring.createHud` now also wraps the FFX HUD with `ui/ffx/OmnisReadout.ts` (the O-2 B disc
+strip and the O-4 C intent line; hidden without `omnis.discs`) and `engine/OmnisGlowLook.ts` (O-8; no
+look without `omnis.state`). `shaders/PaintedShader.ts` gains a `PAINTED_GLOW` define compiled only into
+Omnis's own materials (the `PAINTED_CAST` pattern). `hudAvoidSelectors.ts` adds `OMNIS_READOUT_SELECTORS`
+and `CHAPTER_PANEL_SELECTORS` (Zanmato + Omnis), which the intent slab, the numerals, the coach and the
+advisor now dodge. `.ffx-sensor` reads an optional `--ffx-sensor-dy` (unset = 0). `phoneBattle.ts`
+places the under-rail line below any `[data-phone-under-rail]` panel.
+
 ## 2026-09-25 — Chapter XII ship layer: `SpeakerId` gains `'seymour-omnis'`
 
 **FFX only** [AGENTS.md hard rule 14]: Seymour's last form, inside Sin

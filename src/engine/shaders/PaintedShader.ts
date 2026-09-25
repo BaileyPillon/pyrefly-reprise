@@ -61,6 +61,14 @@ export const paintedFragmentShader = /* glsl */ `
   uniform float castAmount;
   uniform float castGain;
   #endif
+  // Seymour Omnis's red glow (FFX only, Chapter XII; OmnisGlowLook.ts): the
+  // O-1 A glow frame's grade. Compiled only into a figure whose material
+  // defines PAINTED_GLOW, so every other figure's program is exactly as before.
+  #ifdef PAINTED_GLOW
+  uniform float glowAmount;
+  uniform vec3 glowOffset;
+  uniform vec3 glowSlope;
+  #endif
   // UV height of the contact ramp. Set per plane from the pose's world height
   // (see contactBandFor) so the darkening is a fixed distance off the ground
   // instead of a fixed fraction of the image -- a landscape KO plane given the
@@ -167,6 +175,16 @@ export const paintedFragmentShader = /* glsl */ `
       float lc = dot(c, vec3(0.2126, 0.7152, 0.0722));
       vec3 castRgb = clamp(pow(lc, 0.85) * castColor * castGain, 0.0, 1.0);
       c = mix(c, castRgb, clamp(castAmount, 0.0, 1.0));
+    }
+    #endif
+
+    // --- Seymour Omnis's red glow (O-1 A, O-8) ---------------------------------
+    // The picked frame's grade (omnis_build.py red_glow): mix toward a red that
+    // keeps the painting's own light, mean(rgb) * glowSlope + glowOffset.
+    #ifdef PAINTED_GLOW
+    if (glowAmount > 0.0) {
+      float lm = (c.r + c.g + c.b) / 3.0;
+      c = mix(c, glowOffset + glowSlope * lm, clamp(glowAmount, 0.0, 1.0));
     }
     #endif
 
