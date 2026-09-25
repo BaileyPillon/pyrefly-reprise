@@ -60,8 +60,7 @@ export type SpeakerId =
   | 'young-auron'
   /** Ronso elder, killed holding the Gagazet gate. */
   | 'kelk'
-  | 'biran'
-  | 'yenke'
+  | 'biran' | 'yenke'
   /** The Mt. Gagazet merchant. */
   | 'wantz'
   /**
@@ -72,6 +71,7 @@ export type SpeakerId =
    * crew are known by name [ui/common/speaker-roles.ts].
    */
   | 'cid'
+  | 'isaaru' // FFX only, Chapter XIV: the summoner in the Via Purifico (portraits/isaaru.png, O-2 B; CONTRACT-CHANGES)
   // --- FFX-2 party --------------------------------------------------------
   /** FFX-2 Yuna. A separate voice and portrait set from `'yuna'` [writing-bible §1.14]. */
   | 'yuna-x2'

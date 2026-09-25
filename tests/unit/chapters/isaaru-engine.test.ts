@@ -63,7 +63,8 @@ describe('data (research §2, §3)', () => {
       expect(e!.immunityFlags).toEqual(expect.arrayContaining(['immune-to-delay', 'immune-to-percentage-damage', 'immune-to-scan', 'immune-to-sensor', 'boss']));
       for (const st of ['ko', 'slow', 'eject', 'petrify', 'poison', 'silence', 'sleep', 'darkness', 'provoke']) expect(e!.immunities[st as 'ko']).toBe(255);
       expect(e!.immunities.doom).toBeUndefined(); // landable (GameFAQs' one vulnerability)
-      expect(e!.spriteKey).not.toBe(e!.id); // the aeon painting, never a roster id (I-G6)
+      // Its own installed subject (INSTALLED.md: the aeon painting with his O-4 C mark), never a roster aeon's id (I-G6).
+      expect(['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut']).not.toContain(e!.spriteKey);
     }
     expect(s!.abilityIds).toEqual([rows.SPATHI_COUNTDOWN, rows.SPATHI_MEGA_FLARE]); // no counter rows (I-4)
     const isaaru = ISAARU_GROUPS[0]!.enemies[0]!;

@@ -30,6 +30,7 @@ import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-t
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
+import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -146,15 +147,10 @@ SCENES.set('zanarkand-dome', {
  * {@link SCENE_FACTORIES} below — so, exactly as with Bevelle, it must stop
  * reporting itself as a stand-in to {@link sceneReport}.
  *
- * It is written as the placeholder entry with two fields overridden rather than
- * as a fresh object literal, which is not stylistic: `build` stays the demo
- * diorama and is **unreachable** (the older "builder brings its own figures"
- * path, which {@link loadScene} only reaches when `SCENE_FACTORIES` has no
- * entry), and spreading keeps {@link placeholderEntry} referenced for the
- * chapters that have not landed yet — `noUnusedLocals` is on, so the last key
- * to convert would otherwise break this shared file for every other session.
- * The slots are the scene's own, so anything reading the table directly gets
- * Dream's End's formation rather than Gagazet's.
+ * Written as the placeholder entry with two fields overridden: `build` stays the
+ * demo diorama, **unreachable** ({@link loadScene} reaches it only when
+ * `SCENE_FACTORIES` has no entry), and spreading keeps {@link placeholderEntry}
+ * referenced (`noUnusedLocals`). The slots are the scene's own.
  */
 SCENES.set('dreams-end', {
   ...placeholderEntry('dreams-end', "Dream's End — inside Sin"),
@@ -231,6 +227,9 @@ SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern o
 /** The Via Infinito, Cloister 100 (Chapter XIII, FFX-2 only): real, `build` unreachable as for Leblanc [cloister-100.ts]. */
 SCENES.set('via-infinito', { key: 'via-infinito', title: 'Via Infinito — Cloister 100',
   build: buildDemoScene, slots: CLOISTER_100_SLOTS, placeholder: false });
+/** The Via Purifico, the last chamber (Chapter XIV, FFX only): real, `build` unreachable as for Leblanc [via-purifico.ts]. */
+SCENES.set('via-purifico', { key: 'via-purifico', title: 'Via Purifico — the last chamber',
+  build: buildDemoScene, slots: VIA_PURIFICO_SLOTS, placeholder: false });
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -273,6 +272,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
   'via-infinito': buildCloister100Scene,
+  'via-purifico': buildViaPurificoScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */

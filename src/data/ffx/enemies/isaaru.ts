@@ -88,7 +88,7 @@ export const ISAARU_DUEL_AP = 5_000;
 const isaaru: EnemyDef = {
   id: ISAARU_ID,
   name: 'Isaaru',
-  spriteKey: 'isaaru', // no art yet (O-1 picked, not painted); the stage falls back without it
+  spriteKey: 'isaaru', // O-1 A, judge-locked (docs/concepts/chapters/isaaru/INSTALLED.md)
   slot: 0, // M1 — the formation is [isaaru, <aeon>] [§1.1 decompiled]
   stats: {
     hp: 10, // §2.1 [verified: 2 sources]
@@ -172,7 +172,7 @@ const NO_REWARDS: EnemyDef['rewards'] = { ap: 0, apOverkill: 0, gil: 0, overkill
 const grothia: EnemyDef = {
   id: GROTHIA_ID,
   name: 'Grothia',
-  spriteKey: 'ifrit', // his Ifrit: the aeon painting on the enemy side (research §10.2; D-089 art, never altered)
+  spriteKey: 'grothia', // his Ifrit: O-4 C, the Ifrit painting with his sea-green mark (INSTALLED.md; D-089 art never altered)
   slot: 1, // M2 [§1.1 decompiled]
   stats: {
     hp: 8_000, // §2.2 [verified: 4 sources]
@@ -193,7 +193,7 @@ const grothia: EnemyDef = {
   affinities: { fire: 'absorb' }, // §2.3 [verified: 3 sources]
   immunities: AEON_IMMUNITIES,
   immunityFlags: AEON_FLAGS,
-  forms: [{ name: 'Grothia', spriteKey: 'ifrit', hp: 8_000 }],
+  forms: [{ name: 'Grothia', spriteKey: 'grothia', hp: 8_000 }],
   aiScriptId: GROTHIA_SCRIPT,
   rewards: NO_REWARDS,
   abilityIds: [GROTHIA_ATTACK, GROTHIA_ATTACK_YUNA, GROTHIA_FIRA, GROTHIA_HELLFIRE],
@@ -209,7 +209,7 @@ const grothia: EnemyDef = {
 const pterya: EnemyDef = {
   id: PTERYA_ID,
   name: 'Pterya',
-  spriteKey: 'valefor', // his Valefor (research §10.2)
+  spriteKey: 'pterya', // his Valefor, O-4 C (INSTALLED.md)
   slot: 1, // M2 [§1.1 decompiled]
   stats: {
     hp: 12_000, // §2.2 [verified: 4 sources]
@@ -230,7 +230,7 @@ const pterya: EnemyDef = {
   affinities: {}, // §2.3 [verified: 3 sources]
   immunities: AEON_IMMUNITIES,
   immunityFlags: AEON_FLAGS,
-  forms: [{ name: 'Pterya', spriteKey: 'valefor', hp: 12_000 }],
+  forms: [{ name: 'Pterya', spriteKey: 'pterya', hp: 12_000 }],
   aiScriptId: PTERYA_SCRIPT,
   rewards: NO_REWARDS,
   abilityIds: [PTERYA_ATTACK, PTERYA_ATTACK_YUNA, PTERYA_SONIC_WINGS, PTERYA_ENERGY_RAY],
@@ -246,7 +246,7 @@ const pterya: EnemyDef = {
 const spathi: EnemyDef = {
   id: SPATHI_ID,
   name: 'Spathi',
-  spriteKey: 'bahamut', // his Bahamut (research §10.2)
+  spriteKey: 'spathi', // his Bahamut, O-4 C (INSTALLED.md)
   slot: 1, // M2 [§1.1 decompiled]
   stats: {
     hp: 20_000, // §2.2 [verified: 4 sources]
@@ -267,7 +267,7 @@ const spathi: EnemyDef = {
   affinities: {}, // §2.3 [verified: 3 sources]
   immunities: AEON_IMMUNITIES,
   immunityFlags: AEON_FLAGS,
-  forms: [{ name: 'Spathi', spriteKey: 'bahamut', hp: 20_000 }],
+  forms: [{ name: 'Spathi', spriteKey: 'spathi', hp: 20_000 }],
   aiScriptId: SPATHI_SCRIPT,
   rewards: NO_REWARDS,
   // The two counter rows (4:127, 4:173) are not shipped: I-4, B9.

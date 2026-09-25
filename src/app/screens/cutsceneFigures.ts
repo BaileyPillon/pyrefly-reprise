@@ -82,6 +82,24 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     portrait: { x: 0.5, feet: 0.74, height: 0.46 },
     unsent: true,
   },
+  /**
+   * Isaaru, living (FFX only: Chapter XIV). His battle idle, the O-1 A painting
+   * (`public/art/characters/isaaru/idle.png`, 744 x 1188, feet at y 1171;
+   * judge-locked, used as installed). He waits at the chamber's far end in the
+   * pre scene and kneels on the same spot in the post scene
+   * (`research/ffx-isaaru-bevelle.md` §8.2 beats 5 and 7).
+   *
+   * Landscape: right of the dialogue box, facing left toward Yuna. Portrait:
+   * centred, feet above the box. Not unsent: no drift, no pyrefly glow.
+   */
+  isaaru: {
+    art: 'art/characters/isaaru/idle.png',
+    aspect: 744 / 1188,
+    baseline: 1171 / 1188,
+    artFacing: -1,
+    landscape: { x: 0.78, feet: 0.9, height: 0.56 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.44 },
+  },
 };
 
 /** The staged figure for `actor`, or `undefined` when cutscenes do not stage it. */

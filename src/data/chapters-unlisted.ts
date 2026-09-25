@@ -18,17 +18,17 @@
 import type { Chapter } from './encounters.ts';
 import { SEYMOUR_NATUS } from './chapter-seymour-natus.ts';
 import { FFX2_FALLEN_AEONS } from './chapter-ffx2-fallen-aeons.ts';
-import { ISAARU_VIA_PURIFICO } from './chapter-isaaru.ts';
+import { ISAARU_VIA_PURIFICO_SHIPPED } from './chapter-isaaru-ship.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
  * Chapter X, Seymour Natus (FFX only) — `./chapter-seymour-natus.ts`.
  * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts`.
  * Chapter XIII, Trema, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter IX).
- * Chapter XIV, Isaaru in the Via Purifico (FFX only) — `./chapter-isaaru.ts`.
+ * Chapter XIV, Isaaru in the Via Purifico (FFX only) — `./chapter-isaaru.ts`, with its ship layer (`./chapter-isaaru-ship.ts`).
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [
   SEYMOUR_NATUS,
   FFX2_FALLEN_AEONS,
-  ISAARU_VIA_PURIFICO,
+  ISAARU_VIA_PURIFICO_SHIPPED,
 ] as const;

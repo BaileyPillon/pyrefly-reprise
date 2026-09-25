@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XIV ship layer: `SpeakerId` gains `'isaaru'`
+
+**FFX only** [AGENTS.md hard rule 14]. **Additive** in `src/story/dsl.ts`: `SpeakerId` gains
+`'isaaru'`, the speaker for Isaaru's lines in `src/story/scripts/ffx-isaaru.ts` (lines 8 to 21 of
+`docs/plans/isaaru-story-draft.md` and the three link cries, all ours). His portrait is the
+installed O-2 B (`public/art/portraits/isaaru.png`, judge-locked), found by id as every portrait is.
+`SPEAKER_ROLES` gains `isaaru: 'Summoner'`. The adjacent `'biran' | 'yenke'` members were joined on
+one line so the file does not grow; no member changed. No existing script changes.
+
 ## 2026-09-25 — Chapter XIV, Isaaru: `ChapterId` gains `'isaaru-via-purifico'`, `Chapter.number` widens to 15, a one- or two-member `FFXPartyBuild.activeSlots`, `EnemyGroupDef.lockedAeons` / `aeonsOnly` / `victoryBonusAp`
 
 **FFX only** [AGENTS.md hard rule 14]: Isaaru's contest of aeons in the Via Purifico, Yuna
