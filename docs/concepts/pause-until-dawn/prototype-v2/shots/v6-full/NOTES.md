@@ -156,3 +156,27 @@ The v5.1 checks `../../v5-pilot/tools/sweep-metric.py` and `../v51/tools/cut_che
 scratch runtime, the logs and `measure6.json` stay in `D:/Tools/pyrefly-scratch/picks0925/portrait-a2/` (48 MB, not
 committed). The captured frames and sweeps (2.2 GB) were deleted after encoding; `regen.sh` rebuilds them. The
 scratch Vite server on port 5720 was stopped.
+
+## Independent judge (2026-09-25, a separate agent that built none of this)
+
+Checked at 1:1 from the committed files, not from the build's report. **Score 7.5 / 10, above the bar of 7.**
+**Worst: the far-side hair at -40 and +40** (the flat pink band with a step on the image right at -40, and the soft,
+teal-tinged smear beside the tassel at +40). It is unchanged from v5.1 and disclosed; l40 reads 0.83 against the 0.85
+accept in `measure6.json`. The brief's Fix 2 is therefore **not met**. Cap at +-30 or run the GPU pass (Bailey's call).
+
+- **Files.** `clip.mp4` 720x1200, H.264 High, yuv420p, 60 fps, 900 frames, 15.0 s, 4.2 MB, moov before mdat (faststart).
+  `compare.mp4` 1080x900, 25 fps, 27.7 s, 3.4 MB, faststart. Both are under 8 MB. `sheet.jpg` 2000x3462.
+- **One painting per frame.** Pass-2 log: 20 cuts in the clip, 0 frames with a blend weight other than 0 or 1.
+- **Cuts at 1:1** (frames 100/101 at +7, 259/260 at -37, 548/549 at +37, 654/655 at +31, and the big step 658/668):
+  one iris, one lash line, one mouth on both sides of every cut. The eyes arrive before the head at the big step
+  (the A2 eye lead). The smile at 0 and at +40, the blink at -40 and mid-sweep, and the half lid all read cleanly. The
+  brows lift and never draw together, so there is no worried brow.
+- **Sweep numbers** (`sweep-metric.txt` in the scratch folder, re-read): head S 0.89-1.32, face S 0.95-1.19, max non-cut
+  1.27/1.28, 0/81 mixed frames per direction. This matches the claim (gate 1.5).
+- **Fix 1, the throat line, confirmed on the encoded output.** `tools/throat.py` run by the judge on all 900 decoded
+  frames of `clip.mp4`: 0 flagged (longest run 17 px against the 40 threshold). The same detector on v5.1's `clip.mp4`
+  flags 202 of 412 frames (a positive control). Nothing shows at 1:1 in the -40 frame (280).
+- **Locks.** `docs/target/approved-hashes.json`, re-hashed by the judge: 185 entries, 185 match, 0 mismatch, 0 absent. The build's
+  count of "31 absent" does not reproduce now; later lock commits may explain it. This track changed nothing
+  under `public/art`, so it needed no backup; `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/` exists.
+- **Minor.** The v5.1 panel in `compare.mp4` runs behind v6 by a beat, as disclosed. The port into `src/` is not written.
