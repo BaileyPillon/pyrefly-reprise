@@ -28,8 +28,8 @@
  *   stand-in under the narration), `boss-seymour-macalania` (B15's stand-in,
  *   D-091, until a Natus cue is picked by ear) and the shared `victory-ffx`.
  *
- * **Unlisted**, like the chapter: it sits in `./chapter-meta.ts`'s
- * `UNLISTED_CHAPTER_META` until the listing step moves it into `CHAPTER_META`.
+ * **Listed** 2026-09-25 with the chapter itself: it sits in `./chapter-meta.ts`'s
+ * `CHAPTER_META` after Chapter IX's, as the chapter sits after Chapter IX in `CHAPTERS`.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';

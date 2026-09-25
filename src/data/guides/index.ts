@@ -66,7 +66,7 @@ export const GUIDES: readonly ChapterGuide[] = [
   // chapter's shape (`../trema-shape.ts`).
   FFX2_TREMA_GUIDE,
   SEYMOUR_OMNIS_GUIDE,
-  // Chapter X (FFX only), registered and unlisted like its chapter.
+  // Chapter X (FFX only), listed 2026-09-25: the research's line, Haste only Tidus and Auron.
   SEYMOUR_NATUS_GUIDE,
 ];
 

@@ -6,6 +6,25 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — `encounters.ts`: Chapter X (Seymour Natus) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX only** [AGENTS.md hard rule 14]: Seymour Natus on the Highbridge of Bevelle
+(`research/ffx-seymour-natus-highbridge.md` §0.3: FFX-2 has no Natus); the listing itself is shared
+plumbing (both). Bailey, 2026-09-25: "All your recommendations" (D-185: the guide and tactic teach the
+research's strategy 7, "Haste only Tidus and Auron", 169/200 on the bench).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `SEYMOUR_NATUS` and `CHAPTER_IDS` gains
+`'seymour-natus'`, both after Chapter IX and before Chapter XII, so chapter select shows the card in
+the FFX group in number order (I, II, III, COMING VII, VIII, IX, X, XII). `ChapterId` and `getChapter`
+are unchanged (the id was already registered; the union's first six ids were joined onto two lines to
+keep the file at 398 lines); `UNLISTED_CHAPTERS` keeps only the Fallen Aeons. Alongside:
+`CHAPTER_META` gains `NATUS_META` (`UNLISTED_CHAPTER_META` is empty again), and
+`src/story/registry.ts` gains the `'seymour-natus'` key (its scripts, no AI-emitted callouts, no
+seam; four comments were shortened to keep it at 399 lines). Every chapter-generic consumer now sees
+twelve chapters, eleven of them playable: Auron's briefing counts "Eleven fights" by itself (D-136),
+and `arcCleared('ffx')` also needs Chapter X (`ARC_FINALE.ffx` stays `braskas-final-aeon`: the
+Highbridge comes before the Calm Lands and Gagazet). No save migration: saves key chapters by id string.
+
 ## 2026-09-25 — `encounters.ts`: Chapter XII (Seymour Omnis) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX only** [AGENTS.md hard rule 14]: Seymour Omnis in the Garden of Pain inside Sin

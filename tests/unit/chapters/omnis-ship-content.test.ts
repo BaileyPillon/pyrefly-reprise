@@ -34,7 +34,7 @@ describe('the registered record: LISTED (2026-09-25, D-162), with the ship layer
     expect(ch?.number).toBe(12);
     expect(UNLISTED_CHAPTERS).not.toContain(SEYMOUR_OMNIS_SHIPPED);
     expect(CHAPTERS).toContain(SEYMOUR_OMNIS_SHIPPED);
-    expect(CHAPTER_IDS.indexOf('seymour-omnis')).toBe(CHAPTER_IDS.indexOf('yojimbo-cavern') + 1);
+    expect(CHAPTER_IDS.indexOf('seymour-omnis')).toBe(CHAPTER_IDS.indexOf('seymour-natus') + 1); // X listed the same day
     expect(CHAPTERS.map((c) => c.id)).toEqual(CHAPTER_IDS);
   });
 

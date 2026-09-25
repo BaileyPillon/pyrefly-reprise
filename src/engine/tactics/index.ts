@@ -122,7 +122,7 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   { chapterId: 'evrae-airship', bossId: EVRAE_ID, tactic: evrae },
   // Chapter IX (FFX only): Yojimbo alone finds it; Ginnem and Daigoro are untargetable bystanders.
   { chapterId: 'yojimbo-cavern', bossId: YOJIMBO_CAVERN_BOSS_ID, tactic: yojimboCavern },
-  // Chapter X (FFX only, unlisted): Natus and Mortibody, one tactic under both ids.
+  // Chapter X (FFX only, listed 2026-09-25): Natus and Mortibody, one tactic under both ids.
   ...SEYMOUR_NATUS_BOSS_IDS.map((bossId) => ({ chapterId: 'seymour-natus', bossId, tactic: seymourNatus })),
   // Chapter XIII (FFX-2 only, unlisted): Paragon then Trema, one tactic under both ids.
   ...TREMA_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-trema', bossId, tactic: ffx2Trema })),

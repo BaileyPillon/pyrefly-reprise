@@ -8,16 +8,14 @@
  * Kept out of `./encounters.ts` for the house 400-line rule, like Chapters 7
  * to 9; the `Chapter` import is type-only, so there is no runtime cycle.
  *
- * ## Registered, reachable, and UNLISTED
+ * ## Listed 2026-09-25
  *
- * Bailey answered every recommendation on 2026-09-24 ("I'll go with your
- * recommendations for all"), but the art, the arena, the portrait, the HUD
- * reads and the music those picks approve are not painted, built or composed
- * yet (B16 = ship LOCKED if the art is late). So this record sits in
- * `UNLISTED_CHAPTERS`, the Chapter IX precedent: `getChapter`, the battle flow
- * and `window.__pyrefly.gotoChapter` reach it by id, and **chapter select does
- * not show it**. Listing it is the integrator's one line, once its story,
- * meta, scene, guide, tactic and card exist.
+ * Registered and unlisted from 2026-09-24 (Bailey: "I'll go with your
+ * recommendations for all") until its story, meta, scene, guide, tactic and
+ * card existed. Listed on 2026-09-25 (Bailey: "All your recommendations",
+ * which also picked the research's line "Haste only Tidus and Auron" for the
+ * guide and tactic): `./encounters.ts` puts it in `CHAPTERS` after Chapter IX,
+ * so chapter select shows it in the FFX group.
  *
  * The ship layer (2026-09-25; Bailey took every recommendation on the new
  * chapters) replaced the placeholders with Bailey's picks. Every field a
@@ -45,7 +43,7 @@ import { seymourNatusScripts } from '../story/scripts/seymour-natus.ts';
 import { highbridgeBuild } from './ffx/builds/highbridge.ts';
 import { seymourNatusGroup } from './ffx/enemies/seymour-natus.ts';
 
-/** Chapter 10 (registered, unlisted). */
+/** Chapter 10 (listed 2026-09-25). */
 export const SEYMOUR_NATUS: Chapter = {
   id: 'seymour-natus',
   game: 'ffx',
@@ -54,8 +52,7 @@ export const SEYMOUR_NATUS: Chapter = {
   // research §8.2 beats 8-9, summarised: the one Seymour fight the party turns back into.
   subtitle: 'The guardians turn back on the bridge',
   location: 'Highbridge of Bevelle — before the Main Gate', // B1 (picked)
-  // research §8.2 beats 7-9 and §4.1, summarised. Placeholder card copy; the
-  // card itself is not shown until the chapter is listed.
+  // research §8.2 beats 7-9 and §4.1, summarised: the card copy.
   blurb:
     'Seymour meets them at the end of the bridge and offers death as a mercy. ' +
     'Kimahri stands his ground, and the others come back for him.',

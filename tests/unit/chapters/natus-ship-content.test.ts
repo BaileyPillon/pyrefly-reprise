@@ -41,10 +41,10 @@ function newEngine(ch: Chapter, seed: number): BattleEngine {
 }
 
 describe('the pause card', () => {
-  it('is registered and unlisted, as its chapter is, with the installed hero plate B', () => {
-    expect(UNLISTED_CHAPTER_META).toContain(NATUS_META);
-    expect(CHAPTER_META).not.toContain(NATUS_META);
-    expect(CHAPTERS.some((c) => c.id === 'seymour-natus')).toBe(false);
+  it('is LISTED (2026-09-25), as its chapter is, with the installed hero plate B', () => {
+    expect(UNLISTED_CHAPTER_META).not.toContain(NATUS_META);
+    expect(CHAPTER_META).toContain(NATUS_META);
+    expect(CHAPTERS.some((c) => c.id === 'seymour-natus')).toBe(true);
     expect(getChapterMeta('seymour-natus')).toBe(NATUS_META);
     expect(NATUS_META).toMatchObject({ numeral: 'X', gameLabel: 'FFX', title: 'Seymour Natus', heroArt: 'pause/ch10-seymour-natus' });
     expect(NATUS_META.location).toBe(SEYMOUR_NATUS.location);

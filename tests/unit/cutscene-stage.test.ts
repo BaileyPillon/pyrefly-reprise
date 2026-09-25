@@ -72,6 +72,9 @@ describe('which chapters the stage changes (measured, pinned)', () => {
       // then Yuna sends him in the post scene (docs/plans/omnis-story-draft.md beat 5).
       '12 seymour-omnis pre': ['show seymour-omnis'],
       '12 seymour-omnis post': ['show seymour-omnis', 'fx sending-dance @yuna', 'fx pyreflies-rising @seymour-omnis', 'hide seymour-omnis'],
+      // Chapter X (FFX only, listed 2026-09-25): Seymour Natus stands up from the attendants' pyreflies
+      // (research ffx-seymour-natus-highbridge.md §8.2 beat 8).
+      '10 seymour-natus pre': ['fx pyreflies-rising', 'show seymour-natus'],
       // Scenes that already called these keys, and now draw them instead of
       // a 90 ms flash. No figure appears in any of them.
       '1 seymour-flux post': ['fx sending-dance @yuna', 'fx pyreflies-rising'],
