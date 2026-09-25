@@ -19,6 +19,7 @@ import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { PauseScreen } from './PauseScreen.ts';
+import { CutsceneStage } from './CutsceneStage.ts';
 
 /**
  * One row, and it says what the keys actually do.
@@ -81,7 +82,7 @@ export interface CutsceneScreenOptions {
   portraitFor?: (who: SpeakerId) => string | undefined;
   /** Speaker -> role-chip tag; defaults to `speakerRole` (see `src/ui/common/speaker-roles.ts`). */
   roleFor?: (who: SpeakerId) => string | undefined;
-  /** Override or extend the default DOM-only ports (camera/fx/moveActor are no-ops by default — the scene/presenter agent injects real ones here). */
+  /** Override or extend the default ports (camera/moveActor are no-ops; fx/showActor/hideActor act on `CutsceneStage`). */
   ports?: Partial<CutscenePorts>;
   /** Esc fast-forwards the script. Default true. */
   skippable?: boolean;
@@ -109,9 +110,9 @@ export interface CutsceneScreenOptions {
 
 /**
  * Runs a `StoryScript` through `CutsceneRunner`, presenting it with a
- * `DialogueBox` over a backdrop image. Camera/fx/actor movement are DOM-only
- * stand-ins (no Three.js here — that belongs to `src/engine/**`/`src/scenes/**`);
- * pass `ports` to wire the real presenter in without touching this file.
+ * `DialogueBox` over a backdrop image. Figures, drawn effects, flash and shake
+ * live on a DOM-only `CutsceneStage` (no Three.js here); camera and movement
+ * are no-ops. Pass `ports` to wire a real presenter in without touching this file.
  */
 export class CutsceneScreen extends Screen {
   readonly name = 'cutscene';
@@ -128,8 +129,7 @@ export class CutsceneScreen extends Screen {
   private hint: ControlsHint | null = null;
   private runner: CutsceneRunner | null = null;
   private eyebrowEl: HTMLElement | null = null;
-  private flashEl: HTMLElement | null = null;
-  private shakeEl: HTMLElement | null = null;
+  private stage: CutsceneStage | null = null;
   private finished = false;
   private lastResult: CutsceneRunResult | null = null;
   /** The pause overlay while it is up. */
@@ -168,16 +168,13 @@ export class CutsceneScreen extends Screen {
       this.root.appendChild(this.eyebrowEl);
     }
 
-    this.shakeEl = document.createElement('div');
-    this.shakeEl.className = 'cutscene__shake';
-    this.root.appendChild(this.shakeEl);
-
-    this.flashEl = document.createElement('div');
-    this.flashEl.className = 'cutscene__flash';
-    this.root.appendChild(this.flashEl);
+    // Backdrop, then the stage (figures, effects, and the box inside its shake layer), then the flash.
+    this.stage = new CutsceneStage(this.root, { wait: (ms) => this.waitGate(ms), skipping: () => this.runner?.skipped === true });
+    this.stage.mount();
+    this.stage.prepare(this.opts.script ?? DEMO_CUTSCENE_SCRIPT);
 
     this.dialogueBox = new DialogueBox({
-      root: this.shakeEl,
+      root: this.stage.shakeEl,
       ...(this.opts.nameFor ? { nameFor: this.opts.nameFor } : {}),
       ...(this.opts.portraitFor ? { portraitFor: this.opts.portraitFor } : {}),
       ...(this.opts.roleFor ? { roleFor: this.opts.roleFor } : {}),
@@ -200,8 +197,7 @@ export class CutsceneScreen extends Screen {
     this.pauseScreen = null;
     this.hint?.unmount();
     this.dialogueBox?.unmount();
-    this.shakeEl?.remove();
-    this.flashEl?.remove();
+    this.stage?.unmount();
     this.eyebrowEl?.remove();
     this.resolveDone();
   }
@@ -351,7 +347,7 @@ export class CutsceneScreen extends Screen {
   }
 
   override snapshot(): Record<string, unknown> {
-    return { finished: this.finished, result: this.lastResult, paused: this.pauseScreen !== null };
+    return { finished: this.finished, result: this.lastResult, paused: this.pauseScreen !== null, cast: this.stage?.cast() ?? [] };
   }
 
   // ------------------------------------------------------------------ run
@@ -374,11 +370,14 @@ export class CutsceneScreen extends Screen {
   }
 
   private buildPorts(): CutscenePorts {
-    if (!this.dialogueBox) throw new Error('CutsceneScreen: buildPorts() called before the dialogue box exists.');
+    const stage = this.stage;
+    if (!this.dialogueBox || !stage) throw new Error('CutsceneScreen: buildPorts() called before the stage and dialogue box exist.');
     const base = createNoopPorts({
       dialogue: this.dialogueBox,
       camera: () => {}, // no 3D scene owned here — the presenter/scene agent overrides via `opts.ports`.
-      fx: () => this.flash(undefined, 90),
+      fx: (key, at) => stage.fx(key, at),
+      showActor: (step) => stage.showActor(step),
+      hideActor: (step) => stage.hideActor(step),
       music: (track, fade) => {
         // `fade` is the DSL's `MusicStep.fade`, authored in milliseconds
         // (`story/dsl.ts`); `AudioManager` wants seconds. PR-0089: this used to
@@ -402,47 +401,10 @@ export class CutsceneScreen extends Screen {
           console.warn(`[cutscene] sfx "${key}" skipped:`, err instanceof Error ? err.message.split('.')[0] : err);
         }
       },
-      flash: (color, ms) => this.flash(color, ms),
-      shake: (px, ms) => this.shake(px, ms),
+      flash: (color, ms) => stage.flash(color, ms),
+      shake: (px, ms) => stage.shake(px, ms),
       fadeScreen: (to, ms) => this.app.fade(to === 'clear' ? 'clear' : 'opaque', ms),
     });
     return { ...base, ...this.opts.ports };
-  }
-
-  private flash(color: string | undefined, ms: number): Promise<void> {
-    if (!this.flashEl) return Promise.resolve();
-    this.flashEl.style.background = color ?? '#ffffff';
-    this.flashEl.style.transitionDuration = '0ms';
-    this.flashEl.style.opacity = '0.7';
-    return new Promise((resolve) => {
-      window.requestAnimationFrame(() => {
-        if (!this.flashEl) return resolve();
-        this.flashEl.style.transitionDuration = `${ms}ms`;
-        this.flashEl.style.opacity = '0';
-        window.setTimeout(resolve, ms);
-      });
-    });
-  }
-
-  private shake(px: number, ms: number): Promise<void> {
-    const el = this.shakeEl;
-    if (!el) return Promise.resolve();
-    el.style.transition = `transform ${Math.max(30, ms / 8)}ms ease-in-out`;
-    let ticks = 0;
-    const maxTicks = 6;
-    return new Promise((resolve) => {
-      const step = (): void => {
-        ticks++;
-        const decay = 1 - ticks / maxTicks;
-        const dx = (ticks % 2 === 0 ? 1 : -1) * px * decay;
-        el.style.transform = ticks >= maxTicks ? '' : `translate(${dx.toFixed(1)}px, 0)`;
-        if (ticks >= maxTicks) {
-          resolve();
-          return;
-        }
-        window.setTimeout(step, ms / maxTicks);
-      };
-      step();
-    });
   }
 }

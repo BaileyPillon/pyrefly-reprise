@@ -1,0 +1,129 @@
+/*
+ * The cutscene's own stage: the figures a script brings on (only those listed
+ * in `cutsceneFigures.ts`), the pyreflies and the sending (`cutsceneFx.ts`),
+ * the flash and the shake. Owned by `CutsceneStage.ts`.
+ *
+ * Layer order inside `.cutscene`: backdrop (the root's own background), then
+ * `.cutscene__shake` holding the figures, the effects and the dialogue box (in
+ * that order, so the box always reads over a figure), then the flash.
+ */
+
+/* `.cutscene__shake` and `.cutscene__flash` keep their rules in `ui/common/cutscene.css`. */
+
+.cutscene__figures,
+.cutscene__fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ figures */
+
+.cutscene__figure {
+  position: absolute;
+  left: calc(var(--x-l) * 100%);
+  top: calc(var(--feet-l) * 100% - var(--baseline) * var(--h-l) * 100%);
+  height: calc(var(--h-l) * 100%);
+  aspect-ratio: var(--aspect);
+  transform: translateX(-50%);
+  opacity: 0;
+  transition-property: opacity, filter, transform;
+  transition-timing-function: ease-in-out;
+  will-change: opacity, filter, transform;
+}
+@media (orientation: portrait) {
+  .cutscene__figure {
+    left: calc(var(--x-p) * 100%);
+    top: calc(var(--feet-p) * 100% - var(--baseline) * var(--h-p) * 100%);
+    height: calc(var(--h-p) * 100%);
+  }
+}
+.cutscene__figure.is-on {
+  opacity: 1;
+}
+/* Leaving: brightens, softens and lifts as it goes, so it reads as dissolving into light, not switched off. */
+.cutscene__figure.is-leaving {
+  opacity: 0;
+  filter: brightness(1.7) blur(3px);
+  transform: translateX(-50%) translateY(-3%);
+  transition-timing-function: ease-in;
+}
+
+.cutscene__figure-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.cutscene__figure.is-flipped .cutscene__figure-art {
+  transform: scaleX(-1);
+}
+/* An unsent figure hangs in the air a little: a slow drift and the cool glow of the pyreflies that hold it together. */
+.cutscene__figure.is-unsent .cutscene__figure-art {
+  filter: drop-shadow(0 0 1.2vh rgba(150, 205, 255, 0.45));
+  animation: cutscene-unsent-drift 6.5s ease-in-out infinite;
+}
+.cutscene__figure.is-unsent.is-flipped .cutscene__figure-art {
+  animation-name: cutscene-unsent-drift-flipped;
+}
+@keyframes cutscene-unsent-drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.9%); }
+}
+@keyframes cutscene-unsent-drift-flipped {
+  0%, 100% { transform: scaleX(-1) translateY(0); }
+  50% { transform: scaleX(-1) translateY(-0.9%); }
+}
+
+/* ------------------------------------------------------------------ effects */
+
+.cutscene__pyrefly {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, var(--mote, #bfe9ff) 45%, rgba(255, 255, 255, 0) 72%);
+  box-shadow: 0 0 1.1vh 0.3vh var(--mote, #bfe9ff);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+.cutscene__sending {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.cutscene__sending path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+.cutscene__sending-glow {
+  stroke: rgba(150, 210, 255, 0.4);
+  stroke-width: 4.5vh;
+  filter: blur(2vh);
+}
+.cutscene__sending-core {
+  stroke: rgba(235, 248, 255, 0.7);
+  stroke-width: 0.35vh;
+  filter: blur(0.15vh) drop-shadow(0 0 0.8vh rgba(190, 230, 255, 0.9));
+}
+
+.cutscene__sending-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 0.3vh solid rgba(200, 235, 255, 0.6);
+  box-shadow: 0 0 2.5vh rgba(150, 210, 255, 0.55), inset 0 0 2vh rgba(150, 210, 255, 0.4);
+  filter: blur(0.2vh);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cutscene__figure.is-unsent .cutscene__figure-art {
+    animation: none;
+  }
+}
