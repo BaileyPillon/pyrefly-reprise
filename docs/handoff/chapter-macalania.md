@@ -28,7 +28,7 @@ half-switched unlock fails a test.
 | Pause plate redo (D-141 excepted it) | `docs/concepts/chapters/macalania/unlock/pause-plate-redo.jpg`: current, A (judged 7), **A2** (A plus the judge's two notes, hair colour and veins, by pixel edits; **not judged yet**, recommended if it passes), B (6), C (6). Each has a real pause capture | installed over `public/art/pause/macalania.*` in place, so `heroArt` does not change; then the lock in `approved-hashes.json` |
 | Scene cue `scene-macalania-temple` (preflight §6.3; by ear, rule 13) | three sketches in `docs/audio/audition.html` (section `macalania-scene`, lines 80 to 146): A "The Frozen Temple", B "The Wedding Proposal", C "Crystal and Pyreflies", files in `docs/audio/sketches/2026-09-24/` | the picked sketch is composed and registered as a track, then `MACALANIA_SCENE_CUE` names it. The record's `music.scene`, the pre-battle `music()` step and the meta's `musicKeys` all read that one constant |
 
-| Party layout (found by the ship frames, 2026-09-25; the R13-04 / PR-0002 defect class, a major on the other chapters) | `docs/concepts/chapters/macalania/unlock/party-layout/sheet.jpg` and its README: current, A, **B (recommended)**, C, each measured live at 1280x720, 1600x900, 2000x1012 and 390x844 (`data-*.json`) | `PARTY_SLOTS` rows 0 to 2 plus `holdParty` (and `enemySpots` for B) in `src/scenes/macalania-temple.ts`, the D-041 / D-144 recipe; then the arrival, act-two, victory rigs and `macalania-scene.test.ts` are re-measured |
+| Party layout (found by the ship frames, 2026-09-25; the R13-04 / PR-0002 defect class, a major on the other chapters) | `docs/concepts/chapters/macalania/unlock/party-layout/sheet.jpg` and its README: current, A, **B (recommended)**, C, each measured live at 1280x720, 1600x900, 2000x1012 and 390x844 (`data-*.json`) | **Built (repair cycle 1):** all four options are staging data in `src/scenes/macalania-temple-layout.ts`; the pick is ONE constant, `MACALANIA_PARTY_LAYOUT` (still `'current'`), plus dropping the 'party-layout' row from `MACALANIA_OPEN_PICKS`. B proved in the real build through the whole fight: `unlock/party-layout/built/README.md` |
 
 The pause plate and the scene cue do not block the unlock technically: the stand-in plate and the stand-in cue (Chapter I's
 `scene-gagazet`) both work today.
@@ -386,3 +386,35 @@ D-144), so it is an options sheet here, not a build: `unlock/party-layout/`. The
 of every panel except Guardian B's feet under the party panel (18%, as in every option). On the
 phone the party is clear, but Seymour and both Guardians are partly off the right edge (the shared
 `phoneFraming.ts` finding above); options A and B bring Seymour and Guardian A whole into frame.
+
+## Repair cycle 1, 2026-09-25 (verifier M1: the party under the command stack)
+
+**Game case: FFX only** [AGENTS.md rule 14]: Chapter VII's staging under the FFX command stack. No
+shared file, no boss number, no art changed (verify: before and after).
+
+M1 (major) confirmed the builder's finding and that it is correctly held as Bailey's open pick 3. No
+decision in `docs/target/decisions.json` answers that sheet (it was made after Bailey's 12:45
+answers), so the scene still stands on today's layout (AGENTS.md rules 9 and 10). What this cycle
+did is make the pick land as one line, proved:
+
+- `src/scenes/macalania-temple-layout.ts` (new): the sheet's four options as data
+  (`MACALANIA_PARTY_LAYOUTS`, exactly `unlock/party-layout/layouts.json`) and
+  `MACALANIA_PARTY_LAYOUT = 'current'`.
+- `src/scenes/macalania-temple.ts`: party slots 0 to 2 and the staging switches (`holdParty`,
+  `enemySpots`) come from the option in force, in `MACALANIA_TEMPLE_SLOTS` and in the build; a pinned
+  fiend's light pool follows its spot. With `'current'` nothing changes.
+- `tests/unit/chapters/macalania-party-layout.test.ts` (new): the options match the sheet, the scene
+  stands on the option in force, the constant is `'current'` exactly while the pick is open, and the
+  chapter cannot be unlocked while it is `'current'`.
+- Proof on the built scene (`unlock/party-layout/built/`, `prove.mjs`, the constant answered in the
+  page only): at the first menu B clears every party head and torso at 1280x720, 1600x900 and
+  2000x1012 (Tidus 1.00, Yuna 0.62 to 0.65, Rikku 0.95 to 0.97; today 0.45 to 0.51 and 0.21 to 0.27),
+  matching the sheet within 0.01. Two full real-key wins under B (`rehearse.mjs`, env
+  `MACALANIA_LAYOUT=b`) at 1600x900 and 390x844: 0 console errors, 0 bad responses. B's costs beyond
+  the sheet: in act two Seymour, stepped back to [1.1, 0, -8.3], is 0.41 visible behind Anima's left
+  side (today 0.75), face clear; at his fall the swapped-in Auron is cut by the bottom edge of the
+  body close-up.
+
+**To land Bailey's pick:** `MACALANIA_PARTY_LAYOUT = '<id>'`, drop the 'party-layout' row from
+`MACALANIA_OPEN_PICKS` and from the ship test's id list, record the decision; the party-layout test
+then allows the lock line to go.

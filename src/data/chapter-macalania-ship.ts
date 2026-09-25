@@ -30,7 +30,10 @@
  *    the scene's party arc is Chapter I's from before D-041 and is not held, so the FFX command
  *    stack covers Yuna's and Tidus's heads and torsos at the first menu. Options current, A, B
  *    (recommended), C on `docs/concepts/chapters/macalania/unlock/party-layout/sheet.jpg`, measured
- *    live. The pick lands as staging data in `src/scenes/macalania-temple.ts`.
+ *    live. All four are built as staging data in `src/scenes/macalania-temple-layout.ts`
+ *    (repair cycle 1, 2026-09-25); the pick lands as one constant there, `MACALANIA_PARTY_LAYOUT`,
+ *    which stays `'current'` until Bailey picks. The unlock test refuses the lock line's removal
+ *    while it is still `'current'`.
  */
 
 /** Chapter I's scene cue, played here as a recorded stopgap until the pick lands. */
@@ -72,6 +75,6 @@ export const MACALANIA_OPEN_PICKS: readonly MacalaniaOpenPick[] = [
     id: 'party-layout',
     decision: 'D-041 / D-144 recipe for a new chapter (R13-04 class: party under the FFX command stack)',
     candidates: 'docs/concepts/chapters/macalania/unlock/party-layout/sheet.jpg',
-    lands: 'PARTY_SLOTS + holdParty (and enemySpots for B) in src/scenes/macalania-temple.ts',
+    lands: "MACALANIA_PARTY_LAYOUT in src/scenes/macalania-temple-layout.ts (all four options built; set the picked id)",
   },
 ];

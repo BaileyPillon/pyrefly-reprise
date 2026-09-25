@@ -46,6 +46,17 @@ if (mode === 'pause') {
     await route.fulfill({ status: 200, body: fs.readFileSync(file), headers: { 'content-type': type } });
   });
 }
+// ---- a party-layout option, answered in this page only (env MACALANIA_LAYOUT=a|b|c; repair cycle 1):
+// the one constant Bailey's pick 3 changes (src/scenes/macalania-temple-layout.ts). Unset = 'current'.
+const LAYOUT = process.env.MACALANIA_LAYOUT;
+let layoutAnswered = !LAYOUT;
+if (LAYOUT) {
+  await page.route(/\/src\/scenes\/macalania-temple-layout\.ts(\?.*)?$/, async (route) => {
+    const res = await route.fetch();
+    const out = (await res.text()).replace(/(MACALANIA_PARTY_LAYOUT\s*=\s*)["']current["']/, (m, a) => { layoutAnswered = true; return `${a}"${LAYOUT}"`; });
+    await route.fulfill({ response: res, body: out, headers: { ...res.headers(), 'content-length': String(Buffer.byteLength(out)) } });
+  });
+}
 
 const errors = [];
 let beat = 'boot';
@@ -201,7 +212,7 @@ for (let i = 0; ; i++) {
   catch (e) { if (i >= 3) throw e; log('not ready in 60 s (Vite re-optimise with HMR off?): reload'); await page.reload({ waitUntil: 'domcontentloaded' }); }
 }
 log('renderer', await page.evaluate(() => { const gl = document.createElement('canvas').getContext('webgl2'); const e = gl?.getExtension('WEBGL_debug_renderer_info'); return e ? gl.getParameter(e.UNMASKED_RENDERER_WEBGL) : 'unknown'; }));
-log('lock flipped in page:', lockFlipped, '| screen', await screen());
+log('lock flipped in page:', lockFlipped, '| layout', LAYOUT ?? 'current', 'answered', layoutAnswered, '| screen', await screen());
 await page.waitForTimeout(1500);
 beat = 'title';
 if (mode === 'win') await shot('title');
@@ -322,6 +333,17 @@ if (mode === 'phone360' || mode === 'pause') {
     const hp = (id) => (s2.en[id] ? `${s2.en[id].removed ? 'x' : s2.en[id].hp}` : '-');
     log(`turn ${seen.turns} act ${s2.act} ${pl.actor} -> ${pl.label ?? pl.pick} tgt=${pl.targets.join(',')} | S ${hp('seymour-macalania')} GA ${hp('guado-guardian-a')} GB ${hp('guado-guardian-b')} AN ${hp('anima-macalania')} | ${s2.party}`);
     if (seen.turns === 1) { await page.waitForTimeout(800); await shot('first-menu'); }
+    // Act two (Anima out, Seymour stepped back): one frame and every figure's place, for a layout run
+    // (MACALANIA_LAYOUT) or a baseline run (MACALANIA_ACT2=1).
+    if ((LAYOUT || process.env.MACALANIA_ACT2) && seen.anima && !seen.animaGone && !seen.actTwo && Date.now() - seen.anima > 12000) {
+      seen.actTwo = true; await page.waitForTimeout(800);
+      log('ACT TWO', JSON.stringify(await page.evaluate(() => {
+        const stage = window.__pyrefly.battle().stage; const v = stage.visibilityInFrame(); const o = {};
+        for (const [id, s] of stage.actors) { const p = s.actor.position; const r = stage.projectRect(id); o[id] = { pos: [p.x, p.y, p.z].map((x) => +x.toFixed(2)), rect: r ? [r.x, r.y, r.x + r.w, r.y + r.h].map(Math.round) : null, vis: v.has(id) ? +v.get(id).toFixed(2) : null }; }
+        return o;
+      })));
+      await shot('act-two-menu');
+    }
     if (isMobile && (seen.turns <= 3 || seen.turns % 6 === 0)) await fontCheck(`menu turn ${seen.turns}`);
     if (pl.fallbackFrom) log('FALLBACK from', pl.fallbackFrom);
     await enact(pl);

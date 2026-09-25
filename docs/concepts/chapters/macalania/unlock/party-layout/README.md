@@ -3,7 +3,9 @@
 **Game case: FFX only** (AGENTS.md rule 14). Chapter VII is an FFX chapter, and the
 stack is the FFX Ink & Gold command cascade. No FFX-2 scene or HUD is touched.
 
-**Status:** options only, for Bailey's pick. Nothing under `src/` changed for this sheet,
+**Status (repair cycle 1, 2026-09-25):** still Bailey's pick. All four options are now built as
+data behind one constant (`src/scenes/macalania-temple-layout.ts`, still `'current'`) and B is
+proved in the real build: `built/README.md`. **Original status:** options only. Nothing under `src/` changed for this sheet,
 and nothing is built. The layouts were staged at runtime in the page
 (`window.__pyrefly.battle().stage.actors.get(id).actor.position.set(...)`) after the
 first menu was up and staging had finished, the way the R13-04 sheet was made
