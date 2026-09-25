@@ -827,6 +827,35 @@
     "mtime": "2026-09-25T04:26:00.370Z",
     "approved": "2026-09-25"
    }
+  },
+  "chapter:omnis:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/omnis/README.md and docs/plans/chapter-omnis-review.md (O-1 A new paint, O-2 B painted discs with the facing quarter lit, O-3 C deep violet, B17 c). Locked after the independent 1:1 judge docs/concepts/chapters/omnis/production/JUDGE.md: seymour-omnis idle 7.7 and cast 7.4, mortiphasm disc 7.8, mortiphasm-facing layer 8.3, garden-of-pain 7.5 (the picked C plate plus the sourced steps). The mortiphasm ring order (Fire, Water, Ice, Thunder clockwise) is still our estimate (plan B8): a re-ordered disc is a new file that needs its own lock, with this hash kept as superseded. NOT in this set (judged FAIL 5.9, still CANDIDATE): portraits/seymour-omnis.png (blown forehead oval, hair-crown hole, costume off the idle); B17 falls back to the approved seymour-macalania portrait. FFX only, Chapter XII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-omnis/.",
+   "public/art/characters/seymour-omnis/idle.png": {
+    "sha256": "91f67b3a27498c86195e1d352605623a78e350cbfa736c9077341d16767359f3",
+    "mtime": "2026-09-25T04:23:19.835Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/seymour-omnis/cast.png": {
+    "sha256": "98749aa066a456c0e3f3334238ccce2a3d73f2f6059206eae4b551b193225026",
+    "mtime": "2026-09-25T04:23:20.420Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/mortiphasm/idle.png": {
+    "sha256": "962416288387fdfdd998f52575af1a3e6c9c9de6755cc8758126b9afa0c08c0c",
+    "mtime": "2026-09-25T04:23:20.630Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/mortiphasm-facing/idle.png": {
+    "sha256": "0f5445a99dc8e30b301bfcb8e7032dcf09f3850a6479790b873d5f541df61be2",
+    "mtime": "2026-09-25T04:23:20.712Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/garden-of-pain.png": {
+    "sha256": "d18315b7305976c13e2bf4141ff5e79cd7b7df724441874db4f639a3d65d5d93",
+    "mtime": "2026-09-25T04:23:24.255Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
