@@ -152,3 +152,69 @@ did not change; the diff in `encounters.ts` is type-only.
   conflicts only in `docs/CONTRACT-CHANGES.md`. Listing the Den under v2 will need its tile. The record's
   `thumbnailKey` is `chapter-ffx2-den-of-woe`.
 - Listing stays the driver's step, following commit 5c8706d6.
+
+## Re-check after repair 1 (commit `09303d03`), 2026-09-25 evening
+
+**Game case: FFX-2 only.** The checker built none of the repair and edited nothing under `src/` or
+`tests/`; this section is the only change. Scratch: `D:/Tools/pyrefly-scratch/chapters/den-of-woe-recheck/`.
+
+### Mechanical checks
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | exit 0 |
+| Den files (9) + locked-hash test | 10 files passed, 106 tests (9 skipped: the `PYREFLY_MEASURE` table) |
+| Full vitest (`--testTimeout=60000`) | 418 files passed, 2 skipped; 7,844 tests passed, 21 skipped, 1 todo |
+| `node tools/orphans.mjs` | 762 modules, 738 reachable, 24 orphaned (unchanged; the new `builds/den-of-woe.ts` is reachable) |
+| Locked art (sha256, approved + judge-locked) | 225 ok, 0 mismatched, 0 missing |
+| House style | new files 61 / 122 / 176 lines; `denOfWoeDrive.ts` 329 to 369; no file over 400 grew |
+| Boss numbers | untouched: the enemy file only gains the `checkpointOnEntry` switch and wraps Gippal and Nooj |
+
+### The shipped chapter is unchanged (proved on the engine, not by reading)
+
+A scratch test (`equiv.test.ts`) put the ship commit's guide and tactic (`git show 83fd56e0~0:` of each
+file) beside the repaired ones. The guide serialises byte for byte the same. Over 80 whole Den chains
+(Wait, carried state, bench speed) the repaired tactic and the old one made **3,298 decisions with 0
+differences**; 7 of the 80 cleared, in line with the bench's 12/200. The kit is `farplaneBuild` itself and
+no link is a checkpoint (the options test asserts both).
+
+### The options table reproduces
+
+`PYREFLY_MEASURE=1` on `den-of-woe-options-bench.test.ts` (74 s alone) printed the sheet's table cell for
+cell: shipped 0 (0/4/4), no prep 15 (15/38/50), Hero Drinks 18 / 28, levels 19 / 22, both with the prep
+52 (52/125/153), both without it 39 (39/115/160), Active 7 or less everywhere. The harness is
+deterministic, so this proves the table is honest output, not that the human model is right.
+
+### Sensitivity of the human model (my own sweep, first try, 200 seeds, Wait split)
+
+| Menu time / top list | shipped prep | shipped no prep | Drinks prep | Drinks no prep | Levels prep | Levels no prep | **Both prep** | **Both no prep** |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1.0 s / 0.3 s | 4 | 14 | 26 | 38 | 24 | 36 | 60 | **66** |
+| 1.5 s / 0.5 s (the sheet's) | 0 | 15 | 18 | 28 | 19 | 22 | **52** | 39 |
+| 2.5 s / 0.8 s | 2 | 14 | 13 | 15 | 7 | 33 | 38 | **48** |
+
+- **"Both" is the best kit at every speed.** The kit recommendation holds.
+- **The prep's verdict does not hold.** Under "both", the prep beats no prep only at the one 1.5 s point on
+  the first try. It loses at 1.0 s and at 2.5 s, and it loses within five tries at 1.5 s too (153 against
+  160). On every other kit, no prep wins at every speed.
+
+### Verdict on the two findings
+
+- **B1 (listing blocker): answered, still open until Bailey picks.** The four options are built OFF,
+  correct and measured. Nothing is listed. With the switches as they are, the chapter still loses 0/200 at
+  human speed, so B1 blocks the listing until Bailey replies. The repair did what the brief allowed.
+- **M1 (major): still open, and the sheet's resolution is too strong.** The sheet and the repair's
+  forBailey say that picking "Den: both" settles M1 as "keep the advice", because the prep pays once both
+  kit options are on. That rests on one speed point. Faster or slower players, and players who retry, do
+  better without the prep. On the evidence, the prep costs or ties wins on every kit, so the honest line to
+  Bailey is: "Den: both" plus a separate prep call, with no prep as the measured lean (66 / 39 / 48 against
+  60 / 52 / 38). The switch is built and works; only the sheet's recommendation and its "Replies" wording
+  need correcting before Bailey reads it.
+
+### Minor, new
+
+1. **The sheet's recommendation line conflicts with its own table.** `docs/plans/den-of-woe-options-2026-09-25.md`
+   says the prep "pays" under both options, but its own table shows both-no-prep ahead within five tries
+   (160 against 153) and within three nearly level (115 against 125). Fix the wording when M1 is re-put.
+
+The 7 minors above are untouched by the repair (out of its brief), as the builder disclosed.
