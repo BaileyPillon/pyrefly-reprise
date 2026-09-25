@@ -1,0 +1,131 @@
+/* ===== chapter select v2: shared by every option (the fixed list + real art) ===== */
+
+/* hero: real painting, never a silhouette */
+.v2-hero .fe-hero__art img.v2-plate {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: saturate(1.02) brightness(0.96);
+}
+.v2-hero .fe-hero__fade {
+  background:
+    linear-gradient(to top, rgba(7, 6, 13, 0.92) 3%, rgba(7, 6, 13, 0.34) 30%, rgba(7, 6, 13, 0) 52%),
+    linear-gradient(to right, rgba(7, 6, 13, 0.62), rgba(7, 6, 13, 0) 40%);
+}
+.v2-hero::after {
+  /* inner hairline: the Ink & Gold double rule on the plate */
+  content: ''; position: absolute; inset: calc(7 * var(--fe-k));
+  border: 1px solid rgba(227, 185, 74, 0.32); pointer-events: none;
+}
+
+/* composites: the boss painting on its scene plate */
+.v2-comp { position: absolute; inset: 0; overflow: hidden; }
+.v2-comp__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.95) brightness(0.8); }
+.v2-comp__boss { position: absolute; display: block; }
+.v2-comp--evrae .v2-comp__bg { object-position: 50% 40%; }
+.v2-comp--evrae.v2-comp--hero .v2-comp__boss {
+  width: 78%; right: -4%; top: 2%;
+  filter: drop-shadow(0 0 calc(18 * var(--fe-k)) rgba(120, 220, 230, 0.35)) drop-shadow(0 calc(14 * var(--fe-k)) calc(24 * var(--fe-k)) rgba(0, 0, 0, 0.6));
+}
+.v2-comp--evrae.v2-comp--card .v2-comp__boss { width: 72%; right: -6%; top: -34%; }
+.v2-comp--leblanc .v2-comp__bg { object-position: 50% 42%; }
+.v2-comp--leblanc.v2-comp--hero .v2-comp__boss {
+  height: 118%; right: 12%; top: 3%;
+  filter: drop-shadow(0 0 calc(16 * var(--fe-k)) rgba(247, 120, 200, 0.35)) drop-shadow(0 calc(10 * var(--fe-k)) calc(20 * var(--fe-k)) rgba(0, 0, 0, 0.7));
+}
+.v2-comp--leblanc.v2-comp--card .v2-comp__boss { height: 330%; right: 8%; top: -18%; }
+
+/* the fixed list: every chapter in its place, nothing leaves, nothing shifts */
+.v2-rail { gap: calc(6 * var(--fe-k)); }
+.v2-rail .fe-rail__group { font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k))); }
+.v2-card {
+  flex: 1 1 0;
+  background: #0d0b15;
+  border: 1px solid rgba(244, 241, 232, 0.16);
+  transform: none;
+}
+.v2-card__art {
+  position: absolute; top: 0; bottom: 0; right: 0; width: 64%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 30%, #000 60%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 30%, #000 60%);
+}
+.v2-card__art img.v2-plate { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.9) brightness(0.72); }
+.v2-card__art .v2-comp__bg { filter: saturate(0.9) brightness(0.66); }
+.v2-card__fade { position: absolute; inset: 0; background: linear-gradient(to right, rgba(7, 6, 13, 0.55), rgba(7, 6, 13, 0) 70%); }
+.v2-card__num {
+  position: absolute; left: 0; top: 0; bottom: 0; width: calc(54 * var(--fe-k));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ig-font-display); font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(14 * var(--fe-k)));
+  letter-spacing: 0.12em; color: var(--fe-accent);
+  border-right: 1px solid rgba(227, 185, 74, 0.28);
+  background: rgba(7, 6, 13, 0.55);
+}
+.v2-card__name {
+  position: absolute; left: calc(68 * var(--fe-k)); right: calc(44 * var(--fe-k)); top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(22 * var(--fe-k))); line-height: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--ig-paper); text-shadow: 0 calc(2 * var(--fe-k)) calc(10 * var(--fe-k)) rgba(0, 0, 0, 0.9);
+}
+
+/* the selected card stays in place and lights up */
+.v2-card.is-sel {
+  border: calc(2 * var(--fe-k)) solid var(--fe-accent);
+  box-shadow: 0 0 calc(18 * var(--fe-k)) rgba(227, 185, 74, 0.28), 0 calc(8 * var(--fe-k)) calc(20 * var(--fe-k)) rgba(0, 0, 0, 0.6);
+  transform: translate3d(calc(-8 * var(--fe-k)), 0, 0);
+}
+.v2-card.is-sel .v2-card__num { background: var(--fe-accent); color: var(--ig-ink); border-right-color: var(--fe-accent); }
+.v2-card.is-sel .v2-card__art img.v2-plate,
+.v2-card.is-sel .v2-card__art .v2-comp__bg { filter: saturate(1.05) brightness(0.98); }
+.v2-card.is-sel::before {
+  /* the notch that points at the plate */
+  content: ''; position: absolute; left: calc(-2 * var(--fe-k)); top: 50%; z-index: 3;
+  width: 0; height: 0; transform: translate(-100%, -50%);
+  border-top: calc(8 * var(--fe-k)) solid transparent; border-bottom: calc(8 * var(--fe-k)) solid transparent;
+  border-right: calc(9 * var(--fe-k)) solid var(--fe-accent);
+}
+.v2-card.is-sel { overflow: visible; }
+.v2-card.is-sel .v2-card__art { overflow: hidden; }
+
+/* coming: the approved chapter still to land, in its numeric place */
+.v2-card.is-coming { border-style: dashed; border-color: rgba(244, 241, 232, 0.22); cursor: default; }
+.v2-card.is-coming .v2-card__art img.v2-plate { filter: grayscale(1) brightness(0.34) contrast(1.1); }
+.v2-card.is-coming .v2-card__num { color: rgba(227, 185, 74, 0.45); }
+.v2-card.is-coming .v2-card__name { color: rgba(244, 241, 232, 0.6); right: calc(96 * var(--fe-k)); font-size: max(var(--fe-fs-floor), calc(19 * var(--fe-k))); }
+.v2-card__coming {
+  position: absolute; right: calc(12 * var(--fe-k)); top: 50%; transform: translateY(-50%);
+  padding-left: calc(10 * var(--fe-k)); border-left: 1px solid rgba(227, 185, 74, 0.5);
+  font-family: var(--ig-font-display); font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(11 * var(--fe-k))); letter-spacing: 0.28em; text-transform: uppercase; line-height: 1.4;
+  color: rgba(227, 185, 74, 0.9);
+}
+
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  /* phone: one scrolling column; plate, then the whole list, then prose and dossier */
+  .fe-cselect[class*='v2-opt-'] {
+    display: flex; flex-direction: column; gap: calc(10 * var(--fe-k));
+    padding: calc(46 * var(--fe-k)) calc(16 * var(--fe-k)) calc(120 * var(--fe-k));
+    overflow-y: auto; box-sizing: border-box;
+  }
+  .fe-cselect[class*='v2-opt-'] .fe-cselect__board { display: contents; }
+  .fe-cselect[class*='v2-opt-'] .fe-hero,
+  .fe-cselect[class*='v2-opt-'] .fe-prose,
+  .fe-cselect[class*='v2-opt-'] .fe-rail,
+  .fe-cselect[class*='v2-opt-'] .fe-aside,
+  .fe-cselect[class*='v2-opt-'] .v2c-strip {
+    position: relative; left: auto; top: auto; width: auto; flex: 0 0 auto;
+  }
+  .fe-cselect[class*='v2-opt-'] .fe-hero { order: 1; height: calc(190 * var(--fe-k)); }
+  .fe-cselect[class*='v2-opt-'] .v2c-strip { order: 2; }
+  .fe-cselect[class*='v2-opt-'] .fe-rail { order: 3; height: auto; overflow: visible; }
+  .fe-cselect[class*='v2-opt-'] .fe-prose { order: 4; margin-top: calc(6 * var(--fe-k)); }
+  .fe-cselect[class*='v2-opt-'] .fe-aside { order: 5; height: auto; }
+  .v2-rail { gap: calc(5 * var(--fe-k)); }
+  .v2-card { flex: 0 0 calc(48 * var(--fe-k)); }
+  .v2-card__num { width: calc(56 * var(--fe-k)); }
+  .v2-card__name { left: calc(70 * var(--fe-k)); font-size: max(var(--fe-fs-floor), calc(21 * var(--fe-k))); }
+  .v2-card.is-sel { transform: none; }
+  .v2-card.is-sel::before { display: none; }
+  .fe-cselect[class*='v2-opt-'] .chint { z-index: 5; background: rgba(11, 10, 18, 0.96); box-shadow: 0 0 0 100vmax rgba(7, 6, 13, 0); }
+  .fe-cselect[class*='v2-opt-']::after { content: ''; position: fixed; left: 0; right: 0; bottom: 0; height: calc(190 * var(--fe-k)); background: linear-gradient(to top, rgba(7, 6, 13, 0.98) 55%, rgba(7, 6, 13, 0)); pointer-events: none; z-index: 4; }
+}
