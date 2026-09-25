@@ -1,3 +1,5 @@
+SUPERSEDED by research/ffx-isaaru-bevelle.md (2026-09-24); do not use.
+
 # FINAL FANTASY X — Isaaru's contest of aeons, Via Purifico (Bevelle)
 
 **Target project:** Pyrefly Reprise
