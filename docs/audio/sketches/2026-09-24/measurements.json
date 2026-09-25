@@ -94,5 +94,53 @@
       "truePeakDb": -1.38
     },
     "renderMs": 4789
+  },
+  {
+    "id": "macalania-scene-a-frozen-temple",
+    "name": "sketch-macalania-scene-a",
+    "seconds": 65,
+    "bytes": 967770,
+    "notes": 161,
+    "lufs": -16.01,
+    "truePeakDb": -1.39,
+    "tiltDbPerBand": -8.43,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16.01,
+      "truePeakDb": -1.39
+    },
+    "renderMs": 5776
+  },
+  {
+    "id": "macalania-scene-b-wedding-proposal",
+    "name": "sketch-macalania-scene-b",
+    "seconds": 64,
+    "bytes": 976682,
+    "notes": 265,
+    "lufs": -16,
+    "truePeakDb": -2.27,
+    "tiltDbPerBand": -10.1,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16,
+      "truePeakDb": -2.27
+    },
+    "renderMs": 4260
+  },
+  {
+    "id": "macalania-scene-c-crystal-and-pyreflies",
+    "name": "sketch-macalania-scene-c",
+    "seconds": 65,
+    "bytes": 966048,
+    "notes": 138,
+    "lufs": -16,
+    "truePeakDb": -2.52,
+    "tiltDbPerBand": -10.98,
+    "tiltPasses": true,
+    "masterReport": {
+      "lufs": -16,
+      "truePeakDb": -2.52
+    },
+    "renderMs": 4891
   }
 ]

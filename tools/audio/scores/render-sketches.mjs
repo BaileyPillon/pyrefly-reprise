@@ -71,6 +71,10 @@ const ROUNDS = {
     'natus-a-groom-unmasked',
     'natus-b-highbridge-flight',
     'natus-c-mortibody',
+    /** Chapter VII, Macalania Temple scene cue (FFX only): three options. */
+    'macalania-scene-a-frozen-temple',
+    'macalania-scene-b-wedding-proposal',
+    'macalania-scene-c-crystal-and-pyreflies',
   ],
 };
 
