@@ -1,8 +1,8 @@
 /**
  * **A figure sent to come back: the `'returns'` departure** (`BattlePresenterDepartures.ts`).
  *
- * **Game case: FFX only** for the one id that has it, Mortibody (Chapter X); the plumbing is
- * shared (both) [AGENTS.md rule 14]. On whose word: research
+ * **Game case: FFX only** for the two ids that have it, Mortibody (Chapter X) and Mortiorchis
+ * (Chapter I); the plumbing is shared (both) [AGENTS.md rule 14]. On whose word: research
  * `ffx-seymour-natus-highbridge.md` §4.4 (Mortibsorption drains Natus and revives Mortibody,
  * verified: 4 sources) and §4.5 ("Mortibody has no death state of its own: it always
  * revives", derived); Bailey's O-2 A pick with its KO-and-revive strip
@@ -14,8 +14,10 @@
  * figure at `ko` and again at `part-destroyed`, so from its first KO it fought on unseen (the
  * preflight `docs/plans/natus-ship-review.md`, proved on the engine). Here the send keeps the
  * figure on the stage at dissolve 1, `part-destroyed` leaves it, and the reviving heal fades
- * it back in. Chapter I's Mortiorchis shows the same removal and is **not** given this kind
- * (reported, not fixed in passing).
+ * it back in. Chapter I's Mortiorchis had the same removal (independent check M1) and has the same
+ * kind: `research/ffx-seymour-flux.md` §2.2, "Mortiorchis has no death state at all in this
+ * encounter", and §4.4, it "revives via Mortibsorption on every kill" and is "never absent from the
+ * field"; the engine revives it by the same `heal` (`mortibsorption` in `scripted.ts`).
  *
  * Same rules as the other beat modules: no `three`, no DOM, ports only [AGENTS.md rule 1].
  */

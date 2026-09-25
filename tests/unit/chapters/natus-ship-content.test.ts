@@ -3,8 +3,8 @@
  * departures. The tactic and the departures are run on the real engine (AGENTS.md rule 3); the
  * departures through the real `BattlePresenter` on a `FakeStage`.
  *
- * **Game case: FFX only** [AGENTS.md rule 14], except the Chapter I pin at the end, which only
- * proves Chapter I did not move.
+ * **Game case: FFX only** [AGENTS.md rule 14]; the last case is Chapter I's Mortiorchis (FFX too),
+ * which now returns as Mortibody does (independent check M1).
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -203,10 +203,40 @@ describe('the departures (research §4.4 and §4.5; the O-2 A strip; docs/plans/
     expect(r.calls.some((c) => c.startsWith('remove:'))).toBe(false);
   });
 
-  it('Chapter I did not move: Mortiorchis is still sent and removed (the finding is reported, not fixed here)', async () => {
+  it('Chapter I (M1): after its first Mortibsorption, Mortiorchis is back on the stage at full alpha, never removed', async () => {
     expect(getChapter('seymour-flux')).toBe(SEYMOUR_FLUX);
-    expect(departureKindOf('mortiorchis')).toBe('dissolve');
+    expect(departureKindOf('mortiorchis')).toBe('returns');
     const r = await mountAfterFirstDrain(SEYMOUR_FLUX, 'seymour-flux', 'mortiorchis');
-    expect(r.onStage).toBe(false);
+    expect(r.onStage).toBe(true);
+    expect(r.alpha).toBe(1);
+    expect(r.calls).toContain('dissolve=1:mortiorchis');
+    expect(r.calls).toContain('fade=1:mortiorchis');
+    expect(r.calls.some((c) => c.startsWith('remove:'))).toBe(false);
+  });
+
+  it('Chapter I (M1): every Mortibsorption brings Mortiorchis back, to the end of the battle (§4.4 "on every kill")', async () => {
+    const isDrain = (e: BattleEvent): boolean => e.type === 'heal' && e.targetId === 'mortiorchis' && e.cause === 'mortibsorption';
+    let events: BattleEvent[] = [];
+    for (let seed = 1; seed <= 40 && events.filter(isDrain).length < 3; seed++) {
+      const engine = newEngine(SEYMOUR_FLUX, seed);
+      for (let i = 0; i < 20000; i++) {
+        const d = engine.nextDecision();
+        if (d.kind === 'battle-over') break;
+        if (d.kind !== 'player-input') continue;
+        const cmd = intendedStrategy(d.actorId, d.commands, engine) ?? { kind: 'defend', targets: [] };
+        const aim = d.commands.some((c) => c.enabled && c.command.kind === 'attack' && c.validTargets.includes('mortiorchis'));
+        engine.submit(cmd.kind === 'attack' && aim ? { kind: 'attack', targets: ['mortiorchis'] } : cmd);
+      }
+      events = engine.state().log;
+    }
+    const drains = events.filter(isDrain).length;
+    expect(drains).toBeGreaterThanOrEqual(3);
+    expect(events.at(-1)?.type === 'victory' || events.some((e) => e.type === 'defeat')).toBe(true);
+    const stage = new FakeStage(['tidus', 'yuna', 'kimahri', 'auron', 'wakka', 'lulu', 'rikku'], ['seymour-flux', 'mortiorchis']);
+    await new BattlePresenter({ stage, sleep: noSleep }).play(events);
+    const mine = stage.calls.filter((c) => c.endsWith(':mortiorchis'));
+    expect(mine.filter((c) => c === 'fade=1:mortiorchis')).toHaveLength(drains);
+    expect(mine.some((c) => c.startsWith('remove:'))).toBe(false);
+    expect((stage.actor('mortiorchis') as unknown as { alpha: number }).alpha).toBe(1);
   });
 });

@@ -32,8 +32,9 @@
  *   himself (the Cloister 100 scene plays that, `src/scenes/cloister-100-link.ts`); step 4,
  *   Trema is beaten, answers Yuna, and "fades away" (the post scene). Neither is sent at the
  *   blow: the figure takes its standing painting, dims, and stays.
- * - **`'returns'`, Mortibody (FFX only; Chapter X, O-2 A).** Sent like a fiend but kept on the
- *   stage until Mortibsorption's heal brings it back (`BattlePresenterReturns.ts`, the sources).
+ * - **`'returns'`, Mortibody and Mortiorchis (FFX only; Chapter X, O-2 A; Chapter I).** Sent like a
+ *   fiend but kept on the stage until Mortibsorption's heal brings it back (`BattlePresenterReturns.ts`,
+ *   the sources; for Mortiorchis `research/ffx-seymour-flux.md` §2.2 and §4.4).
  *
  * Everything else keeps `'dissolve'`. The kind is a presenter-side table keyed
  * by combatant id (an enemy's combatant id is its `EnemyDef.id`,
@@ -85,6 +86,8 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   trema: 'held',
   // FFX, Chapter X: research/ffx-seymour-natus-highbridge.md §4.4 and §4.5 (see the module note).
   mortibody: 'returns',
+  // FFX, Chapter I: research/ffx-seymour-flux.md §2.2 ("no death state") and §4.4 ("never absent").
+  mortiorchis: 'returns',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {
