@@ -99,8 +99,11 @@
     },
     {
       "kind": "focused",
-      "status": "pending",
-      "requires": "acceptance of the changed area"
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "PASS",
+      "settledBy": "critic/reviews/5be4babe-focused.json",
+      "settledAt": "2026-09-25T02:48:00-04:00"
     },
     {
       "kind": "deep",
