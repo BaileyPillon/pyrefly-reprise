@@ -1,0 +1,149 @@
+{
+ "chapterId": "ffx2-bahamut",
+ "W": "1600",
+ "H": "900",
+ "records": [
+  {
+   "goal": "Steal",
+   "actor": "rikku",
+   "target": "TARGET Bahamut",
+   "engineMessages": [
+    "Rikku stole x2-mute-shock!"
+   ],
+   "shown": "Rikku STOLE X2-MUTE-SHOCK!",
+   "latencyMs": 912,
+   "rect": {
+    "l": 1049,
+    "t": 132,
+    "r": 1555,
+    "b": 210
+   },
+   "geo": {
+    "banner": {
+     "l": 1049,
+     "t": 132,
+     "r": 1555,
+     "b": 210
+    },
+    "band": null,
+    "telegraph": {
+     "l": 1302,
+     "t": 44,
+     "r": 1555,
+     "b": 122
+    },
+    "intent": {
+     "l": 1189,
+     "t": 240,
+     "r": 1564,
+     "b": 562
+    },
+    "partyRows": [
+     {
+      "l": 1173,
+      "t": 650,
+      "r": 1582,
+      "b": 720
+     },
+     {
+      "l": 1163,
+      "t": 728,
+      "r": 1572,
+      "b": 798
+     },
+     {
+      "l": 1153,
+      "t": 805,
+      "r": 1562,
+      "b": 875
+     }
+    ],
+    "font": "6.22px"
+   },
+   "overPartyRow": false,
+   "overBand": false,
+   "file": "docs/screenshots/round11/pr0143-ch4/ffx2-bahamut-04-steal-message.jpg",
+   "hiddenAfterHold": true
+  },
+  {
+   "goal": "Pilfer Gil",
+   "actor": "rikku",
+   "target": "TARGET Bahamut",
+   "engineMessages": [
+    "Rikku pilfered 2,200 gil!"
+   ],
+   "shown": "Rikku PILFERED 2,200 GIL!",
+   "latencyMs": 940,
+   "rect": {
+    "l": 1084,
+    "t": 44,
+    "r": 1555,
+    "b": 122
+   },
+   "geo": {
+    "banner": {
+     "l": 1084,
+     "t": 44,
+     "r": 1555,
+     "b": 122
+    },
+    "band": null,
+    "telegraph": null,
+    "intent": {
+     "l": 1190,
+     "t": 153,
+     "r": 1565,
+     "b": 474
+    },
+    "partyRows": [
+     {
+      "l": 1173,
+      "t": 650,
+      "r": 1582,
+      "b": 720
+     },
+     {
+      "l": 1163,
+      "t": 728,
+      "r": 1572,
+      "b": 798
+     },
+     {
+      "l": 1153,
+      "t": 805,
+      "r": 1562,
+      "b": 875
+     }
+    ],
+    "font": "6.22px"
+   },
+   "overPartyRow": false,
+   "overBand": false,
+   "file": "docs/screenshots/round11/pr0143-ch4/ffx2-bahamut-06-pilfergil-message.jpg",
+   "hiddenAfterHold": true
+  }
+ ],
+ "seen": [
+  {
+   "t": 57515.09999999404,
+   "text": "Rikku STOLE X2-MUTE-SHOCK!",
+   "rect": {
+    "l": 1049,
+    "t": 132,
+    "r": 1555,
+    "b": 210
+   }
+  },
+  {
+   "t": 68074.29999998212,
+   "text": "Rikku PILFERED 2,200 GIL!",
+   "rect": {
+    "l": 1084,
+    "t": 44,
+    "r": 1555,
+    "b": 122
+   }
+  }
+ ],
+ "errors": []
+}

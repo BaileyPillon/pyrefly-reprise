@@ -33,6 +33,8 @@ const BOARD_SELECTORS = [
   '.ffx2hud__party',
   '.ffx2hud__command',
   '.ffx2hud__telegraph',
+  // PR-0143: the battle-message banner (`battleMessage.ts`), under the telegraph.
+  '.ffx2hud__message',
   '.mad__card',
   '.mad__toggle',
   '.sgd__panel',
@@ -48,8 +50,11 @@ const BOARD_SELECTORS = [
   // over the slab, and it takes input while it is up.
 ] as const;
 
-/** PR-0150: the target-select plates, which the intent slab steers around with a margin. */
-const PLATE_SELECTORS: ReadonlySet<string> = new Set(['.ffx2-tplate', '.ffx2-aplate', '.ffx2-ctlhint']);
+/**
+ * PR-0150: the target-select plates, which the intent slab steers around with a margin. PR-0143's message
+ * banner too: it is a top-row slab like them, and the slab's `E HIDE` chip otherwise rode across its bottom edge.
+ */
+const PLATE_SELECTORS: ReadonlySet<string> = new Set(['.ffx2-tplate', '.ffx2-aplate', '.ffx2-ctlhint', '.ffx2hud__message']);
 
 export interface BoardOptions {
   skipChainChip?: boolean;

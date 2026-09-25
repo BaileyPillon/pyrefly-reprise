@@ -102,6 +102,8 @@ export interface PlateSources {
   chip: HTMLElement | null;
   command: HTMLElement | null;
   telegraph: HTMLElement | null;
+  /** PR-0143: the battle-message banner (`battleMessage.ts`), right-anchored with the telegraph; the plates treat the two as one. */
+  message?: HTMLElement | null;
   /** The PR-0012 help band, and its height on the grid while it sits on the stage. */
   band: HTMLElement | null;
   bandGridHeight: number;
@@ -129,13 +131,19 @@ export function plateInputFromDom(src: PlateSources): PlateLayoutInput {
     stageY: y,
     chip: grid(src.chip),
     command: grid(src.command),
-    telegraph: grid(src.telegraph),
+    telegraph: unionRect(grid(src.telegraph), grid(src.message ?? null)),
     bandBottom: bandShown && !bandInBar ? src.bandGridHeight : 0,
     bandBarHeight: bandInBar ? src.band!.getBoundingClientRect().height / src.scale : 0,
     partyLeft: Number.isFinite(partyLeft) ? partyLeft : null,
     field,
     viewBottom: (src.host.height - src.stageY) / src.scale,
   };
+}
+
+/** The box around two optional rects (the telegraph and the message banner stack in the same top-right slot). */
+function unionRect(a: GridRect | null, b: GridRect | null): GridRect | null {
+  if (!a || !b) return a ?? b;
+  return { left: Math.min(a.left, b.left), top: Math.min(a.top, b.top), right: Math.max(a.right, b.right), bottom: Math.max(a.bottom, b.bottom) };
 }
 
 /** Mounts the plates into the FFX-2 HUD's stage and keeps them placed. */

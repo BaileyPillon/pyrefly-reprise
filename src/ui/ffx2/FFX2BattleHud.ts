@@ -49,6 +49,7 @@ import { battleHelpOn } from '../coach/coachState.ts';
 import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
 import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
+import { BattleMessageBanner } from './battleMessage.ts';
 
 /**
  * PR-0012 (round 09 built the description logic, round 10 gated the slab off
@@ -181,6 +182,8 @@ export class FFX2BattleHud implements HudPort {
   private readonly plates = new TargetPlates();
   /** D-044 Node C: Vegnagun's overhead Nodes marked at the top edge (`nodeEdgeMarkers.ts`). FFX-2 only. */
   private readonly nodeMarks = new NodeEdgeMarkers();
+  /** PR-0143: the engine's `message` lines (steals, Pilfer Gil, Berserk...), in the top-right banner (`battleMessage.ts`). FFX-2 only. */
+  private readonly message = new BattleMessageBanner();
   /** The ids the target cursor is on, lit on every row that names them ({@link paintLit}). */
   private lit: { ids: ReadonlySet<CombatantId>; ally: boolean } = { ids: new Set(), ally: false };
   /** A second 640x360 layer over the overlay, so the reticle's petals never paint over the plates. */
@@ -337,6 +340,7 @@ export class FFX2BattleHud implements HudPort {
 
     this.enemyEl = this.stage.querySelector('.ffx2hud__enemies') as HTMLElement;
     this.telegraphEl = this.stage.querySelector('.ffx2hud__telegraph') as HTMLElement;
+    this.message.mount(this.telegraphEl);
     this.partyEl = this.stage.querySelector('.ffx2hud__party') as HTMLElement;
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.commandInfoEl = this.stage.querySelector('.ffx2-cmd-info') as HTMLElement;
@@ -347,10 +351,8 @@ export class FFX2BattleHud implements HudPort {
     this.fenceRightEl = this.stage.querySelector('[data-fence="party-right"]');
     this.fenceColumnEl = this.stage.querySelector('[data-fence="party-column"]');
 
-    // Numerals live on the unscaled overlay, not the 640x360 stage: their
-    // positions come straight from the presenter's projector in real pixels,
-    // with §3.6's grid-quoted glyph sizes multiplied back up by the same
-    // letterbox scale `layout()` applies to the stage.
+    // Numerals live on the unscaled overlay, not the 640x360 stage: positions come from the presenter's projector
+    // in real px, §3.6's grid glyph sizes multiplied back up by the letterbox scale `layout()` gives the stage.
     this.damage.mount(this.overlay, { host: this.el, scale: () => this.stageScale });
     // Into the scaled stage: the rail letterboxes with the chrome, anchors on the same 640x360 grid.
     this.guide.mount(this.stage);
@@ -383,6 +385,7 @@ export class FFX2BattleHud implements HudPort {
     this.applySelection(null);
     this.plates.unmount();
     this.nodeMarks.unmount();
+    this.message.dispose();
     this.el.remove();
     this.mounted = false;
   }
@@ -841,14 +844,11 @@ export class FFX2BattleHud implements HudPort {
   }
 
   onEvent(event: BattleEvent): Promise<void> | void {
-    // FFX-2 only: under Active ATB the clock runs under an open menu, so a
-    // charged spell, a Poison tick or an enemy's own blow can end the fight
-    // while a girl is still choosing. The presenter only tears that menu down
-    // after the whole burst has played (`runActivePump` -> `abandon`), so the
-    // command stack, the reticle and the target plates stood through the last
-    // KO and the victory shot. The engine has already decided the battle when
-    // the burst starts playing, so the menu goes with the deciding KO (or the
-    // victory/defeat event itself, whichever the HUD sees first).
+    // FFX-2 only: under Active ATB a charged spell, a Poison tick or an enemy's blow can end the fight while a
+    // girl is still choosing, and the presenter tears the menu down only after the whole burst has played
+    // (`runActivePump` -> `abandon`), so the stack, reticle and plates stood through the last KO and the victory
+    // shot. The battle is already decided when the burst plays: the menu goes with the deciding KO (or the
+    // victory/defeat event, whichever the HUD sees first).
     if (this.closeMenu && (event.type === 'victory' || event.type === 'defeat' || (event.type === 'ko' && this.lastState?.result))) {
       this.closeCommandMenu();
     }
@@ -860,6 +860,9 @@ export class FFX2BattleHud implements HudPort {
           this.renderEnemies(this.lastState, event.snapshot);
         }
         return;
+      case 'action-start':
+      case 'message':
+        return this.message.onEvent(event, this.lastState);
       case 'chain':
         return this.showChain(event.targetId, event.count, event.multiplier);
       case 'spherechange':
@@ -988,6 +991,7 @@ export class FFX2BattleHud implements HudPort {
         chip: this.activeWaitEl,
         command: this.commandEl,
         telegraph: this.telegraphEl,
+        message: this.message.element,
         band: this.commandInfoEl ?? null,
         bandGridHeight: BAND_GRID_HEIGHT,
         partyFence: this.fenceColumnEl ?? null,
@@ -1188,12 +1192,8 @@ export class FFX2BattleHud implements HudPort {
     const enemyName = (this.lastState?.combatants[enemyId] as FFX2Combatant | undefined)?.name ?? enemyId;
     this.telegraphEl.hidden = false;
     this.telegraphEl.className = `ig-banner ffx2hud__telegraph ffx2hud__telegraph--s${stage}`;
-    // Bahamut's Mega Flare countdown emits the number *as* the state text
-    // (`src/battle/ffx2/ai/bahamut.ts`: "five consecutive actions that do
-    // nothing but display a number"), so the default chip printed
-    // "BAHAMUT · 4 TURNS" next to a banner whose headline was also "4". When
-    // the state text is a bare countdown the chip drops the duplicate and the
-    // numeral carries it alone.
+    // Bahamut's Mega Flare countdown emits the number *as* the state text (`ai/bahamut.ts`), so a bare
+    // countdown drops the chip's "· 4 TURNS" (it duplicated the headline) and the numeral carries it alone.
     const isCountdown = /^\d+$/.test(name.trim());
     const chip = isCountdown
       ? enemyName

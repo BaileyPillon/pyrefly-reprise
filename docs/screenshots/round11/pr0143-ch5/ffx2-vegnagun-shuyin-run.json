@@ -1,0 +1,144 @@
+{
+ "chapterId": "ffx2-vegnagun-shuyin",
+ "W": "1600",
+ "H": "900",
+ "records": [
+  {
+   "goal": "Steal",
+   "actor": "rikku",
+   "target": "TARGET Vegnagun",
+   "engineMessages": [
+    "Rikku stole X-Potion x4!"
+   ],
+   "shown": "Rikku STOLE X-POTION X4!",
+   "latencyMs": 956,
+   "rect": {
+    "l": 1087,
+    "t": 44,
+    "r": 1555,
+    "b": 122
+   },
+   "geo": {
+    "banner": {
+     "l": 1087,
+     "t": 44,
+     "r": 1555,
+     "b": 122
+    },
+    "band": null,
+    "telegraph": null,
+    "intent": {
+     "l": 989,
+     "t": 153,
+     "r": 1364,
+     "b": 311
+    },
+    "partyRows": [
+     {
+      "l": 1173,
+      "t": 650,
+      "r": 1582,
+      "b": 720
+     },
+     {
+      "l": 1163,
+      "t": 728,
+      "r": 1572,
+      "b": 798
+     },
+     {
+      "l": 1153,
+      "t": 805,
+      "r": 1562,
+      "b": 875
+     }
+    ],
+    "font": "6.22px"
+   },
+   "overPartyRow": false,
+   "overBand": false,
+   "file": "docs/screenshots/round11/pr0143-ch5/ffx2-vegnagun-shuyin-04-steal-message.jpg",
+   "hiddenAfterHold": true
+  },
+  {
+   "goal": "Pilfer Gil",
+   "actor": "rikku",
+   "target": "TARGET Vegnagun",
+   "engineMessages": [
+    "Rikku pilfered 3,000 gil!"
+   ],
+   "shown": "Rikku PILFERED 3,000 GIL!",
+   "latencyMs": 923,
+   "rect": {
+    "l": 1083,
+    "t": 44,
+    "r": 1555,
+    "b": 122
+   },
+   "geo": {
+    "banner": {
+     "l": 1083,
+     "t": 44,
+     "r": 1555,
+     "b": 122
+    },
+    "band": null,
+    "telegraph": null,
+    "intent": {
+     "l": 992,
+     "t": 153,
+     "r": 1367,
+     "b": 311
+    },
+    "partyRows": [
+     {
+      "l": 1173,
+      "t": 650,
+      "r": 1582,
+      "b": 720
+     },
+     {
+      "l": 1163,
+      "t": 728,
+      "r": 1572,
+      "b": 798
+     },
+     {
+      "l": 1153,
+      "t": 805,
+      "r": 1562,
+      "b": 875
+     }
+    ],
+    "font": "6.22px"
+   },
+   "overPartyRow": false,
+   "overBand": false,
+   "file": "docs/screenshots/round11/pr0143-ch5/ffx2-vegnagun-shuyin-06-pilfergil-message.jpg",
+   "hiddenAfterHold": true
+  }
+ ],
+ "seen": [
+  {
+   "t": 79968.19999998808,
+   "text": "Rikku STOLE X-POTION X4!",
+   "rect": {
+    "l": 1087,
+    "t": 44,
+    "r": 1555,
+    "b": 122
+   }
+  },
+  {
+   "t": 87820.5,
+   "text": "Rikku PILFERED 3,000 GIL!",
+   "rect": {
+    "l": 1083,
+    "t": 44,
+    "r": 1555,
+    "b": 122
+   }
+  }
+ ],
+ "errors": []
+}
