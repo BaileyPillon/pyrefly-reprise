@@ -67,6 +67,7 @@ export interface BoardFact {
     | 'phase'
     | 'gamble'
     | 'certain-status'
+    | 'removes'
     | 'tempo';
   /** The clause the sentence may print, with no leading capital and no full stop. */
   text: string;
@@ -110,6 +111,51 @@ function statusWord(status: string): string {
 function isAlly(state: Readonly<BattleState>, id: CombatantId): boolean {
   const c = state.combatants[id];
   return c !== undefined && c.side !== 'enemy';
+}
+
+/**
+ * HP the action took off enemies **by dealing damage**: per enemy, the HP it
+ * lost, but never more than the `damage` events that landed on it.
+ *
+ * `damageToEnemies` counts every HP an enemy loses, which is right for ranking
+ * (a shattered Guardian is gone either way) and wrong for the card's word
+ * "damage": a Petrify Grenade that shatters both Guado Guardians removes their
+ * 4,000 HP without a single `damage` event, and the card said "4000 damage"
+ * and printed a 4,000 chip on an item that deals none (Chapter VII e2e, commit
+ * 06338dbc). A Death spell is the same case. Those are said as what they are
+ * ({@link removedFact}, `kills`). Both games: the two `SimOutcome`s share the
+ * fields read here.
+ */
+export function dealtToEnemies(
+  state: Readonly<BattleState>,
+  outcome: Pick<SimOutcome, 'hpDelta' | 'events'>,
+): number {
+  const landed = new Map<CombatantId, number>();
+  for (const e of outcome.events) {
+    if (e.type === 'damage' && e.amount > 0) landed.set(e.targetId, (landed.get(e.targetId) ?? 0) + e.amount);
+  }
+  let total = 0;
+  for (const [id, delta] of Object.entries(outcome.hpDelta)) {
+    if (delta > 0 && state.combatants[id]?.side === 'enemy') total += Math.min(delta, landed.get(id) ?? 0);
+  }
+  return total;
+}
+
+/**
+ * Enemies the action takes off the field with no damage — shattered after a
+ * Petrify, or Ejected — as one clause: "2 of them shatter". `null` when none.
+ */
+function removedFact(state: Readonly<BattleState>, outcome: SimOutcome): BoardFact | null {
+  const added = outcome.statusChanges.filter((c) => c.applied);
+  const gone = added.filter((c) => c.status === 'eject' && !isAlly(state, c.targetId));
+  if (gone.length === 0) return null;
+  const stone = new Set(added.filter((c) => c.status === 'petrify').map((c) => c.targetId));
+  const shatter = gone.every((c) => stone.has(c.targetId));
+  const first = gone[0]!.targetId;
+  const one = gone.length === 1;
+  const who = one ? (state.combatants[first]?.name ?? first) : `${gone.length} of them`;
+  const verb = shatter ? (one ? 'shatters' : 'shatter') : one ? 'leaves the battle' : 'leave the battle';
+  return { kind: 'removes', text: `${who} ${verb}`, value: gone.length, source: 'sim', ...(one ? { targetId: first } : {}) };
 }
 
 /**
@@ -229,14 +275,10 @@ export function evaluate(
         targetId: id,
       });
     }
-    if (outcome.damageToEnemies > 0) {
-      facts.push({
-        kind: 'phase',
-        text: `${outcome.damageToEnemies} damage`,
-        value: outcome.damageToEnemies,
-        source: 'sim',
-      });
-    }
+    const dealt = dealtToEnemies(state, outcome);
+    if (dealt > 0) facts.push({ kind: 'phase', text: `${dealt} damage`, value: dealt, source: 'sim' });
+    const removed = removedFact(state, outcome);
+    if (removed) facts.push(removed);
   }
 
   // ------------------------------------------------------------ the coin flip

@@ -81,6 +81,22 @@ const BOOKKEEPING_EVENTS: ReadonlySet<string> = new Set([
 ]);
 
 /**
+ * A theft that landed. Steal and Pilfer Gil change the inventory and the
+ * target's steal flags, which live in `BattleState.flags` and the engine
+ * runtime, not in anything a `SimOutcome` carries, so their only trace in the
+ * preview is the engine's own success line: FFX `steal.ts` "Stole Hi-Potion!",
+ * FFX-2 `steal.ts` "Rikku stole … !" / "… pilfered 300 gil!". The failures
+ * ("Nothing was stolen!", "Nothing to steal from …") do not match.
+ *
+ * Without this a successful Steal read as a turn spent on nothing, so on
+ * Chapter VII's turn 1 the chapter's own line (Steal from each Guardian,
+ * research §7 row 1) was dropped behind Petrify Grenade and the card and the
+ * strategy panel disagreed on the first move of the fight (e2e, commit
+ * 06338dbc). Both games.
+ */
+const THEFT_LANDED = /\b(?:stole|pilfered)\b/i;
+
+/**
  * **The state guard**: did this previewed action change anything measurable on
  * *this* board?
  *
@@ -145,6 +161,7 @@ export function changesNothing(
   if (def && def.formula === 'ctb' && def.statusEffects.length === 0) return false;
 
   for (const event of outcome.events as readonly BattleEvent[]) {
+    if (event.type === 'message' && THEFT_LANDED.test(event.text)) return false;
     if (BOOKKEEPING_EVENTS.has(event.type)) continue;
     // The actor's own MP outlay is what the action *costs*. Draining an enemy's
     // MP, or putting MP back into an ally, is an effect and falls through.

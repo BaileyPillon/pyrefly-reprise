@@ -51,6 +51,7 @@ const THRESHOLD: Partial<Record<BoardFact['kind'], number>> = {
   kills: 0,
   gamble: 15,
   'certain-status': 1,
+  removes: 1,
   incoming: 200,
   phase: 1,
   tempo: 1,
@@ -69,6 +70,8 @@ const RANK: Record<BoardFact['kind'], number> = {
   'still-lethal': 2,
   gamble: 3,
   'certain-status': 4,
+  // "…, and 2 of them shatter": what a status move did beyond the status itself.
+  removes: 4.5,
   phase: 5,
   incoming: 6,
   tempo: 7,

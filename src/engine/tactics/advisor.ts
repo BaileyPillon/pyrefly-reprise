@@ -120,7 +120,7 @@ import {
   inertAcrossBand,
   statusChances,
 } from './advisor-roll.ts';
-import { type BoardFact, evaluate } from './advisor-eval.ts';
+import { type BoardFact, dealtToEnemies, evaluate } from './advisor-eval.ts';
 import {
   PlanCache,
   beatsPrior,
@@ -1016,15 +1016,15 @@ function candidateFor(
   // `guide.ts` through `scopeWord` so the two panels can never disagree
   // about it (`./targetLabel.ts`).
   const scoped = scopeWord(def?.targeting);
-  const toEnemies = [mid.damageToEnemies, min.damageToEnemies, max.damageToEnemies];
+  const toEnemies = [dealtToEnemies(state, mid), dealtToEnemies(state, min), dealtToEnemies(state, max)];
   const toAllies = [mid.healingToAllies, min.healingToAllies, max.healingToAllies];
   let estimate: AdvisorEstimate | null = null;
   if (toEnemies[0]! > 0 || toEnemies[2]! > 0) {
     estimate = {
       kind: 'damage',
-      min: Math.min(min.damageToEnemies, mid.damageToEnemies),
-      mid: mid.damageToEnemies,
-      max: Math.max(max.damageToEnemies, mid.damageToEnemies),
+      min: Math.min(toEnemies[1]!, toEnemies[0]!),
+      mid: toEnemies[0]!,
+      max: Math.max(toEnemies[2]!, toEnemies[0]!),
       hits: mid.hits,
       killsTarget: targetId !== null && mid.kills.includes(targetId),
     };

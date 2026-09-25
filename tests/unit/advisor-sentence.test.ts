@@ -88,9 +88,17 @@ describe('every figure the card prints is the engine\'s own', () => {
               // aggregation against itself. Summing the enemy hits by hand
               // here still catches `evaluate()` citing a stale or mis-scoped
               // total.
+              // Damage *dealt*: per enemy, the HP it lost, capped at the
+              // `damage` events that landed on it, so HP taken by a shatter or
+              // a Death is not called damage (Chapter VII e2e: a Petrify
+              // Grenade's card said "4000 damage").
+              const landed = new Map<string, number>();
+              for (const e of out.events) {
+                if (e.type === 'damage' && e.amount > 0) landed.set(e.targetId, (landed.get(e.targetId) ?? 0) + e.amount);
+              }
               let enemyDamage = 0;
               for (const [id, delta] of Object.entries(out.hpDelta)) {
-                if (state.combatants[id]?.side === 'enemy' && delta > 0) enemyDamage += delta;
+                if (state.combatants[id]?.side === 'enemy' && delta > 0) enemyDamage += Math.min(delta, landed.get(id) ?? 0);
               }
               if (f.value !== enemyDamage) {
                 wrong.push(`${chapterId}: said ${f.value} damage, the per-target deltas say ${enemyDamage}`);
