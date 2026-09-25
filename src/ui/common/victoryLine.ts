@@ -56,3 +56,18 @@ export function victoryTurn(
   }
   return Math.max(0, total - 1);
 }
+
+/**
+ * Who stands in the results wedge (VL-1, closed by option 2; Bailey, 2026-09-25:
+ * "I'll go with your recommendations for everything"). On a win that serves a
+ * line, the member who speaks it, so the line never sits under someone else's
+ * portrait. A silent win (no line) keeps the leader; a loss always keeps the
+ * leader's fallen pose. Both games: the results screen is shared plumbing.
+ */
+export function wedgeFigureId(
+  victory: boolean,
+  quip: VictoryLine | undefined,
+  leader: string | undefined,
+): string | undefined {
+  return victory && quip ? quip.speakerId : leader;
+}

@@ -5,9 +5,11 @@ Bailey's "all recommendations" on `docs/plans/decisions-2026-09-25.md`, item 7 =
 Method check and paper preflight: `docs/plans/victory-lines-review.md`.
 Not pushed, not deployed.
 
-**Release notes: any release that carries this branch discloses VL-1** (see "Release
-disclosure" below): a major introduced by this candidate, a regression against live for
-attribution, not a blocker, open until Bailey picks option 1 or 2.
+**VL-1 is closed by option 2** (Bailey, 2026-09-25 ~12:45 EDT: "I'll go with your
+recommendations for everything", answering the recommendation "option 2: the speaker
+stands in the portrait (wedge) instead"). See "VL-1 closed" at the end. A release that
+carries the fix no longer needs the disclosure below; one that carries `e26c77aa`
+without it still does.
 
 ## Game case
 
@@ -52,9 +54,8 @@ save; the save schema is untouched (read through `SaveStore.value`).
 
 ## Open for Bailey
 
-- The panel names no speaker, and the wedge still stands the leader's figure, so Yuna's
-  "May they rest." sits under Tidus. Options (each a visible change that needs a pick):
-  name the speaker in small caps under the line, or stand the speaker in the wedge.
+- ~~The panel names no speaker, and the wedge still stands the leader's figure.~~ Closed
+  2026-09-25: Bailey took option 2, the speaker stands in the wedge ("VL-1 closed" below).
 - PR-0021's larger ask (the §4 Win and Form-slot banter bank, option B) stays out of this
   milestone per the sheet.
 
@@ -102,7 +103,7 @@ majors**:
   "regressionNote": "Attribution only: live serves the first panel row's line (ResultsScreen.ts before e26c77aa, rows[0]) under the leader's figure (leaderId), which the handoff measurements above show is the same member in Chapters I and II; the line text itself is each chapter's existing text.",
   "blocksShip": false,
   "fix": "Bailey's pick: option 1 name the speaker, or option 2 stand the speaker in the wedge (frames in docs/screenshots/victory-lines/option-*.jpg). About 20 lines, helper in victoryLine.ts.",
-  "status": "open, awaiting Bailey"
+  "status": "closed by option 2 on 2026-09-25 (Bailey's pick; see 'VL-1 closed')"
 }
 ```
 
@@ -133,3 +134,32 @@ Frames: `docs/screenshots/victory-lines/ch{1,2}-results-{1600x900,390x844}.jpg`.
 **Seen, not changed:** at 390x844 the whole results panel is the 16:9 stage letterboxed
 into the phone's width, so the line renders about 6 px tall (its box measured 133x6).
 That is the results screen's existing phone layout, not this change.
+
+## VL-1 closed (2026-09-25): option 2, the speaker stands in the wedge
+
+Bailey, 2026-09-25 ~12:45 EDT: "I'll go with your recommendations for everything",
+answering the recommendation "option 2: the speaker stands in the portrait (wedge)
+instead". Game case: **both** (the results screen is shared plumbing, CHK-020).
+
+| File | Change |
+|---|---|
+| `src/ui/common/victoryLine.ts` | `wedgeFigureId(victory, quip, leader)`: a win that serves a line stands its speaker; a silent win keeps the leader; a loss always keeps the leader |
+| `src/app/screens/ResultsScreen.ts` | The line is chosen before the wedge is rendered (it was chosen after), and `heroHtml()` stands `wedgeFigureId(...)` through the same `victoryHeroHtml` helper. Still 430 lines |
+| `tests/unit/victory-line-wedge.test.ts` (new) | Drives the real `ResultsScreen.enter()` in jsdom for every registered chapter at six rotation turns: on every win the wedge `<img>` is the quip's `data-speaker` (silent chapters keep the leader); every loss has no line and the leader's `hurt.png` fallen pose; every member who can speak has a measured portrait |
+
+A loss is unchanged: the leader's fallen pose, `hurt` -> `ko` -> no art.
+
+Verified: `npx tsc --noEmit` clean; `victory-line.test.ts` + `victory-line-wedge.test.ts`
+40/40; the full vitest once: 395 files, 7465 passed, 12 skipped, 0 failed. Browser: own HMR-off dev server on 5550, headless GPU, one fresh save per size,
+`setSeed(2)` before the first key, real keys from the title through the board, party prep
+and scenes, the fight handed to the shipped `'intended'` strategy (as before), real keys
+to the results.
+
+| Size | Chapter I (attempt 1) | Chapter II (attempt 2) |
+|---|---|---|
+| 1600x900 | Victory, `tidus`: "...Okay. Next one.", wedge `portraits/tidus.png` | Victory, `yuna`: "May they rest.", wedge `portraits/yuna.png` |
+| 390x844 | Victory, `tidus`: "...Okay. Next one.", wedge `portraits/tidus.png` | Victory, `yuna`: "May they rest.", wedge `portraits/yuna.png` |
+
+Frames (target: `option-2-speaker-in-wedge.jpg`):
+`docs/screenshots/victory-lines/built/ch{1,2}-results-{1600x900,390x844}.jpg`. The
+built Chapter II frame matches the option frame: Yuna's line, Yuna in the wedge.

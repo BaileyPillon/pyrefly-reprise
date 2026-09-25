@@ -24,7 +24,7 @@ import {
   victoryHeroHtml,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
-import { victoryLine, victoryTurn, type VictoryLine } from '../../ui/common/victoryLine.ts';
+import { victoryLine, victoryTurn, wedgeFigureId, type VictoryLine } from '../../ui/common/victoryLine.ts';
 
 /** How long the gil/AP counters take to roll up to their final value [visual-bible §3.8 step 6]. */
 const COUNT_UP_MS = 1150;
@@ -138,6 +138,13 @@ export class ResultsScreen extends Screen {
     if (this.silent) this.stage.el.classList.add('rres--silent');
     if (!this.victory) this.stage.el.classList.add('rres--defeat');
 
+    // A quip is a victory register, never under "Defeat". PR-0021: the speaker rotates
+    // with the save's attempts (both games); chosen first, as they stand in the wedge (VL-1).
+    if (this.victory && !this.silent) {
+      const banks = chapter?.scriptsRef.victoryQuips;
+      const turn = victoryTurn(this.app.save.value.chapters);
+      this.quip = victoryLine(banks, this.rows.map((r) => r.id), turn);
+    }
     // The wedge, the standing figure and the caption never change once the
     // screen is up; only the ledger's numbers roll, so `refresh()` rewrites
     // just `.rres__page` and leaves the artwork alone.
@@ -152,13 +159,6 @@ export class ResultsScreen extends Screen {
     `;
 
     const record = this.app.save.chapter(this.opts.chapterId);
-    // A quip is a victory register, never under "Defeat". PR-0021: the speaker
-    // rotates with the save's attempts and says their bank's first line (both games).
-    if (this.victory && !this.silent) {
-      const banks = chapter?.scriptsRef.victoryQuips;
-      const turn = victoryTurn(this.app.save.value.chapters);
-      this.quip = victoryLine(banks, this.rows.map((r) => r.id), turn);
-    }
     if (this.victory) {
       const previousBestMs =
         this.opts.previousBestMs !== undefined ? this.opts.previousBestMs : record.bestTimeMs;
@@ -262,8 +262,8 @@ export class ResultsScreen extends Screen {
   // --------------------------------------------------------------- content
 
   /**
-   * The figure in the wedge. A win stands the leader's portrait there; a loss
-   * uses their fallen pose, falling back through `hurt` -> `ko` -> no art at
+   * The wedge's figure: a win stands the line's speaker (VL-1), else the leader; a
+   * loss the leader's fallen pose, falling back through `hurt` -> `ko` -> no art at
    * all rather than grinning at the player under the word "Defeat".
    *
    * Reads the leader from the chapter build (`leaderId`), not `rows[0]`
@@ -271,13 +271,13 @@ export class ResultsScreen extends Screen {
    * eligibility, and the fallen pose must render regardless.
    */
   private heroHtml(): string {
-    const leader = leaderId(getChapter(this.opts.chapterId));
-    if (!leader) return '';
+    const figure = wedgeFigureId(this.victory, this.quip, leaderId(getChapter(this.opts.chapterId)));
+    if (!figure) return '';
     if (this.victory) {
-      return victoryHeroHtml(leader);
+      return victoryHeroHtml(figure);
     }
-    const hurt = artUrl(`art/characters/${leader}/hurt.png`);
-    const ko = artUrl(`art/characters/${leader}/ko.png`);
+    const hurt = artUrl(`art/characters/${figure}/hurt.png`);
+    const ko = artUrl(`art/characters/${figure}/ko.png`);
     return `<img class="rres__hero rres__hero--fallen" src="${hurt}" data-fallback="${ko}" alt=""
       draggable="false" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.remove();}" />`;
   }
