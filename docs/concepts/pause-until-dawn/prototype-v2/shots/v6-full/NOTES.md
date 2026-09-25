@@ -153,5 +153,6 @@ v5.1 key.
 | `regen.sh` | Rebuilds everything, CPU only |
 
 The v5.1 checks `../../v5-pilot/tools/sweep-metric.py` and `../v51/tools/cut_checks.py` were run read-only. The
-work files (frames, sweeps, faces, logs) are in `D:/Tools/pyrefly-scratch/picks0925/portrait-a2/` and are not
-committed. The scratch Vite server on port 5720 was stopped.
+scratch runtime, the logs and `measure6.json` stay in `D:/Tools/pyrefly-scratch/picks0925/portrait-a2/` (48 MB, not
+committed). The captured frames and sweeps (2.2 GB) were deleted after encoding; `regen.sh` rebuilds them. The
+scratch Vite server on port 5720 was stopped.
