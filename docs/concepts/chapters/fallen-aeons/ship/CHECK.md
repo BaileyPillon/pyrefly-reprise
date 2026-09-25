@@ -121,3 +121,18 @@ Frames (JPEG, look-only, not committed) are in `D:/Tools/pyrefly-scratch/chapter
   while the menu sat open. That is the live clock rule, not a defect of the scene.
 
 BLOCKERS: 0
+
+## Addendum, 2026-09-25 evening: option A built, main merged, frames re-taken
+
+- Main 46970be4 merged (51af2d55; registries keep both Chapter XII and Chapter XI; `src/scenes/index.ts`
+  394 lines). Option A: 3 s of action time on the three Road links only (`ROAD_ACTION_TIME`), 159/200
+  (79.5 %) at human pace; 80 of 90 other-chapter event-log hashes byte-identical, the 10 that moved
+  all Chapter XI (`action-time-hashes.json`). Shiva and Anima now forgive the wrong line (disclosed in
+  `docs/plans/fallen-aeons-bench.md`).
+- `tsc` clean; full vitest 416 files passed, 2 skipped (7,783 tests); orphans 24, the same as main.
+- Every JPEG in this folder was re-taken on the merged branch with action time on (headless GPU
+  Chromium, dev server on port 5700, stopped by PID): the Sisters at 1280x720, 1600x900, 2000x1012 and
+  390x844 (phone HUD B), Shiva and Anima at 1600x900, the between-links plate B at 1600x900 and 390x844,
+  the pre story. 0 page errors. The links were reached with the debug API (party kept full, enemies held
+  at 1 HP), so the enemy HP bars in these frames are not a real fight's.
+- Still unlisted: `UNLISTED_CHAPTERS` / `UNLISTED_CHAPTER_META` only.
