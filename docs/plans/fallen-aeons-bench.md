@@ -32,6 +32,14 @@ its "action time OFF" row (engine option 0) is the chapter before the pick.
   before and after the switch; **80 byte-identical, and the 10 that moved are all
   `ffx2-fallen-aeons`**. Evidence: `docs/concepts/chapters/fallen-aeons/ship/action-time-hashes.json`.
   The FFX-2 golden (`ffx2-atb-golden.test.ts`) and every Trema test pass unchanged.
+- **Disclosed, for Bailey (measured, not tuned): with action time on, Shiva and Anima forgive the
+  wrong line.** `fallen-aeons-bench.test.ts`: Shiva intended 200/200 vs all-out 194/200 at bench speed
+  and 40/40 vs 40/40 at human pace (Wait split); Anima intended 200/200 vs "no Shell, no Remedy"
+  200/200 and 40/40 vs 40/40 (before the pick: 198 vs 186 at bench speed). The wrong lines only take
+  longer (Anima 2.3 min vs 1.6). **The Sisters still separate the lines** (167 vs 113 of 200 at bench
+  speed, 30 vs 18 of 40 at human pace), so the chapter's test now lives there. That file's
+  "intended beats wrong on every link" check became "never worse on any link, strictly better on the
+  Sisters", and it now prints the three wrong lines at human pace.
 - The switch is pinned by `tests/unit/chapters/fallen-aeons-action-time.test.ts` (each of Shiva's
   turns lands exactly 9,000 ticks later than with the switch forced off), and the scope test in
   `trema-options.test.ts` now allows the Cloister and the Road formations only.
