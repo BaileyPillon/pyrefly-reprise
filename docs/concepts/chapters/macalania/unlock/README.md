@@ -1,5 +1,15 @@
 # Chapter VII unlock: art approval and the Petrify question (FFX only)
 
+> **Answered 2026-09-25.** Bailey: "I'll go with all your recommendations".
+> - Question 1: the five battle paintings and the backdrop are locked as set
+>   `chapter:macalania:2026-09-25` in `docs/target/approved-hashes.json` (backup
+>   `D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania/`).
+> - The pause plate is being redone. Its options sheet is `pause-plate-redo.jpg`, and the work
+>   is in `../pause-plate-redo/`. Nothing is installed yet.
+> - Question 2: option A (a petrified Guardian shatters; an ordinary defeat yields). Recording
+>   and building that answer belongs to another track, not the art track.
+> - The Anima hurt/ko hash noted below is still not recorded.
+
 **Game case: FFX only.** Chapter VII (`seymour-anima-macalania`): human-form Seymour, the
 Guado Guardians and Macalania Temple exist only in FFX. No FFX-2 chapter and no shared code is
 touched.

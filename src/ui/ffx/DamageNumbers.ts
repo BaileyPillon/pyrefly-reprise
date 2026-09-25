@@ -1,6 +1,7 @@
-import type { BattleEvent, CombatantId } from '../../battle/common/types.ts';
+import type { BattleEvent, BattleState, CombatantId } from '../../battle/common/types.ts';
 import { DamageNumbers as SharedDamageNumbers, type NumeralAnchor } from '../common/DamageNumbers.ts';
 import type { NumeralRect } from '../common/damageLadder.ts';
+import { DoomCounters } from './DoomCounters.ts';
 import { ZANMATO_GAUGE_SELECTORS } from './hudAvoidSelectors.ts';
 
 export type Projector = (
@@ -86,6 +87,12 @@ const PANEL_SELECTORS = [
  */
 export class DamageNumbers {
   readonly el: HTMLElement;
+  /**
+   * Doom's countdown over each doomed head (`DoomCounters.ts`): the field's
+   * other numeral, so it rides this layer's projector, letterbox scale, frame
+   * tick and panel list rather than growing `FFXBattleHud.ts` a second copy.
+   */
+  readonly doom: DoomCounters;
   private readonly core: SharedDamageNumbers;
   private projector: Projector | null = null;
   private sideOf: SideResolver | null = null;
@@ -102,6 +109,12 @@ export class DamageNumbers {
       avoid: () => this.panelRects(),
     });
     this.el = this.core.el;
+    this.doom = new DoomCounters({
+      project: () => this.projector,
+      scale: () => this.hudScale(),
+      avoid: () => this.panelRects(),
+    });
+    this.el.appendChild(this.doom.el);
   }
 
   setProjector(project: Projector): void {
@@ -130,15 +143,27 @@ export class DamageNumbers {
     if (spawned) this.startRafFallback();
   }
 
+  /** Every battle event, for the numbers that are not a hit: Doom's count. */
+  watch(event: BattleEvent): void {
+    this.doom.onEvent(event);
+  }
+
+  /** A full engine sync: Doom's counts reconciled with the state (and cleared once there is a result). */
+  syncState(state: BattleState): void {
+    this.doom.sync(state);
+  }
+
   /** Per-frame tick from the battle screen. */
   update(dt: number): void {
     this.externallyTicked = true;
     this.stopRafFallback();
     this.core.update(dt);
+    this.doom.update();
   }
 
   clear(): void {
     this.core.clear();
+    this.doom.clear();
     this.stopRafFallback();
   }
 

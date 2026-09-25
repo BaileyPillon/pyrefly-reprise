@@ -1,0 +1,14 @@
+{
+ "img": "preC.png",
+ "mask": "maskC.png",
+ "denoise": 0.85,
+ "seed": 560302,
+ "positive": "1boy, seymour guado, final fantasy x, safe, solo, male focus, pale light blue hair, very long hair flowing behind him, long hair blowing to the right, dark navy blue robe, red band, macalania temple antechamber interior, glowing blue ice pillars, gold metalwork, warm gold brazier glow, soft bokeh background, depth of field, blurry background, official art, cel shading, soft shading, vibrant colors, rim lighting, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, text, error, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, artist name, multiple boys, 2boys, extra person, second face, straight edge, cut off hair, rooftop, village, lantern, night sky",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 30,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "seconds": 9.288
+}

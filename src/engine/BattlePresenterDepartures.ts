@@ -130,6 +130,42 @@ export const BODY_LIE_MS = 460;
  */
 export const BODY_HOLD_MS = 1400;
 
+/**
+ * The shot the body beat cuts to: a rig registered at run time around where
+ * the body actually lies (the field's relaxation moves his station per
+ * viewport, so no fixed scene rig can frame it). Repair-pass verifier: held on
+ * the killing blow's `enemy` framing, at 1280x960 his head sat behind the
+ * Tidus row of the party panel for the whole hold, and a flat body seen from
+ * that near-level camera is a sliver. This one looks down on him at about 25
+ * degrees, so the body reads as a body on the floor, with it left of centre in
+ * the band between the guide and the party panel, clear of the turn list
+ * (measured in `tests/unit/ch7-presentation-fixes.test.ts` at 16:9, 4:3 and
+ * 21:9). Offsets from the body's middle, world units; the camera sits on the
+ * party's side of him. Only a camera that can take a rig at run time
+ * (`CameraPort.addRig`) moves; otherwise the blow's framing stays, as before.
+ * Presenter plumbing, both games; only FFX's Seymour at Macalania has a body.
+ */
+export const BODY_SHOT = {
+  from: [-1.2, 4.6, 10.4] as [number, number, number],
+  at: [0.35, -0.1, 0.3] as [number, number, number],
+  fov: 32,
+  sway: 0.4,
+} as const;
+/** The rig name {@link BODY_SHOT} is registered under. */
+export const BODY_RIG = 'body';
+/** The move onto {@link BODY_RIG}, ms at timeScale 1: under the roll, so the hold is all stillness. */
+export const BODY_RIG_MS = 520;
+
+/** Register {@link BODY_SHOT} around `actor`, or `null` when the camera cannot take it or is held. */
+function bodyShot(ctx: EventCtx, actor: ActorHandle): string | null {
+  const cam = ctx.stage.camera;
+  if (!cam.addRig || cam.holding) return null;
+  const p = actor.position;
+  const plus = (d: readonly [number, number, number]): [number, number, number] => [p.x + d[0], d[1], p.z + d[2]];
+  cam.addRig(BODY_RIG, { position: plus(BODY_SHOT.from), lookAt: plus(BODY_SHOT.at), fov: BODY_SHOT.fov, sway: BODY_SHOT.sway });
+  return BODY_RIG;
+}
+
 /** How dim a yielding figure gets before it steps back (brightness multiplier). */
 export const YIELD_DIM = 0.45;
 /** The step back, world units: away from the party and deeper into the room. */
@@ -250,7 +286,12 @@ async function yields(ctx: EventCtx, actor: ActorHandle, b: Budget): Promise<voi
  * back (`lieDown`, he has no painted `ko`), a dark flash as a downed party
  * member gets, and no pyreflies. The roll races the departure's own budget.
  */
-async function body(actor: ActorHandle, b: Budget): Promise<void> {
+async function body(ctx: EventCtx, actor: ActorHandle, b: Budget): Promise<void> {
+  const rig = bodyShot(ctx, actor);
+  if (rig) {
+    void ctx.stage.camera.release?.(ctx.moments.ms(BODY_RIG_MS));
+    void b.guard(ctx.moments.moveToRig(rig, BODY_RIG_MS));
+  }
   actor.setPose('ko', { force: true });
   actor.flash(0x4a5a78, 320, 0.7);
   actor.shake(0.12, 200);
@@ -281,7 +322,7 @@ export async function depart(
   if (!actor) return kind === 'body' ? 'stays' : 'removed';
   const b = budget(ctx, departureMs(kind));
   if (kind === 'body') {
-    await body(actor, b);
+    await body(ctx, actor, b);
     return 'stays';
   }
   if (kind === 'falls-away') await fallsAway(actor, b);

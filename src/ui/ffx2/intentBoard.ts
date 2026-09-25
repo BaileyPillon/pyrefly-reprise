@@ -123,6 +123,24 @@ export function fighterBoxes(state: BattleState | null, project: ProjectFn): Int
   return out;
 }
 
+/**
+ * The intent slab and its `E HIDE` chip while painted, as panels the field's
+ * target plate docks clear of (`dockPlate`). FFX-2 only. At Vegnagun's link 3
+ * (D-044, the Body on option C's spot) the slab's only free spot while aiming
+ * is right under the Body, where the Bulwark plates hang by default; docked
+ * against this, they take the side above their ring instead of printing across
+ * the slab's header. The slab never steers around the field plate, so the two
+ * cannot chase each other.
+ */
+export function slabPanels(root: HTMLElement): Array<{ x: number; y: number; w: number; h: number }> {
+  const out: Array<{ x: number; y: number; w: number; h: number }> = [];
+  for (const el of root.querySelectorAll<HTMLElement>('.eint__panel, .eint__toggle')) {
+    const r = el.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) out.push({ x: r.left, y: r.top, w: r.width, h: r.height });
+  }
+  return out;
+}
+
 export interface SlabSolveInput {
   obstacles: IntentAvoidRect[];
   /** The overlay's viewport rect (laid out). */

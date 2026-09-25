@@ -29,7 +29,8 @@ import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { INTENT_AVOID_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
-import { growToGrid, panelPresence, rectKey } from './hudPlacementKeys.ts';
+import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
+import { doomNoteOf } from './DoomCounters.ts';
 import { enemyObstacleRect } from './enemyObstacleRect.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
@@ -418,6 +419,7 @@ export class FFXBattleHud implements HudPort {
     this.sensorPanel.release(state.combatants); // its subject left the field
     this.lastState = state;
     this.zanmato.sync(state);
+    this.damageNumbers.syncState(state); // Doom's counts, reconciled (and cleared once there is a result)
     if (Array.isArray(preview)) {
       // Kept so the field's name plate can print the same letter tag the queue
       // tile shows — the only mark that tells Yu Pagoda B from Yu Pagoda C.
@@ -455,10 +457,10 @@ export class FFXBattleHud implements HudPort {
    * advisor keep reading the engine's own state from the last full `sync`,
    * which lands at the end of the burst a moment later.
    *
-   * Game case: both. Shared playback plumbing, FFX-2 has the same call
-   * (AGENTS.md rule 14 / CHK-020).
+   * Game case: both. Shared playback plumbing, FFX-2 has the same call (AGENTS.md rule 14 / CHK-020).
    */
   syncVitals(state: BattleState): void {
+    this.sensorPanel.release(state.combatants); // at the blow: a last enemy's fall plays with no `sync` (Evrae)
     const actingId = state.log.length ? findLastActorId(state.log) : null;
     this.partyStatus.render(state.activeIds, state.combatants, actingId);
   }
@@ -546,6 +548,7 @@ export class FFXBattleHud implements HudPort {
 
   onEvent(event: BattleEvent): void {
     this.zanmato.onEvent(event);
+    this.damageNumbers.watch(event); // Doom's count ticks at the event, not at the burst's end
     switch (event.type) {
       case 'action-start':
         this.currentActorId = event.actorId;
@@ -963,7 +966,7 @@ export class FFXBattleHud implements HudPort {
     if (cmd.category === 'whitemagic' && label.startsWith('cur') && c.alive && c.hp >= c.stats.maxHp) {
       return 'HP full';
     }
-    return undefined;
+    return doomNoteOf(c); // "Doom 3": research/ffx-combat-core.md §4, the count is shown
   }
 
   /**
@@ -1210,12 +1213,8 @@ export class FFXBattleHud implements HudPort {
       // every state — so every box above the party was measured down to a line
       // 35 grid px lower than the command window really reaches, and Chapter
       // 1's open band came out 24 grid px tall. The slab is its own rect below.
-      cmdArea: growToGrid(this.stageRect(this.commandMenu.stackEl), 1) ?? {
-        left: 30,
-        top: 205,
-        right: 211,
-        bottom: 334,
-      },
+      // The breadcrumb really is in it now: Chapter IX printed the card over "OVERDRIVE".
+      cmdArea: growToGrid(unionOf(this.stageRect(this.commandMenu.stackEl), this.stageRect(this.commandMenu.breadcrumbEl)), 1) ?? { left: 30, top: 205, right: 211, bottom: 334 },
       // The slab's **reserved slot**, not its measured box, and never `null`:
       // it is up on every decision, it is 29 grid px at its tallest, and a box
       // solved while it happened to be empty would be taken away on the next

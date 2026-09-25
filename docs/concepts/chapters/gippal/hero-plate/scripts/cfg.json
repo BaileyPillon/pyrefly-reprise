@@ -1,0 +1,55 @@
+{
+ "src": "D:/Tools/pyrefly-scratch/hero-plates/gippal/options/",
+ "out": "D:/Tools/pyrefly-scratch/hero-plates/gippal/shots/",
+ "host": "ch5-ffx2-vegnagun-shuyin",
+ "chapter": "ffx2-vegnagun-shuyin",
+ "port": 5821,
+ "words": "D:/Final Fantasy/docs/concepts/chapters/gippal/hero-plate/scripts/words.json",
+ "focal": {
+  "a": {
+   "x": 0.45,
+   "y": 0.4
+  },
+  "b": {
+   "x": 0.25,
+   "y": 0.4
+  },
+  "c": {
+   "x": 0.5,
+   "y": 0.35
+  }
+ },
+ "docs": "D:/Final Fantasy/docs/concepts/chapters/gippal/hero-plate/",
+ "title": "Chapter XV  Den of Woe  -  hero plates (FFX-2 only)",
+ "names": {
+  "a": "A  Gippal's shade (anger)",
+  "b": "B  The three shades: Gippal, Nooj, Baralai  (RECOMMENDED)",
+  "c": "C  Paine and her old squad's shades"
+ },
+ "crops": [
+  [
+   "a",
+   380,
+   120,
+   880,
+   620,
+   "A 1:1: the O-1 B treatment at plate scale"
+  ],
+  [
+   "b",
+   860,
+   0,
+   1344,
+   560,
+   "B 1:1: Nooj and Baralai from their idles"
+  ],
+  [
+   "c",
+   0,
+   60,
+   520,
+   620,
+   "C 1:1: the three shades behind Paine"
+  ]
+ ]
+}

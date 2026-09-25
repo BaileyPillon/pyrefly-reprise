@@ -1,0 +1,110 @@
+{
+ "_note": "Chapter I's visible words swapped for Chapter X's registered ones (src/data/chapter-seymour-natus.ts: number 10, title, subtitle, location, blurb) in the page DOM only. Chapter X has no ChapterMeta yet, so its quote, handwritten line, tip, snapshots and first two objectives do not exist: they are blanked, never invented. 'Defeat Seymour Natus' is the one objective the sources support (research §4.5: the battle ends when Natus dies). The party (Tidus, Yuna, Kimahri) is research §8.3's opening line-up; SCENE GAGAZET is Chapter X's registered placeholder scene.",
+ "pairs": [
+  [
+   "I · SEYMOUR FLUX",
+   "X · SEYMOUR NATUS"
+  ],
+  [
+   "I · Seymour Flux",
+   "X · Seymour Natus"
+  ],
+  [
+   "Chapter I ·",
+   "Chapter X ·"
+  ],
+  [
+   "Defeat Seymour Flux",
+   "Defeat Seymour Natus"
+  ],
+  [
+   "DEFEAT SEYMOUR FLUX",
+   "DEFEAT SEYMOUR NATUS"
+  ],
+  [
+   "Holy Water a Zombie before Full-Life lands",
+   "—"
+  ],
+  [
+   "HOLY WATER A ZOMBIE BEFORE FULL-LIFE LANDS",
+   "—"
+  ],
+  [
+   "Survive Total Annihilation",
+   "—"
+  ],
+  [
+   "SURVIVE TOTAL ANNIHILATION",
+   "—"
+  ],
+  [
+   "Seymour Flux",
+   "Seymour Natus"
+  ],
+  [
+   "SEYMOUR FLUX",
+   "SEYMOUR NATUS"
+  ],
+  [
+   "The Prominence",
+   "The guardians turn back on the bridge"
+  ],
+  [
+   "THE PROMINENCE",
+   "THE GUARDIANS TURN BACK ON THE BRIDGE"
+  ],
+  [
+   "Mt. Gagazet",
+   "Highbridge of Bevelle — before the Main Gate"
+  ],
+  [
+   "MT. GAGAZET",
+   "HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE"
+  ],
+  [
+   "CHAPTER I ·",
+   "CHAPTER X ·"
+  ],
+  [
+   "The Ronso died holding this gate, and Seymour is still standing over the bodies when the party arrives. He is offering the pilgrimage's ending early, and he is not lying about the cost.",
+   "Seymour meets them at the end of the bridge and offers death as a mercy. Kimahri stands his ground, and the others come back for him."
+  ],
+  [
+   "Sorrow is honest, at least. That is more than the Ronso could say of hope.",
+   ""
+  ],
+  [
+   "the mountain remembers everything",
+   ""
+  ],
+  [
+   "Bio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late.",
+   "—"
+  ],
+  [
+   "the Prominence, at last",
+   ""
+  ],
+  [
+   "unhurried, always unhurried",
+   ""
+  ],
+  [
+   "the machine beneath him",
+   ""
+  ]
+ ],
+ "exact": {
+  "I": "X",
+  "Seymour": "",
+  "SEYMOUR": "",
+  "“": "",
+  "”": "",
+  "“”": ""
+ },
+ "hideImgs": [
+  "backdrops/gagazet",
+  "characters/seymour-flux/",
+  "characters/mortiorchis/"
+ ]
+}

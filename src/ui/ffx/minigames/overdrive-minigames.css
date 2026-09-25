@@ -18,6 +18,12 @@
  * [docs/CONTRACT-CHANGES.md decision 10].
  */
 .ig-minigame.ffx-mg {
+  /* Above the guide rail (`.sgd`, 3) and the advisor (`.mad`, 4): the open
+     Overdrive is the one decision on screen, and the rail painted over its
+     title ("Ronso Rage", Chapter IX, once Kimahri's picker stopped throwing).
+     Inside `.ffxhud__stage`, whose letterbox transform is its own stacking
+     context, so this cannot reach the pause or the cut-in above the HUD. */
+  z-index: 5;
   opacity: 0;
   transform: skewX(var(--ig-skew)) scale(0.97);
   transition: opacity 0.14s ease, transform 0.14s ease;

@@ -13,11 +13,14 @@ import type { AbilityDef } from '../../../battle/common/types.ts';
 import { recoveryEffectAbilities } from './effects-recovery.ts';
 import { statusEffectAbilities } from './effects-status.ts';
 import { damageEffectAbilities } from './effects-damage.ts';
+import { heldItemEffect } from './held.ts';
 
 export const itemEffectAbilities: AbilityDef[] = [
   ...recoveryEffectAbilities,
   ...statusEffectAbilities,
   ...damageEffectAbilities,
+  // The shared no-op every held-only accessory row points at (`./held.ts`).
+  heldItemEffect,
 ];
 
 export { recoveryEffectAbilities, statusEffectAbilities, damageEffectAbilities };

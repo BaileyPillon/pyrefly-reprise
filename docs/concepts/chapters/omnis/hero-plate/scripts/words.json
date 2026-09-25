@@ -1,0 +1,108 @@
+{
+ "_note": "Chapter I's visible words swapped for Chapter XII's adopted ones (D-145 / plan B1: title 'Seymour Omnis', number XII, location 'Inside Sin - the Garden of Pain') in the page DOM only. Chapter XII is not registered and has no ChapterMeta, so its subtitle, blurb, quote, handwritten lines, tip, first two objectives and snapshots do not exist: they are blanked, never invented. 'Defeat Seymour Omnis' is the one objective the sources support (the battle ends when Seymour dies, research §3).",
+ "pairs": [
+  [
+   "I · Seymour Flux",
+   "XII · Seymour Omnis"
+  ],
+  [
+   "Chapter I ·",
+   "Chapter XII ·"
+  ],
+  [
+   "Defeat Seymour Flux",
+   "—"
+  ],
+  [
+   "DEFEAT SEYMOUR FLUX",
+   "—"
+  ],
+  [
+   "Holy Water a Zombie before Full-Life lands",
+   "Defeat Seymour Omnis"
+  ],
+  [
+   "HOLY WATER A ZOMBIE BEFORE FULL-LIFE LANDS",
+   "DEFEAT SEYMOUR OMNIS"
+  ],
+  [
+   "Survive Total Annihilation",
+   "—"
+  ],
+  [
+   "SURVIVE TOTAL ANNIHILATION",
+   "—"
+  ],
+  [
+   "Seymour Flux",
+   "Seymour Omnis"
+  ],
+  [
+   "SEYMOUR FLUX",
+   "SEYMOUR OMNIS"
+  ],
+  [
+   "The Prominence",
+   ""
+  ],
+  [
+   "THE PROMINENCE",
+   ""
+  ],
+  [
+   "Mt. Gagazet",
+   "Inside Sin — the Garden of Pain"
+  ],
+  [
+   "MT. GAGAZET",
+   "INSIDE SIN — THE GARDEN OF PAIN"
+  ],
+  [
+   "CHAPTER I ·",
+   "CHAPTER XII ·"
+  ],
+  [
+   "The Ronso died holding this gate, and Seymour is still standing over the bodies when the party arrives. He is offering the pilgrimage's ending early, and he is not lying about the cost.",
+   ""
+  ],
+  [
+   "Sorrow is honest, at least. That is more than the Ronso could say of hope.",
+   ""
+  ],
+  [
+   "the mountain remembers everything",
+   ""
+  ],
+  [
+   "Bio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late.",
+   "—"
+  ],
+  [
+   "the Prominence, at last",
+   ""
+  ],
+  [
+   "unhurried, always unhurried",
+   ""
+  ],
+  [
+   "the machine beneath him",
+   ""
+  ]
+ ],
+ "exact": {
+  "I": "XII",
+  "Seymour": "",
+  "SEYMOUR": "",
+  "“": "",
+  "”": "",
+  "GAGAZET": "—",
+  "“”": "",
+  "Gagazet": "—"
+ },
+ "hideImgs": [
+  "backdrops/gagazet",
+  "characters/seymour-flux/",
+  "characters/mortiorchis/"
+ ]
+}

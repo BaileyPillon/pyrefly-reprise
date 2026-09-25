@@ -254,12 +254,19 @@ export class SensorPanel {
    * combatant can leave (a `ko`, `status-add eject`, a scripted removal, a
    * body that stays down) clears it the same way. What Sensor read stays
    * known ({@link isScanned}); only the plate goes. FFX only: the plate is.
+   *
+   * Also called from `FFXBattleHud.syncVitals`, the per-event projection, so
+   * the plate goes at the blow itself: the last enemy's departure plays with
+   * no full `sync` before the result (Chapter VIII verifier: "I EVRAE" stayed
+   * over empty sky for 3.5 s after Evrae fell). A shatter / Eject reaches that
+   * projection as `status-add eject` before `removed` is synced, hence the
+   * `eject` check.
    */
   release(combatants: Readonly<Record<CombatantId, AnyCombatant | undefined>>): void {
     const id = this.current?.id;
     if (!id) return;
     const c = combatants[id];
-    if (c && c.alive && !c.removed && !c.flags.hidden) return;
+    if (c && c.alive && !c.removed && !c.flags.hidden && !c.statuses.eject) return;
     this.hide();
   }
 

@@ -1,0 +1,27 @@
+{
+  "subject": "Seymour (human form) in the Macalania antechamber",
+  "mood": "courteous and wrong: the host at the fayth's door",
+  "seed": 560203,
+  "prompt": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult male, sharp facial features, pale skin, pale light blue hair, very long hair, long hair falling down his back, hair over one eye, purple eyes, human ears, dark navy blue robe, wide red band along the robe's front edge, open robe, bare chest, macalania temple antechamber interior, tall arched doorway of glowing translucent blue ice behind him, carved ice pillars, gold metalwork set into the ice, a warm gold brazier glow on one side of his face, cold blue light on the other side, soft bokeh background, three-quarter view, looking at viewer, courteous serene smile, mouth closed, calm half-lidded eyes, \\(close-up of the face:1.2\\), head and shoulders, face fills the frame, (pale light blue hair:1.2), (purple eyes:1.15), (courteous serene smile:1.1), (a glowing arched ice doorway behind him:1.15), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, crown, tiara, helmet, horns, staff, weapon, \\(pointy ears:1.2\\), elf ears, blonde hair, white hair, grin, open mouth, scar, facial scar, cracks on face, red lines on face, rooftop, roof, village, house, lantern, night sky, city lights, orange bokeh, feminine, androgynous, buttons, brooch, jewel, gem, necklace, coat, popped collar, vampire, heart pupils, star pupils, pink eyes, saturated cyan hair, armor, pauldrons, shoulder armor, gold armor, blue eyes, medium shot, cowboy shot",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(pale light blue hair:1.2), (purple eyes:1.15), (courteous serene smile:1.1), (a glowing arched ice doorway behind him:1.15)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "docs/concepts/chapters/macalania/pause-plate-redo/refs/ref-portrait-head.png",
+  "refWeight": 0.4,
+  "refWeightType": "ease in",
+  "refScaling": "K+V",
+  "refStart": 0.2,
+  "refEnd": 0.6,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-25T04:12:03.710Z"
+}

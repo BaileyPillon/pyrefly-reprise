@@ -74,6 +74,7 @@ import {
   results,
   say,
   sfx,
+  showActor,
   shake,
   wait,
 } from '../dsl.ts';
@@ -140,8 +141,11 @@ export const yojimboCavernScripts: ChapterScripts = {
 
   post: [
     // Yojimbo and Daigoro are already gone (recalled together at the kill,
-    // D-076). Ginnem remains, still.
+    // D-076). Ginnem remains, still: on stage from the first frame (her
+    // battle idle; the cutscene stages her, `app/screens/cutsceneFigures.ts`),
+    // so the sending below has someone to send.
     music(null, 1200),
+    showActor(GINNEM, { ms: 0, facing: -1 }),
     camera('idle', 900),
     beat(1600),
 

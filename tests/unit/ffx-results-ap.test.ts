@@ -366,8 +366,12 @@ describe('PR-0003: FFX results rows survive a real defeat and a real KO at the e
    * hand-built fixture. `gagazetBuild.reserve` is
    * `['auron', 'wakka', 'lulu', 'rikku']`; `intendedStrategy` switches Auron
    * in on all three.
+   *
+   * Seed 8 -> 7 on 2026-09-25 (PR-0155, FFX only): with aeons no longer throwing
+   * the party's Gems, seed 8's line never brings Auron in; seed 7 does (3 turns,
+   * KO'd at the end), the same shape the verifier reproduced.
    */
-  it.each([12, 8, 3])(
+  it.each([12, 7, 3])(
     'a reserve member (Auron) who switched in and took turns gets a row, even KO\'d at the end (seed %i)',
     (seed) => {
       const result = runSeymourFlux(seed);
