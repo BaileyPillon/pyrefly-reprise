@@ -1,0 +1,567 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-25T16:26:16.437Z",
+ "build": {
+  "mainSha": "fc7f1a20",
+  "candidateTree": "D:/pyrefly-rel16",
+  "bundle": "BQnfWT0X",
+  "live": "5be4babe (release 15) as the comparison; the live URL already serves fc7f1a20 (deployed first under the owner override)"
+ },
+ "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: Chapter XIII reaches both of its real destinations (win -> post scene -> results -> chapter select; defeat -> results -> RETRY -> battle) with real keys, 0 console errors, 0 HTTP errors",
+  "No regression against 5be4babe: Chapter V opens identically on both builds; tsc clean and the full unit suite green in the candidate tree (389 files, 7,426 tests)",
+  "The five majors are all inside features that do not exist live (Chapter XIII, phone HUD B) and are disclosed, not holding"
+ ],
+ "checks": [
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": true,
+   "game": "FFX-2",
+   "chapter": "XIII (ffx2-trema), V",
+   "state": "every capture",
+   "reason": "every capture asserted the active screen and logged the #ui screen roots first; one pause capture whose assertion failed was recorded UNVERIFIED and retaken behind an app.screens stack assertion; one debug-driven run (gotoChapter after a title Enter) was discarded as a harness artefact per the CHK-016 race warning",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-09-first-menu.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-pause-chapter-tab.jpg"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": true,
+   "game": "both",
+   "chapter": "all",
+   "state": "live URL",
+   "reason": "focused review of the production candidate; live verification of the exact artifact is its own obligation. The candidate bundle name BQnfWT0X equals the release 16 bundle recorded in 3c7f2c94",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "title, briefing, chapter select, prep, pre scene, coach card, command menu, target step, pause (Esc), pause tabs (E), resume (Esc), results (Enter), RETRY (Enter)",
+   "reason": "every step pressed with page.keyboard; state read back from __pyrefly.screen / app.screens / the battle snapshot after each",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-play-1600x900-13-results.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-win-1600x900-12-results.jpg"
+   ],
+   "minutes": 6
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "win: Paragon -> kill link -> Trema -> post scene -> results -> aftermath line -> chapter select; loss: results (Defeat) -> RETRY -> battle (twice)",
+   "reason": "destinations reached with real Enter only. LABELLED: the win set each enemy to 1 HP through the debug API before a real-key Attack (state setup, not proof of winnability); human winnability (about 13/200 on the bench) was not re-measured. The losses were real-key Attack play and one autoBattle handover at skip speed (labelled)",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-play-1600x900-12-post-scene.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-play-1600x900-13-results.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-win-1600x900-12-results.jpg"
+   ],
+   "minutes": 8
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "link 1 -> link 2",
+   "reason": "the Paragon victory carried nextGroupId ffx2-cloister-trema and the same battle screen moved to Trema with HP carried (Yuna KO, Rikku and Paine hurt at the kill link); Oversoul look B (blue cast, motes) renders on the real presentation path",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-play-1600x900-09-first-menu.jpg",
+    "critic/reviews/fc7f1a20-focused/oversoul-look-B.jpg"
+   ],
+   "minutes": 2
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": true,
+   "game": "both",
+   "chapter": "XIII, select",
+   "state": "chapter select, battle",
+   "reason": "written cases: Trema, Cloister action time, E1/E3 = FFX-2 only (Cloister groups only, constants local to src/data/ffx2/enemies/trema.ts); E2 = shared FFX-2 (spherechange.ts; FFX has no spherechange); pause heroArtFallback = both; enemy-move slab = FFX-2 only (src/ui/ffx2); phone HUD B = both with per-game halves. Trema sits in the FFX-2 group (index 9, after Leblanc) and not in the FFX group; the FFX-2 phone HUD shows no turn list and the boss gauge",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-03-select.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-390x844-09-first-menu.jpg"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "first menu, Yuna and Paine acting",
+   "reason": "advisor and guide name Attack -> Paragon for the acting girl; ATTACK is an enabled top row in the same frame",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-09-first-menu.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "degenerate boards",
+   "reason": "not exercised in this pass (one board with Yuna KO at link 2 was seen but not judged); owed to the deep review"
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "overlay exits",
+   "reason": "only the pause open/close exit was walked (stack returned to [battle]); confirm / cancel / turn-pass / battle-end exits of the Trema overlays not walked"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "select, prep, scene, battle HUD, pause CHAPTER tab, results",
+   "reason": "captured visible text carries no section signs, file stems, row numbers or debug words; SCRIPTED is a designed chip",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-04-prep.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-pause-chapter-tab.jpg"
+   ],
+   "minutes": 2
+  },
+  {
+   "id": "CHK-008",
+   "result": "FAIL",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "target step at 1600x900 and 2000x1012; pause CHAPTER tab",
+   "reason": "the target flower reticle paints over the enemy-move slab text (FOC16-01); the pause CHAPTER tab third column sits across Trema's eyes on hero plate B (FOC16-02)",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-10-target-step.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-2000x1012-10-target-step.jpg",
+    "critic/reviews/fc7f1a20-focused/trema-hero-plate-B.jpg"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-009",
+   "result": "FAIL",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "pause CHAPTER tab",
+   "reason": "the party column prints DRESSPHE… (ellipsis engaged); polish, likely shared with the other FFX-2 chapters",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-pause-chapter-tab.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII, V",
+   "state": "single-target Attack; ALL ALLIES Pray on the phone",
+   "reason": "TARGET Paragon chip, ring and reticle on the target, party chips dimmed; the phone target step labels ALL ALLIES",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-10-target-step.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-touch-pray-target-390x844.jpg"
+   ],
+   "minutes": 2
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "link 1 Paragon, link 2 Trema, default framing",
+   "reason": "one targetable enemy per link, wholly visible at 1600x900 and 2000x1012; on the phone Paragon is visible but small (polish FOC16-05)",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-2000x1012-10-target-step.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-390x844-09-first-menu.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "battle, pause, chapter select, pre scene",
+   "reason": "Oversoul look B and Trema hero plate B judged in game against their option frames (composites); the Trema speaker portrait and the three girls load in the pre scene (naturalWidth > 0). Gippal / Baralai / Buddy in Chapter V were not reached in this pass (listed not tested)",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/oversoul-look-B.jpg",
+    "critic/reviews/fc7f1a20-focused/trema-hero-plate-B.jpg"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-002",
+   "result": "UNVERIFIED",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "pause",
+   "reason": "the pause plate loaded as the 2x WebP at 1600x900, 2000x1012 and 390x844 (slid option B plate, D-070), but the six-viewport fresh-context sweep and the scrollWidth measure were not run"
+  },
+  {
+   "id": "CHK-003",
+   "result": "FAIL",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "phone 390x844",
+   "state": "phone battle HUD B",
+   "reason": "reused from the phone HUD B verifier (not re-measured here): the FFX-2 chain label is about 6 px on phones; everything else it sampled was 14 px or more. Desktop HUD text was not measured in this pass",
+   "evidence": [
+    "docs/handoff/phone-battle-hud.md"
+   ],
+   "minutes": 0
+  },
+  {
+   "id": "CHK-020",
+   "result": "UNVERIFIED",
+   "artifact": "fc7f1a20 / bundle BQnfWT0X",
+   "targetVersion": "71b1f65a607074172a2fbbc6e2d5af9ec81a9eda0a54fa7ffb1f8cd03018ad64",
+   "environment": "vite preview of D:/pyrefly-rel16/dist-gate (built there from fc7f1a20, bundle index-BQnfWT0X.js, the same bundle name release 16 serves live) on 127.0.0.1:5412; previous live 5be4babe served from D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js) on 127.0.0.1:5413 for comparison; headless Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback needed",
+   "mode": "automated",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "pause CHAPTER tab",
+   "state": "heroArtFallback",
+   "reason": "the FFX-2 side was seen (Chapter XIII plate present); the FFX mirror of the heroArtFallback fix was not opened in this pass"
+  }
+ ],
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "detail": {
+   "matched": [
+    "phone battle HUD B (docs/concepts/layout/phone-battle-hud/sheet.jpg, frame B-ffx2-menu): rail, tip line + GUIDE, 2-column tiles, three chips, footer; fighters framed smaller than the frame (FOC16-05)"
+   ],
+   "decisionsCompared": [
+    "Oversoul look B: matched (oversoul-look-B.jpg)",
+    "Trema hero plate B: the plate matches, the CHAPTER column covers the face (FOC16-02)"
+   ]
+  }
+ },
+ "issues": [
+  {
+   "id": "FOC16-01",
+   "severity": "major",
+   "title": "Chapter XIII target step: the FFX-2 target reticle paints over the enemy-move slab",
+   "game": "ffx2",
+   "chapter": "ffx2-trema (link 1, Paragon)",
+   "expected": "the enemy-move slab stays readable while a target is chosen (CHK-008; the slab fix promised HUD chrome above the fighters)",
+   "observed": "the pink flower reticle around Paragon covers the slab description line (\"Spends the turn and does nothing\") at 1600x900 and 2000x1012",
+   "repro": "title Enter, Enter, select XIII, Enter through prep and scene, dismiss the coach card, first menu, Enter on ATTACK",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-10-target-step.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-2000x1012-10-target-step.jpg"
+   ],
+   "confidence": "high (seen at two sizes)",
+   "requirement": "CHK-008",
+   "where": "suspected: the TargetHighlight reticle (world space) against intentPlacement's slab for the large, centred Paragon quad",
+   "fix": "place the slab clear of the reticle's projected box, or keep the reticle under HUD chrome",
+   "acceptanceCheck": "Chapter XIII target step at 1600x900 and 2000x1012: no petal intersects the slab box",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC16-02",
+   "severity": "major",
+   "title": "Chapter XIII pause CHAPTER tab: the quote and polaroid column covers Trema's eyes on hero plate B",
+   "game": "ffx2",
+   "chapter": "ffx2-trema",
+   "expected": "hero plate B as picked (b-pause.jpg): the face clear of panels",
+   "observed": "the third column (the \"Memories are weights\" quote and three polaroids) sits over Trema's forehead and eye; H hides it",
+   "repro": "Chapter XIII first menu, Esc, E three times (CHAPTER)",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/trema-hero-plate-B.jpg",
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-pause-chapter-tab.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-008; Trema hero plate B pick (2026-09-25)",
+   "where": "pause CHAPTER tab layout over the slid plate",
+   "fix": "move the chapter column off the face for this plate (the picked frame has no polaroid strip there)",
+   "acceptanceCheck": "composite against b-pause.jpg shows the face clear at 1600x900 and 2000x1012",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "PHB-01",
+   "severity": "major",
+   "title": "Phone HUD B: ALL-target commands have no touch path to confirm",
+   "game": "both",
+   "chapter": "any at 390x844",
+   "expected": "a touch player can confirm an ALL-target command (Confirm bar or a tap)",
+   "observed": "reported by the phone HUD B verifier; reproduced here: Pray (ALL ALLIES) in Chapter V could not be confirmed by tapping the command twice, the ALL ALLIES label or a party name. The previous live build 5be4babe failed the same touch probe, so this is not a regression on the evidence",
+   "repro": "390x844 touch, Chapter V first menu, tap White Magic, tap Pray (twice), look for Confirm",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-touch-pray-target-390x844.jpg",
+    "critic/reviews/fc7f1a20-focused/prev-touch-pray-target-390x844.jpg"
+   ],
+   "confidence": "medium (Playwright touch emulation, no real phone)",
+   "requirement": "CHK-015",
+   "where": "src/ui/common/phoneBattle.ts target step (suspected: the Back / Confirm bar only mounts for single-target cards)",
+   "fix": "mount the Back / Confirm bar for group targets too",
+   "acceptanceCheck": "touch-only Pray and a multi-target item resolve at 390x844 in both games",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "PHB-02",
+   "severity": "major",
+   "title": "Phone HUD B: the FFX-2 chain label is about 6 px",
+   "game": "ffx2",
+   "chapter": "IV, V, VI, XIII at 390x844",
+   "expected": "14 px floor (CHK-003)",
+   "observed": "reported by the phone HUD B verifier; not re-measured in this pass. On the previous live build the whole phone HUD was below the floor (R15-01), so not a regression",
+   "repro": "390x844, any FFX-2 chain of two or more hits",
+   "evidence": [
+    "docs/handoff/NOW.md (release 16 entry, phone verifier findings)"
+   ],
+   "confidence": "medium (reused finding)",
+   "requirement": "CHK-003",
+   "where": "FFX-2 chain popup under html[data-phone-battle]",
+   "fix": "a phone rule for the chain label at 14 px or more",
+   "acceptanceCheck": "legibility sweep during a chain at 390x844",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "PHB-03",
+   "severity": "major",
+   "title": "Phone HUD B: Chapter V's acting girl is off the left edge of the field",
+   "game": "ffx2",
+   "chapter": "ffx2-vegnagun-shuyin at 390x844",
+   "expected": "the acting girl visible on the 390x520 field",
+   "observed": "reported by the phone HUD B verifier; not re-verified here (a repair is running on main)",
+   "repro": "390x844, Chapter V first menu",
+   "evidence": [
+    "docs/handoff/NOW.md (release 16 entry)"
+   ],
+   "confidence": "medium (reused finding)",
+   "requirement": "CHK-011 (party visibility)",
+   "where": "Chapter V camera against the phone field",
+   "fix": "phone framing for Chapter V",
+   "acceptanceCheck": "all three girls inside the field at 390x844 and 360x780",
+   "introducedByCandidate": true,
+   "regressionVsLive": "unknown",
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC16-03",
+   "severity": "polish",
+   "title": "Pause CHAPTER tab truncates DRESSPHERE to DRESSPHE…",
+   "game": "ffx2",
+   "chapter": "ffx2-trema (likely every FFX-2 chapter)",
+   "expected": "labels shown in full (CHK-009)",
+   "observed": "party column labels ellipsised at 1600x900",
+   "repro": "pause, CHAPTER tab",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-pause-chapter-tab.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-009",
+   "where": "pause chapter panel",
+   "fix": "let the label wrap or shorten it",
+   "acceptanceCheck": "scrollWidth <= clientWidth on every label"
+  },
+  {
+   "id": "FOC16-04",
+   "severity": "polish",
+   "title": "Chapter XIII results list only Trema's rewards",
+   "game": "ffx2",
+   "chapter": "ffx2-trema",
+   "expected": "a two-link chapter's results account for both fights, or say they show the last",
+   "observed": "results: EXP 10,000, AP 50, gil 10,000, Dark Matter (Trema's sourced values); Paragon's link result (13,000 EXP / 2 AP / 8,000 gil) does not appear",
+   "repro": "win Chapter XIII",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-win-1600x900-12-results.jpg"
+   ],
+   "confidence": "medium (display only; whether link 1 is banked was not traced)",
+   "requirement": "prep category (understandable results)",
+   "where": "results screen, chain chapters",
+   "fix": "sum the links or label the card",
+   "acceptanceCheck": "results match the sum of the link results"
+  },
+  {
+   "id": "FOC16-05",
+   "severity": "polish",
+   "title": "Chapter XIII on the phone: the fighters are small at the bottom of the field",
+   "game": "ffx2",
+   "chapter": "ffx2-trema at 390x844",
+   "expected": "the phone frame of option B (fighters large in the field)",
+   "observed": "the Cloister camera keeps the whole hall; Paragon and the girls fill about a fifth of the field (known: FFX-2 phone framing below the HUD band)",
+   "repro": "390x844, Chapter XIII first menu",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/phone-battle-hud-B-ffx2-menu.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "phone HUD B target",
+   "where": "Cloister 100 camera rig on the phone field",
+   "fix": "a phone rig for Cloister 100",
+   "acceptanceCheck": "composite against B-ffx2-menu.jpg"
+  },
+  {
+   "id": "FOC16-06",
+   "severity": "polish",
+   "title": "The guide panel heads the Paragon link with \"Trema\"",
+   "game": "ffx2",
+   "chapter": "ffx2-trema link 1",
+   "expected": "the heading names the fight in front of the player, or the chapter clearly",
+   "observed": "the guide slab reads \"Trema\" while Paragon is the enemy",
+   "repro": "Chapter XIII first menu",
+   "evidence": [
+    "critic/reviews/fc7f1a20-focused/cand-trema-probe-1600x900-09-first-menu.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-004 scope (guide)",
+   "where": "guide heading",
+   "fix": "use the link boss or \"Chapter XIII\"",
+   "acceptanceCheck": "heading matches the link"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Chapter XIII real-key flow title -> select -> prep -> scene -> battle at 1600x900, 2000x1012, 390x844",
+   "Chapter XIII win destinations (labelled HP setup) and two defeat -> RETRY paths",
+   "kill link Paragon -> Trema with HP carried",
+   "pause from the command menu (Esc), CHAPTER tab (E), resume",
+   "chapter select listing of Trema in the FFX-2 group",
+   "Chapter V first menus on the candidate and on 5be4babe",
+   "touch-only ALL-target probe (Pray) at 390x844 on both builds",
+   "data spot-check: Trema HP 999,999, EXP/AP/gil 10,000/50/10,000, Dark Matter drop; Oversoul Paragon HP 210,000, 13,000/2/8,000; the 3 s action time labelled [estimate] and Cloister-only",
+   "tsc --noEmit and the full vitest suite in D:/pyrefly-rel16",
+   "three target composites"
+  ],
+  "reused": [
+   {
+    "what": "data fidelity of every changed Trema / Oversoul value",
+    "from": "Trema go-live workflow data-fidelity verifier (PASS, 0 blockers)",
+    "why": "same commit; this pass spot-checked ten values against research/ffx2-trema.md and found them equal"
+   },
+   {
+    "what": "phone HUD B majors PHB-02 and PHB-03 and the FFX phone evidence",
+    "from": "phone HUD B verifier (docs/handoff/phone-battle-hud.md, docs/screenshots/phone-battle-hud/)",
+    "why": "the phone files are unchanged since that run; PHB-01 re-probed here"
+   }
+  ],
+  "notTested": [
+   "human winnability of Chapter XIII (bench says about 1 in 15)",
+   "E2 accessories-after-spherechange in play (Chapter V logs), E1 timed Stop",
+   "Gippal, Baralai, Buddy portraits in Chapter V",
+   "Evrae (b577073b) and Vegnagun (8b4d6bc6) staging repairs in play",
+   "the FFX-2 enemy-move slab in Chapters IV and VI",
+   "pause heroArtFallback on the FFX side",
+   "audio",
+   "load times",
+   "CHK-005 and CHK-006 matrices",
+   "Chapters I, II, III, IV, VI, VIII, IX, XI"
+  ],
+  "harnessNotes": [
+   "a run that pressed Enter on the title and then called gotoChapter orphaned the title root and left the aftermath scene waiting after the debug flow resolved (369 presses); discarded as the CHK-016 race; the real flow reaches chapter select after the aftermath line",
+   "first menu 12-23 s after battle start includes the first-time coach card; the Chapter V candidate run was slower (16 s vs 11 s) while the unit suite ran beside it (saturated host, not a product finding)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "live verification of fc7f1a20 (if not already settled), then the deep review this shared FFX-2 engine / presenter / chapter change owes on the live build (plan depth deep, deepAfterDeploy); it should cover Chapter V with E2, Chapters IV-VI and XI, the phone HUD in both games, and CHK-005/006",
+ "elapsedMinutes": 75
+}

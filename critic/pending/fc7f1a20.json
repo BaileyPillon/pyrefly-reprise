@@ -111,8 +111,11 @@
     },
     {
       "kind": "focused",
-      "status": "pending",
-      "requires": "acceptance of the changed area"
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "FAIL",
+      "settledBy": "critic/reviews/fc7f1a20-focused.json",
+      "settledAt": "2026-09-25T16:26:16.437Z"
     },
     {
       "kind": "deep",
