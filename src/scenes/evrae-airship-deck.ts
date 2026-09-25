@@ -86,11 +86,16 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * frame-left. Order is the build's `activeSlots`
  * (`src/data/ffx/builds/fahrenheit.ts`): Tidus, Wakka, Rikku. The back of the
  * arc stands a metre and a half from the rail (edge z -2.7).
+ *
+ * R13-03: Tidus and Rikku stand where live e3b8c2a3's relax settled them, Wakka
+ * where a999d133's did (clear of the ORDERS row), measured at 1600x900 and
+ * 2000x1012 (were -2.05 / -3.45 / -1.55); the deck holds them there
+ * ({@link EVRAE_AIRSHIP_DECK_STAGING}).
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [-2.05, 0, 1.55],
-  [-3.45, 0, 0.25],
-  [-1.55, 0, -1.1],
+  [-1.89, 0, 1.55],
+  [-4.15, 0, 0.25],
+  [-1.02, 0, -1.1],
   [-11.6, 0, 2.6],
   [-12.5, 0, 1.0],
   [-13.4, 0, -0.6],
@@ -132,12 +137,16 @@ export const EVRAE_AIRSHIP_ACTOR_HEIGHTS = {
   evrae: EVRAE_WORLD_HEIGHT,
 } as const;
 
+/** R13-03 (FFX only): the party held on its slots. Evrae is re-planted on its range spot by the director, so the shared relax step moved only the party, by a different amount each run. */
+const EVRAE_AIRSHIP_DECK_STAGING = { holdParty: true } as const;
+
 /** The published slots, same shape every other scene exports. */
 export const EVRAE_AIRSHIP_DECK_SLOTS: SceneSlots = {
   party: PARTY_SLOTS.slice(0, 3).map((s) => [...s] as [number, number, number]),
   enemy: ENEMY_SLOTS.map((s) => [...s] as [number, number, number]),
   partyHeight: EVRAE_AIRSHIP_ACTOR_HEIGHTS.tidus,
   enemyHeight: EVRAE_AIRSHIP_ACTOR_HEIGHTS.evrae,
+  ...EVRAE_AIRSHIP_DECK_STAGING,
 };
 
 /** Every rig, exported for the projection test. */
@@ -301,6 +310,7 @@ export const buildEvraeAirshipDeckScene: SceneFactory = async (
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    ...EVRAE_AIRSHIP_DECK_STAGING,
     palette: { ...EVRAE_AIRSHIP_DECK_PALETTE },
     update(dt: number): void {
       backdrop.update(dt);

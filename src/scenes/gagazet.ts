@@ -27,12 +27,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { noiseCanvas, radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
-import type {
-  SceneBuild,
-  SceneBuildOptions,
-  SceneFactory,
-  SceneRigName,
-} from './types.ts';
+import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 
 // ---------------------------------------------------------------------------
 // Mt. Gagazet — the trail near the summit, at night
@@ -176,6 +171,10 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [1.8, 1.85, -7.0], // high float    -> x 0.487..0.700, y 0.108..0.358
   [3.35, 0, -6.6], // ground, back-right
 ];
+// R13-02 (FFX only): the bosses pinned where live e3b8c2a3's relax stood them (measured 1600x900 and 2000x1012), so Mortiorchis's
+// bracket leaves the NEXT BEST MOVE card its band. A pin is never prone-slid, so Mortiorchis's spot carries his old -1.52 slide.
+type Spot3 = [number, number, number];
+export const GAGAZET_STAGING = { holdParty: true, enemySpots: { 'seymour-flux': [3.54, 0, -7.6] as Spot3, mortiorchis: [1.03, 1.01, -7.6] as Spot3 } };
 
 /**
  * One wind-blown snow drift, as an **alpha mask**.
@@ -838,7 +837,7 @@ export const buildGagazetScene: SceneFactory = async (
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
-    holdParty: true, // PARTY_SLOTS is the composition (PR-0002 A, D-041)
+    ...GAGAZET_STAGING, // PARTY_SLOTS is the composition (PR-0002 A, D-041); the bosses on live's spots (R13-02)
     palette: { ...PALETTE },
     update(dt: number): void {
       clock += dt;

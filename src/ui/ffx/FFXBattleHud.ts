@@ -29,7 +29,7 @@ import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { INTENT_AVOID_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey } from './hudPlacementKeys.ts';
-import { evraeFarStreakRect, widenForEvraeFarStreak } from './evraeFarStreakBounds.ts';
+import { enemyObstacleRect } from './enemyObstacleRect.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
   advisorChipDock,
@@ -1367,14 +1367,12 @@ export class FFXBattleHud implements HudPort {
   private enemySpriteRects(): Rect[] {
     const state = this.lastState;
     if (!state) return [];
-    // Evrae's FAR streak is a long slender s-curve, not the roughly
-    // head-tall silhouette `spriteRects` was tuned on — see
-    // `evraeFarStreakBounds.ts` (`chapter-evrae-finish.md` item (c)). FFX only.
+    // The estimate grown to the painted silhouette the target bracket is drawn
+    // on (R13-02), and Evrae's FAR streak by its own sourced rule — see
+    // `enemyObstacleRect.ts` and `evraeFarStreakBounds.ts`. FFX only.
     return this.spriteRects(
       state.enemyIds.filter((id) => state.combatants[id]?.alive !== false),
-      (rect, id, toGrid) =>
-        evraeFarStreakRect(id, state, this.targeting?.rect(id) ?? null, toGrid) ??
-        widenForEvraeFarStreak(rect, id, state),
+      (rect, id, toGrid) => enemyObstacleRect(rect, id, state, this.targeting?.rect(id) ?? null, toGrid),
     );
   }
 
