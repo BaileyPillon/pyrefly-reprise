@@ -525,8 +525,17 @@
   },
   "chapter:leblanc-idles:2026-09-23": {
    "public/art/characters/leblanc/idle.png": {
-    "sha256": "4fea45f98bf44e7aa6aebf0004a2f845f268ebf974992bdd559b3b5258c9094b",
-    "mtime": "2026-09-21T21:48:52.369Z"
+    "sha256": "77192c23501957c6172b351dac7aa525341faef56b77d648f48a10fc4fabe248",
+    "mtime": "2026-09-25T04:03:12.758Z",
+    "approved": "2026-09-25",
+    "words": "I'll go with all your recommendations",
+    "note": "Bailey, 2026-09-25 ~01:40 EDT, answering the driver's recommendation for PR-0096: Leblanc's fan = the folding fan fully open, red leaf (D-036, the same fan as the installed cast), candidate idle.fan-open.red.png from commit 4091d809, judged PASS 7.8 (docs/concepts/chapters/leblanc/fan-open/JUDGE.md). Pixels outside the fan and matte masks are byte-identical to the superseded idle; idle.json canvas and baseline unchanged. FFX-2 only, Chapter VI. Backup of the new file: D:/Tools/pyrefly-art-backup/approved/2026-09-25-leblanc-fan/.",
+    "supersedes": {
+     "sha256": "4fea45f98bf44e7aa6aebf0004a2f845f268ebf974992bdd559b3b5258c9094b",
+     "mtime": "2026-09-21T21:48:52.369Z",
+     "approved": "2026-09-23",
+     "backup": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/leblanc-fan/replaced/idle.png"
+    }
    },
    "public/art/characters/logos/idle.png": {
     "sha256": "7aa37e8b2873caef7ff0f85db9f267045ec70ee62e289b4692e264e25e6c45e3",
