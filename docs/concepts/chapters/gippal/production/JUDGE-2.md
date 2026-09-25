@@ -83,3 +83,84 @@ nooj-shade/idle (attempt 3): PASS (SELF-judged, 7.1): independent judge owed
 nooj-shade/cast (attempt 3): PASS (SELF-judged, 7.1): independent judge owed
 
 Nothing is added to `approved-hashes.json`; all three files stay CANDIDATE until Bailey names them (rule 9).
+
+## Part 3: independent judge of attempt 3, the fur-shoulder fix, and the re-judge (2026-09-25, ~03:55 EDT)
+
+**Game case (rule 14): FFX-2 only.** Judge: a third sub-agent that made none of the Nooj files. Same rubric, bar
+and method as [JUDGE.md](JUDGE.md): each file composited over mid grey and dark blue, looked at at 1:1 and 2x to
+3.5x, against bible §1.23.4 and the picked portrait `portraits/nooj.png` (D-043), plus real 1600x900 engine frames
+(the same Chapter XI staging as Part 2, shade scale 0.82, private Vite server on port 5880, HMR and watch off, GPU
+browser, stopped by its PID). sha256 re-computed first: idle `3b505d6ca7cd`, cast `27e237b57402`, both matching
+Part 2. Sheet: [nooj4-sheet.jpg](nooj4-sheet.jpg). Frames: `frames/nooj-idle-4.jpg`, `frames/nooj-cast-4.jpg`.
+
+### 3a. Attempt 3 as installed: the self-judge's 7.1 does not hold
+
+| Painting | Identity | Anatomy | Hands | Costume | Seams | Edges | Finish | Game read | Overall | Self (Part 2) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `nooj-shade/idle` (attempt 3) | 6.5 | 7 | 6.5 | 5.5 | 7 | 7.5 | 7 | 7.5 | **6.8 FAIL** | 7.1 |
+| `nooj-shade/cast` (attempt 3) | 6.5 | 7 | 6.5 | 5.5 | 6.5 | 7 | 7 | 8 | **6.8 FAIL** | 7.1 |
+
+- **What attempt 3 fixed is real:** both hair loops read as handles (the near one with its red tie, the far one
+  repainted; its edge is acceptable at 3x), blue glasses, a short tuft instead of the knee-length tail,
+  three-quarter left with the machina arm and leg toward camera, the cane in the gloved right hand. The cast's cane
+  swing reads at 1600x900.
+- **Worst: the fur is on the wrong shoulder, and it matters more than the self-judge scored.** The bible (FF Wiki
+  *Nooj* §Appearance, `[single source]`): "Over his **right shoulder** is a purple sleeve with fur at the top", and
+  "Asymmetry is the character: one arm is a thin articulated stick ..., the other is a thick furred purple
+  shoulder." Here the big white fur crest sits on top of the **machina (left)** arm, and the cloth (right) shoulder
+  is bare skin over a long dark glove. Metal and fur end up on the same side, so the asymmetry is inverted. The
+  maker disclosed it; the score has to carry it (identity 6.5, costume 5.5).
+- Also, as disclosed: the gloved hand on the cane is a dark mass, the near foot tapers like a hoof, one belt and a
+  cross strap instead of five. Not disclosed: the machina arm is a bulky blue armoured limb, not the bible's "thin
+  articulated stick with visible gaps" (the render's design; kept, see below), and both shins carry the same greave,
+  so the "one piston, one boot" read is lost.
+- Cast: it carries the idle's misses; its own elbow joint is sound at 2x (the white band is the idle's).
+
+### 3b. The fix (rule 15 method check first, `METHOD-nooj.md` last section)
+
+On the opaque idle, no re-render: the near fur was segmented and cut away and a metal shoulder cap blocked in; the
+far (right) shoulder and upper arm, down to y 288 (the cast's static zone), were recoloured to the bible's purple
+ramp and a ragged grey fur crest blocked in along its top. Then **one masked repaint per shoulder with IP-Adapter
+forced on `portraits/nooj.png`** (ip-adapter-plus SDXL 0.45, denoise 0.6; three seeds each; right 972101, left
+972203 picked at 1:1), a deterministic correction of the right sleeve's lilac back onto the purple ramp, and the
+crest's alpha smoothed (blur 1.1 plus a soft ramp) with its edge colours pulled from its interior. The cast was
+re-derived by transplanting the idle's changed pixels at the cast's paste offset (440, 20) wherever the cast still
+held the idle's unmoved pixels (22,360 px; 114 px at the rotated zone's edge left as they were). Then the same B
+treatment (`shade_b.py`, which reproduces the installed idle byte for byte from the old opaque file) and the same
+crops. Baselines unchanged (1199), borders 0, sizes 726x1274 and 1149x1274. Scripts: `scripts/nooj4/`.
+
+### 3c. Re-judge of the fixed pair
+
+| Painting | sha256 (first 12) | Identity | Anatomy | Hands | Costume | Seams | Edges | Finish | Game read | Overall |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `nooj-shade/idle` (fixed) | `674058d32184` | 7.5 | 7 | 6.5 | 6.5 | 7 | 7 | 7 | 7.5 | **7.0 PASS (narrowly)** |
+| `nooj-shade/cast` (fixed) | `a07ec9e35852` | 7.5 | 7 | 6.5 | 6.5 | 6.5 | 7 | 7 | 8 | **7.0 PASS (narrowly)** |
+
+- **Identity now matches the source on the point that failed:** fur crest and purple sleeve on the right (cloth)
+  shoulder, a clean metal pauldron on the machina side, with the loops, glasses, cane hand and staging from attempt 3.
+  In the engine frame the metal side toward camera reads as one piece, and the fur shows as a pale tuft past the far
+  shoulder.
+- **Worst:** the fur is now the far shoulder's, so at 1600x900 it is a smaller read than the (wrong) near fur was;
+  "one furred shoulder" survives as a tuft, not a mass. At 3x the crest's edge has a few grey flecks where the smoothed
+  alpha meets the spikes, and the sleeve is a flat purple with little fold detail (after B it reads as a dusky band).
+- Cast only: at 3x the sleeve's lower edge meets the glove in a small step at the 114 untouched pixels, above the
+  elbow; not visible at game size.
+- Unchanged and disclosed in the sidecars: the gloved hand, the hoof-like near foot, one belt, both shins armoured,
+  the machina parts the render's blue (the bible's machina ramp is grey `[estimate]`), the sleeve length (ours).
+- **Installed** over the two CANDIDATE slots (`scripts/nooj4/install_fx.py`, which refuses any approved hash);
+  the replaced attempt-3 files and sidecars are kept at
+  `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu3/nooj-shade/replaced/`, the renders and work files beside
+  them. `public/art/manifest.json` regenerated (unchanged: same subjects and poses); `art-manifest-build` and
+  `art-manifest-loader` pass (27). `verify-approved.mjs`: ok 185, 0 mismatched, 0 missing, before and after.
+- GPU: 6 masked repaints (13 to 20 s each), each submitted with fewer than 3 pending; no black frames; ComfyUI not
+  restarted. Nothing downloaded.
+
+### Verdicts (Part 3)
+
+nooj-shade/idle (attempt 3, as installed): FAIL (independent, 6.8): fur on the wrong shoulder; replaced
+nooj-shade/cast (attempt 3, as installed): FAIL (independent, 6.8): replaced
+nooj-shade/idle (fur-shoulder fix): PASS (7.0, narrowly; judged by the agent that made the fix, so a fresh eye is welcome)
+nooj-shade/cast (fur-shoulder fix): PASS (7.0, narrowly; same caveat)
+
+Both stay **CANDIDATE**; nothing is added to `approved-hashes.json` until Bailey names them (rule 9). A judge's PASS is
+not a lock here. If Bailey wants the machina arm as the bible's thin stick with gaps, that is a re-render, not a repair.

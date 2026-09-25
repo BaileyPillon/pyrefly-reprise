@@ -175,3 +175,13 @@ re-judged the three repaired candidates at 1:1 with the same rubric:
 - **GPU:** 69 jobs: 62 character renders (about 8 to 70 s each while shared), 3 loop repaints and 4 joint repaints
   (7 to 13 s each). Every submission waited for fewer than 3 pending; no black frames; ComfyUI was not restarted
   (private restart sentinel). Nothing was downloaded. Scripts: `production/scripts/nooj3/`.
+
+## Nooj fur-shoulder fix, 2026-09-25 (~03:55 EDT)
+
+**FFX-2 only.** A third, independent judge failed attempt 3 at 6.8 (idle and cast): the fur sat on the left (machina)
+shoulder, and bible §1.23.4 puts the purple fur-topped sleeve on the **right**. Fixed by a masked repaint per shoulder
+with IP-Adapter forced on `portraits/nooj.png` (method in `production/METHOD-nooj.md`, verdicts in
+`production/JUDGE-2.md` Part 3), re-judged 7.0 PASS (narrowly) for both, installed over the CANDIDATE slots:
+`nooj-shade/idle` `674058d32184`, `nooj-shade/cast` `a07ec9e35852` (replaced `3b505d6ca7cd` / `27e237b57402`, kept in
+`D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu3/nooj-shade/replaced/`). Same sizes and baselineY 1199; manifest
+unchanged; nothing added to `approved-hashes.json` (verify-approved ok 185 before and after).

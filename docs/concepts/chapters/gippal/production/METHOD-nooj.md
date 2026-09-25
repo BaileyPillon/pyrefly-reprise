@@ -51,3 +51,29 @@ sub-agent that re-judged the repair pass; it made neither earlier attempt.
 - Stop rule kept: had no pilot shown the loops and the fur, I would have stopped; one did, so I did not.
 - Scripts: `scripts/nooj3/`. Renders, the replaced files and the work files:
   `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu2/nooj-shade/`.
+
+## Method check before the fur-shoulder repaint (attempt 3 fix, 2026-09-25, gpu3 judge)
+
+Written by the third, independent judge (it made none of the Nooj files) before any render, because this slot has
+failed twice (rule 15).
+
+- **What is wrong, from the source.** Bible §1.23.4 (FF Wiki *Nooj* §Appearance, `[single source]`): "Over his
+  **right shoulder** is a purple sleeve with fur at the top", and the silhouette line: "one arm is a thin articulated
+  stick ... the other is a thick furred purple shoulder". Attempt 3 puts the fur on the **left** (machina) shoulder and
+  leaves the right shoulder bare skin over a dark glove, so the asymmetry the bible calls "the character" is inverted.
+- **Why a masked repaint can work this time, when attempt 2's could not.** Attempt 2 failed because the camera hid the
+  thing to be added. Here the camera is right: at three-quarter left the far (right) shoulder's top edge is in view
+  (x 203 to 286 on the opaque idle), so a sleeve and a fur crest can be added there, and the near fur can be taken
+  off. No re-render is needed, and no seed hunt: 62 seeds already showed the checkpoint will not put the fur on the
+  right shoulder from text.
+- **Method.** On the opaque idle (`nooj3-idle-opaque.png`): (1) segment the near fur (light, low-saturation pixels,
+  x >= 385), cut it out and block in a metal shoulder cap and the trapezius in the render's own colours, silhouette
+  drawn to follow the arm's outer edge; (2) recolour the far shoulder and upper arm down to y 288 to the bible's
+  purple ramp (`#3E1A4E` / `#6A2E80` / `#9A5AD0`) and block in a ragged grey fur crest (`#8E8C97` / `#C4C2CC`) along
+  its top. Then **one masked repaint per shoulder** with IP-Adapter forced on `portraits/nooj.png` (its lower edge
+  shows the purple fur), 3 seeds each, pick at 1:1, alpha from the block-in. The sleeve stops at y 288 so it stays in
+  the cast's static zone; the cast is re-derived by transplanting the changed pixels at the cast's offset (440, 20),
+  where the rotated forearm does not reach, then the same B treatment and the same crops.
+- **Stop rule.** If neither shoulder reads right at 1:1 after its 3 seeds, stop and report; no fourth attempt tonight.
+- **What stays ours.** The sleeve's length (the source says only "over his right shoulder") and the blue metal (the
+  render's colour; the bible's machina ramp is grey, `[estimate]`).
