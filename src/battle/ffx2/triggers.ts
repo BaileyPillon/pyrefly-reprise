@@ -45,6 +45,8 @@ function matches(
     case 'turn':
       return state.turn >= when.n;
     case 'ability-used':
+      // `onAeon` is FFX's: X-2 has no aeon party, so such a trigger never fires here.
+      if (when.onAeon === true) return false;
       return signal.abilityUsed?.who === when.who && signal.abilityUsed.ability === when.ability;
     case 'ko':
       return (signal.koed ?? []).includes(when.who);

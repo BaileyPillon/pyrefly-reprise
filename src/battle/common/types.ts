@@ -2074,12 +2074,18 @@ export type TriggerCondition =
   | { type: 'status-applied'; who: CombatantId; status: StatusId }
   /** The battle turn counter reached `n` (1-based). */
   | { type: 'turn'; n: number }
-  /** `who` used `ability`. */
-  | { type: 'ability-used'; who: CombatantId; ability: AbilityId }
+  /**
+   * `who` used `ability`. With `onAeon: true` it fires only when one of the
+   * action's targets is an aeon (FFX; FFX-2 has no aeon party, so never there).
+   */
+  | { type: 'ability-used'; who: CombatantId; ability: AbilityId; onAeon?: boolean }
   /** `who` was KO'd, ejected or destroyed. */
   | { type: 'ko'; who: CombatantId }
-  /** `who`'s Overdrive gauge reached 100. */
-  | { type: 'overdrive'; who: CombatantId }
+  /**
+   * `who`'s Overdrive gauge reached 100. With `at`, fires when one gauge change
+   * crosses from below `at` to `at` or above (FFX; X-2 has no gauge).
+   */
+  | { type: 'overdrive'; who: CombatantId; at?: number }
   /** Any enemy began a telegraphed charge; `who` narrows it to one enemy. */
   | { type: 'charge-started'; who?: CombatantId };
 
