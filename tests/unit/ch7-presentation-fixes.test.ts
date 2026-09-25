@@ -6,25 +6,29 @@
  *   body-length off his station, and the whole beat was over in about 1.5 s.
  *   The roll is now a flat quarter turn resting on the floor over his own
  *   station (`LieFlat.ts`), and the shot holds on it before the victory.
- * - **(3) Anima's paintings** (D-045 option A): the boss Anima draws only the
- *   board-approved aeon idle (`ChapterPoseLimits.ts`).
+ * - **(3) Anima's paintings**: D-045 option A drew her board-approved aeon idle
+ *   only, filtered chapter-side by the now-deleted `ChapterPoseLimits.ts`. D-108
+ *   approved her whole folder and D-150 ("Keep the stone look, use Anima's
+ *   approved paintings", Bailey 2026-09-25) lifted the filter for Chapter VII:
+ *   the boss Anima now draws her full approved set, same as the party's own
+ *   summoned Anima always did.
  * - **(6) Petrify reads as stone**: the painting drains to stone over a beat
- *   and holds, and a shatter breaks into stone chips (`StoneShards.ts`).
- *   Presentation only; whether a petrified figure shatters is unchanged.
+ *   and holds, and a shatter breaks into stone chips (`StoneShards.ts`). Kept
+ *   as built (D-149, "Keep the stone look", Bailey 2026-09-25). Presentation
+ *   only; whether a petrified figure shatters is unchanged.
  *
- * Game case: the Seymour and Anima tables are **FFX only** (Chapter VII); the
- * lie geometry, the pose filter and the stone beats are shared plumbing,
- * **both** [AGENTS.md rule 14].
+ * Game case: the Seymour table and Anima's paintings are **FFX only** (Chapter
+ * VII); the lie geometry and the stone beats are shared plumbing, **both**
+ * [AGENTS.md rule 14].
  */
 
 import { describe, expect, it } from 'vitest';
 import { PerspectiveCamera, Scene, Vector3 } from 'three';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
-import { BODY_HOLD_MS, BODY_MS, BODY_RIG, BODY_SHOT, departureMs } from '../../src/engine/BattlePresenterDepartures.ts';
+import { BODY_HOLD_MS, BODY_MS, BODY_RIG, BODY_SHOT, departureMs, departurePoses } from '../../src/engine/BattlePresenterDepartures.ts';
 import { STONE_MS } from '../../src/engine/BattlePresenterArrivals.ts';
 import { LIE_CLEARANCE, LIE_FLAT_TILT, lieOffset } from '../../src/engine/LieFlat.ts';
 import { MACALANIA_TEMPLE_RIGS } from '../../src/scenes/macalania-temple.ts';
-import { limitPoses } from '../../src/engine/ChapterPoseLimits.ts';
 import { SHARD_LIFE, disposeStoneShards, stonePoolOf, stoneShatter } from '../../src/engine/StoneShards.ts';
 import type { BattleEvent, CombatantId, StatusInstance } from '../../src/battle/common/types.ts';
 import { FakeStage, noSleep } from './helpers/FakeStage.ts';
@@ -205,23 +209,16 @@ describe('(2) Seymour lies flat, on his station, and the shot holds on him', () 
   });
 });
 
-describe('(3) Anima draws only her approved idle in Chapter VII', () => {
+describe('(3) Anima draws her whole approved folder in Chapter VII', () => {
   const folder = (id: string): Record<string, string> =>
     Object.fromEntries(['idle', 'attack', 'hurt', 'ko', 'overdrive'].map((p) => [p, `art/characters/${id}/${p}.png`]));
 
-  it('the boss Anima keeps the idle and nothing else, so no other painting is ever fetched', () => {
-    expect(limitPoses('anima-macalania', folder('anima'))).toEqual({ idle: 'art/characters/anima/idle.png' });
+  it('the boss Anima keeps every approved painting: D-108/D-150 lifted D-045\'s idle-only filter, and ChapterPoseLimits.ts is gone', () => {
+    expect(departurePoses('anima-macalania', folder('anima'))).toEqual(folder('anima'));
   });
 
-  it('every other combatant, the party-summoned aeon Anima included, keeps its folder', () => {
-    for (const id of ['anima', 'seymour-macalania', 'guado-guardian-a', 'yuna', 'evrae']) {
-      expect(limitPoses(id, folder(id))).toEqual(folder(id));
-    }
-  });
-
-  it('a limit that would leave nothing keeps the map, so she is never staged invisible', () => {
-    const noIdle = { attack: 'a.png' };
-    expect(limitPoses('anima-macalania', noIdle)).toEqual(noIdle);
+  it('the boss and the party\'s own summoned Anima now draw the identical set', () => {
+    expect(departurePoses('anima-macalania', folder('anima'))).toEqual(departurePoses('anima', folder('anima')));
   });
 });
 

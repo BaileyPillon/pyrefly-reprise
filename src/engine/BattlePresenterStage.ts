@@ -24,7 +24,6 @@ import { laneFrom, relaxActorsOf, relaxField } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
-import { limitPoses } from './ChapterPoseLimits.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
 import { figureBloomMasked } from './BloomMask.ts';
@@ -174,7 +173,7 @@ export class PaintedStage implements BattleStage {
     // been renamed yet still shows its painting instead of a silhouette.
     const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
     const { artId } = art;
-    const poses = limitPoses(c.id, departurePoses(c.id, art.poses)); // D-031 Evrae; D-045 Anima idle only
+    const poses = departurePoses(c.id, art.poses); // D-031 Evrae
     const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
     const own = this.opts.slots.figureHeights?.[c.id]; // a scene's per-combatant height; ring and shadow follow it
     const k = own !== undefined && !worldHeight ? own / worldHeightFor(c, heights) : 1;
