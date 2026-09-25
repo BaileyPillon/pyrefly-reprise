@@ -124,7 +124,7 @@ export const seymourAnimaMacalania: Tactic = (actorId, commands, engine) => {
   //     temple) or Esuna (§8.7, §8.9; §10 lesson 8). A confused ally swings at
   //     the party. Measured on the 200-seed bench (`docs/plans/macalania-bench.md`):
   //     without this rule confused party members took 630 actions and the
-  //     line won 168/200; with it, 188/200. Player side only; no boss number moved.
+  //     line won 168/200; with it, 189/200. Player side only; no boss number moved.
   const confused = living.find((c) => c.id !== actorId && has(c, 'confuse'));
   if (confused) {
     const cure = row(commands, ['Remedy', 'Esuna'], confused.id);

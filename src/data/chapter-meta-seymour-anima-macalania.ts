@@ -10,7 +10,8 @@
  * `src/data/encounters.ts` widened `ChapterId` and the chapter took number 7
  * (display order, after the six already registered — the D-018 rule Leblanc
  * followed). The chapter stays LOCKED as COMING on chapter select until
- * Bailey's two open picks land (`./chapter-macalania-ship.ts`).
+ * Bailey's three open picks land (`MACALANIA_OPEN_PICKS` in `./chapter-macalania-ship.ts`:
+ * the pause plate, the scene cue and the party layout).
  *
  * `heroArt` is the installed pause plate, `public/art/pause/macalania.png`
  * (+ `.2x.webp`). It is the one Chapter VII painting D-141 did not approve: its
