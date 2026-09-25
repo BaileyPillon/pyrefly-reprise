@@ -20,7 +20,8 @@ you can pick, cut or rewrite lines before anyone scripts them (AGENTS.md hard ru
 - **Must not repeat Chapter I.** Chapter I's post ends on Seymour saying Spira's sorrow is patient
   (`src/story/scripts/seymour-flux.ts`). His last words here say the same thing in other words (the
   two chapters rhyme, research §8.1); no line below repeats it. Chapter I's failed sending ("You
-  can't send what refuses to go") gets one callback with variation (bible §2.1), in line 27.
+  can't send what refuses to go") is offered one callback with variation (bible §2.1), as the alternative for line 15 (see
+  Alternatives).
 - **Voices.** Seymour §1.9 (long, courteous, "Lady Yuna", "son of Jecht", death as mercy; correct
   about the diagnosis, monstrous about the cure). Tidus in scene §1.1 and as narrator §1.2. Yuna
   §1.3 (the one "Yes." beat is spent here). Auron §1.4. Wakka §1.5 (he tells her to send him, as

@@ -15,6 +15,7 @@ import { ATTACK_ABILITY_ID } from '../../../src/battle/ffx/registry.ts';
 import { ABILITIES } from '../../../src/data/ffx/index.ts';
 import { gardenOfPainBuild } from '../../../src/data/ffx/builds/garden-of-pain.ts';
 import { OMNIS_RESET_CYCLE, omnisAffinities } from '../../../src/battle/ffx/ai/seymour-omnis-rules.ts';
+import { OMNIS_ASSUMPTIONS } from '../../../src/battle/ffx/ai/seymour-omnis.ts';
 import {
   OMNIS, actor, content, defend, discs, drive, flags, inputFor, lineUp, makeInvincible, newEngine, nextInput, omnisTurns, status,
 } from '../helpers/omnisUnits.ts';
@@ -227,5 +228,15 @@ describe('aeons (§4.5)', () => {
     for (const h of onIfrit) expect(h.type === 'damage' && h.amount).toBeLessThan(0);
     expect(omnisActions(e)).not.toContain('banish');
     expect(e.state().aeonId).toBe('ifrit');
+  });
+});
+
+describe('rule 6 labels (repair pass, 2026-09-25)', () => {
+  it('every unsourced behaviour the verifier named is labelled our estimate', () => {
+    for (const key of ['aeonHoldsField', 'emptyAimFallback', 'reflectBounce', 'discExtraImmunities', 'ringOrder'] as const) {
+      expect(OMNIS_ASSUMPTIONS[key]).toMatch(/our estimate/);
+    }
+    // The aeon eaters are sourced and global, not an assumption of this chapter.
+    expect(OMNIS_ASSUMPTIONS.aeonAbsorb).toMatch(/every FFX battle/);
   });
 });

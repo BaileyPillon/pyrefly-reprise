@@ -222,6 +222,8 @@ export function resolveTargets(
     );
   if (explicit.length > 0) return explicit.slice(0, 1);
 
+  // The empty-aim fallback skips never-random foes too (Chapter XII's discs;
+  // our estimate — research §2 names random-target attacks only).
   const fallback =
     def.targeting === 'single-ally' ? mates : def.targeting === 'single-any' ? [...randomFoes, ...mates] : randomFoes;
   return fallback.length > 0 ? [ctx.rng.pick(fallback)] : [];

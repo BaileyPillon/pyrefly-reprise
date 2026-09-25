@@ -127,16 +127,16 @@ const AEON_INNATE_IMMUNITIES: readonly StatusId[] = [
  * silently doing nothing: healing Shiva with her own Blizzara (§7 row 13), and
  * Macalania Seymour's Blizzaga step *healing* your aeon, because he uses the
  * -ga tier on a summoned aeon regardless of absorption (§5.2). One turn in
- * four, the boss tops up your Shiva. It is canon, it is funny, and it is a free
- * teaching moment about elemental affinity.
+ * four, the boss tops up your Shiva: canon, and a free lesson in affinity.
  *
- * This is a **live rule for every chapter that summons Shiva**, not a Macalania
- * special case — she has Ice Eater everywhere. No existing chapter aims an ice
- * action at a summoned aeon, so no shipped outcome moves; affinity is a damage
- * multiplier and draws no RNG, so seeded runs stay aligned either way.
+ * **Ifrit's Fire Eater and Ixion's Lightning Eater** sit on the same default
+ * armour [ffx-seymour-flux default-equipment table: decompiled + wiki; Omnis
+ * §4.5 verified: 2 sources]. A **live rule for every FFX chapter**, not one
+ * boss's special case (rule 14). Measured 2026-09-25, 520 seeded runs: 3 move
+ * (Macalania and Natus Thunder spells healing a summoned Ixion), no outcome.
  */
 const AEON_INNATE_AFFINITIES: Readonly<Record<string, ElementalAffinities>> = {
-  shiva: { ice: 'absorb' },
+  shiva: { ice: 'absorb' }, ifrit: { fire: 'absorb' }, ixion: { lightning: 'absorb' },
 };
 
 function aeonToCombatant(a: AeonBuild, ownerId: CombatantId): FFXCombatant {

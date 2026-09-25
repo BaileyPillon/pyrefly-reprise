@@ -126,6 +126,10 @@ describe('Macalania — data', () => {
     expect(shiva.affinities['ice']).toBe('absorb');
     // ...and no other aeon gains one by accident.
     expect(cmb(engine, 'valefor').affinities['ice']).toBeUndefined();
+    // Ifrit's Fire Eater and Ixion's Lightning Eater are the same default armour,
+    // live in every FFX chapter, not only Omnis's (rule 14, 2026-09-25).
+    expect(cmb(engine, 'ifrit').affinities).toMatchObject({ fire: 'absorb' });
+    expect(cmb(engine, 'ixion').affinities).toMatchObject({ lightning: 'absorb' });
   });
 
   // §4.3 / §5.1 — Pain's asymmetry needs no engine exception: the hidden Aeon

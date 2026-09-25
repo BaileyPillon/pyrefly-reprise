@@ -32,8 +32,8 @@ night and widen the same two unions; the merge takes the union of all four.
   Wakka, Valefor, Anima or Mindy (`targeting.ts#REACHES_OUT_OF_MELEE`) or a ranged weapon; magic
   always reaches (plan O-G2, research §2 verified: 4 sources).
 - `CombatantFlags.neverRandomTarget` — a random-enemy hit, a Reflect bounce and an empty-aim
-  fallback never land on it (plan O-G7, research §2 single source; the bounce half is our
-  estimate).
+  fallback never land on it (plan O-G7, research §2 single source for random-target attacks;
+  the bounce half and the empty-aim half are both our estimate).
 
 Both flags are set only on the four Mortiphasms. **Measured, not assumed:** the event logs of
 Chapters 1, 2, 3 (both links), 7, 8, 9 and 10 over 20 seeds each, under one scripted policy, hash

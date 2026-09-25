@@ -347,9 +347,6 @@ export function runOmnisTurnEnd(ctx: Ctx): void {
 // Setup
 // ---------------------------------------------------------------------------
 
-/** §4.5 [verified: 2 sources]: the aeons that absorb his elements. Shiva's Ice is already innate (`setup.ts`). */
-const AEON_ABSORBS: Readonly<Record<string, Element4>> = { ifrit: 'fire', ixion: 'lightning' };
-
 /**
  * The opening state [§4.1 "all four discs show Fire", verified: 3 sources]:
  * four Fire discs, so he opens absorbing Fire and weak to Ice. Nothing is
@@ -365,16 +362,17 @@ export function applyOmnisSetup(ctx: Ctx): void {
   ctx.state.flags[OMNIS_SCANNED] = ctx.state.log.length;
   applyAffinities(ctx, omnis);
   markOmnisRuntime(ctx.state, ctx.rt.actors);
-  for (const [aeonId, element] of Object.entries(AEON_ABSORBS)) {
-    const aeon = tryActor(ctx, aeonId);
-    if (aeon && aeon.side === 'aeon') aeon.affinities = { ...aeon.affinities, [element]: 'absorb' };
-  }
+  // §4.5 [verified: 2 sources]: Ifrit drinks his Fire, Ixion his Thunder and
+  // Shiva his Ice. Nothing to set here: all three eaters are their default
+  // armour in every FFX battle (`setup.ts` AEON_INNATE_AFFINITIES, rule 14).
 }
 
 /**
  * The runtime mark this encounter needs — the discs own no CTB slot (B22 = a,
  * the Daigoro seam `ActorRuntime.ordersOnly`) — read off the published state
- * alone so a rebuilt runtime gets it too (the `markEvraeRuntime` lesson).
+ * alone, so a rebuilt runtime can re-apply it (the `markEvraeRuntime` lesson).
+ * The one-command preview's rebuild (`simulate.ts#runtimeFor`) does not call
+ * it: a preview never reads the turn order, so the mark changes nothing there.
  */
 export function markOmnisRuntime(state: Readonly<BattleState>, actors: ReadonlyMap<CombatantId, ActorRuntime>): void {
   if (typeof state.flags[OMNIS_DISCS] !== 'string') return;

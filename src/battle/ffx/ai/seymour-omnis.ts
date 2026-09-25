@@ -65,7 +65,11 @@ export const OMNIS_ASSUMPTIONS = {
   oneAttackPerAction: 'our estimate: an action that lands on him counts once (a Doublecast once, a multi-hit action once); each reflected spell counts',
   resetTiming: 'B23 = a: on his next turn after Ultima (2 sources against 1)',
   twoWaterBug: 'B9 = faithful (single source: wiki)',
-  aeonAbsorb: 'Ifrit absorbs Fire, Ixion Thunder (verified: 2 sources for this fight), set for this battle only; Shiva already absorbs Ice everywhere',
+  aeonAbsorb: 'sourced, not an assumption: Ifrit absorbs Fire, Ixion Thunder, Shiva Ice (§4.5 verified: 2 sources); their default armour in every FFX battle (setup.ts AEON_INNATE_AFFINITIES, rule 14)',
+  aeonHoldsField: 'our estimate: a summoned aeon is the one living member, so the volley gives it two casts (the wiki rule "one per living member plus one" says nothing about aeons)',
+  emptyAimFallback: 'our estimate: an empty-aim fallback skips the discs as a random pick does (research §2 names random-target attacks only)',
+  reflectBounce: 'our estimate: a Reflect bounce never lands on a disc (research §2 names random-target attacks only)',
+  discExtraImmunities: 'our estimate: the discs are also immune to Life and to Threaten (neither sourced for m106; both moot on an unkillable part with no turns)',
 } as const;
 
 function setDefense(ctx: Ctx, value: number): void {
@@ -108,7 +112,7 @@ export function seymourOmnisAi(ai: AiContext): Command {
  * (both halves unsourced):** disc *i* aims at living member *i* in slot order,
  * the next disc at a random living member, and with members down the first
  * discs keep their spells. While an aeon holds the field it is the only
- * member standing, so it takes two.
+ * member standing, so it takes two (**our estimate**, `aeonHoldsField`).
  */
 export function planOmnisVolley(ctx: Ctx): VolleyCast[] {
   const discs = omnisDiscs(ctx.state);

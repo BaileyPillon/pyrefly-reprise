@@ -30,6 +30,8 @@
  *   (×2 / ×4, `[single source: decompile]`) have no field in `EnemyRewards`,
  *   which carries one guaranteed list: the common Lv. 3 Key Sphere ×1 ships.
  *   The steal counts are not printed by any source; ×1 is the singular reading.
+ *   The sourced **equipment drop** (§1.4: always, 3-4 slots, Magic +20% /
+ *   Piercing weapon or SOS armour) is not modelled either: no field (as Natus).
  * - **Slice** immunity has no `ImmunityFlag` (a Zanmato-resistance byte);
  *   `zanmatoLevel: 4` carries it (Yojimbo is not in this preset, B3 = a).
  * - **Accuracy / Evasion** 0 / 0 [decompiled] (the wiki prints accuracy 1);
@@ -206,6 +208,7 @@ function mortiphasm(id: string, slot: number): EnemyDef {
       'mental-break': 255,
     } satisfies StatusImmunities,
     // §2 [verified: 2 sources]: immune to all damage, to Scan and to Sensor.
+    // 'immune-to-life' is our estimate (unsourced for m106; moot on a part).
     immunityFlags: ['immune-to-damage', 'immune-to-scan', 'immune-to-sensor', 'immune-to-life'],
     forms: [{ name: 'Mortiphasm', spriteKey: 'mortiphasm', hp: 1 }],
     aiScriptId: MORTIPHASM_SCRIPT,
@@ -218,7 +221,7 @@ function mortiphasm(id: string, slot: number): EnemyDef {
       neverRandomTarget: true, // §2 [single source: GameFAQs]
       hideHpBar: true, // our estimate: a 1-HP bar on an unkillable disc says nothing true
     },
-    threatenChance: 0, // §2: Threaten byte 0, wiki Immune — immune, as B13 for Omnis
+    threatenChance: 0, // our estimate: B13 (immune) is Omnis's; extended to the discs, moot (no turns)
   };
 }
 
