@@ -47,3 +47,15 @@ export function growToGrid(r: Rect | null, q: number): Rect | null {
     bottom: Math.ceil(r.bottom / q) * q,
   };
 }
+
+/** The smallest rect holding every non-null one, or `null` when there are none. */
+export function unionOf(...rects: ReadonlyArray<Rect | null>): Rect | null {
+  let out: Rect | null = null;
+  for (const r of rects) {
+    if (!r) continue;
+    out = out
+      ? { left: Math.min(out.left, r.left), top: Math.min(out.top, r.top), right: Math.max(out.right, r.right), bottom: Math.max(out.bottom, r.bottom) }
+      : { ...r };
+  }
+  return out;
+}

@@ -98,3 +98,14 @@ describe("the advisor's forecast clause says what the move does", () => {
     expect(incomingText('Kozuka', 88, 1)).toBe('Kozuka hits for about 88');
   });
 });
+
+describe("the advisor's placement counts the submenu's name as part of the command window", () => {
+  it('unionOf spans the stack and the breadcrumb above it, and ignores a hidden one', async () => {
+    const { unionOf } = await import('../../src/ui/ffx/hudPlacementKeys.ts');
+    const stack = { left: 30, top: 284, right: 190, bottom: 334 };
+    const crumb = { left: 30, top: 268, right: 96, bottom: 278 };
+    expect(unionOf(stack, crumb)).toEqual({ left: 30, top: 268, right: 190, bottom: 334 });
+    expect(unionOf(stack, null)).toEqual(stack);
+    expect(unionOf(null, null)).toBeNull();
+  });
+});
