@@ -185,3 +185,61 @@ passes 382 of 382 files (7,233 tests, 5 skipped, 1 todo). `node tools/orphans.mj
 716 modules and 24 orphaned, the same as before the repair.
 
 BLOCKERS: 0
+
+## Re-check (2026-09-25)
+
+An independent re-check of the Repair section above, at `840bc468`. **Game case:** the items keep
+the cases the repair gave them (FFX-2 only; M1 is both, shared pause plumbing). This section is the
+only change. Nothing under `src/` or `tests/` was edited, nothing was pushed or deployed, and no
+Trema option switch was touched. The browser runs used a private Vite dev server on port 5775 (HMR
+off, file watching off) and, for M1, a production build (`vite build` to scratch, then
+`vite preview` on port 5776 at `/pyrefly-reprise/`). Both ran GPU Chromium through Playwright, from
+a fresh page load each time. The chapter was reached with `__pyrefly.gotoChapter` and no key was
+pressed on the title. Both servers were stopped by their PIDs, and the scratch build was deleted.
+In the link runs, as in the first check, party HP was refilled and the boss HP set to 1 through
+`battleState()`. Every command was a real key press. Frames (JPEG, look-only, not committed) are in
+`D:/Tools/pyrefly-scratch/trema-ship3/recheck/shots/`.
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | clean (exit 0) |
+| Full `vitest run --testTimeout=60000`, in the worktree | 382 of 382 files, 7,233 passed, 5 skipped, 1 todo |
+| `node tools/orphans.mjs` | 716 modules, 24 orphaned (the same list as before) |
+| House style | Every touched file is under 400 lines except `FFX2BattleHud.ts`, which stays at 1,212 lines (it did not grow) |
+| Listing | `CHAPTER_IDS`, `CHAPTERS`, `CHAPTER_META` and `__pyrefly.chapters()` list the same nine chapters. `ffx2-trema` is only in `UNLISTED_CHAPTERS` and `UNLISTED_CHAPTER_META`. On chapter select, 49 real-key states (12 presses of each arrow key) never show "Trema", "Cloister" or "XIII". |
+| Option switches | On this branch only `TREMA_KIT_OPTION` exists, and it is `'tr11-a'`, the picked kit. `TREMA_PARAGON_FORM`, `TREMA_CHAPTER_SHAPE`, `CLOISTER_ACTION_TIME_ON` and `ACTION_TIME_ALL_FFX2` live on `chapter-trema-0925` (at `'normal'`, `'paragon-then-trema'`, `false` and `false`). The repair commits touch neither `chapter-ffx2-trema.ts` nor any enemy, action-time or chapter-list file. |
+| Console and network | 0 errors and 0 warnings in all 31 dev runs and both production runs, and no HTTP 4xx. The only failed request is older behaviour: `art/title/keyart.png` is `ERR_ABORTED` when the title closes. |
+
+| Item | Re-check |
+|---|---|
+| **B1** | **Confirmed.** In the page, `x2-supreme-gem` resolves in both `ALL_FFX2_ITEMS` and `FFX2_ITEMS` (all enemies, price 250), and its effect `x2-item-supreme-gem` has power 50, a fixed formula, non-elemental, no damage-limit break. Each number matches its source: ffx2-trema §3.2 lines 134 and 135 for the steal and drop; ffx2-combat-core §5.5 for "GRP / non-elem. / 250 / 2343–2646 to all"; §2.9.3 for power 50, 2,500 damage. The charge time is not sourced and is labelled as borrowed from Shining Gem. `ffx2-steal-item-names.test.ts` runs the FFX-2 engine and passes. |
+| **M1** | **Confirmed on the production preview.** At 1600x900 (P, then E until the CHAPTER tab is on), the plate `ch13-trema` is shown as `data-art="fallback"` with `portraits/yuna-x2.png`, decoded at 832x1216. The run made no request for `ch13-trema`. All 52 distinct images the page fetched decode through `createImageBitmap`, none came back as `text/html`, and no `<img>` is broken. Chapter IV's tab still shows its own plate, `pause/ch4-ffx2-bahamut.2x.webp` (1982x1132), and its 55 images decode. One more aborted request, `pause/yuna-ffx2.png`, is the known 1x-to-2x swap. The fallback shows the whole portrait in a centre column with hard side edges, and the stats and the quote sit over Yuna's face. That is the look until O-5 picks a plate. |
+| **M2** | **Confirmed.** Chapters XIII (Paragon link), XIII (Trema alone, swapped in the page only), IV and V were each run at 1280x720, 1600x900, 2000x1012 and 390x844, sampled at the first two menus. In all 32 samples, and at link 2 in both full runs, the slab and its chip cover 0 px² of the command stack, the party plates and the boss plate. A second pass on XIII (both shapes) and IV also measured the guide, the advisor, the telegraph and the coach marks. Only two cases overlapped: XIII Trema alone at 2000x1012, where 2,625 and 2,637 px² sit over the guide's `MORE` row (see r2), and IV at 390x844, where the first-time coach mark covers 5,277 px² (see r4). Chapter IV's slab sits at 999,75 at 1600x900, against the repair's 998,75. |
+| **m1** | **Confirmed** at 1600x900 and 390x844. Over 21 and 20 samples through the link seam, the slab is never visible. It comes back as "TREMA / ACTS NEXT" at link 2's first menu. The boss plate reads "Paragon" through the whole seam, as disclosed. |
+| **m2** | **Confirmed** at 390x844. In the seam frames once the rig settles, all three girls and Trema are in frame, above the dialogue box and clear of the boss plate. The first frame, taken as the rig flag flips, still shows the fight framing. |
+| **m5** | **Confirmed** in the page: `tremaGuideFor(TREMA_SHAPE_ALONE).bossIds` is `['trema']`, the link shape gives `['trema', 'paragon']`, and the shipped tactic registers `['trema', 'paragon']`. |
+
+Both full link runs (1600x900 and 390x844) ended `victory` in 2 links. Each lost its first attempt
+to a Defeat at 0:22 before the retry: Rikku was down before the first input, which is o1 again.
+
+**Punch list (re-check)**
+
+- **r1 (minor; Trema-alone shape only, which is off):** the slab covers Trema from head to waist at
+  1280x720 as well as at 1600x900. The repair disclosed only 1600x900. This is Bailey's call, together with option 2.
+- **r2 (minor; Trema-alone shape only, which is off):** at 2000x1012 the chip is clear of the guide's box, but
+  the slab and chip together overlap the guide's `MORE` row by about 2,630 px², and the `E HIDE`
+  glyphs print over the "E" of MORE. "Touches" understates it. It is still better than before, when
+  the chip sat on the guide box itself (slab top at 458 before, 482 now).
+- **r3 (minor, disclosed):** the boss plate reads "Paragon" through the seam.
+- **r4 (observation, older behaviour):** the first-time coach mark is not one of the slab's
+  obstacles. On the phone at Chapter IV's first menu it covers the slab (5,277 px²), and at
+  1280x720 and 2000x1012 in Chapter XIII it sits on the advisor card. Its text, "take your time,
+  nobody moves", disagrees with o1.
+- **r5 (observation):** `data-face-crop-manual` is now set on every chapter plate that has a
+  `heroArtFallback` (Chapter IV's plate carries it). This is harmless, because the global face crop only
+  adopts `art/portraits/` sources.
+- Still open from the first check: m3 (the seam cannot be skipped), m4 (story wording, for Bailey),
+  m6 (the phone floor seam, which now shows as two hard horizontal bands in the link shot, and the
+  side bands at 2000x1012), and o1 (the ATB clock under an open menu).
+
+BLOCKERS: 0
