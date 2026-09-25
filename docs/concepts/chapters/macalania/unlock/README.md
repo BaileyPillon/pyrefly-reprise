@@ -13,8 +13,9 @@
 >   `D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania-anima/`). The ko (judged 5)
 >   is locked with the rest and is redone only on Bailey's word.
 > - The pause-plate sheet now has a fifth row, **A2** (A with the judge's two notes fixed by pixel
->   edits), with its real pause capture. A2 is not judged yet. The unlock waits on this pick and on
->   the scene cue (`src/data/chapter-macalania-ship.ts`; `docs/handoff/chapter-macalania.md`,
+>   edits), with its real pause capture. A2 is not judged yet. The unlock waits on this pick, on
+>   the scene cue and on the party layout (`party-layout/sheet.jpg`: the FFX command stack covers
+>   Yuna and Tidus at the first menu; options A, B recommended, C, measured live) (`src/data/chapter-macalania-ship.ts`; `docs/handoff/chapter-macalania.md`,
 >   "Ship layer and unlock readiness"). The rehearsal with the lock removed in the page only is in
 >   `rehearsal/`.
 > - Hash provenance (correction, 2026-09-25): the sheet image `art-approval.jpg` shows no

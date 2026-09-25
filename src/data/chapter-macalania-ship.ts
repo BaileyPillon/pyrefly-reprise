@@ -1,6 +1,6 @@
 /**
  * Chapter VII — Seymour and Anima, Macalania Temple: **what the unlock still waits on**, and the one
- * place each of Bailey's two open picks lands in code.
+ * place each of Bailey's three open picks lands in code.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: Macalania Temple, human-form Seymour, the Guado
  * Guardians (`research/ffx-seymour-anima-macalania.md`). No FFX-2 chapter reads this module.
@@ -17,7 +17,7 @@
  * battle cue "The Courtesy" (D-048), the Guardian's bloom (masked on this stage,
  * `MACALANIA_FIGURE_BLOOM_MASK`), the speaker portrait (D-065).
  *
- * **Open with Bailey (two picks, both prepared):**
+ * **Open with Bailey (three picks, all prepared):**
  * 1. **The pause plate redo** (D-141 excepted it): options A, A2, B, C on
  *    `docs/concepts/chapters/macalania/unlock/pause-plate-redo.jpg`. The pick installs over
  *    `public/art/pause/macalania.*` in place, so `heroArt` does not change.
@@ -26,6 +26,11 @@
  *    into a registered track, and then {@link MACALANIA_SCENE_CUE} names it. That one constant is
  *    what the chapter's `music.scene`, the pre-battle `music()` step and the meta's `musicKeys`
  *    read, so they cannot disagree.
+ * 3. **The party layout** (found 2026-09-25 by the ship frames, the R13-04 / PR-0002 defect class):
+ *    the scene's party arc is Chapter I's from before D-041 and is not held, so the FFX command
+ *    stack covers Yuna's and Tidus's heads and torsos at the first menu. Options current, A, B
+ *    (recommended), C on `docs/concepts/chapters/macalania/unlock/party-layout/sheet.jpg`, measured
+ *    live. The pick lands as staging data in `src/scenes/macalania-temple.ts`.
  */
 
 /** Chapter I's scene cue, played here as a recorded stopgap until the pick lands. */
@@ -43,13 +48,13 @@ export const MACALANIA_SCENE_CUE: string = MACALANIA_SCENE_CUE_STAND_IN;
 
 /** One pick the unlock waits on, and where its candidates are. */
 export interface MacalaniaOpenPick {
-  readonly id: 'pause-plate' | 'scene-cue';
+  readonly id: 'pause-plate' | 'scene-cue' | 'party-layout';
   readonly decision: string;
   readonly candidates: string;
   readonly lands: string;
 }
 
-/** The picks only Bailey can make; the driver deletes the lock line once both are in. */
+/** The picks only Bailey can make; the driver deletes the lock line once all three are in. */
 export const MACALANIA_OPEN_PICKS: readonly MacalaniaOpenPick[] = [
   {
     id: 'pause-plate',
@@ -62,5 +67,11 @@ export const MACALANIA_OPEN_PICKS: readonly MacalaniaOpenPick[] = [
     decision: 'plan §6.3 scene-macalania-temple (by ear, rule 13)',
     candidates: 'docs/audio/audition.html (macalania-scene section, sketches 2026-09-24 A/B/C)',
     lands: 'MACALANIA_SCENE_CUE in src/data/chapter-macalania-ship.ts, after the track is registered',
+  },
+  {
+    id: 'party-layout',
+    decision: 'D-041 / D-144 recipe for a new chapter (R13-04 class: party under the FFX command stack)',
+    candidates: 'docs/concepts/chapters/macalania/unlock/party-layout/sheet.jpg',
+    lands: 'PARTY_SLOTS + holdParty (and enemySpots for B) in src/scenes/macalania-temple.ts',
   },
 ];

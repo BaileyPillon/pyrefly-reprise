@@ -18,8 +18,8 @@ paperwork. No shared file changed, and no boss number changed.
 
 **Where it stands.** Everything that needs no pick from Bailey is built. The chapter stays locked
 behind **one line**, `'seymour-anima-macalania'` in `LOCKED_CHAPTER_IDS`
-(`src/app/screens/frontend/comingChapters.ts`). The driver deletes that line after Bailey's two
-picks land. `src/data/chapter-macalania-ship.ts` lists the two picks, where their candidates are
+(`src/app/screens/frontend/comingChapters.ts`). The driver deletes that line after Bailey's three
+picks land. `src/data/chapter-macalania-ship.ts` lists the three picks, where their candidates are
 and where each one lands in code. `tests/unit/chapters/macalania-ship.test.ts` pins that list, so a
 half-switched unlock fails a test.
 
@@ -28,7 +28,9 @@ half-switched unlock fails a test.
 | Pause plate redo (D-141 excepted it) | `docs/concepts/chapters/macalania/unlock/pause-plate-redo.jpg`: current, A (judged 7), **A2** (A plus the judge's two notes, hair colour and veins, by pixel edits; **not judged yet**, recommended if it passes), B (6), C (6). Each has a real pause capture | installed over `public/art/pause/macalania.*` in place, so `heroArt` does not change; then the lock in `approved-hashes.json` |
 | Scene cue `scene-macalania-temple` (preflight §6.3; by ear, rule 13) | three sketches in `docs/audio/audition.html` (section `macalania-scene`, lines 80 to 146): A "The Frozen Temple", B "The Wedding Proposal", C "Crystal and Pyreflies", files in `docs/audio/sketches/2026-09-24/` | the picked sketch is composed and registered as a track, then `MACALANIA_SCENE_CUE` names it. The record's `music.scene`, the pre-battle `music()` step and the meta's `musicKeys` all read that one constant |
 
-Neither pick blocks the unlock technically: the stand-in plate and the stand-in cue (Chapter I's
+| Party layout (found by the ship frames, 2026-09-25; the R13-04 / PR-0002 defect class, a major on the other chapters) | `docs/concepts/chapters/macalania/unlock/party-layout/sheet.jpg` and its README: current, A, **B (recommended)**, C, each measured live at 1280x720, 1600x900, 2000x1012 and 390x844 (`data-*.json`) | `PARTY_SLOTS` rows 0 to 2 plus `holdParty` (and `enemySpots` for B) in `src/scenes/macalania-temple.ts`, the D-041 / D-144 recipe; then the arrival, act-two, victory rigs and `macalania-scene.test.ts` are re-measured |
+
+The pause plate and the scene cue do not block the unlock technically: the stand-in plate and the stand-in cue (Chapter I's
 `scene-gagazet`) both work today.
 
 **Built in this pass:**
@@ -363,3 +365,24 @@ documents), `learn-atlas-data.test.ts` (gold accent), `story-scripts.test.ts`
    (scene handoff §3).
 8. `docs/handoff/NOW.md` was not edited (not in this brief's file list);
    the orchestrator folds this in.
+
+
+## Ship frames and the party-layout finding (2026-09-25, second ship pass)
+
+**Game case: FFX only.** Frames in `docs/concepts/chapters/macalania/ship/`: the first menu at
+1600x900, 1280x720, 2000x1012 and 390x844 (`fight-*.jpg`), one pre-scene story frame
+(`story-pre-1600.jpg`, Wakka's line 5), and `clearance.json` (every fighter's screen rect against
+every visible HUD panel, `visibilityInFrame()`, console and network). Made by `ship/capture.mjs`
+(headless GPU, private Vite on :5700 with HMR and the watcher off, `gotoChapter` from a fresh load,
+real Enter through the dialogue). 0 console errors, 0 bad responses, no art answered with HTML.
+
+**Finding (not fixed, a pick):** at the first menu the FFX command stack covers Yuna (visibility
+0.22 to 0.27, 87 to 90% of her box under the stack) and Tidus (0.43 to 0.51, 70 to 81%) at all three
+desktop sizes. Chapters I, II and IX measured the same way show at most one party member half under
+the stack. Cause: `PARTY_SLOTS` is Chapter I's arc from before D-041, and without `holdParty` the
+relaxation walks Yuna further left (-2.95 to about -3.46). Round 12 treats this as a major (R13-04,
+PR-0002) and Bailey fixed it both times with a layout pick, approving the sheet as drawn (D-041,
+D-144), so it is an options sheet here, not a build: `unlock/party-layout/`. The enemies are clear
+of every panel except Guardian B's feet under the party panel (18%, as in every option). On the
+phone the party is clear, but Seymour and both Guardians are partly off the right edge (the shared
+`phoneFraming.ts` finding above); options A and B bring Seymour and Guardian A whole into frame.

@@ -47,7 +47,7 @@ describe('Chapter VII ship layer', () => {
   });
 
   it("every open pick's candidates are in the repo", () => {
-    expect(MACALANIA_OPEN_PICKS.map((p) => p.id)).toEqual(['pause-plate', 'scene-cue']);
+    expect(MACALANIA_OPEN_PICKS.map((p) => p.id)).toEqual(['pause-plate', 'scene-cue', 'party-layout']);
     for (const pick of MACALANIA_OPEN_PICKS) {
       const path = pick.candidates.split(' ')[0]!;
       expect(existsSync(join(REPO, path)), path).toBe(true);
