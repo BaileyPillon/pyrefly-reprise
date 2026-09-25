@@ -26,15 +26,16 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
       cite: 'ffx-seymour-flux §6 rows 5-6, §4.3',
     },
     {
-      // PR-0007 option A (FFX only): the old line promised a turn before the mount that CTB often never gives.
-      text: 'Holy Water a Zombie whenever a party turn comes before the mount’s — often none does: both act at Agility 38, so Full-Life can follow Lance of Atrophy at once, 100% of max HP as damage plus a guaranteed Death. A fallen Zombie stays one, so leave them down.',
-      short: 'Holy Water a Zombie when a turn allows',
-      cite: 'ffx-seymour-flux §6 row 4, §3.3, §4.1; ffx-yunalesca §15.2 #29',
+      // Rule 3 (PR-0007) and rule 4 (PR-0008) are known to be wrong against §4.1 / §4.2, but
+      // their new wordings wait on Bailey (decisions-2026-09-25 item 5: "the guide wordings,
+      // shown to you first"). The choices are in docs/plans/pr-0008-guide-wordings.md. FFX only.
+      text: 'Holy Water a Zombie before the mount acts. Lance of Atrophy sets Zombie, and the mount answers with Full-Life — on a living Zombie that is 100% of max HP as damage plus a guaranteed Death.',
+      short: 'Holy Water a Zombie before the mount acts',
+      cite: 'ffx-seymour-flux §6 row 4, §3.3',
     },
     {
-      // PR-0008 (FFX only): §4.2 — the Dispel strips Protect immediately before Cross Cleave, so Protect is no defence.
-      text: 'Stand the party up before the hit, not after it. The Dispel strips Protect right before Cross Cleave, with nothing in between, so what stands through ~2,000-2,450 a head is full HP and Cheer stacks, which it does not remove.',
-      short: 'Full HP and Cheer before the Dispel, not Protect',
+      text: 'Stand the party up before the hit, not after it. Dispel into Cross Cleave arrives with nothing in between, so the only defence is Protect, five Cheer stacks and full HP already being true.',
+      short: 'Buff before the Dispel, never after it',
       cite: 'ffx-seymour-flux §4.2, §5.2, §5.5',
     },
     {

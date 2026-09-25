@@ -35,7 +35,7 @@ line. The draft changed nothing it names below.
 
 | Risk | Cover |
 |---|---|
-| A test or capture that walks in from the title gets a different fight each run | Unit flow tests pin seed 1 in `beforeEach`. The two real-key e2e specs (`intent-pause`, `pause`) call `setSeed(1)` before their first key. **`critic/runner/lib/play.mjs` walks in by real keys with no `setSeed`. It is under `critic/`, which this track may not edit, so the next critic run owes a `__pyrefly.setSeed(1)` step there (handed to the driver).** |
+| A test or capture that walks in from the title gets a different fight each run | Unit flow tests pin seed 1 in `beforeEach`. The two real-key e2e specs (`intent-pause`, `pause`) call `setSeed(1)` before their first key. **Three critic routes walk in by real keys with no `setSeed`: `critic/runner/lib/play.mjs`, `supp.mjs` (`toBattle()`) and `gap-audio.mjs`. They are under `critic/`, which this track may not edit, so each owes a `__pyrefly.setSeed(1)` step before its first key (handed to the driver; exact lines in `docs/handoff/play-seymour-flux.md`).** `tools/gallery.mjs` names `seed: 1` in every `gotoChapter` (measured: battle seed 1 through `prep:begin`) and now also calls `setSeed(1)` after load. Repair cycle 1 found the first draft named only `play.mjs`. |
 | RESTART redraws the seed and the resumed link is not the same fight | `openRun` returns the memo's seeded options. Test: "RESTART past a Save Sphere keeps the run's drawn seed". |
 | Retry arithmetic overflows 32 bits | Max draw 0x7fff0000 plus 1000 per attempt stays under 2^31 for about 65,000 retries. `SeededRng` also truncates to uint32. |
 | Determinism of the engines | Unchanged. `Math.random` is called once per run, in `src/app/`. `src/battle/` still never calls it. |

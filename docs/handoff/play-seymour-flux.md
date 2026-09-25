@@ -6,13 +6,24 @@
 >   (17 / 17 / 19 / 25) and **96 of 200**. Floors are 73/160 and 15/40, with at most 2 losses
 >   before battle turn 10 (`tests/unit/strategy-seymour-flux.test.ts`). The method check refresh
 >   is in `docs/plans/pr-0008-method-check.md` (2026-09-25 section). Nothing on the boss changed.
-> - **Guide, FFX only:** rule 3 (Holy Water: the turn is often not there, a fallen Zombie stays
->   one) and rule 4 (the Dispel strips Protect before Cross Cleave, §4.2) are corrected. The
->   honest-odds rule and one Protect hint wait on Bailey: `docs/plans/pr-0008-guide-wordings.md`.
+> - **Guide, FFX only: nothing changed, all wordings wait on Bailey.** Rule 3 (Holy Water: the
+>   turn is often not there, §4.1) and rule 4 (the Dispel strips Protect before Cross Cleave,
+>   §4.2) are known to be wrong. The first build rewrote them before Bailey saw them, against
+>   item 5's "shown to you first"; repair cycle 1 backed that out, so the guide text equals main.
+>   Rules 3 and 4, the honest-odds rule and one Protect hint are the choices in
+>   `docs/plans/pr-0008-guide-wordings.md`. Build only what Bailey picks there.
 > - **First-attempt seed, both games (shared plumbing):** a run started from real keys draws a
 >   fresh seed (`src/app/runSeed.ts`, via `openRun`). It is no longer seed 1, which lost Chapter 1
 >   under both the line and the advisor. `__pyrefly.setSeed(n)` pins it for captures (`docs/DEV.md`).
 >   Preflight: `docs/plans/ch1-seed-review.md`.
+> - **Owed, under `critic/` (this track may not edit it):** three critic routes walk from the
+>   title into a battle by real keys and now fight on a drawn seed. Each needs
+>   `await page.evaluate(() => window.__pyrefly.setSeed(1));` after the page is ready and before
+>   its first Enter: `critic/runner/lib/play.mjs` (before line 55), `supp.mjs` (top of
+>   `toBattle()`, line 39) and `gap-audio.mjs` (inside the `try`, before line 56). Proved on
+>   2026-09-25 (port 5580, real keys, Chapter 1): no `setSeed` gave seeds 743564349 and
+>   135415521; `setSeed(1)` first gave 1. `tools/gallery.mjs` was already fixed (every pass names
+>   `seed: 1` or takes `gotoChapter`'s default of 1: measured 1); it now also pins 1 after load.
 > - The test driver now lives in `tests/unit/helpers/seymourFluxDrive.ts`.
 
 **Status: winnable, not yet reliable. 146 wins in 200 contiguous seeds (73%),
