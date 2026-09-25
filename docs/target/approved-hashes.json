@@ -740,6 +740,40 @@
     "sha256": "c3e66e3fb678ee4bc91dde2a33c58d083583aed1552ad08718460ea88ed2a675",
     "mtime": "2026-09-25T03:44:20.535Z"
    }
+  },
+  "chapter:macalania:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, answering the driver's Chapter VII recommendation on docs/concepts/chapters/macalania/unlock/art-approval.jpg: approve the five battle paintings and the backdrop as final art, redo the pause plate (pause/macalania.png is NOT in this set; its redo options are docs/concepts/chapters/macalania/unlock/pause-plate-redo.jpg). Judges: ../r3-JUDGE-2.md, ../r3-JUDGE-3.md, production/judge.md (Seymour idle 7, cast 7, hurt 7; Guardian idle pixels 7 / in-game read 6, the fix is the renderer's bloom, not the art; Guardian cast 7; backdrop 7). FFX only, Chapter VII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania/.",
+   "public/art/characters/seymour-macalania/idle.png": {
+    "sha256": "edb8a444172244a0ebdbb691dd9273e8bd6339fae28c151fc78f719cc34eb721",
+    "mtime": "2026-09-23T17:42:11.008Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/seymour-macalania/cast.png": {
+    "sha256": "6f40f101a6d5da45c48408fff4ed2c9636e163fda8a9a020cb762c0033f9f1e1",
+    "mtime": "2026-09-24T05:56:15.564Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/seymour-macalania/hurt.png": {
+    "sha256": "5b16020259c5fea35385ec5ee4be78d65f49f4bd83c3add61cd418d733a8d441",
+    "mtime": "2026-09-24T05:56:15.645Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/guado-guardian/idle.png": {
+    "sha256": "963b58eee9206443b108d4b9f1a3710beba382255529db3ec7c0fac3cbbb88ab",
+    "mtime": "2026-09-24T03:29:42.722Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/guado-guardian/cast.png": {
+    "sha256": "9c7930fca598fd4971a74cd0970d461a7d6db271c96cb59c37ace46ea53e9d96",
+    "mtime": "2026-09-24T05:56:15.601Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/macalania-temple.png": {
+    "sha256": "1a83a9fcfc3d95a2c10a29190b1a86f5b9cdd9878ad171fd4f0c11f2605efb42",
+    "mtime": "2026-09-22T19:43:11.807Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
