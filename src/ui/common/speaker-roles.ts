@@ -39,6 +39,7 @@ export const SPEAKER_ROLES: Partial<Record<SpeakerId, string>> = {
   kelk: 'Ronso Elder',
   biran: 'Ronso',
   yenke: 'Ronso',
+  isaaru: 'Summoner', // Chapter XIV (FFX only): a summoner on the temple's orders
 
   // FFX-2 — two years on, the same faces with different work.
   'yuna-x2': 'Sphere Hunter',

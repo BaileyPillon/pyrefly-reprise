@@ -20,6 +20,7 @@ import { YOJIMBO_CAVERN_GUIDE } from './yojimbo-cavern.ts';
 import { FFX2_TREMA_GUIDE } from './ffx2-trema.ts';
 import { SEYMOUR_OMNIS_GUIDE } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_GUIDE } from './seymour-natus.ts';
+import { ISAARU_GUIDE } from './ffx-isaaru.ts';
 
 export type {
   ChapterGuide,
@@ -45,6 +46,7 @@ export {
   FFX2_TREMA_GUIDE,
   SEYMOUR_OMNIS_GUIDE,
   SEYMOUR_NATUS_GUIDE,
+  ISAARU_GUIDE,
 };
 
 export const GUIDES: readonly ChapterGuide[] = [
@@ -68,6 +70,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   SEYMOUR_OMNIS_GUIDE,
   // Chapter X (FFX only), listed 2026-09-25: the research's line, Haste only Tidus and Auron.
   SEYMOUR_NATUS_GUIDE,
+  // Chapter XIV (FFX only), registered and unlisted like its chapter.
+  ISAARU_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

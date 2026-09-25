@@ -58,6 +58,56 @@ and `CHAPTER_PANEL_SELECTORS` (Zanmato + Omnis), which the intent slab, the nume
 advisor now dodge. `.ffx-sensor` reads an optional `--ffx-sensor-dy` (unset = 0). `phoneBattle.ts`
 places the under-rail line below any `[data-phone-under-rail]` panel.
 
+## 2026-09-25 — Chapter XIV ship layer: `SpeakerId` gains `'isaaru'`
+
+**FFX only** [AGENTS.md hard rule 14]. **Additive** in `src/story/dsl.ts`: `SpeakerId` gains
+`'isaaru'`, the speaker for Isaaru's lines in `src/story/scripts/ffx-isaaru.ts` (lines 8 to 21 of
+`docs/plans/isaaru-story-draft.md` and the three link cries, all ours). His portrait is the
+installed O-2 B (`public/art/portraits/isaaru.png`, judge-locked), found by id as every portrait is.
+`SPEAKER_ROLES` gains `isaaru: 'Summoner'`. The adjacent `'biran' | 'yenke'` members were joined on
+one line so the file does not grow; no member changed. No existing script changes.
+
+## 2026-09-25 — Chapter XIV, Isaaru: `ChapterId` gains `'isaaru-via-purifico'`, `Chapter.number` widens to 15, a one- or two-member `FFXPartyBuild.activeSlots`, `EnemyGroupDef.lockedAeons` / `aeonsOnly` / `victoryBonusAp`
+
+**FFX only** [AGENTS.md hard rule 14]: Isaaru's contest of aeons in the Via Purifico, Yuna
+alone with her aeons (`research/ffx-isaaru-bevelle.md`; in FFX-2 nobody summons); every field
+is shared plumbing, **inert** unless a formation sets it (only Chapter XIV's three do).
+Bailey, 2026-09-25: "I'll go with all your recommendations" (B1-B22 on
+`docs/plans/chapter-isaaru-review.md`, with its Review corrections).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'isaaru-via-purifico'` (the record
+is `src/data/chapter-isaaru.ts`, in `UNLISTED_CHAPTERS`, the Chapter IX to XI precedent);
+`Chapter.number` widens from `1 … 11` to `1 … 15`, so Chapters XII, XIII and XV (built in
+parallel) need no second widening. `learn/atlas/cites.ts` gains the key.
+
+**Additive** in `src/battle/common/types.ts`:
+- `FFXPartyBuild.activeSlots` accepts one or two ids as well as three (`forced_party "y"`, research
+  §1.2 [verified: 3 sources]). The engine always built the line-up from the list's length; every
+  existing build still passes three.
+- `EnemyGroupDef.lockedAeons` (the mirror lock: `{ aeonId, mirrorOf }`), `aeonsOnly` ("can only be
+  fought by aeons": a party member's foe-aimed rows greyed and refused, and a defeat when no aeon
+  is left; an aeon's missing Items row is every FFX battle's rule since PR-0155, not the duel's) and `victoryBonusAp` (a victory reward no enemy carries: the
+  duel's 5,000 AP). Read by `src/battle/ffx/aeon-duel.ts`, which copies them into `state.flags` at
+  setup (`aeonDuel.only`, `aeonDuel.lock:<aeonId>`, `victory.bonusAp`) so a rebuilt runtime and an
+  intent clone see them. Absent everywhere else, reproducibly: `tests/unit/tools/ffx-chapter-hashes.test.ts`
+  (skipped unless `FFX_HASH_OUT` is set) hashes every menu, event log and result of every other FFX
+  chapter, 624 seeded runs (each chapter from its start through its chain, every later link on its
+  own; four policies). Main 8407e966 against this branch after the repair: 623 byte-identical; the one
+  that differs is a Grand Summon the engine resolved itself (below), and with that one fix undone all
+  624 are identical. FFX-2 untouched (no file under `battle/ffx2` or `data/ffx2` changes).
+
+**Also, shared FFX plumbing (FFX only; Chapter XIV engine review, 2026-09-25; not a contract file):**
+a Grand Summon with no aeon chosen (an auto-resolved or headless roll, or the bare re-submit that
+breaks the minigame loop) called `''`, which spent Yuna's gauge and summoned nothing; it now calls
+the first aeon that can take the field, in roster order (`aeon-duel.ts#defaultGrandSummonAeon`, our
+choice: FFX lets the player pick). The UI overlay and every tactic already pass a choice, so play by
+hand is unchanged. And the FFX enemy-intent sentence no longer calls a `formula: 'none'` row
+"non-elemental damage": a no-effect row reads "Deals no damage." (Spathi's Countdown, Evrae's
+Inhale, Macalania Seymour's idle, Yojimbo's Daigoro, Yu Yevon's command 254, Metamorphosis, Draws
+Sword), a cure-only row "Cures ... on ..." (the Guardians' Remedy). Menus and event logs do not
+carry this text; the hashes above are unaffected by it.
+
+No save migration: saves key chapters by id string, and the chapter is unlisted.
 ## 2026-09-25 — Chapter XII ship layer: `SpeakerId` gains `'seymour-omnis'`
 
 **FFX only** [AGENTS.md hard rule 14]: Seymour's last form, inside Sin

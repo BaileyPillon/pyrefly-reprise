@@ -89,12 +89,14 @@ describe('which chapters the stage changes (measured, pinned)', () => {
     // Trema (FFX-2 only, Chapter XIII, listed 2026-09-25) stands in his own post scene only.
     // Seymour Omnis (FFX only, Chapter XII, listed 2026-09-25): his pre and post scenes, no other chapter's.
     // Seymour Natus (FFX only, Chapter X, listed 2026-09-25) stands up in his own pre scene only.
-    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis', 'seymour-natus']);
+    // Isaaru (FFX only, Chapter XIV): he waits in his own pre scene and kneels in his own post scene.
+    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis', 'seymour-natus', 'isaaru']);
     const own: Record<string, string[]> = {
       'yojimbo-cavern': ['ginnem'],
       'ffx2-trema': ['trema'],
       'seymour-omnis': ['seymour-omnis', 'seymour-omnis'],
       'seymour-natus': ['seymour-natus'],
+      'isaaru-via-purifico': ['isaaru', 'isaaru'],
     };
     for (const c of [...CHAPTERS, ...UNLISTED_CHAPTERS]) {
       const shown = [...figuresIn(c.scriptsRef?.pre ?? []), ...figuresIn(c.scriptsRef?.post ?? [])];
@@ -147,7 +149,7 @@ describe('CutsceneStage', () => {
 
   it('mounts the stage layers under the flash, and gives the dialogue box a shake layer to live in', () => {
     expect([...root.children].map((c) => c.className)).toEqual(['cutscene__shake', 'cutscene__flash']);
-    expect([...stage.shakeEl.children].map((c) => c.className)).toEqual(['cutscene__figures', 'cutscene__fx']);
+    expect([...stage.shakeEl.children].map((c) => c.className)).toEqual(['cutscene__figures', 'cutscene__fx', 'cutscene__veil']);
   });
 
   it('stands a staged figure with her painting, and ignores anyone without one', async () => {

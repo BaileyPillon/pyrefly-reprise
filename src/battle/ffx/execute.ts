@@ -23,6 +23,7 @@ import { revealForSensorAuto } from './sensor.ts';
 import { resolveDoublecast } from './doublecast.ts';
 import { carryOutOrder } from './orders.ts';
 import { isVolley, resolveVolley } from './volley.ts';
+import { duelRefusalFor } from './aeon-duel.ts';
 
 /** What executing a command did, so the engine loop knows how to proceed. */
 export interface ExecutionResult {
@@ -70,6 +71,15 @@ export function executeCommand(
   // overlay opens again rather than being auto-rolled.
   if (ctx.rt.pendingMinigame?.actorId === actor.id && command.kind !== 'overdrive') {
     ctx.rt.pendingMinigame = null;
+  }
+
+  // An aeon duel (Chapter XIV; `./aeon-duel.ts`): the menu greys these rows,
+  // and one that arrives anyway is refused with the same reason, the turn kept
+  // open. `undefined`, so a no-op, in every other battle.
+  const refusal = duelRefusalFor(ctx, actor, command);
+  if (refusal !== undefined) {
+    ctx.emit({ type: 'message', text: refusal, kind: 'system' });
+    return { rank: 0, rejected: true, damageDealt: 0 };
   }
 
   switch (command.kind) {

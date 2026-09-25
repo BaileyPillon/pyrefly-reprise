@@ -12,6 +12,7 @@ import type { BattleResult, CombatantId, ItemDrop } from '../common/types.ts';
 import { type Ctx, has, isAlive, tryActor } from './state.ts';
 import { payVictorGauge } from './overdrive.ts';
 import { idiv } from './math.ts';
+import { victoryBonusAp } from './aeon-duel.ts';
 
 /** `apForLevel(sLv) = min(5*(sLv+1) + floor(sLv^3/50), 22000)` [ffx-combat-core §10.1]. */
 export function apForLevel(sLv: number): number {
@@ -113,7 +114,10 @@ export function buildBattleResult(
   outcome: BattleResult['outcome'],
   nextGroupId: string | undefined,
 ): BattleResult {
-  const { ap, gil, drops } = outcome === 'victory' ? collectRewards(ctx) : { ap: 0, gil: 0, drops: [] };
+  const earned = outcome === 'victory' ? collectRewards(ctx) : { ap: 0, gil: 0, drops: [] };
+  const { gil, drops } = earned;
+  // A formation-level reward no enemy carries (Chapter XIV's 5,000 AP, B13 = a); 0 elsewhere.
+  const ap = earned.ap + (outcome === 'victory' ? victoryBonusAp(ctx) : 0);
   if (outcome === 'victory') payVictorGauge(ctx, ctx.state.activeIds);
 
   const result: BattleResult = {

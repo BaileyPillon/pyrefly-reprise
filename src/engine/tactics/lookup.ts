@@ -35,6 +35,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'seymour-natus': 'ffx',
   'ffx2-trema': 'ffx2',
   'seymour-omnis': 'ffx',
+  'isaaru-via-purifico': 'ffx',
 };
 
 /**

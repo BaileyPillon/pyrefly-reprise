@@ -47,6 +47,8 @@ export class CutsceneStage {
   private readonly figuresEl: HTMLElement;
   private readonly fxEl: HTMLElement;
   private readonly flashEl: HTMLElement;
+  private readonly veilEl: HTMLElement;
+  private veiledNow = false;
   private readonly figures = new Map<string, HTMLElement>();
   private readonly timers = new Set<number>();
 
@@ -61,7 +63,10 @@ export class CutsceneStage {
     this.figuresEl.className = 'cutscene__figures';
     this.fxEl = doc.createElement('div');
     this.fxEl.className = 'cutscene__fx';
-    this.shakeEl.append(this.figuresEl, this.fxEl);
+    this.veilEl = doc.createElement('div');
+    this.veilEl.className = 'cutscene__veil';
+    // Before the dialogue box, which `DialogueBox.mount` appends after it: see `veil()`.
+    this.shakeEl.append(this.figuresEl, this.fxEl, this.veilEl);
     this.flashEl = doc.createElement('div');
     this.flashEl.className = 'cutscene__flash';
   }
@@ -148,6 +153,35 @@ export class CutsceneStage {
         window.setTimeout(resolve, ms);
       });
     });
+  }
+
+  /** True while a script's `fade('black')` holds the scene under the veil. */
+  get veiled(): boolean {
+    return this.veiledNow;
+  }
+
+  /**
+   * A script's `fade('black')` / `fade('clear')`: black over the backdrop, the
+   * figures and the effects, **under** the dialogue box.
+   *
+   * The screen used to hand this to `App.fade`, whose `#fade` layer sits over
+   * all of `#ui` (index.html, z-index 20 over 10), so every line narrated after
+   * a fade to black played on a blank screen: Chapter I's epilogue, and the
+   * close of Yunalesca, Braska's Final Aeon, Seymour and Anima, Evrae and
+   * Isaaru. The veil lives in the shake layer just before the box (z 5 under
+   * the box's 6, in the same stacking context even mid-shake), so the line
+   * reads on black the way the scripts were written. The chapter eyebrow goes
+   * under it too. `'white'` stays black, as it always drew here.
+   * **Game case: both** (shared plumbing, CHK-020).
+   */
+  veil(on: boolean, ms: number): Promise<void> {
+    this.veiledNow = on;
+    const dur = `${Math.max(0, ms)}ms`;
+    this.veilEl.style.transitionDuration = dur;
+    this.root.style.setProperty('--cutscene-veil-ms', dur);
+    this.veilEl.classList.toggle('is-on', on);
+    this.root.classList.toggle('is-veiled', on);
+    return ms > 0 ? this.wait(ms) : Promise.resolve();
   }
 
   shake(px: number, ms: number): Promise<void> {

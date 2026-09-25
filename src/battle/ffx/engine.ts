@@ -47,7 +47,7 @@ import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts'
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
 import { counterInputs } from './counter-inputs.ts';
-import { dismissAeon } from './aeons.ts';
+import { aeonDuelLost, dismissAeon } from './aeons.ts';
 import { buildBattleResult } from './results.ts';
 
 /**
@@ -406,23 +406,23 @@ export class FFXEngine implements FFXBattleEngine {
       return true;
     }
 
-    // **Stalemate.** A battle that can be neither won nor lost has to end, or
-    // the only way out is the pause menu [critic round 02 #17].
+    // A lost aeon duel, before the stalemate watch could call it an escape (Chapter XIV only, I-G3 / B11).
+    if (aeonDuelLost(ctx)) { this.finish('defeat'); return true; }
+
+    // **Stalemate.** A battle that can be neither won nor lost has to end, or the only way out is the
+    // pause menu [critic round 02 #17].
     //
-    // Progress is a **new minimum** on the enemy side's total HP. Yu Yevon
-    // answers every damaging action with a 9,999 Curaga, the two Pagodas add
-    // ~4,500 between his turns, and the party's permanent fayth Auto-Life
-    // makes defeat impossible, so a party out of Candles sits there for ever —
-    // measured at 25,364 turns with the boss parked on 6,001 of 99,999. His own
-    // Gravija meanwhile takes 75% of everybody's current HP every cycle, which
-    // is why "some HP moved" is not the test: HP moves constantly in precisely
-    // the fight that is stuck.
+    // Progress is a **new minimum** on the enemy side's total HP. Yu Yevon answers every damaging
+    // action with a 9,999 Curaga, the two Pagodas add ~4,500 between his turns, and the party's
+    // permanent fayth Auto-Life makes defeat impossible, so a party out of Candles sits there for ever —
+    // measured at 25,364 turns with the boss parked on 6,001 of 99,999. His own Gravija meanwhile takes
+    // 75% of everybody's current HP every cycle, which is why "some HP moved" is not the test: HP moves
+    // constantly in precisely the fight that is stuck.
     //
-    // This takes nothing away from him. Every canonical route out — Doom, the
-    // Zombie inversion, Reflect on him, Poison at 10% of 99,999, and the
-    // Gravija attrition that ends at 1 HP — reaches a new minimum long inside
-    // the window [ffx-bfa-yu-yevon §3.5]. The longest intended line in the
-    // project, Chapter 3's first link, wins in ~195 turns.
+    // This takes nothing away from him. Every canonical route out — Doom, the Zombie inversion, Reflect
+    // on him, Poison at 10% of 99,999, and the Gravija attrition that ends at 1 HP — reaches a new
+    // minimum long inside the window [ffx-bfa-yu-yevon §3.5]. The longest intended line in the project,
+    // Chapter 3's first link, wins in ~195 turns.
     const enemyHp = relevant.reduce((sum, c) => sum + Math.max(0, c.hp), 0);
     if (enemyHp < ctx.rt.progress.bestEnemyHp) {
       ctx.rt.progress = { bestEnemyHp: enemyHp, atTurn: ctx.state.turn };

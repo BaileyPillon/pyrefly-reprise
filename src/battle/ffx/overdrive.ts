@@ -7,15 +7,7 @@
  */
 
 import type {
-  AbilityDef,
-  AbilityId,
-  CombatantId,
-  FFXCombatant,
-  ItemId,
-  MinigameKind,
-  MinigameResult,
-  OverdriveModeId,
-  StatusId,
+  AbilityDef, AbilityId, CombatantId, FFXCombatant, ItemId, MinigameKind, MinigameResult, OverdriveModeId, StatusId,
 } from '../common/types.ts';
 import { type Ctx, has, tryActor } from './state.ts';
 import { estimatedDamage } from './formulas.ts';
@@ -23,6 +15,7 @@ import { hasAuto } from './equipment.ts';
 import type { TimingBonus } from './formulas.ts';
 import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furySpellIdsFor, furyTierOf } from './fury.ts';
 import { attackReelHits } from './reels.ts';
+import { defaultGrandSummonAeon, grandSummonChoices } from './aeon-duel.ts';
 
 /** The Attack Reels strip, in both spellings the tree uses [§5.6, `reels.ts`]. */
 const ATTACK_REEL_SYMBOLS = new Set(['1-hit', '2-hit', 'miss', '1hit', '2hit']);
@@ -350,7 +343,7 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
       });
       break;
     case 'yuna-grand-summon':
-      Object.assign(base, { aeons: [...ctx.rt.aeonRoster.keys()] });
+      Object.assign(base, { aeons: grandSummonChoices(ctx) }); // the whole roster, unless an aeon duel narrows it
       break;
     default:
       break;
@@ -447,7 +440,7 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
     case 'gunner-trigger':
       return { kind, trigger: { hits: ctx.rng.int(4, 16) } };
     case 'yuna-grand-summon':
-      return { kind, grandSummon: { aeonId: '' } };
+      return { kind, grandSummon: { aeonId: defaultGrandSummonAeon(ctx) } }; // was always '': gauge spent, no aeon
     default:
       return { kind: 'tidus-timing', timing: { success: false, timeRemainingMs: 0, timerMs } };
   }
