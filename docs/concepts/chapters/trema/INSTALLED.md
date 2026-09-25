@@ -110,3 +110,11 @@ to the chain and scene tracks. The research sources the beat: "in quite an impre
 - Still Bailey's call (review): whether the banners carry an original rendering of Yu Yevon's
   likeness.
 - For the chapter's data: `spriteKey` `trema` and `paragon`, and backdrop `via-infinito`.
+
+## Hero plate installed, 2026-09-25 (FFX-2 only, Chapter XIII)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations". Option B of `hero-plate/README.md` installed as `public/art/pause/ch13-trema.png` (sha `df51b9efa1e1`) with its RealESRGAN `.2x.webp` master and `.json` sidecar; locked in set `bailey:2026-09-25-recommendations`. `src/data/chapter-meta-trema.ts` already names `heroArt: 'pause/ch13-trema'`, so the chapter card and the pause CHAPTER tab show it now (checked on a production build, frames in `docs/concepts/portraits-2026-09-25/installed/ch13-*.jpg`). That file's header comment still says no plate is approved; it belongs to the chapter's owner to update.
+
+## Speaker portrait installed, 2026-09-25 (FFX-2 only, Chapter XIII)
+
+Trema B of `docs/concepts/portraits-2026-09-25/README.md` is `public/art/portraits/trema.png` (sha `5e924bbeb551`), with a measured dialogue row in `src/ui/common/face-crops.json`; locked in set `bailey:2026-09-25-recommendations`. This covers the "Trema's portrait" and "pause plate" lines under "Not made" above; the chapter card and pause tab now read `pause/ch13-trema`.

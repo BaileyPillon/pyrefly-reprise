@@ -2,7 +2,7 @@
 
 **Which game (rule 14): FFX only.** Omnis exists only in FFX (`research/ffx-seymour-omnis.md` §0.3).
 
-**Status: CANDIDATES.** Nothing is installed. `public/art/portraits/seymour-omnis.png` is untouched
+**Status: option A INSTALLED 2026-09-25 (section below).** During the options round nothing was installed: `public/art/portraits/seymour-omnis.png` is untouched
 (sha `ce32e75a6031`), nothing was added to `approved-hashes.json`, and nothing here is approved until Bailey
 names it (rule 9). Until Bailey picks, B17 still falls back to the approved Macalania portrait.
 
@@ -10,6 +10,18 @@ names it (rule 9). Until Bailey picks, B17 still falls back to the approved Maca
 
 **Recommendation: A.** It is the closest to the O-1 A look Bailey picked. It has the veins, both red cowl
 eyes and no trim that the idle lacks. B and C are for Bailey only if he wants trim.
+
+## INSTALLED 2026-09-25: option A (FFX only)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations", taken as a yes to the judge's recommendation, **A with the small install fixes**.
+
+- `public/art/portraits/seymour-omnis.png` now sha `6d4fe6583771`, built from option A (`614b399f1c13`) by `D:/Tools/pyrefly-scratch/trema-go/art-installs/omnis/fix12.py`:
+  1. **done:** the three speck pixels erased (x 329-331, y 680-681; the judge's note wrote them y first as "(680, 329)");
+  2. **done:** the yellow-green on the blue shoulder band neutralised: 1,126 px in the box x 560-760, y 540-660 with hue 30-180 deg were turned to the band's own median blue (228.5 deg), keeping each pixel's saturation and value, so no line moved;
+  3. **not done:** moving the veins toward the temples. The judge marked it optional and Bailey's call; it is a repaint that would change the face Bailey saw on the sheet, and where the temple veins go would be ours. A diffusion fill of the under-eye streaks was tried in scratch and left smudges in the under-eye shading, so it was dropped. Ask Bailey before any vein move.
+- Replaced: the FAIL-judged `ce32e75a6031` (never locked), backed up with its sidecar in `D:/Tools/pyrefly-art-backup/approved/2026-09-25-recommendations/replaced/`; the untouched option A is in `.../unrepaired/`.
+- Its own dialogue row in `src/ui/common/face-crops.json` (`seymour-omnis`: pupils (327, 426) and (440, 386), fx 0.4609, fy 0.04, rows 13 to 892). The Omnis speaker (B17) lives on branch `chapter-omnis-0925`; there it can now use its own portrait instead of Macalania's fallback.
+- Locked in `docs/target/approved-hashes.json`, set `bailey:2026-09-25-recommendations`. Frame: `docs/concepts/portraits-2026-09-25/installed/omnis-install-fixes-1to1.jpg`.
 
 ## What the judge named, and what each option does about it
 

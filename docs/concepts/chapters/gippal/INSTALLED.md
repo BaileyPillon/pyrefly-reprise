@@ -185,3 +185,7 @@ with IP-Adapter forced on `portraits/nooj.png` (method in `production/METHOD-noo
 `nooj-shade/idle` `674058d32184`, `nooj-shade/cast` `a07ec9e35852` (replaced `3b505d6ca7cd` / `27e237b57402`, kept in
 `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu3/nooj-shade/replaced/`). Same sizes and baselineY 1199; manifest
 unchanged; nothing added to `approved-hashes.json` (verify-approved ok 185 before and after).
+
+## Hero plate installed, 2026-09-25 (FFX-2 only, Chapter XV)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations". Option B of `hero-plate/README.md` installed as `public/art/pause/ch15-ffx2-den-of-woe.png` (sha `e75589cda3db`) with its RealESRGAN `.2x.webp` master and `.json` sidecar; locked in set `bailey:2026-09-25-recommendations`. The chapter lives on branch `chapter-gippal-0925` with no `ChapterMeta`. **Ship step:** its `ChapterMeta` names `heroArt: 'pause/ch15-ffx2-den-of-woe'`; the face sits left (focal x 0.25), so the pause text side still needs checking on the real tab (this README's own note on `deriveChromeSide` / a `plates.ts` row).

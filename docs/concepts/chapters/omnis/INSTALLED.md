@@ -120,3 +120,11 @@ Omnis* page, its concept art of Omnis, its concept art of the reels, and one HD 
   nothing was downloaded. **GPU: 12 renders, 2.3 minutes** (8 portrait, 4 steps), out of a 60-minute
   cap. Scripts: [`production/scripts/`](production/scripts/). Scratch:
   `D:/Tools/pyrefly-scratch/ch1215/omnis/`.
+
+## Hero plate installed, 2026-09-25 (FFX only, Chapter XII)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations". Option A of `hero-plate/README.md` installed as `public/art/pause/ch12-seymour-omnis.png` (sha `906175aeff12`) with its RealESRGAN `.2x.webp` master and `.json` sidecar; locked in set `bailey:2026-09-25-recommendations`. The chapter lives on branch `chapter-omnis-0925` with no `ChapterMeta`. **Ship step:** its `ChapterMeta` names `heroArt: 'pause/ch12-seymour-omnis'`.
+
+## Speaker portrait installed, 2026-09-25 (FFX only, Chapter XII)
+
+Bailey, 2026-09-25 ~10:20 EDT: "I'll go with all your recommendations". `portraits/seymour-omnis.png` is now option A of `portrait-options/README.md` with the judge's fixes 1 and 2 (sha `6d4fe6583771`; fix 3, the vein move, not done), replacing the FAIL-judged `ce32e75a6031`; locked in set `bailey:2026-09-25-recommendations`, with a `face-crops.json` dialogue row. B17 no longer needs the Macalania fallback once the branch uses it.

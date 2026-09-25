@@ -1,11 +1,21 @@
 # Chapter XII — Seymour Omnis: hero plate options (FFX only)
 
-**CONCEPT. Nothing is installed.** No file under `src/`, `tests/`, `critic/`, `public/art/` or
+**Option A is INSTALLED (2026-09-25, section below); this was the options round.** During that round no file under `src/`, `tests/`, `critic/`, `public/art/` or
 `docs/target/` was written. `sheet.jpg` is one column that reads on a phone: each option as a
 painting, on the real pause CHAPTER tab, and on the party-prep chapter card, both at 1600x900.
 
 **Game case (rule 14): FFX only.** Seymour Omnis, the Mortiphasm discs and the Garden of Pain
 exist only in FFX (research §0.3). The captures use the FFX pause and the FFX prep screen.
+
+## INSTALLED 2026-09-25: option A (FFX only)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations", taken as a yes to this sheet's recommendation, **A**. A pick approves only what Bailey named, which here is the option as shown.
+
+- `public/art/pause/ch12-seymour-omnis.png` is the picked option byte for byte (sha `906175aeff12`); `ch12-seymour-omnis.2x.webp` is its master by the house route A, RealESRGAN_x4plus x4 then lanczos 0.5, WebP q88 (sha `cd8691fc7894`); `ch12-seymour-omnis.json` carries the base render's recipe, the face focal this sheet used and the master note.
+- Locked in `docs/target/approved-hashes.json`, set `bailey:2026-09-25-recommendations` (`verify-approved`: 185 ok before, 202 after, 0 mismatched, 0 missing).
+- The chapter lives on branch `chapter-omnis-0925` with no `ChapterMeta`. **Ship step:** its `ChapterMeta` names `heroArt: 'pause/ch12-seymour-omnis'`.
+- Backups: `D:/Tools/pyrefly-art-backup/approved/2026-09-25-recommendations/installed/pause/`; the options stay in `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-hero-plates/omnis/`.
+- The "Owed on a pick" list below is now done except the `ChapterMeta` line.
 
 ## The question for Bailey
 

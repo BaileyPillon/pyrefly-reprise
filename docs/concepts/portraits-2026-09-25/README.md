@@ -1,6 +1,6 @@
 # Missing speaker portraits, 2026-09-25: who speaks where, and options
 
-This is an options round (AGENTS.md rule 9). **Nothing here ships.** Nothing was installed into
+This was an options round (AGENTS.md rule 9); Bailey's picks are **installed** (next section). During the round nothing shipped: Nothing was installed into
 `public/art`, `docs/target/approved-hashes.json` was not touched, and nothing under `src/`
 changed. `node D:/Tools/pyrefly-lora/tools/verify-approved.mjs`: 0 mismatched, 0 missing,
 before and after. The full-size candidates (PNG + sidecar JSON, with seed, prompt, denoise and
@@ -10,6 +10,24 @@ repo.
 
 **Which game (rule 14): FFX-2 only.** Every speaker that got options speaks only in FFX-2
 chapters (V and XIII). No FFX speaker was painted.
+
+## INSTALLED 2026-09-25 (FFX-2 only)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations", taken as a yes to the four recommendations below (a pick approves only the option as shown). Shinra and FFX Brother stay without a portrait.
+
+| Speaker | Pick | Candidate file | Installed | sha | Dialogue row (`src/ui/common/face-crops.json`) |
+|---|---|---|---|---|---|
+| `trema` | B | `trema/opt2-b.1` (824x1182) | `public/art/portraits/trema.png` | `5e924bbeb551` | fx 0.3653, fy 0.0193: rows 6-877, the whole eboshi |
+| `gippal` | A | `gippal/opt-a.2` (832x1216) | `public/art/portraits/gippal.png` | `7c77d6f3c8d6` | fx 0.2632, fy 0: rows 0-879, every hair spike |
+| `baralai` | B | `baralai/opt-b.1` (733x1138) | `public/art/portraits/baralai.png` | `26fe078fd31f` | fx 0.4945, fy 0.02: rows 7-781 |
+| `buddy` | B | `buddy/pilot.2` (832x1216, seed 925602) | `public/art/portraits/buddy.png` | `d7472eaf8bce` | fx 0.5204, fy 0.12: rows 40-919, goggles to chin |
+
+- **Which file each letter was.** The sheets name only Trema's; the others were matched by sliding each candidate over its sheet column (mean difference 1.7 to 3.9 against 10 or more for the other seeds).
+- **Repairs.** None of the four picks needed the masked repair: the button note in section 4 belongs to Trema **C**, not the picked B. Gippal A had one detached 216 px alpha island on its left edge (x 0-10, y 578-609); it was erased and nothing else changed. The uncleaned file is kept in `D:/Tools/pyrefly-art-backup/approved/2026-09-25-recommendations/unrepaired/`.
+- **Rows measured** the way the existing rows were: pupils read off grids labelled in file pixels (`installed/` holds the frames, not the grids), then fy set so the card's cover window (it shows width x 1.0565 rows; box 19.71vw x 20.83vw) keeps the head top the fallback (50% 29.5%) cut. Each row's note gives the pupils and the rows shown.
+- Sidecars `public/art/portraits/<id>.json`: the candidate's own recipe plus the pick, sources, status APPROVED and sha. Locked in `docs/target/approved-hashes.json`, set `bailey:2026-09-25-recommendations`.
+- **Checked on a production build** (`vite build` into scratch + `vite preview` on port 5420, GPU Chromium, 1600x900, stopped by PID): Gippal on his real line reached with **real keys only** from the title (Enter, arrows to Chapter V, Enter, Enter, Enter through the story) — `installed/ch5-gippal-card.jpg`. Baralai's line is mid-battle and Buddy's comes after the win, so the debug API set those states up (`gotoChapter` with the intended auto-battle, fast) and the cards were captured while each line was up — `installed/ch5-baralai-card.jpg`, `installed/ch5-buddy-card.jpg`. Each of the three answered 200 image/png and decoded at its real size (832x1216, 733x1138, 832x1216) with the row's object-position applied. Trema's lines play in Chapter XIII's post-Paragon seam, which was not driven here.
+- `installed/portraits-installed.jpg` shows the five installed portraits (with the Omnis one below).
 
 ## 1. Who speaks where
 

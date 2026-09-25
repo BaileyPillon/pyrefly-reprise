@@ -1,12 +1,23 @@
 # Chapter XIII: Trema, hero plate options (FFX-2 only)
 
-**CONCEPT. Nothing is installed.** No file under `src/`, `tests/`, `critic/`, `public/art/`
+**Option B is INSTALLED (2026-09-25, section below); this was the options round.** During that round no file under `src/`, `tests/`, `critic/`, `public/art/`
 or `docs/target/` was written. `sheet.jpg` (one column, readable on a phone) shows each option
 as a painting, on the real pause CHAPTER tab, and on the party-prep chapter card, at 1600x900.
 
 **Game case (rule 14): FFX-2 only.** Trema, Paragon and Cloister 100 exist only in FFX-2
 (`research/ffx2-trema.md` §0). The captures use an FFX-2 chapter's pause and prep screens. No
 option applies to an FFX chapter.
+
+## INSTALLED 2026-09-25: option B (FFX-2 only)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations", taken as a yes to this sheet's recommendation, **B**. A pick approves only what Bailey named, which here is the option as shown.
+
+- `public/art/pause/ch13-trema.png` is the picked option byte for byte (sha `df51b9efa1e1`); `ch13-trema.2x.webp` is its master by the house route A, RealESRGAN_x4plus x4 then lanczos 0.5, WebP q88 (sha `770241cc0f58`); `ch13-trema.json` carries the base render's recipe, the face focal this sheet used and the master note.
+- Locked in `docs/target/approved-hashes.json`, set `bailey:2026-09-25-recommendations` (`verify-approved`: 185 ok before, 202 after, 0 mismatched, 0 missing).
+- `src/data/chapter-meta-trema.ts` already names `heroArt: 'pause/ch13-trema'`, so the chapter card and the pause CHAPTER tab show it now (checked on a production build, frames in `docs/concepts/portraits-2026-09-25/installed/ch13-*.jpg`). That file's header comment still says no plate is approved; it belongs to the chapter's owner to update.
+- Backups: `D:/Tools/pyrefly-art-backup/approved/2026-09-25-recommendations/installed/pause/`; the options stay in `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-hero-plates/trema/`.
+- The "Owed on a pick" list below is now done (the `ChapterMeta` already existed).
+- **Seen on the real tab, not fixed (pause layout, not this plate):** the real chapter now has its quote ("Memories are weights...") and three snapshot tiles, which the options round blanked. On the pause CHAPTER tab they sit over Trema's eyes; the plate cannot pan further (its left edge is already within 73 px of the clamp), so moving the face clear is a layout question for the pause owner.
 
 ## The question for Bailey
 

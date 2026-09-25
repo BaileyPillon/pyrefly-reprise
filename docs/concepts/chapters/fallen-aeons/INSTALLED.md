@@ -66,3 +66,7 @@ About 4 minutes of ComfyUI execution against the 90-minute cap:
 There was no all-black frame. ComfyUI was never restarted. Nothing was downloaded; rembg used the
 isnet-anime weights already on disk. The scripts are in `production/scripts/` (`install.py` holds the
 sidecar text). The scratch files are in `D:/Tools/pyrefly-scratch/fa-prod/`.
+
+## Hero plate installed, 2026-09-25 (FFX-2 only, Chapter XI)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations". Option B of `hero-plate/README.md` installed as `public/art/pause/ch11-ffx2-fallen-aeons.png` (sha `ad4f3f109f53`) with its RealESRGAN `.2x.webp` master and `.json` sidecar; locked in set `bailey:2026-09-25-recommendations`. No `ChapterMeta` names it yet. **Ship step:** give Chapter XI (`ffx2-fallen-aeons`) a `ChapterMeta` with `heroArt: 'pause/ch11-ffx2-fallen-aeons'`.

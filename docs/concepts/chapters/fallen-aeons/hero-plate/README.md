@@ -1,6 +1,6 @@
 # Chapter XI: Fallen Aeons, hero plate options (FFX-2 only)
 
-**CONCEPT. Nothing is installed.** No file under `src/`, `tests/`, `critic/`, `public/art/`
+**Option B is INSTALLED (2026-09-25, section below); this was the options round.** During that round no file under `src/`, `tests/`, `critic/`, `public/art/`
 or `docs/target/` was written. `sheet.jpg` shows each option as a painting, on the real pause
 CHAPTER tab, and on the party-prep chapter card, all at 1600x900. It is laid out one option per
 row so it reads on a phone.
@@ -8,6 +8,16 @@ row so it reads on a phone.
 **Game case (rule 14): FFX-2 only.** This is the Road to the Farplane gauntlet
 (`research/ffx2-fallen-aeons.md` §0 and §6.2). The captures use the FFX-2 pause (pink accent,
 dresspheres) and the FFX-2 prep screen. No option applies to an FFX chapter.
+
+## INSTALLED 2026-09-25: option B (FFX-2 only)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations", taken as a yes to this sheet's recommendation, **B**. A pick approves only what Bailey named, which here is the option as shown.
+
+- `public/art/pause/ch11-ffx2-fallen-aeons.png` is the picked option byte for byte (sha `ad4f3f109f53`); `ch11-ffx2-fallen-aeons.2x.webp` is its master by the house route A, RealESRGAN_x4plus x4 then lanczos 0.5, WebP q88 (sha `2cfdcfca4f06`); `ch11-ffx2-fallen-aeons.json` carries the base render's recipe, the face focal this sheet used and the master note.
+- Locked in `docs/target/approved-hashes.json`, set `bailey:2026-09-25-recommendations` (`verify-approved`: 185 ok before, 202 after, 0 mismatched, 0 missing).
+- No `ChapterMeta` names it yet. **Ship step:** give Chapter XI (`ffx2-fallen-aeons`) a `ChapterMeta` with `heroArt: 'pause/ch11-ffx2-fallen-aeons'`.
+- Backups: `D:/Tools/pyrefly-art-backup/approved/2026-09-25-recommendations/installed/pause/`; the options stay in `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-hero-plates/fallen-aeons/`.
+- The "Owed on a pick" list below is now done except the `ChapterMeta` line.
 
 ## The question for Bailey
 

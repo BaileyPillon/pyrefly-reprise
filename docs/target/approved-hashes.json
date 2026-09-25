@@ -920,6 +920,95 @@
     "mtime": "2026-09-25T04:15:23.042Z",
     "approved": "2026-09-25"
    }
+  },
+  "bailey:2026-09-25-recommendations": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~10:20 EDT, verbatim \"I'll go with all your recommendations\", in reply to the driver's morning message. Taken as a yes to the recommended option of each sheet named there: hero plates Trema B (docs/concepts/chapters/trema/hero-plate), Omnis A, Isaaru B, Natus B, Fallen Aeons B, Den of Woe B (docs/concepts/chapters/<chapter>/hero-plate/README.md); speaker portraits Trema B, Gippal A, Baralai B, Buddy B (docs/concepts/portraits-2026-09-25/README.md); the Omnis speaker portrait A (docs/concepts/chapters/omnis/portrait-options/README.md, independent judge 7.6 PASS) with the judge's install fixes 1 (three speck pixels) and 2 (yellow-green on the shoulder band); the optional fix 3 (moving the veins) was NOT done. Plates: each PNG is the picked option byte for byte; each .2x.webp is its RealESRGAN_x4plus x4 -> lanczos 0.5 master (q88). Plate keys: pause/ch10-seymour-natus, ch11-ffx2-fallen-aeons, ch12-seymour-omnis, ch14-isaaru-via-purifico and ch15-ffx2-den-of-woe follow the pause/ch<NN>-<chapter id> pattern and are not yet named by any ChapterMeta (their ship step); pause/ch13-trema is src/data/chapter-meta-trema.ts's heroArt. Gippal's portrait had one detached 216 px alpha island erased. Game: FFX only for Natus (X), Omnis (XII), Isaaru (XIV); FFX-2 only for Fallen Aeons (XI), Trema (XIII), Den of Woe (XV), and the Trema, Gippal, Baralai, Buddy portraits. NOT covered by this yes: the battle-pose candidates (docs/concepts/chapters/trema/poses, docs/concepts/art5). Replaced file: portraits/seymour-omnis.png sha ce32e75a6031 (judged FAIL 5.9, never locked). Backups: D:/Tools/pyrefly-art-backup/approved/2026-09-25-recommendations/ (replaced/, unrepaired/, installed/).",
+   "public/art/pause/ch10-seymour-natus.png": {
+    "sha256": "f802716b8c8eb43850e5e8288b66b660a752ce7c4e7450a95a3f98cb976ed5d1",
+    "mtime": "2026-09-25T14:36:53.875668Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch10-seymour-natus.2x.webp": {
+    "sha256": "3324d1ea08dfc7d6933a410d8892b8dc1a0b0d9e6fb76000ef53c86160145f32",
+    "mtime": "2026-09-25T14:36:53.881181Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch11-ffx2-fallen-aeons.png": {
+    "sha256": "ad4f3f109f53ce35ea446d1242f6bb83484647281ab17e51108b5ffa46c46de1",
+    "mtime": "2026-09-25T14:36:53.917321Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch11-ffx2-fallen-aeons.2x.webp": {
+    "sha256": "2cfdcfca4f0649827dcb98a3c5a48d6f320499cc928b969b9788f138b479ed9c",
+    "mtime": "2026-09-25T14:36:53.921406Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch12-seymour-omnis.png": {
+    "sha256": "906175aeff124d06dd3986efb45f6138347c2fee1adef351f15cc02b4bf565e5",
+    "mtime": "2026-09-25T14:36:53.955870Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch12-seymour-omnis.2x.webp": {
+    "sha256": "cd8691fc78947354fa69ed94fcc4ed9b860a6558d10d687e7cd8d2adc9221a53",
+    "mtime": "2026-09-25T14:36:53.960375Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch13-trema.png": {
+    "sha256": "df51b9efa1e14ce2c91e670011884af9671740f8dda22a4fd31514e61886f213",
+    "mtime": "2026-09-25T14:36:53.994732Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch13-trema.2x.webp": {
+    "sha256": "770241cc0f58f657a7665e0e79f4fdf96870214bffda91d09c611b0540aad5a2",
+    "mtime": "2026-09-25T14:36:53.998915Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch14-isaaru-via-purifico.png": {
+    "sha256": "1e2d6f56a1b1c6c0a1be389fc50af02097ed2fb385ac21c5406aa9f2197b16b4",
+    "mtime": "2026-09-25T14:36:54.032785Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch14-isaaru-via-purifico.2x.webp": {
+    "sha256": "4efb21d1391f5389af072216d3454160368368ba481bdbefddd66e016a6c1d1e",
+    "mtime": "2026-09-25T14:36:54.036295Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch15-ffx2-den-of-woe.png": {
+    "sha256": "e75589cda3dbf8f2858ceb45c3f34c56db7f14b7644be476e20f0396736de298",
+    "mtime": "2026-09-25T14:36:54.070159Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/ch15-ffx2-den-of-woe.2x.webp": {
+    "sha256": "297dadcdcaa8873d6833cfed043bcbcb90a765b0ac39c2ab91e26e2a49873e86",
+    "mtime": "2026-09-25T14:36:54.074166Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/trema.png": {
+    "sha256": "5e924bbeb551e74637352ca7d8a34b471df954f8b247f88ba62a0e5a65c82023",
+    "mtime": "2026-09-25T14:36:54.107849Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/gippal.png": {
+    "sha256": "7c77d6f3c8d65d8536d54ebe6e4add5f8c078f37d0a7969bfe85879529c9f77c",
+    "mtime": "2026-09-25T14:36:54.130388Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/baralai.png": {
+    "sha256": "26fe078fd31f6a3aaa3daee8ab5acd0d7bb36d99c72309b12bc61fdb072f47dc",
+    "mtime": "2026-09-25T14:36:54.152763Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/buddy.png": {
+    "sha256": "d7472eaf8bceeab23d04ebdb7e7375bc4a0b000dc314e0cccd5087b7ea591836",
+    "mtime": "2026-09-25T14:36:54.173665Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/seymour-omnis.png": {
+    "sha256": "6d4fe6583771660e9251f170f15f893e72d6bba656eb63cdaa3b90716d3ef683",
+    "mtime": "2026-09-25T14:36:54.194984Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
