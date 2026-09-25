@@ -120,6 +120,10 @@ import { YOJIMBO_ABILITIES } from './enemies/yojimbo-abilities.ts';
 import { SEYMOUR_NATUS_ABILITIES } from './enemies/seymour-natus-abilities.ts';
 import { seymourNatusGroup } from './enemies/seymour-natus.ts';
 import { highbridgeBuild } from './builds/highbridge.ts';
+// Chapter XII, Seymour Omnis in the Garden of Pain (FFX only) — registered but unlisted.
+import { SEYMOUR_OMNIS_ABILITIES } from './enemies/seymour-omnis-abilities.ts';
+import { seymourOmnisGroup } from './enemies/seymour-omnis.ts';
+import { gardenOfPainBuild } from './builds/garden-of-pain.ts';
 // Chapter XIV, Isaaru's contest of aeons in the Via Purifico (FFX only) — registered but unlisted.
 import { ISAARU_ABILITIES } from './enemies/isaaru-abilities.ts';
 import { ISAARU_GROUPS } from './enemies/isaaru.ts';
@@ -247,6 +251,7 @@ const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...Object.values(EVRAE_ABILITIES),
   ...Object.values(YOJIMBO_ABILITIES),
   ...Object.values(SEYMOUR_NATUS_ABILITIES),
+  ...Object.values(SEYMOUR_OMNIS_ABILITIES),
   ...Object.values(ISAARU_ABILITIES),
 ];
 
@@ -309,6 +314,9 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   // Chapter X (`seymour-natus`, src/data/chapter-seymour-natus.ts), registered
   // by id but UNLISTED, the Chapter IX precedent [docs/plans/chapter-natus-review.md].
   [seymourNatusGroup.id]: seymourNatusGroup,
+  // Chapter XII (`seymour-omnis`, src/data/chapter-seymour-omnis.ts), registered
+  // by id but UNLISTED [docs/plans/chapter-omnis-review.md].
+  [seymourOmnisGroup.id]: seymourOmnisGroup,
   // Chapter XIV (`isaaru-via-purifico`, src/data/chapter-isaaru.ts), registered by id
   // but UNLISTED: three links, Grothia -> Pterya -> Spathi [docs/plans/chapter-isaaru-review.md].
   ...Object.fromEntries(ISAARU_GROUPS.map((g) => [g.id, g])),
@@ -340,6 +348,7 @@ export {
   fahrenheitBuild,
   yojimboCavernBuild,
   highbridgeBuild,
+  gardenOfPainBuild,
   viaPurificoBuild,
 };
 

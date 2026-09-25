@@ -56,6 +56,25 @@ Sword), a cure-only row "Cures ... on ..." (the Guardians' Remedy). Menus and ev
 carry this text; the hashes above are unaffected by it.
 
 No save migration: saves key chapters by id string, and the chapter is unlisted.
+## 2026-09-25 — Chapter XII ship layer: `SpeakerId` gains `'seymour-omnis'`
+
+**FFX only** [AGENTS.md hard rule 14]: Seymour's last form, inside Sin
+(`research/ffx-seymour-omnis.md` §0.3). **Additive** in `src/story/dsl.ts`: `SpeakerId` gains
+`'seymour-omnis'`, the speaker for Seymour's lines in `src/story/scripts/seymour-omnis.ts` (lines 2 to
+14 of `docs/plans/omnis-story-draft.md` and four callouts, all `[ORIGINAL]`), with his own portrait
+(`portraits/seymour-omnis.png`, portrait A, Bailey's pick of 2026-09-25, locked; its
+`face-crops.json` row already exists). `DialogueBox.defaultName` strips the `-omnis` suffix as it
+strips `-macalania`, so the plate reads "Seymour"; `SPEAKER_ROLES` gives him "Maester" like the other
+two Seymour ids. The union line `'lenne' | 'nooj'` was joined to keep `dsl.ts` at its line count
+(house rule: a file over 400 lines must not grow). No existing script changes.
+
+Not contract files, recorded because they are shared plumbing (both games, inert elsewhere):
+`BattleScreenWiring.createHud` now taps the **FFX** HUD with `engine/OmnisDiscTap.ts` (it writes the
+Mortiphasm disc colours onto the disc actors; a no-op without the Omnis disc state or an
+`affinity-change` event, which only Chapter XII emits). The Omnis rules now also emit nine
+`script-trigger` names (`src/battle/ffx/ai/seymour-omnis-callouts.ts`): presentation hooks that draw
+no RNG; the Omnis bench prints the same 127/200 and key moments before and after.
+
 ## 2026-09-25 — `encounters.ts`: Chapter XIII (Trema) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX-2 only** [AGENTS.md hard rule 14]: Trema and Oversoul Paragon on Cloister 100 of the Via
@@ -216,6 +235,43 @@ moved from `engine.ts#afterAction` into `engineHooks.ts#runAfterActionHooks`, by
 `resolve.ts` reads `extra.mpOnly` together with `extra.mpFractionOfCurrent` as "that share of
 current MP, no HP" (Waning Moon). No shipped record set either combination before, and Chapters
 4, 5, 6 and XI replay byte-identically (180 seeded runs at Active 0 and 700 ms, before and after).
+## 2026-09-25 — Chapter XII, Seymour Omnis: `ChapterId` gains `'seymour-omnis'`, `Chapter.number` widens to 12, `BattleEvent` gains `'affinity-change'`, `CombatantFlags` gains `outOfMeleeReach` and `neverRandomTarget`
+
+**FFX only** [AGENTS.md hard rule 14] (research `ffx-seymour-omnis.md` §0.3: CTB, aeons, Nul
+spells; *X-2* has no Seymour fight); the registration and the two flags are shared plumbing,
+inert everywhere else. Bailey, 2026-09-25 ~01:40 EDT: "I'll go with all your recommendations"
+(B1-B23 and O-1..O-6 on `docs/plans/chapter-omnis-review.md` and the options sheet).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'seymour-omnis'`; `Chapter.number`
+widens from `1 … 11` to `1 … 12`. The record lives in `src/data/chapter-seymour-omnis.ts` and sits
+in `UNLISTED_CHAPTERS` (the Chapter IX to XI precedent; B8 also holds the listing until the ring
+order and the reset cycle are confirmed). Every `Record<ChapterId, …>` gains the key
+(`learn/atlas/cites.ts`, `tests/unit/learn-atlas-data.test.ts`). No save migration: nothing lists
+this id yet. The Trema, Isaaru and Gippal chapters were registered in parallel worktrees the same
+night and widen the same two unions; the merge takes the union of all four.
+
+**Additive** in `src/battle/common/types.ts`:
+- `BattleEvent` `'affinity-change'` `{ targetId, affinities, cause: 'part-turn' | 'reset',
+  partId?, direction?, facings? }` — a combatant's elemental affinities changed mid-battle, with
+  the whole map after the change (plan O-G4). Emitted only by Chapter XII's rules
+  (`src/battle/ffx/ai/seymour-omnis-rules.ts`) when a disc turns or the discs reset; no presenter
+  reads it yet (O-8 / T8 are held for the art picks). No existing switch over `BattleEvent` is
+  exhaustive, so nothing else changes.
+- `CombatantFlags.outOfMeleeReach` — a physical party action reaches the combatant only from
+  Wakka, Valefor, Anima or Mindy (`targeting.ts#REACHES_OUT_OF_MELEE`) or a ranged weapon; magic
+  always reaches (plan O-G2, research §2 verified: 4 sources).
+- `CombatantFlags.neverRandomTarget` — a random-enemy hit, a Reflect bounce and an empty-aim
+  fallback never land on it (plan O-G7, research §2 single source for random-target attacks;
+  the bounce half and the empty-aim half are both our estimate).
+
+Both flags are set only on the four Mortiphasms. **Measured, not assumed:** the event logs of
+Chapters 1, 2, 3 (both links), 7, 8, 9 and 10 over 20 seeds each, under one scripted policy, hash
+identically before (`4f2481f2`) and after this change.
+
+Not listed contract files, recorded for the same reason: `src/battle/ffx/volley.ts` and
+`volley-planners.ts` (new: an enemy turn that casts several rows, O-G3, inert unless a row sets
+`extra.volley`); `execute.ts` routes that row; `ticks.ts#onTurnEnd` and `setup.ts` call the
+Chapter XII hooks (no-ops unless the Omnis formation set its `omnis.*` flags).
 
 ## 2026-09-24 — `encounters.ts`: Chapter IX (Yojimbo) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 

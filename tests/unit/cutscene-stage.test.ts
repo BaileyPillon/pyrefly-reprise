@@ -80,8 +80,8 @@ describe('which chapters the stage changes (measured, pinned)', () => {
 
   it('stands only Chapters IX and XIII\'s own figures, so no other chapter\'s showActor puts anyone on stage', () => {
     // Trema (FFX-2 only, Chapter XIII, listed 2026-09-25) stands in his own post scene only.
-    // Isaaru (FFX only, Chapter XIV, unlisted) stands in his own pre and post scenes; no listed chapter shows him.
-    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'isaaru']);
+    // Plus Seymour Omnis (Chapter XII) and Isaaru (Chapter XIV), FFX only and unlisted: their own pre and post scenes.
+    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis', 'isaaru']);
     const own: Record<string, string[]> = { 'yojimbo-cavern': ['ginnem'], 'ffx2-trema': ['trema'] };
     for (const c of CHAPTERS) {
       const shown = [...figuresIn(c.scriptsRef?.pre ?? []), ...figuresIn(c.scriptsRef?.post ?? [])];

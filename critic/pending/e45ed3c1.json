@@ -1,0 +1,129 @@
+{
+  "mainSha": "e45ed3c1",
+  "bundle": "RSsiNs7I",
+  "deployedAt": "2026-09-25T20:06:18.484Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 708,
+  "policyVersion": 2,
+  "artifactHash": "584cfce124a84b8eb30963bb9c9bb643108b89bd9f6033b972d7c5fba5d45723",
+  "review": "deep",
+  "reasons": [
+    "src/app/runSeed.ts: unclassified product path is a shared system",
+    "src/battle/common/types.ts: shared combat core is a shared system",
+    "src/battle/ffx/triggers.ts: FFX CTB engine is a shared system",
+    "src/battle/ffx2/active.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/engine.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/triggers.ts: FFX-2 ATB engine is a shared system",
+    "src/data/chapter-yojimbo-cavern.ts: unclassified product path is a shared system",
+    "src/engine/ArtManifest.ts: asset loader and manifests is a shared system",
+    "src/engine/BattlePresenterArt.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterArt.ts: asset loader and manifests is a shared system",
+    "src/ui/coach/coachCopy.ts: unclassified product path is a shared system",
+    "src/ui/common/StrategyGuide.ts: global layout, input and boot is a shared system",
+    "src/ui/common/chapterPanel.ts: global layout, input and boot is a shared system",
+    "src/ui/common/pause-chapter.css: global layout, input and boot is a shared system",
+    "src/ui/common/phone-battle-parts.css: global layout, input and boot is a shared system",
+    "src/ui/common/phone-battle.css: global layout, input and boot is a shared system",
+    "src/ui/common/phoneBattle.ts: global layout, input and boot is a shared system",
+    "src/ui/common/phoneBattleText.ts: global layout, input and boot is a shared system",
+    "src/ui/common/phoneFraming.ts: global layout, input and boot is a shared system",
+    "src/ui/common/portrait.ts: global layout, input and boot is a shared system",
+    "src/ui/common/victoryLine.ts: global layout, input and boot is a shared system",
+    "public/art/manifest.json: asset loader and manifests is a shared system"
+  ],
+  "systems": [
+    "FFX CTB engine",
+    "FFX HUD",
+    "FFX-2 ATB engine",
+    "FFX-2 HUD",
+    "asset loader and manifests",
+    "battle presenter and lifecycle",
+    "cutscene scripts",
+    "debug API used by the evidence harness",
+    "effects, lighting and sprites",
+    "global layout, input and boot",
+    "move advisor and enemy intent",
+    "painted artwork",
+    "shared combat core",
+    "strategy guide",
+    "title, chapter select, prep, pause and results screens",
+    "unclassified product path"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin"
+  ],
+  "checks": [
+    "CHK-002",
+    "CHK-003",
+    "CHK-004",
+    "CHK-005",
+    "CHK-006",
+    "CHK-007",
+    "CHK-008",
+    "CHK-009",
+    "CHK-010",
+    "CHK-012",
+    "CHK-013",
+    "CHK-014",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-018",
+    "CHK-019",
+    "CHK-020",
+    "CHK-021",
+    "CHK-022",
+    "CHK-023"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 94,
+    "at": "2026-09-25T20:06:18.484Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "done",
+      "requires": "exact-artifact verification and real-input smoke on the live URL",
+      "result": "PASS",
+      "settledBy": "critic/reviews/e45ed3c1-live.json",
+      "settledAt": "2026-09-25T20:23:44.000Z"
+    },
+    {
+      "kind": "focused",
+      "status": "pending",
+      "requires": "acceptance of the changed area"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483",
+        "dc2669ac",
+        "e3b8c2a3",
+        "a999d133",
+        "1c22066e",
+        "5be4babe",
+        "fc7f1a20"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "Push the build live please let's do it",
+    "date": "2026-09-25T20:06:18.484Z",
+    "report": null,
+    "changedArea": null
+  }
+}

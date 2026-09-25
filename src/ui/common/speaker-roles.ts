@@ -26,6 +26,7 @@ export const SPEAKER_ROLES: Partial<Record<SpeakerId, string>> = {
   // FFX antagonists and the dead.
   seymour: 'Maester',
   'seymour-macalania': 'Maester',
+  'seymour-omnis': 'Maester',
   yunalesca: 'Unsent',
   jecht: 'Final Aeon',
   braska: 'High Summoner',

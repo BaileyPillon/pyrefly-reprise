@@ -35,6 +35,7 @@ import './seymour-anima-macalania.ts';
 import './evrae.ts';
 import './yojimbo.ts';
 import './seymour-natus.ts';
+import './seymour-omnis.ts';
 import './isaaru.ts';
 
 export * from './types.ts';
@@ -59,6 +60,7 @@ export {
 export * from './evrae.ts';
 export * from './yojimbo.ts';
 export * from './seymour-natus.ts';
+export * from './seymour-omnis.ts';
 export * from './isaaru.ts';
 
 /** True for any of the three actors in the Macalania formation. */

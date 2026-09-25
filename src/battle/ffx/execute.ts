@@ -22,6 +22,7 @@ import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 import { revealForSensorAuto } from './sensor.ts';
 import { resolveDoublecast } from './doublecast.ts';
 import { carryOutOrder } from './orders.ts';
+import { isVolley, resolveVolley } from './volley.ts';
 import { duelRefusalFor } from './aeon-duel.ts';
 
 /** What executing a command did, so the engine loop knows how to proceed. */
@@ -210,6 +211,9 @@ export function executeCommand(
   if (command.kind === 'ability' && def.extra?.['castsTwoBlackMagicSpells'] === true) {
     return resolveDoublecast(ctx, actor, def, command.wrappedId, command.targets);
   }
+  // **A volley**: several spells in one enemy turn (Seymour Omnis's four disc
+  // spells, Chapter XII) — inert unless the row sets `extra.volley` [volley.ts].
+  if (command.kind === 'ability' && isVolley(def)) return resolveVolley(ctx, actor, def);
 
   let options: ResolveOptions = {};
 

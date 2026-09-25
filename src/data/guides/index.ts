@@ -18,6 +18,7 @@ import { SEYMOUR_ANIMA_MACALANIA_GUIDE } from './seymour-anima-macalania.ts';
 import { EVRAE_GUIDE } from './evrae.ts';
 import { YOJIMBO_CAVERN_GUIDE } from './yojimbo-cavern.ts';
 import { FFX2_TREMA_GUIDE } from './ffx2-trema.ts';
+import { SEYMOUR_OMNIS_GUIDE } from './seymour-omnis.ts';
 import { ISAARU_GUIDE } from './ffx-isaaru.ts';
 
 export type {
@@ -42,6 +43,7 @@ export {
   EVRAE_GUIDE,
   YOJIMBO_CAVERN_GUIDE,
   FFX2_TREMA_GUIDE,
+  SEYMOUR_OMNIS_GUIDE,
   ISAARU_GUIDE,
 };
 
@@ -63,6 +65,7 @@ export const GUIDES: readonly ChapterGuide[] = [
   // Chapter XIII (FFX-2 only), registered and unlisted like its chapter; its lines follow the
   // chapter's shape (`../trema-shape.ts`).
   FFX2_TREMA_GUIDE,
+  SEYMOUR_OMNIS_GUIDE,
   // Chapter XIV (FFX only), registered and unlisted like its chapter.
   ISAARU_GUIDE,
 ];

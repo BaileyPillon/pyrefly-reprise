@@ -27,6 +27,7 @@ import { installFfxPhoneHud } from '../../ui/ffx/phoneHud.ts';
 import { installFfx2PhoneHud } from '../../ui/ffx2/phoneHud.ts';
 import { ffx2EngineOptions, registerBattleContent } from './BattleScreenContent.ts';
 import { withOversoulLook, type OversoulField } from '../../engine/OversoulLook.ts';
+import { withOmnisDiscs } from '../../engine/OmnisDiscTap.ts';
 
 // ---------------------------------------------------------------- engines
 
@@ -130,8 +131,10 @@ export function createHud(game: GameId, field?: () => OversoulField | null): Hud
     ? withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud)
     : withPhoneLayout(new FFX2BattleHud(), installFfx2PhoneHud);
   // The Oversoul look (FFX-2 only: Oversoul exists only in FFX-2), on the field the screen passes in.
-  // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`).
-  return withCoach(game, game === 'ffx2' && field ? withOversoulLook(hud, field) : hud);
+  // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`). The FFX side gets the
+  // Mortiphasm disc colours (FFX only, Chapter XII; inert without the Omnis disc state, `engine/OmnisDiscTap.ts`).
+  const tapped = !field ? hud : game === 'ffx2' ? withOversoulLook(hud, field) : withOmnisDiscs(hud, field);
+  return withCoach(game, tapped);
 }
 
 // --------------------------------------------------------- cutscene runner

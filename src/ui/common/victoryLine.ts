@@ -11,6 +11,9 @@
  * nothing.
  */
 
+import type { Chapter } from '../../data/encounters.ts';
+import { measuredPortraitIds } from './portrait.ts';
+
 /** One served victory line and the party member who says it. */
 export interface VictoryLine {
   speakerId: string;
@@ -70,4 +73,32 @@ export function wedgeFigureId(
   leader: string | undefined,
 ): string | undefined {
   return victory && quip ? quip.speakerId : leader;
+}
+
+/** The X-2 likenesses a wedge can stand (`portraits/<id>-x2.png` with a measured crop). */
+const X2_PORTRAITS = new Set(measuredPortraitIds().filter((id) => id.endsWith('-x2')));
+
+/**
+ * FOC17-01 (release 17 focused review): the wedge's painting comes from the
+ * chapter's own game (AGENTS.md rule 14). FFX: `portraits/<id>.png`, unchanged.
+ * FFX-2: the girl's X-2 likeness (`yuna-x2`, `rikku-x2`), the same art the
+ * ledger rows beside it climb to (`partyFace.ts`); Paine has no FFX self, so
+ * her one portrait, `paine`, already is her FFX-2 art.
+ */
+export function wedgePortraitId(id: string, chapter: Chapter | undefined): string {
+  if (chapter?.buildRef.game !== 'ffx2') return id;
+  return X2_PORTRAITS.has(`${id}-x2`) ? `${id}-x2` : id;
+}
+
+/**
+ * The fallen pose on a loss, as `[hurt, ko]` art paths (FOC17-01). FFX: the
+ * guardian's own folder. FFX-2: the folder of the dressphere she wears in this
+ * chapter's build (`characters/yuna-gunner/hurt.png`), never her FFX folder;
+ * a dressphere with neither pose painted shows no figure, as before.
+ */
+export function wedgeFallenArt(chapter: Chapter | undefined, id: string): [string, string] {
+  const build = chapter?.buildRef;
+  const dress = build?.game === 'ffx2' ? build.members.find((m) => m.id === id)?.currentDressphere : undefined;
+  const dir = dress ? `${id}-${dress}` : id;
+  return [`art/characters/${dir}/hurt.png`, `art/characters/${dir}/ko.png`];
 }

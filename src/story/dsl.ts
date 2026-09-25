@@ -47,6 +47,7 @@ export type SpeakerId =
    * `-macalania` suffix, as it strips `-x2`.
    */
   | 'seymour-macalania'
+  | 'seymour-omnis' // Chapter XII (FFX): `portraits/seymour-omnis.png` (B17 = c); the plate reads "Seymour"
   | 'yunalesca'
   | 'jecht'
   | 'braska'
@@ -93,8 +94,7 @@ export type SpeakerId =
   | 'shinra'
   // --- FFX-2 antagonists and supporting cast ------------------------------
   | 'shuyin'
-  | 'lenne'
-  | 'nooj'
+  | 'lenne' | 'nooj'
   | 'baralai'
   | 'gippal'
   | 'leblanc'

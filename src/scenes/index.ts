@@ -30,6 +30,7 @@ import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-t
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
+import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.ts';
 import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
@@ -187,13 +188,8 @@ SCENES.set('farplane', {
  * Chateau Leblanc, the Last Room (Chapter 6) — real (`buildLeblancLastRoomScene` in
  * {@link SCENE_FACTORIES}); `build` is the unreachable demo diorama, as for Bevelle above.
  */
-SCENES.set('leblanc-last-room', {
-  key: 'leblanc-last-room',
-  title: 'Chateau Leblanc — the Last Room',
-  build: buildDemoScene,
-  slots: LEBLANC_LAST_ROOM_SLOTS,
-  placeholder: false,
-});
+SCENES.set('leblanc-last-room', { key: 'leblanc-last-room', title: 'Chateau Leblanc — the Last Room',
+  build: buildDemoScene, slots: LEBLANC_LAST_ROOM_SLOTS, placeholder: false });
 /**
  * Macalania Temple, the antechamber (Chapter 7, FFX only) — real
  * (`buildMacalaniaTempleScene` in {@link SCENE_FACTORIES}); `build` is the
@@ -227,6 +223,9 @@ SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern o
 /** The Via Infinito, Cloister 100 (Chapter XIII, FFX-2 only): real, `build` unreachable as for Leblanc [cloister-100.ts]. */
 SCENES.set('via-infinito', { key: 'via-infinito', title: 'Via Infinito — Cloister 100',
   build: buildDemoScene, slots: CLOISTER_100_SLOTS, placeholder: false });
+/** The Garden of Pain inside Sin (Chapter XII, FFX only): real, `build` unreachable as for Leblanc [garden-of-pain.ts]. */
+SCENES.set('garden-of-pain', { key: 'garden-of-pain', title: 'Inside Sin — the Garden of Pain',
+  build: buildDemoScene, slots: GARDEN_OF_PAIN_SLOTS, placeholder: false });
 /** The Via Purifico, the last chamber (Chapter XIV, FFX only): real, `build` unreachable as for Leblanc [via-purifico.ts]. */
 SCENES.set('via-purifico', { key: 'via-purifico', title: 'Via Purifico — the last chamber',
   build: buildDemoScene, slots: VIA_PURIFICO_SLOTS, placeholder: false });
@@ -272,6 +271,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
   'via-infinito': buildCloister100Scene,
+  'garden-of-pain': buildGardenOfPainScene,
   'via-purifico': buildViaPurificoScene,
 };
 
