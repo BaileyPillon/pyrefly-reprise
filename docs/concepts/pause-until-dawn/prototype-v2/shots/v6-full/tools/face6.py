@@ -71,6 +71,8 @@ def key_front(k):
     """(straight RGBA 0..1 on the full canvas, the file's box) of key k's front as the runtime loads it."""
     if k == "frontal":  # this build's own composite (prep)
         v3 = {"file": PROTO / "art" / "v6" / "frontal" / "front.png", "box": [0, 0]}
+    elif (PROTO / "art" / "v6" / "keys" / k / "front.png").exists():  # after collar (+ hair6): what the runtime loads
+        v3 = {"file": PROTO / "art" / "v6" / "keys" / k / "front.png", "box": [0, 0]}
     else:
         v3 = C.rig()["artMeta"]["v3"]["keys"][k]["front"]
     im = np.asarray(Image.open(C.PROTO_ART / v3["file"]).convert("RGBA")).astype(np.float32) / 255.0

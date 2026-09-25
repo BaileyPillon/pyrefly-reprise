@@ -67,7 +67,7 @@ to the same length (27.7 s).
 | Check | v6 full | v5.1 (same stepped sweep) |
 |---|---|---|
 | Frames with two paintings | 0 of 900 (clip), 0 of 545 (compare), 0 of 162 (each sweep) | 0 |
-| Cut S, 1-degree sweep, an expression held on every key (smile 0.7, open 0.6, lids 0.55, gaze +6/+2, brow 0.5), 16 cuts | head 0.89-1.32, face 0.95-1.19, largest non-cut 1.28 (gate 1.5) | head 0.85-1.38 (at rest; v5.1 cannot hold an expression) |
+| Cut S, 1-degree sweep, an expression held on every key (smile 0.7, open 0.6, lids 0.55, gaze +6/+2, brow 0.5), 16 cuts | head 0.86-1.32, face 0.93-1.18, largest non-cut 1.32 (gate 1.5); before the Fix 2 repair 0.89-1.32 / 0.95-1.19 / 1.28 | head 0.85-1.38 (at rest; v5.1 cannot hold an expression) |
 | Same yaw, two keys (the hysteresis pairs), MAD in the eyes box | median 3.48, max 6.0 | median 3.72, max 5.99 |
 | Same, in the mouth box | median 1.48 (l side 1.07-2.01) | median 1.90 (l side 1.42-2.45) |
 | Same, in the jaw box | median 1.71 | median 1.75 |
@@ -76,6 +76,7 @@ to the same length (27.7 s).
 | Weight change per frame (clip) | open 0.047, smile 0.036, press 0.018, brow raise 0.032, brow draw 0. The lids outside blinks change 0.049 (plan: 0.06 or less) | - |
 | Gaze | x -9.6 to +11.3 px, y -2.7 to +1.9 px. The lead over the settled eye peaks at 11.6 px. The fastest idle step is 9.3 px/s (limit 133). The fastest step overall is the input-driven saccade at 10.9 s (424 px/s) | none |
 | Throat line (`throat.py`, page scale) | **0 of 900 frames** after Fix 1 | 799 of 900 on the same capture before the fix |
+| Far-side hair (Fix 2, `hair6.py`) | l40 gradient 1.00 (was 0.83), no row step, 0 teal pixels at +40 | see Fix 2 |
 
 The mouth and jaw boxes read 7-10 at +24..+36 in both builds. That is the earring's swing lag reaching the boxes (up
 minus down 6-10 px), not the face. The v5.1 judge saw the same thing.
@@ -89,27 +90,59 @@ down onto the body's own identical pixels (the neck's map is the identity at the
 (`face6.py collar`). The rest pose is unchanged: max 1 level against v5.1. The line is gone at 1:1 (`sheet.jpg`).
 The method's second step, easing the neck's map onto the body mesh, was not needed.
 
-## Fix 2: the far-side hair at +-30..40 (not fixed, disclosed)
+## Fix 2: the far-side hair at +-30..40 (repair pass, done on the CPU)
 
-The diagnosis is the method's 10-minute check. The smear is already in the push before any repaint: compare
-`warp.front.png` and `warp.hairback.png` with the pick in the key folders. So the cause is the stretch, not the
-LoRA fill. The method's fix (a) needs a LoRA pass (3-5 GPU min), and this track is CPU only. Fix (b) changes the cut.
-The keys' hair is unchanged from v5.1. The numbers in the method's hair box, with the key against the plate warped
-into it:
+The first pass disclosed this one and the judge refuted it: the brief asked for the fix if the defect recurred, and it
+did (l40 0.83 against the 0.85 accept; at -40 a flat pink band with a row step, at +40 a teal smear by the tassel).
+The repair stays on this track's CPU (0 GPU, no LoRA): `tools/hair6.py`, run in `regen.sh` right after the collar.
+Everything was re-captured and re-encoded afterwards: `clip.mp4`, `compare.mp4`, `sheet.jpg` and every number in
+this file are the repaired build.
 
-| Key | Gradient energy vs the plate (accept 0.85 or more) | Hue difference |
-|---|---|---|
-| l20 | 0.90 | 0.9 degrees |
-| l30 | 0.91 | 0.7 degrees |
-| l40 | **0.83** | 1.3 degrees |
-| r20 | 1.00 | 0.5 degrees |
-| r30 | 1.02 | 0.3 degrees |
-| r40 | 1.00 | 0.2 degrees |
+**What was wrong.** The smear is the v5.1 chain, not the plate. Each grown key is the one before it pushed 10 degrees,
+with its stretched holes repainted, so at -40 the far-side hair had been resampled four times and filled once "with
+no structure". The front layer's shoulder hair also met the hair-back along a straight row at y ~600, from -20 on
+(the step). At +40, the plate's teal rim glow sits beside the tassel at rest; as the head turns, the tassel moves away
+and the stretched glow floats on the pink hair. Below it, the blurred footprint fill the tassel covers at rest shows.
 
-The row-step ratio does not work as a test here: this box has painted horizontal edges, and even l20 reads 9.4 on
-it. Seen at 1:1: at -40 the flat pink band with the step at y ~350 is still there, and at +40 the far hair is soft.
-The method's default until (a) passes is the +-30 cap. This build keeps +-40 because the brief asked for every
-v5.1 key.
+**What was done.**
+
+- **Left keys, far side (image right), -20, -30, -40: `warp`.** The region is redrawn from the plate through the key's
+  own map (`cmap.npy`) in one resample. That is the same map every key's face already rides, so the strands sit
+  where the chain put them, as crisp as one resample allows. Back and front get the same pixels, so the row step goes.
+  The mask stays out of the face's support, the ornament, the neck and the silhouette, with a 10 px feather.
+- **Right keys, far side (image left): `clean`.** The teal glow and its halo leave the low frequencies by inpainting.
+  Its high frequencies are kept as luminance only, so the strands stay and the colour goes. The glow **fades a
+  quarter per key**: r10 0.75, r20 0.5, r30 0.25, r40 0. The frontal plate is untouched, so no cut drops the glow in
+  one step. At +30 and +40, the footprint column (the plate's own footprint mask pushed through the key's map) gets
+  the key's own strands from beside it (a clone per 24 px band), laid over the inpainted tone.
+- The faces the capture uploads each frame now start from these fronts (`face6.key_front` reads `v6/keys/<k>/front.png`).
+
+**Numbers** (`measure6.json`, the method's hair boxes; the -40/+40 frames of the encoded `clip.mp4`, old against new):
+
+| Check | Before (committed 85107767) | After | Accept |
+|---|---|---|---|
+| l40 gradient energy against the plate warped into the key | 0.83 | **1.00** | 0.85 or more |
+| l30 / l20 | 0.91 / 0.90 | 1.00 / 0.995 | 0.85 or more |
+| r20 / r30 / r40 (the hair box above; not repainted) | 1.00 / 1.02 / 1.00 | the same | 0.85 or more |
+| Hue difference, every box | 0.2-1.3 degrees | 0.0-0.5 degrees | 6 or less |
+| Row-step max over median, l30 / l40 (the plate warped reads 14.8 / 17.8) | 28.2 / 25.1 | **17.0 / 17.1** | see below |
+| -40, frame 280: largest row-mean step across the seam (page px 490-612, y 570-620) | 8.4 levels | **4.4** | - |
+| -40, frame 280: mean gradient of the far-side hair (page 470-612 x 330-560) | 10.3 | **12.2** | - |
+| +40, frame 590: teal pixels on the far-side hair left of the tassel (page 110-300 x 480-660) | 968 | **0** | - |
+| Cut S at +-30/+-40, expression held (gate 1.5) | head 1.24 / 0.95, face 1.12 / 0.98 | head 1.24 / 0.95, face 1.12 / 0.98 | 1.5 or less |
+
+The l-side gradient ratio is 1.00 **by construction**: those pixels are now the plate warped once, which is what the
+metric compares against. So the table also has plain measurements on the encoded frames. The row-step ratio cannot
+reach 1.5 in this box, because the plate itself has painted horizontal edges there (14.8-17.8 when warped). The repair
+brings l30 and l40 down to the plate's own level.
+
+**Looked at, 1:1 and 2x** (`sheet.jpg`, last row, v6 against v5.1; clip frames 280 and 590; cut pairs 239/240,
+259/260, 531/532, 548/549). At -40 there is no row step, and the pink hair has the plate's strokes. At +40 there is no
+teal smear. The column beside the tassel reads as dark hair with strands, not a brown blur. The glow thins over the
+turn, with no pop at any cut. What remains: the -40 pink band is still wide (it is the plate's own pink hair,
+stretched by the turn), and the re-stranded footprint strands are a little busier than the plate's. The method's GPU
+step (a LoRA pass at denoise 0.30-0.35 over this prefill, 3-5 min) would soften both. It is optional polish now, not
+a defect. The +-30 cap is no longer needed.
 
 ## Looked at, 1:1
 
@@ -127,7 +160,8 @@ v5.1 key.
 
 ## Still open (for Bailey and the next step)
 
-- Fix 2 (a) needs about 3-5 GPU minutes. The alternative is the +-30 cap.
+- Fix 2 is done on the CPU (repair pass). Optional polish: the method's LoRA pass over the repaired far-side hair
+  (3-5 GPU min) would soften the busier footprint strands and the wide -40 pink band. It is not needed to ship the preview.
 - The state mapping (normal, determined, hurt), a sad corner-down and a lower-lid raise are still INFERRED and not
   built.
 - The port into `src/` (the method's "then the port"). This build runs through capture uploads. The runtime shader
@@ -145,6 +179,7 @@ v5.1 key.
 | File | What it does |
 |---|---|
 | `face6.py` | The front-layer rig, the support mask, the per-key sampler, the frontal as a key, Fix 1 (`collar`) |
+| `hair6.py` | Fix 2 on the CPU: the far-side hair from the plate (l20-l40), the teal fade and the footprint column (r10-r40) |
 | `turn6.py` | Feel A2 through the turn (gaze on the runtime's head, no brow draw), the per-frame faces and uploads, the frozen-weight sweeps |
 | `shots6.mjs` | The browser passes on the stepped clock: `log`, `frames`, `sweep`, `rest` |
 | `measure6.py`, `throat.py` | The numbers above |
@@ -153,11 +188,14 @@ v5.1 key.
 | `regen.sh` | Rebuilds everything, CPU only |
 
 The v5.1 checks `../../v5-pilot/tools/sweep-metric.py` and `../v51/tools/cut_checks.py` were run read-only. The
-scratch runtime, the logs and `measure6.json` stay in `D:/Tools/pyrefly-scratch/picks0925/portrait-a2/` (48 MB, not
+scratch runtime, the logs and `measure6.json` stay in `D:/Tools/pyrefly-scratch/picks0925/portrait-a2/` (86 MB after the repair pass, with the repaired keys and `hair6/orig`; not
 committed). The captured frames and sweeps (2.2 GB) were deleted after encoding; `regen.sh` rebuilds them. The
-scratch Vite server on port 5720 was stopped.
+scratch Vite server on port 5720 was stopped (after the first build and again after the repair pass).
 
 ## Independent judge (2026-09-25, a separate agent that built none of this)
+
+*(This judged commit 85107767, before the Fix 2 repair pass above. Its Fix 2 finding was refuted and then repaired;
+the sheet is now 2000 x 3602.)*
 
 Checked at 1:1 from the committed files, not from the build's report. **Score 7.5 / 10, above the bar of 7.**
 **Worst: the far-side hair at -40 and +40** (the flat pink band with a step on the image right at -40, and the soft,
@@ -177,6 +215,9 @@ accept in `measure6.json`. The brief's Fix 2 is therefore **not met**. Cap at +-
   frames of `clip.mp4`: 0 flagged (longest run 17 px against the 40 threshold). The same detector on v5.1's `clip.mp4`
   flags 202 of 412 frames (a positive control). Nothing shows at 1:1 in the -40 frame (280).
 - **Locks.** `docs/target/approved-hashes.json`, re-hashed by the judge: 185 entries, 185 match, 0 mismatch, 0 absent. The build's
-  count of "31 absent" does not reproduce now; later lock commits may explain it. This track changed nothing
+  count of "31 absent" does not reproduce now; later lock commits may explain it. (Repair pass: explained. The 31 are
+  the sets' metadata keys, `words` and `note`, which were counted as files. Counting file entries only: 185 match,
+  0 mismatch, 0 absent, both before and after the repair. The repo has no `verify-approved` tool, so the check is a
+  sha256 re-hash of every file entry.) This track changed nothing
   under `public/art`, so it needed no backup; `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/` exists.
 - **Minor.** The v5.1 panel in `compare.mp4` runs behind v6 by a beat, as disclosed. The port into `src/` is not written.

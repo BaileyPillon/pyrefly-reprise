@@ -24,6 +24,7 @@ json.dump(d, open(a + "rig-v6.json", "w", encoding="utf-8"), indent=1)
 EOF
 $PY face6.py prep                                        # support mask, the frontal as one back + front, rest check
 $PY face6.py collar                                      # Fix 1: every key's neck overlaps the body (rig-v6.json)
+rm -rf "$LP6_WORK/hair6/orig"; $PY hair6.py fix           # Fix 2 (CPU): far-side hair from the plate (l20-l40), teal + footprint (r30, r40)
 U=http://127.0.0.1:5720/
 node shots6.mjs --url $U --out $LP6_CAP --phase rest
 for s in clip half; do node shots6.mjs --url $U --out $LP6_CAP --phase log --script $s; $PY turn6.py $s; node shots6.mjs --url $U --out $LP6_CAP --phase frames --script $s; done

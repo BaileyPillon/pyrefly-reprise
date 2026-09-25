@@ -10,7 +10,7 @@
   throat    the thin-line detector on the throat (canvas y 800-860, x 380-620, page scale): frames with a run of 40 px
   sweeps    the head/face S at every cut (sweep-metric.py) and the same-yaw swap by region (cut_checks.py), v6 with an
             expression held, v6 at rest, v5.1 as committed (the same stepped sweep)
-  hair      the method's Fix 2 numbers in the far-side hair box at +-30 / +-40 (disclosed, not fixed on the CPU)
+  hair      the method's Fix 2 numbers in the far-side hair box at +-20..40 (after hair6.py)
 """
 import json
 import os

@@ -5,7 +5,7 @@
                panel is v5.1's own compare.mp4 panel (its real-time recording), v6 is rendered at 50 fps and encoded at
                25 (half speed); both 540 x 900, labelled
   sheet.jpg    the numbers, the turn every 10 degrees with an expression held, 1:1 crops across four cuts, clip moments
-               at 1:1, the throat before / after Fix 1, the far-side hair at +-40 (disclosed)
+               at 1:1, the throat before / after Fix 1, Fix 2, the far-side hair at +-40 (hair6.py)
 
     PY=D:/Tools/sd-scripts/.venv/Scripts/python.exe
     $PY make6.py clip|compare|sheet
@@ -143,15 +143,16 @@ def sheet():
         tiles.append(rgb(CAP / "frames-clip" / f"{i:05d}.png", (cx - 100, 425, cx + 100, 665)))
         caps.append(f"{i} {what}")
     blocks.append(row("clip.mp4 at 1:1 (page scale): blinks, the eye lead, the smile, through the turn", tiles, caps, W))
-    # 5. throat before / after (3x), far-side hair at +-40 (1:1, disclosed)
+    # 5. throat before / after (3x), far-side hair at +-40 after Fix 2 (1:1)
     # before: the same capture with the v5.1 neck (peek-throat.png, frame 280, 2x); after: this build's frame 280
     before = Image.open(CAP / "peek-throat.png").convert("RGB").crop((500, 0, 1000, 220))
     after = rgb(CAP / "frames-clip" / "00280.png", (250, 680, 500, 790)).resize((500, 220), Image.NEAREST)
     blocks.append(row("Fix 1, the throat line, frame 280 (-40) at 2x: the v5.1 neck (left) and the overlap (right)", [before, after],
                       [f"before: {m['throat']['throat-before']['framesFlagged']} of 900 frames flagged", f"after: {m['throat']['throat-after']['framesFlagged']} of 900"], W))
-    tiles = [rgb(CAP / "sweep" / "up" / "ym40.png", (560, 200, 832, 520)), rgb(CAP / "sweep-v51" / "up" / "ym40.png", (560, 200, 832, 520)),
-             rgb(CAP / "sweep" / "down" / "yp40.png", (0, 200, 280, 520)), rgb(CAP / "sweep-v51" / "down" / "yp40.png", (0, 200, 280, 520))]
-    blocks.append(row("Still open (disclosed): the far-side hair at -40 (image right) and +40 (image left), v6 and v5.1: unchanged, the stretch of the push", tiles,
+    tiles = [rgb(CAP / "sweep" / "up" / "ym40.png", (560, 200, 832, 660)), rgb(CAP / "sweep-v51" / "up" / "ym40.png", (560, 200, 832, 660)),
+             rgb(CAP / "sweep" / "down" / "yp40.png", (40, 380, 420, 780)), rgb(CAP / "sweep-v51" / "down" / "yp40.png", (40, 380, 420, 780))]
+    blocks.append(row("Fix 2, the far-side hair at -40 (image right: from the plate in one resample, the row step gone) and +40 (image left: "
+                      "no teal smear, the footprint column re-stranded), v6 against v5.1", tiles,
                       ["v6 -40", "v5.1 -40", "v6 +40", "v5.1 +40"], W))
     H = sum(b.height for b in blocks)
     out = Image.new("RGB", (W, H), (10, 8, 6))
