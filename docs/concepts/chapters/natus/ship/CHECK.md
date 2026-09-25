@@ -200,3 +200,46 @@ Frames and raw results are in scratch and are not committed:
 - `res-*.json`, `dev-results/`, `res-probe-return.json`: the raw results.
 - `check.mjs` and `probe-return.mjs`: the scripts.
 - `tsc.txt`, `vitest.txt`, `orphans.txt`, `merged-*.txt`, `decode.txt` and `verify.txt`: the logs.
+
+## Re-check after repair 1 (2026-09-25, commit `c390c051`)
+
+Edited nothing but this section. Branch `chapter-natus-ship-0925`, worktree `D:/pyrefly-ch-natus-ship`.
+
+**M1: fixed and proved.** The diff is what the repair says it is: one table line,
+`mortiorchis: 'returns'`, in `src/engine/BattlePresenterDepartures.ts` (now 389 lines, under 400),
+comment-only changes in `BattlePresenterReturns.ts`, and two test files. The plumbing
+(`sendToReturn` / `comeBack`) is unchanged; `comeBack` acts only on a figure a `'returns'` send
+kept, so no other chapter's heal moves. The sources check out in `research/ffx-seymour-flux.md`:
+line 199 (§2.2) "Mortiorchis has no death state at all in this encounter", line 346 (§4.4) "revives
+via Mortibsorption on every kill" and "never absent from the field", and C-12 (line 1178), verified
+by 2 sources. Game case FFX only (Chapter I), written in the commit. No boss number, no art, no
+target file touched (`git diff` over `public/art`, `docs/target` and the hash files is empty).
+
+- `tsc --noEmit`: clean.
+- Full vitest in the worktree: 399 files, 7497 passed, **1 failed**, 5 skipped, 1 todo. The failure is
+  `tests/unit/audio-manifest-io.test.ts` "loses nothing when four separate renders write at once":
+  a Windows `EPERM` opening `manifest.json.lock` in C: Temp while several agents were running
+  suites. The repair touches no audio file, and the same file passed 3 runs out of 3 when re-run
+  alone with `natus-ship-content` and `presenter-departures` (32/32 each time). A load flake, not
+  this candidate.
+- The two new Chapter I cases assert `departureKindOf('mortiorchis') === 'returns'`, on stage at
+  alpha 1 after the first drain, one `fade=1` per drain over a whole battle with 3 or more drains,
+  and never a `remove:`. They cannot pass without the table line.
+- Frames `mortiorchis-return-{0-before,1-sent,2-back}-1600.jpg` looked at: the mount breaks into
+  green pyreflies beside Seymour, then stands back at full alpha with "+4000" and the
+  "Mortiorchis USES MORTIBSORPTION" banner. Matches the claim.
+
+**Still open (not blockers).**
+
+- Chapter I is live and listed, so this change owes the critic's focused check of Chapter I before
+  it ships. The browser proof used the debug auto-battle, not real keys.
+- Side effect, disclosed by the builder and accepted here: the `'returns'` kind maps Mortiorchis's
+  `ko` pose to `hurt`, so its `ko.png` is no longer fetched (not an approved-hash file; the old send
+  never showed it either).
+- Minor 9 grows by one line: `presenter-departures.test.ts` now pins 15 kinds, so a merge with a
+  branch that adds its own departure kind (Omnis) must re-count, not keep either side's number.
+- Minors 1 to 8 from the first check are unchanged (this repair did not target them).
+
+**Verdict: SHIP for the changed area.** Blockers 0. The one major is fixed, with nothing new
+introduced and no regression against live. Logs: `D:/Tools/pyrefly-scratch/chapters/natus-check/recheck-tsc.txt`
+and `recheck-vitest.txt`.
