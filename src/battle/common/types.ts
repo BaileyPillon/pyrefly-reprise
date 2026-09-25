@@ -2569,4 +2569,6 @@ export interface EnemyGroupDef {
   checkpointOnEntry?: boolean;
   /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema; CONTRACT-CHANGES). */
   carriesPartyState?: boolean;
+  /** FFX-2: an ailment row with no duration value lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES). */
+  timedAilmentDefaults?: boolean;
 }

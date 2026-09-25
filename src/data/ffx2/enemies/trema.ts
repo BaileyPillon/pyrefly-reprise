@@ -93,6 +93,7 @@ export const cloisterParagonGroup: EnemyGroupDef = {
   canEscape: false, // nothing sourced lets the party escape (plan O-4: no Flee)
   nextGroupId: CLOISTER_TREMA,
   musicCues: [{ at: 'start', track: 'scene-bevelle-underground', fadeMs: 800 }], // TR16 = a
+  timedAilmentDefaults: true, // Paragon's Confuse wears off (§2.8 default 133), method check E1
 };
 
 /** Link 2: Trema. `Bevelle - Secret Dungeon - Level 100 - BOSS 229 Trema 1` [SinirothX]. */
@@ -104,6 +105,7 @@ export const cloisterTremaGroup: EnemyGroupDef = {
   musicCues: [{ at: 'start', track: 'boss-ffx2-aeon', fadeMs: 800 }], // TR16 = a, the stand-in for `boss-trema`
   carriesPartyState: true, // "whatever state the Paragon fight left them" [verified: 5 sources]
   checkpointOnEntry: true, // TR5 = b
+  timedAilmentDefaults: true, // Beguiling Mire's Stop wears off (§2.8, 100 [estimate]), method check E1
 };
 
 export const tremaGroups: readonly EnemyGroupDef[] = [cloisterParagonGroup, cloisterTremaGroup];

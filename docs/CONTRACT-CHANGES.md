@@ -6,6 +6,28 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XIII winnability fixes: `EnemyGroupDef.timedAilmentDefaults`
+
+**FFX-2 only** [AGENTS.md hard rule 14]. From `docs/plans/trema-winnability-method-check.md` E1.
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef.timedAilmentDefaults?: boolean`. In a
+battle whose group sets it, an ailment row with no duration value (`duration: 0`) lasts §2.8's
+default for that status instead of "until cured": Sleep 97 and Berserk / Confuse 133 (the tables'
+global defaults, `[single source]`), Stop 100 and Slow 100 (the value most published sources carry,
+`[estimate]`); table `AILMENT_DEFAULT_DURATION` in `src/battle/ffx2/statuses.ts`. §2.8 lists all five
+as timed `[verified: 2 sources]`. `setup.ts` copies the flag into `BattleState.flags`, `engine.ts`
+into `ResolveContext`, and `resolve.ts#applyRiders` passes it to `applyStatus`. Only the two Cloister
+100 links set it (Paragon's Confuse, Trema's Beguiling Mire Stop). Chapters 5 and XI carry the same
+`duration: 0` ailment rows under a written precedent ("until cured", `[estimate]`); they do not set
+the flag, so their event logs are unchanged (measured). Turning it on there is a separate decision.
+
+Not a contract change, recorded here because it moves shipped logs: `spherechange.ts#refreshDerivedStats`
+now layers the girl's accessories (method check E2). Measured over 30 seeds each: chapter 4, 5 and 6 at
+D = 0 and the Wait `intendedStrategy` runs are byte-identical; chapter 5 at D = 700 and D = 1500 moves on
+the seeds where a girl spherechanges under Itchy (win counts unchanged, 17/30 and 3/30), and Chapter XI's
+all-out line goes from 1/30 to 3/30 wins. `ffx2-atb-golden.test.ts` re-pins one hash (chapter 5, D = 1500,
+seed 3).
+
 ## 2026-09-25 — Chapter XIII, Trema: `ChapterId` gains `'ffx2-trema'`, `Chapter.number` widens to 13, `EnemyDef.autoStatuses`, `EnemyGroupDef.checkpointOnEntry` and `carriesPartyState`, `ids.ts` gains `TremaEnemyId`
 
 **FFX-2 only** [AGENTS.md hard rule 14] (research `ffx2-trema.md` §0: ATB, dresspheres, Garment

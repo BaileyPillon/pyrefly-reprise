@@ -96,6 +96,7 @@ export const tremaAbilities: AbilityDef[] = [
     id: 'trema-beguiling-mire',
     name: 'Beguiling Mire',
     power: 4, // DC 4 x3 (the Fiend Arena block's 5 x3 is not this fight), Stop chance 120 [SinirothX]
+    // No duration value is published: the group's `timedAilmentDefaults` gives Stop §2.8's 100 (53 s) `[estimate]`.
     statusEffects: [{ status: 'stop', chance: 120, duration: 0 }],
     messageTemplate: 'Trema uses Beguiling Mire',
   },

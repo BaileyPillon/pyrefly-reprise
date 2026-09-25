@@ -180,6 +180,8 @@ Counter: hit by any attack that Shell or Protect cannot reduce  ->  Big Bang
 
 Examples of attacks that trigger Big Bang: Dark Knight's Darkness, Absorb, 1000 Needles (Split_Infinity); Nooj's Lightfall (wiki). The wiki also says it uses Big Bang "if the party doesn't attack it for too long". SinirothX's normal-form script has no such rule; only its Oversoul script does (T-7).
 
+**Normal form's physicals always land** `[verified: 2 sources]` (added 2026-09-25, `docs/plans/trema-winnability-method-check.md` S9): Split_Infinity (FAQ 26832, G0648) says the normal Paragon "is able to connect with all of his physical attacks", which is why he Oversouls it; the wiki's *Paragon* (revid 3998078) has them dodgeable only in Oversoul. The engine gives its five Normal Attacks `canMiss: false`.
+
 **AI, Oversoul form** `[SinirothX]`, summarised. It waits and does nothing until it is hit or its HP or MP changes. It **copies** Black Magic, Arcana (except Black Sky), MP Absorb, Supernova, Dispel, Haste, Hastega and Holy back at the attacker, answers healing and buffs with Demi, and otherwise uses a Normal Attack. After 20 seconds of being left alone it uses Judgment, Genesis or Big Bang (or Dispel if anyone has Reflect). Below 4/10 HP: 1/2 Normal Attack, 1/8 each Firaga, Blizzaga, Thundaga or Waterga on everyone. Below 1/10 HP: Ultima, Holy, Judgment, Genesis or Big Bang at 1/5 each, plus **Final Impact** once (14 random hits of 1/8 of max HP and MP). Its physicals **miss** in Oversoul (Split_Infinity, GamerGuides, Blackestmage) `[verified: 2 sources]`.
 
 ### 4.2 Trema

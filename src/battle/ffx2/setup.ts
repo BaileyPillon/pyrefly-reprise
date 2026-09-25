@@ -306,6 +306,7 @@ export function buildState(
     flags: {
       ...(setup.chained || options.chained ? { chained: true } : {}),
       ...(enemies.nextGroupId ? { nextGroupId: enemies.nextGroupId } : {}),
+      ...(enemies.timedAilmentDefaults ? { timedAilmentDefaults: true } : {}), // `statuses.ts`, Chapter XIII
       canEscape: setup.canEscape ?? enemies.canEscape ?? false,
       ...inventoryFlags(party, options),
     },

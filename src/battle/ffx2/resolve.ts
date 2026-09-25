@@ -28,8 +28,8 @@ export interface ResolveContext {
   abilities: AbilityRegistry;
   rng: Rng;
   emit: Emit;
-  /** Per-girl Break Damage Limit, from an accessory or a Garment Grid gate. */
-  breaksDamageLimit(unit: Ffx2Unit): boolean;
+  breaksDamageLimit(unit: Ffx2Unit): boolean; // per girl: an accessory or a Garment Grid gate
+  timedAilmentDefaults?: boolean; // `EnemyGroupDef.timedAilmentDefaults` (`statuses.ts`, Chapter XIII)
 }
 
 /**
@@ -153,7 +153,7 @@ function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, abil
         ? 100
         : statusChanceLinear(user.level ?? 1, application.chance, target.level ?? 1, resist);
     if (chance < 100 && ctx.rng.int(0, 99) >= chance) continue;
-    const instance = applyStatus(target, application, user.id, ability.id);
+    const instance = applyStatus(target, application, user.id, ability.id, ctx.timedAilmentDefaults === true);
     if (!instance) continue;
     ctx.emit({
       type: 'status-add',

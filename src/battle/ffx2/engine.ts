@@ -494,9 +494,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       abilities: this.abilities,
       rng: this.rng,
       emit: (e) => this.emit(e),
-      // Break Damage Limit from an accessory or a Garment Grid gate, cached on
-      // the girl when her gate bonuses were last recomputed.
-      breaksDamageLimit: (unit) => unit.aiMemory?.['bdl'] === true,
+      breaksDamageLimit: (unit) => unit.aiMemory?.['bdl'] === true, // cached at her last gate recompute
+      timedAilmentDefaults: this.battleState.flags['timedAilmentDefaults'] === true, // `setup.ts`, from the group
     };
   }
 

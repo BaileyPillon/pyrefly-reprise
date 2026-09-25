@@ -7,9 +7,13 @@
  * `paragon-`-prefixed and nothing is shared with the FFX tables.
  *
  * **Accuracy.** Paragon's record has Accuracy 0 (SinirothX; the wiki's "Accuracy 13" is its
- * mislabelled Luck, research §3.2), so the physical rows carry no `accuracy` byte and the
- * engine's enemy baseline applies (`constants.ts` ENEMY_BASE_ACCURACY): the Leblanc and
- * Chapter XI precedent. Magic never misses (hard rule 5: `canMiss: false`).
+ * mislabelled Luck, research §3.2). **The normal form's physicals always connect**
+ * `[verified: 2 sources]`: Split_Infinity (FAQ 26832, G0648: normal Paragon "is able to connect
+ * with all of his physical attacks", which is why he fights it Oversouled) and the wiki's
+ * *Paragon* (revid 3998078: only the Oversoul form's attacks can be dodged); research §4.1. So the
+ * five Normal Attacks carry `canMiss: false` (method check E3, 2026-09-25). Before, they rolled on
+ * the engine's enemy baseline (`constants.ts` ENEMY_BASE_ACCURACY, an `[estimate]`) and landed 3 %
+ * of the time against the preset's Rabite's Feet. Magic never misses (hard rule 5).
  *
  * **MP.** No source gives Genesis or Big Bang an MP cost. The wiki says draining Paragon's
  * MP in International / HD blocks both (plan Review, `[single source]`); the AI reads that
@@ -38,6 +42,7 @@ const normalAttack = {
   element: ['none' as const],
   targeting: 'single-enemy' as const,
   flags: ['crit-eligible' as const],
+  canMiss: false, // normal form: "connect[s] with all of his physical attacks" [verified: 2 sources]
 };
 
 /**
@@ -71,7 +76,7 @@ export const paragonAbilities: AbilityDef[] = [
     ...normalAttack,
     id: 'paragon-attack-confuse',
     name: 'Attack', // Normal Attack 3: Poison always, Confuse chance 120 [SinirothX]
-    // Confuse has no published duration: 0 = until cured or struck, the Chapter XI precedent. `[estimate]`
+    // Confuse: no duration on the row; the group's `timedAilmentDefaults` gives §2.8's global default 133 (70.5 s).
     statusEffects: [
       { status: 'poison', chance: 255, duration: 0 },
       { status: 'confuse', chance: 120, duration: 0 },
