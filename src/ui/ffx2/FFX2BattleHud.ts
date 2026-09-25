@@ -340,7 +340,7 @@ export class FFX2BattleHud implements HudPort {
 
     this.enemyEl = this.stage.querySelector('.ffx2hud__enemies') as HTMLElement;
     this.telegraphEl = this.stage.querySelector('.ffx2hud__telegraph') as HTMLElement;
-    this.message.mount(this.telegraphEl);
+    this.message.mount(this.telegraphEl, this.el);
     this.partyEl = this.stage.querySelector('.ffx2hud__party') as HTMLElement;
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.commandInfoEl = this.stage.querySelector('.ffx2-cmd-info') as HTMLElement;
@@ -991,7 +991,6 @@ export class FFX2BattleHud implements HudPort {
         chip: this.activeWaitEl,
         command: this.commandEl,
         telegraph: this.telegraphEl,
-        message: this.message.element,
         band: this.commandInfoEl ?? null,
         bandGridHeight: BAND_GRID_HEIGHT,
         partyFence: this.fenceColumnEl ?? null,

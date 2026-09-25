@@ -1,0 +1,1611 @@
+{
+ "CH": "ffx2-leblanc",
+ "TAG": "repair",
+ "active": true,
+ "steps": [
+  "battle reached by real keys",
+  "Yuna: Attack | Skill | Change | Item",
+  "Rikku: Attack | Skill | Change | Item",
+  "Paine: Attack | Skill | Change | Item",
+  "Yuna: Attack | Skill | Change | Item",
+  "Rikku: Attack | Skill | Change | Item"
+ ],
+ "actions": [
+  {
+   "ability": "Steal",
+   "target": "TARGETDr. Goon",
+   "engine": [
+    "Rikku stole Budget Grenade!"
+   ],
+   "firstShownMs": 2308,
+   "lastShownMs": 3313,
+   "text": "Rikku stole Budget Grenade!",
+   "rect": {
+    "l": 1034,
+    "t": 461,
+    "r": 1555,
+    "b": 539
+   },
+   "slot": "right@184",
+   "yielded": "ffx2hud__command",
+   "slabTops": [
+    271,
+    263,
+    275,
+    269,
+    272,
+    267,
+    270,
+    276,
+    273,
+    274,
+    135,
+    134,
+    132,
+    129,
+    130,
+    131,
+    133
+   ],
+   "overlapSamples": 0,
+   "slabMaxJumpPx": 139,
+   "slabJumpAtBannerEdges": [
+    {
+     "dt": 2308,
+     "d": 0,
+     "dy": 0,
+     "dx": 0,
+     "shown": true
+    },
+    {
+     "dt": 3366,
+     "d": 7,
+     "dy": 1,
+     "dx": 7,
+     "shown": false
+    }
+   ],
+   "anyOverlap": {
+    "slab": false,
+    "party": false,
+    "band": false,
+    "menu": false,
+    "plate": false
+   },
+   "shots": [
+    "D:/Final Fantasy/docs/screenshots/round11/pr0143-repair/repair-ffx2-leblanc-active-03-steal-message.jpg",
+    "D:/Final Fantasy/docs/screenshots/round11/pr0143-repair/repair-ffx2-leblanc-active-04-steal-after-message.jpg"
+   ],
+   "samples": [
+    {
+     "dt": 2,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "881,273,1256,432",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 55,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "881,273,1256,432",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 103,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "881,273,1256,432",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 150,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "880,273,1255,431",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 196,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "875,272,1250,430",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 244,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "856,270,1231,428",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 305,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "829,270,1204,428",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 367,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,271,1190,429",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 428,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "814,271,1189,430",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 489,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "814,271,1189,430",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 536,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,271,1190,430",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 598,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,271,1190,430",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 644,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,271,1190,430",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 704,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "801,263,1176,421",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 766,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "821,275,1196,433",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 813,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "816,269,1191,428",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 863,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,272,1190,430",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 922,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "812,267,1187,426",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 970,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "823,270,1198,428",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1016,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "820,276,1195,434",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1062,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "818,271,1193,429",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1123,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "823,272,1198,431",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1170,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "831,273,1206,431",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1231,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "848,274,1223,432",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1278,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "862,274,1237,432",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1325,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "868,274,1243,432",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1372,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "875,135,1250,457",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1432,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "880,135,1255,456",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1482,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "881,135,1256,456",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1540,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "880,134,1255,456",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1587,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "871,132,1246,454",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1633,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "847,129,1222,451",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1695,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "820,130,1195,451",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1755,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,131,1190,452",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1817,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,131,1190,452",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1878,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,131,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1927,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,131,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1986,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2045,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2094,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2153,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2199,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2247,
+     "msg": false,
+     "slot": null,
+     "m": null,
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2308,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2416,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2478,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2524,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2571,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2631,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2678,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2728,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2787,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2834,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2881,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2929,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2990,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 3037,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 3083,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 3144,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "815,132,1190,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 3205,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "816,132,1191,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 3265,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "817,132,1192,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 3313,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1034,461,1555,539",
+     "slab": "821,132,1196,454",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 3366,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "828,133,1203,454",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3468,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "854,135,1229,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3528,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,457",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3578,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,457",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3637,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3699,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3746,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3808,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3868,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3916,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3977,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4037,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4098,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4145,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4191,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4252,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4314,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4361,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4408,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4455,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    }
+   ]
+  },
+  {
+   "ability": "Pilfer Gil",
+   "target": "TARGETOrmi",
+   "engine": [
+    "Ormi has no gil to take"
+   ],
+   "firstShownMs": 906,
+   "lastShownMs": 1942,
+   "text": "Rikku Ormi has no gil to take",
+   "rect": {
+    "l": 1026,
+    "t": 460,
+    "r": 1555,
+    "b": 538
+   },
+   "slot": "right@184",
+   "yielded": "ffx2hud__command",
+   "slabTops": [
+    131,
+    132,
+    133,
+    135
+   ],
+   "overlapSamples": 0,
+   "slabMaxJumpPx": 26,
+   "slabJumpAtBannerEdges": [
+    {
+     "dt": 906,
+     "d": 0,
+     "dy": 0,
+     "dx": 0,
+     "shown": true
+    },
+    {
+     "dt": 2002,
+     "d": 7,
+     "dy": 1,
+     "dx": 7,
+     "shown": false
+    }
+   ],
+   "anyOverlap": {
+    "slab": false,
+    "party": false,
+    "band": false,
+    "menu": false,
+    "plate": false
+   },
+   "shots": [
+    "D:/Final Fantasy/docs/screenshots/round11/pr0143-repair/repair-ffx2-leblanc-active-06-pilfergil-message.jpg",
+    "D:/Final Fantasy/docs/screenshots/round11/pr0143-repair/repair-ffx2-leblanc-active-07-pilfergil-after-message.jpg"
+   ],
+   "samples": [
+    {
+     "dt": 0,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "879,135,1254,456",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 58,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "879,135,1254,456",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 119,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "879,135,1254,456",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 180,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "876,134,1251,455",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 227,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "862,131,1237,452",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 288,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "835,129,1210,451",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 335,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "818,130,1193,451",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 381,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,452",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 427,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,452",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 488,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,452",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 549,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 597,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 643,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 691,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 736,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 783,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 845,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 906,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1014,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1061,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1121,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1167,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1213,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1275,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1321,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1369,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1430,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1492,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1538,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1584,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1631,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1677,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1739,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1785,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "813,131,1188,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1833,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "814,132,1189,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1893,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "816,132,1191,453",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 1942,
+     "msg": true,
+     "slot": "right@184",
+     "m": "1026,460,1555,538",
+     "slab": "819,132,1194,454",
+     "cmd": false,
+     "plate": false
+    },
+    {
+     "dt": 2002,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "826,133,1201,454",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2096,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "852,135,1227,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2160,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2220,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2282,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2343,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2393,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2452,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2512,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2574,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2634,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2696,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2743,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2804,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2866,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2926,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 2976,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3034,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3096,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3143,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3205,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3252,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3315,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3377,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3423,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3470,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3531,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3577,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3638,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3684,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3733,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3794,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3854,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3915,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 3965,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4028,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4088,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4150,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4211,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4260,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4320,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4367,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4428,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    },
+    {
+     "dt": 4476,
+     "msg": false,
+     "slot": "right@184",
+     "m": null,
+     "slab": "867,135,1242,456",
+     "cmd": true,
+     "plate": false
+    }
+   ]
+  }
+ ],
+ "errs": [],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "activeRow": {
+  "text": "X-2 BATTLEACTIVE",
+  "sel": true
+ }
+}

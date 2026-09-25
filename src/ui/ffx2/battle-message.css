@@ -3,12 +3,13 @@
  *
  * It is the approved `.ig-banner` (paper slab, pink accent rule, right-anchored
  * under `.ig--ffx2` at top 17.78 on the 640x360 grid), so this file only adds
- * what a line of battle text needs on top of it. Grid units throughout.
+ * what a line of battle text needs on top of it. Grid units throughout. Where it
+ * actually stands is chosen per line in `battleMessage.ts` (`bannerSlot`, inline
+ * `top` and, for the left-hand column, `left`): it steps off the telegraph, the
+ * intent slab and the menus rather than moving them.
  */
 .ffx2hud__message {
-  /* Wide enough for "Rikku · STOLE BUDGET GRENADE!", narrow enough that the
-     left end stays right of the boss strip (`.ffx2hud__enemies`, which ends
-     near x 265 with three enemies): right 21.33 + 300 puts the edge at 319. */
+  /* Wide enough for "Rikku · STOLE BUDGET GRENADE!" without wrapping. */
   max-width: 300px;
 }
 .ffx2hud__message .ig-banner__name {
@@ -19,13 +20,4 @@
      wraps inside the chip instead of widening the slab. */
   white-space: normal;
   line-height: 1.35;
-}
-/*
- * A charge telegraph and a message can be up together (Bahamut's countdown and
- * a steal in the same burst). The telegraph keeps its slot; the message stacks
- * under it: the banner is 32 tall on the grid (name 20.44 + padding 9.77 +
- * rule 1.78), plus a 3 gap.
- */
-.ffx2hud__telegraph:not([hidden]) + .ffx2hud__message {
-  top: 52.78px;
 }
