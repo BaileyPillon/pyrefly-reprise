@@ -58,6 +58,15 @@
  * magic, so `CH4_D0` and `CH4_D1500` are unchanged (recomputed, equal). After:
  * zero evaded magic on every seed, D=0 still 20/20. The Active D=1500 arm moved
  * from 2/10 to 0/10 wins (it pins hashes, not outcomes; disclosed in the plan).
+ *
+ * **Re-pinned a fourth time, one hash, for the spherechange accessories fix**
+ * (branch `chapter-trema-0925`, 2026-09-25, `docs/plans/trema-winnability-method-check.md`
+ * E2, `src/battle/ffx2/spherechange.ts#refreshDerivedStats`): a girl keeps her accessories
+ * through a spherechange (ffx2-combat-core §4.2, §5.4). Only `CH5_D1500` seed 3 moves: Yuna
+ * changes White Mage to Gunner under Itchy and her next Poison tick is 102, not 51, because her
+ * Crystal Bangle's max HP survives the change. Measured event by event against the pre-fix
+ * engine: every event before that tick is identical, the outcome (a loss) is unchanged, and
+ * every D=0 hash and every chapter 4 hash is unchanged (recomputed, equal).
  */
 
 import { describe, expect, it } from 'vitest';
@@ -88,7 +97,7 @@ const CH4_D1500 = [
 ];
 /** Re-pinned for combat-fixes-0924 (a), magic never rolls; see the file doc comment. */
 const CH5_D1500 = [
-  '236e6bcb26a247f3', 'a49c69b47306d7e3', 'ffea4915e5c151c0', 'a70c9fdcaf9da8e1', '7468cb4e44e99042',
+  '236e6bcb26a247f3', 'a49c69b47306d7e3', '360f70c856ef7435', 'a70c9fdcaf9da8e1', '7468cb4e44e99042',
   'c151f9764f59a886', 'c4b8430493fbd119', 'e1574f1b0f92b4fc', '3701ee228cd5f640', 'ebe5074a81fc5dd8',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);

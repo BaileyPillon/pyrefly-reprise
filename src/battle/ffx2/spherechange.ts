@@ -21,6 +21,7 @@
 import type { SpherechangeCommand, StatBlock } from '../common/types.ts';
 import type { DressphereRegistry, Emit, Ffx2Unit, GarmentGridRegistry } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
+import { withAccessories } from './accessories.ts';
 import {
   activeGateBonuses,
   breaksDamageLimit,
@@ -50,7 +51,10 @@ export function refreshDerivedStats(unit: Ffx2Unit, deps: SpherechangeDeps): Sta
   const base = derive(sphere.current, unit.level);
   const grid = deps.grids.get(sphere.garmentGrid.id);
   const bonuses = grid ? activeGateBonuses(grid, sphere.garmentGrid.passedGates) : [];
-  const stats = withStatBonus(base, gateStatTotal(bonuses));
+  // Accessories belong to the girl, not the dressphere: layered as `setup.ts#buildMember` does
+  // (grid, then accessories). Until 2026-09-25 this dropped them, so crossing a gate cost her the
+  // Crystal Bangle's HP for the rest of the battle [combat-core §4.2, §5.4; method check E2].
+  const stats = withAccessories(withStatBonus(base, gateStatTotal(bonuses)), unit.accessories);
 
   // Keep the HP/MP *ratio* across the change: X-2 swaps the pool, not the wound.
   const hpRatio = unit.stats.maxHp > 0 ? unit.hp / unit.stats.maxHp : 1;

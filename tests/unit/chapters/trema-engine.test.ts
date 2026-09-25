@@ -216,8 +216,9 @@ describe('the link: carried state and the TR5 checkpoint', () => {
 
   it('a girl who spherechanged during Paragon enters Trema in that dressphere, its max HP, gates reset (§1.1; combat-core §4.1)', () => {
     const engine = newEngine();
-    const setup: BattleSetup = { game: 'ffx2', party: viaInfinitoBuild, enemies: group(CLOISTER_PARAGON), triggers: [], seed: 9, condition: 'normal', canEscape: false };
-    engine.setSeed(9);
+    // Seed 1: since Paragon's physicals always land (E3), seed 9 kills the party before Paine's first turn.
+    const setup: BattleSetup = { game: 'ffx2', party: viaInfinitoBuild, enemies: group(CLOISTER_PARAGON), triggers: [], seed: 1, condition: 'normal', canEscape: false };
+    engine.setSeed(1);
     engine.init(setup);
     type Girl = { hp: number; stats: { maxHp: number }; dresspheres: { current: string; garmentGrid: { passedGates: string[] } } };
     const paine = () => engine.state().combatants['paine'] as unknown as Girl;
@@ -233,8 +234,9 @@ describe('the link: carried state and the TR5 checkpoint', () => {
     // A real spherechange through the menu, across The End's red gate (Dark Knight to Warrior).
     expect(paine().dresspheres.current).toBe('warrior');
     expect(paine().dresspheres.garmentGrid.passedGates).toContain('red');
-    // Mid-battle her maximum reads 4,122 (a spherechange drops accessories: the known
-    // `spherechange.ts#refreshDerivedStats` bug, left for its own reviewed fix); she ends the link on it.
+    // Mid-battle her maximum keeps the Crystal Bangle (E2: `spherechange.ts#refreshDerivedStats`
+    // layers her accessories again), Warrior Lv 99 4,122 x2; she ends the link on it.
+    expect(paine().stats.maxHp).toBe(4122 * 2);
     paine().hp = paine().stats.maxHp;
     const carriedHp = paine().hp;
     const next = setupForNextLink(setup, cloisterTremaGroup, engine.state() as BattleState, 2);
