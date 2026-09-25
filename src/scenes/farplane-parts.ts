@@ -63,7 +63,22 @@ export const FARPLANE_PART_ANCHORS: PartAnchors = {
  */
 export const FARPLANE_ENEMY_SPOTS: Readonly<Record<string, [number, number, number]>> = {
   'vegnagun-body': [2.8, 0, -12.0],
+  // Where live a999d133's relaxation settled them (GPU, 1600x900 and 2000x1012), now that the
+  // party is held (below): Vegnagun's Leg (Chapter 5, link 2) and Shiva (Chapter XI, link 1).
+  'vegnagun-leg': [2.02, 0, -5.0],
+  'x2-shiva': [1.12, 0, -5.0],
 };
 
-/** What `buildFarplaneScene` publishes onto its `SceneBuild` (`SceneStaging`). */
-export const FARPLANE_STAGING = { partAnchors: FARPLANE_PART_ANCHORS, enemySpots: FARPLANE_ENEMY_SPOTS } as const;
+/**
+ * What `buildFarplaneScene` publishes onto its `SceneBuild` (`SceneStaging`).
+ *
+ * `holdParty` (2026-09-25, repair of 04681f5c): the girls stand exactly on
+ * `PARTY_SLOTS` (`farplane.ts`), which hold where live's relaxation settled
+ * them. The relaxation runs only in the opening settle window and stops when a
+ * menu opens, so whether it ran decided the frame: unrelaxed at link 3 (2000x1012)
+ * Paine stood 0.79 visible behind Rikku and the intent slab, while a Bulwark was
+ * aimed, fell over Yuna; relaxed at link 2 it pushed Paine across the Leg. The
+ * fiends it used to part from the party stand pinned on live's settled spots
+ * above. Staging, not game data; FFX-2 only (Chapter 5 and Chapter XI).
+ */
+export const FARPLANE_STAGING = { partAnchors: FARPLANE_PART_ANCHORS, enemySpots: FARPLANE_ENEMY_SPOTS, holdParty: true } as const;
