@@ -128,7 +128,24 @@
           "src": "docs/screenshots/mockups/A-ffx2-battle.jpg",
           "state": "approved",
           "note": "Pink replaces gold as the accent in the FFX-2 chapters.",
-          "build": "Chapter 4 (Bahamut), a party member's command menu open."
+          "build": "Chapter 4 (Bahamut), a party member's command menu open.",
+          "delivery": "implemented",
+          "deliveryNote": "Party-left, enemy-right stays as built (docs/target/decisions.json D-167, item 6 of docs/plans/decisions-2026-09-25.md); this mockup's Bahamut-left/party-right side was never something Bailey named, so the built side is recorded as an accepted adaptation rather than a target miss. research/ffx-vs-ffx2-presentation.md: FFX-2 has free battle positions, no source fixes a side.",
+          "reaction": {
+            "date": "2026-09-25",
+            "words": "all recommendations",
+            "how": "Bailey answered docs/plans/decisions-2026-09-25.md with 'all recommendations' (~11:00 EDT); item 6 recommended A, recording the built party-left side as an accepted adaptation rather than swapping sides.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "party-left layout the five FFX-2 chapters are already staged on"
+            ],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "that the mockup's Bahamut-left caption was never Bailey's own pick, so the built side needed a record rather than a swap"
+            ]
+          }
         },
         {
           "label": "Results",
