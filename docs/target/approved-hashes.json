@@ -803,6 +803,30 @@
     "mtime": "2026-09-25T04:16:55.295Z",
     "approved": "2026-09-25"
    }
+  },
+  "chapter:gippal:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/gippal/README.md (O-1 B translucent shade, the same treatment for Baralai and Nooj, O-3 A cold-blue Den). Locked after the independent 1:1 judge docs/concepts/chapters/gippal/production/JUDGE.md: gippal-shade idle 7.6 and cast 7.2, baralai-shade idle 7.5, den-of-woe 7.6 (byte-identical to the picked O-3 A plate). NOT in this set (judged FAIL, still CANDIDATE): baralai-shade/cast 5.7, nooj-shade/idle 6.9, nooj-shade/cast 6.8. FFX-2 only, Chapter XV (provisional). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-gippal/.",
+   "public/art/characters/gippal-shade/idle.png": {
+    "sha256": "dd3f7cffe7087b4cfc6da4dec25a182c6b4c2af128a6fdf063ac0c7c1868a901",
+    "mtime": "2026-09-25T04:26:00.234Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/gippal-shade/cast.png": {
+    "sha256": "b0c9a95ccf4718916199a6b420c37cb004f2aac2574c29238449e27cde3a2452",
+    "mtime": "2026-09-25T04:26:00.276Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/baralai-shade/idle.png": {
+    "sha256": "1b3270d74a12365cd01387af2ab9b3cde3e272a190cbefe6e99c34f0f05fbaa3",
+    "mtime": "2026-09-25T04:26:00.291Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/den-of-woe.png": {
+    "sha256": "96965cfad6dca7e12ce2004be2d643e07eea4c59b0beafd215d48b022e46c95e",
+    "mtime": "2026-09-25T04:26:00.370Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
