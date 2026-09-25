@@ -4,10 +4,11 @@ import type { CameraRig } from '../engine/BattleCamera.ts';
 import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
-import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
+import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
+import { CAVERN_WIDE_RIGS, cavernRigsFor, viewportAspect } from './cavern-stolen-fayth-rigs.ts';
 import type { SceneSlots } from './index.ts';
 import { SakuraArrival, sakuraArrivalAt, softDiscTexture, SAKURA_ARRIVAL_MS } from './cavern-stolen-fayth-arrival.ts';
-import { CAVERN_IDS, findFigure, scaleFigure, victoryStruck, type StagedFigure } from './cavern-stolen-fayth-cast.ts';
+import { CAVERN_IDS, findFigure, victoryStruck, type StagedFigure } from './cavern-stolen-fayth-cast.ts';
 
 // ---------------------------------------------------------------------------
 // The Cavern of the Stolen Fayth, the last chamber (FFX)
@@ -50,24 +51,6 @@ const BACKDROP = (() => {
 const CAMERA_REF: [number, number, number] = [0, 5.1, 17.6];
 
 /**
- * FFX framing, fov 30-34 like the other FFX chapters, a little higher and
- * steeper than Chapter 1 so the whole field stands in the band the FFX HUD
- * leaves open (under the Zanmato gauge, left of the CTB list, right of the
- * command stack, above the party rows). The `victory` rig takes in the lit pad
- * behind the party's heads, all three of them in frame.
- */
-const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
-  /** The chamber, wide, as the night forms (O-4 A's frame). */
-  intro: { position: [0.6, 3.6, 20.0], lookAt: [1.4, 2.6, -4.0], fov: 32, sway: 1.3 },
-  idle: { position: CAMERA_REF, lookAt: [0.6, 1.8, 0], fov: 28 },
-  action: { position: [0.5, 4.3, 14.2], lookAt: [1.5, 1.7, 0.6], fov: 28, sway: 0.7 },
-  /** On Yojimbo and Daigoro; the boss reveal's push. */
-  enemy: { position: [2.6, 3.4, 11.8], lookAt: [4.4, 1.8, -0.8], fov: 30, sway: 0.7 },
-  party: { position: [-0.4, 3.1, 12.2], lookAt: [0.0, 1.1, 4.4], fov: 30, sway: 0.7 },
-  victory: { position: [-0.7, 3.2, 16.0], lookAt: [0.7, 1.2, -2.0], fov: 30, sway: 1.1 },
-};
-
-/**
  * Party: Lulu, Kimahri, Yuna, the build's `activeSlots` order
  * (`src/data/ffx/builds/yojimbo-cavern.ts`), then four reserve spots off
  * frame-left. Lulu and Yuna in front, Kimahri a step back between them, all
@@ -86,13 +69,20 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 /**
  * Enemy slots, index = each record's `slot` (`src/data/ffx/enemies/yojimbo.ts`):
  * 0 Lady Ginnem (M1), 1 Yojimbo (M2), 2 Daigoro (M3). Yojimbo right of the
- * field under the gauge, Daigoro at his feet on the party's side, Ginnem apart,
- * further back between the two sides: she is untargetable and takes no part.
+ * party and a step back, Daigoro beside him on the party's side (sheet-arrival
+ * A's order), Ginnem apart, far back behind the party: she is untargetable and
+ * takes no part.
+ *
+ * Solved on 2026-09-25 against the FFX HUD at 1600x900 (and 2000x1012), with
+ * the Sensor plate's resting place (grid 436..542 x 166..253, open for seven
+ * seconds on every reveal) as an obstacle: at (5, 0, 0) the open plate hid 83 %
+ * of Yojimbo, and the `party` close-up put him behind the CTB list. He now
+ * stands in the column between Yuna and that plate.
  */
 const ENEMY_SLOTS: Array<[number, number, number]> = [
-  [3.63, 0, -4.82],
-  [5.0, 0, 0.0],
-  [3.19, 0, 0.27],
+  [1.0, 0, -6.5],
+  [2.75, 0, -2.0],
+  [1.5, 0, -2.1],
 ];
 
 /** Index of each combatant's slot in {@link CAVERN_STOLEN_FAYTH_SLOTS}.enemy. */
@@ -102,15 +92,13 @@ export const CAVERN_ENEMY_SLOT = { ginnem: 0, yojimbo: 1, daigoro: 2 } as const;
  * World heights, every one a presentation estimate (`docs/concepts/chapters/
  * yojimbo/INSTALLED.md`, the visual bible's `[estimate]`, no game data): Yojimbo
  * 2.55, Daigoro 0.73, Ginnem at human scale. The party takes the FFX chapters'
- * 1.75. The stage sizes Ginnem at 0.7 of the boss height (1.785) and Daigoro the
- * same, so the scene scales Daigoro's figure to his own ({@link DAIGORO_SCALE}).
+ * 1.75. The stage sizes Ginnem at 0.7 of the boss height (1.785), its rule for
+ * a non-boss fiend; Daigoro gets his own through `figureHeights` (the stage's
+ * per-combatant height, which shrinks his shadow and turn ring with him).
  */
 export const CAVERN_ACTOR_HEIGHTS = { party: 1.75, yojimbo: 2.55, daigoro: 0.73, ginnem: 1.785 } as const;
 
-/** Daigoro's figure scale: his height over the stage's 0.7-of-boss default. */
-export const DAIGORO_SCALE = CAVERN_ACTOR_HEIGHTS.daigoro / (CAVERN_ACTOR_HEIGHTS.yojimbo * 0.7);
-
-/** Each enemy stays on its spot; the party is held on its slots. */
+/** Each enemy stays on its spot; the party is held on its slots; Daigoro stands at his own height. */
 const CAVERN_STAGING = {
   holdParty: true,
   enemySpots: {
@@ -118,6 +106,7 @@ const CAVERN_STAGING = {
     [CAVERN_IDS.yojimbo]: ENEMY_SLOTS[CAVERN_ENEMY_SLOT.yojimbo]!,
     [CAVERN_IDS.daigoro]: ENEMY_SLOTS[CAVERN_ENEMY_SLOT.daigoro]!,
   },
+  figureHeights: { [CAVERN_IDS.daigoro]: CAVERN_ACTOR_HEIGHTS.daigoro },
 } as const;
 
 /** The published slots, same shape every other scene exports. */
@@ -129,7 +118,8 @@ export const CAVERN_STOLEN_FAYTH_SLOTS: SceneSlots = {
   ...CAVERN_STAGING,
 };
 
-export const CAVERN_STOLEN_FAYTH_RIGS: Readonly<Record<string, CameraRig>> = RIGS;
+/** The 16:9 rigs (`cavern-stolen-fayth-rigs.ts` has the phone's and the aspect rule). */
+export const CAVERN_STOLEN_FAYTH_RIGS: Readonly<Record<string, CameraRig>> = CAVERN_WIDE_RIGS;
 export const CAVERN_STOLEN_FAYTH_BACKDROP = BACKDROP;
 
 /** A plate pixel on the painting plane, in world units (the plane is not rolled or scaled). */
@@ -175,6 +165,8 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   group.name = 'scene:cavern-stolen-fayth';
   const low = opts.quality === 'low';
   const cameraRef = opts.cameraRef ?? CAMERA_REF;
+  // The framing for the window this battle opens in (16:9, 4:3, a phone).
+  const rigs = cavernRigsFor(viewportAspect());
   const url = artUrl('art/backdrops/cavern-stolen-fayth.png');
 
   const backdropOptions = {
@@ -264,7 +256,7 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   // to this scene's `intro` rig (`BattleMoments.battleStart`); the first frame
   // rendered from there starts it. With no opening (the skip speed) it starts
   // {@link ARRIVAL_FALLBACK_MS} after he is staged.
-  const intro = new Vector3(...(RIGS.intro.position as [number, number, number]));
+  const intro = new Vector3(...(rigs.intro.position as [number, number, number]));
   let introSeen = false;
   pools[0]!.frustumCulled = false; // the probe below must run on every frame
   pools[0]!.onBeforeRender = (_r, _s, camera): void => {
@@ -288,7 +280,6 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
       introSeen = false;
     }
     const daigoro = findFigure(root, CAVERN_IDS.daigoro);
-    if (daigoro) scaleFigure(daigoro, DAIGORO_SCALE);
     if (!yojimbo) return;
     if (waitMs >= 0) {
       waitMs += dt * 1000;
@@ -348,7 +339,7 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
     },
     lights,
     particles,
-    rigs: RIGS,
+    rigs,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     partyHeight: CAVERN_ACTOR_HEIGHTS.party,

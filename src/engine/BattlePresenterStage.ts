@@ -175,10 +175,9 @@ export class PaintedStage implements BattleStage {
     const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
     const { artId } = art;
     const poses = limitPoses(c.id, departurePoses(c.id, art.poses)); // D-031 Evrae; D-045 Anima idle only
-    const heights = {
-      party: this.opts.slots.partyHeight ?? 1.82,
-      enemy: this.opts.slots.enemyHeight ?? 4.1,
-    };
+    const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
+    const own = this.opts.slots.figureHeights?.[c.id]; // a scene's per-combatant height; ring and shadow follow it
+    const k = own !== undefined && !worldHeight ? own / worldHeightFor(c, heights) : 1;
 
     const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
     const actor = await PaintedActor.create({
@@ -189,7 +188,7 @@ export class PaintedStage implements BattleStage {
       // question, answered by each pose's sidecar; art painted to the contract
       // (party faces right, enemies face left) is drawn exactly as painted.
       side: c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party',
-      worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? worldHeightFor(c, heights)),
+      worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? own ?? worldHeightFor(c, heights)),
       crossfadeMs: kind === 'party' ? 120 : 140,
       poses,
       placeholder:
@@ -203,14 +202,14 @@ export class PaintedStage implements BattleStage {
         : { strength: 0.7 },
       groundShade: 0.24,
       bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
-      shadow: anchor ? false : { radius: kind === 'party' ? 0.62 : 1.5, opacity: 0.48 },
+      shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, opacity: 0.48 },
       breathe: { amplitude: 0.016, speed: 0.4 },
       sway: { amplitude: 0.009, speed: 0.22 },
       // The turn highlight: gold under a party member, a cooler ring under a
       // fiend, so whose turn it is reads even in a screenshot.
       turnRing: {
         color: kind === 'party' ? 0xf0cf92 : 0xc8a0ff,
-        radius: anchor ? SA.anchoredRingRadius(anchor) : kind === 'party' ? 0.78 : 1.7,
+        radius: anchor ? SA.anchoredRingRadius(anchor) : (kind === 'party' ? 0.78 : 1.7) * k,
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
     });
