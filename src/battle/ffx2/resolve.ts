@@ -143,9 +143,7 @@ function targetForHit(
  */
 function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, ability: AbilityDef): void {
   const rollOneOf = ability.extra?.['statusRollOneOf'] === true && ability.statusEffects.length > 1;
-  const applications = rollOneOf
-    ? [ctx.rng.pick([...ability.statusEffects])]
-    : ability.statusEffects;
+  const applications = rollOneOf ? [ctx.rng.pick([...ability.statusEffects])] : ability.statusEffects;
 
   for (const application of applications) {
     const resist = target.immunities[application.status] ?? 0;
@@ -179,9 +177,8 @@ function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, abil
   }
 
   if (ability.flags.includes('removes-statuses')) {
-    for (const id of ability.removesStatuses as StatusId[]) {
-      // An enemy's auto-status (`EnemyDef.autoStatuses`, Trema's Spellspring) stays put.
-      if (target.autoStatuses?.includes(id)) continue;
+    // `EnemyDef.autoStatuses` (Trema's Spellspring) stay: "auto-status" read as undispellable, `[estimate]`.
+    for (const id of (ability.removesStatuses as StatusId[]).filter((s) => !target.autoStatuses?.includes(s))) {
       if (removeStatus(target, id)) {
         ctx.emit({ type: 'status-remove', targetId: target.id, status: id, reason: 'dispelled' });
       }

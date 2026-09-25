@@ -82,6 +82,10 @@ export const paragonAbilities: AbilityDef[] = [
     ...normalAttack,
     id: 'paragon-attack-pierce',
     name: 'Attack', // Normal Attack 4: ignores Defense [SinirothX]; wiki observed 8,273 to 9,342
+    // Unexplained, not tuned (flagged 2026-09-25): this row (DC 16, Str 244, Lv 99) gives 7,814 to
+    // about 8,824 non-crit through `resolve.ts`, and the wiki's observed range is that times 1.0587,
+    // which is 271/256 to four places (its low end is our top roll x 240/256). A second randomiser
+    // step, a Str or DC we lack, or a wiki target state? The research does not say.
     ignoresDefense: true,
     messageTemplate: 'Paragon attacks {target}',
   },

@@ -19,8 +19,9 @@
  *   (Acc 105 + Luck 111 against Eva 99 + Luck 26, `[derived]`), and at 100 % while his chain
  *   window is open (`chain.ts#cannotEvade`, the plan Review's correction 4).
  *
- * **Beyond the §3 list, flagged to Bailey:** Phoenix Downs. Rikku's Stash revives for free,
- * but nobody revives Rikku herself without one. Count `[estimate]`.
+ * **Not in the bag: Phoenix Downs.** They are outside the approved TR11 a list, so they are not
+ * built (rule 10); Rikku's Stash revives the others, and nobody revives Rikku. Whether to add
+ * them is a question for Bailey, measured as an option row in `docs/plans/trema-bench.md`.
  *
  * **Garment Grids.** The End on Paine (TR11). Yuna keeps the Chapter V preset's Tempered Will
  * and Rikku wears First Steps, a gateless grid, so her Gunner node (for Target MP, the
@@ -109,13 +110,12 @@ export const viaInfinitoBuild: FFX2PartyBuild = {
       accessories: ['crystal-bangle', "rabite's-foot"], // TR9 b, TR11 a
     },
   ],
-  // TR11 a, counts `[estimate]`; Phoenix Down is the flagged addition (see the header).
+  // TR11 a exactly, counts `[estimate]` (no Phoenix Downs: see the header).
   inventory: [
     { itemId: 'x2-megalixir', count: 10 },
     { itemId: 'x2-light-curtain', count: 10 }, // Protect
     { itemId: 'x2-lunar-curtain', count: 10 }, // Shell: Meteor is magical (TR3 = a)
     { itemId: 'x2-remedy', count: 10 },
-    { itemId: 'x2-phoenix-down', count: 20 },
   ],
   gil: 200000,
 };

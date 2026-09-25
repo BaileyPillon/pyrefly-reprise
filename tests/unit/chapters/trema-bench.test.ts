@@ -12,7 +12,8 @@
  *
  * The option rows are **not built**: they swap in the other sourced reading of Paragon's
  * block (T-6, the wiki's Mag 88 / Def 244 / MDef 89) or the sourced Stamina Tonic's doubled
- * max HP (TR11 c, which the engine does not model), to show Bailey what each would buy.
+ * max HP (TR11 c, which the engine does not model), or add 20 Phoenix Downs to the approved
+ * TR11 a bag (not in it, so not built), to show Bailey what each would buy.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -21,6 +22,8 @@ import { driveChapter, driveParagon, driveTremaFresh, LINES, type DriveOptions, 
 const SEEDS = 200;
 const HUMAN_SEEDS = 40;
 const WIKI_T6 = { mag: 88, def: 244, mdef: 89 };
+/** The Phoenix Downs question (outside the approved TR11 a bag, so an option row, never built). */
+const PHOENIX_DOWNS = [{ itemId: 'x2-phoenix-down', count: 20 }];
 const rows: string[] = [];
 
 interface Tally { wins: number; seeds: number; unfinished: number; minutes: number; winMinutes: number; bigBang: number; genesis: number; meteor: number; ultima: number; flare: number; blocked: number; darkness: number }
@@ -63,10 +66,12 @@ describe('Chapter XIII benches (200 seeds a fight, bench speed, Active)', () => 
     ['1 Paragon', 'wrong: Darkness on Paragon', paragon(LINES.darknessOnParagon)],
     ['1 Paragon', 'option T-6 b (wiki Mag 88 / Def 244 / MDef 89), intended', paragon(LINES.intended, { paragonStats: WIKI_T6 })],
     ['1 Paragon', 'option TR11 c (Stamina Tonic: max HP x2), intended', paragon(LINES.intended, { hpMultiplier: 2 })],
+    ['1 Paragon', 'option: + 20 Phoenix Downs (not built; outside TR11 a), intended', paragon(LINES.intended, { extraItems: PHOENIX_DOWNS })],
     ['2 Trema (fresh)', 'intended: Protect, drain to < 10 MP, Shell before Meteor, Darkness x2', tremaFresh(LINES.intended)],
     ['2 Trema (fresh)', 'intended without the drain', tremaFresh(LINES.noDrain)],
     ['2 Trema (fresh)', 'wrong: Darkness x2, no drain, no Curtains', tremaFresh(LINES.noDrainNoShell)],
     ['2 Trema (fresh)', 'option TR11 c (max HP x2), intended without the drain', tremaFresh(LINES.noDrain, { hpMultiplier: 2 })],
+    ['2 Trema (fresh)', 'option: + 20 Phoenix Downs (not built), intended without the drain', tremaFresh(LINES.noDrain, { extraItems: PHOENIX_DOWNS })],
   ];
 
   for (const [link, name, run] of cases) {

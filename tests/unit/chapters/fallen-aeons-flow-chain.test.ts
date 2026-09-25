@@ -220,17 +220,23 @@ describe('every other chapter chains exactly as before', () => {
   }
 
   const others = [...CHAPTERS, ...UNLISTED_CHAPTERS].filter((c) => c.id !== CHAPTER.id);
+  /**
+   * The one checkpoint with no Save Sphere, by name: Chapter XIII's Trema link (TR5 = b). A
+   * `checkpointOnEntry` anywhere else fails below, so a stray flag cannot slip past this guard.
+   */
+  const CHECKPOINT_WITHOUT_SAVE_SPHERE: Readonly<Record<string, number>> = { 'ffx2-trema': 2 };
 
   it('covers every registered chapter but Chapter XI', () => {
     expect(others.length).toBeGreaterThanOrEqual(10);
   });
 
   for (const chapter of others) {
-    it(`${chapter.number}. ${chapter.id}: no Save Sphere, and no checkpoint but at a checkpointOnEntry link, win or lose on any link`, async () => {
+    it(`${chapter.number}. ${chapter.id}: no Save Sphere, and no checkpoint but Chapter XIII's named Trema link, win or lose on any link`, async () => {
       const groups = await groupsOf(chapter);
       expect(groups.some((g) => g.restoresPartyOnEntry === true)).toBe(false);
-      // Chapter XIII's Trema link is the one checkpoint without a Save Sphere (TR5 = b).
-      const checkpointLink = groups.findIndex((g) => g.checkpointOnEntry === true) + 1;
+      const checkpointLink = CHECKPOINT_WITHOUT_SAVE_SPHERE[chapter.id] ?? 0;
+      const flagged = groups.flatMap((g, i) => (g.checkpointOnEntry === true ? [i + 1] : []));
+      expect(flagged).toEqual(checkpointLink > 0 ? [checkpointLink] : []);
       for (let lostAt = 1; lostAt <= groups.length; lostAt++) {
         const kinds: Kind[] = [...Array(lostAt - 1).fill('victory'), 'defeat'];
         let cards = 0;

@@ -8,7 +8,8 @@
  * The staging, `[verified: 5 sources]` (research §1.1): when Paragon falls, Trema appears,
  * finishes it, and his battle starts **with no healing and no chance to change equipment**;
  * the party starts it in whatever state the Paragon fight left them. So Trema's link:
- * - carries HP, MP, KO **and statuses** (`carriesPartyStatuses`), and restores nothing;
+ * - carries HP, MP, KO, **statuses and the worn dressphere** (`carriesPartyState`; gates reset,
+ *   a new battle), and restores nothing;
  * - is the retry checkpoint (`checkpointOnEntry`, plan TR5 = b): a loss to Trema retries
  *   Trema in Paragon's end state, kept in memory only (never saved, D-100), so this chapter
  *   is not save-data class.
@@ -101,7 +102,7 @@ export const cloisterTremaGroup: EnemyGroupDef = {
   enemies: [trema],
   canEscape: false,
   musicCues: [{ at: 'start', track: 'boss-ffx2-aeon', fadeMs: 800 }], // TR16 = a, the stand-in for `boss-trema`
-  carriesPartyStatuses: true, // "whatever state the Paragon fight left them" [verified: 5 sources]
+  carriesPartyState: true, // "whatever state the Paragon fight left them" [verified: 5 sources]
   checkpointOnEntry: true, // TR5 = b
 };
 

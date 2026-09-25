@@ -10,7 +10,7 @@
  * drain the engine models); Shell before Meteor (TR3 = a: magical).
  */
 
-import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef, StatBlock } from '../../../src/battle/common/types.ts';
+import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef, FFX2PartyBuild, InventoryEntry, StatBlock } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
@@ -248,6 +248,14 @@ export interface DriveOptions {
    */
   paragonStats?: Partial<StatBlock>;
   hpMultiplier?: number;
+  /** Items added to the TR11 a bag, **an option row only** (the Phoenix Downs question for Bailey). */
+  extraItems?: InventoryEntry[];
+}
+
+/** The preset, with any option items added to its bag. */
+function partyFor(opts: DriveOptions): FFX2PartyBuild {
+  if (!opts.extraItems?.length) return viaInfinitoBuild;
+  return { ...viaInfinitoBuild, inventory: [...viaInfinitoBuild.inventory, ...opts.extraItems] };
 }
 
 function applyOptions(engine: FFX2Engine, opts: DriveOptions): void {
@@ -274,7 +282,7 @@ export function newEngine(opts: DriveOptions = {}): FFX2Engine {
 export function driveParagon(line: LineOptions, seed: number, opts: DriveOptions = {}): LinkRun {
   const engine = newEngine(opts);
   const setup: BattleSetup = {
-    game: 'ffx2', party: viaInfinitoBuild, enemies: group(CLOISTER_PARAGON), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: partyFor(opts), enemies: group(CLOISTER_PARAGON), triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);
@@ -290,7 +298,7 @@ export function driveParagon(line: LineOptions, seed: number, opts: DriveOptions
 export function driveTremaFresh(line: LineOptions, seed: number, opts: DriveOptions = {}): LinkRun {
   const engine = newEngine(opts);
   const setup: BattleSetup = {
-    game: 'ffx2', party: viaInfinitoBuild, enemies: group(CLOISTER_TREMA), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: partyFor(opts), enemies: group(CLOISTER_TREMA), triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);
@@ -306,7 +314,7 @@ export function driveChapter(
 ): { outcome: string | undefined; links: LinkRun[]; tremaSetup?: BattleSetup } {
   const engine = newEngine(opts);
   let setup: BattleSetup = {
-    game: 'ffx2', party: viaInfinitoBuild, enemies: group(CLOISTER_PARAGON), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: partyFor(opts), enemies: group(CLOISTER_PARAGON), triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);

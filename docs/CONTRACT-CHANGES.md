@@ -6,7 +6,7 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
-## 2026-09-25 — Chapter XIII, Trema: `ChapterId` gains `'ffx2-trema'`, `Chapter.number` widens to 13, `EnemyDef.autoStatuses`, `EnemyGroupDef.checkpointOnEntry` and `carriesPartyStatuses`, `ids.ts` gains `TremaEnemyId`
+## 2026-09-25 — Chapter XIII, Trema: `ChapterId` gains `'ffx2-trema'`, `Chapter.number` widens to 13, `EnemyDef.autoStatuses`, `EnemyGroupDef.checkpointOnEntry` and `carriesPartyState`, `ids.ts` gains `TremaEnemyId`
 
 **FFX-2 only** [AGENTS.md hard rule 14] (research `ffx2-trema.md` §0: ATB, dresspheres, Garment
 Grids, Spherechange; Paragon and Trema share only *models* with FFX's Nemesis and unsent priest,
@@ -22,22 +22,31 @@ integrator serialises the two). The record lives in `src/data/chapter-ffx2-trema
 
 **Additive** in `src/battle/common/types.ts`:
 - `EnemyDef.autoStatuses?: StatusId[]`: statuses an enemy carries from the first event and that
-  no Dispel removes. Trema's Spellspring (International / HD, `[verified: 2 sources]`). Applied in
+  no Dispel removes. Trema's Spellspring (International / HD, `[verified: 2 sources]`); "no Dispel
+  removes it" is read from the sources' word "auto-status", `[estimate]`. Applied in
   `src/battle/ffx2/setup.ts#buildEnemy` with no RNG draw; `resolve.ts` skips them in a removal list.
 - `EnemyGroupDef.checkpointOnEntry?: boolean`: a chained link that is a retry checkpoint **without**
   a Save Sphere (TR5 = b). `BattleChainCheckpoint.checkpointAt` reads it beside
   `restoresPartyOnEntry`; the setup the link was entered on already carries the previous link's
   end state, so a retry replays it. Kept in memory only (D-100): not save-data class.
-- `EnemyGroupDef.carriesPartyStatuses?: boolean`: the party enters the link with its statuses as
-  well as its HP and MP ("whatever state the Paragon fight left them", `[verified: 5 sources]`).
-  `BattleScreenSetup.setupForNextLink` copies them (`cloneData`) only for a link that sets it.
+- `EnemyGroupDef.carriesPartyState?: boolean` (named `carriesPartyStatuses` in the first cut, never
+  pushed): the party enters the link with its statuses and its **worn dressphere** as well as its
+  HP and MP ("whatever state the Paragon fight left them", "no chance to change equipment",
+  `[verified: 5 sources]`). `BattleScreenSetup.carryWholeState` copies the statuses, the worn
+  dressphere, her grid node and her AP (`cloneData`) only for a link that sets it; HP and MP then
+  clamp to the worn dressphere's maximum. Passed gates and the worn-this-battle list start empty,
+  because gate effects are "lost at the end of the battle" (ffx2-combat-core §4.1, `[verified: 2
+  sources]`) and Trema's is a new battle. Accessories stay the build's. The doc comments on these
+  three fields are one line each (house rule 7: the file had grown by 24 lines); the detail is here.
 
 **Additive** in `src/data/ffx2/ids.ts`: `TremaEnemyId = 'paragon' | 'trema'`, joined into
 `FFX2EnemyId`; `TREMA_CHAIN_ORDER`.
 
 Not a listed contract file, recorded for the same reason: `src/battle/ffx2/internal.ts` gains
 `AiScript.counter` (an out-of-turn counter, run by `engineHooks.ts#runCounters` after a party
-action that damaged the enemy; Paragon's Big Bang, TR12 = b) and `Ffx2Unit.autoStatuses`.
+action that damaged the enemy; Paragon's Big Bang, TR12 = b) and `Ffx2Unit.autoStatuses`. The
+engine's post-action hook sequence (`onDamaged`, `onTargeted`, `onTurnResolved`, then counters)
+moved from `engine.ts#afterAction` into `engineHooks.ts#runAfterActionHooks`, byte-identical.
 `resolve.ts` reads `extra.mpOnly` together with `extra.mpFractionOfCurrent` as "that share of
 current MP, no HP" (Waning Moon). No shipped record set either combination before, and Chapters
 4, 5, 6 and XI replay byte-identically (180 seeded runs at Active 0 and 700 ms, before and after).

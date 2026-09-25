@@ -20,6 +20,13 @@
  * Magic never misses (hard rule 5). Whether Meteor can miss is not said: it is a spell here
  * (TR3 = a), so it cannot.
  *
+ * **A sourced exception to hard rule 5's "only physical attacks roll": Waning Moon** is
+ * fractional (`damageType: 'other'`), not physical, and still rolls, because both sources say
+ * Luck dodges it (Split_Infinity + the wiki, `[verified: 2 sources]`; Rabite's Foot is the
+ * sources' answer to it, research §5 `[verified: 3 sources]`). Rule 6 (the sources) wins over
+ * the house default here; flagged to Bailey. The Dark Knight's Darkness (`canMiss: true`, TR9) is
+ * the same kind of precedent.
+ *
  * **Durations.** No source publishes a duration for Beguiling Mire's Stop or Choking Mist's
  * Poison: `duration: 0`, until cured, the Leblanc and Chapter XI precedent. `[estimate]`
  */
@@ -98,7 +105,7 @@ export const tremaAbilities: AbilityDef[] = [
     name: 'Waning Moon',
     // 3 hits, each takes 5/16 of the target's **current** MP and no HP [SinirothX; wiki
     // "remaining MP", plan Review]. `mpOnly` + `mpFractionOfCurrent` (resolve.ts, plan TR-G4).
-    // The zero power keeps the HP carrier at 0; the hit still rolls (see the header).
+    // The zero power keeps the HP carrier at 0; the hit still rolls: the sourced rule-5 exception (header).
     power: 0,
     formula: 'percent-current',
     damageType: 'other',

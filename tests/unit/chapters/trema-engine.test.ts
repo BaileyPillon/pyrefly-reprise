@@ -214,9 +214,49 @@ describe('the link: carried state and the TR5 checkpoint', () => {
     expect(c['paine']!.hp).toBe(c['paine']!.stats.maxHp);
   });
 
+  it('a girl who spherechanged during Paragon enters Trema in that dressphere, its max HP, gates reset (§1.1; combat-core §4.1)', () => {
+    const engine = newEngine();
+    const setup: BattleSetup = { game: 'ffx2', party: viaInfinitoBuild, enemies: group(CLOISTER_PARAGON), triggers: [], seed: 9, condition: 'normal', canEscape: false };
+    engine.setSeed(9);
+    engine.init(setup);
+    type Girl = { hp: number; stats: { maxHp: number }; dresspheres: { current: string; garmentGrid: { passedGates: string[] } } };
+    const paine = () => engine.state().combatants['paine'] as unknown as Girl;
+    for (let i = 0; i < 2000 && paine().dresspheres.current !== 'warrior'; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') throw new Error('battle ended');
+      if (d.kind === 'waiting') { engine.tick(d.nextEventMs); continue; }
+      if (d.kind !== 'player-input') continue;
+      const change = d.commands.find((c) => c.enabled && c.command.kind === 'spherechange' &&
+        (c.command as { extra: { toDressphere: string } }).extra.toDressphere === 'warrior');
+      engine.submit(d.actorId === 'paine' && change ? change.command : { kind: 'defend', targets: [] });
+    }
+    // A real spherechange through the menu, across The End's red gate (Dark Knight to Warrior).
+    expect(paine().dresspheres.current).toBe('warrior');
+    expect(paine().dresspheres.garmentGrid.passedGates).toContain('red');
+    // Mid-battle her maximum reads 4,122 (a spherechange drops accessories: the known
+    // `spherechange.ts#refreshDerivedStats` bug, left for its own reviewed fix); she ends the link on it.
+    paine().hp = paine().stats.maxHp;
+    const carriedHp = paine().hp;
+    const next = setupForNextLink(setup, cloisterTremaGroup, engine.state() as BattleState, 2);
+    const trema = newEngine();
+    trema.setSeed(next.seed);
+    trema.init(next);
+    const p = trema.state().combatants['paine'] as unknown as Girl;
+    expect(p.dresspheres.current).toBe('warrior');
+    // Her worn dressphere's maximum with her accessories kept (Warrior Lv 99 4,122 x2, Crystal Bangle),
+    // not the preset Dark Knight's 5,355 x2; the HP she ended Paragon on rides along.
+    expect(p.stats.maxHp).toBe(4122 * 2);
+    expect(p.hp).toBe(carriedHp);
+    expect(p.dresspheres.garmentGrid.passedGates).toEqual([]); // a new battle: gate effects are lost
+    // The preset build is untouched, and a chain without the flag still reverts to it (every other chapter).
+    expect(viaInfinitoBuild.members[2].currentDressphere).toBe('dark-knight');
+    const plain = setupForNextLink(setup, { ...cloisterTremaGroup, carriesPartyState: undefined }, engine.state() as BattleState, 2);
+    expect((plain.party.members[2] as { currentDressphere: string }).currentDressphere).toBe('dark-knight');
+  });
+
   it('a chain without the flag still carries HP and MP only (every other chapter)', () => {
     const { setup, state } = paragonWonState();
-    const next = setupForNextLink(setup, { ...cloisterTremaGroup, carriesPartyStatuses: undefined }, state, 2);
+    const next = setupForNextLink(setup, { ...cloisterTremaGroup, carriesPartyState: undefined }, state, 2);
     const yuna = next.party.members.find((m) => m.id === 'yuna') as { statuses?: unknown; hp?: number };
     expect(yuna.hp).toBe(1234);
     expect(yuna.statuses).toBeUndefined();

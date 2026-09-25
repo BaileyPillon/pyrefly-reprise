@@ -184,6 +184,22 @@ export function notifyEnemiesTargeted(
   }
 }
 
+/**
+ * The engine's post-action AI hooks, in their fixed order (moved out of `engine.ts#afterAction`,
+ * house rule 7; byte-identical): `onDamaged`, `onTargeted`, every enemy's `onTurnResolved`,
+ * then the out-of-turn counters. `produced` is re-read before each step, as the inline code
+ * did, so a hook that emits is seen by the steps after it.
+ */
+export function runAfterActionHooks(produced: () => EventDraft[], actor: Ffx2Unit, env: CounterEnv): void {
+  notifyEnemiesDamaged(produced(), actor, env.units, env.aiContext);
+  notifyEnemiesTargeted(produced(), actor, env.units, env.aiContext);
+  for (const unit of env.units) {
+    if (unit.side !== 'enemy') continue;
+    aiScriptFor(unit.enemy?.aiScriptId).onTurnResolved?.(env.aiContext(unit), actor);
+  }
+  runCounters(produced(), actor, env); // Paragon's Big Bang (TR12 b)
+}
+
 /** HP damage this action dealt, per target (an HP cost the caster paid is not a hit). */
 function damageTotals(produced: EventDraft[], actor: Ffx2Unit): Map<CombatantId, number> {
   const totals = new Map<CombatantId, number>();

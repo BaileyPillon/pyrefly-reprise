@@ -2511,12 +2511,7 @@ export interface EnemyDef {
   level?: number;
   /** FFX-2 only: ATB ticks the enemy waits after its gauge fills before choosing. 0 = acts immediately. */
   thinkingPeriod?: number;
-  /**
-   * **FFX-2 only: statuses the enemy carries from the start of the battle** and that no
-   * Dispel removes (an "auto-status" in the sources). Chapter XIII's Trema carries
-   * Spellspring in International / HD [ffx2-trema §3.1, `[verified: 2 sources]`]. Absent
-   * everywhere else, so no other formation changes.
-   */
+  /** FFX-2: statuses held from the start that no Dispel removes (`[estimate]` reading; Trema's Spellspring; CONTRACT-CHANGES). */
   autoStatuses?: StatusId[];
 }
 
@@ -2570,21 +2565,8 @@ export interface EnemyGroupDef {
    * flow to read. Absent everywhere else, so no other chain changes.
    */
   restoresPartyOnEntry?: boolean;
-  /**
-   * **FFX-2, a chained link that is a retry checkpoint without a Save Sphere** (Chapter
-   * XIII, Trema after Paragon; `docs/plans/chapter-trema-review.md` TR5 = b). A defeat in or
-   * after this link retries at it, with the party exactly as it entered (HP, MP, statuses
-   * and items carried out of the link before, nothing restored), kept in memory only.
-   * `restoresPartyOnEntry` implies a checkpoint already; this flag makes one with no
-   * restore. Absent everywhere else, so no other chain changes.
-   */
+  /** FFX-2: a chained link that is a retry checkpoint with no Save Sphere (Chapter XIII's Trema, TR5 b; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
-  /**
-   * **FFX-2, a chained link the party enters with its statuses** as the link before left
-   * them (KO, Poison, Protect and the rest), not only its HP and MP. Chapter XIII's Trema:
-   * "whatever state the Paragon fight left them" [ffx2-trema §1.1, `[verified: 5 sources]`].
-   * Read by `BattleScreenSetup.setupForNextLink`. Absent everywhere else, so every other
-   * chain carries HP and MP only, as before.
-   */
-  carriesPartyStatuses?: boolean;
+  /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema; CONTRACT-CHANGES). */
+  carriesPartyState?: boolean;
 }
