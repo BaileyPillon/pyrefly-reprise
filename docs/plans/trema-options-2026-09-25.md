@@ -1,109 +1,109 @@
-# Chapter XIII (Trema): options for Bailey's word, 2026-09-25
+# Chapter XIII (Trema): options for Bailey's word, 2026-09-25 (measured)
 
-**Game case: FFX-2 only.** Evidence on branch `chapter-trema-0925` (`D:/pyrefly-ch-trema`): research
-§12 (ea2664d2), `docs/plans/trema-bench.md` (d7403ad2), the method check. No boss number changes.
+**Game case: FFX-2 only.** Evidence on branch `chapter-trema-0925` (`D:/pyrefly-ch-trema`, c69cafeb):
+research §12 (ea2664d2), `docs/plans/trema-bench.md` (fourth pass), an independent re-run. No boss
+number changed. Every option below is **built and switched OFF**. With every switch off, the chapter
+and every other chapter replay byte-identically (176 Chapter XIII hashes, Chapters 4, 5, 6, XI, FFX 1, 3).
 
-## What happened tonight
+## The short version
 
-1. Trema did not ship. With your picks (TR7 Normal Paragon, TR10, TR11 a) the chapter wins 0/200.
-2. Normal Paragon is the wall: 0/200 with every sourced kit, even with 3 s of animation time.
-3. The sources say the one TR10 clear on record was against **Oversoul** Paragon, not the normal one.
+1. As you picked it (Normal Paragon, TR10, TR11 a), Chapter XIII wins 0/200. Normal Paragon is the wall.
+2. Oversoul Paragon with Split_Infinity's kit is the only option that wins at all.
+3. **No option reaches 1 win in 4 for a human.** The best measured row is 31/200 (15.5 %), and it
+   rests on two of our estimates. At the default (harder) estimates the best is 13/200 (6.5 %).
 
 ## How to read the numbers
 
-- "Bench" = perfect instant play, 200 seeds. "Human" = live default Wait split, 1.5 s a menu
-  (0.5 s on the top list with the clock running), 40 seeds.
-- "Trema" = Trema with the party at full strength. In the chapter the party arrives hurt from
-  Paragon, so the chapter rate can only be lower than the Trema rate.
-- Kits: **your kit** = TR11 a. **Split's kit** = Split_Infinity's clear (Defense Bracers and
-  Adamantite, Rabite's Feet, Valiant Lustre on all three, 99 Megalixirs and Mega-Potions,
-  Stamina Tonic, Soul Spring, Three Stars). It is built on the branch and switched OFF.
-
-| Kit | Paragon bench / human | Trema bench / human | Chapter bench / human |
-|---|---|---|---|
-| Your kit (TR11 a) | 0/200 · 0/40 | 0/200 · 0/40 | 0/200 · 0/40 |
-| Split's kit | 0/200 · 0/40 | 30/200 · 1/40 | 0/200 · 0/40 |
-| Split's kit + the one Ribbon | 0/200 · 0/40 | 49/200 · 4/40 | 0/200 · 0/40 |
+- "Bench" = perfect instant play, 200 seeds. "Human" = the live default, Wait split (0.5 s top list,
+  1.0 s held). Human rows are 200 seeds where re-run, else 40.
+- "Trema" = the story Trema with a fresh party. The chapter rate is always lower: the party arrives hurt.
+- **Split's kit** = Split_Infinity's clear (Defense Bracers, Adamantite, Rabite's Feet, Valiant Lustre,
+  Megalixirs, Stamina Tonic, Soul Spring, Three Stars). "+ Ribbon" adds the wiki's one Ribbon.
 
 ## The options
 
-### 1. Oversoul Paragon, with Split's kit (TR7 changes to Oversoul, TR11 to Split's kit)
+### 1. Oversoul Paragon, with Split's kit (TR7 to Oversoul, TR11 to Split's kit)
 
-- **What changes:** link 1 becomes Oversoul Paragon, the form you get after ten Omega Weapon
-  kills. It waits until it is hit, copies spells back, has no Big Bang counter, and its
-  physicals often miss. The party wears the kit from the clear that TR10 was picked from.
-- **Sources:** the trigger, the "easier" verdict and the misses have 3 sources. The full stats
-  and AI script come from one source (SinirothX). Three gaps need a labelled estimate or your
-  pick: how often its physicals miss (no source gives a number), the idle timer (20 s or 2.5 min),
-  and Final Impact's hit count (14 or 10).
-- **Measured:** nothing yet. It cannot be measured until it is built. The chapter can win no
-  more often than Trema does: 30/200 on the bench and 1/40 for a human, with Split's kit.
-- **To build:** the Oversoul block and AI on the branch, OFF, then a bench: roughly 3 to 4 hours.
-- **You would be approving:** the easier, sourced form of Paragon. The one TR10 clear on record
-  fought this form. The fight stays short of human-winnable unless option 3 also lands.
+- **What changes:** link 1 becomes Oversoul Paragon. It waits to be hit, answers, never opens with
+  Big Bang, and its physicals can miss. Trema stays the story Trema.
+- **Sources:** stats and AI script, one source (SinirothX), checked line by line. Behaviour, three
+  sources. Kit, three sources. **Estimates (labelled, harder reading by default):** physical hit
+  rate 50 %, when it answers (`'immediate'`), the 4/10 and 1/10 HP thresholds (SinirothX).
+- **Measured, Split's kit:** Paragon 22/200 bench, 34/200 human. Trema 30/200, 1/40.
+  **Chapter 5/200 bench, 3/200 human (1.5 %).**
+- **Measured, + Ribbon:** Paragon 34/200, 34/200. Trema 49/200, 4/40. Chapter 11/200, 3/200.
+- **The estimates decide it (+ Ribbon rows).** Answer timing `'next-turn'` (SinirothX's literal words): Paragon 82/200,
+  chapter 21/200 bench, 4/40 human. Thresholds at the observed 55 % / 20 %: chapter 11 falls to 1/200.
+- **Else it changes:** nothing outside Chapter XIII.
 
-### 2. Trema alone (TR1 b)
+### 2. Trema alone, Fiend Arena block (TR1 b)
 
-- **What changes:** no Paragon. Trema is fought at full HP using his Fiend Arena block
-  (International/HD). That block is slower (Agility 95 against 129) and luckier (Luck 128
-  against 26), so Darkness lands only on a chained Trema. The story beat of Trema killing
-  Paragon is lost.
-- **Sources:** the block and the full-HP start have 2 sources. His AI weights have one, and
-  that text breaks off partway through.
-- **Measured:** the Fiend Arena block has not been benched. The nearest measurement is the story
-  Trema with a full-strength party: 30/200 on the bench and 1/40 human (Split's kit), and 49/200
-  and 4/40 with the Ribbon.
-- **To build:** one enemy block and a bench run, 1 to 2 hours, then the ship steps.
-- **You would be approving:** a one-fight chapter that leaves out the game's staging.
+- **What changes:** no Paragon. Trema at full HP with his arena block (Agility 95, Luck 128).
+  The story beat of Trema killing Paragon is lost.
+- **Sources:** block and full-HP start, 2 sources. AI weights, 1 source (text breaks off).
+- **Measured:** 0/200 bench, 0/40 human, with every kit (NightMare185's too). 0/100 with 1.5 s or
+  3 s of action time. Luck 128 makes Darkness miss. Worse than the story Trema, not better.
+- **Else it changes:** nothing outside Chapter XIII.
 
-### 3. Action time as a labelled estimate (E4), together with Split's kit
+### 3. Action time (E4), an estimate of how long an action takes
 
-- **What changes:** every action takes N seconds before the actor's gauge refills. Today the
-  engine takes no time for an action. This applies to all FFX-2 chapters (4, 5, 6, XI and XIII),
-  not only Trema.
-- **Sources:** that the action takes time is sourced (2 sources: the wiki and Split_Infinity).
-  **The length is unsourced.** No guide publishes animation lengths, so N would be an estimate
-  in your name.
-- **Measured (bench, 100 seeds; human speed not run yet):**
-  - N = 1.5 s: Trema 71 with Split's kit, 63 to 64 with the Ribbon. Paragon 0. Chapter 0.
-  - N = 3 s: Trema 87 with Split's kit, 73 to 74 with the Ribbon. Paragon 0 to 7. Chapter 4 to 5.
-- **To build:** 2 to 3 hours, re-benching Chapters 4, 5, 6 and XI, and a deep review because it
-  touches shared combat.
-- **You would be approving:** a number we chose ourselves, labelled as an estimate. It fixes
-  Trema, but it does not fix normal Paragon on its own.
+- **What changes:** after an action the actor's gauge waits N seconds before refilling.
+- **Sources:** that actions take time, 2 sources. **The length N is unsourced**, an estimate in your name.
+- **Measured on your picks (Normal Paragon):** 0/200 bench and 0/40 human at 1.5 s and at 3 s.
+  Paragon still wins. It does help Trema: story Trema fresh 140/200 bench and 25/40 human at
+  1.5 s, 88/100 and 34/40 at 3 s (against 30/200 and 1/40 off).
+- **Stacked on option 1 (chapter, Split's kit):** 8/200 bench, 10/200 human at 1.5 s;
+  15/200 bench, 13/200 human at 3 s.
+- **Else it changes:** as built it covers the Cloister links only, so nothing else moves. Turned on
+  for every FFX-2 chapter it moves them all, both ways: Chapter XI 30 to 81/100 bench at 1.5 s,
+  Chapters 5 and 6 up or down by line. That wider switch would need its own review.
 
-### 4. NightMare185's line-up against normal Paragon (TR10 changes, TR7 stays Normal)
+### 4. NightMare185's line-up against Normal Paragon (TR10 changes, TR7 stays Normal)
 
-- **What changes:** Dark Knights on Valiant Lustre, each wearing only an Oath Veil and a Crystal
-  Bangle, with 99 Megalixirs. One girl throws a Megalixir every turn. The others use plain
-  Attacks, never Darkness. It has no Alchemist. For Trema he switches to Three Stars and Soul
-  Spring.
-- **Sources:** one source ("tested in 10 battles"). The wiki paraphrases it, so it counts once.
-  This is the only recorded clear of normal Paragon that does not use Cat Nip.
-- **Measured:** not benched. **Our guess, not a measurement:** low (Paragon acts about 4 times a Dark Knight turn).
-- **To build:** a bench line from modelled items, 1 to 2 hours (a Dark Knight Rikku needs art).
-- **You would be approving:** a different line-up from TR10, backed by a single source.
+- **What changes:** three Dark Knights on Valiant Lustre, Oath Veil and Crystal Bangle, Megalixir
+  every turn, plain Attacks.
+- **Sources:** one source (FAQ 27609, Strategy 3, "tested in 10 battles" against Normal Paragon).
+  **Kit gap:** the build carries 99 Mega-Potions (source says 55) and lacks his Remedies,
+  X-Potions, Light Curtains and Stamina Tonics.
+- **Measured:** 0/200 bench, 0/40 human on Paragon, Trema and the chapter. The party dies in 10 to
+  60 s. The kit gaps would not change that.
+- **Else it changes:** nothing outside Chapter XIII.
 
 ### 5. Keep Chapter XIII unlisted and ship Omnis, Isaaru and Gippal first
 
-- **What changes:** nothing new. Trema's art (on main) and its engine (on the branch) wait.
-- **Sources and measurements:** their own. Their engines are on branches, each with open questions.
-- **To build:** each follows the same ship path as Yojimbo, once you answer its questions.
-- **You would be approving:** Trema comes later, and three other chapters go ahead now.
+- Nothing new ships. Trema's art and engine wait. Each other chapter follows Yojimbo's path.
 
-## Recommendation: option 1, with option 3 measured in the same run
+## Top three combinations (human, chapter, 200 seeds)
 
-Split_Infinity's TR10 clear was against Oversoul Paragon. No sourced kit beats normal Paragon here
-even with 3 s of action time, so option 1 is the only faithful route past link 1. Trema is only
-human-winnable with some action time, so the same run should measure option 3 at 1.5 s and 3 s,
-both on the bench and at human speed. Everything stays OFF, and you get the numbers before
-anything ships. Chapter XIII stays unlisted until then, so option 5's chapters are not held up.
+| Combination | Human | Bench | What rests on an estimate |
+|---|---:|---:|---|
+| 1 + Split's kit + action time 1.5 s + `'next-turn'` answers | 31/200 | 33/200 | action time length; answer timing |
+| 1 + Split's kit + action time 3 s | 13/200 | 15/200 | action time length |
+| 1 + Split's kit + Ribbon + action time 3 s | 12/200 | 9/200 | action time length; Ribbon is wiki advice |
 
-**Also found (single source, not proposed):** the wiki's figure for Paragon's Normal Attack
-suggests every defence-ignoring hit in the engine, the party's Darkness included, is about 5.9 %
-low.
+All Oversoul rows also rest on the hit-rate and threshold estimates. No bench line yet plays
+Split's own Oversoul opening (Star Curtain, all three attack at once), so option 1 is a floor.
+
+## To ship, once you pick
+
+Every option is built. What is left: flip the switch, then the chapter's ship stage (scene, content,
+listing): about 2 to 3 hours, then the focused review and the deploy. Action time touches combat,
+so it also owes a deep review after the deploy.
+
+## Recommendation: option 1 with option 3 at 3 s, Split's kit
+
+Nothing reaches 1 in 4. Plainly: at the default estimates the best faithful line wins about
+**1 time in 15 for a human (13/200)**. Option 1 is the only sourced form of Paragon anyone clears
+with this kit. The engine's current zero action time is known to be wrong, so a labelled 3 s is
+closer to the game than none. If you also accept SinirothX's literal reading of when Oversoul
+Paragon answers, the best row is **about 1 in 6 (31/200, at 1.5 s)**.
+
+**Also found (not proposed):** Paragon's Normal Attack reads about 5.9 % low against the wiki.
 
 ## Replies you can send
 
-- "Trema: 1 and 3" (the recommendation: build and measure, ship nothing yet)
-- "Trema: 1" / "Trema: 2" / "Trema: 3 at 3 s" / "Trema: 4" / "Trema: 5" (park it; Omnis, Isaaru, Gippal next)
+- "Trema: 1 and 3 at 3 s" (the recommendation, about 1 in 15)
+- "Trema: 1 and 3 at 1.5 s, next-turn" (the best measured row, about 1 in 6; two estimates)
+- "Trema: 1" (Oversoul only, no action time, about 1 in 70)
+- "Trema: 2" / "Trema: 4" (both measured 0 wins)
+- "Trema: 5" (park it; Omnis, Isaaru, Gippal next)
