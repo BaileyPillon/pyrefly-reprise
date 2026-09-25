@@ -1,0 +1,184 @@
+/*
+ * FFX's battle HUD on an upright phone, part two (option B, Bailey
+ * 2026-09-25; part one and the sources are `phone-hud.css`). FFX only: the
+ * Sensor card as the target card, the transient slabs, the trigger prompt,
+ * Evrae's airship orders (Chapter VIII) and Yojimbo's Zanmato gauge
+ * (Chapter IX), each moved or re-sized to the phone's rail and grid.
+ */
+
+/* ------------------------------------------- the Sensor card, as the card */
+html[data-phone-battle='ffx'] .ffx-sensor {
+  display: none !important;
+}
+html[data-phone-battle='ffx'] .ffxhud.phud--sensor .ffx-sensor:not([hidden]) {
+  display: block !important;
+  left: var(--phud-side) !important;
+  right: var(--phud-side);
+  top: calc(100% - var(--phud-tip) - 44px);
+  width: auto;
+  padding: 12px 14px;
+  transform: none;
+  z-index: 12;
+  background: rgba(11, 10, 18, 0.92);
+  border-left: 3px solid var(--ig-accent);
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor > * {
+  transform: none;
+}
+/* The desktop plate folds to a one-line chip after a few seconds; as the
+   target card it stays open for the whole step (a folded card was an empty
+   strip over the grid). */
+html[data-phone-battle='ffx'] .ffxhud.phud--sensor .ffx-sensor--folded .ffx-sensor__body {
+  display: block;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__name {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__hp {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__bar {
+  height: 6px;
+  margin-bottom: 10px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__chips {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__chip {
+  height: 30px;
+  gap: 6px;
+  font-size: 14px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__chip-icon {
+  width: 8px;
+  height: 8px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__unknown,
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__failed {
+  font-size: 14px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__toggle {
+  display: none;
+}
+
+/* ------------------------------------------------ transients, under the rail */
+html[data-phone-battle='ffx'] .ffxhud .ig-banner {
+  left: 10px;
+  top: 120px;
+  max-width: calc(100% - 20px);
+}
+html[data-phone-battle='ffx'] .ffxhud .ig-banner__name {
+  font-size: 20px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ig-banner__chip {
+  font-size: 14px;
+  letter-spacing: 0.16em;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-telegraph {
+  top: 120px;
+  max-width: calc(100% - 20px);
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-telegraph__actor {
+  font-size: 14px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-telegraph__state {
+  font-size: 22px;
+}
+
+/* --------------------------------------------------- the trigger prompt */
+html[data-phone-battle='ffx'] .ffxhud__stage > .ig-cmd-stack {
+  left: var(--phud-side);
+  right: var(--phud-side);
+  top: calc(100% - var(--phud-grid));
+  bottom: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+html[data-phone-battle='ffx'] .ffxhud__stage > .ig-cmd-stack[hidden] {
+  display: none;
+}
+html[data-phone-battle='ffx'] .ffxhud .ig-cmd__ready {
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  margin-left: 0;
+  color: inherit;
+  opacity: 0.7;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-trigger__face {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 34px;
+  height: 34px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-trigger__face .ffx-portrait-fallback {
+  font-size: 16px;
+}
+
+/* ------------------------------------------- Evrae's airship orders (VIII) */
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order[hidden] {
+  display: none;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order .ig-cmd {
+  width: auto;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__tag,
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__already,
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__chip,
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__slab-title,
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__cost,
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__left {
+  font-size: 14px;
+  margin-left: 0;
+  white-space: normal;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order .ffx-cmd--trigger__label {
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__slab {
+  grid-column: 1 / -1;
+  width: auto;
+  margin: 0;
+  padding: 8px 12px;
+  gap: 4px;
+  transform: none;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__slab > * {
+  transform: none;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__pips i {
+  width: 14px;
+  height: 6px;
+}
+
+/* ------------------------------------------------ Yojimbo's gauge (IX) */
+/* The gauge's own phone frame (`zanmato-gauge.css`, `.ffx-zg--phone`) sits
+   under the rail and the enemy line; its small print meets the 14 px floor. */
+html[data-phone-battle='ffx'] .ffx-zg--phone .ffx-zg__frame {
+  top: 120px;
+}
+html[data-phone-battle='ffx'] .ffx-zg--phone .ffx-zg__chip,
+html[data-phone-battle='ffx'] .ffx-zg__nums span,
+html[data-phone-battle='ffx'] .ffx-zg__labels span,
+html[data-phone-battle='ffx'] .ffx-zg--phone .ffx-zg__banner small {
+  font-size: 14px;
+}
+html[data-phone-battle='ffx'] .ffx-zg__nums,
+html[data-phone-battle='ffx'] .ffx-zg__labels {
+  height: 20px;
+}

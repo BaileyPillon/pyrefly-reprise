@@ -1,0 +1,2116 @@
+{
+ "before2": {
+  "seymour-flux@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 692171920,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1095.2,
+    99.5,
+    145.8,
+    301.3
+   ],
+   ".ig-cmd-stack": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ig-stat-list": [
+    805.3,
+    516.5,
+    428.4,
+    179.5
+   ],
+   ".ffx-sensor": [
+    853.3,
+    332,
+    237.4,
+    176
+   ],
+   ".sgd__toggle": [
+    40.4,
+    66,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    338.6,
+    51,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1133.5,
+    77.5,
+    104.2,
+    15
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    56.4,
+    269.9,
+    328.1,
+    38.1
+   ],
+   ".mad__card": [
+    324.4,
+    75.6,
+    227.1,
+    154.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-bahamut@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3097654914,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    509.8,
+    553,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1039,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    474,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    502.5,
+    578.8,
+    407,
+    89.3
+   ],
+   ".eint__panel": [
+    799.8,
+    59.7,
+    300,
+    185.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    474,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "seymour-flux@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1102651545,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1368.9,
+    124.4,
+    182.2,
+    376.6
+   ],
+   ".ig-cmd-stack": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ig-stat-list": [
+    1006.7,
+    645.7,
+    535.5,
+    224.3
+   ],
+   ".ffx-sensor": [
+    1066.6,
+    415,
+    296.8,
+    220
+   ],
+   ".sgd__toggle": [
+    50.5,
+    82.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    423.5,
+    26.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1416.9,
+    96.9,
+    130.2,
+    18.8
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    70.5,
+    337.4,
+    410.1,
+    47.6
+   ],
+   ".mad__card": [
+    401.2,
+    54.1,
+    282.5,
+    233.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-bahamut@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 11819092,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    772.5,
+    631.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1297.8,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    592.5,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    756.4,
+    659.9,
+    382.2,
+    175.1
+   ],
+   ".eint__panel": [
+    998.9,
+    74.6,
+    375,
+    231.4
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    592.5,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "seymour-flux@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2316830391,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1639.7,
+    139.9,
+    204.9,
+    423.4
+   ],
+   ".ig-cmd-stack": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ig-stat-list": [
+    1232.4,
+    726,
+    602.2,
+    252.3
+   ],
+   ".ffx-sensor": [
+    1299.8,
+    466.6,
+    333.7,
+    247.4
+   ],
+   ".sgd__toggle": [
+    157.3,
+    92.8,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    577.2,
+    43.6,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1693.7,
+    109,
+    146.4,
+    21.1
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    179.7,
+    379.4,
+    461.2,
+    53.5
+   ],
+   ".mad__card": [
+    552.5,
+    69.1,
+    315.9,
+    254.1
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "ffx2-bahamut@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3269890057,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    831.9,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1558.8,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    666.2,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    816.7,
+    774.7,
+    563.4,
+    164.2
+   ],
+   ".eint__panel": [
+    1222.6,
+    83.9,
+    421.7,
+    260.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    666.2,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  }
+ },
+ "after2": {
+  "seymour-flux@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 692171920,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1095.2,
+    99.5,
+    145.8,
+    301.3
+   ],
+   ".ig-cmd-stack": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ig-stat-list": [
+    805.3,
+    516.5,
+    428.4,
+    179.5
+   ],
+   ".ffx-sensor": [
+    853.3,
+    332,
+    237.4,
+    176
+   ],
+   ".sgd__toggle": [
+    40.4,
+    66,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    338.6,
+    51,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1133.5,
+    77.5,
+    104.2,
+    15
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    56.4,
+    269.9,
+    328.1,
+    38.1
+   ],
+   ".mad__card": [
+    324.4,
+    75.6,
+    219.1,
+    154.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-bahamut@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3097654914,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    515.8,
+    553,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1037.5,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    474,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    508.5,
+    578.8,
+    401,
+    89.3
+   ],
+   ".eint__panel": [
+    798.3,
+    59.7,
+    300,
+    185.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    474,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "seymour-flux@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1102651545,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1368.9,
+    124.4,
+    182.2,
+    376.6
+   ],
+   ".ig-cmd-stack": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ig-stat-list": [
+    1006.7,
+    645.7,
+    535.5,
+    224.3
+   ],
+   ".ffx-sensor": [
+    1066.6,
+    415,
+    296.8,
+    220
+   ],
+   ".sgd__toggle": [
+    50.5,
+    82.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    423.5,
+    26.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1416.9,
+    96.9,
+    130.2,
+    18.8
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    70.5,
+    337.4,
+    410.1,
+    47.6
+   ],
+   ".mad__card": [
+    401.2,
+    54.1,
+    282.5,
+    233.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-bahamut@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2621306410,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    645,
+    681.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1297.9,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    592.5,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    634.2,
+    709.5,
+    504.2,
+    125.5
+   ],
+   ".eint__panel": [
+    998.9,
+    74.6,
+    375,
+    231.4
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    592.5,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "seymour-flux@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2316830391,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1639.7,
+    139.9,
+    204.9,
+    423.4
+   ],
+   ".ig-cmd-stack": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ig-stat-list": [
+    1232.4,
+    726,
+    602.2,
+    252.3
+   ],
+   ".ffx-sensor": [
+    1299.8,
+    466.6,
+    333.7,
+    247.4
+   ],
+   ".sgd__toggle": [
+    157.3,
+    92.8,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    577.2,
+    43.6,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1693.7,
+    109,
+    146.4,
+    21.1
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    179.7,
+    379.4,
+    461.2,
+    53.5
+   ],
+   ".mad__card": [
+    552.5,
+    69.1,
+    315.9,
+    254.1
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "ffx2-bahamut@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1853889207,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    831.9,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1558.7,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    666.2,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    816.7,
+    774.7,
+    563.4,
+    164.2
+   ],
+   ".eint__panel": [
+    1222.5,
+    83.9,
+    421.7,
+    260.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    666.2,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  }
+ },
+ "after3": {
+  "seymour-flux@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 692171920,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1095.2,
+    99.5,
+    145.8,
+    301.3
+   ],
+   ".ig-cmd-stack": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ig-stat-list": [
+    805.3,
+    516.5,
+    428.4,
+    179.5
+   ],
+   ".ffx-sensor": [
+    853.3,
+    332,
+    237.4,
+    176
+   ],
+   ".sgd__toggle": [
+    40.4,
+    66,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    338.6,
+    51,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1133.5,
+    77.5,
+    104.2,
+    15
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    56.4,
+    269.9,
+    328.1,
+    38.1
+   ],
+   ".mad__card": [
+    324.4,
+    75.6,
+    219.1,
+    154.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-bahamut@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 786989094,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    615.8,
+    489,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1038.4,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    474,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    601.7,
+    514.4,
+    308.6,
+    153.6
+   ],
+   ".eint__panel": [
+    799.2,
+    59.7,
+    300,
+    185.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    474,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "seymour-flux@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1102651545,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1368.9,
+    124.4,
+    182.2,
+    376.6
+   ],
+   ".ig-cmd-stack": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ig-stat-list": [
+    1006.7,
+    645.7,
+    535.5,
+    224.3
+   ],
+   ".ffx-sensor": [
+    1066.6,
+    415,
+    296.8,
+    220
+   ],
+   ".sgd__toggle": [
+    50.5,
+    82.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    423.5,
+    26.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1416.9,
+    96.9,
+    130.2,
+    18.8
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    70.5,
+    337.4,
+    410.1,
+    47.6
+   ],
+   ".mad__card": [
+    401.2,
+    54.1,
+    282.5,
+    233.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-bahamut@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1988627686,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    772.5,
+    631.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1298.5,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    592.5,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    756.4,
+    659.9,
+    382.2,
+    175.1
+   ],
+   ".eint__panel": [
+    999.5,
+    74.6,
+    375,
+    231.4
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    592.5,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "seymour-flux@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2316830391,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1639.7,
+    139.9,
+    204.9,
+    423.4
+   ],
+   ".ig-cmd-stack": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ig-stat-list": [
+    1232.4,
+    726,
+    602.2,
+    252.3
+   ],
+   ".ffx-sensor": [
+    1299.8,
+    466.6,
+    333.7,
+    247.4
+   ],
+   ".sgd__toggle": [
+    157.3,
+    92.8,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    577.2,
+    43.6,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1693.7,
+    109,
+    146.4,
+    21.1
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    179.7,
+    379.4,
+    461.2,
+    53.5
+   ],
+   ".mad__card": [
+    552.5,
+    69.1,
+    315.9,
+    254.1
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "ffx2-bahamut@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1853889207,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    831.9,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1559.3,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    666.2,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    816.7,
+    774.7,
+    563.4,
+    164.2
+   ],
+   ".eint__panel": [
+    1223.2,
+    83.9,
+    421.7,
+    260.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    666.2,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  }
+ },
+ "before4": {
+  "seymour-flux@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 692171920,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1095.2,
+    99.5,
+    145.8,
+    301.3
+   ],
+   ".ig-cmd-stack": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ig-stat-list": [
+    805.3,
+    516.5,
+    428.4,
+    179.5
+   ],
+   ".ffx-sensor": [
+    853.3,
+    332,
+    237.4,
+    176
+   ],
+   ".sgd__toggle": [
+    40.4,
+    66,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    338.6,
+    51,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1133.5,
+    77.5,
+    104.2,
+    15
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    56.4,
+    269.9,
+    328.1,
+    38.1
+   ],
+   ".mad__card": [
+    324.4,
+    75.6,
+    219.1,
+    154.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "Next best moveTidusHastega\u2192the partyGuide\u2019s pickin White Magic30 MP",
+   "hudKids": "ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  }
+ },
+ "after4": {
+  "seymour-flux@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 692171920,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1095.2,
+    99.5,
+    145.8,
+    301.3
+   ],
+   ".ig-cmd-stack": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ig-stat-list": [
+    805.3,
+    516.5,
+    428.4,
+    179.5
+   ],
+   ".ffx-sensor": [
+    853.3,
+    332,
+    237.4,
+    176
+   ],
+   ".sgd__toggle": [
+    40.4,
+    66,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    338.6,
+    51,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1133.5,
+    77.5,
+    104.2,
+    15
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    56.4,
+    269.9,
+    328.1,
+    38.1
+   ],
+   ".mad__card": [
+    324.4,
+    75.6,
+    227.1,
+    154.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "Next best moveTidusHastega\u2192the partyGuide\u2019s pickin White Magic30 MP",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  }
+ }
+}

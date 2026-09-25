@@ -1,0 +1,319 @@
+/*
+ * The battle HUD on an upright phone, option B "compact rail" (Bailey,
+ * 2026-09-25). Target: docs/concepts/layout/phone-battle-hud/sheet.jpg row B
+ * and frames/B-*.jpg; the geometry below is the mockup's (`mock.html`,
+ * `OPT === 'B'`), anchored to the bottom so 360 x 780 keeps the same thumb
+ * zone and gives up field height instead.
+ *
+ * Shared by both games (the game halves are `ui/ffx/phone-hud*.css` and
+ * `ui/ffx2/phone-hud.css`). Every rule is under `html[data-phone-battle]`,
+ * which only `phoneBattle.ts` sets, so nothing here reaches a desktop window.
+ * CHK-003: nothing a player reads is under 14 CSS px.
+ *
+ * Geometry at 844 tall (all from the bottom edge):
+ *   field      0 .. H-324         (#game is cut to it; 520 at 844, 456 at 780)
+ *   chips      H-358 .. H-296     (party, overlapping the field's fade)
+ *   tip line   H-286 .. H-242     (advisor, GUIDE at its right end)
+ *   grid       H-234 ..           (commands, 2 columns, 56 px tiles)
+ *   footer     H-34  .. H-8
+ */
+
+html[data-phone-battle] {
+  --phud-field: 324px;
+  --phud-chips: 296px;
+  --phud-tip: 242px;
+  --phud-grid: 234px;
+  --phud-side: 8px;
+}
+
+/* ------------------------------------------------------------- the field */
+html[data-phone-battle] #game {
+  bottom: auto;
+  height: calc(100% - var(--phud-field));
+}
+
+/* ------------------------------------------------ the panel and the shade */
+html[data-phone-battle] .phud-panel,
+html[data-phone-battle] .phud-shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+html[data-phone-battle] .phud-panel {
+  top: calc(100% - var(--phud-field) - 90px);
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(4, 6, 11, 0), #04060b 90px);
+}
+html[data-phone-battle] .phud-shade {
+  top: 0;
+  height: 110px;
+  background: linear-gradient(to bottom, rgba(4, 6, 11, 0.85), rgba(4, 6, 11, 0));
+}
+.phud-panel,
+.phud-shade,
+.phud-foot,
+.phud-guide,
+.phud-card,
+.phud-target {
+  display: none;
+}
+html[data-phone-battle] .phud-panel,
+html[data-phone-battle] .phud-shade {
+  display: block;
+}
+
+/* The HUD's own vignette darkens the frame's bottom fifth, which on the phone
+   is the thumb zone: the tiles went grey and the ink ones unreadable. The
+   panel and the shade above carry the phone's own falloff instead. */
+html[data-phone-battle] .ig-surface__vignette {
+  display: none;
+}
+
+/* ------------------------------------------------------------ pause (rail) */
+html[data-phone-battle] .battle-pause-chip {
+  position: absolute;
+  left: auto;
+  right: 10px;
+  top: 10px;
+  width: 46px;
+  height: 46px;
+  min-height: 0;
+  padding: 0;
+  z-index: 40;
+  font-size: 14px;
+  text-indent: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  background: rgba(11, 10, 18, 0.8);
+  border: 1px solid rgba(244, 241, 232, 0.28);
+  box-shadow: none;
+  transform: none;
+}
+html[data-phone-battle] .battle-pause-chip::before {
+  content: '❚❚';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-indent: 0;
+  font-size: 16px;
+  letter-spacing: -0.1em;
+  color: var(--ig-paper, #f4f1e8);
+}
+
+/* ------------------------------------------------------------ the footer */
+html[data-phone-battle] .phud-foot {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  display: block;
+  text-align: center;
+  font-family: var(--ig-font-text);
+  font-size: 14px;
+  line-height: 1.25;
+  color: rgba(244, 241, 232, 0.72);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+html[data-phone-battle] .phud-foot__who {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ig-accent);
+}
+html[data-phone-battle] .phud-foot__who:not(:empty) + .phud-foot__help:not(:empty)::before {
+  content: ' · ';
+}
+html[data-phone-battle] .phud-foot--empty,
+html[data-phone-battle] [data-phone-step='target'] > .phud-foot {
+  display: none;
+}
+
+/* ------------------------------------------------------------- GUIDE */
+html[data-phone-battle] .phud-guide {
+  position: absolute;
+  right: calc(var(--phud-side) + 8px);
+  bottom: calc(var(--phud-tip) + 6px);
+  z-index: 12;
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(244, 241, 232, 0.28);
+  background: rgba(11, 10, 18, 0.9);
+  font: 700 14px/1 var(--ig-font-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.85);
+  pointer-events: auto;
+  cursor: pointer;
+}
+html[data-phone-battle] .phud-guide--on {
+  border-color: var(--ig-accent);
+  color: var(--ig-accent);
+}
+html[data-phone-battle] [data-phone-step='target'] > .phud-guide {
+  display: none;
+}
+
+/* ------------------------------------------------------ the target step */
+html[data-phone-battle] [data-phone-step='target'] > .phud-card {
+  position: absolute;
+  left: var(--phud-side);
+  right: var(--phud-side);
+  top: calc(100% - var(--phud-tip) - 44px);
+  z-index: 12;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+  align-items: center;
+  padding: 12px;
+  background: rgba(11, 10, 18, 0.92);
+  border-left: 3px solid var(--ig-accent);
+  pointer-events: none;
+}
+html[data-phone-battle] .phud-card__face {
+  width: 44px;
+  height: 44px;
+  background: #1a1826 no-repeat 50% 14% / cover;
+}
+html[data-phone-battle] .phud-card__face[hidden] {
+  display: none;
+}
+html[data-phone-battle] .phud-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+html[data-phone-battle] .phud-card__name {
+  font: italic 700 22px/1.1 var(--ig-font-serif);
+  color: var(--ig-paper);
+}
+html[data-phone-battle] .phud-card__hp {
+  font: 700 16px/1 var(--ig-font-numeral);
+  color: var(--ig-paper);
+}
+html[data-phone-battle] .phud-card__hp:empty {
+  display: none;
+}
+html[data-phone-battle] .phud-card__note {
+  grid-column: 1 / -1;
+  font-size: 14px;
+  line-height: 1.3;
+  color: rgba(244, 241, 232, 0.72);
+}
+html[data-phone-battle] .phud-card__note:empty {
+  display: none;
+}
+/* FFX: the Sensor card is the target card when it names the target. */
+html[data-phone-battle] .phud--sensor > .phud-card {
+  display: none;
+}
+
+html[data-phone-battle] [data-phone-step='target'] > .phud-target {
+  position: absolute;
+  left: var(--phud-side);
+  right: var(--phud-side);
+  bottom: 38px;
+  z-index: 12;
+  display: block;
+  pointer-events: none;
+}
+html[data-phone-battle] .phud-target__hint {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(244, 241, 232, 0.7);
+}
+html[data-phone-battle] .phud-target__bar {
+  display: flex;
+  gap: 8px;
+}
+html[data-phone-battle] .phud-target__back,
+html[data-phone-battle] .phud-target__go {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 15px/1.1 var(--ig-font-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  pointer-events: auto;
+  cursor: pointer;
+}
+html[data-phone-battle] .phud-target__back {
+  flex: none;
+  width: 96px;
+  border: 1px solid rgba(244, 241, 232, 0.35);
+  background: rgba(11, 10, 18, 0.9);
+  color: var(--ig-paper);
+}
+html[data-phone-battle] .phud-target__go {
+  flex: 1;
+  min-width: 0;
+  padding: 0 16px;
+  border: 0;
+  background: var(--ig-accent);
+  color: var(--ig-ink);
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ------------------------------------------------- the guide, as a sheet */
+html[data-phone-battle] .sgd__toggle {
+  display: none !important;
+}
+html[data-phone-battle] .sgd__stack {
+  display: none !important;
+}
+html[data-phone-battle] [data-phone-guide='open'] .sgd:not(.sgd--off) .sgd__stack {
+  position: absolute;
+  display: flex !important;
+  flex-direction: column;
+  left: 10px !important;
+  right: 10px !important;
+  top: 66px !important;
+  bottom: auto !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: calc(100% - var(--phud-field) - 110px) !important;
+  z-index: 30;
+  transform: none !important;
+  pointer-events: auto;
+  overflow: hidden;
+  background: rgba(11, 10, 18, 0.95);
+  border-left: 3px solid var(--ig-accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+html[data-phone-battle] [data-phone-guide='open'] .sgd__panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none !important;
+  width: auto !important;
+  overflow-y: auto;
+  touch-action: pan-y;
+  transform: none !important;
+  padding: 10px 12px;
+  font-size: 15px !important;
+}
+html[data-phone-battle] [data-phone-guide='open'] .sgd__panel * {
+  font-size: 15px !important;
+  line-height: 1.35 !important;
+  max-height: none !important;
+  -webkit-line-clamp: unset !important;
+}
+html[data-phone-battle] [data-phone-guide='open'] .sgd__panel .sgd__title {
+  font-size: 19px !important;
+}
+html[data-phone-battle] [data-phone-guide='open'] .sgd__more {
+  display: none !important;
+}

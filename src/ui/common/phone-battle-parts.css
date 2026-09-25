@@ -1,0 +1,281 @@
+/*
+ * The phone battle HUD (option B, Bailey 2026-09-25), part two: the two shared
+ * read-outs the sheet re-draws as one line each. Both games; see
+ * `phone-battle.css` for the geometry and the rule that keeps all of this off
+ * a desktop window.
+ *
+ *  - The move advisor becomes the tip line: its lead move only, one line,
+ *    "TIP  Hastega → the party", with GUIDE at the right end. A tap on the
+ *    line is the advisor's own switch; when it is off the switch itself is the
+ *    line ("TIP  best move"). The floating HIDE MOVES tab is gone.
+ *  - The enemy-move read-out becomes the line under the rail: who acts next
+ *    and with what, clamped to two lines.
+ *
+ * Both components write their own boxes inline every frame (the FFX safe-zone
+ * solver, the intent's pin to the boss), hence the `!important`s: an author
+ * `!important` is the one thing an inline declaration yields to.
+ */
+
+/* --------------------------------------------------------- the tip line */
+html[data-phone-battle] .mad {
+  --lb-scale: 1 !important;
+}
+html[data-phone-battle] .mad__card,
+html[data-phone-battle] .mad--off .mad__toggle {
+  position: absolute !important;
+  left: var(--phud-side) !important;
+  right: var(--phud-side) !important;
+  top: auto !important;
+  bottom: var(--phud-tip) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  margin: 0 !important;
+  padding: 0 96px 0 12px !important;
+  transform: none !important;
+  display: flex !important;
+  align-items: center;
+  overflow: hidden;
+  background: rgba(11, 10, 18, 0.9) !important;
+  border: 0 !important;
+  border-left: 3px solid var(--ig-accent) !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+  pointer-events: auto;
+  cursor: pointer;
+}
+/* The line is up whenever the player has the advisor on. FFX's safe-zone
+   solver (`FFXBattleHud.placeAdvisor`) takes the card down when its 640x360
+   grid has no clear band, which on the phone is a question about a layout
+   that is not on screen; the phone gives the line its own slot. */
+html[data-phone-battle] .mad--off .mad__card {
+  display: none !important;
+}
+html[data-phone-battle] .ffxhud .mad:not(.mad--off) .mad__card[hidden],
+html[data-phone-battle] .ffx2hud .mad:not(.mad--off) .mad__card[hidden] {
+  display: flex !important;
+}
+html[data-phone-battle] .mad__card::before,
+html[data-phone-battle] .mad--off .mad__toggle::before {
+  content: 'Tip';
+  flex: none;
+  margin-right: 10px;
+  font: 700 14px/1 var(--ig-font-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ig-accent);
+}
+html[data-phone-battle] .mad__head,
+html[data-phone-battle] .mad__move--alt,
+html[data-phone-battle] .mad__stats,
+html[data-phone-battle] .mad__effect,
+html[data-phone-battle] .mad__why,
+html[data-phone-battle] .mad__warn,
+html[data-phone-battle] .mad__rank,
+html[data-phone-battle] .mad__badge,
+html[data-phone-battle] .mad__idle {
+  display: none !important;
+}
+html[data-phone-battle] .mad__move {
+  min-width: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+}
+html[data-phone-battle] .mad__line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+  color: var(--ig-paper);
+}
+html[data-phone-battle] .mad__line > * {
+  font-size: 15px !important;
+}
+html[data-phone-battle] .mad__label {
+  font-weight: 700;
+  color: var(--ig-accent) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+html[data-phone-battle] .mad__target {
+  color: var(--ig-paper) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The switch: gone while the line is up (the line is the switch). */
+html[data-phone-battle] .mad:not(.mad--off) .mad__toggle {
+  display: none !important;
+}
+html[data-phone-battle] .mad--off .mad__toggle b {
+  display: none;
+}
+html[data-phone-battle] .mad--off .mad__toggle span {
+  font: 600 15px/1.2 var(--ig-font-text) !important;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(244, 241, 232, 0.75);
+}
+/* A submenu's title takes the tip line's slot (the game halves place it). */
+html[data-phone-battle] [data-phone-step='target'] .mad {
+  display: none !important;
+}
+
+/* ------------------------------------------------- the enemy-move line */
+html[data-phone-battle] .eint__panel,
+html[data-phone-battle] .eint__toggle {
+  --eint-scale: 1 !important;
+}
+html[data-phone-battle] .eint__panel {
+  position: absolute !important;
+  left: 10px !important;
+  top: 66px !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: min(310px, calc(100% - 20px)) !important;
+  height: auto !important;
+  max-height: 64px !important;
+  transform: none !important;
+  padding: 6px 10px !important;
+  overflow: hidden;
+  background: rgba(11, 10, 18, 0.9) !important;
+  border: 0 !important;
+  border-left: 3px solid var(--ig-blood, #c8323c) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+html[data-phone-battle] .eint__panel::after,
+html[data-phone-battle] .eint__panel::before {
+  display: none !important;
+}
+html[data-phone-battle] .eint__body {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  max-height: 52px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  color: var(--ig-paper);
+}
+html[data-phone-battle] .eint__body > * {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+}
+html[data-phone-battle] .eint__body > * + *::before {
+  content: ' · ';
+  color: rgba(244, 241, 232, 0.6);
+}
+html[data-phone-battle] .eint__enemy,
+html[data-phone-battle] .eint__enemy * {
+  font: 700 14px/1.3 var(--ig-font-display) !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e86a6a !important;
+}
+html[data-phone-battle] .eint__enemy i {
+  margin-left: 0.4em;
+  font-style: normal;
+}
+html[data-phone-battle] .eint__move *,
+html[data-phone-battle] .eint__dmg *,
+html[data-phone-battle] .eint__lines * {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+}
+/* One line of it: who and what, the first number, nothing that needs a table. */
+html[data-phone-battle] .eint__conf,
+html[data-phone-battle] .eint__head,
+html[data-phone-battle] .eint__desc,
+html[data-phone-battle] .eint__els,
+html[data-phone-battle] .eint__charge,
+html[data-phone-battle] .eint__odds,
+html[data-phone-battle] .eint__form,
+html[data-phone-battle] .eint__note,
+html[data-phone-battle] .eint__cite,
+html[data-phone-battle] .eint__lines,
+html[data-phone-battle] .eint__pct,
+html[data-phone-battle] .eint__dmg i,
+html[data-phone-battle] .eint__dmg + .eint__dmg {
+  display: none !important;
+}
+html[data-phone-battle] .eint__dmgs,
+html[data-phone-battle] .eint__dmg {
+  display: inline !important;
+  list-style: none;
+}
+html[data-phone-battle] .eint__who::after {
+  content: ' ';
+}
+/* The E chip: the line is the read-out; with the read-out off, the chip is the line. */
+html[data-phone-battle] .eint:not(.eint--off) .eint__toggle {
+  display: none !important;
+}
+html[data-phone-battle] .eint--off .eint__toggle {
+  position: absolute !important;
+  left: 10px !important;
+  top: 66px !important;
+  height: 32px !important;
+  padding: 0 10px !important;
+  transform: none !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  background: rgba(11, 10, 18, 0.85) !important;
+  border: 0 !important;
+  border-left: 3px solid var(--ig-blood, #c8323c) !important;
+  font: 700 14px/1 var(--ig-font-display) !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.8) !important;
+  pointer-events: auto;
+}
+html[data-phone-battle] .eint--off .eint__toggle > * {
+  font-size: 14px !important;
+  transform: none !important;
+}
+html[data-phone-battle] .eint--off .eint__toggle b {
+  display: none;
+}
+/* A status the move lands ("Zombie 50%") reads as words on the line, not a boxed chip. */
+html[data-phone-battle] .eint__status-chip {
+  display: inline !important;
+  margin: 0 0 0 0.4em !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  vertical-align: baseline !important;
+}
+
+/* ------------------------------------------ transients drawn over the HUD */
+/* The turn cut-in is letterboxed onto the window at 0.61x on a phone, so its
+   "YOUR TURN · CTB 1 OF 3" line lands at 3.8 px; the rail already says whose
+   turn it is, so on the phone the slab keeps the name and drops the line. */
+html[data-phone-battle] .pf-cutin .ig-cutin__ctb {
+  display: none;
+}
+/* Battle barks ("Eeew! Yunie, don't heal him!") and the moment slab's small caps. */
+html[data-phone-battle] .dbox__text {
+  font-size: 15px;
+}
+html[data-phone-battle] .dbox__role,
+html[data-phone-battle] .dbox__auto,
+html[data-phone-battle] .pf-mom__slab-sub {
+  font-size: 14px;
+}

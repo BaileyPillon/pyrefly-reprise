@@ -711,7 +711,7 @@ export class DamageNumbers {
   }
 
   private scale(): number {
-    const s = this.opts.scale?.() ?? 1;
+    const s = typeof document !== 'undefined' && document.documentElement?.dataset['phoneBattle'] ? 1 : (this.opts.scale?.() ?? 1); // 1:1 on the phone HUD (phoneBattle.ts)
     return Number.isFinite(s) && s > 0 ? s : 1;
   }
 
