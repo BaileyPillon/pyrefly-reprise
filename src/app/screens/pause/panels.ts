@@ -151,7 +151,7 @@ export function controlsColumns(): PanelColumn[] {
       rows: [
         row('tab-prev', 'Previous tab', 'Q  /  L1  /  ←'),
         row('tab-next', 'Next tab', 'E  /  R1  /  →'),
-        row('rows', 'Move down a list', '↑  ↓  /  D-pad'),
+        row('rows', 'Move down a menu', '↑  ↓  /  D-pad'),
         row('adjust', 'Adjust a setting', '←  →  /  D-pad'),
         row('confirm', 'Confirm', 'Enter  /  Z  /  Cross'),
         row('back', 'Back', 'Esc  /  X  /  Circle'),

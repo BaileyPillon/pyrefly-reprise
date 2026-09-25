@@ -183,7 +183,7 @@ export function executeCommand(
     const detail = Array.isArray(choices) && choices.length > 0
       ? ` Choose one of: ${choices.join(', ')}.`
       : typeof submenu === 'string'
-        ? ` It opens the ${submenu} list; choose an item from it.`
+        ? ` It opens the ${submenu} menu; choose an item from it.`
         : '';
     ctx.emit({
       type: 'message',

@@ -95,7 +95,7 @@ export function floorNote(ctx: FloorContext): string {
   // Nothing refused the raise; it simply is not what the card picked. Say
   // whether standing them up is even on the table.
   if (ctx.raiseLabel) {
-    return `${who} can be stood up right now — ${ctx.raiseLabel} is on ${ctx.actorName}'s list`;
+    return `${who} can be stood up right now — ${ctx.raiseLabel} is on ${ctx.actorName}'s menu`;
   }
   return `Nothing ${ctx.actorName} can press stands ${who} up — that raise has to come from somebody else`;
 }
