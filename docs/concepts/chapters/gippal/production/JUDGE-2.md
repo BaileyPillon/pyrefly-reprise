@@ -164,3 +164,71 @@ nooj-shade/cast (fur-shoulder fix): PASS (7.0, narrowly; same caveat)
 
 Both stay **CANDIDATE**; nothing is added to `approved-hashes.json` until Bailey names them (rule 9). A judge's PASS is
 not a lock here. If Bailey wants the machina arm as the bible's thin stick with gaps, that is a re-render, not a repair.
+
+## Independent judge, attempt 4 (2026-09-25, ~04:00 EDT)
+
+**Game case (rule 14): FFX-2 only.** Judge: a fourth sub-agent that made none of the Nooj files and did not write
+Part 3. It judges the fur-shoulder fix that Part 3c scored only by its maker (7.0). Same rubric, bar 7 and method as
+[JUDGE.md](JUDGE.md). No art was changed, no GPU was used, nothing goes into `approved-hashes.json` (rule 9).
+
+**Method.** sha256 re-computed first: `nooj-shade/idle.png` `674058d32184` (726x1274), `nooj-shade/cast.png`
+`a07ec9e35852` (1149x1274), both matching Part 3c and the installed sidecars. `verify-approved.mjs` before: ok 185,
+0 mismatched, 0 missing. Each file composited over mid grey and dark blue, looked at at 1:1 and 2x to 3.5x (head and
+loops, the fur crest, the cane hand, the feet, the cast's elbow and hand), against bible §1.23.4 and the picked
+portrait `portraits/nooj.png` (D-043). Engine frames: the same staging as `frames/nooj-*-3.jpg` and `-4.jpg`
+(Chapter XI's first link, reached on a fresh page load with `__pyrefly.gotoChapter('ffx2-fallen-aeons')`, no key
+pressed on the title; Farplane plate served as `den-of-woe.png`, the x2-shiva slot served the Nooj file at shade scale
+0.82, name label Nooj), from a private Vite server rooted at the `chapter-gippal-0925` worktree `D:/pyrefly-ch-gippal`
+(its `public/art` is a junction to the main tree's) on port 5910, HMR and watch off, GPU browser, stopped by its PID.
+The Den chapter itself (`ffx2-den-of-woe`) is not usable for this: its scene is the `bevelle-underground`
+placeholder and `shade-nooj` has no billboard wired yet. Frames: `frames/nooj-idle-4j.jpg`, `frames/nooj-cast-4j.jpg`.
+
+| Painting | Identity | Anatomy | Hands | Costume | Seams | Edges | Finish | Game read | Overall | Maker (3c) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `nooj-shade/idle` (fur-shoulder fix) | 7.5 | 7 | 6.5 | 6.5 | 7 | 7 | 7 | 7 | **6.9 FAIL (narrowly)** | 7.0 |
+| `nooj-shade/cast` (fur-shoulder fix) | 7.5 | 7 | 6.5 | 6.5 | 6.5 | 7 | 7 | 7.5 | **6.9 FAIL (narrowly)** | 7.0 |
+
+(Unrounded means 6.94 and 6.94.) The fix did what it set out to do at 1:1; the pair misses the bar on the game read.
+
+**`nooj-shade/idle`, FAIL (6.9, narrowly).**
+- **What the fix got right, confirmed:** the fur is on the right (cloth) shoulder and a clean blue pauldron sits on
+  the machina side, so metal and cloth are on the sides the bible gives. At 1:1 the crest reads as fur (spiky, pale),
+  with no seam at either shoulder. Both loops still flank the skull like handles, the glasses are blue, the cane is in
+  the gloved right hand, and he stands three-quarter left with the machina arm and leg toward camera.
+- **Worst (the deciding fault): "one furred shoulder" is lost at game size.** The crest is about 75x90 px on the
+  canvas, so about 25x30 px at 1600x900, and after the B treatment it is pale blue on a pale blue halo, tucked behind
+  the far shoulder. In `frames/nooj-idle-4j.jpg` it reads as a faint lighter patch, not a shape. The bible's
+  silhouette line calls the cloth side "a thick furred purple shoulder"; here the right arm is a thin dark glove
+  with a short dusky band on top, so at game size his only broad shoulder is the metal one. The maker disclosed that
+  the fur is "a tuft, not a mass"; that is the fault, and it is the one point between this and 7.
+- The cane hand (unchanged since attempt 3) is a dark glove mass with a hooked spur at its outer edge; at 3x it reads
+  as a claw more than fingers. The near foot still tapers like a hoof.
+- Not named before: the near ear, beside the near loop, is pointed (an elf ear at 2x); nothing in the source says so.
+  Minor, and it does not show at game size.
+- At 3.5x the crest has a few detached grey flecks and a posterised interior, and the sleeve under it is flat lilac-grey
+  with no folds. None of this shows at 1:1.
+- Still disclosed and unchanged: one belt pair and a cross strap (bible: five visible), both shins armoured, and the
+  machina arm is a bulky blue armoured limb, not the bible's thin articulated stick with gaps.
+
+**`nooj-shade/cast`, FAIL (6.9, narrowly).** The cane swing is the strongest read of the pair: at 1600x900 the cane
+sweeps out and down toward the party and the pose reads at once. The crest shows a little more past the far shoulder
+than in the idle, but it is still a tuft. At 2x to 3x the elbow is a boxy dark block where the sleeve meets the
+rotated forearm, and the forearm's upper edge steps; neither shows at game size. It carries the idle's misses. As
+before, its canvas widens left, so in the frame it stands about 18 px right of the idle's feet (the scene should
+anchor casts to the idle's feet, T5).
+
+**What would lift it (a suggestion, not a brief; nothing was changed).** The fix is right on which side; the fur's
+size is short. A masked repaint on the same opaque idle that makes the crest a mass (about twice the width, rising
+above the far shoulder line and breaking the silhouette outward, as the portrait's fur collar does), with a fuller
+purple sleeve under it, then B and the cast transplant as before. It needs no re-render. This slot has now failed four
+independent judgements (6.9, 6.6, 6.8, 6.9), so rule 15 applies: a written method check comes before the next attempt.
+The maker's own stop rule said no fourth attempt tonight. Since the gap is one sub-score, the cheaper step may be to
+show Bailey `frames/nooj-idle-4j.jpg` and ask whether the tuft is enough.
+
+### Verdicts (independent, attempt 4)
+
+nooj-shade/idle (fur-shoulder fix, `674058d32184`): FAIL (independent, 6.9 narrowly): the fur shoulder does not read at game size
+nooj-shade/cast (fur-shoulder fix, `a07ec9e35852`): FAIL (independent, 6.9 narrowly): the same miss, inherited
+
+Both stay **CANDIDATE**. No art was changed; nothing was added to `approved-hashes.json`. `verify-approved.mjs` after:
+see the commit body.
