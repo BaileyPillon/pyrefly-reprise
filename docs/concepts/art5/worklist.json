@@ -1,0 +1,239 @@
+{
+ "note": "art5 queue order (FFX-2 only). Live chapters IV, V, VI first (bevelleBuild, farplaneBuild, chateauBuild in src/data/encounters.ts; Chapter XI reuses farplaneBuild), then the rest of the roster in the audit's order. The dual kind (guns, daggers) runs only a pilot (pilot = those candidate numbers, no round 2) until the pilot has been looked at 1:1 beside the idle; enabled=false until then.",
+ "order": [
+  {
+   "id": "rikku-berserker",
+   "poses": [
+    "hurt"
+   ],
+   "enabled": true,
+   "pilot": [
+    5,
+    6,
+    7,
+    8
+   ],
+   "why": "second try: r1 read the hurt as a flip"
+  },
+  {
+   "id": "rikku-thief",
+   "poses": [
+    "hurt"
+   ],
+   "enabled": false,
+   "pilot": [
+    5,
+    6,
+    7,
+    8
+   ],
+   "why": "second try: r1 read off balance as a flip (legs up)"
+  },
+  {
+   "id": "rikku-dark-knight",
+   "poses": [
+    "ko",
+    "victory"
+   ],
+   "enabled": false,
+   "pilot": [
+    5,
+    6,
+    7,
+    8
+   ],
+   "why": "second try: armour lost in r1"
+  },
+  {
+   "id": "yuna-gunner",
+   "poses": [
+    "item"
+   ],
+   "enabled": true,
+   "pilot": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  {
+   "id": "rikku-thief",
+   "poses": [
+    "attack"
+   ],
+   "enabled": true,
+   "pilot": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  {
+   "id": "rikku-dark-knight",
+   "poses": [
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "paine-warrior",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "yuna-gunner",
+   "poses": [
+    "item"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "rikku-thief",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "paine-black-mage",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "paine-gunner",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "paine-samurai",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "paine-white-mage",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "rikku-berserker",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "rikku-black-mage",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "rikku-gunner",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "rikku-white-mage",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "yuna-black-mage",
+   "poses": [
+    "item"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "yuna-songstress",
+   "poses": [
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  },
+  {
+   "id": "yuna-warrior",
+   "poses": [
+    "attack",
+    "cast",
+    "item",
+    "hurt",
+    "ko",
+    "victory"
+   ],
+   "enabled": true
+  }
+ ]
+}

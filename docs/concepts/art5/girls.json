@@ -1,0 +1,132 @@
+{
+ "note": "art5 (FFX-2 only). Identity read off each INSTALLED idle picture (public/art/characters/<id>/idle.png), never its idle.json prompt (the Chapter XIII METHOD.md section 4 fix). kind = the pose-tag set in poses.json; skel = the skeleton folder (skeletons.py). weapon replaces the word 'greatsword' in the sword kind's pose tags.",
+ "girls": {
+  "rikku-dark-knight": {
+   "kind": "sword",
+   "skel": "sword",
+   "seed0": 25500,
+   "weapon": "greatsword",
+   "victoryFace": "grin",
+   "identity": "rikku \\(ff10-2\\), final fantasy x-2, blonde hair, long hair, (braided ponytail:1.1), many braids, green eyes, no headwear, dark knight, (full armor:1.2), (navy blue plate armor:1.2), (chainmail shirt:1.1), covered midriff, armored skirt, gold trim, dark blue pauldrons, black gauntlets, white flower on chest, brown leather belts, chainmail skirt, gold fringe, (dark blue armored greaves:1.1), armored boots, (dark blue greatsword:1.2), gold engraving, green gem",
+   "neg": "helmet, horned helmet, horns, black armor, full face helmet, mask, short hair, brown hair, wings, feathers, scythe, axe, dual wielding, two weapons, spear, polearm, staff, second sword, bare midriff, navel, bikini, crop top, bare shoulders, bare legs, thighs, shorts, miniskirt, bandana, scarf",
+   "identity_r1": "rikku \\(ff10-2\\), final fantasy x-2, blonde hair, long hair, (braided ponytail:1.1), many braids, green eyes, no headwear, dark knight, navy blue plate armor, chainmail, gold trim, dark blue pauldrons, black gauntlets, white flower on chest, brown leather belts, chainmail skirt, gold fringe, dark blue armored boots, (dark blue greatsword:1.2), gold engraving, green gem",
+   "neg_r1": "helmet, horned helmet, horns, black armor, full face helmet, mask, short hair, brown hair, wings, feathers, scythe, axe, dual wielding, two weapons, spear, polearm, staff, second sword",
+   "note": "r1 (cand 1-4) lost the armour in victory (her default outfit came back) and partly in ko; cand 5-8 are the second try with the armour weighted and the default-outfit words negated (rule 15: last try)."
+  },
+  "paine-warrior": {
+   "kind": "sword",
+   "skel": "sword",
+   "seed0": 25600,
+   "weapon": "sword",
+   "victoryFace": "smirk",
+   "identity": "paine \\(ff10-2\\), final fantasy x-2, silver hair, (spiked hair:1.1), short hair, red eyes, pale skin, black choker, black leather jacket, cropped jacket, off shoulder, white corset, black elbow gloves, red belt, skull belt buckle, black leather shorts, black thigh boots, red boot straps, (red longsword:1.2), red crossguard",
+   "neg": "helmet, armor, cape, blonde hair, brown hair, skirt, long hair, wings, dual wielding, two weapons, spear, scythe, polearm, staff, second sword, greatsword, huge sword"
+  },
+  "yuna-gunner": {
+   "kind": "guns",
+   "skel": "dual",
+   "seed0": 25700,
+   "victoryFace": "light smile",
+   "identity": "yuna \\(ff10-2\\), final fantasy x-2, brown hair, short hair, heterochromia, blue eye, green eye, single earring, white halter top, pink hood, bare shoulders, orange obi, yellow arm ribbons, blue pleated miniskirt, white and pink side skirt, blue fingerless gloves, two black pistols, dark blue lace-up boots",
+   "neg": "rifle, sword, blonde hair, long hair, armor, hat"
+  },
+  "rikku-thief": {
+   "kind": "daggers",
+   "skel": "dual",
+   "seed0": 25800,
+   "victoryFace": "grin",
+   "identity": "rikku \\(ff10-2\\), final fantasy x-2, blonde hair, messy hair, spiked hair, braids, blue bandana, red hair beads, green eyes, tan skin, red scarf, yellow bikini top, blue puffy detached sleeves, yellow ribbons, brown fingerless gloves, bare midriff, green pleated miniskirt, brown belt pouches, (bare legs:1.2), tan legs, blue and white boots, orange ribbons, two orange daggers",
+   "neg": "sword, long sword, armor, brown hair, short hair, black clothes, pants, leggings, pantyhose, tights, red legwear, orange legwear, long scarf, flowing scarf"
+  },
+  "yuna-black-mage": {
+   "kind": "staff",
+   "skel": "sword",
+   "seed0": 25900,
+   "victoryFace": "light smile",
+   "identity": "yuna \\(ff10-2\\), final fantasy x-2, black mage, brown hair, short hair, heterochromia, blue eye, green eye, (blue witch hat:1.2), pink flower on hat, white top, blue shawl, orange belt, blue corset, fishnet glove, long pink and lavender skirt, side slit, blue boots, holding staff, gold ring staff, teal tassel",
+   "neg": "sword, gun, blonde hair, long hair, armor, two staffs"
+  },
+  "yuna-songstress": {
+   "kind": "mic",
+   "skel": "flask",
+   "seed0": 26000,
+   "victoryFace": "smile",
+   "identity": "yuna \\(ff10-2\\), final fantasy x-2, songstress, brown hair, short hair, heterochromia, blue eye, green eye, earrings, blue and white top, sleeveless, teal choker, orange obi, pink and blue ruffled miniskirt, (long flowing blue and pink sash:1.1), blue arm band, blue fingerless gloves, pink thighhighs, brown knee boots, holding microphone",
+   "neg": "sword, gun, staff, armor, hat, blonde hair, long hair"
+  },
+  "yuna-warrior": {
+   "kind": "sword",
+   "skel": "sword",
+   "seed0": 26100,
+   "victoryFace": "light smile",
+   "identity": "yuna \\(ff10-2\\), final fantasy x-2, warrior, brown hair, short hair, heterochromia, blue eye, green eye, earrings, red hood, white top, detached pink sleeves, orange obi, blue waist cloth, long pink and blue skirt, dark blue leggings, brown boots, (blue longsword:1.2), gold crossguard",
+   "neg": "armor, helmet, wings, dual wielding, two weapons, greatsword, huge sword, spear, polearm, staff, second sword, gun, blonde hair",
+   "weapon": "sword"
+  },
+  "paine-black-mage": {
+   "kind": "staff",
+   "skel": "sword",
+   "seed0": 26200,
+   "victoryFace": "smirk",
+   "identity": "paine \\(ff10-2\\), final fantasy x-2, black mage, silver hair, short hair, red eyes, pale skin, (purple witch hat:1.2), red hat band, off-shoulder purple dress, pink capelet, black mesh sleeve, brown belt, long slit dress, purple and blue dress, black ankle boots, holding staff, red and silver staff",
+   "neg": "blonde hair, brown hair, armor, sword, gun, long hair, two staffs"
+  },
+  "paine-gunner": {
+   "kind": "guns",
+   "skel": "dual",
+   "seed0": 26300,
+   "victoryFace": "smirk",
+   "identity": "paine \\(ff10-2\\), final fantasy x-2, gunner, silver hair, (spiked hair:1.1), short hair, red eyes, pale skin, black choker, black and red corset top, bare shoulders, black puffy short sleeves, white straps, red belt, black shorts, thigh strap, black knee boots, two orange pistols",
+   "neg": "rifle, sword, blonde hair, brown hair, armor, hat, skirt"
+  },
+  "paine-samurai": {
+   "kind": "sword",
+   "skel": "sword",
+   "seed0": 26400,
+   "victoryFace": "smirk",
+   "identity": "paine \\(ff10-2\\), final fantasy x-2, samurai, silver hair, (spiked hair:1.1), short hair, red eyes, pale skin, black choker, red samurai shoulder armor, blue kimono top, skull emblem, white rope belt, orange sash, blue hakama, white patterned hakama, orange and blue greaves, orange shoes, (katana:1.2), black sheath",
+   "neg": "helmet, blonde hair, brown hair, greatsword, huge sword, western sword, dual wielding, two weapons, spear, polearm, staff, second sword",
+   "weapon": "katana"
+  },
+  "paine-white-mage": {
+   "kind": "staff",
+   "skel": "sword",
+   "seed0": 26500,
+   "victoryFace": "smirk",
+   "identity": "paine \\(ff10-2\\), final fantasy x-2, white mage, silver hair, short hair, red eyes, pale skin, (white hood:1.2), pink hood lining, white robe, crescent moon emblem, lavender capelet, wide sleeves, white gloves, brown belts, white long coat, orange hem, lattice pattern, white boots, holding staff, (crescent moon staff:1.1), gold crescent",
+   "neg": "blonde hair, brown hair, armor, sword, gun, witch hat, two staffs"
+  },
+  "rikku-berserker": {
+   "kind": "claws",
+   "skel": "flask",
+   "seed0": 26600,
+   "victoryFace": "grin",
+   "identity": "rikku \\(ff10-2\\), final fantasy x-2, berserker, blonde hair, messy hair, spiked hair, braids, blue bandana, green eyes, tan skin, red scarf, yellow bikini top, blue ribbons, orange belts, green pleated miniskirt, (claw gauntlets:1.2), orange claws, (tail:1.1), orange tail, black thighhighs, orange boot cuffs, black boots",
+   "neg": "sword, dagger, gun, staff, brown hair, short hair, wings"
+  },
+  "rikku-black-mage": {
+   "kind": "staff",
+   "skel": "sword",
+   "seed0": 26700,
+   "victoryFace": "grin",
+   "identity": "rikku \\(ff10-2\\), final fantasy x-2, black mage, blonde hair, long hair, braids, green eyes, (purple witch hat:1.2), wide brim hat, purple leotard, yellow and green tassels, fishnet sleeves, brown belts, belt pouches, thigh strap, pink leg warmers, black boots, holding staff, (orange staff:1.1), spear tip",
+   "neg": "bandana, sword, gun, brown hair, short hair, two staffs"
+  },
+  "rikku-gunner": {
+   "kind": "guns",
+   "skel": "dual",
+   "seed0": 26800,
+   "victoryFace": "grin",
+   "identity": "rikku \\(ff10-2\\), final fantasy x-2, gunner, blonde hair, messy hair, spiked hair, braids, blue bandana, green eyes, pink scarf, white crop top, orange vest, white and blue camo sleeve, bare midriff, green and orange belt, denim shorts, frayed shorts, blue boots, orange straps, two blue pistols",
+   "neg": "rifle, sword, brown hair, short hair, hat"
+  },
+  "rikku-white-mage": {
+   "kind": "staff",
+   "skel": "sword",
+   "seed0": 26900,
+   "victoryFace": "grin",
+   "identity": "rikku \\(ff10-2\\), final fantasy x-2, white mage, blonde hair, messy hair, spiked hair, braids, blue bandana, green eyes, red scarf, orange bikini top, white detached sleeves, purple lined cape, bare midriff, green belt, white skirt, white long coat tails, white boots, holding staff, (orange spade staff:1.1)",
+   "neg": "hood, witch hat, sword, gun, brown hair, short hair, two staffs"
+  }
+ }
+}
