@@ -299,9 +299,10 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    *
    * **22 -> 15 on 2026-09-25 (PR-0155, FFX only; Bailey: "I'll go with all your recommendations").**
    * An aeon's menu has no Item row [ffx-combat-core §6.2], so Ifrit, Ixion and Shiva no longer throw
-   * Gems on their one turn: 23 -> 17 of these forty, measured with nothing else changed.
+   * Gems on their one turn: 23 -> 17 of these forty, measured with nothing else changed (26 -> 17
+   * against live a999d133, both fixes together). 17/40 is under half: this is a floor, not a promise.
    */
-  it('wins the great majority of forty contiguous seeds', () => {
+  it('keeps at least fifteen wins in forty contiguous seeds (measured 17)', () => {
     const results = Array.from({ length: 40 }, (_, i) => runIntended(i + 1));
     const wins = results.filter((r) => r.outcome === 'victory').length;
     const lost = results
@@ -310,7 +311,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
       .map((x) => `${x.seed}: ${x.r.outcome} with ${x.r.bossHp} left at turn ${x.r.turns}`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(', ') || 'none'}`);
 
-    expect(wins, 'Chapter 1 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(15);
+    expect(wins, 'Chapter 1 fell below its 15/40 floor (17/40 measured 2026-09-25, PR-0155)').toBeGreaterThanOrEqual(15);
   }, 120_000);
 
   /**
