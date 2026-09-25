@@ -257,3 +257,62 @@ review is owed needs Bailey's words.
 
 **Verdict: PROCEED.** Sixteen mechanics already work (§4.1); new: Lv 99 rows, an MP gate, an
 MP-fraction key, the counter timing, a checkpoint without a restore. Nothing perceivable first.
+
+## Review (adversarial, FFX-2 only; 2026-09-24)
+
+Reviewer: a sub-agent of the driver, docs only. Re-fetched through `api.php?action=parse&prop=wikitext`
+(browser user agent): *Trema (boss)* revid **4008691**, *Paragon (Final Fantasy X-2)* **3998078**,
+*Trema* **4011844**, *Final Fantasy X-2 enemy abilities* **3998493**: all four equal the research's
+revids. Engine claims were read at 8de19d4c's tree, and two were **run** with Node (rule 3). The six
+option sheets and the O-4 phone pages were opened; the phone pages were measured headless at 390 px.
+
+### Research and sources
+
+| Claim | Verdict | Evidence |
+|---|---|---|
+| Trema Lv 99, HP 999,999, MP 999, STR/MAG/DEF/MDEF 255, Agi 128 (wiki), Luck 26, Eva 99, EXP 10,000, AP 50, gil 10,000, pilfer 300, rare steal Turbo Ether ×1 (wiki), steal rate 128, status list incl. Slow, Stop, Reflect, Zantetsu 255 | CONFIRMED | *Trema (boss)* infobox, section 1 |
+| Fiend Arena block: Agi 95, Luck 128, EXP 2,000, AP 1, gil 3,000, pilfer 3,000, drops DM ×2/×3, steals TE ×1/×2 at 64 | CONFIRMED | same infobox, section 2 |
+| Meteor at < 1/2 and < 1/4 only, Ultima after losing 83.3 %; original physical / International and HD magical (Shell halves, Sentinel does not work) | CONFIRMED | *Trema (boss)* "Battle" |
+| Meteor 12 hits, 1/8 of max HP, Trema's version magical, physical in the original; Waning Moon 3 × 5/16 of *remaining* MP; Beguiling Mire 3 hits + Stop | CONFIRMED | *enemy abilities* rows |
+| Paragon HP 200,000 / 210,000; MP 9,999; wiki STR 244 / MAG 88 / DEF 244 / MDEF 89; "Accuracy 13" / Oversoul 16; Agi 188 / 244; EXP, AP, gil, pilfer 4,000 / 6,800 | CONFIRMED | *Paragon* infobox |
+| Genesis arc 180° (wiki) vs 150° (SinirothX) | CONFIRMED as the conflict | *Paragon* "Battle" |
+| **T-6 "open and blocking"** | **CORRECTED (half)** | `[derived]`: the wiki's own prose gives Big Bang at 255 MDEF as **23,803 to 26,877**. `ffx2-combat-core.md` §2.1 magic steps (Lv 99, DC 250, `(270 − 255)/255`, randomiser 240..271/256, floored) give **exactly 23,803 to 26,877 with MAG 244**, and 15,402 to 17,391 with MAG 88. The wiki's text contradicts its infobox, and SinirothX's **MAG 244** stands. DEF (88 vs 244) is still unproven. The swapped-column pattern points to SinirothX, but no damage figure in the sources settles it. TR8 = a now rests on two independent lines for MAG. |
+| **Missing from research §4.1 and plan TR-G3** | **CORRECTED** | *Paragon* (wiki): in **International and HD**, draining Paragon's MP blocks **Big Bang and Genesis**, but using a **Mana Spring** for it still draws Big Bang. `[single source]`. The MP gate (TR-G3, TR4) therefore applies to link 1 as well, and T1 needs a "Mana Spring counts as a trigger" case. |
+| T-5 lean (TR4 = b) | CONFIRMED as open; weaker than stated | The wiki's "drain with Target MP, he can't cast Ultima, Demi, Flare" sits under **"Original strategy"**. Only GamerGuides HD backs (b) for Spellspring versions. TR4 stays Bailey's call; the guide text must say so. |
+| T-4 moot (plan §2) | CONFIRMED | 1/8 of max HP reaches 9,999 only above 79,992 max HP. The wiki's richest build, Dark Knights on Stamina Tonic + Break HP Limit, is "over 21,000" (a 2,677 hit). |
+| 101 capped hits; Meteor averages 50 % of max HP per girl | CONFIRMED | arithmetic |
+
+### Engine claims (plan §4)
+
+| Claim | Verdict | Evidence |
+|---|---|---|
+| `restoresPartyOnEntry` `common/types.ts:2565`; `nextGroupId` | CONFIRMED | read |
+| Vegnagun `hpTriggerFired`, strict `<` | CONFIRMED | `ai/vegnagun.ts:47` |
+| `extra.sequence` packs stages into one turn | CONFIRMED | `resolve.ts:431` |
+| random targeting re-picked per hit | CONFIRMED | `resolve.ts:262–264` calls `targetForHit` per strike (line 117 is the pick) |
+| `percent-total` = power/16 of max HP, `percent-current` of current HP | CONFIRMED | `formulas.ts:171–179` |
+| Spellspring makes MP cost 0; MP clamps at 0 | CONFIRMED | `resolve.ts:203–204` |
+| `attackClass` → Darkness (`damageType 'other'`, `canMiss: true`) classes "none" | CONFIRMED, with a caveat | `execute.ts:67`, `:210`; `dark-knight.ts:56`. Caveat: `lastAttackClass` holds the **last party action**, not the hit that damaged Paragon. Under Active ATB a heal can land between, so T3 must test the ordering. |
+| `isCounter` only labels | CONFIRMED | `resolve.ts:457`; no caller passes `isCounter: true` |
+| Accessories, The End grid, unknown grid → gateless ring | CONFIRMED (path imprecise) | the files are `src/battle/ffx2/accessories.ts` (:69, :87) and `src/battle/ffx2/garment-grids.ts` (:115–117, :133), not `src/data`. Valiant Lustre, Higher Power, Soul/Mana Spring are absent from FFX-2 data. Stamina Tonic exists only for FFX. |
+| **TR-G1** Dark Knight at Lv 99 extrapolates to HP 5,508, STR 204 | CONFIRMED by running | `dressphereStats('dark-knight', 99)` |
+| **TR-G1 "Gun Mage has no anchor at all (falls back to Gunner)"** | **REFUTED** | `dressphere-stats.ts:79–85` has five Gun Mage rows (Lv 20–50); `hasAnchors('gun-mage')` is true; Lv 99 extrapolates to HP 2,823. Gun Mage needs a Lv 99 row like the others, not a new anchor set. |
+| **TR-G2** Darkness vs Trema 0 %, 91 % with Rabite's Foot | CONFIRMED by running | `hitPercent`: 0 and 91. With the engine's own Lv 99 extrapolation (Acc 104, Luck 22) it is 1 %. |
+| TR-G2 "the sourced main damage line would never land" | **CORRECTED** | `resolve.ts:277` → `chain.ts:48` `cannotEvade`: a **chained** target cannot evade, so Darkness lands at 100 % while Trema's chain window is open. An opener that always hits (magic, items) makes the sourced line work today. T0 must measure this before `canMiss` is touched. TR9 gains an option (d): leave `canMiss` alone and rely on the chain. |
+| Hours total 14.25 | CONFIRMED | sum of §8 |
+
+### Option sheets (`docs/concepts/chapters/trema/`)
+
+All six sheets exist (2000 px wide, stamped CONCEPT), plus the per-option frames and the O-4 HTML.
+The phone pages were measured at 390 px: the smallest font is **12 px** on all six, and `scrollWidth` is 390 on all six. **CONFIRMED.**
+
+- **O-1** matches its descriptions, **except**: the sheet and README call A closest to "an old man in a **torn** Yevon priest's robe", and A's robe is pristine. The one sourced look detail is missing from the recommended option. **Flag for Bailey.**
+- **O-2, O-2b** match. The link's "breaks into pyreflies" is our staging of a sourced beat ("an impressive scene"). That is labelled.
+- **O-3**: B's in-battle frame does not show the sourced upside-down banners, because the staging crops the top of the plate. B is recommended as "reads as a cloister", not for the sourced detail. The README decides that painting Yu Yevon's likeness "would copy the game's design (rule 8)". **That is Bailey's call, not settled**: an original rendering of a likeness is a design question, as Trema's own look is.
+- **O-4**: "12 hits" and the 1/6 Ultima tick carry the conflicts T-2 and T-1 on screen. They are disclosed in the README, not on the sheet. A's link-2 sentence says Trema "**casts** Meteor", which leans toward TR3 = a while the README says the type is not shown. Neutral wording is needed. No odds or targets were invented; HP values are marked illustrative.
+
+### Invented or settled-too-early
+
+No invented game numbers were found. The pixel sizes, hours, GPU time and item counts are labelled as ours or `[estimate]`. The following are presented as settled but belong to Bailey: the Yu Yevon banner exclusion (O-3), the chapter number XIII (depends on Omnis registering first), and "no Hymn lyric" (a sound recommendation, but a decision).
+
+**Verdict: the preflight stands with five corrections.** (1) T-6 half resolved (MAG 244, `[derived]`). (2) The Paragon MP gate and the Mana Spring trigger were missing. (3) Gun Mage anchors exist. (4) Chained targets cannot evade, so TR-G2 is not fatal. (5) O-1 A lacks the torn robe. None of them changes the order of work: T0 first.
