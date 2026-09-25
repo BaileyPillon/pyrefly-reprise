@@ -167,12 +167,24 @@ run, so `gh-pages` always ends up with exactly one commit. Requires the `gh`
 CLI (hardcoded at `D:/Tools/GitHubCLI/gh.exe`) authenticated against
 `BaileyPillon/pyrefly-reprise`.
 
-**Every live build must be evaluated by the critic — no exceptions.** The
-mandatory sequence is green tree -> push main -> deploy -> announce -> a full
-critic round on the live URL, and only the chief critic's report for that
-exact build clears the `critic/pending/<sha>.json` marker the deploy just
-left behind (see `critic/RUBRIC.md`, "The loop"). Run `npm run critic:status`
-at any time to see which live builds are still waiting on a round.
+**Every live build must be evaluated by the critic — no exceptions — and the
+depth of the review follows what changed** (critic policy v2, approved by
+Bailey on 2026-09-20; `critic/RUBRIC.md` sections 4 and 10). The sequence is
+green tree -> push main -> `node tools/critic-plan.mjs` (which review this
+change needs) -> review the production candidate (focused; deep BEFORE the
+deploy when a shared system changed, and the deploy refuses without it) ->
+deploy -> live verification of the exact artifact -> announce -> any deep
+review still owed. The deploy publishes `artifact-manifest.json` (sha256 of
+every shipped file, media decode-checked), compares the live bytes with it,
+keeps a copy in `critic/artifacts/<sha>.json`, and leaves
+`critic/pending/<sha>.json` listing that build's separate obligations (`live`,
+`focused`, `deep`, `milestone`). Reviewers never delete a marker: they write a
+report (`critic/reviews/`, `critic/rounds/`) and run
+`node tools/critic-clear.mjs --report <file>`, which validates it and settles
+only what that report can settle. `node tools/critic-score.mjs --report <file>`
+does the score arithmetic and the acceptance gates. Run `npm run critic:status`
+at any time to see what each live build still owes and which build the last
+full score belongs to. The review workflows are `critic/runner/*.js`.
 
 ### Sprite tool (retired)
 
@@ -230,7 +242,7 @@ frames have rendered.
 | `goto(name)` | replace the active screen; resolves `false` if unregistered |
 | `frame()` / `frames(n)` | resolve after 1 / n rendered frames |
 | `snapshotState()` | screen name, frame count, per-screen snapshot, seed, flow step, and — in a battle — the **full ordered event log** |
-| `setSeed(n)` / `seed()` | RNG seed for the **next** battle started (engines are seeded per battle via `BattleSetup.seed`) |
+| `setSeed(n)` / `seed()` | RNG seed for the **next** battle started (engines are seeded per battle via `BattleSetup.seed`): `gotoChapter`'s default, and it also **pins every run started from real keys** to `n`. Without a `setSeed`, a run the player starts draws a fresh first seed (PR-0008, both games; `src/app/runSeed.ts`); a retry still adds 1000 per attempt. A capture or spec that walks in from the title and needs a fixed fight calls `setSeed(1)` after `waitReady()`, before its first key. `battleState().seed` reads the seed a live battle is on |
 | `waitReady()` | resolves after the first rendered frame |
 | `audioDebug()` | mixer state, tracks and all 28 SFX with cached flags |
 | `playMusic(name, fade?)` | `'title' \| 'battle-ffx' \| 'boss-dread'` |

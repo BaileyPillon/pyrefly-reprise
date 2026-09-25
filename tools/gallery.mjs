@@ -824,6 +824,10 @@ async function main() {
     console.log(`[gallery] loading ${URL_}`);
     await page.goto(URL_, { waitUntil: 'load', timeout: READY_TIMEOUT });
     await page.waitForFunction(() => window.__pyreflyReady === true, null, READY);
+    // Fixed fights for every capture (PR-0008, both games). Each pass below names `seed: 1` or
+    // takes `gotoChapter`'s default, which is this value; the pin also covers any run a key or a
+    // `prep:begin` starts, which would otherwise draw a fresh first seed (`src/app/runSeed.ts`).
+    await page.evaluate(() => window.__pyrefly.setSeed(1));
 
     const renderer = await page.evaluate(() => {
       const canvas = document.querySelector('#game canvas');

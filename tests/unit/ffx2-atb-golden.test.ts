@@ -67,6 +67,14 @@
  * Crystal Bangle's max HP survives the change. Measured event by event against the pre-fix
  * engine: every event before that tick is identical, the outcome (a loss) is unchanged, and
  * every D=0 hash and every chapter 4 hash is unchanged (recomputed, equal).
+ *
+ * **Re-pinned a fifth time, the Active D = 1500 arm only, for "an enemy hit closes an open menu"**
+ * (decision sheet 2026-09-25 item 4, A1; `research/ffx2-combat-core.md` §1.1, §1.5;
+ * `docs/plans/ffx2-hit-closes-menu-review.md`). At 1.5 s under Active every seed has an enemy hit
+ * land on an open menu, so all twenty `CH4_D1500` / `CH5_D1500` hashes move: 109 and 289 menus
+ * closed over the ten seeds; chapter 4 still wins 10/10, chapter 5 0/10 as before. Every D = 0
+ * hash is unchanged (no menu is ever open while the clock runs at zero decision time), and so is
+ * the Wait arm below (the whole-menu hold lets no enemy act). FFX-2 only.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -90,15 +98,15 @@ const CH5_D0 = [
   'cdc6e3b1150fcdfa', '9a1120dac00c3a94', '80c71a5ec0bb6309', '9e3fcd2c8121445a', 'd4a565da312c37c1',
 ];
 
-/** Recorded after the hold / owner fixes (commit 1 of the track), before the speed lever. */
+/** Re-pinned for item 4 A1 (an enemy hit closes an open menu); the old hashes are in git at d19e5715. */
 const CH4_D1500 = [
-  'f7184d7b87948e2c', 'e162970a86a2268f', 'fc6c4f4b8b7cb240', '7f9abbf856f2464a', '4439b76d4c54cc7d',
-  '51f22c7af66239a8', 'd73d41236dc23eb0', '042fd279eda61cb1', '82058d0ebeeadaeb', '4ec0c1f9c35887d7',
+  'd059f64cfe4afce9', 'f6f806a146e9e13a', 'f83208beb680732e', '55849fe6d4141a5e', 'fcbdcacd10f65af5',
+  '1aeec8665a52b244', '9fd799be79ae2949', '75f4f1f4a4833dfa', 'fd62b9c13e0700ce', '0a8ab81cd457d8ca',
 ];
-/** Re-pinned for combat-fixes-0924 (a), magic never rolls; see the file doc comment. */
+/** Re-pinned for item 4 A1 (an enemy hit closes an open menu); the old hashes are in git at d19e5715. */
 const CH5_D1500 = [
-  '236e6bcb26a247f3', 'a49c69b47306d7e3', '360f70c856ef7435', 'a70c9fdcaf9da8e1', '7468cb4e44e99042',
-  'c151f9764f59a886', 'c4b8430493fbd119', 'e1574f1b0f92b4fc', '3701ee228cd5f640', 'ebe5074a81fc5dd8',
+  '374fdd1c29e0ebd6', 'c322aba8cd62419a', '8ad30c2c303fd4ee', 'e7f340becf929f3a', 'b9d19e92668b039f',
+  '0fa90654a8923b1e', 'f749bb55a0930a72', '9070e4ddfbe674f8', '2416c7675b4de48c', '065e34cd0350d3b1',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 

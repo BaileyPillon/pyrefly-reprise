@@ -28,6 +28,7 @@
  */
 
 import type { ChapterGuide } from './types.ts';
+import { WAIT_SPLIT_HABIT_RULE } from './ffx2-wait-habit.ts';
 
 export const FFX2_LEBLANC_GUIDE: ChapterGuide = {
   id: 'ffx2-leblanc',
@@ -148,6 +149,9 @@ export const FFX2_LEBLANC_GUIDE: ChapterGuide = {
       cite: 'ffx2-leblanc-syndicate §4.5, §5.3',
     },
   ],
+
+  // Decision sheet 2026-09-25 item 3 (C): the Wait split's habit, first, under Wait's split only.
+  clockRules: { wait: WAIT_SPLIT_HABIT_RULE },
 };
 
 export default FFX2_LEBLANC_GUIDE;

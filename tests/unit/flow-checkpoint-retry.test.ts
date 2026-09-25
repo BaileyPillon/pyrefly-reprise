@@ -15,6 +15,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { App } from '../../src/app/App.ts';
+import { pinRunSeed } from '../../src/app/runSeed.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { Screen } from '../../src/app/Screen.ts';
 import {
@@ -114,6 +115,7 @@ const panels: Array<{ outcome: string; elapsedMs: number | undefined }> = [];
 let app: FakeApp;
 
 beforeEach(() => {
+  pinRunSeed(1); // this file pins the flow's seed arithmetic on seed 1 (a real run draws one, PR-0008)
   shown.length = 0;
   battles.length = 0;
   panels.length = 0;
@@ -133,7 +135,10 @@ beforeEach(() => {
   app = new FakeApp();
 });
 
-afterEach(() => resetFlowScreens());
+afterEach(() => {
+  resetFlowScreens();
+  pinRunSeed(null);
+});
 
 /** The checkpoint a real chain would hand back after entering `link`. */
 function checkpoint(link: 2 | 3): ChainCheckpoint {

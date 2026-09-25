@@ -301,10 +301,10 @@ export class GameFlow {
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
     const chapter = getChapter(id);
     if (!chapter) return null;
-    void preloadBattle(chapter, opts.seed ?? 1); // the battle's art loads behind prep and the scene (PR-0061)
     const save = this.app.save;
     // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
-    let { attempt, carry } = ({ opts } = openRun(this, id, opts));
+    let { attempt, carry, opts: { seed } } = ({ opts } = openRun(this, id, opts)); // a fresh first seed (PR-0008)
+    void preloadBattle(chapter, seed); // the battle's art loads behind prep and the scene (PR-0061)
 
     // A run started from outside {@link start}'s own loop — `main.ts` when the
     // board resolves, the debug API's `gotoChapter`, the pause menu's RESTART
@@ -343,7 +343,7 @@ export class GameFlow {
       const battleOpts: BattleScreenOptions = {
         chapter,
         // A retry reseeds, so the same losing fight does not replay verbatim.
-        seed: (opts.seed ?? 1) + attempt * 1000,
+        seed: seed + attempt * 1000,
         auto: opts.auto ?? null,
         ...(opts.speed ? { speed: opts.speed } : {}),
         ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
@@ -403,7 +403,7 @@ export class GameFlow {
       }
 
       this.step = 'idle';
-      return closeRun(this, id, { carry, attempt, opts }, fought, outcome);
+      return closeRun(this, id, { carry, attempt, opts: { ...opts, seed } }, fought, outcome);
     }
   }
 

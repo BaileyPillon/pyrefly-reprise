@@ -1,0 +1,157 @@
+{
+ "note": "resolvePoseMap (src/engine/BattlePresenterArt.ts) run in the dev build against the regenerated manifest, 2026-09-25 after the install. \"borrowed\" = a failed slot that the existing POSE_FALLBACKS chain now fills with a neighbouring installed painting instead of the idle.",
+ "maps": {
+  "yuna-dark-knight": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "attack",
+   "cast": "attack",
+   "item": "idle",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "idle",
+   "defend": "idle"
+  },
+  "paine-dark-knight": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "attack",
+   "cast": "attack",
+   "item": "item",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "idle",
+   "defend": "idle"
+  },
+  "rikku-alchemist": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "idle",
+   "cast": "cast",
+   "item": "item",
+   "hurt": "hurt",
+   "ko": "hurt",
+   "victory": "victory",
+   "defend": "idle"
+  },
+  "paine-black-mage": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "attack",
+   "cast": "cast",
+   "item": "item",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "victory",
+   "defend": "idle"
+  },
+  "paine-warrior": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "idle",
+   "cast": "idle",
+   "item": "idle",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "victory",
+   "defend": "idle"
+  },
+  "rikku-black-mage": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "attack",
+   "cast": "cast",
+   "item": "cast",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "idle",
+   "defend": "idle"
+  },
+  "rikku-gunner": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "idle",
+   "cast": "cast",
+   "item": "cast",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "victory",
+   "defend": "idle"
+  },
+  "rikku-thief": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "idle",
+   "cast": "idle",
+   "item": "idle",
+   "hurt": "idle",
+   "ko": "ko",
+   "victory": "idle",
+   "defend": "idle"
+  },
+  "rikku-white-mage": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "attack",
+   "cast": "attack",
+   "item": "idle",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "idle",
+   "defend": "idle"
+  },
+  "yuna-black-mage": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "attack",
+   "cast": "cast",
+   "item": "item",
+   "hurt": "hurt",
+   "ko": "ko",
+   "victory": "victory",
+   "defend": "idle"
+  },
+  "yuna-gunner": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "attack",
+   "cast": "cast",
+   "item": "item",
+   "hurt": "hurt",
+   "ko": "ko",
+   "victory": "victory",
+   "defend": "idle"
+  },
+  "yuna-songstress": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "attack",
+   "cast": "attack",
+   "item": "item",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "idle",
+   "defend": "idle"
+  },
+  "yuna-warrior": {
+   "idle": "idle",
+   "ready": "idle",
+   "attack": "idle",
+   "cast": "idle",
+   "item": "idle",
+   "hurt": "idle",
+   "ko": "idle",
+   "victory": "victory",
+   "defend": "idle"
+  }
+ },
+ "borrowed": [
+  "yuna-dark-knight/cast -> attack.png",
+  "paine-dark-knight/cast -> attack.png",
+  "rikku-alchemist/ko -> hurt.png",
+  "rikku-black-mage/item -> cast.png",
+  "rikku-gunner/item -> cast.png",
+  "rikku-white-mage/cast -> attack.png",
+  "yuna-songstress/cast -> attack.png"
+ ]
+}

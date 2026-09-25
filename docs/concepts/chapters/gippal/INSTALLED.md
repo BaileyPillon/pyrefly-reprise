@@ -189,3 +189,50 @@ unchanged; nothing added to `approved-hashes.json` (verify-approved ok 185 befor
 ## Hero plate installed, 2026-09-25 (FFX-2 only, Chapter XV)
 
 Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations". Option B of `hero-plate/README.md` installed as `public/art/pause/ch15-ffx2-den-of-woe.png` (sha `e75589cda3db`) with its RealESRGAN `.2x.webp` master and `.json` sidecar; locked in set `bailey:2026-09-25-recommendations`. The chapter lives on branch `chapter-gippal-0925` with no `ChapterMeta`. **Ship step:** its `ChapterMeta` names `heroArt: 'pause/ch15-ffx2-den-of-woe'`; the face sits left (focal x 0.25), so the pause text side still needs checking on the real tab (this README's own note on `deriveChromeSide` / a `plates.ts` row).
+
+## Nooj idle installed (option A), 2026-09-25 (~15:15 EDT)
+
+**FFX-2 only.** The Den of Woe shades exist only in FFX-2. Bailey, 2026-09-25 ~14:25 EDT, verbatim: *"I'll go with all
+your recommendations however"*. For Nooj the driver recommended A: *"fix only the idle (the loops, the sleeve, the neck
+fringe), then judge it. If it passes, install it and let Nooj use the idle for his action moments too, with the usual
+motion, like several bosses already do."* The repair is attempt 7 ([nooj-options/idle-only/README.md](nooj-options/idle-only/README.md));
+an independent judge passed it narrowly at **7.0** ([nooj-options/README.md](nooj-options/README.md), "Independent judge
+(idle only)"). Decision **D-182**.
+
+| Path (under `public/art/`) | Now | Was |
+|---|---|---|
+| `characters/nooj-shade/idle.png` | **`869f9ae5b1d8`**, 509x1146, baselineY 1060, `scale` 1.0707, `facing: left`; locked in `approved-hashes.json` set `bailey:2026-09-25-nooj-idle` | `674058d32184` (CANDIDATE, never locked) |
+| `characters/nooj-shade/cast.png` | **removed** from the served slot | `a07ec9e35852` (CANDIDATE, never locked) |
+
+- **The file.** The judged candidate `a87ff561ef41` (369x1006, baselineY 990) through the unchanged O-1 B treatment
+  (`production/scripts/shade_b.py`, 70 px pad). The output is byte-identical to the look copy in the judge's frame, so the
+  served file is the one judged. `scale` = 1060 / 990 keeps the unpadded painting's pixel scale, the convention of the
+  other two shades' sidecars; the world height stays the scene's call (T5). The sidecar carries Bailey's words, the
+  source hash, the judge's scores and the judge's named faults as `knownDefects`.
+- **Action moments.** With no `cast` in the slot, `resolvePoseMap` (POSE_FALLBACKS in `src/engine/BattlePresenterArt.ts`)
+  points every enemy pose (idle, attack, cast, hurt, ko) at `idle.png`, and the presenter's usual lean and flinch carry
+  the motion. KO stays the pyrefly dissolve.
+- **Checks.** Both hash lists were checked first (neither old file was listed); the install script
+  (`production/scripts/nooj7-install/install_nooj7.py`) refuses any approved or judge-locked hash. Replaced files, with
+  their sidecars, are kept in `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-nooj7/replaced/` (hashes re-checked
+  after the copy). `node tools/gen/manifest.mjs`: `nooj-shade` now lists `idle` only (82 subjects, 260 poses);
+  `art-manifest-build` and `art-manifest-loader` pass (27). `verify-approved.mjs`: ok 224 before, ok 225 after (the new
+  lock), 0 mismatched, 0 missing. No GPU, nothing downloaded.
+- **Proof in the Den of Woe staging** (branch `chapter-gippal-ship-0925`, worktree `D:/pyrefly-ch-gippal-ship`, private
+  Vite server on port 5821, HMR and watch off, headless, stopped by its PID). Seed 1, real Enter presses drive the girls;
+  Nooj arrives through the chapter's own flow and his first action is `x2-den-nooj-attack` on Rikku. At 1600x900 and at
+  390x844 his actor is **not a placeholder**, every pose URL is `idle.png`, the presenter shows him in the `cast` pose
+  on the idle painting, and the only Nooj requests are `idle.png` and `idle.json` (all 200; no request for a missing
+  cast; no page errors). Frames: `production/frames/nooj7-install-1600-action.jpg` (his attack, lean on the idle),
+  `nooj7-install-1600-after.jpg`, `nooj7-install-390-action.jpg`, `nooj7-install-390-camera.jpg`.
+- **Two staging shortcuts, disclosed.** (1) The chapter's enemy data names `spriteKey: 'shade-nooj'` (and
+  `shade-gippal`, `shade-baralai`), while the art lives under `characters/nooj-shade/` (and `gippal-shade`,
+  `baralai-shade`). As it stands **the chapter loads no shade painting**. The capture bridged this by request
+  interception only (the manifest's `*-shade` subjects copied under the chapter's ids, `/characters/shade-<name>/` served
+  from `/characters/<name>-shade/`). The ship step must wire it (spriteKey or an `ART_ID_OVERRIDES` row); no `src/` file
+  was changed here. (2) To reach Nooj quickly, Baralai's and Gippal's HP was set to 1 through `battleState()`; the
+  girls' real Attack keys then felled them.
+- **Seen in the frames, not fixed (staging, not the painting).** The shades use the engine's default boss height (4.1
+  units, about 2.4 times the girls) because the Den scene (T5) sets none. On the 390x844 phone view, when the camera
+  turns to Nooj, his head is above the top edge. By the time Nooj acts, the girls are worn to 0 HP (the bench's "Nooj
+  the wall"), so the frames show KO chips.
