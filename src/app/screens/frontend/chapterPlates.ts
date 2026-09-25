@@ -67,6 +67,12 @@ const CARD_FACE_Y = 50;
 const card = (h: number, focus?: readonly [number, number]): Placement => P(CARD_FACE_X, CARD_FACE_Y, h, focus);
 /** A card whose long title would reach the face at 58 percent: the face sits at (`x`, `y`) instead. */
 const cardAt = (x: number, y: number, h: number, focus: readonly [number, number]): Placement => P(x, y, h, focus);
+/**
+ * Where the face sits on a card whose title reaches 58 percent (measured for
+ * Chapters X to XV): past the title's end, below-left of the corner ribbon.
+ */
+export const CARD_CLEAR = { x: 68, y: 64 } as const;
+const cardClear = (h: number, focus: readonly [number, number]): Placement => cardAt(CARD_CLEAR.x, CARD_CLEAR.y, h, focus);
 
 /**
  * Per chapter, measured on the paintings (face centres read off a 5 percent
@@ -151,6 +157,60 @@ export const PLATE_COMPOSITIONS: Readonly<Record<string, PlateComposition>> = {
     scene: { hero: '50% 55%', card: '50% 30%' },
     glow: 'rgba(130, 200, 255, 0.34)',
     layers: [{ key: 'trema', focus: [0.51, 0.14], hero: P(66, 24, 150), card: card(420) }],
+  },
+  // The chapters after IX. Each card title reaches past 58 percent of the
+  // card's art at 1280, 1600 and 2000 ('Seymour Omnis' covered his face on the
+  // default crop), so each card puts the measured face at CARD_CLEAR: past the
+  // title's end and below-left of the beaten card's corner ribbon. Measured
+  // headless at 1280x720, 1600x900, 2000x1125 and 390x844, selected or not,
+  // beaten or not: the face clears the title by 20 px or more and the ribbon's
+  // band by 8 px or more at every size (captures in
+  // docs/screenshots/chapter-select-c/card-crops/). Face boxes, as fractions of
+  // each painting: Omnis 0.39-0.48 x 0.11-0.19, Natus 0.43-0.53 x 0.17-0.245,
+  // Shiva 0.29-0.40 x 0.15-0.22, Isaaru 0.52-0.66 x 0.06-0.16, Baralai
+  // 0.27-0.40 x 0.13-0.21.
+  // X: Seymour Natus before the Highbridge gate, from the thighs up.
+  'seymour-natus': {
+    scene: { hero: '50% 50%', card: '50% 40%' },
+    glow: 'rgba(255, 180, 90, 0.36)',
+    layers: [
+      { key: 'seymour-natus', focus: [0.48, 0.205], hero: P(64, 32, 150), card: cardClear(420, [0.48, 0.205]) },
+    ],
+  },
+  // XI (FFX-2): Shiva on the Road to the Farplane, Anima (the Road's last
+  // fallen aeon) behind her on the right; the card crops to Shiva alone.
+  'ffx2-fallen-aeons': {
+    scene: { hero: '50% 55%', card: '50% 40%' },
+    glow: 'rgba(240, 170, 255, 0.38)',
+    layers: [
+      { key: 'x2-anima', focus: [0.42, 0.27], hero: P(85, 32, 112), card: null },
+      { key: 'x2-shiva', focus: [0.345, 0.185], hero: P(60, 30, 150), card: cardClear(440, [0.345, 0.185]) },
+    ],
+  },
+  // XII: Seymour Omnis in the Garden of Pain, claws spread, from the waist up.
+  'seymour-omnis': {
+    scene: { hero: '50% 45%', card: '50% 40%' },
+    glow: 'rgba(150, 140, 255, 0.38)',
+    layers: [
+      { key: 'seymour-omnis', focus: [0.435, 0.15], hero: P(64, 32, 150), card: cardClear(400, [0.435, 0.15]) },
+    ],
+  },
+  // XIV: Isaaru in the last chamber of the Via Purifico, sleeves open.
+  'isaaru-via-purifico': {
+    scene: { hero: '50% 55%', card: '50% 40%' },
+    glow: 'rgba(255, 90, 70, 0.36)',
+    layers: [{ key: 'isaaru', focus: [0.59, 0.11], hero: P(64, 24, 140), card: cardClear(340, [0.59, 0.11]) }],
+  },
+  // XV (FFX-2): the three shades in the Den of Woe, Baralai (the first one
+  // met) in front between Gippal and Nooj; the card crops to Baralai.
+  'ffx2-den-of-woe': {
+    scene: { hero: '50% 55%', card: '50% 40%' },
+    glow: 'rgba(110, 220, 230, 0.36)',
+    layers: [
+      { key: 'nooj-shade', focus: [0.55, 0.18], hero: P(82, 24, 120), card: null },
+      { key: 'gippal-shade', focus: [0.51, 0.16], hero: P(46, 26, 120), card: null },
+      { key: 'baralai-shade', focus: [0.335, 0.17], hero: P(64, 30, 150), card: cardClear(400, [0.335, 0.17]) },
+    ],
   },
 };
 

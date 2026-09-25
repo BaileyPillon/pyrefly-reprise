@@ -21,7 +21,9 @@ import { SaveStore } from '../../src/app/SaveData.ts';
 import { CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { buildChapterTiles, silhouetteKeysFor } from '../../src/app/screens/frontend/chapterGrid.ts';
 import { boardProgress } from '../../src/app/screens/frontend/chapterProgress.ts';
-import { compositionFor, PLATE_COMPOSITIONS } from '../../src/app/screens/frontend/chapterPlates.ts';
+import { CARD_CLEAR, compositionFor, PLATE_COMPOSITIONS } from '../../src/app/screens/frontend/chapterPlates.ts';
+import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../src/data/ffx/index.ts';
+import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../src/data/ffx2/index.ts';
 
 interface Rig {
   screen: ChapterSelectScreen;
@@ -264,6 +266,9 @@ function spriteKeysIn(root: unknown): Set<string> {
     seen.add(v);
     for (const [k, x] of Object.entries(v as Record<string, unknown>)) {
       if (k === 'spriteKey' && typeof x === 'string') out.add(x);
+      // A chained fight's later links (Anima after Shiva, Gippal and Nooj
+      // after Baralai) are reached by id, as the battle screen reaches them.
+      else if (k === 'nextGroupId' && typeof x === 'string') walk(FFX_GROUPS[x] ?? FFX2_GROUPS[x]);
       else walk(x);
     }
   };
@@ -311,5 +316,36 @@ describe('the boss painted on its own scene', () => {
     expect(card.x).toBeGreaterThanOrEqual(75);
     expect(card.y).toBeGreaterThan(50);
     expect(card.focus).toEqual([0.33, 0.3]);
+  });
+
+  // Chapters X to XV: each title reaches past 58 percent of the card's art, so
+  // the measured face sits at CARD_CLEAR (68, 64). Measured headless at
+  // 1280x720, 1600x900, 2000x1125 and 390x844, selected or not, beaten or not:
+  // the face clears the title by 22 px or more and the ribbon's band by 8 px
+  // or more. At x 64 the title gap falls to 14 px, at x 72 the ribbon gap to
+  // 4 px; the guard keeps the face inside that window.
+  it.each([
+    ['seymour-natus', 'seymour-natus', [0.48, 0.205]],
+    ['ffx2-fallen-aeons', 'x2-shiva', [0.345, 0.185]],
+    ['seymour-omnis', 'seymour-omnis', [0.435, 0.15]],
+    ['isaaru-via-purifico', 'isaaru', [0.59, 0.11]],
+    ['ffx2-den-of-woe', 'baralai-shade', [0.335, 0.17]],
+  ] as const)('keeps the face on card %s (%s) off its title and the corner ribbon', (id, key, face) => {
+    const comp = PLATE_COMPOSITIONS[id];
+    expect(comp, id).toBeDefined();
+    const onCard = comp!.layers.filter((l) => l.card);
+    expect(onCard.map((l) => l.key)).toEqual([key]);
+    const card = onCard[0]!.card!;
+    expect(card.focus).toEqual(face);
+    expect([card.x, card.y]).toEqual([CARD_CLEAR.x, CARD_CLEAR.y]);
+    expect(card.x).toBeGreaterThanOrEqual(66);
+    expect(card.x).toBeLessThanOrEqual(70);
+    expect(card.y).toBeGreaterThanOrEqual(60);
+    // The plate: every face right of the numeral and name, below the top edge.
+    for (const l of comp!.layers) {
+      expect(l.hero.x, `${id} ${l.key}`).toBeGreaterThanOrEqual(45);
+      expect(l.hero.y, `${id} ${l.key}`).toBeGreaterThanOrEqual(20);
+      expect(l.hero.y, `${id} ${l.key}`).toBeLessThanOrEqual(35);
+    }
   });
 });

@@ -1,0 +1,370 @@
+[
+ {
+  "size": "1280",
+  "save": "new",
+  "state": "unsel",
+  "selected": false,
+  "cleared": false,
+  "card": [
+   695,
+   373,
+   284,
+   37
+  ],
+  "face": [
+   914,
+   391,
+   923,
+   402
+  ],
+  "titleGapPx": 22,
+  "ribbonClearPx": null,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "1280",
+  "save": "new",
+  "state": "sel",
+  "selected": true,
+  "cleared": false,
+  "card": [
+   688,
+   373,
+   284,
+   37
+  ],
+  "face": [
+   907,
+   391,
+   916,
+   402
+  ],
+  "titleGapPx": 22,
+  "ribbonClearPx": null,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "1280",
+  "save": "beaten",
+  "state": "unsel",
+  "selected": false,
+  "cleared": true,
+  "card": [
+   695,
+   373,
+   284,
+   37
+  ],
+  "face": [
+   914,
+   391,
+   923,
+   402
+  ],
+  "titleGapPx": 22,
+  "ribbonClearPx": 8,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "1280",
+  "save": "beaten",
+  "state": "sel",
+  "selected": true,
+  "cleared": true,
+  "card": [
+   688,
+   373,
+   284,
+   37
+  ],
+  "face": [
+   907,
+   391,
+   916,
+   402
+  ],
+  "titleGapPx": 22,
+  "ribbonClearPx": 8,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "1600",
+  "save": "new",
+  "state": "unsel",
+  "selected": false,
+  "cleared": false,
+  "card": [
+   869,
+   467,
+   356,
+   47
+  ],
+  "face": [
+   1143,
+   490,
+   1155,
+   504
+  ],
+  "titleGapPx": 27,
+  "ribbonClearPx": null,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "1600",
+  "save": "new",
+  "state": "sel",
+  "selected": true,
+  "cleared": false,
+  "card": [
+   860,
+   465,
+   356,
+   49
+  ],
+  "face": [
+   1134,
+   489,
+   1145,
+   503
+  ],
+  "titleGapPx": 26,
+  "ribbonClearPx": null,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "1600",
+  "save": "beaten",
+  "state": "unsel",
+  "selected": false,
+  "cleared": true,
+  "card": [
+   869,
+   467,
+   356,
+   47
+  ],
+  "face": [
+   1143,
+   490,
+   1155,
+   504
+  ],
+  "titleGapPx": 27,
+  "ribbonClearPx": 12,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "1600",
+  "save": "beaten",
+  "state": "sel",
+  "selected": true,
+  "cleared": true,
+  "card": [
+   860,
+   465,
+   356,
+   49
+  ],
+  "face": [
+   1134,
+   489,
+   1145,
+   503
+  ],
+  "titleGapPx": 26,
+  "ribbonClearPx": 10,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "2000",
+  "save": "new",
+  "state": "unsel",
+  "selected": false,
+  "cleared": false,
+  "card": [
+   1086,
+   583,
+   444,
+   59
+  ],
+  "face": [
+   1429,
+   611,
+   1443,
+   629
+  ],
+  "titleGapPx": 34,
+  "ribbonClearPx": null,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "2000",
+  "save": "new",
+  "state": "sel",
+  "selected": true,
+  "cleared": false,
+  "card": [
+   1075,
+   581,
+   444,
+   61
+  ],
+  "face": [
+   1417,
+   610,
+   1432,
+   628
+  ],
+  "titleGapPx": 33,
+  "ribbonClearPx": null,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "2000",
+  "save": "beaten",
+  "state": "unsel",
+  "selected": false,
+  "cleared": true,
+  "card": [
+   1086,
+   583,
+   444,
+   59
+  ],
+  "face": [
+   1429,
+   611,
+   1443,
+   629
+  ],
+  "titleGapPx": 34,
+  "ribbonClearPx": 14,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "2000",
+  "save": "beaten",
+  "state": "sel",
+  "selected": true,
+  "cleared": true,
+  "card": [
+   1075,
+   581,
+   444,
+   61
+  ],
+  "face": [
+   1417,
+   610,
+   1432,
+   628
+  ],
+  "titleGapPx": 33,
+  "ribbonClearPx": 14,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "390",
+  "save": "new",
+  "state": "unsel",
+  "selected": false,
+  "cleared": false,
+  "card": [
+   12,
+   404,
+   367,
+   35
+  ],
+  "face": [
+   296,
+   421,
+   304,
+   431
+  ],
+  "titleGapPx": 128,
+  "ribbonClearPx": null,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "390",
+  "save": "new",
+  "state": "sel",
+  "selected": true,
+  "cleared": false,
+  "card": [
+   12,
+   404,
+   367,
+   35
+  ],
+  "face": [
+   296,
+   421,
+   304,
+   431
+  ],
+  "titleGapPx": 128,
+  "ribbonClearPx": null,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "390",
+  "save": "beaten",
+  "state": "unsel",
+  "selected": false,
+  "cleared": true,
+  "card": [
+   12,
+   404,
+   367,
+   35
+  ],
+  "face": [
+   296,
+   421,
+   304,
+   431
+  ],
+  "titleGapPx": 128,
+  "ribbonClearPx": 16,
+  "faceInsideCard": true,
+  "errors": []
+ },
+ {
+  "size": "390",
+  "save": "beaten",
+  "state": "sel",
+  "selected": true,
+  "cleared": true,
+  "card": [
+   12,
+   404,
+   367,
+   35
+  ],
+  "face": [
+   296,
+   421,
+   304,
+   431
+  ],
+  "titleGapPx": 128,
+  "ribbonClearPx": 16,
+  "faceInsideCard": true,
+  "errors": []
+ }
+]
