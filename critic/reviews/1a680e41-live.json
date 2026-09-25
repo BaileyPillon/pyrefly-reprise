@@ -1,0 +1,60 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-25T22:20:00.000Z",
+  "build": {
+    "mainSha": "1a680e41",
+    "bundle": "BVdUtZb-",
+    "artifactHash": "1b5eba77b3ed49108942a02ab8fd4c0b923cfa0407835ef9708a375882702e3d"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/1a680e41.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/e45ed3c1.json -> result PASS, liveManifest match, checked 47, mismatched 0, missing 0, wrongType 0, errors 0"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, tools/zz-live-1a680e41.tmp.mjs. Part A: Chapter IV (FFX-2 Bahamut), 1600x900, real Enter through title/select/prep to battle, labelled debug HP-lower to 1, real Change->Gunner->Attack ended the fight, results wedge imgSrc=/pyrefly-reprise/art/portraits/yuna-x2.png (X-2 art). Pause: real Escape opens pause, real H hides/restores .pause__ui, audioDebug() playing='pause' source='prerendered' cached=true, real P did not close pause (Escape did, pre-existing gap), real Escape resumed. Part B: Chapter I (Seymour Flux), same method, real Attack ended the fight, results wedge imgSrc=/pyrefly-reprise/art/portraits/tidus.png (FFX art, no -x2). Part C: 390x844 real-touch context, data-phone-battle='ffx2', real tap on Item row (data-idx=2) opened Item submenu, real tap on Lunar Curtain row (targeting:'all-allies') set .phud-card__name='All allies', .phud-target__go='Lunar Curtain → All allies', .phud-target__hint='All three girls at once · Confirm or Back'. Console errors 0, network 4xx/5xx 0 across all three contexts. State asserted via screen()/battleState()/awaitingMenu before each capture throughout."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight pass: musicVolume changed 0.7->0.37 via SaveStore.setSettings, took effect immediately, survived page.reload(); Chapter I's just-recorded win record (cleared, attempts, bestTurns, bestTimeMs, playTimeMs) was byte-identical before and after the same reload.",
+      "reason": "Full upgrade-path matrix (fresh/returning/migrating/invalid-storage save profiles) not tested; out of scope for this lightweight live pass per the task."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact-artifact manifest verify-live (CHK-017)",
+      "Chapter IV FFX-2 Bahamut real-input win via labelled debug HP-lower + real in-game Change->Gunner->Attack",
+      "results wedge shows FFX-2 X-2 art on an FFX-2 win (yuna-x2.png)",
+      "Chapter I Seymour Flux real-input win via the same method",
+      "results wedge still shows FFX art on an FFX win (tidus.png, no -x2 suffix)",
+      "390x844 real-touch phone smoke: tap Item then Lunar Curtain names the target card and Confirm button with the tapped item, targeting All allies (FOC17-02)",
+      "pause/resume (Escape, P) and H hide/restore panels with real keys",
+      "prerendered music playing check via audioDebug()",
+      "reload smoke: one setting + Chapter I progress survive a reload"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix (fresh/returning/migrating/invalid-storage save profiles)",
+      "Chapters II, III and V real-input smoke",
+      "a real cancel path on the phone target step itself (only the phone Back button's presence and the desktop pause-overlay Escape cancel-equivalent were exercised)",
+      "physical device, Safari or controller input",
+      "the tapped item's actual submission and its damage/status resolution (target card and Confirm label were read before confirming; the confirm tap itself was not required by this check and was not exercised on phone)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 45
+}

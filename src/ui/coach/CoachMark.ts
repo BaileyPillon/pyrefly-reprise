@@ -29,7 +29,7 @@ import './coach.css';
 import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from '../common/html.ts';
 import { RawInputWatcher } from '../ffx/rawInput.ts';
-import { INTENT_AVOID_SELECTORS, rectsOf, ZANMATO_GAUGE_SELECTORS } from '../ffx/hudAvoidSelectors.ts';
+import { CHAPTER_PANEL_SELECTORS, INTENT_AVOID_SELECTORS, rectsOf } from '../ffx/hudAvoidSelectors.ts';
 import { bandClearOf, clearOfPanels, slideClearOf } from './coachAvoid.ts';
 import { coachRunningBadge, type CoachMark as CoachMarkDef } from './coachCopy.ts';
 import { ffx2CoachClock } from './coachState.ts';
@@ -78,7 +78,7 @@ const CONFIRM_KEYS = new Set(['Enter', 'NumpadEnter', 'Space', 'KeyZ']);
 const SIDE_PANELS: readonly string[] = ['.ig-cmd-stack', '.ffx-cmd-info'];
 /** Every other panel the intent slab keeps off (`hudAvoidSelectors.ts`): the gauge solve's cost. */
 const SOFT_PANELS: readonly string[] = INTENT_AVOID_SELECTORS.filter(
-  (s) => s !== '.mad__card' && !SIDE_PANELS.includes(s) && !(ZANMATO_GAUGE_SELECTORS as readonly string[]).includes(s),
+  (s) => s !== '.mad__card' && !SIDE_PANELS.includes(s) && !(CHAPTER_PANEL_SELECTORS as readonly string[]).includes(s),
 );
 
 export class CoachMark {
@@ -288,7 +288,7 @@ export class CoachMark {
    * returns before touching the line, so every other battle places as before.
    */
   private avoidZanmatoGauge(host: HTMLElement): void {
-    const gauge = rectsOf(host, ZANMATO_GAUGE_SELECTORS);
+    const gauge = rectsOf(host, CHAPTER_PANEL_SELECTORS); // and Chapter XII's disc strip and intent line
     if (!gauge.length) return;
     const now = this.el.getBoundingClientRect();
     const stage = host.getBoundingClientRect();

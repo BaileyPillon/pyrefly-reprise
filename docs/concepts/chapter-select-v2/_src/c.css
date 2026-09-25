@@ -1,0 +1,104 @@
+/* ===== Option C: the victory ribbon and the progress strip ===== */
+
+/* the hero: a gold sash across the top-right corner, only once beaten */
+.v2c-sash {
+  position: absolute; right: 0; top: 0; width: calc(220 * var(--fe-k)); height: calc(220 * var(--fe-k));
+  overflow: hidden; pointer-events: none;
+}
+.v2c-sash__band {
+  position: absolute; top: calc(66 * var(--fe-k)); right: calc(-74 * var(--fe-k)); width: calc(320 * var(--fe-k));
+  height: calc(40 * var(--fe-k)); box-sizing: border-box;
+  transform: rotate(45deg);
+  display: flex; align-items: center; justify-content: center; gap: calc(14 * var(--fe-k));
+  background: linear-gradient(to bottom, #f0cc6a, #e3b94a 46%, #b98d27);
+  border-top: 1px solid rgba(255, 240, 200, 0.8);
+  box-shadow: 0 0 0 calc(3 * var(--fe-k)) rgba(11, 10, 18, 0.85), 0 calc(10 * var(--fe-k)) calc(22 * var(--fe-k)) rgba(0, 0, 0, 0.6);
+}
+.v2c-sash__band::before, .v2c-sash__band::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 1px; background: rgba(11, 10, 18, 0.55);
+}
+.v2c-sash__band::before { top: calc(4 * var(--fe-k)); }
+.v2c-sash__band::after { bottom: calc(4 * var(--fe-k)); }
+.v2c-sash__band span {
+  font-family: var(--ig-font-display); font-weight: 700; text-transform: uppercase;
+  font-size: max(var(--fe-fs-floor), calc(15 * var(--fe-k))); letter-spacing: 0.34em; color: var(--ig-ink);
+}
+.v2c-sash__band b {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(24 * var(--fe-k))); line-height: 1; color: var(--ig-ink);
+}
+
+/* the card: a small ribbon across its top-right corner */
+.v2c-corner {
+  position: absolute; right: 0; top: 0; width: calc(54 * var(--fe-k)); height: calc(54 * var(--fe-k)); overflow: hidden; z-index: 2;
+}
+.v2c-corner i {
+  position: absolute; top: calc(7 * var(--fe-k)); right: calc(-26 * var(--fe-k)); width: calc(92 * var(--fe-k)); height: calc(20 * var(--fe-k));
+  transform: rotate(45deg); display: flex; align-items: center; justify-content: center; font-style: normal;
+  font-size: calc(14 * var(--fe-k)); line-height: 1; color: var(--ig-ink);
+  background: linear-gradient(to bottom, #f0cc6a, #e3b94a 50%, #b98d27);
+  box-shadow: 0 0 0 1px rgba(11, 10, 18, 0.8), 0 calc(3 * var(--fe-k)) calc(6 * var(--fe-k)) rgba(0, 0, 0, 0.6);
+}
+.v2-card.is-sel .v2c-corner { right: 0; top: 0; }
+.v2-opt-C .v2-card.is-cleared .v2-card__art img.v2-plate,
+.v2-opt-C .v2-card.is-cleared .v2-card__art .v2-comp__bg { filter: saturate(1.04) brightness(0.9); }
+
+/* the progress strip under the plate: every chapter, lit once beaten */
+.v2-opt-C .fe-prose { top: calc(566 * var(--fe-k)); }
+.v2c-strip {
+  position: absolute; left: calc(58 * var(--fe-k)); top: calc(522 * var(--fe-k)); width: calc(700 * var(--fe-k));
+  height: calc(34 * var(--fe-k)); display: flex; align-items: center; gap: calc(14 * var(--fe-k));
+}
+.v2c-strip__count {
+  flex: 0 0 auto; display: flex; align-items: baseline; gap: calc(8 * var(--fe-k));
+  padding-right: calc(14 * var(--fe-k)); border-right: 1px solid rgba(227, 185, 74, 0.4);
+}
+.v2c-strip__count b {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(28 * var(--fe-k))); line-height: 1; color: var(--ig-gold);
+}
+.v2c-strip__count span {
+  font-family: var(--ig-font-display); font-weight: 700; text-transform: uppercase;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k))); letter-spacing: 0.2em; color: rgba(244, 241, 232, 0.72);
+}
+.v2c-strip__pips { flex: 1 1 auto; display: flex; align-items: center; gap: calc(5 * var(--fe-k)); height: 100%; }
+.v2c-strip__game {
+  font-family: var(--ig-font-display); font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k))); letter-spacing: 0.1em; color: rgba(227, 185, 74, 0.7);
+  padding: 0 calc(4 * var(--fe-k)) 0 calc(6 * var(--fe-k));
+}
+.v2c-strip__game--x2 { color: rgba(247, 182, 217, 0.8); margin-left: calc(8 * var(--fe-k)); }
+.v2c-pip {
+  position: relative; flex: 1 1 0; height: calc(26 * var(--fe-k));
+  display: flex; align-items: center; justify-content: center;
+  clip-path: polygon(calc(6 * var(--fe-k)) 0, 100% 0, calc(100% - 6 * var(--fe-k)) 100%, 0 100%);
+  background: rgba(244, 241, 232, 0.1);
+  font-family: var(--ig-font-display); font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k))); letter-spacing: 0.06em; color: rgba(244, 241, 232, 0.55);
+}
+.v2c-pip.is-lit { background: linear-gradient(to bottom, #f0cc6a, #e3b94a 50%, #b98d27); color: var(--ig-ink); }
+.v2c-pip.is-x2.is-lit { background: linear-gradient(to bottom, #fbd0e6, #f7b6d9 50%, #d58bb4); }
+.v2c-pip.is-coming { background: repeating-linear-gradient(-45deg, rgba(244, 241, 232, 0.08) 0 3px, rgba(244, 241, 232, 0) 3px 6px); color: rgba(244, 241, 232, 0.32); }
+.v2c-pip.is-sel { background: rgba(244, 241, 232, 0.24); color: var(--ig-paper); }
+.v2c-pip.is-sel.is-lit { color: var(--ig-ink); background: linear-gradient(to bottom, #f0cc6a, #e3b94a 50%, #b98d27); }
+.v2c-pip.is-sel.is-lit::after { background: var(--ig-ink); box-shadow: none; }
+.v2c-pip.is-sel::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 70%; height: calc(3 * var(--fe-k)); background: var(--ig-paper); box-shadow: 0 0 calc(6 * var(--fe-k)) rgba(244, 241, 232, 0.8);
+}
+
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .v2c-sash { width: calc(170 * var(--fe-k)); height: calc(170 * var(--fe-k)); }
+  .v2c-sash__band { top: calc(50 * var(--fe-k)); right: calc(-62 * var(--fe-k)); width: calc(260 * var(--fe-k)); height: calc(34 * var(--fe-k)); gap: calc(8 * var(--fe-k)); }
+  .v2c-sash__band b { font-size: max(var(--fe-fs-floor), calc(20 * var(--fe-k))); }
+  .v2c-sash__band span { letter-spacing: 0.24em; }
+  .v2c-strip { height: calc(30 * var(--fe-k)); gap: calc(8 * var(--fe-k)); }
+  .v2c-strip__count { padding-right: calc(8 * var(--fe-k)); gap: calc(4 * var(--fe-k)); }
+  .v2c-strip__count span { display: none; }
+  .v2c-strip__count b { font-size: max(var(--fe-fs-floor), calc(22 * var(--fe-k))); }
+  .v2c-strip__count b::after { content: '/9'; font-size: 0.6em; color: rgba(244, 241, 232, 0.6); margin-left: 2px; }
+  .v2c-strip__game { display: none; }
+  .v2c-strip__pips { gap: calc(3 * var(--fe-k)); }
+  .v2c-pip { height: calc(18 * var(--fe-k)); font-size: 0; }
+  .v2c-strip__game--x2 { display: block; font-size: 0; width: calc(4 * var(--fe-k)); padding: 0; margin-left: 0; }
+}

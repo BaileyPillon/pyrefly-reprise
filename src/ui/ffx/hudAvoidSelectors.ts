@@ -20,6 +20,16 @@
 export const ZANMATO_GAUGE_SELECTORS = ['.ffx-zg__panel', '.ffx-zg__banner'] as const;
 
 /**
+ * Seymour Omnis's disc strip and intent line (FFX, Chapter XII only;
+ * `OmnisReadout.ts`): opaque ink like the Zanmato panel, so the same panels
+ * dodge them. The colour-order tab hangs under the strip.
+ */
+export const OMNIS_READOUT_SELECTORS = ['.ffx-omr__strip', '.ffx-omr__note', '.ffx-omr__intent'] as const;
+
+/** Every one-chapter panel the floating FFX panels dodge (Chapter IX's gauge, Chapter XII's read-out). */
+export const CHAPTER_PANEL_SELECTORS = [...ZANMATO_GAUGE_SELECTORS, ...OMNIS_READOUT_SELECTORS] as const;
+
+/**
  * The HUD panels the intent slab may not cover.
  *
  * The CTB list first and above all — the slab's whole claim is "this is what
@@ -51,7 +61,7 @@ export const INTENT_AVOID_SELECTORS = [
   // changes nothing about how a reticle is drawn or aimed, which is issue
   // #08/#13's track, not this one.
   '.ig-reticle',
-  ...ZANMATO_GAUGE_SELECTORS,
+  ...CHAPTER_PANEL_SELECTORS,
 ] as const;
 
 export interface ViewportRect {

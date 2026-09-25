@@ -27,6 +27,9 @@ import { installFfxPhoneHud } from '../../ui/ffx/phoneHud.ts';
 import { installFfx2PhoneHud } from '../../ui/ffx2/phoneHud.ts';
 import { ffx2EngineOptions, registerBattleContent } from './BattleScreenContent.ts';
 import { withOversoulLook, type OversoulField } from '../../engine/OversoulLook.ts';
+import { withOmnisDiscs } from '../../engine/OmnisDiscTap.ts';
+import { withOmnisGlow } from '../../engine/OmnisGlowLook.ts';
+import { withOmnisReadout } from '../../ui/ffx/OmnisReadout.ts';
 
 // ---------------------------------------------------------------- engines
 
@@ -127,11 +130,15 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
 export function createHud(game: GameId, field?: () => OversoulField | null): HudPort {
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
   const hud: HudPort = game === 'ffx'
-    ? withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud)
+    ? withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))
     : withPhoneLayout(new FFX2BattleHud(), installFfx2PhoneHud);
   // The Oversoul look (FFX-2 only: Oversoul exists only in FFX-2), on the field the screen passes in.
-  // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`).
-  return withCoach(game, game === 'ffx2' && field ? withOversoulLook(hud, field) : hud);
+  // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`). The FFX side gets the
+  // Mortiphasm disc colours and Omnis's red glow (FFX only, Chapter XII; inert without the Omnis state,
+  // `engine/OmnisDiscTap.ts`, `engine/OmnisGlowLook.ts`). The disc strip and the intent line are
+  // `ui/ffx/OmnisReadout.ts`, on the FFX HUD above (the same Chapter XII gate).
+  const tapped = !field ? hud : game === 'ffx2' ? withOversoulLook(hud, field) : withOmnisGlow(withOmnisDiscs(hud, field), field);
+  return withCoach(game, tapped);
 }
 
 // --------------------------------------------------------- cutscene runner

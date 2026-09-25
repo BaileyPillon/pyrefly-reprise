@@ -31,7 +31,7 @@ describe('departure kinds', () => {
     for (const id of ['dr-goon', 'fem-goon', 'seymour-flux', 'cid', 'yunalesca']) {
       expect(departureKindOf(id)).toBe('dissolve');
     }
-    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(13); // + Chapter XIII's paragon and trema, held (FFX-2)
+    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(14); // + Chapter XIII's paragon and trema (FFX-2) and Chapter XII's seymour-omnis (FFX), held
   });
 
   // Chapter VII (FFX only, AGENTS.md rule 14): D-045 the Guado Guardians yield

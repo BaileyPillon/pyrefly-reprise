@@ -25,6 +25,7 @@ import { EVRAE_META } from './chapter-meta-evrae.ts';
 import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
 import { TREMA_META } from './chapter-meta-trema.ts';
 import { FALLEN_AEONS_META } from './chapter-meta-fallen-aeons.ts';
+import { SEYMOUR_OMNIS_META } from './chapter-meta-seymour-omnis.ts';
 
 /**
  * The pause screen's objective rule vocabulary. Each rule is a pure
@@ -356,7 +357,7 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   musicKeys: ['scene-farplane', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'],
 };
 
-/** All ten listed chapters' pause-screen metadata, in play order. */
+/** All eleven listed chapters' pause-screen metadata, in play order. */
 export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_FLUX_META,
   YUNALESCA_META,
@@ -367,6 +368,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_ANIMA_MACALANIA_META,
   EVRAE_META,
   YOJIMBO_META,
+  SEYMOUR_OMNIS_META, // Chapter XII (FFX), listed 2026-09-25
   TREMA_META, // Chapter XIII (FFX-2), listed 2026-09-25
 ] as const;
 

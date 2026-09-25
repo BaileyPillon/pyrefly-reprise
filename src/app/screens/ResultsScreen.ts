@@ -24,7 +24,7 @@ import {
   victoryHeroHtml,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
-import { victoryLine, victoryTurn, wedgeFigureId, type VictoryLine } from '../../ui/common/victoryLine.ts';
+import { victoryLine, victoryTurn, wedgeFallenArt, wedgeFigureId, wedgePortraitId, type VictoryLine } from '../../ui/common/victoryLine.ts';
 
 /** How long the gil/AP counters take to roll up to their final value [visual-bible §3.8 step 6]. */
 const COUNT_UP_MS = 1150;
@@ -268,16 +268,15 @@ export class ResultsScreen extends Screen {
    *
    * Reads the leader from the chapter build (`leaderId`), not `rows[0]`
    * (PR-0003): the row list can legitimately be empty or reordered by AP
-   * eligibility, and the fallen pose must render regardless.
+   * eligibility, and the fallen pose must render regardless. The art is the
+   * chapter's own game's (FOC17-01): an FFX-2 girl in her X-2 likeness or dressphere.
    */
   private heroHtml(): string {
-    const figure = wedgeFigureId(this.victory, this.quip, leaderId(getChapter(this.opts.chapterId)));
+    const chapter = getChapter(this.opts.chapterId);
+    const figure = wedgeFigureId(this.victory, this.quip, leaderId(chapter));
     if (!figure) return '';
-    if (this.victory) {
-      return victoryHeroHtml(figure);
-    }
-    const hurt = artUrl(`art/characters/${figure}/hurt.png`);
-    const ko = artUrl(`art/characters/${figure}/ko.png`);
+    if (this.victory) return victoryHeroHtml(wedgePortraitId(figure, chapter));
+    const [hurt, ko] = wedgeFallenArt(chapter, figure).map((p) => artUrl(p));
     return `<img class="rres__hero rres__hero--fallen" src="${hurt}" data-fallback="${ko}" alt=""
       draggable="false" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.remove();}" />`;
   }

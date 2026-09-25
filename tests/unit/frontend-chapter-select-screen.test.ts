@@ -74,10 +74,11 @@ afterEach(() => {
 const selectedId = (rig: Rig): unknown => rig.screen.snapshot()['selectedId'];
 
 describe('the board on screen', () => {
-  it('draws ten cards in two game groups — the hero plus nine on the rail', () => {
+  it('draws the hero plus all eleven cards in two game groups, the selected one included (D-183)', () => {
     const { root } = mount();
     expect(root.querySelectorAll('.fe-hero')).toHaveLength(1);
-    expect(root.querySelectorAll('.fe-card')).toHaveLength(9);
+    expect(root.querySelectorAll('.fe-card')).toHaveLength(11);
+    expect(root.querySelectorAll('.fe-card--sel')).toHaveLength(1);
     const groups = [...root.querySelectorAll('.fe-rail__group')].map((g) => g.textContent?.trim());
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
   });
@@ -93,17 +94,19 @@ describe('the board on screen', () => {
     }
   });
 
-  it('shows an uncleared boss as a silhouette with its name and no spoiler text', () => {
+  it('shows an unbeaten boss painted on its scene, with its name and no spoiler text (no silhouettes)', () => {
     const { root } = mount();
+    expect(root.querySelector('.fe-sil')).toBeNull();
     const card = root.querySelector('.fe-card:not(.fe-card--coming)') as HTMLElement;
-    expect(card.querySelector('.fe-card__sil img')?.className).toBe('fe-sil');
+    expect(card.querySelector('.cs-art__scene')?.getAttribute('src')).toMatch(/art\/backdrops\/[a-z-]+\.png$/);
+    expect(card.querySelector('.cs-art__boss')?.getAttribute('src')).toMatch(/art\/characters\/[a-z0-9-]+\/idle\.png$/);
     expect(card.querySelector('.fe-card__name')?.textContent?.trim()).toBeTruthy();
     // Only the numeral, the name and the shape. Nothing that tells the story.
     const text = card.textContent ?? '';
     expect(text).not.toMatch(/summoner|unsent|aeon|Sin|Farplane/i);
   });
 
-  it('swaps the silhouette for the painting once the chapter is cleared', () => {
+  it('marks a beaten chapter with the gold ribbon and keeps its painting', () => {
     const first = mount();
     const before = first.root.querySelectorAll('.fe-card--cleared');
     expect(before).toHaveLength(0);
@@ -113,7 +116,7 @@ describe('the board on screen', () => {
     const cleared = [...after.root.querySelectorAll('.fe-card--cleared')];
     expect(cleared).toHaveLength(1);
     expect(cleared[0]!.querySelector('.fe-card__name')?.textContent?.trim()).toBe('Lady Yunalesca');
-    expect(cleared[0]!.querySelector('.fe-card__sil')).toBeNull();
+    expect(cleared[0]!.querySelector('.fe-card__ribbon')?.textContent).toBe('3:20');
     expect(cleared[0]!.querySelector('.fe-card__art img')).not.toBeNull();
   });
 });
@@ -132,7 +135,10 @@ describe('the keyboard', () => {
     // Yojimbo (Chapter IX) was listed 2026-09-24 and is playable.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('yojimbo-cavern');
-    // Macalania sits between here and FFX-2, and is stepped over.
+    // Omnis (Chapter XII) was listed 2026-09-25 and is playable.
+    rig.key('ArrowRight');
+    expect(selectedId(rig)).toBe('seymour-omnis');
+    // Macalania (VII) sits between III and VIII and was stepped over above.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('ffx2-bahamut');
   });
@@ -223,10 +229,10 @@ describe('the mouse', () => {
 
     click(rig, cardFor(rig, 'Lady Yunalesca'));
     expect(selectedId(rig)).toBe('yunalesca');
-    // The card has moved to the plate, and nothing has started.
+    // The plate shows it, the card is lit where it sits, and nothing has started.
     expect(picked).toEqual([]);
     expect(rig.root.querySelector('.fe-hero')?.getAttribute('aria-label')).toBe('Lady Yunalesca');
-    expect(cardFor(rig, 'Lady Yunalesca')).toBeNull();
+    expect(cardFor(rig, 'Lady Yunalesca').classList.contains('fe-card--sel')).toBe(true);
 
     click(rig, rig.root.querySelector('.fe-hero')!);
     expect(picked).toEqual(['yunalesca']);

@@ -1,11 +1,13 @@
 /**
- * Markup for the showpiece chapter board: the hero plate, the prose slab, the
- * grouped card rail and the dossier.
+ * Markup for the chapter board: the hero plate, the prose slab, the fixed
+ * card list and the dossier.
  *
- * Approved end state:
- * `docs/concepts/polish/showpiece-frontend/chapter-select.png`. The base look
- * is the approved tile `docs/screenshots/mockups/A-chapter-select.jpg`; what
- * this adds is the boss silhouettes and the two game groups.
+ * Approved end state (D-183, Bailey 2026-09-25, "I'll go with C a victory
+ * ribbon" and "All recommendations"): `docs/concepts/chapter-select-v2/`
+ * option C, with every plate and card showing the boss painted on its own
+ * scene (`chapterPlates.ts`) and the fixed list. It replaces the silhouette
+ * board of `docs/concepts/polish/showpiece-frontend/chapter-select.png`; the
+ * Ink & Gold chrome, the prose slab and the dossier are unchanged.
  *
  * Split out of `ChapterSelectScreen.ts` so both stay under the 400-line house
  * limit. Everything here is a pure string builder — the screen owns the DOM,
@@ -13,11 +15,12 @@
  */
 
 import type { Chapter } from '../../../data/encounters.ts';
-import { artUrl } from '../../../engine/PaintedArt.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 import { partyFaceHtml, type PartyFaceMember } from '../../../ui/common/partyFace.ts';
 import { formatClearTime } from '../../../ui/common/resultsMath.ts';
 import type { ChapterGroup, ChapterTile } from './chapterGrid.ts';
+import { cardRibbonHtml, victorySashHtml } from './chapterProgress.ts';
+import { plateArtHtml } from './chapterPlates.ts';
 import './party-face-placeholder.css';
 
 /** Every enemy in the chapter's first formation, as one line. */
@@ -38,49 +41,18 @@ export function recommendedParty(chapter: Chapter): PartyFaceMember[] {
 }
 
 /**
- * A boss painting drawn as an ink silhouette.
- *
- * The painting is an approved file in `public/art/characters/`; the silhouette
- * is the `.fe-sil` CSS filter over it, so nothing is generated and the
- * approved art is never replaced (hard rules 8 and 9).
+ * The selected chapter, big: its boss painted on its own scene (D-183), the
+ * chapter numeral and name bottom-left, and the VICTORY sash once beaten.
+ * The whole plate is the begin button (the second click of the two-click rule).
  */
-function silHtml(key: string, className: string): string {
-  const src = artUrl(`art/characters/${key}/idle.png`);
-  return (
-    `<span class="${className}">` +
-    `<img class="fe-sil" src="${src}" alt="" draggable="false" onerror="this.parentElement?.remove()">` +
-    `</span>`
-  );
-}
-
-/** The backdrop `<img>` for a plate, or nothing when there is no painting. */
-function plateHtml(sceneKey: string | null, alt: string): string {
-  if (!sceneKey) return '';
-  const src = artUrl(`art/backdrops/${sceneKey}.png`);
-  return `<img src="${src}" alt="${escapeHtml(alt)}" draggable="false" onerror="this.remove()">`;
-}
-
-/**
- * The selected chapter, big.
- *
- * Cleared or not, the hero plate always carries the silhouette: this is the
- * card the player is looking at, and the boss reading as a shape is the whole
- * point of the board. It is the *rail* cards that swap silhouette for painting
- * once a chapter is behind you.
- */
-export function heroHtml(tile: ChapterTile, index: number): string {
-  const sils = tile.silhouetteKeys;
-  const back = sils.length > 1 ? silHtml(sils[0]!, 'fe-hero__sil fe-hero__sil--back') : '';
-  const front = sils.length > 0 ? silHtml(sils[sils.length - 1]!, 'fe-hero__sil') : '';
+export function heroHtml(tile: ChapterTile, index: number, bestTimeMs: number | null = null): string {
   const numeral = tile.numeral ? `Chapter ${tile.numeral}` : 'Coming';
   return `
-    <div class="fe-hero" data-action="fe-card-${index}" role="button" tabindex="0"
+    <div class="fe-hero${tile.cleared ? ' fe-hero--cleared' : ''}" data-action="fe-card-${index}" role="button" tabindex="0"
          aria-label="${escapeHtml(tile.title)}">
-      <div class="fe-hero__art">${plateHtml(tile.sceneKey, tile.title)}</div>
-      ${tile.sceneKey ? '' : '<div class="fe-card__locked"></div>'}
+      <div class="fe-hero__art">${plateArtHtml(tile, 'hero')}</div>
       <div class="fe-hero__fade"></div>
-      ${back}${front}
-      ${tile.cleared ? '<div class="fe-hero__check" title="Cleared">&#10003;</div>' : ''}
+      ${victorySashHtml(tile, bestTimeMs)}
       <div class="fe-hero__num">${escapeHtml(numeral)}</div>
       <div class="fe-hero__name">${escapeHtml(tile.title)}</div>
     </div>
@@ -110,54 +82,58 @@ export function proseHtml(tile: ChapterTile): string {
 }
 
 /**
- * One rail card.
+ * One card of the fixed list (D-183): the numeral in its own column, the name
+ * beside it, the boss painted on its scene behind, and the gold ribbon once
+ * beaten. The selected card is the same element lit in place (gold frame,
+ * gold numeral block, the notch), so nothing moves when the cursor does.
  *
- * An uncleared chapter shows its boss as an ink silhouette and its name, and
- * **nothing else** — no subtitle, no location, no blurb, because those are the
- * spoiler. A cleared one shows the painting instead: the shape has done its
- * job and the place is the reward.
+ * A COMING card has no `data-action`: it can never be selected or started.
  */
-export function cardHtml(tile: ChapterTile, index: number): string {
+export function cardHtml(tile: ChapterTile, index: number, selected: boolean, bestTimeMs: number | null = null): string {
+  const num = `<span class="fe-card__num">${escapeHtml(tile.numeral ?? '')}</span>`;
+  const name = `<span class="fe-card__name">${escapeHtml(tile.title)}</span>`;
+  const art = `<div class="fe-card__art">${plateArtHtml(tile, 'card')}</div><div class="fe-card__fade"></div>`;
   if (!tile.playable) {
     return `
-      <div class="fe-card fe-card--coming" aria-disabled="true"
+      <div class="fe-card fe-card--coming" data-card="${escapeHtml(tile.id)}" aria-disabled="true"
            aria-label="${escapeHtml(tile.title)} — coming">
-        <div class="fe-card__locked"></div>
-        ${tile.silhouetteKeys[0] ? silHtml(tile.silhouetteKeys[0], 'fe-card__sil') : ''}
-        <div class="fe-card__name">${escapeHtml(tile.title)}</div>
-        <div class="fe-card__coming">Coming</div>
+        ${art}${num}${name}<span class="fe-card__coming">Coming</span>
       </div>
     `;
   }
-  const sil = tile.cleared ? '' : tile.silhouetteKeys.at(-1);
+  const cls = `fe-card${tile.cleared ? ' fe-card--cleared' : ''}${selected ? ' fe-card--sel' : ''}`;
   return `
-    <div class="fe-card${tile.cleared ? ' fe-card--cleared' : ''}"
-         data-action="fe-card-${index}" role="button" tabindex="0"
-         aria-label="${escapeHtml(tile.title)}">
-      <div class="fe-card__art">${plateHtml(tile.sceneKey, tile.title)}</div>
-      <div class="fe-card__fade"></div>
-      ${sil ? silHtml(sil, 'fe-card__sil') : ''}
-      ${tile.numeral ? `<span class="fe-card__num">${tile.numeral}</span>` : ''}
-      ${tile.cleared ? '<span class="fe-card__check" title="Cleared">&#10003;</span>' : ''}
-      <div class="fe-card__name">${escapeHtml(tile.title)}</div>
+    <div class="${cls}" data-card="${escapeHtml(tile.id)}" data-action="fe-card-${index}" role="button" tabindex="0"
+         aria-label="${escapeHtml(tile.title)}"${selected ? ' aria-current="true"' : ''}>
+      ${art}${num}${name}${cardRibbonHtml(tile, bestTimeMs)}
     </div>
   `;
 }
 
 /**
- * The whole rail: two game groups, every tile but the selected one.
+ * The whole list: two game groups, **every** tile in its place (D-183).
  *
- * The cards are flex items with no fixed height, so five chapters and eight
- * chapters both fill the same rail without a scrollbar and without a rewrite
- * the day a chapter lands.
+ * The rail once dropped the selected tile (it had moved up to the plate), so
+ * every card below slid up one place and a second click on the same spot
+ * landed on the next chapter (Bailey: "If I click Evrae then click its again
+ * it's Yojimbo"). Now the list never changes shape: the selected card is lit
+ * where it sits. The cards are flex items with no fixed height, so the list
+ * fills the same rail whatever the chapter count.
  */
-export function railHtml(groups: readonly ChapterGroup[], tiles: readonly ChapterTile[], selected: number): string {
+export function railHtml(
+  groups: readonly ChapterGroup[],
+  tiles: readonly ChapterTile[],
+  selected: number,
+  bestTimeOf: (id: string) => number | null = () => null,
+): string {
   const indexOf = new Map(tiles.map((t, i) => [t.id, i]));
   return groups
     .map((group) => {
       const cards = group.tiles
-        .filter((t) => indexOf.get(t.id) !== selected)
-        .map((t) => cardHtml(t, indexOf.get(t.id) ?? -1))
+        .map((t) => {
+          const i = indexOf.get(t.id) ?? -1;
+          return cardHtml(t, i, i === selected, t.cleared ? bestTimeOf(t.id) : null);
+        })
         .join('');
       if (!cards) return '';
       return (

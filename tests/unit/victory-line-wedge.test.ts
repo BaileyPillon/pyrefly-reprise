@@ -13,7 +13,7 @@ import type { BattleResult } from '../../src/battle/common/types.ts';
 import { CHAPTERS, getChapter, type ChapterId } from '../../src/data/encounters.ts';
 import { measuredPortraitIds } from '../../src/ui/common/portrait.ts';
 import { buildMemberRows, leaderId } from '../../src/ui/common/resultsMath.ts';
-import { victoryLine, wedgeFigureId } from '../../src/ui/common/victoryLine.ts';
+import { victoryLine, wedgeFallenArt, wedgeFigureId, wedgePortraitId } from '../../src/ui/common/victoryLine.ts';
 
 function result(outcome: BattleResult['outcome']): BattleResult {
   return {
@@ -58,8 +58,10 @@ describe('VL-1 option 2: the speaker stands in the wedge (both games)', () => {
         const root = render(chapter.id, 'victory', attempts);
         const quip = root.querySelector<HTMLElement>('.rres__quip');
         const speaker = quip?.dataset.speaker;
-        if (speaker) expect(wedgeId(root), `${chapter.id} attempt ${attempts}`).toBe(speaker);
-        else expect(wedgeId(root) ?? leaderId(chapter)).toBe(leaderId(chapter));
+        // FOC17-01: the art is the chapter's own game's (an FFX-2 girl's -x2 likeness).
+        const lead = leaderId(chapter)!;
+        if (speaker) expect(wedgeId(root), `${chapter.id} attempt ${attempts}`).toBe(wedgePortraitId(speaker, chapter));
+        else expect(wedgeId(root) ?? wedgePortraitId(lead, chapter)).toBe(wedgePortraitId(lead, chapter));
         root.remove();
       }
     });
@@ -69,7 +71,7 @@ describe('VL-1 option 2: the speaker stands in the wedge (both games)', () => {
         const root = render(chapter.id, 'defeat', attempts);
         expect(root.querySelector('.rres__quip')).toBeNull();
         const img = root.querySelector('.rres__ink img.rres__hero--fallen');
-        expect(img?.getAttribute('src')).toContain(`art/characters/${leaderId(chapter)}/hurt.png`);
+        expect(img?.getAttribute('src')).toContain(wedgeFallenArt(chapter, leaderId(chapter)!)[0]);
         root.remove();
       }
     });
