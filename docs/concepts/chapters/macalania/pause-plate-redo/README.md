@@ -1,6 +1,8 @@
 # Chapter VII pause plate: redo options (FFX only)
 
-**Options only. Nothing is installed.** `public/art/pause/macalania.*` is still the plate that
+**Installed 2026-09-25: A2** (Bailey: "All your recommendations"; the independent judge passed A2 at 7.4,
+`JUDGE-A2.md`). Locked as `chapter:macalania-pause:2026-09-25`. The text below is the options round as it
+was. Originally: options only; `public/art/pause/macalania.*` was the plate that
 scored 6. The sheet for Bailey is `../unlock/pause-plate-redo.jpg` (`.html`).
 
 **Game case (rule 14): FFX only.** This is human-form Seymour in Macalania Temple, Chapter VII

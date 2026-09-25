@@ -1038,6 +1038,20 @@
     "mtime": "2026-09-25T14:36:54.194984Z",
     "approved": "2026-09-25"
    }
+  },
+  "chapter:macalania-pause:2026-09-25": {
+   "words": "All your recommendations",
+   "note": "Bailey, 2026-09-25 ~18:30 EDT, verbatim \"All your recommendations\", accepting the driver's Chapter VII recommendation: the pause plate redo A2 if an independent judge passes it, otherwise A (docs/concepts/chapters/macalania/unlock/pause-plate-redo.jpg). The independent judge passed A2 at 7.4 (docs/concepts/chapters/macalania/pause-plate-redo/JUDGE-A2.md; worst: seams 6.5, a 4-level step at the box a2.py restored around the mouth, not visible in the master or at game size). The PNG is option A2 byte for byte; the .2x.webp is its RealESRGAN_x4plus x4 -> lanczos 0.5 master (q88, scripts/master_a2.py); the sidecar carries the measured focal 0.45/0.43. Replaced: pause/macalania.png sha 68fa5225fc1a (the 2026-09-22 CANDIDATE, production judge 6, never locked). FFX only, Chapter VII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-ch7-pause-plate/ (replaced/, installed/).",
+   "public/art/pause/macalania.png": {
+    "sha256": "446b5b7e50c15dc4cbc5e5ea359adcdb3cb0fecf21669e3ff3ee37fba04eb11f",
+    "mtime": "2026-09-25T22:51:18.207Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/pause/macalania.2x.webp": {
+    "sha256": "581741cd6233ccc8bffd46828405f57c974c857e6d2dc95e295c551c3b2cc0eb",
+    "mtime": "2026-09-25T22:51:18.214Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
