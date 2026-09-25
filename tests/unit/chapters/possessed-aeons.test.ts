@@ -267,3 +267,18 @@ describe('OPEN ITEM — possessed-aeon Attack/Specials currently always hit', ()
     expect(hitChance(enemyUser, partyTarget, bladeBlitz)).not.toBeNull();
   });
 });
+
+describe('possessed aeons show their name capitalised in battle (round 11)', () => {
+  // `src/battle/ffx/setup.ts` names the combatant from `forms[0].name`, so the
+  // turn order read 'Possessed valefor' while the record said 'Possessed Valefor'.
+  it('every link names the aeon the same way in the record and its form', async () => {
+    const { buildPossessedAeonChain } = await import('../../../src/data/ffx/enemies/braskas-final-aeon.ts');
+    const chain = buildPossessedAeonChain(['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut', 'yojimbo', 'anima', 'magus-sisters']);
+    const aeons = chain.flatMap((g) => g.enemies).filter((e) => e.id.startsWith('possessed-'));
+    expect(aeons.length).toBeGreaterThan(0);
+    for (const e of aeons) {
+      expect(e.forms?.[0]?.name, e.id).toBe(e.name);
+      expect(e.name, e.id).toMatch(/^Possessed [A-Z]/);
+    }
+  });
+});

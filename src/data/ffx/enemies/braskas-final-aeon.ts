@@ -331,7 +331,7 @@ function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): E
       'auto-life': 255,
     },
     immunityFlags: ['boss', 'immune-to-scan'],
-    forms: [{ name: `Possessed ${aeonId.replace('possessed-', '')}`, spriteKey: aeonId.replace('possessed-', ''), hp: 1 }],
+    forms: [{ name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`, spriteKey: aeonId.replace('possessed-', ''), hp: 1 }],
     aiScriptId: 'possessed-aeon',
     rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] }, // §2.3 — no AP/gil for these
     abilityIds: POSSESSED_AEON_ABILITY_IDS[aeonId],
