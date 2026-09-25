@@ -41,6 +41,7 @@ const OWN_TACTIC: Record<string, string> = {
   'evrae-airship': 'evrae',
   'yojimbo-cavern': 'yojimboCavern',
   'ffx2-trema': 'ffx2Trema',
+  'ffx2-den-of-woe': 'ffx2DenOfWoe',
 };
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS];
