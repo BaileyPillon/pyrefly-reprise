@@ -1,5 +1,5 @@
 /**
- * Chapter 6 scripts — Seymour + Anima, Macalania Temple antechamber.
+ * Chapter VII scripts — Seymour + Anima, Macalania Temple antechamber.
  * New scene tag **E8** (the writing bible's §0.1 table predates this chapter;
  * `research/ffx-seymour-anima-macalania.md` §13 row 5 records that gap).
  *
@@ -49,7 +49,9 @@
  * `music.battle` and the formation's start `musicCue`. `scene-macalania-temple`
  * still does not exist — an unregistered cue throws in the cutscene runner
  * (`tests/unit/audio-story-cues.test.ts`) — so the establishing `music()` call
- * stays routed to Chapter 1's `scene-gagazet` until that cue lands too.
+ * plays `MACALANIA_SCENE_CUE` (`src/data/chapter-macalania-ship.ts`), today
+ * Chapter 1's `scene-gagazet`, the same constant the chapter's `music.scene`
+ * reads, so the two switch together when Bailey's pick lands.
  *
  * The pre-battle **Trigger Commands** (Talk: Tidus +10 STR, Yuna +10 MDef,
  * Wakka +10 MDef, §9.6 beat 8) are `TriggerCommand`s fired from the battle
@@ -62,14 +64,13 @@
  *   2. Every `say` in a mid script carries an explicit `auto` — a mid-battle
  *      beat runs inside a live fight on a 30 s presenter budget.
  *
- * **Not registered anywhere.** `src/story/registry.ts`, `src/story/index.ts`
- * and `src/data/encounters.ts` are integrator-only
- * [docs/plans/chapter-macalania-review.md §8.1]. The integrator adds this
- * chapter's key alongside `encounters.ts`, and `AI_EMITTED_TRIGGERS` gains an
- * empty entry — this chapter emits no AI-side script triggers.
+ * **Registered** in `src/story/registry.ts` with the chapter (integrator pass,
+ * `docs/handoff/chapter-macalania.md`); `AI_EMITTED_TRIGGERS` holds an empty
+ * entry — this chapter emits no AI-side script triggers.
  */
 
 import type { ChapterScripts } from '../dsl.ts';
+import { MACALANIA_SCENE_CUE } from '../../data/chapter-macalania-ship.ts';
 import {
   battleStart,
   beat,
@@ -103,10 +104,10 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
   pre: [
     // §9.1 — the room is shown before it is fought in. Light through ice,
     // the Chamber door glowing behind the enemy line, and no one in it.
-    // Integrator: the preflight's own cue (`scene-macalania-temple`, §6.3) is
-    // an unbuilt composition, so this routes Chapter 1's scene cue until
-    // Bailey picks one by ear [docs/handoff/chapter-macalania.md].
-    music('scene-gagazet', 1400),
+    // The preflight's own cue (`scene-macalania-temple`, §6.3) is an unbuilt
+    // composition, so this plays the stand-in until Bailey picks a sketch by
+    // ear [src/data/chapter-macalania-ship.ts].
+    music(MACALANIA_SCENE_CUE, 1400),
     camera('idle', 0),
     fade('clear', 1400),
     sfx('fayth-hum'),

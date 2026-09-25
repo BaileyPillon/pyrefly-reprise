@@ -775,6 +775,35 @@
     "approved": "2026-09-25"
    }
   },
+  "chapter:macalania-anima:2026-09-25": {
+   "words": "I'll go with your recommendations for all",
+   "note": "Bailey, 2026-09-24 ~14:40 EDT (D-108, FA11): public/art/characters/anima/* is approved and may be derived from directly; restated for Chapter VII on 2026-09-25 ~00:40 EDT (D-150, \"Keep the stone look, use Anima's approved paintings\"). D-141 recorded the hash as owed with the Chapter VII approval; this set is that record, the whole folder as installed (idle 2026-09-18, attack and overdrive 2026-09-19, hurt and ko 2026-09-22). The ko painting was judged 5 (reads as a lean, not a collapse) and is flagged for Bailey on docs/concepts/chapters/macalania/unlock/README.md; D-141 did not except it, so it is locked like the rest and is redone only on his word. Nothing was rendered or replaced. FFX only (Chapter VII's boss Anima; the party's own summon shares the folder). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania-anima/.",
+   "public/art/characters/anima/idle.png": {
+    "sha256": "9a91c5cf4545b0f1010d9c7d61a9356862e81c276685b2656de3b528b887dba9",
+    "mtime": "2026-09-18T14:16:18.422Z",
+    "approved": "2026-09-24"
+   },
+   "public/art/characters/anima/attack.png": {
+    "sha256": "bb93942f126dbc9686ace1d7cafdcf94eb74017a53ccb3aea8702ed5647775bd",
+    "mtime": "2026-09-19T17:57:40.749Z",
+    "approved": "2026-09-24"
+   },
+   "public/art/characters/anima/overdrive.png": {
+    "sha256": "b619046beee12fcc92c8ecab7d41c7f8a126349f18dba7a9c199f236fb1d10a7",
+    "mtime": "2026-09-19T17:57:40.871Z",
+    "approved": "2026-09-24"
+   },
+   "public/art/characters/anima/hurt.png": {
+    "sha256": "594df2ce16c7c3f0afde92b70113f7a409bff640266c311818d864e07ac90eb6",
+    "mtime": "2026-09-22T19:55:44.194Z",
+    "approved": "2026-09-24"
+   },
+   "public/art/characters/anima/ko.png": {
+    "sha256": "bae94bab3c0a37d479a145e8fc556e2e9f21acaddc3729c5bb9b740b7bbf1494",
+    "mtime": "2026-09-22T19:56:19.903Z",
+    "approved": "2026-09-24"
+   }
+  },
   "chapter:trema:2026-09-25": {
    "words": "I'll go with all your recommendations",
    "note": "Bailey, 2026-09-25 ~01:40 EDT, answering every Chapter XIII recommendation (O-1 A priest with the review's torn robe, O-2 A gold armoured beast, O-2b link staged, O-3 B Cloister 100 repaint; Review corrections applied; docs/concepts/chapters/trema/README.md, docs/plans/chapter-trema-review.md). Installed in 6896b272 (docs/concepts/chapters/trema/INSTALLED.md). Judge: docs/concepts/chapters/trema/production/JUDGE.md, independent 1:1 judge, bar 7, all five PASS (Trema idle 7.7, Trema cast 7.1, Paragon idle 7.7, Paragon cast 7.1, plate 7.6; worst: Trema cast shoulder-seam artefacts, Paragon cast light edge fringe and rigid pitch, the plate's banners carry no Yu Yevon likeness, which stays Bailey's call). The link (O-2b) is staging, not a painting, and is not in this set. FFX-2 only, Chapter XIII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-trema/.",

@@ -10,24 +10,25 @@
  * `src/data/encounters.ts` widened `ChapterId` and the chapter took number 7
  * (display order, after the six already registered — the D-018 rule Leblanc
  * followed). The chapter stays LOCKED as COMING on chapter select until
- * Bailey approves its art.
+ * Bailey's two open picks land (`./chapter-macalania-ship.ts`).
  *
  * `heroArt` is the installed pause plate, `public/art/pause/macalania.png`
- * (+ `.2x.webp`; its sidecar says CANDIDATE, hero.550003, IP-Adapter on the
- * installed Seymour idle head). It used to name
- * `pause/ch7-seymour-anima-macalania`, which was never rendered, so the tab
- * fell back to `portraits/seymour.png` (the Flux-era face) and the plate was
- * wired to nothing (critic pass on 62b4927). `heroArtFallback` stays the
- * portrait. These are CANDIDATE assets (`docs/target/targets.json`): none of
- * Macalania's art is Bailey-approved yet.
+ * (+ `.2x.webp`). It is the one Chapter VII painting D-141 did not approve: its
+ * redo options wait on Bailey, and the pick installs over the same path, so this
+ * id does not change. It used to name `pause/ch7-seymour-anima-macalania`, which
+ * was never rendered (critic pass on 62b4927). `heroArtFallback` (shown only if
+ * the plate fails to load) is the approved human-form speaker portrait
+ * `portraits/seymour-macalania.png` (D-065), not the Flux-era `portraits/seymour.png`.
  *
  * `musicKeys` name the cues the chapter routes (`./chapter-seymour-anima-macalania.ts`
- * `music`): Chapter 1's `scene-gagazet` as a recorded stopgap for the unbuilt
- * `scene-macalania-temple` (preflight §6.3), the chapter's own battle cue
- * `boss-seymour-macalania` (2026-09-24, FFX only), and the shared `victory-ffx`.
+ * `music`): `MACALANIA_SCENE_CUE`, today Chapter 1's `scene-gagazet` as a recorded
+ * stopgap for the unbuilt `scene-macalania-temple` (preflight §6.3), the chapter's
+ * own battle cue `boss-seymour-macalania` (2026-09-24, FFX only), and the shared
+ * `victory-ffx`.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
+import { MACALANIA_SCENE_CUE } from './chapter-macalania-ship.ts';
 
 /**
  * Seymour and Anima — Macalania Temple.
@@ -47,7 +48,7 @@ export const SEYMOUR_ANIMA_MACALANIA_META: ChapterMeta = {
     "through the chamber floor to make the answer for him. What she does to a party is not what she " +
     'does to the aeon summoned to stand in front of them, and the fight is built entirely out of that gap.',
   heroArt: 'pause/macalania',
-  heroArtFallback: 'portraits/seymour.png',
+  heroArtFallback: 'portraits/seymour-macalania.png',
   quote: {
     text: 'You already know the ending. I am only asking you to stop pretending otherwise.',
     speaker: 'Seymour',
@@ -77,7 +78,7 @@ export const SEYMOUR_ANIMA_MACALANIA_META: ChapterMeta = {
     { image: 'characters/seymour-macalania/idle.png', caption: 'unhurried, still unhurried' },
   ],
   focalCharacterId: 'seymour',
-  musicKeys: ['scene-gagazet', 'boss-seymour-macalania', 'victory-ffx'],
+  musicKeys: [MACALANIA_SCENE_CUE, 'boss-seymour-macalania', 'victory-ffx'],
 };
 
 export default SEYMOUR_ANIMA_MACALANIA_META;

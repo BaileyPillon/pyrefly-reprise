@@ -11,10 +11,10 @@
  * type-only, so there is no runtime cycle.
  *
  * **Registered, playable through `window.__pyrefly.gotoChapter`, and LOCKED
- * on chapter select** as a COMING card until Bailey approves its art (every
- * Macalania painting is CANDIDATE; Anima's arrival is built to the driver's
- * recommendation, INFERRED in `docs/target/targets.json`). The lock is one
- * line in `src/app/screens/frontend/comingChapters.ts`'s
+ * on chapter select** as a COMING card. The art is approved (D-141) except the
+ * pause plate, whose redo is Bailey's pick, and the scene cue is his pick by
+ * ear; `./chapter-macalania-ship.ts` lists both and where each lands. The lock
+ * is one line in `src/app/screens/frontend/comingChapters.ts`'s
  * `LOCKED_CHAPTER_IDS`; see `docs/handoff/chapter-macalania.md`.
  *
  * Number 7: display order, after the six chapters already registered — the
@@ -28,12 +28,14 @@
  * §6.3, research §9.8: this fight's own theme, NOT the Flux chapter's
  * `boss-seymour`). A CANDIDATE until Bailey's ear rules on the full cue (hard
  * rule 13). The scene cue the preflight also names, `scene-macalania-temple`,
- * does not exist yet, so the scene still falls back to Chapter 1's
- * `scene-gagazet` — a recorded stopgap, not a claim — and the victory is the
- * shared FFX fanfare `victory-ffx`.
+ * does not exist yet, so the scene plays `MACALANIA_SCENE_CUE`
+ * (`./chapter-macalania-ship.ts`), today Chapter 1's `scene-gagazet` — a
+ * recorded stopgap, not a claim — and the victory is the shared FFX fanfare
+ * `victory-ffx`.
  */
 
 import type { Chapter } from './encounters.ts';
+import { MACALANIA_SCENE_CUE } from './chapter-macalania-ship.ts';
 import { macalaniaBuild } from './ffx/builds/macalania.ts';
 import { seymourAnimaMacalaniaGroup } from './ffx/enemies/seymour-anima-macalania.ts';
 import { seymourAnimaMacalaniaScripts } from '../story/scripts/seymour-anima-macalania.ts';
@@ -59,8 +61,9 @@ export const SEYMOUR_ANIMA_MACALANIA: Chapter = {
   enemyGroupRef: seymourAnimaMacalaniaGroup,
   scriptsRef: seymourAnimaMacalaniaScripts,
   music: {
-    // Scene: Chapter 1's cue as a recorded stopgap — see the file doc above.
-    scene: 'scene-gagazet',
+    // Scene: Chapter 1's cue as a recorded stopgap until Bailey's pick lands
+    // (`./chapter-macalania-ship.ts`) — see the file doc above.
+    scene: MACALANIA_SCENE_CUE,
     // The chapter's own battle cue (FFX only), Bailey's pick of sketch A.
     battle: 'boss-seymour-macalania',
     victory: 'victory-ffx',

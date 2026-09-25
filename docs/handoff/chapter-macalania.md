@@ -11,6 +11,78 @@
 > guide, tactic and meta (`27ed39e`, `chapter-macalania-guide.md`) and the
 > scene with Anima's arrival (`823450d`, `chapter-macalania-scene.md`).
 
+## Ship layer and unlock readiness, 2026-09-25 (branch chapter-macalania-ship-0925)
+
+**Game case: FFX only** [AGENTS.md rule 14]: Chapter VII's own record, meta, script, tactic and
+paperwork. No shared file changed, and no boss number changed.
+
+**Where it stands.** Everything that needs no pick from Bailey is built. The chapter stays locked
+behind **one line**, `'seymour-anima-macalania'` in `LOCKED_CHAPTER_IDS`
+(`src/app/screens/frontend/comingChapters.ts`). The driver deletes that line after Bailey's two
+picks land. `src/data/chapter-macalania-ship.ts` lists the two picks, where their candidates are
+and where each one lands in code. `tests/unit/chapters/macalania-ship.test.ts` pins that list, so a
+half-switched unlock fails a test.
+
+| Open pick (Bailey only) | Candidates | Lands |
+|---|---|---|
+| Pause plate redo (D-141 excepted it) | `docs/concepts/chapters/macalania/unlock/pause-plate-redo.jpg`: current, A (judged 7), **A2** (A plus the judge's two notes, hair colour and veins, by pixel edits; **not judged yet**, recommended if it passes), B (6), C (6). Each has a real pause capture | installed over `public/art/pause/macalania.*` in place, so `heroArt` does not change; then the lock in `approved-hashes.json` |
+| Scene cue `scene-macalania-temple` (preflight §6.3; by ear, rule 13) | three sketches in `docs/audio/audition.html` (section `macalania-scene`, lines 80 to 146): A "The Frozen Temple", B "The Wedding Proposal", C "Crystal and Pyreflies", files in `docs/audio/sketches/2026-09-24/` | the picked sketch is composed and registered as a track, then `MACALANIA_SCENE_CUE` names it. The record's `music.scene`, the pre-battle `music()` step and the meta's `musicKeys` all read that one constant |
+
+Neither pick blocks the unlock technically: the stand-in plate and the stand-in cue (Chapter I's
+`scene-gagazet`) both work today.
+
+**Built in this pass:**
+
+- `src/data/chapter-macalania-ship.ts`: the scene cue as one constant (`MACALANIA_SCENE_CUE`, the
+  stand-in until the pick is registered) and `MACALANIA_OPEN_PICKS`.
+- The pause fallback (`heroArtFallback`) is now the approved Chapter VII speaker portrait,
+  `portraits/seymour-macalania.png` (D-065), not the Flux-era face.
+- Anima's approved folder is locked as `chapter:macalania-anima:2026-09-25` in
+  `docs/target/approved-hashes.json` (D-108, D-141 said the hash was owed, D-150). Nothing was
+  rendered or replaced. The ko painting (judged 5) is locked with the rest; D-141 did not except it,
+  and it is flagged for Bailey on `unlock/README.md`.
+- Option A2 for the pause plate and its real pause capture (`unlock/img/redo-a2*.{jpg,png}`,
+  `unlock/img/redo-pause-a2.jpg`), and the re-rendered options sheet.
+- **The intended line cures Confusion** (tactic rule 1b, `src/engine/tactics/seymour-anima-macalania.ts`).
+  The Guardians' Shremedy confuses at 50% (research §2.3), and the line had no answer, so a confused
+  Tidus attacked the party. It now uses a Remedy or Esuna (§8.7, §8.9, §10 lesson 8). Intended
+  168/200 -> 189/200, advisor 161 -> 192 (`docs/plans/macalania-bench.md`). Player side only.
+- The 200-seed bench (`tests/unit/chapters/macalania-bench.test.ts`) and its write-up.
+
+### Unlock rehearsal (real keys, the lock removed in the page only)
+
+`docs/concepts/chapters/macalania/unlock/rehearsal/rehearse.mjs` answers the dev server's
+`comingChapters.ts` with the lock line removed (a Playwright route), which is exactly the driver's
+one-line unlock, and plays from the title with real keys. Nothing on disk changes. Own Vite on port
+5700 (`--strictPort`, HMR and the watcher off through a scratch config), `PYREFLY_BROWSER=gpu`
+(ANGLE on the RTX 5070 Ti, D3D11); the server was stopped by its PID afterwards.
+
+| Run | Result |
+|---|---|
+| 1600x900, `win` | title, briefing, chapter select (VII between III and VIII, the arrows reach it), party prep, the pre-battle scene (30 lines), the battle (Anima's arrival, Seymour's dismissal, Seymour down, 49 turns), results (Victory, NEW BEST), the aftermath (19 lines), the board with VII **cleared**, and after a reload VII still cleared. 0 console errors, 0 HTTP errors |
+| 390x844, `phone` | the same flow to the board with VII cleared. 0 console errors, 0 HTTP errors. Battle-HUD text at 14 px or more in every menu, submenu and target step sampled, except the four 9 px reserve-member letters in the Switch submenu (below) |
+| 1600x900, `pause` | the pause CHAPTER tab with A2 answered in the page only (`unlock/img/redo-pause-a2.jpg`) |
+
+Frames and logs: `unlock/rehearsal/`. Music heard in order: title, chapter-select, `scene-gagazet`
+(prep and pre-battle scene, the stand-in), `boss-seymour-macalania`, `victory-ffx`.
+
+### Seen in the rehearsal, not fixed (for the driver)
+
+1. **Phone: Anima's arrival is off the frame.** At 390x844 the phone field shows the party while
+   Anima rises (`rehearsal/phone-390x844-07-anima-landed.jpg`), and at the first menu Seymour and
+   one Guardian are off the right edge (`phone-390x844-04-first-menu.jpg`). `phoneFraming.ts` slides
+   the canvas only when a command menu is up, so a mid-battle arrival keeps the last slide. That
+   file is shared (both games), so a fix belongs to the phone HUD track, with options first
+   (rule 9). The approved arrival (D-033) reads fully at 1600x900.
+2. **Phone: the results screen is the desktop layout scaled down** (text 5 to 9 px,
+   `phone-390x844-10-results.jpg`). This is shared, not Chapter VII's; 8bee6347 already lists it
+   as open.
+3. **Phone: the Switch submenu's reserve-member letters are 9 px** (`ffx-portrait-fallback`; W, A,
+   L, K). This is FFX-wide, not Chapter VII's.
+4. **Chapter select, BOSS line:** "Guado Guardian A + Seymour + Guado Guardian B"
+   (`bossNames` joins the first formation's names by design), so Anima, the chapter's title boss,
+   is not named. Changing it means a per-chapter field on a shared screen: polish, for the driver.
+
 ## Repair pass, 2026-09-25 (the verifier's two refuted items)
 
 **Game case.** The Sensor release is the FFX HUD's (every FFX chapter; FFX-2's
@@ -154,8 +226,8 @@ The paper preflight for the DEEP part is the addendum at the end of
 narratively it precedes Chapter 1). `window.__pyrefly.gotoChapter`, the flow,
 party prep, the cutscene, the battle, the guide and tactic, the pause meta and
 the results screen all reach it. **Chapter select shows it as a locked COMING
-card**, because every Macalania painting is CANDIDATE and Anima's arrival is
-built to a recommendation, not a pick.
+card**. (2026-09-22 reason: every painting was CANDIDATE. Today's reason: Bailey's two open
+picks, the pause-plate redo and the scene cue; see "Ship layer and unlock readiness" above.)
 
 ### The one-line unlock
 

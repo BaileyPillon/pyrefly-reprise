@@ -8,7 +8,15 @@
 >   is in `../pause-plate-redo/`. Nothing is installed yet.
 > - Question 2: option A (a petrified Guardian shatters; an ordinary defeat yields). Recording
 >   and building that answer belongs to another track, not the art track.
-> - The Anima hurt/ko hash noted below is still not recorded.
+> - Anima's folder (idle, attack, overdrive, hurt, ko) is now locked as set
+>   `chapter:macalania-anima:2026-09-25` (2026-09-25, ship pass; backup
+>   `D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania-anima/`). The ko (judged 5)
+>   is locked with the rest and is redone only on Bailey's word.
+> - The pause-plate sheet now has a fifth row, **A2** (A with the judge's two notes fixed by pixel
+>   edits), with its real pause capture. A2 is not judged yet. The unlock waits on this pick and on
+>   the scene cue (`src/data/chapter-macalania-ship.ts`; `docs/handoff/chapter-macalania.md`,
+>   "Ship layer and unlock readiness"). The rehearsal with the lock removed in the page only is in
+>   `rehearsal/`.
 > - Hash provenance (correction, 2026-09-25): the sheet image `art-approval.jpg` shows no
 >   hashes. The five character locks were checked against the 12-character hashes in the table
 >   below. The backdrop had no hash listed when the sheet was made; its lock was taken from the
