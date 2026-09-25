@@ -1,0 +1,297 @@
+{
+  "chapter": "seymour-flux",
+  "viewport": "390x844",
+  "menu": {
+    "pending": true,
+    "actor": "tidus",
+    "state": "top",
+    "open": true,
+    "suspended": false,
+    "target": null
+  },
+  "legibilityMenu": {
+    "total": 70,
+    "under14": 70,
+    "smallest": [
+      {
+        "t": "E",
+        "px": 2.6
+      },
+      {
+        "t": "enemy move",
+        "px": 2.6
+      },
+      {
+        "t": "OD",
+        "px": 3
+      },
+      {
+        "t": "OD",
+        "px": 3
+      },
+      {
+        "t": "Overdrive",
+        "px": 3
+      },
+      {
+        "t": "I",
+        "px": 3
+      },
+      {
+        "t": "hide",
+        "px": 3
+      },
+      {
+        "t": "Tidus",
+        "px": 3.4
+      },
+      {
+        "t": "Seymour Flux",
+        "px": 3.4
+      },
+      {
+        "t": "Mortiorchis",
+        "px": 3.4
+      },
+      {
+        "t": "Kimahri",
+        "px": 3.4
+      },
+      {
+        "t": "Yuna",
+        "px": 3.4
+      }
+    ],
+    "largest": [
+      {
+        "t": "K",
+        "px": 7.3
+      },
+      {
+        "t": "N",
+        "px": 12.2
+      },
+      {
+        "t": "hide moves",
+        "px": 12.2
+      },
+      {
+        "t": "PAUSE",
+        "px": 13.3
+      }
+    ]
+  },
+  "hud": {
+    "party": [
+      {
+        "id": "tidus",
+        "name": "Tidus",
+        "hp": 2420,
+        "maxHp": 2420,
+        "mp": 115,
+        "maxMp": 115,
+        "od": {
+          "gauge": 50,
+          "mode": "warrior",
+          "unlockedModes": [
+            "stoic",
+            "warrior"
+          ],
+          "unlockedOverdriveIds": [
+            "spiral-cut"
+          ]
+        },
+        "atb": null
+      },
+      {
+        "id": "yuna",
+        "name": "Yuna",
+        "hp": 1500,
+        "maxHp": 1500,
+        "mp": 270,
+        "maxMp": 270,
+        "od": {
+          "gauge": 40,
+          "mode": "healer",
+          "unlockedModes": [
+            "stoic",
+            "healer"
+          ],
+          "unlockedOverdriveIds": [
+            "grand-summon"
+          ]
+        },
+        "atb": null
+      },
+      {
+        "id": "kimahri",
+        "name": "Kimahri",
+        "hp": 2310,
+        "maxHp": 2310,
+        "mp": 130,
+        "maxMp": 130,
+        "od": {
+          "gauge": 100,
+          "mode": "stoic",
+          "unlockedModes": [
+            "stoic"
+          ],
+          "unlockedOverdriveIds": [
+            "jump",
+            "mighty-guard",
+            "white-wind"
+          ]
+        },
+        "atb": null
+      }
+    ],
+    "enemies": [
+      {
+        "id": "seymour-flux",
+        "name": "Seymour Flux",
+        "hp": 70000,
+        "maxHp": 70000
+      },
+      {
+        "id": "mortiorchis",
+        "name": "Mortiorchis",
+        "hp": 4000,
+        "maxHp": 4000
+      }
+    ],
+    "pending": "tidus",
+    "commands": [
+      "Attack",
+      "Cheer",
+      "Provoke",
+      "Haste",
+      "Hastega",
+      "Slow",
+      "Delay Attack",
+      "Delay Buster",
+      "Flee",
+      "Talk",
+      "Potion",
+      "Hi-Potion",
+      "X-Potion",
+      "Mega-Potion",
+      "Phoenix Down",
+      "Mega Phoenix",
+      "Holy Water",
+      "Remedy",
+      "Soft",
+      "Antidote",
+      "Eye Drops",
+      "Echo Screen",
+      "Ether",
+      "Turbo Ether",
+      "Elixir",
+      "Al Bhed Potion",
+      "Grenade",
+      "Frag Grenade",
+      "Fire Gem",
+      "Ice Gem",
+      "Lightning Gem",
+      "Water Gem",
+      "Poison Fang",
+      "Light Curtain",
+      "Lunar Curtain",
+      "Star Curtain",
+      "Healing Water",
+      "Defend",
+      "Auron",
+      "Wakka",
+      "Lulu",
+      "Rikku"
+    ],
+    "text": "Tidus T Seymour Flux S Mortiorchis M Kimahri K Yuna Y Seymour Flux S TALK ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ▼ Physical damage T Tidus 2420 /2420 115 /115 OD Y Yuna 1500 /1500 270 /270 OD K Kimahri 2310 /2310 130 /130 OVERDRIVE Mortiorchis HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I HIDE Seymour Flux NEXT TIDUS Hastega → the party G HIDE GUIDE N HIDE MOVES E ENEMY MOVE Seymour Flux PAUSE",
+    "buttons": [
+      "Ihide",
+      "Ghide guide",
+      "Nhide moves",
+      "Eenemy move",
+      "PAUSE"
+    ]
+  },
+  "targetStep": {
+    "pending": true,
+    "actor": "tidus",
+    "state": "target",
+    "open": true,
+    "suspended": false,
+    "target": "mortiorchis"
+  },
+  "legibilityTarget": {
+    "total": 71,
+    "under14": 70,
+    "smallest": [
+      {
+        "t": "E",
+        "px": 2.6
+      },
+      {
+        "t": "enemy move",
+        "px": 2.6
+      },
+      {
+        "t": "OD",
+        "px": 3
+      },
+      {
+        "t": "OD",
+        "px": 3
+      },
+      {
+        "t": "Overdrive",
+        "px": 3
+      },
+      {
+        "t": "I",
+        "px": 3
+      },
+      {
+        "t": "hide",
+        "px": 3
+      },
+      {
+        "t": "Tidus",
+        "px": 3.4
+      },
+      {
+        "t": "Seymour Flux",
+        "px": 3.4
+      },
+      {
+        "t": "Mortiorchis",
+        "px": 3.4
+      },
+      {
+        "t": "Kimahri",
+        "px": 3.4
+      },
+      {
+        "t": "Yuna",
+        "px": 3.4
+      }
+    ],
+    "largest": [
+      {
+        "t": "N",
+        "px": 12.2
+      },
+      {
+        "t": "hide moves",
+        "px": 12.2
+      },
+      {
+        "t": "PAUSE",
+        "px": 13.3
+      },
+      {
+        "t": "Mortiorchis",
+        "px": 19
+      }
+    ]
+  },
+  "errors": []
+}

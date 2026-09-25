@@ -1,0 +1,286 @@
+{
+  "chapter": "ffx2-bahamut",
+  "viewport": "390x560",
+  "menu": {
+    "pending": true,
+    "actor": "yuna",
+    "state": null,
+    "open": true,
+    "x2rows": [
+      "White Magic",
+      "Change",
+      "Item"
+    ],
+    "reticles": 0,
+    "suspended": false,
+    "target": null
+  },
+  "legibilityMenu": {
+    "total": 59,
+    "under14": 59,
+    "smallest": [
+      {
+        "t": "Scripted",
+        "px": 2.4
+      },
+      {
+        "t": "5% HP",
+        "px": 2.4
+      },
+      {
+        "t": "95% to hit",
+        "px": 2.4
+      },
+      {
+        "t": "Damage",
+        "px": 2.6
+      },
+      {
+        "t": "Also",
+        "px": 2.6
+      },
+      {
+        "t": "E",
+        "px": 2.6
+      },
+      {
+        "t": "hide",
+        "px": 2.6
+      },
+      {
+        "t": "Rikku",
+        "px": 2.7
+      },
+      {
+        "t": "Bahamut",
+        "px": 2.8
+      },
+      {
+        "t": "acts next",
+        "px": 2.8
+      },
+      {
+        "t": "/690",
+        "px": 3
+      },
+      {
+        "t": "/130",
+        "px": 3
+      }
+    ],
+    "largest": [
+      {
+        "t": "the party",
+        "px": 12.2
+      },
+      {
+        "t": "N",
+        "px": 12.2
+      },
+      {
+        "t": "hide moves",
+        "px": 12.2
+      },
+      {
+        "t": "PAUSE",
+        "px": 13.3
+      }
+    ]
+  },
+  "hud": {
+    "party": [
+      {
+        "id": "yuna",
+        "name": "Yuna",
+        "hp": 690,
+        "maxHp": 690,
+        "mp": 130,
+        "maxMp": 130,
+        "od": null,
+        "atb": {
+          "ticks": 16362,
+          "required": 13207,
+          "gauge": 100,
+          "charging": null,
+          "recovery": 0
+        }
+      },
+      {
+        "id": "rikku",
+        "name": "Rikku",
+        "hp": 1734,
+        "maxHp": 1839,
+        "mp": 158,
+        "maxMp": 158,
+        "od": null,
+        "atb": {
+          "ticks": 11344,
+          "required": 17948,
+          "gauge": 63,
+          "charging": null,
+          "recovery": 0
+        }
+      },
+      {
+        "id": "paine",
+        "name": "Paine",
+        "hp": 1706,
+        "maxHp": 1706,
+        "mp": 67,
+        "maxMp": 67,
+        "od": null,
+        "atb": {
+          "ticks": 15736,
+          "required": 13725,
+          "gauge": 100,
+          "charging": null,
+          "recovery": 0
+        }
+      }
+    ],
+    "enemies": [
+      {
+        "id": "bahamut",
+        "name": "Bahamut",
+        "hp": 8400,
+        "maxHp": 8400
+      }
+    ],
+    "pending": "yuna",
+    "commands": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel",
+      "gunner",
+      "black-mage",
+      "Potion",
+      "Hi-Potion",
+      "Phoenix Down",
+      "Ether",
+      "Remedy",
+      "Holy Water",
+      "Lunar Curtain",
+      "Light Curtain"
+    ],
+    "text": "Bahamut SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1734 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 CRS WHITE MAGIC ◂ CHANGE ◂ ITEM ◂ WHITE MAGIC Open the White Magic menu. Bahamut NEXT YUNA G HIDE GUIDE Yuna Shell → the party N HIDE MOVES 105 BAHAMUT ACTS NEXT Attack SCRIPTED Physical non-elemental damage to one girl. DAMAGE RIKKU 93–105 5% HP 95% to hit ALSO The Mega Flare countdown is an action counter, not a clock — Slowing him slows it too E HIDE Bahamut PAUSE",
+    "buttons": [
+      "Ghide guide",
+      "Nhide moves",
+      "Ehide",
+      "PAUSE"
+    ]
+  },
+  "subStep": {
+    "pending": true,
+    "actor": "yuna",
+    "state": null,
+    "open": true,
+    "x2rows": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel"
+    ],
+    "reticles": 0,
+    "suspended": false,
+    "target": null
+  },
+  "targetStep": {
+    "pending": true,
+    "actor": "yuna",
+    "state": null,
+    "open": true,
+    "x2rows": [
+      "Cure",
+      "Shell",
+      "Protect",
+      "Esuna",
+      "Cura",
+      "Vigor",
+      "Dispel"
+    ],
+    "reticles": 0,
+    "suspended": false,
+    "target": null
+  },
+  "legibilityTarget": {
+    "total": 77,
+    "under14": 75,
+    "smallest": [
+      {
+        "t": "Scripted",
+        "px": 2.4
+      },
+      {
+        "t": "5% HP",
+        "px": 2.4
+      },
+      {
+        "t": "95% to hit",
+        "px": 2.4
+      },
+      {
+        "t": "Damage",
+        "px": 2.6
+      },
+      {
+        "t": "Also",
+        "px": 2.6
+      },
+      {
+        "t": "E",
+        "px": 2.6
+      },
+      {
+        "t": "hide",
+        "px": 2.6
+      },
+      {
+        "t": "Rikku",
+        "px": 2.7
+      },
+      {
+        "t": "Bahamut",
+        "px": 2.8
+      },
+      {
+        "t": "acts next",
+        "px": 2.8
+      },
+      {
+        "t": "/690",
+        "px": 3
+      },
+      {
+        "t": "/130",
+        "px": 3
+      }
+    ],
+    "largest": [
+      {
+        "t": "hide moves",
+        "px": 12.2
+      },
+      {
+        "t": "PAUSE",
+        "px": 13.3
+      },
+      {
+        "t": "Yuna",
+        "px": 22
+      },
+      {
+        "t": "Yuna",
+        "px": 24.2
+      }
+    ]
+  },
+  "errors": []
+}

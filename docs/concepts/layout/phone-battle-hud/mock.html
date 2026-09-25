@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Phone battle HUD options</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- CONCEPT mockup, not product code. Query: ?opt=A|B|C|R&game=ffx|ffx2&step=menu|target
+     Text is the real text read from the running game (capture/*.json); the field is the
+     real battle render at that field size (capture/*-plate.jpg). Nothing here is built. -->
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<style>
+  html, body { width: auto; height: auto; background: #04060b; }
+  body { margin: 0; overflow: hidden; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  #ph { position: relative; overflow: hidden; background: #04060b; color: var(--ig-paper); font-family: var(--ig-font-text); }
+  .plate { position: absolute; left: 0; display: block; }
+  .lab { font-family: var(--ig-font-display); font-weight: 700; text-transform: uppercase; letter-spacing: .14em; }
+  .num { font-family: var(--ig-font-numeral); font-weight: 700; }
+  .serif { font-family: var(--ig-font-serif); font-style: italic; font-weight: 600; }
+  .acc { color: var(--ig-accent); }
+  .tag { position: absolute; z-index: 99; padding: 3px 8px; background: rgba(11,10,18,.72); border-left: 3px solid var(--ig-accent);
+         font: 700 14px/1 var(--ig-font-display); letter-spacing: .24em; color: rgba(244,241,232,.8); }
+  .face { display: block; background-size: cover; background-position: 50% 14%; background-color: #1a1826; flex: none; }
+  .ink { background: rgba(11,10,18,.88); }
+  .hair { height: 1px; background: rgba(244,241,232,.14); }
+  /* turn order faces (FFX CTB) */
+  .ctb { display: flex; gap: 6px; align-items: flex-end; }
+  .ctb .t { position: relative; width: 40px; height: 40px; border: 2px solid rgba(244,241,232,.35); }
+  .ctb .t.en { border-color: var(--ig-blood); }
+  .ctb .t.now { width: 50px; height: 50px; border-color: var(--ig-accent); box-shadow: 0 0 0 2px rgba(11,10,18,.9), 0 0 12px rgba(227,185,74,.5); }
+  .ctb .t.hit { outline: 2px dashed var(--ig-paper); outline-offset: 2px; }
+  /* command rows */
+  .cmd { display: flex; align-items: center; justify-content: space-between; height: 46px; padding: 0 14px; margin-bottom: 6px;
+         background: var(--ig-paper); color: var(--ig-ink); transform: skewX(var(--ig-skew)); font: 700 16px/1 var(--ig-font-display); letter-spacing: .12em; text-transform: uppercase; }
+  .cmd > * { transform: skewX(var(--ig-skew-inverse)); }
+  .acmds .cmd { height: 42px; margin-bottom: 5px; font-size: 15px; letter-spacing: .08em; padding: 0 12px; }
+  .cmd.sel { background: var(--ig-accent); box-shadow: 0 0 0 2px rgba(11,10,18,.9), 0 6px 16px rgba(0,0,0,.5); }
+  .cmd.ink2 { background: rgba(11,10,18,.86); color: var(--ig-paper); border: 1px solid rgba(244,241,232,.2); }
+  .cmd .n { font: 700 15px/1 var(--ig-font-numeral); letter-spacing: 0; color: rgba(11,10,18,.6); }
+  .cmd.ink2 .n { color: rgba(244,241,232,.6); }
+  /* party */
+  .pr { display: grid; grid-template-columns: 40px 1fr auto; gap: 0 10px; align-items: center; padding: 6px 10px; }
+  .pr .face { width: 40px; height: 40px; grid-row: span 2; border: 2px solid rgba(244,241,232,.3); }
+  .pr.act .face { border-color: var(--ig-accent); }
+  .pr .nm { font: italic 700 19px/1 var(--ig-font-serif); }
+  .pr .hp { font: 700 19px/1 var(--ig-font-numeral); text-align: right; }
+  .pr .hp small { font-size: 14px; color: rgba(244,241,232,.55); }
+  .pr .mp { font: 700 15px/1 var(--ig-font-numeral); color: var(--ig-spira-sky); text-align: right; }
+  .bar { position: relative; height: 6px; background: rgba(244,241,232,.14); overflow: hidden; }
+  .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ig-gold); }
+  .bar.od i { background: linear-gradient(90deg, #b8862a, #e3b94a); }
+  .bar.full i { background: #ffd86b; box-shadow: 0 0 8px #ffd86b; }
+  .bar.atb i { background: #5fd07e; }
+  .bar.atb.full i { background: #8df0a6; box-shadow: 0 0 8px #8df0a6; }
+  .pr .row2 { display: flex; align-items: center; gap: 8px; }
+  .pr .row2 .bar { flex: 1; }
+  .pr .row2 .k { font: 700 14px/1 var(--ig-font-display); letter-spacing: .12em; color: rgba(244,241,232,.6); }
+  .pr .row2 .k.lit { color: #ffd86b; }
+  .pr .row2 .k.ready { color: #8df0a6; }
+  /* advisor, guide, intent */
+  .adv { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-left: 3px solid var(--ig-accent); background: rgba(11,10,18,.9); font-size: 15px; }
+  .adv b { font: 700 14px/1 var(--ig-font-display); letter-spacing: .16em; color: var(--ig-accent); }
+  .adv .mv { font-weight: 700; color: var(--ig-accent); }
+  .chipbtn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid rgba(244,241,232,.28); background: rgba(11,10,18,.8);
+             font: 700 14px/1 var(--ig-font-display); letter-spacing: .14em; text-transform: uppercase; color: rgba(244,241,232,.85); }
+  .chipbtn.on { border-color: var(--ig-accent); color: var(--ig-accent); }
+  .intent { padding: 8px 12px; background: rgba(11,10,18,.9); border-left: 3px solid var(--ig-blood); font-size: 15px; }
+  .intent b { font: 700 14px/1 var(--ig-font-display); letter-spacing: .14em; color: #e86a6a; text-transform: uppercase; }
+  /* target */
+  .ret { position: absolute; border: 0; pointer-events: none; }
+  .ret:before, .ret:after, .ret i:before, .ret i:after { content: ""; position: absolute; width: 22px; height: 22px; border: 3px solid var(--ig-accent); }
+  .ret:before { left: 0; top: 0; border-right: 0; border-bottom: 0; }
+  .ret:after { right: 0; top: 0; border-left: 0; border-bottom: 0; }
+  .ret i:before { left: 0; bottom: 0; border-right: 0; border-top: 0; }
+  .ret i:after { right: 0; bottom: 0; border-left: 0; border-top: 0; }
+  .plateN { position: absolute; padding: 6px 14px; background: var(--ig-paper); color: var(--ig-ink); font: italic 700 22px/1 var(--ig-font-serif); box-shadow: 0 6px 16px rgba(0,0,0,.5); border-left: 4px solid var(--ig-accent); }
+  .confirm { display: flex; gap: 8px; }
+  .confirm .go { flex: 1; height: 52px; display: flex; align-items: center; justify-content: center; background: var(--ig-accent); color: var(--ig-ink); font: 700 16px/1 var(--ig-font-display); letter-spacing: .18em; text-transform: uppercase; clip-path: polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%); }
+  .confirm .bk { width: 96px; height: 52px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(244,241,232,.35); font: 700 15px/1 var(--ig-font-display); letter-spacing: .16em; text-transform: uppercase; }
+  .hint { font-size: 14px; color: rgba(244,241,232,.7); }
+  .wk { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+  .wk span { font: 700 14px/1 var(--ig-font-display); letter-spacing: .08em; padding: 5px 7px; border: 1px solid rgba(244,241,232,.25); color: rgba(244,241,232,.8); }
+  .eyb { font: 700 14px/1 var(--ig-font-display); letter-spacing: .22em; text-transform: uppercase; color: rgba(244,241,232,.55); }
+  .tgtrow { display: grid; grid-template-columns: 44px 1fr auto; gap: 0 10px; align-items: center; padding: 8px 10px; border: 1px solid rgba(244,241,232,.16); margin-bottom: 6px; }
+  .tgtrow.sel { border-color: var(--ig-accent); background: rgba(227,185,74,.1); }
+  .ig--ffx2 .tgtrow.sel { background: rgba(247,182,217,.1); }
+  .tgtrow .face { width: 44px; height: 44px; }
+  .tgtrow .nm { font: italic 700 20px/1 var(--ig-font-serif); }
+  .tgtrow .hp { font: 700 17px/1 var(--ig-font-numeral); }
+  .rot { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 18px; padding: 0 28px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tile { height: 56px; display: flex; flex-direction: column; justify-content: center; padding: 0 14px; background: var(--ig-paper); color: var(--ig-ink); font: 700 16px/1 var(--ig-font-display); letter-spacing: .1em; text-transform: uppercase; position: relative; }
+  .tile small { font: 700 14px/1 var(--ig-font-numeral); letter-spacing: 0; color: rgba(11,10,18,.55); margin-top: 4px; text-transform: none; }
+  .tile.sel { background: var(--ig-accent); box-shadow: 0 0 0 2px rgba(11,10,18,.9); }
+  .tile.ink2 { background: rgba(11,10,18,.86); color: var(--ig-paper); border: 1px solid rgba(244,241,232,.22); }
+  .tile.ink2 small { color: rgba(244,241,232,.55); }
+  .chip { display: grid; grid-template-columns: 34px 1fr; gap: 2px 7px; align-items: center; padding: 6px 7px; background: rgba(11,10,18,.88); border: 1px solid rgba(244,241,232,.16); }
+  .chip.act { border-color: var(--ig-accent); }
+  .chip .face { width: 34px; height: 34px; grid-row: span 2; }
+  .chip .nm { font: italic 700 17px/1 var(--ig-font-serif); white-space: nowrap; }
+  .chip .hp { font: 700 16px/1 var(--ig-font-numeral); }
+  .chip .hp em { font-style: normal; color: var(--ig-spira-sky); font-size: 14px; margin-left: 5px; }
+  .chip .bar { grid-column: 1 / 3; margin-top: 3px; }
+</style>
+</head>
+<body>
+<div id="ph"></div>
+<script>
+const P = new URLSearchParams(location.search);
+const OPT = P.get('opt') || 'A', GAME = P.get('game') || 'ffx', STEP = P.get('step') || 'menu';
+const LAND = OPT === 'C';
+const W = LAND ? 844 : 390, H = LAND ? 390 : 844;
+const ART = '../../../../public/art/';
+const face = (k) => k.startsWith('crop:') ? `url('${ART}characters/${k.slice(5)}/idle.png')` : `url('${ART}portraits/${k}.png')`;
+// Real values read from the running game at the first command menu (capture/ffx-ch1.json, capture/ffx2-ch4.json).
+const D = {
+  ffx: {
+    chapter: 'I', actor: 'Tidus', actorId: 'tidus',
+    commands: [['Talk'], ['Attack'], ['Special', '×4'], ['White Magic', '×3'], ['Items', '×27'], ['Flee']], sel: 1,
+    party: [
+      { n: 'Tidus', f: 'tidus', hp: 2420, mhp: 2420, mp: 115, mmp: 115, g: 50, act: true },
+      { n: 'Yuna', f: 'yuna', hp: 1500, mhp: 1500, mp: 270, mmp: 270, g: 40 },
+      { n: 'Kimahri', f: 'kimahri', hp: 2310, mhp: 2310, mp: 130, mmp: 130, g: 100 },
+    ],
+    ctb: [['tidus', 0, 'Tidus'], ['seymour', 1, 'Seymour Flux'], ['crop:mortiorchis', 1, 'Mortiorchis'], ['kimahri', 0, 'Kimahri'], ['yuna', 0, 'Yuna'], ['seymour', 1, 'Seymour Flux']],
+    advisor: ['Hastega', 'the party'],
+    intent: ['Seymour Flux', 'Physical damage'],
+    help: null,
+    target: { name: 'Mortiorchis', f: 'crop:mortiorchis', hp: '4000 / 4000', wk: ['Fire', 'Ice', 'Thunder', 'Water', 'Holy', 'Grav'], cmd: 'Attack',
+      others: [{ name: 'Seymour Flux', f: 'seymour', hp: '70000 / 70000' }] },
+    plate: { A: 'capture/ffx-ch1-390x420-03-plate.jpg', B: 'capture/ffx-ch1-390x560-03-plate.jpg', C: 'capture/ffx-ch1-844x390-03-plate.jpg', R: 'capture/ffx-ch1-03-plate.jpg' },
+    ret: { A: [135, 92, 170, 104], B: [108, 120, 206, 130], C: [362, 80, 142, 96] },
+  },
+  ffx2: {
+    chapter: 'IV', actor: 'Yuna', actorId: 'yuna',
+    commands: [['White Magic', '◂'], ['Change', '◂'], ['Item', '◂']], sel: 0,
+    sub: ['Cure', 'Shell', 'Protect', 'Esuna', 'Cura', 'Vigor', 'Dispel'],
+    party: [
+      { n: 'Yuna', f: 'yuna-x2', job: 'White Mage', hp: 690, mhp: 690, mp: 130, mmp: 130, g: 100, act: true },
+      { n: 'Rikku', f: 'rikku-x2', job: 'Dark Knight', hp: 1734, mhp: 1839, mp: 158, mmp: 158, g: 63 },
+      { n: 'Paine', f: 'paine', job: 'Warrior', hp: 1706, mhp: 1706, mp: 67, mmp: 67, g: 100 },
+    ],
+    advisor: ['Shell', 'the party'],
+    intent: ['Bahamut', 'Attack · one girl · Rikku 93–105'],
+    help: 'Open the White Magic menu.',
+    target: { name: 'Yuna', f: 'yuna-x2', hp: '690 / 690', cmd: 'Cure', desc: 'Restores HP', ally: true,
+      others: [{ name: 'Rikku', f: 'rikku-x2', hp: '1734 / 1839' }, { name: 'Paine', f: 'paine', hp: '1706 / 1706' }] },
+    plate: { A: 'capture/ffx2-ch4-390x420-03-plate.jpg', B: 'capture/ffx2-ch4-390x420-03-plate.jpg', C: 'capture/ffx2-ch4-844x390-03-plate.jpg', R: 'capture/ffx2-ch4-03-plate.jpg' },
+    ret: { A: [0, 190, 56, 184], B: [0, 236, 66, 226], C: [232, 192, 66, 160] },
+  },
+}[GAME];
+const X2 = GAME === 'ffx2';
+const ph = document.getElementById('ph');
+ph.style.width = W + 'px'; ph.style.height = H + 'px';
+ph.className = 'ig' + (X2 ? ' ig--ffx2' : '');
+document.body.style.width = W + 'px'; document.body.style.height = H + 'px';
+const h = (s) => ph.insertAdjacentHTML('beforeend', s);
+const box = (x, y, w, hh, inner, extra = '') => `<div style="position:absolute;left:${x}px;top:${y}px;${w ? 'width:' + w + 'px;' : ''}${hh ? 'height:' + hh + 'px;' : ''}${extra}">${inner}</div>`;
+const T = STEP === 'target';
+
+function ctbStrip(size) {
+  if (X2) return '';
+  return `<div class="ctb">${D.ctb.map(([f, en, n], i) => `<i class="face t${en ? ' en' : ''}${i === 0 ? ' now' : ''}${T && i > 0 && n === D.target.name ? ' hit' : ''}" style="background-image:${face(f)}" title="${n}"></i>`).join('')}</div>`;
+}
+function partyRow(p) {
+  const x2 = X2;
+  const full = p.g >= 100;
+  const k = x2 ? `<span class="k${full ? ' ready' : ''}">${full ? 'READY' : 'ATB'}</span>` : `<span class="k${full ? ' lit' : ''}">${full ? 'OVERDRIVE' : 'OD'}</span>`;
+  return `<div class="pr${p.act ? ' act' : ''}"><i class="face" style="background-image:${face(p.f)}"></i>
+    <span class="nm">${p.n}${x2 ? ` <span class="lab" style="font-style:normal;font-size:14px;color:rgba(244,241,232,.55);letter-spacing:.08em">${p.job}</span>` : ''}</span>
+    <span class="hp">${p.hp}<small>/${p.mhp}</small></span>
+    <span class="row2">${k}<span class="bar ${x2 ? 'atb' : 'od'}${full ? ' full' : ''}"><i style="width:${p.g}%"></i></span></span>
+    <span class="mp">${p.mp} MP</span></div>`;
+}
+function partyChip(p) {
+  const full = p.g >= 100;
+  return `<div class="chip${p.act ? ' act' : ''}"><i class="face" style="background-image:${face(p.f)}"></i><span class="nm">${p.n}</span>
+    <span class="hp">${p.hp}<em>${p.mp}</em></span><span class="bar ${X2 ? 'atb' : 'od'}${full ? ' full' : ''}"><i style="width:${p.g}%"></i></span></div>`;
+}
+function reticle(r, dx = 0, dy = 0) {
+  const [x, y, w, hh] = r;
+  return `<div class="ret" style="left:${x + dx}px;top:${y + dy}px;width:${w}px;height:${hh}px"><i></i></div>`;
+}
+function adv() {
+  return `<div class="adv"><b>${X2 ? D.actor : 'Next'}</b><span><span class="mv">${D.advisor[0]}</span> → ${D.advisor[1]}</span><span style="margin-left:auto" class="lab acc" title="guide">▸</span></div>`;
+}
+function intent() {
+  return `<div class="intent"><b>${D.intent[0]} acts next</b><div style="margin-top:4px">${D.intent[1]}</div></div>`;
+}
+function targetRows() {
+  const t = D.target;
+  const all = [{ name: t.name, f: t.f, hp: t.hp, sel: true }, ...t.others];
+  return all.map((r) => `<div class="tgtrow${r.sel ? ' sel' : ''}"><i class="face" style="background-image:${face(r.f)}"></i><span class="nm">${r.name}</span><span class="hp num">${r.hp}</span></div>`).join('');
+}
+function topBar(extra = '') {
+  return `<div style="display:flex;align-items:center;gap:8px"><span class="chipbtn">❚❚ Pause</span>${extra}</div>`;
+}
+
+// ---------------------------------------------------------------- baseline plate
+if (OPT === 'R') {
+  h(`<img class="plate" src="${D.plate.R}" style="top:0;width:${W}px;height:${H}px;object-fit:cover;filter:brightness(.35) blur(2px)">`);
+  h(`<div class="rot">
+      <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="var(--ig-accent)" stroke-width="4"><rect x="40" y="18" width="40" height="72" rx="6"/><rect x="24" y="54" width="72" height="40" rx="6" stroke-dasharray="6 6" opacity=".7"/><path d="M92 30 q14 14 4 32" /><path d="M92 62 l4 0 l1 -6"/></g></svg>
+      <div class="eyb acc">Battle · Chapter ${D.chapter}</div>
+      <div style="font:italic 700 34px/1.1 var(--ig-font-serif)">Turn your phone sideways</div>
+      <div style="font-size:16px;line-height:1.5;color:rgba(244,241,232,.8)">The battle waits for you. It is laid out for a wide screen: the field, the ${X2 ? 'ATB gauges' : 'turn order'} and your commands side by side.</div>
+      <div class="hint">Rotation locked? Pull down the control centre and turn it off.</div>
+      <span class="chipbtn" style="margin-top:6px">Back to chapter select</span>
+    </div>`);
+}
+
+// ---------------------------------------------------------------- A: bottom sheet
+if (OPT === 'A') {
+  const FH = 400;
+  h(`<img class="plate" src="${D.plate.A}" style="top:-20px;width:390px;height:420px">`);
+  h(`<div style="position:absolute;left:0;right:0;top:${FH - 60}px;height:60px;background:linear-gradient(to bottom,rgba(4,6,11,0),#04060b)"></div>`);
+  h(box(12, 12, 366, 0, topBar(`<span style="flex:1"></span><span class="chipbtn${T ? '' : ' on'}">Guide</span>`)));
+  if (T) {
+    h(reticle(D.ret.A, 0, -20));
+    const [x, y0, w] = D.ret.A; const y = y0 - 20;
+    h(`<div class="plateN" style="left:${Math.max(8, Math.min(390 - 190, x + w / 2 - 80))}px;top:${y - 44 < 56 ? y + D.ret.A[3] + 6 : y - 44}px">${D.target.name}</div>`);
+  }
+  let y = FH - 6;
+  // turn order (FFX) or intent (FFX-2) band
+  if (!X2) {
+    h(box(12, y, 366, 0, `<div style="display:flex;align-items:center;justify-content:space-between"><span class="eyb">Turn order</span><span class="eyb" style="letter-spacing:.1em;color:rgba(244,241,232,.7)">${T ? 'Mortiorchis acts 3rd' : ''}</span></div><div style="margin-top:4px">${ctbStrip()}</div>`));
+    y += 70;
+  } else {
+    h(box(12, y, 366, 0, intent()));
+    y += 70;
+  }
+  if (!T) {
+    h(box(12, y, 366, 0, adv()));
+    y += 46;
+    // commands left, party right
+    const cmds = D.commands.map(([n, c], i) => `<div class="cmd${i === D.sel ? ' sel' : ''}${n === 'Talk' || n === 'Flee' ? ' ink2' : ''}"><span>${i === D.sel ? '▸ ' : ''}${n}</span>${c ? `<span class="n">${c}</span>` : ''}</div>`).join('');
+    h(box(18, y, 190, 0, `<div class="acmds">${cmds}</div>`));
+    h(box(214, y, 168, 0, D.party.map((p) => `<div class="pr" style="grid-template-columns:34px 1fr;padding:5px 6px;margin-bottom:6px;background:rgba(11,10,18,.7);border:1px solid ${p.act ? 'var(--ig-accent)' : 'rgba(244,241,232,.12)'}">
+        <i class="face" style="width:34px;height:34px;background-image:${face(p.f)}"></i><span class="nm" style="font-size:17px">${p.n}</span>
+        <span class="row2" style="gap:6px"><span class="hp" style="font-size:17px">${p.hp}</span><span class="mp" style="font-size:14px">${p.mp}</span></span>
+        <span class="bar ${X2 ? 'atb' : 'od'}${p.g >= 100 ? ' full' : ''}" style="grid-column:1/3;margin-top:4px"><i style="width:${p.g}%"></i></span></div>`).join('')));
+    if (X2) h(box(12, H - 50, 366, 0, `<div class="hint"><span class="lab acc" style="font-size:14px">White Magic</span> · ${D.help}</div>`));
+    else h(box(12, H - 50, 366, 0, `<div class="hint">OD bar · <span style="color:#ffd86b">Kimahri's Overdrive is ready</span></div>`));
+  } else {
+    y += 10;
+    h(box(12, y, 366, 0, `<div class="eyb" style="margin-bottom:8px">${D.target.cmd} → choose ${D.target.ally ? 'a girl' : 'a target'}${D.target.desc ? ` · <span style="color:rgba(244,241,232,.8);letter-spacing:.06em">${D.target.desc}</span>` : ''}</div>${targetRows()}`));
+    y += 30 + 64 * (1 + D.target.others.length);
+    if (D.target.wk) h(box(12, y, 366, 0, `<div class="eyb" style="margin-bottom:6px">Mortiorchis · elements</div><div class="wk">${D.target.wk.map((w) => `<span>${w}</span>`).join('')}</div>`));
+    h(box(12, H - 66, 366, 0, `<div class="confirm"><span class="bk">Back</span><span class="go">${D.target.cmd} ${D.target.name}</span></div>`));
+    h(box(12, H - 112, 366, 0, `<div class="hint">Tap the ${D.target.ally ? 'girl' : 'enemy'} on the field or in the list; tap again to confirm.</div>`));
+  }
+}
+
+// ---------------------------------------------------------------- B: compact rail
+if (OPT === 'B') {
+  const FH = 520;
+  if (X2) h(`<img class="plate" src="${D.plate.B}" style="top:0;width:${Math.round(390 * FH / 420)}px;height:${FH}px">`);
+  else h(`<img class="plate" src="${D.plate.B}" style="top:0;width:390px;height:560px">`);
+  h(`<div style="position:absolute;left:0;right:0;top:0;height:76px;background:linear-gradient(to bottom,rgba(4,6,11,.85),rgba(4,6,11,0))"></div>`);
+  h(`<div style="position:absolute;left:0;right:0;top:${FH - 90}px;bottom:0;background:linear-gradient(to bottom,rgba(4,6,11,0),#04060b 90px)"></div>`);
+  // top rail
+  if (!X2) h(box(10, 10, 310, 0, ctbStrip()));
+  else h(box(10, 10, 310, 0, `<div class="ink" style="padding:6px 10px;border-left:3px solid var(--ig-accent)"><div style="display:flex;justify-content:space-between"><span class="serif" style="font-size:18px">Bahamut</span></div><div class="bar" style="margin-top:5px;height:5px"><i style="width:100%;background:var(--ig-accent)"></i></div></div>`));
+  h(box(334, 10, 46, 46, `<span class="chipbtn" style="width:46px;height:46px;justify-content:center;padding:0">❚❚</span>`));
+  // intent chip under the rail
+  h(box(10, 72, 0, 0, `<div class="intent" style="padding:6px 10px;font-size:14px;max-width:300px"><b>${D.intent[0]} next</b> · ${D.intent[1]}</div>`, 'right:auto'));
+  if (T) {
+    const r = D.ret.B;
+    h(reticle(r));
+    h(`<div class="plateN" style="left:${Math.max(8, Math.min(390 - 200, r[0] + r[2] / 2 - 70))}px;top:${r[1] - 46 < 130 ? r[1] + r[3] + 6 : r[1] - 46}px">${D.target.name}</div>`);
+  }
+  let y = FH - 34;
+  // party chips
+  h(box(8, y, 374, 0, `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">${D.party.map(partyChip).join('')}</div>`));
+  y += 72;
+  if (!T) {
+    h(box(8, y, 374, 0, `<div class="adv" style="padding:7px 10px"><b>Tip</b><span><span class="mv">${D.advisor[0]}</span> → ${D.advisor[1]}</span><span class="chipbtn" style="margin-left:auto;height:30px;padding:0 10px">Guide</span></div>`));
+    y += 52;
+    let tiles;
+    if (X2) tiles = [['White Magic', '7 spells', 1], ['Change', 'dressphere', 0], ['Item', '', 0]];
+    else tiles = [['Attack', '', 1], ['Special', '×4', 0], ['White Magic', '×3', 0], ['Items', '×27', 0], ['Talk', '', 0, 1], ['Flee', '', 0, 1]];
+    h(box(8, y, 374, 0, `<div class="grid">${tiles.map(([n, s, sel, ink]) => `<div class="tile${sel ? ' sel' : ''}${ink ? ' ink2' : ''}">${n}${s ? `<small>${s}</small>` : ''}</div>`).join('')}</div>`));
+    h(box(8, H - 34, 374, 0, `<div class="hint" style="text-align:center">${X2 ? `<span class="acc lab" style="font-size:14px">${D.actor}</span> · ${D.help}` : `<span class="acc lab" style="font-size:14px">Tidus</span> · turn 1 of the order above`}</div>`));
+  } else {
+    h(box(8, y, 374, 0, `<div class="ink" style="padding:10px 12px;border-left:3px solid var(--ig-accent)">
+      <div style="display:flex;align-items:center;gap:10px"><i class="face" style="width:44px;height:44px;background-image:${face(D.target.f)}"></i>
+      <div><div class="serif" style="font-size:22px">${D.target.name}</div><div class="num" style="font-size:16px">HP ${D.target.hp}</div></div></div>
+      ${D.target.wk ? `<div class="wk" style="margin-top:8px">${D.target.wk.map((w) => `<span>${w}</span>`).join('')}</div>` : `<div class="hint" style="margin-top:8px">${D.target.cmd} · ${D.target.desc}</div>`}</div>`));
+    h(box(8, H - 118, 374, 0, `<div class="hint" style="text-align:center;margin-bottom:10px">Tap another ${D.target.ally ? 'girl' : 'enemy'} to switch · swipe ← →</div><div class="confirm"><span class="bk">Back</span><span class="go">${D.target.cmd} → ${D.target.name}</span></div>`));
+  }
+}
+
+// ---------------------------------------------------------------- C: landscape
+if (OPT === 'C') {
+  h(`<img class="plate" src="${D.plate.C}" style="top:0;width:844px;height:390px">`);
+  h(`<div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(4,6,11,.55),rgba(4,6,11,0) 36%,rgba(4,6,11,0) 60%,rgba(4,6,11,.6))"></div>`);
+  const left = X2 ? 620 : 16; // FFX-2 anchors the command stack to the other edge
+  h(box(12, 10, 0, 0, `<div style="display:flex;gap:8px"><span class="chipbtn">❚❚</span><span class="chipbtn">Guide</span></div>`));
+  if (!X2) h(box(560, 10, 280, 0, `<div style="display:flex;justify-content:flex-end">${ctbStrip()}</div>`));
+  h(box(X2 ? 170 : 150, 10, X2 ? 330 : 390, 0, T ? '' : `<div class="intent" style="padding:6px 10px;font-size:14px"><b>${D.intent[0]} next</b> · ${D.intent[1]}</div>`));
+  if (!T) {
+    h(box(X2 ? 528 : 16, 58, 300, 0, adv()));
+    const cmds = D.commands.map(([n, c], i) => `<div class="cmd${i === D.sel ? ' sel' : ''}${n === 'Talk' || n === 'Flee' ? ' ink2' : ''}" style="height:40px;margin-bottom:5px;${X2 ? '' : `margin-right:${i * 5}px`}"><span>${i === D.sel ? '▸ ' : ''}${n}</span>${c ? `<span class="n">${c}</span>` : ''}</div>`).join('');
+    h(box(left, X2 ? 104 : 108, X2 ? 210 : 200, 0, cmds));
+  } else {
+    const r = D.ret.C;
+    h(reticle(r));
+    h(`<div class="plateN" style="left:${r[0] + r[2] / 2 - 70}px;top:${r[1] - 44 < 56 ? r[1] + r[3] + 6 : r[1] - 44}px">${D.target.name}</div>`);
+    h(box(X2 ? 548 : 16, 58, X2 ? 284 : 240, 0, `<div class="ink" style="padding:10px 12px;border-left:3px solid var(--ig-accent)"><div class="eyb acc">${D.target.cmd}</div>
+      <div class="serif" style="font-size:22px;margin-top:6px">${D.target.name}</div><div class="num" style="font-size:16px">HP ${D.target.hp}</div>
+      ${D.target.wk ? `<div class="wk" style="margin-top:8px">${D.target.wk.map((w) => `<span>${w}</span>`).join('')}</div>` : `<div class="hint" style="margin-top:6px">${D.target.desc}</div>`}</div>`));
+    h(box(X2 ? 548 : 16, X2 ? 196 : 262, X2 ? 284 : 240, 0, `<div class="confirm"><span class="bk" style="width:80px;height:46px">Back</span><span class="go" style="height:46px">Confirm</span></div>`));
+  }
+  // party slabs bottom-right (FFX) / bottom-right under the stack (FFX-2)
+  const px = 548, py = X2 ? 252 : 236;
+  if (!(X2 && T)) h(box(px, py, 284, 0, D.party.map((p) => `<div class="pr ink" style="grid-template-columns:34px 1fr auto;padding:4px 8px;margin-bottom:4px;border-left:3px solid ${p.act ? 'var(--ig-accent)' : 'transparent'}">
+      <i class="face" style="width:34px;height:34px;background-image:${face(p.f)}"></i><span class="nm" style="font-size:17px">${p.n}</span><span class="hp" style="font-size:17px">${p.hp}</span>
+      <span class="row2"><span class="bar ${X2 ? 'atb' : 'od'}${p.g >= 100 ? ' full' : ''}"><i style="width:${p.g}%"></i></span></span><span class="mp" style="font-size:14px">${p.mp} MP</span></div>`).join('')));
+  if (X2 && T) h(box(548, 252, 284, 0, D.party.map((p, i) => `<div class="pr ink" style="grid-template-columns:34px 1fr auto;padding:4px 8px;margin-bottom:4px;border:1px solid ${i === 0 ? 'var(--ig-accent)' : 'transparent'}">
+      <i class="face" style="width:34px;height:34px;background-image:${face(p.f)}"></i><span class="nm" style="font-size:17px">${p.n}</span><span class="hp" style="font-size:17px">${p.hp}</span>
+      <span class="row2"><span class="bar atb${p.g >= 100 ? ' full' : ''}"><i style="width:${p.g}%"></i></span></span><span class="mp" style="font-size:14px">${p.mp} MP</span></div>`).join('')));
+}
+h(`<div class="tag" style="${LAND ? (GAME === 'ffx' ? 'left:560px;top:64px' : 'left:16px;bottom:10px') : OPT === 'R' ? 'right:8px;bottom:8px' : OPT === 'A' ? 'left:136px;top:22px' : 'right:8px;top:128px'}">CONCEPT</div>`);
+</script>
+</body>
+</html>

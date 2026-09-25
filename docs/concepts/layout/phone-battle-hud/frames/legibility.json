@@ -1,0 +1,142 @@
+[
+  {
+    "name": "A-ffx-menu",
+    "texts": 28,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "A-ffx-target",
+    "texts": 21,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "A-ffx2-menu",
+    "texts": 26,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "A-ffx2-target",
+    "texts": 17,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "B-ffx-menu",
+    "texts": 28,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "B-ffx-target",
+    "texts": 25,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "B-ffx2-menu",
+    "texts": 25,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "B-ffx2-target",
+    "texts": 21,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "C-ffx-menu",
+    "texts": 27,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "C-ffx-target",
+    "texts": 24,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "C-ffx2-menu",
+    "texts": 24,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "C-ffx2-target",
+    "texts": 19,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "R-ffx-rotate",
+    "texts": 6,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  },
+  {
+    "name": "R-ffx2-rotate",
+    "texts": 6,
+    "minPx": 14,
+    "under14": 0,
+    "clipped": 0,
+    "errs": [],
+    "broken": [],
+    "badFaces": []
+  }
+]

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Phone battle HUD options sheet</title>
+<link rel="stylesheet" href="../../polish/_kit/kit.css">
+<style>
+  html, body { width: 2206px; height: auto; background: #07080d; margin: 0; overflow: visible; }
+  body { color: #f4f1e8; font-family: 'Exo 2', sans-serif; -webkit-font-smoothing: antialiased; padding: 36px 40px 40px; box-sizing: border-box; }
+  h1 { font: italic 700 52px/1 'Cormorant Garamond', serif; margin: 8px 0 0; }
+  .ey { font: 700 16px/1 'Chakra Petch', sans-serif; letter-spacing: .24em; text-transform: uppercase; color: #e3b94a; }
+  .lead { font-size: 20px; line-height: 1.5; color: rgba(244,241,232,.82); max-width: 1560px; margin: 12px 0 0; }
+  .q { margin-top: 18px; padding: 14px 20px; border-left: 4px solid #e3b94a; background: rgba(227,185,74,.08); font-size: 22px; max-width: 1560px; }
+  .q b { font-family: 'Chakra Petch', sans-serif; letter-spacing: .1em; }
+  .row { margin-top: 42px; }
+  .rh { display: flex; align-items: baseline; gap: 18px; border-bottom: 1px solid rgba(244,241,232,.16); padding-bottom: 10px; margin-bottom: 16px; }
+  .rh .k { font: 700 30px/1 'Chakra Petch', sans-serif; letter-spacing: .12em; color: #e3b94a; }
+  .rh .t { font: italic 700 34px/1 'Cormorant Garamond', serif; }
+  .rh .s { font-size: 18px; color: rgba(244,241,232,.65); }
+  .rec { font: 700 15px/1 'Chakra Petch', sans-serif; letter-spacing: .2em; padding: 6px 10px; background: #e3b94a; color: #0b0a12; }
+  .cells { display: flex; gap: 24px; align-items: flex-start; }
+  figure { margin: 0; }
+  figure img { display: block; outline: 1px solid rgba(227,185,74,.45); }
+  figcaption { font: 700 15px/1.3 'Chakra Petch', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: rgba(244,241,232,.7); margin-top: 8px; }
+  .notes { flex: 1; margin: 0; font-size: 17px; line-height: 1.5; color: rgba(244,241,232,.85); }
+  .notes dt { font: 700 14px/1 'Chakra Petch', sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #e3b94a; margin-top: 14px; }
+  .notes dt:first-child { margin-top: 0; }
+  .notes dd { margin: 4px 0 0; }
+  .bad { color: #ff9a9a; }
+  .grid2 { display: grid; grid-template-columns: 844px 844px; gap: 24px; }
+</style></head><body>
+<div class="ey">Pyrefly Reprise · layout options · both games · CONCEPT, nothing built</div>
+<h1>The battle HUD on a phone (390 × 844)</h1>
+<p class="lead">Today a phone gets the 16:9 desktop HUD scaled down. In Chapter I's first menu all 70 text nodes are under the 14 px floor (the smallest is 2.6 px); in Chapter IV all 57 are. A "HIDE MOVES" tab also floats across the middle of the field. Each option below is drawn at native phone pixels, over the real battle render at that field size, using the real text of the first command menu (Chapter I, Tidus; Chapter IV, Yuna). Every text node in every option frame measures 14 px or more. FFX shows its CTB turn order. FFX-2 has no turn-order list, so its ATB gauges sit on each girl and the frame shows Bahamut's next move instead.</p>
+<div class="q"><b>Question for Bailey:</b> on a phone held upright, which battle HUD should we use: A (bottom sheet), B (compact rail) or C (landscape only)? <b>Recommended: B.</b></div>
+
+<div class="row"><div class="rh"><span class="k">TODAY</span><span class="t">The desktop HUD, scaled down</span><span class="s">real keys, own GPU browser, 390 × 844</span></div>
+<div class="cells">
+<figure><img src="capture/ffx-ch1-01-menu.jpg" width="390" height="844"><figcaption>FFX · Ch. I · command menu</figcaption></figure>
+<figure><img src="capture/ffx-ch1-02-target.jpg" width="390" height="844"><figcaption>FFX · Ch. I · target step</figcaption></figure>
+<figure><img src="capture/ffx2-ch4-01-menu.jpg" width="390" height="844"><figcaption>FFX-2 · Ch. IV · command menu</figcaption></figure>
+<figure><img src="capture/ffx2-ch4-02-target.jpg" width="390" height="844"><figcaption>FFX-2 · Ch. IV · target step</figcaption></figure>
+<dl class="notes"><dt>Legibility (CHK-003)</dt><dd class="bad">Ch. I: 70 of 70 text nodes under 14 px, the smallest 2.6 px. Ch. IV: 57 of 57, the smallest 2.4 px.</dd>
+<dt>Field</dt><dd>The portrait camera leaves only a sliver of Seymour Flux at the right edge, because the field is framed for 16:9.</dd>
+<dt>Clutter</dt><dd>"HIDE MOVES" floats across the boss. The guide, advisor, enemy move and CTB are each only a few px tall.</dd>
+<dt>Landscape today (844 × 390)</dt><dd class="bad">Still 70 of 70 under 14 px (the smallest 4.5 px), so turning the phone does not fix it on its own.</dd></dl>
+</div></div>
+
+<div class="row"><div class="rh"><span class="k">A</span><span class="t">Bottom sheet</span><span class="s">the field on top (400 px), with one stacked ink panel under it</span></div>
+<div class="cells">
+<figure><img src="frames/A-ffx-menu.jpg" width="390" height="844"><figcaption>FFX · command menu</figcaption></figure>
+<figure><img src="frames/A-ffx-target.jpg" width="390" height="844"><figcaption>FFX · target step</figcaption></figure>
+<figure><img src="frames/A-ffx2-menu.jpg" width="390" height="844"><figcaption>FFX-2 · command menu</figcaption></figure>
+<figure><img src="frames/A-ffx2-target.jpg" width="390" height="844"><figcaption>FFX-2 · target step</figcaption></figure>
+<dl class="notes"><dt>Commands</dt><dd>A vertical Ink &amp; Gold list at the bottom left, in 42 px rows.</dd>
+<dt>Party</dt><dd>Three cards at the bottom right, each with face, name, HP, MP and an OD bar (FFX) or ATB bar (FFX-2).</dd>
+<dt>Turn order</dt><dd>FFX: CTB faces across the top of the sheet. FFX-2: Bahamut's next move takes that slot, and the ATB is on each card.</dd>
+<dt>Target</dt><dd>A reticle and name plate on the field. The list becomes target rows with HP (plus Mortiorchis's elements), with Back and a large Confirm.</dd>
+<dt>Advisor / guide</dt><dd>The advisor is one line above the commands; tap it to hide it. The strategy guide opens as a sheet from GUIDE.</dd>
+<dt>Trade-off</dt><dd>Shows the most information at once, but has the smallest field. In FFX the enemy-move line does not fit, so it moves behind GUIDE.</dd></dl>
+</div></div>
+
+<div class="row"><div class="rh"><span class="k">B</span><span class="t">Compact rail</span><span class="rec">RECOMMENDED</span><span class="s">the field at full width (520 px), a turn rail on top, a thumb grid at the bottom</span></div>
+<div class="cells">
+<figure><img src="frames/B-ffx-menu.jpg" width="390" height="844"><figcaption>FFX · command menu</figcaption></figure>
+<figure><img src="frames/B-ffx-target.jpg" width="390" height="844"><figcaption>FFX · target step</figcaption></figure>
+<figure><img src="frames/B-ffx2-menu.jpg" width="390" height="844"><figcaption>FFX-2 · command menu</figcaption></figure>
+<figure><img src="frames/B-ffx2-target.jpg" width="390" height="844"><figcaption>FFX-2 · target step</figcaption></figure>
+<dl class="notes"><dt>Commands</dt><dd>A 2 × 3 grid of 56 px tiles (2 × 2 for Yuna's three commands) where the thumb rests. Each tile shows its count or submenu.</dd>
+<dt>Party</dt><dd>Three chips in a row above the grid, each with face, name, HP, MP and an OD or ATB bar.</dd>
+<dt>Turn order</dt><dd>FFX: a CTB rail across the top; in the target step the target is outlined in it. FFX-2: Bahamut's gauge sits in the rail, and the ATB is on each chip.</dd>
+<dt>Target</dt><dd>Tap the enemy (or girl) on the field. The grid becomes a target card with a Back / Confirm bar.</dd>
+<dt>Advisor / guide</dt><dd>The enemy's next move sits under the rail. The advisor is a one-line tip above the grid, with GUIDE beside it.</dd>
+<dt>Why recommended</dt><dd>It has the largest field of the upright options, every tap is within thumb reach, and nothing depends on turning the phone.</dd></dl>
+</div></div>
+
+<div class="row"><div class="rh"><span class="k">C</span><span class="t">Landscape only</span><span class="s">upright shows a rotate prompt; sideways gets the desktop layout redrawn for 844 × 390 at the 14 px floor</span></div>
+<div class="cells">
+<figure><img src="frames/R-ffx-rotate.jpg" width="390" height="844"><figcaption>Upright · rotate prompt</figcaption></figure>
+<div><div class="grid2">
+<figure><img src="frames/C-ffx-menu.jpg" width="844" height="390"><figcaption>FFX · command menu · 844 × 390</figcaption></figure>
+<figure><img src="frames/C-ffx-target.jpg" width="844" height="390"><figcaption>FFX · target step</figcaption></figure>
+<figure><img src="frames/C-ffx2-menu.jpg" width="844" height="390"><figcaption>FFX-2 · command menu (chrome on the other edge)</figcaption></figure>
+<figure><img src="frames/C-ffx2-target.jpg" width="844" height="390"><figcaption>FFX-2 · target step</figcaption></figure>
+</div>
+<dl class="notes" style="margin-top:18px"><dt>Commands / party / turn order</dt><dd>Where the desktop HUD puts them. FFX: the cascade on the left, the slabs at the bottom right, the CTB at the top right. FFX-2 is mirrored, with the stack and the rows on the right edge.</dd>
+<dt>Target / advisor / guide</dt><dd>A target card and Confirm replace the stack. The advisor is one line under the top bar, and the guide sits behind GUIDE.</dd>
+<dt>Trade-off</dt><dd>Closest to the desktop and to the original games. But every phone player has to turn the phone, and the desktop HUD still has to be redrawn, because scaled down it measures 4.5 px.</dd></dl></div>
+</div></div>
+</body></html>
