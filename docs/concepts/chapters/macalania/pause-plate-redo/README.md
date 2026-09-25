@@ -76,3 +76,31 @@ and on the chapter card. The chapter card was not captured.
   prefill: `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/ch7-pause-plate/`.
 - Scratch: `D:/Tools/pyrefly-scratch/picks0925/ch7-art/`.
 - GPU use: about 20 renders of 8 to 40 s each, one at a time. No render came back black.
+
+## Independent check, 2026-09-25 (a separate agent that made none of this)
+
+Scope: the brief's (a) locks and (b) redo options. Bar 7; the worst criterion decides.
+
+**(a) Locks: confirmed.** Set `chapter:macalania:2026-09-25` holds exactly the six files named
+in the brief (Seymour idle, cast, hurt; Guardian idle, cast; `backdrops/macalania-temple.png`),
+with Bailey's words. `pause/macalania.png` is not in it (installed sha `68fa5225...`,
+untouched). Every installed file's sha256 equals its lock and its backup under
+`D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania/`. The five character
+hashes match the 12-character hashes in `../unlock/README.md`. The sheet image itself shows no
+hashes, and the backdrop has none listed, but its mtime (09-22) is earlier than the sheet
+(09-24). `verify-approved`: 185 ok, 0 mismatched, 0 missing. The count is higher than the 159
+claimed because other sets were added since. The three vitest files that read the locks
+pass, 36/36.
+
+**(b) Options, judged at 1:1 from `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/ch7-pause-plate/`:**
+
+| Option | Score | Worst | Notes |
+|---|---|---|---|
+| A | **7** | Hair crown shades to saturated royal blue, off his pale-blue approved idle and portrait. This is inherited from the installed plate and disclosed. | The pixel diff confirms that the face, hair and robe equal the installed plate. Only the background (the edges, 37% of pixels) and the vein patch changed. The background reads as the antechamber (arches, gold metalwork, a candle), with no seams at the hair edge. The veins are now faint beige lines; at 1:1 they still form a small crackle, but it no longer reads as a red scar. The smile and the eye hold. |
+| B | 6 | Identity: a generic long-haired youth, with no veins, no crest, a purple streak and hair over the second eye. | This is the cleanest rendering of the three, but it is the furthest from the anchors. |
+| C | 6 | Composition and expression: the face is pushed into the left third in profile, hair fills the frame, and the cold stare goes against the courteous smile that §9.2 asks for. | It is on-model (the approved portrait), but flatter than the other plates. |
+
+The recommendation **A** stands: it is the only option at the bar. If Bailey picks A, an
+optional polish is to pull the crown's royal blue toward the idle's pale blue. It is not
+needed to ship. The capture log shows 0 errors and the CHAPTER tab on all four shots, and no
+listener remains on ports 5640-5659. Nothing under `public/art` changed.
