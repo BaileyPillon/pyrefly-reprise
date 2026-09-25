@@ -134,7 +134,7 @@ describe('CutsceneStage', () => {
 
   it('mounts the stage layers under the flash, and gives the dialogue box a shake layer to live in', () => {
     expect([...root.children].map((c) => c.className)).toEqual(['cutscene__shake', 'cutscene__flash']);
-    expect([...stage.shakeEl.children].map((c) => c.className)).toEqual(['cutscene__figures', 'cutscene__fx']);
+    expect([...stage.shakeEl.children].map((c) => c.className)).toEqual(['cutscene__figures', 'cutscene__fx', 'cutscene__veil']);
   });
 
   it('stands a staged figure with her painting, and ignores anyone without one', async () => {

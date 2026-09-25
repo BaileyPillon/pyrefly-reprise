@@ -173,3 +173,28 @@ Frames and raw results are in scratch and are not committed:
   narration here and in Seymour Flux); `ph-first-*` (the first frame of each actor); `loss-*`; `win-*`.
 - `res-*.json` and `dev-results/`: the raw results.
 - `check.mjs`, `seeds.mts`, `ph.mjs` and `narr.mjs`: the scripts.
+
+## Repair cycle 1 (ISA-CHK-M1 fixed; game case both, shared plumbing)
+
+- **Fix:** a cutscene's `fade('black')` (and `'white'`, which has always drawn black on this screen) now
+  goes to a veil on the cutscene stage (`CutsceneStage.veil`, `.cutscene__veil`, z-index 5), inside the
+  shake layer just before the dialogue box (z-index 6), instead of `App.fade('opaque')`, whose `#fade`
+  layer covers all of `#ui`. The chapter eyebrow goes under the veil too. `fade('clear')` clears both the
+  veil and `#fade`, as before. A scene that ends under the veil sets `#fade` opaque at once, so the next
+  screen fades in from black exactly as it did. `CutsceneScreen.ts` stays at 410 lines. The battle's
+  mid-fight beats (`BattleScreenCutscenes`) were never affected and are untouched.
+- **Scenes this changes (measured and pinned in `tests/unit/cutscene-veil.test.ts`):** every line after a
+  fade used to be a blank black frame: I Seymour Flux post (4 lines), II Yunalesca (4), III Braska's Final
+  Aeon (3), IV Bahamut (2), V Vegnagun and Shuyin (3), VI Leblanc (2), VII Seymour and Anima (4), VIII
+  Evrae (3), XIV Isaaru (2). All are post scenes; nothing else changes.
+- **Proof, real Enter presses, headless, dev server with HMR off (port 5760, stopped):** Chapter XIV seed 2
+  at 1600x900 and seed 1 at 390x844, Chapter I seed 1 at 1600x900. For every line after the fade the box
+  is the topmost element at its text (`elementFromPoint`), the veil is on at opacity 1 and `#fade` is clear;
+  after the Isaaru scene the results screen comes up normally, and after the Flux epilogue `#fade` is
+  opaque, as before. Frames: `repair1-post-narration-1600x900.jpg`, `repair1-post-narration-390x844.jpg`,
+  `repair1-flux-epilogue-1600x900.jpg` here; the rest in `D:/Tools/pyrefly-scratch/chapters/isaaru-repair1/`.
+- **Checks:** tsc clean; vitest 415 files passed, 3 skipped; orphans 24 (unchanged); approved and
+  judge-locked hashes 225 ok, 0 mismatched.
+- **Still for the driver:** on the phone the controls hint still covers the lower half of the narration
+  plate (minor 3, shared hint, now visible over black instead of hidden). `fade('white')` still draws
+  black in a cutscene, as it always has; the DSL says white is for the Sending (Chapter V uses it twice).

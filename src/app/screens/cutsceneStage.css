@@ -127,3 +127,31 @@
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------------- veil */
+
+/*
+ * A script's fade to black (`CutsceneStage.veil`): over the backdrop, the
+ * scrim, the figures and the effects, under the dialogue box (z 6), so a line
+ * narrated after `fade('black')` reads on black. Oversized so a shake never
+ * shows the backdrop at an edge; the root clips it.
+ */
+.cutscene__veil {
+  position: absolute;
+  inset: -64px;
+  z-index: 5;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+.cutscene__veil.is-on {
+  opacity: 1;
+}
+.cutscene .cutscene__eyebrow {
+  transition: opacity var(--cutscene-veil-ms, 450ms) ease;
+}
+.cutscene.is-veiled .cutscene__eyebrow {
+  opacity: 0;
+}
