@@ -1,11 +1,11 @@
 import './ffx-hud.css';
 import type {
-  AtbSnapshot,
-  AvailableCommand,
+  AtbSnapshot, AvailableCommand,
   BattleEvent,
   BattleState,
   Command,
   CombatantId,
+  MessageKind,
   MinigameKind,
   MinigameResult,
   TurnPreview,
@@ -18,6 +18,7 @@ import { DamageNumbers, type Projector } from './DamageNumbers.ts';
 import { openMinigame as dispatchMinigame } from './minigames/index.ts';
 import { PartyStatusWindow } from './PartyStatusWindow.ts';
 import { SensorPanel } from './SensorPanel.ts';
+import { bannerSpeaker } from './bannerSpeaker.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
@@ -410,12 +411,11 @@ export class FFXBattleHud implements HudPort {
       this.commandMenu.close();
       this.airship.abandon();
       this.clearTransientOverlays();
-      // The enemy plate goes with them. This is also the call `SensorPanel.hide()`
-      // never had: before this round one Sensor in Chapter 1 left the card on
-      // the field for the rest of the fight, which is what crowded the screen
-      // and starved the advisor's shelf (`critic/rounds/round-02.md`).
+      // The enemy plate goes with them (before this round one Sensor in Chapter 1
+      // left the card up for the rest of the fight, `critic/rounds/round-02.md`).
       this.sensorPanel.hide();
     }
+    this.sensorPanel.release(state.combatants); // its subject left the field
     this.lastState = state;
     this.zanmato.sync(state);
     if (Array.isArray(preview)) {
@@ -564,7 +564,7 @@ export class FFXBattleHud implements HudPort {
         this.currentActorId = event.actorId;
         return;
       case 'message':
-        this.setMessage(event.text);
+        this.setMessage(event.text, event.kind);
         return;
       case 'charge':
         this.telegraph.show(this.nameOf(event.enemyId), event.name, event.stage);
@@ -705,11 +705,11 @@ export class FFXBattleHud implements HudPort {
    * `"<name> "` prefix when the text happens to restate the tracked actor's
    * name, so "Tidus uses Cure" doesn't read "Tidus / Tidus uses Cure".
    */
-  private setMessage(text: string): void {
+  private setMessage(text: string, kind?: MessageKind): void {
     const nameEl = this.bannerEl.querySelector<HTMLElement>('[data-role="name"]')!;
     const chipEl = this.bannerEl.querySelector<HTMLElement>('[data-role="chip"]')!;
-    const name = this.currentActorId ? this.nameOf(this.currentActorId) : '';
-    const chipText = name && text.startsWith(`${name} `) ? text.slice(name.length + 1) : text;
+    // A scripted enemy beat names the enemy, not whoever acted last (`bannerSpeaker.ts`).
+    const { name, chip: chipText } = bannerSpeaker(text, kind, this.currentActorId, this.lastState?.combatants);
     nameEl.textContent = name;
     nameEl.hidden = !name;
     chipEl.textContent = chipText;

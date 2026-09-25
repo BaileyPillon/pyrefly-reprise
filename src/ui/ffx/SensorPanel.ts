@@ -245,6 +245,24 @@ export class SensorPanel {
     this.openMs = 0;
   }
 
+  /**
+   * The plate's subject has left the field — KO'd, shattered, ejected,
+   * dismissed, removed or hidden — so its plate and its folded `I` chip go
+   * with it. Chapter VII e2e (commit 06338dbc): "I GUADO GUARDIAN B" stayed on
+   * the field after both Guardians had shattered, all through Anima's act.
+   * Read off the synced state rather than off one event kind, so every way a
+   * combatant can leave (a `ko`, `status-add eject`, a scripted removal, a
+   * body that stays down) clears it the same way. What Sensor read stays
+   * known ({@link isScanned}); only the plate goes. FFX only: the plate is.
+   */
+  release(combatants: Readonly<Record<CombatantId, AnyCombatant | undefined>>): void {
+    const id = this.current?.id;
+    if (!id) return;
+    const c = combatants[id];
+    if (c && c.alive && !c.removed && !c.flags.hidden) return;
+    this.hide();
+  }
+
   /** Everything Sensor knew is forgotten — a new battle starts blind. */
   reset(): void {
     this.scanned.clear();
