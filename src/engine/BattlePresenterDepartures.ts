@@ -109,6 +109,15 @@ export const YIELD_MS = { dim: 360, step: 1000 } as const;
 export const BODY_MS = 620;
 /** The roll onto his back inside {@link BODY_MS}; the rest is the landing. */
 export const BODY_LIE_MS = 460;
+/**
+ * How long the shot stays on the body once it is down, before the victory
+ * beat takes the camera. Chapter VII e2e (commit 06338dbc) caught the whole of
+ * "falls and stays down" lasting about 1.5 s, most of it the roll, so the
+ * stillness that makes it a body never registered. The body itself is never
+ * lifted again: it lies there through the victory pose and the results
+ * transition (`PaintedActor.lieDown`, and `'stays'` below).
+ */
+export const BODY_HOLD_MS = 1400;
 
 /** How dim a yielding figure gets before it steps back (brightness multiplier). */
 export const YIELD_DIM = 0.45;
@@ -236,6 +245,7 @@ async function body(actor: ActorHandle, b: Budget): Promise<void> {
   actor.shake(0.12, 200);
   // With no painted `ko` (D-045 option A), the standing plane itself goes over.
   await Promise.all([b.guard(actor.lieDown?.(BODY_LIE_MS)), b.sleep(BODY_MS)]);
+  await b.sleep(BODY_HOLD_MS);
 }
 
 /**
@@ -266,6 +276,6 @@ export async function depart(
 
 /** A departure's full length at timeScale 1, the outer guard's budget. */
 export function departureMs(kind: Exclude<DepartureKind, 'dissolve'>): number {
-  if (kind === 'body') return BODY_MS;
+  if (kind === 'body') return BODY_MS + BODY_HOLD_MS;
   return kind === 'falls-away' ? FALL_MS.lurch + FALL_MS.drop : YIELD_MS.dim + YIELD_MS.step;
 }

@@ -91,6 +91,9 @@ export class FakeActor implements ActorHandle {
     this.facing = dir;
   }
   setBrightness(): void {}
+  setStone(amount: number): void {
+    this.note(`stone=${amount}`);
+  }
   async lieDown(): Promise<void> {
     this.note('lieDown');
   }

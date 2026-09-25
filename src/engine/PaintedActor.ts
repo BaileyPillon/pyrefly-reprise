@@ -43,6 +43,7 @@ import {
 } from './PaintedArt.ts';
 import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
 import { placePlane } from './PaintedRest.ts';
+import { lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
@@ -325,12 +326,12 @@ const HURT_TINT = 0xff9f8e;
 
 /** How long the KO takes to tip over and hit the ground. */
 const FALL_MS = 300;
-/**
- * How far {@link PaintedActor.lieDown} rolls a standing painting onto its back,
- * radians: a little short of flat, so it reads as a body crumpled on the floor
- * rather than a card laid on it.
- */
-const LIE_ANGLE = 1.5;
+/** {@link PaintedActor.lieDown}'s roll: flat on the floor (1.5 left the head tilted up, Chapter VII e2e). */
+const LIE_ANGLE = Math.PI / 2;
+/** ...then tipped back about its long axis onto the floor, radians (`LieFlat.ts`). */
+const LIE_TILT = 1.0;
+/** What a petrified figure's painting is tinted toward ({@link PaintedActor.setStone}). */
+const STONE_TINT = new Color(0xb4afa6);
 
 /** Stable per-name jitter so a party does not breathe, or cheer, in lockstep. */
 function beatOffsetFor(name: string): number {
@@ -520,6 +521,7 @@ export class PaintedActor extends Group {
   private accentLevel = 0;
   private readonly accentColour = new Color(0xf2c21e);
   private dimAmount = 0;
+  private stoneAmount = 0;
   /** Breathing phase in cycles, so a tempo change never snaps the chest. */
   private breathPhase = Math.random();
   /** A stable per-name offset, so a party does not breathe (or cheer) in step. */
@@ -1162,9 +1164,8 @@ export class PaintedActor extends Group {
   }
 
   private syncTint(): void {
-    this.u.tint.value.copy(
-      this.tintScratch.copy(this.baseTint).lerp(this.hurtTintColour, clamp01(this.hurtTint)),
-    );
+    this.tintScratch.copy(this.baseTint).lerp(this.hurtTintColour, clamp01(this.hurtTint));
+    this.u.tint.value.copy(this.tintScratch.lerp(STONE_TINT, this.stoneAmount * 0.6));
   }
 
   // --------------------------------------------------------------------- life
@@ -1240,7 +1241,7 @@ export class PaintedActor extends Group {
   setDim(amount: number): void {
     const k = clamp01(amount);
     this.dimAmount = k;
-    this.u.desaturate.value = k;
+    this.u.desaturate.value = Math.max(k, this.stoneAmount);
     this.u.brightness.value = this.baseBrightness * (1 - k * 0.9);
   }
 
@@ -1362,13 +1363,11 @@ export class PaintedActor extends Group {
   private playCue(cue: LifeCue): void {
     switch (cue) {
       case 'step':
-        // Their turn: the lean is posture, this is the weight coming up on to
-        // the front foot.
+        // Their turn: the weight coming up on to the front foot.
         void this.hop(this.worldHeight * 0.035, 300);
         return;
       case 'flinch':
-        // Reached only when something set the `hurt` pose directly; `recoil`
-        // brings its own knock-back.
+        // Only when something set `hurt` directly; `recoil` brings its own knock-back.
         if (this.flinching) return;
         this.tintHurt(260);
         void this.knockBack(300, this.worldHeight * 0.1);
@@ -1380,8 +1379,7 @@ export class PaintedActor extends Group {
         this.rise();
         return;
       case 'hop':
-        // Victory, staggered a little per fighter so a party does not cheer on
-        // one frame like a chorus line.
+        // Victory, staggered per fighter so a party does not cheer like a chorus line.
         this.after(this.beatOffset * 240, () => {
           void this.hop(this.worldHeight * 0.13, 460);
         });
@@ -1432,13 +1430,10 @@ export class PaintedActor extends Group {
   }
 
   /**
-   * Fall onto its back and stay there: the standing painting rolls in its own
-   * plane about the feet, away from the way it faces, and is lifted so no part
-   * of it sinks through the floor. For a figure whose defeat leaves a body but
-   * who has no painted `ko` (Seymour at Macalania, D-046; the departure is
-   * `'body'` in `BattlePresenterDepartures.ts`). `ms` 0 lies down at once
-   * (a field staged with the body already down). Both games' plumbing; only
-   * FFX's Seymour uses it today.
+   * Fall onto its back and stay there, flat on the floor over its own station
+   * ({@link lieOffset}): a defeat that leaves a body with no painted `ko`
+   * (Seymour at Macalania, D-046, the `'body'` departure). `ms` 0 lies down at
+   * once. Both games' plumbing; only FFX's Seymour uses it today.
    */
   lieDown(ms = 520): Promise<void> {
     if (ms <= 0) {
@@ -1461,17 +1456,10 @@ export class PaintedActor extends Group {
     });
   }
 
-  /** How far the rolled content box would sink below the feet, world units (0 standing). */
-  private lieLift(angle: number): number {
-    if (angle === 0) return 0;
+  /** Where the rolled body goes: `[dx, lift]`, on the floor over its own station (`LieFlat.ts`). */
+  private lieOffset(angle: number): [number, number, number] {
     const slot = this.slots[this.active]!;
-    const box = slot.scale.contentBox;
-    const xs = slot.mesh.scale.x < 0 ? [-box.x1, -box.x0] : [box.x0, box.x1];
-    const s = Math.sin(angle);
-    const c = Math.cos(angle);
-    let low = 0;
-    for (const x of xs) for (const y of [box.y0, box.y1]) low = Math.min(low, x * s + y * c);
-    return -low;
+    return lieOffset(slot.scale.contentBox, slot.mesh.scale.x < 0, angle, LIE_TILT * this.lieRoll);
   }
 
   /** A plain delay on the actor's own tween group, so `dispose` kills it. */
@@ -1706,6 +1694,13 @@ export class PaintedActor extends Group {
     this.syncTint();
   }
 
+  /** Petrified, 0..1: drained of colour and tinted stone, beside (never fighting) {@link setDim}. */
+  setStone(k: number): void {
+    this.stoneAmount = clamp01(k);
+    this.u.desaturate.value = Math.max(this.dimAmount, this.stoneAmount);
+    this.syncTint();
+  }
+
   /** Drive the rim light from the scene's light rig. */
   setRimLight(colour: number | string, strength: number, dir?: [number, number]): void {
     this.u.rimColor.value.set(colour as never);
@@ -1805,7 +1800,8 @@ export class PaintedActor extends Group {
     // Blended across the crossfade, so the standing idle's breathing eases out
     // as the KO painting eases in rather than stopping dead.
     const prone = this.proneWeight();
-    const upright = 1 - prone;
+    // A body rolled onto its back ({@link lieDown}) is down too: no breath, lean or crouch.
+    const upright = (1 - prone) * (1 - this.lieRoll);
 
     // --- life: posture eases toward whatever state we are in ---------------
     this.life?.update(dt);
@@ -1849,37 +1845,32 @@ export class PaintedActor extends Group {
     }
 
     const lie = this.lieRoll * LIE_ANGLE * this.facing;
-    oy += this.lieLift(lie);
-    this.inner.position.set(ox, oy, 0);
-    // Sway is a standing figure's weight shifting; rotating a body that is
-    // already lying down just wobbles the whole painting, and on a wide plane
-    // the corners swing far enough to show the PNG's rectangle.
+    const [lieDx, lieLift, lieDz] = this.lieOffset(lie);
+    ox += lieDx;
+    oy += lieLift;
+    this.inner.position.set(ox, oy, lieDz);
+    // Sway is a standing figure's weight shifting; on a body lying down it only
+    // wobbles the painting and shows the corners of the PNG's rectangle.
     const swayAmp = this.swayAmp * upright;
     const sway = swayAmp ? Math.sin(this.clock * this.swaySpeed * TAU) * swayAmp : 0;
-    // Posture tilt is a *body* rotation: tipping "forward" is toward the way
-    // the fighter is turned, which is why it carries the facing and the sway
-    // does not. Kept small, and faded out with the pose, because a wide plane
-    // rotated far enough shows the corners of its own PNG.
-    const standing = 1 - this.lieRoll;
+    // Posture tilt is a *body* rotation (forward = the way the fighter is
+    // turned, so it carries the facing), kept small and faded out with the pose.
     const bodyTilt = (tilt + this.fallTilt * 0.3) * upright * -this.facing;
-    this.inner.rotation.z = (sway + bodyTilt) * standing + lie;
+    this.inner.rotation.z = sway + bodyTilt + lie;
+    this.inner.rotation.x = -LIE_TILT * this.lieRoll;
 
     // --- the interim turn --------------------------------------------------
-    // The plane yawed toward the enemy, for art that has not been repainted
-    // turned yet. It rides on `inner`, which carries both planes and nothing
-    // else: the contact shadow and the turn ring are siblings and stay lying
-    // flat on the ground, and the lunge (`inner.position`) is applied after the
-    // rotation, so "forward" is still world ±x however far the body is turned.
-    // Faded out with `upright` for the same reason the sway and the posture
-    // tilt are — a prone painting is a *wide* plane, and swinging one in depth
-    // shows the corners of its own PNG.
+    // The plane yawed toward the enemy, for art not yet repainted turned. It
+    // rides on `inner` (both planes only: the shadow and turn ring stay flat on
+    // the ground), and the lunge is applied after it, so "forward" stays world
+    // ±x. Faded out with `upright` and the roll: a prone or lying painting is a
+    // *wide* plane, and swinging one in depth shows the corners of its PNG.
     const yawWanted = this.yawTarget() * upright;
     if (this.yawPrimed) {
       this.appliedYaw = approach(this.appliedYaw, yawWanted, YAW_TAU, dt);
     } else {
-      // The field opens already turned. Nobody swings into their stance on the
-      // first half-second of a battle, and a capture taken at frame 2 would
-      // otherwise catch every fighter mid-swing.
+      // The field opens already turned: nobody swings into their stance on the
+      // first half-second of a battle (or mid-swing in a frame-2 capture).
       this.yawPrimed = true;
       this.appliedYaw = yawWanted;
     }

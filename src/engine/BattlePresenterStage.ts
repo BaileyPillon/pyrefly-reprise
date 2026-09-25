@@ -24,6 +24,8 @@ import { laneFrom, relaxActorsOf, relaxField } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
+import { limitPoses } from './ChapterPoseLimits.ts';
+import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
@@ -172,7 +174,7 @@ export class PaintedStage implements BattleStage {
     // been renamed yet still shows its painting instead of a silhouette.
     const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
     const { artId } = art;
-    const poses = departurePoses(c.id, art.poses); // no ko painting for Evrae's fall (D-031)
+    const poses = limitPoses(c.id, departurePoses(c.id, art.poses)); // D-031 Evrae; D-045 Anima idle only
     const heights = {
       party: this.opts.slots.partyHeight ?? 1.82,
       enemy: this.opts.slots.enemyHeight ?? 4.1,
@@ -550,17 +552,14 @@ export class PaintedStage implements BattleStage {
       }
       const staged = this.actors.get(at);
       if (!staged) return;
+      // A petrified figure breaks into stone chips, not light (`StoneShards.ts`).
+      if (key === 'stone-shatter') return stoneShatter(this.opts.scene, staged.actor.position, staged.actor.height);
       const point = staged.actor.centerPoint(this.scratch.clone());
-      // The bloom is sized to the figure it lands on. `HitEffects` is
-      // configured once, for a boss; played unscaled on a 1.8-unit party
-      // member the same quad is wider than she is tall, and with depth
-      // testing off it paints straight over her (this is what turned Rikku
-      // into a white blob in docs/screenshots/70/52-ffx2-bahamut.png).
+      // The bloom is sized to the figure it lands on: `HitEffects` is set up for
+      // a boss, and unscaled it turned Rikku into a white blob
+      // (docs/screenshots/70/52-ffx2-bahamut.png). `colour` is the element's,
+      // so a heal reads as a green glow rather than a white hole in the figure.
       const bloom = bloomScale(staged.actor.height) * (crit ? 1.3 : 1);
-      // `colour` used to be computed here and then thrown away for everything
-      // except the screen flash, so every bloom was the constructor's icy
-      // white regardless of element. Passing it through is what makes a heal
-      // read as a green glow rather than as a white hole in the figure.
       this.hits.flash.play(point, crit ? 320 : 260, bloom, colour);
       this.hits.sparks.emit(point, crit ? 1.35 : 1);
       if (key === 'slash' || key === 'impact') {
@@ -685,6 +684,7 @@ export class PaintedStage implements BattleStage {
     this.actors.clear();
     this.partRings.dispose();
     this.hits.dispose();
+    disposeStoneShards(this.opts.scene);
     this.flashEl?.remove();
     this.flashEl = null;
   }

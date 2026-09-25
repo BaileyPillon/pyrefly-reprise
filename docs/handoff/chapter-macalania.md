@@ -11,6 +11,31 @@
 > guide, tactic and meta (`27ed39e`, `chapter-macalania-guide.md`) and the
 > scene with Anima's arrival (`823450d`, `chapter-macalania-scene.md`).
 
+## Fix pass 2, 2026-09-24 (the real-key e2e on 06338dbc)
+
+**Game case.** The chapter tables are **FFX only** (Seymour's body hold,
+Anima's idle-only limit). The rest is shared plumbing and says so: the Sensor
+chip release and the banner speaker are the FFX HUD's (every FFX chapter); the
+lie geometry, the stone beats and shards, the advisor's damage wording and the
+theft rule are **both**. Whether a petrified Guardian shatters is unchanged
+(the question is open with Bailey, `unlock/petrify-shatter.jpg`); no boss
+number changed.
+
+| e2e finding | Root cause, proven by running | Fix | Test |
+|---|---|---|---|
+| "I GUADO GUARDIAN B" chip stays after both Guardians left | `SensorPanel` was only hidden on a battle result | `SensorPanel.release(combatants)` on every HUD `sync`: a subject that is dead, removed or hidden takes its plate and chip with it (what Sensor read stays known) | `ch7-hud-fixes.test.ts` (1) |
+| Seymour's body lasts ~1.5 s and lies tilted off the floor | `LIE_ANGLE` 1.5 rad left the head end raised; the roll about the feet laid him a half body-length off his station; posture lean/crouch/breath/yaw still applied to the rolled plane; the beat was 620 ms then the 900 ms victory | a flat quarter turn resting on the floor over his station (`src/engine/LieFlat.ts`, pure), a rolled body counts as down in `PaintedActor.update`, and `BODY_HOLD_MS` 1,400 holds the shot on him before the victory; he is never lifted again | `ch7-presentation-fixes.test.ts` (2) |
+| Anima draws her attack, hurt and ko paintings | the boss borrows the aeon's whole folder (`spriteKey: 'anima'`) | `src/engine/ChapterPoseLimits.ts`: `anima-macalania` draws the idle only (D-045 option A); the other PNGs are never fetched; the party's summoned Anima elsewhere is untouched | same file (3) |
+| "Rikku · Seymour summons Anima" | the banner named `currentActorId` whatever the text | `src/ui/ffx/bannerSpeaker.ts`: a message that opens with a combatant's name is that combatant's line; an enemy telegraph naming nobody names nobody | `ch7-hud-fixes.test.ts` (4) |
+| Advisor: Petrify Grenade "4000 damage", and it disagrees with the guide's Steal on turn 1 | (a) `damageToEnemies` is HP lost, and a shatter loses 4,000 with no `damage` event; (b) a landed Steal changes only inventory/flags, so the no-op guard dropped the chapter line behind the grenade | (a) `dealtToEnemies` (damage events, capped by HP lost) for the chip and the sentence, plus a `removes` fact: "It puts Petrify on 2 of them, and 2 of them shatter"; (b) the guard reads the engine's own "Stole …" / "pilfered" line | `advisor-status-items.test.ts`; `advisor-sentence.test.ts` re-derives the new definition |
+| The shatter barely reads as stone | a 220 ms status beat, then the green-edged pyrefly dissolve in grey | `PaintedActor.setStone` (desaturate + stone tint, separate from the targeting dim), the painting drains to stone over 280 ms and holds 340 ms (`STONE_MS`), then `vfx.play('stone-shatter')`: opaque stone chips that fall to its feet (`src/engine/StoneShards.ts`); a Soft restores the colour | `ch7-presentation-fixes.test.ts` (6) |
+
+**Other chapters, measured.** The advisor's text over chapters 1-8, seeds 1-3,
+60 decisions each (1,026 cards), before and after: only Chapter VII's cards
+changed (the nine Petrify Grenade / Steal rows above). Departure kinds are
+unchanged; a party member petrified in Chapters 6 and 8 now greys and holds
+the same beat (both games).
+
 ## Fix pass, 2026-09-22 (critic pass on 62b4927)
 
 **Game case.** The chapter's own files are **FFX only**. Three fixes are shared

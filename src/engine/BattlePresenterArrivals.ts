@@ -22,9 +22,19 @@
  *    (Eject, Banish, and the petrified-monster shatter) emits
  *    `status-add eject` and never a `ko`, so a shattered Guado Guardian stood
  *    on the field at full colour for the rest of the fight.
+ *
+ * 3. **Petrify reads as stone** (Chapter VII e2e, commit 06338dbc: the
+ *    Guardians' shatter "barely reads as stone" at game size). A petrified
+ *    figure's painting is drained to stone grey and held there a beat before
+ *    anything else happens to it ({@link turnToStone}); when a petrified enemy
+ *    shatters, it breaks into stone chips that fall to its feet
+ *    (`vfx.play('stone-shatter')`, `StoneShards.ts`) while it crumbles away in
+ *    stone grey. Presentation only: whether a petrified figure shatters is the
+ *    engine's, and an open question with Bailey (petrify-shatter.jpg).
  */
 
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
+import type { ActorHandle } from './BattlePresenterPorts.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { cue, settled, TIMING } from './BattlePresenterEvents.ts';
 
@@ -37,6 +47,13 @@ export const ARRIVAL_CAP_MS = 9_000;
 
 /** Stone grey: the petrify flash, and the colour a petrified fiend comes apart in. */
 const STONE = 0xb9b4aa;
+/**
+ * Turning to stone, ms at timeScale 1: the grey creeps in over `in`, then the
+ * statue holds for `hold` so it reads as stone before it breaks. The old 220 ms
+ * status beat was over before the eye found the figure at game size.
+ */
+export const STONE_MS = { in: 280, hold: 340 } as const;
+const STONE_STEPS = 4;
 
 type PartRestored = Extract<BattleEvent, { type: 'part-restored' }>;
 type StatusAdd = Extract<BattleEvent, { type: 'status-add' }>;
@@ -73,7 +90,10 @@ export async function statusAdded(ctx: EventCtx, event: StatusAdd): Promise<void
   if (event.status === 'eject' && a && ctx.stage.sideOf(event.targetId) === 'enemy') {
     const stone = stoneIds.get(ctx)?.has(event.targetId) === true;
     cue(ctx, stone ? 'petrify-shatter' : 'status', { volume: 0.7 });
-    if (stone) ctx.stage.camera.shake(0.1, 260);
+    if (stone) {
+      ctx.stage.camera.shake(0.1, 260);
+      void ctx.stage.vfx.play('stone-shatter', event.targetId);
+    }
     await settled(ctx, a.dissolveTo(1, TIMING.ko, stone ? STONE : 0x9dffc4), TIMING.ko);
     ctx.stage.removeCombatant(event.targetId);
     return;
@@ -83,10 +103,32 @@ export async function statusAdded(ctx: EventCtx, event: StatusAdd): Promise<void
     if (!set) stoneIds.set(ctx, (set = new Set()));
     set.add(event.targetId);
     a?.flash(STONE, 320, 0.85);
-    a?.setBrightness(0.72);
+    cue(ctx, 'status', { volume: 0.5 });
+    return turnToStone(ctx, a);
   } else {
     a?.flash(0xc9a6ff, 260, 0.5);
   }
   cue(ctx, 'status', { volume: 0.5 });
   return ctx.sleep(TIMING.status);
+}
+
+/** The painting drains to stone grey over {@link STONE_MS}.in, then holds. */
+async function turnToStone(ctx: EventCtx, a: ActorHandle | undefined): Promise<void> {
+  if (!a?.setStone || ctx.speed() === 'skip') {
+    a?.setStone?.(1);
+    a?.setBrightness(0.8);
+    return ctx.sleep(TIMING.status);
+  }
+  for (let i = 1; i <= STONE_STEPS; i++) {
+    a.setStone(i / STONE_STEPS);
+    a.setBrightness(1 - 0.2 * (i / STONE_STEPS));
+    await ctx.sleep(STONE_MS.in / STONE_STEPS);
+  }
+  await ctx.sleep(STONE_MS.hold);
+}
+
+/** `status-remove petrify`: back to flesh (a Soft, or an Esuna). */
+export function unstone(a: ActorHandle | undefined): void {
+  a?.setBrightness(1);
+  a?.setStone?.(0);
 }

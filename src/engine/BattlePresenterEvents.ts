@@ -33,7 +33,7 @@ import {
   turnStart,
   victory,
 } from './BattlePresenterBeats.ts';
-import { flushArrivals, restorePart, statusAdded } from './BattlePresenterArrivals.ts';
+import { flushArrivals, restorePart, statusAdded, unstone } from './BattlePresenterArrivals.ts';
 
 /** One numeral, minus the screen position the stage supplies. */
 type Numeral = Omit<Parameters<DamageNumbersPort['show']>[0], 'x' | 'y'>;
@@ -233,7 +233,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return statusAdded(ctx, event);
 
     case 'status-remove':
-      if (event.status === 'petrify') ctx.stage.actor(event.targetId)?.setBrightness(1);
+      if (event.status === 'petrify') unstone(ctx.stage.actor(event.targetId));
       return ctx.sleep(TIMING.status * 0.4);
 
     case 'status-tick':

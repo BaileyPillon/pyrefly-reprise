@@ -61,6 +61,8 @@ export interface ActorHandle {
   setBrightness(mult: number): void;
   /** Optional: fall onto its back and stay down (`PaintedActor.lieDown`; the `'body'` departure). */
   lieDown?(ms?: number): Promise<void>;
+  /** Optional: petrified, 0..1 — the painting drained to stone grey (`PaintedActor.setStone`). */
+  setStone?(amount: number): void;
   centerPoint(): Point3;
   headPoint(): Point3;
 }
