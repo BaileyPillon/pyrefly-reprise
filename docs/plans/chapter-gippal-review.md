@@ -256,3 +256,45 @@ is owed needs Bailey's words.
 
 **Verdict: PROCEED.** Fifteen needs already work (§4.1) and the Chapter V preset is the sourced
 party. New: the full carry, an exact Lightfall, a max-MP fraction, the counter's timing.
+
+## Review (adversarial, 2026-09-24, FFX-2 only)
+
+Reviewed on d93daae7 by a sub-agent of the driver: research 1ff8f78b, this plan, the options in
+de19b73e. **Re-fetched** through `api.php?action=parse&prop=wikitext`: *Gippal (boss)* 3956604,
+*Nooj (boss)* 3956546, *Baralai (boss)* 3967145, *Den of Woe* 3797694, *Gippal* 3972827, all
+**unchanged revids**; SinirothX FAQ 31807 and Split_Infinity FAQ 26832 read again into scratch
+(no downloads). Engine claims checked by reading and by one scratch run (`buildState`,
+`computeDamage`, `hitPercent` arithmetic). Nothing under `src/`, `tests/`, `public/art` changed.
+
+| # | Claim | Verdict | Evidence / correction |
+|---:|---|---|---|
+| 1 | Gippal block (Lv 56, HP 14,800, MP 235, 73/55/68/33, Agi 118, Eva 23, Luck 6, Acc 0; EXP 1,200, AP 5, gil 5,000, pilfer 15,000; Kaiser Knuckles; White Lore) | CONFIRMED | SinirothX and the wiki infobox, cell by cell |
+| 2 | Gippal AI: 15/16 cycle Grinder, Attack, Grinder, Attack, Bullseye; 1/32 + 1/32; below 1/3 the 1/5 ×4 and 1/15 ×3 set | CONFIRMED | SinirothX verbatim; Split_Infinity gives the same order |
+| 3 | Bullseye 9/16 of current HP, 140° arc; Mortar DC 22 ignores DEF, same arc; Grinder DC 14; Potion Plus 600; bombs 46–52 at chance 50 | CONFIRMED | SinirothX; wiki prose |
+| 4 | Gippal immune list incl. fractional, "SinirothX + wiki + Split_Infinity" | CORRECTED (minor) | the wiki infobox has no fractional row (it lists "multi attack"); fractional rests on SinirothX + Split_Infinity (`%DMG`): still 2 sources |
+| 5 | Nooj: HP 23,800, DEF 144 / MDEF 103, cycle 1-1-2-1-Greedy Aura, Lightfall at 2,999 or less once, "constant"; gil 30,000 vs wiki 3,000 (G-3) | CONFIRMED | SinirothX; wiki "falls below 3,000"; Split_Infinity 30,000 |
+| 6 | Baralai: wiki HP 1,220 is a dropped digit (G-1); Drill Shot at 8 in the Den, 10 at Bevelle (G-5) | CONFIRMED | wiki infobox `2 hp = 1220`; wiki AI dumps (Den 8, Bevelle 10) |
+| 7 | Plan §2 and §9: Baralai has a **six-step** cycle | CORRECTED | **five** actions, then repeat (Attack, Glint, Triple Attack, Looming Glacier, Silence / Absorb); research §4.2 lists it right, the plan miscounts. T3/T10 test five |
+| 8 | G-2: Split_Infinity puts Mortar and Lightfall at "below 75 %" | CORRECTED (nuance) | his wording is ambiguous: for Baralai's Guard he writes "lose more than 75 % HP", which is SinirothX's below-1/3 region. Only GamerGuides' 17,850 reads 75 % literally. The dump's values stand; the conflict is weaker than stated |
+| 9 | Den: under Mushroom Rock Road, "Sealed Cave", five bosses with no break, Yuna alone for two, Supreme Light, music names | CONFIRMED | wiki *Den of Woe*; SinirothX formation table (BOSS 225–229, `Weapon[..]` entries as quoted) |
+| 10 | Gippal's look (patch over the **right** eye, mortar with a rounded saw blade) | CONFIRMED | wiki *Gippal* §Appearance, 3972827. Pilot: the patch sits on his right eye (viewer's left); no saw blade, as disclosed |
+| 11 | GP13: the shades are silent because "nothing in the sources gives them lines" | CORRECTED | the wiki lists lines: *Baralai (boss)* "Suffer!" before Looming Glacier, "It's not over!" before Drill Shot (fight not stated); *Nooj (boss)* battle and Lightfall quotes (in the Creature Creator / Fiend Arena part). None is tied to the Den shades, so silence stays a fair recommendation, but it is Bailey's call on a partly sourced fact. Rule 8: never quote them |
+| 12 | GP3 a "everything carries" is "the faithful no break" | CORRECTED | the sources back **HP** carried (research §2, 2 sources). Statuses and the current dressphere carrying is our inference; label GP3 a as `[derived]` |
+| 13 | GP-G1: `carryFfx2` carries HP, MP, bag only; nothing passes `carriedParty` | CONFIRMED (by reading) | `BattleScreenSetup.ts:143–150`; `carriedParty` is only read (`ffx2/setup.ts:264`, `engine.ts:174`). T0's two-link run still owed (rule 3) |
+| 14 | GP-G2: `fixed-no-variance` rolls; 4,687 / 5,000 / 5,292 at 240 / 256 / 271 | CONFIRMED (run) | same numbers from `computeDamage`, power 100; Alchemist uses it at `alchemist.ts:70, 89, 108`. Enemy all-party moves are not halved (`execute.ts:214`) |
+| 15 | GP10 a covers the exactness question | CORRECTED | `percent-current` / `percent-total` roll too, so Bullseye (9/16), Drill Shot (3/4) and Greedy Aura (3/16) would vary ±6 %; §9 asserts them exact. GP10 must name those three too, or §9 must test the rolled spread. Research combat-core step 7 says the roll applies to everything but menu White Magic, against SinirothX's "constant" / "fractional": a sources conflict for Bailey, not an engine bug by default |
+| 16 | GP-G3 `mpOnly` bases on max HP; GP-G5 `radiusMetres` has no reader; GP-G6 Mortar offered with no learning; GP-G7 3-tuple; §4.1 rows 4–15 | CONFIRMED | `resolve.ts:347`; grep finds only the two definitions; `targeting.ts:250`, `dresspheres/gun-mage.ts:52`; `types.ts:2445`; the cited lines hold at HEAD |
+| 17 | §3: max HP 2,488 / 5,652 / 5,862; Darkness hits 87 % / 98 % / 100 % | CONFIRMED (run) | `buildState(farplaneBuild)`; `hit.ts` points race 104+12 − (23+6) = 87 |
+| 18 | O-1 sheet, reason for B: "matches the approved Shuyin painting, which is also cold and translucent" | **REFUTED** | `characters/shuyin/idle.png` and `portraits/shuyin.png` are fully opaque, warm-skinned, full colour; the engine draws no ghost treatment for him. Drop that reason; B stands or falls on the scan text alone |
+| 19 | O-1: D is "the Chapter IV violet, your Chapter XI pick" | CONFIRMED | D-109, D-118 |
+| 20 | O-4: labels ≥ 12 px on phone, no sideways scroll, no Flee | CONFIRMED (measured) | Playwright on `{a,b,c}-p2-phone.html` at 390: min 12 px, scrollWidth 390, no "Flee"; desktop pages min 14 px (13 px only in the composite note) |
+| 21 | O-4 numbers (Drill Shot at 8 for 3/4 max HP; Bullseye 9/16, cannot KO; below 1/3 + Mortar; Lightfall ≤ 2,999, 5,000, once; Yuna 2,488) | CONFIRMED | all trace to research §4 and item 17; "6 of 8", "Paine" and HP bars are labelled illustrative |
+| 22 | Sheets exist and match the README | CONFIRMED with gaps | every listed file is present. Gaps: phone mockups exist for the **Gippal moment only**, and at 390 px Yuna is cropped out of the scene, so the Nooj moment ("KO at Lightfall" chip, C's ring under Yuna) is unshown on a phone; the O-3 plates show no clear tunnel mouth although the README names one; the 2400-px sheets are legible on a phone only when zoomed (the phone sheet is fine) |
+
+**Presented as settled but Bailey's call:** (a) the phone HUD in O-4 is a **new layout** (today
+there is none, `phone-live-today.jpg`); picking O-4 B must not approve a phone HUD for other
+chapters. Ask it separately, game case "both". (b) GP3 a's status carry (item 12). (c) GP10's
+reach (item 15). (d) The shade treatment applying to Baralai and Nooj (the README already asks).
+**Invented numbers:** none found; the one unsupported reason is item 18.
+
+**Verdict: PROCEED**, with items 7, 11, 12, 15 and 18 corrected before the sheet goes to Bailey.
