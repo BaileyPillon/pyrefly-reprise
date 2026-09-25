@@ -1,0 +1,154 @@
+# Chapter XV ship layer: independent check
+
+**Game case: FFX-2 only.** The Den of Woe, the three shades (research `ffx2-gippal-den-of-woe.md`: ATB,
+dresspheres, the FFX-2 status set). Nothing below is true of an FFX chapter.
+
+- **Checked:** commit `bbc54e49` on branch `chapter-gippal-ship-0925`, in the worktree `D:/pyrefly-ch-gippal-ship`.
+- **When:** 2026-09-25, evening.
+- **How:** the checker built none of it and edited nothing under `src/` or `tests/`. This section is the only commit.
+- **Verdict:** **1 blocker, for listing only**: nobody can win the chapter at human speed. That blocker is
+  Bailey's call among sourced player-side options, not a defect in the ship layer. There is also 1 major (the
+  guide teaches the Lightfall prep that the bench measures as worse) and 7 minors. The ship layer itself works
+  end to end. It can stay on this branch **unlisted**, as the brief says.
+
+## Mechanical checks
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | exit 0 |
+| Full vitest (`--testTimeout=60000`) | 416 files passed, 2 skipped (418). 7,831 tests passed, 12 skipped, 1 todo. Exit 0, 73 s. |
+| `node tools/orphans.mjs` | 761 modules, 737 reachable, 24 orphaned: the same 24 as `main`. None of them is a Den module. |
+| Boss numbers | The ship commits (`77c16e3b`, `4284ef77`, `c89b505e`, `bbc54e49`) touch the enemy data only in the shades' `spriteKey` values. The only AI change is the `baralai-count-seven` emit. That emit draws no RNG and changes no decision: `countOne` only moves the existing `hits` increment. No stat, ability or AI row moved. |
+| House style | Every new file is under 400 lines. `src/scenes/index.ts` is at 399 (the Evrae entry was compacted to make room). `src/battle/common/types.ts`, the shared contract, grew from 2,612 to 2,621 lines (see minor 5). `resolve.ts` holds at 469. |
+| Contracts | `docs/CONTRACT-CHANGES.md` has the Chapter XV entries (`ChapterId`, `Chapter.number` 15, `carriesFullPartyState`, `DenOfWoeEnemyId`, and the ship layer). |
+| Merge with current `main` (`ba201aff`, chapter select v2) | A `git merge-tree` dry run has one conflict, in `docs/CONTRACT-CHANGES.md`: both sides add entries at the top. No code conflicts. |
+| Locked art (sha256 of every approved and judge-locked file), before and after every run | Worktree: 225 ok, 0 mismatched, 0 missing. Main: the same. `public/art` is a junction to main's copy. |
+| Worktree after the whole check | `git status` is clean before this commit. |
+
+## In the browser: headless GPU Chromium, fresh load each run
+
+- **Servers:** a private Vite dev server on port 5799 and a production preview on 5798, each with HMR and the
+  watcher off and its own cache and `dist` under `D:/Tools/pyrefly-scratch/chapters/den-of-woe-check/`. Both
+  were stopped by their port's PID. Nothing listens on 5780 to 5799.
+- **Reaching the chapter:** the debug API was used only to open the unlisted chapter:
+  `gotoChapter('ffx2-den-of-woe', { skipPrep: false, skipCutscenes: false, skipResults: false, seed: 1 })`.
+  No confirm key was pressed on the title first. After that, every step was a real key (or a tap for the phone
+  pause tab).
+- **Page health:** no page errors, no console errors and no HTTP errors in any run. Every image the page
+  loaded decoded in the page with `createImageBitmap`. No actor, pose or console line ever reported a
+  procedural placeholder.
+
+### The walk at four sizes (dev server)
+
+The walk is: party prep, Enter, the pre scene advanced line by line with Enter, then the first command menu
+(Yuna, White Mage). Then one real action with Enter presses: the first-time card, White Magic, Pray, and the
+group target. Yuna plays Pray on the whole party.
+
+| Size | Prep | Pre scene | First menu | Real action | Images, all decoded | Placeholder poses |
+|---|---|---|---|---|---|---|
+| 1600x900 | ok, "XV · The Den of Woe", with the objectives and tip | 8 lines, in draft order: 4 of Yuna's narration, then lines 5 to 8, each with its portrait | 11.2 s after the battle opened | `yuna` Pray → party | 60 | none |
+| 1280x720 | ok | the same | 11.5 s | the same | 57 | none |
+| 2000x1012 | ok | the same | 11.5 s | the same | 57 | none |
+| 390x844 (touch) | ok | the same | 11.5 s | the same | 60 | none |
+
+**Pause, CHAPTER tab.** At 1600x900 the tab was opened with Esc and then a click; at 390x844, with a tap.
+- The plate is `ch15-ffx2-den-of-woe` (hero plate B). Its `.2x.webp` loaded at 1982x1132 on desktop and
+  1477x844 on the phone.
+- The tab shows the three objectives (Get past Baralai, Get past Gippal, Defeat Nooj), "Battle 1 of 3", the
+  scene "Den of Woe", the quote (line 13), the handwritten line and the three snapshots.
+- The tab strip is `member:yuna, member:rikku, member:paine, chapter, guide, options, controls, music`.
+
+### The production build (vite build + vite preview, base `/pyrefly-reprise/`)
+
+- **Build:** exit 0. The artifact manifest decode-checked all 1,068 files: 0 problems, 0 files that failed to
+  decode, 0 unverified audio. The Den's files all decode: the plate, the three shades' idles, the Baralai and
+  Gippal casts, and the hero plate PNG and `.2x.webp`.
+- **The walk on the preview at 1600x900 and 390x844:** the same as on dev. 60 images, all decoded, and no errors.
+- **Every link on the stage (preview, seed 7, `intended`, fast):** it ended in victory with 3 links. 32
+  actor/pose pairs were seen across Baralai, Gippal and Nooj, the three girls included, and none was a
+  placeholder. Nooj has no `cast` painting, so his cast pose shows his idle painting, never a silhouette.
+- **Callouts that fired on seed 7:** `baralai-entrance`, `baralai-count-seven` (the AI emit), `gippal-entrance`,
+  `gippal-third`, `gippal-mortar`, `nooj-entrance`. Lightfall did not come on this seed.
+
+### A win (labelled: bench speed, not human speed)
+
+- **Seeds:** my own search on the live flow (`auto: 'intended'`, `speed: 'skip'`). Seeds 1 to 13, 31 to 47 and
+  61 to 90 give 5 wins in 60 runs (seeds 7, 13, 39, 47, 77): 8 %. That is in line with the builder's 12/200.
+- **Seed 7, fresh load, cutscenes on, real Enter presses through the pre scene:** it won all three links. Then
+  the post scene played in draft order: Paine's "Enough. Let them rest.", then lines 9 to 15, each with its
+  portrait. The results screen reads "Victory, New best". It shows 1,800 EXP ×3, AP 10, 30,000 gil and
+  Magical Dances Vol. 1: Nooj's row in the research, §3.2. Enter on Confirm played line 16 ("No."), and the
+  flow resolved `victory`.
+
+### A loss and a retry
+
+- **Seed 1, `auto: 'attack'`:** Defeat. The results read "Den of Woe — under Mushroom Rock Road · Fell", with
+  Retry and Chapter Select.
+- **Retry with a real Enter press:** back into battle on seed 1001. The link is `shade-baralai` at 12,220 HP.
+  The party is at full: 2,488, 5,652 and 5,862. So a retry restarts the Den from the first shade (GP4 a, as
+  built). The retry frame showed no errors.
+
+### Chapter select (from the title with Enter)
+
+There are 10 tiles, and they are the same as `main` at the merged base. Seymour and Anima (VII) is still
+**Coming** and not playable. The Den is not in the list, and the page has no "Den of Woe" text. `CHAPTERS`
+did not change; the diff in `encounters.ts` is type-only.
+
+## The story against the writing bible
+
+- **FFX-2 grammar (§2.2).** Yuna narrates the open, which is the FFX-2 chapter convention. There is one
+  sincere exchange, lines 12 to 14 (three lines, under the four-line cap), and then the banter resumes (15, 16).
+  Paine ends the pre-scene exchange and the post, varying the order once.
+- **Voices.** Every Paine line is 2 to 8 words, with the one-word veto ("Enough.", "No."). She states a feeling
+  only when Yuna asks (§1.16). Rikku is right on a technical point twice (Baralai's count, the Gun Mage's
+  Mortar) and says what the others feel (line 11) (§1.15). Yuna's seam shows once (line 12) (§1.14). Every line
+  is 10 words or fewer (§2.3).
+- **Theme.** Nobody states it. Line 10 names Shuyin as the cause, which is a plot fact from research §6.2.
+- **Our words only.** Every line is marked `[ORIGINAL]`, and the shades are silent (GP13 a). The only change from
+  the draft is the moved ellipsis in Rikku's link-1 line, which the house lint required and the draft discloses.
+
+## Findings
+
+### Blocker (for listing, not for keeping the chapter on the branch)
+
+1. **Nobody can win the chapter at human speed.** The builder's bench: 0/40 on the intended line at human
+   speed (Wait split) and 0/40 under Active. Nooj fought fresh wins 1/40, because Lightfall's 5,000 to
+   everyone kills Yuna (2,488 max HP) from full. My live seed search agrees at bench speed (5/60). Listing
+   the chapter as it is would ship an encounter no human wins. The answers are sourced player-side options,
+   never a boss number, and they are Bailey's call: 3 Hero Drinks (4/40), +8 levels (1/40), or both (10/40).
+
+### Major
+
+1. **The guide and the tactic teach the Lightfall prep, which the bench measures as worse than no prep.** The
+   prep keeps the Dark Knights above 5,000 HP: the Curaga hint on Nooj, and the "plain swing" hint instead of
+   Darkness. With the prep the Den wins 12/200 at bench speed and 0/40 at human speed; without it, 26/200 and
+   3/40. The advice is the sources' own, and it is disclosed. Bailey decides whether to keep it.
+
+### Minors
+
+1. **Phone framing (390x844).** At every command menu, Baralai is cut at the right edge while the party stays
+   whole. The target step does show him whole. The scene uses Chapter V's wide rigs, as every FFX-2 scene does
+   on the phone, and the phone framing is a best-effort slide. The builder disclosed this.
+2. **The pause hero plate.** The plate's two faces sit under the tab's text columns: Gippal's under "The
+   party", Nooj's under the location and quote. On the phone only Gippal's hair shows above the text. The
+   plate has no measured focal entry, so it uses `plates.ts`'s fallback. The builder disclosed this.
+3. **No Shuyin portrait in the narration.** GP14 a says Yuna's narration plays over the approved Shuyin
+   portrait, but `narrate` has no portrait slot, so lines 3 and 4 play over the cave. This departs from the
+   pick. It is disclosed in the draft's "As built" section, and it needs a small cutscene feature or Bailey's
+   okay.
+4. **The music is a stand-in.** The battle cue is `boss-shuyin` (GP16 b) until Bailey picks a Den cue by ear.
+5. **`src/battle/common/types.ts` grew by 9 lines** (`carriesFullPartyState`) although it is over 400 lines.
+   It is the shared contract, and Chapters XIII and XIV grew it the same way. It came from the engine commit,
+   not the ship layer.
+6. **`src/scenes/index.ts` is at 399 lines.** The Chapter XI, XII and XIV branches also register scenes
+   there, so it needs compacting when they merge.
+7. **The results tally shows only Nooj's link.** It lists 1,800 EXP, 30,000 gil and Magical Dances Vol. 1,
+   which are Nooj's sourced values, not the three shades' sum. This is shared chain behaviour, and I did not
+   check it against the other chains.
+
+### For the integrator (not findings)
+
+- `main` has moved to `ba201aff` (chapter select v2, the boss painted on its scene). The dry-run merge
+  conflicts only in `docs/CONTRACT-CHANGES.md`. Listing the Den under v2 will need its tile. The record's
+  `thumbnailKey` is `chapter-ffx2-den-of-woe`.
+- Listing stays the driver's step, following commit 5c8706d6.
