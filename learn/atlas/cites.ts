@@ -48,6 +48,8 @@ import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.
 import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natus-abilities.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from '../../src/data/ffx2/enemies/magus-sisters-abilities.ts';
+import { paragonAbilities } from '../../src/data/ffx2/enemies/paragon-abilities.ts';
+import { tremaAbilities } from '../../src/data/ffx2/enemies/trema-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -129,6 +131,11 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     mindy: 'research/ffx2-fallen-aeons.md §3.2 (src/data/ffx2/enemies/magus-sisters.ts)',
     'x2-anima': 'research/ffx2-fallen-aeons.md §3.3 (src/data/ffx2/enemies/fallen-aeons-road.ts)',
   },
+  // Chapter XIII (FFX-2), registered but unlisted like Chapters IX to XI.
+  'ffx2-trema': {
+    paragon: 'research/ffx2-trema.md §3.2 (src/data/ffx2/enemies/paragon.ts)',
+    trema: 'research/ffx2-trema.md §3.1 (src/data/ffx2/enemies/trema.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -199,6 +206,10 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
     fileCite(magusSistersAbilities, 'research/ffx2-fallen-aeons.md §4.2 (src/data/ffx2/enemies/magus-sisters-abilities.ts)'),
     fileCite(x2AnimaAbilities, 'research/ffx2-fallen-aeons.md §4.3 (src/data/ffx2/enemies/fallen-aeons-abilities.ts)'),
   ],
+  'ffx2-trema': [
+    fileCite(paragonAbilities, 'research/ffx2-trema.md §4.1 (src/data/ffx2/enemies/paragon-abilities.ts)'),
+    fileCite(tremaAbilities, 'research/ffx2-trema.md §4.2 (src/data/ffx2/enemies/trema-abilities.ts)'),
+  ],
 };
 
 /**
@@ -247,6 +258,8 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
   },
   // Every Chapter XI ability id is `x2-`-prefixed and defined in the chapter's own ability files.
   'ffx2-fallen-aeons': {},
+  // Every Paragon and Trema ability id is `paragon-`/`trema-`-prefixed (no shared reuse).
+  'ffx2-trema': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

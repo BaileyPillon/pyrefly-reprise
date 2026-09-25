@@ -30,6 +30,7 @@ import { withAccessories } from './accessories.ts';
 import { activeGateBonuses, gateStatTotal, withStatBonus } from './garment-grids.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
+import { applyStatus } from './statuses.ts';
 
 function emptyAtb(agi: number): Ffx2Unit['atb'] {
   return { ticks: 0, required: baseRequired(agi), gauge: 0, charging: null, recovery: 0 };
@@ -116,7 +117,7 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
 
 function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
   const stats: StatBlock = { ...enemy.stats };
-  return {
+  const unit: Ffx2Unit = {
     id: enemy.id,
     name: enemy.name,
     side: 'enemy',
@@ -152,6 +153,19 @@ function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
       ...(enemy.thinkingPeriod !== undefined ? { thinkingPeriod: enemy.thinkingPeriod } : {}),
     },
   };
+  applyAutoStatuses(unit, enemy.autoStatuses);
+  return unit;
+}
+
+/**
+ * `EnemyDef.autoStatuses` (FFX-2, Chapter XIII's Trema: Spellspring). Applied before the
+ * first event, with no RNG draw, and remembered on the unit so a Dispel leaves them alone
+ * (`resolve.ts`). An enemy without the field is built exactly as before.
+ */
+function applyAutoStatuses(unit: Ffx2Unit, ids: EnemyDef['autoStatuses']): void {
+  if (!ids || ids.length === 0) return;
+  unit.autoStatuses = [...ids];
+  for (const id of ids) applyStatus(unit, { status: id, chance: 255, duration: 0 }, unit.id);
 }
 
 /** Restore a girl from the previous link of a chain. CONTRACT-CHANGES §6. */

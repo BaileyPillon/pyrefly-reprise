@@ -87,3 +87,14 @@ export function applyMpFraction(ctx: ResolveContext, user: Ffx2Unit, target: Ffx
     if (user.mp > before) ctx.emit({ type: 'mp-heal', targetId: user.id, sourceId: target.id, amount: user.mp - before });
   }
 }
+
+/**
+ * What an `mpOnly` hit takes from the target's MP. By default the computed amount (Leblanc's
+ * and the Vegnagun rows); with `extra.mpFractionOfCurrent` as well, that many sixteenths of the
+ * target's **current** MP and no HP: Chapter XIII's Waning Moon, 5/16 a hit [ffx2-trema §4.2].
+ * No shipped ability set both keys before Chapter XIII, so every other replay is unchanged.
+ */
+export function mpOnlyTaken(ability: AbilityDef, target: Ffx2Unit, amount: number): number {
+  const sixteenths = ability.extra?.['mpFractionOfCurrent'];
+  return typeof sixteenths === 'number' ? Math.floor((target.mp * sixteenths) / 16) : Math.abs(amount);
+}

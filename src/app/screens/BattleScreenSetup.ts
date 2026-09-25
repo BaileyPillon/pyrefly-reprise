@@ -21,6 +21,7 @@ import type {
   InventoryEntry,
   MidBattleTrigger,
 } from '../../battle/common/types.ts';
+import { cloneData } from '../../battle/common/clone.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
@@ -85,7 +86,7 @@ export function setupForNextLink(
 ): BattleSetup {
   return {
     game: previous.game,
-    party: carryPartyForward(previous.party, state),
+    party: carryPartyForward(previous.party, state, nextGroup.carriesPartyStatuses === true),
     enemies: nextGroup,
     triggers: previous.triggers,
     seed,
@@ -104,9 +105,10 @@ export function setupForNextLink(
 export function carryPartyForward(
   build: FFXPartyBuild | FFX2PartyBuild,
   state: BattleState,
+  withStatuses = false,
 ): FFXPartyBuild | FFX2PartyBuild {
   if (build.game === 'ffx') return carryFfx(build, state);
-  return carryFfx2(build, state);
+  return carryFfx2(build, state, withStatuses);
 }
 
 function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {
@@ -140,11 +142,14 @@ function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {
   };
 }
 
-function carryFfx2(build: FFX2PartyBuild, state: BattleState): FFX2PartyBuild {
+function carryFfx2(build: FFX2PartyBuild, state: BattleState, withStatuses: boolean): FFX2PartyBuild {
   const members = build.members.map((m) => {
     const live = state.combatants[m.id];
     if (!live) return m;
-    return { ...m, hp: Math.max(0, live.hp), mp: Math.max(0, live.mp) };
+    const carried = { ...m, hp: Math.max(0, live.hp), mp: Math.max(0, live.mp) };
+    // `EnemyGroupDef.carriesPartyStatuses` (FFX-2, Chapter XIII's Trema link only): the
+    // statuses ride along too, as copies, so the setup a retry replays never changes.
+    return withStatuses ? { ...carried, statuses: cloneData(live.statuses) } : carried;
   }) as FFX2PartyBuild['members'];
   return { ...build, members, inventory: carryInventory(build.inventory, state) };
 }

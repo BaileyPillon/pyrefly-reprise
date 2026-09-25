@@ -307,8 +307,19 @@ export type VegnagunEnemyId =
   /** Battle 5. Lv 55-ish, Str 47 / Def 132 / Mag 42 / MDef 92. Biased toward targeting Yuna. */
   | 'shuyin';
 
-/** Every FFX-2 enemy combatant across the two chapters. */
-export type FFX2EnemyId = BahamutEnemyId | VegnagunEnemyId;
+/**
+ * Chapter XIII (registered, unlisted) — Cloister 100 of the Via Infinito, two links with
+ * the party carried between them [ffx2-trema §1.1, `[verified: 5 sources]`]: Paragon
+ * (Lv 99, HP 200 000; Lord Zaon's fiend form), then Trema (Lv 99, HP 999 999; the founder
+ * of New Yevon). FFX-2 only: no FFX combatant shares either id.
+ */
+export type TremaEnemyId = 'paragon' | 'trema';
+
+/** Every FFX-2 enemy combatant with an id in this file (Chapters 4 and 5, and XIII). */
+export type FFX2EnemyId = BahamutEnemyId | VegnagunEnemyId | TremaEnemyId;
+
+/** Chapter XIII's two links, in order. */
+export const TREMA_CHAIN_ORDER: readonly TremaEnemyId[] = ['paragon', 'trema'] as const;
 
 /** The five battles of the Vegnagun chain, in order. */
 export const VEGNAGUN_CHAIN_ORDER: readonly VegnagunEnemyId[] = [

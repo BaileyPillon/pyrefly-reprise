@@ -64,7 +64,7 @@ import {
 } from './gauges.ts';
 import type { ResolveContext } from './resolve.ts';
 import { buildCommands, type MenuContext } from './targeting.ts';
-import { aiContextFor, berserkTurnCommand, notifyEnemiesDamaged, notifyEnemiesTargeted, payStatusClocks } from './engineHooks.ts';
+import { aiContextFor, berserkTurnCommand, notifyEnemiesDamaged, notifyEnemiesTargeted, payStatusClocks, runCounters, type CounterEnv } from './engineHooks.ts';
 import { buildState, inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
@@ -525,6 +525,14 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     };
   }
 
+  private counterEnv(): CounterEnv {
+    const cls = this.battleState.flags['lastAttackClass'];
+    return {
+      units: this.units, abilities: this.abilities, attackClass: typeof cls === 'string' ? cls : 'none',
+      aiContext: (u) => this.aiContext(u), resolveCtx: () => this.resolveCtx(), emit: (e) => this.emit(e),
+    };
+  }
+
   private aiContext(self: Ffx2Unit): AiContext {
     return aiContextFor(self, this.units, this.rng, this.battleState, this.abilities, (e) => this.emit(e));
   }
@@ -598,6 +606,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       if (unit.side !== 'enemy') continue;
       aiScriptFor(unit.enemy?.aiScriptId).onTurnResolved?.(this.aiContext(unit), actor);
     }
+    runCounters(this.drafts.slice(startedAt), actor, this.counterEnv()); // Paragon's Big Bang (TR12 b)
     this.flushSignal(startedAt, actor);
   }
 

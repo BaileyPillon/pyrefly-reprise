@@ -25,6 +25,7 @@ import type {
   ItemId,
   Rng,
   StatBlock,
+  StatusId,
 } from '../common/types.ts';
 import type { AtbSpeed } from './constants.ts';
 import type { AtbMode } from './active.ts';
@@ -58,6 +59,8 @@ export interface Ffx2Unit extends FFX2Combatant {
   stolenFrom?: boolean;
   /** Set on an enemy once Pilfer Gil has taken its gil: once per battle (`steal.ts`). */
   gilPilfered?: boolean;
+  /** `EnemyDef.autoStatuses`, kept so a Dispel can leave them alone (`resolve.ts`). */
+  autoStatuses?: StatusId[];
 }
 
 /** Ability lookup. Data files register the real table; `abilities.ts` is the fallback. */
@@ -236,6 +239,14 @@ export interface AiScript {
   onTargeted?(ctx: AiContext, sourceId: CombatantId): void;
   /** Optional hook run when a Regen tick heals `self` (the Magus Sisters' +5, §4.2). */
   onRegen?(ctx: AiContext, amount: number): void;
+  /**
+   * Optional **out-of-turn counter** (`engineHooks.ts#runCounters`): asked once after every
+   * party action that damaged `self`, with the damage and that action's mitigation class
+   * (`execute.ts#attackClass`). A command returned here resolves at once, costs `self` no
+   * ATB and emits a `counter` event. Paragon's Big Bang [ffx2-trema §4.1, `[SinirothX]`
+   * "Counter"; plan TR12 = b]. No other script defines it, so no other log changes.
+   */
+  counter?(ctx: AiContext, attacker: Ffx2Unit, hit: { amount: number; attackClass: string }): Command | null;
 }
 
 /** Read or write a numeric AI memory slot. */

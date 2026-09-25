@@ -6,6 +6,42 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XIII, Trema: `ChapterId` gains `'ffx2-trema'`, `Chapter.number` widens to 13, `EnemyDef.autoStatuses`, `EnemyGroupDef.checkpointOnEntry` and `carriesPartyStatuses`, `ids.ts` gains `TremaEnemyId`
+
+**FFX-2 only** [AGENTS.md hard rule 14] (research `ffx2-trema.md` §0: ATB, dresspheres, Garment
+Grids, Spherechange; Paragon and Trema share only *models* with FFX's Nemesis and unsent priest,
+no data); the registration and the chain flags are shared plumbing, but only this chapter's
+records set them. Bailey, 2026-09-25: "I'll go with all your recommendations" (TR1-TR19 and
+O-1..O-4 on `docs/plans/chapter-trema-review.md`, after its Review).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'ffx2-trema'`; `Chapter.number`
+widens from `1 … 11` to `1 … 13` (12 is Seymour Omnis's, registered on its own branch; the
+integrator serialises the two). The record lives in `src/data/chapter-ffx2-trema.ts` and sits in
+`UNLISTED_CHAPTERS` (the Chapter IX to XI precedent). Every `Record<ChapterId, …>` gains the key
+(`learn/atlas/cites.ts`, `tests/unit/learn-atlas-data.test.ts`). No save migration.
+
+**Additive** in `src/battle/common/types.ts`:
+- `EnemyDef.autoStatuses?: StatusId[]`: statuses an enemy carries from the first event and that
+  no Dispel removes. Trema's Spellspring (International / HD, `[verified: 2 sources]`). Applied in
+  `src/battle/ffx2/setup.ts#buildEnemy` with no RNG draw; `resolve.ts` skips them in a removal list.
+- `EnemyGroupDef.checkpointOnEntry?: boolean`: a chained link that is a retry checkpoint **without**
+  a Save Sphere (TR5 = b). `BattleChainCheckpoint.checkpointAt` reads it beside
+  `restoresPartyOnEntry`; the setup the link was entered on already carries the previous link's
+  end state, so a retry replays it. Kept in memory only (D-100): not save-data class.
+- `EnemyGroupDef.carriesPartyStatuses?: boolean`: the party enters the link with its statuses as
+  well as its HP and MP ("whatever state the Paragon fight left them", `[verified: 5 sources]`).
+  `BattleScreenSetup.setupForNextLink` copies them (`cloneData`) only for a link that sets it.
+
+**Additive** in `src/data/ffx2/ids.ts`: `TremaEnemyId = 'paragon' | 'trema'`, joined into
+`FFX2EnemyId`; `TREMA_CHAIN_ORDER`.
+
+Not a listed contract file, recorded for the same reason: `src/battle/ffx2/internal.ts` gains
+`AiScript.counter` (an out-of-turn counter, run by `engineHooks.ts#runCounters` after a party
+action that damaged the enemy; Paragon's Big Bang, TR12 = b) and `Ffx2Unit.autoStatuses`.
+`resolve.ts` reads `extra.mpOnly` together with `extra.mpFractionOfCurrent` as "that share of
+current MP, no HP" (Waning Moon). No shipped record set either combination before, and Chapters
+4, 5, 6 and XI replay byte-identically (180 seeded runs at Active 0 and 700 ms, before and after).
+
 ## 2026-09-24 — `encounters.ts`: Chapter IX (Yojimbo) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX only** [AGENTS.md hard rule 14]: Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth

@@ -226,9 +226,11 @@ describe('every other chapter chains exactly as before', () => {
   });
 
   for (const chapter of others) {
-    it(`${chapter.number}. ${chapter.id}: no Save Sphere, no checkpoint, win or lose on any link`, async () => {
+    it(`${chapter.number}. ${chapter.id}: no Save Sphere, and no checkpoint but at a checkpointOnEntry link, win or lose on any link`, async () => {
       const groups = await groupsOf(chapter);
       expect(groups.some((g) => g.restoresPartyOnEntry === true)).toBe(false);
+      // Chapter XIII's Trema link is the one checkpoint without a Save Sphere (TR5 = b).
+      const checkpointLink = groups.findIndex((g) => g.checkpointOnEntry === true) + 1;
       for (let lostAt = 1; lostAt <= groups.length; lostAt++) {
         const kinds: Kind[] = [...Array(lostAt - 1).fill('victory'), 'defeat'];
         let cards = 0;
@@ -251,7 +253,8 @@ describe('every other chapter chains exactly as before', () => {
           },
         });
         expect(cards).toBe(0);
-        expect(result.checkpoint).toBeNull();
+        if (checkpointLink > 0 && lostAt >= checkpointLink) expect(result.checkpoint?.link).toBe(checkpointLink);
+        else expect(result.checkpoint).toBeNull();
         expect(result.links).toBe(lostAt);
       }
     });

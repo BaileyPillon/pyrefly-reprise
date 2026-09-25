@@ -8,7 +8,7 @@
 import type { BattleState, CombatantId, Command, Rng } from '../common/types.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit } from './internal.ts';
 import { advanceStatuses } from './statuses.ts';
-import { applyHpDelta, heal, type ResolveContext } from './resolve.ts';
+import { applyHpDelta, heal, resolveAbility, type ResolveContext } from './resolve.ts';
 import { berserkCommand, type MenuContext } from './targeting.ts';
 import { aiScriptFor } from './ai/index.ts';
 
@@ -141,16 +141,7 @@ export function notifyEnemiesDamaged(
   units: Ffx2Unit[],
   aiContext: (unit: Ffx2Unit) => AiContext,
 ): void {
-  const totals = new Map<CombatantId, number>();
-  for (const draft of produced) {
-    if (draft.type !== 'damage') continue;
-    const hit = draft as { targetId: CombatantId; amount: number };
-    if (!(hit.amount > 0)) continue;
-    // An HP *cost* is the caster paying for her own ability, not a hit on her.
-    if (hit.targetId === actor.id && actor.side === 'party') continue;
-    totals.set(hit.targetId, (totals.get(hit.targetId) ?? 0) + hit.amount);
-  }
-  for (const [targetId, amount] of totals) {
+  for (const [targetId, amount] of damageTotals(produced, actor)) {
     const unit = units.find((u) => u.id === targetId);
     if (!unit || unit.side !== 'enemy') continue;
     aiScriptFor(unit.enemy?.aiScriptId).onDamaged?.(aiContext(unit), actor.id, amount);
@@ -190,5 +181,66 @@ export function notifyEnemiesTargeted(
     const unit = units.find((u) => u.id === targetId);
     if (!unit || unit.side !== 'enemy') continue;
     aiScriptFor(unit.enemy?.aiScriptId).onTargeted?.(aiContext(unit), actor.id);
+  }
+}
+
+/** HP damage this action dealt, per target (an HP cost the caster paid is not a hit). */
+function damageTotals(produced: EventDraft[], actor: Ffx2Unit): Map<CombatantId, number> {
+  const totals = new Map<CombatantId, number>();
+  for (const draft of produced) {
+    if (draft.type !== 'damage') continue;
+    const hit = draft as { targetId: CombatantId; amount: number };
+    if (!(hit.amount > 0)) continue;
+    // An HP *cost* is the caster paying for her own ability, not a hit on her.
+    if (hit.targetId === actor.id && actor.side === 'party') continue;
+    totals.set(hit.targetId, (totals.get(hit.targetId) ?? 0) + hit.amount);
+  }
+  return totals;
+}
+
+/** What {@link runCounters} needs from the engine. */
+export interface CounterEnv {
+  units: Ffx2Unit[];
+  abilities: AbilityRegistry;
+  /** The mitigation class of the party action that just resolved (`flags.lastAttackClass`). */
+  attackClass: string;
+  aiContext(unit: Ffx2Unit): AiContext;
+  resolveCtx(): ResolveContext;
+  emit: Emit;
+}
+
+/**
+ * **Out-of-turn counters** (`AiScript.counter`; FFX-2 only, Chapter XIII's Paragon).
+ *
+ * After a party action, every living enemy it damaged whose script defines `counter` is asked
+ * once. A command it returns resolves at once as a counter (`isCounter`, which emits the
+ * `counter` event): `action-start`, the ability, `action-end`, and **no** change to the
+ * enemy's ATB, because a counter is not its turn. The sources call Paragon's Big Bang a
+ * "Counter" [ffx2-trema §4.1, `[SinirothX]`]; the plan's TR12 = b took the immediate reading
+ * over "on its next turn". Whether a counter waits out a chain lock is not in the sources:
+ * it does not wait, `[estimate]`. No script defined `counter` before Chapter XIII, so every
+ * other chapter's event log is unchanged.
+ */
+export function runCounters(produced: EventDraft[], actor: Ffx2Unit, env: CounterEnv): void {
+  if (actor.side !== 'party') return;
+  const hits = damageTotals(produced, actor);
+  // A hit that takes only MP is still a hit (the wiki: a Mana Spring drain draws Big Bang).
+  for (const draft of produced) {
+    const d = draft as { type: string; targetId?: CombatantId; sourceId?: CombatantId; amount?: number };
+    if (d.type !== 'mp-damage' || d.sourceId !== actor.id || !d.targetId || !((d.amount ?? 0) > 0)) continue;
+    hits.set(d.targetId, (hits.get(d.targetId) ?? 0) + (d.amount ?? 0));
+  }
+  for (const [targetId, amount] of hits) {
+    const unit = env.units.find((u) => u.id === targetId);
+    if (!unit || unit.side !== 'enemy' || !unit.alive || unit.removed) continue;
+    const script = aiScriptFor(unit.enemy?.aiScriptId);
+    if (!script.counter) continue;
+    const command = script.counter(env.aiContext(unit), actor, { amount, attackClass: env.attackClass });
+    if (!command || command.kind !== 'ability') continue;
+    const ability = env.abilities.get(command.id);
+    if (!ability) continue;
+    env.emit({ type: 'action-start', actorId: unit.id, command, abilityId: ability.id, abilityName: ability.name, targets: command.targets });
+    resolveAbility(env.resolveCtx(), unit, ability, command.targets, { isCounter: true });
+    env.emit({ type: 'action-end', actorId: unit.id });
   }
 }

@@ -21,7 +21,7 @@ import { resolveSensor, sensorKind } from './sensor.ts';
 import { applyStatus, removeStatus, statusChanceLinear } from './statuses.ts';
 import { hpCostFor, resolveTargets } from './targeting.ts';
 import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
-import { applyMpFraction, resolveSetTo, setsPoolsTo } from './aeon-effects.ts';
+import { applyMpFraction, mpOnlyTaken, resolveSetTo, setsPoolsTo } from './aeon-effects.ts';
 
 export interface ResolveContext {
   units: Ffx2Unit[];
@@ -180,6 +180,8 @@ function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, abil
 
   if (ability.flags.includes('removes-statuses')) {
     for (const id of ability.removesStatuses as StatusId[]) {
+      // An enemy's auto-status (`EnemyDef.autoStatuses`, Trema's Spellspring) stays put.
+      if (target.autoStatuses?.includes(id)) continue;
       if (removeStatus(target, id)) {
         ctx.emit({ type: 'status-remove', targetId: target.id, status: id, reason: 'dispelled' });
       }
@@ -346,7 +348,7 @@ export function resolveAbility(
 
       const mpOnly = ability.extra?.['mpOnly'] === true;
       if (mpOnly) {
-        const drained = Math.min(target.mp, Math.abs(result.amount));
+        const drained = Math.min(target.mp, mpOnlyTaken(ability, target, result.amount)); // Waning Moon: `aeon-effects.ts`
         target.mp -= drained;
         ctx.emit({ type: 'mp-damage', targetId: target.id, sourceId: user.id, amount: drained });
         if (ability.flags.includes('drains-mp')) {
