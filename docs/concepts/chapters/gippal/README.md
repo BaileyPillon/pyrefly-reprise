@@ -5,6 +5,14 @@
 `docs/plans/chapter-gippal-review.md` §6.2 says come first (hard rule 9). Pick or mix per row. A
 pick approves only the parts you name (AGENTS.md rule 15). Every sheet is stamped `CONCEPT`.
 
+**Corrected 2026-09-24 after the adversarial review** (`docs/plans/chapter-gippal-review.md`,
+Review). O-1 B's second reason was wrong (the approved Shuyin paintings are opaque and full colour,
+not cold and translucent): B now stands on the scan text alone. The phone layout in O-4 is no longer
+presented as settled: the phone battle HUD is its own cross-chapter question. The O-3 plates show no
+clear tunnel mouth, and the question says so. Every sheet was re-cut as one column that reads on a
+phone: at 390 px wide no word on a sheet is below 12.5 px, O-4 is one sheet per moment, and each
+phone mockup has its own row at full size.
+
 **Which game (rule 14): FFX-2 only.** Every frame uses the real Chapter V ATB HUD and the Chapter V
 line-up: Yuna as a White Mage, Rikku and Paine as Dark Knights (GP5 a). A pick applies to this
 chapter only.
@@ -13,7 +21,7 @@ chapter only.
 |---|---|---|
 | O-1 Gippal's shade | `o1-shade/sheet.jpg` | `o1-shade/{a-pyrefly-edge,b-translucent,c-anger-red,d-chapter4-violet}-frame.jpg` (1600x900), `cards.jpg`, `withdrawn-rolls.jpg` |
 | O-3 The Den | `o3-den/sheet.jpg` | `o3-den/{a,b,c}-frame.jpg`, `{a,b,c}-plate.jpg`, `guide-a.jpg`, `withdrawn-rolls.jpg` |
-| O-4 Reading the fight | `o4-fight/sheet.jpg`, `o4-fight/sheet-phone.jpg` | `o4-fight/{a,b,c}-{p1,p2,p3}.jpg` (1600x900), `{a,b,c}-p2-phone.jpg` (390x844 at 2x), the `.html` pages, `fight.css`, `phone.css`, `phone-live-today.jpg` |
+| O-4 Reading the fight | `o4-fight/sheet-p1.jpg` (Baralai), `sheet-p2.jpg` (Gippal), `sheet-p3.jpg` (Nooj), `o4-fight/sheet-phone.jpg` | `o4-fight/{a,b,c}-{p1,p2,p3}.jpg` (1600x900), `{a,b,c}-p2-phone.jpg` (390x844 at 2x), the `.html` pages, `fight.css`, `phone.css`, `phone-live-today.jpg` |
 | O-2 Baralai and Nooj | not made yet | These depend on GP1. If you pick b or c there, they are drawn in the treatment you pick in O-1 |
 | O-5 Music | not in this set | Music is its own track, judged by ear on `docs/audio/audition.html` (rule 13) |
 
@@ -27,17 +35,18 @@ chapter only.
    - C: a red pyrefly body that holds his shape, with his feet coming apart into motes.
    - D: the Chapter IV violet, the look you picked for Chapter XI's possessed aeons.
 
-   **I recommend B.** The scan text says he is an illusion made of pyreflies, and B reads that
-   way at once. It matches the approved Shuyin painting, which is also cold and translucent, and
-   Shuyin is the one behind the shades. He still reads as Gippal by his outline: the spiky hair,
-   the patch and the mortar. A reads as the real man. D says "possessed", which the shades are
+   **I recommend B,** on the scan text alone: it says he is an illusion made of pyreflies, and B
+   reads that way at once. He still reads as Gippal by his outline: the spiky hair, the patch and
+   the mortar. (It does not echo Shuyin, who is behind the shades: the approved Shuyin paintings
+   are opaque and full colour, so that is no reason for B, and none against it.) A reads as the
+   real man. D says "possessed", which the shades are
    not. **C is the alternative if you want each shade coloured by its feeling.** The scan texts
    give sorrow for Baralai, anger for Gippal and despair for Nooj. The colours for those would
    be ours. **Follow-up question:** whatever you pick in O-1 also applies to Baralai and Nooj in
    O-2. Is that right?
 2. **O-3: What light should the Den have?** All three use one painted cave: a rectangular
-   clearing of cracked stone, rock walls and a tunnel mouth at the far end. Only the light
-   changes.
+   clearing of cracked stone and rock walls. The layout guide had a tunnel mouth at the far end,
+   but no plate shows a clear one; the finals would add it. Only the light changes.
    - A: cold blue pyreflies.
    - B: crimson.
    - C: near dark, with one shaft of light from the ravine above.
@@ -59,12 +68,19 @@ chapter only.
    - C: marks in the world: a counter circle over the shade and a red ring under the member at
      risk.
 
-   **I recommend B, with A's sentence kept in the enemy-move card**, as in Chapter X. B works at
-   phone width and covers no painting. C's marks sit on top of the paintings. **Phone width**
-   (`o4-fight/sheet-phone.jpg`) has its own layout. Every fight label is 12 CSS px or larger
-   (measured), nothing scrolls sideways, and there is no Flee: the Den cannot be escaped (research
-   §3). For comparison, `phone-live-today.jpg` is the game as it runs today at 390 px, with no
-   phone layout. **"Shade 2 of 3" is our wording**, and it only fits if GP1 is b or c.
+   **I recommend B, with A's sentence kept in the enemy-move card**, as in Chapter X. B covers no
+   painting; C's marks sit on top of the paintings. **"Shade 2 of 3" is our wording**, and it
+   only fits if GP1 is b or c.
+   **Phone width is not this chapter's call.** Which battle HUD a phone gets is one question for
+   every chapter, game case both, already asked with its own options in
+   `docs/concepts/layout/phone-battle-hud/` (recommended there: B, the compact rail). Picking O-4
+   here approves no phone layout. `o4-fight/sheet-phone.jpg` borrows the Yojimbo round's phone
+   layout only to test the chips' words on the Gippal moment: every fight label 12 CSS px or
+   larger (measured), nothing scrolls sideways, and there is no Flee (the Den cannot be escaped,
+   research §3). Two gaps: at 390 px **Yuna is cropped out** of the scene on the left, and the
+   Nooj moment (the "KO at Lightfall" chip on Yuna's row, C's ring under her) has **no phone
+   mockup**; both wait for the phone HUD pick. For comparison, `phone-live-today.jpg` is the game
+   as it runs today at 390 px, with no phone layout.
 
 ## What is sourced and what is ours (rule 6)
 
@@ -86,6 +102,10 @@ chapter only.
     added (§4.1; the trigger is conflict G-2).
   - Nooj: Lightfall, 5,000 to all, once, at 2,999 HP or less (§4.3, G-2).
   - Yuna's 2,488 max HP was measured on the engine (plan §3).
+  - The fractions and Lightfall's 5,000 are the sourced values. Our engine would roll them ±6 %
+    today; whether they stay exact is plan GP10 (Lightfall, Bullseye, Drill Shot, Greedy Aura).
+  - Between the shades, the sources carry **HP** (research §2, 2 sources). Carrying statuses and
+    the current dressphere too is **our inference** from "no break", not sourced (plan GP3).
 
   The blow count (6), the last attacker (Paine) and the party HP are illustrative. The HP bars
   are the HUD as captured and do not show the moment's real HP.
@@ -147,4 +167,7 @@ chapter only.
 - **O-4:** `scripts/o4_html.py` writes the pages over the real frames, using
   `docs/concepts/polish/_kit/kit.css` for fonts and tokens. `scripts/shoot.mjs` shoots them in
   Playwright and measures the smallest fight-label font: 14 px at 1600x900, 12 px on the phone.
-- Scratch (full-size renders, captures, sheet specs): `D:/Tools/pyrefly-scratch/gippal-options/`.
+- **Sheets:** `scripts/sheets.py` builds every sheet with `scripts/sheet.py` (re-cut 2026-09-24):
+  one column, 1,200 px wide for the 1600x900 frames, 780 px for the phone mockups. The HUD text
+  inside a 1600x900 frame cannot read on a phone at any size; those sheets rely on their captions.
+- Scratch (full-size renders, captures, the first cut's sheet builder): `D:/Tools/pyrefly-scratch/gippal-options/`.

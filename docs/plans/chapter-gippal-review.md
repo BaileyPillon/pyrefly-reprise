@@ -31,11 +31,11 @@ THEMES.md §3, `approved-hashes.json`, D-043. Wiki revids are carried, not re-fe
 | Where / when | A sealed cave under **Mushroom Rock Road** (not Djose); Chapter 5, optional, all ten Crimson Spheres | §0 C-1, C-2 `[verified: 3–4]` |
 | Shape (the game) | Five bosses, no break: possessed Rikku, possessed Paine (Yuna alone), then shades of **Baralai → Gippal → Nooj** with the full party; HP carried | §2 `[verified: 4]` |
 | Gippal (shade) | Lv 56 · HP **14,800** · MP 235 · STR 73 · MAG 55 · DEF 68 · MDEF 33 · AGI 118 · Eva 23 · Luck 6 · Acc 0 | §3.1 `[verified: 2–5]` |
-| Gippal immunities | Death, Petrify, Sleep, Silence, Darkness, Poison, Confuse, Berserk, Curse, Eject, Slow, Stop, Doom, Delay, fractional, Gravity; **the Breaks land** | §3.1 `[verified: 3]`; Breaks `[derived]` |
+| Gippal immunities | Death, Petrify, Sleep, Silence, Darkness, Poison, Confuse, Berserk, Curse, Eject, Slow, Stop, Doom, Delay, fractional, Gravity; **the Breaks land** | §3.1 `[verified: 3]`, fractional `[verified: 2]` (not on the wiki infobox; review item 4); Breaks `[derived]` |
 | Gippal AI, HP ≥ 1/3 | 15/16 next cycle step **Grinder → Attack → Grinder → Attack → Bullseye**; 1/32 Flash Bomb; 1/32 Hush Grenade | §4.1 `[verified: 2]` |
 | Gippal AI, HP < 1/3 | 1/5 each Attack, Bullseye, Grinder, **Mortar**; 1/15 each Potion Plus, Flash Bomb, Hush Grenade. Strict `<`: 4,933 HP or less `[derived]` | §4.1; trigger `[conflict]` G-2 |
 | Gippal actions | Attack DC 16 · Grinder DC 14 ignores DEF · **Bullseye 9/16 of current HP** in a 140° arc, cannot kill · **Mortar DC 22** ignores DEF, same arc · Potion Plus +600 self · Flash Bomb / Hush Grenade 46–52 to all + Darkness / Silence (chance 50) | §4.1 `[SinirothX]`, 2–4 sources each |
-| Baralai (shade) | HP **12,220** (wiki 1,220 is a dropped digit, G-1) · MP 720 · DEF 67 · MDEF 26 · AGI 112 · six-step cycle; below 1/3 a 1/4 Regen / Guard branch; **+1 per hit or HP change, at 8 Drill Shot (3/4 of max HP) the last attacker** | §3.2, §4.2 `[verified: 2]`; 8 vs 10 G-5 |
+| Baralai (shade) | HP **12,220** (wiki 1,220 is a dropped digit, G-1) · MP 720 · DEF 67 · MDEF 26 · AGI 112 · **five-step** cycle (Attack, Glint, Triple Attack, Looming Glacier, Silence / Absorb, then repeat; review item 7); below 1/3 a 1/4 Regen / Guard branch; **+1 per hit or HP change, at 8 Drill Shot (3/4 of max HP) the last attacker** | §3.2, §4.2 `[verified: 2]`; 8 vs 10 G-5 |
 | Nooj (shade) | HP **23,800** · MP 720 · **DEF 144 · MDEF 103** · AGI 121 · cycle Attack 1, Attack 1, Attack 2 (ignores MDEF), Attack 1, Greedy Aura (3/16 of max HP and MP); **HP ≤ 2,999: Lightfall, 5,000 to all, once** | §3.2, §4.3 `[verified: 3]`; trigger G-2 |
 | Rewards | Kaiser Knuckles (Gippal; FFExodus's Magical Dances is a copy error, G-4); Nooj gil 30,000 (wiki 3,000, G-3); Supreme Light for all five | §3, §2 |
 | Unsourced | the shades' battle music (G-11), party level (G-12), how shades look (G-13), the `Weapon[..]` formation entries (G-10, props `[estimate]`), whether the shades speak | §9 |
@@ -126,17 +126,17 @@ union Omnis, Trema and Isaaru widen, so one integrator serialises all four), `sr
 |---|---|---|---|
 | **GP1** | Scope | a) Gippal alone, 14,800 HP / b) the three shades Baralai → Gippal → Nooj, carried / c) all five, Yuna's solo duels first (GP-G7) | **b**: how the game stages him; sorrow, anger, despair as one idea (§1.3). a is the small fully sourced fallback |
 | **GP2** | Title, location, number | "The Den of Woe" / "Gippal" / "Crimson Squad" | **"The Den of Woe"** for b ("Gippal" for a); location "Den of Woe — under Mushroom Rock Road"; number by registration (D-058), **XV** after Isaaru's XIV |
-| **GP3** | What carries between links | a) everything: HP, MP, KO, statuses, dressphere (GP-G1) / b) HP, MP, KO, items only (today) / c) a restore before each link (Chapter XI) | **a**, the faithful "no break" |
+| **GP3** | What carries between links | a) everything: HP, MP, KO, statuses, dressphere (GP-G1) / b) HP, MP, KO, items only (today) / c) a restore before each link (Chapter XI) | **a**, `[derived]`: the sources back **HP** carried (research §2, 2 sources); statuses and the current dressphere carrying is **our inference** from "no break", not sourced (review item 12) |
 | **GP4** | Retry after a loss on Gippal or Nooj | a) from Baralai (faithful; today's behaviour) / b) from the lost link, carried state in memory (Trema TR5 seam) / c) measure first, then ask once | **c**, with a as the build until the numbers exist |
 | **GP5** | Line-up and level | a) the Chapter V preset as is: Yuna White Mage, Rikku and Paine Dark Knight, Lv 46–50 / b) a higher `[estimate]` level nearer the bosses' 52–63 | **a**, measured on 200 seeds; b only if Bailey sees the numbers first |
 | **GP6** | Items | a) the Chapter V bag as is / b) plus Dark Matter or Hero Drinks at an `[estimate]` count (the sourced Invincible line) | **a**; Yuna's Lightfall answer is a Phoenix Down, disclosed in the guide |
 | **GP7** | Mortar, the Blue Bullet | a) no learning; the Gun Mage already lists it; a callout names Gippal as its source / b) build learn-on-hit (GP-G6) | **a** |
 | **GP8** | The 140° arc and 5 m radius | a) whole party, labelled (Vegnagun Bulwark precedent) / b) a slot stand-in (Supercollider precedent) / c) build positions | **a**; the guide says it is harsher than the arc |
-| **GP9** | Source conflicts | Mortar below 1/3 and Lightfall at ≤ 2,999 (dump) vs 75 % (two guides), G-2; Baralai 12,220 (G-1); Drill Shot at 8 (G-5); Nooj gil 30,000 (G-3); Greedy Aura damage only (G-7) | **the dump's values**, each tagged; a PCSX2 check only if Bailey wants certainty |
-| **GP10** | Lightfall exact or rolled (GP-G2) | a) exact 5,000 for Lightfall only, shipped chapters untouched / b) make `fixed-no-variance` skip the roll everywhere (changes shipped mixes; deep review) / c) leave the roll, labelled | **a** now; b raised separately as a disclosed finding |
+| **GP9** | Source conflicts | Mortar below 1/3 and Lightfall at ≤ 2,999 (dump) vs 75 % (GamerGuides' 17,850 literally; Split_Infinity's wording is ambiguous, review item 8), G-2; Baralai 12,220 (G-1); Drill Shot at 8 (G-5); Nooj gil 30,000 (G-3); Greedy Aura damage only (G-7) | **the dump's values**, each tagged; a PCSX2 check only if Bailey wants certainty |
+| **GP10** | Exact or rolled (GP-G2): **Lightfall, and the fractions Bullseye (9/16), Drill Shot (3/4) and Greedy Aura (3/16)**, which roll ±6 % in the engine too (`percent-current` / `percent-total`; review item 15) | a) exact for these four only, shipped chapters untouched / b) make `fixed-no-variance` and the fractions skip the roll everywhere (changes shipped mixes; deep review) / c) leave the roll, labelled, and test the rolled spread in §9 | **a** now; b raised separately as a disclosed finding. A sources conflict, not an engine bug by default: SinirothX says "constant" / "fractional", combat-core step 7 says the roll applies to everything but menu White Magic |
 | **GP11** | Baralai's counter granularity | a) +1 per action that damages him (engine hook, Vegnagun Head precedent) / b) +1 per hit | **a**, labelled estimate |
 | **GP12** | `Weapon[..]` entries in the formations (G-10) | props, not built / targets | **props**; no source names a second target |
-| **GP13** | Do the shades speak? (unsourced) | a) silent; Yuna, Rikku, Paine carry the lines / b) one line each in the bible's voices (§1.20) | **a**; nothing in the sources gives them lines |
+| **GP13** | Do the shades speak? (partly sourced) | a) silent; Yuna, Rikku, Paine carry the lines / b) one line each in the bible's voices (§1.20) | **a**. The wiki does list battle lines for Baralai (before Looming Glacier and Drill Shot, fight not stated) and Nooj (in the Creature Creator / Fiend Arena part), but none is tied to the Den shades (review item 11). Rule 8: never quote them |
 | **GP14** | How the story opens | a) Yuna's narration: the ten spheres, the door, Shuyin's memory in three or four lines, over the approved Shuyin portrait / b) stage the vision live / c) no vision | **a** |
 | **GP15** | Mid-battle callouts | each link's entrance, Gippal's turn to the random set, the first Mortar (Gun Mage aside), Baralai's counter nearing 8, Lightfall, the last shade falling | **in**, drafted in a story draft Bailey reads first, our words (rule 8) |
 | **GP16** | Music | a) a new original cue `boss-den-of-woe` from the SONGSTRESS_DARK / Shuyin family, auditioned / b) reuse `boss-shuyin` / c) reuse `boss-ffx2-aeon` | **a**; b is the stand-in if the sketch is not picked in time |
@@ -172,7 +172,9 @@ batch. Sheets in `docs/concepts/chapters/gippal/`, JPEG.
 - **O-4 Reading the fight:** mockups at 1600×900 **and** 390 px: the link count ("shade 2 of 3",
   our label), Gippal's next cycle step, Baralai's counter toward 8, a Lightfall warning as Nooj
   nears 2,999. One option is "intent text only". No invented target or odds; **no FLEE** (cannot
-  escape, §3).
+  escape, §3). **The phone layout in these mockups is not this chapter's to settle** (review (a)):
+  the phone battle HUD is a cross-chapter question, game case both, already asked in
+  `docs/concepts/layout/phone-battle-hud/`; picking O-4 approves no phone HUD.
 - **O-5 Music:** 2 sketches on `docs/audio/audition.html` (rule 13). Brief: Shuyin's grief
   wearing three men's faces. Anti-brief: no quotation of "The Crimson Squad", "Nightmare in the
   Den" or "Yuna's Ballad".
@@ -224,9 +226,10 @@ LAST  integrator wiring · node tools/orphans.mjs · real-input win and loss acr
 - **Mechanic units, one per research row:** Gippal's five-step cycle in order and the 15/16,
   1/32, 1/32 weights over many seeds; the random set only below 1/3 (4,934 keeps the cycle,
   4,933 switches); Bullseye takes 9/16 of current HP and never kills; Mortar and Grinder ignore
-  DEF; Potion Plus 600; Baralai's six steps, Looming Glacier on the highest-MP girl not in Stop,
+  DEF; Potion Plus 600; Baralai's five steps, Looming Glacier on the highest-MP girl not in Stop,
   Drill Shot at 8 on the last attacker, then reset; Nooj's five steps, Attack 2 ignoring MDEF,
-  Greedy Aura 3/16 of max HP **and** max MP, Lightfall once at ≤ 2,999 per GP10; every immunity
+  Greedy Aura 3/16 of max HP **and** max MP, Lightfall once at ≤ 2,999; Lightfall, Bullseye,
+  Drill Shot and Greedy Aura exact or inside the rolled spread, per GP10; every immunity
   row; carried HP, MP, KO (and statuses per GP3) from Baralai to Gippal to Nooj, no results.
 - **Absence (rule 14, CHK-021):** FFX-2 Chapters 4–6 and XI byte-identical event logs at fixed
   seeds after GP-G1 to G3; FFX chapters untouched.
@@ -298,3 +301,7 @@ reach (item 15). (d) The shade treatment applying to Baralai and Nooj (the READM
 **Invented numbers:** none found; the one unsupported reason is item 18.
 
 **Verdict: PROCEED**, with items 7, 11, 12, 15 and 18 corrected before the sheet goes to Bailey.
+
+**Corrections applied (2026-09-24, after this review):** items 4 and 8 in the research; items 7, 12, 15, 11 and
+(a) in §2, §5, §6.2 and §9 here; items 18 and 22 on the sheets and README in `docs/concepts/chapters/gippal/`,
+whose sheets were re-cut one column for a phone.
