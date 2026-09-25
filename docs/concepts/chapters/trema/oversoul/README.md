@@ -76,3 +76,23 @@ untouched, needs no new art to judge, and can be switched off with the Oversoul 
 - Not made:
   - the transformation beat, where blue motes stream in under an "Oversoul!" caption;
   - Oversoul cast, hurt or KO variants (only the idle was treated).
+
+## Built: option B (2026-09-25)
+
+Bailey picked B ("I'll go with all your recommendations"). **FFX-2 only.** Frames are in `built/`:
+`target-vs-built.jpg` puts the B frame above beside the build, and `built-<size>-{full,clean,moment}.jpg`
+are real Chapter XIII frames on the Cloister 100 scene at 1280x720, 1600x900, 2000x1012 and 390x844.
+
+- `src/engine/OversoulLook.ts`: B's cast (`#6fa8ff`, 0.8, gain 2.2), rim (`#7cc4ff`, 0.7) and 70 blue
+  motes. It turns on for a combatant whose AI script is `paragon-oversoul`, never for normal Paragon. The
+  locked painting is untouched. The cast is compiled into Paragon's own two planes only (`PAINTED_CAST`
+  define in `PaintedShader.ts`), so no other figure's shader changes.
+- **When:** at the Oversoul action, the engine's line "Paragon oversouls!". The look fades in over 1.2 s.
+  A figure restaged after that line comes back already blue. The motes fade with the figure's alpha and
+  its KO dissolve.
+- **Caption:** the FFX-2 message line shows "Paragon · Oversoul!" once. The source is the wiki screenshot
+  *File:Oversoul FFX-2.jpg* (file page revid 2493543).
+- **One change from the frame:** the moment. The B frame shows Paragon blue from the first menu. The
+  build is gold until its first turn, because the engine plays the Oversoul as that turn (wiki revid
+  4041089: "always the first action").
+- Still owed: the absorption beat (motes streaming inward), and cast, hurt and KO variants.

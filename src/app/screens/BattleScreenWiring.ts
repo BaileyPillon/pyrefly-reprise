@@ -26,6 +26,7 @@ import { withPhoneLayout } from '../../ui/common/phoneBattle.ts';
 import { installFfxPhoneHud } from '../../ui/ffx/phoneHud.ts';
 import { installFfx2PhoneHud } from '../../ui/ffx2/phoneHud.ts';
 import { ffx2EngineOptions, registerBattleContent } from './BattleScreenContent.ts';
+import { withOversoulLook, type OversoulField } from '../../engine/OversoulLook.ts';
 
 // ---------------------------------------------------------------- engines
 
@@ -123,12 +124,14 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * sources). The wrapper is transparent when coaching is off, already seen, or
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
-export function createHud(game: GameId): HudPort {
+export function createHud(game: GameId, field?: () => OversoulField | null): HudPort {
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
   const hud: HudPort = game === 'ffx'
     ? withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud)
     : withPhoneLayout(new FFX2BattleHud(), installFfx2PhoneHud);
-  return withCoach(game, hud);
+  // The Oversoul look (FFX-2 only: Oversoul exists only in FFX-2), on the field the screen passes in.
+  // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`).
+  return withCoach(game, game === 'ffx2' && field ? withOversoulLook(hud, field) : hud);
 }
 
 // --------------------------------------------------------- cutscene runner
