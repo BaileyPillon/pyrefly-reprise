@@ -126,3 +126,62 @@ the builder did.
   impression, whichever option is picked.
 
 BLOCKERS: 1
+
+## Repair (2026-09-25)
+
+The repair pass on the punch list above: B1, M1, M2, m1, m2 and m5. It does not touch m3, m4, m6 or
+o1. Each fix has its own commit, and each commit says which game it applies to. Nothing is listed,
+and no Trema option switch was changed. The browser runs used a private Vite dev server on port
+5770 (HMR off, file watching off) and, for M1, a production build (`vite build` to scratch, then
+`vite preview` on port 5771 at `/pyrefly-reprise/`). Both used GPU Chromium, started from a fresh page
+load and reached the chapter through `__pyrefly.gotoChapter`. Both servers were stopped by PID.
+The frames named below are in `repair/`.
+
+| Item | Fix | Game case | Proof |
+|---|---|---|---|
+| **B1** | Adds an FFX-2 `x2-supreme-gem` ItemDef row and its effect. The effect is sourced, so the row is a full thrown item, not a name-only row: ffx2-trema §3.2 (the steal and drop), ffx2-combat-core §5.5 (targets the whole enemy party, non-elemental, sells for 250) and §2.9.3 (power 50, so 2,500 damage). No charge time is published, so it uses Shining Gem's, as the file's other thrown items do. | FFX-2 only | `ffx2-steal-item-names.test.ts` passes (7 of 7), with a new test that pins the row |
+| **M1** | `PauseView.renderPlate` passes `heroArtFallback` to `PortraitStage.show`. When the manifest says the plate is absent, the page requests only the fallback, not the plate and not its sidecar. The fallback is also opted out of the global portrait face crop, which had blown a 40 px tile crop up to full screen, so it shows the whole portrait, as `pause-screen.css` intends. A plate that exists, or a call with no fallback, renders exactly as before. | both (shared pause plumbing) | `pause-chapter-plate-fallback.test.ts` (4 tests). **Production preview:** the CHAPTER tab shows Yuna's `portraits/yuna-x2.png` (decoded, 832 px wide). There was no request for `ch13-trema` (`.png`, `.json` or a portrait) and no HTTP 4xx in the whole run. Two `ERR_ABORTED` requests are older behaviour: the title key art is dropped when the title closes, and the 1x `rikku-ffx2.png` is dropped when its 2x `srcset` master takes over. Chapter IV's tab still shows its own plate (`m1-pause-chapter-ch4-…-unchanged`). Frames: `m1-pause-chapter-1600x900-before` (blank), `…-after-prod`. |
+| **M2** | `placeSlab` gains a `tiered` mode. HUD chrome ranks above the fighters: `fighterBoxes` marks the fighters `soft`, and the winning spot covers the least chrome first, then the least fighter, then is the nearest. The slab's `E HIDE` chip is scored with the slab (`opts.chip`), because the chip rides above the slab and had been crossing the boss plate. `solveSlab` already used the panel's measured box, and now also passes the chip's measured box (`SlabSolveInput.chip` replaces `chipHeight`). The chain counter keeps the old untiered rule. | FFX-2 only (the FFX-2 HUD; the FFX HUD has its own twin) | `ui-ffx2-intent-tiered.test.ts` (5 tests) and the existing placement suites (55 tests) pass. **Browser matrix:** 6 boards (IV, V, VI, XI, XIII with its link, XIII with Trema alone) at 1280x720, 1600x900, 2000x1012 and 390x844, sampled at the first menu and the next one, old code against new. |
+| **m1** | On a `ko` event for the enemy the slab names, the FFX-2 HUD reads the engine's intent again. The engine never names a dead enemy, so the slab clears as the link seam starts. | FFX-2 only | `ui-ffx2-intent-ko-clear.test.ts` (2 tests). Real keys: the slab is hidden from Paragon's KO for the whole seam at 1600x900 and 390x844, and returns as "TREMA / ACTS NEXT" at link 2 (`m1-seam-1600x900-after`). |
+| **m2** | Re-aims the phone `trema-link` rig: position (-0.8, 6.5, 22), look-at (1.1, -4.0, -3), fov 42. It was (-1.25, 5.5, 14), (1.75, -2, -3), fov 40. | FFX-2 only | A new test in `trema-ship-scene.test.ts` projects all three girls, Paragon and Trema's entrance spot through the rig and checks they are on screen and above the dialogue box. Real keys at 390x844: all three girls, Paragon breaking into pyreflies and Trema are in frame, clear of the boss plate (`m2-phone-link-390x844-before` / `-after`). |
+| **m5** | `tremaBossIdsFor(shape)` (`trema-shape.ts`) is now the source of the guide's `bossIds`, and of the tactic's `TREMA_CHAPTER_BOSS_IDS`. The Trema-alone shape claims only `trema`, and the strategy-guide suite's check that the guide covers every boss id a tactic registers still holds after the option flips. | FFX-2 only | `trema-ship-content.test.ts` pins `['trema']` for the Trema-alone shape and `['trema', 'paragon']` for the link shape |
+
+**M2 matrix (square pixels of the slab and its chip over the command stack, party plates and boss
+plate; the other chrome is the guide, the advisor, the telegraph and the target plates).** Before
+(old placement) → after:
+
+| Board | Before | After |
+|---|---|---|
+| XIII, Trema alone, 1280x720 | command stack 1,764 and 2,232 | 0 |
+| XIII, Trema alone, 1600x900 | command stack 3,420 and 3,375 (the reported defect) | 0 |
+| XI Fallen Aeons, second menu, 1280 / 1600 / 2000 | boss plate 793 / 1,292 / 1,615 (the chip) | 0 |
+| V Vegnagun, second menu, 1600x900 | boss plate 476, other chrome 8,260 | 0 |
+| V Vegnagun, second menu, 2000x1012 | party plates 644 | 0 |
+| VI Leblanc, 390x844 | party plates 30 (the chip) | 0 |
+| Every other sample (IV at every size, XIII with its link, the rest) | 0 | 0; the slab stays at the same spot to within 2 px |
+
+In the final run, 42 of 42 samples cover no chrome. Chapter IV does not move: at 1600x900 the slab
+sits at 998,75 before and after (`m2-ch4-1600x900-before` / `-after`). At link 2 of the shipped
+shape, the slab hangs over Trema with its tail attached, clear of ATTACK
+(`m2-trema-link2-1600x900-after`).
+
+**Disclosed; none of these is a regression:**
+
+- In the Trema-alone shape at 1600x900, the slab no longer covers ATTACK. The only free spot left is
+  over Trema's head and shoulders, so it now covers them, and its tail is dropped
+  (`m2-trema-alone-1600x900-after`). Getting it off both would need a shorter slab (the
+  `MAX_HEIGHT_FRACTION` cap in `EnemyIntent.ts`, another track's file) or a framing change. That is
+  Bailey's call, with option 2.
+- At 2000x1012 in the Trema-alone shape, the slab parks bottom left, as it did before. The guide's
+  "MORE" row draws a few pixels below the guide's own box, so the chip sits 4 px clear of the box
+  but touches that text.
+- During the seam the boss plate still reads "Paragon" (the other half of m1). This fix clears
+  only the slab.
+- On the phone, with the camera pulled back, the floor seam m6 disclosed now shows as a line across
+  the top quarter of the link shot.
+
+**Re-run:** `tsc --noEmit` is clean. The full vitest run (`--testTimeout=60000`, in the worktree)
+passes 382 of 382 files (7,233 tests, 5 skipped, 1 todo). `node tools/orphans.mjs` finds
+716 modules and 24 orphaned, the same as before the repair.
+
+BLOCKERS: 0
