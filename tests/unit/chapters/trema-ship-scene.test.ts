@@ -14,7 +14,13 @@
 import { Group, Object3D, PerspectiveCamera, Vector3 } from 'three';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { getScene, getSceneFactory, isPlaceholderScene, loadScene, type LoadedScene } from '../../../src/scenes/index.ts';
-import { CLOISTER_100_SLOTS, CLOISTER_ACTOR_HEIGHTS, CLOISTER_BOSS_SPOT, CLOISTER_IDS } from '../../../src/scenes/cloister-100.ts';
+import {
+  CLOISTER_100_SLOTS,
+  CLOISTER_ACTOR_HEIGHTS,
+  CLOISTER_BOSS_SPOT,
+  CLOISTER_IDS,
+  CLOISTER_LINK_SIDE_SPOT,
+} from '../../../src/scenes/cloister-100.ts';
 import {
   CLOISTER_LINK_RIG,
   CLOISTER_PHONE_ASPECT,
@@ -59,6 +65,27 @@ describe('Cloister 100 — tables', () => {
     expect(cloisterRigsFor(CLOISTER_PHONE_ASPECT)['idle']).toEqual(CLOISTER_PHONE_RIGS['idle']);
     expect(cloisterRigsFor(16 / 9)['idle']).toEqual(CLOISTER_WIDE_RIGS['idle']);
     expect(cloisterRigsFor(4 / 3)['idle']!.fov!).toBeGreaterThan(CLOISTER_WIDE_RIGS['idle']!.fov!);
+  });
+
+  it("the phone's link shot holds all three girls, Paragon and the old man's entrance (m2: it cropped Yuna)", () => {
+    const rig = cloisterRigsFor(CLOISTER_PHONE_ASPECT)[CLOISTER_LINK_RIG]!;
+    const cam = new PerspectiveCamera(rig.fov, CLOISTER_PHONE_ASPECT, 0.1, 200);
+    const at = (v: [number, number, number] | Vector3): Vector3 => (v instanceof Vector3 ? v.clone() : new Vector3(...v));
+    cam.position.copy(at(rig.position));
+    cam.lookAt(at(rig.lookAt));
+    cam.updateMatrixWorld();
+    const onScreen = (x: number, y: number, z: number): void => {
+      const p = new Vector3(x, y, z).project(cam);
+      expect(Math.abs(p.x), `x of ${x},${y},${z}`).toBeLessThan(0.92);
+      expect(Math.abs(p.y), `y of ${x},${y},${z}`).toBeLessThan(0.95);
+      // Above the lower third, where the seam's dialogue box sits.
+      expect(p.y, `above the dialogue box: ${x},${y},${z}`).toBeGreaterThan(-0.33);
+    };
+    const party = CLOISTER_100_SLOTS.party;
+    const h = CLOISTER_ACTOR_HEIGHTS;
+    for (const [x, , z] of party) for (const y of [0, h.party]) onScreen(x - 0.45, y, z); // each girl's left side, feet to head
+    for (const y of [0, h.paragon]) onScreen(CLOISTER_BOSS_SPOT[0], y, CLOISTER_BOSS_SPOT[2]);
+    for (const y of [0, h.trema]) onScreen(CLOISTER_LINK_SIDE_SPOT[0] + 0.5, y, CLOISTER_LINK_SIDE_SPOT[2]);
   });
 
   it('the cutscene can stand Trema up (his post scene), from the installed idle', () => {

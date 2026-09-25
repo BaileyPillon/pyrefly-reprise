@@ -70,8 +70,9 @@ export const CLOISTER_PHONE_RIGS: RigSet = {
   action: { position: [-1.5, 2.5, 12.0], lookAt: [0.25, 5.0, -3.0], fov: 40, sway: 0.5 },
   party: { position: [-1.5, 3.0, 10.0], lookAt: [-1.0, 3.0, -3.0], fov: 40, sway: 0.5 },
   enemy: { position: [-1.5, 3.0, 10.5], lookAt: [0.75, 5.0, -3.0], fov: 40, sway: 0.5 },
-  // The seam's dialogue box covers the phone's lower third, so the kill link is framed above the band.
-  [CLOISTER_LINK_RIG]: { position: [-1.25, 5.5, 14.0], lookAt: [1.75, -2.0, -3.0], fov: 40, sway: 0.3 },
+  // The seam's dialogue box covers the phone's lower third, so the kill link is framed above the band;
+  // pulled back and aimed left of the boss so all three girls stand in it, clear of the boss plate (it cropped Yuna, m2).
+  [CLOISTER_LINK_RIG]: { position: [-0.8, 6.5, 22.0], lookAt: [1.1, -4.0, -3.0], fov: 42, sway: 0.3 },
   victory: { position: [-1.5, 3.0, 10.5], lookAt: [-1.0, 3.2, -3.0], fov: 40, sway: 0.8 },
 };
 
