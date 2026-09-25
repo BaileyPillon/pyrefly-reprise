@@ -90,8 +90,8 @@ describe('onboarding copy deck', () => {
     const whole = BRIEFING_LINES.map((l) => l.lead + l.strong + l.tail).join(' ');
     // Both clocks, named once, which is the entire reason the briefing is the
     // one surface shared by two games.
-    expect(whole).toContain('nothing moves until you move');
-    expect(whole).toContain('the clock does not wait');
+    expect(whole).toContain('nothing moves until you act');
+    expect(whole).toContain('the clock keeps running');
   });
 
   /**

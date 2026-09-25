@@ -269,8 +269,8 @@ describe("Auron's briefing", () => {
     expect(node.querySelectorAll('.coach-brief__line')).toHaveLength(4);
     expect(node.textContent).toContain('Auron');
     const text = node.textContent ?? '';
-    expect(text).toContain('nothing moves until you move');
-    expect(text).toContain('the clock does not wait');
+    expect(text).toContain('nothing moves until you act');
+    expect(text).toContain('the clock keeps running');
     // The off switch is on the first surface, exactly as every option promised.
     expect(text.toLowerCase()).toContain('never show this again');
     expect(text.toLowerCase()).toContain('skip');
