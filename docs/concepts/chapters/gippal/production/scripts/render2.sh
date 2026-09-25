@@ -1,0 +1,6 @@
+G=D:/Tools/pyrefly-scratch/ch1215/gippal/gen.sh
+R=D:/Tools/pyrefly-scratch/ch1215/gippal/renders
+NOOJ="1boy, solo, nooj, final fantasy x-2, safe, male focus, adult man, very tall, masculine angular face, brown hair, long hair in two loops and a long ponytail, red hair tie, blue eyes, blue-tinted glasses, red bodysuit, red long johns, red and black belts across the chest and legs, purple fur-trimmed sleeve on his right shoulder, purple sleeve with grey fur at the top on one shoulder, mechanical prosthetic left arm, machina metal arm, mechanical prosthetic left leg, metal leg, purple boots, silver cane, full body"
+NPOSE="standing tall, both hands resting on the top of a long silver cane planted on the ground in front of him, calm, serious, looking at viewer"
+NNEG="sword, gun, 1girl, wings, cape, hood, hat, helmet, eyepatch, sunglasses, black glasses, blonde hair, short hair, red hair, beard, breastplate, plate armor, tail, background, scenery, 2boys, chibi, huge weapon, floating objects, gloves"
+bash $G character --name nooj-shade --pose idle --facing left --tags "$NOOJ" --poseTags "$NPOSE" --negAdd "$NNEG" --seed 962201 --batch 4 --ref "D:/Final Fantasy/public/art/portraits/nooj.png" --out $R/nooj2.png
