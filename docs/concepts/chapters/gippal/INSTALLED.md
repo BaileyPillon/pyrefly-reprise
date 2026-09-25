@@ -23,9 +23,9 @@ are in `production/frames/` and the scripts in `production/scripts/`.
 | `characters/gippal-shade/idle.png` | 779x1245, 1169, `scale` 1.0503, `facing: left` | `dd3f7cffe708` | The O-1 pilot's own pixels (`gippal-a2`, seed 951102). One repair: the ring clamp on the mortar was repainted as the sourced **rounded saw blade** (visual bible §1.23.5). A toothed disc was blocked in behind the barrel and the fist, then repainted inside the disc mask only (seed 963102, denoise 0.55). 25,919 px changed; every other pixel is the render's own (MAD 0). Then the B treatment. |
 | `characters/gippal-shade/cast.png` | 961x1245, 1170, `facing: left` | `b0c9a95ccf47` | The opaque idle's forearm, fist, mortar and saw turn 18 degrees about the elbow as one rigid piece: the mortar swings up and out toward the party. Only the elbow seam was repainted (seed 964101, denoise 0.45). Then the B treatment. |
 | `characters/baralai-shade/idle.png` | 682x1321, 1246, `scale` 1.0453, `facing: left` | `1b3270d74a12` | **A fresh render**, because no Baralai painting exists on disk: there is no speaker portrait and no body. Character preset, 4 seeds (961101 to 961104). Two were quarantined by the cut-out guard; 961103 was kept. The identity words come from visual bible §1.23.6 `[single source]`. The staff comes from research §strategy ("Baralai's staff"). No repair. Then the B treatment. |
-| `characters/baralai-shade/cast.png` | 785x1305, 1230, `facing: left` | `9ba75ed87c7c` | The forearm, hand and staff turn 22 degrees about the elbow, so the staff head tips toward the party. The part of the pole hidden behind the coat was rebuilt from the idle's own pole profile. The chest the forearm uncovered was repainted inside its mask only (seed 965102, denoise 0.55). |
-| `characters/nooj-shade/idle.png` | 587x1271, 1196, `scale` 1.0482, `facing: left` | `f4511c1727ba` | **A fresh render**, with IP-Adapter using the picked speaker portrait `portraits/nooj.png` (D-043) as the identity reference. The portrait is head and shoulders only. 8 seeds in two batches; 962203 was kept: brown hair, blue glasses, a ponytail with a red tie, and the machina left arm and left leg toward the camera, as bible §1.23.4 stages him. No repair. Then the B treatment. |
-| `characters/nooj-shade/cast.png` | 902x1271, 1196, `facing: left` | `735ec81b90a1` | The machina forearm, hand and cane turn 32 degrees about the elbow, so the cane is levelled at the party. The torso it uncovered was repainted inside its mask only (seed 966102, denoise 0.5). |
+| `characters/baralai-shade/cast.png` | 785x1305, 1230, `facing: left` | `8e7e91027953` (repair; was `9ba75ed87c7c`) | The forearm, hand and staff turn 22 degrees about the elbow, so the staff head tips toward the party. The part of the pole hidden behind the coat was rebuilt from the idle's own pole profile. The chest the forearm uncovered was repainted inside its mask only (seed 965102, denoise 0.55). |
+| `characters/nooj-shade/idle.png` | 521x1271, 1196, `scale` 1.0482, `facing: left` | `c4e6316bd88c` (repair; was `f4511c1727ba`) | **A fresh render**. The IP-Adapter reference `portraits/nooj.png` (D-043) was requested but **skipped** by `comfy.mjs` (the render record says `refSkippedMonochrome`; corrected in the repair pass). The portrait is head and shoulders only. 8 seeds in two batches; 962203 was kept: brown hair, blue glasses, a ponytail with a red tie, and the machina left arm and left leg toward the camera, as bible §1.23.4 stages him. No repair. Then the B treatment. |
+| `characters/nooj-shade/cast.png` | 839x1271, 1196, `facing: left` | `6283780d309c` (repair; was `735ec81b90a1`) | The machina forearm, hand and cane turn 32 degrees about the elbow, so the cane is levelled at the party. The torso it uncovered was repainted inside its mask only (seed 966102, denoise 0.5). |
 | `backdrops/den-of-woe.png` | 2688x1536 | `96965cfad6dc` | The picked O-3 A plate, installed unchanged: byte-identical to the options run's `plate-a.png`. It is `den-a3` (img2img over the layout guide), lifted, with a blue floor glow and drawn motes (`scripts/denplates.py`). |
 
 **The B treatment** (`production/scripts/shade_b.py`) is the options round's own B code with the
@@ -86,6 +86,46 @@ The frames in `production/frames/*.jpg` are real 1600x900 engine frames:
 - **Still from Chapter XI:** the pink motes (the Farplane scene) and the tutorial card.
 - **The plate alone:** `den-plate.jpg` shows it with the HUD off and no enemy.
 - **Server:** a private Vite server on port 5800 (HMR off, GPU browser), stopped by its PID.
+
+## Repair pass, 2026-09-25 (after the independent judge, `production/JUDGE.md`)
+
+The judge passed and locked Gippal's idle and cast, Baralai's idle and the Den plate, and failed
+three files. Each got **one** masked repair here; all three stay **CANDIDATE** for the next judge
+and none is in `approved-hashes.json` (the approved set was checked before and after: 185 ok, 0
+mismatched). Sheet: [production/repair-sheet.jpg](production/repair-sheet.jpg); engine frames
+`production/frames/*-repair.jpg` (same staging as below, private Vite server on port 5811, stopped).
+
+- **Baralai cast (FAIL 5.7: sliced boot, ruler-cut coat edge with a notch, flag-shaped debris at the
+  staff butt, far hand a stump on a cord).** Cause: the first derive lifted every `b >= r` pixel in a
+  strip along the old pole, which took boot, trouser and coat-edge pixels and rotated them with the
+  staff. Re-derived from the **locked idle's** opaque render with the same 22-degree turn
+  (`scripts/bar_cast2.py`): only strictly blue pole pixels above row 1000 move (below that the blue
+  is the near boot's laces); the old pole's stub on the near boot shaft is removed and the shaft
+  closed; the far hand and its cord are removed, so the hand hides behind the coat; the coat's front
+  edge (the idle's own straight edge) gets a smooth wave and a 2 px ink line; the rebuilt pole ends
+  in a rounded bronze butt cap; the judged chest repaint (seed 965102) is kept pixel for pixel. One
+  masked repaint over the coat edge, shaft and cap (seed 968101, denoise 0.5,
+  `scripts/repaint_ref.py`), the ink line restored after it. Still flagged: the pole is a uniform
+  cylinder below the grip, the far hand is hidden rather than placed, the cap and the wave are ours.
+- **Nooj idle (FAIL 6.9: no hair loops, a knee-length ponytail).** On the same render and canvas
+  (`scripts/nooj_idle2.py`): the ponytail is cut at mid-back (tip at row 345) with the render's own
+  strands kept and the new outline feathered along them; a hair loop is blocked in at the near temple
+  (bible §1.23.4 colours) and painted by **one** masked repaint with IP-Adapter on the picked
+  portrait (ip-adapter-plus SDXL, weight 0.55, K+V; seed 969101, denoise 0.62). Only the loop is kept
+  from that repaint, its colours set to the render's own hair hue. Still flagged: only the near loop
+  shows (the far one is behind the head), the loop reads small at game size and as a dark braided
+  loop rather than the portrait's full outward loop, it shows no red tie, and the far-side fur sleeve
+  and the cane in the machina left hand are unchanged (both need a re-render, not a masked repair).
+  **Correction:** the first install said the render used IP-Adapter; its record shows the reference
+  was skipped (`refSkippedMonochrome`).
+- **Nooj cast (FAIL 6.8, inherited).** The repaired idle's changed pixels (20,297 px, none under the
+  moving arm) are carried into the judged cast (32 degrees, torso repaint seed 966102); nothing else
+  changed. The small red spur under the forearm is still there.
+- **Sizes:** baselines are unchanged (Baralai cast 1230, Nooj 1196) and the idle's `scale` stays
+  1.0482; the Nooj files are narrower (521 and 839 px) because the ponytail no longer reaches the
+  knee. GPU: two repaint jobs (7 s and 12 s of ComfyUI time), each submitted with fewer than 3
+  pending; no black frames; ComfyUI was not restarted. Nothing was downloaded. Scratch:
+  `D:/Tools/pyrefly-scratch/ch1215/gippal-repair/` (the replaced candidates are kept in `prev/`).
 
 ## GPU and scratch
 
