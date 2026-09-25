@@ -10,7 +10,7 @@
  * Pain on Anima; "kill Mindy first" (the wiki and GamerGuides).
  */
 
-import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
+import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef, FFX2PartyBuild, MidBattleTrigger } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
@@ -260,6 +260,8 @@ export interface DriveOptions {
   flags?: Record<string, string | number | boolean>;
   /** The party (default: the chapter's `farplaneBuild`); a measured option passes its own. */
   build?: FFX2PartyBuild;
+  /** The story's mid-battle triggers (default none), for the ship layer's trigger tests. */
+  triggers?: MidBattleTrigger[];
 }
 
 function group(id: string): EnemyGroupDef {
@@ -276,7 +278,7 @@ function group(id: string): EnemyGroupDef {
 export function driveLink(linkId: string, line: LineOptions, seed: number, opts: DriveOptions = {}): LinkRun {
   const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...opts.engine }));
   const setup: BattleSetup = {
-    game: 'ffx2', party: opts.build ?? farplaneBuild, enemies: group(linkId), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: opts.build ?? farplaneBuild, enemies: group(linkId), triggers: opts.triggers ?? [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);

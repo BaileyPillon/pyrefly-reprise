@@ -39,6 +39,8 @@ export const SISTER_IDS = ['sandy', 'cindy', 'mindy'] as const;
 /** Cindy's cycle length: 1 guard turn + 7 "Action 1" turns. */
 export const CINDY_CYCLE = 8;
 export const DELTA_DISARMED_FLAG = 'deltaAttackDisarmed';
+/** The `script-trigger` name emitted once, the turn the first sister falls. */
+export const SISTERS_FIRST_DOWN = 'sisters-first-down';
 
 function sisters(ctx: AiContext): Ffx2Unit[] {
   return ctx.units.filter((u) => u.side === 'enemy' && (SISTER_IDS as readonly string[]).includes(u.id));
@@ -97,7 +99,11 @@ export const magusSistersScript: AiScript = {
   },
   onTurnResolved(ctx) {
     if (ctx.flags[DELTA_DISARMED_FLAG] === true) return;
-    if (sisters(ctx).some((s) => !s.alive)) ctx.flags[DELTA_DISARMED_FLAG] = true;
+    if (!sisters(ctx).some((s) => !s.alive)) return;
+    ctx.flags[DELTA_DISARMED_FLAG] = true;
+    // The first sister's fall, for Paine's callout (FA16 a; `src/story/scripts/ffx2-fallen-aeons.ts`):
+    // which sister falls first is the player's choice, so no one-combatant story trigger can carry it.
+    ctx.emit({ type: 'script-trigger', name: SISTERS_FIRST_DOWN, payload: { who: ctx.self.id } });
   },
   onRegen(ctx) {
     bumpAc(ctx.self, 5); // "and when Regen heals her"

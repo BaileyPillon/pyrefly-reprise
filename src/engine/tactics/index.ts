@@ -41,6 +41,7 @@ import { SEYMOUR_MACALANIA_ID, seymourAnimaMacalania } from './seymour-anima-mac
 import { EVRAE_ID, evrae } from './evrae.ts';
 import { YOJIMBO_CAVERN_BOSS_ID, yojimboCavern } from './yojimbo-cavern.ts';
 import { TREMA_CHAPTER_BOSS_IDS, ffx2Trema } from './ffx2-trema.ts';
+import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -70,6 +71,7 @@ export { seymourAnimaMacalania, SEYMOUR_MACALANIA_ID } from './seymour-anima-mac
 export { evrae, EVRAE_ID } from './evrae.ts';
 export { yojimboCavern, YOJIMBO_CAVERN_BOSS_ID } from './yojimbo-cavern.ts';
 export { ffx2Trema, TREMA_CHAPTER_BOSS_IDS } from './ffx2-trema.ts';
+export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -120,6 +122,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   { chapterId: 'yojimbo-cavern', bossId: YOJIMBO_CAVERN_BOSS_ID, tactic: yojimboCavern },
   // Chapter XIII (FFX-2 only, unlisted): Paragon then Trema, one tactic under both ids.
   ...TREMA_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-trema', bossId, tactic: ffx2Trema })),
+  // Chapter XI (FFX-2 only, unlisted): Shiva, the Sisters, Anima; one tactic under all five ids.
+  ...FALLEN_AEONS_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-fallen-aeons', bossId, tactic: ffx2FallenAeons })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

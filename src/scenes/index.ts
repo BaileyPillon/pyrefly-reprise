@@ -30,6 +30,7 @@ import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-t
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
+import { buildRoadToTheFarplaneScene, ROAD_TO_THE_FARPLANE_SLOTS } from './road-to-the-farplane.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -191,13 +192,8 @@ SCENES.set('farplane', {
  * Chateau Leblanc, the Last Room (Chapter 6) — real (`buildLeblancLastRoomScene` in
  * {@link SCENE_FACTORIES}); `build` is the unreachable demo diorama, as for Bevelle above.
  */
-SCENES.set('leblanc-last-room', {
-  key: 'leblanc-last-room',
-  title: 'Chateau Leblanc — the Last Room',
-  build: buildDemoScene,
-  slots: LEBLANC_LAST_ROOM_SLOTS,
-  placeholder: false,
-});
+SCENES.set('leblanc-last-room', { key: 'leblanc-last-room', title: 'Chateau Leblanc — the Last Room',
+  build: buildDemoScene, slots: LEBLANC_LAST_ROOM_SLOTS, placeholder: false });
 /**
  * Macalania Temple, the antechamber (Chapter 7, FFX only) — real
  * (`buildMacalaniaTempleScene` in {@link SCENE_FACTORIES}); `build` is the
@@ -231,6 +227,9 @@ SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern o
 /** The Via Infinito, Cloister 100 (Chapter XIII, FFX-2 only): real, `build` unreachable as for Leblanc [cloister-100.ts]. */
 SCENES.set('via-infinito', { key: 'via-infinito', title: 'Via Infinito — Cloister 100',
   build: buildDemoScene, slots: CLOISTER_100_SLOTS, placeholder: false });
+/** The Road to the Farplane (Chapter XI, FFX-2 only): real, `build` unreachable as for Leblanc [road-to-the-farplane.ts]. */
+SCENES.set('road-to-the-farplane', { key: 'road-to-the-farplane', title: 'The Road to the Farplane',
+  build: buildDemoScene, slots: ROAD_TO_THE_FARPLANE_SLOTS, placeholder: false });
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -273,6 +272,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
   'via-infinito': buildCloister100Scene,
+  'road-to-the-farplane': buildRoadToTheFarplaneScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */
