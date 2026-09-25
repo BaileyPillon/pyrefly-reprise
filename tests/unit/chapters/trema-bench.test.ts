@@ -127,4 +127,42 @@ describe('Chapter XIII benches (200 seeds a line, bench speed, Active)', () => {
         '|---|---|---|---|---:|---:|---:|---|---:|', ...rows].join('\n'),
     );
   }, 900_000);
+
+  // 2026-09-25, third pass: the live default became Wait split (`DEFAULT_WAIT_SPLIT = true` since
+  // release 12.3), not Active. A human under Wait split spends 0.5 s reading the top-level command
+  // list, where the clock still runs exactly as it does under Active (`throughInput`), then 1.0 s
+  // inside a submenu or aiming a target, where Wait's split holds the clock (`active.ts`
+  // `DEFAULT_WAIT_SPLIT`; modelled the same way `fallenAeonsDrive.ts` and `ffx2ChapterDrive.ts`
+  // already model it: `engine.setMenuLevel('top')`, tick `topMs`, `engine.setMenuLevel('deep')`,
+  // and no further tick for the rest of the 1.5 s). Every kit x every link, intended line, 40 seeds.
+  it('human speed: Wait split, 0.5 s top / 1.0 s held (40 seeds)', () => {
+    const kits: TremaKitOption[] = ['tr11-a', 'sourced-kit', 'sourced-kit-one-lustre', 'sourced-kit-ribbon'];
+    for (const kit of kits) {
+      const line = kit === 'tr11-a' ? LINES.intended : LINES.kitIntended;
+      const o = { decisionMs: HUMAN, topMs: 500, engine: { atbMode: 'wait' as const, waitSplit: true }, build: tremaBuildFor(kit) };
+      row(kit, '1 Paragon', 'intended', 'Wait split, D=1.5 s (0.5 s top)', bench(P(line)(o), HUMAN_SEEDS));
+      row(kit, '2 Trema (fresh)', 'intended', 'Wait split, D=1.5 s (0.5 s top)', bench(T(line)(o), HUMAN_SEEDS));
+      row(kit, 'Chapter (1-2)', 'intended', 'Wait split, D=1.5 s (0.5 s top)', bench(C(line)(o), HUMAN_SEEDS));
+    }
+    console.log(
+      ['| Kit | Link | Line | ATB | Wins | Avg min | Avg min (wins) | Boss moves / fight | Darkness / fight |',
+        '|---|---|---|---|---:|---:|---:|---|---:|', ...rows].join('\n'),
+    );
+  }, 1_200_000);
+
+  // The two kits that win at all at bench speed, at 200 seeds, to confirm the engine's Wait split
+  // mode does not itself move a bench-speed (D=0) result: no decision time is ever ticked at D=0,
+  // so the top/held split has nothing to act on and the numbers should match the Active D=0 rows.
+  it('sourced-kit and sourced-kit-ribbon on Trema fresh, Wait split at bench speed (200 seeds)', () => {
+    for (const kit of ['sourced-kit', 'sourced-kit-ribbon'] as const) {
+      const o = { engine: { atbMode: 'wait' as const, waitSplit: true }, build: tremaBuildFor(kit) };
+      const t = bench(T(LINES.kitIntended)(o), SEEDS);
+      row(kit, '2 Trema (fresh)', 'kit intended', 'Wait split, D=0', t);
+      expect(t.unfinished).toBe(0);
+    }
+    console.log(
+      ['| Kit | Link | Line | ATB | Wins | Avg min | Avg min (wins) | Boss moves / fight | Darkness / fight |',
+        '|---|---|---|---|---:|---:|---:|---|---:|', ...rows].join('\n'),
+    );
+  }, 600_000);
 });

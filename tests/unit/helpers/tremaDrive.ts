@@ -35,7 +35,7 @@ export interface LinkRun {
 
 const MAX_DECISIONS = 60_000;
 
-function runLink(engine: FFX2Engine, line: LineOptions, decisionMs: number): LinkRun {
+function runLink(engine: FFX2Engine, line: LineOptions, decisionMs: number, topMs?: number): LinkRun {
   const startTicks = engine.state().ticks;
   for (let i = 0; i < MAX_DECISIONS; i++) {
     const d = engine.nextDecision();
@@ -45,7 +45,16 @@ function runLink(engine: FFX2Engine, line: LineOptions, decisionMs: number): Lin
       continue;
     }
     if (d.kind !== 'player-input') continue;
-    if (decisionMs > 0) {
+    if (topMs !== undefined && topMs > 0) {
+      // Wait's split (`fallenAeonsDrive.ts`, `ffx2ChapterDrive.ts`): the clock runs while the
+      // top-level list is open, and holds once the cursor drops into a submenu or the target
+      // cursor. Only the `topMs` portion is ever ticked; the rest of `decisionMs` is spent with
+      // the clock held, so it moves nothing.
+      engine.setMenuLevel('top');
+      engine.tick(Math.min(topMs, decisionMs), { throughInput: true });
+      engine.setMenuLevel('deep');
+      if (!engine.inputValid(d.actorId)) continue;
+    } else if (decisionMs > 0) {
       engine.tick(decisionMs, { throughInput: true });
       if (!engine.inputValid(d.actorId)) continue;
     }
@@ -70,6 +79,9 @@ function summarise(engine: FFX2Engine, outcome: string | undefined, startTicks: 
 
 export interface DriveOptions {
   decisionMs?: number;
+  /** Wait split only: ms of `decisionMs` spent on the top-level list before a submenu or the
+   * target cursor holds the clock (`fallenAeonsDrive.ts`, `ffx2ChapterDrive.ts`). */
+  topMs?: number;
   /** A party build in place of the shipped preset: a kit option (`via-infinito-kit.ts`). */
   build?: FFX2PartyBuild;
   engine?: Partial<Ffx2EngineOptions>;
@@ -121,7 +133,7 @@ export function driveParagon(line: LineOptions, seed: number, opts: DriveOptions
   engine.setSeed(seed);
   engine.init(setup);
   applyOptions(engine, opts);
-  return runLink(engine, line, opts.decisionMs ?? 0);
+  return runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);
 }
 
 /**
@@ -137,7 +149,7 @@ export function driveTremaFresh(line: LineOptions, seed: number, opts: DriveOpti
   engine.setSeed(seed);
   engine.init(setup);
   applyOptions(engine, opts);
-  return runLink(engine, line, opts.decisionMs ?? 0);
+  return runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);
 }
 
 /** The whole chapter: Paragon, then Trema in Paragon's end state, carried as the app carries it. */
@@ -153,11 +165,11 @@ export function driveChapter(
   engine.setSeed(seed);
   engine.init(setup);
   applyOptions(engine, { ...opts, hpMultiplier: 1 }); // HP is carried and clamped at the seam: link options only
-  const first = runLink(engine, line, opts.decisionMs ?? 0);
+  const first = runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);
   if (first.outcome !== 'victory') return { outcome: first.outcome, links: [first] };
   setup = setupForNextLink(setup, group(CLOISTER_TREMA), engine.state(), seed + 1) as BattleSetup;
   engine.setSeed(setup.seed);
   engine.init(setup);
-  const second = runLink(engine, line, opts.decisionMs ?? 0);
+  const second = runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);
   return { outcome: second.outcome, links: [first, second], tremaSetup: setup };
 }

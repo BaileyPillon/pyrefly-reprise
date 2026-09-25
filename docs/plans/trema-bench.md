@@ -90,6 +90,51 @@ Bailey are in the method check §4 and in this pass's report: TR7 (Oversoul Para
 only summarised in the research, so it cannot be built yet), TR1 b (Trema alone), and a source
 or an explicit estimate for action time (E4).
 
+## 2026-09-25, third pass: the live default is Wait split, not Active
+
+Branch `chapter-trema-0925`. Release 12.3 made the engine's default ATB mode Wait, and Wait's
+**split** is on by default (`DEFAULT_WAIT_SPLIT = true`, `src/battle/ffx2/active.ts`), not the
+whole-menu hold. The human-speed rows above spend all 1.5 s of a menu with the clock running
+under Active. That is no longer the live behaviour. This pass models a human under **Wait
+split**: 0.5 s reading the top-level command list, where the clock runs exactly as it does under
+Active (`throughInput`), then 1.0 s inside a submenu or aiming a target, where the split holds
+the clock and the rest of the 1.5 s moves nothing. Modelled in `tremaDrive.ts#runLink` the same
+way `fallenAeonsDrive.ts` and `ffx2ChapterDrive.ts` already model it for Chapters XI, 4, 5 and 6:
+`engine.setMenuLevel('top')`, tick `topMs`, `engine.setMenuLevel('deep')`. No engine or data file
+changed; only the test helper and this bench gained the option. 40 seeds a line at human speed
+(intended line, every kit x every link), plus 200 seeds at bench speed for the two kits that win
+at all, to confirm the mode switch alone does not move a D=0 result.
+
+| Kit | Link | Line | ATB | Wins | Avg min | Avg min (wins) | Boss moves / fight | Darkness / fight |
+|---|---|---|---|---:|---:|---:|---|---:|
+| tr11-a | 1 Paragon | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.09 | — | BB 0.00 · Gen 1.10 | 0.00 |
+| tr11-a | 2 Trema (fresh) | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.34 | — | Met 0.00 · Flare 0.55 · blocked 0.00 | 2.70 |
+| tr11-a | Chapter (1-2) | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.09 | — | reached Trema 0/40 | 0.00 |
+| sourced-kit | 1 Paragon | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.12 | — | BB 0.00 · Gen 1.60 | 0.00 |
+| sourced-kit | 2 Trema (fresh) | intended | Wait split, D=1.5 s (0.5 s top) | 1/40 | 3.95 | 14.3 | Met 0.38 · Flare 0.40 · blocked 12.93 | 42.42 |
+| sourced-kit | Chapter (1-2) | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.12 | — | reached Trema 0/40 | 0.00 |
+| sourced-kit-one-lustre | 1 Paragon | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.11 | — | BB 0.00 · Gen 1.45 | 0.00 |
+| sourced-kit-one-lustre | 2 Trema (fresh) | intended | Wait split, D=1.5 s (0.5 s top) | 3/40 | 2.33 | 13.1 | Met 0.15 · Flare 0.38 · blocked 7.47 | 24.77 |
+| sourced-kit-one-lustre | Chapter (1-2) | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.11 | — | reached Trema 0/40 | 0.00 |
+| sourced-kit-ribbon | 1 Paragon | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.12 | — | BB 0.00 · Gen 1.60 | 0.00 |
+| sourced-kit-ribbon | 2 Trema (fresh) | intended | Wait split, D=1.5 s (0.5 s top) | 4/40 | 2.36 | 13.5 | Met 0.28 · Flare 0.88 · blocked 7.03 | 25.60 |
+| sourced-kit-ribbon | Chapter (1-2) | intended | Wait split, D=1.5 s (0.5 s top) | 0/40 | 0.12 | — | reached Trema 0/40 | 0.00 |
+| sourced-kit | 2 Trema (fresh) | kit intended | Wait split, D=0 | 30/200 | 4.61 | 12.2 | Met 0.60 · Flare 0.30 · blocked 14.36 | 58.89 |
+| sourced-kit-ribbon | 2 Trema (fresh) | kit intended | Wait split, D=0 | 49/200 | 3.99 | 12.0 | Met 0.58 · Flare 0.90 · blocked 11.35 | 52.77 |
+
+**What changed against the Active D=1.5 s rows, in three sentences.** Wait split's 40-seed rows
+land close to Active's own D=1.5 s rows and inside the same noise band (tr11-a and sourced-kit
+Paragon and Chapter unchanged at 0/40; Trema fresh ticks up a little — sourced-kit 0/40 to 1/40,
+and the two kits Active never ran at human speed, sourced-kit-one-lustre and sourced-kit-ribbon,
+land at 3/40 and 4/40 — because 1.0 s of every 1.5 s now runs against a held clock instead of a
+running one, so the party loses less ATB ground to menu time than Active's D=1.5 s charged it.
+The bench-speed (D=0) row for sourced-kit and sourced-kit-ribbon is identical to their Active D=0
+row (30/200 and 49/200) at every field, confirming the mode switch alone (`atbMode: 'wait'`,
+`waitSplit: true`) moves nothing when no decision time is ticked. **None of this changes the
+second pass's headline: the chapter is still 0/40 and 0/200 on every kit and link that reaches
+it, Paragon is still the wall, and Trema alone is still winnable only with the sourced kit** —
+Wait split's forgiveness narrows the human-speed gap under Active but does not close it.
+
 ## First cut (126b719f, before the method check)
 
 Kept as history. Of its engine bugs, #2 (a spherechange drops accessories) is fixed in the second
