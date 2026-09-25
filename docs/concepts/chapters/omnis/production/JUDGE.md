@@ -141,5 +141,6 @@ seymour-omnis portrait: FAIL (not locked; B17 falls back to the approved seymour
 
 Set `chapter:omnis:2026-09-25` in `docs/target/approved-hashes.json` (the five PASS files, sha256
 re-taken by this judge). Backup: `D:/Tools/pyrefly-art-backup/approved/2026-09-25-omnis/` (PNG plus
-sidecar for each). `verify-approved.mjs` before the lock: 159 ok, 0 mismatched, 0 missing; after: see the
-lock commit.
+sidecar for each). `verify-approved.mjs` at the start of judging: 159 ok; right before the lock (after the Trema
+and Gippal locks landed): 168 ok, 0 mismatched, 0 missing; after: 173 ok, 0 mismatched, 0 missing.
+Lock commit: e7457293.
