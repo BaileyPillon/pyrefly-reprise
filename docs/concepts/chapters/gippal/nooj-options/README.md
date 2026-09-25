@@ -260,3 +260,121 @@ Bailey accepted option 1 with one targeted repair pass. The results are in [repa
 - **The cast** did not come right in two tries, so the pass stopped. The best try is kept, and it is not judged.
 
 Nothing was installed.
+
+## Independent judge (repair) (2026-09-25)
+
+**Game case (rule 14): FFX-2 only.** The judge is a sub-agent that made none of these files and changed no art. The
+rubric and bar are those of [production/JUDGE.md](../production/JUDGE.md): bar 7 overall, and no category below 6.5.
+The gates are from [METHOD-nooj-2.md](../production/METHOD-nooj-2.md). Identity is judged against the picked portrait
+`public/art/portraits/nooj.png` and visual bible §1.23.4. This is a judge's verdict, not Bailey's. Nothing was
+installed or locked. `verify-approved.mjs` reported ok 224, with 0 mismatched and 0 missing, before and after.
+
+**Verdict: both files FAIL.** The idle is closer (6.9), and the repair did what it was asked to do. The cast is
+further off (6.4).
+
+**Files judged.** Both are in `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-nooj6/`, and each sha256 was
+re-computed and matches the repair README.
+
+| File | sha256 (12) |
+|---|---|
+| `idle-repair/idle-repaired.png` (369x1008) | `8e1d77e9991c` |
+| `cast/C-r1/cand-976202.png` (876x991) | `b31df6985f14` |
+
+**Method.**
+
+- Each cut-out was composited over mid grey and over dark blue and viewed at 1:1. The head, both hands, both feet and
+  the torso were then viewed at 2x nearest-neighbour. Option 1's own idle and cast were beside them.
+- The two engine frames in [repair/frames/](repair/frames/) (1600x900, Chapter XI staging, factor 0.82, B treatment)
+  were cropped at 2x, beside option 1's frames.
+- Fur width was measured on each cut-out: the extent from the 1st to the 99th percentile of light, low-saturation
+  pixels over the far shoulder. It was then scaled by the figure's height in the frame: 0.366 for the idle and 0.357
+  for the cast. The dark lilac tips and the B glow blur the edge, so the numbers carry about ±8 px of error.
+- The look-only crops are JPEGs in `D:/Tools/pyrefly-scratch/nooj6-judge/`.
+
+### Scores (0 to 10; bar 7, no category below 6.5)
+
+| Painting | Identity | Anatomy | Hands | Costume | Seams | Edges | Finish | Game read | Overall |
+|---|---|---|---|---|---|---|---|---|---|
+| Opt 1 idle, before the repair | 6.5 | 6 | 5 | 6 | 8 | 7.5 | 7 | 7.5 | 6.7 |
+| **Repaired idle** | 6.5 | 6.5 | 7 | **6** | 7.5 | 7.5 | 7 | 7.5 | **6.9 FAIL** |
+| Opt 1 cast, before the repair | 6 | 7 | 7 | 5.5 | 6 | 7.5 | 6.5 | 7.5 | 6.6 |
+| **Cast 976202** | 6.5 | 6.5 | **5.5** | **5** | 7 | 7.5 | 7 | 6.5 | **6.4 FAIL** |
+
+The idle misses the bar by 0.1, and its costume score (6) is below the 6.5 floor. The cast misses the bar by 0.6,
+and both its hands score (5.5) and its costume score (5) are below the floor.
+
+### Gates
+
+| Gate | Repaired idle | Cast 976202 |
+|---|---|---|
+| Tall column (red before B) | yes | yes |
+| One furred shoulder, ≥ 50 px, breaking the outline | **yes**, about 58 to 70 px on the far (right) shoulder. A ragged lilac and orange fringe also rises behind the neck on the near side, about 50 px wide on the canvas, and at 2x in the frame it reads as the collar carrying on | **yes**, about 64 to 71 px, on the far shoulder only. It is the cleanest fur shape of any attempt |
+| One thin skeletal arm | thin at game size. At 1:1 the forearm is still the blue blade with a fin spike at the elbow; only the hand is new | yes, a silver jointed arm with gaps |
+| Cane as a third leg, touching the ground | yes | n/a (levelled at the party, which reads) |
+| Two loops with ties; blue glasses | loops yes, but black, with red insides and no separate tie, so they read as ram horns at 1:1 and as handles in the frame. Glasses yes | **yes**: brown hair loops with red ties, the closest yet to the portrait. Glasses yes |
+| Human ear | yes, small, on the near side behind the hair | **no**: no ear shows on either side |
+| Gloved hand, finger reads, no spur | **yes**: a black-gloved human fist with knuckle folds, no metal and no spur. It is oversized for his forearm, and the white insert below it is blocky at 1:1 | **no**: the cloth-side glove is a mitten with one pointing finger, and the cane passes over it without being gripped. The forearm above it is a black plated sleeve |
+| One purple boot and one metal foot, no hoof | **yes**: a boxy purple boot with a toe and a sole, and a grey metal foot with a toe plate | borderline: the purple boot has a toe, but the metal foot is a plate with two forward prongs, a claw risk at 2x |
+| At least 3 belts | 3, narrowly (the chest harness and two crossed hip belts) | 3, narrowly (the same) |
+| Cast elbow continuous | n/a | yes |
+| Cast is the same man as the idle | n/a | **no** (see below) |
+
+### Named faults, worst first
+
+**Repaired idle, FAIL (6.9).** The three repaired regions pass their gates. The fail comes from faults that were out
+of scope for this pass.
+
+- **Worst: the costume.** Under the fur the upper arm is bare skin, and a red, black and blue sleeve starts at the
+  elbow. There is no purple sleeve. The machina forearm is a blue blade with a fin spike, where the bible has grey.
+  The near-side fringe behind the neck puts some fur on both shoulders. The new boot is boxy, close to an armoured
+  greave.
+- **Identity:** the loops still read as ram horns, and the face is young, soft and frontal, with a pout.
+- **Staging:** the lean does not show. The cane stands vertically beside the far leg, the body is frontal, and the legs
+  are about 60 percent of his height.
+- **The repaired regions at 1:1:**
+  - The glove is a little large.
+  - The cane's blue and white handle hangs below the fist rather than running into it.
+  - A few pale pixels of the ground shadow remain left of the metal toe, after the alpha touch-up.
+
+  None of these reads in the frame.
+- **What works:** at game size the fist reads clearly on the cane, and both legs now end in feet. The fur shape and
+  the cane as a third leg still give the best squint read of every attempt.
+
+**Cast 976202, FAIL (6.4).**
+
+- **Worst: the props, which read at game size.**
+  - The cane ends in a blue trident with an eye-like gem at the fork, so it is a staff, not the idle's cane.
+  - A second length of the shaft runs on behind his neck and out past the near shoulder. At 1600x900 it is a clear
+    line to the right of his head.
+  - The machina hand grips a second black rod, which hangs down in front of his crotch. It reads in the frame.
+- **The hands.** The cane hand is a mitten that points rather than grips. The cloth-side arm is a black plated sleeve,
+  which puts armour on the cloth side.
+- **The costume.** The near shoulder is bare skin. The metal foot is a pronged plate.
+- **Not the same man as the idle.** The idle has black horn loops, a blue blade arm, a red and blue cloth sleeve and a
+  plain silver cane with a blue handle. The cast has brown loops, a silver skeletal arm, a black armoured sleeve and a
+  trident staff. After the B treatment the colour gap shrinks, but the trident and the rod behind the neck still
+  change the prop. The cast's feet land about 50 to 90 px to the right of the idle's in the frame, the staging note
+  from attempts 3 and 5.
+- **What works:**
+  - It fixes both cast faults the first judge named. The fur is on the far shoulder only, and the grey patch is gone.
+  - The face is the most mature and portrait-like of every attempt, three-quarter left with a frown.
+  - The loops and ties match the portrait.
+  - The elbow is continuous, and the levelled cane reads.
+
+### What would lift it (the judge's list; nobody has approved it)
+
+1. **Idle, 0.1 short:** masked repaints of the loops (brown hair loops with red ties, with 976202's loops as the
+   reference), and of the upper arm under the fur (a purple sleeve over the bare skin). Remove the near-side fringe
+   behind the neck. The costume and identity scores are the ones below the bar, and this would lift both.
+2. **Cast:** builder route (a) as written, which repaints the fork, the rod behind the neck and the second rod, does
+   **not** reach the gates on its own. The cane hand and the black sleeve would still fail. It would also need the cane
+   hand to grip and a red sleeve on the cloth arm. After step 1, the cast and the idle would share their loops, and the
+   same-man gate could then pass. Route (b), masks on option 1's own cast, starts from a face and loops that are
+   further from the portrait.
+3. Either route is a third try under rule 15, so it needs Bailey's word first, then a fresh judge.
+
+### Verdicts
+
+- repaired idle (`8e1d77e9991c`): FAIL (6.9)
+- cast 976202 (`b31df6985f14`): FAIL (6.4)
+- The pair: FAIL. Nothing was locked, and both files stay CANDIDATE.
