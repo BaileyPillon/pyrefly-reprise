@@ -90,6 +90,10 @@ describe('the guide', () => {
     expect(says(TREMA_SHAPE_PARAGON_LINK)).toMatch(/Big Bang/);
     expect(says(OVERSOUL_LIKE)).not.toMatch(/Big Bang/);
     expect(says(TREMA_SHAPE_ALONE)).not.toMatch(/Big Bang|Paragon/);
+    // m5: the boss ids follow the shape too, so Trema alone claims no Paragon.
+    expect(tremaGuideFor(TREMA_SHAPE_ALONE).bossIds).toEqual(['trema']);
+    expect(tremaGuideFor(TREMA_SHAPE_PARAGON_LINK).bossIds).toEqual(['trema', 'paragon']);
+    expect(says(TREMA_SHAPE_ALONE)).not.toMatch(/paragon/i);
   });
 
   it('the registered guide is the shipped shape\'s, and it is found from either boss on an FFX-2 board', () => {

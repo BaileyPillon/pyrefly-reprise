@@ -31,9 +31,11 @@
 
 import type { AnyCombatant, AvailableCommand, Command, CombatantId } from '../../battle/common/types.ts';
 import { type Tactic, activeParty, has, hpFraction } from './common.ts';
+import { FFX2_TREMA_SHIPPED, shapeOfChapter } from '../../data/chapter-trema-ship.ts';
+import { tremaBossIdsFor } from '../../data/trema-shape.ts';
 
-/** Every combatant id the chapter can field: the tactic and the guide register them all. */
-export const TREMA_CHAPTER_BOSS_IDS: readonly CombatantId[] = ['trema', 'paragon'];
+/** Every combatant id the chapter's shape fields: the tactic and the guide register the same ids. */
+export const TREMA_CHAPTER_BOSS_IDS: readonly CombatantId[] = tremaBossIdsFor(shapeOfChapter(FFX2_TREMA_SHIPPED));
 
 /** Demi costs 10 MP (research §4.2): the drain's target. */
 const DRAIN_BELOW = 10;

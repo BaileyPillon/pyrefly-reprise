@@ -26,7 +26,7 @@
  */
 
 import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from './types.ts';
-import type { TremaShape } from '../trema-shape.ts';
+import { tremaBossIdsFor, type TremaShape } from '../trema-shape.ts';
 import { FFX2_TREMA_SHIPPED, shapeOfChapter } from '../chapter-trema-ship.ts';
 
 const NOTHING_STICKS: GuideRule = {
@@ -141,8 +141,8 @@ export function tremaGuideFor(shape: TremaShape): ChapterGuide {
   return {
     id: 'ffx2-trema',
     title: 'Trema',
-    // Every id the chapter can field (the tactic registers the same two): Trema, and Paragon.
-    bossIds: shape.paragonId ? [shape.tremaId, shape.paragonId] : [shape.tremaId, 'paragon'],
+    // Every id this shape fields: Trema, and Paragon only with a Paragon link (`tremaBossIdsFor`).
+    bossIds: tremaBossIdsFor(shape),
     rules,
     hints: hints(shape),
     watch: [],

@@ -87,3 +87,11 @@ export const TREMA_SHAPE_PARAGON_LINK: TremaShape = {
 };
 /** Option 2, Trema alone (TR1 b): no Paragon, no link. */
 export const TREMA_SHAPE_ALONE: TremaShape = { paragonLink: false, paragonBigBang: false, tremaId: TREMA_ID };
+
+/**
+ * Every boss id a chapter of this shape fields: Trema, and Paragon only when there is a Paragon
+ * link. The guide registers exactly these, so the Trema-alone shape claims no Paragon (m5).
+ */
+export function tremaBossIdsFor(shape: TremaShape): readonly string[] {
+  return shape.paragonLink && shape.paragonId ? [shape.tremaId, shape.paragonId] : [shape.tremaId];
+}
