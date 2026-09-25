@@ -11,64 +11,41 @@
  *
  * ## Registered, reachable, and UNLISTED
  *
- * Bailey: "Let's add Yojimbo first please. He goes in next build!" His picks
- * on the preflight (`docs/plans/chapter-yojimbo-review.md` §5, B1-B10) and on
- * the options rounds O-1 to O-6 are **still pending**, so this record carries
- * only what depends on none of them. It sits in `UNLISTED_CHAPTERS`, not in
- * `CHAPTERS`: `getChapter`, the battle flow and `window.__pyrefly.gotoChapter`
- * reach it by id, but **chapter select does not show it** — no new card, and
- * no COMING card either, because a card is perceivable and waits for Bailey
- * (AGENTS.md hard rule 9). Moving it into `CHAPTERS` is the integrator's one
- * line, the day its story, meta, scene, tactic and card are picked and built.
+ * It sits in `UNLISTED_CHAPTERS`, not in `CHAPTERS`: `getChapter`, the battle
+ * flow and `window.__pyrefly.gotoChapter` reach it by id, but **chapter select
+ * does not show it**. Moving it into `CHAPTERS` is the integrator's one line.
  *
- * Every field below that a player would see or hear is a **placeholder**, and
- * says so:
+ * Bailey's picks (docs/target/decisions.json D-049 to D-076): title "Yojimbo"
+ * (D-053), Chapter IX (D-058), line-up Lulu, Kimahri, Yuna (D-066), no Candle
+ * of Life (D-067), Kimahri with Doom (D-056), battle music O-6 A (D-063).
  *
- * - `sceneKey: 'gagazet'` — **placeholder**. No Cavern diorama exists (O-4
- *   is unpicked). Mt. Gagazet is the next stop after the Cavern (§1.1), and
- *   Chapter 1's diorama is the one every FFX chapter already falls back on.
- * - `music` — **placeholder**, Chapter 1's cues, the stopgap Chapter 8 used
- *   before its own cues existed. The chapter's own slot is "Lulu's Theme", the
- *   only place that track plays (§6.4 [verified: 2 sources]); ours must be an
- *   original cue, auditioned first (O-6, rules 8 and 13).
- * - `scriptsRef` — **placeholder**: a silent pre scene that opens the battle
- *   and a silent post scene that shows results, and nothing else. The story
- *   beats are drafted for Bailey in `docs/plans/yojimbo-story-draft.md`; this
- *   track does not write `src/story`.
- * - `title: 'Yojimbo'` — B5, the preflight's recommendation (the encounter's
- *   name, the Evrae precedent), **pending**. Subtitle and blurb are summaries of
- *   research §6.2's sourced beats, in our own words; none is a quoted line.
- *
- * Built on assumptions B1 (this is Lady Ginnem's Yojimbo, candidate A) and B10
- * (it is Chapter IX), both the driver's recommendations, both pending.
+ * - `scriptsRef` — the pre and post scenes of
+ *   `docs/plans/yojimbo-story-draft.md` (`src/story/scripts/yojimbo-cavern.ts`),
+ *   **without** the four mid-battle callouts, held until Bailey reads the
+ *   draft (D-068).
+ * - `music` — `boss-yojimbo` ("The Summoner's Sorrow", Bailey's O-6 pick) for
+ *   the battle, in the slot where the game plays "Lulu's Theme" (§6.4
+ *   [verified: 2 sources]). The scene fallback is `scene-gagazet`, a
+ *   **stand-in** for the cave's own theme, which has no cue of ours (the
+ *   Chapter VII precedent); the pre scene moves to `boss-yojimbo` itself when
+ *   Ginnem appears.
+ * - `sceneKey: 'gagazet'` — **placeholder** until the Cavern scene (O-4 A,
+ *   `public/art/backdrops/cavern-stolen-fayth.png`) is wired by the scene track.
+ * - Subtitle and blurb are summaries of research §6.2's sourced beats, in our
+ *   own words; none is a quoted line.
  */
 
 import type { Chapter } from './encounters.ts';
-import type { ChapterScripts } from '../story/dsl.ts';
-import { battleStart, results } from '../story/dsl.ts';
+import { yojimboCavernScripts } from '../story/scripts/yojimbo-cavern.ts';
 import { yojimboCavernBuild } from './ffx/builds/yojimbo-cavern.ts';
 import { yojimboGroup } from './ffx/enemies/yojimbo.ts';
-
-/**
- * **Placeholder** story layer: open the battle, show the results, say nothing.
- * `ChapterScripts` requires a pre scene ending in `battleStart` and a post
- * scene containing `results` (`src/story/dsl.ts`); this is the least that
- * satisfies it without writing a line of story.
- */
-export const YOJIMBO_PLACEHOLDER_SCRIPTS: ChapterScripts = {
-  pre: [battleStart()],
-  post: [results()],
-  victoryQuips: {},
-  mid: [],
-  midScripts: {},
-};
 
 /** Chapter 9 (registered, unlisted). */
 export const YOJIMBO_CAVERN: Chapter = {
   id: 'yojimbo-cavern',
   game: 'ffx',
-  number: 9, // B10 (pending): registration order after Chapter VIII
-  title: 'Yojimbo', // B5 (pending)
+  number: 9, // B10, D-058
+  title: 'Yojimbo', // B5, D-053
   // research §6.2 beats 3-4, summarised: Lulu's last duty as Ginnem's guardian.
   subtitle: "A guardian's last duty to her first summoner",
   // research §1.1 / §6.1 [verified: 2 sources]: the last chamber of the Cavern.
@@ -82,12 +59,13 @@ export const YOJIMBO_CAVERN: Chapter = {
   thumbnailKey: 'chapter-yojimbo-cavern',
   buildRef: yojimboCavernBuild,
   enemyGroupRef: yojimboGroup,
-  scriptsRef: YOJIMBO_PLACEHOLDER_SCRIPTS, // PLACEHOLDER — see the file header
+  scriptsRef: yojimboCavernScripts,
   music: {
-    // PLACEHOLDER — Chapter 1's cues until the "Lulu's Theme" slot is composed
-    // and picked (O-6). FFX cues only (THEMES.md never crosses the scores).
+    // Stand-in scene cue (see the file header); FFX cues only (THEMES.md
+    // never crosses the scores).
     scene: 'scene-gagazet',
-    battle: 'boss-seymour',
+    // O-6 A, D-063: the original cue in the "Lulu's Theme" slot [§6.4].
+    battle: 'boss-yojimbo',
     victory: 'victory-ffx',
   },
   // Yojimbo, Ginnem and Daigoro are all Sensor- and Scan-immune

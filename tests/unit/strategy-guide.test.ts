@@ -312,7 +312,7 @@ describe('phase notes', () => {
 
 describe('src/data/guides', () => {
   it('has one guide per chapter, and every chapter that ships a tactic has one', () => {
-    expect(GUIDES).toHaveLength(8);
+    expect(GUIDES).toHaveLength(9);
     for (const id of [
       'seymour-flux',
       'yunalesca',
@@ -322,6 +322,7 @@ describe('src/data/guides', () => {
       'ffx2-leblanc',
       'seymour-anima-macalania',
       'evrae-airship',
+      'yojimbo-cavern',
     ]) {
       expect(guideForChapter(id), id).toBeDefined();
     }

@@ -59,11 +59,6 @@ const MANIFEST = join(REPO_ROOT, 'public', 'audio', 'manifest.json');
 const KNOWN_UNWIRED = new Set([
   'battle-ffx',
   'boss-dread',
-  // Chapter IX's battle cue (FFX only, 2026-09-24): composed and rendered by the
-  // audio track, wired by the Chapter IX data owner (src/data/**yojimbo*;
-  // docs/concepts/chapters/yojimbo/INSTALLED.md). The honesty check below fails
-  // the moment the chapter names it, which is the reminder to delete this line.
-  'boss-yojimbo',
 ]);
 
 // ---------------------------------------------------------------------------

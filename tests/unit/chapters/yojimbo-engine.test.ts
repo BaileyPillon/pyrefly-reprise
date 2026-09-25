@@ -497,9 +497,10 @@ describe('The Cavern build and the chapter registration', () => {
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('yojimbo-cavern'); // Chapter X joined the list on 2026-09-24
     expect(CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
     expect(CHAPTER_IDS).not.toContain('yojimbo-cavern');
-    // Placeholder story: opens the battle, shows results, says nothing.
-    expect(ch?.scriptsRef.pre).toEqual([{ type: 'battleStart' }]);
-    expect(ch?.scriptsRef.post).toEqual([{ type: 'results' }]);
+    // The story layer (tests/unit/chapters/yojimbo-content.test.ts pins its lines):
+    // the pre scene ends by opening the battle, the post scene shows results.
+    expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' });
+    expect(ch?.scriptsRef.post.some((s) => s.type === 'results')).toBe(true);
   });
 });
 

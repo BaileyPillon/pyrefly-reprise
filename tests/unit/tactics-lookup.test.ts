@@ -39,6 +39,7 @@ const OWN_TACTIC: Record<string, string> = {
   'ffx2-leblanc': 'ffx2Leblanc',
   'seymour-anima-macalania': 'seymourAnimaMacalania',
   'evrae-airship': 'evrae',
+  'yojimbo-cavern': 'yojimboCavern',
 };
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS];
@@ -62,7 +63,8 @@ describe('a friendly Bahamut in an FFX fight picks no FFX-2 guide or tactic', ()
       combatants: {
         yuna: { id: 'yuna', side: 'party' },
         bahamut: { id: 'bahamut', side: 'aeon' },
-        yojimbo: { id: 'yojimbo', side: 'enemy' },
+        // Chapter X's boss: IX has its own guide and tactic now.
+        'seymour-natus': { id: 'seymour-natus', side: 'enemy' },
       },
     } as unknown as BattleState;
     expect(guideForState(state)).toBeNull();

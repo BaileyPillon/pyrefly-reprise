@@ -244,8 +244,13 @@ export const yojimboGroup: EnemyGroupDef = {
   // Lady Ginnem. The formation slots M1-M3 stay on each record's `slot`, which
   // is what the stage places by and what the Daigoro row orders (§3.1).
   enemies: [yojimbo, ginnem, daigoro],
-  // No `musicCues`: the chapter's own cue ("Lulu's Theme" slot, research §6.4)
-  // is not composed yet, so the chapter record's placeholder routing applies.
+  musicCues: [
+    // The chapter's own battle cue in the "Lulu's Theme" slot (research §6.4
+    // [verified: 2 sources]): "The Summoner's Sorrow", O-6 sketch A, Bailey's
+    // pick (D-063). The pre scene starts it when Ginnem appears, so the battle
+    // carries it on rather than restarting it. FFX only.
+    { at: 'start', track: 'boss-yojimbo', fadeMs: 800 },
+  ],
 };
 
 export default yojimboGroup;

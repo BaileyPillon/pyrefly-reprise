@@ -22,6 +22,7 @@ import type { ChapterId } from './encounters.ts';
 import { FFX2_LEBLANC_META } from './chapter-meta-ffx2-leblanc.ts';
 import { SEYMOUR_ANIMA_MACALANIA_META } from './chapter-meta-seymour-anima-macalania.ts';
 import { EVRAE_META } from './chapter-meta-evrae.ts';
+import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
 
 /**
  * The pause screen's objective rule vocabulary. Each rule is a pure
@@ -82,7 +83,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX';
   title: string;
   subtitle: string;
   location: string;
@@ -365,7 +366,15 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   EVRAE_META,
 ] as const;
 
+/**
+ * Metadata for chapters that are registered but not listed
+ * (`./chapters-unlisted.ts`): the pause screen and the prep panel find them by
+ * id, and `CHAPTER_META` stays one-to-one with the listed chapters. Listing a
+ * chapter moves its record from here into `CHAPTER_META`.
+ */
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [YOJIMBO_META] as const;
+
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {
-  return CHAPTER_META.find((m) => m.id === id);
+  return CHAPTER_META.find((m) => m.id === id) ?? UNLISTED_CHAPTER_META.find((m) => m.id === id);
 }
