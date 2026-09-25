@@ -1,0 +1,561 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-24T20:12:00-04:00",
+ "build": {
+  "mainSha": "a999d133",
+  "candidateTree": "D:/pyrefly-rel13",
+  "bundle": "Ji5E4fD0",
+  "artifactHash": "612bae4ccada27c29c9ff2eadf43705242b2273d18d59c55ebf93f5cc3672e55",
+  "reviewedManifestHash": "b5873d9c21cfce8299d08351c4562bd8cb5d08a5a7bbb069933c8ae53b30a7a1",
+  "artifactNote": "the reviewed dist-gate matches the deployed artifact (critic/artifacts/a999d133.json) byte for byte except .nojekyll, which the deploy adds",
+  "live": "e3b8c2a3 until 19:47 EDT; a999d133 itself was deployed under owner override during this review",
+  "deployedDuringReview": "2026-09-24T23:47:16Z"
+ },
+ "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect. With real keys, all seven listed chapters load and reach a first menu and a targeting step. The engine finishes every listed chapter on 16 seeds, with 6 of 8 intended wins in ch. I. The ch. IV victory and the ch. I defeat both reach results and move on. There were no console errors and no 404s.",
+  "No major regression: the only major (R13-04, the Evrae stack covering Tidus) is the same on live.",
+  "Every adopted change is present and matches its tile: PR-0002 A, PR-0005 B, pause faces B with Paine A, phone prep A, the s3 plates, and the plates closing at victory.",
+  "The combat changes are sourced and their tests pass: FFX-2 magic never rolls (combat-core 2.9), and Mortibsorption runs the threshold counters (ffx-seymour-flux 2.2 and 4.3). The full suite passes (340 files) and tsc is clean.",
+  "changedArea is FAIL only for two polish regressions against live (R13-02, R13-03). The rules say polish never holds a build."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "all listed",
+   "state": "boot and battle music",
+   "reason": "audio routing change is additive (boss-yojimbo key for unlisted Chapter IX); no listed-chapter track changed",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/sweep-cand-1600x900.json",
+    "D:/Tools/pyrefly-scratch/focused-r13/cand-manifest.json (boss-yojimbo.mp3 decodes, mp3 90.27 s by ffprobe; audioUnverified 0)"
+   ],
+   "mode": "automated",
+   "minutes": 3
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "I, III, V",
+   "state": "pause full-bleed at 1280x720, 1280x960, 1600x900, 2000x1012, 390x844",
+   "evidence": [
+    "critic/reviews/a999d133-focused/pause/",
+    "critic/reviews/a999d133-focused/pause/sheet-ch3-1280x960.jpg",
+    "critic/reviews/a999d133-focused/pause/sheet-ch5-cand-1280.jpg",
+    "critic/reviews/a999d133-focused/pause/sheet-phone.jpg"
+   ],
+   "mode": "automated capture, manual read",
+   "minutes": 4
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "I, IV",
+   "state": "party prep at 390x844",
+   "evidence": [
+    "critic/reviews/a999d133-focused/prep/phone-sheet.jpg",
+    "critic/reviews/a999d133-focused/prep/prep-cand.json (min effective text 14 px; live 3 px)"
+   ],
+   "reason": "the phone prep card rises from 3 px to 14 px minimum text; the pre-existing FFX-2 phone pause overlap is R13-05 (polish, same on live)",
+   "mode": "automated",
+   "minutes": 3
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "I, IV, V",
+   "state": "first menu advisor",
+   "evidence": [
+    "critic/reviews/a999d133-focused/cand-seymour-flux-1600x900-menu.jpg",
+    "critic/reviews/a999d133-focused/cand-ffx2-bahamut-1600x900-target2.jpg"
+   ],
+   "reason": "the advisor names a legal row and says where it is (IN WHITE MAGIC / IN ITEM); FFX-2 magic now reads 100% TO HIT",
+   "mode": "manual",
+   "minutes": 1
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "ffx2",
+   "chapter": "IV, V",
+   "state": "victory frame (PR-0150)",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/victory-cand-ffx2-bahamut.json",
+    "critic/reviews/a999d133-focused/data/victory-cand-ffx2-vegnagun-shuyin.json",
+    "critic/reviews/a999d133-focused/cand-ffx2-bahamut-end.jpg"
+   ],
+   "reason": "at the victory event the TARGET and actor plates, the controls hint and the targeting class are all gone (0 visible)",
+   "mode": "automated",
+   "minutes": 3
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "all listed",
+   "state": "first menu and targeting",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/target-cand-1600x900.json"
+   ],
+   "mode": "manual read of the captured HUD text",
+   "minutes": 1
+  },
+  {
+   "id": "CHK-008",
+   "result": "FAIL",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "I, II, III, VIII, IV, V, VI",
+   "state": "first menu and a targeting step at 1600x900 and 2000x1012, candidate vs live",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/sweep-cand-1600x900.json",
+    "critic/reviews/a999d133-focused/data/sweep-live-1600x900.json",
+    "critic/reviews/a999d133-focused/data/sweep-cand-2000x1012.json",
+    "critic/reviews/a999d133-focused/data/sweep-live-2000x1012.json",
+    "critic/reviews/a999d133-focused/data/target-cand-1600x900.json",
+    "critic/reviews/a999d133-focused/data/target-live-1600x900.json",
+    "critic/reviews/a999d133-focused/pr-0002.jpg"
+   ],
+   "reason": "Yuna now clears the stack in I and III (frame visibility 0.28 to 1.00), as adopted. Three polish trade-offs against live: R13-01, R13-02, R13-03. The Evrae stack still covers Tidus (R13-04, same on live)",
+   "mode": "automated measurement plus manual composites",
+   "minutes": 12
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "I, IV, V",
+   "state": "targeting plates and phone prep",
+   "evidence": [
+    "critic/reviews/a999d133-focused/cand-ffx2-bahamut-1600x900-target2.jpg",
+    "critic/reviews/a999d133-focused/prep/phone-sheet.jpg"
+   ],
+   "mode": "manual",
+   "minutes": 1
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "I, IV, V",
+   "state": "targeting",
+   "evidence": [
+    "critic/reviews/a999d133-focused/targeting-s3.jpg",
+    "critic/reviews/a999d133-focused/cand-ffx2-bahamut-1600x900-target2.jpg",
+    "critic/reviews/a999d133-focused/cand-seymour-flux-1600x900-target2.jpg"
+   ],
+   "reason": "the s3 plates (TARGET, actor, controls hint) appear in FFX-2 only; FFX keeps its reticle",
+   "mode": "manual",
+   "minutes": 2
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "I, III, V, VI",
+   "state": "targeting step",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/target-cand-1600x900.json",
+    "critic/reviews/a999d133-focused/data/target-cand-2000x1012.json"
+   ],
+   "reason": "every enemy is at least 0.77 clear of other figures at both sizes. The Mortiorchis figure is lower in frame than live, because its box sits under the wider moves panel; it looks clear on screen (R13-02)",
+   "mode": "automated",
+   "minutes": 2
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "all listed",
+   "state": "artifact",
+   "evidence": [
+    "D:/Tools/pyrefly-scratch/focused-r13/cand-manifest.json"
+   ],
+   "reason": "no shipped art changed against e3b8c2a3. The diff has 51 added files for unlisted IX-XI and 3 changed (the art and audio manifests and index.html)",
+   "mode": "automated",
+   "minutes": 2
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "reason": "no listed-chapter art changed (artifact diff). The new art is for unlisted Chapters IX-XI, which normal play cannot reach. It is owed its own review before those chapters are listed"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": true,
+   "game": "both",
+   "chapter": "I-VI, VIII",
+   "state": "real input used: title Enter, briefing Enter, chapter-select arrows, Enter, prep Enter, held Enter through cutscenes, Enter to target, Esc to pause, Q/E tabs, PG DN/PG UP in prep, and wheel plus a tap on the phone prep",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/",
+    "critic/reviews/a999d133-focused/prep/prep-cand.json",
+    "critic/reviews/a999d133-focused/data/prepkeys.json"
+   ],
+   "mode": "automated real input (Playwright keyboard, wheel, touch tap)",
+   "minutes": 10
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": true,
+   "game": "both",
+   "reason": "every capture first asserted the screen (battle, pause or party-prep) and the chapter id. Failed waits are recorded as UNVERIFIED (the Evrae targeting step)",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/"
+   ],
+   "mode": "automated",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": true,
+   "reason": "pre-deploy candidate; the live review after npm run deploy verifies the exact live artifact"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "reason": "no 404 or console error in more than 150 candidate page loads",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/sweep-cand-1600x900.json",
+    "critic/reviews/a999d133-focused/pause/pause-cand.json",
+    "critic/reviews/a999d133-focused/prep/prep-cand.json"
+   ],
+   "mode": "automated",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "evidence": [
+    "D:/Tools/pyrefly-scratch/focused-r13/cand-manifest.json (decodeChecked true, problems 0)"
+   ],
+   "mode": "automated",
+   "minutes": 2
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "reason": "the paired flows ran in both games: pause faces (FFX Tidus and Auron; FFX-2 Yuna, Rikku and Paine), phone prep (I and IV) and staging (all seven chapters)",
+   "evidence": [
+    "critic/reviews/a999d133-focused/pause/",
+    "critic/reviews/a999d133-focused/prep/phone-sheet.jpg"
+   ],
+   "mode": "automated",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": true,
+   "game": "both",
+   "reason": "presence and absence both checked. The cut-in lift is present in FFX (.ffxhud__lift on the candidate) and the FFX-2 path is untouched (ui-ffx-cutin-lift test). The s3 plates appear only in FFX-2. The Paine stack appears only in FFX-2, at 1280 wide. The Yuna slot moved only in I and III. The magic hit change is in ffx2/hit.ts only (combat-core 2.9 Accuracy column). The Mortibsorption counters are FFX only (ffx-seymour-flux 2.2 and 4.3)",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/cutin-cand-seymour-flux-1600x900.json",
+    "critic/reviews/a999d133-focused/data/cutin-live-seymour-flux-1600x900.json",
+    "critic/reviews/a999d133-focused/pause/pause-cand.json",
+    "critic/reviews/a999d133-focused/targeting-s3.jpg"
+   ],
+   "mode": "automated plus source reading",
+   "minutes": 4
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "chapter": "I, IV, V",
+   "state": "outcome",
+   "evidence": [
+    "critic/reviews/a999d133-focused/data/victory-cand-ffx2-bahamut.json",
+    "critic/reviews/a999d133-focused/data/victory-cand-seymour-flux.json",
+    "critic/reviews/a999d133-focused/data/outcomes.json"
+   ],
+   "reason": "the ch. IV victory reaches results and then its aftermath. The ch. I defeat (seed 1, same on live) reaches results and then prep (retry). The candidate engine outcomes across I-VI and VIII on 16 seeds finish every chapter. They are not compared with e3b8c2a3: that pass ran after live had become a999d133",
+   "mode": "automated (real-input entry, intended strategy)",
+   "minutes": 6
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "game": "both",
+   "reason": "the staging, cut-in lift, plates and pause framing were all seen through the real presentation path of the production build",
+   "evidence": [
+    "critic/reviews/a999d133-focused/cand-seymour-flux-1600x900-cutin0.jpg",
+    "critic/reviews/a999d133-focused/pr-0005-ffx.jpg"
+   ],
+   "mode": "automated",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "artifact": "a999d133 / b5873d9c21cfce82",
+   "targetVersion": "e64a53228ac90becd067d239392c6183d1b2fe9f4f2ad6166b8181db4b01ba85",
+   "environment": "vite preview of D:/pyrefly-rel13/dist-gate on 127.0.0.1:5921 (bundle index-Ji5E4fD0.js, artifact b5873d9c21cfce82, 939 files, decode-checked, 0 problems) vs live https://baileypillon.github.io/pyrefly-reprise/ (e3b8c2a3); Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "reason": "no agent can hear. The one new cue (boss-yojimbo) plays only in unlisted Chapter IX, which normal play cannot reach. Its audition is owed before IX is listed"
+  }
+ ],
+ "targets": {
+  "required": 7,
+  "matched": 6,
+  "failing": 0,
+  "unverified": 1,
+  "waiting": 0,
+  "detail": {
+   "matched": [
+    "PR-0002 Yuna slot (pr-0002.jpg)",
+    "PR-0005-ffx cut-in option B (pr-0005-ffx.jpg)",
+    "Pause faces B + Paine A (pause-faces.jpg, pause/sheet-ch3-1280x960.jpg, pause/sheet-ch5-cand-1280.jpg)",
+    "PR-0127 phone prep A (pr-0127-phone.jpg, prep/phone-sheet.jpg)",
+    "Targeting in FFX-2, the s3 plates (targeting-s3.jpg; ch. IV single target, ch. V all allies)",
+    "Pause on a phone (pause-phone.jpg; the remake layout, unchanged from live)"
+   ],
+   "unverified": [
+    "Vegnagun parts, D-044 anchors: only the Tail was on the field at the first menu, and no single-target attack on a named part was reached"
+   ]
+  }
+ },
+ "issues": [
+  {
+   "id": "R13-04",
+   "severity": "major",
+   "title": "Evrae (Chapter VIII): the FFX command stack covers Tidus at the first menu",
+   "game": "ffx",
+   "chapter": "evrae-airship",
+   "expected": "the acting character readable beside the command stack, as PR-0002 A now does for Yuna in I and III",
+   "observed": "ORDERS, ATTACK and SPECIAL cover Tidus at 1600x900 and 2000x1012 (frame visibility 0.23 and 0.25 on the candidate, 0.16 and 0.17 on live)",
+   "repro": "title Enter, Enter, select VIII, Enter, Enter, hold Enter through the scene; first menu",
+   "evidence": [
+    "critic/reviews/a999d133-focused/cand-evrae-airship-2000x1012-menu.jpg",
+    "critic/reviews/a999d133-focused/live-evrae-airship-2000x1012-menu.jpg"
+   ],
+   "confidence": "high (measured and seen on both builds)",
+   "requirement": "CHK-008; the same defect class as PR-0002 (D-041 covered chapters 1 and 3 only)",
+   "where": "Evrae scene layout data (suspected; not traced)",
+   "fix": "an options sheet for chapter VIII in the PR-0002 manner, for Bailey to pick from",
+   "acceptanceCheck": "Tidus frame visibility >= 0.9 at the first menu, 1600x900 and 2000x1012",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R13-03",
+   "severity": "polish",
+   "title": "Evrae at 2000x1012: Rikku stands about 30 px further left, and her left side is now under the stack rows",
+   "game": "ffx",
+   "chapter": "evrae-airship",
+   "expected": "Rikku fully clear, as on live",
+   "observed": "clear of other figures falls from 0.87 to 0.64; her face and weapon are still clear",
+   "repro": "as R13-04, at 2000x1012",
+   "evidence": [
+    "D:/Tools/pyrefly-scratch/focused-r13/crop-ch8.jpg",
+    "critic/reviews/a999d133-focused/data/sweep-cand-2000x1012.json"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-008",
+   "where": "holdParty staging (21e397b1), suspected",
+   "fix": "keep the chapter VIII party slots on their live spots",
+   "acceptanceCheck": "Rikku visibility at least as high as live at 2000x1012",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false
+  },
+  {
+   "id": "R13-02",
+   "severity": "polish",
+   "title": "Chapter I targeting: the reticle bracket crosses the NEXT BEST MOVE panel text",
+   "game": "ffx",
+   "chapter": "seymour-flux",
+   "expected": "bracket and panel apart, as on live, where the panel compacts",
+   "observed": "at 1600x900 the top-left bracket line runs through \"inflicts Haste\". Mortiorchis now stands lower because the fiend-gives-way relax was retired",
+   "repro": "ch. I first menu, Enter (coach), Enter (Attack)",
+   "evidence": [
+    "D:/Tools/pyrefly-scratch/focused-r13/crop-ch1t.jpg",
+    "critic/reviews/a999d133-focused/cand-seymour-flux-1600x900-target2.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-008",
+   "where": "suspected: the reticle against the moves-panel layout after holdParty",
+   "fix": "let the moves panel compact, or clip the reticle at a panel edge",
+   "acceptanceCheck": "no reticle stroke over panel text in ch. I targeting at 1600x900 and 2000x1012",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false
+  },
+  {
+   "id": "R13-01",
+   "severity": "polish",
+   "title": "Chapters I and III: Yuna's new slot overlaps the middle figure (Kimahri, Auron)",
+   "game": "ffx",
+   "chapter": "seymour-flux, braskas-final-aeon",
+   "expected": "PR-0002 option A: Yuna clear of the stack",
+   "observed": "delivered (Yuna 0.28 to 1.00). By bounding box, Kimahri (I) falls from 0.72 to 0.41 and Auron (III) from 0.82 to 0.34. Both stay readable, with Yuna's staff across them",
+   "repro": "first menu in I or III",
+   "evidence": [
+    "D:/Tools/pyrefly-scratch/focused-r13/crop-ch3.jpg",
+    "critic/reviews/a999d133-focused/pr-0002.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "the trade-off D-041 accepted; CHK-008",
+   "where": "chapter scene layout data",
+   "fix": "none required; Bailey may want a small spacing pass",
+   "acceptanceCheck": "the middle figure's face and weapon unobstructed",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R13-05",
+   "severity": "polish",
+   "title": "FFX-2 phone pause: the GARMENT GRID row prints over the chapter caption",
+   "game": "ffx2",
+   "chapter": "ffx2-vegnagun-shuyin",
+   "expected": "rows and caption apart at 390x844",
+   "observed": "the two lines overlap on both builds",
+   "repro": "ch. V first menu, Esc, E to Paine, at 390x844",
+   "evidence": [
+    "critic/reviews/a999d133-focused/pause/sheet-phone.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-003",
+   "where": "pause phone layout",
+   "fix": "drop or wrap the last IN THIS FIGHT rows on the phone",
+   "acceptanceCheck": "no text overlap on the FFX-2 phone pause",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "the real-input flow title > briefing > select > prep > battle in every listed chapter (I, II, III, VIII, IV, V, VI) at 1600x900 and 2000x1012 on candidate and live: the first menu plus a targeting step, with figure-vs-figure and figure-vs-HUD visibility measured",
+   "the cut-in with the menu above it at 1600x900 and 2000x1012 (ch. I)",
+   "pause faces with Esc and Q/E at 1280x720, 1280x960, 1600x900, 2000x1012 and 390x844 in III and V, plus I",
+   "the phone prep card at 390x844 (I, IV) with the wheel and a touch tap on START BATTLE; desktop PG DN / PG UP at 1280x720 (I, IV; new in this candidate)",
+   "the FFX-2 victory frame (IV, V) and results; the FFX defeat through results to prep (I)",
+   "engine outcomes on 16 seeds on the candidate (the live side of that pass ran against a999d133 after the 19:47 deploy, so it is not a baseline)",
+   "the artifact hash and decode of 939 files; the diff against e3b8c2a3",
+   "npx tsc --noEmit clean; vitest 340 files and 6664 tests passed"
+  ],
+  "reused": [],
+  "notTested": [
+   "the PR-0019 ALL ALLIES chip on the chosen row in a browser (only the target-chip-clear unit test passes)",
+   "a single-target attack on a named Vegnagun part (the D-044 anchors)",
+   "the Evrae targeting step (the key path went into the Orders menu)",
+   "gamepad, a real phone, Safari, Firefox",
+   "the unlisted Chapters IX, X and XI (normal play cannot reach them, by design; the data audit of their 2,000+ lines is deferred to their own review)",
+   "audio listening (CHK-B1)"
+  ]
+ },
+ "regressions": [
+  "R13-02 polish: the ch. I reticle bracket crosses the moves panel text",
+  "R13-03 polish: at 2000x1012 in Evrae, Rikku is partly under the stack"
+ ],
+ "nextReview": "After npm run deploy: the live verification of the exact artifact. Then the deep review this shared-system change owes, on the live build (plan depth deep, deepBeforeDeploy false, deep carried from e3b8c2a3).",
+ "elapsedMinutes": 50,
+ "dataAudit": {
+  "performed": true,
+  "values": [
+   "gunner Enchanted Ammo canMiss true: research/ffx2-combat-core.md line 620 (Accuracy Stat) - matches",
+   "hit.ts, magic never rolls: the combat-core 2.9 magic tables carry no Accuracy column - matches",
+   "Mortibsorption counts as an attack for the thresholds: research/ffx-seymour-flux.md 2.2 line 200 [verified: 2 sources]; Protect below 75 %, Reflect below 50 % (4.3) - matches"
+  ],
+  "deferred": "the data for unlisted Chapters IX-XI (Yojimbo, Seymour Natus, the Fallen Aeons, the Magus Sisters), which normal play cannot reach"
+ }
+}
