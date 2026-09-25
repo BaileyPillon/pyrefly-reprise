@@ -856,6 +856,70 @@
     "mtime": "2026-09-25T04:23:24.255Z",
     "approved": "2026-09-25"
    }
+  },
+  "chapter:isaaru:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/isaaru/README.md and docs/plans/chapter-isaaru-review.md (O-1 A with the knee-length coat and sea-green sash repairs, O-2 B, O-3 A, O-4 C his sea-green edge on the Ifrit/Valefor/Bahamut paintings, B19 KO = the dissolve). Locked after the independent 1:1 judge docs/concepts/chapters/isaaru/production/JUDGE.md: isaaru idle 7.3, isaaru portrait 7.8, via-purifico 7.6, grothia idle/attack/overdrive 8.0/7.6/7.3, pterya 7.3/7.8/7.6, spathi 7.4/7.7/7.6. Grothia, Pterya and Spathi are derived from the approved D-089 ifrit, valefor and bahamut paintings (read only); a change to those sources does not change these files. Known and disclosed: the knot is ornamental, not a bow; Pterya idle inherits Valefor idle's straight-cut wing tip; the plate has no low parapet. FFX only, Chapter XIV. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-isaaru/.",
+   "public/art/characters/isaaru/idle.png": {
+    "sha256": "c290bedc3f6fe743b9c778736aa2a50ef0ac28bd4030161dbcc69dea87e81945",
+    "mtime": "2026-09-25T04:15:22.815Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/portraits/isaaru.png": {
+    "sha256": "b5fbc12c65b404fa4f2260fc19d39f642a2d5b27a981bf3bb65b15e43e25a529",
+    "mtime": "2026-09-25T04:15:22.837Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/via-purifico.png": {
+    "sha256": "60c446c9b2457d865dabab1412d1c3c695603beae77fe90eb9d7aba5082e7afa",
+    "mtime": "2026-09-25T04:15:22.861Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/grothia/idle.png": {
+    "sha256": "ca830982fa17180fd6d5cadae47cf33e2b11764f24df2693d08d1e1cf6f0b5dc",
+    "mtime": "2026-09-25T04:15:22.883Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/grothia/attack.png": {
+    "sha256": "e7b9b00b366d2f4520f70bedad1276de852583559c2791cc4806f208d9727df4",
+    "mtime": "2026-09-25T04:15:22.903Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/grothia/overdrive.png": {
+    "sha256": "780b689239b529bff2cf1b2680f2193a217246f225c7866c18f462436cda4f66",
+    "mtime": "2026-09-25T04:15:22.922Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/pterya/idle.png": {
+    "sha256": "448f7f2a4181da13fa7934069421c139ee7ce6a8aaac6f881c1bd8695a2a20fa",
+    "mtime": "2026-09-25T04:15:22.941Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/pterya/attack.png": {
+    "sha256": "d16c31ad216602845c1a010e87ffa84d1a8b781d8bd7975811d78275be7977ec",
+    "mtime": "2026-09-25T04:15:22.961Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/pterya/overdrive.png": {
+    "sha256": "0534de30bd83be8965cfec5a18f21100c75c3620515293ea51e327dfe28a8f20",
+    "mtime": "2026-09-25T04:15:22.981Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/spathi/idle.png": {
+    "sha256": "5a692112a0e30cf5a6027284f7b48adfa7b8555da1af8981a02a7d9736933059",
+    "mtime": "2026-09-25T04:15:23.002Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/spathi/attack.png": {
+    "sha256": "fb6c6538fd72b77685f4b162996aa6c0b2f04dc765ab4277fd04dd2c69d060f9",
+    "mtime": "2026-09-25T04:15:23.023Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/spathi/overdrive.png": {
+    "sha256": "99a10a220359f14e01e0075d04d5a61cb2344d877532839a410508db5cc2da60",
+    "mtime": "2026-09-25T04:15:23.042Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
