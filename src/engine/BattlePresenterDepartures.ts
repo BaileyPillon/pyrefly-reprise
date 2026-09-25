@@ -32,6 +32,8 @@
  *   himself (the Cloister 100 scene plays that, `src/scenes/cloister-100-link.ts`); step 4,
  *   Trema is beaten, answers Yuna, and "fades away" (the post scene). Neither is sent at the
  *   blow: the figure takes its standing painting, dims, and stays.
+ * - **`'returns'`, Mortibody (FFX only; Chapter X, O-2 A).** Sent like a fiend but kept on the
+ *   stage until Mortibsorption's heal brings it back (`BattlePresenterReturns.ts`, the sources).
  *
  * Everything else keeps `'dissolve'`. The kind is a presenter-side table keyed
  * by combatant id (an enemy's combatant id is its `EnemyDef.id`,
@@ -55,8 +57,9 @@ import type { CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle, Point3 } from './BattlePresenterPorts.ts';
 import { ACTOR_ANIM_GRACE_MS, type EventCtx } from './BattlePresenterEvents.ts';
 import { RECALL_MS, recall } from './BattlePresenterRecall.ts';
+import { RETURN_MS, sendToReturn } from './BattlePresenterReturns.ts';
 
-export type DepartureKind = 'dissolve' | 'falls-away' | 'yields' | 'body' | 'dismissed' | 'held';
+export type DepartureKind = 'dissolve' | 'falls-away' | 'yields' | 'body' | 'dismissed' | 'held' | 'returns';
 
 /** Who leaves the field some other way than being sent. Keyed by combatant id. */
 export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind>>> = {
@@ -80,6 +83,8 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   // FFX-2, Chapter XIII: research/ffx2-trema.md §2 steps 2 and 4 (see the module note).
   paragon: 'held',
   trema: 'held',
+  // FFX, Chapter X: research/ffx-seymour-natus-highbridge.md §4.4 and §4.5 (see the module note).
+  mortibody: 'returns',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {
@@ -352,10 +357,14 @@ export async function depart(
     await recall(ctx, id, actor, budget(ctx, departureMs(kind)));
     return 'removed';
   }
-  if (!actor) return kind === 'body' || kind === 'held' ? 'stays' : 'removed';
+  if (!actor) return kind === 'body' || kind === 'held' || kind === 'returns' ? 'stays' : 'removed';
   const b = budget(ctx, departureMs(kind));
   if (kind === 'held') {
     await held(actor, b);
+    return 'stays';
+  }
+  if (kind === 'returns') {
+    await sendToReturn(actor, b.guard);
     return 'stays';
   }
   if (kind === 'body') {
@@ -371,6 +380,7 @@ export async function depart(
 export function departureMs(kind: Exclude<DepartureKind, 'dissolve'>): number {
   if (kind === 'body') return BODY_MS + BODY_HOLD_MS;
   if (kind === 'held') return HELD_MS;
+  if (kind === 'returns') return RETURN_MS;
   if (kind === 'dismissed') return RECALL_MS.dim + RECALL_MS.rise;
   return kind === 'falls-away' ? FALL_MS.lurch + FALL_MS.drop : YIELD_MS.dim + YIELD_MS.step;
 }

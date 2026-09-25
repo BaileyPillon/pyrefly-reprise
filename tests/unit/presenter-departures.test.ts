@@ -31,7 +31,10 @@ describe('departure kinds', () => {
     for (const id of ['dr-goon', 'fem-goon', 'seymour-flux', 'cid', 'yunalesca']) {
       expect(departureKindOf(id)).toBe('dissolve');
     }
-    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(13); // + Chapter XIII's paragon and trema, held (FFX-2)
+    // + Chapter XIII's paragon and trema, held (FFX-2); + Chapter X's mortibody, returns (FFX)
+    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(14);
+    expect(departureKindOf('mortibody')).toBe('returns');
+    expect(departureKindOf('mortiorchis')).toBe('dissolve'); // Chapter I unchanged (docs/plans/natus-ship-review.md)
   });
 
   // Chapter VII (FFX only, AGENTS.md rule 14): D-045 the Guado Guardians yield
