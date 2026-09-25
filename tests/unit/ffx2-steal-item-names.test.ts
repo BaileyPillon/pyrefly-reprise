@@ -77,6 +77,19 @@ describe('FFX-2 steal rewards resolve to named items (FFX-2 only)', () => {
     expect(effect.power * 50).toBe(450);
   });
 
+  it("Supreme Gem (Paragon's steal) is the sourced thrown item: 2,500 to all, non-elemental, sells for 250", () => {
+    const item = data.ITEMS['x2-supreme-gem']!;
+    expect(item.name).toBe('Supreme Gem');
+    expect(item.usableInBattle).toBe(true);
+    expect(item.usableInMenu).toBe(false);
+    expect(item.price).toBe(250);
+    expect(item.targeting).toBe('all-enemies');
+    const effect = data.ABILITIES[item.effect as string]!;
+    expect(effect.formula).toBe('fixed');
+    expect(effect.element).toEqual(['none']);
+    expect(effect.power * 50).toBe(2500);
+  });
+
   it('a gap would still read as words, not an id', () => {
     expect(readableItemId('x2-mute-shock')).toBe('Mute Shock');
     expect(readableItemId('snow-ring')).toBe('Snow Ring');

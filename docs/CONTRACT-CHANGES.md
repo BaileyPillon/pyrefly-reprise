@@ -6,6 +6,82 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XIII ship layer: `SpeakerId` gains `'trema'`
+
+**FFX-2 only** [AGENTS.md hard rule 14]. **Additive** in `src/story/dsl.ts`: `SpeakerId` gains
+`'trema'`, the speaker for Trema's lines in `src/story/scripts/ffx2-trema.ts` (lines 10 to 21 of
+`docs/plans/trema-story-draft.md`, all `[ORIGINAL]`). He has no portrait yet (O-5 is its own
+round), so the dialogue box shows the name plate alone, as `portrait.ts` does for any id with no
+file. `SPEAKER_ROLES` is a `Partial` record, so nothing else has to name him. No existing script
+changes.
+
+## 2026-09-25 — Chapter XIII winnability fixes: `EnemyGroupDef.timedAilmentDefaults`
+
+**FFX-2 only** [AGENTS.md hard rule 14]. From `docs/plans/trema-winnability-method-check.md` E1.
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef.timedAilmentDefaults?: boolean`. In a
+battle whose group sets it, an ailment row with no duration value (`duration: 0`) lasts §2.8's
+default for that status instead of "until cured": Sleep 97 and Berserk / Confuse 133 (the tables'
+global defaults, `[single source]`), Stop 100 and Slow 100 (the value most published sources carry,
+`[estimate]`); table `AILMENT_DEFAULT_DURATION` in `src/battle/ffx2/statuses.ts`. §2.8 lists all five
+as timed `[verified: 2 sources]`. `setup.ts` copies the flag into `BattleState.flags`, `engine.ts`
+into `ResolveContext`, and `resolve.ts#applyRiders` passes it to `applyStatus`. Only the two Cloister
+100 links set it (Paragon's Confuse, Trema's Beguiling Mire Stop). Chapters 5 and XI carry the same
+`duration: 0` ailment rows under a written precedent ("until cured", `[estimate]`); they do not set
+the flag, so their event logs are unchanged (measured). Turning it on there is a separate decision.
+
+Not a contract change, recorded here because it moves shipped logs: `spherechange.ts#refreshDerivedStats`
+now layers the girl's accessories (method check E2). Measured over 30 seeds each: chapter 4, 5 and 6 at
+D = 0 and the Wait `intendedStrategy` runs are byte-identical; chapter 5 at D = 700 and D = 1500 moves on
+the seeds where a girl spherechanges under Itchy (win counts unchanged, 17/30 and 3/30), and Chapter XI's
+all-out line goes from 1/30 to 3/30 wins. `ffx2-atb-golden.test.ts` re-pins one hash (chapter 5, D = 1500,
+seed 3).
+
+## 2026-09-25 — Chapter XIII, Trema: `ChapterId` gains `'ffx2-trema'`, `Chapter.number` widens to 13, `EnemyDef.autoStatuses`, `EnemyGroupDef.checkpointOnEntry` and `carriesPartyState`, `ids.ts` gains `TremaEnemyId`
+
+**FFX-2 only** [AGENTS.md hard rule 14] (research `ffx2-trema.md` §0: ATB, dresspheres, Garment
+Grids, Spherechange; Paragon and Trema share only *models* with FFX's Nemesis and unsent priest,
+no data); the registration and the chain flags are shared plumbing, but only this chapter's
+records set them. Bailey, 2026-09-25: "I'll go with all your recommendations" (TR1-TR19 and
+O-1..O-4 on `docs/plans/chapter-trema-review.md`, after its Review).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'ffx2-trema'`; `Chapter.number`
+widens from `1 … 11` to `1 … 13` (12 is Seymour Omnis's, registered on its own branch; the
+integrator serialises the two). The record lives in `src/data/chapter-ffx2-trema.ts` and sits in
+`UNLISTED_CHAPTERS` (the Chapter IX to XI precedent). Every `Record<ChapterId, …>` gains the key
+(`learn/atlas/cites.ts`, `tests/unit/learn-atlas-data.test.ts`). No save migration.
+
+**Additive** in `src/battle/common/types.ts`:
+- `EnemyDef.autoStatuses?: StatusId[]`: statuses an enemy carries from the first event and that
+  no Dispel removes. Trema's Spellspring (International / HD, `[verified: 2 sources]`); "no Dispel
+  removes it" is read from the sources' word "auto-status", `[estimate]`. Applied in
+  `src/battle/ffx2/setup.ts#buildEnemy` with no RNG draw; `resolve.ts` skips them in a removal list.
+- `EnemyGroupDef.checkpointOnEntry?: boolean`: a chained link that is a retry checkpoint **without**
+  a Save Sphere (TR5 = b). `BattleChainCheckpoint.checkpointAt` reads it beside
+  `restoresPartyOnEntry`; the setup the link was entered on already carries the previous link's
+  end state, so a retry replays it. Kept in memory only (D-100): not save-data class.
+- `EnemyGroupDef.carriesPartyState?: boolean` (named `carriesPartyStatuses` in the first cut, never
+  pushed): the party enters the link with its statuses and its **worn dressphere** as well as its
+  HP and MP ("whatever state the Paragon fight left them", "no chance to change equipment",
+  `[verified: 5 sources]`). `BattleScreenSetup.carryWholeState` copies the statuses, the worn
+  dressphere, her grid node and her AP (`cloneData`) only for a link that sets it; HP and MP then
+  clamp to the worn dressphere's maximum. Passed gates and the worn-this-battle list start empty,
+  because gate effects are "lost at the end of the battle" (ffx2-combat-core §4.1, `[verified: 2
+  sources]`) and Trema's is a new battle. Accessories stay the build's. The doc comments on these
+  three fields are one line each (house rule 7: the file had grown by 24 lines); the detail is here.
+
+**Additive** in `src/data/ffx2/ids.ts`: `TremaEnemyId = 'paragon' | 'trema'`, joined into
+`FFX2EnemyId`; `TREMA_CHAIN_ORDER`.
+
+Not a listed contract file, recorded for the same reason: `src/battle/ffx2/internal.ts` gains
+`AiScript.counter` (an out-of-turn counter, run by `engineHooks.ts#runCounters` after a party
+action that damaged the enemy; Paragon's Big Bang, TR12 = b) and `Ffx2Unit.autoStatuses`. The
+engine's post-action hook sequence (`onDamaged`, `onTargeted`, `onTurnResolved`, then counters)
+moved from `engine.ts#afterAction` into `engineHooks.ts#runAfterActionHooks`, byte-identical.
+`resolve.ts` reads `extra.mpOnly` together with `extra.mpFractionOfCurrent` as "that share of
+current MP, no HP" (Waning Moon). No shipped record set either combination before, and Chapters
+4, 5, 6 and XI replay byte-identically (180 seeded runs at Active 0 and 700 ms, before and after).
+
 ## 2026-09-24 — `encounters.ts`: Chapter IX (Yojimbo) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX only** [AGENTS.md hard rule 14]: Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth

@@ -143,7 +143,10 @@ export const gunnerAbilities: AbilityDef[] = [
     removesStatuses: [],
     flags: [],
     messageTemplate: '{user} uses Target MP',
-    extra: { damagesPool: 'mp' },
+    // "Special damage to target's MP" [ffx2-combat-core §2.9.1 "Str (vs MP)", §3.1 table]. The
+    // engine reads `mpOnly` (resolve.ts); `damagesPool` alone was read by nothing, so Target MP
+    // hit HP. No shipped build had learned it before Chapter XIII's Lv 99 party (FFX-2 only).
+    extra: { damagesPool: 'mp', mpOnly: true },
   },
   {
     id: 'x2-gunner-quarter-pounder',

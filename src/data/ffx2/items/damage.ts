@@ -66,6 +66,21 @@ export const damageItems: ItemDef[] = [
     description: 'Heavy non-elemental damage to one enemy.',
   },
   {
+    // Paragon's steal and common drop in Chapter XIII [ffx2-trema §3.2: "Steal | Supreme Gem /
+    // Supreme Gem x2 (25%)", SinirothX + wiki]. Scope, element and price: ffx2-combat-core §5.5
+    // ("Supreme Gem | GRP | non-elem. | 250 / — | 2343–2646 to all"; 250 is the sell price, the
+    // same column Dark Matter's 7500 comes from); damage §2.9.3 (power 50 -> 2,500).
+    id: 'x2-supreme-gem',
+    name: 'Supreme Gem',
+    game: 'ffx2',
+    effect: 'x2-item-supreme-gem',
+    targeting: 'all-enemies',
+    usableInBattle: true,
+    usableInMenu: false,
+    price: 250,
+    description: 'Heavy non-elemental damage to all enemies.',
+  },
+  {
     id: 'x2-dark-matter',
     name: 'Dark Matter',
     game: 'ffx2',

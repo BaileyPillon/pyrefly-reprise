@@ -2511,6 +2511,8 @@ export interface EnemyDef {
   level?: number;
   /** FFX-2 only: ATB ticks the enemy waits after its gauge fills before choosing. 0 = acts immediately. */
   thinkingPeriod?: number;
+  /** FFX-2: statuses held from the start that no Dispel removes (`[estimate]` reading; Trema's Spellspring; CONTRACT-CHANGES). */
+  autoStatuses?: StatusId[];
 }
 
 /** A music change wired to a battle phase. */
@@ -2563,4 +2565,10 @@ export interface EnemyGroupDef {
    * flow to read. Absent everywhere else, so no other chain changes.
    */
   restoresPartyOnEntry?: boolean;
+  /** FFX-2: a chained link that is a retry checkpoint with no Save Sphere (Chapter XIII's Trema, TR5 b; CONTRACT-CHANGES). */
+  checkpointOnEntry?: boolean;
+  /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema; CONTRACT-CHANGES). */
+  carriesPartyState?: boolean;
+  /** FFX-2: an ailment row with no duration value lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES). */
+  timedAilmentDefaults?: boolean;
 }

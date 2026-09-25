@@ -108,6 +108,26 @@ export const damageEffectAbilities: AbilityDef[] = [
     messageTemplate: '{user} throws a Shining Gem',
   },
   {
+    id: 'x2-item-supreme-gem',
+    name: 'Supreme Gem',
+    game: 'ffx2',
+    category: 'item',
+    mpCost: 0,
+    // No per-item charge time is published; this is the Shining Gem row's (thrown gems share it).
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: 70,
+    power: 50, // 2,500 damage to all [ffx2-combat-core §2.9.3]; 2343-2646 after the randomiser [§5.5]
+    formula: 'fixed',
+    damageType: 'other',
+    element: ['none'],
+    targeting: 'all-enemies',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['never-break-damage-limit'],
+    messageTemplate: '{user} throws a Supreme Gem',
+  },
+  {
     id: 'x2-item-dark-matter',
     name: 'Dark Matter',
     game: 'ffx2',

@@ -180,6 +180,8 @@ Counter: hit by any attack that Shell or Protect cannot reduce  ->  Big Bang
 
 Examples of attacks that trigger Big Bang: Dark Knight's Darkness, Absorb, 1000 Needles (Split_Infinity); Nooj's Lightfall (wiki). The wiki also says it uses Big Bang "if the party doesn't attack it for too long". SinirothX's normal-form script has no such rule; only its Oversoul script does (T-7).
 
+**Normal form's physicals always land** `[verified: 2 sources]` (added 2026-09-25, `docs/plans/trema-winnability-method-check.md` S9): Split_Infinity (FAQ 26832, G0648) says the normal Paragon "is able to connect with all of his physical attacks", which is why he Oversouls it; the wiki's *Paragon* (revid 3998078) has them dodgeable only in Oversoul. The engine gives its five Normal Attacks `canMiss: false`.
+
 **AI, Oversoul form** `[SinirothX]`, summarised. It waits and does nothing until it is hit or its HP or MP changes. It **copies** Black Magic, Arcana (except Black Sky), MP Absorb, Supernova, Dispel, Haste, Hastega and Holy back at the attacker, answers healing and buffs with Demi, and otherwise uses a Normal Attack. After 20 seconds of being left alone it uses Judgment, Genesis or Big Bang (or Dispel if anyone has Reflect). Below 4/10 HP: 1/2 Normal Attack, 1/8 each Firaga, Blizzaga, Thundaga or Waterga on everyone. Below 1/10 HP: Ultima, Holy, Judgment, Genesis or Big Bang at 1/5 each, plus **Final Impact** once (14 random hits of 1/8 of max HP and MP). Its physicals **miss** in Oversoul (Split_Infinity, GamerGuides, Blackestmage) `[verified: 2 sources]`.
 
 ### 4.2 Trema
@@ -240,7 +242,7 @@ HP triggers (each fires once, at the next chance):
 
 - **What players actually bring** (each is a strategy the chapter should allow):
   - **Two Dark Knights plus a healer**: Alchemist (Split_Infinity, Blackestmage) or White Mage opened as Gun Mage for Mighty Guard (GamerGuides). Darkness gets past Trema's 255 Defense and is the main damage `[verified: 3 sources]`. **Darkness must not be used against Paragon's normal form**, because it draws Big Bang.
-  - **The Valiant Lustre Garment Grid**: each gate crossed adds +40 Defense, and GamerGuides and Split_Infinity cross two with quick Spherechanges while Trema cannot act; the wiki uses its edge for maximum HP, Defense and Magic Defense `[verified: 2 sources]`.
+  - **The Valiant Lustre Garment Grid**: each gate crossed adds +40 Defense, and GamerGuides and Split_Infinity cross two with quick Spherechanges while Trema cannot act; the wiki uses its edge for maximum HP, Defense and Magic Defense `[verified: 2 sources]`. **Corrected 2026-09-25:** the grid is Equip Def +20 / MDef +20, Yellow and Blue gates Def +20 each, Red and Green MDef +20 each, so +60 / +60 with all four (`ffx2-vegnagun-shuyin.md` §6.6; FF Wiki *Garment Grid* revid 3998878). Split_Infinity's "+40" is two gates, not one. The wiki table's "Defense +30, Magic Defense +30" sits in its *Creature Abilities* column and is not a gate bonus.
   - **Drain his MP first** (Soul Spring, Mana Spring, Target MP) `[verified: 4 sources]`.
   - **Stamina Tonic** (doubles HP), Megalixir, Light or Lunar Curtain, Chocobo Wing (Haste), Defense Bracer (Protect and Shell), Crystal Bangle (+100% HP), Rabite's Foot (Luck, so Mist, Mire and Moon miss) `[verified: 3 sources]`.
   - **Original only:** Gunner at Critical HP + Cat Nip + Trigger Happy (about 150,000 per round, wiki) `[verified: 4 sources]`.
@@ -399,3 +401,215 @@ Trema is FFX-2's argument about the past (spheres, memory, letting go), put in t
 | 11 | Battle quotes | wiki boss page vs agent_0042 | agree on every line both carry |
 | 12 | Music | wiki Trema page + wiki OST page | "New Yevon" for Trema; single source (one wiki) |
 | 13 | Dressphere Lv 99 rows | wiki dressphere tables | transcribed; Gunner MDef duplication known |
+
+---
+
+## 12. Follow-up, 2026-09-25: Oversoul Paragon, action time, the real clears, and T-6
+
+**Game case: FFX-2 only.** Written after `docs/plans/trema-winnability-method-check.md` and the second bench pass (`docs/plans/trema-bench.md`) left Paragon at 0/200 with every sourced kit. This section gathers evidence only. Nothing here changes a boss number (AGENTS.md rule 6). Sources were read into scratch on D: (`D:/Tools/pyrefly-scratch/trema-options/research-0925/`, plus the 2026-09-24 copies of SinirothX and Split_Infinity's *Boss Guide* in `D:/Tools/pyrefly-scratch/gippal-review/`). The FF Wiki was read through `api.php?action=parse`. Revision ids are listed under 12.6.
+
+### 12.1 T-6 is settled: Paragon's Magic is 244 and its Defense is 88 (SinirothX, TR8 a)
+
+**Answer.** TR8 a (SinirothX: Str 244 / Mag 244 / Def 88 / MDef 88) is the block the game's own numbers reproduce. The FF Wiki's T-6 b block (Mag 88 / Def 244 / MDef 89) is **SinirothX's block with the Magic and Defense columns swapped**, plus the Oversoul MDef (89) in the shared field. `[verified: SinirothX dump + derived checks against observations by three independent writers]`
+
+| Check | Mag 244 / Def 88 (TR8 a) | Mag 88 / Def 244 (T-6 b) | Observation | Result |
+|---|---|---|---|---|
+| Big Bang (DC 250, magic) on MDef 255 | 23,803 to 26,878 `[derived]` | 15,402 to 17,391 `[derived]` | wiki *Paragon*: "With 255 Magic Defense, Big Bang will only do 23,803~26,877 damage". Split_Infinity G0648: "even at maximum MDEF this attack causes around 25000 damage" | **Mag 244**, to the unit |
+| Big Bang on MDef 240 | about 47,600 to 53,800 `[derived]` | about 30,800 to 34,800 | NightMare185 (FAQ 27609): "With MGDEF of 240, he will do at least 50,000 HP and with 255 MGDEF, he can do half that" | **Mag 244** |
+| Genesis (DC 44) on MDef 165 | 5,161 to 5,828 `[derived]` | 3,339 to 3,771 | NightMare185: "If you have 165 MGDEF, his Genesis should do around 5400 to 5700" | **Mag 244** |
+| Genesis on an unprepared party | up to 14,986 at MDef 0 | at most 9,697 at MDef 0 | wiki: Genesis "can inflict over 9,999 damage to an unprepared party"; GamerGuides: Big Bang or Genesis "tend to pierce 10,000+ damage" | **Mag 244** (Mag 88 cannot pass 9,999) |
+| A Lv 99 Warrior's Attack (Str 168) on Oversoul Paragon | about 3,200 `[derived]` | about 460 | NightMare185: Warrior "will do about 3400 HP DMG avg" | **Def 88** |
+
+Formulas: `research/ffx2-combat-core.md` §2.1 (SinirothX flowchart), Lv 99, randomiser 240 to 271 / 256.
+
+**How the wiki's block came about** `[estimate for the mechanism; the pattern is verified]`:
+
+- The same Magic-for-Defense swap appears on **Ultima Weapon**: SinirothX Mag 53 / Def 32 (Oversoul 63 / 82), wiki Mag 32 / Def 53 (Oversoul 82 / 63). **Omega Weapon** matches SinirothX in both. So the wiki's error is a repeated column swap, not a second data source.
+- Neoseeker's FFX-2 wiki (*Paragon*, oldid 31398) prints the block in the order **Strength, Defense, Magic, Mag Def: 244 / 88 / 244 / 88**. Copy that row into the Fandom infobox order (strength, magic, defense, mag defense) and you get exactly the Fandom figures.
+- Both wikis also print SinirothX's **Luck** (13, Oversoul 16) as "Accuracy", the mislabel §3.2 already noted.
+- No third independent dump was found. zero_six (FAQ 28832) prints no stats; hrs-game.main.jp (a Japanese HD guide) gives HP only. The Magic reading rests on SinirothX plus the checks above. The Defense reading rests on SinirothX plus one observation (NightMare185).
+
+**Consequence for the benches:** the "option T-6 b" rows in `docs/plans/trema-bench.md` test a transcription error and can be dropped. TR8 a stands.
+
+**A side finding (engine, FFX-2 formula; would touch every FFX-2 chapter):** the wiki's observed Normal Attack 4 range, "8,273~9,342", is Str 244 physical damage with **Defense treated as 0 in step 3** (`× 270/255`), which gives 8,274 to 9,342 `[derived]`. Skipping step 3 gives 7,814 to 8,823, and that is what the engine produces (trema-bench "one more unexplained number"). The 1.0587 ratio that bench note found is 270/255. `[single source: one observation (wiki), derived]`. If the engine models "ignores Defense" by skipping step 3, every Defense-ignoring hit, the party's Darkness included, may be about 5.9 % low. **This has not been checked against a second observation. Report it; do not build it.**
+
+### 12.2 Oversoul Paragon: what the sources give, and what is missing
+
+**Trigger** `[verified: 3 sources: wiki *Oversoul (Final Fantasy X-2)*, Split_Infinity G0648, NightMare185; GamerGuides is Kolar again]`. The Weapon type (Ultima Weapon, Omega Weapon, Paragon) Oversouls after **10 kills** of that type (wiki *Oversoul* table, "Weapon | 10"). Split: "fight Omega Weapon on Farplane and kill ten of them before one oversouls. Now run away." The next Paragon met is then Oversouled.
+
+The wiki says Oversoul "will always be the first action any monster of that type takes" and is itself an action. HP and MP are restored, statuses are removed, and "all abilities cost 0 MP" while a fiend is Oversouled. That last point is why guides report it casts without MP (NightMare185: "IF PARAGON IS OVERSOULED, HE CAN STILL USE MAGIC WITHOUT MP").
+
+**Stat block, Oversoul** `[SinirothX; HP, EXP, AP and gil verified: 4 sources (§3.2); Agility also on the wiki]`:
+
+- Lv 99, HP 210,000, MP 9,999
+- Str 244, Mag 244, Def 88, **MDef 89**
+- Evasion 0, **Luck 16**, Accuracy 0, **Agility 244**, Thinking Period 0
+- The same immunities as the normal form
+- EXP 13,000, AP 2, gil 8,000; drops Dark Matter / Dark Matter ×2; Bribe Dark Matter ×24 / ×30
+
+**Actions, Oversoul** (SinirothX "Monster's Oversoul Attacks"; DC = damage constant):
+
+| Action | SinirothX | Other sources |
+|---|---|---|
+| Normal Attack | one target, physical, DC 16, no status listed | wiki: counters Attacks "with a physical attack of its own that causes Itchy" `[conflict]` |
+| Judgement | one target, **magic, DC 22** | wiki "heavy damage to one character"; GamerGuides "high single-target magic damage" |
+| Genesis | as the normal form, DC 44 | |
+| Big Bang | all, magic, DC 250 | |
+| **Final Impact** | "damage random characters by 1/8 of max HP and MP **14 times** (type: fractional) (can break damage limit)" | wiki: 14 hits of 12.5 % that "can chain, but can also be mitigated by Protect". Split, GamerGuides and NightMare185: **10 hits**; NightMare says it "cannot be reduced in anyway" `[conflict: 14 (SinirothX, wiki) against 10 (Kolar, NightMare185)]`, like Meteor's T-2 |
+| Demi | all, 1/4 of current HP, gravity | |
+| Firaga / Blizzaga / Thundaga / Waterga | DC 21, element; the attack list says "one character", the AI says "on all characters" | Split, zero_six: "VS all chrs" |
+| Holy | one target, DC 12 × 8 | |
+| Ultima | all, DC 70 | |
+| Dispel | removes Auto-Life, Shell, Protect, Reflect, Regen, Haste and Spellspring | |
+| Osmose | one target, 3/16 of remaining MP | NightMare185: after a Soul Spring drain "Paragon will use Osmose EVERY turn" |
+
+**AI, Oversoul, in full** (SinirothX; the structure is quoted, the wording paraphrased):
+
+```
+(1) Before it acts: has it been hit (not counting KO cures or Slots), or has its HP or MP changed?
+      yes -> (2b)      no -> do nothing and wait
+(2a) after waiting: hit, or HP/MP changed, within 20 seconds?
+      yes -> (2b)
+      no  -> anyone Reflected? yes: Dispel on all.  no: 1/3 Judgement, 1/3 Genesis, 1/3 Big Bang
+(2b) hit by an "Attack a"?  yes -> the same attack back at the character that hit it
+                                   (Normal Attack if its copy would be reflected back to it)
+     else hit by an "Attack b"?  yes -> Demi, until it is hit by another attack
+     else -> Normal Attack
+  "Attack a": MP Absorb; every Arcana except Black Sky; every Black Magic;
+              White Magic Dispel, Haste, Hastega, Holy; Blue Bullet Supernova
+  "Attack b": Cure, Cura, Curaga, Regen, Esuna, Shell, Protect, Reflect, Full-Cure
+HP left < 1/10 of max and nobody Reflected -> Final Impact (once only)
+HP left < 4/10 of max -> anyone Reflected? yes: Dispel on all.
+      no: below 1/10: 1/5 each Ultima, Holy, Judgement, Genesis, Big Bang
+          else:       1/2 Normal Attack, 1/8 each Firaga, Blizzaga, Thundaga, Waterga (all characters)
+```
+
+The copy rules agree across Split (G0648 "Copycat move"), NightMare185 (credited to Split), GamerGuides and the wiki `[verified: 3 sources, counting Kolar once]`.
+
+**The Oversoul form has no Big Bang counter.** Big Bang comes only from the idle branch or the < 1/10 roll. Darkness is on neither copy list, so SinirothX's script answers it with a Normal Attack. GamerGuides' HD clear uses Darkness on this form (§12.3).
+
+**Hit rule.** Oversoul Paragon's physicals **often miss** `[verified: 3 sources]`:
+
+- Split: "If Paragon is oversouled, his physical attacks will MISS. Which is funny, since its ACC is higher in oversoul state." Also: "if Paragon is oversouled, and your LUCK is so-so, most of its physicals won't connect."
+- NightMare185: it "will miss a lot with his regular physical attacks, but if it does connect, it will do around 2600 HP dmg to 3500 HP dmg avg."
+- Wiki: "it becomes possible to dodge its physical attacks".
+
+SinirothX's Accuracy (0 in both forms) and Luck (13 to 16) do not explain the misses under the engine's formula. **The mechanism and the rate are unsourced.** The sources point to Luck mattering.
+
+**What is missing before Oversoul Paragon can be built faithfully:**
+
+1. **The miss rate or mechanism** for its physicals (above). The only sourced rule is "often misses; Luck helps".
+2. **The idle timer:** SinirothX says "within 20 seconds". The wiki says it "will not attack for about 2.5 minutes unless provoked", and NightMare185 also says "about 2.5 minutes" `[conflict]`. SinirothX's unit may not be wall-clock seconds; this is unresolved.
+3. **Thresholds as observed** `[conflict, observations against the dump; use SinirothX as §0.1 ranks it]`:
+   - SinirothX: magic below 4/10 of HP left, the Ultima pool below 1/10.
+   - Wiki: magic "after it loses ~45%", Ultima after "~80%".
+   - NightMare185: 45 %, then 70 to 80 %.
+   - GamerGuides: Dispel after "the 157,500 HP line (75% remaining)" when Reflect is up.
+4. **Final Impact:** 14 or 10 hits, whether it chains, and whether Protect reduces it (above).
+5. **The -aga spells:** single target or all, and whether the multi-target halving (combat-core §2.1 step 15) applies to an enemy's all-target cast. The engine already has a rule for this; there is no Paragon-specific source.
+6. **Normal Attack status in Oversoul:** Itchy (wiki) or none (SinirothX).
+7. **"Thinking Period 0":** the field is in the dump, but no source defines its unit or effect.
+8. **Counter timing:** is (2b)'s answer an immediate counter, or does it wait for its next ATB turn? SinirothX writes "Before it performs an attack", which reads as its next turn. The wiki says it "will counter all attacks" `[unresolved]`.
+
+Everything else (stats, action list, DCs, copy lists, the once-only Final Impact, Reflect → Dispel) is sourced well enough to build.
+
+### 12.3 The real clears, line-ups and opening turns
+
+**Split_Infinity (Damir Kolar), *Boss Guide* FAQ 26832, G0648 Paragon and G0649 Trema** (version "Leifang", 2008; original / US data):
+
+- **The Paragon he beat was Oversouled.** "Make sure you oversoul Paragon! This is important! Look why - regular Paragon is able to connect with all of his physical attacks."
+- **Level and line-up:** "Girls all Lv99." "Party was two dark knights with Darkness and mastered alchemist."
+- **Grid:** Valiant Lustre, with Berserker in the right slot, Warrior top, Dark Knight left, Alchemist bottom.
+- **Accessories:** each Dark Knight wears a Defense Bracer (or Shining Bracer) and a Rabite's Foot; the Alchemist wears Adamantite and a Rabite's Foot.
+- **Items:** Soul Spring, Stamina Tonic, 99 Mega-Potions and 99 Megalixirs.
+- **Config:** "change ATB speed to medium or slow, and Spherechange to 'short'."
+- **Paragon, opening turns (Oversoul):**
+  - "As battle starts, have one girl toss Star Curtain" (Reflect). "Paragon doesn't attack at all as battle starts."
+  - Then "MAKE SURE ALL THREE GIRLS ATTACK AT THE SAME TIME!" to chain, and "DO NOT ATTACK PARAGON WHILE IT'S IN THE ATTACK MOTION, as chain effects aren't registered."
+  - After 75 % of its HP is lost, it Dispels the Reflect; toss Star Curtain again. It then casts -aga spells or Dispel "for about four or five of its turns", then Genesis or Final Impact.
+  - "If Genesis was used, too bad. Retry." "If Paragon manages to pull off Big Bang, reset and reload."
+- **Which dressphere they fought Paragon in is not stated.** The Trema opening ("spherechange from berserker to warrior") implies Berserker `[derived]`.
+- **Trema, opening turns:**
+  - Two spherechanges on the Valiant Lustre (Berserker → Warrior → Dark Knight), "ADDING +40 TO DEF STAT", while "Mr T. is not able to attack during these scenes". Then the Adamantite girl changes to Alchemist.
+  - "Now one dark knight uses Stamina Tonic, other dark knight uses Megalixir and alchemist uses Soul Spring on Mr T. Woosh - all his MP are gone."
+  - Then Darkness from the two Dark Knights ("about 5000"), Mega-Potions or Megalixirs from the Alchemist, and HP kept above 75 % for Meteor. "Battle lasted around 30 minutes."
+- **No Twin Stars or Three Stars appear in his kit.**
+
+**GamerGuides HD (the same author; counts with Split once):**
+
+- "Come in at Level 99, using two Dark Knights at least and some supportive unit; this support unit should start as a Gun Mage before going to White Mage."
+- Valiant Lustre, Soul Springs, Spherechange "Short", and "Fight the Omega Weapon in the Farplane ten times; this will let Paragon Oversoul, oddly making things easier."
+- Against Oversoul Paragon: "throw up Star Curtain and Mighty Guard", then "we used Darkness from Dark Knights supported by an Alchemist using Mega-Potions". If Big Bang or Genesis comes early, "reset and retry".
+
+**NightMare185, *Via Infinito FAQ* v3.2 (US), FAQ 27609.** This is the only Catnip-free clear of the **normal** Paragon found. The FF Wiki's "Normal" strategy paraphrases it, so the two count once.
+
+- **Strategy 1** (Higher Power, Break HP Limit): open with "a Stamina Tonic and Megalixir". MDef "over 175" and Def 165. "From now use REGULAR ATTACKS. DO NOT USE DARKNESS."
+- **Strategy 2** (no Break HP Limit): Valiant Lustre, "a Crsytal Glove and Oath Veil on all your girls", Dark Knight, "AT LEAST 60 MEGALIXIRS".
+- **Strategy 3** (no Break HP Limit), "tested ... in 10 battles with Paragon and they have all worked out":
+  - Line-up: Dark Knights on Valiant Lustre, each with only an **Oath Veil and a Crystal Bangle**, and 99 Megalixirs.
+  - Opening: "When the battle begins, use Megalixirs to heal even though you have full health." After the first Genesis, another Megalixir, then "2 girls use REGULAR ATTACKS". The loop: "Repeat healing with 1 Girl with the Megalixir and 2 girls attacking."
+  - Damage he reports: Genesis about 4,700 to 5,700 at MDef 185; physicals about 2,300 to 3,500.
+  - If Itchy lands on everyone, all three spherechange, "Because it prevents a stop in Paragon and he won't be able to do crap".
+  - For Trema he pairs it with his Strategy 2: Twin or Three Stars, Chocobo Wings, Soul Spring, then two Darkness and one Mega-Potion a turn.
+- **His own recommendation** is still "MAKE SURE YOU HAVE PARAGON ON OVERSOUL ... I've only been able to beat him like this" (Catnip-free section, written before Strategy 3 was added).
+
+**Others:**
+
+- RavenXX (Neoseeker, 2004): Cat Nip Gunner (original version only), CONGRATS! reels, or Bribe.
+- FF Wiki *Trema (boss)*: three Mascots on Higher Power, with Rikku's Rabite's Foot chaining Paine's Cactling Gun, and "This strategy can also be used to defeat Paragon".
+- hrs-game.main.jp (Japanese, HD): bribe Paragon, or CONGRATS!; in Oversoul it only counters. Its bribe price is 1,312,500 gil against the wiki's 800,000 `[conflict, minor]`.
+- Latino Love (in Split G0648): Mascots with special dresspheres, Great Whirl and Vajra.
+
+**Is TR10 (two Dark Knights and an Alchemist) a line-up anyone used against Paragon?**
+
+- **Yes, but only against the Oversoul form** `[verified: 1 author (Kolar), in two documents]`. Split uses regular Attacks under Reflect; GamerGuides uses Darkness, which the Oversoul form does not punish.
+- **No source found uses TR10 against the normal form.** The one sourced Catnip-free normal clear (NightMare185 Strategy 3) uses Dark Knights with Oath Veil + Crystal Bangle, one of them throwing Megalixirs. It has no Alchemist, no Rabite's Foot, no Auto-Protect and no Darkness. Its safety comes from a Megalixir every turn and from attacking only after a Genesis `[single source]`.
+
+**E3 check:** of the normal form, NightMare185 also writes, "With that luck boost from the accessory, the chance of him hitting your gunner is unlikely". That may be about targeting (his prep says fiends pick low-Luck girls) or about hitting. It is ambiguous, so E3 stays `[verified: 2 sources: Split, wiki]`, with this noted as a `[conflict, ambiguous]`.
+
+### 12.4 E4, action time: what is published and what is not
+
+| Question | Answer | Status |
+|---|---|---|
+| Does the actor's **own** gauge refill while its action animates? | **No.** A turn is fill, then charge, then "execution time of the selected action. After execution, there may be a 'Recovery' time before the ATB bar begins to refill" (wiki *Haste (Final Fantasy X-2 status)*). Split G1019: Haste "affects the speed at which attacks are executed ... thus allowing target to enter CTIM or RECTIM sooner". G0905 rule 4 has the bar come back only after the charged action executes. | `[verified: 2 sources]`. **The engine's "an action takes no time" contradicts this.** |
+| Do **other** units' gauges keep filling while someone animates? | In Active mode yes, except during an automatic Wait. Split G0913: "If ATB mode is set to Active, time always passes", but "Time is also stopped (ie set to 'Wait mode' automatically) during some of battle's longer animations. Listing those would just be waste of time". Wiki *Active Time Battle* (FFX-2): "regardless of ATB setting, the game will toggle between Wait mode and Active mode during certain attacks". | `[verified: 2 sources]`. **Which animations trigger the Wait is not published.** |
+| Do actions queue? | No. FFX-2 is the opposite of a queue: "party members can take actions simultaneously as opposed to the one-at-a-time system used in previous ATB systems" (wiki *Final Fantasy X-2*). **Trap:** the wiki's *Speed (stat)* line "everyone else's ATB gauges continue to fill during ability animations ... actions thus queue up" is in its **Final Fantasy IX** section and does not apply. | `[single source]` |
+| Does time pass during a spherechange? | **No, with Spherechange set to Short.** GamerGuides: "Trema won't get a chance to attack during the intermissions"; Split G0649: "Mr T. is not able to attack during these scenes". NightMare185: an all-party spherechange "prevents a stop in Paragon and he won't be able to do crap". | `[verified: 2 sources: Kolar, NightMare185]` |
+| Can a unit mid-animation be chained? | An **enemy** in its attack or cast animation cannot. Split: "DO NOT ATTACK PARAGON WHILE IT'S IN THE ATTACK MOTION, as chain effects aren't registered". Wiki *Trema (boss)*: "Attacking during Trema's casting animation won't build chain". The rule that enemies can chain the party is symmetric (combat-core §1.7), but whether a **girl** mid-animation is equally unchainable is unsourced. | `[verified: 2 sources]` for enemies; unsourced for the party |
+| Published timings | Chain window 2 s, 3 s after a critical `[verified: 2]`. The gauge tick model and the Config ATB speed setting Slow / Normal / Fast (0.71 / 0.53 / 0.42 s per duration unit; pbirdman sheet; combat-core §1.2 and §2.8) `[single source]`. Haste speeds animations and the gauge by about 5 % (wiki, Split) `[verified: 2]`. Split's clear used ATB speed "medium or slow". | as tagged |
+| **Seconds per action, frame counts, animation lengths** | **Nothing is published.** No source read gives the length of any FFX-2 animation (enemy or party) or the recovery value of a boss action. The closest is the wiki's "no charge time and a short recovery" for Trema (§4.2), which has no number. | **unsourced** |
+
+**What this means for E4:** the rule that an action's execution takes time before its actor's gauge refills is sourced (2 sources), and the engine breaks it. The **length** of that time is not sourced anywhere. Any N seconds (the 1.5 s and 3 s probes) is an `[estimate]`. It needs Bailey's explicit word, or a measurement from footage, which would itself be an estimate unless its method is written down. The spherechange time-freeze (2 sources) is a second sourced rule the engine should be checked against.
+
+### 12.5 Answers in one place
+
+| # | Question | Answer | Status |
+|---|---|---|---|
+| 1 | Oversoul Paragon | Full stats, action list, DCs and AI in 12.2. Still missing: the physical miss rate, the idle timer (20 s or 2.5 min), Final Impact's hit count (14 or 10) and whether Protect reduces it, the -aga targeting, Itchy in Oversoul, and when a counter fires. | SinirothX single-source dump; behaviour verified: 3 |
+| 2 | E4 action time | The actor waits out its own execution before its gauge refills (2 sources). Others keep filling in Active mode, except during unlisted long animations (2). FFX-2 units act simultaneously, not in a queue (1). Short spherechanges freeze time (2). **No seconds are published.** | as tagged; timings unsourced |
+| 3 | Real clears | Split and GamerGuides (Kolar): the TR10 line-up at Lv 99 on Valiant Lustre, **against Oversoul Paragon**. NightMare185: a Catnip-free **normal** Paragon clear with Dark Knights, Oath Veil, Crystal Bangle, 99 Megalixirs and regular attacks. No TR10 clear of the normal form was found. | 12.3 |
+| 4 | T-6 | SinirothX (TR8 a: Mag 244, Def 88) is right. The wiki's block is a Magic↔Defense column swap, and the same swap is on Ultima Weapon. The Big Bang, Genesis and Warrior Attack observations reproduce TR8 a and rule out T-6 b. | verified: dump + derived checks against 3 writers |
+
+### 12.6 Sources for this section (read 2026-09-25)
+
+- **FF Wiki, `api.php?action=parse`:**
+  - *Paragon (Final Fantasy X-2)* revid 3998078
+  - *Ultima Weapon (Final Fantasy X-2)* revid 3939317
+  - *Omega Weapon (Final Fantasy X-2)* revid 3939312
+  - *Oversoul (Final Fantasy X-2)* revid 4041089
+  - *Active Time Battle* revid 3995539
+  - *Final Fantasy X-2* revid 4024331
+  - *Haste (Final Fantasy X-2 status)* revid 3998880
+  - *Speed (stat)* revid 4027984
+  - *Chain (term)* revid 4043750
+  - *Trema (boss)* revid 4008691
+  - *Menu (Final Fantasy X-2)* revid 3736537
+- **SinirothX**, *Enemy Encyclopedia* v1.3, GameFAQs FAQ 31807: Paragon, Ultima Weapon, Omega Weapon, and the damage flowchart.
+- **Split_Infinity (Damir Kolar)**, *Boss Guide* ("Leifang", 2008), FAQ 26832: G0648 and G0649, including Latino Love's strategy.
+- **Split_Infinity**, *Guide and Walkthrough* ("Cool Rikku", 2011), FAQ 25872: G0905, G0906, G0912, G0913 and G1019.
+- **NightMare185**, *Via Infinito FAQ* v3.2 (US), FAQ 27609: Paragon/Trema preparation and strategies, including the Catnip-free section.
+- **zero_six**, *Enemy Database* v0.80, FAQ 28832: the Paragon entry has no stats.
+- **GamerGuides (Damir Kolar)**, *Final Fantasy X-2 HD Remaster*, "Bevelle & the Via Infinito".
+- **RavenXX**, *Paragon/Trema Guide*, Neoseeker FAQ 80425 (2004).
+- **Neoseeker FFX-2 wiki**, *Paragon* (oldid 31398).
+- **hrs-game.main.jp**, *FF10-2 HD* 聖ベベル廟・隠された迷宮 (story_lv5_13).

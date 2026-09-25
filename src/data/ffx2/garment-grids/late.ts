@@ -319,6 +319,29 @@ export const lateGarmentGrids: GarmentGridDef[] = [
     obtained: 'Ch.3, uncommon field find.',
     citation: 'ids.ts [single source] — full gate table not published',
   },
+  {
+    // Chapter XIII's sourced kit option only (docs/plans/trema-winnability-method-check.md S2); no
+    // shipped build equips it. Equip DEF +20 / MDEF +20; the Yellow and Blue gates DEF +20 each, Red
+    // and Green MDEF +20 each: +60 / +60 with all four [verified: 2 sources: ffx2-vegnagun-shuyin
+    // §6.6 "Stacks to +60/+60"; FF Wiki *Garment Grid* revid 3998878, Equip and Gates columns]. That
+    // table's fifth column ("Moogle Cureja, Defense +30, Magic Defense +30") is headed **Creature
+    // Abilities**: what a captured fiend gets, not the girls, so it is not a four-gate bonus (the
+    // method check read +90 / +90; corrected here). Node count is not published: 5, like the other
+    // DEF/MDEF grids, [estimate]; gates in the order Y, B, R, G round the ring (topology [estimate]).
+    id: 'valiant-lustre',
+    name: 'Valiant Lustre',
+    nodeCount: 5,
+    gateColours: ['yellow', 'blue', 'red', 'green'],
+    equip: { description: 'DEF +20, MDEF +20', statBonus: { def: 20, mdef: 20 } },
+    gateEffects: [
+      { gates: ['yellow'], effect: { description: 'DEF +20', statBonus: { def: 20 } } },
+      { gates: ['blue'], effect: { description: 'DEF +20', statBonus: { def: 20 } } },
+      { gates: ['red'], effect: { description: 'MDEF +20', statBonus: { mdef: 20 } } },
+      { gates: ['green'], effect: { description: 'MDEF +20', statBonus: { mdef: 20 } } },
+    ],
+    obtained: 'Ch.5, Thunder Plains: defeat Humbaba ("A Fallen Genius?").',
+    citation: 'ffx2-vegnagun-shuyin.md §6.6 + FF Wiki Garment Grid revid 3998878 [verified: 2 sources]',
+  },
 ];
 
 export default lateGarmentGrids;

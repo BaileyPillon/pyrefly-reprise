@@ -260,3 +260,24 @@ describe('withStatBonus', () => {
     expect(out.maxHp).toBeGreaterThanOrEqual(out.hp);
   });
 });
+
+describe('accessories survive a spherechange (method check E2, 2026-09-25; FFX-2 shared plumbing)', () => {
+  it('re-derives the new dressphere with her Crystal Bangle and Rabite\'s Foot still on', () => {
+    const unit = girl('vanguard', 'gunner', 24);
+    unit.accessories = ['crystal-bangle', "rabite's-foot"];
+    change(unit, 'warrior', 1); // across Vanguard's red gate
+    const warrior = withStatBonus(dressphereStats('warrior', 24), gateStatTotal(activeGateBonuses(garmentGrid('vanguard'), ['red'])));
+    expect(unit.dresspheres?.current).toBe('warrior');
+    expect(unit.stats.maxHp).toBe(warrior.maxHp * 2); // max HP +100 %
+    expect(unit.stats.luck).toBe(warrior.luck + 100); // Luck +100
+    expect(unit.stats.str).toBe(warrior.str); // the gate's STR +5 is in `warrior` already
+  });
+
+  it('a girl with no accessories derives exactly as before', () => {
+    const unit = girl('vanguard', 'gunner', 24);
+    change(unit, 'warrior', 1);
+    const warrior = withStatBonus(dressphereStats('warrior', 24), gateStatTotal(activeGateBonuses(garmentGrid('vanguard'), ['red'])));
+    expect(unit.stats.maxHp).toBe(warrior.maxHp);
+    expect(unit.stats.luck).toBe(warrior.luck);
+  });
+});
