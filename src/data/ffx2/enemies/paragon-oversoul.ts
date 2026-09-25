@@ -1,8 +1,8 @@
 /**
- * Chapter XIII, link 1, **option 1 (TR7 b): Oversoul Paragon**, built and **switched OFF**.
+ * Chapter XIII, link 1, **option 1 (TR7 b): Oversoul Paragon**, **shipped** (Bailey, 2026-09-25,
+ * "Trema: 1 and 3 at 3 s"; `docs/plans/trema-options-2026-09-25.md`, option 1).
  *
- * **Game case: FFX-2 only** [AGENTS.md rule 14]. Bailey picked TR7 = Normal; this form needs his
- * word (`docs/plans/trema-options-2026-09-25.md`, option 1). The chapter reaches it only through
+ * **Game case: FFX-2 only** [AGENTS.md rule 14]. The chapter reaches it through
  * `TREMA_PARAGON_FORM = 'oversoul'` in `src/data/chapter-ffx2-trema.ts`. Source:
  * `research/ffx2-trema.md` §12.2 (SinirothX FAQ 31807's dump: stats, actions, DCs and AI, a
  * **single-source** script whose *behaviour* is verified by 3 sources: waits until hit, copies

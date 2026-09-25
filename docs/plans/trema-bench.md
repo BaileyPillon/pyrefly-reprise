@@ -5,6 +5,58 @@ fight at bench speed, 40 at human speed; Active ATB, Bailey 2026-09-21). Plan
 `docs/plans/chapter-trema-review.md` §9 and TR6 = c: **measure first, then ask once with the
 numbers. Nothing here tuned a boss** (rule 6, "never weaken a boss").
 
+## 2026-09-25, fifth pass: the shipped setting, "Trema: 1 and 3 at 3 s"
+
+**Bailey, 2026-09-25 ~10:20 EDT: "I'll go with all your recommendations"**, which took the options
+sheet's "Trema: 1 and 3 at 3 s" (`docs/plans/trema-options-2026-09-25.md`). Now switched ON in the
+chapter (`src/data/chapter-ffx2-trema.ts`): `TREMA_PARAGON_FORM = 'oversoul'`,
+`TREMA_KIT_OPTION = 'sourced-kit'` (Split_Infinity's clear), `TREMA_CHAPTER_SHAPE` still
+`'paragon-then-trema'`; and in `src/data/ffx2/enemies/trema.ts` `CLOISTER_ACTION_TIME_ON = true` with
+its own labelled `[estimate]` `CLOISTER_ACTION_TIME_SECONDS = 3`, on the four Cloister formations
+only. `ACTION_TIME_ALL_FFX2` stays false and the global `ACTION_TIME_ESTIMATE_SECONDS` stays 1.5 s;
+`OVERSOUL_ESTIMATES` stay at their defaults (the harder readings). No boss number changed.
+
+Printed by `tests/unit/chapters/trema-shipped-bench.test.ts`, which reads the registered record (its
+first formation and its build) and the formations' own action time. Line: `LINES.kitIntended`.
+200 seeds at bench speed (D = 0) and **200** at human speed under Wait split (1.5 s a menu: 0.5 s on
+the top-level list with the clock running, 1.0 s held), the live default.
+
+| Link | Mode | Wins | Avg min | Avg min (wins) | Reached Trema | Big Bang / fight | Final Impact / fight |
+|---|---|---:|---:|---:|---:|---:|---:|
+| 1 Oversoul Paragon | bench, D=0 | 27/200 | 4.09 | 4.6 | — | 0.34 | 1.00 |
+| 1 Oversoul Paragon | human, Wait split 0.5 s top / 1.0 s held | 28/200 | 4.52 | 5.0 | — | 0.37 | 1.00 |
+| 2 Trema (fresh) | bench, D=0 | 177/200 | 14.44 | 15.1 | — | 0.00 | 0.00 |
+| 2 Trema (fresh) | human, Wait split 0.5 s top / 1.0 s held | 170/200 | 15.24 | 16.0 | — | 0.00 | 0.00 |
+| **Chapter (1-2)** | **bench, D=0** | **15/200** | 5.27 | 19.6 | 27/200 | 0.34 | 1.00 |
+| **Chapter (1-2)** | **human, Wait split 0.5 s top / 1.0 s held** | **13/200** | 5.94 | 20.9 | 28/200 | 0.37 | 1.00 |
+
+- **The chapter matches the options sheet exactly: 15/200 bench (7.5 %), 13/200 human (6.5 %),
+  about 1 win in 15.** The sheet measured it with the engine option `actionTimeSeconds: 3`; the
+  shipped chapter carries it on the formations instead, and the test proves the two give
+  byte-identical event logs (seeds 1 to 10, the whole chapter).
+- **Oversoul Paragon is still the wall** (27/200 and 28/200). Trema is not: fresh, he falls 177/200
+  and 170/200. Every chapter run that reaches Trema at bench speed ends 15 wins in 27.
+- Big Bang still comes about once in three Paragon fights: not as a counter (Oversoul Paragon has
+  none), but from the script's idle branch and its below-a-tenth roll (research §12.2). Every
+  Paragon fight reaches Final Impact (below a tenth of its HP). The story's Big Bang callout is
+  registered only for a Paragon with the counter, so it does not fire here
+  (`trema-ship-story.test.ts` runs the engine to prove it).
+- **Every other chapter replays byte-identically against main** before this change (`fc7cd05b`, the
+  options landed OFF) and after the switch: Chapters 4, 5 and 6 (Active at D = 0, 700, 1500 and Wait
+  intended / attack / fuzz, 30 seeds each) and XI (intended and all-out at D = 0 and 1500, 30 seeds),
+  FFX Chapters 1 and 3 (intended and attack, 20 seeds). The hash scripts are
+  `D:/Tools/pyrefly-scratch/trema-go/switches/hashes.mts` and `ffxhash.mts` (the earlier Trema agents'
+  scripts, `trema-ship/verify-fix/`).
+- The older benches keep measuring what they measured: `trema-bench.test.ts` and the option 1, 2 and 4
+  rows of `trema-options-bench.test.ts` now pass the engine option `actionTimeSeconds: 0`, which wins
+  over the formations' 3 s, and their rows reproduce (for example option 1 sourced kit: Paragon
+  22/200, chapter 5/200 bench and 1/40 human; sourced kit on Trema fresh 30/200).
+- The tactic (`src/engine/tactics/ffx2-trema.ts`) now plays the kit's steps the bench line plays
+  (Stamina Tonic, Three Stars on Trema, Megalixir under 60 % with the kit's Mega-Potions, an Itchy
+  knight changes dressphere out of it); the guide (`src/data/guides/ffx2-trema.ts`) describes
+  Oversoul Paragon (waits to be hit, answers each hit, its HP lines at 4/10 and 1/10) and the kit's
+  items, keyed on the shape and on rows only that kit offers.
+
 ## 2026-09-25, second pass: after the method check's fixes, with the kit options built and OFF
 
 Branch `chapter-trema-0925`, after `docs/plans/trema-winnability-method-check.md` and its fixes:

@@ -11,6 +11,11 @@
  * Every line is run as an intended line and a credibly wrong one, on Paragon, on Trema fresh (full
  * HP and MP: the upper bound of link 2) and on the whole chapter as the app carries it.
  *
+ * **Action time off in every row** (`AT_OFF`): since 2026-09-25 the Cloister formations carry 3 s of
+ * action time (option 3, shipped), and the engine option 0 wins over a formation's value, so these
+ * rows keep measuring what they always measured. The shipped setting's bench is
+ * `trema-shipped-bench.test.ts`.
+ *
  * Bench speed is zero decision time under Active ATB (Bailey, 2026-09-21: FFX-2 is Active only);
  * the human rows spend 1.5 s per menu under Active. Minutes are game minutes at Normal ATB speed.
  * The remaining option rows are **not built**: T-6 b swaps in the wiki's reading of Paragon's block
@@ -27,6 +32,9 @@ const HUMAN = 1500;
 const WIKI_T6 = { mag: 88, def: 244, mdef: 89 };
 const PHOENIX_DOWNS = [{ itemId: 'x2-phoenix-down', count: 20 }];
 const rows: string[] = [];
+
+/** These rows measure with action time off (see the header); a row's own engine options are kept. */
+const AT_OFF = (o: DriveOptions): DriveOptions => ({ ...o, engine: { actionTimeSeconds: 0, ...o.engine } });
 
 interface Tally { wins: number; seeds: number; unfinished: number; minutes: number; winMinutes: number; reached: number; bigBang: number; genesis: number; meteor: number; flare: number; blocked: number; darkness: number }
 type Run = LinkRun | { outcome: string | undefined; links: LinkRun[] };
@@ -66,9 +74,9 @@ function row(kit: string, link: string, line: string, mode: string, t: Tally): v
 }
 
 type Case = [kit: TremaKitOption, link: string, line: string, run: (opts: DriveOptions) => (seed: number) => Run];
-const P = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveParagon(l, s, o);
-const T = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveTremaFresh(l, s, o);
-const C = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveChapter(l, s, o);
+const P = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveParagon(l, s, AT_OFF(o));
+const T = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveTremaFresh(l, s, AT_OFF(o));
+const C = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveChapter(l, s, AT_OFF(o));
 
 /** TR11 a (the shipped build) and each kit option, intended and credibly wrong, on every link. */
 const CASES: Case[] = [

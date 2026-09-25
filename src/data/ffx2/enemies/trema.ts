@@ -21,7 +21,6 @@
 
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
 import { CLOISTER_BOSS_IMMUNITY, paragon } from './paragon.ts';
-import { ACTION_TIME_ESTIMATE_SECONDS } from '../../../battle/ffx2/action-time.ts';
 
 export const CLOISTER_PARAGON = 'ffx2-cloister-paragon';
 export const CLOISTER_TREMA = 'ffx2-cloister-trema';
@@ -29,15 +28,23 @@ export const CLOISTER_TREMA = 'ffx2-cloister-trema';
 export const TREMA_CHAPTER_CHAIN_ORDER = [CLOISTER_PARAGON, CLOISTER_TREMA] as const;
 
 /**
- * **Option 3 (E4), OFF: action time on Chapter XIII's links only.** Seconds each action takes
- * before its actor's gauge refills (`src/battle/ffx2/action-time.ts`): the rule is sourced
- * `[verified: 2 sources]`, the length is not (research §12.4). To turn it on for this chapter alone,
- * set `CLOISTER_ACTION_TIME_ON = true`: every action then takes `ACTION_TIME_ESTIMATE_SECONDS` (1.5 s, an
- * `[estimate]`). Needs Bailey's word.
+ * **Option 3 (E4), ON: action time on Chapter XIII's links only** (Bailey, 2026-09-25, "I'll go with
+ * all your recommendations", taking the options sheet's "Trema: 1 and 3 at 3 s"). Seconds each
+ * action takes before its actor's gauge refills (`src/battle/ffx2/action-time.ts`): the rule is
+ * sourced `[verified: 2 sources]`, the length is not (research §12.4). No other FFX-2 chapter moves:
+ * `ACTION_TIME_ALL_FFX2` stays false, and the global `ACTION_TIME_ESTIMATE_SECONDS` (1.5 s) is not
+ * read here. `CLOISTER_ACTION_TIME_ON = false` turns it off again.
  */
-export const CLOISTER_ACTION_TIME_ON: boolean = false;
-/** Seconds of action time on the Cloister links: 0 while the switch is off. */
-export const CLOISTER_ACTION_TIME = CLOISTER_ACTION_TIME_ON ? ACTION_TIME_ESTIMATE_SECONDS : 0;
+export const CLOISTER_ACTION_TIME_ON: boolean = true;
+/**
+ * **`[estimate]`, Bailey's pick: 3 s of game time per action, on the Cloister links only.** Unsourced
+ * (research §12.4: no published lengths); the longer of the two lengths the options sheet measured
+ * (`docs/plans/trema-options-2026-09-25.md`, option 3). Its own constant, so the global estimate
+ * does not move.
+ */
+export const CLOISTER_ACTION_TIME_SECONDS = 3;
+/** Seconds of action time on the Cloister links: {@link CLOISTER_ACTION_TIME_SECONDS}, or 0 with the switch off. */
+export const CLOISTER_ACTION_TIME = CLOISTER_ACTION_TIME_ON ? CLOISTER_ACTION_TIME_SECONDS : 0;
 const actionTime = CLOISTER_ACTION_TIME > 0 ? { actionTimeSeconds: CLOISTER_ACTION_TIME } : {};
 
 /** Trema, Via Infinito story version, bestiary #243 on the wiki (§3.1). International / HD (TR2 = a). */
@@ -107,7 +114,7 @@ export const cloisterParagonGroup: EnemyGroupDef = {
   nextGroupId: CLOISTER_TREMA,
   musicCues: [{ at: 'start', track: 'scene-bevelle-underground', fadeMs: 800 }], // TR16 = a
   timedAilmentDefaults: true, // Paragon's Confuse wears off (§2.8 default 133), method check E1
-  ...actionTime, // option 3 (E4), OFF
+  ...actionTime, // option 3 (E4), ON at 3 s
 };
 
 /** Link 2: Trema. `Bevelle - Secret Dungeon - Level 100 - BOSS 229 Trema 1` [SinirothX]. */
@@ -120,7 +127,7 @@ export const cloisterTremaGroup: EnemyGroupDef = {
   carriesPartyState: true, // "whatever state the Paragon fight left them" [verified: 5 sources]
   checkpointOnEntry: true, // TR5 = b
   timedAilmentDefaults: true, // Beguiling Mire's Stop wears off (§2.8, 100 [estimate]), method check E1
-  ...actionTime, // option 3 (E4), OFF
+  ...actionTime, // option 3 (E4), ON at 3 s
 };
 
 export const tremaGroups: readonly EnemyGroupDef[] = [cloisterParagonGroup, cloisterTremaGroup];

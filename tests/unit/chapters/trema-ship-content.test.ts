@@ -14,18 +14,21 @@ import { UNLISTED_CHAPTER_META, getChapterMeta } from '../../../src/data/chapter
 import { TREMA_META, tremaMetaFor } from '../../../src/data/chapter-meta-trema.ts';
 import { FFX2_TREMA_GUIDE, tremaGuideFor } from '../../../src/data/guides/ffx2-trema.ts';
 import { RULE_SHORT_MAX } from '../../../src/data/guides/types.ts';
-import { TREMA_SHAPE_ALONE, TREMA_SHAPE_PARAGON_LINK, type TremaShape } from '../../../src/data/trema-shape.ts';
+import { TREMA_SHAPE_ALONE, TREMA_SHAPE_OVERSOUL_LINK, TREMA_SHAPE_PARAGON_LINK, type TremaShape } from '../../../src/data/trema-shape.ts';
 import { guideForState } from '../../../src/engine/tactics/guide.ts';
 import { tacticFor } from '../../../src/engine/tactics/index.ts';
 import { ffx2Trema } from '../../../src/engine/tactics/ffx2-trema.ts';
 import { HELD_MARK, departureKindOf, departurePoses } from '../../../src/engine/BattlePresenterDepartures.ts';
 import { BattlePresenter } from '../../../src/engine/BattlePresenter.ts';
 import { viaInfinitoBuild } from '../../../src/data/ffx2/builds/via-infinito.ts';
+import { FFX2_TREMA } from '../../../src/data/chapter-ffx2-trema.ts';
+import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { group, newEngine } from '../helpers/tremaDrive.ts';
 import { FakeStage, noSleep } from '../helpers/FakeStage.ts';
 
 const OVERSOUL_LIKE: TremaShape = { paragonLink: true, paragonBigBang: false, paragonId: 'paragon', tremaId: 'trema' };
 const SHAPES = [
+  ['Oversoul Paragon link (shipped)', TREMA_SHAPE_OVERSOUL_LINK],
   ['Paragon link', TREMA_SHAPE_PARAGON_LINK],
   ['Paragon with no Big Bang', OVERSOUL_LIKE],
   ['Trema alone', TREMA_SHAPE_ALONE],
@@ -89,6 +92,12 @@ describe('the guide', () => {
     const says = (s: TremaShape): string => JSON.stringify(tremaGuideFor(s));
     expect(says(TREMA_SHAPE_PARAGON_LINK)).toMatch(/Big Bang/);
     expect(says(OVERSOUL_LIKE)).not.toMatch(/Big Bang/);
+    // Oversoul Paragon (shipped) has no Big Bang counter (research §12.2): no "never Darkness" rule, no
+    // counter line; Big Bang is named only as a move it makes when left alone or near the end.
+    const oversoul = tremaGuideFor(TREMA_SHAPE_OVERSOUL_LINK);
+    expect(says(TREMA_SHAPE_OVERSOUL_LINK)).not.toMatch(/answers[^.'"]*with Big Bang|never Darkness/i);
+    expect(oversoul.rules.map((r) => r.short)).toContain('Paragon waits, then answers every hit');
+    expect(oversoul.bossIds).toEqual(['trema', 'paragon']);
     expect(says(TREMA_SHAPE_ALONE)).not.toMatch(/Big Bang|Paragon/);
     // m5: the boss ids follow the shape too, so Trema alone claims no Paragon.
     expect(tremaGuideFor(TREMA_SHAPE_ALONE).bossIds).toEqual(['trema']);
@@ -97,7 +106,7 @@ describe('the guide', () => {
   });
 
   it('the registered guide is the shipped shape\'s, and it is found from either boss on an FFX-2 board', () => {
-    expect(FFX2_TREMA_GUIDE).toEqual(tremaGuideFor(TREMA_SHAPE_PARAGON_LINK));
+    expect(FFX2_TREMA_GUIDE).toEqual(tremaGuideFor(TREMA_SHAPE_OVERSOUL_LINK));
     for (const id of ['paragon', 'trema']) {
       const state = { game: 'ffx2', combatants: { [id]: { id, side: 'enemy', alive: true, hp: 1, statuses: {}, stats: { maxHp: 1 } } }, log: [] };
       expect(guideForState(state as never)?.id).toBe('ffx2-trema');
@@ -110,11 +119,11 @@ describe('the tactic, on the real engine', () => {
   type Pick = { actor: string; kind: string; id?: string; targets: readonly string[] };
 
   /** The tactic's picks over several seeds (Paragon can wipe the party before anyone acts on some). */
-  function picksOn(groupId: string, n: number): Pick[] {
+  function picksOn(groupId: string, n: number, party: FFX2PartyBuild = viaInfinitoBuild): Pick[] {
     const out: Pick[] = [];
     for (let seed = 1; seed <= 12 && out.length < n; seed++) {
       const engine = newEngine();
-      const setup: BattleSetup = { game: 'ffx2', party: viaInfinitoBuild, enemies: group(groupId), triggers: [], seed, condition: 'normal', canEscape: false };
+      const setup: BattleSetup = { game: 'ffx2', party, enemies: group(groupId), triggers: [], seed, condition: 'normal', canEscape: false };
       engine.setSeed(seed);
       engine.init(setup);
       for (let i = 0; i < 4000 && out.length < n; i++) {
@@ -145,6 +154,21 @@ describe('the tactic, on the real engine', () => {
     const picks = picksOn('ffx2-cloister-paragon', 12);
     expect(picks.some((p) => p.id === 'x2-dark-knight-darkness')).toBe(false);
     expect(picks.some((p) => p.actor !== 'rikku' && p.kind === 'attack')).toBe(true);
+  });
+
+  it('shipped (Oversoul Paragon, sourced kit): a Stamina Tonic opens, the Dark Knights swing plain Attacks', () => {
+    const picks = picksOn(FFX2_TREMA.enemyGroupRef.id, 12, FFX2_TREMA.buildRef as FFX2PartyBuild);
+    expect(picks.find((p) => p.actor === 'rikku')?.id).toBe('x2-stamina-tonic');
+    expect(picks.some((p) => p.id === 'x2-dark-knight-darkness')).toBe(false);
+    expect(picks.some((p) => p.actor !== 'rikku' && p.kind === 'attack')).toBe(true);
+  });
+
+  it('shipped kit on Trema: a Soul Spring drains him first, Three Stars follows, the Dark Knights use Darkness', () => {
+    const picks = picksOn('ffx2-cloister-trema', 16, FFX2_TREMA.buildRef as FFX2PartyBuild);
+    expect(picks.find((p) => p.actor === 'rikku')?.id).toBe('x2-soul-spring');
+    expect(picks.some((p) => p.id === 'x2-three-stars')).toBe(true);
+    expect(picks.some((p) => p.id === 'x2-gunner-target-mp')).toBe(false);
+    expect(picks.some((p) => p.id === 'x2-dark-knight-darkness')).toBe(true);
   });
 
   it('Trema: Rikku goes after his MP first, and the Dark Knights use Darkness', () => {

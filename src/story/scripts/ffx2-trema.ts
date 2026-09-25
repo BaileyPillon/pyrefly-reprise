@@ -199,7 +199,7 @@ export function tremaScriptsFor(shape: TremaStoryShape): ChapterScripts {
   return { pre, post: post(shape.tremaId), victoryQuips: {}, mid, midScripts };
 }
 
-/** The picks as built today: Paragon (normal), then Trema. */
+/** The normal-Paragon link (TR7 a), kept for the engine-run tests; the registered chapter reads its own shape (Oversoul Paragon since 2026-09-25, `chapter-trema-ship.ts`). */
 export const ffx2TremaScripts: ChapterScripts = tremaScriptsFor({
   paragonLink: true,
   paragonBigBang: true,

@@ -16,6 +16,11 @@
  *   (normal Paragon, tr11-a) at 1.5 s and 3 s, and the best surviving option (Oversoul Paragon,
  *   sourced-kit) at 1.5 s only, to see whether it stacks.
  * That leaves the rows below.
+ *
+ * **Since 2026-09-25 option 1 and option 3 at 3 s ship** (Bailey: "Trema: 1 and 3 at 3 s"): the Cloister
+ * formations carry 3 s of action time. The rows of options 1, 2 and 4 pass the engine option
+ * `actionTimeSeconds: 0` (`AT_OFF`, which wins over a formation's value), so they still measure what
+ * the options sheet measured. The shipped setting's own bench is `trema-shipped-bench.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -33,6 +38,9 @@ const HUMAN_SEEDS = 40;
 const HUMAN = 1500;
 const WAIT_SPLIT = { decisionMs: HUMAN, topMs: 500, engine: { atbMode: 'wait' as const, waitSplit: true } };
 const rows: string[] = [];
+
+/** Options 1, 2 and 4 as the sheet measured them: action time off (see the header). */
+const AT_OFF = (o: DriveOptions): DriveOptions => ({ ...o, engine: { actionTimeSeconds: 0, ...o.engine } });
 
 interface Tally { wins: number; seeds: number; unfinished: number; minutes: number }
 type Run = LinkRun | { outcome: string | undefined; links: LinkRun[] };
@@ -67,7 +75,7 @@ describe('Option 2 (TR1 b): Trema alone, the Fiend Arena block — kit is the on
   const kits: (TremaKitOption | 'nightmare-kit')[] = ['tr11-a', 'sourced-kit', 'sourced-kit-ribbon', 'nightmare-kit'];
   for (const kit of kits) {
     it(`${kit}: bench (200) and human Wait split (40)`, () => {
-      const opts = (extra: Partial<DriveOptions> = {}): DriveOptions => ({ build: kitBuild(kit), tremaGroup: CLOISTER_TREMA_ARENA, ...extra });
+      const opts = (extra: Partial<DriveOptions> = {}): DriveOptions => AT_OFF({ build: kitBuild(kit), tremaGroup: CLOISTER_TREMA_ARENA, ...extra });
       const bt = bench((s) => driveTremaFresh(kitLine(kit), s, opts()), SEEDS);
       const ht = bench((s) => driveTremaFresh(kitLine(kit), s, opts(WAIT_SPLIT)), HUMAN_SEEDS);
       row(`2: Trema alone (${kit})`, 'chapter (one link)', 'bench D=0', bt);
@@ -81,7 +89,7 @@ describe('Option 1 (TR7 b): Oversoul Paragon, then the shipped Trema link', () =
   const kits: (TremaKitOption | 'nightmare-kit')[] = ['tr11-a', 'sourced-kit', 'sourced-kit-ribbon'];
   for (const kit of kits) {
     it(`${kit}: Paragon link and whole chapter, bench (200) and human (40)`, () => {
-      const opts = (extra: Partial<DriveOptions> = {}): DriveOptions => ({ build: kitBuild(kit), paragonGroup: CLOISTER_PARAGON_OVERSOUL, ...extra });
+      const opts = (extra: Partial<DriveOptions> = {}): DriveOptions => AT_OFF({ build: kitBuild(kit), paragonGroup: CLOISTER_PARAGON_OVERSOUL, ...extra });
       const pb = bench((s) => driveParagon(kitLine(kit), s, opts()), SEEDS);
       const ph = bench((s) => driveParagon(kitLine(kit), s, opts(WAIT_SPLIT)), HUMAN_SEEDS);
       const cb = bench((s) => driveChapter(kitLine(kit), s, opts()), SEEDS);
@@ -97,7 +105,7 @@ describe('Option 1 (TR7 b): Oversoul Paragon, then the shipped Trema link', () =
 
 describe('Option 4 (TR10): NightMare185\'s kit, normal Paragon and the shipped Trema link', () => {
   it('Paragon, Trema fresh and the chapter, bench (200) and human (40)', () => {
-    const opts = (extra: Partial<DriveOptions> = {}): DriveOptions => ({ build: viaInfinitoNightmareKitBuild, ...extra });
+    const opts = (extra: Partial<DriveOptions> = {}): DriveOptions => AT_OFF({ build: viaInfinitoNightmareKitBuild, ...extra });
     for (const [label, drive] of [
       ['1 Paragon', driveParagon], ['2 Trema (fresh)', driveTremaFresh], ['Chapter (1-2)', driveChapter],
     ] as const) {

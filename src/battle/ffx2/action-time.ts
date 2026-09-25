@@ -1,7 +1,7 @@
 /**
  * **Action time (method check E4): an actor's own gauge waits for its action to play out.**
  * **FFX-2 only** [AGENTS.md rule 14]: FFX is CTB and has no gauge to hold
- * (`research/ffx-vs-ffx2-presentation.md` §4.3). **OFF everywhere by default.**
+ * (`research/ffx-vs-ffx2-presentation.md` §4.3). **OFF everywhere but Chapter XIII's two links** (3 s there, Bailey's pick).
  *
  * The rule is sourced, the length is not (`research/ffx2-trema.md` §12.4):
  *
@@ -19,7 +19,7 @@
  *   reading) and Stop's freeze.
  * - **Unsourced: the LENGTH.** "Nothing is published": no source gives any FFX-2 animation or
  *   recovery length (§12.4). {@link ACTION_TIME_ESTIMATE_SECONDS} is **one labelled estimate
- *   parameter**, the same for every action and every unit, and needs Bailey's word before it ships.
+ *   parameter**, the same for every action and every unit; the global switch that reads it is off.
  *
  * **Not modelled, each on purpose:** the "Automatic Wait" some long animations trigger (§12.4: which
  * ones is unpublished); that an enemy mid-animation cannot be chained (2 sources, a separate rule);
@@ -31,7 +31,8 @@
  * **The switches** (each one line; the most specific wins):
  * 1. `Ffx2EngineOptions.actionTimeSeconds` — one engine, for a measurement run.
  * 2. `EnemyGroupDef.actionTimeSeconds` — one formation. Chapter XIII's two links read
- *    `CLOISTER_ACTION_TIME` (`src/data/ffx2/enemies/trema.ts`).
+ *    `CLOISTER_ACTION_TIME` (`src/data/ffx2/enemies/trema.ts`): ON, 3 s (`CLOISTER_ACTION_TIME_SECONDS`,
+ *    an `[estimate]`, Bailey's pick on 2026-09-25), Chapter XIII only.
  * 3. {@link ACTION_TIME_ALL_FFX2} — every FFX-2 battle (Chapters 4, 5, 6, XI and XIII).
  *
  * Deterministic and DOM-free: no RNG draw, so a replay moves only through the time it adds.

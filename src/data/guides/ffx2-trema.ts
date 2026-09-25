@@ -10,12 +10,14 @@
  * ## True for every option
  *
  * Bailey's options for the fight (`docs/plans/trema-options-2026-09-25.md`: Oversoul Paragon,
- * Trema alone, action time, another line-up, the kit) are built as OFF switches on the engine
- * track. **This guide must stay true whichever is switched on**, so:
+ * Trema alone, action time, another line-up, the kit) are switches on the engine track; Bailey's
+ * pick (2026-09-25, "Trema: 1 and 3 at 3 s") ships Oversoul Paragon with Split_Infinity's kit and
+ * 3 s of action time. **This guide must stay true whichever is switched on**, so:
  *
  * - every Paragon line sits behind the chapter-shape flags (`src/data/trema-shape.ts`, read off
  *   the chapter's own formations): Big Bang only with a Paragon that has it (the normal form,
- *   research §4.1), the carry-over only with a Paragon link;
+ *   research §4.1), the wait-and-answer lines only with Oversoul Paragon (§12.2, **the shipped
+ *   option**, Bailey 2026-09-25), the carry-over only with a Paragon link;
  * - every kit line is keyed on a row only that kit offers (Soul Spring, Mega-Potion), so it can
  *   only ever explain a command the player actually has;
  * - the disputed facts say they are disputed: T-3 (Meteor's type), T-5 (the drain against
@@ -28,6 +30,7 @@
 import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from './types.ts';
 import { tremaBossIdsFor, type TremaShape } from '../trema-shape.ts';
 import { FFX2_TREMA_SHIPPED, shapeOfChapter } from '../chapter-trema-ship.ts';
+import { OVERSOUL_ESTIMATES } from '../ffx2/enemies/paragon-oversoul.ts';
 
 const NOTHING_STICKS: GuideRule = {
   text: 'Nothing sticks to Trema: every status, every stat change, Gravity and Reflect fail on him. Only damage moves him.',
@@ -54,6 +57,12 @@ const BIG_BANG: GuideRule = {
   short: 'Paragon: plain Attacks, never Darkness',
   cite: 'ffx2-trema §4.1',
 };
+/** Oversoul Paragon (option 1, shipped), research §12.2: SinirothX's script, its behaviour verified by 3 sources. */
+const OVERSOUL_WAITS: GuideRule = {
+  text: 'This Paragon has oversouled: it does nothing until it is hit, then answers each hit. A spell comes back at whoever cast it; anything else draws its Attack, which often misses. Left alone for long, it strikes on its own, Big Bang among its moves, so keep hitting it.',
+  short: 'Paragon waits, then answers every hit',
+  cite: 'ffx2-trema §12.2',
+};
 const CARRY: GuideRule = {
   text: 'Nothing is healed and nothing can be changed between Paragon and Trema: his fight starts as Paragon left you.',
   short: 'Trema starts where Paragon left you',
@@ -69,6 +78,16 @@ function hints(shape: TremaShape): GuideHint[] {
       cite: 'ffx2-trema §5, §10 T-5',
     },
     {
+      when: { labels: ['Stamina Tonic'] },
+      text: "A Stamina Tonic doubles everyone's max HP for the battle; a Megalixir then fills it",
+      cite: 'ffx2-trema §5, §12.3',
+    },
+    {
+      when: { labels: ['Three Stars'] },
+      text: "Three Stars makes every MP cost 0 for the battle, Darkness's HP cost too",
+      cite: 'ffx2-combat-core §2.8',
+    },
+    {
       when: { labels: ['Soul Spring'] },
       text: 'A Soul Spring drains his MP: without it he cannot pay for his spells (disputed under Spellspring)',
       cite: 'ffx2-trema §5, §12.3',
@@ -80,6 +99,13 @@ function hints(shape: TremaShape): GuideHint[] {
     },
     { when: { labels: ['Darkness'] }, text: 'Darkness is the damage line the clears use against Trema', cite: 'ffx2-trema §5' },
   ];
+  if (shape.paragonWaitsToBeHit && paragon) {
+    out.push({
+      when: { kinds: ['attack'], bossId: paragon },
+      text: 'A plain Attack: it only answers with its own Attack, which often misses',
+      cite: 'ffx2-trema §12.2',
+    });
+  }
   if (shape.paragonBigBang && paragon) {
     out.push({
       when: { kinds: ['attack'], bossId: paragon },
@@ -116,12 +142,33 @@ function phases(shape: TremaShape): GuidePhase[] {
   if (shape.paragonLink && shape.paragonId) {
     out.push({
       bossId: shape.paragonId,
+      ...(shape.paragonWaitsToBeHit ? { aboveHpFraction: OVERSOUL_ESTIMATES.magicBelow } : {}),
       label: 'PARAGON',
       note: shape.paragonBigBang
         ? 'It answers unsoftened hits with Big Bang. Trema waits behind it, and nothing is healed between.'
-        : 'Trema waits behind it, and nothing is healed between.',
-      cite: 'ffx2-trema §1.1, §4.1',
+        : shape.paragonWaitsToBeHit
+          ? 'It waits to be hit, then answers each hit. Trema waits behind it, and nothing is healed between.'
+          : 'Trema waits behind it, and nothing is healed between.',
+      cite: shape.paragonWaitsToBeHit ? 'ffx2-trema §1.1, §12.2' : 'ffx2-trema §1.1, §4.1',
     });
+    if (shape.paragonWaitsToBeHit) {
+      // Oversoul Paragon's HP lines (research §12.2, SinirothX's 4/10 and 1/10, `OVERSOUL_ESTIMATES`).
+      out.push(
+        {
+          bossId: shape.paragonId,
+          aboveHpFraction: OVERSOUL_ESTIMATES.finalBelow,
+          label: 'BELOW 4/10',
+          note: 'It still waits to be hit, but half its answers are now -aga spells on the whole party.',
+          cite: 'ffx2-trema §12.2',
+        },
+        {
+          bossId: shape.paragonId,
+          label: 'BELOW A TENTH',
+          note: 'Final Impact comes once; after it, any answer can be Ultima, Holy, Judgement, Genesis or Big Bang.',
+          cite: 'ffx2-trema §12.2',
+        },
+      );
+    }
   }
   out.push(
     { bossId: t, aboveHpFraction: 0.5, label: 'TREMA', note: 'Below half his HP, Meteor comes down.', cite: 'ffx2-trema §4.2' },
@@ -136,6 +183,7 @@ function phases(shape: TremaShape): GuidePhase[] {
 export function tremaGuideFor(shape: TremaShape): ChapterGuide {
   const rules: GuideRule[] = [NOTHING_STICKS, METEOR_LINES, DRAIN];
   if (shape.paragonBigBang) rules.push(BIG_BANG);
+  if (shape.paragonWaitsToBeHit) rules.push(OVERSOUL_WAITS);
   if (shape.paragonLink) rules.push(CARRY);
   else rules.push(DARKNESS);
   return {
@@ -150,7 +198,7 @@ export function tremaGuideFor(shape: TremaShape): ChapterGuide {
   };
 }
 
-/** Chapter XIII's guide, for the shape its registered record has. */
+/** Chapter XIII's guide, for the shape its registered record has (shipped: Oversoul Paragon, then Trema). */
 export const FFX2_TREMA_GUIDE: ChapterGuide = tremaGuideFor(shapeOfChapter(FFX2_TREMA_SHIPPED));
 
 export default FFX2_TREMA_GUIDE;

@@ -13,7 +13,8 @@ import { CHAPTER_IDS, getChapter } from '../../../src/data/encounters.ts';
 import { FFX2_TREMA } from '../../../src/data/chapter-ffx2-trema.ts';
 import { FFX2_TREMA_SHIPPED, shapeOfChapter, withTremaShip } from '../../../src/data/chapter-trema-ship.ts';
 import { cloisterParagonGroup, cloisterTremaGroup } from '../../../src/data/ffx2/enemies/trema.ts';
-import { TREMA_SHAPE_ALONE, TREMA_SHAPE_PARAGON_LINK, tremaShapeOf } from '../../../src/data/trema-shape.ts';
+import { TREMA_SHAPE_ALONE, TREMA_SHAPE_OVERSOUL_LINK, TREMA_SHAPE_PARAGON_LINK, tremaShapeOf } from '../../../src/data/trema-shape.ts';
+import { cloisterParagonOversoulGroup } from '../../../src/data/ffx2/enemies/trema-options.ts';
 import { lintScript, type ChapterScripts, type StoryScript } from '../../../src/story/dsl.ts';
 import {
   TREMA_AI_TRIGGERS,
@@ -31,9 +32,16 @@ import { fallback, knightTurn, rikkuTurn } from '../helpers/tremaLines.ts';
 const ALONE_CHAPTER = { ...FFX2_TREMA, enemyGroupRef: cloisterTremaGroup };
 
 describe('the chapter shape, read off the formations', () => {
-  it('Paragon then Trema (TR1 a): a Paragon link with the Big Bang counter', () => {
+  it('Paragon then Trema (TR1 a) with the normal Paragon: a Paragon link with the Big Bang counter', () => {
     expect(tremaShapeOf(cloisterParagonGroup, (id) => group(id))).toEqual(TREMA_SHAPE_PARAGON_LINK);
-    expect(shapeOfChapter(FFX2_TREMA)).toEqual(TREMA_SHAPE_PARAGON_LINK);
+  });
+
+  it('shipped (option 1): Oversoul Paragon then Trema, a link with no Big Bang counter, a Paragon that waits to be hit', () => {
+    // Oversoul Paragon lists Big Bang among its moves (idle, or below a tenth: research §12.2) but runs
+    // `paragon-oversoul`, which has no counter; the shape reads the script, not the ability list.
+    expect(cloisterParagonOversoulGroup.enemies[0]?.abilityIds).toContain('paragon-big-bang');
+    expect(tremaShapeOf(cloisterParagonOversoulGroup, (id) => group(id))).toEqual(TREMA_SHAPE_OVERSOUL_LINK);
+    expect(shapeOfChapter(FFX2_TREMA)).toEqual(TREMA_SHAPE_OVERSOUL_LINK);
   });
 
   it('Trema alone (option 2): no link, no Paragon', () => {
@@ -113,7 +121,11 @@ describe('the registered record: UNLISTED, with the ship layer on', () => {
     const ch = getChapter('ffx2-trema');
     expect(ch).toBe(FFX2_TREMA_SHIPPED);
     expect(ch?.sceneKey).toBe('via-infinito');
-    expect(ch?.scriptsRef.mid.map((t) => t.id)).toEqual(ffx2TremaScripts.mid.map((t) => t.id));
+    expect(ch?.scriptsRef.mid.map((t) => t.id)).toEqual(tremaScriptsFor(TREMA_SHAPE_OVERSOUL_LINK).mid.map((t) => t.id));
+    // Oversoul Paragon has no Big Bang counter, so Paine's "it hits back" callout is not registered.
+    expect(ch?.scriptsRef.mid.some((t) => t.id === 'paragon-big-bang')).toBe(false);
+    expect(ch?.scriptsRef.midScripts['paragon-big-bang']).toBeUndefined();
+    expect(ch?.scriptsRef.mid.some((t) => t.id === TREMA_LINK_SEAM)).toBe(true);
     expect(ch?.music).toEqual(FFX2_TREMA.music);
     expect(CHAPTER_IDS).not.toContain('ffx2-trema');
   });
@@ -162,6 +174,26 @@ describe('the triggers fire on the real engine', () => {
     const names = run(group('ffx2-cloister-paragon'), mid, 3, () => {}, LINES.darknessOnParagon, 600);
     expect(names).toContain('paragon-mourned');
     expect(names).toContain('paragon-big-bang');
+  });
+
+  it('shipped Oversoul Paragon: left alone it uses Big Bang, and no Big Bang callout fires', () => {
+    const mid = FFX2_TREMA_SHIPPED.scriptsRef.mid;
+    let seen = 0;
+    for (let seed = 1; seed <= 8 && seen === 0; seed++) {
+      const engine = newEngine();
+      engine.setSeed(seed);
+      engine.init({ game: 'ffx2', party: FFX2_TREMA_SHIPPED.buildRef, enemies: FFX2_TREMA_SHIPPED.enemyGroupRef, triggers: mid, seed, condition: 'normal', canEscape: false });
+      for (let i = 0; i < 3000; i++) {
+        const d = engine.nextDecision();
+        if (d.kind === 'battle-over') break;
+        if (d.kind === 'waiting') engine.tick(Math.max(1, d.nextEventMs));
+        else if (d.kind === 'player-input') engine.submit({ kind: 'defend', targets: [] });
+      }
+      const log = engine.state().log as readonly BattleEvent[];
+      seen += log.filter((e) => e.type === 'action-start' && (e as { abilityId?: string }).abilityId === 'paragon-big-bang').length;
+      expect(log.some((e) => e.type === 'script-trigger' && (e as { name: string }).name === 'paragon-big-bang')).toBe(false);
+    }
+    expect(seen).toBeGreaterThan(0); // the move itself happened, so the silence is the story's, not luck
   });
 
   it('Paragon: its KO fires the link seam', () => {

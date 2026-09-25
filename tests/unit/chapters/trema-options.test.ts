@@ -1,8 +1,10 @@
 /**
- * Chapter XIII — the four options of `docs/plans/trema-options-2026-09-25.md`, built as switches
- * that ship **OFF**: (1) Oversoul Paragon (its AI in `trema-oversoul.test.ts`), (2) Trema alone,
- * the Fiend Arena block, (3) action time (method check E4), (4) NightMare185's kit. Each through
- * the real engine or the shipped records [hard rule 3]. **FFX-2 only** [AGENTS.md rule 14].
+ * Chapter XIII — the four options of `docs/plans/trema-options-2026-09-25.md`, built as switches:
+ * (1) Oversoul Paragon (its AI in `trema-oversoul.test.ts`), (2) Trema alone, the Fiend Arena block,
+ * (3) action time (method check E4), (4) NightMare185's kit. **Bailey's pick (2026-09-25, "Trema: 1
+ * and 3 at 3 s") ships option 1 with Split_Infinity's kit and option 3 at 3 s on the Cloister links
+ * only**; options 2 and 4 stay OFF and still build. Each through the real engine or the shipped
+ * records [hard rule 3]. **FFX-2 only** [AGENTS.md rule 14].
  */
 
 import { describe, expect, it } from 'vitest';
@@ -19,11 +21,13 @@ import * as data from '../../../src/data/ffx2/index.ts';
 import {
   FFX2_TREMA, TREMA_CHAPTER_SHAPE, TREMA_KIT_OPTION, TREMA_PARAGON_FORM, tremaFirstGroup,
 } from '../../../src/data/chapter-ffx2-trema.ts';
-import { CLOISTER_ACTION_TIME, CLOISTER_ACTION_TIME_ON, cloisterParagonGroup, cloisterTremaGroup, trema } from '../../../src/data/ffx2/enemies/trema.ts';
+import {
+  CLOISTER_ACTION_TIME, CLOISTER_ACTION_TIME_ON, CLOISTER_ACTION_TIME_SECONDS, cloisterParagonGroup, cloisterTremaGroup, trema,
+} from '../../../src/data/ffx2/enemies/trema.ts';
 import {
   CLOISTER_TREMA_ARENA, cloisterParagonOversoulGroup, cloisterTremaArenaGroup, tremaArena,
 } from '../../../src/data/ffx2/enemies/trema-options.ts';
-import { tremaBuildFor } from '../../../src/data/ffx2/builds/via-infinito-kit.ts';
+import { TREMA_KIT_OPTIONS, tremaBuildFor, viaInfinitoSourcedKitBuild } from '../../../src/data/ffx2/builds/via-infinito-kit.ts';
 import { viaInfinitoBuild } from '../../../src/data/ffx2/builds/via-infinito.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { driveParagon, driveTremaFresh, LINES } from '../helpers/tremaDrive.ts';
@@ -31,30 +35,48 @@ import { board } from '../helpers/tremaUnits.ts';
 
 const idOf = (c: Command | null): string | null => (c && 'id' in c ? (c as { id: string }).id : null);
 
-describe('every option ships OFF: the chapter is Bailey\'s TR1 a / TR7 Normal / TR11 a, with no action time', () => {
-  it('the five switches read off', () => {
-    expect(TREMA_PARAGON_FORM).toBe('normal');
+/** The Cloister formations: the only ones that carry action time. */
+const CLOISTER_GROUP_IDS = ['ffx2-cloister-paragon', 'ffx2-cloister-trema', 'ffx2-cloister-paragon-oversoul', 'ffx2-cloister-trema-arena'];
+
+describe('the shipped pick: Oversoul Paragon with Split_Infinity\'s kit, and 3 s of action time on the Cloister links only', () => {
+  it('the switches read Bailey\'s pick; the global action-time switch and estimate are untouched', () => {
+    expect(TREMA_PARAGON_FORM).toBe('oversoul');
     expect(TREMA_CHAPTER_SHAPE).toBe('paragon-then-trema');
-    expect(CLOISTER_ACTION_TIME_ON).toBe(false);
-    expect(CLOISTER_ACTION_TIME).toBe(0);
+    expect(CLOISTER_ACTION_TIME_ON).toBe(true);
+    expect(CLOISTER_ACTION_TIME_SECONDS).toBe(3);
+    expect(CLOISTER_ACTION_TIME).toBe(3);
     expect(ACTION_TIME_ALL_FFX2).toBe(false);
-    expect(TREMA_KIT_OPTION).toBe('tr11-a');
+    expect(ACTION_TIME_ESTIMATE_SECONDS).toBe(1.5);
+    expect(TREMA_KIT_OPTION).toBe('sourced-kit');
   });
 
-  it('the chapter record is the one it was: Paragon first, TR11 a, Paragon under The Bevelle Underground', () => {
-    expect(FFX2_TREMA.enemyGroupRef).toBe(cloisterParagonGroup);
-    expect(FFX2_TREMA.buildRef).toBe(viaInfinitoBuild);
+  it('the chapter record: Oversoul Paragon, then the story Trema, with the sourced kit, Paragon under The Bevelle Underground', () => {
+    expect(FFX2_TREMA.enemyGroupRef).toBe(cloisterParagonOversoulGroup);
+    expect(FFX2_TREMA.enemyGroupRef.nextGroupId).toBe(cloisterTremaGroup.id);
+    expect(FFX2_TREMA.buildRef).toBe(viaInfinitoSourcedKitBuild);
     expect(FFX2_TREMA.music.battle).toBe('scene-bevelle-underground');
+    expect(FFX2_TREMA.sensorTexts.paragon).toBe(cloisterParagonOversoulGroup.enemies[0]?.sensorText);
+  });
+
+  it('every other option still builds: each shape and form gives a registered formation, each kit a build', () => {
     expect(tremaFirstGroup('paragon-then-trema', 'normal')).toBe(cloisterParagonGroup);
     expect(tremaFirstGroup('paragon-then-trema', 'oversoul')).toBe(cloisterParagonOversoulGroup);
     expect(tremaFirstGroup('trema-alone', 'normal')).toBe(cloisterTremaArenaGroup);
     expect(tremaFirstGroup('trema-alone', 'oversoul')).toBe(cloisterTremaArenaGroup);
+    for (const g of [cloisterParagonGroup, cloisterParagonOversoulGroup, cloisterTremaArenaGroup]) expect(data.ENEMY_GROUPS_BY_ID[g.id]).toBe(g);
+    expect(tremaBuildFor('tr11-a')).toBe(viaInfinitoBuild);
+    for (const option of TREMA_KIT_OPTIONS) expect(tremaBuildFor(option).members.length, option).toBe(3);
+    // The first pick still fights: normal Paragon with TR11 a runs to an end through the engine.
+    expect(['victory', 'defeat']).toContain(driveParagon(LINES.intended, 1).outcome);
   });
 
-  it('no formation carries action time, and no battle flag is set', () => {
-    for (const g of data.ENEMY_GROUPS) expect('actionTimeSeconds' in g, g.id).toBe(false);
-    expect(board('paragon').engine.state().flags[ACTION_TIME_FLAG]).toBeUndefined();
-    expect(board('trema').engine.state().flags[ACTION_TIME_FLAG]).toBeUndefined();
+  it('only the Cloister formations carry action time (3 s), and the battle flag is set on both links', () => {
+    for (const g of data.ENEMY_GROUPS) {
+      if (CLOISTER_GROUP_IDS.includes(g.id)) expect(g.actionTimeSeconds, g.id).toBe(3);
+      else expect('actionTimeSeconds' in g, g.id).toBe(false);
+    }
+    expect(board('paragon').engine.state().flags[ACTION_TIME_FLAG]).toBe(3);
+    expect(board('trema').engine.state().flags[ACTION_TIME_FLAG]).toBe(3);
   });
 
   it('only Oversoul Paragon answers party actions (`onPartyAction`), so no other log moves', () => {
@@ -91,7 +113,7 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
   });
 
   it('adds exactly the length to each gap between Trema\'s turns, and nothing when off', () => {
-    const off = tremaTurns(cloisterTremaGroup, {}, 4);
+    const off = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 0 }, 4);
     const on = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 1.5 }, 4);
     const gaps = (s: number[]) => s.slice(1).map((t, i) => t - (s[i] ?? 0));
     expect(off).toHaveLength(4);
@@ -101,9 +123,12 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
   it('the formation\'s value turns it on for that battle alone, and the engine option wins', () => {
     const group = { ...cloisterTremaGroup, actionTimeSeconds: 2 };
     const b = tremaTurns(group, {}, 3);
-    const off = tremaTurns(cloisterTremaGroup, {}, 3);
+    const off = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 0 }, 3);
     expect(Math.abs((b[1]! - b[0]!) - (off[1]! - off[0]!) - 6000)).toBeLessThanOrEqual(1);
     expect(tremaTurns(group, { actionTimeSeconds: 0 }, 3)).toEqual(off);
+    // The shipped formation: 3 s, 9,000 ticks at Normal.
+    const shipped = tremaTurns(cloisterTremaGroup, {}, 3);
+    expect(Math.abs((shipped[1]! - shipped[0]!) - (off[1]! - off[0]!) - 9000)).toBeLessThanOrEqual(1);
   });
 
   it('other gauges keep filling while it plays out (Active), and the Wait hold stops it too', () => {

@@ -8,8 +8,8 @@
  *
  * ## The flag, and how it is read
  *
- * The chapter's options (`docs/plans/trema-options-2026-09-25.md`) are built on another branch
- * as OFF switches, in files this module never touches (`chapter-ffx2-trema.ts`,
+ * The chapter's options (`docs/plans/trema-options-2026-09-25.md`) are switches (shipped: option 1,
+ * Oversoul Paragon, with option 3), in files this module never touches (`chapter-ffx2-trema.ts`,
  * `ffx2/enemies/**`, the kit). What they change that the ship layer cares about is the **first
  * formation** of `Chapter.enemyGroupRef`:
  *
@@ -20,8 +20,13 @@
  *   callout, the kill link on the field, the "Reach Trema" objective) is left out.
  *
  * {@link TremaShape.paragonBigBang} is whether that Paragon carries the Big Bang counter (the
- * normal form, TR7; research §4.1). Oversoul Paragon has none (research §12.2), so the guide's
- * "never Darkness on Paragon" line and the Big Bang callout stay behind this flag.
+ * normal form, TR7; research §4.1). Oversoul Paragon has none (research §12.2: its Big Bang comes
+ * only when it is left alone or below a tenth of its HP, never as an answer), so the guide's
+ * "never Darkness on Paragon" line and the Big Bang callout stay behind this flag. The counter is
+ * the normal form's AI script (`paragon`); Oversoul Paragon lists Big Bang among its actions but
+ * runs `paragon-oversoul`, so the flag reads the script, not the ability list.
+ * {@link TremaShape.paragonWaitsToBeHit} marks Oversoul Paragon (research §12.2: it does nothing
+ * until it is hit, then answers each hit), for the guide's lines about that form.
  *
  * A formation is recognised by its enemies' ids and AI script ids, never by a formation id:
  * the options may add formations under names this branch cannot know.
@@ -35,6 +40,8 @@ export interface TremaShape {
   readonly paragonLink: boolean;
   /** That Paragon answers an unreducible hit with Big Bang (the normal form; research §4.1). */
   readonly paragonBigBang: boolean;
+  /** That Paragon is Oversoul Paragon: it waits to be hit, then answers each hit (research §12.2). */
+  readonly paragonWaitsToBeHit?: boolean;
   /** Paragon's combatant id (an enemy's combatant id is its `EnemyDef.id`), when there is a link. */
   readonly paragonId?: string;
   /** Trema's combatant id: the story block's `trema`, or whichever Trema block the shape fields. */
@@ -43,6 +50,10 @@ export interface TremaShape {
 
 /** Paragon's counter, as the data names it (`src/data/ffx2/enemies/paragon-abilities.ts`). */
 export const PARAGON_BIG_BANG = 'paragon-big-bang';
+
+/** The AI script that carries the Big Bang counter (`src/battle/ffx2/ai/paragon.ts`), and Oversoul Paragon's. */
+export const PARAGON_COUNTER_SCRIPT = 'paragon';
+export const PARAGON_OVERSOUL_SCRIPT = 'paragon-oversoul';
 
 /** Is this enemy a Paragon (any form)? By id or AI script, `paragon` or `paragon-<form>`. */
 export function isParagon(e: Pick<EnemyDef, 'id'> & { aiScriptId?: string }): boolean {
@@ -72,16 +83,31 @@ export function tremaShapeOf(first: Formation, find?: (id: string) => Formation 
   if (!paragonLink || !paragon) return { paragonLink: false, paragonBigBang: false, tremaId };
   return {
     paragonLink: true,
-    paragonBigBang: Boolean(paragon.abilityIds?.includes(PARAGON_BIG_BANG)),
+    paragonBigBang:
+      (paragon.aiScriptId ?? PARAGON_COUNTER_SCRIPT) === PARAGON_COUNTER_SCRIPT &&
+      Boolean(paragon.abilityIds?.includes(PARAGON_BIG_BANG)),
+    paragonWaitsToBeHit: paragon.aiScriptId === PARAGON_OVERSOUL_SCRIPT,
     paragonId: paragon.id,
     tremaId,
   };
 }
 
-/** The shipped picks, TR1 a with the normal Paragon (TR7): what the chapter data carries today. */
+/** TR1 a with the normal Paragon (TR7 a, the Big Bang counter): built, not the shipped pick. */
 export const TREMA_SHAPE_PARAGON_LINK: TremaShape = {
   paragonLink: true,
   paragonBigBang: true,
+  paragonWaitsToBeHit: false,
+  paragonId: 'paragon',
+  tremaId: TREMA_ID,
+};
+/**
+ * **The shipped shape** (Bailey, 2026-09-25, "Trema: 1 and 3 at 3 s"): TR1 a with Oversoul Paragon
+ * (option 1): a Paragon link, no Big Bang counter, a Paragon that waits to be hit.
+ */
+export const TREMA_SHAPE_OVERSOUL_LINK: TremaShape = {
+  paragonLink: true,
+  paragonBigBang: false,
+  paragonWaitsToBeHit: true,
   paragonId: 'paragon',
   tremaId: TREMA_ID,
 };

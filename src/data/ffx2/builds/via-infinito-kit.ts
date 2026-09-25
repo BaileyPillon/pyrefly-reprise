@@ -1,10 +1,10 @@
 /**
- * Chapter XIII **kit options**: the sourced clear's equipment, built as data and **switched OFF**.
+ * Chapter XIII **kit options**: the sourced clear's equipment, built as data.
  *
- * **Game case: FFX-2 only** [AGENTS.md rule 14]. Bailey picked **TR11 a** (only the kit the engine
- * modelled, `./via-infinito.ts`); these rows go beyond it, so they need Bailey's word (rule 10) and
- * the chapter ships `TREMA_KIT_OPTION = 'tr11-a'` (`../../chapter-ffx2-trema.ts`). They exist so
- * the question can be asked with measured numbers (`docs/plans/trema-bench.md`, "Kit options").
+ * **Game case: FFX-2 only** [AGENTS.md rule 14]. Bailey first picked **TR11 a** (only the kit the
+ * engine modelled, `./via-infinito.ts`); on 2026-09-25 he took the options sheet's "Trema: 1 and 3 at
+ * 3 s", so the chapter ships `TREMA_KIT_OPTION = 'sourced-kit'` (`../../chapter-ffx2-trema.ts`). The
+ * other rows stay built and OFF (`docs/plans/trema-bench.md`, "Kit options").
  * TR10's line-up is kept exactly (except by `'nightmare-kit'`): Yuna and Paine Dark Knights, Rikku Alchemist, Lv 99.
  *
  * **`'sourced-kit'`** is Split_Infinity's own clear (GameFAQs FAQ 26832, G0648 / G0649; method

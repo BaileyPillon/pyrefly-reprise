@@ -1,5 +1,5 @@
 /**
- * **Oversoul Paragon**, Chapter XIII link 1, **option 1 (TR7 b), OFF**. **FFX-2 only** [AGENTS.md
+ * **Oversoul Paragon**, Chapter XIII link 1, **option 1 (TR7 b), shipped 2026-09-25**. **FFX-2 only** [AGENTS.md
  * rule 14]. Research `research/ffx2-trema.md` §12.2, SinirothX's dump (single source), its
  * behaviour verified by 3 sources (waits until hit; copies spells back; physicals often miss):
  *

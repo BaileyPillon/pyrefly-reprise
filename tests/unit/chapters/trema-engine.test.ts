@@ -12,6 +12,7 @@ import { applyStatus } from '../../../src/battle/ffx2/statuses.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { viaInfinitoBuild } from '../../../src/data/ffx2/builds/via-infinito.ts';
 import { CLOISTER_PARAGON, CLOISTER_TREMA, cloisterTremaGroup } from '../../../src/data/ffx2/enemies/trema.ts';
+import { CLOISTER_PARAGON_OVERSOUL } from '../../../src/data/ffx2/enemies/trema-options.ts';
 import { GENESIS_STRIPS } from '../../../src/data/ffx2/enemies/paragon-abilities.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { checkpointAt, resumeSetup } from '../../../src/app/screens/BattleChainCheckpoint.ts';
@@ -286,7 +287,8 @@ describe('registration (unlisted, TR18)', () => {
   it('getChapter finds Chapter XIII; chapter select does not list it', () => {
     const ch = getChapter('ffx2-trema');
     expect(ch).toMatchObject({ game: 'ffx2', number: 13, title: 'Trema', location: 'Via Infinito — Cloister 100' });
-    expect(ch?.enemyGroupRef.id).toBe(CLOISTER_PARAGON);
+    // Bailey's pick (2026-09-25, "Trema: 1 and 3 at 3 s"): Oversoul Paragon is link 1.
+    expect(ch?.enemyGroupRef.id).toBe(CLOISTER_PARAGON_OVERSOUL);
     expect(ch?.enemyGroupRef.nextGroupId).toBe(CLOISTER_TREMA);
     expect(CHAPTER_IDS).not.toContain('ffx2-trema');
   });

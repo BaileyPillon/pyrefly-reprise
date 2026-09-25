@@ -4,7 +4,7 @@
  * **Game case: FFX-2 only** [AGENTS.md rule 14].
  *
  * `./chapter-ffx2-trema.ts` owns the fight (the formations, the party, the kit switch) and is
- * edited only by the engine track, which builds Bailey's options there as OFF switches
+ * edited only by the engine track, which builds Bailey's options there as switches (shipped: 1 and 3 at 3 s)
  * (`docs/plans/trema-options-2026-09-25.md`). This module adds what a player sees and hears,
  * built to Bailey's picks on `docs/plans/chapter-trema-review.md`, and **reads the fight's shape
  * from that record** (`./trema-shape.ts`) instead of assuming it:

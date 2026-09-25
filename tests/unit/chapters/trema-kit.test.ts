@@ -1,7 +1,8 @@
 /**
  * Chapter XIII — the sourced kit the method check found missing (E5): the status half of the
  * accessories (Auto-Wall, Ribbon), Soul Spring, Three / Twin Stars, Stamina Tonic, the Valiant
- * Lustre grid, and the kit options that wear them, which ship **OFF** (TR11 a stays the build).
+ * Lustre grid, and the kit options that wear them. **Split_Infinity's kit (`'sourced-kit'`) ships**
+ * (Bailey, 2026-09-25, "Trema: 1 and 3 at 3 s"); TR11 a and the other kits stay built and OFF.
  * Each through the real engine or resolver [hard rule 3]. **FFX-2 only** [AGENTS.md rule 14].
  */
 
@@ -44,10 +45,10 @@ function ctx(units: Ffx2Unit[], seed = 1) {
   };
 }
 
-describe('the kit ships OFF: TR11 a is the chapter\'s build', () => {
-  it('the chapter builds with TR11 a, and every option but NightMare185\'s keeps TR10\'s line-up', () => {
-    expect(TREMA_KIT_OPTION).toBe('tr11-a');
-    expect(FFX2_TREMA.buildRef).toBe(viaInfinitoBuild);
+describe('the sourced kit ships: Split_Infinity\'s clear is the chapter\'s build', () => {
+  it('the chapter builds with the sourced kit, and every option but NightMare185\'s keeps TR10\'s line-up', () => {
+    expect(TREMA_KIT_OPTION).toBe('sourced-kit');
+    expect(FFX2_TREMA.buildRef).toBe(viaInfinitoSourcedKitBuild);
     expect(tremaBuildFor('tr11-a')).toBe(viaInfinitoBuild);
     // 'nightmare-kit' (option 4) is three Dark Knights by its source: `trema-options.test.ts`.
     for (const option of TREMA_KIT_OPTIONS.filter((o) => o !== 'nightmare-kit')) {

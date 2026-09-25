@@ -8,23 +8,30 @@
  * ## The line
  *
  * It is the **intended** line of the chapter's benches (`tests/unit/helpers/tremaLines.ts`
- * `LINES.intended`, `docs/plans/trema-bench.md`), written as a tactic. It picks only among the
- * rows the engine offers, so a row a kit does not carry is simply never picked: that is how the
- * kit options (`src/data/ffx2/builds/via-infinito-kit.ts`, OFF) stay behind their own switch.
+ * `LINES.kitIntended` for the shipped kit, `LINES.intended` for TR11 a; `docs/plans/trema-bench.md`),
+ * written as a tactic. It picks only among the rows the engine offers, so a row a kit does not carry
+ * is simply never picked: that is how each kit option (`src/data/ffx2/builds/via-infinito-kit.ts`)
+ * keeps its own steps. The chapter ships Split_Infinity's kit (`'sourced-kit'`) against Oversoul
+ * Paragon (Bailey, 2026-09-25, "Trema: 1 and 3 at 3 s").
  *
  * 1. **Revive** a downed girl: Rikku from her stash or a Phoenix Down; a Dark Knight revives
  *    Rikku first (she is the healer).
  * 2. **Drain his MP first** on Trema (`[verified: 4 sources]`): a Soul Spring when the kit carries
  *    one, else Rikku changes to Gunner for Target MP until he is below Demi's 10 MP, then back.
  *    TR4 b (`[single source]` + `[conflict]` T-5): the guide says so.
- * 3. **Megalixir** when two girls are under 45 %; a Mega-Potion under 80 % when the kit has them.
- * 4. **Curtains**: Shell against Paragon's Genesis (magic); Protect against Trema's physical
+ * 3. **The kit's openers** (only rows that kit carries): a Stamina Tonic while a girl's max HP is not
+ *    yet doubled; on Trema, Three Stars while a Dark Knight lacks Spellspring (research §12.3).
+ * 4. **Megalixir** when two girls are under 45 % (under 60 % with the kit's 99 Mega-Potions to back
+ *    it); a Mega-Potion when two are under 80 %.
+ * 5. **Curtains**: Shell against Paragon's Genesis (magic); Protect against Trema's physical
  *    chain, and Shell ahead of each Meteor line (TR3 a: magical, `[conflict]` T-3).
- * 5. **Remedy** Confuse, Itchy and Stop.
- * 6. **An X-Potion** for one girl under 60 %.
- * 7. **The Dark Knights**: Darkness on Trema; a plain Attack on Paragon, **never Darkness** (an
- *    attack Protect cannot reduce draws Big Bang, research §4.1). The Attack is also right for a
- *    Paragon with no counter, so this line holds for every option.
+ * 6. **Remedy** Confuse, Itchy and Stop.
+ * 7. **An X-Potion** for one girl under 60 %.
+ * 8. **The Dark Knights**: Darkness on Trema; a plain Attack on Paragon, **never Darkness** (an
+ *    attack Protect cannot reduce draws Big Bang, research §4.1). The Attack is also right for
+ *    Oversoul Paragon, which has no counter and answers a plain Attack with its own, which often
+ *    misses (§12.2), so this line holds for every option. An Itchy knight changes dressphere out
+ *    of it when the menu offers that (NightMare185, §12.3), else holds for Rikku's Remedy.
  *
  * Returns `null` (the generic ladder) when neither Paragon nor Trema is on the field.
  */
@@ -84,6 +91,8 @@ function rikkuTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyC
       use(commands, 'item', 'x2-phoenix-down', [down.id]);
     if (back) return back;
   }
+  // The kit (Split_Infinity's, research §12.3) carries 99 Mega-Potions, so it heals the party earlier.
+  const kit = use(commands, 'item', 'x2-mega-potion', []) !== null;
   if (onTrema && foe.mp >= DRAIN_BELOW) {
     const soul = use(commands, 'item', 'x2-soul-spring', [foe.id]);
     if (soul) return soul;
@@ -98,8 +107,16 @@ function rikkuTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyC
     const home = spherechangeTo(commands, 'alchemist');
     if (home) return home;
   }
+  if (living.some((u) => !has(u, 'max-hp-x2'))) {
+    const tonic = use(commands, 'item', 'x2-stamina-tonic', []);
+    if (tonic) return tonic;
+  }
+  if (onTrema && living.some((u) => u.id !== 'rikku' && !has(u, 'spellspring'))) {
+    const stars = use(commands, 'item', 'x2-three-stars', []);
+    if (stars) return stars;
+  }
   const below = (f: number): number => living.filter((u) => hpFraction(u) < f).length;
-  if (below(0.45) >= 2) {
+  if (below(kit ? 0.6 : 0.45) >= 2) {
     const all = use(commands, 'item', 'x2-megalixir', []);
     if (all) return all;
   }
@@ -139,10 +156,16 @@ function rikkuTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyC
 
 function knightTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyCombatant[], foe: AnyCombatant): Command | null {
   if (has(self, 'itchy')) {
-    // Itchy leaves little to press (§2.8): hold for Rikku's Remedy when a Defend row is offered;
-    // with only a spherechange left, the generic ladder takes the turn (`null`).
+    // Itchy leaves little to press (§2.8): change dressphere out of it (NightMare185, §12.3) when a
+    // change is offered, else hold for Rikku's Remedy; with neither, the generic ladder (`null`).
+    const out = commands.find((c) => c.enabled && c.command.kind === 'spherechange');
+    if (out) return { ...out.command } as Command;
     const hold = commands.find((c) => c.enabled && c.command.kind === 'defend');
     return hold ? ({ ...hold.command, targets: [] } as Command) : null;
+  }
+  if (sphereOf(self) !== undefined && sphereOf(self) !== 'dark-knight') {
+    const home = spherechangeTo(commands, 'dark-knight');
+    if (home) return home;
   }
   const rikku = party.find((u) => u.id === 'rikku');
   if (rikku && !rikku.alive) {

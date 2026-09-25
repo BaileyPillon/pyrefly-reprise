@@ -1,12 +1,12 @@
 /**
- * Chapter XIII's **boss-side options, built and switched OFF**: option 1 (TR7 b, Oversoul Paragon)
- * and option 2 (TR1 b, Trema alone, the Fiend Arena block). `docs/plans/trema-options-2026-09-25.md`.
+ * Chapter XIII's **boss-side options**: option 1 (TR7 b, Oversoul Paragon), **shipped** since
+ * 2026-09-25 (Bailey: "Trema: 1 and 3 at 3 s"), and option 2 (TR1 b, Trema alone, the Fiend Arena
+ * block), built and OFF. `docs/plans/trema-options-2026-09-25.md`.
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. Nothing here changes a boss number: each is
  * another *sourced* encounter, reached only through the switches in `src/data/chapter-ffx2-trema.ts`
- * (`TREMA_PARAGON_FORM`, `TREMA_CHAPTER_SHAPE`), which ship `'normal'` and `'paragon-then-trema'`.
- * The formations are registered (`./index.ts`) so the chain and the debug API can reach them by id;
- * registering them moves nothing, because no chapter points at them.
+ * (`TREMA_PARAGON_FORM`, `TREMA_CHAPTER_SHAPE`), which ship `'oversoul'` and `'paragon-then-trema'`.
+ * The formations are registered (`./index.ts`) so the chain and the debug API can reach them by id.
  */
 
 import type { AbilityDef, EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
