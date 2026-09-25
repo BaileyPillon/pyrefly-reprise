@@ -161,6 +161,15 @@ export interface ChapterGuide {
   /** Phase/form notes. First match wins. */
   phases: readonly GuidePhase[];
   /**
+   * The headline while one link of a chained chapter stands, keyed by that
+   * link's boss id; {@link title} otherwise. Optional and additive (FOC16-06):
+   * Chapter XIII printed "Trema" over the whole Paragon fight. The first id in
+   * {@link bossIds} order that is standing (on the enemy side, not removed,
+   * HP above 0) picks the headline (`src/engine/tactics/lookup.ts`,
+   * `guideTitle`). Both games may use it; only Chapter XIII does today.
+   */
+  linkTitles?: Readonly<Record<CombatantId, string>>;
+  /**
    * **FFX-2 only.** A RULES bullet shown *first*, and only while the player's X-2 clock is
    * this one ({@link GuideClock}): a habit that is true of one clock and false of another
    * (decision sheet 2026-09-25 item 3, the Wait split's "open a list at once"). Kept out of

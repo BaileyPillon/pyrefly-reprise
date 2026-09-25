@@ -46,11 +46,11 @@ import type {
   Decision,
   EnemyFields,
 } from '../../battle/common/types.ts';
-import type { ChapterGuide, GuideHint, GuidePhase, GuideRule } from '../../data/guides/types.ts';
-import { GUIDES } from '../../data/guides/index.ts';
+import type { ChapterGuide, GuideClock, GuideHint, GuidePhase, GuideRule } from '../../data/guides/types.ts';
+import { GUIDES, rulesOnClock } from '../../data/guides/index.ts';
 import { intendedStrategy } from '../BattlePresenterStrategies.ts';
 import { targetLabel } from './targetLabel.ts';
-import { chapterOnBoard } from './lookup.ts';
+import { chapterOnBoard, guideTitle } from './lookup.ts';
 
 /** Thrown when a tactic asks the guide's read-only engine view to do something. */
 export class GuideEngineMisuseError extends Error {
@@ -311,24 +311,24 @@ export function recommendedCommand(
 }
 
 /**
- * Everything the panel shows, or `null` when this encounter has no written
- * guide (which is not an error — a chapter without a `src/data/guides/` file
- * simply has no panel).
+ * Everything the panel shows, or `null` when this encounter has no written guide (not an error:
+ * no panel). `clock` is the player's X-2 clock, the engine default unless told (`rulesOnClock`).
  */
 export function buildGuideView(
   state: Readonly<BattleState>,
   decision: GuideDecision | null,
+  clock: GuideClock = 'wait',
 ): GuideView | null {
   const guide = guideForState(state);
   if (!guide) return null;
 
   const view: GuideView = {
     chapterId: guide.id,
-    title: guide.title,
+    title: guideTitle(state, guide),
     next: null,
     watch: [],
     phase: null,
-    rules: guide.rules,
+    rules: rulesOnClock(guide, clock),
   };
 
   // --- WATCH -------------------------------------------------------------

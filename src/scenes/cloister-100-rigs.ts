@@ -1,4 +1,5 @@
 import type { CameraRig } from '../engine/BattleCamera.ts';
+import { PHONE_BATTLE_QUERY } from '../ui/common/phoneBattle.ts';
 import type { SceneRigName } from './types.ts';
 import { holdWidth } from './cavern-stolen-fayth-rigs.ts';
 
@@ -18,9 +19,18 @@ import { holdWidth } from './cavern-stolen-fayth-rigs.ts';
 //   HUD at 1280x720, 1600x900 and 2000x1012.
 // - **Between square and 16:9**: the wide rigs with the fov opened to 16:9's
 //   width (`holdWidth`).
-// - **Portrait (a phone)**: {@link CLOISTER_PHONE_RIGS}, pulled back and
-//   centred so the boss and the party stand whole in the band the phone HUD
-//   leaves open.
+// - **Portrait with a full-window canvas** (a portrait window the phone
+//   battle HUD does not take, 600 px wide and up): {@link CLOISTER_PHONE_RIGS},
+//   pulled back and centred so the boss and the party stand whole in the band
+//   the old phone HUD left open.
+// - **An upright phone** (`PHONE_BATTLE_QUERY`): the phone battle HUD, option B
+//   (Bailey, 2026-09-25), draws the canvas as the **16:9 render** at the
+//   field's height and slides it (`phone-battle.css`, `phoneFraming.ts`), so
+//   the render is 16:9 whatever the window is, and it takes the wide rigs,
+//   as every other FFX-2 chapter's scene does ({@link cloisterRenderAspect}).
+//   FOC16-05 (release 16 focused review): the portrait rigs, drawn into that
+//   16:9 canvas, left the fighters about half the height the approved frame
+//   B-ffx2-menu shows.
 //
 // `trema-link` ({@link CLOISTER_LINK_RIG}) is the link seam's shot: the
 // story's `camera('trema-link')` cuts here, and the scene starts the kill link
@@ -84,4 +94,21 @@ export function cloisterRigsFor(aspect: number): Record<SceneRigName, CameraRig>
   const out: Record<string, CameraRig> = {};
   for (const [name, rig] of Object.entries(base)) out[name] = holdWidth(rig, aspect, design);
   return out as Record<SceneRigName, CameraRig> & Record<string, CameraRig>;
+}
+
+/**
+ * The aspect of the render the scene is built for: 16:9 under the upright-phone
+ * battle HUD (its canvas is the 16:9 render at the field's height, never the
+ * window's shape), else the window's; 16:9 with no window (a unit test, a
+ * worker). Read once, when the scene is built, like the Cavern's
+ * `viewportAspect`. FFX-2 only (Chapter XIII's scene); FOC16-05.
+ */
+export function cloisterRenderAspect(
+  win: Pick<Window, 'innerWidth' | 'innerHeight'> & { matchMedia?: Window['matchMedia'] } | undefined = typeof window === 'undefined' ? undefined : window,
+): number {
+  if (!win) return CLOISTER_DESIGN_ASPECT;
+  if (win.matchMedia?.(PHONE_BATTLE_QUERY).matches === true) return CLOISTER_DESIGN_ASPECT;
+  const w = win.innerWidth;
+  const h = win.innerHeight;
+  return w > 0 && h > 0 ? w / h : CLOISTER_DESIGN_ASPECT;
 }

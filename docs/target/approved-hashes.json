@@ -594,30 +594,6 @@
     "approved": "2026-09-24"
    }
   },
-  "chapter:yojimbo:2026-09-24": {
-   "words": "All your recommendations",
-   "note": "Bailey, 2026-09-24, answering the driver's Yojimbo chapter recommendations (docs/plans/chapter-yojimbo-review.md B1-B10, docs/concepts/chapters/yojimbo/README.md O-1..O-5). Judge PASS for all four subjects: docs/concepts/chapters/yojimbo/production/JUDGE.md (Yojimbo 7.9, Daigoro 7.3, Ginnem 7.5, chamber 8.0). FFX only, Chapter IX. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo/.",
-   "public/art/characters/yojimbo-cavern/idle.png": {
-    "sha256": "bc8f5c1ecc8fb0a0cfa0c5a20e6ec12f3f3de71678c91ce44584050525866c1f",
-    "mtime": "2026-09-24T16:42:29.000Z",
-    "approved": "2026-09-24"
-   },
-   "public/art/characters/daigoro/idle.png": {
-    "sha256": "b9d952d377c6a2d015edc919e91f4d9176e0e868324a19a1cefdc6805b6e49c8",
-    "mtime": "2026-09-24T16:42:30.000Z",
-    "approved": "2026-09-24"
-   },
-   "public/art/characters/ginnem/idle.png": {
-    "sha256": "061d0021abc18af7263fa64923b2f6070f22de7ec0d61c673aa413f511971bee",
-    "mtime": "2026-09-24T16:42:30.000Z",
-    "approved": "2026-09-24"
-   },
-   "public/art/backdrops/cavern-stolen-fayth.png": {
-    "sha256": "cfdfe552d083bb05828a9d9fae8ea5400ae3cb2e106845b60418b8cda81b93a3",
-    "mtime": "2026-09-24T16:48:33.000Z",
-    "approved": "2026-09-24"
-   }
-  },
   "chapter:yojimbo-casts:2026-09-24": {
    "words": "I'll go with your recommendations for all",
    "note": "Bailey's paintings pick A (docs/target/decisions.json), answered for r1 pixel repairs: Yojimbo's drawn blade and Daigoro's 30-degree bite, each judged 7.0 PASS at the bar in the re-judge appended to docs/concepts/chapters/yojimbo/casts/JUDGE.md (commit edec1037). FFX only, Chapter IX. Installed from D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo-casts/<subject>/cast-r1.png (never cast-r1-option-longer.png, which needs a separate yes). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/. UPDATE 2026-09-24 ~20:00 EDT: Bailey, verbatim, answering (1) \"Yes install please\" (2) \"I'll go with your recommendation\" — the longer blade replaces the drawn-blade r1 for yojimbo-cavern/cast.png, judged LONGER-BLADE: PASS (docs/concepts/chapters/yojimbo/casts/JUDGE.md, 'The longer blade: 1:1 check and in-battle frame'; frame docs/concepts/chapters/yojimbo/casts/longer-blade-in-battle.jpg). Installed from D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo-casts/yojimbo-cavern/cast-r1-option-longer.png. The superseded r1 hash (b67565f47e90fa58a53096e8156af2c695c02ae30e3e874937e8ec1509a9ac3f, approved 2026-09-24) is kept, not deleted, at D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/replaced-by-longer/. Daigoro's cast.png (r1, 30-degree bite) is untouched by this update.",
@@ -630,91 +606,6 @@
      "approved": "2026-09-24",
      "backup": "D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/replaced-by-longer/cast.png"
     }
-   },
-   "public/art/characters/daigoro/cast.png": {
-    "sha256": "97a32c4f2d6c39d7bbb569b2cdeb74f7514a0799b845b90a9ada7c04dda5ba60",
-    "mtime": "2026-09-24T19:05:18.963Z",
-    "approved": "2026-09-24"
-   }
-  },
-  "chapter:natus:2026-09-24": {
-   "words": "I'll go with your recommendations for all",
-   "note": "Bailey, 2026-09-24 ~14:40 EDT, answering every Chapter X recommendation (O-1 A, O-2 A + KO-and-revive strip, O-3 C night with the city lit, O-5 A; Review corrections applied). Judge: docs/concepts/chapters/natus/production/JUDGE.md (10 subjects, bar 7; 5 Natus subjects PASS). FFX only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-chapter-natus/.",
-   "public/art/characters/seymour-natus/idle.png": {
-    "sha256": "c53d22c1cea6ad918570f033d8236ef29e574f32be7127bb6856e53b6c6ddcc4",
-    "mtime": "2026-09-24T18:49:37.328Z"
-   },
-   "public/art/characters/seymour-natus-ring/idle.png": {
-    "sha256": "bd6754303eb7c80abdbb96067786b44e7adefc73ed6e55490baa808890e6b87a",
-    "mtime": "2026-09-24T18:49:37.523Z"
-   },
-   "public/art/characters/mortibody/idle.png": {
-    "sha256": "20b012ade63e04802114b28e6ef025ecb1b28fbe74aab96ed302cc60e9b88416",
-    "mtime": "2026-09-24T18:49:37.660Z"
-   },
-   "public/art/backdrops/bevelle-highbridge.png": {
-    "sha256": "3c8aebf46c531b644cf59dd868742fa3548871a0f844adea6dd64e555b411a4e",
-    "mtime": "2026-09-24T18:49:40.290Z"
-   },
-   "public/art/portraits/seymour-natus.png": {
-    "sha256": "0980d552d487424b70900051c8e0fedb62bed15b3dc859fb9bc5e5b20fc36534",
-    "mtime": "2026-09-24T18:49:41.077Z"
-   }
-  },
-  "chapter:fallen-aeons:2026-09-24": {
-   "words": "I'll go with your recommendations for all",
-   "note": "Bailey, 2026-09-24 ~14:40 EDT, answering every Chapter XI recommendation (O-1 A armoured Sisters, O-2 B Ch.IV violet, O-3 A + B between-links shot, FA11 Anima approved on his word; Review corrections applied). Judge: docs/concepts/chapters/fallen-aeons/production/JUDGE.md (bar 7; sandy/x2-shiva/x2-anima/both road plates PASS, cindy and mindy cast paintings FAIL and excluded pending repaint). FFX-2 only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-chapter-fallen-aeons/.",
-   "public/art/characters/sandy/idle.png": {
-    "sha256": "80d6990c9ffd70392ab85db74846d8e65f5258653a47af490668e8657e43c037",
-    "mtime": "2026-09-24T19:06:26.968Z"
-   },
-   "public/art/characters/sandy/cast.png": {
-    "sha256": "85a695d47166a6c2f3d54d18d817cd7f541cd66ac1877eda9b2e8291397726fb",
-    "mtime": "2026-09-24T19:06:26.997Z"
-   },
-   "public/art/characters/x2-shiva/idle.png": {
-    "sha256": "5a48ce74aee2eae908362749551a422c36e91c181002a6a122c2efb56318a219",
-    "mtime": "2026-09-24T19:06:27.107Z"
-   },
-   "public/art/characters/x2-shiva/attack.png": {
-    "sha256": "85f90e2ab0f079d43650e465f955b61e66eef56ba932d2f0707fddad3c56547b",
-    "mtime": "2026-09-24T19:06:27.135Z"
-   },
-   "public/art/characters/x2-shiva/overdrive.png": {
-    "sha256": "2c12d3de1dd9b85528185b72350d6c40ac6fd38a82f7598ca0163ea850a56438",
-    "mtime": "2026-09-24T19:06:27.168Z"
-   },
-   "public/art/characters/x2-anima/idle.png": {
-    "sha256": "60d4e46a82cd9dc97d3c13e8a1662b7bcdecde522cae40be8dd403bb64e5082a",
-    "mtime": "2026-09-24T19:06:27.193Z"
-   },
-   "public/art/characters/x2-anima/attack.png": {
-    "sha256": "b84e67f3eca1bd61041d2b5ab3a6742a502211f40ccb1ea012f6efac22571d77",
-    "mtime": "2026-09-24T19:06:27.226Z"
-   },
-   "public/art/characters/x2-anima/overdrive.png": {
-    "sha256": "0ce67e776023eb89fcb16996519584cfc80c8d86e375cfd0896b2e2ac182f608",
-    "mtime": "2026-09-24T19:06:27.264Z"
-   },
-   "public/art/backdrops/road-to-the-farplane.png": {
-    "sha256": "9c254d5eef92f5b59fe51bf0f5c64bdf73b2b2db6a7917551a9a7f0e57346a16",
-    "mtime": "2026-09-24T19:06:27.306Z"
-   },
-   "public/art/backdrops/road-to-the-farplane-links.png": {
-    "sha256": "467e3d459b7b11d6860cfe5c821820ce52161cd6ce13320707cd158097a5746a",
-    "mtime": "2026-09-24T19:06:27.310Z"
-   }
-  },
-  "chapter:fallen-aeons-casts:2026-09-24": {
-   "words": "I'll go with your recommendations for all",
-   "note": "Bailey, 2026-09-24 ~14:40 EDT, picking FA13 (one idle and one cast per Magus Sister) as part of every Chapter XI recommendation. The chapter:fallen-aeons:2026-09-24 set locked sandy/x2-shiva/x2-anima/both road plates the same day and excluded cindy's and mindy's cast paintings, FAIL in the judge's first pass. Both were repaired (r1, commit 82df5a8f; r1b margin fix, commit ac36ef64) and re-judged PASS: cindy 7.4, mindy 7.1 (docs/concepts/chapters/fallen-aeons/production/JUDGE.md, 'Re-judge: Cindy and Mindy cast r1' section). Cindy's file was padded 2 px on the left after that judgement (r1b) so the cut-out margin measures 16 px; every judged pixel is kept at a +2 px offset, asserted unchanged. FFX-2 only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-fallen-aeons-casts/.",
-   "public/art/characters/cindy/cast.png": {
-    "sha256": "f6304c7ff362379b5da45fbb432170ddcf4acbf606636daab2ae19d98a0fa271",
-    "mtime": "2026-09-24T22:16:43.542Z"
-   },
-   "public/art/characters/mindy/cast.png": {
-    "sha256": "fe2204472e2958e7ef2fc2134df8e957a0d5567c83b368d9df386fd7f77f1339",
-    "mtime": "2026-09-24T21:01:28.462Z"
    }
   },
   "chapter:yojimbo-plate:2026-09-24": {
@@ -723,14 +614,6 @@
    "public/art/pause/ch9-yojimbo.png": {
     "sha256": "6cd24bfda4633285f933278cfd9adda8b99e54895a454d3724e663a762fd3423",
     "mtime": "2026-09-24T19:48:20.732Z"
-   }
-  },
-  "chapter:natus-cast:2026-09-24": {
-   "words": "I'll go with all your recommendations",
-   "note": "Bailey, 2026-09-24 ~19:20 EDT, answering the driver's recommendation to give Natus one hero cast painting (D-034 / D-045 precedent). Judge: docs/concepts/chapters/natus/production/JUDGE.md, 'Addendum 2026-09-24 (evening)' section, independent 1:1 judge PASS 7.4 (worst: the right-wrist neck and band, then the modest game-size read). FFX only, Chapter X. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-natus-cast/.",
-   "public/art/characters/seymour-natus/cast.png": {
-    "sha256": "975fd8fd3cb1e4640234999a25a8889d7e72ec446a311715469c5023a584a419",
-    "mtime": "2026-09-24T23:29:40.642Z"
    }
   },
   "chapter:yojimbo-sakura:2026-09-25": {
@@ -775,149 +658,12 @@
     "approved": "2026-09-25"
    }
   },
-  "chapter:trema:2026-09-25": {
-   "words": "I'll go with all your recommendations",
-   "note": "Bailey, 2026-09-25 ~01:40 EDT, answering every Chapter XIII recommendation (O-1 A priest with the review's torn robe, O-2 A gold armoured beast, O-2b link staged, O-3 B Cloister 100 repaint; Review corrections applied; docs/concepts/chapters/trema/README.md, docs/plans/chapter-trema-review.md). Installed in 6896b272 (docs/concepts/chapters/trema/INSTALLED.md). Judge: docs/concepts/chapters/trema/production/JUDGE.md, independent 1:1 judge, bar 7, all five PASS (Trema idle 7.7, Trema cast 7.1, Paragon idle 7.7, Paragon cast 7.1, plate 7.6; worst: Trema cast shoulder-seam artefacts, Paragon cast light edge fringe and rigid pitch, the plate's banners carry no Yu Yevon likeness, which stays Bailey's call). The link (O-2b) is staging, not a painting, and is not in this set. FFX-2 only, Chapter XIII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-trema/.",
-   "public/art/characters/trema/idle.png": {
-    "sha256": "77b4cba2eb4b99fb803f678ac526d0685efd31704136f0bdc8fe7de0300f0903",
-    "mtime": "2026-09-25T04:16:55.145Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/trema/cast.png": {
-    "sha256": "744cc1501f8e98be8f46974d162b4d0a1d48e957864b716161be87c50493e506",
-    "mtime": "2026-09-25T04:16:55.185Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/paragon/idle.png": {
-    "sha256": "0e3972b558c07d71c70eb60f4d71752ea9b91601e81293e39673146f65e569b9",
-    "mtime": "2026-09-25T04:16:55.232Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/paragon/cast.png": {
-    "sha256": "f2f2300b6f8f30e7a8021457de08cd625f7f68996b48dc99aa2f1e39d5312a7d",
-    "mtime": "2026-09-25T04:16:55.263Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/backdrops/via-infinito.png": {
-    "sha256": "82eedcd375055e10fa8d537b2b1f75b4d1d68575cdb3adffe319c9e7548b47fa",
-    "mtime": "2026-09-25T04:16:55.295Z",
-    "approved": "2026-09-25"
-   }
-  },
   "chapter:gippal:2026-09-25": {
    "words": "I'll go with all your recommendations",
    "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/gippal/README.md (O-1 B translucent shade, the same treatment for Baralai and Nooj, O-3 A cold-blue Den). Locked after the independent 1:1 judge docs/concepts/chapters/gippal/production/JUDGE.md: gippal-shade idle 7.6 and cast 7.2, baralai-shade idle 7.5, den-of-woe 7.6 (byte-identical to the picked O-3 A plate). NOT in this set (judged FAIL, still CANDIDATE): baralai-shade/cast 5.7, nooj-shade/idle 6.9, nooj-shade/cast 6.8. FFX-2 only, Chapter XV (provisional). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-gippal/.",
-   "public/art/characters/gippal-shade/idle.png": {
-    "sha256": "dd3f7cffe7087b4cfc6da4dec25a182c6b4c2af128a6fdf063ac0c7c1868a901",
-    "mtime": "2026-09-25T04:26:00.234Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/gippal-shade/cast.png": {
-    "sha256": "b0c9a95ccf4718916199a6b420c37cb004f2aac2574c29238449e27cde3a2452",
-    "mtime": "2026-09-25T04:26:00.276Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/baralai-shade/idle.png": {
-    "sha256": "1b3270d74a12365cd01387af2ab9b3cde3e272a190cbefe6e99c34f0f05fbaa3",
-    "mtime": "2026-09-25T04:26:00.291Z",
-    "approved": "2026-09-25"
-   },
    "public/art/backdrops/den-of-woe.png": {
     "sha256": "96965cfad6dca7e12ce2004be2d643e07eea4c59b0beafd215d48b022e46c95e",
     "mtime": "2026-09-25T04:26:00.370Z",
-    "approved": "2026-09-25"
-   }
-  },
-  "chapter:omnis:2026-09-25": {
-   "words": "I'll go with all your recommendations",
-   "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/omnis/README.md and docs/plans/chapter-omnis-review.md (O-1 A new paint, O-2 B painted discs with the facing quarter lit, O-3 C deep violet, B17 c). Locked after the independent 1:1 judge docs/concepts/chapters/omnis/production/JUDGE.md: seymour-omnis idle 7.7 and cast 7.4, mortiphasm disc 7.8, mortiphasm-facing layer 8.3, garden-of-pain 7.5 (the picked C plate plus the sourced steps). The mortiphasm ring order (Fire, Water, Ice, Thunder clockwise) is still our estimate (plan B8): a re-ordered disc is a new file that needs its own lock, with this hash kept as superseded. NOT in this set (judged FAIL 5.9, still CANDIDATE): portraits/seymour-omnis.png (blown forehead oval, hair-crown hole, costume off the idle); B17 falls back to the approved seymour-macalania portrait. FFX only, Chapter XII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-omnis/.",
-   "public/art/characters/seymour-omnis/idle.png": {
-    "sha256": "91f67b3a27498c86195e1d352605623a78e350cbfa736c9077341d16767359f3",
-    "mtime": "2026-09-25T04:23:19.835Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/seymour-omnis/cast.png": {
-    "sha256": "98749aa066a456c0e3f3334238ccce2a3d73f2f6059206eae4b551b193225026",
-    "mtime": "2026-09-25T04:23:20.420Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/mortiphasm/idle.png": {
-    "sha256": "962416288387fdfdd998f52575af1a3e6c9c9de6755cc8758126b9afa0c08c0c",
-    "mtime": "2026-09-25T04:23:20.630Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/mortiphasm-facing/idle.png": {
-    "sha256": "0f5445a99dc8e30b301bfcb8e7032dcf09f3850a6479790b873d5f541df61be2",
-    "mtime": "2026-09-25T04:23:20.712Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/backdrops/garden-of-pain.png": {
-    "sha256": "d18315b7305976c13e2bf4141ff5e79cd7b7df724441874db4f639a3d65d5d93",
-    "mtime": "2026-09-25T04:23:24.255Z",
-    "approved": "2026-09-25"
-   }
-  },
-  "chapter:isaaru:2026-09-25": {
-   "words": "I'll go with all your recommendations",
-   "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/isaaru/README.md and docs/plans/chapter-isaaru-review.md (O-1 A with the knee-length coat and sea-green sash repairs, O-2 B, O-3 A, O-4 C his sea-green edge on the Ifrit/Valefor/Bahamut paintings, B19 KO = the dissolve). Locked after the independent 1:1 judge docs/concepts/chapters/isaaru/production/JUDGE.md: isaaru idle 7.3, isaaru portrait 7.8, via-purifico 7.6, grothia idle/attack/overdrive 8.0/7.6/7.3, pterya 7.3/7.8/7.6, spathi 7.4/7.7/7.6. Grothia, Pterya and Spathi are derived from the approved D-089 ifrit, valefor and bahamut paintings (read only); a change to those sources does not change these files. Known and disclosed: the knot is ornamental, not a bow; Pterya idle inherits Valefor idle's straight-cut wing tip; the plate has no low parapet. FFX only, Chapter XIV. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-isaaru/.",
-   "public/art/characters/isaaru/idle.png": {
-    "sha256": "c290bedc3f6fe743b9c778736aa2a50ef0ac28bd4030161dbcc69dea87e81945",
-    "mtime": "2026-09-25T04:15:22.815Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/portraits/isaaru.png": {
-    "sha256": "b5fbc12c65b404fa4f2260fc19d39f642a2d5b27a981bf3bb65b15e43e25a529",
-    "mtime": "2026-09-25T04:15:22.837Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/backdrops/via-purifico.png": {
-    "sha256": "60c446c9b2457d865dabab1412d1c3c695603beae77fe90eb9d7aba5082e7afa",
-    "mtime": "2026-09-25T04:15:22.861Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/grothia/idle.png": {
-    "sha256": "ca830982fa17180fd6d5cadae47cf33e2b11764f24df2693d08d1e1cf6f0b5dc",
-    "mtime": "2026-09-25T04:15:22.883Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/grothia/attack.png": {
-    "sha256": "e7b9b00b366d2f4520f70bedad1276de852583559c2791cc4806f208d9727df4",
-    "mtime": "2026-09-25T04:15:22.903Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/grothia/overdrive.png": {
-    "sha256": "780b689239b529bff2cf1b2680f2193a217246f225c7866c18f462436cda4f66",
-    "mtime": "2026-09-25T04:15:22.922Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/pterya/idle.png": {
-    "sha256": "448f7f2a4181da13fa7934069421c139ee7ce6a8aaac6f881c1bd8695a2a20fa",
-    "mtime": "2026-09-25T04:15:22.941Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/pterya/attack.png": {
-    "sha256": "d16c31ad216602845c1a010e87ffa84d1a8b781d8bd7975811d78275be7977ec",
-    "mtime": "2026-09-25T04:15:22.961Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/pterya/overdrive.png": {
-    "sha256": "0534de30bd83be8965cfec5a18f21100c75c3620515293ea51e327dfe28a8f20",
-    "mtime": "2026-09-25T04:15:22.981Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/spathi/idle.png": {
-    "sha256": "5a692112a0e30cf5a6027284f7b48adfa7b8555da1af8981a02a7d9736933059",
-    "mtime": "2026-09-25T04:15:23.002Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/spathi/attack.png": {
-    "sha256": "fb6c6538fd72b77685f4b162996aa6c0b2f04dc765ab4277fd04dd2c69d060f9",
-    "mtime": "2026-09-25T04:15:23.023Z",
-    "approved": "2026-09-25"
-   },
-   "public/art/characters/spathi/overdrive.png": {
-    "sha256": "99a10a220359f14e01e0075d04d5a61cb2344d877532839a410508db5cc2da60",
-    "mtime": "2026-09-25T04:15:23.042Z",
     "approved": "2026-09-25"
    }
   },
@@ -1007,6 +753,129 @@
    "public/art/portraits/seymour-omnis.png": {
     "sha256": "6d4fe6583771660e9251f170f15f893e72d6bba656eb63cdaa3b90716d3ef683",
     "mtime": "2026-09-25T14:36:54.194984Z",
+    "approved": "2026-09-25"
+   }
+  },
+  "bailey:2026-09-25-poses": {
+   "words": "I'll go with your recommendations for everything",
+   "note": "Bailey, 2026-09-25 ~12:45 EDT, verbatim \"I'll go with your recommendations for everything\", answering the driver's recommendation to install all 22 judge-passed FFX-2 battle poses (Trema line-up 7 of 15, docs/concepts/chapters/trema/poses/judge/JUDGE.md; the other dresspheres 15 of 62, docs/concepts/art5/JUDGE.md) and leave the failed slots empty on the standing painting with its flinch. Each PNG is the judge's pick byte for byte from D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/<id>/<slot>.png (sha256 equal to the candidate sidecar's), with its sidecar carrying the head-matched 'scale'; every slot was empty, nothing replaced. Game: FFX-2 only (dresspheres worn or reached in Chapters IV, V/XI, VI and XIII).",
+   "public/art/characters/paine-black-mage/attack.png": {
+    "sha256": "944f89be4420cafdfa3f92ecdce346c2f00e59cb68f5bb267fa866013550ea88",
+    "mtime": "2026-09-25T15:16:11.114Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-black-mage/cast.png": {
+    "sha256": "e8f7200bc0bb52a6c35dc42baa6428fe81a67da21f4d47fc4ce36664df0fc66f",
+    "mtime": "2026-09-25T15:16:11.117Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-black-mage/item.png": {
+    "sha256": "67c4610d621f011da158ee48591e91aa2303d9ab8b5d00f3c792153728ceb245",
+    "mtime": "2026-09-25T15:16:11.118Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-black-mage/victory.png": {
+    "sha256": "5f416dfbe414927c73c63098aa853c3d64fdd46a6d1d7d81631113a2efb575ed",
+    "mtime": "2026-09-25T15:16:11.134Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-dark-knight/attack.png": {
+    "sha256": "e2ab3af4cb132e93290f8b4d75eefd6293f86d7f26b65efd978796705967b5f4",
+    "mtime": "2026-09-25T15:16:11.011Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-dark-knight/item.png": {
+    "sha256": "6c0101b02347961eb1d35713f15ab8644907135aa03a0b519f5170ea303512a7",
+    "mtime": "2026-09-25T15:16:11.021Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paine-warrior/victory.png": {
+    "sha256": "cb8a42412bbfdc6f495f53e266e170b442ee0bd76cac59ea896a6def2c637d60",
+    "mtime": "2026-09-25T15:16:11.088Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-alchemist/cast.png": {
+    "sha256": "1bc78194168d9e45223bc4bc96f243b383e0545831a860bf6caca61c13b735bc",
+    "mtime": "2026-09-25T15:16:11.044Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-alchemist/hurt.png": {
+    "sha256": "cdbf864aaee28dd7c6f8add5f49445c477c9dccac0355f98ce95c765a1ec7cc8",
+    "mtime": "2026-09-25T15:16:11.047Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-alchemist/item.png": {
+    "sha256": "7ed0cd7b2616e2ede9dec2e4fd5fce5aa9e167da35dc9ae5def976e554063359",
+    "mtime": "2026-09-25T15:16:11.044Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-alchemist/victory.png": {
+    "sha256": "2c3ab09b02485b7593cfebe715a93659b2bb101e16fad3e7aba227b585f6a925",
+    "mtime": "2026-09-25T15:16:11.051Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-black-mage/attack.png": {
+    "sha256": "b896affad1f3fc4fe69951369270d8c173eac4c167fbe0ca0d2089509fc4194b",
+    "mtime": "2026-09-25T15:16:11.203Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-black-mage/cast.png": {
+    "sha256": "a1007f9b73912bacc4785ddf190a0502acea1f4880c946656d1eb9aa1b9deb91",
+    "mtime": "2026-09-25T15:16:11.204Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-gunner/cast.png": {
+    "sha256": "41953bc670d7b30b8837cac54f1d0143e9d7082cc58fdd16933e68662d1a0af7",
+    "mtime": "2026-09-25T15:16:11.230Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-gunner/victory.png": {
+    "sha256": "274ea60c1c847aed9494dd49cfad92c09272a2a3715652e6847377b7364b7914",
+    "mtime": "2026-09-25T15:16:11.252Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-thief/ko.png": {
+    "sha256": "8d0b011167985a0abc2b73061f510e976b8e9def1070b411d12cc37de09e2444",
+    "mtime": "2026-09-25T15:16:11.110Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/rikku-white-mage/attack.png": {
+    "sha256": "ed917bde87bb9ad59458397019210509a5d1bc45cb2606046fa75e5791d5cd08",
+    "mtime": "2026-09-25T15:16:11.255Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-black-mage/item.png": {
+    "sha256": "cbd4f7c0889026731fbf34be10e1008afab139f5caca00cb44175b9431d423b5",
+    "mtime": "2026-09-25T15:16:11.289Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-dark-knight/attack.png": {
+    "sha256": "c2e55c0526c788c4a29585651f8c04aac6563d539f2b60df8040f876762702da",
+    "mtime": "2026-09-25T15:16:10.993Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-gunner/item.png": {
+    "sha256": "993a53574c2623ebb79ae76031f954210ac66582e4ae0c4d0de5f9396b03b7a1",
+    "mtime": "2026-09-25T15:16:11.091Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-songstress/item.png": {
+    "sha256": "4114bd7edabd7c5504d9fb09d53108a71135e65349a2a1beda45d148d1f061be",
+    "mtime": "2026-09-25T15:16:11.298Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/yuna-warrior/victory.png": {
+    "sha256": "2b846f54059e4568a754ca15e199a493c95cc48539a0c272c3a2c4f14f48f05a",
+    "mtime": "2026-09-25T15:16:11.341Z",
+    "approved": "2026-09-25"
+   }
+  },
+  "bailey:2026-09-25-nooj-idle": {
+   "words": "I'll go with all your recommendations however",
+   "note": "Bailey, 2026-09-25 ~14:25 EDT, verbatim \"I'll go with all your recommendations however\". For Nooj the driver's recommendation was A: \"fix only the idle (the loops, the sleeve, the neck fringe), then judge it. If it passes, install it and let Nooj use the idle for his action moments too, with the usual motion, like several bosses already do.\" The idle was repaired (attempt 7, candidate a87ff561ef41, docs/concepts/chapters/gippal/nooj-options/idle-only/README.md) and passed an independent judge narrowly at 7.0 (docs/concepts/chapters/gippal/nooj-options/README.md, 'Independent judge (idle only)'). The installed file is that candidate through the unchanged O-1 B treatment (production/scripts/shade_b.py), byte-identical to the judged frame's look copy (869f9ae5b1d8). The candidate cast (a07ec9e35852) was removed from the served slot, so Nooj's action moments fall back to this idle. Replaced: idle 674058d32184 and cast a07ec9e35852 (CANDIDATES, never locked), kept in D:/Tools/pyrefly-art-backup/candidates/2026-09-25-nooj7/replaced/. Game: FFX-2 only (the Den of Woe shades).",
+   "public/art/characters/nooj-shade/idle.png": {
+    "sha256": "869f9ae5b1d8079fc8d5313b2363651db9f1d5dd183c2b496c4ea15e3434297f",
+    "mtime": "2026-09-25T19:00:36.080Z",
     "approved": "2026-09-25"
    }
   }

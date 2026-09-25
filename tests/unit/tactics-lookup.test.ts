@@ -42,6 +42,7 @@ const OWN_TACTIC: Record<string, string> = {
   'yojimbo-cavern': 'yojimboCavern',
   'ffx2-trema': 'ffx2Trema',
   'ffx2-den-of-woe': 'ffx2DenOfWoe',
+  'seymour-omnis': 'seymourOmnis', // Chapter XII (FFX), unlisted
 };
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS];

@@ -34,6 +34,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'yojimbo-cavern': 'ffx',
   'ffx2-trema': 'ffx2',
   'ffx2-den-of-woe': 'ffx2',
+  'seymour-omnis': 'ffx',
 };
 
 /**
@@ -48,4 +49,24 @@ export function chapterOnBoard(
 ): boolean {
   if (CHAPTER_GAME[chapterId] !== state.game) return false;
   return bossIds.some((id) => state.combatants[id]?.side === 'enemy');
+}
+
+/**
+ * The strategy guide's headline for the board: the standing link's own name
+ * when the chapter names its links (`ChapterGuide.linkTitles`), else the
+ * chapter's title. FOC16-06 (release 16 focused review): Chapter XIII's panel
+ * said "Trema" while Oversoul Paragon, the first link, was the one standing.
+ * Both games (shared plumbing); a guide with no `linkTitles` is unchanged.
+ */
+export function guideTitle(
+  state: Readonly<Pick<BattleState, 'combatants'>>,
+  guide: { title: string; bossIds: readonly CombatantId[]; linkTitles?: Readonly<Record<CombatantId, string>> },
+): string {
+  const titles = guide.linkTitles;
+  if (!titles) return guide.title;
+  for (const id of guide.bossIds) {
+    const c = state.combatants[id];
+    if (c && c.side === 'enemy' && !c.removed && c.hp > 0 && titles[id]) return titles[id];
+  }
+  return guide.title;
 }

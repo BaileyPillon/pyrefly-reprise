@@ -1,0 +1,92 @@
+/*
+ * The pause CHAPTER tab's own rules, and the FFX-2 keys too long for the key
+ * cell, kept out of `pause-screen.css`, which is past the 400-line house rule.
+ * Imported by `src/app/screens/pause/dossierPlace.ts`.
+ */
+
+/*
+ * FOC16-02: the dossier moves off a chapter plate's face
+ * (`dossierPlace.ts` decides and measures; game case: both, shared pause
+ * plumbing; only Chapter XIII's plate has a face box today).
+ *
+ * `under`: the dossier wraps under THIS ENCOUNTER and THE PARTY, on the side
+ * of the painting that is empty, quote and snapshots side by side so it
+ * stays short enough to clear the objective.
+ */
+.pause--dossier-under .pause__body[data-tab='chapter'] {
+  top: var(--pu-dossier-top, var(--pu-top-body));
+  flex-wrap: wrap;
+  row-gap: clamp(14px, 2.4vh, 28px);
+}
+
+.pause--dossier-under .pause__body[data-tab='chapter'] > .pause__col[data-col='dossier'] {
+  flex: 0 0 100%;
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: start;
+  align-items: start;
+  column-gap: clamp(22px, 3vw, 58px);
+}
+
+.pause--dossier-under .pause__col[data-col='dossier'] > h3 {
+  grid-column: 1 / -1;
+}
+
+.pause--dossier-under .pause__col[data-col='dossier'] > .pause__snaps {
+  margin-top: 0;
+}
+
+/* `under-lean`: the same, without the snapshots. */
+.pause--dossier-lean .pause__col[data-col='dossier'] > .pause__snaps {
+  display: none;
+}
+
+/* `heading`: the heading alone, as the picked plate frame draws the column. */
+.pause--dossier-heading .pause__body[data-tab='chapter'] > .pause__col[data-col='dossier'] > :not(h3) {
+  display: none;
+}
+
+/*
+ * FOC16-03: THE PARTY printed DRESSPHE… in FFX-2. The key cell is
+ * `--pu-key` wide (sized for BATTLE STATS' longest label, MAGIC DEF) and
+ * ellipsised, and DRESSPHERE is two letters longer. A column that holds a
+ * dressphere row widens its keys to fit the word at the key's own type size
+ * (9 x `--pu-fs`, so it holds at every window and at the phone's 12 px), and
+ * its empty bar cell (every row here is a word row) gives the same width
+ * back, so the values stay exactly where they were. Only FFX-2 has a
+ * dressphere row (`panels.ts` `gearRows`); FFX's WEAPON / ARMOUR keys fit
+ * already, and an FFX column is not matched. Game case: FFX-2 only.
+ */
+.pause__col[data-col='gear']:has(.pause__row[data-row$='-dress']) {
+  --pu-gear-key: max(var(--pu-key), calc(var(--pu-fs) * 9));
+}
+
+.pause__col[data-col='gear']:has(.pause__row[data-row$='-dress']) .pause__k {
+  width: var(--pu-gear-key);
+}
+
+.pause__col[data-col='gear']:has(.pause__row[data-row$='-dress']) .pause__bar {
+  width: max(0px, calc(var(--pu-bar) - (var(--pu-gear-key) - var(--pu-key))));
+}
+
+/*
+ * FOC16-03, checked on every tab: the member tab's IN THIS FIGHT column
+ * printed GARMENT GR… at 1280x720, where the wide key cell sits at its
+ * 118 to 122 px floor (it fits from about 1600 wide). The same answer as
+ * DRESSPHERE: the column that holds the Garment Grid row widens its keys to
+ * fit the word at the key's type size (11 x `--pu-fs`; it needs 152 px at
+ * 14 px) and its bars give the width back, so the values do not move. Only
+ * FFX-2 has a Garment Grid row (`meters.ts`); FFX's member and CHAPTER tabs
+ * cut nothing at 1280x720. Game case: FFX-2 only.
+ */
+.pause__col--wide:has(.pause__row[data-row='grid']) {
+  --pu-grid-key: max(clamp(118px, 9.5vw, 190px), calc(var(--pu-fs) * 11));
+}
+
+.pause__col--wide:has(.pause__row[data-row='grid']) .pause__k {
+  width: var(--pu-grid-key);
+}
+
+.pause__col--wide:has(.pause__row[data-row='grid']) .pause__bar {
+  width: max(0px, calc(var(--pu-bar) - (var(--pu-grid-key) - clamp(118px, 9.5vw, 190px))));
+}

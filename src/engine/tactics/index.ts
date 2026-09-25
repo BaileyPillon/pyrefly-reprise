@@ -42,6 +42,7 @@ import { EVRAE_ID, evrae } from './evrae.ts';
 import { YOJIMBO_CAVERN_BOSS_ID, yojimboCavern } from './yojimbo-cavern.ts';
 import { TREMA_CHAPTER_BOSS_IDS, ffx2Trema } from './ffx2-trema.ts';
 import { DEN_OF_WOE_TACTIC_IDS, ffx2DenOfWoe } from './ffx2-den-of-woe.ts';
+import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -72,6 +73,7 @@ export { evrae, EVRAE_ID } from './evrae.ts';
 export { yojimboCavern, YOJIMBO_CAVERN_BOSS_ID } from './yojimbo-cavern.ts';
 export { ffx2Trema, TREMA_CHAPTER_BOSS_IDS } from './ffx2-trema.ts';
 export { ffx2DenOfWoe, DEN_OF_WOE_TACTIC_IDS } from './ffx2-den-of-woe.ts';
+export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -124,6 +126,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...TREMA_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-trema', bossId, tactic: ffx2Trema })),
   // Chapter XV (FFX-2 only, unlisted): the three shades, one tactic under all three ids.
   ...DEN_OF_WOE_TACTIC_IDS.map((bossId) => ({ chapterId: 'ffx2-den-of-woe', bossId, tactic: ffx2DenOfWoe })),
+  // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
+  { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

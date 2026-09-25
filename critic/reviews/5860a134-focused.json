@@ -1,0 +1,501 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-25T19:31:01.938Z",
+ "build": {
+  "mainSha": "5860a134",
+  "candidateTree": "D:/pyrefly-rel17",
+  "bundle": "Bz-OGER1",
+  "live": "fc7f1a20 (release 16), served from D:/pyrefly-rel16/dist-gate for comparison"
+ },
+ "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: every played flow (Chapters I, IV, V, VI, IX, XIII) loaded, reached its menus, won or lost, and returned through results, retry or chapter select, with 0 console or HTTP errors.",
+  "No regression against fc7f1a20: every defect found is either new-feature behaviour (VL-1 wedge, phone ALL confirm, A1) or present on live too.",
+  "The batch repairs live defects: the phone ALL-target step now confirms by touch (PHB-01), the acting girl is on screen at 390x844 (PHB-03), no phone battle text below 14 px (PHB-02), the Chapter XIII reticle clears the enemy-move slab (FOC16-01) and the pause dossier clears Trema's face (FOC16-02).",
+  "Two majors are disclosed, not held: FOC17-01 (FFX portrait in the FFX-2 results wedge) and FOC17-02 (phone target step labels the wrong item); both are inside features that are new in this candidate."
+ ],
+ "checks": [
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "I, IV, V, VI, IX, XIII",
+   "state": "every capture",
+   "reason": "every capture went through a helper that reads window.__pyrefly.screen() and refuses the capture (logs UNVERIFIED) when the screen is not the expected one; no capture was refused in the kept runs. A chapter-select index error (Evrae instead of Chapter IV) was caught from the capture itself and the run was redone on the right chapter.",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch1-win-results.jpg",
+    "critic/reviews/5860a134-focused/cand-ch13-pause-chapter-1600x900.jpg"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "mandatory": true,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "all",
+   "state": "n/a",
+   "reason": "focused review of the production candidate; live verification of the exact artifact is a separate obligation after the deploy",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-021",
+   "result": "FAIL",
+   "mandatory": true,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "I, IV, V, VI",
+   "state": "results, guide, battle",
+   "reason": "Presence and absence checked: fresh first-attempt seed in FFX Chapter I (live 1, candidate 1611190343) and in FFX-2 runs (shared plumbing, both games); the Wait-split rule is the first RULES bullet in Chapters V and VI and absent from Chapter I (FFX) and Chapter IV; the A1 hit-close lives only in src/battle/ffx2 and fired in Chapter V. FAIL because the victory-line speaker now standing in the results wedge uses the FFX portrait in FFX-2 (FOC17-01: FFX Rikku with goggles on a Chateau Leblanc victory).",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch6-vl-r2-results.jpg",
+    "critic/reviews/5860a134-focused/cand-guide-ch5-vegnagun-1600x900.jpg",
+    "critic/reviews/5860a134-focused/cand-guide-ch1-flux-1600x900.jpg"
+   ],
+   "minutes": 10
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "I, IV, V, VI, XIII",
+   "state": "menus, target step, touch confirm",
+   "reason": "every flow was entered from the title with real keys; attacks, the pause, the guide MORE toggle (mouse) and the phone ALL-target confirm (touchscreen taps) were real input; the only debug setup was enemy HP set to 1 before a real Attack (labelled) and setCoaching(false)",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch5-ph4-target-step.jpg",
+    "critic/reviews/5860a134-focused/cand-ch5-ph4-after-confirm.jpg"
+   ],
+   "minutes": 6
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "I, IV, VI",
+   "state": "win, defeat, retry",
+   "reason": "wins reached the post scene, then results, then chapter select (Chapter VI round 2 ended at chapter-select); a Chapter VI defeat reached RETRY and Enter returned to the battle, which was then won",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch1-win-results.jpg",
+    "critic/reviews/5860a134-focused/cand-ch4-win-results.jpg",
+    "critic/reviews/5860a134-focused/cand-ch6-vl-r2-results.jpg"
+   ],
+   "minutes": 6
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "FFX-2",
+   "chapter": "V (ffx2-vegnagun-shuyin)",
+   "state": "top-level command menu open, idle",
+   "reason": "the A1 rule was observed through the real presenter: the engine behind battle.presenter.pendingMenu set hitClosed to the menu owner (Paine) when Vegnagun hit her with the menu open, and the presenter consumed it and offered a fresh menu about 1.3 s later (hitClosed back to null); hits on other girls did not close her menu",
+   "evidence": [
+    "critic/reviews/5860a134-focused/a1-hit-closes-menu-trace.txt"
+   ],
+   "minutes": 5
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "FFX-2",
+   "chapter": "V",
+   "state": "phone 390x844 first command menu",
+   "reason": "effective rendered size (font size times ancestor transforms) of every visible text node in the phone battle HUD: none below 14 px. One state measured (first menu); the FFX phone HUD was not measured",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch5-phone-menu.jpg"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "manual",
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "target step on Paragon; pause CHAPTER tab",
+   "reason": "the reticle around Paragon no longer reaches the enemy-move slab (top right); the pause dossier columns end left of Trema's face",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch13-target-step-1600x900.jpg",
+    "critic/reviews/5860a134-focused/cand-ch13-pause-chapter-1600x900.jpg"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "manual",
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "state": "pause CHAPTER tab",
+   "reason": "DRESSPHERE labels are printed in full",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch13-pause-chapter-1600x900.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "manual",
+   "game": "FFX-2",
+   "chapter": "V",
+   "state": "phone ALL-target step",
+   "reason": "all three girls carry brackets and the chips glow; the hint reads \"All three girls at once\" with Back and a confirm button",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch5-ph4-target-step.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX (yojimbo-cavern)",
+   "state": "first command menu",
+   "reason": "every figure is painted art: the scene report lists 11 figures with placeholder false and 0 with placeholder true; Yojimbo, Daigoro, the party and the Fayth are drawn",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch9-first-menu-1600x900.jpg"
+   ],
+   "minutes": 2
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "manual",
+   "game": "both",
+   "chapter": "I, V, VI",
+   "state": "guide, results, phone",
+   "reason": "the new copy (the Wait-split rule, the victory lines, the phone hints) has no developer vocabulary",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-guide-ch5-vegnagun-1600x900.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-004",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "reason": "the advisor code was not changed by this batch except through the Wait-split bench tests; its menu-path claims were not re-audited in play",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-002",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "reason": "not exercised in this pass",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "reason": "broken-board recommendations not exercised",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "reason": "transient overlay cleanup not exercised beyond the A1 menu reset",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "FFX-2",
+   "chapter": "IV, V, VI, XIII",
+   "state": "battle",
+   "reason": "the 22 installed FFX-2 poses were seen rendering at idle in Chapters IV, V, VI and XIII with no missing figure, but no written-rubric art judgement was made (deep review)",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-018",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "reason": "not audited in this pass; the art-index no-cache fix was verified only through the Chapter IX scene report",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-019",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "reason": "the artifact manifest decode check runs at the deploy",
+   "minutes": 0
+  },
+  {
+   "id": "CHK-020",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "artifact": "5860a134 / bundle index-Bz-OGER1.js (D:/pyrefly-rel17/dist-gate)",
+   "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+   "environment": "vite preview of D:/pyrefly-rel17/dist-gate (production build of 5860a134, bundle index-Bz-OGER1.js) on 127.0.0.1:5420; live release 16 fc7f1a20 served from D:/pyrefly-rel16/dist-gate (bundle index-BQnfWT0X.js, the bundle the live URL serves) on 127.0.0.1:5421; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback; coach cards switched off with setCoaching(false) as setup",
+   "mode": "automated",
+   "game": "both",
+   "chapter": "I, VI; V phone",
+   "state": "results; phone",
+   "reason": "the results wedge got the same speaker work in both games (FFX Chapter I Tidus, FFX-2 Chapter VI Rikku); the phone HUD repair was checked in FFX-2 only, the FFX phone half was not played",
+   "minutes": 0
+  }
+ ],
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "detail": {
+   "matched": [
+    "phone battle HUD B (docs/concepts/layout/phone-battle-hud/sheet.jpg, frame B-ffx2-target) against the Chapter V ALL-target step: layout matches (rail, enemy line, chips, card, hint, BACK + confirm bar); the confirm label names the wrong item (FOC17-02)"
+   ],
+   "decisionsCompared": [
+    "Trema hero plate B: the pause dossier now clears the face (FOC16-02 repaired)"
+   ]
+  }
+ },
+ "issues": [
+  {
+   "id": "FOC17-01",
+   "severity": "major",
+   "title": "FFX-2 results: the victory line's speaker stands in the wedge in her FFX portrait (FFX Rikku with goggles at Chateau Leblanc)",
+   "game": "ffx2",
+   "chapter": "ffx2-leblanc (VI); every FFX-2 chapter with victory lines (V, VI); the leader fallback shows FFX Yuna in IV",
+   "expected": "an FFX-2 results wedge shows the FFX-2 look of the figure (portraits/rikku-x2.png, yuna-x2.png), as the ledger faces on the same screen already do (CHK-021)",
+   "observed": "Chapter VI victory, speaker rikku, line \"Gullwings one, Syndicate nothing!\", wedge src art/portraits/rikku.png (the FFX Rikku: goggles, FFX outfit); Chapter IV win shows art/portraits/yuna.png (FFX Yuna) as the leader, which live also does",
+   "repro": "fresh save, real keys: title, Enter, chapter select, Leblanc, Enter through prep and scene; win (labelled HP-1 setup + real Attack) twice so the rotation reaches Rikku; read the wedge",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch6-vl-r2-results.jpg",
+    "critic/reviews/5860a134-focused/cand-ch4-win-results.jpg"
+   ],
+   "confidence": "high (DOM src and capture; portrait files compared side by side)",
+   "requirement": "CHK-021; AGENTS.md rule 14",
+   "where": "suspected: victoryHeroHtml (src/ui/common/resultsMath.ts) asks portraitImgHtml(id) with no game, while the ledger rows use the -x2 aware partyFaceHtml ladder",
+   "fix": "resolve the wedge portrait through the same game-aware ladder as the ledger faces (-x2 in FFX-2)",
+   "acceptanceCheck": "FFX-2 Chapters IV, V, VI victories: the wedge src is an -x2 portrait (or paine.png) for Yuna, Rikku and Paine; FFX chapters unchanged",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC17-02",
+   "severity": "major",
+   "title": "Phone target step names the highlighted row, not the tapped item: \"POTION -> ALL ALLIES\" confirms a Mega-Potion",
+   "game": "ffx2 (FFX phone half not checked)",
+   "chapter": "ffx2-vegnagun-shuyin (V)",
+   "expected": "the target card and the confirm button name the command that will be sent",
+   "observed": "touch ITEM, touch MEGA-POTION: card \"All allies / Potion - Recovers 200 HP.\", confirm \"POTION -> ALL ALLIES\"; tapping it sent {kind:item, id:x2-mega-potion, targets:[yuna,rikku,paine]}. Live shows the same stale Potion help in its footer at this step (the list cursor stays on Potion) but had no confirm button",
+   "repro": "390x844 touch context, real keys to Chapter V battle, tap ITEM, tap MEGA-POTION, read the target step, tap the confirm",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch5-ph4-target-step.jpg",
+    "critic/reviews/5860a134-focused/live-ch5-ph4-target-step.jpg",
+    "critic/reviews/5860a134-focused/phone-battle-hud-B-ffx2-target.jpg"
+   ],
+   "confidence": "medium-high (Playwright touchscreen taps; a real phone was not used)",
+   "requirement": "CHK-004 / interface information; phone HUD B target frame",
+   "where": "suspected: phoneBattleText reads the menu cursor row, and a tap on a list row sends the command without moving the cursor",
+   "fix": "move the menu cursor to the tapped row before confirming it, or read the pending command for the card and the confirm label",
+   "acceptanceCheck": "phone, both games: tap an ALL item or spell that is not under the cursor; the card and confirm name it; the sent command matches",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC17-03",
+   "severity": "polish",
+   "title": "A1: an enemy hit closes the open menu with no visible cue",
+   "game": "ffx2",
+   "chapter": "V",
+   "expected": "the player can tell the menu was reset by the hit",
+   "observed": "the fresh menu reopens with the same rows about 1.3 s after the hit; at the top level the reset cannot be seen",
+   "repro": "Chapter V, leave the top-level menu open until the owner is hit",
+   "evidence": [
+    "critic/reviews/5860a134-focused/a1-hit-closes-menu-trace.txt"
+   ],
+   "confidence": "medium",
+   "requirement": "feel / interface",
+   "where": "presentation of item 4 A1",
+   "fix": "a short menu dismiss/reopen beat, or a flash on the command stack",
+   "acceptanceCheck": "a capture sequence shows the menu leave and return",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC17-04",
+   "severity": "polish",
+   "title": "FFX results: \"x3 PARTY\" beside AP while only the actors earn it",
+   "game": "ffx",
+   "chapter": "I",
+   "expected": "the AP row does not imply all three were paid",
+   "observed": "\"15,000 x3 PARTY\" with Yuna and Kimahri at +0 AP (the same on live)",
+   "repro": "win Chapter I with only Tidus acting",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-ch1-win-results.jpg",
+    "critic/reviews/5860a134-focused/live-ch1-win-results.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "interface",
+   "where": "results ledger",
+   "fix": "drop x3 PARTY in FFX or count the members who earned AP",
+   "acceptanceCheck": "Chapter I results after a one-actor win",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC17-05",
+   "severity": "suggestion",
+   "title": "Question for Bailey: the Wait-split rule is shown in Chapters V and VI only",
+   "game": "ffx2",
+   "chapter": "IV, XIII",
+   "expected": "as decided (item 3 names V and VI)",
+   "observed": "Chapter IV and XIII guides do not carry it, although the same clock split applies there",
+   "repro": "open the guide in Chapter IV",
+   "evidence": [
+    "critic/reviews/5860a134-focused/cand-guide-ch4-bahamut-1600x900.jpg"
+   ],
+   "confidence": "n/a",
+   "requirement": "decision sheet item 3 (scope as approved)",
+   "where": "src/data/guides",
+   "fix": "ask Bailey; build nothing without a yes",
+   "acceptanceCheck": "n/a"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Chapter I (FFX) real-key entry on candidate and live: first-attempt seed live 1, candidate 1611190343; win to results (Tidus line \"...Okay. Next one.\" from writing-bible 5.4, Tidus in the wedge)",
+   "Chapter IV (FFX-2) win to results at 2000x1012: no victory line, as the bible requires for Chapter 4",
+   "Chapter V (FFX-2) A1: idle top-level menu, engine hitClosed traced through the presenter; submenu idle (clock held, no hits)",
+   "Chapter VI (FFX-2) defeat -> RETRY -> win, results with rotated speaker Rikku",
+   "Wait-split guide rule: present as the first rule in V and VI (after MORE clicks by mouse), absent in I and IV",
+   "Chapter IX (FFX): art present, scene report 0 placeholders",
+   "Chapter XIII (FFX-2): target step reticle vs slab, pause CHAPTER tab (Esc, E x3) and resume",
+   "Phone 390x844 Chapter V: text sizes, framing, touch ALL-target confirm on candidate and the same flow on live",
+   "npx tsc --noEmit clean in D:/pyrefly-rel17; the 21 changed unit test files: 205 passed, 7 skipped"
+  ],
+  "reused": [
+   {
+    "what": "Chapter I guide corrections and seed plumbing unit coverage",
+    "from": "tests/unit/strategy-seymour-flux.test.ts, flow-checkpoint-retry.test.ts in the candidate tree (run here)",
+    "why": "data text checked by the builder tests; no research value changed in this batch per plan (dataAudit false)"
+   }
+  ],
+  "notTested": [
+   "Chapter IX callouts in play (mid-battle triggers; only the art and first menu were seen)",
+   "FFX phone HUD half",
+   "Chapters II, III, VIII in play",
+   "full unit suite",
+   "audio",
+   "load times and frame times",
+   "real phone, Safari, gamepad",
+   "approved-art hash check (plan: approvedArtCheck false)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "live verification of 5860a134 after the deploy (CHK-017), then the deep review this shared-system change owes on the live build (plan depth deep, deepAfterDeploy true); FOC17-01 and FOC17-02 go into the next batch",
+ "elapsedMinutes": 70
+}

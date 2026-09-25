@@ -74,6 +74,27 @@ export function artManifestPath(): string {
   return `${base.replace(/\/+$/, '')}/art/manifest.json`;
 }
 
+/**
+ * How every request for the art *index* goes out: the manifest, the pose
+ * probes, and the focal sidecars that sit beside the paintings.
+ *
+ * **`no-cache`, never `force-cache`.** `no-cache` still uses the browser's
+ * copy, but only after the server has confirmed it with a conditional request
+ * (a 304 of a few hundred bytes when nothing changed). `force-cache` uses *any*
+ * stored copy, however stale, and never asks: GitHub Pages serves
+ * `manifest.json` with `max-age=600`, and a browser that had once cached the
+ * manifest of an older release kept answering from it after every later
+ * deploy. On 2026-09-25 that put Chapter IX in front of Bailey with Yuna's own
+ * aeon painting in place of Lady Ginnem's Yojimbo, the procedural boss
+ * silhouette in place of Ginnem and Daigoro, and the fallback sky in place of
+ * the cavern plate, because the cached manifest predated all four paintings
+ * (`docs/screenshots/silhouette-bug/`). The index is what decides whether a
+ * painting is drawn at all, so it must never be older than the build reading it.
+ *
+ * Game case: both (shared plumbing, CHK-020).
+ */
+export const ART_INDEX_CACHE: RequestCache = 'no-cache';
+
 let inFlight: Promise<ArtManifest | null> | null = null;
 let current: ArtManifest | null = null;
 
@@ -140,7 +161,7 @@ export function loadArtManifest(): Promise<ArtManifest | null> {
   if (inFlight) return inFlight;
   inFlight = (async (): Promise<ArtManifest | null> => {
     try {
-      const res = await fetch(artManifestPath(), { cache: 'force-cache' });
+      const res = await fetch(artManifestPath(), { cache: ART_INDEX_CACHE });
       // A dev server answers a missing file with `index.html` and a 200, so the
       // status alone is not the signal — the same trap `BattlePresenterArt`
       // documents for pose probes. Parsing is the honest check here: HTML is

@@ -1,0 +1,73 @@
+/* ===== Option B: the veil and the laurel ===== */
+
+/* not beaten: full colour under a thin ink veil, with the word set on it */
+.v2b-veil {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(-58deg, rgba(7, 6, 13, 0.16) 0 1px, rgba(7, 6, 13, 0) 1px 5px),
+    radial-gradient(120% 110% at 60% 36%, rgba(11, 10, 18, 0.06) 20%, rgba(11, 10, 18, 0.5) 100%),
+    rgba(20, 18, 34, 0.18);
+}
+.v2-opt-B .v2-hero.is-open .fe-hero__art img.v2-plate { filter: saturate(0.82) brightness(0.84); }
+.v2b-undefeated {
+  position: absolute; left: 50%; top: calc(22 * var(--fe-k)); transform: translateX(-50%);
+  display: flex; align-items: center; gap: calc(16 * var(--fe-k));
+  padding: calc(7 * var(--fe-k)) calc(18 * var(--fe-k)) calc(8 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.72);
+  border-top: 1px solid rgba(227, 185, 74, 0.6); border-bottom: 1px solid rgba(227, 185, 74, 0.6);
+  font-family: var(--ig-font-display); font-weight: 700; text-transform: uppercase;
+  font-size: max(var(--fe-fs-floor), calc(16 * var(--fe-k))); letter-spacing: 0.52em;
+  color: var(--ig-gold); white-space: nowrap;
+}
+.v2b-undefeated i { width: calc(34 * var(--fe-k)); height: 1px; background: var(--ig-gold); opacity: 0.8; }
+
+/* beaten: the veil lifts, a laurel carries the record */
+.v2b-laurel {
+  position: absolute; right: calc(24 * var(--fe-k)); top: calc(18 * var(--fe-k));
+  width: calc(150 * var(--fe-k)); height: calc(150 * var(--fe-k)); color: var(--ig-gold);
+  filter: drop-shadow(0 calc(4 * var(--fe-k)) calc(10 * var(--fe-k)) rgba(0, 0, 0, 0.85));
+}
+.v2b-laurel::before {
+  content: ''; position: absolute; inset: 18%; border-radius: 50%;
+  background: radial-gradient(circle, rgba(11, 10, 18, 0.8) 55%, rgba(11, 10, 18, 0) 72%);
+}
+.v2b-laurel__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.v2b-laurel__core {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding-bottom: calc(6 * var(--fe-k));
+}
+.v2b-laurel__core span {
+  position: absolute; left: 50%; bottom: calc(-16 * var(--fe-k)); transform: translateX(-50%);
+  padding: calc(3 * var(--fe-k)) calc(10 * var(--fe-k)) calc(4 * var(--fe-k));
+  background: rgba(11, 10, 18, 0.86); border-top: 1px solid rgba(227, 185, 74, 0.6); border-bottom: 1px solid rgba(227, 185, 74, 0.6);
+  white-space: nowrap; font-family: var(--ig-font-display); font-weight: 700; text-transform: uppercase;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k))); letter-spacing: 0.3em; color: var(--ig-gold);
+}
+.v2b-laurel__core b {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(32 * var(--fe-k))); line-height: 1.05; color: var(--ig-paper);
+}
+
+/* the list: unbeaten cards under the same veil, beaten ones bright with a sprig */
+.v2b-cardveil {
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(-58deg, rgba(7, 6, 13, 0.2) 0 1px, rgba(7, 6, 13, 0) 1px 5px), rgba(20, 18, 34, 0.3);
+}
+.v2-opt-B .v2-card.is-open .v2-card__art img.v2-plate { filter: saturate(0.7) brightness(0.56); }
+.v2-opt-B .v2-card.is-open.is-sel .v2-card__art img.v2-plate { filter: saturate(0.82) brightness(0.8); }
+.v2-opt-B .v2-card.is-cleared .v2-card__art img.v2-plate,
+.v2-opt-B .v2-card.is-cleared .v2-card__art .v2-comp__bg { filter: saturate(1.08) brightness(1); }
+.v2-opt-B .v2-card.is-cleared { border-color: rgba(227, 185, 74, 0.5); }
+.v2b-mark {
+  position: absolute; right: calc(8 * var(--fe-k)); top: 50%; transform: translateY(-50%);
+  width: calc(34 * var(--fe-k)); height: calc(34 * var(--fe-k)); color: var(--ig-gold);
+  filter: drop-shadow(0 0 calc(4 * var(--fe-k)) rgba(0, 0, 0, 1)) drop-shadow(0 0 calc(2 * var(--fe-k)) rgba(0, 0, 0, 1));
+}
+.v2b-mark__svg { width: 100%; height: 100%; display: block; }
+
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .v2b-laurel { width: calc(118 * var(--fe-k)); height: calc(118 * var(--fe-k)); right: calc(12 * var(--fe-k)); top: calc(10 * var(--fe-k)); }
+  .v2b-laurel__core b { font-size: max(var(--fe-fs-floor), calc(26 * var(--fe-k))); }
+  .v2b-undefeated { top: calc(12 * var(--fe-k)); letter-spacing: 0.4em; gap: calc(10 * var(--fe-k)); }
+  .v2b-undefeated i { width: calc(18 * var(--fe-k)); }
+}

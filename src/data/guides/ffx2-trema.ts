@@ -195,6 +195,8 @@ export function tremaGuideFor(shape: TremaShape): ChapterGuide {
     hints: hints(shape),
     watch: [],
     phases: phases(shape),
+    // FOC16-06: the headline names the link that stands, "Paragon" first, then "Trema" (research §2).
+    ...(shape.paragonLink && shape.paragonId ? { linkTitles: { [shape.paragonId]: 'Paragon' } } : {}),
   };
 }
 

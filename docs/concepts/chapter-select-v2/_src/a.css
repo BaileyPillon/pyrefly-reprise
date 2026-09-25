@@ -1,0 +1,40 @@
+/* ===== Option A: the gold seal ===== */
+.v2a-seal {
+  position: absolute; right: calc(22 * var(--fe-k)); top: calc(20 * var(--fe-k));
+  width: calc(150 * var(--fe-k)); height: calc(150 * var(--fe-k));
+  transform: rotate(-9deg);
+  filter: drop-shadow(0 calc(6 * var(--fe-k)) calc(14 * var(--fe-k)) rgba(0, 0, 0, 0.7));
+}
+.v2a-seal svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.v2a-seal__disc { fill: rgba(11, 10, 18, 0.84); stroke: var(--ig-gold); stroke-width: 3; }
+.v2a-seal__line { fill: none; stroke: var(--ig-gold); stroke-width: 1.2; opacity: 0.8; }
+.v2a-seal__line--in { stroke-width: 1.6; opacity: 1; }
+.v2a-seal__ring { fill: var(--ig-gold); font-family: var(--ig-font-display); font-weight: 700; font-size: 17px; letter-spacing: 2px; }
+.v2a-seal__core {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: calc(1 * var(--fe-k));
+}
+.v2a-seal__core span {
+  font-family: var(--ig-font-display); font-weight: 700; text-transform: uppercase;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k))); letter-spacing: 0.3em; color: var(--ig-gold); margin-right: -0.3em;
+}
+.v2a-seal__core b {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(30 * var(--fe-k))); line-height: 1; color: var(--ig-paper);
+}
+
+/* the small gold mark on a beaten card */
+.v2a-mark {
+  position: absolute; right: calc(12 * var(--fe-k)); top: 50%; transform: translateY(-50%);
+  width: calc(22 * var(--fe-k)); height: calc(22 * var(--fe-k));
+  filter: drop-shadow(0 0 calc(6 * var(--fe-k)) rgba(0, 0, 0, 0.9));
+}
+.v2a-mark svg { width: 100%; height: 100%; display: block; }
+.v2a-mark circle { fill: var(--ig-gold); stroke: rgba(11, 10, 18, 0.7); stroke-width: 1; }
+.v2a-mark path { fill: none; stroke: var(--ig-ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .v2a-seal { width: calc(120 * var(--fe-k)); height: calc(120 * var(--fe-k)); right: calc(14 * var(--fe-k)); top: calc(14 * var(--fe-k)); }
+  .v2a-seal__core b { font-size: max(var(--fe-fs-floor), calc(24 * var(--fe-k))); }
+  .v2a-seal__ring { font-size: 19px; }
+}

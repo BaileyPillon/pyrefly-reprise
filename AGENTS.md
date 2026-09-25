@@ -125,6 +125,11 @@ is active.
 - `tools/zz-*.tmp.*` and the root `.*-tmp.mjs` files are agent scratch. Leave them.
 - `npm run build` rewrites the shared `dist/`. If another agent may be running e2e or
   screenshots against the preview, verify with `tsc` + targeted vitest instead.
+- **Stop the servers you start (Bailey, 2026-09-24).** Before you finish, stop every
+  dev or preview server you started, by its port: `Get-NetTCPConnection -LocalPort
+  <port> -State Listen` gives the PID, then `taskkill /PID <pid> /T /F`. A Vite server
+  on the default config holds about 1.1 GB and 93,000 file watches even when idle; on
+  2026-09-24, 21 leftovers had grown the page file on C: by 19 GB.
 - Commit subjects say what changed and why, in the style of `git log`.
 
 ## Done means

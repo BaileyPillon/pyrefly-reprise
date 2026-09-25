@@ -1,0 +1,374 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-09-25T21:10:00.000Z",
+  "build": {
+    "mainSha": "1a680e41",
+    "candidateTree": "D:/pyrefly-rel17b",
+    "bundle": "BVdUtZb-",
+    "live": "e45ed3c1 (release 17, bundle index-RSsiNs7I.js) checked at https://baileypillon.github.io/pyrefly-reprise/; the brief named fc7f1a20, but docs/deploys.log and critic-plan (previousBuild) show e45ed3c1 went live at 20:06Z and replaced it"
+  },
+  "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "PASS",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect: FFX-2 Chapters IV, VI and XIII and FFX Chapter I were played by real keys to results (wins and losses), then on to chapter select or RETRY to prep, with 0 console errors and 0 HTTP errors.",
+    "No regression against live e45ed3c1: the only product delta since live is the FOC17-01 and FOC17-02 repair (ResultsScreen.ts, victoryLine.ts, ffx2/CommandMenu.ts); the briefing option A and Nooj's idle are already live.",
+    "Both majors that release 17 disclosed are repaired: the FFX-2 wedge now shows rikku-x2 / paine / yuna-x2 and the dressphere's fallen pose, where live shows FFX Rikku and FFX Yuna; the phone target step now names the tapped item (Mega-Potion, Hi-Potion) in both games and sends that item.",
+    "What is left is polish: the Trema (Chapter XIII) loss wedge is empty because Yuna's Dark Knight dressphere has no hurt or ko painting (live shows FFX Yuna there), and a pre-existing ivory strip right of the wedge at 2000x1012."
+  ],
+  "checks": [
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview of D:/pyrefly-rel17b/dist-gate on 127.0.0.1:5420 (PID 45116, stopped); live e45ed3c1 at https://baileypillon.github.io/pyrefly-reprise/; headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "I, IV, V, VI, XIII",
+      "state": "every capture",
+      "reason": "every results capture went through a helper that reads window.__pyrefly.screen() and records UNVERIFIED instead of capturing when the screen is not 'results'; the chapter id from chapter select was asserted before Enter; the briefing capture asserted screen 'title' with the briefing text present. No capture was refused.",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch6-win-p1-results-1600x900.jpg",
+        "critic/reviews/1a680e41-focused/cand-briefing-1600x900.jpg"
+      ],
+      "minutes": 2
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "mandatory": true,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "n/a",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "all",
+      "state": "n/a",
+      "reason": "focused review of the production candidate; live verification of the exact artifact is a separate obligation after the deploy",
+      "minutes": 0
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "mandatory": true,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview of D:/pyrefly-rel17b/dist-gate on 127.0.0.1:5420; headless Playwright Chromium, PYREFLY_BROWSER=gpu",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "I, IV, VI, XIII",
+      "state": "results (win and loss)",
+      "reason": "FOC17-01 is FFX-2 only (AGENTS.md rule 14; research/ffx-vs-ffx2-presentation.md 2.2: FFX-2 victory poses are per dressphere). Presence in FFX-2: Chapter VI wins show portraits/rikku-x2.png (Rikku) and portraits/paine.png (Paine), Chapter IV win shows portraits/yuna-x2.png, Chapter IV loss shows characters/yuna-white-mage/hurt.png (her Chapter IV dressphere). Absence in FFX: Chapter I win still shows portraits/tidus.png. FOC17-02 is both (shared input plumbing, CHK-020): the code change is in src/ui/ffx2 only, and the FFX phone menu already named the tapped item; both verified by touch.",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch6-win-p1-results-1600x900.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch6-win-p2-results-2000x1012.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch4-win-results-2000x1012.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch4-lose-results-1600x900.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch1-win-results-1600x900.jpg"
+      ],
+      "minutes": 12
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview on 127.0.0.1:5420; headless Playwright Chromium, PYREFLY_BROWSER=gpu; 390x844 with hasTouch/isMobile",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "I, IV, V, VI, XIII",
+      "state": "command menu, target step, results",
+      "reason": "every menu choice was made by real keys (arrows + Enter), real touch taps (phone) or real mouse clicks (desktop FFX-2 Item > Hi-Potion); the debug API only set enemy HP (wins) or party HP (losses) to 1, labelled in the logs, and recorded prior attempts to rotate the victory speaker. The sent command was read from the battle log after the real confirm.",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch5-mega-target-step-390x844.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch1-mega-target-step-390x844.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch6-mouse-target-step-1600x900.jpg"
+      ],
+      "minutes": 8
+    },
+    {
+      "id": "CHK-010",
+      "result": "PASS",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview on 127.0.0.1:5420; headless Playwright Chromium, PYREFLY_BROWSER=gpu",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "I (FFX), V and VI (FFX-2)",
+      "state": "item submenu and target step",
+      "reason": "a tapped or clicked row that was not under the cursor now takes the cursor: FFX-2 phone Mega-Potion -> card 'All allies', note 'Mega-Potion', confirm 'Mega-Potion -> All allies', sent x2-mega-potion to yuna, rikku, paine; FFX-2 phone Hi-Potion -> confirm 'Hi-Potion -> Yuna', sent x2-hi-potion; FFX phone Mega-Potion -> confirm 'Mega-Potion -> All allies', sent mega-potion to tidus, yuna, kimahri; FFX-2 desktop mouse click on Hi-Potion -> highlighted row and help line 'HI-POTION Recovers 1000 HP.', Enter sent x2-hi-potion.",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch5-mega-target-step-390x844.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch5-hipotion-target-step-390x844.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch1-mega-target-step-390x844.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch6-mouse-target-step-1600x900.jpg"
+      ],
+      "minutes": 6
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview on 127.0.0.1:5420; headless Playwright Chromium, PYREFLY_BROWSER=gpu, 390x844 touch",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "I (FFX), V (FFX-2)",
+      "state": "phone target step for a tapped ALL item",
+      "reason": "the same tap (Items/Item, then Mega-Potion while the cursor sits on Potion) was played in both games; both name and send the tapped item. The results wedge repair was checked in both games (FFX unchanged, FFX-2 repaired).",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch1-mega-target-step-390x844.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch5-mega-target-step-390x844.jpg"
+      ],
+      "minutes": 2
+    },
+    {
+      "id": "CHK-003",
+      "result": "PASS",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview on 127.0.0.1:5420; headless Playwright Chromium, PYREFLY_BROWSER=gpu",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "title (briefing)",
+      "state": "first-run briefing at 1600x900, 2000x1012, 390x844",
+      "reason": "the changed copy (briefing option A) renders at a smallest computed font size of 15 px at 1600x900 and 2000x1012 and 14 px at 390x844; every line is inside the viewport in the captures. The phone target-step text was measured by the 5860a134 pass and its layout is unchanged.",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-briefing-1600x900.jpg",
+        "critic/reviews/1a680e41-focused/cand-briefing-2000x1012.jpg",
+        "critic/reviews/1a680e41-focused/cand-briefing-390x844.jpg"
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview on 127.0.0.1:5420; headless Playwright Chromium, PYREFLY_BROWSER=gpu",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "title",
+      "state": "first-run briefing",
+      "reason": "the briefing reads verbatim: 'Nine fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.' It matches Bailey's option A word for word; no developer vocabulary.",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-briefing-1600x900.jpg"
+      ],
+      "minutes": 1
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview on 127.0.0.1:5420; headless Playwright Chromium, PYREFLY_BROWSER=gpu",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "I, V",
+      "state": "phone target step confirm label",
+      "reason": "the longest new confirm label, 'MEGA-POTION -> ALL ALLIES', shows in full inside the confirm bar at 390x844 in both games.",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch5-mega-target-step-390x844.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch1-mega-target-step-390x844.jpg"
+      ],
+      "minutes": 1
+    },
+    {
+      "id": "CHK-008",
+      "result": "PASS",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "vite preview on 127.0.0.1:5420; headless Playwright Chromium, PYREFLY_BROWSER=gpu",
+      "mode": "manual",
+      "game": "ffx2",
+      "chapter": "IV, VI",
+      "state": "results wedge",
+      "reason": "the new X-2 portraits sit in the wedge the same way as the FFX portraits did: face framed inside the diagonal, the location caption and CONFIRM clear of the face at 1600x900 and 2000x1012.",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch6-win-p1-results-1600x900.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch6-win-p2-results-2000x1012.jpg",
+        "critic/reviews/1a680e41-focused/cand-ch4-win-results-2000x1012.jpg"
+      ],
+      "minutes": 2
+    },
+    {
+      "id": "CHK-002",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "n/a",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "n/a",
+      "state": "n/a",
+      "reason": "not measured in this pass; the delta changes no full-screen layer. The results screen at 2000x1012 ends about 100 px short of the right edge (FOC17b-02, same on live), which belongs to this check and goes to the deep review.",
+      "minutes": 0
+    },
+    {
+      "id": "CHK-006",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "artifact": "1a680e41 / bundle index-BVdUtZb-.js (D:/pyrefly-rel17b/dist-gate)",
+      "targetVersion": "3d2822fe2cf77b77b712c232defcf2ed908e66e2f5e532ac5a2ab02b8ef7bc00",
+      "environment": "n/a",
+      "mode": "automated",
+      "game": "both",
+      "chapter": "n/a",
+      "state": "n/a",
+      "reason": "no transient overlay was changed by the delta; not exercised in this pass",
+      "minutes": 0
+    }
+  ],
+  "targets": {
+    "required": 3,
+    "matched": 3,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0,
+    "detail": {
+      "matched": [
+        "Results (docs/screenshots/mockups/A-results.jpg, chapter 1 win): composition matches (Victory, AP / GIL / ITEMS ledger, three party rows, portrait wedge, CONFIRM); the wedge shows Tidus, the victory-line speaker, per the VL-1 decision; composite critic/reviews/1a680e41-focused/tile-A-results.jpg",
+        "Phone battle HUD B (docs/concepts/layout/phone-battle-hud/sheet.jpg) against the Chapter V ALL-target step: rail, enemy line, chips, card, hint, BACK + confirm; the confirm now names the tapped item; composite tile-phone-battle-hud.jpg",
+        "Auron's briefing C1 (docs/concepts/onboarding/c-aurons-briefing/c1-briefing.png): painting, layout, gold emphasis and skip line match; the words are the later option A rewording Bailey picked (D-181), verbatim; composite tile-c1-briefing.jpg"
+      ]
+    }
+  },
+  "issues": [
+    {
+      "id": "FOC17b-01",
+      "severity": "polish",
+      "title": "FFX-2 Trema (Chapter XIII) loss: the results wedge is empty because Yuna's Dark Knight dressphere has no hurt or ko painting",
+      "game": "ffx2",
+      "chapter": "ffx2-trema (XIII); any FFX-2 chapter whose leader wears a dressphere without hurt.png / ko.png",
+      "expected": "a defeat lays the leader down in her FFX-2 look (dressphere pose), or at least in an X-2 likeness",
+      "observed": "candidate: no figure in the wedge (img src yuna-dark-knight/hurt.png, then ko.png, both missing, so the onerror removes it); live e45ed3c1 shows the FFX Yuna hurt painting (wrong game) in the same place. On Pages the two missing files will likely log 404s.",
+      "repro": "fresh save, real keys: title, chapter select, Trema, Enter through prep and scene; party HP set to 1 (labelled setup), Defend until defeat; read .rres__hero",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch13-lose-results-1600x900.jpg",
+        "critic/reviews/1a680e41-focused/live-ch13-lose-results-1600x900.jpg"
+      ],
+      "confidence": "high (DOM read on both builds; art folder listing: yuna-dark-knight has attack and idle only)",
+      "requirement": "CHK-021; AGENTS.md rule 14",
+      "where": "wedgeFallenArt in src/ui/common/victoryLine.ts (traced)",
+      "fix": "when the dressphere folder has no hurt/ko pose, fall back to an FFX-2 art the girl has (her dressphere idle, or the -x2 portrait dimmed) rather than nothing; or paint yuna-dark-knight hurt/ko (art needs Bailey's pipeline and approval)",
+      "acceptanceCheck": "a Trema loss shows an FFX-2 figure of Yuna in the wedge, no FFX art, no 404 in the console",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC17b-02",
+      "severity": "polish",
+      "title": "Results screen at 2000x1012 stops about 100 px short of the right edge, leaving an ivory strip beside the wedge",
+      "game": "both",
+      "chapter": "every chapter (seen in IV and VI)",
+      "expected": "the wedge painting runs to the right edge of the window, as it does at 1600x900",
+      "observed": "an ivory band about 100 px wide right of the portrait at 2000x1012; identical on live e45ed3c1",
+      "repro": "win any chapter at a 2000x1012 viewport; look at the right edge of the results screen",
+      "evidence": [
+        "critic/reviews/1a680e41-focused/cand-ch4-win-results-2000x1012.jpg",
+        "critic/reviews/1a680e41-focused/live-ch4-win-results-2000x1012.jpg"
+      ],
+      "confidence": "high (same capture on both builds)",
+      "requirement": "CHK-002",
+      "where": "suspected: a max-width on the results frame (not traced)",
+      "fix": "let the wedge column bleed to the window edge on wide shapes",
+      "acceptanceCheck": "results at 2000x1012 and 2560x1440 show the painting to the right edge",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC17-03",
+      "severity": "polish",
+      "title": "carried from 5860a134: the A1 menu reset has no visible cue at the top level",
+      "game": "ffx2",
+      "chapter": "V",
+      "expected": "a visible cue when an enemy hit closes the acting girl's menu",
+      "observed": "not rechecked; the delta does not touch it",
+      "repro": "see critic/reviews/5860a134-focused.md",
+      "evidence": ["critic/reviews/5860a134-focused/a1-hit-closes-menu-trace.txt"],
+      "confidence": "carried",
+      "requirement": "CHK-010",
+      "where": "src/battle/ffx2 + FFX-2 HUD (not traced)",
+      "fix": "see the 5860a134 report",
+      "acceptanceCheck": "see the 5860a134 report"
+    },
+    {
+      "id": "FOC17-04",
+      "severity": "polish",
+      "title": "carried: FFX results say 'x3 PARTY' beside AP that only the actors earn (seen again: Tidus +15,000, Yuna and Kimahri +0)",
+      "game": "ffx",
+      "chapter": "I",
+      "expected": "the AP label matches who earned it",
+      "observed": "same as live",
+      "repro": "win Chapter I with Tidus acting alone",
+      "evidence": ["critic/reviews/1a680e41-focused/cand-ch1-win-results-1600x900.jpg"],
+      "confidence": "high",
+      "requirement": "interface",
+      "where": "results ledger label (not traced)",
+      "fix": "see the 5860a134 report",
+      "acceptanceCheck": "see the 5860a134 report"
+    },
+    {
+      "id": "FOC17-05",
+      "severity": "suggestion",
+      "title": "carried question for Bailey: Chapters IV and XIII run the Wait split but their guides do not carry the rule",
+      "game": "ffx2",
+      "chapter": "IV, XIII",
+      "expected": "Bailey's call",
+      "observed": "unchanged",
+      "repro": "see critic/reviews/5860a134-focused.md",
+      "evidence": ["critic/reviews/5860a134-focused/cand-guide-ch4-bahamut-1600x900.jpg"],
+      "confidence": "carried",
+      "requirement": "AGENTS.md rule 10",
+      "where": "n/a",
+      "fix": "ask Bailey; build nothing without a yes",
+      "acceptanceCheck": "Bailey's answer recorded"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "tsc --noEmit clean in D:/pyrefly-rel17b; the 6 unit files touched since 5860a134: 79 passed",
+      "FFX-2 Chapter VI win (real keys) with 1 and 2 prior attempts: Rikku line + rikku-x2 at 1600x900, Paine line + paine.png at 2000x1012; live shows FFX rikku.png for the same run",
+      "FFX-2 Chapter IV win at 2000x1012: yuna-x2 in the wedge (live: FFX yuna.png), Enter, hold-Enter through the post scene to chapter select",
+      "FFX-2 Chapter IV loss at 1600x900: yuna-white-mage/hurt.png; Enter (RETRY) to party prep",
+      "FFX-2 Chapter XIII loss on candidate and live (FOC17b-01)",
+      "FFX Chapter I win: Tidus line and portraits/tidus.png unchanged",
+      "Phone 390x844 touch: FFX-2 Chapter V Mega-Potion (ALL) and Hi-Potion (single), FFX Chapter I Mega-Potion (ALL): card, confirm and sent command agree",
+      "Desktop 1600x900 mouse: FFX-2 Chapter VI Item > Hi-Potion click, help line and sent command agree; keyboard menus exercised in every win run",
+      "First-run briefing at 1600x900, 2000x1012, 390x844: option A text verbatim, smallest text 14-15 px",
+      "Three target composites (results, phone HUD B, briefing C1)"
+    ],
+    "reused": [
+      {
+        "what": "Chapters V A1 trace, IX art, XIII reticle and pause, guide Wait-split rule, phone text sizes, defeat -> RETRY -> win flow",
+        "from": "critic/reviews/5860a134-focused.md",
+        "why": "git diff 5860a134..1a680e41 changes only src/app/screens/ResultsScreen.ts (heroHtml), src/ui/common/victoryLine.ts (two new helpers), src/ui/ffx2/CommandMenu.ts (tap moves the cursor) and src/ui/coach/coachCopy.ts (briefing copy); none of those paths feeds the engines, the presenter, the guide, the pause screen or the scene art. Nooj's idle is art for the unlisted Den of Woe chapter, not reachable from chapter select."
+      }
+    ],
+    "notTested": [
+      "Den of Woe / Nooj idle in play (chapter unlisted; approvedArtCheck false in the plan)",
+      "Chapters II, III, V results wedge by play (V covered by the unit test, not by a win this pass)",
+      "Audio, load and frame times, real devices, Safari"
+    ]
+  },
+  "regressions": [],
+  "nextReview": "live verification of 1a680e41 after the deploy (CHK-017), then the deep review this shared-system change owes on the live build (plan depth deep, deepAfterDeploy true; carried deep obligation from e45ed3c1); FOC17b-01 and FOC17b-02 go into the next batch",
+  "elapsedMinutes": 45
+}

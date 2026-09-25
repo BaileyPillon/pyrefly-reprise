@@ -145,10 +145,14 @@ export function playableChapterCount(registry: ChapterCountRegistry = {}): numbe
  */
 export const BRIEFING_LINES: readonly BriefingLine[] = [
   { lead: `“${countWord(playableChapterCount())} fights. That is all this is.`, strong: '', tail: '' },
-  { lead: 'In mine, ', strong: 'nothing moves until you move', tail: ' —' },
-  { lead: 'read the list, take your time.', strong: '', tail: '' },
-  { lead: 'In hers, ', strong: 'the clock does not wait', tail: '.”' },
+  { lead: 'In the FFX fights, ', strong: 'nothing moves until you act', tail: '.' },
+  { lead: 'Take your time.', strong: '', tail: '' },
+  { lead: 'In the FFX-2 fights, ', strong: 'the clock keeps running', tail: ', even while you choose.”' },
 ];
+// Reworded 2026-09-25 (D-181): Bailey on the live briefing, "The way this is worded
+// makes no sense to me…", then picked option A: the games are named instead of
+// "In mine / In hers", "read the list" is gone (D-136), and each clock line says
+// plainly when it runs. The line above is the Active wording; Wait's is below.
 
 /**
  * The fourth line under FFX-2's **Wait** mode — **Bailey's pick, verbatim**
@@ -170,9 +174,9 @@ export const BRIEFING_LINES: readonly BriefingLine[] = [
  * FFX-2 only in content; lines 1-3 never change.
  */
 export const BRIEFING_WAIT_LINE: BriefingLine = {
-  lead: 'In hers, ',
-  strong: 'the clock does not wait',
-  tail: '. Choosing a command stops it.”',
+  lead: 'In the FFX-2 fights, ',
+  strong: 'the clock keeps running',
+  tail: ' until you pick a command. Then it waits while you choose.”',
 };
 
 /**
@@ -191,7 +195,7 @@ export type Ffx2CoachClock = 'active' | 'wait' | 'hold';
  * old hold, where nothing moves while any command menu is open.
  */
 export const BRIEFING_HOLD_LINE: BriefingLine = {
-  lead: 'In hers, ',
+  lead: 'In the FFX-2 fights, ',
   strong: 'the clock holds while you choose',
   tail: '.”',
 };

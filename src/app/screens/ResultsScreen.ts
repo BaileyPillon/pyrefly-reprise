@@ -21,10 +21,10 @@ import {
   isNewBest,
   isSilentResultsChapter,
   leaderId,
-  pickVictoryQuip,
   victoryHeroHtml,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
+import { victoryLine, victoryTurn, wedgeFallenArt, wedgeFigureId, wedgePortraitId, type VictoryLine } from '../../ui/common/victoryLine.ts';
 
 /** How long the gil/AP counters take to roll up to their final value [visual-bible §3.8 step 6]. */
 const COUNT_UP_MS = 1150;
@@ -102,7 +102,7 @@ export class ResultsScreen extends Screen {
   private readonly rows: ResultsMemberRow[];
   /** Filled in by `enter()`, from the record as it stood before this clear. */
   private wasNewBest = false;
-  private readonly quip: string | undefined;
+  private quip: VictoryLine | undefined;
   /** FFX pays in AP, FFX-2 in EXP. The ledger heading is labelled from this. */
   private readonly awardUnit: 'AP' | 'EXP';
   /** The real clear time, not the engine's unadvanced `elapsedMs`. */
@@ -127,13 +127,6 @@ export class ResultsScreen extends Screen {
     this.awardUnit = game === 'ffx' ? 'AP' : 'EXP';
     this.clearMs = clearTimeMs(opts.result, opts.elapsedMs, game);
     this.rows = buildMemberRows(chapter, opts.result);
-
-    // A quip is a victory register. Printing "…Okay. Next one." under a
-    // 200 px "Defeat" was the tonal bug this screen was rebuilt for.
-    this.quip =
-      this.victory && !this.silent
-        ? pickVictoryQuip(chapter?.scriptsRef.victoryQuips[this.rows[0]?.id ?? ''] ?? undefined)
-        : undefined;
   }
 
   override enter(): void {
@@ -145,6 +138,13 @@ export class ResultsScreen extends Screen {
     if (this.silent) this.stage.el.classList.add('rres--silent');
     if (!this.victory) this.stage.el.classList.add('rres--defeat');
 
+    // A quip is a victory register, never under "Defeat". PR-0021: the speaker rotates
+    // with the save's attempts (both games); chosen first, as they stand in the wedge (VL-1).
+    if (this.victory && !this.silent) {
+      const banks = chapter?.scriptsRef.victoryQuips;
+      const turn = victoryTurn(this.app.save.value.chapters);
+      this.quip = victoryLine(banks, this.rows.map((r) => r.id), turn);
+    }
     // The wedge, the standing figure and the caption never change once the
     // screen is up; only the ledger's numbers roll, so `refresh()` rewrites
     // just `.rres__page` and leaves the artwork alone.
@@ -262,22 +262,21 @@ export class ResultsScreen extends Screen {
   // --------------------------------------------------------------- content
 
   /**
-   * The figure in the wedge. A win stands the leader's portrait there; a loss
-   * uses their fallen pose, falling back through `hurt` -> `ko` -> no art at
+   * The wedge's figure: a win stands the line's speaker (VL-1), else the leader; a
+   * loss the leader's fallen pose, falling back through `hurt` -> `ko` -> no art at
    * all rather than grinning at the player under the word "Defeat".
    *
    * Reads the leader from the chapter build (`leaderId`), not `rows[0]`
    * (PR-0003): the row list can legitimately be empty or reordered by AP
-   * eligibility, and the fallen pose must render regardless.
+   * eligibility, and the fallen pose must render regardless. The art is the
+   * chapter's own game's (FOC17-01): an FFX-2 girl in her X-2 likeness or dressphere.
    */
   private heroHtml(): string {
-    const leader = leaderId(getChapter(this.opts.chapterId));
-    if (!leader) return '';
-    if (this.victory) {
-      return victoryHeroHtml(leader);
-    }
-    const hurt = artUrl(`art/characters/${leader}/hurt.png`);
-    const ko = artUrl(`art/characters/${leader}/ko.png`);
+    const chapter = getChapter(this.opts.chapterId);
+    const figure = wedgeFigureId(this.victory, this.quip, leaderId(chapter));
+    if (!figure) return '';
+    if (this.victory) return victoryHeroHtml(wedgePortraitId(figure, chapter));
+    const [hurt, ko] = wedgeFallenArt(chapter, figure).map((p) => artUrl(p));
     return `<img class="rres__hero rres__hero--fallen" src="${hurt}" data-fallback="${ko}" alt=""
       draggable="false" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.remove();}" />`;
   }
@@ -367,7 +366,7 @@ export class ResultsScreen extends Screen {
           <div class="rres__rule"></div>
           ${tags.map((t) => `<span class="rres__tag">${escapeHtml(t)}</span>`).join('')}
         </div>
-        ${this.quip ? `<div class="rres__quip">${escapeHtml(this.quip)}</div>` : ''}
+        ${this.quip ? `<div class="rres__quip" data-speaker="${escapeHtml(this.quip.speakerId)}">${escapeHtml(this.quip.line)}</div>` : ''}
       </div>
 
       <div class="rres__ledger rres__ledger--${density.ledger}">${ledgerHtml}</div>

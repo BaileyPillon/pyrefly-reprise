@@ -56,7 +56,7 @@ import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 
 /**
  * Every registered chapter id. Also the keys used in `SaveData.chapters`.
- * `'seymour-natus'`, `'ffx2-fallen-aeons'` and `'ffx2-den-of-woe'` are registered but unlisted: see `UNLISTED_CHAPTERS`.
+ * `'seymour-natus'`, `'ffx2-fallen-aeons'`, `'seymour-omnis'` and `'ffx2-den-of-woe'` are registered but unlisted: see `UNLISTED_CHAPTERS`.
  */
 export type ChapterId =
   | 'seymour-flux'
@@ -68,7 +68,8 @@ export type ChapterId =
   | 'seymour-anima-macalania'
   | 'evrae-airship'
   | 'yojimbo-cavern'
-  | 'seymour-natus' | 'ffx2-fallen-aeons' | 'ffx2-trema' | 'ffx2-den-of-woe';
+  | 'seymour-natus' | 'ffx2-fallen-aeons'
+  | 'seymour-omnis' | 'ffx2-trema' | 'ffx2-den-of-woe';
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {

@@ -1,0 +1,62 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-25T20:23:44.000Z",
+  "build": {
+    "mainSha": "e45ed3c1",
+    "bundle": "RSsiNs7I",
+    "artifactHash": "584cfce124a84b8eb30963bb9c9bb643108b89bd9f6033b972d7c5fba5d45723"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/e45ed3c1.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/fc7f1a20.json => {result: PASS, artifactHash: 584cfce124a84b8eb30963bb9c9bb643108b89bd9f6033b972d7c5fba5d45723, liveManifest: match, checked: 94, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, fresh context, 1600x900, cache-busted URL. Every screen check was gated on window.__pyrefly.screen()/snapshotState().overlayDepth polling before use, never a fixed timeout. Real-input flow: title -> real click + Enter -> briefing (body text captured verbatim, matches the release note's Wait/Active line exactly) -> chapter select -> Chapter IX (yojimbo-cavern, present in chapters()) -> cutscene -> battle; the Yojimbo/Ginnem/Daigoro cast painting (art/characters/yojimbo-cavern/idle.png) returned 200 image/png live, no placeholder silhouette; art/manifest.json returned 200 (source uses cache:'no-cache', src/engine/ArtManifest.ts); a real Attack command resolved; audioDebug() while still in battle showed playing:'boss-yojimbo' with {cached:true, source:'prerendered'} (not the synth fallback); a real Escape opened the pause overlay (confirmed by page text/snapshot), a real H hid the panels then a second H restored them, and a second real Escape resumed to the battle screen; returned to chapter select, selected Chapter XIII (ffx2-trema, present in chapters()) and reached party-prep with the header verbatim 'XIII · TREMA — VIA INFINITO — CLOISTER 100' and party Yuna/Rikku/Paine LV 99. Zero console errors and zero >=400 responses across the whole run."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "settings.masterVolume changed from 0.8 to 0.55 on the persisted save (the same field the pause Options slider writes, src/app/screens/pause/settings.ts) and Chapter IX's one real Attack recorded progress (yojimbo-cavern attempts:1, playTimeMs:2416.6). After a full page reload both read back unchanged: masterVolume 0.55, yojimbo-cavern attempts:1 playTimeMs:2416.6.",
+      "reason": "Lightweight smoke only, as the task scopes it; the setting was changed by writing the persisted field directly rather than via a real click on the Options slider (every screen transition and command in the CHK-016 pass used real key/mouse input, but this one mutation did not), and the full CHK-024 upgrade matrix (fresh/returning/migrating/invalid-storage) is not tested here."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact-manifest verify-live (94 files, byte-identical, changed-from fc7f1a20)",
+      "title -> real Enter -> briefing (verbatim Wait/Active line matching the release note) -> chapter select",
+      "Chapter IX (Yojimbo) listed in chapters() and reachable: select -> cutscene -> battle, each state asserted",
+      "Yojimbo/Ginnem/Daigoro cast art and the art index both return 200 live; art index fetch uses cache:'no-cache' at the source",
+      "a real Attack command resolves in Chapter IX battle",
+      "prerendered music confirmed via audioDebug() (boss-yojimbo, cached:true, source:prerendered) while still in battle",
+      "pause overlay open/resume with a real Escape (overlay confirmed by page text), H hides and restores the pause panels",
+      "Chapter XIII (Trema) listed in chapters() and reachable to its first menu (party-prep), header and party verified verbatim",
+      "a save-backed setting (masterVolume) and Chapter IX progress (attempts/playTimeMs) both survive a full page reload",
+      "zero console errors and zero >=400 responses across the whole run"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full CHK-024 upgrade matrix (fresh player / returning player / a previous-release save migrating forward / invalid or truncated storage / reset-and-confirm) -- out of scope for this lightweight pass",
+      "real-input smoke of Chapters I-VIII, X-XII (only Chapter IX and Chapter XIII, the two named by the release note, were exercised)",
+      "a positive/cancel pair on a battle command submenu specifically (only the pause overlay's own open/resume, which functions as the cancel-equivalent exercised here, and one real Attack were run)",
+      "a second-visit byte-level proof that the art index revalidates rather than serving a stale cached copy -- confirmed only by reading the source (cache:'no-cache') plus one successful live 200, not by a repeat-visit cache trace",
+      "phone target labeling (FOC17-02), results wedge FFX-2 art (FOC17-01), the 22 new FFX-2 battle poses, victory lines in the results wedge, the Wait-split guide line in Chapters V/VI, and the FFX-2 menu-closes-on-hit change -- all named in the release note but not individually exercised in this pass's time budget",
+      "physical device / Safari / gamepad input"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 35
+}

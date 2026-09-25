@@ -550,6 +550,19 @@ export interface CombatantFlags {
   carriesStateForward?: boolean;
   /** Cannot be revived by anything (possessed aeons, Yu Yevon's shell). */
   noRevive?: boolean;
+  /**
+   * **Out of melee reach** (FFX): a *physical* party action reaches this
+   * combatant only from a user who can reach it (`targeting.ts`,
+   * `REACHES_OUT_OF_MELEE`: Wakka, Valefor, Anima, Mindy). Seymour Omnis's
+   * Mortiphasm discs [ffx-seymour-omnis §2, verified: 4 sources]. Magic reaches.
+   */
+  outOfMeleeReach?: boolean;
+  /**
+   * **Never a random pick** (FFX): a `random-enemy` hit, a Reflect bounce or an
+   * empty-aim fallback never lands here; only an explicit aim does. The
+   * Mortiphasm discs [ffx-seymour-omnis §2, single source: GameFAQs].
+   */
+  neverRandomTarget?: boolean;
 }
 
 /**
@@ -1947,6 +1960,25 @@ export type BattleEvent =
       ownerId?: CombatantId;
     })
   | (BattleEventBase & { type: 'part-restored'; partId: CombatantId; hp: number; ownerId?: CombatantId })
+  /**
+   * A combatant's elemental affinities changed mid-battle (FFX; Chapter XII,
+   * Seymour Omnis, whose four Mortiphasm discs set them). `affinities` is the
+   * **whole** map after the change (a missing element is `normal`), so the
+   * Sensor panel and the HUD can redraw from this event alone. `facings` names
+   * what each part now shows when parts drive the change (part id -> element).
+   */
+  | (BattleEventBase & {
+      type: 'affinity-change';
+      targetId: CombatantId;
+      affinities: ElementalAffinities;
+      /** Why: a part turned, or a scripted reset. */
+      cause: 'part-turn' | 'reset';
+      /** The part that turned (with `cause: 'part-turn'`). */
+      partId?: CombatantId;
+      /** Which way it turned, seen from the front: `left` (counter-clockwise) or `right` (clockwise). */
+      direction?: 'left' | 'right';
+      facings?: Record<CombatantId, ElementId>;
+    })
   /** A named hook the story runner listens for. Pauses playback while a mid-battle script plays. */
   | (BattleEventBase & { type: 'script-trigger'; name: string; payload?: Record<string, unknown> })
   | (BattleEventBase & {
@@ -2074,12 +2106,18 @@ export type TriggerCondition =
   | { type: 'status-applied'; who: CombatantId; status: StatusId }
   /** The battle turn counter reached `n` (1-based). */
   | { type: 'turn'; n: number }
-  /** `who` used `ability`. */
-  | { type: 'ability-used'; who: CombatantId; ability: AbilityId }
+  /**
+   * `who` used `ability`. With `onAeon: true` it fires only when one of the
+   * action's targets is an aeon (FFX; FFX-2 has no aeon party, so never there).
+   */
+  | { type: 'ability-used'; who: CombatantId; ability: AbilityId; onAeon?: boolean }
   /** `who` was KO'd, ejected or destroyed. */
   | { type: 'ko'; who: CombatantId }
-  /** `who`'s Overdrive gauge reached 100. */
-  | { type: 'overdrive'; who: CombatantId }
+  /**
+   * `who`'s Overdrive gauge reached 100. With `at`, fires when one gauge change
+   * crosses from below `at` to `at` or above (FFX; X-2 has no gauge).
+   */
+  | { type: 'overdrive'; who: CombatantId; at?: number }
   /** Any enemy began a telegraphed charge; `who` narrows it to one enemy. */
   | { type: 'charge-started'; who?: CombatantId };
 

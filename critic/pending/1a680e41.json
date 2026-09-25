@@ -1,0 +1,87 @@
+{
+  "mainSha": "1a680e41",
+  "bundle": "BVdUtZb-",
+  "deployedAt": "2026-09-25T21:30:13.157Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 708,
+  "policyVersion": 2,
+  "artifactHash": "1b5eba77b3ed49108942a02ab8fd4c0b923cfa0407835ef9708a375882702e3d",
+  "review": "deep",
+  "reasons": [
+    "src/ui/common/victoryLine.ts: global layout, input and boot is a shared system"
+  ],
+  "systems": [
+    "FFX-2 HUD",
+    "global layout, input and boot",
+    "title, chapter select, prep, pause and results screens"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin"
+  ],
+  "checks": [
+    "CHK-002",
+    "CHK-003",
+    "CHK-006",
+    "CHK-007",
+    "CHK-008",
+    "CHK-009",
+    "CHK-010",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-020",
+    "CHK-021"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 47,
+    "at": "2026-09-25T21:30:13.157Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
+    },
+    {
+      "kind": "focused",
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "PASS",
+      "settledBy": "critic/reviews/1a680e41-focused.json",
+      "settledAt": "2026-09-25T21:10:00.000Z"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483",
+        "dc2669ac",
+        "e3b8c2a3",
+        "a999d133",
+        "1c22066e",
+        "5be4babe",
+        "fc7f1a20",
+        "e45ed3c1"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "Push the build live please let's get moving",
+    "date": "2026-09-25T21:30:13.157Z",
+    "report": "critic/reviews/1a680e41-focused.json",
+    "changedArea": null
+  }
+}

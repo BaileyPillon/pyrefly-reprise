@@ -64,10 +64,10 @@ describe('copy: three clocks, three sets of words', () => {
 
     const hold = briefingLines('hold');
     expect(hold.slice(0, 3)).toStrictEqual(BRIEFING_LINES.slice(0, 3));
-    expect(text(hold[3]!)).toBe('In hers, the clock holds while you choose.”');
+    expect(text(hold[3]!)).toBe('In the FFX-2 fights, the clock holds while you choose.”');
     // D-136 (2026-09-25) reworded the Wait tail: "Choosing a command stops
     // it." supersedes D-121's "A list stops it."
-    expect(text(briefingLines('wait')[3]!)).toBe('In hers, the clock does not wait. Choosing a command stops it.”');
+    expect(text(briefingLines('wait')[3]!)).toBe('In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.”');
     expect(briefingLines('active')).toStrictEqual(BRIEFING_LINES);
   });
 });

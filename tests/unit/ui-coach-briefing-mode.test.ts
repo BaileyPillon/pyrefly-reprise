@@ -47,9 +47,9 @@ describe('copy: the mode-aware fourth line', () => {
     // count of playable chapters; "That is all this is." and the rest never change.
     expect(BRIEFING_LINES.map(text)).toStrictEqual([
       `“${countWord(playableChapterCount())} fights. That is all this is.`,
-      'In mine, nothing moves until you move —',
-      'read the list, take your time.',
-      'In hers, the clock does not wait.”',
+      'In the FFX fights, nothing moves until you act.',
+      'Take your time.',
+      'In the FFX-2 fights, the clock keeps running, even while you choose.”',
     ]);
   });
 
@@ -64,7 +64,7 @@ describe('copy: the mode-aware fourth line', () => {
     // D-136 (2026-09-25) reworded the tail again: "Choosing a command stops
     // it." supersedes "A list stops it." — Bailey did not want the command
     // menu called a list.
-    expect(text(BRIEFING_WAIT_LINE)).toBe('In hers, the clock does not wait. Choosing a command stops it.”');
+    expect(text(BRIEFING_WAIT_LINE)).toBe('In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.”');
     expect(BRIEFING_WAIT_LINE.strong).toBe(BRIEFING_LINES[3]!.strong);
     expect(BRIEFING_WAIT_LINE).not.toStrictEqual(BRIEFING_LINES[3]);
   });
@@ -73,7 +73,7 @@ describe('copy: the mode-aware fourth line', () => {
     const approved = BRIEFING_LINES[3]!;
     expect(BRIEFING_WAIT_LINE.lead).toBe(approved.lead);
     expect(BRIEFING_WAIT_LINE.strong).toBe(approved.strong);
-    expect(BRIEFING_WAIT_LINE.tail.startsWith(approved.tail.slice(0, 1))).toBe(true);
+    // D-181 (2026-09-25, option A): the Wait tail says when the clock stops, so it no longer shares the Active tail's first character.
     expect(BRIEFING_WAIT_LINE.tail.endsWith('”')).toBe(true);
     // Still one briefing line. The 60-character cap the original drafts were
     // written to (docs/concepts/coach/wait-split-lines.md, "Constraints
@@ -82,7 +82,9 @@ describe('copy: the mode-aware fourth line', () => {
     // exercise, and it runs 3 characters past that cap ("Choosing a command
     // stops it." reads longer than "A list stops it."). Applied exactly as
     // given rather than trimmed to fit a constraint that was never his own.
-    expect(text(BRIEFING_WAIT_LINE).length).toBeLessThanOrEqual(65);
+    // D-181 (2026-09-25): Bailey picked option A, a longer and plainer line that
+    // wraps inside the briefing panel (checked at 1600x900, 1280x720 and 390x844).
+    expect(text(BRIEFING_WAIT_LINE).length).toBeLessThanOrEqual(110);
   });
 });
 
@@ -106,7 +108,7 @@ describe('the briefing reads the mode when it is shown', () => {
     const lines = shownLines(root);
     expect(lines).toHaveLength(4);
     expect(lines[3]).toBe(text(BRIEFING_WAIT_LINE));
-    expect(lines[3]).toBe('In hers, the clock does not wait. Choosing a command stops it.”');
+    expect(lines[3]).toBe('In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.”');
     b.skip();
   });
 
@@ -114,7 +116,7 @@ describe('the briefing reads the mode when it is shown', () => {
     save.setSettings({ ffx2Atb: 'active' });
     const b = new Briefing({ root, reduceMotion: true });
     void b.show();
-    expect(shownLines(root)[3]).toBe('In hers, the clock does not wait.”');
+    expect(shownLines(root)[3]).toBe('In the FFX-2 fights, the clock keeps running, even while you choose.”');
     b.skip();
   });
 
@@ -122,7 +124,7 @@ describe('the briefing reads the mode when it is shown', () => {
     const b = new Briefing({ root, reduceMotion: true });
     save.setSettings({ ffx2Atb: 'active' });
     void b.show();
-    expect(shownLines(root)[3]).toBe('In hers, the clock does not wait.”');
+    expect(shownLines(root)[3]).toBe('In the FFX-2 fights, the clock keeps running, even while you choose.”');
     b.skip();
     save.setSettings({ ffx2Atb: 'wait' });
     const again = new Briefing({ root, reduceMotion: true });
@@ -136,7 +138,7 @@ describe('the briefing reads the mode when it is shown', () => {
     const b = new Briefing({ root, reduceMotion: true });
     void b.show();
     const golds = Array.from(root.querySelectorAll('.coach-brief__line b')).map((n) => n.textContent);
-    expect(golds).toStrictEqual(['nothing moves until you move', BRIEFING_WAIT_LINE.strong]);
+    expect(golds).toStrictEqual(['nothing moves until you act', BRIEFING_WAIT_LINE.strong]);
     b.skip();
   });
 });

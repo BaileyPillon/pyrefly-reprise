@@ -564,14 +564,16 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       const el = (e.target as HTMLElement).closest('[data-idx]');
       if (!el) return;
       const idx = Number(el.getAttribute('data-idx'));
+      // A tap moves the cursor onto the row first, so the help line and the phone's
+      // target card name the command it sends, not the one it was on (FOC17-02).
       if (view === 'top') {
-        topIdx = idx;
+        if (idx !== topIdx) { topIdx = idx; renderTop(); }
         const row = topRows[idx];
         if (!row) return;
         if ('leaf' in row) chooseLeaf(row.leaf);
         else openGroup(row.items, groupLabel(row.group));
       } else if (view === 'sub') {
-        subIdx = idx;
+        if (idx !== subIdx) { subIdx = idx; renderSub(subCategory); }
         const c = subItems[idx];
         if (c) chooseLeaf(c);
       }
