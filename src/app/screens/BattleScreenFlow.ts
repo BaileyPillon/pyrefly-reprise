@@ -29,6 +29,8 @@ import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
+import { preloadBattle } from './battlePreload.ts';
+import { boardWhenWarm } from './frontendWarm.ts';
 import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun } from './pause/restartCarry.ts';
@@ -282,7 +284,7 @@ export class GameFlow {
     void audio.playMusic('chapter-select', { fade: 1.2 }).catch(() => {
       /* the track may not be composed yet */
     });
-    const screen = makeChapterSelect();
+    const screen = await boardWhenWarm(this.app, makeChapterSelect); // PR-0065: no grey busts on arrival
     if (!(await this.show(screen))) return null;
     return screen.done;
   }
@@ -299,6 +301,7 @@ export class GameFlow {
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
     const chapter = getChapter(id);
     if (!chapter) return null;
+    void preloadBattle(chapter, opts.seed ?? 1); // the battle's art loads behind prep and the scene (PR-0061)
     const save = this.app.save;
     // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
     let { attempt, carry } = ({ opts } = openRun(this, id, opts));
@@ -308,17 +311,13 @@ export class GameFlow {
     // ENCOUNTER — **is** the new owner of the stack, and has to say so before
     // {@link show} looks at `owned`.
     //
-    // `owned` is left pointing at whatever screen the *previous* run put up,
-    // and nothing since has gone through `show`: the board that `main.ts`
-    // `goto`s after a chapter ends is not a flow screen. So the first `show`
-    // of the next run saw `owned !== null && current !== owned`, read a fresh
-    // start as "something navigated out from under us", set `handedOver` and
-    // returned false — `runChapter` then answered `null` without showing
-    // anything. Measured on the real path: pause -> OPTIONS -> RESTART
-    // ENCOUNTER left the player on chapter select for good, while the same row
-    // through the debug harness restarted, because there `current` happened to
-    // still equal `owned`. Re-entrant calls (`start` is running) keep the
-    // guard: that is the case it was written for.
+    // `owned` still points at the *previous* run's screen (the board `main.ts`
+    // `goto`s after a chapter is not a flow screen), so the first `show` saw
+    // `owned !== current`, read a fresh start as "navigated out from under
+    // us" and `runChapter` answered `null`: pause -> OPTIONS -> RESTART
+    // ENCOUNTER left the player on chapter select for good (the debug harness
+    // restarted only because `current` happened to equal `owned`). Re-entrant
+    // calls (`start` is running) keep the guard; that is its case.
     if (!this.running) {
       this.owned = null;
       this.handedOver = false;
@@ -336,7 +335,7 @@ export class GameFlow {
 
       save.recordAttempt(id);
 
-      // The pre-battle scene plays once; a retry goes straight back in.
+      // The pre-battle scene plays once (a retry goes straight back in).
       if (!opts.skipCutscenes && attempt === 0) await this.playCutscene(chapter, 'pre');
       if (this.handedOver) return null;
 

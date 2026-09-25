@@ -10,6 +10,7 @@ import { ParallaxField, normalisePointer } from './frontend/parallax.ts';
 import { MoteField } from './frontend/motes.ts';
 import { titleMarkup, upgradeTitlePlanes } from './frontend/titleMarkup.ts';
 import { readSetting } from '../SaveData.ts';
+import { warmFrontEnd } from './frontendWarm.ts';
 
 /**
  * The title card, in the approved "Ink & Gold" presentation and now moving.
@@ -90,6 +91,8 @@ export class TitleScreen extends Screen {
     // The 2688px master, once the manifest says it is on disk. Never awaited:
     // the 1x plate is already decoding and the screen is correct without it.
     void upgradeTitlePlanes(this.root);
+    // The briefing's and the board's paintings, while the title waits for a key (PR-0065).
+    warmFrontEnd(this.app);
 
     const motes = this.root.querySelector('.fe-title__motes');
     if (motes instanceof HTMLElement) {

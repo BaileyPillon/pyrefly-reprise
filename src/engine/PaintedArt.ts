@@ -1,15 +1,21 @@
 import {
   CanvasTexture,
+  ImageLoader,
   LinearFilter,
   LinearMipmapLinearFilter,
   SRGBColorSpace,
+  Texture,
   TextureLoader,
-  type Texture,
 } from 'three';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
 import type { AlphaBox, PoseFrame } from './PaintedScale.ts';
 import { groundHullFromBottoms, type GroundHull } from './PaintedRest.ts';
+import { cachedPainting, paintingKey, type PreparedPainting } from './PaintedArtCache.ts';
+import { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
+
+// Matte cleanup lives in `./PaintedMatte.ts`; re-exported for existing callers.
+export { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
 
 // "Does this art exist?" is answered by `./ArtManifest.ts` — import it from
 // there. It is deliberately not re-exported here: this file is already well
@@ -111,12 +117,25 @@ export function paintedCanvasTexture(canvas: HTMLCanvasElement): CanvasTexture {
 }
 
 const loader = new TextureLoader();
+const imageLoader = new ImageLoader();
 const warned = new Set<string>();
 
 function warnOnce(url: string, why: string): void {
   if (warned.has(url)) return;
   warned.add(url);
   console.warn(`[painted] ${why}: ${url} — using a procedural placeholder.`);
+}
+
+/** The decoded image (decoded off the main thread first), or null on a miss. */
+async function tryLoadImage(url: string): Promise<HTMLImageElement | null> {
+  try {
+    const image = await imageLoader.loadAsync(url);
+    await image.decode?.().catch(() => undefined);
+    return image;
+  } catch {
+    warnOnce(url, 'missing painting');
+    return null;
+  }
 }
 
 /** Resolves to the texture, or null when the file is absent/undecodable. */
@@ -175,68 +194,78 @@ export async function loadPainted(
     return placeholderPainted(url, fallback, fallbackBaseline);
   }
 
-  const [tex, meta] = await Promise.all([tryLoadTexture(url), tryLoadMeta(url)]);
-  if (tex) {
-    const img = tex.image as { width?: number; height?: number } | undefined;
-    const width = meta?.width ?? img?.width ?? 1024;
-    const height = meta?.height ?? img?.height ?? 1024;
+  const prep = await cachedPainting(
+    paintingKey(url, matte, fit),
+    () => preparePainting(url, matte, fit),
+    opts.ignoreManifest === true,
+  );
+  if (!prep) return placeholderPainted(url, fallback, fallbackBaseline);
+  // A texture of its own every time (an actor disposes what it loaded); only
+  // the decoded pixels and the measurements are shared (`PaintedArtCache.ts`).
+  const texture = prep.cleaned
+    ? paintedCanvasTexture(prep.source as HTMLCanvasElement)
+    : configurePaintedTexture(new Texture(prep.source));
+  return { texture, meta: { ...prep.meta }, placeholder: false, url };
+}
 
-    let texture = tex;
-    let pixels: CanvasImageSource | null = (tex.image as CanvasImageSource) ?? null;
-    if (matte && matte.mode !== 'off' && tex.image) {
-      const cleaned = cleanMatte(tex.image as Parameters<typeof cleanMatte>[0], matte);
-      if (cleaned) {
-        console.warn(
-          `[painted] ${url} still had an opaque white studio background; ` +
-            'cleaned it at load time. Regenerate the PNG with a proper alpha matte.',
-        );
-        texture = paintedCanvasTexture(cleaned);
-        tex.dispose();
-        pixels = cleaned;
-      }
+/**
+ * Fetch, decode, matte-check and measure one painting, ahead of the battle
+ * that stages it (PR-0061; `app/screens/battlePreload.ts`). Resolves to false
+ * on a miss. The same options as the later {@link loadPainted} call, or the
+ * work is done twice.
+ */
+export async function prewarmPainted(url: string, matte?: MatteOptions, fit?: false | BaselineFitOptions): Promise<boolean> {
+  if ((await manifestKnowsAsset(url)) === false) return false;
+  return (await cachedPainting(paintingKey(url, matte, fit), () => preparePainting(url, matte, fit))) !== null;
+}
+
+/** The texture-free half of {@link loadPainted}, memoised by `PaintedArtCache.ts`. */
+async function preparePainting(
+  url: string,
+  matte?: MatteOptions,
+  fit?: false | BaselineFitOptions,
+): Promise<PreparedPainting | null> {
+  const [image, meta] = await Promise.all([tryLoadImage(url), tryLoadMeta(url)]);
+  if (!image) return null;
+  const width = meta?.width ?? image.width ?? 1024;
+  const height = meta?.height ?? image.height ?? 1024;
+  let pixels: HTMLImageElement | HTMLCanvasElement = image;
+  if (matte && matte.mode !== 'off') {
+    const cleaned = cleanMatte(image, matte);
+    if (cleaned) {
+      console.warn(
+        `[painted] ${url} still had an opaque white studio background; ` +
+          'cleaned it at load time. Regenerate the PNG with a proper alpha matte.',
+      );
+      pixels = cleaned;
     }
-
-    // The sidecar's `baselineY` is written by the art tool and is usually just
-    // `height - 16`, not a measurement — so measure. Reading the *cleaned*
-    // alpha is what plants a figure's feet exactly on the ground plane.
-    let baselineY = meta?.baselineY ?? height;
-    // One alpha pass answers both questions: where the feet are, and the tight
-    // box the figure occupies (which is what a target bracket is scaled from —
-    // see `measureAlpha`). The box is measured even when the caller has opted
-    // out of baseline fitting, because a hand-measured baseline says nothing
-    // about how much empty canvas surrounds the figure.
-    let content: AlphaBox | undefined;
-    let ground: GroundHull | undefined;
-    if (pixels) {
-      const measured = measureAlpha(pixels, width, height, fit === false ? {} : (fit ?? {}));
-      if (fit !== false && measured.baselineY !== null) baselineY = measured.baselineY;
-      if (measured.box) content = measured.box;
-      if (measured.ground) ground = measured.ground;
-    }
-
-    return {
-      texture,
-      // The hand overrides ride along untouched: `anchorY` beats the measured
-      // baseline, and `scale` trims the derived pixel scale, both inside
-      // `computePoseScale`.
-      meta: {
-        width,
-        height,
-        baselineY,
-        ...(meta?.scale !== undefined ? { scale: meta.scale } : {}),
-        ...(meta?.anchorY !== undefined ? { anchorY: meta.anchorY } : {}),
-        // Which way the painting faces rides along too: it decides whether the
-        // plane is mirrored, and that is a per-*pose* question (one old frontal
-        // `cast.png` can sit in an otherwise right-facing set).
-        ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),
-        ...(content ? { content } : {}),
-        ...(ground ? { ground } : {}),
-      },
-      placeholder: false,
-      url,
-    };
   }
-  return placeholderPainted(url, fallback, fallbackBaseline);
+  // The sidecar's `baselineY` is usually just `height - 16`, not a
+  // measurement — so measure the *cleaned* alpha, which plants the feet on the
+  // ground plane. One pass answers both questions: the feet, and the tight box
+  // a target bracket is scaled from (measured even when baseline fitting is
+  // off, since a hand baseline says nothing about the empty canvas around it).
+  let baselineY = meta?.baselineY ?? height;
+  const measured = measureAlpha(pixels, width, height, fit === false ? {} : (fit ?? {}));
+  if (fit !== false && measured.baselineY !== null) baselineY = measured.baselineY;
+  return {
+    source: pixels,
+    cleaned: pixels !== image,
+    meta: {
+      width,
+      height,
+      baselineY,
+      // The hand overrides ride along untouched: `anchorY` beats the measured
+      // baseline and `scale` trims the derived pixel scale (`computePoseScale`).
+      ...(meta?.scale !== undefined ? { scale: meta.scale } : {}),
+      ...(meta?.anchorY !== undefined ? { anchorY: meta.anchorY } : {}),
+      // Facing is a per-*pose* question: it decides whether the plane is
+      // mirrored, and one old frontal `cast.png` can sit in a right-facing set.
+      ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),
+      ...(measured.box ? { content: measured.box } : {}),
+      ...(measured.ground ? { ground: measured.ground } : {}),
+    },
+  };
 }
 
 /** Options for {@link loadPainted}. */
@@ -408,153 +437,6 @@ export function measureAlpha(
             y1: Math.min(h, Math.ceil((by1 + 1) * scaleY)),
           },
   };
-}
-
-// ---------------------------------------------------------------------------
-// Matte cleanup
-// ---------------------------------------------------------------------------
-
-export interface MatteOptions {
-  /**
-   * `'auto'` (default) runs the cleanup but keeps the original unless the
-   * leftover background is large *and* wraps most of the image border, so a
-   * correctly cut-out PNG is never touched. `'force'` always applies it,
-   * `'off'` skips it.
-   */
-  mode?: 'auto' | 'force' | 'off';
-  /** Fraction of the image that must be background-white for `'auto'`. */
-  minFraction?: number;
-  /** Borders the region must touch for `'auto'`. 1..4. */
-  minBorders?: number;
-}
-
-const smoothstep = (a: number, b: number, x: number): number => {
-  const t = Math.max(0, Math.min(1, (x - a) / (b - a || 1e-6)));
-  return t * t * (3 - 2 * t);
-};
-
-/**
- * Remove a leftover white studio background from a generated character PNG.
- *
- * Image models prompted with "simple background, white background" often come
- * back with a matte that only *partly* cut the white away — a big opaque white
- * cloud still surrounds the figure, which reads as a white box once the PNG is
- * a plane in a 3D scene.
- *
- * The fix is a flood fill seeded from the image border that travels only
- * through already-transparent or near-white, near-desaturated pixels, scaling
- * their alpha down by how white they are. Because it is connectivity-based, an
- * *interior* white (Yuna's kimono, a highlight) is never touched — only white
- * that is continuous with the outside of the figure.
- *
- * @returns a cleaned canvas, or null when nothing needed doing.
- */
-export function cleanMatte(
-  source: CanvasImageSource & { width?: number; height?: number },
-  opts: MatteOptions = {},
-): HTMLCanvasElement | null {
-  const mode = opts.mode ?? 'auto';
-  if (mode === 'off') return null;
-
-  const w = Math.floor(
-    (source as HTMLImageElement).naturalWidth || (source.width as number) || 0,
-  );
-  const h = Math.floor(
-    (source as HTMLImageElement).naturalHeight || (source.height as number) || 0,
-  );
-  if (!w || !h) return null;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  if (!ctx) return null;
-  ctx.drawImage(source, 0, 0);
-
-  let img: ImageData;
-  try {
-    img = ctx.getImageData(0, 0, w, h);
-  } catch {
-    return null;
-  }
-  const d = img.data;
-
-  const whiteness = (i: number): number => {
-    const r = d[i]!;
-    const g = d[i + 1]!;
-    const b = d[i + 2]!;
-    const max = r > g ? (r > b ? r : b) : g > b ? g : b;
-    const min = r < g ? (r < b ? r : b) : g < b ? g : b;
-    const lum = max / 255;
-    const sat = max > 0 ? (max - min) / max : 0;
-    return smoothstep(0.78, 0.94, lum) * (1 - smoothstep(0.1, 0.32, sat));
-  };
-
-  const visited = new Uint8Array(w * h);
-  const stack = new Int32Array(w * h);
-  let top = 0;
-  const push = (p: number): void => {
-    if (visited[p]) return;
-    visited[p] = 1;
-    stack[top++] = p;
-  };
-
-  for (let x = 0; x < w; x++) {
-    push(x);
-    push((h - 1) * w + x);
-  }
-  for (let y = 0; y < h; y++) {
-    push(y * w);
-    push(y * w + w - 1);
-  }
-
-  let cleared = 0;
-  const borders = [false, false, false, false]; // top, bottom, left, right
-
-  while (top > 0) {
-    const p = stack[--top]!;
-    const i = p * 4;
-    const a = d[i + 3]!;
-    let travel = a < 24;
-    if (!travel) {
-      const wht = whiteness(i);
-      if (wht > 0.3) {
-        travel = true;
-        // A *hard* cut with a short ramp, not a linear `a * (1 - whiteness)`.
-        // Scaling alpha linearly leaves a wash of 30-50%-opaque pixels wherever
-        // the studio background picked up a tint from the figure's own glow —
-        // invisible in isolation, but in a scene it is a translucent rectangle
-        // the size of the whole PNG, and any flash or dissolve lights it up.
-        const next = a * (1 - smoothstep(0.26, 0.62, wht));
-        if (a - next > 8) cleared++;
-        d[i + 3] = next;
-        const y0 = (p / w) | 0;
-        const x0 = p - y0 * w;
-        if (y0 < 2) borders[0] = true;
-        if (y0 > h - 3) borders[1] = true;
-        if (x0 < 2) borders[2] = true;
-        if (x0 > w - 3) borders[3] = true;
-      }
-    }
-    if (!travel) continue;
-
-    const y = (p / w) | 0;
-    const x = p - y * w;
-    if (x > 0) push(p - 1);
-    if (x < w - 1) push(p + 1);
-    if (y > 0) push(p - w);
-    if (y < h - 1) push(p + w);
-  }
-
-  if (mode === 'auto') {
-    const fraction = cleared / (w * h);
-    const touched = borders.filter(Boolean).length;
-    if (fraction < (opts.minFraction ?? 0.05) || touched < (opts.minBorders ?? 3)) return null;
-  }
-  if (!cleared) return null;
-
-  ctx.putImageData(img, 0, 0);
-  return canvas;
 }
 
 /** HEAD probe. Cheap enough to poll a handful of paths every few seconds. */

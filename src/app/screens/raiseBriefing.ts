@@ -14,6 +14,8 @@
 import type { App } from '../App.ts';
 import { Briefing, type BriefingOptions, type BriefingOutcome } from '../../ui/coach/Briefing.ts';
 import { shouldShow } from '../../ui/coach/coachState.ts';
+import { untilWarm } from '../imageWarm.ts';
+import { briefingArtUrls, FRONTEND_WARM_CEILING_MS } from './frontendWarm.ts';
 
 /**
  * Build a briefing bound to this `App`.
@@ -64,5 +66,7 @@ function canDriveInput(app: App): boolean {
 export async function runBriefingIfDue(app: App): Promise<BriefingOutcome | null> {
   if (!canDriveInput(app)) return null;
   if (!shouldShow('briefing')) return null;
+  // Auron and his backdrop decoded before the briefing goes up (PR-0065), with a ceiling.
+  await untilWarm(briefingArtUrls(), FRONTEND_WARM_CEILING_MS);
   return await makeBriefing(app).show();
 }

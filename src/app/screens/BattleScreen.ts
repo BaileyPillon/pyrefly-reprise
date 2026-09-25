@@ -53,6 +53,7 @@ import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
+import { warmShaders } from './BattleScreenWarmup.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -170,6 +171,8 @@ export class BattleScreen extends Screen {
    * on afterwards: every await below checks this before touching anything.
    */
   private exited = false;
+  /** False until the field's shaders are compiled: nothing draws it before (PR-0061). */
+  private fieldShown = false;
 
   /** Resolves when the encounter ends (victory, defeat, escape or exit). */
   readonly finished: Promise<BattleScreenResult>;
@@ -196,6 +199,7 @@ export class BattleScreen extends Screen {
     this.app.renderer.applyPalette(this.scene.palette);
     this.scene.hideOwnActors();
     this.syncPixelScale();
+    void warmShaders(this.app.renderer, scene.scene); // the diorama's programs compile while the figures load
 
     // --- field -------------------------------------------------------------
     this.stage = new PaintedStage({
@@ -299,17 +303,15 @@ export class BattleScreen extends Screen {
     // formation's `musicCues`, so the boss theme the pre-scene faded in is the
     // one that keeps playing instead of being crossfaded out to the generic
     // `battle-ffx` (critic round 02 #02). Nothing plays music here.
+    await warmShaders(this.app.renderer, this.scene.scene, { draw: true }); // the figures' too; first frame under the swirl
+    if (this.exited) return this.releaseParts();
+    this.fieldShown = true;
     void this.app.fade('clear', 600);
 
-    // `P` has no abstract button in `app/Input.ts` — adding one would put a
-    // global binding in a contract file for a single screen — so it gets a
-    // listener of its own. It only ever sets a flag; every decision about
-    // *whether* the menu may open stays in `handleInput` with the other ways in.
-    //
-    // Note this is a bubble-phase listener, so it stops firing the moment the
-    // pause screen claims the keyboard (`Input.claimKeyboard`, capture phase).
-    // That is the behaviour we want: P re-opening a menu that is already up
-    // would be a no-op at best.
+    // `P` has no abstract button in `app/Input.ts` (a global binding in a
+    // contract file for one screen), so it gets a listener that only sets a
+    // flag; `handleInput` decides. Bubble phase, so it goes quiet the moment
+    // the pause screen claims the keyboard (`Input.claimKeyboard`, capture).
     window.addEventListener('keydown', this.onPauseKey);
 
     // ...and the fourth, for a mouse: a chip in the top-left corner of the
@@ -334,9 +336,7 @@ export class BattleScreen extends Screen {
     this.root.appendChild(chip);
     this.pauseChip = chip;
 
-    // How many formations this chapter chains through, for the pause screen's
-    // ENCOUNTER PROGRESS row ("LINK 2 OF 4"). Async because resolving a
-    // `nextGroupId` is, and not worth blocking the first frame for.
+    // Chain length for the pause's ENCOUNTER PROGRESS row; async, never worth blocking on.
     void chainLengthOf(chapter.enemyGroupRef, findEnemyGroup).then((n) => (this.chainLength = n));
 
     // Run the encounter without blocking `enter()`, so the first frame draws.
@@ -810,7 +810,7 @@ export class BattleScreen extends Screen {
   }
 
   override render(): { scene: Scene; camera: Camera } | null {
-    if (!this.scene) return null;
+    if (!this.scene || !this.fieldShown) return null;
     return { scene: this.scene.scene, camera: this.app.renderer.camera };
   }
 
