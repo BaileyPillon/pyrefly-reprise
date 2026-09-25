@@ -9,8 +9,7 @@ Written 2026-09-24 by a sub-agent of the driver after Bailey's words (verbatim):
 Isaaru's contest of aeons at Beville and Gippal, in the Den of Woe as two additional chapters in
 addition to the ones I selected already"*.
 
-**Verdict: PROCEED on data, AI and the engine seams; HOLD everything perceivable until §5 and §6
-are picked (rule 9). The chapter's scope (GP1) is Bailey's first answer; the rest follows it.**
+**Verdict: PROCEED on data, AI and seams; HOLD everything perceivable until §5 and §6 are picked.**
 
 ## 1. Game case and sources
 
@@ -209,8 +208,7 @@ past: she speaks least and last); the shades silent under GP13 = a.
 | T10 tests + measure | `tests/unit/chapters/den-of-woe-*.test.ts`, bench | T1–T4, T7 | 1.75 | sonnet / opus |
 | **Total** | | | **~13 agent hours**, plus judging and review | |
 
-**GPU `[estimate]`** (only while NOW.md says art is on): options ~1½ h; finals (three shades,
-backdrop, plates) ~2 h: **~3½ hours** with rerolls. Candidate A drops about half of it.
+**GPU `[estimate]`** (art on only): options ~1½ h, finals ~2 h: **~3½ h** with rerolls; A halves it.
 
 ```
 NOW   Bailey answers GP1–GP18 (one sheet) · O-1, O-3 go out together (O-2 after GP1) · T0
