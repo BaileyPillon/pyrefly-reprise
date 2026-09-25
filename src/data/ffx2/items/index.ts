@@ -11,9 +11,11 @@ import type { AbilityDef, AbilityId, ItemDef, ItemId } from '../../../battle/com
 import { recoveryItems } from './recovery.ts';
 import { statusItems } from './status.ts';
 import { damageItems } from './damage.ts';
+import { heldItems } from './held.ts';
 import { itemEffectAbilities } from './effects.ts';
 
-export const ALL_FFX2_ITEMS: readonly ItemDef[] = [...recoveryItems, ...statusItems, ...damageItems];
+/** `heldItems`: steal rewards that are accessories, named but never used from a menu (`./held.ts`). */
+export const ALL_FFX2_ITEMS: readonly ItemDef[] = [...recoveryItems, ...statusItems, ...damageItems, ...heldItems];
 
 export const FFX2_ITEMS: Record<ItemId, ItemDef> = Object.fromEntries(ALL_FFX2_ITEMS.map((i) => [i.id, i]));
 
@@ -22,6 +24,6 @@ export const FFX2_ITEM_EFFECT_ABILITIES: Record<AbilityId, AbilityDef> = Object.
   itemEffectAbilities.map((a) => [a.id, a]),
 );
 
-export { recoveryItems, statusItems, damageItems, itemEffectAbilities };
+export { recoveryItems, statusItems, damageItems, heldItems, itemEffectAbilities };
 
 export default FFX2_ITEMS;

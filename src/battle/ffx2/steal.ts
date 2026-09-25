@@ -67,9 +67,23 @@ export interface TheftEnv {
   emit: Emit;
 }
 
-/** `"Grenade"` from the item table, falling back to the raw id. */
+/**
+ * A readable name for an id the item table does not carry: `"x2-mute-shock"`
+ * -> `"Mute Shock"`. Every shipped steal id has a row now (`data/ffx2/items/
+ * held.ts`); this only keeps a future gap from printing a raw id in the banner.
+ */
+export function readableItemId(id: string): string {
+  return id
+    .replace(/^x2-/, '')
+    .split('-')
+    .filter((w) => w.length > 0)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+/** `"Grenade"` from the item table, else a readable form of the id. */
 function itemName(env: TheftEnv, drop: ItemDrop): string {
-  return env.items?.get(drop.itemId)?.name ?? drop.itemId;
+  return env.items?.get(drop.itemId)?.name ?? readableItemId(drop.itemId);
 }
 
 /** The steal byte: `stealRate` when the record has it, else its percentage on the /255 scale. */
