@@ -169,4 +169,25 @@ export interface ChapterGuide {
    * `guideTitle`). Both games may use it; only Chapter XIII does today.
    */
   linkTitles?: Readonly<Record<CombatantId, string>>;
+  /**
+   * **FFX-2 only.** A RULES bullet shown *first*, and only while the player's X-2 clock is
+   * this one ({@link GuideClock}): a habit that is true of one clock and false of another
+   * (decision sheet 2026-09-25 item 3, the Wait split's "open a list at once"). Kept out of
+   * {@link rules} so the 3-5 standing truths stay the same under every clock.
+   */
+  clockRules?: Partial<Record<GuideClock, GuideRule>>;
+}
+
+/**
+ * The X-2 clock a line must be true of, the coach's own three (`ui/coach/coachCopy.ts`
+ * `Ffx2CoachClock`): `'active'`, `'wait'` (Wait's split, the default: the clock runs at the
+ * top-level command list and holds in a submenu or while aiming, `ffx2-combat-core §1.5`) and
+ * `'hold'` (`?wait=hold`, the old whole-menu hold). FFX guides carry no clock rule.
+ */
+export type GuideClock = 'active' | 'wait' | 'hold';
+
+/** The RULES the panel shows under `clock`: the clock's own bullet first, then the standing ones. */
+export function rulesOnClock(guide: ChapterGuide, clock: GuideClock): readonly GuideRule[] {
+  const lead = guide.clockRules?.[clock];
+  return lead ? [lead, ...guide.rules] : guide.rules;
 }

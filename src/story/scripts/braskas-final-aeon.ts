@@ -24,7 +24,8 @@
  * **Never fire a victory quip after a loss-shaped victory** — each destroyed
  * aeon is a bereavement, so every aeon KO owns a grief beat in `midScripts`
  * and the tally flourish stays suppressed for those links of the chain
- * [writing-bible §5.4]. `victoryQuips` below is the end-of-chapter bank only.
+ * [writing-bible §5.4]. The end-of-chapter card is quiet too: `victoryQuips` is
+ * empty (PR-0187).
  *
  * Mechanics hooks:
  *   - The in-battle **Talk** trigger: two charges, the effect lands on BFA's
@@ -167,17 +168,12 @@ export const braskasFinalAeonScripts: ChapterScripts = {
     narrate('I left in the part where she kept walking.'),
     wait(1600),
   ],
-  victoryQuips: {
-    // §5.4 — end-of-chapter only. The aeon kills serve no quip at all; their
-    // grief beats live in `midScripts` below.
-    tidus: ['...Okay. Next one.', 'That was for him.'],
-    yuna: ['May they rest.', 'Thank you. All of you.'],
-    auron: ["It isn't over.", 'Hmph.'],
-    wakka: ['...Ya. Okay. Ya.', "Never doin' that again."],
-    lulu: ["Don't celebrate yet.", 'Stay standing.'],
-    kimahri: ['Kimahri remembers.', 'Kimahri stands with Yuna.'],
-    rikku: ['...Can we not do that again?', 'Everybody in one piece?'],
-  },
+  // PR-0187 (Bailey's pick A, decisions-2026-09-25 item 7; FFX only): no
+  // victory line. This results card sits between Yu Yevon's death and the FFX
+  // ending, and §5.4 says "never fire a victory quip after a story-critical
+  // loss-shaped victory (E4's aeon kills)". Our reading: §5.4's table also lists
+  // E4 as grim. Same as Chapter IX.
+  victoryQuips: {},
   mid: [
     {
       // The useless third Talk. Characterisation, not a mechanic.

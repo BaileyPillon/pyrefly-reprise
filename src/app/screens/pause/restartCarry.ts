@@ -30,12 +30,16 @@
 
 import { carryAfterDefeat, FRESH_RUN, type ChainCheckpoint, type RetryCarry } from '../BattleChainCheckpoint.ts';
 import type { RunChapterOptions } from '../BattleScreenFlow.ts';
+import { drawRunSeed } from '../../runSeed.ts';
+
+/** A run's options once its first seed is fixed, so a restart that resumes it reuses that seed. */
+export type SeededRunOptions = RunChapterOptions & { seed: number };
 
 /** How a chapter run starts: the retry carry, the attempt count, the options it runs with. */
 export interface RunStart {
   carry: RetryCarry;
   attempt: number;
-  opts: RunChapterOptions;
+  opts: SeededRunOptions;
 }
 
 interface Memo extends RunStart {
@@ -49,6 +53,9 @@ const lastAborted = new WeakMap<object, Memo>();
  * The start of a chapter run on `flow`. A restart that follows a run aborted
  * past a Save Sphere in the same chapter resumes it; anything else starts
  * fresh with its own options. The memory is spent either way.
+ *
+ * A fresh run with no seed of its own draws one (`runSeed.ts`, PR-0008; both
+ * games): the first attempt is no longer seed 1 every time.
  */
 export function openRun(flow: object, chapterId: string, opts: RunChapterOptions): RunStart {
   const memo = lastAborted.get(flow);
@@ -56,7 +63,7 @@ export function openRun(flow: object, chapterId: string, opts: RunChapterOptions
   if (opts.restart === true && memo && memo.chapterId === chapterId && memo.carry.resumeAt) {
     return { carry: memo.carry, attempt: memo.attempt, opts: memo.opts };
   }
-  return { carry: FRESH_RUN, attempt: 0, opts };
+  return { carry: FRESH_RUN, attempt: 0, opts: { ...opts, seed: opts.seed ?? drawRunSeed() } };
 }
 
 /**

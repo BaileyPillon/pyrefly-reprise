@@ -22,12 +22,26 @@
  *   writing-bible §1.6 ("exactly once per arc when grief cracks through").
  * - **No victory quips**: E9 is grim tier, so §5.4 suppresses the light ones.
  *
+ * ## The four mid-battle callouts (D-068, C-1)
+ *
+ * The draft's lines 86-99, word for word, each at the moment the draft names,
+ * each keyed to the engine's own events (`src/battle/ffx/triggers.ts`), once:
+ *
+ * - **Lulu, gauge crosses 50 %** (Wakizashi joins his pool, research §4.1
+ *   `[verified: 3 sources]`): `overdrive` at 50, off the `overdrive-gauge`
+ *   event, whether his own +2 or the party's +3 carries it over.
+ * - **Auron, gauge full** ("Zanmato next turn", §4.1): `overdrive` at 100.
+ * - **Kimahri, Doom lands on Yojimbo** (count 5, §2.1 `[verified: 4 sources]`,
+ *   which is what "Five breaths" says): `status-applied` doom.
+ * - **Yuna, an aeon takes Zanmato** (§5.3): `ability-used` Zanmato with
+ *   `onAeon`, so it fires only when the blow lands on an aeon.
+ *
+ * Bailey, 2026-09-25: "Read, build as written (Recommended)", which also
+ * keeps Lulu's word "long blade" for the Wakizashi (the stronger strike,
+ * research §3.1; long only next to the Kozuka).
+ *
  * ## Not built, on purpose
  *
- * - **The four mid-battle callouts** (gauge crosses 50 %, "Zanmato next turn",
- *   Doom lands, an aeon takes Zanmato). Bailey said yes to them (D-068) on the
- *   promise that he reads the story draft first; that read has not happened,
- *   so `mid` and `midScripts` stay empty.
  * - **The haggle and the hiring** (research §7): no hiring this release
  *   (D-052). The post scene ends as Yuna goes on to the fayth.
  * - **Tidus's narration interlude**: the draft leaves it out.
@@ -61,7 +75,7 @@
  * (research §5.2), whichever three are fighting.
  */
 
-import type { ChapterScripts } from '../dsl.ts';
+import type { ChapterScripts, StoryScript } from '../dsl.ts';
 import {
   battleStart,
   beat,
@@ -85,6 +99,19 @@ import {
  * into `src/data/ffx/**`, as in the other chapters.
  */
 const GINNEM = 'ginnem';
+
+/**
+ * Yojimbo's id and his Zanmato row, mirrored from
+ * `src/battle/ffx/ai/yojimbo-rules.ts` (`YOJIMBO_ID`, `YOJIMBO_ZANMATO`) for
+ * the same reason; the callout tests pin the copies equal.
+ */
+export const YOJIMBO = 'yojimbo';
+export const ZANMATO = 'yojimbo-zanmato';
+
+/** One callout: a single line that advances on its own (writing-bible §2.1, 1.2 to 2.0 s). */
+function callout(line: ReturnType<typeof say>): StoryScript {
+  return [{ ...line, auto: 1800 }];
+}
 
 export const yojimboCavernScripts: ChapterScripts = {
   pre: [
@@ -178,9 +205,28 @@ export const yojimboCavernScripts: ChapterScripts = {
 
   // E9 is grim tier: §5.4 suppresses the light quips, and the draft writes none.
   victoryQuips: {},
-  // The four callouts are held until Bailey reads the draft (D-068).
-  mid: [],
-  midScripts: {},
+  // The draft's four callouts (lines 86-99), D-068 C-1; see the file header.
+  mid: [
+    { id: 'yojimbo-long-blade', when: { type: 'overdrive', who: YOJIMBO, at: 50 }, once: true, script: 'yojimbo-long-blade' },
+    { id: 'yojimbo-zanmato-next', when: { type: 'overdrive', who: YOJIMBO }, once: true, script: 'yojimbo-zanmato-next' },
+    { id: 'yojimbo-doomed', when: { type: 'status-applied', who: YOJIMBO, status: 'doom' }, once: true, script: 'yojimbo-doomed' },
+    {
+      id: 'yojimbo-aeon-takes-zanmato',
+      when: { type: 'ability-used', who: YOJIMBO, ability: ZANMATO, onAeon: true },
+      once: true,
+      script: 'yojimbo-aeon-takes-zanmato',
+    },
+  ],
+  midScripts: {
+    // Gauge crosses 50 %: the Wakizashi joins his pool.
+    'yojimbo-long-blade': callout(say('lulu', 'He draws the long blade now. Be quick.')),
+    // Gauge full: Zanmato on his next turn.
+    'yojimbo-zanmato-next': callout(say('auron', 'Next turn, he kills us all. Move.')),
+    // Doom lands on Yojimbo, count 5.
+    'yojimbo-doomed': callout(say('kimahri', 'Five breaths. Then gone.')),
+    // An aeon stands in front of Zanmato.
+    'yojimbo-aeon-takes-zanmato': callout(say('yuna', 'Thank you. Rest now.')),
+  },
 };
 
 export default yojimboCavernScripts;

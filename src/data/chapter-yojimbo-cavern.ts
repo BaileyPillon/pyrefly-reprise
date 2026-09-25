@@ -21,8 +21,8 @@
  *
  * - `scriptsRef` — the pre and post scenes of
  *   `docs/plans/yojimbo-story-draft.md` (`src/story/scripts/yojimbo-cavern.ts`),
- *   **without** the four mid-battle callouts, held until Bailey reads the
- *   draft (D-068).
+ *   and its four mid-battle callouts, as written (D-068; Bailey read them,
+ *   2026-09-25).
  * - `music` — `boss-yojimbo` ("The Summoner's Sorrow", Bailey's O-6 pick) for
  *   the battle, in the slot where the game plays "Lulu's Theme" (§6.4
  *   [verified: 2 sources]). The scene fallback is `scene-gagazet`, a

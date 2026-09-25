@@ -15,9 +15,10 @@
  * games, as it was: a fresh run from the first formation.
  */
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { App } from '../../src/app/App.ts';
+import { MAX_DRAWN_SEED, drawRunSeed, pinRunSeed } from '../../src/app/runSeed.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { Screen } from '../../src/app/Screen.ts';
 import {
@@ -118,6 +119,7 @@ const panels: Array<{ outcome: string; elapsedMs: number | undefined }> = [];
 let app: FakeApp;
 
 beforeEach(() => {
+  pinRunSeed(1); // this file pins the flow's seed arithmetic on seed 1 (a real run draws one, PR-0008)
   shown.length = 0;
   battles.length = 0;
   panels.length = 0;
@@ -137,7 +139,10 @@ beforeEach(() => {
   app = new FakeApp();
 });
 
-afterEach(() => resetFlowScreens());
+afterEach(() => {
+  resetFlowScreens();
+  pinRunSeed(null);
+});
 
 function checkpoint(link: 2 | 3): ChainCheckpoint {
   const group = link === 2 ? roadSistersGroup : roadAnimaGroup;
@@ -249,4 +254,50 @@ describe('every other chapter restarts exactly as before (both games)', () => {
       expect(result?.elapsedMs).toBe(6_000);
     });
   }
+});
+
+/**
+ * PR-0008 (decisions-2026-09-25 item 5, option B). **Both games (shared plumbing).** A run that
+ * names no seed draws a fresh one, so a newcomer's first attempt is not seed 1 every time; a
+ * RETRY still adds 1000; a RESTART that resumes a checkpoint keeps the run's drawn seed; and a
+ * caller that names a seed (tests, the critic, `__pyrefly.gotoChapter`) gets exactly that seed.
+ */
+describe('the first attempt draws a fresh seed (PR-0008)', () => {
+  const FLUX = getChapter('seymour-flux')!;
+  const seedAt = (r: number) => 1 + Math.floor(r * MAX_DRAWN_SEED);
+  beforeEach(() => pinRunSeed(null));
+  afterEach(() => vi.restoreAllMocks());
+
+  it('draws in 1..MAX, and a pin (the debug setSeed) overrides the draw', () => {
+    expect(drawRunSeed(() => 0)).toBe(1);
+    expect(drawRunSeed(() => 1 - 2 ** -53)).toBe(MAX_DRAWN_SEED); // Math.random's largest value
+    pinRunSeed(1);
+    expect(drawRunSeed(() => 0.5)).toBe(1);
+  });
+
+  it('a run from real keys fights on a drawn seed, and RETRY adds 1000 to it', async () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0.25);
+    endings = [{ outcome: 'defeat', elapsedMs: 10 }, { outcome: 'defeat', elapsedMs: 10 }];
+    choices = ['retry', 'chapter-select'];
+    await app.flow.runChapter(FLUX.id, { skipCutscenes: true });
+    expect(battles.map((b) => b.seed)).toEqual([seedAt(0.25), seedAt(0.25) + 1000]);
+    expect(seedAt(0.25)).not.toBe(1);
+  });
+
+  it('two fresh runs draw two seeds; a named seed is used as given', async () => {
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.1).mockReturnValueOnce(0.2);
+    await app.flow.runChapter(FLUX.id, { skipCutscenes: true });
+    await app.flow.runChapter(FLUX.id, { skipCutscenes: true });
+    await app.flow.runChapter(FLUX.id, { skipCutscenes: true, seed: 7 });
+    expect(battles.map((b) => b.seed)).toEqual([seedAt(0.1), seedAt(0.2), 7]);
+  });
+
+  it('RESTART past a Save Sphere keeps the run’s drawn seed rather than drawing again', async () => {
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.3).mockReturnValueOnce(0.9);
+    endings = [{ outcome: 'aborted', elapsedMs: 10, checkpoint: checkpoint(2) }, { outcome: 'aborted', elapsedMs: 10 }];
+    await app.flow.runChapter(ROAD.id, { skipCutscenes: true });
+    await board();
+    await app.flow.runChapter(ROAD.id, RESTART);
+    expect(battles.map((b) => b.seed)).toEqual([seedAt(0.3), seedAt(0.3) + 1000]);
+  });
 });

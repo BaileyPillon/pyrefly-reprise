@@ -8,6 +8,7 @@
  */
 
 import type { ChapterGuide } from './types.ts';
+import { WAIT_SPLIT_HABIT_RULE } from './ffx2-wait-habit.ts';
 
 export const FFX2_VEGNAGUN_SHUYIN_GUIDE: ChapterGuide = {
   id: 'ffx2-vegnagun-shuyin',
@@ -163,4 +164,7 @@ export const FFX2_VEGNAGUN_SHUYIN_GUIDE: ChapterGuide = {
       cite: 'ffx2-vegnagun-shuyin §7.2',
     },
   ],
+
+  // Decision sheet 2026-09-25 item 3 (C): the Wait split's habit, first, under Wait's split only.
+  clockRules: { wait: WAIT_SPLIT_HABIT_RULE },
 };

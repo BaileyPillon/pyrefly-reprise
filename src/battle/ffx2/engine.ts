@@ -76,6 +76,7 @@ import {
   awaitsPlayerInput,
   canTakeTurn,
   clockHeldByMenu,
+  closesOpenMenu,
   DEFAULT_ATB_MODE,
   DEFAULT_WAIT_SPLIT,
   heldStillPending,
@@ -119,22 +120,19 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    */
   private inputOwner: CombatantId | null = null;
   /**
-   * A command its owner confirmed while §1.7 chain-locked, waiting for the lock
-   * to lift (`active.ts` {@link HeldCommand}; critic round 08 PR-0076). Never
-   * set by a zero-decision-time run, so every replay is untouched.
+   * A command its owner confirmed while §1.7 chain-locked, waiting for the lock to lift (`active.ts`
+   * {@link HeldCommand}; round 08 PR-0076). Never set at zero decision time, so every replay is untouched.
    */
   private held: HeldCommand | null = null;
+  /** The girl whose open menu an enemy hit closed (item 4 A1, `active.ts` {@link closesOpenMenu}); cleared by the next decision. */
+  private hitClosed: CombatantId | null = null;
   /**
    * Ticks a `throughInput` step was handed but could not spend, because a ready
-   * enemy ended the sub-step loop so its events could be played.
-   *
-   * In the `'waiting'` path this never mattered: the presenter asks for exactly
-   * `nextEventMs`, so there is nothing left over. Under Active the pump hands
-   * over whatever really elapsed, and an enemy acting 10 ms into a 50 ms step
-   * would otherwise throw the other 40 ms away — game time lost, once per enemy
-   * action, for as long as a menu is open. Carried and drained on the next
-   * `throughInput` step instead. Untouched by Wait-mode ticks, so a run that
-   * never opens a menu is bit-identical to before Active existed.
+   * enemy ended the sub-step loop so its events could be played. The `'waiting'`
+   * path asks for exactly `nextEventMs`, so nothing is left over there; under
+   * Active an enemy acting 10 ms into a 50 ms step would otherwise throw 40 ms of
+   * game time away. Carried to the next `throughInput` step; untouched by
+   * Wait-mode ticks, so a run that never opens a menu is bit-identical.
    */
   private carriedTicks = 0;
   /**
@@ -240,6 +238,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   }
 
   nextDecision(): Decision {
+    if (this.hitClosed) [this.hitClosed, this.level] = [null, 'deep']; // item 4 A1: a fresh menu starts held
     if (this.battleState.result) {
       this.inputOwner = null;
       return { kind: 'battle-over', result: this.battleState.result };
@@ -343,7 +342,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
    * polls this once per pump step while a menu is up; see `active.ts` {@link inputStillValid}.
    */
   inputValid(actorId: CombatantId): boolean {
-    return inputStillValid(this.units, actorId, Boolean(this.battleState.result), this.awaitingMinigame !== null);
+    return inputStillValid(this.units, actorId, !!this.battleState.result, this.awaitingMinigame !== null, this.hitClosed === actorId);
   }
 
   /**
@@ -613,6 +612,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
   private emit(draft: EventDraft): void {
     this.drafts.push(draft);
+    if (this.inputOwner && closesOpenMenu(draft, this.inputOwner, this.units)) this.hitClosed = this.inputOwner;
   }
 
   /** Stamp `seq`, append to the log, and hand the batch to the caller. */

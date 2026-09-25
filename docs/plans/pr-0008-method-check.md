@@ -208,3 +208,63 @@ Verdict: **recommendation stands, with two corrections.** Re-run on the working 
 - CORRECTED: the 36/40 bar comes from the critic's own PR-0008 `expected` ("as chapters 2-6 do") and `acceptanceCheck` ("at least 36/40, with no loss before **player** turn 10"). It does not come from `WIN_BAR` in `strategy-ffx2-leblanc.test.ts`, which is another chapter's test. Drop that sentence. The proposed check counts **battle** turns, so it must say that it changes the unit.
 - CORRECTED: the Haste-on-Seymour figure (99 vs 100 / 160) disagrees with PR-0007's probe (26 -> 21 on seeds 1-40). The two probes are designed differently. Reconcile them before either number goes to Bailey.
 - Builder: `src/data/guides/seymour-flux.ts` is also edited by PR-0007 option A (the Holy Water rule). Build both guide changes in one pass and show Bailey **one** set of wording options. Re-run the guide fold/scale tests, because a new rule can hit the PR-0010 height cap. Rules 9 and 10 are correctly held for Bailey. No boss value changes.
+
+## Refresh, 2026-09-25 (today's engine; decisions-2026-09-25 item 5)
+
+**FFX only** for the fight and its numbers. Re-measured on the worktree `D:/pyrefly-dec-0925`
+(branch `decisions-0925`, from `d19e5715`), with the shipped `intendedStrategy`, the real FFX
+engine and data, and `gagazetBuild`. The driver is the test's own, moved unchanged to
+`tests/unit/helpers/seymourFluxDrive.ts`. The probes are scratch
+(`D:/Tools/pyrefly-scratch/dec-0925/ch1-seed/*.probe.ts`). Nothing on the boss was touched.
+Since section 2 was written, two sourced fixes have landed: Poison no longer opens phase 2
+(combat-fixes-0924 (d), §4.3), and aeons have no Item row (PR-0155, ffx-combat-core §6.2).
+
+| Measure | 2026-09-23 | **2026-09-25** |
+|---|---:|---:|
+| Seeds 1-40 / 41-80 / 101-140 / 1001-1040 | 26 / 21 / 24 / 29 | **17 / 17 / 19 / 25** |
+| Four windows (160 seeds) | 100 | **78** (48.75%) |
+| Seeds 1-200 | 116 | **96** |
+| Losses before battle turn 10 | 1 (seed 20, turn 8) | **1** (seed 20, turn 8) |
+| Seymour takes the first enemy turn: runs / lost | 114 / 51 (45%) | 114 / **68 (60%)** |
+| The mount takes it: runs / lost | 46 / 9 (20%) | 46 / **14 (30%)** |
+| Losses that reached phase 2 (he cast Reflect) | 18 of 60 | **16 of 82** |
+| Losses with Seymour still above 52,500 | not measured | 12 of 82 |
+| Party turns per enemy turn (wins / losses, aeon turns counted) | 1.44 / 1.03 | 1.67 / 1.19 (not comparable: the old probe's counting is not on record) |
+| Full-Life KOs with no party action since the Zombie (wins / losses) | 84 / 152 | 76 / 203 |
+| Cross Cleave KOs (wins / losses) | 8 / 80 | 90 / 196 |
+| ... with no party turn between the Dispel and the Cleave | 5 / 67 | 4 / 109 |
+
+**What changed, and what did not.**
+
+1. The chapter is harder than the "about 3 fights in 8" in section 1, item 3: a well-played run
+   now loses **about half the time** (82 of 160). At 0.4875 a try, it is **74% within two tries
+   and 87% within three.**
+2. The mechanism is the same, and the opening order matters more. When Seymour moves first, the
+   line now loses 60% of the time (was 45%). Phase 1 still decides most losses: 66 of the 82
+   never reach phase 2.
+3. Cross Cleave kills far more often, in wins as well as losses. The fights are longer (aeons no
+   longer throw Gems, so there are more Dispel and Cleave cycles). The guide's rule 4 (Protect
+   as the defence) is still wrong, and wrong more often.
+4. **A new observation to reconcile before anyone cites "0 missed cures" again.** This probe
+   reads the whole engine log. It finds 36 Full-Life KOs (32 in losses) on a character whose
+   Zombie never cleared. That is a party member raised while still a Zombie (`SURVIVES_KO`,
+   `statuses.ts:63`, sourced to ffx-yunalesca §15.2 #29), then killed again. It also finds 7
+   KOs (4 in losses) where a character's turn came between the Zombie and the Full-Life and was
+   spent on a Phoenix Down rather than a Holy Water. The 2026-09-23 "0 of 236" count did not
+   separate these cases. This is a tactic observation. The plan still says to stop tuning the
+   tactic, and nothing here changes it. Flagged for whoever next picks up the Chapter 1 tactic
+   or advisor, not built.
+
+**Floors (sheet item 5 A).** The 160-seed floor is **73** (five below 78), with at most 2 losses
+before battle turn 10. That is a battle turn, not a player turn. The 40-seed floor stays at
+**15**. Both live in `tests/unit/strategy-seymour-flux.test.ts`.
+
+**Section 1, item 2 is superseded.** "At least 95 of 160, 25 of 40" was set against the 100/160
+line. Today's floors are the ones above. The critic owns PR-0008's acceptance text. Hand it
+"73 of 160 over the four standard windows, at most 2 losses before battle turn 10, 15 of 40" at
+the next focused review, citing Bailey's 2026-09-25 words.
+
+**Guide (sheet item 5 A, one pass).** The two sourced corrections ship: rule 4 no longer calls
+Protect a defence against the Dispel and Cross Cleave (§4.2), and rule 3 carries PR-0007 option
+A's Holy Water line (the turn is often not there; a fallen Zombie stays one). The honest-odds
+rule is shown to Bailey first: `docs/plans/pr-0008-guide-wordings.md`.

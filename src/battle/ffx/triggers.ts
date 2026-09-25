@@ -13,12 +13,19 @@ import { type Ctx, tryActor } from './state.ts';
 
 /** What happened during the action just resolved. */
 export interface TriggerSignals {
-  abilityUses: Array<{ who: string; ability: string }>;
+  /**
+   * `targets` is the command's list plus every `targetId` the action's events
+   * name before its `action-end`: an AI command may pass `[]` and let the row's
+   * targeting resolve (Yojimbo's Zanmato does).
+   */
+  abilityUses: Array<{ who: string; ability: string; targets: string[] }>;
   statusApplied: Array<{ who: string; status: string }>;
   kos: string[];
   formChanges: Array<{ who: string; form: number }>;
   chargesStarted: string[];
   overdriveFull: string[];
+  /** Every gauge change, for `overdrive` triggers with an `at` threshold. */
+  gaugeChanges: Array<{ who: string; from: number; to: number }>;
 }
 
 /** Read the signals out of the events an action produced. */
@@ -30,11 +37,23 @@ export function collectSignals(events: readonly BattleEvent[]): TriggerSignals {
     formChanges: [],
     chargesStarted: [],
     overdriveFull: [],
+    gaugeChanges: [],
   };
+  let open: TriggerSignals['abilityUses'][number] | null = null;
   for (const e of events) {
+    if (open && 'targetId' in e && typeof e.targetId === 'string' && !open.targets.includes(e.targetId)) {
+      open.targets.push(e.targetId);
+    }
     switch (e.type) {
       case 'action-start':
-        if (e.abilityId) signals.abilityUses.push({ who: e.actorId, ability: e.abilityId });
+        open = null;
+        if (e.abilityId) {
+          open = { who: e.actorId, ability: e.abilityId, targets: [...e.targets] };
+          signals.abilityUses.push(open);
+        }
+        break;
+      case 'action-end':
+        open = null;
         break;
       case 'status-add':
         signals.statusApplied.push({ who: e.targetId, status: e.status });
@@ -54,6 +73,7 @@ export function collectSignals(events: readonly BattleEvent[]): TriggerSignals {
         break;
       case 'overdrive-gauge':
         if (e.to >= 100) signals.overdriveFull.push(e.who);
+        signals.gaugeChanges.push({ who: e.who, from: e.from, to: e.to });
         break;
       default:
         break;
@@ -76,11 +96,19 @@ function matches(ctx: Ctx, trigger: MidBattleTrigger, signals: TriggerSignals): 
     case 'turn':
       return ctx.state.turn >= when.n;
     case 'ability-used':
-      return signals.abilityUses.some((a) => a.who === when.who && a.ability === when.ability);
+      return signals.abilityUses.some(
+        (a) =>
+          a.who === when.who &&
+          a.ability === when.ability &&
+          (when.onAeon !== true || a.targets.some((t) => tryActor(ctx, t)?.aeon !== undefined)),
+      );
     case 'ko':
       return signals.kos.includes(when.who);
-    case 'overdrive':
-      return signals.overdriveFull.includes(when.who);
+    case 'overdrive': {
+      const at = when.at;
+      if (at === undefined) return signals.overdriveFull.includes(when.who);
+      return signals.gaugeChanges.some((g) => g.who === when.who && g.from < at && g.to >= at);
+    }
     case 'charge-started':
       return when.who === undefined ? signals.chargesStarted.length > 0 : signals.chargesStarted.includes(when.who);
     default:
