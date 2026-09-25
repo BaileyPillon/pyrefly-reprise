@@ -18,8 +18,10 @@
  *
  * What is **not** sourced, and so not written: an effect or description for
  * Snow Ring, Potpourri, Chaos Shock and Fury Shock (the research names them and
- * nothing more), and a shop price for any of them but White Cape. None is
- * equipped by a shipped build, so the accessory stat table
+ * nothing more), and a shop price for any of them but White Cape. Those rows
+ * carry `price: 0` because the field is required, and are listed in
+ * {@link UNSOURCED_PRICE_IDS}: their 0 means "unsourced", not "never sold"
+ * (`ItemDef.price`, CONTRACT-CHANGES 2026-09-25). None is equipped by a shipped build, so the accessory stat table
  * (`battle/ffx2/accessories.ts`) is not extended either.
  *
  * `ItemDef.effect` is always an ability id in FFX-2 (CONTRACT-CHANGES decision
@@ -55,7 +57,12 @@ export const heldItemEffect: AbilityDef = {
   messageTemplate: '{user} holds {ability}',
 };
 
-function held(id: string, name: string, price: number, description?: string): ItemDef {
+/** Held rows whose shop price the research does not give; each carries `price: 0`. */
+export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock',
+]);
+
+function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
   const row: ItemDef = {
     id,
     name,
@@ -64,7 +71,7 @@ function held(id: string, name: string, price: number, description?: string): It
     targeting: 'self',
     usableInBattle: false,
     usableInMenu: false,
-    price,
+    price: price === 'unsourced' ? 0 : price,
   };
   if (description !== undefined) row.description = description;
   return row;
@@ -72,13 +79,13 @@ function held(id: string, name: string, price: number, description?: string): It
 
 export const heldItems: ItemDef[] = [
   // ffx2-bahamut §1.6: "Accessory: adds Silence to attacks, user can cast Silence; Strength −5, Magic +3".
-  held('x2-mute-shock', 'Mute Shock', 0, 'Accessory. Adds Silence to attacks; Str -5, Mag +3.'),
-  held('snow-ring', 'Snow Ring', 0),
-  held('potpourri', 'Potpourri', 0),
+  held('x2-mute-shock', 'Mute Shock', 'unsourced', 'Accessory. Adds Silence to attacks; the wearer can cast Silence; Str -5, Mag +3.'),
+  held('snow-ring', 'Snow Ring', 'unsourced'),
+  held('potpourri', 'Potpourri', 'unsourced'),
   // ffx2-combat-core §5.4 "DEF +4, MDEF +4, Silenceproof"; ffx2-leblanc-syndicate §7.5 "3,000 gil".
   held('white-cape', 'White Cape', 3000, 'Accessory. Guards against Silence; Def +4, MDef +4.'),
-  held('x2-chaos-shock', 'Chaos Shock', 0),
-  held('x2-fury-shock', 'Fury Shock', 0),
+  held('x2-chaos-shock', 'Chaos Shock', 'unsourced'),
+  held('x2-fury-shock', 'Fury Shock', 'unsourced'),
 ];
 
 export default heldItems;

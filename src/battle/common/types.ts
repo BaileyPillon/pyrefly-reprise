@@ -1417,7 +1417,7 @@ export interface ItemDef {
   usableInBattle: boolean;
   /** Selectable from the prep-menu Item screen. */
   usableInMenu: boolean;
-  /** Shop price in gil, 0–999 999. 0 for items that are never sold. */
+  /** Shop price in gil, 0–999 999. 0 for items never sold, or whose price is unsourced (the data file's note says which). */
   price: number;
   /** Icon key for the item list. */
   iconKey?: string;

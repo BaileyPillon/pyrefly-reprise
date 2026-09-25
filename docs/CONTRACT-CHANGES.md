@@ -6,6 +6,17 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — `ItemDef.price`: 0 may also mean "unsourced"
+
+**FFX-2 only in use; the field is shared** [AGENTS.md hard rule 14]. Doc comment only, no type
+change, and the line was edited in place so `src/battle/common/types.ts` does not grow. The comment
+said 0 means "never sold". The FFX-2 steal accessories added in `src/data/ffx2/items/held.ts`
+(Mute Shock, Snow Ring, Potpourri, Chaos Shock, Fury Shock) have no sourced shop price, so rule 6
+forbids a number, yet `price` is required. It now reads "0 for items never sold, or whose price is
+unsourced (the data file's note says which)"; `held.ts` exports `UNSOURCED_PRICE_IDS` so the case is
+machine-readable. Nothing in `src/` or `tools/` reads `price` today (grep, 2026-09-25), so no behaviour
+changes. Test: `tests/unit/ffx2-steal-item-names.test.ts`.
+
 ## 2026-09-25 — Chapter XIII options, built OFF: `EnemyGroupDef.actionTimeSeconds`
 
 **FFX-2 only** [AGENTS.md hard rule 14]. From `docs/plans/trema-options-2026-09-25.md` (options 1 to
