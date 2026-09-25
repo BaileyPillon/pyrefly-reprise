@@ -18,16 +18,17 @@
 import type { Chapter } from './encounters.ts';
 import { SEYMOUR_NATUS } from './chapter-seymour-natus.ts';
 import { FFX2_FALLEN_AEONS } from './chapter-ffx2-fallen-aeons.ts';
-import { FFX2_TREMA } from './chapter-ffx2-trema.ts';
+import { FFX2_TREMA_SHIPPED } from './chapter-trema-ship.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
  * Chapter X, Seymour Natus (FFX only) — `./chapter-seymour-natus.ts`.
  * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts`.
- * Chapter XIII, Trema (FFX-2 only) — `./chapter-ffx2-trema.ts`.
+ * Chapter XIII, Trema (FFX-2 only) — `./chapter-ffx2-trema.ts` (the fight), with the ship layer
+ * (scene, story, music; `./chapter-trema-ship.ts`) laid over it. Still unlisted.
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [
   SEYMOUR_NATUS,
   FFX2_FALLEN_AEONS,
-  FFX2_TREMA,
+  FFX2_TREMA_SHIPPED,
 ] as const;

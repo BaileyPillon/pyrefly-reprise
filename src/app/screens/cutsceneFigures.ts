@@ -64,6 +64,24 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     portrait: { x: 0.5, feet: 0.74, height: 0.44 },
     unsent: true,
   },
+  /**
+   * Trema, unsent (FFX-2 only: Chapter XIII). His battle idle, the installed O-1 A painting
+   * (`public/art/characters/trema/idle.png`, 816 x 1167, feet at y 1144; TR18 LOCKED). He is
+   * revealed in the pre scene when the chapter has no Paragon link (option 2), and in the post
+   * scene he answers Yuna and fades away (`research/ffx2-trema.md` §2 step 4).
+   *
+   * Landscape: right of the dialogue box, facing left toward the party. Portrait: centred,
+   * feet above the box.
+   */
+  trema: {
+    art: 'art/characters/trema/idle.png',
+    aspect: 816 / 1167,
+    baseline: 1144 / 1167,
+    artFacing: -1,
+    landscape: { x: 0.8, feet: 0.9, height: 0.6 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+    unsent: true,
+  },
 };
 
 /** The staged figure for `actor`, or `undefined` when cutscenes do not stage it. */

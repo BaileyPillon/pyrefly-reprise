@@ -77,7 +77,8 @@ describe('which chapters the stage changes (measured, pinned)', () => {
   });
 
   it('stands only Chapter IX\'s own figure, so no other chapter\'s showActor puts anyone on stage', () => {
-    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem']);
+    // Plus Trema (FFX-2 only, Chapter XIII, unlisted): his post scene; no listed chapter shows him.
+    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema']);
     for (const c of CHAPTERS) {
       const shown = [...figuresIn(c.scriptsRef?.pre ?? []), ...figuresIn(c.scriptsRef?.post ?? [])];
       expect(shown, c.id).toEqual(c.id === 'yojimbo-cavern' ? ['ginnem'] : []);

@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XIII ship layer: `SpeakerId` gains `'trema'`
+
+**FFX-2 only** [AGENTS.md hard rule 14]. **Additive** in `src/story/dsl.ts`: `SpeakerId` gains
+`'trema'`, the speaker for Trema's lines in `src/story/scripts/ffx2-trema.ts` (lines 10 to 21 of
+`docs/plans/trema-story-draft.md`, all `[ORIGINAL]`). He has no portrait yet (O-5 is its own
+round), so the dialogue box shows the name plate alone, as `portrait.ts` does for any id with no
+file. `SPEAKER_ROLES` is a `Partial` record, so nothing else has to name him. No existing script
+changes.
+
 ## 2026-09-25 — Chapter XIII winnability fixes: `EnemyGroupDef.timedAilmentDefaults`
 
 **FFX-2 only** [AGENTS.md hard rule 14]. From `docs/plans/trema-winnability-method-check.md` E1.

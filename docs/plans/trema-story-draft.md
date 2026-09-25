@@ -1,9 +1,14 @@
 # DRAFT for Bailey — Chapter XIII story beats: Trema, Cloister 100 of the Via Infinito (FFX-2 only)
 
-**Status: a draft to read and react to. Nothing here is built.** The chapter runs today on a
-placeholder story layer (the battle opens, results show, no lines; see
-`src/data/chapter-ffx2-trema.ts`). No file under `src/story` was written. Pick, cut or rewrite
-lines before anyone scripts them (AGENTS.md hard rules 9 and 10).
+**Status: a draft to read and react to, now scripted UNLISTED** (2026-09-25, branch
+`chapter-trema-ship-0925`): `src/story/scripts/ffx2-trema.ts` plays these lines unchanged, by
+number, on the chapter record `src/data/chapter-trema-ship.ts` lays over
+`src/data/chapter-ffx2-trema.ts`. The chapter is still not in chapter select. Cut or rewrite any
+line and the script follows (AGENTS.md hard rules 9 and 10).
+
+**Two shapes.** The script reads the chapter's shape from its data (`src/data/trema-shape.ts`):
+with a Paragon link (TR1 a, option 1) it plays as written below; with **Trema alone** (option 2 on
+`docs/plans/trema-options-2026-09-25.md`) it plays the variant at the end of this file.
 
 - **Game case: FFX-2 only** (AGENTS.md rule 14). FFX-2 cutscene grammar
   (`research/writing-bible.md` §2.2): Yuna narrates the chapter open, three-beat banter (Rikku
@@ -78,7 +83,8 @@ no healing, no change of equipment). The party stays as the first fight left the
 
 ## Link 2 — Trema
 
-**Callout — the first Stop (TR13; Beguiling Mire):** Rikku: "Can't... move... not now!"
+**Callout — the first Stop (TR13; Beguiling Mire):** Rikku: "Can't move... not now!" (scripted
+with one ellipsis: the house lint allows one a line; the draft had two)
 
 **Callout — first Meteor (`trema-meteor-1`, TR13):** Paine: "Heads up. Literally."
 
@@ -110,3 +116,23 @@ after the results screen).
    (research §7.2, not used here); if you would rather he stay silent in battle, cut it.
 4. **The Iron Duke** (the sourced reward, `[verified: 4 sources]`) is not an item the results
    screen can show today; line 23 nods at it.
+
+## Option 2 variant — Trema alone (built, switched by the chapter's own data)
+
+With no Paragon there is no link seam, so Trema's reveal moves into the pre scene. Lines 1 to 7
+play as above; then he is already standing in the last room (his idle, faded in), and lines 11 to
+18 play before `battleStart()`. Lines 8, 9 and 10 and the Big Bang callout are dropped (they
+belong to Paragon). The callouts on Trema and the post scene are unchanged. **No new line was
+written for this variant.**
+
+## Where each beat plays (as scripted)
+
+| Beat | Trigger | Budget |
+|---|---|---|
+| Line 8 (Yuna) | Paragon `hp-below` 1, the first action of link 1 | beat, 8 s |
+| Paragon's first Big Bang | `ability-used` `paragon-big-bang`, only when that Paragon has it | beat |
+| Lines 9 to 18, the link | `ko` on Paragon: the seam `paragon-falls`; its `camera('trema-link')` starts the kill link on the field (`src/scenes/cloister-100-link.ts`) | seam, up to 26 s |
+| Trema's entrance | Trema `hp-below` 1 (the Shuyin precedent) | beat |
+| The first Stop | `ability-used` `trema-beguiling-mire` | beat |
+| Meteor 1, Meteor 2, Ultima | the AI's own `trema-meteor-1`, `trema-meteor-2`, `trema-ultima` | beat |
+| Lines 19 to 24 | the post scene; he fades out after line 21, `results()` after line 23 | owns the screen |
