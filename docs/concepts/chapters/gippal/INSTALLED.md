@@ -136,3 +136,42 @@ mismatched). Sheet: [production/repair-sheet.jpg](production/repair-sheet.jpg); 
   ComfyUI was never restarted, and the restart sentinel was written into a private log folder.
 - Nothing was downloaded.
 - **Scratch:** `D:/Tools/pyrefly-scratch/ch1215/gippal/`.
+
+## Second judge and Nooj attempt 3, 2026-09-25 (~03:40 EDT)
+
+**FFX-2 only.** A second judge ([production/JUDGE-2.md](production/JUDGE-2.md)), which made none of the repaired files,
+re-judged the three repaired candidates at 1:1 with the same rubric:
+
+| File | Round 1 | After the repair | Now installed |
+|---|---|---|---|
+| `baralai-shade/cast` | 5.7 FAIL | **7.1 PASS** (independent) | unchanged, `8e7e91027953`; not re-derived |
+| `nooj-shade/idle` | 6.9 FAIL | **6.6 FAIL** (independent) | **replaced** by attempt 3, `3b505d6ca7cd`, 7.1 PASS **self-judged** |
+| `nooj-shade/cast` | 6.8 FAIL | **6.6 FAIL** (independent) | **replaced** by attempt 3's cast, `27e237b57402`, 7.1 PASS **self-judged** |
+
+- **Nooj had failed twice**, so the method check came first ([production/METHOD-nooj.md](production/METHOD-nooj.md)): the
+  profile camera made the far loop and the fur shoulder impossible, and the portrait never went in. Attempt 3 is a fresh
+  render, three-quarter left, with IP-Adapter on `portraits/nooj.png` **forced past the monochrome guard**
+  (`--forceRef`, weight 0.55, ease in, 0.2 to 0.7; recorded as `refForced: true` in both sidecars). 62 seeds in 9
+  pilots, 4 quarantined; 970704 kept. One masked repaint (IP-Adapter on the portrait, seed 971102) added the far hair
+  loop behind the head; three white holes the cut-out left were keyed out. The cast turns the gloved right forearm,
+  hand and cane 40 degrees about the elbow (the cane swings toward the party), with one joint repaint (seed 971204).
+  Then the same B treatment (`production/scripts/shade_b.py`). Sizes: idle 726x1274, cast 1149x1274, both baselineY
+  1199; idle `scale` 1.049 (unpadded baseline 1143).
+- **What it fixes:** two hair loops with red ties, one furred shoulder, the cane in the right hand, the machina left arm
+  and leg toward camera, no long ponytail. **Still off (disclosed in the sidecars):** the fur is on the left (machina)
+  shoulder and the right arm is a dark glove, not the bible's purple sleeve; the gloved hand is a dark mass; the far loop's
+  edge is a little blocky at 2x; the near foot tapers like a hoof; fewer belts than the bible's five.
+- **The new pair is self-judged** (this agent made it and was told not to re-delegate): an independent 1:1 judge is owed
+  before it can be locked. Nothing was added to `approved-hashes.json`; `verify-approved.mjs` reported ok 185, 0
+  mismatched, 0 missing before and after. The install script refuses any file whose hash is approved.
+- **Kept:** the replaced candidates (`replaced/`), all 62 renders and the work files are in
+  `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu2/nooj-shade/`. `public/art/manifest.json` regenerated (unchanged:
+  same subjects and poses); `art-manifest-build` and `art-manifest-loader` pass (27).
+- **Frames:** `production/frames/nooj-idle-3.jpg` and `nooj-cast-3.jpg`, real 1600x900 engine frames, same staging as
+  above (shade factor 0.82), private Vite server on port 5823 (HMR off, GPU browser), stopped by its PID. The cast sits
+  about 90 px right of the idle's spot because its canvas widens for the cane; the Den scene (T5) should anchor it.
+- **Sheet for Bailey:** [production/nooj3-sheet.jpg](production/nooj3-sheet.jpg) (old repair vs new idle and cast, both
+  frames, and every pilot seed).
+- **GPU:** 69 jobs: 62 character renders (about 8 to 70 s each while shared), 3 loop repaints and 4 joint repaints
+  (7 to 13 s each). Every submission waited for fewer than 3 pending; no black frames; ComfyUI was not restarted
+  (private restart sentinel). Nothing was downloaded. Scripts: `production/scripts/nooj3/`.
