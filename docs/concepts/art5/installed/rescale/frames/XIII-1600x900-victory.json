@@ -1,0 +1,38 @@
+{
+ "healTopUps": 0,
+ "chapter": "ffx2-trema",
+ "numeral": "XIII",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "results": [
+  {
+   "key": "rikku-alchemist/victory",
+   "id": "rikku",
+   "art": "rikku-alchemist",
+   "pose": "victory",
+   "slotName": "victory",
+   "requested": "victory",
+   "staged": false,
+   "url": "/art/characters/rikku-alchemist/victory.png",
+   "placeholder": false,
+   "fade": 1,
+   "actionKind": null,
+   "ability": null,
+   "lastEvent": "script-trigger",
+   "upp": 0.001723259762308998,
+   "clamped": false,
+   "idleUpp": 0.0014855687606112054,
+   "sidecarScale": 1.16,
+   "refScale": null,
+   "hp": 5106,
+   "frame": null,
+   "ratio": 1.16,
+   "file": "D:/Tools/pyrefly-scratch/pose-repair1/out/XIII-1600x900-rikku-alchemist-victory.jpg"
+  }
+ ],
+ "missing": [],
+ "debugNotes": [
+  "DEBUG STATE SETUP (labelled): enemy HP set to 1 for paragon (the victory moment)"
+ ],
+ "errors": []
+}

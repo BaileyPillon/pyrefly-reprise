@@ -1,0 +1,145 @@
+{
+ "yuna-dark-knight": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "attack.png",
+  "cast": "idle.png",
+  "item": "idle.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "idle.png",
+  "defend": "idle.png"
+ },
+ "paine-dark-knight": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "attack.png",
+  "cast": "idle.png",
+  "item": "item.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "idle.png",
+  "defend": "idle.png"
+ },
+ "rikku-white-mage": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "attack.png",
+  "cast": "idle.png",
+  "item": "idle.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "idle.png",
+  "defend": "idle.png"
+ },
+ "rikku-alchemist": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "idle.png",
+  "cast": "cast.png",
+  "item": "item.png",
+  "hurt": "hurt.png",
+  "ko": "idle.png",
+  "victory": "victory.png",
+  "defend": "idle.png"
+ },
+ "rikku-black-mage": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "attack.png",
+  "cast": "cast.png",
+  "item": "idle.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "idle.png",
+  "defend": "idle.png"
+ },
+ "rikku-gunner": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "idle.png",
+  "cast": "cast.png",
+  "item": "idle.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "victory.png",
+  "defend": "idle.png"
+ },
+ "yuna-songstress": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "attack.png",
+  "cast": "idle.png",
+  "item": "item.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "idle.png",
+  "defend": "idle.png"
+ },
+ "paine-black-mage": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "attack.png",
+  "cast": "cast.png",
+  "item": "item.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "victory.png",
+  "defend": "idle.png"
+ },
+ "yuna-warrior": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "idle.png",
+  "cast": "idle.png",
+  "item": "idle.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "victory.png",
+  "defend": "idle.png"
+ },
+ "paine-warrior": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "idle.png",
+  "cast": "idle.png",
+  "item": "idle.png",
+  "hurt": "idle.png",
+  "ko": "idle.png",
+  "victory": "victory.png",
+  "defend": "idle.png"
+ },
+ "rikku-thief": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "idle.png",
+  "cast": "idle.png",
+  "item": "idle.png",
+  "hurt": "idle.png",
+  "ko": "ko.png",
+  "victory": "idle.png",
+  "defend": "idle.png"
+ },
+ "yuna-black-mage": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "attack.png",
+  "cast": "cast.png",
+  "item": "item.png",
+  "hurt": "hurt.png",
+  "ko": "ko.png",
+  "victory": "victory.png",
+  "defend": "idle.png"
+ },
+ "yuna-gunner": {
+  "idle": "idle.png",
+  "ready": "idle.png",
+  "attack": "attack.png",
+  "cast": "cast.png",
+  "item": "item.png",
+  "hurt": "hurt.png",
+  "ko": "ko.png",
+  "victory": "victory.png",
+  "defend": "idle.png"
+ }
+}

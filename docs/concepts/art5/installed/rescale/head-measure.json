@@ -1,0 +1,634 @@
+{
+ "note": "Repair cycle 1 of V-1 (2026-09-25, FFX-2 only). Eyes = iris colour centroids (seeded by the judge points, reseeded where the judge point missed the iris); chin = the judge point unless listed in chinsCorrected (checked on marked crops). Ratios are idle/pose, i.e. the scale that makes the pose head the idle head size under the engine rule (pose pixels drawn at scale x the idle pixel size). Occluded chins (scarf, collar, hands) give no eye-to-chin reading.",
+ "poses": {
+  "paine-black-mage/attack": {
+   "installed": 0.93,
+   "corrected": 1.05,
+   "eyeSpacingRatio": 1.041,
+   "eyeToChinRatio": 1.061,
+   "basis": "eye spacing 1.04 and eye line to chin 1.06 agree; mean"
+  },
+  "paine-black-mage/cast": {
+   "installed": 1,
+   "corrected": 1.0,
+   "eyeSpacingRatio": 1.105,
+   "eyeToChinRatio": 1.024,
+   "basis": "kept: eye line to chin 1.02 (eye spacing 1.11 is shortened by her three-quarter turn against a frontal idle)"
+  },
+  "paine-black-mage/item": {
+   "installed": 0.95,
+   "corrected": 1.03,
+   "eyeSpacingRatio": 1.014,
+   "eyeToChinRatio": 1.053,
+   "basis": "eye spacing 1.01 and eye line to chin 1.05 agree; mean"
+  },
+  "paine-black-mage/victory": {
+   "installed": 1.14,
+   "corrected": 1.14,
+   "eyeSpacingRatio": 1.116,
+   "eyeToChinRatio": 1.165,
+   "basis": "kept: eye spacing 1.12 and eye line to chin 1.17 agree"
+  },
+  "paine-dark-knight/attack": {
+   "installed": 1.19,
+   "corrected": 0.92,
+   "eyeSpacingRatio": 0.834,
+   "eyeToChinRatio": null,
+   "basis": "chin hidden by the collar; eye spacing 0.83 is a floor (the idle is turned further than the attack), eye line to mouth 0.97 a ceiling (the attack looks down); midpoint"
+  },
+  "paine-dark-knight/item": {
+   "installed": 1.35,
+   "corrected": 0.98,
+   "eyeSpacingRatio": 0.986,
+   "eyeToChinRatio": 0.969,
+   "basis": "eye spacing 0.99 and eye line to chin 0.97 agree; the judge's chin point sat on the mouth"
+  },
+  "paine-warrior/victory": {
+   "installed": 1.24,
+   "corrected": 1.01,
+   "eyeSpacingRatio": 1.012,
+   "eyeToChinRatio": 1.255,
+   "basis": "eye spacing 1.01, idle and pose turned alike; eye line to chin 1.25 is shortened by the raised chin of the smile"
+  },
+  "rikku-alchemist/cast": {
+   "installed": 0.96,
+   "corrected": 0.96,
+   "eyeSpacingRatio": 0.918,
+   "eyeToChinRatio": 1.124,
+   "basis": "kept: eye spacing 0.92, eye line to chin 1.12 (the idle's open grin lengthens its face); 0.96 matches by eye"
+  },
+  "rikku-alchemist/hurt": {
+   "installed": 1.3,
+   "corrected": 1.08,
+   "eyeSpacingRatio": null,
+   "eyeToChinRatio": null,
+   "basis": "one eye visible, head thrown back: the open iris is the idle's size (1.00, a floor since her eye is wide open); 1.08 matches by eye"
+  },
+  "rikku-alchemist/item": {
+   "installed": 1.46,
+   "corrected": 1.15,
+   "eyeSpacingRatio": 1.199,
+   "eyeToChinRatio": null,
+   "basis": "eye spacing 1.20; chin under the scarf; the verifier's eye-chin and headband readings give 1.14 and 1.10; 1.15 is within 5 percent of all three"
+  },
+  "rikku-alchemist/victory": {
+   "installed": 1.09,
+   "corrected": 1.16,
+   "eyeSpacingRatio": 1.164,
+   "eyeToChinRatio": null,
+   "basis": "eye spacing 1.16; chin under the scarf"
+  },
+  "rikku-black-mage/attack": {
+   "installed": 1.52,
+   "corrected": 1.26,
+   "eyeSpacingRatio": 1.241,
+   "eyeToChinRatio": 1.294,
+   "basis": "eye spacing 1.24 and eye line to chin 1.29 agree; mean"
+  },
+  "rikku-black-mage/cast": {
+   "installed": 1.23,
+   "corrected": 1.04,
+   "eyeSpacingRatio": 1.278,
+   "eyeToChinRatio": 1.044,
+   "basis": "eye line to chin 1.04; eye spacing 1.28 is shortened by the upturned three-quarter face against a frontal idle"
+  },
+  "rikku-gunner/cast": {
+   "installed": 0.99,
+   "corrected": 0.99,
+   "eyeSpacingRatio": 1.012,
+   "eyeToChinRatio": null,
+   "basis": "kept: eye spacing 1.01; chin behind her hands"
+  },
+  "rikku-gunner/victory": {
+   "installed": 0.99,
+   "corrected": 0.99,
+   "eyeSpacingRatio": 1.03,
+   "eyeToChinRatio": null,
+   "basis": "kept: eye spacing 1.03; chin under the scarf"
+  },
+  "rikku-thief/ko": {
+   "installed": 1.31,
+   "corrected": 1.31,
+   "eyeSpacingRatio": 1.281,
+   "eyeToChinRatio": null,
+   "basis": "kept: spacing of the closed eyes 1.28"
+  },
+  "rikku-white-mage/attack": {
+   "installed": 1.13,
+   "corrected": 0.94,
+   "eyeSpacingRatio": 0.885,
+   "eyeToChinRatio": 1.091,
+   "basis": "eye spacing 0.89, eye line to chin 1.09 (the idle's open grin lengthens its face); 0.94 matches by eye"
+  },
+  "yuna-black-mage/item": {
+   "installed": 1.66,
+   "corrected": 1.34,
+   "eyeSpacingRatio": 1.208,
+   "eyeToChinRatio": 1.483,
+   "basis": "eye spacing 1.21 and eye line to chin 1.48 straddle it (turned and lowered face); mean 1.34, which the verifier's eye spacing (1.34) also gives"
+  },
+  "yuna-dark-knight/attack": {
+   "installed": 1.11,
+   "corrected": 1.0,
+   "eyeSpacingRatio": 1.02,
+   "eyeToChinRatio": 0.966,
+   "basis": "eye spacing 1.02 and eye line to chin 0.97 agree; mean"
+  },
+  "yuna-gunner/item": {
+   "installed": 1.09,
+   "corrected": 1.09,
+   "eyeSpacingRatio": 1.116,
+   "eyeToChinRatio": 1.329,
+   "basis": "kept: eye spacing 1.12; eye line to chin 1.33 is shortened by the lowered face"
+  },
+  "yuna-songstress/item": {
+   "installed": 1.38,
+   "corrected": 1.38,
+   "eyeSpacingRatio": 1.361,
+   "eyeToChinRatio": 1.316,
+   "basis": "kept: eye spacing 1.36 and eye line to chin 1.32 agree"
+  },
+  "yuna-warrior/victory": {
+   "installed": 1.36,
+   "corrected": 1.28,
+   "eyeSpacingRatio": 1.279,
+   "eyeToChinRatio": 1.287,
+   "basis": "eye spacing 1.28 and eye line to chin 1.29 agree"
+  }
+ },
+ "eyes": {
+  "paine-black-mage/attack": {
+   "L": [
+    475.6,
+    318.7
+   ],
+   "R": [
+    516.9,
+    331.2
+   ]
+  },
+  "paine-black-mage/cast": {
+   "L": [
+    174.2,
+    438.2
+   ],
+   "R": [
+    213.1,
+    450.3
+   ]
+  },
+  "paine-black-mage/idle": {
+   "L": [
+    265.8,
+    201.9
+   ],
+   "R": [
+    310.8,
+    202.5
+   ]
+  },
+  "paine-black-mage/item": {
+   "L": [
+    246.5,
+    269.7
+   ],
+   "R": [
+    289.3,
+    281.4
+   ]
+  },
+  "paine-black-mage/victory": {
+   "L": [
+    288.4,
+    422.8
+   ],
+   "R": [
+    328.7,
+    421.3
+   ]
+  },
+  "paine-dark-knight/attack": {
+   "L": [
+    415.2,
+    505.4
+   ],
+   "R": [
+    459.5,
+    513.4
+   ]
+  },
+  "paine-dark-knight/idle": {
+   "L": [
+    358.5,
+    242.2
+   ],
+   "R": [
+    393.9,
+    254.5
+   ]
+  },
+  "paine-dark-knight/item": {
+   "L": [
+    323.0,
+    84.1
+   ],
+   "R": [
+    360.1,
+    92.5
+   ]
+  },
+  "paine-warrior/idle": {
+   "L": [
+    180.1,
+    142.6
+   ],
+   "R": [
+    217.5,
+    158.8
+   ]
+  },
+  "paine-warrior/victory": {
+   "L": [
+    297.6,
+    408.1
+   ],
+   "R": [
+    337.1,
+    416.0
+   ]
+  },
+  "rikku-alchemist/cast": {
+   "L": [
+    173.2,
+    260.0
+   ],
+   "R": [
+    220.9,
+    241.6
+   ]
+  },
+  "rikku-alchemist/idle": {
+   "L": [
+    201.7,
+    180.2
+   ],
+   "R": [
+    247.5,
+    190.4
+   ]
+  },
+  "rikku-alchemist/item": {
+   "L": [
+    169.3,
+    170.0
+   ],
+   "R": [
+    207.7,
+    178.1
+   ]
+  },
+  "rikku-alchemist/victory": {
+   "L": [
+    141.3,
+    172.3
+   ],
+   "R": [
+    181.6,
+    173.0
+   ]
+  },
+  "rikku-black-mage/attack": {
+   "L": [
+    416.3,
+    290.6
+   ],
+   "R": [
+    458.7,
+    294.2
+   ]
+  },
+  "rikku-black-mage/cast": {
+   "L": [
+    230.7,
+    432.7
+   ],
+   "R": [
+    270.5,
+    443.4
+   ]
+  },
+  "rikku-black-mage/idle": {
+   "L": [
+    239.6,
+    230.0
+   ],
+   "R": [
+    292.3,
+    229.0
+   ]
+  },
+  "rikku-gunner/cast": {
+   "L": [
+    141.2,
+    294.8
+   ],
+   "R": [
+    182.2,
+    303.4
+   ]
+  },
+  "rikku-gunner/idle": {
+   "L": [
+    154.5,
+    152.0
+   ],
+   "R": [
+    196.9,
+    152.2
+   ]
+  },
+  "rikku-gunner/victory": {
+   "L": [
+    156.0,
+    221.1
+   ],
+   "R": [
+    193.5,
+    238.1
+   ]
+  },
+  "rikku-thief/idle": {
+   "L": [
+    261.8,
+    305.7
+   ],
+   "R": [
+    332.3,
+    309.5
+   ]
+  },
+  "rikku-thief/ko": {
+   "L": [
+    927.6,
+    278.0
+   ],
+   "R": [
+    979.8,
+    295.5
+   ],
+   "note": "closed eyes, centres of the lid lines"
+  },
+  "rikku-white-mage/attack": {
+   "L": [
+    491.4,
+    393.6
+   ],
+   "R": [
+    552.3,
+    383.1
+   ]
+  },
+  "rikku-white-mage/idle": {
+   "L": [
+    180.6,
+    201.6
+   ],
+   "R": [
+    235.3,
+    200.9
+   ]
+  },
+  "yuna-black-mage/idle": {
+   "L": [
+    315.5,
+    199.1
+   ],
+   "R": [
+    365.3,
+    197.6
+   ]
+  },
+  "yuna-black-mage/item": {
+   "L": [
+    384.3,
+    156.6
+   ],
+   "R": [
+    424.4,
+    166.3
+   ]
+  },
+  "yuna-dark-knight/attack": {
+   "L": [
+    422.3,
+    515.4
+   ],
+   "R": [
+    465.7,
+    523.2
+   ]
+  },
+  "yuna-dark-knight/idle": {
+   "L": [
+    243.2,
+    257.4
+   ],
+   "R": [
+    288.1,
+    256.2
+   ]
+  },
+  "yuna-gunner/idle": {
+   "L": [
+    209.3,
+    127.4
+   ],
+   "R": [
+    264.9,
+    129.6
+   ]
+  },
+  "yuna-gunner/item": {
+   "L": [
+    179.2,
+    107.8
+   ],
+   "R": [
+    228.0,
+    117.7
+   ]
+  },
+  "yuna-songstress/idle": {
+   "L": [
+    228.0,
+    117.9
+   ],
+   "R": [
+    279.5,
+    114.2
+   ]
+  },
+  "yuna-songstress/item": {
+   "L": [
+    302.2,
+    91.4
+   ],
+   "R": [
+    338.6,
+    102.3
+   ]
+  },
+  "yuna-warrior/idle": {
+   "L": [
+    335.1,
+    117.3
+   ],
+   "R": [
+    387.9,
+    118.1
+   ]
+  },
+  "yuna-warrior/victory": {
+   "L": [
+    284.9,
+    428.7
+   ],
+   "R": [
+    326.2,
+    430.7
+   ]
+  }
+ },
+ "chinsCorrected": {
+  "paine-dark-knight/item": {
+   "judge": [
+    340,
+    123
+   ],
+   "corrected": [
+    335.7,
+    138.5
+   ]
+  },
+  "rikku-alchemist/idle": {
+   "judge": [
+    223,
+    235
+   ],
+   "corrected": [
+    217.3,
+    247.4
+   ]
+  },
+  "rikku-alchemist/cast": {
+   "judge": [
+    203,
+    302
+   ],
+   "corrected": [
+    197.5,
+    306.5
+   ]
+  },
+  "rikku-black-mage/attack": {
+   "judge": [
+    435,
+    332
+   ],
+   "corrected": [
+    429.7,
+    336.9
+   ]
+  },
+  "rikku-black-mage/cast": {
+   "judge": [
+    245,
+    481
+   ],
+   "corrected": [
+    249.2,
+    494.0
+   ]
+  },
+  "rikku-white-mage/idle": {
+   "judge": [
+    208,
+    260
+   ],
+   "corrected": [
+    207.4,
+    268.9
+   ]
+  },
+  "rikku-white-mage/attack": {
+   "judge": [
+    517,
+    439
+   ],
+   "corrected": [
+    512.0,
+    449.6
+   ]
+  },
+  "yuna-dark-knight/idle": {
+   "judge": [
+    267,
+    306
+   ],
+   "corrected": [
+    266.5,
+    301.0
+   ]
+  },
+  "yuna-gunner/idle": {
+   "judge": [
+    236,
+    194
+   ],
+   "corrected": [
+    236.2,
+    190.5
+   ]
+  },
+  "yuna-gunner/item": {
+   "judge": [
+    202,
+    175
+   ],
+   "corrected": [
+    199.7,
+    159.3
+   ]
+  },
+  "yuna-songstress/idle": {
+   "judge": [
+    255,
+    177
+   ],
+   "corrected": [
+    254.0,
+    171.8
+   ]
+  },
+  "yuna-songstress/item": {
+   "judge": [
+    316,
+    134
+   ],
+   "corrected": [
+    313.1,
+    138.6
+   ]
+  },
+  "yuna-warrior/idle": {
+   "judge": [
+    360,
+    174
+   ],
+   "corrected": [
+    360.4,
+    168.3
+   ]
+  }
+ }
+}

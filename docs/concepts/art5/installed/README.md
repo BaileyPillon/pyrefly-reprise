@@ -74,3 +74,7 @@ now fills six failed slots with a neighbouring installed painting instead of the
 
 No code was changed. Whether these slots should fall back to the idle instead is the driver's
 call, and possibly Bailey's.
+
+**Fixed in repair cycle 1 (2026-09-25), see `rescale/README.md`.** A dressphere's failed cast, item and
+ko slots now show the standing painting, as D-179 says. The head scales were re-measured: 14 of the 22
+sidecars changed. The `ratio`/`sidecarScale` pairs above are the installed values, before the repair.
