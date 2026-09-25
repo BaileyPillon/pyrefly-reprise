@@ -224,3 +224,28 @@ Frames and raw results are in scratch and are not committed:
   (minor 3; the text line itself stays clear in the 390x844 frame). `fade('white')` still draws black,
   unchanged; that needs a decision from the driver and Bailey. The branch-behind-main minor may have
   grown.
+
+## Re-check after repair 2 (independent; nothing edited but this section)
+
+**Verdict: ISA-CHK-M1 stays fixed. 0 blockers, 0 majors open. The 9 minors are unchanged. Still unlisted.**
+
+- **What repair 2 did:** nothing new. No commit was made after the re-check commit a6dc53c1, and the
+  worktree is clean. The fix is still the 4bcb6de6 diff.
+- **Code read again (4bcb6de6):** `fadeScreen` sends `'clear'` to both `#fade` and `CutsceneStage.veil(false)`,
+  and every other value to `veil(true)`. `.cutscene__veil` is appended to `.cutscene__shake` after the figures
+  and fx, before the box. Its z-index is 5 (`cutsceneStage.css`). The box's is 6 (`dialogue-box.css` line 38).
+  When a scene ends veiled, `#fade` goes opaque at 0 ms before the hand-off. `CutsceneScreen.ts` was 410 lines
+  before the fix and is 410 now, so it did not grow.
+- **Branch against main:** main is 9 commits past the merge base 93a2b983. None of them touches `src/app`,
+  `src/ui` or `src/story`, so the fix files will merge without conflict. Isaaru is still only in
+  `UNLISTED_CHAPTERS` (`chapters-unlisted.ts`).
+- **Re-run here:** `tsc --noEmit` exit 0, empty output
+  (`D:/Tools/pyrefly-scratch/chapters/isaaru/recheck2-tsc.txt`). The full vitest run with
+  `--testTimeout=60000` exits 0: 415 files passed, 3 skipped, 7721 tests. That includes
+  `cutscene-veil` (5), `cutscene-stage` (13) and `target-approved-hashes-judge-locked` (6). The log is at
+  `D:/Tools/pyrefly-scratch/chapters/isaaru/recheck2-vitest.txt`. Orphans: 24, the same baseline.
+- **Not re-driven:** I did not start a browser or a dev server, so there is none to stop. The repair 1
+  frames and the headless real-key results still apply, because the code has not changed since then.
+- **Still open, as disclosed:** on the phone, the controls hint covers the lower part of the narration box
+  (minor 3). `fade('white')` still draws black; the driver and Bailey need to decide that. The other minors
+  from f6b3d04c are unchanged.
