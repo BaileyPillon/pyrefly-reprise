@@ -69,8 +69,13 @@ describe('R13-03: the Fahrenheit deck holds its party (FFX only, Chapter VIII)',
   it('publishes holdParty, with the active spots where live settled them', () => {
     expect(SLOTS.holdParty).toBe(true);
     expect(SLOTS.enemySpots).toBeUndefined();
-    // Measured at 1600x900 and 2000x1012: Tidus x 267 / 407 and Rikku 483 / 644 px (e3b8c2a3), Wakka -81 / 10 (a999d133).
-    expect(SLOTS.party.map((s) => s[0])).toEqual([-1.89, -4.15, -1.02]);
+    // R13-04 option B (Bailey, 2026-09-25): the arc re-laid right of the FFX command stack, back row at the rail.
+    // Tidus 0.15 right of the sheet's 0.1: at FAR (2000x1012) he covered 0.07 of Wakka at 0.1.
+    expect(SLOTS.party).toEqual([
+      [0.25, 0, 0.9],
+      [-0.95, 0, -2.5],
+      [2.2, 0, -2.3],
+    ]);
   });
 
   it('keeps Rikku on her slot while Evrae is re-planted, where the shared step walked her left', () => {
