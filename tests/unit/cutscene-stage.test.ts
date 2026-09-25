@@ -15,7 +15,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CutsceneStage } from '../../src/app/screens/CutsceneStage.ts';
 import { CUTSCENE_FIGURES, cutsceneFigure, figureBox, figuresIn } from '../../src/app/screens/cutsceneFigures.ts';
 import { isStagedFx } from '../../src/app/screens/cutsceneFx.ts';
-import { CHAPTERS } from '../../src/data/encounters.ts';
+import { CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { fx, hideActor, showActor, type Step, type StoryScript } from '../../src/story/dsl.ts';
 import { CutsceneRunner, createNoopPorts } from '../../src/story/runner/CutsceneRunner.ts';
 import { yojimboCavernScripts } from '../../src/story/scripts/yojimbo-cavern.ts';
@@ -80,9 +80,10 @@ describe('which chapters the stage changes (measured, pinned)', () => {
 
   it('stands only Chapters IX and XIII\'s own figures, so no other chapter\'s showActor puts anyone on stage', () => {
     // Trema (FFX-2 only, Chapter XIII, listed 2026-09-25) stands in his own post scene only.
-    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema']);
-    const own: Record<string, string[]> = { 'yojimbo-cavern': ['ginnem'], 'ffx2-trema': ['trema'] };
-    for (const c of CHAPTERS) {
+    // Seymour Natus (FFX only, Chapter X, unlisted) stands up in his own pre scene only.
+    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-natus']);
+    const own: Record<string, string[]> = { 'yojimbo-cavern': ['ginnem'], 'ffx2-trema': ['trema'], 'seymour-natus': ['seymour-natus'] };
+    for (const c of [...CHAPTERS, ...UNLISTED_CHAPTERS]) {
       const shown = [...figuresIn(c.scriptsRef?.pre ?? []), ...figuresIn(c.scriptsRef?.post ?? [])];
       expect(shown, c.id).toEqual(own[c.id] ?? []);
     }

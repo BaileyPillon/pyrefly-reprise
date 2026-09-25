@@ -41,6 +41,7 @@ import { SEYMOUR_MACALANIA_ID, seymourAnimaMacalania } from './seymour-anima-mac
 import { EVRAE_ID, evrae } from './evrae.ts';
 import { YOJIMBO_CAVERN_BOSS_ID, yojimboCavern } from './yojimbo-cavern.ts';
 import { TREMA_CHAPTER_BOSS_IDS, ffx2Trema } from './ffx2-trema.ts';
+import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -70,6 +71,7 @@ export { seymourAnimaMacalania, SEYMOUR_MACALANIA_ID } from './seymour-anima-mac
 export { evrae, EVRAE_ID } from './evrae.ts';
 export { yojimboCavern, YOJIMBO_CAVERN_BOSS_ID } from './yojimbo-cavern.ts';
 export { ffx2Trema, TREMA_CHAPTER_BOSS_IDS } from './ffx2-trema.ts';
+export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymour-natus.ts';
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -118,6 +120,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   { chapterId: 'evrae-airship', bossId: EVRAE_ID, tactic: evrae },
   // Chapter IX (FFX only): Yojimbo alone finds it; Ginnem and Daigoro are untargetable bystanders.
   { chapterId: 'yojimbo-cavern', bossId: YOJIMBO_CAVERN_BOSS_ID, tactic: yojimboCavern },
+  // Chapter X (FFX only, unlisted): Natus and Mortibody, one tactic under both ids.
+  ...SEYMOUR_NATUS_BOSS_IDS.map((bossId) => ({ chapterId: 'seymour-natus', bossId, tactic: seymourNatus })),
   // Chapter XIII (FFX-2 only, unlisted): Paragon then Trema, one tactic under both ids.
   ...TREMA_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-trema', bossId, tactic: ffx2Trema })),
 ];
