@@ -100,6 +100,24 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     portrait: { x: 0.5, feet: 0.74, height: 0.46 },
     unsent: true,
   },
+  /**
+   * Seymour Natus, unsent (FFX only: Chapter X). His battle idle, the installed O-1 A painting
+   * (`public/art/characters/seymour-natus/idle.png`, 693 x 1165, feet at y 1148; judge-locked
+   * set chapter:natus). He stands up from the attendants' pyreflies in the pre scene (research
+   * §8.2 beat 8). Painted near-frontal (`facing: front`, never mirrored): `artFacing` -1 with the
+   * script's `facing: -1` draws it as painted. The ring layer is the battle stage's, not here.
+   *
+   * Landscape: right of the dialogue box, facing the party. Portrait: centred, feet above the box.
+   */
+  'seymour-natus': {
+    art: 'art/characters/seymour-natus/idle.png',
+    aspect: 693 / 1165,
+    baseline: 1148 / 1165,
+    artFacing: -1,
+    landscape: { x: 0.8, feet: 0.9, height: 0.62 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+    unsent: true,
+  },
 };
 
 /** The staged figure for `actor`, or `undefined` when cutscenes do not stage it. */

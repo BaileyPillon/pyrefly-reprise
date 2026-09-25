@@ -31,6 +31,7 @@ import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-ai
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
 import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.ts';
+import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -163,16 +164,10 @@ SCENES.set('dreams-end', {
   placeholder: false,
 });
 /**
- * Bevelle Underground is a real location now — `buildBevelleUndergroundScene`
- * in {@link SCENE_FACTORIES} below — so it must stop reporting itself as a
- * stand-in to {@link sceneReport}, which is what the debug API and the critic
- * read to decide whether a chapter has been built yet.
- *
- * `build` stays pointed at the demo diorama and is **unreachable**: it is the
- * older "builder brings its own figures" path, and {@link loadScene} only falls
- * through to this table when `SCENE_FACTORIES` has no entry for the key. The
- * slots are the scene's own, so anything reading the table directly gets
- * Bevelle's formation rather than Gagazet's.
+ * Bevelle Underground is real (`buildBevelleUndergroundScene` in {@link SCENE_FACTORIES}), so it
+ * must not report itself as a stand-in to {@link sceneReport} (the debug API and the critic read it).
+ * `build` is the demo diorama and **unreachable**: {@link loadScene} only falls through to this
+ * table when `SCENE_FACTORIES` has no entry. The slots are the scene's own (Bevelle's formation).
  */
 SCENES.set('bevelle-underground', {
   key: 'bevelle-underground',
@@ -230,6 +225,9 @@ SCENES.set('via-infinito', { key: 'via-infinito', title: 'Via Infinito — Clois
 /** The Garden of Pain inside Sin (Chapter XII, FFX only): real, `build` unreachable as for Leblanc [garden-of-pain.ts]. */
 SCENES.set('garden-of-pain', { key: 'garden-of-pain', title: 'Inside Sin — the Garden of Pain',
   build: buildDemoScene, slots: GARDEN_OF_PAIN_SLOTS, placeholder: false });
+/** The Highbridge of Bevelle (Chapter X, FFX only): real, `build` unreachable as for Leblanc [highbridge.ts]. */
+SCENES.set('bevelle-highbridge', { key: 'bevelle-highbridge', title: 'Highbridge of Bevelle — before the Main Gate',
+  build: buildDemoScene, slots: HIGHBRIDGE_SLOTS, placeholder: false });
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -273,6 +271,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
   'via-infinito': buildCloister100Scene,
   'garden-of-pain': buildGardenOfPainScene,
+  'bevelle-highbridge': buildHighbridgeScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */

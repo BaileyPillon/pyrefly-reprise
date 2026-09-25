@@ -33,7 +33,7 @@ import {
   turnStart,
   victory,
 } from './BattlePresenterBeats.ts';
-import { flushArrivals, restorePart, statusAdded, unstone } from './BattlePresenterArrivals.ts';
+import { comeBack, flushArrivals, keptToReturn, restorePart, statusAdded, unstone } from './BattlePresenterArrivals.ts';
 
 /** One numeral, minus the screen position the stage supplies. */
 type Numeral = Omit<Parameters<DamageNumbersPort['show']>[0], 'x' | 'y'>;
@@ -208,7 +208,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return damage(ctx, event);
 
     case 'heal': {
-      const a = ctx.stage.actor(event.targetId);
+      const a = await comeBack(ctx, event.targetId); // a kept figure's revive fades it in first
       a?.flash(0x9dffc4, 320, 0.6);
       numeral(ctx, event.targetId, { kind: 'heal', amount: event.amount });
       cue(ctx, 'heal', { volume: 0.7 });
@@ -328,7 +328,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
     case 'part-destroyed': {
       const a = ctx.stage.actor(event.partId);
       await settled(ctx, a?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko);
-      ctx.stage.removeCombatant(event.partId);
+      if (!keptToReturn(a)) ctx.stage.removeCombatant(event.partId); // Mortibody comes back
       ctx.stage.camera.shake(0.12, 320);
       return;
     }

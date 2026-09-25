@@ -93,7 +93,8 @@ describe('The Highbridge build and the chapter registration', () => {
     expect(CHAPTERS.map((c) => c.id)).not.toContain('seymour-natus');
     expect(CHAPTER_IDS).not.toContain('seymour-natus');
     expect(ch?.sceneKey).not.toBe('bevelle-underground'); // the FFX-2 arena (research §0.3)
-    expect(ch?.scriptsRef.pre).toEqual([{ type: 'battleStart' }]);
-    expect(ch?.scriptsRef.post).toEqual([{ type: 'results' }]);
+    expect(ch?.sceneKey).toBe('bevelle-highbridge'); // the ship layer's scene (O-3 C)
+    expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' }); // the story: natus-ship-story.test.ts
+    expect(ch?.scriptsRef.post.at(-1)).toEqual({ type: 'results' });
   });
 });

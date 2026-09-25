@@ -31,6 +31,12 @@
  *    (`vfx.play('stone-shatter')`, `StoneShards.ts`) while it crumbles away in
  *    stone grey. Presentation only: whether a petrified figure shatters is the
  *    engine's, and an open question with Bailey (petrify-shatter.jpg).
+ *
+ * 4. **A figure sent to come back comes back** ({@link comeBack}). Mortibody's
+ *    Mortibsorption revives it with a `heal` and no `revive` event
+ *    (`src/battle/ffx/scripted.ts`), so its `'returns'` departure keeps the
+ *    figure on the stage and that heal fades it back in
+ *    (`BattlePresenterReturns.ts`; `docs/plans/natus-ship-review.md`).
  */
 
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
@@ -132,3 +138,6 @@ export function unstone(a: ActorHandle | undefined): void {
   a?.setBrightness(1);
   a?.setStone?.(0);
 }
+
+/** Rule 4's two calls, for `BattlePresenterEvents.ts`'s one import line (it may not grow). */
+export { comeBack, keptToReturn } from './BattlePresenterReturns.ts';
