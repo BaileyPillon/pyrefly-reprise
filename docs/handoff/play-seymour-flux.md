@@ -1,5 +1,20 @@
 # Chapter 1 — Seymour Flux, on Mt. Gagazet
 
+> **2026-09-25 (PR-0008, decisions-2026-09-25 item 5 B; branch `decisions-0925`).** Read this
+> first. The status paragraph below is history: its 146/200 predates four sourced fixes.
+> - **Today, FFX only:** the shipped line wins **78 of 160** over the four standard windows
+>   (17 / 17 / 19 / 25) and **96 of 200**. Floors are 73/160 and 15/40, with at most 2 losses
+>   before battle turn 10 (`tests/unit/strategy-seymour-flux.test.ts`). The method check refresh
+>   is in `docs/plans/pr-0008-method-check.md` (2026-09-25 section). Nothing on the boss changed.
+> - **Guide, FFX only:** rule 3 (Holy Water: the turn is often not there, a fallen Zombie stays
+>   one) and rule 4 (the Dispel strips Protect before Cross Cleave, §4.2) are corrected. The
+>   honest-odds rule and one Protect hint wait on Bailey: `docs/plans/pr-0008-guide-wordings.md`.
+> - **First-attempt seed, both games (shared plumbing):** a run started from real keys draws a
+>   fresh seed (`src/app/runSeed.ts`, via `openRun`). It is no longer seed 1, which lost Chapter 1
+>   under both the line and the advisor. `__pyrefly.setSeed(n)` pins it for captures (`docs/DEV.md`).
+>   Preflight: `docs/plans/ch1-seed-review.md`.
+> - The test driver now lives in `tests/unit/helpers/seymourFluxDrive.ts`.
+
 **Status: winnable, not yet reliable. 146 wins in 200 contiguous seeds (73%),
 against 0 before this round.** The four measured seeds (1, 7, 42, 20260916) all
 win and the chain completes. The project's bar for a chapter is 90%; this is
