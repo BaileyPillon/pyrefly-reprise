@@ -5,8 +5,12 @@
  *
  * **Measure, never tune** (`docs/plans/chapter-omnis-review.md` §9, R4, the
  * `boss-side-fix-needs-measured-options` rule): this file prints the numbers
- * and pins only that every battle ends and that the intended line beats the
- * wrong one. If a line is unwinnable, the answer is measured options for
+ * (outcomes, turns and the boss's key moments: first glow, first Ultima,
+ * below 20,000, KOs by what landed them) and pins only that every battle
+ * ends, that the intended line beats the wrong one, and that the glow /
+ * Dispel / Ultima / reset cycle occurs on the intended line. Read-out:
+ * `docs/plans/omnis-bench.md`. FFX is CTB, so decision time never matters.
+ * If a line is unwinnable, the answer is measured options for
  * Bailey, never a weaker or stronger boss.
  *
  * What every number rests on, said out loud:
