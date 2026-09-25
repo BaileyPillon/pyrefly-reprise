@@ -30,10 +30,16 @@
  *   is "both" (`critic/CHECKS.md` CHK-020); the content differs, the machinery
  *   does not.
  *
- * Pure data and pure functions: no DOM, no save store, no `three`.
+ * Pure data and pure functions: no DOM, no save store, no `three`. The one
+ * exception is {@link playableChapterCount}, which reads the chapter registry
+ * and its unlock rule (`data/encounters.ts`, `app/screens/frontend/comingChapters.ts`)
+ * to count fights for {@link BRIEFING_LINES}' first line — both are plain data
+ * modules, so this stays free of DOM, save store and `three`.
  */
 
 import type { GameId } from '../../battle/common/types.ts';
+import { CHAPTERS } from '../../data/encounters.ts';
+import { LOCKED_CHAPTER_IDS } from '../../app/screens/frontend/comingChapters.ts';
 
 /** Every teaching surface that is shown once and then never again. */
 export type CoachMarkId =
@@ -84,8 +90,61 @@ export interface BriefingLine {
 
 export const BRIEFING_SPEAKER = 'Auron';
 
+/** Word forms for a small count, capitalised, the way the briefing's first line reads it. */
+const COUNT_WORDS = [
+  'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+  'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen',
+  'Nineteen', 'Twenty',
+];
+
+/** A capitalised number word for `n` (`'Eight'`), or the digits themselves past twenty. */
+export function countWord(n: number): string {
+  return COUNT_WORDS[n] ?? String(n);
+}
+
+/** What {@link playableChapterCount} needs of a chapter registry — `CHAPTERS` satisfies it. */
+export interface ChapterCountRegistry {
+  readonly chapters?: readonly { readonly id: string }[];
+  readonly locked?: ReadonlySet<string>;
+}
+
+/**
+ * How many fights a player can actually pick from chapter select right now:
+ * every chapter registered in `data/encounters.ts` **minus** the ones
+ * `LOCKED_CHAPTER_IDS` still holds back as a locked COMING card
+ * (`app/screens/frontend/chapterGrid.ts`'s own `playable` rule — a registered
+ * chapter is `playable: true` unless its id is locked, and an unregistered one
+ * never reaches `CHAPTERS` at all, hard rule 6). Defaults to the real
+ * registries; a test passes its own, the same pattern
+ * `chapterGrid.ts`'s `buildChapterTiles` uses.
+ */
+export function playableChapterCount(registry: ChapterCountRegistry = {}): number {
+  const chapters = registry.chapters ?? CHAPTERS;
+  const locked = registry.locked ?? LOCKED_CHAPTER_IDS;
+  return chapters.filter((c) => !locked.has(c.id)).length;
+}
+
+/**
+ * The briefing's four lines, exactly as Bailey approved them on the frame
+ * `docs/concepts/onboarding/c-aurons-briefing/c1-briefing.png`.
+ *
+ * The emphasised halves are the two clocks: FFX waits, FFX-2 does not. That is
+ * the whole point of putting one shared surface in front of a board that mixes
+ * chapters from both games — a friend who has played neither needs to know they
+ * are two games before the list makes sense
+ * (`docs/plans/onboarding-review.md`, "Missing", last bullet).
+ *
+ * **The first line's count is not written here.** Bailey, 2026-09-25, after
+ * the driver's proposal: *"Auron's onboarding lines mention 5 fights and now
+ * there's more than that."* D-136 supersedes the hard-coded "Five" with
+ * {@link playableChapterCount}, read at import time — the count is exactly the
+ * chapter-select board's own `playable` tiles, both games together, so it
+ * moves by itself the day a chapter unlocks or gets listed and this file never
+ * needs a hand again. "That is all this is." and the rest of the line are
+ * unchanged — only the number word does.
+ */
 export const BRIEFING_LINES: readonly BriefingLine[] = [
-  { lead: '“Five fights. That is all this is.', strong: '', tail: '' },
+  { lead: `“${countWord(playableChapterCount())} fights. That is all this is.`, strong: '', tail: '' },
   { lead: 'In mine, ', strong: 'nothing moves until you move', tail: ' —' },
   { lead: 'read the list, take your time.', strong: '', tail: '' },
   { lead: 'In hers, ', strong: 'the clock does not wait', tail: '.”' },
@@ -101,13 +160,19 @@ export const BRIEFING_LINES: readonly BriefingLine[] = [
  * being aimed at. The gold half is his approved C1 wording, word for word; the
  * four plain words after it make it true under Wait.
  *
+ * **The tail changed again, 2026-09-25 (D-136).** Bailey: *"Calling the
+ * command menu a list a little weird don't you think?"* D-121's tail, "A list
+ * stops it.", is superseded by "Choosing a command stops it." — same claim,
+ * true of the same clock, worded around the actual verb the player performs
+ * rather than the on-screen thing D-121 named. The gold half is unchanged.
+ *
  * His approved line is shown only when `Settings.ffx2Atb` is `'active'`.
  * FFX-2 only in content; lines 1-3 never change.
  */
 export const BRIEFING_WAIT_LINE: BriefingLine = {
   lead: 'In hers, ',
   strong: 'the clock does not wait',
-  tail: '. A list stops it.”',
+  tail: '. Choosing a command stops it.”',
 };
 
 /**
@@ -159,10 +224,16 @@ export const BRIEFING_MS = 20_000;
  * his Active badge and states a rule, not a status, because the badge stays up
  * for its whole fade even after the player opens a list.
  *
+ * **Reworded again, 2026-09-25 (D-136)**, alongside {@link BRIEFING_WAIT_LINE}
+ * and {@link FFX2_GAUGE_BODY_WAIT}: Bailey did not want "list" standing in for
+ * the command menu, so D-121's "a list holds them" is superseded by "a command
+ * holds them" — same rule, same clock, worded around the choice the player
+ * makes rather than the menu it opens.
+ *
  * FFX-2 only — `CoachMark.ts` never shows this badge for an FFX mark.
  */
 export const COACH_RUNNING_BADGE_ACTIVE = 'Nothing paused &middot; gauges running';
-export const COACH_RUNNING_BADGE_WAIT = 'Gauges running &middot; a list holds them';
+export const COACH_RUNNING_BADGE_WAIT = 'Gauges running &middot; a command holds them';
 /** Under `?wait=hold` only: the pre-split Wait badge (the agent's draft), true of the old hold. */
 export const COACH_RUNNING_BADGE_HOLD = 'Menu&rsquo;s up &middot; gauges holding';
 
@@ -228,9 +299,15 @@ export const FFX_MARKS: readonly CoachMark[] = [
  * under **both** modes now, reading whichever body is true through
  * {@link ffx2GaugeBody}, and marks it seen the first time it is shown — in
  * whichever mode that was.
+ *
+ * **Reworded again, 2026-09-25 (D-136).** Bailey, answering the driver's
+ * proposal: *"Calling the command menu a list a little weird don't you
+ * think?"* D-121's "Open a list and take your time" is superseded by "Pick a
+ * command and take your time" — the same instruction, true of the same clock,
+ * without naming the on-screen list.
  */
 export const FFX2_GAUGE_BODY_ACTIVE = "“Bar's full, she's up — don't wait for me, we all go at once!”";
-export const FFX2_GAUGE_BODY_WAIT = "“Bar's full, she's up! Open a list and take your time, nobody moves.”";
+export const FFX2_GAUGE_BODY_WAIT = "“Bar's full, she's up! Pick a command and take your time, nobody moves.”";
 /**
  * Under `?wait=hold` only: Bailey's D-030 Wait pick, verbatim, which he chose
  * for the old whole-menu hold and which is true of it (nobody moves while any

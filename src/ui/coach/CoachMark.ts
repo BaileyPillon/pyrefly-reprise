@@ -140,7 +140,8 @@ export class CoachMark {
     // line already reads `ffx2AtbMode()` (`Briefing.ts`). Since the Wait split
     // became the default (D-029 follow-up 2) the clock runs on the top-level
     // list and holds once a list is open, and the Wait badge says so in
-    // Bailey's words (D-121): "Gauges running · a list holds them" (the
+    // Bailey's words (D-121, reworded by D-136 on 2026-09-25 to stop calling
+    // the command menu a list): "Gauges running · a command holds them" (the
     // pre-split badge under `?wait=hold`, where the top-level list holds too).
     // FFX-2 only: FFX is CTB and its line holds the menu by design.
     const running =

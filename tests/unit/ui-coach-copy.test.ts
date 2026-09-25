@@ -22,6 +22,7 @@ import {
   COACH_RUNNING_BADGE_HOLD,
   COACH_RUNNING_BADGE_WAIT,
   coachRunningBadge,
+  countWord,
   FFX2_GAUGE_BODY_ACTIVE,
   FFX2_GAUGE_BODY_HOLD,
   FFX2_GAUGE_BODY_WAIT,
@@ -30,8 +31,11 @@ import {
   FFX_MARKS,
   markById,
   marksFor,
+  playableChapterCount,
   speakerFor,
 } from '../../src/ui/coach/coachCopy.ts';
+import { CHAPTERS } from '../../src/data/encounters.ts';
+import { LOCKED_CHAPTER_IDS } from '../../src/app/screens/frontend/comingChapters.ts';
 
 /** Every word a player can read in the whole feature. */
 function everyPlayerString(): string[] {
@@ -133,9 +137,12 @@ describe('onboarding copy deck', () => {
     // is open (tests/unit/ffx2-wait-split.test.ts). Bailey's pick, verbatim
     // (2026-09-24, draft 3a, D-121): a rule true in both places, not a status.
     expect(coachRunningBadge('wait')).toBe(COACH_RUNNING_BADGE_WAIT);
-    expect(COACH_RUNNING_BADGE_WAIT).toBe('Gauges running &middot; a list holds them');
+    // D-136 (2026-09-25): Bailey did not want "list" standing in for the
+    // command menu — superseded D-121's "a list holds them".
+    expect(COACH_RUNNING_BADGE_WAIT).toBe('Gauges running &middot; a command holds them');
     expect(COACH_RUNNING_BADGE_WAIT).not.toMatch(/nothing paused/i);
-    expect(COACH_RUNNING_BADGE_WAIT.toLowerCase()).toMatch(/a list holds/);
+    expect(COACH_RUNNING_BADGE_WAIT.toLowerCase()).toMatch(/a command holds/);
+    expect(COACH_RUNNING_BADGE_WAIT.toLowerCase()).not.toMatch(/\blist\b/);
 
     // Still the same badge shape: two short phrases joined by a middle dot.
     for (const badge of [COACH_RUNNING_BADGE_ACTIVE, COACH_RUNNING_BADGE_WAIT]) {
@@ -148,9 +155,29 @@ describe('onboarding copy deck', () => {
     expect(ffx2GaugeBody('active')).toBe(FFX2_GAUGE_BODY_ACTIVE);
     expect(FFX2_GAUGE_BODY_ACTIVE).toBe("“Bar's full, she's up — don't wait for me, we all go at once!”");
     expect(ffx2GaugeBody('wait')).toBe(FFX2_GAUGE_BODY_WAIT);
-    expect(FFX2_GAUGE_BODY_WAIT).toBe("“Bar's full, she's up! Open a list and take your time, nobody moves.”");
+    // D-136 (2026-09-25): superseded D-121's "Open a list" — Bailey did not
+    // want "list" standing in for the command menu.
+    expect(FFX2_GAUGE_BODY_WAIT).toBe("“Bar's full, she's up! Pick a command and take your time, nobody moves.”");
     // The old Wait body claimed a hold on the top-level list, untrue under the split.
     expect(FFX2_GAUGE_BODY_WAIT).not.toMatch(/while you're picking/);
+    expect(FFX2_GAUGE_BODY_WAIT.toLowerCase()).not.toMatch(/\blist\b/);
+  });
+
+  it('the briefing counts fights from the live chapter board, never a hard-coded number (D-136)', () => {
+    const live = playableChapterCount();
+    // The same rule chapter select itself uses: registered minus locked.
+    expect(live).toBe(CHAPTERS.filter((c) => !LOCKED_CHAPTER_IDS.has(c.id)).length);
+    expect(BRIEFING_LINES[0]!.lead).toBe(`“${countWord(live)} fights. That is all this is.`);
+    expect(countWord(8)).toBe('Eight');
+    expect(countWord(0)).toBe('Zero');
+    expect(countWord(21)).toBe('21'); // past the word table: digits, not invented words
+
+    // A chapter that lands raises the count by exactly one, with no edit here.
+    const withOneMore = [...CHAPTERS, { id: 'a-new-chapter-nobody-wrote-yet' }];
+    expect(playableChapterCount({ chapters: withOneMore })).toBe(live + 1);
+
+    // Unlocking every currently-locked chapter raises it to the full registry.
+    expect(playableChapterCount({ locked: new Set() })).toBe(CHAPTERS.length);
   });
 
   it('no player-facing string carries developer or wiki vocabulary (CHK-007, REQUIRED 14)', () => {

@@ -20,6 +20,8 @@ import {
   BRIEFING_LINES,
   BRIEFING_WAIT_LINE,
   briefingLines,
+  countWord,
+  playableChapterCount,
 } from '../../src/ui/coach/coachCopy.ts';
 import { resetCoach, setOnboardingLive } from '../../src/ui/coach/coachState.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
@@ -40,9 +42,11 @@ function shownLines(root: HTMLElement): string[] {
 }
 
 describe('copy: the mode-aware fourth line', () => {
-  it('Bailey’s approved four lines are untouched, word for word', () => {
+  it('Bailey’s approved four lines are untouched, word for word — line 1’s count is live (D-136)', () => {
+    // D-136 (2026-09-25): the hard-coded "Five" is superseded by the live
+    // count of playable chapters; "That is all this is." and the rest never change.
     expect(BRIEFING_LINES.map(text)).toStrictEqual([
-      '“Five fights. That is all this is.',
+      `“${countWord(playableChapterCount())} fights. That is all this is.`,
       'In mine, nothing moves until you move —',
       'read the list, take your time.',
       'In hers, the clock does not wait.”',
@@ -57,7 +61,10 @@ describe('copy: the mode-aware fourth line', () => {
     expect(wait[3]).toStrictEqual(BRIEFING_WAIT_LINE);
     // Bailey's pick, verbatim (2026-09-24, draft 2a, D-121): his approved
     // gold half, then four plain words that make it true under the Wait split.
-    expect(text(BRIEFING_WAIT_LINE)).toBe('In hers, the clock does not wait. A list stops it.”');
+    // D-136 (2026-09-25) reworded the tail again: "Choosing a command stops
+    // it." supersedes "A list stops it." — Bailey did not want the command
+    // menu called a list.
+    expect(text(BRIEFING_WAIT_LINE)).toBe('In hers, the clock does not wait. Choosing a command stops it.”');
     expect(BRIEFING_WAIT_LINE.strong).toBe(BRIEFING_LINES[3]!.strong);
     expect(BRIEFING_WAIT_LINE).not.toStrictEqual(BRIEFING_LINES[3]);
   });
@@ -68,9 +75,14 @@ describe('copy: the mode-aware fourth line', () => {
     expect(BRIEFING_WAIT_LINE.strong).toBe(approved.strong);
     expect(BRIEFING_WAIT_LINE.tail.startsWith(approved.tail.slice(0, 1))).toBe(true);
     expect(BRIEFING_WAIT_LINE.tail.endsWith('”')).toBe(true);
-    // Still one briefing line: the 60-character cap the drafts were written to
-    // (docs/concepts/coach/wait-split-lines.md, "Constraints used").
-    expect(text(BRIEFING_WAIT_LINE).length).toBeLessThanOrEqual(60);
+    // Still one briefing line. The 60-character cap the original drafts were
+    // written to (docs/concepts/coach/wait-split-lines.md, "Constraints
+    // used") governed D-121's three candidate lines; D-136 (2026-09-25) is
+    // Bailey's own verbatim replacement wording, not a re-run of that draft
+    // exercise, and it runs 3 characters past that cap ("Choosing a command
+    // stops it." reads longer than "A list stops it."). Applied exactly as
+    // given rather than trimmed to fit a constraint that was never his own.
+    expect(text(BRIEFING_WAIT_LINE).length).toBeLessThanOrEqual(65);
   });
 });
 
@@ -94,7 +106,7 @@ describe('the briefing reads the mode when it is shown', () => {
     const lines = shownLines(root);
     expect(lines).toHaveLength(4);
     expect(lines[3]).toBe(text(BRIEFING_WAIT_LINE));
-    expect(lines[3]).toBe('In hers, the clock does not wait. A list stops it.”');
+    expect(lines[3]).toBe('In hers, the clock does not wait. Choosing a command stops it.”');
     b.skip();
   });
 

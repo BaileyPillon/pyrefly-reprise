@@ -317,9 +317,10 @@ describe('the coach layer', () => {
     const line = markEl(root);
     expect(line, 'the mark shows under the Wait default too, with the Wait body').not.toBeNull();
     expect(line?.dataset['mark']).toBe('ffx2-gauge');
-    // Bailey's Wait body since the split (2026-09-24, draft 1a, D-121): the
-    // bubble goes up on the top-level list, where the clock runs.
-    expect(line?.textContent).toContain("Bar's full, she's up! Open a list and take your time, nobody moves.");
+    // Bailey's Wait body since the split (2026-09-24, draft 1a, D-121); D-136
+    // (2026-09-25) reworded "Open a list" to "Pick a command" — the bubble
+    // goes up on the top-level list, where the clock runs.
+    expect(line?.textContent).toContain("Bar's full, she's up! Pick a command and take your time, nobody moves.");
     expect(line?.textContent).not.toContain("while you're picking");
     expect(line?.textContent, 'not the Active-only advice').not.toContain("don't wait for me");
   });

@@ -65,7 +65,9 @@ describe('copy: three clocks, three sets of words', () => {
     const hold = briefingLines('hold');
     expect(hold.slice(0, 3)).toStrictEqual(BRIEFING_LINES.slice(0, 3));
     expect(text(hold[3]!)).toBe('In hers, the clock holds while you choose.”');
-    expect(text(briefingLines('wait')[3]!)).toBe('In hers, the clock does not wait. A list stops it.”');
+    // D-136 (2026-09-25) reworded the Wait tail: "Choosing a command stops
+    // it." supersedes D-121's "A list stops it."
+    expect(text(briefingLines('wait')[3]!)).toBe('In hers, the clock does not wait. Choosing a command stops it.”');
     expect(briefingLines('active')).toStrictEqual(BRIEFING_LINES);
   });
 });
@@ -154,7 +156,8 @@ describe('on screen under ?wait=hold', () => {
     setUrl('');
     const split = new CoachMark({ root, mark: mark!, game: 'ffx2', reduceMotion: true });
     void split.show();
-    expect(badge()).toBe('Gauges running · a list holds them');
+    // D-136 (2026-09-25) superseded D-121's "a list holds them".
+    expect(badge()).toBe('Gauges running · a command holds them');
     split.dismiss();
   });
 });
