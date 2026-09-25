@@ -47,7 +47,8 @@ import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts'
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
 import { counterInputs } from './counter-inputs.ts';
-import { dismissAeon } from './aeons.ts';
+import { availableAeons, dismissAeon } from './aeons.ts';
+import { duelLost } from './aeon-duel.ts';
 import { buildBattleResult } from './results.ts';
 
 /**
@@ -423,6 +424,13 @@ export class FFXEngine implements FFXBattleEngine {
     // Gravija attrition that ends at 1 HP — reaches a new minimum long inside
     // the window [ffx-bfa-yu-yevon §3.5]. The longest intended line in the
     // project, Chapter 3's first link, wins in ~195 turns.
+    // An aeon duel is lost when no aeon is left, before the stalemate watch
+    // could end it as an escape (Chapter XIV, plan I-G3 / B11; `./aeon-duel.ts`).
+    if (duelLost(ctx, availableAeons(ctx).length)) {
+      this.finish('defeat');
+      return true;
+    }
+
     const enemyHp = relevant.reduce((sum, c) => sum + Math.max(0, c.hp), 0);
     if (enemyHp < ctx.rt.progress.bestEnemyHp) {
       ctx.rt.progress = { bestEnemyHp: enemyHp, atTurn: ctx.state.turn };

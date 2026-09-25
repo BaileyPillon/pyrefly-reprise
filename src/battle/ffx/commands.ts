@@ -13,6 +13,7 @@ import { reachesAtRange, validTargets } from './targeting.ts';
 import { type AimDef, preferredTargetIds } from '../common/aim.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
+import { applyDuelRows, lockReason } from './aeon-duel.ts';
 import { triggerHandler } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 
@@ -176,18 +177,24 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
 
   // Summon, Yuna only, rank 3. Blocked by Silence, and never while an aeon is
   // already out.
+  // An aeon duel's mirror-locked aeon stays on the list, greyed with its
+  // reason (Chapter XIV, plan B6 / O-5 "Mirror of Grothia"); with no lock
+  // set, the rows are exactly the available aeons in roster order, as before.
   if (ctx.state.aeonId === null && ctx.rt.aeonRoster.size > 0 && user.id === 'yuna') {
-    for (const aeon of availableAeons(ctx)) {
+    const free = new Set(availableAeons(ctx).map((a) => a.id));
+    for (const [key, aeon] of ctx.rt.aeonRoster) {
+      const locked = lockReason(ctx, key);
+      if (!free.has(aeon.id) && !(locked !== undefined && aeon.hp > 0)) continue;
       const row: AvailableCommand = {
         command: { kind: 'summon', id: aeon.id, targets: [] },
         label: aeon.name,
         category: 'summon',
         mpCost: 0,
         rank: 3,
-        enabled: !has(user, 'silence'),
+        enabled: locked === undefined && !has(user, 'silence'),
         validTargets: [],
       };
-      if (!row.enabled) row.disabledReason = 'Silenced';
+      if (!row.enabled) row.disabledReason = locked ?? 'Silenced';
       rows.push(row);
     }
   }
@@ -276,5 +283,7 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     });
   }
 
-  return rows;
+  // An aeon duel (Chapter XIV only; `./aeon-duel.ts`): Yuna's foe-aimed rows
+  // greyed, no Items row on an aeon. Returns `rows` untouched everywhere else.
+  return applyDuelRows(ctx, user, rows);
 }

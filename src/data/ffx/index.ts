@@ -120,6 +120,10 @@ import { YOJIMBO_ABILITIES } from './enemies/yojimbo-abilities.ts';
 import { SEYMOUR_NATUS_ABILITIES } from './enemies/seymour-natus-abilities.ts';
 import { seymourNatusGroup } from './enemies/seymour-natus.ts';
 import { highbridgeBuild } from './builds/highbridge.ts';
+// Chapter XIV, Isaaru's contest of aeons in the Via Purifico (FFX only) — registered but unlisted.
+import { ISAARU_ABILITIES } from './enemies/isaaru-abilities.ts';
+import { ISAARU_GROUPS } from './enemies/isaaru.ts';
+import { viaPurificoBuild } from './builds/via-purifico.ts';
 import { seymourFluxGroup } from './enemies/seymour-flux.ts';
 import { yunalescaGroup } from './enemies/yunalesca.ts';
 import { seymourAnimaMacalaniaGroup } from './enemies/seymour-anima-macalania.ts';
@@ -243,6 +247,7 @@ const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...Object.values(EVRAE_ABILITIES),
   ...Object.values(YOJIMBO_ABILITIES),
   ...Object.values(SEYMOUR_NATUS_ABILITIES),
+  ...Object.values(ISAARU_ABILITIES),
 ];
 
 // Fold item-effect and boss abilities into the merged ABILITIES record.
@@ -304,6 +309,9 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   // Chapter X (`seymour-natus`, src/data/chapter-seymour-natus.ts), registered
   // by id but UNLISTED, the Chapter IX precedent [docs/plans/chapter-natus-review.md].
   [seymourNatusGroup.id]: seymourNatusGroup,
+  // Chapter XIV (`isaaru-via-purifico`, src/data/chapter-isaaru.ts), registered by id
+  // but UNLISTED: three links, Grothia -> Pterya -> Spathi [docs/plans/chapter-isaaru-review.md].
+  ...Object.fromEntries(ISAARU_GROUPS.map((g) => [g.id, g])),
 };
 
 /** Convenience alias for the first group of the possessed-aeon gauntlet. */
@@ -332,6 +340,7 @@ export {
   fahrenheitBuild,
   yojimboCavernBuild,
   highbridgeBuild,
+  viaPurificoBuild,
 };
 
 export type { AeonCatalogDef, OverdriveModeDef, FFXStatusDef, FFXCharacterDef };

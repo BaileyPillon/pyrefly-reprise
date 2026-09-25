@@ -46,6 +46,7 @@ import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from '../../src/data/ffx/enemies/se
 import { EVRAE_ABILITIES } from '../../src/data/ffx/enemies/evrae-abilities.ts';
 import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.ts';
 import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natus-abilities.ts';
+import { ISAARU_ABILITIES } from '../../src/data/ffx/enemies/isaaru-abilities.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from '../../src/data/ffx2/enemies/magus-sisters-abilities.ts';
 
@@ -129,6 +130,13 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     mindy: 'research/ffx2-fallen-aeons.md §3.2 (src/data/ffx2/enemies/magus-sisters.ts)',
     'x2-anima': 'research/ffx2-fallen-aeons.md §3.3 (src/data/ffx2/enemies/fallen-aeons-road.ts)',
   },
+  // Chapter XIV (FFX), registered but unlisted like Chapters IX to XI.
+  'isaaru-via-purifico': {
+    isaaru: 'research/ffx-isaaru-bevelle.md §2.1 (src/data/ffx/enemies/isaaru.ts)',
+    grothia: 'research/ffx-isaaru-bevelle.md §2.2-§2.4 (src/data/ffx/enemies/isaaru.ts)',
+    pterya: 'research/ffx-isaaru-bevelle.md §2.2-§2.4 (src/data/ffx/enemies/isaaru.ts)',
+    spathi: 'research/ffx-isaaru-bevelle.md §2.2-§2.4 (src/data/ffx/enemies/isaaru.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -199,6 +207,9 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
     fileCite(magusSistersAbilities, 'research/ffx2-fallen-aeons.md §4.2 (src/data/ffx2/enemies/magus-sisters-abilities.ts)'),
     fileCite(x2AnimaAbilities, 'research/ffx2-fallen-aeons.md §4.3 (src/data/ffx2/enemies/fallen-aeons-abilities.ts)'),
   ],
+  'isaaru-via-purifico': [
+    fileCite(ISAARU_ABILITIES, 'research/ffx-isaaru-bevelle.md §3 (src/data/ffx/enemies/isaaru-abilities.ts)'),
+  ],
 };
 
 /**
@@ -247,6 +258,8 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
   },
   // Every Chapter XI ability id is `x2-`-prefixed and defined in the chapter's own ability files.
   'ffx2-fallen-aeons': {},
+  // Every Chapter XIV ability id is prefixed with its aeon's name and defined in the chapter's own file.
+  'isaaru-via-purifico': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

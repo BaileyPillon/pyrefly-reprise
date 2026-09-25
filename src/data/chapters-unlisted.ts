@@ -18,13 +18,16 @@
 import type { Chapter } from './encounters.ts';
 import { SEYMOUR_NATUS } from './chapter-seymour-natus.ts';
 import { FFX2_FALLEN_AEONS } from './chapter-ffx2-fallen-aeons.ts';
+import { ISAARU_VIA_PURIFICO } from './chapter-isaaru.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
  * Chapter X, Seymour Natus (FFX only) — `./chapter-seymour-natus.ts`.
  * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts`.
+ * Chapter XIV, Isaaru in the Via Purifico (FFX only) — `./chapter-isaaru.ts`.
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [
   SEYMOUR_NATUS,
   FFX2_FALLEN_AEONS,
+  ISAARU_VIA_PURIFICO,
 ] as const;

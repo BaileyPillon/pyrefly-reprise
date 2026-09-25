@@ -23,6 +23,7 @@ import { hasAuto } from './equipment.ts';
 import type { TimingBonus } from './formulas.ts';
 import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furySpellIdsFor, furyTierOf } from './fury.ts';
 import { attackReelHits } from './reels.ts';
+import { grandSummonChoices } from './aeon-duel.ts';
 
 /** The Attack Reels strip, in both spellings the tree uses [§5.6, `reels.ts`]. */
 const ATTACK_REEL_SYMBOLS = new Set(['1-hit', '2-hit', 'miss', '1hit', '2hit']);
@@ -350,7 +351,7 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
       });
       break;
     case 'yuna-grand-summon':
-      Object.assign(base, { aeons: [...ctx.rt.aeonRoster.keys()] });
+      Object.assign(base, { aeons: grandSummonChoices(ctx) }); // the whole roster, unless an aeon duel narrows it
       break;
     default:
       break;

@@ -2397,8 +2397,15 @@ export interface FFXPartyBuild {
   game: 'ffx';
   /** Every member the player may field, including the bench. */
   members: FFXMemberBuild[];
-  /** The three on the field at battle start, in slot order. */
-  activeSlots: [string, string, string];
+  /**
+   * The members on the field at battle start, in slot order: **three**
+   * everywhere but a forced solo line-up. One or two ids is legal (additive,
+   * 2026-09-25): Chapter XIV's Via Purifico duel fields **Yuna alone**
+   * (`forced_party "y"`, research/ffx-isaaru-bevelle.md §1.2 [verified: 3
+   * sources]). The engine has always built the line-up from this list's
+   * length (`setup.ts`), so a shorter one needs no engine change.
+   */
+  activeSlots: [string, string, string] | [string, string] | [string];
   /** Bench member ids, switchable in. */
   reserve: string[];
   aeons: AeonBuild[];
@@ -2563,4 +2570,36 @@ export interface EnemyGroupDef {
    * flow to read. Absent everywhere else, so no other chain changes.
    */
   restoresPartyOnEntry?: boolean;
+  /**
+   * **FFX, the mirror lock** (Chapter XIV, Isaaru's contest of aeons,
+   * `docs/plans/chapter-isaaru-review.md` I-G2): Yuna cannot summon her own
+   * copy of the aeon she is facing, "two aeons of the same type cannot fight
+   * each other" [research/ffx-isaaru-bevelle.md §1.2, verified: 2 sources].
+   * `aeonId` is the locked roster key; `mirrorOf` is the enemy combatant id
+   * whose name the greyed Summon row gives as its reason ("Mirror of
+   * Grothia", Bailey's O-5 pick). Read by `battle/ffx/aeon-duel.ts`; absent
+   * everywhere else, so no other chapter's Summon list changes.
+   */
+  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId }>;
+  /**
+   * **FFX, "can only be fought by aeons"** (Chapter XIV; research §1.2
+   * [verified: 2 sources] for the rule, plan B6 / B7 / B11 for how it is
+   * built, each Bailey's pick 2026-09-25). While set:
+   * - a party member's rows that act on the enemy side (Attack, Talk, attack
+   *   items, any foe-aimed ability) are greyed "Only an aeon can fight an
+   *   aeon" and refused if submitted (B6 = a, our estimate: the sources say
+   *   only aeons can fight, not what Yuna's menu shows);
+   * - an aeon has no Items row (B7, our estimate);
+   * - the battle is **lost** when no aeon holds the field and none is left to
+   *   summon (B11 = a, [single source: GameFAQs]), so it never drifts into the
+   *   400-turn stalemate `'escape'` (plan I-G3, review E11).
+   */
+  aeonsOnly?: boolean;
+  /**
+   * AP paid on a victory over this formation **on top of** its enemies'
+   * rewards, for a reward no single enemy carries: the 5,000 AP Yuna gains
+   * for winning Isaaru's duel [research §11 I-1, single source: GameFAQs;
+   * plan B13 = a]. Absent everywhere else.
+   */
+  victoryBonusAp?: number;
 }

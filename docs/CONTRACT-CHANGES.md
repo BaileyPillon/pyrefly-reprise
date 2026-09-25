@@ -6,6 +6,33 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XIV, Isaaru: `ChapterId` gains `'isaaru-via-purifico'`, `Chapter.number` widens to 15, a one- or two-member `FFXPartyBuild.activeSlots`, `EnemyGroupDef.lockedAeons` / `aeonsOnly` / `victoryBonusAp`
+
+**FFX only** [AGENTS.md hard rule 14]: Isaaru's contest of aeons in the Via Purifico, Yuna
+alone with her aeons (`research/ffx-isaaru-bevelle.md`; in FFX-2 nobody summons); every field
+is shared plumbing, **inert** unless a formation sets it (only Chapter XIV's three do).
+Bailey, 2026-09-25: "I'll go with all your recommendations" (B1-B22 on
+`docs/plans/chapter-isaaru-review.md`, with its Review corrections).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'isaaru-via-purifico'` (the record
+is `src/data/chapter-isaaru.ts`, in `UNLISTED_CHAPTERS`, the Chapter IX to XI precedent);
+`Chapter.number` widens from `1 … 11` to `1 … 15`, so Chapters XII, XIII and XV (built in
+parallel) need no second widening. `learn/atlas/cites.ts` gains the key.
+
+**Additive** in `src/battle/common/types.ts`:
+- `FFXPartyBuild.activeSlots` accepts one or two ids as well as three (`forced_party "y"`, research
+  §1.2 [verified: 3 sources]). The engine always built the line-up from the list's length; every
+  existing build still passes three.
+- `EnemyGroupDef.lockedAeons` (the mirror lock: `{ aeonId, mirrorOf }`), `aeonsOnly` ("can only be
+  fought by aeons": a party member's foe-aimed rows greyed and refused, no Items row on an aeon,
+  and a defeat when no aeon is left) and `victoryBonusAp` (a victory reward no enemy carries: the
+  duel's 5,000 AP). Read by `src/battle/ffx/aeon-duel.ts`, which copies them into `state.flags` at
+  setup (`aeonDuel.only`, `aeonDuel.lock:<aeonId>`, `victory.bonusAp`) so a rebuilt runtime and an
+  intent clone see them. Absent everywhere else: Chapters 1-3 and 7-10 event logs and menus
+  measured byte-identical before and after (70 seeded runs), FFX-2 untouched.
+
+No save migration: saves key chapters by id string, and the chapter is unlisted.
+
 ## 2026-09-24 — `encounters.ts`: Chapter IX (Yojimbo) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX only** [AGENTS.md hard rule 14]: Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth

@@ -67,6 +67,7 @@ import { commandAbility } from './state.ts';
 import { critChance, hitChance } from './formulas.ts';
 import { equipmentCrit } from './equipment.ts';
 import { markEvraeRuntime } from './ai/evrae-rules.ts';
+import { markIsaaruRuntime } from './ai/isaaru-rules.ts';
 
 // ---------------------------------------------------------------- the rolls
 
@@ -323,6 +324,7 @@ function runtimeFor(state: BattleState, command: Command): FFXRuntime {
     if (c.side === 'aeon') rt.aeonRoster.set(id, c);
   }
   markEvraeRuntime(state.flags, rt.actors); // setup marks a rebuilt runtime would lose (Wakka's reach)
+  markIsaaruRuntime(state, rt.actors); // and Chapter XIV's (the targeting gauges, Isaaru's no-turn)
   if (command.kind === 'item') {
     const stocked = state.flags[`inventory:${command.id}`];
     rt.inventory.set(command.id, typeof stocked === 'number' && stocked > 0 ? stocked : 99);

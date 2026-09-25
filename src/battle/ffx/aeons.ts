@@ -13,6 +13,7 @@ import { ejectActor } from './hp.ts';
 import { setGauge } from './overdrive.ts';
 import { normalise } from './turnQueue.ts';
 import { baseCtb } from './math.ts';
+import { lockedMirrorOf } from './aeon-duel.ts';
 
 /**
  * Battles a KO'd aeon must sit out before it may be summoned again.
@@ -20,12 +21,17 @@ import { baseCtb } from './math.ts';
  */
 export const AEON_REVIVE_BATTLES = 3;
 
-/** Aeons Yuna may summon right now. */
+/**
+ * Aeons Yuna may summon right now. An aeon under an aeon duel's **mirror
+ * lock** is not one (`./aeon-duel.ts`, Chapter XIV only; research
+ * ffx-isaaru-bevelle §1.2 [verified: 2 sources]).
+ */
 export function availableAeons(ctx: Ctx): FFXCombatant[] {
   const out: FFXCombatant[] = [];
-  for (const aeon of ctx.rt.aeonRoster.values()) {
+  for (const [key, aeon] of ctx.rt.aeonRoster) {
     if ((aeon.aeon?.reviveCountdown ?? 0) > 0) continue;
     if (aeon.hp <= 0) continue;
+    if (lockedMirrorOf(ctx, key) !== undefined) continue;
     out.push(aeon);
   }
   return out;
