@@ -136,3 +136,69 @@ BLOCKERS: 0
   the pre story. 0 page errors. The links were reached with the debug API (party kept full, enemies held
   at 1 HP), so the enemy HP bars in these frames are not a real fight's.
 - Still unlisted: `UNLISTED_CHAPTERS` / `UNLISTED_CHAPTER_META` only.
+
+## Independent check of option A, 2026-09-25 evening (at `ccf44634`)
+
+**Game case: FFX-2 only** (AGENTS.md rule 14; FFX is CTB and has no gauge to hold). I built none of
+it and edited nothing but this section. Browser runs used a **production build** (`vite build` into a
+scratch folder on D:, `vite preview` on port 5763, base `/pyrefly-reprise/`), headless GPU Chromium
+through Playwright, a fresh load each run, `gotoChapter('ffx2-fallen-aeons')` from the title with no
+key pressed first. Prep, the pre scene, the first menu, one real action, the guide and pause were real
+keys (and real taps and clicks on the guide); the win runs handed the fight to `autoBattle('intended')`
+after the first menu. The server was stopped by its PID. Frames and logs (not committed):
+`D:/Tools/pyrefly-scratch/chapters/fallen-aeons/indcheck/`.
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | clean (exit 0, 1,981 files) |
+| Full `vitest run --testTimeout=60000` | **416 files passed, 2 skipped; 7,783 tests passed**, 12 skipped, 1 todo |
+| `node tools/orphans.mjs` | 761 modules, **24 orphaned**, the same 24 as main |
+| Approved and judge-locked art (`verify-approved.mjs`, `ROOT` = this worktree) | **225 ok (177 approved + 48 judge-locked), 0 mismatched, 0 missing**; the same 225 match byte for byte in the built `dist/` |
+| Scope | `action-time.ts` changed in comments only; the switch is one spread in `fallen-aeons-road.ts` on the three Road groups. `ACTION_TIME_ALL_FFX2` false, the estimate 1.5 s, Shiva 14,800 HP / Agility 119 and Anima 36,000 / 133 unchanged. No file over 400 lines (largest touched: 397). Nothing under `critic/`, no NOW.md, no `decisions.json`, no `public/art`. |
+
+**Bench rows the change touches (re-run in the full suite, not copied):**
+`fallen-aeons-ship-bench.test.ts` printed the chapter as shipped at **174/200** bench, **33/40** and
+**159/200 (79.5 %)** human Wait split, 34/40 on the guide's habit; the OFF row **58/200** and **31/200
+(15.5 %)**; 1.5 s 147 / 115; Lv 52 191 / 177. Every figure is the build report's. Human losses on 200
+seeds: Shiva 0, Sisters 41, Anima 0. `fallen-aeons-bench.test.ts`: Shiva 200 vs 194 (wrong) at bench
+speed and 40 vs 40 at human pace; the Sisters 167 vs 113 and 30 vs 18; Anima 200 vs 200 and 40 vs 40.
+`fallen-aeons-action-time.test.ts` (each Shiva turn exactly 9,000 ticks later) and the Trema scope test
+pass.
+
+**Real keys, production build:**
+
+| Size | Prep | Pre scene | First menu | Real action | Action time live | Habit line | Errors |
+|---|---|---|---|---|---|---|---|
+| 1600x900, seed 3 | yes | 7 lines | Yuna, White Magic / Change / Item | White Magic, Pray, All allies: `action-start x2-white-mage-pray` | engine flag `actionTimeSeconds` = **3** at the first menu and after the action | first RULES bullet, "Pick a command at once", on the guide panel's second page (one real click on MORE) | 0 console errors, 0 HTTP 4xx, 70/70 images decode |
+| 390x844, seed 3 (phone HUD B) | yes | 7 lines | yes, the two-column phone grid | the same Pray | **3**, both reads | first RULES bullet on the sheet a real tap on GUIDE opens | 0 errors, 70/70 decode |
+
+- **The switch reaches all three links in the browser.** Win runs at 1600x900 (seed 11) and 390x844
+  (seed 9): the live engine's flag read **3 on Shiva, 3 on the Sisters and 3 on Anima** (each link
+  a fresh engine, `ticks` 0). Both won through all three links (3:49 and 2:50 of game time), the Save
+  Sphere card showed, the seam and every mid-battle line fired, and "ROAD TO THE FARPLANE · CLEARED"
+  results followed, then the post lines with real Enter. The pause CHAPTER tab loaded
+  `ch11-ffx2-fallen-aeons.2x.webp` (1982x1132). 83 and 86 images decoded, 0 broken, 0 placeholder
+  actors, 0 console errors. The only `ERR_ABORTED` entries were superseded `.png` twins of pause
+  portraits whose `.2x.webp` loaded.
+- **Still unlisted:** the chapter is reached only through the debug API; the registries keep it in
+  `UNLISTED_CHAPTERS` / `UNLISTED_CHAPTER_META`.
+
+### Punch list
+
+**Blockers:** none.
+
+- **n1 (disclosed, for Bailey; not a defect):** with 3 s of action time, Shiva and Anima no longer
+  punish the credibly wrong line at human pace (40/40 vs 40/40 on both); only the Sisters separate the
+  lines (30 vs 18 of 40). The bench test's "beats wrong on every link" became "never worse, strictly
+  better on the Sisters". This is measured and written up in `docs/plans/fallen-aeons-bench.md`, and
+  no boss number moved. It means the chapter teaches its answer in one link out of three.
+- **n2 (minor, shared guide panel, both games):** at 1600x900 the habit line is the first RULES
+  bullet, but the panel opens on NEXT and WATCH, so the line is one MORE click away at the first menu.
+  On the phone it is visible as soon as GUIDE is tapped.
+- **n3 (minor, shared phone HUD B, outside this chapter):** with the phone guide sheet open, a
+  keyboard Escape opens pause rather than closing the sheet. There is no Escape on a phone, so this
+  matters only for a keyboard on a narrow window.
+- The earlier punch list's m1 to m5 and o1, o3 are unchanged by option A. o2 cleared with the merge
+  of main.
+
+BLOCKERS: 0
