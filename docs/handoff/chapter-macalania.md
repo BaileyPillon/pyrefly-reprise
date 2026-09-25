@@ -30,6 +30,25 @@ number changed.
 | Advisor: Petrify Grenade "4000 damage", and it disagrees with the guide's Steal on turn 1 | (a) `damageToEnemies` is HP lost, and a shatter loses 4,000 with no `damage` event; (b) a landed Steal changes only inventory/flags, so the no-op guard dropped the chapter line behind the grenade | (a) `dealtToEnemies` (damage events, capped by HP lost) for the chip and the sentence, plus a `removes` fact: "It puts Petrify on 2 of them, and 2 of them shatter"; (b) the guard reads the engine's own "Stole …" / "pilfered" line | `advisor-status-items.test.ts`; `advisor-sentence.test.ts` re-derives the new definition |
 | The shatter barely reads as stone | a 220 ms status beat, then the green-edged pyrefly dissolve in grey | `PaintedActor.setStone` (desaturate + stone tint, separate from the targeting dim), the painting drains to stone over 280 ms and holds 340 ms (`STONE_MS`), then `vfx.play('stone-shatter')`: opaque stone chips that fall to its feet (`src/engine/StoneShards.ts`); a Soft restores the colour | `ch7-presentation-fixes.test.ts` (6) |
 
+**Verified with real keys** (two full wins, own Vite :5611 with HMR and the
+watcher off, `PYREFLY_BROWSER=gpu` on the RTX 5070 Ti, seed 1, chapter reached
+with `gotoChapter` from a fresh title; scratch harness `tools/zz-ch7-fix.tmp.mjs`,
+not committed; the server stopped by PID): turn 1 card and guide both
+"Steal → Guado Guardian A" (GUIDE'S PICK); both Guardians grey to stone and
+break into chips; the Sensor plate is hidden from the moment both have gone;
+"Seymour · summons Anima" and "Seymour · dismisses Anima"; the only Anima art
+requested is `anima/idle.png`; Seymour lies tipped back on the floor from
+~0.5 s after his KO, still down in the victory shot, until the aftermath scene
+takes the screen at ~3.1 s. 0 console errors, 0 HTTP errors. Frames:
+`docs/screenshots/ch7-fixes/` (numbered by item).
+
+**Still open.** The body's head end sits a little higher than the hem (the
+painting's own silhouette flares at the hem; a painted `ko` would settle it).
+The shot during Guardian B's shatter frames the party, so B's break happens at
+the right edge or off frame (the camera's, not this pass's). The stone look was
+built on the orchestrator's brief without an options round (AGENTS.md rule 9);
+it is presentation only and sits behind `setStone` and `vfx 'stone-shatter'`.
+
 **Other chapters, measured.** The advisor's text over chapters 1-8, seeds 1-3,
 60 decisions each (1,026 cards), before and after: only Chapter VII's cards
 changed (the nine Petrify Grenade / Steal rows above). Departure kinds are
