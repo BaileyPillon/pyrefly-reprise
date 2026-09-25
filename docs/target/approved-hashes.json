@@ -732,6 +732,14 @@
     "sha256": "975fd8fd3cb1e4640234999a25a8889d7e72ec446a311715469c5023a584a419",
     "mtime": "2026-09-24T23:29:40.642Z"
    }
+  },
+  "chapter:yojimbo-sakura:2026-09-25": {
+   "words": "All your recommendations",
+   "note": "Bailey, 2026-09-24 ~13:35 EDT, O-4 for Chapter IX: chamber A cold (D-061) with the night-sakura arrival playing at fight start (D-072, docs/concepts/chapters/yojimbo/chamber/sheet-arrival.jpg, option A bottom row). This is that option's own tree: the tree2 raw render recoloured by the overlay recipe (make_sakura.py: pink to the visual bible #8FC8F0, ground levelled to black, base faded, edges feathered; drawn additively by src/scenes/cavern-stolen-fayth-arrival.ts). Installed 2026-09-25 as public/art/backdrops/cavern-stolen-fayth/sakura.png (new file, nothing replaced). Side by side with the target: docs/screenshots/yojimbo-polish/01-sakura-target-vs-build.jpg. No independent judge report (options round only). FFX only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-yojimbo-sakura/ (with make_sakura.py).",
+   "public/art/backdrops/cavern-stolen-fayth/sakura.png": {
+    "sha256": "c3e66e3fb678ee4bc91dde2a33c58d083583aed1552ad08718460ea88ed2a675",
+    "mtime": "2026-09-25T03:44:20.535Z"
+   }
   }
  }
 }
