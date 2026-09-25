@@ -5,7 +5,7 @@
  * Tables through the pure exports; the factory under jsdom with a no-op 2D context and an empty
  * art manifest (the Chapter XI scene test's set-up: the backdrop goes straight to its placeholder,
  * no decode, no network). What it looks like is the browser pass's
- * (`docs/concepts/chapters/gippal/ship/`).
+ * (`docs/concepts/chapters/den-of-woe/ship/`).
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14].
  */

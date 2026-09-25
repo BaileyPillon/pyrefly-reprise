@@ -27,7 +27,7 @@ Branch `chapter-gippal-ship-0925`, worktree `D:/pyrefly-ch-gippal-ship` (from `c
 **0 / 40** at human speed (Wait split); Nooj is the wall (1 / 40 fresh at human speed). The
 sourced player-side options (Hero Drinks GP6 b, levels GP5 b) are numbers for Bailey, not built.
 
-## Frames (JPEG, `docs/concepts/chapters/gippal/ship/`)
+## Frames (JPEG, `docs/concepts/chapters/den-of-woe/ship/`)
 
 Headless Playwright on a private Vite server (port 5780, HMR and watch off), stopped by its PID.
 Baralai at 1280x720, 1600x900, 2000x1012 and 390x844 (with the entrance callout, and
