@@ -1,5 +1,8 @@
 # Option sheet: Chapter VII's party under the FFX command stack (Macalania Temple)
 
+> **Picked 2026-09-25 ~18:30 EDT: B** (Bailey: "All your recommendations"). `MACALANIA_PARTY_LAYOUT = 'b'`,
+> and the build's frames at four sizes are in `../../ship/picked/`.
+
 **Game case: FFX only** (AGENTS.md rule 14). Chapter VII is an FFX chapter, and the
 stack is the FFX Ink & Gold command cascade. No FFX-2 scene or HUD is touched.
 

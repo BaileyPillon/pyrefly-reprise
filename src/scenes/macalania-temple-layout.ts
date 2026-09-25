@@ -7,14 +7,14 @@
 // from before D-041 (the R13-04 / PR-0002 defect class). Bailey fixed that
 // class twice with a layout pick (D-041, D-144); for Chapter VII the sheet is
 // `docs/concepts/chapters/macalania/unlock/party-layout/` (current, A, B
-// recommended, C), and the pick is still open (`MACALANIA_OPEN_PICKS`,
-// 'party-layout', in `src/data/chapter-macalania-ship.ts`).
+// recommended, C). Bailey picked B on 2026-09-25 (~18:30 EDT, verbatim "All
+// your recommendations"), so it has left `MACALANIA_OPEN_PICKS` in
+// `src/data/chapter-macalania-ship.ts`.
 //
 // Every option is built here as staging data, so the pick lands as ONE
-// constant, {@link MACALANIA_PARTY_LAYOUT}. It stays `'current'` (today's
-// staging, unchanged) until Bailey picks: AGENTS.md rules 9 and 10. The
-// chapter is behind its lock line until then, and the ship-layer test refuses
-// the unlock while this constant is still `'current'`.
+// constant, {@link MACALANIA_PARTY_LAYOUT}, now `'b'`. The other options stay
+// built so the sheet's measurements stay pinned; the ship-layer test still
+// refuses an unlock while this constant is `'current'`.
 //
 // Staging only, no game data: positions are world units measured live on the
 // sheet (`data-*.json`), not numbers from the game.
@@ -91,11 +91,12 @@ export const MACALANIA_PARTY_LAYOUTS: Readonly<Record<MacalaniaPartyLayoutId, Ma
 };
 
 /**
- * **The one line Bailey's pick changes.** `'current'` until the party-layout
- * pick is answered and recorded in `docs/target/decisions.json`; then the
- * picked id, and `'party-layout'` leaves `MACALANIA_OPEN_PICKS`.
+ * **The one line Bailey's pick changes.** `'b'`: Bailey, 2026-09-25 ~18:30 EDT,
+ * "All your recommendations", taking the sheet's recommended B (the party
+ * re-laid right of the FFX command stack and held, the three ground fiends
+ * pinned one step right and back). The merge records the decision on main.
  */
-export const MACALANIA_PARTY_LAYOUT: MacalaniaPartyLayoutId = 'current';
+export const MACALANIA_PARTY_LAYOUT: MacalaniaPartyLayoutId = 'b';
 
 /** The layout the scene stands on. */
 export function macalaniaPartyLayout(id: MacalaniaPartyLayoutId = MACALANIA_PARTY_LAYOUT): MacalaniaPartyLayout {

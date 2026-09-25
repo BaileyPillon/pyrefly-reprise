@@ -120,11 +120,11 @@ export const COMING_CHAPTERS: readonly ComingChapter[] = [
  * id matches the real chapter) and the playable card takes its place.
  */
 export const LOCKED_CHAPTER_IDS: ReadonlySet<string> = new Set<string>([
-  // Chapter 7, Macalania (FFX only): art approved (D-141) except the pause
-  // plate; waits on Bailey's three picks, the pause-plate redo, the scene cue
-  // and the party layout (src/data/chapter-macalania-ship.ts). Once they have
-  // landed, deleting this line is the whole unlock, rehearsed with real keys
-  // (docs/handoff/chapter-macalania.md).
+  // Chapter 7, Macalania (FFX only): art approved (D-141), the pause-plate
+  // redo A2 and the party layout B picked (Bailey, 2026-09-25). Stays locked
+  // until Bailey picks the scene cue by ear (src/data/chapter-macalania-ship.ts).
+  // Once it has landed, deleting this line is the whole unlock, rehearsed with
+  // real keys (docs/handoff/chapter-macalania.md).
   'seymour-anima-macalania',
   // Chapter 8, Evrae (FFX only): UNLOCKED on Bailey's word, 2026-09-23
   // ("I'll go with your recommendations let's get to work" — accepting the

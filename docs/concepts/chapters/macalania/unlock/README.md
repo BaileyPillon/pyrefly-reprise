@@ -1,6 +1,10 @@
 # Chapter VII unlock: art approval and the Petrify question (FFX only)
 
 > **Answered 2026-09-25.** Bailey: "I'll go with all your recommendations".
+> - **Update, 2026-09-25 ~18:30 EDT** (Bailey: "All your recommendations"): the pause plate is **A2**
+>   (independent judge 7.4, `../pause-plate-redo/JUDGE-A2.md`), installed and locked as
+>   `chapter:macalania-pause:2026-09-25`; the party layout is **B** (`MACALANIA_PARTY_LAYOUT = 'b'`). The
+>   chapter stays locked until the scene cue is picked by ear.
 > - Question 1: the five battle paintings and the backdrop are locked as set
 >   `chapter:macalania:2026-09-25` in `docs/target/approved-hashes.json` (backup
 >   `D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania/`).

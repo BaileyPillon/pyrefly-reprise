@@ -73,9 +73,9 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
 
 /**
  * Party slots 0-2 (Tidus, Yuna, Rikku, the build's `activeSlots`) come from the
- * party-layout option in force (`macalania-temple-layout.ts`, Bailey's open pick
- * 3; `'current'` is Chapter 1's pre-D-041 arc), then four reserve spots off
- * frame-left.
+ * party-layout option in force (`macalania-temple-layout.ts`, Bailey's pick B,
+ * 2026-09-25; `'current'` was Chapter 1's pre-D-041 arc), then four reserve
+ * spots off frame-left.
  */
 const LAYOUT = macalaniaPartyLayout();
 const PARTY_SLOTS: Array<[number, number, number]> = [

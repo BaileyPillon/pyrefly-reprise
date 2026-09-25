@@ -10,13 +10,13 @@
  * `src/data/encounters.ts` widened `ChapterId` and the chapter took number 7
  * (display order, after the six already registered — the D-018 rule Leblanc
  * followed). The chapter stays LOCKED as COMING on chapter select until
- * Bailey's three open picks land (`MACALANIA_OPEN_PICKS` in `./chapter-macalania-ship.ts`:
- * the pause plate, the scene cue and the party layout).
+ * Bailey's last open pick lands (`MACALANIA_OPEN_PICKS` in `./chapter-macalania-ship.ts`:
+ * the scene cue; the pause plate A2 and the party layout B were picked 2026-09-25).
  *
  * `heroArt` is the installed pause plate, `public/art/pause/macalania.png`
- * (+ `.2x.webp`). It is the one Chapter VII painting D-141 did not approve: its
- * redo options wait on Bailey, and the pick installs over the same path, so this
- * id does not change. It used to name `pause/ch7-seymour-anima-macalania`, which
+ * (+ `.2x.webp`). D-141 excepted the first plate; Bailey picked the redo A2 on
+ * 2026-09-25 ("All your recommendations"), installed over the same path (so this
+ * id did not change) and locked as `chapter:macalania-pause:2026-09-25`. It used to name `pause/ch7-seymour-anima-macalania`, which
  * was never rendered (critic pass on 62b4927). `heroArtFallback` (shown only if
  * the plate fails to load) is the approved human-form speaker portrait
  * `portraits/seymour-macalania.png` (D-065), not the Flux-era `portraits/seymour.png`.

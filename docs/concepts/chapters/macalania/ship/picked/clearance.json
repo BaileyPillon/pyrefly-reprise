@@ -1,0 +1,409 @@
+{
+  "runs": [
+    {
+      "size": "1600x900",
+      "preSceneLines": 32,
+      "phoneHud": false,
+      "fighters": [
+        {
+          "id": "tidus",
+          "side": "party",
+          "rect": [
+            620,
+            491,
+            828,
+            813
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 100,
+          "panelHits": []
+        },
+        {
+          "id": "yuna",
+          "side": "party",
+          "rect": [
+            487,
+            477,
+            692,
+            754
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 63.4,
+          "panelHits": [
+            ".ig-cmd-stack 16.9%"
+          ]
+        },
+        {
+          "id": "rikku",
+          "side": "party",
+          "rect": [
+            872,
+            492,
+            1042,
+            779
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 96.1,
+          "panelHits": [
+            ".ig-stat-list 9.7%"
+          ]
+        },
+        {
+          "id": "guado-guardian-a",
+          "side": "enemy",
+          "rect": [
+            728,
+            344,
+            949,
+            661
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 57.2,
+          "panelHits": []
+        },
+        {
+          "id": "seymour-macalania",
+          "side": "enemy",
+          "rect": [
+            837,
+            243,
+            1095,
+            628
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 43.5,
+          "panelHits": []
+        },
+        {
+          "id": "guado-guardian-b",
+          "side": "enemy",
+          "rect": [
+            1054,
+            345,
+            1302,
+            695
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 85.9,
+          "panelHits": [
+            ".ig-stat-list 14.1%"
+          ]
+        }
+      ],
+      "panels": [
+        ".ig-ctb 1369,124,1551,501",
+        ".ig-cmd-stack 76,511,527,836",
+        ".ffx-cmd-info 70,337,481,385",
+        ".ig-stat-list 1007,646,1542,870",
+        ".eint__toggle 1417,97,1547,116",
+        ".sgd__panel 53,110,383,250",
+        ".sgd__toggle 51,83,198,109",
+        ".mad__card 506,51,764,305",
+        ".mad__toggle 530,24,673,48"
+      ],
+      "errors": [],
+      "bad": []
+    },
+    {
+      "size": "1280x720",
+      "preSceneLines": 34,
+      "phoneHud": false,
+      "fighters": [
+        {
+          "id": "tidus",
+          "side": "party",
+          "rect": [
+            496,
+            389,
+            663,
+            649
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 100,
+          "panelHits": []
+        },
+        {
+          "id": "yuna",
+          "side": "party",
+          "rect": [
+            389,
+            384,
+            553,
+            603
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 62.9,
+          "panelHits": [
+            ".ig-cmd-stack 17.7%"
+          ]
+        },
+        {
+          "id": "rikku",
+          "side": "party",
+          "rect": [
+            696,
+            393,
+            832,
+            623
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 96.5,
+          "panelHits": [
+            ".ig-stat-list 9.2%"
+          ]
+        },
+        {
+          "id": "guado-guardian-a",
+          "side": "enemy",
+          "rect": [
+            583,
+            277,
+            761,
+            529
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 55.6,
+          "panelHits": []
+        },
+        {
+          "id": "seymour-macalania",
+          "side": "enemy",
+          "rect": [
+            669,
+            191,
+            876,
+            503
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 44.1,
+          "panelHits": []
+        },
+        {
+          "id": "guado-guardian-b",
+          "side": "enemy",
+          "rect": [
+            843,
+            275,
+            1046,
+            555
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 86.2,
+          "panelHits": [
+            ".ig-stat-list 13.8%"
+          ]
+        }
+      ],
+      "panels": [
+        ".ig-ctb 1095,100,1241,401",
+        ".ig-cmd-stack 60,409,421,668",
+        ".ffx-cmd-info 56,270,384,308",
+        ".ig-stat-list 805,517,1234,696",
+        ".eint__toggle 1133,78,1238,93",
+        ".sgd__panel 43,88,307,200",
+        ".sgd__toggle 40,66,159,87",
+        ".mad__card 408,72,608,244",
+        ".mad__toggle 424,47,559,68"
+      ],
+      "errors": [],
+      "bad": []
+    },
+    {
+      "size": "2000x1012",
+      "preSceneLines": 34,
+      "phoneHud": false,
+      "fighters": [
+        {
+          "id": "tidus",
+          "side": "party",
+          "rect": [
+            798,
+            547,
+            1031,
+            909
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 100,
+          "panelHits": []
+        },
+        {
+          "id": "yuna",
+          "side": "party",
+          "rect": [
+            647,
+            542,
+            878,
+            845
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 62.9,
+          "panelHits": [
+            ".ig-cmd-stack 17.5%"
+          ]
+        },
+        {
+          "id": "rikku",
+          "side": "party",
+          "rect": [
+            1085,
+            546,
+            1271,
+            872
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 96.5,
+          "panelHits": [
+            ".ig-stat-list 9.4%"
+          ]
+        },
+        {
+          "id": "guado-guardian-a",
+          "side": "enemy",
+          "rect": [
+            920,
+            398,
+            1168,
+            743
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 55.4,
+          "panelHits": []
+        },
+        {
+          "id": "seymour-macalania",
+          "side": "enemy",
+          "rect": [
+            1042,
+            274,
+            1332,
+            707
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 43,
+          "panelHits": []
+        },
+        {
+          "id": "guado-guardian-b",
+          "side": "enemy",
+          "rect": [
+            1284,
+            375,
+            1564,
+            781
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 86.5,
+          "panelHits": [
+            ".ig-stat-list 13.5%"
+          ]
+        }
+      ],
+      "panels": [
+        ".ig-ctb 1640,140,1845,563",
+        ".ig-cmd-stack 185,575,693,940",
+        ".ffx-cmd-info 180,379,641,433",
+        ".ig-stat-list 1232,726,1835,978",
+        ".eint__toggle 1694,109,1840,130",
+        ".sgd__panel 160,124,531,281",
+        ".sgd__toggle 157,93,324,122",
+        ".mad__card 670,71,958,343",
+        ".mad__toggle 697,44,844,65"
+      ],
+      "errors": [],
+      "bad": []
+    },
+    {
+      "size": "390x844",
+      "preSceneLines": 34,
+      "phoneHud": true,
+      "fighters": [
+        {
+          "id": "tidus",
+          "side": "party",
+          "rect": [
+            93,
+            286,
+            213,
+            469
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 100,
+          "panelHits": []
+        },
+        {
+          "id": "yuna",
+          "side": "party",
+          "rect": [
+            17,
+            280,
+            134,
+            434
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 66.3,
+          "panelHits": []
+        },
+        {
+          "id": "rikku",
+          "side": "party",
+          "rect": [
+            241,
+            278,
+            336,
+            448
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 100,
+          "panelHits": []
+        },
+        {
+          "id": "guado-guardian-a",
+          "side": "enemy",
+          "rect": [
+            154,
+            199,
+            281,
+            382
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 57.7,
+          "panelHits": []
+        },
+        {
+          "id": "seymour-macalania",
+          "side": "enemy",
+          "rect": [
+            217,
+            142,
+            365,
+            362
+          ],
+          "inViewPct": 100,
+          "visibleInFramePct": 41.6,
+          "panelHits": []
+        },
+        {
+          "id": "guado-guardian-b",
+          "side": "enemy",
+          "rect": [
+            342,
+            194,
+            485,
+            401
+          ],
+          "inViewPct": 33.7,
+          "visibleInFramePct": 100,
+          "panelHits": []
+        }
+      ],
+      "panels": [
+        ".ig-ctb 10,10,324,64",
+        ".ig-cmd-stack 8,610,382,794",
+        ".ig-stat-list 8,486,382,548",
+        ".eint__panel 10,66,380,116"
+      ],
+      "errors": [],
+      "bad": []
+    }
+  ]
+}

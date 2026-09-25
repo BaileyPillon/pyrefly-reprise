@@ -7,7 +7,8 @@
  * chapter: the scene cue is one constant that the record, the pre-battle scene and the meta all
  * read, it always names a registered track, and registering the planned cue without switching
  * the constant fails here; every open pick's candidates exist in the repo; Anima's approved folder
- * is locked; and the chapter is still behind its lock line.
+ * and the picked pause plate (A2) are locked; the party stands on the picked layout B; and the
+ * chapter is still behind its lock line (the scene cue is open).
  */
 
 import { createHash } from 'node:crypto';
@@ -24,6 +25,7 @@ import {
   MACALANIA_SCENE_CUE_STAND_IN,
 } from '../../../src/data/chapter-macalania-ship.ts';
 import { SEYMOUR_ANIMA_MACALANIA } from '../../../src/data/chapter-seymour-anima-macalania.ts';
+import { MACALANIA_PARTY_LAYOUT } from '../../../src/scenes/macalania-temple-layout.ts';
 import { SEYMOUR_ANIMA_MACALANIA_META } from '../../../src/data/chapter-meta-seymour-anima-macalania.ts';
 import { LOCKED_CHAPTER_IDS } from '../../../src/app/screens/frontend/comingChapters.ts';
 
@@ -47,7 +49,8 @@ describe('Chapter VII ship layer', () => {
   });
 
   it("every open pick's candidates are in the repo", () => {
-    expect(MACALANIA_OPEN_PICKS.map((p) => p.id)).toEqual(['pause-plate', 'scene-cue', 'party-layout']);
+    // The pause plate (A2) and the party layout (B) were picked on 2026-09-25; the scene cue is open.
+    expect(MACALANIA_OPEN_PICKS.map((p) => p.id)).toEqual(['scene-cue']);
     for (const pick of MACALANIA_OPEN_PICKS) {
       const path = pick.candidates.split(' ')[0]!;
       expect(existsSync(join(REPO, path)), path).toBe(true);
@@ -77,6 +80,32 @@ describe('Chapter VII ship layer', () => {
       const abs = join(REPO, f);
       if (existsSync(abs)) expect(createHash('sha256').update(readFileSync(abs)).digest('hex'), f).toBe(sha);
     }
+  });
+
+  it("the picked pause plate (A2) is locked, and the files on disk are the lock's", () => {
+    const sets = JSON.parse(readFileSync(join(REPO, 'docs/target/approved-hashes.json'), 'utf8')).sets as Record<
+      string,
+      Record<string, { sha256?: string }> & { words?: string }
+    >;
+    const set = sets['chapter:macalania-pause:2026-09-25'];
+    expect(set?.words).toBe('All your recommendations');
+    for (const f of ['public/art/pause/macalania.png', 'public/art/pause/macalania.2x.webp']) {
+      const sha = set![f]?.sha256;
+      expect(sha, f).toMatch(/^[0-9a-f]{64}$/);
+      const abs = join(REPO, f);
+      if (existsSync(abs)) expect(createHash('sha256').update(readFileSync(abs)).digest('hex'), f).toBe(sha);
+    }
+    const sidecar = join(REPO, 'public/art/pause/macalania.json');
+    if (existsSync(sidecar)) {
+      const side = JSON.parse(readFileSync(sidecar, 'utf8')) as { status: string; focal: { x: number; y: number } };
+      expect(side.status).toMatch(/^APPROVED \(pause plate redo option A2/);
+      expect(side.focal).toEqual({ x: 0.45, y: 0.43 });
+    }
+    expect(SEYMOUR_ANIMA_MACALANIA_META.heroArt).toBe('pause/macalania');
+  });
+
+  it('stands on the picked party layout B', () => {
+    expect(MACALANIA_PARTY_LAYOUT).toBe('b');
   });
 
   it('is still behind its one lock line until the driver flips it', () => {

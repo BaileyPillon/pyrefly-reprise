@@ -13,6 +13,22 @@
 
 ## Ship layer and unlock readiness, 2026-09-25 (branch chapter-macalania-ship-0925)
 
+> **Two picks landed, 2026-09-25 ~18:30 EDT.** Bailey, verbatim: "All your recommendations".
+> - **Pause plate: A2**, after an independent judge passed it at 7.4
+>   (`docs/concepts/chapters/macalania/pause-plate-redo/JUDGE-A2.md`; worst: seams 6.5, a faint
+>   4-level box around the mouth that does not show in the master or on the tab). It is installed
+>   over `public/art/pause/macalania.*` (the PNG byte for byte, a RealESRGAN master, and a sidecar
+>   with focal 0.45/0.43) and locked as `chapter:macalania-pause:2026-09-25`. The replaced plate is
+>   backed up in `D:/Tools/pyrefly-art-backup/approved/2026-09-25-ch7-pause-plate/replaced/`.
+> - **Party layout: B.** `MACALANIA_PARTY_LAYOUT = 'b'`, and the row has left `MACALANIA_OPEN_PICKS`.
+>   The live frames at four sizes are in `docs/concepts/chapters/macalania/ship/picked/`
+>   (`clearance.json`; at 1600x900 Tidus clears the stack and Yuna's whole box is 16.9% under it,
+>   her cape and staff, with her head and torso clear, which matches the sheet's B).
+>   Target and build side by side: `docs/screenshots/macalania-picks/target-vs-build.jpg`.
+> - **Still locked.** The scene cue is the last open pick, and Bailey picks it by ear
+>   (`docs/audio/audition.html`, `macalania-scene`). The lock line stays until then. The records for
+>   decisions.json are the merge agent's job on main.
+
 **Game case: FFX only** [AGENTS.md rule 14]: Chapter VII's own record, meta, script, tactic and
 paperwork. No shared file changed, and no boss number changed.
 
