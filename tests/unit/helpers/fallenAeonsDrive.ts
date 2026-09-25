@@ -10,7 +10,7 @@
  * Pain on Anima; "kill Mindy first" (the wiki and GamerGuides).
  */
 
-import type { BattleSetup, Command, Decision, EnemyGroupDef } from '../../../src/battle/common/types.ts';
+import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
@@ -39,6 +39,14 @@ export interface LineOptions {
   guardEarly: boolean;
   /** The White Mage: cure damage (off = she only revives and Prays). */
   heal: boolean;
+  /**
+   * The White Mage: Shell and Protect come first, ahead of cures and Dispel (GamerGuides:
+   * "Mighty Guard or Protect + Shell at the start of each fight", research §5 `[single source]`).
+   * Off = the older order, where `guardEarly` waits behind cures and Dispel.
+   */
+  guardFirst?: boolean;
+  /** The White Mage: the guard from the bag (Lunar Curtain, Light Curtain: party-wide, no charge). */
+  curtains?: boolean;
 }
 
 export const LINES = {
@@ -87,6 +95,18 @@ function girls(engine: FFX2Engine): Unit[] {
  * bar), spells when the bag cannot answer. `heal: false` is the reckless line:
  * she only revives and Prays.
  */
+function guardTurn(d: Input, living: Unit[], line: LineOptions): Command | null {
+  if (living.some((u) => !u.statuses['shell'])) {
+    const shell = (line.curtains ? use(d, 'item', 'x2-lunar-curtain', []) : null) ?? use(d, 'ability', 'x2-white-mage-shell', []);
+    if (shell) return shell;
+  }
+  if (living.some((u) => !u.statuses['protect'])) {
+    const protect = (line.curtains ? use(d, 'item', 'x2-light-curtain', []) : null) ?? use(d, 'ability', 'x2-white-mage-protect', []);
+    if (protect) return protect;
+  }
+  return null;
+}
+
 function yunaTurn(d: Input, engine: FFX2Engine, line: LineOptions, turn: number): Command | null {
   const party = girls(engine);
   const self = party.find((u) => u.id === d.actorId);
@@ -97,6 +117,10 @@ function yunaTurn(d: Input, engine: FFX2Engine, line: LineOptions, turn: number)
   }
   if (ko[0]) return use(d, 'item', 'x2-phoenix-down', [ko[0].id]) ?? use(d, 'ability', 'x2-white-mage-life', [ko[0].id]);
   const living = party.filter((u) => u.alive);
+  if (line.guardFirst && line.guardEarly && turn < 8) {
+    const guard = guardTurn(d, living, line);
+    if (guard) return guard;
+  }
   const below = (f: number) => living.filter((u) => u.hp < u.stats.maxHp * f);
   const lowest = [...living].sort((a, b) => a.hp / a.stats.maxHp - b.hp / b.stats.maxHp)[0];
   if (line.heal) {
@@ -138,14 +162,8 @@ function yunaTurn(d: Input, engine: FFX2Engine, line: LineOptions, turn: number)
     }
   }
   if (line.guardEarly && turn < 8) {
-    if (living.some((u) => !u.statuses['shell'])) {
-      const shell = use(d, 'ability', 'x2-white-mage-shell', []);
-      if (shell) return shell;
-    }
-    if (living.some((u) => !u.statuses['protect'])) {
-      const protect = use(d, 'ability', 'x2-white-mage-protect', []);
-      if (protect) return protect;
-    }
+    const guard = guardTurn(d, living, line);
+    if (guard) return guard;
   }
   if (line.heal && lowest && lowest.hp < lowest.stats.maxHp * 0.75) {
     const cura = use(d, 'ability', 'x2-white-mage-cura', [lowest.id]);
@@ -187,6 +205,8 @@ export interface LinkRun {
   ticks: number;
   deltaAttacks: number;
   overdrives: number;
+  /** The battle's event log, for the loss anatomy (`fallen-aeons-ship-bench.test.ts`). */
+  log: readonly BattleEvent[];
 }
 
 const MAX_DECISIONS = 40_000;
@@ -227,6 +247,7 @@ function summarise(engine: FFX2Engine, outcome: string | undefined): LinkRun {
     ticks: engine.state().ticks,
     deltaAttacks: started('x2-magus-delta-attack'),
     overdrives: started('x2-shiva-diamond-dust') + started('x2-anima-oblivion'),
+    log,
   };
 }
 
@@ -237,6 +258,8 @@ export interface DriveOptions {
   engine?: Partial<Ffx2EngineOptions>;
   /** Set `state.flags` after init (the FA8 b switch). */
   flags?: Record<string, string | number | boolean>;
+  /** The party (default: the chapter's `farplaneBuild`); a measured option passes its own. */
+  build?: FFX2PartyBuild;
 }
 
 function group(id: string): EnemyGroupDef {
@@ -253,7 +276,7 @@ function group(id: string): EnemyGroupDef {
 export function driveLink(linkId: string, line: LineOptions, seed: number, opts: DriveOptions = {}): LinkRun {
   const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...opts.engine }));
   const setup: BattleSetup = {
-    game: 'ffx2', party: farplaneBuild, enemies: group(linkId), triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: opts.build ?? farplaneBuild, enemies: group(linkId), triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);
@@ -269,7 +292,7 @@ export function driveChain(
 ): { outcome: string | undefined; links: LinkRun[] } {
   const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...opts.engine }));
   let setup: BattleSetup = {
-    game: 'ffx2', party: farplaneBuild, enemies: group(FALLEN_AEONS_CHAIN_ORDER[0]), triggers: [], seed,
+    game: 'ffx2', party: opts.build ?? farplaneBuild, enemies: group(FALLEN_AEONS_CHAIN_ORDER[0]), triggers: [], seed,
     condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);

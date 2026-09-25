@@ -1,5 +1,44 @@
 # Chapter XI — Fallen Aeons: measured benches (FFX-2 only)
 
+## 2026-09-25: the ship gate's re-measure (read this first)
+
+Printed by `tests/unit/chapters/fallen-aeons-ship-bench.test.ts` (branch
+`chapter-fallen-aeons-ship-0925`, main 761d3eb0), which reads the registered record (`FFX2_FALLEN_AEONS`:
+build and first formation). Human pace = the live default, **Wait split**, 1.5 s a menu (0.5 s on the
+top command list with the clock running, 1.0 s held), the model the Trema benches use. The chapter
+row is one unbroken run of the Road through the Save Sphere restore; a link alone equals its FA3 retry.
+
+| Fight | Line | Bench (D = 0) | Human, Wait split |
+|---|---|---:|---:|
+| **Chapter (1-2-3), one run** | intended on each link | 58/200 (29 %) | **8/40 (20 %); 36/200 (18 %)** |
+| 1 Shiva | intended | 183/200 | 39/40 |
+| 2 Magus Sisters | intended: Darkness x2 + Dispel + heals | 84/200 | 8/40 |
+| 3 Anima | intended | 198/200 | 39/40 |
+| 2 Sisters | Mindy first by Drain / Cindy first by Drain / Mindy first by Attack | 0 / 0 / 0 of 200 | 0 / 0 / 0 of 40 |
+| 2 Sisters | wrong: Darkness spam, no Dispel | 54/200 | 5/40 |
+| Chapter | the guide's habit (0.25 s on the top list) | | 7/40 |
+| Chapter | OPTION action time 1.5 s | 147/200 | 117/200 |
+| Chapter | OPTION action time 3 s | 174/200 | **164/200 (82 %)** |
+| Chapter | OPTION preset at Lv 52 / 52 / 52 | 99/200 | 61/200 |
+
+- **Under the 25 % gate at human pace**, so the method check is written:
+  `docs/plans/fallen-aeons-winnability-method-check.md` (loss anatomy, the sourced options, one
+  question for Bailey). Nothing is built; no boss number moved.
+- **The Sisters lose 141 of 164 human runs.** They take about 36 turns to the party's 12 in the 40 s a
+  loss lasts, and Sandy's physicals plus Mindy's spells do the killing (Delta Attack 0.5 a loss).
+- **Moved since the 2026-09-24 table below, by 881d4548 (FFX-2 magic never rolls), not by this
+  track:** Anima intended 173 -> 198, Anima wrong 109 -> 186, the Road 51 -> 58. Every other bench-speed
+  row reproduces exactly (`fallen-aeons-bench.test.ts` re-run today).
+- **Helper changes (additive, test only):** `fallenAeonsDrive.ts` returns the event log, takes an
+  optional `build`, and has two optional line switches (`guardFirst`, `curtains`); existing lines replay
+  unchanged.
+- **For the ship layer:** the chapter's guide must carry the Wait-split habit rule exactly as main will
+  ship it: "Pick a command at once. Until you do, the clock still runs."
+  (`WAIT_SPLIT_HABIT_RULE`, `src/data/guides/ffx2-wait-habit.ts` on `decisions-0925`). Measured, the
+  habit alone does not move this chapter (7/40 at 0.25 s against 8/40 at 0.5 s).
+
+## 2026-09-24: the first pass (history)
+
 **Measure, never tune** (plan `docs/plans/chapter-fallen-aeons-review.md` §9; memory rule
 "never weaken a boss"). Every number below was produced by running the engine
 (`tests/unit/chapters/fallen-aeons-bench.test.ts`, lines in `tests/unit/helpers/fallenAeonsDrive.ts`)
