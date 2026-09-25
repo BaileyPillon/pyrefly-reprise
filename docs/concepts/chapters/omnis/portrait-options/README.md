@@ -117,3 +117,55 @@ What limits each option, worst first:
 - `verify-approved.mjs` before and after: 185 ok, 0 mismatched, 0 missing. The installed portrait is unchanged (`ce32e75a6031`).
 - Backup of every render, sidecar, init, mask and paste, plus the three option PNGs:
   `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu2/seymour-omnis-portrait/`.
+
+## JUDGE: independent 1:1 pass (2026-09-25, ~04:00 EDT)
+
+**FFX only.** Judge: a sub-agent that made none of these files (it also judged the Den of Woe Nooj tonight). Same
+columns and bar 7 as the builder's table above and `../production/JUDGE.md`. Looked at: the three option PNGs from
+the backup (sha `614b399f1c13`, `8cd16ea5da3f`, `81069683e277`, matching the table above) over the night tone at full
+size and at 1:1 crops (face, chest, shoulder, top edge on white), the speaker-card and phone frames in
+[sheet.jpg](sheet.jpg), and beside them the approved `seymour-macalania`, `seymour-natus` and the Chapter I `seymour`
+portraits, `../o1-omnis/a-card.jpg` (the O-1 A pick) and `research/visual-bible.md` §Seymour base design ("light blue
+hair ... a large bang falling over his face", "purple eyes", "the veins on his face are pronounced"; facial veins
+"branching from temples", `[single source]`). Nothing was installed or rendered for this part.
+
+**Measured (re-checked, not copied):** all three are 832x1216 with binary alpha (0 or 255 only). Each has the main
+island plus **two specks of 2 px and 1 px at about (680, 329)**, in a gap in the hanging hair (4-connected labelling;
+the builder's "one island" likely used 8-connectivity). B differs from A in 144,293 px (box x 449-822, y 401-838), C in
+195,293 px (x 380-830, y 474-1119); outside those boxes all three are A's pixels, as claimed. A carries 949 px of
+yellow-green on the blue shoulder band; B and C about 180 each.
+
+| Option | Identity to O-1 A | Anatomy | Costume | Edges | Finish | Game read | **Overall** | Verdict | Builder |
+|---|---|---|---|---|---|---|---|---|---|
+| **A** no trim | 8.5 | 6.5 | 8 | 7.5 | 7 | 8 | **7.6** | **PASS** | 7.9 |
+| **C** rune-strip stole | 8 | 6.5 | 7 | 7.5 | 7 | 7.5 | **7.3** | PASS | 7.7 |
+| **B** red-lined collar | 7.5 | 6.5 | 6 | 7.5 | 6.5 | 7.5 | **6.9** | FAIL (narrowly) | 7.4 |
+
+**Shared by all three, worst first (the same pixels):**
+- **Anatomy, scored lower than the builder did.** The chest is over-cut into lumpy slabs, and where the torso meets
+  the near arm a dark line runs down the side like a crease or a vein, so the arm-to-ribcage junction does not read at
+  1:1. In the card and on the phone it is below the face and reads only as "bare, pale, muscled".
+- **The veins sit in the wrong place for the source.** They run straight down from the lower lids, so at 1:1 they read
+  as ink tear-streaks. The bible puts Seymour's facial veins branching from the temples (the approved Natus portrait
+  has them on the cheek and brow). They do answer the judge's "no veins" point and they read in the card; moving them
+  is a small masked repaint, not a new option.
+- The face is strong: the bang over one eye, purple eyes, the cold half-smile, both cowls with their red eyes and the
+  pink horn spikes. The top edge on white is clean, the cowls and hair are cut by the frame like the approved set, and
+  the style (line weight, cool night palette) sits well beside Macalania and Natus.
+
+**Per option:**
+- **A, PASS (7.6).** The closest to the O-1 A body Bailey picked: indigo cowls, the spiral tattoo, the hanging pale
+  strips, no trim. Worst beyond the shared points: the 949 px yellow-green tint on the shoulder band (small, but it is
+  the only warm-green note on a cold figure) and the three speck pixels.
+- **C, PASS (7.3).** The stole reads as woven cloth and the tattoo is kept pixel for pixel. It is not on the O-1 A
+  body; its chevrons are pale, not the idle's red runes; the strip is flat, like a strap laid on, and ends in two small
+  copper tips. It also covers part of the shoulder that makes A read as O-1 A.
+- **B, FAIL (6.9).** The red lining is sourced in spirit (his base robe is "dark blue with red trimmings"), but O-1 A
+  has none, and at 1:1 it reads as a red bracket bolted to the collar, not a lined edge. Worst: a dark scratch runs
+  along the lining's lower edge on the shoulder band (about x 650-715, y 640-660), a repaint artefact that shows at 1:1.
+
+**Recommendation: A**, the builder's pick too, with three small fixes at install time, none of which changes the look
+Bailey is choosing: delete the three speck pixels, neutralise the yellow-green on the shoulder band, and (optional,
+Bailey's call) move the veins up toward the temples with one masked repaint. An installed A also needs its own
+`face-crops.json` row (the frames borrowed Macalania's). Nothing here is installed or approved; B17 keeps falling back to
+the approved Macalania portrait until Bailey names an option (rule 9).
