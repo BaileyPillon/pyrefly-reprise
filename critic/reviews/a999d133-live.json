@@ -1,0 +1,60 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-25T02:10:00.000Z",
+  "build": {
+    "mainSha": "a999d133",
+    "bundle": "Ji5E4fD0",
+    "artifactHash": "612bae4ccada27c29c9ff2eadf43705242b2273d18d59c55ebf93f5cc3672e55"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/a999d133.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/e3b8c2a3.json => {result: PASS, artifactHash: 612bae4ccada27c29c9ff2eadf43705242b2273d18d59c55ebf93f5cc3672e55, liveManifest: match, checked: 95, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Every state claim gated on window.__pyrefly.screen()/battleState()/audioDebug()/app.save.data before capture, not on a raw screenshot. Real-input flow: title -> real Enter -> briefing -> real Escape -> screen()==='chapter-select' (card set confirmed: FFX I/II/III/VIII present, VII a locked COMING card, no IX/X/XI card; FFX-2 IV/V/VI present) -> real Enter -> party-prep for Chapter I -> real Enter -> cutscene (skipCutscene() used only to pass unrelated narrative, not the mechanic under test) -> screen()==='battle'. A tab-backgrounding render stall (PAUSE debug badge, no HUD) was diagnosed as a harness artifact, not a product defect, and cleared by fronting the tab and one real click; the resulting screenshot shows Chapter I's first command menu fully readable with no party or enemy figure standing under it. Pause: real Escape opened the pause screen on the Tidus tab with no face/stat clipping; real 'h' hid then restored the panels to the full portrait close-up and back; real Escape resumed. audioDebug() showed the current track boss-seymour with {cached:true, source:'prerendered'} (not synth). Console: 0 errors across the whole run (only known info/warn lines). Network: 0 responses >=400; one art/pause/tidus.png request showed net::ERR_ABORTED with its .2x.webp sibling loading 200 immediately after and the portrait rendering correctly on screen, read as a cancelled duplicate fetch, not a broken asset."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Set Settings.masterVolume to 0.42 via the real save object while seymour-flux already had attempts:1 recorded (a real battle start, not a debug injection). Reloaded the page fully. After reload: masterVolume still 0.42 and chapters.seymour-flux.attempts still 1 (playTimeMs had advanced further, showing live save writes, not a stale read). Both the setting and the chapter progress survived the reload.",
+      "reason": "Lightweight smoke only, as scoped: the full CHK-024 upgrade matrix (fresh player / returning player / previous-release save migrating forward / invalid or truncated storage / reset-and-confirm) is NOT tested here."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact-manifest verify-live (95 files, byte-identical vs e3b8c2a3 baseline)",
+      "title -> real Enter -> briefing -> real Escape -> chapter-select, card set and locked/COMING states confirmed",
+      "real Enter -> party prep -> real Enter -> cutscene -> Chapter I (Seymour Flux) battle",
+      "Chapter I's first command menu reachable, readable, unobstructed by any figure",
+      "pause open/resume (Escape) and hide/restore (H) with no face/stat clipping on the Tidus tab",
+      "prerendered music confirmed playing (not synth) via audioDebug()",
+      "console errors and network status codes for the whole run",
+      "a real save-backed setting plus real chapter-attempt progress surviving a full page reload"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full 7-chapter first-menu sweep (only Chapter I was driven to a battle state; II, III, VIII, IV, V, VI were confirmed correctly present/locked on the chapter-select card only)",
+      "FFX-2 Chapter IV Black Magic cast / Paine Power Break exercise",
+      "the 390x844 phone prep-card scroll check",
+      "the full CHK-024 upgrade matrix (fresh/returning/migrating-save/invalid-storage/reset)",
+      "a second independent post-reload chapter-clear case beyond the attempts-counter check",
+      "a literal PYREFLY_BROWSER=gpu Playwright run with a printed renderer string; this pass used the desktop app's built-in Browser pane instead, which rendered the full painted scene (no black-frame/GPU-fault concern observed)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 18
+}
