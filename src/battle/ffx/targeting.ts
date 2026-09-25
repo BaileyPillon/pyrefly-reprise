@@ -75,6 +75,33 @@ export function reachesFoesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef
   return false;
 }
 
+/**
+ * **Who reaches a foe out of melee range with a physical action**: Wakka,
+ * Valefor, Anima and Mindy (her normal Attack, not Passado) — Seymour Omnis's
+ * Mortiphasm discs [ffx-seymour-omnis §2, verified: 4 sources]. Mindy's
+ * Passado nuance is not built: no preset owns the Magus Sisters. FFX only.
+ */
+export const REACHES_OUT_OF_MELEE: ReadonlySet<CombatantId> = new Set(['wakka', 'valefor', 'anima', 'mindy']);
+
+/**
+ * **Per-target reach** (`CombatantFlags.outOfMeleeReach`). Unlike the airship
+ * gate above, which is a property of the whole gap, this is a property of one
+ * foe: magic always reaches it, a physical action only from
+ * {@link REACHES_OUT_OF_MELEE} or a ranged weapon (`ActorRuntime.rangedWeapon`).
+ * True for every combatant without the flag, which is every combatant outside
+ * Chapter XII, so no other battle changes.
+ */
+export function reachesTarget(ctx: Ctx, user: FFXCombatant, def: AbilityDef, target: FFXCombatant): boolean {
+  if (target.flags.outOfMeleeReach !== true || user.side === target.side) return true;
+  if (def.damageType !== 'physical') return true;
+  return REACHES_OUT_OF_MELEE.has(user.id) || ctx.rt.actors.get(user.id)?.rangedWeapon === true;
+}
+
+/** False for a combatant a random pick must skip (`CombatantFlags.neverRandomTarget`). */
+function randomPickable(c: FFXCombatant): boolean {
+  return c.flags.neverRandomTarget !== true;
+}
+
 /** True when a targeting value can legally land on one of the user's own side. */
 function canPointAtAllies(def: AbilityDef): boolean {
   switch (def.targeting) {
@@ -111,7 +138,9 @@ export function validTargets(ctx: Ctx, user: FFXCombatant, def: AbilityDef): Com
   // The far side simply is not on the list. A foe-only row therefore comes back
   // empty exactly as it used to, and a `single-any` row keeps its allies.
   const reachable = reachesFoesAtRange(ctx, user, def) ? (user.side === 'enemy' ? friendlies(ctx) : enemies(ctx)) : [];
-  const foes = reachable.filter((c) => targetable(c) && alive(c));
+  const foes = reachable.filter(
+    (c) => targetable(c) && alive(c) && reachesTarget(ctx, user, def, c) && (def.targeting !== 'random-enemy' || randomPickable(c)),
+  );
   const mates = alliesOf(ctx, user).filter((c) => targetable(c) && alive(c));
 
   switch (def.targeting) {
@@ -157,7 +186,13 @@ export function resolveTargets(
   // menu never offers (`targetable`: untargetable or hidden, like Macalania's
   // Seymour or Yojimbo's Ginnem and Daigoro). A same-side pick is unchanged.
   const crosses = reachesFoesAtRange(ctx, user, def);
-  const foes = crosses ? (user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)) : [];
+  // Per-target reach and the never-a-random-pick flag (Chapter XII's discs)
+  // filter nothing for any combatant without those flags, so the arrays below
+  // — and every RNG draw made from them — are unchanged elsewhere.
+  const foes = (crosses ? (user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)) : []).filter((c) =>
+    reachesTarget(ctx, user, def, c),
+  );
+  const randomFoes = foes.filter(randomPickable);
   const mates = alliesOf(ctx, user).filter((c) => targetable(c) && (def.flags.includes('can-target-dead') || isAlive(c)));
 
   switch (def.targeting) {
@@ -170,7 +205,7 @@ export function resolveTargets(
     case 'all':
       return [...mates, ...foes];
     case 'random-enemy':
-      return foes.length > 0 ? [ctx.rng.pick(foes)] : [];
+      return randomFoes.length > 0 ? [ctx.rng.pick(randomFoes)] : [];
     case 'random-ally':
       return mates.length > 0 ? [ctx.rng.pick(mates)] : [];
     default:
@@ -181,12 +216,14 @@ export function resolveTargets(
     .map((id) => tryActor(ctx, id))
     .filter(
       (c): c is FFXCombatant =>
-        c !== undefined && onField(c) && (c.side === user.side || (crosses && targetable(c))),
+        c !== undefined &&
+        onField(c) &&
+        (c.side === user.side || (crosses && targetable(c) && reachesTarget(ctx, user, def, c))),
     );
   if (explicit.length > 0) return explicit.slice(0, 1);
 
   const fallback =
-    def.targeting === 'single-ally' ? mates : def.targeting === 'single-any' ? [...foes, ...mates] : foes;
+    def.targeting === 'single-ally' ? mates : def.targeting === 'single-any' ? [...randomFoes, ...mates] : randomFoes;
   return fallback.length > 0 ? [ctx.rng.pick(fallback)] : [];
 }
 
@@ -212,7 +249,7 @@ export function nextHitTargets(
   if (hit > 0 && def.extra?.['distinctTargetsPerHit'] === true && def.targeting === 'random-enemy') {
     const crosses = reachesFoesAtRange(ctx, user, def);
     const foes = crosses ? (user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)) : [];
-    const fresh = foes.filter((c) => !previous.some((p) => p.id === c.id));
+    const fresh = foes.filter((c) => randomPickable(c) && !previous.some((p) => p.id === c.id));
     if (fresh.length > 0) return [ctx.rng.pick(fresh)];
   }
   return resolveTargets(ctx, user, def, []);
@@ -289,6 +326,8 @@ export function redirectTarget(
  * the reflector [ffx-combat-core §4.2].
  */
 export function reflectBounceTarget(ctx: Ctx, reflector: FFXCombatant): FFXCombatant | undefined {
-  const other = reflector.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx);
+  // A foe that is never a random pick is never a bounce target either
+  // (Chapter XII's discs; our estimate — research §2 names random-target attacks).
+  const other = (reflector.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)).filter(randomPickable);
   return other.length > 0 ? ctx.rng.pick(other) : undefined;
 }

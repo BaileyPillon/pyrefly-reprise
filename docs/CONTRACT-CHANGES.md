@@ -6,6 +6,44 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XII, Seymour Omnis: `ChapterId` gains `'seymour-omnis'`, `Chapter.number` widens to 12, `BattleEvent` gains `'affinity-change'`, `CombatantFlags` gains `outOfMeleeReach` and `neverRandomTarget`
+
+**FFX only** [AGENTS.md hard rule 14] (research `ffx-seymour-omnis.md` §0.3: CTB, aeons, Nul
+spells; *X-2* has no Seymour fight); the registration and the two flags are shared plumbing,
+inert everywhere else. Bailey, 2026-09-25 ~01:40 EDT: "I'll go with all your recommendations"
+(B1-B23 and O-1..O-6 on `docs/plans/chapter-omnis-review.md` and the options sheet).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'seymour-omnis'`; `Chapter.number`
+widens from `1 … 11` to `1 … 12`. The record lives in `src/data/chapter-seymour-omnis.ts` and sits
+in `UNLISTED_CHAPTERS` (the Chapter IX to XI precedent; B8 also holds the listing until the ring
+order and the reset cycle are confirmed). Every `Record<ChapterId, …>` gains the key
+(`learn/atlas/cites.ts`, `tests/unit/learn-atlas-data.test.ts`). No save migration: nothing lists
+this id yet. The Trema, Isaaru and Gippal chapters were registered in parallel worktrees the same
+night and widen the same two unions; the merge takes the union of all four.
+
+**Additive** in `src/battle/common/types.ts`:
+- `BattleEvent` `'affinity-change'` `{ targetId, affinities, cause: 'part-turn' | 'reset',
+  partId?, direction?, facings? }` — a combatant's elemental affinities changed mid-battle, with
+  the whole map after the change (plan O-G4). Emitted only by Chapter XII's rules
+  (`src/battle/ffx/ai/seymour-omnis-rules.ts`) when a disc turns or the discs reset; no presenter
+  reads it yet (O-8 / T8 are held for the art picks). No existing switch over `BattleEvent` is
+  exhaustive, so nothing else changes.
+- `CombatantFlags.outOfMeleeReach` — a physical party action reaches the combatant only from
+  Wakka, Valefor, Anima or Mindy (`targeting.ts#REACHES_OUT_OF_MELEE`) or a ranged weapon; magic
+  always reaches (plan O-G2, research §2 verified: 4 sources).
+- `CombatantFlags.neverRandomTarget` — a random-enemy hit, a Reflect bounce and an empty-aim
+  fallback never land on it (plan O-G7, research §2 single source; the bounce half is our
+  estimate).
+
+Both flags are set only on the four Mortiphasms. **Measured, not assumed:** the event logs of
+Chapters 1, 2, 3 (both links), 7, 8, 9 and 10 over 20 seeds each, under one scripted policy, hash
+identically before (`4f2481f2`) and after this change.
+
+Not listed contract files, recorded for the same reason: `src/battle/ffx/volley.ts` and
+`volley-planners.ts` (new: an enemy turn that casts several rows, O-G3, inert unless a row sets
+`extra.volley`); `execute.ts` routes that row; `ticks.ts#onTurnEnd` and `setup.ts` call the
+Chapter XII hooks (no-ops unless the Omnis formation set its `omnis.*` flags).
+
 ## 2026-09-24 — `encounters.ts`: Chapter IX (Yojimbo) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX only** [AGENTS.md hard rule 14]: Lady Ginnem's Yojimbo in the Cavern of the Stolen Fayth

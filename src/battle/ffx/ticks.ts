@@ -14,6 +14,7 @@ import { clearUntilNextTurnStatuses, refreshCriticalStatus, removeStatus, tickDu
 import { hasAuto } from './equipment.ts';
 import { onTurnStartGauge } from './overdrive.ts';
 import { ATTACK_ABILITY_ID } from './registry.ts';
+import { runOmnisTurnEnd } from './ai/seymour-omnis-rules.ts';
 
 /** Potions Auto-Potion reaches for, weakest first [ffx-combat-core §9]. */
 const AUTO_POTION_ORDER: readonly ItemId[] = ['potion', 'hi-potion', 'x-potion'];
@@ -129,6 +130,9 @@ function releaseThreatenFrom(ctx: Ctx, user: FFXCombatant): void {
 
 /** Everything that happens as a combatant's turn closes. */
 export function onTurnEnd(ctx: Ctx, actor: FFXCombatant): void {
+  // Chapter XII: count the hits on Seymour Omnis and turn the discs this turn
+  // landed on (a no-op in every other battle) [ai/seymour-omnis-rules.ts].
+  runOmnisTurnEnd(ctx);
   tickDurationStatuses(ctx, actor);
 
   // Poison: `maxHP // 4` for characters; enemies use their own percentage.

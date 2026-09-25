@@ -31,6 +31,7 @@ import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
 import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
+import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 
 /** A permanent, undispellable instance of `status`. */
 function permanentStatus(status: StatusId): StatusInstance {
@@ -384,15 +385,14 @@ export function buildBattle(
 
   seedInitialCtb(ctx, setup.condition ?? 'normal');
 
-  // Per-encounter scripted setup. A no-op in every battle but its own: the
-  // Macalania opening is "a scripted pre-turn sequence, not three ordinary
-  // turns" [ffx-seymour-anima-macalania §5.2], so the Guardians' Protect and
-  // Seymour's Shell are applied here rather than costing three enemy turns the
-  // player would watch resolve before acting.
+  // Per-encounter scripted setup. A no-op in every battle but its own: the Macalania opening is "a
+  // scripted pre-turn sequence, not three ordinary turns" [ffx-seymour-anima-macalania §5.2], so the
+  // Guardians' Protect and Seymour's Shell are applied here, not in three enemy turns the player watches.
   applyMacalaniaSetup(ctx);
   // The airship opens NEAR, Cid becomes a non-combatant turn-taker and Wakka's
   // blitzball becomes a ranged weapon [ffx-evrae-airship §4.1, §2.1, §4.3].
   applyEvraeSetup(ctx);
   applyYojimboSetup(ctx); // Yojimbo's gauge; Ginnem and Daigoro take no turns [ffx-yojimbo §2.5, §4.1]
+  applyOmnisSetup(ctx); // Chapter XII: four Fire discs, his affinity, discs without turns [ffx-seymour-omnis §4.1]
   return ctx;
 }
