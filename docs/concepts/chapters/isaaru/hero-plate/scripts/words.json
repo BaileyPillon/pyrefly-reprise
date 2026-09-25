@@ -1,0 +1,108 @@
+{
+ "_note": "Chapter I's visible words swapped for Chapter XIV's adopted ones (D-147 / plan B1: title 'Isaaru', number XIV, location 'Via Purifico - beneath Bevelle') in the page DOM only. Chapter XIV is not registered and has no ChapterMeta, so its subtitle, blurb, quote, handwritten lines, tip, first two objectives and snapshots do not exist: they are blanked, never invented. 'Defeat Grothia, Pterya and Spathi' restates the sourced three links (research/ffx-isaaru-bevelle.md §8.2 beat 6).",
+ "pairs": [
+  [
+   "I · Seymour Flux",
+   "XIV · Isaaru"
+  ],
+  [
+   "Chapter I ·",
+   "Chapter XIV ·"
+  ],
+  [
+   "Defeat Seymour Flux",
+   "—"
+  ],
+  [
+   "DEFEAT SEYMOUR FLUX",
+   "—"
+  ],
+  [
+   "Holy Water a Zombie before Full-Life lands",
+   "Defeat Grothia, Pterya and Spathi"
+  ],
+  [
+   "HOLY WATER A ZOMBIE BEFORE FULL-LIFE LANDS",
+   "DEFEAT GROTHIA, PTERYA AND SPATHI"
+  ],
+  [
+   "Survive Total Annihilation",
+   "—"
+  ],
+  [
+   "SURVIVE TOTAL ANNIHILATION",
+   "—"
+  ],
+  [
+   "Seymour Flux",
+   "Isaaru"
+  ],
+  [
+   "SEYMOUR FLUX",
+   "ISAARU"
+  ],
+  [
+   "The Prominence",
+   ""
+  ],
+  [
+   "THE PROMINENCE",
+   ""
+  ],
+  [
+   "Mt. Gagazet",
+   "Via Purifico — beneath Bevelle"
+  ],
+  [
+   "MT. GAGAZET",
+   "VIA PURIFICO — BENEATH BEVELLE"
+  ],
+  [
+   "CHAPTER I ·",
+   "CHAPTER XIV ·"
+  ],
+  [
+   "The Ronso died holding this gate, and Seymour is still standing over the bodies when the party arrives. He is offering the pilgrimage's ending early, and he is not lying about the cost.",
+   ""
+  ],
+  [
+   "Sorrow is honest, at least. That is more than the Ronso could say of hope.",
+   ""
+  ],
+  [
+   "the mountain remembers everything",
+   ""
+  ],
+  [
+   "Bio him turn one — it deals a straight percentage every enemy turn and never triggers his HP-threshold reactions, so Protect and Reflect come out late.",
+   "—"
+  ],
+  [
+   "the Prominence, at last",
+   ""
+  ],
+  [
+   "unhurried, always unhurried",
+   ""
+  ],
+  [
+   "the machine beneath him",
+   ""
+  ]
+ ],
+ "exact": {
+  "I": "XIV",
+  "Seymour": "",
+  "SEYMOUR": "",
+  "“": "",
+  "”": "",
+  "GAGAZET": "—",
+  "“”": "",
+  "Gagazet": "—"
+ },
+ "hideImgs": [
+  "backdrops/gagazet",
+  "characters/seymour-flux/",
+  "characters/mortiorchis/"
+ ]
+}
