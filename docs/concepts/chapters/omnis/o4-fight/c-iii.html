@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>C</title>
+<link rel="stylesheet" href="../../../polish/_kit/kit.css">
+<style>
+html, body { margin: 0; width: 1600px; height: 900px; overflow: hidden; background: #05040a; }
+.fr { position: relative; width: 1600px; height: 900px; overflow: hidden; color: var(--ig-paper); font-family: var(--ig-font-text); }
+.fr > img.bg { position: absolute; inset: 0; width: 1600px; height: 900px; }
+.tag { position: absolute; left: 0; top: 26px; z-index: 30; display: flex; font-family: var(--ig-font-display); font-weight: 700; }
+.tag b { background: var(--ig-gold); color: var(--ig-ink); padding: 6px 12px; font-size: 20px; }
+.tag span { background: rgba(11,10,18,0.9); padding: 8px 14px; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; }
+.note { position: absolute; left: 20px; bottom: 4px; font-family: var(--ig-font-display); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(244,241,232,0.6); }
+.cpt { position: absolute; right: 8px; bottom: 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.3em; color: rgba(244,241,232,0.6); }
+/* the disc strip (O-2 B): what each disc faces him with, and what that makes him */
+.ds { position: absolute; left: 690px; top: 14px; z-index: 12; display: flex; align-items: center; gap: 14px; padding: 8px 18px 8px 14px;
+  background: rgba(11,10,18,0.88); border-bottom: 2px solid var(--ig-gold); transform: skewX(var(--ig-skew)); box-shadow: 0 6px 18px rgba(0,0,0,0.55); }
+.ds > * { transform: skewX(var(--ig-skew-inverse)); }
+.ds h4 { margin: 0; font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.18em; color: var(--ig-gold); text-transform: uppercase; line-height: 1.2; }
+.ds__grid { display: grid; grid-template-columns: auto 10px auto; grid-template-rows: auto auto; gap: 4px 6px; align-items: center; }
+.ds__mid { grid-row: 1 / 3; grid-column: 2; width: 2px; height: 100%; background: rgba(227,185,74,0.5); justify-self: center; }
+.dc { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase; }
+.dc svg { width: 20px; height: 20px; fill: currentColor; stroke: none; }
+.dc svg line { stroke: currentColor; }
+.dc--turned { outline: 2px solid #fff; box-shadow: 0 0 12px #fff; }
+.aff { display: flex; flex-direction: column; gap: 4px; font-family: var(--ig-font-display); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; }
+.aff span { display: inline-flex; align-items: center; gap: 6px; }
+.aff i { font-style: normal; color: rgba(244,241,232,0.7); font-size: 13px; letter-spacing: 0.14em; min-width: 64px; }
+.aff em { font-style: normal; padding: 1px 8px; }
+.aff .chg { color: var(--ig-gold); font-size: 13px; }
+/* the attack counter (O-4 B) beside his queue tile */
+.pips { position: absolute; left: 1148px; top: 212px; z-index: 12; display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(11,10,18,0.9);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; transform: skewX(var(--ig-skew)); }
+.pips > * { transform: skewX(var(--ig-skew-inverse)); }
+.pip { display: inline-block; width: 11px; height: 11px; border: 2px solid var(--ig-gold); transform: rotate(45deg); margin: 0 2px; }
+.pip--on { background: var(--ig-gold); }
+.pips--full { background: var(--ig-blood); color: #fff; box-shadow: 0 0 18px rgba(230,40,40,0.8); }
+.pips--full .pip { border-color: #fff; background: #fff; }
+/* one line of intent (O-4 C) in the enemy-move slot under the queue */
+.intent { position: absolute; right: 56px; top: 548px; width: 460px; z-index: 10; padding: 12px 16px 14px 18px; background: rgba(11,10,18,0.9);
+  border-left: 3px solid var(--ig-blood); transform: skewX(var(--ig-skew)); }
+.intent > * { transform: skewX(var(--ig-skew-inverse)); }
+.intent h4 { margin: 0 0 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.2em; color: #e86a6a; text-transform: uppercase; }
+.intent p { margin: 0; font-size: 19px; line-height: 1.3; }
+.intent p b { color: var(--ig-gold); font-weight: 600; }
+</style></head><body>
+
+<div class="fr ig">
+<img class="bg" src="hud-iii.jpg" alt="">
+<div class="ds"><h4>Discs<br>facing him</h4><div class="ds__grid"><span class="dc dc--turned" style="background:#f5d432;color:#0b0a12"><svg viewBox="-1 -1 2 2"><polygon points="0.25,-1 -0.5,0.1 -0.02,0.1 -0.25,1 0.5,-0.15 0.02,-0.15"/></svg>Thunder</span><span class="ds__mid"></span><span class="dc" style="background:#f07622;color:#0b0a12"><svg viewBox="-1 -1 2 2"><polygon points="-0.55,0.85 -0.62,0.1 -0.38,-0.45 -0.22,0 0,-1 0.22,0 0.4,-0.5 0.62,0.1 0.55,0.85"/></svg>Fire</span><span class="dc" style="background:#f07622;color:#0b0a12"><svg viewBox="-1 -1 2 2"><polygon points="-0.55,0.85 -0.62,0.1 -0.38,-0.45 -0.22,0 0,-1 0.22,0 0.4,-0.5 0.62,0.1 0.55,0.85"/></svg>Fire</span><span class="dc" style="background:#f07622;color:#0b0a12"><svg viewBox="-1 -1 2 2"><polygon points="-0.55,0.85 -0.62,0.1 -0.38,-0.45 -0.22,0 0,-1 0.22,0 0.4,-0.5 0.62,0.1 0.55,0.85"/></svg>Fire</span></div><div class="aff"><span><i>Absorbs</i><em style="background:#f07622;color:#0b0a12">Fire</em></span><span><i>Halves</i><em style="background:#f5d432;color:#0b0a12">Thunder</em></span></div></div>
+<div class="intent"><h4>Enemy intent</h4><p>One disc turned to <b>Thunder</b>: three <b>Firaga</b> and one <b>Thundara</b> next. Ice no longer hurts him double.</p></div>
+<div class="tag"><b>C</b><span>Glow + one line of intent &mdash; a disc turned: his resistances change</span></div>
+<div class="note">Real engine frame + HUD (Chapter III, art served in) &middot; overlays = mockup &middot; ring order = our estimate &middot; plate O-3 C</div><div class="cpt">CONCEPT</div></div></body></html>

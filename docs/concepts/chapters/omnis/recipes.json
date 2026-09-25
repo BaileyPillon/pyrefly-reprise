@@ -1,0 +1,114 @@
+{
+ "game": "ffx",
+ "chapter": "XII Seymour Omnis (proposed)",
+ "status": "CONCEPT",
+ "tool": "tools/gen/comfy.mjs (ComfyUI, animagine-xl-4.0-opt), one job at a time, submitted when /queue had fewer than 3 pending; ComfyUI never restarted; no black frames",
+ "renders": {
+  "O-1 A omnis-a": {
+   "seed": 912102,
+   "preset": "character --pose idle --facing left --composition full",
+   "tags": "1boy, seymour guado, final fantasy x, solo, male focus, final mutated form, towering demonic sorcerer, pale grey blue skin, long straight light blue hair falling past his shoulders, purple eyes, dark veins on his face, bare chest with ridged ribs, dark indigo armored shoulders with curved horn spikes, clawed hands, (lower body is a long heavy dark indigo skirt of hanging tattered cloth strips, no legs visible:1.2), (1boy:1.3)",
+   "poseTags": "floating upright in midair, both arms spread wide at shoulder height, hem hanging straight down, looking at viewer, cold smile",
+   "negAdd": "legs, feet, boots, wings, bird wings, angel, sword, weapon, staff, spear, shield, holding, ring, disc, halo, background, scenery, sky, 2boys, latex, shiny clothes, crown, flowing hair, wind, dynamic pose, dancing, from side",
+   "note": "the cut-out guard in the pipeline rejected it; the quarantined cut-out was used (checkCutoutFile on it alone passes). Sidecar not written."
+  },
+  "O-1 B omnis-b2": {
+   "seed": 912202,
+   "prompt": "1boy, seymour guado, final fantasy x, solo, male focus, final mutated form, towering demonic sorcerer, pale grey blue skin, long straight light blue hair falling past his shoulders, purple eyes, dark veins on his face, bare chest with ridged ribs, dark indigo armored shoulders with curved horn spikes, clawed hands, \\(lower body is a long heavy dark indigo skirt of hanging tattered cloth strips, no legs visible:1.2\\), \\(1boy:1.3\\), floating upright in midair, both arms spread wide at shoulder height, hem hanging straight down, looking at viewer, cold smile, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, legs, feet, boots, wings, bird wings, angel, sword, weapon, staff, spear, shield, holding, ring, disc, halo, background, scenery, sky, 2boys, latex, shiny clothes, crown, flowing hair, wind, dynamic pose, dancing, from side",
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 28,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "refWeight": 0.3,
+   "ref": "public/art/portraits/seymour-macalania.png (approved), --forceRef"
+  },
+  "O-1 B withdrawn omnis-b": {
+   "seed": 912201,
+   "prompt": "1boy, seymour guado, final fantasy x, solo, male focus, final mutated form, towering demonic sorcerer, pale grey blue skin, long straight light blue hair falling past his shoulders, purple eyes, dark veins on his face, bare chest with ridged ribs, dark indigo armored shoulders with curved horn spikes, clawed hands, \\(lower body is a long heavy dark indigo skirt of hanging tattered cloth strips, no legs visible:1.2\\), \\(1boy:1.3\\), floating upright in midair, both arms spread wide at shoulder height, hem hanging straight down, looking at viewer, cold smile, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, legs, feet, boots, wings, bird wings, angel, sword, weapon, staff, spear, shield, holding, ring, disc, halo, background, scenery, sky, 2boys, latex, shiny clothes, crown, flowing hair, wind, dynamic pose, dancing, from side",
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 28,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "refWeight": 0.3,
+   "why": "legs and a crest the prompt did not ask for; reads as a generic demon"
+  },
+  "O-1 C": "no render: omnis_build.py translucent() on O-1 A pixels (alpha by luminance, pyrefly tint, halo, motes)",
+  "red glow (all O-1)": "no render: omnis_build.py red_glow() (38 percent red mix, blurred red halo); stands in for a live effect",
+  "O-2 disc texture disc-a": {
+   "seed": 912301,
+   "prompt": "no humans, object focus, \\(a huge flat circular carved wheel divided by a cross into four equal quarter sections:1.4\\), thick ornate rim of dark bronze, engraved glyphs around the rim, a round jewelled hub in the centre, each quarter a smooth pale grey stone panel with carved swirl patterns, weathered, full circle visible, isolated object, \\(front view:1.3\\), straight-on, flat, centered, straight-on, full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, 1boy, 1girl, human, person, character, face, clock hands, numbers, text, staff, handle, pole, spikes",
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 28,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "use": "centre circle cropped (469,497 r318), tinted per quarter in omnis_build.py painted_disc(); C rings are drawn, not rendered"
+  },
+  "O-3 A garden-a (= garden-A)": {
+   "seed": 912411,
+   "prompt": "no humans, scenery, no humans, scenery, final fantasy x, outdoors, a dream realm inside a giant creature, low level eye-height view across a wide stone terrace of pale weathered paving in the foreground, the top of a flight of stone steps, a calm vast red-tinged sea beyond the terrace, floating rock islands with tall thin waterfalls pouring into the sea, glassy walkways of water, a few thin dark stone staves at the terrace edges, deep perspective, symmetrical composition, eerie stillness, detailed background, painterly, cinematic lighting, wide shot, dusk, the sea glowing deep crimson, warm orange and red light, sky fading from red to violet, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, boat, ship, glowing lines, lava, neon, fire, road markings, railway, indoors, ceiling, hall, arches, columns, pillars, temple interior, window, roof, sun, orb, sphere, planet, moon",
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 30,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "denoise": 0.58
+  },
+  "O-3 B garden-B2": {
+   "seed": 912422,
+   "prompt": "no humans, scenery, no humans, scenery, final fantasy x, outdoors, a dream realm inside a giant creature, low level eye-height view across a wide stone terrace of pale weathered paving in the foreground, the top of a flight of stone steps, a calm vast red-tinged sea beyond the terrace, floating rock islands with tall thin waterfalls pouring into the sea, glassy walkways of water, a few thin dark stone staves at the terrace edges, deep perspective, symmetrical composition, eerie stillness, detailed background, painterly, cinematic lighting, wide shot, \\(waterfalls:1.3\\), pale noon, bright flat daylight, pale cloudless sky, \\(the sea a pale rose red:1.3\\), soft shadows, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, boat, ship, glowing lines, lava, neon, fire, road markings, railway, indoors, ceiling, hall, arches, columns, pillars, temple interior, window, roof, sun, orb, sphere, planet, moon, light beam, sunset, blue sea, bird, creature, dragon",
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 30,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "denoise": 0.48
+  },
+  "O-3 C garden-C": {
+   "seed": 912431,
+   "prompt": "no humans, scenery, no humans, scenery, final fantasy x, outdoors, a dream realm inside a giant creature, low level eye-height view across a wide stone terrace of pale weathered paving in the foreground, the top of a flight of stone steps, a calm vast red-tinged sea beyond the terrace, floating rock islands with tall thin waterfalls pouring into the sea, glassy walkways of water, a few thin dark stone staves at the terrace edges, deep perspective, symmetrical composition, eerie stillness, detailed background, painterly, cinematic lighting, wide shot, \\(waterfalls:1.3\\), deep violet twilight, the sea dark crimson, cold violet light, green-white pyreflies drifting in the air, dim, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+   "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, boat, ship, glowing lines, lava, neon, fire, road markings, railway, indoors, ceiling, hall, arches, columns, pillars, temple interior, window, roof, sun, orb, sphere, planet, moon, light beam",
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "steps": 30,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "scheduler": "normal",
+   "denoise": 0.5
+  },
+  "O-3 init sources": {
+   "sky, sea, floating ledges": {
+    "seed": 912407,
+    "prompt": "no humans, scenery, final fantasy x, scenery, no humans, inside a vast otherworldly dream realm, low eye-height view across a wide flat stone platform at the top of a broad flight of pale steps, \\(the platform fills the lower foreground:1.3\\), a calm red-tinged sea stretching to the horizon beyond, glassy blue watery walkways crossing the sea, tall thin waterfalls pouring from floating rock ledges in the distance, carved circular glyph motifs on the platform edge, tall thin stone staves standing in a row along the platform, deep perspective, symmetrical composition, eerie calm, dusk, the sea glowing deep red, warm orange rim light on the steps, cloudless sky fading from red to violet, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+    "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, boat, ship, glowing lines, lava, neon, fire, road markings, railway, sun, orb, sphere, planet, moon, indoors",
+    "model": "animagine-xl-4.0-opt.safetensors",
+    "steps": 30,
+    "cfg": 6,
+    "sampler": "euler_ancestral",
+    "scheduler": "normal"
+   },
+   "terrace floor band": {
+    "seed": 912403,
+    "prompt": "no humans, scenery, no humans, scenery, final fantasy x, a dream realm inside a giant creature, low level eye-height view across a raised stone terrace at the top of a broad flight of steps, \\(a wide plaza of pale weathered stone paving filling the foreground:1.3\\), carved circular glyph rings inlaid in the paving, \\(rows of tall thin dark stone staves standing along both sides of the terrace:1.2\\), beyond the terrace edge \\(a calm vast red-tinged sea to the horizon:1.2\\), thin glassy blue walkways of water crossing the sea, \\(tall thin waterfalls falling from floating rock ledges in the distance:1.2\\), deep perspective, symmetrical composition, open air, eerie stillness, detailed background, painterly, cinematic lighting, wide shot, dusk, a low crimson sun on the horizon, the sea glowing deep red, warm orange light, cloudless sky fading from red to violet, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+    "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, boat, ship, glowing lines, lava, neon, fire, road markings, railway",
+    "model": "animagine-xl-4.0-opt.safetensors",
+    "steps": 30,
+    "cfg": 6,
+    "sampler": "euler_ancestral",
+    "scheduler": "normal"
+   },
+   "method": "initplate.py: top 60 % from 912407, floor band from 912403, per-option colour grade, then img2img at the denoise above"
+  }
+ },
+ "withdrawn": [
+  "O-1 A pilot seed 912101: a flowing ethereal figure cropped at the frame edges, no boss read",
+  "O-3 pilots 912401-912408 and 912412: a glowing lava road, an empty sea with a floating rock, an indoor hall, a giant red orb, a sunset with a flying creature; none had the terrace, the red sea and the waterfalls together"
+ ],
+ "ring order": "OUR ESTIMATE (plan B8): clockwise Fire, Water, Ice, Thunder (GameFAQs reset cycle read as a ring). Colours sourced: research/ffx-seymour-omnis.md 4.1"
+}
