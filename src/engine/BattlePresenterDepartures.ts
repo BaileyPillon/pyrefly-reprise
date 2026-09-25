@@ -27,7 +27,8 @@
  *   (`docs/concepts/chapters/yojimbo/decisions/README.md`); the class is
  *   Anima's row, "present the departure as a recall, not a death"
  *   (`research/ffx-vs-ffx2-presentation.md` §3.2). `BattlePresenterRecall.ts`.
- * - **`'held'`, Paragon and Trema (FFX-2 only; Chapter XIII, O-2 yes).** Beaten, and left
+ * - **`'held'`, Paragon and Trema (FFX-2 only; Chapter XIII, O-2 yes), and Seymour Omnis (FFX
+ *   only; Chapter XII, sent by Yuna in the post scene).** Beaten, and left
  *   standing: `research/ffx2-trema.md` §2 step 2, Paragon falls and Trema "destroys Paragon"
  *   himself (the Cloister 100 scene plays that, `src/scenes/cloister-100-link.ts`); step 4,
  *   Trema is beaten, answers Yuna, and "fades away" (the post scene). Neither is sent at the
@@ -80,6 +81,8 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   // FFX-2, Chapter XIII: research/ffx2-trema.md §2 steps 2 and 4 (see the module note).
   paragon: 'held',
   trema: 'held',
+  // FFX, Chapter XII: research/ffx-seymour-omnis.md §4.6 [verified: 2 sources]: he kneels and is sent in the post scene.
+  'seymour-omnis': 'held',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {

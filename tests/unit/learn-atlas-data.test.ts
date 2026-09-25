@@ -45,6 +45,7 @@ describe('buildChapterSpecimen', () => {
       'yojimbo-cavern': 'gold',
       'seymour-natus': 'gold',
       'ffx2-fallen-aeons': 'pink', // Chapter XI, FFX-2, unlisted
+      'seymour-omnis': 'gold', // Chapter XII, FFX, unlisted
       'ffx2-trema': 'pink', // Chapter XIII, FFX-2, unlisted
     };
     for (const id of CHAPTER_IDS) {
