@@ -21,6 +21,12 @@
  *   (the act rosters, `src/data/ffx2/enemies/leblanc-syndicate-acts.ts`); the
  *   Goons are rank and file and keep the dissolve, as the decision names only
  *   the three.
+ * - **`'dismissed'`, Yojimbo with Daigoro (FFX only; Bailey D-076).** An aeon
+ *   is recalled, not killed: the idles dim and rise away together, no
+ *   pyreflies. **Our reading**: no source describes how Yojimbo leaves
+ *   (`docs/concepts/chapters/yojimbo/decisions/README.md`); the class is
+ *   Anima's row, "present the departure as a recall, not a death"
+ *   (`research/ffx-vs-ffx2-presentation.md` §3.2). `BattlePresenterRecall.ts`.
  *
  * Everything else keeps `'dissolve'`. The kind is a presenter-side table keyed
  * by combatant id (an enemy's combatant id is its `EnemyDef.id`,
@@ -43,8 +49,9 @@
 import type { CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle, Point3 } from './BattlePresenterPorts.ts';
 import { ACTOR_ANIM_GRACE_MS, type EventCtx } from './BattlePresenterEvents.ts';
+import { RECALL_MS, recall } from './BattlePresenterRecall.ts';
 
-export type DepartureKind = 'dissolve' | 'falls-away' | 'yields' | 'body';
+export type DepartureKind = 'dissolve' | 'falls-away' | 'yields' | 'body' | 'dismissed';
 
 /** Who leaves the field some other way than being sent. Keyed by combatant id. */
 export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind>>> = {
@@ -61,6 +68,10 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   'guado-guardian-a': 'yields',
   'guado-guardian-b': 'yields',
   'seymour-macalania': 'body',
+  // FFX, Chapter IX: D-076, OUR READING (no source gives Yojimbo's exit; the
+  // decision sheet: "Yojimbo himself: no source describes how he leaves").
+  // Daigoro goes with him (`RECALL_COMPANIONS`); Lady Ginnem has no KO and stays.
+  yojimbo: 'dismissed',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {
@@ -263,6 +274,10 @@ export async function depart(
 ): Promise<DepartureOutcome> {
   const kind = departureKindOf(id);
   if (kind === 'dissolve') return 'dissolve';
+  if (kind === 'dismissed') {
+    await recall(ctx, id, actor, budget(ctx, departureMs(kind)));
+    return 'removed';
+  }
   if (!actor) return kind === 'body' ? 'stays' : 'removed';
   const b = budget(ctx, departureMs(kind));
   if (kind === 'body') {
@@ -277,5 +292,6 @@ export async function depart(
 /** A departure's full length at timeScale 1, the outer guard's budget. */
 export function departureMs(kind: Exclude<DepartureKind, 'dissolve'>): number {
   if (kind === 'body') return BODY_MS + BODY_HOLD_MS;
+  if (kind === 'dismissed') return RECALL_MS.dim + RECALL_MS.rise;
   return kind === 'falls-away' ? FALL_MS.lurch + FALL_MS.drop : YIELD_MS.dim + YIELD_MS.step;
 }
