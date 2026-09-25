@@ -40,6 +40,7 @@ import { resolveTargetMode } from '../ffx/CommandMenuLogic.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
 import { commandHelpText, groupHelpText } from './commandHelp.ts';
 import { withTargets } from './withTargets.ts';
+import { keepPlateDocked } from './plateRedock.ts';
 
 const CATEGORY_LABELS: Record<string, string> = {
   attack: 'Attack',
@@ -297,12 +298,11 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       if (view === 'target' && pending) finish(pending, groupMode ? targetIds : [id]);
     });
     deps.targetLayer.append(cursor.el);
+    keepPlateDocked(cursor, deps.panels, () => view === 'target');
     /** True while the chosen command hits every listed target. */
     let groupMode = false;
-
     /** One-shot, so an external close after the menu resolved does nothing. */
     let live = true;
-
     const cleanup = (): void => {
       if (!live) return;
       live = false;

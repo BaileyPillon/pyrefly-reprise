@@ -43,7 +43,7 @@ import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
-import { BODY_HALF_WIDTH, boardRects, fighterBoxes, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
+import { BODY_HALF_WIDTH, boardRects, fighterBoxes, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
 import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
@@ -793,7 +793,7 @@ export class FFX2BattleHud implements HudPort {
       // letter tag the plate prints — the plate used to print the raw
       // combatant id.
       projectRect: (id) => this.targeting?.rect(id) ?? null,
-      panels: () => this.panelRects(),
+      panels: () => [...this.panelRects(), ...slabPanels(this.el)],
       nameOf: (id) => this.lastState?.combatants[id]?.name ?? id,
       letterTagOf: (id) => this.letterTagOf(id),
       kindOf: (id) => {
