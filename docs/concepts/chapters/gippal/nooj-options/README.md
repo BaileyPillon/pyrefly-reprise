@@ -119,3 +119,134 @@ man. So these are **options for Bailey to react to, not verified passes.**
   - An independent judge of the picked pair.
   - The B treatment and sidecars written by an install script that refuses approved hashes, as the attempt-4 install
     did.
+
+## Independent judge (2026-09-25)
+
+**Game case (rule 14): FFX-2 only.** The judge is a sub-agent that made none of these files and changed no art. The
+rubric and bar are those of [production/JUDGE.md](../production/JUDGE.md): bar 7 overall, and the method adds that no
+category may fall below 6.5. The gates are from [METHOD-nooj-2.md](../production/METHOD-nooj-2.md). Identity is judged
+against the picked portrait `public/art/portraits/nooj.png` and visual bible §1.23.4. These are a judge's verdicts,
+not Bailey's pick. Nothing was installed or locked. `verify-approved` reported ok 224, with 0 mismatched and 0 missing.
+
+**Files judged (sha256, first 12 characters).** All are in `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-nooj5/`.
+
+| File | sha256 |
+|---|---|
+| `idle-lean/C-opt/cand-975102` | `079577b678f1` |
+| `idle-upright/C-opt/cand-975101` | `7f72cb26c838` |
+| `idle-glasses/C-opt/cand-975101` | `5d6191d26045` |
+| `cast/C-lean-f/cand-975201` | `eb43e21a686f` |
+| `cast/C-upright-f/cand-975201` | `b312e866856d` |
+| `cast/C-glasses-f/cand-975201` | `867271d92909` |
+
+**Method.**
+
+- Each cut-out was composited over mid grey and over dark blue, then viewed at 1:1 and at 2x (head, shoulders, both
+  hands, both feet).
+- The six engine frames in `frames/` were cropped at 1:1, and the shoulders at 2x nearest-neighbour, beside the
+  installed attempt-4 frames.
+- Fur width was measured on the far side of the head in each idle cut-out: light, low-saturation pixels above the
+  chest. It was then scaled by the figure's height in the frame. The 2x crops of the frames were checked by eye. These
+  numbers carry about ±8 px of error, because the dark lilac fur tips and the B glow blur the edge.
+
+### Scores (0 to 10; bar 7, no category below 6.5)
+
+| Painting | Identity | Anatomy | Hands | Costume | Seams | Edges | Finish | Game read | Overall |
+|---|---|---|---|---|---|---|---|---|---|
+| Opt 1 idle (lean 975102) | 6.5 | 6 | 5 | 6 | 8 | 7.5 | 7 | 7.5 | **6.7 FAIL** |
+| Opt 1 cast (C-lean-f) | 6 | 7 | 7 | 5.5 | 6 | 7.5 | 6.5 | 7.5 | **6.6 FAIL** |
+| Opt 2 idle (upright 975101) | 5.5 | 6 | 6 | 5 | 8 | 7.5 | 7 | 7 | **6.5 FAIL** |
+| Opt 2 cast (C-upright-f) | 5.5 | 6.5 | 7 | 5 | 6 | 7.5 | 6.5 | 7.5 | **6.4 FAIL** |
+| Opt 3 idle (glasses 975101) | 6 | 6.5 | 6 | 5.5 | 8 | 7.5 | 7 | 6.5 | **6.6 FAIL** |
+| Opt 3 cast (C-glasses-f) | 6 | 7 | 7 | 5.5 | 6 | 7.5 | 6.5 | 7.5 | **6.6 FAIL** |
+
+For comparison, the installed attempt 4 scored 6.9 and 6.8 in round 1. **No pair passes.** Every painting also has
+at least one category below 6.5.
+
+### Gates
+
+| Gate | Opt 1 | Opt 2 | Opt 3 |
+|---|---|---|---|
+| Tall column (red before B) | yes | yes | yes |
+| One furred shoulder, ≥ 50 px, breaking the outline | yes, about 51 to 59 px, far (right) shoulder | yes, about 51 to 63 px, but fringe on both shoulders | borderline, about 35 to 52 px; the figure renders smaller |
+| One thin skeletal arm | thin at game size; at 1:1 a blue fin with no fingers | yes, a jointed arm akimbo | yes, raised to the glasses |
+| Cane as a third leg, touching the ground | yes | yes, in front of the far leg | yes |
+| Two loops with ties; blue glasses | yes; the loops are black and read as ram horns at 2x | yes | yes |
+| Human ear | yes (near side) | yes, small | not visible |
+| Gloved hand, finger reads, no spur | **no**: silver skeletal fingers under the cane glove | near hand yes; the cane hand is hidden under the tabard | the glasses hand yes; the far hand is swallowed by a black fur cuff |
+| One purple boot and one metal foot, no hoof | **no**: both legs end in footless pegs | **no**: the metal foot is a pointed blade, and the boot is a flared bell | **yes** |
+| At least 3 belts | 3, narrowly (chest harness and two crossed hip belts) | 2 | 1 |
+| Cast elbow continuous | yes | yes | yes |
+| Cast is the same man as the idle | **no** (see below) | **no** | **no** |
+
+### Named faults, worst first
+
+**Faults shared by all three casts.** They are one picture: one seed, one skeleton, one block-in.
+
+- **Worst: a flat, unrendered grey patch on the leading (cloth, right) shoulder.** It spans about x 560 to 625 and
+  y 145 to 210 in each cast `.png`. It reads as a metal pauldron on the cloth side, so the metal is on the wrong side.
+- The fur is a white collar around the neck and across both shoulders. The bible has grey fur topping one purple
+  sleeve on the right shoulder.
+- There is no purple sleeve, and only one waist belt.
+- **Not the same man as its idle.** Option 1's idle has a blue machina arm, lilac fur and black loops; its cast has a
+  white arm, a white collar and brown loops. Option 2's magenta chest and tabard disappear in the cast. Option 3's red
+  eye cuff disappears and its silver arm turns white. In the engine the idle-to-cast swap will visibly change the man.
+- The cast's feet land about 60 to 90 px to the right of the idle's in the frame, the same staging note as attempt 3.
+- **What works:** the cane is levelled at the party and reads at 1600x900. The faces are the sharpest and closest to
+  the portrait in the whole set, three-quarter left with a frown. The elbows are continuous. The feet are real.
+
+**Option 1, "Leaning on the cane", FAIL (idle 6.7, cast 6.6).**
+
+- **Worst: the hands.** The cane hand is a black fingerless glove over silver, skeletal, mechanical fingers. That
+  puts metal fingers on his cloth (right) side, and at 2x it reads as a claw. The machina hand is a pale blue fin with
+  no fingers.
+- **Both legs end in footless pegs.** The purple boot is a flat-bottomed stump, and the metal shin tapers into a blue
+  stump below a disc knee. Neither has a foot or a toe.
+- **The staging does not show the lean.** The cane stands vertically beside him, the legs are apart, and the body and
+  face are nearly frontal rather than three-quarter left. The "weight on the cane" is not legible at 1:1 or in the
+  frame.
+- Under the fur the upper arm is bare skin, then a red, black and blue sleeve begins. There is no purple sleeve. The
+  machina arm is blue, where the bible has grey, and at 1:1 it is a blade-shaped plate, not a stick with gaps.
+- The loops are black with red insides and read as ram horns at 2x; the portrait's loops are brown hair.
+- The face is young, soft and frontal. The legs are about 60 percent of his height.
+- **What works:** it has the best squint read of the three. One lilac fur shape on the correct far shoulder breaks the
+  outline, there is a thin arm, and the cane touches the ground. The cut-out is clean, and none of it was touched up.
+
+**Option 2, "Hand on hip", FAIL (idle 6.5, cast 6.4).**
+
+- **Worst: the costume and the face.** The chest is magenta with a heart-shaped pendant. A long red tabard hangs over
+  the far arm, and a pink sash hangs between the legs. The face is the most feminine of the three: frontal, with large
+  eyes.
+- The metal foot is a black triangular blade, a hoof or blade read. The far boot flares like a bell and has no foot.
+- The cane head is white with black dots and reads as a skull or dalmatian pattern. The cane hand is hidden.
+- Fur fringe also shows on the near shoulder.
+- **In the cast the metal shin turns purple below the knee.** Two purple boots means the metal-foot gate fails there
+  too. A strap hangs from the belt.
+- **What works:** it has the widest fur. The akimbo machina arm is the clearest mechanical read of the three, and it
+  is the only option with a purple upper sleeve.
+
+**Option 3, "The portrait's gesture", FAIL (idle 6.6, cast 6.6).**
+
+- **Worst: the far forearm.** It carries a red cuff with two round, eye-like ornaments, a face read at 1:1 and 2x. It
+  ends in a black fur cuff that swallows the hand, and the cane appears to grow out of it.
+- There is one belt.
+- The face is the softest and most feminine.
+- At game size he renders about 300 px tall, against about 345 px for the other two, so the fur falls to the 50 px
+  gate or below it.
+- **What works:** the machina fingers at the glasses tie him directly to the picked portrait. It is the only idle with
+  real feet: a purple boot with a toe, and a black metal leg with a foot. The machina forearm reads as metal.
+
+### Best option
+
+**Option 1 is the closest, narrowly (idle 6.7), and none passes.** It is the only one with the right squint reads in
+the frame: one fur shape on the correct shoulder, a thin arm, and the cane as a third leg. Its misses are local to
+the hands and the feet. Options 2 and 3 fail on costume and face identity, which are harder to repair.
+
+If Bailey still wants to react to Option 1 as the base, these would lift it to the bar. This is the judge's list, not
+yet approved by anyone.
+
+1. Masked repaints of the cane hand (a gloved human hand, no silver fingers), the machina hand (jointed metal fingers)
+   and both feet (a boot toe, and a metal foot that is not a hoof).
+2. A new cast derived from Option 1's idle, with the fur region only on the far shoulder, no grey block-in on the
+   leading shoulder, the idle's machina arm colour, and the idle's loops.
+3. A fresh independent judge of the result.
