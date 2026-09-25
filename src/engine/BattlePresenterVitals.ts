@@ -55,6 +55,14 @@ import type {
 export interface Vitals {
   hp: number;
   mp: number;
+  /**
+   * The pool ceilings as of the last full sync. A heal's `damage` event carries
+   * the blow, not the shortfall (`battle/ffx/hp.ts` `applyHpDelta`), so a
+   * 1000-point Al Bhed Potion on a 632/1265 Tidus arrives as -1000; without the
+   * ceiling the row read 1632/1265 until the next burst (PR-0156).
+   */
+  maxHp: number;
+  maxMp: number;
   alive: boolean;
   statuses: Partial<Record<StatusId, StatusInstance>>;
   /** Overdrive / ATB-independent gauge, or `null` for a combatant that has none. */
@@ -81,6 +89,8 @@ export function captureVitals(state: BattleState): VitalsMap {
     out.set(id, {
       hp: c.hp,
       mp: c.mp,
+      maxHp: c.stats.maxHp,
+      maxMp: c.stats.maxMp,
       alive: c.alive,
       statuses: { ...c.statuses },
       gauge: c.overdrive ? c.overdrive.gauge : null,
@@ -105,13 +115,13 @@ export function applyEventToVitals(vitals: VitalsMap, event: BattleEvent): boole
       if (!v) return false;
       // Rule 5 of the playback protocol: a `heals`-flagged action is negative
       // damage, not a `heal` event, so this one line covers both directions.
-      v.hp = clampHp(v.hp - event.amount);
+      v.hp = clampHp(v.hp - event.amount, v.maxHp);
       return true;
     }
     case 'heal': {
       const v = vitals.get(event.targetId);
       if (!v) return false;
-      v.hp = clampHp(v.hp + event.amount);
+      v.hp = clampHp(v.hp + event.amount, v.maxHp);
       return true;
     }
     case 'mp-damage': {
@@ -123,7 +133,7 @@ export function applyEventToVitals(vitals: VitalsMap, event: BattleEvent): boole
     case 'mp-heal': {
       const v = vitals.get(event.targetId);
       if (!v) return false;
-      v.mp = Math.max(0, v.mp + event.amount);
+      v.mp = Math.min(v.maxMp, Math.max(0, v.mp + event.amount));
       return true;
     }
     case 'ko': {
@@ -137,7 +147,7 @@ export function applyEventToVitals(vitals: VitalsMap, event: BattleEvent): boole
       const v = vitals.get(event.targetId);
       if (!v) return false;
       v.alive = true;
-      v.hp = clampHp(event.hp);
+      v.hp = clampHp(event.hp, v.maxHp);
       return true;
     }
     case 'status-add': {
@@ -236,6 +246,7 @@ function sameStatuses(
   return true;
 }
 
-function clampHp(n: number): number {
-  return Math.max(0, Math.round(n));
+/** Between 0 and the pool's ceiling, as the engine itself keeps it (PR-0156). */
+function clampHp(n: number, max: number): number {
+  return Math.min(max, Math.max(0, Math.round(n)));
 }
