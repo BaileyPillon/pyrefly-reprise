@@ -97,6 +97,26 @@ describe('Chapter XV benches (200 seeds, bench speed, Wait)', () => {
     }
   }, 600_000);
 
+  it("timed statuses run out on the engine: Looming Glacier's Stop (§2.8)", () => {
+    const expired: Record<string, number> = {};
+    // The magic line carries no Remedy, so Stop is left to run out. Baralai's own Guard and
+    // Regen come out below 1/3 HP, where he dies first; den-of-woe-engine.test.ts runs them out.
+    for (let seed = 1; seed <= 20; seed++) {
+      driveLink(DEN_BARALAI, LINES.magic, seed, {
+        inspect: (engine) => {
+          for (const e of engine.state().log) {
+            if (e.type !== 'status-remove' || (e as { reason?: string }).reason !== 'expired') continue;
+            const { targetId, status } = e as { targetId: string; status: string };
+            const who = ['yuna', 'rikku', 'paine'].includes(targetId) ? 'girl' : 'baralai';
+            expired[`${who}:${status}`] = (expired[`${who}:${status}`] ?? 0) + 1;
+          }
+        },
+      });
+    }
+    rows.push(`| (expiries, Baralai, magic line, seeds 1-20) | ${JSON.stringify(expired)} | | | |`);
+    expect(expired['girl:stop'] ?? 0).toBeGreaterThan(0);
+  }, 300_000);
+
   it('what-if, not shipped: the preset at +8 levels (GP5 b as numbers)', () => {
     for (const [link, id] of LINKS) row(link, 'intended, what-if +8 levels', 'Wait, D=0', benchLink(id, LINES.intended, SEEDS, { party: WHAT_IF }));
     row('Den (1-2-3)', 'intended, what-if +8 levels', 'Wait, D=0', benchDen(LINES.intended, SEEDS, { party: WHAT_IF }));

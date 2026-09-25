@@ -26,8 +26,11 @@ import {
 import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
 import { CHAPTERS, CHAPTER_IDS, getChapter } from '../../../src/data/encounters.ts';
 import { ability, ctxFor, girlsAt } from '../helpers/fallenAeonsUnits.ts';
+import { INFINITE_STATUSES, advanceStatuses, durationToTicks } from '../../../src/battle/ffx2/statuses.ts';
+import { DEN_GUARD_DURATION, DEN_REGEN_DURATION, DEN_STOP_DURATION } from '../../../src/data/ffx2/enemies/den-of-woe-abilities.ts';
 
 type Damage = Extract<BattleEvent, { type: 'damage' }>;
+type Removed = Extract<BattleEvent, { type: 'status-remove' }>;
 const damages = (events: readonly { type: string }[]) => events.filter((e) => e.type === 'damage') as Damage[];
 
 describe('data, carried from research §3 (rule 6)', () => {
@@ -185,6 +188,38 @@ describe('the shades\' actions (§4)', () => {
     expect(baralai.statuses.regen).toBeDefined();
     resolveAbility(ctx, baralai, ability('x2-den-baralai-not-so-mighty-guard'), []);
     expect(Object.keys(baralai.statuses).sort()).toEqual(['protect', 'regen', 'shell']);
+  });
+
+  it('Stop, Protect, Shell and Regen are timed (combat-core §2.8); Darkness and Silence are Infinite', () => {
+    const party = girlsAt(3000, 180);
+    const baralai = aiUnit('shade-baralai', 'enemy');
+    baralai.mp = 100;
+    const { ctx } = ctxFor([baralai, ...party], 2);
+    resolveAbility(ctx, baralai, ability('x2-den-baralai-looming-glacier'), ['rikku']);
+    expect(party[1]!.statuses.stop!.ticksRemaining).toBe(durationToTicks(DEN_STOP_DURATION));
+    expect(DEN_STOP_DURATION).toBe(100);
+    resolveAbility(ctx, baralai, ability('x2-den-baralai-not-so-mighty-guard'), []);
+    for (const s of ['protect', 'shell', 'regen'] as const) {
+      expect(baralai.statuses[s]!.ticksRemaining, s).toBe(durationToTicks(DEN_GUARD_DURATION));
+      expect(baralai.statuses[s]!.permanent, s).toBe(false);
+    }
+    delete baralai.statuses.regen;
+    resolveAbility(ctx, baralai, ability('x2-den-baralai-regen'), []);
+    expect(baralai.statuses.regen!.ticksRemaining).toBe(durationToTicks(DEN_REGEN_DURATION));
+    expect([DEN_GUARD_DURATION, DEN_REGEN_DURATION]).toEqual([100, 50]);
+    // Run the clock: the Regen spell's 50 units go first, then the Guard's 100, then Stop's.
+    const removed: string[] = [];
+    const emit = (e: { type: string }) => {
+      if (e.type === 'status-remove') removed.push(`${(e as Removed).targetId}:${(e as Removed).status}`);
+    };
+    resolveAbility(ctx, baralai, ability('x2-den-baralai-not-so-mighty-guard'), []);
+    advanceStatuses(baralai, durationToTicks(DEN_GUARD_DURATION)! + 1, emit);
+    advanceStatuses(party[1]!, durationToTicks(DEN_STOP_DURATION)! + 1, emit);
+    expect(baralai.statuses.protect ?? baralai.statuses.shell ?? baralai.statuses.regen).toBeUndefined();
+    expect(party[1]!.statuses.stop).toBeUndefined();
+    expect(removed.sort()).toEqual(['rikku:stop', 'shade-baralai:protect', 'shade-baralai:regen', 'shade-baralai:shell']);
+    expect(INFINITE_STATUSES).toContain('darkness');
+    expect(INFINITE_STATUSES).toContain('silence');
   });
 
   it('Rippling Chroma ignores Magic Defense', () => {

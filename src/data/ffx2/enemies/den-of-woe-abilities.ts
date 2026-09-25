@@ -24,12 +24,27 @@
  * `crit-eligible` sits on the single-target and random physical strikes, as on
  * every shipped enemy attack (house precedent, not a source).
  *
- * **Durations and chances the sources do not give** are `[estimate]`s, each on its
- * row: `duration: 0` lasts until cured (the Chapter XI precedent), and a rider
- * with no printed chance is 254 (lands unless immune).
+ * **Durations.** Darkness and Silence are `Infinite` in the source tables
+ * (`research/ffx2-combat-core.md` §2.8), so they last until cured; the engine
+ * ignores the duration of an `INFINITE_STATUSES` entry. Stop, Protect, Shell and
+ * Regen are **timed** statuses there, and no source prints the shades' values, so
+ * each takes the published player value of its nearest analogue (the constants
+ * below, each an `[estimate]`). A rider with no printed chance is 254 (lands unless
+ * immune), also an `[estimate]`.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
+
+/** Looming Glacier's Stop: 100 units = 53.0 s at Normal speed, the commonest Stop value
+ *  (Borrowed Time, Stop Missile, Stop Spark...) `[estimate: nearest analogue, combat-core §2.8]`. */
+export const DEN_STOP_DURATION = 100;
+/** Not-So-Mighty Guard's Protect, Shell and Regen: 100 units = 53.0 s, the value of the one
+ *  published triple buff of the same three (Wall / Hi-Wall / Final Wall) and of the Protect and
+ *  Shell spells `[estimate: nearest analogue, combat-core §2.8]`. */
+export const DEN_GUARD_DURATION = 100;
+/** Baralai's Regen spell: 50 units = 26.5 s, the White Mage Regen value
+ *  `[estimate: nearest analogue, combat-core §2.8]`. */
+export const DEN_REGEN_DURATION = 50;
 
 const base = {
   game: 'ffx2' as const,
@@ -112,7 +127,7 @@ export const shadeGippalAbilities: AbilityDef[] = [
     damageType: 'other',
     element: ['none'],
     targeting: 'all-enemies',
-    statusEffects: [{ status: 'darkness', chance: 50, duration: 0 }], // duration [estimate]
+    statusEffects: [{ status: 'darkness', chance: 50, duration: 0 }], // Infinite (§2.8)
     canMiss: false,
     messageTemplate: 'Gippal throws a Flash Bomb',
   },
@@ -125,7 +140,7 @@ export const shadeGippalAbilities: AbilityDef[] = [
     damageType: 'other',
     element: ['none'],
     targeting: 'all-enemies',
-    statusEffects: [{ status: 'silence', chance: 50, duration: 0 }], // duration [estimate]
+    statusEffects: [{ status: 'silence', chance: 50, duration: 0 }], // Infinite (§2.8)
     canMiss: false,
     messageTemplate: 'Gippal throws a Hush Grenade',
   },
@@ -158,13 +173,13 @@ export const shadeBaralaiAbilities: AbilityDef[] = [
     id: 'x2-den-baralai-looming-glacier',
     name: 'Looming Glacier',
     // "one character's MP to 0 and Stop". `setMpTo` (`ffx2/aeon-effects.ts`) plus the
-    // Stop rider; no chance is printed: 254 [estimate], duration [estimate].
+    // Stop rider; no chance is printed: 254 [estimate]; timed, DEN_STOP_DURATION [estimate].
     power: 0,
     formula: 'none',
     damageType: 'other',
     element: ['none'],
     targeting: 'single-enemy',
-    statusEffects: [{ status: 'stop', chance: 254, duration: 0 }],
+    statusEffects: [{ status: 'stop', chance: 254, duration: DEN_STOP_DURATION }],
     canMiss: false,
     extra: { setMpTo: 0 },
     messageTemplate: 'Baralai uses Looming Glacier',
@@ -210,9 +225,9 @@ export const shadeBaralaiAbilities: AbilityDef[] = [
     element: ['none'],
     targeting: 'self',
     statusEffects: [
-      { status: 'protect', chance: 254, duration: 0 },
-      { status: 'shell', chance: 254, duration: 0 },
-      { status: 'regen', chance: 254, duration: 0 },
+      { status: 'protect', chance: 254, duration: DEN_GUARD_DURATION }, // [estimate]
+      { status: 'shell', chance: 254, duration: DEN_GUARD_DURATION }, // [estimate]
+      { status: 'regen', chance: 254, duration: DEN_GUARD_DURATION }, // [estimate]
     ],
     canMiss: false,
     messageTemplate: 'Baralai uses Not-So-Mighty Guard',
@@ -228,7 +243,7 @@ export const shadeBaralaiAbilities: AbilityDef[] = [
     damageType: 'other',
     element: ['none'],
     targeting: 'all-enemies',
-    statusEffects: [{ status: 'silence', chance: 75, duration: 0 }], // duration [estimate]
+    statusEffects: [{ status: 'silence', chance: 75, duration: 0 }], // Infinite (§2.8)
     canMiss: false,
     messageTemplate: 'Baralai casts Silence',
   },
@@ -242,7 +257,7 @@ export const shadeBaralaiAbilities: AbilityDef[] = [
     damageType: 'other',
     element: ['none'],
     targeting: 'self',
-    statusEffects: [{ status: 'regen', chance: 254, duration: 0 }],
+    statusEffects: [{ status: 'regen', chance: 254, duration: DEN_REGEN_DURATION }], // [estimate]
     canMiss: false,
     messageTemplate: 'Baralai casts Regen',
   },

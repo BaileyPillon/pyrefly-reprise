@@ -288,8 +288,7 @@ export function resolveAbility(
         : false;
       const randomRoll = randomiserRoll(ctx.rng);
 
-      // Delta Attack (Ch. XI; no riders) and Looming Glacier's MP to 0 + Stop (Ch. XV): `aeon-effects.ts`.
-      if (setsPoolsTo(ability)) {
+      if (setsPoolsTo(ability)) { // Delta Attack (XI, no riders), Looming Glacier + Stop (XV)
         total += resolveSetTo(ctx, user, target, ability, index, hitCount);
         applyRiders(ctx, user, target, ability);
         index += 1;
