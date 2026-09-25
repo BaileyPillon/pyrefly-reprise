@@ -74,6 +74,11 @@ and on the chapter card. The chapter card was not captured.
   with `../unlock/img/redo-*`.
 - The full-resolution options (`a|b|c.png`, `.2x.png`, `.json`), every render, mask and
   prefill: `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/ch7-pause-plate/`.
+- **Not install-ready.** In that folder, `a|b|c.2x.png` are lanczos previews, and
+  `a|b|c.json` are unedited copies of the installed plate's sidecar (tag `hero.550003`, the old
+  focal). Both exist only so `capture.mjs` can answer the plate's three URLs. The install still
+  owes the RealESRGAN 2x master and a new sidecar with the measured focal (see "Owed on a
+  pick"). The folder carries `PREVIEW-ONLY-DO-NOT-INSTALL.txt` saying the same.
 - Scratch: `D:/Tools/pyrefly-scratch/picks0925/ch7-art/`.
 - GPU use: about 20 renders of 8 to 40 s each, one at a time. No render came back black.
 
