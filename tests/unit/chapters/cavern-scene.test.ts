@@ -9,8 +9,11 @@
  * The HUD claim is **measured**: the slots are pushed through a real three.js
  * camera on the `idle` rig at 1600x900 and every figure must miss the FFX HUD
  * boxes the real game laid out at that size (command stack, CTB list, Zanmato
- * gauge, party rows; read from the live DOM on 2026-09-24) and every other
- * figure.
+ * gauge, party rows; read from the live DOM on 2026-09-24; the open Sensor
+ * plate's box on 2026-09-25) and every other figure. The same grid boxes are
+ * scaled to 1280x720 and 2000x1012 (the FFX HUD is a 640x360 grid pinned to
+ * the smaller fit), and the phone rigs are checked against the phone HUD read
+ * at 390x844 on 2026-09-25.
  *
  * **Game case: FFX only** [AGENTS.md rule 14].
  */
@@ -24,11 +27,12 @@ import {
   CAVERN_STOLEN_FAYTH_BACKDROP as BACKDROP,
   CAVERN_STOLEN_FAYTH_RIGS as RIGS,
   CAVERN_STOLEN_FAYTH_SLOTS as SLOTS,
-  DAIGORO_SCALE,
   platePoint,
 } from '../../../src/scenes/cavern-stolen-fayth.ts';
 import { SAKURA_ARRIVAL_MS, SAKURA_FLOOR_GLOW, SAKURA_NIGHT, sakuraArrivalAt } from '../../../src/scenes/cavern-stolen-fayth-arrival.ts';
-import { CAVERN_IDS, findFigure, scaleFigure, victoryStruck, type StagedFigure } from '../../../src/scenes/cavern-stolen-fayth-cast.ts';
+import { CAVERN_IDS, findFigure, victoryStruck, type StagedFigure } from '../../../src/scenes/cavern-stolen-fayth-cast.ts';
+import { CAVERN_PHONE_RIGS, cavernRigsFor, holdWidth } from '../../../src/scenes/cavern-stolen-fayth-rigs.ts';
+import type { CameraRig } from '../../../src/engine/BattleCamera.ts';
 import { getScene, getSceneFactory } from '../../../src/scenes/index.ts';
 import { yojimboGroup } from '../../../src/data/ffx/enemies/yojimbo.ts';
 import { yojimboCavernBuild } from '../../../src/data/ffx/builds/yojimbo-cavern.ts';
@@ -44,14 +48,31 @@ const HUD_1600: Record<string, [number, number, number, number]> = {
   ctb: [1386, 124, 1551, 501],
   gauge: [718, 11, 1227, 158],
   partyRows: [1007, 646, 1542, 870],
+  /** The Sensor plate open at its resting place (grid 436,166; skewed), seven seconds on every reveal. */
+  sensorOpen: [1071, 415, 1359, 595],
 };
+
+/** The same boxes on another viewport: the FFX HUD is the 640x360 grid at min(W/640, H/360), centred. */
+function hudAt(w: number, h: number): Record<string, Box> {
+  const s = Math.min(w / 640, h / 360);
+  const ox = (w - 640 * s) / 2;
+  const oy = (h - 360 * s) / 2;
+  const out: Record<string, Box> = {};
+  for (const [k, b] of Object.entries(HUD_1600)) {
+    out[k] = [ox + (b[0] / 2.5) * s, oy + (b[1] / 2.5) * s, ox + (b[2] / 2.5) * s, oy + (b[3] / 2.5) * s];
+  }
+  return out;
+}
+
+/** The phone HUD at 390x844 (live DOM, 2026-09-25): the gauge across the top and the party rows. */
+const HUD_PHONE: Record<string, Box> = { gauge: [12, 30, 378, 169], partyRows: [245, 470, 376, 524] };
 
 /** Painted aspect (content width / height) from each idle's sidecar and alpha box. */
 const ASPECT: Record<string, number> = { lulu: 0.4, kimahri: 0.631, yuna: 0.739, yojimbo: 0.658, daigoro: 0.989, ginnem: 0.651 };
 
-function camFor(rig: string): PerspectiveCamera {
-  const r = RIGS[rig]!;
-  const cam = new PerspectiveCamera(r.fov ?? 30, W / H_PX, 0.1, 200);
+function camFor(rig: string, w = W, h = H_PX, rigs: Readonly<Record<string, CameraRig>> = RIGS): PerspectiveCamera {
+  const r = rigs[rig]!;
+  const cam = new PerspectiveCamera(r.fov ?? 30, w / h, 0.1, 200);
   cam.position.set(...(r.position as [number, number, number]));
   cam.lookAt(new Vector3(...(r.lookAt as [number, number, number])));
   cam.updateMatrixWorld();
@@ -60,7 +81,7 @@ function camFor(rig: string): PerspectiveCamera {
 }
 
 type Box = [number, number, number, number];
-function boxOf(cam: PerspectiveCamera, spot: readonly number[], height: number, aspect: number): Box {
+function boxOf(cam: PerspectiveCamera, spot: readonly number[], height: number, aspect: number, vw = W, vh = H_PX): Box {
   const w = height * aspect;
   const pts = [
     [-w / 2, 0],
@@ -68,26 +89,28 @@ function boxOf(cam: PerspectiveCamera, spot: readonly number[], height: number, 
     [-w / 2, height],
     [w / 2, height],
   ].map(([dx, dy]) => new Vector3(spot[0]! + dx!, spot[1]! + dy!, spot[2]!).project(cam));
-  const xs = pts.map((p) => ((p.x + 1) / 2) * W);
-  const ys = pts.map((p) => ((1 - p.y) / 2) * H_PX);
+  const xs = pts.map((p) => ((p.x + 1) / 2) * vw);
+  const ys = pts.map((p) => ((1 - p.y) / 2) * vh);
   return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
 }
 const overlap = (a: Box, b: Box): number =>
   Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0])) * Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));
 
-function figures(): Record<string, Box> {
-  const cam = camFor('idle');
+function figures(rig = 'idle', w = W, h = H_PX, rigs: Readonly<Record<string, CameraRig>> = RIGS): Record<string, Box> {
+  const cam = camFor(rig, w, h, rigs);
   const [lulu, kimahri, yuna] = SLOTS.party;
   const e = SLOTS.enemy;
   return {
-    lulu: boxOf(cam, lulu!, H.party, ASPECT.lulu!),
-    kimahri: boxOf(cam, kimahri!, H.party, ASPECT.kimahri!),
-    yuna: boxOf(cam, yuna!, H.party, ASPECT.yuna!),
-    yojimbo: boxOf(cam, e[CAVERN_ENEMY_SLOT.yojimbo]!, H.yojimbo, ASPECT.yojimbo!),
-    daigoro: boxOf(cam, e[CAVERN_ENEMY_SLOT.daigoro]!, H.daigoro, ASPECT.daigoro!),
-    ginnem: boxOf(cam, e[CAVERN_ENEMY_SLOT.ginnem]!, H.ginnem, ASPECT.ginnem!),
+    lulu: boxOf(cam, lulu!, H.party, ASPECT.lulu!, w, h),
+    kimahri: boxOf(cam, kimahri!, H.party, ASPECT.kimahri!, w, h),
+    yuna: boxOf(cam, yuna!, H.party, ASPECT.yuna!, w, h),
+    yojimbo: boxOf(cam, e[CAVERN_ENEMY_SLOT.yojimbo]!, H.yojimbo, ASPECT.yojimbo!, w, h),
+    daigoro: boxOf(cam, e[CAVERN_ENEMY_SLOT.daigoro]!, H.daigoro, ASPECT.daigoro!, w, h),
+    ginnem: boxOf(cam, e[CAVERN_ENEMY_SLOT.ginnem]!, H.ginnem, ASPECT.ginnem!, w, h),
   };
 }
+const area = (b: Box): number => (b[2] - b[0]) * (b[3] - b[1]);
+const onScreen = (b: Box, w: number, h: number): boolean => b[0] >= 0 && b[1] >= 0 && b[2] <= w && b[3] <= h;
 
 describe('cavern-stolen-fayth — registration', () => {
   it('is a real scene factory, and Chapter IX stands in it', () => {
@@ -113,11 +136,11 @@ describe('cavern-stolen-fayth — formation and marks', () => {
     expect(SLOTS.holdParty).toBe(true);
   });
 
-  it('publishes its own heights, and sizes Daigoro to his estimate, not the stage default', () => {
+  it("publishes its own heights, and Daigoro's through the stage's per-combatant height", () => {
     expect(SLOTS.partyHeight).toBe(1.75);
     expect(SLOTS.enemyHeight).toBe(H.yojimbo);
-    // The stage sizes a non-boss fiend at 0.7 of the boss height (BattlePresenterArt.worldHeightFor).
-    expect(H.yojimbo * 0.7 * DAIGORO_SCALE).toBeCloseTo(H.daigoro, 9);
+    // Not the stage's 0.7-of-boss rule (BattlePresenterArt.worldHeightFor), which stood him as tall as Lulu.
+    expect(SLOTS.figureHeights).toEqual({ [CAVERN_IDS.daigoro]: H.daigoro });
   });
 
   it('keeps every figure off the FFX HUD at idle, 1600x900, measured with a real camera', () => {
@@ -127,6 +150,57 @@ describe('cavern-stolen-fayth — formation and marks', () => {
       expect(box[0]).toBeGreaterThan(0);
       expect(box[2]).toBeLessThan(W);
     }
+  });
+
+  it('keeps Yojimbo whole and clear of the open Sensor plate and the CTB list at 1280x720, 1600x900 and 2000x1012', () => {
+    for (const [w, h] of [[1280, 720], [1600, 900], [2000, 1012]] as const) {
+      const hud = hudAt(w, h);
+      for (const rig of ['idle', 'action', 'enemy', 'party']) {
+        const y = figures(rig, w, h).yojimbo!;
+        expect(onScreen(y, w, h), `${rig} ${w}`).toBe(true);
+        for (const panel of ['sensorOpen', 'ctb', 'gauge', 'partyRows']) {
+          expect(overlap(y, hud[panel]!), `${rig} ${w} x ${panel}`).toBe(0);
+        }
+      }
+      for (const [id, box] of Object.entries(figures('idle', w, h))) {
+        for (const [panel, b] of Object.entries(hud)) expect(overlap(box, b), `${w} idle ${id} x ${panel}`).toBe(0);
+      }
+    }
+  });
+
+  it("holds 16:9's width between square and 16:9, so 4:3 stands every figure on the same HUD grid pixel", () => {
+    const wide = figures('idle', 1600, 900);
+    const rigs = cavernRigsFor(1280 / 960);
+    expect(rigs.idle!.fov!).toBeGreaterThan(RIGS.idle!.fov!);
+    const narrow = figures('idle', 1280, 960, rigs);
+    // 4:3's HUD is the grid at 2x, letterboxed 120 px down.
+    for (const id of Object.keys(wide)) {
+      const a = wide[id]!.map((v) => v / 2.5);
+      const b = narrow[id]!.map((v, i) => (i % 2 ? v - 120 : v) / 2);
+      for (let i = 0; i < 4; i++) expect(Math.abs(a[i]! - b[i]!), `${id}[${i}]`).toBeLessThan(0.6);
+    }
+    expect(holdWidth(RIGS.idle!, 2, 16 / 9)).toBe(RIGS.idle);
+  });
+
+  it('frames Yojimbo, Daigoro and Ginnem whole on a phone (390x844), clear of its gauge, in every battle rig', () => {
+    const rigs = cavernRigsFor(390 / 844);
+    expect(rigs.idle).toEqual(CAVERN_PHONE_RIGS.idle);
+    for (const rig of ['idle', 'action', 'enemy']) {
+      const f = figures(rig, 390, 844, rigs);
+      for (const id of ['yojimbo', 'daigoro', 'ginnem']) {
+        expect(onScreen(f[id]!, 390, 844), `${rig} ${id} on screen`).toBe(true);
+        expect(overlap(f[id]!, HUD_PHONE.gauge!), `${rig} ${id} x gauge`).toBe(0);
+        expect(overlap(f[id]!, HUD_PHONE.partyRows!) / area(f[id]!), `${rig} ${id} x party rows`).toBeLessThan(0.15);
+      }
+      // At a readable size: Yojimbo at least a fifth of the phone's height in the idle frame.
+      if (rig === 'idle') expect((f.yojimbo![3] - f.yojimbo![1]) / 844).toBeGreaterThan(0.2);
+    }
+    // His blow on the party: all three of them and Yojimbo whole.
+    const p = figures('party', 390, 844, rigs);
+    for (const id of ['lulu', 'kimahri', 'yuna', 'yojimbo']) expect(onScreen(p[id]!, 390, 844), `party ${id}`).toBe(true);
+    // After the recall: the party and Ginnem, who stays until Yuna sends her (D-076).
+    const v = figures('victory', 390, 844, rigs);
+    for (const id of ['lulu', 'kimahri', 'yuna', 'ginnem']) expect(onScreen(v[id]!, 390, 844), `victory ${id}`).toBe(true);
   });
 
   it('keeps every figure clear of every other one', () => {
@@ -225,12 +299,4 @@ describe('cavern-stolen-fayth — reading the staged figures', () => {
     expect(victoryStruck(root)).toBe(true);
   });
 
-  it('scales a figure about its feet', () => {
-    const d = fig(CAVERN_IDS.daigoro);
-    d.position.set(3, 0, 1);
-    scaleFigure(d, DAIGORO_SCALE);
-    expect(d.scale.x).toBeCloseTo(DAIGORO_SCALE, 9);
-    expect(d.scale.y).toBeCloseTo(DAIGORO_SCALE, 9);
-    expect(d.position.toArray()).toEqual([3, 0, 1]);
-  });
 });

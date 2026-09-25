@@ -1,0 +1,14 @@
+{
+ "img": "preA.png",
+ "mask": "maskA.png",
+ "denoise": 0.62,
+ "seed": 560102,
+ "positive": "1boy, seymour guado, final fantasy x, safe, solo, male focus, light blue hair, very long hair, dark blue robe, red trim, high collar, macalania temple antechamber interior, tall arched windows of translucent glowing blue ice, carved ice pillars, gold metalwork set into the ice, warm gold brazier light glowing through the ice walls, cold blue light, soft bokeh background, depth of field, blurry background, cinematic lighting, official art, cel shading, soft shading, vibrant colors, rim lighting, detailed, masterpiece, high score, great score, absurdres",
+ "negative": "lowres, bad anatomy, text, error, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, artist name, multiple boys, 2boys, extra person, house, rooftop, roof, village, building exterior, window frame, lantern, night sky, stars, city, city lights, outdoors, sky, snow, orange bokeh, crystal spire, chandelier, diamond, gem",
+ "model": "animagine-xl-4.0-opt.safetensors",
+ "steps": 30,
+ "cfg": 6,
+ "sampler": "euler_ancestral",
+ "scheduler": "normal",
+ "seconds": 13.271
+}

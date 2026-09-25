@@ -1,0 +1,61 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-25T06:30:00.000Z",
+  "build": {
+    "mainSha": "1c22066e",
+    "bundle": "l_HXObKO",
+    "artifactHash": "9aa052b823fdb68eb990a67d63d4c94d0d28c7927fddef99ed61b416c1ff9e6d"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/1c22066e.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/a999d133.json --full (--full used because critic/pending/1c22066e.json names review: deep) => {result: PASS, artifactHash: 9aa052b823fdb68eb990a67d63d4c94d0d28c7927fddef99ed61b416c1ff9e6d, liveManifest: match, checked: 942, mismatched: [], missing: [], wrongType: [], errors: []}. Hash matches the pending marker's artifactHash and deploys.log's bundle=l_HXObKO."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "GPU Playwright (PYREFLY_BROWSER=gpu), renderer confirmed via WEBGL_debug_renderer_info as 'ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)'. Every capture gated on window.__pyrefly.screen()/battleState()/DOM text before use, not a raw timeout. FFX real flow 1: title -> real Enter -> briefing -> chapter-select (Chapter VII confirmed still a locked .fe-card--coming tile, 'Seymour and Anima Coming') -> real chapter select -> held real Enter (documented cutscene-skip) into Chapter I battle -> NEXT BEST MOVE card populated ('Hastega -> the party ... always hits + Haste') -> real Enter confirmed ATTACK, opening real target brackets on both enemies, screenshot shows the brackets clear of the NEXT BEST MOVE card (no overlap) -> real Escape cancelled back. FFX real flow 2: title -> chapter-select -> real selection of Chapter VIII (Evrae airship) -> held real Enter into battle -> first command menu (ORDERS/ATTACK/SPECIAL/WHITE MAGIC/ITEMS/FLEE) reached; screenshot shows Rikku standing clear of the menu, no overlap. FFX-2 real flow: title -> chapter-select -> real selection of Chapter V (Vegnagun/Shuyin) -> held real Enter into battle -> DEBUG SPEED-UP (labelled): window.__pyrefly.autoBattle('intended') used to clear link 1, per docs/DEV.md's documented debug API, not counted as the real-input assertion itself; real mid-fight state observed (Vegnagun HP drawn down from 4000, a Tail Beam hit on Yuna, Paine at low HP) but a character-banter line intercepted the real ATTACK keypress meant to bring up the Node markers, so the Node-marker top-edge framing was not captured cleanly this pass (UNVERIFIED, not FAIL; see notTested). Phone pause (390x844): a first-time Auron coach toast was found to claim the keyboard until dismissed with a real Enter (this is what made the first Escape/P attempts appear to do nothing); after dismissing it, a real P press (the documented KeyP pause binding in BattleScreen.ts) opened the phone pause; the Tidus tab's battle-stats column sits clear of the chapter caption band below it, no overlap. Console/network: 0 errors and 0 >=400 responses across every context for the whole run.",
+      "reason": "One of the six named smoke items (Chapter V Node markers at aim) could not be captured cleanly within this pass's time budget; recorded honestly as UNVERIFIED under coverage rather than asserted PASS or FAIL. Nothing observed suggests a break."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "A real save-backed setting (Settings.masterVolume) set to 0.37 via the live save object, then a full page reload. After reload, masterVolume read back 0.37 — the setting survived.",
+      "reason": "Lightweight smoke only, as the task scopes it: the full CHK-024 upgrade matrix (fresh/returning/migrating-save/invalid-storage/reset) is NOT tested here."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact-manifest verify-live, full set (942 files, byte-identical vs a999d133 baseline and vs the served bundle)",
+      "Chapter VII still a locked COMING card at chapter-select",
+      "Chapter I: title -> real Enter -> chapter-select -> real chapter selection -> held real Enter through the cutscene -> battle -> NEXT BEST MOVE card populated -> real ATTACK confirm opens target brackets clear of that card -> real Escape cancels back",
+      "Chapter VIII (Evrae airship): title -> chapter-select -> real chapter selection -> held real Enter -> battle -> first command menu reached with Rikku clear of it",
+      "Chapter V (Vegnagun/Shuyin): title -> chapter-select -> real chapter selection -> held real Enter -> battle; link 1 cleared via the documented autoBattle debug speed-up; real mid-fight state confirmed (Vegnagun HP down, Tail Beam damage, Paine banter)",
+      "Phone pause (390x844): first-time coach toast identified and dismissed with a real Enter; real P press opens the pause; Tidus tab's stat column clear of the chapter caption",
+      "a real save-backed setting (masterVolume) surviving a full page reload",
+      "console errors and >=400 responses across the whole run"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full CHK-024 upgrade matrix (fresh/returning/migrating-save/invalid-storage/reset)",
+      "a physical controller and Safari",
+      "Chapter V's Node markers specifically framed at the top edge while aiming at a Node -- a character-banter line intercepted the real ATTACK press meant to trigger it; UNVERIFIED, not attempted again within this pass's time budget",
+      "the phone pause's CHAPTER tab specifically (named in phoneFit.ts's own R13-05 note as a location that previously overran) -- only the Tidus tab was checked",
+      "an explicit audioDebug() read confirming prerendered (not synth) audio on this exact build -- no audio-affecting file is in this build's changed-file list, so this is a low-risk gap rather than a disclosed defect",
+      "real H hide/restore of the phone pause panels on this build (checked on a prior build's shared plumbing, not re-confirmed here since pause-phone.css is in this build's changed-file list)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 50
+}

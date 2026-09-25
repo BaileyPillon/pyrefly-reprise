@@ -50,15 +50,19 @@ export const FARPLANE_PART_ANCHORS: PartAnchors = {
  * formation holds, so it fell to `ENEMY_SLOTS[0]`, which is solved for the
  * tail: at 1600x900 (GPU, seed 1, first menu) it ran x 479..1124, right behind
  * Rikku and Paine, and the Right Bulwark's ring and bracket landed on the
- * party. This spot is the live build's frame (76f587c3): live stood the body
- * at x 5.75..5.82, z -10 and `ProneLay` slid its wide painting +1.38 along the
- * floor, so the painting was drawn centred on x 7.13..7.20. A pinned figure is
- * never slid (`layProneFigures`), so the spot is where the painting is drawn.
- * Where the Left Bulwark's ring should sit relative to the command window is
- * an open question for Bailey: `docs/concepts/layout/ch5-vegnagun-staging/`.
+ * party. A pinned figure is never slid (`layProneFigures`), so the spot is
+ * where the painting is drawn.
+ *
+ * Bailey picked option C of `docs/concepts/layout/ch5-vegnagun-staging/` on
+ * 2026-09-25 ("I'll go with all your recommendations"): 4.35 left of live's
+ * frame (76f587c3, drawn centred on x ~7.15) and 2 deeper, so the Left
+ * Bulwark's ring and name plate, which ride the far leg's foot, stand clear of
+ * the FFX-2 command window instead of under it (measured at 1600x900 in the
+ * option sheet: ring x 1073-1153 against the window's 1246; the Body about 8%
+ * smaller than live's). Staging, not game data.
  */
 export const FARPLANE_ENEMY_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  'vegnagun-body': [7.15, 0, -10.0],
+  'vegnagun-body': [2.8, 0, -12.0],
 };
 
 /** What `buildFarplaneScene` publishes onto its `SceneBuild` (`SceneStaging`). */

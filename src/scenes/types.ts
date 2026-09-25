@@ -148,6 +148,13 @@ export interface SceneStaging {
    * (Yunalesca, Chapter 2: the spot live's relaxation settled her on).
    */
   readonly enemySpots?: Readonly<Record<string, [number, number, number]>>;
+  /**
+   * A world height for a named combatant, overriding the stage's rule
+   * (`BattlePresenterArt.worldHeightFor`: every non-boss fiend at 0.7 of the
+   * boss height). Its shadow and turn ring shrink with it. For a companion the
+   * rule would stand as tall as the party (Daigoro, Chapter IX).
+   */
+  readonly figureHeights?: Readonly<Record<string, number>>;
 }
 
 /** The staging switches a build set, and only those. */
@@ -158,6 +165,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.figureBloomMaskArt) out.figureBloomMaskArt = build.figureBloomMaskArt;
   if (build.holdParty) out.holdParty = true;
   if (build.enemySpots) out.enemySpots = build.enemySpots;
+  if (build.figureHeights) out.figureHeights = build.figureHeights;
   return out;
 }
 

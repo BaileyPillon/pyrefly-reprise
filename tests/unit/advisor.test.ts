@@ -241,7 +241,7 @@ describe('buildAdvisorView — agreement with the shipped tactic', () => {
     'Lunar Curtain',
     'Protect',
     'Shell',
-    'Talk',
+    'Talk', 'Holy Water', // formula none, cures Zombie / Curse: nothing to number (reached on seed 4 since PR-0155)
     'Defend',
     // Added 2026-09-19 with Chapter 1's phase-2 Dispel rung (§6 row 8): Dispel
     // takes a status off and deals nothing, so a figure on it would be

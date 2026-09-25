@@ -197,6 +197,26 @@ function incoming(intent: AdvisorIntent | null): Map<CombatantId, { amount: numb
 }
 
 /**
+ * The `incoming` fact in plain words: what the move does and roughly how hard.
+ *
+ * It read "Daigoro is worth about 552" (Chapter IX's end-to-end), which is the
+ * scorer's language, not the player's: the forecast is the damage the move
+ * deals, so the sentence says that ("Daigoro bites for about 550"). "About"
+ * keeps two significant figures, since the forecast is a roll's middle and the
+ * last digit was false precision; the fact's `value` stays exact for
+ * `tests/unit/advisor-sentence.test.ts`. A move that lands on several targets
+ * says the total is a total. Daigoro is Yojimbo's dog, so he bites; every
+ * other move hits. Both games: the advisor's wording is shared.
+ */
+export function incomingText(move: string, total: number, targets: number): string {
+  const verb = move === 'Daigoro' ? 'bites' : 'hits';
+  const n = Math.round(total);
+  const step = n < 100 ? 1 : 10 ** (Math.floor(Math.log10(n)) - 1);
+  const about = (Math.round(n / step) * step).toLocaleString('en-US');
+  return targets > 1 ? `${move} ${verb} for about ${about} in all` : `${move} ${verb} for about ${about}`;
+}
+
+/**
  * Price one candidate against what is coming, and say what was proved.
  *
  * @param intent the **pre-action** forecast, taken once for the decision. Every
@@ -256,7 +276,7 @@ export function evaluate(
     if (total > 0) {
       facts.push({
         kind: 'incoming',
-        text: `${intent?.moveName ?? 'the next move'} is worth about ${Math.round(total)}`,
+        text: incomingText(intent?.moveName ?? 'the next move', total, coming.size),
         value: Math.round(total),
         source: 'forecast',
       });

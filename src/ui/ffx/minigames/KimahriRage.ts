@@ -2,6 +2,7 @@ import type { AbilityId, MinigameResult } from '../../../battle/common/types.ts'
 import { RawInputWatcher } from '../rawInput.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../cancelClaim.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
+import { ABILITIES } from '../../../data/ffx/index.ts';
 import { arr, escapeHtml, MinigameCancelled } from './params.ts';
 
 interface RageEntry {
@@ -12,11 +13,37 @@ interface RageEntry {
 }
 
 /**
+ * One `rages` entry as the engine sends it, made into a row.
+ *
+ * The engine's `minigameParams` (`battle/ffx/overdrive.ts`) publishes
+ * `rages: user.overdrive.unlockedOverdriveIds`, a list of **ability ids**, and
+ * this picker was written against `{ id, name }` rows (the HUD demo's
+ * fixture). So every real Ronso Rage handed `escapeHtml` an `undefined` name,
+ * the overlay threw, and the presenter fell back to re-submitting the command
+ * bare (Chapter IX's end-to-end: Doom only landed through that fallback). The
+ * id is the contract; the name comes from the ability table, the same place
+ * the command menu reads it. A full row (the demo) is kept as it is. FFX only.
+ */
+function rageEntry(raw: unknown): RageEntry | null {
+  if (typeof raw === 'string') return raw ? { id: raw, name: ABILITIES[raw]?.name ?? raw } : null;
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Partial<RageEntry>;
+  if (typeof r.id !== 'string' || !r.id) return null;
+  return { ...r, id: r.id, name: typeof r.name === 'string' && r.name ? r.name : (ABILITIES[r.id]?.name ?? r.id) };
+}
+
+/**
  * Kimahri — Ronso Rage [visual-bible §3.11.7]: no timed input, a plain
  * ability list of every Rage learned via Lancet.
+ *
+ * The cursor opens on the Rage the command menu already chose
+ * (`params.abilityId`), so the confirm that closes this list keeps that choice
+ * rather than quietly swapping it for the first Rage learned.
  */
 export function openKimahriRage(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
-  const rages = arr<RageEntry>(params['rages'], []);
+  const rages = arr<unknown>(params['rages'], [])
+    .map(rageEntry)
+    .filter((r): r is RageEntry => r !== null);
 
   const overlay = new OverdriveOverlay();
   root.appendChild(overlay.el);
@@ -31,7 +58,7 @@ export function openKimahriRage(root: HTMLElement, params: Record<string, unknow
   const listEl = overlay.bodyEl.querySelector<HTMLElement>('[data-role="list"]')!;
 
   return new Promise<MinigameResult>((resolve, reject) => {
-    let cursor = 0;
+    let cursor = Math.max(0, rages.findIndex((r) => r.id === params['abilityId']));
     let settled = false;
 
     const render = (): void => {

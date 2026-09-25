@@ -173,15 +173,16 @@ describe("PR-0002 A: Yuna's slot (FFX only, Chapter 2)", () => {
 });
 
 describe("Vegnagun's body stands on its own spot at link 3 (FFX-2 only)", () => {
-  it("is pinned where live drew it (76f587c3), not the tail's slot, and published with the anchors", () => {
+  it("is pinned on option C's spot (Bailey, 2026-09-25), not the tail's slot, and published with the anchors", () => {
     const body = FARPLANE_ENEMY_SPOTS['vegnagun-body']!;
-    // Live stood it at x 5.75..5.82 and slid the wide painting +1.38 (ProneLay); a pin is never slid.
-    expect(body).toEqual([7.15, 0, -10.0]);
-    expect(body[0]).toBeGreaterThanOrEqual(5.75 + 1.38);
-    expect(body[0]).toBeLessThanOrEqual(5.82 + 1.38);
-    // Well right of and behind the tail's slot [0.8, 0, -5.0], where it stood behind Rikku and Paine.
-    expect(body[0]).toBeGreaterThan(0.8 + 4);
-    expect(body[2]).toBeLessThan(-5.0 - 4);
+    // docs/concepts/layout/ch5-vegnagun-staging/ option C: left of live's frame (drawn at x ~7.15, z -10)
+    // so the Left Bulwark's ring and plate clear the FFX-2 command window, and deeper, so a little smaller.
+    expect(body).toEqual([2.8, 0, -12.0]);
+    expect(body[0]).toBeLessThan(7.15 - 4);
+    expect(body[2]).toBeLessThan(-10.0);
+    // Still right of and well behind the tail's slot [0.8, 0, -5.0], where it stood behind Rikku and Paine.
+    expect(body[0]).toBeGreaterThan(0.8 + 1.5);
+    expect(body[2]).toBeLessThan(-5.0 - 6);
     expect(FARPLANE_STAGING.enemySpots).toBe(FARPLANE_ENEMY_SPOTS);
     expect(FARPLANE_STAGING.partAnchors).toBe(FARPLANE_PART_ANCHORS);
     // Pinned by combatant id, never by an anchored part's id.

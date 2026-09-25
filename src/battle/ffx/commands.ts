@@ -199,8 +199,11 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     }
   }
 
-  // Items.
-  for (const [itemId, count] of ctx.rt.inventory) {
+  // Items. Party members only: an aeon's menu is Attack, its Special / Magic,
+  // Overdrive, Shield, Boost and Dismiss, with no Item row [ffx-combat-core
+  // §6.2, §6.3, from ffx_command.csv], and the party's items cannot even be
+  // aimed at one (§6.1). FFX only (PR-0155).
+  for (const [itemId, count] of user.side === 'aeon' ? [] : ctx.rt.inventory) {
     if (count <= 0) continue;
     const item = ctx.content.item(itemId);
     const effect = ctx.content.itemEffect(itemId);

@@ -94,6 +94,12 @@ export interface CameraPort {
   hold?(on: boolean): void;
   /** True while `hold(true)` is engaged. Optional and additive, as `hold`. */
   readonly holding?: boolean;
+  /**
+   * Register (or replace) a rig at run time, world units. Optional and
+   * additive: the `'body'` departure frames a body where it actually lies
+   * (`BattlePresenterDepartures.ts`, `BODY_SHOT`); `BattleCamera.addRig`.
+   */
+  addRig?(name: string, rig: { position: [number, number, number]; lookAt: [number, number, number]; fov?: number; sway?: number }): void;
   readonly rigNames: string[];
   readonly rigName: string;
 }

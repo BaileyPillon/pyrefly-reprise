@@ -1,0 +1,10 @@
+G=D:/Tools/pyrefly-scratch/ch1215/gippal/gen.sh
+R=D:/Tools/pyrefly-scratch/ch1215/gippal/renders
+BAR="1boy, solo, baralai, final fantasy x-2, safe, male focus, young man, dark skin, brown eyes, calm serious face, short silver hair styled in a quiff, blue headband, high collar rising to his chin, long green priest coat with yellow trim that stops at the knee, orange panels with gold glyphs on the chest, black and white panels with gold glyphs on the lower coat, dark trousers, boots, holding a long slender staff, full body"
+BPOSE="standing upright and calm, holding a long slender staff upright in one hand beside him, other arm lowered at his side, sorrowful, looking at viewer"
+BNEG="sword, gun, 1girl, long hair, wings, cape, hood, hat, helmet, glasses, eyepatch, pale skin, white skin, blond hair, red coat, blue coat, background, scenery, 2boys, chibi, huge weapon, floating objects"
+bash $G character --name baralai-shade --pose idle --facing left --tags "$BAR" --poseTags "$BPOSE" --negAdd "$BNEG" --seed 961101 --batch 4 --out $R/baralai.png
+NOOJ="1boy, solo, nooj, final fantasy x-2, safe, male focus, adult man, very tall, masculine angular face, brown hair, long hair in two loops and a ponytail, red hair tie, blue eyes, blue-tinted glasses, red bodysuit, red and black belts across the chest and legs, purple fur-trimmed sleeve on his right shoulder, grey fur, mechanical prosthetic left arm, machina metal arm, mechanical prosthetic left leg, purple boots, long silver cane in his right hand, full body"
+NPOSE="standing tall, leaning lightly on a long silver cane held in his right hand, metal left arm lowered, calm, serious, looking at viewer"
+NNEG="sword, gun, 1girl, wings, cape, hood, hat, helmet, eyepatch, sunglasses, black glasses, blonde hair, short hair, red hair, beard, breastplate, plate armor, background, scenery, 2boys, chibi, huge weapon, floating objects"
+bash $G character --name nooj-shade --pose idle --facing left --tags "$NOOJ" --poseTags "$NPOSE" --negAdd "$NNEG" --seed 962101 --batch 4 --ref "D:/Final Fantasy/public/art/portraits/nooj.png" --out $R/nooj.png

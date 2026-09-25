@@ -1,0 +1,63 @@
+{
+ "width": 1200,
+ "title": "Chapter XII Seymour Omnis: production candidates (FFX only)",
+ "question": "Bailey 2026-09-25: \"I'll go with all your recommendations\". O-1 A, O-2 B (painted discs), O-3 C (violet), portrait B17 c. Six files installed as CANDIDATES under new ids; none judged independently, none approved, nothing in src loads them yet.",
+ "rec": "Ring order on the discs = OUR ESTIMATE (B8): clockwise Fire, Water, Ice, Thunder. The look-only pass saw a different order in one game screenshot (panel 6, last disc). B8 still needs your word.",
+ "blocks": [
+  {
+   "head": "In a real 1600x900 frame"
+  },
+  {
+   "key": "1",
+   "cap": "Idle, opening state: all four discs show Fire toward him (lit quarter, gold rim). Chapter III staging, HUD leftovers are Chapter III's",
+   "img": "D:/Final Fantasy/docs/concepts/chapters/omnis/production/battle-1600.jpg"
+  },
+  {
+   "key": "2",
+   "cap": "Hero cast (every spell, Dispel, Ultima): both clawed arms lift 20 degrees. Idle pixels moved, nothing repainted",
+   "img": "D:/Final Fantasy/docs/concepts/chapters/omnis/production/cast-1600.jpg"
+  },
+  {
+   "key": "3",
+   "cap": "One disc turned 90 degrees (upper left): the painted disc turns under a fixed facing layer, so Thunder now faces him",
+   "img": "D:/Final Fantasy/docs/concepts/chapters/omnis/production/turned-1600.jpg"
+  },
+  {
+   "head": "What changed from the picked options, at 1:1"
+  },
+  {
+   "key": "4",
+   "cap": "Idle repair, options cut-out (left) vs installed (right): the white pocket under his arm is open; the pale strips are whole",
+   "img": "D:/Tools/pyrefly-scratch/ch1215/omnis/look/sheet-idle-repair.jpg"
+  },
+  {
+   "key": "5",
+   "cap": "Idle (left) and cast (right) at the same pixel scale",
+   "img": "D:/Tools/pyrefly-scratch/ch1215/omnis/look/sheet-idle-cast.jpg"
+  },
+  {
+   "key": "6",
+   "cap": "Disc, facing layer, the two together, and (not installed) the order the look-only pass saw: Fire, Thunder, Water, Ice clockwise",
+   "img": "D:/Tools/pyrefly-scratch/ch1215/omnis/look/sheet-discs.jpg"
+  },
+  {
+   "key": "7",
+   "cap": "Garden plate before (top) and after (bottom): steps up to a dais, the one sourced Garden fact; 3.2 % of the plate changed",
+   "img": "D:/Tools/pyrefly-scratch/ch1215/omnis/look/sheet-steps.jpg"
+  },
+  {
+   "head": "Speaker portrait"
+  },
+  {
+   "key": "8",
+   "cap": "New Omnis portrait (left) and the approved Macalania portrait it falls back to (right)",
+   "img": "D:/Tools/pyrefly-scratch/ch1215/omnis/look/sheet-portrait.jpg"
+  },
+  {
+   "key": "9",
+   "cap": "The portrait in the dialogue card over the Garden plate (Chapter VII's line and label are leftovers)",
+   "img": "D:/Final Fantasy/docs/concepts/chapters/omnis/production/dialogue-1600.jpg"
+  }
+ ],
+ "stamp": "CANDIDATE"
+}
