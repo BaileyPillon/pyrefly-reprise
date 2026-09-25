@@ -64,7 +64,7 @@ import {
 } from './gauges.ts';
 import type { ResolveContext } from './resolve.ts';
 import { buildCommands, type MenuContext } from './targeting.ts';
-import { aiContextFor, berserkTurnCommand, notifyEnemiesDamaged, notifyEnemiesTargeted, payStatusClocks } from './engineHooks.ts';
+import { aiContextFor, berserkTurnCommand, payStatusClocks, runAfterActionHooks } from './engineHooks.ts';
 import { buildState, inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
@@ -494,9 +494,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       abilities: this.abilities,
       rng: this.rng,
       emit: (e) => this.emit(e),
-      // Break Damage Limit from an accessory or a Garment Grid gate, cached on
-      // the girl when her gate bonuses were last recomputed.
-      breaksDamageLimit: (unit) => unit.aiMemory?.['bdl'] === true,
+      breaksDamageLimit: (unit) => unit.aiMemory?.['bdl'] === true, // cached at her last gate recompute
+      timedAilmentDefaults: this.battleState.flags['timedAilmentDefaults'] === true, // `setup.ts`, from the group
     };
   }
 
@@ -585,19 +584,13 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     performCommand(this.env(), unit, command, true);
   }
 
-  /** Tell every enemy this action hit that it was hit (`notifyEnemiesDamaged`). */
-  private notifyDamaged(startedAt: number, actor: Ffx2Unit): void {
-    notifyEnemiesDamaged(this.drafts.slice(startedAt), actor, this.units, (u) => this.aiContext(u));
-    notifyEnemiesTargeted(this.drafts.slice(startedAt), actor, this.units, (u) => this.aiContext(u));
-  }
-
-  /** Post-action bookkeeping: AI hooks, then story triggers and battle end. */
+  /** Post-action bookkeeping: AI hooks (`runAfterActionHooks`), then story triggers and battle end. */
   private afterAction(actor: Ffx2Unit, startedAt: number): void {
-    this.notifyDamaged(startedAt, actor);
-    for (const unit of this.units) {
-      if (unit.side !== 'enemy') continue;
-      aiScriptFor(unit.enemy?.aiScriptId).onTurnResolved?.(this.aiContext(unit), actor);
-    }
+    const cls = this.battleState.flags['lastAttackClass'];
+    runAfterActionHooks(() => this.drafts.slice(startedAt), actor, {
+      units: this.units, abilities: this.abilities, attackClass: typeof cls === 'string' ? cls : 'none',
+      aiContext: (u) => this.aiContext(u), resolveCtx: () => this.resolveCtx(), emit: (e) => this.emit(e),
+    });
     this.flushSignal(startedAt, actor);
   }
 

@@ -148,7 +148,32 @@ describe('evrae-airship-deck: framing, measured through a real camera', () => {
     expect(f.fov).toBeGreaterThanOrEqual(n.fov);
   });
 
-  it('hides the painted rail behind the deck edge at every idle rig (the rolled plane)', () => {
+  it('shoots NEAR’s enemy rig from the party’s right: Tidus out of frame, Wakka, Rikku and Evrae’s head in it', () => {
+    // R13-04 repair: from the old spot Tidus stood in the foreground over Wakka, and a
+    // downed Rikku lay under the party-status panel. Boxes are each figure's painting
+    // (heights as staged, widths as measured in the browser), at 1600x900 and 2000x1012.
+    const r = RANGE_STAGING.near.rigs.enemy;
+    const figures = { tidus: 1.12, wakka: 1.03, rikku: 0.96 } as const;
+    for (const aspect of [16 / 9, 2000 / 1012]) {
+      const cam = camFor(r);
+      cam.aspect = aspect;
+      cam.updateProjectionMatrix();
+      const at = (id: keyof typeof figures): ReturnType<typeof box> =>
+        box(cam, SLOTS.party[['tidus', 'wakka', 'rikku'].indexOf(id)]!, figures[id], H[id]);
+      expect(at('tidus').r, `tidus at ${aspect.toFixed(2)}`).toBeLessThan(0);
+      for (const id of ['wakka', 'rikku'] as const) {
+        expect(at(id).l, `${id} at ${aspect.toFixed(2)}`).toBeGreaterThan(0);
+        expect(at(id).r, `${id} at ${aspect.toFixed(2)}`).toBeLessThan(0.5);
+      }
+      const near = RANGE_STAGING.near.evrae;
+      const head = new Vector3(near[0], near[1] + H.evrae * (1 - 175 / 784), near[2]).project(cam);
+      expect((head.x + 1) / 2).toBeGreaterThan(0.3);
+      expect((head.x + 1) / 2).toBeLessThan(0.6);
+      expect((1 - head.y) / 2).toBeLessThan(0.5);
+    }
+  });
+
+  it('hides the painted rail behind the deck edge at every range rig and the intro (the rolled plane)', () => {
     // The painting's rail, in image fractions, rotated by the roll about the plane's centre.
     const Hp = (BACKDROP.width * 1536) / 2688;
     const rot = (x: number, y: number): [number, number] => [
@@ -159,7 +184,8 @@ describe('evrae-airship-deck: framing, measured through a real camera', () => {
     const b = rot(BACKDROP.width / 2, Hp * (0.5 - 0.57));
     expect(Math.abs(a[1] - b[1])).toBeLessThan(0.5); // level after the roll
     const railTop = BACKDROP.centreY + Math.max(a[1], b[1]) + 1.6; // + the rail's half thickness
-    for (const r of [RANGE_STAGING.near.rigs.idle, RANGE_STAGING.far.rigs.idle, RIGS['intro']!]) {
+    // Every range rig (idle, action, enemy), not only the idle ones: the enemy rig moved (R13-04 repair).
+    for (const r of [...Object.values(RANGE_STAGING.near.rigs), ...Object.values(RANGE_STAGING.far.rigs), RIGS['intro']!]) {
       const [, py, pz] = r.position as [number, number, number];
       // Sightline over the deck's far edge, continued to the painting plane.
       const t = (BACKDROP.distance - pz) / (DECK.edgeZ - pz);

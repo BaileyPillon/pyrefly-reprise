@@ -182,7 +182,17 @@ export const RANGE_STAGING: Readonly<Record<AirshipRange, RangeStaging>> = {
     rigs: {
       idle: { position: [-0.5, 1.45, 9.4], lookAt: [0.9, 1.75, -3.0], fov: 34 },
       action: { position: [-0.2, 1.4, 8.4], lookAt: [1.4, 1.8, -3.2], fov: 34, sway: 0.7 },
-      enemy: { position: [0.6, 1.3, 6.2], lookAt: [2.2, 1.9, -5.0], fov: 34, sway: 0.7 },
+      /**
+       * The boss's own shot (reveal, impacts, its turns), from the party's
+       * right. R13-04 option B stands the party at the rail in front of Evrae,
+       * and the old spot [0.6, 1.3, 6.2] -> [2.2, 1.9, -5.0] put Tidus in the
+       * foreground over Wakka (0.28-0.31 of him clear) and a downed Rikku under
+       * the party-status panel. From here Tidus is out of frame, Wakka and Rikku
+       * stand clear, a downed Rikku lies left of the panel, and 0.89-0.90 of
+       * Evrae's box is clear (1600x900 and 2000x1012). Low enough (y 1.3 at
+       * z 5.5) that the painted rail stays behind the deck edge.
+       */
+      enemy: { position: [6.2, 1.3, 5.5], lookAt: [3.0, 1.9, -5.0], fov: 34, sway: 0.7 },
     },
     haze: 0.0,
     wind: 1.0,

@@ -139,3 +139,7 @@ Scratch is in `D:/Tools/pyrefly-scratch/ch1215/isaaru-art/`.
 My first scratch folder, `ch1215/isaaru/`, was emptied by someone else at about 00:32 EDT while I was
 working. It was probably another chapter agent's cleanup under the same key. Nothing installed was
 affected, and the frames were re-rendered.
+
+## Hero plate installed, 2026-09-25 (FFX only, Chapter XIV)
+
+Bailey, 2026-09-25 ~10:20 EDT, verbatim: "I'll go with all your recommendations". Option B of `hero-plate/README.md` installed as `public/art/pause/ch14-isaaru-via-purifico.png` (sha `1e2d6f56a1b1`) with its RealESRGAN `.2x.webp` master and `.json` sidecar; locked in set `bailey:2026-09-25-recommendations`. The chapter lives on branch `chapter-isaaru-0925` with no `ChapterMeta`. **Ship step:** its `ChapterMeta` names `heroArt: 'pause/ch14-isaaru-via-purifico'`.

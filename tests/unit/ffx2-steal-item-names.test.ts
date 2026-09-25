@@ -20,6 +20,7 @@ import {
   itemRegistryFrom,
 } from '../../src/battle/ffx2/index.ts';
 import { readableItemId } from '../../src/battle/ffx2/steal.ts';
+import { UNSOURCED_PRICE_IDS } from '../../src/data/ffx2/items/held.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
 
@@ -77,9 +78,36 @@ describe('FFX-2 steal rewards resolve to named items (FFX-2 only)', () => {
     expect(effect.power * 50).toBe(450);
   });
 
-  it('a gap would still read as words, not an id', () => {
+  it("Supreme Gem (Paragon's steal) is the sourced thrown item: 2,500 to all, non-elemental, sells for 250", () => {
+    const item = data.ITEMS['x2-supreme-gem']!;
+    expect(item.name).toBe('Supreme Gem');
+    expect(item.usableInBattle).toBe(true);
+    expect(item.usableInMenu).toBe(false);
+    expect(item.price).toBe(250);
+    expect(item.targeting).toBe('all-enemies');
+    const effect = data.ABILITIES[item.effect as string]!;
+    expect(effect.formula).toBe('fixed');
+    expect(effect.element).toEqual(['none']);
+    expect(effect.power * 50).toBe(2500);
+  });
+
+  it('a gap would still read as words, not an id; a one-letter word keeps its hyphen', () => {
     expect(readableItemId('x2-mute-shock')).toBe('Mute Shock');
     expect(readableItemId('snow-ring')).toBe('Snow Ring');
+    expect(readableItemId('x2-l-bomb')).toBe('L-Bomb');
+    expect(readableItemId('x-potion')).toBe('X-Potion');
+  });
+
+  it('Mute Shock carries all of its sourced text, "user can cast Silence" included', () => {
+    const d = data.ITEMS['x2-mute-shock']!.description!;
+    for (const part of ['Adds Silence to attacks', 'can cast Silence', 'Str -5', 'Mag +3']) expect(d).toContain(part);
+  });
+
+  it('a held price of 0 is flagged unsourced, never read as "never sold"; White Cape keeps its sourced 3,000', () => {
+    expect([...UNSOURCED_PRICE_IDS].sort()).toEqual(['potpourri', 'snow-ring', 'x2-chaos-shock', 'x2-fury-shock', 'x2-mute-shock']);
+    for (const id of UNSOURCED_PRICE_IDS) expect(data.ITEMS[id]!.price, id).toBe(0);
+    expect(UNSOURCED_PRICE_IDS.has('white-cape')).toBe(false);
+    expect(data.ITEMS['white-cape']!.price).toBe(3000);
   });
 
   it('on the real engine, stealing from Bahamut says "stole Mute Shock!"', () => {

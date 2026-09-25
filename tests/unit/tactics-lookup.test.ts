@@ -40,6 +40,7 @@ const OWN_TACTIC: Record<string, string> = {
   'seymour-anima-macalania': 'seymourAnimaMacalania',
   'evrae-airship': 'evrae',
   'yojimbo-cavern': 'yojimboCavern',
+  'ffx2-trema': 'ffx2Trema',
 };
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS];

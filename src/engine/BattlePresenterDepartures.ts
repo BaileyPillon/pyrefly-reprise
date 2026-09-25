@@ -27,6 +27,11 @@
  *   (`docs/concepts/chapters/yojimbo/decisions/README.md`); the class is
  *   Anima's row, "present the departure as a recall, not a death"
  *   (`research/ffx-vs-ffx2-presentation.md` §3.2). `BattlePresenterRecall.ts`.
+ * - **`'held'`, Paragon and Trema (FFX-2 only; Chapter XIII, O-2 yes).** Beaten, and left
+ *   standing: `research/ffx2-trema.md` §2 step 2, Paragon falls and Trema "destroys Paragon"
+ *   himself (the Cloister 100 scene plays that, `src/scenes/cloister-100-link.ts`); step 4,
+ *   Trema is beaten, answers Yuna, and "fades away" (the post scene). Neither is sent at the
+ *   blow: the figure takes its standing painting, dims, and stays.
  *
  * Everything else keeps `'dissolve'`. The kind is a presenter-side table keyed
  * by combatant id (an enemy's combatant id is its `EnemyDef.id`,
@@ -51,7 +56,7 @@ import type { ActorHandle, Point3 } from './BattlePresenterPorts.ts';
 import { ACTOR_ANIM_GRACE_MS, type EventCtx } from './BattlePresenterEvents.ts';
 import { RECALL_MS, recall } from './BattlePresenterRecall.ts';
 
-export type DepartureKind = 'dissolve' | 'falls-away' | 'yields' | 'body' | 'dismissed';
+export type DepartureKind = 'dissolve' | 'falls-away' | 'yields' | 'body' | 'dismissed' | 'held';
 
 /** Who leaves the field some other way than being sent. Keyed by combatant id. */
 export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind>>> = {
@@ -72,6 +77,9 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   // decision sheet: "Yojimbo himself: no source describes how he leaves").
   // Daigoro goes with him (`RECALL_COMPANIONS`); Lady Ginnem has no KO and stays.
   yojimbo: 'dismissed',
+  // FFX-2, Chapter XIII: research/ffx2-trema.md §2 steps 2 and 4 (see the module note).
+  paragon: 'held',
+  trema: 'held',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {
@@ -165,6 +173,11 @@ function bodyShot(ctx: EventCtx, actor: ActorHandle): string | null {
   cam.addRig(BODY_RIG, { position: plus(BODY_SHOT.from), lookAt: plus(BODY_SHOT.at), fov: BODY_SHOT.fov, sway: BODY_SHOT.sway });
   return BODY_RIG;
 }
+
+/** Held, in milliseconds at timeScale 1: the dim where it stands. Ours, like every timing here. */
+export const HELD_MS = 480;
+/** How dim a held figure stays (brightness multiplier): beaten, still there. */
+export const HELD_DIM = 0.55;
 
 /** How dim a yielding figure gets before it steps back (brightness multiplier). */
 export const YIELD_DIM = 0.45;
@@ -281,6 +294,26 @@ async function yields(ctx: EventCtx, actor: ActorHandle, b: Budget): Promise<voi
 }
 
 /**
+ * The mark a held figure carries, read structurally (the `scaleOf` trick: this file stays on the
+ * headless side of the `three` line) off a `PaintedActor`'s `userData`. A scene keys a beat on it:
+ * Cloister 100 breaks a held Paragon only once it has really been beaten.
+ */
+export const HELD_MARK = 'departure:held';
+
+/** Beaten and left standing: the standing painting, a pale flash, a dim, and it stays. */
+async function held(actor: ActorHandle, b: Budget): Promise<void> {
+  const data = (actor as unknown as { userData?: Record<string, unknown> }).userData;
+  if (data) data[HELD_MARK] = true;
+  actor.setPose('hurt', { force: true });
+  actor.flash(0xdfe8ff, 260, 0.5);
+  const steps = 6;
+  for (let i = 1; i <= steps; i++) {
+    actor.setBrightness(1 - (1 - HELD_DIM) * (i / steps));
+    await b.sleep(HELD_MS / steps);
+  }
+}
+
+/**
  * Seymour falls and stays down: the KO state at his own station (the actor's
  * life layer drops the body, `PaintedActor.fall`), the plane rolled onto its
  * back (`lieDown`, he has no painted `ko`), a dark flash as a downed party
@@ -319,8 +352,12 @@ export async function depart(
     await recall(ctx, id, actor, budget(ctx, departureMs(kind)));
     return 'removed';
   }
-  if (!actor) return kind === 'body' ? 'stays' : 'removed';
+  if (!actor) return kind === 'body' || kind === 'held' ? 'stays' : 'removed';
   const b = budget(ctx, departureMs(kind));
+  if (kind === 'held') {
+    await held(actor, b);
+    return 'stays';
+  }
   if (kind === 'body') {
     await body(ctx, actor, b);
     return 'stays';
@@ -333,6 +370,7 @@ export async function depart(
 /** A departure's full length at timeScale 1, the outer guard's budget. */
 export function departureMs(kind: Exclude<DepartureKind, 'dissolve'>): number {
   if (kind === 'body') return BODY_MS + BODY_HOLD_MS;
+  if (kind === 'held') return HELD_MS;
   if (kind === 'dismissed') return RECALL_MS.dim + RECALL_MS.rise;
   return kind === 'falls-away' ? FALL_MS.lurch + FALL_MS.drop : YIELD_MS.dim + YIELD_MS.step;
 }

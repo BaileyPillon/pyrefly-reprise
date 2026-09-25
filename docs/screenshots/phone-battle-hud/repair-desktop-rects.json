@@ -1,0 +1,3328 @@
+{
+ "note": "HEAD b0e4bef0 vs the repair, gotoChapter seed 1, menu step; rp-head2 = HEAD run again, rp-new2 = repair run again (noise)",
+ "head": {
+  "seymour-flux@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 692171920,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1095.2,
+    99.5,
+    145.8,
+    301.3
+   ],
+   ".ig-cmd-stack": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ig-stat-list": [
+    805.3,
+    516.5,
+    428.4,
+    179.5
+   ],
+   ".ffx-sensor": [
+    853.3,
+    332,
+    237.4,
+    176
+   ],
+   ".sgd__toggle": [
+    40.4,
+    66,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    338.6,
+    51,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1133.5,
+    77.5,
+    104.2,
+    15
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    56.4,
+    269.9,
+    328.1,
+    38.1
+   ],
+   ".mad__card": [
+    324.4,
+    75.6,
+    219.1,
+    154.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MP",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-bahamut@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3097654914,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    519.8,
+    553,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1038.8,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    474,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    512.5,
+    578.8,
+    397,
+    89.3
+   ],
+   ".eint__panel": [
+    799.6,
+    59.7,
+    300,
+    185.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    474,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-vegnagun-shuyin@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3793669316,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    475.8,
+    555,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    984.9,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    477.9,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    468.5,
+    579,
+    440.9,
+    89
+   ],
+   ".eint__panel": [
+    745.8,
+    59.7,
+    300,
+    182.5
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    477.9,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Item",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "seymour-flux@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1102651545,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1368.9,
+    124.4,
+    182.2,
+    376.6
+   ],
+   ".ig-cmd-stack": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ig-stat-list": [
+    1006.7,
+    645.7,
+    535.5,
+    224.3
+   ],
+   ".ffx-sensor": [
+    1066.6,
+    415,
+    296.8,
+    220
+   ],
+   ".sgd__toggle": [
+    50.5,
+    82.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    423.5,
+    26.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1416.9,
+    96.9,
+    130.2,
+    18.8
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    70.5,
+    337.4,
+    410.1,
+    47.6
+   ],
+   ".mad__card": [
+    401.2,
+    54.1,
+    282.5,
+    233.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteIt puts Haste on the party, and Lance of Atrophy hits for about 760.",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-bahamut@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 11819092,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    772.5,
+    631.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1295.8,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    592.5,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    756.4,
+    659.9,
+    382.2,
+    175.1
+   ],
+   ".eint__panel": [
+    996.9,
+    74.6,
+    375,
+    231.4
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    592.5,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP100% to hit+ ShellInflicts ShellIt puts Shell on the party.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-vegnagun-shuyin@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3874696899,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    602.5,
+    658.8,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1229.4,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    597.4,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    589.2,
+    686.8,
+    549,
+    148.2
+   ],
+   ".eint__panel": [
+    930.5,
+    74.6,
+    375,
+    228.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    597.4,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Itemno MP100% to hit+ ProtectGrants Protect to the whole party.It puts Protect on the party, and Noli Me Tangere hits for about 3,700 in all.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "seymour-flux@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2316830391,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1639.7,
+    139.9,
+    204.9,
+    423.4
+   ],
+   ".ig-cmd-stack": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ig-stat-list": [
+    1232.4,
+    726,
+    602.2,
+    252.3
+   ],
+   ".ffx-sensor": [
+    1299.8,
+    466.6,
+    333.7,
+    247.4
+   ],
+   ".sgd__toggle": [
+    157.3,
+    92.8,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    577.2,
+    43.6,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1693.7,
+    109,
+    146.4,
+    21.1
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    179.7,
+    379.4,
+    461.2,
+    53.5
+   ],
+   ".mad__card": [
+    552.5,
+    69.1,
+    315.9,
+    254.1
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteIt puts Haste on the party, and Lance of Atrophy hits for about 760.",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "ffx2-bahamut@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1853889207,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    826.3,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1558.3,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    666.2,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    811.1,
+    774.7,
+    569,
+    164.2
+   ],
+   ".eint__panel": [
+    1222.2,
+    83.9,
+    421.7,
+    260.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    666.2,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP100% to hit+ ShellInflicts ShellIt puts Shell on the party.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "ffx2-vegnagun-shuyin@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2248362433,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    775.7,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1483.2,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    671.8,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    760.5,
+    774.7,
+    619.6,
+    164.2
+   ],
+   ".eint__panel": [
+    1147.1,
+    83.9,
+    421.7,
+    256.6
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    671.8,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Itemno MP100% to hit+ ProtectGrants Protect to the whole party.It puts Protect on the party, and Noli Me Tangere hits for about 3,700 in all.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "seymour-flux@844x390": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3306094017,
+   "#game > canvas": [
+    0,
+    0,
+    844,
+    390
+   ],
+   ".ffxhud__stage": [
+    75.3,
+    0,
+    693.3,
+    390
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    668.5,
+    53.9,
+    78.9,
+    163.2
+   ],
+   ".ig-cmd-stack": [
+    108.1,
+    192.7,
+    203.2,
+    169.4
+   ],
+   ".ig-stat-list": [
+    511.5,
+    279.8,
+    232.1,
+    97.2
+   ],
+   ".ffx-sensor": [
+    537.5,
+    179.8,
+    128.6,
+    95.3
+   ],
+   ".sgd__toggle": [
+    97.2,
+    35.7,
+    64.1,
+    11.4
+   ],
+   ".mad__toggle": [
+    258,
+    41.7,
+    122.8,
+    17.9
+   ],
+   ".eint__toggle": [
+    689.3,
+    42,
+    56.4,
+    8.1
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    105.9,
+    146.2,
+    177.7,
+    20.6
+   ],
+   ".mad__card": [
+    253.3,
+    62,
+    114.2,
+    62.5
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    108.1,
+    192.7,
+    203.2,
+    169.4
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "TidusHastega→the party",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    844,
+    390
+   ]
+  },
+  "ffx2-bahamut@844x390": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 612551575,
+   "#game > canvas": [
+    0,
+    0,
+    844,
+    390
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    75.3,
+    0,
+    693.3,
+    390
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    615.1,
+    181.1,
+    140.6,
+    82.8
+   ],
+   ".ig-stat-list": [
+    578,
+    281.7,
+    179.8,
+    97.5
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    97.2,
+    83.4,
+    64.1,
+    11.4
+   ],
+   ".mad__toggle": [
+    358.3,
+    296.3,
+    122.8,
+    17.9
+   ],
+   ".eint__toggle": [
+    639.2,
+    23.1,
+    33,
+    8.1
+   ],
+   ".ffx2hud__enemies": [
+    98.4,
+    44.4,
+    256.7,
+    33.6
+   ],
+   ".ffx2-cmd-info": [
+    75.3,
+    0,
+    693.3,
+    18.8
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    355.4,
+    316.6,
+    213.3,
+    45.3
+   ],
+   ".eint__panel": [
+    509.7,
+    32.3,
+    162.5,
+    100.3
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    615.1,
+    181.1,
+    140.6,
+    82.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    98.4,
+    44.4,
+    256.7,
+    20.6
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "YunaShell→the party",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    844,
+    390
+   ]
+  },
+  "ffx2-vegnagun-shuyin@844x390": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3732358823,
+   "#game > canvas": [
+    0,
+    0,
+    844,
+    390
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    75.3,
+    0,
+    693.3,
+    390
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    615.1,
+    181.1,
+    140.6,
+    82.8
+   ],
+   ".ig-stat-list": [
+    578,
+    281.7,
+    179.8,
+    97.5
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    97.2,
+    83.4,
+    64.1,
+    11.4
+   ],
+   ".mad__toggle": [
+    332.3,
+    296.3,
+    122.8,
+    17.9
+   ],
+   ".eint__toggle": [
+    610.6,
+    23.1,
+    33,
+    8.1
+   ],
+   ".ffx2hud__enemies": [
+    98.4,
+    44.4,
+    258.9,
+    33.6
+   ],
+   ".ffx2-cmd-info": [
+    75.3,
+    0,
+    693.3,
+    18.8
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    329.4,
+    316.6,
+    239.3,
+    45.3
+   ],
+   ".eint__panel": [
+    481.1,
+    32.3,
+    162.5,
+    98.9
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    615.1,
+    181.1,
+    140.6,
+    82.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    98.4,
+    44.4,
+    258.9,
+    20.6
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "YunaLight Curtain→the party",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    844,
+    390
+   ]
+  }
+ },
+ "repair": {
+  "seymour-flux@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 692171920,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1095.2,
+    99.5,
+    145.8,
+    301.3
+   ],
+   ".ig-cmd-stack": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ig-stat-list": [
+    805.3,
+    516.5,
+    428.4,
+    179.5
+   ],
+   ".ffx-sensor": [
+    853.3,
+    332,
+    237.4,
+    176
+   ],
+   ".sgd__toggle": [
+    40.4,
+    66,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    338.6,
+    51,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1133.5,
+    77.5,
+    104.2,
+    15
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    56.4,
+    269.9,
+    328.1,
+    38.1
+   ],
+   ".mad__card": [
+    324.4,
+    75.6,
+    219.1,
+    154.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    60.4,
+    355.7,
+    375.1,
+    312.8
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MP",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-bahamut@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3097654914,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    515.8,
+    553,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1038.2,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    474,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    508.5,
+    578.8,
+    401,
+    89.3
+   ],
+   ".eint__panel": [
+    799,
+    59.7,
+    300,
+    185.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    474,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-vegnagun-shuyin@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3793669316,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    477.8,
+    555,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    984.6,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    477.9,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    470.5,
+    579,
+    438.9,
+    89
+   ],
+   ".eint__panel": [
+    745.5,
+    59.7,
+    300,
+    182.5
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    477.9,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Item",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "seymour-flux@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1102651545,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1368.9,
+    124.4,
+    182.2,
+    376.6
+   ],
+   ".ig-cmd-stack": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ig-stat-list": [
+    1006.7,
+    645.7,
+    535.5,
+    224.3
+   ],
+   ".ffx-sensor": [
+    1066.6,
+    415,
+    296.8,
+    220
+   ],
+   ".sgd__toggle": [
+    50.5,
+    82.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    423.5,
+    26.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1416.9,
+    96.9,
+    130.2,
+    18.8
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    70.5,
+    337.4,
+    410.1,
+    47.6
+   ],
+   ".mad__card": [
+    401.2,
+    54.1,
+    282.5,
+    233.4
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    75.5,
+    444.6,
+    468.9,
+    391
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteIt puts Haste on the party, and Lance of Atrophy hits for about 760.",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-bahamut@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 4166133052,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    647.5,
+    681.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1297.8,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    592.5,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    636.7,
+    709.5,
+    501.7,
+    125.5
+   ],
+   ".eint__panel": [
+    998.8,
+    74.6,
+    375,
+    231.4
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    592.5,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP100% to hit+ ShellIt puts Shell on the party.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-vegnagun-shuyin@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3874696899,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    605,
+    658.8,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1229.1,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    597.4,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    591.7,
+    686.8,
+    546.5,
+    148.2
+   ],
+   ".eint__panel": [
+    930.2,
+    74.6,
+    375,
+    228.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    597.4,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Itemno MP100% to hit+ ProtectGrants Protect to the whole party.It puts Protect on the party, and Noli Me Tangere hits for about 3,700 in all.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "seymour-flux@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2316830391,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    1639.7,
+    139.9,
+    204.9,
+    423.4
+   ],
+   ".ig-cmd-stack": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ig-stat-list": [
+    1232.4,
+    726,
+    602.2,
+    252.3
+   ],
+   ".ffx-sensor": [
+    1299.8,
+    466.6,
+    333.7,
+    247.4
+   ],
+   ".sgd__toggle": [
+    157.3,
+    92.8,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    577.2,
+    43.6,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1693.7,
+    109,
+    146.4,
+    21.1
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    179.7,
+    379.4,
+    461.2,
+    53.5
+   ],
+   ".mad__card": [
+    552.5,
+    69.1,
+    315.9,
+    254.1
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    185.4,
+    499.9,
+    527.2,
+    439.6
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "Next best moveTidusHastega→the partyGuide’s pickin White Magic30 MPalways hits+ HasteIt puts Haste on the party, and Lance of Atrophy hits for about 760.",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "ffx2-bahamut@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1853889207,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    829.1,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1560.1,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    666.2,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    813.9,
+    774.7,
+    566.2,
+    164.2
+   ],
+   ".eint__panel": [
+    1223.9,
+    83.9,
+    421.7,
+    260.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    666.2,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP100% to hit+ ShellInflicts ShellIt puts Shell on the party.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "ffx2-vegnagun-shuyin@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3428988549,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    775.7,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1482.9,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    671.8,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    760.5,
+    774.7,
+    619.6,
+    164.2
+   ],
+   ".eint__panel": [
+    1146.7,
+    83.9,
+    421.7,
+    256.6
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    671.8,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Itemno MP100% to hit+ ProtectGrants Protect to the whole party.It puts Protect on the party, and Noli Me Tangere hits for about 3,700 in all.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "seymour-flux@844x390": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3306094017,
+   "#game > canvas": [
+    0,
+    0,
+    844,
+    390
+   ],
+   ".ffxhud__stage": [
+    75.3,
+    0,
+    693.3,
+    390
+   ],
+   ".ffx2hud__stage": null,
+   ".ig-ctb": [
+    668.5,
+    53.9,
+    78.9,
+    163.2
+   ],
+   ".ig-cmd-stack": [
+    108.1,
+    192.7,
+    203.2,
+    169.4
+   ],
+   ".ig-stat-list": [
+    511.5,
+    279.8,
+    232.1,
+    97.2
+   ],
+   ".ffx-sensor": [
+    537.5,
+    179.8,
+    128.6,
+    95.3
+   ],
+   ".sgd__toggle": [
+    97.2,
+    35.7,
+    64.1,
+    11.4
+   ],
+   ".mad__toggle": [
+    258,
+    41.7,
+    122.8,
+    17.9
+   ],
+   ".eint__toggle": [
+    689.3,
+    42,
+    56.4,
+    8.1
+   ],
+   ".ffx2hud__enemies": null,
+   ".ffx2-cmd-info": null,
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": [
+    105.9,
+    146.2,
+    177.7,
+    20.6
+   ],
+   ".mad__card": [
+    253.3,
+    62,
+    114.2,
+    62.5
+   ],
+   ".eint__panel": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ffx-cmd-area": [
+    108.1,
+    192.7,
+    203.2,
+    169.4
+   ],
+   ".ffx2hud__command": null,
+   ".ffx-zg": [
+    0,
+    0,
+    0,
+    0
+   ],
+   ".ig-bosshp": null,
+   ".ffx2-atbmode": null,
+   "madText": "TidusHastega→the party",
+   "hudKids": "phud-panel phud-shade ffxhud__stage ffxhud__stage ffxhud__overlay ig-surface phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    844,
+    390
+   ]
+  },
+  "ffx2-bahamut@844x390": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 612551575,
+   "#game > canvas": [
+    0,
+    0,
+    844,
+    390
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    75.3,
+    0,
+    693.3,
+    390
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    615.1,
+    181.1,
+    140.6,
+    82.8
+   ],
+   ".ig-stat-list": [
+    578,
+    281.7,
+    179.8,
+    97.5
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    97.2,
+    83.4,
+    64.1,
+    11.4
+   ],
+   ".mad__toggle": [
+    354,
+    296.3,
+    122.8,
+    17.9
+   ],
+   ".eint__toggle": [
+    639.4,
+    23.1,
+    33,
+    8.1
+   ],
+   ".ffx2hud__enemies": [
+    98.4,
+    44.4,
+    256.7,
+    33.6
+   ],
+   ".ffx2-cmd-info": [
+    75.3,
+    0,
+    693.3,
+    18.8
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    351.1,
+    316.6,
+    217.6,
+    45.3
+   ],
+   ".eint__panel": [
+    509.9,
+    32.3,
+    162.5,
+    100.3
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    615.1,
+    181.1,
+    140.6,
+    82.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    98.4,
+    44.4,
+    256.7,
+    20.6
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "YunaShell→the party",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    844,
+    390
+   ]
+  },
+  "ffx2-vegnagun-shuyin@844x390": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3732358823,
+   "#game > canvas": [
+    0,
+    0,
+    844,
+    390
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    75.3,
+    0,
+    693.3,
+    390
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    615.1,
+    181.1,
+    140.6,
+    82.8
+   ],
+   ".ig-stat-list": [
+    578,
+    281.7,
+    179.8,
+    97.5
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    97.2,
+    83.4,
+    64.1,
+    11.4
+   ],
+   ".mad__toggle": [
+    334.5,
+    296.3,
+    122.8,
+    17.9
+   ],
+   ".eint__toggle": [
+    610.2,
+    23.1,
+    33,
+    8.1
+   ],
+   ".ffx2hud__enemies": [
+    98.4,
+    44.4,
+    258.9,
+    33.6
+   ],
+   ".ffx2-cmd-info": [
+    75.3,
+    0,
+    693.3,
+    18.8
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    331.6,
+    316.6,
+    237.1,
+    45.3
+   ],
+   ".eint__panel": [
+    480.7,
+    32.3,
+    162.5,
+    98.9
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    615.1,
+    181.1,
+    140.6,
+    82.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    98.4,
+    44.4,
+    258.9,
+    20.6
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "YunaLight Curtain→the party",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    844,
+    390
+   ]
+  }
+ },
+ "head2": {
+  "ffx2-bahamut@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2076448980,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    531.8,
+    553,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    1037.7,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    474,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    524.5,
+    578.8,
+    385,
+    89.3
+   ],
+   ".eint__panel": [
+    798.6,
+    59.7,
+    300,
+    185.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    474,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-vegnagun-shuyin@1280x720": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 2181374621,
+   "#game > canvas": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1280,
+    720
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ig-stat-list": [
+    928,
+    520,
+    332,
+    180
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    40.4,
+    154,
+    118.3,
+    21
+   ],
+   ".mad__toggle": [
+    479.8,
+    555,
+    135.4,
+    21
+   ],
+   ".eint__toggle": [
+    984.1,
+    42.7,
+    60.8,
+    15
+   ],
+   ".ffx2hud__enemies": [
+    42.7,
+    82,
+    477.9,
+    62
+   ],
+   ".ffx2-cmd-info": [
+    68.2,
+    0,
+    1211.8,
+    34.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    472.5,
+    579,
+    436.9,
+    89
+   ],
+   ".eint__panel": [
+    745,
+    59.7,
+    300,
+    182.5
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    996.5,
+    334.3,
+    259.5,
+    152.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    42.7,
+    82,
+    477.9,
+    38
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Item",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1280,
+    720
+   ]
+  },
+  "ffx2-bahamut@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 11819092,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    775,
+    631.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1296.7,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    592.5,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    758.9,
+    659.9,
+    379.7,
+    175.1
+   ],
+   ".eint__panel": [
+    997.7,
+    74.6,
+    375,
+    231.4
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    592.5,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP100% to hit+ ShellInflicts ShellIt puts Shell on the party.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-vegnagun-shuyin@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 4050306837,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    602.5,
+    658.8,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1229.3,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    597.4,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    589.2,
+    686.8,
+    549,
+    148.2
+   ],
+   ".eint__panel": [
+    930.4,
+    74.6,
+    375,
+    228.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    597.4,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Itemno MP100% to hit+ ProtectGrants Protect to the whole party.It puts Protect on the party, and Noli Me Tangere hits for about 3,700 in all.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  },
+  "ffx2-bahamut@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3269890057,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    831.9,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1559.2,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    666.2,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    816.7,
+    774.7,
+    563.4,
+    164.2
+   ],
+   ".eint__panel": [
+    1223.1,
+    83.9,
+    421.7,
+    260.2
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    666.2,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP100% to hit+ ShellInflicts ShellIt puts Shell on the party.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  },
+  "ffx2-vegnagun-shuyin@2000x1012": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 3428988549,
+   "#game > canvas": [
+    0,
+    0,
+    2000,
+    1012
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    100.4,
+    0,
+    1799.1,
+    1012
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ig-stat-list": [
+    1404.8,
+    730.9,
+    466.6,
+    253
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    157.3,
+    216.5,
+    166.3,
+    29.5
+   ],
+   ".mad__toggle": [
+    778.5,
+    749.2,
+    147.4,
+    21.1
+   ],
+   ".eint__toggle": [
+    1482.4,
+    60,
+    85.5,
+    21.1
+   ],
+   ".ffx2hud__enemies": [
+    160.4,
+    115.3,
+    671.8,
+    87.1
+   ],
+   ".ffx2-cmd-info": [
+    100.4,
+    0,
+    1799.1,
+    48.7
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    763.3,
+    774.7,
+    616.8,
+    164.2
+   ],
+   ".eint__panel": [
+    1146.2,
+    83.9,
+    421.7,
+    256.6
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1501,
+    469.8,
+    364.8,
+    214.8
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    160.4,
+    115.3,
+    671.8,
+    53.4
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaLight Curtain→the partyin Itemno MP100% to hit+ ProtectGrants Protect to the whole party.It puts Protect on the party, and Noli Me Tangere hits for about 3,700 in all.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    2000,
+    1012
+   ]
+  }
+ },
+ "repair2": {
+  "ffx2-bahamut@1600x900": {
+   "phoneAttr": null,
+   "phoneEls": 0,
+   "fontSizes": 1988627686,
+   "#game > canvas": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ffxhud__stage": null,
+   ".ffx2hud__stage": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   ".ig-ctb": null,
+   ".ig-cmd-stack": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ig-stat-list": [
+    1160,
+    650,
+    415,
+    225
+   ],
+   ".ffx-sensor": null,
+   ".sgd__toggle": [
+    50.5,
+    192.5,
+    147.9,
+    26.3
+   ],
+   ".mad__toggle": [
+    775,
+    631.3,
+    142.4,
+    23.8
+   ],
+   ".eint__toggle": [
+    1296.8,
+    53.3,
+    76.1,
+    18.8
+   ],
+   ".ffx2hud__enemies": [
+    53.3,
+    102.5,
+    592.5,
+    77.5
+   ],
+   ".ffx2-cmd-info": [
+    70.2,
+    0,
+    1529.8,
+    43.3
+   ],
+   ".battle-pause-chip": [
+    0,
+    1,
+    60.2,
+    21
+   ],
+   ".ffx-cmd-info": null,
+   ".mad__card": [
+    758.9,
+    659.9,
+    379.7,
+    175.1
+   ],
+   ".eint__panel": [
+    997.8,
+    74.6,
+    375,
+    231.4
+   ],
+   ".ffx-cmd-area": null,
+   ".ffx2hud__command": [
+    1245.6,
+    417.9,
+    324.4,
+    191.1
+   ],
+   ".ffx-zg": null,
+   ".ig-bosshp": [
+    53.3,
+    102.5,
+    592.5,
+    47.5
+   ],
+   ".ffx2-atbmode": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "madText": "Next best moveYunaShell→the partyGuide’s pickin White Magic10 MP100% to hit+ ShellInflicts ShellIt puts Shell on the party.",
+   "hudKids": "phud-panel phud-shade ffx2hud__stage ffx2hud__overlay ffx2hud__plates phud-foot phud-guide phud-card phud-target",
+   "canvasPx": [
+    1600,
+    900
+   ]
+  }
+ }
+}

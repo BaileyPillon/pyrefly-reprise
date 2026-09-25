@@ -47,6 +47,146 @@ Sword), a cure-only row "Cures ... on ..." (the Guardians' Remedy). Menus and ev
 carry this text; the hashes above are unaffected by it.
 
 No save migration: saves key chapters by id string, and the chapter is unlisted.
+## 2026-09-25 — `encounters.ts`: Chapter XIII (Trema) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX-2 only** [AGENTS.md hard rule 14]: Trema and Oversoul Paragon on Cloister 100 of the Via
+Infinito (`research/ffx2-trema.md`); the listing itself is shared plumbing (both). Bailey,
+2026-09-25: "I'll go with all your recommendations" (Chapter XIII as "Trema: 1 and 3 at 3 s",
+its hero plate B).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `FFX2_TREMA_SHIPPED` and `CHAPTER_IDS`
+gains `'ffx2-trema'`, both after Chapter IX (registration order); chapter select groups by game,
+so the card sits after Chapter VI in the FFX-2 group with numeral XIII. `ChapterId` and
+`getChapter` are unchanged (the id was already registered); `UNLISTED_CHAPTERS` keeps Natus and
+the Fallen Aeons. Alongside: `CHAPTER_META` gains `TREMA_META` (`UNLISTED_CHAPTER_META` is empty
+again), `src/story/registry.ts` gains the `'ffx2-trema'` key (the shipped Oversoul shape's scripts,
+Trema's three AI callouts, and the `paragon-falls` link seam on the seam budget), and
+`tremaScriptsFor` now returns one object per shape so the registry and the record hold the same
+scripts. Every chapter-generic consumer now sees ten chapters, nine of them playable (Macalania
+is still a COMING card): Auron's briefing counts "Nine fights" by itself (D-136), and
+`arcCleared('ffx2')` also needs Chapter XIII (`ARC_FINALE.ffx2` stays `ffx2-vegnagun-shuyin`: Trema
+is an optional superboss, research §1). No save migration: saves key chapters by id string.
+
+## 2026-09-25 — `ItemDef.price`: 0 may also mean "unsourced"
+
+**FFX-2 only in use; the field is shared** [AGENTS.md hard rule 14]. Doc comment only, no type
+change, and the line was edited in place so `src/battle/common/types.ts` does not grow. The comment
+said 0 means "never sold". The FFX-2 steal accessories added in `src/data/ffx2/items/held.ts`
+(Mute Shock, Snow Ring, Potpourri, Chaos Shock, Fury Shock) have no sourced shop price, so rule 6
+forbids a number, yet `price` is required. It now reads "0 for items never sold, or whose price is
+unsourced (the data file's note says which)"; `held.ts` exports `UNSOURCED_PRICE_IDS` so the case is
+machine-readable. Nothing in `src/` or `tools/` reads `price` today (grep, 2026-09-25), so no behaviour
+changes. Test: `tests/unit/ffx2-steal-item-names.test.ts`.
+
+## 2026-09-25 — Chapter XIII options, built OFF: `EnemyGroupDef.actionTimeSeconds`
+
+**FFX-2 only** [AGENTS.md hard rule 14]. From `docs/plans/trema-options-2026-09-25.md` (options 1 to
+4) and the method check's E4. Every switch ships OFF; with all of them off, Chapters 4, 5, 6 and XI,
+FFX Chapters 1 and 3 and every Chapter XIII kit, line and link replay byte-identically (event-log
+hashes over 20 to 30 seeds a line, before and after).
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef.actionTimeSeconds?: number` (seconds an
+action takes before its actor's gauge refills; method check E4). The rule is `[verified: 2 sources]`
+(research `ffx2-trema.md` §12.4), the length is an unsourced `[estimate]`
+(`ACTION_TIME_ESTIMATE_SECONDS = 1.5` in `src/battle/ffx2/action-time.ts`). `setup.ts` copies it into
+`BattleState.flags.actionTimeSeconds`; `execute.ts#finishAction` adds it to the actor's
+`atb.recovery` (not after a spherechange, a counter or a flavour turn). No shipped formation sets it:
+Chapter XIII's links set it only when `CLOISTER_ACTION_TIME_ON` (`src/data/ffx2/enemies/trema.ts`) is
+turned on. The field's comment was folded onto one line with `timedAilmentDefaults`' so the file does
+not grow.
+
+Not contract files, recorded because they are shared FFX-2 plumbing (each inert until a switch or an
+OFF option uses it):
+- `Ffx2EngineOptions.actionTimeSeconds` (per engine, wins over the formation) and the global switch
+  `ACTION_TIME_ALL_FFX2 = false` (`action-time.ts`), for measuring Chapters 4, 5, 6 and XI.
+- `AiScript.onPartyAction` (`internal.ts`, run by `engineHooks.ts#runPartyActionAnswers` after every
+  party action; a returned command resolves as a counter). Only Oversoul Paragon's script defines it.
+  `runCounters` now resolves through the same `resolveAsCounter` helper (byte-identical).
+  `execute.ts#abilityPerformedBy` (a module `WeakMap`, not state) tells it the ability of a charged
+  action, whose `action-start` sits in an earlier slice of drafts.
+- `AbilityDef.extra.mpFractionOfMax` (`aeon-effects.ts#applyMpFraction`): sixteenths of the target's
+  **max** MP a hit, for Oversoul Paragon's Final Impact.
+- `battle/ffx2/ai/trema.ts` became `makeTremaScript(id, weights)`; the story script draws exactly
+  as before (`TREMA_STORY_WEIGHTS`), the Fiend Arena script is `'trema-arena'`.
+- Registered, reachable only by id: formations `ffx2-cloister-paragon-oversoul` and
+  `ffx2-cloister-trema-arena` (`src/data/ffx2/enemies/trema-options.ts`), scripts `paragon-oversoul`
+  and `trema-arena`, abilities `paragon-os-*` and `trema-arena-beguiling-mire`.
+
+## 2026-09-25 — Chapter XIII ship layer: `SpeakerId` gains `'trema'`
+
+**FFX-2 only** [AGENTS.md hard rule 14]. **Additive** in `src/story/dsl.ts`: `SpeakerId` gains
+`'trema'`, the speaker for Trema's lines in `src/story/scripts/ffx2-trema.ts` (lines 10 to 21 of
+`docs/plans/trema-story-draft.md`, all `[ORIGINAL]`). He has no portrait yet (O-5 is its own
+round), so the dialogue box shows the name plate alone, as `portrait.ts` does for any id with no
+file. `SPEAKER_ROLES` is a `Partial` record, so nothing else has to name him. No existing script
+changes.
+
+## 2026-09-25 — Chapter XIII winnability fixes: `EnemyGroupDef.timedAilmentDefaults`
+
+**FFX-2 only** [AGENTS.md hard rule 14]. From `docs/plans/trema-winnability-method-check.md` E1.
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef.timedAilmentDefaults?: boolean`. In a
+battle whose group sets it, an ailment row with no duration value (`duration: 0`) lasts §2.8's
+default for that status instead of "until cured": Sleep 97 and Berserk / Confuse 133 (the tables'
+global defaults, `[single source]`), Stop 100 and Slow 100 (the value most published sources carry,
+`[estimate]`); table `AILMENT_DEFAULT_DURATION` in `src/battle/ffx2/statuses.ts`. §2.8 lists all five
+as timed `[verified: 2 sources]`. `setup.ts` copies the flag into `BattleState.flags`, `engine.ts`
+into `ResolveContext`, and `resolve.ts#applyRiders` passes it to `applyStatus`. Only the two Cloister
+100 links set it (Paragon's Confuse, Trema's Beguiling Mire Stop). Chapters 5 and XI carry the same
+`duration: 0` ailment rows under a written precedent ("until cured", `[estimate]`); they do not set
+the flag, so their event logs are unchanged (measured). Turning it on there is a separate decision.
+
+Not a contract change, recorded here because it moves shipped logs: `spherechange.ts#refreshDerivedStats`
+now layers the girl's accessories (method check E2). Measured over 30 seeds each: chapter 4, 5 and 6 at
+D = 0 and the Wait `intendedStrategy` runs are byte-identical; chapter 5 at D = 700 and D = 1500 moves on
+the seeds where a girl spherechanges under Itchy (win counts unchanged, 17/30 and 3/30), and Chapter XI's
+all-out line goes from 1/30 to 3/30 wins. `ffx2-atb-golden.test.ts` re-pins one hash (chapter 5, D = 1500,
+seed 3).
+
+## 2026-09-25 — Chapter XIII, Trema: `ChapterId` gains `'ffx2-trema'`, `Chapter.number` widens to 13, `EnemyDef.autoStatuses`, `EnemyGroupDef.checkpointOnEntry` and `carriesPartyState`, `ids.ts` gains `TremaEnemyId`
+
+**FFX-2 only** [AGENTS.md hard rule 14] (research `ffx2-trema.md` §0: ATB, dresspheres, Garment
+Grids, Spherechange; Paragon and Trema share only *models* with FFX's Nemesis and unsent priest,
+no data); the registration and the chain flags are shared plumbing, but only this chapter's
+records set them. Bailey, 2026-09-25: "I'll go with all your recommendations" (TR1-TR19 and
+O-1..O-4 on `docs/plans/chapter-trema-review.md`, after its Review).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'ffx2-trema'`; `Chapter.number`
+widens from `1 … 11` to `1 … 13` (12 is Seymour Omnis's, registered on its own branch; the
+integrator serialises the two). The record lives in `src/data/chapter-ffx2-trema.ts` and sits in
+`UNLISTED_CHAPTERS` (the Chapter IX to XI precedent). Every `Record<ChapterId, …>` gains the key
+(`learn/atlas/cites.ts`, `tests/unit/learn-atlas-data.test.ts`). No save migration.
+
+**Additive** in `src/battle/common/types.ts`:
+- `EnemyDef.autoStatuses?: StatusId[]`: statuses an enemy carries from the first event and that
+  no Dispel removes. Trema's Spellspring (International / HD, `[verified: 2 sources]`); "no Dispel
+  removes it" is read from the sources' word "auto-status", `[estimate]`. Applied in
+  `src/battle/ffx2/setup.ts#buildEnemy` with no RNG draw; `resolve.ts` skips them in a removal list.
+- `EnemyGroupDef.checkpointOnEntry?: boolean`: a chained link that is a retry checkpoint **without**
+  a Save Sphere (TR5 = b). `BattleChainCheckpoint.checkpointAt` reads it beside
+  `restoresPartyOnEntry`; the setup the link was entered on already carries the previous link's
+  end state, so a retry replays it. Kept in memory only (D-100): not save-data class.
+- `EnemyGroupDef.carriesPartyState?: boolean` (named `carriesPartyStatuses` in the first cut, never
+  pushed): the party enters the link with its statuses and its **worn dressphere** as well as its
+  HP and MP ("whatever state the Paragon fight left them", "no chance to change equipment",
+  `[verified: 5 sources]`). `BattleScreenSetup.carryWholeState` copies the statuses, the worn
+  dressphere, her grid node and her AP (`cloneData`) only for a link that sets it; HP and MP then
+  clamp to the worn dressphere's maximum. Passed gates and the worn-this-battle list start empty,
+  because gate effects are "lost at the end of the battle" (ffx2-combat-core §4.1, `[verified: 2
+  sources]`) and Trema's is a new battle. Accessories stay the build's. The doc comments on these
+  three fields are one line each (house rule 7: the file had grown by 24 lines); the detail is here.
+
+**Additive** in `src/data/ffx2/ids.ts`: `TremaEnemyId = 'paragon' | 'trema'`, joined into
+`FFX2EnemyId`; `TREMA_CHAIN_ORDER`.
+
+Not a listed contract file, recorded for the same reason: `src/battle/ffx2/internal.ts` gains
+`AiScript.counter` (an out-of-turn counter, run by `engineHooks.ts#runCounters` after a party
+action that damaged the enemy; Paragon's Big Bang, TR12 = b) and `Ffx2Unit.autoStatuses`. The
+engine's post-action hook sequence (`onDamaged`, `onTargeted`, `onTurnResolved`, then counters)
+moved from `engine.ts#afterAction` into `engineHooks.ts#runAfterActionHooks`, byte-identical.
+`resolve.ts` reads `extra.mpOnly` together with `extra.mpFractionOfCurrent` as "that share of
+current MP, no HP" (Waning Moon). No shipped record set either combination before, and Chapters
+4, 5, 6 and XI replay byte-identically (180 seeded runs at Active 0 and 700 ms, before and after).
 
 ## 2026-09-24 — `encounters.ts`: Chapter IX (Yojimbo) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 

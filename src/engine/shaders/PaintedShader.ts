@@ -53,6 +53,14 @@ export const paintedFragmentShader = /* glsl */ `
   // dark frame. Applied last, after the flash and before the dissolve, so a
   // hit landing on a dimmed figure still reads.
   uniform float desaturate;
+  // The Oversoul blue cast (FFX-2 only; OversoulLook.ts): the painting's own
+  // luma, re-coloured. Compiled only into a figure whose material defines
+  // PAINTED_CAST, so every other figure's program is exactly as before.
+  #ifdef PAINTED_CAST
+  uniform vec3 castColor;
+  uniform float castAmount;
+  uniform float castGain;
+  #endif
   // UV height of the contact ramp. Set per plane from the pose's world height
   // (see contactBandFor) so the darkening is a fixed distance off the ground
   // instead of a fixed fraction of the image -- a landscape KO plane given the
@@ -149,6 +157,18 @@ export const paintedFragmentShader = /* glsl */ `
       vec3 lift = flashColor * (flashMask * FLASH_GAIN) * reflectance;
       c = min(c + lift, max(c, vec3(FLASH_CEIL)));
     }
+
+    // --- Oversoul blue cast (option B, docs/concepts/chapters/trema/oversoul) --
+    // "the fiend's body absorbs pyreflies, acquiring a blue cast" (FF Wiki,
+    // Oversoul (Final Fantasy X-2), revid 4041089). Just before the quiet dim,
+    // where the picked frame put it, so a dimmed Oversoul fiend still greys.
+    #ifdef PAINTED_CAST
+    if (castAmount > 0.0) {
+      float lc = dot(c, vec3(0.2126, 0.7152, 0.0722));
+      vec3 castRgb = clamp(pow(lc, 0.85) * castColor * castGain, 0.0, 1.0);
+      c = mix(c, castRgb, clamp(castAmount, 0.0, 1.0));
+    }
+    #endif
 
     // --- the quiet dim ------------------------------------------------------
     if (desaturate > 0.0) {

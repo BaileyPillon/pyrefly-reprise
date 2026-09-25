@@ -1,0 +1,801 @@
+{
+ "note": "An agent's own brief look at sheet size beside each installed idle, 2026-09-25 (FFX-2 only, art5). NOT a judge's verdict and NOT Bailey's. CANDIDATES; nothing installed, nothing approved. pick = the recommended frame, null = leave the slot empty (engine fallback). cands omitted = every candidate on disk.",
+ "girls": {
+  "rikku-dark-knight": {
+   "ko": {
+    "pick": 7,
+    "summary": "PASS on the second try (cand 5-8, armour weighted): on her side, head right, navy armour; r1 lost the armour",
+    "look": {
+     "1": "armour lost",
+     "2": "armour lost, slab sword",
+     "3": "armour lost",
+     "4": "armour lost, sword upright",
+     "5": "armour, cropped close",
+     "6": "armour, small",
+     "7": "best: armour, eyes shut",
+     "8": "good alternative"
+    }
+   },
+   "victory": {
+    "pick": null,
+    "summary": "FAIL twice: her default outfit (bikini, bare midriff) replaces the armour in r1 and in the second try; stopped (rule 15), slot left empty",
+    "look": {
+     "1": "no armour",
+     "2": "no armour",
+     "3": "no armour",
+     "4": "no armour",
+     "5": "no armour",
+     "6": "no armour",
+     "7": "part armour, bare midriff",
+     "8": "no armour"
+    }
+   }
+  },
+  "paine-warrior": {
+   "attack": {
+    "pick": 2,
+    "summary": "PASS: lunge toward screen-right, red sword; boots come out red, the idle's are black",
+    "look": {
+     "1": "good, red boots",
+     "2": "best",
+     "3": "sword hidden",
+     "4": "thin sword"
+    }
+   },
+   "cast": {
+    "pick": 4,
+    "summary": "PASS: arm up, sword held low",
+    "look": {
+     "1": "extra blade",
+     "2": "sword point up",
+     "3": "ok",
+     "4": "best"
+    }
+   },
+   "item": {
+    "pick": 3,
+    "summary": "PASS: bottle held out, one sword at her side",
+    "look": {
+     "1": "two props, red",
+     "2": "ok",
+     "3": "best",
+     "4": "bottle falling"
+    }
+   },
+   "hurt": {
+    "pick": 4,
+    "summary": "PASS, weak: leaning back, wincing",
+    "look": {
+     "1": "giant sword",
+     "2": "sword pillar",
+     "3": "ok",
+     "4": "best"
+    }
+   },
+   "ko": {
+    "pick": 3,
+    "summary": "PASS: on her side, eyes shut",
+    "look": {
+     "1": "ok, blue hair",
+     "2": "guard reject",
+     "3": "best",
+     "4": "clutter, extra swords"
+    }
+   },
+   "victory": {
+    "pick": 3,
+    "summary": "PASS: sword over the shoulder, hand on hip",
+    "look": {
+     "1": "thin",
+     "2": "thin",
+     "3": "best",
+     "4": "ok"
+    }
+   }
+  },
+  "yuna-gunner": {
+   "item": {
+    "pick": 4,
+    "summary": "PASS, weak: bottle held out, short skirt; the second pistol is missing in every frame",
+    "look": {
+     "1": "long skirt",
+     "2": "long skirt",
+     "3": "ok",
+     "4": "best"
+    }
+   }
+  },
+  "rikku-thief": {
+   "attack": {
+    "pick": 3,
+    "summary": "PASS: lunge, a dagger in each hand; legs come out orange-red (pilot ran before the leg words)",
+    "look": {
+     "1": "good, guard reject",
+     "2": "huge scarf",
+     "3": "best",
+     "4": "huge hair"
+    }
+   },
+   "cast": {
+    "pick": 3,
+    "summary": "PASS: dagger raised, the other low",
+    "look": {
+     "1": "cape grows",
+     "2": "scarf grows",
+     "3": "best",
+     "4": "ok"
+    }
+   },
+   "item": {
+    "pick": 3,
+    "summary": "PASS: bottle held out",
+    "look": {
+     "1": "ok",
+     "2": "scarf grows",
+     "3": "best",
+     "4": "busy"
+    }
+   },
+   "hurt": {
+    "pick": 6,
+    "summary": "PASS on the second try (feet on ground, flips negated); r1 read off balance as a flip",
+    "look": {
+     "1": "flip",
+     "2": "not hurt",
+     "3": "flip",
+     "4": "upside down",
+     "5": "ok",
+     "6": "best",
+     "7": "scarf",
+     "8": "oversized"
+    }
+   },
+   "ko": {
+    "pick": 3,
+    "summary": "PASS: on her side, eyes shut",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "best",
+     "4": "cropped close"
+    }
+   },
+   "victory": {
+    "pick": 1,
+    "summary": "PASS: dagger raised high",
+    "look": {
+     "1": "best",
+     "2": "ok",
+     "3": "ok",
+     "4": "giant tail shape"
+    }
+   }
+  },
+  "paine-black-mage": {
+   "attack": {
+    "pick": 2,
+    "summary": "PASS: staff thrust forward; staffs are more ornate than the idle's",
+    "look": {
+     "1": "guard reject",
+     "2": "best",
+     "3": "guard reject",
+     "4": "ok"
+    }
+   },
+   "cast": {
+    "pick": 1,
+    "summary": "PASS: arm and staff up",
+    "look": {
+     "1": "best",
+     "2": "ok",
+     "3": "ok",
+     "4": "ok"
+    }
+   },
+   "item": {
+    "pick": 4,
+    "summary": "PASS: bottle and staff",
+    "look": {
+     "1": "guard reject",
+     "2": "no bottle",
+     "3": "ok",
+     "4": "best"
+    }
+   },
+   "hurt": {
+    "pick": 1,
+    "summary": "PASS, weak: wincing, little lean",
+    "look": {
+     "1": "best",
+     "2": "guard reject",
+     "3": "not hurt",
+     "4": "second figure"
+    }
+   },
+   "ko": {
+    "pick": 4,
+    "summary": "PASS: on her side, hat on",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "staff upright",
+     "4": "best"
+    }
+   },
+   "victory": {
+    "pick": 4,
+    "summary": "PASS: hand on hip, staff",
+    "look": {
+     "1": "guard reject",
+     "2": "guard reject",
+     "3": "ok",
+     "4": "best"
+    }
+   }
+  },
+  "paine-gunner": {
+   "attack": {
+    "pick": 1,
+    "summary": "PASS: both pistols aimed toward screen-right",
+    "look": {
+     "1": "best",
+     "2": "guard reject",
+     "3": "one gun",
+     "4": "ok"
+    }
+   },
+   "cast": {
+    "pick": 2,
+    "summary": "PASS: pistol raised",
+    "look": {
+     "1": "stray shapes",
+     "2": "best",
+     "3": "flared skirt",
+     "4": "ok"
+    }
+   },
+   "item": {
+    "pick": 2,
+    "summary": "PASS: bottle held out, pistol at the hip",
+    "look": {
+     "1": "blue tail cloth",
+     "2": "best",
+     "3": "ok",
+     "4": "huge hair, props"
+    }
+   },
+   "hurt": {
+    "pick": 2,
+    "summary": "PASS, weak: she doubles over forward more than she reels back",
+    "look": {
+     "1": "bent over",
+     "2": "best of four",
+     "3": "second figure",
+     "4": "bent over"
+    }
+   },
+   "ko": {
+    "pick": 2,
+    "summary": "PASS: on her side, eyes shut",
+    "look": {
+     "1": "prop clutter",
+     "2": "best",
+     "3": "ok",
+     "4": "ok, small"
+    }
+   },
+   "victory": {
+    "pick": 3,
+    "summary": "PASS: pistol raised",
+    "look": {
+     "1": "thin",
+     "2": "ok",
+     "3": "best",
+     "4": "ok"
+    }
+   }
+  },
+  "paine-samurai": {
+   "attack": {
+    "pick": 4,
+    "summary": "PASS: katana drawn, shoulder armour, hakama",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "three figures, guard reject",
+     "4": "best"
+    }
+   },
+   "cast": {
+    "pick": 2,
+    "summary": "PASS: arm up, katana low",
+    "look": {
+     "1": "ok",
+     "2": "best",
+     "3": "guard reject",
+     "4": "feather fan shapes"
+    }
+   },
+   "item": {
+    "pick": 4,
+    "summary": "PASS: bottle held out",
+    "look": {
+     "1": "cape",
+     "2": "ok",
+     "3": "ok",
+     "4": "best"
+    }
+   },
+   "hurt": {
+    "pick": 4,
+    "summary": "PASS, weak: little lean",
+    "look": {
+     "1": "ok",
+     "2": "second figure",
+     "3": "wing shape",
+     "4": "best"
+    }
+   },
+   "ko": {
+    "pick": 2,
+    "summary": "PASS: on her side, katana beside her",
+    "look": {
+     "1": "ok",
+     "2": "best",
+     "3": "ok",
+     "4": "ok"
+    }
+   },
+   "victory": {
+    "pick": 4,
+    "summary": "PASS: katana on the shoulder",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "extra blades",
+     "4": "best"
+    }
+   }
+  },
+  "paine-white-mage": {
+   "attack": {
+    "pick": 2,
+    "summary": "PASS: hood, white robe with the zigzag hem, staff swung",
+    "look": {
+     "1": "ok",
+     "2": "best",
+     "3": "axe-like staff",
+     "4": "extra staff parts"
+    }
+   },
+   "cast": {
+    "pick": 4,
+    "summary": "PASS: staff raised",
+    "look": {
+     "1": "ok",
+     "2": "thin",
+     "3": "ok",
+     "4": "best"
+    }
+   },
+   "item": {
+    "pick": 1,
+    "summary": "PASS: bottle and staff",
+    "look": {
+     "1": "best",
+     "2": "painted scenery behind her",
+     "3": "ok",
+     "4": "hoop props"
+    }
+   },
+   "hurt": {
+    "pick": 3,
+    "summary": "PASS, weak: head back, staff held",
+    "look": {
+     "1": "guard reject",
+     "2": "guard reject",
+     "3": "best",
+     "4": "dress balloons"
+    }
+   },
+   "ko": {
+    "pick": 4,
+    "summary": "PASS: on her side, hood on",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "ok",
+     "4": "best"
+    }
+   },
+   "victory": {
+    "pick": 3,
+    "summary": "PASS: staff on the shoulder, hand on hip",
+    "look": {
+     "1": "guard reject",
+     "2": "ok",
+     "3": "best",
+     "4": "busy"
+    }
+   }
+  },
+  "rikku-berserker": {
+   "attack": {
+    "pick": 3,
+    "summary": "PASS: claw lunge, tail, bandana",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "best",
+     "4": "busy"
+    }
+   },
+   "cast": {
+    "pick": 4,
+    "summary": "PASS: fist up, hand on hip",
+    "look": {
+     "1": "tail fills",
+     "2": "ok",
+     "3": "swirl tails",
+     "4": "best"
+    }
+   },
+   "item": {
+    "pick": 3,
+    "summary": "PASS: bottle held out",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "best",
+     "4": "ok"
+    }
+   },
+   "hurt": {
+    "pick": 7,
+    "summary": "PASS on the second try (feet on ground, flips negated); r1 read the hurt as a flip",
+    "look": {
+     "1": "upside down",
+     "2": "flip",
+     "3": "not hurt",
+     "4": "leg up",
+     "5": "ok",
+     "6": "ok",
+     "7": "best",
+     "8": "big tail"
+    }
+   },
+   "ko": {
+    "pick": 2,
+    "summary": "PASS: on her side, claws, tail",
+    "look": {
+     "1": "ok",
+     "2": "best",
+     "3": "tail arch",
+     "4": "cropped close"
+    }
+   },
+   "victory": {
+    "pick": 2,
+    "summary": "PASS: both fists up",
+    "look": {
+     "1": "tail",
+     "2": "best",
+     "3": "ok",
+     "4": "ok"
+    }
+   }
+  },
+  "rikku-black-mage": {
+   "attack": {
+    "pick": 4,
+    "summary": "PASS: staff thrust, witch hat, leotard",
+    "look": {
+     "1": "guard reject",
+     "2": "ok",
+     "3": "guard reject",
+     "4": "best"
+    }
+   },
+   "cast": {
+    "pick": 4,
+    "summary": "PASS: arm up, staff held",
+    "look": {
+     "1": "ok",
+     "2": "thin",
+     "3": "cape",
+     "4": "best"
+    }
+   },
+   "item": {
+    "pick": 4,
+    "summary": "PASS: bottle and staff",
+    "look": {
+     "1": "guard reject",
+     "2": "ok",
+     "3": "no bottle",
+     "4": "best"
+    }
+   },
+   "hurt": {
+    "pick": 2,
+    "summary": "PASS, weak: little lean",
+    "look": {
+     "1": "guard reject",
+     "2": "best of four",
+     "3": "guard reject",
+     "4": "not hurt"
+    }
+   },
+   "ko": {
+    "pick": 3,
+    "summary": "PASS: on her side, hat by her head",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "best",
+     "4": "legs up"
+    }
+   },
+   "victory": {
+    "pick": 3,
+    "summary": "PASS: staff held, hand on hip",
+    "look": {
+     "1": "cape",
+     "2": "big staff",
+     "3": "best",
+     "4": "ok"
+    }
+   }
+  },
+  "rikku-gunner": {
+   "attack": {
+    "pick": 2,
+    "summary": "PASS: both pistols aimed toward screen-right",
+    "look": {
+     "1": "one gun",
+     "2": "best",
+     "3": "ok",
+     "4": "ok"
+    }
+   },
+   "cast": {
+    "pick": 1,
+    "summary": "PASS, weak: the raised hand often holds no pistol",
+    "look": {
+     "1": "best",
+     "2": "ok",
+     "3": "no gun raised",
+     "4": "no gun raised"
+    }
+   },
+   "item": {
+    "pick": 2,
+    "summary": "PASS: bottle held out",
+    "look": {
+     "1": "oversized",
+     "2": "best",
+     "3": "ok",
+     "4": "busy"
+    }
+   },
+   "hurt": {
+    "pick": 4,
+    "summary": "PASS, weak: bent more than reeling",
+    "look": {
+     "1": "odd legs",
+     "2": "ok",
+     "3": "aiming",
+     "4": "best"
+    }
+   },
+   "ko": {
+    "pick": 3,
+    "summary": "PASS: on her side, pistol by her hand",
+    "look": {
+     "1": "ok",
+     "2": "ok",
+     "3": "best",
+     "4": "curled"
+    }
+   },
+   "victory": {
+    "pick": 3,
+    "summary": "PASS, weak: arm up, pistol small or missing",
+    "look": {
+     "1": "ok",
+     "2": "scarf",
+     "3": "best",
+     "4": "ok"
+    }
+   }
+  },
+  "rikku-white-mage": {
+   "attack": {
+    "pick": 1,
+    "summary": "PASS: staff swung, bandana, white coat tails",
+    "look": {
+     "1": "best",
+     "2": "guard reject",
+     "3": "guard reject",
+     "4": "big staff head"
+    }
+   },
+   "cast": {
+    "pick": 4,
+    "summary": "PASS: arm up, staff held",
+    "look": {
+     "1": "ok",
+     "2": "halo backdrop, guard reject",
+     "3": "ok",
+     "4": "best"
+    }
+   },
+   "item": {
+    "pick": 3,
+    "summary": "PASS: bottle held out",
+    "look": {
+     "1": "guard reject",
+     "2": "ok",
+     "3": "best",
+     "4": "big staff head"
+    }
+   },
+   "hurt": {
+    "pick": 4,
+    "summary": "PASS, weak: head back, staff up",
+    "look": {
+     "1": "guard reject",
+     "2": "flip",
+     "3": "not hurt",
+     "4": "best"
+    }
+   },
+   "ko": {
+    "pick": 3,
+    "summary": "PASS: on her side, eyes shut",
+    "look": {
+     "1": "ok",
+     "2": "small",
+     "3": "best",
+     "4": "staff upright"
+    }
+   },
+   "victory": {
+    "pick": 3,
+    "summary": "PASS: staff held, arms crossed",
+    "look": {
+     "1": "guard reject",
+     "2": "ok",
+     "3": "best",
+     "4": "ok"
+    }
+   }
+  },
+  "yuna-black-mage": {
+   "item": {
+    "pick": 4,
+    "summary": "PASS: bottle held out, staff, blue witch hat with the pink flower",
+    "look": {
+     "1": "no bottle",
+     "2": "odd hat",
+     "3": "no bottle",
+     "4": "best"
+    }
+   }
+  },
+  "yuna-songstress": {
+   "cast": {
+    "pick": 4,
+    "summary": "PASS: microphone raised, hand on hip",
+    "look": {
+     "1": "long skirt",
+     "2": "ok",
+     "3": "ok",
+     "4": "best"
+    }
+   },
+   "item": {
+    "pick": 2,
+    "summary": "PASS: bottle held up",
+    "look": {
+     "1": "ok",
+     "2": "best",
+     "3": "ok",
+     "4": "busy sash"
+    }
+   },
+   "hurt": {
+    "pick": 2,
+    "summary": "PASS: head back, eye shut",
+    "look": {
+     "1": "ok",
+     "2": "best",
+     "3": "bent over",
+     "4": "ok"
+    }
+   },
+   "ko": {
+    "pick": 1,
+    "summary": "PASS: on her side, eyes shut",
+    "look": {
+     "1": "best",
+     "2": "cropped close",
+     "3": "ok",
+     "4": "ok"
+    }
+   },
+   "victory": {
+    "pick": 1,
+    "summary": "PASS: both arms up, microphone",
+    "look": {
+     "1": "best",
+     "2": "sash loop",
+     "3": "ok",
+     "4": "guard reject"
+    }
+   }
+  },
+  "yuna-warrior": {
+   "attack": {
+    "pick": 4,
+    "summary": "PASS: blue longsword swung toward screen-right; the red hood comes out worn UP in most frames (the idle wears it down)",
+    "look": {
+     "1": "hood up",
+     "2": "ok, hood up",
+     "3": "hood up",
+     "4": "best"
+    }
+   },
+   "cast": {
+    "pick": 3,
+    "summary": "PASS: arm up, sword low",
+    "look": {
+     "1": "dragon shape behind her",
+     "2": "ok",
+     "3": "best",
+     "4": "ok"
+    }
+   },
+   "item": {
+    "pick": 2,
+    "summary": "PASS: bottle and sword",
+    "look": {
+     "1": "oversized",
+     "2": "best",
+     "3": "two swords",
+     "4": "ok"
+    }
+   },
+   "hurt": {
+    "pick": 2,
+    "summary": "PASS: head back, sword low",
+    "look": {
+     "1": "sword up",
+     "2": "best",
+     "3": "ok",
+     "4": "ok"
+    }
+   },
+   "ko": {
+    "pick": 2,
+    "summary": "PASS: on her side, eyes shut",
+    "look": {
+     "1": "sword upright",
+     "2": "best",
+     "3": "ok",
+     "4": "ok"
+    }
+   },
+   "victory": {
+    "pick": 2,
+    "summary": "PASS: sword on the shoulder",
+    "look": {
+     "1": "ok",
+     "2": "best",
+     "3": "sword planted",
+     "4": "ok"
+    }
+   }
+  }
+ }
+}

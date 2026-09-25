@@ -34,7 +34,7 @@
  */
 
 import { artUrl } from '../../../engine/PaintedArt.ts';
-import { loadArtManifest, pause2xUrlFor, pauseStemOf } from '../../../engine/ArtManifest.ts';
+import { loadArtManifest, manifestKnowsAssetNow, pause2xUrlFor, pauseStemOf } from '../../../engine/ArtManifest.ts';
 import { coverSourceWidth, pauseFocal } from '../../../ui/common/chapterPanel.ts';
 import { framePlate, framingFor, type PlateFraming } from './plates.ts';
 import { FACE_BOXES, type Rect } from './faceClear.ts';
@@ -199,8 +199,13 @@ export class PortraitStage {
    *
    * Re-showing the plate already up does nothing, so re-rendering the screen
    * (a setting changed, a row moved) never restarts the push-in.
+   *
+   * `fallbackArt` is a chapter's `heroArtFallback` (a path under `public/art/`):
+   * when given it replaces the `portraits/<fallbackId ?? plateId>.png` guess,
+   * and a plate the art manifest says is absent goes straight to it, with no
+   * request for the plate or its sidecar.
    */
-  show(plateId: string, fallbackId?: string): void {
+  show(plateId: string, fallbackId?: string, fallbackArt?: string): void {
     if (this.disposed || plateId === this.currentId) return;
     const previous = this.current;
 
@@ -211,7 +216,7 @@ export class PortraitStage {
     img.dataset['plate'] = plateId;
     if (previous) img.classList.add('pause__plate--entering');
     this.root.appendChild(img);
-    this.mountPlate(img, plateId, fallbackId);
+    this.mountPlate(img, plateId, fallbackId, fallbackArt);
 
     this.current = img;
     this.currentId = plateId;
@@ -307,9 +312,9 @@ export class PortraitStage {
    * leaving a broken-image glyph — the same chain `mountHeroArt` walks, and
    * the reason three all-black FFX-2 portraits never left an empty frame.
    */
-  private mountPlate(img: HTMLImageElement, plateId: string, fallbackId?: string): void {
+  private mountPlate(img: HTMLImageElement, plateId: string, fallbackId?: string, fallbackArt?: string): void {
     const url = artUrl(`art/pause/${plateId}.png`);
-    const fallback = artUrl(`art/portraits/${fallbackId ?? plateId}.png`);
+    const fallback = fallbackArt ? artUrl(`art/${fallbackArt}`) : artUrl(`art/portraits/${fallbackId ?? plateId}.png`);
     img.addEventListener(
       'error',
       () => {
@@ -326,6 +331,17 @@ export class PortraitStage {
     img.addEventListener('load', () => {
       img.dataset['loaded'] = 'true';
     });
+    // A chapter's fallback is shown whole (pause-screen.css `[data-art='fallback']`),
+    // so the global portrait face-crop (`ui/common/portrait.ts`) must not adopt it
+    // and blow a 40px-tile crop up to the full frame.
+    if (fallbackArt) img.setAttribute('data-face-crop-manual', '');
+    // A chapter plate not painted yet (Chapter XIII until Bailey picks one):
+    // the manifest already knows, so ask for the fallback alone.
+    if (fallbackArt && manifestKnowsAssetNow(url) === false) {
+      img.dataset['art'] = 'fallback';
+      img.src = fallback;
+      return;
+    }
     img.dataset['art'] = 'plate';
     img.src = url;
 

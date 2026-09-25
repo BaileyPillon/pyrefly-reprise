@@ -1,0 +1,27 @@
+{
+  "subject": "Paine and the shades of her squad",
+  "mood": "the recorder faces what she recorded",
+  "seed": 1503003,
+  "prompt": "1girl, paine \\(ff10-2\\), final fantasy x-2, safe, solo, very short spiked silver hair standing up in sharp points, red eyes, pale skin, angular face, sharp jaw, mature female, plain black leather bustier, plain silver studded collar, dark rough rock cave wall, cold grey blue light, soft bokeh background, she is on the right side of the frame, dark empty cave space on the left, three-quarter view, facing left, eyes lowered, guarded expression, grief held in, brows drawn, mouth closed, lips together, head and shoulders, hands out of frame, (very short spiked silver hair standing up in sharp points:1.25), (eyes lowered, grief held in:1.2), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, eye shadow, heavy makeup, red eye makeup, facial mark, spiked ball, floating spikes, glowing orbs, mohawk, fangs, sharp teeth, open mouth, grin, grinning, laughing, spiked pauldron, shoulder armour, spikes, skull pauldron, blush, sparkles, long hair, bloom, smile, crying, tears, second face, face close behind her, warm light, orange light, red light, sunset, fire, city lights, buildings, window, butterfly, insect, wings, fairy, huge glowing orbs, star shaped sparkle, lens flare",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(very short spiked silver hair standing up in sharp points:1.25), (eyes lowered, grief held in:1.2)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "public/art/characters/paine-warrior/idle.png",
+  "refWeight": 0.5,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-25T05:56:17.827Z"
+}

@@ -1,0 +1,60 @@
+{
+ "title": "Chapter XI  Fallen Aeons: hero plate options (FFX-2 only)",
+ "subtitle": "CONCEPT, nothing installed. Plate, then pause CHAPTER tab and prep card, 1600x900.",
+ "a": "A  Yuna asks Anima's forgiveness",
+ "b": "B  The possessed Shiva, close up  -  RECOMMENDED",
+ "c": "C  Sandy, with Cindy and Mindy behind her",
+ "rec": "b",
+ "crops": [
+  {
+   "src": "renders/af-961103.png",
+   "box": [
+    440,
+    200,
+    790,
+    320
+   ],
+   "label": "A before: her right eye blue"
+  },
+  {
+   "src": "options/a.png",
+   "box": [
+    210,
+    200,
+    560,
+    320
+   ],
+   "label": "A after: right green, left blue"
+  },
+  {
+   "src": "options/a.png",
+   "box": [
+    930,
+    0,
+    1344,
+    620
+   ],
+   "label": "A: Anima from x2-anima's idle"
+  },
+  {
+   "src": "options/b.png",
+   "box": [
+    420,
+    120,
+    920,
+    560
+   ],
+   "label": "B: the face at 1:1"
+  },
+  {
+   "src": "options/c.png",
+   "box": [
+    0,
+    0,
+    520,
+    700
+   ],
+   "label": "C: Cindy and Mindy from idles"
+  }
+ ]
+}

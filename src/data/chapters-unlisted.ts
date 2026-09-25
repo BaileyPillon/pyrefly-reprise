@@ -24,6 +24,7 @@ import { ISAARU_VIA_PURIFICO } from './chapter-isaaru.ts';
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
  * Chapter X, Seymour Natus (FFX only) — `./chapter-seymour-natus.ts`.
  * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts`.
+ * Chapter XIII, Trema, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter IX).
  * Chapter XIV, Isaaru in the Via Purifico (FFX only) — `./chapter-isaaru.ts`.
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [

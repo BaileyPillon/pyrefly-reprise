@@ -92,3 +92,27 @@ seams (7.0).**
   frame. proof-run.json records fanHits 0 (no interception), consoleErrors [], notFound [],
   stoppedAtLink 3, and pose idle. Nothing is listening on 5660-5679.
 - **Tests.** leblanc-art and chapters-6-7-8-enemy-sprite-manifest: 31/31 pass.
+
+## Second install check, 2026-09-25 06:30 EDT (independent; I made none of 486be04a or b9e0c581)
+
+FFX-2 only (Chapter VI). **Verdict: CONFIRMED, 7.8. Worst: seams, 7.0** (the near-white
+specks at the hair tip and the thin matte contour along the hair against the red leaf, 3x
+only; pre-existing, disclosed, not cleaned).
+
+- `public/art/characters/leblanc/idle.png` sha256 77192c23... equals
+  `candidates/2026-09-25-leblanc-fan/idle.fan-open.red.png`. Diff against the backed-up old
+  idle recomputed: 15,232 px in (383,54)-(549,217), 124 opaque before, 0 lost alpha, 591x1118.
+- Backups re-hashed: `picks/leblanc-fan/replaced/idle.png` = 4fea45f9... (the superseded
+  hash in the lock); `approved/2026-09-25-leblanc-fan/idle.png` = 77192c23..., its json
+  equals the installed sidecar (c478df23...). Sidecar keys match the old one plus metadata
+  (`status`, `method`, `derivedFrom`, `fanColour`, `game`, `approved`); canvas and
+  baselineY unchanged.
+- Lock: `supersedes` follows the yojimbo-casts convention. `verify-approved` run now:
+  185 ok, 0 mismatched, 0 missing (the count grew from 152 with other tracks' locks).
+- Art at 1:1 and 3x on grey: one open red folding fan, the cast's fan; face, smile, hand
+  and pose unchanged. Game frame (picks0925, 1600x900): the fan reads red and open at
+  about 81x154 px; the intent card ends at y about 365, above her head (y 382).
+  proof-run.json: 1600x900, gpu, no hooks, fanHits 0, consoleErrors [], notFound [],
+  stoppedAtLink 3 (the STOP_AT_LINK "error" is the planned stop), pose idle.
+- Tests: leblanc-art + chapters-6-7-8-enemy-sprite-manifest 31/31. Nothing listens on
+  5660-5679.

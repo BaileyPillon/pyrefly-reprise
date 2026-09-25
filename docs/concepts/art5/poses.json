@@ -1,0 +1,174 @@
+{
+ "note": "Body-only Danbooru pose tags per kind (no effect words; Chapter XIII METHOD.md). sword and flask are the Chapter XIII sets unchanged (render.mjs there); guns and daggers are new in art5 and draw on the dual skeletons.",
+ "HURT_NEG": "smile, smirk, grin, happy, laughing",
+ "KO": {
+  "tags": "lying, on side, on ground, full body, from side, head to the right, feet to the left, (closed eyes:1.3), unconscious, expressionless, closed mouth",
+  "neg": "sitting, standing, open eyes, looking at viewer, lying on back, smile, wink, sleeping, pillow"
+ },
+ "kinds": {
+  "sword": {
+   "attack": {
+    "tags": "fighting stance, (lunging:1.2), leaning forward, legs apart, bent knees, (two-handed:1.2), holding greatsword with both hands, sword pointing forward, serious, v-shaped eyebrows, closed mouth",
+    "neg": "planted sword, sword on ground, leaning on sword, standing straight, sword behind back, smile"
+   },
+   "cast": {
+    "tags": "standing, (arm up:1.2), raised hand, open hand, empty hand, (single weapon:1.2), one hand holding sword, sword pointing down, looking up, serious, closed mouth",
+    "neg": "two-handed, sword raised, smile, holding two weapons, oversized sword, giant sword"
+   },
+   "item": {
+    "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, (single weapon:1.2), one hand holding sword, sword pointing down, looking at object, closed mouth",
+    "neg": "two-handed, drinking, sword raised, holding two weapons, oversized sword, giant sword"
+   },
+   "hurt": {
+    "tags": "(leaning back:1.2), stumbling backward, off balance, head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, hand on own chest, one hand holding sword, sword pointing down, sword at side",
+    "neg": "{HURT_NEG}, oversized sword, giant sword, sword behind back, two swords, broken sword, close-up, upper body, cowboy shot"
+   },
+   "victory": {
+    "tags": "standing, (sword over shoulder:1.2), holding greatsword, hand on own hip, confident, {face}",
+    "neg": "sword raised, two-handed, sword on ground"
+   },
+   "ko": {
+    "tags": "{KO}, sword on ground",
+    "neg": "{KO}"
+   }
+  },
+  "guns": {
+   "attack": {
+    "tags": "fighting stance, (aiming:1.2), arms extended forward, (dual wielding:1.1), holding pistol in each hand, legs apart, leaning forward, serious, closed mouth",
+    "neg": "rifle, sword, arm up, hand on hip, smile, standing straight"
+   },
+   "cast": {
+    "tags": "standing, (arm up:1.2), holding pistol pointing up, other hand holding pistol at side, looking up, serious, closed mouth",
+    "neg": "rifle, aiming at viewer, smile"
+   },
+   "item": {
+    "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, other hand holding pistol at side, pistol pointing down, looking at object, closed mouth",
+    "neg": "rifle, drinking, aiming, arm up, aiming at viewer"
+   },
+   "hurt": {
+    "tags": "standing, (feet on ground:1.2), (leaning back:1.2), head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, arms down, holding pistol in each hand",
+    "neg": "{HURT_NEG}, aiming, close-up, upper body, cowboy shot, jumping, midair, legs up, leg lift, upside-down, kicking, flip, knee up, long scarf, flowing scarf",
+    "tags_r1": "(leaning back:1.2), stumbling backward, off balance, head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, arms down, holding pistol in each hand",
+    "neg_r1": "{HURT_NEG}, aiming, close-up, upper body, cowboy shot"
+   },
+   "victory": {
+    "tags": "standing, (arm up:1.2), holding pistol pointing up, other hand holding pistol at side, legs apart, confident, {face}",
+    "neg": "aiming at viewer, rifle"
+   },
+   "ko": {
+    "tags": "{KO}, pistol on ground",
+    "neg": "{KO}"
+   }
+  },
+  "daggers": {
+   "attack": {
+    "tags": "fighting stance, (lunging:1.2), leaning forward, legs apart, bent knees, arms extended forward, (dual wielding:1.1), holding dagger in each hand, serious, v-shaped eyebrows, open mouth",
+    "neg": "sword, long sword, standing straight, hand on hip, smile"
+   },
+   "cast": {
+    "tags": "standing, (arm up:1.2), holding dagger raised, other hand holding dagger at side, reverse grip, looking up, determined, open mouth",
+    "neg": "sword, long sword"
+   },
+   "item": {
+    "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, other hand holding dagger at side, reverse grip, looking at object, smile",
+    "neg": "sword, drinking, arm up"
+   },
+   "hurt": {
+    "tags": "standing, (feet on ground:1.2), (leaning back:1.2), head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, arms down, holding dagger in each hand",
+    "neg": "{HURT_NEG}, sword, close-up, upper body, cowboy shot, jumping, midair, legs up, leg lift, upside-down, kicking, flip, knee up, long scarf, flowing scarf",
+    "tags_r1": "(leaning back:1.2), stumbling backward, off balance, head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, arms down, holding dagger in each hand",
+    "neg_r1": "{HURT_NEG}, sword, close-up, upper body, cowboy shot"
+   },
+   "victory": {
+    "tags": "standing, (arm up:1.2), holding dagger raised, other hand holding dagger at side, reverse grip, legs apart, {face}, open mouth",
+    "neg": "sword, long sword"
+   },
+   "ko": {
+    "tags": "{KO}, dagger on ground",
+    "neg": "{KO}"
+   }
+  },
+  "staff": {
+   "attack": {
+    "tags": "fighting stance, (lunging:1.1), leaning forward, legs apart, bent knees, (two-handed:1.2), holding staff with both hands, staff pointing forward, serious, closed mouth",
+    "neg": "sword, standing straight, smile"
+   },
+   "cast": {
+    "tags": "standing, (arm up:1.2), raised hand, open hand, one hand holding staff, staff at side, looking up, serious, closed mouth",
+    "neg": "two-handed, smile, sword"
+   },
+   "item": {
+    "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, one hand holding staff, staff at side, looking at object, closed mouth",
+    "neg": "two-handed, drinking, sword"
+   },
+   "hurt": {
+    "tags": "(leaning back:1.2), stumbling backward, off balance, head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, hand on own chest, one hand holding staff",
+    "neg": "{HURT_NEG}, sword, close-up, upper body, cowboy shot"
+   },
+   "victory": {
+    "tags": "standing, (staff over shoulder:1.2), holding staff, hand on own hip, confident, {face}",
+    "neg": "sword, two-handed"
+   },
+   "ko": {
+    "tags": "{KO}, staff on ground",
+    "neg": "{KO}"
+   }
+  },
+  "mic": {
+   "attack": {
+    "tags": "(throwing:1.1), arm extended forward, holding microphone, leaning forward, legs apart, singing, open mouth",
+    "neg": "weapon, standing straight"
+   },
+   "cast": {
+    "tags": "standing, (arm up:1.2), holding microphone, hand on own hip, singing, open mouth, looking up",
+    "neg": "weapon, closed mouth"
+   },
+   "item": {
+    "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, hand on own hip, smile, looking at viewer",
+    "neg": "drinking, arm up, weapon"
+   },
+   "hurt": {
+    "tags": "standing, (feet on ground:1.2), (leaning back:1.2), head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, hands on own chest",
+    "neg": "{HURT_NEG}, close-up, upper body, cowboy shot, jumping, midair, legs up, leg lift, upside-down, kicking, flip, knee up",
+    "tags_r1": "(leaning back:1.2), stumbling backward, off balance, head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, hands on own chest",
+    "neg_r1": "{HURT_NEG}, close-up, upper body, cowboy shot"
+   },
+   "victory": {
+    "tags": "(arms up:1.2), cheering, standing, legs apart, holding microphone, {face}, open mouth",
+    "neg": "jumping, midair, weapon"
+   },
+   "ko": {
+    "tags": "{KO}",
+    "neg": "{KO}"
+   }
+  },
+  "claws": {
+   "attack": {
+    "tags": "(lunging:1.2), claw pose, arm extended forward, leaning forward, legs apart, bent knees, fierce, open mouth, fang",
+    "neg": "sword, dagger, weapon, standing straight, hand on hip"
+   },
+   "cast": {
+    "tags": "standing, (arm up:1.2), clenched hand, hand on own hip, fierce, open mouth, looking up",
+    "neg": "sword, dagger, weapon"
+   },
+   "item": {
+    "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, hand on own hip, grin, looking at viewer",
+    "neg": "drinking, arm up, weapon"
+   },
+   "hurt": {
+    "tags": "standing, (feet on ground:1.2), (leaning back:1.2), head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, hands on own chest",
+    "neg": "{HURT_NEG}, close-up, upper body, cowboy shot, jumping, midair, legs up, leg lift, upside-down, kicking, flip, knee up",
+    "tags_r1": "(leaning back:1.2), stumbling backward, off balance, head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, hands on own chest",
+    "neg_r1": "{HURT_NEG}, close-up, upper body, cowboy shot"
+   },
+   "victory": {
+    "tags": "(arms up:1.2), clenched hands, cheering, standing, legs apart, {face}, open mouth",
+    "neg": "jumping, midair, weapon"
+   },
+   "ko": {
+    "tags": "{KO}",
+    "neg": "{KO}"
+   }
+  }
+ }
+}

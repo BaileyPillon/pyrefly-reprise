@@ -1,0 +1,590 @@
+{
+ "paine-black-mage/idle": {
+  "eyeL": [
+   266,
+   206
+  ],
+  "eyeR": [
+   309,
+   206
+  ],
+  "chin": [
+   285,
+   250
+  ]
+ },
+ "paine-dark-knight/idle": {
+  "eyeL": [
+   356,
+   243
+  ],
+  "eyeR": [
+   395,
+   256
+  ],
+  "chin": [
+   370,
+   297
+  ]
+ },
+ "paine-gunner/idle": {
+  "eyeL": [
+   252,
+   145
+  ],
+  "eyeR": [
+   300,
+   145
+  ],
+  "chin": [
+   275,
+   199
+  ]
+ },
+ "paine-warrior/idle": {
+  "eyeL": [
+   180,
+   145
+  ],
+  "eyeR": [
+   217,
+   160
+  ],
+  "chin": [
+   195,
+   207
+  ]
+ },
+ "rikku-alchemist/idle": {
+  "eyeL": [
+   203,
+   182
+  ],
+  "eyeR": [
+   247,
+   190
+  ],
+  "chin": [
+   223,
+   235
+  ]
+ },
+ "rikku-black-mage/idle": {
+  "eyeL": [
+   237,
+   231
+  ],
+  "eyeR": [
+   292,
+   228
+  ],
+  "chin": [
+   267,
+   288
+  ]
+ },
+ "rikku-gunner/idle": {
+  "eyeL": [
+   155,
+   152
+  ],
+  "eyeR": [
+   196,
+   152
+  ],
+  "chin": [
+   173,
+   195
+  ]
+ },
+ "rikku-thief/idle": {
+  "eyeL": [
+   262,
+   308
+  ],
+  "eyeR": [
+   332,
+   308
+  ],
+  "chin": [
+   300,
+   393
+  ]
+ },
+ "rikku-white-mage/idle": {
+  "eyeL": [
+   180,
+   201
+  ],
+  "eyeR": [
+   235,
+   201
+  ],
+  "chin": [
+   208,
+   260
+  ]
+ },
+ "yuna-black-mage/idle": {
+  "eyeL": [
+   315,
+   199
+  ],
+  "eyeR": [
+   365,
+   197
+  ],
+  "chin": [
+   340,
+   257
+  ]
+ },
+ "yuna-dark-knight/idle": {
+  "eyeL": [
+   243,
+   256
+  ],
+  "eyeR": [
+   288,
+   256
+  ],
+  "chin": [
+   267,
+   306
+  ]
+ },
+ "yuna-gunner/idle": {
+  "eyeL": [
+   208,
+   128
+  ],
+  "eyeR": [
+   263,
+   130
+  ],
+  "chin": [
+   236,
+   194
+  ]
+ },
+ "yuna-songstress/idle": {
+  "eyeL": [
+   229,
+   118
+  ],
+  "eyeR": [
+   280,
+   115
+  ],
+  "chin": [
+   255,
+   177
+  ]
+ },
+ "yuna-warrior/idle": {
+  "eyeL": [
+   332,
+   115
+  ],
+  "eyeR": [
+   385,
+   118
+  ],
+  "chin": [
+   360,
+   174
+  ]
+ },
+ "yuna-dark-knight/attack": {
+  "eyeL": [
+   421,
+   516
+  ],
+  "eyeR": [
+   466,
+   524
+  ],
+  "chin": [
+   441,
+   565
+  ]
+ },
+ "paine-white-mage/idle": {
+  "eyeL": [
+   400,
+   170
+  ],
+  "eyeR": [
+   441,
+   170
+  ],
+  "chin": [
+   422,
+   205
+  ]
+ },
+ "rikku-dark-knight/idle": {
+  "eyeL": [
+   295,
+   171
+  ],
+  "eyeR": [
+   334,
+   183
+  ],
+  "chin": [
+   307,
+   202
+  ]
+ },
+ "paine-dark-knight/attack": {
+  "eyeL": [
+   413,
+   508
+  ],
+  "eyeR": [
+   458,
+   510
+  ],
+  "chin": [
+   438,
+   549
+  ]
+ },
+ "paine-dark-knight/item": {
+  "eyeL": [
+   323,
+   85
+  ],
+  "eyeR": [
+   358,
+   90
+  ],
+  "chin": [
+   340,
+   123
+  ]
+ },
+ "rikku-alchemist/cast": {
+  "eyeL": [
+   171,
+   259
+  ],
+  "eyeR": [
+   223,
+   244
+  ],
+  "chin": [
+   203,
+   302
+  ]
+ },
+ "rikku-alchemist/item": {
+  "eyeL": [
+   170,
+   172
+  ],
+  "eyeR": [
+   209,
+   175
+  ],
+  "chin": [
+   187,
+   207
+  ]
+ },
+ "rikku-alchemist/hurt": {
+  "eyeL": [
+   151,
+   104
+  ],
+  "eyeR": [
+   186,
+   112
+  ],
+  "chin": [
+   161,
+   145
+  ]
+ },
+ "rikku-alchemist/victory": {
+  "eyeL": [
+   140,
+   171
+  ],
+  "eyeR": [
+   182,
+   171
+  ],
+  "chin": [
+   160,
+   216
+  ]
+ },
+ "paine-warrior/victory": {
+  "eyeL": [
+   294,
+   410
+  ],
+  "eyeR": [
+   337,
+   415
+  ],
+  "chin": [
+   304,
+   455
+  ]
+ },
+ "yuna-gunner/item": {
+  "eyeL": [
+   180,
+   109
+  ],
+  "eyeR": [
+   225,
+   122
+  ],
+  "chin": [
+   202,
+   175
+  ]
+ },
+ "rikku-thief/item": {
+  "eyeL": [
+   167,
+   158
+  ],
+  "eyeR": [
+   210,
+   168
+  ],
+  "chin": [
+   187,
+   209
+  ]
+ },
+ "rikku-thief/ko": {
+  "eyeL": [
+   921,
+   298
+  ],
+  "eyeR": [
+   973,
+   322
+  ],
+  "chin": [
+   943,
+   375
+  ]
+ },
+ "rikku-thief/victory": {
+  "eyeL": [
+   232,
+   361
+  ],
+  "eyeR": [
+   270,
+   374
+  ],
+  "chin": [
+   242,
+   409
+  ]
+ },
+ "paine-black-mage/attack": {
+  "eyeL": [
+   472,
+   321
+  ],
+  "eyeR": [
+   512,
+   324
+  ],
+  "chin": [
+   493,
+   370
+  ]
+ },
+ "paine-black-mage/cast": {
+  "eyeL": [
+   174,
+   441
+  ],
+  "eyeR": [
+   209,
+   453
+  ],
+  "chin": [
+   196,
+   491
+  ]
+ },
+ "paine-black-mage/item": {
+  "eyeL": [
+   246,
+   272
+  ],
+  "eyeR": [
+   289,
+   277
+  ],
+  "chin": [
+   266,
+   321
+  ]
+ },
+ "paine-black-mage/victory": {
+  "eyeL": [
+   289,
+   423
+  ],
+  "eyeR": [
+   327,
+   426
+  ],
+  "chin": [
+   312,
+   463
+  ]
+ },
+ "paine-white-mage/attack": {
+  "eyeL": [
+   474,
+   486
+  ],
+  "eyeR": [
+   522,
+   489
+  ],
+  "chin": [
+   497,
+   537
+  ]
+ },
+ "rikku-black-mage/attack": {
+  "eyeL": [
+   416,
+   293
+  ],
+  "eyeR": [
+   451,
+   294
+  ],
+  "chin": [
+   435,
+   332
+  ]
+ },
+ "rikku-black-mage/cast": {
+  "eyeL": [
+   224,
+   427
+  ],
+  "eyeR": [
+   258,
+   440
+  ],
+  "chin": [
+   245,
+   481
+  ]
+ },
+ "rikku-gunner/attack": {
+  "eyeL": [
+   205,
+   313
+  ],
+  "eyeR": [
+   277,
+   311
+  ],
+  "chin": [
+   255,
+   396
+  ]
+ },
+ "rikku-gunner/cast": {
+  "eyeL": [
+   137,
+   290
+  ],
+  "eyeR": [
+   181,
+   305
+  ],
+  "chin": [
+   155,
+   341
+  ]
+ },
+ "rikku-gunner/victory": {
+  "eyeL": [
+   153,
+   220
+  ],
+  "eyeR": [
+   192,
+   229
+  ],
+  "chin": [
+   160,
+   266
+  ]
+ },
+ "rikku-white-mage/attack": {
+  "eyeL": [
+   485,
+   392
+  ],
+  "eyeR": [
+   548,
+   382
+  ],
+  "chin": [
+   517,
+   439
+  ]
+ },
+ "yuna-black-mage/item": {
+  "eyeL": [
+   387,
+   163
+  ],
+  "eyeR": [
+   422,
+   168
+  ],
+  "chin": [
+   405,
+   201
+  ]
+ },
+ "yuna-songstress/item": {
+  "eyeL": [
+   299,
+   82
+  ],
+  "eyeR": [
+   333,
+   98
+  ],
+  "chin": [
+   316,
+   134
+  ]
+ },
+ "yuna-warrior/victory": {
+  "eyeL": [
+   279,
+   425
+  ],
+  "eyeR": [
+   319,
+   429
+  ],
+  "chin": [
+   304,
+   469
+  ]
+ }
+}

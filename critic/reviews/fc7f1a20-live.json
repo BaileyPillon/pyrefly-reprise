@@ -1,0 +1,65 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-25T18:00:00.000Z",
+  "build": {
+    "mainSha": "fc7f1a20",
+    "bundle": "BQnfWT0X",
+    "artifactHash": "e8fff6a590be9577556546d5e35437f23c69a30b4caa6dca1ea85251dce9d006"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/fc7f1a20.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/5be4babe.json -> {result: PASS, liveManifest: match, checked: 81, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu (renderer confirmed 'ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti ...) Direct3D11'), fresh context, 1600x900, cache-busted URL. Screen/state asserted via window.__pyrefly.screen()/battleState() before each step: title -> (briefing, real Enter) -> chapter-select -> real clicks on the Trema card (aria-label) -> party-prep -> real Enter through pre-scene cutscene -> battle (Chapter XIII, Oversoul Paragon). Reached a real awaitingMenu:true state, then a real Attack via Enter/Enter/Enter (no debug select:/gotoChapter used for navigation or the attack): Paragon HP 210000 -> 206674, turn 4 -> 5. Cancel path (Escape) exercised from a reopened submenu. Escape paused (screen stack battle,pause), H hid/restored .pause__ui. audioDebug() showed playing track 'pause' ('Still Water') with source:'prerendered', cached:true. Console errors: 0. 4xx/5xx responses: 0."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight pass only: SaveStore.setSettings({musicVolume:0.42}) changed 0.7 -> 0.42 in memory; page.reload(); value read back as 0.42 after reload. Full upgrade-path matrix (older save shapes, migrateFfx2Atb) not exercised.",
+      "reason": "Full upgrade matrix intentionally out of scope for this pass (see task); recorded under coverage.notTested."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Exact-artifact byte identity of every shipped file (81 files) at the live URL",
+      "Title -> briefing -> chapter-select real navigation",
+      "Chapter XIII (Trema) card presence and real-click selection from chapter-select",
+      "Party-prep -> pre-scene cutscene -> battle start for Chapter XIII",
+      "Real player command menu reached with Oversoul Paragon in the field",
+      "One real Attack by keyboard against Paragon (positive path), confirmed via HP/turn state change",
+      "Cancel path (Escape) from a reopened command submenu",
+      "Pause (Escape), hide/restore (H), resume (Escape/P) in battle",
+      "Prerendered music fetched and playing (audioDebug source:'prerendered') rather than synth fallback",
+      "Console error and 404/5xx count for the whole run",
+      "Lightweight reload smoke: one setting change survives a reload"
+    ],
+    "reused": [],
+    "notTested": [
+      "Full save/settings upgrade matrix across older save shapes (CHK-024 full pass)",
+      "The Paragon -> Trema phase transition and the Trema fight itself",
+      "The other four shipped chapters (Seymour Flux, Yunalesca, Braska's Final Aeon, FFX-2 Vegnagun/Shuyin)",
+      "Evrae and Vegnagun staging repairs claimed in the release headline",
+      "New speaker portraits (Trema; Gippal, Baralai, Buddy)",
+      "Phone battle HUD B on an actual phone viewport/device",
+      "Cross-browser (Edge/Firefox/Safari) or real-device/gamepad coverage",
+      "The deep review already owed for this build (separate obligation, not settled by this report)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 12
+}

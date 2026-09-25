@@ -1,0 +1,504 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-25T02:48:00-04:00",
+ "build": {
+  "mainSha": "5be4babe",
+  "candidateTree": "D:/pyrefly-rel15",
+  "bundle": "Dat8v42m",
+  "live": "1c22066e (release 14) as the comparison; the live URL already serves 5be4babe (deployed first under the owner override)"
+ },
+ "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: Chapter IX plays through its real flow with real keys at 1600x900, 2000x1012 and 390x844 (win by Kimahri's Doom, count 5, 0:45 to 2:16), and the defeat path reaches RETRY and returns to party prep; 0 console errors and 0 HTTP errors in every run.",
+  "No regression against 1c22066e: FFX-2 Chapter IV and FFX Chapter I reach their first menu through the real flow exactly as on the previous build (identical text for IV, identical phone frame for I).",
+  "Chapter IX data matches research/ffx-yojimbo.md (HP 33,000, Def 80, MDef 0, Overkill 4,060, Doom 5, Kozuka 16 / Wakizashi 28 / Daigoro 20 crit+shatter 10 / Zanmato 200 fixed, Ginnem HP 10 Doom 3, Daigoro STR 25) and the gauge moves +3 per targeting, +2 per his action in play; 43 changed test files pass.",
+  "The majors this release discloses: R15-01 (phone battle HUD text below the floor, pre-existing, same on 1c22066e) and R13-04 (Evrae stack covers Tidus, carried; its fix was reverted out of this release)."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "title, briefing, chapter select, prep, cutscene, battle, results at 1600x900, 2000x1012, 390x844",
+   "reason": "every full-screen layer owned the window at all three sizes; no stage showing through a front-end screen in any capture",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600x900-04-prep.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-13-results.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-390x844-14-back-at-select.jpg"
+   ],
+   "minutes": 2
+  },
+  {
+   "id": "CHK-003",
+   "result": "FAIL",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "I, IX",
+   "state": "first command menu at 390x844",
+   "reason": "at 390x844 the battle HUD (command stack, party panel, CTB list, guide) renders at roughly 5 to 7 px effective text; identical on the previous live build 1c22066e in Chapter I, so pre-existing and not a regression (R15-01). 1600x900 and 2000x1012 read fine by eye; no pixel sweep of text sizes in this pass",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-390x844-08-first-menu.jpg",
+    "critic/reviews/5be4babe-focused/phone-ch1-prev-vs-cand.jpg"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "first menu, Kimahri",
+   "reason": "NEXT BEST MOVE names Doom -> Yojimbo, IN OVERDRIVE, NO MP; OVERDRIVE READY is on the stack and the real-key path Overdrive > Doom > (Ronso Rage list) Doom landed Doom count 5",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-08-first-menu.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000.log"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "advisor on a broken board",
+   "reason": "not exercised: the advisor was only read on a healthy board and after Yuna KO (not captured); deep review owed"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "battle -> aftermath scene -> results -> chapter select",
+   "reason": "no gauge, guide or coach overlay carried into the aftermath scene, results or chapter select in any run",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-12-after-battle.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-14-back-at-select.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "both",
+   "chapter": "IX, IV",
+   "state": "select, prep, briefing, battle text dumps",
+   "reason": "no developer vocabulary in the Chapter IX select, prep, cutscene, battle or results text dumps; briefing reads \"Eight fights\" and chapter select has exactly 8 playable tiles (9 tiles, Seymour and Anima COMING)",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600.log",
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600x900-02-briefing.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "first menu at 1600x900 and 2000x1012",
+   "reason": "Lulu, Kimahri, Yuna, Yojimbo, Ginnem and Daigoro all clear of the gauge, guide, advisor, command stack and party panel by eye at both sizes (not measured). Chapter VIII R13-04 is carried unmeasured (the Evrae re-lay was reverted out of this release)",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600x900-08-first-menu.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-08-first-menu.jpg"
+   ],
+   "minutes": 2
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "select, prep, battle",
+   "reason": "Yojimbo, Lady Ginnem, Daigoro, Kozuka, Wakizashi and every party name print in full at 1600x900 and 2000x1012",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-08-first-menu.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600x900-03-select.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "command stack, Ronso Rage list, target step",
+   "reason": "the highlighted row is gold on every step; the target cursor landed on the intended combatant (script read activeTargetId before Enter)",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600x900-09-after-battle.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000.log"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "battle",
+   "reason": "Yojimbo, Ginnem and Daigoro are on screen and inside the frame at 1600x900, 2000x1012 and 390x844",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-390x844-08-first-menu.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-08-first-menu.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "battle, cutscene",
+   "reason": "painted billboards and portraits for every combatant and speaker; no fallback face seen in any capture",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600x900-05-cutscene-open.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-08-first-menu.jpg"
+   ],
+   "minutes": 1
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX, III",
+   "reason": "no new art judgement this pass: the plan sets approvedArtCheck false; the Chapter IX boss / chamber tiles are approved but delivery not-scheduled; Anima stone look (Chapter III) left to the deep review"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "title -> select -> prep -> cutscene -> battle -> outcome -> results -> select / retry",
+   "reason": "every step pressed with Playwright keyboard (Enter, arrows); state only read to choose keys. Win by Doom at 1600x900, 2000x1012, 390x844; defeat and RETRY at 1600x900; no debug call changed state",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000.log",
+    "critic/reviews/5be4babe-focused/cand-ix-loss-1600.log",
+    "critic/reviews/5be4babe-focused/cand-ix-win-390.log"
+   ],
+   "minutes": 12
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "both",
+   "chapter": "IX, I, IV",
+   "state": "every capture",
+   "reason": "each capture asserted window.__pyrefly.screen() first and logs it beside the file; a mismatch writes UNVERIFIED and no file (none occurred)",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600.log"
+   ],
+   "minutes": 0
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "reason": "focused review of the production candidate; live verification is the separate live obligation. Note: the live bundle name is already index-Dat8v42m.js, the same as this build"
+  },
+  {
+   "id": "CHK-018",
+   "result": "UNVERIFIED",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "reason": "no audit of hand-written shipped paths this pass; one aborted request per Chapter IX entry (art/backdrops/cavern-stolen-fayth/sakura.png net::ERR_ABORTED, no 4xx) is logged as R15-02"
+  },
+  {
+   "id": "CHK-019",
+   "result": "UNVERIFIED",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "reason": "no decode check run on the candidate media; deploy-pages artifact-manifest decode-checks every shipped file at deploy (critic/artifacts/5be4babe.json), not re-read here"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "both",
+   "chapter": "I, IV, IX",
+   "state": "shared front end and flow",
+   "reason": "shared plumbing (chapter registry, loading warm-up, coach copy count) behaves the same in both games: FFX-2 Chapter IV and FFX Chapter I reach their first menu through the real flow on the candidate exactly as on 1c22066e (identical text dumps for IV)",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ch4-1600.log",
+    "critic/reviews/5be4babe-focused/prev-ch4-1600.log",
+    "critic/reviews/5be4babe-focused/phone-ch1-prev-vs-cand.jpg"
+   ],
+   "minutes": 4
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": true,
+   "mode": "automated",
+   "game": "both",
+   "chapter": "IX (FFX only) + FFX-2 message lines + aeon Items",
+   "state": "placement",
+   "reason": "Chapter IX is FFX only (research/ffx-yojimbo.md section 0.3) and sits only in the FFX row of chapter select; Zanmato gauge under src/ui/ffx; FFX-2 battle message lines are src/ui/ffx2/battleMessage.ts only; aeon Items removal is FFX only (research/ffx-combat-core.md 6.2/6.3, tests/unit/ffx-aeon-no-items.test.ts); steal names under src/battle/ffx2 and src/data/ffx2. 43 changed test files pass (703 tests)",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600x900-03-select.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600.log"
+   ],
+   "minutes": 3
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "win and loss",
+   "reason": "victory -> aftermath cutscene -> results (Victory, NEW BEST) -> chapter select with yojimbo-cavern in cleared; defeat -> results (Defeat, RETRY / CHAPTER SELECT) -> RETRY with Enter -> party prep",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-13-results.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-14-back-at-select.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-loss-1600x900-13-loss-offer.jpg",
+    "critic/reviews/5be4babe-focused/cand-ix-loss-1600x900-14-after-retry.jpg"
+   ],
+   "minutes": 2
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "artifact": "5be4babe / bundle Dat8v42m",
+   "targetVersion": "d5f76c2bb64c84b83a816d80dfb28a499aeaff65ed3a661b70d34ca9a93b466a",
+   "environment": "vite preview of D:/pyrefly-rel15/dist-gate (bundle index-Dat8v42m.js, byte-identical name to the live bundle) on 127.0.0.1:5431; previous live 1c22066e rebuilt from D:/pyrefly-rel14 into dist-gate and served on 127.0.0.1:5432 for comparison; Playwright Chromium, PYREFLY_BROWSER=gpu, ANGLE D3D11 RTX 5070 Ti, no fallback",
+   "mandatory": false,
+   "mode": "automated",
+   "game": "FFX",
+   "chapter": "IX",
+   "state": "gauge, Doom counter, recall",
+   "reason": "the Zanmato gauge rose through the real presenter path (2 -> 5 -> 10 ... +3 per targeting, +2 per Yojimbo action, research 4.1) and the Doom counter ticked 5 -> 0 on Yojimbo in the real battle",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000.log",
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-11-mid-battle.jpg"
+   ],
+   "minutes": 1
+  }
+ ],
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "detail": {
+   "matched": [
+    "The Zanmato gauge (FFX), option A bar under his name: bands at 25 / 50 / 80, percent, Next line (yojimbo-gauge.jpg)"
+   ],
+   "notRequired": [
+    "Yojimbo boss sheet, boss painting and the chamber: approved, delivery not-scheduled (composite yojimbo-chamber.jpg kept for the deep review)"
+   ]
+  }
+ },
+ "issues": [
+  {
+   "id": "R15-01",
+   "severity": "major",
+   "title": "Phone 390x844: the FFX battle HUD text is far below the legibility floor (Chapter IX inherits it)",
+   "game": "ffx",
+   "chapter": "yojimbo-cavern, seymour-flux",
+   "expected": "command stack, party panel, CTB list and guide readable at 390x844 (CHK-003 floor)",
+   "observed": "the whole battle HUD is drawn at roughly 5 to 7 px effective text on a 390x844 viewport; the Chapter I frame is identical on 1c22066e",
+   "repro": "viewport 390x844 touch, title Enter, Enter, select IX, Enter, hold Enter through the scene; first menu",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-390x844-08-first-menu.jpg",
+    "critic/reviews/5be4babe-focused/phone-ch1-prev-vs-cand.jpg"
+   ],
+   "confidence": "high for the observation, text size estimated from the frame, not measured",
+   "requirement": "CHK-003",
+   "where": "FFX battle HUD phone scaling (suspected: one global scale factor)",
+   "fix": "options for a phone battle HUD layout, shown to Bailey first (hard rule 9)",
+   "acceptanceCheck": "every battle HUD string at 390x844 measures at least the CHK-003 floor",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R13-04",
+   "severity": "major",
+   "title": "Evrae (Chapter VIII): the FFX command stack covers Tidus at the first menu (carried; the fix 1f650d3f was reverted out of this release)",
+   "game": "ffx",
+   "chapter": "evrae-airship",
+   "expected": "the acting character readable beside the command stack",
+   "observed": "not re-measured in this pass; release 15 reverted the Evrae re-lay, so the staging is the one 1c22066e-focused measured (0.25 / 0.247 visibility)",
+   "repro": "as in critic/reviews/1c22066e-focused.json R13-04",
+   "evidence": [
+    "critic/reviews/1c22066e-focused/cand-evrae-airship-2000x1012-menu.jpg"
+   ],
+   "confidence": "medium (carried evidence; shared presenter files changed since)",
+   "requirement": "CHK-008",
+   "where": "Evrae scene staging; b9c2fe57 on main is the follow-up",
+   "fix": "ship the verified Evrae re-lay in the next batch",
+   "acceptanceCheck": "Tidus frame visibility >= 0.9 at the first menu, 1600x900 and 2000x1012",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R15-02",
+   "severity": "polish",
+   "title": "Chapter IX: the sakura backdrop layer request is aborted on every entry",
+   "game": "ffx",
+   "chapter": "yojimbo-cavern",
+   "expected": "each requested art file loads once or is not requested",
+   "observed": "art/backdrops/cavern-stolen-fayth/sakura.png net::ERR_ABORTED on all four Chapter IX entries (no 4xx, no console error); title keyart.png aborted twice the same way; whether the sakura layer then shows in battle was not verified",
+   "repro": "enter Chapter IX from chapter select and watch the network log",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-1600.log"
+   ],
+   "confidence": "high for the abort, unknown for the visible effect",
+   "requirement": "CHK-018",
+   "where": "suspected: the new battle preload / warm-up cancelling a superseded fetch (src/app/screens/battlePreload.ts)",
+   "fix": "confirm the abort is a cancelled duplicate and that the layer is drawn; otherwise stop cancelling it",
+   "acceptanceCheck": "no aborted art requests on Chapter IX entry, or a written reason and a capture of the layer"
+  },
+  {
+   "id": "R15-03",
+   "severity": "polish",
+   "title": "Ronso Rage asks for Doom twice",
+   "game": "ffx",
+   "chapter": "yojimbo-cavern",
+   "expected": "one choice of Doom from the Overdrive list",
+   "observed": "Overdrive lists Doom; confirming it opens a second list \"Ronso Rage · Choose a Rage: Jump / Doom\" that needs another Enter",
+   "repro": "Kimahri first turn: Overdrive, Doom, Enter",
+   "evidence": [
+    "critic/reviews/5be4babe-focused/cand-ix-win-2000x1012-09-ronso-rage-list.jpg"
+   ],
+   "confidence": "high; not compared with 1c22066e Chapter I",
+   "requirement": "CHK-015",
+   "where": "CommandMenu wrapper list (PR-0125)",
+   "fix": "question for Bailey or the deep review: is the second list intended for a named Rage?",
+   "acceptanceCheck": "decision recorded"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Chapter IX real-key flow: win at 1600x900, 2000x1012, 390x844; defeat + RETRY at 1600x900",
+   "briefing count \"Eight\" vs 8 playable tiles",
+   "Chapter I first menu at 390x844 on candidate and 1c22066e",
+   "Chapter IV (FFX-2) first menus at 1600x900 on candidate and 1c22066e",
+   "data audit of the Yojimbo, Ginnem, Daigoro stats and the four abilities against research",
+   "43 changed unit test files (703 tests) in D:/pyrefly-rel15",
+   "target composite for the Zanmato gauge"
+  ],
+  "reused": [
+   {
+    "what": "R13-04 Evrae measurement",
+    "from": "critic/reviews/1c22066e-focused.json",
+    "why": "release 15 reverted the Evrae re-lay (a2a1b1f5), so the scene staging is the one measured there; shared presenter files did change, so it stays medium confidence"
+   }
+  ],
+  "notTested": [
+   "Zanmato actually firing (both losses and wins ended before 100 percent) and the aeon-takes-Zanmato route",
+   "Chapter VII fixes (chapter locked)",
+   "FFX-2 battle message lines in play (unit tests only)",
+   "aeon Items removal in play (unit test only)",
+   "steal names in play",
+   "cue routing and audio",
+   "loading-time measurement (first menu about 12 s after the battle screen, not compared)",
+   "Anima paintings and stone look (Chapter III)",
+   "Leblanc fan (Chapter VI)",
+   "pause in Chapter IX",
+   "Chapters II, III, V, VI, VIII",
+   "the live URL (separate live obligation)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of 5be4babe (owed), then the deep review this shared-system change owes on the live build: Zanmato and the aeon route, Chapters II, III, V, VI, VIII, audio routing, loading times, pause in IX.",
+ "elapsedMinutes": 42
+}

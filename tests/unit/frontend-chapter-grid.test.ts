@@ -31,15 +31,16 @@ describe('the board', () => {
     save = freshStore();
   });
 
-  it('holds nine cards: eight playable chapters (Leblanc, Evrae and Yojimbo now landed) and one still coming', () => {
+  it('holds ten cards: nine playable chapters (Leblanc, Evrae, Yojimbo and Trema now landed) and one still coming', () => {
     const tiles = buildChapterTiles(save);
     // Leblanc's and Evrae's own COMING_CHAPTERS rows are filtered out by id
     // now that their real chapters are registered and unlocked, so the raw
     // `COMING_CHAPTERS.length` (3) overcounts by two — this asserts what the
     // board actually shows. Macalania (Chapter 7) is registered but still
     // LOCKED, so its real tile is withheld and its COMING row stays.
-    // Chapter IX (Yojimbo) was listed 2026-09-24 with no COMING row of its own.
-    expect(tiles).toHaveLength(9);
+    // Chapter IX (Yojimbo) was listed 2026-09-24 and Chapter XIII (Trema) on
+    // 2026-09-25, neither with a COMING row of its own.
+    expect(tiles).toHaveLength(10);
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length - LOCKED_CHAPTER_IDS.size);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
       'Seymour and Anima',
@@ -52,9 +53,9 @@ describe('the board', () => {
     expect(groups[0]!.label).toBe('Final Fantasy X');
     expect(groups[1]!.label).toBe('Final Fantasy X-2');
     // Six FFX cards (5 built — Evrae and Yojimbo now landed — + 1 still
-    // coming, Macalania), three FFX-2 (3 built, Leblanc's coming row dropped).
+    // coming, Macalania), four FFX-2 (IV, V, VI and XIII, Leblanc's coming row dropped).
     expect(groups[0]!.tiles).toHaveLength(6);
-    expect(groups[1]!.tiles).toHaveLength(3);
+    expect(groups[1]!.tiles.map((t) => t.numeral)).toEqual(['IV', 'V', 'VI', 'XIII']);
     for (const group of groups) {
       const firstComing = group.tiles.findIndex((t) => !t.playable);
       if (firstComing >= 0) {
@@ -202,8 +203,8 @@ describe('the cursor', () => {
     const fromLastFfx = tiles.findIndex((t) => t.id === 'yojimbo-cavern');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
     // Wrapping backwards from the first card lands on the last *playable* one
-    // — Leblanc now, since it landed as the sixth chapter.
-    expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('ffx2-leblanc');
+    // — Trema now, listed 2026-09-25 after Chapter VI in the FFX-2 group.
+    expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('ffx2-trema');
     for (let i = 0; i < tiles.length; i++) {
       if (!tiles[i]!.playable) continue;
       expect(tiles[stepSelection(tiles, i, 1)]!.playable).toBe(true);

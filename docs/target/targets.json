@@ -128,7 +128,24 @@
           "src": "docs/screenshots/mockups/A-ffx2-battle.jpg",
           "state": "approved",
           "note": "Pink replaces gold as the accent in the FFX-2 chapters.",
-          "build": "Chapter 4 (Bahamut), a party member's command menu open."
+          "build": "Chapter 4 (Bahamut), a party member's command menu open.",
+          "delivery": "implemented",
+          "deliveryNote": "Party-left, enemy-right stays as built (docs/target/decisions.json D-167, item 6 of docs/plans/decisions-2026-09-25.md); this mockup's Bahamut-left/party-right side was never something Bailey named, so the built side is recorded as an accepted adaptation rather than a target miss. research/ffx-vs-ffx2-presentation.md: FFX-2 has free battle positions, no source fixes a side.",
+          "reaction": {
+            "date": "2026-09-25",
+            "words": "all recommendations",
+            "how": "Bailey answered docs/plans/decisions-2026-09-25.md with 'all recommendations' (~11:00 EDT); item 6 recommended A, recording the built party-left side as an accepted adaptation rather than swapping sides.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [
+              "party-left layout the five FFX-2 chapters are already staged on"
+            ],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "that the mockup's Bahamut-left caption was never Bailey's own pick, so the built side needed a record rather than a swap"
+            ]
+          }
         },
         {
           "label": "Results",
@@ -1453,7 +1470,7 @@
           "label": "Seymour Natus, Chapter X (FFX)",
           "src": "docs/concepts/chapters/natus/natus/sheet.jpg",
           "state": "approved",
-          "delivery": "not-scheduled",
+          "delivery": "in-progress",
           "game": "ffx",
           "gameNote": "FFX only: CTB, aeons, Trigger Commands and the FFX status set (research/ffx-seymour-natus-highbridge.md §0.3; docs/plans/chapter-natus-review.md §1). Chapter registration in src/data/encounters.ts is shared plumbing, case 'both' (CHK-020).",
           "note": "Seymour Natus + Mortibody, north end of the Highbridge of Bevelle, before the Main Gate, straight after the Via Purifico (docs/plans/chapter-natus-review.md, docs/target/decisions.json D-077 through D-097). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks; PROCEED on engine, data, AI and story (the plan's own verdict), HOLD everything Bailey sees or hears until this pick lands.",
@@ -1486,7 +1503,8 @@
               "O-2 Mortibody: option A beside O-1, with the KO-and-revive strip reading \"back weaker, max 3,000\" per the engine, not the wiki sentence (D-094)",
               "O-3 the Highbridge: option C, night with the city lit, over the more literally sourced option B, with the gate-facade gap disclosed (D-095)",
               "O-4 reading the fight: option B's HUD-row chips with option A's one-line text kept, and the Review's corrections applied — the Claw chip never names a target it picks at random, no FLEE control, no leftover \"Physical damage\" label, Mortibody stays visible at phone width (D-096)",
-              "O-5 Natus's portrait: option A, used only if B12 lands as its conditional b (D-097)"
+              "O-5 Natus's portrait: option A, used only if B12 lands as its conditional b (D-097)",
+              "hero-plate/pause-card composition: option B (Trema-style, the boss shown, not the Highbridge alone), 2026-09-25, D-156, docs/concepts/chapters/natus/hero-plate/README.md"
             ],
             "undecided": [
               "whether B12 actually resolves to b (Natus portrait) or falls back to a, which depends on whether O-1 lands in time"
@@ -1498,7 +1516,7 @@
           "label": "Fallen Aeons, Chapter XI (FFX-2)",
           "src": "docs/concepts/chapters/fallen-aeons/o1-sisters/sheet.jpg",
           "state": "approved",
-          "delivery": "not-scheduled",
+          "delivery": "in-progress",
           "game": "ffx2",
           "gameNote": "FFX-2 only: the Road to the Farplane gauntlet (Shiva, then the Magus Sisters, then Anima) is an FFX-2 encounter chain with no FFX counterpart (docs/plans/chapter-fallen-aeons-review.md §1). FFX-2 setup ignores EnemyGroupDef.aiScriptId: the Sisters get one shared per-enemy script, like Vegnagun (Review correction 1).",
           "note": "Three links — Shiva, Magus Sisters, Anima — with a Save Sphere full restore between them (docs/plans/chapter-fallen-aeons-review.md, docs/target/decisions.json D-098 through D-120). Nothing here is built or wired: no file under src/, tests/, critic/ or public/art was touched by the options round or by Bailey's picks.",
@@ -1533,7 +1551,8 @@
               "O-1 the Magus Sisters: option A armoured trio, with Cindy corrected to red spots on BLUE per the visual bible (the sheet's own note was wrong) (D-117)",
               "O-2 the possessed treatment: option B, the Chapter IV violet on the Road plate (D-118)",
               "O-3 the Road: option A (single platform, foreground) as the primary plate, option B (all three platforms) as the between-links shot (D-119)",
-              "O-4 link transitions: the Save Sphere fade with the HP/MP restore shown (D-120)"
+              "O-4 link transitions: the Save Sphere fade with the HP/MP restore shown (D-120)",
+              "hero-plate/pause-card composition: option B (the boss shown, reads on both surfaces), 2026-09-25, D-157, docs/concepts/chapters/fallen-aeons/hero-plate/README.md"
             ],
             "undecided": [
               "whether statuses (Stop, Pain's stacks, Itchy) also clear at the Save Sphere, or only HP/MP — no source says either way (carried with FA2)"

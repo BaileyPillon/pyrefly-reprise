@@ -12,6 +12,7 @@ import { Group, PerspectiveCamera, Vector3 } from 'three';
 import { anchorFor, anchorPoint, PartRings, RING_FORWARD, type PartAnchor } from '../../../src/engine/PartAnchors.ts';
 import { solveFormation, type FormationMember } from '../../../src/engine/Formation.ts';
 import { FARPLANE_ENEMY_SPOTS, FARPLANE_PART_ANCHORS, FARPLANE_STAGING } from '../../../src/scenes/farplane-parts.ts';
+import { FARPLANE_SLOTS } from '../../../src/scenes/farplane.ts';
 import { DREAMS_END_SLOTS } from '../../../src/scenes/dreams-end.ts';
 import { ZANARKAND_DOME_SLOTS } from '../../../src/scenes/zanarkand-dome.ts';
 
@@ -187,5 +188,23 @@ describe("Vegnagun's body stands on its own spot at link 3 (FFX-2 only)", () => 
     expect(FARPLANE_STAGING.partAnchors).toBe(FARPLANE_PART_ANCHORS);
     // Pinned by combatant id, never by an anchored part's id.
     for (const id of Object.keys(FARPLANE_ENEMY_SPOTS)) expect(FARPLANE_PART_ANCHORS[id]).toBeUndefined();
+  });
+
+  it("holds the party where live's relaxation settled it, so no flow packs Paine behind Rikku (repair of 04681f5c)", () => {
+    // Unrelaxed on the old table (-2.3/-1.45/-0.55) Paine stood 0.79 visible at link 3 (GPU, 2000x1012)
+    // and the intent slab fell over Yuna while a Bulwark was aimed; the relaxation does not run in every flow.
+    // Held, and the fiends live's relaxation parted from the party pinned where it left them.
+    expect(FARPLANE_STAGING.holdParty).toBe(true);
+    expect(FARPLANE_ENEMY_SPOTS['vegnagun-leg']).toEqual([2.02, 0, -5.0]);
+    expect(FARPLANE_ENEMY_SPOTS['x2-shiva']).toEqual([1.12, 0, -5.0]);
+    expect(FARPLANE_SLOTS.party).toEqual([
+      [-2.48, 0, 1.45],
+      [-1.44, 0, 0.1],
+      [-0.33, 0, -1.3],
+    ]);
+    // Left to right, a clear world gap between neighbours.
+    const xs = FARPLANE_SLOTS.party.map((s) => s[0]);
+    expect(xs[1]! - xs[0]!).toBeGreaterThan(1.0);
+    expect(xs[2]! - xs[1]!).toBeGreaterThan(1.0);
   });
 });

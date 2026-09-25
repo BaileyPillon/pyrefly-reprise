@@ -14,6 +14,11 @@
  * - Lv 20 / 24 / 28 — [ffx2-bahamut §4.2] `[verified: 2 sources]`
  * - Lv 45 / 50 — [ffx2-vegnagun-shuyin §6.2] `[single source]` (transcribed
  *   game tables, so high confidence)
+ * - Lv 99 — [ffx2-trema §5] `[single source]` (the wiki's transcribed tables), for
+ *   Chapter XIII's Lv 99 party (FFX-2 only; plan TR-G1). Gunner, Warrior, Dark
+ *   Knight, White Mage, Alchemist and Gun Mage. Every other shipped build is at
+ *   Lv 50 or below, where these rows change nothing; Levels 51 to 98 now
+ *   interpolate towards the real Lv 99 row instead of extrapolating past Lv 50.
  *
  * Between and outside those anchors we interpolate linearly, which is
  * `[estimate]` — the real curves are mildly convex — and is accurate to a few
@@ -33,6 +38,9 @@ const ANCHORS: Readonly<Record<string, readonly Anchor[]>> = {
     [28, 1143, 63, 58, 29, 35, 35, 53, 123, 4, 16],
     [45, 1680, 84, 81, 40, 45, 45, 55, 126, 5, 19],
     [50, 1822, 90, 87, 44, 47, 47, 56, 127, 5, 20],
+    // Lv 99 [ffx2-trema §5] `[single source]`; MDef 48 from the growth algorithm, because the
+    // wiki table copies Defense into Magic Defense (58/58) [ffx2-combat-core §5.1a data warning].
+    [99, 2837, 123, 137, 73, 58, 48, 57, 131, 4, 24],
   ],
   thief: [
     [20, 896, 74, 39, 32, 24, 54, 60, 110, 19, 26],
@@ -47,6 +55,7 @@ const ANCHORS: Readonly<Record<string, readonly Anchor[]>> = {
     [28, 1349, 72, 72, 27, 102, 9, 50, 102, 5, 12],
     [45, 2063, 102, 101, 36, 115, 11, 52, 103, 6, 13],
     [50, 2267, 110, 109, 38, 117, 12, 53, 104, 7, 14],
+    [99, 4122, 168, 168, 56, 132, 13, 54, 103, 6, 13], // Lv 99 [ffx2-trema §5] `[single source]`
   ],
   'dark-knight': [
     [20, 1311, 147, 60, 44, 118, 80, 38, 102, 2, 10],
@@ -54,6 +63,7 @@ const ANCHORS: Readonly<Record<string, readonly Anchor[]>> = {
     [28, 1753, 169, 76, 54, 124, 84, 38, 102, 2, 10],
     [45, 2668, 216, 107, 72, 136, 93, 40, 104, 3, 11],
     [50, 2931, 229, 116, 77, 139, 96, 41, 104, 4, 12],
+    [99, 5355, 338, 175, 109, 151, 105, 42, 105, 3, 11], // Lv 99 [ffx2-trema §5] `[single source]`
   ],
   'white-mage': [
     [20, 613, 119, 9, 64, 12, 129, 52, 100, 5, 10],
@@ -61,6 +71,7 @@ const ANCHORS: Readonly<Record<string, readonly Anchor[]>> = {
     [28, 815, 147, 10, 76, 13, 136, 52, 100, 5, 10],
     [45, 1221, 203, 14, 101, 16, 150, 54, 102, 6, 11],
     [50, 1334, 219, 14, 108, 17, 155, 54, 102, 7, 12],
+    [99, 2294, 350, 20, 154, 21, 194, 55, 103, 7, 12], // Lv 99 [ffx2-trema §5] `[single source]`
   ],
   'black-mage': [
     [20, 593, 130, 8, 68, 7, 124, 51, 99, 4, 10],
@@ -75,6 +86,7 @@ const ANCHORS: Readonly<Record<string, readonly Anchor[]>> = {
     [28, 1041, 52, 54, 15, 30, 13, 52, 120, 3, 11],
     [45, 1524, 70, 76, 21, 39, 19, 55, 121, 4, 12],
     [50, 1652, 75, 81, 23, 42, 21, 55, 123, 4, 13],
+    [99, 2553, 107, 125, 29, 52, 35, 58, 124, 4, 12], // Lv 99 [ffx2-trema §5] `[single source]`
   ],
   'gun-mage': [
     [20, 747, 98, 52, 61, 25, 63, 53, 120, 3, 10],
@@ -82,6 +94,7 @@ const ANCHORS: Readonly<Record<string, readonly Anchor[]>> = {
     [28, 991, 120, 66, 73, 29, 69, 53, 121, 3, 10],
     [45, 1462, 166, 92, 96, 38, 81, 56, 123, 4, 11],
     [50, 1588, 179, 99, 102, 41, 83, 56, 124, 5, 12],
+    [99, 2523, 288, 152, 149, 51, 97, 59, 127, 4, 11], // Lv 99 [ffx2-trema §5] `[single source]`
   ],
   songstress: [
     [20, 597, 98, 7, 46, 7, 41, 55, 98, 10, 9],

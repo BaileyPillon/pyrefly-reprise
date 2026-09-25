@@ -225,7 +225,7 @@ export class BattleScreen extends Screen {
     if (this.exited) return this.releaseParts();
 
     // --- HUD + ports -------------------------------------------------------
-    this.hud = createHud(chapter.game);
+    this.hud = createHud(chapter.game, () => this.stage); // the field, for the FFX-2 Oversoul look
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);

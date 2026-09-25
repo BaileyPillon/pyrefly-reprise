@@ -75,12 +75,12 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   enemy: rig(RANGE_STAGING.near.rigs.enemy),
   /**
    * `party` and `victory` frame the R13-04 arc (option B): from left of it, so
-   * Wakka at the rail reads left of Tidus instead of behind him, with the
-   * three spread across 0.36..0.69 of the frame (live's arc under live's rigs:
-   * 0.31..0.72). Were [-1.2, 1.6, 7.4] -> [-2.6, 1.2, 0.4] and
+   * Wakka at the rail reads left of Tidus instead of behind him (`party` 0.5
+   * further left than first built, so Tidus's wide attack painting clears Wakka
+   * in the push-in). Were [-1.2, 1.6, 7.4] -> [-2.6, 1.2, 0.4] and
    * [-1.6, 1.7, 7.6] -> [-2.6, 1.3, 0.6], aimed at the old arc's centre.
    */
-  party: { position: [-0.45, 1.6, 6.75], lookAt: [0.25, 1.2, 0], fov: 32, sway: 0.7 },
+  party: { position: [-0.95, 1.6, 6.75], lookAt: [0.0, 1.2, 0], fov: 32, sway: 0.7 },
   victory: { position: [-0.4, 1.7, 6.95], lookAt: [0.35, 1.3, 0.2], fov: 32, sway: 1.2 },
   'idle-far': rig(RANGE_STAGING.far.rigs.idle),
   'action-far': rig(RANGE_STAGING.far.rigs.action),
@@ -98,13 +98,13 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
  * at NEAR (0.23 of him in frame) and Wakka at FAR (0.14). Evrae holds the
  * space right of that, so the back row stands at the rail instead, 0.2 to 0.4
  * in front of its line (edge z -2.7): Tidus front-centre, Wakka back-left,
- * Rikku back-right. Tidus stands 0.15 right of the sheet's [0.1, 0, 0.9]: there
- * he covered Wakka's right edge at FAR (0.93 of Wakka clear at 2000x1012; 1.00
- * now). The approved stack is untouched, and the deck holds the
+ * Rikku back-right, exactly on the sheet's spots (a 0.15 shift of Tidus built
+ * in 1f650d3f without asking was taken back: D-144 approves the sheet as drawn).
+ * The approved stack is untouched, and the deck holds the
  * arc ({@link EVRAE_AIRSHIP_DECK_STAGING}). Staging, not game data.
  */
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [0.25, 0, 0.9],
+  [0.1, 0, 0.9],
   [-0.95, 0, -2.5],
   [2.2, 0, -2.3],
   [-11.6, 0, 2.6],

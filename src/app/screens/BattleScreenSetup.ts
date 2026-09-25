@@ -15,12 +15,15 @@ import type {
   BattleSetup,
   BattleState,
   EnemyGroupDef,
+  FFX2Combatant,
+  FFX2MemberBuild,
   FFX2PartyBuild,
   FFXCombatant,
   FFXPartyBuild,
   InventoryEntry,
   MidBattleTrigger,
 } from '../../battle/common/types.ts';
+import { cloneData } from '../../battle/common/clone.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
@@ -85,7 +88,7 @@ export function setupForNextLink(
 ): BattleSetup {
   return {
     game: previous.game,
-    party: carryPartyForward(previous.party, state),
+    party: carryPartyForward(previous.party, state, nextGroup.carriesPartyState === true),
     enemies: nextGroup,
     triggers: previous.triggers,
     seed,
@@ -104,9 +107,10 @@ export function setupForNextLink(
 export function carryPartyForward(
   build: FFXPartyBuild | FFX2PartyBuild,
   state: BattleState,
+  wholeState = false,
 ): FFXPartyBuild | FFX2PartyBuild {
   if (build.game === 'ffx') return carryFfx(build, state);
-  return carryFfx2(build, state);
+  return carryFfx2(build, state, wholeState);
 }
 
 function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {
@@ -140,13 +144,38 @@ function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {
   };
 }
 
-function carryFfx2(build: FFX2PartyBuild, state: BattleState): FFX2PartyBuild {
+function carryFfx2(build: FFX2PartyBuild, state: BattleState, wholeState: boolean): FFX2PartyBuild {
   const members = build.members.map((m) => {
-    const live = state.combatants[m.id];
+    const live = state.combatants[m.id] as FFX2Combatant | undefined;
     if (!live) return m;
-    return { ...m, hp: Math.max(0, live.hp), mp: Math.max(0, live.mp) };
+    const carried = { ...m, hp: Math.max(0, live.hp), mp: Math.max(0, live.mp) };
+    return wholeState ? carryWholeState(carried, live) : carried;
   }) as FFX2PartyBuild['members'];
   return { ...build, members, inventory: carryInventory(build.inventory, state) };
+}
+
+/**
+ * `EnemyGroupDef.carriesPartyState` (FFX-2, Chapter XIII's Trema link only): she enters "in
+ * whatever state the Paragon fight left them", with "no chance to change equipment"
+ * [ffx2-trema §1.1, `[verified: 5 sources]`]. So besides HP and MP she keeps her statuses and
+ * the dressphere she is wearing, on the grid node she stands on, with the AP she earned; her HP
+ * and MP are then clamped to *that* dressphere's maximum (`setup.ts#buildMember`), not the
+ * preset's. Gate effects do not carry: Trema's is a new battle, and they are "lost at the end
+ * of the battle" [ffx2-combat-core §4.1, `[verified: 2 sources]`], so the passed gates and the
+ * worn-this-battle list start empty. Accessories stay the build's (no equipment change). All
+ * copies, so the setup a retry replays never changes.
+ */
+function carryWholeState(member: FFX2MemberBuild, live: FFX2Combatant): FFX2MemberBuild {
+  const worn = live.dresspheres;
+  const statuses = { statuses: cloneData(live.statuses) };
+  if (!worn || worn.special) return { ...member, ...statuses }; // a special dressphere: `[estimate]`, the preset's
+  return {
+    ...member,
+    ...statuses,
+    currentDressphere: worn.current,
+    garmentGrid: { ...member.garmentGrid, nodePosition: worn.garmentGrid.nodePosition, passedGates: [], wornThisBattle: [] },
+    abilitiesLearned: cloneData(worn.abilitiesLearned),
+  };
 }
 
 /**

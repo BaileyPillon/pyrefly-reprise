@@ -1,5 +1,6 @@
 import './battle-message.css';
 import type { BattleEvent, BattleState, CombatantId } from '../../battle/common/types.ts';
+import { oversoulCaptionOf } from '../../engine/OversoulMoment.ts';
 
 /**
  * PR-0143 (round 11, FFX-2 only): the FFX-2 HUD's battle-message banner.
@@ -178,6 +179,8 @@ export class BattleMessageBanner {
   private observer: MutationObserver | null = null;
   /** What was already under the banner when it arrived (only when no spot was free): it does not end the line. */
   private readonly tolerated = new Set<Element>();
+  /** Fiends whose "Oversoul!" caption has shown this battle. */
+  private readonly oversouled = new Set<string>();
 
   /** Mount right after the telegraph; `root` is where the board it keeps off lives. */
   mount(telegraph: HTMLElement, root: HTMLElement): void {
@@ -205,6 +208,14 @@ export class BattleMessageBanner {
       return;
     }
     if (event.type !== 'message') return;
+    // The Oversoul action plays no `action-start`, so the line carries its own speaker: the
+    // fiend's name, then the game's "Oversoul!" caption, once per fiend (`engine/OversoulMoment.ts`).
+    const oversoul = oversoulCaptionOf(event);
+    if (oversoul) {
+      if (!this.oversouled.has(oversoul.name)) this.show(oversoul);
+      this.oversouled.add(oversoul.name);
+      return;
+    }
     const name = this.actorId ? (state?.combatants[this.actorId]?.name ?? '') : '';
     this.show(messageParts(event.text, name));
   }
@@ -238,6 +249,7 @@ export class BattleMessageBanner {
     this.el = null;
     this.root = null;
     this.actorId = null;
+    this.oversouled.clear();
   }
 
   /** The stage's viewport origin and letterbox scale, or `null` while it is not laid out. */
