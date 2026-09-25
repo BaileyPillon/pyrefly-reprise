@@ -211,8 +211,23 @@ export const denBaralaiGroup: EnemyGroupDef = {
   musicCues: DEN_CUE,
 };
 
+/**
+ * **GP4, OFF: where a retry starts.** `false` is the build of Bailey's GP4 c ("measure first, then
+ * ask once", with a as the build): a loss anywhere retries from Baralai, as the game's own reload
+ * does. `true` is GP4 b: a loss on Gippal or Nooj retries that link from the state the party entered
+ * it on, through the checkpoint seam Chapter XIII's Trema uses (`checkpointOnEntry`,
+ * `app/screens/BattleChainCheckpoint.ts`). Numbers: `docs/plans/den-of-woe-options-2026-09-25.md`.
+ * Change only on Bailey's word.
+ */
+export const DEN_OF_WOE_RETRY_FROM_LINK: boolean = false;
+
+/** `group` as a retry checkpoint (GP4 b). */
+export function withRetryFromLink(group: EnemyGroupDef): EnemyGroupDef {
+  return { ...group, checkpointOnEntry: true };
+}
+
 /** Link 2: Gippal. `Sealed Cave - BOSS 226 Gippal` [SinirothX]. */
-export const denGippalGroup: EnemyGroupDef = {
+const denGippalLink: EnemyGroupDef = {
   id: DEN_GIPPAL,
   game: 'ffx2',
   enemies: [shadeGippal],
@@ -222,8 +237,11 @@ export const denGippalGroup: EnemyGroupDef = {
   carriesFullPartyState: true, // GP3 a
 };
 
+/** Link 2 as the chapter registers it: a retry checkpoint only under GP4 b. */
+export const denGippalGroup: EnemyGroupDef = DEN_OF_WOE_RETRY_FROM_LINK ? withRetryFromLink(denGippalLink) : denGippalLink;
+
 /** Link 3: Nooj. `Sealed Cave - BOSS 225 Nooj` [SinirothX]. */
-export const denNoojGroup: EnemyGroupDef = {
+const denNoojLink: EnemyGroupDef = {
   id: DEN_NOOJ,
   game: 'ffx2',
   enemies: [shadeNooj],
@@ -231,5 +249,8 @@ export const denNoojGroup: EnemyGroupDef = {
   musicCues: DEN_CUE,
   carriesFullPartyState: true, // GP3 a
 };
+
+/** Link 3 as the chapter registers it: a retry checkpoint only under GP4 b. */
+export const denNoojGroup: EnemyGroupDef = DEN_OF_WOE_RETRY_FROM_LINK ? withRetryFromLink(denNoojLink) : denNoojLink;
 
 export const denOfWoeGroups: readonly EnemyGroupDef[] = [denBaralaiGroup, denGippalGroup, denNoojGroup];

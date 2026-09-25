@@ -25,7 +25,7 @@
  *   after Isaaru's XIV, by registration order (D-058). Omnis (XII), Trema (XIII)
  *   and Isaaru (XIV) widen `Chapter.number` on their own branches; the integrator
  *   serialises the four.
- * - `buildRef: farplaneBuild` — **GP5 a / GP6 a** (picked): the Chapter V preset and
+ * - `buildRef: denOfWoeKit` (= `farplaneBuild` while GP5 b and GP6 b are off) — **GP5 a / GP6 a** (picked): the Chapter V preset and
  *   bag as they stand, Yuna White Mage (Lv 46), Rikku and Paine Dark Knight (Lv 48,
  *   50) `[estimate]` levels; the two Dark Knights on Darkness plus a healer is the
  *   sourced line `[verified: 4 sources]`. No Dark Matter or Hero Drink: Yuna's answer
@@ -47,8 +47,19 @@
 import type { Chapter } from './encounters.ts';
 import type { ChapterScripts } from '../story/dsl.ts';
 import { battleStart, results } from '../story/dsl.ts';
-import { farplaneBuild } from './ffx2/builds/farplane.ts';
+import { denOfWoeKit } from './ffx2/builds/den-of-woe.ts';
 import { denBaralaiGroup } from './ffx2/enemies/den-of-woe.ts';
+
+/**
+ * **The options of `docs/plans/den-of-woe-options-2026-09-25.md`, built and OFF**, gathered here
+ * (each lives beside what it changes). Every one is at Bailey's pick; with all four as they are the
+ * chapter is unchanged (`tests/unit/chapters/den-of-woe-options.test.ts`). Each needs Bailey's word:
+ * GP6 b `DEN_OF_WOE_HERO_DRINKS` and GP5 b `DEN_OF_WOE_LEVEL_BONUS` (the kit), GP4 b
+ * `DEN_OF_WOE_RETRY_FROM_LINK` (the formations), M1 `DEN_OF_WOE_LIGHTFALL_PREP` (the guide and tactic).
+ */
+export { DEN_OF_WOE_HERO_DRINKS, DEN_OF_WOE_LEVEL_BONUS } from './ffx2/builds/den-of-woe.ts';
+export { DEN_OF_WOE_RETRY_FROM_LINK } from './ffx2/enemies/den-of-woe.ts';
+export { DEN_OF_WOE_LIGHTFALL_PREP } from './guides/ffx2-den-of-woe.ts';
 
 /** **Placeholder** story layer: open the battle, show the results, say nothing. */
 export const DEN_OF_WOE_PLACEHOLDER_SCRIPTS: ChapterScripts = {
@@ -74,7 +85,7 @@ export const FFX2_DEN_OF_WOE: Chapter = {
     'The pyreflies still hold what the survivors felt: Baralai, then Gippal, then Nooj, one after another, no rest between.',
   sceneKey: 'bevelle-underground', // PLACEHOLDER — see the file header
   thumbnailKey: 'chapter-ffx2-den-of-woe',
-  buildRef: farplaneBuild,
+  buildRef: denOfWoeKit, // GP5 a / GP6 a: `farplaneBuild` itself while both switches are 0
   enemyGroupRef: denBaralaiGroup,
   scriptsRef: DEN_OF_WOE_PLACEHOLDER_SCRIPTS, // PLACEHOLDER — see the file header
   music: {

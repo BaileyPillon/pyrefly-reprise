@@ -50,6 +50,8 @@ export interface LineOptions {
    * must carry them ({@link withHeroDrinks}); the Chapter V bag has none.
    */
   heroDrink?: boolean;
+  /** Nooj's HP at or below which a girl drinks (default 4,500, the first what-if's window). Our line, not game data. */
+  heroDrinkAt?: number;
 }
 
 export const LINES = {
@@ -97,15 +99,13 @@ const DK_FLOOR = 5000;
 /** GP6 b what-if: drink before Lightfall (see {@link LineOptions.heroDrink}). */
 function heroDrink(d: Input, engine: FFX2Engine, line: LineOptions, self: Unit | undefined): Command | null {
   const n = nooj(engine);
-  if (!line.heroDrink || !self || !n || n.hp > 4500 || n.aiMemory?.['lightfallFired'] || self.statuses['invincible']) return null;
+  if (!line.heroDrink || !self || !n || n.hp > (line.heroDrinkAt ?? 4500) || n.aiMemory?.['lightfallFired'] || self.statuses['invincible']) return null;
   if (self.id !== 'yuna' && self.hp > DK_FLOOR) return null;
   return use(d, 'item', 'x2-hero-drink', [self.id]);
 }
 
 /** The party with `count` Hero Drinks added to its bag: GP6 b as numbers, an `[estimate]` count. */
-export function withHeroDrinks(party: FFX2PartyBuild, count: number): FFX2PartyBuild {
-  return { ...party, inventory: [...party.inventory, { itemId: 'x2-hero-drink', count }] };
-}
+export { withHeroDrinks } from '../../../src/data/ffx2/builds/den-of-woe.ts';
 
 function yunaTurn(d: Input, engine: FFX2Engine, line: LineOptions, turn: number): Command | null {
   const party = girls(engine);
@@ -326,4 +326,44 @@ export function driveDen(line: LineOptions, seed: number, opts: DriveOptions = {
     engine.init(setup);
   }
   return { outcome: 'victory', links };
+}
+
+/**
+ * A player who retries: up to `attempts` tries at the Den. With `fromLink` (GP4 b, the
+ * `checkpointOnEntry` seam Chapter XIII's Trema uses) a loss on Gippal or Nooj retries that link
+ * from the state the party entered it on; without it every retry starts again at Baralai (GP4 a,
+ * as built). Each retry reseeds (`seed + 1000 * attempt`, the flow reseeds a retry too). Returns
+ * the attempt that cleared the Den, or `undefined` when none did.
+ */
+export function driveDenAttempts(
+  line: LineOptions, seed: number, attempts: number, fromLink: boolean, opts: DriveOptions = {},
+): number | undefined {
+  let entry: { link: number; setup: BattleSetup } | null = null;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    const base = seed + 1000 * attempt;
+    const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...opts.engine }));
+    let link: number = entry?.link ?? 0;
+    let setup: BattleSetup = entry
+      ? { ...entry.setup, seed: base + link }
+      : {
+        game: 'ffx2', party: opts.party ?? farplaneBuild, enemies: group(DEN_OF_WOE_CHAIN_ORDER[0]), triggers: opts.triggers ?? [],
+        seed: base, condition: 'normal', canEscape: false,
+      };
+    let won = false;
+    for (;;) {
+      engine.setSeed(setup.seed);
+      engine.init(setup);
+      const run = runLink(engine, line, opts.decisionMs ?? 0, opts.topMs);
+      if (run.outcome !== 'victory') {
+        if (fromLink && link > 0) entry = { link, setup };
+        break;
+      }
+      const nextId = DEN_OF_WOE_CHAIN_ORDER[link + 1];
+      if (!nextId) { won = true; break; }
+      link += 1;
+      setup = setupForNextLink(setup, group(nextId), engine.state(), base + link) as BattleSetup;
+    }
+    if (won) return attempt + 1;
+  }
+  return undefined;
 }

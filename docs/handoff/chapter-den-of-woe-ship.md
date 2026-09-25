@@ -27,6 +27,33 @@ Branch `chapter-gippal-ship-0925`, worktree `D:/pyrefly-ch-gippal-ship` (from `c
 **0 / 40** at human speed (Wait split); Nooj is the wall (1 / 40 fresh at human speed). The
 sourced player-side options (Hero Drinks GP6 b, levels GP5 b) are numbers for Bailey, not built.
 
+## Repair cycle 1 (2026-09-25): B1 and M1 of the ship check, built as options OFF
+
+The ship check (`docs/concepts/chapters/den-of-woe/ship/CHECK.md`) found one listing blocker (B1:
+nobody wins at human speed) and one major (M1: the guide's Lightfall prep measures worse than no
+prep). Both are Bailey's call, never a boss number, so each answer is **built and switched OFF**, like
+Trema's options. The sheet is `docs/plans/den-of-woe-options-2026-09-25.md`.
+
+| Switch (Bailey's pick today) | Where | On, it does |
+|---|---|---|
+| `DEN_OF_WOE_HERO_DRINKS = 0` (GP6 a) | `src/data/ffx2/builds/den-of-woe.ts` | 3 (`[estimate]`) Hero Drinks in the bag; the tactic and guide drink one on Nooj before Lightfall |
+| `DEN_OF_WOE_LEVEL_BONUS = 0` (GP5 a) | same | +8 levels (`[estimate]`, G-12 unsourced) |
+| `DEN_OF_WOE_RETRY_FROM_LINK = false` (GP4 a build) | `src/data/ffx2/enemies/den-of-woe.ts` | Gippal and Nooj become `checkpointOnEntry` links (Trema's seam) |
+| `DEN_OF_WOE_LIGHTFALL_PREP = true` (as shipped) | `src/data/guides/ffx2-den-of-woe.ts` | `false` drops the prep's two hints; the tactic keeps to Darkness |
+
+All four are re-exported from `src/data/chapter-ffx2-den-of-woe.ts`. With them as they are, the
+chapter is unchanged: the kit is `farplaneBuild` itself, the formations and the guide serialise
+identically, and the tactic's 994 decisions over 60 fights match the ship commit's decision for
+decision. Tests: `den-of-woe-options.test.ts` (the switches, each option through its factory, and the
+option tactics run on the engine with their guides explaining every pick) and
+`den-of-woe-options-bench.test.ts` (the sheet's table, 200 human seeds with retries: run it with `PYREFLY_MEASURE=1`, about 90 s alone and 3 min in the full suite; a small harness check always runs). A
+headless check with all four switched on (then back off) showed the levels and max HP in effect, the
+Hero Drinks drunk on Nooj, and a real-key RETRY after a Nooj loss that opened on Nooj in the entry
+state.
+
+**Recommendation in the sheet:** GP5 b + GP6 b, keep the prep, keep the retry from Baralai. That is
+52/200 on the first try and 153/200 within five. **Listing still waits for Bailey's reply.**
+
 ## Frames (JPEG, `docs/concepts/chapters/den-of-woe/ship/`)
 
 Headless Playwright on a private Vite server (port 5780, HMR and watch off), stopped by its PID.

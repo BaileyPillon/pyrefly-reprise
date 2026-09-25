@@ -30,11 +30,20 @@
  * less; else **Darkness**.
  *
  * Returns `null` (the generic ladder) when no shade is on the field.
+ *
+ * ## The options (OFF; `docs/plans/den-of-woe-options-2026-09-25.md`)
+ *
+ * - **M1** (`DEN_OF_WOE_LIGHTFALL_PREP` false): steps 4 and the plain swing drop out; the Dark
+ *   Knights keep to Darkness. {@link makeDenOfWoeTactic} takes it as an option.
+ * - **GP6 b** (Hero Drinks in the bag): before step 4, and before a Dark Knight's Darkness, a girl
+ *   Lightfall would kill (Yuna always; a Dark Knight at 5,000 HP or less) drinks one once Nooj is at
+ *   4,500 HP or less and Lightfall is still to come. The step asks for a row only the bag can offer,
+ *   so with the Chapter V bag (GP6 a) it never fires.
  */
 
 import type { AnyCombatant, AvailableCommand, Command, CombatantId } from '../../battle/common/types.ts';
 import { type Tactic, activeParty, has, hpFraction } from './common.ts';
-import { DEN_OF_WOE_BOSS_IDS } from '../../data/guides/ffx2-den-of-woe.ts';
+import { DEN_OF_WOE_BOSS_IDS, DEN_OF_WOE_LIGHTFALL_PREP } from '../../data/guides/ffx2-den-of-woe.ts';
 
 /** The three shades: the tactic and the guide register the same ids. */
 export const DEN_OF_WOE_TACTIC_IDS: readonly CombatantId[] = DEN_OF_WOE_BOSS_IDS;
@@ -45,6 +54,13 @@ const DK_FLOOR = 5000;
 const PREP_FROM = 8000;
 /** "Early in each link": the White Mage's first turns, as the bench line counts them. */
 const GUARD_TURNS = 8;
+/** GP6 b: Nooj's HP from which a girl drinks a Hero Drink (the bench's what-if window; our line, not data). */
+const DRINK_FROM = 4500;
+
+/** The tactic's switches: the Lightfall prep (M1, `DEN_OF_WOE_LIGHTFALL_PREP`). */
+export interface DenOfWoeTacticOptions {
+  lightfallPrep: boolean;
+}
 
 function use(commands: AvailableCommand[], kind: string, id: string, targets: CombatantId[]): Command | null {
   const r = commands.find(
@@ -53,9 +69,23 @@ function use(commands: AvailableCommand[], kind: string, id: string, targets: Co
   return r ? ({ ...r.command, targets } as Command) : null;
 }
 
+function lightfallToCome(foe: AnyCombatant): boolean {
+  return foe.id === 'shade-nooj' && !(foe as { aiMemory?: Record<string, unknown> }).aiMemory?.['lightfallFired'];
+}
+
 /** Nooj is near the end and Lightfall is still to come. */
-function prepWindow(foe: AnyCombatant): boolean {
-  return foe.id === 'shade-nooj' && foe.hp <= PREP_FROM && !(foe as { aiMemory?: Record<string, unknown> }).aiMemory?.['lightfallFired'];
+function prepWindow(foe: AnyCombatant, o: DenOfWoeTacticOptions): boolean {
+  return o.lightfallPrep && lightfallToCome(foe) && foe.hp <= PREP_FROM;
+}
+
+/**
+ * GP6 b: a girl Lightfall would kill drinks a Hero Drink (Invincible) once Nooj is near it. Only when
+ * the bag carries one: the Chapter V bag has none (GP6 a), so this never fires in the shipped kit.
+ */
+function heroDrink(commands: AvailableCommand[], self: AnyCombatant, foe: AnyCombatant): Command | null {
+  if (!lightfallToCome(foe) || foe.hp > DRINK_FROM || has(self, 'invincible')) return null;
+  if (self.id !== 'yuna' && self.hp > DK_FLOOR) return null;
+  return use(commands, 'item', 'x2-hero-drink', [self.id]);
 }
 
 /**
@@ -67,7 +97,9 @@ function partyTurns(log: readonly { type: string; actorId?: string }[], party: r
   return log.filter((e) => e.type === 'turn-start' && e.actorId !== undefined && ids.has(e.actorId)).length;
 }
 
-function yunaTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyCombatant[], foe: AnyCombatant, turn: number): Command | null {
+function yunaTurn(
+  commands: AvailableCommand[], self: AnyCombatant, party: AnyCombatant[], foe: AnyCombatant, turn: number, o: DenOfWoeTacticOptions,
+): Command | null {
   const ko = party.filter((u) => !u.alive);
   if (ko.length >= 2) {
     const mega = use(commands, 'item', 'x2-mega-phoenix', []);
@@ -101,7 +133,9 @@ function yunaTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyCo
     const one = use(commands, 'item', 'x2-x-potion', [lowest.id]) ?? use(commands, 'ability', 'x2-white-mage-curaga', [lowest.id]);
     if (one) return one;
   }
-  if (prepWindow(foe)) {
+  const drink = heroDrink(commands, self, foe);
+  if (drink) return drink;
+  if (prepWindow(foe, o)) {
     const knights = living.filter((u) => u.id !== 'yuna' && u.hp <= DK_FLOOR);
     if (knights.length >= 2) {
       const all = use(commands, 'item', 'x2-mega-potion', []);
@@ -134,7 +168,9 @@ function yunaTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyCo
   return use(commands, 'ability', 'x2-white-mage-pray', []);
 }
 
-function knightTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyCombatant[], foe: AnyCombatant): Command | null {
+function knightTurn(
+  commands: AvailableCommand[], self: AnyCombatant, party: AnyCombatant[], foe: AnyCombatant, o: DenOfWoeTacticOptions,
+): Command | null {
   const ko = party.filter((u) => !u.alive);
   if (ko.some((u) => u.id === 'yuna')) {
     const revive = (ko.length >= 2 ? use(commands, 'item', 'x2-mega-phoenix', []) : null) ?? use(commands, 'item', 'x2-phoenix-down', ['yuna']);
@@ -148,15 +184,18 @@ function knightTurn(commands: AvailableCommand[], self: AnyCombatant, party: Any
     const r = commands.find((c) => c.enabled && c.command.kind === 'attack');
     return r ? ({ ...r.command, targets: [foe.id] } as Command) : use(commands, 'ability', 'x2-dark-knight-attack', [foe.id]);
   };
+  const drink = heroDrink(commands, self, foe);
+  if (drink) return drink;
   // Darkness costs 1/8 of max HP: in Nooj's end window, never pay it down to Lightfall's 5,000.
-  if (prepWindow(foe) && self.hp - Math.ceil(self.stats.maxHp / 8) <= DK_FLOOR) {
+  if (prepWindow(foe, o) && self.hp - Math.ceil(self.stats.maxHp / 8) <= DK_FLOOR) {
     const swing = attack();
     if (swing) return swing;
   }
   return use(commands, 'ability', 'x2-dark-knight-darkness', []) ?? attack();
 }
 
-export const ffx2DenOfWoe: Tactic = (actorId, commands, engine) => {
+/** The Den's tactic for a set of options; the shipped one reads the switch. */
+export const makeDenOfWoeTactic = (o: DenOfWoeTacticOptions): Tactic => (actorId, commands, engine) => {
   const state = engine.state();
   const foe = state.enemyIds
     .map((id) => state.combatants[id])
@@ -165,8 +204,10 @@ export const ffx2DenOfWoe: Tactic = (actorId, commands, engine) => {
   const party = activeParty(engine);
   const self = party.find((c) => c.id === actorId);
   if (!self) return null;
-  if (actorId === 'yuna') return yunaTurn(commands, self, party, foe, partyTurns(state.log as readonly { type: string; actorId?: string }[], party));
-  return knightTurn(commands, self, party, foe);
+  if (actorId === 'yuna') return yunaTurn(commands, self, party, foe, partyTurns(state.log as readonly { type: string; actorId?: string }[], party), o);
+  return knightTurn(commands, self, party, foe, o);
 };
+
+export const ffx2DenOfWoe: Tactic = makeDenOfWoeTactic({ lightfallPrep: DEN_OF_WOE_LIGHTFALL_PREP });
 
 export default ffx2DenOfWoe;

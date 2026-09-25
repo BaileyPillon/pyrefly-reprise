@@ -45,6 +45,16 @@ Hero Drink is the sourced answer (Invincible through Lightfall); the Chapter V b
 is Bailey's call (GP6), with or without a higher level (GP5). Even both together leave the Den at
 a quarter at human speed.
 
+## Repair cycle 1 (2026-09-25): the options built OFF, re-measured at 200 human seeds
+
+The ship check's blocker B1 and major M1 (`docs/concepts/chapters/den-of-woe/ship/CHECK.md`) are
+answered by **four switches, all at Bailey's picks** (GP6 b Hero Drinks, GP5 b levels, GP4 b retry
+from the lost shade, M1 the Lightfall prep), measured at 200 seeds a row at human speed, with
+retries, in `tests/unit/chapters/den-of-woe-options-bench.test.ts` (`PYREFLY_MEASURE=1`). The 40-seed human rows above
+stay as they were measured. At 200 seeds the shipped line is 0/200, and no prep is 15/200. Both kit
+options with the prep give 52/200, the best first try. The sheet for Bailey, with the full table and
+replies, is `docs/plans/den-of-woe-options-2026-09-25.md`.
+
 ## Two things the bench shows about its own lines
 
 - **The Lightfall prep is worse than no prep** (Den 12 vs 26 at bench speed). Keeping the Dark
