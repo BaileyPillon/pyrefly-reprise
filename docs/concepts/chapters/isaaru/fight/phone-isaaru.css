@@ -1,0 +1,26 @@
+/* Chapter XIV (provisional, FFX only) O-5 at phone width, on top of the Yojimbo round's phone.css layout.
+   Every label that carries fight information is at least 12 CSS px. */
+html, body { width: 390px; height: 844px; }
+.ph .ph__ctb-row { position: relative; }
+.pgrid { grid-template-columns: 1fr 1fr; top: 520px !important; }
+.pgrid .ph__cmd { height: 44px; font-size: 15px; }
+.ph__cmd small { display: block; font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; letter-spacing: 0.02em; text-transform: uppercase; color: #f0b0a8; }
+.ph__cmd.pl { background: rgba(70,68,84,0.96); color: rgba(244,241,232,0.55); }
+.ph__cmd.pl span { line-height: 1.05; }
+.pgrid ~ .ph__party { top: 690px; }
+.pwait { opacity: 0.6; }
+.pi { position: absolute; left: 16px; right: 16px; top: 452px; z-index: 8; padding: 8px 12px; background: rgba(11,10,18,0.92); border-left: 3px solid var(--ig-blood); }
+.pi h4 { margin: 0 0 4px; font-family: var(--ig-font-display); font-size: 12px; letter-spacing: 0.18em; color: #e86a6a; text-transform: uppercase; }
+.pi p { margin: 0; font-size: 15px; line-height: 1.3; }
+.pi b { color: var(--ig-gold); }
+.pchip { position: absolute; left: 16px; top: 470px; z-index: 8; padding: 6px 10px; background: var(--ig-blood); color: #fff;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; }
+.pcount { position: absolute; top: -8px; right: 0; min-width: 20px; height: 20px; padding: 0 3px; display: flex; align-items: center; justify-content: center;
+  background: var(--ig-blood); border: 1px solid #fff; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 13px; color: #fff; box-sizing: border-box; }
+.pcount--fire { background: #c8561f; font-size: 12px; }
+.pring { position: absolute; left: 110px; top: 432px; width: 170px; height: 44px; z-index: 6; border-radius: 50%; border: 3px solid #ff8a3a; box-shadow: 0 0 18px #ff5a2a; }
+.plbl { position: absolute; left: 100px; top: 482px; z-index: 8; font-family: var(--ig-font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #fff; text-shadow: 0 2px 4px #000, 0 0 8px #000; }
+.plbl--c2 { left: 150px; top: 350px; }
+.pbig { position: absolute; left: 250px; top: 260px; z-index: 8; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 72px; color: #fff;
+  text-shadow: 0 0 14px #ff3b3b, 0 0 30px #b02a2a, 0 3px 5px #000; }
