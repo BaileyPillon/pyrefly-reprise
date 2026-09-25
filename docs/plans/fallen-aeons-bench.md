@@ -1,5 +1,41 @@
 # Chapter XI — Fallen Aeons: measured benches (FFX-2 only)
 
+## 2026-09-25, evening: option A built, 3 s of action time on the Road (read this first)
+
+Bailey, 2026-09-25 ~18:30 EDT: "All your recommendations", which takes this chapter's **option A**:
+3 s of action time on the three Road links only (`ROAD_ACTION_TIME_ON`, `ROAD_ACTION_TIME_SECONDS = 3`
+in `src/data/ffx2/enemies/fallen-aeons-road.ts`; the same switch and labelled `[estimate]` as Chapter
+XIII's `CLOISTER_ACTION_TIME_SECONDS`). The rule is sourced `[verified: 2 sources]`, the length is our
+estimate (`research/ffx2-trema.md` §12.4). No boss number moved. Main 46970be4 was merged first
+(51af2d55). `tests/unit/chapters/fallen-aeons-ship-bench.test.ts` now measures the chapter as it ships;
+its "action time OFF" row (engine option 0) is the chapter before the pick.
+
+| Fight | Line | Bench (D = 0) | Human, Wait split (0.5 s top / 1.0 s held) |
+|---|---|---:|---:|
+| **Chapter (1-2-3), one run, as shipped** | intended on each link | 174/200 (87 %) | **33/40 (82.5 %); 159/200 (79.5 %)** |
+| 1 Shiva | intended | 200/200 | 40/40 |
+| 2 Magus Sisters | intended: Darkness x2 + Dispel + heals | 167/200 | 30/40 |
+| 3 Anima | intended | 200/200 | 40/40 |
+| 2 Sisters | Mindy first by Drain / Cindy first by Drain / Mindy first by Attack | 0 / 0 / 3 of 200 | 0 / 0 / 0 of 40 |
+| 2 Sisters | wrong: Darkness spam, no Dispel | 113/200 | 18/40 |
+| Chapter | the guide's habit (0.25 s on the top list) | | 34/40 |
+| Chapter | action time OFF (the chapter before the pick) | 58/200 | 31/200 (15.5 %), as the table below |
+| Chapter | action time 1.5 s (not picked) | 147/200 | 115/200 |
+| Chapter | preset at Lv 52 / 52 / 52 on top of action time (not picked, not built) | 191/200 | 177/200 |
+
+- **The pick's figure reproduces exactly: 159/200 (79.5 %) at human pace**, the same number the
+  options table measured with the engine option. Human losses on 200 seeds: Shiva 0, **Sisters 41**,
+  Anima 0. The intended line still beats every wrong line by a wide margin (Sisters 30/40 vs 18/40
+  for Darkness spam and 0/40 for any kill-one-first line), so the fight still teaches its answer.
+- **No other chapter moved.** Every chapter in `CHAPTERS` and `UNLISTED_CHAPTERS` (13), seeds 1-5, the
+  shipped strategy, FFX-2 chapters under both Active D = 0 and the Wait split: 90 event-log hashes
+  before and after the switch; **80 byte-identical, and the 10 that moved are all
+  `ffx2-fallen-aeons`**. Evidence: `docs/concepts/chapters/fallen-aeons/ship/action-time-hashes.json`.
+  The FFX-2 golden (`ffx2-atb-golden.test.ts`) and every Trema test pass unchanged.
+- The switch is pinned by `tests/unit/chapters/fallen-aeons-action-time.test.ts` (each of Shiva's
+  turns lands exactly 9,000 ticks later than with the switch forced off), and the scope test in
+  `trema-options.test.ts` now allows the Cloister and the Road formations only.
+
 ## 2026-09-25, later: re-measured on main 3c4cd1f6 (read this first)
 
 Main moved under the first re-measure: **07af1f90 (decision sheet item 4 A1) makes an enemy hit close

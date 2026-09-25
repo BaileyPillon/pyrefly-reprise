@@ -1,6 +1,9 @@
 /**
  * Chapter XI — the **ship gate's** bench (2026-09-25): re-measure the intended line on the chapter
- * as registered, before its ship layer is built. **FFX-2 only** [AGENTS.md rule 14]: ATB, the Wait
+ * as registered. **Since Bailey's pick (2026-09-25, "All your recommendations": option A) the
+ * registered Road links carry 3 s of action time** (`ROAD_ACTION_TIME`, `fallen-aeons-road.ts`), so
+ * every row below measures the chapter as it ships; "action time OFF" (engine option 0) is the
+ * chapter before the pick. **FFX-2 only** [AGENTS.md rule 14]: ATB, the Wait
  * split, dresspheres. Measure, never tune (`docs/plans/chapter-fallen-aeons-review.md` §9): no boss
  * number moves here; a low rate goes to Bailey with sourced player-side options.
  *
@@ -130,14 +133,14 @@ describe('Chapter XI ship gate: the intended line, bench and human Wait split', 
     expect(c.unfinished + s.unfinished).toBe(0);
   }, 900_000);
 
-  it('measured options for Bailey (none built): action time, the preset at the top of its level band (200 seeds)', () => {
-    // Action time: a SOURCED rule the engine breaks (src/battle/ffx2/action-time.ts, [verified: 2]); its
-    // length is an unsourced [estimate]. Chapter XIII ships it at 3 s on its own formations only.
+  it('measured options: action time off / 1.5 s, the preset at the top of its level band (200 seeds; 3 s is built)', () => {
+    // Action time: a SOURCED rule (src/battle/ffx2/action-time.ts, [verified: 2]); its length is an
+    // unsourced [estimate]. The Road links ship it at 3 s (option A), as Chapter XIII's links do.
     // Levels: the preset's 46 / 48 / 50 are an [estimate] inside research §5's band (43-52); 52 is its top.
     const top: FFX2PartyBuild = { ...farplaneBuild, members: farplaneBuild.members.map((m) => ({ ...m, level: 52 })) as FFX2PartyBuild['members'] };
     const options: Array<[string, DriveOptions]> = [
+      ['action time OFF (engine option 0: the chapter before the pick)', { engine: { actionTimeSeconds: 0 } }],
       ['action time 1.5 s (engine option)', { engine: { actionTimeSeconds: 1.5 } }],
-      ['action time 3 s (engine option)', { engine: { actionTimeSeconds: 3 } }],
       ['preset at Lv 52 / 52 / 52', { build: top }],
     ];
     for (const [name, o] of options) {
@@ -152,9 +155,9 @@ describe('Chapter XI ship gate: the intended line, bench and human Wait split', 
     }
   }, 1_800_000);
 
-  it('the chapter is winnable at both speeds', () => {
+  it('the chapter is winnable at both speeds, and clears the 25 % gate at human pace with action time on', () => {
     expect(tallies.get('chapter|bench')?.wins).toBeGreaterThan(0);
-    expect(tallies.get('chapter|human200')?.wins).toBeGreaterThan(0);
+    expect(tallies.get('chapter|human200')?.wins).toBeGreaterThan(50);
   });
 
   it('prints the table', () => {
