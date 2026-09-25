@@ -243,3 +243,78 @@ target file touched (`git diff` over `public/art`, `docs/target` and the hash fi
 **Verdict: SHIP for the changed area.** Blockers 0. The one major is fixed, with nothing new
 introduced and no regression against live. Logs: `D:/Tools/pyrefly-scratch/chapters/natus-check/recheck-tsc.txt`
 and `recheck-vitest.txt`.
+
+## Independent check of strategy 7 (2026-09-25, commit `44239b52`)
+
+I edited nothing except this section. Branch `chapter-natus-ship-0925`, worktree `D:/pyrefly-ch-natus-ship`.
+Bailey's pick, 2026-09-25: "All your recommendations" (item 2: teach "Haste only Tidus and Auron").
+**Game case: FFX only.** The commit says so, and that is correct: research §0.3 lists no Natus and no
+Desperado in FFX-2.
+
+**Scope.** The diff touches six files: the tactic, the guide, the pause tip in `chapter-meta-natus.ts`,
+two test files and the bench doc. It moves no boss number and touches no art, `docs/target` file or
+shared contract. I checked the source line: `research/ffx-seymour-natus-highbridge.md` line 328 (§6.3
+row 7) reads "Haste only two party members (three triggers Desperado)" [verified: 3 sources]. The
+research does not name the two. "Tidus and Auron" is our pick, and the tactic, the guide and the bench
+doc all say so. The tactic is 193 lines.
+
+- `tsc --noEmit`: clean.
+- Full vitest (`--testTimeout=60000`): **399 files, 7,499 passed**, 5 skipped, 1 todo, 0 failed.
+- `node tools/orphans.mjs`: 24 orphaned modules. That is the same list as the first check, so nothing
+  new is unwired.
+- **Bench, re-run inside that suite:**
+
+  | Line | Wins |
+  |---|---|
+  | Shipped, strategy 7 | **169/200 (84.5 %)**, 80.2 mean turns, 0.00 Desperados |
+  | Haste all three | 157/200, 2.05 Desperados |
+  | Nobody Hastes | 116/200 |
+
+  Every column matches the builder's table. The Haste-all-three row was 153 in the first table. It
+  moved because that line is now built on the new shipped tactic, and the bench doc says so.
+- **Real keys, headless, fresh load, seed 1, at 1600x900 and 390x844 (phone, touch).** The debug API
+  only opened the unlisted chapter. No key was pressed on the title, and the API was used for nothing
+  else except reading state. Every command went in by keys, following the intended line, with 1 miss
+  (Yuna's Summon→Shiva row, which fell back to Attack). Results, the same at both sizes:
+  - The advisor card read "Haste → Tidus" with the "Guide's pick" badge, then "Haste → Auron". Both
+    were entered through White Magic → Haste → target.
+  - The battle log shows exactly `tidus->tidus` and `tidus->auron`. At most 2 active members had Haste
+    at once, and there was no Desperado.
+  - The new row hint "Haste Tidus: two Hasted guardians are safe, and a third would call Desperado" is
+    in the guide rail.
+  - The pause GUIDE tab, reached with the E key, shows the new tip "... and Haste only Tidus and
+    Auron." at 1600x900.
+  - Party prep shows the new TIP at both sizes, with no overflow.
+  - No horizontal scroll, no page errors, no HTTP errors.
+- **Locked art:**
+  - All 224 files in the branch's `docs/target/approved-hashes.json` match by sha256.
+  - All 177 files in main's copy match.
+  - Nothing is missing and nothing is mismatched.
+
+**Minor findings (not blockers, none introduced as a defect):**
+
+1. **The guide promises more than the research does.** It says "Two Hasted guardians are safe". That is
+   true in our engine, which builds only the Haste-on-all-three rule, as research N-5 directs. The
+   research also records a single-source wiki ladder: 4 to 7 buffs among Haste, Shell, Reflect and the
+   Nul spells give Desperado 25 to 100 %. The shipped line casts Shell on all three plus Haste on two,
+   which is 5 buffs, 50 % on that ladder. N-5 is still open. The wording could say "Two Hasted
+   guardians do not call it" instead of "safe".
+2. **The new hint is not shown by default.** The FFX guide rail is compact at both sizes, so the Haste
+   row hint sits under MORE. The advisor's reason for Haste is its generic buff line ("It puts Haste
+   on Tidus, and Multi-Watera hits for about 2,000 in all."), which does not mention the
+   never-a-third rule. This is existing shared behaviour.
+3. **On the phone, the pause GUIDE tab hides the tip.** The rule is `.pause__quote { display: none; }`
+   in `pause-screen.css` line 921, which dates from 8cf17246 (2026-09-21) and applies to every
+   chapter. The tip is still shown on the prep dossier on the phone.
+
+**Verdict: SHIP for the changed area.** 0 blockers. Nothing critical or major is introduced, and there
+is no regression against the first build: the no-Haste line still reproduces 116/200 exactly. I
+started one Vite server of my own on port 5293 and stopped it by PID.
+
+The frames, results and logs are in `D:/Tools/pyrefly-scratch/chapters/natus-check/haste/`. They are
+not committed:
+
+- Frames: `haste-row-*`, `haste-target-*`, `after-second-haste-*`, `pause-guide-*`, `prep-*`.
+- Results: `res-*.json`.
+- Logs: `tsc.txt`, `vitest.txt`, `orphans-haste.txt`, `verify-approved-*.txt`.
+- Scripts: `haste-keys.mjs` and `prep-tip.mjs`, one level up.
