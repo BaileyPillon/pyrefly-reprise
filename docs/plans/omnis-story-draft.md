@@ -1,9 +1,15 @@
 # DRAFT for Bailey — Chapter XII story beats: Seymour Omnis in the Garden of Pain (FFX only)
 
-**Status: a draft to read and react to. Nothing here is built.** The chapter runs today on a
-placeholder story layer (the battle opens, then results show, with no lines; see
-`src/data/chapter-seymour-omnis.ts`). No file under `src/story` was written. This page is here so
-you can pick, cut or rewrite lines before anyone scripts them (AGENTS.md hard rules 9 and 10).
+**Status: a draft to read and react to, now scripted UNLISTED** (2026-09-25, branch
+`chapter-omnis-ship-0925`): `src/story/scripts/seymour-omnis.ts` plays these lines unchanged, by
+number, with the first choice wherever an alternative is offered (line 12 "Yes.", line 15 the bare
+goodbye, line 1 alone), on the chapter record `src/data/chapter-omnis-ship.ts` lays over
+`src/data/chapter-seymour-omnis.ts`. The callouts below are keyed to names the Omnis rules emit
+(`src/battle/ffx/ai/seymour-omnis-callouts.ts`). Two small departures, both said in the script: the
+dive line plays as the Garden fades in (the cutscene's black also hides the dialogue box), and the
+first-disc line has a Tidus variant without Wakka's "ya" for when someone else turned the disc. The
+chapter is still not in chapter select (B8). Cut or rewrite any line and the script follows (AGENTS.md
+hard rules 9 and 10); the four questions at the end are still open.
 
 - **Game case: FFX only** (AGENTS.md rule 14). FFX cutscene grammar (`research/writing-bible.md`
   §2.1). The FFX-2 register does not apply.

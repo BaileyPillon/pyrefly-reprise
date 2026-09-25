@@ -82,6 +82,24 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     portrait: { x: 0.5, feet: 0.74, height: 0.46 },
     unsent: true,
   },
+  /**
+   * Seymour Omnis, unsent (FFX only: Chapter XII). His battle idle, the installed O-1 A painting
+   * (`public/art/characters/seymour-omnis/idle.png`, 864 x 1229, the hem at y 1212; locked). He
+   * hovers at the top of the steps in the pre scene, and in the post scene Yuna sends him
+   * (`research/ffx-seymour-omnis.md` §4.6, verified: 2 sources).
+   *
+   * Landscape: right of the dialogue box, facing left toward the party. Portrait: centred, the
+   * hem above the box.
+   */
+  'seymour-omnis': {
+    art: 'art/characters/seymour-omnis/idle.png',
+    aspect: 864 / 1229,
+    baseline: 1212 / 1229,
+    artFacing: -1,
+    landscape: { x: 0.78, feet: 0.9, height: 0.66 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+    unsent: true,
+  },
 };
 
 /** The staged figure for `actor`, or `undefined` when cutscenes do not stage it. */

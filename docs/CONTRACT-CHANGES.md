@@ -6,6 +6,25 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — Chapter XII ship layer: `SpeakerId` gains `'seymour-omnis'`
+
+**FFX only** [AGENTS.md hard rule 14]: Seymour's last form, inside Sin
+(`research/ffx-seymour-omnis.md` §0.3). **Additive** in `src/story/dsl.ts`: `SpeakerId` gains
+`'seymour-omnis'`, the speaker for Seymour's lines in `src/story/scripts/seymour-omnis.ts` (lines 2 to
+14 of `docs/plans/omnis-story-draft.md` and four callouts, all `[ORIGINAL]`), with his own portrait
+(`portraits/seymour-omnis.png`, portrait A, Bailey's pick of 2026-09-25, locked; its
+`face-crops.json` row already exists). `DialogueBox.defaultName` strips the `-omnis` suffix as it
+strips `-macalania`, so the plate reads "Seymour"; `SPEAKER_ROLES` gives him "Maester" like the other
+two Seymour ids. The union line `'lenne' | 'nooj'` was joined to keep `dsl.ts` at its line count
+(house rule: a file over 400 lines must not grow). No existing script changes.
+
+Not contract files, recorded because they are shared plumbing (both games, inert elsewhere):
+`BattleScreenWiring.createHud` now taps the **FFX** HUD with `engine/OmnisDiscTap.ts` (it writes the
+Mortiphasm disc colours onto the disc actors; a no-op without the Omnis disc state or an
+`affinity-change` event, which only Chapter XII emits). The Omnis rules now also emit nine
+`script-trigger` names (`src/battle/ffx/ai/seymour-omnis-callouts.ts`): presentation hooks that draw
+no RNG; the Omnis bench prints the same 127/200 and key moments before and after.
+
 ## 2026-09-25 — `encounters.ts`: Chapter XIII (Trema) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX-2 only** [AGENTS.md hard rule 14]: Trema and Oversoul Paragon on Cloister 100 of the Via

@@ -51,6 +51,7 @@ import type {
 } from '../../common/types.ts';
 import type { ActorRuntime } from '../state.ts';
 import { type Ctx, abilityOf, isAlive, tryActor } from '../state.ts';
+import { OMNIS_CALLOUTS as SAY, omnisCalloutOnce } from './seymour-omnis-callouts.ts';
 
 /** Ids mirrored from `src/data/ffx/enemies/seymour-omnis.ts` (the tests pin them equal). */
 export const OMNIS_ID = 'seymour-omnis';
@@ -251,6 +252,7 @@ export function resetDiscs(ctx: Ctx): void {
   writeDiscs(ctx, discs);
   const affinities = applyAffinities(ctx, omnis);
   ctx.emit({ type: 'affinity-change', targetId: OMNIS_ID, affinities, cause: 'reset', facings: facings(discs) });
+  omnisCalloutOnce(ctx, 'reset', SAY.reset); // the first reset's line (B15)
 }
 
 // ---------------------------------------------------------------------------
@@ -304,12 +306,14 @@ export function runOmnisTurnEnd(ctx: Ctx): void {
   let def: AbilityDef | undefined;
   let counted = false;
   let hits = omnisHits(ctx);
-  const turns: Array<{ index: number; direction: 'left' | 'right' }> = [];
+  let by: CombatantId | undefined;
+  const turns: Array<{ index: number; direction: 'left' | 'right'; by?: CombatantId }> = [];
   for (let i = typeof from === 'number' ? from : 0; i < log.length; i++) {
     const e = log[i];
     if (!e) continue;
     if (e.type === 'action-start') {
       def = e.abilityId !== undefined ? abilityOf(ctx, e.abilityId) : undefined;
+      by = e.actorId;
       counted = false;
       continue;
     }
@@ -328,17 +332,21 @@ export function runOmnisTurnEnd(ctx: Ctx): void {
       counted = true;
     }
     const direction = discTurnFor(def);
-    if (direction) turns.push({ index, direction });
+    if (direction) turns.push({ index, direction, ...(by === undefined ? {} : { by }) });
   }
   ctx.state.flags[OMNIS_HITS] = hits;
   for (const t of turns) turnDisc(ctx, t.index, t.direction);
+  const first = turns[0]; // the first disc a member turns: Wakka's line if it was his (B15)
+  if (first) omnisCalloutOnce(ctx, 'turned', first.by === 'wakka' ? SAY.turnedWakka : SAY.turned, first.by);
 
   const omnis = tryActor(ctx, OMNIS_ID);
+  if (omnis && isAlive(omnis) && omnis.hp < LOW_HP_BELOW) omnisCalloutOnce(ctx, 'low', SAY.low);
   if (omnis && isAlive(omnis) && omnisState(ctx) === 'normal' && hits >= glowThreshold(ctx)) {
     setOmnisState(ctx, 'red');
     // The game's only telegraph is the red glow [§4.4, §7]; placeholder copy
     // for the log until the glow itself is drawn (O-8).
     ctx.emit({ type: 'message', text: 'Seymour Omnis glows red', kind: 'telegraph' });
+    omnisCalloutOnce(ctx, 'glow', SAY.glow);
   }
   ctx.state.flags[OMNIS_SCANNED] = log.length;
 }

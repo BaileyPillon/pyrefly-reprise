@@ -33,6 +33,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'evrae-airship': 'ffx',
   'yojimbo-cavern': 'ffx',
   'ffx2-trema': 'ffx2',
+  'seymour-omnis': 'ffx',
 };
 
 /**

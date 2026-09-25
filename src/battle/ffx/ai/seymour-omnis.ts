@@ -47,6 +47,7 @@ import {
   resetDiscs,
   setOmnisState,
 } from './seymour-omnis-rules.ts';
+import { OMNIS_CALLOUTS, omnisCallout, omnisCalloutOnce, omnisSpend } from './seymour-omnis-callouts.ts';
 
 export * from './seymour-omnis-rules.ts';
 
@@ -84,8 +85,10 @@ export function seymourOmnisAi(ai: AiContext): Command {
     case 'red':
       setDefense(ctx, DEF_AFTER_DISPEL);
       setOmnisState(ctx, 'dispelled');
+      omnisCalloutOnce(ctx, 'dispel', OMNIS_CALLOUTS.dispel); // his line before the first Dispel (B15)
       return use(ai, OMNIS_DISPEL_ID, []);
     case 'dispelled':
+      omnisCallout(ctx, OMNIS_CALLOUTS.ultima); // his line before each Ultima (B15)
       setDefense(ctx, DEF_AFTER_ULTIMA);
       ctx.state.flags[OMNIS_HITS] = 0;
       if (RESET_ON_NEXT_TURN) setOmnisState(ctx, 'reset-due');
@@ -101,7 +104,19 @@ export function seymourOmnisAi(ai: AiContext): Command {
     case 'normal':
       break;
   }
+  sayDiscLesson(ctx);
   return use(ai, OMNIS_VOLLEY_ID, []);
+}
+
+/**
+ * The turn-one disc lesson (B15), before his first four spells, and only while
+ * all four discs still show Fire (the line says so): Lulu's line with Lulu on
+ * the field, Auron's otherwise. Spent silently once a disc has turned.
+ */
+function sayDiscLesson(ctx: Ctx): void {
+  if (!omnisDiscs(ctx.state).every((d) => d === 'fire')) return omnisSpend(ctx, 'lesson');
+  const lulu = livingFriendlies(ctx).some((c) => c.id === 'lulu');
+  omnisCalloutOnce(ctx, 'lesson', lulu ? OMNIS_CALLOUTS.lessonLulu : OMNIS_CALLOUTS.lesson);
 }
 
 /**
