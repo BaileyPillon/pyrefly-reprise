@@ -181,7 +181,16 @@ function choose(line: Line, engine: BattleEngine, actorId: string, commands: rea
   return hitOmnis(commands);
 }
 
-interface Outcome { outcome: string; turns: number; glows: number; ultimas: number; turned: number; ga: number; casts: number; omnisHp: number }
+/** One fight, read back from the event log: the outcome and the boss's key moments. */
+interface Outcome {
+  outcome: string; turns: number; partyActions: number; omnisTurns: number;
+  glows: number; dispels: number; ultimas: number; resets: number; turned: number; ga: number; casts: number;
+  firstGlow: number; firstUltima: number; below20k: number; omnisHp: number;
+  /** Party-side KOs by what landed them: Ultima, a -ga, a -ra, anything else. */
+  ko: Record<KoBy, number>; raises: number; lastBlow: KoBy | 'none';
+}
+type KoBy = 'ultima' | 'ga' | 'ra' | 'other';
+type Moment = 'firstGlow' | 'firstUltima' | 'below20k';
 
 function play(line: Line, seed: number, party: FFXPartyBuild): Outcome {
   const engine = newEngine(seed, party);
@@ -191,36 +200,95 @@ function play(line: Line, seed: number, party: FFXPartyBuild): Outcome {
     if (d.kind === 'player-input') engine.submit(choose(line, engine, d.actorId, d.commands));
   }
   const st = engine.state();
-  const log = st.log;
-  const casts = log.filter((e) => e.type === 'action-start' && e.actorId === OMNIS && /^omnis-(fir|bliz|thund|water)/.test(e.abilityId ?? ''));
-  return {
-    outcome: st.result?.outcome ?? 'unfinished',
-    turns: st.turn,
-    glows: log.filter((e) => e.type === 'message' && e.text === 'Seymour Omnis glows red').length,
-    ultimas: log.filter((e) => e.type === 'action-start' && e.abilityId === 'omnis-ultima').length,
-    turned: log.filter((e) => e.type === 'affinity-change' && e.cause === 'part-turn').length,
-    ga: casts.filter((e) => e.type === 'action-start' && (e.abilityId ?? '').endsWith('ga')).length,
-    casts: casts.length,
-    omnisHp: (st.combatants[OMNIS] as FFXCombatant).hp,
+  const o: Outcome = {
+    outcome: st.result?.outcome ?? 'unfinished', turns: st.turn, partyActions: 0, omnisTurns: 0,
+    glows: 0, dispels: 0, ultimas: 0, resets: 0, turned: 0, ga: 0, casts: 0,
+    firstGlow: -1, firstUltima: -1, below20k: -1, omnisHp: (st.combatants[OMNIS] as FFXCombatant).hp,
+    ko: { ultima: 0, ga: 0, ra: 0, other: 0 }, raises: 0, lastBlow: 'none',
   };
+  const foes = new Set<string>([OMNIS, ...DISCS]);
+  const maxHp = (st.combatants[OMNIS] as FFXCombatant).stats.maxHp;
+  let hp = maxHp;
+  let by: KoBy = 'other';
+  // The log is in order, so a moment is "his Nth turn" (1-based), counted as the walk goes.
+  for (const e of st.log) {
+    if (e.type === 'turn-start' && e.actorId === OMNIS) o.omnisTurns++;
+    if (e.type === 'action-start') {
+      const id = e.abilityId ?? '';
+      if (e.actorId === OMNIS) {
+        by = id === 'omnis-ultima' ? 'ultima' : /^omnis-(fir|bliz|thund|water)/.test(id) ? (id.endsWith('ga') ? 'ga' : 'ra') : 'other';
+        if (by === 'ga' || by === 'ra') o.casts++;
+        if (by === 'ga') o.ga++;
+        if (id === 'omnis-ultima') {
+          o.ultimas++;
+          if (o.firstUltima < 0) o.firstUltima = o.omnisTurns;
+        }
+        if (id === 'omnis-dispel') o.dispels++;
+      } else {
+        by = 'other';
+        if (!foes.has(e.actorId)) o.partyActions++;
+      }
+    }
+    if (e.type === 'message' && e.text === 'Seymour Omnis glows red') {
+      o.glows++;
+      if (o.firstGlow < 0) o.firstGlow = o.omnisTurns;
+    }
+    if (e.type === 'affinity-change') {
+      if (e.cause === 'part-turn') o.turned++;
+      else o.resets++;
+    }
+    if (e.type === 'damage' && e.targetId === OMNIS) {
+      hp = Math.min(maxHp, Math.max(0, hp - e.amount));
+      if (hp < 20_000 && o.below20k < 0) o.below20k = o.omnisTurns;
+    }
+    if (e.type === 'ko' && !foes.has(e.targetId)) {
+      o.ko[by]++;
+      o.lastBlow = by;
+    }
+    if (e.type === 'revive') o.raises++;
+  }
+  return o;
 }
 
-interface Bench { wins: number; outcomes: Record<string, number>; meanTurns: number; glows: number; ultimas: number; turned: number; gaShare: number; meanHp: number }
+type Numeric = Exclude<keyof Outcome, 'outcome' | 'ko' | 'lastBlow'>;
+
+interface Bench {
+  wins: number; outcomes: Record<string, number>;
+  mean: (k: Numeric, winsOnly?: boolean) => number;
+  /** Mean of a moment over the fights that reached it, and how many did. */
+  moment: (k: Moment) => { mean: number; reached: number };
+  ko: Record<KoBy, number>; lastBlow: Record<string, number>; gaShare: number;
+}
 
 function bench(line: Line, party: FFXPartyBuild = gardenOfPainBuild): Bench {
+  const runs: Outcome[] = [];
+  for (let seed = 1; seed <= SEEDS; seed++) runs.push(play(line, seed, party));
   const outcomes: Record<string, number> = {};
-  let wins = 0, turns = 0, glows = 0, ultimas = 0, turned = 0, ga = 0, casts = 0, hp = 0;
-  for (let seed = 1; seed <= SEEDS; seed++) {
-    const r = play(line, seed, party);
+  const lastBlow: Record<string, number> = {};
+  const ko: Record<KoBy, number> = { ultima: 0, ga: 0, ra: 0, other: 0 };
+  for (const r of runs) {
     outcomes[r.outcome] = (outcomes[r.outcome] ?? 0) + 1;
-    if (r.outcome === 'victory') wins++;
-    turns += r.turns; glows += r.glows; ultimas += r.ultimas; turned += r.turned; ga += r.ga; casts += r.casts; hp += r.omnisHp;
+    if (r.outcome === 'defeat') lastBlow[r.lastBlow] = (lastBlow[r.lastBlow] ?? 0) + 1;
+    for (const k of Object.keys(ko) as KoBy[]) ko[k] += r.ko[k] / SEEDS;
   }
+  const wins = runs.filter((r) => r.outcome === 'victory');
+  const casts = runs.reduce((s, r) => s + r.casts, 0);
   return {
-    wins, outcomes, meanTurns: turns / SEEDS, glows: glows / SEEDS, ultimas: ultimas / SEEDS,
-    turned: turned / SEEDS, gaShare: casts > 0 ? ga / casts : 0, meanHp: hp / SEEDS,
+    wins: wins.length, outcomes, ko, lastBlow,
+    gaShare: casts > 0 ? runs.reduce((s, r) => s + r.ga, 0) / casts : 0,
+    mean: (k, winsOnly = false) => {
+      const set = winsOnly ? wins : runs;
+      return set.length === 0 ? 0 : set.reduce((s, r) => s + r[k], 0) / set.length;
+    },
+    moment: (k) => {
+      const hit = runs.filter((r) => r[k] >= 0);
+      return { mean: hit.length === 0 ? 0 : hit.reduce((s, r) => s + r[k], 0) / hit.length, reached: hit.length };
+    },
   };
 }
+
+const f1 = (x: number): string => x.toFixed(1);
+const f2 = (x: number): string => x.toFixed(2);
 
 describe(`Seymour Omnis — win rates across ${SEEDS} seeds (measured, not tuned)`, () => {
   let results: Record<Line, Bench>;
@@ -229,15 +297,29 @@ describe(`Seymour Omnis — win rates across ${SEEDS} seeds (measured, not tuned
     results = Object.fromEntries(LINES.map((l) => [l, bench(l)])) as Record<Line, Bench>;
     ringless = bench('intended', noRing);
     const rows: [string, Bench][] = [...Object.entries(results), ['intended, no ring (B6 = b)', ringless]];
-    console.log('| Line | Wins | Outcomes | Mean turns | Glows / fight | Ultimas / fight | Disc turns / fight | -ga share of his spells | Omnis HP left (mean) |');
-    console.log('|---|---:|---|---:|---:|---:|---:|---:|---:|');
+    console.log('| Line | Wins | Outcomes | Battle turns, all (mean) | Battle turns, wins | Party actions | His turns | Omnis HP left (mean) |');
+    console.log('|---|---:|---|---:|---:|---:|---:|---:|');
     for (const [name, r] of rows) {
       console.log(
-        `| ${name} | ${r.wins}/${SEEDS} | ${JSON.stringify(r.outcomes)} | ${r.meanTurns.toFixed(1)} | ${r.glows.toFixed(2)} | ` +
-          `${r.ultimas.toFixed(2)} | ${r.turned.toFixed(2)} | ${(100 * r.gaShare).toFixed(0)} % | ${Math.round(r.meanHp)} |`,
+        `| ${name} | ${r.wins}/${SEEDS} | ${JSON.stringify(r.outcomes)} | ${f1(r.mean('turns'))} | ${f1(r.mean('turns', true))} | ` +
+          `${f1(r.mean('partyActions'))} | ${f1(r.mean('omnisTurns'))} | ${Math.round(r.mean('omnisHp'))} |`,
       );
     }
-  }, 600_000);
+    console.log('');
+    console.log(
+      '| Line | 1st glow: his turn (fights) | 1st Ultima: his turn (fights) | Below 20,000: his turn (fights) | Glows | Dispels | Ultimas | Resets | ' +
+        'Disc turns | -ga share | KOs: Ultima / -ga / -ra / other | Raises | Defeats by last blow |',
+    );
+    console.log('|---|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|---|');
+    for (const [name, r] of rows) {
+      const m = (k: Moment): string => `${f1(r.moment(k).mean)} (${r.moment(k).reached})`;
+      console.log(
+        `| ${name} | ${m('firstGlow')} | ${m('firstUltima')} | ${m('below20k')} | ${f2(r.mean('glows'))} | ${f2(r.mean('dispels'))} | ` +
+          `${f2(r.mean('ultimas'))} | ${f2(r.mean('resets'))} | ${f2(r.mean('turned'))} | ${(100 * r.gaShare).toFixed(0)} % | ` +
+          `${f2(r.ko.ultima)} / ${f2(r.ko.ga)} / ${f2(r.ko.ra)} / ${f2(r.ko.other)} | ${f2(r.mean('raises'))} | ${JSON.stringify(r.lastBlow)} |`,
+      );
+    }
+  }, 900_000);
 
   it('every battle ends (no runaway loop)', () => {
     for (const r of [...Object.values(results), ringless]) expect(r.outcomes['unfinished'] ?? 0).toBe(0);
@@ -248,8 +330,16 @@ describe(`Seymour Omnis — win rates across ${SEEDS} seeds (measured, not tuned
   });
 
   it('only the intended line turns discs, and it cuts his -ga share', () => {
-    expect(results.intended.turned).toBeGreaterThan(0);
-    expect(results['break-brute'].turned).toBe(0);
+    expect(results.intended.mean('turned')).toBeGreaterThan(0);
+    expect(results['break-brute'].mean('turned')).toBe(0);
     expect(results.intended.gaShare).toBeLessThan(results['break-brute'].gaShare);
+  });
+
+  it('the key moments happen on the intended line: a glow, Dispel, Ultima and a reset', () => {
+    const r = results.intended;
+    expect(r.moment('firstGlow').reached).toBe(SEEDS);
+    expect(r.mean('dispels')).toBeGreaterThan(0);
+    expect(r.moment('firstUltima').reached).toBeGreaterThan(0);
+    expect(r.mean('resets')).toBeGreaterThan(0);
   });
 });
