@@ -257,3 +257,63 @@ focused before deploy, deep after on live. Not save-data class unless `ChapterId
 
 **Verdict: PROCEED.** Fifteen needs already work (§4.1); new: the hit-landed set, per-target reach,
 the volley, the affinity event, the disc stage. Nothing perceivable before B1–B21 and O-1…O-6.
+
+## Review (adversarial, 2026-09-24; FFX only)
+
+Reviewer: a sub-agent of the driver, after the options builder's commit 189ffa75. Method: three
+wiki pages re-fetched through `api.php?action=parse&prop=wikitext|revid` (browser user agent);
+every file:line in §4.1 opened; the research's `[derived]` damage numbers re-run through the
+engine's own `baseDamage` (`src/battle/ffx/formulas.ts`, Node type-stripping, scratch on D:);
+the six sheets in `docs/concepts/chapters/omnis/` read, the two phone sheets at phone scale.
+Nothing under `src/`, `tests/`, `critic/`, `public/art` or `docs/target/` was touched.
+
+### Sources
+
+| # | Claim | Verdict |
+|---:|---|---|
+| S1 | Wiki revids: *Seymour Omnis* 4032306, *Mortiphasm* 3981206, *Inside Sin* 4034458 | **CONFIRMED**, unchanged since the research read them |
+| S2 | HP 80,000, MP 999, Str 20, Def 180, Mag 35, MDef 100, Agi 40, Luck 20, Overkill 15,000, AP 24,000 / 36,000, Gil 12,000, Zanmato 4, steal Shining / Supreme Gem, drop Lv. 3 Key Sphere ×1 / ×2, 3–4 slots, Piercing / Magic +20%, SOS Shell / Protect / Haste | **CONFIRMED** against the infobox |
+| S3 | Threaten: wiki Immune (research O-2); Power and Magic Break immune; Armor and Mental Break absent from the immune list (landable) | **CONFIRMED** |
+| S4 | Four spells a turn, one per member plus a random fourth; 2–3 with KO'd members; -ra on 1–2 matching, -ga on 3–4; colours orange / purple / blue / yellow | **CONFIRMED**. Note: *which* disc's spell is dropped when a member is KO'd is unsourced; the research pseudocode (`discs[: n]`) keeps the first discs without a tag. Fold it into B12 as an estimate |
+| S5 | Affinity ladder 1 half / 2 immune / 3 absorb / 4 absorb + opposite weak; opening all Fire, weak to Ice; the two-Water bug | **CONFIRMED** |
+| S6 | Six attacks (three below 20,000 HP), glow, Dispel, then Ultima; counters and reflected spells count; Def 180 → 100 on Dispel → 150 on Ultima; Ultima DC 64, special damage, Shield and Focus reduce it; no Banish; the Anima line | **CONFIRMED** |
+| S7 | Reach: only Wakka, Valefor, Anima, Mindy (regular attack) hit a disc physically | **CONFIRMED** (*Mortiphasm*) |
+| S8 | O-10, reset timing: "GameFAQs immediately after Ultima, GamerGuides on the turn after"; research and plan build GameFAQs' timing | **CORRECTED.** The re-fetched *Mortiphasm* page says the discs turn "on his next turn after casting Ultima", which the research did not count. That is 2 sources (wiki, GamerGuides) against 1 (GameFAQs): build *next turn* by the research's own majority rule, or put it to Bailey; it is not settled for GameFAQs |
+| S9 | O-11: the wiki's "next element listed above" reads Fire, Ice, Water, Thunder | **CONFIRMED** (the colour order in *Seymour Omnis*'s Battle prose); still a conflict with GameFAQs, B8 stands |
+| S10 | Garden of Pain = steps to a platform, "the staves remain"; the red-tinged sea, blue walkways, waterfalls and Yevon symbols describe the **Sea of Sorrow** | **CONFIRMED** (*Inside Sin*). See A3: the O-3 sheet blurs the two |
+| S11 | §3.3 damage tables: -ra / -ga / Ultima at MDef 10 and 25 (1,274 / 2,406 / 3,994; 1,141 / 2,154 / 3,577); Attack at Str 40 into Def 180 / 150 / 100 / Break (297 / 472 / 864 / 2,016) and Str 30 into 180 (127) | **CONFIRMED**: the engine's `baseDamage` returns every one of these exactly at roll 16. Typo: research §3.3 cites "§6.3 preset MDEF"; the preset is §6.2 |
+
+### Engine claims (plan §4)
+
+| # | Claim | Verdict |
+|---:|---|---|
+| E1 | §4.1 #1–#15 file:line references (`formulas.ts:267, 116, 121, 143, 301, 320`; `engine.ts:402`; `yojimbo-rules.ts:174`; `setup.ts:184`; `elements.ts:35`; `statuses.ts:78`; `abilities.ts:148, 336`; `scripted.ts:98`; `equipment.ts:264`; `chapters-unlisted.ts:28`) | **CONFIRMED**; each line says what the plan says. `DISPEL_REMOVES` is exactly the research's list |
+| E2 | O-G1: a disc hit is invisible (`counter-inputs.ts:36` needs `amount > 0`; `blockedByImmunity` returns 0 and `abilities.ts` skips `dealDamage` on 0) | **CONFIRMED** |
+| E3 | O-G2, O-G3: `reachesFoesAtRange` is keyed on `airship.range` for the whole foe list; `AiScript` returns one `Command` | **CONFIRMED** (`targeting.ts:63`, `ai/types.ts:29`) |
+| E4 | O-G5 "counts counters and reflected spells (#11)", given that `collectBossCounters` returns early on `is-counter` (`reactions.ts:56`) | **CONFIRMED** as workable: a party Counterattack / Magic Counter resolves as the plain Attack row (`ticks.ts:210`, `ATTACK_ABILITY_ID`), which carries no `is-counter` flag, so it reaches a hook placed where the Natus hook sits. T10 should still test one Magic Counter |
+| E5 | §4.1 #7 "O-12's estimate holds by construction" | **CONFIRMED for our engine** (a Break zeroes the defence term whatever the stat). It remains an estimate about the original game; keep the label |
+| E6 | §2 table: Mortiphasm "no turns", tagged `[decompiled]` | **CORRECTED.** The decompile lists no actions for `m106` (research §2) and the wiki lists *Turns Left* / *Turns Right* as its abilities; whether a disc owns a CTB slot or only turns in reaction is **unsourced**. Tag it `[estimate]` and add it to the B-list (it decides whether the queue shows four disc tiles) |
+
+### Option sheets (189ffa75)
+
+| # | Claim | Verdict |
+|---:|---|---|
+| A1 | The six sheets and their parts exist as the README lists them, stamped CONCEPT, the ring order labelled "our estimate (B8)" | **CONFIRMED** |
+| A2 | O-4 C, frame iii: "Ice no longer hurts him double" (`o4-fight/c-iii.html:48`, `c-iii-phone.html:44`) | **CORRECTED.** A single weakness is **×1.5** (`AFFINITY_MULTIPLIER_FFX.weak`, research §3.3, combat-core §3), not double. Reword ("Ice no longer hurts him extra") before Bailey takes the wording as approved |
+| A3 | O-3 sheet subtitle "Sourced: steps up to a platform; a red-tinged sea, blue water walkways, waterfalls" | **CORRECTED.** Only the steps and the platform are sourced for the Garden of Pain; the sea, walkways and waterfalls are the Sea of Sorrow's (S10). The README says "the Sea of Sorrow beside it" correctly; the sheet does not. And, as the README admits, no plate shows the steps, the one Garden fact |
+| A4 | README: "the Mortiphasms were taken out of the turn queue (they have no turns, §2)" | **CORRECTED**: research §2 does not say this (E6). The frames present an estimate as sourced |
+| A5 | Phone reading (390 px): the queue row and the "Tidus COMMAND" label cover the upper-left disc in A, B and C (O-2 and O-4 phone sheets) | **CONFIRMED** as disclosed, but it matters more than the README says: at 390 px, A and C cannot show all four facings, so only B (the strip) passes "read the discs at a glance". Say so in question 1, not only in the off-canon list |
+| A6 | O-4 C lines i and ii (four Firaga, absorbs Fire, weak to Ice; Dispel on the party, then Ultima, then every disc turns) and O-2 B's strip after one turn ("absorbs Fire, halves Thunder") | **CONFIRMED** against S4–S6 |
+| A7 | Turn-queue order (Omnis second) and party HP / MP in the frames | **CONFIRMED as labelled**: Chapter III's queue and numbers with names swapped, not Omnis's 7-tick CTB; no invented number |
+
+### Presented as settled, but Bailey's call or unsourced
+
+1. **O-10 reset timing** (S8): not "build GameFAQs"; the majority now says next turn.
+2. **Discs in the CTB queue** (E6, A4): an estimate, not a source; needs a B line.
+3. **The ring order**: the sheets read GameFAQs' *reset cycle* as the *physical order around a disc*; that is a second assumption stacked on B8. Label it so; B8 must confirm both.
+4. **Which spell drops when a member is KO'd** (S4): unlabelled in the pseudocode; add to B12.
+5. The builder's five recommendations (O-2 B, O-1 A, O-3 C, O-4 C, the look-only reference pass) are correctly framed as recommendations awaiting Bailey; the reference pass needs his yes (rule 11).
+
+No invented game number found: every stat, DC and threshold in the research, the plan and the sheets
+traces to a source or to the engine's own chain. **Verdict: the preflight stands** with the four
+corrections above (S8, E6, A2, A3); fix A2's wording before the sheet goes to Bailey.
