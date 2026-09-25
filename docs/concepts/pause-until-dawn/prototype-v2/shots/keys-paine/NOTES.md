@@ -17,17 +17,17 @@ The plate `public/art/pause/paine.png` was read and never written. Every render 
 | -30 | 23.6 % | 8.1 % | 1.03 | 2.68 | 0 | 49.8 s. **FAIL at 1:1**, not retried |
 
 **Sweep.** This is a 1-degree sweep from -20 to +20 with a hard cut halfway between keys. S is the head-box step at
-a cut divided by the median 1-degree step, which is 10.05.
+a cut divided by the median 1-degree step, which is 10.07.
 
 | Cut | S |
 |---|---|
-| -16/-15 | 1.08 |
-| -6/-5 | 1.01 |
+| -16/-15 | 1.09 |
+| -6/-5 | 1.03 |
 | +5/+6 | 1.03 |
-| +15/+16 | 1.02 |
+| +15/+16 | 1.03 |
 
-- The largest step away from a cut is 1.05x the median.
-- The same-yaw swap (head-box MAD) is 0.13 to 1.82.
+- The largest step away from a cut is 1.06x the median.
+- The same-yaw swap (head-box MAD) is 0.16 to 1.77.
 - 0 of 41 frames show two paintings. Each frame is one key's paint, by construction.
 - At rest the render matches the plate with a MAD of 0.015.
 
@@ -67,6 +67,8 @@ Each key goes through the same four steps:
   - Both were redone: the neck is pinned, and the neck zone was repainted as shadowed neck and collar.
   - A thin dark crack at the chin tip came from an owner-seam sampling bug. Each painting now reaches 4 px past the
     pixels it owns.
+  - The renderer also fills the missing band along the proxy rim from the plate's texels. It was found on Rikku,
+    and this sweep and video were re-rendered with it.
 - **+30 fails twice** (`fail-p30-attempt1.jpg`, `fail-p30-attempt2.jpg`).
   - Paine's plate is already turned about 55 degrees to her right. Turning her 30 degrees back toward frontal
     stretches the far side of the face.
@@ -91,7 +93,7 @@ Each key goes through the same four steps:
 
 - `sheet.jpg`: the five keys, 1:1 crops on both sides of the four cuts, and the numbers.
 - `turn.mp4`: the turn 0 -> +20 -> -20 -> 0, eased. It is 1344 x 768, 25 fps, 8.4 s, H.264 yuv420p with
-  faststart, 0.97 MB.
+  faststart, 0.98 MB.
 - `fail-*.jpg`: the look sheets of the three failed keys. Each shows the cut at 1:1 and every candidate.
 - Keys, paintings, candidates, masks, the underlay, the configuration and the tools (`kcore.py`, `kgrow.py`,
   `ksweep.py`, `klook.py`, `masks.py`, `underlay*.py`, `comfy.py`, `sam_parts.py`) are backed up to
