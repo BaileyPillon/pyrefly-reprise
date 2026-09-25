@@ -46,6 +46,10 @@ export const CHAPTER_FACE_BOXES: Readonly<Record<string, FaceBox>> = {
   // Plate B: brow 0.42 (above the eyebrows, under the hat band), chin 0.68 (in the beard),
   // ear edge 0.49 to the far cheek 0.67.
   'ch13-trema': { x0: 0.49, x1: 0.67, y0: 0.42, y1: 0.68 },
+  // Chapter X plate B (FFX only; D-156): Natus's face, centred. Brow 0.25 (under the swept crest),
+  // chin 0.55, cheek to cheek 0.40 to 0.60. The dossier laid its quote and snapshots across his
+  // right eye at 1600x900 (docs/concepts/chapters/natus/ship/).
+  'ch10-seymour-natus': { x0: 0.4, x1: 0.6, y0: 0.25, y1: 0.55 },
 };
 
 export type DossierPlace = 'beside' | 'under' | 'under-lean' | 'heading';

@@ -86,8 +86,13 @@ describe('the CHAPTER dossier keeps the plate face clear (FOC16-02)', () => {
     expect(dossierClears(FACE, { ink: [{ ...clear, left: -3 }], floor: 686, width: 1600 })).toBe(false);
   });
 
-  it('has a face box only for Chapter XIII plate B, inside the painting', () => {
-    expect(Object.keys(CHAPTER_FACE_BOXES)).toEqual(['ch13-trema']);
+  it('has a face box only for Chapter XIII plate B and Chapter X plate B, inside the painting', () => {
+    expect(Object.keys(CHAPTER_FACE_BOXES)).toEqual(['ch13-trema', 'ch10-seymour-natus']);
+    // Chapter X (FFX only): Natus's face is centred on his plate, inside the painting.
+    const n = CHAPTER_FACE_BOXES['ch10-seymour-natus']!;
+    expect(n.x0).toBeLessThan(0.5);
+    expect(n.x1).toBeGreaterThan(0.5);
+    expect(n.y0).toBeLessThan(n.y1);
     const f = CHAPTER_FACE_BOXES['ch13-trema']!;
     expect(f.x0).toBeGreaterThanOrEqual(0);
     expect(f.x1).toBeLessThanOrEqual(1);
