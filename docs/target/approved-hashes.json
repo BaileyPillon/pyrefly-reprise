@@ -774,6 +774,35 @@
     "mtime": "2026-09-22T19:43:11.807Z",
     "approved": "2026-09-25"
    }
+  },
+  "chapter:trema:2026-09-25": {
+   "words": "I'll go with all your recommendations",
+   "note": "Bailey, 2026-09-25 ~01:40 EDT, answering every Chapter XIII recommendation (O-1 A priest with the review's torn robe, O-2 A gold armoured beast, O-2b link staged, O-3 B Cloister 100 repaint; Review corrections applied; docs/concepts/chapters/trema/README.md, docs/plans/chapter-trema-review.md). Installed in 6896b272 (docs/concepts/chapters/trema/INSTALLED.md). Judge: docs/concepts/chapters/trema/production/JUDGE.md, independent 1:1 judge, bar 7, all five PASS (Trema idle 7.7, Trema cast 7.1, Paragon idle 7.7, Paragon cast 7.1, plate 7.6; worst: Trema cast shoulder-seam artefacts, Paragon cast light edge fringe and rigid pitch, the plate's banners carry no Yu Yevon likeness, which stays Bailey's call). The link (O-2b) is staging, not a painting, and is not in this set. FFX-2 only, Chapter XIII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-trema/.",
+   "public/art/characters/trema/idle.png": {
+    "sha256": "77b4cba2eb4b99fb803f678ac526d0685efd31704136f0bdc8fe7de0300f0903",
+    "mtime": "2026-09-25T04:16:55.145Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/trema/cast.png": {
+    "sha256": "744cc1501f8e98be8f46974d162b4d0a1d48e957864b716161be87c50493e506",
+    "mtime": "2026-09-25T04:16:55.185Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paragon/idle.png": {
+    "sha256": "0e3972b558c07d71c70eb60f4d71752ea9b91601e81293e39673146f65e569b9",
+    "mtime": "2026-09-25T04:16:55.232Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/characters/paragon/cast.png": {
+    "sha256": "f2f2300b6f8f30e7a8021457de08cd625f7f68996b48dc99aa2f1e39d5312a7d",
+    "mtime": "2026-09-25T04:16:55.263Z",
+    "approved": "2026-09-25"
+   },
+   "public/art/backdrops/via-infinito.png": {
+    "sha256": "82eedcd375055e10fa8d537b2b1f75b4d1d68575cdb3adffe319c9e7548b47fa",
+    "mtime": "2026-09-25T04:16:55.295Z",
+    "approved": "2026-09-25"
+   }
   }
  }
 }
