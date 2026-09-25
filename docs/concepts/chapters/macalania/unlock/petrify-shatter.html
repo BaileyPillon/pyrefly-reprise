@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Petrify shatter or yield</title>
+<link rel="stylesheet" href="../../../polish/_kit/kit.css">
+<style>
+  :root { --ink:#0b0a12; --paper:#f4f1e8; --gold:#e3b94a; --gold2:#b8862a; --sky:#7fc6e8; --blood:#b02a2a; }
+  body { margin:0; width:1600px; height:900px; background:var(--ink); }
+  .sheet { width:1600px; height:900px; box-sizing:border-box; padding:16px 28px 14px; background:var(--ink); color:var(--paper); display:flex; flex-direction:column; gap:10px; }
+  .title { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:700; font-size:30px; margin:0; }
+  .sub { font-family:'Chakra Petch',sans-serif; font-weight:500; font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-top:3px; }
+  .top { display:flex; gap:12px; }
+  .box { background:#14121c; border:1px solid rgba(227,185,74,.28); padding:8px 12px; box-sizing:border-box; }
+  .box h3 { margin:0 0 5px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); }
+  .q { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:17px; line-height:1.25; color:var(--paper); margin:0 0 5px; }
+  .q cite { font-family:'Chakra Petch',sans-serif; font-style:normal; font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:rgba(244,241,232,.5); margin-left:6px; }
+  .t { font-family:'Exo 2',sans-serif; font-size:14px; line-height:1.3; color:#d8d3e0; margin:0; }
+  .t b { color:var(--gold); }
+  .card img { display:block; border:1px solid rgba(244,241,232,.15); }
+  .opts { display:flex; gap:12px; flex:1; min-height:0; }
+  .opt { flex:1; background:#14121c; border:1px solid rgba(227,185,74,.28); padding:8px 10px; box-sizing:border-box; display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .opt.pick { outline:2px solid var(--gold); outline-offset:2px; }
+  .ohead { display:flex; align-items:center; gap:8px; }
+  .oname { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:700; font-size:24px; color:var(--gold); line-height:1; }
+  .otag { font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; letter-spacing:.05em; text-transform:uppercase; padding:2px 7px; color:var(--ink); background:#9fb0c4; }
+  .otag.rec { background:var(--gold); }
+  .otag.today { background:var(--sky); }
+  .strip-lbl { font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:rgba(244,241,232,.6); }
+  .strip { display:flex; gap:4px; }
+  .fr { position:relative; width:128px; height:140px; overflow:hidden; background:#000; border:1px solid rgba(244,241,232,.15); }
+  .fr img { width:128px; height:140px; object-fit:cover; object-position:50% 12%; display:block; }
+  .fr .i { position:absolute; left:3px; top:2px; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:13px; color:var(--gold); background:rgba(11,10,18,.75); padding:0 4px; }
+  .fr.grey img { filter:grayscale(1) brightness(.9); }
+  .cap { font-family:'Exo 2',sans-serif; font-size:13.5px; line-height:1.28; color:#d8d3e0; margin:0; }
+  .cap b { color:var(--gold); }
+  .adv { position:relative; width:230px; height:158px; overflow:hidden; border:1px solid rgba(244,241,232,.15); }
+  .adv img { width:230px; height:158px; object-fit:cover; object-position:0 0; display:block; }
+  .adv.cut::after { content:''; position:absolute; left:6px; right:6px; top:50%; height:3px; background:var(--blood); transform:rotate(-24deg); }
+  .foot { display:flex; gap:12px; }
+  .recbox { flex:1.25; background:var(--paper); color:var(--ink); padding:8px 14px; font-family:'Exo 2',sans-serif; font-size:14.5px; line-height:1.32; border-left:6px solid var(--gold); }
+  .recbox h3 { margin:0 0 3px; font-family:'Chakra Petch',sans-serif; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold2); }
+  .found { flex:1; background:#14121c; border-left:6px solid var(--sky); padding:8px 14px; font-family:'Exo 2',sans-serif; font-size:13px; line-height:1.3; color:#d8d3e0; }
+  .found h3 { margin:0 0 3px; font-family:'Chakra Petch',sans-serif; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--sky); }
+</style></head>
+<body>
+<div class="sheet ig">
+  <div>
+    <h1 class="title">When Petrify Grenade hits a Guado Guardian, does it shatter or yield?</h1>
+    <div class="sub">Chapter VII &middot; FFX only &middot; a rule for one case, needs your pick &middot; real e2e frames (commit 06338dbc) and D-046&rsquo;s mock; nothing rendered</div>
+  </div>
+
+  <div class="top">
+    <div class="box" style="flex:1.35">
+      <h3>Why it needs a pick</h3>
+      <p class="q">&ldquo;Petrify &hellip; Fully landable &mdash; and this is the fight&rsquo;s shortcut. Kimahri&rsquo;s Stone Breath and Rikku&rsquo;s Petrify Grenade both petrify, and a petrified monster always shatters. Shattering forfeits the overkill AP.&rdquo;<cite>research ffx-seymour-anima-macalania &sect;2.2 (verified, 2 sources)</cite></p>
+      <p class="t">Your <b>D-046</b> said the Guardians <b>yield</b> when beaten (&ldquo;Living Guado bodyguards. They lose.&rdquo; presentation.md row 140). But the guide&rsquo;s own hint and the move advisor tell the player to throw <b>Petrify Grenade</b>, which does not beat them the ordinary way: it petrifies them and they shatter (the engine&rsquo;s eject). So D-046 did not decide what a petrified Guardian does.</p>
+    </div>
+    <div class="box card" style="flex:none; width:256px">
+      <h3>The advisor, first menu</h3>
+      <img src="img/advisor-card.jpg" alt="" style="width:230px;height:157px;object-fit:cover;object-position:0 0">
+    </div>
+    <div class="box" style="flex:1">
+      <h3>The guide&rsquo;s own line</h3>
+      <p class="q" style="font-size:16px">&ldquo;The Guardians have no Petrify resistance at all, and a petrified monster shatters &mdash; it forfeits the overkill AP and it ends them in one throw&rdquo;<cite>src/data/guides/seymour-anima-macalania.ts, hint on Petrify Grenade / Stone Breath</cite></p>
+      <p class="t">Research &sect;7 row 2 lists it as one of the fight&rsquo;s intended strategies, and &sect;10 as its lesson: <b>a real trade-off, stated in numbers</b> (a faster kill against the overkill AP).</p>
+    </div>
+  </div>
+
+  <div class="opts">
+    <div class="opt pick">
+      <div class="ohead"><span class="oname">A</span><span class="otag rec">recommended</span><span class="otag today">what the build does today</span></div>
+      <div class="strip-lbl">Petrified &rarr; shatters (real frames, &minus;0.6 s, +0.0 s, +0.6 s)</div>
+      <div class="strip">
+        <div class="fr"><span class="i">1</span><img src="img/shatter-1.jpg" alt=""></div>
+        <div class="fr"><span class="i">2</span><img src="img/shatter-2.jpg" alt=""></div>
+        <div class="fr"><span class="i">3</span><img src="img/shatter-3.jpg" alt=""></div>
+      </div>
+      <div class="strip-lbl">Ordinary defeat &rarr; yields (D-046 mock)</div>
+      <div class="strip">
+        <div class="fr"><span class="i">1</span><img src="img/yields-1.jpg" alt=""></div>
+        <div class="fr"><span class="i">2</span><img src="img/yields-2.jpg" alt=""></div>
+        <div class="fr"><span class="i">3</span><img src="img/yields-3.jpg" alt=""></div>
+      </div>
+      <p class="cap">Two outcomes, as in FFX: <b>petrified, it shatters</b> and is removed (grey flash, shatter sound, a small shake, a 0.6 s fade toward stone). <b>Beaten normally, it yields</b>, per D-046. The guide line stays true. No code change: both are in the code today (the yield is not in these e2e frames).</p>
+    </div>
+    <div class="opt">
+      <div class="ohead"><span class="oname">B</span><span class="otag">always yield</span></div>
+      <div class="strip-lbl">Petrified &rarr; yields anyway (D-046 mock)</div>
+      <div class="strip">
+        <div class="fr grey"><span class="i">1</span><img src="img/yields-1.jpg" alt=""></div>
+        <div class="fr"><span class="i">2</span><img src="img/yields-2.jpg" alt=""></div>
+        <div class="fr"><span class="i">3</span><img src="img/yields-3.jpg" alt=""></div>
+      </div>
+      <div class="strip-lbl">Ordinary defeat &rarr; yields (D-046 mock)</div>
+      <div class="strip">
+        <div class="fr"><span class="i">1</span><img src="img/yields-1.jpg" alt=""></div>
+        <div class="fr"><span class="i">2</span><img src="img/yields-2.jpg" alt=""></div>
+        <div class="fr"><span class="i">3</span><img src="img/yields-3.jpg" alt=""></div>
+      </div>
+      <p class="cap">One exit for the Guardians whatever beat them: the stone Guardian (frame 1, greyed with a CSS filter here) steps back like a living one. <b>Off-canon</b>: FFX removes a petrified monster. The guide line (&ldquo;shatters&rdquo;) would then be wrong and would need rewording too. A presenter change.</p>
+    </div>
+    <div class="opt">
+      <div class="ohead"><span class="oname">C</span><span class="otag">drop it from the guide</span></div>
+      <div class="strip-lbl">The advisor and guide stop suggesting it</div>
+      <div class="strip">
+        <div class="adv cut"><img src="img/advisor-card.jpg" alt=""></div>
+      </div>
+      <p class="cap">Remove Petrify Grenade (and Stone Breath) from the guide hint and the move advisor, so the player is never pointed at the case. <b>The case still exists</b>: the preset still carries Petrify Grenades (research &sect;8.9) and Items can still throw one, so C still needs A or B for that throw. It also removes one of the fight&rsquo;s intended lessons (research &sect;7 row 2, &sect;10). A guide and advisor change.</p>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="recbox">
+      <h3>Recommendation: A</h3>
+      <b>Keep the shatter for a petrified Guardian and yield for an ordinary defeat.</b> It is what the game&rsquo;s mechanics do (research &sect;2.2, verified from 2 sources), it keeps the guide&rsquo;s taught trade-off honest, D-046 still covers every ordinary defeat, and it is already in the code. D-046 read as answering the ordinary case; A records that the petrified case is a separate rule.
+    </div>
+    <div class="found">
+      <h3>Seen in the frames, not fixed</h3>
+      &bull; The &ldquo;stone&rdquo; barely reads: the Guardian is still in full colour at +0.0 s and gone by +0.6 s (frames 2&ndash;3). Making it read as stone is a look change, so it would be shown to you first.<br>
+      &bull; The advisor card prices Petrify Grenade at <b style="color:var(--sky)">4,000</b> and says &ldquo;4000 damage&rdquo;, but the item does no damage (items/offensive-1a.ts). The 4,000 is probably the two Guardians&rsquo; 2,000 HP each.
+    </div>
+  </div>
+</div>
+</body></html>

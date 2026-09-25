@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Chapter VII art approval</title>
+<link rel="stylesheet" href="../../../polish/_kit/kit.css">
+<style>
+  :root { --ink:#0b0a12; --paper:#f4f1e8; --gold:#e3b94a; --gold2:#b8862a; --sky:#7fc6e8; --blood:#b02a2a; }
+  body { margin:0; width:1600px; background:var(--ink); }
+  .sheet { width:1600px; box-sizing:border-box; padding:22px 36px 26px; background:var(--ink); color:var(--paper); }
+  .title { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:700; font-size:34px; margin:0; }
+  .sub { font-family:'Chakra Petch',sans-serif; font-weight:500; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-top:4px; }
+  .ask { margin-top:12px; background:var(--paper); color:var(--ink); padding:10px 16px; border-left:6px solid var(--gold2); font-family:'Exo 2',sans-serif; font-size:17px; line-height:1.35; }
+  .ask b { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; }
+  .section { margin-top:18px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); border-bottom:1px solid rgba(227,185,74,.35); padding-bottom:4px; }
+  .section span { color:rgba(244,241,232,.55); font-weight:500; letter-spacing:.04em; text-transform:none; margin-left:10px; }
+  .cards { display:flex; gap:11px; margin-top:10px; }
+  .card { width:295px; flex:none; background:#14121c; border:1px solid rgba(227,185,74,.28); box-sizing:border-box; }
+  .card.ref { border-color:rgba(127,198,232,.45); }
+  .card.low { border-color:rgba(176,42,42,.7); }
+  .chead { display:flex; align-items:baseline; justify-content:space-between; padding:7px 10px 5px; }
+  .cname { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:700; font-size:22px; color:var(--gold); line-height:1; }
+  .cpose { font-family:'Chakra Petch',sans-serif; font-weight:500; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:rgba(244,241,232,.7); }
+  .score { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:26px; line-height:1; color:var(--ink); background:var(--gold); padding:2px 8px; }
+  .score.low { background:var(--blood); color:var(--paper); }
+  .score.ref { background:var(--sky); }
+  .lbl { font-family:'Chakra Petch',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:rgba(244,241,232,.55); padding:4px 10px 2px; }
+  .win { width:295px; overflow:hidden; background:#000; display:flex; justify-content:center; }
+  .win img { object-fit:none; object-position:50% 0; display:block; }
+  .w1 { height:340px; } .w1 img { width:295px; height:340px; }
+  .w2 { height:340px; } .w2 img { width:295px; height:340px; }
+  .note { font-family:'Exo 2',sans-serif; font-size:14px; line-height:1.3; color:#d8d3e0; padding:7px 10px 9px; margin:0; }
+  .note b { color:var(--gold); }
+  .frames { display:flex; gap:12px; margin-top:10px; }
+  .fr { width:500px; }
+  .fr img { width:500px; height:281px; display:block; border:1px solid rgba(244,241,232,.15); }
+  .fr p { font-family:'Exo 2',sans-serif; font-size:13px; color:rgba(244,241,232,.7); margin:4px 0 0; }
+  .row2 { display:flex; gap:12px; margin-top:10px; align-items:stretch; }
+  .wide { width:604px; flex:none; background:#14121c; border:1px solid rgba(227,185,74,.28); box-sizing:border-box; }
+  .wide.low { border-color:rgba(176,42,42,.7); }
+  .wide .pair { display:flex; gap:8px; padding:0 10px; }
+  .wide .pair .win { width:auto; }
+  .wide .pair img.full { width:258px; height:auto; object-fit:contain; }
+  .foot { margin-top:16px; display:flex; gap:16px; }
+  .rec { flex:1; background:var(--paper); color:var(--ink); padding:10px 16px; font-family:'Exo 2',sans-serif; font-size:15px; line-height:1.36; border-left:6px solid var(--gold); }
+  .rec h3 { margin:0 0 4px; font-family:'Chakra Petch',sans-serif; font-size:14px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold2); }
+  .rec.alt { background:#14121c; color:#d8d3e0; border-left-color:var(--sky); }
+  .rec.alt h3 { color:var(--sky); }
+  .tag { font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; letter-spacing:.08em; position:absolute; right:10px; top:8px; color:var(--ink); background:var(--gold); padding:2px 6px; }
+</style></head>
+<body>
+<div class="sheet ig">
+  <h1 class="title">Chapter VII &mdash; the paintings it will ship, for your yes as final art</h1>
+  <div class="sub">Macalania Temple &middot; FFX only &middot; composed from the installed files and real 1600&times;900 battle captures (GPU, seed 1) &middot; nothing rendered</div>
+  <div class="ask"><b>One question:</b> approve all of these as final art, or name any to redo? &nbsp;Each card shows the painting at 1:1 (top), the same painting at 1:1 in a real battle frame (bottom), and the independent judge's score (bar 7, the worst criterion decides). Chapter VII stays locked until these are answered.</div>
+
+  <div class="section">Battle paintings <span>not in approved-hashes.json; installed today; D-045 option A (idle + one cast each, no attack painting)</span></div>
+  <div class="cards">
+    <div class="card">
+      <div class="chead"><div><div class="cname">Seymour</div><div class="cpose">idle &middot; r3</div></div><div class="score">7</div></div>
+      <div class="lbl">1:1 painting</div><div class="win w1"><img src="img/seymour-idle-1to1.png" alt=""></div>
+      <div class="lbl">1:1 in battle</div><div class="win w2"><img src="img/seymour-idle-battle.png" alt=""></div>
+      <p class="note">Judge 2: worst 7 (a few loose hair specks, ear-bowl spot, soft fingers; none visible at game size). In-game read <b>8</b>. No facial veins, as in the concept you picked.</p>
+    </div>
+    <div class="card">
+      <div class="chead"><div><div class="cname">Seymour</div><div class="cpose">cast &middot; r3 + hand repair</div></div><div class="score">7</div></div>
+      <div class="lbl">1:1 painting</div><div class="win w1"><img src="img/seymour-cast-1to1.png" alt=""></div>
+      <div class="lbl">1:1 in battle</div><div class="win w2"><img src="img/seymour-cast-battle.png" alt=""></div>
+      <p class="note">Judge 4: worst 7 (the raised hand: small violet nails, a flat pale palm). Was 5 before the repair. Read <b>8</b>: hair streaming, open palm. Every spell he casts uses it.</p>
+    </div>
+    <div class="card">
+      <div class="chead"><div><div class="cname">Seymour</div><div class="cpose">hurt &middot; r3 (idle leaned back)</div></div><div class="score">7</div></div>
+      <div class="lbl">1:1 painting</div><div class="win w1"><img src="img/seymour-hurt-1to1.png" alt=""></div>
+      <div class="lbl">1:1 in battle, mid-flinch</div><div class="win w2"><img src="img/seymour-hurt-battle.png" alt=""></div>
+      <p class="note">Judge 3: worst 7 (the idle's own edges). The idle's pixels, upper body tilted back 9&deg;. A mild recoil, but it reads better than no hurt painting.</p>
+    </div>
+    <div class="card low">
+      <div class="chead"><div><div class="cname">Guado Guardian</div><div class="cpose">idle &middot; r3</div></div><div class="score low">7 / 6</div></div>
+      <div class="lbl">1:1 painting</div><div class="win w1"><img src="img/guardian-idle-1to1.png" alt=""></div>
+      <div class="lbl">1:1 in battle</div><div class="win w2"><img src="img/guardian-idle-battle.png" alt=""></div>
+      <p class="note">Judge 2: pixels <b>7</b>, in-game read <b>6</b>: the bloom makes the pale robe highlights glow. The fix recommended is in the renderer&rsquo;s bloom, not a repaint, so your pixels stay.</p>
+    </div>
+    <div class="card">
+      <div class="chead"><div><div class="cname">Guado Guardian</div><div class="cpose">cast &middot; r3 + wrist repair</div></div><div class="score">7</div></div>
+      <div class="lbl">1:1 painting</div><div class="win w1"><img src="img/guardian-cast-1to1.png" alt="" style="object-position:50% 50%"></div>
+      <div class="lbl">1:1 in battle</div><div class="win w2"><img src="img/guardian-cast-battle.png" alt=""></div>
+      <p class="note">Judge 4: worst 7 (the veins go soft where the wrist was repainted, visible at 2x). Was 6. Spear raised near-vertical. No Guardian hurt painting ships; the engine uses the idle.</p>
+    </div>
+  </div>
+
+  <div class="frames">
+    <div class="fr"><img src="img/frame-idle.jpg" alt=""><p>Real frame, idle. Seymour and both Guardians, on the Macalania backdrop</p></div>
+    <div class="fr"><img src="img/frame-cast.jpg" alt=""><p>Real frame, every enemy in its cast painting</p></div>
+    <div class="fr"><img src="img/frame-seymour-hurt.jpg" alt=""><p>Real frame, Seymour 8 frames into the engine&rsquo;s flinch</p></div>
+  </div>
+
+  <div class="section">Also ships, also not approved yet <span>and one reference you already approved</span></div>
+  <div class="row2">
+    <div class="wide">
+      <div class="chead"><div><div class="cname">Backdrop</div><div class="cpose">macalania-temple &middot; from your pick A</div></div><div class="score">7</div></div>
+      <div class="pair">
+        <div><div class="lbl" style="padding-left:0">1:1</div><div class="win w1" style="width:296px"><img src="img/backdrop-1to1.png" alt=""></div></div>
+        <div><div class="lbl" style="padding-left:0">in battle (behind every frame above)</div><img class="full" src="img/frame-idle.jpg" alt="" style="width:282px;border:1px solid rgba(244,241,232,.15)"></div>
+      </div>
+      <p class="note">Production judge (09-22): 7, palette. Keeps A&rsquo;s circular hall, ice arches and braziers. Slightly soft at 1:1; almost none of the warm temple red, which A lacked as well.</p>
+    </div>
+    <div class="wide low">
+      <div class="chead"><div><div class="cname">Pause plate</div><div class="cpose">pause/macalania</div></div><div class="score low">6</div></div>
+      <div class="pair">
+        <div><div class="lbl" style="padding-left:0">1:1</div><div class="win w1" style="width:296px"><img src="img/pause-1to1.png" alt=""></div></div>
+        <div><div class="lbl" style="padding-left:0">pause, chapter tab (real capture)</div><img class="full" src="img/frame-pause-chapter.jpg" alt="" style="width:282px;border:1px solid rgba(244,241,232,.15)"></div>
+      </div>
+      <p class="note">Production judge: <b>6</b>, scene. A strong face, but the background is a lantern-lit rooftop village, not the temple, and the facial veins read as a <b>cheek scar</b>. The only item here below the bar.</p>
+    </div>
+    <div class="card ref" style="width:296px;flex:1">
+      <div class="chead"><div><div class="cname">Anima</div><div class="cpose">idle &middot; reference</div></div><div class="score ref">OK</div></div>
+      <div class="lbl">1:1 painting</div><div class="win w1" style="height:230px"><img src="img/anima-idle-1to1.png" alt="" style="height:230px;object-position:50% 20%"></div>
+      <p class="note">Already approved (D-108: &ldquo;anima/* is approved&rdquo;). The same wording covers her Macalania <b>hurt (judged 7)</b> and <b>ko (judged 5, reads as a lean)</b>. Name the ko if you want it redone.</p>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="rec">
+      <h3>Recommendation</h3>
+      <b>Approve the five battle paintings and the backdrop as final. Redo the pause plate</b> (repaint only the background as the ice antechamber and soften the scar; keep the face). The Guardian&rsquo;s glow is fixed in the renderer, not in the art. Every battle painting is at the bar of 7 and none is above it. The judges&rsquo; optional polish (Seymour&rsquo;s nails, the Guardian&rsquo;s wrist veins) is recorded but not needed to ship.
+    </div>
+    <div class="rec alt">
+      <h3>What a yes does</h3>
+      The approved files&rsquo; hashes are recorded in approved-hashes.json and backed up, and this sheet&rsquo;s art stops blocking the Chapter VII unlock. What still blocks it: the Petrify question on the second sheet, and the pause plate if you want it redone first.
+    </div>
+  </div>
+</div>
+</body></html>
