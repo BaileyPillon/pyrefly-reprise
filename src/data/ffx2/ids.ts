@@ -237,7 +237,9 @@ export type GarmentGridId =
   /** 5 nodes. Per-gate stat bonus allocated to every gate. */
   | 'strength-of-one'
   /** 4 nodes. Per-gate stat bonus allocated to every gate. */
-  | 'howling-wind';
+  | 'howling-wind'
+  /** Equip DEF +20, MDEF +20; Y, B = DEF +20 each; R, G = MDEF +20 each. Node count unpublished. Chapter XIII's kit option. */
+  | 'valiant-lustre';
 
 /**
  * Six-node Grids — the strongest SDSP hosts, since the main part's HP, MP, Str,

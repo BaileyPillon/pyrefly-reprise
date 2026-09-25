@@ -7,10 +7,11 @@
  * The lines follow the sources' clears (`research/ffx2-trema.md` §5): two Dark Knights on
  * Darkness and a healer `[verified: 3 sources]`; **never Darkness on Paragon** (it draws Big
  * Bang); **drain his MP first** `[verified: 4 sources]` (here the Gunner's Target MP, the one
- * drain the engine models); Shell before Meteor (TR3 = a: magical).
+ * drain TR11 a carries; the kit options' lines use a Soul Spring); Shell before Meteor (TR3 = a:
+ * magical). The policies live in `tremaLines.ts`.
  */
 
-import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef, FFX2PartyBuild, InventoryEntry, StatBlock } from '../../../src/battle/common/types.ts';
+import type { BattleEvent, BattleSetup, EnemyGroupDef, FFX2PartyBuild, InventoryEntry, StatBlock } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
@@ -18,178 +19,8 @@ import { viaInfinitoBuild } from '../../../src/data/ffx2/builds/via-infinito.ts'
 import { CLOISTER_PARAGON, CLOISTER_TREMA } from '../../../src/data/ffx2/enemies/trema.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { ffx2Options } from './ffx2ChapterDrive.ts';
-
-type Input = Extract<Decision, { kind: 'player-input' }>;
-type Unit = {
-  id: string; side: string; hp: number; mp: number; alive: boolean; removed?: boolean;
-  stats: { maxHp: number; maxMp: number }; statuses: Record<string, unknown>;
-  dresspheres?: { current: string; garmentGrid: { nodePosition: number } };
-};
-
-export interface LineOptions {
-  /** What the Dark Knights swing at Paragon: a plain Attack (Protect reduces it) or Darkness (it does not). */
-  paragonDk: 'attack' | 'darkness';
-  /** Rikku changes to Gunner at Trema's start and uses Target MP until his MP is below this; 0 = no drain. */
-  drainBelow: number;
-  /**
-   * Curtains: Shell against Paragon's Genesis (magic); Protect against Trema's physical chain,
-   * and Shell ahead of each Meteor (TR3 = a: Meteor is magical).
-   */
-  curtains: boolean;
-  /** Rikku cures Confuse, Itchy and Stop with a stashed Remedy. */
-  remedy: boolean;
-}
-
-export const LINES = {
-  /** The sources' clear: Attack on Paragon, Curtains, the drain, Darkness x2 on Trema. */
-  intended: { paragonDk: 'attack', drainBelow: 10, curtains: true, remedy: true },
-  /** Credibly wrong on link 1 (plan §9): Darkness on Paragon, the move that wins everywhere else. */
-  darknessOnParagon: { paragonDk: 'darkness', drainBelow: 10, curtains: true, remedy: true },
-  /** Credibly wrong on link 2: straight to Darkness, no drain and no Curtains. */
-  noDrainNoShell: { paragonDk: 'attack', drainBelow: 0, curtains: false, remedy: true },
-  /** The intended line without the drain (Curtains kept): what the drain is worth. */
-  noDrain: { paragonDk: 'attack', drainBelow: 0, curtains: true, remedy: true },
-} satisfies Record<string, LineOptions>;
-
-function units(engine: FFX2Engine): Unit[] {
-  return Object.values(engine.state().combatants) as unknown as Unit[];
-}
-
-function rowFor(d: Input, kind: string, id: string) {
-  return d.commands.find(
-    (c) => c.enabled && c.command.kind === kind && 'id' in c.command && (c.command as { id: string }).id === id,
-  );
-}
-
-function use(d: Input, kind: string, id: string, targets: string[]): Command | null {
-  const row = rowFor(d, kind, id);
-  return row ? ({ ...row.command, targets } as Command) : null;
-}
-
-function girls(engine: FFX2Engine): Unit[] {
-  return units(engine).filter((u) => u.side === 'party' && !u.removed);
-}
-
-function boss(engine: FFX2Engine): Unit | undefined {
-  return units(engine).find((u) => u.side === 'enemy' && u.alive);
-}
-
-function spherechangeTo(d: Input, dressphere: string): Command | null {
-  const row = d.commands.find(
-    (c) => c.enabled && c.command.kind === 'spherechange' &&
-      (c.command as { extra: { toDressphere: string } }).extra.toDressphere === dressphere,
-  );
-  return row ? ({ ...row.command } as Command) : null;
-}
-
-const MENACED = ['confuse', 'itchy', 'stop'];
-
-/** Rikku as a competent player runs her: revive, drain (Trema), heal the party, Curtains, cure, heal one; else swing. */
-function rikkuTurn(d: Input, engine: FFX2Engine, line: LineOptions): Command | null {
-  const party = girls(engine);
-  const self = party.find((u) => u.id === d.actorId);
-  const foe = boss(engine);
-  const onTrema = foe?.id === 'trema';
-  const sphere = self?.dresspheres?.current;
-  const stash = sphere === 'alchemist';
-  const living = party.filter((u) => u.alive);
-  const lacking = (status: string) => living.filter((u) => !u.statuses[status]).length >= 2;
-
-  const ko = party.filter((u) => !u.alive);
-  if (ko[0]) {
-    const revive = (stash ? use(d, 'ability', 'x2-alchemist-stash-phoenix-down', [ko[0].id]) : null) ??
-      use(d, 'item', 'x2-phoenix-down', [ko[0].id]);
-    if (revive) return revive;
-  }
-  // "Drain his MP first" (Trema only; research §5, `[verified: 4 sources]`): change to Gunner, Target MP until he is below the line, change back.
-  if (onTrema && foe && line.drainBelow > 0) {
-    if (foe.mp >= line.drainBelow) {
-      if (sphere === 'alchemist') return spherechangeTo(d, 'gunner');
-      if (sphere === 'gunner') {
-        const drain = use(d, 'ability', 'x2-gunner-target-mp', [foe.id]);
-        if (drain) return drain;
-      }
-    } else if (sphere === 'gunner') {
-      return spherechangeTo(d, 'alchemist');
-    }
-  }
-  const below = (f: number) => living.filter((u) => u.hp < u.stats.maxHp * f);
-  if (below(0.45).length >= 2) {
-    const all = use(d, 'item', 'x2-megalixir', []);
-    if (all) return all;
-  }
-  if (line.curtains) {
-    // Paragon: Genesis is magic, so Shell (it strips the Shell after it lands). Trema: his
-    // three-hit chain is physical, so Protect; Shell ahead of each Meteor (TR3 = a).
-    if (!onTrema && lacking('shell')) {
-      const shell = use(d, 'item', 'x2-lunar-curtain', []);
-      if (shell) return shell;
-    }
-    if (onTrema && lacking('protect')) {
-      const protect = use(d, 'item', 'x2-light-curtain', []);
-      if (protect) return protect;
-    }
-    if (onTrema && foe) {
-      const next = foe.hp > foe.stats.maxHp / 2 ? 0.5 : foe.hp > foe.stats.maxHp / 4 ? 0.25 : 0;
-      if (next > 0 && foe.hp < foe.stats.maxHp * (next + 0.08) && lacking('shell')) {
-        const shell = use(d, 'item', 'x2-lunar-curtain', []);
-        if (shell) return shell;
-      }
-    }
-  }
-  if (line.remedy) {
-    const menaced = living.find((u) => MENACED.some((s) => u.statuses[s]));
-    if (menaced) {
-      const remedy = (stash ? use(d, 'ability', 'x2-alchemist-stash-remedy', [menaced.id]) : null) ??
-        use(d, 'item', 'x2-remedy', [menaced.id]);
-      if (remedy) return remedy;
-    }
-  }
-  const lowest = [...living].sort((a, b) => a.hp / a.stats.maxHp - b.hp / b.stats.maxHp)[0];
-  if (lowest && lowest.hp < lowest.stats.maxHp * 0.6 && stash) {
-    const one = use(d, 'ability', 'x2-alchemist-stash-x-potion', [lowest.id]) ??
-      use(d, 'ability', 'x2-alchemist-stash-elixir', [lowest.id]);
-    if (one) return one;
-  }
-  if (foe) {
-    const attack = d.commands.find((c) => c.enabled && c.command.kind === 'attack');
-    if (attack) return { ...attack.command, targets: [foe.id] } as Command;
-  }
-  return null;
-}
-
-function knightTurn(d: Input, engine: FFX2Engine, line: LineOptions): Command | null {
-  const party = girls(engine);
-  const self = party.find((u) => u.id === d.actorId);
-  const foe = boss(engine);
-  if (!self || !foe) return null;
-  // Itchy leaves only a spherechange: wait for the Remedy rather than change dresspheres.
-  if (self.statuses['itchy']) return { kind: 'defend', targets: [] };
-  const rikku = party.find((u) => u.id === 'rikku');
-  if (rikku && !rikku.alive) {
-    const pd = use(d, 'item', 'x2-phoenix-down', [rikku.id]);
-    if (pd) return pd;
-  }
-  if (self.hp < self.stats.maxHp * 0.25) {
-    const mega = use(d, 'item', 'x2-megalixir', []);
-    if (mega) return mega;
-  }
-  const darkness = foe.id === 'trema' || line.paragonDk === 'darkness';
-  if (darkness) {
-    const dk = use(d, 'ability', 'x2-dark-knight-darkness', []);
-    if (dk) return dk;
-  }
-  const attack = d.commands.find((c) => c.enabled && c.command.kind === 'attack') ??
-    rowFor(d, 'ability', 'x2-dark-knight-attack');
-  return attack ? ({ ...attack.command, targets: [foe.id] } as Command) : null;
-}
-
-function fallback(d: Input): Command {
-  const row = d.commands.find((c) => c.enabled && c.command.kind === 'attack');
-  if (!row) return { kind: 'defend', targets: [] };
-  const target = row.validTargets[0];
-  return { ...row.command, targets: target ? [target] : [] } as Command;
-}
+import { fallback, knightTurn, rikkuTurn, units, type LineOptions } from './tremaLines.ts';
+export { LINES, type LineOptions } from './tremaLines.ts';
 
 export interface LinkRun {
   outcome: string | undefined;
@@ -239,6 +70,8 @@ function summarise(engine: FFX2Engine, outcome: string | undefined, startTicks: 
 
 export interface DriveOptions {
   decisionMs?: number;
+  /** A party build in place of the shipped preset: a kit option (`via-infinito-kit.ts`). */
+  build?: FFX2PartyBuild;
   engine?: Partial<Ffx2EngineOptions>;
   /**
    * **Measured options for Bailey, never shipped** (plan §9: bring measured options, never
@@ -254,8 +87,9 @@ export interface DriveOptions {
 
 /** The preset, with any option items added to its bag. */
 function partyFor(opts: DriveOptions): FFX2PartyBuild {
-  if (!opts.extraItems?.length) return viaInfinitoBuild;
-  return { ...viaInfinitoBuild, inventory: [...viaInfinitoBuild.inventory, ...opts.extraItems] };
+  const base = opts.build ?? viaInfinitoBuild;
+  if (!opts.extraItems?.length) return base;
+  return { ...base, inventory: [...base.inventory, ...opts.extraItems] };
 }
 
 function applyOptions(engine: FFX2Engine, opts: DriveOptions): void {

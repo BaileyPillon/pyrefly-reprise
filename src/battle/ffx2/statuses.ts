@@ -24,6 +24,7 @@ import type {
   StatusInstance,
 } from '../common/types.ts';
 import type { Emit, Ffx2Unit } from './internal.ts';
+import { withPoolStatuses } from './kit.ts';
 import {
   DURATION_SCALE_HASTE,
   DURATION_SCALE_SLOW,
@@ -229,6 +230,8 @@ export function applyStatus(
     delete target.statuses.confuse;
     delete target.statuses.berserk;
   }
+  // Stamina Tonic: the ceiling doubles, current HP does not (`kit.ts`). Nothing in FFX-2 removes it mid-battle.
+  if (id === 'max-hp-x2') target.stats = withPoolStatuses(target.stats, target.statuses);
   return instance;
 }
 

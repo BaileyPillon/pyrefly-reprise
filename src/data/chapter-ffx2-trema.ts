@@ -22,7 +22,10 @@
  *
  * - `title: 'Trema'`, `location` — **TR17** (picked); `number: 13` by registration after
  *   Omnis (XII), D-058.
- * - `buildRef: viaInfinitoBuild` — **TR10 a / TR11 a / TR9 b** (picked).
+ * - `buildRef: viaInfinitoBuild` — **TR10 a / TR11 a / TR9 b** (picked), through
+ *   `TREMA_KIT_OPTION = 'tr11-a'`. The other kit options (`./ffx2/builds/via-infinito-kit.ts`: the
+ *   sourced clear's Valiant Lustre, Defense Bracers, Adamantite, Soul Spring, Three Stars, Stamina
+ *   Tonic, Ribbon) are built, tested and **OFF**: each goes beyond TR11 a and needs Bailey's word.
  * - `enemyGroupRef` — **TR1 a**: Paragon, then Trema, carried over (`./ffx2/enemies/trema.ts`).
  * - `sceneKey: 'bevelle-underground'` — **placeholder**: the approved Bevelle Underground
  *   scene, the same underworld family (research §6.1). O-3 picked B (the repainted plate) for
@@ -39,7 +42,7 @@
 import type { Chapter } from './encounters.ts';
 import type { ChapterScripts } from '../story/dsl.ts';
 import { battleStart, results } from '../story/dsl.ts';
-import { viaInfinitoBuild } from './ffx2/builds/via-infinito.ts';
+import { tremaBuildFor, type TremaKitOption } from './ffx2/builds/via-infinito-kit.ts';
 import { cloisterParagonGroup } from './ffx2/enemies/trema.ts';
 
 /** **Placeholder** story layer: open the battle, show the results, say nothing. */
@@ -50,6 +53,9 @@ export const TREMA_PLACEHOLDER_SCRIPTS: ChapterScripts = {
   mid: [],
   midScripts: {},
 };
+
+/** The kit the chapter is built with: Bailey's TR11 a. Change only on Bailey's word (see the header). */
+export const TREMA_KIT_OPTION: TremaKitOption = 'tr11-a';
 
 /** Chapter 13 (registered, unlisted). */
 export const FFX2_TREMA: Chapter = {
@@ -66,7 +72,7 @@ export const FFX2_TREMA: Chapter = {
     'Beat it, and the man who founded New Yevon steps out to finish it himself.',
   sceneKey: 'bevelle-underground', // PLACEHOLDER — see the file header
   thumbnailKey: 'chapter-ffx2-trema',
-  buildRef: viaInfinitoBuild,
+  buildRef: tremaBuildFor(TREMA_KIT_OPTION),
   enemyGroupRef: cloisterParagonGroup,
   scriptsRef: TREMA_PLACEHOLDER_SCRIPTS, // PLACEHOLDER — see the file header
   music: {

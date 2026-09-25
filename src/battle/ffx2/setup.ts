@@ -27,6 +27,7 @@ import { cloneData } from '../common/clone.ts';
 import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
+import { accessoryAutoStatuses, accessoryImmunities, withPoolStatuses } from './kit.ts';
 import { activeGateBonuses, gateStatTotal, withStatBonus } from './garment-grids.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
@@ -62,7 +63,8 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
   // always named and nothing ever computed [accessories.ts, ffx2-combat-core
   // §5.4]. Without it the researched loadouts are inert and Chapter 5's Tail
   // kills the White Mage from full on its first Noli Me Tangere.
-  const stats: StatBlock = withAccessories(withStatBonus(base, equip), member.accessories);
+  // A carried Stamina Tonic (`kit.ts`) doubles the pool before her carried HP is clamped to it.
+  const stats: StatBlock = withPoolStatuses(withAccessories(withStatBonus(base, equip), member.accessories), member.statuses);
   // Carried across a chain seam (CONTRACT-CHANGES §6, `BattleScreenSetup.carryFfx2`)
   // as a raw number on the build, with no maximum to check against until the
   // dressphere's stats are derived, right above — so it is clamped here, not
@@ -158,7 +160,8 @@ function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
 }
 
 /**
- * `EnemyDef.autoStatuses` (FFX-2, Chapter XIII's Trema: Spellspring). Applied before the
+ * `EnemyDef.autoStatuses` (FFX-2, Chapter XIII's Trema: Spellspring), and a girl's Auto-Wall
+ * accessories (`kit.ts`). Applied before the
  * first event, with no RNG draw, and remembered on the unit so a Dispel leaves them alone
  * (`resolve.ts`). An enemy without the field is built exactly as before.
  */
@@ -277,6 +280,9 @@ export function buildState(
     gridNodes[unit.id] = gridNodeContents(member, grid?.nodes ?? 6);
     if (options.carriedParty) applyCarriedState(unit, options.carriedParty);
     if (enemies.restoresPartyOnEntry) restoreAtSaveSphere(unit);
+    // Accessories' status half (`kit.ts`): Auto-Wall and Ribbon. No shipped build before Chapter XIII's kit option wears one.
+    applyAutoStatuses(unit, accessoryAutoStatuses(unit.accessories));
+    Object.assign(unit.immunities, accessoryImmunities(unit.accessories));
     units.push(unit);
   });
 

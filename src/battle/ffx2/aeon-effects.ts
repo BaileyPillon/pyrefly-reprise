@@ -73,11 +73,17 @@ export function resolveSetTo(
   return taken;
 }
 
-/** The MP half of Heavenly Strike and Absorb, after the HP hit has landed. */
-export function applyMpFraction(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, ability: AbilityDef): void {
+/**
+ * The MP half of Heavenly Strike and Absorb, after the HP hit has landed; and of the **Soul
+ * Spring** item, `extra.mpDrainMatchesHp`: "absorbs 937–1058 HP **and up to 1058 MP**"
+ * (ffx2-combat-core §5.5), read as the same amount of MP as the HP hit took, capped by what the
+ * target has (Chapter XIII's kit option; no shipped row sets the key, so no replay moves).
+ */
+export function applyMpFraction(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, ability: AbilityDef, hpTaken = 0): void {
   const n = ability.extra?.['mpFractionOfCurrent'];
-  if (typeof n !== 'number' || n <= 0) return;
-  const drained = Math.min(target.mp, Math.floor((target.mp * n) / 16));
+  const matched = ability.extra?.['mpDrainMatchesHp'] === true;
+  if (!matched && (typeof n !== 'number' || n <= 0)) return;
+  const drained = Math.min(target.mp, matched ? Math.max(0, hpTaken) : Math.floor((target.mp * (n as number)) / 16));
   if (drained <= 0) return;
   target.mp -= drained;
   ctx.emit({ type: 'mp-damage', targetId: target.id, sourceId: user.id, amount: drained });

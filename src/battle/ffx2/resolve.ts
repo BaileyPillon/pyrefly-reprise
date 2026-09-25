@@ -385,7 +385,7 @@ export function resolveAbility(
         }
       }
 
-      applyMpFraction(ctx, user, target, ability); // Heavenly Strike, Absorb (`aeon-effects.ts`)
+      applyMpFraction(ctx, user, target, ability, result.amount); // Heavenly Strike, Absorb, Soul Spring (`aeon-effects.ts`)
       applyRiders(ctx, user, target, ability);
       index += 1;
     }
