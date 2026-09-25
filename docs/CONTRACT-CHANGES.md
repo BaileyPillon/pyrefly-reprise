@@ -78,6 +78,26 @@ unsourced (the data file's note says which)"; `held.ts` exports `UNSOURCED_PRICE
 machine-readable. Nothing in `src/` or `tools/` reads `price` today (grep, 2026-09-25), so no behaviour
 changes. Test: `tests/unit/ffx2-steal-item-names.test.ts`.
 
+## 2026-09-25 — Chapter IX callouts: `TriggerCondition` gains `overdrive.at` and `ability-used.onAeon`
+
+**FFX only** in effect [AGENTS.md hard rule 14]; the evaluator change is shared plumbing. For the
+four Chapter IX callouts Bailey read and approved (D-068, decision sheet item 8,
+`src/story/scripts/yojimbo-cavern.ts`).
+
+**Additive** in `src/battle/common/types.ts`, both fields optional:
+- `{ type: 'overdrive'; who; at?: number }`: with `at`, fires when one `overdrive-gauge` change for
+  `who` goes from below `at` to `at` or above (Lulu's line when Yojimbo's gauge crosses 50). Without
+  `at` the old rule stands unchanged (the gauge reached 100).
+- `{ type: 'ability-used'; who; ability; onAeon?: boolean }`: with `onAeon: true`, fires only when
+  the action landed on an aeon (Yuna's line when an aeon takes Zanmato).
+
+`src/battle/ffx/triggers.ts`: `TriggerSignals.abilityUses[].targets` (new) is the command's list plus
+every `targetId` the action's events name before its `action-end`, because an AI command may pass `[]`
+and let the row's targeting resolve (Yojimbo's Zanmato does; the engine test proves it).
+`TriggerSignals.gaugeChanges` (new) lists every gauge change. Nothing that existed reads either, so
+every shipped trigger behaves as before. `src/battle/ffx2/triggers.ts`: an `onAeon` trigger never
+fires (X-2 has no aeon party); `overdrive` already never fired there.
+
 ## 2026-09-25 — Chapter XIII options, built OFF: `EnemyGroupDef.actionTimeSeconds`
 
 **FFX-2 only** [AGENTS.md hard rule 14]. From `docs/plans/trema-options-2026-09-25.md` (options 1 to

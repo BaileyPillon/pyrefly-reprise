@@ -13,7 +13,7 @@
  * square frame comes out at the same head scale with its eyes on one line.
  */
 
-import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
+import { ART_INDEX_CACHE, manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import faceCropData from './face-crops.json';
 import { canHostCrop } from './portraitHost.ts';
@@ -478,7 +478,7 @@ export function portraitFocal(id: string): Promise<Omit<PortraitCrop, 'aspect'> 
   const pending = (async (): Promise<Omit<PortraitCrop, 'aspect'> | null> => {
     if (typeof fetch !== 'function') return null;
     try {
-      const res = await fetch(artUrl(`art/portraits/${id}.json`), { cache: 'force-cache' });
+      const res = await fetch(artUrl(`art/portraits/${id}.json`), { cache: ART_INDEX_CACHE });
       if (!res.ok) return null;
       const focal = ((await res.json()) as PortraitSidecar).focal;
       if (!focal) return null;

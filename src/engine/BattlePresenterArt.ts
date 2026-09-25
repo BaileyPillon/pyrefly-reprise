@@ -18,7 +18,7 @@
  */
 
 import type { AnyCombatant, FFX2Combatant, FFXCombatant } from '../battle/common/types.ts';
-import { artStatesFor } from './ArtManifest.ts';
+import { ART_INDEX_CACHE, artStatesFor } from './ArtManifest.ts';
 import { artUrl } from './PaintedArt.ts';
 
 /** Poses a party member is painted in. */
@@ -129,6 +129,38 @@ const POSE_FALLBACKS: Readonly<Record<string, readonly string[]>> = {
   victory: ['victory', 'idle'],
 };
 
+/**
+ * FFX-2 dressphere paintings never borrow another action's painting.
+ *
+ * Bailey, 2026-09-25 (D-179): a pose slot the judge failed stays "on the
+ * standing painting with its flinch motion". With {@link POSE_FALLBACKS} a
+ * Dark Knight who has an attack painting but no cast painting would cast from
+ * her sword swing, and an Alchemist with no KO painting would lie down in her
+ * hurt painting. For a dressphere, cast, item and KO fall straight to the idle.
+ * FFX figures and every enemy keep the table above. FFX-2 only.
+ */
+const DRESSPHERE_POSE_FALLBACKS: Readonly<Record<string, readonly string[]>> = {
+  ...POSE_FALLBACKS,
+  cast: ['cast', 'idle'],
+  item: ['item', 'idle'],
+  ko: ['ko', 'idle'],
+};
+
+/**
+ * Is `artId` an FFX-2 dressphere painting, `<girl>-<dressphere>`?
+ *
+ * {@link artIdFor} names an FFX-2 girl by her current dressphere
+ * (`yuna-gunner`, `rikku-alchemist`, `paine-dark-knight`); FFX's Yuna and Rikku
+ * are the bare `yuna` and `rikku`, and `yunalesca-1` is not a girl.
+ */
+export function isDresspherePainting(artId: string): boolean {
+  return /^(yuna|rikku|paine)-[a-z]/.test(artId);
+}
+
+function fallbacksFor(artId: string): Readonly<Record<string, readonly string[]>> {
+  return isDresspherePainting(artId) ? DRESSPHERE_POSE_FALLBACKS : POSE_FALLBACKS;
+}
+
 /** HEAD-probe results, so a battle probes each URL at most once per session. */
 const exists = new Map<string, Promise<boolean>>();
 
@@ -144,7 +176,7 @@ const exists = new Map<string, Promise<boolean>>();
 function probe(url: string): Promise<boolean> {
   const cached = exists.get(url);
   if (cached) return cached;
-  const p = fetch(url, { method: 'HEAD', cache: 'force-cache' })
+  const p = fetch(url, { method: 'HEAD', cache: ART_INDEX_CACHE })
     .then((res) => res.ok && (res.headers.get('content-type') ?? '').startsWith('image/'))
     .catch(() => false);
   exists.set(url, p);
@@ -174,7 +206,8 @@ async function hasPose(artId: string, pose: string): Promise<boolean> {
 
 /**
  * A pose map in which **every** pose points at art that actually exists,
- * falling back down {@link POSE_FALLBACKS} until something does.
+ * falling back down {@link POSE_FALLBACKS} (for an FFX-2 dressphere,
+ * {@link DRESSPHERE_POSE_FALLBACKS}) until something does.
  *
  * A figure with no art at all returns the plain map, so `PaintedActor` draws
  * its procedural stand-in exactly as before.
@@ -184,7 +217,8 @@ export async function resolvePoseMap(
   kind: 'party' | 'enemy',
 ): Promise<Record<string, string>> {
   const poses = kind === 'party' ? PARTY_POSES : ENEMY_POSES;
-  const wanted = [...new Set(poses.flatMap((p) => POSE_FALLBACKS[p] ?? [p]))];
+  const fallbacks = fallbacksFor(artId);
+  const wanted = [...new Set(poses.flatMap((p) => fallbacks[p] ?? [p]))];
   const found = new Map<string, boolean>();
   const set = await poseSet(artId);
   if (set) {
@@ -200,7 +234,7 @@ export async function resolvePoseMap(
 
   const out: Record<string, string> = {};
   for (const pose of poses) {
-    const chain = POSE_FALLBACKS[pose] ?? [pose];
+    const chain = fallbacks[pose] ?? [pose];
     const hit = chain.find((p) => found.get(p)) ?? pose;
     out[pose] = characterUrl(artId, hit);
   }

@@ -27,6 +27,7 @@ import {
 import { PortraitStage } from './PortraitStage.ts';
 import { memberChromeBoxes } from './chromeBoxes.ts';
 import { stackHost } from './stackColumn.ts';
+import { placeDossier } from './dossierPlace.ts';
 import { fitPhoneBody } from './phoneFit.ts';
 import { chromeSideForCombatant, plateIdFor } from './plates.ts';
 import { buildTabs, memberIdOf, type PauseTab } from './tabs.ts';
@@ -87,6 +88,8 @@ export class PauseView {
         return memberChromeBoxes(root, art);
       },
       stack: stackHost(root),
+      // FOC16-02: the CHAPTER tab's dossier stays off the chapter plate's face.
+      onLayout: () => placeDossier(root, art, this.portrait?.plate ?? null),
     });
     this.tabs = buildTabs(deps.state());
   }

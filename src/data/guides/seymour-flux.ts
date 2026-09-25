@@ -26,6 +26,9 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
       cite: 'ffx-seymour-flux §6 rows 5-6, §4.3',
     },
     {
+      // Rule 3 (PR-0007) and rule 4 (PR-0008) are known to be wrong against §4.1 / §4.2, but
+      // their new wordings wait on Bailey (decisions-2026-09-25 item 5: "the guide wordings,
+      // shown to you first"). The choices are in docs/plans/pr-0008-guide-wordings.md. FFX only.
       text: 'Holy Water a Zombie before the mount acts. Lance of Atrophy sets Zombie, and the mount answers with Full-Life — on a living Zombie that is 100% of max HP as damage plus a guaranteed Death.',
       short: 'Holy Water a Zombie before the mount acts',
       cite: 'ffx-seymour-flux §6 row 4, §3.3',

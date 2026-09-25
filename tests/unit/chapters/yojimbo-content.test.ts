@@ -83,9 +83,9 @@ describe('the story scenes (docs/plans/yojimbo-story-draft.md, lines 1-32)', () 
     for (const who of speakers) expect(existsSync(join(ART, 'portraits', `${who}.png`)), who).toBe(true);
   });
 
-  it('holds the four mid-battle callouts until Bailey reads the draft (D-068), and writes no quips (grim tier)', () => {
-    expect(yojimboCavernScripts.mid).toEqual([]);
-    expect(yojimboCavernScripts.midScripts).toEqual({});
+  it('carries the four mid-battle callouts (D-068; engine runs in yojimbo-callouts.test.ts), and writes no quips (grim tier)', () => {
+    expect(yojimboCavernScripts.mid).toHaveLength(4);
+    expect(Object.keys(yojimboCavernScripts.midScripts)).toHaveLength(4);
     expect(yojimboCavernScripts.victoryQuips).toEqual({});
   });
 });

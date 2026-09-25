@@ -6,8 +6,7 @@ import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts'
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import type { SceneSlots } from './index.ts';
-import { viewportAspect } from './cavern-stolen-fayth-rigs.ts';
-import { CLOISTER_CAMERA_REF, CLOISTER_LINK_RIG, CLOISTER_WIDE_RIGS, cloisterRigsFor } from './cloister-100-rigs.ts';
+import { CLOISTER_CAMERA_REF, CLOISTER_LINK_RIG, CLOISTER_WIDE_RIGS, cloisterRenderAspect, cloisterRigsFor } from './cloister-100-rigs.ts';
 import { CloisterLink } from './cloister-100-link.ts';
 
 // ---------------------------------------------------------------------------
@@ -43,7 +42,8 @@ export const CLOISTER_BACKDROP = { width: 78, distance: -50, centreY: -2.82 } as
 /**
  * The plane on a phone: the same painting, raised so the phone rigs' low camera, looking up the
  * hall over the fighters' heads, sees the vault and banners instead of the dark above the plate
- * (`cloister-100-rigs.ts`, the phone rigs). Solved at 390x844 for the `idle` rig.
+ * (`cloister-100-rigs.ts`, the phone rigs). Solved at 390x844 for the `idle` rig. Since the
+ * phone battle HUD (a 16:9 canvas, FOC16-05) only a portrait window it does not take uses it.
  */
 export const CLOISTER_PHONE_BACKDROP = { width: 78, distance: -50, centreY: 17.5 } as const;
 
@@ -137,7 +137,8 @@ export const buildCloister100Scene: SceneFactory = async (opts: SceneBuildOption
   const group = new Group();
   group.name = 'scene:via-infinito';
   const low = opts.quality === 'low';
-  const aspect = viewportAspect();
+  // FOC16-05: the render's aspect, not the window's (the phone battle HUD draws a 16:9 canvas).
+  const aspect = cloisterRenderAspect();
   const phone = aspect < 1;
   const rigs = cloisterRigsFor(aspect);
   const plane = phone ? CLOISTER_PHONE_BACKDROP : CLOISTER_BACKDROP;
