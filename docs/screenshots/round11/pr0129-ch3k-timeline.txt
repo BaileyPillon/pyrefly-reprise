@@ -1,0 +1,51 @@
+PR-0129 Chapter 3 (FFX), CLEAN-TREE REAL-KEY WIN: git archive of b6289eaf (1ac99739 + the form-name fix; no uncommitted edits from other agents), own vite :5741 --strictPort, HMR and watcher off, PYREFLY_BROWSER=gpu, 1600x900, fresh profile, seed 1.
+Every input is a real key, title to results (235 commands, 0 console errors, 0 retries, victory 17:56). No autoBattle, forceCommand, gotoChapter or setBattleSpeed.
+Method (rule 15, third try after two advisor-led losses): the move is the 'intended' line, read from the open menu (presenter pendingMenu + intendedStrategy, overdrive/minigame rows left out, as autoBattle does); the driver then enters it with arrow keys and Enter, Doublecast included. 11 picks were Defend, which has no menu row, so the driver pressed Attack instead.
+Driver: D:/Tools/pyrefly-scratch/audio-routing/drive-intended-keys.mjs. Samples: __pyrefly.audioDebug().music every 500 ms.
+Result: boss-jecht starts once (link 0/1). 'jecht-falls' fades it (615.5 s); silence carries into link 2 (possessed Valefor, 637.1 s); 'valefor-enters' at 642.0 s; its last step music('boss-yu-yevon', 1200) (src/story/scripts/braskas-final-aeon.ts:305) starts boss-yu-yevon at 667.5 s, which holds unbroken through link 3 (673.5 s), 4 (700.0 s), 5 (804.0 s), 6 (959.0 s), 7 Yu Yevon (1047.0 s) to results (1084.0 s, victory-ffx). No boss-jecht after 'valefor-enters'.
+Columns: ms screen link current fading trigger (the newest script-trigger in the battle log). JPEGs: pr0129-ch3k-*.jpg
+
+501 title link null cur null fading [] trig null
+1512 chapter-select link null cur chapter-select@0.00 fading [] trig null
+2079 party-prep link null cur chapter-select@0.05 fading [] trig null
+4002 cutscene link null cur chapter-select@1.00 fading [] trig null
+5001 cutscene link null cur scene-dreams-end@0.00 fading ["chapter-select@0.05"] trig null
+5502 cutscene link null cur scene-dreams-end@0.06 fading ["chapter-select@0.00"] trig null
+6006 cutscene link null cur scene-dreams-end@1.00 fading [] trig null
+7547 battle link 0 cur scene-dreams-end@1.00 fading [] trig null
+8797 battle link 0 cur boss-jecht@1.00 fading ["scene-dreams-end@0.00"] trig null
+9004 battle link 0 cur boss-jecht@1.00 fading [] trig null
+11025 battle link 1 cur boss-jecht@1.00 fading [] trig null
+244003 battle link 1 cur boss-jecht@1.00 fading [] trig bfa-low
+279504 battle link 1 cur boss-jecht@1.00 fading [] trig bfa-sword
+430001 battle link 1 cur boss-jecht@1.00 fading [] trig bfa-talk
+613015 battle link 1 cur boss-jecht@1.00 fading [] trig jecht-falls
+615503 battle link 1 cur null fading ["boss-jecht@0.13"] trig jecht-falls
+616012 battle link 1 cur null fading ["boss-jecht@0.00"] trig jecht-falls
+616510 battle link 1 cur null fading [] trig jecht-falls
+637085 battle link 2 cur null fading [] trig jecht-falls
+642001 battle link 2 cur null fading [] trig valefor-enters
+667505 battle link 2 cur boss-yu-yevon@0.00 fading [] trig valefor-falls
+673509 battle link 3 cur boss-yu-yevon@1.00 fading [] trig valefor-falls
+678012 battle link 3 cur boss-yu-yevon@1.00 fading [] trig ifrit-enters
+694510 battle link 3 cur boss-yu-yevon@1.00 fading [] trig ifrit-falls
+700003 battle link 4 cur boss-yu-yevon@1.00 fading [] trig ifrit-falls
+705008 battle link 4 cur boss-yu-yevon@1.00 fading [] trig ixion-enters
+798506 battle link 4 cur boss-yu-yevon@1.00 fading [] trig ixion-falls
+804001 battle link 5 cur boss-yu-yevon@1.00 fading [] trig ixion-falls
+808507 battle link 5 cur boss-yu-yevon@1.00 fading [] trig shiva-enters
+955002 battle link 5 cur boss-yu-yevon@1.00 fading [] trig shiva-falls
+959002 battle link 6 cur boss-yu-yevon@1.00 fading [] trig shiva-falls
+963501 battle link 6 cur boss-yu-yevon@1.00 fading [] trig bahamut-enters
+1038015 battle link 6 cur boss-yu-yevon@1.00 fading [] trig bahamut-falls
+1047004 battle link 7 cur boss-yu-yevon@1.00 fading [] trig bahamut-falls
+1050507 battle link 7 cur boss-yu-yevon@1.00 fading [] trig yu-yevon-arrives
+1084010 results link null cur victory-ffx@0.01 fading ["boss-yu-yevon@0.00"] trig yu-yevon-arrives
+1084505 results link null cur victory-ffx@1.00 fading [] trig yu-yevon-arrives
+STARTS
+chapter-select [[1512,null,null]]
+scene-dreams-end [[5001,null,null]]
+boss-jecht [[8797,0,null]]
+boss-yu-yevon [[667505,2,"valefor-falls"]]
+victory-ffx [[1084010,null,"yu-yevon-arrives"]]
+silent battle samples 104 of 2150

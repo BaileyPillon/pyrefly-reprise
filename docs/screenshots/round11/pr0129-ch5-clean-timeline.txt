@@ -1,0 +1,52 @@
+PR-0129 Chapter 5 (FFX-2), CLEAN-TREE proof: git archive of 1ac99739 (no uncommitted edits from other agents), own vite :5759, HMR and watcher off, PYREFLY_BROWSER=gpu, 1600x900, fresh profile, seed 1.
+Real keys only, following the advisor: victory 22:30, 165 commands, 0 console errors. Run by the round-11 PR-0129 verifier; samples every 500 ms of __pyrefly.audioDebug().music.
+Replaces the provenance of pr0129-ch5-timeline.txt (that run was served from the shared working tree). b6289eaf changes only Chapter 3's form name, so this routing is unchanged at HEAD.
+Columns: ms screen link current fading trigger. JPEGs: vfy-pr0129-ch5-*.jpg
+
+501 title link null cur null fading [] trig null
+1013 chapter-select link null cur null fading [] trig null
+1513 chapter-select link null cur chapter-select@0.00 fading [] trig null
+2507 party-prep link null cur chapter-select@1.00 fading [] trig null
+4508 cutscene link null cur chapter-select@1.00 fading [] trig null
+5013 cutscene link null cur scene-farplane@0.00 fading ["chapter-select@0.39"] trig null
+5511 cutscene link null cur scene-farplane@0.01 fading ["chapter-select@0.02"] trig null
+6001 cutscene link null cur scene-farplane@0.16 fading ["chapter-select@0.00"] trig null
+6502 cutscene link null cur scene-farplane@1.00 fading [] trig null
+8178 battle link 0 cur boss-vegnagun@1.00 fading ["scene-farplane@1.00"] trig null
+8505 battle link 0 cur boss-vegnagun@0.00 fading ["scene-farplane@0.03"] trig null
+9007 battle link 0 cur boss-vegnagun@0.49 fading ["scene-farplane@0.00"] trig null
+9511 battle link 0 cur boss-vegnagun@1.00 fading [] trig null
+12004 battle link 1 cur boss-vegnagun@1.00 fading [] trig null
+15514 battle link 1 cur boss-vegnagun@1.00 fading [] trig farplane-voice-braska
+118002 battle link 1 cur boss-vegnagun@1.00 fading [] trig vegnagun-tail-quarter
+136504 battle link 1 cur boss-vegnagun@1.00 fading [] trig tail-down
+151503 battle link 2 cur boss-vegnagun@1.00 fading [] trig tail-down
+186508 battle link 2 cur boss-vegnagun@1.00 fading [] trig farplane-voice
+321003 battle link 2 cur boss-vegnagun@1.00 fading [] trig leg-down
+341000 battle link 3 cur boss-vegnagun@1.00 fading [] trig leg-down
+549505 battle link 3 cur boss-vegnagun@1.00 fading [] trig body-down
+567539 battle link 4 cur boss-vegnagun@1.00 fading [] trig body-down
+582012 battle link 4 cur boss-vegnagun@1.00 fading [] trig shuyin-line-1
+649007 battle link 4 cur boss-vegnagun@1.00 fading [] trig shuyin-line-2
+698003 battle link 4 cur boss-vegnagun@1.00 fading [] trig jecht-no-overtime
+1082504 battle link 4 cur boss-vegnagun@1.00 fading [] trig head-down
+1091503 battle link 5 cur boss-vegnagun@1.00 fading [] trig head-down
+1095505 battle link 5 cur boss-vegnagun@1.00 fading [] trig shuyin-appears
+1096504 battle link 5 cur null fading ["boss-vegnagun@0.97"] trig shuyin-appears
+1097004 battle link 5 cur null fading ["boss-vegnagun@0.01"] trig shuyin-appears
+1097504 battle link 5 cur null fading [] trig shuyin-appears
+1121003 battle link 5 cur boss-shuyin@0.00 fading [] trig shuyin-appears
+1218501 battle link 5 cur boss-shuyin@1.00 fading [] trig shuyin-taunt
+1238508 battle link 5 cur boss-shuyin@1.00 fading [] trig shuyin-half
+1257003 battle link 5 cur boss-shuyin@1.00 fading [] trig shuyin-desperate
+1322512 battle link 5 cur boss-shuyin@1.00 fading [] trig shuyin-low
+1358501 cutscene link null cur null fading ["boss-shuyin@0.08"] trig shuyin-low
+1359011 cutscene link null cur null fading [] trig shuyin-low
+1360006 results link null cur victory-ffx2@1.00 fading [] trig shuyin-low
+STARTS
+chapter-select [[1513,null,null]]
+scene-farplane [[5013,null,null]]
+boss-vegnagun [[8178,0,null]]
+boss-shuyin [[1121003,5,"shuyin-appears"]]
+victory-ffx2 [[1360006,null,"shuyin-low"]]
+silent battle samples 49 of 2700
