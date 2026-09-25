@@ -219,3 +219,12 @@ strip fixes above.** It is the only option that teaches both which chapters are 
 the player has come without veiling the art, and Bailey has already leaned to it. For open question
 3: keep boss-on-scene for Leblanc and Evrae, and extend it to every chapter. That also removes the
 need for a candidate-plate options round.
+
+## One-look sheet
+
+`sheet.jpg` puts everything on one page for a quick look: the live build at top, then
+options A, B and C, each shown at Chapter I (not cleared) and Chapter VIII (cleared) at
+1600x900, then the 390x844 phone captures for all four in a row at the bottom. Built by
+`_src/sheet.mjs` (`node docs/concepts/chapter-select-v2/_src/sheet.mjs`), which composites
+the existing capture JPEGs with sharp; it reads only the files already in this folder and
+writes no product code.
