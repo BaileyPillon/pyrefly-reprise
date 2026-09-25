@@ -141,7 +141,7 @@
     },
     {
       "kind": "deep",
-      "status": "pending",
+      "status": "carried",
       "requires": "deep review of every affected chapter and system",
       "carriedFrom": [
         "fd0ae96",
@@ -154,7 +154,9 @@
         "bcbdb483",
         "dc2669ac",
         "e3b8c2a3"
-      ]
+      ],
+      "carriedTo": "1c22066e",
+      "at": "2026-09-25T04:06:34.435Z"
     }
   ],
   "ownerOverride": {
@@ -162,5 +164,6 @@
     "date": "2026-09-24T23:47:16.220Z",
     "report": null,
     "changedArea": null
-  }
+  },
+  "supersededBy": "1c22066e"
 }
