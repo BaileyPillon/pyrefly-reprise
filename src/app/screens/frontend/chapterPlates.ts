@@ -65,6 +65,8 @@ const P = (x: number, y: number, h: number, focus?: readonly [number, number]): 
 const CARD_FACE_X = 58;
 const CARD_FACE_Y = 50;
 const card = (h: number, focus?: readonly [number, number]): Placement => P(CARD_FACE_X, CARD_FACE_Y, h, focus);
+/** A card whose long title would reach the face at 58 percent: the face sits at (`x`, `y`) instead. */
+const cardAt = (x: number, y: number, h: number, focus: readonly [number, number]): Placement => P(x, y, h, focus);
 
 /**
  * Per chapter, measured on the paintings (face centres read off a 5 percent
@@ -89,11 +91,22 @@ export const PLATE_COMPOSITIONS: Readonly<Record<string, PlateComposition>> = {
     glow: 'rgba(190, 160, 255, 0.4)',
     layers: [{ key: 'yunalesca-1', focus: [0.44, 0.17], hero: P(68, 24, 150), card: card(400) }],
   },
-  // III: Jecht in the aeon's body, before the Dream's End pyre.
+  // III: Jecht in the aeon's body, before the Dream's End pyre. Its card
+  // title is the longest on the board and runs past 58 percent, so the card
+  // puts the face (measured at 0.33, 0.3; the skin spans 0.24 to 0.37 of the
+  // width, 0.21 to 0.37 of the height) low and right: past the title's end
+  // and under the beaten card's corner ribbon, at 1280, 1600, 2000 and 390.
   'braskas-final-aeon': {
     scene: { hero: '50% 55%', card: '50% 45%' },
     glow: 'rgba(255, 120, 70, 0.4)',
-    layers: [{ key: 'braskas-final-aeon-1', focus: [0.4, 0.3], hero: P(62, 37, 118), card: card(330) }],
+    layers: [
+      {
+        key: 'braskas-final-aeon-1',
+        focus: [0.4, 0.3],
+        hero: P(62, 37, 118),
+        card: cardAt(78, 70, 270, [0.33, 0.3]),
+      },
+    ],
   },
   // IV (FFX-2): Bahamut in the Bevelle vault, wings open.
   'ffx2-bahamut': {

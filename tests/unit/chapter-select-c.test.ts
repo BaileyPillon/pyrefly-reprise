@@ -303,4 +303,13 @@ describe('the boss painted on its own scene', () => {
       expect(fy, id).toBeLessThan(1);
     }
   });
+
+  it("keeps Braska's Final Aeon's face off its long card title (repair F1)", () => {
+    // The title runs past 58 percent of the card's art at every desktop size;
+    // measured in a browser, the face clears it (and the corner ribbon) at 78.
+    const card = PLATE_COMPOSITIONS['braskas-final-aeon']!.layers[0]!.card!;
+    expect(card.x).toBeGreaterThanOrEqual(75);
+    expect(card.y).toBeGreaterThan(50);
+    expect(card.focus).toEqual([0.33, 0.3]);
+  });
 });
