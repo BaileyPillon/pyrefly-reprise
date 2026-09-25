@@ -5,7 +5,97 @@ fight at bench speed, 40 at human speed; Active ATB, Bailey 2026-09-21). Plan
 `docs/plans/chapter-trema-review.md` §9 and TR6 = c: **measure first, then ask once with the
 numbers. Nothing here tuned a boss** (rule 6, "never weaken a boss").
 
-## The table
+## 2026-09-25, second pass: after the method check's fixes, with the kit options built and OFF
+
+Branch `chapter-trema-0925`, after `docs/plans/trema-winnability-method-check.md` and its fixes:
+**E1** (the Cloister links time Stop, Slow, Sleep, Confuse and Berserk on §2.8's defaults), **E2**
+(accessories survive a spherechange), **E3** (normal Paragon's physicals always land,
+`[verified: 2 sources]`). The **kit options** (`src/data/ffx2/builds/via-infinito-kit.ts`) are
+built, tested and OFF: the chapter ships `TREMA_KIT_OPTION = 'tr11-a'`. `sourced-kit` is
+Split_Infinity's clear (Defense Bracers and Adamantite for Auto-Wall, Rabite's Feet, Valiant
+Lustre on all three, 99 Megalixirs and 99 Mega-Potions, Stamina Tonic, Soul Spring, Three Stars);
+`sourced-kit-one-lustre` if a grid is one girl's at a time; `sourced-kit-ribbon` adds the game's
+one Ribbon on the healer. 200 seeds a line at bench speed, 40 at human speed (1.5 s a menu).
+
+| Kit | Link | Line | ATB | Wins | Avg min | Avg min (wins) | Boss moves / fight | Darkness / fight |
+|---|---|---|---|---:|---:|---:|---|---:|
+| tr11-a | 1 Paragon | intended: Attack, Shell, heals, never Darkness | Active, D=0 | 0/200 | 0.10 | — | BB 0.00 · Gen 1.04 | 0.00 |
+| tr11-a | 1 Paragon | wrong: Darkness on Paragon | Active, D=0 | 0/200 | 0.08 | — | BB 0.23 · Gen 0.91 | 0.47 |
+| tr11-a | 2 Trema (fresh) | intended: Protect, drain to < 10 MP, Shell before Meteor, Darkness x2 | Active, D=0 | 0/200 | 0.38 | — | Met 0.00 · Flare 0.63 · blocked 0.00 | 3.60 |
+| tr11-a | 2 Trema (fresh) | intended without the drain | Active, D=0 | 0/200 | 0.55 | — | Met 0.00 · Flare 0.92 · blocked 0.00 | 5.88 |
+| tr11-a | 2 Trema (fresh) | wrong: Darkness x2, no drain, no Curtains | Active, D=0 | 0/200 | 0.40 | — | Met 0.00 · Flare 0.61 · blocked 0.00 | 4.28 |
+| tr11-a | Chapter (1-2) | intended on both links | Active, D=0 | 0/200 | 0.10 | — | reached Trema 0/200 | 0.00 |
+| tr11-a | Chapter (1-2) | wrong: Darkness on Paragon | Active, D=0 | 0/200 | 0.08 | — | reached Trema 0/200 | 0.47 |
+| sourced-kit | 1 Paragon | kit intended: Tonic, Megalixir, Shell, Attack, Itchy spherechanged | Active, D=0 | 0/200 | 0.14 | — | BB 0.00 · Gen 1.33 | 0.00 |
+| sourced-kit | 1 Paragon | kit wrong: Darkness on Paragon | Active, D=0 | 0/200 | 0.09 | — | BB 0.36 · Gen 1.04 | 0.80 |
+| sourced-kit | 2 Trema (fresh) | kit intended: Soul Spring, Tonic, Three Stars, Darkness x2 | Active, D=0 | 30/200 | 4.61 | 12.2 | Met 0.60 · Flare 0.30 · blocked 14.36 | 58.89 |
+| sourced-kit | 2 Trema (fresh) | kit wrong: no drain, no Curtains, no Stars | Active, D=0 | 0/200 | 0.80 | — | Met 0.00 · Flare 1.42 · blocked 0.00 | 7.73 |
+| sourced-kit | Chapter (1-2) | kit intended on both links | Active, D=0 | 0/200 | 0.14 | — | reached Trema 0/200 | 0.00 |
+| sourced-kit | Chapter (1-2) | kit wrong: Darkness on Paragon | Active, D=0 | 0/200 | 0.09 | — | reached Trema 0/200 | 0.80 |
+| sourced-kit-one-lustre | 1 Paragon | kit intended | Active, D=0 | 0/200 | 0.13 | — | BB 0.00 · Gen 1.25 | 0.00 |
+| sourced-kit-one-lustre | 2 Trema (fresh) | kit intended | Active, D=0 | 5/200 | 2.87 | 12.0 | Met 0.30 · Flare 0.31 · blocked 8.70 | 35.56 |
+| sourced-kit-one-lustre | Chapter (1-2) | kit intended | Active, D=0 | 0/200 | 0.13 | — | reached Trema 0/200 | 0.00 |
+| sourced-kit-ribbon | 1 Paragon | kit intended | Active, D=0 | 0/200 | 0.14 | — | BB 0.00 · Gen 1.33 | 0.00 |
+| sourced-kit-ribbon | 2 Trema (fresh) | kit intended | Active, D=0 | 49/200 | 3.99 | 12.0 | Met 0.58 · Flare 0.90 · blocked 11.35 | 52.77 |
+| sourced-kit-ribbon | Chapter (1-2) | kit intended | Active, D=0 | 0/200 | 0.14 | — | reached Trema 0/200 | 0.00 |
+| tr11-a | 1 Paragon | option T-6 b (wiki Mag 88 / Def 244 / MDef 89), intended | Active, D=0 | 0/200 | 0.12 | — | BB 0.00 · Gen 1.10 | 0.00 |
+| sourced-kit | 1 Paragon | option T-6 b, kit intended | Active, D=0 | 0/200 | 0.17 | — | BB 0.00 · Gen 1.63 | 0.00 |
+| tr11-a | 2 Trema (fresh) | option: + 20 Phoenix Downs (not built), intended | Active, D=0 | 0/200 | 0.61 | — | Met 0.00 · Flare 1.05 · blocked 0.06 | 3.58 |
+| tr11-a | 1 Paragon | intended | Active, D=1.5 s | 0/40 | 0.09 | — | BB 0.00 · Gen 1.07 | 0.00 |
+| tr11-a | 2 Trema (fresh) | intended | Active, D=1.5 s | 0/40 | 0.31 | — | Met 0.00 · Flare 0.45 · blocked 0.00 | 2.00 |
+| tr11-a | Chapter (1-2) | intended | Active, D=1.5 s | 0/40 | 0.09 | — | reached Trema 0/40 | 0.00 |
+| sourced-kit | 1 Paragon | intended | Active, D=1.5 s | 0/40 | 0.11 | — | BB 0.00 · Gen 1.57 | 0.00 |
+| sourced-kit | 2 Trema (fresh) | intended | Active, D=1.5 s | 0/40 | 1.58 | — | Met 0.05 · Flare 0.40 · blocked 4.63 | 12.03 |
+| sourced-kit | Chapter (1-2) | intended | Active, D=1.5 s | 0/40 | 0.11 | — | reached Trema 0/40 | 0.00 |
+
+"blocked" counts Trema's spells the MP gate stopped after a drain (TR4 = b). Every run ends in a
+win or a loss (no unfinished run).
+
+**What the numbers say.**
+
+1. **With Bailey's build (TR10 a, TR11 a) the chapter is not winnable: 0/200 on every line and
+   link, 0/40 at human speed.** The intended line's chapter win rate is **0**.
+2. **Paragon is the wall, whatever the kit.** No kit and no line wins link 1 (0/200 each). Its
+   Genesis (DC 44, Magic 244, TR8 a) deals about 3,600 to 5,800 to every girl through Shell and
+   is half of every second Paragon action (one in four on average); Paragon acts every 1.23 s, a Dark Knight
+   every 5.4 s, so the party is dead before its second round. With E3 its physicals now land
+   too, as the sources say. The wiki's T-6 b block (Magic 88, Defense 244) softens Genesis but
+   stops the Dark Knights' Attack (0/200 either way).
+3. **Trema alone becomes winnable with the sourced kit: 30/200 at bench speed (49/200 with the
+   Ribbon), 0/40 at human speed.** The drain works (about 14 of his spells blocked a fight), the
+   Auto-Wall and Adamantite keep the Alchemist alive through the three-hit chains, and Three Stars
+   makes Darkness free. Wins take about 12 game minutes. With one Valiant Lustre: 5/200.
+4. **The method check's +90 / +90 for Valiant Lustre was a misreading** (the wiki table's fifth
+   column is *Creature Abilities*); the grid is +60 / +60 with all four gates, and crossing gates
+   in battle measured worse (a Dark Knight changed into a White Mage is killed mid-route), so the
+   lines keep only the equip bonus. That, the 9,999 cap on the Stamina Tonic, and real turn costs
+   for the drain and the Stars (the probes gave them at 0 s) are why the method check's 157/200
+   is 30/200 here.
+
+**Probes, not built (no source for the timing; E4).** A scratch probe adds N seconds of recovery
+after every action (`D:/Tools/pyrefly-scratch/trema-ship/fix/e4probe.mts`), 100 seeds, bench speed:
+
+| Probe | Kit | Paragon | Trema (fresh) | Chapter |
+|---|---|---:|---:|---:|
+| 1.5 s after every action | tr11-a | 0 | 0 | 0 |
+| 1.5 s | sourced-kit | 0 | 71 | 0 |
+| 1.5 s | sourced-kit-ribbon | 0 | 63–64 | 0 |
+| 3 s | sourced-kit | 0 | 87 | 0 |
+| 3 s | sourced-kit-ribbon | 0–7 | 73–74 | 4–5 |
+
+A probe that also fixes the known all-target double hit (`resolve.ts#targetForHit`, not built)
+moved none of these rows by more than one seed. **Normal Paragon at TR8 a is not winnable in
+this engine with any sourced kit, even with 3 s of animation time.** The questions this leaves for
+Bailey are in the method check §4 and in this pass's report: TR7 (Oversoul Paragon: its script is
+only summarised in the research, so it cannot be built yet), TR1 b (Trema alone), and a source
+or an explicit estimate for action time (E4).
+
+## First cut (126b719f, before the method check)
+
+Kept as history. Of its engine bugs, #2 (a spherechange drops accessories) is fixed in the second
+pass (E2); #1 and #4 stand (the Stamina Tonic alone honours the 9,999 cap, `battle/ffx2/kit.ts`).
+
+### The table
 
 | Link | Line | ATB | Wins | Avg min | Avg min (wins) | Boss moves / fight | Darkness / fight |
 |---|---|---|---:|---:|---:|---|---:|
@@ -39,7 +129,7 @@ numbers. Nothing here tuned a boss** (rule 6, "never weaken a boss").
   drain 1.12 min / Darkness 9.43), which cross-checks the change. The chain now also carries the
   worn dressphere into Trema (research §1.1); it moves no row, because no run reaches Trema.
 
-## What the numbers say
+### What the numbers say
 
 **As picked (TR8 a, TR10 a, TR11 a), neither fight is winnable by these lines: 0/200 each, and
 0/200 for the chapter.** The fights end in under half a minute on Paragon and under a minute
@@ -72,7 +162,7 @@ on Trema, against the sources' "about 30 minutes" clear. Why, read off the runs:
    x 240/256). A second randomiser step, a stat we lack, or the wiki's target state: the research
    does not say (`paragon-abilities.ts` carries the note).
 
-## Measured options to bring to Bailey (asked once, TR6 = c)
+### Measured options to bring to Bailey (asked once, TR6 = c)
 
 - **a. Keep everything as picked** and ship the chapter LOCKED as a known unwinnable fight: not
   recommended.
@@ -85,7 +175,7 @@ on Trema, against the sources' "about 30 minutes" clear. Why, read off the runs:
 - **d. Revisit the line-up** (TR10): the Mascot line (International, `[single source]`) or a
   third Dark Knight; needs art and grid work.
 
-## Engine bugs found while measuring (not fixed: each changes shipped chapters)
+### Engine bugs found while measuring (not fixed: each changes shipped chapters)
 
 1. **An all-target action skips a target and hits another twice when one dies mid-cast**
    (`resolve.ts#targetForHit` indexes the *living* list). Seen on Genesis: Rikku died first, Yuna

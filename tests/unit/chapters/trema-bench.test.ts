@@ -1,115 +1,130 @@
 /**
- * Chapter XIII — seeded benches across 200 seeds per fight (plan
- * `docs/plans/chapter-trema-review.md` §9, T10; TR6 = c: "measure first, then ask once with
- * the numbers"). **FFX-2 only.** Measure, never tune: a low rate goes to Bailey as measured
- * options; no boss number is changed to move it. The table is printed and copied into
- * `docs/plans/trema-bench.md` and the commit body.
+ * Chapter XIII — seeded benches, 200 seeds per line at bench speed and 40 at human speed (plan
+ * `docs/plans/chapter-trema-review.md` §9, T10; TR6 = c: "measure first, then ask once with the
+ * numbers"). **FFX-2 only.** Measure, never tune: a low rate goes to Bailey as measured options;
+ * no boss number is changed to move it. The table is printed and copied into
+ * `docs/plans/trema-bench.md`.
  *
- * Bench speed is zero decision time under Active ATB (Bailey, 2026-09-21: FFX-2 is Active
- * only); at zero decision time nothing ticks under a menu, so Active and Wait read alike. The
- * human-speed rows spend 1.5 s per menu under Active, 40 seeds each. Minutes are game minutes
- * at Normal ATB speed (3,000 ticks a second).
+ * Re-run 2026-09-25 after the method check's corrections (`docs/plans/trema-winnability-method-check.md`:
+ * E1 timed ailments, E2 accessories through a spherechange, E3 Paragon's physicals always land) and
+ * with the **kit options** built but OFF in the chapter (`src/data/ffx2/builds/via-infinito-kit.ts`).
+ * Every line is run as an intended line and a credibly wrong one, on Paragon, on Trema fresh (full
+ * HP and MP: the upper bound of link 2) and on the whole chapter as the app carries it.
  *
- * The option rows are **not built**: they swap in the other sourced reading of Paragon's
- * block (T-6, the wiki's Mag 88 / Def 244 / MDef 89) or the sourced Stamina Tonic's doubled
- * max HP (TR11 c, which the engine does not model), or add 20 Phoenix Downs to the approved
- * TR11 a bag (not in it, so not built), to show Bailey what each would buy.
+ * Bench speed is zero decision time under Active ATB (Bailey, 2026-09-21: FFX-2 is Active only);
+ * the human rows spend 1.5 s per menu under Active. Minutes are game minutes at Normal ATB speed.
+ * The remaining option rows are **not built**: T-6 b swaps in the wiki's reading of Paragon's block
+ * (Mag 88 / Def 244 / MDef 89), and 20 Phoenix Downs are outside the approved TR11 a bag.
  */
 
 import { describe, expect, it } from 'vitest';
 import { driveChapter, driveParagon, driveTremaFresh, LINES, type DriveOptions, type LineOptions, type LinkRun } from '../helpers/tremaDrive.ts';
+import { tremaBuildFor, type TremaKitOption } from '../../../src/data/ffx2/builds/via-infinito-kit.ts';
 
 const SEEDS = 200;
 const HUMAN_SEEDS = 40;
+const HUMAN = 1500;
 const WIKI_T6 = { mag: 88, def: 244, mdef: 89 };
-/** The Phoenix Downs question (outside the approved TR11 a bag, so an option row, never built). */
 const PHOENIX_DOWNS = [{ itemId: 'x2-phoenix-down', count: 20 }];
 const rows: string[] = [];
 
-interface Tally { wins: number; seeds: number; unfinished: number; minutes: number; winMinutes: number; bigBang: number; genesis: number; meteor: number; ultima: number; flare: number; blocked: number; darkness: number }
+interface Tally { wins: number; seeds: number; unfinished: number; minutes: number; winMinutes: number; reached: number; bigBang: number; genesis: number; meteor: number; flare: number; blocked: number; darkness: number }
+type Run = LinkRun | { outcome: string | undefined; links: LinkRun[] };
 
-function bench(run: (seed: number) => LinkRun, seeds: number): Tally {
-  const t: Tally = { wins: 0, seeds, unfinished: 0, minutes: 0, winMinutes: 0, bigBang: 0, genesis: 0, meteor: 0, ultima: 0, flare: 0, blocked: 0, darkness: 0 };
+function bench(run: (seed: number) => Run, seeds: number): Tally {
+  const t: Tally = { wins: 0, seeds, unfinished: 0, minutes: 0, winMinutes: 0, reached: 0, bigBang: 0, genesis: 0, meteor: 0, flare: 0, blocked: 0, darkness: 0 };
   for (let seed = 1; seed <= seeds; seed++) {
     const r = run(seed);
-    if (r.outcome === 'victory') { t.wins += 1; t.winMinutes += r.minutes; }
+    const links = 'links' in r ? r.links : [r];
+    const minutes = links.reduce((m, l) => m + l.minutes, 0);
+    if (r.outcome === 'victory') { t.wins += 1; t.winMinutes += minutes; }
     if (r.outcome === undefined) t.unfinished += 1;
-    t.minutes += r.minutes;
-    t.bigBang += r.count('paragon-big-bang');
-    t.genesis += r.count('paragon-genesis');
-    t.meteor += r.count('trema-meteor');
-    t.ultima += r.count('trema-ultima');
-    t.flare += r.count('trema-flare');
-    t.blocked += r.blocked;
-    t.darkness += r.count('x2-dark-knight-darkness');
+    if (links.length > 1) t.reached += 1;
+    t.minutes += minutes;
+    for (const l of links) {
+      t.bigBang += l.count('paragon-big-bang');
+      t.genesis += l.count('paragon-genesis');
+      t.meteor += l.count('trema-meteor');
+      t.flare += l.count('trema-flare');
+      t.blocked += l.blocked;
+      t.darkness += l.count('x2-dark-knight-darkness');
+    }
   }
   return t;
 }
 
 const per = (n: number, t: Tally) => (n / t.seeds).toFixed(2);
 
-function row(link: string, line: string, mode: string, t: Tally): void {
+function row(kit: string, link: string, line: string, mode: string, t: Tally): void {
   const winMin = t.wins > 0 ? (t.winMinutes / t.wins).toFixed(1) : '—';
   const moves = link.startsWith('1')
     ? `BB ${per(t.bigBang, t)} · Gen ${per(t.genesis, t)}`
-    : `Met ${per(t.meteor, t)} · Ult ${per(t.ultima, t)} · Flare ${per(t.flare, t)} · blocked ${per(t.blocked, t)}`;
-  rows.push(`| ${link} | ${line} | ${mode} | ${t.wins}/${t.seeds} | ${(t.minutes / t.seeds).toFixed(2)} | ${winMin} | ${moves} | ${per(t.darkness, t)} |`);
+    : link.startsWith('2')
+      ? `Met ${per(t.meteor, t)} · Flare ${per(t.flare, t)} · blocked ${per(t.blocked, t)}`
+      : `reached Trema ${t.reached}/${t.seeds}`;
+  rows.push(`| ${kit} | ${link} | ${line} | ${mode} | ${t.wins}/${t.seeds} | ${(t.minutes / t.seeds).toFixed(2)} | ${winMin} | ${moves} | ${per(t.darkness, t)} |`);
 }
 
-const paragon = (line: LineOptions, opts: DriveOptions = {}) => (seed: number) => driveParagon(line, seed, opts);
-const tremaFresh = (line: LineOptions, opts: DriveOptions = {}) => (seed: number) => driveTremaFresh(line, seed, opts);
+type Case = [kit: TremaKitOption, link: string, line: string, run: (opts: DriveOptions) => (seed: number) => Run];
+const P = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveParagon(l, s, o);
+const T = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveTremaFresh(l, s, o);
+const C = (l: LineOptions) => (o: DriveOptions) => (s: number) => driveChapter(l, s, o);
 
-describe('Chapter XIII benches (200 seeds a fight, bench speed, Active)', () => {
+/** TR11 a (the shipped build) and each kit option, intended and credibly wrong, on every link. */
+const CASES: Case[] = [
+  ['tr11-a', '1 Paragon', 'intended: Attack, Shell, heals, never Darkness', P(LINES.intended)],
+  ['tr11-a', '1 Paragon', 'wrong: Darkness on Paragon', P(LINES.darknessOnParagon)],
+  ['tr11-a', '2 Trema (fresh)', 'intended: Protect, drain to < 10 MP, Shell before Meteor, Darkness x2', T(LINES.intended)],
+  ['tr11-a', '2 Trema (fresh)', 'intended without the drain', T(LINES.noDrain)],
+  ['tr11-a', '2 Trema (fresh)', 'wrong: Darkness x2, no drain, no Curtains', T(LINES.noDrainNoShell)],
+  ['tr11-a', 'Chapter (1-2)', 'intended on both links', C(LINES.intended)],
+  ['tr11-a', 'Chapter (1-2)', 'wrong: Darkness on Paragon', C(LINES.darknessOnParagon)],
+  ['sourced-kit', '1 Paragon', 'kit intended: Tonic, Megalixir, Shell, Attack, Itchy spherechanged', P(LINES.kitIntended)],
+  ['sourced-kit', '1 Paragon', 'kit wrong: Darkness on Paragon', P(LINES.kitDarknessOnParagon)],
+  ['sourced-kit', '2 Trema (fresh)', 'kit intended: Soul Spring, Tonic, Three Stars, Darkness x2', T(LINES.kitIntended)],
+  ['sourced-kit', '2 Trema (fresh)', 'kit wrong: no drain, no Curtains, no Stars', T(LINES.kitNoDrainNoShell)],
+  ['sourced-kit', 'Chapter (1-2)', 'kit intended on both links', C(LINES.kitIntended)],
+  ['sourced-kit', 'Chapter (1-2)', 'kit wrong: Darkness on Paragon', C(LINES.kitDarknessOnParagon)],
+  ['sourced-kit-one-lustre', '1 Paragon', 'kit intended', P(LINES.kitIntended)],
+  ['sourced-kit-one-lustre', '2 Trema (fresh)', 'kit intended', T(LINES.kitIntended)],
+  ['sourced-kit-one-lustre', 'Chapter (1-2)', 'kit intended', C(LINES.kitIntended)],
+  ['sourced-kit-ribbon', '1 Paragon', 'kit intended', P(LINES.kitIntended)],
+  ['sourced-kit-ribbon', '2 Trema (fresh)', 'kit intended', T(LINES.kitIntended)],
+  ['sourced-kit-ribbon', 'Chapter (1-2)', 'kit intended', C(LINES.kitIntended)],
+];
+
+describe('Chapter XIII benches (200 seeds a line, bench speed, Active)', () => {
   const results = new Map<string, Tally>();
-  const cases: Array<[string, string, (seed: number) => LinkRun]> = [
-    ['1 Paragon', 'intended: Attack, Shell, heals, never Darkness', paragon(LINES.intended)],
-    ['1 Paragon', 'wrong: Darkness on Paragon', paragon(LINES.darknessOnParagon)],
-    ['1 Paragon', 'option T-6 b (wiki Mag 88 / Def 244 / MDef 89), intended', paragon(LINES.intended, { paragonStats: WIKI_T6 })],
-    ['1 Paragon', 'option TR11 c (Stamina Tonic: max HP x2), intended', paragon(LINES.intended, { hpMultiplier: 2 })],
-    ['1 Paragon', 'option: + 20 Phoenix Downs (not built; outside TR11 a), intended', paragon(LINES.intended, { extraItems: PHOENIX_DOWNS })],
-    ['2 Trema (fresh)', 'intended: Protect, drain to < 10 MP, Shell before Meteor, Darkness x2', tremaFresh(LINES.intended)],
-    ['2 Trema (fresh)', 'intended without the drain', tremaFresh(LINES.noDrain)],
-    ['2 Trema (fresh)', 'wrong: Darkness x2, no drain, no Curtains', tremaFresh(LINES.noDrainNoShell)],
-    ['2 Trema (fresh)', 'option TR11 c (max HP x2), intended without the drain', tremaFresh(LINES.noDrain, { hpMultiplier: 2 })],
-    ['2 Trema (fresh)', 'option: + 20 Phoenix Downs (not built), intended without the drain', tremaFresh(LINES.noDrain, { extraItems: PHOENIX_DOWNS })],
-  ];
-
-  for (const [link, name, run] of cases) {
-    it(`${link}: ${name}`, () => {
-      const t = bench(run, SEEDS);
-      results.set(name, t);
-      row(link, name, 'Active, D=0', t);
+  for (const [kit, link, name, run] of CASES) {
+    it(`${kit} · ${link}: ${name}`, () => {
+      const t = bench(run({ build: tremaBuildFor(kit) }), SEEDS);
+      results.set(`${kit}|${link}|${name}`, t);
+      row(kit, link, name, 'Active, D=0', t);
       expect(t.unfinished).toBe(0); // every run ends in a win or a loss
-    }, 300_000);
+    }, 600_000);
   }
 
   it('the wrong line on Paragon draws Big Bang and the intended one never does', () => {
-    expect(results.get('intended: Attack, Shell, heals, never Darkness')?.bigBang).toBe(0);
-    expect(results.get('wrong: Darkness on Paragon')?.bigBang ?? 0).toBeGreaterThan(0);
+    expect(results.get('tr11-a|1 Paragon|intended: Attack, Shell, heals, never Darkness')?.bigBang).toBe(0);
+    expect(results.get('sourced-kit|1 Paragon|kit intended: Tonic, Megalixir, Shell, Attack, Itchy spherechanged')?.bigBang).toBe(0);
   });
 
-  it('the whole chapter, intended line, Trema entered in Paragon\'s end state', () => {
-    let wins = 0;
-    let reached = 0;
-    let minutes = 0;
-    for (let seed = 1; seed <= SEEDS; seed++) {
-      const run = driveChapter(LINES.intended, seed);
-      expect(run.outcome).toBeDefined();
-      if (run.links.length > 1) reached += 1;
-      if (run.outcome === 'victory') wins += 1;
-      minutes += run.links.reduce((m, l) => m + l.minutes, 0);
-    }
-    rows.push(`| Chapter (1-2) | intended on both links | Active, D=0 | ${wins}/${SEEDS} | ${(minutes / SEEDS).toFixed(2)} | — | reached Trema ${reached}/${SEEDS} | |`);
-  }, 300_000);
+  it('option rows that are not built (T-6 b, Phoenix Downs)', () => {
+    row('tr11-a', '1 Paragon', 'option T-6 b (wiki Mag 88 / Def 244 / MDef 89), intended', 'Active, D=0', bench(P(LINES.intended)({ paragonStats: WIKI_T6 }), SEEDS));
+    row('sourced-kit', '1 Paragon', 'option T-6 b, kit intended', 'Active, D=0', bench(P(LINES.kitIntended)({ paragonStats: WIKI_T6, build: tremaBuildFor('sourced-kit') }), SEEDS));
+    row('tr11-a', '2 Trema (fresh)', 'option: + 20 Phoenix Downs (not built), intended', 'Active, D=0', bench(T(LINES.intended)({ extraItems: PHOENIX_DOWNS }), SEEDS));
+  }, 600_000);
 
   it('human speed: 1.5 s a menu under Active (40 seeds)', () => {
-    const human = { decisionMs: 1500 };
-    row('1 Paragon', 'intended', 'Active, D=1.5 s', bench(paragon(LINES.intended, human), HUMAN_SEEDS));
-    row('2 Trema (fresh)', 'intended without the drain', 'Active, D=1.5 s', bench(tremaFresh(LINES.noDrain, human), HUMAN_SEEDS));
-    row('2 Trema (fresh)', 'intended', 'Active, D=1.5 s', bench(tremaFresh(LINES.intended, human), HUMAN_SEEDS));
+    for (const [kit, line] of [['tr11-a', LINES.intended], ['sourced-kit', LINES.kitIntended]] as const) {
+      const o = { decisionMs: HUMAN, build: tremaBuildFor(kit) };
+      row(kit, '1 Paragon', 'intended', 'Active, D=1.5 s', bench(P(line)(o), HUMAN_SEEDS));
+      row(kit, '2 Trema (fresh)', 'intended', 'Active, D=1.5 s', bench(T(line)(o), HUMAN_SEEDS));
+      row(kit, 'Chapter (1-2)', 'intended', 'Active, D=1.5 s', bench(C(line)(o), HUMAN_SEEDS));
+    }
     console.log(
-      ['| Link | Line | ATB | Wins | Avg min | Avg min (wins) | Boss moves / fight | Darkness / fight |',
-        '|---|---|---|---:|---:|---:|---|---:|', ...rows].join('\n'),
+      ['| Kit | Link | Line | ATB | Wins | Avg min | Avg min (wins) | Boss moves / fight | Darkness / fight |',
+        '|---|---|---|---|---:|---:|---:|---|---:|', ...rows].join('\n'),
     );
-  }, 600_000);
+  }, 900_000);
 });

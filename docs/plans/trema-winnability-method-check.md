@@ -147,3 +147,17 @@ timing. With **one** Ribbon (research: "most players have 0–1"): 30/200.
 **Recommended order:** P1 + P2 (bugs, own review) → P3 (Bailey's word on the kit) → ask P4
 (a) against (b) with these numbers, and the E4 source question, in one sheet. The boss data is
 untouched throughout.
+
+## Follow-up, 2026-09-25 (fix pass on this branch)
+
+Built: **E1** (scoped to the two Cloister links by `EnemyGroupDef.timedAilmentDefaults`; Chapters
+5 and XI keep their written "until cured" precedent until Bailey says otherwise), **E2**, **E3**,
+and the E5 tools behind OFF-by-default kit options (`src/data/ffx2/builds/via-infinito-kit.ts`).
+Measured in `docs/plans/trema-bench.md` (second pass). Two corrections to this note:
+
+- **Valiant Lustre is +60 / +60, not +90 / +90.** The "Moogle Cureja, Defense +30, Magic Defense
+  +30" cell of the wiki's *Garment Grid* table (revid 3998878) sits in its *Creature Abilities*
+  column, what a captured fiend gets; ffx2-vegnagun-shuyin §6.6 agrees ("Stacks to +60/+60").
+- The probes' Stamina Tonic doubled HP without the 9,999 cap (§2.4, `[verified: 2 sources]`); the
+  built Tonic honours it. With both corrections and real turn costs, Trema alone with Split's kit
+  is 30/200 (not 157/200), Paragon stays 0/200 with every kit, and the chapter is 0/200.
