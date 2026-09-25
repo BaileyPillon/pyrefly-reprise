@@ -10,8 +10,8 @@
  * - `subtitle`, `blurb`, `handwritten` and `tip` are our own words over the research's sourced
  *   facts (§8.2 beats 3-5; §4.1 the four spells, one disc each, verified: 4 sources; §4.2 the
  *   affinity ladder, verified: 5 sources; §4.4 the glow, Dispel and Ultima, verified: 4-5
- *   sources). None of them names the ring order or the reset cycle, the two estimates B8 holds
- *   the listing on, so every line stays true whatever Bailey confirms.
+ *   sources). None of them names the ring order or the reset cycle, the two estimates B8 is
+ *   about, so every line stays true whatever Bailey confirms.
  * - `quote` is line 9 of `docs/plans/omnis-story-draft.md`, an `[ORIGINAL]` line in Seymour's
  *   voice (writing-bible §1.9), and the line the pre scene (`src/story/scripts/seymour-omnis.ts`)
  *   actually plays.
@@ -25,8 +25,8 @@
  * - `musicKeys` are the cues the chapter plays (`./chapter-omnis-ship.ts`): the stand-in scene
  *   cue, B18's stand-in battle cue and the FFX fanfare.
  *
- * **Unlisted**: it sits in `./chapter-meta.ts`'s `UNLISTED_CHAPTER_META`, as the chapter sits in
- * `UNLISTED_CHAPTERS` (B8).
+ * **Listed** 2026-09-25 with the chapter itself (ship order D-162): it sits in `./chapter-meta.ts`'s
+ * `CHAPTER_META` after Chapter IX's, as the chapter sits after Chapter IX in `CHAPTERS`.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';

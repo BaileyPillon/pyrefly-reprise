@@ -250,7 +250,7 @@ afterEach(() => {
 });
 
 /** Chapters whose post script authors every line before results(). */
-const ENDS_ON_RESULTS: ReadonlySet<string> = new Set(['yojimbo-cavern']);
+const ENDS_ON_RESULTS: ReadonlySet<string> = new Set(['yojimbo-cavern', 'seymour-omnis']);
 
 describe('the post-battle scenes play — critic round 02 #04', () => {
   it.each(CHAPTERS.map((c) => [c.id, c] as const))(
@@ -369,7 +369,10 @@ describe('the end of an arc — critic round 02 #32', () => {
       // Chapter 9 (Yojimbo) too: the Cavern of the Stolen Fayth comes before
       // Mt. Gagazet and Zanarkand (research ffx-yojimbo.md §1.1, §1.2 item 5 and §5 [verified: 3 sources]; its party is
       // the Gagazet build). Chapter 13 (Trema): an optional Chapter 5 superboss, "not a story boss" (ffx2-trema.md §1).
-      const storyEarlierThanFinale = new Set(['ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'ffx2-trema']);
+      // Chapter 12 (Omnis): the Garden of Pain inside Sin, before Dream's End (ffx-seymour-omnis.md header and §0.3).
+      const storyEarlierThanFinale = new Set([
+        'ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'seymour-omnis', 'ffx2-trema',
+      ]);
       const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id));
       const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;
       expect(lastByDisplayOrder).toBe(id);

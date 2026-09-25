@@ -74,10 +74,10 @@ afterEach(() => {
 const selectedId = (rig: Rig): unknown => rig.screen.snapshot()['selectedId'];
 
 describe('the board on screen', () => {
-  it('draws the hero plus all ten cards in two game groups, the selected one included (D-183)', () => {
+  it('draws the hero plus all eleven cards in two game groups, the selected one included (D-183)', () => {
     const { root } = mount();
     expect(root.querySelectorAll('.fe-hero')).toHaveLength(1);
-    expect(root.querySelectorAll('.fe-card')).toHaveLength(10);
+    expect(root.querySelectorAll('.fe-card')).toHaveLength(11);
     expect(root.querySelectorAll('.fe-card--sel')).toHaveLength(1);
     const groups = [...root.querySelectorAll('.fe-rail__group')].map((g) => g.textContent?.trim());
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
@@ -135,6 +135,9 @@ describe('the keyboard', () => {
     // Yojimbo (Chapter IX) was listed 2026-09-24 and is playable.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('yojimbo-cavern');
+    // Omnis (Chapter XII) was listed 2026-09-25 and is playable.
+    rig.key('ArrowRight');
+    expect(selectedId(rig)).toBe('seymour-omnis');
     // Macalania (VII) sits between III and VIII and was stepped over above.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('ffx2-bahamut');

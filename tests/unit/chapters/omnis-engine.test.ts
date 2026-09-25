@@ -22,15 +22,15 @@ import {
 } from '../helpers/omnisUnits.ts';
 
 describe('Chapter XII registration (FFX only)', () => {
-  it('is registered, reachable by id and UNLISTED', () => {
+  it('is registered, reachable by id and LISTED after Chapter IX (2026-09-25)', () => {
     const ch = getChapter('seymour-omnis');
     expect(ch?.number).toBe(12);
     expect(ch?.game).toBe('ffx');
     expect(ch?.title).toBe('Seymour Omnis');
     expect(ch?.location).toBe('Inside Sin — the Garden of Pain');
-    expect(CHAPTERS.some((c) => c.id === 'seymour-omnis')).toBe(false);
-    expect(CHAPTER_IDS).not.toContain('seymour-omnis');
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('seymour-omnis');
+    expect(CHAPTERS.some((c) => c.id === 'seymour-omnis')).toBe(true);
+    expect(CHAPTER_IDS.indexOf('seymour-omnis')).toBe(CHAPTER_IDS.indexOf('yojimbo-cavern') + 1);
+    expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('seymour-omnis');
     expect(ch?.buildRef).toBe(gardenOfPainBuild);
     expect(ch?.enemyGroupRef).toBe(ENEMY_GROUPS_BY_ID['seymour-omnis']);
   });

@@ -22,8 +22,8 @@ import { departureKindOf } from '../../../src/engine/BattlePresenterDepartures.t
 import { SPEAKER_ROLES } from '../../../src/ui/common/speaker-roles.ts';
 import { OMNIS, newEngine } from '../helpers/omnisUnits.ts';
 
-describe('the registered record: UNLISTED (B8), with the ship layer on', () => {
-  it('getChapter finds it on the Garden of Pain with the story and the stand-in cues; chapter select does not list it', () => {
+describe('the registered record: LISTED (2026-09-25, D-162), with the ship layer on', () => {
+  it('getChapter finds it on the Garden of Pain with the story and the stand-in cues; chapter select lists it after Chapter IX', () => {
     const ch = getChapter('seymour-omnis');
     expect(ch).toBe(SEYMOUR_OMNIS_SHIPPED);
     expect(ch?.sceneKey).toBe(OMNIS_SCENE_KEY);
@@ -32,9 +32,10 @@ describe('the registered record: UNLISTED (B8), with the ship layer on', () => {
     expect(ch?.music.battle).toBe('boss-seymour'); // B18's named stand-in until the new cue is picked by ear
     expect(ch?.game).toBe('ffx');
     expect(ch?.number).toBe(12);
-    expect(UNLISTED_CHAPTERS).toContain(SEYMOUR_OMNIS_SHIPPED);
-    expect(CHAPTERS.map((c) => c.id)).not.toContain('seymour-omnis');
-    expect(CHAPTER_IDS).not.toContain('seymour-omnis');
+    expect(UNLISTED_CHAPTERS).not.toContain(SEYMOUR_OMNIS_SHIPPED);
+    expect(CHAPTERS).toContain(SEYMOUR_OMNIS_SHIPPED);
+    expect(CHAPTER_IDS.indexOf('seymour-omnis')).toBe(CHAPTER_IDS.indexOf('yojimbo-cavern') + 1);
+    expect(CHAPTERS.map((c) => c.id)).toEqual(CHAPTER_IDS);
   });
 
   it('lays the layer over the engine track\'s fight without touching it', () => {
@@ -51,11 +52,11 @@ describe('the registered record: UNLISTED (B8), with the ship layer on', () => {
   });
 });
 
-describe('the pause card (unlisted with the chapter)', () => {
-  it('is the unlisted meta, in FFX\'s voice, numeral XII, on the locked hero plate with the portrait fallback', () => {
+describe('the pause card (listed with the chapter)', () => {
+  it('is the listed meta, in FFX\'s voice, numeral XII, on the locked hero plate with the portrait fallback', () => {
     expect(getChapterMeta('seymour-omnis')).toBe(SEYMOUR_OMNIS_META);
-    expect(UNLISTED_CHAPTER_META).toContain(SEYMOUR_OMNIS_META);
-    expect(CHAPTER_META).not.toContain(SEYMOUR_OMNIS_META);
+    expect(UNLISTED_CHAPTER_META).not.toContain(SEYMOUR_OMNIS_META);
+    expect(CHAPTER_META).toContain(SEYMOUR_OMNIS_META);
     expect(SEYMOUR_OMNIS_META).toMatchObject({
       gameLabel: 'FFX',
       numeral: 'XII',
