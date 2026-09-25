@@ -221,3 +221,38 @@ accept in `measure6.json`. The brief's Fix 2 is therefore **not met**. Cap at +-
   sha256 re-hash of every file entry.) This track changed nothing
   under `public/art`, so it needed no backup; `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/` exists.
 - **Minor.** The v5.1 panel in `compare.mp4` runs behind v6 by a beat, as disclosed. The port into `src/` is not written.
+
+## Second independent judge (2026-09-25, a separate agent that built none of this)
+
+This pass judged the claims of 85107767 and 909dc5f3, and also the repair pass in 96d837fd that is now committed. Every
+check was made on the committed files and the pass-2 logs. None was taken from the build's report.
+
+- **Files, re-probed.** `clip.mp4`: 720x1200, H.264 High, yuv420p, 60 fps, 900 frames, 15.0 s, 4.26 MB, moov at byte 36
+  and before mdat. `compare.mp4`: 1080x900, 25 fps, 692 frames, 27.7 s, 3.36 MB, faststart. The copies at 85107767 read
+  the same. `sheet.jpg` is 2000x3602 (it was 2000x3462). Every tool file is under 400 lines.
+- **One painting per frame.** Pass-2 logs (`cap/log2-clip.json`, `log2-half.json`): 0 of 900 and 0 of 545 frames
+  have a blend weight other than 0 or 1. There are 20 and 16 cuts across all nine keys (frontal, l10-l40, r10-r40),
+  with yaw from -40 to +39.7.
+- **Feel A2** (`faces-clip/weights.json`): browDraw is 0.0 in every frame, so the brow never looks worried. The
+  largest change per frame is open 0.047, smile 0.036 and brow raise 0.032. Gaze x peaks at 11.3 px. At 1:1 the eyes
+  arrive before the head at the big step (frames 658 to 668). The smile plays at 0 (frame 36) and at +40 (frame 590).
+  The blink reads at -40 (frame 280) and mid-sweep (frame 478).
+- **Cuts at 1:1 and 2x** (frames 259/260 at -37 and 548/549 at +37): one iris, one lash line and one mouth on both
+  sides of each cut. I could not pick out the cut.
+- **Fix 1, the throat line.** I ran `tools/throat.py` on every decoded frame. Current clip: 0 of 900 frames (max run
+  18 px, threshold 40). The 85107767 clip: 0 of 900. The v5.1 `clip.mp4` as a positive control: 202 of 412.
+  **Confirmed.**
+- **Fix 2, the far-side hair.** I compared frames 280 (-40) and 590 (+40) at 2x, old against new. At 85107767 the
+  defect is plainly visible: a hard horizontal row step through the far-side hair at -40, and a teal smear beside the
+  tassel at +40. As claimed ("not fixed, disclosed"), the brief's Fix 2 was **not met at that commit**. At 96d837fd
+  the row step is gone, the pink hair carries strokes, the teal smear is gone and there is no pop at the cuts.
+  **What remains:** the -40 pink band is still wide and stretched, and the column beside the tassel at +40 is a little
+  muddy and busier than the plate's strands, with a faint pale patch where the glow was. These are polish items, not
+  defects.
+- **Locks.** I re-hashed `docs/target/approved-hashes.json` on my own, reading the file entries only: 185 match,
+  0 mismatch, 0 absent. The first claim's "31 absent" was a miscount of metadata keys, as the repair pass noted.
+  No commit on this track touched `public/art`, so no backup was owed.
+
+**Score: 7.5 / 10 at 85107767 and 8 / 10 at 96d837fd. Both are above the bar of 7.** The worst item now is the
+stretched -40 pink band and the busy footprint column at +40. The optional LoRA pass would soften both, and whether
+to run it is Bailey's call. The worst item at 85107767 was the unrepaired far-side hair.
