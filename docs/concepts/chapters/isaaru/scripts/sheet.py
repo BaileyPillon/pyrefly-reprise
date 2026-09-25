@@ -110,6 +110,6 @@ if not PHONE: d.rectangle((0, 0, 12, H), fill=GOLD)
 else: d.rectangle((0, 0, W, round(2 * u)), fill=GOLD)
 y = PAD
 for h, dr in ops: dr(d, sh, y); y += h
-d.text((W - PAD, H - round(4 * u)), 'CONCEPT', font=F['stamp'], fill=GOLD, anchor='rd')
+d.text((W - PAD, H - round(4 * u)), spec.get('stamp', 'CONCEPT'), font=F['stamp'], fill=GOLD, anchor='rd')
 sh.save(out, quality=84, optimize=True)
 print(out, sh.size, 'smallest sheet text at 390 px wide: %.1f px' % min(SIZES.values()))
