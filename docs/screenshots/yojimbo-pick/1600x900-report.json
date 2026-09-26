@@ -1,0 +1,115 @@
+{
+ "viewport": "1600x900",
+ "steps": [
+  {
+   "k": "chapter-select",
+   "v": true
+  },
+  {
+   "k": "prep",
+   "v": true
+  },
+  {
+   "k": "prep card: ??? shown, Ghost fact hidden",
+   "v": {
+    "q": true,
+    "ghost": false
+   }
+  },
+  {
+   "k": "prep OVERDRIVE tab (Kimahri): Jump listed, Doom listed?",
+   "v": {
+    "jump": false,
+    "doom": false
+   }
+  },
+  {
+   "k": "battle",
+   "v": true
+  },
+  {
+   "k": "menu 0",
+   "v": {
+    "who": "kimahri",
+    "rows": [
+     "Attack",
+     "Special",
+     "Items",
+     "Switch"
+    ]
+   }
+  },
+  {
+   "k": "menu 1",
+   "v": {
+    "who": "yuna",
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Summon",
+     "Switch"
+    ]
+   }
+  },
+  {
+   "k": "menu 2",
+   "v": {
+    "who": "lulu",
+    "rows": [
+     "Attack",
+     "Special",
+     "Black Magic",
+     "Items",
+     "Switch"
+    ]
+   }
+  },
+  {
+   "k": "top row",
+   "v": "Black Magic"
+  },
+  {
+   "k": "spell row",
+   "v": "Fira"
+  },
+  {
+   "k": "real action",
+   "v": {
+    "abilityId": "fira",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  },
+  {
+   "k": "pause headline",
+   "v": {
+    "obj": "Let an aeon take Zanmato",
+    "hasQ": false
+   }
+  },
+  {
+   "k": "first fight",
+   "v": {
+    "outcome": "defeat",
+    "turns": 105,
+    "seed": 14,
+    "zanmato": 1,
+    "doomRow": false
+   }
+  },
+  {
+   "k": "retry -> prep",
+   "v": true
+  },
+  {
+   "k": "prep card after the loss",
+   "v": {
+    "q": false,
+    "fact": true
+   }
+  }
+ ]
+}
