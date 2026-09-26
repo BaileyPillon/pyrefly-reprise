@@ -16,6 +16,7 @@ import {
 } from './frontend/chapterGrid.ts';
 import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCards.ts';
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
+import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
 
 export interface ChapterSelectScreenOptions {
   /** Called when the player confirms a card. The presenter wires the actual transition. */
@@ -107,9 +108,8 @@ export class ChapterSelectScreen extends Screen {
   override enter(): void {
     installInkGoldStyles();
     this.tiles = buildChapterTiles(this.app.save);
-    const wanted = this.opts.initialIndex ?? 0;
-    this.selected = this.tiles[wanted]?.playable ? wanted : this.tiles.findIndex((t) => t.playable);
-    if (this.selected < 0) this.selected = 0;
+    // PR-0109: back on the chapter the player last chose (prep Esc, results CONFIRM, reload).
+    this.selected = initialBoardIndex(this.tiles, this.opts.initialIndex);
 
     this.root.className = 'screen fe fe-cselect ig';
     // `__scroll` is the page on a phone (one scrolling column); on a desktop
@@ -246,6 +246,7 @@ export class ChapterSelectScreen extends Screen {
     this.confirming = true;
     audio.playSfx('confirm');
     const id = tile.id as ChapterId;
+    rememberBoardChapter(id);
     (this.opts.onSelect ?? defaultOnSelect)(id);
     this.settle(id);
     // A standalone (non-flow) registration keeps living after confirm — the

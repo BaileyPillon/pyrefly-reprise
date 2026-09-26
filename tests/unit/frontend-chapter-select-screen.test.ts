@@ -13,6 +13,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { ChapterSelectScreen } from '../../src/app/screens/ChapterSelectScreen.ts';
+import { forgetBoardChapter } from '../../src/app/screens/frontend/boardFocus.ts';
 import { Input } from '../../src/app/Input.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 
@@ -36,6 +37,8 @@ function mount(opts: ConstructorParameters<typeof ChapterSelectScreen>[0] = {}):
   const input = new Input({ pointerRoot: root });
   input.attach();
 
+  // Each mount is a fresh session's board (PR-0109 remembers the last pick otherwise).
+  forgetBoardChapter();
   const screen = new ChapterSelectScreen(opts);
   screen.root = root;
   screen.app = { save, fade: () => Promise.resolve() } as unknown as ChapterSelectScreen['app'];
