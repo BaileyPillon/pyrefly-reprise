@@ -72,3 +72,43 @@ Branch `t1-b4b` (worktree `D:/pyrefly-t1-b4b`), from main `3665f1eb`, 2026-09-26
   `npm ci --offline --ignore-scripts`, which uses the local npm cache and downloads nothing. By the end of
   this batch it looked restored by someone (77 entries, `.bin` and `@exodus` back): check
   `npm ls` before trusting a test run there.
+
+## CHECK (independent, 2026-09-26, not the builder)
+
+Checked `cc19c192` in this worktree with its own `node_modules` and a `public/art` junction, which was
+removed afterwards. I made my own production build (`vite build`; the plugin printed "left out 291
+unshipped file(s)") and served it with `vite preview` on 5975, stopped afterwards by its PID; nothing
+listens on 5975-5979 now. The checks used headless Chromium with `PYREFLY_BROWSER=gpu` and real keys,
+driven by my own driver, `tools/zz-t1b4b-check.tmp.mjs` (untracked). The evidence is in
+`docs/screenshots/t1-b4b/check/` (JPEG frames and `check-*.json`, not committed, per the brief).
+
+**Suite.** `npx tsc --noEmit` is clean. The full `vitest run --testTimeout=60000` exits 0: 454 files
+passed and 4 skipped, 8,346 tests passed. `node tools/orphans.mjs` reports 24, the same as main. None
+of the touched files is in `docs/CONTRACTS.md`.
+
+| Issue | Round-13 acceptance check, as I ran it | Result |
+|---|---|---|
+| PR-0109 | Prep Esc for each of the 14 playable cards (in reverse order) at 1600x900, 2000x1012 and 390x844: `selectedId` = that chapter in **42 of 42**. Results return for **all 14** chapters at all three sizes (the builder did 3): **42 of 42**. That covers 30 victory CONFIRMs and 12 defeat CHAPTER SELECTs; the fight was settled by the debug `autoBattle` at skip speed, and the board, prep and results used real keys. A same-tab reload, after moving the cursor without confirming, came back on the last confirmed card at all three sizes: 3 of 3. 0 console errors, 0 HTTP ≥ 400. | **Pass** |
+| PR-0214 | The round-13 probe: Ch I pre-scene 2.5 s, Esc, 1 s, Esc, then read after 1.5 s. `music.current` was **null in 3 of 3** (it was `pause` while paused). The Ch I battle resumed to `boss-seymour`, the Ch V pre-scene to `scene-farplane` and the Ch V battle to `boss-vegnagun`. As an extra FFX-2 check, the Ch IV pre-scene resumed to `scene-bevelle-underground` and the Ch IV battle to `boss-ffx2-aeon`, all at gain 1. | **Pass**, no regression in either game |
+| PR-0158 | Real Escape at 0.5, 1, 2, 3 and 4 s after battle mount in Ch I and Ch VI, with the scene held through by Enter presses (no debug skip): 10 of 10 with 0 console or page errors. At 0.5 and 1 s the key was ignored; from 2 s the pause opened and Esc closed it. 4 s later the screen was `battle` and the presenter was not aborted. | **Pass** |
+| PR-0100 | Fresh `dist/`: 0 files under `audio/candidates` (the folder is gone). `qa.mjs --strict` exits 0. `audition.html` opened headless from `file://`: **72 of 72** sources reach `canplay`, including the 31 candidates it names. The sources are still on disk (291 matches under `public/`). | **Pass** |
+| PR-0173 | Fresh `dist/`: 0 `art/**/*.raw.png` and 0 `art/**/*.N.png|json`; 825 files, 411 MB. The art manifest lists no numbered or raw entry. In every run above, which entered the battle of all 14 chapters at three sizes plus prep, pause and results, **0 responses were ≥ 400**. | **Pass** |
+| PR-0099 (docs half) | THEMES.md "The chapter cue map" has rows for VI, X, XI, XII, XIII and XIV (and for all 15). A grep for leblanc, natus, omnis, isaaru, fallen and trema hits each one. `themes-audit.mjs` exits 0 with "0 chapter(s) depart"; it sets exit 1 when a row is missing or differs (unit test). I checked the cited decisions (D-018, D-048, D-063, D-091, D-112, D-145, D-146, D-147, D-148, D-186, D-190, D-209) in `decisions.json`: each exists and says what its row claims. No cue was composed. | **Pass** (the D-168 listening agenda for the owed cues is the other half; it is not part of the acceptance check) |
+| PR-0215 | Ch III, the engine's own stalemate watch debug-set (`rt.progress`), then real Enter presses: the fight ended as `escape` and the results panel appeared. RETRY led to prep, then Enter led to battle. CHAPTER SELECT led to the board on `braskas-final-aeon`. Save: only `playTimeMs` changed; `attempts` and `cleared` did not. **But the card reads "Defeat" and "DREAM'S END — INSIDE SIN · FELL" and nothing on it explains the withdrawal.** | **Acceptance FAILS on "a results card explains the withdrawal"**. The builder stopped that half correctly: it is new copy on a screen Bailey sees, in a file another branch owns (rules 9 and 10). PR-0215 must stay **open (partial)**, not cleared. |
+| PR-0216 | Not claimed as fixed, and no code changed. Not re-run. | n/a |
+
+**Class A.** Every change routes to, remembers or guards something that already exists, or prunes
+files from the build. There is no new perceivable element, no invented data and no boss number.
+Approved art is untouched, because the prune works only on `dist/` and uses `lstat`. The one rule
+note: `BattleScreen.ts`, already over 400 lines, grew from 919 to 924, the guard only (disclosed).
+`deploy-pages.mjs` (708 → 717) and `qa.mjs` (+5) were already over 400 too, and their new logic
+lives in `tools/dist-filter.mjs`.
+
+**Merge condition (regression in the critic tooling, not in the game).** After PR-0109,
+`critic/runner/lib/play.mjs:68-70` presses ArrowRight `idx` more times after an Esc from prep. The
+board now comes back on chapter `idx` and wraps (`chapterGrid.ts`, "wrapping"), so the capture harness
+would confirm chapter `2·idx mod n` and go on to capture the **wrong chapter** without an assertion
+failing. `supp.mjs` and `gap-audio.mjs` count presses only from a fresh profile, where the board still
+opens on Chapter I, so they are unaffected. `t1-b5`, which owns `critic/runner`, has no commit touching
+`play.mjs`. Do not merge this branch to main ahead of that fix: it has to land in the same merge or
+before it.
