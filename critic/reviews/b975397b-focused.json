@@ -1,0 +1,291 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-09-26T06:25:00.000Z",
+  "build": {
+    "mainSha": "b975397b",
+    "fullSha": "b975397be2920702571cac820c69afdff252b891",
+    "candidateTree": "D:/pyrefly-rel18",
+    "bundle": "Dd1Fjf8_",
+    "live": "1a680e41 (release 17.1, bundle index-BVdUtZb-.js, confirmed at https://baileypillon.github.io/pyrefly-reprise/ during this review)"
+  },
+  "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+  "targetVersionNote": "sha256 of docs/target/targets.json in the candidate tree D:/pyrefly-rel18; the main tree's copy has moved on since (61e81202...c990)",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "PASS",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect found: all four newly listed chapters (X Natus, XI Fallen Aeons, XII Omnis, XIV Isaaru) run from the title through chapter select, prep, scene, battle, post scene and results back to chapter select with the beaten card marked, by real keys (and taps for the phone board).",
+    "No regression against live 1a680e41: the nine chapters already live (I, II, III, IV, V, VI, VIII, IX, XIII) all start, pause by Esc and leave battle correctly on the candidate; eight were played to a win, and Chapter II to a loss, then RETRY, then prep.",
+    "The one major (FOC18-01, the Road's 3 s action time lets Shiva and Anima ignore the wrong line) sits inside Chapter XI, which is not live at all. It is Bailey's option A trade-off, already disclosed by its builders. It is disclosed here and does not hold the build.",
+    "Chapter select v2 matches the approved option C target (D-183) at 1600x900, 2000x1012 and 390x844. The cutscene veil fix works in both games: 32 of 32 narration lines under the veil stayed readable, and #fade never covered a line."
+  ],
+  "checks": [
+    {
+      "id": "CHK-016", "result": "PASS", "mandatory": true, "mode": "automated", "minutes": 2,
+      "game": "both", "chapter": "I-VI, VIII-XIV, chapter select", "state": "every capture",
+      "artifact": "b975397b / bundle index-Dd1Fjf8_.js (D:/pyrefly-rel18/dist-gate)", "targetVersion": "7b9585cb...a59d8",
+      "environment": "vite preview of D:/pyrefly-rel18/dist-gate on 127.0.0.1:5421 (PID 52192, stopped, port closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no black canvas, no fallback",
+      "reason": "every capture goes through a helper that reads window.__pyrefly.screen() and refuses (logs UNVERIFIED, no file) when the screen is not the one wanted; it refused three times (post-scene-open wanted cutscene, got results, in Chapters I, VI, VIII), and none of those became evidence. The card id is asserted before Enter, and the chapter id after Enter.",
+      "evidence": ["critic/reviews/b975397b-focused/cand-seymour-natus-win-1600x900-s7-04-card-selected.jpg", "critic/reviews/b975397b-focused/cand-isaaru-via-purifico-win-1600x900-s7-12-results.jpg"]
+    },
+    {
+      "id": "CHK-017", "result": "NOT APPLICABLE", "mandatory": true, "mode": "manual", "minutes": 1,
+      "game": "both", "chapter": "all", "state": "live URL",
+      "reason": "Deployment verification is the separate live obligation that follows the deploy. The live site was opened only for comparison: bundle index-BVdUtZb-.js = 1a680e41, chapter select v1 (VII listed after IX, 'Nine fights' briefing), 0 console errors, 0 HTTP errors."
+    },
+    {
+      "id": "CHK-021", "result": "PASS", "mandatory": true, "mode": "automated", "minutes": 4,
+      "game": "both", "chapter": "X, XII, XIV (FFX only); XI (FFX-2 only); chapter select and veil (both)",
+      "state": "battle open, pause, results",
+      "reason": "Present in the intended game: X, XII and XIV run the FFX CTB HUD (turn list, Talk / Overdrive / Summon rows, sphere-level results), and XII's disc strip ('Colour order: our estimate') shows only in XII. XI runs the FFX-2 ATB HUD (dressphere chips, Attack / Skill / Change / Item, EXP and per-dressphere AP on results), and its three Road links chain inside one battle screen. Absent from the other game: no FFX-2 gauge or dressphere UI in X, XII or XIV. The action-time switch is on only for the XI and XIII formations (fallen-aeons-road.ts ROAD_ACTION_TIME, action-time.ts: ACTION_TIME_ALL_FFX2 stays false), and IV, V and VI played at their normal pace. The shared parts (chapter select, veil) were checked in both games. Game cases from research/ffx-vs-ffx2-presentation.md and each chapter's research file.",
+      "evidence": ["critic/reviews/b975397b-focused/cand-seymour-natus-win-1600x900-s7-09-turn1-menu.jpg", "critic/reviews/b975397b-focused/cand-ffx2-fallen-aeons-win-2000x1012-s7-08-turn1-menu.jpg", "critic/reviews/b975397b-focused/cand-seymour-omnis-win-390x844-s7-08-turn1-menu.jpg"]
+    },
+    {
+      "id": "CHK-015", "result": "PASS", "mandatory": false, "mode": "automated", "minutes": 25,
+      "game": "both", "chapter": "X, XI, XII, XIV and I-VI, VIII, IX, XIII", "state": "title to chapter select to prep to battle to results",
+      "reason": "Every flow used the player's input: Enter / arrows from the title, the briefing, card selection (ArrowRight walk, then Enter), prep, scenes, menu navigation and targeting, Esc to pause and resume, CONFIRM on results. The phone board used taps and the desktop board used mouse clicks. Debug setup is labelled in every log: a seed before the first key, and enemy HP set to 1 after 25 intended turns (X, XII, XIV), after 3 to 6 turns (regression runs), or from the first turn (VIII phone). Evrae's Orders -> Pull back was also proved separately by real keys.",
+      "evidence": ["tools/zz-foc18.tmp/natus-win.log", "tools/zz-foc18.tmp/evrae-probe.mjs", "critic/reviews/b975397b-focused/cand-evrae-orders-after-2-enters-1600x900.jpg"]
+    },
+    {
+      "id": "CHK-022", "result": "PASS", "mandatory": false, "mode": "automated", "minutes": 30,
+      "game": "both", "chapter": "X, XI, XII, XIV, I, III, IV, V, VI, VIII, IX, XIII (win); II (loss)", "state": "outcome to destination",
+      "reason": "Every win ran post scene, then results (Victory, NEW BEST, ledger, wedge), then CONFIRM, then the rest of the post scene, then chapter select, where the card shows [cleared] (fe-card--cleared) and the strip reads '1 OF 13 BEATEN'. XI chained Shiva, the Sisters and Anima inside one battle, and XIV chained Grothia, Pterya and Spathi. II's loss went Defeat, then RETRY, then party prep. In a harness mishap, XI went Defeat, then RETRY, and resumed at the Sisters link. No flow stalled.",
+      "evidence": ["critic/reviews/b975397b-focused/cand-seymour-natus-win-1600x900-s7-14-back-at-select-cleared.jpg", "critic/reviews/b975397b-focused/cand-ffx2-fallen-aeons-win-2000x1012-s7-11-results.jpg", "critic/reviews/b975397b-focused/cand-seymour-omnis-win-390x844-s7-12-results.jpg", "tools/zz-foc18.tmp/reg-yunalesca.log"]
+    },
+    {
+      "id": "CHK-006", "result": "PASS", "mandatory": false, "mode": "automated", "minutes": 3,
+      "game": "both", "chapter": "X, XIV, I, III, IV, V, VI, VIII", "state": "cutscene veil (fade to black) and the next screen",
+      "reason": "Each dialogue line was checked with elementFromPoint at the box centre (box pointer-events briefly on). Of the lines played under the veil, 32 of 32 had the box on top in I, III, IV, V, VI, VIII and XIV. Natus's 19 veiled pre-scene lines were caught by an earlier version of the probe that could not see the box (pointer-events none), and the capture shows the line readable over black. #fade was opaque over a line 0 times. The veil cleared for the next screen every time: battle and results came up painted, never black.",
+      "evidence": ["critic/reviews/b975397b-focused/cand-seymour-natus-win-1600x900-s7-07-veiled-line.jpg", "critic/reviews/b975397b-focused/cand-isaaru-via-purifico-win-1600x900-s7-11-veiled-line.jpg", "critic/reviews/b975397b-focused/cand-seymour-natus-win-1600x900-s7-09-turn1-menu.jpg"]
+    },
+    {
+      "id": "CHK-002", "result": "PASS", "mandatory": false, "mode": "automated", "minutes": 3,
+      "game": "both", "chapter": "chapter select, pause in X, XI, XII, XIV", "state": "board and pause",
+      "reason": "The board fills the window with no horizontal scroll at 1280, 1600, 2000 and 390. Pause is full-bleed with no overflow at 1600x900 (X and XIV), 2000x1012 (XI) and 390x844 (XII).",
+      "evidence": ["critic/reviews/b975397b-focused/cselect/2000-clears-ch8.jpg", "critic/reviews/b975397b-focused/cand-ffx2-fallen-aeons-win-2000x1012-s7-09-pause.jpg", "critic/reviews/b975397b-focused/cand-isaaru-via-purifico-pauseprobe-esc-1600x900.jpg", "critic/reviews/b975397b-focused/cand-seymour-omnis-win-390x844-s7-09-pause.jpg"]
+    },
+    {
+      "id": "CHK-003", "result": "FAIL", "mandatory": false, "mode": "automated", "minutes": 3,
+      "game": "both", "chapter": "chapter select", "state": "board, fresh save",
+      "reason": "Smallest rendered text is 14 px at 1600x900 ('of 13 beaten', strip numerals) and 14 px at 2000x1012 ('Coming'), both at the floor. At 390x844 the heading 'Chapter select', 'Chapter I', '/13', 'CTB' and 'Final Fantasy X' render at 12 px. The live board measures the same 12 px at 390x844, so this is not a regression (FOC18-03). No card or plate name is clipped at any size.",
+      "evidence": ["tools/zz-foc18.tmp/textprobe.mjs", "critic/reviews/b975397b-focused/cselect/390-new-ch1.jpg"]
+    },
+    {
+      "id": "CHK-009", "result": "PASS", "mandatory": false, "mode": "automated", "minutes": 1,
+      "game": "both", "chapter": "chapter select", "state": "board",
+      "reason": "No .fe-card__name or .fe-hero__name has scrollWidth > clientWidth at 1600, 2000 or 390. The new names Seymour Natus, Seymour Omnis, Isaaru and Fallen Aeons are shown in full.",
+      "evidence": ["critic/reviews/b975397b-focused/cselect/1600-new-ch1.jpg", "critic/reviews/b975397b-focused/cselect/390-new-end.jpg"]
+    },
+    {
+      "id": "CHK-010", "result": "PASS", "mandatory": false, "mode": "manual", "minutes": 2,
+      "game": "both", "chapter": "chapter select", "state": "selected card",
+      "reason": "The selected card is lit in place: gold frame, gold numeral block and notch. The plate and dossier follow it. Arrow walks move one card at a time in number order, FFX then FFX-2, and skip the COMING VII. Tapping or clicking VII does nothing.",
+      "evidence": ["critic/reviews/b975397b-focused/cselect/1600-new-ch1.jpg", "critic/reviews/b975397b-focused/cselect/report.json"]
+    },
+    {
+      "id": "CHK-013", "result": "PASS", "mandatory": false, "mode": "manual", "minutes": 3,
+      "game": "both", "chapter": "chapter select", "state": "cards and plate, new and with clears",
+      "reason": "Every card and the plate show the boss painted on its own scene, with no silhouettes, masks, brightness(0) or pause plates. Every boss painting loaded, and every face point lies inside its card art at all four sizes. The sash sits top-left, off the boss's face. Judged in the running board at display size.",
+      "evidence": ["critic/reviews/b975397b-focused/tile-chapter-select-v2-ch8-cleared-1600.jpg", "critic/reviews/b975397b-focused/cselect/report.json"]
+    },
+    {
+      "id": "CHK-020", "result": "PASS", "mandatory": false, "mode": "automated", "minutes": 2,
+      "game": "both", "chapter": "chapter select; veil in IV, V, VI and I, III, VIII, XIV", "state": "shared screens",
+      "reason": "The v2 board treats both groups the same (ribbon, strip pips, plate). The veil fix holds in the FFX-2 post scenes (IV 4/4, V 5/5, VI 4/4 lines on top) as it does in FFX.",
+      "evidence": ["critic/reviews/b975397b-focused/cselect/1600-clears-ch6.jpg", "tools/zz-foc18.tmp/reg-ffx2-vegnagun-shuyin.log"]
+    },
+    {
+      "id": "CHK-004", "result": "PASS", "mandatory": false, "mode": "manual", "minutes": 3,
+      "game": "both", "chapter": "X, XI, XII, XIV (first menu)", "state": "first command menu",
+      "reason": "Sample of the first menu in each new chapter. X: Tidus 'Talk', row 0 of his menu. XIV: Yuna 'Grand Summon', marked IN OVERDRIVE, with the Overdrive row READY. XII (phone): TIP 'Wakka' for Tidus, and his Switch row is present. XI: the card names Paine / Darkness IN SKILL, and the open menu is a Dark Knight menu with a Skill row. Later turns were not audited.",
+      "evidence": ["critic/reviews/b975397b-focused/cand-isaaru-via-purifico-win-1600x900-s7-08-turn1-menu.jpg", "critic/reviews/b975397b-focused/cand-seymour-natus-win-1600x900-s7-09-turn1-menu.jpg"]
+    },
+    {
+      "id": "CHK-005", "result": "UNVERIFIED", "mandatory": false, "mode": "manual", "minutes": 0,
+      "game": "both", "chapter": "X, XI, XII, XIV", "state": "broken board",
+      "reason": "Not exercised in this pass: no KO'd or near-dead party member was set up to test the new tactics files (seymour-natus, seymour-omnis, ffx-isaaru, ffx2-fallen-aeons). Their builder benches are recorded, but a critic run on a broken board is owed to the deep review."
+    },
+    {
+      "id": "CHK-007", "result": "PASS", "mandatory": false, "mode": "manual", "minutes": 2,
+      "game": "both", "chapter": "X, XI, XII, XIV", "state": "prep, battle, pause, results, board copy",
+      "reason": "Read the player-facing text on the captured screens: no ids, section signs or research citations. 'Colour order: our estimate' on XII is the intended player-facing label for the GameFAQs disc cycle.",
+      "evidence": ["critic/reviews/b975397b-focused/cand-seymour-omnis-win-390x844-s7-08-turn1-menu.jpg", "critic/reviews/b975397b-focused/cand-seymour-natus-win-1600x900-s7-05-prep.jpg"]
+    },
+    {
+      "id": "CHK-008", "result": "PASS", "mandatory": false, "mode": "manual", "minutes": 2,
+      "game": "both", "chapter": "X, XI, XIV at desktop; XII at phone", "state": "first menu",
+      "reason": "Guide, advisor and intent panels clear the painted party and boss in the X, XI and XIV first-menu captures (1600 and 2000). On the phone, XII's intent line and disc strip sit between the rail and the party cards.",
+      "evidence": ["critic/reviews/b975397b-focused/cand-ffx2-fallen-aeons-win-2000x1012-s7-08-turn1-menu.jpg", "critic/reviews/b975397b-focused/cand-isaaru-via-purifico-win-1600x900-s7-08-turn1-menu.jpg"]
+    },
+    {
+      "id": "CHK-011", "result": "PASS", "mandatory": false, "mode": "manual", "minutes": 2,
+      "game": "both", "chapter": "X, XI (Shiva link), XII, XIV (Grothia link)", "state": "first menu",
+      "reason": "Natus and Mortibody, Omnis with his four discs, Shiva, and Grothia are each visible and separately placed in the first-menu captures. The Sisters and Anima links and Pterya / Spathi were played but not captured.",
+      "evidence": ["critic/reviews/b975397b-focused/cand-seymour-natus-win-1600x900-s7-09-turn1-menu.jpg", "critic/reviews/b975397b-focused/cand-seymour-omnis-win-390x844-s7-08-turn1-menu.jpg"]
+    },
+    {
+      "id": "CHK-023", "result": "PASS", "mandatory": false, "mode": "automated", "minutes": 2,
+      "game": "both", "chapter": "X, XI, XII, XIV", "state": "battle",
+      "reason": "The new AI and presentation reached the real screen. XII: the disc strip and enemy-intent line change as the discs turn (Fire x4, then Ice/Water). XI: the Shiva rules banner ('WATCH SHIVA RULES') and the chain through three formations with the Sisters' callouts. XIV: the aeon-duel links end in 5,000 AP to Yuna. X: Mortibody on the turn list.",
+      "evidence": ["tools/zz-foc18.tmp/omnis-win.log", "tools/zz-foc18.tmp/fa-win.log", "tools/zz-foc18.tmp/isaaru-win.log"]
+    }
+  ],
+  "targets": {
+    "required": 2,
+    "matched": 2,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0,
+    "detail": {
+      "matched": [
+        "Chapter select v2, option C (docs/concepts/chapter-select-v2/option-C/C-ch8-cleared-1600.jpg, D-183, 'polish' group) against the candidate board with five clears and Chapter VIII selected at 1600x900: boss on its scene on the plate and every card, fixed list, VII COMING in number order between III and VIII, VICTORY sash plus card ribbon with best time, strip '5 OF 13 BEATEN' counting listed chapters only. The deviations are the recorded README ones: sash top-left, time on the ribbon, touch wording on the phone. The phone frame (C-ch1-open-390) also matches as one scrolling column. Composites: tile-chapter-select-v2-ch8-cleared-1600.jpg and tile-chapter-select-v2-ch1-open-390.jpg",
+        "Chapter VII Macalania tile (docs/concepts/chapters/macalania/renders/backdrop-a.png): its build state is 'LOCKED as a COMING card on chapter select until Bailey...'. The candidate shows VII COMING, and clicks, taps and arrows cannot select or start it."
+      ],
+      "notCompared": "The chapter tiles for Natus (natus/sheet.jpg) and Fallen Aeons (o1-sisters/sheet.jpg) have no 'build' field describing a moment to capture. The older presentation tile A-chapter-select.jpg is superseded on this subject by the later D-183 pick."
+    }
+  },
+  "issues": [
+    {
+      "id": "FOC18-01",
+      "severity": "major",
+      "title": "Chapter XI: with the Road's 3 s action time, Shiva and Anima no longer punish the credibly wrong line; only the Sisters do",
+      "game": "ffx2",
+      "chapter": "ffx2-fallen-aeons (XI), Shiva and Anima links",
+      "expected": "each link teaches its lesson (Shiva: action counter plus Stop protection; Anima: attrition with a Holy weakness), so a credibly wrong line loses more often than the intended one at human pace",
+      "observed": "the builders' independent check measured the wrong line winning as often as the right one on Shiva and on Anima (40/40 vs 40/40) with option A on; the separation survives only on the Sisters. Not re-measured here; the real-key win at 2000x1012 does not bear on it",
+      "repro": "docs/plans/fallen-aeons-bench.md and docs/concepts/chapters/fallen-aeons/ship/CHECK.md (the credible-mistake rows, option A)",
+      "evidence": ["docs/concepts/chapters/fallen-aeons/ship/CHECK.md"],
+      "confidence": "medium (the builders' measurement, reused and not re-run by this critic)",
+      "requirement": "RUBRIC §2 encounter authenticity ('never punish a canonical tactic for being strong', but the lessons must still bite); Bailey's option A pick of 2026-09-25 took this trade-off knowingly",
+      "where": "src/data/ffx2/enemies/fallen-aeons-road.ts ROAD_ACTION_TIME_SECONDS = 3 (traced)",
+      "fix": "ask Bailey whether to keep option A as is or to take action time off the Shiva and Anima links only (the switch is per formation); no boss number moves either way",
+      "acceptanceCheck": "the bench shows the wrong line losing measurably more often than the intended line on each link, or Bailey's recorded yes to the trade-off",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "FOC18-02",
+      "severity": "polish",
+      "title": "Chapter X: Mortibody's turn-list chip shows an 'M' monogram through the transparent painting",
+      "game": "ffx",
+      "chapter": "seymour-natus (X)",
+      "expected": "a painted face or body crop only, like Mortiorchis in Chapter I",
+      "observed": "a faint 'M' letter tile sits behind or over Mortibody's body crop in the CTB list at 1600x900",
+      "repro": "real keys to Chapter X, first menu; read the right-hand turn list",
+      "evidence": ["critic/reviews/b975397b-focused/zoom-natus-ctb-mortibody.jpg", "critic/reviews/b975397b-focused/zoom-flux-ctb.jpg"],
+      "confidence": "medium (seen at 2x zoom of a 1600x900 capture; DOM not read)",
+      "requirement": "CHK-012",
+      "where": "suspected: the CTB chip's monogram fallback stays visible under a transparent-background portrait (no portraits/mortibody.png ships)",
+      "fix": "give Mortibody a portrait crop, or hide the monogram once the image loads",
+      "acceptanceCheck": "Chapter X first menu: the Mortibody chip shows art only",
+      "inNewFeature": true
+    },
+    {
+      "id": "FOC18-03",
+      "severity": "polish",
+      "title": "Phone chapter select: five text runs at 12 px (below the 14 px floor), unchanged from live",
+      "game": "both",
+      "chapter": "chapter select at 390x844",
+      "expected": "no player-facing text under 14 css px",
+      "observed": "the 'Chapter select' heading, 'Chapter I', '/13', 'CTB' and 'Final Fantasy X' render at 12 px on the candidate; live measures 12 px on the same 390x844 board",
+      "repro": "node tools/zz-foc18.tmp/textprobe.mjs against the candidate and against the live URL",
+      "evidence": ["tools/zz-foc18.tmp/textprobe.mjs", "critic/reviews/b975397b-focused/cselect/390-new-ch1.jpg"],
+      "confidence": "high (computed font size times ancestor transforms)",
+      "requirement": "CHK-003",
+      "where": "suspected: the phone rules of src/app/screens/frontend/chapter-select-c.css and frontend.css",
+      "fix": "raise the phone eyebrow, strip and chip type tokens to 14 px",
+      "acceptanceCheck": "the text probe reports a 14 px minimum at 390x844",
+      "introducedByCandidate": false,
+      "regressionVsLive": false
+    },
+    {
+      "id": "FOC18-04",
+      "severity": "polish",
+      "title": "Chapter select: selecting a card nudges the cards below it by 2 px (no reordering)",
+      "game": "both",
+      "chapter": "chapter select at 1600x900 and 2000x1012",
+      "expected": "'the selected card lit in place'; nothing else moves",
+      "observed": "the newly selected card grows 2 px and moves 2 to 2.5 px left, the old one returns 9 to 10 px right, and when Chapter I is reselected every card below shifts down 2 px. The order never changes and Enter never starts another chapter (13 of 13 clicks began the clicked chapter), so this is not the shifting list Bailey disliked",
+      "repro": "node tools/zz-foc18.tmp/cardmove.mjs <base> 1600 900 1",
+      "evidence": ["tools/zz-foc18.tmp/cardmove.mjs", "critic/reviews/b975397b-focused/cselect/report.json"],
+      "confidence": "high (bounding rects before and after each click, hover settled first)",
+      "requirement": "targets.json chapter-select v2 reaction: disliked 'the list that shifts under the cursor'",
+      "where": "suspected: the selected-card border / notch rule in chapter-select-c.css adds 2 px of height",
+      "fix": "reserve the selected border on every card (transparent), or draw it with an outline or inset shadow",
+      "acceptanceCheck": "cardmove probe: only the selected and previously selected cards change, with 0 px height change"
+    },
+    {
+      "id": "FOC18-05",
+      "severity": "suggestion",
+      "title": "After a win the board comes back on Chapter I, not on the chapter just beaten",
+      "game": "both",
+      "chapter": "chapter select after any win",
+      "expected": "a player who just beat XI finds XI (with its new ribbon) selected",
+      "observed": "selectedIndex 0 (Seymour Flux) after every win in this pass; same initialIndex ?? 0 logic on live 1a680e41, so not a regression",
+      "repro": "win any chapter, CONFIRM through results, read window.__pyrefly.snapshotState().screenState.selectedId",
+      "evidence": ["tools/zz-foc18.tmp/fa-win.log"],
+      "confidence": "high",
+      "requirement": "none (usability suggestion; the fixed-list decision says nothing about the return position)",
+      "where": "src/app/screens/ChapterSelectScreen.ts line 110 (traced)",
+      "fix": "pass the finished chapter's index as initialIndex on the way back (needs Bailey's yes; it is a behaviour choice)",
+      "acceptanceCheck": "after a win the beaten card is the selected one"
+    },
+    {
+      "id": "FOC18-06",
+      "severity": "suggestion",
+      "title": "Question for Bailey: Chapter XIV's trimmed pause-card copy is an agent's inference",
+      "game": "ffx",
+      "chapter": "isaaru-via-purifico (XIV)",
+      "expected": "copy Bailey has named",
+      "observed": "'Summoner Against Summoner' / 'three aeons, one fayth each' are recorded as INFERRED in NOW.md (D-186)",
+      "repro": "pause in Chapter XIV, CHAPTER tab",
+      "evidence": ["critic/reviews/b975397b-focused/cand-isaaru-via-purifico-pauseprobe-esc-1600x900.jpg"],
+      "confidence": "high",
+      "requirement": "RUBRIC §7: an inferred item never fails a build; it is asked",
+      "where": "src/data/chapter-meta-isaaru.ts",
+      "fix": "ask Bailey",
+      "acceptanceCheck": "Bailey's recorded answer"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "npx tsc --noEmit clean in D:/pyrefly-rel18; npx vitest run: 8012 passed, 13 skipped, 0 failed (432 files); node tools/orphans.mjs: 24 orphans, the same count the builders recorded, none new",
+      "Chapter select v2 (both games): 1280x720, 1600x900, 2000x1012 and 390x844, fresh save and five clears. Order I II III VII(COMING) VIII IX X XII XIV | IV V VI XI XIII; arrow walks; up/down between the games; VII unselectable by click or tap; each of the 13 playable cards clicked or tapped twice starts that chapter (13/13 at every size); plate click and Enter begin; Esc goes back to the title; ribbons with best time; '5 OF 13 BEATEN'; 0 console errors",
+      "Chapter X Natus (FFX) at 1600x900: real keys from the title, prep, 32-line pre scene under the veil, Esc pause and resume, 25 intended turns (Talk, Auron switch, Ixion, Hi-Potion), then labelled 1-HP finish; post scene, results (6,300 AP, sphere levels), chapter select [cleared]",
+      "Chapter XI Fallen Aeons (FFX-2) at 2000x1012: real keys, Esc pause, Attack through Shiva, the Sisters and Anima in one battle (labelled 1-HP after turn 4), post scene, results (EXP 5,478, Tetra Band), chapter select [cleared]; an earlier harness run also showed Defeat, then RETRY, resuming at the Sisters link",
+      "Chapter XII Omnis (FFX) at 390x844: real keys and phone HUD, Esc pause, 25 intended turns (Armor Break, attacks on Omnis and discs), labelled finish, 12-line post scene, results (24,000 AP, Lv. 3 Key Sphere), chapter select [cleared]",
+      "Chapter XIV Isaaru (FFX) at 1600x900: real keys, Grand Summon / Valefor / Bahamut Mega Flare across the Grothia, Pterya and Spathi links, labelled finish on Spathi, veiled post lines readable, results 5,000 AP, chapter select [cleared]; Esc pause probed at Yuna's and an aeon's menu (3/3 opened the pause)",
+      "Regression on the candidate, chapters already live (win unless noted): I (1600, 45 post lines, 6 veiled lines readable), II (2000, Defeat, then RETRY, then prep), III (1600), IV (1600), V (2000, every Vegnagun part and Shuyin), VI (390), VIII (390; Orders -> Pull back also by real keys at 1600), IX (1600), XIII (1600). Esc pause worked in each; 0 console errors and 0 HTTP errors in every run",
+      "Live 1a680e41 comparison: chapter select v1 and the Chapter I entry to the first menu at 1600x900 (bundle index-BVdUtZb-.js), and chapter-select text sizes at three sizes",
+      "Data audit (dataAudit true), sampled against research/: Omnis HP 80,000 / Def 180 / MDef 100 / Mag 35 / Agi 40 (ffx-seymour-omnis.md §1.1, O-1); Isaaru 10 HP; Grothia / Pterya / Spathi 8,000 / 12,000 / 20,000 (ffx-isaaru-bevelle.md §2.2); duel AP 5,000 (§11 I-1); Shiva 14,800 HP, Agi 119 (conflict F-3, ranked source); Anima 36,000 (ffx2-fallen-aeons.md); the Natus guide's 'Haste Tidus and Auron, never a third' (ffx-seymour-natus-highbridge.md strategy 7, three sources). All match. ROAD_ACTION_TIME_SECONDS 3 is labelled [estimate], Bailey's pick, unsourced (§12.4)"
+    ],
+    "reused": [
+      {
+        "what": "Human-pace win rates: X 169/200, XI 159/200 (option A), XIV 125/200; XI's credible-mistake rows (FOC18-01)",
+        "from": "the builders' benches and independent checks (docs/plans/fallen-aeons-bench.md, docs/concepts/chapters/*/ship/CHECK.md)",
+        "why": "they were measured on the same engine commits the candidate ships (no engine or data change to those chapters after them); a focused pass does not re-run 200-seed benches"
+      },
+      {
+        "what": "Results-wedge art by game, the briefing option A text, phone HUD B tap behaviour",
+        "from": "critic/reviews/1a680e41-focused.md",
+        "why": "ResultsScreen.ts, victoryLine.ts and ffx2/CommandMenu.ts are unchanged since 1a680e41; the briefing now counts listed chapters ('Thirteen fights', seen on the candidate) and its other lines are unchanged"
+      }
+    ],
+    "notTested": [
+      "Chapter VII Macalania pause plate A2 and party layout B: the chapter is still LOCKED, so no player can reach them (only the COMING card was checked)",
+      "CHK-005: the new tactics files on a broken board",
+      "The approved-art hash check (approvedArtCheck is false in the plan)",
+      "Full intended-line wins without the labelled 1-HP finish for X, XII and XIV (builder benches reused); the Chapter II win (the harness forced attack-only and Yunalesca's form 3 won, which is canonical)",
+      "Audio, load and frame times, real devices, Safari, gamepad"
+    ]
+  },
+  "regressions": [],
+  "nextReview": "Live verification of b975397b after the deploy (CHK-017), then the deep review this shared-system change owes on the live build (plan depth deep, deepAfterDeploy true, carried deep obligation from 1a680e41). It should include CHK-005 on the four new tactics, a full intended-line win in X, XII and XIV, and FOC18-01 put to Bailey.",
+  "elapsedMinutes": 110,
+  "notes": "Browser mode: PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), no black canvas, no fallback; one browser at a time. Harness failures that are not product defects: the first XI run used the FFX menu driver and idled; an FFX loop ended on a link's interim victory; the Evrae driver did not press Enter a second time on Orders (the real-key probe shows two Enters issue the order). Each was fixed in the harness and re-run. The server on 5421 was stopped by its PID (52192) and the port was confirmed closed."
+}
