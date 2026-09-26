@@ -32,9 +32,12 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'seymour-anima-macalania': 'ffx',
   'evrae-airship': 'ffx',
   'yojimbo-cavern': 'ffx',
+  'seymour-natus': 'ffx',
   'ffx2-trema': 'ffx2',
   'ffx2-den-of-woe': 'ffx2',
+  'ffx2-fallen-aeons': 'ffx2',
   'seymour-omnis': 'ffx',
+  'isaaru-via-purifico': 'ffx',
 };
 
 /**

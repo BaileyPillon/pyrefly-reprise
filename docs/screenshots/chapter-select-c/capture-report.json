@@ -1,0 +1,390 @@
+{
+  "runs": [
+    {
+      "size": "1600",
+      "save": "new",
+      "geometry": {
+        "overlaps": [],
+        "clipped": [],
+        "hscroll": false
+      },
+      "board": {
+        "selectedIndex": 0,
+        "selectedId": "seymour-flux",
+        "tiles": 10,
+        "coming": [
+          "seymour-anima-macalania"
+        ],
+        "cleared": [],
+        "order": [
+          "seymour-flux",
+          "yunalesca",
+          "braskas-final-aeon",
+          "seymour-anima-macalania",
+          "evrae-airship",
+          "yojimbo-cavern",
+          "ffx2-bahamut",
+          "ffx2-vegnagun-shuyin",
+          "ffx2-leblanc",
+          "ffx2-trema"
+        ],
+        "beaten": 0,
+        "total": 9
+      },
+      "selectedAfterMove": "evrae-airship",
+      "secondClick": {
+        "target": "evrae-airship",
+        "before": "chapter-select",
+        "after": "party-prep"
+      },
+      "errors": [],
+      "shots": [
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-new-ch1.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-new-ch8.jpg"
+      ],
+      "first": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-new-ch1.jpg",
+      "ch8": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-new-ch8.jpg",
+      "ch6": null
+    },
+    {
+      "size": "1600",
+      "save": "two",
+      "geometry": {
+        "overlaps": [],
+        "clipped": [],
+        "hscroll": false
+      },
+      "board": {
+        "selectedIndex": 0,
+        "selectedId": "seymour-flux",
+        "tiles": 10,
+        "coming": [
+          "seymour-anima-macalania"
+        ],
+        "cleared": [
+          "evrae-airship",
+          "ffx2-leblanc"
+        ],
+        "order": [
+          "seymour-flux",
+          "yunalesca",
+          "braskas-final-aeon",
+          "seymour-anima-macalania",
+          "evrae-airship",
+          "yojimbo-cavern",
+          "ffx2-bahamut",
+          "ffx2-vegnagun-shuyin",
+          "ffx2-leblanc",
+          "ffx2-trema"
+        ],
+        "beaten": 2,
+        "total": 9
+      },
+      "selectedAfterMove": "evrae-airship",
+      "secondClick": {
+        "target": "ffx2-leblanc",
+        "before": "chapter-select",
+        "after": "party-prep"
+      },
+      "errors": [],
+      "shots": [
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-two-ch1.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-two-ch8.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-two-ch6.jpg"
+      ],
+      "first": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-two-ch1.jpg",
+      "ch8": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-two-ch8.jpg",
+      "ch6": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1600-two-ch6.jpg"
+    },
+    {
+      "size": "1280",
+      "save": "new",
+      "geometry": {
+        "overlaps": [],
+        "clipped": [],
+        "hscroll": false
+      },
+      "board": {
+        "selectedIndex": 0,
+        "selectedId": "seymour-flux",
+        "tiles": 10,
+        "coming": [
+          "seymour-anima-macalania"
+        ],
+        "cleared": [],
+        "order": [
+          "seymour-flux",
+          "yunalesca",
+          "braskas-final-aeon",
+          "seymour-anima-macalania",
+          "evrae-airship",
+          "yojimbo-cavern",
+          "ffx2-bahamut",
+          "ffx2-vegnagun-shuyin",
+          "ffx2-leblanc",
+          "ffx2-trema"
+        ],
+        "beaten": 0,
+        "total": 9
+      },
+      "selectedAfterMove": "evrae-airship",
+      "secondClick": {
+        "target": "evrae-airship",
+        "before": "chapter-select",
+        "after": "party-prep"
+      },
+      "errors": [],
+      "shots": [
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-new-ch1.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-new-ch8.jpg"
+      ],
+      "first": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-new-ch1.jpg",
+      "ch8": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-new-ch8.jpg",
+      "ch6": null
+    },
+    {
+      "size": "1280",
+      "save": "two",
+      "geometry": {
+        "overlaps": [],
+        "clipped": [],
+        "hscroll": false
+      },
+      "board": {
+        "selectedIndex": 0,
+        "selectedId": "seymour-flux",
+        "tiles": 10,
+        "coming": [
+          "seymour-anima-macalania"
+        ],
+        "cleared": [
+          "evrae-airship",
+          "ffx2-leblanc"
+        ],
+        "order": [
+          "seymour-flux",
+          "yunalesca",
+          "braskas-final-aeon",
+          "seymour-anima-macalania",
+          "evrae-airship",
+          "yojimbo-cavern",
+          "ffx2-bahamut",
+          "ffx2-vegnagun-shuyin",
+          "ffx2-leblanc",
+          "ffx2-trema"
+        ],
+        "beaten": 2,
+        "total": 9
+      },
+      "selectedAfterMove": "evrae-airship",
+      "secondClick": {
+        "target": "ffx2-leblanc",
+        "before": "chapter-select",
+        "after": "party-prep"
+      },
+      "errors": [],
+      "shots": [
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-two-ch1.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-two-ch8.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-two-ch6.jpg"
+      ],
+      "first": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-two-ch1.jpg",
+      "ch8": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-two-ch8.jpg",
+      "ch6": "D:/Final Fantasy/docs/screenshots/chapter-select-c/1280-two-ch6.jpg"
+    },
+    {
+      "size": "2000",
+      "save": "new",
+      "geometry": {
+        "overlaps": [],
+        "clipped": [],
+        "hscroll": false
+      },
+      "board": {
+        "selectedIndex": 0,
+        "selectedId": "seymour-flux",
+        "tiles": 10,
+        "coming": [
+          "seymour-anima-macalania"
+        ],
+        "cleared": [],
+        "order": [
+          "seymour-flux",
+          "yunalesca",
+          "braskas-final-aeon",
+          "seymour-anima-macalania",
+          "evrae-airship",
+          "yojimbo-cavern",
+          "ffx2-bahamut",
+          "ffx2-vegnagun-shuyin",
+          "ffx2-leblanc",
+          "ffx2-trema"
+        ],
+        "beaten": 0,
+        "total": 9
+      },
+      "selectedAfterMove": "evrae-airship",
+      "secondClick": {
+        "target": "evrae-airship",
+        "before": "chapter-select",
+        "after": "party-prep"
+      },
+      "errors": [],
+      "shots": [
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-new-ch1.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-new-ch8.jpg"
+      ],
+      "first": "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-new-ch1.jpg",
+      "ch8": "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-new-ch8.jpg",
+      "ch6": null
+    },
+    {
+      "size": "2000",
+      "save": "two",
+      "geometry": {
+        "overlaps": [],
+        "clipped": [],
+        "hscroll": false
+      },
+      "board": {
+        "selectedIndex": 0,
+        "selectedId": "seymour-flux",
+        "tiles": 10,
+        "coming": [
+          "seymour-anima-macalania"
+        ],
+        "cleared": [
+          "evrae-airship",
+          "ffx2-leblanc"
+        ],
+        "order": [
+          "seymour-flux",
+          "yunalesca",
+          "braskas-final-aeon",
+          "seymour-anima-macalania",
+          "evrae-airship",
+          "yojimbo-cavern",
+          "ffx2-bahamut",
+          "ffx2-vegnagun-shuyin",
+          "ffx2-leblanc",
+          "ffx2-trema"
+        ],
+        "beaten": 2,
+        "total": 9
+      },
+      "selectedAfterMove": "evrae-airship",
+      "secondClick": {
+        "target": "ffx2-leblanc",
+        "before": "chapter-select",
+        "after": "party-prep"
+      },
+      "errors": [],
+      "shots": [
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-two-ch1.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-two-ch8.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-two-ch6.jpg"
+      ],
+      "first": "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-two-ch1.jpg",
+      "ch8": "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-two-ch8.jpg",
+      "ch6": "D:/Final Fantasy/docs/screenshots/chapter-select-c/2000-two-ch6.jpg"
+    },
+    {
+      "size": "390",
+      "save": "new",
+      "geometry": {
+        "overlaps": [],
+        "clipped": [],
+        "hscroll": false
+      },
+      "board": {
+        "selectedIndex": 0,
+        "selectedId": "seymour-flux",
+        "tiles": 10,
+        "coming": [
+          "seymour-anima-macalania"
+        ],
+        "cleared": [],
+        "order": [
+          "seymour-flux",
+          "yunalesca",
+          "braskas-final-aeon",
+          "seymour-anima-macalania",
+          "evrae-airship",
+          "yojimbo-cavern",
+          "ffx2-bahamut",
+          "ffx2-vegnagun-shuyin",
+          "ffx2-leblanc",
+          "ffx2-trema"
+        ],
+        "beaten": 0,
+        "total": 9
+      },
+      "selectedAfterMove": "evrae-airship",
+      "secondClick": {
+        "target": "evrae-airship",
+        "before": "chapter-select",
+        "after": "party-prep"
+      },
+      "errors": [],
+      "shots": [
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-new-ch1.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-new-ch8.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-new-end.jpg"
+      ],
+      "first": "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-new-ch1.jpg",
+      "ch8": "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-new-ch8.jpg",
+      "ch6": null
+    },
+    {
+      "size": "390",
+      "save": "two",
+      "geometry": {
+        "overlaps": [],
+        "clipped": [],
+        "hscroll": false
+      },
+      "board": {
+        "selectedIndex": 0,
+        "selectedId": "seymour-flux",
+        "tiles": 10,
+        "coming": [
+          "seymour-anima-macalania"
+        ],
+        "cleared": [
+          "evrae-airship",
+          "ffx2-leblanc"
+        ],
+        "order": [
+          "seymour-flux",
+          "yunalesca",
+          "braskas-final-aeon",
+          "seymour-anima-macalania",
+          "evrae-airship",
+          "yojimbo-cavern",
+          "ffx2-bahamut",
+          "ffx2-vegnagun-shuyin",
+          "ffx2-leblanc",
+          "ffx2-trema"
+        ],
+        "beaten": 2,
+        "total": 9
+      },
+      "selectedAfterMove": "evrae-airship",
+      "secondClick": {
+        "target": "ffx2-leblanc",
+        "before": "chapter-select",
+        "after": "party-prep"
+      },
+      "errors": [],
+      "shots": [
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-two-ch1.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-two-ch8.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-two-ch6.jpg",
+        "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-two-end.jpg"
+      ],
+      "first": "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-two-ch1.jpg",
+      "ch8": "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-two-ch8.jpg",
+      "ch6": "D:/Final Fantasy/docs/screenshots/chapter-select-c/390-two-ch6.jpg"
+    }
+  ]
+}

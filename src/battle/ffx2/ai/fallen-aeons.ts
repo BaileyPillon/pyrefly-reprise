@@ -24,6 +24,9 @@ import { mem, setMem } from '../internal.ts';
 export const AC = 'ac';
 /** The Overdrive threshold, every aeon [§4]. */
 export const AC_OVERDRIVE = 100;
+/** Anima's Pain count (AI memory), and the `script-trigger` name emitted as she picks her third. */
+const PAINS = 'pains';
+export const ANIMA_THIRD_PAIN = 'anima-third-pain';
 
 /** The flag the bench flips to measure FA8 b. */
 export const AC_TRIGGER_FLAG = 'fallenAeonsAcTrigger';
@@ -115,6 +118,12 @@ export const x2AnimaScript: AiScript = {
     }
     const id = ctx.rng.int(0, 4) < 4 ? 'x2-anima-stare' : 'x2-anima-pain';
     bumpAc(self, 5);
+    if (id === 'x2-anima-pain') {
+      // Count her Pains; the third gets Yuna's callout (FA16 a; `src/story/scripts/ffx2-fallen-aeons.ts`).
+      const pains = mem(self, PAINS) + 1;
+      setMem(self, PAINS, pains);
+      if (pains === 3) ctx.emit({ type: 'script-trigger', name: ANIMA_THIRD_PAIN, payload: { who: self.id } });
+    }
     return use(id, randomGirl(ctx));
   },
   ...attackedHooks(5),

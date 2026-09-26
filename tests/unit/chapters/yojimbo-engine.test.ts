@@ -495,8 +495,9 @@ describe('The Cavern build and the chapter registration', () => {
     expect(ch).toMatchObject({ game: 'ffx', number: 9, title: 'Yojimbo' });
     expect(ch?.enemyGroupRef.id).toBe(GROUP_ID);
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
-    expect(CHAPTERS.map((c) => c.id).slice(-3)).toEqual(['evrae-airship', 'yojimbo-cavern', 'ffx2-trema']); // XIII listed 2026-09-25
-    expect(CHAPTER_IDS.slice(-2)).toEqual(['yojimbo-cavern', 'ffx2-trema']);
+    // X, XII, XIII and XIV listed 2026-09-25, after IX.
+    expect(CHAPTERS.map((c) => c.id).slice(-6)).toEqual(['evrae-airship', 'yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico']);
+    expect(CHAPTER_IDS.slice(-5)).toEqual(['yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico']);
     // The story layer (tests/unit/chapters/yojimbo-content.test.ts pins its lines):
     // the pre scene ends by opening the battle, the post scene shows results.
     expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' });
@@ -528,7 +529,11 @@ describe('FFX only: nothing here reaches another chapter or FFX-2', () => {
       for (const id of st.enemyIds) {
         const e = st.combatants[id] as FFXCombatant;
         expect(e.overdrive?.enemyGaugeRules, `${ch.id}/${id}`).not.toBe('yojimbo');
-        if (e.alive && !e.removed) expect(inQueue.has(id), `${ch.id}/${id} lost its turn`).toBe(true);
+        // Chapter XII's four Mortiphasm discs own no turn by design (B22 = a, `applyOmnisSetup`),
+        // pinned in tests/unit/chapters/omnis-engine.test.ts; everything else keeps its turn.
+        // Chapter XIV's Isaaru is a bystander with no turn by design (B8); only his aeons act.
+        const turnless = (ch.id === 'seymour-omnis' && id.startsWith('mortiphasm-')) || (ch.id === 'isaaru-via-purifico' && id === 'isaaru');
+        if (e.alive && !e.removed && !turnless) expect(inQueue.has(id), `${ch.id}/${id} lost its turn`).toBe(true);
       }
     }
   });

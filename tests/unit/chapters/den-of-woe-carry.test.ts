@@ -146,13 +146,15 @@ describe('the flag is the only way in: every other chain carries what it always 
    * chain, seeds 1-8, `intendedStrategy`, D = 0. Chapter 5's first eight equal the
    * `ffx2-atb-golden.test.ts` pins. The Sisters' runs exercise the "set to" path
    * that now also runs riders (Delta Attack has none): 4 Delta Attacks across
-   * seeds 1-8, counted 2026-09-25.
+   * seeds 1-8, counted 2026-09-25. Chapter XI's two rows re-recorded 2026-09-26 on an export of
+   * `main` 30420871 (its Fallen Aeons ship layer, option A: 3 s of action time on the Road links,
+   * moves those logs), and the merged branch prints the same hashes: the Den's flag moves nothing.
    */
   const BASE = {
     ch5: ['f5874befbb32bca2', '3d936ba1a11afdd9', '6e4e0fb5790b3f6a', '65a2f90ebd84a0a3', '5bcf9bc9c12b4f79', '1f317c664da2fa56', 'f2bbb405d2f7559a', '2460bc9767b55825'],
     ch6: ['0aadde1f8d3aff80', '995cb5ec3f5834e0', '67647d2cb3df6954', '31f76e6f441c188f', 'f25cf6be4eb333fd', '66b37dd52d704894', '5030ad54d4e4d192', '11b9c3bbc8f0a712'],
-    ch11: ['80a3a08d15d5a0ce', 'e472b1ff05535728', '662ee19744422dbb', 'dd1c791ffa2f41d6', '11d4214a0f788bce', '44006cd052148b1d', '998d88ffbeec0c78', '522b508037e30825'],
-    sisters: ['82dd30838f13ef2b', 'f15bb46d43c44d92', '7146e484f29262ab', '98d6337c46636466', '2ed76b894bc74539', '36c03240823c36bb', '196ef488a130ca0e', 'c4efaaee767d9973'],
+    ch11: ['528ec0db4b37672a', 'e46413ec4c70d2a6', '288bc47e48393c09', '1ac2781ac707395e', '4bb93d7af6857f5b', 'dd949f68a130511e', '13cfe04e09776a7c', 'b9fe2723647eb6cc'],
+    sisters: ['03941e8ce26cebf7', '68f3e1783ded11f6', '4a4973a5ffe2e7d4', '8850cc34e6365230', '99db911fb8fdae1b', 'cd46efeb96a5b815', 'b91a2538521eefc4', '40d4d993c40a1bc7'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {

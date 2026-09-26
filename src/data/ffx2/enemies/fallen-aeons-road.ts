@@ -36,6 +36,22 @@ const AEON_COMMON: StatusImmunities = { ...STANDARD_AILMENT_IMMUNITY, stop: 255 
 
 const AEON_CUE = [{ at: 'start' as const, track: 'boss-ffx2-aeon' as const, fadeMs: 800 }];
 
+/**
+ * **Action time on the Road's three links only** (Bailey, 2026-09-25, "All your recommendations",
+ * taking the Chapter XI ship gate's option A; `docs/plans/fallen-aeons-bench.md`, measured
+ * 159/200 (79.5 %) at human pace on the Wait split). Seconds each action takes before its actor's
+ * gauge refills (`src/battle/ffx2/action-time.ts`): the rule is sourced `[verified: 2 sources]`, the
+ * length is not (`research/ffx2-trema.md` §12.4). The same switch and labelled estimate as Chapter
+ * XIII's `CLOISTER_ACTION_TIME_SECONDS`; no other chapter moves (`ACTION_TIME_ALL_FFX2` stays
+ * false). `ROAD_ACTION_TIME_ON = false` turns it off again. No boss number moves.
+ */
+export const ROAD_ACTION_TIME_ON: boolean = true;
+/** **`[estimate]`, Bailey's pick: 3 s of game time per action, on the Road links only.** Unsourced (§12.4). */
+export const ROAD_ACTION_TIME_SECONDS = 3;
+/** Seconds of action time on the Road links: {@link ROAD_ACTION_TIME_SECONDS}, or 0 with the switch off. */
+export const ROAD_ACTION_TIME = ROAD_ACTION_TIME_ON ? ROAD_ACTION_TIME_SECONDS : 0;
+const actionTime = ROAD_ACTION_TIME > 0 ? { actionTimeSeconds: ROAD_ACTION_TIME } : {};
+
 /** Shiva, bestiary #181 (§3.1). */
 export const x2Shiva: EnemyDef = {
   id: 'x2-shiva',
@@ -152,6 +168,7 @@ export const roadShivaGroup: EnemyGroupDef = {
   canEscape: false,
   nextGroupId: ROAD_SISTERS,
   musicCues: AEON_CUE,
+  ...actionTime, // ROAD_ACTION_TIME: 3 s, Bailey's option A
 };
 
 /** Link 2: the Magus Sisters. `Farplane - BOSS 228 Mindy 1 Sandy 1 Cindy 1` [SinirothX]. */
@@ -162,6 +179,7 @@ export const roadSistersGroup: EnemyGroupDef = {
   canEscape: false,
   nextGroupId: ROAD_ANIMA,
   musicCues: AEON_CUE,
+  ...actionTime, // ROAD_ACTION_TIME: 3 s, Bailey's option A
   restoresPartyOnEntry: true, // FA2 b / FA3 b: the Save Sphere after Shiva
 };
 
@@ -172,6 +190,7 @@ export const roadAnimaGroup: EnemyGroupDef = {
   enemies: [x2Anima],
   canEscape: false,
   musicCues: AEON_CUE,
+  ...actionTime, // ROAD_ACTION_TIME: 3 s, Bailey's option A
   restoresPartyOnEntry: true, // FA2 b / FA3 b: the Save Sphere after the Sisters
 };
 

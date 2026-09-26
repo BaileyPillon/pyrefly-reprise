@@ -59,14 +59,17 @@ import { ffx2LeblancScripts } from './scripts/ffx2-leblanc.ts';
 import { seymourAnimaMacalaniaScripts } from './scripts/seymour-anima-macalania.ts';
 import { evraeAirshipScripts } from './scripts/evrae-airship.ts';
 import { yojimboCavernScripts } from './scripts/yojimbo-cavern.ts';
+import { seymourNatusScripts } from './scripts/seymour-natus.ts';
 import { TREMA_AI_TRIGGERS, TREMA_LINK_SEAM, ffx2TremaShippedScripts } from './scripts/ffx2-trema.ts';
+import { OMNIS_STORY_TRIGGERS, seymourOmnisScripts } from './scripts/seymour-omnis.ts';
+import { ISAARU_SEAMS, isaaruScripts } from './scripts/ffx-isaaru.ts';
 
 /** Chapter ids, matching `data/encounters.ts`. */
 export type ChapterKey =
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern'
-  | 'ffx2-trema';
+  | 'seymour-natus' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico';
 
 /** Every chapter's story layer, in play order. */
 export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
@@ -79,7 +82,10 @@ export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
   'seymour-anima-macalania': seymourAnimaMacalaniaScripts,
   'evrae-airship': evraeAirshipScripts,
   'yojimbo-cavern': yojimboCavernScripts,
+  'seymour-natus': seymourNatusScripts, // Chapter X as listed 2026-09-25: the Highbridge of Bevelle
+  'seymour-omnis': seymourOmnisScripts, // Chapter XII as listed 2026-09-25: the Garden of Pain
   'ffx2-trema': ffx2TremaShippedScripts, // Chapter XIII as listed 2026-09-25: Oversoul Paragon, then Trema
+  'isaaru-via-purifico': isaaruScripts, // Chapter XIV as listed 2026-09-25: the Via Purifico
 };
 
 export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
@@ -107,29 +113,24 @@ export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
  *   `auron-halfway` (half of `HEAD_FIRE_AT_TURN`), `shuyin-line-3`..`6` (every
  *   `HEAD_LINE_INTERVAL` turns) and `shuyin-line-7` (the cannon fires: the bad
  *   ending).
- * - `battle/ffx2/ai/shuyin.ts` — `shuyin-taunt` above half HP,
- *   `shuyin-desperate` below it.
+ * - `battle/ffx2/ai/shuyin.ts` — `shuyin-taunt` above half HP, `shuyin-desperate` below it.
  *
- * No FFX AI script emits `script-trigger`; Chapters 1–3 go through `mid` only.
+ * - `battle/ffx/ai/seymour-omnis-callouts.ts` — Chapter XII's nine callouts
+ *   (`OMNIS_CALLOUTS`, mirrored as `OMNIS_STORY_TRIGGERS`), the one FFX emitter.
  */
 export const AI_EMITTED_TRIGGERS: Readonly<Record<ChapterKey, readonly string[]>> = {
-  'seymour-flux': [],
-  yunalesca: [],
-  'braskas-final-aeon': [],
-  'ffx2-bahamut': [],
-  // No `leblanc-syndicate.ts` AI script emits `script-trigger`; every beat
-  // this chapter fires goes through `mid` (`ko`/`ability-used`) instead.
+  'seymour-flux': [], yunalesca: [], 'braskas-final-aeon': [], 'ffx2-bahamut': [],
+  // No LeBlanc AI emits one: every beat goes through `mid` (`ko`/`ability-used`) instead.
   'ffx2-leblanc': [],
-  // No `seymour-anima-macalania.ts` / `macalania-rules.ts` AI script emits
-  // `script-trigger`; its three beats go through `mid` (hp-below, ability-used)
-  // [docs/handoff/chapter-macalania-script.md].
+  // No Macalania AI emits one: its three beats go through `mid` [docs/handoff/chapter-macalania-script.md].
   'seymour-anima-macalania': [],
-  // No `evrae.ts` / `evrae-rules.ts` / `evrae-counters.ts` AI script emits
-  // `script-trigger`; its five beats go through `mid` (ability-used, hp-below,
-  // status-applied) [docs/handoff/chapter-evrae-script.md].
+  // No Evrae AI emits one: its five beats go through `mid` [docs/handoff/chapter-evrae-script.md].
   'evrae-airship': [],
   'yojimbo-cavern': [],
+  'seymour-natus': [], // No Natus AI emits one (the B9 callouts are held, D-085); no `mid` beats either.
+  'seymour-omnis': Object.values(OMNIS_STORY_TRIGGERS), // Omnis's nine callouts (`battle/ffx/ai/seymour-omnis-callouts.ts`)
   'ffx2-trema': TREMA_AI_TRIGGERS, // Trema's Meteor and Ultima lines (`battle/ffx2/ai/trema.ts`)
+  'isaaru-via-purifico': [], // No Isaaru AI emits one: his beats go through `mid` (listed as is, 2026-09-25)
   'ffx2-vegnagun-shuyin': [
     'farplane-voice',
     'farplane-voice-braska',
@@ -171,25 +172,23 @@ export const SEAM_BUDGET_MS = 26_000;
  * everything here plays with the player's hands off the controller.
  */
 export const CHAIN_SEAMS: Readonly<Record<ChapterKey, readonly string[]>> = {
-  'seymour-flux': [],
-  yunalesca: [],
-  // Jecht's goodbye (on his KO, mid-chain) and the chant that opens the
-  // possessed-aeon gauntlet.
+  'seymour-flux': [], yunalesca: [],
+  // Jecht's goodbye (on his KO, mid-chain) and the chant that opens the possessed-aeon gauntlet.
   'braskas-final-aeon': ['jecht-falls', 'valefor-enters'],
   'ffx2-bahamut': [],
   // One per link of the Vegnagun chain, plus Shuyin stepping out of Baralai.
   'ffx2-vegnagun-shuyin': ['tail-down', 'leg-down', 'body-down', 'shuyin-appears'],
-  // The two between-act beats, per `ffx2-leblanc.ts`'s own wiring notes: a
-  // group boundary where the scene is the point, not an in-fight interrupt.
+  // The two between-act beats (`ffx2-leblanc.ts`'s wiring notes): a group boundary, not an interrupt.
   'ffx2-leblanc': ['act-one-cleared', 'act-two-cleared'],
-  // One continuous battle across three acts (no chained formation), so every
-  // beat is an in-fight interrupt on the 8 s budget.
+  // One continuous battle across three acts (no chained formation): every beat is an 8 s interrupt.
   'seymour-anima-macalania': [],
   // One battle, one formation: every beat is an in-fight interrupt.
   'evrae-airship': [],
-  'yojimbo-cavern': [],
+  'yojimbo-cavern': [], 'seymour-natus': [], 'seymour-omnis': [],
   // The Paragon-to-Trema link: the seam fires off Paragon's KO, between the two formations.
   'ffx2-trema': [TREMA_LINK_SEAM],
+  // Isaaru calls his next aeon off the last one's KO, between two formations: his cry, then her lock line.
+  'isaaru-via-purifico': [ISAARU_SEAMS.pterya, ISAARU_SEAMS.spathi],
 };
 
 /** The budget a given script has to fit inside. */

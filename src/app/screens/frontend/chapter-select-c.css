@@ -1,0 +1,352 @@
+/*
+ * Chapter select v2, option C (D-183): the boss painted on its scene, the
+ * selected card lit in place, the victory ribbon and the progress strip.
+ *
+ * Target: docs/concepts/chapter-select-v2/option-C/*.jpg and its _src/c.css /
+ * _src/common.css, which made the captures; this is that CSS, moved onto the
+ * real markup, plus the fixes the README's critique names (the sash off the
+ * boss, the time on the card ribbon, flat higher-contrast pips, the strip's
+ * height taken from the plate). Same authoring grid as frontend.css: every
+ * length is concept units times --fe-k, every font-size is floored.
+ *
+ * Game-aware (AGENTS.md rule 14): both. The only per-game rule is the FFX-2
+ * pip colour, the existing pyre-pink accent.
+ */
+
+/* ------------------------------------------------ the boss on its scene */
+
+.cs-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.cs-art__scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.95) brightness(0.8);
+}
+.cs-art__boss {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  height: var(--h);
+  width: auto;
+  max-width: none;
+  display: block;
+  /* the painting's focus point (its face) lands on (--x, --y) */
+  transform: translate(calc(var(--fx) * -100%), calc(var(--fy) * -100%));
+}
+/* The scene's own light on the boss, and a cast shadow, so it sits in the room. */
+.cs-art--hero .cs-art__boss {
+  filter: drop-shadow(0 0 calc(16 * var(--fe-k)) var(--glow))
+    drop-shadow(0 calc(14 * var(--fe-k)) calc(24 * var(--fe-k)) rgba(0, 0, 0, 0.65));
+}
+.cs-art--hero::after {
+  /* the floor haze in front of the boss's lower body */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  background: linear-gradient(to top, rgba(7, 6, 13, 0.55), rgba(7, 6, 13, 0));
+}
+.fe-card .cs-art__scene { filter: saturate(0.9) brightness(0.62); }
+.fe-card .cs-art__boss {
+  filter: saturate(0.92) brightness(0.84) drop-shadow(0 0 calc(6 * var(--fe-k)) rgba(0, 0, 0, 0.7));
+}
+
+/* the plate's inner hairline: the Ink & Gold double rule */
+.fe-hero::after {
+  content: '';
+  position: absolute;
+  inset: calc(7 * var(--fe-k));
+  border: 1px solid rgba(227, 185, 74, 0.32);
+  pointer-events: none;
+}
+
+/* ------------------------------------------ the selected card, in place */
+
+.fe-rail { gap: calc(6 * var(--fe-k)); }
+.fe-card--sel {
+  overflow: visible;
+  border: calc(2 * var(--fe-k)) solid var(--fe-accent);
+  box-shadow: 0 0 calc(18 * var(--fe-k)) rgba(227, 185, 74, 0.28), 0 calc(8 * var(--fe-k)) calc(20 * var(--fe-k)) rgba(0, 0, 0, 0.6);
+  transform: translate3d(calc(-8 * var(--fe-k)), 0, 0);
+}
+.fe-card--sel:hover { transform: translate3d(calc(-8 * var(--fe-k)), 0, 0); }
+.fe-card--sel .fe-card__num {
+  background: var(--fe-accent);
+  color: var(--ig-ink);
+  border-right-color: var(--fe-accent);
+}
+.fe-card--sel .cs-art__scene { filter: saturate(1.05) brightness(0.95); }
+.fe-card--sel .cs-art__boss { filter: drop-shadow(0 0 calc(6 * var(--fe-k)) var(--glow)); }
+.fe-card--sel::before {
+  /* the notch that points at the plate */
+  content: '';
+  position: absolute;
+  left: calc(-2 * var(--fe-k));
+  top: 50%;
+  z-index: 3;
+  width: 0;
+  height: 0;
+  transform: translate(-100%, -50%);
+  border-top: calc(8 * var(--fe-k)) solid transparent;
+  border-bottom: calc(8 * var(--fe-k)) solid transparent;
+  border-right: calc(9 * var(--fe-k)) solid var(--fe-accent);
+}
+.fe-card--cleared .cs-art__scene { filter: saturate(1.02) brightness(0.8); }
+.fe-card--coming .cs-art { filter: grayscale(1) brightness(0.42) contrast(1.1); }
+
+/* --------------------------------------------- the plate's victory sash */
+
+/* Top-left, off the boss (the critique: top-right lay across Evrae's coils). */
+.cs-sash {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: calc(210 * var(--fe-k));
+  height: calc(210 * var(--fe-k));
+  overflow: hidden;
+  pointer-events: none;
+}
+.cs-sash__band {
+  position: absolute;
+  top: calc(62 * var(--fe-k));
+  left: calc(-74 * var(--fe-k));
+  width: calc(320 * var(--fe-k));
+  height: calc(40 * var(--fe-k));
+  box-sizing: border-box;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(12 * var(--fe-k));
+  background: linear-gradient(to bottom, #f0cc6a, #e3b94a 46%, #b98d27);
+  border-top: 1px solid rgba(255, 240, 200, 0.8);
+  box-shadow: 0 0 0 calc(3 * var(--fe-k)) rgba(11, 10, 18, 0.85), 0 calc(10 * var(--fe-k)) calc(22 * var(--fe-k)) rgba(0, 0, 0, 0.6);
+}
+.cs-sash__band::before,
+.cs-sash__band::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(11, 10, 18, 0.55);
+}
+.cs-sash__band::before { top: calc(4 * var(--fe-k)); }
+.cs-sash__band::after { bottom: calc(4 * var(--fe-k)); }
+.cs-sash__band span {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: max(var(--fe-fs-floor), calc(15 * var(--fe-k)));
+  letter-spacing: 0.3em;
+  color: var(--ig-ink);
+}
+.cs-sash__band b {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(24 * var(--fe-k)));
+  line-height: 1;
+  color: var(--ig-ink);
+}
+
+/* ------------------------------------------------ the card's gold ribbon */
+
+.fe-card__ribbon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  width: calc(62 * var(--fe-k));
+  height: calc(62 * var(--fe-k));
+  overflow: hidden;
+  pointer-events: none;
+}
+.fe-card__ribbon i {
+  position: absolute;
+  top: calc(10 * var(--fe-k));
+  right: calc(-30 * var(--fe-k));
+  width: calc(104 * var(--fe-k));
+  height: calc(22 * var(--fe-k));
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k)));
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--ig-ink);
+  background: linear-gradient(to bottom, #f0cc6a, #e3b94a 50%, #b98d27);
+  box-shadow: 0 0 0 1px rgba(11, 10, 18, 0.8), 0 calc(3 * var(--fe-k)) calc(6 * var(--fe-k)) rgba(0, 0, 0, 0.6);
+}
+.fe-card--cleared .fe-card__name { right: calc(52 * var(--fe-k)); }
+
+/* ----------------------------------------- the progress strip, flat pips */
+
+.cs-strip {
+  position: absolute;
+  left: calc(58 * var(--fe-k));
+  top: calc(494 * var(--fe-k));
+  width: calc(700 * var(--fe-k));
+  height: calc(32 * var(--fe-k));
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--fe-k));
+  pointer-events: none;
+}
+.cs-strip__count {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  gap: calc(8 * var(--fe-k));
+  padding-right: calc(14 * var(--fe-k));
+  border-right: 1px solid rgba(227, 185, 74, 0.4);
+}
+.cs-strip__count b {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(28 * var(--fe-k)));
+  line-height: 1;
+  color: var(--ig-gold);
+}
+.cs-strip__of {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k)));
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+  color: rgba(244, 241, 232, 0.78);
+}
+.cs-strip__slash { display: none; }
+.cs-strip__pips {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: calc(5 * var(--fe-k));
+  height: 100%;
+}
+.cs-strip__game {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k)));
+  letter-spacing: 0.1em;
+  color: rgba(227, 185, 74, 0.8);
+  padding: 0 calc(4 * var(--fe-k)) 0 calc(6 * var(--fe-k));
+}
+.cs-strip__game--x2 { color: rgba(247, 182, 217, 0.88); margin-left: calc(8 * var(--fe-k)); }
+/* A flat mark, not a button: a hairline outline, no bevel, no hover. */
+.cs-pip {
+  position: relative;
+  flex: 1 1 0;
+  height: calc(24 * var(--fe-k));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(calc(6 * var(--fe-k)) 0, 100% 0, calc(100% - 6 * var(--fe-k)) 100%, 0 100%);
+  background: rgba(244, 241, 232, 0.16);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(12 * var(--fe-k)));
+  letter-spacing: 0.04em;
+  color: rgba(244, 241, 232, 0.8);
+}
+.cs-pip.is-lit {
+  background: linear-gradient(to bottom, #f0cc6a, #e3b94a 50%, #b98d27);
+  color: var(--ig-ink);
+}
+.cs-pip.is-x2.is-lit {
+  background: linear-gradient(to bottom, #fbd0e6, #f7b6d9 50%, #d58bb4);
+}
+.cs-pip.is-coming {
+  background: repeating-linear-gradient(-45deg, rgba(244, 241, 232, 0.14) 0 3px, rgba(244, 241, 232, 0) 3px 6px);
+  color: rgba(244, 241, 232, 0.42);
+}
+.cs-pip.is-sel { color: var(--ig-paper); background: rgba(244, 241, 232, 0.3); }
+.cs-pip.is-sel.is-lit {
+  color: var(--ig-ink);
+  background: linear-gradient(to bottom, #f0cc6a, #e3b94a 50%, #b98d27);
+}
+.cs-pip.is-sel.is-x2.is-lit {
+  background: linear-gradient(to bottom, #fbd0e6, #f7b6d9 50%, #d58bb4);
+}
+.cs-pip.is-sel::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 70%;
+  height: calc(3 * var(--fe-k));
+  background: var(--ig-paper);
+}
+.cs-pip.is-sel.is-lit::after { background: var(--ig-ink); }
+
+/* ------------------------------------------------------------- the phone */
+
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .cs-strip {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    order: 2;
+    flex: 0 0 auto;
+    height: calc(30 * var(--fe-k));
+    gap: calc(8 * var(--fe-k));
+  }
+  .cs-strip__count { padding-right: calc(8 * var(--fe-k)); gap: calc(2 * var(--fe-k)); }
+  .cs-strip__of,
+  .cs-strip__game { display: none; }
+  .cs-strip__slash {
+    display: inline;
+    font-family: var(--ig-font-serif);
+    font-style: italic;
+    font-size: max(var(--fe-fs-floor), calc(15 * var(--fe-k)));
+    color: rgba(244, 241, 232, 0.66);
+  }
+  .cs-strip__count b { font-size: max(var(--fe-fs-floor), calc(22 * var(--fe-k))); }
+  .cs-strip__pips { gap: calc(3 * var(--fe-k)); }
+  .cs-pip { height: calc(18 * var(--fe-k)); font-size: 0; }
+  /* Small enough to clear CHAPTER N on the short phone plate. */
+  .cs-sash { width: calc(112 * var(--fe-k)); height: calc(112 * var(--fe-k)); }
+  .cs-sash__band {
+    top: calc(28 * var(--fe-k));
+    left: calc(-46 * var(--fe-k));
+    width: calc(190 * var(--fe-k));
+    height: calc(28 * var(--fe-k));
+    gap: calc(6 * var(--fe-k));
+  }
+  .cs-sash__band span { letter-spacing: 0.16em; }
+  .cs-sash__band b { font-size: max(var(--fe-fs-floor), calc(16 * var(--fe-k))); }
+  .fe-card--sel,
+  .fe-card--sel:hover { transform: none; }
+  .fe-card--sel::before { display: none; }
+  /* The controls strip is solid on a phone, and the column fades out under it. */
+  .fe-cselect .chint { z-index: 5; background: rgba(11, 10, 18, 0.96); }
+  .fe-cselect::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(110 * var(--fe-k));
+    background: linear-gradient(to top, rgba(7, 6, 13, 0.96) 50%, rgba(7, 6, 13, 0));
+    pointer-events: none;
+    z-index: 4;
+  }
+}

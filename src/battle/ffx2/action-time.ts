@@ -1,7 +1,8 @@
 /**
  * **Action time (method check E4): an actor's own gauge waits for its action to play out.**
  * **FFX-2 only** [AGENTS.md rule 14]: FFX is CTB and has no gauge to hold
- * (`research/ffx-vs-ffx2-presentation.md` §4.3). **OFF everywhere but Chapter XIII's two links** (3 s there, Bailey's pick).
+ * (`research/ffx-vs-ffx2-presentation.md` §4.3). **OFF everywhere but Chapter XIII's two links and Chapter XI's three**
+ * (3 s there, Bailey's picks).
  *
  * The rule is sourced, the length is not (`research/ffx2-trema.md` §12.4):
  *
@@ -32,7 +33,9 @@
  * 1. `Ffx2EngineOptions.actionTimeSeconds` — one engine, for a measurement run.
  * 2. `EnemyGroupDef.actionTimeSeconds` — one formation. Chapter XIII's two links read
  *    `CLOISTER_ACTION_TIME` (`src/data/ffx2/enemies/trema.ts`): ON, 3 s (`CLOISTER_ACTION_TIME_SECONDS`,
- *    an `[estimate]`, Bailey's pick on 2026-09-25), Chapter XIII only.
+ *    an `[estimate]`, Bailey's pick on 2026-09-25). Chapter XI's three Road links read `ROAD_ACTION_TIME`
+ *    (`src/data/ffx2/enemies/fallen-aeons-road.ts`): ON, 3 s (`ROAD_ACTION_TIME_SECONDS`, the same
+ *    `[estimate]`, Bailey's option A on 2026-09-25). No other formation carries one.
  * 3. {@link ACTION_TIME_ALL_FFX2} — every FFX-2 battle (Chapters 4, 5, 6, XI and XIII).
  *
  * Deterministic and DOM-free: no RNG draw, so a replay moves only through the time it adds.

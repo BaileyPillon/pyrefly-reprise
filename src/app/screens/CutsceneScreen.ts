@@ -359,13 +359,13 @@ export class CutsceneScreen extends Screen {
     const result = await this.runner.run(script, undefined, from > 0 ? { from } : {});
     this.lastResult = result;
     this.finished = true;
-
+    // `fade('black')` is the stage's veil (under the box, `CutsceneStage.veil`); a scene that ends under it hands the black to #fade for the next screen.
+    if (this.stage?.veiled) void this.app.fade('opaque', 0);
     if (result.type === 'battleStart') this.opts.onBattleStart?.(result.transition);
     else if (result.type === 'results') this.opts.onResults?.(result.silent, result.resumeAt);
     else this.opts.onEnd?.();
 
-    // Resolve now rather than waiting for `exit()` — the flow's
-    // `await screen.done` is what triggers the replace that would call it.
+    // Resolve now, not in `exit()`: the flow's `await screen.done` triggers the replace that calls it.
     this.resolveDone();
   }
 
@@ -403,7 +403,7 @@ export class CutsceneScreen extends Screen {
       },
       flash: (color, ms) => stage.flash(color, ms),
       shake: (px, ms) => stage.shake(px, ms),
-      fadeScreen: (to, ms) => this.app.fade(to === 'clear' ? 'clear' : 'opaque', ms),
+      fadeScreen: (to, ms) => (to === 'clear' ? Promise.all([this.app.fade('clear', ms), stage.veil(false, ms)]).then(() => {}) : stage.veil(true, ms)),
     });
     return { ...base, ...this.opts.ports };
   }

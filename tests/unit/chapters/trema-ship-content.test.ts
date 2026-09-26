@@ -40,7 +40,7 @@ const art = (p: string): boolean => existsSync(new URL(`../../../public/art/${p}
 describe('the pause card', () => {
   it('is listed, as its chapter is (2026-09-25), with the installed hero plate B', () => {
     expect(UNLISTED_CHAPTER_META).not.toContain(TREMA_META);
-    expect(CHAPTER_META.at(-1)).toBe(TREMA_META);
+    expect(CHAPTER_META.at(-2)).toBe(TREMA_META); // Chapter XIV's card follows (listed the same day)
     expect(TREMA_META.heroArt).toBe('pause/ch13-trema');
     expect(getChapterMeta('ffx2-trema')).toBe(TREMA_META);
     expect(TREMA_META).toMatchObject({ numeral: 'XIII', gameLabel: 'FFX-2', title: 'Trema', location: 'Via Infinito — Cloister 100' });

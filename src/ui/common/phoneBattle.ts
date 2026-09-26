@@ -214,7 +214,8 @@ export function installPhoneBattle(
     };
     const rail = bottomOf(game === 'ffx' ? '.ig-ctb' : '.ffx2hud__enemies');
     if (rail <= 0) return;
-    const line = Math.max(rail, bottomOf('.eint:not(.eint--off) .eint__panel'), bottomOf('.eint--off .eint__toggle'));
+    // A chapter panel marked `data-phone-under-rail` (Chapter XII's disc strip) takes the line's slot.
+    const line = Math.max(rail, bottomOf('.eint:not(.eint--off) .eint__panel'), bottomOf('.eint--off .eint__toggle'), bottomOf('[data-phone-under-rail]'));
     const next = `${rail}/${line}`;
     if (next === under) return;
     under = next;

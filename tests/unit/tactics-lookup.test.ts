@@ -25,7 +25,7 @@ import type { BattleState } from '../../src/battle/common/types.ts';
 import { CHAPTERS, UNLISTED_CHAPTERS, getChapter, type Chapter } from '../../src/data/encounters.ts';
 import { GUIDES } from '../../src/data/guides/index.ts';
 import { guideForState, stateOnlyEngine } from '../../src/engine/tactics/guide.ts';
-import { TACTICS, tacticFor, ffx2Bahamut } from '../../src/engine/tactics/index.ts';
+import { TACTICS, tacticFor, ffx2Bahamut, seymourNatus } from '../../src/engine/tactics/index.ts';
 import { CHAPTER_GAME } from '../../src/engine/tactics/lookup.ts';
 import { chainGroups, runChapter, type RunRecord } from './tactics-lookup-harness.ts';
 
@@ -41,8 +41,11 @@ const OWN_TACTIC: Record<string, string> = {
   'evrae-airship': 'evrae',
   'yojimbo-cavern': 'yojimboCavern',
   'ffx2-trema': 'ffx2Trema',
-  'ffx2-den-of-woe': 'ffx2DenOfWoe',
-  'seymour-omnis': 'seymourOmnis', // Chapter XII (FFX), unlisted
+  'seymour-omnis': 'seymourOmnis', // Chapter XII (FFX)
+  'seymour-natus': 'seymourNatus', // Chapter X (FFX)
+  'isaaru-via-purifico': 'isaaruViaPurifico', // Chapter XIV (FFX)
+  'ffx2-fallen-aeons': 'ffx2FallenAeons', // Chapter XI (FFX-2), unlisted
+  'ffx2-den-of-woe': 'ffx2DenOfWoe', // Chapter XV (FFX-2), unlisted
 };
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS];
@@ -66,12 +69,15 @@ describe('a friendly Bahamut in an FFX fight picks no FFX-2 guide or tactic', ()
       combatants: {
         yuna: { id: 'yuna', side: 'party' },
         bahamut: { id: 'bahamut', side: 'aeon' },
-        // Chapter X's boss: IX has its own guide and tactic now.
+        // Chapter X's boss: it has its own guide and tactic now (N-G6), and the aeon steals neither.
         'seymour-natus': { id: 'seymour-natus', side: 'enemy' },
       },
     } as unknown as BattleState;
-    expect(guideForState(state)).toBeNull();
-    expect(tacticFor(stateOnlyEngine(state))).toBeNull();
+    expect(guideForState(state)?.id).toBe('seymour-natus');
+    expect(tacticFor(stateOnlyEngine(state))).toBe(seymourNatus);
+    const aeonOnly = { game: 'ffx', combatants: { yuna: state.combatants['yuna'], bahamut: state.combatants['bahamut'] } } as unknown as BattleState;
+    expect(guideForState(aeonOnly)).toBeNull();
+    expect(tacticFor(stateOnlyEngine(aeonOnly))).toBeNull();
   });
 
   it('even an enemy-side "bahamut" in an FFX fight is not Chapter IV', () => {

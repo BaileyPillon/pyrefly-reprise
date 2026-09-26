@@ -47,6 +47,7 @@ import { EVRAE_ABILITIES } from '../../src/data/ffx/enemies/evrae-abilities.ts';
 import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.ts';
 import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natus-abilities.ts';
 import { SEYMOUR_OMNIS_ABILITIES } from '../../src/data/ffx/enemies/seymour-omnis-abilities.ts';
+import { ISAARU_ABILITIES } from '../../src/data/ffx/enemies/isaaru-abilities.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from '../../src/data/ffx2/enemies/magus-sisters-abilities.ts';
 import { paragonAbilities } from '../../src/data/ffx2/enemies/paragon-abilities.ts';
@@ -146,6 +147,13 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
     'mortiphasm-3': 'research/ffx-seymour-omnis.md §2 (src/data/ffx/enemies/seymour-omnis.ts)',
     'mortiphasm-4': 'research/ffx-seymour-omnis.md §2 (src/data/ffx/enemies/seymour-omnis.ts)',
   },
+  // Chapter XIV (FFX), registered but unlisted like Chapters IX to XI.
+  'isaaru-via-purifico': {
+    isaaru: 'research/ffx-isaaru-bevelle.md §2.1 (src/data/ffx/enemies/isaaru.ts)',
+    grothia: 'research/ffx-isaaru-bevelle.md §2.2-§2.4 (src/data/ffx/enemies/isaaru.ts)',
+    pterya: 'research/ffx-isaaru-bevelle.md §2.2-§2.4 (src/data/ffx/enemies/isaaru.ts)',
+    spathi: 'research/ffx-isaaru-bevelle.md §2.2-§2.4 (src/data/ffx/enemies/isaaru.ts)',
+  },
   // Chapter XIII (FFX-2), registered but unlisted like Chapters IX to XI.
   'ffx2-trema': {
     // The listed chapter's Paragon is the Oversoul form (Bailey, 2026-09-25): same id, §12.2's block.
@@ -231,6 +239,9 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
   'seymour-omnis': [
     fileCite(SEYMOUR_OMNIS_ABILITIES, 'research/ffx-seymour-omnis.md §3.1 (src/data/ffx/enemies/seymour-omnis-abilities.ts)'),
   ],
+  'isaaru-via-purifico': [
+    fileCite(ISAARU_ABILITIES, 'research/ffx-isaaru-bevelle.md §3 (src/data/ffx/enemies/isaaru-abilities.ts)'),
+  ],
   'ffx2-trema': [
     fileCite(paragonAbilities, 'research/ffx2-trema.md §4.1 (src/data/ffx2/enemies/paragon-abilities.ts)'),
     fileCite(tremaAbilities, 'research/ffx2-trema.md §4.2 (src/data/ffx2/enemies/trema-abilities.ts)'),
@@ -291,6 +302,8 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
   'ffx2-fallen-aeons': {},
   // Every Chapter XII ability id is `omnis-`-prefixed and defined in the chapter's own ability file.
   'seymour-omnis': {},
+  // Every Chapter XIV ability id is prefixed with its aeon's name and defined in the chapter's own file.
+  'isaaru-via-purifico': {},
   // Every Paragon and Trema ability id is `paragon-`/`trema-`-prefixed (no shared reuse).
   'ffx2-trema': {},
   // Every Chapter XV ability id is `x2-den-`-prefixed and defined in the chapter's own ability file.

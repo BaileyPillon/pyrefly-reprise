@@ -30,8 +30,11 @@ import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-t
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
+import { buildRoadToTheFarplaneScene, ROAD_TO_THE_FARPLANE_SLOTS } from './road-to-the-farplane.ts';
 import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.ts';
 import { buildDenOfWoeScene, DEN_OF_WOE_SLOTS } from './den-of-woe.ts';
+import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
+import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -148,15 +151,10 @@ SCENES.set('zanarkand-dome', {
  * {@link SCENE_FACTORIES} below — so, exactly as with Bevelle, it must stop
  * reporting itself as a stand-in to {@link sceneReport}.
  *
- * It is written as the placeholder entry with two fields overridden rather than
- * as a fresh object literal, which is not stylistic: `build` stays the demo
- * diorama and is **unreachable** (the older "builder brings its own figures"
- * path, which {@link loadScene} only reaches when `SCENE_FACTORIES` has no
- * entry), and spreading keeps {@link placeholderEntry} referenced for the
- * chapters that have not landed yet — `noUnusedLocals` is on, so the last key
- * to convert would otherwise break this shared file for every other session.
- * The slots are the scene's own, so anything reading the table directly gets
- * Dream's End's formation rather than Gagazet's.
+ * Written as the placeholder entry with two fields overridden: `build` stays the
+ * demo diorama, **unreachable** ({@link loadScene} reaches it only when
+ * `SCENE_FACTORIES` has no entry), and spreading keeps {@link placeholderEntry}
+ * referenced (`noUnusedLocals`). The slots are the scene's own.
  */
 SCENES.set('dreams-end', {
   ...placeholderEntry('dreams-end', "Dream's End — inside Sin"),
@@ -164,16 +162,10 @@ SCENES.set('dreams-end', {
   placeholder: false,
 });
 /**
- * Bevelle Underground is a real location now — `buildBevelleUndergroundScene`
- * in {@link SCENE_FACTORIES} below — so it must stop reporting itself as a
- * stand-in to {@link sceneReport}, which is what the debug API and the critic
- * read to decide whether a chapter has been built yet.
- *
- * `build` stays pointed at the demo diorama and is **unreachable**: it is the
- * older "builder brings its own figures" path, and {@link loadScene} only falls
- * through to this table when `SCENE_FACTORIES` has no entry for the key. The
- * slots are the scene's own, so anything reading the table directly gets
- * Bevelle's formation rather than Gagazet's.
+ * Bevelle Underground is real (`buildBevelleUndergroundScene` in {@link SCENE_FACTORIES}), so it
+ * must not report itself as a stand-in to {@link sceneReport} (the debug API and the critic read it).
+ * `build` is the demo diorama and **unreachable**: {@link loadScene} only falls through to this
+ * table when `SCENE_FACTORIES` has no entry. The slots are the scene's own (Bevelle's formation).
  */
 SCENES.set('bevelle-underground', {
   key: 'bevelle-underground',
@@ -201,13 +193,8 @@ SCENES.set('leblanc-last-room', { key: 'leblanc-last-room', title: 'Chateau Lebl
  * unreachable demo diorama, as for Leblanc above
  * [docs/handoff/chapter-macalania-scene.md §6].
  */
-SCENES.set('macalania-temple', {
-  key: 'macalania-temple',
-  title: 'Macalania Temple — the antechamber',
-  build: buildDemoScene,
-  slots: MACALANIA_TEMPLE_SLOTS,
-  placeholder: false,
-});
+SCENES.set('macalania-temple', { key: 'macalania-temple', title: 'Macalania Temple — the antechamber',
+  build: buildDemoScene, slots: MACALANIA_TEMPLE_SLOTS, placeholder: false });
 /**
  * The deck of the Fahrenheit (Chapter 8, FFX only) — real
  * (`buildEvraeAirshipDeckScene` in {@link SCENE_FACTORIES}, which also
@@ -223,9 +210,18 @@ SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern o
 /** The Via Infinito, Cloister 100 (Chapter XIII, FFX-2 only): real, `build` unreachable as for Leblanc [cloister-100.ts]. */
 SCENES.set('via-infinito', { key: 'via-infinito', title: 'Via Infinito — Cloister 100',
   build: buildDemoScene, slots: CLOISTER_100_SLOTS, placeholder: false });
+/** The Road to the Farplane (Chapter XI, FFX-2 only): real, `build` unreachable as for Leblanc [road-to-the-farplane.ts]. */
+SCENES.set('road-to-the-farplane', { key: 'road-to-the-farplane', title: 'The Road to the Farplane',
+  build: buildDemoScene, slots: ROAD_TO_THE_FARPLANE_SLOTS, placeholder: false });
 /** The Garden of Pain inside Sin (Chapter XII, FFX only): real, `build` unreachable as for Leblanc [garden-of-pain.ts]. */
 SCENES.set('garden-of-pain', { key: 'garden-of-pain', title: 'Inside Sin — the Garden of Pain',
   build: buildDemoScene, slots: GARDEN_OF_PAIN_SLOTS, placeholder: false });
+/** The Highbridge of Bevelle (Chapter X, FFX only): real, `build` unreachable as for Leblanc [highbridge.ts]. */
+SCENES.set('bevelle-highbridge', { key: 'bevelle-highbridge', title: 'Highbridge of Bevelle — before the Main Gate',
+  build: buildDemoScene, slots: HIGHBRIDGE_SLOTS, placeholder: false });
+/** The Via Purifico, the last chamber (Chapter XIV, FFX only): real, `build` unreachable as for Leblanc [via-purifico.ts]. */
+SCENES.set('via-purifico', { key: 'via-purifico', title: 'Via Purifico — the last chamber',
+  build: buildDemoScene, slots: VIA_PURIFICO_SLOTS, placeholder: false });
 /** The Den of Woe (Chapter XV, FFX-2 only): real, `build` unreachable as for Leblanc [den-of-woe.ts]. */
 SCENES.set('den-of-woe', { key: 'den-of-woe', title: 'The Den of Woe',
   build: buildDemoScene, slots: DEN_OF_WOE_SLOTS, placeholder: false });
@@ -271,7 +267,10 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
   'via-infinito': buildCloister100Scene,
+  'road-to-the-farplane': buildRoadToTheFarplaneScene,
   'garden-of-pain': buildGardenOfPainScene,
+  'bevelle-highbridge': buildHighbridgeScene,
+  'via-purifico': buildViaPurificoScene,
   'den-of-woe': buildDenOfWoeScene,
 };
 

@@ -290,21 +290,23 @@ const TARGET_WORD: Record<string, string> = {
 };
 
 /**
- * One sentence of "what it does", composed from the ability record.
- *
- * Written from `AbilityDef` rather than from a prose table on purpose:
- * `AbilityDef` has no `description` field (only `ItemDef` does), and a
- * hand-written line per boss move is a second source of truth that drifts the
- * first time a data agent retunes `hits` or an element. Everything in this
- * sentence is a field a test can read back.
+ * One sentence of "what it does", composed from the ability record. Written from `AbilityDef` rather
+ * than from a prose table on purpose: `AbilityDef` has no `description` field (only `ItemDef` does), and
+ * a hand-written line per boss move is a second source of truth that drifts the first time a data agent
+ * retunes `hits` or an element. Everything in this sentence is a field a test can read back.
  */
 export function describeAbility(def: AbilityDef): string {
   const parts: string[] = [];
   const heals = def.flags.includes('heals');
   const where = TARGET_WORD[def.targeting] ?? 'its target';
 
+  // A `formula: 'none'` row inflicts, cures or does neither; it never deals damage (Spathi's Countdown,
+  // Evrae's Inhale, Esuna: "non-elemental damage to itself" was false). FFX only; ffx2/intent.ts has its own.
+  const inert = def.formula === 'none' && def.statusEffects.length === 0 && !heals;
   if (def.formula === 'none' && def.statusEffects.length > 0) {
     parts.push(`Inflicts ${def.statusEffects.map((s) => statusWord(s.status)).join(', ')} on ${where}`);
+  } else if (inert) {
+    parts.push(def.removesStatuses.length > 0 ? `Cures ${def.removesStatuses.map(statusWord).join(', ')} on ${where}` : 'Deals no damage');
   } else if (heals) {
     parts.push(`Restores HP to ${where}`);
   } else {
@@ -320,10 +322,8 @@ export function describeAbility(def: AbilityDef): string {
   if (def.flags.includes('drains-mp')) parts.push('drains MP');
   if (def.flags.includes('piercing') || def.ignoresDefense === true) parts.push('ignores Defense');
   if (def.flags.includes('always-break-damage-limit')) parts.push('cap 99 999');
-  if (def.removesStatuses.length > 0) {
-    parts.push(`strips ${def.removesStatuses.map(statusWord).join(', ')}`);
-  }
-  if (def.canMiss === false) parts.push('never misses');
+  if (def.removesStatuses.length > 0 && !inert) parts.push(`strips ${def.removesStatuses.map(statusWord).join(', ')}`);
+  if (def.canMiss === false && !inert) parts.push('never misses');
   return `${parts.join(' - ')}.`;
 }
 

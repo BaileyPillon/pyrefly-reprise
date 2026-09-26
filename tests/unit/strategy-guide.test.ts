@@ -312,7 +312,7 @@ describe('phase notes', () => {
 
 describe('src/data/guides', () => {
   it('has one guide per chapter, and every chapter that ships a tactic has one', () => {
-    expect(GUIDES).toHaveLength(12);
+    expect(GUIDES).toHaveLength(15);
     for (const id of [
       'seymour-flux',
       'yunalesca',
@@ -324,8 +324,11 @@ describe('src/data/guides', () => {
       'evrae-airship',
       'yojimbo-cavern',
       'ffx2-trema',
-      'ffx2-den-of-woe',
-      'seymour-omnis', // Chapter XII (FFX), unlisted
+      'seymour-omnis', // Chapter XII (FFX)
+      'seymour-natus', // Chapter X (FFX)
+      'isaaru-via-purifico', // Chapter XIV (FFX)
+      'ffx2-fallen-aeons', // Chapter XI (FFX-2), unlisted
+      'ffx2-den-of-woe', // Chapter XV (FFX-2), unlisted
     ]) {
       expect(guideForChapter(id), id).toBeDefined();
     }

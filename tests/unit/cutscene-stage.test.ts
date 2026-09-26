@@ -15,7 +15,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CutsceneStage } from '../../src/app/screens/CutsceneStage.ts';
 import { CUTSCENE_FIGURES, cutsceneFigure, figureBox, figuresIn } from '../../src/app/screens/cutsceneFigures.ts';
 import { isStagedFx } from '../../src/app/screens/cutsceneFx.ts';
-import { CHAPTERS } from '../../src/data/encounters.ts';
+import { CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { fx, hideActor, showActor, type Step, type StoryScript } from '../../src/story/dsl.ts';
 import { CutsceneRunner, createNoopPorts } from '../../src/story/runner/CutsceneRunner.ts';
 import { yojimboCavernScripts } from '../../src/story/scripts/yojimbo-cavern.ts';
@@ -68,6 +68,17 @@ describe('which chapters the stage changes (measured, pinned)', () => {
       '9 yojimbo-cavern post': ['show ginnem', 'fx sending-dance @yuna', 'fx pyreflies-rising @ginnem', 'hide ginnem'],
       // Chapter XIII (FFX-2 only, listed 2026-09-25): Trema answers Yuna and fades (research ffx2-trema.md §2 step 4).
       '13 ffx2-trema post': ['show trema', 'hide trema'],
+      // Chapter XII (FFX only, listed 2026-09-25): Seymour Omnis stands at the top of the steps,
+      // then Yuna sends him in the post scene (docs/plans/omnis-story-draft.md beat 5).
+      '12 seymour-omnis pre': ['show seymour-omnis'],
+      '12 seymour-omnis post': ['show seymour-omnis', 'fx sending-dance @yuna', 'fx pyreflies-rising @seymour-omnis', 'hide seymour-omnis'],
+      // Chapter X (FFX only, listed 2026-09-25): Seymour Natus stands up from the attendants' pyreflies
+      // (research ffx-seymour-natus-highbridge.md §8.2 beat 8).
+      '10 seymour-natus pre': ['fx pyreflies-rising', 'show seymour-natus'],
+      // Chapter XIV (FFX only, listed 2026-09-25): Isaaru waits at the chamber's far end, then stands on his spot
+      // after the contest (research ffx-isaaru-bevelle.md §8.2 beats 5 and 7).
+      '14 isaaru-via-purifico pre': ['show isaaru'],
+      '14 isaaru-via-purifico post': ['show isaaru', 'hide isaaru'],
       // Scenes that already called these keys, and now draw them instead of
       // a 90 ms flash. No figure appears in any of them.
       '1 seymour-flux post': ['fx sending-dance @yuna', 'fx pyreflies-rising'],
@@ -78,12 +89,20 @@ describe('which chapters the stage changes (measured, pinned)', () => {
     });
   });
 
-  it('stands only Chapters IX and XIII\'s own figures, so no other chapter\'s showActor puts anyone on stage', () => {
+  it('stands only Chapters IX, X, XII, XIII and XIV\'s own figures, so no other chapter\'s showActor puts anyone on stage', () => {
     // Trema (FFX-2 only, Chapter XIII, listed 2026-09-25) stands in his own post scene only.
-    // Plus Seymour Omnis (FFX only, Chapter XII, unlisted): his pre and post scenes; no listed chapter shows him.
-    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis']);
-    const own: Record<string, string[]> = { 'yojimbo-cavern': ['ginnem'], 'ffx2-trema': ['trema'] };
-    for (const c of CHAPTERS) {
+    // Seymour Omnis (FFX only, Chapter XII, listed 2026-09-25): his pre and post scenes, no other chapter's.
+    // Seymour Natus (FFX only, Chapter X, listed 2026-09-25) stands up in his own pre scene only.
+    // Isaaru (FFX only, Chapter XIV): he waits in his own pre scene and kneels in his own post scene.
+    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis', 'seymour-natus', 'isaaru']);
+    const own: Record<string, string[]> = {
+      'yojimbo-cavern': ['ginnem'],
+      'ffx2-trema': ['trema'],
+      'seymour-omnis': ['seymour-omnis', 'seymour-omnis'],
+      'seymour-natus': ['seymour-natus'],
+      'isaaru-via-purifico': ['isaaru', 'isaaru'],
+    };
+    for (const c of [...CHAPTERS, ...UNLISTED_CHAPTERS]) {
       const shown = [...figuresIn(c.scriptsRef?.pre ?? []), ...figuresIn(c.scriptsRef?.post ?? [])];
       expect(shown, c.id).toEqual(own[c.id] ?? []);
     }
@@ -134,7 +153,7 @@ describe('CutsceneStage', () => {
 
   it('mounts the stage layers under the flash, and gives the dialogue box a shake layer to live in', () => {
     expect([...root.children].map((c) => c.className)).toEqual(['cutscene__shake', 'cutscene__flash']);
-    expect([...stage.shakeEl.children].map((c) => c.className)).toEqual(['cutscene__figures', 'cutscene__fx']);
+    expect([...stage.shakeEl.children].map((c) => c.className)).toEqual(['cutscene__figures', 'cutscene__fx', 'cutscene__veil']);
   });
 
   it('stands a staged figure with her painting, and ignores anyone without one', async () => {

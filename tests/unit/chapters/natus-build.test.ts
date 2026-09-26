@@ -85,15 +85,16 @@ describe('The Highbridge build and the chapter registration', () => {
     expect(inversions).toEqual([]);
   });
 
-  it('Chapter X is registered by id, reachable, and not listed (no chapter-select card)', () => {
+  it('Chapter X is registered by id, reachable, and LISTED after Chapter IX (2026-09-25)', () => {
     const ch = getChapter('seymour-natus');
     expect(ch).toMatchObject({ game: 'ffx', number: 10, title: 'Seymour Natus', location: 'Highbridge of Bevelle — before the Main Gate' });
     expect(ch?.enemyGroupRef.id).toBe(GROUP_ID);
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('seymour-natus');
-    expect(CHAPTERS.map((c) => c.id)).not.toContain('seymour-natus');
-    expect(CHAPTER_IDS).not.toContain('seymour-natus');
+    expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('seymour-natus');
+    expect(CHAPTERS.map((c) => c.id)).toContain('seymour-natus');
+    expect(CHAPTER_IDS.indexOf('seymour-natus')).toBe(CHAPTER_IDS.indexOf('yojimbo-cavern') + 1);
     expect(ch?.sceneKey).not.toBe('bevelle-underground'); // the FFX-2 arena (research §0.3)
-    expect(ch?.scriptsRef.pre).toEqual([{ type: 'battleStart' }]);
-    expect(ch?.scriptsRef.post).toEqual([{ type: 'results' }]);
+    expect(ch?.sceneKey).toBe('bevelle-highbridge'); // the ship layer's scene (O-3 C)
+    expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' }); // the story: natus-ship-story.test.ts
+    expect(ch?.scriptsRef.post.at(-1)).toEqual({ type: 'results' });
   });
 });

@@ -36,6 +36,7 @@ import './evrae.ts';
 import './yojimbo.ts';
 import './seymour-natus.ts';
 import './seymour-omnis.ts';
+import './isaaru.ts';
 
 export * from './types.ts';
 export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
@@ -60,6 +61,7 @@ export * from './evrae.ts';
 export * from './yojimbo.ts';
 export * from './seymour-natus.ts';
 export * from './seymour-omnis.ts';
+export * from './isaaru.ts';
 
 /** True for any of the three actors in the Macalania formation. */
 function isMacalaniaScript(script: string): boolean {

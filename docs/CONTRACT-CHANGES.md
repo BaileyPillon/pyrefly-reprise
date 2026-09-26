@@ -6,6 +6,130 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — `encounters.ts`: Chapter XIV (Isaaru) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX only** [AGENTS.md hard rule 14]: Isaaru's contest of aeons in the Via Purifico
+(`research/ffx-isaaru-bevelle.md`; FFX-2 has no summoners); the listing itself is shared plumbing
+(both). Bailey, 2026-09-25 ~18:30 EDT: "All your recommendations" (D-186: Chapter XIV as is, 125/200
+on the bench, no build change).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `ISAARU_VIA_PURIFICO_SHIPPED` and
+`CHAPTER_IDS` gains `'isaaru-via-purifico'`, both last (after Chapter XIII); chapter select groups by
+game, so the card sits after Chapter XII in the FFX group (I, II, III, COMING VII, VIII, IX, X, XII,
+XIV). `ChapterId` and `getChapter` are unchanged (the id was already registered; the union's last two
+lines and two import comments were joined to keep the file at 399 lines); `UNLISTED_CHAPTERS` keeps
+only the Fallen Aeons. Alongside: `CHAPTER_META` gains `ISAARU_META` (`UNLISTED_CHAPTER_META` is
+empty again; its tagline is trimmed to the pause card's 2-4 words, "Summoner Against Summoner", and
+its aside to "three aeons, one fayth each"), and `src/story/registry.ts` gains the
+`'isaaru-via-purifico'` key (its scripts, no AI-emitted callouts, its two link seams
+`pterya-called` and `spathi-called` on the seam budget; four map lines were joined to keep it at 398
+lines). Every chapter-generic consumer now sees thirteen chapters, twelve of them playable: Auron's
+briefing counts "Twelve fights" by itself (D-136), and `arcCleared('ffx')` also needs Chapter XIV
+(`ARC_FINALE.ffx` stays `braskas-final-aeon`: the Via Purifico comes before the Highbridge). No save
+migration: saves key chapters by id string.
+
+## 2026-09-25 — `encounters.ts`: Chapter X (Seymour Natus) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX only** [AGENTS.md hard rule 14]: Seymour Natus on the Highbridge of Bevelle
+(`research/ffx-seymour-natus-highbridge.md` §0.3: FFX-2 has no Natus); the listing itself is shared
+plumbing (both). Bailey, 2026-09-25: "All your recommendations" (D-185: the guide and tactic teach the
+research's strategy 7, "Haste only Tidus and Auron", 169/200 on the bench).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `SEYMOUR_NATUS` and `CHAPTER_IDS` gains
+`'seymour-natus'`, both after Chapter IX and before Chapter XII, so chapter select shows the card in
+the FFX group in number order (I, II, III, COMING VII, VIII, IX, X, XII). `ChapterId` and `getChapter`
+are unchanged (the id was already registered; the union's first six ids were joined onto two lines to
+keep the file at 398 lines); `UNLISTED_CHAPTERS` keeps only the Fallen Aeons. Alongside:
+`CHAPTER_META` gains `NATUS_META` (`UNLISTED_CHAPTER_META` is empty again), and
+`src/story/registry.ts` gains the `'seymour-natus'` key (its scripts, no AI-emitted callouts, no
+seam; four comments were shortened to keep it at 399 lines). Every chapter-generic consumer now sees
+twelve chapters, eleven of them playable: Auron's briefing counts "Eleven fights" by itself (D-136),
+and `arcCleared('ffx')` also needs Chapter X (`ARC_FINALE.ffx` stays `braskas-final-aeon`: the
+Highbridge comes before the Calm Lands and Gagazet). No save migration: saves key chapters by id string.
+
+## 2026-09-25 — `encounters.ts`: Chapter XII (Seymour Omnis) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX only** [AGENTS.md hard rule 14]: Seymour Omnis in the Garden of Pain inside Sin
+(`research/ffx-seymour-omnis.md` §0.3); the listing itself is shared plumbing (both). Bailey,
+2026-09-25: "all recommendations please" on the ship order "Omnis (XII, FFX) first, then Isaaru"
+(D-162). The ring order (O-7) and the reset cycle (O-11) play as GameFAQs' cycle labelled
+"our estimate": Bailey settled B8 (D-145) that way, 2026-09-25 ~18:10 EDT: list it with GameFAQs'
+order, labelled "our estimate" (D-184).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `SEYMOUR_OMNIS_SHIPPED` and `CHAPTER_IDS`
+gains `'seymour-omnis'`, both after Chapter IX and before Chapter XIII, so chapter select shows the
+card last among the FFX chapters, in number order (I, II, III, COMING VII, VIII, IX, XII; D-183).
+`ChapterId` and `getChapter` are unchanged (the id was already registered; its union's three
+Chapter VII to IX lines were joined to keep the file at 399 lines); `UNLISTED_CHAPTERS` keeps Natus
+and the Fallen Aeons. Alongside: `CHAPTER_META` gains `SEYMOUR_OMNIS_META` (`UNLISTED_CHAPTER_META`
+is empty again), and `src/story/registry.ts` gains the `'seymour-omnis'` key (its scripts, its nine
+AI-emitted callouts, no seam; two comments were shortened to keep it at 399 lines). Every
+chapter-generic consumer now sees eleven chapters, ten of them playable: Auron's briefing counts
+"Ten fights" by itself (D-136), and `arcCleared('ffx')` also needs Chapter XII (`ARC_FINALE.ffx`
+stays `braskas-final-aeon`: Omnis comes before Dream's End in the story). No save migration: saves
+key chapters by id string.
+
+## 2026-09-25 — Chapter XII read-out and glow: shared plumbing only (no contract file changed)
+
+**FFX only** [AGENTS.md hard rule 14], inert outside Chapter XII. Recorded because they are shared:
+`BattleScreenWiring.createHud` now also wraps the FFX HUD with `ui/ffx/OmnisReadout.ts` (the O-2 B disc
+strip and the O-4 C intent line; hidden without `omnis.discs`) and `engine/OmnisGlowLook.ts` (O-8; no
+look without `omnis.state`). `shaders/PaintedShader.ts` gains a `PAINTED_GLOW` define compiled only into
+Omnis's own materials (the `PAINTED_CAST` pattern). `hudAvoidSelectors.ts` adds `OMNIS_READOUT_SELECTORS`
+and `CHAPTER_PANEL_SELECTORS` (Zanmato + Omnis), which the intent slab, the numerals, the coach and the
+advisor now dodge. `.ffx-sensor` reads an optional `--ffx-sensor-dy` (unset = 0). `phoneBattle.ts`
+places the under-rail line below any `[data-phone-under-rail]` panel.
+
+## 2026-09-25 — Chapter XIV ship layer: `SpeakerId` gains `'isaaru'`
+
+**FFX only** [AGENTS.md hard rule 14]. **Additive** in `src/story/dsl.ts`: `SpeakerId` gains
+`'isaaru'`, the speaker for Isaaru's lines in `src/story/scripts/ffx-isaaru.ts` (lines 8 to 21 of
+`docs/plans/isaaru-story-draft.md` and the three link cries, all ours). His portrait is the
+installed O-2 B (`public/art/portraits/isaaru.png`, judge-locked), found by id as every portrait is.
+`SPEAKER_ROLES` gains `isaaru: 'Summoner'`. The adjacent `'biran' | 'yenke'` members were joined on
+one line so the file does not grow; no member changed. No existing script changes.
+
+## 2026-09-25 — Chapter XIV, Isaaru: `ChapterId` gains `'isaaru-via-purifico'`, `Chapter.number` widens to 15, a one- or two-member `FFXPartyBuild.activeSlots`, `EnemyGroupDef.lockedAeons` / `aeonsOnly` / `victoryBonusAp`
+
+**FFX only** [AGENTS.md hard rule 14]: Isaaru's contest of aeons in the Via Purifico, Yuna
+alone with her aeons (`research/ffx-isaaru-bevelle.md`; in FFX-2 nobody summons); every field
+is shared plumbing, **inert** unless a formation sets it (only Chapter XIV's three do).
+Bailey, 2026-09-25: "I'll go with all your recommendations" (B1-B22 on
+`docs/plans/chapter-isaaru-review.md`, with its Review corrections).
+
+**Additive** in `src/data/encounters.ts`: `ChapterId` gains `'isaaru-via-purifico'` (the record
+is `src/data/chapter-isaaru.ts`, in `UNLISTED_CHAPTERS`, the Chapter IX to XI precedent);
+`Chapter.number` widens from `1 … 11` to `1 … 15`, so Chapters XII, XIII and XV (built in
+parallel) need no second widening. `learn/atlas/cites.ts` gains the key.
+
+**Additive** in `src/battle/common/types.ts`:
+- `FFXPartyBuild.activeSlots` accepts one or two ids as well as three (`forced_party "y"`, research
+  §1.2 [verified: 3 sources]). The engine always built the line-up from the list's length; every
+  existing build still passes three.
+- `EnemyGroupDef.lockedAeons` (the mirror lock: `{ aeonId, mirrorOf }`), `aeonsOnly` ("can only be
+  fought by aeons": a party member's foe-aimed rows greyed and refused, and a defeat when no aeon
+  is left; an aeon's missing Items row is every FFX battle's rule since PR-0155, not the duel's) and `victoryBonusAp` (a victory reward no enemy carries: the
+  duel's 5,000 AP). Read by `src/battle/ffx/aeon-duel.ts`, which copies them into `state.flags` at
+  setup (`aeonDuel.only`, `aeonDuel.lock:<aeonId>`, `victory.bonusAp`) so a rebuilt runtime and an
+  intent clone see them. Absent everywhere else, reproducibly: `tests/unit/tools/ffx-chapter-hashes.test.ts`
+  (skipped unless `FFX_HASH_OUT` is set) hashes every menu, event log and result of every other FFX
+  chapter, 624 seeded runs (each chapter from its start through its chain, every later link on its
+  own; four policies). Main 8407e966 against this branch after the repair: 623 byte-identical; the one
+  that differs is a Grand Summon the engine resolved itself (below), and with that one fix undone all
+  624 are identical. FFX-2 untouched (no file under `battle/ffx2` or `data/ffx2` changes).
+
+**Also, shared FFX plumbing (FFX only; Chapter XIV engine review, 2026-09-25; not a contract file):**
+a Grand Summon with no aeon chosen (an auto-resolved or headless roll, or the bare re-submit that
+breaks the minigame loop) called `''`, which spent Yuna's gauge and summoned nothing; it now calls
+the first aeon that can take the field, in roster order (`aeon-duel.ts#defaultGrandSummonAeon`, our
+choice: FFX lets the player pick). The UI overlay and every tactic already pass a choice, so play by
+hand is unchanged. And the FFX enemy-intent sentence no longer calls a `formula: 'none'` row
+"non-elemental damage": a no-effect row reads "Deals no damage." (Spathi's Countdown, Evrae's
+Inhale, Macalania Seymour's idle, Yojimbo's Daigoro, Yu Yevon's command 254, Metamorphosis, Draws
+Sword), a cure-only row "Cures ... on ..." (the Guardians' Remedy). Menus and event logs do not
+carry this text; the hashes above are unaffected by it.
+
+No save migration: saves key chapters by id string, and the chapter is unlisted.
 ## 2026-09-25 — Chapter XV ship layer (no contract file changes)
 
 **FFX-2 only** [AGENTS.md hard rule 14]: the Den of Woe's scene, story, pause card, guide and tactic

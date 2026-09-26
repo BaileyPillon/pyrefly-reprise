@@ -541,11 +541,11 @@
    three — which is the price, knowingly paid: a 100x78 panel over a boss's
    feet for seven seconds is a much smaller thing than a slab printed over
    another panel's text. */
-/* `--ffx-sensor-dx` is the steer `FFXBattleHud.steerSensor` writes while an
-   enemy target cursor is live, so the read-out stops opening across the very
-   fiend it describes. Zero — the resting place — whenever no cursor is up. */
+/* `--ffx-sensor-dx` is the steer `FFXBattleHud.steerSensor` writes while an enemy target cursor is live, so the
+   read-out stops opening across the very fiend it describes. Zero — the resting place — whenever no cursor is up.
+   `--ffx-sensor-dy`: Chapter XII's lift clear of the intent line (FFX only, `OmnisReadout.ts`); zero elsewhere. */
 .ffx-sensor {
-  position: absolute; left: calc(436px + var(--ffx-sensor-dx, 0px)); top: 166px; width: 100px;
+  position: absolute; left: calc(436px + var(--ffx-sensor-dx, 0px)); top: calc(166px + var(--ffx-sensor-dy, 0px)); width: 100px;
   padding: 6px 8px; background: var(--ig-ink-panel);
   transform: skewX(var(--ig-skew));
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);

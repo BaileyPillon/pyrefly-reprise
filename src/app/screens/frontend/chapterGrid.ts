@@ -1,12 +1,12 @@
 /**
- * The chapter grid behind the showpiece chapter select.
+ * The chapter grid behind chapter select.
  *
- * Approved end state: `docs/concepts/polish/showpiece-frontend/after.png` and
- * `chapter-select.png` — "A front end that moves: parallax title and
- * silhouette chapter cards" (Bailey, 2026-09-19). The board reads as *the
- * encounters*, not as five thumbnails, so every card carries its boss as an
- * ink silhouette until the chapter has been cleared, and then it carries the
- * painting.
+ * Approved end state: `docs/concepts/chapter-select-v2/` option C (D-183,
+ * Bailey 2026-09-25, "I'll go with C a victory ribbon", "All
+ * recommendations"), which replaces the silhouette cards of
+ * `docs/concepts/polish/showpiece-frontend/chapter-select.png`: a fixed list
+ * in chapter-number order per game, every card the boss painted on its scene
+ * (`chapterPlates.ts`), a beaten chapter marked by the gold ribbon.
  *
  * Pure: no DOM, no `three`, no timers. Everything the screen draws is decided
  * here and pinned by `tests/unit/frontend-chapter-grid.test.ts`.
@@ -22,7 +22,8 @@ import { romanNumeral } from '../../../ui/common/roman.ts';
 import { COMING_CHAPTERS, LOCKED_CHAPTER_IDS, type ComingChapter } from './comingChapters.ts';
 
 /**
- * Which painting is cut into the ink silhouette for a built chapter.
+ * Which boss painting a built chapter's plate and card show (named for the
+ * silhouettes it once cut; `chapterPlates.ts` composes the paintings now).
  *
  * Defaults to the formation's first enemy `spriteKey`; this table overrides
  * that where the default cutout is unusable or uninteresting, with the reason.
@@ -56,15 +57,22 @@ export interface ChapterTile {
   readonly kind: 'chapter' | 'coming';
   readonly id: string;
   readonly game: GameId;
-  /** `'I'`..`'VIII'` for a built chapter, `null` for a coming one. */
+  /**
+   * The chapter's number in the registry, or `null` for a coming row with no
+   * registered chapter behind it. A locked (registered) chapter keeps its
+   * number, so its COMING card sits in number order (VII between III and
+   * VIII): Bailey, 2026-09-25, "All recommendations" (D-183).
+   */
+  readonly number: number | null;
+  /** `'I'`..`'XIII'` from `number`, `null` when there is no number. */
   readonly numeral: string | null;
   readonly title: string;
   readonly location: string;
   /** `art/backdrops/<sceneKey>.png`, or `null` when nothing is painted yet. */
   readonly sceneKey: string | null;
-  /** `art/characters/<key>/idle.png`, back to front. May be empty. */
+  /** The boss paintings, `art/characters/<key>/idle.png`, back to front. May be empty. */
   readonly silhouetteKeys: readonly string[];
-  /** True once the player has cleared it: the card shows the painting instead. */
+  /** True once the player has cleared it: the card and plate wear the victory ribbon. */
   readonly cleared: boolean;
   /** False for a coming chapter — the card is inert and reads COMING. */
   readonly playable: boolean;
@@ -97,6 +105,7 @@ function tileForChapter(chapter: Chapter, save: ClearedLookup): ChapterTile {
     kind: 'chapter',
     id: chapter.id,
     game: chapter.game,
+    number: chapter.number,
     numeral: romanNumeral(chapter.number),
     title: chapter.title,
     location: chapter.location,
@@ -108,15 +117,21 @@ function tileForChapter(chapter: Chapter, save: ClearedLookup): ChapterTile {
   };
 }
 
-function tileForComing(coming: ComingChapter): ChapterTile {
+/**
+ * A coming card. When its id is a registered (locked) chapter, the card
+ * borrows that chapter's number and scene, never its data: the chapter record
+ * itself stays `null` so nothing can start it.
+ */
+function tileForComing(coming: ComingChapter, registered: Chapter | undefined): ChapterTile {
   return {
     kind: 'coming',
     id: coming.id,
     game: coming.game,
-    numeral: null,
+    number: registered?.number ?? null,
+    numeral: registered ? romanNumeral(registered.number) : null,
     title: coming.title,
     location: coming.location,
-    sceneKey: null,
+    sceneKey: registered?.sceneKey ?? null,
     silhouetteKeys: coming.silhouetteKeys,
     cleared: false,
     playable: false,
@@ -138,8 +153,10 @@ export interface ChapterRegistries {
 }
 
 /**
- * Every card on the board, FFX chapters first, then FFX-2, each game's built
- * chapters in play order followed by that game's approved-but-coming ones.
+ * Every card on the board, FFX chapters first, then FFX-2, each game's cards
+ * in chapter-number order. A coming card with a registered number sits at its
+ * number's place (Chapter VII between III and VIII); a coming row with no
+ * number yet goes after its game's numbered cards.
  *
  * A coming row whose id **or** title has since appeared in `CHAPTERS` is
  * dropped: the real chapter is already in the list, so the card lights up by
@@ -152,7 +169,8 @@ export function buildChapterTiles(
   registries: ChapterRegistries = {},
 ): ChapterTile[] {
   const locked = registries.locked ?? LOCKED_CHAPTER_IDS;
-  const chapters = (registries.chapters ?? CHAPTERS).filter((c) => !locked.has(c.id));
+  const registered = registries.chapters ?? CHAPTERS;
+  const chapters = registered.filter((c) => !locked.has(c.id));
   const comingRows = registries.coming ?? COMING_CHAPTERS;
   const liveIds = new Set(chapters.map((c) => c.id as string));
   const liveTitles = new Set(chapters.map((c) => c.title.toLowerCase()));
@@ -162,14 +180,25 @@ export function buildChapterTiles(
 
   const tiles: ChapterTile[] = [];
   for (const game of ['ffx', 'ffx2'] as const) {
+    const own: ChapterTile[] = [];
     for (const chapter of chapters) {
-      if (chapter.game === game) tiles.push(tileForChapter(chapter, save));
+      if (chapter.game === game) own.push(tileForChapter(chapter, save));
     }
     for (const row of coming) {
-      if (row.game === game) tiles.push(tileForComing(row));
+      if (row.game !== game) continue;
+      const behind = locked.has(row.id) ? registered.find((c) => c.id === row.id) : undefined;
+      own.push(tileForComing(row, behind));
     }
+    // Stable: equal numbers (and every un-numbered row) keep registry order.
+    own.sort((a, b) => byNumber(a.number) - byNumber(b.number));
+    tiles.push(...own);
   }
   return tiles;
+}
+
+/** A sort key that puts an un-numbered coming row after every numbered card. */
+function byNumber(n: number | null): number {
+  return n ?? Number.MAX_SAFE_INTEGER;
 }
 
 /** The same tiles, split into the two game groups the board shows. */

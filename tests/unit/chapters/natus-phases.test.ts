@@ -258,7 +258,7 @@ describe('FFX only: nothing here reaches another chapter or FFX-2', () => {
   });
 
   it('every other FFX chapter keeps its natus.* flags empty through a seeded run', () => {
-    for (const ch of CHAPTERS.filter((c) => c.game === 'ffx')) {
+    for (const ch of CHAPTERS.filter((c) => c.game === 'ffx' && c.id !== 'seymour-natus')) { // Chapter X itself is listed (2026-09-25)
       const engine = createFFXEngine({ content, autoResolveMinigames: true });
       engine.init({ game: 'ffx', party: ch.buildRef as typeof highbridgeBuild, enemies: ch.enemyGroupRef, triggers: [], seed: 1, condition: 'normal', canEscape: false });
       drive(engine, defend, (e) => e.state().turn > 40);
