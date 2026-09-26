@@ -1,0 +1,103 @@
+{
+  "mainSha": "ce05b02c",
+  "bundle": "i8Mr-QwD",
+  "deployedAt": "2026-09-26T18:20:35.740Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 754,
+  "policyVersion": 2,
+  "artifactHash": "fc45319a67de442052f25bc72daa242916e61180f76e4e361532ea4be2c00f2d",
+  "review": "deep",
+  "reasons": [
+    "src/battle/ffx2/abilities-shuyin.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/active.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/chain.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/constants.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/engine.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/internal.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/menu-cancel.ts: FFX-2 ATB engine is a shared system",
+    "src/battle/ffx2/resolve.ts: FFX-2 ATB engine is a shared system",
+    "public/art/manifest.json: asset loader and manifests is a shared system"
+  ],
+  "systems": [
+    "FFX HUD",
+    "FFX-2 ATB engine",
+    "asset loader and manifests",
+    "painted artwork"
+  ],
+  "chapters": [
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin",
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon"
+  ],
+  "checks": [
+    "CHK-003",
+    "CHK-004",
+    "CHK-006",
+    "CHK-007",
+    "CHK-008",
+    "CHK-009",
+    "CHK-010",
+    "CHK-012",
+    "CHK-013",
+    "CHK-014",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-018",
+    "CHK-019",
+    "CHK-020",
+    "CHK-021",
+    "CHK-022",
+    "CHK-023"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 94,
+    "at": "2026-09-26T18:20:35.740Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
+    },
+    {
+      "kind": "focused",
+      "status": "pending",
+      "requires": "acceptance of the changed area"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483",
+        "dc2669ac",
+        "e3b8c2a3",
+        "a999d133",
+        "1c22066e",
+        "5be4babe",
+        "fc7f1a20",
+        "e45ed3c1",
+        "1a680e41",
+        "b975397b",
+        "43dca986"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "Just push the live build please",
+    "date": "2026-09-26T18:20:35.740Z",
+    "report": null,
+    "changedArea": null
+  }
+}
