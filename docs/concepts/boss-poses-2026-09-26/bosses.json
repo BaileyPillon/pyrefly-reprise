@@ -1,0 +1,544 @@
+{
+ "yojimbo": {
+  "title": "Chapter IX Yojimbo (FFX only)",
+  "art": "yojimbo-cavern",
+  "game": "FFX only (Ch IX, Cavern of the Stolen Fayth)",
+  "backdrop": "cavern-stolen-fayth",
+  "seed0": 926000,
+  "weapon": "katana",
+  "headF": 0.3,
+  "subject": "1boy, solo, male focus, samurai, final fantasy x",
+  "identity": "armored samurai, (wide shallow conical gold straw hat:1.15), jingasa, small peak on top of hat, red hat cord, (gold menpo face mask:1.2), fanged gold mask, gold chest armor, gold shoulder armor, purple sleeves, purple gloves, black gauntlets, orange sash tied at waist, purple hakama, purple robe, geta sandals, dark blue tabi",
+  "neg": "multiple boys, 2boys, dog, animal, bare face, bare arms, navy blue coat, cape, wings, horns, straw hat brim torn, blonde hair, long hair, ribbons, streamers, floating fabric, flowing cloth, swirling cloth, wind, cloth rings, oversized hat, umbrella, parasol, giant hat, red hat, orange hat, tall hat, traffic cone, pointed tall hat, hat with tassels, white mask, skull mask, skull, bone mask, hat band, round crown, sombrero, bare feet",
+  "erase": {
+   "nosword": [
+    [
+     [
+      140,
+      392
+     ],
+     [
+      166,
+      360
+     ],
+     [
+      262,
+      438
+     ],
+     [
+      262,
+      486
+     ],
+     [
+      232,
+      490
+     ]
+    ],
+    [
+     [
+      14,
+      636
+     ],
+     [
+      34,
+      668
+     ],
+     [
+      262,
+      548
+     ],
+     [
+      262,
+      494
+     ],
+     [
+      236,
+      494
+     ]
+    ]
+   ],
+   "nohat": [
+    [
+     [
+      140,
+      392
+     ],
+     [
+      166,
+      360
+     ],
+     [
+      262,
+      438
+     ],
+     [
+      262,
+      486
+     ],
+     [
+      232,
+      490
+     ]
+    ],
+    [
+     [
+      14,
+      636
+     ],
+     [
+      34,
+      668
+     ],
+     [
+      262,
+      548
+     ],
+     [
+      262,
+      494
+     ],
+     [
+      236,
+      494
+     ]
+    ],
+    [
+     [
+      110,
+      44
+     ],
+     [
+      330,
+      24
+     ],
+     [
+      380,
+      10
+     ],
+     [
+      425,
+      28
+     ],
+     [
+      470,
+      66
+     ],
+     [
+      560,
+      156
+     ],
+     [
+      606,
+      208
+     ],
+     [
+      590,
+      220
+     ],
+     [
+      500,
+      192
+     ],
+     [
+      440,
+      172
+     ],
+     [
+      415,
+      150
+     ],
+     [
+      395,
+      110
+     ],
+     [
+      375,
+      95
+     ],
+     [
+      330,
+      95
+     ],
+     [
+      298,
+      120
+     ],
+     [
+      292,
+      138
+     ],
+     [
+      250,
+      124
+     ],
+     [
+      200,
+      106
+     ],
+     [
+      150,
+      88
+     ],
+     [
+      108,
+      72
+     ]
+    ],
+    [
+     [
+      452,
+      165
+     ],
+     [
+      474,
+      165
+     ],
+     [
+      474,
+      262
+     ],
+     [
+      452,
+      262
+     ]
+    ],
+    [
+     [
+      510,
+      175
+     ],
+     [
+      532,
+      175
+     ],
+     [
+      585,
+      690
+     ],
+     [
+      545,
+      695
+     ],
+     [
+      512,
+      420
+     ]
+    ]
+   ]
+  },
+  "poses": {
+   "attack": {
+    "size": [
+     1024,
+     1216
+    ],
+    "ref": "nosword",
+    "weaponless": true,
+    "tags": "wide shot, fighting stance, (lunging:1.2), leaning forward, legs apart, bent knees, (both arms extended forward:1.2), (clenched fists:1.2), hands together, both hands in front of chest",
+    "negx": "standing straight, open hand, arms at sides, hand on hip",
+    "cn": [
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95
+    ],
+    "skelScale": 0.72,
+    "ground": 1105
+   },
+   "hurt": {
+    "size": [
+     1024,
+     1216
+    ],
+    "ref": "nohat",
+    "tags": "(recoiling:1.2), knocked back, (leaning back:1.1), head tilted back, arm outstretched forward, other arm lowered, feet on ground",
+    "negx": "hat, straw hat, headwear, jingasa, helmet, hood, kabuto, bent over, bowing, jumping, midair, kneeling, sitting, arms up, close-up, upper body, cowboy shot, leaning forward, hunched, looking down, bent at waist, shield, gold wall, dripping, liquid, pole, stick, cane, holding object",
+    "cn": [
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95
+    ],
+    "skelScale": 0.72,
+    "ground": 1105,
+    "weaponless": true,
+    "weapon": "sheath",
+    "v1": {
+     "tags": "(recoiling:1.2), knocked back, (leaning back:1.1), (head tilted back:1.2), looking up, arm outstretched forward, other arm lowered, feet on ground, hat on head, hat tied on",
+     "negx": "bent over, bowing, jumping, midair, kneeling, sitting, arms up, close-up, upper body, cowboy shot, leaning forward, hunched, looking down, bent at waist, hat flying off, falling hat, floating hat, hat in hand, shield, gold wall, dripping, liquid, pole, stick, cane, holding object",
+     "cn": [
+      0.92,
+      0.95,
+      0.92,
+      0.95,
+      0.92,
+      0.95,
+      0.92,
+      0.95,
+      0.92,
+      0.95,
+      0.92,
+      0.95
+     ],
+     "skelScale": 0.72,
+     "ground": 1105
+    },
+    "skel": "hurt",
+    "v2a": {
+     "skel": "hurt2",
+     "tags": "(flinching:1.2), staggering back, (head down:1.1), bowed head, one arm raised to guard, forearm across chest, other arm swung back, bent knees, hat on head",
+     "negx": "leaning forward, bowing, bent at waist, head tilted back, looking up, jumping, midair, kneeling, sitting, arms up, close-up, upper body, cowboy shot, hat flying off, falling hat, floating hat, hat in hand, holding hat, shield, gold wall, dripping, liquid, pole, stick, cane, holding object",
+     "result": "cand 17-20: cones read, but every frame is a bow or folded arms, not a hit"
+    },
+    "v2b": {
+     "skel": "hurt3",
+     "tags": "(recoiling:1.2), staggering backward, leaning back, (one arm raised in front of face:1.1), shielding face with forearm, other arm thrown down and back, bent knees, hat on head",
+     "negx": "bowing, bent at waist, hunched, head down, arms crossed, crossed arms, leaning forward, head tilted back, looking up, jumping, midair, kneeling, sitting, both arms up, close-up, upper body, cowboy shot, hat flying off, falling hat, floating hat, hat in hand, holding hat, shield, gold wall, dripping, liquid, pole, stick, cane, holding object",
+     "result": "cand 21-24: 4 of 4 guard rejects; brim + raised arm explode into gold sheets (METHOD-CHECK-yojimbo-hurt.md)"
+    },
+    "method": "METHOD-CHECK-yojimbo-hurt.md option 1: hatless body + the idle hat/mask + the idle sheathed katana composited",
+    "identity": "armored samurai, (bare head:1.2), short black hair, topknot, (gold menpo face mask:1.2), fanged gold mask, gold chest armor, gold shoulder armor, purple sleeves, purple gloves, black gauntlets, orange sash tied at waist, purple hakama, purple robe, geta sandals, dark blue tabi",
+    "refHead": "head-nohat.png"
+   },
+   "attack-h": {
+    "size": [
+     1024,
+     1216
+    ],
+    "ref": "nohat",
+    "weaponless": true,
+    "tags": "wide shot, fighting stance, (lunging:1.2), leaning forward, legs apart, bent knees, (both arms extended forward:1.2), (clenched fists:1.2), hands together, both hands in front of chest",
+    "negx": "standing straight, open hand, arms at sides, hand on hip, hat, straw hat, headwear, jingasa, helmet, hood, kabuto",
+    "cn": [
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95,
+     0.9,
+     0.95,
+     0.92,
+     0.95
+    ],
+    "skelScale": 0.72,
+    "ground": 1105,
+    "skel": "attack",
+    "refHead": "head-nohat.png",
+    "identity": "armored samurai, (bare head:1.2), short black hair, topknot, (gold menpo face mask:1.2), fanged gold mask, gold chest armor, gold shoulder armor, purple sleeves, purple gloves, black gauntlets, orange sash tied at waist, purple hakama, purple robe, geta sandals, dark blue tabi",
+    "method": "METHOD-CHECK-yojimbo-hurt.md option 1 applied to the attack: hatless, weaponless body + the idle hat/mask + the drawn katana composited",
+    "slot": "attack"
+   }
+  },
+  "weapons": {
+   "sheath": {
+    "polys": [
+     [
+      [
+       140,
+       392
+      ],
+      [
+       166,
+       360
+      ],
+      [
+       262,
+       438
+      ],
+      [
+       262,
+       486
+      ],
+      [
+       232,
+       490
+      ]
+     ],
+     [
+      [
+       14,
+       636
+      ],
+      [
+       34,
+       668
+      ],
+      [
+       262,
+       548
+      ],
+      [
+       262,
+       494
+      ],
+      [
+       236,
+       494
+      ]
+     ]
+    ],
+    "grip": [
+     250,
+     470
+    ],
+    "tip": [
+     22,
+     650
+    ]
+   },
+   "hat": {
+    "polys": [
+     [
+      [
+       118,
+       48
+      ],
+      [
+       230,
+       34
+      ],
+      [
+       330,
+       26
+      ],
+      [
+       340,
+       20
+      ],
+      [
+       380,
+       12
+      ],
+      [
+       422,
+       28
+      ],
+      [
+       470,
+       68
+      ],
+      [
+       560,
+       158
+      ],
+      [
+       604,
+       208
+      ],
+      [
+       592,
+       216
+      ],
+      [
+       500,
+       188
+      ],
+      [
+       430,
+       166
+      ],
+      [
+       400,
+       152
+      ],
+      [
+       372,
+       162
+      ],
+      [
+       350,
+       174
+      ],
+      [
+       337,
+       200
+      ],
+      [
+       314,
+       216
+      ],
+      [
+       296,
+       210
+      ],
+      [
+       288,
+       145
+      ],
+      [
+       292,
+       128
+      ],
+      [
+       250,
+       114
+      ],
+      [
+       200,
+       98
+      ],
+      [
+       150,
+       80
+      ],
+      [
+       118,
+       66
+      ]
+     ]
+    ],
+    "grip": [
+     345,
+     168
+    ],
+    "tip": [
+     380,
+     15
+    ],
+    "note": "the idle jingasa + gold menpo mask down to the chin; grip = the nape under the brim, tip = the hat apex (upright = -77 deg)"
+   }
+  },
+  "identity_v1": "armored samurai, (wide flat conical straw hat:1.1), gold straw hat, wide brim, red hat cord, gold menpo face mask, fanged mask, gold chest armor, gold shoulder armor, purple sleeves, purple gloves, black gauntlets, orange sash tied at waist, purple hakama, purple robe, geta sandals, dark blue tabi",
+  "neg_v1": "multiple boys, 2boys, dog, animal, bare face, bare arms, navy blue coat, cape, wings, horns, straw hat brim torn, blonde hair, long hair, ribbons, streamers, floating fabric, flowing cloth, swirling cloth, wind, cloth rings, oversized hat, umbrella, parasol, giant hat, red hat, orange hat, cone hat, tall hat, traffic cone, pointed tall hat, hat with tassels",
+  "v2note": "v2 (2026-09-26 evening): identity/neg revised after the stopped run's look (white skull masks, round-crowned hats; the old neg 'cone hat' fought the conical jingasa). Renders 1-12 attack / 1-16 hurt used identity_v1/neg_v1 (their sidecars hold the exact prompts)."
+ }
+}

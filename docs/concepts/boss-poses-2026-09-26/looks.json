@@ -1,0 +1,136 @@
+{
+ "yojimbo": {
+  "attack": {
+   "pick": "c45 (alt c48)",
+   "folder": "attack-h",
+   "cands": {
+    "45": {
+     "score": "7.69",
+     "verdict": "PASS",
+     "look": "Maker: Lunge with both fists on the hilt, blade out toward the party: the Zanmato draw. Hat and mask are the idle's own; gold pauldron and waist plate are closest to the idle. Second look: Worst: the hilt runs on past the rear fist over the forearm (reads as the pommel at game size). Sleeves lighter violet than the idle; the idle's long trailing robe is a hakama here. Hat cords cut at the brim.",
+     "scores": {
+      "identity": 8,
+      "anatomy": 7.5,
+      "hands": 7,
+      "costume": 7.5,
+      "seams": 7.5,
+      "edges": 8,
+      "finish": 7.5,
+      "gameRead": 8.5
+     }
+    },
+    "48": {
+     "score": "7.62",
+     "verdict": "PASS",
+     "look": "Maker: The deepest lunge and the cleanest sword line of the set; best read at game size. Second look: Worst: a thin blue ground-shadow streak left under both geta (the cutout kept it). Cuirass mostly hidden by the arms; chest plate smaller than the idle's.",
+     "scores": {
+      "identity": 8,
+      "anatomy": 8,
+      "hands": 7,
+      "costume": 7,
+      "seams": 7.5,
+      "edges": 7,
+      "finish": 7.5,
+      "gameRead": 9
+     }
+    },
+    "44": {
+     "score": "7.62",
+     "verdict": "PASS",
+     "look": "Maker: Clean lunge, the hat reads exactly as the idle's. Second look: Worst: costume. A blue-violet kimono and a dark lower sash band the idle does not have; no gold cuirass. The hilt passes over the rear forearm.",
+     "scores": {
+      "identity": 8,
+      "anatomy": 7.5,
+      "hands": 7,
+      "costume": 7,
+      "seams": 7.5,
+      "edges": 8,
+      "finish": 7.5,
+      "gameRead": 8.5
+     }
+    },
+    "46": {
+     "score": "6.81",
+     "verdict": "FAIL",
+     "look": "Maker: Same lunge; the render added flared purple cloth behind him. Second look: FAIL. The purple cloth fans out behind him in three points and reads as wings or a cape at game size; the idle has neither. Otherwise sound.",
+     "scores": {
+      "identity": 7,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 5.5,
+      "seams": 7.5,
+      "edges": 7,
+      "finish": 7,
+      "gameRead": 6.5
+     }
+    }
+   }
+  },
+  "hurt": {
+   "pick": "c35 (alt c34)",
+   "folder": "hurt",
+   "cands": {
+    "34": {
+     "score": "7.38",
+     "verdict": "PASS",
+     "look": "Maker: Thrown back from the blow, arms flung down, head and hat tipped back: the clearest hit read. Dark purple, gold pauldrons, orange sash, sheathed katana at the hip. Second look: Worst: the head sits behind the shoulder line with no neck showing, so the hat seems to hang off his back at 1:1 (not at game size). A cyan rim line on the robe's left edge.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 7.5,
+      "seams": 7,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 8
+     }
+    },
+    "35": {
+     "score": "7.44",
+     "verdict": "PASS",
+     "look": "Maker: Recoil with both hands splayed; the lean and the tipped hat read as a hit. Second look: Worst: the hat is tipped almost to vertical, more than the body lean asks. Lilac hakama, paler than the idle's purple.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 7.5,
+      "hands": 7.5,
+      "costume": 7,
+      "seams": 7,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 8
+     }
+    },
+    "28": {
+     "score": "7.31",
+     "verdict": "PASS",
+     "look": "Maker: Knocked back, near arm reaching forward, hat tipped back. Second look: Worst: costume. A pale lilac robe with shoulder plates only, much lighter than the idle; the near hand is small and the far hand hides under the scabbard.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 7.5,
+      "hands": 6.5,
+      "costume": 6.5,
+      "seams": 7.5,
+      "edges": 8,
+      "finish": 7.5,
+      "gameRead": 7.5
+     }
+    },
+    "29": {
+     "score": "7.12",
+     "verdict": "PASS",
+     "look": "Maker: Bent back at the waist, head thrown back. Second look: Worst: anatomy and seams. The mask sits straight on the shoulder armour with no neck, and a pale scrap of the render's own neck shows at the collar. Narrow pass.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 6.5,
+      "hands": 7,
+      "costume": 7,
+      "seams": 6.5,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 7.5
+     }
+    }
+   }
+  }
+ }
+}
