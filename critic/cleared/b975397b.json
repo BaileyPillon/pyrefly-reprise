@@ -1,0 +1,54 @@
+{
+  "mainSha": "b975397b",
+  "bundle": "Dd1Fjf8_",
+  "deployedAt": "2026-09-26T06:27:00.994Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 708,
+  "artifactHash": "1d4de5edb67b7be498709c77e824168d3e30493de36acb2469b8a0634f42c791",
+  "review": "deep",
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "done",
+      "requires": "exact-artifact verification and real-input smoke on the live URL",
+      "result": "PASS",
+      "settledBy": "critic/reviews/b975397b-live.json",
+      "settledAt": "2026-09-26T07:15:00.000Z",
+      "note": "settled in the main tree before 43dca986 replaced it; the deploy in D:/pyrefly-rel19 read an older copy and wrote superseded-unverified, corrected by the driver"
+    },
+    {
+      "kind": "focused",
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "PASS",
+      "settledBy": "critic/reviews/b975397b-focused.json",
+      "settledAt": "2026-09-26T06:25:00.000Z"
+    },
+    {
+      "kind": "deep",
+      "status": "carried",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483",
+        "dc2669ac",
+        "e3b8c2a3",
+        "a999d133",
+        "1c22066e",
+        "5be4babe",
+        "fc7f1a20",
+        "e45ed3c1",
+        "1a680e41"
+      ],
+      "carriedTo": "43dca986",
+      "at": "2026-09-26T15:13:24.643Z"
+    }
+  ],
+  "supersededBy": "43dca986"
+}

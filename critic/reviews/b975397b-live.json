@@ -1,0 +1,61 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-26T07:15:00.000Z",
+  "build": {
+    "mainSha": "b975397b",
+    "bundle": "Dd1Fjf8_",
+    "artifactHash": "1d4de5edb67b7be498709c77e824168d3e30493de36acb2469b8a0634f42c791"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/b975397b.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/1a680e41.json -> result PASS, liveManifest match, checked 50, mismatched 0, missing 0, wrongType 0, errors 0"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (playwright 1.63), PYREFLY_BROWSER=gpu (real-GPU launch args from tools/browser-mode.mjs; no black-canvas fallback needed), fresh incognito context, 1600x900, script .zz-live-smoke-b975397b-tmp.mjs. Cache-busted load of https://baileypillon.github.io/pyrefly-reprise/?cb=<ts>. Real click on the title's [data-action=confirm] plate reached chapter-select (screen()==='chapter-select'). Chapter-select v2 confirmed: [data-card] lists all four newly listed chapters (seymour-natus = X Natus, ffx2-fallen-aeons = XI Fallen Aeons, seymour-omnis = XII Omnis, isaaru-via-purifico = XIV Isaaru) alongside the nine already-live cards. Real two-click select+confirm on the X Natus card entered party-prep, real Enter began the chapter, real held-Enter skipped the pre-battle cutscene, reaching battle with window.__pyrefly.snapshotState().screenState.playback.awaitingMenu===true (asserted before proceeding, not assumed). Positive path: real Enter opened the command menu on the player turn. Cancel path: real Escape backed out (screen stayed 'battle' or moved to the documented 'pause' state; battle was never exited to chapter-select or title). Pause: real Escape opens 'pause' with a pause panel present; real KeyP + KeyH hide the pause UI (0 '[class*=pause]' elements) and a second KeyH restores it (77 elements, same as before); Escape resumes. Music: audioDebug() during play showed the boss-seymour-macalania cue active with source:'prerendered', and prerendered.manifest===true, prerendered.spriteDecoded===true (not the procedural synth fallback). Console errors and HTTP >=400 responses were counted for the whole run: 0 and 0."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight pass only, on the same run as CHK-016: real progress was made (the X Natus chapter's attempts counter incremented to 1 in the save, pyrefly-reprise:save:v1 in localStorage) and page.reload() was performed. After reload, the save's seymour-natus.attempts field was still 1 (unchanged from before the reload) and pausePanelsHidden read back the same value it held before the reload, confirming both progress and a settings field survive a real reload.",
+      "reason": "Full upgrade-path matrix (fresh player, returning player, a fixture from the previous live build migrating forward, invalid/truncated storage, and reload during every allowed state) was NOT tested; out of scope for this lightweight live pass per the task."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact-artifact manifest verify-live against the previous build 1a680e41 (CHK-017)",
+      "real-input boot: title -> chapter-select via a real click",
+      "chapter-select v2 lists the four newly listed chapters (X Natus, XI Fallen Aeons, XII Omnis, XIV Isaaru)",
+      "entering the changed chapter (X Natus / seymour-natus) via real clicks and the two-click select+confirm rule",
+      "real held-Enter cutscene skip, real Enter through party-prep, reaching a real player turn with awaitingMenu asserted before proceeding",
+      "positive path (Enter opens command menu) and cancel path (Escape backs out / opens pause; battle never exited) on the player turn",
+      "pause and resume via Escape, and H hide/restore of the pause panels",
+      "prerendered music confirmed playing (not the synth fallback) via audioDebug()",
+      "reload smoke: one real settings field and one piece of real progress (attempt count) both survive a reload",
+      "console errors and 404/4xx/5xx responses counted for the whole run"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix (fresh player, returning player, previous-build save fixture migrating forward, invalid/truncated storage, reload during every allowed state)",
+      "the other three newly listed chapters (XI Fallen Aeons, XII Omnis, XIV Isaaru) played end to end; only chapter-select listing was confirmed for all four, and one (X Natus) was played to a real player turn",
+      "the nine chapters already live (regression replay) — this pass only re-confirmed the exact-artifact identity for them, not a fresh playthrough",
+      "physical device, Safari or real-controller input",
+      "phone/touch layout (390x844) on this pass"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 22
+}

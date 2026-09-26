@@ -1,0 +1,518 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-26T15:10:53.349Z",
+ "build": {
+  "mainSha": "43dca986",
+  "fullSha": "43dca9860791b44d3887ab7ac04c4dc95f89502b",
+  "candidateTree": "D:/pyrefly-rel19",
+  "bundle": "D56B92vC",
+  "live": "b975397b (release 18, bundle Dd1Fjf8_) used for comparison runs"
+ },
+ "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: Chapter XV (new, FFX-2) was won by real keys at 1600x900 and 390x844 through all three shades to results and back to the board, with prep at LV 54/56/58, Hero Drink x3 in the bag, and a Hero Drink drunk in Nooj's link before Lightfall.",
+  "Chapter III, unwinnable live by real keys in round 13, was won on the candidate by following the advisor card on every command (seed 1, 1600x900) through the post scene, results and the board ribbon (CHK-022).",
+  "No regression against live b975397b: every other listed chapter reached its outcome and results on the candidate; the one surprise (Chapter I lost with setSeed(1)) reproduces identically on the live site, command for command.",
+  "Each round-13 fix meets its acceptance check (PR-0198, PR-0208, PR-0153, PR-0123, PR-0207, PR-0126 desktop); the three majors left open (IC-1, IC-2, PR-0126 phone half) are not regressions and are disclosed."
+ ],
+ "checks": [
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 3,
+   "game": "both",
+   "chapter": "I, III, V, XI, XV and the regression set",
+   "state": "every capture",
+   "reason": "every route capture waits on window.__pyrefly.screen() and records ASSERT-FAIL instead of a file on a wrong screen; the probe refused one capture (pause instead of battle) and it was not used as evidence; stale-root check logged per capture in index.jsonl",
+   "evidence": [
+    "critic/reviews/43dca986-focused/index.jsonl",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/03-card.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 1,
+   "game": "both",
+   "chapter": "all",
+   "state": "live URL",
+   "reason": "Deployment verification is the separate live obligation after the deploy. The live site (b975397b) was opened only for comparison runs (Chapter I seed 1, Chapter V Pray target)."
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-022",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 70,
+   "game": "both",
+   "chapter": "III braskas-final-aeon, XV ffx2-den-of-woe, I, V, XI, XII, IX, X, IV, VI, XIII, XIV",
+   "state": "title to outcome to results to board, real keys",
+   "reason": "Chapter III won by real keys following the advisor card on every command (seed 1, 1600x900, 190 commands, 0 misses, 187/187 targets steered to the named plate), through all 7 links, the post scene, results and the board ribbon (III cleared, survives a reload). Chapter XV won at 1600x900 (first try) and at 390x844 (first try; an earlier overlapping run won on its second try after a RETRY), through the three shades, post scene, results, board and reload. Chapter I (unpinned), V (seed 1), XI (390), XIV (Isaaru) won following the advisor; II lost then results (same as release 18); IV, VI, IX, X, XII, XIII reached results and the board with the release-18 regression driver.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/braskas-final-aeon-win-s1/31-results.png",
+    "critic/reviews/43dca986-focused/braskas-final-aeon-win-s1/34-board-after.png",
+    "critic/reviews/43dca986-focused/braskas-final-aeon-win-s1/35-board-reload.png",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/31-results.png",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/34-board-after.png",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win-phone/31-results.png",
+    "critic/reviews/43dca986-focused/ffx2-vegnagun-shuyin-win-s1/31-results.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-015",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 5,
+   "game": "both",
+   "chapter": "III, XV, I, V, XI",
+   "state": "command menu, submenu, target, pause, prep, cutscene",
+   "reason": "Everything was driven by Playwright keyboard presses on the production bundle: Esc opens pause and resumes, P opens pause (P does not close it, same on live: round 13 recorded pCloses false 28/28), target Esc cancels with no leftover reticle, prep Esc returns to the board, Enter holds skip scenes, RETRY after a loss returns to the fight. Debug use: setSeed before the first key (labelled) and read-only state queries.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/14-pause-Esc.png",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/16b-after-cancel.png",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win-phone/14-pause-Esc.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-010",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "automated",
+   "minutes": 10,
+   "game": "ffx2",
+   "chapter": "XV ffx2-den-of-woe and V ffx2-vegnagun-shuyin",
+   "state": "Yuna (White Mage) > White Magic > Pray, all-allies target state",
+   "reason": "By real keys at 1600x900 and 390x844: the target state shows TARGET All allies, the ALL ALLIES label, brackets on all three girls (3 of 3 lit), green party rows and ENTER CONFIRM / ESC BACK; on the phone the BACK / PRAY -> ALL ALLIES pair. The state holds with no input for 2.4 s (sampled every 100 ms, no action fired) and Esc returns to the menu. Same on live Chapter V. Polish: in the Den the ALL ALLIES label overlaps the intent panel (FOC19-05).",
+   "evidence": [
+    "critic/reviews/43dca986-focused/probe-b-ffx2-den-of-woe-1600x900/ffx2-pray-all-allies-target.png",
+    "critic/reviews/43dca986-focused/probe-390x844/ffx2-pray-all-allies-target.png",
+    "critic/reviews/43dca986-focused/probe-live-ffx2-vegnagun-shuyin-1600x900/ffx2-pray-all-allies-target.png",
+    "critic/reviews/43dca986-focused/probe-w-ffx2-den-of-woe-1600x900/probe.json"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-021",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 6,
+   "game": "both",
+   "chapter": "XV (FFX-2), III and I (FFX), V and XI (FFX-2)",
+   "state": "game case of each change",
+   "reason": "Every commit states its case. Chapter XV: FFX-2 only (research/ffx2-gippal-den-of-woe.md): present in the X-2 group after XIII with ATB, dresspheres, chain and FFX-2 results; absent from the FFX group. PR-0198 and PR-0208: FFX only (letterTags.ts is under src/battle/ffx; the FFX-2 HUD names its own rows); lettered Yu Pagoda A/B seen in III. PR-0153: both, random-target rows seen in I (FFX) and XV and XI (FFX-2, \"random: YUNA / RIKKU / PAINE\"). PR-0123: both badge, FFX-2 cast (Shuyin link 5). PR-0207 and PR-0126: both.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/03-card.png",
+    "critic/reviews/43dca986-focused/seymour-flux-win-s1/12-intent-E.png",
+    "critic/reviews/43dca986-focused/ffx2-vegnagun-shuyin-win-s1/24-seam-5-first-menu.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-004",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "automated",
+   "minutes": 3,
+   "game": "both",
+   "chapter": "III, XV, I, V, XI",
+   "state": "advisor card on every followed command",
+   "reason": "PR-0126 desktop half: 0 of 316 desktop cards naming a submenu row lacked the \"in <menu>\" chip (III 216, XV 56, XI 50, I 24 incl. Items, White Magic, Skill, Special, Overdrive). The phone tip still has no menu word (carried, FOC19-03).",
+   "evidence": [
+    "critic/reviews/43dca986-focused/braskas-final-aeon-win-s1/run.json",
+    "critic/reviews/43dca986-focused/ffx2-fallen-aeons-win/run.json"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-005",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "automated",
+   "minutes": 4,
+   "game": "ffx",
+   "chapter": "III braskas-final-aeon, I seymour-flux",
+   "state": "Zombie on an ally (broken board)",
+   "reason": "PR-0198: tests/unit/advisor-zombie-heal.test.ts passes on the candidate; in the III real-key route (Yuna and others Zombied by Triumphant Grasp) and in the I runs no party KO was caused by an advisor-named item: every KO came from a boss action. The card says \"Yuna is still a Zombie - the next Full-Life would kill\" and offers Holy Water / leave-down lines instead of Elixir.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/braskas-final-aeon-win-s1/battle-log.json",
+    "critic/reviews/43dca986-focused/seymour-flux-win-s1/run.json"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-011",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "manual",
+   "minutes": 2,
+   "game": "both",
+   "chapter": "III, XV",
+   "state": "default framing",
+   "reason": "III: both Yu Pagodas and the aeon targeted and lettered (plates A/B) and reachable by the cursor; XV: one shade per link, visible at 1600 and 390 (the Baralai shade stands at the right edge of the phone frame, fully drawn).",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win-phone/12-intent-E.png",
+    "critic/reviews/43dca986-focused/braskas-final-aeon-win-s1/16-target-single.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-009",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "manual",
+   "minutes": 1,
+   "game": "both",
+   "chapter": "XV, III",
+   "state": "card, plates, intent",
+   "reason": "Names shown in full: The Den of Woe card, Yu Pagoda A / B on card and plate, shade names on the gauge and pause card; no truncation seen except the pause GARMENT GRID value \"TEMPERED W...\" on the phone, which is the release-18 pause layout.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/03-card.png",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win-phone/14-pause-Esc.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-008",
+   "result": "FAIL",
+   "mandatory": false,
+   "mode": "manual",
+   "minutes": 2,
+   "game": "ffx2",
+   "chapter": "XV ffx2-den-of-woe",
+   "state": "Baralai link, Pray target state, 1600x900",
+   "reason": "The ALL ALLIES label sits on top of the intent panel's last lines in the Den (FOC19-05, polish, new chapter only). Live Chapter V places the panel right and does not collide.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/probe-b-ffx2-den-of-woe-1600x900/ffx2-pray-all-allies-target.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-002",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "manual",
+   "minutes": 1,
+   "game": "both",
+   "chapter": "XV, III",
+   "state": "pause and results",
+   "reason": "Pause and results fill the window at 1600x900 and 390x844 in the new chapter.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win-phone/14-pause-Esc.png",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/31-results.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-003",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "automated",
+   "minutes": 1,
+   "game": "both",
+   "chapter": "III, XV",
+   "state": "first menu advisor card",
+   "reason": "Measured effective advisor text at the first menu: minimum 12.2 px at 1600x900 (III), no clipped rows; phone Den coach mark did not overlap the command stack.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/braskas-final-aeon-win-s1/run.json"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-006",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "automated",
+   "minutes": 1,
+   "game": "both",
+   "chapter": "III, XV",
+   "state": "target cancel",
+   "reason": "After Esc from target selection 0 target elements remain (every route run, and the Pray probe).",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/16b-after-cancel.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-007",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "manual",
+   "minutes": 1,
+   "game": "both",
+   "chapter": "XV",
+   "state": "prep, card, pause, results",
+   "reason": "No raw ids or debug text seen in the new chapter's prep, card, HUD, pause or results.",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/04-prep.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "mandatory": false,
+   "mode": "manual",
+   "minutes": 0,
+   "game": "both",
+   "chapter": "-",
+   "state": "-",
+   "reason": "No shipped art changed in this candidate (pose round 2 is docs and records only); the cutter's verify-approved gate read 232 ok, 0 mismatched, 0 missing."
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-020",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "manual",
+   "minutes": 2,
+   "game": "both",
+   "chapter": "I, III (FFX); XI, XV, V (FFX-2)",
+   "state": "intent and advisor fixes",
+   "reason": "The \"both\" fixes are the same work in both games: random-target rows and certainty badges seen in FFX (Lance of Atrophy) and FFX-2 (Triple Attack, Blizzaga); the phone certainty token in both HUD families (XI, XV).",
+   "evidence": [
+    "critic/reviews/43dca986-focused/seymour-flux-win-s1/12-intent-E.png",
+    "critic/reviews/43dca986-focused/ffx2-fallen-aeons-win-phone/23-midfight.png"
+   ]
+  },
+  {
+   "artifact": "43dca986 / bundle index-D56B92vC.js (D:/pyrefly-rel19/dist-gate)",
+   "targetVersion": "7b9585cbdb40e237268e162981e0b3266997c81af6db4c5159fb8119572a59d8",
+   "environment": "vite preview of D:/pyrefly-rel19/dist-gate on 127.0.0.1:5431 (PID 4644, stopped by PID, port confirmed closed); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas, no fallback",
+   "id": "CHK-023",
+   "result": "PASS",
+   "mandatory": false,
+   "mode": "automated",
+   "minutes": 2,
+   "game": "ffx2",
+   "chapter": "XV",
+   "state": "Hero Drink before Lightfall",
+   "reason": "Real presentation path: the advisor names \"Hero Drink -> Yuna, in Item\" in Nooj's link; the keys submit it; the battle log shows the Hero Drink (seq 1150), Invincible added (seq 1175) and Lightfall after (seq 1251), and the party survives to victory. Phone run: Paine and Rikku drink before Lightfall (seq 852, 1046; Lightfall 1213).",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/battle-log.json",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win-phone/battle-log.json"
+   ]
+  }
+ ],
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "detail": {
+   "matched": [
+    "Chapter select v2 option C (docs/concepts/chapter-select-v2/option-C/C-ch8-cleared-1600.jpg) against the candidate board after the Chapter III win at 1600x900: the composition holds with 15 cards, XV in the X-2 group after XIII, III cleared on the ribbon and strip. Composite critic/reviews/43dca986-focused/chapter-select-v2-C.jpg"
+   ],
+   "notCompared": "No approved tile exists for the Den of Woe (its picks are decisions D-148 and D-191, not pictures)."
+  }
+ },
+ "issues": [
+  {
+   "id": "FOC19-01",
+   "severity": "major",
+   "title": "IC-1 (disclosed by D-191): FFX-2 sole-survivor chain lock: a girl left alone is chained by Nooj and never gets a turn; immune misses feed the chain",
+   "game": "ffx2",
+   "chapter": "XV ffx2-den-of-woe (shared FFX-2 engine: resolve.ts registerHit before the immunity check)",
+   "expected": "a lone survivor still gets turns; whether an immune miss chains is sourced before it is relied on",
+   "observed": "recorded by the chapter's independent check (docs/concepts/chapters/den-of-woe/ship/CHECK.md); not hit in this review's three Den wins; not re-measured",
+   "repro": "docs/target/decisions.json D-191; the ffx2-engine-fixes-0926 branch is sourcing it",
+   "evidence": [
+    "docs/target/decisions.json (D-191)"
+   ],
+   "confidence": "medium (builders' check, reused)",
+   "requirement": "RUBRIC section 2 combat correctness; AGENTS.md rule 6",
+   "where": "src/battle/ffx2/resolve.ts (registerHit order), per D-191",
+   "fix": "on the separate engine branch: register a chain hit only after the immunity check, once the source settles whether an immune miss chains",
+   "acceptanceCheck": "a seeded Den board with one girl left: she gets a turn between Nooj's actions; the Den bench re-measured",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC19-02",
+   "severity": "major",
+   "title": "IC-2 (disclosed by D-191): FFX-2 all-target wrap: when a target dies mid-move an earlier girl is hit twice and the last is skipped",
+   "game": "ffx2",
+   "chapter": "shared FFX-2 engine; seen by the builders in XV",
+   "expected": "each living target hit once",
+   "observed": "recorded by the chapter check (targetForHit indexes living[hitIndex % living.length] over a shrinking list); not re-measured here",
+   "repro": "D-191; resolve.ts targetForHit",
+   "evidence": [
+    "docs/target/decisions.json (D-191)"
+   ],
+   "confidence": "medium (builders' trace, reused)",
+   "requirement": "combat correctness",
+   "where": "src/battle/ffx2/resolve.ts targetForHit (per D-191)",
+   "fix": "fix the target list at the move's start on the engine branch",
+   "acceptanceCheck": "unit case: an all-target multi-hit that kills one girl on hit 1 hits each remaining girl the right number of times",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC19-03",
+   "severity": "major",
+   "title": "PR-0126 phone half (carried, not in this batch): the phone advisor tip still names no menu (\"TIP Protect -> the party\")",
+   "game": "both",
+   "chapter": "XV, XI at 390x844",
+   "expected": "the phone tip carries the menu word (\"TIP Protect · White Magic\")",
+   "observed": "Den phone first menu: \"TIP Protect -> the party\" with White Magic as the needed menu",
+   "repro": "390x844, Chapter XV first menu",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win-phone/12-intent-E.png"
+   ],
+   "confidence": "high",
+   "requirement": "round 13 PR-0126 acceptance (phone half)",
+   "where": "phone tip renderer (not traced)",
+   "fix": "as round 13",
+   "acceptanceCheck": "the phone tip screenshot shows the menu word",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC19-04",
+   "severity": "polish",
+   "title": "Chapter XV results count only Nooj's rewards (EXP 1,800, AP 10, gil 30,000, one drop) after three shades",
+   "game": "ffx2",
+   "chapter": "XV results",
+   "expected": "unsourced: whether the Den's three shades award separately (research section 3.2 lists 1,200 / 1,200 / 1,800 EXP and three drops); a question for Bailey or the sources",
+   "observed": "the results card reads EXP 1,800 x3, AP 10, GIL 30,000, Magical Dances Vol 1",
+   "repro": "win Chapter XV",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/31-results.png"
+   ],
+   "confidence": "high on what shows; the expectation is unsourced",
+   "requirement": "research/ffx2-gippal-den-of-woe.md section 3.2 (rewards per shade)",
+   "where": "chain results summation (not traced)",
+   "fix": "decide from the sources whether a chain sums its links' rewards, then apply it to every FFX-2 chain",
+   "acceptanceCheck": "Den results match the sourced rule",
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC19-05",
+   "severity": "polish",
+   "title": "In the Den, the ALL ALLIES target label overlaps the enemy-intent panel",
+   "game": "ffx2",
+   "chapter": "XV Baralai link, 1600x900",
+   "expected": "the label clear of the intent panel (as in Chapter V)",
+   "observed": "the label covers the intent panel's last lines",
+   "repro": "1600x900, Yuna > White Magic > Pray at the first menu",
+   "evidence": [
+    "critic/reviews/43dca986-focused/probe-b-ffx2-den-of-woe-1600x900/ffx2-pray-all-allies-target.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-008",
+   "where": "intent panel placement for a centre-staged enemy (not traced)",
+   "fix": "dock the ALL label below the party brackets or move the panel",
+   "acceptanceCheck": "no overlap in the Den Pray target frame",
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC19-06",
+   "severity": "polish",
+   "title": "Chapter XV card: BOSS lists only Baralai, and the card copy differs from the prep copy",
+   "game": "ffx2",
+   "chapter": "chapter select, XV",
+   "expected": "the three shades named (or the chapter's framing), one version of the premise",
+   "observed": "BOSS \"Baralai\"; card \"Ten old recordings ... a squad of recruits\", prep \"Paine's old recordings ... her squad\"",
+   "repro": "select XV on the board",
+   "evidence": [
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/03-card.png",
+    "critic/reviews/43dca986-focused/ffx2-den-of-woe-win/04-prep.png"
+   ],
+   "confidence": "high",
+   "requirement": "writing consistency",
+   "where": "src/data/chapter-meta-den-of-woe.ts (not traced line by line)",
+   "fix": "name the three shades on BOSS and use one premise text",
+   "acceptanceCheck": "card and prep agree",
+   "inNewFeature": true
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Gates re-read from the cutter: tsc clean, vitest 445 files / 8260 passed / 0 failed, build ok, verify-approved 232 ok 0 mismatched 0 missing; re-ran here: the 9 acceptance unit files for the fixed issues (125 passed) and orphans (24, unchanged)",
+   "Chapter XV real flow by real keys: 1600x900 win (first try, 56 commands), 390x844 win (first try); prep ITEMS tab reads Hero Drink x3 (1600x900) and the party reads LV 54/56/58 at 1600, 390 and 2000",
+   "Chapter III real-key advisor win, seed 1, 1600x900 (190 commands, 7 links, post scene, results, board ribbon, reload)",
+   "Fixed issues: PR-0198 (unit plus real route), PR-0208 (card lettered A/B; Slow A hit yu-pagoda-left, B hit -right; chapter won), PR-0153 (Ch I Lance lists Tidus, Yuna, Kimahri under RANDOM TARGET), PR-0123 (Ch V link 5: Terror of Zanarkand SCRIPTED on the headline and WATCH Terror of Zanarkand in the guide), PR-0207 (phone intent token on 66/66 XI turns and every Den turn), PR-0126 desktop (0/316 cards without the chip)",
+   "CHK-010 FFX-2 all-allies by real keys (Pray) on the candidate and on live",
+   "Regression: I (unpinned win; pinned loss identical on live), II (loss, as release 18), III, IV, V (seed-1 win at 2000x1012), VI, IX, X, XI (390 win; 1600 advisor run lost without the harness Change), XII (390), XIII, XIV (advisor win); VIII only to the first menu (known harness Orders fault, same as release 18)",
+   "Data audit: every Den value checked against research/ffx2-gippal-den-of-woe.md (HP 14,800 / 12,220 / 23,800, MP, STR/MAG/DEF/MDEF/AGI/EVA/LUCK, levels, Gravity immunity, Grinder DC 14, Bullseye 9/16, Mortar DC 22, Glint DC 20, Drill Shot 3/4, Absorb 3/16, Lightfall 5,000, the three Lore steals); estimates are labelled [estimate]"
+  ],
+  "reused": [
+   {
+    "what": "the Den bench (39/200 first try, 160/200 within five at human pace) and IC-1 / IC-2",
+    "from": "docs/target/decisions.json D-191, docs/concepts/chapters/den-of-woe/ship/CHECK.md",
+    "why": "the engine and data are byte-identical to what the check measured; this review did not re-run 200 seeds"
+   },
+   {
+    "what": "full unit suite and verify-approved",
+    "from": "the release cut of D:/pyrefly-rel19 (same commit)",
+    "why": "same tree, same commit, nothing changed since"
+   }
+  ],
+  "notTested": [
+   "audio (agents cannot hear; routing not probed)",
+   "performance and frame times",
+   "gamepad and real touch devices, Safari, Firefox",
+   "Chapter XV loss path and RETRY-from-Baralai at 1600 (the phone run's overlapping first attempt lost and RETRY reached the fight, evidence a2-*)",
+   "Evrae (VIII) past its first menu (harness Orders fault)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of 43dca986 after the deploy, then the deep review this shared-system change owes on the live build (plan depth deep, deepAfterDeploy true; b975397b's deep obligation is carried).",
+ "elapsedMinutes": 190,
+ "notes": "Harness: the round-13 route driver was copied and fixed so it steers the target cursor by the visible name plate (the old slug match could not tell Yu Pagoda A from B; the first Chapter III run with the old matcher lost and is kept as braskas-final-aeon-win-s1-harness-steer-bug, not evidence). A killed background lane left an orphaned duplicate that ran four routes in parallel with the planned lane for about 40 minutes (two browsers at once); it was killed by PID; the Chapter III win and the 390 Den win ran in their own pages and their input is valid; the ch1 and ch11 outputs were redone serially. Chapter I with setSeed(1) takes a different RNG stream from the default seed-1 start and loses in 24 commands on both the candidate and live, identically. Preview server PID 4644 on port 5431 was stopped by its PID and the port confirmed closed."
+}
