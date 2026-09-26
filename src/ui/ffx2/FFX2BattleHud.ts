@@ -50,6 +50,7 @@ import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
 import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
 import { BattleMessageBanner } from './battleMessage.ts';
+import { displayNameOf } from './displayName.ts';
 
 /**
  * PR-0012 (round 09 built the description logic, round 10 gated the slab off
@@ -773,6 +774,15 @@ export class FFX2BattleHud implements HudPort {
       );
       return { kind: 'defend', targets: [] };
     }
+    // PR-0175: a menu still open from an earlier decision (a link that ended
+    // under it) is torn down before the next one opens. Overwriting its close
+    // handle left its cursor in the overlay, still on arrow keys, projecting
+    // the last link's Leg and Head onto the corner with their raw ids.
+    if (this.closeMenu) {
+      const stale = this.closeMenu;
+      this.closeMenu = null;
+      stale();
+    }
     this.actingId = actorId;
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     this.commandEl.hidden = false;
@@ -794,7 +804,7 @@ export class FFX2BattleHud implements HudPort {
       // combatant id.
       projectRect: (id) => this.targeting?.rect(id) ?? null,
       panels: () => [...this.panelRects(), ...slabPanels(this.el)],
-      nameOf: (id) => this.lastState?.combatants[id]?.name ?? id,
+      nameOf: (id) => displayNameOf(this.lastState, id), // never the raw id (PR-0175)
       letterTagOf: (id) => this.letterTagOf(id),
       kindOf: (id) => {
         if (id === actorId) return 'self';
