@@ -420,3 +420,87 @@ IC-1 arm alone moves only V (13 / 20, and 6 at bench), as section 8 F1 found.
   this branch.
 - F2 (the lone White Mage stalemate in Chapter IV) still stands for Bailey. The shipped line never
   meets it, and the test that did (B1) now plays the shipped line under a cap.
+
+## 10. Independent check of section 9, 2026-09-26 (a separate agent that did not build it)
+
+**Game case: FFX-2 only** (the menu-cancel rule and the chapters are FFX-2's; the test cap is shared
+test plumbing). Checked branch head `5083709d` (commits `bf46732e`, `54da2e9d`, `5083709d` on top of
+`d0d53cb4`). Every number was re-run, none was copied. The runs used my own scratch exports on D:
+(`git archive` of `d0d53cb4`, `5083709d` and `79434a56`), not the builder's. Nothing was pushed or
+deployed. NOW.md, `critic/` and the main tree were not touched; the main tree was read only for
+`research/ffx2-combat-core.md` §9 at `ea05f877`.
+
+### Verdict: B1 is closed, section 9 reproduces exactly, no blocker
+
+- **B1 is closed without weakening the test.** The Chapter IV test still asserts the same cue fade
+  (`fades[0]` is `fadeMs / 1000` and under 5 s), and it now also asserts that the fight ended in a
+  victory or defeat and not at the cap. Proven both ways in a scratch copy: with the old first-enabled
+  line (`setCappedAutoPlay(presenter, () => null)`), the fade assertions still pass, and the test
+  then fails loudly with "the fight hit the decision cap after 5001 decisions", in 327 ms instead of
+  running out of heap.
+- **The switch matches research §9.2 and goes no further, and it ships OFF.**
+  `MENU_CANCEL_ONLY_DELAY_ABILITIES = false`. When it is on, `closesOpenMenu` adds one condition to
+  release 17's rule: the hitting ability must carry Delay (the `weak-delay` / `strong-delay` flags or
+  a `delay-effect` status row) or Action-cancel (an `action-cancel` status row). No delay amount is
+  applied (A2 stays unbuilt), and the gauge perturbation from §9.2 row 3 is not built (amount
+  unsourced).
+- **No ability flag was invented, and no boss number moved.** The branch changes nothing under
+  `src/data` against `d0d53cb4`. The four enemy rows that carry Delay in these chapters were flagged
+  before this branch, and each one has a source: Vita Brevis (`ffx2-vegnagun-shuyin.md` §3.2, "strong
+  Delay"), Supercollider and Huggles (`ffx2-leblanc-syndicate.md` §4.2, `[verified: 2 sources]`), and
+  Mach Fan (§4.4, `[verified: 2 sources for effect]`). The research for Chapters IV, XI, XIII and XV
+  lists Delay and Interrupt only as immunities; none of those enemies has a Delay ability.
+- **With the switch off, the logs are identical, and this is proven on far more than the pinned
+  seeds.** I took hashes from `d0d53cb4` (its bench with the branch's bench file dropped in, `built`
+  arm), then ran the branch against them: **0 / 200 logs move** in every chapter (IV, V, VI, XI, XIII)
+  at all three speeds (Wait split 1.5 s / 0.5 s, Active 1.5 s, bench). That makes 3,000 runs.
+- **Hits are attributed to the right ability.** I probed 20 seeds each of IV, V and VI at Active
+  1.5 s with the switch on. All 8,673 enemy hits on a girl were attributed to an ability. In every
+  case the ability was the one named by that enemy's most recent `action-start` (0 disagreements).
+  The Delay hits were only Vita Brevis (69), Supercollider (136), Huggles (45) and Mach Fan (105).
+
+### Re-run results
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | clean |
+| `tools/orphans.mjs` | 24 (784 modules, 760 reachable), unchanged |
+| Full vitest `--testTimeout=60000` | **431 passed, 4 skipped (435 files), 8,030 tests, exit 0** (82.5 s). **Exact** |
+| B1 with the old first-enabled line under the cap | the cap fires after 5,001 decisions, in 327 ms; the fade assertions pass first. **Exact** |
+| Section 9.3, IV to XIII, four arms x three speeds (`PYREFLY_MEASURE=1`, 118 s) | every win count, every rate and every "logs moved vs B" count matches section 9.3. **Exact** (IV and V menu human/Active 200 / 200, VI 198 / 200, XI 180 / 199, XIII 22 / 26; IC-1 alone moves only V, 13 / 20 / 6) |
+| Average minutes quoted in 9.4 | IV Active 2.51 -> 2.39. **Exact** |
+| XV, my own export of `79434a56` + `git diff ea05f877 5083709d -- src/battle/ffx2` (applied cleanly), shipped kit and line, 200 seeds, retry from Baralai | first try, human / Active / bench: B 34 / 6 / 94, + menu 36 / 13 / 94, + IC-1 48 / 8 / 112, both 48 / 18 / 112. Within 3 / 5, human: 102 / 149, 113 / 145, 133 / 171, 127 / 162; Active: 12 / 16, 27 / 45, 16 / 24, 44 / 69; bench: 168 / 196 (B, + menu), 179 / 199 (IC-1, both). **Exact** |
+| Rates table in 9.3 (derived) | recomputed from the counts. **Exact** |
+
+### Findings that do not block
+
+- **C1. Action-cancel goes slightly beyond the words of §9.2.** §9.2 ties the lost menu to the Delay
+  effect (G1041). For Action-cancel (G1042) it says that the effect cancels a *charging* command and
+  restarts the ATB; it does not say an open menu closes. The switch treats Action-cancel as closing a
+  menu too, which follows the brief's wording. **No change to any number:** no enemy in any FFX-2
+  chapter carries Action-cancel. If Bailey takes the correction, the sheet should say that the
+  Action-cancel half is our reading.
+- **C2. The action-start / action-end stream is not balanced per actor.** For example, Bahamut's
+  ends outnumber his starts by 15 to 19 in each fight, and some Chapter V parts are short by 1 to 9.
+  `ActingAbilities` survives this because popping an empty stack does nothing, and the probe above
+  found no misattribution. But a stray end that popped a charged Delay ability could, in principle,
+  leave its hits unattributed, and then they would not close the menu. If the switch is turned on, a
+  one-line guard test over the chapters (every enemy hit attributed, as in the probe) would lock this
+  in.
+- **C3. The cap fails silently in two of the capped tests.** `presenter-vitals-sync` (`playChapter`)
+  and `audio-chain-entrance-owner` (`timeline`) do not assert `capped() === false` or an outcome. If a
+  shipped line ever stalemated there, they would stop at 5,000 decisions and check only what was
+  played up to that point. This is still strictly better than the old hang, and the other three
+  capped sites assert a real outcome.
+- **C4. Wording.** The summary says `engine.ts` is 641 lines. It is **643** (it was 636; +9 / -2),
+  still over the 400-line rule, as F3 already notes. Section 9.4 says the correction "never lowers a
+  first-try rate at the live default by more than 1.5 points". That is true (XIII 8.0 -> 6.5 %), but
+  XV's within-5 rate drops 2 points (74.5 -> 72.5 %), and XIII's computed within-5 drops 5.6 points
+  (34.1 -> 28.5 %). Both are noise-sized on 13 to 16 wins, but Bailey should see them next to the
+  first-try line.
+- F2 (the Chapter IV lone White Mage stalemate) still stands for Bailey, and so does the uncapped
+  live presenter loop behind `window.__pyrefly.autoBattle`. That is a debug path, and the section 9.1
+  note is accurate.
+- My scratch exports are in `D:/pyrefly-scratch-chk0926b` (`d0`, `head` and `xv`, each with a
+  `node_modules` junction). Deleting them was not permitted from this session. Unlink each
+  junction (`rmdir`) before deleting the folder.
