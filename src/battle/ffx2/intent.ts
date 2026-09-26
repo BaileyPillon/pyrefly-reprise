@@ -46,6 +46,8 @@ import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { canAct } from './statuses.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
+import type { RandomTarget } from '../common/intentTargets.ts';
+import { ffx2RandomTarget } from './intentRandom.ts';
 
 /** See the FFX twin: enough samples to catch a real branch, few enough to cache. */
 export const SAMPLE_COUNT = 24;
@@ -88,6 +90,7 @@ export interface EnemyIntent {
   elements: ElementId[];
   statusText: string[];
   estimate: ActionEstimate | null;
+  randomTarget?: RandomTarget<TargetEstimate> | null; // PR-0153: a rolled victim, every candidate
   confidence: 'scripted' | 'likely';
   branches: IntentBranch[];
   charge: IntentCharge | null;
@@ -385,7 +388,7 @@ export function estimateFFX2Command(
   actorId: CombatantId,
   command: Command,
   def: AbilityDef,
-  options: { abilities?: AbilityRegistry; items?: ItemRegistry } = {},
+  options: { abilities?: AbilityRegistry; items?: ItemRegistry; aim?: CombatantId } = {},
 ): ActionEstimate | null {
   const at = (roll: RollPolicy): SimOutcome | null =>
     simulateFFX2Command(state, actorId, command, { roll, ...options });
@@ -512,10 +515,17 @@ export function predictFFX2EnemyIntent(
   };
 
   const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null }>();
-  const record = (run: DryRun): void => {
+  const keyOf = (run: DryRun): string => {
     const def = defFor(run.command);
     const charge = run.events.find((e) => e.type === 'charge') as { name: string } | undefined;
-    const key = def ? `ability:${def.id}` : charge ? `charge:${charge.name}` : 'pass';
+    return def ? `ability:${def.id}` : charge ? `charge:${charge.name}` : 'pass';
+  };
+  const firstKey = keyOf(first);
+  const sampledTargets: CombatantId[][] = []; // PR-0153: whom each sample of this move aimed at
+  const record = (run: DryRun): void => {
+    const def = defFor(run.command);
+    const key = keyOf(run);
+    if (key === firstKey && run.command) sampledTargets.push([...run.command.targets]);
     const entry = tally.get(key);
     if (entry) {
       entry.count += 1;
@@ -589,11 +599,15 @@ export function predictFFX2EnemyIntent(
           )
         : null;
 
+  const randomTarget = def && first.command
+    ? ffx2RandomTarget(Object.values(env.state.combatants) as Ffx2Unit[], unit, first.command, def, sampledTargets, (aimed, aim) =>
+        estimateFFX2Command(env.state, enemyId, aimed, def, { ...simOptions, aim })?.perTarget ?? null)
+    : null;
   const statusText: string[] = [];
   const statusSource = def ?? payloadDef;
   if (statusSource) {
     const seen = new Set<string>();
-    const targets = estimate?.perTarget ?? [];
+    const targets = randomTarget?.rows ?? estimate?.perTarget ?? [];
     for (const t of targets) {
       const victim = env.state.combatants[t.targetId] as FFX2Combatant | undefined;
       if (!victim) continue;
@@ -639,6 +653,7 @@ export function predictFFX2EnemyIntent(
     elements: def ? [...def.element] : payloadDef ? [...payloadDef.element] : [],
     statusText,
     estimate,
+    randomTarget,
     confidence,
     branches: confidence === 'likely' ? branches : [],
     charge,

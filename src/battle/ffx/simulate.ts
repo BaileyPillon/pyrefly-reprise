@@ -52,6 +52,7 @@
 
 import type { AbilityDef, BattleEvent, BattleState, Command, CombatantId, FFXCombatant, StatusId } from '../common/types.ts';
 import { SeededRng } from '../common/rng.ts';
+import { aimedPick } from '../common/intentTargets.ts';
 import { type Ctx, type EventInput, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { FFXContentRegistry, getFFXRegistry } from './registry.ts';
 import { executeCommand } from './execute.ts';
@@ -76,7 +77,7 @@ export type RollPolicy = 'min' | 'mid' | 'max';
  * helper, not guessing at intent.
  */
 export class RollPolicyRng extends SeededRng {
-  constructor(private readonly policy: RollPolicy) {
+  constructor(private readonly policy: RollPolicy, private readonly aim?: CombatantId) {
     // `Ctx.rng` is typed as the concrete `SeededRng`, not the `Rng` interface,
     // so a preview's generator has to *be* one. Every draw is overridden below;
     // the inherited mulberry32 state is never advanced.
@@ -102,10 +103,10 @@ export class RollPolicyRng extends SeededRng {
     return hi - lo === 31 ? lo + 16 : median;
   }
 
-  /** The middle element, so a `random-enemy` aim is stable across the three rolls. */
+  /** The middle element, so a `random-enemy` aim is stable across the three rolls — or the `aim`, when told one. */
   override pick<T>(items: readonly T[]): T {
     if (items.length === 0) throw new Error('RollPolicyRng.pick: empty array');
-    return items[Math.floor((items.length - 1) / 2)] as T;
+    return (aimedPick(items, this.aim) ?? items[Math.floor((items.length - 1) / 2)]) as T;
   }
 
   /** Identity: a preview must not reorder a target list behind the player's back. */
@@ -178,6 +179,8 @@ export interface SimOptions {
   roll?: RollPolicy;
   /** Ability/item records. Defaults to the process-wide registry. */
   content?: FFXContentRegistry;
+  /** A random pick lands on this combatant when it can (PR-0153's per-candidate rows). */
+  aim?: CombatantId;
 }
 
 // ---------------------------------------------------------------- the clone
@@ -382,7 +385,7 @@ export function simulateFFXCommand(
   const ctx: Ctx = {
     state: clone,
     rt: runtimeFor(clone, command),
-    rng: new RollPolicyRng(options.roll ?? 'mid'),
+    rng: new RollPolicyRng(options.roll ?? 'mid', options.aim),
     // Not `.clone()`: the engine copies the registry at `init` so two battles
     // cannot mutate each other's content, but nothing on the resolve path
     // writes to it and a preview runs dozens of times per open menu. Cloning

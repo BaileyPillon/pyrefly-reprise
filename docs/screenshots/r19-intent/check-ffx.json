@@ -1,0 +1,236 @@
+[
+  {
+    "name": "ch1-lance-1600x900",
+    "chapterId": "seymour-flux",
+    "intent": {
+      "phone": false,
+      "panelHidden": false,
+      "text": "SEYMOUR FLUX\n2ND IN QUEUE\n\nLance of Atrophy\nSCRIPTED\nZOMBIE 100%\n\nPhysical non-elemental damage to one character - never misses.\n\nDAMAGE · RANDOM TARGET\nTIDUS\n707–799\n31% HP\nYUNA\n746–842\n53% HP\nKIMAHRI\n698–788\n32% HP\n\nLands on one of these, picked when it acts.\n\nIF YOU ATTACK\nA Delay attempt on either of them fails and is punished with party-wide Slowga\nBelow 75% HP Seymour answers with Protect\nBelow 50% HP Seymour answers with Reflect and phase 2 opens\nJ HOLD · +4 MORE",
+      "move": "Lance of Atrophy",
+      "conf": "Scripted",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Tidus707–79931% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Yuna746–84253% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Kimahri698–78832% HP",
+          "visible": true,
+          "lethal": false
+        }
+      ],
+      "odds": [],
+      "rect": {
+        "x": 397,
+        "y": 31.296875,
+        "w": 375,
+        "h": 321.484375
+      }
+    },
+    "errors": []
+  },
+  {
+    "name": "ch8-evrae-1600x900",
+    "chapterId": "evrae-airship",
+    "intent": {
+      "phone": false,
+      "panelHidden": false,
+      "text": "EVRAE\n3RD IN QUEUE\n\nAttack\nSCRIPTED\n\nPhysical non-elemental damage to a random character.\n\nDAMAGE · RANDOM TARGET\nTIDUS\n1,262–1,265\nKO\n99% to hit\nWAKKA\n1,262–1,425\n94% HP\nRIKKU\n880\nKO\n\nLands on one of these, picked when it acts.",
+      "move": "Attack",
+      "conf": "Scripted",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Tidus1,262–1,265KO 99% to hit",
+          "visible": true,
+          "lethal": true
+        },
+        {
+          "text": "Wakka1,262–1,42594% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Rikku880KO",
+          "visible": true,
+          "lethal": true
+        }
+      ],
+      "odds": [],
+      "rect": {
+        "x": 735.296875,
+        "y": 85.09375,
+        "w": 375,
+        "h": 229.4140625
+      }
+    },
+    "errors": []
+  },
+  {
+    "name": "ch9-daigoro-1600x900",
+    "chapterId": "yojimbo-cavern",
+    "intent": {
+      "phone": false,
+      "panelHidden": false,
+      "text": "YOJIMBO\n4TH IN QUEUE\n\nDaigoro\nSCRIPTED\n\nDeals no damage.\n\nDAMAGE · RANDOM TARGET\nLULU\n544–615\n42% HP\nKIMAHRI\n517–584\n31% HP\nYUNA\n553–624\n39% HP\n\nLands on one of these, picked when it acts.",
+      "move": "Daigoro",
+      "conf": "Scripted",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Lulu544–61542% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Kimahri517–58431% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Yuna553–62439% HP",
+          "visible": true,
+          "lethal": false
+        }
+      ],
+      "odds": [],
+      "rect": {
+        "x": 338.6875,
+        "y": 112.296875,
+        "w": 375,
+        "h": 229.4140625
+      }
+    },
+    "errors": []
+  },
+  {
+    "name": "ch1-lance-390x844",
+    "chapterId": "seymour-flux",
+    "intent": {
+      "phone": true,
+      "panelHidden": false,
+      "text": "SEYMOUR FLUX2ND IN QUEUE\n\nLance of AtrophySCRIPTEDZOMBIE 100%\n\nTIDUS707–799YUNA746–842KIMAHRI698–788",
+      "move": "Lance of Atrophy",
+      "conf": "Scripted",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Tidus707–79931% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Yuna746–84253% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Kimahri698–78832% HP",
+          "visible": true,
+          "lethal": false
+        }
+      ],
+      "odds": [],
+      "rect": {
+        "x": 10,
+        "y": 66,
+        "w": 370,
+        "h": 69.5625
+      }
+    },
+    "errors": []
+  },
+  {
+    "name": "ch8-evrae-390x844",
+    "chapterId": "evrae-airship",
+    "intent": {
+      "phone": true,
+      "panelHidden": false,
+      "text": "EVRAE3RD IN QUEUE\n\nAttackSCRIPTED\n\nTIDUS1,262–1,265KO WAKKA1,262–1,425RIKKU880KO",
+      "move": "Attack",
+      "conf": "Scripted",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Tidus1,262–1,265KO 99% to hit",
+          "visible": true,
+          "lethal": true
+        },
+        {
+          "text": "Wakka1,262–1,42594% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Rikku880KO",
+          "visible": true,
+          "lethal": true
+        }
+      ],
+      "odds": [],
+      "rect": {
+        "x": 10,
+        "y": 66,
+        "w": 370,
+        "h": 69.5625
+      }
+    },
+    "errors": []
+  },
+  {
+    "name": "ch9-daigoro-390x844",
+    "chapterId": "yojimbo-cavern",
+    "intent": {
+      "phone": true,
+      "panelHidden": false,
+      "text": "YOJIMBO4TH IN QUEUE\n\nDaigoroSCRIPTED\n\nLULU544–615KIMAHRI517–584YUNA553–624",
+      "move": "Daigoro",
+      "conf": "Scripted",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Lulu544–61542% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Kimahri517–58431% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Yuna553–62439% HP",
+          "visible": true,
+          "lethal": false
+        }
+      ],
+      "odds": [],
+      "rect": {
+        "x": 10,
+        "y": 66,
+        "w": 370,
+        "h": 69.5625
+      }
+    },
+    "errors": []
+  }
+]

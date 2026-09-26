@@ -50,6 +50,7 @@ import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { critPercent, hitPercent } from './formulas.ts';
 import { rollTriggerHappy, rollReels } from './minigames.ts';
 import { SeededRng } from '../common/rng.ts';
+import { aimedPick } from '../common/intentTargets.ts';
 
 // ----------------------------------------------------------------- the rolls
 
@@ -74,7 +75,7 @@ export type RollPolicy = 'min' | 'mid' | 'max';
  * higher top end.
  */
 export class RollPolicyRng extends SeededRng {
-  constructor(private readonly policy: RollPolicy) {
+  constructor(private readonly policy: RollPolicy, private readonly aim?: CombatantId) {
     super(0);
   }
 
@@ -93,10 +94,10 @@ export class RollPolicyRng extends SeededRng {
     return median;
   }
 
-  /** The middle element, so a `random-enemy` aim is stable across the three rolls. */
+  /** The middle element, so a `random-enemy` aim is stable across the three rolls — or the `aim`, when told one. */
   override pick<T>(items: readonly T[]): T {
     if (items.length === 0) throw new Error('RollPolicyRng.pick: empty array');
-    return items[Math.floor((items.length - 1) / 2)] as T;
+    return (aimedPick(items, this.aim) ?? items[Math.floor((items.length - 1) / 2)]) as T;
   }
 
   override shuffle<T>(items: readonly T[]): T[] {
@@ -149,6 +150,7 @@ export interface Ffx2SimOptions {
   /** The registries the live engine was constructed with; the baseline otherwise. */
   abilities?: AbilityRegistry;
   items?: ItemRegistry;
+  aim?: CombatantId; // a random pick lands here when it can (PR-0153)
 }
 
 // ----------------------------------------------------------------- the clone
@@ -260,7 +262,7 @@ export function simulateFFX2Command(
   const ctx: ResolveContext = {
     units,
     abilities,
-    rng: new RollPolicyRng(options.roll ?? 'mid'),
+    rng: new RollPolicyRng(options.roll ?? 'mid', options.aim),
     emit,
     // Same read as `FFX2Engine.resolveCtx`: the flag is cached on the girl when
     // her gate bonuses were last recomputed, and the clone carries it.

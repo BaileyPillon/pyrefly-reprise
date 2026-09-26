@@ -5,6 +5,7 @@ import { INTENT_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
 import { EnemyIntentOverflow } from './enemy-intent-overflow.ts';
 import { briefStatusChip } from './enemy-intent-brief-status.ts';
+import { anyLethalRow, damageHtml } from './enemy-intent-damage.ts';
 
 /**
  * The enemy-intent slab: **what the boss is about to do, hanging over its
@@ -98,6 +99,14 @@ export interface IntentBranchView {
   percent: number;
 }
 
+/** PR-0153: a rolled victim — every candidate, each estimated. */
+export interface IntentRandomTargetView {
+  rows: readonly IntentTargetView[];
+  /** Each hit re-picks its victim; every row is one hit's worth. */
+  perHit: boolean;
+  hits: number;
+}
+
 /**
  * The slab's whole input.
  *
@@ -118,6 +127,7 @@ export interface IntentView {
   elements: readonly string[];
   statusText: readonly string[];
   estimate: IntentEstimateView | null;
+  randomTarget?: IntentRandomTargetView | null;
   confidence: 'scripted' | 'likely';
   branches: readonly IntentBranchView[];
   charge: IntentChargeView | null;
@@ -599,7 +609,7 @@ export class EnemyIntentPanel {
 
     this.el.classList.toggle(
       'eint--imminent',
-      view.charge?.stage === 2 || view.estimate?.perTarget.some((t) => t.lethal) === true,
+      view.charge?.stage === 2 || anyLethalRow(view),
     );
     box.style.left = `${left.toFixed(1)}px`;
     box.style.top = `${top.toFixed(1)}px`;
@@ -711,14 +721,11 @@ function signatureOf(view: IntentView): string {
     view.charge ? `${view.charge.name}:${view.charge.turnsLeft}` : '',
     view.branches.map((b) => `${b.label}:${b.percent}`).join('|'),
     view.estimate?.perTarget.map((t) => `${t.targetId}:${t.amount}`).join('|') ?? '',
+    view.randomTarget?.rows.map((t) => `${t.targetId}:${t.amount}:${t.lethal}`).join('|') ?? '',
     view.statusText.join('|'),
     view.formNote ?? '',
     view.notes.join('|'),
   ].join('~');
-}
-
-function num(n: number): string {
-  return Math.abs(Math.round(n)).toLocaleString('en-US');
 }
 
 /**
@@ -760,39 +767,6 @@ function timingText(view: IntentView): string {
   const place = view.turnsAway + 1;
   const suffix = place % 10 === 1 && place % 100 !== 11 ? 'st' : place % 10 === 2 && place % 100 !== 12 ? 'nd' : place % 10 === 3 && place % 100 !== 13 ? 'rd' : 'th';
   return `${place}${suffix} in queue`;
-}
-
-function damageHtml(view: IntentView): string {
-  const est = view.estimate;
-  if (!est) return '';
-  // A target the move merely *touched* — a status application with no HP
-  // change, e.g. Bahamut's Curse (`formula: 'none'`, `power: 0`) — is not
-  // damage and not a heal. `touchedFFX2`/its FFX twin list it in `perTarget`
-  // anyway (the move did something to it), so this is the layer that decides
-  // a zero row earns no place in a section titled "Damage". Round 03 #37: "a
-  // move that deals no damage shows no damage section at all, in both games."
-  const targets = est.perTarget.filter((t) => t.amount !== 0);
-  if (targets.length === 0) return '';
-  const rows = targets
-    .map((t) => {
-      // The sign is the engine's: positive means HP is lost. A boss healing
-      // itself therefore reads as a negative amount, and the row says so rather
-      // than printing a bare number the player has to interpret.
-      const restoring = t.amount < 0;
-      const pct = Math.round(t.hpFraction * 100);
-      const band = t.min !== t.max ? `${num(t.min)}–${num(t.max)}` : num(t.amount);
-      const hit = t.hitChancePercent !== null && t.hitChancePercent < 100 ? ` <i>${Math.max(0, Math.round(t.hitChancePercent))}% to hit</i>` : '';
-      return (
-        `<li class="eint__dmg${t.lethal ? ' eint__dmg--lethal' : ''}${restoring ? ' eint__dmg--heal' : ''}">` +
-        `<span class="eint__who">${escapeHtml(t.targetName)}</span>` +
-        `<span class="eint__amt">${restoring ? '+' : ''}${band}</span>` +
-        `<span class="eint__pct">${t.lethal ? 'KO' : restoring ? 'heals' : `${pct}% HP`}</span>${hit}` +
-        '</li>'
-      );
-    })
-    .join('');
-  const hits = est.hits > 1 ? `<p class="eint__note">${est.hits} hits each.</p>` : '';
-  return `<h4 class="eint__head">Damage</h4><ul class="eint__dmgs">${rows}</ul>${hits}`;
 }
 
 /**

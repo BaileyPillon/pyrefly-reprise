@@ -220,6 +220,24 @@ html[data-phone-battle] .eint__dmg {
 html[data-phone-battle] .eint__who::after {
   content: ' ';
 }
+/* PR-0153 (both games): a rolled victim is every candidate, never the first
+   one alone, and a candidate the move would KO says so. */
+html[data-phone-battle] .eint__body > .eint__dmgs--random::before {
+  content: ' · random: ';
+}
+html[data-phone-battle] .eint__dmgs--random .eint__dmg + .eint__dmg,
+html[data-phone-battle] .eint__dmgs--random .eint__cand {
+  display: inline !important;
+}
+html[data-phone-battle] .eint__dmgs--random .eint__cand + .eint__cand::before,
+html[data-phone-battle] .eint__dmgs--random .eint__dmg + .eint__dmg::before {
+  content: ' / ';
+  color: rgba(244, 241, 232, 0.6);
+}
+html[data-phone-battle] .eint__dmgs--random .eint__dmg--lethal .eint__pct {
+  display: inline !important;
+  margin-left: 0.3em;
+}
 /* The E chip: the line is the read-out; with the read-out off, the chip is the line. */
 html[data-phone-battle] .eint:not(.eint--off) .eint__toggle {
   display: none !important;
