@@ -86,8 +86,12 @@ describe('the CHAPTER dossier keeps the plate face clear (FOC16-02)', () => {
     expect(dossierClears(FACE, { ink: [{ ...clear, left: -3 }], floor: 686, width: 1600 })).toBe(false);
   });
 
-  it('has a face box only for Chapter XIII plate B and Chapter X plate B, inside the painting', () => {
-    expect(Object.keys(CHAPTER_FACE_BOXES)).toEqual(['ch13-trema', 'ch10-seymour-natus']);
+  it('has a face box only for the four plates measured so far, inside the painting', () => {
+    // PR-0171 (round 13): Chapter II (Yunalesca) and Chapter IX (Yojimbo)
+    // joined Chapter XIII and Chapter X — their dossiers had no face box at
+    // all, so `placeDossier` always fell back to `beside` and laid the quote
+    // and polaroids across the plate's face/mask.
+    expect(Object.keys(CHAPTER_FACE_BOXES)).toEqual(['ch13-trema', 'ch10-seymour-natus', 'ch2-yunalesca', 'ch9-yojimbo']);
     // Chapter X (FFX only): Natus's face is centred on his plate, inside the painting.
     const n = CHAPTER_FACE_BOXES['ch10-seymour-natus']!;
     expect(n.x0).toBeLessThan(0.5);
@@ -100,5 +104,15 @@ describe('the CHAPTER dossier keeps the plate face clear (FOC16-02)', () => {
     expect(f.y0).toBeLessThan(f.y1);
     // Right of centre: the empty side, where the text goes, is the left.
     expect((f.x0 + f.x1) / 2).toBeGreaterThan(0.5);
+    // Every measured box is a real box inside the 0..1 painting, x0<x1, y0<y1.
+    for (const id of ['ch2-yunalesca', 'ch9-yojimbo'] as const) {
+      const box = CHAPTER_FACE_BOXES[id]!;
+      expect(box.x0, id).toBeGreaterThanOrEqual(0);
+      expect(box.x1, id).toBeLessThanOrEqual(1);
+      expect(box.x0, id).toBeLessThan(box.x1);
+      expect(box.y0, id).toBeGreaterThanOrEqual(0);
+      expect(box.y1, id).toBeLessThanOrEqual(1);
+      expect(box.y0, id).toBeLessThan(box.y1);
+    }
   });
 });
