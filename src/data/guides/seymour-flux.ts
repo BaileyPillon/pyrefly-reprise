@@ -58,7 +58,7 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Hastega', 'Haste'] },
-      text: 'Haste is ctb x 8/16 — roughly double the party’s share of the clock, and the CTB margin the Holy Water rhythm needs to beat the mount’s Full-Life',
+      text: 'Haste roughly doubles your turns against theirs — the margin the Holy Water rhythm needs to beat the mount’s Full-Life',
       cite: 'ffx-seymour-flux §6 row 10',
     },
     {
