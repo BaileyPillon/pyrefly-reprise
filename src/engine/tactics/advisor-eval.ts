@@ -52,6 +52,7 @@ import type {
 import type { SimOutcome } from '../../battle/ffx/simulate.ts';
 import type { AdvisorIntent } from './advisor-revive.ts';
 import type { StatusChance } from './advisor-roll.ts';
+import { targetDisplayName } from './targetLabel.ts';
 
 /** Where a claim came from. A sentence may only cite a fact that carries one. */
 export type FactSource = 'sim' | 'forecast' | 'state' | 'turnOrder';
@@ -153,7 +154,7 @@ function removedFact(state: Readonly<BattleState>, outcome: SimOutcome): BoardFa
   const shatter = gone.every((c) => stone.has(c.targetId));
   const first = gone[0]!.targetId;
   const one = gone.length === 1;
-  const who = one ? (state.combatants[first]?.name ?? first) : `${gone.length} of them`;
+  const who = one ? (targetDisplayName(state, first) ?? first) : `${gone.length} of them`;
   const verb = shatter ? (one ? 'shatters' : 'shatter') : one ? 'leaves the battle' : 'leave the battle';
   return { kind: 'removes', text: `${who} ${verb}`, value: gone.length, source: 'sim', ...(one ? { targetId: first } : {}) };
 }
@@ -289,7 +290,7 @@ export function evaluate(
       if (isAlly(state, id)) continue;
       facts.push({
         kind: 'kills',
-        text: `it finishes ${state.combatants[id]?.name ?? id}`,
+        text: `it finishes ${targetDisplayName(state, id) ?? id}`,
         value: state.combatants[id]?.hp ?? 0,
         source: 'sim',
         targetId: id,
@@ -323,7 +324,7 @@ export function evaluate(
         ? group.every((c) => isAlly(state, c.targetId))
           ? 'the party'
           : `${group.length} of them`
-        : (state.combatants[first.targetId]?.name ?? first.targetId);
+        : (targetDisplayName(state, first.targetId) ?? first.targetId);
     if (first.landedAtMedian) {
       facts.push({
         kind: 'certain-status',

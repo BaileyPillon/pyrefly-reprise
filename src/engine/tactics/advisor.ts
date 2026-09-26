@@ -111,7 +111,7 @@ import {
 } from './advisor-revive.ts';
 import { forecastFromState } from './advisor-forecast.ts';
 import { floorNote } from './advisor-floor.ts';
-import { changesNothing } from './advisor-guard.ts';
+import { changesNothing, harmsAZombie } from './advisor-guard.ts';
 import {
   type StatusChance,
   bestChance,
@@ -137,7 +137,7 @@ import {
 } from './advisor-committed.ts';
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
 import { holdingForTheBreath } from './airship-orders.ts';
-import { scopeWord } from './targetLabel.ts';
+import { scopeWord, targetDisplayName } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
 export { changesNothing } from './advisor-guard.ts';
@@ -899,8 +899,7 @@ function reasonFor(
   outcome: SimOutcome,
   chances: readonly StatusChance[] = [],
 ): string {
-  const target = s.targetId ? state.combatants[s.targetId] : undefined;
-  const name = target?.name ?? 'the target';
+  const name = targetDisplayName(state, s.targetId) ?? 'the target';
   if (s.isSwitch) return `${state.combatants[(s.command as { extra: { inId: CombatantId } }).extra.inId]?.name ?? 'The bench'} can act this turn; the slot cannot`;
   if (s.command.kind === 'summon') return `${s.label} takes the hits while the party’s counters are frozen`;
   if (s.command.kind === 'dismiss') return 'Puts the party back on the field';
@@ -946,7 +945,7 @@ function reasonFor(
   // §9 is still open, so the voice here states the odds and no more].
   const gamble = bestTry(chances);
   if (gamble) {
-    const on = state.combatants[gamble.targetId]?.name ?? name;
+    const on = targetDisplayName(state, gamble.targetId) ?? name;
     return `${statusLabel(gamble.status)} on ${on} — about ${Math.round(gamble.percent)} in 100, and it is the line`;
   }
   return 'The best of what is offered';
@@ -1009,7 +1008,6 @@ function candidateFor(
   const min = withRange ? (sim(state, actorId, command, 'min') ?? mid) : mid;
   const max = withRange ? (sim(state, actorId, command, 'max') ?? mid) : mid;
 
-  const target = targetId ? state.combatants[targetId] : undefined;
   // A party-wide spell is aimed at one id so the engine can resolve it, but
   // naming that id on the card reads as "Hastega on Tidus" for a move that
   // hits all three. The scope word is what the player sees — shared with
@@ -1067,7 +1065,7 @@ function candidateFor(
     label: row.label,
     menu: menuChipFor(state.game, commands, row),
     targetId,
-    targetName: scoped ?? target?.name ?? null,
+    targetName: scoped ?? targetDisplayName(state, targetId),
     effect: describeAbility(def, row, command),
     estimate,
     mpCost: row.mpCost,
@@ -1354,7 +1352,17 @@ export function buildAdvisorView(
       : changesNothing(decision.actorId, c.suggestion.command, c.outcome));
     (dead ? inert : useful).push(c);
   }
-  const ordered = useful.length > 0 ? [...useful, ...inert] : legal;
+  // **The Zombie guard** (PR-0198): a row that hurts a living Zombie ally goes
+  // behind every row that does not, inert ones included — a turn spent on
+  // nothing is cheaper than one spent KO'ing your own healer
+  // [`./advisor-guard.ts#harmsAZombie`].
+  const harmful = legal.filter((c) => harmsAZombie(state, c.outcome));
+  const kept = (xs: Candidate[]): Candidate[] => xs.filter((c) => !harmful.includes(c));
+  const safe = kept(legal);
+  const ordered =
+    safe.length === 0
+      ? legal
+      : [...(kept(useful).length > 0 ? [...kept(useful), ...kept(inert)] : safe), ...harmful];
 
   const shown: Candidate[] = [ordered[0]!];
   /** A revive this board was offered, priced, and refused. See {@link noteFor}. */

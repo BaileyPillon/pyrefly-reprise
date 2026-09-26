@@ -1352,10 +1352,19 @@ function supportTurn(
   // level), then Ether (+100), then the Elixir, which is also a full heal.
   // {@link MP_FLOOR} is two Curagas, so the refill turn is taken while she can
   // still answer an emergency, not after she has already failed to.
+  //
+  // **Never the Elixir on a Zombie** (PR-0198). It restores HP as well as MP,
+  // and HP restored to a Zombie is damage: live, a Triumphant Grasp'd Yuna
+  // drank it for 5,130 and KO'd herself. Under Zombie the refill is an Ether
+  // (MP only), and with only the Elixir left the Zombie is cured first so the
+  // Elixir is safe on a later turn.
   const me = state.combatants[actorId];
   if (me && me.mp < MP_FLOOR) {
-    const refill = row(commands, ['Turbo Ether', 'Ether', 'Elixir'], actorId);
+    const zombie = has(me, 'zombie');
+    const refill = row(commands, zombie ? ['Turbo Ether', 'Ether'] : ['Turbo Ether', 'Ether', 'Elixir'], actorId);
     if (refill) return aim(refill, actorId);
+    const cure = zombie ? row(commands, ['Holy Water', 'Remedy'], actorId) : undefined;
+    if (cure) return aim(cure, actorId);
   }
 
   // **The summon outranks the Protect and the routine top-up**, and that

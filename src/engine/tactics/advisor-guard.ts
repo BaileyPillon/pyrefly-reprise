@@ -9,7 +9,7 @@
  * previewed outcome and nothing else.
  */
 
-import type { BattleEvent, Command, CombatantId } from '../../battle/common/types.ts';
+import type { BattleEvent, BattleState, Command, CombatantId } from '../../battle/common/types.ts';
 import type { SimOutcome } from '../../battle/ffx/simulate.ts';
 
 /**
@@ -172,4 +172,39 @@ export function changesNothing(
     return false;
   }
   return true;
+}
+
+/**
+ * **The Zombie guard**: does this previewed action hurt a living Zombie on the
+ * party's own side? (PR-0198, critic round 13.)
+ *
+ * Healing a Zombie is damage, and a revive on a living one is a KO
+ * [research/ffx-combat-core.md, the `zombie` status contract; FFX
+ * `formulas.ts`, `abilities.ts`]. `scoreOutcome` already charges that as
+ * friendly fire, but the {@link changesNothing} split let it back to the top:
+ * damage to your own side is "doing something", so once the chapter's line
+ * was an inert Defend the card's first *useful* row was the self-harm —
+ * "Potion → Tidus" on a Zombie Tidus at Yunalesca, "Al Bhed Potion" onto a
+ * Zombie at Seymour Flux, and live in Chapter III "Elixir → Yuna", which KO'd
+ * her in two of four real-key losses. `buildAdvisorView` puts every row this
+ * returns `true` for behind every row it does not, the chapter's own line
+ * included, so the rule holds for every tactic rather than one chapter's.
+ *
+ * Read off the simulation, not the item record: any positive `hpDelta` on, or
+ * a KO of, a party member who is standing and carries Zombie. A heal that
+ * reaches a Zombie *and* clears it (a Holy Water, a Remedy) previews as the
+ * cure it is, not as damage, so it is never caught here.
+ *
+ * **Which game: FFX only in effect.** The file is shared plumbing, but FFX-2's
+ * data layer defines no `zombie` status [advisor-floor.ts], so this can only
+ * return `true` on an FFX board [AGENTS.md rule 14].
+ */
+export function harmsAZombie(state: Readonly<BattleState>, outcome: SimOutcome | null): boolean {
+  if (!outcome) return false;
+  const zombieAlly = (id: CombatantId): boolean => {
+    const c = state.combatants[id];
+    return !!c && c.side !== 'enemy' && c.alive && c.statuses['zombie'] !== undefined;
+  };
+  if (outcome.kills.some(zombieAlly)) return true;
+  return Object.entries(outcome.hpDelta).some(([id, delta]) => delta > 0 && zombieAlly(id));
 }
