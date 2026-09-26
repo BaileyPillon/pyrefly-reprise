@@ -36,14 +36,20 @@ function rageEntry(raw: unknown): RageEntry | null {
  * Kimahri — Ronso Rage [visual-bible §3.11.7]: no timed input, a plain
  * ability list of every Rage learned via Lancet.
  *
- * The cursor opens on the Rage the command menu already chose
- * (`params.abilityId`), so the confirm that closes this list keeps that choice
- * rather than quietly swapping it for the first Rage learned.
+ * **One chooser (PR-0182).** The command menu's OVERDRIVE list already lists
+ * the Rages, and the command it submits names the one picked
+ * (`params.abilityId`). When it does, the request resolves to that Rage at
+ * once: showing the same list again only cost the player a second confirm (the
+ * critic's route needed an extra Enter on Kimahri's Mighty Guard). The list
+ * below is the fallback for a request that names no Rage it knows; its cursor
+ * then opens on the first one.
  */
 export function openKimahriRage(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
   const rages = arr<unknown>(params['rages'], [])
     .map(rageEntry)
     .filter((r): r is RageEntry => r !== null);
+  const chosen = rages.find((r) => r.id === params['abilityId']);
+  if (chosen) return Promise.resolve({ kind: 'kimahri-rage', rage: { rageId: chosen.id } });
 
   const overlay = new OverdriveOverlay();
   root.appendChild(overlay.el);
