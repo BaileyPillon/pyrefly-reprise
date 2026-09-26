@@ -29,16 +29,44 @@ export function ensure(dir) {
  */
 export function makeIndexer(evidenceDir) {
   const INDEX = path.join(evidenceDir, 'index.json');
+  const LOCK = `${INDEX}.lock`;
   return function addIndex(entry) {
     ensure(evidenceDir);
-    let arr = [];
-    try {
-      arr = JSON.parse(fs.readFileSync(INDEX, 'utf8'));
-    } catch {
-      arr = [];
+    // Several routes may share one evidence directory (batch t1-b5 ran six at
+    // once): take a lock file so two read-modify-writes cannot interleave, and
+    // never replace an index that fails to parse with an empty one.
+    let fd = null;
+    for (let i = 0; i < 400 && fd === null; i++) {
+      try {
+        fd = fs.openSync(LOCK, 'wx');
+      } catch {
+        try {
+          if (Date.now() - fs.statSync(LOCK).mtimeMs > 10000) fs.rmSync(LOCK, { force: true }); // a crashed writer
+        } catch {
+          /* gone already */
+        }
+        const until = Date.now() + 25;
+        while (Date.now() < until) { /* spin: addIndex is synchronous by contract */ }
+      }
     }
-    arr.push({ ...entry, mode: MODE, ts: new Date().toISOString() });
-    fs.writeFileSync(INDEX, JSON.stringify(arr, null, 1));
+    try {
+      let arr = [];
+      if (fs.existsSync(INDEX)) {
+        try {
+          arr = JSON.parse(fs.readFileSync(INDEX, 'utf8'));
+        } catch {
+          fs.copyFileSync(INDEX, `${INDEX}.corrupt-${Date.now()}`);
+          arr = [];
+        }
+      }
+      arr.push({ ...entry, mode: MODE, ts: new Date().toISOString() });
+      fs.writeFileSync(INDEX, JSON.stringify(arr, null, 1));
+    } finally {
+      if (fd !== null) {
+        fs.closeSync(fd);
+        fs.rmSync(LOCK, { force: true });
+      }
+    }
   };
 }
 

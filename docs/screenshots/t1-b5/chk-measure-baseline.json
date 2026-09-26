@@ -1,0 +1,266 @@
+{
+ "note": "Baseline of the CHK-008 and CHK-011 measuring sticks on the production build of 76f19bdb + batch t1-b5 (seed 1, PYREFLY_BROWSER=gpu, 2026-09-26). Reports: test-results/chk-measure (regenerate with the specs). CHK-008: face hits = panel quads on an actor quad upper third, over the reached HUD states (of 9). CHK-011: samples over the 25% rule (occluded plus off frame).",
+ "chk008": {
+  "braskas-final-aeon": {
+   "1280x720": {
+    "faceHits": 11,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 11,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 12,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 11,
+    "statesReached": 6
+   }
+  },
+  "evrae-airship": {
+   "1280x720": {
+    "faceHits": 3,
+    "statesReached": 4
+   },
+   "1600x900": {
+    "faceHits": 3,
+    "statesReached": 4
+   },
+   "2000x1000": {
+    "faceHits": 3,
+    "statesReached": 4
+   },
+   "2560x1440": {
+    "faceHits": 3,
+    "statesReached": 4
+   }
+  },
+  "ffx2-bahamut": {
+   "1280x720": {
+    "faceHits": 11,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 11,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 3,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 8,
+    "statesReached": 6
+   }
+  },
+  "ffx2-den-of-woe": {
+   "1280x720": {
+    "faceHits": 0,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 0,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 0,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 0,
+    "statesReached": 6
+   }
+  },
+  "ffx2-fallen-aeons": {
+   "1280x720": {
+    "faceHits": 3,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 3,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 3,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 3,
+    "statesReached": 6
+   }
+  },
+  "ffx2-leblanc": {
+   "1280x720": {
+    "faceHits": 5,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 4,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 4,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 1,
+    "statesReached": 6
+   }
+  },
+  "ffx2-trema": {
+   "1280x720": {
+    "faceHits": 2,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 2,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 2,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 2,
+    "statesReached": 6
+   }
+  },
+  "ffx2-vegnagun-shuyin": {
+   "1280x720": {
+    "faceHits": 7,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 7,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 7,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 7,
+    "statesReached": 6
+   }
+  },
+  "isaaru-via-purifico": {
+   "1280x720": {
+    "faceHits": 8,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 6,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 6,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 3,
+    "statesReached": 6
+   }
+  },
+  "seymour-flux": {
+   "1280x720": {
+    "faceHits": 11,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 11,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 11,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 11,
+    "statesReached": 6
+   }
+  },
+  "seymour-natus": {
+   "1280x720": {
+    "faceHits": 8,
+    "statesReached": 6
+   },
+   "1600x900": {
+    "faceHits": 7,
+    "statesReached": 6
+   },
+   "2000x1000": {
+    "faceHits": 5,
+    "statesReached": 6
+   },
+   "2560x1440": {
+    "faceHits": 6,
+    "statesReached": 6
+   }
+  },
+  "seymour-omnis": {
+   "1280x720": {
+    "faceHits": 4,
+    "statesReached": 4
+   },
+   "1600x900": {
+    "faceHits": 4,
+    "statesReached": 4
+   },
+   "2000x1000": {
+    "faceHits": 4,
+    "statesReached": 4
+   },
+   "2560x1440": {
+    "faceHits": 4,
+    "statesReached": 4
+   }
+  },
+  "yojimbo-cavern": {
+   "1280x720": {
+    "faceHits": 1,
+    "statesReached": 4
+   },
+   "1600x900": {
+    "faceHits": 1,
+    "statesReached": 4
+   },
+   "2000x1000": {
+    "faceHits": 1,
+    "statesReached": 4
+   },
+   "2560x1440": {
+    "faceHits": 1,
+    "statesReached": 4
+   }
+  },
+  "yunalesca": {
+   "1280x720": {
+    "faceHits": 4,
+    "statesReached": 4
+   },
+   "1600x900": {
+    "faceHits": 4,
+    "statesReached": 4
+   },
+   "2000x1000": {
+    "faceHits": 4,
+    "statesReached": 4
+   },
+   "2560x1440": {
+    "faceHits": 4,
+    "statesReached": 4
+   }
+  }
+ },
+ "chk008ByPanel": {
+  ".ig-cmd-stack": 122,
+  ".eint__panel": 122,
+  ".ffx-target__plate": 18,
+  ".sgd__panel": 12,
+  ".ig-ctb": 4,
+  ".ig-stat-list": 3
+ },
+ "chk011": {}
+}
