@@ -149,7 +149,7 @@ The tools, `looks.txt`, `measure.json` and `judge.json` are in this folder.
 - **rikku-thief item and victory.** The shipped Thief idle is drawn with a head about 1.9x the size
   of every other Rikku (eye to chin 85 px, against about 45 for the picks). A head match gives scale
   1.85 and 2.00, and she would stand 1.5 to 1.7 times the idle. The fault is the idle's proportions
-  as much as the picks'. Question 1 below.
+  as much as the picks'. Question 1 below (answered 2026-09-26: the Thief is judged by body height).
 - **paine-white-mage attack.** The pick's head is 1.4x the idle's, so at the head-match scale of 0.71
   her lunge stands 0.51 of the idle.
 
@@ -308,9 +308,32 @@ The failed picks are at the bottom, small, each with its reason.
 
 ## Questions for Bailey (not built)
 
-1. **Rikku's Thief idle is drawn with a much larger head than her pose paintings.** A head-matched
-   pose therefore stands 1.5 to 1.7 times the idle. Either her poses stay empty, or the idle is
-   re-derived to match. Rikku wears the Thief at the start of Chapter VI. Her ko passes (scale 1.31).
+1. **ANSWERED 2026-09-26: judge the Thief by body height.** Rikku's Thief idle is drawn with a
+   much larger head than her pose paintings, so a head-matched pose stood 1.5 to 1.7 times the idle.
+   Bailey, 2026-09-26 about 07:00 EDT, verbatim: *"I'll go with all your recommendations"*, answering
+   the driver's item 4, "Rikku Thief: judge her poses by body height instead of head size
+   (recommended), or repaint her idle" (`round2/METHOD-CHECK.md` B, answer 1). The approved Thief
+   idle stays as it is. The gate below replaces the head-match scale gate **for the Thief only**
+   (FFX-2 only); every other dressphere keeps the head-match gate, and the rest of the rubric is
+   unchanged for the Thief too (eight categories, identity to the installed Thief idle, pass at a
+   mean of 7.0, the border-alpha check, one weapon set, a clean cutout).
+
+   **The Thief's scale gate (body height).**
+   - **Scale.** `scale` = the idle's body height / the pose's body height. Body height is the eye
+     line to the soles (lowest row with alpha above 90), in each picture's own pixels. The idle
+     measures 887 px (eye line y 308, soles y 1195). For a bent pose (a lunge, a crouch, a recoil)
+     body height is the unfolded length: eye line to belt buckle, buckle to the knee of the standing
+     leg, that knee to its sole, each a straight line, on the idle and on the pose alike.
+   - **Gate.** At that scale the pose's head (eye line to chin) must be **0.45 to 0.85** of the
+     idle's 85 px. Rikku's other idles, sized the same way, carry 0.50 (Gunner), 0.52 (Alchemist),
+     0.62 (White Mage) and 0.65 (Black Mage) of the Thief idle's head, so her own head lands there;
+     below 0.45 is a pinhead no Rikku idle has, and above 0.85 is the big-head forcing that went
+     chibi in round 2 try b. A bent pose also has to stand at least 0.60 of the idle at that scale.
+   - **What Bailey will see.** When the Thief swaps from her idle to a pose, she keeps her height and
+     her head shrinks to about half to two thirds of the idle's. That is the trade Bailey accepted;
+     repainting the idle (answer 3) remains the fix if the jump shows too much in a fight.
+   - The verdicts under this gate are pass `thief-body-gate` in `round2/judge2.json`; the picture is
+     `round2/sheet3-rikku-thief.jpg`.
 2. **Two shipped idles have Yuna's eyes on the off-source sides.** The Songstress and Dark Knight
    idles put blue on screen-left, and the source puts green there
    (`research/visual-bible.md` §Yuna). Most passing picks follow the source, so a pose swap flips her

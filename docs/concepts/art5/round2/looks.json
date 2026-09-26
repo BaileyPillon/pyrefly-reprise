@@ -232,7 +232,22 @@
    },
    "verdict": "FAIL (stops, rule 15): the head fix took (c7 is inside the gate) and the facing is fixed, but the only candidate with both loses the bandana, the puffy sleeves and the green skirt; c6 keeps more of her look but has claws for daggers and fails the scale gate. No candidate fixes the named faults and keeps her identity."
   },
-  "stopped": true
+  "stopped": true,
+  "c": {
+   "cands": {
+    "9": "try c: red hair, wing-like streamers, a sword for a dagger",
+    "10": "try c, best: lunges right at the enemy, normal head, bandana, braids, blue puffy sleeves, green skirt, bare tan legs. Worst: hands and costume (6): the near fist holds a fan of three blades (white, blue, orange), not one dagger, the far dagger is hidden, and the sleeves are solid blue with no yellow bows",
+    "11": "try c: blue skirt, a long red blade and a blue one",
+    "12": "try c: lunges right, but two long blue needle claws from one fist and a long red scarf streamer with a blue cape panel"
+   },
+   "verdict": "FAIL (no candidate reaches 7.0) (try c, no big-head forcing, body-height gate)"
+  },
+  "thiefBodyGate": {
+   "pick": null,
+   "verdict": "FAIL (no candidate reaches 7.0)",
+   "date": "2026-09-26",
+   "note": "Re-judged under the body-height gate (JUDGE.md Question 1); see judge2.json thiefBodyGate for every candidate."
+  }
  },
  "rikku-thief/cast": {
   "cands": {
@@ -251,7 +266,22 @@
    },
    "verdict": "FAIL (stops, rule 15): the head factor now works (c5-c7 inside the gate), but the other named fixes do not land: no candidate has the short curved second dagger, the puffy sleeves or bare tan legs without red-orange shins; the best (c6) holds a pickaxe for its second weapon."
   },
-  "stopped": true
+  "stopped": true,
+  "c": {
+   "cands": {
+    "9": "try c: a big yellow bow-shaped blade raised, a streamer low",
+    "10": "try c: both hands hold a curved blade, the cast reads, normal head; but pale skin, the blades are large blue sickles (idle: small orange daggers), ruffle cuffs not puffy sleeves",
+    "11": "try c: tan, reverse-grip dagger raised and a second dagger low, normal head; but a green smear under the screen-right eye, gold-hilted blue daggers, blue ruffle cuffs not puffy sleeves, one shin red-orange, mismatched boots",
+    "12": "try c: a huge red monster shape behind her"
+   },
+   "verdict": "FAIL (no candidate reaches 7.0) (try c, no big-head forcing, body-height gate)"
+  },
+  "thiefBodyGate": {
+   "pick": null,
+   "verdict": "FAIL (no candidate reaches 7.0)",
+   "date": "2026-09-26",
+   "note": "Re-judged under the body-height gate (JUDGE.md Question 1); see judge2.json thiefBodyGate for every candidate."
+  }
  },
  "rikku-thief/hurt": {
   "cands": {
@@ -270,7 +300,22 @@
    },
    "verdict": "FAIL (stops, rule 15): the guard rejected all four; the big-head/from-above words turned every render into a canvas-filling close-up, and two of them have a second head."
   },
-  "stopped": true
+  "stopped": true,
+  "c": {
+   "cands": {
+    "9": "try c: bent forward and turned away, a wrench-like weapon and a streamer",
+    "10": "try c: red-orange body turned away, streamer",
+    "11": "try c PICK: the recoil reads (head thrown back, one eye shut, teeth set, arms flung out), one small blue dagger in each hand, bandana, braids, yellow top, red scarf, green skirt, belt pouches, normal head. Worst: costume (5.5): orange forearm guards the idle does not have, light-blue ruffle cuffs (idle: puffy blue-white sleeves with yellow bows), shins grading to orange, plain white boots (idle: blue-white with green soles)",
+    "12": "try c: a big painted blob behind her"
+   },
+   "verdict": "PASS 7.06 (narrow): r2-c11 (try c, no big-head forcing, body-height gate)"
+  },
+  "thiefBodyGate": {
+   "pick": "r2-c11",
+   "verdict": "PASS 7.06 (narrow)",
+   "date": "2026-09-26",
+   "note": "Re-judged under the body-height gate (JUDGE.md Question 1); see judge2.json thiefBodyGate for every candidate."
+  }
  },
  "rikku-thief/item": {
   "cands": {
@@ -289,7 +334,13 @@
    },
    "verdict": "PASS, weak: cand-8 (the head-match fix now lands, and c8 also keeps the dagger in the other hand. Residuals: shins grade to red-orange/pink below the knee, puffy sleeves solid blue not white-blue with yellow bows, a red scarf trails like a short cape, boots plain blue not blue-white with green soles.)"
   },
-  "pick": "cand-8"
+  "pick": "cand-8",
+  "thiefBodyGate": {
+   "pick": "r1-c3",
+   "verdict": "PASS 7.38",
+   "date": "2026-09-26",
+   "note": "Re-judged under the body-height gate (JUDGE.md Question 1); see judge2.json thiefBodyGate for every candidate."
+  }
  },
  "rikku-thief/victory": {
   "cands": {
@@ -308,7 +359,13 @@
    },
    "verdict": "FAIL (stops, rule 15): the scale gate is fixed (c5 and c7 about 1.0), but c5 swaps the dagger for a large hook and c7 brings back a rainbow streamer; neither has the idle's two small daggers."
   },
-  "stopped": true
+  "stopped": true,
+  "thiefBodyGate": {
+   "pick": "r1-c3",
+   "verdict": "PASS 7.44",
+   "date": "2026-09-26",
+   "note": "Re-judged under the body-height gate (JUDGE.md Question 1); see judge2.json thiefBodyGate for every candidate."
+  }
  },
  "rikku-black-mage/item": {
   "cands": {

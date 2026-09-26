@@ -205,7 +205,7 @@
    "pose": "attack",
    "answer": "daggers merged into one pole weapon, floating piece, red-orange legs, green sleeves: (holding dagger in each hand:1.2) + two separate daggers, double-bladed weapon/polearm negated, (bare legs:1.3), (blue puffy detached sleeves:1.2); head factor 1.45 for the big-headed idle",
    "enabled": true,
-   "try": "b",
+   "try": "c",
    "b": {
     "extra": "facing right, lunging to the right, (both daggers pointing right:1.2), (big head:1.15), from above, foreshortening",
     "negx": "facing left, pointing left, daggers pointing left, streamer, ribbon, long ribbon, rainbow, red legwear, orange legwear, red legs",
@@ -216,6 +216,18 @@
      1
     ],
     "why": "Only c1 cleared the guard and its attack points away from the enemy; the head factor 1.45 did not take, so the Thief scale gate still fails. This is JUDGE Question 1 for Bailey; a prompt-only b may not close the gap."
+   },
+   "c": {
+    "extra": "facing right, lunging to the right, (both daggers pointing right:1.2)",
+    "negx": "facing left, pointing left, daggers pointing left, streamer, ribbon, long ribbon, rainbow, red legwear, orange legwear, red legs",
+    "cn": [
+     0.9,
+     0.95,
+     0.9,
+     1
+    ],
+    "skelDir": "rikku-thief-c",
+    "why": "Bailey 2026-09-26 picked the body-height gate for the Thief (JUDGE.md Question 1). Try c drops the big-head forcing (the '(big head)', 'from above', 'foreshortening' words and the 1.45 skeleton head factor) and keeps the slot's other b fixes; the skeleton has a normal Rikku head (skeletons-thief-c.py). Cand 9-12."
    }
   },
   {
@@ -223,7 +235,7 @@
    "pose": "cast",
    "answer": "soles cut by the bottom edge, second dagger lost to a streamer, no puffy sleeves, red-orange legs: ground line up to 1135, (other hand holding dagger at side), streamer negated, sleeves + bare legs weighted; head factor 1.45",
    "enabled": true,
-   "try": "b",
+   "try": "c",
    "b": {
     "extra": "(big head:1.15), from above, foreshortening, (tan bare legs:1.3), (short curved dagger:1.1)",
     "negx": "red legs, orange legs, red socks, leg paint, cape, long blade, extra blade",
@@ -234,6 +246,18 @@
      1
     ],
     "why": "The soles are fixed and c4 fixes the second dagger and sleeves; the head factor did not take (scale gate fails, JUDGE Question 1); c4's shins also stay red-orange."
+   },
+   "c": {
+    "extra": "(tan bare legs:1.3), (short curved dagger:1.1)",
+    "negx": "red legs, orange legs, red socks, leg paint, cape, long blade, extra blade",
+    "cn": [
+     0.9,
+     0.95,
+     0.9,
+     1
+    ],
+    "skelDir": "rikku-thief-c",
+    "why": "Bailey 2026-09-26 picked the body-height gate for the Thief (JUDGE.md Question 1). Try c drops the big-head forcing (the '(big head)', 'from above', 'foreshortening' words and the 1.45 skeleton head factor) and keeps the slot's other b fixes; the skeleton has a normal Rikku head (skeletons-thief-c.py). Cand 9-12."
    }
   },
   {
@@ -241,7 +265,7 @@
    "pose": "hurt",
    "answer": "a fork dangling from the braid, flame blades, no puffy sleeves, a hip bend: new recoil skeleton, fork/flame blade/fire negated, sleeves weighted; head factor 1.45",
    "enabled": true,
-   "try": "b",
+   "try": "c",
    "b": {
     "extra": "(big head:1.15), from above, facing viewer, (one small dagger in each hand:1.1)",
     "negx": "three blades, fan of blades, back, twisted torso, looking back, extra head, multiple heads",
@@ -252,6 +276,18 @@
      1
     ],
     "why": "The fork and flame blades are gone and the puffy sleeves are back, but the recoil turns her away from the camera and the head factor did not take (JUDGE Question 1)."
+   },
+   "c": {
+    "extra": "facing viewer, (one small dagger in each hand:1.1)",
+    "negx": "three blades, fan of blades, back, twisted torso, looking back, extra head, multiple heads",
+    "cn": [
+     0.9,
+     0.95,
+     0.9,
+     1
+    ],
+    "skelDir": "rikku-thief-c",
+    "why": "Bailey 2026-09-26 picked the body-height gate for the Thief (JUDGE.md Question 1). Try c drops the big-head forcing (the '(big head)', 'from above', 'foreshortening' words and the 1.45 skeleton head factor) and keeps the slot's other b fixes; the skeleton has a normal Rikku head (skeletons-thief-c.py). Cand 9-12."
    }
   },
   {

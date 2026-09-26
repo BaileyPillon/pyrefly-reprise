@@ -10,11 +10,35 @@ and `round2-ready.jpg` for every judge-PASS pick beside its idle in one overview
 `sheet2-paine-warrior.jpg` still shows the pre-method picks.
 
 Counts across the 55 worklist slots (this pass judged every slot the makers
-passed): **21 judge PASS**, **23 judge FAIL** (the maker's own pick scored
+passed): **23 judge PASS**, **23 judge FAIL** (the maker's own pick scored
 below the 7.0 bar), **1 maker FAIL** (no candidate the maker judged worth a judge
-pass), **10 STOPPED** (failed try b, rule 15: no third try), **0 not
-looked at yet**. The five Paine Warrior slots count by their method-run judge (pass
-"method" in `judge2.json`, 2026-09-26): attack and cast PASS; item, hurt and ko FAIL.
+pass), **8 STOPPED** (failed try b, rule 15: no third try; the Thief's attack and
+cast failed a third, try c), **0 not looked at yet**. The five Paine Warrior slots
+count by their method-run judge (pass "method" in `judge2.json`, 2026-09-26): attack
+and cast PASS; item, hurt and ko FAIL. The five Rikku Thief slots count by the
+body-height judge (pass "thief-body-gate", 2026-09-26, below): item, hurt and victory
+PASS; attack and cast STOPPED.
+
+**Rikku Thief, body-height gate (FFX-2 only; Bailey, 2026-09-26: "I'll go with all your
+recommendations", item 4 = judge her poses by body height; JUDGE.md Question 1, answered).**
+Every Thief candidate was re-judged against the full rubric with the new gate: round 2
+try a (cand 1-4) and try b (5-8), round 1 (the 2026-09-25-gpu5 set, cand 1-8), and a new
+try c of four renders per slot with no pass (cand 9-12: the try b fixes without the
+big-head words, on a skeleton with a normal Rikku head, `skeletons-thief-c.py`,
+`render-thief-c.mjs`). 12 GPU jobs, no black frame. Scores per candidate:
+`judge2.json` "thiefBodyGate"; the picture: `sheet3-rikku-thief.jpg`.
+
+| slot | pick | judge score | body scale | head at that scale |
+|---|---|---|---|---|
+| rikku-thief/attack | no pick (STOPPED) | best try c cand-10 6.94: a fan of three blades in one fist | - | - |
+| rikku-thief/cast | no pick (STOPPED) | best try c cand-10 6.94 (pale, big blue sickles), cand-11 6.88 | - | - |
+| rikku-thief/item | round 1 cand-3.png | PASS 7.38 | 1.24 | 0.67 of the idle's |
+| rikku-thief/hurt | try c cand-11.png | PASS 7.06 (narrow) | 1.18 (bent, unfolded) | 0.56 |
+| rikku-thief/victory | round 1 cand-3.png | PASS 7.44 | 1.21 | 0.56 |
+
+**The try b item pick (cand-8) in `round2-ready.jpg` no longer passes:** pass 2 scored it
+6.94, and at body scale its forced head is 0.94 of the idle's (gate 0.45 to 0.85). Under the
+body-height gate the Thief item pick is round 1 cand-3. `round2-ready.jpg` was not redrawn.
 
 ## Ready for Bailey's pick (judge PASS at 7.0 or above)
 
@@ -29,7 +53,9 @@ hundredths of the bar and should be looked at again before it is trusted.
 | paine-warrior/attack | method cand-7-comp.png | PASS 7.12 |
 | paine-warrior/cast | method cand-8-comp.png | PASS 7.00 (exactly on the bar) |
 | rikku-alchemist/attack | cand-4.png | PASS 7.12 |
-| rikku-thief/item | cand-8.png | PASS (narrow, try b) |
+| rikku-thief/item | round 1 cand-3.png (body-height gate; replaces try b cand-8) | PASS 7.38 |
+| rikku-thief/hurt | try c cand-11.png (body-height gate) | PASS 7.06 (narrow) |
+| rikku-thief/victory | round 1 cand-3.png (body-height gate) | PASS 7.44 |
 | paine-black-mage/ko | cand-1.png | PASS 7.00 |
 | paine-gunner/attack | cand-1.png | PASS 7.00 |
 | paine-gunner/item | cand-8.png | PASS 7.25 |
@@ -48,7 +74,8 @@ hundredths of the bar and should be looked at again before it is trusted.
 
 ## Open method questions
 
-- **JUDGE.md Question 1 (the Rikku Thief head scale).** The shipped Thief idle draws Rikku's
+- **ANSWERED 2026-09-26 (Bailey: judge the Thief by body height; results above).** JUDGE.md
+  Question 1 (the Rikku Thief head scale). The shipped Thief idle draws Rikku's
   head at about 1.9x the size of every other Rikku pose, so the round 1 head-match scale gate
   reads every otherwise-good Thief candidate as too tall. Round 2's thief slots (attack, cast,
   hurt, victory) all STOPPED under rule 15 without a scale ruling; only item passed the judge,
@@ -85,7 +112,7 @@ hundredths of the bar and should be looked at again before it is trusted.
 
 - **rikku-alchemist** (2 slots): 1 judge PASS, 1 judge FAIL, 0 maker FAIL, 0 STOPPED.
 - **rikku-dark-knight** (1 slots): 0 judge PASS, 1 judge FAIL, 0 maker FAIL, 0 STOPPED.
-- **rikku-thief** (5 slots): 1 judge PASS, 0 judge FAIL, 0 maker FAIL, 4 STOPPED.
+- **rikku-thief** (5 slots): 3 judge PASS, 0 judge FAIL, 0 maker FAIL, 2 STOPPED (body-height gate, 2026-09-26).
 - **rikku-black-mage** (4 slots): 1 judge PASS, 1 judge FAIL, 0 maker FAIL, 2 STOPPED.
 - **rikku-gunner** (4 slots): 3 judge PASS, 1 judge FAIL, 0 maker FAIL, 0 STOPPED.
 - **rikku-white-mage** (5 slots): 2 judge PASS, 3 judge FAIL, 0 maker FAIL, 0 STOPPED.
@@ -108,11 +135,11 @@ hundredths of the bar and should be looked at again before it is trusted.
 | paine-warrior/hurt | judge FAIL (method) | method cand-9-comp.png | FAIL 5.75 | Worst: hands (5): the sword hand is a malformed pale block and the pommel only touches it. Lavender hair, a red stroke down the neck, a hip pouch and glyphs on the boots. Planted upright, the sword reads as a cane with a wince, not a hit. |
 | paine-warrior/ko | judge FAIL (method) | method cand-4-comp.png | FAIL 6.56 | On her back with the sword dropped by her open hand: one sword, reads as down. Worst: costume (5.5): many red studded straps, a white zigzag fringe for the corset, block heels. The face is hidden (only the underside of the jaw shows), and the plank-straight body reads as levitating. |
 | rikku-dark-knight/ko | judge FAIL | cand-8 | FAIL (all try-a candidates guard-rejected for tou… | Judge pass covered the try-a set only; try-a had no candidate to score because every frame touched an edge. See the looker's try-b PASS on cand-8 in looks.json (not separately re-… |
-| rikku-thief/attack | STOPPED |  |  | FAIL (stops, rule 15): the head fix took (c7 is inside the gate) and the facing is fixed, but the only candidate with both loses the bandana, the puffy sleeves and the green skirt… |
-| rikku-thief/cast | STOPPED |  |  | FAIL (stops, rule 15): the head factor now works (c5-c7 inside the gate), but the other named fixes do not land: no candidate has the short curved second dagger, the puffy sleeves… |
-| rikku-thief/hurt | STOPPED |  |  | FAIL (stops, rule 15): the guard rejected all four; the big-head/from-above words turned every render into a canvas-filling close-up, and two of them have a second head. |
-| rikku-thief/item | judge PASS | cand-8.png | PASS (narrow, try b) | The Thief item scale gate now passes numerically after try b, but the eye spacing and hair mane keep the head reading larger than the idle at game size. |
-| rikku-thief/victory | STOPPED |  |  | FAIL (stops, rule 15): the scale gate is fixed (c5 and c7 about 1.0), but c5 swaps the dagger for a large hook and c7 brings back a rainbow streamer; neither has the idle's two sm… |
+| rikku-thief/attack | STOPPED (body gate) |  |  | Try c (no big-head forcing) failed too: best cand-10 6.94, the lunge at the enemy and a normal head land, but the near fist holds a fan of three blades. Third failure, rule 15. |
+| rikku-thief/cast | STOPPED (body gate) |  |  | Try c failed too: cand-10 6.94 (pale skin, big blue sickles), cand-11 6.88 (a green smear under one eye). Third failure, rule 15. |
+| rikku-thief/hurt | judge PASS (body gate) | try c cand-11.png | PASS 7.06 (narrow) | The recoil reads, one small dagger per hand, normal head (0.56 of the idle's at body scale 1.18). Worst: costume (5.5): orange forearm guards, ruffle cuffs not puffy sleeves, plain white boots. |
+| rikku-thief/item | judge PASS (body gate) | round 1 cand-3.png | PASS 7.38 | Bottle held out, puffy sleeves with yellow bows, bare tan legs (head 0.67 at body scale 1.24). Worst: the low hand has no dagger, mismatched star boots. The try b cand-8 fails (6.94; head 0.94). |
+| rikku-thief/victory | judge PASS (body gate) | round 1 cand-3.png | PASS 7.44 | Hand raised, grin, the idle's small orange dagger gripped low, puffy sleeves with bows (head 0.56 at body scale 1.21). Worst: lighter tan, one shin red-orange, mismatched boots. |
 | paine-black-mage/hurt | maker FAIL |  |  | FAIL: Three of four filled the canvas; c3's staff is the wrong weapon and is held up like a banner, which reads as a cheer rather than a hit. Lower the staff, weight the claw staf… |
 | paine-black-mage/ko | judge PASS | cand-1.png | PASS 7.00 | On her side, head right, eyes shut, a gloved hand on the staff lying the full width in front of her. The silver claw head with its red orb is close to the idle's claw staff. The f… |
 | paine-gunner/attack | judge PASS | cand-1.png | PASS 7.00 | A lunge with both guns aimed at the enemy reads at battle size. Head-match scale 1.23, lunge stature 0.94. Worst: costume (5.5). A cropped black jacket over a red bra-like panel l… |

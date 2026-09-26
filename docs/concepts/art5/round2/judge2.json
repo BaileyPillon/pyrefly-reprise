@@ -378,6 +378,253 @@
     "judge": "agent judge pass 2, not Bailey; made none of these frames",
     "pass": "2",
     "earlierUnmergedJudge": "JUDGE PASS 7.00 (cand-8) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+   },
+   "thiefBodyGate": {
+    "pass": "thief-body-gate",
+    "judge": "agent judge, not Bailey; made none of these frames",
+    "date": "2026-09-26",
+    "gate": "body height (JUDGE.md Question 1, answered by Bailey 2026-09-26)",
+    "idle": {
+     "eyeLineY": 308,
+     "chinY": 393,
+     "eyeChin": 85,
+     "solesY": 1195,
+     "bodyHeight": 887,
+     "bodyUnfolded": 897
+    },
+    "candidates": {
+     "r2-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-1.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 7,
+       "cost": 5,
+       "seams": 8,
+       "edges": 8,
+       "finish": 7,
+       "game": 7
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "blue bottle held out, tan, normal head; but one leg deep red-orange from the thigh down, ruffle cuffs not puffy sleeves"
+     },
+     "r2-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-2.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 6,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 6.5,
+       "edges": 3,
+       "finish": 6.5,
+       "game": 5
+      },
+      "mean": 5.44,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 5.44",
+      "note": "huge feathered mane"
+     },
+     "r2-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-3.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 8,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 6.5
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "green bottle, a small blade low, long blue sleeves, small figure"
+     },
+     "r2-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-4.png",
+      "scores": {
+       "id": 7,
+       "anat": 7.5,
+       "hands": 6,
+       "cost": 6,
+       "seams": 8,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7
+      },
+      "mean": 7.12,
+      "guard": "ok",
+      "verdict": "PASS 7.12",
+      "note": "PASS, not picked: pink bottle held out, white puffy sleeves, bare legs, blue-white boots; worst hands (the low hand has wedge claw fingers); a satchel and a blue hip streamer, no dagger"
+     },
+     "r2-c5": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-5.png",
+      "scores": {
+       "id": 5,
+       "anat": 5,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5.5
+      },
+      "mean": 6.19,
+      "guard": "ok",
+      "verdict": "FAIL 6.19",
+      "note": "chibi (big-head forcing), red hair"
+     },
+     "r2-c6": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-6.png",
+      "scores": {
+       "id": 4.5,
+       "anat": 5,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7,
+       "edges": 3,
+       "finish": 6.5,
+       "game": 5
+      },
+      "mean": 5.38,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 5.38",
+      "note": "leaning close-up, red hair"
+     },
+     "r2-c7": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-7.png",
+      "scores": {
+       "id": 4.5,
+       "anat": 4.5,
+       "hands": 6,
+       "cost": 5.5,
+       "seams": 7,
+       "edges": 3,
+       "finish": 6.5,
+       "game": 4.5
+      },
+      "mean": 5.19,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 5.19",
+      "note": "chibi close-up with a big flask"
+     },
+     "r2-c8": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-8.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 6.5,
+       "hands": 7,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "the try b pick (pass 2: 6.94, kept): FAILS the body gate too, head 0.94 of the idle at body scale (the big-head forcing)"
+     },
+     "r1-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/item/cand-1.png",
+      "scores": {
+       "id": 5,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 6
+      },
+      "mean": 6.56,
+      "guard": "ok",
+      "verdict": "FAIL 6.56",
+      "note": "round 1: a blue mask over the mouth"
+     },
+     "r1-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/item/cand-2.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.62,
+      "guard": "ok",
+      "verdict": "FAIL 6.62",
+      "note": "round 1: rainbow streamers"
+     },
+     "r1-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/item/cand-3.png",
+      "scores": {
+       "id": 7.5,
+       "anat": 7.5,
+       "hands": 6.5,
+       "cost": 6.5,
+       "seams": 8,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7.5
+      },
+      "mean": 7.38,
+      "guard": "ok",
+      "verdict": "PASS 7.38",
+      "note": "PICK (round 1 cand-3; round 1 judge 7.44, failed then only on the head-match gate): bottle held out toward the enemy, puffy white-blue sleeves with yellow bows, yellow top, red scarf, green skirt, belt pouches, bare tan legs, grin. Worst: hands and costume (6.5): the low hand is a muddle of glove and red-orange ribbon with no dagger, boots blue with a white star and mismatched (idle: blue-white sock boots, green soles)"
+     },
+     "r1-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/item/cand-4.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.62,
+      "guard": "ok",
+      "verdict": "FAIL 6.62",
+      "note": "round 1: rainbow cape"
+     }
+    },
+    "pick": "r1-c3",
+    "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/item/cand-3.png",
+    "scores": {
+     "id": 7.5,
+     "anat": 7.5,
+     "hands": 6.5,
+     "cost": 6.5,
+     "seams": 8,
+     "edges": 8,
+     "finish": 7.5,
+     "game": 7.5
+    },
+    "verdict": "PASS 7.38",
+    "scale": {
+     "bodyScale": 1.239,
+     "headAtScale": 0.67,
+     "statureAtScale": 1.0,
+     "pickEyeLineY": 163,
+     "pickChinY": 209,
+     "pickSolesY": 879,
+     "pickBody": 716,
+     "idleBody": 887,
+     "bent": false,
+     "gate": "PASS"
+    },
+    "why": "PICK (round 1 cand-3; round 1 judge 7.44, failed then only on the head-match gate): bottle held out toward the enemy, puffy white-blue sleeves with yellow bows, yellow top, red scarf, green skirt, belt pouches, bare tan legs, grin. Worst: hands and costume (6.5): the low hand is a muddle of glove and red-orange ribbon with no dagger, boots blue with a white star and mismatched (idle: blue-white sock boots, green soles)",
+    "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok"
    }
   },
   "rikku-dark-knight/ko": {
@@ -1034,8 +1281,1230 @@
    "mechanical": "border alpha 0 on the cut-out, maxRgb 255 (no black frame), guard ok",
    "judge": "agent judge, method pass, not Bailey; made none of these frames",
    "pass": "method"
+  },
+  "rikku-thief/attack": {
+   "thiefBodyGate": {
+    "pass": "thief-body-gate",
+    "judge": "agent judge, not Bailey; made none of these frames",
+    "date": "2026-09-26",
+    "gate": "body height (JUDGE.md Question 1, answered by Bailey 2026-09-26)",
+    "idle": {
+     "eyeLineY": 308,
+     "chinY": 393,
+     "eyeChin": 85,
+     "solesY": 1195,
+     "bodyHeight": 887,
+     "bodyUnfolded": 897
+    },
+    "candidates": {
+     "r2-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-1.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 6,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5
+      },
+      "mean": 6.56,
+      "guard": "ok",
+      "verdict": "FAIL 6.56",
+      "note": "lunge with two separate blue daggers, but both point screen-left, away from the enemy; shins grade red-orange"
+     },
+     "r2-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-2.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 4.5,
+       "finish": 7,
+       "game": 6
+      },
+      "mean": 6.19,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 6.19",
+      "note": "red-orange legs; touches the canvas edge"
+     },
+     "r2-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-3.png",
+      "scores": {
+       "id": 6,
+       "anat": 6.5,
+       "hands": 6,
+       "cost": 4.5,
+       "seams": 7,
+       "edges": 4.5,
+       "finish": 7,
+       "game": 6
+      },
+      "mean": 5.94,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 5.94",
+      "note": "single long blade, streamer, red legs"
+     },
+     "r2-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-4.png",
+      "scores": {
+       "id": 6,
+       "anat": 6,
+       "hands": 6,
+       "cost": 4,
+       "seams": 7,
+       "edges": 3.5,
+       "finish": 6.5,
+       "game": 5
+      },
+      "mean": 5.5,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 5.50",
+      "note": "rainbow streamers fill the frame, red legs"
+     },
+     "r2-c5": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-5.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 6.5,
+       "hands": 6,
+       "cost": 5,
+       "seams": 7,
+       "edges": 4.5,
+       "finish": 7,
+       "game": 6
+      },
+      "mean": 5.94,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 5.94",
+      "note": "blue skirt, claw blades"
+     },
+     "r2-c6": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-6.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 7,
+       "hands": 5.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.44,
+      "guard": "ok",
+      "verdict": "FAIL 6.44",
+      "note": "three-blade claw in each hand, blue skirt"
+     },
+     "r2-c7": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-7.png",
+      "scores": {
+       "id": 5,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 7
+      },
+      "mean": 6.5,
+      "guard": "ok",
+      "verdict": "FAIL 6.50",
+      "note": "lunges right with two curved daggers, but the bandana is a big blue bow, blue skirt, teal sneakers: not the Thief"
+     },
+     "r2-c8": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-8.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 6.5,
+       "hands": 6,
+       "cost": 5,
+       "seams": 7,
+       "edges": 4,
+       "finish": 7,
+       "game": 6
+      },
+      "mean": 5.88,
+      "guard": "REJECT crop box",
+      "verdict": "FAIL 5.88",
+      "note": "canvas-filling"
+     },
+     "r2-c9": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-9.png",
+      "scores": {
+       "id": 5,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.38,
+      "guard": "ok",
+      "verdict": "FAIL 6.38",
+      "note": "try c: red hair, wing-like streamers, a sword for a dagger"
+     },
+     "r2-c10": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-10.png",
+      "scores": {
+       "id": 7,
+       "anat": 7,
+       "hands": 6,
+       "cost": 6,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 7
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "try c, best: lunges right at the enemy, normal head, bandana, braids, blue puffy sleeves, green skirt, bare tan legs. Worst: hands and costume (6): the near fist holds a fan of three blades (white, blue, orange), not one dagger, the far dagger is hidden, and the sleeves are solid blue with no yellow bows"
+     },
+     "r2-c11": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-11.png",
+      "scores": {
+       "id": 6,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7,
+       "edges": 4,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.06,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 6.06",
+      "note": "try c: blue skirt, a long red blade and a blue one"
+     },
+     "r2-c12": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/attack/cand-12.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 6,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 7
+      },
+      "mean": 6.69,
+      "guard": "ok",
+      "verdict": "FAIL 6.69",
+      "note": "try c: lunges right, but two long blue needle claws from one fist and a long red scarf streamer with a blue cape panel"
+     },
+     "r1-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/attack/cand-1.png",
+      "scores": {
+       "id": 6,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7,
+       "edges": 4,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.06,
+      "guard": "REJECT crop box",
+      "verdict": "FAIL 6.06",
+      "note": "round 1: long two-ended blade, red legs"
+     },
+     "r1-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/attack/cand-2.png",
+      "scores": {
+       "id": 6,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7,
+       "edges": 4,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.0,
+      "guard": "REJECT crop box",
+      "verdict": "FAIL 6.00",
+      "note": "round 1: big streamer"
+     },
+     "r1-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/attack/cand-3.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 6,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.44,
+      "guard": "ok",
+      "verdict": "FAIL 6.44",
+      "note": "round 1 judge pick (6.44, kept): daggers merged into one double-ended pole weapon, red-orange legs"
+     },
+     "r1-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/attack/cand-4.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 6.5,
+       "hands": 6,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.38,
+      "guard": "ok",
+      "verdict": "FAIL 6.38",
+      "note": "round 1: red legs, double-ended weapon, hair mane"
+     }
+    },
+    "pick": null,
+    "verdict": "FAIL (no candidate reaches 7.0)",
+    "why": "No pick. Best try c cand-10 (6.94): the lunge at the enemy and the normal head land, but the near fist holds a fan of three blades. Third failed try: rule 15 stops the slot; a method check comes before any fourth."
+   }
+  },
+  "rikku-thief/cast": {
+   "thiefBodyGate": {
+    "pass": "thief-body-gate",
+    "judge": "agent judge, not Bailey; made none of these frames",
+    "date": "2026-09-26",
+    "gate": "body height (JUDGE.md Question 1, answered by Bailey 2026-09-26)",
+    "idle": {
+     "eyeLineY": 308,
+     "chinY": 393,
+     "eyeChin": 85,
+     "solesY": 1195,
+     "bodyHeight": 887,
+     "bodyUnfolded": 897
+    },
+    "candidates": {
+     "r2-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-1.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.69,
+      "guard": "ok",
+      "verdict": "FAIL 6.69",
+      "note": "arm up with a dagger; a two-ended blade behind the hip reads as an extra blade; purple scarf flap"
+     },
+     "r2-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-2.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 6
+      },
+      "mean": 6.62,
+      "guard": "ok",
+      "verdict": "FAIL 6.62",
+      "note": "long blue sword-like blades, cape flap, no puffy sleeves"
+     },
+     "r2-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-3.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 6.5
+      },
+      "mean": 6.75,
+      "guard": "ok",
+      "verdict": "FAIL 6.75",
+      "note": "raised weapon is a large yellow boomerang shape, the low hand holds a stub, rainbow satchel, no puffy sleeves, pale skin"
+     },
+     "r2-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-4.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 7,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 7
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "two curved daggers (up and low) and white puffy sleeves, but pale skin and red-orange streaked shins; the kukris are bigger and yellower than the idle"
+     },
+     "r2-c5": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-5.png",
+      "scores": {
+       "id": 6,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.56,
+      "guard": "ok",
+      "verdict": "FAIL 6.56",
+      "note": "red scarf streamer like a cape, red-orange shins, big head"
+     },
+     "r2-c6": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-6.png",
+      "scores": {
+       "id": 6,
+       "anat": 6.5,
+       "hands": 6,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.5,
+      "guard": "ok",
+      "verdict": "FAIL 6.50",
+      "note": "spear-like blade raised, a pickaxe low"
+     },
+     "r2-c7": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-7.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.62,
+      "guard": "ok",
+      "verdict": "FAIL 6.62",
+      "note": "red-brown legs all the way down, small sleeves"
+     },
+     "r2-c8": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-8.png",
+      "scores": {
+       "id": 5,
+       "anat": 5.5,
+       "hands": 6,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6
+      },
+      "mean": 6.25,
+      "guard": "ok",
+      "verdict": "FAIL 6.25",
+      "note": "chibi (big-head forcing)"
+     },
+     "r2-c9": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-9.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 6
+      },
+      "mean": 6.69,
+      "guard": "ok",
+      "verdict": "FAIL 6.69",
+      "note": "try c: a big yellow bow-shaped blade raised, a streamer low"
+     },
+     "r2-c10": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-10.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 7,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "try c: both hands hold a curved blade, the cast reads, normal head; but pale skin, the blades are large blue sickles (idle: small orange daggers), ruffle cuffs not puffy sleeves"
+     },
+     "r2-c11": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-11.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 7,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 6.5,
+       "game": 7
+      },
+      "mean": 6.88,
+      "guard": "ok",
+      "verdict": "FAIL 6.88",
+      "note": "try c: tan, reverse-grip dagger raised and a second dagger low, normal head; but a green smear under the screen-right eye, gold-hilted blue daggers, blue ruffle cuffs not puffy sleeves, one shin red-orange, mismatched boots"
+     },
+     "r2-c12": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/cast/cand-12.png",
+      "scores": {
+       "id": 4,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 4,
+       "seams": 5,
+       "edges": 2.5,
+       "finish": 6,
+       "game": 3.5
+      },
+      "mean": 4.75,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 4.75",
+      "note": "try c: a huge red monster shape behind her"
+     },
+     "r1-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/cast/cand-1.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 6
+      },
+      "mean": 6.56,
+      "guard": "ok",
+      "verdict": "FAIL 6.56",
+      "note": "round 1: long spear, red streamers"
+     },
+     "r1-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/cast/cand-2.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.62,
+      "guard": "ok",
+      "verdict": "FAIL 6.62",
+      "note": "round 1: rainbow streamer cape"
+     },
+     "r1-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/cast/cand-3.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 5.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.38,
+      "guard": "ok",
+      "verdict": "FAIL 6.38",
+      "note": "round 1 judge pick (6.38, kept): long blue streamer, red legs"
+     },
+     "r1-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/cast/cand-4.png",
+      "scores": {
+       "id": 6,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.62,
+      "guard": "ok",
+      "verdict": "FAIL 6.62",
+      "note": "round 1: tiny figure, long blue streamer"
+     }
+    },
+    "pick": null,
+    "verdict": "FAIL (no candidate reaches 7.0)",
+    "why": "No pick. Best try c cand-10 (6.94, pale skin, big blue sickles) and cand-11 (6.88, a green smear under one eye). Third failed try: rule 15 stops the slot; a method check comes before any fourth."
+   }
+  },
+  "rikku-thief/hurt": {
+   "thiefBodyGate": {
+    "pass": "thief-body-gate",
+    "judge": "agent judge, not Bailey; made none of these frames",
+    "date": "2026-09-26",
+    "gate": "body height (JUDGE.md Question 1, answered by Bailey 2026-09-26)",
+    "idle": {
+     "eyeLineY": 308,
+     "chinY": 393,
+     "eyeChin": 85,
+     "solesY": 1195,
+     "bodyHeight": 887,
+     "bodyUnfolded": 897
+    },
+    "candidates": {
+     "r2-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-1.png",
+      "scores": {
+       "id": 6,
+       "anat": 6.5,
+       "hands": 5.5,
+       "cost": 6,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5.5
+      },
+      "mean": 6.44,
+      "guard": "ok",
+      "verdict": "FAIL 6.44",
+      "note": "wince, but turned three-quarters away and a three-blade fan in the near hand"
+     },
+     "r2-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-2.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5
+      },
+      "mean": 6.5,
+      "guard": "ok",
+      "verdict": "FAIL 6.50",
+      "note": "back to the camera, looking over her shoulder"
+     },
+     "r2-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-3.png",
+      "scores": {
+       "id": 3,
+       "anat": 4,
+       "hands": 6,
+       "cost": 6,
+       "seams": 6,
+       "edges": 7.5,
+       "finish": 6,
+       "game": 3
+      },
+      "mean": 5.19,
+      "guard": "ok",
+      "verdict": "FAIL 5.19",
+      "note": "a second head beside hers"
+     },
+     "r2-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-4.png",
+      "scores": {
+       "id": 6,
+       "anat": 6,
+       "hands": 6,
+       "cost": 5,
+       "seams": 7,
+       "edges": 4,
+       "finish": 7,
+       "game": 6
+      },
+      "mean": 5.88,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 5.88",
+      "note": "kick pose touching the edge"
+     },
+     "r2-c5": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-5.png",
+      "scores": {
+       "id": 3,
+       "anat": 4,
+       "hands": 6,
+       "cost": 5.5,
+       "seams": 6,
+       "edges": 3.5,
+       "finish": 6,
+       "game": 3
+      },
+      "mean": 4.62,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 4.62",
+      "note": "close-up with a second head"
+     },
+     "r2-c6": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-6.png",
+      "scores": {
+       "id": 4.5,
+       "anat": 5,
+       "hands": 6,
+       "cost": 5.5,
+       "seams": 5,
+       "edges": 3,
+       "finish": 5.5,
+       "game": 4
+      },
+      "mean": 4.81,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 4.81",
+      "note": "chibi close-up on a flame-shaped cloud"
+     },
+     "r2-c7": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-7.png",
+      "scores": {
+       "id": 3,
+       "anat": 4,
+       "hands": 6,
+       "cost": 5.5,
+       "seams": 5.5,
+       "edges": 3.5,
+       "finish": 6,
+       "game": 3
+      },
+      "mean": 4.56,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 4.56",
+      "note": "a second upside-down head above her"
+     },
+     "r2-c8": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-8.png",
+      "scores": {
+       "id": 5,
+       "anat": 5.5,
+       "hands": 6,
+       "cost": 5.5,
+       "seams": 6.5,
+       "edges": 3,
+       "finish": 6.5,
+       "game": 4.5
+      },
+      "mean": 5.31,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 5.31",
+      "note": "close-up crouch"
+     },
+     "r2-c9": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-9.png",
+      "scores": {
+       "id": 6,
+       "anat": 6,
+       "hands": 5.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5.5
+      },
+      "mean": 6.25,
+      "guard": "ok",
+      "verdict": "FAIL 6.25",
+      "note": "try c: bent forward and turned away, a wrench-like weapon and a streamer"
+     },
+     "r2-c10": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-10.png",
+      "scores": {
+       "id": 4.5,
+       "anat": 6,
+       "hands": 6,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5
+      },
+      "mean": 6.0,
+      "guard": "ok",
+      "verdict": "FAIL 6.00",
+      "note": "try c: red-orange body turned away, streamer"
+     },
+     "r2-c11": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-11.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 7,
+       "cost": 5.5,
+       "seams": 8,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7
+      },
+      "mean": 7.06,
+      "guard": "ok",
+      "verdict": "PASS 7.06",
+      "note": "try c PICK: the recoil reads (head thrown back, one eye shut, teeth set, arms flung out), one small blue dagger in each hand, bandana, braids, yellow top, red scarf, green skirt, belt pouches, normal head. Worst: costume (5.5): orange forearm guards the idle does not have, light-blue ruffle cuffs (idle: puffy blue-white sleeves with yellow bows), shins grading to orange, plain white boots (idle: blue-white with green soles)"
+     },
+     "r2-c12": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-12.png",
+      "scores": {
+       "id": 5,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 5,
+       "edges": 2.5,
+       "finish": 6,
+       "game": 4
+      },
+      "mean": 5.06,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 5.06",
+      "note": "try c: a big painted blob behind her"
+     },
+     "r1-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/hurt/cand-1.png",
+      "scores": {
+       "id": 5,
+       "anat": 5,
+       "hands": 6,
+       "cost": 4.5,
+       "seams": 5.5,
+       "edges": 3,
+       "finish": 6,
+       "game": 4
+      },
+      "mean": 4.88,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 4.88",
+      "note": "round 1: tangled legs, a white skirt shape"
+     },
+     "r1-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/hurt/cand-2.png",
+      "scores": {
+       "id": 5,
+       "anat": 5.5,
+       "hands": 6,
+       "cost": 5.5,
+       "seams": 7,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5
+      },
+      "mean": 6.06,
+      "guard": "ok",
+      "verdict": "FAIL 6.06",
+      "note": "round 1: kick, a second hair mass"
+     },
+     "r1-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/hurt/cand-3.png",
+      "scores": {
+       "id": 3,
+       "anat": 3.5,
+       "hands": 5.5,
+       "cost": 5,
+       "seams": 5,
+       "edges": 3,
+       "finish": 5.5,
+       "game": 3
+      },
+      "mean": 4.19,
+      "guard": "REJECT full canvas",
+      "verdict": "FAIL 4.19",
+      "note": "round 1: two tangled figures"
+     },
+     "r1-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/hurt/cand-4.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 5,
+       "hands": 6,
+       "cost": 5,
+       "seams": 7,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5
+      },
+      "mean": 6.0,
+      "guard": "ok",
+      "verdict": "FAIL 6.00",
+      "note": "round 1: a leg kicked high, feathers"
+     },
+     "r1-c5": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/hurt/cand-5.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 7,
+       "hands": 6,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 5
+      },
+      "mean": 6.44,
+      "guard": "ok",
+      "verdict": "FAIL 6.44",
+      "note": "round 1: back to the camera"
+     },
+     "r1-c6": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/hurt/cand-6.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 6.5,
+       "hands": 6,
+       "cost": 6,
+       "seams": 7.5,
+       "edges": 7,
+       "finish": 6.5,
+       "game": 7
+      },
+      "mean": 6.62,
+      "guard": "ok",
+      "verdict": "FAIL 6.62",
+      "note": "round 1 judge pick (6.62, kept): bends back, reads as a bow"
+     },
+     "r1-c7": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/hurt/cand-7.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 6.5,
+       "hands": 6,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7,
+       "game": 5.5
+      },
+      "mean": 6.38,
+      "guard": "ok",
+      "verdict": "FAIL 6.38",
+      "note": "round 1: back bent away, streamers"
+     },
+     "r1-c8": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/hurt/cand-8.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 5.5
+      },
+      "mean": 6.38,
+      "guard": "ok",
+      "verdict": "FAIL 6.38",
+      "note": "round 1: red legs, rainbow streamer"
+     }
+    },
+    "pick": "r2-c11",
+    "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-11.png",
+    "scores": {
+     "id": 6.5,
+     "anat": 7,
+     "hands": 7,
+     "cost": 5.5,
+     "seams": 8,
+     "edges": 8,
+     "finish": 7.5,
+     "game": 7
+    },
+    "verdict": "PASS 7.06 (narrow)",
+    "scale": {
+     "bodyScale": 1.183,
+     "headAtScale": 0.56,
+     "statureAtScale": 0.92,
+     "pickEyeLineY": 114,
+     "pickChinY": 154,
+     "pickSolesY": 806,
+     "pickBody": 758,
+     "idleBody": 897,
+     "bent": true,
+     "points": "eye (225,115), buckle (333,317), left knee (200,544), left sole (156,806)",
+     "gate": "PASS"
+    },
+    "why": "try c PICK: the recoil reads (head thrown back, one eye shut, teeth set, arms flung out), one small blue dagger in each hand, bandana, braids, yellow top, red scarf, green skirt, belt pouches, normal head. Worst: costume (5.5): orange forearm guards the idle does not have, light-blue ruffle cuffs (idle: puffy blue-white sleeves with yellow bows), shins grading to orange, plain white boots (idle: blue-white with green soles)",
+    "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok"
+   }
+  },
+  "rikku-thief/victory": {
+   "thiefBodyGate": {
+    "pass": "thief-body-gate",
+    "judge": "agent judge, not Bailey; made none of these frames",
+    "date": "2026-09-26",
+    "gate": "body height (JUDGE.md Question 1, answered by Bailey 2026-09-26)",
+    "idle": {
+     "eyeLineY": 308,
+     "chinY": 393,
+     "eyeChin": 85,
+     "solesY": 1195,
+     "bodyHeight": 887,
+     "bodyUnfolded": 897
+    },
+    "candidates": {
+     "r2-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/victory/cand-1.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "finger up, a long orange spike blade low"
+     },
+     "r2-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/victory/cand-2.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 7,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 6.5,
+       "game": 7.5
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "two small orange daggers (one raised) and a grin, but pale skin, a red blotch on one knee and a red-grey shin, ruffle cuffs, a lavender blob behind the head"
+     },
+     "r2-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/victory/cand-3.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 6.5
+      },
+      "mean": 6.81,
+      "guard": "ok",
+      "verdict": "FAIL 6.81",
+      "note": "huge hair mane, salute, a club-like blade"
+     },
+     "r2-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/victory/cand-4.png",
+      "scores": {
+       "id": 7,
+       "anat": 7.5,
+       "hands": 6.5,
+       "cost": 6,
+       "seams": 8,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7.5
+      },
+      "mean": 7.25,
+      "guard": "ok",
+      "verdict": "PASS 7.25",
+      "note": "PASS, not picked: V-sign, grin, puffy white-blue sleeves, tan; the dagger is green-tipped and its hand a reddish block; boots with orange soles"
+     },
+     "r2-c5": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/victory/cand-5.png",
+      "scores": {
+       "id": 6,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 6.5
+      },
+      "mean": 6.75,
+      "guard": "ok",
+      "verdict": "FAIL 6.75",
+      "note": "a big blue hook for a dagger, red shins"
+     },
+     "r2-c6": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/victory/cand-6.png",
+      "scores": {
+       "id": 4.5,
+       "anat": 5,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 3.5,
+       "finish": 7,
+       "game": 5
+      },
+      "mean": 5.56,
+      "guard": "REJECT crop box",
+      "verdict": "FAIL 5.56",
+      "note": "chibi close-up"
+     },
+     "r2-c7": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/victory/cand-7.png",
+      "scores": {
+       "id": 5.5,
+       "anat": 6.5,
+       "hands": 6.5,
+       "cost": 4.5,
+       "seams": 7.5,
+       "edges": 7.5,
+       "finish": 7,
+       "game": 6.5
+      },
+      "mean": 6.44,
+      "guard": "ok",
+      "verdict": "FAIL 6.44",
+      "note": "rainbow streamer, jagged dagger"
+     },
+     "r2-c8": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/victory/cand-8.png",
+      "scores": {
+       "id": 5,
+       "anat": 5.5,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 4,
+       "finish": 7,
+       "game": 5.5
+      },
+      "mean": 5.81,
+      "guard": "REJECT edge",
+      "verdict": "FAIL 5.81",
+      "note": "chibi, touches the edge"
+     },
+     "r1-c1": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/victory/cand-1.png",
+      "scores": {
+       "id": 7,
+       "anat": 7.5,
+       "hands": 7,
+       "cost": 6,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7.5
+      },
+      "mean": 7.25,
+      "guard": "ok",
+      "verdict": "PASS 7.25",
+      "note": "PASS, not picked (round 1 judge 7.38, failed then on the head-match gate): blade raised high and a grin, tan; the raised blade is a long thin orange spike, no second dagger, flared half sleeves"
+     },
+     "r1-c2": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/victory/cand-2.png",
+      "scores": {
+       "id": 6.5,
+       "anat": 7,
+       "hands": 6.5,
+       "cost": 5.5,
+       "seams": 7.5,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7
+      },
+      "mean": 6.94,
+      "guard": "ok",
+      "verdict": "FAIL 6.94",
+      "note": "round 1: pale, one shin red-orange"
+     },
+     "r1-c3": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/victory/cand-3.png",
+      "scores": {
+       "id": 7.5,
+       "anat": 7.5,
+       "hands": 7,
+       "cost": 6.5,
+       "seams": 8,
+       "edges": 8,
+       "finish": 7.5,
+       "game": 7.5
+      },
+      "mean": 7.44,
+      "guard": "ok",
+      "verdict": "PASS 7.44",
+      "note": "PICK (round 1 cand-3): open hand raised and a grin, a small orange dagger gripped low in a brown glove (the idle's own dagger shape), puffy white sleeves with yellow bows, yellow top, red scarf, green skirt, belt pouches. Worst: costume (6.5): the skin is a lighter tan than the idle, one shin grades red-orange, boots blue-white but mismatched with brown soles (idle: green soles)"
+     },
+     "r1-c4": {
+      "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/victory/cand-4.png",
+      "scores": {
+       "id": 5,
+       "anat": 6,
+       "hands": 6.5,
+       "cost": 4,
+       "seams": 7,
+       "edges": 7.5,
+       "finish": 6.5,
+       "game": 5
+      },
+      "mean": 5.94,
+      "guard": "ok",
+      "verdict": "FAIL 5.94",
+      "note": "round 1: a giant orange tail shape"
+     }
+    },
+    "pick": "r1-c3",
+    "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/victory/cand-3.png",
+    "scores": {
+     "id": 7.5,
+     "anat": 7.5,
+     "hands": 7,
+     "cost": 6.5,
+     "seams": 8,
+     "edges": 8,
+     "finish": 7.5,
+     "game": 7.5
+    },
+    "verdict": "PASS 7.44",
+    "scale": {
+     "bodyScale": 1.213,
+     "headAtScale": 0.56,
+     "statureAtScale": 1.0,
+     "pickEyeLineY": 211,
+     "pickChinY": 250,
+     "pickSolesY": 942,
+     "pickBody": 731,
+     "idleBody": 887,
+     "bent": false,
+     "gate": "PASS"
+    },
+    "why": "PICK (round 1 cand-3): open hand raised and a grin, a small orange dagger gripped low in a brown glove (the idle's own dagger shape), puffy white sleeves with yellow bows, yellow top, red scarf, green skirt, belt pouches. Worst: costume (6.5): the skin is a lighter tan than the idle, one shin grades red-orange, boots blue-white but mismatched with brown soles (idle: green soles)",
+    "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok"
+   }
   }
  },
  "note2": "Pass 2 (agent judge, not Bailey, 2026-09-26): scored the maker-passed slots the first pass had not scored. New slots carry \"pass\": \"2\". Two slots already had a first-pass entry without scores (rikku-dark-knight/ko, rikku-thief/item, both try-b picks); those first-pass fields are left as they were and pass 2 sits under their \"pass2\" key. Full notes: D:/Tools/pyrefly-scratch/pose2b/judge2b.json.",
- "note3": "Method pass (agent judge, not Bailey, 2026-09-26): scored the five Paine Warrior method-run picks (sword-free bodies with the idle's own sword composited, commit a3584d1d) against the round 1 rubric. New slots carry \"pass\": \"method\"; paine-warrior/item already had a pass-2 entry, left as it was, and the method score sits under its \"method\" key. Each \"seam\" field is the composite check (edges, scale, lighting, grip)."
+ "note3": "Method pass (agent judge, not Bailey, 2026-09-26): scored the five Paine Warrior method-run picks (sword-free bodies with the idle's own sword composited, commit a3584d1d) against the round 1 rubric. New slots carry \"pass\": \"method\"; paine-warrior/item already had a pass-2 entry, left as it was, and the method score sits under its \"method\" key. Each \"seam\" field is the composite check (edges, scale, lighting, grip).",
+ "note4": "Thief body-gate pass (agent judge, not Bailey, 2026-09-26): Bailey picked the body-height gate for the Rikku Thief (JUDGE.md Question 1, answered). Every Thief candidate (round 2 try a 1-4, try b 5-8, the new try c 9-12, and round 1 cand 1-8 in 2026-09-25-gpu5) re-scored against the round 1 rubric with that gate. Each Thief slot carries it under \"thiefBodyGate\" (pass \"thief-body-gate\"); nothing earlier is overwritten. Gate: scale = idle body height / pose body height (eye line to soles; unfolded eye-buckle-knee-sole for a bent pose); at that scale the head (eye to chin) must be 0.45 to 0.85 of the idle's 85 px, and a bent pose must stand at least 0.60 of the idle."
 }
