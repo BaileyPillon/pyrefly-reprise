@@ -351,11 +351,548 @@
     "headMatch": 1.18,
     "note": "scale gate now passes (1.18 / 1.07), but the eyes sit about 1.4x wider apart than the idle and the hair mane is larger, so the head still looks bigger than the idle at game size when the pose swaps in"
    },
-   "why": "The Thief item scale gate now passes numerically after try b, but the eye spacing and hair mane keep the head reading larger than the idle at game size."
+   "why": "The Thief item scale gate now passes numerically after try b, but the eye spacing and hair mane keep the head reading larger than the idle at game size.",
+   "pass2": {
+    "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-8.png",
+    "try": "b",
+    "verdict": "FAIL 6.94",
+    "scores": {
+     "id": 6.5,
+     "anat": 6.5,
+     "hands": 7,
+     "cost": 5.5,
+     "seams": 7.5,
+     "edges": 8,
+     "finish": 7.5,
+     "game": 7
+    },
+    "scale": {
+     "headMatch": 1.17,
+     "stature": 1.14,
+     "pickEyeChin": 73,
+     "idleEyeChin": 85.1
+    },
+    "why": "She leans forward like the idle, holds the small bottle out toward the enemy, and a dagger hangs at her hip. Head-match scale 1.17: the stature gate passes (1.14). Worst: costume (5.5). Her legs grade to red-orange below the skirt (idle: bare tan legs). The puffy sleeves are solid blue with no yellow bows, the boots are plain blue (idle: blue-white sock boots with green soles), and the red scarf trails like a short cape. At battle size the mane and the big eyes make the head read larger than the idle's, so the swap still pops.",
+    "otherCandidateClearlyBetter": "No: c5 is chibi (under the gate), and c6 and c7 are guard rejects.",
+    "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+    "judge": "agent judge pass 2, not Bailey; made none of these frames",
+    "pass": "2",
+    "earlierUnmergedJudge": "JUDGE PASS 7.00 (cand-8) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+   }
   },
   "rikku-dark-knight/ko": {
    "verdict": "FAIL (all try-a candidates guard-rejected for touching the canvas edge; try b cand-8 later passed the look, see looks.json)",
-   "why": "Judge pass covered the try-a set only; try-a had no candidate to score because every frame touched an edge. See the looker's try-b PASS on cand-8 in looks.json (not separately re-judged in this pass)."
+   "why": "Judge pass covered the try-a set only; try-a had no candidate to score because every frame touched an edge. See the looker's try-b PASS on cand-8 in looks.json (not separately re-judged in this pass).",
+   "pass2": {
+    "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-dark-knight/ko/cand-8.png",
+    "try": "b",
+    "verdict": "FAIL 6.62",
+    "scores": {
+     "id": 6.5,
+     "anat": 6.5,
+     "hands": 6,
+     "cost": 6,
+     "seams": 7,
+     "edges": 7,
+     "finish": 7,
+     "game": 7
+    },
+    "scale": {
+     "note": "ko: lying down, not gated"
+    },
+    "why": "On her side, head right, eyes shut, chainmail, the white flower on the chest, the sword lying beside her: it reads as down, and the edge faults of try a are gone. Worst: hands and costume (6 each). The sword hand is a muddle of a pale forearm, a black cuff and gold guard pieces. The armour is bright royal blue (idle: navy-black with gold trim). The sword is a slim blue longsword (idle: dark engraved greatsword). She has straight blonde hair with one braid and no dark-streaked spiky mane. A pale cyan shadow patch lies under her body.",
+    "otherCandidateClearlyBetter": "No: c5 and c6 have no sword, and in c7 the sword stands up in the air.",
+    "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+    "judge": "agent judge pass 2, not Bailey; made none of these frames",
+    "pass": "2",
+    "earlierUnmergedJudge": "JUDGE FAIL 6.50: identity (cand-8) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+   }
+  },
+  "yuna-dark-knight/cast": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-dark-knight/cast/cand-4.png",
+   "try": "a",
+   "verdict": "FAIL 6.88",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 7,
+    "cost": 5,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 6.5
+   },
+   "scale": {
+    "headMatch": 1.14,
+    "stature": 0.94,
+    "pickEyeChin": 44,
+    "idleEyeChin": 50.0
+   },
+   "why": "Open hand raised, sword low: the cast reads. Worst: costume (5). The Dark Knight kit is mostly gone: no blue pauldrons or gauntlets, a gold corset panel over the bodice, one leg in a blue greave and the other a pink thighhigh on a high heel, and the idle's huge dark engraved greatsword is a slim katana with a gold guard. At battle size the silhouette stops reading as the Dark Knight. The helm is a pointed teal hood with a swirl disc, not the idle's crested goggles. Only one eye shows (blue); the other is under the hair.",
+   "otherCandidateClearlyBetter": "No: c1 and c2 raise the sword in the cast hand, and c3 is guard-rejected (a painted rock).",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "yuna-dark-knight/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-dark-knight/ko/cand-3.png",
+   "try": "a",
+   "verdict": "FAIL 6.69",
+   "scores": {
+    "id": 6,
+    "anat": 6.5,
+    "hands": 6.5,
+    "cost": 5,
+    "seams": 7.5,
+    "edges": 7.5,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "note": "ko: lying down, not gated"
+   },
+   "why": "Down on her side, head right, eyes shut: reads as down. Worst: costume (5). No pauldrons and no armoured greaves (both feet in pink stockings, one with a black ankle cuff), a bare midriff, and a slim sheathed katana in place of the greatsword. The helm is a different teal helm with a blue disc and a yellow horn.",
+   "otherCandidateClearlyBetter": "No: c1, c2 and c4 are guard rejects.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "paine-dark-knight/cast": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-dark-knight/cast/cand-2.png",
+   "try": "a",
+   "verdict": "PASS 7.19",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6.5,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.26,
+    "stature": 0.95,
+    "pickEyeChin": 38,
+    "idleEyeChin": 47.8
+   },
+   "why": "Gauntlet raised open, sword low: the cast reads. Black spiked plate, dark cape with red lining and a red sash. The sword is a red-orange engraved blade: slimmer than the idle's slab, but the nearest to it in the slot. Worst: identity and costume (6.5 each). The hair is a swept bob, not the idle's tall crest. At 2x the screen-left eye is a spiky red scribble. The idle's red shoulder ruffle is missing.",
+   "otherCandidateClearlyBetter": "No: c1 also reads, with a gold blade and a paler cape, but it is not better; c3 and c4 raise the sword in the cast hand.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "paine-dark-knight/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-dark-knight/ko/cand-1.png",
+   "try": "a",
+   "verdict": "PASS 7.06",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6.5,
+    "seams": 6.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "note": "ko: lying down, not gated"
+   },
+   "why": "On her side, head right, eyes shut, gauntlet under her head, black plate, red sash, clear of every edge: it reads as down. Worst: seams (6.5). The sword is two pieces that do not meet. A blue grip with an orange flame pommel sticks up behind her shoulder, and a silver blade with an orange engraved plate lies under her hand at a different angle. The red cape lining lies flat under her legs like a red mat. A small red touch sits at the mouth corner.",
+   "otherCandidateClearlyBetter": "No: c2 to c4 are guard-rejected close-ups.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "paine-dark-knight/victory": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-dark-knight/victory/cand-1.png",
+   "try": "a",
+   "verdict": "FAIL 6.88",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 5.5,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 6.5
+   },
+   "scale": {
+    "headMatch": 1.37,
+    "stature": 1.03,
+    "pickEyeChin": 35,
+    "idleEyeChin": 47.8
+   },
+   "why": "Hand on hip, smirk and heavy spiked plate: a victory stance. Worst: costume (5.5). The idle's greatsword is a short blade held low and nearly hidden, so at battle size she carries no sword to speak of. The pauldrons are huge spikes, the cape grades red to pink, and the hair is long and straight with no crest. The slot's alternate c2 (curved gold-and-red scimitar held low, cape with red lining) scores about 6.9: two small blue shadow dabs are painted at its feet and the blade is a scimitar.",
+   "otherCandidateClearlyBetter": "No: c2 is level with it, not clearly better (see why); c3 has a red cape and c4 a blue blade.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "rikku-white-mage/hurt": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-white-mage/hurt/cand-4.png",
+   "try": "a",
+   "verdict": "FAIL 6.88",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 5.5,
+    "seams": 7,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 6.5
+   },
+   "scale": {
+    "headMatch": 1.44,
+    "stature": 1.01,
+    "pickEyeChin": 41,
+    "idleEyeChin": 59.0
+   },
+   "why": "Wince (one eye shut, teeth set) and arms flung out: the hurt reads, moderately. Worst: costume (5.5). The staff is a thin blue spear with an orange arrowhead (idle: orange spade with the crescent cut). The white coat is gone, leaving detached sleeves and a blue-to-purple train from the waist. Neither hand holds the staff: it passes behind her body.",
+   "otherCandidateClearlyBetter": "No: c1 to c3 are guard rejects.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE FAIL 6.50: hands (cand-4) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "rikku-white-mage/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-white-mage/ko/cand-5.png",
+   "try": "b",
+   "verdict": "FAIL 6.88",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6,
+    "seams": 7,
+    "edges": 7,
+    "finish": 7.5,
+    "game": 6.5
+   },
+   "scale": {
+    "note": "ko: lying down, not gated"
+   },
+   "why": "On her side, head right, eyes shut, legs together, the staff lying from her feet to her head: the named faults are fixed. Worst: game read and costume (6.5 and 6). Her cheek rests on her hand, so she reads as asleep rather than fallen, the same fault as alchemist/ko in pass 1. The coat lining lies under her as a flat blue mat. The staff head is a yellow beak with a white oval (idle: spade with the crescent cut), with a red streamer and a pale shadow patch under it.",
+   "otherCandidateClearlyBetter": "No: c6 is closest (legs straight, ring head at the feet), but her hair spills long; c7 has the wrong staff and c8 a blue mat.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE PASS 7.06 (cand-5) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "rikku-white-mage/victory": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-white-mage/victory/cand-1.png",
+   "try": "a",
+   "verdict": "PASS 7.06",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6,
+    "seams": 7,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.51,
+    "stature": 1.16,
+    "pickEyeChin": 39,
+    "idleEyeChin": 59.0
+   },
+   "why": "Grin and hand on hip; the staff is planted and gripped loosely by the other gloved hand. Bandana, braids, red scarf, orange top, green belt, white apron skirt, and the white coat with its blue lining: the coat reads. Head-match scale 1.51, figure stature 1.16. Worst: costume (6). The staff is a thin blue shaft with an orange diamond spear tip (idle: the big orange spade with the crescent). The boots have orange X straps.",
+   "otherCandidateClearlyBetter": "No: c2 has a giant ring head over her, c3 a red spear and a painted shadow streak, c4 a spear at an angle.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE FAIL 6.88: hands (cand-1) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "paine-warrior/item": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-warrior/item/cand-4.png",
+   "try": "a",
+   "verdict": "FAIL 6.75",
+   "scores": {
+    "id": 6,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6,
+    "seams": 6.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 6.5
+   },
+   "scale": {
+    "headMatch": 1.14,
+    "stature": 1.06,
+    "pickEyeChin": 48,
+    "idleEyeChin": 54.6
+   },
+   "why": "The flask is held out at chest height, and she wears the white corset, black off-shoulder jacket, red skull belt and black shorts. Worst: identity (6), then seams and game read (6.5). A giant curved red blade taller than she is stands behind her with no hand on it. The hair is a bob with a blue tint (idle: swept crest). A red strap ending in a ring dangles from her hip. The boots are one-piece high-heeled thigh boots (idle: thighhighs and buckled boots with red straps).",
+   "otherCandidateClearlyBetter": "No: c1 and c2 carry oversized red blades, and c3 is small with the bottle held low.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE FAIL 6.69: game read and identity (giant unheld sword behind her, bob hair) (cand-4) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "paine-black-mage/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-black-mage/ko/cand-1.png",
+   "try": "a",
+   "verdict": "PASS 7.00",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7,
+    "game": 7
+   },
+   "scale": {
+    "note": "ko: lying down, not gated"
+   },
+   "why": "On her side, head right, eyes shut, a gloved hand on the staff lying the full width in front of her. The silver claw head with its red orb is close to the idle's claw staff. The fishnet sleeve, pink off-shoulder ruffle, belt and purple gown are hers. Worst: costume (6). The hat stands upright behind her head like a big shell: a dark purple brim and a red cone with a black band (idle: lavender hat with a red band). The closed eyes are drawn in red strokes.",
+   "otherCandidateClearlyBetter": "No: c2 has a pale floor sheet under her, and c3 and c4 are guard rejects.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE PASS 7.06 (cand-1) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "paine-gunner/attack": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-gunner/attack/cand-1.png",
+   "try": "a",
+   "verdict": "PASS 7.00",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 5.5,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "headMatch": 1.23,
+    "stature": 0.94,
+    "pickEyeChin": 44,
+    "idleEyeChin": 54.0
+   },
+   "why": "A lunge with both guns aimed at the enemy reads at battle size. Head-match scale 1.23, lunge stature 0.94. Worst: costume (5.5). A cropped black jacket over a red bra-like panel leaves the midriff bare (idle: covered black top with a red panel). The gloves are white (idle: black fingerless), a white flap hangs at the hip, and the guns are silver with red slides (idle: red-and-black revolvers). The two gun hands overlap and blur at 1:1. Swept hair, no tall crest.",
+   "otherCandidateClearlyBetter": "No: c2 (black top with red, holster at the hip, one gun aimed) is a fair alternate, but its hair turns blue and its boots are blue.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE PASS 7.06 (cand-1) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "paine-gunner/cast": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-gunner/cast/cand-1.png",
+   "try": "a",
+   "verdict": "FAIL 6.94",
+   "scores": {
+    "id": 6,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 5.5,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "headMatch": 1.3,
+    "stature": 0.96,
+    "pickEyeChin": 41.5,
+    "idleEyeChin": 54.0
+   },
+   "why": "Pistol raised high: the cast reads. Worst: costume (5.5). A white chest panel with a red splatter motif (idle: red panel on black). Heeled thigh boots with red bows (idle: knee boots). The lowered gun is a chunky red-and-black block. The hair is a bob with no crest.",
+   "otherCandidateClearlyBetter": "No: c2 to c4 carry the same drift.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE FAIL 6.94: costume (white chest with a red splat, not the black top with a red panel) (cand-1) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "paine-gunner/item": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-gunner/item/cand-8.png",
+   "try": "b",
+   "verdict": "PASS 7.25",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.54,
+    "stature": 1.15,
+    "pickEyeChin": 35,
+    "idleEyeChin": 54.0
+   },
+   "why": "The pink flask is held out at chest height and a black handgun is held low at her side. The spiked silver crest is the nearest to the idle's in the set. Stern red eyes, black off-shoulder puffy top, red belt, black shorts, thigh strap. Head-match scale 1.54, figure stature 1.15. Worst: costume (6). The chest panel is white with a small red motif (idle: red on black), the gun is a black automatic (idle: red-and-black revolvers), and the thigh-high heeled boots have a frayed white fringe at the top.",
+   "otherCandidateClearlyBetter": "No: c6 has the red corset and c7 the white halter with the bottle hanging low.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "paine-gunner/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-gunner/ko/cand-4.png",
+   "try": "a",
+   "verdict": "FAIL 6.88",
+   "scores": {
+    "id": 6.5,
+    "anat": 6.5,
+    "hands": 7,
+    "cost": 5.5,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7,
+    "game": 7
+   },
+   "scale": {
+    "note": "ko: lying down, not gated"
+   },
+   "why": "On her side, head right, eyes shut, clear of the edges; the black top, red belt and thigh straps are hers. Worst: costume (5.5): there is no gun anywhere in the frame (the idle carries two revolvers), and the top is cropped with a bare midriff and cleavage. At 2x the face is slightly muddled: the two closed eyes sit at different heights with a dark smudge under the lower one.",
+   "otherCandidateClearlyBetter": "No: c1 has the red harness and head pillowed on the arm; c2 lies on a giant gun board; c3 is a guard reject.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE PASS 7.00 (cand-4) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "paine-gunner/victory": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-gunner/victory/cand-4.png",
+   "try": "a",
+   "verdict": "PASS 7.38",
+   "scores": {
+    "id": 6.5,
+    "anat": 7.5,
+    "hands": 7,
+    "cost": 7,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.35,
+    "stature": 1.03,
+    "pickEyeChin": 40,
+    "idleEyeChin": 54.0
+   },
+   "why": "The closest to the idle of any Paine gunner frame. A red revolver is raised, the second red revolver hangs low in the other hand, and she smiles. Black off-shoulder top with a red chest panel, red belt, black shorts, thigh strap, black knee boots. Head-match scale 1.35, figure stature 1.03. Worst: identity (6.5): a swept bob with no tall crest. The boots have heels, and the sleeves have red cuffs.",
+   "otherCandidateClearlyBetter": "No: c1 has a toy-shaped low gun, c2 a white corset, and c3 a striped corset.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2",
+   "earlierUnmergedJudge": "JUDGE PASS 7.38 (cand-4) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+  },
+  "paine-white-mage/cast": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-white-mage/cast/cand-2.png",
+   "try": "a",
+   "verdict": "PASS 7.12",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.17,
+    "stature": 0.88,
+    "pickEyeChin": 30,
+    "idleEyeChin": 35.0
+   },
+   "why": "Open hand raised beside the staff head; the other hand grips the shaft. The cast reads, and she keeps the hood, the gold chest crescent, brown belts, orange hem panels and the dark lattice at the hem. Head-match scale 1.17, figure stature 0.88. Worst: costume (6). The chest opens at the neckline, with the crescent split in two. The staff head is a spiky orange C (idle: the red-gold crescent), and the butt end is a large orange-and-blue ornament. The capelet is white with orange cuffs. The face is small, with bangs instead of the swept fringe.",
+   "otherCandidateClearlyBetter": "No: c1 has tassels hanging from the head, c3 red dangles, and c4 a red skirt.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "paine-white-mage/hurt": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-white-mage/hurt/cand-4.png",
+   "try": "a",
+   "verdict": "FAIL 6.62 (scale gate)",
+   "scores": {
+    "id": 6,
+    "anat": 6,
+    "hands": 7,
+    "cost": 6,
+    "seams": 7,
+    "edges": 6.5,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "headMatch": 0.7,
+    "stature": 0.5,
+    "pickEyeChin": 50,
+    "idleEyeChin": 35.0
+   },
+   "why": "Head thrown back, one eye shut: the recoil reads. Scale gate FAIL: the head is too big for the body. Eye to chin is about 50 px on an 754 px figure (idle: 35 on 1055), so at head-match scale 0.70 she stands 0.50 of the idle, under even the 0.60 lunge allowance. Also: the hood is down (idle: up), the staff head is a gold slotted blade with a red ribbon (idle: the crescent), she wears red lattice pantaloons, and a black cast shadow is painted under the feet.",
+   "otherCandidateClearlyBetter": "No: c1 (crescent moon floating above her) and c2/c3 (guard rejects) are worse.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "paine-white-mage/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-white-mage/ko/cand-1.png",
+   "try": "a",
+   "verdict": "FAIL 6.94",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 7,
+    "cost": 5.5,
+    "seams": 7.5,
+    "edges": 7.5,
+    "finish": 7.5,
+    "game": 6.5
+   },
+   "scale": {
+    "note": "ko: lying down, not gated"
+   },
+   "why": "On her front, head right, eyes shut, face clean, hood up, a gloved hand on the staff. Worst: costume (5.5). The crescent emblem moved from the chest to the hood, and there is no lattice, no lavender capelet and almost no belt. The staff head is a blue fork with gold wings (idle: the red-gold crescent). Her cheek rests on the staff, so she reads as asleep more than fallen. The robe tail at the left thins into a white flame-like streak that ends 5 px from the canvas edge.",
+   "otherCandidateClearlyBetter": "No: c4 lies on a floor disc with a moon floating above; c2 and c3 are guard rejects.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
+  },
+  "paine-white-mage/victory": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-white-mage/victory/cand-1.png",
+   "try": "a",
+   "verdict": "FAIL 6.94 (scale gate)",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6,
+    "seams": 7,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "headMatch": 0.96,
+    "stature": 0.74,
+    "pickEyeChin": 36.5,
+    "idleEyeChin": 35.0
+   },
+   "why": "Hand on hip, calm smile, hood up, gold chest crescent, brown belt: a victory stance. Scale gate at the edge: eye to chin 36.5 px, so at head-match scale 0.96 she stands 0.74 of the idle (gate 0.75), inside the measurement error but visibly short beside the idle. Worst: costume (6). The staff is a thin shaft with a gold lantern and a spiral finial (idle: the crescent), and it stands beside her unheld while her hand holds a stray gold charm. No lattice, no capelet. One eye is red, the other dark.",
+   "otherCandidateClearlyBetter": "No: c2 has a giant crescent disc behind her, c3 no staff, and c4 a wheel head.",
+   "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge pass 2, not Bailey; made none of these frames",
+   "pass": "2"
   }
- }
+ },
+ "note2": "Pass 2 (agent judge, not Bailey, 2026-09-26): scored the maker-passed slots the first pass had not scored. New slots carry \"pass\": \"2\". Two slots already had a first-pass entry without scores (rikku-dark-knight/ko, rikku-thief/item, both try-b picks); those first-pass fields are left as they were and pass 2 sits under their \"pass2\" key. Full notes: D:/Tools/pyrefly-scratch/pose2b/judge2b.json."
 }
