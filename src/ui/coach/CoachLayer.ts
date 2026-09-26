@@ -63,6 +63,7 @@ import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
 import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
+import { BeatHold, beatUp } from './coachHold.ts';
 import { ffx2CoachClock, markSeen, shouldShow } from './coachState.ts';
 import type { IntentSource } from '../common/EnemyIntent.ts';
 
@@ -149,8 +150,11 @@ export function markForEvent(
 class CoachedHud implements HudPort {
   private layer: HTMLElement | null = null;
   private live: CoachMark | null = null;
+  private liveDef: CoachMarkDef | null = null;
   /** The girl whose X-2 command menu raised {@link live}, if a menu raised it. */
   private liveOwner: CombatantId | null = null;
+  /** PR-0119: a mark waits while a mid-battle beat's card is up (`coachHold.ts`). */
+  private readonly hold = new BeatHold(() => beatUp(this.layer));
 
   constructor(
     private readonly game: GameId,
@@ -184,12 +188,11 @@ class CoachedHud implements HudPort {
     this.inner.syncVitals?.(state);
   }
 
-  // The optional FFX-2 clock methods (and `onMenuLevel` below). A wrapper that leaves an optional
-  // `HudPort` method out hides it from the presenter: until the Wait-mode
-  // repair pass the Active pump's `syncGauges` never reached the real HUD (the
-  // bars stood still under an open menu while the clock ran), a torn-down
-  // menu's `closeCommandMenu` never released its keyboard claim, and the mode
-  // chip was never told Wait from Active. `ffx2-wait-mode-repair.test.ts`.
+  // The optional FFX-2 clock methods (and `onMenuLevel` below). A wrapper that leaves an optional `HudPort`
+  // method out hides it from the presenter: until the Wait-mode repair pass the Active pump's `syncGauges`
+  // never reached the real HUD (the bars stood still under an open menu while the clock ran), a torn-down
+  // menu's `closeCommandMenu` never released its keyboard claim, and the mode chip was never told Wait from
+  // Active. `ffx2-wait-mode-repair.test.ts`.
 
   syncGauges(snapshot: AtbSnapshot): void {
     this.inner.syncGauges?.(snapshot);
@@ -208,11 +211,10 @@ class CoachedHud implements HudPort {
     return this.inner.onMenuLevel?.(listener) ?? (() => undefined);
   }
 
-  // PR-0090: forwards `attachEnemyIntent`'s duck-typed wiring to the real HUD.
-  // Always present (not `?.`-guarded on this side) so a HUD mock that lacks
-  // it still gets `undefined` from the inner call below, and so
-  // `attachEnemyIntent`'s own `typeof h.setIntentSource === 'function'` probe
-  // sees a real function on every `CoachedHud`, in both games.
+  // PR-0090: forwards `attachEnemyIntent`'s duck-typed wiring to the real HUD. Always present (not
+  // `?.`-guarded on this side) so a HUD mock that lacks it still gets `undefined` from the inner call,
+  // and `attachEnemyIntent`'s `typeof h.setIntentSource === 'function'` probe sees a real function on
+  // every `CoachedHud`, in both games.
   setIntentSource(source: IntentSource | null): void {
     (this.inner as IntentAwareHud).setIntentSource?.(source);
   }
@@ -256,9 +258,12 @@ class CoachedHud implements HudPort {
 
   update(dt: number): void {
     this.inner.update?.(dt);
-    // FOC-05: `.mad__card` is re-solved by `MoveAdvisor.layout()` on its own
-    // schedule (`CoachMark.recheckPosition`'s own comment), so an FFX line
-    // has to keep checking, not just check once when it goes up.
+    // PR-0119: a live line steps aside for a beat's card; a held one comes back after it.
+    if (this.live && !this.live.finished && this.liveDef && this.hold.defer(this.liveDef)) this.clear();
+    const held = this.hold.release();
+    if (held) void this.raise(held);
+    // FOC-05: `.mad__card` is re-solved by `MoveAdvisor.layout()` on its own schedule
+    // (`CoachMark.recheckPosition`), so an FFX line keeps checking, not only once.
     this.live?.recheckPosition();
   }
 
@@ -343,10 +348,8 @@ class CoachedHud implements HudPort {
     // an enemy can act while the line is up, and that used to take the line
     // down in 0.8 s in chapter 6. It fades on its own, so only her own action
     // (her menu answered) ends it early. FFX-2 only: every FFX line holds.
-    if (event.type === 'action-start' && this.live?.finished === false) {
-      const otherActor = this.liveOwner !== null && event.actorId !== this.liveOwner;
-      if (!otherActor) this.clear();
-    }
+    const otherActor = event.type === 'action-start' && this.liveOwner !== null && event.actorId !== this.liveOwner;
+    if (event.type === 'action-start' && this.live?.finished === false && !otherActor) this.clear();
     const mark = this.due(markForEvent(this.game, event, (id) => !shouldShow(id)));
     if (mark) {
       markSeen(mark.id);
@@ -357,14 +360,12 @@ class CoachedHud implements HudPort {
 
   /** One surface at a time: a second candidate is simply dropped. */
   private due(mark: CoachMarkDef | null): CoachMarkDef | null {
-    if (!mark || !this.layer) return null;
-    if (this.live && !this.live.finished) return null;
-    return mark;
+    return !mark || !this.layer || (this.live && !this.live.finished) ? null : mark;
   }
 
   private raise(mark: CoachMarkDef): Promise<unknown> {
     const layer = this.layer;
-    if (!layer) return Promise.resolve(null);
+    if (!layer || this.hold.defer(mark)) return Promise.resolve(null);
     const line = new CoachMark({
       root: layer,
       mark,
@@ -374,14 +375,14 @@ class CoachedHud implements HudPort {
       ...(this.opts.clearTimer ? { clearTimer: this.opts.clearTimer } : {}),
     });
     this.live = line;
+    this.liveDef = mark;
     this.liveOwner = null;
     return line.show();
   }
 
   private clear(): void {
     this.live?.dismiss();
-    this.live = null;
-    this.liveOwner = null;
+    this.live = this.liveDef = this.liveOwner = null;
   }
 }
 
