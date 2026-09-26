@@ -5,6 +5,7 @@ import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { ADVISOR_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
 import { guideAgrees, withGuideBadge } from './advisorGuideBadge.ts';
+import { followCard } from './advisorChipFollow.ts';
 
 /**
  * The optional in-battle **move advisor**: an Ink & Gold card that says what to
@@ -144,6 +145,8 @@ export class MoveAdvisor {
   private fittedFor = '';
   /** Whether the guide's NEXT, on the latest board, still names the tactic row (PR-0169). */
   private guideAgrees = true;
+  /** Re-applies "the chip goes where the card goes" (./advisorChipFollow.ts, PR-0130). */
+  private readonly syncChip: () => void;
 
   constructor(opts: MoveAdvisorOptions) {
     this.opts = opts;
@@ -163,6 +166,7 @@ export class MoveAdvisor {
     this.cardEl.dataset['role'] = 'move-advisor-card';
 
     this.el.append(this.cardEl, this.toggleEl);
+    this.syncChip = followCard(this.cardEl, this.toggleEl, () => this.visible);
     this.toggleEl.addEventListener('click', (e) => {
       e.preventDefault();
       this.toggle();
@@ -234,6 +238,7 @@ export class MoveAdvisor {
     this.toggleEl.innerHTML = `<b>${escapeHtml(keys)}</b><span>${escapeHtml(word)}</span>`;
     this.toggleEl.setAttribute('aria-pressed', String(this.visible));
     this.toggleEl.title = this.visible ? 'Hide the move advisor' : 'Show the next best move';
+    this.syncChip();
   }
 
   /**
