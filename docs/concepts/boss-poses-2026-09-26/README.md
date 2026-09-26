@@ -27,6 +27,7 @@ second look.
 | `logos-hurt.jpg` | Logos, hurt | FFX-2 only, Chapter VI |
 | `leblanc-hurt.jpg` | Leblanc, hurt | FFX-2 only, Chapter VI |
 | `ormi-hurt.jpg` | Ormi, hurt | FFX-2 only, Chapter VI |
+| `ffx2-dr-goon-hurt.jpg` | Leblanc Syndicate goon (male), hurt | FFX-2 only, Chapter VI |
 | `natus-tries.jpg` | Seymour Natus, hurt and KO: the three failed tries, nothing to pick | FFX only, Chapter X |
 
 ## Read this first: which painting a boss actually shows
@@ -62,6 +63,8 @@ Claw, Paragon's Normal Attacks). That is a `src/` change for a fix batch, not ma
 | Logos (VI, FFX-2) | hurt | **c2** (alt c3 7.50) | 7.56 | 4 pass (c6 7.38, c4 7.38) | The near sleeve is short, the forearm bare; the helmet turns with a purple emblem on its side |
 | Leblanc (VI, FFX-2) | hurt | **c10** (alt c1 7.19) | 7.38 | 2 pass, 2 fail (c6 6.88 reads as a curtsey, c8 6.94 no hit read) | The fan is white and blue (the idle's is red and silver), the robe pastel instead of purple, pink hair tips. c1 keeps the red fan but the hit reads mildly |
 | Ormi (VI, FFX-2) | hurt | **c7** (alt c11 7.12) | 7.25 | 3 pass (c6 7.00 narrowly), 1 fail (c1 6.69, bare belly) | He faces screen-left; the idle faces right, so an install would flip him horizontally (no repaint). White pantaloons and a green bow the idle lacks |
+| Goon, male (VI, FFX-2) | hurt | **c4** (alt c1 7.06) | 7.19 | 2 pass, 2 fail (c2 6.94 and c3 6.81: turned away from the camera) | A bright yellow-green suit, not the idle's olive; slimmer than the idle's muscle; laced boots. Pilot only (4 renders) |
+| Goon, female (VI, FFX-2) | hurt | **none** | - | 0 of 4 pass | Pilot only: all four turn away from the camera and carry a fan in each hand (the idle holds one, closed). No sheet. A second try would render her fan-free and composite the idle's own fan (METHOD-CHECK method 1) |
 
 **Not reached this run** (plan order), and why: Mortibody (X) and the Mortiphasms (XII) are
 non-biped (no OpenPose skeleton fits a floating skull or a machine); Seymour Omnis (XII) is a torso on
@@ -117,4 +120,4 @@ Its hurt renders all lost the hat's shape.
   `v2b`), `looks.json` (the looks and scores behind the sheets).
 
 GPU in this run: Yojimbo 34 renders (4 attack, 20 hurt, 10 hatless attack), Natus 24, Trema 12, Logos 8,
-Leblanc 12, Ormi 12: 102 renders, no black frame, ComfyUI never restarted.
+Leblanc 12, Ormi 12, the goons 8: 110 renders, no black frame, ComfyUI never restarted.

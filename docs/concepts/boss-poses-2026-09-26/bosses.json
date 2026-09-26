@@ -1204,5 +1204,79 @@
    "identity": "extremely short and stout build, a big round belly, thick heavy limbs, wide barrel chest, short neck, bald head with a small red top-knot, thick eyebrows, wearing predominantly purple samurai-style armor with gold trim, a fur-trimmed mantle across the shoulders, a wide teal sash at the waist, a massive round shield strapped across his back nearly as tall as he is, the shield rimmed in gold with a red syndicate heart emblem at its center, thick short legs, sandals, (short and extremely stout:1.4), (huge round belly:1.35), (massive round shield on back:1.2)",
    "result": "pilot 1 (hurt 1-4): the belly comes out bare in 4 of 4 (the idle: covered by purple armour), a second shield in c2"
   }
+ },
+ "ffx2-dr-goon": {
+  "title": "Chapter VI Leblanc Goon, male (FFX-2 only)",
+  "art": "ffx2-dr-goon",
+  "game": "FFX-2 only (Ch VI, Leblanc's chateau)",
+  "backdrop": "leblanc-last-room",
+  "seed0": 929300,
+  "weapon": "none",
+  "headF": 0.2,
+  "subject": "1boy, final fantasy x-2, safe, solo, male focus, a leblanc syndicate goon",
+  "identity": "an adult man of average build, wearing a skin-tight matte olive drab army green cloth bodysuit that covers him from neck to wrists and ankles, the suit fitted close to the body with only seam lines and soft fold shading, a pink heart emblem printed on the center of his chest, black gloves, black boots, (olive green bodysuit:1.3), (skin tight:1.2), (small pink heart emblem:1.05), short dark hair, a black domino eye mask over his eyes, the olive green bodysuit zipped closed up to the neck, (domino mask:1.3), (black eye mask:1.1), (closed bodysuit:1.2)",
+  "identitySource": "public/art/characters/ffx2-dr-goon/idle.json prompt (approved idle), pose and expression words stripped; the idle faces screen-right",
+  "neg": "2boys, 1girl, chibi, weapon, bare chest, shirtless, open bodysuit, armor, cape",
+  "erase": {},
+  "poses": {
+   "hurt": {
+    "size": [
+     832,
+     1216
+    ],
+    "facing": "right",
+    "tags": "(recoiling:1.2), knocked back, (leaning back:1.1), head tilted back, grimace, gritted teeth, both arms flung down and out, feet on ground",
+    "negx": "smile, grin, bowing, leaning forward, kneeling, sitting, arms up, close-up, upper body, cowboy shot, jumping, midair",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9,
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "skelScale": 0.8,
+    "ground": 1150
+   }
+  }
+ },
+ "ffx2-fem-goon": {
+  "title": "Chapter VI Leblanc Goon, female (FFX-2 only)",
+  "art": "ffx2-fem-goon",
+  "game": "FFX-2 only (Ch VI, Leblanc's chateau)",
+  "backdrop": "leblanc-last-room",
+  "seed0": 929400,
+  "weapon": "fan",
+  "headF": 0.2,
+  "subject": "1girl, final fantasy x-2, safe, solo, a leblanc syndicate goon",
+  "identity": "a young woman of slim build, wearing a skin-tight matte pink cloth bodysuit, the same pink on both arms and both legs that covers her from neck to wrists and ankles, the suit fitted close to the body with only seam lines and soft fold shading, a red heart emblem printed on the center of her chest, pink gloves, pink boots, (pink bodysuit:1.3), (skin tight:1.2), (small red heart emblem:1.05), (short hair:1.45), (bob cut:1.3), brown hair cut above the shoulders, a white domino eye mask over her eyes, the pink bodysuit covering her chest, shoulders and both arms to the wrists, (domino mask:1.4), (white eye mask:1.3), (long sleeves:1.2), holding a closed pink folding fan in one hand",
+  "identitySource": "public/art/characters/ffx2-fem-goon/idle.json prompt (approved idle), pose and expression words stripped; the idle faces screen-right",
+  "neg": "2girls, 1boy, chibi, open fan, cleavage, bare shoulders, bare legs, long hair, sunburst",
+  "erase": {},
+  "poses": {
+   "hurt": {
+    "size": [
+     832,
+     1216
+    ],
+    "facing": "right",
+    "tags": "(recoiling:1.2), knocked back, (leaning back:1.1), head tilted back, grimace, gritted teeth, both arms flung down and out, feet on ground, the closed fan still in one hand",
+    "negx": "smile, grin, bowing, leaning forward, kneeling, sitting, arms up, close-up, upper body, cowboy shot, jumping, midair",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9,
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "skelScale": 0.8,
+    "ground": 1150
+   }
+  }
  }
 }

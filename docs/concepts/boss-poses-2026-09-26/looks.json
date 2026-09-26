@@ -404,5 +404,73 @@
     }
    }
   }
+ },
+ "ffx2-dr-goon": {
+  "hurt": {
+   "pick": "c4 (alt c1)",
+   "folder": "hurt",
+   "cands": {
+    "4": {
+     "score": "7.19",
+     "verdict": "PASS",
+     "look": "Maker: Front-on, knocked back with both arms flung out; mask and heart emblem. Second look: Worst: the suit is a bright yellow-green, not the idle's olive, the build is slimmer than the idle's muscle, and the boots are laced.",
+     "scores": {
+      "identity": 6.5,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 6.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 7.5
+     }
+    },
+    "1": {
+     "score": "7.06",
+     "verdict": "PASS",
+     "look": "Maker: Olive suit, mask and heart; a stiff lean back. Second look: Worst: he tips back as one rigid plank, and a dark strap hangs beside his leg that the idle does not have. Narrow pass.",
+     "scores": {
+      "identity": 7,
+      "anatomy": 6.5,
+      "hands": 6.5,
+      "costume": 6.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 7
+     }
+    },
+    "2": {
+     "score": "6.94",
+     "verdict": "FAIL",
+     "look": "Maker: Arms flung wide. Second look: FAIL. Seen from behind (the render turned him away), so the chest heart and the grin are gone; a brown belt.",
+     "scores": {
+      "identity": 6,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 6.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 6
+     }
+    },
+    "3": {
+     "score": "6.81",
+     "verdict": "FAIL",
+     "look": "Maker: Mask, olive suit. Second look: FAIL. Twisted away from the camera with no hit read.",
+     "scores": {
+      "identity": 6.5,
+      "anatomy": 6.5,
+      "hands": 6.5,
+      "costume": 6.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 5.5
+     }
+    }
+   }
+  }
  }
 }

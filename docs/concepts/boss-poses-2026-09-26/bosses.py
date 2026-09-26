@@ -120,6 +120,14 @@ def skel_raw(boss, pose):
         k = base.body((430, 660), 253, s=0.97, head_deg=230, rarm=(128, 112), larm=(20, 45),
                       rleg=(120, 100), lleg=(70, 92), **prof)
         return (W, H), base.mirror(k, W)
+    if boss in ('ffx2-dr-goon', 'ffx2-fem-goon') and pose == 'hurt':
+        # both goon idles face screen-RIGHT: the right-facing draft of the same knocked-back recoil,
+        # not mirrored (the torso tips back toward screen-left, away from the party).
+        W, H = 832, 1216
+        prof = dict(sh=32, hp=26, turn=18)
+        k = base.body((430, 660), 253, s=0.97, head_deg=230, rarm=(128, 112), larm=(20, 45),
+                      rleg=(120, 100), lleg=(70, 92), **prof)
+        return (W, H), k
     if boss == 'ormi' and pose == 'hurt':
         # Ormi's idle faces screen-RIGHT (not mirrored). Short and stout: a thick torso and wide
         # shoulders, the legs drawn at 60% so ControlNet does not stretch him tall; knocked back
