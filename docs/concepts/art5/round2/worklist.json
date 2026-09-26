@@ -346,14 +346,48 @@
    "pose": "item",
    "answer": "red corset with a white halter, the other hand holds a non-pistol, spiky mane: black top weighted, (other hand holding handgun at side:1.1), red corset negated, swept hair",
    "enabled": true,
-   "try": "a"
+   "try": "b",
+   "b": {
+    "extra": "(holding handgun at side:1.3), pistol pointing down, (holding potion bottle:1.1)",
+    "negx": "spikes, spiked weapon, mace, gauntlet, ink splash, splatter, star, emblem, halo, spear, trident, cape, blue boots, blue footwear, laces",
+    "cn": [
+     0.8,
+     0.85,
+     0.8,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(swept back hair:1.1), spiked crest",
+      "(swept back hair:1.3), (spiked hair crest:1.2)"
+     ]
+    ],
+    "why": "The named fix (the other hand holds a handgun) failed again: c1's low hand holds a spiked object; the others added floating props (splash, trident, star)"
+   }
   },
   {
    "id": "paine-gunner",
    "pose": "hurt",
    "answer": "doubles over forward, pistols like brooms, red-black top, blue smear: new recoil skeleton (torso back), bent over/broom negated, revolvers weighted, shadow negated",
    "enabled": true,
-   "try": "a"
+   "try": "b",
+   "b": {
+    "extra": "(leaning back:1.2), torso arched back, head thrown back, holding a handgun in each hand, (black knee boots:1.3)",
+    "negx": "bent over, bending forward, leaning forward, hunched, blue feet, gradient boots, red leg armor, thigh armor, cannon, bazooka, scythe, large blade",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(swept back hair:1.1), spiked crest",
+      "(swept back hair:1.3), (spiked hair crest:1.2)"
+     ]
+    ],
+    "why": "The recoil skeleton is read only half the time (c3 still doubles over), and the named blue smear and non-gun weapons recur"
+   }
   },
   {
    "id": "paine-gunner",
@@ -374,7 +408,24 @@
    "pose": "attack",
    "answer": "scale gate (stands 0.51: head 1.4x the idle's), classic white-mage robe with a zigzag hem, bare legs: head factor 0.70 (idle R 27), the 'white mage' class word dropped, zigzag/triangle/sawtooth trim and bare legs negated, crescent emblem + lattice + ankle-length robe weighted",
    "enabled": true,
-   "try": "a"
+   "try": "b",
+   "b": {
+    "extra": "(single staff:1.2), staff held in both hands, swinging staff, (ankle-length robe:1.3), (legs covered by robe:1.2)",
+    "negx": "two staffs, spear, polearm, second weapon, spiked disc, sun, bare thighs, short skirt, apron, giant staff head, close-up, cropped",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(red and gold crescent moon staff:1.1)",
+      "(red and gold crescent moon staff:1.3)"
+     ]
+    ],
+    "why": "Three of four still fill the canvas (the scale gate) and every candidate shows the bare legs the answer negated; c3 carries two weapons"
+   }
   },
   {
    "id": "paine-white-mage",
@@ -388,7 +439,24 @@
    "pose": "item",
    "answer": "doll-like face, classic robe, bottle hanging low, cast shadow: (stern expression) + mature female, cute/round face negated, 'bottle at chest height', shadow negated; robe words weighted",
    "enabled": true,
-   "try": "a"
+   "try": "b",
+   "b": {
+    "extra": "(holding potion bottle at chest height:1.3), one staff in the other hand",
+    "negx": "background, scenery, building, arch, castle, tower, flowers, disc, halo, wheel, window, second staff, floating weapon, crescent behind head",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(lattice pattern panels:1.1)",
+      "lattice pattern hem panels"
+     ]
+    ],
+    "why": "No candidate holds a bottle; the lattice and crescent words grew into scenery, discs and a second staff. Limit the lattice to the hem and weight the bottle"
+   }
   },
   {
    "id": "paine-white-mage",

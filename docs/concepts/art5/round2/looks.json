@@ -519,5 +519,113 @@
    "4": "guard REJECT (edges): half-sitting, a second hand at the staff"
   },
   "verdict": "PASS: cand-1 (cand-1 fixes all three named faults (staff inside the frame, no shadow, hat purple not blue). Residuals: the hat brim is red underneath, and the staff head is a claw hook rather than the idle's exact shape (partial data: the looker report was truncated before the rest of this entry's notes).)"
+ },
+ "paine-gunner/attack": {
+  "cands": {
+   "1": "PICK: two handguns aimed the same way, swept spiky silver hair, black top with a red chest panel, puffy black sleeves, black knee boots",
+   "2": "also reads: two pistols forward, spiky hair with a blue tint, but an extra red holstered object at the hip; dark-blue boots with pink accents",
+   "3": "one oversized red-black blaster (toy-like); a red heel",
+   "4": "the second gun hangs vertical, pointing down (not the same way)"
+  },
+  "verdict": "PASS: cand-1 (cand-1 answers every named fault: real revolvers pointing the same way, no red boots, no red top, swept hair. Residuals: the guns are grey with red grips rather than the idle's red-black revolvers, one glove is white, and the boots have a blue sheen)"
+ },
+ "paine-gunner/cast": {
+  "cands": {
+   "1": "PICK: one red-black gun raised, the other gun low; black top with a red chest motif; puffy black sleeves; black thigh strap; black boots",
+   "2": "reads, but a white corset panel with no red chest panel; the low hand shows a gun plus holster clutter",
+   "3": "a pink-white halo disc behind her head; harlequin chequered top",
+   "4": "the raised gun is a long silver pipe and the low gun rifle-like (rifle negated); red-and-white striped top; red boot tops"
+  },
+  "verdict": "PASS: cand-1 (cand-1 has no red frilled corset, no toy gun and no yellow gun. Residuals: the hair is a swept bob without the tall crest, small red bows on the boots, a red heart graphic instead of the idle's panel, and high heels)"
+ },
+ "paine-gunner/item": {
+  "cands": {
+   "1": "flask held at chest height and a black top, but the other hand holds a spiked red-black object (not readable as a handgun); bob hair; small figure",
+   "2": "guard REJECT (crop box): a huge black ink splash fills the background",
+   "3": "a red trident or spear stands on her head; red cape",
+   "4": "a star emblem floats above her head; blue boots with red laces"
+  },
+  "verdict": "FAIL (The slot's named fault, a non-pistol in the other hand, persists in the only clean candidate; the other three add extra objects)"
+ },
+ "paine-gunner/hurt": {
+  "cands": {
+   "1": "leans back with a wince (recoil reads), one revolver low, but the far boot fades into a blue smear at the foot (the named blue smear) and a red armour plate covers her near thigh",
+   "2": "a giant red cannon or bazooka in her arms; ribbon streamers",
+   "3": "bent forward at the waist (the named 'doubles over' fault)",
+   "4": "leans back, but the other hand holds a large scythe-like blade"
+  },
+  "verdict": "FAIL (c1 recoils but keeps the named blue smear plus a red leg plate; c3 doubles over; c2 and c4 carry extra weapons)"
+ },
+ "paine-gunner/ko": {
+  "cands": {
+   "1": "reads: curled on her side, eyes shut, clear of the edges; red heels on the boots; no gun shown",
+   "2": "lying on a giant surfboard-sized gun",
+   "3": "guard REJECT (both side edges)",
+   "4": "PICK: flat on her side, eyes shut, black top, red belt, all-black thigh boots, clear of every edge"
+  },
+  "verdict": "PASS: cand-4 (cand-4 fixes the edge, the red boots, the toy blaster and the mane (swept hair). Residuals: no revolver is shown, the red chest panel is barely visible and the figure lies very flat (1178x288); cand-1 is the alternate if the red heels are acceptable)"
+ },
+ "paine-gunner/victory": {
+  "cands": {
+   "1": "spiked crest hair (good), but a bare-midriff crop top and a long silver gun with a spiked part",
+   "2": "reads: spiked crest hair, but a white-red corset front, one red puffy sleeve and one red heel",
+   "3": "red-and-white striped corset (negated)",
+   "4": "PICK: gun raised in one hand, red gun held at her side, black top with a red chest panel, puffy black sleeves, black knee boots"
+  },
+  "verdict": "PASS: cand-4 (cand-4 matches the idle's outfit best and fixes the red corset, the red boots and the orange stub gun. Residual: the hair is a swept bob without the crest (cand-2 has the crest but a red sleeve and heel))"
+ },
+ "paine-white-mage/attack": {
+  "cands": {
+   "1": "guard REJECT (fills the whole canvas): a close-up figure",
+   "2": "guard REJECT (crop box): bare legs, a scythe-shaped staff head",
+   "3": "the only guard ok, but two weapons: a sunburst-crescent staff held vertical plus a separate spear held horizontal; bare thighs under a short lattice apron; face shadowed by the hood",
+   "4": "guard REJECT (crop box): bare legs, a gold ring head with feather tassels"
+  },
+  "verdict": "FAIL (The named fixes (scale, bare legs, the robe) are not met; the only guard-clean candidate has two weapons)"
+ },
+ "paine-white-mage/cast": {
+  "cands": {
+   "1": "red and blue diamond tassels hang from the crescent (tassels negated); one red heel",
+   "2": "PICK: open hand raised with the crescent staff, face clear, ankle-length white robe with a dark lattice hem, no zigzag, no thigh slit, crescent emblem at the chest",
+   "3": "reads, but a stray red streak floats beside the staff and small red dangles hang on its head",
+   "4": "reads: crescent staff held up vertical, face clear, but the skirt is red and the top laced open"
+  },
+  "verdict": "PASS: cand-2 (cand-2 fixes the face smear, the zigzag, the thigh slit and the tassels. Residuals: the capelet is white and orange rather than lavender, the crescent head is hooked, and the staff is held up rather than beside her; cand-4 is the alternate)"
+ },
+ "paine-white-mage/item": {
+  "cands": {
+   "1": "guard REJECT (edge): a castle and flower field painted behind her",
+   "2": "guard REJECT (crop box): a stone arch fills the frame",
+   "3": "no bottle; a second crescent weapon floats across her staff with crystal tips",
+   "4": "no bottle; a giant lattice disc behind her head"
+  },
+  "verdict": "FAIL (The named fix (bottle at chest height) is absent in all four, and each adds large extra objects)"
+ },
+ "paine-white-mage/hurt": {
+  "cands": {
+   "1": "a crescent moon floats in the air above her; the staff is raised diagonally like a banner with a huge ornate head",
+   "2": "guard REJECT (fills the canvas): a lattice screen behind her",
+   "3": "guard REJECT (fills the canvas): a giant crescent arc, a floor tile",
+   "4": "PICK: head thrown back wincing, arm flung, staff lowered to her side, robe with red lattice lower panels, stern face"
+  },
+  "verdict": "PASS, weak: cand-4 (cand-4 fixes the tiny head on a long robe, the banner staff, the horn and the cute face. Residuals: the hood is down (the idle wears it up); the staff head is a gold fork, not the crescent; a faint shadow under the boots; stature is about 0.70-0.77 of the idle's, near the 0.75 scale gate, so the judge must measure it)"
+ },
+ "paine-white-mage/ko": {
+  "cands": {
+   "1": "PICK: lying on her side, eyes shut, hood up with a crescent, gloved hand on the staff beside her, no zigzag",
+   "2": "guard REJECT (top edge): stray paint marks, a floor strip",
+   "3": "guard REJECT (bottom edge): a floor slab under her",
+   "4": "a crescent moon floats above her; a floor disc or shadow under her"
+  },
+  "verdict": "PASS, weak: cand-1 (cand-1 fixes the zigzag cuffs and is inside the canvas. Residuals: the staff head is a blue-and-bronze pronged ring, not the red-gold crescent (close to the star the answer negated); a faint white smear trails her boots to the left; the robe lining is red-orange)"
+ },
+ "paine-white-mage/victory": {
+  "cands": {
+   "1": "PICK: hand on hip, the staff planted upright beside her with a red-gold crescent-flame head, hood up, crescent emblems, long robe",
+   "2": "a giant crescent disc floats behind her head",
+   "3": "no staff at all; small figure",
+   "4": "holds the staff, but the head is a gold wheel with a red crystal spike (sunburst-like); pink skirt"
+  },
+  "verdict": "PASS, weak: cand-1 (cand-1 fixes the sunburst head and plants the staff. Residuals: the staff stands just beside her hand rather than gripped; a soft smile rather than stern; the robe is shaded blue, with no lattice panels; a small gold ornament dangles at her hand)"
  }
 }
