@@ -1,0 +1,59 @@
+{
+  "width": 382,
+  "height": 1044,
+  "baselineY": 1028,
+  "scale": 0.99,
+  "scaleNote": "Head match 2026-09-25 (decision sheet item 11): idle eye-line to chin 43.1 px vs this pose 43.7 px, points in docs/concepts/art5/judge/measure.json; read by eye off 2x gridded crops, about +/-5%.",
+  "seed": 26811,
+  "prompt": "1girl, solo, standing, (arm up:1.2), holding pistol pointing up, other hand holding pistol at side, looking up, serious, closed mouth, rikku \\(ff10-2\\), final fantasy x-2, gunner, blonde hair, messy hair, spiked hair, braids, blue bandana, green eyes, pink scarf, white crop top, orange vest, white and blue camo sleeve, bare midriff, green and orange belt, denim shorts, frayed shorts, blue boots, orange straps, two blue pistols, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, multiple swords, floating sword, from behind, facing away, rifle, aiming at viewer, smile, rifle, sword, brown hair, short hair, hat",
+  "cropBox": [
+    238,
+    171,
+    620,
+    1215
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.65,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/art5/skeletons/dual/cast.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "rikku-gunner-idle-square.png",
+      "rikku-gunner-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-25 ~12:45 EDT, \"I'll go with your recommendations for everything\" (install all 22 judge-passed poses); installed 2026-09-25, locked in docs/target/approved-hashes.json set bailey:2026-09-25-poses",
+  "judge": "docs/concepts/art5/judge/judge.json#rikku-gunner/cast (7.38)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-gunner/cast/cand-1.png",
+  "sha256": "41953bc670d7b30b8837cac54f1d0143e9d7082cc58fdd16933e68662d1a0af7",
+  "generatedAt": "2026-09-25T09:43:07.930Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/rikku-gunner/cast.png"
+}

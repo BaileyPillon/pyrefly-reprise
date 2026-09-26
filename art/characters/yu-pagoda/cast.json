@@ -1,0 +1,33 @@
+{
+  "width": 570,
+  "height": 938,
+  "baselineY": 922,
+  "seed": 901823,
+  "prompt": "no humans, ornate tiered pagoda finial, temple spire ornament, stacked square tiers, gold trim rings, hanging gold bells, yevon glyph medallion, carved stone, floating, glowing runes, tiers levitating apart, golden light pouring from the gaps between tiers, runes lit, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, building, temple exterior, landscape, 1girl, 1boy, window, lit windows, house, boulder, rock, cliff, face, head, statue of a person, idol, bust",
+  "cropBox": [
+    131,
+    137,
+    701,
+    1075
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "cast",
+  "composition": "boss",
+  "facing": "left",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "img2img": "tools/gen/_fix8/pl-cast.png",
+  "denoise": 0.52,
+  "generatedAt": "2026-09-19T20:04:46.908Z"
+}

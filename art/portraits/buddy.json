@@ -1,0 +1,63 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 925602,
+  "prompt": "1boy, solo, male focus, young man, al bhed, final fantasy x-2, \\(dark blond hair:1.2\\), short messy hair, \\(goggles over his eyes:1.4\\), goggle lenses covering the eyes, \\(purple shirt:1.2\\), purple collar, friendly grin, headset microphone, head and shoulders, close-up, portrait, looking at viewer, straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, visible eyes, goggles on forehead, sunglasses, armor, weapon, red hair",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cutout": {
+    "coverage": {
+      "widthFraction": 1,
+      "heightFraction": 1,
+      "checked": true,
+      "exceeds": true
+    },
+    "components": {
+      "componentCount": 1,
+      "largestPixels": 824117,
+      "secondPixels": 0,
+      "secondRatio": 0,
+      "touchesLargest": null
+    },
+    "nearWhite": {
+      "fraction": 0.0035783754005802573,
+      "largestRegionFraction": 0.0006042831297012438,
+      "detached": false,
+      "touchesEdge": false,
+      "allowanceUsed": 0.03
+    }
+  },
+  "generatedAt": "2026-09-25T10:24:40.129Z",
+  "candidate": "docs/concepts/portraits-2026-09-25 Buddy B (buddy/pilot.2)",
+  "candidateFile": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu6/buddy/pilot.2.png",
+  "pickedBy": "Bailey 2026-09-25 ~10:20 EDT (\"I'll go with all your recommendations\")",
+  "status": "APPROVED",
+  "game": "ffx2",
+  "speakerId": "buddy",
+  "chapter": "FFX-2 Chapter V",
+  "sources": "research/visual-bible.md 1.23.7 [single source], text only (no painting of Buddy exists); the headset microphone is ours, not sourced",
+  "sha256": "d7472eaf8bceeab23d04ebdb7e7375bc4a0b000dc314e0cccd5087b7ea591836",
+  "installedAt": "2026-09-25T14:38:43.278332+00:00"
+}

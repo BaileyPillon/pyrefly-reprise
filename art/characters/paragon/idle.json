@@ -1,0 +1,32 @@
+{
+  "width": 1150,
+  "height": 815,
+  "baselineY": 798,
+  "pose": "idle",
+  "facing": "left",
+  "facingObserved": true,
+  "facingNote": "Judged on the pixels: the horned head is at screen-left, toward the party.",
+  "nonBiped": true,
+  "status": "CANDIDATE",
+  "game": "FFX-2 only",
+  "chapter": "Chapter XIII Trema (Via Infinito, Cloister 100), link 1",
+  "pickedFrom": "O-2 A gold armoured beast, with the link staged (O-2b yes), Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\" (docs/concepts/chapters/trema/README.md; plan docs/plans/chapter-trema-review.md with its Review)",
+  "concept": "docs/concepts/chapters/trema/paragon/a-gold-frame.jpg",
+  "conceptSeed": 924402,
+  "prompt": "no humans, monster, final fantasy x-2, \\(huge armoured beast:1.3\\), \\(four-legged:1.2\\), crouching low, \\(gold and black armour plates:1.3\\), dark bronze segmented body, \\(crown of long curved golden spikes rising from its back and head:1.3\\), \\(two large curled horns:1.2\\), fanged snarling beast face, long jagged blade-like forelegs with claws, spiked armoured shoulders, long curved tail blade, menacing, full body, standing at ease, relaxed posture, weapon lowered or sheathed, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1boy, 1girl, human, person, rider, knight, humanoid, wings, dragon wings, background, scenery, text, chibi",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "sourced": "research/ffx2-trema.md 6.2: Lord Zaon's fiend form, uses FFX's Nemesis model [single source]; the look is ours",
+  "link": "No KO painting: the link (Trema destroys Paragon) is staged with the engine's pyrefly dissolve plus Trema's entrance, as the O-2b strip showed; see docs/concepts/chapters/trema/production/link-*.jpg",
+  "method": "r3 derive-from-concept: the options round's cut-out of render paragon-a.2 (seed 924402), same crop; the repairs erase alpha only, no GPU - production/scripts/paraclean.py",
+  "repairs": [
+    "the loose curved blade in front of it (the README flaw: attached to nothing) erased inside a polygon; near the mane only its blue-grey metal and ink edge, never the fur",
+    "white background pockets rembg left between the claws and legs opened (3,012 px) and a 2-pass white matte halo peeled (372 px)",
+    "a detached baked floor-shadow sliver under the hind foot removed (about 420 px)"
+  ],
+  "sha256": "0e3972b558c07d71c70eb60f4d71752ea9b91601e81293e39673146f65e569b9",
+  "installedAt": "2026-09-25T04:16:55.114731+00:00"
+}

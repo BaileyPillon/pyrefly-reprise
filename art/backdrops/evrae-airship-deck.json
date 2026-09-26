@@ -1,0 +1,26 @@
+{
+  "seed": 502002,
+  "prompt": "no humans, scenery, final fantasy x, open foredeck of an airship, metal deck plating, guard rail in foreground, looking up at open sky, dramatic upward angle, clouds streaking past, sense of speed, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-21T17:06:10.515Z",
+  "status": "CANDIDATE",
+  "method": "r3-derive",
+  "methodNote": "The picked concept B's own pixels, installed unchanged: backdrop-b.png is already 2688x1536 (the 1344x768 render through RealESRGAN_x4plus at 2x), the same size and aspect as every other backdrop plate, so no upscale and no outpaint was needed. MAD 0 over the whole plate. No GPU used.",
+  "pickedFrom": "backdrop B ('looking up at the hull from the rail'), Bailey 2026-09-21, docs/target/targets.json / decisions.json D-020",
+  "candidateOf": "public/art/backdrops/evrae-airship-deck.png",
+  "candidateSource": "docs/concepts/chapters/evrae/renders/backdrop-b.png",
+  "sha256": "2679b8ef3cd92422cc0f5e4d90e8b36c9e84900637068459698afad1b9893ea7",
+  "replaced": "D:/Tools/pyrefly-art-backup/candidates/2026-09-23-evrae-r3/backdrops/evrae-airship-deck.png (seed 811003, the later render whose upper half is the hull underside; chapter-evrae.md fix-pass finding 6)",
+  "production": "docs/concepts/chapters/evrae/r3/r3.md",
+  "installedAt": "2026-09-23T16:36:03.945137Z"
+}

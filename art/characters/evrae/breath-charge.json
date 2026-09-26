@@ -1,0 +1,47 @@
+{
+  "width": 1171,
+  "height": 784,
+  "baselineY": 768,
+  "pose": "breath-charge",
+  "composition": "boss",
+  "facing": "left",
+  "status": "CANDIDATE (not approved; no entry in docs/target/approved-hashes.json)",
+  "method": "r3-derive (repair cycle)",
+  "methodNote": "idle-near's own pixels. The throat swells in place: only the neck's belly plates and the lowest 12 px of teal stretch down (up to 66 px, one smooth convex underside that merges into the arch's belly line); every dorsal scale above that is idle's pixels exactly. The sac outline is the belly edge plus the swell, drawn as binary alpha like the rest of the sprite; the rim's last 6 px take the colour 7 px further in (no pale fringe). The glow lights the belly plates themselves, so its top edge is their own painted seam, and it falls off along the neck (Gaussian, not a column). A small warm spill follows the seam's curve. The mouth glow is unchanged from cycle 1. No generated pixels. Glow colour orange is unsourced (research 12.2 names none).",
+  "derivedFrom": "public/art/characters/evrae/idle-near.png (sha256 4140ba740cd0fde65e91d7c730726294ac6dee7e53dcd18620251fb1f6e928af, judged 8)",
+  "identityAnchor": "docs/concepts/chapters/evrae/renders/evrae-b.png (picked concept B, teal-dominant)",
+  "derive": {
+    "params": {
+      "A": 66.0,
+      "cx": 440.0,
+      "x0": 382.0,
+      "x1": 528.0,
+      "teal": 12.0,
+      "glow": 1.0,
+      "filledPx": 160,
+      "rimPx": 804
+    },
+    "maxPush": 65.69576263427734,
+    "softAlphaPx": 0,
+    "changedShare": 0.05120301865268492,
+    "opaqueRatio": 1.0150274497759593,
+    "unchangedAboveSeam": "dorsal of the belly-plate seam minus 12 px: idle pixels exactly"
+  },
+  "script": "docs/concepts/chapters/evrae/r3/scripts/breath_inplace.py (A=66 CX=440)",
+  "contentBox": [
+    16,
+    16,
+    1154,
+    767
+  ],
+  "sha256": "55ce9c754a263db5a1e1d4dc871b57e914d872632f6383012b76c50786375934",
+  "replaced": {
+    "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-23-evrae-r3/cycle1/characters/evrae/breath-charge.png",
+    "sha256": "5353810008fa4fdc4d247b41ac4eba07adba4b4bc197411acaead5a356c3c9c7",
+    "judged": "docs/concepts/chapters/evrae/r3/JUDGE.md",
+    "score": 5
+  },
+  "candidateOf": "public/art/characters/evrae/breath-charge.png",
+  "notes": "docs/concepts/chapters/evrae/r3/r3.md",
+  "installedAt": "2026-09-23T18:09:30.541996Z"
+}

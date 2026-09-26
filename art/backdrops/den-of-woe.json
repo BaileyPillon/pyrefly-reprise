@@ -1,0 +1,22 @@
+{
+  "status": "CANDIDATE",
+  "game": "FFX-2 only",
+  "chapter": "Chapter XV Den of Woe (provisional ffx2-den-of-woe)",
+  "concept": "O-3 A cold blue pyreflies, picked by Bailey 2026-09-25; docs/concepts/chapters/gippal/o3-den/a-frame.jpg",
+  "method": "the picked plate installed unchanged (MAD 0 against the O-3 plate-a): den-a3 (img2img over the layout guide, denoise 0.8) lifted x1.12, a blue floor glow and drawn pyrefly motes (docs/concepts/chapters/gippal/scripts/denplates.py)",
+  "canon": "a pyrefly-filled cave with a rectangular clearing [single source: GamerGuides]; rock, floor and light are ours",
+  "knownDefects": [
+    "no clear tunnel mouth: two masked repaint tries (6 seeds) read as a door or a cut-out hole and were withdrawn (rule 15)",
+    "the motes are painted in; if the scene adds live pyrefly particles they may double up",
+    "the painted pyreflies on the floor read as glowing domes"
+  ],
+  "seed": 952103,
+  "denoise": 0.8,
+  "prompt": "no humans, scenery, no humans, scenery, final fantasy x-2, \\(vast natural cave chamber deep underground:1.3\\), \\(slightly high angle view:1.2\\), \\(a wide flat rectangular clearing of cracked dark stone floor filling the lower half of the picture:1.4\\), rough rock walls rising on both sides into darkness, stalactites, a narrow dark tunnel mouth in the far wall, \\(many small round soft glowing orbs of light floating in the air:1.3\\), faint mist on the floor, ancient, eerie, sorrowful, empty, detailed background, painterly, cinematic lighting, wide shot, \\(cold blue and pale green light from the floating orbs:1.3\\), cool blue shadows, soft blue glow on the cave floor, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, sky, sun, trees, grass, building, temple, pillar, water, river, lake, reflection, bridge, stairs, door, stars, star shape, sparkles, snowflakes, crystals, ice, red, orange, fire, light beam, light shaft, spotlight",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "installedAt": "2026-09-25T04:26:00.219166Z"
+}

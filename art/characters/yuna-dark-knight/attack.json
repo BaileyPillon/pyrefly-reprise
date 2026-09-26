@@ -1,0 +1,59 @@
+{
+  "width": 885,
+  "height": 1216,
+  "baselineY": 1210,
+  "scale": 1,
+  "scaleNote": "Head match corrected 2026-09-25 (repair of verifier V-1; was 1.11 from the judge note: Head match 2026-09-25 (decision sheet item 10): idle eye-line to chin 50.0 px vs this pose 45.1 px, points in docs/concepts/art5/judge/measure.json; read by eye off 2x gridded crops, about +/-5%.). Method: iris-centroid eye spacing and a checked eye-line-to-chin point, each as idle/pose, read against which one the head turn or tilt shortens: eye spacing 1.02 and eye line to chin 0.97 agree; mean. Evidence: docs/concepts/art5/installed/rescale/.",
+  "seed": 25106,
+  "prompt": "1girl, solo, fighting stance, (lunging:1.2), leaning forward, legs apart, bent knees, (two-handed:1.2), holding greatsword with both hands, sword pointing forward, serious, v-shaped eyebrows, closed mouth, yuna \\(ff10-2\\), final fantasy x-2, brown hair, short hair, heterochromia, blue eye, green eye, dark knight, (teal helmet:1.2), blue crest, pink hair flower, white capelet, blue pauldrons, blue bustier, gold sash, blue pleated skirt, black gauntlets, white cape, pink thighhighs, blue armored boots, (dark blue greatsword:1.2), gold engraving, red sword grip, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, two swords, multiple swords, floating sword, from behind, facing away, planted sword, sword on ground, leaning on sword, standing straight, sword behind back, smile, horned helmet, horns, black armor, blonde hair, long hair, wings, feathers, scythe, axe, pink sword, huge ribbons",
+  "cropBox": [
+    70,
+    0,
+    955,
+    1216
+  ],
+  "source": {
+    "width": 1024,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "attack",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 885,
+    "height": 1216
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.8,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/chapters/trema/poses/skeletons/sword/attack.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "yuna-dark-knight-idle-square.png",
+      "yuna-dark-knight-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-25 ~12:45 EDT, \"I'll go with your recommendations for everything\" (install all 22 judge-passed poses); installed 2026-09-25, locked in docs/target/approved-hashes.json set bailey:2026-09-25-poses",
+  "judge": "docs/concepts/art5/judge/judge.json#yuna-dark-knight/attack (7.31)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu4/trema-poses/yuna-dark-knight/attack/r2/cand-6.png",
+  "sha256": "c2e55c0526c788c4a29585651f8c04aac6563d539f2b60df8040f876762702da",
+  "generatedAt": "2026-09-25T08:12:06.465Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/yuna-dark-knight/attack.png"
+}

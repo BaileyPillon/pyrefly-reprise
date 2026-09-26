@@ -1,0 +1,54 @@
+{
+  "width": 744,
+  "height": 1188,
+  "baselineY": 1171,
+  "pose": "idle",
+  "composition": "full",
+  "nonBiped": false,
+  "facing": "left",
+  "facingObserved": true,
+  "status": "CANDIDATE",
+  "game": "FFX only",
+  "chapter": "Chapter XIV (provisional) Isaaru, Via Purifico beneath Bevelle",
+  "concept": "O-1 A (calm, arms open), render isaaru-a3; docs/concepts/chapters/isaaru/isaaru/a-card.jpg; picked by Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\"",
+  "method": "r3 derive-from-concept (docs/plans/art-method-r3/METHOD-CHECK.md): the picked render's own pixels; pixel repairs only, 0 GPU (docs/concepts/chapters/isaaru/production/scripts/isaaru_idle.py)",
+  "repairs": [
+    "coat to the knee (wiki Isaaru \"Appearance\", revid 4026440: a black knee-length jacket edged in sea green): the sea-green front panels erased below a hem line at y 846 (+/-10 px slope); the robe in front keeps every pixel; a 2 px ink hem on the cut; on the right the robe edge is a fitted straight line with its own ink",
+    "the wide white sash recoloured sea green and the navy cord knot with its hanging cords a deeper sea green (wiki: a wide sea-green belt tied in a bow); a*/b* taken from the painting's own sea-green lapel at each pixel's lightness; the knot keeps its drawn shape (an ornamental knot, not a bow)",
+    "the dark navy coat pulled toward black (Lab chroma x0.5, L x0.9)",
+    "the white robe's highlights compressed (L > 75 -> 75 + (L - 75) x 0.6) so the chapter's bloom does not blow it out (the options README asked for this)"
+  ],
+  "knownDefects": [
+    "the knot is the render's ornamental knot with tassels, recoloured, not a bow",
+    "the white robe still reaches the ankles (a white robe under the jacket is sourced; its length is the render's)",
+    "the topknot and side locks are our reading of the images; the wiki does not say his hair is tied up"
+  ],
+  "acts": "no (plan B8 = a: on the field, no turn, never targetable), so idle is his only painting; hurt/ko fall back to idle",
+  "suggestedWorldHeight": "0.85 x Mortibody's stage height (the options frames; about a man beside Yuna) [estimate]",
+  "seed": 921103,
+  "prompt": "safe, 1boy, solo, male focus, final fantasy x, young male summoner, temple priest, slender, gentle calm face, half-closed eyes, long brown hair tied back high in a topknot with loose side locks framing the face, \\(long flowing ceremonial robe coat reaching the ankles:1.1\\), dark navy blue robe coat with very wide sea green lapels running down the full length of the front, tall standing sea green collar, blue violet under-robe, white inner layer, a large turquoise silk cord tied in an ornamental knot at the waist with two long hanging tassels, wide long sleeves with white cuffs, white skirt showing below, cloth shoes, adult man, standing upright, arms relaxed, hands clasped in front of the waist, serene, dignified, full body, feet visible, standing at ease, relaxed posture, weapon lowered or sheathed, (1boy:1.3), (adult male:1.2), (sea green lapels:1.2), (three-quarter view:1.1), body turned slightly to the left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, armor, sword, gun, hat, helmet, beard, old man, muscular, bare chest, cape, wings, background, scenery, 2boys, 1girl, female, glasses, suit, blazer, pocket, necktie, dress shoes, leather shoes, modern clothes, feminine, androgynous, staff",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cropBox": [
+    15,
+    21,
+    759,
+    1209
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "judgeNotes": "self-judged at 1:1 and in a real 1600x900 engine frame; not independently judged; not approved",
+  "sha256": "c290bedc3f6fe743b9c778736aa2a50ef0ac28bd4030161dbcc69dea87e81945",
+  "installedAt": "2026-09-25T04:15:22.790379Z",
+  "readme": "docs/concepts/chapters/isaaru/INSTALLED.md"
+}

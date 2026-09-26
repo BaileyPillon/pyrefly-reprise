@@ -1,0 +1,53 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 813101,
+  "prompt": "1boy, cid \\(ff10\\), final fantasy x, al bhed, safe, solo, completely bald head, deeply tanned weathered skin, thick grey mustache, heavy stocky muscular build, broad shoulders, green al bhed eyes with a spiral pupil, orange and brown flight captain jacket with a wide collar, leather straps and buckles across the chest, goggles with round amber lenses pushed up and resting on his forehead, gruff commanding expression, weathered scar, head and shoulders, looking at viewer, confident commanding expression, airship captain, straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "cutout": {
+    "coverage": {
+      "widthFraction": 1,
+      "heightFraction": 1,
+      "checked": true,
+      "exceeds": true
+    },
+    "components": {
+      "componentCount": 1,
+      "largestPixels": 900934,
+      "secondPixels": 0,
+      "secondRatio": 0,
+      "touchesLargest": null
+    },
+    "nearWhite": {
+      "fraction": 0.0025806551867284394,
+      "largestRegionFraction": 0.0007814112909491705,
+      "detached": false,
+      "touchesEdge": false,
+      "allowanceUsed": 0.03
+    }
+  },
+  "generatedAt": "2026-09-21T23:03:00.870Z"
+}

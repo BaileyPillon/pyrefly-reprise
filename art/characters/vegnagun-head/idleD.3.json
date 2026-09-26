@@ -1,0 +1,33 @@
+{
+  "width": 1216,
+  "height": 832,
+  "baselineY": 830,
+  "seed": 806004714,
+  "prompt": "no humans, giant machine, machina skull, mechanical skull head, riveted steel plating, dull blue grey steel, two curved horns, huge cannon barrel protruding from the open jaw, mouth cannon, gun barrel, glowing muzzle, four small turret pods, glowing lens eyes, segmented plating, brass hydraulics, rivets, rust, machina, colossal, ominous, dormant, jaw parted over the barrel, muzzle dark, lens eyes glowing faintly, (riveted metal skull:1.4), (huge cannon barrel in the mouth:1.4), (two curved horns:1.2), (from side:1.3), three-quarter view, body facing left, full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1girl, 1boy, human, skeleton, bone, animal skull, small, toy, spaceship, tank, organic, flesh, skin, scales, dragon, reptile, creature, fangs, tongue, wings, ground, rocks, scenery, background",
+  "cropBox": [
+    0,
+    0,
+    1216,
+    832
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idleD",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "(from side:1.3), three-quarter view, body facing left",
+  "emphasis": "(riveted metal skull:1.4), (huge cannon barrel in the mouth:1.4), (two curved horns:1.2)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "generatedAt": "2026-09-19T18:41:53.662Z"
+}

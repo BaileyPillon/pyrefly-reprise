@@ -1,0 +1,46 @@
+{
+  "subject": "Seymour Natus, born of the pyreflies",
+  "mood": "death offered as a mercy",
+  "seed": 952203,
+  "prompt": "1boy, solo, male focus, seymour guado, final fantasy x, safe, demonic transformed form, pale ashen lavender grey skin, silver white hair swept up into a tall spiked crest, purple eyes, dark veins on his face, bare chest with ridged ribs, broad violet armored pauldrons, open night sky behind his head, night, deep blue night sky, the holy city of bevelle behind, tall crimson and gold temple spires with warm gold lit windows, lanterns along a long stone bridge, warm gold lights reflected in dark water, soft bokeh background, small floating glowing pale light orbs rising around him, three-quarter view, looking at viewer, cold smile, half-closed eyes, serene, imposing, head and shoulders, upper body, arms out of frame, he is slightly left of centre, (silver white hair swept up and back into a tall spiked crest:1.3), (cold serene smile:1.15), (pale ashen lavender grey skin:1.15), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, daylight, sun, sunset, modern city, skyscraper, cars, neon, butterfly, insect, wings, fairy, girl, female, light blue hair, blue skin, long straight hair, helmet, crown, \\(horns:1.3\\), ram horns, curled horns, spikes on shoulders, glowing chest, spiked halo, crown of spikes, spiked collar, long straight hair falling forward, sword, weapon, staff, bird wings, angel, halo of light, ring, disc, wheel, shield, circle, holding, hands",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(silver white hair swept up and back into a tall spiked crest:1.3), (cold serene smile:1.15), (pale ashen lavender grey skin:1.15)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "D:/Tools/pyrefly-scratch/hero-plates/natus/refs/ref-natus-head.png",
+  "refWeight": 0.35,
+  "refWeightType": "ease in",
+  "refScaling": "K+V",
+  "refStart": 0.2,
+  "refEnd": 0.6,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-25T04:47:24.209Z",
+  "baseRender": "b2f-952203",
+  "composite": "compose.py: the installed Natus ring layer (idle sidecar 'layers': diameter 974, centre (346, 469)) set behind the rendered figure's isnet-anime matte; the ring was never asked of the sampler",
+  "focal": {
+    "x": 0.5,
+    "y": 0.35
+  },
+  "master": {
+    "file": "ch10-seymour-natus.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "PNG is the picked option byte for byte (the 1x the options round showed); the master is its upscale."
+  },
+  "status": "APPROVED (hero plate option B, Bailey, 2026-09-25 ~10:20 EDT: \"I'll go with all your recommendations\")",
+  "game": "FFX only",
+  "chapter": "Chapter X Seymour Natus (seymour-natus)",
+  "optionsRound": "docs/concepts/chapters/natus/hero-plate/README.md",
+  "pngSha256": "f802716b8c8eb43850e5e8288b66b660a752ce7c4e7450a95a3f98cb976ed5d1"
+}

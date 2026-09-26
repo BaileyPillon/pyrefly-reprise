@@ -1,0 +1,76 @@
+{
+  "width": 1171,
+  "height": 784,
+  "baselineY": 768,
+  "seed": 822302,
+  "prompt": "no humans, evrae \\(ff10\\), final fantasy x, safe, solo, monster, dragon, eastern dragon, sea serpent, wingless, one head, serpentine body, very long body, coiled body, dark teal scales, deep blue-green scales, navy shadows on the scales, pale tan underbelly, cream belly scales, segmented belly plates, crimson red dorsal spines, orange-tipped spines, serrated fins along the whole spine, red swept-back head crest, red jaw frills, orange eyes, sharp teeth, thin whiskers, orange flame-shaped tail fin, two clawed forelimbs, reptilian, full body, entire body within the frame, head raised on the upper left, looking at viewer, open mouth, sharp teeth, long body looping behind in wide coils, tail tip visible, hovering in midair, (dark teal scales:1.3), (pale tan underbelly:1.15), (crimson red dorsal spines:1.15), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, orange scales, orange body, yellow scales, gold scales, green scales, lime green, red body, brown body, multiple heads, two heads, extra head, wings, bat, feathers, bird, insect, humanoid, person, human face, mammal, fur, sky, clouds, blue background, gradient background, out of frame",
+  "cropBox": [
+    22,
+    25,
+    1193,
+    809
+  ],
+  "source": {
+    "width": 1216,
+    "height": 832
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "boss",
+  "facing": "left",
+  "emphasis": "(dark teal scales:1.3), (pale tan underbelly:1.15), (crimson red dorsal spines:1.15)",
+  "canvas": {
+    "width": 1216,
+    "height": 832
+  },
+  "ref": "docs/concepts/chapters/evrae/redo/refs/evrae-b-square.png",
+  "refWeight": 0.45,
+  "refWeightType": "ease in",
+  "refScaling": "K+V",
+  "refStart": 0.2,
+  "refEnd": 0.6,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "img2img": "docs/concepts/chapters/evrae/redo/refs/evrae-b-init.png",
+  "denoise": 0.6,
+  "lint": {
+    "stripped": []
+  },
+  "cutout": {
+    "coverage": {
+      "widthFraction": 0.9629934210526315,
+      "heightFraction": 0.9423076923076923,
+      "checked": false,
+      "exceeds": false
+    },
+    "components": {
+      "componentCount": 3,
+      "largestPixels": 450960,
+      "secondPixels": 5,
+      "secondRatio": 0.000011087457867660103,
+      "touchesLargest": true
+    },
+    "nearWhite": {
+      "fraction": 0.18896864307746208,
+      "largestRegionFraction": 0.12119236577237016,
+      "detached": false,
+      "touchesEdge": false,
+      "allowanceUsed": 1.1137875
+    }
+  },
+  "candidateOf": "D:\\Final Fantasy\\public\\art\\characters\\evrae\\idle-near.png",
+  "generatedAt": "2026-09-22T20:17:37.391Z",
+  "status": "CANDIDATE (not approved; no entry in docs/target/approved-hashes.json)",
+  "redo": {
+    "date": "2026-09-22",
+    "candidate": "docs/concepts/chapters/evrae/redo/cand/idle-near/r4/idle-near.2.png",
+    "method": "img2img from refs/evrae-b-init.png (the picked concept B, stray second head removed) at denoise 0.6 + --ref refs/evrae-b-square.png --forceRef 0.45; unhole.py min area 100 cleared the enclosed white-background holes",
+    "identityAnchor": "docs/concepts/chapters/evrae/renders/evrae-b.png (picked concept B, teal-dominant)",
+    "notes": "docs/concepts/chapters/evrae/redo/redo.md",
+    "promotedFrom": "idle-near.png (same pixels; the engine falls back to a plain idle until NEAR/FAR is wired)"
+  }
+}

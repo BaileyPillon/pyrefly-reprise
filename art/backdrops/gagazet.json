@@ -1,0 +1,12 @@
+{
+  "seed": 284923191,
+  "prompt": "no humans, scenery, snowy mountain pass at night, narrow trail, jagged cliffs, snow, blizzard haze, distant stone carvings of giant faces in the cliff wall, cold blue moonlight, pyreflies floating, dramatic, final fantasy x mt gagazet, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "generatedAt": "2026-09-15T17:51:15.104Z"
+}

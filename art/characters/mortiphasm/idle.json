@@ -1,0 +1,61 @@
+{
+  "width": 668,
+  "height": 668,
+  "baselineY": 651,
+  "seed": 912301,
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "prompt": "no humans, object focus, \\(a huge flat circular carved wheel divided by a cross into four equal quarter sections:1.4\\), thick ornate rim of dark bronze, engraved glyphs around the rim, a round jewelled hub in the centre, each quarter a smooth pale grey stone panel with carved swirl patterns, weathered, full circle visible, isolated object, \\(front view:1.3\\), straight-on, flat, centered, straight-on, full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "source": {
+    "width": 1024,
+    "height": 1024
+  },
+  "cropBox": [
+    181,
+    181,
+    849,
+    849
+  ],
+  "cropNote": "raw 1024x1024 render coords: the centre circle r318 about (515,515) plus a 16 px margin",
+  "pose": "idle",
+  "composition": "boss",
+  "nonBiped": true,
+  "facing": "front",
+  "facingNote": "NEVER MIRROR: a mirror reverses the ring order. The disc faces the camera; which element faces Omnis is a rotation about the disc centre, not a flip.",
+  "disc": {
+    "centre": [
+      333.5,
+      333.5
+    ],
+    "radiusPx": 318,
+    "ringOrder": "OUR ESTIMATE (plan B8): clockwise on screen from the quarter centred at 0 deg (screen right): fire, water, ice, thunder; quarter k is centred on k x 90 deg clockwise",
+    "quarterColours": "sourced (research 4.1): orange Fire (240,118,30), purple Ice (160,100,235), blue Water (40,120,235), yellow Thunder (245,212,50)",
+    "turn": "a spell turns a disc 90 deg right, a physical hit 90 deg left (research 4.3); which screen direction \"right\" is on a disc is presentation, ours",
+    "retint": "a different ring order is a re-run of disc_build.py with the order argument (no GPU); see INSTALLED.md for what the look-only pass showed"
+  },
+  "layers": {
+    "facing": "characters/mortiphasm-facing/idle.png",
+    "note": "drawn on top, NOT turning with the disc: it marks the quarter that faces Omnis (lit, gold rim arc) and dims the other three. Painted facing screen right (0 deg); rotate the layer 180 deg for a disc on his right. O-2 B also puts a disc strip on the HUD (T8, not art)"
+  },
+  "staging": {
+    "picked": "two discs each side of him, facing him (ours; O-2 frames)",
+    "discDiameterVsOmnisHeight": 0.395,
+    "slotsOnOptionsCanvas": "canvas 2050x1560 with Omnis 0.86 of its height: disc centres at (0.15,0.30) and (0.21,0.66) facing right, (0.85,0.30) and (0.79,0.66) facing left"
+  },
+  "states": "idle only: the discs take no turns (B22 a, estimate) and never die (immune to all damage, research 2)",
+  "pickedFrom": "O-2 B (painted discs; the HUD strip is T8), Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\" (docs/concepts/chapters/omnis/README.md, docs/plans/chapter-omnis-review.md)",
+  "concept": "docs/concepts/chapters/omnis/o2-discs/b-frame.jpg",
+  "reference": "look-only reference pass 2026-09-25 (Bailey's yes to question 5): the wiki's Omnis concept art, the reels concept art and one HD battle screenshot were viewed in the built-in browser and not saved; see docs/concepts/chapters/omnis/INSTALLED.md",
+  "method": "r3 derive-from-concept: the options painted_disc() recipe on the picked render (seed 912301) at its own pixel scale (636 px across); repairs of PIL artefacts only: rim diamonds keep their own paint, anti-aliased circle edge and dividers, un-lit (the lit quarter is its own layer)",
+  "offCanon": "The look-only pass showed the game's discs as purple mandala wheels with four round coloured jewels at the quarter points, placed above, below and to each side of him; ours are bronze wheels with tinted quarters, two each side, as picked (O-2 B).",
+  "candidateSource": "D:/Tools/pyrefly-scratch/omnis-options/renders/disc-a.png",
+  "script": "D:/Tools/pyrefly-scratch/ch1215/omnis/disc_build.py",
+  "status": "CANDIDATE",
+  "game": "ffx",
+  "judgeNotes": "self-judged at 1:1 and in a 1600x900 engine frame; not independently judged; not approved (never in approved-hashes.json)",
+  "sha256": "962416288387fdfdd998f52575af1a3e6c9c9de6755cc8758126b9afa0c08c0c",
+  "installedAt": "2026-09-25T04:23:19.275774Z"
+}

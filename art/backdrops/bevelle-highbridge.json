@@ -1,0 +1,27 @@
+{
+  "seed": 913302,
+  "prompt": "no humans, scenery, final fantasy x, scenery, no humans, bevelle highbridge, low level eye-height view along a wide stone bridge toward a tall ornate palace gate at the far end, the main gate of a holy city with tall golden doors, \\(a wide plaza of pale cream stone paving filling the foreground:1.3\\), crimson carpet borders with gold zigzag patterns, a green diamond patterned runner down the middle, \\(giant crimson fabric canopies shaped like inverted cones on tall pillars along both sides:1.3\\), olive bronze arches, shallow water channels beside the walkway, tall crimson and gold temple spires rising behind the gate, deep perspective, symmetrical composition, \\(open air, open night sky above:1.3\\), \\(night:1.3\\), deep blue night sky with stars, the spires and windows of the city behind the gate lit warm gold, lamps along the bridge, warm light reflecting in the dark water channels, quiet, moody, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, modern city, cars, skyscraper, daylight, sun, noon, ceiling, roof, corridor, hallway, indoors, interior",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "width": 2688,
+  "height": 1536,
+  "pickedFrom": "O-3 C (night, the city lit), Bailey 2026-09-24 ~14:40 EDT, verbatim: \"I'll go with your recommendations for all\" (docs/concepts/chapters/natus/README.md)",
+  "concept": "docs/concepts/chapters/natus/highbridge/c-plate.jpg",
+  "method": "r3-derive: the picked plate own pixels, installed unchanged (MAD 0), the Evrae deck precedent; already 2688x1536, one opaque plate like every approved chapter backdrop",
+  "offCanon": "no crimson inverted-cone canopies and no green runner; the gate facade fills the frame and the bridge hardly shows (the plan Review flag, disclosed; taste over fidelity was Bailey's call)",
+  "candidateSource": "D:/Tools/pyrefly-scratch/natus-options/renders/highbridge-c2.png",
+  "sha256": "3c8aebf46c531b644cf59dd868742fa3548871a0f844adea6dd64e555b411a4e",
+  "installedAt": "2026-09-24T18:49:37.120923Z",
+  "status": "CANDIDATE",
+  "game": "ffx",
+  "judgeNotes": "self-judged at 1:1 and in a 1600x900 engine frame; not independently judged; not approved (never in approved-hashes.json)"
+}

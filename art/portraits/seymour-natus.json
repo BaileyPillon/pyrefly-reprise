@@ -1,0 +1,36 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 914101,
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "prompt": "character preset, --pose portrait, --ref the O-1 A head crop at 0.35 (forced); see docs/concepts/chapters/natus/recipes.json natus-portrait-a",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "pickedFrom": "O-5 A, Bailey 2026-09-24 ~14:40 EDT, verbatim: \"I'll go with your recommendations for all\" (docs/concepts/chapters/natus/README.md)",
+  "concept": "docs/concepts/chapters/natus/portrait/a-dialogue.jpg",
+  "cutout": {
+    "matte": "isnet-anime (the options run output), white halo peeled from the matte edge (268 px), canvas-edge rows kept; rgb equals the raw render exactly inside the alpha",
+    "guard": "components ok (1), near-white ok; coverage 100% x 100% because the spike crown is cut by the top of the frame. Checked at file size, every approved portrait in the set fails that rule the same way (tidus, yuna, auron, seymour, anima, nooj, cid, seymour-macalania all 100% x 100%); the close-up is handled by the face-crops row",
+    "outpaintTried": "two masked outpaints for headroom (8 seeds, 76 GPU s) invented a gold crown or cone above the spikes every time; dropped after two failures (AGENTS.md rule 15), not shipped"
+  },
+  "offCanon": "a gold-tipped spike crown and facial marks that the O-1 A body does not have (the plan Review: picking portrait A approves a different look)",
+  "candidateSource": "D:/Tools/pyrefly-scratch/natus-options/renders/natus-portrait-a.raw.png",
+  "script": "D:/Tools/pyrefly-scratch/natus-prod/portrait_matte.py",
+  "sha256": "0980d552d487424b70900051c8e0fedb62bed15b3dc859fb9bc5e5b20fc36534",
+  "installedAt": "2026-09-24T18:49:37.120923Z",
+  "status": "CANDIDATE",
+  "game": "ffx",
+  "judgeNotes": "self-judged at 1:1 and in a 1600x900 engine frame; not independently judged; not approved (never in approved-hashes.json)"
+}

@@ -1,0 +1,25 @@
+{
+  "width": 2688,
+  "height": 1536,
+  "status": "CANDIDATE",
+  "game": "FFX-2 only",
+  "scene": "Via Infinito, Cloister 100 (Chapter XIII Trema; the planned src/scenes/via-infinito.ts)",
+  "pickedFrom": "O-3 B repaint, Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\" (docs/concepts/chapters/trema/README.md; plan docs/plans/chapter-trema-review.md with its Review)",
+  "concept": "docs/concepts/chapters/trema/cloister/b-repaint-frame.jpg",
+  "derivedFrom": "public/art/backdrops/bevelle-underground.png (approved scene:bevelle-underground), img2img at denoise 0.7",
+  "method": "r3: the picked plate installed unchanged (MAD 0 to the options render cloister-b2), as the Natus and Evrae plates were",
+  "seed": 924702,
+  "denoise": 0.7,
+  "prompt": "no humans, scenery, no humans, scenery, final fantasy x-2, \\(vast underground cloister hall deep beneath a holy city:1.2\\), \\(dark teal and slate blue stone and steel:1.3\\), \\(long white cloth banners hanging upside down from the high vaults, each with a large black stylised emblem:1.3\\), \\(tall glowing white lamp slits:1.2\\), engraved stone floor, small drifting green and white glowing orbs of light, cold teal light, deep shadows, solemn, ancient, detailed background, painterly, cinematic lighting, wide shot, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, 1boy, 1girl, human, person, people, character, crowd, statue, text, sky, sun, window, outdoor, trees, water, orange light, fire, orange lamps",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "notes": [
+    "The sourced upside-down banners hang in the top third, which the Chapter IV staging crops; a Cloister scene gets its own staging (T5).",
+    "No Yu Yevon likeness on the banners: the review says that is Bailey's call, still open; the emblem at the back is our own shape."
+  ],
+  "sha256": "82eedcd375055e10fa8d537b2b1f75b4d1d68575cdb3adffe319c9e7548b47fa",
+  "installedAt": "2026-09-25T04:16:55.114731+00:00"
+}

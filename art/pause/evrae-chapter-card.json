@@ -1,0 +1,43 @@
+{
+  "subject": "Evrae alongside the Fahrenheit (FAR silhouette, research \u00a712.3 money shot 2)",
+  "mood": "the posted guard pacing the airship: deck rail in the foreground, prow at frame-left, the wyrm a teal diagonal across open sky",
+  "seed": 827201,
+  "prompt": "no humans, scenery, final fantasy x, on the foredeck of a flying airship, riveted steel deck plating in the foreground, metal floor, a dark iron guard rail across the foreground, the airship's dark hull and prow on the left, open sky, warm peach band low in the sky, cold blue zenith, cloud sea below, high altitude, daylight, a long wingless serpentine sea dragon flying alongside the ship at a middle distance on the right, dark teal scales, crimson red dorsal spines, pale tan underbelly, reptilian dragon head with a red crest and orange eyes facing the ship, long diagonal body, orange flame-shaped tail fin, sense of scale, sense of motion, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, wings, bat, bird, feathers, multiple heads, two heads, text, letters, logo, people, wooden floor, wood planks, spaceship, mecha, robot, fish, fire, flames, white crest",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "docs/concepts/chapters/evrae/redo/refs/evrae-b-square.png",
+  "refWeight": 0.45,
+  "refWeightType": "ease in",
+  "refScaling": "K+V",
+  "refStart": 0.2,
+  "refEnd": 0.6,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "img2img": "docs/concepts/chapters/evrae/redo/sketches/chapter-card.png",
+  "denoise": 0.6,
+  "generatedAt": "2026-09-22T20:30:46.556Z",
+  "preset": "backdrop (wide framing; the hero preset's close-up block is what kept returning head close-ups in the 2026-09-21 rounds)",
+  "master": {
+    "file": "evrae-chapter-card.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "backdrop preset: 1344x768 render -> RealESRGAN_x4plus x4 -> 0.5",
+    "webpQuality": 88,
+    "note": "The master is the preset's own 2x output; the PNG is its lanczos 0.5 downscale."
+  },
+  "status": "CANDIDATE (not approved; no entry in docs/target/approved-hashes.json)",
+  "redo": {
+    "date": "2026-09-22",
+    "candidate": "docs/concepts/chapters/evrae/redo/cand/chapter-card/r3/card.1.png",
+    "method": "img2img from sketches/chapter-card.png (PIL: sky, clouds, prow, steel deck, rail, and the picked idle-far cutout pasted as the wyrm) at denoise 0.6 + forced ref refs/evrae-b-square.png 0.45",
+    "notes": "docs/concepts/chapters/evrae/redo/redo.md"
+  }
+}

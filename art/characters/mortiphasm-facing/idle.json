@@ -1,0 +1,24 @@
+{
+  "width": 668,
+  "height": 668,
+  "baselineY": 651,
+  "pose": "idle",
+  "composition": "boss",
+  "nonBiped": true,
+  "facing": "front",
+  "facingNote": "painted facing screen right (0 deg); rotate, never mirror",
+  "layerOf": "mortiphasm",
+  "pivot": [
+    333.5,
+    333.5
+  ],
+  "draws": "the facing quarter (+-45 deg) under a 12 % white wash, the other three under a 40 % black dim (the options lit x1.35 / x0.6 as a normal-alpha layer), a gold rim arc (+-44 deg, r 0.90-0.99 of the disc) with a soft glow and a pale core",
+  "pickedFrom": "O-2 B (the quarter facing him lit with a gold rim, the others dimmed), Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\" (docs/concepts/chapters/omnis/README.md, docs/plans/chapter-omnis-review.md)",
+  "method": "drawn in numpy (no render), the options _facing_glow() look as its own layer so the disc can turn under it",
+  "script": "D:/Tools/pyrefly-scratch/ch1215/omnis/disc_build.py",
+  "status": "CANDIDATE",
+  "game": "ffx",
+  "judgeNotes": "self-judged at 1:1 and in a 1600x900 engine frame; not independently judged; not approved (never in approved-hashes.json)",
+  "sha256": "0f5445a99dc8e30b301bfcb8e7032dcf09f3850a6479790b873d5f541df61be2",
+  "installedAt": "2026-09-25T04:23:19.275774Z"
+}

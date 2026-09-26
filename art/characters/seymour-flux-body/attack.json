@@ -1,0 +1,36 @@
+{
+  "width": 658,
+  "height": 1135,
+  "baselineY": 1119,
+  "seed": 1361000,
+  "prompt": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, young man, smooth unlined face, pale blue-grey skin, light blue hair, hair lacquered and swept up into a tall wide fan-shaped crest, two long thick locks of hair falling down his back, purple eyes, pronounced dark veins branching across his face, ornate dark blue robe worn open, red trimmings, tall high collar lined with red, green sash, bare chest, leonine chest tattoo, wide sleeves, sitting cross-legged floating in midair, both knees and crossed shins clearly visible below the open robe, tattered robe hem, attacking, lunging forward, the near arm thrust straight forward toward the left, the open hand held flat with five separate relaxed fingers, violet energy gathered above the open palm, the far arm flung back behind him, wide sleeves whipping back, head lowered, snarling, (tall wide fan-shaped hair crest:1.45), (dark blue robe with red trim and green sash:1.35), (smooth young male face:1.3), (one arm thrust straight forward:1.4), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1girl, female, woman, breasts, cleavage, feminine, androgynous, lipstick, makeup, old man, elderly, wrinkles, gaunt, sunken cheeks, hollow cheeks, bony face, skull face, beard, stubble, horns, antlers, branches, tree, antler headpiece, helmet, crown, mitre, hat, topknot, ponytail, hair down, long loose hair, straight hanging hair, wings, feathers, blade, scythe, parasol, umbrella, folding fan, banner, magenta, pink, orange, coral, salmon, peach, tan robe, weapon, sword, spear, boots, shoes, bare legs, bare thighs, exposed legs, naked legs, chair, stool, throne, standing, dark background, black background, aura, scenery, floor, shadow, cast shadow, reflection, cropped, out of frame, monochrome, claw, claws, talons, malformed hand, bent fingers, stiff fingers, arms resting on his knees, hands clasped on his knees, still, seated at rest",
+  "cropBox": [
+    87,
+    39,
+    745,
+    1174
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "attack",
+  "composition": "boss",
+  "facing": "left",
+  "emphasis": "(tall wide fan-shaped hair crest:1.45), (dark blue robe with red trim and green sash:1.35), (smooth young male face:1.3), (one arm thrust straight forward:1.4)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "img2img": "tools/gen/refs/sey-plate-attack11.png",
+  "denoise": 0.64,
+  "generatedAt": "2026-09-19T19:40:25.308Z",
+  "fixRound": "bosses-a fix round 11 (2026-09-19). Judge (sheet score 6): attack aged the face a decade into a gaunt, hollow-cheeked man who does not match the idle; the outstretched near hand had stiff, mis-shaped claw fingers; the robe's blue/red/green palette went coral and orange. Root cause: this file was still a round-7 --ref @0.6 render (seed 781003) made against an OLDER idle, and its negative never banned orange. Re-rendered off an --img2img pose-plate of the CURRENT idle rotated +12deg at denoise 0.64, identity block copied verbatim from idle.json, with (tall wide fan-shaped hair crest:1.45), (dark blue robe with red trim and green sash:1.35) and (smooth young male face:1.3) in --emphasis and gaunt/sunken cheeks/hollow cheeks/old man/orange/coral/salmon/claws/talons/bent fingers/stiff fingers in --negAdd. NOTE ON THE RECIPE: a FLAT plate of this idle reproduces his seated pose at denoise 0.58, 0.60, 0.62, 0.72 AND 0.75 - twenty-three candidates, all of them the idle. A rigid rotation of the plate is the only lever that moved him; the cost is a ~10% smaller cutout. op 52.7% vs idle 54.0%.",
+  "candidate": "sey-attackD11.1"
+}

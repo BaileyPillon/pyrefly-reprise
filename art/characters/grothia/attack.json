@@ -1,0 +1,22 @@
+{
+  "width": 1121,
+  "height": 1144,
+  "baselineY": 1078,
+  "pose": "attack",
+  "facing": "left",
+  "facingObserved": true,
+  "status": "CANDIDATE",
+  "game": "FFX only",
+  "chapter": "Chapter XIV (provisional) Isaaru, Via Purifico beneath Bevelle",
+  "concept": "O-4 C \"his side\": a sea-green edge and a darker grade in his coat's colour; docs/concepts/chapters/isaaru/aeons/c-frame.jpg; picked by Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\"",
+  "method": "r3 derive: the ifrit painting's own pixels; grade (saturation x0.8, multiply (200,212,232), contrast x1.08), inner sea-green rim, sea-green glow behind (alpha capped at 0.33, under the engine's 0.35 alpha measure, so it never moves the feet or the content box), 60 px transparent pad; line work and shapes identical; 0 GPU (docs/concepts/chapters/isaaru/production/scripts/isaaru_aeons.py)",
+  "derivedFrom": "public/art/characters/ifrit/attack.png (D-089, read only; sha256 1b0c3babcea387531a27833b82b1b2dd0cd0b8d0d083d8e3b396915cd22acf5c)",
+  "sourceSeed": 1922400049,
+  "sourcePrompt": "1other, solo, monster, demon, humanoid beast, hunched posture, bulky muscular body, broad shoulders, reddish brown skin, dark red brown hide, short orange red mane, two thick curled cream ram horns spiraling beside the head, ram face, fanged ape face, claws, fangs, yellow eyes, short tail, aeon, final fantasy x, lunging forward, the head thrust out in front of the shoulders with the jaws open in a snarl, one clawed arm reaching forward with the claws spread, the other clawed arm swung back behind the hip, both hind legs planted apart on the ground, the tail out behind, full body, feet visible, zoomed out, the whole beast inside the frame, nothing cropped, (short orange red mane:1.25), (two matching curled cream ram horns:1.2), (from side:1.15), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "canon": "not canon: the sources give no visual difference between Isaaru's aeons and Yuna's (research/ffx-isaaru-bevelle.md section 10.2); the mark is ours (plan B18 = c)",
+  "ko": "no painting: the engine's pyrefly dissolve (plan B19, O-4 follow-up 1)",
+  "judgeNotes": "self-judged at 1:1 and in a real 1600x900 engine frame; not independently judged; not approved",
+  "sha256": "e7b9b00b366d2f4520f70bedad1276de852583559c2791cc4806f208d9727df4",
+  "installedAt": "2026-09-25T04:15:22.790379Z",
+  "readme": "docs/concepts/chapters/isaaru/INSTALLED.md"
+}

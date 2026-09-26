@@ -1,0 +1,60 @@
+{
+  "width": 853,
+  "height": 897,
+  "baselineY": 846,
+  "composition": "boss",
+  "nonBiped": true,
+  "facing": "left",
+  "facingObserved": true,
+  "cutout": {
+    "contentBox": [
+      16,
+      16,
+      836,
+      880
+    ],
+    "rawContentBox": [
+      16,
+      16,
+      836,
+      880
+    ],
+    "matte": "the concept render's own comfy.mjs cut-out (binary) from the options round"
+  },
+  "suggestedWorldHeight": "visual bible 24 px against a 60 px party member [estimate]: about 0.73 world units (the options README: about 0.4 of a party member)",
+  "pose": "cast",
+  "status": "CANDIDATE r1 (never installed; not approved)",
+  "game": "FFX only",
+  "anchor": "public/art/characters/daigoro/idle.png sha256 b9d952d377c6a2d015edc919e91f4d9176e0e868324a19a1cefdc6805b6e49c8",
+  "method": "r3 idle-pixel transplant + masked repaint: the idle lower jaw turned 30 degrees down about the hinge, the gap as mouth, then one repaint inside the muzzle mask",
+  "reads": "Daigoro (row 4:177, his bite): the only action he takes",
+  "repaints": [
+    {
+      "seed": 924403,
+      "denoise": 0.6,
+      "words": "no humans, komainu, lion dog, white fur, animal focus, open mouth, wide open mouth, snarling, bared teeth, fangs, sharp teeth, biting, angry, black nose, close-up, official art, cel shading, soft shading, detailed",
+      "model": "animagine-xl-4.0-opt.safetensors",
+      "ipadapter": {
+        "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+        "weight": 0.35,
+        "type": "ease in",
+        "start": 0.2,
+        "end": 0.7,
+        "refs": [
+          "D:/Tools/pyrefly-scratch/yoj-casts/dg/ref-idle-square.png",
+          "D:/Tools/pyrefly-scratch/yoj-casts/dg/ref-idle-detail.png"
+        ]
+      },
+      "steps": 30,
+      "cfg": 6,
+      "sampler": "euler_ancestral",
+      "mask": "muzzle and jaw"
+    }
+  ],
+  "scripts": "docs/concepts/chapters/yojimbo/casts/scripts/ (yoj_r1.py, dg_r1.py, r1_sidecars.py)",
+  "repair": "r1 pixel touch-up per JUDGE.md (commit 01dc52f9), no GPU: the pink / magenta speckle fringe under the lower jaw inpainted from the surrounding fur (the white jaw band hidden from the solver); the angular lower lip redrawn as one smooth tapered line through the traced points (kinks at the front and back corners rounded), the uncovered pixels inpainted per side; the front fang picket thinned to his anatomy (the four teeth between the front fang and the canine removed, refilled from the dark lip and the red mouth). Colours snapped to the locked idle palette (invented share 0.0 %); MAD 0 against cast.png outside provenance/r1/daigoro-cast-r1.mask.png.",
+  "parent": "daigoro/cast.png sha256 e30d5acab762d3bf7ea1323ced63bdfb5dda802e6ebc393bddc3e2a029032c76",
+  "sha256": "97a32c4f2d6c39d7bbb569b2cdeb74f7514a0799b845b90a9ada7c04dda5ba60",
+  "installedAt": "2026-09-24T19:05:09.733Z",
+  "readme": "docs/concepts/chapters/yojimbo/casts/JUDGE.md"
+}

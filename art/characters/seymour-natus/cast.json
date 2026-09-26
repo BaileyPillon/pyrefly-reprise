@@ -1,0 +1,160 @@
+{
+  "width": 796,
+  "height": 1165,
+  "baselineY": 1148,
+  "composition": "full",
+  "nonBiped": false,
+  "facing": "front",
+  "facingNote": "Judged on the pixels: the idle's near-frontal body and face, unchanged; 'front' is never mirrored (as idle.json).",
+  "pose": "cast",
+  "status": "CANDIDATE",
+  "game": "ffx",
+  "reads": "every Natus spell (Multi-ra, Flare, Break, Banish; research/ffx-seymour-natus-highbridge.md): both blade-wings flare open about the grip",
+  "derivedFrom": "public/art/characters/seymour-natus/idle.png",
+  "idleSha256": "c53d22c1cea6ad918570f033d8236ef29e574f32be7127bb6856e53b6c6ddcc4",
+  "method": "r3 derive-from-idle (docs/plans/art-method-r3/METHOD-CHECK.md step 2): idle-pixel transplant, both blade-wings (crescent, hilt, hand and tail) turned 18.0 deg outward about the grip, body, head, ring framing and both forearms the idle own pixels; then a masked seam repaint at each wrist only (Animagine XL 4.0 Opt img2img + IP-Adapter plus on the idle, denoise 0.4), the idle white matte pocket in the right hand Telea pre-filled and repainted, the white-ground fringe peeled on the new edges, painted pixels checked against the idle's palette",
+  "framing": "same pixel scale and baseline as the idle; canvas widened sideways only (idle x0 sits at x 73); the ring layer is the idle's (idle.json layers)",
+  "pieces": {
+    "left": {
+      "pivot": [
+        205,
+        515
+      ],
+      "deg": -18.0,
+      "poly": [
+        [
+          0,
+          0
+        ],
+        [
+          272,
+          0
+        ],
+        [
+          252,
+          130
+        ],
+        [
+          205,
+          262
+        ],
+        [
+          192,
+          300
+        ],
+        [
+          190,
+          438
+        ],
+        [
+          168,
+          440
+        ],
+        [
+          236,
+          500
+        ],
+        [
+          274,
+          527
+        ],
+        [
+          274,
+          596
+        ],
+        [
+          190,
+          628
+        ],
+        [
+          0,
+          640
+        ]
+      ]
+    },
+    "right": {
+      "pivot": [
+        505,
+        500
+      ],
+      "deg": 18.0,
+      "poly": [
+        [
+          482,
+          0
+        ],
+        [
+          693,
+          0
+        ],
+        [
+          693,
+          630
+        ],
+        [
+          548,
+          630
+        ],
+        [
+          474,
+          542
+        ],
+        [
+          478,
+          519
+        ],
+        [
+          522,
+          479
+        ],
+        [
+          521,
+          442
+        ],
+        [
+          507,
+          405
+        ],
+        [
+          497,
+          205
+        ]
+      ]
+    }
+  },
+  "repaints": [
+    {
+      "side": "left wrist",
+      "seed": 924700,
+      "denoise": 0.4,
+      "words": "1boy, solo, close-up, armored forearm, dark violet armored gauntlet, clawed hand, gripping a sword hilt, orange cord wrapped hilt, red cord, lavender feather blade, grey lavender feathers, white background, official art, cel shading, soft shading, detailed",
+      "model": "animagine-xl-4.0-opt.safetensors"
+    },
+    {
+      "side": "right wrist + pocket",
+      "seed": 924721,
+      "denoise": 0.4,
+      "words": "1boy, solo, close-up, armored forearm, dark violet armored gauntlet, clawed hand, gripping a sword hilt, red cord, lavender feather blade, grey lavender feathers, white background, official art, cel shading, soft shading, detailed",
+      "model": "animagine-xl-4.0-opt.safetensors"
+    }
+  ],
+  "gates": {
+    "madOutsidePiecesAndSeam": 0,
+    "shares": {
+      "idleUnchanged": 0.6944,
+      "idleMoved": 0.2847,
+      "painted": 0.0209
+    },
+    "inventedColourShareOfPainted": 0.0,
+    "opaqueRatio": 0.9997,
+    "softAlphaPx": 0,
+    "idlePixelShare": 0.9791
+  },
+  "scripts": "docs/concepts/chapters/natus/production/cast-scripts/ (transplant.py, prep.py, repaint.mjs, merge.py, finish.py, install.py)",
+  "sheet": "docs/concepts/chapters/natus/production/cast.jpg",
+  "decision": "Bailey 2026-09-24 ~19:20 EDT, 'I'll go with all your recommendations' (Natus gets one hero cast painting; precedent D-034/D-045)",
+  "sha256": "975fd8fd3cb1e4640234999a25a8889d7e72ec446a311715469c5023a584a419",
+  "installedAt": "2026-09-24T23:29:40.664047Z",
+  "judgeNotes": "self-judged at 1:1 and in a 1600x900 engine frame; not independently judged; not approved (never in approved-hashes.json)",
+  "offCanon": "the flare is our derived pose (the sources give what he casts, not how the model moves)"
+}

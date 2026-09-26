@@ -1,0 +1,42 @@
+{
+  "width": 629,
+  "height": 1159,
+  "baselineY": 1143,
+  "seed": 378329874,
+  "prompt": "1girl, lulu \\(ff10\\), final fantasy x, safe, solo, wide floor length skirt made of many stacked horizontal black leather belts with metal buckles, the belt skirt is solid black from waist to floor and covers her feet completely, the entire dress is solid black with no coloured panels, black hair, braided updo with long braids, ornamented hair sticks, crimson red eyes, purple lipstick, pale skin, large breasts, black off the shoulder corset with a wide brown fur collar, long black detached sleeves, many red and purple beaded necklaces, one tiny white moogle doll no bigger than her hand with two black dot eyes, red cheeks and a red pom pom on a thin antenna, her torso turned to the side, one arm raised and extended forward at shoulder height with the palm open and the five fingers clearly separated, a small round glowing magic circle in the air in front of that open palm, the tiny white moogle doll held down at her hip in her other hand, her face fully visible and turned toward the viewer, lips parted, intent expression, (solid black dress:1.4), (stacked leather belt skirt:1.35), (wide brown fur collar:1.3), (tiny white moogle doll:1.3), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, short skirt, miniskirt, ruffled skirt, scalloped skirt, tiered skirt, layered ruffles, blue skirt, purple skirt, blue underskirt, blue bodice, blue corset, scalloped bodice, scaled bodice, chevron pattern, zigzag pattern, two tone dress, gradient skirt, colorful skirt, beaded skirt, charm fringe, hanging tassels, fringed hem, white dress, cream dress, grey dress, pale dress, ball gown, crinoline, hoop skirt, petticoat, white lace collar, lace bell cuffs, lace trim, frilled cuff, white lace, leg armor, greaves, trousers, leggings, bare legs, thighs, knees, footwear, shoes, boots, high heels, bare feet, two moogles, many moogles, giant moogle, moogle as large as a person, moogle standing on the ground, moogle on the floor, moogle sitting in her skirt, rabbit, cat, fox, animal ears, teddy bear, faceless doll, white blob, fused fingers, blob hand, mitten hands, disembodied hand, floating hand, extra arm, wings, feathers, hat, beret, red hair, streaked hair",
+  "cropBox": [
+    65,
+    33,
+    694,
+    1192
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "g2cast",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/lulu/idle.png",
+  "refWeight": 0.72,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T22:34:54.241Z",
+  "facingObserved": true,
+  "flipped": true,
+  "flippedAt": "2026-09-18T19:04:17.287254-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image."
+}

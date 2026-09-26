@@ -1,0 +1,88 @@
+{
+ "width": 730,
+ "height": 1093,
+ "baselineY": 1076,
+ "composition": "full",
+ "nonBiped": false,
+ "facing": "left",
+ "facingObserved": true,
+ "cutout": {
+  "contentBox": [
+   6,
+   16,
+   713,
+   1076
+  ],
+  "rawContentBox": [
+   16,
+   16,
+   713,
+   1076
+  ],
+  "matte": "the concept render's own comfy.mjs cut-out (binary) from the options round",
+  "note": "the longer blade reaches past the parent content box"
+ },
+ "suggestedWorldHeight": "visual bible (research/visual-bible.md boss sizes) 84 px against a 60 px Tidus-scale party member [estimate]: about 2.55 world units at partyHeight 1.82",
+ "pose": "cast",
+ "status": "INSTALLED (approved 2026-09-24): the longer-blade option, judged LONGER-BLADE: PASS (docs/concepts/chapters/yojimbo/casts/JUDGE.md), installed on Bailey's word",
+ "game": "FFX only",
+ "anchor": "public/art/characters/yojimbo-cavern/idle.png sha256 bc8f5c1ecc8fb0a0cfa0c5a20e6ec12f3f3de71678c91ce44584050525866c1f",
+ "method": "r3 idle-pixel transplant + masked seam repaint (METHOD-CHECK step 2): the idle katana (hilt, tsuba) moved from the hip into the far hand; the far forearm is the idle gauntlet forearm moved under the body; the blade drawn in steel colours the idle already has; repaint only inside masks, then the hilt interior re-pasted",
+ "reads": "Zanmato and every enemy action: the drawn blade (poseForCommand maps every Yojimbo row, kind ability, to cast)",
+ "repaints": [
+  {
+   "seed": 924100,
+   "denoise": 0.55,
+   "words": "1boy, samurai, solo, holding katana, gripping sword hilt, fist, black gauntlet, gold trim, purple glove, blue sword hilt, gold tsuba, gold armor, profile, from side, white background, official art, cel shading, soft shading, vibrant colors, detailed",
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.35,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.7,
+    "refs": [
+     "D:/Tools/pyrefly-scratch/yoj-casts/yoj/ref-idle-square.png",
+     "D:/Tools/pyrefly-scratch/yoj-casts/yoj/ref-idle-detail.png"
+    ]
+   },
+   "steps": 30,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "mask": "fist, wrist, forearm seam"
+  },
+  {
+   "seed": 924201,
+   "denoise": 0.45,
+   "words": "1boy, samurai, solo, holding katana, unsheathed katana, steel blade, katana blade, blue sword hilt, gold tsuba, purple glove, profile, from side, white background, official art, cel shading, soft shading, vibrant colors, detailed",
+   "model": "animagine-xl-4.0-opt.safetensors",
+   "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.35,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.7,
+    "refs": [
+     "D:/Tools/pyrefly-scratch/yoj-casts/yoj/ref-idle-square.png",
+     "D:/Tools/pyrefly-scratch/yoj-casts/yoj/ref-idle-detail.png"
+    ]
+   },
+   "steps": 30,
+   "cfg": 6,
+   "sampler": "euler_ancestral",
+   "mask": "blade and hilt edges"
+  }
+ ],
+ "pixelOnly": [
+  "hip: the tsuba sliver and its shadow erased back to the sash edge (nothing painted)",
+  "white-ground fringe peeled on the new silhouette"
+ ],
+ "scripts": "docs/concepts/chapters/yojimbo/casts/scripts/ (yoj_r1.py, dg_r1.py, r1_sidecars.py)",
+ "repair": "r1 pixel repair per JUDGE.md (commit 01dc52f9), no GPU: the blade redrawn on the same arc and the same tip (LENGTHENED: the same arc continued 40 px past the tip, about 243 to 283 px; a visual option, no sourced blade length) with ink on spine and edge at the idle line weight (2 to 3 px), a two-value steel split, a shinogi line and a pointed kissaki with its yokote; the ragged black root replaced by a gold habaki collar at the tsuba, the red fringe and loose dark pixels outside the tsuba rim peeled; the glove front edge smoothed, its pale lavender fringe peeled and inked (tapered, 1 to 2 px). Every colour is snapped to the locked idle palette (invented share 0.0 %); MAD 0 against cast.png outside provenance/r1/yojimbo-cast-r1-option-longer.mask.png.",
+ "parent": "yojimbo-cavern/cast.png sha256 949a8b19053757efc6ad1920b1da0411858c4c3d5dad8c4e4a7ecfad93595689",
+ "sha256": "cc044fc04ab9cd93fe86bb7b2856a948d2377a9853fa49f63db6a89be17bd695",
+ "installedAt": "2026-09-24T20:00:00.000Z",
+ "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo-casts/yojimbo-cavern/cast-r1-option-longer.png",
+ "installNote": "Replaces the r1 drawn-blade cast (sha256 b67565f47e90fa58a53096e8156af2c695c02ae30e3e874937e8ec1509a9ac3f, backed up to D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/replaced-by-longer/), which is superseded, not deleted. Independent judge: LONGER-BLADE: PASS, docs/concepts/chapters/yojimbo/casts/JUDGE.md ('The longer blade: 1:1 check and in-battle frame' section; frame docs/concepts/chapters/yojimbo/casts/longer-blade-in-battle.jpg). Bailey, 2026-09-24 ~20:00 EDT, verbatim: \"1. Yes install please 2. I'll go with your recommendation\", approving the install of the longer blade over r1. FFX only, Chapter IX.",
+ "readme": "docs/concepts/chapters/yojimbo/casts/JUDGE.md"
+}

@@ -1,0 +1,32 @@
+{
+  "width": 975,
+  "height": 1018,
+  "baselineY": 1002,
+  "seed": 1397797182,
+  "prompt": "1other, solo, monster, demon, humanoid beast, hunchback, hunched posture, bulky muscular body, broad shoulders, reddish brown skin, dark red brown hide, short orange red mane, two huge curved bone white horns sweeping back from the head, claws, fangs, yellow eyes, aeon, final fantasy x, standing, hunched forward, arms out, fists clenched, looking at viewer, menacing, full body, feet visible, zoomed out, the whole beast inside the frame, nothing cropped, (two huge curved horns:1.4), (reddish brown hide:1.25), (short mane:1.15), (from side:1.15), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, cyan, neon cyan, blue fur, blue highlights, teal, ram horns, curled horns, small horns, long hair, shaggy fur, extra heads, two faces, extra limbs, cropped, close-up, pedestal, rock, floor, ground, glowing background, light burst, backlight, white glow, glowing aura, magic circle",
+  "cropBox": [
+    45,
+    0,
+    1020,
+    1018
+  ],
+  "source": {
+    "width": 1024,
+    "height": 1024
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idleB",
+  "composition": "boss",
+  "facing": "left",
+  "facingPhrase": "(from side:1.15), three-quarter view, (looking at viewer:1.2)",
+  "canvas": {
+    "width": 1024,
+    "height": 1024
+  },
+  "generatedAt": "2026-09-18T12:28:43.709Z"
+}

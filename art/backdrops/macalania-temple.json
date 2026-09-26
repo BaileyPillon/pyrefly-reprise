@@ -1,0 +1,28 @@
+{
+  "tag": "backdrop.540001.d45",
+  "seed": 540001,
+  "denoise": 0.45,
+  "prompt": "no humans, scenery, final fantasy x, macalania temple, chamber of the fayth antechamber, ice temple interior, ice pretending to be masonry, carved polished ice columns and arches, rounded melted edges, translucent ice walls, warm gold brazier light travelling sideways through the ice walls, gold metalwork set into the ice, twin braziers, glacier blue, pale cyan, faint green core in thick ice, deep temple red and ochre accents, symmetrical wide hall, glowing door in background, reflective ice floor, empty hall, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, snow, snowfield, mountain, grey rock, opaque stone, outdoors, sky, character, silhouette",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "img2img": "docs/concepts/chapters/macalania/renders/backdrop-a.png",
+  "pickedFrom": "backdrop A (warm brazier gold), docs/target/targets.json",
+  "seconds": 31,
+  "generatedAt": "2026-09-22T19:43:12.358Z",
+  "status": "CANDIDATE",
+  "candidateOf": "public/art/backdrops/macalania-temple.png",
+  "candidateSource": "docs/concepts/chapters/macalania/production/renders/backdrop/backdrop.540001.d45.png",
+  "method": "img2img from the picked backdrop A at denoise 0.45, §9.1 painter's brief words",
+  "judged": "backdrop A kept (img2img 0.45)|crisper metalwork, braziers kept|light-through-walls no stronger than A",
+  "production": "docs/concepts/chapters/macalania/production/production.md",
+  "installedAt": "2026-09-22T19:58:12.127Z"
+}

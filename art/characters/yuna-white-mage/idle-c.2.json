@@ -1,0 +1,32 @@
+{
+  "width": 748,
+  "height": 1207,
+  "baselineY": 1191,
+  "seed": 1615647733,
+  "prompt": "1girl, yuna \\(ff10-2\\), final fantasy x-2, safe, solo, white mage, brown hair, short hair, very long red braid, heterochromia, blue eye, green eye, white hooded robe, hood up, shin-length robe, purple trim, pink lining, yellow circle pattern, pink hood trim, yellow crescent moon pattern, wide sleeves, yellow flame pattern on cuffs, white gloves, white boots, holding rod, standing, holding rod in one hand, looking at viewer, gentle smile, face visible, (white mage:1.4), (hood up:1.35), (purple trim:1.2), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, obi, kimono, japanese clothes, sash, flower sash, detached sleeves, sleeveless, bare shoulders, long skirt, pleated skirt, summoner, blue dress, yellow sleeve, ring staff",
+  "cropBox": [
+    77,
+    2,
+    825,
+    1209
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "facing": "right",
+  "emphasis": "(white mage:1.4), (hood up:1.35), (purple trim:1.2)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "generatedAt": "2026-09-19T18:40:51.701Z"
+}

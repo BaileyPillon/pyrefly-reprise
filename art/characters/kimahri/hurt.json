@@ -1,0 +1,42 @@
+{
+  "width": 827,
+  "height": 1173,
+  "baselineY": 1157,
+  "seed": 327100,
+  "prompt": "1other, kimahri ronso, final fantasy x, safe, solo, one long curved amber horn on one side of his forehead and one short flat topped broken amber stub on the other side, asymmetric horns, furry male, anthro, blue fur, blue lion beastman, broad humanoid face, short muzzle, yellow eyes, slit pupils, long white mane, white beard, pierced ears, very muscular, black sleeveless top, white skull emblem on the chest, white fur tufts on the shoulders, red waist sash, blue hakama trousers, blue tail, exactly one weapon, a single spear with a plain brown wooden shaft and a silver leaf shaped head, hit hard and reeling, his spine arched backwards, his head thrown back with his eyes screwed shut and his jaw clenched in a grimace of pain, his free paw clamped flat over a wound on his chest with all five clawed fingers spread, one knee buckling and dropping toward the ground, the single spear gripped in his other paw with its point dragging on the ground behind him, staggering, off balance, (blue fur:1.4), (long white mane:1.3), (grimacing in pain:1.35), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, white fur on his body, white skin, pale body, albino, blue mane, blue hair on his head, blue beard, two matching horns, matched pair of horns, symmetrical horns, three horns, extra horn, antlers, unicorn horn, red horn, second weapon, extra weapon, duplicate weapon, two spears, second spear, glaive, sword, blade at his hip, weapon at his side, sheathed weapon, second polearm, axe, staff, floating weapon, detached weapon, weapon standing on its own, detached spear tip, spearhead separated from the shaft, blob hand, mitten hands, fused fingers, malformed hand, missing hand, hidden hand, three arms, extra arms, carved staff, ornate staff, orange staff, wooden harpoon, totem pole, tree stump, log, grass, outdoor scenery, ground shadow, cast shadow, folded arms, crossed arms, arms crossed over the chest, posing, calm expression, neutral expression, smiling, standing upright, standing at rest, attacking, lunging forward, charging, roaring in triumph",
+  "cropBox": [
+    0,
+    10,
+    827,
+    1183
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "hurt",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/kimahri/idle.png",
+  "refWeight": 0.7,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.35,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T10:46:11.128Z",
+  "flipped": true,
+  "flippedAt": "2026-09-18T06:51:40.846678-04:00",
+  "flipNote": "Mirrored horizontally by tools/gen/flip.py to satisfy the v3 facing contract. Re-running the recorded seed reproduces the UNmirrored image.",
+  "facingObserved": true
+}

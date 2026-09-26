@@ -1,0 +1,55 @@
+{
+  "width": 757,
+  "height": 1164,
+  "baselineY": 1100,
+  "pose": "idle",
+  "composition": "full",
+  "nonBiped": false,
+  "facing": "left",
+  "facingObserved": true,
+  "status": "CANDIDATE",
+  "game": "FFX only",
+  "method": "r3 derive-from-concept: the picked O-3 B pixels exactly (the ginnem-a render, seed 904101, with the options round's pyrefly-edge treatment D:/Tools/pyrefly-scratch/yojimbo/unsent.py, random seed 7): soft cool rim glow, 140 motes on the outline, body alpha 0.88; no repaint, no GPU",
+  "concept": "docs/concepts/chapters/yojimbo/ginnem/b-pyrefly-edged-card.jpg (O-3 B the glowing unsent outline, picked 2026-09-24)",
+  "conceptSeed": 904101,
+  "repairs": [],
+  "cutout": {
+    "contentBox": [
+      16,
+      16,
+      740,
+      1147
+    ],
+    "rawContentBox": [
+      39,
+      39,
+      763,
+      1170
+    ],
+    "matte": "the concept render's comfy.mjs cut-out (binary), then the options round's pyrefly-edge treatment (soft alpha: rim glow and motes outside the body, body at 0.88)"
+  },
+  "suggestedWorldHeight": "a palette swap of Belgemine (wiki), so human scale: partyHeight 1.82 world units [estimate]",
+  "seed": 904101,
+  "prompt": "1girl, solo, summoner, final fantasy x, young woman with white face makeup, pale white painted face, brunette hair tied up with golden hair ornaments on the sides of the head, small round dark mark on the forehead, wrap robe sectioned with bands, puffed shoulders, sleeves cuffed with bands above the elbow, wide bell cuffs with a latticed diamond pattern, fingerless gloves, obi belt with a thin orange sash and a red tassel, long skirt, robes in muted grey lavender and pale violet, sorrowful, distant expression, standing still, hands folded in front of her, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, smile, bright colours, armor",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "cropBox": [
+    116,
+    75,
+    791,
+    1155
+  ],
+  "sha256": "061d0021abc18af7263fa64923b2f6070f22de7ec0d61c673aa413f511971bee",
+  "judgeNotes": "self-judged at 1:1 and in a real battle frame; not an independent judge; not approved (never in approved-hashes.json). Soft alpha on purpose (the glow and the 0.88 body): the one idle here that is not binary. The options README said the motes would be live particles in the game; until that effect exists (src/engine is another track's) the picked treatment is baked so the painting shows what Bailey picked; the solid painting is kept at D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo/ginnem/idle.solid.png for when the live effect lands. White make-up (sourced) tried as a pixel lift of the face skin and dropped: no visible change, the face is already near white. Hair came out fair, not brunette (our own prompt word; unsourced). Untargetable (B3). Game case: FFX only.",
+  "generatedAt": "2026-09-24T06:06:07.684Z",
+  "installedAt": "2026-09-24T16:42:20Z",
+  "readme": "docs/concepts/chapters/yojimbo/INSTALLED.md"
+}

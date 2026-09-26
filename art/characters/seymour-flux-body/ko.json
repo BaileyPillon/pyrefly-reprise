@@ -1,0 +1,36 @@
+{
+  "width": 765,
+  "height": 755,
+  "baselineY": 739,
+  "seed": 1381000,
+  "prompt": "1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, young man, smooth unlined face, pale blue-grey skin, light blue hair, hair lacquered and swept up into a tall wide fan-shaped crest, two long thick locks of hair falling down his back, purple eyes, pronounced dark veins branching across his face, ornate dark blue robe worn open, red trimmings, tall high collar lined with red, green sash, bare chest, leonine chest tattoo, wide sleeves, sitting cross-legged floating in midair, both knees and crossed shins clearly visible below the open robe, tattered robe hem, defeated, head hanging forward with the chin on his chest, both eyes closed, both arms hanging limp and loose at his sides, shoulders collapsed, the body sagging forward over the folded legs, dissolving into pyreflies, motes of light, (tall wide fan-shaped hair crest:1.45), (dark blue robe with red trim and green sash:1.35), (smooth young male face:1.3), (head hanging forward, both eyes closed:1.4), (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, 1girl, female, woman, breasts, cleavage, feminine, androgynous, lipstick, makeup, old man, elderly, wrinkles, gaunt, sunken cheeks, hollow cheeks, bony face, skull face, beard, stubble, horns, antlers, branches, tree, antler headpiece, helmet, crown, mitre, hat, topknot, ponytail, hair down, long loose hair, straight hanging hair, wings, feathers, blade, scythe, parasol, umbrella, folding fan, banner, magenta, pink, orange, coral, salmon, peach, tan robe, weapon, sword, spear, boots, shoes, bare legs, bare thighs, exposed legs, naked legs, chair, stool, throne, standing, dark background, black background, aura, scenery, floor, shadow, cast shadow, reflection, cropped, out of frame, monochrome, claw, claws, talons, malformed hand, bent fingers, stiff fingers, arms resting on his knees, hands clasped on his knees, still, seated at rest, upright, alert, open eyes",
+  "cropBox": [
+    38,
+    234,
+    803,
+    989
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "ko",
+  "composition": "boss",
+  "facing": "left",
+  "emphasis": "(tall wide fan-shaped hair crest:1.45), (dark blue robe with red trim and green sash:1.35), (smooth young male face:1.3), (head hanging forward, both eyes closed:1.4)",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "img2img": "tools/gen/refs/sey-plate-ko11.png",
+  "denoise": 0.6,
+  "generatedAt": "2026-09-19T19:42:18.649Z",
+  "fixRound": "bosses-a fix round 11 (2026-09-19). Judge (sheet score 6): ko lost the signature spiked upswept hair entirely, letting it hang long and loose, and the palette went coral and orange. Same stale round-7 render (seed 783003). Re-rendered off a pose-plate of the current idle rotated -30deg at denoise 0.60; (tall wide fan-shaped hair crest:1.45) is first in --emphasis, which handoff SSL1 establishes is the only channel that survives a strong pose, and ponytail/hair down/long loose hair/straight hanging hair are in --negAdd. Crest intact, body slumped forward and down, eyes closed, dark blue robe with red trim and green sash. Cutout is 15% less dense than the idle, which is what a collapsed pose costs. op 45.9% vs idle 54.0%.",
+  "candidate": "sey-koD11.1"
+}

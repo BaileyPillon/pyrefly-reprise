@@ -1,0 +1,32 @@
+{
+  "width": 509,
+  "height": 1146,
+  "baselineY": 1060,
+  "facing": "left",
+  "status": "APPROVED (Bailey 2026-09-25, option A; independent judge 7.0 PASS)",
+  "game": "FFX-2 only",
+  "chapter": "Chapter XV Den of Woe (provisional ffx2-den-of-woe)",
+  "concept": "O-1 B translucent and lit from within, the same treatment for all three shades; picked by Bailey 2026-09-25 (\"I'll go with all your recommendations\"); docs/concepts/chapters/gippal/o1-shade/b-translucent-frame.jpg",
+  "canon": "the shade look is ours (research G-13); the sources say only that each is an illusion made of pyreflies",
+  "bailey": "2026-09-25 ~14:25 EDT, verbatim \"I'll go with all your recommendations however\"; the driver's Nooj recommendation A: fix only the idle (the loops, the sleeve, the neck fringe), then judge it; if it passes, install it and let Nooj use the idle for his action moments too, with the usual motion",
+  "base": "attempt 7 idle (docs/concepts/chapters/gippal/nooj-options/idle-only/README.md): masked repaints of attempt 6's repaired idle (8e1d77e9991c) with IP-Adapter forced on portraits/nooj.png; loops seed 977102, sleeve 977101 then 977202, near side (neck fringe + machina forearm) 977102; alpha-only ground-shadow touch-up",
+  "sourceSha256": "a87ff561ef41b4a56b139185d6dc9885a569b79cb74a50642dd10fa70f60a040",
+  "sourceFile": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-nooj7/merge/idle-m2.png",
+  "judge": "docs/concepts/chapters/gippal/nooj-options/README.md, \"Independent judge (idle only)\": 7.0 PASS narrowly; identity 7, anatomy 6.5, hands 7, costume 7, seams 7, edges 7, finish 7, game read 7.5",
+  "method": "O-1 B treatment (docs/concepts/chapters/gippal/production/scripts/shade_b.py), unchanged; no GPU in the install",
+  "poses": "idle only: no cast, attack or hurt painting is served, so every action moment falls back to this idle (POSE_FALLBACKS in src/engine/BattlePresenterArt.ts) with the engine's usual motion; KO is the pyrefly dissolve",
+  "knownDefects": [
+    "the face is young, soft and frontal (the portrait is mature and angular); the lean does not show (the cane stands vertically); the legs are about 60 percent of his height (anatomy at the 6.5 floor)",
+    "the sleeve is a straight purple tube with a flat cuff; the fur tips over its top form a regular pale and pink fringe at 2x",
+    "the loops are rounder than the portrait's; the red ties are a few pixels each and the B treatment washes them out at game size",
+    "a faint pale halo on the loops' outer edge and the near shoulder at 2x; a tiny orange sliver left of the metal toe",
+    "a small amber plate on the machina upper arm; a red and black fold in the armpit; the boot is boxy",
+    "the red suit and the purple boot are muted by the B treatment, as the pick accepts"
+  ],
+  "scale": 1.0707,
+  "scaleNote": "the B pad moves baselineY; this factor keeps the pixels-per-world-unit of the unpadded painting (baselineY 990)",
+  "installedAt": "2026-09-25T19:00:36Z",
+  "replacedSha256": "674058d321846f5e717a4fb5d2384a832ecc1b40115a0368e69b6fb11e0992e7",
+  "removedCastSha256": "a07ec9e35852073794cc09e6d16a9ff056265258aadbc779808b3840b923d211",
+  "replacedKeptAt": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-nooj7/replaced/"
+}

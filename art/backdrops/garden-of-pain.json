@@ -1,0 +1,37 @@
+{
+  "seed": 912431,
+  "prompt": "no humans, scenery, no humans, scenery, final fantasy x, outdoors, a dream realm inside a giant creature, low level eye-height view across a wide stone terrace of pale weathered paving in the foreground, the top of a flight of stone steps, a calm vast red-tinged sea beyond the terrace, floating rock islands with tall thin waterfalls pouring into the sea, glassy walkways of water, a few thin dark stone staves at the terrace edges, deep perspective, symmetrical composition, eerie stillness, detailed background, painterly, cinematic lighting, wide shot, \\(waterfalls:1.3\\), deep violet twilight, the sea dark crimson, cold violet light, green-white pyreflies drifting in the air, dim, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "img2img": "init-garden-c.png (sky and ledges from 912407, terrace floor from 912403)",
+  "denoise": 0.5,
+  "width": 2688,
+  "height": 1536,
+  "pickedFrom": "O-3 C (deep violet), Bailey 2026-09-25 ~01:40 EDT, verbatim: \"I'll go with all your recommendations\" (docs/concepts/chapters/omnis/README.md, docs/plans/chapter-omnis-review.md)",
+  "concept": "docs/concepts/chapters/omnis/o3-garden/c-plate.jpg",
+  "method": "r3-derive: the picked plate own pixels; one repair: the steps",
+  "repairs": [
+    {
+      "what": "a short broad flight of five stone steps rising from the terrace's far edge to a raised dais under Omnis: the one sourced Garden of Pain fact (research 7: steps up to a platform), which no options plate showed (README question 3 said a final would add them)",
+      "how": "PIL blocks in the terrace's own sampled colours (steps_init.py), then a masked img2img inside a feathered box only (steps_merge.py): crop x1140-2164 y560-1136, Animagine XL 4.0 Opt, IP-Adapter plus on the plate crop at 0.3, denoise 0.5, seed 925301 (1 of 4)",
+      "changed": "pixels x1341-1981 y774-998 only (3.2 % of the plate); MAD 0 elsewhere",
+      "gpuSeconds": 9.4
+    }
+  ],
+  "offCanon": "Ours: the violet light, the floating ledges, the terrace paving, the dais. No staves in this plate (the look-only pass showed them as tall slender ornamented poles along the platform edges; the options drew none). The sea, walkways and waterfalls belong to the Sea of Sorrow, not the Garden, and are not claimed here.",
+  "candidateSource": "D:/Tools/pyrefly-scratch/omnis-options/renders/garden-C.png",
+  "script": "D:/Tools/pyrefly-scratch/ch1215/omnis/steps_merge.py r1",
+  "status": "CANDIDATE",
+  "game": "ffx",
+  "judgeNotes": "self-judged at 1:1 and in a 1600x900 engine frame; not independently judged; not approved (never in approved-hashes.json)",
+  "sha256": "d18315b7305976c13e2bf4141ff5e79cd7b7df724441874db4f639a3d65d5d93",
+  "installedAt": "2026-09-25T04:23:19.275774Z"
+}

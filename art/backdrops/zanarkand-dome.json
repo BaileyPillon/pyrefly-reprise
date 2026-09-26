@@ -1,0 +1,16 @@
+{
+  "seed": 1865557194,
+  "prompt": "no humans, scenery, vast ruined temple great hall interior, dark cavernous ceremonial hall, long processional floor of cracked pale stone, raised circular dais at the far end, rows of broken stone pillars receding into darkness, ruptured domed ceiling with a ragged oculus, single shaft of cold pale light falling onto the dais, faintly glowing golden glyphs on the back wall, dust motes in the light beam, one point perspective, monumental scale, deep shadows, almost black ambient, ancient, abandoned, detailed background, painterly, cinematic lighting, wide shot, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, 1girl, 1boy, character, people, person, human, water, reflection, sky, sunset, pink sky, outdoors, trees, flooded",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "upscaler": "RealESRGAN_x4plus.pth",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "generatedAt": "2026-09-15T23:01:36.065Z"
+}

@@ -1,0 +1,72 @@
+{
+  "width": 733,
+  "height": 1138,
+  "baselineY": 1138,
+  "seed": 925511,
+  "prompt": "1boy, solo, baralai, final fantasy x-2, male focus, young man, \\(dark skin:1.2\\), brown eyes, \\(short silver hair swept up:1.2\\), \\(blue headband:1.2\\), high green collar with yellow trim, gold glyph panels on the chest, long slender golden staff, sorrowful expression, eyes lowered, head and shoulders, close-up, portrait, straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, light skin, pale skin, blonde hair, black hair, hat, hood, armor, sword",
+  "cropBox": [
+    0,
+    78,
+    733,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "D:/Tools/pyrefly-scratch/gpu6/bar-init.png",
+  "refWeight": 0.3,
+  "refWeightType": "ease in",
+  "refScaling": "K+V",
+  "refStart": 0.2,
+  "refEnd": 0.6,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "img2img": "D:/Tools/pyrefly-scratch/gpu6/bar-init.png",
+  "denoise": 0.56,
+  "cutout": {
+    "coverage": {
+      "widthFraction": 0.8810096153846154,
+      "heightFraction": 0.9358552631578947,
+      "checked": true,
+      "exceeds": false
+    },
+    "components": {
+      "componentCount": 1,
+      "largestPixels": 464304,
+      "secondPixels": 0,
+      "secondRatio": 0,
+      "touchesLargest": null
+    },
+    "nearWhite": {
+      "fraction": 0.002181760226058789,
+      "largestRegionFraction": 0.0011070333229952788,
+      "detached": false,
+      "touchesEdge": false,
+      "allowanceUsed": 0.7939126945217612
+    }
+  },
+  "generatedAt": "2026-09-25T10:11:27.869Z",
+  "candidate": "docs/concepts/portraits-2026-09-25 Baralai B (baralai/opt-b.1)",
+  "candidateFile": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu6/baralai/opt-b.1.png",
+  "pickedBy": "Bailey 2026-09-25 ~10:20 EDT (\"I'll go with all your recommendations\")",
+  "status": "APPROVED",
+  "game": "ffx2",
+  "speakerId": "baralai",
+  "chapter": "FFX-2 Chapter V",
+  "sources": "research/visual-bible.md; img2img from the opaque render the installed baralai-shade was made from (seed 961103)",
+  "sha256": "26fe078fd31f6a3aaa3daee8ab5acd0d7bb36d99c72309b12bc61fdb072f47dc",
+  "installedAt": "2026-09-25T14:38:43.278332+00:00"
+}

@@ -1,0 +1,40 @@
+{
+  "width": 400,
+  "height": 1159,
+  "baselineY": 1143,
+  "seed": 332302,
+  "prompt": "1girl, rikku \\(ff10\\), final fantasy x, safe, solo, petite teenage girl, tan skin, natural skin tone, blonde hair, high fan shaped ponytail, two thin braids with beads, orange feather hair ornaments, blue and green bobby pins, green eyes, swirl pupils, al bhed, orange sleeveless tank top, bare midriff, khaki arm warmers, red belt, green cargo short shorts, bare tan legs, orange thigh pouch, two long blue ribbon straps hanging from the back, pink tinted goggles on her head, one single metal claw gauntlet on her right hand only with three short silver blades over the knuckles, her left hand is bare with visible fingers, blue and orange sneakers, standing upright with a straight back, holding a small glass potion bottle of blue liquid with a cork stopper out in front of her chest, her bare hand wrapped around the small bottle with all five fingers visible, her arm extended forward, offering the item, a small smile, (small glass potion bottle:1.4), (standing upright:1.35), (fingers clearly visible:1.25), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, orange skin, orange legs, orange tights, orange pantyhose, red skin, colour cast, monochrome orange, tinted skin, swimsuit, bikini, long hair down, brown hair, blue eyes, long trousers, capri pants, baggy pants, goggles over eyes, extra shoe, third shoe, floating shoe, detached shoe, extra foot, third leg, extra leg, extra limb, two claws, claw on both hands, claw gauntlet on both hands, second gauntlet, duplicate gauntlet, claw over the shoulder, blades floating in the air, blades detached from the hand, wrist blades, fused fingers, mitten hands, sleeve fused to the arm, missing hand, no hand, sword, staff, extra weapon, duplicate weapon, two weapons, floating weapon, detached weapon, afterimage, ghost image, motion blur, mirrored copy, ornate frame, halo, mandala, background decoration, decorative border, circular frame, wings, smoke, mist, multiple arms, chibi, missing arm, ground shadow, cast shadow, colored background, scenery, bending over, bent forward, leaning forward, bowing, hunched, striped tube, metal can, canister, cylinder, tube, thermos, giant bottle, huge bottle, bottle bigger than her head, floating bottles, many bottles, two bottles, bottle without a hand, red liquid, glass tank, glass case",
+  "cropBox": [
+    260,
+    30,
+    660,
+    1189
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "item",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/rikku/idle.png",
+  "refWeight": 0.7,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.3,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T10:08:54.641Z",
+  "facingObserved": true,
+  "flipped": false
+}

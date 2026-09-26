@@ -1,0 +1,82 @@
+{
+  "width": 832,
+  "height": 1216,
+  "baselineY": 1216,
+  "seed": 188023,
+  "prompt": "1boy, nooj \\(ff10-2\\), final fantasy x-2, safe, solo, male focus, adult man, masculine angular face, brown hair, long hair, hair rings, ponytail, red hair tie, blue eyes, blue-tinted glasses, crimson bodysuit, red and black belts across the chest, purple fur-trimmed shoulder sleeve on right shoulder, grey fur, mechanical prosthetic left arm, machina metal arm, head and shoulders, adjusting glasses with his metal hand, faint wry smile, calm, straight-on, (metal fingers:1.1), (brown hair:1.3), (blue-tinted glasses:1.1), (purple fur-trimmed sleeve:1.15), straight-on, portrait, close-up, upper body, looking at viewer, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, red hair, pink hair, orange hair, scarf, blonde hair, short hair, sunglasses, black glasses, eyepatch, scar, beard, sword, gun, breastplate, plate armor, shoulder armor on right shoulder",
+  "cropBox": [
+    0,
+    0,
+    832,
+    1216
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "portrait",
+  "composition": "portrait",
+  "facing": "none",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": null,
+  "cutout": {
+    "width": 832,
+    "height": 1216,
+    "baselineY": 1216,
+    "cropBox": [
+      0,
+      0,
+      832,
+      1216
+    ],
+    "contentBox": [
+      0,
+      0,
+      832,
+      1216
+    ],
+    "sourceWidth": 832,
+    "sourceHeight": 1216,
+    "model": "isnet-anime"
+  },
+  "generatedAt": "2026-09-23T17:24:13.974Z",
+  "candidate": "nooj-c",
+  "pickedBy": "Bailey 2026-09-24 (\"I'll take all of your recommendations\": Nooj C with one repair pass)",
+  "game": "ffx2",
+  "speakerId": "nooj",
+  "sources": "research/visual-bible.md 1.23.4 (FF Wiki Nooj); mouth per research/ffx2-vegnagun-shuyin.md beat 1 (flat, resolved)",
+  "repair": {
+    "date": "2026-09-24",
+    "judge": "docs/concepts/portraits/nooj-brother/JUDGE.md (red suit, neutral mouth, heavier ink)",
+    "mouth": {
+      "tool": "tools/gen/inpaint.mjs",
+      "box": [
+        330,
+        585,
+        195,
+        100
+      ],
+      "latent": true,
+      "denoise": 0.7,
+      "seed": 5202,
+      "feather": 8,
+      "tags": "closed mouth, expressionless, serious, flat mouth, thick black lineart, no smile",
+      "negAdd": "smile, smirk, grin, open mouth, teeth, lipstick, frown",
+      "identity": "1boy, nooj \\(ff10-2\\), final fantasy x-2, solo, male focus, adult man, masculine angular face",
+      "speck": "one 8 px inpaint speck at (516,602) filled from its surroundings"
+    },
+    "suit": "deterministic hue shift of the purple suit (hue 225-349 above y 1020, dark purple only below y 1060, fur kept purple) to crimson h 356",
+    "ink": "lines (luma < 0.30) grown 1 px and pulled to near-black at 0.75; saturation x1.12, contrast x1.06",
+    "script": "D:/Tools/pyrefly-art-backup/candidates/2026-09-24-picks/nooj-c.repair.py",
+    "gpuPrompts": 2
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "width": 791,
+  "height": 1037,
+  "baselineY": 1021,
+  "seed": 950203,
+  "prompt": "1girl, yuna \\(ff10\\), final fantasy x, safe, solo, brown hair, short hair, single braid, heterochromia, blue eye, green eye, japanese clothes, black camisole, white sash, yellow obi, obi, purple hakama, long skirt, pleated skirt, floral print, detached sleeves, pink and white sleeves, black boots, holding staff, summoner staff, struck by a heavy blow coming from the right edge of the frame, chest and front of her body turned toward the right, both boots pointing to the right, recoiling, staggering back onto her left heel, torso arched back, head tipped back, eyes screwed shut, mouth open in pain, both hands gripping the shaft of her summoner rod, the rod held upright and vertical in front of her with the large ornate golden crescent head at the TOP above her hands and the plain slim tip pointing down at the ground, knees buckling, off balance, (ornate golden rod head at the top:1.4), (in pain:1.3), (both hands on the shaft:1.2), (from side:1.3), three-quarter view, body facing right, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, facing viewer, front view, straight-on, symmetrical, from behind, facing away, upside down staff, inverted staff, staff head at the bottom, staff head near the ground, ornament at the bottom, spear, pointed tip up, standing straight, calm expression, smiling, serene, gentle smile, neutral pose, relaxed pose, symmetrical stance, straight-on, frontal pose, facing the camera, aura, energy ribbon, colored swirl, glowing ribbon, motion blur, speed lines, impact effect, extra staff, two staves, second staff, broken staff, raised staff, staff overhead, arms raised, magic circle, glowing magic, casting, victory pose, blue boots, white boots, mismatched shoes, mitten, mittens, deformed hand, fused fingers, detached limb, floating arm, extra arm, disconnected sleeve, floating sleeve, gown, dress",
+  "cropBox": [
+    9,
+    119,
+    800,
+    1156
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "f4hurt",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "ref": "public/art/characters/yuna/idle.png",
+  "refWeight": 0.65,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T19:14:10.000Z",
+  "pickedFrom": "f4hurt.3",
+  "round": "art3-party-a-fix4"
+}

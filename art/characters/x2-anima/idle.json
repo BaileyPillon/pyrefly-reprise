@@ -1,0 +1,18 @@
+{
+  "width": 873,
+  "height": 1343,
+  "baselineY": 1256,
+  "facing": "left",
+  "status": "CANDIDATE",
+  "game": "FFX-2 only",
+  "chapter": "Chapter XI Fallen Aeons (ffx2-fallen-aeons)",
+  "concept": "O-2 B Chapter IV violet (FA12), picked by Bailey 2026-09-24; docs/concepts/chapters/fallen-aeons/o2-possessed/",
+  "method": "r3 derive: the APPROVED painting's own pixels, colour grade only (shadows toward violet, highlights kept), inner violet rim, violet eye glow, dark violet aura behind the figure (alpha capped at 0.33, under the engine's 0.35 alpha-measure threshold, so the aura never moves the feet or the content box); line work and shapes identical; 70 px transparent pad on every side; no GPU (docs/concepts/chapters/fallen-aeons/production/scripts/possess_b.py)",
+  "derivedFrom": "public/art/characters/anima/idle.png (FA11: Anima counts as approved on Bailey's word, 2026-09-24)",
+  "sourceSeed": 870317746,
+  "sourcePrompt": "no humans, solo, monster, towering aeon, massive bulky figure, upper body bound in thick grey bandage wrappings and heavy iron chains, arms strapped against the sides, two long curved horns, one single glowing eye, mouth sewn shut with black stitches, dark violet armoured lower body, mournful, final fantasy x, standing upright, looming, whole figure inside the frame from the top of the horns to the feet, zoomed out, head and bandaged face clearly visible, chains hanging at both sides, (bandage wrappings:1.3), (mouth sewn shut with stitches:1.3), (full body:1.2), (from side:1.1), three-quarter view, (looking at viewer:1.2), full body, centered, imposing, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "canon": "not canon: no source confirms a recolour (research F-12); house precedent ffx2-bahamut idle",
+  "scale": 1.059,
+  "scaleNote": "the 70 px top pad raises baselineY; this factor restores the approved painting's pixels-per-world-unit",
+  "installedAt": "2026-09-24T19:06:26.958124Z"
+}

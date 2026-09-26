@@ -1,0 +1,30 @@
+{
+ "width": 826,
+ "height": 1153,
+ "baselineY": 1137,
+ "composition": "full",
+ "nonBiped": false,
+ "facing": "left",
+ "pose": "cast",
+ "status": "INSTALLED",
+ "method": "r3 derive-from-idle cast (commit 1b97cb55: fist and spear turned 35 deg about the wrist), REPAIRED per judge 3 (D-045): masked repaint of the wrist bend (an inner-corner fillet guide, Animagine XL 4.0 Opt img2img denoise 0.5, seed 8201 of 4) plus the green hook and shaft specks (Telea pre-fill then the same pass); the sampler's gold line on the wrist's inner edge recoloured to the idle's ink, residual specks and the shaft's pale fringe dots filled from the robe (Telea); the shaft itself pasted back exactly; rotation untouched; MAD 0 against the r3 candidate outside the repair mask",
+ "derivedFrom": "public/art/characters/guado-guardian/idle.png",
+ "idleSha256": "963b58eee9206443b108d4b9f1a3710beba382255529db3ec7c0fac3cbbb88ab",
+ "sha256": "9c7930fca598fd4971a74cd0970d461a7d6db271c96cb59c37ace46ea53e9d96",
+ "candidateOf": "public/art/characters/guado-guardian/cast.png",
+ "judgeNotes": "self-judged only; not an independent judge; not approved; not installed",
+ "gates": {
+  "shares": {
+   "idleUnchanged": 0.8862,
+   "idleMoved": 0.0709,
+   "painted": 0.0431
+  },
+  "idlePixelShare": 0.9571,
+  "inventedColourShareOfPainted": 0,
+  "opaqueRatio": 0.9713,
+  "softAlphaPx": 0
+ },
+ "installedAt": "2026-09-24T05:56:29.675Z",
+ "judgeReport": "docs/concepts/chapters/macalania/r3-JUDGE-3.md (judge 4 re-judge, 2026-09-24: SEYMOUR-CAST PASS, GUARDIAN-CAST PASS, worst 7)",
+ "decision": "D-045 option A (Bailey, 2026-09-24)"
+}

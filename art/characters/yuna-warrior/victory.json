@@ -1,0 +1,59 @@
+{
+  "width": 490,
+  "height": 1213,
+  "baselineY": 1197,
+  "scale": 1.28,
+  "scaleNote": "Head match corrected 2026-09-25 (repair of verifier V-1; was 1.36 from the judge note: Head match 2026-09-25 (decision sheet item 11): idle eye-line to chin 57.5 px vs this pose 42.3 px, points in docs/concepts/art5/judge/measure.json; read by eye off 2x gridded crops, about +/-5%.). Method: iris-centroid eye spacing and a checked eye-line-to-chin point, each as idle/pose, read against which one the head turn or tilt shortens: eye spacing 1.28 and eye line to chin 1.29 agree. Evidence: docs/concepts/art5/installed/rescale/.",
+  "seed": 26152,
+  "prompt": "1girl, solo, standing, (sword over shoulder:1.2), holding sword, hand on own hip, confident, light smile, yuna \\(ff10-2\\), final fantasy x-2, warrior, brown hair, short hair, heterochromia, blue eye, green eye, earrings, red hood, white top, detached pink sleeves, orange obi, blue waist cloth, long pink and blue skirt, dark blue leggings, brown boots, (blue longsword:1.2), gold crossguard, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, magic circle, glowing weapon, glowing sword, fire, flames, fire trail, swirl, lightning, dark aura, splash, extra sword, multiple swords, floating sword, from behind, facing away, sword raised, two-handed, sword on ground, armor, helmet, wings, dual wielding, two weapons, greatsword, huge sword, spear, polearm, staff, second sword, gun, blonde hair",
+  "cropBox": [
+    104,
+    1,
+    594,
+    1214
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "victory",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "controlnet": {
+    "file": "xinsir-controlnet-openpose-sdxl-1.0.safetensors",
+    "strength": 0.75,
+    "start": 0,
+    "end": 1,
+    "skeleton": "docs/concepts/art5/skeletons/sword/victory.png"
+  },
+  "ipadapter": {
+    "file": "ip-adapter-plus_sdxl_vit-h.safetensors",
+    "weight": 0.5,
+    "type": "ease in",
+    "start": 0.2,
+    "end": 0.8,
+    "scaling": "K+V",
+    "combine": "concat",
+    "images": [
+      "yuna-warrior-idle-square.png",
+      "yuna-warrior-head.png"
+    ],
+    "forced": true
+  },
+  "status": "APPROVED: Bailey 2026-09-25 ~12:45 EDT, \"I'll go with your recommendations for everything\" (install all 22 judge-passed poses); installed 2026-09-25, locked in docs/target/approved-hashes.json set bailey:2026-09-25-poses",
+  "judge": "docs/concepts/art5/judge/judge.json#yuna-warrior/victory (7.12)",
+  "candidateOf": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/yuna-warrior/victory/cand-2.png",
+  "sha256": "2b846f54059e4568a754ca15e199a493c95cc48539a0c272c3a2c4f14f48f05a",
+  "generatedAt": "2026-09-25T10:00:15.111Z",
+  "installedFrom": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-judge-poses/yuna-warrior/victory.png"
+}

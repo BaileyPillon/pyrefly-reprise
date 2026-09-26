@@ -1,0 +1,68 @@
+{
+  "width": 541,
+  "height": 1153,
+  "baselineY": 1137,
+  "seed": 72324,
+  "prompt": "1boy, final fantasy x-2, safe, solo, male focus, a leblanc syndicate goon, an adult man of average build, wearing a skin-tight matte olive drab army green cloth bodysuit that covers him from neck to wrists and ankles, the suit fitted close to the body with only seam lines and soft fold shading, a pink heart emblem printed on the center of his chest, black gloves, black boots, \\(olive green bodysuit:1.3\\), \\(skin tight:1.2\\), \\(small pink heart emblem:1.05\\), short dark hair, a black domino eye mask over his eyes, a toothy grin, the olive green bodysuit zipped closed up to the neck, \\(domino mask:1.3\\), \\(black eye mask:1.1\\), \\(closed bodysuit:1.2\\), standing, one fist raised in front of the chest, the other fist at his hip, feet apart, a cocky grin, looking at viewer, (from side:1.3), three-quarter view, body facing left, (looking at viewer:1.2), full body, standing, feet visible, simple background, white background, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, paint splatter, ink splash, colorful background, abstract background, aura, glow, energy, magic, sparks, particles, smoke, slash effect, motion lines, speed lines, afterimage, debris, extra weapon, floating objects, facing viewer, front view, straight-on, symmetrical, from behind, facing away, armor, shoulder armor, pauldrons, helmet, visor, metal mask, gold mask, plate armor, cape, cloak, hooded cloak, robe, coat, from behind, ass, arms crossed, weapon, text, letters, latex, shiny clothes, glossy, asymmetrical legwear, mismatched legwear, single leg pantyhose, cyclops, one eye, sneakers, shoulder patch, arm badge, surgical mask, medical mask, animal ears, cat ears, animal hood, orange, white leotard, two-tone bodysuit, scarf, sash, boxing gloves, long hair, jacket, open jacket, open clothes, coat, bare chest, pectorals, cleavage, scarf, sash, loincloth, swirl, ribbon, heart symbol, background heart",
+  "cropBox": [
+    167,
+    30,
+    708,
+    1183
+  ],
+  "source": {
+    "width": 832,
+    "height": 1216
+  },
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 28,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "pose": "idle",
+  "composition": "full",
+  "facing": "right",
+  "canvas": {
+    "width": 832,
+    "height": 1216
+  },
+  "lint": {
+    "stripped": []
+  },
+  "cutout": {
+    "coverage": {
+      "widthFraction": 0.6502403846153846,
+      "heightFraction": 0.9481907894736842,
+      "checked": true,
+      "exceeds": false
+    },
+    "components": {
+      "componentCount": 1,
+      "largestPixels": 264052,
+      "secondPixels": 0,
+      "secondRatio": 0,
+      "touchesLargest": null
+    },
+    "nearWhite": {
+      "fraction": 0.0008521048884310666,
+      "largestRegionFraction": 0.00035220335388484085,
+      "detached": false,
+      "touchesEdge": false,
+      "allowanceUsed": 0.03
+    }
+  },
+  "generatedAt": "2026-09-24T01:38:29.800Z",
+  "facingObserved": true,
+  "facingNote": "The prompt asked for body facing left; the pixels face screen-right (docs/concepts/chapters/leblanc/goons/picks.json, observed). Sidecar states the pixels so PaintedActor mirrors the figure toward the party.",
+  "status": "APPROVED",
+  "option": "C",
+  "pick": "Dr. Goon C (seed 72324): black domino mask, face shown, cocky grin",
+  "pickedBy": "Bailey, 2026-09-24: \"All your recommendations\" (the goons = Dr. Goon C and Fem-Goon C; options sheet docs/concepts/chapters/leblanc/goons/options.jpg, judge 815314a)",
+  "candidateSource": "D:/Tools/pyrefly-lora/goons/r3/out/dr-C.72324.png (round r3, docs/concepts/chapters/leblanc/goons/README.md)",
+  "scaleNote": "No sidecar scale: research/ffx2-leblanc-syndicate.md gives no goon height, so the engine rule stands (worldHeightFor: a non-boss enemy is 0.7x the boss height), which already makes both goons read smaller than Ormi.",
+  "castNote": "Option A for the goons: no cast painting; the cast pose falls back to the idle.",
+  "game": "FFX-2 only (Chapter VI, Act I)",
+  "sha256": "f01f1e0583d286544491f4aa12381b43866e433c6fdbcf6388271352bd5d23ad",
+  "installedAt": "2026-09-24T04:32:34.125076Z"
+}

@@ -1,0 +1,41 @@
+{
+  "subject": "Kimahri",
+  "mood": "silent stoic resolve, broken horn",
+  "seed": 20261305,
+  "prompt": "1other, kimahri ronso, final fantasy x, safe, solo, anthro, blue lion man, broad furry snout, wide flat feline nose, whiskers, short blue fur, pale white mane, yellow eyes, bare face, simple leather harness on his chest, mount gagazet snowfield behind him, cold grey-blue light, falling snow, soft bokeh background, three-quarter view, looking at viewer, mouth closed, stoic, calm, jaw set, head and shoulders, (a blue lion man with a broad furry snout and whiskers:1.25), (one short broken horn stub:1.25), close-up, face focus, portrait, upper body, expressive, detailed eyes, cinematic lighting, dramatic lighting, depth of field, blurry background, dramatic, official art, cel shading, soft shading, vibrant colors, rim lighting, colorful, detailed, masterpiece, high score, great score, absurdres",
+  "negative": "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, jpeg artifacts, signature, watermark, username, blurry, artist name, multiple views, multiple girls, multiple boys, 2girls, 2boys, full body, wide shot, from afar, feet, legs, chibi, sketch, monochrome, muzzle, muzzle cage, cage over the snout, grille, bridle, strap over the nose, gag, mask, face armor, helmet, two horns, long horn, tall horn, curved horn, intact horn, antlers, horn ornament, gold horn cap, human face, human nose, elf ears, blonde hair, gold ornament, cluttered",
+  "model": "animagine-xl-4.0-opt.safetensors",
+  "steps": 30,
+  "cfg": 6,
+  "sampler": "euler_ancestral",
+  "scheduler": "normal",
+  "composition": "hero",
+  "facing": "none",
+  "emphasis": "(a blue lion man with a broad furry snout and whiskers:1.25), (one short broken horn stub:1.25)",
+  "canvas": {
+    "width": 1344,
+    "height": 768
+  },
+  "ref": "public/art/characters/kimahri/idle.png",
+  "refWeight": 0.55,
+  "refWeightType": "linear",
+  "refScaling": "K+V",
+  "refStart": 0.25,
+  "refEnd": 0.85,
+  "ipadapter": "ip-adapter-plus_sdxl_vit-h.safetensors",
+  "generatedAt": "2026-09-18T17:07:23.255Z",
+  "fixPass": "round 5 (2026-09-18)",
+  "judgeFixes": "Feline Ronso head - broad furry snout, flat feline nose, whiskers, fur, no elf ears (was a blue-tinted human face); one horn only; blue fur with a white mane throughout",
+  "focal": {
+    "x": 0.42,
+    "y": 0.44
+  },
+  "master": {
+    "file": "kimahri.2x.webp",
+    "width": 2688,
+    "height": 1536,
+    "route": "RealESRGAN_x4plus x4 -> lanczos 0.5",
+    "webpQuality": 88,
+    "note": "PNG is this master downscaled to 1344x768; both are one image."
+  }
+}
