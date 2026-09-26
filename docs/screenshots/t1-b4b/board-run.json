@@ -1,0 +1,340 @@
+{
+  "base": "http://127.0.0.1:5970/pyrefly-reprise/",
+  "shapes": {
+    "1600x900": [
+      {
+        "step": "fresh",
+        "selectedId": "seymour-flux"
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-flux",
+        "selectedId": "seymour-flux",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "yunalesca",
+        "selectedId": "yunalesca",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "braskas-final-aeon",
+        "selectedId": "braskas-final-aeon",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "evrae-airship",
+        "selectedId": "evrae-airship",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "yojimbo-cavern",
+        "selectedId": "yojimbo-cavern",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-natus",
+        "selectedId": "seymour-natus",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-omnis",
+        "selectedId": "seymour-omnis",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "isaaru-via-purifico",
+        "selectedId": "isaaru-via-purifico",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-bahamut",
+        "selectedId": "ffx2-bahamut",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-vegnagun-shuyin",
+        "selectedId": "ffx2-vegnagun-shuyin",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-leblanc",
+        "selectedId": "ffx2-leblanc",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-fallen-aeons",
+        "selectedId": "ffx2-fallen-aeons",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-trema",
+        "selectedId": "ffx2-trema",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-den-of-woe",
+        "selectedId": "ffx2-den-of-woe",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "seymour-flux",
+        "outcome": "defeat",
+        "selectedId": "seymour-flux",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "ffx2-leblanc",
+        "outcome": "victory",
+        "selectedId": "ffx2-leblanc",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "isaaru-via-purifico",
+        "outcome": "defeat",
+        "selectedId": "isaaru-via-purifico",
+        "ok": true
+      }
+    ],
+    "2000x1012": [
+      {
+        "step": "fresh",
+        "selectedId": "seymour-flux"
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-flux",
+        "selectedId": "seymour-flux",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "yunalesca",
+        "selectedId": "yunalesca",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "braskas-final-aeon",
+        "selectedId": "braskas-final-aeon",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "evrae-airship",
+        "selectedId": "evrae-airship",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "yojimbo-cavern",
+        "selectedId": "yojimbo-cavern",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-natus",
+        "selectedId": "seymour-natus",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-omnis",
+        "selectedId": "seymour-omnis",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "isaaru-via-purifico",
+        "selectedId": "isaaru-via-purifico",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-bahamut",
+        "selectedId": "ffx2-bahamut",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-vegnagun-shuyin",
+        "selectedId": "ffx2-vegnagun-shuyin",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-leblanc",
+        "selectedId": "ffx2-leblanc",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-fallen-aeons",
+        "selectedId": "ffx2-fallen-aeons",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-trema",
+        "selectedId": "ffx2-trema",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-den-of-woe",
+        "selectedId": "ffx2-den-of-woe",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "seymour-flux",
+        "outcome": "victory",
+        "selectedId": "seymour-flux",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "ffx2-leblanc",
+        "outcome": "victory",
+        "selectedId": "ffx2-leblanc",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "isaaru-via-purifico",
+        "outcome": "victory",
+        "selectedId": "isaaru-via-purifico",
+        "ok": true
+      }
+    ],
+    "390x844": [
+      {
+        "step": "fresh",
+        "selectedId": "seymour-flux"
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-flux",
+        "selectedId": "seymour-flux",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "yunalesca",
+        "selectedId": "yunalesca",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "braskas-final-aeon",
+        "selectedId": "braskas-final-aeon",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "evrae-airship",
+        "selectedId": "evrae-airship",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "yojimbo-cavern",
+        "selectedId": "yojimbo-cavern",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-natus",
+        "selectedId": "seymour-natus",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "seymour-omnis",
+        "selectedId": "seymour-omnis",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "isaaru-via-purifico",
+        "selectedId": "isaaru-via-purifico",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-bahamut",
+        "selectedId": "ffx2-bahamut",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-vegnagun-shuyin",
+        "selectedId": "ffx2-vegnagun-shuyin",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-leblanc",
+        "selectedId": "ffx2-leblanc",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-fallen-aeons",
+        "selectedId": "ffx2-fallen-aeons",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-trema",
+        "selectedId": "ffx2-trema",
+        "ok": true
+      },
+      {
+        "step": "prep-esc",
+        "chapter": "ffx2-den-of-woe",
+        "selectedId": "ffx2-den-of-woe",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "seymour-flux",
+        "outcome": "defeat",
+        "selectedId": "seymour-flux",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "ffx2-leblanc",
+        "outcome": "defeat",
+        "selectedId": "ffx2-leblanc",
+        "ok": true
+      },
+      {
+        "step": "results-return",
+        "chapter": "isaaru-via-purifico",
+        "outcome": "defeat",
+        "selectedId": "isaaru-via-purifico",
+        "ok": true
+      }
+    ]
+  },
+  "consoleErrors": [],
+  "notFound": []
+}

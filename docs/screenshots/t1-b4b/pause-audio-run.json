@@ -1,0 +1,86 @@
+{
+  "which": "pause-audio",
+  "base": "http://127.0.0.1:5970/pyrefly-reprise/",
+  "runs": [
+    {
+      "label": "ch1-pre-scene",
+      "before": {
+        "ready": true,
+        "playing": null,
+        "current": null
+      },
+      "paused": {
+        "ready": true,
+        "playing": "pause",
+        "current": {
+          "name": "pause",
+          "gain": 1
+        }
+      },
+      "resumed": {
+        "ready": true,
+        "playing": null,
+        "current": null
+      },
+      "screen": "cutscene",
+      "errors": []
+    },
+    {
+      "label": "ch1-battle",
+      "before": {
+        "ready": true,
+        "playing": "boss-seymour",
+        "current": {
+          "name": "boss-seymour",
+          "gain": 1
+        }
+      },
+      "paused": {
+        "ready": true,
+        "playing": "pause",
+        "current": {
+          "name": "pause",
+          "gain": 1
+        }
+      },
+      "resumed": {
+        "ready": true,
+        "playing": "boss-seymour",
+        "current": {
+          "name": "boss-seymour",
+          "gain": 1
+        }
+      },
+      "errors": []
+    },
+    {
+      "label": "ch5-pre-scene",
+      "before": {
+        "ready": true,
+        "playing": "scene-farplane",
+        "current": {
+          "name": "scene-farplane",
+          "gain": 1
+        }
+      },
+      "paused": {
+        "ready": true,
+        "playing": "pause",
+        "current": {
+          "name": "pause",
+          "gain": 1
+        }
+      },
+      "resumed": {
+        "ready": true,
+        "playing": "scene-farplane",
+        "current": {
+          "name": "scene-farplane",
+          "gain": 1
+        }
+      },
+      "screen": "cutscene",
+      "errors": []
+    }
+  ]
+}
