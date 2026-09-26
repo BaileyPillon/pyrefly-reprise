@@ -18,13 +18,14 @@
  * HP carried between the shades (§2, 2 sources). Carrying statuses and the dressphere too is our
  * reading of "no break" (GP3 a, `[derived]`), and the guide says only what the build does.
  *
- * The chapter preset has no Dark Matter or Hero Drink (GP6 a), so Yuna (2,488 max HP) cannot
- * outlast Lightfall: the guide says so and names the Phoenix Down (plan R3).
- *
- * Two options for Bailey reach this guide, both OFF (`docs/plans/den-of-woe-options-2026-09-25.md`):
- * {@link DEN_OF_WOE_LIGHTFALL_PREP} (M1: drop the prep's two hints) and GP6 b's Hero Drinks (a
- * drink hint on Nooj, and the Lightfall rule names Invincible). {@link denOfWoeGuide} builds any mix;
- * at the shipped switches it is the guide as the ship layer wrote it.
+ * **Bailey's pick, 2026-09-26** ("I pick your recommendation for Den of Woe" = "Den: both, drop the
+ * prep", `docs/plans/den-of-woe-options-2026-09-25.md`): the bag carries 3 Hero Drinks `[estimate]`
+ * and the girls are 8 levels up `[estimate]` (`../ffx2/builds/den-of-woe.ts`). Against Lightfall the
+ * guide teaches **Invincible**, the sources' answer (§5: the wiki and GamerGuides reach it with an
+ * Alchemist's Dark Matter mix); the preset has no Alchemist, so a Hero Drink gives it, one girl at a
+ * time. The Lightfall prep (§5's "more than 5,000 HP on the Dark Knights") is **dropped**
+ * ({@link DEN_OF_WOE_LIGHTFALL_PREP} false): the Dark Knights stay on Darkness to the end.
+ * {@link denOfWoeGuide} still builds any mix (the options bench reads the others).
  *
  * The Wait split's habit line leads the RULES under Wait (`./ffx2-wait-habit.ts`, decision sheet
  * 2026-09-25 item 3 with D-136's wording), as main ships it for the FFX-2 guides.
@@ -35,13 +36,14 @@ import { WAIT_SPLIT_HABIT_RULE } from './ffx2-wait-habit.ts';
 import { DEN_OF_WOE_HERO_DRINKS } from '../ffx2/builds/den-of-woe.ts';
 
 /**
- * **M1 of the ship check, OFF: the Lightfall prep.** `true` is the sources' advice as shipped (§5:
- * more than 5,000 HP on the Dark Knights when Lightfall comes; the Curaga and plain-swing hints on
- * Nooj, and the tactic plays it). The bench measures it as worse than no prep on the Chapter V kit
- * and better with GP5 b and GP6 b both on (`docs/plans/den-of-woe-options-2026-09-25.md`). `false`
- * drops the two hints and the tactic keeps to Darkness. Change only on Bailey's word.
+ * **M1 of the ship check: the Lightfall prep, DROPPED.** `false` is Bailey's pick, 2026-09-26 ("I pick
+ * your recommendation for Den of Woe" = "Den: both, drop the prep"): no Curaga or plain-swing hint on
+ * Nooj, and the tactic keeps the Dark Knights on Darkness. `true` would be the sources' advice (§5:
+ * more than 5,000 HP on the Dark Knights when Lightfall comes), which the options bench measures as
+ * costing or tying wins for most players (`docs/plans/den-of-woe-options-2026-09-25.md`, the speed
+ * table). Change only on Bailey's word.
  */
-export const DEN_OF_WOE_LIGHTFALL_PREP: boolean = true;
+export const DEN_OF_WOE_LIGHTFALL_PREP: boolean = false;
 
 /** What the guide says depends on: the prep switch and the Hero Drinks in the bag (GP6). */
 export interface DenOfWoeGuideOptions {
@@ -80,9 +82,14 @@ const LIGHTFALL_RULE: GuideRule = {
   cite: 'ffx2-gippal-den-of-woe §4.3, §5',
 };
 
-/** GP6 b: with Hero Drinks in the bag, Invincible is the answer the sources give (§5). */
+/**
+ * GP6 b: with Hero Drinks in the bag, Invincible is the answer the sources give (§5, reached there with
+ * an Alchemist's Dark Matter; here a Hero Drink, as the preset has no Alchemist).
+ */
 const LIGHTFALL_RULE_HERO: GuideRule = {
-  text: 'Near the end Nooj calls down Lightfall, 5,000 to everyone, once. Only Invincible saves Yuna: a Hero Drink just before it.',
+  text:
+    'Near the end Nooj calls down Lightfall, 5,000 to everyone, once. Invincible is the answer: a Hero Drink just before it, ' +
+    'for Yuna and for a Dark Knight at 5,000 HP or less.',
   short: 'Nooj: Lightfall, 5,000 to all, once',
   cite: 'ffx2-gippal-den-of-woe §4.3, §5',
 };
@@ -174,8 +181,8 @@ const PHASES: GuidePhase[] = [
 ];
 
 /**
- * Chapter XV's guide for a set of options. With the shipped switches (prep on, no Hero Drinks) it
- * is the guide as the ship layer wrote it, hint for hint and in the same order.
+ * Chapter XV's guide for a set of options. With the prep on and no Hero Drinks it is the guide as the
+ * ship layer first wrote it, hint for hint and in the same order; Bailey's pick is no prep, 3 drinks.
  */
 export function denOfWoeGuide(o: DenOfWoeGuideOptions): ChapterGuide {
   const hints = [...HINTS];
@@ -198,7 +205,7 @@ export function denOfWoeGuide(o: DenOfWoeGuideOptions): ChapterGuide {
   };
 }
 
-/** Chapter XV's guide, from the switches (today: the prep on, no Hero Drinks). */
+/** Chapter XV's guide, from the switches (Bailey's pick, 2026-09-26: no prep, 3 Hero Drinks). */
 export const FFX2_DEN_OF_WOE_GUIDE: ChapterGuide = denOfWoeGuide({
   lightfallPrep: DEN_OF_WOE_LIGHTFALL_PREP,
   heroDrinks: DEN_OF_WOE_HERO_DRINKS,

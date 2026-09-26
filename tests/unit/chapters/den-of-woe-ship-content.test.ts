@@ -1,7 +1,9 @@
 /**
  * Chapter XV (the Den of Woe) ship layer: the pause card, the guide, the tactic, the departures and
  * the shades' paintings. The tactic is proved by **running the engine** with it (AGENTS.md rule 3):
- * it is the bench's intended line written as a tactic, so it must win about as often as that line.
+ * it is the bench's line written as a tactic, so it must win about as often as that line. As shipped
+ * (Bailey's pick, 2026-09-26) that is the line without the Lightfall prep, with the Hero Drink, on the
+ * shipped kit (3 Hero Drinks, +8 levels, both `[estimate]`).
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14].
  */
@@ -12,7 +14,6 @@ import { describe, expect, it } from 'vitest';
 import type { AvailableCommand, BattleSetup, BattleState, Command, Decision } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
-import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
 import { DEN_BARALAI, DEN_GIPPAL, DEN_NOOJ, shadeBaralai, shadeGippal, shadeNooj } from '../../../src/data/ffx2/enemies/den-of-woe.ts';
 import { CHAPTER_META, UNLISTED_CHAPTER_META, getChapterMeta } from '../../../src/data/chapter-meta.ts';
 import { DEN_OF_WOE_META } from '../../../src/data/chapter-meta-den-of-woe.ts';
@@ -27,9 +28,15 @@ import { guideForState } from '../../../src/engine/tactics/guide.ts';
 import { CHAPTER_GAME, guideTitle } from '../../../src/engine/tactics/lookup.ts';
 import { departureKindOf } from '../../../src/engine/BattlePresenterDepartures.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
-import { LINES, driveLink } from '../helpers/denOfWoeDrive.ts';
+import { LINES, driveLink, type LineOptions } from '../helpers/denOfWoeDrive.ts';
+import { DEN_OF_WOE_LIGHTFALL_PREP } from '../../../src/data/guides/ffx2-den-of-woe.ts';
+import { DEN_OF_WOE_HERO_DRINKS } from '../../../src/data/ffx2/builds/den-of-woe.ts';
+import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 
 const art = (p: string): boolean => existsSync(resolve('public/art', p));
+/** The shipped kit and the bench line the shipped switches name (Bailey's pick: no prep, the Hero Drink). */
+const SHIPPED_KIT = FFX2_DEN_OF_WOE_SHIPPED.buildRef as FFX2PartyBuild;
+const SHIPPED_LINE: LineOptions = { ...(DEN_OF_WOE_LIGHTFALL_PREP ? LINES.intended : LINES.noPrep), heroDrink: DEN_OF_WOE_HERO_DRINKS > 0 };
 
 describe('the pause card', () => {
   it('is registered unlisted, numbered XV, with the installed hero plate B', () => {
@@ -136,7 +143,7 @@ function fallback(d: Input): Command {
 function tacticLink(linkId: string, seed: number): { outcome: string | undefined; picks: number; explained: number } {
   const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait' }));
   const setup: BattleSetup = {
-    game: 'ffx2', party: farplaneBuild, enemies: data.ENEMY_GROUPS_BY_ID[linkId]!, triggers: [], seed, condition: 'normal', canEscape: false,
+    game: 'ffx2', party: SHIPPED_KIT, enemies: data.ENEMY_GROUPS_BY_ID[linkId]!, triggers: [], seed, condition: 'normal', canEscape: false,
   };
   engine.setSeed(seed);
   engine.init(setup);
@@ -167,7 +174,7 @@ describe('the tactic, by running the engine (bench speed, 20 seeds a link)', () 
   const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
   const cases = [DEN_BARALAI, DEN_GIPPAL, DEN_NOOJ] as const;
 
-  it.each(cases)('%s: wins about as often as the intended line, and every pick is one the guide explains', (link) => {
+  it.each(cases)('%s: wins about as often as the shipped line, and every pick is one the guide explains', (link) => {
     let tactic = 0;
     let bench = 0;
     let picks = 0;
@@ -177,9 +184,9 @@ describe('the tactic, by running the engine (bench speed, 20 seeds a link)', () 
       if (run.outcome === 'victory') tactic++;
       picks += run.picks;
       explained += run.explained;
-      if (driveLink(link, LINES.intended, seed).outcome === 'victory') bench++;
+      if (driveLink(link, SHIPPED_LINE, seed, { party: SHIPPED_KIT }).outcome === 'victory') bench++;
     }
-    console.info(`[den tactic] ${link}: tactic ${tactic}/${SEEDS.length}, intended line ${bench}/${SEEDS.length}; ${explained}/${picks} picks explained`);
+    console.info(`[den tactic] ${link}: tactic ${tactic}/${SEEDS.length}, shipped line ${bench}/${SEEDS.length}; ${explained}/${picks} picks explained`);
     expect(picks).toBeGreaterThan(0);
     expect(explained).toBe(picks);
     expect(Math.abs(tactic - bench)).toBeLessThanOrEqual(5);

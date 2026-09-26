@@ -45,9 +45,10 @@ export interface LineOptions {
   /** A Dark Knight throws a Phoenix Down (a Mega Phoenix for two) when the healer is down. */
   dkRevive: boolean;
   /**
-   * What-if only (GP6 b, not shipped): a girl who would not survive Lightfall drinks a Hero Drink
-   * (Invincible, 10.6 s) once Nooj is at 4,500 HP or less and Lightfall is still to come. The bag
-   * must carry them ({@link withHeroDrinks}); the Chapter V bag has none.
+   * GP6 b (shipped since Bailey's pick of 2026-09-26): a girl who would not survive Lightfall drinks a
+   * Hero Drink (Invincible, 10.6 s) once Nooj is at 4,500 HP or less and Lightfall is still to come.
+   * The bag must carry them ({@link withHeroDrinks}, or the shipped `denOfWoeKit`); the Chapter V bag
+   * alone has none.
    */
   heroDrink?: boolean;
   /** Nooj's HP at or below which a girl drinks (default 4,500, the first what-if's window). Our line, not game data. */
@@ -272,7 +273,7 @@ export interface DriveOptions {
   engine?: Partial<Ffx2EngineOptions>;
   /** Look at the engine once a link has ended (a test reads the log). */
   inspect?: (engine: FFX2Engine) => void;
-  /** The party (default: the Chapter V preset, GP5 a). A what-if bench passes another. */
+  /** The party (default: the Chapter V preset alone, GP5 a / GP6 a; the shipped kit is `denOfWoeKit`). */
   party?: FFX2PartyBuild;
   /** Look at the engine as a link opens (the Den only). */
   start?: (engine: FFX2Engine) => void;

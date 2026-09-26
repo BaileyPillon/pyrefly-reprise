@@ -23,7 +23,7 @@ import {
   shadeGippal,
   shadeNooj,
 } from '../../../src/data/ffx2/enemies/den-of-woe.ts';
-import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
+import { denOfWoeKit } from '../../../src/data/ffx2/builds/den-of-woe.ts';
 import { CHAPTERS, CHAPTER_IDS, getChapter } from '../../../src/data/encounters.ts';
 import { ability, ctxFor, girlsAt } from '../helpers/fallenAeonsUnits.ts';
 import { INFINITE_STATUSES, advanceStatuses, durationToTicks } from '../../../src/battle/ffx2/statuses.ts';
@@ -268,7 +268,7 @@ describe('registration: registered, reachable, unlisted', () => {
     expect(ch?.number).toBe(15);
     expect(ch?.title).toBe('The Den of Woe');
     expect(ch?.location).toBe('Den of Woe — under Mushroom Rock Road');
-    expect(ch?.buildRef).toBe(farplaneBuild);
+    expect(ch?.buildRef).toBe(denOfWoeKit); // Bailey's pick 2026-09-26: the preset + 3 Hero Drinks + 8 levels
     expect(ch?.enemyGroupRef.id).toBe(DEN_BARALAI);
     expect(CHAPTER_IDS).not.toContain('ffx2-den-of-woe');
     expect(CHAPTERS.some((c) => c.id === 'ffx2-den-of-woe')).toBe(false);

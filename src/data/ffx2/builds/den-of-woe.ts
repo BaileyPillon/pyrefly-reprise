@@ -1,13 +1,16 @@
 /**
- * Chapter XV (the Den of Woe): the party it fights with, and **two options for Bailey, built and
- * OFF** (`docs/plans/den-of-woe-options-2026-09-25.md`).
+ * Chapter XV (the Den of Woe): the party it fights with, **the Chapter V preset with both kit
+ * options ON** (`docs/plans/den-of-woe-options-2026-09-25.md`, "Bailey's pick, 2026-09-26").
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]: the Chapter V preset, FFX-2 items.
  *
- * Bailey picked **GP5 a** and **GP6 a** (`docs/plans/chapter-gippal-review.md`, D-148): the Chapter V
- * preset and bag as they stand (`./farplane.ts`). With both switches at 0 the kit **is**
- * `farplaneBuild`, the same object, so the chapter is unchanged. The numbers behind each option are
- * `docs/plans/den-of-woe-bench.md`; never flip one without Bailey's word.
+ * Bailey first picked GP5 a and GP6 a (`docs/plans/chapter-gippal-review.md`, D-148): the Chapter V
+ * preset and bag as they stand (`./farplane.ts`). The ship check measured that no human wins the Den
+ * that way (0 of 200 first tries), and on **2026-09-26** Bailey picked the options sheet's
+ * recommendation, "Den: both, drop the prep" ("I pick your recommendation for Den of Woe"): GP6 b and
+ * GP5 b below, both ON; the Lightfall prep dropped (`../../guides/ffx2-den-of-woe.ts`); the retry
+ * from Baralai kept (`../enemies/den-of-woe.ts`). `farplaneBuild` itself is untouched: the kit is a
+ * copy with the two options laid on. The numbers are in the sheet and `docs/plans/den-of-woe-bench.md`.
  *
  * - **GP6 b, Hero Drinks** ({@link DEN_OF_WOE_HERO_DRINKS}): Invincible through Lightfall is the
  *   sources' answer to it (research `ffx2-gippal-den-of-woe.md` §5, wiki and GamerGuides, who reach
@@ -28,16 +31,18 @@ export const DEN_OF_WOE_HERO_DRINKS_OPTION = 3;
 export const DEN_OF_WOE_LEVEL_BONUS_OPTION = 8;
 
 /**
- * **GP6, OFF: Hero Drinks in the bag.** `0` is Bailey's pick (GP6 a). Option b is
- * {@link DEN_OF_WOE_HERO_DRINKS_OPTION}. Change only on Bailey's word.
+ * **GP6 b, ON: 3 Hero Drinks in the bag** `[estimate]` (the count; no source gives a bag for the Den).
+ * Bailey's pick, 2026-09-26 ("I pick your recommendation for Den of Woe" = "Den: both, drop the
+ * prep"). `0` would be GP6 a, the Chapter V bag alone. Change only on Bailey's word.
  */
-export const DEN_OF_WOE_HERO_DRINKS: number = 0;
+export const DEN_OF_WOE_HERO_DRINKS: number = DEN_OF_WOE_HERO_DRINKS_OPTION;
 
 /**
- * **GP5, OFF: levels added to each girl.** `0` is Bailey's pick (GP5 a). Option b is
- * {@link DEN_OF_WOE_LEVEL_BONUS_OPTION}. Change only on Bailey's word.
+ * **GP5 b, ON: 8 levels added to each girl, 54 / 56 / 58** `[estimate]`, in Bailey's name (no source
+ * gives a player level for the Den, research §5, G-12). Bailey's pick, 2026-09-26, with GP6 b above.
+ * `0` would be GP5 a, the preset's 46 / 48 / 50. Change only on Bailey's word.
  */
-export const DEN_OF_WOE_LEVEL_BONUS: number = 0;
+export const DEN_OF_WOE_LEVEL_BONUS: number = DEN_OF_WOE_LEVEL_BONUS_OPTION;
 
 /** `party` with `count` Hero Drinks added to its bag (GP6 b as numbers). */
 export function withHeroDrinks(party: FFX2PartyBuild, count: number): FFX2PartyBuild {
@@ -57,5 +62,5 @@ export function denOfWoeBuild(heroDrinks: number, levelBonus: number): FFX2Party
   return party;
 }
 
-/** The kit Chapter XV ships with, from the two switches (today: `farplaneBuild`). */
+/** The kit Chapter XV ships with, from the two switches (Bailey's pick: 3 Hero Drinks, +8 levels). */
 export const denOfWoeKit: FFX2PartyBuild = denOfWoeBuild(DEN_OF_WOE_HERO_DRINKS, DEN_OF_WOE_LEVEL_BONUS);

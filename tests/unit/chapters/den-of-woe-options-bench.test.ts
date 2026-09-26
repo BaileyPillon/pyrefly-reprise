@@ -1,12 +1,14 @@
 /**
  * Chapter XV — the options for Bailey, measured (`docs/plans/den-of-woe-options-2026-09-25.md`).
  * **FFX-2 only.** Measure, never tune: every row is a sourced player-side option or one of our own
- * lines; no boss number changes. The options are built OFF (`den-of-woe-options.test.ts`), so each
- * row passes the option in as numbers, exactly as the switch would.
+ * lines; no boss number changes. Each row passes the option in as numbers, exactly as the switch
+ * would, so the table stays the same after Bailey's pick of 2026-09-26 ("Den: both, drop the prep":
+ * the "both, no prep" row is the chapter as shipped, `den-of-woe-shipped-bench.test.ts`).
  *
- * - **Kit:** the Chapter V preset (GP5 a, GP6 a, shipped), + 3 Hero Drinks (GP6 b), + 8 levels
- *   (GP5 b), or both. The count and the raise are `[estimate]`s.
- * - **Line:** the intended line with the Lightfall prep (the guide as shipped) or without it (M1).
+ * - **Kit:** the Chapter V preset (GP5 a, GP6 a), + 3 Hero Drinks (GP6 b), + 8 levels (GP5 b), or
+ *   both (shipped since 2026-09-26). The count and the raise are `[estimate]`s.
+ * - **Line:** the intended line with the Lightfall prep (the sources' advice) or without it (M1,
+ *   shipped since 2026-09-26).
  * - **Speed:** human, Wait split (the live default: 1.5 s a menu, 0.5 s of it on the top list),
  *   200 seeds; bench speed (D = 0) and Active at 1.5 s for reference.
  * - **Retries (GP4):** a player who tries again, up to 10 times: from Baralai (GP4 a, as built) or
@@ -32,10 +34,10 @@ const split: DriveOptions = { decisionMs: 1500, topMs: 500, engine: { atbMode: '
 const active: DriveOptions = { decisionMs: 1500, engine: { atbMode: 'active' } };
 
 const KITS: Array<[string, FFX2PartyBuild]> = [
-  ['Chapter V kit (shipped)', denOfWoeBuild(0, 0)],
+  ['Chapter V kit', denOfWoeBuild(0, 0)],
   ['+ 3 Hero Drinks (GP6 b)', denOfWoeBuild(DEN_OF_WOE_HERO_DRINKS_OPTION, 0)],
   ['+ 8 levels (GP5 b)', denOfWoeBuild(0, DEN_OF_WOE_LEVEL_BONUS_OPTION)],
-  ['both (GP5 b + GP6 b)', denOfWoeBuild(DEN_OF_WOE_HERO_DRINKS_OPTION, DEN_OF_WOE_LEVEL_BONUS_OPTION)],
+  ['both (GP5 b + GP6 b, shipped)', denOfWoeBuild(DEN_OF_WOE_HERO_DRINKS_OPTION, DEN_OF_WOE_LEVEL_BONUS_OPTION)],
 ];
 
 function lineFor(prep: boolean, party: FFX2PartyBuild): LineOptions {
@@ -147,8 +149,9 @@ describe.skipIf(!MEASURE)('Chapter XV, the Lightfall prep across human speeds (P
     // Under both kit options, no prep wins the first try at 1.0 s and 2.5 s ...
     expect(f(1000, 3, false)).toBeGreaterThan(f(1000, 3, true));
     expect(f(2500, 3, false)).toBeGreaterThan(f(2500, 3, true));
-    // ... and within five tries at the sheet's 1.5 s, where the prep's only first-try lead sits.
-    expect(five.get('1500|false')!).toBeGreaterThanOrEqual(five.get('1500|true')!);
+    // ... and within five tries (from Baralai) at every speed, the 1.5 s point included, where the
+    // prep's only first-try lead sits (the re-check's minor 4: 1.0 s and 2.5 s asserted too).
+    for (const [ms] of SPEEDS) expect(five.get(`${ms}|false`)!, `${ms} within 5`).toBeGreaterThanOrEqual(five.get(`${ms}|true`)!);
     // 'Both' stays the best kit at every speed, with either line.
     for (const [ms] of SPEEDS) {
       const best = Math.max(f(ms, 3, true), f(ms, 3, false));

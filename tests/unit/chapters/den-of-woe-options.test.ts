@@ -1,12 +1,13 @@
 /**
- * Chapter XV — the four options for Bailey are built and **OFF**
- * (`docs/plans/den-of-woe-options-2026-09-25.md`). **FFX-2 only.**
+ * Chapter XV — the four options of `docs/plans/den-of-woe-options-2026-09-25.md`, at **Bailey's pick
+ * of 2026-09-26** ("I pick your recommendation for Den of Woe" = "Den: both, drop the prep").
+ * **FFX-2 only.**
  *
- * With every switch at Bailey's pick the chapter is the ship layer's chapter: the Chapter V kit
- * itself, no retry checkpoint, the guide and tactic with the Lightfall prep. Each option, turned
- * on through its factory, does what the sheet says, and the tactic it gives is proved by running
- * the engine (AGENTS.md rule 3): it plays the bench's line for that option, and the guide it goes
- * with explains every pick.
+ * As shipped: 3 Hero Drinks in the bag and +8 levels (both `[estimate]`), no Lightfall prep in the
+ * guide or tactic (the Dark Knights stay on Darkness), and no retry checkpoint (a loss retries from
+ * Baralai, as the game does). Each option, turned on through its factory, does what the sheet says,
+ * and the tactic it gives is proved by running the engine (AGENTS.md rule 3): it plays the bench's
+ * line for that option, and the guide it goes with explains every pick.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -25,6 +26,7 @@ import { DEN_OF_WOE_LIGHTFALL_PREP, FFX2_DEN_OF_WOE_GUIDE, denOfWoeGuide } from 
 import type { ChapterGuide } from '../../../src/data/guides/types.ts';
 import { FFX2_DEN_OF_WOE } from '../../../src/data/chapter-ffx2-den-of-woe.ts';
 import { FFX2_DEN_OF_WOE_SHIPPED } from '../../../src/data/chapter-den-of-woe-ship.ts';
+import { DEN_OF_WOE_META } from '../../../src/data/chapter-meta-den-of-woe.ts';
 import { checkpointAt } from '../../../src/app/screens/BattleChainCheckpoint.ts';
 import { makeDenOfWoeTactic, ffx2DenOfWoe } from '../../../src/engine/tactics/ffx2-den-of-woe.ts';
 import type { Tactic } from '../../../src/engine/tactics/common.ts';
@@ -35,14 +37,19 @@ const setupOf = (party: FFX2PartyBuild, linkId: string, seed = 1): BattleSetup =
   game: 'ffx2', party, enemies: data.ENEMY_GROUPS_BY_ID[linkId]!, triggers: [], seed, condition: 'normal', canEscape: false,
 });
 
-describe("every switch is at Bailey's pick", () => {
-  it('GP5 a and GP6 a: the chapter fights with the Chapter V kit itself', () => {
-    expect(DEN_OF_WOE_HERO_DRINKS).toBe(0);
-    expect(DEN_OF_WOE_LEVEL_BONUS).toBe(0);
-    expect(denOfWoeKit).toBe(farplaneBuild);
-    expect(FFX2_DEN_OF_WOE.buildRef).toBe(farplaneBuild);
-    expect(FFX2_DEN_OF_WOE_SHIPPED.buildRef).toBe(farplaneBuild);
+describe("every switch is at Bailey's pick of 2026-09-26 (\"Den: both, drop the prep\")", () => {
+  it('GP6 b and GP5 b: the chapter fights with 3 Hero Drinks and 54 / 56 / 58; the preset is untouched', () => {
+    expect(DEN_OF_WOE_HERO_DRINKS).toBe(3);
+    expect(DEN_OF_WOE_LEVEL_BONUS).toBe(8);
+    expect(denOfWoeKit).not.toBe(farplaneBuild);
+    expect(FFX2_DEN_OF_WOE.buildRef).toBe(denOfWoeKit);
+    expect(FFX2_DEN_OF_WOE_SHIPPED.buildRef).toBe(denOfWoeKit);
+    expect(denOfWoeKit.members.map((m) => [m.id, m.level])).toEqual([['yuna', 54], ['rikku', 56], ['paine', 58]]);
+    expect(denOfWoeKit.inventory.filter((i) => i.itemId === 'x2-hero-drink')).toEqual([{ itemId: 'x2-hero-drink', count: 3 }]);
+    // The rest of the bag is the Chapter V bag, item for item, in the same order.
+    expect(denOfWoeKit.inventory.slice(0, -1)).toEqual(farplaneBuild.inventory);
     expect(farplaneBuild.inventory.some((i) => i.itemId === 'x2-hero-drink')).toBe(false);
+    expect(farplaneBuild.members.map((m) => m.level)).toEqual([46, 48, 50]);
   });
 
   it('GP4 (built as a): no link is a retry checkpoint, so a loss retries from Baralai', () => {
@@ -54,13 +61,20 @@ describe("every switch is at Bailey's pick", () => {
     }
   });
 
-  it('M1 (off): the guide and tactic keep the Lightfall prep; no Hero Drink hint', () => {
-    expect(DEN_OF_WOE_LIGHTFALL_PREP).toBe(true);
+  it('M1 (prep dropped): no Lightfall prep hint; the guide teaches the Hero Drink and Invincible', () => {
+    expect(DEN_OF_WOE_LIGHTFALL_PREP).toBe(false);
+    expect(FFX2_DEN_OF_WOE_GUIDE).toEqual(denOfWoeGuide({ lightfallPrep: false, heroDrinks: 3 }));
     const labels = FFX2_DEN_OF_WOE_GUIDE.hints.map((h) => `${(h.when.labels ?? h.when.kinds ?? []).join('/')}@${h.when.bossId ?? ''}`);
-    expect(labels).toContain('Curaga@shade-nooj');
-    expect(labels).toContain('attack@shade-nooj');
-    expect(labels.some((l) => l.startsWith('Hero Drink'))).toBe(false);
-    expect(FFX2_DEN_OF_WOE_GUIDE.rules.at(-1)!.text).toContain('Phoenix Down');
+    expect(labels).not.toContain('Curaga@shade-nooj');
+    expect(labels).not.toContain('attack@shade-nooj');
+    expect(labels).toContain('Hero Drink@shade-nooj');
+    const all = [...FFX2_DEN_OF_WOE_GUIDE.rules.map((r) => r.text), ...FFX2_DEN_OF_WOE_GUIDE.hints.map((h) => h.text)].join(' ');
+    expect(all).not.toMatch(/above 5,000|plain swing|Phoenix Down ready/);
+    expect(FFX2_DEN_OF_WOE_GUIDE.rules.at(-1)!.text).toMatch(/Invincible.*Hero Drink/);
+    // The pause and prep tip teaches the same line.
+    expect(DEN_OF_WOE_META.tip).toContain('Hero Drink');
+    expect(DEN_OF_WOE_META.tip).toContain('Invincible');
+    expect(DEN_OF_WOE_META.tip).not.toMatch(/Phoenix Down|5,000 HP/);
   });
 });
 
@@ -146,10 +160,13 @@ function compare(o: { prep: boolean; drinks: number }, linkId: string): { tactic
 }
 
 describe('the option tactics, by running the engine (bench speed, 20 seeds)', () => {
-  it('the shipped tactic is the factory at the switch', () => {
-    const a = SEEDS.slice(0, 5).map((s) => tacticLink(ffx2DenOfWoe, FFX2_DEN_OF_WOE_GUIDE, farplaneBuild, DEN_NOOJ, s));
-    const b = SEEDS.slice(0, 5).map((s) => tacticLink(makeDenOfWoeTactic({ lightfallPrep: true }), FFX2_DEN_OF_WOE_GUIDE, farplaneBuild, DEN_NOOJ, s));
+  it('the shipped tactic is the factory at the switch (no prep), and on the shipped kit it drinks, never swings', () => {
+    const a = SEEDS.slice(0, 5).map((s) => tacticLink(ffx2DenOfWoe, FFX2_DEN_OF_WOE_GUIDE, denOfWoeKit, DEN_NOOJ, s));
+    const b = SEEDS.slice(0, 5).map((s) => tacticLink(makeDenOfWoeTactic({ lightfallPrep: false }), FFX2_DEN_OF_WOE_GUIDE, denOfWoeKit, DEN_NOOJ, s));
     expect(a).toEqual(b);
+    expect(a.reduce((n, r) => n + r.drinks, 0)).toBeGreaterThan(0);
+    expect(a.reduce((n, r) => n + r.noojSwings, 0)).toBe(0);
+    expect(a.reduce((n, r) => n + r.explained, 0)).toBe(a.reduce((n, r) => n + r.picks, 0));
   }, 120_000);
 
   it.each([
@@ -167,9 +184,9 @@ describe('the option tactics, by running the engine (bench speed, 20 seeds)', ()
     if (!o.prep) expect(tactic.reduce((n, r) => n + r.noojSwings, 0)).toBe(0);
   }, 180_000);
 
-  it('M1: without the prep, Baralai is fought exactly as shipped (the prep is Nooj only)', () => {
-    const a = SEEDS.slice(0, 5).map((s) => tacticLink(ffx2DenOfWoe, FFX2_DEN_OF_WOE_GUIDE, farplaneBuild, DEN_BARALAI, s));
-    const b = SEEDS.slice(0, 5).map((s) => tacticLink(makeDenOfWoeTactic({ lightfallPrep: false }), FFX2_DEN_OF_WOE_GUIDE, farplaneBuild, DEN_BARALAI, s));
+  it('M1: with or without the prep, Baralai is fought the same (the prep is Nooj only)', () => {
+    const a = SEEDS.slice(0, 5).map((s) => tacticLink(makeDenOfWoeTactic({ lightfallPrep: true }), FFX2_DEN_OF_WOE_GUIDE, farplaneBuild, DEN_BARALAI, s));
+    const b = SEEDS.slice(0, 5).map((s) => tacticLink(ffx2DenOfWoe, FFX2_DEN_OF_WOE_GUIDE, farplaneBuild, DEN_BARALAI, s));
     expect(b.map((r) => r.outcome)).toEqual(a.map((r) => r.outcome));
     expect(b.map((r) => r.picks)).toEqual(a.map((r) => r.picks));
   }, 120_000);

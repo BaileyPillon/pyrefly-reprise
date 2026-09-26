@@ -28,8 +28,9 @@
  * - `buildRef: denOfWoeKit` (= `farplaneBuild` while GP5 b and GP6 b are off) — **GP5 a / GP6 a** (picked): the Chapter V preset and
  *   bag as they stand, Yuna White Mage (Lv 46), Rikku and Paine Dark Knight (Lv 48,
  *   50) `[estimate]` levels; the two Dark Knights on Darkness plus a healer is the
- *   sourced line `[verified: 4 sources]`. No Dark Matter or Hero Drink: Yuna's answer
- *   to Lightfall is a Phoenix Down, disclosed in the guide when it is written.
+ *   sourced line `[verified: 4 sources]`. Bailey's pick of 2026-09-26 adds 3 Hero Drinks and 8
+ *   levels (both `[estimate]`, `./ffx2/builds/den-of-woe.ts`): Invincible from a Hero Drink is
+ *   the answer to Lightfall, and the guide teaches it.
  * - `sceneKey: 'bevelle-underground'` — **placeholder**: the approved FFX-2
  *   underground diorama, the nearest to a cave, until the Den scene (plan track T5,
  *   after the O-3 pick A, cold blue pyreflies) is built.
@@ -51,11 +52,12 @@ import { denOfWoeKit } from './ffx2/builds/den-of-woe.ts';
 import { denBaralaiGroup } from './ffx2/enemies/den-of-woe.ts';
 
 /**
- * **The options of `docs/plans/den-of-woe-options-2026-09-25.md`, built and OFF**, gathered here
- * (each lives beside what it changes). Every one is at Bailey's pick; with all four as they are the
- * chapter is unchanged (`tests/unit/chapters/den-of-woe-options.test.ts`). Each needs Bailey's word:
- * GP6 b `DEN_OF_WOE_HERO_DRINKS` and GP5 b `DEN_OF_WOE_LEVEL_BONUS` (the kit), GP4 b
- * `DEN_OF_WOE_RETRY_FROM_LINK` (the formations), M1 `DEN_OF_WOE_LIGHTFALL_PREP` (the guide and tactic).
+ * **The options of `docs/plans/den-of-woe-options-2026-09-25.md`**, gathered here (each lives beside
+ * what it changes), set to **Bailey's pick of 2026-09-26** ("I pick your recommendation for Den of
+ * Woe" = "Den: both, drop the prep"): GP6 b `DEN_OF_WOE_HERO_DRINKS` = 3 and GP5 b
+ * `DEN_OF_WOE_LEVEL_BONUS` = 8 (the kit, both `[estimate]`), M1 `DEN_OF_WOE_LIGHTFALL_PREP` = false
+ * (the guide and tactic), and GP4 b `DEN_OF_WOE_RETRY_FROM_LINK` = false (not picked: a loss retries
+ * from Baralai, as the game does). Pinned by `tests/unit/chapters/den-of-woe-options.test.ts`.
  */
 export { DEN_OF_WOE_HERO_DRINKS, DEN_OF_WOE_LEVEL_BONUS } from './ffx2/builds/den-of-woe.ts';
 export { DEN_OF_WOE_RETRY_FROM_LINK } from './ffx2/enemies/den-of-woe.ts';
@@ -85,7 +87,7 @@ export const FFX2_DEN_OF_WOE: Chapter = {
     'The pyreflies still hold what the survivors felt: Baralai, then Gippal, then Nooj, one after another, no rest between.',
   sceneKey: 'bevelle-underground', // PLACEHOLDER — see the file header
   thumbnailKey: 'chapter-ffx2-den-of-woe',
-  buildRef: denOfWoeKit, // GP5 a / GP6 a: `farplaneBuild` itself while both switches are 0
+  buildRef: denOfWoeKit, // Bailey's pick 2026-09-26: the Chapter V preset + 3 Hero Drinks + 8 levels [estimate]
   enemyGroupRef: denBaralaiGroup,
   scriptsRef: DEN_OF_WOE_PLACEHOLDER_SCRIPTS, // PLACEHOLDER — see the file header
   music: {

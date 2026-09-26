@@ -9,10 +9,14 @@
  *
  * The **intended** line of the chapter's bench (`tests/unit/helpers/denOfWoeDrive.ts`
  * `LINES.intended`; `docs/plans/den-of-woe-bench.md`), written as a tactic for the Chapter V
- * preset the chapter ships (GP5 a, GP6 a): Yuna as White Mage, Rikku and Paine as Dark Knights.
- * Two Dark Knights on Darkness plus a healer, Protect first `[verified: 4 sources]`; Remedy on
- * Looming Glacier's Stop (§4.2); on Nooj, the Dark Knights kept above 5,000 HP for Lightfall
- * (§4.3, §5). It picks only among the rows the engine offers.
+ * preset: Yuna as White Mage, Rikku and Paine as Dark Knights. Two Dark Knights on Darkness plus a
+ * healer, Protect first `[verified: 4 sources]`; Remedy on Looming Glacier's Stop (§4.2). It picks
+ * only among the rows the engine offers.
+ *
+ * **As shipped (Bailey's pick, 2026-09-26, "Den: both, drop the prep"):** the kit carries 3 Hero
+ * Drinks and 8 more levels (both `[estimate]`), so on Nooj a girl Lightfall would kill drinks one
+ * (Invincible, the sources' answer, §5), and the Lightfall prep (step 4, the plain swing) is off:
+ * the Dark Knights stay on Darkness. That is the bench's `LINES.noPrep` with `heroDrink`.
  *
  * Yuna:
  * 1. **Revive**: a Mega Phoenix for two down, else a Phoenix Down (or Life).
@@ -31,14 +35,14 @@
  *
  * Returns `null` (the generic ladder) when no shade is on the field.
  *
- * ## The options (OFF; `docs/plans/den-of-woe-options-2026-09-25.md`)
+ * ## The options (`docs/plans/den-of-woe-options-2026-09-25.md`)
  *
- * - **M1** (`DEN_OF_WOE_LIGHTFALL_PREP` false): steps 4 and the plain swing drop out; the Dark
- *   Knights keep to Darkness. {@link makeDenOfWoeTactic} takes it as an option.
- * - **GP6 b** (Hero Drinks in the bag): before step 4, and before a Dark Knight's Darkness, a girl
- *   Lightfall would kill (Yuna always; a Dark Knight at 5,000 HP or less) drinks one once Nooj is at
- *   4,500 HP or less and Lightfall is still to come. The step asks for a row only the bag can offer,
- *   so with the Chapter V bag (GP6 a) it never fires.
+ * - **M1** (`DEN_OF_WOE_LIGHTFALL_PREP`, false as shipped): steps 4 and the plain swing drop out; the
+ *   Dark Knights keep to Darkness. {@link makeDenOfWoeTactic} takes it as an option.
+ * - **GP6 b** (Hero Drinks in the bag, ON as shipped): before step 4, and before a Dark Knight's
+ *   Darkness, a girl Lightfall would kill (Yuna always; a Dark Knight at 5,000 HP or less) drinks one
+ *   once Nooj is at 4,500 HP or less and Lightfall is still to come (our line, not game data). The
+ *   step asks for a row only the bag can offer, so with the Chapter V bag alone it never fires.
  */
 
 import type { AnyCombatant, AvailableCommand, Command, CombatantId } from '../../battle/common/types.ts';
@@ -80,7 +84,7 @@ function prepWindow(foe: AnyCombatant, o: DenOfWoeTacticOptions): boolean {
 
 /**
  * GP6 b: a girl Lightfall would kill drinks a Hero Drink (Invincible) once Nooj is near it. Only when
- * the bag carries one: the Chapter V bag has none (GP6 a), so this never fires in the shipped kit.
+ * the bag carries one: the shipped kit does (3, Bailey's pick 2026-09-26); the Chapter V bag alone has none.
  */
 function heroDrink(commands: AvailableCommand[], self: AnyCombatant, foe: AnyCombatant): Command | null {
   if (!lightfallToCome(foe) || foe.hp > DRINK_FROM || has(self, 'invincible')) return null;

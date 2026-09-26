@@ -9,8 +9,9 @@
  * - `blurb`, `handwritten` and `tip` are our own words over the research's sourced facts (§2 the
  *   three shades back to back with no break `[verified: 4 sources]`; §4.2 Baralai's counter and
  *   Drill Shot's three quarters of max HP; §4.3 Lightfall, 5,000 to everyone once near the end).
- *   The tip names the Phoenix Down because the chapter preset has no Hero Drink (GP6 a) and Yuna's
- *   2,488 max HP cannot outlast Lightfall (plan R3; the guide says the same).
+ *   The tip teaches the Hero Drink against Lightfall: Invincible is the sources' answer (§5, reached
+ *   there with an Alchemist's Dark Matter), and the bag carries 3 Hero Drinks by Bailey's pick of
+ *   2026-09-26 (`./ffx2/builds/den-of-woe.ts`, `[estimate]`). No Lightfall prep (dropped, same pick).
  * - `quote` is line 13 of `docs/plans/gippal-story-draft.md`, an `[ORIGINAL]` line the post plays
  *   (`src/story/scripts/ffx2-den-of-woe.ts`).
  * - `objectives`: the chain's two later links (no Save Sphere between, GP3 a), then the win.
@@ -52,7 +53,7 @@ export const DEN_OF_WOE_META: ChapterMeta = {
   ],
   tip:
     'Nothing heals between the three shades. Baralai counts every blow and at eight hits back for three quarters of max HP. ' +
-    'Near the end Nooj calls down Lightfall, 5,000 to everyone, once: Yuna cannot survive it, so keep a Phoenix Down ready.',
+    'Near the end Nooj calls down Lightfall, 5,000 to everyone, once: a Hero Drink just before it makes a girl Invincible.',
   snapshots: [
     { image: 'backdrops/den-of-woe.png', caption: 'the sealed cave' },
     { image: 'characters/gippal-shade/idle.png', caption: 'his anger, two years old' },
