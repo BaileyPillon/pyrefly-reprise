@@ -596,28 +596,36 @@ target frames.
 ## 9. Inferred choices: ask before building (rule 15)
 
 Each item is a guess. Recommendations are marked. The driver puts them to Bailey in one
-short list (a line each) before the step that needs them. **Nothing below is approved.**
+short list (a line each) before the step that needs them. **Updated 2026-09-26: Q1, Q2,
+Q3, Q5 and Q6 are answered (see each item below, and D-220's `followUp` in
+`docs/target/decisions.json`); Q4 and Q7 are still open and need pictures first.**
 
 - **Q1. Fixed fallbacks.** Arrows, Enter and Escape always stay bound, shown as
   "always", so no remap can lock the player out. *Recommend yes.*
+  **ANSWERED 2026-09-26: yes (Bailey, verbatim above).**
 - **Q2. What "holds the camera still" means.** (a) Rig changes become **cuts**, and
   shakes, pushes, rolls and sway are gone. (b) The camera is pinned on the wide frame
   for the whole fight. *Recommend (a):* FFX itself hard-cuts to the target, and a pinned
   wide frame loses the boss reveals. Actor and menu shakes also stop; lunges and hops
   stay.
+  **ANSWERED 2026-09-26: yes (Bailey, verbatim above) — option (a).**
 - **Q3. TEXT SIZE scope.** This build covers the battle HUD, the dialogue card and the
   pause. Chapter select, party prep, results, the coach marks and the briefing stay at
   100 %. *Recommend yes;* the others can follow with their own frames.
+  **ANSWERED 2026-09-26: yes (Bailey, verbatim above).**
 - **Q4. FFX-2 HUD and pause at 130 %.** Two frames, made the way the round made its
   frames, shown before those passes are built. Until then those two stay at 100 % and
   the build says so.
+  **open: pictures owed before the step.**
 - **Q5. A player whose OS asks for reduced motion** sees REDUCE MOTION already ON under
   "all off unless you turn them on". *Recommend:* keep Bailey's approved wording and
   show the true value. The alternative is to default `reduceMotion` to off and ignore
   the OS, which would be a regression for exactly the players the setting exists for.
+  **ANSWERED 2026-09-26: yes (Bailey, verbatim above).**
 - **Q6. The single-letter panel keys** (G, N, E intent, I, J, H, P, F, B) stay fixed in
   this build. Binding a game key onto one is refused with a line naming the panel.
   *Recommend yes.*
+  **ANSWERED 2026-09-26: yes (Bailey, verbatim above).**
 - **Q7. How soft "softens" is.** *Recommend:*
   - screen washes capped at 35 % peak, with pure white tinted to warm ivory;
   - actor flashes capped at 0.35 peak;
@@ -625,6 +633,7 @@ short list (a line each) before the step that needs them. **Nothing below is app
   - CSS pulses become a steady highlight.
 
   Shown to Bailey as a before/after pair of the Braska form change. He judges by eye.
+  **open: pictures owed before the step.**
 
 ---
 
