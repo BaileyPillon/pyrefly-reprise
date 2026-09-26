@@ -619,3 +619,21 @@ Everything else (stats, action list, DCs, copy lists, the once-only Final Impact
 - **RavenXX**, *Paragon/Trema Guide*, Neoseeker FAQ 80425 (2004).
 - **Neoseeker FFX-2 wiki**, *Paragon* (oldid 31398).
 - **hrs-game.main.jp**, *FF10-2 HD* 聖ベベル廟・隠された迷宮 (story_lv5_13).
+
+---
+
+## 13. Follow-up, 2026-09-26: does the party pose after beating Trema? (C-7, D-214; FFX-2 only)
+
+**Answer: no victory pose after Trema.** This is a **FF Wiki reading, single source**; GameFAQs does not say it either way, so under Bailey's rule (D-214, 2026-09-25: prefer GameFAQs) it is **our estimate** until the Steam session sees it. No source contradicts it.
+
+**What the wiki says.** *Final Fantasy X-2 victory poses*, section "When victory poses are not used" (revid 3955034, read by `api.php?action=parse` 2026-09-26): the girls skip the pose after Bahamut, Shuyin, and "all Via Infinito special bosses (only when fought as bosses for the first time)". The page does not list those bosses by name. The wiki's *Via Infinito* page (revid 3983658) names the Great Cloister bosses: Aranea (20), Black Elemental (40), Concherer (60), Chac (80), and Paragon then Trema (100). Trema is the floor-100 boss, so "all" covers him. His one Via Infinito fight is a first fight by definition: after he fades he does not come back there (NightMare185 notes only that **Paragon** can be fought again after Trema). The parenthesis is about the earlier bosses, which return as random encounters on floors 81 to 99. The Fiend Arena bout (§3.3) poses nothing either, for a different reason: the same wiki section withholds the pose in every Fiend Arena tournament battle.
+
+**What GameFAQs says.** I searched 20 FFX-2 FAQs on GameFAQs for "pose", "victory pose" and the Trema aftermath. None of them states whether the girls pose after Trema. What they do say agrees with the wiki reading: the fall leads straight into a scene.
+- Blackestmage, *Guide and Walkthrough*, FAQ 28684 (updated 2006-01-22), Via Infinito / Trema section: after he falls, Yuna tells Trema why she fights, he vanishes, and the Iron Duke is awarded. The same guide says Paine talks about Trema right after the Aranea fight, another scene on a special-boss win.
+- nemes1ss, *Perfect Game Walkthrough*, FAQ 27786 (updated 2004-03-03), Bevelle: "the final scenes after you kill Trema", and no Episode Complete.
+- NightMare185, *Via Infinito FAQ* v3.2, FAQ 27609 (2005-04-21), FAQ Q17: no Episode Complete for Trema. Nothing on poses.
+- Searched with no pose statement found: agent_0042 *Battle Quotes List* 27214 (no Trema win line either), charmin *Bevelle 100 Dungeon FAQ* 23230, Split_Infinity *Boss Guide* 26832, *Guide and Walkthrough* 25872 and *Regional/International Version Changes* 30013, Ryu_Kaze *Ultimania Translations* 42601, bremen 26991, Mad_Monarch_Gyl 22855, Paradisio 27115, IiNcXz 22332, beefybuffalo 69320, JungleJim 27060, MobiusSoul 26969, 78927, and KeyBlade999 *FFX-2 FAQ/Walkthrough* 69206 (all 72 pages, 2015-09-20).
+
+**Status.** `[single source — FF Wiki; GameFAQs silent; our estimate]`. The Steam session can confirm it only with a Cloister 100 save, which we do not have (`observed-trema-steam-2026-09-25.md`).
+
+**What it means for the chapter (a recommendation, not built).** Chapter XIII should end with **no victory pose**: the girls hold their battle stance while the post-battle scene runs (§7.2), as Chapter 4 does after Bahamut. The sources speak only of the **pose**. They say nothing about the fanfare or the victory quips after Trema, and the chapter's post script already cuts the music as the scene begins. The presentation program's A-4 (`docs/plans/presentation-program-2026-09-26.md`) adds a `victoryPose: 'pose' | 'hold'` presenter port; the recommendation is to set Chapter XIII's `src/data/chapter-meta-trema.ts` value to `'hold'` in A-4's batch-4 step, beside II, IV and V. A-4's `'hold'` also keeps the victory cue quiet; for Trema that part is `[ours]`, because no source mentions a fanfare either way.
