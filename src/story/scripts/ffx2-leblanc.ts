@@ -257,7 +257,7 @@ export const ffx2LeblancScripts: ChapterScripts = {
     say('leblanc', "Oh, don't gloat, pet. You'll crease."),
     say('leblanc', "Fine. Take it. I'd memorised the good part anyway."),
     say('yuna-x2', 'You had the other half. The whole time.'),
-    say('leblanc', 'I had the *better* half, dearie.'),
+    say('leblanc', 'I had the better half, dearie.'),
     say('rikku-x2', 'Is she flirting with a sphere?'),
     say('paine', 'Play it.'),
 
@@ -328,7 +328,7 @@ export const ffx2LeblancScripts: ChapterScripts = {
       say('yuna-x2', 'Paine? What is it?', { auto: 1200 }),
       say('paine', 'Turn it off.', { auto: 1400 }),
       wait(1600),
-      say('rikku-x2', '...Okay. Next room.', { auto: 1300 }),
+      say('rikku-x2', '...Okay. Round two.', { auto: 1300 }),
       camera('idle', 600),
     ],
 

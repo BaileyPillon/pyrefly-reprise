@@ -6,6 +6,17 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-26 — `dsl.ts`: `lintScript` also runs the story-text lint (CHK-007)
+
+**Both** [AGENTS.md hard rule 14]: the dialogue box is shared plumbing and prints its text literally in
+either game. `lintScript` now also reports every finding of the new `src/story/textLint.ts`
+(`storyTextIssues`): markup characters (`*` `_` `` ` `` `[` `]` `<` `>`), `§`, `ffx-`/`ffx2-` file stems,
+file extensions, and raw ids (three or more lowercase hyphen-joined parts, or camelCase). **Additive**:
+no signature changes; a script that was clean before stays clean unless it carries one of those, and the
+only line in the tree that did was PR-0102's `*better*` (fixed in the same batch, t1-b4a).
+`tests/unit/story-text-lint.test.ts` runs it over every line of every chapter and adds the FFX-2
+speaker allow-list (CHK-021).
+
 ## 2026-09-26 — `encounters.ts`: Chapter XV (the Den of Woe) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX-2 only** [AGENTS.md hard rule 14]: the three shades under Mushroom Rock Road in FFX-2 Chapter 5
