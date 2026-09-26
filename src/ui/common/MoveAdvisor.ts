@@ -4,6 +4,7 @@ import { buildAdvisorView, type AdvisorOptions, type AdvisorView, type MoveSugge
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { ADVISOR_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
+import { guideAgrees, withGuideBadge } from './advisorGuideBadge.ts';
 
 /**
  * The optional in-battle **move advisor**: an Ink & Gold card that says what to
@@ -141,6 +142,8 @@ export class MoveAdvisor {
   private density: Density = 0;
   /** `signature@cap@width` the current density was measured for. */
   private fittedFor = '';
+  /** Whether the guide's NEXT, on the latest board, still names the tactic row (PR-0169). */
+  private guideAgrees = true;
 
   constructor(opts: MoveAdvisorOptions) {
     this.opts = opts;
@@ -281,6 +284,15 @@ export class MoveAdvisor {
   /** New engine state. The card only speaks at a decision, so this just records it. */
   sync(state: Readonly<BattleState>): void {
     this.lastState = state;
+    // The advice is held, but the "Guide's pick" badge is a claim about the
+    // guide beside it, which re-reads every board: withdraw it the moment the
+    // two stop naming the same move (./advisorGuideBadge.ts, PR-0169).
+    if (!this.decision || !this.cached) return;
+    const agrees = guideAgrees(state, this.decision, this.cached);
+    if (agrees === this.guideAgrees) return;
+    this.guideAgrees = agrees;
+    this.lastSignature = '';
+    this.render();
   }
 
   /**
@@ -294,6 +306,7 @@ export class MoveAdvisor {
     if (state) this.lastState = state;
     this.decision = { actorId, commands };
     this.cached = this.compute();
+    this.guideAgrees = this.lastState ? guideAgrees(this.lastState, this.decision, this.cached) : true;
     this.render();
   }
 
@@ -336,7 +349,7 @@ export class MoveAdvisor {
       this.lastSignature = signature;
       this.density = 0;
       this.fittedFor = '';
-      this.cardEl.innerHTML = cardHtml(this.cached, 0);
+      this.cardEl.innerHTML = cardHtml(withGuideBadge(this.cached, this.guideAgrees), 0);
     }
     this.layout();
     this.fitCard();
@@ -396,7 +409,7 @@ export class MoveAdvisor {
     let density = this.density;
     while (density < MAX_DENSITY && this.cardEl.scrollHeight > cap + 1) {
       density = (density + 1) as Density;
-      this.cardEl.innerHTML = cardHtml(this.cached, density);
+      this.cardEl.innerHTML = cardHtml(withGuideBadge(this.cached, this.guideAgrees), density);
     }
     this.density = density;
   }

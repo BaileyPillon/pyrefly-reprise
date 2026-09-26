@@ -1629,7 +1629,7 @@ function defFor(
  * FFX-2 fields no switch at all, which `advisor-plan.test.ts` asserts rather
  * than assumes.
  */
-function sameCommand(a: Command, b: Command): boolean {
+export function sameCommand(a: Command, b: Command): boolean {
   if (a.kind !== b.kind) return false;
   const idA = 'id' in a ? String(a.id) : '';
   const idB = 'id' in b ? String(b.id) : '';
