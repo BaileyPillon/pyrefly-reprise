@@ -24,6 +24,7 @@ import { SEYMOUR_ANIMA_MACALANIA_META } from './chapter-meta-seymour-anima-macal
 import { EVRAE_META } from './chapter-meta-evrae.ts';
 import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
 import { TREMA_META } from './chapter-meta-trema.ts';
+import { FALLEN_AEONS_META } from './chapter-meta-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_META } from './chapter-meta-seymour-omnis.ts';
 import { NATUS_META } from './chapter-meta-natus.ts';
 import { ISAARU_META } from './chapter-meta-isaaru.ts';
@@ -381,7 +382,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
  * id, and `CHAPTER_META` stays one-to-one with the listed chapters. Listing a
  * chapter moves its record from here into `CHAPTER_META`.
  */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [] as const;
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [FALLEN_AEONS_META] as const; // Chapter XI (FFX-2)
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

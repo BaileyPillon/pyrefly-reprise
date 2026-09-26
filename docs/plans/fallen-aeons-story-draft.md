@@ -105,3 +105,26 @@ results screen).
    Itchy (plan Review R4 item 4); today nothing carries a status across a link anyway.
 2. **Leblanc's shop in the Glen** is sourced (research §2); whether our Glen shows it is yours.
 3. **Callout speakers** are our assignment; swap any of them freely.
+
+---
+
+## Built (2026-09-25, the ship layer, still unlisted)
+
+`src/story/scripts/ffx2-fallen-aeons.ts` carries every line above, numbered the same, with these
+changes. **Game case: FFX-2 only.**
+
+- **Stop lands** plays for whichever girl Stop lands on. Measured on the intended line (100 seeds of
+  Shiva, `driveLink`): Stop landed on Yuna 7 times and never on a Dark Knight, so Rikku's line alone
+  would almost never play. Rikku's own line keeps the draft ("Can't move... Yunie!", one ellipsis:
+  the house lint allows one a line). **Added, ours, for your yes or a rewrite:** Rikku, when Yuna is
+  stopped: "Yunie's frozen! Remedy, now!"; Paine, when she is: "Can't move. Get me a Remedy."
+- **Between 1 and 2** (lines 9 to 12) is a seam on Shiva's KO, before the Save Sphere card, on the
+  O-3 B plate (the scene shows plate B while the camera stands on the `road-links` rig).
+- **Between 2 and 3** (lines 14 to 16) cannot be a seam: the Sisters' link ends on whichever sister
+  falls last, and no trigger can name her. The banter opens Anima's link instead, ahead of line 17,
+  after the Save Sphere card; holds of 1.2 to 1.4 s keep the four lines inside the 8 s beat budget.
+- **The first sister falls** and **the third Pain** are emitted by the Chapter XI AIs
+  (`sisters-first-down`, `anima-third-pain`), the Trema precedent for moments only the AI can count.
+- **Open:** the pre and post scenes play over plate A (the cutscene screen draws the chapter's own
+  plate). The post scene is the Glen (research §2, the flower meadow); showing the approved Farplane
+  plate there would need a per-scene backdrop, which the cutscene screen does not have.

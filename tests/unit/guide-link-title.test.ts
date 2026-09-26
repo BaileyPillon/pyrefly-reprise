@@ -54,7 +54,8 @@ describe('the guide headline names the link that stands (FOC16-06)', () => {
       const state = { combatants: Object.fromEntries(g.bossIds.map((id) => [id, { id, side: 'enemy', hp: 1, removed: false }])) };
       expect(guideTitle(state as never, g)).toBe(g.title);
     }
-    // + Chapter XIV (FFX only, unlisted): the panel names the aeon of the standing link.
-    expect(GUIDES.filter((g) => g.linkTitles).map((g) => g.id)).toEqual(['ffx2-trema', 'isaaru-via-purifico']);
+    // + Chapter XIV (FFX only): the panel names the aeon of the standing link.
+    // Plus Chapter XI (FFX-2, unlisted): Shiva, the Magus Sisters, Anima.
+    expect(GUIDES.filter((g) => g.linkTitles).map((g) => g.id)).toEqual(['ffx2-trema', 'ffx2-fallen-aeons', 'isaaru-via-purifico']);
   });
 });

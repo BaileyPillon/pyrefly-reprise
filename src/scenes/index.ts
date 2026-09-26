@@ -30,6 +30,7 @@ import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-t
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
+import { buildRoadToTheFarplaneScene, ROAD_TO_THE_FARPLANE_SLOTS } from './road-to-the-farplane.ts';
 import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.ts';
 import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
 import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
@@ -191,13 +192,8 @@ SCENES.set('leblanc-last-room', { key: 'leblanc-last-room', title: 'Chateau Lebl
  * unreachable demo diorama, as for Leblanc above
  * [docs/handoff/chapter-macalania-scene.md §6].
  */
-SCENES.set('macalania-temple', {
-  key: 'macalania-temple',
-  title: 'Macalania Temple — the antechamber',
-  build: buildDemoScene,
-  slots: MACALANIA_TEMPLE_SLOTS,
-  placeholder: false,
-});
+SCENES.set('macalania-temple', { key: 'macalania-temple', title: 'Macalania Temple — the antechamber',
+  build: buildDemoScene, slots: MACALANIA_TEMPLE_SLOTS, placeholder: false });
 /**
  * The deck of the Fahrenheit (Chapter 8, FFX only) — real
  * (`buildEvraeAirshipDeckScene` in {@link SCENE_FACTORIES}, which also
@@ -205,19 +201,17 @@ SCENES.set('macalania-temple', {
  * is the unreachable demo diorama, as for Leblanc above
  * [docs/handoff/chapter-evrae-scene.md §6].
  */
-SCENES.set('evrae-airship-deck', {
-  key: 'evrae-airship-deck',
-  title: 'The deck of the Fahrenheit',
-  build: buildDemoScene,
-  slots: EVRAE_AIRSHIP_DECK_SLOTS,
-  placeholder: false,
-});
+SCENES.set('evrae-airship-deck', { key: 'evrae-airship-deck', title: 'The deck of the Fahrenheit',
+  build: buildDemoScene, slots: EVRAE_AIRSHIP_DECK_SLOTS, placeholder: false });
 /** The Cavern of the Stolen Fayth (Chapter IX, FFX only): real, `build` unreachable as for Leblanc [cavern-stolen-fayth.ts]. */
 SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern of the Stolen Fayth — the last chamber',
   build: buildDemoScene, slots: CAVERN_STOLEN_FAYTH_SLOTS, placeholder: false });
 /** The Via Infinito, Cloister 100 (Chapter XIII, FFX-2 only): real, `build` unreachable as for Leblanc [cloister-100.ts]. */
 SCENES.set('via-infinito', { key: 'via-infinito', title: 'Via Infinito — Cloister 100',
   build: buildDemoScene, slots: CLOISTER_100_SLOTS, placeholder: false });
+/** The Road to the Farplane (Chapter XI, FFX-2 only): real, `build` unreachable as for Leblanc [road-to-the-farplane.ts]. */
+SCENES.set('road-to-the-farplane', { key: 'road-to-the-farplane', title: 'The Road to the Farplane',
+  build: buildDemoScene, slots: ROAD_TO_THE_FARPLANE_SLOTS, placeholder: false });
 /** The Garden of Pain inside Sin (Chapter XII, FFX only): real, `build` unreachable as for Leblanc [garden-of-pain.ts]. */
 SCENES.set('garden-of-pain', { key: 'garden-of-pain', title: 'Inside Sin — the Garden of Pain',
   build: buildDemoScene, slots: GARDEN_OF_PAIN_SLOTS, placeholder: false });
@@ -269,6 +263,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
   'via-infinito': buildCloister100Scene,
+  'road-to-the-farplane': buildRoadToTheFarplaneScene,
   'garden-of-pain': buildGardenOfPainScene,
   'bevelle-highbridge': buildHighbridgeScene,
   'via-purifico': buildViaPurificoScene,

@@ -1,5 +1,112 @@
 # Chapter XI — Fallen Aeons: measured benches (FFX-2 only)
 
+## 2026-09-25, evening: option A built, 3 s of action time on the Road (read this first)
+
+Bailey, 2026-09-25 ~18:30 EDT: "All your recommendations", which takes this chapter's **option A**:
+3 s of action time on the three Road links only (`ROAD_ACTION_TIME_ON`, `ROAD_ACTION_TIME_SECONDS = 3`
+in `src/data/ffx2/enemies/fallen-aeons-road.ts`; the same switch and labelled `[estimate]` as Chapter
+XIII's `CLOISTER_ACTION_TIME_SECONDS`). The rule is sourced `[verified: 2 sources]`, the length is our
+estimate (`research/ffx2-trema.md` §12.4). No boss number moved. Main 46970be4 was merged first
+(51af2d55). `tests/unit/chapters/fallen-aeons-ship-bench.test.ts` now measures the chapter as it ships;
+its "action time OFF" row (engine option 0) is the chapter before the pick.
+
+| Fight | Line | Bench (D = 0) | Human, Wait split (0.5 s top / 1.0 s held) |
+|---|---|---:|---:|
+| **Chapter (1-2-3), one run, as shipped** | intended on each link | 174/200 (87 %) | **33/40 (82.5 %); 159/200 (79.5 %)** |
+| 1 Shiva | intended | 200/200 | 40/40 |
+| 2 Magus Sisters | intended: Darkness x2 + Dispel + heals | 167/200 | 30/40 |
+| 3 Anima | intended | 200/200 | 40/40 |
+| 2 Sisters | Mindy first by Drain / Cindy first by Drain / Mindy first by Attack | 0 / 0 / 3 of 200 | 0 / 0 / 0 of 40 |
+| 2 Sisters | wrong: Darkness spam, no Dispel | 113/200 | 18/40 |
+| Chapter | the guide's habit (0.25 s on the top list) | | 34/40 |
+| Chapter | action time OFF (the chapter before the pick) | 58/200 | 31/200 (15.5 %), as the table below |
+| Chapter | action time 1.5 s (not picked) | 147/200 | 115/200 |
+| Chapter | preset at Lv 52 / 52 / 52 on top of action time (not picked, not built) | 191/200 | 177/200 |
+
+- **The pick's figure reproduces exactly: 159/200 (79.5 %) at human pace**, the same number the
+  options table measured with the engine option. Human losses on 200 seeds: Shiva 0, **Sisters 41**,
+  Anima 0. The intended line still beats every wrong line by a wide margin (Sisters 30/40 vs 18/40
+  for Darkness spam and 0/40 for any kill-one-first line), so the fight still teaches its answer.
+- **No other chapter moved.** Every chapter in `CHAPTERS` and `UNLISTED_CHAPTERS` (13), seeds 1-5, the
+  shipped strategy, FFX-2 chapters under both Active D = 0 and the Wait split: 90 event-log hashes
+  before and after the switch; **80 byte-identical, and the 10 that moved are all
+  `ffx2-fallen-aeons`**. Evidence: `docs/concepts/chapters/fallen-aeons/ship/action-time-hashes.json`.
+  The FFX-2 golden (`ffx2-atb-golden.test.ts`) and every Trema test pass unchanged.
+- **Disclosed, for Bailey (measured, not tuned): with action time on, Shiva and Anima forgive the
+  wrong line.** `fallen-aeons-bench.test.ts`: Shiva intended 200/200 vs all-out 194/200 at bench speed
+  and 40/40 vs 40/40 at human pace (Wait split); Anima intended 200/200 vs "no Shell, no Remedy"
+  200/200 and 40/40 vs 40/40 (before the pick: 198 vs 186 at bench speed). The wrong lines only take
+  longer (Anima 2.3 min vs 1.6). **The Sisters still separate the lines** (167 vs 113 of 200 at bench
+  speed, 30 vs 18 of 40 at human pace), so the chapter's test now lives there. That file's
+  "intended beats wrong on every link" check became "never worse on any link, strictly better on the
+  Sisters", and it now prints the three wrong lines at human pace.
+- The switch is pinned by `tests/unit/chapters/fallen-aeons-action-time.test.ts` (each of Shiva's
+  turns lands exactly 9,000 ticks later than with the switch forced off), and the scope test in
+  `trema-options.test.ts` now allows the Cloister and the Road formations only.
+
+## 2026-09-25, later: re-measured on main 3c4cd1f6 (read this first)
+
+Main moved under the first re-measure: **07af1f90 (decision sheet item 4 A1) makes an enemy hit close
+an open command menu** under Active and on the Wait split's top list, and the bench helper honours it
+(`engine.inputValid` after each menu spell, then a fresh menu). Main was merged into this branch
+(00e49f02) and `tests/unit/chapters/fallen-aeons-ship-bench.test.ts` re-run unchanged. Bench-speed rows
+do not move (no menu is open at D = 0); every human row moves down a little.
+
+| Fight | Line | Bench (D = 0) | Human, Wait split (761d3eb0) | Human, Wait split (main 3c4cd1f6) |
+|---|---|---:|---:|---:|
+| **Chapter (1-2-3), one run** | intended on each link | 58/200 (29 %) | 8/40; 36/200 (18 %) | **5/40 (12.5 %); 31/200 (15.5 %)** |
+| 1 Shiva | intended | 183/200 | 39/40 | 39/40 |
+| 2 Magus Sisters | intended | 84/200 | 8/40 | 8/40 |
+| 3 Anima | intended | 198/200 | 39/40 | 40/40 |
+| Chapter | the guide's habit (0.25 s on the top list) | | 7/40 | 5/40 |
+| 2 Sisters | the guide's habit | | | 9/40 |
+| Chapter | OPTION action time 1.5 s | 147/200 | 117/200 | 115/200 (57.5 %) |
+| Chapter | OPTION action time 3 s | 174/200 | 164/200 | **159/200 (79.5 %)** |
+| Chapter | OPTION preset at Lv 52 / 52 / 52 | 99/200 | 61/200 | 58/200 (29 %) |
+
+Human losses on the Road, 200 seeds: Shiva 22, **Sisters 146**, Anima 1. Still under the 25 % gate;
+the method check (`fallen-aeons-winnability-method-check.md`) stands with these numbers, and its one
+question for Bailey is unchanged. Nothing built; no boss number moved.
+
+## 2026-09-25: the ship gate's re-measure on 761d3eb0 (before item 4 A1)
+
+Printed by `tests/unit/chapters/fallen-aeons-ship-bench.test.ts` (branch
+`chapter-fallen-aeons-ship-0925`, main 761d3eb0), which reads the registered record (`FFX2_FALLEN_AEONS`:
+build and first formation). Human pace = the live default, **Wait split**, 1.5 s a menu (0.5 s on the
+top command list with the clock running, 1.0 s held), the model the Trema benches use. The chapter
+row is one unbroken run of the Road through the Save Sphere restore; a link alone equals its FA3 retry.
+
+| Fight | Line | Bench (D = 0) | Human, Wait split |
+|---|---|---:|---:|
+| **Chapter (1-2-3), one run** | intended on each link | 58/200 (29 %) | **8/40 (20 %); 36/200 (18 %)** |
+| 1 Shiva | intended | 183/200 | 39/40 |
+| 2 Magus Sisters | intended: Darkness x2 + Dispel + heals | 84/200 | 8/40 |
+| 3 Anima | intended | 198/200 | 39/40 |
+| 2 Sisters | Mindy first by Drain / Cindy first by Drain / Mindy first by Attack | 0 / 0 / 0 of 200 | 0 / 0 / 0 of 40 |
+| 2 Sisters | wrong: Darkness spam, no Dispel | 54/200 | 5/40 |
+| Chapter | the guide's habit (0.25 s on the top list) | | 7/40 |
+| Chapter | OPTION action time 1.5 s | 147/200 | 117/200 |
+| Chapter | OPTION action time 3 s | 174/200 | **164/200 (82 %)** |
+| Chapter | OPTION preset at Lv 52 / 52 / 52 | 99/200 | 61/200 |
+
+- **Under the 25 % gate at human pace**, so the method check is written:
+  `docs/plans/fallen-aeons-winnability-method-check.md` (loss anatomy, the sourced options, one
+  question for Bailey). Nothing is built; no boss number moved.
+- **The Sisters lose 141 of 164 human runs.** They take about 36 turns to the party's 12 in the 40 s a
+  loss lasts, and Sandy's physicals plus Mindy's spells do the killing (Delta Attack 0.5 a loss).
+- **Moved since the 2026-09-24 table below, by 881d4548 (FFX-2 magic never rolls), not by this
+  track:** Anima intended 173 -> 198, Anima wrong 109 -> 186, the Road 51 -> 58. Every other bench-speed
+  row reproduces exactly (`fallen-aeons-bench.test.ts` re-run today).
+- **Helper changes (additive, test only):** `fallenAeonsDrive.ts` returns the event log, takes an
+  optional `build`, and has two optional line switches (`guardFirst`, `curtains`); existing lines replay
+  unchanged.
+- **For the ship layer:** the chapter's guide must carry the Wait-split habit rule exactly as main will
+  ship it: "Pick a command at once. Until you do, the clock still runs."
+  (`WAIT_SPLIT_HABIT_RULE`, `src/data/guides/ffx2-wait-habit.ts` on `decisions-0925`). Measured, the
+  habit alone does not move this chapter (7/40 at 0.25 s against 8/40 at 0.5 s).
+
+## 2026-09-24: the first pass (history)
+
 **Measure, never tune** (plan `docs/plans/chapter-fallen-aeons-review.md` §9; memory rule
 "never weaken a boss"). Every number below was produced by running the engine
 (`tests/unit/chapters/fallen-aeons-bench.test.ts`, lines in `tests/unit/helpers/fallenAeonsDrive.ts`)
