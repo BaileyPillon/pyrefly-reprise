@@ -531,12 +531,17 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     }
     // Critic round 09 PR-0126: the *lead*'s own "in <submenu>" chip used to
     // vanish a rung early (density 5 folded the lead fully bare, dropping 27
-    // of 283 chapter 5 decisions' path chip). It now survives every rung but
-    // the phone-compact last one, same as the runner-up's.
-    for (let d = 0 as Density; d < MAX_DENSITY; d = (d + 1) as Density) {
+    // of 283 chapter 5 decisions' path chip). Round 13 (PR-0126, narrowed)
+    // found the phone-compact last rung still dropped it — 'TIP Wakka' for a
+    // Switch, 'TIP Darkness → all enemies' with no menu named — and on
+    // desktop, any card fitted into a narrow `hudSafeZones.ts` "compact" box
+    // walks its density ladder to this same rung, so the same loss showed up
+    // there too (CHK-004, "say where"). The chip now survives **every** rung,
+    // including the last: the reason line sheds first (see `showReason`
+    // above), never the path to the row.
+    for (let d = 0 as Density; d <= MAX_DENSITY; d = (d + 1) as Density) {
       expect(text(d), `density ${d}`).toContain('in White Magic');
     }
-    expect(text(MAX_DENSITY)).not.toContain('in White Magic');
     // The badge is decoration and still sheds one rung ahead of the wipe —
     // but, unlike before, it no longer takes the menu chip down with it.
     expect(text(4)).toContain('Guide’s pick');
