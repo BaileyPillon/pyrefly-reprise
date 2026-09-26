@@ -73,7 +73,7 @@ describe('FFX-2 help band: geometry', () => {
 
   it('stays full width when there is no chip on its row', () => {
     const g = bandGeometry({ scale: 2.5, stageX: 0, stageY: 0, pauseChip: null });
-    expect(g).toEqual({ mode: 'stage', left: 0, zoom: 1 });
+    expect(g).toEqual({ mode: 'stage', left: 0, zoom: 1, pillar: 0 });
   });
 
   it('moves into the bar above a portrait letterbox and zooms to a readable size (390x844)', () => {

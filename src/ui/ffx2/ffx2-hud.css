@@ -554,7 +554,9 @@
   /* `--band-left` clears the PAUSE chip (`commandHelpBand.ts`): that chip is
      mounted by `BattleScreen` over this row in device px, outside the stage. */
   left: var(--band-left, 0px);
-  right: 0;
+  /* PR-0135: out over the right-hand letterbox pillar at a wide window
+     (`commandHelpBand.ts` `pillar`; 0 at 16:9). */
+  right: calc(-1 * var(--band-pillar, 0px));
   top: 0;
   height: 17.33px; /* 52px @ 1920x1080 */
   display: flex;

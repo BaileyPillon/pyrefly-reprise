@@ -318,7 +318,6 @@ export class FFX2BattleHud implements HudPort {
     this.stage = document.createElement('div');
     this.stage.className = 'ffx2hud__stage';
     this.stage.innerHTML = `
-      <div class="ig-surface"><div class="ig-surface__grain"></div><div class="ig-surface__vignette"></div></div>
       <div class="ffx2hud__enemies"></div>
       <div class="ig-banner ffx2hud__telegraph" hidden></div>
       <div class="ig-stat-list ffx2hud__party"></div>
@@ -337,6 +336,13 @@ export class FFX2BattleHud implements HudPort {
     this.platesLayer = document.createElement('div');
     this.platesLayer.className = 'ffx2hud__plates';
 
+    // PR-0135: the grain and vignette cover the whole window, not the 16:9
+    // stage (a hard edge either side at 2000x1012 and 2560x1080). First child,
+    // so they still paint under every panel.
+    const surface = document.createElement('div');
+    surface.className = 'ig-surface';
+    surface.innerHTML = '<div class="ig-surface__grain"></div><div class="ig-surface__vignette"></div>';
+    this.el.appendChild(surface);
     this.el.appendChild(this.stage);
     this.el.appendChild(this.overlay);
     this.el.appendChild(this.platesLayer);
@@ -1091,6 +1097,7 @@ export class FFX2BattleHud implements HudPort {
       stageX: host.left + this.stageX,
       stageY: host.top + this.stageY,
       pauseChip: chip?.getBoundingClientRect() ?? null,
+      hostLeft: host.left,
     };
   }
 
