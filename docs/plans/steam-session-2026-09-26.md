@@ -156,6 +156,17 @@ retries the FFX-2 legs should either walk longer, pick a different field
 position from those saves, or investigate why the Via Infinito gave no
 encounters in that window before spending more of the 30-minute budget there.
 
+## Answers from the sources (2026-09-26, after the session)
+
+The four FFX-2 items the session could not reach were sourced from GameFAQs first, then the FF Wiki (FFX-2 only). Full write-ups: `research/ffx2-combat-core.md` §10 (items 1, 3, 8) and `research/ffx2-leblanc-syndicate.md` §19 (item 7). Recommendations only; nothing was built.
+
+- **Item 1, PR-0209 / IC-1 (immune hits and chains).** No source says whether an IMMUNE or Invincible hit staggers. GameFAQs' reading, **our estimate**: it does not stagger, does not open or extend a chain, does not count toward the attacker's chain, and does not hold the victim's turn (Split_Infinity FAQ 25872 G1032: attacks on Invincible "will fail"). Counter-hint recorded: SinirothX's flowchart applies immunity after the chain step. Recommendation: switch `IMMUNE_HITS_SKIP_CHAIN` on, labelled, and put the measured Chapter V change to Bailey once.
+- **Item 3, PR-0124 (dressphere at a seam).** GameFAQs' reading, **our estimate** `[single source]`: the dressphere a girl ends a battle in is the one she starts the next in (KADFC's Speed Guide, FAQ 38278, has the player put Paine back on her menu dressphere between each Chateau Leblanc fight). Gate effects and the special-dressphere unlock do not carry `[verified: 2 sources]`. Recommendation: carry the current dressphere in `BattleScreenSetup.carryFfx2`.
+- **Item 7, PR-0106 (Leblanc failsafe).** There is no HP failsafe; the line is turn-counted. SinirothX (FAQ 31807) is the only source (the wiki copies it). GameFAQs' reading, **our estimate**: one Not-So-Mighty Guard, once, on turn 25 + No Love Lost uses, read the same way as the No Love Lost line; the code's "every turn after" has no source. New conflict found: SinirothX's basic-pattern turn 5 is a Normal Attack, not the guard as the wiki (and our code) has it; GameFAQs preferred. This item is the Chapter 2 Chateau fight, not the Chapter 5 Farplane allies the table above assumed.
+- **Item 8, NEW-C1 (lone White Mage vs Bahamut).** Two girls down is not a Game Over `[verified: 2 sources]`. The White Mage has no damaging command of her own `[verified: 2 sources]`; she can damage Bahamut only with items, a Garment Grid's equip spell or a lent skillset, or by curing Curse (which Bahamut puts on her every cycle) and spherechanging. On the sourced numbers she can stall Mega Flare indefinitely with free Vigor (derived, not stated anywhere). Recommendation: no rule change; let the lone girl use Esuna, spherechange and items, and give the tests a way out of the stalemate.
+
+Items 4 (GP-G2) and 6 (PR-0217 / PR-0054) were not part of this pass.
+
 ## Notes for whoever runs this
 
 - Per rule 8, write every observation as prose (what was seen, when, in which
