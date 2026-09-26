@@ -221,13 +221,19 @@ describe('ffx2-leblanc — structure', () => {
     // The two between-act beats are chain seams (a group boundary, the scene
     // IS the point); the four Act III beats interrupt a live fight.
     const seams = new Set(['act-one-cleared', 'act-two-cleared']);
-    for (const [id, script] of Object.entries(chapter.midScripts)) {
-      const ms = flatten(script).reduce((total, step) => {
+    // An `ifFlag` plays one branch, so it costs its longer branch, not both
+    // (PR-0103's kill-order guard gives the Act III KO beats two branches).
+    const duration = (steps: readonly Step[]): number =>
+      steps.reduce((total, step) => {
         if (step.type === 'say') return total + (step.auto ?? 0);
         if (step.type === 'wait') return total + step.ms;
         if (step.type === 'camera') return total + step.ms;
+        if (step.type === 'ifFlag') return total + Math.max(duration(step.then), duration(step.else ?? []));
+        if (step.type === 'parallel') return total + Math.max(0, ...step.steps.map((s) => duration([s])));
         return total;
       }, 0);
+    for (const [id, script] of Object.entries(chapter.midScripts)) {
+      const ms = duration(script);
       const budget = seams.has(id) ? SEAM_BUDGET_MS : MID_SCRIPT_BUDGET_MS;
       expect(ms, `${id} runs ${ms} ms`).toBeLessThanOrEqual(budget);
     }

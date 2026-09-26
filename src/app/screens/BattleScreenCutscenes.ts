@@ -404,8 +404,9 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
       try {
         // `reset()` keeps the `'skip'` latch (`CutsceneRunner.setInstant`), so a
         // run at that speed starts *every* beat fast-forwarded, not just the
-        // one that happened to be in flight when the speed was set.
-        runner.reset();
+        // one that happened to be in flight when the speed was set. Flags are
+        // kept: they live for the chapter, so a beat can read an earlier one's.
+        runner.reset({ keepFlags: true });
         if (mode === 'instant') {
           // Nothing to race. Every timed step resolves at once, so the beat
           // costs a handful of microtasks and cannot overrun a budget it is
