@@ -77,6 +77,7 @@ import {
   FakeMessageBar,
   FakeStage,
 } from './helpers/FakeStage.ts';
+import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 
 /** The bound from the brief: a row may trail its own hit by this much, no more. */
 const LAG_BOUND_MS = 250;
@@ -287,7 +288,7 @@ async function playChapter(game: 'ffx' | 'ffx2', seed: number): Promise<Run> {
     cutscenes: new FakeCutscenes(),
     sleep: (ms) => clock.sleep(ms),
   });
-  presenter.setAutoPlay(intendedStrategy);
+  setCappedAutoPlay(presenter, intendedStrategy);
   await presenter.run(engine as never);
   return { hud, clock, finalState: engine.state() };
 }

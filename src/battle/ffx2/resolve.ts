@@ -14,13 +14,12 @@ import type {
   StatusId,
 } from '../common/types.ts';
 import type { AbilityRegistry, Emit, Ffx2Unit } from './internal.ts';
-import { breakChain, cannotEvade, registerHit } from './chain.ts';
-import { chainMultiplier } from './chain.ts';
+import { breakChain, cannotEvade, chainMultiplier, peekChainCount, registerHit } from './chain.ts';
 import { computeDamage, critPercent, hitPercent, randomiserRoll } from './formulas.ts';
 import { resolveSensor, sensorKind } from './sensor.ts';
 import { applyStatus, removeStatus, statusChanceLinear } from './statuses.ts';
 import { hpCostFor, resolveTargets } from './targeting.ts';
-import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
+import { AUTO_LIFE_REVIVE_FRACTION, IMMUNE_HITS_SKIP_CHAIN, NAMED_TARGETS_ONLY } from './constants.ts';
 import { applyMpFraction, mpOnlyTaken, resolveSetTo, setsPoolsTo } from './aeon-effects.ts';
 
 export interface ResolveContext {
@@ -30,6 +29,8 @@ export interface ResolveContext {
   emit: Emit;
   breaksDamageLimit(unit: Ffx2Unit): boolean; // per girl: an accessory or a Garment Grid gate
   timedAilmentDefaults?: boolean; // `EnemyGroupDef.timedAilmentDefaults` (`statuses.ts`, Chapter XIII)
+  immuneHitsSkipChain?: boolean; // IC-1's OFF switch; absent = `constants.ts` IMMUNE_HITS_SKIP_CHAIN
+  namedTargetsOnly?: boolean; // `extra.namedTargetsOnly` rows; absent = `constants.ts` NAMED_TARGETS_ONLY
 }
 
 /**
@@ -106,20 +107,30 @@ export function revive(ctx: ResolveContext, target: Ffx2Unit, fraction: number, 
   }
 }
 
-/** Per-hit target selection; `random-*` re-rolls a fresh target each strike. §2.9 */
+/**
+ * Per-hit target selection; `random-*` re-rolls a fresh target each strike. §2.9
+ *
+ * **All-target (IC-2, §9.1 `[verified: 3 sources]`):** the move is defined per character, so hit
+ * `hitIndex` belongs to `pool[hitIndex]`, the targets taken once at the action's start. A target
+ * KO'd partway takes nothing more and its hit is **not** handed on (the mid-move death case is
+ * unsourced; this is the per-target definition's reading). It used to index a list re-filtered
+ * after every hit, so a death wrapped later hits onto a girl already hit and the last went free.
+ */
 function targetForHit(
   ability: AbilityDef,
   pool: readonly Ffx2Unit[],
   hitIndex: number,
   rng: Rng,
 ): Ffx2Unit | undefined {
-  const living = pool.filter((u) => u.alive || ability.flags.includes('can-target-dead'));
+  const standing = (u: Ffx2Unit) => u.alive || ability.flags.includes('can-target-dead');
+  if (ability.targeting === 'all-enemies' || ability.targeting === 'all-allies' || ability.targeting === 'all') {
+    const own = pool[hitIndex];
+    return own && standing(own) ? own : undefined;
+  }
+  const living = pool.filter(standing);
   if (living.length === 0) return undefined;
   if (ability.targeting === 'random-enemy' || ability.targeting === 'random-ally') {
     return rng.pick(living);
-  }
-  if (ability.targeting === 'all-enemies' || ability.targeting === 'all-allies' || ability.targeting === 'all') {
-    return living[hitIndex % living.length];
   }
   return living[0];
 }
@@ -197,7 +208,11 @@ export function resolveAbility(
   requested: readonly CombatantId[],
   options: { multiTarget?: boolean; isCounter?: boolean; hitsOverride?: number; inSequence?: boolean } = {},
 ): number {
-  const pool = resolveTargets(ctx.units, user, ability, requested, ctx.rng);
+  const all = resolveTargets(ctx.units, user, ability, requested, ctx.rng);
+  // `extra.namedTargetsOnly` (`abilities-shuyin.ts`, Acta Est Fabula): an all-target row whose
+  // source names its targets hits only the ids its caller named. Switch: `constants.ts`.
+  const namedOnly = ability.extra?.['namedTargetsOnly'] === true && (ctx.namedTargetsOnly ?? NAMED_TARGETS_ONLY);
+  const pool = namedOnly ? all.filter((u) => requested.includes(u.id)) : all;
   if (pool.length === 0) return 0;
 
   const mpCost = user.statuses.spellspring ? 0 : ability.mpCost;
@@ -316,15 +331,11 @@ export function resolveAbility(
       // `healing` formula), so the two cannot drift apart. Revives already
       // skipped this block above.
       const restorative = ability.flags.includes('heals') || ability.formula === 'healing';
-      const chainCount = restorative ? 0 : registerHit(target, crit);
-      if (!restorative) {
-        ctx.emit({
-          type: 'chain',
-          targetId: target.id,
-          count: chainCount,
-          multiplier: chainMultiplier(chainCount),
-        });
-      }
+      // IC-1's OFF switch (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, unsourced §9.2): on, the count is
+      // peeked and only a non-immune result registers. `computeDamage` is pure, so the chain event
+      // still precedes the damage event and the default path's log is unchanged.
+      const skipImmune = !restorative && (ctx.immuneHitsSkipChain ?? IMMUNE_HITS_SKIP_CHAIN);
+      const chainCount = restorative ? 0 : skipImmune ? peekChainCount(target) : registerHit(target, crit);
 
       const result = computeDamage({
         user,
@@ -336,6 +347,11 @@ export function resolveAbility(
         multiTarget: options.multiTarget === true,
         breaksDamageLimit: ctx.breaksDamageLimit(user),
       });
+
+      if (!restorative && !(skipImmune && result.immune)) {
+        if (skipImmune) registerHit(target, crit);
+        ctx.emit({ type: 'chain', targetId: target.id, count: chainCount, multiplier: chainMultiplier(chainCount) });
+      }
 
       if (result.immune) {
         ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });

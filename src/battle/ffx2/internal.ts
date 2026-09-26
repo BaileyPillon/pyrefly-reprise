@@ -186,6 +186,15 @@ export interface Ffx2EngineOptions {
    * For measurement runs. `0` is off.
    */
   actionTimeSeconds?: number;
+  /**
+   * IC-1's alternative (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, OFF): an immune hit opens no chain
+   * window. Unsourced either way (`research/ffx2-combat-core.md` §9.2). For measurement runs.
+   */
+  immuneHitsSkipChain?: boolean;
+  /** `constants.ts` NAMED_TARGETS_ONLY (Acta Est Fabula on the Redoubts only), for a measurement run. */
+  namedTargetsOnly?: boolean;
+  /** `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (only a Delay / Action-cancel hit closes a menu), for a measurement run. */
+  menuCancelOnlyDelayAbilities?: boolean;
 }
 
 /** The party's live state as it crosses from one chained group to the next. */

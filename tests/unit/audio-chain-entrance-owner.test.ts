@@ -47,6 +47,7 @@ import { buildPossessedAeonChain, yuYevonGroup } from '../../src/data/ffx/enemie
 import { shuyinGroup } from '../../src/data/ffx2/enemies/shuyin.ts';
 import type { StoryScript } from '../../src/story/dsl.ts';
 import { FakeStage } from './helpers/FakeStage.ts';
+import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 
 type Entry =
   | { kind: 'start'; track: string; link: number }
@@ -108,7 +109,7 @@ async function timeline(chapter: Chapter): Promise<{ log: Entry[]; links: number
     sleep: () => Promise.resolve(),
   });
   presenter.setSpeed('skip');
-  presenter.setAutoPlay(intendedStrategy);
+  setCappedAutoPlay(presenter, intendedStrategy);
   const result = await runEncounterChain({
     chapter,
     presenter,
