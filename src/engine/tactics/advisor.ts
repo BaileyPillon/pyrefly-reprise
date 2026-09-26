@@ -111,7 +111,7 @@ import {
 } from './advisor-revive.ts';
 import { forecastFromState } from './advisor-forecast.ts';
 import { floorNote } from './advisor-floor.ts';
-import { changesNothing } from './advisor-guard.ts';
+import { changesNothing, harmsAZombie } from './advisor-guard.ts';
 import {
   type StatusChance,
   bestChance,
@@ -1354,7 +1354,17 @@ export function buildAdvisorView(
       : changesNothing(decision.actorId, c.suggestion.command, c.outcome));
     (dead ? inert : useful).push(c);
   }
-  const ordered = useful.length > 0 ? [...useful, ...inert] : legal;
+  // **The Zombie guard** (PR-0198): a row that hurts a living Zombie ally goes
+  // behind every row that does not, inert ones included — a turn spent on
+  // nothing is cheaper than one spent KO'ing your own healer
+  // [`./advisor-guard.ts#harmsAZombie`].
+  const harmful = legal.filter((c) => harmsAZombie(state, c.outcome));
+  const kept = (xs: Candidate[]): Candidate[] => xs.filter((c) => !harmful.includes(c));
+  const safe = kept(legal);
+  const ordered =
+    safe.length === 0
+      ? legal
+      : [...(kept(useful).length > 0 ? [...kept(useful), ...kept(inert)] : safe), ...harmful];
 
   const shown: Candidate[] = [ordered[0]!];
   /** A revive this board was offered, priced, and refused. See {@link noteFor}. */
