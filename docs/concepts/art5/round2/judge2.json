@@ -1,0 +1,361 @@
+{
+ "note": "Agent judge, not Bailey. Round 1 rubric (docs/concepts/art5/JUDGE.md): 8 categories, pass at a mean of 7.0, scale gate 0.75-1.30 upright stature (0.60 for a lunge, ko not gated). Nothing installed to public/art; nothing committed by the judge passes.",
+ "slots": {
+  "yuna-songstress/cast": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-songstress/cast/cand-2.png",
+   "verdict": "PASS 7.31",
+   "scores": {
+    "id": 7,
+    "anat": 7.5,
+    "hands": 6.5,
+    "cost": 6.5,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.33,
+    "stature": 1.05
+   },
+   "why": "Raised microphone and hand-on-hip read clearly at battle size; clean face, teal drop earrings, heterochromia, open smile. Worst: hands (2x muddle of orange/white strokes on the raised fist). Costume residuals: narrow ribbon-tassel sash (idle: broad pink-to-blue train), orange boots with white bows (idle: tan-brown), no lace petticoat, pale blue collar with no teal ornament, eye colours on the idle's own sides, hair darker brown than the idle's auburn."
+  },
+  "yuna-songstress/victory": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-songstress/victory/cand-6.png",
+   "verdict": "PASS 7.38",
+   "scores": {
+    "id": 7,
+    "anat": 7.5,
+    "hands": 7,
+    "cost": 6.5,
+    "seams": 8,
+    "edges": 7.5,
+    "finish": 7.5,
+    "game": 8
+   },
+   "scale": {
+    "headMatch": 1.14,
+    "stature": 0.84
+   },
+   "why": "Best face of the batch: eye colours on the idle's own sides, auburn hair, teal drop earrings, open grin; one mic and one open hand read as a clear cheer. Worst: costume (legs orange/red-orange to the boots instead of pink thighhighs, boots red-orange with orange panels instead of tan-brown, sash only a small tail, no petticoat)."
+  },
+  "yuna-warrior/hurt": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-warrior/hurt/cand-7.png",
+   "verdict": "PASS 7.19",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6.5,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.41,
+    "stature": 0.94
+   },
+   "why": "Real recoil (torso and head thrown back, one eye shut, mouth open, free arm flung out); kimono sleeves and long blue skirt hold, boots mismatched tan/brown as in the idle; sword continuous and gripped. Worst: identity/costume (blade black with cyan glyphs and a gold chisel tip rather than the idle's broad cyan blade, large teal disc earrings not drops, red hood flares into a sizeable shape, a red cape panel at the right hip)."
+  },
+  "yuna-songstress/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-songstress/ko/cand-1.png",
+   "verdict": "PASS 7.00 (exactly on the bar)",
+   "scores": {
+    "id": 6.5,
+    "anat": 7.5,
+    "hands": 7,
+    "cost": 6.5,
+    "seams": 7.5,
+    "edges": 6.5,
+    "finish": 7,
+    "game": 7.5
+   },
+   "why": "Reads as down at any size; clean face (eyes shut, gloved hand under the chin), mic by the other hand, pink thighhighs, no wrong prop. Worst: edges (a pale blue/pink floor smear under the boots and a faint wisp off the hair tips, both faint at game size); boots orange with black side stripes instead of tan-brown, hair darker brown, small orange obi ends by the chin."
+  },
+  "yuna-warrior/cast": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-warrior/cast/cand-1.png",
+   "verdict": "FAIL 6.94: identity (6), no heterochromia",
+   "scores": {
+    "id": 6,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6.5,
+    "seams": 7.5,
+    "edges": 7.5,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "headMatch": 1.15,
+    "stature": 0.83
+   },
+   "why": "Raised-arm cast reads, sword held low with the crossguard clear. Both eyes are the same teal (no heterochromia; the maker's note it was 'not clear at this size' was wrong, it is absent). Earrings dark blue-black not teal drops, boots ankle-high yellow-orange/red-brown not tall tan/red-brown, blade slim, an extra gold-and-blue trinket balanced on the raised fingertip reads as floating."
+  },
+  "yuna-warrior/item": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-warrior/item/cand-1.png",
+   "verdict": "FAIL 6.94: hands (6), the sword is not held",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 6,
+    "cost": 6.5,
+    "seams": 7,
+    "edges": 8,
+    "finish": 7,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.53,
+    "stature": 1.13
+   },
+   "why": "Bottle held out at chest height reads well, hood down. The 'sword hand' the maker described is actually open and empty, pointing down; the hilt rests unheld at her hip against the obi, so the sword is not held. A garbled pink scribble ornament tangles with the crossguard. Eye colours on the wrong sides, earrings blue crystals not teal drops, boots ankle-high."
+  },
+  "yuna-warrior/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-warrior/ko/cand-2.png",
+   "verdict": "FAIL 6.88: edges (6.5), pink floor streaks",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6.5,
+    "seams": 7,
+    "edges": 6.5,
+    "finish": 7,
+    "game": 7.5
+   },
+   "why": "Lies on her side, eyes shut, hood down, sword beside her not under her, clear of every edge. A pink smear under the torso and a detached pink streak below the grip. Sword has no crossguard (a gold bow-knot and tassel on a cyan rope grip instead), face small with the hood running into the cheek, skirt stops mid-calf, boots tan lace-up ankle boots."
+  },
+  "yuna-warrior/attack": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-warrior/attack/cand-8.png",
+   "verdict": "FAIL 6.75: costume (5)",
+   "scores": {
+    "id": 6,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 5,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 6.5
+   },
+   "scale": {
+    "headMatch": 1.42,
+    "stature": 1
+   },
+   "why": "Good face (determined look, heterochromia on the idle's sides, hood down), one sword clear of the edges. Skirt is a full flared bell skirt not the idle's long straight slit skirt; bare legs and navy loafers instead of navy leggings and tall tan/red-brown boots; only one kimono sleeve, a yellow bow on the near shoulder; blade raised as an overhead wind-up/guard, not a strike."
+  },
+  "yuna-songstress/hurt": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/yuna-songstress/hurt/cand-6.png",
+   "verdict": "FAIL 6.69: costume (5.5), the sash became a gown train",
+   "scores": {
+    "id": 6,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 5.5,
+    "seams": 7.5,
+    "edges": 7.5,
+    "finish": 7.5,
+    "game": 6
+   },
+   "scale": {
+    "headMatch": 1.41,
+    "stature": 0.98
+   },
+   "why": "Tall brown knee boots from try b landed, face clean (one eye shut, mouth open), teal drop earring. The sash grew into a floor-length train fanning on both sides, reading as a slit ball gown; frame 823 px wide. Bare legs (no pink thighhighs), orange glove not blue. Reads as a weak wince/lean, the same round-1 fault; the train dominates the silhouette."
+  },
+  "rikku-alchemist/attack": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-alchemist/attack/cand-4.png",
+   "verdict": "PASS 7.12",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "headMatch": 0.94,
+    "stature": 0.68
+   },
+   "why": "Flask thrust toward the enemy reads at game size. Worst: costume (only one flame strip left, at the hip, idle has them down both legs; boots blue with black flaps not green cuffs; a large brown satchel)."
+  },
+  "rikku-alchemist/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-alchemist/ko/cand-3.png",
+   "verdict": "FAIL 6.81: game read",
+   "scores": {
+    "id": 7,
+    "anat": 6.5,
+    "hands": 6.5,
+    "cost": 6,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7,
+    "game": 6
+   },
+   "why": "Cheek pillowed on her forearm reads as asleep rather than fallen; flame strips spread under her as an orange-yellow mat, flask a pink blob at the chest."
+  },
+  "rikku-black-mage/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-black-mage/ko/cand-4.png",
+   "verdict": "PASS 7.12",
+   "scores": {
+    "id": 7,
+    "anat": 6.5,
+    "hands": 7,
+    "cost": 7,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7,
+    "game": 7
+   },
+   "scale": {
+    "headMatch": 1.17
+   },
+   "why": "Face-down, eyes shut, hat on, fishnet sleeve, pink warmer; staff lies flat beside her with the orange claw head clear, the fall reads. Worst: anatomy (only one lower leg reads at 2x, torso short)."
+  },
+  "rikku-black-mage/victory": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-black-mage/victory/cand-2.png",
+   "verdict": "FAIL 6.94: game read",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 6
+   },
+   "scale": {
+    "headMatch": 1.17,
+    "stature": 0.98
+   },
+   "why": "Reads at game size as the idle's stance with a grin; the swap barely registers as a victory. Staff a thin rod with a small plain hook head ending at her knee (idle: an ornate orange head, planted); staff hand a dark mitten; mismatched warmers; a red scarf replaces the purple collar."
+  },
+  "rikku-gunner/attack": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-gunner/attack/cand-4.png",
+   "verdict": "PASS 7.12",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.23,
+    "stature": 0.98
+   },
+   "why": "Two blue-gold pistols stacked and aimed at the enemy, normal head, kit reads (bandana, braids, pink scarf, crop top, denim shorts, camo sleeve). Worst: costume (baggy blue leg warmers replace the idle's tall fitted buckled boots; an orange-green pouch flap; the lower pistol's grip flares oddly)."
+  },
+  "rikku-gunner/item": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-gunner/item/cand-4.png",
+   "verdict": "PASS 7.38",
+   "scores": {
+    "id": 7.5,
+    "anat": 7.5,
+    "hands": 7,
+    "cost": 6.5,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7
+   },
+   "scale": {
+    "headMatch": 1.13,
+    "stature": 0.96
+   },
+   "why": "The best Rikku frame in the batch: green bulb bottle held out by the neck, blue pistol gripped low, white crop top, short pink scarf, tall pale-blue boots. Worst: costume (a large lavender satchel with a carved orange holster the idle does not have, chunky pistol)."
+  },
+  "rikku-gunner/hurt": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-gunner/hurt/cand-3.png",
+   "verdict": "FAIL 6.81: hands",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 5.5,
+    "cost": 5.5,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 6.5
+   },
+   "scale": {
+    "headMatch": 1.05,
+    "stature": 0.8
+   },
+   "why": "At 3x the screen-left hand is missing (barrel grows straight out of the cuff past a sliver of skin); the other hand clasps a blue cylinder with no grip or trigger (both guns read as tubes, round 1's gun fault); the pink scarf became bow-like bunny ears; both sleeves camo."
+  },
+  "rikku-gunner/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-gunner/ko/cand-3.png",
+   "verdict": "PASS 7.06 (narrow)",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6.5,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 6
+   },
+   "scale": {
+    "headMatch": 0.83
+   },
+   "why": "Clean face, eyes shut; tall blue buckled boots, denim shorts, camo sleeve match the idle; head now about 1.2x the idle's (round 1 was 1.8x). Worst: game read (head rests on the forearm like a nap, no pistol visible); top pale blue not white."
+  },
+  "rikku-white-mage/cast": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-white-mage/cast/cand-3.png",
+   "verdict": "PASS 7.25",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 7,
+    "cost": 6,
+    "seams": 8,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.34,
+    "stature": 1.03
+   },
+   "why": "Raised hand really grips one upright staff (fingers wrap it at 2x); cast reads clearly at game size. Worst: costume (white coat flares into a wide orange-pink-purple cape, the spade head is heart-cut not crescent, neutral face)."
+  },
+  "rikku-white-mage/item": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-white-mage/item/cand-1.png",
+   "verdict": "FAIL 6.81: hands",
+   "scores": {
+    "id": 6.5,
+    "anat": 7,
+    "hands": 5.5,
+    "cost": 6,
+    "seams": 7.5,
+    "edges": 8,
+    "finish": 7,
+    "game": 7
+   },
+   "why": "At 3x the flask hand is a malformed pale blob with wedge fingers under the flask; the flask hangs from the staff rather than being held out."
+  },
+  "rikku-thief/item": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/rikku-thief/item/cand-8.png",
+   "verdict": "PASS (narrow, try b)",
+   "scale": {
+    "headMatch": 1.18,
+    "note": "scale gate now passes (1.18 / 1.07), but the eyes sit about 1.4x wider apart than the idle and the hair mane is larger, so the head still looks bigger than the idle at game size when the pose swaps in"
+   },
+   "why": "The Thief item scale gate now passes numerically after try b, but the eye spacing and hair mane keep the head reading larger than the idle at game size."
+  },
+  "rikku-dark-knight/ko": {
+   "verdict": "FAIL (all try-a candidates guard-rejected for touching the canvas edge; try b cand-8 later passed the look, see looks.json)",
+   "why": "Judge pass covered the try-a set only; try-a had no candidate to score because every frame touched an edge. See the looker's try-b PASS on cand-8 in looks.json (not separately re-judged in this pass)."
+  }
+ }
+}

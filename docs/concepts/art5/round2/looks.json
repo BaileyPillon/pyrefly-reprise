@@ -73,7 +73,17 @@
    "3": "guard REJECT (touches the left edge); ponytail, oversized sash",
    "4": "wince and lean; rainbow skirt, red-yellow boots, small teal studs instead of drops"
   },
-  "verdict": "FAIL: The sash is no longer cut by the edge in 1, 2 and 4, and the recoil reads. The boot fix failed in all four: blue, black or red-yellow, never tan. cand-1 also has detached flecks by the boots and cand-4 a rainbow skirt. try b leaves cn at CN_B and swaps in a stronger boot phrase."
+  "verdict": "PASS, weak: cand-6 (the try-b boot fix landed as tall brown knee boots and the sash clears the edge; the recoil reads as a wince with a lean back, same strength as try-a cand-1. Residuals: no pink thighhighs, front-laced boots, an oversized sash train fanning along the floor on both sides, hair darker brown than the idle's auburn.)",
+  "b": {
+   "cands": {
+    "5": "guard REJECT (touches the left and right edges); tan lace-up knee boots, head-back recoil, sash train spread wide",
+    "6": "PICK, only frame that passed the guard: head tilted back with one eye shut, mic clutched at the chest, slight lean back; brown leather knee boots (the boot fix landed); sash inside the frame",
+    "7": "guard REJECT (crop covers 100% x 98.5%, content at the edge); a second figure's legs over her, crouched and broken",
+    "8": "guard REJECT (crop 99.4% x 99.7%); kneeling, not a hurt recoil; mismatched legwear"
+   },
+   "verdict": "PASS, weak: cand-6 (the try-b boot fix landed as tall brown knee boots and the sash clears the edge; the recoil reads as a wince with a lean back, same strength as try-a cand-1. Residuals: no pink thighhighs, front-laced boots, an oversized sash train fanning along the floor on both sides, hair darker brown than the idle's auburn.)"
+  },
+  "pick": "cand-6"
  },
  "yuna-songstress/ko": {
   "cands": {
@@ -91,7 +101,17 @@
    "3": "one mic plus an open hand, sash, full-size figure; blue lace-up boots, red-orange stockings",
    "4": "giant striped rattle or mace overhead: fail"
   },
-  "verdict": "FAIL: The one-microphone and sash fixes landed in 1 and 3. The tan knee boots the answer weights did not appear anywhere: every candidate has blue boots, and cand-3 has the lace-up boots the answer names as a fault. 2 and 4 grew giant props. If try b fails, cand-3 or cand-1 is the fallback."
+  "verdict": "PASS: cand-6 (every fix now lands: one microphone with the other hand open, sash present, knee boots neither blue nor lace-up, full-size figure, no giant props, heterochromia reads. Residuals: no pink thighhighs, boots orange with reddish tops rather than tan-brown. cand-8 is the backup if the judge wants the pink leg colour.)",
+  "b": {
+   "cands": {
+    "5": "both arms up with a microphone in EACH hand (the two-mic fault); orange knee boots",
+    "6": "PICK: both arms up, one mic in the right hand and the left hand open and empty; blue/green heterochromia visible; pink sash tail on one side; knee boots with no laces (orange-tan)",
+    "7": "a microphone in each hand again; orange boots",
+    "8": "one mic and an open hand, pink knee cuffs, but large sash wings on both sides, a yellow tie and a blue drape behind; the widest frame (654 px)"
+   },
+   "verdict": "PASS: cand-6 (every fix now lands: one microphone with the other hand open, sash present, knee boots neither blue nor lace-up, full-size figure, no giant props, heterochromia reads. Residuals: no pink thighhighs, boots orange with reddish tops rather than tan-brown. cand-8 is the backup if the judge wants the pink leg colour.)"
+  },
+  "pick": "cand-6"
  },
  "yuna-warrior/attack": {
   "cands": {
@@ -100,7 +120,17 @@
    "3": "red beret or cap on her head (hood-up class), plus a sword blade and a separate blue staff: two weapons",
    "4": "best identity (hood down, kimono sleeves, long blue skirt, cyan longsword, heterochromia), but guard REJECT: blade tip touches the right edge"
   },
-  "verdict": "FAIL: Only 2 and 3 passed the guard, and both break the one-weapon rule (glaive in 2, blade plus staff in 3), with a hat in 3. cand-4 lands every identity fix and fails only on the edge. A higher cn keeps the skeleton's sword framing. If b still touches the edge, the cause is the blade length in the 1024-canvas sword skeleton, not the prompt."
+  "verdict": "PASS, weak: cand-8 (all four passed the guard, so the 1024-canvas edge problem is solved; cand-8 is the only one meeting the one-weapon rule with hood down, kimono sleeves and the long blue skirt. Weak: reads as an overhead wind-up rather than a strike landing, flat navy loafers instead of tan/red-brown knee boots, no navy leggings.)",
+  "b": {
+   "cands": {
+    "5": "one cyan blade in a two-handed diagonal swing, hood down on the shoulders, kimono sleeves; knee-length flounced skirt instead of the long skirt; navy shoes, bare legs; small figure",
+    "6": "a small detached blade floats at the top and pink ribbon shards surround her (floating debris); not usable",
+    "7": "one blade raised overhead in both hands, but the red hood flares up into a large cape (the hood-cape fault the answer negated); short blue skirt",
+    "8": "PICK: one cyan longsword with a gold crossguard raised in both hands, hood down (red hood behind the neck), kimono sleeves, long blue skirt, heterochromia visible"
+   },
+   "verdict": "PASS, weak: cand-8 (all four passed the guard, so the 1024-canvas edge problem is solved; cand-8 is the only one meeting the one-weapon rule with hood down, kimono sleeves and the long blue skirt. Weak: reads as an overhead wind-up rather than a strike landing, flat navy loafers instead of tan/red-brown knee boots, no navy leggings.)"
+  },
+  "pick": "cand-8"
  },
  "yuna-warrior/cast": {
   "cands": {
@@ -127,7 +157,17 @@
    "3": "guard REJECT (touches the bottom edge); two swords",
    "4": "lean-back recoil and sword over the shoulder, but a giant pink wing or sash flame fills the top half"
   },
-  "verdict": "FAIL: The identity fixes landed in cand-2: hood down, a cyan sword instead of a yellow one, skirt and sleeves back. But the new recoil skeleton did not hold, and it reads as a wince, not a hit, which is the round 1 'weak lean' fault. The only other guard-ok frame (4) has a giant pink wing. The higher cn is meant to make the recoil skeleton hold. If try b fails, cand-2 is the fallback."
+  "verdict": "PASS: cand-7 (the higher ControlNet strength made the recoil skeleton hold; reads as a hit, not the try-a wince, and keeps the identity fixes try-a cand-2 had landed. Residuals: blade darker teal than the idle's bright cyan, earrings teal balls rather than drops, a red cape panel at the right hip.)",
+  "b": {
+   "cands": {
+    "5": "guard REJECT (touches the right and bottom edges); a large orange-red cape flame on top",
+    "6": "leans back with one eye shut, sleeves, long skirt, but the blade is a rainbow/yellow gradient (the yellow-sword class the answer negated)",
+    "7": "PICK: clear recoil (torso thrown back, head back, one eye shut, mouth open), sword held low at her side with a dark teal blade and gold hilt, kimono sleeves, long blue skirt, hood fallen back behind the head, mismatched tan and brown boots like the idle",
+    "8": "small figure holding the sword straight up; reads as a salute, not a hit"
+   },
+   "verdict": "PASS: cand-7 (the higher ControlNet strength made the recoil skeleton hold; reads as a hit, not the try-a wince, and keeps the identity fixes try-a cand-2 had landed. Residuals: blade darker teal than the idle's bright cyan, earrings teal balls rather than drops, a red cape panel at the right hip.)"
+  },
+  "pick": "cand-7"
  },
  "yuna-warrior/ko": {
   "cands": {
@@ -163,7 +203,17 @@
    "3": "guard REJECT (both side edges): reads as down with navy armour, but there is no sword, the midriff is bare and a pale sheet lies under her",
    "4": "guard REJECT: lying inside a big teal disc or platform with a gold sun emblem, sword beside her"
   },
-  "verdict": "FAIL: All four touch the canvas edges, and the greatsword word grew into a boat-sized blade (c2) or a platform (c4). Shrink the sword word, add framing words and stronger OpenPose to hold the 0.72 skeleton footprint, and weight the covered midriff."
+  "verdict": "PASS: cand-8 (framing fixed, all four guard ok, the platform and boat blade are gone; cand-8 is the only one with the sword lying beside her. Residuals: the sword is a slim longsword not the idle's dark engraved greatsword, a thin blue shadow streak under the body, only one braid survives from the idle's dark-streaked mane.)",
+  "b": {
+   "cands": {
+    "5": "guard ok: lying down, eyes shut, navy armour, chainmail stomach; no sword anywhere",
+    "6": "guard ok: lying down, eyes shut, armour; no sword",
+    "7": "guard ok: lying down, but the sword stands up diagonally into the air from beside her",
+    "8": "PICK: lying on her side, head right, eyes shut, white flower on the chest, chainmail covering the stomach, a blue sword lying flat along her body; no platform, disc or boat blade; clear of the edges"
+   },
+   "verdict": "PASS: cand-8 (framing fixed, all four guard ok, the platform and boat blade are gone; cand-8 is the only one with the sword lying beside her. Residuals: the sword is a slim longsword not the idle's dark engraved greatsword, a thin blue shadow streak under the body, only one braid survives from the idle's dark-streaked mane.)"
+  },
+  "pick": "cand-8"
  },
  "rikku-thief/attack": {
   "cands": {
@@ -172,7 +222,17 @@
    "3": "guard REJECT (edge): red-orange legs, single long blade",
    "4": "guard REJECT (full canvas): rainbow streamers fill the frame, red legs"
   },
-  "verdict": "FAIL: Only c1 cleared the guard, and its attack points away from the enemy (round 1 failed a gunner attack for this). Separately, the head factor 1.45 did not take: the heads come out normal size, so the Thief scale gate (JUDGE Question 1) still fails. Push the direction and head size harder and raise OpenPose; prompt words may not close a 1.5-1.8x stature gap."
+  "verdict": "FAIL (stops, rule 15): the head fix took (c7 is inside the gate) and the facing is fixed, but the only candidate with both loses the bandana, the puffy sleeves and the green skirt; c6 keeps more of her look but has claws for daggers and fails the scale gate. No candidate fixes the named faults and keeps her identity.",
+  "b": {
+   "cands": {
+    "5": "guard REJECT (edge)",
+    "6": "guard ok: faces and lunges right, but holds a three-blade claw in each hand, blue skirt (idle green), blue sleeves; head still small (stature about 1.45, over the gate)",
+    "7": "guard ok, closest: lunges right with two separate curved daggers, the front one at the enemy; stature about 1.08 (inside the gate). But the bandana became a big blue hair bow, hair straight, no puffy sleeves, blue skirt, teal sneakers: the Thief identity is gone",
+    "8": "guard REJECT (crop box): canvas-filling"
+   },
+   "verdict": "FAIL (stops, rule 15): the head fix took (c7 is inside the gate) and the facing is fixed, but the only candidate with both loses the bandana, the puffy sleeves and the green skirt; c6 keeps more of her look but has claws for daggers and fails the scale gate. No candidate fixes the named faults and keeps her identity."
+  },
+  "stopped": true
  },
  "rikku-thief/cast": {
   "cands": {
@@ -181,7 +241,17 @@
    "3": "dagger raised, no second dagger (the lower hand holds a pouch)",
    "4": "best on content: dagger raised, second curved dagger low in the other hand, big white puffy sleeves, soles clear; but red-orange streaks on the shins and knees"
   },
-  "verdict": "FAIL: The soles are fixed, and c4 fixes the second dagger and the sleeves. But the named head factor did not take: eye-to-chin is about 43-47/1000 against the idle's 68, so she stands about 1.5x the idle at head-match (gate 1.30). c4's shins also stay red-orange. Hold for Bailey's Question 1, or try b as above."
+  "verdict": "FAIL (stops, rule 15): the head factor now works (c5-c7 inside the gate), but the other named fixes do not land: no candidate has the short curved second dagger, the puffy sleeves or bare tan legs without red-orange shins; the best (c6) holds a pickaxe for its second weapon.",
+  "b": {
+   "cands": {
+    "5": "guard ok: scale about 1.0 (fine); dagger raised, second curved blade low; red scarf streamer flying (a cape), red-orange shins, no puffy sleeves",
+    "6": "guard ok, closest: bandana, braids, green skirt, arm raised with a big spear-like blade; the other hand holds a pickaxe or hook, not a dagger; small white shoulder frills, not puffy sleeves; shins still grade to red-orange; stature about 1.26",
+    "7": "guard ok: red-brown legs all the way down, small sleeves, dagger raised",
+    "8": "guard ok but chibi: stature about 0.73 (under the gate)"
+   },
+   "verdict": "FAIL (stops, rule 15): the head factor now works (c5-c7 inside the gate), but the other named fixes do not land: no candidate has the short curved second dagger, the puffy sleeves or bare tan legs without red-orange shins; the best (c6) holds a pickaxe for its second weapon."
+  },
+  "stopped": true
  },
  "rikku-thief/hurt": {
   "cands": {
@@ -190,7 +260,17 @@
    "3": "two heads (a second face beside hers): fail",
    "4": "guard REJECT (edge)"
   },
-  "verdict": "FAIL: The fork and flame blades are gone and the puffy sleeves are back in c1, but the recoil turns her away from the camera and the head factor did not take (scale gate fails, JUDGE Question 1)."
+  "verdict": "FAIL (stops, rule 15): the guard rejected all four; the big-head/from-above words turned every render into a canvas-filling close-up, and two of them have a second head.",
+  "b": {
+   "cands": {
+    "5": "guard REJECT (edge): close-up, a second head (a small blonde face beside her)",
+    "6": "guard REJECT (full canvas): close-up with a flame-shaped cloud behind",
+    "7": "guard REJECT (edge): a second, upside-down red-haired head above her",
+    "8": "guard REJECT (full canvas): close-up crouch"
+   },
+   "verdict": "FAIL (stops, rule 15): the guard rejected all four; the big-head/from-above words turned every render into a canvas-filling close-up, and two of them have a second head."
+  },
+  "stopped": true
  },
  "rikku-thief/item": {
   "cands": {
@@ -199,7 +279,17 @@
    "3": "green bottle held out, a small blade in the other hand, long blue sleeves (not puffy); head small",
    "4": "best on content: pink bottle held out, white puffy sleeves, bare legs, blue-white boots; no dagger visible; eye-to-chin about 37/1000 (stature about 1.8)"
   },
-  "verdict": "FAIL: The only fix this slot names is the head factor, and it did not move the head ratio. Round 1 stood 1.49; round 2 stands about 1.7-1.8 against the 1.30 gate. The idle's big head comes from leaning toward the camera, so b asks for that lean and foreshortening. This is really JUDGE Question 1 for Bailey."
+  "verdict": "PASS, weak: cand-8 (the head-match fix now lands, and c8 also keeps the dagger in the other hand. Residuals: shins grade to red-orange/pink below the knee, puffy sleeves solid blue not white-blue with yellow bows, a red scarf trails like a short cape, boots plain blue not blue-white with green soles.)",
+  "b": {
+   "cands": {
+    "5": "guard ok but chibi: stature about 0.67 (under the gate); red hair",
+    "6": "guard REJECT (full canvas): leaning close-up, red hair",
+    "7": "guard REJECT (full canvas): chibi close-up holding a big flask",
+    "8": "PICK: leans forward like the idle, bottle held out toward the enemy, a small dagger low in the other hand, blue puffy sleeves, bandana, braids, red scarf, green skirt, blue boots; stature about 1.19 (inside 0.75-1.30)"
+   },
+   "verdict": "PASS, weak: cand-8 (the head-match fix now lands, and c8 also keeps the dagger in the other hand. Residuals: shins grade to red-orange/pink below the knee, puffy sleeves solid blue not white-blue with yellow bows, a red scarf trails like a short cape, boots plain blue not blue-white with green soles.)"
+  },
+  "pick": "cand-8"
  },
  "rikku-thief/victory": {
   "cands": {
@@ -208,7 +298,17 @@
    "3": "saluting, dagger low; huge hair spike mane",
    "4": "V-sign, small dagger in the other hand, puffy sleeve; eye-to-chin about 35/1000 (stature about 1.9)"
   },
-  "verdict": "FAIL: The spike blade is mostly fixed (c2 and c4 hold small daggers and c2 has both), but the head factor did not take: stature at head-match is about 1.9 (round 1 was 1.67; the gate is 1.30). Same JUDGE Question 1 blocker."
+  "verdict": "FAIL (stops, rule 15): the scale gate is fixed (c5 and c7 about 1.0), but c5 swaps the dagger for a large hook and c7 brings back a rainbow streamer; neither has the idle's two small daggers.",
+  "b": {
+   "cands": {
+    "5": "guard ok: V-sign, grin, bandana, green skirt, blue-white boots with yellow bows; stature about 0.96 (fine). But the only weapon is a big blue hook or tail shape, not a small dagger, and the shins are red",
+    "6": "guard REJECT (crop box): chibi close-up",
+    "7": "guard ok: stature about 0.99 (fine), grin, fist behind the head, jagged orange dagger; but a big pink-blue rainbow streamer sweeps from the hip, and the boots do not match",
+    "8": "guard REJECT (edge)"
+   },
+   "verdict": "FAIL (stops, rule 15): the scale gate is fixed (c5 and c7 about 1.0), but c5 swaps the dagger for a large hook and c7 brings back a rainbow streamer; neither has the idle's two small daggers."
+  },
+  "stopped": true
  },
  "rikku-black-mage/item": {
   "cands": {
@@ -217,7 +317,17 @@
    "3": "guard REJECT (edge): staff horizontal and floating, waist-long hair",
    "4": "one staff gripped upright, pink leg warmers; but the bottle is at her hip (the item does not read), the hair is waist-long and there is a fringed shawl"
   },
-  "verdict": "FAIL: The staff-in-hand and pink-warmer fixes landed (c4), but no candidate combines one gripped staff with a bottle at chest height. The shoulder-length hair fix missed in all four. Stronger OpenPose holds the extended-arm skeleton."
+  "verdict": "FAIL (stops, rule 15): the hair fix landed (c6, c8), but the same gap as try a is still there: no candidate combines one gripped staff with a bottle at chest height; c6 has the bottle but an unheld staff, c8 has the staff but the bottle at the hip.",
+  "b": {
+   "cands": {
+    "5": "guard ok: a spear-staff behind her plus a round orb weapon at the hip (two weapons), big purple cape",
+    "6": "guard ok: bottle raised at chest height, shoulder-length hair with braids, pink leg warmers; but the staff leans behind her, unheld, and she wears a feathered tassel skirt",
+    "7": "guard ok: staff gripped upright; no bottle visible; a big rainbow skirt or cape",
+    "8": "guard ok: one staff gripped upright, shoulder-length hair with braids; but the green bottle hangs at her hip (the item does not read), mismatched pink and red warmers, blue heels"
+   },
+   "verdict": "FAIL (stops, rule 15): the hair fix landed (c6, c8), but the same gap as try a is still there: no candidate combines one gripped staff with a bottle at chest height; c6 has the bottle but an unheld staff, c8 has the staff but the bottle at the hip."
+  },
+  "stopped": true
  },
  "rikku-black-mage/hurt": {
   "cands": {
@@ -226,7 +336,17 @@
    "3": "guard ok but two heads (a second small face at the left); staff diagonal",
    "4": "guard REJECT (full canvas): close framing, feathered sash"
   },
-  "verdict": "FAIL: All four came out as close-ups filling the canvas, and the only one the guard passed has a second head. The recoil skeleton was ignored. Push framing and full body, and raise OpenPose."
+  "verdict": "FAIL (stops, rule 15): framing is fixed (three full-body, guard-ok frames, no second head), but the named faults come back: the staff splits in two (c6), the hat is gone (c5), or the staff is raised (c7). The recoil reads in c5 but it has no hat.",
+  "b": {
+   "cands": {
+    "5": "guard ok, full body: recoils back, but the hat is gone and the staff has a giant spiked sun-disc head raised diagonally",
+    "6": "guard ok, closest: full body, hat on, one eye shut, staff held low in one hand; but a separate red hooked staff piece lies at her feet (split in two again) and a long rainbow cape hangs behind",
+    "7": "guard ok: full body, hat on, bent forward, but the staff is raised diagonally over her head (negated)",
+    "8": "guard REJECT (edge)"
+   },
+   "verdict": "FAIL (stops, rule 15): framing is fixed (three full-body, guard-ok frames, no second head), but the named faults come back: the staff splits in two (c6), the hat is gone (c5), or the staff is raised (c7). The recoil reads in c5 but it has no hat."
+  },
+  "stopped": true
  },
  "rikku-black-mage/ko": {
   "cands": {
@@ -316,7 +436,17 @@
    "3": "guard REJECT (left edge): staff under her, shadow sheet",
    "4": "guard REJECT (right edge): best read, with the heart-spade staff beside her, but a white sheet spreads under her"
   },
-  "verdict": "FAIL: The garbled face and puddle are gone, but three of four touch the canvas edges, and the only guard-ok frame has a knee-up pose and a short spear instead of the spade staff. Framing words plus stronger OpenPose on the 0.72 skeleton."
+  "verdict": "PASS: cand-5 (the two named faults, the knee-up leg and the wrong staff head, are both fixed: legs together and down, and the crescent-cut spade staff lying beside her head.)",
+  "b": {
+   "cands": {
+    "5": "PICK: lying on her side, head right, eyes shut, clean face, legs together and down (knees a little bent, no knee up), the orange spade staff with its crescent cut lying beside her head, white apron skirt, white sleeves, headband, braids",
+    "6": "guard ok: legs straight, eyes shut, staff lying along her with an orange ring head at the feet end; hair spills long to the right",
+    "7": "guard ok: face half hidden under the hair, a blue spear-headed staff (not the spade), blue skirt",
+    "8": "guard ok: orange spade head at the feet end, blue coat mat under her, red streamer at the right"
+   },
+   "verdict": "PASS: cand-5 (the two named faults, the knee-up leg and the wrong staff head, are both fixed: legs together and down, and the crescent-cut spade staff lying beside her head.)"
+  },
+  "pick": "cand-5"
  },
  "rikku-white-mage/victory": {
   "cands": {
