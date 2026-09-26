@@ -46,6 +46,52 @@ export const SAKURA_FLOOR_GLOW = 70 / 255;
 /** The recoloured tree, when the art session has installed it; else {@link paintSakuraTree}. */
 export const SAKURA_TREE_URL = 'art/backdrops/cavern-stolen-fayth/sakura.png';
 
+/**
+ * Where the painted tree's roots end, as a fraction of the canvas from the top
+ * (PR-0184): the last row of `sakura.png` with more than 20 pixels brighter than
+ * 40/255 is 880 of 1024 (measured 2026-09-26). The plane is sunk by the rest, so
+ * the trunk meets the floor instead of hanging 0.9 units above it. The procedural
+ * stand-in roots at 0.98 (`paintSakuraTree`); both sit near enough on the floor.
+ */
+export const SAKURA_TREE_ROOT = 880 / 1024;
+
+/** The tree plate's side and top feather, as a fraction of its width and height (PR-0184). */
+const SAKURA_EDGE = { side: 0.12, top: 0.08 } as const;
+
+/**
+ * The tree plate's alpha at canvas point (u, v), v = 0 at the top: 0 on the
+ * left, right and top edges, easing to 1 over {@link SAKURA_EDGE}, and 1 all the
+ * way down the base, where the roots stand on the floor. The approved painting
+ * has a vignette that stops a few pixels short of its right edge (the canopy
+ * reaches column 991 of 1024), which read as a straight vertical cut; this ramp
+ * is what ends it softly. The PNG is untouched.
+ */
+export function sakuraEdgeAlpha(u: number, v: number): number {
+  const ramp = (d: number, band: number): number => {
+    const k = Math.min(1, Math.max(0, d / band));
+    return k * k * (3 - 2 * k);
+  };
+  return Math.min(ramp(u, SAKURA_EDGE.side), ramp(1 - u, SAKURA_EDGE.side), ramp(v, SAKURA_EDGE.top));
+}
+
+/** {@link sakuraEdgeAlpha} as an alpha map (three reads its green channel). */
+function edgeAlphaTexture(size = 128): CanvasTexture {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d')!;
+  const img = ctx.createImageData(size, size);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const a = Math.round(255 * sakuraEdgeAlpha((x + 0.5) / size, (y + 0.5) / size));
+      const i = (y * size + x) * 4;
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = a;
+      img.data[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  return new CanvasTexture(c);
+}
+
 /** The arrival's beats, in ms from the opening shot (the scene's `intro` rig). */
 export const SAKURA_ARRIVAL_MS = {
   nightIn: [0, 700],
@@ -171,16 +217,6 @@ export function paintSakuraTree(w = 512, h = 512, seed = 7100): HTMLCanvasElemen
   return c;
 }
 
-/** Is the recoloured tree installed? A dev server answers a missing file with `index.html`. */
-async function treeInstalled(url: string): Promise<boolean> {
-  try {
-    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
-    return res.ok && (res.headers.get('content-type') ?? '').startsWith('image/');
-  } catch {
-    return false;
-  }
-}
-
 /** Where the overlay's pieces stand, in world units (the scene's own numbers). */
 export interface SakuraLayout {
   /** The plane the night veil covers: centre and size, just in front of the painting. */
@@ -227,9 +263,11 @@ export class SakuraArrival {
     this.group.add(this.floorVeil);
 
     const treeTex = configurePaintedTexture(new CanvasTexture(paintSakuraTree()));
-    this.textures.push(treeTex);
+    const edgeTex = edgeAlphaTexture();
+    this.textures.push(treeTex, edgeTex);
     const treeMat = new MeshBasicMaterial({
       map: treeTex,
+      alphaMap: edgeTex, // PR-0184: no straight plate edge on the sides or top
       transparent: true,
       opacity: 0,
       depthWrite: false,
@@ -239,9 +277,12 @@ export class SakuraArrival {
     });
     const th = layout.tree.height;
     this.tree = new Mesh(new PlaneGeometry(th, th), treeMat);
-    this.tree.geometry.translate(0, th / 2, 0);
+    // PR-0184: the painting's roots, not the canvas bottom, stand on the floor.
+    this.tree.geometry.translate(0, th / 2 - th * (1 - SAKURA_TREE_ROOT), 0);
     this.tree.position.set(...layout.tree.foot);
-    this.tree.renderOrder = -45;
+    // After the night on the floor (2) and its glow (3), before every figure (10): the floor veil
+    // does not write depth, so drawn after the tree it laid the night over the trunk (PR-0184).
+    this.tree.renderOrder = 4;
     this.group.add(this.tree);
 
     const discTex = softDiscTexture();
@@ -276,10 +317,14 @@ export class SakuraArrival {
     this.group.add(this.petals);
   }
 
-  /** Swap in the recoloured painting when it is installed. Never rejects. */
+  /**
+   * Swap in the recoloured painting when it is installed. Never rejects. One GET:
+   * the HEAD probe that used to come first was aborted by Chromium on every entry
+   * (R15-02), and a missing file (a dev server's `index.html`) fails to decode, so
+   * `tryLoadTexture` already answers "not installed" with `null`.
+   */
   async loadPainting(): Promise<void> {
     const url = artUrl(SAKURA_TREE_URL);
-    if (!(await treeInstalled(url))) return;
     const tex = await tryLoadTexture(url);
     if (!tex) return;
     const mat = this.tree.material as MeshBasicMaterial;

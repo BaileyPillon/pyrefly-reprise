@@ -46,7 +46,10 @@ export const CAVERN_WIDE_RIGS: Readonly<Record<SceneRigName, CameraRig> & Record
   intro: { position: [0.6, 3.6, 20.0], lookAt: [1.4, 2.6, -4.0], fov: 32, sway: 1.3 },
   idle: { position: [0, 5.1, 17.6], lookAt: [0.6, 1.8, 0], fov: 28 },
   action: { position: [0.5, 4.3, 14.2], lookAt: [1.5, 1.7, 0.6], fov: 28, sway: 0.7 },
-  enemy: { position: [0.5, 3.4, 9.8], lookAt: [2.3, 1.8, -2.8], fov: 30, sway: 0.7 },
+  // PR-0185: raised from y 3.4 (look 1.8) so the party, 5 units in front of the lens, falls wholly
+  // below the frame instead of poking the tops of three heads in along the bottom edge. Yojimbo and
+  // Daigoro keep their screen boxes within a few pixels (measured live at 1600x900, 2026-09-26).
+  enemy: { position: [0.5, 5.0, 9.8], lookAt: [2.3, 1.6, -2.8], fov: 30, sway: 0.7 },
   party: { position: [-0.4, 3.1, 12.25], lookAt: [0.95, 1.4, 4.4], fov: 31, sway: 0.7 },
   victory: { position: [-0.7, 3.2, 16.0], lookAt: [0.7, 1.2, -2.0], fov: 30, sway: 1.1 },
 };

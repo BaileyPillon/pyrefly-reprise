@@ -1,0 +1,124 @@
+/**
+ * **Chapter IX's arrival and enemy shot (FFX only): PR-0184, PR-0185, R15-02.**
+ *
+ * - PR-0185: the `enemy` rig (the boss reveal's push and every Yojimbo turn)
+ *   cut the tops of Lulu's, Kimahri's and Yuna's heads along the bottom edge.
+ *   Measured with a real three.js camera on the scene's own rigs, with and
+ *   without the reveal's 0.12 dolly push: every party figure is either wholly
+ *   in frame or wholly below it, at 1280x720, 1600x900 and 2000x1012.
+ *   Yojimbo and Daigoro stay whole on screen.
+ * - PR-0184: the approved tree (sheet-arrival A) stands on the floor: the
+ *   plane's base is sunk to the painting's own root line, it is drawn after the
+ *   night that lies on the floor (which used to darken its trunk away), and its
+ *   sides and top fade out through an alpha ramp, so no straight plate edge.
+ * - R15-02: the painted tree is loaded by one GET; the HEAD probe that Chromium
+ *   aborted on every Chapter IX entry is gone.
+ *
+ * **Game case: FFX only** [AGENTS.md rule 14].
+ */
+
+import { PerspectiveCamera, Vector3 } from 'three';
+import { readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
+import {
+  CAVERN_ACTOR_HEIGHTS as H,
+  CAVERN_ENEMY_SLOT,
+  CAVERN_STOLEN_FAYTH_SLOTS as SLOTS,
+} from '../../../src/scenes/cavern-stolen-fayth.ts';
+import { cavernRigsFor } from '../../../src/scenes/cavern-stolen-fayth-rigs.ts';
+import { SAKURA_TREE_ROOT, sakuraEdgeAlpha, SAKURA_TREE_URL } from '../../../src/scenes/cavern-stolen-fayth-arrival.ts';
+import type { CameraRig } from '../../../src/engine/BattleCamera.ts';
+
+type Box = [number, number, number, number];
+const ASPECT: Record<string, number> = { lulu: 0.4, kimahri: 0.631, yuna: 0.739, yojimbo: 0.658, daigoro: 0.989 };
+
+function cam(rig: CameraRig, w: number, h: number, push: number): PerspectiveCamera {
+  const p = rig.position as [number, number, number];
+  const l = rig.lookAt as [number, number, number];
+  const c = new PerspectiveCamera(rig.fov ?? 30, w / h, 0.1, 200);
+  c.position.set(...(p.map((v, i) => v + (l[i]! - v) * push) as [number, number, number]));
+  c.lookAt(new Vector3(...l));
+  c.updateMatrixWorld();
+  c.updateProjectionMatrix();
+  return c;
+}
+
+function boxOf(c: PerspectiveCamera, spot: readonly number[], height: number, aspect: number, vw: number, vh: number): Box {
+  const w = height * aspect;
+  const pts = [
+    [-w / 2, 0],
+    [w / 2, 0],
+    [-w / 2, height],
+    [w / 2, height],
+  ].map(([dx, dy]) => new Vector3(spot[0]! + dx!, spot[1]! + dy!, spot[2]!).project(c));
+  const xs = pts.map((p) => ((p.x + 1) / 2) * vw);
+  const ys = pts.map((p) => ((1 - p.y) / 2) * vh);
+  return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+}
+
+const SIZES: Array<[number, number]> = [
+  [1280, 720],
+  [1600, 900],
+  [2000, 1012],
+];
+// Not 4:3: there `holdWidth` opens the fov to keep 16:9's width, and no height of this rig clears
+// the party (measured 2026-09-26, heights 5.0-6.2). Noted in
+// docs/handoff/t1-b2b.md as open for a 4:3-specific rig.
+
+describe('PR-0185: the enemy shot cuts no party head (Chapter IX, FFX)', () => {
+  for (const [w, h] of SIZES) {
+    for (const push of [0, 0.06, 0.12]) {
+      it(`${w}x${h}, push ${push}: every party figure wholly in or wholly below the frame; Yojimbo and Daigoro whole`, () => {
+        const c = cam(cavernRigsFor(w / h).enemy!, w, h, push);
+        const [lulu, kimahri, yuna] = SLOTS.party;
+        const party = { lulu, kimahri, yuna };
+        for (const [id, spot] of Object.entries(party)) {
+          const b = boxOf(c, spot!, H.party, ASPECT[id]!, w, h);
+          const straddles = b[1] < h && b[3] > h;
+          expect(straddles, `${id} top ${b[1].toFixed(0)} bottom ${b[3].toFixed(0)} of ${h}`).toBe(false);
+        }
+        const e = SLOTS.enemy;
+        const yo = boxOf(c, e[CAVERN_ENEMY_SLOT.yojimbo]!, H.yojimbo, ASPECT.yojimbo!, w, h);
+        const dg = boxOf(c, e[CAVERN_ENEMY_SLOT.daigoro]!, H.daigoro, ASPECT.daigoro!, w, h);
+        for (const b of [yo, dg]) {
+          expect(b[0]).toBeGreaterThanOrEqual(0);
+          expect(b[1]).toBeGreaterThanOrEqual(0);
+          expect(b[2]).toBeLessThanOrEqual(w);
+          expect(b[3]).toBeLessThanOrEqual(h);
+        }
+        // Still his close-up: Yojimbo at least a third of the frame's height.
+        expect((yo[3] - yo[1]) / h).toBeGreaterThan(0.33);
+      });
+    }
+  }
+});
+
+describe('PR-0184: the sakura tree stands on the floor with no plate edge', () => {
+  it("sinks the plane to the painting's root line (the lowest painted row, ~86% down the 1024 canvas)", () => {
+    expect(SAKURA_TREE_ROOT).toBeGreaterThan(0.8);
+    expect(SAKURA_TREE_ROOT).toBeLessThan(0.92);
+  });
+
+  it('fades the sides and the top to nothing and leaves the trunk and root whole', () => {
+    // u, v in 0..1 with v = 0 at the top of the canvas.
+    expect(sakuraEdgeAlpha(0, 0.5)).toBe(0);
+    expect(sakuraEdgeAlpha(1, 0.5)).toBe(0);
+    expect(sakuraEdgeAlpha(0.5, 0)).toBe(0);
+    expect(sakuraEdgeAlpha(0.5, 0.5)).toBe(1);
+    expect(sakuraEdgeAlpha(0.5, 0.86)).toBe(1); // the root line
+    expect(sakuraEdgeAlpha(0.5, 1)).toBe(1); // the base is never faded
+    // A soft ramp, not a step: halfway into the side band is part-transparent.
+    const mid = sakuraEdgeAlpha(0.06, 0.5);
+    expect(mid).toBeGreaterThan(0.1);
+    expect(mid).toBeLessThan(0.9);
+  });
+});
+
+describe('R15-02: one request for the painted tree, never an aborted HEAD', () => {
+  // The factory needs a DOM, so the network half is the browser pass (docs/handoff/t1-b2b.md).
+  it('the arrival module makes no HEAD probe for sakura.png', () => {
+    const src = readFileSync(new URL('../../../src/scenes/cavern-stolen-fayth-arrival.ts', import.meta.url), 'utf8');
+    expect(SAKURA_TREE_URL).toMatch(/sakura\.png$/);
+    expect(src).not.toMatch(/method:\s*'HEAD'/);
+  });
+});
