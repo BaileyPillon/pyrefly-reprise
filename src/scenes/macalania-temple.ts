@@ -8,6 +8,7 @@ import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
 import { makeAnimaArrivalDirector } from './macalania-temple-arrival-battle.ts';
+import { macalaniaPartyLayout } from './macalania-temple-layout.ts';
 
 // ---------------------------------------------------------------------------
 // Macalania Temple — the antechamber outside the Chamber of the Fayth (FFX)
@@ -71,14 +72,14 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
 };
 
 /**
- * Party: Chapter 1's (`gagazet.ts`) measured FFX arc, front to back and
- * staggered, then four reserve spots off frame-left. Order is the build's
- * `activeSlots` (`src/data/ffx/builds/macalania.ts`): Tidus, Yuna, Rikku.
+ * Party slots 0-2 (Tidus, Yuna, Rikku, the build's `activeSlots`) come from the
+ * party-layout option in force (`macalania-temple-layout.ts`, Bailey's pick B,
+ * 2026-09-25; `'current'` was Chapter 1's pre-D-041 arc), then four reserve
+ * spots off frame-left.
  */
+const LAYOUT = macalaniaPartyLayout();
 const PARTY_SLOTS: Array<[number, number, number]> = [
-  [-1.55, 0, 1.55],
-  [-2.95, 0, 0.25],
-  [-1.05, 0, -1.05],
+  ...LAYOUT.party.map((s) => [...s] as [number, number, number]),
   [-11.6, 0, 2.6],
   [-12.5, 0, 1.0],
   [-13.4, 0, -0.6],
@@ -154,6 +155,7 @@ export const MACALANIA_TEMPLE_SLOTS: SceneSlots = {
   enemy: ENEMY_SLOTS.map((s) => [...s] as [number, number, number]),
   partyHeight: MACALANIA_TEMPLE_ACTOR_HEIGHTS.tidus,
   enemyHeight: MACALANIA_TEMPLE_ACTOR_HEIGHTS.seymour,
+  ...LAYOUT.staging,
 };
 
 /** Every rig, exported for the projection test and the arrival module. */
@@ -321,7 +323,9 @@ export const buildMacalaniaTempleScene: SceneFactory = async (
       pool.position.set(s[0], 0.02, s[2]);
       return pool;
     }),
-    ...ENEMY_SLOTS.slice(0, 3).map((s) => {
+    ...ENEMY_SLOTS.slice(0, 3).map((slot, i) => {
+      const id = Object.keys(MACALANIA_ENEMY_SLOT)[i]!;
+      const s = LAYOUT.staging.enemySpots?.[id] ?? slot; // a pinned fiend's pool follows its spot
       const pool = makeLightPool({ color: 0x9fd8ff, radius: 1.1, opacity: 0.16 });
       pool.position.set(s[0], 0.018, s[2]);
       return pool;
@@ -364,6 +368,7 @@ export const buildMacalaniaTempleScene: SceneFactory = async (
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     palette: { ...MACALANIA_TEMPLE_PALETTE },
+    ...LAYOUT.staging,
     figureBloomMaskArt: MACALANIA_FIGURE_BLOOM_MASK_ART,
     update(dt: number): void {
       backdrop.update(dt);

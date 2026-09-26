@@ -1,6 +1,8 @@
 # Chapter VII pause plate: redo options (FFX only)
 
-**Options only. Nothing is installed.** `public/art/pause/macalania.*` is still the plate that
+**Installed 2026-09-25: A2** (Bailey: "All your recommendations"; the independent judge passed A2 at 7.4,
+`JUDGE-A2.md`). Locked as `chapter:macalania-pause:2026-09-25`. The text below is the options round as it
+was. Originally: options only; `public/art/pause/macalania.*` was the plate that
 scored 6. The sheet for Bailey is `../unlock/pause-plate-redo.jpg` (`.html`).
 
 **Game case (rule 14): FFX only.** This is human-form Seymour in Macalania Temple, Chapter VII
@@ -57,6 +59,26 @@ reloads in that case.
 
 The pause tab crops tightly to the face, so the background shows mostly at the plate's edges
 and on the chapter card. The chapter card was not captured.
+
+## Option A2, 2026-09-25 (added after the judge; not judged yet)
+
+A2 answers the judge's two notes on A (see "Independent check" below) by **pixel edits only**. No
+render, no GPU and no model: `scripts/a2.py`, numpy on A's own pixels.
+
+- **Hair:** A's crown is saturated royal blue, but the approved idle, the speaker portrait and the
+  Chapter I plate are pale silver-lilac. A2 pulls the hair's saturation from 0.69 to about 0.45,
+  near the idle's measured 0.41 (hair pixels, hue 185-260, value > 0.55, median).
+- **Veins:** A's faded veins still read as a crack at game size. A2 tints them to the skin around
+  them. The mouth, nose, eyes, collar and background are A's pixels.
+
+Files: `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-picks/ch7-pause-plate/a2.png` (with a
+lanczos `a2.2x.webp` preview and `a2.json`, an unedited copy of the installed sidecar; both
+preview only, like A's), the sheet row `../unlock/img/redo-a2.jpg`, the 1:1 face
+`../unlock/img/redo-a2-face.png`, and the real pause capture `../unlock/img/redo-pause-a2.jpg`
+(`../unlock/rehearsal/rehearse.mjs`, mode `pause`: own Vite on 5700, GPU, the plate's three URLs
+answered in the page only; 0 console errors, 0 HTTP errors). The sheet recommends A2 **only if an
+independent judge passes it**, and A otherwise. That judge pass is owed; the maker of A2 cannot be
+its judge.
 
 ## Owed on a pick
 

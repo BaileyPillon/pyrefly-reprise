@@ -1,0 +1,481 @@
+{
+ "layout": "a",
+ "runs": [
+  {
+   "size": "1600x900",
+   "answered": true,
+   "preSceneLines": 41,
+   "phoneHud": false,
+   "rows": 5,
+   "figures": {
+    "tidus": {
+     "side": "party",
+     "pos": [
+      -0.3,
+      0,
+      1.6
+     ],
+     "rect": [
+      574,
+      484,
+      778,
+      801
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 1
+    },
+    "yuna": {
+     "side": "party",
+     "pos": [
+      -1,
+      0,
+      -0.9
+     ],
+     "rect": [
+      501,
+      472,
+      685,
+      719
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": ".ig-cmd-stack 12%",
+     "inViewPct": 100,
+     "visInFrame": 0.42
+    },
+    "rikku": {
+     "side": "party",
+     "pos": [
+      0.8,
+      0,
+      0.3
+     ],
+     "rect": [
+      792,
+      479,
+      950,
+      757
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 1
+    },
+    "guado-guardian-a": {
+     "side": "enemy",
+     "pos": [
+      -0.64,
+      0,
+      -3.15
+     ],
+     "rect": [
+      537,
+      351,
+      770,
+      671
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 0.39
+    },
+    "seymour-macalania": {
+     "side": "enemy",
+     "pos": [
+      1.7,
+      0,
+      -5.4
+     ],
+     "rect": [
+      763,
+      239,
+      1030,
+      633
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 0.74
+    },
+    "guado-guardian-b": {
+     "side": "enemy",
+     "pos": [
+      3.32,
+      0,
+      -0.9
+     ],
+     "rect": [
+      1042,
+      329,
+      1310,
+      716
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": ".ig-stat-list 18%",
+     "inViewPct": 100,
+     "visInFrame": 0.82
+    }
+   },
+   "errors": [],
+   "bad": []
+  },
+  {
+   "size": "1280x720",
+   "answered": true,
+   "preSceneLines": 41,
+   "phoneHud": false,
+   "rows": 5,
+   "figures": {
+    "tidus": {
+     "side": "party",
+     "pos": [
+      -0.3,
+      0,
+      1.6
+     ],
+     "rect": [
+      458,
+      393,
+      621,
+      640
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 1
+    },
+    "yuna": {
+     "side": "party",
+     "pos": [
+      -1,
+      0,
+      -0.9
+     ],
+     "rect": [
+      399,
+      374,
+      547,
+      575
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": ".ig-cmd-stack 12%",
+     "inViewPct": 100,
+     "visInFrame": 0.45
+    },
+    "rikku": {
+     "side": "party",
+     "pos": [
+      0.8,
+      0,
+      0.3
+     ],
+     "rect": [
+      635,
+      381,
+      760,
+      603
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 1
+    },
+    "guado-guardian-a": {
+     "side": "enemy",
+     "pos": [
+      -0.91,
+      0,
+      -3.15
+     ],
+     "rect": [
+      408,
+      273,
+      593,
+      536
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": ".ig-cmd-stack 3%",
+     "inViewPct": 100,
+     "visInFrame": 0.4
+    },
+    "seymour-macalania": {
+     "side": "enemy",
+     "pos": [
+      1.42,
+      0,
+      -5.4
+     ],
+     "rect": [
+      586,
+      190,
+      799,
+      508
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 0.7
+    },
+    "guado-guardian-b": {
+     "side": "enemy",
+     "pos": [
+      3.11,
+      0,
+      -0.9
+     ],
+     "rect": [
+      812,
+      269,
+      1029,
+      571
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": ".ig-stat-list 18%",
+     "inViewPct": 100,
+     "visInFrame": 0.83
+    }
+   },
+   "errors": [],
+   "bad": []
+  },
+  {
+   "size": "2000x1012",
+   "answered": true,
+   "preSceneLines": 41,
+   "phoneHud": false,
+   "rows": 5,
+   "figures": {
+    "tidus": {
+     "side": "party",
+     "pos": [
+      -0.3,
+      0,
+      1.6
+     ],
+     "rect": [
+      744,
+      541,
+      971,
+      899
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 1
+    },
+    "yuna": {
+     "side": "party",
+     "pos": [
+      -1,
+      0,
+      -0.9
+     ],
+     "rect": [
+      664,
+      530,
+      870,
+      807
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": ".ig-cmd-stack 12%",
+     "inViewPct": 100,
+     "visInFrame": 0.41
+    },
+    "rikku": {
+     "side": "party",
+     "pos": [
+      0.8,
+      0,
+      0.3
+     ],
+     "rect": [
+      992,
+      546,
+      1168,
+      848
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 1
+    },
+    "guado-guardian-a": {
+     "side": "enemy",
+     "pos": [
+      -0.87,
+      0,
+      -3.15
+     ],
+     "rect": [
+      676,
+      384,
+      937,
+      754
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": ".ig-cmd-stack 3%",
+     "inViewPct": 100,
+     "visInFrame": 0.4
+    },
+    "seymour-macalania": {
+     "side": "enemy",
+     "pos": [
+      1.45,
+      0,
+      -5.4
+     ],
+     "rect": [
+      931,
+      261,
+      1227,
+      713
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 0.72
+    },
+    "guado-guardian-b": {
+     "side": "enemy",
+     "pos": [
+      3.11,
+      0,
+      -0.9
+     ],
+     "rect": [
+      1239,
+      381,
+      1541,
+      803
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": ".ig-stat-list 18%",
+     "inViewPct": 100,
+     "visInFrame": 0.83
+    }
+   },
+   "errors": [],
+   "bad": []
+  },
+  {
+   "size": "390x844",
+   "answered": true,
+   "preSceneLines": 41,
+   "phoneHud": true,
+   "rows": 5,
+   "figures": {
+    "tidus": {
+     "side": "party",
+     "pos": [
+      -0.3,
+      0,
+      1.6
+     ],
+     "rect": [
+      66,
+      279,
+      184,
+      463
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 1
+    },
+    "yuna": {
+     "side": "party",
+     "pos": [
+      -1,
+      0,
+      -0.9
+     ],
+     "rect": [
+      22,
+      273,
+      129,
+      416
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 0.43
+    },
+    "rikku": {
+     "side": "party",
+     "pos": [
+      0.8,
+      0,
+      0.3
+     ],
+     "rect": [
+      192,
+      276,
+      284,
+      437
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 1
+    },
+    "guado-guardian-a": {
+     "side": "enemy",
+     "pos": [
+      -0.2,
+      0,
+      -3.15
+     ],
+     "rect": [
+      75,
+      202,
+      209,
+      387
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 0.43
+    },
+    "seymour-macalania": {
+     "side": "enemy",
+     "pos": [
+      2.27,
+      0,
+      -5.4
+     ],
+     "rect": [
+      206,
+      134,
+      359,
+      365
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 100,
+     "visInFrame": 0.8
+    },
+    "guado-guardian-b": {
+     "side": "enemy",
+     "pos": [
+      4.05,
+      0,
+      -0.9
+     ],
+     "rect": [
+      392,
+      192,
+      545,
+      413
+     ],
+     "headTorsoUnderRowsPct": 0,
+     "worstPanel": "",
+     "inViewPct": 0,
+     "visInFrame": 1
+    }
+   },
+   "errors": [],
+   "bad": []
+  }
+ ]
+}

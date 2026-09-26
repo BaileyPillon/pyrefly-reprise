@@ -1,6 +1,10 @@
 # Chapter VII unlock: art approval and the Petrify question (FFX only)
 
 > **Answered 2026-09-25.** Bailey: "I'll go with all your recommendations".
+> - **Update, 2026-09-25 ~18:30 EDT** (Bailey: "All your recommendations"): the pause plate is **A2**
+>   (independent judge 7.4, `../pause-plate-redo/JUDGE-A2.md`), installed and locked as
+>   `chapter:macalania-pause:2026-09-25`; the party layout is **B** (`MACALANIA_PARTY_LAYOUT = 'b'`). The
+>   chapter stays locked until the scene cue is picked by ear.
 > - Question 1: the five battle paintings and the backdrop are locked as set
 >   `chapter:macalania:2026-09-25` in `docs/target/approved-hashes.json` (backup
 >   `D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania/`).
@@ -8,7 +12,16 @@
 >   is in `../pause-plate-redo/`. Nothing is installed yet.
 > - Question 2: option A (a petrified Guardian shatters; an ordinary defeat yields). Recording
 >   and building that answer belongs to another track, not the art track.
-> - The Anima hurt/ko hash noted below is still not recorded.
+> - Anima's folder (idle, attack, overdrive, hurt, ko) is now locked as set
+>   `chapter:macalania-anima:2026-09-25` (2026-09-25, ship pass; backup
+>   `D:/Tools/pyrefly-art-backup/approved/2026-09-25-chapter-macalania-anima/`). The ko (judged 5)
+>   is locked with the rest and is redone only on Bailey's word.
+> - The pause-plate sheet now has a fifth row, **A2** (A with the judge's two notes fixed by pixel
+>   edits), with its real pause capture. A2 is not judged yet. The unlock waits on this pick, on
+>   the scene cue and on the party layout (`party-layout/sheet.jpg`: the FFX command stack covers
+>   Yuna and Tidus at the first menu; options A, B recommended, C, measured live) (`src/data/chapter-macalania-ship.ts`; `docs/handoff/chapter-macalania.md`,
+>   "Ship layer and unlock readiness"). The rehearsal with the lock removed in the page only is in
+>   `rehearsal/`.
 > - Hash provenance (correction, 2026-09-25): the sheet image `art-approval.jpg` shows no
 >   hashes. The five character locks were checked against the 12-character hashes in the table
 >   below. The backdrop had no hash listed when the sheet was made; its lock was taken from the
