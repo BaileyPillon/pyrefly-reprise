@@ -158,6 +158,12 @@ export interface ResultsMemberRow {
    */
   detail: string;
   /**
+   * Where the member stands, short: `S.LV 18` (FFX, the detail line's own first
+   * part) or `LV 46` (FFX-2, her level). The phone page's chip prints it on a
+   * loss (PR-0001 B), where the dressphere name would not fit.
+   */
+  standing: string;
+  /**
    * FFX-2 only: the dressphere she fought this battle in, so the row's face
    * can climb the same `-x2`/dressphere ladder the pause screen's party strip
    * and the battle HUD rows use ({@link partyFaceHtml} in
@@ -261,6 +267,7 @@ export function buildMemberRows(
         levelDelta,
         levelUnit: 'S.Lv' as const,
         detail: sphereGridDetail(sLv, banked, levelDelta),
+        standing: `S.LV ${sLv + levelDelta}`,
       };
     });
   }
@@ -276,6 +283,7 @@ export function buildMemberRows(
       levelDelta: result.levelsGained?.[member.id] ?? 0,
       levelUnit: 'Lv' as const,
       detail: dressphereDetail(member.currentDressphere, progress?.learned ?? [], banked),
+      standing: `LV ${member.level + (result.levelsGained?.[member.id] ?? 0)}`,
       dressphere: member.currentDressphere,
     };
   });
