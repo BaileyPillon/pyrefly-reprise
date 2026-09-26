@@ -338,7 +338,12 @@ export function statusWord(id: string): string {
   if (id === 'ko') return 'Death';
   return id
     .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w) => {
+      // "Max HP x2", not "Max Hp X2" (critic round 13 PR-0074).
+      if (w === 'hp' || w === 'mp') return w.toUpperCase();
+      if (/^x\d+$/.test(w)) return w;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
     .join(' ');
 }
 

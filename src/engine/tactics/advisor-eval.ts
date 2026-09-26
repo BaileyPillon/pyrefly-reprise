@@ -53,6 +53,7 @@ import type { SimOutcome } from '../../battle/ffx/simulate.ts';
 import type { AdvisorIntent } from './advisor-revive.ts';
 import type { StatusChance } from './advisor-roll.ts';
 import { targetDisplayName } from './targetLabel.ts';
+import { statusWords } from './advisor-copy.ts';
 
 /** Where a claim came from. A sentence may only cite a fact that carries one. */
 export type FactSource = 'sim' | 'forecast' | 'state' | 'turnOrder';
@@ -103,10 +104,7 @@ const TEMPO_WEIGHT = 40;
 
 /** `'power-break'` -> `'Power Break'`. The card is read by a player, not a log. */
 function statusWord(status: string): string {
-  return String(status)
-    .split('-')
-    .map((w) => (w ? w[0]!.toUpperCase() + w.slice(1) : w))
-    .join(' ');
+  return statusWords(String(status)); // "Max HP x2", not "Max Hp X2" (PR-0074)
 }
 
 function isAlly(state: Readonly<BattleState>, id: CombatantId): boolean {

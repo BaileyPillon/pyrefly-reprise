@@ -128,6 +128,7 @@ import {
   cacheKeyFor,
 } from './advisor-plan.ts';
 import { sentenceFor } from './advisor-say.ts';
+import { dropRepeatedStatuses, statusWords } from './advisor-copy.ts';
 import {
   type Committed,
   type QueuedCommand,
@@ -558,10 +559,7 @@ function primaryBoss(state: Readonly<BattleState>): AnyCombatant | null {
 
 /** `'power-break'` → `'Power Break'`. There is no status-name table to share. */
 export function statusLabel(status: StatusId | string): string {
-  return String(status)
-    .split('-')
-    .map((w) => (w ? w[0]!.toUpperCase() + w.slice(1) : w))
-    .join(' ');
+  return statusWords(String(status)); // "Max HP x2", not "Max Hp X2" (PR-0074)
 }
 
 /**
@@ -1401,7 +1399,11 @@ export function buildAdvisorView(
     const longPlan =
       override !== null && c === override && tactic ? tactic.suggestion.label : null;
     const said = sentenceFor(c.facts, confidenceOf(c.chances), longPlan);
-    return { ...s, facts: c.facts, ...(said ? { reason: said } : {}) };
+    const reason = said || s.reason;
+    // One claim, said once: the effect line gives up a status the reason
+    // already names ("Inflicts Shell" over "It puts Shell on the party").
+    const effect = dropRepeatedStatuses(s.effect, reason, s.statuses);
+    return { ...s, facts: c.facts, reason, effect };
   });
 
   const view: AdvisorView = {
