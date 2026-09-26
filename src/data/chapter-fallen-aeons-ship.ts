@@ -15,8 +15,10 @@
  * - `music` — FA15 a as the record already has it (`boss-ffx2-aeon` on every link, the field bed
  *   `scene-farplane`, the FFX-2 fanfare), unchanged.
  *
- * **Unlisted**: `./chapters-unlisted.ts` carries the result, so chapter select does not show it
- * until the driver lists it (the Chapter XIII listing step, commit 5c8706d6, is the pattern).
+ * **Listed** 2026-09-26 (Bailey, 2026-09-25: "All your recommendations", option A = 3 s of action
+ * time on the three Road links), as commits ad3c3c36 and 28135f60 listed Chapters X and XIV:
+ * `./encounters.ts` puts this result in `CHAPTERS` after Chapter X (it was in
+ * `./chapters-unlisted.ts` until then: reachable by id, no card).
  */
 
 import type { Chapter } from './encounters.ts';

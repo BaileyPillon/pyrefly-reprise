@@ -83,8 +83,8 @@ describe('data, carried from research §3 (rule 6)', () => {
   });
 });
 
-describe('registration: registered, reachable, unlisted', () => {
-  it('getChapter finds Chapter XI; chapter select does not list it', () => {
+describe('registration: registered, reachable, listed (2026-09-26)', () => {
+  it('getChapter finds Chapter XI; chapter select lists it after Chapter X', () => {
     const ch = getChapter('ffx2-fallen-aeons');
     expect(ch?.game).toBe('ffx2');
     expect(ch?.number).toBe(11);
@@ -92,8 +92,8 @@ describe('registration: registered, reachable, unlisted', () => {
     expect(ch?.location).toBe('Road to the Farplane');
     expect(ch?.buildRef).toBe(farplaneBuild);
     expect(ch?.enemyGroupRef.id).toBe(ROAD_SHIVA);
-    expect(CHAPTER_IDS).not.toContain('ffx2-fallen-aeons');
-    expect(CHAPTERS.some((c) => c.id === 'ffx2-fallen-aeons')).toBe(false);
+    expect(CHAPTER_IDS.indexOf('ffx2-fallen-aeons')).toBe(CHAPTER_IDS.indexOf('seymour-natus') + 1);
+    expect(CHAPTERS.some((c) => c.id === 'ffx2-fallen-aeons')).toBe(true);
   });
 
   it('three links in the sourced order, a Save Sphere before links 2 and 3, no escape, one aeon cue', () => {

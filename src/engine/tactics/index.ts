@@ -130,7 +130,7 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...SEYMOUR_NATUS_BOSS_IDS.map((bossId) => ({ chapterId: 'seymour-natus', bossId, tactic: seymourNatus })),
   // Chapter XIII (FFX-2 only, unlisted): Paragon then Trema, one tactic under both ids.
   ...TREMA_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-trema', bossId, tactic: ffx2Trema })),
-  // Chapter XI (FFX-2 only, unlisted): Shiva, the Sisters, Anima; one tactic under all five ids.
+  // Chapter XI (FFX-2 only, listed 2026-09-26): Shiva, the Sisters, Anima; one tactic under all five ids.
   ...FALLEN_AEONS_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-fallen-aeons', bossId, tactic: ffx2FallenAeons })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },

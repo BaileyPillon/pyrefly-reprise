@@ -6,6 +6,29 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-26 — `encounters.ts`: Chapter XI (Fallen Aeons) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX-2 only** [AGENTS.md hard rule 14]: the Road to the Farplane gauntlet in FFX-2 Chapter 5
+(`research/ffx2-fallen-aeons.md`: ATB, dresspheres, the aeons' action counter); the listing itself is
+shared plumbing (both). Bailey, 2026-09-25 ~18:30 EDT: "All your recommendations" (D-187: option A,
+3 s of action time `[estimate]` on the three Road links only, 159/200 at human pace).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `FFX2_FALLEN_AEONS_SHIPPED` and
+`CHAPTER_IDS` gains `'ffx2-fallen-aeons'`, both after Chapter X (number order); chapter select groups
+by game, so the card sits after Chapter VI in the FFX-2 group (IV, V, VI, XI, XIII). `ChapterId` and
+`getChapter` are unchanged (the id was already registered; the `ChapterId` doc comment was joined to
+one line to keep the file at 399 lines); `UNLISTED_CHAPTERS` is now empty (the mechanism stays for the
+next chapter). Alongside: `CHAPTER_META` gains `FALLEN_AEONS_META` after Chapter X's
+(`UNLISTED_CHAPTER_META` is empty; its tagline is trimmed from the record's "Three platforms, three
+of her own" to the pause card's 2-4 words, "Three of Her Own", and its blurb split into two
+sentences), and `src/story/registry.ts` gains the `'ffx2-fallen-aeons'` key (its scripts, its two
+AI-emitted callouts `sisters-first-down` and `anima-third-pain`, its one link seam `shiva-falls` on
+the seam budget; map lines were joined to keep it at 399 lines). Every chapter-generic consumer now
+sees fourteen chapters, thirteen of them playable: Auron's briefing counts "Thirteen fights" by
+itself (D-136), the strip reads "0 of 13", and `arcCleared('ffx2')` also needs Chapter XI
+(`ARC_FINALE.ffx2` stays `ffx2-vegnagun-shuyin`: the Road comes right before the Heart of the
+Farplane, research §1.2 item 5). No save migration: saves key chapters by id string.
+
 ## 2026-09-25 — `encounters.ts`: Chapter XIV (Isaaru) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX only** [AGENTS.md hard rule 14]: Isaaru's contest of aeons in the Via Purifico

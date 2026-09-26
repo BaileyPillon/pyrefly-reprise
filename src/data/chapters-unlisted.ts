@@ -16,17 +16,13 @@
  */
 
 import type { Chapter } from './encounters.ts';
-import { FFX2_FALLEN_AEONS_SHIPPED } from './chapter-fallen-aeons-ship.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
  * Chapter X, Seymour Natus, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter IX).
- * Chapter XI, Fallen Aeons (FFX-2 only) — `./chapter-ffx2-fallen-aeons.ts` (the fight), with the ship
- * layer (scene, story; `./chapter-fallen-aeons-ship.ts`) laid over it. Still unlisted.
- * Chapter XII, Seymour Omnis, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter X).
+ * Chapter XI, Fallen Aeons, was listed on 2026-09-26 (now in `CHAPTERS`, after Chapter X).
+ * Chapter XII, Seymour Omnis, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter XI).
  * Chapter XIII, Trema, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter XII).
  * Chapter XIV, Isaaru, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter XIII).
  */
-export const UNLISTED_CHAPTERS: readonly Chapter[] = [
-  FFX2_FALLEN_AEONS_SHIPPED,
-] as const;
+export const UNLISTED_CHAPTERS: readonly Chapter[] = [] as const;

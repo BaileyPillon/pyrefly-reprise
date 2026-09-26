@@ -8,7 +8,11 @@
  * Kept out of `./encounters.ts` for the house 400-line rule, like Chapters 7 to
  * 10; the `Chapter` import is type-only, so there is no runtime cycle.
  *
- * ## Registered, reachable, and UNLISTED
+ * ## Registered, reachable, and (since 2026-09-26) LISTED
+ *
+ * Listed 2026-09-26 (Bailey, 2026-09-25: "All your recommendations", option A): the ship
+ * layer over this record (`./chapter-fallen-aeons-ship.ts`) sits in `CHAPTERS` after Chapter X.
+ * The paragraph below is the history of the registration.
  *
  * Bailey answered every recommendation on 2026-09-24 ("I'll go with your
  * recommendations for all": FA1–FA19, O-1..O-4 on
@@ -54,7 +58,7 @@ export const FALLEN_AEONS_PLACEHOLDER_SCRIPTS: ChapterScripts = {
   midScripts: {},
 };
 
-/** Chapter 11 (registered, unlisted). */
+/** Chapter 11 (the engine record; `CHAPTERS` lists it with the ship layer on). */
 export const FFX2_FALLEN_AEONS: Chapter = {
   id: 'ffx2-fallen-aeons',
   game: 'ffx2',

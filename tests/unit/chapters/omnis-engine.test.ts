@@ -29,7 +29,7 @@ describe('Chapter XII registration (FFX only)', () => {
     expect(ch?.title).toBe('Seymour Omnis');
     expect(ch?.location).toBe('Inside Sin — the Garden of Pain');
     expect(CHAPTERS.some((c) => c.id === 'seymour-omnis')).toBe(true);
-    expect(CHAPTER_IDS.indexOf('seymour-omnis')).toBe(CHAPTER_IDS.indexOf('seymour-natus') + 1); // X listed the same day
+    expect(CHAPTER_IDS.indexOf('seymour-omnis')).toBe(CHAPTER_IDS.indexOf('seymour-natus') + 2); // X listed the same day, XI between them since 2026-09-26
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('seymour-omnis');
     expect(ch?.buildRef).toBe(gardenOfPainBuild);
     expect(ch?.enemyGroupRef).toBe(ENEMY_GROUPS_BY_ID['seymour-omnis']);

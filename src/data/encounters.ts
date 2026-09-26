@@ -48,18 +48,16 @@ import { ffx2LeblancScripts } from '../story/scripts/ffx2-leblanc.ts';
 // only the `Chapter` type from here, so there is no runtime cycle.
 import { SEYMOUR_ANIMA_MACALANIA } from './chapter-seymour-anima-macalania.ts';
 import { EVRAE_AIRSHIP } from './chapter-evrae-airship.ts';
-// Chapters IX, X, XII, XIII and XIV (listed 2026-09-24, then 09-25) and the registered-but-unlisted list (same reason).
+// Chapters IX to XIV (listed 2026-09-24, then 09-25) and the registered-but-unlisted list (same reason).
 import { YOJIMBO_CAVERN } from './chapter-yojimbo-cavern.ts';
 import { SEYMOUR_NATUS } from './chapter-seymour-natus.ts';
+import { FFX2_FALLEN_AEONS_SHIPPED } from './chapter-fallen-aeons-ship.ts';
 import { SEYMOUR_OMNIS_SHIPPED } from './chapter-omnis-ship.ts';
 import { FFX2_TREMA_SHIPPED } from './chapter-trema-ship.ts';
 import { ISAARU_VIA_PURIFICO_SHIPPED } from './chapter-isaaru-ship.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 
-/**
- * Every registered chapter id. Also the keys used in `SaveData.chapters`.
- * `'ffx2-fallen-aeons'` is registered but unlisted: see `UNLISTED_CHAPTERS`.
- */
+/** Every registered chapter id (all fourteen listed since 2026-09-26). Also the keys used in `SaveData.chapters`. */
 export type ChapterId =
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
@@ -359,7 +357,7 @@ export const FFX2_LEBLANC: Chapter = {
 export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN };
 export { UNLISTED_CHAPTERS }; // registered, not listed: `./chapters-unlisted.ts`
 
-/** All thirteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
+/** All fourteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25, XI 2026-09-26); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
 export const CHAPTERS: readonly Chapter[] = [
   SEYMOUR_FLUX,
   YUNALESCA,
@@ -371,6 +369,7 @@ export const CHAPTERS: readonly Chapter[] = [
   EVRAE_AIRSHIP,
   YOJIMBO_CAVERN,
   SEYMOUR_NATUS,
+  FFX2_FALLEN_AEONS_SHIPPED,
   SEYMOUR_OMNIS_SHIPPED,
   FFX2_TREMA_SHIPPED,
   ISAARU_VIA_PURIFICO_SHIPPED,
@@ -388,6 +387,7 @@ export const CHAPTER_IDS: readonly ChapterId[] = [
   'evrae-airship',
   'yojimbo-cavern',
   'seymour-natus',
+  'ffx2-fallen-aeons',
   'seymour-omnis',
   'ffx2-trema',
   'isaaru-via-purifico',

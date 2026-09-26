@@ -32,10 +32,10 @@ import { LINES, driveLink } from '../helpers/fallenAeonsDrive.ts';
 const art = (p: string): boolean => existsSync(resolve('public/art', p));
 
 describe('the pause card', () => {
-  it('is registered unlisted, numbered XI, with the installed hero plate B', () => {
+  it('is listed (2026-09-26), numbered XI, with the installed hero plate B', () => {
     expect(getChapterMeta('ffx2-fallen-aeons')).toBe(FALLEN_AEONS_META);
-    expect(UNLISTED_CHAPTER_META).toContain(FALLEN_AEONS_META);
-    expect(CHAPTER_META).not.toContain(FALLEN_AEONS_META);
+    expect(UNLISTED_CHAPTER_META).not.toContain(FALLEN_AEONS_META);
+    expect(CHAPTER_META).toContain(FALLEN_AEONS_META);
     expect(FALLEN_AEONS_META).toMatchObject({ numeral: 'XI', gameLabel: 'FFX-2', title: 'Fallen Aeons', location: 'Road to the Farplane' });
     expect(FALLEN_AEONS_META.heroArt).toBe('pause/ch11-ffx2-fallen-aeons');
     expect(art(`${FALLEN_AEONS_META.heroArt}.png`)).toBe(true);

@@ -37,9 +37,9 @@ function fired(log: readonly BattleEvent[]): string[] {
 }
 
 describe('the registered record', () => {
-  it('is the engine track\'s record with the Road scene and the story on, still unlisted', () => {
+  it('is the engine track\'s record with the Road scene and the story on, listed (2026-09-26)', () => {
     expect(getChapter('ffx2-fallen-aeons')).toBe(FFX2_FALLEN_AEONS_SHIPPED);
-    expect(CHAPTERS.some((c) => c.id === 'ffx2-fallen-aeons')).toBe(false);
+    expect(CHAPTERS).toContain(FFX2_FALLEN_AEONS_SHIPPED);
     expect(FFX2_FALLEN_AEONS_SHIPPED.sceneKey).toBe('road-to-the-farplane');
     expect(FFX2_FALLEN_AEONS_SHIPPED.scriptsRef).toBe(S);
     // Everything else is the engine track's, untouched: the fight, the party, FA15's music.
