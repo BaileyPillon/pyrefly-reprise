@@ -137,7 +137,7 @@ import {
 } from './advisor-committed.ts';
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
 import { holdingForTheBreath } from './airship-orders.ts';
-import { scopeWord, targetDisplayName } from './targetLabel.ts';
+import { isSelfOrder, scopeWord, targetDisplayName } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
 export { changesNothing } from './advisor-guard.ts';
@@ -1065,7 +1065,7 @@ function candidateFor(
     label: row.label,
     menu: menuChipFor(state.game, commands, row),
     targetId,
-    targetName: scoped ?? targetDisplayName(state, targetId),
+    targetName: isSelfOrder(state.game, command) ? null : (scoped ?? targetDisplayName(state, targetId)),
     effect: describeAbility(def, row, command),
     estimate,
     mpCost: row.mpCost,
