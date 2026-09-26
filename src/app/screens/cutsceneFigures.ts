@@ -136,6 +136,26 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     landscape: { x: 0.78, feet: 0.9, height: 0.56 },
     portrait: { x: 0.5, feet: 0.74, height: 0.44 },
   },
+  /**
+   * Shuyin, unsent (FFX-2 only: Chapter V, PR-0133). His battle idle, the installed painting
+   * (`public/art/characters/shuyin/idle.png`, 694 x 1136, feet at y 1120; used as installed). The
+   * post scene already posed him (`setPose('shuyin', 'kneel')`) and took him off with Lenne
+   * (`hideActor('shuyin', 1600)`), writing-bible §3 E5 post; he now stands on the plate from the
+   * first frame instead of the lines playing over an empty Farplane.
+   *
+   * Landscape: right of the dialogue box, facing left toward Yuna. Portrait: centred, feet above
+   * the box. Lenne (`showActor('lenne')`) is not staged: two figures right of the box is a layout
+   * the approved frames do not show.
+   */
+  shuyin: {
+    art: 'art/characters/shuyin/idle.png',
+    aspect: 694 / 1136,
+    baseline: 1120 / 1136,
+    artFacing: -1,
+    landscape: { x: 0.8, feet: 0.9, height: 0.6 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+    unsent: true,
+  },
 };
 
 /** The staged figure for `actor`, or `undefined` when cutscenes do not stage it. */

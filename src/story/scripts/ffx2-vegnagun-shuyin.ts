@@ -125,6 +125,9 @@ export const ffx2VegnagunShuyinScripts: ChapterScripts = {
     // --- The Lenne release [writing-bible §3 E5 post] ---------------------
     music(null, 1000),
     camera('idle', 900),
+    // He is already there when the scene opens: the fight just ended on him
+    // (PR-0133; the cutscene stage stands him from `cutsceneFigures.ts`).
+    showActor('shuyin', { ms: 0, facing: -1 }),
     setPose('shuyin', 'kneel'),
     beat(1600), // He refuses to look up.
     say('yuna-x2', 'Listen to me. She asked me to—'),

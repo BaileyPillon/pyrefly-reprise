@@ -84,7 +84,9 @@ describe('which chapters the stage changes (measured, pinned)', () => {
       '1 seymour-flux post': ['fx sending-dance @yuna', 'fx pyreflies-rising'],
       '2 yunalesca post': ['fx pyreflies-rising'],
       '3 braskas-final-aeon post': ['fx sending-dance @yuna', 'fx pyreflies-rising @auron'],
-      '5 ffx2-vegnagun-shuyin post': ['fx pyreflies-rising'],
+      // Chapter V (FFX-2 only, PR-0133): Shuyin kneels on stage for the Lenne release, then goes with her
+      // (writing-bible §3 E5 post; the script already posed and hid him).
+      '5 ffx2-vegnagun-shuyin post': ['show shuyin', 'fx pyreflies-rising', 'hide shuyin'],
       '7 seymour-anima-macalania post': ['fx sending-dance @yuna'],
     });
   });
@@ -94,13 +96,15 @@ describe('which chapters the stage changes (measured, pinned)', () => {
     // Seymour Omnis (FFX only, Chapter XII, listed 2026-09-25): his pre and post scenes, no other chapter's.
     // Seymour Natus (FFX only, Chapter X, listed 2026-09-25) stands up in his own pre scene only.
     // Isaaru (FFX only, Chapter XIV): he waits in his own pre scene and kneels in his own post scene.
-    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis', 'seymour-natus', 'isaaru']);
+    // Shuyin (FFX-2 only, Chapter V, PR-0133) stands in his own post scene only.
+    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis', 'seymour-natus', 'isaaru', 'shuyin']);
     const own: Record<string, string[]> = {
       'yojimbo-cavern': ['ginnem'],
       'ffx2-trema': ['trema'],
       'seymour-omnis': ['seymour-omnis', 'seymour-omnis'],
       'seymour-natus': ['seymour-natus'],
       'isaaru-via-purifico': ['isaaru', 'isaaru'],
+      'ffx2-vegnagun-shuyin': ['shuyin'],
     };
     for (const c of [...CHAPTERS, ...UNLISTED_CHAPTERS]) {
       const shown = [...figuresIn(c.scriptsRef?.pre ?? []), ...figuresIn(c.scriptsRef?.post ?? [])];
