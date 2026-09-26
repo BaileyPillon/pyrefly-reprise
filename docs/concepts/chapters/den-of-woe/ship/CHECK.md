@@ -347,7 +347,7 @@ run opened it with `gotoChapter`. Frames and JSON are in `D:/Tools/pyrefly-scrat
 - **The Hero Drink on Nooj, by real keys (seed 6).** The shipped tactic played at skip speed to Nooj.
   The debug API handed control back at 6,137 HP. From there every turn was real keys: Pray, Darkness
   twice, then Yuna **Item > Hero Drink > Yuna** at Nooj 3,709. She was Invincible, and Lightfall
-  (Nooj 663 later) read "Yuna miss, immune; Rikku 5,000, KO".
+  then read "Yuna miss, immune; Rikku 5,000, KO".
 - **A win to results (seed 4, a seed of mine).** The shipped tactic played at skip speed, with real
   Enter through the pre scene, all three shades, the 8-line post scene ("Enough. Let them rest." first)
   and results: "CLEARED · Victory · NEW BEST". The flow resolved victory over 3 links. A scan of seeds 1
