@@ -193,6 +193,27 @@ chapter. It flatters the player. A scratch copy with each target hit once (not c
 the shipped Den at **34 first try and 102 / 149 within 3 / 5** at 1.5 s (59 / 169 at 1.0 s, 45 / 131
 at 2.5 s, bench 94). That is still about 1 in 6 first try and 3 in 4 within five, and still the best kit.
 
+### Re-measured on main after the engine fix (2026-09-26, Bailey's D-193 option B)
+
+Bailey picked the engine fix ("I'll go with all your recommendations", D-193), and branch
+`ffx2-engine-fixes-0926` is merged on main (merge `8235ad63`): each girl now takes an all-target hit
+once (IC-2), so Lightfall no longer skips the last girl. IC-1's immune-hit switch and the menu-cancel
+switch stay OFF. **FFX-2 only.** The shipped record, re-run on main (`den-of-woe-shipped-bench.test.ts`,
+`PYREFLY_MEASURE=1`, 200 seeds, retry from Baralai):
+
+| Speed | First try | Within 3 / 5 | Before the fix |
+|---|---:|---|---|
+| Human, Wait split 1.0 s / 0.3 s | 59 | 134 / 169 | 66, 136 / 173 |
+| **Human, Wait split 1.5 s / 0.5 s (the live default)** | **34** | **102 / 149** | 39, 115 / 160 |
+| Human, Wait split 2.5 s / 0.8 s | 45 | 98 / 131 | 48, 99 / 134 |
+| Bench speed (D = 0) | 94 | 168 / 196 | 102, 173 / 199 |
+| Active, 1.5 s | 6 | 12 / 16 | 7, 15 / 20 |
+
+Every cell the scratch copy above and `docs/plans/ffx2-engine-fixes-2026-09-26.md` predicted is
+exact (34 first try, 102 / 149 at 1.5 s; 59 / 169 and 45 / 131; bench 94). At the live default about
+**1 in 6 clear on the first try and 3 in 4 within five tries**. No Den number changed; the table in
+"Measured on the shipped record" above is the record at the pick and stays as it was.
+
 ### The real flow (production build, headless GPU, fresh profile each run)
 
 The chapter is unlisted, so every run opened it with `window.__pyrefly.gotoChapter`. Frames:

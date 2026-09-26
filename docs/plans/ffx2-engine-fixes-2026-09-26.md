@@ -504,3 +504,50 @@ deployed. NOW.md, `critic/` and the main tree were not touched; the main tree wa
 - My scratch exports are in `D:/pyrefly-scratch-chk0926b` (`d0`, `head` and `xv`, each with a
   `node_modules` junction). Deleting them was not permitted from this session. Unlink each
   junction (`rmdir`) before deleting the folder.
+
+## 11. Merged on main, re-measured (2026-09-26, Bailey's D-193)
+
+Bailey, ~07:00 EDT: "I'll go with all your recommendations" (D-193, option B). The branch is merged on
+`main` (merge `8235ad63`, no conflicts; main had moved on to the listed Den of Woe and release 19).
+On main: `NAMED_TARGETS_ONLY = true`, `IMMUNE_HITS_SKIP_CHAIN = false`,
+`MENU_CANCEL_ONLY_DELAY_ABILITIES = false` (the menu-cancel correction is still Bailey's open call).
+**FFX-2 only.**
+
+**Every FFX-2 chapter on main**, 200 seeds, first try human (Wait split 1.5 s / 0.5 s) / Active 1.5 s /
+bench (`ffx2-engine-fixes-bench.test.ts`, `PYREFLY_MEASURE=1 ENGINE_FIX_ARMS=built`; the Den from
+`den-of-woe-shipped-bench.test.ts`):
+
+| Chapter | Human / Active / bench | Column B in 9.3 |
+|---|---|---|
+| IV Bahamut | 200 / 200 / 200 | exact |
+| V Vegnagun + Shuyin | 175 / 29 / 188 | exact |
+| VI Leblanc | 159 / 13 / 195 | exact |
+| XI Fallen Aeons | 157 / 95 / 174 | exact |
+| XIII Trema | 16 / 7 / 14 | exact |
+| XV Den of Woe | 34 / 6 / 94; within 3 / 5 human 102 / 149, Active 12 / 16, bench 168 / 196 | exact |
+
+The Den at the other human speeds: 59 first try, 134 / 169 at 1.0 s; 45, 98 / 131 at 2.5 s (section 7's
+scratch read 59 / 169 and 45 / 131). D-191's numbers note in `docs/target/decisions.json` and the Den
+options sheet carry the new table.
+
+**One pin moved on main that the branch did not have:** `tests/unit/chapters/den-of-woe-carry.test.ts`
+pins the Chapter 5, 6 and XI event logs (seeds 1 to 8, D = 0). Re-pinned with the reason in the file:
+Chapter 5's eight now equal the re-pinned `ffx2-atb-golden` CH5_D0 again (IC-2 and Acta), Chapter 6
+moves on seed 3, the Road on six of eight and the Sisters on all eight (IC-2 alone; neither chain casts
+Acta). No contract file changed, so there is no `docs/CONTRACT-CHANGES.md` entry.
+
+**Real-key sanity run on a production build** (`vite build`, served at `/pyrefly-reprise/` on port
+5880, headless Chromium on the real GPU, `PYREFLY_BROWSER=gpu`, 0 page errors). The debug API reached
+each link, labelled: `setSeed(1)`, `gotoChapter(<id>, { skipCutscenes: true })` with no auto,
+`autoBattle('intended')` on every link before the checked one, `setBattleSpeed('fast')`.
+
+- **Chapter V, the Head link (seed 4), real keys only:** auto-play cleared on entry, 97 Enter presses.
+  The Head's first Acta Est Fabula targets `redoubt-r` and `redoubt-l` only: two hits, healing them
+  2,451 and 2,392. The cast's only HP events are those two heals: the Head is not a target and is not healed (35,448 HP before and after the cast).
+  Frame: `docs/screenshots/engine-0926/ch5-head-first-acta.jpg`.
+- **Chapter XV, Nooj (seed 3):** debug auto-play held the link until Nooj was at 3,595 HP (above
+  Lightfall's 2,999 line), then auto was cleared and 31 real Enter presses took him to 927. Lightfall:
+  three hits, one on each living girl (Yuna 587 HP, Rikku 1,905, Paine 4,425 before it), 5,000 each, in
+  order Yuna, Rikku, Paine; nobody is hit twice and nobody is skipped (the old wrap's seed-6 failure).
+  No girl had drunk a Hero Drink, so all three went down, as the line predicts. Frame:
+  `docs/screenshots/engine-0926/ch15-first-lightfall.jpg`.
