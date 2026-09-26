@@ -117,22 +117,3 @@
 .battle-midbeat .dbox__portrait:empty {
   display: none;
 }
-
-/*
- * PR-0211 (both games, CHK-008): a beat's line card sits in a band at the top
- * of the field, clear of the party. At its cutscene place (bottom-left, the
- * approved A-dialogue frame) it covered the party below the shoulders during
- * a fight: Jecht's card across Lulu, Auron and Yuna in Chapter III at 1600,
- * Shinra's across Yuna and Rikku in Chapter V at 2000. The party stands in the
- * lower half of every battle frame; the band above the field holds only the
- * HUD panels this beat already dims. `top` clears the portrait's overhang
- * above the slab (20.83 - 0.69 - 13.19 = 6.95vw), so the portrait stays on
- * screen. Cutscenes are not a beat and keep the approved place; the phone
- * layout (560px and under) has its own card and is left alone.
- */
-@media (min-width: 561px) {
-  .battle-midbeat .dbox .dbox__win {
-    top: 8vw;
-    bottom: auto;
-  }
-}
