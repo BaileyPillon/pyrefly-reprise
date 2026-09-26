@@ -745,6 +745,10 @@ describe('the whole layer hides for the pause and comes back as it was', () => {
 
   it('setIntentSuspended forwards to a HUD that has the method, and is a no-op otherwise', () => {
     const { hud } = mountHud(new FFX2BattleHud());
+    // PR-0146: the FFX-2 slab is held until the battle-start moment hands the
+    // HUD back (`intentOpeningHold.ts`); play that opening first.
+    hud.setVisible(false);
+    hud.setVisible(true);
     setIntentSuspended(hud, true);
     expect(hud.enemyIntent.isSuspended).toBe(true);
     setIntentSuspended(hud, false);

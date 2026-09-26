@@ -51,6 +51,7 @@ import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HE
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
 import { BattleMessageBanner } from './battleMessage.ts';
 import { displayNameOf } from './displayName.ts';
+import { IntentOpeningHold } from './intentOpeningHold.ts';
 
 /**
  * PR-0012 (round 09 built the description logic, round 10 gated the slab off
@@ -157,6 +158,8 @@ export class FFX2BattleHud implements HudPort {
   private readonly levels = new MenuLevelRelay();
   /** Tears the open command menu down from outside. Active ATB only. */
   private closeMenu: (() => void) | null = null;
+  /** PR-0146: the slab waits for the battle-start moment (./intentOpeningHold.ts). */
+  private readonly openingHold = new IntentOpeningHold((s) => this.intent.setSuspended(s));
   /** The painted field's targeting surface, when there is a field. */
   private targeting: TargetingPort | null = null;
   /** Countdown to the next panel re-measure, so `visibleInFrame` never goes stale. */
@@ -366,6 +369,7 @@ export class FFX2BattleHud implements HudPort {
       project: (id, anchor) => this.project(id, anchor),
       avoid: () => this.intentAvoidRects(),
     });
+    this.openingHold.start();
 
     this.mounted = true;
     this.layout();
@@ -431,7 +435,7 @@ export class FFX2BattleHud implements HudPort {
    * `EnemyIntentPanel.setSuspended` (PR-0122).
    */
   setIntentSuspended(suspended: boolean): void {
-    this.intent.setSuspended(suspended);
+    this.openingHold.pause(suspended); // folded with the opening hold (PR-0146)
   }
 
   /** The intent slab, for tests and the debug snapshot. */
@@ -774,6 +778,7 @@ export class FFX2BattleHud implements HudPort {
       );
       return { kind: 'defend', targets: [] };
     }
+    this.openingHold.decision(); // PR-0146: the opening is over
     // PR-0175: a menu still open from an earlier decision (a link that ended
     // under it) is torn down before the next one opens. Overwriting its close
     // handle left its cursor in the overlay, still on arrow keys, projecting
@@ -913,6 +918,7 @@ export class FFX2BattleHud implements HudPort {
 
   setVisible(visible: boolean): void {
     this.el.hidden = !visible;
+    this.openingHold.visible(visible);
   }
 
   setProjector(
