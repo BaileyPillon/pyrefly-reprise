@@ -196,10 +196,14 @@ describe('ZanmatoGauge: the widget', () => {
     expect(g.bannerEl.hidden).toBe(false);
     expect(g.bannerEl.textContent).toContain('Yojimbo strikes on his next turn');
     expect(g.obstacleEls()).toEqual([g.panelEl, g.bannerEl]);
-    // A second sync at 100 is not a second banner cue; Zanmato resets it.
+    // Zanmato's reset no longer cuts the banner short, and the panel holds the
+    // full view until his action has ended (PR-0191; ui-ffx-zanmato-hold.test.ts).
     g.onEvent(gaugeEvent(100, 0));
-    expect(g.bannerEl.hidden).toBe(true);
-    expect(g.obstacleEls()).toEqual([g.panelEl]);
+    expect(g.bannerEl.hidden).toBe(false);
+    expect(g.panelEl.classList.contains('ffx-zg__panel--full')).toBe(true);
+    g.onEvent({ type: 'action-end', actorId: 'yojimbo' } as BattleEvent);
+    expect(g.panelEl.classList.contains('ffx-zg__panel--full')).toBe(false);
+    expect(g.panelEl.dataset['gauge']).toBe('0');
     g.dispose();
   });
 
