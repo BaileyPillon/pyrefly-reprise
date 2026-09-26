@@ -8,7 +8,7 @@
  * Kept out of `./encounters.ts` for the house 400-line rule, like Chapters 7
  * to 10; the `Chapter` import is type-only, so there is no runtime cycle.
  *
- * ## Registered, reachable, and UNLISTED
+ * ## Registered, reachable, then listed 2026-09-25
  *
  * Bailey took every recommendation on 2026-09-25 ("I'll go with all your
  * recommendations": `docs/plans/chapter-isaaru-review.md` B1-B22 and
@@ -17,8 +17,9 @@
  * cue those picks approve are not painted, built or composed yet (B22 = ship
  * LOCKED if the art is late). So this record sits in `UNLISTED_CHAPTERS`, the
  * Chapter IX and X precedent: `getChapter`, the battle flow and
- * `window.__pyrefly.gotoChapter` reach it by id, and **chapter select does not
- * show it**.
+ * `window.__pyrefly.gotoChapter` reach it by id, and chapter select did not
+ * show it. Listed on 2026-09-25 (Bailey: "All your recommendations", Chapter
+ * XIV as is): `./encounters.ts` puts the shipped record after Chapter XIII.
  *
  * Every field a player would see or hear is Bailey's pick or a
  * **placeholder**, and says which:
@@ -61,7 +62,7 @@ export const ISAARU_PLACEHOLDER_SCRIPTS: ChapterScripts = {
   midScripts: {},
 };
 
-/** Chapter 14 (registered, unlisted). */
+/** Chapter 14 (listed 2026-09-25, through `./chapter-isaaru-ship.ts`). */
 export const ISAARU_VIA_PURIFICO: Chapter = {
   id: 'isaaru-via-purifico',
   game: 'ffx',
@@ -70,7 +71,7 @@ export const ISAARU_VIA_PURIFICO: Chapter = {
   // research §1.2 and §8.2 beats 5-6, summarised: the one fight the player commands only aeons.
   subtitle: 'A summoner against a summoner',
   location: 'Via Purifico — beneath Bevelle', // B1 (picked)
-  // research §8.2 beats 5-7, summarised. Placeholder card copy; no card shows until the chapter is listed.
+  // research §8.2 beats 5-7, summarised: the card copy.
   blurb:
     'At the way out of the prison, Isaaru waits under orders to stop her. ' +
     'Yuna stands alone, and only her aeons can answer his.',

@@ -82,6 +82,8 @@ const SEEDS = [1, 2, 3] as const;
  */
 const MIN_ROWS_AUDITED: Readonly<Record<string, number>> = {
   'ffx2-leblanc': 15,
+  // Chapter XIV: Yuna alone, and only her aeons may act on his (research ffx-isaaru-bevelle.md §1.2), so fewer rows exist.
+  'isaaru-via-purifico': 12,
 };
 
 /** The minimum the harness needs from either engine. */
@@ -253,7 +255,8 @@ describe('every row the menu offers changes the battle or is refused out loud', 
  * ask and nothing here is applied to chapters 4 and 5 [AGENTS.md hard rule 14].
  */
 describe('and the bench is asked too, which is where the two inert rows were hiding', () => {
-  for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx')) {
+  // Chapter XIV has no bench: Yuna fights alone in the Via Purifico (forced_party "y", research ffx-isaaru-bevelle.md §1.2).
+  for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx' && c.id !== 'isaaru-via-purifico')) {
     it(`holds for every reserve guardian in chapter ${chapter.number}`, () => {
       const inert: string[] = [];
       const roster = makeEngine(chapter, 3).state().reserveIds.slice();

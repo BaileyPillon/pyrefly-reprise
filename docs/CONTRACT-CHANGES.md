@@ -6,6 +6,28 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-25 — `encounters.ts`: Chapter XIV (Isaaru) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX only** [AGENTS.md hard rule 14]: Isaaru's contest of aeons in the Via Purifico
+(`research/ffx-isaaru-bevelle.md`; FFX-2 has no summoners); the listing itself is shared plumbing
+(both). Bailey, 2026-09-25 ~18:30 EDT: "All your recommendations" (D-186: Chapter XIV as is, 125/200
+on the bench, no build change).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `ISAARU_VIA_PURIFICO_SHIPPED` and
+`CHAPTER_IDS` gains `'isaaru-via-purifico'`, both last (after Chapter XIII); chapter select groups by
+game, so the card sits after Chapter XII in the FFX group (I, II, III, COMING VII, VIII, IX, X, XII,
+XIV). `ChapterId` and `getChapter` are unchanged (the id was already registered; the union's last two
+lines and two import comments were joined to keep the file at 399 lines); `UNLISTED_CHAPTERS` keeps
+only the Fallen Aeons. Alongside: `CHAPTER_META` gains `ISAARU_META` (`UNLISTED_CHAPTER_META` is
+empty again; its tagline is trimmed to the pause card's 2-4 words, "Summoner Against Summoner", and
+its aside to "three aeons, one fayth each"), and `src/story/registry.ts` gains the
+`'isaaru-via-purifico'` key (its scripts, no AI-emitted callouts, its two link seams
+`pterya-called` and `spathi-called` on the seam budget; four map lines were joined to keep it at 398
+lines). Every chapter-generic consumer now sees thirteen chapters, twelve of them playable: Auron's
+briefing counts "Twelve fights" by itself (D-136), and `arcCleared('ffx')` also needs Chapter XIV
+(`ARC_FINALE.ffx` stays `braskas-final-aeon`: the Via Purifico comes before the Highbridge). No save
+migration: saves key chapters by id string.
+
 ## 2026-09-25 — `encounters.ts`: Chapter X (Seymour Natus) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX only** [AGENTS.md hard rule 14]: Seymour Natus on the Highbridge of Bevelle

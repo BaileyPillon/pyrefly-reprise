@@ -8,7 +8,8 @@
  *
  * - `title` "Isaaru", `location` "Via Purifico — beneath Bevelle": B1 (picked,
  *   D-147), as the record has them.
- * - `subtitle` and `blurb` are the record's own; `handwritten` and `tip` are
+ * - `blurb` is the record's own; `subtitle` is the record's trimmed to the pause
+ *   card's 2-4 word tagline at the listing; `handwritten` and `tip` are
  *   our words over the research's sourced facts: only aeons can fight his
  *   aeons and the mirror lock (§1.2, `[verified: 2 sources]`), a KO'd aeon
  *   stays down (§1.2, `[derived]`), Grothia opens with a full gauge (§4.1,
@@ -31,8 +32,8 @@
  *   `boss-yojimbo`, both stand-ins until B21's "Still Water" is sketched and
  *   picked by ear (rule 13), and the shared `victory-ffx` fanfare.
  *
- * **Unlisted**: it sits in `./chapter-meta.ts`'s `UNLISTED_CHAPTER_META` until
- * the chapter is listed, when it moves into `CHAPTER_META`.
+ * **Listed** 2026-09-25 with the chapter itself: it sits in `./chapter-meta.ts`'s
+ * `CHAPTER_META` after Chapter XIII's, as the chapter sits after Chapter XIII in `CHAPTERS`.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
@@ -43,7 +44,7 @@ export const ISAARU_META: ChapterMeta = {
   gameLabel: 'FFX',
   numeral: 'XIV',
   title: 'Isaaru',
-  subtitle: 'A summoner against a summoner',
+  subtitle: 'Summoner Against Summoner',
   location: 'Via Purifico — beneath Bevelle',
   blurb:
     'At the way out of the prison, Isaaru waits under orders to stop her. ' +
@@ -51,7 +52,7 @@ export const ISAARU_META: ChapterMeta = {
   heroArt: 'pause/ch14-isaaru-via-purifico',
   heroArtFallback: 'portraits/yuna.png',
   quote: { text: 'I know what the temple says. For me, that is enough.', speaker: 'Isaaru' },
-  handwritten: 'three of his aeons, one fayth each',
+  handwritten: 'three aeons, one fayth each',
   objectives: [
     {
       // §4.1 [single source: wiki]: Grothia opens with a full gauge, so his first turn with an aeon out is Hellfire.

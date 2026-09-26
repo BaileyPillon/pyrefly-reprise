@@ -122,7 +122,7 @@ describe('the fixed list', () => {
     const rig = mount();
     const before = cards(rig);
     const ids = cardIds(rig);
-    expect(ids).toHaveLength(12);
+    expect(ids).toHaveLength(13);
     const moves = ['ArrowRight', 'ArrowRight', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowLeft'];
     for (const code of moves) {
       rig.key(code);
@@ -142,7 +142,7 @@ describe('the fixed list', () => {
   it('puts the COMING Chapter VII in number order, between III and VIII, and it stays unplayable', () => {
     const rig = mount();
     const numerals = cards(rig).map((c) => c.querySelector('.fe-card__num')?.textContent);
-    expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'IV', 'V', 'VI', 'XIII']);
+    expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'IV', 'V', 'VI', 'XIII']);
     const vii = card(rig, 'seymour-anima-macalania');
     expect(vii.classList.contains('fe-card--coming')).toBe(true);
     expect(vii.getAttribute('data-action')).toBeNull();
@@ -184,13 +184,13 @@ describe('numerals never overlap names (the sheet)', () => {
 });
 
 describe('the progress strip', () => {
-  it('reads 0 of 11 on a new save (Chapters X and XII listed 2026-09-25): listed, playable chapters only, the coming card hatched', () => {
+  it('reads 0 of 12 on a new save (Chapters X, XII and XIV listed 2026-09-25): listed, playable chapters only, the coming card hatched', () => {
     const rig = mount();
     expect(rig.screen.snapshot()['beaten']).toBe(0);
-    expect(rig.screen.snapshot()['total']).toBe(11);
+    expect(rig.screen.snapshot()['total']).toBe(12);
     expect(rig.root.querySelector('.cs-strip__count b')?.textContent).toBe('0');
-    expect(rig.root.querySelector('.cs-strip__of')?.textContent).toBe('of 11 beaten');
-    expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(12);
+    expect(rig.root.querySelector('.cs-strip__of')?.textContent).toBe('of 12 beaten');
+    expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(13);
     expect(rig.root.querySelectorAll('.cs-pip.is-lit')).toHaveLength(0);
     expect([...rig.root.querySelectorAll('.cs-pip.is-coming')].map((p) => p.textContent)).toEqual(['VII']);
   });
@@ -204,8 +204,8 @@ describe('the progress strip', () => {
       ['seymour-anima-macalania', 100_000],
     ]);
     expect(rig.screen.snapshot()['beaten']).toBe(2);
-    expect(rig.screen.snapshot()['total']).toBe(11);
-    expect(rig.root.querySelector('.cs-strip')?.getAttribute('aria-label')).toBe('2 of 11 chapters beaten');
+    expect(rig.screen.snapshot()['total']).toBe(12);
+    expect(rig.root.querySelector('.cs-strip')?.getAttribute('aria-label')).toBe('2 of 12 chapters beaten');
     const lit = [...rig.root.querySelectorAll('.cs-pip.is-lit')].map((p) => [p.textContent, p.classList.contains('is-x2')]);
     expect(lit).toEqual([
       ['VIII', false],

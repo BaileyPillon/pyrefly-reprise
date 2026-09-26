@@ -197,15 +197,15 @@ describe('the chain (research §1.2, §4.4)', () => {
   });
 });
 
-describe('registration: Chapter XIV, unlisted', () => {
-  it('reachable by id, not on chapter select, number 14, FFX, opens on Grothia with the solo build', () => {
+describe('registration: Chapter XIV, listed 2026-09-25', () => {
+  it('reachable by id, on chapter select after Chapter XIII, number 14, FFX, opens on Grothia with the solo build', () => {
     const ch = getChapter('isaaru-via-purifico');
     expect(ch).toMatchObject({ game: 'ffx', number: 14, title: 'Isaaru' });
     expect(ch?.enemyGroupRef.id).toBe('isaaru-grothia');
     expect(ch?.buildRef).toBe(viaPurificoBuild);
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('isaaru-via-purifico');
-    expect(CHAPTERS.map((c) => c.id)).not.toContain('isaaru-via-purifico');
-    expect(CHAPTER_IDS).not.toContain('isaaru-via-purifico');
+    expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('isaaru-via-purifico');
+    expect(CHAPTERS.map((c) => c.id).at(-1)).toBe('isaaru-via-purifico');
+    expect(CHAPTER_IDS.at(-1)).toBe('isaaru-via-purifico');
     expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' });
   });
 });

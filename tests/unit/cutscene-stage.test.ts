@@ -75,6 +75,10 @@ describe('which chapters the stage changes (measured, pinned)', () => {
       // Chapter X (FFX only, listed 2026-09-25): Seymour Natus stands up from the attendants' pyreflies
       // (research ffx-seymour-natus-highbridge.md §8.2 beat 8).
       '10 seymour-natus pre': ['fx pyreflies-rising', 'show seymour-natus'],
+      // Chapter XIV (FFX only, listed 2026-09-25): Isaaru waits at the chamber's far end, then stands on his spot
+      // after the contest (research ffx-isaaru-bevelle.md §8.2 beats 5 and 7).
+      '14 isaaru-via-purifico pre': ['show isaaru'],
+      '14 isaaru-via-purifico post': ['show isaaru', 'hide isaaru'],
       // Scenes that already called these keys, and now draw them instead of
       // a 90 ms flash. No figure appears in any of them.
       '1 seymour-flux post': ['fx sending-dance @yuna', 'fx pyreflies-rising'],
@@ -85,7 +89,7 @@ describe('which chapters the stage changes (measured, pinned)', () => {
     });
   });
 
-  it('stands only Chapters IX, X, XII and XIII\'s own figures, so no other chapter\'s showActor puts anyone on stage', () => {
+  it('stands only Chapters IX, X, XII, XIII and XIV\'s own figures, so no other chapter\'s showActor puts anyone on stage', () => {
     // Trema (FFX-2 only, Chapter XIII, listed 2026-09-25) stands in his own post scene only.
     // Seymour Omnis (FFX only, Chapter XII, listed 2026-09-25): his pre and post scenes, no other chapter's.
     // Seymour Natus (FFX only, Chapter X, listed 2026-09-25) stands up in his own pre scene only.

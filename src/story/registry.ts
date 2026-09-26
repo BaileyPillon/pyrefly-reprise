@@ -62,13 +62,14 @@ import { yojimboCavernScripts } from './scripts/yojimbo-cavern.ts';
 import { seymourNatusScripts } from './scripts/seymour-natus.ts';
 import { TREMA_AI_TRIGGERS, TREMA_LINK_SEAM, ffx2TremaShippedScripts } from './scripts/ffx2-trema.ts';
 import { OMNIS_STORY_TRIGGERS, seymourOmnisScripts } from './scripts/seymour-omnis.ts';
+import { ISAARU_SEAMS, isaaruScripts } from './scripts/ffx-isaaru.ts';
 
 /** Chapter ids, matching `data/encounters.ts`. */
 export type ChapterKey =
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern'
-  | 'seymour-natus' | 'seymour-omnis' | 'ffx2-trema';
+  | 'seymour-natus' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico';
 
 /** Every chapter's story layer, in play order. */
 export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
@@ -84,6 +85,7 @@ export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
   'seymour-natus': seymourNatusScripts, // Chapter X as listed 2026-09-25: the Highbridge of Bevelle
   'seymour-omnis': seymourOmnisScripts, // Chapter XII as listed 2026-09-25: the Garden of Pain
   'ffx2-trema': ffx2TremaShippedScripts, // Chapter XIII as listed 2026-09-25: Oversoul Paragon, then Trema
+  'isaaru-via-purifico': isaaruScripts, // Chapter XIV as listed 2026-09-25: the Via Purifico
 };
 
 export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
@@ -117,10 +119,7 @@ export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
  *   (`OMNIS_CALLOUTS`, mirrored as `OMNIS_STORY_TRIGGERS`), the one FFX emitter.
  */
 export const AI_EMITTED_TRIGGERS: Readonly<Record<ChapterKey, readonly string[]>> = {
-  'seymour-flux': [],
-  yunalesca: [],
-  'braskas-final-aeon': [],
-  'ffx2-bahamut': [],
+  'seymour-flux': [], yunalesca: [], 'braskas-final-aeon': [], 'ffx2-bahamut': [],
   // No LeBlanc AI emits one: every beat goes through `mid` (`ko`/`ability-used`) instead.
   'ffx2-leblanc': [],
   // No Macalania AI emits one: its three beats go through `mid` [docs/handoff/chapter-macalania-script.md].
@@ -131,6 +130,7 @@ export const AI_EMITTED_TRIGGERS: Readonly<Record<ChapterKey, readonly string[]>
   'seymour-natus': [], // No Natus AI emits one (the B9 callouts are held, D-085); no `mid` beats either.
   'seymour-omnis': Object.values(OMNIS_STORY_TRIGGERS), // Omnis's nine callouts (`battle/ffx/ai/seymour-omnis-callouts.ts`)
   'ffx2-trema': TREMA_AI_TRIGGERS, // Trema's Meteor and Ultima lines (`battle/ffx2/ai/trema.ts`)
+  'isaaru-via-purifico': [], // No Isaaru AI emits one: his beats go through `mid` (listed as is, 2026-09-25)
   'ffx2-vegnagun-shuyin': [
     'farplane-voice',
     'farplane-voice-braska',
@@ -172,8 +172,7 @@ export const SEAM_BUDGET_MS = 26_000;
  * everything here plays with the player's hands off the controller.
  */
 export const CHAIN_SEAMS: Readonly<Record<ChapterKey, readonly string[]>> = {
-  'seymour-flux': [],
-  yunalesca: [],
+  'seymour-flux': [], yunalesca: [],
   // Jecht's goodbye (on his KO, mid-chain) and the chant that opens the possessed-aeon gauntlet.
   'braskas-final-aeon': ['jecht-falls', 'valefor-enters'],
   'ffx2-bahamut': [],
@@ -185,11 +184,11 @@ export const CHAIN_SEAMS: Readonly<Record<ChapterKey, readonly string[]>> = {
   'seymour-anima-macalania': [],
   // One battle, one formation: every beat is an in-fight interrupt.
   'evrae-airship': [],
-  'yojimbo-cavern': [],
-  'seymour-natus': [],
-  'seymour-omnis': [],
+  'yojimbo-cavern': [], 'seymour-natus': [], 'seymour-omnis': [],
   // The Paragon-to-Trema link: the seam fires off Paragon's KO, between the two formations.
   'ffx2-trema': [TREMA_LINK_SEAM],
+  // Isaaru calls his next aeon off the last one's KO, between two formations: his cry, then her lock line.
+  'isaaru-via-purifico': [ISAARU_SEAMS.pterya, ISAARU_SEAMS.spathi],
 };
 
 /** The budget a given script has to fit inside. */

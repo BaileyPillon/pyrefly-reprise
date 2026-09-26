@@ -130,7 +130,7 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...TREMA_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-trema', bossId, tactic: ffx2Trema })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
-  // Chapter XIV (FFX only, unlisted): his three aeons, one a link; Isaaru is an untargetable bystander.
+  // Chapter XIV (FFX only, listed 2026-09-25): his three aeons, one a link; Isaaru is an untargetable bystander.
   ...ISAARU_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'isaaru-via-purifico', bossId, tactic: isaaruViaPurifico })),
 ];
 

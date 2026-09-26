@@ -16,7 +16,6 @@ import { readFileSync } from 'node:fs';
 import { CutsceneStage } from '../../src/app/screens/CutsceneStage.ts';
 import { CHAPTERS } from '../../src/data/encounters.ts';
 import type { Step, StoryScript } from '../../src/story/dsl.ts';
-import { isaaruScripts } from '../../src/story/scripts/ffx-isaaru.ts';
 
 /**
  * Lines (`say` / `narrate`) that play while a fade to black or white is up:
@@ -51,8 +50,6 @@ describe('which scenes narrate under a fade (measured, pinned)', () => {
     for (const c of CHAPTERS) {
       scenes.push([`${c.number} ${c.id} pre`, c.scriptsRef?.pre], [`${c.number} ${c.id} post`, c.scriptsRef?.post]);
     }
-    // Chapter XIV (FFX only) is unlisted, so it is not in CHAPTERS yet.
-    scenes.push(['14 isaaru pre', isaaruScripts.pre], ['14 isaaru post', isaaruScripts.post]);
     for (const [key, script] of scenes) {
       if (!script) continue;
       const { n } = linesUnderFade(script);
@@ -71,7 +68,7 @@ describe('which scenes narrate under a fade (measured, pinned)', () => {
       // Chapter X (FFX only), listed on main while Chapter XIV was on its branch: the veil reaches it too.
       '10 seymour-natus pre': 9,
       '10 seymour-natus post': 5,
-      '14 isaaru post': 2,
+      '14 isaaru-via-purifico post': 2,
     });
   });
 });

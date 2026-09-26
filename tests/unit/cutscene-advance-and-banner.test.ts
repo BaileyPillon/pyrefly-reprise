@@ -85,8 +85,10 @@ describe('CutsceneRunner resumes past the results marker — #04', () => {
       // Chapter IX's draft puts `[BEAT: results()]` after its last line
       // (docs/plans/yojimbo-story-draft.md, post-battle beat 5): nothing follows.
       // Chapter XII's draft does the same (docs/plans/omnis-story-draft.md, "Post-battle": Auron's line, then `results()`),
-      // and so does Chapter X's (docs/plans/natus-story-draft.md, "Post-battle": the Calm Lands line, then `results()`).
-      if (chapter.id === 'yojimbo-cavern' || chapter.id === 'seymour-natus' || chapter.id === 'seymour-omnis') {
+      // and so does Chapter X's (docs/plans/natus-story-draft.md, "Post-battle": the Calm Lands line, then `results()`),
+      // and Chapter XIV's (docs/plans/isaaru-story-draft.md: the stairs interlude, then `results()`).
+      const endsOnResults = ['yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'isaaru-via-purifico'];
+      if (endsOnResults.includes(chapter.id)) {
         expect(after).toBe(0);
         continue;
       }

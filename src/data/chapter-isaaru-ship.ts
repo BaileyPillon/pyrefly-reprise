@@ -18,9 +18,10 @@
  *   yet, so the stand-ins stay (`scene-gagazet` under the walk in,
  *   `boss-yojimbo` for the duel; FFX cues only).
  *
- * **Unlisted** (the brief: the driver lists it, as commit 5c8706d6 listed
- * Chapter XIII). `./chapters-unlisted.ts` registers this result, so the battle
- * flow and the debug API reach it by id and chapter select does not show it.
+ * **Listed** 2026-09-25 (Bailey: "All your recommendations", Chapter XIV as
+ * is), as commit 5c8706d6 listed Chapter XIII: `./encounters.ts` puts this
+ * result in `CHAPTERS` after Chapter XIII (it was in `./chapters-unlisted.ts`
+ * until then: reachable by id, no card).
  */
 
 import type { Chapter } from './encounters.ts';

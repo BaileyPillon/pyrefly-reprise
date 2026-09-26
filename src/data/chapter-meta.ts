@@ -358,7 +358,7 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   musicKeys: ['scene-farplane', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'],
 };
 
-/** All twelve listed chapters' pause-screen metadata, in play order. */
+/** All thirteen listed chapters' pause-screen metadata, in play order. */
 export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_FLUX_META,
   YUNALESCA_META,
@@ -372,6 +372,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   NATUS_META, // Chapter X (FFX), listed 2026-09-25
   SEYMOUR_OMNIS_META, // Chapter XII (FFX), listed 2026-09-25
   TREMA_META, // Chapter XIII (FFX-2), listed 2026-09-25
+  ISAARU_META, // Chapter XIV (FFX), listed 2026-09-25
 ] as const;
 
 /**
@@ -380,8 +381,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
  * id, and `CHAPTER_META` stays one-to-one with the listed chapters. Listing a
  * chapter moves its record from here into `CHAPTER_META`.
  */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] =
-  [ISAARU_META] as const; // Chapter XIV (FFX), unlisted
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [] as const;
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

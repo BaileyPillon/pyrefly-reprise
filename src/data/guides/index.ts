@@ -70,7 +70,7 @@ export const GUIDES: readonly ChapterGuide[] = [
   SEYMOUR_OMNIS_GUIDE,
   // Chapter X (FFX only), listed 2026-09-25: the research's line, Haste only Tidus and Auron.
   SEYMOUR_NATUS_GUIDE,
-  // Chapter XIV (FFX only), registered and unlisted like its chapter.
+  // Chapter XIV (FFX only), listed 2026-09-25 as is (125/200 on the bench).
   ISAARU_GUIDE,
 ];
 

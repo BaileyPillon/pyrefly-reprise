@@ -34,12 +34,12 @@
  *   resolves (`hp-below` Grothia at `fraction: 1`, the Shuyin precedent: no
  *   trigger watches a summon). Grothia opens with a full gauge (research §4.1),
  *   so it lands before his first Hellfire whoever moves first.
- * - **Not built here, owed to the listing step:** Kimahri's "count reads 1"
+ * - **Not built (listed as is, 2026-09-25):** Kimahri's "count reads 1"
  *   and Lulu's "last aeon" lines. Neither moment is a trigger the story can
  *   watch (no condition reads a flag or the Summon list), so each needs the
  *   Isaaru AI to emit a named `script-trigger`, and every AI-emitted name must
  *   be on `src/story/registry.ts`'s `AI_EMITTED_TRIGGERS`, which gains this
- *   chapter's key only when the chapter is listed (the Trema precedent). The
+ *   chapter's key with an empty list at the listing (no build change). The
  *   count itself is on screen all the while (the AI's telegraph, B20).
  *
  * ## The exit
