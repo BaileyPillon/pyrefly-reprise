@@ -62,7 +62,9 @@ import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from
 import { activeScriptId, chooseAiCommand, fluxPhase } from './ai/index.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { predictTurnOrder } from './turnQueue.ts';
-import { type ActionEstimate, estimateCommand } from './estimate.ts';
+import { type ActionEstimate, type TargetEstimate, estimateCommand } from './estimate.ts';
+import type { RandomTarget } from '../common/intentTargets.ts';
+import { ffxRandomTarget } from './intentRandom.ts';
 
 export type { ActionEstimate, StatusOdds, TargetEstimate } from './estimate.ts';
 
@@ -91,6 +93,8 @@ export interface IntentBranch {
   label: string;
   /** 0–100, rounded. Shares sum to 100 up to rounding. */
   percent: number;
+  /** PR-0123: the branch `moveName` names (the badge reads its percent). */
+  rolled?: boolean;
 }
 
 /** A live telegraph, and what it is counting down to. */
@@ -124,6 +128,8 @@ export interface EnemyIntent {
   /** "Death 100%", "Zombie 40% (blocked)" — per target, deduplicated. */
   statusText: string[];
   estimate: ActionEstimate | null;
+  /** PR-0153: the victim is rolled — every candidate, estimated (`intentRandom.ts`). */
+  randomTarget?: RandomTarget<TargetEstimate> | null;
   confidence: 'scripted' | 'likely';
   /** Empty when `confidence` is `'scripted'`. */
   branches: IntentBranch[];
@@ -545,9 +551,12 @@ export function predictEnemyIntent(
   // Sampling: one run per RNG position, tallied by branch. The stride is the
   // golden-ratio constant mulberry32 already advances its state by, so the
   // samples are spread across the stream rather than clustered behind it.
-  const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null }>();
+  const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null; key: string }>();
+  const firstKey = branchKey(ctx, first);
+  const sampledTargets: CombatantId[][] = []; // PR-0153: whom each sample of this move aimed at
   const record = (run: DryRun): void => {
     const key = branchKey(ctx, run);
+    if (key === firstKey && run.command) sampledTargets.push([...run.command.targets]);
     const def = defOf(ctx, run.command);
     const entry = tally.get(key);
     if (entry) {
@@ -556,8 +565,9 @@ export function predictEnemyIntent(
     }
     tally.set(key, {
       count: 1,
-      label: def?.name ?? (run.command ? run.command.kind : 'no action'),
+      label: def?.name ?? (run.command ? run.command.kind : 'No action'),
       abilityId: def?.id ?? null,
+      key,
     });
   };
   record(first);
@@ -573,6 +583,7 @@ export function predictEnemyIntent(
     abilityId: t.abilityId,
     label: t.label,
     percent: percents[i]!,
+    ...(t.key === firstKey ? { rolled: true } : {}),
   }));
   const confidence: EnemyIntent['confidence'] = tally.size <= 1 ? 'scripted' : 'likely';
 
@@ -602,6 +613,7 @@ export function predictEnemyIntent(
       ? estimateCommand(ctx.state, enemyId, payloadCommand, payloadDef, ctx.content)
       : null;
 
+  const randomTarget = def && first.command ? ffxRandomTarget(ctx, enemyId, first.command, def, sampledTargets) : null;
   const kind: IntentKind = def ? 'action' : charge ? 'charge' : 'pass';
   const passMessage = first.events.find((e) => e.type === 'message') as { text: string } | undefined;
   const moveName = def
@@ -613,7 +625,7 @@ export function predictEnemyIntent(
   const statusText: string[] = [];
   if (estimate) {
     const seen = new Set<string>();
-    for (const t of estimate.perTarget) {
+    for (const t of randomTarget?.rows ?? estimate.perTarget) {
       for (const s of t.statuses) {
         const label = `${statusWord(s.status)} ${s.percent}%${s.blocked ? ' (blocked)' : ''}`;
         if (seen.has(label)) continue;
@@ -648,6 +660,7 @@ export function predictEnemyIntent(
     elements: def ? [...def.element] : payloadDef ? [...payloadDef.element] : [],
     statusText,
     estimate,
+    randomTarget,
     confidence,
     branches: confidence === 'likely' ? branches : [],
     charge,

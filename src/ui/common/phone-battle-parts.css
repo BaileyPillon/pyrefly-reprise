@@ -196,8 +196,7 @@ html[data-phone-battle] .eint__lines * {
   font-size: 14px !important;
   line-height: 1.3 !important;
 }
-/* One line of it: who and what, the first number, nothing that needs a table. */
-html[data-phone-battle] .eint__conf,
+/* One line of it: who and what, how sure, the first number, nothing that needs a table. */
 html[data-phone-battle] .eint__head,
 html[data-phone-battle] .eint__desc,
 html[data-phone-battle] .eint__els,
@@ -219,6 +218,36 @@ html[data-phone-battle] .eint__dmg {
 }
 html[data-phone-battle] .eint__who::after {
   content: ' ';
+}
+/* PR-0207 (both games): the certainty badge stays on the line. Without it
+   "Kick · PAINE 179-202" read as certain while the desktop card said MOST
+   LIKELY 50%. The Odds table stays desktop-only. */
+html[data-phone-battle] .eint__conf {
+  display: inline !important;
+  margin-left: 0.4em;
+  padding: 0 0.3em !important;
+  border-width: 1px;
+  letter-spacing: 0.06em;
+  transform: none;
+  vertical-align: baseline;
+}
+/* PR-0153 (both games): a rolled victim is every candidate, never the first
+   one alone, and a candidate the move would KO says so. */
+html[data-phone-battle] .eint__body > .eint__dmgs--random::before {
+  content: ' · random: ';
+}
+html[data-phone-battle] .eint__dmgs--random .eint__dmg + .eint__dmg,
+html[data-phone-battle] .eint__dmgs--random .eint__cand {
+  display: inline !important;
+}
+html[data-phone-battle] .eint__dmgs--random .eint__cand + .eint__cand::before,
+html[data-phone-battle] .eint__dmgs--random .eint__dmg + .eint__dmg::before {
+  content: ' / ';
+  color: rgba(244, 241, 232, 0.6);
+}
+html[data-phone-battle] .eint__dmgs--random .eint__dmg--lethal .eint__pct {
+  display: inline !important;
+  margin-left: 0.3em;
 }
 /* The E chip: the line is the read-out; with the read-out off, the chip is the line. */
 html[data-phone-battle] .eint:not(.eint--off) .eint__toggle {

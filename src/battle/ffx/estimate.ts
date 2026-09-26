@@ -170,8 +170,9 @@ function run(
   command: Command,
   roll: RollPolicy,
   content?: FFXContentRegistry,
+  aim?: CombatantId,
 ): SimOutcome | null {
-  return simulateFFXCommand(state, actorId, command, { roll, ...(content ? { content } : {}) });
+  return simulateFFXCommand(state, actorId, command, { roll, ...(content ? { content } : {}), ...(aim ? { aim } : {}) });
 }
 
 /**
@@ -194,11 +195,13 @@ export function estimateCommand(
   command: Command,
   def: AbilityDef,
   content?: FFXContentRegistry,
+  /** Land any random pick on this combatant (PR-0153's per-candidate rows). */
+  aim?: CombatantId,
 ): ActionEstimate | null {
-  const mid = run(state, actorId, command, 'mid', content);
+  const mid = run(state, actorId, command, 'mid', content, aim);
   if (!mid) return null;
-  const lo = run(state, actorId, command, 'min', content) ?? mid;
-  const hi = run(state, actorId, command, 'max', content) ?? mid;
+  const lo = run(state, actorId, command, 'min', content, aim) ?? mid;
+  const hi = run(state, actorId, command, 'max', content, aim) ?? mid;
   const resolved = mid.ability ?? def;
 
   const user = state.combatants[actorId] as FFXCombatant | undefined;

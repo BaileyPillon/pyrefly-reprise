@@ -46,6 +46,8 @@ import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { canAct } from './statuses.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
+import type { RandomTarget } from '../common/intentTargets.ts';
+import { ffx2RandomTarget } from './intentRandom.ts';
 
 /** See the FFX twin: enough samples to catch a real branch, few enough to cache. */
 export const SAMPLE_COUNT = 24;
@@ -55,6 +57,7 @@ export interface IntentBranch {
   abilityId: AbilityId | null;
   label: string;
   percent: number;
+  rolled?: boolean; // PR-0123: the branch `moveName` names
 }
 
 /** A live telegraph, and what it is counting down to. */
@@ -88,6 +91,7 @@ export interface EnemyIntent {
   elements: ElementId[];
   statusText: string[];
   estimate: ActionEstimate | null;
+  randomTarget?: RandomTarget<TargetEstimate> | null; // PR-0153: a rolled victim, every candidate
   confidence: 'scripted' | 'likely';
   branches: IntentBranch[];
   charge: IntentCharge | null;
@@ -385,7 +389,7 @@ export function estimateFFX2Command(
   actorId: CombatantId,
   command: Command,
   def: AbilityDef,
-  options: { abilities?: AbilityRegistry; items?: ItemRegistry } = {},
+  options: { abilities?: AbilityRegistry; items?: ItemRegistry; aim?: CombatantId } = {},
 ): ActionEstimate | null {
   const at = (roll: RollPolicy): SimOutcome | null =>
     simulateFFX2Command(state, actorId, command, { roll, ...options });
@@ -503,7 +507,12 @@ export function predictFFX2EnemyIntent(
   const base = env.rng.saveState();
   const abilities = chainRegistries(env.abilities, defaultAbilities);
 
-  const first = dryRun(env, enemyId, base);
+  // PR-0123: a command already on the purple charge bar is the move this enemy
+  // makes next, committed (`gauges.ts#beginCharge`). Dry-running the *next*
+  // decision instead put "No action" over a Terror of Zanarkand the guide was
+  // correctly calling for this turn. FFX-2 only: FFX's CTB has no charge bar.
+  const committed = unit.atb.charging?.commandRef ?? null;
+  const first: DryRun | null = committed ? { command: committed, events: [] } : dryRun(env, enemyId, base);
   if (!first) return null;
 
   const defFor = (command: Command | null): AbilityDef | undefined => {
@@ -511,11 +520,18 @@ export function predictFFX2EnemyIntent(
     return abilities.get(command.id);
   };
 
-  const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null }>();
-  const record = (run: DryRun): void => {
+  const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null; key: string }>();
+  const keyOf = (run: DryRun): string => {
     const def = defFor(run.command);
     const charge = run.events.find((e) => e.type === 'charge') as { name: string } | undefined;
-    const key = def ? `ability:${def.id}` : charge ? `charge:${charge.name}` : 'pass';
+    return def ? `ability:${def.id}` : charge ? `charge:${charge.name}` : 'pass';
+  };
+  const firstKey = keyOf(first);
+  const sampledTargets: CombatantId[][] = []; // PR-0153: whom each sample of this move aimed at
+  const record = (run: DryRun): void => {
+    const def = defFor(run.command);
+    const key = keyOf(run);
+    if (key === firstKey && run.command) sampledTargets.push([...run.command.targets]);
     const entry = tally.get(key);
     if (entry) {
       entry.count += 1;
@@ -523,12 +539,13 @@ export function predictFFX2EnemyIntent(
     }
     tally.set(key, {
       count: 1,
-      label: def?.name ?? (run.command ? run.command.kind : 'no action'),
+      label: def?.name ?? (run.command ? run.command.kind : 'No action'),
       abilityId: def?.id ?? null,
+      key,
     });
   };
   record(first);
-  for (let i = 1; i < samples; i++) {
+  for (let i = 1; i < (committed ? 1 : samples); i++) {
     const run = dryRun(env, enemyId, (base + Math.imul(i, 0x9e3779b1)) >>> 0);
     if (run) record(run);
   }
@@ -540,6 +557,7 @@ export function predictFFX2EnemyIntent(
     abilityId: t.abilityId,
     label: t.label,
     percent: percents[i]!,
+    ...(t.key === firstKey ? { rolled: true } : {}),
   }));
   const confidence: EnemyIntent['confidence'] = tally.size <= 1 ? 'scripted' : 'likely';
 
@@ -589,11 +607,15 @@ export function predictFFX2EnemyIntent(
           )
         : null;
 
+  const randomTarget = def && first.command
+    ? ffx2RandomTarget(Object.values(env.state.combatants) as Ffx2Unit[], unit, first.command, def, sampledTargets, (aimed, aim) =>
+        estimateFFX2Command(env.state, enemyId, aimed, def, { ...simOptions, aim })?.perTarget ?? null)
+    : null;
   const statusText: string[] = [];
   const statusSource = def ?? payloadDef;
   if (statusSource) {
     const seen = new Set<string>();
-    const targets = estimate?.perTarget ?? [];
+    const targets = randomTarget?.rows ?? estimate?.perTarget ?? [];
     for (const t of targets) {
       const victim = env.state.combatants[t.targetId] as FFX2Combatant | undefined;
       if (!victim) continue;
@@ -639,6 +661,7 @@ export function predictFFX2EnemyIntent(
     elements: def ? [...def.element] : payloadDef ? [...payloadDef.element] : [],
     statusText,
     estimate,
+    randomTarget,
     confidence,
     branches: confidence === 'likely' ? branches : [],
     charge,

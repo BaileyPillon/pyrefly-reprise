@@ -1,0 +1,88 @@
+[
+  {
+    "name": "ch11-shiva-1600x900",
+    "chapterId": "ffx2-fallen-aeons",
+    "intent": {
+      "phone": false,
+      "panelHidden": false,
+      "text": "SHIVA\nACTS NEXT\n\nKick\nMOST LIKELY 58%\n\nPhysical non-elemental damage to one girl.\n\nDAMAGE · RANDOM TARGET\nYUNA\n348–393\n30% HP\n93% to hit\nRIKKU\n180–204\n3% HP\n94% to hit\nPAINE\n179–202\n3% HP\n94% to hit\n\nLands on one of these, picked when it acts.\n\nODDS\nKick\n58%\nBlizzaga\n25%\nHeavenly Strike\n17%\nJ HOLD · +2 MORE",
+      "move": "Kick",
+      "conf": "Most likely 58%",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Yuna348–39330% HP 93% to hit",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Rikku180–2043% HP 94% to hit",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Paine179–2023% HP 94% to hit",
+          "visible": true,
+          "lethal": false
+        }
+      ],
+      "odds": [
+        "Kick58%",
+        "Blizzaga25%",
+        "Heavenly Strike17%"
+      ],
+      "rect": {
+        "x": 944.890625,
+        "y": 74.59375,
+        "w": 375,
+        "h": 321.484375
+      }
+    },
+    "errors": []
+  },
+  {
+    "name": "ch11-shiva-390x844",
+    "chapterId": "ffx2-fallen-aeons",
+    "intent": {
+      "phone": true,
+      "panelHidden": false,
+      "text": "SHIVAACTS NEXT\n\nKickMOST LIKELY 58%\n\nYUNA348–393 RIKKU180–204 PAINE179–202",
+      "move": "Kick",
+      "conf": "Most likely 58%",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Yuna348–39330% HP 93% to hit",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Rikku180–2043% HP 94% to hit",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Paine179–2023% HP 94% to hit",
+          "visible": true,
+          "lethal": false
+        }
+      ],
+      "odds": [
+        "Kick58%",
+        "Blizzaga25%",
+        "Heavenly Strike17%"
+      ],
+      "rect": {
+        "x": 10,
+        "y": 60,
+        "w": 370,
+        "h": 69.5625
+      }
+    },
+    "errors": []
+  }
+]

@@ -331,6 +331,18 @@
 .eint__dmg--heal .eint__amt {
   color: #9fd8a0;
 }
+/* PR-0153: a status-only move's rolled victims — names, no numbers. */
+.eint__cand {
+  display: inline;
+  color: #b9c6d6;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 4.4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.eint__cand + .eint__cand::before {
+  content: ' / ';
+}
 
 .eint__lines li,
 .eint__odds li {
