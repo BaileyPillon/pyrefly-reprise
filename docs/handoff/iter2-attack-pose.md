@@ -137,3 +137,104 @@ Today's build frame for the same move is `docs/screenshots/attack-pose/IX-1600x9
   boss, scaling the enemy lunge is a presentation choice to put to Bailey; I did not tune it.
 - Checks: `npx tsc --noEmit` clean; the new file passes 26 of 26; full `vitest --testTimeout=60000` was still running when this was committed (553 passing checks so far, no failure yet): re-run it before the merge;
   `node tools/orphans.mjs` is still 24 orphaned (both new modules reachable).
+
+## CHECK (independent, 2026-09-26 ~20:00 EDT; checker did not build it)
+
+Branch `iter2-attack-pose` at `5e80d4c3`, worktree `D:/pyrefly-iter2-attackpose`. Game case: both
+(shared presenter plumbing, CHK-020); the checks below cover FFX chapters I, II, III, IX, XII, XIV
+and FFX-2 chapters VI and XI.
+
+**Verdict: the mapping does what the pick asked, with no regression found and no blocker.** Four
+points need Bailey's eye (below). No boss number moved: the diff touches no file under `src/data/`
+or `src/battle/`.
+
+### Re-run checks
+
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| full `npx vitest run --testTimeout=60000` | **450 files passed, 4 skipped; 8337 tests passed, 29 skipped, 1 todo; exit 0** (this settles the "full suite not finished" note above) |
+| `node tools/orphans.mjs` | 24 orphaned, the same count as main; both new modules are reachable |
+| Every enemy ability id has a row (my own scratch test, listed **and** unlisted chapters) | all resolve, none missing |
+| Production build (`vite build`, own `dist/`), `vite preview` on port 6065, stopped by its PID | built and served |
+
+### Real keys on the production build (headless GPU Chromium, 1600x900; the party presses Enter only)
+
+My own observer recorded, for every enemy action, the pose asked for, the painting on screen once
+the crossfade settled, and the largest lunge. The frames and JSON are in
+`docs/screenshots/attack-pose/check/`. They are not committed: the brief says to commit only this
+file.
+
+| Ch | Enemy: ability (row) | Painting on screen | Lunge | Reading |
+|---|---|---|---|---|
+| IX (s1, s4) | Yojimbo: Kozuka, Wakizashi (physical) | `yojimbo-cavern/cast.png` | 0 | fallback, because no attack painting is installed yet |
+| IX | Daigoro: bite (physical) | `daigoro/cast.png` | 0 | fallback, because Daigoro has no attack painting |
+| IX | Yojimbo: the Daigoro order (`other`/`none`) | `cast.png` | 0 | unchanged |
+| IX **simulated install** (s4) | Yojimbo: Kozuka, Wakizashi | **`yojimbo-cavern/attack.png` (c45)** | 1.40 | the path works end to end; the order stays `cast` |
+| VI (s1, Wait) | Ormi Shield Bash, Logos Double Shot, goon Strike (physical) | `ormi/cast.png`, `logos/cast.png`, `ffx2-dr-goon/idle.png` | 0 | fallback, as before |
+| VI | fem-goon Fire/Fira, Ormi Concussive Blast / Supercollider, Logos Russian Roulette | cast or idle | 0 | unchanged |
+| I (s1) | Seymour Flux: Lance of Atrophy; Mortiorchis: Cross Cleave | **`attack.png`** | 1.40 | new: before this branch these showed `cast.png` |
+| I | Dispel, Full-Life | `cast.png` | 0 | unchanged |
+| II (s1) | Yunalesca: Dispelling Slap (x6) | **`yunalesca-1/attack.png`** | 1.40 | new |
+| II | Blind Counter, Absorb | `yunalesca-1/cast.png` | 0 | unchanged |
+| III (s1, s2) | BFA: Left Arm Strike, Triumphant Grasp (`other` + `strength`) | **`braskas-final-aeon-1/attack.png`** | 1.40 | new |
+| III | Jecht Beam, both Yu Pagodas' Power Wave / Curse | `cast.png` | 0 | unchanged |
+| XI (s1) | Shiva: Kick (physical) | `x2-shiva/attack.png` | 1.40 | same painting as live; the beat is now the attack beat |
+| XI | Shiva: Blizzaga, Diamond Dust, Heavenly Strike; all Magus Sisters actions | the same painting as live | 0 | unchanged (Sandy's Attack and Cindy's Camisade are physical but have no attack painting, so they fall back to `cast`) |
+| XIV (s1) | Grothia: attack on Yuna (physical) | `grothia/attack.png` | 1.40 | same painting as live (no cast painting); the beat is now the attack beat |
+| XII (s1) | Omnis: Firaga, Waterga, Blizzaga, Ultima, Dispel | `seymour-omnis/cast.png` | 0 | unchanged |
+
+- **Simulated install.** For this check only, c45
+  (`D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/yojimbo/attack-h/cand-45.png`)
+  was copied into this worktree's `dist/art/characters/yojimbo-cavern/attack.png`, and `attack` was
+  added to `dist/art/manifest.json`. Both were reverted afterwards. `public/art` was not touched,
+  and nothing was installed.
+- Chapter VII (Macalania) is still locked on the chapter select (`comingChapters.ts`), so real keys
+  cannot reach it. The unit table covers it: Anima's Oblivion is physical, and Anima has only an
+  attack painting, so only the beat changes. No console errors, except one
+  `net::ERR_NO_BUFFER_SPACE` in the Omnis run while four browsers ran at once (environment).
+
+### Target vs build (Yojimbo, the one picture Bailey picked for this mapping)
+
+`docs/screenshots/attack-pose/check/IX-target-vs-build.jpg`: left, the picked c45 from
+`docs/concepts/boss-poses-2026-09-26/yojimbo-attack.jpg`; middle, Wakizashi in this build with c45
+simulated; right, Wakizashi with today's art (the fallback). The build matches the target:
+- the blade points at the party;
+- the hat and mask are the idle's;
+- the lunge stands lower than the idle, as the sheet's game-scale row shows.
+
+Only one thing is not in the sheet: in battle the attack beat also carries the figure about 1.4
+world units toward the party.
+
+### For Bailey (none blocks the merge)
+
+1. **Zanmato does not draw the picked painting.** The maker describes c45 as "the Zanmato draw".
+   The Zanmato row says `other` / `fixed-no-variance`, so by the rule it stays `cast`, and c45 shows
+   on Kozuka and Wakizashi instead. Drawing it for Zanmato would be a per-ability exception, so it
+   needs Bailey's yes.
+2. **Bosses now use the party's attack beat, which no mockup showed.** This applies in I, II, III,
+   XI and XIV (and VII once it is unlocked): a lunge of 1.4 units, the attack cue and roll, and no
+   420 ms cast hold. The wind-up drops from about 800 ms to 220 ms. On screen:
+   - Yunalesca lunges over Auron (`II-s1-yunalesca-dispelling-slap.jpg`);
+   - Seymour Flux passes behind Mortiorchis (`I-s1-seymour-flux-lance-of-atrophy.jpg`).
+
+   A shorter or no lunge for enemies is a presentation choice. I did not tune it.
+3. **Yunalesca's approved Form I paintings show a pale, hard-edged panel** where the cutout kept
+   the white between her hair strands. It is in `attack.png` (left and top edges) and also in the
+   live `cast.png` (right edge). So this is not a regression, but Dispelling Slap now shows the
+   attack version. Both files are in `docs/target/approved-hashes.json`, so only Bailey can have them
+   replaced.
+4. **Test gap (small):** `tests/unit/enemy-action-pose.test.ts` computes `found` for each row but
+   never asserts it. So the claim "every ability id has a row" is not enforced (it holds today; my
+   scratch test checked it). One line fixes it: `expect(r.found).toBe(true)`.
+
+House notes:
+- `BattlePresenterStage.ts` grew from 719 to 731 lines and `BattleScreen.ts` from 919 to 923. Both
+  were already over the 400-line limit.
+- `BattlePresenterPorts.ts` is at 397 lines, so its next addition needs a split.
+
+Checker scratch (uncommitted, left in place):
+- `tools/zz-attackcheck.tmp/` (the observer driver and the found test);
+- `docs/screenshots/attack-pose/check/`;
+- `node_modules.stale-vite-tmp/`: the builder's leftover `node_modules/.vite` folder, moved aside so
+  the junction could be made, then moved back after the junction was removed.
