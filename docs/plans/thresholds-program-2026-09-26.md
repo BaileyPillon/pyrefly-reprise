@@ -443,6 +443,34 @@ Whoever picks either item up should add it to their batch's ownership list in §
 take it as a small, separately-reviewed change) before editing it, so it is not
 touched by two batches at once.
 
+### FFX-2 sourced answers (research ca5bdde3, 2026-09-26)
+
+Commit `ca5bdde3` sourced four FFX-2 questions the Steam session could not reach
+(immune-hit chains, dressphere carry at a seam, Leblanc's failsafe line, a lone
+White Mage vs Bahamut). All four are **FFX-2 only** (rule 14) and their files sit
+inside Batch 1's ownership (`src/battle/ffx2/**`, `src/data/ffx2/**`,
+`src/app/screens/BattleScreenSetup.ts` / `BattleScreenCarry.ts`), so none of them
+build until Batch 1 merges to `main` (shared-working-tree rule). Where the cited
+research is silent, the reading is GameFAQs', labelled "our estimate" per Bailey's
+2026-09-26 rule (D-2xx item 13). Per `boss-side-fix-needs-measured-options`, each
+item that changes difficulty is built as a named, defaultable switch and measured
+on every FFX-2 chapter (VI, XI, XIII, XV, plus any others with the affected
+system live) at both human pace (Wait split and Active) and bench speed, then put
+to Bailey once, together, with the numbers and a recommendation, before any of
+them ships.
+
+| Item | Game (rule 14) | Files | How to build | Measurement owed |
+|---|---|---|---|---|
+| PR-0209 / IC-1: immune-hit chain skip (`IMMUNE_HITS_SKIP_CHAIN`) | FFX-2 only | `src/battle/ffx2/**` (the chain-hit resolver) | Add `IMMUNE_HITS_SKIP_CHAIN` as a named, defaultable switch (default off, current main behaviour) per Split_Infinity FAQ G1032, our estimate, `research/ffx2-combat-core.md` section 10; keep the existing menu correction on when the switch is on. | Measure switch on vs off on every FFX-2 chapter (VI, XI, XIII, XV) at Wait-split human pace, Active human pace, and bench speed; report chain length and turn-count deltas with a recommendation before it ships. |
+| PR-0124: dressphere carry across a linked battle | FFX-2 only | `src/app/screens/BattleScreenSetup.ts` (`carryFfx2`), `src/app/screens/BattleScreenCarry.ts` | Add a named, defaultable switch so a dressphere changed mid-battle carries into the next linked battle in `BattleScreenSetup.carryFfx2`, per KADFC FAQ 38278 + one board post, our estimate; gate effects and special-dressphere unlocks do **not** carry (2 sources agree on that half). Scope to the chained encounters: Chapters V, VI, XI, XIII, XV. | Measure with the switch on vs off across every chained encounter in Chapters V, VI, XI, XIII, XV, at Wait-split human pace, Active human pace, and bench speed; confirm gate/unlock state never carries in either mode; report deltas and a recommendation before it ships. |
+| PR-0106: Leblanc failsafe timing + turn-5 correction | FFX-2 only | `src/battle/ffx2/**` (Leblanc's pattern/failsafe logic), `src/data/ffx2/**` (her data row) | Add a named, defaultable switch so Not-So-Mighty Guard's failsafe fires once on turn 25 plus on a No Love Lost use, not every turn after, per SinirothX's extracted data (single source, our estimate), `research/ffx2-leblanc-syndicate.md` section 19; correct pattern turn 5 to Fan Slap per the same source, flagging the conflict against research section 5.3 and the wiki rather than silently overriding them. | Measure switch on vs off on Chapter VI (Leblanc's chapter) at Wait-split human pace, Active human pace, and bench speed; report fight-length and damage-taken deltas plus the turn-5 conflict, with a recommendation before it ships. |
+| NEW-C1: lone White Mage vs Bahamut tactic/advisor | FFX-2 only | `src/battle/ffx2/**` (tactics/advisor rules), tests only elsewhere | No rule change. Update the tactic/advisor so a lone fielded White Mage uses Esuna, then falls back to spherechange, items, or a Garment Grid spell, per `research/ffx2-combat-core.md` section 10; keep the existing decision cap in tests. | Not difficulty-changing (advisor behaviour only) — no chapter measurement owed; cover with unit tests asserting the Esuna-first, capped-decision ordering. |
+
+Each switch above defaults to current main behaviour until Bailey's single combined
+go-ahead; ship a switch turned on only after that conversation, and record the
+outcome as its own decision in `docs/target/decisions.json` alongside the D-2xx
+range already in use.
+
 ---
 
 ## 9. Steam session 2026-09-26: answers
