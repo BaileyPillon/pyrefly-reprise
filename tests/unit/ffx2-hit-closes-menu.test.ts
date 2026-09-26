@@ -4,6 +4,10 @@
  * Plan: `docs/plans/ffx2-hit-closes-menu-review.md`. Proven on the real engine (rule 3): Chapter
  * IV's Bahamut against the Bevelle build, the clock run under an open menu until something lands.
  * No delay is applied (A2 is unsourced): she is offered a fresh menu at once.
+ *
+ * These pin release 17's rule, which is the default while `constants.ts`
+ * MENU_CANCEL_ONLY_DELAY_ABILITIES is OFF. §9.2 corrects §1.1 (only a Delay or Action-cancel
+ * ability closes a menu); that switch and its tests are in `ffx2-menu-cancel-delay.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';

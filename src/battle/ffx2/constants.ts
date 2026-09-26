@@ -110,6 +110,19 @@ export const IMMUNE_HITS_SKIP_CHAIN = false;
  */
 export const NAMED_TARGETS_ONLY = true;
 
+/**
+ * The menu-cancel correction, a named **OFF** switch (`research/ffx2-combat-core.md` §9.2, commit
+ * `ea05f877`, `[verified: 2 sources]`: Split_Infinity G1041 / G1042). Release 17 built "an enemy hit
+ * closes an open command menu" (decision sheet 2026-09-25 item 4 A1) from §1.1's wording; §9.2
+ * corrects §1.1: only an ability carrying a **Delay effect** (DELEF) or **Action-cancel** (ACTIC)
+ * closes the menu, not every hit. When true, `active.ts` `closesOpenMenu` asks the hitting ability
+ * (`carriesMenuCancel`: the `weak-delay` / `strong-delay` flags or a `delay-effect` / `action-cancel`
+ * status row, all from the sourced data rows). Off keeps release 17's behaviour until Bailey picks
+ * (`docs/plans/ffx2-engine-fixes-2026-09-26.md` §9); `Ffx2EngineOptions.menuCancelOnlyDelayAbilities`
+ * overrides it for a measurement run. FFX-2 only.
+ */
+export const MENU_CANCEL_ONLY_DELAY_ABILITIES = false;
+
 // ---------------------------------------------------------------------------
 // Statuses (§2.8)
 // ---------------------------------------------------------------------------

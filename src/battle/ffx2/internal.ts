@@ -193,6 +193,8 @@ export interface Ffx2EngineOptions {
   immuneHitsSkipChain?: boolean;
   /** `constants.ts` NAMED_TARGETS_ONLY (Acta Est Fabula on the Redoubts only), for a measurement run. */
   namedTargetsOnly?: boolean;
+  /** `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (only a Delay / Action-cancel hit closes a menu), for a measurement run. */
+  menuCancelOnlyDelayAbilities?: boolean;
 }
 
 /** The party's live state as it crosses from one chained group to the next. */

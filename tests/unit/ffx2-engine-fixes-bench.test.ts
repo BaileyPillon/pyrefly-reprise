@@ -11,7 +11,9 @@
  * (`docs/plans/ffx2-engine-fixes-2026-09-26.md`).
  *
  * Speeds, as every FFX-2 bench measures them: bench (zero decision time) and human (the live default
- * Wait split, 1.5 s a menu, 0.5 s of it on the top-level list with the clock running). 200 seeds.
+ * Wait split, 1.5 s a menu, 0.5 s of it on the top-level list with the clock running), plus Active at
+ * 1.5 s a menu (the clock runs under the whole menu). 200 seeds. `ENGINE_FIX_ARMS`,
+ * `ENGINE_FIX_SPEEDS` and `ENGINE_FIX_CHAPTERS` (comma-separated prefixes) narrow a run.
  * Each chapter is one unbroken run in the shipped order with its shipped line. Nothing here tunes a
  * boss (hard rule 6).
  *
@@ -38,19 +40,30 @@ const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const SEEDS = Number(process.env['ENGINE_FIX_SEEDS'] ?? 200);
 const HASH_OUT = process.env['ENGINE_FIX_HASH_OUT'];
 const HASH_BASE = process.env['ENGINE_FIX_HASH_BASE'];
-const ARMS = (process.env['ENGINE_FIX_ARMS'] ?? 'built,ic2-only,switch').split(',');
-/** `built`: the branch (IC-2 fix, Acta on the Redoubts only); `ic2-only`: Acta's old target set; `switch`: plus IC-1's switch. */
+const ARMS = (process.env['ENGINE_FIX_ARMS'] ?? 'built,menu,switch,both').split(',');
+/**
+ * `built`: the branch, option B (IC-2 fix, Acta on the Redoubts only); `ic2-only`: Acta's old target
+ * set; `switch`: plus IC-1's switch; `menu`: plus the menu-cancel correction (§9.2, only a Delay or
+ * Action-cancel ability closes an open menu, `menuCancelOnlyDelayAbilities`); `both`: plus both.
+ */
 const ARM_OPTIONS: Record<string, Partial<Ffx2EngineOptions>> = {
   built: {},
   'ic2-only': { namedTargetsOnly: false },
   switch: { immuneHitsSkipChain: true },
+  menu: { menuCancelOnlyDelayAbilities: true },
+  both: { immuneHitsSkipChain: true, menuCancelOnlyDelayAbilities: true },
 };
 
 interface Speed { name: string; decisionMs: number; topMs?: number; engine: Partial<Ffx2EngineOptions> }
-const SPEEDS: Speed[] = [
+const SPEED_LIST: Speed[] = [
   { name: 'human 1.5 s / 0.5 s', decisionMs: 1500, topMs: 500, engine: { atbMode: 'wait', waitSplit: true } },
+  // Active at human pace: the clock runs under the whole menu, where the menu-cancel rule matters most.
+  { name: 'active 1.5 s', decisionMs: 1500, engine: { atbMode: 'active' } },
   { name: 'bench D=0', decisionMs: 0, engine: {} },
 ];
+const SPEED_FILTER = process.env['ENGINE_FIX_SPEEDS']?.split(',');
+const SPEEDS = SPEED_FILTER ? SPEED_LIST.filter((s) => SPEED_FILTER.some((f) => s.name.startsWith(f))) : SPEED_LIST;
+const CHAPTER_FILTER = process.env['ENGINE_FIX_CHAPTERS']?.split(',');
 
 type Run = { outcome: string | undefined; logs: readonly (readonly BattleEvent[])[]; ticks: number };
 type Drive = (seed: number, s: Speed, extra: Partial<Ffx2EngineOptions>) => Run;
@@ -86,6 +99,7 @@ const rows: string[] = [];
 
 describe.skipIf(!MEASURE)('IC-1 / IC-2: every FFX-2 chapter, bench and human Wait split (PYREFLY_MEASURE=1)', () => {
   for (const [name, drive] of CHAPTERS) {
+    if (CHAPTER_FILTER && !CHAPTER_FILTER.some((f) => name.startsWith(f))) continue;
     it(name, () => {
       for (const arm of ARMS) {
         const extra: Partial<Ffx2EngineOptions> = ARM_OPTIONS[arm] ?? {};
@@ -94,6 +108,7 @@ describe.skipIf(!MEASURE)('IC-1 / IC-2: every FFX-2 chapter, bench and human Wai
           let unfinished = 0;
           let minutes = 0;
           let moved = 0;
+          let vsBuilt = 0;
           for (let seed = 1; seed <= SEEDS; seed++) {
             const r = drive(seed, speed, extra);
             if (r.outcome === 'victory') wins += 1;
@@ -104,10 +119,12 @@ describe.skipIf(!MEASURE)('IC-1 / IC-2: every FFX-2 chapter, bench and human Wai
             hashes[key] = h;
             const was = base[`${name}|${speed.name}|built|${seed}`];
             if (was !== undefined && was !== h) moved += 1;
+            const built = hashes[`${name}|${speed.name}|built|${seed}`];
+            if (built !== undefined && built !== h) vsBuilt += 1;
           }
           const p = wins / SEEDS;
           const five = 1 - (1 - p) ** 5;
-          rows.push(`| ${name} | ${speed.name} | ${arm} | ${wins}/${SEEDS} | ${(100 * p).toFixed(1)} % | ${(100 * five).toFixed(1)} % | ${(minutes / SEEDS).toFixed(2)} | ${HASH_BASE ? `${moved}/${SEEDS}` : '—'} | ${unfinished} |`);
+          rows.push(`| ${name} | ${speed.name} | ${arm} | ${wins}/${SEEDS} | ${(100 * p).toFixed(1)} % | ${(100 * five).toFixed(1)} % | ${(minutes / SEEDS).toFixed(2)} | ${HASH_BASE ? `${moved}/${SEEDS}` : '—'} | ${vsBuilt}/${SEEDS} | ${unfinished} |`);
           expect(wins + unfinished).toBeLessThanOrEqual(SEEDS);
         }
       }
@@ -117,8 +134,8 @@ describe.skipIf(!MEASURE)('IC-1 / IC-2: every FFX-2 chapter, bench and human Wai
     if (HASH_OUT) writeFileSync(HASH_OUT, JSON.stringify(hashes));
     console.log([
       '',
-      '| Chapter | Speed | Arm | Wins | First try | Within 5 (independent retries, computed) | Avg min | Logs moved vs base | Unfinished |',
-      '|---|---|---|---:|---:|---:|---:|---:|---:|',
+      '| Chapter | Speed | Arm | Wins | First try | Within 5 (independent retries, computed) | Avg min | Logs moved vs base | Logs moved vs built | Unfinished |',
+      '|---|---|---|---:|---:|---:|---:|---:|---:|---:|',
       ...rows,
     ].join('\n'));
   });

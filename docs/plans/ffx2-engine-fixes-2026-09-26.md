@@ -155,6 +155,8 @@ Yuna is left standing alone. She has no Attack row.
   - **B + IC-1's switch** (also turn on `IMMUNE_HITS_SKIP_CHAIN`): XV 24 % first try, 85.5 %
     within 5, and nothing else changes. This is **our reading** of Split_Infinity, not a source.
     It needs Bailey's word or a look in the real game before it is turned on.
+  - **B + the menu-cancel correction** (section 9, sourced, built OFF): only a Delay or
+    Action-cancel ability closes an open menu. Recommended with B; see section 9.5.
 - **C. Keep the old behaviour.** This is wrong on the sources: a party-wide move hits a girl twice
   and skips another (IC-2, contradicting three sources), and the Vegnagun Head heals itself 9,999
   from a move whose source targets only the Redoubts. The old numbers only looked balanced because
@@ -258,3 +260,161 @@ deployed. NOW.md, critic/ and the main tree were not touched.
   relaxed assertions in `strategy-ffx2-bahamut` (mash no longer "must reach a decision" or "whole
   party down") and in `combat-fixes-bench` (a) ch4 "wrong" are explained and match the reproduced
   runs.
+
+## 9. B1 closed, and the menu-cancel correction measured (2026-09-26, later)
+
+**Game case: FFX-2 only** (the menu-cancel rule and the chapters are FFX-2's; the test cap in 9.1 is
+shared test plumbing and touches no game code). Nothing pushed or deployed; NOW.md and `critic/` not
+touched; the main tree was only read (`research/ffx2-combat-core.md` §9 at `ea05f877`).
+
+### 9.1 B1: the test, not the engine
+
+- `tests/unit/audio-fade-units.test.ts` (the Chapter IV chain test) now plays the chapter's own
+  line (`intendedStrategy`) through the real presenter, under a player-decision cap. The cue it tests
+  is played before the first decision, so nothing about the audio check changed. It also asserts the
+  fight ended by victory or defeat, not by the cap. Proven both ways: with the line it passes in
+  about 50 ms; with the old first-enabled line the cap aborts the stalemate after 5,001 decisions in
+  about 0.3 s and the test fails loudly, where it used to exhaust the 4 GB heap.
+- The cap is `tests/unit/helpers/presenterCap.ts` (`setCappedAutoPlay`, 5,000 player decisions, then
+  it aborts the presenter). The presenter's own loop guards only against livelock (no events) and
+  against one actor being offered the same turn forever; a fight that keeps emitting events and
+  never ends has no bound.
+- **Every loop that plays a fight to its end, checked:**
+
+  | Where | Loop | Cap before | Now |
+  |---|---|---|---|
+  | `audio-fade-units.test.ts` (Ch. IV chain) | presenter, real FFX-2 engine, no strategy | none (B1) | intended line + cap |
+  | `audio-chain-entrance-owner.test.ts` | presenter, every chapter, intended | none | cap added |
+  | `flow-encounter-chain.test.ts` (2 sites) | presenter, every chapter / Ch. IV, intended | wall-clock deadline only | cap added |
+  | `presenter-vitals-sync.test.ts` `playChapter` | presenter, FFX and FFX-2, intended | HUD aborts on a stuck sync only | cap added |
+  | `ffx2-berserk-zero-rows.test.ts` | presenter, Ch. IV, 32 seeds | none (asserts "not aborted", so a cap hit fails) | cap added |
+  | `chk023-runtime-proofs.test.ts` | presenter, FFX Yu Yevon only | none | unchanged: FFX engine, no IC-2 path |
+  | `presenter-vitals-hp-ceiling.test.ts` | presenter | its strategy aborts | unchanged |
+  | `presenter-playback.test.ts` | presenter on `FakeEngine` | fake fights end | unchanged |
+  | `ffx2-active-*`, `ffx2-wait-*`, `target-frame-hold*`, `presenter-cut-in-no-delay`, `ffx-no-active-clock` | `void presenter.run`, then `abort()` | the test aborts | unchanged |
+  | `fallen-aeons-flow-chain.test.ts`, the Ch. V case in `audio-fade-units` | scripted presenter stub | no fight | unchanged |
+  | Engine drivers: `ffx2ChapterDrive`, `combatFixesDrive`, `fallenAeonsDrive`, `tremaDrive`, `advisor-committed`, `ffx2-active-measure`, `ffx2-advisor-wait-split-bench`, `strategy-*` | `nextDecision` loops | 20,000 to 30,000 decisions a link | already capped |
+  | `src/scenes/evrae-airship-debug-battle.ts` (FFX) | `maxSteps` | capped | unchanged |
+
+- **`window.__pyrefly.autoBattle('defend' | 'attack' | 'random')` on Chapter IV is not a plain
+  loop.** `src/debug/api.ts` only calls `presenter.setAutoPlay(strategy)`, and the live presenter's
+  loop then plays at the chosen speed. So no cap was added there. With a strategy that cannot win,
+  the lone White Mage stalemate would play on until the page is left (the pause menu's exits abort
+  the presenter). A cap would belong in the presenter's own loop, which both games and every player
+  share; that is a separate change and was not made here.
+- Full suite: **431 files passed, 4 skipped, 8,030 tests, exit 0** (`--testTimeout=60000`). B1 is closed.
+
+### 9.2 The menu-cancel correction, built OFF
+
+`research/ffx2-combat-core.md` §9.2 (`ea05f877`, `[verified: 2 sources]`, Split_Infinity G1041 and
+G1042) corrects §1.1: an open command menu is closed only by an ability with a **Delay effect** or
+**Action-cancel**, not by every hit. Release 17 (decision sheet 2026-09-25 item 4 A1,
+`tests/unit/ffx2-hit-closes-menu.test.ts`) closes it on any damaging enemy hit.
+
+- **Switch:** `constants.ts` `MENU_CANCEL_ONLY_DELAY_ABILITIES = false`, and the engine option
+  `menuCancelOnlyDelayAbilities`. When it is on, `active.ts` `closesOpenMenu` also requires the
+  hitting ability to carry one of the two. `menu-cancel.ts` `carriesMenuCancel` reads that from the
+  row itself: the `weak-delay` / `strong-delay` flags, or a `delay-effect` / `action-cancel` status
+  row. The engine learns which ability a hit belongs to from the `action-start` / `action-end` drafts
+  it already emits (`ActingAbilities`: a charged ability's start is kept until it fires, and a counter
+  nests inside). No row was given a flag, and no delay amount is applied (A2 stays unbuilt: no source
+  gives the percentage for an enemy ability).
+- **Which enemy abilities carry it in the FFX-2 chapters.** Every enemy row in the data table and in
+  the engine's own table was listed, and XV's branch was listed too:
+
+  | Chapter | Ability | Carries | Source |
+  |---|---|---|---|
+  | V | Vegnagun Leg, **Vita Brevis** | strong Delay (guaranteed) | `research/ffx2-vegnagun-shuyin.md` §3.2 |
+  | VI | Ormi, **Supercollider** | Delay | `research/ffx2-leblanc-syndicate.md` §4.2, `[verified: 2 sources]` (zero_six FAQ 28832 and the wiki) |
+  | VI | Ormi, **Huggles** | Delay on each hit | same §4.2, `[verified: 2 sources]` |
+  | VI | Leblanc, **Mach Fan** | weak Delay | same file §4.4, `[verified: 2 sources for effect]` |
+  | IV, XI, XIII, XV | none | none | Bahamut, the Fallen Aeons, Trema and the Den of Woe trio have no Delay or Action-cancel ability in their research files (only an immunity to Delay and Interrupt) |
+
+  No enemy row in these chapters carries Action-cancel. The party's own Delay rows (Delay Attack,
+  Delay Buster, Bully Ghiki, Shockstorm, Fright, Gold Hourglass) hit enemies, which have no menu.
+- **Tests** (`tests/unit/ffx2-menu-cancel-delay.test.ts`, 7 tests). The switch ships off. With the
+  switch off (absent, and `false`), Chapters IV, V and VI at Active 1.5 s and at the Wait split
+  1.5 s / 0.5 s replay, byte for byte, the hashes taken from `d0d53cb4`, before the switch existed.
+  With the switch on, Bahamut's hits land on a girl under an open menu and the menu stays open
+  (10 seeds). In Chapter VI (3 formations x 40 seeds), every step where an enemy hit landed on the
+  owner closes her menu exactly when the ability carries Delay. Steps where a status also landed on
+  her (Russian Roulette's Petrify or Eject) are left out, because a status closes the menu by its own
+  rule. The existing `ffx2-hit-closes-menu` tests pin release 17's rule and still pass unchanged.
+
+### 9.3 Every FFX-2 chapter, four arms (200 seeds a row)
+
+B is this branch (IC-2 fix, Acta on the Redoubts). "+ menu" turns on the menu-cancel correction and
+"+ IC-1" the immune-hit switch. Human is the live default, the Wait split (1.5 s a menu, 0.5 s of it
+on the top list). Active is 1.5 s a menu with the clock running throughout. Bench is zero decision
+time. Within 5 is 1-(1-p)^5 from the first-try rate, except XV, which retries from Baralai as the game
+does (its "within 3 / 5" is counted). Chapters IV to XIII come from `ffx2-engine-fixes-bench.test.ts`
+(`PYREFLY_MEASURE=1`, 114 s). XV comes from a scratch export of `chapter-gippal-ship-0925` at
+`79434a56` with this branch's whole `src/battle/ffx2` patch applied (it applied cleanly), using that
+branch's driver, kit and line, as in section 7; the export was deleted afterwards. The B column
+reproduces section 4 exactly (IV 200 / 200, V 175 / 188, VI 159 / 195, XI 157 / 174, XIII 16 / 14,
+XV 34 / 94 and 149 within 5).
+
+**First try, wins of 200** (human / Active / bench):
+
+| Chapter | B | B + menu | B + IC-1 | B + both |
+|---|---:|---:|---:|---:|
+| IV Bahamut | 200 / 200 / 200 | 200 / 200 / 200 | 200 / 200 / 200 | 200 / 200 / 200 |
+| V Vegnagun + Shuyin | 175 / 29 / 188 | **181 / 90** / 188 | 175 / 31 / 188 | 181 / 89 / 188 |
+| VI Leblanc | 159 / 13 / 195 | 157 / **31** / 195 | 159 / 13 / 195 | 157 / 31 / 195 |
+| XI Fallen Aeons | 157 / 95 / 174 | **164 / 116** / 174 | 157 / 95 / 174 | 164 / 116 / 174 |
+| XIII Trema | 16 / 7 / 14 | 13 / 13 / 14 | 16 / 7 / 14 | 13 / 13 / 14 |
+| XV Den of Woe | 34 / 6 / 94 | 36 / 13 / 94 | 48 / 8 / 112 | 48 / 18 / 112 |
+
+**As rates** (human first try, human within 5, Active first try):
+
+| Chapter | B | B + menu | B + IC-1 | B + both |
+|---|---|---|---|---|
+| IV | 100 %, 100 %, 100 % | same | same | same |
+| V | 87.5 %, 100 %, 14.5 % | 90.5 %, 100 %, **45.0 %** | 87.5 %, 100 %, 15.5 % | 90.5 %, 100 %, 44.5 % |
+| VI | 79.5 %, 100 %, 6.5 % | 78.5 %, 100 %, **15.5 %** | same as B | 78.5 %, 100 %, 15.5 % |
+| XI | 78.5 %, 100 %, 47.5 % | 82.0 %, 100 %, **58.0 %** | same as B | 82.0 %, 100 %, 58.0 % |
+| XIII | 8.0 %, 34.1 %, 3.5 % | 6.5 %, 28.5 %, 6.5 % | same as B | 6.5 %, 28.5 %, 6.5 % |
+| XV | 17.0 %, 74.5 %, 3.0 % | 18.0 %, 72.5 %, 6.5 % | 24.0 %, 85.5 %, 4.0 % | 24.0 %, 81.0 %, 9.0 % |
+
+XV within 3 / 5 (retry from Baralai). Human: B 102 / 149, + menu 113 / 145, + IC-1 133 / 171, both
+127 / 162. Active: B 12 / 16, + menu 27 / 45, + IC-1 16 / 24, both 44 / 69. Bench: B and + menu
+168 / 196, + IC-1 and both 179 / 199.
+
+**Event logs that move against B** (human / Active). Bench never moves, because no clock runs under a
+menu at zero decision time. IV 200 / 200, V 200 / 200, VI 198 / 200, XI 180 / 199, XIII 22 / 26. The
+IC-1 arm alone moves only V (13 / 20, and 6 at bench), as section 8 F1 found.
+
+### 9.4 What the correction means, chapter by chapter
+
+- **IV Bahamut.** He has no Delay ability, so under the correction none of his hits closes a menu.
+  Wins stay 200 / 200 at every speed. Every human and Active log moves, and the Active fight gets
+  shorter (2.51 -> 2.39 min on average). Nothing for the player to relearn.
+- **V Vegnagun + Shuyin.** Vita Brevis still closes menus (sourced Delay); no other hit does. The live
+  default rises 87.5 -> 90.5 %, and **Active triples, 14.5 -> 45 %**. Bench is unchanged.
+- **VI Leblanc.** Supercollider, Huggles and Mach Fan still close menus. Human -1 point (2 seeds,
+  noise-sized); Active 6.5 -> 15.5 %.
+- **XI Fallen Aeons.** No Delay ability. Human 78.5 -> 82 %, Active 47.5 -> 58 %.
+- **XIII Trema.** No Delay ability. Human 16 -> 13 wins (8 -> 6.5 %: 3 seeds, inside the noise of a
+  16-win count); Active 7 -> 13. Only about 1 run in 8 moves at all, because Trema's hits rarely land
+  under an open menu. The chapter's own difficulty question (section 4) is unchanged.
+- **XV Den of Woe.** No Delay ability. Human first try 34 -> 36, within 5 149 -> 145 (a 2-point drop,
+  inside the noise); Active 6 -> 13 first try and 16 -> 45 within 5. With IC-1 as well: human 48 first
+  try, 162 within 5 (IC-1 alone: 171).
+- Across the six chapters, the correction never lowers a first-try rate at the live default by more
+  than 1.5 points, and it raises every Active rate below 100 % (2 to 3 times in V, VI and XV). Nothing new falls
+  below 1 in 10 at the live default; XIII was already below it.
+
+### 9.5 Recommendation (sourced changes on, unsourced off)
+
+- **Take B and turn the menu-cancel correction on** (`MENU_CANCEL_ONLY_DELAY_ABILITIES = true`). It is
+  sourced (`[verified: 2 sources]`). It replaces a reading that §9.2 shows was taken from a
+  Delay-effect example. And it makes Active playable again without touching a boss number: release
+  17 had made Active very hard (V 14.5 %, VI 6.5 %, XV 3 %). It changes a shipped rule from decision
+  item 4 A1, so it is **Bailey's call**, and the switch stays OFF in this branch until Bailey picks.
+- **Keep IC-1 off** until Bailey rules or the Steam HD Remaster is checked. It is unsourced, and it
+  moves only XV (and 13 to 20 of V's logs).
+- If Bailey takes the correction, item 4 A1 in the decision sheet (`docs/plans/decisions-2026-09-25.md`,
+  on main) should note it. That sheet was not edited here, because the main tree is off limits to
+  this branch.
+- F2 (the lone White Mage stalemate in Chapter IV) still stands for Bailey. The shipped line never
+  meets it, and the test that did (B1) now plays the shipped line under a cap.

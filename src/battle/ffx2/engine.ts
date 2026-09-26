@@ -51,7 +51,8 @@ import type {
   GarmentGridRegistry,
 } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
-import { ATB_SPEED_MULTIPLIER, type AtbSpeed } from './constants.ts';
+import { ATB_SPEED_MULTIPLIER, MENU_CANCEL_ONLY_DELAY_ABILITIES, type AtbSpeed } from './constants.ts';
+import { ActingAbilities } from './menu-cancel.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { advanceChainWindows, isActionLocked } from './chain.ts';
@@ -126,6 +127,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   private held: HeldCommand | null = null;
   /** The girl whose open menu an enemy hit closed (item 4 A1, `active.ts` {@link closesOpenMenu}); cleared by the next decision. */
   private hitClosed: CombatantId | null = null;
+  /** What each unit is resolving, for the OFF menu-cancel correction (`menu-cancel.ts`). */
+  private readonly acting = new ActingAbilities();
   /**
    * Ticks a `throughInput` step was handed but could not spend, because a ready
    * enemy ended the sub-step loop so its events could be played. The `'waiting'`
@@ -173,6 +176,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
     this.awaitingMinigame = null;
     this.inputOwner = null;
     this.held = null;
+    this.acting.clear();
     this.carriedTicks = 0;
     this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
     this.flush();
@@ -614,7 +618,10 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
 
   private emit(draft: EventDraft): void {
     this.drafts.push(draft);
-    if (this.inputOwner && closesOpenMenu(draft, this.inputOwner, this.units)) this.hitClosed = this.inputOwner;
+    this.acting.note(draft);
+    const onlyDelay = this.options.menuCancelOnlyDelayAbilities ?? MENU_CANCEL_ONLY_DELAY_ABILITIES;
+    const by = onlyDelay && draft.type === 'damage' ? { ability: this.abilities.get(this.acting.current(draft.sourceId) ?? '') } : undefined;
+    if (this.inputOwner && closesOpenMenu(draft, this.inputOwner, this.units, by)) this.hitClosed = this.inputOwner;
   }
 
   /** Stamp `seq`, append to the log, and hand the batch to the caller. */

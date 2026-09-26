@@ -32,6 +32,7 @@ import { isActionLocked, ticksUntilChainBreak } from './chain.ts';
 import { isReady, ticksUntilNextEvent } from './gauges.ts';
 import { rollDefault } from './minigames.ts';
 import { canAct, ticksUntilStatusEvent } from './statuses.ts';
+import { carriesMenuCancel } from './menu-cancel.ts';
 
 /**
  * FFX-2's Config "ATB Mode" (§1.5). `'wait'` is the default (D-029): the clock
@@ -233,11 +234,24 @@ export function inputStillValid(
  * `'damage'` draft with `amount > 0` on the menu's owner whose `sourceId` is an
  * enemy. A miss, an immune or absorbed blow, a status tick, her own HP cost and a
  * Confused ally's blow do not close it.
+ *
+ * **Corrected by §9.2** (`research/ffx2-combat-core.md`, commit `ea05f877`): §1.1's wording comes
+ * from Split_Infinity's Delay-effect example (G1041), and only Delay or Action-cancel abilities close
+ * a menu. Built as the OFF switch `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (`menu-cancel.ts`):
+ * with `onlyDelay` given, the hit must also come from such an ability.
  */
-export function closesOpenMenu(draft: EventDraft, owner: CombatantId, units: readonly Ffx2Unit[]): boolean {
+export function closesOpenMenu(
+  draft: EventDraft,
+  owner: CombatantId,
+  units: readonly Ffx2Unit[],
+  onlyDelay?: { ability: AbilityDef | undefined },
+): boolean {
   if (draft.type !== 'damage' || draft.targetId !== owner || draft.amount <= 0 || !draft.sourceId) return false;
   const source = draft.sourceId;
-  return units.some((u) => u.id === source && u.side === 'enemy');
+  if (!units.some((u) => u.id === source && u.side === 'enemy')) return false;
+  // The menu-cancel correction (`constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES, OFF; §9.2): when
+  // the engine passes `onlyDelay`, only a hit whose ability carries Delay or Action-cancel closes it.
+  return onlyDelay === undefined || carriesMenuCancel(onlyDelay.ability);
 }
 
 /**
