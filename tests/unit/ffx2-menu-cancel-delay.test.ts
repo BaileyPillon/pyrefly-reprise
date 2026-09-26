@@ -2,13 +2,16 @@
  * **The menu-cancel correction** (`research/ffx2-combat-core.md` §9.2, commit `ea05f877`,
  * `[verified: 2 sources]`, Split_Infinity G1041 / G1042): only an ability with a **Delay effect** or
  * **Action-cancel** closes an open command menu, not every enemy hit. Release 17 (decision sheet
- * 2026-09-25 item 4 A1) closes the menu on any damaging enemy hit. The correction is built as the
- * named OFF switch `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (`menu-cancel.ts`), with the
- * engine option `menuCancelOnlyDelayAbilities` for measuring. **FFX-2 only** (AGENTS.md rule 14).
+ * 2026-09-25 item 4 A1) closed the menu on any damaging enemy hit. The correction is the switch
+ * `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (`menu-cancel.ts`), built OFF and turned **ON** by
+ * Bailey on 2026-09-26 ("I'll take all your recommendations", answering "menu correction on (my
+ * recommendation), or keep it as is"); the engine option `menuCancelOnlyDelayAbilities: false`
+ * replays release 17's rule for measuring. **FFX-2 only** (AGENTS.md rule 14).
  *
- * Proven on the real engine (rule 3): switch off, the logs are byte-identical to the build before
- * the switch existed (hashes taken from `d0d53cb4`); switch on, Bahamut's plain hit leaves the menu
- * open, and a sourced Delay ability (Chapter VI) still closes it.
+ * Proven on the real engine (rule 3): with the option `false`, the logs are byte-identical to the
+ * build before the switch existed (hashes taken from `d0d53cb4`); by default (on) they are the logs
+ * re-pinned on 2026-09-26, Bahamut's plain hit leaves the menu open, and a sourced Delay ability
+ * (Chapter VI) still closes it.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -54,9 +57,9 @@ describe('carriesMenuCancel reads the sourced rows (no row is flagged here)', ()
   });
 });
 
-describe('switch off (the default): release 17\'s logs, byte for byte', () => {
-  // From `d0d53cb4`, before the switch existed (`ffx2ChapterDrive`, human pace: Active 1.5 s a
-  // menu, and the Wait split 1.5 s / 0.5 s on the top list).
+describe('the default is ON; the option `false` replays release 17\'s logs, byte for byte', () => {
+  // Release 17's rule, from `d0d53cb4`, before the switch existed (`ffx2ChapterDrive`, human pace:
+  // Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the top list).
   const PINNED: Record<string, string> = {
     'IV|active|1': 'd059f64cfe4afce9', 'IV|split|1': 'c9ed16c44755cdd7',
     'IV|active|2': 'f6f806a146e9e13a', 'IV|split|2': 'eee3244f250d5099',
@@ -68,24 +71,40 @@ describe('switch off (the default): release 17\'s logs, byte for byte', () => {
     'VI|active|2': '8f610b1001a7c91d', 'VI|split|2': '2dced3deffa86083',
     'VI|active|3': '89fde8982efe7a14', 'VI|split|3': '5d55feb0039ead09',
   };
+  // Switch on (the default since 2026-09-26), recorded on branch `r20-menu-cancel` the same way.
+  // All eighteen differ from release 17's: at human pace a plain hit lands on an open menu in each of
+  // these runs. `ffx2-atb-golden.test.ts` holds the matching Active re-pin (same first two per chapter).
+  const ON: Record<string, string> = {
+    'IV|active|1': 'f7184d7b87948e2c', 'IV|split|1': '9890214268abe440',
+    'IV|active|2': 'e162970a86a2268f', 'IV|split|2': '898a6077addce590',
+    'IV|active|3': 'fc6c4f4b8b7cb240', 'IV|split|3': '1632f82e2a3ce9e3',
+    'V|active|1': '6be1a4346ecdd543', 'V|split|1': 'e628082551af56ff',
+    'V|active|2': 'd87ae9b34cf3f68c', 'V|split|2': 'bf0e82af326cd75c',
+    'V|active|3': '0f23aa5c24c2e101', 'V|split|3': '65d1ac6fe36018f8',
+    'VI|active|1': '1e6d2254c421cf97', 'VI|split|1': '5a15ae3d9a79c6c3',
+    'VI|active|2': 'a1fc93804dedb8cb', 'VI|split|2': 'cdb3630f1780026d',
+    'VI|active|3': '4fb96e507ba8ac03', 'VI|split|3': 'a8af26bfad0124a1',
+  };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 
-  it('the switch ships OFF', () => {
-    expect(MENU_CANCEL_ONLY_DELAY_ABILITIES).toBe(false);
+  it('the switch ships ON (Bailey, 2026-09-26)', () => {
+    expect(MENU_CANCEL_ONLY_DELAY_ABILITIES).toBe(true);
   });
 
-  it('Chapters IV, V and VI at human pace replay the pre-switch logs; switch on, Chapter IV\'s Active logs move', () => {
-    let movedOn = 0;
+  it('Chapters IV, V and VI at human pace: `false` replays the pre-switch logs; the default and `true` play the re-pinned ones', () => {
     for (const [name, drive] of Object.entries(DRIVES)) {
       for (let seed = 1; seed <= 3; seed++) {
-        for (const off of [{}, { menuCancelOnlyDelayAbilities: false }] as Array<Partial<Ffx2EngineOptions>>) {
-          expect(logHash(drive(seed, 1500, { atbMode: 'active', ...off })), `${name} active ${seed}`).toBe(PINNED[`${name}|active|${seed}`]);
-          expect(logHash(drive(seed, 1500, { atbMode: 'wait', waitSplit: true, ...off }, undefined, 500)), `${name} split ${seed}`).toBe(PINNED[`${name}|split|${seed}`]);
+        const r17 = { menuCancelOnlyDelayAbilities: false };
+        expect(logHash(drive(seed, 1500, { atbMode: 'active', ...r17 })), `${name} active ${seed} r17`).toBe(PINNED[`${name}|active|${seed}`]);
+        expect(logHash(drive(seed, 1500, { atbMode: 'wait', waitSplit: true, ...r17 }, undefined, 500)), `${name} split ${seed} r17`).toBe(PINNED[`${name}|split|${seed}`]);
+        for (const on of [{}, { menuCancelOnlyDelayAbilities: true }] as Array<Partial<Ffx2EngineOptions>>) {
+          expect(logHash(drive(seed, 1500, { atbMode: 'active', ...on })), `${name} active ${seed}`).toBe(ON[`${name}|active|${seed}`]);
+          expect(logHash(drive(seed, 1500, { atbMode: 'wait', waitSplit: true, ...on }, undefined, 500)), `${name} split ${seed}`).toBe(ON[`${name}|split|${seed}`]);
         }
-        if (name === 'IV' && logHash(drive(seed, 1500, { atbMode: 'active', menuCancelOnlyDelayAbilities: true })) !== PINNED[`IV|active|${seed}`]) movedOn += 1;
+        expect(ON[`${name}|active|${seed}`]).not.toBe(PINNED[`${name}|active|${seed}`]);
+        expect(ON[`${name}|split|${seed}`]).not.toBe(PINNED[`${name}|split|${seed}`]);
       }
     }
-    expect(movedOn, 'the switch must change something where Bahamut\'s plain hits closed menus').toBeGreaterThan(0);
   }, 120_000);
 });
 
@@ -146,8 +165,8 @@ describe('switch on: a plain hit leaves the menu open, a Delay ability closes it
     }
     expect(plain, 'no Bahamut hit landed under an open menu').toBeGreaterThan(0);
 
-    // The same seeds with the switch off: release 17 closes on the first such hit.
-    const { engine, menu } = engineAt(group, bevelleBuild, 1, { atbMode: 'active' });
+    // The same seed with the option `false`: release 17's rule closes on the first such hit.
+    const { engine, menu } = engineAt(group, bevelleBuild, 1, { atbMode: 'active', menuCancelOnlyDelayAbilities: false });
     const off = hitsUnderMenu(engine, menu.actorId, 30_000);
     expect(off.some((h) => h.closedAfter)).toBe(true);
   });

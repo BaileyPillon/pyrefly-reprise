@@ -237,7 +237,7 @@ export function inputStillValid(
  *
  * **Corrected by §9.2** (`research/ffx2-combat-core.md`, commit `ea05f877`): §1.1's wording comes
  * from Split_Infinity's Delay-effect example (G1041), and only Delay or Action-cancel abilities close
- * a menu. Built as the OFF switch `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (`menu-cancel.ts`):
+ * a menu. Built as the switch `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (ON since 2026-09-26, Bailey) (`menu-cancel.ts`):
  * with `onlyDelay` given, the hit must also come from such an ability.
  */
 export function closesOpenMenu(
@@ -249,7 +249,7 @@ export function closesOpenMenu(
   if (draft.type !== 'damage' || draft.targetId !== owner || draft.amount <= 0 || !draft.sourceId) return false;
   const source = draft.sourceId;
   if (!units.some((u) => u.id === source && u.side === 'enemy')) return false;
-  // The menu-cancel correction (`constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES, OFF; §9.2): when
+  // The menu-cancel correction (`constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES, ON since 2026-09-26; §9.2): when
   // the engine passes `onlyDelay`, only a hit whose ability carries Delay or Action-cancel closes it.
   return onlyDelay === undefined || carriesMenuCancel(onlyDelay.ability);
 }

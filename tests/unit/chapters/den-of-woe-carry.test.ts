@@ -149,12 +149,21 @@ describe('the flag is the only way in: every other chain carries what it always 
    * seeds 1-8, counted 2026-09-25. Chapter XI's two rows re-recorded 2026-09-26 on an export of
    * `main` 30420871 (its Fallen Aeons ship layer, option A: 3 s of action time on the Road links,
    * moves those logs), and the merged branch prints the same hashes: the Den's flag moves nothing.
+   *
+   * **Re-pinned 2026-09-26 for the merge of `ffx2-engine-fixes-0926` (Bailey's D-193, option B;
+   * FFX-2 only).** No Den code changed; the engine did. (1) IC-2: an all-target action hits each
+   * target taken at its start once, and a target KO'd partway is skipped instead of its hits
+   * wrapping onto someone already hit (`research/ffx2-combat-core.md` §9.1). (2) Acta Est Fabula
+   * hits only the two Redoubts it names (`NAMED_TARGETS_ONLY`, Chapter 5 only). Chapter 5's eight
+   * now equal the re-pinned `ffx2-atb-golden.test.ts` CH5_D0 pins again; Chapter 6 moves on seed 3
+   * only, Chapter XI's Road on six of eight and the Sisters on all eight (IC-2 alone: neither chain
+   * casts Acta, and both OFF switches stay off). The old hashes are in git at bd4d1327.
    */
   const BASE = {
-    ch5: ['f5874befbb32bca2', '3d936ba1a11afdd9', '6e4e0fb5790b3f6a', '65a2f90ebd84a0a3', '5bcf9bc9c12b4f79', '1f317c664da2fa56', 'f2bbb405d2f7559a', '2460bc9767b55825'],
-    ch6: ['0aadde1f8d3aff80', '995cb5ec3f5834e0', '67647d2cb3df6954', '31f76e6f441c188f', 'f25cf6be4eb333fd', '66b37dd52d704894', '5030ad54d4e4d192', '11b9c3bbc8f0a712'],
-    ch11: ['528ec0db4b37672a', 'e46413ec4c70d2a6', '288bc47e48393c09', '1ac2781ac707395e', '4bb93d7af6857f5b', 'dd949f68a130511e', '13cfe04e09776a7c', 'b9fe2723647eb6cc'],
-    sisters: ['03941e8ce26cebf7', '68f3e1783ded11f6', '4a4973a5ffe2e7d4', '8850cc34e6365230', '99db911fb8fdae1b', 'cd46efeb96a5b815', 'b91a2538521eefc4', '40d4d993c40a1bc7'],
+    ch5: ['7a91c483c3dd8d2c', '054c5f01b9f23ffe', '678d9b991119fa5a', '06f41fb4fb006fbf', '1a487e798a11a864', 'a41b99982fd20f8c', '0c1cbbc0c51f3dcb', '417742a6b0ae62b6'],
+    ch6: ['0aadde1f8d3aff80', '995cb5ec3f5834e0', 'd86662749c9fb7e1', '31f76e6f441c188f', 'f25cf6be4eb333fd', '66b37dd52d704894', '5030ad54d4e4d192', '11b9c3bbc8f0a712'],
+    ch11: ['f319b30327d9fa18', '4eafcc689be0d273', '4737582661062166', '5ef0c3e3c91f6248', '316435e39e8d936e', 'dd949f68a130511e', '076a5d7037502f95', 'b9fe2723647eb6cc'],
+    sisters: ['99687484cc8094aa', '0229b3252a43a986', 'c794a775eeb15831', '5626b29ba82258dc', '6e58f2c1ade7d918', 'c6a29af6615c238b', '80a81c5b4a82be04', '03217cc660878ed9'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {

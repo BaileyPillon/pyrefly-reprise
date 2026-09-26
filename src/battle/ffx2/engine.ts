@@ -127,7 +127,7 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
   private held: HeldCommand | null = null;
   /** The girl whose open menu an enemy hit closed (item 4 A1, `active.ts` {@link closesOpenMenu}); cleared by the next decision. */
   private hitClosed: CombatantId | null = null;
-  /** What each unit is resolving, for the OFF menu-cancel correction (`menu-cancel.ts`). */
+  /** What each unit is resolving, for the menu-cancel correction (`menu-cancel.ts`, ON since 2026-09-26). */
   private readonly acting = new ActingAbilities();
   /**
    * Ticks a `throughInput` step was handed but could not spend, because a ready

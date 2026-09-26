@@ -87,6 +87,21 @@
  * `constants.ts` NAMED_TARGETS_ONLY): every D = 0 seed casts it 5-6 times, so all twenty move.
  * Outcomes: D = 0 still 20/20; the Active D = 1500 arm 0/10 -> 1/10 (seed 7). Chapter 4 never meets
  * either case: `CH4_D0` and `CH4_D1500` are unchanged (recomputed, equal).
+ *
+ * **Re-pinned a seventh time, the Active D = 1500 arrays only, for the menu-cancel correction**
+ * (Bailey, 2026-09-26: "I'll take all your recommendations", answering "menu correction on (my
+ * recommendation), or keep it as is"; `research/ffx2-combat-core.md` §9.2, Split_Infinity G1041 /
+ * G1042; `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES now true). An open menu is closed only by
+ * an enemy ability with a Delay effect or Action-cancel, not by every hit, which replaces the fifth
+ * re-pin's rule (item 4 A1). At 1.5 s under Active every seed had a plain hit close a menu, so all
+ * twenty `CH4_D1500` / `CH5_D1500` hashes move: menus the clock closed over the ten seeds fall from
+ * 109 to 4 in chapter 4 (Bahamut carries no Delay ability, so what is left is a status or a KO, each
+ * closing a menu on its own rule) and from 300 to 56 in chapter 5 (the same, plus the Leg's Vita
+ * Brevis, a strong Delay). Outcomes: chapter 4 still
+ * 10/10; chapter 5 1/10 -> 4/10. The engine option `menuCancelOnlyDelayAbilities: false` still
+ * replays the fifth/sixth pins byte for byte (recomputed, equal; `ffx2-menu-cancel-delay.test.ts`
+ * pins that). Every D = 0 hash and the Wait arm are unchanged (no clock runs under a menu there).
+ * The old hashes are in git at 63767b5b. FFX-2 only.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -110,15 +125,15 @@ const CH5_D0 = [
   '3308bf9c4da70848', '1404aa309330d2e2', 'f43e5c95eba9b8b8', 'bcb5f17ee39f6771', '2499f5d1a03632af',
 ];
 
-/** Re-pinned for item 4 A1 (an enemy hit closes an open menu); the old hashes are in git at d19e5715. */
+/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. */
 const CH4_D1500 = [
-  'd059f64cfe4afce9', 'f6f806a146e9e13a', 'f83208beb680732e', '55849fe6d4141a5e', 'fcbdcacd10f65af5',
-  '1aeec8665a52b244', '9fd799be79ae2949', '75f4f1f4a4833dfa', 'fd62b9c13e0700ce', '0a8ab81cd457d8ca',
+  'f7184d7b87948e2c', 'e162970a86a2268f', 'fc6c4f4b8b7cb240', '7f9abbf856f2464a', '4439b76d4c54cc7d',
+  '51f22c7af66239a8', 'd73d41236dc23eb0', '042fd279eda61cb1', '82058d0ebeeadaeb', '4ec0c1f9c35887d7',
 ];
-/** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. */
+/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. */
 const CH5_D1500 = [
-  'cccd73412d81d111', '1248968158cd4baa', '31ebf80e1112a172', 'a1c681453ad60707', '936b0ab05cb1222d',
-  '0fa90654a8923b1e', '1ded15a2a1bc5320', '4225ba360348a286', '0ed3780db24ad7be', '33b3d787ad381e94',
+  '6be1a4346ecdd543', 'd87ae9b34cf3f68c', '0f23aa5c24c2e101', '845dee0fe14e44bf', 'f61a6a28d122fb1b',
+  'abeeba939da2c5ea', 'c4b8430493fbd119', '5ce39e1ce17df9f6', '350f1f16efbdba4d', 'c1e9f4bdf61704ec',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 

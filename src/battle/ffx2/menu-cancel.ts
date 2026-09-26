@@ -8,7 +8,7 @@
  * hit carries a **Delay effect** (DELEF, Split_Infinity G1041) or **Action-cancel** (ACTIC, G1042),
  * both named per ability. This file answers "does the ability behind this hit carry one?" from the
  * ability's own sourced row, and remembers which ability each unit is resolving so the engine can
- * ask. It is read only while `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (OFF) or the engine
+ * ask. It is read only while `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (ON since Bailey's word of 2026-09-26) or the engine
  * option `menuCancelOnlyDelayAbilities` is on.
  *
  * Pure, DOM-free and deterministic: it reads event drafts and never writes state or events, so no
