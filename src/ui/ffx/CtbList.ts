@@ -135,7 +135,17 @@ export class CtbList {
     // then fall to a crop of the enemy's own idle painting via `bodyId`
     // (`combatant.spriteKey`, since a multi-form boss's idle art is keyed by
     // form — `yunalesca-1`/`-2`/`-3` — not by its one shared fight id).
-    const face = row.isParty
+    // An aeon's combatant carries no `portraitKey` (PR-0176): its tile takes
+    // its own `portraits/<aeon>.png` over a crop of its idle painting, through
+    // `resolvePortraitKey` so the unapproved navy Yojimbo stays out (D-054).
+    // Its idle crop is skipped for the same reason as the portrait: Yojimbo's
+    // `characters/yojimbo/idle.png` is that same navy painting.
+    const aeon = combatant?.side === 'aeon';
+    const aeonKey = combatant?.spriteKey ?? row.actorId;
+    const aeonFace = resolvePortraitKey(aeonKey);
+    const face = aeon
+      ? portraitChipHtml(row.portraitKey ?? aeonFace, name, tintFor('aeon'), aeonFace === undefined ? undefined : aeonKey)
+      : row.isParty
       ? portraitChipHtml(row.portraitKey, name, tintFor(side))
       : portraitChipHtml(row.portraitKey ?? resolvePortraitKey(row.actorId), name, tintFor(side), combatant?.spriteKey ?? row.actorId);
     const tag = row.letterTag ? `<span class="ig-ctb__tag">${escapeHtml(row.letterTag)}</span>` : '';
