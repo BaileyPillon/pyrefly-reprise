@@ -193,6 +193,11 @@
   color: var(--ig-paper);
   font-weight: 600;
 }
+/* The menu path on the label line is for the phone tip (phone-battle-parts.css);
+   on desktop the "in <menu>" chip under the line already says it. */
+.mad__where {
+  display: none;
+}
 /* "CHAPTER LINE" — this row is the tactic the encounter was designed around,
    not merely the best-scoring simulation. */
 .mad__badge {

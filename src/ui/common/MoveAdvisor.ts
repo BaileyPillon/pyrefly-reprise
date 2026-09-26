@@ -608,13 +608,18 @@ function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Densi
   const bare = density >= MAX_DENSITY;
   const badge = s.source === 'tactic' && density < 5 ? '<span class="mad__badge">Guide’s pick</span>' : '';
   const menu = s.menu ? `<span class="mad__stat">in ${escapeHtml(s.menu)}</span>` : '';
+  // The same path, on the label line itself: the phone tip shows this line and
+  // nothing else, so without it every phone tip read "TIP Darkness -> all
+  // enemies" with no menu named (critic round 13 PR-0126, phone half; CHK-004).
+  // `move-advisor.css` hides it on desktop, where the chip above says it.
+  const where = s.menu ? `<span class="mad__where">${escapeHtml(s.menu)}</span>` : '';
   const showEffect = !bare && (alt ? density < 1 : density < 2);
   const trimStats = alt ? density >= 2 : density >= 4;
   const barStats = (alt && density >= 3) || bare;
   const showReason = !bare && (alt || density < 4);
   return [
     `<article class="mad__move${alt ? ' mad__move--alt' : ''}">`,
-    `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${badge}</p>`,
+    `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${where}${badge}</p>`,
     barStats ? (menu ? `<p class="mad__stats">${menu}</p>` : '') : statsHtml(s, menu, trimStats),
     showEffect && s.effect ? `<p class="mad__effect">${escapeHtml(s.effect)}</p>` : '',
     showReason && s.reason ? `<p class="mad__why">${escapeHtml(s.reason)}.</p>` : '',
