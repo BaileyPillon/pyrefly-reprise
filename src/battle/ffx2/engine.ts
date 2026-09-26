@@ -495,6 +495,8 @@ export class FFX2Engine implements FFX2BattleEngine, BattleEngine {
       emit: (e) => this.emit(e),
       breaksDamageLimit: (unit) => unit.aiMemory?.['bdl'] === true, // cached at her last gate recompute
       timedAilmentDefaults: this.battleState.flags['timedAilmentDefaults'] === true, // `setup.ts`, from the group
+      ...(this.options.immuneHitsSkipChain !== undefined ? { immuneHitsSkipChain: this.options.immuneHitsSkipChain } : {}), // IC-1 switch
+      ...(this.options.namedTargetsOnly !== undefined ? { namedTargetsOnly: this.options.namedTargetsOnly } : {}), // Acta switch
     };
   }
 

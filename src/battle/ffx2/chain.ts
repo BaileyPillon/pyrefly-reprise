@@ -63,10 +63,15 @@ export function isActionLocked(c: FFX2Combatant): boolean {
  * critical, 2 s otherwise.
  */
 export function registerHit(target: FFX2Combatant, crit: boolean): number {
-  const count = isChained(target) ? Math.min(CHAIN_MAX, target.chainCount + 1) : 0;
+  const count = peekChainCount(target);
   target.chainCount = count;
   target.chainWindowTicks = crit ? CHAIN_WINDOW_TICKS_CRIT : CHAIN_WINDOW_TICKS;
   return count;
+}
+
+/** The count {@link registerHit} would return for a hit landing now, without registering it. */
+export function peekChainCount(target: FFX2Combatant): number {
+  return isChained(target) ? Math.min(CHAIN_MAX, target.chainCount + 1) : 0;
 }
 
 /**

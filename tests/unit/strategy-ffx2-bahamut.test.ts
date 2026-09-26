@@ -485,6 +485,14 @@ function runLine(seed: number, line: Line): LineRun {
  * Paine and an Iron Bangle (+20%) on Rikku, and Yuna is the White Mage — MDef
  * 132, "the single most Mega-Flare-resistant dressphere in the game" (§2.3) —
  * so the *first* Mega Flare does not quite finish them and the second does.)
+ *
+ * **Re-measured 2026-09-26 for IC-2** (`docs/plans/ffx2-engine-fixes-2026-09-26.md`). The
+ * "second Mega Flare finishes them" above was the all-target wrap: Rikku died mid-Mega-Flare and the
+ * third hit wrapped onto Yuna, so she took two and Paine none. Each girl now takes Mega Flare
+ * once (`research/ffx2-combat-core.md` §9.1). Rikku and Paine still fall, but the White Mage outlasts
+ * four Mega Flares with her own Cures and, with no Attack row, the line has nothing left to press
+ * (this harness allows no spherechange): the run stops **undecided** with 5,408-5,455 of his HP
+ * on him on every seed. The line still loses; it no longer ends in a wipe.
  */
 describe('mashing Attack into Defense 160 stays a losing tactic', () => {
   for (const seed of SEEDS) {
@@ -492,11 +500,9 @@ describe('mashing Attack into Defense 160 stays a losing tactic', () => {
       const r = runLine(seed, mashAttack);
       console.log(`mash, seed ${seed}:`, JSON.stringify(r));
 
-      expect(r.outcome, 'the battle must reach a decision').toBeDefined();
       expect(r.outcome).not.toBe('victory');
       expect(r.shellCasts, 'the losing line is defined by never casting Shell [§3.3]').toBe(0);
-      expect(r.kos, 'the whole party must go down').toBe(3);
-      expect(r.killedByMegaFlare, 'and Mega Flare must be among the killers [§2.1, §2.4]').toBeGreaterThanOrEqual(1);
+      expect(r.kos, 'both damage dealers go down; the lone White Mage cannot attack').toBeGreaterThanOrEqual(2);
       expect(r.bossHp, 'with most of his 8,400 HP still on him [§1.2, §2.3]').toBeGreaterThan(BAHAMUT_HP / 3);
     });
   }
@@ -613,7 +619,12 @@ describe('each of the researched survival routes behaves as researched', () => {
   const routes: ReadonlyArray<readonly [string, Line, number]> = [
     ['Shell route (no Breaks at all)', lever({ shell: true, heal: true, breaks: false, darkness: true }), 28],
     ['Magic Break route (no Shell, no cure spells)', lever({ shell: false, heal: false, breaks: true, darkness: true }), 28],
-    ['heal-only route (no Shell, no Breaks)', lever({ shell: false, heal: true, breaks: false, darkness: true }), 20],
+    // Re-measured 2026-09-26 for IC-2: 27/30 -> 1/30. Its wins were the all-target wrap: Mega Flare
+    // killed Rikku, wrapped its third hit onto Yuna and never touched Paine, so the Warrior was left
+    // to finish him. Each girl now takes Mega Flare once and the White Mage is the one left, with no
+    // Attack row (this harness allows no spherechange): 27 of 30 stop undecided. §2.4 calls this
+    // route marginal; the shipped line (Shell + Breaks) is unaffected. Flagged for Bailey in the plan.
+    ['heal-only route (no Shell, no Breaks)', lever({ shell: false, heal: true, breaks: false, darkness: true }), 1],
   ];
 
   for (const [name, line, bar] of routes) {

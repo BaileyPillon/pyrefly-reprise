@@ -148,8 +148,11 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // identical before and after (preflight §7), so these per-seed hashes are the pre-change logs.
   const PINNED = [
     ['373c0af61dfb8aae', 'd0e49a7271c07e2b', '802486af811c9d6b'],
-    ['f5874befbb32bca2', '3d936ba1a11afdd9', '6e4e0fb5790b3f6a'],
-    ['0aadde1f8d3aff80', '995cb5ec3f5834e0', '67647d2cb3df6954'],
+    // Chapter V all three and Chapter VI seed 3 re-pinned 2026-09-26 for IC-2 (a target KO'd inside an
+    // all-target action is skipped, not wrapped) and Acta Est Fabula's target (the Redoubts only);
+    // `ffx2-atb-golden.test.ts` has the measurement. Old hashes in git at ea05f877.
+    ['7a91c483c3dd8d2c', '054c5f01b9f23ffe', '678d9b991119fa5a'],
+    ['0aadde1f8d3aff80', '995cb5ec3f5834e0', 'd86662749c9fb7e1'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

@@ -91,6 +91,25 @@ export const CHAIN_MAX = 99;
  */
 export const CHAIN_LOCKS_ACTIONS = true;
 
+/**
+ * IC-1's alternative, a named **OFF** switch: when true, a hit whose result is immune (Invincible,
+ * Null Physical / Null Magic, an immune affinity) opens and extends no chain window. Whether such a
+ * hit staggers is **unsourced** (§9.2: misses never chain `[verified: 3 sources]`; immune hits are not
+ * covered; Split_Infinity's "will fail" is the nearest wording, an `[estimate]`). Off keeps the engine
+ * as it was; `Ffx2EngineOptions.immuneHitsSkipChain` overrides it for a measurement run.
+ */
+export const IMMUNE_HITS_SKIP_CHAIN = false;
+
+/**
+ * An all-target row carrying `extra.namedTargetsOnly` hits only the ids its caller named. Its one
+ * row is the Vegnagun Head's **Acta Est Fabula**, whose sourced target is "both Redoubts"
+ * (`research/ffx2-vegnagun-shuyin.md` §3.4, `[verified: 2 sources]`); as `all-allies` it also healed
+ * the Head itself for 9,999 every cast, which the old all-target wrap (IC-2) had hidden. A
+ * boss-side change: **Bailey's call** (`docs/plans/ffx2-engine-fixes-2026-09-26.md`). `false`
+ * restores the old target set; `Ffx2EngineOptions.namedTargetsOnly` overrides it for a run.
+ */
+export const NAMED_TARGETS_ONLY = true;
+
 // ---------------------------------------------------------------------------
 // Statuses (§2.8)
 // ---------------------------------------------------------------------------

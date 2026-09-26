@@ -75,6 +75,18 @@
  * closed over the ten seeds; chapter 4 still wins 10/10, chapter 5 0/10 as before. Every D = 0
  * hash is unchanged (no menu is ever open while the clock runs at zero decision time), and so is
  * the Wait arm below (the whole-menu hold lets no enemy act). FFX-2 only.
+ *
+ * **Re-pinned a sixth time, the chapter 5 arrays only, for IC-2 and Acta Est Fabula's target**
+ * (branch `ffx2-engine-fixes-0926`, 2026-09-26, `docs/plans/ffx2-engine-fixes-2026-09-26.md`).
+ * (1) An all-target action now hits each target taken at its start, and a target KO'd partway is
+ * skipped rather than its hits wrapped onto someone already hit (`research/ffx2-combat-core.md`
+ * §9.1). Measured against the old engine with a throwaway probe: every moved seed's first
+ * differing event follows a KO inside an all-target action (a Bulwark dying to Black Sky, or a girl
+ * dying to the Tail, a Node or the Leg); `CH5_D1500` seed 6 has none and did not move. (2) Acta Est
+ * Fabula hits the two Redoubts it names, not the Head as well (§3.4 "both Redoubts";
+ * `constants.ts` NAMED_TARGETS_ONLY): every D = 0 seed casts it 5-6 times, so all twenty move.
+ * Outcomes: D = 0 still 20/20; the Active D = 1500 arm 0/10 -> 1/10 (seed 7). Chapter 4 never meets
+ * either case: `CH4_D0` and `CH4_D1500` are unchanged (recomputed, equal).
  */
 
 import { describe, expect, it } from 'vitest';
@@ -90,12 +102,12 @@ const CH4_D0 = [
   '6a153f98a05af5cf', '5764b43c5c6b9c94', '2649ce030cbd66bc', 'de6d7169d7f08905', '7b311b79d378648d',
 ];
 
-/** Re-pinned for combat-fixes-0924 (a), magic never rolls; see the file doc comment. */
+/** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. */
 const CH5_D0 = [
-  'f5874befbb32bca2', '3d936ba1a11afdd9', '6e4e0fb5790b3f6a', '65a2f90ebd84a0a3', '5bcf9bc9c12b4f79',
-  '1f317c664da2fa56', 'f2bbb405d2f7559a', '2460bc9767b55825', '15798d31533b4ce0', 'b784d1b4630ce0af',
-  '1614585c2e961713', '1618b9ad2cbddc13', '5518e6ac6da67ffd', '00afb8e0097c71b9', '3d2f30a7ec6129ab',
-  'cdc6e3b1150fcdfa', '9a1120dac00c3a94', '80c71a5ec0bb6309', '9e3fcd2c8121445a', 'd4a565da312c37c1',
+  '7a91c483c3dd8d2c', '054c5f01b9f23ffe', '678d9b991119fa5a', '06f41fb4fb006fbf', '1a487e798a11a864',
+  'a41b99982fd20f8c', '0c1cbbc0c51f3dcb', '417742a6b0ae62b6', '818b87ecca6cc80b', 'ea6dac586568298a',
+  'febe9b943707b3e0', '17cd9bd9e06b9f6d', '9fd978ff17bd934d', 'fa5d938948bf4897', '49d34f2f14d4ff64',
+  '3308bf9c4da70848', '1404aa309330d2e2', 'f43e5c95eba9b8b8', 'bcb5f17ee39f6771', '2499f5d1a03632af',
 ];
 
 /** Re-pinned for item 4 A1 (an enemy hit closes an open menu); the old hashes are in git at d19e5715. */
@@ -103,10 +115,10 @@ const CH4_D1500 = [
   'd059f64cfe4afce9', 'f6f806a146e9e13a', 'f83208beb680732e', '55849fe6d4141a5e', 'fcbdcacd10f65af5',
   '1aeec8665a52b244', '9fd799be79ae2949', '75f4f1f4a4833dfa', 'fd62b9c13e0700ce', '0a8ab81cd457d8ca',
 ];
-/** Re-pinned for item 4 A1 (an enemy hit closes an open menu); the old hashes are in git at d19e5715. */
+/** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. */
 const CH5_D1500 = [
-  '374fdd1c29e0ebd6', 'c322aba8cd62419a', '8ad30c2c303fd4ee', 'e7f340becf929f3a', 'b9d19e92668b039f',
-  '0fa90654a8923b1e', 'f749bb55a0930a72', '9070e4ddfbe674f8', '2416c7675b4de48c', '065e34cd0350d3b1',
+  'cccd73412d81d111', '1248968158cd4baa', '31ebf80e1112a172', 'a1c681453ad60707', '936b0ab05cb1222d',
+  '0fa90654a8923b1e', '1ded15a2a1bc5320', '4225ba360348a286', '0ed3780db24ad7be', '33b3d787ad381e94',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 

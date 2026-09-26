@@ -97,6 +97,9 @@ export const SHUYIN_ABILITIES: AbilityDef[] = [
     extra: {
       failTimer: { fireAtTurn: HEAD_FIRE_AT_TURN, lineInterval: HEAD_LINE_INTERVAL },
       startsPhaseB: true,
+      // Target "both Redoubts" [§3.4], not the Head: `all-allies` also takes the caster. Read by
+      // `resolve.ts` while `constants.ts` NAMED_TARGETS_ONLY is on (2026-09-26, Bailey's call).
+      namedTargetsOnly: true,
     },
   }),
 
