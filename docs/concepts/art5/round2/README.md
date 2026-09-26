@@ -40,6 +40,43 @@ big-head words, on a skeleton with a normal Rikku head, `skeletons-thief-c.py`,
 6.94, and at body scale its forced head is 0.94 of the idle's (gate 0.45 to 0.85). Under the
 body-height gate the Thief item pick is round 1 cand-3. `round2-ready.jpg` was not redrawn.
 
+## D-194 install list (driver, 2026-09-26): exactly these 20
+
+Bailey approved "the 21 judged picks" as shown in `round2-ready.jpg` (sent to him ~06:50 EDT;
+D-194). One of those 21, **rikku-thief/item try b cand-8, is WITHDRAWN**: under Bailey's own
+D-195 (the Thief judged by body height) it fails (head 0.94 of the idle's at body scale, gate
+0.45 to 0.85). So D-194 installs **these 20 and nothing else**; rikku-thief/item keeps the idle.
+The three body-gate Thief picks in the table above (item round 1 cand-3, hurt try c cand-11,
+victory round 1 cand-3) were never shown to Bailey: they are **not installed** until he picks
+them from `sheet3-rikku-thief.jpg`.
+
+| # | slot | candidate |
+|---|---|---|
+| 1 | paine-black-mage/ko | cand-1.png |
+| 2 | paine-dark-knight/cast | cand-2.png |
+| 3 | paine-dark-knight/ko | cand-1.png |
+| 4 | paine-gunner/attack | cand-1.png |
+| 5 | paine-gunner/item | cand-8.png (try b) |
+| 6 | paine-gunner/victory | cand-4.png |
+| 7 | paine-warrior/attack | method cand-7-comp.png (D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/attack/) |
+| 8 | paine-warrior/cast | method cand-8-comp.png (D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/cast/) |
+| 9 | paine-white-mage/cast | cand-2.png |
+| 10 | rikku-alchemist/attack | cand-4.png |
+| 11 | rikku-black-mage/ko | cand-4.png |
+| 12 | rikku-gunner/attack | cand-4.png |
+| 13 | rikku-gunner/item | cand-4.png |
+| 14 | rikku-gunner/ko | cand-3.png |
+| 15 | rikku-white-mage/cast | cand-3.png |
+| 16 | rikku-white-mage/victory | cand-1.png |
+| 17 | yuna-songstress/cast | cand-2.png |
+| 18 | yuna-songstress/ko | cand-1.png |
+| 19 | yuna-songstress/victory | cand-6.png (try b) |
+| 20 | yuna-warrior/hurt | cand-7.png (try b) |
+
+Round 2 candidates live under `D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/<slot>/`
+unless the row names another folder. Scales: the head-matched scale the judge recorded in
+`judge2.json` for each pick.
+
 ## Ready for Bailey's pick (judge PASS at 7.0 or above)
 
 Agent looks and agent judge only — none of this is Bailey's call yet. Every row below
