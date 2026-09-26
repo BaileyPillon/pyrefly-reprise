@@ -52,3 +52,47 @@ Rule 15: none of this batch's items is on the stalled list. No method check was 
 - Full `vitest run --testTimeout=60000`: exit 0, 458 files and 8342 tests passed, 29 skipped.
 - `node tools/orphans.mjs`: 24 orphaned, the same as main (804 modules, 780 reachable).
 - Browser checks used `vite preview` of this branch's production build on port 5950 with `PYREFLY_BROWSER=gpu`, headless. The server was stopped by its PID.
+
+## CHECK (independent, 2026-09-26)
+
+A second agent checked this batch. It did not build it. It checked `465363d1` in this worktree.
+
+**Result: 2 blockers, both in PR-0211. Every other fixed item passes its round-13 acceptance check.**
+
+The checker ran its own production build (`vite build --outDir dist-check`) and served it with `vite preview` on port 5955, headless, with `PYREFLY_BROWSER=gpu`. It stopped the server by its PID afterwards. The frames and JSON are in `docs/screenshots/t1-b4a-check/`. They are left untracked, because this commit carries only this section.
+
+- `tsc --noEmit`: clean. The full `vitest run --testTimeout=60000` exits 0: 458 files, 8342 tests passed, 29 skipped, no failures, so there is no load flake. `tools/orphans.mjs` still reports 24, the same as main. No art is touched. Approved hashes against the shared art: 207 match, 0 mismatched. 29 listed paths are absent from the shared `public/art`, which main uses too.
+- The e2e spec `pause-p-toggle` passed 4/4 against the checker's build. It ran from a copy that only changed where screenshots go.
+
+| Item | Verdict | What the checker saw |
+|---|---|---|
+| CHK-007 / CHK-021 | pass | The lint runs over every say, narrate, choice and quip in every chapter, and the allow-list has its reverse check. One note: the lint rejects `[`, so it would also reject the `[ALBHED]` tag that writing-bible §1.8 prescribes for Al Bhed lines. No line uses that tag today. |
+| PR-0102 | pass | Chapter VI won by auto, then the aftermath walked with real Enter presses. The screen showed `I had the better half, dearie.` with no asterisks. |
+| PR-0147 | pass | The Act I seam plays in the heart room, and Rikku's line is `...Okay. Round two.` (`leblanc-ormi-first-seam-*`). |
+| PR-0103 | pass (real engine) | The real engine and presenter ran Chapter VI with the auto strategy retargeted onto Ormi (20 retargets). KO order: ormi, then logos, then leblanc. `ormi-down` played Ormi's own KO bark and ended on `Logos, darling. Do try to last longer.` `logos-down` was Leblanc alone, then Paine: `Just her now.` No KO'd speaker spoke after his KO, and no line named a dead target as next. The three new lines are the Leblanc-alone variant the issue's fix asks for. |
+| PR-0194 | pass (auto route) | Chapter V ran on the intended auto route. The engine emitted `farplane-voice` 3 times and the line showed twice, both on the Leg link. The critic's advisor-guided real-key route was not replayed. |
+| PR-0133 (V half) | pass | In the V post scene, the cast is `[shuyin]` from the first line. His figure spans x 1115-1445 at 1600 and never touches the card. Two notes. Lenne speaks five lines and is still not staged; the builder's note says so. Shuyin stands in his battle idle through the `kneel` / "He refuses to look up" beat. |
+| PR-0134 | pass | Arrowing the board with real keys: VI's BOSS row reads `Leblanc, Logos and Ormi`. The other cards join with ` + `, so the two new rows use a different style. |
+| FOC19-06 | pass | By real keys, XV's card and prep carry the same blurb word for word. The subtitles still differ: the card says `Three men she knows, made of what they felt` and the prep says `Three Men She Knows`. That was already there (D-191) and is outside this check. The blurb the batch kept is the one its source comment calls "placeholder card copy". |
+| PR-0159 | pass | Read again against writing-bible §1.1, §1.5, §1.6 and §1.8. Tidus has `Hey!`, `c'mon` and stacked questions. Wakka has `ya?` twice. Rikku is exclamatory and hedges with "kinda". Lulu is clipped and uses no slang. The three are distinguishable with names hidden. There are still 47 lines, and the story tests pass. |
+| PR-0073 | pass | At 390x844 with touch, in Chapters I and V, the strip reads `TAP ADVANCE · TAP HERE MENU` and names no key. Tapping the chip advanced the line, and `Tap here` opened the pause. The briefing reads `TAP SKIP ... · TAP HERE NEVER SHOW THIS AGAIN`. A tap skips it. `Tap here` opts out, and after a reload the briefing stayed gone. |
+| PR-0057 | pass | At 390x844 in Chapters I and V, with the card visible at opacity 1, in both the keyboard and touch contexts: `.chint` overlaps `.dbox__body` by 0 and the speaker plate by 0, and stays within 0..390. |
+| PR-0115 | pass | In addition to the spec: after P closes the pause, it stays closed 1.5 s later. P during a scene does not advance the line. P closes a pause that Esc opened. Five quick presses of P leave the pause open. Checked in Chapters I and VI. |
+| PR-0119 | pass (by the builder's forced case) | On the Chapter VI run, 0 of the frames with a card up had a coach mark overlapping the card, seams included. The collision did not happen naturally on this route either, so the forced browser case in `pr0119-forced-report.json` is the evidence. |
+| **PR-0211** | **FAIL + regression** | See the blockers below. |
+
+### Blockers
+
+1. **PR-0211 fails its acceptance check at 2000 in Chapter V.** Overlap here is the card's rect against the top 65% of each party figure's projected quad (`stage.screenRects()`), the same measure the builder used for "0 px²".
+   - At 2000x1012, the card for Jecht's `No overtime in this one, kid.` overlaps the party by 20,366 px²: the card's bottom edge (y 424) runs across the top of Rikku's head and Paine's hair (`overlap-ffx2-vegnagun-shuyin-2000-01.jpg`). This happened on 2 of 2 runs.
+   - At 1600 the same line overlapped by 3,627 px² on 1 of 2 runs.
+   - Cause: during that link the camera frames the party large and high, and `top: 8vw` does not clear them.
+   - Chapter III was clean at 1600 and at 2000.
+2. **Regression from the same change.** In Chapter III the band card now covers Braska's Final Aeon's head and upper body, along with the Yu Pagoda tops, for the boss's own lines. Before the change the boss was fully visible. The builder's own frame shows it (`pr0211-braskas-final-aeon-1600-after.jpg`), and so do the checker's (`midbeat-braskas-final-aeon-1600-0*.jpg`).
+   - This trades CHK-008's "dialogue over actors" from the party onto the boss.
+   - No fixed band clears both the party and the boss at every camera. Where the card goes, for example the left column the dimmed HUD leaves free, or a narrower card, is a placement choice. It probably needs options for Bailey under rule 9 rather than another tuned number.
+
+### Other notes (not blockers)
+
+- `CutsceneScreen.ts` is 418 lines (410 on main). The new logic is in modules and only wiring was added.
+- PR-0127 was stopped for a design choice. The checker did not re-measure it.
