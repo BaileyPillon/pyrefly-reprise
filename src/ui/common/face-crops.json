@@ -35,7 +35,7 @@
   "targets": { "eyeY": 0.42, "ipd": 0.3 },
   "portraits": {
     "tidus": { "fx": 0.4087, "fy": 0.3548, "ipd": 0.2067, "px": [832, 1216], "note": "head rolled; his left eye sits 63 px below his right" },
-    "yuna": { "fx": 0.3726, "fy": 0.3478, "ipd": 0.2015, "px": [832, 1216], "note": "three-quarter, head tilted" },
+    "yuna": { "fx": 0.3891, "fy": 0.3493, "ipd": 0.2451, "px": [832, 1216], "note": "PR-0014 re-measure 2026-09-26: three-quarter, head tilted; green eye centre (227, 457), blue eye centre (420, 393) (pixel-cluster re-measure of art/portraits/yuna.png at its shipped 832x1216). The old row's ipd (0.2015) under-measured the true separation by about 20%, which over-zoomed the crop and pushed more of her hair out the top of the tile than TARGET_HEAD/TARGET_EYE_Y call for." },
     "auron": {
       "fx": 0.42,
       "fy": 0.379,
