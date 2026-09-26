@@ -1025,6 +1025,25 @@
     "mtime": "2026-09-26T16:21:17.008Z",
     "approved": "2026-09-26"
    }
+  },
+  "bailey:2026-09-26-thief": {
+   "words": "I’ll take all your recommendations",
+   "note": "Bailey, 2026-09-26 ~11:30 EDT, verbatim \"I’ll take all your recommendations\" (D-199 in docs/target/decisions.json), answering the driver's question \"Rikku Thief: install item, hurt and victory? Yes, or no.\" after the sheet docs/concepts/art5/round2/sheet3-rikku-thief.jpg was sent to him first. Installed: the three body-gate picks of judge2.json thiefBodyGate (the D-195 gate Bailey adopted at ~07:00 EDT with \"I’ll go with all your recommendations\"): item = round 1 cand-3 (D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/rikku-thief/item/cand-3.png), hurt = round 2 try c cand-11 (.../2026-09-25-day1/pose-round2/rikku-thief/hurt/cand-11.png), victory = round 1 cand-3 (.../2026-09-25-gpu5/rikku-thief/victory/cand-3.png). A pick approves only the pose as shown. Each PNG is the candidate byte for byte, with a sidecar carrying the body-height 'scale' (item 1.25, hurt 1.15, victory 1.21; docs/concepts/art5/installed-thief-0926/). Thief attack and cast stay on the idle (no pick after three tries, rule 15). All three slots were empty; nothing replaced. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-26-thief/ (installed/, replaced/). Game: FFX-2 only (the Thief dressphere).",
+   "public/art/characters/rikku-thief/item.png": {
+    "sha256": "fd98514546e05b8a80660e68659a6a028faa776f914ab9d4072d024671d36117",
+    "mtime": "2026-09-26T17:14:19.120Z",
+    "approved": "2026-09-26"
+   },
+   "public/art/characters/rikku-thief/hurt.png": {
+    "sha256": "60aef5ccc4556df084762fbcb5816bcbca3c5e55e811e7bebf882124916c7ee6",
+    "mtime": "2026-09-26T17:14:19.136Z",
+    "approved": "2026-09-26"
+   },
+   "public/art/characters/rikku-thief/victory.png": {
+    "sha256": "80821d5b064a40891cf847f0bf5e024bd40fb43374dfd07cbff38020d757e536",
+    "mtime": "2026-09-26T17:14:19.147Z",
+    "approved": "2026-09-26"
+   }
   }
  }
 }

@@ -1,0 +1,112 @@
+{
+ "idle": {
+  "eyeLine": [
+   297.0,
+   307.6
+  ],
+  "eyeL": [
+   261.8095238095238,
+   305.7142857142857
+  ],
+  "eyeR": [
+   332.2563025210084,
+   309.5042016806723
+  ],
+  "soles": 1195,
+  "bodyStraight": 887.4,
+  "bodyUnfolded": 892.9,
+  "path": [
+   [
+    292,
+    552
+   ],
+   [
+    240,
+    800
+   ],
+   [
+    245,
+    1195
+   ]
+  ]
+ },
+ "item": {
+  "eyeL": [
+   167.9,
+   160.9
+  ],
+  "eyeR": [
+   207,
+   174
+  ],
+  "eyeLine": [
+   187.4,
+   167.4
+  ],
+  "soles": 879,
+  "bent": false,
+  "path": null,
+  "body": 711.6,
+  "idleBody": 887.4,
+  "measured": 1.247,
+  "judgeBodyScale": 1.239,
+  "headAtScale": 0.61
+ },
+ "hurt": {
+  "eyeL": [
+   188.9,
+   126.6
+  ],
+  "eyeR": [
+   220.9,
+   100.3
+  ],
+  "eyeLine": [
+   204.9,
+   113.5
+  ],
+  "soles": 806,
+  "bent": true,
+  "path": [
+   [
+    336,
+    310
+   ],
+   [
+    199,
+    537
+   ],
+   [
+    156,
+    806
+   ]
+  ],
+  "body": 773.8,
+  "idleBody": 892.9,
+  "measured": 1.154,
+  "judgeBodyScale": 1.183,
+  "headAtScale": 0.55
+ },
+ "victory": {
+  "eyeL": [
+   205.1,
+   206.0
+  ],
+  "eyeR": [
+   240.5,
+   216
+  ],
+  "eyeLine": [
+   222.8,
+   211.0
+  ],
+  "soles": 942,
+  "bent": false,
+  "path": null,
+  "body": 731.0,
+  "idleBody": 887.4,
+  "measured": 1.214,
+  "judgeBodyScale": 1.213,
+  "headAtScale": 0.55
+ }
+}

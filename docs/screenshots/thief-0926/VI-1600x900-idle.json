@@ -1,0 +1,71 @@
+{
+ "healTopUps": 0,
+ "chapter": "ffx2-leblanc",
+ "numeral": "VI-T",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "results": [
+  {
+   "key": "rikku-thief/item",
+   "id": "rikku",
+   "art": "rikku-thief",
+   "pose": "item",
+   "slotName": "item",
+   "requested": "item",
+   "staged": false,
+   "url": "/pyrefly-reprise/art/characters/rikku-thief/item.png",
+   "placeholder": false,
+   "fade": 1,
+   "actionKind": "item",
+   "ability": "Potion",
+   "lastEvent": "turn-start",
+   "upp": 0.0017543859649122805,
+   "clamped": false,
+   "idleUpp": 0.0014035087719298245,
+   "sidecarScale": 1.25,
+   "refScale": null,
+   "hp": 881,
+   "pos": [
+    -1.3,
+    0,
+    0.1
+   ],
+   "frame": null,
+   "ratio": 1.25,
+   "file": "scratch frames/VI-T-1600x900-rikku-thief-item.jpg"
+  },
+  {
+   "key": "rikku-thief/idle",
+   "id": "rikku",
+   "art": "rikku-thief",
+   "pose": "idle",
+   "slotName": "ready",
+   "requested": "ready",
+   "staged": false,
+   "url": "/pyrefly-reprise/art/characters/rikku-thief/idle.png",
+   "placeholder": false,
+   "fade": 1,
+   "actionKind": "item",
+   "ability": "Potion",
+   "lastEvent": "chain",
+   "upp": 0.0014035087719298245,
+   "clamped": false,
+   "idleUpp": 0.0014035087719298245,
+   "sidecarScale": null,
+   "refScale": null,
+   "hp": 827,
+   "pos": [
+    -1.3,
+    0,
+    0.1
+   ],
+   "frame": null,
+   "ratio": 1,
+   "file": "scratch frames/VI-T-1600x900-rikku-thief-idle.jpg"
+  }
+ ],
+ "missing": [],
+ "debugNotes": [],
+ "errors": [],
+ "http4xx": []
+}
