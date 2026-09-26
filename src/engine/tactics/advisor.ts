@@ -129,6 +129,7 @@ import {
 } from './advisor-plan.ts';
 import { sentenceFor } from './advisor-say.ts';
 import { dropRepeatedStatuses, statusWords } from './advisor-copy.ts';
+import { discTurnOf, discTurnValue } from './advisor-omnis.ts';
 import {
   type Committed,
   type QueuedCommand,
@@ -1084,7 +1085,7 @@ function candidateFor(
       ...base,
       reason: reasonFor(state, base, mid, chances),
       cite: '',
-      score: scored.score,
+      score: scored.score + discTurnValue(discTurnOf(state, command, mid)), // Ch XII (PR-0197)
       source: 'simulated',
     },
   };
@@ -1347,7 +1348,10 @@ export function buildAdvisorView(
   for (const c of legal) {
     const dead = !(hold && c.suggestion.source === 'tactic') && (planner
       ? inertAcrossBand(decision.actorId, c.suggestion.command, c.outcome, c.chances)
-      : changesNothing(decision.actorId, c.suggestion.command, c.outcome));
+      : changesNothing(decision.actorId, c.suggestion.command, c.outcome)) &&
+      // Chapter XII: a zero-damage hit that turns a disc off a -ga is the
+      // fight's signature move, not a no-op (./advisor-omnis.ts, PR-0197).
+      !((discTurnOf(state, c.suggestion.command, c.outcome)?.gaLost ?? 0) > 0);
     (dead ? inert : useful).push(c);
   }
   // **The Zombie guard** (PR-0198): a row that hurts a living Zombie ally goes
