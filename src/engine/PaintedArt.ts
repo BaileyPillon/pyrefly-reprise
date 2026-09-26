@@ -8,6 +8,7 @@ import {
   TextureLoader,
 } from 'three';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
+import { fetchWithOneRetry, retryPause } from './fetchRetry.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
 import type { AlphaBox, PoseFrame } from './PaintedScale.ts';
 import { groundHullFromBottoms, type GroundHull } from './PaintedRest.ts';
@@ -126,10 +127,25 @@ function warnOnce(url: string, why: string): void {
   console.warn(`[painted] ${why}: ${url} — using a procedural placeholder.`);
 }
 
+/**
+ * An image load, retried once (PR-0149) only when the art manifest says the
+ * file ships: the image loaders cannot tell a 503 from a 404, and a painting
+ * the manifest does not know may simply be absent, which must stay fast.
+ */
+async function loadShippedOnce<T>(url: string, load: () => Promise<T>): Promise<T> {
+  try {
+    return await load();
+  } catch (err) {
+    if ((await manifestKnowsAsset(url)) !== true) throw err;
+    await retryPause();
+    return load();
+  }
+}
+
 /** The decoded image (decoded off the main thread first), or null on a miss. */
 async function tryLoadImage(url: string): Promise<HTMLImageElement | null> {
   try {
-    const image = await imageLoader.loadAsync(url);
+    const image = await loadShippedOnce(url, () => imageLoader.loadAsync(url));
     await image.decode?.().catch(() => undefined);
     return image;
   } catch {
@@ -141,7 +157,7 @@ async function tryLoadImage(url: string): Promise<HTMLImageElement | null> {
 /** Resolves to the texture, or null when the file is absent/undecodable. */
 export async function tryLoadTexture(url: string): Promise<Texture | null> {
   try {
-    const tex = await loader.loadAsync(url);
+    const tex = await loadShippedOnce(url, () => loader.loadAsync(url));
     return configurePaintedTexture(tex);
   } catch {
     warnOnce(url, 'missing painting');
@@ -153,7 +169,7 @@ export async function tryLoadTexture(url: string): Promise<Texture | null> {
 export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
   const jsonUrl = imageUrl.replace(/\.[a-z0-9]+$/i, '.json');
   try {
-    const res = await fetch(jsonUrl, { cache: 'no-cache' });
+    const res = await fetchWithOneRetry(jsonUrl, { cache: 'no-cache' });
     if (!res.ok) return null;
     const raw = (await res.json()) as Partial<PoseMeta>;
     if (typeof raw.height !== 'number' || typeof raw.width !== 'number') return null;
