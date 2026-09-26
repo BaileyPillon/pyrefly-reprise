@@ -443,6 +443,25 @@ Whoever picks either item up should add it to their batch's ownership list in §
 take it as a small, separately-reviewed change) before editing it, so it is not
 touched by two batches at once.
 
+### Iteration 2, 2026-09-26 ~18:45 EDT: the Yojimbo faithfulness pick and four presentation questions
+
+Bailey answered the driver's questions (2026-09-26 ~18:40 EDT) with "I'll go with
+all of your recommendations": `docs/plans/yojimbo-faithfulness-2026-09-26.md`
+(c728ac8a) P-1 and P-2, and `docs/plans/presentation-program-2026-09-26.md`
+(c0edc5c1) C-1, C-4 and C-7. Each is its own decision in
+`docs/target/decisions.json` (D-222 to D-226); D-222 partly supersedes the Doom
+half of D-056 and D-066 (both marked `partly superseded`, text kept, not deleted,
+per the shared-working-tree rule). None is built yet; each waits on the batch (or
+branch) that owns its files, per §2's shared-working-tree rule.
+
+| Item | Game (rule 14) | Files it touches | Waits on | Acceptance check |
+|---|---|---|---|---|
+| Yojimbo P-1: `cavernDoomPrep` = `not-learned` (D-222, re-opens D-056/D-066) | FFX only (Ch IX, Lady Ginnem's Cavern of the Stolen Fayth) | `src/data/ffx/builds/yojimbo-cavern.ts` (the named switch) | Branch `yojimbo-pick-0926`, not yet merged to `main` | Yojimbo-faithfulness §3.2's bench (200 seeds, real engine) reproduces first-try win rates in the same ballpark as the intended line's 161/200 (≈80%) and 200/200 within five with no pre-loaded Doom; the advisor's separate Gem-based route is unaffected; no Yojimbo-side number (HP, Defense, gauge rates, bands, Zanmato) changes (rule 6). |
+| Yojimbo P-2, option (b): the Doom objective shows as a hidden "???" line (D-223) | FFX only (Ch IX) | `src/data/chapter-meta-yojimbo.ts` and the chapter-card UI that reads its objectives | Batch 4 merge (owns `src/data/chapter-meta-*.ts`) | In a real-key Ch IX run, the "Doom Yojimbo" objective reads "???" until either Doom lands on Yojimbo or the player has lost the fight once on that save/profile, then reveals its real text; the other two objectives (Survive Zanmato, Defeat Yojimbo) are unchanged; a unit test covers the reveal transition. |
+| C-1 phase lighting, option (A), the reduced version (D-224) | Both, canon triggers only (FFX: Flux's Reflect at 50%, the Mortiorchis charge ladder, Yunalesca's forms, Anima, Cid moving the ship; FFX-2: the Mega Flare countdown and the Vegnagun part links) | `src/engine/Renderer.ts`, `src/engine/ScenePalettes.ts`, a phase hook through the Ports | Batch 2 merge | On each listed canon trigger, a real-key capture shows a hand-tuned hue/exposure grade, fog, floor glow and a rim/bounce tint on the cast, tweened over about 1.5s, with no more than 3 flashes per second; the reduce-flashes accessibility tier skips the tween entirely; the approved phase-lighting tile's `after.png` is re-shot to match option (A) before it is called delivered (rule 9). |
+| C-4 pyreflies follow the sources (D-225) | Macalania and Gagazet FFX (Ch III/VIII); Leblanc FFX-2 (Ch VI) | `src/engine/Particles.ts`, `src/scenes/*.ts` (except `farplane.ts`, which waits for `r21-road-phone`) | Batch 2 merge, after A-5's emitter | Macalania's motes by the Chamber door hold until Seymour's death rather than appearing early; Leblanc's room shows no pyreflies (its magenta motes are removed); Gagazet keeps today's snow-and-glitter treatment with no pyreflies added; a per-scene canon-row unit test (A-6) covers all three. |
+| C-7 Trema's victory pose: settle from GameFAQs per D-214 (D-226) | FFX-2 only (Ch XIII, Via Infinito) | The GameFAQs reading itself (research, not code); once recorded it feeds A-4's `victoryPose` port default for Trema in the relevant `src/data/chapter-meta-*.ts` row | The GameFAQs research read (not yet done); then batch 4 merge for the data row | `research/*.md` gains a line, cited to GameFAQs and labelled "our estimate" (rule 6), on whether Trema is a "Via Infinito special boss on first defeat"; until then Trema's `victoryPose` stays at A-4's default, `'pose'`, per the plan's "keep the pose until then." |
+
 ### FFX-2 sourced answers (research ca5bdde3, 2026-09-26)
 
 Commit `ca5bdde3` sourced four FFX-2 questions the Steam session could not reach
