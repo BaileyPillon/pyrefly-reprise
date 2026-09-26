@@ -193,3 +193,16 @@
   transform: scale(var(--tp-zoom, 1));
   transform-origin: top left;
 }
+
+/* PR-0193 (FFX-2 only here): the whole-side label ("ALL ENEMIES" / "ALL
+   ALLIES", `TargetCursor.groupLabelHtml`) lives on the unscaled overlay, so
+   `ffx-hud.css`'s fixed 13 px read the same at 1280x720 and 2560x1440. It now
+   scales with the letterbox (5.6 grid px, 14 px at 1600x900) and never renders
+   under the 14 px floor (CHK-003); the padding keeps its proportions. */
+.ffx2hud .ffx-target__all {
+  padding: max(5px, calc(2px * var(--ffx2-scale, 2.5))) max(16px, calc(6.4px * var(--ffx2-scale, 2.5)))
+    max(6px, calc(2.4px * var(--ffx2-scale, 2.5)));
+}
+.ffx2hud .ffx-target__all span {
+  font-size: max(14px, calc(5.6px * var(--ffx2-scale, 2.5)));
+}
