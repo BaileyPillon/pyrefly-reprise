@@ -28,6 +28,7 @@ import type { AutoStrategy } from '../../engine/BattlePresenter.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
+import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { boardWhenWarm } from './frontendWarm.ts';
@@ -393,6 +394,8 @@ export class GameFlow {
       }
 
       if (outcome.outcome === 'defeat') {
+        // A secret objective row shows from now on (Chapter IX's Doom row, objectiveReveal.ts).
+        noteChapterLost(id);
         // The defeat panel owns the retry decision: `RETRY` re-enters the loop
         // (through the prep menu when there is one), `CHAPTER SELECT` gives up
         // and hands the outcome back to the caller. An automated run never
