@@ -789,6 +789,33 @@
             "undecided": [],
             "inferred": []
           }
+        },
+        {
+          "label": "Accessibility settings: option C, rows plus a first-launch comfort card (both)",
+          "src": "docs/concepts/accessibility-2026-09-26/sheet.jpg",
+          "state": "approved",
+          "delivery": "not-scheduled",
+          "game": "both",
+          "gameNote": "Both: the settings and their runtime effects (text size, motion, flashes, remap) are shared plumbing across the pause screen, SaveData, Input and both games' presenters (CHK-020); the FFX-2 HUD (ffx2hud) still needs its own 130% layout pass.",
+          "note": "docs/concepts/accessibility-2026-09-26/README.md's three options (A rows only, B its own ACCESSIBILITY tab, C A's rows plus a one-time comfort card at first launch); C was recommended because REDUCE FLASHES and TEXT SIZE only fully help when set before the first flash and the first line of dialogue. docs/target/decisions.json D-220. Save-data class (new Settings fields): a deep review before deploy and the CHK-024 upgrade matrix, not a focused-only pass. Not yet built.",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "Yes I’ll go with your recommendations for all",
+            "how": "Bailey, 2026-09-26 ~17:30 EDT, answering the driver's accessibility question together with the FFX Sensor question, one reply.",
+            "liked": [
+              "option C: rows in the pause SETTINGS column, plus a one-time comfort card at the title"
+            ],
+            "disliked": [],
+            "mustRemain": [
+              "all four settings (TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, CONTROLS remap) off by default",
+              "the card appears once, at first launch, and never again"
+            ],
+            "mustChange": [],
+            "undecided": [
+              "the card's exact wording (README question 2) — asked, not yet confirmed word for word"
+            ],
+            "inferred": []
+          }
         }
       ]
     },

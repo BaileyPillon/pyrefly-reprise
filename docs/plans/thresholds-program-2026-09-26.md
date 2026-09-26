@@ -423,6 +423,20 @@ merge to `main` before it can be built there, per the shared-working-tree rule
 | Accessibility build (PR-0032, D-202) | both | Cross-cutting: the options-round UI (batch 3/4 CSS and screens) plus `src/app/SaveData.ts` for the stored settings (unclaimed in §2, same gap as the SFX item above) | The options round (§3 item 5) must run and Bailey must pick first; then whichever batch's files the picked layout falls in, plus SaveData.ts | Save-data class: a deep review before the deploy that ships it (AGENTS.md "Release"), all-off-by-default, and the CHK-024 upgrade matrix confirms an old save boots with every setting off. |
 | Each chapter's own cue (PR-0099, D-209) | each cue keeps its own chapter's game tag (VI, XI, XIII, XV are FFX-2; VII, X, XII, XIV are FFX) | `public/audio/**` (new renders) and `docs/audio/THEMES.md` (batch 5's docs-half rows land first) | The audio direction pick (§3 item 6, "Only after item 6's pick") | `tools/audio/themes-audit.mjs` finds a THEMES.md row and a matching audio file for every listed chapter; no chapter still plays a stand-in cue. |
 
+### Iteration 2, 2026-09-26 ~17:30 EDT: the accessibility pick and the Sensor line
+
+Bailey answered the driver's two follow-up questions with "Yes I'll go with your
+recommendations for all," picking option C for the accessibility options round and
+approving the FFX Sensor-immune help-bar line. Each is its own decision in
+`docs/target/decisions.json` (D-220, D-221) and D-220 also has a target tile
+(`docs/target/targets.json`, group `pause`). Neither is built; both wait on the
+batches that own their files, per the shared-working-tree rule.
+
+| Item | Game (rule 14) | Files it touches | Waits on | Acceptance check |
+|---|---|---|---|---|
+| FFX Sensor-immune help-bar line (D-221, supersedes D-196) | FFX only | `src/ui/ffx/SensorPanel.ts` and its help-bar text; the same file PR-0170 and PR-0180 (§9, `t1-b2a`) already touch | Batch 2's `t1-b2a` merge (no other batch touches `src/ui/ffx/**` meanwhile) | On a Sensor-immune target (e.g. Isaaru, Yojimbo, Daigoro, Mortiphasm, Yu Yevon, Spherimorph per `research/ffx-yojimbo.md` and `research/observed-ffx-steam-2026-09-26.md` §2.3), the panel shows the enemy's name with the caption "Immune to sensors." instead of hiding; a unit test covers at least one such enemy; FFX-2's Trema Sensor immunity is untouched. |
+| Accessibility build, option C (PR-0032, D-220) | both | `src/app/SaveData.ts` (new Settings fields; **unclaimed** in §2, same gap as the SFX item above) for the schema; `src/app/screens/pause/**` (`t1-b3b`) for the SETTINGS column rows and the first-launch comfort card; `pause/keys.ts` (`t1-b4a`) so a remapped key stays out of the pause's raw-key collisions; the title/frontend screen that shows the comfort card (`t1-b3b` / `t1-b4a`); the presenter ports (`BattlePresenterPorts.ts`, batch 2) for REDUCE FLASHES, never the pure presenter (hard rule 1); both games' battle HUDs for TEXT SIZE, including FFX-2's own 130% layout pass (not yet measured, per the README) | `SaveData.ts` needs an owner assigned before it is touched (flag per the SFX row above); then `t1-b3b`, `t1-b4a` and batch 2 merges, in whichever order their files land | Save-data class: a deep review before the deploy that ships it (AGENTS.md "Release") and the CHK-024 upgrade matrix confirm an old save boots with every setting off; all four settings default off; the comfort card shows once at first launch and never again; the FFX-2 HUD holds at 130% without clipping (see `docs/concepts/accessibility-2026-09-26/README.md` "What 130% does"). |
+
 **Note on unclaimed files:** `src/app/SaveData.ts` is not listed under any of the five
 batches in §2. Both the accessibility build and the SFX-per-profile change need it.
 Whoever picks either item up should add it to their batch's ownership list in §2 (or
