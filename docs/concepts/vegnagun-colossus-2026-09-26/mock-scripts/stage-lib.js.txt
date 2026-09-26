@@ -1,0 +1,24 @@
+const P = window.__pyrefly;
+const W = window.__b3 = window.__b3 || { orig: {}, origRigs: null, grades: {}, loop: false };
+W.b = () => P.battle(); W.st = () => P.battle().stage; W.bc = () => P.battle().stage.opts.battleCamera;
+W.act = (id) => W.st().actor(id);
+W.mats = (id) => { const out = []; W.act(id)?.traverse((n) => { if (n.isMesh && n.material?.uniforms?.tint) out.push(n.material); }); return out; };
+W.remember = (id) => { const a = W.act(id); if (a && !W.orig[id]) W.orig[id] = { pos: a.position.toArray(), scale: a.scale.toArray() }; };
+W.place = (id, pos, s, mirror) => { const a = W.act(id); if (!a) return 'no ' + id; W.remember(id); if (pos) a.position.set(...pos); if (s != null) a.scale.set(mirror ? -s : s, s, s); a.updateMatrixWorld(true); return a.position.toArray(); };
+W.restore = () => { for (const [id, o] of Object.entries(W.orig)) { const a = W.act(id); if (a) { a.position.set(...o.pos); a.scale.set(...o.scale); } } W.orig = {}; W.ungrade(); W.bg(1,0); W.ancRestore(); W.ringRestore(); W.ringsOver(false); if (W.origRigs) { for (const [n, r] of Object.entries(W.origRigs)) W.bc().addRig(n, r); } };
+W.rigs = (map) => { const bc = W.bc(); if (!W.origRigs) { W.origRigs = {}; for (const n of bc.rigNames) W.origRigs[n] = bc.getRig(n); } for (const [n, r] of Object.entries(map)) bc.addRig(n, r); };
+W.snap = (n = 'idle') => W.bc().snapTo(n);
+W.uOrig = W.uOrig || {};
+W.grade = (id, g) => { if (!W.uOrig[id]) W.uOrig[id] = W.mats(id).map((m) => ({ m, tint: m.uniforms.tint.value.clone(), d: m.uniforms.desaturate.value, b: m.uniforms.brightness.value, rim: m.uniforms.rimColor.value.clone(), rs: m.uniforms.rimStrength.value })); W.grades[id] = g; };
+W.ungrade = () => { W.grades = {}; for (const arr of Object.values(W.uOrig)) for (const o of arr) { const u = o.m.uniforms; u.tint.value.copy(o.tint); u.desaturate.value = o.d; u.brightness.value = o.b; u.rimColor.value.copy(o.rim); u.rimStrength.value = o.rs; } W.uOrig = {}; };
+if (!W.loop) { W.loop = true; const tick = () => { try { for (const [id, g] of Object.entries(W.grades)) for (const m of W.mats(id)) { const u = m.uniforms; if (g.tint) u.tint.value.setRGB(...g.tint); if (g.desaturate != null) u.desaturate.value = g.desaturate; if (g.brightness != null) u.brightness.value = g.brightness; if (g.cast && u.castColor) { u.castColor.value.setRGB(...g.cast); u.castAmount.value = g.castAmount ?? 0.3; } if (g.rim) { u.rimColor.value.setRGB(...g.rim); u.rimStrength.value = g.rimStrength ?? 0.5; } } } catch (e) { W.err = String(e); } requestAnimationFrame(tick); }; requestAnimationFrame(tick); }
+W.proj = () => { const st = W.st(); const o = {}; for (const id of st.staged()) { const r = st.projectRect(id); o[id] = r ? [r.x | 0, r.y | 0, (r.x + r.w) | 0, (r.y + r.h) | 0] : null; } return { rects: o, rings: st.partRingSnapshot().map((r) => [r.id, r.visible, r.at.map((v) => +v.toFixed(2))]), rig: W.bc().rigName }; };
+W.bgNames = ['backdrop-painting','backdrop-layer-0','backdrop-layer-1','farplane-haze','mist-0','mist-1'];
+W.bg = (k, dy = 0) => { const sc = W.st().opts.scene; W.bgOrig = W.bgOrig || {}; sc.traverse((n) => { if (n.isMesh && W.bgNames.includes(n.name)) { if (!W.bgOrig[n.name]) W.bgOrig[n.name] = { s: n.scale.toArray(), y: n.position.y }; const o = W.bgOrig[n.name]; n.scale.set(o.s[0] * k, o.s[1] * k, o.s[2]); n.position.y = o.y + dy; } }); return Object.keys(W.bgOrig); };
+W.anc = () => W.st().opts.slots.partAnchors;
+W.anchor = (id, patch) => { const a = W.anc()[id]; if (!a) return 'no ' + id; W.ancOrig = W.ancOrig || {}; if (!W.ancOrig[id]) W.ancOrig[id] = JSON.parse(JSON.stringify(a)); Object.assign(a, JSON.parse(JSON.stringify(patch))); return a; };
+W.ancRestore = () => { for (const [id, o] of Object.entries(W.ancOrig || {})) { const a = W.anc()[id]; for (const k of Object.keys(a)) delete a[k]; Object.assign(a, o); } W.ancOrig = {}; };
+W.ringScale = (k) => { const pr = W.st().partRings; W.ringOrig = W.ringOrig || new Map(); for (const [id, e] of pr.rings) { if (!W.ringOrig.has(id)) W.ringOrig.set(id, e.mesh.geometry); const g0 = W.ringOrig.get(id); const p = g0.parameters; e.mesh.geometry = new g0.constructor(p.innerRadius * k, p.outerRadius * k, 48); } return pr.rings.size; };
+W.ringRestore = () => { if (!W.ringOrig) return; const pr = W.st().partRings; for (const [id, e] of pr.rings) if (W.ringOrig.has(id)) e.mesh.geometry = W.ringOrig.get(id); W.ringOrig = new Map(); };
+W.ringsOver = (on) => { for (const [, e] of W.st().partRings.rings) e.mesh.renderOrder = on ? 11 : 7; };
+return Object.keys(W);

@@ -1,0 +1,171 @@
+# B3 Vegnagun colossus options: compose phone-readable sheets and 6 s clips from the real-engine captures.
+import json, os, subprocess
+from PIL import Image, ImageDraw, ImageFont
+
+V1 = 'D:/Tools/pyrefly-scratch/b3/out'      # link 1 (tail): first capture run, whole party standing
+V2 = 'D:/Tools/pyrefly-scratch/b3-v2/out'   # links 2-4: second run (stronger C grade)
+OUT = 'D:/Final Fantasy/docs/concepts/vegnagun-colossus-2026-09-26'
+TMP = 'D:/Tools/pyrefly-scratch/b3-v2/clipframes'
+FFMPEG = 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe'
+os.makedirs(OUT, exist_ok=True)
+
+F = 'C:/Windows/Fonts/'
+def font(n, s): return ImageFont.truetype(F + n, s)
+BOLD, REG, ITAL = 'segoeuib.ttf', 'segoeui.ttf', 'segoeuii.ttf'
+INK, PAPER, GOLD, PINK, GREY = (16, 12, 24), (246, 242, 234), (227, 185, 74), (244, 155, 184), (170, 164, 186)
+
+LINKS = [('1', 'tail', 'Link 1 · Tail'), ('2', 'leg', 'Link 2 · Leg + Nodes'), ('3', 'body', 'Link 3 · Body + Bulwarks'), ('4', 'head', 'Link 4 · Head + Redoubts')]
+OPTS = [('today', 'TODAY (live)'), ('C', 'C · today\'s scale + unifying grade'), ('A', 'A · part-scale staging'), ('B', 'B · A + unified repaint (PLACEHOLDER)')]
+SHORT = {'today': 'TODAY', 'C': 'OPTION C', 'A': 'OPTION A', 'B': 'OPTION B'}
+
+def src(vp, n, name, opt, kind='menu'):
+    base = V1 if n == '1' else V2
+    return f'{base}/{vp}-{n}-{name}-{opt}-{kind}.png'
+
+def tag(im, text, sub=None, big=False, color=GOLD):
+    d = ImageDraw.Draw(im)
+    f = font(BOLD, 30 if big else 17)
+    x, y = 8, 8
+    w = d.textlength(text, font=f)
+    d.rectangle([x, y, x + w + 16, y + (42 if big else 26)], fill=INK)
+    d.rectangle([x, y, x + 4, y + (42 if big else 26)], fill=color)
+    d.text((x + 10, y + 1), text, font=f, fill=PAPER)
+    if sub:
+        fs = font(BOLD, 22 if big else 13)
+        ws = d.textlength(sub, font=fs)
+        yy = y + (46 if big else 29)
+        d.rectangle([x, yy, x + ws + 16, yy + (30 if big else 19)], fill=(120, 20, 40))
+        d.text((x + 8, yy + 1), sub, font=fs, fill=PAPER)
+    return im
+
+def placeholder(im, big=False):
+    return tag(im, '', None) if False else im
+
+def frame(vp, n, name, opt, w, kind='menu', crop=None, label=True, big=False):
+    im = Image.open(src(vp, n, name, opt, kind)).convert('RGB')
+    if crop: im = im.crop(crop)
+    h = round(im.height * w / im.width)
+    im = im.resize((w, h), Image.LANCZOS)
+    if label:
+        sub = 'PLACEHOLDER GRADE, stands in for repaint ART-6' if (opt == 'B' and name != 'tail') else ('Tail A kept as picked' if opt == 'B' else None)
+        tag(im, SHORT[opt] + ' · ' + [l[2] for l in LINKS if l[0] == n][0], sub, big=big)
+    return im
+
+def header(width, title, lines, h):
+    im = Image.new('RGB', (width, h), INK)
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, h - 4, width, h], fill=GOLD)
+    d.text((24, 14), title, font=font(BOLD, 34), fill=PAPER)
+    y = 62
+    for ln in lines:
+        col, fnt = (GREY, font(REG, 20)) if not ln.startswith('"') else (PINK, font(ITAL, 20))
+        d.text((24, y), ln, font=fnt, fill=col); y += 28
+    return im
+
+def save(im, name, q=84):
+    p = f'{OUT}/{name}'
+    while True:
+        im.save(p, quality=q, optimize=True, progressive=True)
+        if os.path.getsize(p) < 1_000_000 or q < 50: break
+        q -= 6
+    print(name, im.size, os.path.getsize(p) // 1024, 'KB q', q)
+
+QUOTE1 = '"It is so large that no single camera frame ever contains it; the player fights a leg that fills the screen,'
+QUOTE2 = '"then a tail, then a chest, then a cannon-headed skull."  (research/visual-bible.md §1.18, our art-direction note)'
+GAME = 'FFX-2 only · Chapter V · real-engine frames (scratch worktree off main, no src/ change) · existing paintings only'
+
+# 01: overview grid, desk
+cw = 400
+rows = []
+for n, name, lab in LINKS:
+    row = Image.new('RGB', (cw * 4, 225))
+    for i, (o, _) in enumerate(OPTS):
+        row.paste(frame('desk', n, name, o, cw), (i * cw, 0))
+    rows.append(row)
+hd = header(1600, 'B3 · Vegnagun as a colossus · 1600x900, links 1-4', [GAME, 'Columns: TODAY · C · A · B.  Rows: link 1 Tail, 2 Leg, 3 Body, 4 Head.', QUOTE1, QUOTE2], 190)
+sheet = Image.new('RGB', (1600, 190 + 225 * 4), INK)
+sheet.paste(hd, (0, 0))
+for i, r in enumerate(rows): sheet.paste(r, (0, 190 + i * 225))
+save(sheet, '01-compare-1600.jpg')
+
+# 02-04: one sheet per option, 2x2 at 800x450
+NOTES = {
+    'A': ['Part-scale staging: each part is rescaled and moved so it fills the frame; the girls stand small at lower left.',
+          'Camera per link: a low master looking up (fov 40) replaces today\'s level master. Parts are 4 to 6 times a girl\'s height.'],
+    'B': ['A\'s staging with one material across head, body and leg. The dark grade here is a STAND-IN: the real option is',
+          'repaint job ART-6 (head, body, leg as one dark locust/moth machine; Tail A stays). No new art was rendered for this round.'],
+    'C': ['Today\'s staging and camera, with a cool grade and violet rim on each part to pull the four paintings together.',
+          'Part rings drawn over the paintings. Parts stay 1 to 1.7 times a girl\'s height.'],
+}
+for k, (o, title) in enumerate([('A', 'Option A · part-scale staging'), ('B', 'Option B · A + unified repaint (placeholder grade)'), ('C', 'Option C · today\'s scale + unifying grade')]):
+    hd = header(1600, title + ' · 1600x900', NOTES[o], 128)
+    sheet = Image.new('RGB', (1600, 128 + 900), INK)
+    sheet.paste(hd, (0, 0))
+    for i, (n, name, lab) in enumerate(LINKS):
+        sheet.paste(frame('desk', n, name, o, 800), ((i % 2) * 800, 128 + (i // 2) * 450))
+    save(sheet, f'0{k + 2}-option-{o}-1600.jpg')
+
+# 05: rings and plates on target (links 3 and 4)
+hd = header(1600, 'Rings and plates in place · target cursor on the Left Bulwark (link 3) and the Left Redoubt (link 4)',
+            ['D-044 C* rings on the parent paintings; the name plate appears on the targeted part. In A and B the rings scale with the part.'], 100)
+sheet = Image.new('RGB', (1600, 100 + 450), INK)
+sheet.paste(hd, (0, 0))
+for i, (o, _) in enumerate(OPTS):
+    sheet.paste(frame('desk', '3', 'body', o, 400, kind='target'), (i * 400, 100))
+    sheet.paste(frame('desk', '4', 'head', o, 400, kind='target'), (i * 400, 325))
+save(sheet, '05-rings-plates-targeted-1600.jpg')
+
+# 06: phone compare (stage region only), 4 links x 4 options
+pw, crop = 240, (0, 0, 390, 560)
+ph = round(560 * pw / 390)
+hd = header(960, 'Phone 390x844 · links 1-4', ['Columns TODAY · C · A · B (stage crop, top 560 px).', 'Today and C lose the part off the right edge.'], 120)
+sheet = Image.new('RGB', (960, 120 + ph * 4), INK)
+sheet.paste(hd, (0, 0))
+for r, (n, name, lab) in enumerate(LINKS):
+    for c, (o, _) in enumerate(OPTS):
+        im = Image.open(src('phone', n, name, o)).convert('RGB').crop(crop).resize((pw, ph), Image.LANCZOS)
+        d = ImageDraw.Draw(im); f = font(BOLD, 14)
+        t = SHORT[o] + ' · L' + n + (' · PLACEHOLDER' if o == 'B' and name != 'tail' else '')
+        d.rectangle([0, ph - 22, d.textlength(t, font=f) + 12, ph], fill=INK); d.text((6, ph - 21), t, font=f, fill=PAPER)
+        sheet.paste(im, (c * pw, 120 + r * ph))
+save(sheet, '06-phone-compare-390.jpg')
+
+# 07: option A on phone, full frames
+hd = header(1560, 'Option A on a phone · 390x844 full frames, links 1-4', ['The part fills the stage above the HUD; the girls stay readable at about 90 px tall.'], 100)
+sheet = Image.new('RGB', (1560, 100 + 844), INK)
+sheet.paste(hd, (0, 0))
+for i, (n, name, lab) in enumerate(LINKS):
+    im = Image.open(src('phone', n, name, 'A')).convert('RGB')
+    sheet.paste(im, (i * 390, 100))
+save(sheet, '07-option-A-phone-390.jpg')
+
+# clips: 4 links x 1.5 s camera push, 30 fps -> 6 s per option per viewport
+def clip(vp, o):
+    d = f'{TMP}/{vp}-{o}'
+    os.makedirs(d, exist_ok=True)
+    k = 0
+    for n, name, lab in LINKS:
+        base = V1 if n == '1' else V2
+        cdir = f'{base}/clip-{vp}-{o}-{n}'
+        meta = json.load(open(cdir + '/frames.json'))
+        t0 = meta[0]['t'] + 150
+        for j in range(45):
+            t = t0 + j * 1000 / 30
+            best = min(meta, key=lambda m: abs(m['t'] - t))
+            im = Image.open(cdir + '/' + best['n']).convert('RGB')
+            if vp == 'desk':
+                sub = 'PLACEHOLDER GRADE, stands in for repaint ART-6' if (o == 'B' and name != 'tail') else None
+                tag(im, SHORT[o] + ' · ' + lab, sub, big=True)
+            else:
+                dr = ImageDraw.Draw(im); f = font(BOLD, 15)
+                t1 = SHORT[o] + ' · L' + n + (' · PLACEHOLDER' if o == 'B' and name != 'tail' else '')
+                dr.rectangle([0, 470, dr.textlength(t1, font=f) + 14, 494], fill=INK); dr.text((7, 471), t1, font=f, fill=PAPER)
+            im.save(f'{d}/{k:04d}.jpg', quality=92); k += 1
+    outp = f'{OUT}/clip-{o}-{"1600" if vp == "desk" else "390"}.mp4'
+    crf = '24' if vp == 'desk' else '22'
+    subprocess.run([FFMPEG, '-y', '-loglevel', 'error', '-framerate', '30', '-i', f'{d}/%04d.jpg', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', crf, '-preset', 'slow', '-movflags', '+faststart', outp], check=True)
+    print(os.path.basename(outp), os.path.getsize(outp) // 1024, 'KB')
+
+for vp in ['desk', 'phone']:
+    for o in ['A', 'B', 'C']:
+        clip(vp, o)

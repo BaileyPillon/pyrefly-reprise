@@ -1,0 +1,91 @@
+// agent scratch (B3 options v2, stronger C grade): drive a running zz-b3-repl through Ch5 links 1-4 and shoot today / C / A / B.
+// node tools/zz-b3-drive.tmp.mjs <replPort> <desk|phone> <outDir>
+import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+const [rport, vp, out] = process.argv.slice(2);
+const R = `http://127.0.0.1:${rport}`;
+const post = async (path, body = '') => { const r = await fetch(R + path, { method: 'POST', body }); const j = await r.json(); if (!j.ok) throw new Error(path + ' ' + JSON.stringify(j).slice(0, 600)); return j; };
+const ev = (js) => post('/eval', js);
+const shot = (p) => post('/shot?path=' + encodeURIComponent(p));
+const key = (k) => post('/key?k=' + encodeURIComponent(k));
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+mkdirSync(out, { recursive: true });
+const lib = readFileSync('D:/Tools/pyrefly-scratch/b3/lib.js', 'utf8');
+
+const TODAY = { idle: { position: [0, 2.7, 9.8], lookAt: [0.5, 1.45, -1.4], fov: 32, sway: 1 }, push: { position: [0.2, 2.45, 8.0], lookAt: [0.7, 1.6, -1.4], fov: 32, sway: 1 } };
+const CAM = {
+  desk: { idle: { position: [1.2, 1.15, 14.5], lookAt: [1.8, 3.4, -4], fov: 40, sway: 0.6 }, push: { position: [1.35, 1.0, 12.0], lookAt: [1.9, 3.9, -4], fov: 40, sway: 0.6 } },
+  phone: { idle: { position: [1.9, 1.15, 14.5], lookAt: [2.5, 3.6, -4], fov: 40, sway: 0.6 }, push: { position: [2.0, 1.0, 12.2], lookAt: [2.6, 4.1, -4], fov: 40, sway: 0.6 } },
+}[vp];
+const PART = {
+  desk: { 'vegnagun-tail': [[-5.0, -1.4, -17], 5.6, false], 'vegnagun-leg': [[3.2, 0, -12], 5.5, false], 'vegnagun-body': [[-4.6, 0, -16], 4.3, false], 'vegnagun-head': [[13.5, 1.6, -15], 4.8, true] },
+  phone: { 'vegnagun-tail': [[-7.5, -0.6, -17], 3.9, false], 'vegnagun-leg': [[0.6, 0, -12], 4.6, false], 'vegnagun-body': [[-4.6, 0, -16], 2.7, false], 'vegnagun-head': [[5.5, 1.2, -15], 3.6, true] },
+}[vp];
+const GRADE_C = { tint: [0.7, 0.7, 0.84], desaturate: 0.62, brightness: 0.9, rim: [0.86, 0.66, 1], rimStrength: 0.9 };
+const GRADE_B = { tint: [0.52, 0.5, 0.66], desaturate: 0.82, brightness: 0.82, rim: [0.82, 0.6, 1], rimStrength: 1.0 };
+const LINKS = [['tail', 'vegnagun-tail', null], ['leg', 'vegnagun-leg', null], ['body', 'vegnagun-body', 'bulwark-l'], ['head', 'vegnagun-head', 'redoubt-l']];
+
+async function apply(opt, part) {
+  let js = `const W=__b3; W.restore(); W.grades={};`;
+  if (opt === 'today') js += `W.rigs(${JSON.stringify(TODAY)});`;
+  if (opt === 'C') js += `W.rigs(${JSON.stringify(TODAY)}); W.grade('${part}', ${JSON.stringify(GRADE_C)}); W.ringsOver(true);`;
+  if (opt === 'A' || opt === 'B') {
+    const [pos, s, mir] = PART[part];
+    js += `W.rigs(${JSON.stringify(CAM)}); W.bg(1.8, 6); W.place('${part}', ${JSON.stringify(pos)}, ${s}, ${mir}); W.ringScale(${s}); W.ringsOver(true);`;
+    if (part === 'vegnagun-leg') js += `W.anchor('node-a',{offset:[6,40,-4]}); W.anchor('node-b',{offset:[10,46,0]}); W.anchor('node-c',{offset:[6,40,4]});`;
+    if (part === 'vegnagun-body') js += `W.anchor('bulwark-r',{px:[160,700],ring:{radius:0.55,ground:false}}); W.anchor('bulwark-l',{px:[1110,700],ring:{radius:0.55,ground:false}});`;
+    if (opt === 'B' && part !== 'vegnagun-tail') js += `W.grade('${part}', ${JSON.stringify(GRADE_B)});`;
+  }
+  js += `W.snap('idle'); await __pyrefly.frames(14); return W.proj();`;
+  return (await ev(js)).r;
+}
+
+async function goLink(id, first) {
+  if (first) {
+    await ev(`const P=window.__pyrefly; P.setSeed(1); P.gotoChapter('ffx2-vegnagun-shuyin',{skipCutscenes:true,auto:'intended',speed:'skip'}); return 1`);
+    await sleep(2500);
+  } else {
+    await ev(`const b=__pyrefly.battle(); b.setPresenterPaused(false); b.battlePresenter.setAutoPlay((...a)=>null); __pyrefly.autoBattle('intended'); b.battlePresenter.setSpeed('skip'); return 1`);
+  }
+  await post('/wait', `(() => { const b = window.__pyrefly.battle(); if (!b?.stage || !b.battlePresenter || !b.stage.staged().includes('${id}')) return false; b.battlePresenter.setAutoPlay(null); b.battlePresenter.setSpeed('normal'); return true; })()`);
+  await post('/wait', `(() => { const s = document.querySelector('.ffx2hud__command'); return s && s.getBoundingClientRect().height > 20; })()`);
+  await ev(`__pyrefly.battle().setPresenterPaused(true); return 1`);
+  await ev(lib);
+  await sleep(2200); // let the turn cut-in and banners clear
+}
+
+const report = { vp, links: {} };
+for (let i = 0; i < LINKS.length; i++) {
+  const [name, id, ringId] = LINKS[i];
+  await goLink(id, i === 0);
+  if (i === 0 && vp === 'desk') { for (const k of ['g', 'n', 'e']) { await key(k); await sleep(250); } await sleep(600); }
+  report.links[name] = {};
+  for (const opt of ['today', 'C', 'A', 'B']) {
+    const p = await apply(opt, id);
+    await sleep(500);
+    await shot(`${out}/${vp}-${i + 1}-${name}-${opt}-menu.png`);
+    report.links[name][opt] = { menu: p };
+    if (ringId) {
+      await key('Enter'); await sleep(500);
+      for (let k = 0; k < 6; k++) { const sel = (await ev(`return __pyrefly.targeting().selectedIds`)).r; if (sel.includes(ringId)) break; await key('ArrowRight'); await sleep(350); }
+      await sleep(400);
+      await shot(`${out}/${vp}-${i + 1}-${name}-${opt}-target.png`);
+      report.links[name][opt].target = (await ev(`return {sel: __pyrefly.targeting().selectedIds, proj: __b3.proj()}`)).r;
+      await key('Escape'); await sleep(400);
+    }
+  }
+  // clips: one 1.5 s camera push per option on this link
+  for (const opt of ['C', 'A', 'B']) {
+    await apply(opt, id);
+    await sleep(300);
+    await post('/cast/start');
+    await sleep(150);
+    await ev(`__b3.bc().moveTo('push', 1500); return 1`);
+    await sleep(1650);
+    const c = await post('/cast/stop?dir=' + encodeURIComponent(`${out}/clip-${vp}-${opt}-${i + 1}`));
+    report.links[name]['clip' + opt] = c.n;
+  }
+  await ev(`__b3.restore(); __b3.snap('idle'); return 1`);
+  console.log('done link', name);
+}
+writeFileSync(`${out}/${vp}-report.json`, JSON.stringify(report, null, 1));
+console.log('ALL DONE');
