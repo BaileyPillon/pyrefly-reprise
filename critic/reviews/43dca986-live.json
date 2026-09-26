@@ -1,0 +1,69 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-26T15:33:18.000Z",
+  "build": {
+    "mainSha": "43dca986",
+    "bundle": "D56B92vC",
+    "artifactHash": "218b36a4aed2b90a66ae4fd38e5acc3baf79079c31d6e5841a5def9a472f1a34"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/43dca986.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/b975397b.json -> result PASS, liveManifest match, checked 47, mismatched 0, missing 0, wrongType 0, errors 0. Because the marker's planned review is deep, repeated with --full: result PASS, liveManifest match, checked 1071, mismatched 0, missing 0, wrongType 0, errors 0."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu (real-GPU launch args from tools/browser-mode.mjs; no black-canvas fallback needed), fresh incognito context, 1600x900, script .zz-live-smoke-43dca986.tmp.mjs (two fresh-load runs, one per changed chapter). Cache-busted load of https://baileypillon.github.io/pyrefly-reprise/?cb=<ts>. Real click on the title confirm plus real Enters reached chapter-select (screen()==='chapter-select', asserted). chapters() lists ffx2-den-of-woe (Chapter XV) after ffx2-trema (Chapter XIII), and its card text 'Den of Woe' is present on the screen. Real select+confirm on ffx2-den-of-woe entered a cutscene directly (no separate party-prep screen, matching the shipped pick 'Den: both, drop the prep'); a real 2.5s Enter hold (the game's documented hold-to-skip binding) advanced past the cutscene to battle, where the FFX-2 command menu ('.ig-cmd-stack [data-idx]') appeared and was asserted present before proceeding. Fresh reload, then real select+confirm on braskas-final-aeon (Chapter III), real held-Enter skipped its cutscene, reached battle with the command menu asserted present before capture. Real click on the enemy-intent toggle revealed the panel: 'Braska's Final Aeon - Left-Arm Strike - Most likely 92% - Yuna 2,334-2,635 (49% HP, 77% to hit)', confirming the victim-list-with-odds shape (PR-0153/PR-0123/PR-0207). Positive path: real click on the first command row (Talk) fired. Cancel/pause path: real Escape opened the pause overlay (overlayDepth 1) and a second real Escape resumed to battle (overlayDepth 0, screen stayed 'battle', never exited to chapter-select or title). Real H press before/after left the same panel count (77) both times (nothing further to hide at that moment; H toggle itself round-tripped). Music: audioDebug() showed playing:'boss-jecht' with prerendered.manifest===true, prerendered.sprite===true, prerendered.spriteDecoded===true (not the procedural synth fallback). Console errors and HTTP >=400 responses were counted for the whole run (both chapters, all asset/audio/font requests): 0 and 0.",
+      "reason": null,
+      "reusedFrom": "critic/reviews/43dca986-focused.json (CHK-022 evidence: braskas-final-aeon-win-s1 screenshots showing the advisor card and target-plate letter 'Slow -> Yu Pagoda B', and the ffx2-den-of-woe-win screenshots showing LV 54/56/58 + Hero Drink x3 prep)",
+      "dependencyArgument": "Same commit 43dca986, same production bundle D56B92vC, no code or asset change between the focused pass (15:10) and this deploy/live pass (15:13-15:33); the live turn observed in this pass had not yet reached the duplicate-Yu-Pagoda phase, so the letter itself was not re-derived live and is reused instead of re-asserted."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight pass only, on the Chapter III session from the same run as CHK-016: one setting (masterVolume) was changed directly on the save object in localStorage (the slider is not exposed to a headless run) while real progress already existed on both played chapters (ffx2-den-of-woe.attempts=1, braskas-final-aeon.attempts=1, non-zero playTimeMs on each). page.reload() was performed. After reload, the full settings object read back identical to what was written, and both chapters' attempts and playTimeMs were unchanged from before the reload. Both the changed setting and the existing progress survived a real reload.",
+      "reason": "Full upgrade-path matrix (fresh player, returning player, a fixture from the previous live build migrating forward, invalid/truncated storage, and reload during every allowed state) was NOT tested; out of scope for this lightweight live pass per the task."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact-artifact manifest verify-live against the previous build b975397b, both diff mode (47 files) and --full mode (1071 files) because the build's planned review is deep (CHK-017)",
+      "real-input boot: title -> chapter-select via a real click and real Enters",
+      "chapter-select lists Chapter XV, the Den of Woe (ffx2-den-of-woe), after Chapter XIII",
+      "entering Chapter XV via real select+confirm; confirmed no separate party-prep screen (matches the shipped 'drop the prep' pick)",
+      "real hold-Enter cutscene skip (the game's documented hold-to-skip binding) reaching a real player turn on Chapter XV, command menu asserted present before proceeding",
+      "entering Chapter III via real select+confirm, real hold-Enter cutscene skip, reaching a real player turn with the command menu asserted present before capture",
+      "enemy intent panel real-click reveal, showing a victim with odds and a damage range for the enemy's next move (PR-0153/PR-0123/PR-0207 shape)",
+      "positive path (real click on a command row) and cancel path (Escape opens pause, second Escape resumes, battle never exited) on the Chapter III player turn",
+      "pause and resume via Escape, and H press round-trip on the pause panels",
+      "prerendered music confirmed playing (not the synth fallback) via audioDebug()",
+      "reload smoke: one real setting change and existing real progress on two chapters both survive a reload",
+      "console errors and HTTP >=400 responses counted for the whole run"
+    ],
+    "reused": [
+      "Chapter III advisor-card and target-plate letter for the duplicate Yu Pagoda A/B enemies (PR-0208), and Chapter XV's LV 54/56/58 + Hero Drink x3 prep values, from critic/reviews/43dca986-focused.json's CHK-022 evidence on the same candidate bundle -- this pass's Chapter III turn had not yet reached the duplicate-Yu-Pagoda phase and Chapter XV has no on-screen prep UI to re-read the numbers from"
+    ],
+    "notTested": [
+      "full CHK-024 upgrade matrix (fresh player, returning player, previous-build save fixture migrating forward, invalid/truncated storage, reload during every allowed state)",
+      "the Zombie-guard advisor fix (PR-0198: never aim an HP restorative at a living Zombie) on the live site directly -- reused from the focused review, which reproduced it on the identical candidate bundle",
+      "the other listed FFX chapters (I, II) and the remaining FFX-2 chapters (Bahamut, Vegnagun/Shuyin, Trema, Leblanc, Fallen Aeons, Omnis, Natus, Isaaru) played end to end on the live site in this pass -- only exact-artifact identity covers them here",
+      "phone/touch layout (390x844) on this pass",
+      "physical device, Safari or real-controller input",
+      "the deep review of every affected chapter and system, which remains a separate open obligation on this build (critic/pending/43dca986.json)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 20
+}
