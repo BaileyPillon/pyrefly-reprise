@@ -185,11 +185,12 @@ export function slideFeather(frameW: number): number {
 }
 
 /**
- * The CSS mask that feathers a slid plate's uncovered edges into the falloff,
- * or `''` when no page shows. One gradient per uncovered edge, intersected
- * (`.pause__plate--slid`). The stage applies it to a slid plate only
- * ({@link FramedBox.slid}): a plate the search framed is never masked, even
- * where it leaves page uncovered for another reason (the 4K magnify cap).
+ * The CSS mask that feathers a plate's uncovered edges into the falloff, or
+ * `''` when no page shows. One gradient per uncovered edge, intersected
+ * (`.pause__plate--slid`, `.pause__plate--capped`). The stage applies it to a
+ * slid plate ({@link FramedBox.slid}) and, since PR-0121, to a plate that
+ * leaves page uncovered for another reason (the 4K magnify cap) — either way
+ * the edge is feathered rather than cut flat.
  *
  * With `face`, each fade ends before the face begins (at rest; the push-in
  * scales the mask with the plate), so the feather never dims an eye or a chin.

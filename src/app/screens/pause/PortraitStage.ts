@@ -39,7 +39,7 @@ import { coverSourceWidth, pauseFocal } from '../../../ui/common/chapterPanel.ts
 import { framePlate, framingFor, type PlateFraming } from './plates.ts';
 import { FACE_BOXES, type Rect } from './faceClear.ts';
 import { FaceFramer } from './faceFramer.ts';
-import { slideMask } from './faceSlide.ts';
+import { emptyEdges, slideMask } from './faceSlide.ts';
 import { chromeFor, type StackHost } from './faceStack.ts';
 import '../../../ui/common/pause-slide.css';
 
@@ -178,8 +178,18 @@ export class PortraitStage {
     img.style.height = `${box.height.toFixed(1)}px`;
     // Option B (faceSlide): only a plate slid under the falloff feathers the page
     // it uncovers, and never into its face.
-    const mask = box.slid ? slideMask(box, w, h, FACE_BOXES[id]) : '';
-    img.classList.toggle('pause__plate--slid', mask !== '');
+    //
+    // PR-0121: at very large windows (3840x2160) `framePlate`'s own magnify
+    // cap (never stretch a master past 1.25x) can leave the frame short of
+    // full cover on its own, with no slide involved — the hard edge Bailey
+    // saw as a black band. That is the same "page shows past the plate's
+    // edge" shape `slideMask` already solves for a slid plate, so an
+    // uncovered-but-not-slid box is feathered the same way instead of left as
+    // a flat cut.
+    const capped = !box.slid && Object.values(emptyEdges(box, w, h)).some((v) => v > 0);
+    const mask = box.slid || capped ? slideMask(box, w, h, FACE_BOXES[id]) : '';
+    img.classList.toggle('pause__plate--slid', !!box.slid && mask !== '');
+    img.classList.toggle('pause__plate--capped', capped && mask !== '');
     if (mask) img.style.setProperty('--pu-slide-mask', mask);
     else img.style.removeProperty('--pu-slide-mask');
   }
