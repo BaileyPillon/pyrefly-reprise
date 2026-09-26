@@ -1,0 +1,658 @@
+{
+ "note": "Pose round 2 queue order (FFX-2 only): the Chapter XIII line-up first, then the slots worn at a live chapter start (IV-VI), then one link, then two links. One entry per slot the judges FAILED (the two JUDGE.md files). try a = cand 1-4; when my look fails a slot, try b = cand 5-8 with the tweak written in `b`; a slot that fails b stops (rule 15). skel/tags = the skeleton and tag key when not the pose itself; cn = OpenPose strengths.",
+ "order": [
+  {
+   "id": "yuna-dark-knight",
+   "pose": "cast",
+   "answer": "giant curved slab, cyan eyes, orange top and bare midriff, odd stockings, residue: sword named plain 'dark blue sword' (weight off), (blue breastplate), covered midriff and heterochromia weighted; bare midriff, orange top, curved/giant sword, red legwear negated; head factor 0.95",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "yuna-dark-knight",
+   "pose": "ko",
+   "answer": "helm became a cowl, thighhighs gone, blade residue under the legs: helm words 'teal helmet with blue crest', cowl/hood/hat negated, (pink thighhighs) weighted, 'sword beside her' not under her; ko skeleton 0.72 centred for margin",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "yuna-dark-knight",
+   "pose": "victory",
+   "answer": "sun-hat helm, both eyes green, no pauldrons, red stocking, blade cut by the top edge: victory-low skeleton (sword planted point-down, hand on hip) so the blade cannot reach the top; hat/cap/brim negated; pauldrons, heterochromia, thighhighs weighted",
+   "enabled": true,
+   "try": "b",
+   "skel": "victory-low",
+   "tags": "victory-low",
+   "b": {
+    "extra": "(full armor:1.2), (blue shoulder armor:1.2), (armored breastplate:1.2), armored gauntlets, (dark blue greatsword:1.1)",
+    "negx": "sailor collar, school uniform, thin sword, katana, bare arms",
+    "why": "armour lost in all four frames of try a: the armour words weighted, sailor/thin-sword negated"
+   },
+   "stopped": true
+  },
+  {
+   "id": "paine-dark-knight",
+   "pose": "cast",
+   "answer": "red winged cape 40% of the silhouette, blue spiked second weapon, bob with no crest: (black cape) + red lining, red/winged/large cape negated; single-weapon tags; swept-back hair + spiked crest, bob cut negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-dark-knight",
+   "pose": "ko",
+   "answer": "content on three canvas edges, blade off the corner, legs heaped: ko skeleton 0.72 centred, 'sword beside her', sword under body negated, armored legs named",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-dark-knight",
+   "pose": "victory",
+   "answer": "poleaxe, silver ponytail, sheer tights: victory-low skeleton (sword point-down at her side), axe/poleaxe/halberd/crescent blade, ponytail/long hair, tights/pantyhose negated, armored legs named",
+   "enabled": true,
+   "try": "a",
+   "skel": "victory-low",
+   "tags": "victory-low"
+  },
+  {
+   "id": "rikku-alchemist",
+   "pose": "attack",
+   "answer": "threw toward screen-left, leg strips gone, dripping bulb flask: OpenPose raised to 0.8-0.9 so the right-facing skeleton holds; 'facing right' tag, facing left/looking back negated; leg strips weighted 1.2; dripping and orange flask negated",
+   "enabled": true,
+   "try": "a",
+   "cn": [
+    0.85,
+    0.9,
+    0.8,
+    0.9
+   ]
+  },
+  {
+   "id": "rikku-alchemist",
+   "pose": "ko",
+   "answer": "legs a shapeless blob, red streaks read as blood: ko skeleton 0.72 (limbs further apart relative to the frame), blood/injury/red streaks negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-warrior",
+   "pose": "attack",
+   "answer": "exploded mane, red boots, plain red blade on a blue katana grip: (black thigh boots:1.3), swept-back hair + crest, (ornate red longsword) + winged crossguard; red boots, katana, blue grip, messy hair negated; head factor 0.94",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(thrusting sword forward:1.2), sword pointing forward, blade level with her arms, (longsword:1.1)",
+    "negx": "sword pointing down, vertical sword, long handle, long grip, pommel ring, pink blade, plain blade, red knee guards, sword longer than her body",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.95
+    ],
+    "identitySwap": [
+     [
+      "(swept back hair:1.1), spiked crest",
+      "(swept back hair:1.3), (spiked hair crest:1.2)"
+     ]
+    ],
+    "why": "c1 swings a plain pink blade on a pole grip; c4 has the right sword but holds it vertical; the other two crossed the edges. Make the blade point forward along the lunge, shorten it, and push the crest hair."
+   }
+  },
+  {
+   "id": "paine-warrior",
+   "pose": "cast",
+   "answer": "detached red blade floating at her hip, one red boot, spiky hair, small figure: single weapon, floating/broken sword negated, black boots weighted, head factor 0.94 on a skeleton grounded higher",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(empty raised hand:1.2), open palm, (holding sword in lowered hand:1.2), sword pointing down at her side",
+    "negx": "raised sword, sword above head, holding sword up, floating sword, sword behind her, skulls, blue heels, blue footwear",
+    "cn": [
+     0.8,
+     0.85,
+     0.8,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(swept back hair:1.1), spiked crest",
+      "(swept back hair:1.3), (spiked hair crest:1.2)"
+     ]
+    ],
+    "why": "The sword floats or is raised in the cast hand in all four; the paine-dark-knight cast precedent failed a sword raised in the cast hand."
+   }
+  },
+  {
+   "id": "paine-warrior",
+   "pose": "item",
+   "answer": "one boot red, red shoulder cape, silver-blue blade, small figure: black boots + black jacket weighted; cape, silver sword, red boots negated; bottle at chest height",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-warrior",
+   "pose": "hurt",
+   "answer": "weak lean, red boots and jacket, rapier, blue shadow blob, 0.65 of the idle: new recoil skeleton (torso 240, head thrown back, near arm flung forward), rapier/red boots/red jacket negated, shadow/floor negated",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(holding sword in one hand:1.2), sword pointing down, (knocked back:1.1), both feet on the ground",
+    "negx": "floating sword, dropped sword, sheath, scabbard, blue strap, gold crossguard, blood, red splash, red streaks, multiple swords, raised leg, kicking, sword longer than her body",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(swept back hair:1.1), spiked crest",
+      "(swept back hair:1.3), (spiked hair crest:1.2)"
+     ]
+    ],
+    "why": "The recoil reads in c1 but the sword floats with a gold guard and an extra sheath or hilt; the other three hit the edges with multiplied blades and splashes."
+   }
+  },
+  {
+   "id": "paine-warrior",
+   "pose": "ko",
+   "answer": "rainbow floor streak off the left edge, rainbow blade, red boots: ko neg adds floor, streak, rainbow, shadow; ko skeleton 0.72 centred; black boots weighted",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(small sword lying beside her:1.2), sword shorter than her body, whole body in frame",
+    "negx": "sword across the frame, standing sword, sword stuck in ground, floor, shadow, floor reflection, sword above her",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(ornate red longsword:1.2), red blade, red winged crossguard",
+      "red longsword"
+     ]
+    ],
+    "why": "All four touch the canvas edges because the heavily weighted sword grows wider than the 1344 canvas; lighten the sword words for ko only and name a short sword beside her."
+   }
+  },
+  {
+   "id": "rikku-dark-knight",
+   "pose": "ko",
+   "answer": "content on three edges, floating brown fragments, flat slit sword, bare thigh: ko skeleton 0.72 centred, debris/particles/flat sword/bare thighs negated, greaves weighted 1.2",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(wide shot:1.2), (small figure:1.2), empty space around her, (sword lying on the ground beside her:1.1), (chainmail covering stomach:1.2)",
+    "negx": "platform, disc, circle, emblem, sun emblem, giant blade, curved blade, boat, sword under body, lying on sword, blanket, sheet, bare stomach, cropped legs",
+    "cn": [
+     0.85,
+     0.9,
+     0.9,
+     0.95
+    ],
+    "identitySwap": [
+     [
+      "dark blue greatsword, gold engraving, green gem",
+      "dark blue sword"
+     ]
+    ],
+    "why": "All four touch the canvas edges and the greatsword word grew into a boat-sized blade or a platform; shrink the sword word, add framing words and stronger OpenPose."
+   }
+  },
+  {
+   "id": "rikku-thief",
+   "pose": "attack",
+   "answer": "daggers merged into one pole weapon, floating piece, red-orange legs, green sleeves: (holding dagger in each hand:1.2) + two separate daggers, double-bladed weapon/polearm negated, (bare legs:1.3), (blue puffy detached sleeves:1.2); head factor 1.45 for the big-headed idle",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "facing right, lunging to the right, (both daggers pointing right:1.2), (big head:1.15), from above, foreshortening",
+    "negx": "facing left, pointing left, daggers pointing left, streamer, ribbon, long ribbon, rainbow, red legwear, orange legwear, red legs",
+    "cn": [
+     0.9,
+     0.95,
+     0.9,
+     1
+    ],
+    "why": "Only c1 cleared the guard and its attack points away from the enemy; the head factor 1.45 did not take, so the Thief scale gate still fails. This is JUDGE Question 1 for Bailey; a prompt-only b may not close the gap."
+   }
+  },
+  {
+   "id": "rikku-thief",
+   "pose": "cast",
+   "answer": "soles cut by the bottom edge, second dagger lost to a streamer, no puffy sleeves, red-orange legs: ground line up to 1135, (other hand holding dagger at side), streamer negated, sleeves + bare legs weighted; head factor 1.45",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(big head:1.15), from above, foreshortening, (tan bare legs:1.3), (short curved dagger:1.1)",
+    "negx": "red legs, orange legs, red socks, leg paint, cape, long blade, extra blade",
+    "cn": [
+     0.9,
+     0.95,
+     0.9,
+     1
+    ],
+    "why": "The soles are fixed and c4 fixes the second dagger and sleeves; the head factor did not take (scale gate fails, JUDGE Question 1); c4's shins also stay red-orange."
+   }
+  },
+  {
+   "id": "rikku-thief",
+   "pose": "hurt",
+   "answer": "a fork dangling from the braid, flame blades, no puffy sleeves, a hip bend: new recoil skeleton, fork/flame blade/fire negated, sleeves weighted; head factor 1.45",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(big head:1.15), from above, facing viewer, (one small dagger in each hand:1.1)",
+    "negx": "three blades, fan of blades, back, twisted torso, looking back, extra head, multiple heads",
+    "cn": [
+     0.9,
+     0.95,
+     0.9,
+     1
+    ],
+    "why": "The fork and flame blades are gone and the puffy sleeves are back, but the recoil turns her away from the camera and the head factor did not take (JUDGE Question 1)."
+   }
+  },
+  {
+   "id": "rikku-thief",
+   "pose": "item",
+   "answer": "scored 7.44 but the scale gate failed (head 0.55 of the idle head, stands 1.49): skeleton head factor 1.45 so the head matches her big-headed idle; identity unchanged apart from the sleeves",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(big head:1.2), (leaning forward toward viewer:1.1), from above, foreshortening, (other hand holding small dagger:1.1)",
+    "negx": "small head, tall, long legs, red legs, orange legs",
+    "cn": [
+     0.9,
+     0.95,
+     0.9,
+     1
+    ],
+    "why": "The only fix this slot names is the head factor and it did not move the head ratio (round 2 about 1.7-1.8x against the 1.30 gate); this is really JUDGE Question 1 for Bailey."
+   }
+  },
+  {
+   "id": "rikku-thief",
+   "pose": "victory",
+   "answer": "scored 7.38 but the scale gate failed (stands 1.67) and the blade was a long spike, second dagger gone: head factor 1.45; 'small dagger', spike/long blade negated; other hand holds a dagger",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(big head:1.2), (leaning forward toward viewer:1.1), from above, foreshortening",
+    "negx": "small head, tall, long legs, long blade, spike",
+    "cn": [
+     0.9,
+     0.95,
+     0.9,
+     1
+    ],
+    "why": "The spike blade is mostly fixed but the head factor did not take (stature about 1.9x against the 1.30 gate); same JUDGE Question 1 blocker."
+   }
+  },
+  {
+   "id": "paine-black-mage",
+   "pose": "hurt",
+   "answer": "round cute big-headed face, red hat with a ribbon, double-pointed staff, weak recoil: new recoil skeleton, (stern expression) + mature female, chibi/round face/red hat/ribbon/double-ended staff negated; head factor 0.83",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(staff held low:1.2), staff pointing down, (flinching:1.2), leaning back, wincing",
+    "negx": "raised staff, staff overhead, holding staff up, large staff head, silver staff head, feather, blue gem, puffy dress, huge hat, oversized hat, close-up",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(red and silver claw staff:1.1)",
+      "(red and silver claw staff:1.3)"
+     ]
+    ],
+    "why": "Three of four filled the canvas and the only guard-ok frame has the wrong staff held up like a banner, which reads as a cheer rather than a hit."
+   }
+  },
+  {
+   "id": "paine-black-mage",
+   "pose": "ko",
+   "answer": "staff cut by the left edge, shadow wedge to the right edge, blue hat: ko skeleton 0.72 centred, 'staff beside her', shadow negated, blue hat negated, gold buckle named",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-gunner",
+   "pose": "attack",
+   "answer": "orange toy blasters pointing opposite ways, red boots, spiky mane, red top: (two red and black revolvers:1.2), 'both guns pointing the same way', aiming backward negated, toy gun/blaster/red boots/red top negated, swept hair; OpenPose 0.8-0.9",
+   "enabled": true,
+   "try": "a",
+   "cn": [
+    0.8,
+    0.85,
+    0.9,
+    0.85
+   ]
+  },
+  {
+   "id": "paine-gunner",
+   "pose": "cast",
+   "answer": "red frilled corset, toy raised gun, yellow holstered gun, spiky hair: (black off-shoulder top:1.2) + red chest panel, red corset/frills/yellow gun/toy gun negated, swept hair",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-gunner",
+   "pose": "item",
+   "answer": "red corset with a white halter, the other hand holds a non-pistol, spiky mane: black top weighted, (other hand holding handgun at side:1.1), red corset negated, swept hair",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-gunner",
+   "pose": "hurt",
+   "answer": "doubles over forward, pistols like brooms, red-black top, blue smear: new recoil skeleton (torso back), bent over/broom negated, revolvers weighted, shadow negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-gunner",
+   "pose": "ko",
+   "answer": "boot toe on the left edge, red boots, orange toy blaster, spiky mane: ko skeleton 0.72 centred, black knee boots weighted, toy gun negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-gunner",
+   "pose": "victory",
+   "answer": "red corset, red-fronted boots, spiky mane, a small orange stub for a gun: black top and black knee boots weighted, (other hand holding handgun at side:1.1), red corset/red boots/orange gun negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-white-mage",
+   "pose": "attack",
+   "answer": "scale gate (stands 0.51: head 1.4x the idle's), classic white-mage robe with a zigzag hem, bare legs: head factor 0.70 (idle R 27), the 'white mage' class word dropped, zigzag/triangle/sawtooth trim and bare legs negated, crescent emblem + lattice + ankle-length robe weighted",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-white-mage",
+   "pose": "cast",
+   "answer": "face half covered by a red hood-lining smear, zigzag cape with thigh slit, red tassels: hood lining word dropped, zigzag/thigh slit/tassels negated, robe words weighted; head factor 0.70",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-white-mage",
+   "pose": "item",
+   "answer": "doll-like face, classic robe, bottle hanging low, cast shadow: (stern expression) + mature female, cute/round face negated, 'bottle at chest height', shadow negated; robe words weighted",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-white-mage",
+   "pose": "hurt",
+   "answer": "tiny head on a very long robe, staff held up like a banner, giant gold horn, cute face: new recoil skeleton with the staff lowered, staff raised/horn negated; head factor 0.70 (her idle is small-headed, but the judge asked for a head the body fits: watch this one)",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-white-mage",
+   "pose": "ko",
+   "answer": "classic robe with red zigzag cuffs, a small star disc staff head: zigzag and star negated, crescent staff weighted, ko skeleton 0.72",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "paine-white-mage",
+   "pose": "victory",
+   "answer": "huge gold sunburst staff head, classic robe, soft face: victory-low skeleton (staff planted), sunburst/star/spiked head negated, (red and gold crescent moon staff), stern expression",
+   "enabled": true,
+   "try": "a",
+   "skel": "victory-low",
+   "tags": "victory-low"
+  },
+  {
+   "id": "rikku-black-mage",
+   "pose": "item",
+   "answer": "staff head floats behind the hat, lower shaft at another angle, blue-purple leg warmers, waist-long hair: (one hand holding staff:1.2) + hand gripping staff, floating/broken staff negated, (pink leg warmers:1.2), shoulder-length hair",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(holding potion bottle up at chest height:1.2), arm extended forward, (shoulder-length hair:1.2), braids",
+    "negx": "bottle at hip, long hair, very long hair, waist-length hair, shawl, second staff, spear behind her, staff behind back",
+    "cn": [
+     0.9,
+     0.9,
+     0.85,
+     0.95
+    ],
+    "why": "The staff-in-hand and pink-warmer fixes landed but no candidate combines one gripped staff with a chest-height bottle; the hair fix missed in all four."
+   }
+  },
+  {
+   "id": "rikku-black-mage",
+   "pose": "hurt",
+   "answer": "hat flew off and stands behind her, staff split in two: new recoil skeleton with the staff lowered, flying hat/broken staff negated",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(full body:1.2), (wide shot:1.1), small figure, feet on ground, staff held low at her side",
+    "negx": "close-up, from below, cropped, extra head, multiple heads, staff raised, oversized staff, giant staff, flying hat",
+    "cn": [
+     0.9,
+     0.9,
+     0.95,
+     0.95
+    ],
+    "why": "All four came out as canvas-filling close-ups and the only guard-ok frame has a second head; the recoil skeleton was ignored."
+   }
+  },
+  {
+   "id": "rikku-black-mage",
+   "pose": "ko",
+   "answer": "staff head stands straight up out of the hat, reads asleep: 'staff beside her', staff standing upright/staff behind head negated, ko skeleton 0.72",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "rikku-black-mage",
+   "pose": "victory",
+   "answer": "staff broken again (head above the brim, shaft at the hip), one white sleeve: victory-low skeleton (staff planted upright in one hand), floating/broken staff and staff over shoulder negated",
+   "enabled": true,
+   "try": "a",
+   "skel": "victory-low",
+   "tags": "victory-low"
+  },
+  {
+   "id": "rikku-gunner",
+   "pose": "attack",
+   "answer": "head 2x the idle's on a normal body, chunky toy blasters: head factor 0.84 (idle R 20.8), chibi/big head negated, (two long blue pistols:1.2), toy gun/blaster negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "rikku-gunner",
+   "pose": "item",
+   "answer": "the other hand holds a mug-like holster, orange vest and green bra, knee-length shawl, one orange leg: (other hand holding handgun at side:1.1), (white crop top:1.2), vest/green bra/shawl/mug negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "rikku-gunner",
+   "pose": "hurt",
+   "answer": "seen from behind, bent over, mace-like blaster, cast shadow: new recoil skeleton, from behind/bent over negated, long blue pistols weighted, mace/shadow negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "rikku-gunner",
+   "pose": "ko",
+   "answer": "head 1.8x the idle's, propped up like resting, cyan puddle: head factor 0.84, propped up/puddle/water negated, ko skeleton 0.72",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "rikku-white-mage",
+   "pose": "cast",
+   "answer": "staff floats in neither hand with a bell, white coat gone: (one hand holding staff:1.2) + hand gripping staff, floating staff/bell negated, (white long coat:1.2)",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "rikku-white-mage",
+   "pose": "item",
+   "answer": "short gold mace with a whip loop, flame-coloured train, small figure: whip/mace/train negated, white long coat weighted, orange spade staff, bottle at chest height",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "rikku-white-mage",
+   "pose": "hurt",
+   "answer": "staff thrust straight up so it reads as a cheer, red zigzag sleeves: new recoil skeleton with the staff lowered, staff raised/arms up/zigzag negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "rikku-white-mage",
+   "pose": "ko",
+   "answer": "garbled face with red strokes, cyan puddle, small hook staff: ko neg adds puddle, water, streak, blood; ko skeleton 0.72; spade staff weighted",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(small figure:1.2), (wide shot:1.1), legs straight, (orange spade staff lying beside her:1.2)",
+    "negx": "knee up, legs up, raised leg, short staff, spear, hook, sheet, blanket, cloth under body",
+    "cn": [
+     0.85,
+     0.9,
+     0.9,
+     0.95
+    ],
+    "why": "The garbled face and puddle are gone but three of four touch the canvas edges and the guard-ok frame has a knee-up pose and the wrong staff; framing words plus stronger OpenPose."
+   }
+  },
+  {
+   "id": "rikku-white-mage",
+   "pose": "victory",
+   "answer": "two staffs (one on the shoulder, one at the hip), blue shadow streak: victory-low skeleton (one staff planted), two staffs/staff over shoulder/shadow negated",
+   "enabled": true,
+   "try": "a",
+   "skel": "victory-low",
+   "tags": "victory-low"
+  },
+  {
+   "id": "yuna-songstress",
+   "pose": "cast",
+   "answer": "far eye a red swirl, big blue hoop earrings: (heterochromia:1.1), red eyes/swirl eyes/hoop earrings negated, (teal drop earrings:1.1)",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "yuna-songstress",
+   "pose": "hurt",
+   "answer": "sash train cut by the right edge, black boots, pink ball earrings, obi pouch: sash weight dropped to 1.0, stronger recoil skeleton, (tall tan knee boots:1.2), black boots negated, teal drop earrings",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "pink thighhighs, orange boot cuffs, (holding microphone at chest:1.1)",
+    "negx": "blue boots, navy boots, dark boots, winged boots, feathers, petals, confetti, rainbow skirt, multicolored skirt, ponytail",
+    "identitySwap": [
+     [
+      "(tall tan knee boots:1.2)",
+      "(tall brown leather knee boots:1.35)"
+     ]
+    ],
+    "why": "The sash is no longer cut by the edge and the recoil reads; the boot fix failed in all four; a stronger boot phrase replaces the identity fix."
+   }
+  },
+  {
+   "id": "yuna-songstress",
+   "pose": "ko",
+   "answer": "muddled face (eye beside the ear, a blue band across the hair): ko skeleton 0.72, ko negatives, heterochromia weighted; if it muddles again the slot stops (face detail at ko size is the limit)",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "yuna-songstress",
+   "pose": "victory",
+   "answer": "a microphone in each hand, sash gone, lace-up boots, short figure: (holding one microphone:1.2) + other hand open, two microphones/dual wielding negated, sash named, tall tan knee boots weighted",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(holding one microphone:1.2), other hand open, empty hand, pink thighhighs",
+    "negx": "blue boots, lace-up boots, cross-laced footwear, mismatched legwear, shield, wheel, mace, rattle, oversized object, holding object overhead",
+    "identitySwap": [
+     [
+      "(tall tan knee boots:1.2)",
+      "(tall brown leather knee boots:1.35)"
+     ]
+    ],
+    "why": "The one-microphone and sash fixes landed; the boot identity fix did not appear in any candidate, and two candidates grew giant props."
+   }
+  },
+  {
+   "id": "yuna-warrior",
+   "pose": "attack",
+   "answer": "two swords, right blade cut by the edge, huge hood-cape, no kimono sleeves or long skirt: two swords negated, 1024-wide canvas kept, (red hood down:1.2) + hood up/hood cape negated, (detached pink kimono sleeves:1.2), (long blue skirt:1.2)",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(single-edged longsword:1.1), one blade, sword held in both hands",
+    "negx": "double-bladed sword, double-ended weapon, glaive, spear, staff, polearm, hat, beret, cap, oversized sword, very long sword, mismatched boots",
+    "cn": [
+     0.85,
+     0.9,
+     0.85,
+     0.9
+    ],
+    "identitySwap": [
+     [
+      "(red hood down:1.2), hood down",
+      "(red hood down:1.2), hood resting on shoulders, bare head"
+     ]
+    ],
+    "why": "Only 2 and 3 passed the guard and both break the one-weapon rule; cand-4 lands every identity fix and fails only on the edge; a higher cn keeps the skeleton's sword framing."
+   }
+  },
+  {
+   "id": "yuna-warrior",
+   "pose": "cast",
+   "answer": "one red eye, sleeves gone, short pink-white wrap skirt, guard cut by the sleeve: heterochromia weighted, red eyes negated, sleeves + long skirt weighted, short skirt/miniskirt negated",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "yuna-warrior",
+   "pose": "item",
+   "answer": "hood UP, both eyes green, two bottles low at the hip, sword as a cane, small figure: hood down weighted, hood up negated, 'bottle at chest height', two bottles negated, heterochromia weighted",
+   "enabled": true,
+   "try": "a"
+  },
+  {
+   "id": "yuna-warrior",
+   "pose": "hurt",
+   "answer": "hood up, yellow blade held upside down, skirt and sleeves gone, 0.62 of the idle: new recoil skeleton, hood down, (cyan longsword:1.2), upside-down sword/yellow sword negated, skirt and sleeves weighted",
+   "enabled": true,
+   "try": "b",
+   "b": {
+    "extra": "(leaning back:1.2), (recoiling:1.2), head thrown back, staggering backward, sword held low at her side",
+    "negx": "wings, pink cape, flowing ribbon, giant sash, sword over shoulder, extra legs, three legs, two swords, standing straight",
+    "cn": [
+     0.85,
+     0.9,
+     0.9,
+     0.95
+    ],
+    "why": "The identity fixes landed in cand-2 but the recoil skeleton did not hold, reading as a wince not a hit; a higher cn is meant to make the recoil skeleton hold."
+   }
+  },
+  {
+   "id": "yuna-warrior",
+   "pose": "ko",
+   "answer": "hood up, no sword, long skirt and sleeves gone: hood down weighted, 'sword beside her', long skirt + kimono sleeves weighted, ko skeleton 0.72",
+   "enabled": true,
+   "try": "a"
+  }
+ ]
+}

@@ -1,0 +1,393 @@
+{
+ "yuna-dark-knight/cast": {
+  "cands": {
+   "1": "sword raised in the cast hand plus a spear shape: fail",
+   "2": "sword raised, bare midriff: fail",
+   "3": "pedestal rock painted under her; edge",
+   "4": "PICK: cast reads, helm crest, sword low; legs mismatched"
+  },
+  "verdict": "PASS, weak: cand-4 (open hand raised, sword low in the other hand, crested teal helm, blue bodice, cape); cand-1 and cand-2 raise the SWORD in the raised hand; far leg armoured blue, near leg pink thighhigh (the idle has both)"
+ },
+ "yuna-dark-knight/ko": {
+  "cands": {
+   "1": "body fills the frame, white blob: fail",
+   "2": "touches the right edge",
+   "3": "PICK: reads as down; bare midriff; one foot bootless",
+   "4": "touches both edges"
+  },
+  "verdict": "PASS, weak: cand-3 (down on her side, head right, eyes shut, crested helm, pink thighhighs, sword beside her); midriff bare and one boot missing; rendered on the 1216x832 ko canvas before the switch to 1344x768"
+ },
+ "yuna-dark-knight/victory": {
+  "cands": {
+   "1": "thin red sword, no armour",
+   "2": "sword held flat, no armour",
+   "3": "two extra swords",
+   "4": "closest: armoured legs, but no pauldrons",
+   "5": "helm floats above her, giant shell pauldrons",
+   "6": "two armoured knights behind her",
+   "7": "two knights and a spear",
+   "8": "three knights"
+  },
+  "verdict": "FAIL twice, STOPPED (rule 15): try b's weighted armour words painted whole armoured knights around her (cand 6-8) or a detached helm and giant pauldrons (cand 5); the slot stays empty"
+ },
+ "paine-dark-knight/cast": {
+  "cands": {
+   "1": "reads: gold blade low; cape less red",
+   "2": "PICK: arm up, red sword low, dark cape",
+   "3": "sword raised in the cast hand",
+   "4": "sword raised in the cast hand"
+  },
+  "verdict": "PASS: cand-2 (open hand raised, red sword low, black plate, dark cape with red lining, swept silver hair); cand-1 also reads. The sword is slimmer than the idle's slab"
+ },
+ "paine-dark-knight/ko": {
+  "cands": {
+   "1": "PICK: reads as down, clear of the edges",
+   "2": "close-up, edges",
+   "3": "close-up, a second sword standing",
+   "4": "close-up, spiked mace"
+  },
+  "verdict": "PASS: cand-1 (down on her side, head right, eyes shut, black armour, red sash, sword beside her, clear of every edge). cand 2-4 came out as close-ups that fill the 1344x768 frame (ko framing words added after this slot)"
+ },
+ "paine-dark-knight/victory": {
+  "cands": {
+   "1": "PICK: hand on hip, sword planted, dark cape",
+   "2": "reads: cape wide, sword at the side",
+   "3": "red cape",
+   "4": "blue blade"
+  },
+  "verdict": "PASS: cand-1 or cand-2 (hand on hip, sword planted point-down, black plate, dark cape, no poleaxe, no ponytail); cand-3 red cape, cand-4 a blue blade"
+ },
+ "yuna-songstress/cast": {
+  "cands": {
+   "1": "reads, teal drop earrings, heterochromia; legs mismatched (magenta thigh with a black knee pad vs pink), orange boots with white cuffs",
+   "2": "PICK: arm up with one mic, hand on hip, teal drop earrings, green/blue eyes, both thighhighs pink, orange-gold knee boots, blue-pink sash; slim figure",
+   "3": "reads, earrings fixed; pink heart-topped boots with a drape at the ankle",
+   "4": "reads, earrings fixed; blue boots, sash only on one side"
+  },
+  "verdict": "PASS: cand-2 (The fix landed in all four: teal drop earrings, no hoops and no red swirl eye, with heterochromia visible in 1, 2 and 4. cand-2 has the fewest identity misses. Residuals: hair darker brown than the idle's auburn, pink-white collar instead of the teal choker and ornament, eye colours on the opposite sides from the idle, boots orange-gold rather than tan-brown, no lace petticoat.)"
+ },
+ "yuna-songstress/hurt": {
+  "cands": {
+   "1": "head back, mic clutched, sash inside the frame; blue winged boots with loose orange flecks floating beside them",
+   "2": "black-navy boots (the negated item), wide sash, stands more than recoils",
+   "3": "guard REJECT (touches the left edge); ponytail, oversized sash",
+   "4": "wince and lean; rainbow skirt, red-yellow boots, small teal studs instead of drops"
+  },
+  "verdict": "FAIL: The sash is no longer cut by the edge in 1, 2 and 4, and the recoil reads. The boot fix failed in all four: blue, black or red-yellow, never tan. cand-1 also has detached flecks by the boots and cand-4 a rainbow skirt. try b leaves cn at CN_B and swaps in a stronger boot phrase."
+ },
+ "yuna-songstress/ko": {
+  "cands": {
+   "1": "PICK: down on her side, head right, clean face with eyes shut, pink thighhighs, blue gloves, mic on the floor beside her hand, orange knee boots",
+   "2": "clean face; blue shadow slab under her, navy leggings over pink, flat tan shoes instead of boots",
+   "3": "clean face; holds a staff or brush, the wrong weapon",
+   "4": "clean face; pink and cyan sash streaks along the floor (floor-streak class), blue boots"
+  },
+  "verdict": "PASS: cand-1 (The face muddle the answer names is gone in all four, since the ko framing and negatives worked. cand-1 has no wrong prop and no floor slab. Residuals: boots orange with black stripes instead of tan-brown, a faint blue shadow halo under the legs, a small orange obi tail by the chin, the choker reads blue rather than teal.)"
+ },
+ "yuna-songstress/victory": {
+  "cands": {
+   "1": "one mic plus an open hand, sash present; blue boots, thighhighs mismatched (magenta vs red-pink)",
+   "2": "two mics plus a giant colour-wheel disc overhead: fail",
+   "3": "one mic plus an open hand, sash, full-size figure; blue lace-up boots, red-orange stockings",
+   "4": "giant striped rattle or mace overhead: fail"
+  },
+  "verdict": "FAIL: The one-microphone and sash fixes landed in 1 and 3. The tan knee boots the answer weights did not appear anywhere: every candidate has blue boots, and cand-3 has the lace-up boots the answer names as a fault. 2 and 4 grew giant props. If try b fails, cand-3 or cand-1 is the fallback."
+ },
+ "yuna-warrior/attack": {
+  "cands": {
+   "1": "guard REJECT (crop box 98.9% x 97.6%); crouched leap, blade to the top-right corner",
+   "2": "one blade runs through both hands and on to the lower left, so it reads as a double-ended glaive; pink ribbon arc, small figure, boots mismatched",
+   "3": "red beret or cap on her head (hood-up class), plus a sword blade and a separate blue staff: two weapons",
+   "4": "best identity (hood down, kimono sleeves, long blue skirt, cyan longsword, heterochromia), but guard REJECT: blade tip touches the right edge"
+  },
+  "verdict": "FAIL: Only 2 and 3 passed the guard, and both break the one-weapon rule (glaive in 2, blade plus staff in 3), with a hat in 3. cand-4 lands every identity fix and fails only on the edge. A higher cn keeps the skeleton's sword framing. If b still touches the edge, the cause is the blade length in the 1024-canvas sword skeleton, not the prompt."
+ },
+ "yuna-warrior/cast": {
+  "cands": {
+   "1": "PICK: casting hand raised, sword low in the other hand with the crossguard clear, pink-white kimono sleeves, long blue skirt, hood down; a small gold key-like ornament at the raised fingertips",
+   "2": "the raised hand holds the sword by the pommel with the blade hanging (sword raised in the cast hand), ballgown skirt with a frill hem",
+   "3": "guard REJECT (detached floating sword); the pose itself is good, open palm with heterochromia",
+   "4": "sword raised in the cast hand, both eyes teal"
+  },
+  "verdict": "PASS, weak: cand-1 (Sleeves, long skirt and the uncut guard all landed in cand-1, and the cast reads. Residuals: a small gold ornament in the raised hand (an extra prop, tiny at battle size), heterochromia not clear at this size, boots mismatched (yellow-orange vs red-brown), blade slimmer than the idle's broad one.)"
+ },
+ "yuna-warrior/item": {
+  "cands": {
+   "1": "PICK: one blue bottle held out at chest height, sword low in the other hand, hood down, sleeves, long skirt, heterochromia",
+   "2": "green bottle low at the hip (the named fault)",
+   "3": "bottle at arm's length; the sword stands detached behind her, held by no hand",
+   "4": "sword used as a cane plus an orange amulet or mirror in the other hand, long train"
+  },
+  "verdict": "PASS: cand-1 (cand-1 lands every fix: hood down, one bottle at chest height, the sword no longer a cane, sleeves and long skirt, heterochromia. Residuals: the skirt slit shows the navy legging, boots mismatched (tan vs red-brown).)"
+ },
+ "yuna-warrior/hurt": {
+  "cands": {
+   "1": "guard REJECT (touches the left edge); three feet",
+   "2": "hood down, sleeves, long skirt, cyan blade (grip up, blade trailing behind her); stands nearly upright with only a head-tilt wince, so the recoil is weak",
+   "3": "guard REJECT (touches the bottom edge); two swords",
+   "4": "lean-back recoil and sword over the shoulder, but a giant pink wing or sash flame fills the top half"
+  },
+  "verdict": "FAIL: The identity fixes landed in cand-2: hood down, a cyan sword instead of a yellow one, skirt and sleeves back. But the new recoil skeleton did not hold, and it reads as a wince, not a hit, which is the round 1 'weak lean' fault. The only other guard-ok frame (4) has a giant pink wing. The higher cn is meant to make the recoil skeleton hold. If try b fails, cand-2 is the fallback."
+ },
+ "yuna-warrior/ko": {
+  "cands": {
+   "1": "guard REJECT (touches the edge); one eye open",
+   "2": "PICK: down on her side, head right, eyes shut, hood down (red hood behind the neck), sleeves, skirt, full cyan sword lying beside her, clear of the edges",
+   "3": "guard REJECT (blade to the right edge)",
+   "4": "reads as two swords (one floating above her with a crossguard, a blue grip under her arm), eye open"
+  },
+  "verdict": "PASS: cand-2 (cand-2 lands the answer: hood down, sword beside her rather than under her, sleeves present, clear of every edge. Residuals: skirt reaches mid-calf rather than the idle's ankle, boots lace-up tan, a faint pink smear under the sword grip end.)"
+ },
+ "rikku-alchemist/attack": {
+  "cands": {
+   "1": "faces right, purple bulb flask held out right; leg strips turned into a big orange-yellow scarf flying above her head",
+   "2": "guard REJECT (top edge): flask hangs on a string from the top of the canvas",
+   "3": "faces right, flask held out; strips become a scarf tail flying left; no strips on the legs",
+   "4": "PICK: arm out to the right with a purple bulb flask (not dripping), lunge reads toward the enemy; the leg strips are down to one yellow-orange strip trailing from the hip; big brown satchel; black-and-blue boots (idle: blue with green cuffs)"
+  },
+  "verdict": "PASS, weak: cand-4 (All four fixed the direction (the throw goes toward screen-right) and none has a dripping or orange flask. None kept the idle's flame strips hanging down the legs: cand-4 keeps one strip behind the hip, the others turned the strips into a flying scarf. cand-3 is the alternative.)"
+ },
+ "rikku-alchemist/ko": {
+  "cands": {
+   "1": "guard REJECT (left edge); orange cloth mat under her",
+   "2": "reads as down, legs separate, flask in hand; a blue streak under the boots like a puddle or shadow",
+   "3": "PICK: lying on her side, head right, eyes shut, both legs clearly apart in orange leggings with blue boots, headband and braids; no blood-like streaks",
+   "4": "guard REJECT (bottom edge); close framing, blue sheet under her"
+  },
+  "verdict": "PASS: cand-3 (Legs are no longer a blob and there are no red streaks that read as blood. Residuals: the flame strips spread under her like a small mat, her face is half on her arm, and the flask is barely visible (a pink shape at her chest). cand-2 is the alternative, but it has a blue streak under the boots.)"
+ },
+ "rikku-dark-knight/ko": {
+  "cands": {
+   "1": "guard REJECT (left and top edges): a close-up filling the frame, blue shard sticking up, bare midriff",
+   "2": "guard REJECT: lying on top of a giant curved golden blade like a boat spanning the full width",
+   "3": "guard REJECT (both side edges): reads as down with navy armour, but there is no sword, the midriff is bare and a pale sheet lies under her",
+   "4": "guard REJECT: lying inside a big teal disc or platform with a gold sun emblem, sword beside her"
+  },
+  "verdict": "FAIL: All four touch the canvas edges, and the greatsword word grew into a boat-sized blade (c2) or a platform (c4). Shrink the sword word, add framing words and stronger OpenPose to hold the 0.72 skeleton footprint, and weight the covered midriff."
+ },
+ "rikku-thief/attack": {
+  "cands": {
+   "1": "guard ok: bare tan legs, blue-white puffy sleeves, two separate blue daggers; but both blades point screen-LEFT, away from the enemy; head still too small for the idle",
+   "2": "guard REJECT (edge): red-orange legs",
+   "3": "guard REJECT (edge): red-orange legs, single long blade",
+   "4": "guard REJECT (full canvas): rainbow streamers fill the frame, red legs"
+  },
+  "verdict": "FAIL: Only c1 cleared the guard, and its attack points away from the enemy (round 1 failed a gunner attack for this). Separately, the head factor 1.45 did not take: the heads come out normal size, so the Thief scale gate (JUDGE Question 1) still fails. Push the direction and head size harder and raise OpenPose; prompt words may not close a 1.5-1.8x stature gap."
+ },
+ "rikku-thief/cast": {
+  "cands": {
+   "1": "arm up with a dagger; the other hand has a two-ended blade shape behind her hip (reads as an extra blade); small sleeves; purple scarf flap; legs mostly bare; soles inside the frame",
+   "2": "long blue blades like swords, cape flap, no puffy sleeves",
+   "3": "dagger raised, no second dagger (the lower hand holds a pouch)",
+   "4": "best on content: dagger raised, second curved dagger low in the other hand, big white puffy sleeves, soles clear; but red-orange streaks on the shins and knees"
+  },
+  "verdict": "FAIL: The soles are fixed, and c4 fixes the second dagger and the sleeves. But the named head factor did not take: eye-to-chin is about 43-47/1000 against the idle's 68, so she stands about 1.5x the idle at head-match (gate 1.30). c4's shins also stay red-orange. Hold for Bailey's Question 1, or try b as above."
+ },
+ "rikku-thief/hurt": {
+  "cands": {
+   "1": "best on content: wince with gritted teeth, stumbling stride, blue-white puffy sleeves, a dagger in each hand; but the near hand holds a three-blade fan, the torso is turned three-quarters away from the camera, and the head is small (eye-to-chin about 40/1000, stature about 1.7)",
+   "2": "wince, looking back over her shoulder with her back to the camera; no puffy sleeves",
+   "3": "two heads (a second face beside hers): fail",
+   "4": "guard REJECT (edge)"
+  },
+  "verdict": "FAIL: The fork and flame blades are gone and the puffy sleeves are back in c1, but the recoil turns her away from the camera and the head factor did not take (scale gate fails, JUDGE Question 1)."
+ },
+ "rikku-thief/item": {
+  "cands": {
+   "1": "blue bulb bottle held out, other hand empty; one shin red-orange; eye-to-chin about 40/1000 (stature about 1.7)",
+   "2": "guard REJECT (full canvas): huge red-orange feathered mane",
+   "3": "green bottle held out, a small blade in the other hand, long blue sleeves (not puffy); head small",
+   "4": "best on content: pink bottle held out, white puffy sleeves, bare legs, blue-white boots; no dagger visible; eye-to-chin about 37/1000 (stature about 1.8)"
+  },
+  "verdict": "FAIL: The only fix this slot names is the head factor, and it did not move the head ratio. Round 1 stood 1.49; round 2 stands about 1.7-1.8 against the 1.30 gate. The idle's big head comes from leaning toward the camera, so b asks for that lean and foreshortening. This is really JUDGE Question 1 for Bailey."
+ },
+ "rikku-thief/victory": {
+  "cands": {
+   "1": "finger pointing up, a long orange blade in the other hand (spike-like); head small",
+   "2": "best on content: small dagger raised, a second dagger low in the other hand, grin; head small (eye-to-chin about 35/1000)",
+   "3": "saluting, dagger low; huge hair spike mane",
+   "4": "V-sign, small dagger in the other hand, puffy sleeve; eye-to-chin about 35/1000 (stature about 1.9)"
+  },
+  "verdict": "FAIL: The spike blade is mostly fixed (c2 and c4 hold small daggers and c2 has both), but the head factor did not take: stature at head-match is about 1.9 (round 1 was 1.67; the gate is 1.30). Same JUDGE Question 1 blocker."
+ },
+ "rikku-black-mage/item": {
+  "cands": {
+   "1": "guard REJECT (full canvas): staff diagonal across the frame, green bottle low",
+   "2": "bottle held up at chest height, pink leg warmers; but TWO staffs: an orb staff in the hand and a floating spear-tipped staff behind her",
+   "3": "guard REJECT (edge): staff horizontal and floating, waist-long hair",
+   "4": "one staff gripped upright, pink leg warmers; but the bottle is at her hip (the item does not read), the hair is waist-long and there is a fringed shawl"
+  },
+  "verdict": "FAIL: The staff-in-hand and pink-warmer fixes landed (c4), but no candidate combines one gripped staff with a bottle at chest height. The shoulder-length hair fix missed in all four. Stronger OpenPose holds the extended-arm skeleton."
+ },
+ "rikku-black-mage/hurt": {
+  "cands": {
+   "1": "guard REJECT (full canvas): staff raised huge over her head",
+   "2": "guard REJECT (full canvas): close-up from below",
+   "3": "guard ok but two heads (a second small face at the left); staff diagonal",
+   "4": "guard REJECT (full canvas): close framing, feathered sash"
+  },
+  "verdict": "FAIL: All four came out as close-ups filling the canvas, and the only one the guard passed has a second head. The recoil skeleton was ignored. Push framing and full body, and raise OpenPose."
+ },
+ "rikku-black-mage/ko": {
+  "cands": {
+   "1": "guard REJECT (right edge): hat brim runs off the edge",
+   "2": "guard REJECT (top edge): staff stands straight up again",
+   "3": "reads as down, but the staff runs under her whole body",
+   "4": "PICK: lying down, head right, eyes shut, pink leg warmers, the staff lies horizontal beside her head with the orange claw head clear"
+  },
+  "verdict": "PASS: cand-4 (The staff lies beside her instead of standing up out of the hat, and the body is clear of the edges. Residuals: the tall hat cone stands up at an angle (it reads as a hat, not a staff), her face is half hidden, and the staff head is a claw hook.)"
+ },
+ "rikku-black-mage/victory": {
+  "cands": {
+   "1": "hand on hip, but the staff lies diagonally behind her unheld, and she wears a big cape the idle does not have",
+   "2": "PICK: grin, one staff gripped upright at her side, hand behind at the pouch, purple hat, fishnet sleeves, pink leg warmers",
+   "3": "guard REJECT (second blob): the staff floats separately",
+   "4": "a scythe-like curved blade plus a spear: fail"
+  },
+  "verdict": "PASS, weak: cand-2 (One unbroken staff held in one hand, no staff over the shoulder, no floating head. Residuals: the staff is short and ends at her knee (not planted), its head is a plain spear or claw rather than the idle's ornate orange head, the other hand is not clearly on the hip, and the boots are pink-red.)"
+ },
+ "rikku-gunner/attack": {
+  "cands": {
+   "1": "one pistol aimed right; the other hand holds a big blue blade-like holster pointing down",
+   "2": "the second long pistol points screen-left behind her head: fail",
+   "3": "the second pistol, held at the hip, points left: fail",
+   "4": "PICK: both arms out to the right with two blue-gold pistols pointing the same way, normal head size (not chibi), white crop top, denim shorts, pink scarf, camo sleeve"
+  },
+  "verdict": "PASS: cand-4 (The head is back to normal proportion and the pistols are long, not toy blasters, both aimed at the enemy. Residuals: baggy blue leg warmers instead of the idle's tall fitted blue boots, an orange-green pouch flap at the hip, and bare legs (the idle's upper legs are orange).)"
+ },
+ "rikku-gunner/item": {
+  "cands": {
+   "1": "bottle at chest height, a long blue gun in the other hand; but the pink scarf trails to her thigh (repeats the round-1 shawl)",
+   "2": "holds a blue tube or thermos, not a bottle",
+   "3": "bottle at the hip, a blue drape over the legs",
+   "4": "PICK: green bulb bottle held out, a blue pistol gripped at her side pointing down, white crop top, short pink scarf, tall pale-blue boots"
+  },
+  "verdict": "PASS: cand-4 (No mug, vest, green bra or shawl, and the gun is in the other hand. Residuals: a large blue satchel and an orange sheath at the hip that the idle lacks, the bottle at waist-to-chest height, and pale boots. cand-1 is the alternative if the long scarf tail is acceptable.)"
+ },
+ "rikku-gunner/hurt": {
+  "cands": {
+   "1": "guard REJECT (edge): back to the camera with a pink cloth sweeping the floor",
+   "2": "leaning back, wincing, guns lowered, but seen from behind (torso away)",
+   "3": "PICK: front view, leaning back, one eye shut, a long blue pistol lowered in each hand, blue boots, white top, denim shorts",
+   "4": "leaning back and wincing, but red-brown short boots and a gold pistol"
+  },
+  "verdict": "PASS: cand-3 (No longer from behind or bent over, and no mace blaster or cast shadow. Residuals: camo sleeves on both arms (the idle has one) and slouched short blue boots.)"
+ },
+ "rikku-gunner/ko": {
+  "cands": {
+   "1": "lying flat with a long blue pistol beside her hand; brown-orange boots (idle: blue)",
+   "2": "head on her arm, pink scarf, gun by her head",
+   "3": "PICK: lying flat on her side, head right, eyes shut, normal head size, tall blue boots, denim shorts, camo sleeve",
+   "4": "head a little large, blue shadow under her"
+  },
+  "verdict": "PASS: cand-3 (The head is at the idle's proportion, she is not propped up, and there is no puddle. Residuals: her head rests on her forearm and no pistol is visible. cand-1 is the alternative (pistol beside her hand, but brown boots).)"
+ },
+ "rikku-white-mage/cast": {
+  "cands": {
+   "1": "open hand raised, but the staff lies diagonally, not gripped, with a purple ring at its foot",
+   "2": "staff with spear tips at both ends crossing her body",
+   "3": "PICK: the raised hand grips one staff upright with an orange heart-cut spade head; white long coat with sleeves and blue lining; bandana, red scarf, orange top, white apron skirt",
+   "4": "the raised hand grips the staff; the coat turns blue-purple; red spear head"
+  },
+  "verdict": "PASS: cand-3 (The staff is held in a hand, not floating, there is no bell, and the white coat is back. Residuals: the raised hand holds the staff instead of being an open hand (it still reads as a cast for a staff user), the coat tails flare into a pink-orange gradient, and the legs are red-orange.)"
+ },
+ "rikku-white-mage/item": {
+  "cands": {
+   "1": "PICK: orange flask held at chest height, one staff running diagonally behind her and gripped in the lower hand, white-blue long coat",
+   "2": "flame-headed staff, no bottle",
+   "3": "sun-ring staff, no bottle, baggy trousers",
+   "4": "idle-like heart spade staff gripped upright and a white-blue coat, but the bottle is small at the hip"
+  },
+  "verdict": "PASS: cand-1 (No whip, mace or train, the white long coat is weighted in, and the bottle is at chest height. Residuals: the staff head is a gold twisted leaf rather than the orange spade, the staff sits diagonally, and a yellow panel shows under the coat. cand-4 has the better staff but fails the named chest-height bottle.)"
+ },
+ "rikku-white-mage/hurt": {
+  "cands": {
+   "1": "guard REJECT (crop box): staff raised high with a rainbow flag",
+   "2": "guard REJECT (crop box): leaning back with the staff raised diagonally",
+   "3": "guard REJECT (edge): second head at the left",
+   "4": "PICK: leaning back, one eye shut, the other arm flung down-left, the staff held low at the hip with its head rising diagonally behind her, white apron skirt, white sleeves, blue-purple coat tail"
+  },
+  "verdict": "PASS, weak: cand-4 (No longer a cheer: the staff is not thrust straight up and there are no zigzag sleeves. The only candidate the guard passed. Residuals: the staff tip still rises above her head, the staff head is a spear point rather than the spade, and the coat tail flares wide.)"
+ },
+ "rikku-white-mage/ko": {
+  "cands": {
+   "1": "guard REJECT (full canvas): close-up, staff running off the frame",
+   "2": "guard ok: face clean, lying head right; but one knee up with a boot in the air, and the staff is a short spear (the named spade staff is missing)",
+   "3": "guard REJECT (left edge): staff under her, shadow sheet",
+   "4": "guard REJECT (right edge): best read, with the heart-spade staff beside her, but a white sheet spreads under her"
+  },
+  "verdict": "FAIL: The garbled face and puddle are gone, but three of four touch the canvas edges, and the only guard-ok frame has a knee-up pose and a short spear instead of the spade staff. Framing words plus stronger OpenPose on the 0.72 skeleton."
+ },
+ "rikku-white-mage/victory": {
+  "cands": {
+   "1": "PICK: one staff standing upright at her side, the other hand on her hip, grin, white long coat with blue lining, apron skirt",
+   "2": "hand on hip, one staff gripped upright with a big round orange head, but the coat flares orange-red",
+   "3": "staff diagonal with a red ground streak (shadow): fail",
+   "4": "staff diagonal across her, not planted"
+  },
+  "verdict": "PASS, weak: cand-1 (One staff, not over the shoulder, and no blue shadow streak. Residuals: the staff has a plain spear head (idle: orange spade), her hand near the shaft is not clearly gripping it, and the foot of the staff stops just above the ground. cand-2 is the alternative (clearly gripped with a heavier orange head, but the coat drifts orange).)"
+ },
+ "paine-warrior/attack": {
+  "cands": {
+   "1": "reads as a swing, but the blade is plain pink on a long black pole grip with a ring pommel (reads as a glaive); no crossguard; bob hair",
+   "2": "guard REJECT (crop box, edges): giant sword off the canvas",
+   "3": "guard REJECT (edge): spiked mane, but the sword is split into a dark hilt and a separate red blade",
+   "4": "best identity (spiked swept hair, ornate red serrated blade, black thigh boots), but the sword is held vertical, point down, in a static guard: does not read as an attack; red flared knee pieces"
+  },
+  "verdict": "FAIL: No candidate both reads as an attack and carries the named ornate red longsword; two of four touch the edges."
+ },
+ "paine-warrior/cast": {
+  "cands": {
+   "1": "sword floats diagonally behind her, not held by either hand; bob hair",
+   "2": "guard REJECT (second blob 53%, edge): skull-headed swords spray around her",
+   "3": "sword raised by the grip in the cast hand; one blue heel",
+   "4": "raised hand on the crossguard of a giant vertical sword (the sword is raised); bob hair"
+  },
+  "verdict": "FAIL: The named fix (a single sword, not floating) fails: the sword floats (c1), multiplies (c2) or is raised in the cast hand (c3, c4)."
+ },
+ "paine-warrior/item": {
+  "cands": {
+   "1": "no bottle; the sword's colour bleeds blue-purple into her near leg; red tassel at her hip",
+   "2": "bottle floats detached at the left; red feather-wing on her head; red-lined shoulder cape",
+   "3": "small bottle hanging low at the hip (the answer wanted chest height); sword floats unheld beside her",
+   "4": "PICK: round flask held at chest height, both boots black, black jacket, no cape, red blade; the giant red sword stands unheld behind her; bob hair; red belt tail with a ring"
+  },
+  "verdict": "PASS, weak: cand-4 (cand-4 meets every named fix (bottle at chest height, black boots and jacket, no cape, no silver blade). Residuals: the sword is oversized and stands behind her without a grip, the hair is a bob rather than the crest, and the figure is a little small at 1:1.)"
+ },
+ "paine-warrior/hurt": {
+  "cands": {
+   "1": "the only guard ok: recoil reads (leans back, wince, arm flung), but the sword floats detached with a gold crossguard, a blue sheath or strap hangs to the ground, a second hilt shows behind her belt, one leg is kicked up",
+   "2": "guard REJECT (edge): red blood-like splash streak, blade dissolving",
+   "3": "guard REJECT (edge): a long red streak and a second blade crossing her",
+   "4": "guard REJECT (edge): four or more swords around her, red splashes"
+  },
+  "verdict": "FAIL: Three of four are edge rejects with extra blades; c1 has a floating sword plus a sheath and a second hilt (the rubric's extra-weapon fault)."
+ },
+ "paine-warrior/ko": {
+  "cands": {
+   "1": "guard REJECT (edge on 3 sides): the giant sword spans the width; a second sword stands vertical",
+   "2": "guard REJECT (top edge): two swords standing",
+   "3": "guard REJECT (edge): the sword spans the width; blue floor shadow",
+   "4": "guard REJECT (edge): the sword lies across the top of her, touching both sides"
+  },
+  "verdict": "FAIL: All four are guard rejects on the edges (the named fault is not fixed); the sword grows past the canvas every time."
+ },
+ "paine-black-mage/hurt": {
+  "cands": {
+   "1": "guard REJECT (crop box): pointed red hat (negated), scythe-like staff",
+   "2": "guard REJECT (fills the canvas): huge hat, claw staff, wink",
+   "3": "the only guard ok: leans back, but the staff is raised overhead like a banner with a giant silver-and-gold feathered head and a blue gem (not the idle's red-silver claw staff); puffy dress; hat sliding off",
+   "4": "guard REJECT (fills the canvas): huge red hat, a second face or figure, rainbow ribbon"
+  },
+  "verdict": "FAIL: Three of four filled the canvas; c3's staff is the wrong weapon and is held up like a banner, which reads as a cheer rather than a hit. Lower the staff, weight the claw staff, shrink the hat."
+ },
+ "paine-black-mage/ko": {
+  "cands": {
+   "1": "PICK: down on her front and side, eyes shut, purple witch hat, claw-headed staff beside her, no shadow, clear of every edge; the hat brim underside is red",
+   "2": "reads as down, but has a blue-white shadow smear under her (shadow was negated); staff under her",
+   "3": "guard REJECT (right edge): shadow wedge",
+   "4": "guard REJECT (edges): half-sitting, a second hand at the staff"
+  },
+  "verdict": "PASS: cand-1 (cand-1 fixes all three named faults (staff inside the frame, no shadow, hat purple not blue). Residuals: the hat brim is red underneath, and the staff head is a claw hook rather than the idle's exact shape (partial data: the looker report was truncated before the rest of this entry's notes).)"
+ }
+}
