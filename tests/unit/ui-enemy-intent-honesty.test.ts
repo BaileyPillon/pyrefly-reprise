@@ -98,3 +98,21 @@ describe('PR-0153: a random target is every candidate, never one name', () => {
     expect(root.querySelector('.eint__head')?.textContent).toBe('Damage');
   });
 });
+
+describe('PR-0207: the phone strip keeps the certainty badge (both games)', () => {
+  /** The selectors of every `display: none` rule under the phone attribute. */
+  function hiddenOnPhone(): string[] {
+    const out: string[] = [];
+    for (const m of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+      if (!/display:\s*none/.test(m[2]!)) continue;
+      for (const sel of m[1]!.split(',')) out.push(sel.trim());
+    }
+    return out;
+  }
+
+  it('does not hide .eint__conf on the phone, and still hides the Odds table', () => {
+    const hidden = hiddenOnPhone();
+    expect(hidden.filter((s) => /\.eint__conf\b/.test(s))).toEqual([]);
+    expect(hidden).toContain('html[data-phone-battle] .eint__odds');
+  });
+});
