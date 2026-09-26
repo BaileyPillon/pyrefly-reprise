@@ -30,7 +30,16 @@
  * needing an engine, a registry instance, or boot-order timing.
  */
 
-import type { AbilityDef, Command, GameId, ItemDef, Targeting } from '../../battle/common/types.ts';
+import type {
+  AbilityDef,
+  BattleState,
+  CombatantId,
+  Command,
+  GameId,
+  ItemDef,
+  Targeting,
+} from '../../battle/common/types.ts';
+import { letterTagsOf } from '../../battle/ffx/letterTags.ts';
 import { ABILITIES as FFX_ABILITIES, ITEMS as FFX_ITEMS } from '../../data/ffx/index.ts';
 import { ABILITIES as FFX2_ABILITIES, ITEMS as FFX2_ITEMS } from '../../data/ffx2/index.ts';
 
@@ -82,4 +91,25 @@ function targetingFor(game: GameId, command: Command): Targeting | undefined {
  */
 export function targetLabel(game: GameId, command: Command, fallbackName: string | null): string | null {
   return scopeWord(targetingFor(game, command)) ?? fallbackName;
+}
+
+/**
+ * The name to print for one combatant as a **target**: its own name, plus the
+ * letter FFX gives duplicates of one enemy ("Yu Pagoda B"), exactly as the CTB
+ * tile and the target cursor's name plate show it (`letterTagsOf`, the rule
+ * `turnQueue.ts` caches for the tile). `null` for an unknown id.
+ *
+ * Without the letter the card read "Slow → Yu Pagoda" for a Slow the advisor
+ * meant for one Pagoda in particular, and a player following it Slowed the
+ * other one, the one already slowed (critic round 13 PR-0208).
+ *
+ * **FFX only.** FFX-2's HUD names its own duplicate parts, so on an FFX-2
+ * board this is the plain name [AGENTS.md rule 14].
+ */
+export function targetDisplayName(state: Readonly<BattleState>, id: CombatantId | null): string | null {
+  const c = id ? state.combatants[id] : undefined;
+  if (!c || !id) return null;
+  if (state.game !== 'ffx' || c.side !== 'enemy') return c.name;
+  const letter = letterTagsOf(state).get(id);
+  return letter ? `${c.name} ${letter}` : c.name;
 }

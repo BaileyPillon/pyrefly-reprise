@@ -49,7 +49,7 @@ import type {
 import type { ChapterGuide, GuideClock, GuideHint, GuidePhase, GuideRule } from '../../data/guides/types.ts';
 import { GUIDES, rulesOnClock } from '../../data/guides/index.ts';
 import { intendedStrategy } from '../BattlePresenterStrategies.ts';
-import { targetLabel } from './targetLabel.ts';
+import { targetDisplayName, targetLabel } from './targetLabel.ts';
 import { chapterOnBoard, guideTitle } from './lookup.ts';
 
 /** Thrown when a tactic asks the guide's read-only engine view to do something. */
@@ -382,7 +382,7 @@ function nextFor(
   // party" for the same command on the same frame [pre-deploy critic gate
   // 2026-09-18]. `targetLabel` is the single place both panels get this
   // word from now, so they cannot disagree again.
-  const targetName = targetLabel(state.game, command, target?.name ?? null);
+  const targetName = targetLabel(state.game, command, targetDisplayName(state, targetId)); // lettered (PR-0208)
 
   const hit = guide.hints.find((h) =>
     hintMatches(h, { label, command, actorId: decision.actorId, target, state, guide }),
