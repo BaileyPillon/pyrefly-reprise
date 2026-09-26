@@ -417,7 +417,8 @@ export const ffx2VegnagunShuyinScripts: ChapterScripts = {
     ],
     'farplane-voice': [
       // The Leg's flavour slot fires more than once, so this has to be the
-      // line worth hearing twice: the rule the fight is built on.
+      // line worth hearing twice: the rule the fight is built on. Twice, and
+      // no more: `story/showCaps.ts` caps it per battle (PR-0194).
       say('jecht', "Forget the lights up top. The leg's the job.", { auto: 1200 }),
     ],
     'vegnagun-tail-quarter': [
