@@ -1,0 +1,105 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Spell FX mock</title>
+<style>
+@font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 300 700; src: url('/public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2') format('woff2'); }
+@font-face { font-family: 'Chakra Petch'; font-weight: 700; src: url('/public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2') format('woff2'); }
+@font-face { font-family: 'Chakra Petch'; font-style: italic; font-weight: 700; src: url('/public/fonts/chakra-petch/ChakraPetch-BoldItalic-700.woff2') format('woff2'); }
+html, body { margin: 0; background: #000; }
+canvas { display: block; }
+</style>
+<script src="fx-lib.js"></script><script src="fx-b.js"></script><script src="fx-ac.js"></script>
+</head><body><canvas id="c"></canvas>
+<script>
+// Driver: init(cfg) loads the plate and paintings; frame(t) draws one frame of
+// the sequence at global time t. Design space is 1600x900 (the plate's size).
+const OPT = { A: 'PAINTED FLIPBOOKS', B: 'SHADER PARTICLES', C: 'PARTICLES + ELEMENT GLYPH' };
+const LABELS = {
+  ffx: { fire: 'Fire → Seymour Flux', ice: 'Blizzard → Seymour Flux', thunder: 'Thunder → Seymour Flux', water: 'Water → Seymour Flux', holy: 'Holy → Seymour Flux', cure: 'Cure → Tidus', hit: 'Attack · Tidus → Mortiorchis', special: 'Spiral Cut · Tidus’s Overdrive' },
+  ffx2: { fire: 'Fira → Bahamut', ice: 'Blizzara → Bahamut', thunder: 'Thundara → Bahamut', water: 'Watera → Bahamut', holy: 'Holy · eight hits → Bahamut', cure: 'Cura → Rikku', hit: 'Attack · Paine, Warrior → Bahamut', special: 'Mega Flare · Bahamut → the party' },
+};
+const TARGET = {
+  ffx: { fire: 'seymour-flux', ice: 'seymour-flux', thunder: 'seymour-flux', water: 'seymour-flux', holy: 'seymour-flux', cure: 'tidus', hit: 'mortiorchis', special: 'seymour-flux' },
+  ffx2: { fire: 'bahamut', ice: 'bahamut', thunder: 'bahamut', water: 'bahamut', holy: 'bahamut', cure: 'rikku', hit: 'bahamut', special: 'bahamut' },
+};
+let cfg, plate, main, mctx, layer, lctx;
+const load = (u) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error(u)); i.src = u; });
+
+window.init = async (c) => {
+  cfg = c;
+  main = document.getElementById('c'); main.width = c.W; main.height = c.H; mctx = main.getContext('2d');
+  layer = document.createElement('canvas'); layer.width = c.W; layer.height = c.H; lctx = layer.getContext('2d');
+  plate = await load(c.plate);
+  const paint = {};
+  for (const [k, u] of Object.entries(c.paintings ?? {})) paint[k] = await load(u);
+  cfg.paint = paint;
+  const T = {};
+  for (const [id, r] of Object.entries(c.rects)) T[id] = { x: r.x, y: r.y, w: r.w, h: r.h, cx: r.x + r.w / 2, cy: r.y + r.h * 0.45, fx: r.x + r.w / 2, fy: r.y + r.h * 0.97, sc: r.h / 360 };
+  T.party = c.party;
+  cfg.T = T;
+  await document.fonts.load('italic 700 40px "Cormorant Garamond"'); await document.fonts.load('700 16px "Chakra Petch"'); await document.fonts.load('italic 700 30px "Chakra Petch"');
+  return true;
+};
+
+function effectFor(opt, el, game) {
+  const key = el === 'special' ? (game === 'ffx2' ? 'megaflare' : 'spiral') : el;
+  if (opt === 'A') return FX.A[key];
+  return FX.B[key];
+}
+
+window.frame = (t) => {
+  const k = cfg.W / 1600;
+  let start = 0, item = cfg.seq[cfg.seq.length - 1], local = 0;
+  for (const s of cfg.seq) { if (t < start + s.dur) { item = s; break; } start += s.dur; }
+  local = Math.min(t - start, item.dur);
+  const game = cfg.game, T = cfg.T[TARGET[game][item.el]];
+  const flashes = [];
+  const S = {
+    ctx: lctx, game, reduce: !!cfg.reduce, dens: cfg.opt === 'C' ? 0.6 : 1, paint: cfg.paint, T: cfg.T, shake: 0,
+    flash: (id, col, a) => { if (a > 0.003) flashes.push({ id, col, a }); },
+    actorCap: (a) => (cfg.reduce ? Math.min(a, 0.35) : a),
+  };
+  lctx.setTransform(k, 0, 0, k, 0, 0);
+  lctx.globalCompositeOperation = 'source-over'; lctx.globalAlpha = 1; lctx.filter = 'none';
+  lctx.drawImage(plate, 0, 0, 1600, 900);
+  effectFor(cfg.opt, item.el, game)(S, local, T);
+  if (cfg.opt === 'C') FX.C.glyph(S, local, T, item.el);
+  // Compose with shake (overscan so no edge shows).
+  mctx.setTransform(1, 0, 0, 1, 0, 0); mctx.fillStyle = '#000'; mctx.fillRect(0, 0, cfg.W, cfg.H);
+  const sh = S.shake * k, dx = Math.sin(t * 97) * sh, dy = Math.cos(t * 83) * sh * 0.6, os = 1 + (sh * 2.4) / cfg.W;
+  mctx.save(); mctx.translate(cfg.W / 2 + dx, cfg.H / 2 + dy); mctx.scale(os, os); mctx.drawImage(layer, -cfg.W / 2, -cfg.H / 2); mctx.restore();
+  // Screen washes. REDUCE FLASHES (D-220; accessibility-review §5.2 proposal):
+  // a wash peaks at 35 %, pure white becomes warm ivory, and after the first
+  // flash of one action the rest are dropped. No duration changes.
+  for (const f of flashes) {
+    let { col, a } = f;
+    if (cfg.reduce) { if (f.id > 0) continue; a = Math.min(a, 0.35); const [r, g, b] = FX.hex(col); if (r >= 0xe0 && g >= 0xe0 && b >= 0xe0) col = '#FFF1D6'; }
+    mctx.fillStyle = FX.rgba(col, a); mctx.fillRect(0, 0, cfg.W, cfg.H);
+  }
+  caption(item, game, k);
+};
+
+function caption(item, game, k) {
+  const c = mctx, acc = game === 'ffx2' ? '#F7B6D9' : '#E3B94A';
+  c.setTransform(k, 0, 0, k, 0, 0);
+  const label = LABELS[game][item.el];
+  c.font = 'italic 700 40px "Cormorant Garamond"';
+  const w = Math.max(560, c.measureText(label).width + 70);
+  c.fillStyle = 'rgba(11,10,18,.84)'; c.fillRect(0, 0, w, 104);
+  c.fillStyle = acc; c.fillRect(0, 0, 7, 104);
+  c.font = '700 16px "Chakra Petch"'; c.fillStyle = acc; c.letterSpacing = '4px';
+  c.fillText(cfg.opt === 'today' ? 'TODAY · THE LIVE BUILD' : `OPTION ${cfg.opt} · ${OPT[cfg.opt]}`, 30, 34);
+  c.letterSpacing = '0px'; c.font = 'italic 700 40px "Cormorant Garamond"'; c.fillStyle = '#F4F1E8';
+  c.fillText(label, 30, 82);
+  const notes = [`${game === 'ffx2' ? 'FFX-2 · CHAPTER IV' : 'FFX · CHAPTER I'} · REAL-ENGINE FRAME, EFFECT MOCKED`];
+  if (cfg.opt === 'A') notes.push('ORIGINAL COMFYUI PILOT PAINTINGS · FRAMES DERIVED FROM ONE PAINTING (SKETCH)');
+  if (cfg.opt === 'C') notes.push('GLYPH IS A DRAWN STAND-IN FOR A PAINTED ONE');
+  c.font = '700 13px "Chakra Petch"'; c.letterSpacing = '2px'; c.textAlign = 'right';
+  notes.forEach((n, i) => { c.fillStyle = 'rgba(11,10,18,.7)'; const tw = c.measureText(n).width; c.fillRect(1600 - tw - 36, 842 - (notes.length - 1 - i) * 26 - 18, tw + 36, 24); c.fillStyle = 'rgba(244,241,232,.85)'; c.fillText(n, 1582, 842 - (notes.length - 1 - i) * 26); });
+  if (cfg.reduce) {
+    const s = 'REDUCE FLASHES · ON'; c.font = '700 18px "Chakra Petch"'; const tw = c.measureText(s).width;
+    c.fillStyle = 'rgba(11,10,18,.84)'; c.fillRect(1600 - tw - 60, 24, tw + 40, 44); c.fillStyle = acc; c.fillRect(1600 - 26, 24, 6, 44); c.fillText(s, 1600 - 40, 53);
+  }
+  c.textAlign = 'left'; c.letterSpacing = '0px';
+}
+window.snap = (q = 0.9) => main.toDataURL('image/jpeg', q);
+</script></body></html>
