@@ -329,6 +329,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
   if (build.arrivals) attachArrivals(scene, build.arrivals);
 
   const battleCamera = new BattleCamera(camera, { rigs: build.rigs, initial: 'idle' });
+  build.bindCamera?.(battleCamera); // a scene that re-frames itself mid-battle (the Road's phone camera)
   const toSpot = (v: Vector3): Spot => [v.x, v.y, v.z];
 
   return {

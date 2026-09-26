@@ -1,0 +1,2455 @@
+{
+ "desk": {
+  "tail": {
+   "hud": {
+    "intent": [
+     476,
+     184,
+     851,
+     413
+    ],
+    "command": [
+     1245,
+     351,
+     1570,
+     608
+    ],
+    "bars": [
+     53,
+     102,
+     650,
+     180
+    ],
+    "party": [
+     1160,
+     650,
+     1575,
+     875
+    ]
+   },
+   "features": {
+    "vegnagun-tail:stinger": {
+     "box": [
+      454,
+      425,
+      694,
+      613
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-tail:joint": {
+     "box": [
+      1171,
+      99,
+      1413,
+      239
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      340,
+      550,
+      470,
+      714
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      487,
+      548,
+      590,
+      706
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      602,
+      561,
+      680,
+      693
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-tail": {
+     "r": [
+      455,
+      -133,
+      1744,
+      735
+     ],
+     "h": 22.96,
+     "pos": [
+      9.74,
+      -1.4,
+      -17
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂",
+    "after": {
+     "sel": [
+      "vegnagun-tail"
+     ],
+     "cmd": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂"
+    },
+    "back": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂",
+    "featuresWhileAiming": {
+     "vegnagun-tail:stinger": {
+      "box": [
+       454,
+       425,
+       693,
+       613
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-tail:joint": {
+      "box": [
+       1170,
+       99,
+       1413,
+       239
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "leg": {
+   "hud": {
+    "intent": [
+     1106,
+     74,
+     1481,
+     396
+    ],
+    "command": [
+     1245,
+     417,
+     1570,
+     608
+    ],
+    "bars": [
+     53,
+     102,
+     650,
+     280
+    ],
+    "party": [
+     1160,
+     650,
+     1575,
+     875
+    ]
+   },
+   "features": {
+    "vegnagun-leg:spikeClaw": {
+     "box": [
+      587,
+      361,
+      772,
+      668
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:knee": {
+     "box": [
+      963,
+      200,
+      1126,
+      387
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0.126,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:greenLens": {
+     "box": [
+      673,
+      173,
+      770,
+      267
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:redOrb": {
+     "box": [
+      969,
+      -263,
+      1063,
+      -177
+     ],
+     "onScreen": 0,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      333,
+      560,
+      466,
+      718
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      476,
+      544,
+      582,
+      702
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      600,
+      546,
+      676,
+      694
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-leg": {
+     "r": [
+      508,
+      -304,
+      1192,
+      657
+     ],
+     "h": 22.55,
+     "pos": [
+      3.2,
+      0,
+      -12
+     ],
+     "sx": 1
+    },
+    "node-a": {
+     "r": [
+      1013,
+      -802,
+      1078,
+      -745
+     ],
+     "h": 1.8,
+     "pos": [
+      9.2,
+      40,
+      -16
+     ],
+     "sx": 1
+    },
+    "node-b": {
+     "r": [
+      1193,
+      -1170,
+      1264,
+      -1109
+     ],
+     "h": 1.8,
+     "pos": [
+      13.2,
+      46,
+      -12
+     ],
+     "sx": 1
+    },
+    "node-c": {
+     "r": [
+      1087,
+      -1210,
+      1171,
+      -1138
+     ],
+     "h": 1.8,
+     "pos": [
+      9.2,
+      40,
+      -8
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "WHITE MAGIC\n◂\nCHANGE\n◂\nITEM\n◂",
+    "after": {
+     "sel": [],
+     "cmd": "WHITE MAGIC\nPRAY\nVIGOR\nSHELL\n10\nPROTECT\n12\nCURE\n4\nCURA\n10\nCURAGA\n20\nESUNA\n10\nDIS"
+    },
+    "back": "WHITE MAGIC\n◂\nCHANGE\n◂\nITEM\n◂",
+    "featuresWhileAiming": {
+     "vegnagun-leg:spikeClaw": {
+      "box": [
+       587,
+       354,
+       775,
+       665
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:knee": {
+      "box": [
+       970,
+       197,
+       1130,
+       389
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:greenLens": {
+      "box": [
+       679,
+       165,
+       777,
+       261
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:redOrb": {
+      "box": [
+       982,
+       -270,
+       1075,
+       -182
+      ],
+      "onScreen": 0,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "body": {
+   "hud": {
+    "intent": [
+     719,
+     74,
+     1094,
+     323
+    ],
+    "command": [
+     1245,
+     351,
+     1570,
+     608
+    ],
+    "bars": [
+     53,
+     102,
+     650,
+     247
+    ],
+    "party": [
+     1160,
+     650,
+     1575,
+     875
+    ]
+   },
+   "features": {
+    "vegnagun-body:core": {
+     "box": [
+      670,
+      288,
+      758,
+      374
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0.18,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-body:muzzleLens": {
+     "box": [
+      56,
+      65,
+      185,
+      166
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0.636,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      342,
+      550,
+      471,
+      713
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      489,
+      545,
+      591,
+      705
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      601,
+      547,
+      673,
+      692
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-body": {
+     "r": [
+      -22,
+      -42,
+      1047,
+      648
+     ],
+     "h": 17.63,
+     "pos": [
+      -4.6,
+      0,
+      -16
+     ],
+     "sx": 1
+    },
+    "bulwark-r": {
+     "r": [
+      10,
+      374,
+      226,
+      646
+     ],
+     "h": 4.73,
+     "pos": [
+      -14.31,
+      -0.01,
+      -15.95
+     ],
+     "sx": 1
+    },
+    "bulwark-l": {
+     "r": [
+      871,
+      379,
+      1065,
+      645
+     ],
+     "h": 4.73,
+     "pos": [
+      6.35,
+      -0.01,
+      -15.95
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂",
+    "after": {
+     "sel": [
+      "bulwark-l"
+     ],
+     "cmd": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂"
+    },
+    "back": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂",
+    "featuresWhileAiming": {
+     "vegnagun-body:core": {
+      "box": [
+       670,
+       288,
+       757,
+       374
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-body:muzzleLens": {
+      "box": [
+       54,
+       65,
+       184,
+       166
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0.63,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "head": {
+   "hud": {
+    "intent": [
+     932,
+     90,
+     1307,
+     192
+    ],
+    "command": [
+     1245,
+     417,
+     1570,
+     608
+    ],
+    "bars": [
+     53,
+     102,
+     650,
+     247
+    ],
+    "party": [
+     1160,
+     650,
+     1575,
+     875
+    ]
+   },
+   "features": {
+    "vegnagun-head:skullFace": {
+     "box": [
+      693,
+      188,
+      921,
+      470
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-head:horn": {
+     "box": [
+      969,
+      196,
+      1151,
+      405
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      372,
+      537,
+      459,
+      715
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      474,
+      543,
+      580,
+      701
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      601,
+      547,
+      672,
+      692
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-head": {
+     "r": [
+      62,
+      -271,
+      1330,
+      650
+     ],
+     "h": 19.68,
+     "pos": [
+      0.33,
+      1.6,
+      -15
+     ],
+     "sx": -1
+    },
+    "redoubt-r": {
+     "r": [
+      896,
+      217,
+      1063,
+      379
+     ],
+     "h": 4.03,
+     "pos": [
+      6.54,
+      6.43,
+      -14.95
+     ],
+     "sx": 1
+    },
+    "redoubt-l": {
+     "r": [
+      662,
+      358,
+      807,
+      501
+     ],
+     "h": 3.46,
+     "pos": [
+      0.61,
+      3.43,
+      -14.95
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "WHITE MAGIC\n◂\nCHANGE\n◂\nITEM\n◂",
+    "after": {
+     "sel": [],
+     "cmd": "WHITE MAGIC\nPRAY\nVIGOR\nSHELL\n10\nPROTECT\n12\nCURE\n4\nCURA\n10\nCURAGA\n20\nESUNA\n10\nDIS"
+    },
+    "back": "WHITE MAGIC\n◂\nCHANGE\n◂\nITEM\n◂",
+    "featuresWhileAiming": {
+     "vegnagun-head:skullFace": {
+      "box": [
+       693,
+       188,
+       920,
+       470
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-head:horn": {
+      "box": [
+       968,
+       196,
+       1150,
+       405
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  }
+ },
+ "wide": {
+  "tail": {
+   "hud": {
+    "intent": [
+     1561,
+     83,
+     1982,
+     341
+    ],
+    "command": [
+     1501,
+     469,
+     1865,
+     684
+    ],
+    "bars": [
+     160,
+     115,
+     832,
+     202
+    ],
+    "party": [
+     1404,
+     730,
+     1871,
+     983
+    ]
+   },
+   "features": {
+    "vegnagun-tail:stinger": {
+     "box": [
+      610,
+      478,
+      880,
+      689
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-tail:joint": {
+     "box": [
+      1415,
+      112,
+      1688,
+      269
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0.467,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      520,
+      606,
+      618,
+      806
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      641,
+      610,
+      761,
+      790
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      779,
+      632,
+      864,
+      779
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-tail": {
+     "r": [
+      612,
+      -149,
+      2059,
+      827
+     ],
+     "h": 22.96,
+     "pos": [
+      9.74,
+      -1.4,
+      -17
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "WHITE MAGIC\n◂\nCHANGE\n◂\nITEM\n◂",
+    "after": {
+     "sel": [],
+     "cmd": "WHITE MAGIC\nPRAY\nVIGOR\nSHELL\n10\nPROTECT\n12\nCURE\n4\nCURA\n10\nCURAGA\n20\nESUNA\n10\nDIS"
+    },
+    "back": "WHITE MAGIC\n◂\nCHANGE\n◂\nITEM\n◂",
+    "featuresWhileAiming": {
+     "vegnagun-tail:stinger": {
+      "box": [
+       610,
+       478,
+       880,
+       689
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-tail:joint": {
+      "box": [
+       1416,
+       112,
+       1688,
+       269
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0.689,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "leg": {
+   "hud": {
+    "intent": [
+     1343,
+     83,
+     1765,
+     445
+    ],
+    "command": [
+     1501,
+     469,
+     1865,
+     684
+    ],
+    "bars": [
+     160,
+     115,
+     832,
+     314
+    ],
+    "party": [
+     1404,
+     730,
+     1871,
+     983
+    ]
+   },
+   "features": {
+    "vegnagun-leg:spikeClaw": {
+     "box": [
+      760,
+      401,
+      972,
+      748
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:knee": {
+     "box": [
+      1190,
+      224,
+      1371,
+      439
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0.153,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:greenLens": {
+     "box": [
+      863,
+      190,
+      974,
+      297
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:redOrb": {
+     "box": [
+      1204,
+      -297,
+      1308,
+      -198
+     ],
+     "onScreen": 0,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      521,
+      602,
+      620,
+      804
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      647,
+      612,
+      771,
+      793
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      773,
+      621,
+      858,
+      782
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-leg": {
+     "r": [
+      671,
+      -350,
+      1441,
+      738
+     ],
+     "h": 22.55,
+     "pos": [
+      3.2,
+      0,
+      -12
+     ],
+     "sx": 1
+    },
+    "node-a": {
+     "r": [
+      1240,
+      -900,
+      1312,
+      -836
+     ],
+     "h": 1.8,
+     "pos": [
+      9.2,
+      40,
+      -16
+     ],
+     "sx": 1
+    },
+    "node-b": {
+     "r": [
+      1441,
+      -1313,
+      1521,
+      -1244
+     ],
+     "h": 1.8,
+     "pos": [
+      13.2,
+      46,
+      -12
+     ],
+     "sx": 1
+    },
+    "node-c": {
+     "r": [
+      1323,
+      -1357,
+      1416,
+      -1276
+     ],
+     "h": 1.8,
+     "pos": [
+      9.2,
+      40,
+      -8
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "WHITE MAGIC\n◂\nCHANGE\n◂\nITEM\n◂",
+    "after": {
+     "sel": [],
+     "cmd": "WHITE MAGIC\nPRAY\nVIGOR\nSHELL\n10\nPROTECT\n12\nCURE\n4\nCURA\n10\nCURAGA\n20\nESUNA\n10\nDIS"
+    },
+    "back": "WHITE MAGIC\n◂\nCHANGE\n◂\nITEM\n◂",
+    "featuresWhileAiming": {
+     "vegnagun-leg:spikeClaw": {
+      "box": [
+       760,
+       397,
+       968,
+       750
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:knee": {
+      "box": [
+       1185,
+       212,
+       1367,
+       429
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:greenLens": {
+      "box": [
+       859,
+       180,
+       968,
+       288
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:redOrb": {
+      "box": [
+       1193,
+       -319,
+       1298,
+       -220
+      ],
+      "onScreen": 0,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "body": {
+   "hud": {
+    "intent": [
+     908,
+     83,
+     1330,
+     363
+    ],
+    "command": [
+     1501,
+     394,
+     1865,
+     684
+    ],
+    "bars": [
+     160,
+     115,
+     832,
+     278
+    ],
+    "party": [
+     1404,
+     730,
+     1871,
+     983
+    ]
+   },
+   "features": {
+    "vegnagun-body:core": {
+     "box": [
+      854,
+      324,
+      953,
+      420
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0.183,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-body:muzzleLens": {
+     "box": [
+      163,
+      73,
+      309,
+      187
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0.636,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      484,
+      617,
+      631,
+      803
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      649,
+      609,
+      764,
+      794
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      776,
+      615,
+      856,
+      779
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-body": {
+     "r": [
+      75,
+      -48,
+      1279,
+      729
+     ],
+     "h": 17.63,
+     "pos": [
+      -4.6,
+      0,
+      -16
+     ],
+     "sx": 1
+    },
+    "bulwark-r": {
+     "r": [
+      112,
+      421,
+      355,
+      727
+     ],
+     "h": 4.73,
+     "pos": [
+      -14.31,
+      -0.01,
+      -15.95
+     ],
+     "sx": 1
+    },
+    "bulwark-l": {
+     "r": [
+      1080,
+      426,
+      1299,
+      725
+     ],
+     "h": 4.73,
+     "pos": [
+      6.35,
+      -0.01,
+      -15.95
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂",
+    "after": {
+     "sel": [
+      "bulwark-l"
+     ],
+     "cmd": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂"
+    },
+    "back": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂",
+    "featuresWhileAiming": {
+     "vegnagun-body:core": {
+      "box": [
+       854,
+       324,
+       952,
+       420
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-body:muzzleLens": {
+      "box": [
+       162,
+       73,
+       308,
+       187
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0.634,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "head": {
+   "hud": {
+    "intent": [
+     1229,
+     83,
+     1650,
+     259
+    ],
+    "command": [
+     1501,
+     394,
+     1865,
+     684
+    ],
+    "bars": [
+     160,
+     115,
+     832,
+     278
+    ],
+    "party": [
+     1404,
+     730,
+     1871,
+     983
+    ]
+   },
+   "features": {
+    "vegnagun-head:skullFace": {
+     "box": [
+      880,
+      212,
+      1136,
+      528
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-head:horn": {
+     "box": [
+      1190,
+      220,
+      1394,
+      455
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0.133,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      502,
+      607,
+      605,
+      801
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      650,
+      610,
+      765,
+      792
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      776,
+      616,
+      858,
+      778
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-head": {
+     "r": [
+      171,
+      -305,
+      1596,
+      731
+     ],
+     "h": 19.68,
+     "pos": [
+      0.33,
+      1.6,
+      -15
+     ],
+     "sx": -1
+    },
+    "redoubt-r": {
+     "r": [
+      1108,
+      244,
+      1295,
+      426
+     ],
+     "h": 4.03,
+     "pos": [
+      6.54,
+      6.43,
+      -14.95
+     ],
+     "sx": 1
+    },
+    "redoubt-l": {
+     "r": [
+      845,
+      402,
+      1008,
+      563
+     ],
+     "h": 3.46,
+     "pos": [
+      0.61,
+      3.43,
+      -14.95
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂",
+    "after": {
+     "sel": [
+      "redoubt-l"
+     ],
+     "cmd": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂"
+    },
+    "back": "ATTACK\nSKILL\n◂\nCHANGE\n◂\nITEM\n◂",
+    "featuresWhileAiming": {
+     "vegnagun-head:skullFace": {
+      "box": [
+       880,
+       211,
+       1135,
+       528
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-head:horn": {
+      "box": [
+       1189,
+       220,
+       1394,
+       455
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0.419,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  }
+ },
+ "phone": {
+  "tail": {
+   "hud": {
+    "intent": [
+     10,
+     60,
+     380,
+     129
+    ],
+    "command": [
+     8,
+     610,
+     382,
+     730
+    ],
+    "bars": [
+     10,
+     10,
+     324,
+     58
+    ],
+    "party": [
+     8,
+     486,
+     382,
+     548
+    ]
+   },
+   "features": {
+    "vegnagun-tail:stinger": {
+     "box": [
+      5,
+      282,
+      103,
+      359
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-tail:joint": {
+     "box": [
+      306,
+      147,
+      405,
+      205
+     ],
+     "onScreen": 0.845,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      10,
+      325,
+      87,
+      420
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      99,
+      324,
+      159,
+      415
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      169,
+      331,
+      215,
+      408
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-tail": {
+     "r": [
+      5,
+      48,
+      533,
+      408
+     ],
+     "h": 15.99,
+     "pos": [
+      0.79,
+      -0.6,
+      -17
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "ATTACK\nSKILL\nCHANGE\nITEM",
+    "after": {
+     "sel": [
+      "vegnagun-tail"
+     ],
+     "cmd": ""
+    },
+    "back": "ATTACK\nSKILL\nCHANGE\nITEM",
+    "featuresWhileAiming": {
+     "vegnagun-tail:stinger": {
+      "box": [
+       5,
+       282,
+       103,
+       359
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-tail:joint": {
+      "box": [
+       306,
+       147,
+       405,
+       205
+      ],
+      "onScreen": 0.844,
+      "covered": {
+       "intent": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "leg": {
+   "hud": {
+    "intent": [
+     10,
+     145,
+     380,
+     195
+    ],
+    "command": [
+     8,
+     610,
+     382,
+     730
+    ],
+    "bars": [
+     10,
+     10,
+     324,
+     143
+    ],
+    "party": [
+     8,
+     486,
+     382,
+     548
+    ]
+   },
+   "features": {
+    "vegnagun-leg:spikeClaw": {
+     "box": [
+      125,
+      242,
+      217,
+      392
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:knee": {
+     "box": [
+      313,
+      162,
+      391,
+      255
+     ],
+     "onScreen": 0.977,
+     "covered": {
+      "intent": 0.298,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:greenLens": {
+     "box": [
+      170,
+      149,
+      219,
+      195
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0.988,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-leg:redOrb": {
+     "box": [
+      320,
+      -66,
+      365,
+      -23
+     ],
+     "onScreen": 0,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      24,
+      314,
+      78,
+      418
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      85,
+      325,
+      150,
+      417
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      166,
+      326,
+      210,
+      410
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-leg": {
+     "r": [
+      88,
+      -85,
+      422,
+      387
+     ],
+     "h": 18.86,
+     "pos": [
+      0.6,
+      0,
+      -12
+     ],
+     "sx": 1
+    },
+    "node-a": {
+     "r": [
+      372,
+      -451,
+      409,
+      -418
+     ],
+     "h": 1.8,
+     "pos": [
+      6.6,
+      40,
+      -16
+     ],
+     "sx": 1
+    },
+    "node-b": {
+     "r": [
+      468,
+      -660,
+      509,
+      -625
+     ],
+     "h": 1.8,
+     "pos": [
+      10.6,
+      46,
+      -12
+     ],
+     "sx": 1
+    },
+    "node-c": {
+     "r": [
+      395,
+      -682,
+      442,
+      -642
+     ],
+     "h": 1.8,
+     "pos": [
+      6.6,
+      40,
+      -8
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "WHITE MAGIC\nCHANGE\nITEM",
+    "after": {
+     "sel": [],
+     "cmd": "WHITE MAGIC\nPRAY\nVIGOR\nSHELL\n10\nPROTECT\n12\nCURE\n4\nCURA\n10\nCURAGA\n20\nESUNA\n10\nDIS"
+    },
+    "back": "WHITE MAGIC\nCHANGE\nITEM",
+    "featuresWhileAiming": {
+     "vegnagun-leg:spikeClaw": {
+      "box": [
+       108,
+       238,
+       203,
+       391
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:knee": {
+      "box": [
+       298,
+       160,
+       376,
+       254
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0.372,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:greenLens": {
+      "box": [
+       156,
+       145,
+       205,
+       192
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 1,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-leg:redOrb": {
+      "box": [
+       309,
+       -72,
+       354,
+       -28
+      ],
+      "onScreen": 0,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "body": {
+   "hud": {
+    "intent": [
+     10,
+     102,
+     380,
+     152
+    ],
+    "command": [
+     8,
+     610,
+     382,
+     730
+    ],
+    "bars": [
+     10,
+     10,
+     324,
+     100
+    ],
+    "party": [
+     8,
+     486,
+     382,
+     548
+    ]
+   },
+   "features": {
+    "vegnagun-body:core": {
+     "box": [
+      243,
+      249,
+      275,
+      281
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-body:muzzleLens": {
+     "box": [
+      17,
+      167,
+      64,
+      205
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      78,
+      319,
+      129,
+      421
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      142,
+      320,
+      203,
+      413
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      218,
+      323,
+      260,
+      408
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-body": {
+     "r": [
+      -9,
+      126,
+      380,
+      382
+     ],
+     "h": 11.07,
+     "pos": [
+      -4.6,
+      0,
+      -16
+     ],
+     "sx": 1
+    },
+    "bulwark-r": {
+     "r": [
+      2,
+      282,
+      80,
+      381
+     ],
+     "h": 2.97,
+     "pos": [
+      -10.69,
+      -0.03,
+      -15.95
+     ],
+     "sx": 1
+    },
+    "bulwark-l": {
+     "r": [
+      316,
+      283,
+      386,
+      381
+     ],
+     "h": 2.97,
+     "pos": [
+      2.27,
+      -0.03,
+      -15.95
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "WHITE MAGIC\nCHANGE\nITEM",
+    "after": {
+     "sel": [],
+     "cmd": "▴\nWHITE MAGIC\nPRAY\nVIGOR\nSHELL\n10\nPROTECT\n12\nCURE\n4\nCURA\n10\nCURAGA\n20\nESUNA\n10\nD"
+    },
+    "back": "WHITE MAGIC\nCHANGE\nITEM",
+    "featuresWhileAiming": {
+     "vegnagun-body:core": {
+      "box": [
+       243,
+       249,
+       276,
+       281
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-body:muzzleLens": {
+      "box": [
+       18,
+       167,
+       65,
+       205
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "command": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  },
+  "head": {
+   "hud": {
+    "intent": [
+     10,
+     102,
+     367,
+     133
+    ],
+    "command": [
+     8,
+     610,
+     382,
+     730
+    ],
+    "bars": [
+     10,
+     10,
+     324,
+     100
+    ],
+    "party": [
+     8,
+     486,
+     382,
+     548
+    ]
+   },
+   "features": {
+    "vegnagun-head:skullFace": {
+     "box": [
+      114,
+      179,
+      217,
+      304
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    },
+    "vegnagun-head:horn": {
+     "box": [
+      236,
+      182,
+      319,
+      275
+     ],
+     "onScreen": 1,
+     "covered": {
+      "intent": 0,
+      "command": 0,
+      "bars": 0,
+      "party": 0
+     }
+    }
+   },
+   "partRects": {
+    "yuna": {
+     "r": [
+      6,
+      317,
+      59,
+      420
+     ],
+     "h": 1.82,
+     "pos": [
+      -2.48,
+      0,
+      1.45
+     ],
+     "sx": 1
+    },
+    "rikku": {
+     "r": [
+      86,
+      323,
+      146,
+      415
+     ],
+     "h": 1.82,
+     "pos": [
+      -1.44,
+      0,
+      0.1
+     ],
+     "sx": 1
+    },
+    "paine": {
+     "r": [
+      155,
+      325,
+      198,
+      408
+     ],
+     "h": 1.82,
+     "pos": [
+      -0.33,
+      0,
+      -1.3
+     ],
+     "sx": 1
+    },
+    "vegnagun-head": {
+     "r": [
+      -163,
+      -25,
+      404,
+      383
+     ],
+     "h": 14.76,
+     "pos": [
+      -4.32,
+      1.2,
+      -15
+     ],
+     "sx": -1
+    },
+    "redoubt-r": {
+     "r": [
+      204,
+      192,
+      278,
+      264
+     ],
+     "h": 3.02,
+     "pos": [
+      0.34,
+      4.81,
+      -14.95
+     ],
+     "sx": 1
+    },
+    "redoubt-l": {
+     "r": [
+      99,
+      255,
+      164,
+      318
+     ],
+     "h": 2.59,
+     "pos": [
+      -4.11,
+      2.56,
+      -14.95
+     ],
+     "sx": 1
+    }
+   },
+   "realKeys": {
+    "before": "ATTACK\nSKILL\nCHANGE\nITEM",
+    "after": {
+     "sel": [
+      "redoubt-l"
+     ],
+     "cmd": ""
+    },
+    "back": "ATTACK\nSKILL\nCHANGE\nITEM",
+    "featuresWhileAiming": {
+     "vegnagun-head:skullFace": {
+      "box": [
+       114,
+       179,
+       217,
+       304
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "bars": 0,
+       "party": 0
+      }
+     },
+     "vegnagun-head:horn": {
+      "box": [
+       236,
+       183,
+       319,
+       275
+      ],
+      "onScreen": 1,
+      "covered": {
+       "intent": 0,
+       "bars": 0,
+       "party": 0
+      }
+     }
+    }
+   }
+  }
+ }
+}

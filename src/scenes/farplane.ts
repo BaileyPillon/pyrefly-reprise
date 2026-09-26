@@ -31,7 +31,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { paintBossSilhouette, radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import { HitEffects } from '../engine/VFX.ts';
-import { FARPLANE_STAGING } from './farplane-parts.ts';
+import { VegnagunColossus, colossusOnPhone } from './farplane-colossus.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { AssetReport, PaintedScene } from './demo.ts';
 import {
@@ -487,6 +487,8 @@ export const buildFarplaneScene: SceneFactory = async (
 ): Promise<SceneBuild> => {
   const group = new Group();
   group.name = 'scene:farplane';
+  // Vegnagun staging option A (Bailey, 2026-09-26; FFX-2 only, Chapter V): farplane-colossus.ts.
+  const colossus = new VegnagunColossus(RIGS, group, colossusOnPhone());
   const low = opts.quality === 'low';
   const cameraRef = opts.cameraRef ?? CAMERA_REF;
 
@@ -850,7 +852,8 @@ export const buildFarplaneScene: SceneFactory = async (
     rigs: RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
-    ...FARPLANE_STAGING, // Vegnagun's figure-less parts and the body's own spot (D-044)
+    ...colossus.staging, // Vegnagun's parts pinned, sized and re-anchored for option A (D-044 rings)
+    bindCamera: (camera: BattleCamera | null): void => colossus.bind(camera),
     /**
      * The shared Farplane grade, pulled back.
      *
@@ -878,6 +881,7 @@ export const buildFarplaneScene: SceneFactory = async (
     } satisfies ScenePalette,
     update(dt: number): void {
       clock += dt;
+      colossus.update(group.parent);
       backdrop.update(dt);
       lights.update(dt);
       for (const p of particles) p.update(dt);
@@ -889,6 +893,7 @@ export const buildFarplaneScene: SceneFactory = async (
     },
     dispose(): void {
       watcher?.stop();
+      colossus.bind(null);
       for (const p of particles) p.dispose();
       for (const p of pools) {
         p.geometry.dispose();
