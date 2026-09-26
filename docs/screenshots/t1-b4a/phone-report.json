@@ -1,0 +1,108 @@
+{
+ "plain-seymour-flux": {
+  "chint": {
+   "x": 93,
+   "y": 772,
+   "w": 204,
+   "h": 64
+  },
+  "body": {
+   "x": 96,
+   "y": 711,
+   "w": 270,
+   "h": 35
+  },
+  "speaker": {
+   "x": 96,
+   "y": 711,
+   "w": 46,
+   "h": 15
+  },
+  "chintText": "Enter advance·Hold Enter skip·Esc menu",
+  "chintHitsBody": false,
+  "chintHitsSpeaker": false,
+  "chintInside": true
+ },
+ "plain-ffx2-vegnagun-shuyin": {
+  "chint": {
+   "x": 93,
+   "y": 772,
+   "w": 204,
+   "h": 64
+  },
+  "body": {
+   "x": 96,
+   "y": 711,
+   "w": 270,
+   "h": 35
+  },
+  "speaker": {
+   "x": 96,
+   "y": 711,
+   "w": 26,
+   "h": 15
+  },
+  "chintText": "Enter advance·Hold Enter skip·Esc menu",
+  "chintHitsBody": false,
+  "chintHitsSpeaker": false,
+  "chintInside": true
+ },
+ "touch-seymour-flux": {
+  "chint": {
+   "x": 94,
+   "y": 792,
+   "w": 201,
+   "h": 44
+  },
+  "body": {
+   "x": 96,
+   "y": 711,
+   "w": 270,
+   "h": 35
+  },
+  "speaker": {
+   "x": 96,
+   "y": 711,
+   "w": 46,
+   "h": 15
+  },
+  "chintText": "Tap advance·Tap here menu",
+  "chintHitsBody": false,
+  "chintHitsSpeaker": false,
+  "chintInside": true,
+  "tapAdvanced": true,
+  "tapOpenedMenu": true
+ },
+ "touch-ffx2-vegnagun-shuyin": {
+  "chint": {
+   "x": 94,
+   "y": 792,
+   "w": 201,
+   "h": 44
+  },
+  "body": {
+   "x": 96,
+   "y": 711,
+   "w": 270,
+   "h": 35
+  },
+  "speaker": {
+   "x": 96,
+   "y": 711,
+   "w": 26,
+   "h": 15
+  },
+  "chintText": "Tap advance·Tap here menu",
+  "chintHitsBody": false,
+  "chintHitsSpeaker": false,
+  "chintInside": true,
+  "tapAdvanced": true,
+  "tapOpenedMenu": true
+ },
+ "touch-briefing": {
+  "up": true,
+  "text": "TAP SKIP — 20 SECONDS, ONCE TAP HERE NEVER SHOW THIS AGAIN",
+  "tapSkipped": true,
+  "screen": "chapter-select"
+ }
+}
