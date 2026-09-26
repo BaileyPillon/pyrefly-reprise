@@ -35,6 +35,7 @@ import { findEnemyGroup, setupForChapter } from '../../src/app/screens/BattleScr
 import { cueForGroup, runEncounterChain } from '../../src/app/screens/BattleEncounterChain.ts';
 import { TRACKS } from '../../src/audio/tracks/index.ts';
 import { FakeAudio, FakeStage } from './helpers/FakeStage.ts';
+import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 
 /** Wall-clock budget for one chapter. Generous; a healthy run is milliseconds. */
 const BUDGET_MS = 20_000;
@@ -109,7 +110,7 @@ async function playChapter(chapter: Chapter, speed: PlaybackSpeed, seed = 1) {
   );
   const presenter = new BattlePresenter({ stage, audio, sleep });
   presenter.setSpeed(speed);
-  presenter.setAutoPlay(intendedStrategy);
+  setCappedAutoPlay(presenter, intendedStrategy);
 
   const result = await withDeadline(
     `${chapter.id} at speed '${speed}'`,
@@ -262,7 +263,7 @@ describe('a stage animation that never settles cannot strand a chapter — #01',
     );
     const presenter = new BattlePresenter({ stage, audio: new FakeAudio(), sleep });
     presenter.setSpeed('skip');
-    presenter.setAutoPlay(intendedStrategy);
+    setCappedAutoPlay(presenter, intendedStrategy);
 
     const { outcome } = await withDeadline(
       'chapter 4 with a dead KO animation',

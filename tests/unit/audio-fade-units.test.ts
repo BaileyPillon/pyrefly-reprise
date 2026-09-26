@@ -34,7 +34,9 @@ import { findEnemyGroup, setupForChapter } from '../../src/app/screens/BattleScr
 import { registerBattleContent, ffx2EngineOptions } from '../../src/app/screens/BattleScreenContent.ts';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
 import { FakeAudio, FakeStage } from './helpers/FakeStage.ts';
+import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 
 describe('fadeMsToSec', () => {
   it('divides an authored-in-ms fade by 1000', () => {
@@ -208,11 +210,18 @@ describe('BattleEncounterChain: cueForGroup fadeMs (authored ms) reaches playMus
     const audioPort = new FakeAudio();
     const presenter = new BattlePresenter({ stage, audio: audioPort, sleep: () => Promise.resolve() });
     presenter.setSpeed('skip');
+    // The fight is played by the chapter's own line, with a decision cap. With
+    // no HUD and no strategy the presenter picks the first enabled row for every
+    // command, and since the FFX-2 IC-2 fix (2026-09-26) that line leaves the
+    // White Mage Yuna alone against Bahamut: she cannot win and Vigor keeps her
+    // alive, so the fight never ended and the worker ran out of heap. The cue
+    // under test is played before the first decision either way.
+    const auto = setCappedAutoPlay(presenter, intendedStrategy);
     // `ChainStagePort` (re-stage the field for the next formation) is a
     // separate, smaller port than the `BattleStage` the presenter drives.
     const chainStage = { stage: (_s: unknown) => Promise.resolve() };
 
-    await runEncounterChain({
+    const result = await runEncounterChain({
       chapter,
       presenter,
       engine,
@@ -229,6 +238,8 @@ describe('BattleEncounterChain: cueForGroup fadeMs (authored ms) reaches playMus
     // AudioManager as 1200 seconds.
     expect(audioPort.fades[0]).toBeCloseTo(cue.fadeMs / 1000, 6);
     expect(audioPort.fades[0]).toBeLessThan(5);
+    expect(auto.capped(), `the fight hit the decision cap after ${auto.decisions()} decisions`).toBe(false);
+    expect(['victory', 'defeat']).toContain(result.outcome.kind);
   });
 
   it('chapter 5: each chained Vegnagun link plays boss-vegnagun with its authored 600 ms as 0.6 s; Shuyin starts nothing (PR-0129)', async () => {

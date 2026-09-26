@@ -43,6 +43,7 @@ import { registerBattleContent, ffx2EngineOptions } from '../../src/app/screens/
 import * as ffx2data from '../../src/data/ffx2/index.ts';
 import { farplaneBuild } from '../../src/data/ffx2/builds/farplane.ts';
 import { FakeAudio, FakeCutscenes, FakeDamageNumbers, FakeMessageBar, FakeStage } from './helpers/FakeStage.ts';
+import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 
 beforeAll(async () => {
   await registerBattleContent();
@@ -242,7 +243,7 @@ describe('PR-0045 — Chapter 5 link 2 reaches an outcome on every seed', () => 
         cutscenes: new FakeCutscenes(),
         sleep: () => Promise.resolve(),
       });
-      presenter.setAutoPlay(strategy);
+      setCappedAutoPlay(presenter, strategy);
       const outcome = await presenter.run(engine);
       if (zeroRow) stalls.push(zeroRow);
       expect(outcome.kind, `seed ${seed} ended as ${outcome.kind}`).not.toBe('aborted');
