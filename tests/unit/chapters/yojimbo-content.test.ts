@@ -30,6 +30,7 @@ import { lintScript, type SayStep, type Step } from '../../../src/story/dsl.ts';
 import { yojimboCavernScripts } from '../../../src/story/scripts/yojimbo-cavern.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { buildGuideView, guideForState, stateOnlyEngine } from '../../../src/engine/tactics/guide.ts';
+import { buildAdvisorView } from '../../../src/engine/tactics/advisor.ts';
 import { tacticFor, yojimboCavern } from '../../../src/engine/tactics/index.ts';
 import { evaluateObjective } from '../../../src/ui/common/chapterObjectives.ts';
 
@@ -247,6 +248,32 @@ describe('guide', () => {
     for (const r of guide.rules) expect(r.short.length, r.short).toBeLessThanOrEqual(RULE_SHORT_MAX);
     const engine = newEngine(1);
     expect(guideForState(engine.state())?.id).toBe('yojimbo-cavern');
+  });
+
+  it('names Doom nowhere while Kimahri has none (P-1), so it cannot spoil the card’s ??? row (P-2 (b))', () => {
+    expect(CAVERN_DOOM_PREP).toBe('not-learned');
+    const text = [
+      ...guide.rules.flatMap((r) => [r.text, r.short]),
+      ...guide.hints.flatMap((h) => [h.text, ...(h.when.labels ?? [])]),
+      ...guide.phases.map((p) => p.note),
+    ].join(' ');
+    expect(text).not.toMatch(/doom|ghost|lancet/i);
+  });
+
+  it('the advisor never suggests Doom across a whole fight: it reads the menu, and Doom is not on it', () => {
+    const engine = newEngine(2);
+    let suggestions = 0;
+    for (let i = 0; i < 6000; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      for (const s of buildAdvisorView(engine.state(), { actorId: d.actorId, commands: d.commands }, {})?.suggestions ?? []) {
+        suggestions++;
+        expect('id' in s.command ? s.command.id : s.command.kind).not.toBe('doom');
+      }
+      engine.submit(intendedStrategy(d.actorId, d.commands, engine) ?? { kind: 'defend', targets: [] });
+    }
+    expect(suggestions).toBeGreaterThan(0);
   });
 
   it('explains the tactic’s picks on a real battle, with a citation', () => {
