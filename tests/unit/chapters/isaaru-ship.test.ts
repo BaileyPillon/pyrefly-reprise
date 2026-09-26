@@ -37,14 +37,14 @@ describe('the registered record', () => {
   it('is reachable by id and listed (2026-09-25), with the ship layer on', () => {
     expect(getChapter('isaaru-via-purifico')).toBe(ISAARU_VIA_PURIFICO_SHIPPED);
     expect(UNLISTED_CHAPTERS).not.toContain(ISAARU_VIA_PURIFICO_SHIPPED);
-    expect(CHAPTERS.at(-1)).toBe(ISAARU_VIA_PURIFICO_SHIPPED);
+    expect(CHAPTERS.at(-2)).toBe(ISAARU_VIA_PURIFICO_SHIPPED); // Chapter XV follows (listed 2026-09-26)
     expect(ISAARU_VIA_PURIFICO_SHIPPED.sceneKey).toBe('via-purifico');
     expect(ISAARU_VIA_PURIFICO_SHIPPED.scriptsRef).toBe(isaaruScripts);
   });
 
   it('the pause card is listed too, with hero plate B and art that exists', () => {
     expect(UNLISTED_CHAPTER_META).not.toContain(ISAARU_META);
-    expect(CHAPTER_META.at(-1)).toBe(ISAARU_META);
+    expect(CHAPTER_META.at(-2)).toBe(ISAARU_META);
     expect(getChapterMeta('isaaru-via-purifico')).toBe(ISAARU_META);
     expect(ISAARU_META).toMatchObject({ numeral: 'XIV', gameLabel: 'FFX', heroArt: 'pause/ch14-isaaru-via-purifico' });
     expect(art('pause/ch14-isaaru-via-purifico.png')).toBe(true);

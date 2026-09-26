@@ -261,8 +261,8 @@ describe('the shades\' actions (§4)', () => {
   });
 });
 
-describe('registration: registered, reachable, unlisted', () => {
-  it('getChapter finds Chapter XV; chapter select does not list it', () => {
+describe('registration: registered, reachable, listed (2026-09-26)', () => {
+  it('getChapter finds Chapter XV; chapter select lists it after Chapter XIV', () => {
     const ch = getChapter('ffx2-den-of-woe');
     expect(ch?.game).toBe('ffx2');
     expect(ch?.number).toBe(15);
@@ -270,8 +270,8 @@ describe('registration: registered, reachable, unlisted', () => {
     expect(ch?.location).toBe('Den of Woe — under Mushroom Rock Road');
     expect(ch?.buildRef).toBe(denOfWoeKit); // Bailey's pick 2026-09-26: the preset + 3 Hero Drinks + 8 levels
     expect(ch?.enemyGroupRef.id).toBe(DEN_BARALAI);
-    expect(CHAPTER_IDS).not.toContain('ffx2-den-of-woe');
-    expect(CHAPTERS.some((c) => c.id === 'ffx2-den-of-woe')).toBe(false);
+    expect(CHAPTER_IDS.indexOf('ffx2-den-of-woe')).toBe(CHAPTER_IDS.indexOf('isaaru-via-purifico') + 1);
+    expect(CHAPTERS.some((c) => c.id === 'ffx2-den-of-woe')).toBe(true);
   });
 
   it('three links in the sourced order, no Save Sphere, full carry into 2 and 3, no escape, one cue', () => {

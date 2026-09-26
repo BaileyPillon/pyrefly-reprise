@@ -495,9 +495,9 @@ describe('The Cavern build and the chapter registration', () => {
     expect(ch).toMatchObject({ game: 'ffx', number: 9, title: 'Yojimbo' });
     expect(ch?.enemyGroupRef.id).toBe(GROUP_ID);
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
-    // X, XII, XIII and XIV listed 2026-09-25, XI 2026-09-26, after IX.
-    expect(CHAPTERS.map((c) => c.id).slice(-7)).toEqual(['evrae-airship', 'yojimbo-cavern', 'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico']);
-    expect(CHAPTER_IDS.slice(-6)).toEqual(['yojimbo-cavern', 'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico']);
+    // X, XII, XIII and XIV listed 2026-09-25, XI and XV 2026-09-26, after IX.
+    expect(CHAPTERS.map((c) => c.id).slice(-8)).toEqual(['evrae-airship', 'yojimbo-cavern', 'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico', 'ffx2-den-of-woe']);
+    expect(CHAPTER_IDS.slice(-7)).toEqual(['yojimbo-cavern', 'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico', 'ffx2-den-of-woe']);
     // The story layer (tests/unit/chapters/yojimbo-content.test.ts pins its lines):
     // the pre scene ends by opening the battle, the post scene shows results.
     expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' });

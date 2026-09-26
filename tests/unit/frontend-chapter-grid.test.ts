@@ -31,7 +31,7 @@ describe('the board', () => {
     save = freshStore();
   });
 
-  it('holds fourteen cards: thirteen playable chapters (Leblanc, Evrae, Yojimbo, Natus, Fallen Aeons, Omnis, Trema and Isaaru now landed) and one still coming', () => {
+  it('holds fifteen cards: fourteen playable chapters (Leblanc, Evrae, Yojimbo, Natus, Fallen Aeons, Omnis, Trema, Isaaru and the Den of Woe now landed) and one still coming', () => {
     const tiles = buildChapterTiles(save);
     // Leblanc's and Evrae's own COMING_CHAPTERS rows are filtered out by id
     // now that their real chapters are registered and unlocked, so the raw
@@ -39,8 +39,8 @@ describe('the board', () => {
     // board actually shows. Macalania (Chapter 7) is registered but still
     // LOCKED, so its real tile is withheld and its COMING row stays.
     // Chapter IX (Yojimbo) was listed 2026-09-24 and Chapters X (Natus), XII (Omnis)
-    // XIII (Trema) and XIV (Isaaru) on 2026-09-25, XI (Fallen Aeons) on 2026-09-26, none with a COMING row of its own.
-    expect(tiles).toHaveLength(14);
+    // XIII (Trema) and XIV (Isaaru) on 2026-09-25, XI (Fallen Aeons) and XV (Den of Woe) on 2026-09-26, none with a COMING row of its own.
+    expect(tiles).toHaveLength(15);
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length - LOCKED_CHAPTER_IDS.size);
     expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
       'Seymour and Anima',
@@ -53,14 +53,14 @@ describe('the board', () => {
     expect(groups[0]!.label).toBe('Final Fantasy X');
     expect(groups[1]!.label).toBe('Final Fantasy X-2');
     // Nine FFX cards (8 built — Evrae, Yojimbo, Natus, Omnis and Isaaru now landed — + 1 still
-    // coming, Macalania), five FFX-2 (IV, V, VI, XI and XIII, Leblanc's coming row dropped).
+    // coming, Macalania), six FFX-2 (IV, V, VI, XI, XIII and XV, Leblanc's coming row dropped).
     expect(groups[0]!.tiles).toHaveLength(9);
     // D-183 (Bailey, 2026-09-25, "All recommendations"): the COMING Chapter
     // VII sits at its number's place, between III and VIII, not at the end.
     expect(groups[0]!.tiles.map((t) => t.numeral)).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV']);
     expect(groups[0]!.tiles[3]!.playable).toBe(false);
     expect(groups[0]!.tiles.filter((t) => t.playable).map((t) => t.numeral)).toEqual(['I', 'II', 'III', 'VIII', 'IX', 'X', 'XII', 'XIV']);
-    expect(groups[1]!.tiles.map((t) => t.numeral)).toEqual(['IV', 'V', 'VI', 'XI', 'XIII']);
+    expect(groups[1]!.tiles.map((t) => t.numeral)).toEqual(['IV', 'V', 'VI', 'XI', 'XIII', 'XV']);
     for (const group of groups) {
       const numbers = group.tiles.map((t) => t.number ?? Number.MAX_SAFE_INTEGER);
       expect(numbers).toEqual([...numbers].sort((a, b) => a - b));
@@ -206,8 +206,8 @@ describe('the cursor', () => {
     const fromLastFfx = tiles.findIndex((t) => t.id === 'isaaru-via-purifico');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
     // Wrapping backwards from the first card lands on the last *playable* one
-    // — Trema now, listed 2026-09-25 after Chapter VI in the FFX-2 group.
-    expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('ffx2-trema');
+    // — the Den of Woe now, listed 2026-09-26 after Chapter XIII in the FFX-2 group.
+    expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('ffx2-den-of-woe');
     for (let i = 0; i < tiles.length; i++) {
       if (!tiles[i]!.playable) continue;
       expect(tiles[stepSelection(tiles, i, 1)]!.playable).toBe(true);

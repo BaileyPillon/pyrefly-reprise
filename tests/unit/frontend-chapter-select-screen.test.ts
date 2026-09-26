@@ -74,10 +74,10 @@ afterEach(() => {
 const selectedId = (rig: Rig): unknown => rig.screen.snapshot()['selectedId'];
 
 describe('the board on screen', () => {
-  it('draws the hero plus all fourteen cards in two game groups, the selected one included (D-183)', () => {
+  it('draws the hero plus all fifteen cards in two game groups, the selected one included (D-183)', () => {
     const { root } = mount();
     expect(root.querySelectorAll('.fe-hero')).toHaveLength(1);
-    expect(root.querySelectorAll('.fe-card')).toHaveLength(14);
+    expect(root.querySelectorAll('.fe-card')).toHaveLength(15);
     expect(root.querySelectorAll('.fe-card--sel')).toHaveLength(1);
     const groups = [...root.querySelectorAll('.fe-rail__group')].map((g) => g.textContent?.trim());
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
@@ -152,8 +152,8 @@ describe('the keyboard', () => {
   it('wraps left from the first card to the last playable one', () => {
     const rig = mount();
     rig.key('ArrowLeft');
-    // Trema (Chapter XIII) now, listed 2026-09-25 after Chapter VI in the FFX-2 group.
-    expect(selectedId(rig)).toBe('ffx2-trema');
+    // The Den of Woe (Chapter XV) now, listed 2026-09-26 after Chapter XIII in the FFX-2 group.
+    expect(selectedId(rig)).toBe('ffx2-den-of-woe');
   });
 
   it('crosses between the two games with up and down', () => {

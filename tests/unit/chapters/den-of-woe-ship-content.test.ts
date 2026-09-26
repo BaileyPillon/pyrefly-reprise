@@ -39,10 +39,10 @@ const SHIPPED_KIT = FFX2_DEN_OF_WOE_SHIPPED.buildRef as FFX2PartyBuild;
 const SHIPPED_LINE: LineOptions = { ...(DEN_OF_WOE_LIGHTFALL_PREP ? LINES.intended : LINES.noPrep), heroDrink: DEN_OF_WOE_HERO_DRINKS > 0 };
 
 describe('the pause card', () => {
-  it('is registered unlisted, numbered XV, with the installed hero plate B', () => {
+  it('is listed (2026-09-26), numbered XV, with the installed hero plate B', () => {
     expect(getChapterMeta('ffx2-den-of-woe')).toBe(DEN_OF_WOE_META);
-    expect(UNLISTED_CHAPTER_META).toContain(DEN_OF_WOE_META);
-    expect(CHAPTER_META.some((m) => m.id === 'ffx2-den-of-woe')).toBe(false);
+    expect(UNLISTED_CHAPTER_META).not.toContain(DEN_OF_WOE_META);
+    expect(CHAPTER_META).toContain(DEN_OF_WOE_META);
     expect(DEN_OF_WOE_META.numeral).toBe('XV');
     expect(DEN_OF_WOE_META.gameLabel).toBe('FFX-2');
     expect(DEN_OF_WOE_META.title).toBe(FFX2_DEN_OF_WOE_SHIPPED.title);

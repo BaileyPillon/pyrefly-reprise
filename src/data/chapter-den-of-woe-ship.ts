@@ -16,8 +16,9 @@
  *   `boss-den-of-woe` is picked by ear, rule 13; the field bed `scene-bevelle-underground`; the
  *   FFX-2 fanfare), unchanged.
  *
- * **Unlisted**: `./chapters-unlisted.ts` carries the result, so chapter select does not show it
- * until the driver lists it (the Chapter XIII listing step, commit 5c8706d6, is the pattern).
+ * **Listed** 2026-09-26 (Bailey, 2026-09-26: "I pick your recommendation for Den of Woe", "Den: both,
+ * drop the prep"), as commit 430736bf listed Chapter XI: `./encounters.ts` puts this result in
+ * `CHAPTERS` after Chapter XIV (it was in `./chapters-unlisted.ts` until then: reachable by id, no card).
  */
 
 import type { Chapter } from './encounters.ts';

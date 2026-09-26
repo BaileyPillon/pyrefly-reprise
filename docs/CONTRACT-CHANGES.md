@@ -6,6 +6,30 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-26 — `encounters.ts`: Chapter XV (the Den of Woe) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
+
+**FFX-2 only** [AGENTS.md hard rule 14]: the three shades under Mushroom Rock Road in FFX-2 Chapter 5
+(`research/ffx2-gippal-den-of-woe.md`: ATB, dresspheres, the FFX-2 status set); the listing itself is
+shared plumbing (both). Bailey, 2026-09-26 ~00:05 EDT: "I pick your recommendation for Den of Woe"
+(D-191: "Den: both, drop the prep" = 3 Hero Drinks and +8 levels in the Den's kit, both `[estimate]`,
+no Lightfall prep, retry from the link OFF; 39/200 first try and 160/200 within five at human pace).
+
+**Additive** in `src/data/encounters.ts`: `CHAPTERS` gains `FFX2_DEN_OF_WOE_SHIPPED` and `CHAPTER_IDS`
+gains `'ffx2-den-of-woe'`, both after Chapter XIV (number order); chapter select groups by game, so
+the card sits after Chapter XIII in the FFX-2 group (IV, V, VI, XI, XIII, XV). `ChapterId` and
+`getChapter` are unchanged (the id was already registered; two export lines and the first three
+`CHAPTER_IDS` entries were joined to keep the file at 399 lines); `UNLISTED_CHAPTERS` is empty again
+(the mechanism stays). Alongside: `CHAPTER_META` gains `DEN_OF_WOE_META` after Chapter XIV's
+(`UNLISTED_CHAPTER_META` is empty; its tagline is trimmed from the record's "Three men she knows, made
+of what they felt" to the pause card's 2-4 words, "Three Men She Knows", an agent's trim, inferred),
+and `src/story/registry.ts` gains the `'ffx2-den-of-woe'` key (its scripts, its one AI-emitted
+callout `baralai-count-seven`, no seam: the shades rise back to back and every entrance is an 8 s
+interrupt; lines were joined to keep it at 399 lines). Every chapter-generic consumer now sees fifteen
+chapters, fourteen of them playable: Auron's briefing counts "Fourteen fights" by itself (D-136), the
+strip reads "0 of 14", and `arcCleared('ffx2')` also needs Chapter XV (`ARC_FINALE.ffx2` stays
+`ffx2-vegnagun-shuyin`: the Den is optional Chapter 5 content before the finale, research §2 and §8).
+No save migration: saves key chapters by id string.
+
 ## 2026-09-26 — `encounters.ts`: Chapter XI (Fallen Aeons) moves from `UNLISTED_CHAPTERS` into `CHAPTERS`
 
 **FFX-2 only** [AGENTS.md hard rule 14]: the Road to the Farplane gauntlet in FFX-2 Chapter 5

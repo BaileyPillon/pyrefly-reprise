@@ -73,7 +73,7 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_TREMA_GUIDE,
   // Chapter XI (FFX-2 only), listed 2026-09-26 with its chapter.
   FFX2_FALLEN_AEONS_GUIDE,
-  // Chapter XV (FFX-2 only), registered and unlisted like its chapter: the three shades.
+  // Chapter XV (FFX-2 only), listed 2026-09-26 with its chapter: the three shades.
   FFX2_DEN_OF_WOE_GUIDE,
   SEYMOUR_OMNIS_GUIDE,
   // Chapter X (FFX only), listed 2026-09-25: the research's line, Haste only Tidus and Auron.

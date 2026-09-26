@@ -16,7 +16,6 @@
  */
 
 import type { Chapter } from './encounters.ts';
-import { FFX2_DEN_OF_WOE_SHIPPED } from './chapter-den-of-woe-ship.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
@@ -25,9 +24,6 @@ import { FFX2_DEN_OF_WOE_SHIPPED } from './chapter-den-of-woe-ship.ts';
  * Chapter XII, Seymour Omnis, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter XI).
  * Chapter XIII, Trema, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter XII).
  * Chapter XIV, Isaaru, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter XIII).
- * Chapter XV, The Den of Woe (FFX-2 only) — `./chapter-ffx2-den-of-woe.ts` (the fight), with the ship
- * layer (scene, story; `./chapter-den-of-woe-ship.ts`) laid over it. Still unlisted.
+ * Chapter XV, The Den of Woe, was listed on 2026-09-26 (now in `CHAPTERS`, after Chapter XIV).
  */
-export const UNLISTED_CHAPTERS: readonly Chapter[] = [
-  FFX2_DEN_OF_WOE_SHIPPED,
-] as const;
+export const UNLISTED_CHAPTERS: readonly Chapter[] = [] as const;

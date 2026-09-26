@@ -374,9 +374,10 @@ describe('the end of an arc — critic round 02 #32', () => {
       // §8.1 and §8.2 beat 10; story order VII, VIII, X, IX, I, D-058). Chapter 14 (Isaaru): the Via Purifico, just
       // before the Highbridge (ffx-isaaru-bevelle.md §8.2 beat 5: both groups reunite on the Highbridge).
       // Chapter 11 (Fallen Aeons): the Road comes right before the Heart of the Farplane (ffx2-fallen-aeons.md §1.2 item 5).
+      // Chapter 15 (Den of Woe): optional Chapter 5 content before the finale (ffx2-gippal-den-of-woe.md §2 and §8).
       const storyEarlierThanFinale = new Set([
         'ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'seymour-natus', 'seymour-omnis',
-        'ffx2-trema', 'isaaru-via-purifico', 'ffx2-fallen-aeons',
+        'ffx2-trema', 'isaaru-via-purifico', 'ffx2-fallen-aeons', 'ffx2-den-of-woe',
       ]);
       const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id));
       const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;

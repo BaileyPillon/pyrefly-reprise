@@ -5,7 +5,10 @@
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. ATB, dresspheres, the FFX-2 status set; nothing
  * here is true of an FFX chapter.
  *
- * - `title` "The Den of Woe", `location`, `subtitle`: GP2 (picked), the registered record's.
+ * - `title` "The Den of Woe", `location`: GP2 (picked), the registered record's. `subtitle` is the
+ *   record's ("Three men she knows, made of what they felt") trimmed at the listing to the pause
+ *   card's 2-4 word tagline, "Three Men She Knows": an agent's trim (inferred, not Bailey's words),
+ *   flagged in D-191. Chapter select's own card keeps the record's subtitle.
  * - `blurb`, `handwritten` and `tip` are our own words over the research's sourced facts (§2 the
  *   three shades back to back with no break `[verified: 4 sources]`; §4.2 Baralai's counter and
  *   Drill Shot's three quarters of max HP; §4.3 Lightfall, 5,000 to everyone once near the end).
@@ -25,7 +28,8 @@
  * - `musicKeys`: GP16 as the record has it, the field bed, the stand-in `boss-shuyin`, the FFX-2
  *   fanfare.
  *
- * **Unlisted**: it sits in `./chapter-meta.ts`'s `UNLISTED_CHAPTER_META` until the chapter is listed.
+ * **Listed** 2026-09-26 with the chapter itself: it sits in `./chapter-meta.ts`'s `CHAPTER_META`
+ * after Chapter XIV's, as the chapter sits after Chapter XIV in `CHAPTERS`.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
@@ -36,7 +40,7 @@ export const DEN_OF_WOE_META: ChapterMeta = {
   gameLabel: 'FFX-2',
   numeral: 'XV',
   title: FFX2_DEN_OF_WOE_SHIPPED.title,
-  subtitle: FFX2_DEN_OF_WOE_SHIPPED.subtitle,
+  subtitle: 'Three Men She Knows',
   location: FFX2_DEN_OF_WOE_SHIPPED.location,
   blurb:
     "Paine's old recordings open a sealed cave under the ravine, where her squad once turned on each other. " +

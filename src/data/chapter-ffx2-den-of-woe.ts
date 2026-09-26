@@ -8,7 +8,11 @@
  * Kept out of `./encounters.ts` for the house 400-line rule, like Chapters 7 to
  * 11; the `Chapter` import is type-only, so there is no runtime cycle.
  *
- * ## Registered, reachable, and UNLISTED
+ * ## Registered, reachable, and (since 2026-09-26) LISTED
+ *
+ * Listed 2026-09-26 (Bailey: "I pick your recommendation for Den of Woe"): the ship layer over this
+ * record (`./chapter-den-of-woe-ship.ts`) sits in `CHAPTERS` after Chapter XIV. The paragraphs below
+ * are the history of the registration.
  *
  * Bailey answered every recommendation on 2026-09-25 ("I'll go with all your
  * recommendations": GP1–GP18 on `docs/plans/chapter-gippal-review.md`, after its
@@ -72,7 +76,7 @@ export const DEN_OF_WOE_PLACEHOLDER_SCRIPTS: ChapterScripts = {
   midScripts: {},
 };
 
-/** Chapter 15 (registered, unlisted). */
+/** Chapter 15 (the engine record; `CHAPTERS` lists it with the ship layer on). */
 export const FFX2_DEN_OF_WOE: Chapter = {
   id: 'ffx2-den-of-woe',
   game: 'ffx2',

@@ -33,9 +33,9 @@ function started(log: readonly BattleEvent[], ability: string): number {
 }
 
 describe('the registered record', () => {
-  it("is the engine track's record with the Den scene and the story on, still unlisted", () => {
+  it("is the engine track's record with the Den scene and the story on, listed (2026-09-26)", () => {
     expect(getChapter('ffx2-den-of-woe')).toBe(FFX2_DEN_OF_WOE_SHIPPED);
-    expect(CHAPTERS.some((c) => c.id === 'ffx2-den-of-woe')).toBe(false);
+    expect(CHAPTERS).toContain(FFX2_DEN_OF_WOE_SHIPPED);
     expect(FFX2_DEN_OF_WOE_SHIPPED.sceneKey).toBe('den-of-woe');
     expect(FFX2_DEN_OF_WOE_SHIPPED.scriptsRef).toBe(S);
     const { sceneKey: _a, scriptsRef: _b, ...rest } = FFX2_DEN_OF_WOE_SHIPPED;
