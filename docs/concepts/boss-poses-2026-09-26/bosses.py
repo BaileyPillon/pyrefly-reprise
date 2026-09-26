@@ -112,6 +112,55 @@ def skel_raw(boss, pose):
         else:
             raise SystemExit(f'no skeleton for {boss}/{pose}')
         return (W, H), base.mirror(k, W)
+    if boss in ('leblanc', 'logos') and pose == 'hurt':
+        # the knocked-back recoil (Trema's), facing screen-left like both idles; Leblanc stands
+        # nearer three-quarter than profile, so her shoulders are drawn wider.
+        W, H = 832, 1216
+        prof = dict(sh=34, hp=28, turn=18) if boss == 'leblanc' else dict(sh=24, hp=20, turn=22)
+        k = base.body((430, 660), 253, s=0.97, head_deg=230, rarm=(128, 112), larm=(20, 45),
+                      rleg=(120, 100), lleg=(70, 92), **prof)
+        return (W, H), base.mirror(k, W)
+    if boss == 'ormi' and pose == 'hurt':
+        # Ormi's idle faces screen-RIGHT (not mirrored). Short and stout: a thick torso and wide
+        # shoulders, the legs drawn at 60% so ControlNet does not stretch him tall; knocked back
+        # toward screen-left, arms flung out.
+        W, H = 832, 1216
+        k = base.body((440, 760), 257, s=0.9, head_deg=242, rarm=(160, 135), larm=(20, 55),
+                      rleg=(112, 96), lleg=(70, 88), sh=46, hp=40, turn=20)
+        for hip, knee, ank in ((8, 9, 10), (11, 12, 13)):
+            hx, hy = k[hip]
+            k[knee] = (hx + (k[knee][0] - hx) * 0.6, hy + (k[knee][1] - hy) * 0.6)
+            k[ank] = (hx + (k[ank][0] - hx) * 0.6, hy + (k[ank][1] - hy) * 0.6)
+        return (W, H), k
+    if boss == 'trema':
+        # Profile facing screen-left like his idle; the same knocked-back recoil as Yojimbo's hurt
+        # (the stopped run's skeleton), drawn on a narrower canvas for the long robe.
+        W, H = 832, 1216
+        prof = dict(sh=24, hp=20, turn=22)
+        if pose == 'hurt':
+            k = base.body((430, 660), 253, s=0.97, head_deg=230, rarm=(128, 112), larm=(20, 45),
+                          rleg=(120, 100), lleg=(70, 92), **prof)
+        else:
+            raise SystemExit(f'no skeleton for {boss}/{pose}')
+        return (W, H), base.mirror(k, W)
+    if boss == 'seymour-natus':
+        # Front three-quarter, hovering (the idle: floating, feet pointed down below the hem, body
+        # turned slightly left). Not mirrored: the idle faces the camera, not a side.
+        W, H = 1024, 1216
+        fr = dict(sh=40, hp=30, turn=8)
+        if pose == 'hurt':
+            # thrown sideways by the blow: torso tipped ~10 deg, head knocked to the side, both arms
+            # flung out and down (the blades go with the forearms), legs dangling, one knee bent.
+            k = base.body((512, 690), 262, s=1.0, head_deg=240, rarm=(155, 140), larm=(20, 40),
+                          rleg=(100, 92), lleg=(78, 100), **fr)
+        elif pose == 'ko':
+            # limp in the air: torso sagging to one side, head lolling down past the shoulder,
+            # both arms hanging straight down, legs trailing.
+            k = base.body((512, 700), 258, s=1.0, head_deg=205, rarm=(95, 92), larm=(85, 88),
+                          rleg=(96, 100), lleg=(84, 92), **fr)
+        else:
+            raise SystemExit(f'no skeleton for {boss}/{pose}')
+        return (W, H), k
     raise SystemExit(f'no skeletons for {boss}')
 
 
@@ -139,58 +188,7 @@ def skel(boss):
     ov.save(HERE / 'skeletons' / boss / 'overview.jpg', quality=80)
 
 
-# ------------------------------------------------------------------ Yojimbo's katana
-def katana():
-    """The drawn katana, built from approved pixels only: the blade and tsuba of the installed
-    cast (approved 2026-09-24) and the idle's own wrapped hilt and pommel (the cast's hilt is
-    under his glove), turned onto the cast's grip line. Coordinates read off gridded crops."""
-    cast = np.array(Image.open(ART / 'yojimbo-cavern' / 'cast.png').convert('RGBA')).astype(int)
-    idle = Image.open(ART / 'yojimbo-cavern' / 'idle.png').convert('RGBA')
-    H, W = cast.shape[:2]
-    # 1. blade + habaki + tsuba from the cast, purple glove pixels left out
-    m = Image.new('L', (W, H), 0)
-    ImageDraw.Draw(m).polygon([(0, 45), (35, 48), (130, 138), (205, 243), (230, 262), (228, 288), (214, 297),
-                               (190, 295), (176, 280), (163, 255), (95, 170), (0, 82)], fill=255)
-    r, g, b, a = (cast[..., i] for i in range(4))
-    purple = (b - g > 35) & (r > 70)
-    keep = (np.array(m) > 0) & (a > 0) & ~purple
-    blade = cast.copy(); blade[..., 3] = np.where(keep, a, 0)
-    blade_im = Image.fromarray(blade.astype('uint8'), 'RGBA')
-    # 2. the idle's hilt, pommel to just under the tsuba, moved onto the cast's grip line
-    S, E = np.array([158.0, 378.0]), np.array([238.0, 448.0])
-    u = (E - S) / np.linalg.norm(E - S); n = np.array([-u[1], u[0]]); hw = 17
-    hm = Image.new('L', idle.size, 0)
-    ImageDraw.Draw(hm).polygon([tuple(S + hw * n), tuple(S - hw * n), tuple(E - hw * n), tuple(E + hw * n)], fill=255)
-    ia = np.array(idle).astype(int); ia[..., 3] = np.where(np.array(hm) > 0, ia[..., 3], 0)
-    hilt = Image.fromarray(ia.astype('uint8'), 'RGBA')
-    src_ang = math.degrees(math.atan2(*(S - E)[::-1]))       # ~221 deg: tsuba -> pommel
-    dst_ang = 52.8                                          # cast grip line, tsuba -> pommel
-    T0 = np.array([214.0, 290.0])                           # where the grip leaves the cast's tsuba
-    d = math.radians(dst_ang - src_ang); c_, s_ = math.cos(d), math.sin(d)
-    # inverse affine: dst p -> src q = R^-1 (p - T0) + E
-    A = (c_, s_, 0, -s_, c_, 0)
-    A = (A[0], A[1], E[0] - (A[0] * T0[0] + A[1] * T0[1]), A[3], A[4], E[1] - (A[3] * T0[0] + A[4] * T0[1]))
-    hilt_t = hilt.transform((W + 60, H + 60), Image.AFFINE, A, resample=Image.BICUBIC)
-    k = Image.new('RGBA', (W + 60, H + 60), (0, 0, 0, 0))
-    k.alpha_composite(hilt_t)
-    k.alpha_composite(blade_im, (0, 0))
-    bb = k.getbbox(); k = k.crop(bb)
-    L = float(np.linalg.norm(E - S))
-    pommel = T0 + L * np.array([math.cos(math.radians(dst_ang)), math.sin(math.radians(dst_ang))])
-    grip1 = T0 + 0.30 * (pommel - T0); grip2 = T0 + 0.75 * (pommel - T0)
-    tip = np.array([8.0, 62.0])
-    meta = {'bbox': bb, 'tip': list(tip - bb[:2]), 'grip': list((grip1 + grip2) / 2 - bb[:2]),
-            'grip1': list(grip1 - bb[:2]), 'grip2': list(grip2 - bb[:2]), 'pommel': list(pommel - bb[:2]),
-            'source': 'blade + tsuba: public/art/characters/yojimbo-cavern/cast.png (installed, approved 2026-09-24); '
-                      'hilt: yojimbo-cavern/idle.png, turned %.1f deg onto the cast grip line' % (dst_ang - src_ang)}
-    d_ = OUT / 'yojimbo' / '_refs'; d_.mkdir(parents=True, exist_ok=True)
-    k.save(d_ / 'katana.png'); json.dump(meta, open(d_ / 'katana.json', 'w'), indent=1)
-    prev = Image.new('RGBA', k.size, (200, 200, 200, 255)); prev.alpha_composite(k)
-    dd = ImageDraw.Draw(prev)
-    for key, col in (('tip', 'red'), ('grip1', 'blue'), ('grip2', 'blue'), ('pommel', 'green')):
-        x, y = meta[key]; dd.ellipse([x - 4, y - 4, x + 4, y + 4], outline=col, width=2)
-    prev.convert('RGB').save(d_ / 'katana-preview.png')
-    print(json.dumps(meta))
+# Yojimbo's drawn katana is built in katana.py (`python bosses.py katana`)
 
 
 # ------------------------------------------------------------------ a weapon cut straight from the idle
@@ -332,146 +330,7 @@ def erase(boss, pose, n, poly_arg, why):
     print(json.dumps({'erased': gone}))
 
 
-# ------------------------------------------------------------------ sheets
-def font(sz):
-    for f in ('C:/Windows/Fonts/segoeui.ttf', 'C:/Windows/Fonts/arial.ttf'):
-        try:
-            return ImageFont.truetype(f, sz)
-        except OSError:
-            pass
-    return ImageFont.load_default()
-
-
-def place_on(bg, fig, h, x_frac=0.62, ground=0.86):
-    """The figure at in-battle height h over the backdrop crop, feet on a ground line."""
-    fig = fig.crop(fig.getbbox())
-    fig = fig.resize((max(1, int(fig.width * h / fig.height)), h), Image.LANCZOS)
-    x = int(bg.width * x_frac - fig.width / 2); y = int(bg.height * ground - fig.height)
-    bg = bg.copy(); bg.alpha_composite(fig, (max(0, x), max(0, y)))
-    return bg
-
-
-def sheet(boss):
-    c = CFG[boss]
-    picks = json.load(open(HERE / 'looks.json', encoding='utf8')).get(boss, {})
-    idle = Image.open(ART / c['art'] / 'idle.png').convert('RGBA')
-    bdp = Image.open(REPO / 'public' / 'art' / 'backdrops' / f"{c['backdrop']}.png").convert('RGBA')
-    bw = 520; bg = bdp.resize((bw, int(bdp.height * bw / bdp.width)), Image.LANCZOS)
-    bg = bg.crop((0, max(0, bg.height - 360), bw, bg.height)) if bg.height > 360 else bg
-    F, Fs = font(26), font(18)
-    parts = []
-    for pose in c['poses']:
-        d = OUT / boss / pose
-        cands = sorted(d.glob('cand-*.png'), key=lambda p: int(p.stem.split('-')[1]))
-        cands = [p for p in cands if p.stem.count('-') == 1]
-        if not cands:
-            continue
-        tile_h = 420
-        row_imgs = [('idle (installed)', idle)]
-        for p in cands:
-            n = int(p.stem.split('-')[1])
-            row_imgs.append((f'c{n}', Image.open(p).convert('RGBA')))
-        colw = 300
-        W = 20 + colw * len(row_imgs)
-        H = 60 + tile_h + 12 + bg.height + 70
-        sh = Image.new('RGB', (W, H), (24, 26, 34)); dr = ImageDraw.Draw(sh)
-        pk = picks.get(pose, {})
-        title = f"{c['title']} - {pose}   pick: {pk.get('pick', '-')}   judge: {pk.get('judge', '-')}"
-        dr.text((16, 14), title, fill=(236, 214, 150), font=F)
-        for i, (lab, im) in enumerate(row_imgs):
-            x0 = 10 + i * colw
-            t = im.crop(im.getbbox()); sc = min((colw - 16) / t.width, tile_h / t.height)
-            t = t.resize((max(1, int(t.width * sc)), max(1, int(t.height * sc))), Image.LANCZOS)
-            cell = Image.new('RGBA', (colw - 8, tile_h), (0, 0, 0, 0))
-            half = Image.new('RGBA', (colw - 8, tile_h), (128, 128, 128, 255))
-            ImageDraw.Draw(half).rectangle([0, tile_h // 2, colw, tile_h], fill=(28, 36, 64, 255))
-            half.alpha_composite(t, ((colw - 8 - t.width) // 2, tile_h - t.height))
-            sh.paste(half.convert('RGB'), (x0, 56))
-            col = (140, 230, 140) if lab == f"c{pk.get('pick', '')}".replace('cc', 'c') else (230, 230, 230)
-            dr.text((x0 + 6, 58), lab, fill=col, font=Fs)
-            g = place_on(bg, im, int(bg.height * 0.78), x_frac=0.5)
-            g = g.resize((colw - 8, int(g.height * (colw - 8) / g.width)), Image.LANCZOS)
-            sh.paste(g.convert('RGB'), (x0, 56 + tile_h + 12))
-        note = pk.get('note', '')
-        dr.text((16, H - 56), note[:200], fill=(210, 210, 210), font=Fs)
-        dr.text((16, H - 30), f"{c['game']}. Candidates only; nothing installed. Split grey/navy = 1:1 read; lower row = over {c['backdrop']} at battle scale.",
-                fill=(150, 150, 160), font=Fs)
-        if W > 2000:
-            sh = sh.resize((2000, int(H * 2000 / W)), Image.LANCZOS)
-        out = HERE / f'{boss}-{pose}.jpg'
-        q = 85
-        sh.save(out, quality=q)
-        while out.stat().st_size > 1_000_000 and q > 40:
-            q -= 8; sh.save(out, quality=q)
-        parts.append(out.name)
-    print(json.dumps({'sheets': parts}))
-
-
-# ------------------------------------------------------------------ v2 sheets (explicit candidates, game-scale row)
-def sheet2(boss, slot, folder, ns_arg):
-    """One phone-readable part per slot: the installed idle and each candidate at 1:1 proportion on
-    split grey/navy; below, each over the chapter backdrop at game scale (pixel scale taken from the
-    hat/head-match scale, so a lunge shows lower than the idle, as it will in battle); below that the
-    looks (maker + second look) from looks.json. Under 1 MB, at most 2000 px wide and tall."""
-    c = CFG[boss]
-    looks = json.load(open(HERE / 'looks.json', encoding='utf8')).get(boss, {}).get(slot, {})
-    ns = [int(x) for x in ns_arg.split(',')]
-    idle = Image.open(ART / c['art'] / 'idle.png').convert('RGBA')
-    idle_h = idle.getbbox()[3] - idle.getbbox()[1]
-    bdp = Image.open(REPO / 'public' / 'art' / 'backdrops' / f"{c['backdrop']}.png").convert('RGBA')
-    colw, tile_h, bg_h = 372, 440, 300
-    bw = colw - 8
-    bgs = bdp.resize((bw, int(bdp.height * bw / bdp.width)), Image.LANCZOS)
-    bgs = bgs.crop((0, max(0, bgs.height - bg_h), bw, bgs.height)); bg_h = bgs.height
-    k = bg_h * 0.74 / idle_h                      # the idle stands 74% of the backdrop crop
-    F, Fs, Ft = font(26), font(17), font(15)
-    items = [('idle (installed)', idle, 1.0, None)]
-    for n in ns:
-        side = json.load(open(OUT / boss / folder / f'cand-{n}.json'))
-        pcs = side.get('composite', {}).get('pieces', [])
-        sc = next((p['scale'] for p in pcs if p.get('piece') in ('hat', 'head')), side.get('composite', {}).get('scale', 1.0))
-        items.append((f'c{n}', Image.open(OUT / boss / folder / f'cand-{n}.png').convert('RGBA'), sc, looks.get('cands', {}).get(str(n), {})))
-    W = 16 + colw * len(items)
-    text_h = 230
-    H = 58 + tile_h + 10 + bgs.height + 10 + text_h + 40
-    sh = Image.new('RGB', (W, H), (22, 24, 32)); dr = ImageDraw.Draw(sh)
-    dr.text((14, 12), f"{c['title']}: {slot}   maker pick: {looks.get('pick', '-')}", fill=(236, 214, 150), font=F)
-    for i, (lab, im, sc, lk) in enumerate(items):
-        x0 = 8 + i * colw
-        t = im.crop(im.getbbox()); z = min((colw - 16) / t.width, tile_h / t.height)
-        t = t.resize((max(1, int(t.width * z)), max(1, int(t.height * z))), Image.LANCZOS)
-        half = Image.new('RGBA', (colw - 8, tile_h), (128, 128, 128, 255))
-        ImageDraw.Draw(half).rectangle([0, tile_h // 2, colw, tile_h], fill=(28, 36, 64, 255))
-        half.alpha_composite(t, ((colw - 8 - t.width) // 2, tile_h - t.height))
-        sh.paste(half.convert('RGB'), (x0, 52))
-        good = lk and lk.get('verdict') == 'PASS'
-        col = (140, 230, 140) if good else ((240, 150, 140) if lk else (230, 230, 230))
-        dr.text((x0 + 6, 54), lab + (f"  {lk.get('score', '')} {lk.get('verdict', '')}" if lk else ''), fill=col, font=Fs)
-        fig = im.crop(im.getbbox())
-        h = max(1, int(fig.height / sc * k)); fig = fig.resize((max(1, int(fig.width * h / fig.height)), h), Image.LANCZOS)
-        g = bgs.copy(); g.alpha_composite(fig, (int(bw * 0.55 - fig.width / 2), int(bg_h * 0.9 - fig.height)))
-        sh.paste(g.convert('RGB'), (x0, 52 + tile_h + 10))
-        ty = 52 + tile_h + 10 + bgs.height + 8
-        txt = (lk or {}).get('look', 'Approved idle, for identity and scale.' if lk is None else '')
-        words, line, lines = txt.split(), '', []
-        for w in words:
-            if dr.textlength(line + ' ' + w, font=Ft) > colw - 14:
-                lines.append(line); line = w
-            else:
-                line = (line + ' ' + w).strip()
-        lines.append(line)
-        for j, L in enumerate(lines[:12]):
-            dr.text((x0 + 4, ty + j * 18), L, fill=(215, 215, 215), font=Ft)
-    dr.text((14, H - 30), f"{c['game']}. Candidates only, nothing installed. Top: each figure fit to its tile on grey/navy. Middle: over {c['backdrop']} at game scale.",
-            fill=(150, 150, 160), font=Ft)
-    if W > 2000:
-        sh = sh.resize((2000, int(H * 2000 / W)), Image.LANCZOS)
-    out = HERE / f'{boss}-{slot}.jpg'
-    q = 88
-    sh.save(out, quality=q)
-    while out.stat().st_size > 1_000_000 and q > 40:
-        q -= 6; sh.save(out, quality=q)
-    print(json.dumps({'sheet': out.name, 'size': sh.size, 'bytes': out.stat().st_size}))
+# sheets live in sheets.py (house rule: files under 400 lines)
 
 
 if __name__ == '__main__':
@@ -485,14 +344,17 @@ if __name__ == '__main__':
     elif cmd == 'erase':
         erase(a[0], a[1], a[2], a[3], a[4])
     elif cmd == 'katana':
+        from katana import katana
         katana()
     elif cmd == 'comp':
         comp(a[0], a[1], a[2], a[3], float(a[4]), *(float(x) for x in a[5:7]), *(a[7:8] or []))
     elif cmd == 'comp2':
         comp2(a[0], a[1], a[2], a[3])
     elif cmd == 'sheet2':
+        from sheets import sheet2
         sheet2(a[0], a[1], a[2], a[3])
     elif cmd == 'sheet':
+        from sheets import sheet
         sheet(a[0])
     else:
         print(__doc__)

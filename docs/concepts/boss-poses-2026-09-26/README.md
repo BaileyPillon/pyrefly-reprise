@@ -23,6 +23,31 @@ second look.
 |---|---|---|
 | `yojimbo-attack.jpg` | Yojimbo, attack (the Zanmato draw) | FFX only, Chapter IX |
 | `yojimbo-hurt.jpg` | Yojimbo, hurt | FFX only, Chapter IX |
+| `trema-hurt.jpg` | Trema, hurt | FFX-2 only, Chapter XIII |
+| `logos-hurt.jpg` | Logos, hurt | FFX-2 only, Chapter VI |
+| `leblanc-hurt.jpg` | Leblanc, hurt | FFX-2 only, Chapter VI |
+| `ormi-hurt.jpg` | Ormi, hurt | FFX-2 only, Chapter VI |
+| `natus-tries.jpg` | Seymour Natus, hurt and KO: the three failed tries, nothing to pick | FFX only, Chapter X |
+
+## Read this first: which painting a boss actually shows
+
+Measured by running the engine (rule 3; scratch bench `tools/zz-bossposes.tmp/poses.test.ts`, 30
+seeds per chapter, every enemy `action-start` passed through the presenter's own `poseForCommand`):
+
+| Chapter (FFX) | Enemy actions seen | Pose drawn | Hits taken by the boss |
+|---|---|---|---|
+| IX Yojimbo | Daigoro, Kozuka, Wakizashi (Yojimbo); the bite (Daigoro) | `cast` every time | 354 |
+| X Natus | Multi-Blizzara/Thundara/Watera (Natus); Blizzard/Thunder/Water (Mortibody) | `cast` every time | 169 |
+| XII Omnis | Firaga, Waterga, Blizzaga, Ultima, Dispel | `cast` every time | 449 |
+
+Every enemy action is sent as `{ kind: 'ability' }`, and `poseForCommand('ability')` is `cast`. An
+enemy draws its **`attack`** painting only on a counter (`BattlePresenterEvents.ts`, `'counter'`).
+The FFX-2 AI files send `{ kind: 'ability', id: 'attack' }` too (read, not run: `src/battle/ffx2/ai/`).
+So, **today, a new boss `attack` painting would almost never be seen**; a **`hurt`** painting shows on
+every hit the boss takes. That is why this run spent its GPU on hurt after Yojimbo. For Yojimbo's
+attack options (and any later boss attack) to reach the screen, the presenter would need a small
+mapping, for example "a physical enemy ability draws `attack`" (Kozuka, Wakizashi, Zanmato, Shattering
+Claw, Paragon's Normal Attacks). That is a `src/` change for a fix batch, not made here.
 
 ## Results
 
@@ -32,9 +57,23 @@ second look.
 | Yojimbo (IX, FFX) | hurt | **c35** (alt c34 7.38) | 7.44 | 4 pass (c28 7.31, c29 7.12 narrowly) | The hat is tipped almost vertical, more than the lean asks; lilac hakama paler than the idle's purple |
 | Yojimbo (IX, FFX) | ko | not made | - | - | Yojimbo's departure is `'dismissed'` (Bailey D-076, `src/engine/BattlePresenterDepartures.ts`): `departurePoses` maps his `ko` to `hurt`, so a KO painting would never be drawn. The plan lists only attack and hurt for him. |
 | Daigoro (IX, FFX) | - | not made | - | - | Daigoro already has a painted `cast` (his bite) and is untargetable (D-051), so he never takes a hit and has no hurt slot to fill. |
+| Seymour Natus (X, FFX) | hurt, ko | **none** | - | 0 of 24 renders usable, 21 guard rejects | Three tries, all the same failure: feathered wing fans spray across the canvas (`METHOD-CHECK-natus.md`, `natus-tries.jpg`). Stopped by the method check's own rule. No attack slot: Natus has no physical attack (research §3, `[decompiled]`). |
+| Trema (XIII, FFX-2) | hurt | **c7** (alt c10 for the costume, c8 for the hat) | 7.38 | 4 pass (c8 7.31, c10 7.25, c6 7.19) | The eboshi is a tall pointed cone with two trailing ribbons (the idle's is shorter and rounded, with a red and white band); the lower hand grips a loose black strap; the fur lapels are gone |
+| Logos (VI, FFX-2) | hurt | **c2** (alt c3 7.50) | 7.56 | 4 pass (c6 7.38, c4 7.38) | The near sleeve is short, the forearm bare; the helmet turns with a purple emblem on its side |
+| Leblanc (VI, FFX-2) | hurt | **c10** (alt c1 7.19) | 7.38 | 2 pass, 2 fail (c6 6.88 reads as a curtsey, c8 6.94 no hit read) | The fan is white and blue (the idle's is red and silver), the robe pastel instead of purple, pink hair tips. c1 keeps the red fan but the hit reads mildly |
+| Ormi (VI, FFX-2) | hurt | **c7** (alt c11 7.12) | 7.25 | 3 pass (c6 7.00 narrowly), 1 fail (c1 6.69, bare belly) | He faces screen-left; the idle faces right, so an install would flip him horizontally (no repaint). White pantaloons and a green bow the idle lacks |
 
-Scale gate (stature at the hat's head-match scale, idle = 1.00): attack 0.78 to 0.79 (lunge, at
-least 0.60), hurt 0.93 to 0.96 (upright, 0.75 to 1.30). Border alpha is 0 on every candidate and every
+**Not reached this run** (plan order), and why: Mortibody (X) and the Mortiphasms (XII) are
+non-biped (no OpenPose skeleton fits a floating skull or a machine); Seymour Omnis (XII) is a torso on
+a tentacle mass with no legs, the same problem; Paragon (XIII) is a four-legged beast; FFX-2 Bahamut's
+attack (IV) would not be drawn (see above); the Den of Woe shades (XV) and Isaaru's aeons (XIV) were
+not started. The non-bipeds need a different method (for example an img2img pass from the idle at a
+low denoise), which is new and would need its own pilot.
+
+Scale gate (stature at the hat's head-match scale, idle = 1.00): Yojimbo attack 0.78 to 0.79 (lunge, at
+least 0.60), hurt 0.93 to 0.96 (upright, 0.75 to 1.30). The FFX-2 hurts are single renders at the idle's
+head size; their figure height is 0.88 to 1.01 of the idle's for Trema and judged by eye to sit inside
+the gate for the Ch VI three (eye-to-chin was not measured for any FFX-2 hurt; disclosed). Border alpha is 0 on every candidate and every
 candidate passes the cutout guard.
 
 ## Method (and why it changed for Yojimbo)
@@ -72,8 +111,10 @@ Its hurt renders all lost the hat's shape.
   Yojimbo's attack is in the `attack-h` folder.
 - Render log: `D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/<boss>/render.log`.
 - Tools here: `render.mjs` (GPU; submits only while fewer than 3 prompts are pending, never restarts
-  ComfyUI), `bosses.py` (refs, skeletons, cut-outs, `comp2` composite, `sheet2`), `bosses.json`
+  ComfyUI), `bosses.py` (refs, skeletons, cut-outs, `comp2` composite), `sheets.py` (`sheet2`),
+  `katana.py` (Yojimbo's drawn katana from approved pixels), `bosses.json`
   (per-boss identity and per-slot recipe, with every earlier try's recipe kept under `v1`, `v2a`,
   `v2b`), `looks.json` (the looks and scores behind the sheets).
 
-GPU: Yojimbo took 34 renders in this run (4 attack, 20 hurt, 10 hatless attack), no black frame.
+GPU in this run: Yojimbo 34 renders (4 attack, 20 hurt, 10 hatless attack), Natus 24, Trema 12, Logos 8,
+Leblanc 12, Ormi 12: 102 renders, no black frame, ComfyUI never restarted.

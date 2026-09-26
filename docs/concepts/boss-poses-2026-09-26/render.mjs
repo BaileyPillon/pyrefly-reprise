@@ -34,11 +34,11 @@ const IPADAPTER = 'ip-adapter-plus_sdxl_vit-h.safetensors';
 const CLIPVISION = 'CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors';
 const IPA = { weight: 0.5, type: 'ease in', start: 0.2, end: 0.8, scaling: 'K+V' };
 const MAX_PENDING = 3;
-const SEED_OFF = { attack: 0, cast: 10, hurt: 30, ko: 40, 'attack-h': 60, 'hurt-h': 70 };
+const SEED_OFF = { attack: 0, 'hurt-b': 80, 'ko-b': 90, cast: 10, hurt: 30, ko: 40, 'attack-h': 60, 'hurt-h': 70 };
 const COMMON_NEG = `${SPRITE_NEGATIVE}, multiple views, chibi, sketch, monochrome, 3d, realistic, cropped, ` +
   'magic circle, glowing weapon, fire, flames, fire trail, swirl, lightning, dark aura, splash, cast shadow, drop shadow, pedestal, platform, rock, floor, scenery';
 const NO_WEAPON_NEG = 'sword, katana, weapon, holding weapon, blade, dagger, knife, staff, spear, polearm, scythe, axe, gun, sheath, scabbard, sheathed sword, stick, pole';
-const FACING = { left: '(from side:1.3), three-quarter view, body facing left, (looking at viewer:1.1)', right: '(from side:1.3), three-quarter view, body facing right, (looking at viewer:1.1)' };
+const FACING = { front3q: '(three-quarter view:1.1), body turned slightly to the left, (looking at viewer:1.2)', left: '(from side:1.3), three-quarter view, body facing left, (looking at viewer:1.1)', right: '(from side:1.3), three-quarter view, body facing right, (looking at viewer:1.1)' };
 
 const cfg = () => JSON.parse(readFileSync(join(HERE, 'bosses.json'), 'utf8'));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

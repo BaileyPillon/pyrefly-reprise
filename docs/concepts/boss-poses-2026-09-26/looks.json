@@ -132,5 +132,277 @@
     }
    }
   }
+ },
+ "trema": {
+  "hurt": {
+   "pick": "c7 (alt c10 for costume, c8 for the hat)",
+   "folder": "hurt",
+   "cands": {
+    "7": {
+     "score": "7.38",
+     "verdict": "PASS",
+     "look": "Maker: Leans back from the blow, head tipped up, both hands thrown open: the hit reads. White coat, gold crest, red and orange stole, black under-robe, white beard. Second look: Worst: the eboshi is a tall pointed cone with two trailing ribbons (the idle: a shorter rounded cap with a red and white band). The lower hand grips a loose black strap. Fur lapels gone.",
+     "scores": {
+      "identity": 7,
+      "anatomy": 7.5,
+      "hands": 6.5,
+      "costume": 7.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 7.5
+     }
+    },
+    "8": {
+     "score": "7.31",
+     "verdict": "PASS",
+     "look": "Maker: A stiff lean back with the chin up; the hat is the closest to the idle's straight eboshi. Second look: Worst: the hit reads mildly, more a sway than a blow. No red and white hat band; the stole is brown-red, not the idle's black with a crest.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 7,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 7
+     }
+    },
+    "10": {
+     "score": "7.25",
+     "verdict": "PASS",
+     "look": "Maker: Upright, both arms out; the costume is the closest (white coat, gold trim, black stole with a gold crest). Second look: Worst: game read. He faces the camera with arms out, so it reads as a shrug, not a hit; passes on the mean only. A blue gem appears on the hem.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 7.5,
+      "hands": 7,
+      "costume": 7.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 5.5
+     }
+    },
+    "6": {
+     "score": "7.19",
+     "verdict": "PASS",
+     "look": "Maker: The clearest recoil of the four: thrown back, arm flung up. Second look: Worst: identity. The hat curves like a horn, a red braid hangs from it, and his feet are bare. Narrow pass.",
+     "scores": {
+      "identity": 6,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 6.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 8
+     }
+    }
+   }
+  }
+ },
+ "logos": {
+  "hurt": {
+   "pick": "c2 (alt c3)",
+   "folder": "hurt",
+   "cands": {
+    "2": {
+     "score": "7.56",
+     "verdict": "PASS",
+     "look": "Maker: Knocked back, head thrown up, a revolver in each hand at the idle's size. Silver helmet, blue coat, purple sash. Second look: Worst: the near sleeve is short and the forearm bare (the idle's wide sleeves reach the wrist); the helmet turns with a purple emblem on its side.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 7.5,
+      "hands": 7.5,
+      "costume": 7,
+      "seams": 8,
+      "edges": 8,
+      "finish": 7.5,
+      "gameRead": 7.5
+     }
+    },
+    "3": {
+     "score": "7.50",
+     "verdict": "PASS",
+     "look": "Maker: The clearest hit: leaning far back, arms flung, guns out. Second look: Worst: the revolvers are long-barrelled and larger than the idle's; a white under-panel shows below the sash.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 7.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 8
+     }
+    },
+    "6": {
+     "score": "7.38",
+     "verdict": "PASS",
+     "look": "Maker: Bent back from the blow, both guns flung out. Second look: Worst: hands. Both revolvers are nearly twice the idle's size.",
+     "scores": {
+      "identity": 7,
+      "anatomy": 7,
+      "hands": 6.5,
+      "costume": 7.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 8
+     }
+    },
+    "4": {
+     "score": "7.38",
+     "verdict": "PASS",
+     "look": "Maker: Head thrown back, guns hanging. Second look: Worst: identity. The helmet grows a wide curved brim, so it reads as a hat; the guns are long.",
+     "scores": {
+      "identity": 6.5,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 7.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 8
+     }
+    }
+   }
+  }
+ },
+ "leblanc": {
+  "hurt": {
+   "pick": "c10 (alt c1)",
+   "folder": "hurt",
+   "cands": {
+    "10": {
+     "score": "7.38",
+     "verdict": "PASS",
+     "look": "Maker: The clearest hit of the set: thrown back, fan flung wide, teeth gritted. Short bob, heart mark, triangle-patterned robe. Second look: Worst: identity and costume. The fan is white and blue (the idle's is red and silver), the robe is pastel instead of purple, and the hair tips turn pink.",
+     "scores": {
+      "identity": 6.5,
+      "anatomy": 7.5,
+      "hands": 7,
+      "costume": 6.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 8.5
+     }
+    },
+    "1": {
+     "score": "7.19",
+     "verdict": "PASS",
+     "look": "Maker: Closest to the idle: red fan, bob, heart, purple-blue sleeves. Second look: Worst: the hit reads mildly (a twist, not a blow); the fan is held flat at her chest and the near hand is small.",
+     "scores": {
+      "identity": 7.5,
+      "anatomy": 7,
+      "hands": 6.5,
+      "costume": 7,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 6.5
+     }
+    },
+    "6": {
+     "score": "6.88",
+     "verdict": "FAIL",
+     "look": "Maker: Staggering with the fan raised. Second look: FAIL. She bows forward at the waist, so it reads as a curtsey, not a hit; the fan is white and blue.",
+     "scores": {
+      "identity": 6.5,
+      "anatomy": 6.5,
+      "hands": 7,
+      "costume": 6.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7,
+      "gameRead": 6
+     }
+    },
+    "8": {
+     "score": "6.94",
+     "verdict": "FAIL",
+     "look": "Maker: Standing, fan closed like a stick. Second look: FAIL. Upright with a grimace only: no hit read at game size; the robe is white and pink.",
+     "scores": {
+      "identity": 7,
+      "anatomy": 7,
+      "hands": 6.5,
+      "costume": 6.5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 5.5
+     }
+    }
+   }
+  }
+ },
+ "ormi": {
+  "hurt": {
+   "pick": "c7 (alt c11)",
+   "folder": "hurt",
+   "cands": {
+    "7": {
+     "score": "7.25",
+     "verdict": "PASS",
+     "look": "Maker: Leaning back with a grimace, shield on his back, stout and bald with the red top-knot. Second look: Worst: he faces screen-LEFT, the idle faces right (a horizontal flip at install, no repaint); white pantaloons and a green bow the idle does not have.",
+     "scores": {
+      "identity": 7,
+      "anatomy": 7,
+      "hands": 7,
+      "costume": 7,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 7
+     }
+    },
+    "11": {
+     "score": "7.12",
+     "verdict": "PASS",
+     "look": "Maker: Faces right like the idle; purple armour over the belly, fur mantle, the shield on his back. Second look: Worst: the shield is oversized and ornate, a gold wheel taller than he is; a ragged blue fur hem. The hit reads as a lean.",
+     "scores": {
+      "identity": 7,
+      "anatomy": 7,
+      "hands": 6.5,
+      "costume": 7,
+      "seams": 8,
+      "edges": 7,
+      "finish": 7.5,
+      "gameRead": 7
+     }
+    },
+    "6": {
+     "score": "7.00",
+     "verdict": "PASS",
+     "look": "Maker: Faces right, purple armour, shield. Second look: Worst: the shield is carried in front, not on his back, and the pose is a hunch more than a hit. Narrow pass at 7.00.",
+     "scores": {
+      "identity": 7,
+      "anatomy": 6.5,
+      "hands": 6.5,
+      "costume": 7,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 6
+     }
+    },
+    "1": {
+     "score": "6.69",
+     "verdict": "FAIL",
+     "look": "Maker: The first pilot. Second look: FAIL. His belly is bare (the idle: covered by purple armour); the prompt was corrected for the later renders.",
+     "scores": {
+      "identity": 5.5,
+      "anatomy": 7,
+      "hands": 6.5,
+      "costume": 5,
+      "seams": 8,
+      "edges": 7.5,
+      "finish": 7.5,
+      "gameRead": 6.5
+     }
+    }
+   }
+  }
  }
 }
