@@ -545,7 +545,17 @@
    "3": "a red trident or spear stands on her head; red cape",
    "4": "a star emblem floats above her head; blue boots with red laces"
   },
-  "verdict": "FAIL (The slot's named fault, a non-pistol in the other hand, persists in the only clean candidate; the other three add extra objects)"
+  "verdict": "PASS: cand-8 (cand-8 answers the slot's named fault from try a (the other hand held a spiked non-pistol): the low hand now holds a real handgun, the bottle is at chest height, and the try-b crest weighting gave her the spiked crest instead of the bob. No floating props (the splash, trident and star of try a are gone). Residuals: the chest panel is white with a small red motif rather than the idle's red panel on black; the gun is a black automatic, not the idle's red-and-black revolver; the boots run to the thigh (idle: knee boots) and the near one has a frayed white fringe at the top; the figure is a little small in the frame (377x854 cutout). cand-6 is the alternate if the judge prefers its knee boots, but its red bodysuit is the negated corset.)",
+  "b": {
+   "cands": {
+    "5": "guard REJECT (crop box 100% x 100%, edge): a giant red-silver winged emblem spreads over her with pink-blue streamers hanging to the floor",
+    "6": "guard ok: flask raised, handgun low at her side pointing down, spiked crest hair; but the torso is a red corset-like bodysuit (the negated red corset) and a red scarf flap hangs at the gun hand",
+    "7": "guard ok: handgun (a long grey revolver) low at her side, spiked crest hair; but a white halter top over a black corset (the named white-halter fault) and the bottle hangs low from the fingers with a spiked cap (spikes negated)",
+    "8": "PICK: pink flask held out at chest height, black handgun low at her side pointing down, spiked silver crest, stern red eyes, black off-shoulder puffy top, red belt, black shorts with the thigh strap, black boots; clear of every edge"
+   },
+   "verdict": "PASS: cand-8 (cand-8 answers the slot's named fault from try a (the other hand held a spiked non-pistol): the low hand now holds a real handgun, the bottle is at chest height, and the try-b crest weighting gave her the spiked crest instead of the bob. No floating props (the splash, trident and star of try a are gone). Residuals: the chest panel is white with a small red motif rather than the idle's red panel on black; the gun is a black automatic, not the idle's red-and-black revolver; the boots run to the thigh (idle: knee boots) and the near one has a frayed white fringe at the top; the figure is a little small in the frame (377x854 cutout). cand-6 is the alternate if the judge prefers its knee boots, but its red bodysuit is the negated corset.)"
+  },
+  "pick": "cand-8"
  },
  "paine-gunner/hurt": {
   "cands": {
@@ -554,7 +564,17 @@
    "3": "bent forward at the waist (the named 'doubles over' fault)",
    "4": "leans back, but the other hand holds a large scythe-like blade"
   },
-  "verdict": "FAIL (c1 recoils but keeps the named blue smear plus a red leg plate; c3 doubles over; c2 and c4 carry extra weapons)"
+  "verdict": "FAIL (stops, rule 15): The b tweak (weighted lean-back, a handgun in each hand, black knee boots, cannon/scythe/red leg armour negated) did not land: the two guard-ok frames carry a negated cannon (c6) or a floating extra pair of legs and gun (c8), and the other two are canvas-filling rejects. No candidate is a clean recoil with two revolvers and the idle's outfit; worse than try-a cand-1.",
+  "b": {
+   "cands": {
+    "5": "guard REJECT (edge): leans back with a hand to her face, but red-and-white block shapes fill the frame behind and under her",
+    "6": "guard ok: leans back with head turned, handgun low in one hand, spiked crest; but a giant red cannon-gauntlet sits on her raised shoulder (cannon negated) and the top is a white corset",
+    "7": "guard REJECT (crop box 100% x 100%): huge red mechanical wings or blades fill the frame, a second grey weapon at her hip",
+    "8": "guard ok: bent back with a gun in each hand, but a second pair of legs with boots and a third gun floats above her (extra limbs); red thigh-high legwear"
+   },
+   "verdict": "FAIL (stops, rule 15): The b tweak (weighted lean-back, a handgun in each hand, black knee boots, cannon/scythe/red leg armour negated) did not land: the two guard-ok frames carry a negated cannon (c6) or a floating extra pair of legs and gun (c8), and the other two are canvas-filling rejects. No candidate is a clean recoil with two revolvers and the idle's outfit; worse than try-a cand-1."
+  },
+  "stopped": true
  },
  "paine-gunner/ko": {
   "cands": {
@@ -581,7 +601,17 @@
    "3": "the only guard ok, but two weapons: a sunburst-crescent staff held vertical plus a separate spear held horizontal; bare thighs under a short lattice apron; face shadowed by the hood",
    "4": "guard REJECT (crop box): bare legs, a gold ring head with feather tassels"
   },
-  "verdict": "FAIL (The named fixes (scale, bare legs, the robe) are not met; the only guard-clean candidate has two weapons)"
+  "verdict": "FAIL (stops, rule 15): c6 and c7 no longer fill the canvas (stature not measured), but the other named fixes fail: every candidate still shows bare legs under the robe (the named fault, weighted ankle-length robe did not hold) and both guard-ok frames carry two weapons or a floating extra crescent (the same fault as try-a c3).",
+  "b": {
+   "cands": {
+    "5": "guard REJECT (crop box 100% x 100%, edge): close-up filling the canvas, giant gold star-crescent staff head",
+    "6": "guard ok and inside the frame: a two-handed swing, but the staff is double-headed (red orb with purple feathers at one end, a gold lattice axe-crescent at the other), a separate gold crescent blade floats behind her shoulder, the hood is down and both thighs are bare through the open robe",
+    "7": "guard ok: a two-handed thrust, hood up, crescent head; but two weapons cross in her hands (a vertical crescent staff with a blue diamond frame and a horizontal staff with a red ornate head), and the near thigh is bare below a short robe front",
+    "8": "guard REJECT (edge): a giant crescent-ring polearm spans the frame, cloak fans to the edges"
+   },
+   "verdict": "FAIL (stops, rule 15): c6 and c7 no longer fill the canvas (stature not measured), but the other named fixes fail: every candidate still shows bare legs under the robe (the named fault, weighted ankle-length robe did not hold) and both guard-ok frames carry two weapons or a floating extra crescent (the same fault as try-a c3)."
+  },
+  "stopped": true
  },
  "paine-white-mage/cast": {
   "cands": {
@@ -599,7 +629,17 @@
    "3": "no bottle; a second crescent weapon floats across her staff with crystal tips",
    "4": "no bottle; a giant lattice disc behind her head"
   },
-  "verdict": "FAIL (The named fix (bottle at chest height) is absent in all four, and each adds large extra objects)"
+  "verdict": "FAIL (stops, rule 15): The b tweak cleared the scenery, discs and second staff of try a, but the slot's named fix, the bottle at chest height (weighted 1.3), is absent in all four: every bottle hangs at the hip or waist. c8 adds a floating crescent and the wrong staff head.",
+  "b": {
+   "cands": {
+    "5": "guard REJECT (edge): bottle held at waist height, a gold crescent staff with a pink bulb; red and black boots",
+    "6": "guard ok: one crescent staff (blue crystal tassels hang from its head), hood up, stern face; but the pink bottle hangs low at the hip, not at chest height; black tights, orange sleeves, no lattice",
+    "7": "guard REJECT (edge): bottle at the hip, crescent staff held away from her",
+    "8": "guard ok: hood up, one staff; but a tiny red bottle hangs at the hip, the staff head is a red-gem disc with white feather wings (not the crescent), a crescent streak floats in the air beside her head, and she smiles"
+   },
+   "verdict": "FAIL (stops, rule 15): The b tweak cleared the scenery, discs and second staff of try a, but the slot's named fix, the bottle at chest height (weighted 1.3), is absent in all four: every bottle hangs at the hip or waist. c8 adds a floating crescent and the wrong staff head."
+  },
+  "stopped": true
  },
  "paine-white-mage/hurt": {
   "cands": {
