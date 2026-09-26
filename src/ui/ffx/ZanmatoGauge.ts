@@ -28,9 +28,10 @@ import {
  * One deliberate difference from the mockups: **no HP line.** Yojimbo is
  * Sensor- and Scan-immune (`research/ffx-yojimbo.md` §2, "Scan and Sensor
  * show nothing"; `src/data/ffx/enemies/yojimbo.ts` `immunityFlags`), and the
- * HUD's own Sensor plate says "SENSOR FAILED" on the same screen, so printing
- * "HP 25,740 / 33,000" would hand the player what the fight hides. Reported
- * to Bailey as a question, not decided for him.
+ * HUD's own Sensor plate shows nothing for him on the same screen (D-196,
+ * `docs/target/decisions.json`: "show nothing", not an invented caption), so
+ * printing "HP 25,740 / 33,000" here would hand the player what the fight
+ * hides just the same.
  *
  * Mounted by `FFXBattleHud` and inert in every battle whose state carries no
  * `enemyGaugeRules: 'yojimbo'` enemy (see `zanmatoGaugeModel.ts`).

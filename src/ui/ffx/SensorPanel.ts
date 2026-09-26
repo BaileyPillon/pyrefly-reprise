@@ -103,6 +103,19 @@ const TOGGLE_KEY_LABEL = 'I';
  * opens on a reveal or a target change, folds itself to a one-line chip after
  * {@link SENSOR_OPEN_MS}, and reopens on a click or `I` — and a plate the player
  * opened by hand never folds itself under them.
+ *
+ * ## Sensor shows nothing (D-196, FFX only)
+ *
+ * `research/ffx-yojimbo.md` §2: "Scan and Sensor show nothing" on a
+ * Sensor-immune target (`immunityFlags` carries `'immune-to-sensor'` —
+ * `src/data/ffx/enemies/yojimbo.ts` and the other bosses the research marks
+ * this way). Bailey's correction to D-196 (`docs/target/decisions.json`):
+ * the earlier build printed a name, an HP bar and a "SENSOR FAILED" caption
+ * for such a target — a plate that exists says something ("Sensor tried and
+ * came back empty") the source does not support. The fix is upstream of
+ * rendering: `open()` refuses a Sensor-immune target outright, so the panel
+ * is not shown at all — no name, no `? ? ?` HP, no caption — exactly as if
+ * nothing had been aimed at. Every other target renders exactly as before.
  */
 export class SensorPanel {
   readonly el: HTMLElement;
@@ -200,6 +213,12 @@ export class SensorPanel {
   }
 
   private open(target: AnyCombatant, byHand: boolean): void {
+    // D-196: a Sensor-immune target gets no plate at all, not a plate that
+    // says it found nothing. See the class doc's "Sensor shows nothing" note.
+    if (isSensorImmune(target)) {
+      this.hide();
+      return;
+    }
     this.current = target;
     this.folded = false;
     this.pinned = byHand;
@@ -291,13 +310,14 @@ export class SensorPanel {
   private render(): void {
     const target = this.current;
     if (!target) return;
+    // `open()` refuses a Sensor-immune target before `current` is ever set to
+    // it (D-196: "Sensor shows nothing"), so this method never runs for one.
     const known = this.scanned.has(target.id);
-    const sensorImmune = target.immunityFlags.includes('immune-to-sensor');
     const maxHp = target.stats.maxHp || 1;
-    const hpFrac = known && !sensorImmune ? Math.max(0, Math.min(1, target.hp / maxHp)) : 0;
-    const hpText = sensorImmune ? '- - -' : known ? `${target.hp} / ${maxHp}` : '? ? ?';
+    const hpFrac = known ? Math.max(0, Math.min(1, target.hp / maxHp)) : 0;
+    const hpText = known ? `${target.hp} / ${maxHp}` : '? ? ?';
     const chips =
-      !known || sensorImmune
+      !known
         ? ''
         : SENSOR_ELEMENTS.map((el) => {
             const affinity = target.affinities[el] ?? 'normal';
@@ -324,11 +344,9 @@ export class SensorPanel {
     // An unscanned enemy has no HP bar in FFX and does not grow one here: the
     // bar renders at zero width under a "? ? ?" readout and the panel says, in
     // one line, which command would fill it in.
-    const tail = sensorImmune
-      ? '<div class="ffx-sensor__failed">SENSOR FAILED</div>'
-      : known
-        ? `<div class="ffx-sensor__chips">${chips}</div>`
-        : '<div class="ffx-sensor__unknown">Sensor reads HP and weaknesses</div>';
+    const tail = known
+      ? `<div class="ffx-sensor__chips">${chips}</div>`
+      : '<div class="ffx-sensor__unknown">Sensor reads HP and weaknesses</div>';
 
     this.bodyEl.innerHTML = `
       <div class="ffx-sensor__name">${escapeHtml(target.name)}</div>
@@ -337,6 +355,15 @@ export class SensorPanel {
       ${tail}
     `;
   }
+}
+
+/**
+ * D-196: whether Sensor (and the plate it opens) shows nothing for this
+ * target — `research/ffx-yojimbo.md` §2's "Scan and Sensor show nothing".
+ * FFX only [AGENTS.md rule 14]: `immunityFlags` and this panel are both FFX's.
+ */
+function isSensorImmune(target: AnyCombatant): boolean {
+  return target.immunityFlags.includes('immune-to-sensor');
 }
 
 function affinityClass(a: string): string {
