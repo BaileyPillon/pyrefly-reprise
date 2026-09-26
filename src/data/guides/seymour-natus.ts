@@ -48,7 +48,7 @@ export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
       cite: 'ffx-seymour-natus-highbridge §3, §4.1, §5',
     },
     {
-      text: 'Haste Tidus and Auron, and no one else. Two Hasted guardians are safe; Haste on all three active guardians calls Desperado from Mortibody: about 500 to everyone, and it strips Shell, Protect, Reflect, Haste and Regen.',
+      text: 'Haste Tidus and Auron, never a third: a third Haste calls Desperado from Mortibody, about 500 to everyone, and it strips Shell, Protect, Reflect, Haste and Regen.',
       short: 'Haste Tidus and Auron, never a third',
       cite: 'ffx-seymour-natus-highbridge §3.2, §4.3, §6.3 row 7',
     },
@@ -107,7 +107,7 @@ export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Haste'] },
-      text: 'Haste {target}: two Hasted guardians are safe, and a third would call Desperado',
+      text: 'Haste {target}: never a third — a third Haste calls Desperado',
       cite: 'ffx-seymour-natus-highbridge §4.3, §6.3 row 7',
     },
     {
