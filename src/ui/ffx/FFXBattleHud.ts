@@ -11,6 +11,7 @@ import type {
   TurnPreview,
 } from '../../battle/common/types.ts';
 import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import { letterTagsOf } from '../../battle/ffx/letterTags.ts';
 import { installInkGoldStyles } from '../inkgold/index.ts';
 import { CommandMenu } from './CommandMenu.ts';
 import { CtbList } from './CtbList.ts';
@@ -939,10 +940,14 @@ export class FFXBattleHud implements HudPort {
    *
    * Read off the turn preview the CTB list last rendered rather than
    * re-derived, so the field plate and the queue tile can never print
-   * different letters for one fiend.
+   * different letters for one fiend. A fiend **off** the forecast (a Slowed
+   * Pagoda past its depth) reads the same roster rule the tile and the advisor
+   * card use (`letterTagsOf`), so it never loses its letter (PR-0208).
    */
   private letterTagOf(id: CombatantId): string | undefined {
-    return this.lastPreviewRows.find((r) => r.actorId === id)?.letterTag;
+    const row = this.lastPreviewRows.find((r) => r.actorId === id);
+    if (row) return row.letterTag;
+    return this.lastState ? letterTagsOf(this.lastState).get(id) : undefined;
   }
 
   /**
