@@ -2589,6 +2589,13 @@ export interface EnemyGroupDef {
    */
   nextGroupId?: string;
   /**
+   * The formation's own name for its opening reveal plate, when its first enemy's
+   * name would misname it: Chapter XI's second link is "Magus Sisters", not
+   * "Sandy" (PR-0205). Optional and additive; absent, the plate names the first
+   * standing enemy as before. Presentation only: no engine reads it.
+   */
+  headline?: string;
+  /**
    * The party fights this formation under a **permanent, non-consumable
    * Auto-Life granted by the fayth**, so a KO'd member revives immediately and
    * the battle cannot be lost [ffx-bfa-yu-yevon §2.3, verified: 3 sources].

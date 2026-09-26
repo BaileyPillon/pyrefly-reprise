@@ -176,6 +176,8 @@ export const roadSistersGroup: EnemyGroupDef = {
   id: ROAD_SISTERS,
   game: 'ffx2',
   enemies: [sandy, cindy, mindy],
+  // PR-0205: the seam's reveal plate names the formation, as the guide's link title does.
+  headline: 'Magus Sisters',
   canEscape: false,
   nextGroupId: ROAD_ANIMA,
   musicCues: AEON_CUE,
