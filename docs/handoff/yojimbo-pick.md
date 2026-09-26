@@ -87,3 +87,79 @@ Frames are in `docs/screenshots/yojimbo-pick/`, at 1600x900 and 390x844, seed 14
   This matters more now that the chapter is a 110-turn race.
 - The phone defeat card at 390x844 is the desktop panel scaled down to tiny type
   (`390x844-6-results.jpg`).
+
+## CHECK (independent checker, 2026-09-26; I did not build this)
+
+**Verdict: PASS, no blocker.** The branch does what Bailey picked (P-1 `not-learned`, P-2 (b)),
+FFX only. No boss number moved: the diff touches nothing under `src/battle/`, `src/data/ffx/enemies/`
+or `research/`. The two new numbers are labelled: Kimahri's gauge 45 (`[estimate]`,
+`ffx-seymour-flux.md` C-16, cited correctly) and 0 for `learned-spent` (`[estimate]`). The
+"Ghost teaches Doom" fact is `ffx-yojimbo.md` §5.3 row 1 `[verified: 4 sources]`.
+
+Re-run on `f760b4cc`:
+
+- `tsc --noEmit`: clean (exit 0).
+- Full `vitest run --testTimeout=60000`: 448 files passed, 2 failed; 8319 tests passed, 3 failed,
+  the same three as the builder's run. Neither failing file is touched by the branch:
+  - `art-ref-defaults` (2 tests) fails only because this worktree is a sparse checkout that leaves
+    out `docs/concepts/**/*.png` ("Input file is missing: ...leblanc-b.png"). The file **passes** on
+    main `09ad6021`, so the builder's "also fails in the main tree" is wrong for this file. The
+    cause is the checkout, not the code.
+  - `critic-policy-adoptions` fails on main `09ad6021` too (`decisions.json` state).
+- `orphans`: `objectiveReveal.ts` is reachable; the 24 orphans are the same as before.
+- **The bench reproduces exactly.** I copied the builder's bench to `tools/zz-yoj-check.tmp/` and
+  ran it on the real engine, 200 seeds each:
+  - Shipped party: intended 161/200 (within 5: 200), advisor 200/200, hack-and-sponge 161/200,
+    everyone-Attack 0/200.
+  - Other switch values: `preloaded` 200/200 (200 Doom kills), `learned-spent` 159/200, and
+    `not-learned` with gauge 100 gives 161/200.
+  - The committed `yojimbo-bench` prints intended 143/200, preloaded 200/200, wrong 0/200.
+- **Doom never appears on Kimahri's menu over whole fights.** Engine check, 200 seeds: Kimahri's
+  menu had an Overdrive row 970 times (his gauge reached 100). The only Rage it offered was Jump.
+  Doom rows: 0. The advisor suggested Doom: 0 times.
+
+**Real keys, my own production build** (headless GPU, port 6040, stopped by PID; the build was
+deleted afterwards). Seed 14, at 1600x900 and 390x844. Frames and report JSON are in the agent
+scratch folder `tools/zz-yoj-check.tmp/shots/` (not committed).
+
+1. The prep card reads "???", "Let an aeon take Zanmato", "Defeat Yojimbo", with no "Doom"
+   anywhere on the page. At battle start the engine has Kimahri's Rages as `['jump']`, gauge 45.
+   His first menu is Attack, Special, Items, Switch.
+2. Lulu cast Fira at Yojimbo by keys: 3 casts in the first fight, 2 in the second.
+3. The pause headline is "Let an aeon take Zanmato". The pause CHAPTER tab, reached by keys, lists
+   "1. ???" before the loss.
+4. The first fight ended in **defeat** on turn 105 (1 Zanmato, 0 Doom), which matches the bench.
+   RETRY (Enter) led to a prep card that reads "In the game, a Ghost teaches Doom". The pause
+   CHAPTER tab in the next fight lists the same line, not ticked, and the headline is still the
+   aeon row.
+5. The second fight (seed 1014) was a **victory**, with 0 Zanmato and 0 Doom. The post-battle
+   scene played ("She's gone. Truly, this time.").
+6. **Kimahri's Ronso Rage submenu, opened by keys at gauge 100** (seed 14, the 58th menu), lists
+   only **Jump** (`1600x900-kimahri-overdrive-submenu.jpg`). This is the proof the builder's step 2
+   lacked: at gauge 45 the menu has no Overdrive row, so it could not show whether Doom was there.
+
+### Findings (none blocks the merge)
+
+- **Major, needs Bailey's yes (rule 15, `inferred`): the revealed row's wording is ours, not his
+  pick.** P-2 (b) in the plan says the hidden line reveals "Doom Yojimbo". Under P-1 Doom cannot
+  land, so the builder replaced it with "In the game, a Ghost teaches Doom". That fact is sourced,
+  but Bailey never saw it.
+  - It reads as an objective that can never tick: the pause tab tops out at 2 of 3.
+  - It tells the player about a Ghost they cannot meet here.
+  - The driver should put this to Bailey. Options: the built fact line; a reveal that reads
+    "Doom Yojimbo" but is marked unavailable; or dropping the row under `not-learned`.
+- **Major, not caused by this branch: the advisor still wins 200/200 in about 7 Yojimbo actions,
+  with Fire Gems.** So a player who follows the advisor never races. That undercuts the point of
+  Bailey's P-1 pick ("the player earns it"). This is audit P-3 / Y-1, which is unsourced; per the
+  plan it is not to be changed without a source. Disclose it with the release.
+- **Major, not caused by this branch: the FFX HUD has no Defend.** I confirmed the builder's
+  finding in `CommandMenuLogic.buildTopRows` (Defend is skipped, and nothing in `src/ui` or
+  `src/app` offers it). The tactic's "everyone else defends" cannot be played by a human, and
+  the chapter is now a 105-turn race.
+- Minor: the Doom-only content cannot happen on the shipped value but stays for the switch. That
+  covers the `yojimbo-doomed` callout "Five breaths. Then gone." and the `survived-ability doom`
+  rule. This is expected.
+- Minor: `chapterPanel.ts` (498 lines) and `BattleScreenFlow.ts` (511) were already over the
+  400-line house limit before this branch, and each gains 3 lines here.
+- Minor: the reveal lasts only for the session, so a reload hides the row again. This is
+  deliberate, to avoid a save-schema change, and it is documented above.
