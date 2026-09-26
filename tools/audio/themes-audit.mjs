@@ -24,6 +24,10 @@
  *              rubato that stands in for the tempo map the renderer lacks —
  *              and the appoggiatura rule wherever FAREWELL's falling cell
  *              appears.
+ *   CHAPTERS   every listed chapter has a row in THEMES.md "The chapter cue
+ *              map" and its cells match the chapter's `music` record; a
+ *              failure here sets the exit code (PR-0099,
+ *              `chapter-cue-map-report.mjs`).
  *
  *   node tools/audio/themes-audit.mjs [cue ...] [--json=PATH] [--verbose]
  */
@@ -587,6 +591,11 @@ for (const row of report) {
   if (verbose) for (const n of row.notes) console.log(`   --  ${n}`);
 }
 console.log(`\n${failed} of ${report.length} cue(s) depart from the bible`);
+
+// The chapter cue map (PR-0099): every listed chapter has a row, and the row is what it plays.
+const { chapterCueMapReport } = await import('./chapter-cue-map-report.mjs');
+const chapterFailures = await chapterCueMapReport(console.log);
+if (chapterFailures.length) process.exitCode = 1;
 
 if (jsonOut) {
   await writeFile(jsonOut, JSON.stringify(report, null, 2));
