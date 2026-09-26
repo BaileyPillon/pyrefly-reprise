@@ -2314,3 +2314,32 @@ Our FFX boss rewards name five sphere items that have no item row yet. Their nam
 | **Lv. 4 Key Sphere** | "Opens Locks on Sphere Grid." | opens a Lv. 4 lock | Seymour Flux (`ffx-seymour-flux.md`) |
 
 None of the five has a use in battle. The *Final Fantasy X items* Spheres table lists drop, steal, bribe and field sources for each and **no shop**, so a price of 0 ("never sold" in the `ItemDef` contract) is `[single source]`.
+
+---
+
+## Observed session addendum (2026-09-26): targeting step, enemy action names, Sensor-immune text
+
+Full method, screenshots and write-up: `research/observed-ffx-steam-2026-09-26.md`
+(FFX Steam HD Remaster, Spherimorph, Macalania Woods Lake Road, party Tidus/Auron/Lulu,
+default config). Tag introduced there: `[observed: FFX Steam HD Remaster,
+2026-09-26 (driver's screenshots, not re-measured)]`. Short pointers, for
+whoever is near these behaviours next:
+
+- **Target step with one valid target (PR-0170).** With Spherimorph the only
+  enemy, choosing Attack still raised a target cursor and waited for a
+  second confirm before firing — it did not auto-resolve. `[observed: FFX
+  Steam HD Remaster, 2026-09-26 (driver's screenshots, not re-measured)]`
+  This is new evidence for §1.6 and §2.11 above (which document the CTB
+  turn-list and hit-chance UI but not the target-confirm step itself, since
+  no source had covered it before now).
+- **Enemy ability names in the top HELP bar (PR-0180).** Spherimorph's Fire
+  cast showed the name "Fire", centred, in the top HELP bar for about 1.5 to
+  2 seconds; its plain physical attack showed no name at all. `[observed:
+  FFX Steam HD Remaster, 2026-09-26 (driver's screenshots, not re-measured)]`
+- **Sensor-immune HELP text.** Targeting the Sensor-immune Spherimorph
+  printed "Immune to sensors." next to the boss's name in the HELP bar.
+  `[observed: FFX Steam HD Remaster, 2026-09-26 (driver's screenshots, not
+  re-measured)]` This corrects the "Scan and Sensor show nothing" reading in
+  `research/ffx-yojimbo.md` §2.3 for the Sensor half only — see that file's
+  own dated correction note. Scan's on-screen behaviour against an immune
+  target was not observed and remains open.

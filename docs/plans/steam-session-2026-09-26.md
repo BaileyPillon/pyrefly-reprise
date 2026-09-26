@@ -115,6 +115,47 @@ scene.
 | 8 (expensive half, if ever run) | A lone White Mage can win/lose Bahamut by Attack/spherechange, faithfully | Record it as faithful information per the table row's own instruction | NEW-C1 |
 | 8 (expensive half, if ever run) | She cannot | Becomes an options round per the table row ("possibly an options round") — do not build anything before that round | NEW-C1 |
 
+## Session outcome, 2026-09-26 (~17:00 EDT)
+
+The driver ran the FFX leg of this plan using a downloaded community
+step-save pack (Bailey's approval: "Yes download it it's fine") rather than a
+fresh New Game — save 52, "Macalania Woods - Lake Road" (17:35 play time),
+party Tidus/Auron/Lulu, default config. Full write-up:
+`research/observed-ffx-steam-2026-09-26.md`.
+
+**Answered:**
+- **Item 2, PR-0170 (FFX half).** Retail FFX still shows a target cursor and
+  waits for a confirm even with one valid enemy on the field (observed on
+  Spherimorph, the only target).
+- **Item 5, PR-0180.** Retail FFX names a non-attack enemy ability, centred,
+  in the top HELP bar for the span of the action, and names nothing for a
+  plain attack (observed: Spherimorph's Fire named, its plain attack not
+  named).
+- **Bonus, D-196.** The HELP bar also prints "Immune to sensors." when a
+  Sensor-immune enemy (Spherimorph) is targeted — this corrects the "Scan and
+  Sensor show nothing" reading `research/ffx-yojimbo.md` §2.3 built D-196 on,
+  for Sensor only. See that file's dated correction note.
+
+**Still open — the FFX-2 questions this session did not reach:**
+- **Item 1, PR-0209** — immune hits and chains.
+- **Item 3, PR-0124** — dressphere carry at a seam.
+- **Item 7, PR-0106** — the Leblanc failsafe.
+- **Item 8, NEW-C1** — a lone White Mage against Bahamut (and its cheaper
+  Game Over prior question).
+
+Item 4 (GP-G2, Alchemist variance) and item 6 (PR-0217/PR-0054, Zombie
+through KO) were also not reached.
+
+**Blocker hit on the FFX-2 legs:** loading the FFX-2 community saves
+(`ffx2_003` and `ffx2_000`) put the party in the Via Infinito, where **30
+seconds of walking produced no random encounter at all** — cause unknown.
+Yuna and Paine had no encounter-blocking accessory equipped, and Rikku was
+KO'd at the time. Because no encounter fired, none of the four FFX-2 items
+above could be attempted from that vantage point this session. Whoever
+retries the FFX-2 legs should either walk longer, pick a different field
+position from those saves, or investigate why the Via Infinito gave no
+encounters in that window before spending more of the 30-minute budget there.
+
 ## Notes for whoever runs this
 
 - Per rule 8, write every observation as prose (what was seen, when, in which

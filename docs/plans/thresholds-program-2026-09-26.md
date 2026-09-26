@@ -428,3 +428,35 @@ batches in §2. Both the accessibility build and the SFX-per-profile change need
 Whoever picks either item up should add it to their batch's ownership list in §2 (or
 take it as a small, separately-reviewed change) before editing it, so it is not
 touched by two batches at once.
+
+---
+
+## 9. Steam session 2026-09-26: answers
+
+The driver ran the FFX leg of the Steam HD Remaster session (queue item 7)
+this afternoon: the community save pack, save 52 "Macalania Woods - Lake
+Road", the Spherimorph battle, party Tidus/Auron/Lulu, default config. Full
+write-up: `research/observed-ffx-steam-2026-09-26.md`. Pointers also added to
+`research/ffx-combat-core.md` (new dated addendum) and `research/ffx-yojimbo.md`
+§2.3 (dated correction note). The FFX-2 legs of that session's plan
+(PR-0209, PR-0124, PR-0106, NEW-C1, GP-G2, PR-0217/0054) were **not** run this
+pass — see `docs/plans/steam-session-2026-09-26.md` for what is still open,
+including a blocking observation (no random encounter reached in 30 s in the
+Via Infinito on the FFX-2 community saves).
+
+| # | Item | Answer |
+|---|---|---|
+| 1 | **PR-0170** (one-target cursor, FFX half) | Retail FFX still shows a target cursor and waits for a confirm press even with exactly one valid target. Our engine's auto-fire on a lone target is a sourced faithfulness bug. |
+| 2 | **PR-0180** (enemy action names) | Retail FFX names a non-attack enemy ability, centred, in the top HELP bar for the span of the action (about 1.5 to 2 s observed on Fire), and names nothing for a plain attack. `actionBanner.ts`'s OFF switch is now sourced. |
+| 3 | **D-196** (Sensor-immune text) | Retail FFX prints "Immune to sensors." in the HELP bar when a Sensor-immune enemy is targeted. `research/ffx-yojimbo.md`'s older "Scan and Sensor show nothing" note was incomplete for Sensor; Scan itself was not observed and stays open. Flagged for whoever owns D-196, not rebuilt here. |
+
+**Reclassification for iteration 2:** both **PR-0170** and **PR-0180** move
+from class **D** (stalled, blocked on a source) to class **A** (sourced;
+build now), per §2's class definitions. Both live under `src/ui/ffx/**`
+(`CommandMenu.ts` / `CommandMenuLogic.ts` / `TargetCursor.ts` for PR-0170;
+the new `actionBanner.ts` for PR-0180), which **Batch 2** owns in §2's
+ownership table. That batch is currently running as `t1-b2a`, so neither fix
+lands until `t1-b2a` merges to `main` (shared-working-tree rule — no other
+batch touches `src/ui/ffx/**` in the meantime). Iteration 2's merge list in
+§4 should pick up PR-0180 as sourced-and-buildable rather than "if it is
+sourced," and add PR-0170 to Batch 2's table in §2 alongside it.

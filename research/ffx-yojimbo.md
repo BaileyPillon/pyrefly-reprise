@@ -116,6 +116,22 @@ Neutral to Fire, Ice, Thunder, Water and Holy. `[decompiled]`. The wiki lists no
 | Death, Zombie, Petrify, Poison, all four Breaks, Confuse, Berserk, Provoke, Sleep, Silence, Dark, Slow, Scan, all Distillers, Eject, Auto-Life | **255** | Immune `[decompiled]` + wiki immunity list `[verified: 2 sources]` |
 | Flags | `immune_to_percentage_damage` (Demi / Gravity do nothing, GameFAQs "Gravity (Immune)"), `immune_to_sensor`, `immune_to_scan`, `immune_to_delay`, `immune_to_slice`, `immune_to_bribe` | `[decompiled]` + wiki `[verified: 2 sources]`. **No Scan text exists.** |
 
+> **Dated correction, 2026-09-26.** The line above ("No Scan text exists") was
+> written from the decompile and wikis only, with no source that actually
+> showed what an immune target's HELP bar does. A live Steam HD Remaster
+> session that day, targeting the also-`immune_to_sensor` boss Spherimorph
+> (Macalania Woods), observed the game print **"Immune to sensors."** next to
+> the enemy's name in the top HELP bar while a Sensor-immune enemy was
+> targeted `[observed: FFX Steam HD Remaster, 2026-09-26 (driver's
+> screenshots, not re-measured); full write-up
+> research/observed-ffx-steam-2026-09-26.md]`. So **Sensor is not silent
+> against an immune target** — it prints a line — and this Yojimbo
+> record's "no Scan text" note only ever covered **Scan**, which was **not**
+> observed this session and stays open. D-196 (built as hiding the Sensor
+> panel entirely on an immune target) was decided on the older, incomplete
+> reading and should be reconsidered by whoever owns `src/ui/ffx/**` and
+> D-196 against this new source. No code changed here.
+
 ### 2.4 Rewards
 
 None. Drop chance 0, steal chance 0, equipment chance 0, 0 AP, 0 gil `[decompiled]` + GameFAQs table `[verified: 2 sources]`. The real rewards are the **Chamber of the Fayth** access (hiring Yojimbo) and the chests in the two side rooms reached by the teleporter afterwards: **Flexible Arm** (Rikku, 4 empty slots), **MP Sphere**, **X-Potion ×2** `[verified: 3 sources — wiki, Jegged, GameFAQs]`.
