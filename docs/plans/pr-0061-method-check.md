@@ -205,3 +205,74 @@ remainder there is Leblanc's opening enemy turns, not loading. No chapter's
 intended length has been recorded by Bailey, and without presses every
 chapter is still 6.8-9.6 s because of the approved card and sweep. PR-0061 is
 therefore **not fixed**; its loading share is.
+
+## Round-13 addendum (2026-09-26): seed-pinned split, and the D-138 calibration
+
+Written before the third repair, as rule 15 asks (open at major in rounds 12 and 13, fifth review).
+Paper only; the numbers below are read from round 13's own `run.json` files, nothing re-run.
+**Game case: both** (the opening card, the sweep, callouts and the first menu are shared
+presenter plumbing, CHK-020; the sensor line is the chapter's own beat).
+
+### What changed since the repair pass above
+
+- **The calibration is settled.** D-206 (Bailey, 2026-09-26 ~16:00 EDT, "I'll go with all of your
+  recommendations", answering the sheet's item 5): the critic counts the approved 2.2 s card and
+  3.8 s sweep as authored beats and judges only the leftover. It is `critic/calibration/cases.json`
+  CAL-005 (should-pass). Round 13's acceptance ("median at or under 6 s passive") can therefore
+  never be met without cutting approved beats, which D-138 forbids; it is replaced by the leftover
+  form: **passive time after the approved beats at most about 1.5 s, and with Confirm presses the
+  first menu at about 4 s.**
+- **The seed was not what the runs recorded.** Round 13's Chapter I 14.37 s run recorded seed 1,
+  but its gap pass showed that with the seed truly pinned to 1 Tidus acts first, as in round 12;
+  Flux opens on seed 1001 (R13G-09). The harness reads `__pyrefly.seed()`, not the battle's own
+  seed (PR-0202, batch 5). Every per-chapter number below is therefore "some seed", not seed 1.
+
+### The split, from round 13's run.json (`firstState.playTimeMs`, `playback.lastEvents`)
+
+Chapter XII opens with nothing before the first turn (`lastEvents` = `turn-start` only) and reads
+6.45 s: that is the **authored floor**, the 6.0 s of approved beats plus about 0.45 s of reveal
+and hand-off. Everything above 6.45 s is leftover.
+
+| chapter | first menu | leftover | what fills the leftover (last events) |
+|---|---|---|---|
+| XII Omnis | 6.45 s | 0 | nothing |
+| II Yunalesca | 6.35 / 7.73 s | 0 / 1.3 s | one opening action on the second run |
+| III BFA | 7.73 s | 1.3 s | one opening action |
+| IV Bahamut | 7.57-7.60 s | 1.1 s | Bahamut's opening action with a status |
+| X Natus | 8.07-8.08 s | 1.6 s | two sensor reads |
+| V Vegnagun | 9.32 / 11.25 s | 2.9 / 4.8 s | a held callout (`script-trigger`); an enemy action with two misses |
+| XIV Isaaru | 10.33 s | 3.9 s | an enemy action, then a held callout |
+| XI Fallen Aeons | 10.40-10.77 s | 4.0-4.3 s | an enemy action (with a chain), then a held callout |
+| I Flux (unpinned) | 14.37 s | 7.9 s | sensor, Lance of Atrophy with a status, a 3.3 s held callout, Mortiorchis's turn |
+
+Three kinds of leftover, and only two are presentation:
+
+1. **The fight itself** (an enemy acting first in the CTB or ATB order). Faithful; not dead time;
+   the only lever is how long each action's presentation takes, which is the same everywhere.
+2. **Held callouts** (`script-trigger` followed by a hold): 2.4-3.3 s each in I, V, XI and XIV.
+   These are authored story beats, but their *hold* is not an approved duration; the line can
+   stay on screen while the next event plays.
+3. **Sensor lines** (X, and I when Kimahri reads first): 1.6-1.8 s each, currently played as
+   their own beat after the sweep.
+
+### Alternatives, and the smallest test that tells them apart
+
+- (a) **Auto-advance the opening callout under the enemy action**, and **run the sensor read under
+  the push** (the sweep's last second), approved beats untouched. Moves kinds 2 and 3.
+- (b) Shorten each enemy action's presentation. Moves kind 1, but touches every fight's feel and
+  was never asked for; out of scope.
+
+Deciding test, after PR-0202 lands: one real-key run per chapter at 1600x900 on a production
+build, the battle's own seed pinned before the first key, recording the presenter's own phase
+timestamps (card up/down, sweep start/end, each event's start and the moment its presentation
+resolves, each callout's show and dismiss) in run.json. Sum per kind. If kinds 2 and 3 account for
+the excess over 1.5 s in I, V, X, XI and XIV, (a) is the whole fix; if kind 1 alone exceeds 1.5 s
+anywhere, that chapter's remainder is the fight and is reported as such, not built.
+
+### Choice
+
+**Change method: (a), measured by the split above.** Batch 2 builds the callout auto-advance and
+the sensor-under-push (class A: no approved beat is shortened, D-138 and D-206 hold), with a
+presenter unit test that the first menu can open while an opening callout is still on screen. The
+acceptance is CAL-005's form, per chapter, seed pinned. The round-11 figures above (with Confirm
+presses) stay the Confirm-path baseline.
