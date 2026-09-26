@@ -19,13 +19,15 @@
  *
  *   node docs/concepts/art5/round2/pilot-warrior.mjs prep
  *   node docs/concepts/art5/round2/pilot-warrior.mjs body <pose> <n> [<n>...]
- *   node docs/concepts/art5/round2/pilot-warrior.mjs comp <pose> <n> <hx,hy[;hx2,hy2]> <deg> [scale] [handR]
+ *   node docs/concepts/art5/round2/pilot-warrior.mjs comp <pose> <n> <hx,hy[;hx2,hy2]> <deg> [scale] [handR] [front|back] [squash]
  *   node docs/concepts/art5/round2/pilot-warrior.mjs grip <pose> <n> [denoise]
  *
  * <deg> is the grip-to-tip direction on screen (0 = right, 90 = down). Hands are raw-canvas pixels
  * read off the body render by looking at it. Shared ComfyUI: submits only while fewer than 3
  * prompts are pending; never restarts it; an all-black frame writes STOP-BLACK.txt and stops.
  * Candidates only, outside the repo; nothing is installed into public/art.
+ * Full run (2026-09-26): all five slots (attack, cast, item, hurt, ko), bodies n = 4..7 per slot;
+ * ko has no hand (handR 0: the sword lies beside her); 'back' layers the sword behind the body.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -60,21 +62,34 @@ const SWORD_POLY = [[300, 376], [328, 376], [328, 440], [398, 440], [398, 508], 
 const GRIP = [314, 405]; const GRIP_TOP = 376; const GRIP_END = 440; const TIP = [293, 1110];
 const SQUARE_OFFSET = [404, 18];      // where the idle sits in paine-warrior-idle-square.png
 
-// Paine Warrior identity (girls2.json) with the sword words taken OUT for the body pass.
-const IDENTITY = 'paine \\(ff10-2\\), final fantasy x-2, silver hair, short hair, (swept back hair:1.3), (spiked hair crest:1.2), ' +
+// Paine Warrior identity (girls2.json) with the sword words taken OUT for the body pass. Full run: the
+// idle's own hair, legwear and boots weighted (a tall swept-back crest, not a spiked mane; black
+// thighhighs; chunky flat mid-calf combat boots with red buckle straps), heels and red legs negated.
+const IDENTITY = 'paine \\(ff10-2\\), final fantasy x-2, silver hair, short hair, (swept back hair:1.3), (pompadour:0.9), (spiked hair crest:1.0), hair behind ears, hair flipped out at the nape, ' +
   'red eyes, pale skin, black choker, (black leather jacket:1.2), cropped jacket, off shoulder, white corset, black elbow gloves, ' +
-  'red belt, skull belt buckle, black leather shorts, (black thigh boots:1.3), red boot straps';
-const GIRL_NEG = 'helmet, armor, cape, shoulder cape, blonde hair, brown hair, skirt, long hair, messy hair, bob cut, wings, ' +
-  'red boots, red footwear, red jacket, blue jacket';
+  'red belt, skull belt buckle, black leather shorts, (black thighhighs:1.2), (black combat boots:1.3), (chunky boots:1.2), flat heels, (red buckle straps on boots:1.1)';
+const GIRL_NEG = 'helmet, armor, cape, shoulder cape, blonde hair, brown hair, skirt, long hair, messy hair, bangs, ponytail, hair bun, headband, pointy ears, elf, bob cut, wings, ' +
+  'red boots, red footwear, red jacket, blue jacket, high heels, high heel boots, stiletto heels, red legwear, red thighhighs, gradient legwear, knee pads';
 const NO_WEAPON_NEG = 'sword, weapon, holding weapon, blade, katana, dagger, knife, staff, spear, polearm, scythe, axe, gun, ' +
   'sheath, scabbard, stick, pole';
+// grip = the hand the sword goes in; the other hand's words keep the fist off the raised/bottle hand
+const FIST = 'clenched hand at her side';
+const KO = 'lying, on side, full body, (wide shot:1.1), small figure, from side, head to the right, feet to the left, (closed eyes:1.3), unconscious, expressionless, closed mouth, arms at her sides, empty hands';
+const KO_NEG = 'sitting, standing, open eyes, looking at viewer, lying on back, smile, wink, sleeping, pillow, propped up, floor, puddle, water, reflection, shadow, rainbow, streak, blood, debris, particles, close-up, portrait, upper body';
 const BODY = {
   cast: { size: [832, 1216], skel: 'cast',
-    tags: 'standing, (arm up:1.2), raised hand, open hand, open palm, (other arm lowered at her side:1.1), (clenched fist:1.2), looking up, serious, closed mouth',
-    neg: 'smile, two-handed' },
+    tags: `standing, (arm up:1.2), (open hand:1.3), (spread fingers:1.2), empty raised hand, palm up, (other arm lowered at her side:1.1), (${FIST}:1.25), looking up, serious, closed mouth`,
+    neg: 'smile, two-handed, raised fist, fist pump, pointing, clenched raised hand' },
   attack: { size: [1024, 1216], skel: 'attack',
     tags: 'fighting stance, (lunging:1.2), leaning forward, legs apart, bent knees, (both arms extended forward:1.2), (clenched fists:1.2), hands together, serious, v-shaped eyebrows, closed mouth',
     neg: 'standing straight, smile, open hand' },
+  item: { size: [832, 1216], skel: 'item',
+    tags: `standing, (holding potion bottle:1.2), small bottle, (arm extended forward:1.1), bottle at chest height, (other arm lowered at her side:1.1), ${FIST}, looking at object, closed mouth`,
+    neg: 'drinking, two bottles, bottle at hip, arm up, two-handed' },
+  hurt: { size: [832, 1216], skel: 'hurt',
+    tags: `(recoiling:1.2), knocked back, (leaning back:1.2), head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, arm outstretched, (other arm lowered:1.1), ${FIST}, feet on ground`,
+    neg: 'smile, smirk, grin, happy, bent over, bowing, jumping, midair, flip, legs up, knee up, raised leg, kicking, arms up, close-up, upper body, cowboy shot, ribbon, streamers, halo, machinery, scenery', cn: 0.92 },
+  ko: { size: [1344, 768], skel: 'ko', prone: true, tags: KO, neg: KO_NEG },
 };
 const COMMON_NEG = `${SPRITE_NEGATIVE}, multiple views, 2girls, chibi, sketch, monochrome, 3d, realistic, cropped, ` +
   'magic circle, fire, flames, swirl, lightning, dark aura, splash, cast shadow, drop shadow, pedestal, platform, rock, from behind, facing away';
@@ -94,15 +109,20 @@ from PIL import Image, ImageDraw
 idle, out, poly, grip, gtop, gend, tip, off = sys.argv[1], sys.argv[2], json.loads(sys.argv[3]), json.loads(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), json.loads(sys.argv[7]), json.loads(sys.argv[8])
 im = Image.open(idle).convert('RGBA'); W, H = im.size
 m = Image.new('L', (W, H), 0); ImageDraw.Draw(m).polygon([tuple(p) for p in poly], fill=255)
-a = np.array(im).astype(int); yy, xx = np.mgrid[0:H, 0:W]
+a = np.array(im).astype(int); a0 = a.copy(); yy, xx = np.mgrid[0:H, 0:W]
 dark = a[..., :3].max(-1) < 70
 keep = (np.array(m) > 0) & (a[..., 3] > 0) & ~(dark & (yy > 1040) & (xx < 300)) & ~(dark & (xx < 272))
-# a clean point: fade the last 60 px of blade to a taper instead of the ragged cut at the boot
-t0 = tip[1] - 60
+keep0 = keep.copy()
+# one clean point (full run fix): the red spine stops ~30 px above the silver edge and the boot hides
+# the real tip, so rebuild the last 75 px from the full-width row at t0, squeezed to a single apex
+t0 = tip[1] - 70; cols = np.where(keep[t0])[0]; L0, R0 = int(cols.min()), int(cols.max())
+src = a[t0, L0:R0 + 1].copy(); ty = tip[1] + 5
 for y in range(t0, H):
-    half = max(0.0, 16 * (tip[1] + 8 - y) / 68)
-    cx = tip[0] + 4
-    keep[y] &= (np.abs(xx[y] - cx) <= half)
+    keep[y] = False
+    if y > ty: continue
+    frac = (ty - y) / (ty - t0); w = max(1, int(round((R0 - L0 + 1) * frac)))
+    xs = np.linspace(0, len(src) - 1, w).round().astype(int); x0 = int(round((L0 + R0) / 2 - w / 2))
+    a[y, x0:x0 + w] = src[xs]; keep[y, x0:x0 + w] = True
 # keep only the sword's own connected body: stray flecks (belt, glove edge, gaps) become noise when rotated
 from scipy import ndimage
 lab, nl = ndimage.label(keep & (a[..., 3] > 40))
@@ -122,7 +142,7 @@ meta = {'bbox': bb, 'grip': [grip[0] - bb[0], grip[1] - bb[1]], 'tip': [tip[0] -
         'grip2h': [grip[0] - bb[0], g1], 'tip2h': [tip[0] - bb[0], tip[1] - bb[1] + (g1 - g0)]}
 json.dump(meta, open(out + '/sword.json', 'w'), indent=1)
 # the IP-Adapter reference square with the sword taken out (white where it was)
-nos = a.copy(); nos[..., 3] = np.where(keep, 0, a[..., 3])
+nos = a0.copy(); nos[..., 3] = np.where(keep | keep0, 0, a0[..., 3])
 sq = Image.new('RGB', (1216, 1216), (255, 255, 255)); fig = Image.fromarray(nos.astype('uint8'), 'RGBA')
 sq.paste(fig, tuple(off), fig); sq.save(out + '/refs/paine-warrior-idle-nosword-square.png')
 print(json.dumps(meta))
@@ -135,7 +155,8 @@ function prep() {
 // ---------------------------------------------------------------- 2. body + 4. grip (GPU)
 function bodyGraph({ b, seed, skel, refA, refB, prefix }) {
   const [width, height] = b.size;
-  const positive = `1girl, solo, ${b.tags}, ${IDENTITY}, three-quarter view, looking at viewer, full body, feet visible, simple background, white background, ${STYLE_TAGS}, ${QUALITY_TAGS}`;
+  const view = b.prone ? '' : 'three-quarter view, looking at viewer, full body, feet visible, ';
+  const positive = `1girl, solo, ${b.tags}, ${IDENTITY}, ${view}simple background, white background, ${STYLE_TAGS}, ${QUALITY_TAGS}`;
   const negative = `${COMMON_NEG}, ${NO_WEAPON_NEG}, ${b.neg}, ${GIRL_NEG}`;
   return { positive, negative, g: {
     4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
@@ -144,7 +165,7 @@ function bodyGraph({ b, seed, skel, refA, refB, prefix }) {
     7: { class_type: 'CLIPTextEncode', inputs: { text: negative, clip: ['4', 1] } },
     30: { class_type: 'ControlNetLoader', inputs: { control_net_name: CONTROLNET } },
     31: { class_type: 'LoadImage', inputs: { image: skel, upload: 'image' } },
-    32: { class_type: 'ControlNetApplyAdvanced', inputs: { positive: ['6', 0], negative: ['7', 0], control_net: ['30', 0], image: ['31', 0], strength: CN, start_percent: 0, end_percent: 1, vae: ['4', 2] } },
+    32: { class_type: 'ControlNetApplyAdvanced', inputs: { positive: ['6', 0], negative: ['7', 0], control_net: ['30', 0], image: ['31', 0], strength: b.cn || CN, start_percent: 0, end_percent: 1, vae: ['4', 2] } },
     20: { class_type: 'LoadImage', inputs: { image: refA, upload: 'image' } },
     24: { class_type: 'LoadImage', inputs: { image: refB, upload: 'image' } },
     25: { class_type: 'ImageBatch', inputs: { image1: ['20', 0], image2: ['24', 0] } },
@@ -207,8 +228,9 @@ async function run(g, rawPath, cutPath, size, tag) {
 }
 
 async function guardOf(rawPath, cutPath, [w, h]) {
+  const prone = w > h;   // the ko canvas (1344x768) is the only landscape one
   const cut = cutout(rawPath, cutPath);
-  let guard = await checkCutoutFile(cutPath, { sourceWidth: w, sourceHeight: h, composition: 'full' });
+  let guard = await checkCutoutFile(cutPath, { sourceWidth: w, sourceHeight: h, composition: prone ? 'prone' : 'full' });
   const cb = cut.contentBox;
   if (cb && (cb[0] <= 3 || cb[1] <= 3 || cb[2] >= w - 4 || cb[3] >= h - 4)) {
     guard = { ok: false, reasons: [...(guard.reasons || []), `content touches the canvas edge (${cb.join(',')})`] };
@@ -229,8 +251,8 @@ async function body(pose, ns) {
     const { g, positive, negative } = bodyGraph({ b, seed, skel: stageImage(skelPath), refA, refB, prefix: `pyrefly/method/paine-warrior-${pose}` });
     const d = dirOf(pose);
     const r = await run(g, join(d, `body-${n}.raw.png`), join(d, `body-${n}.png`), b.size, `${pose}#${n}`);
-    side(pose, n, { game: 'ffx2', subject: 'paine-warrior', state: pose, step: 'body (no sword)', seed, status: 'PILOT', positive, negative,
-      controlnet: { file: CONTROLNET, strength: CN, skeleton: `docs/concepts/art5/round2/skeletons/paine-warrior/${b.skel}.png` },
+    side(pose, n, { game: 'ffx2', subject: 'paine-warrior', state: pose, step: 'body (no sword)', seed, status: Number(n) >= 4 ? 'METHOD RUN' : 'PILOT', positive, negative,
+      controlnet: { file: CONTROLNET, strength: b.cn || CN, skeleton: `docs/concepts/art5/round2/skeletons/paine-warrior/${b.skel}.png` },
       ipadapter: { file: IPADAPTER, ...IPA, images: ['paine-warrior-idle-nosword-square.png (pilot prep)', 'paine-warrior-head.png'] },
       model: CKPT, steps: 28, cfg: 6, width: b.size[0], height: b.size[1], ...r, generatedAt: new Date().toISOString() });
     log(`body ${pose}#${n} seed ${seed}: guard ${r.guard.ok ? 'ok' : 'REJECT ' + r.guard.reasons.join('; ')} (${r.seconds}s)`);
@@ -241,11 +263,14 @@ async function body(pose, ns) {
 const COMP_PY = `
 import sys, json, math, numpy as np
 from PIL import Image, ImageDraw, ImageFilter
-out, raw, cut, cbox, hands, deg, scale, hr, mode = sys.argv[1], sys.argv[2], sys.argv[3], json.loads(sys.argv[4]), json.loads(sys.argv[5]), float(sys.argv[6]), float(sys.argv[7]), int(sys.argv[8]), sys.argv[9]
+out, raw, cut, cbox, hands, deg, scale, hr, layer = sys.argv[1], sys.argv[2], sys.argv[3], json.loads(sys.argv[4]), json.loads(sys.argv[5]), float(sys.argv[6]), float(sys.argv[7]), int(sys.argv[8]), sys.argv[9]
 meta = json.load(open(sys.argv[10]))
 two = len(hands) == 2
 sw = Image.open(sys.argv[11] + ('/sword-2h.png' if two else '/sword.png')).convert('RGBA')
 G = meta['grip2h' if two else 'grip']; T = meta['tip2h' if two else 'tip']
+# squash < 1 narrows the sword across the blade: a sword lying flat on the ground, seen from the side (ko)
+sq = float(sys.argv[12]); sw = sw.resize((max(1, round(sw.width * sq)), sw.height), Image.LANCZOS) if sq != 1 else sw
+G = [G[0] * sq, G[1]]; T = [T[0] * sq, T[1]]
 W, H = Image.open(raw).size
 bodyL = Image.new('RGBA', (W, H), (0, 0, 0, 0)); bodyL.paste(Image.open(cut).convert('RGBA'), (cbox[0], cbox[1]))
 P = [sum(h[0] for h in hands) / len(hands), sum(h[1] for h in hands) / len(hands)]
@@ -254,13 +279,16 @@ c, s = math.cos(d), math.sin(d)
 A = (c / scale, s / scale, 0, -s / scale, c / scale, 0)
 A = (A[0], A[1], G[0] - (A[0] * P[0] + A[1] * P[1]), A[3], A[4], G[1] - (A[3] * P[0] + A[4] * P[1]))
 swL = sw.transform((W, H), Image.AFFINE, A, resample=Image.BICUBIC)
-comp = Image.new('RGBA', (W, H), (255, 255, 255, 255)); comp.alpha_composite(bodyL); comp.alpha_composite(swL)
+comp = Image.new('RGBA', (W, H), (255, 255, 255, 255))
+# 'back': the sword goes behind the body (a hand behind her hip); 'front': over the body, fingers laid back on
+if layer == 'back': comp.alpha_composite(swL); comp.alpha_composite(bodyL)
+else: comp.alpha_composite(bodyL); comp.alpha_composite(swL)
 # the fingers go back over the grip: a feathered disc of the body's own pixels at each hand
 disc = Image.new('L', (W, H), 0); dd = ImageDraw.Draw(disc)
 for h in hands: dd.ellipse([h[0] - hr, h[1] - hr, h[0] + hr, h[1] + hr], fill=255)
 disc = disc.filter(ImageFilter.GaussianBlur(2))
 ba = np.array(bodyL).astype(float); hand = ba.copy(); hand[..., 3] = ba[..., 3] * np.array(disc) / 255.0
-comp.alpha_composite(Image.fromarray(hand.astype('uint8'), 'RGBA'))
+if hr > 0 and layer != 'back': comp.alpha_composite(Image.fromarray(hand.astype('uint8'), 'RGBA'))
 comp.convert('RGB').save(out + '-comp.png')
 # the grip-pass mask: a disc 1.9x the hand radius around each hand (white = repaint)
 mk = Image.new('RGB', (W, H), (0, 0, 0)); md = ImageDraw.Draw(mk)
@@ -268,15 +296,15 @@ R = int(hr * 1.9)
 for h in hands: md.ellipse([h[0] - R, h[1] - R, h[0] + R, h[1] + R], fill=(255, 255, 255))
 mk.filter(ImageFilter.GaussianBlur(6)).save(out + '-mask.png')
 L = scale * math.dist(G, T); tip = (P[0] + math.cos(th) * L, P[1] + math.sin(th) * L)
-print(json.dumps({'grip': P, 'tip': [round(tip[0]), round(tip[1])], 'deg': deg, 'scale': scale, 'handR': hr, 'maskR': R, 'twoHanded': two}))
+print(json.dumps({'grip': P, 'tip': [round(tip[0]), round(tip[1])], 'deg': deg, 'scale': scale, 'handR': hr, 'maskR': R, 'twoHanded': two, 'layer': layer, 'squash': sq}))
 `;
-async function comp(pose, n, handsArg, deg, scale = 0.67, hr = 22) {
+async function comp(pose, n, handsArg, deg, scale = 0.67, hr = 22, layer = 'front', squash = 1) {
   const d = dirOf(pose); const s = side(pose, n);
   if (!s.cutout) throw new Error(`no body-${n} for ${pose}`);
   const hands = handsArg.split(';').map((p) => p.split(',').map(Number));
   const stem = join(d, `cand-${n}`);
   const info = JSON.parse(py(COMP_PY, stem, join(d, `body-${n}.raw.png`), join(d, `body-${n}.png`), JSON.stringify(s.cutout.cropBox),
-    JSON.stringify(hands), deg, scale, hr, 'comp', join(OUT, 'sword.json'), OUT));
+    JSON.stringify(hands), deg, scale, hr, layer, join(OUT, 'sword.json'), OUT, squash));
   const size = [s.width, s.height];
   const r = await guardOf(`${stem}-comp.png`, `${stem}-comp.cut.png`, size);
   side(pose, n, { comp: { ...info, source: 'the idle\'s own sword, cut from public/art/characters/paine-warrior/idle.png (read only)', ...r } });
@@ -298,6 +326,6 @@ const [cmd, ...a] = process.argv.slice(2);
 mkdirSync(OUT, { recursive: true });
 if (cmd === 'prep') prep();
 else if (cmd === 'body') await body(a[0], a.slice(1));
-else if (cmd === 'comp') await comp(a[0], a[1], a[2], Number(a[3]), a[4] ? Number(a[4]) : undefined, a[5] ? Number(a[5]) : undefined);
+else if (cmd === 'comp') await comp(a[0], a[1], a[2], Number(a[3]), a[4] ? Number(a[4]) : undefined, a[5] ? Number(a[5]) : undefined, a[6] || 'front', a[7] ? Number(a[7]) : 1);
 else if (cmd === 'grip') await grip(a[0], a[1], a[2]);
-else console.log('usage: prep | body <pose> <n>... | comp <pose> <n> <hx,hy[;hx2,hy2]> <deg> [scale] [handR] | grip <pose> <n> [denoise]');
+else console.log('usage: prep | body <pose> <n>... | comp <pose> <n> <hx,hy[;hx2,hy2]> <deg> [scale] [handR] [front|back] [squash] | grip <pose> <n> [denoise]');

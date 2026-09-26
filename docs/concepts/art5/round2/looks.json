@@ -464,7 +464,21 @@
    "3": "guard REJECT (edge): spiked mane, but the sword is split into a dark hilt and a separate red blade",
    "4": "best identity (spiked swept hair, ornate red serrated blade, black thigh boots), but the sword is held vertical, point down, in a static guard: does not read as an attack; red flared knee pieces"
   },
-  "verdict": "FAIL: No candidate both reads as an attack and carries the named ornate red longsword; two of four touch the edges."
+  "verdict": "FAIL: No candidate both reads as an attack and carries the named ornate red longsword; two of four touch the edges.",
+  "method": {
+   "note": "Method run (METHOD-CHECK.md A, option 1): body rendered with no sword, the idle's own sword cut out and composited into her hand (pilot-warrior.mjs). Identity fixes this run: open palm on cast, chunky flat combat boots with red buckle straps, black thighhighs, heels and red legwear negated, hair weighting swapped from the spiked mane (round 2) through pompadour and crest variants. Agent look, not Bailey; nothing installed.",
+   "sheet": "docs/concepts/art5/round2/sheet3-paine-warrior.jpg",
+   "bodies": "n 4-7, seeds 36604-36607, ControlNet 0.85; hair: swept back + pompadour 0.9 + spiked hair crest 1.0",
+   "cands": {
+    "4": "best hair (tall swept-back silver crest, closest to the idle), chunky boots with red buckles, black thighhighs; a red-lined high collar flares behind her neck (red jacket class); two-handed low thrust at 53 deg",
+    "5": "spiky exploded mane (the round 2 hair fault), boots right; two-handed thrust at 45 deg",
+    "6": "bob-length hair, no crest; boots right; thrust at 52 deg",
+    "7": "PICK: swept silver hair with a spiked top, black jacket, white corset, red belt with skull, black thighhighs, chunky black boots with red buckle straps; the idle's ornate red sword in both fists, low forward thrust at 48 deg; no red on the lower legs"
+   },
+   "verdict": "PASS, agent look: cand-7. The named round 2 fault (no candidate both reads as an attack and carries the ornate red longsword) is fixed in all four: one sword, the idle's own, gripped in both fists, pointing at the enemy. Residuals: the crest is lower and spikier than the idle's; the grip shows a red strip between the two fists (hands spaced on a stretched grip); the blade is a flat 2D rotation (no foreshortening); reads as a low thrust rather than a big swing. Alternate: cand-4 (best hair) if the red collar flare is acceptable.",
+   "pick": "cand-7",
+   "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/attack/cand-7-comp.png"
+  }
  },
  "paine-warrior/cast": {
   "cands": {
@@ -473,7 +487,23 @@
    "3": "sword raised by the grip in the cast hand; one blue heel",
    "4": "raised hand on the crossguard of a giant vertical sword (the sword is raised); bob hair"
   },
-  "verdict": "FAIL: The named fix (a single sword, not floating) fails: the sword floats (c1), multiplies (c2) or is raised in the cast hand (c3, c4)."
+  "verdict": "FAIL: The named fix (a single sword, not floating) fails: the sword floats (c1), multiplies (c2) or is raised in the cast hand (c3, c4).",
+  "method": {
+   "note": "Method run (METHOD-CHECK.md A, option 1): body rendered with no sword, the idle's own sword cut out and composited into her hand (pilot-warrior.mjs). Identity fixes this run: open palm on cast, chunky flat combat boots with red buckle straps, black thighhighs, heels and red legwear negated, hair weighting swapped from the spiked mane (round 2) through pompadour and crest variants. Agent look, not Bailey; nothing installed.",
+   "sheet": "docs/concepts/art5/round2/sheet3-paine-warrior.jpg",
+   "bodies": "n 4-7 (lowered hand unweighted) and 8-9 (clenched hand at her side 1.25), seeds 36614-36619; grip passes on 4 and 6 at denoise 0.38",
+   "cands": {
+    "4": "open palm raised (fixed), chunky boots with red buckles; the lowered hand is open with spread fingers, so the sword sits under open fingers; grip pass 0.38 set the hilt into the palm but did not close the fingers; pompadour hair",
+    "5": "open palm raised; lowered hand open; one navy boot; pompadour hair (not composited to the sheet, comp only)",
+    "6": "black-gloved open palm raised, skull boots; lowered hand open, grip pass 0.38 smudged the fingers; pompadour hair",
+    "7": "open palm raised, lowered hand curled so the sword reads held; a long red sash hangs from the belt to the boots (extra red cloth)",
+    "8": "PICK: open palm raised high in a black sleeve, lowered hand a fist at her thigh holding the idle's sword, point trailing to the floor behind her; tall swept-back silver crest (the closest hair of the run), black thighhighs, chunky flat black boots",
+    "9": "open palm raised, fist holds the sword; blue-tinted swept hair, buckled boots"
+   },
+   "verdict": "PASS, agent look: cand-8. The named faults are fixed: one sword, not floating, held in the lowered hand (not raised in the cast hand), and the cast hand is an OPEN PALM (the pilot's raised fist is gone once the fist word was tied to the lowered hand). Residuals: the boots lack the idle's three red buckle straps (one small red tab), the thighhighs read sheer rather than the idle's latex, no pommel shows above the fist.",
+   "pick": "cand-8",
+   "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/cast/cand-8-comp.png"
+  }
  },
  "paine-warrior/item": {
   "cands": {
@@ -482,7 +512,21 @@
    "3": "small bottle hanging low at the hip (the answer wanted chest height); sword floats unheld beside her",
    "4": "PICK: round flask held at chest height, both boots black, black jacket, no cape, red blade; the giant red sword stands unheld behind her; bob hair; red belt tail with a ring"
   },
-  "verdict": "PASS, weak: cand-4 (cand-4 meets every named fix (bottle at chest height, black boots and jacket, no cape, no silver blade). Residuals: the sword is oversized and stands behind her without a grip, the hair is a bob rather than the crest, and the figure is a little small at 1:1.)"
+  "verdict": "PASS, weak: cand-4 (cand-4 meets every named fix (bottle at chest height, black boots and jacket, no cape, no silver blade). Residuals: the sword is oversized and stands behind her without a grip, the hair is a bob rather than the crest, and the figure is a little small at 1:1.)",
+  "method": {
+   "note": "Method run (METHOD-CHECK.md A, option 1): body rendered with no sword, the idle's own sword cut out and composited into her hand (pilot-warrior.mjs). Identity fixes this run: open palm on cast, chunky flat combat boots with red buckle straps, black thighhighs, heels and red legwear negated, hair weighting swapped from the spiked mane (round 2) through pompadour and crest variants. Agent look, not Bailey; nothing installed.",
+   "sheet": "docs/concepts/art5/round2/sheet3-paine-warrior.jpg",
+   "bodies": "n 4-7, seeds 36624-36627; hair tried as tall crest + pointy tips (4-5) and voluminous + spiked crest (6-7)",
+   "cands": {
+    "4": "PICK: glass potion bottle held out at chest height in a black-gloved hand; the idle's sword at rest in the other gloved fist, point down on the floor beside her feet, like the idle stance; chunky boots with red buckle straps (closest to the idle), black thighhighs, black jacket, no cape",
+    "5": "bottle at chest height, clean fist holds the sword at rest; pointed elf ears, bare arms (no elbow gloves), white bands on the thighhighs",
+    "6": "bottle at chest height, sword at rest; a red headband, spiked boot cuffs; a floating lens shape in the raw background (cut away)",
+    "7": "bottle at chest height, sword at rest trailing back; bare bottle hand, a red belt tail with a rainbow tip dangling"
+   },
+   "verdict": "PASS, agent look: cand-4. The slot's answer holds (bottle at chest height, black boots and jacket, no cape, no silver blade) and the round 2 residual (giant sword standing unheld behind her) is fixed: the sword is the idle's, in her hand, at rest point-down on the floor, never floating. Residuals: a pointed ear shows (\"pointy hair tips\" leaked into the ear; negated from the next body on), the hair is tied up rather than the swept crest, a row of blue-purple crystal tassels on the belt.",
+   "pick": "cand-4",
+   "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/item/cand-4-comp.png"
+  }
  },
  "paine-warrior/hurt": {
   "cands": {
@@ -491,7 +535,24 @@
    "3": "guard REJECT (edge): a long red streak and a second blade crossing her",
    "4": "guard REJECT (edge): four or more swords around her, red splashes"
   },
-  "verdict": "FAIL: Three of four are edge rejects with extra blades; c1 has a floating sword plus a sheath and a second hilt (the rubric's extra-weapon fault)."
+  "verdict": "FAIL: Three of four are edge rejects with extra blades; c1 has a floating sword plus a sheath and a second hilt (the rubric's extra-weapon fault).",
+  "method": {
+   "note": "Method run (METHOD-CHECK.md A, option 1): body rendered with no sword, the idle's own sword cut out and composited into her hand (pilot-warrior.mjs). Identity fixes this run: open palm on cast, chunky flat combat boots with red buckle straps, black thighhighs, heels and red legwear negated, hair weighting swapped from the spiked mane (round 2) through pompadour and crest variants. Agent look, not Bailey; nothing installed.",
+   "sheet": "docs/concepts/art5/round2/sheet3-paine-warrior.jpg",
+   "bodies": "n 4-7 at ControlNet 0.85 and 8-10 at 0.92 (ribbons, halo, machinery negated), seeds 36634-36640; 4 of 7 guard rejects or unusable",
+   "cands": {
+    "4": "wince with clenched teeth, arm flung back with an open hand, the idle's sword hanging point-down from the forward fist; spiky mane (round 2 hair fault), tall quilted boots without the red buckles",
+    "5": "guard ok but no hand shows: twisted crouch, purple and yellow splashes on the jacket; not composited",
+    "6": "guard REJECT (edge): red and blue ribbons across the frame",
+    "7": "guard REJECT (edge): a giant machine and halo behind her",
+    "8": "guard REJECT (edge): red-blue floor streak",
+    "9": "PICK: head thrown back, one eye shut in a wince, the outstretched fist keeps the idle's sword pointing down at her side; swept crest hair, chunky boots with red buckle straps, black thighhighs",
+    "10": "guard REJECT (bottom edge): head back to the sky, long loose hair, red cape panel"
+   },
+   "verdict": "PASS, weak, agent look: cand-9. The named fault (floating sword with a gold guard, extra sheath and hilt, multiplied blades) is fixed: one sword, the idle's own, held in her fist. Weak: the recoil is a head-back wince with the feet planted rather than a thrown-back body; residuals: lavender tint in the hair, a red pouch on the hip, the sword hangs straight down (reads as keeping hold, not swinging). The body step is the bottleneck for this slot: 4 of 7 bodies failed without any sword in the prompt.",
+   "pick": "cand-9",
+   "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/hurt/cand-9-comp.png"
+  }
  },
  "paine-warrior/ko": {
   "cands": {
@@ -500,7 +561,21 @@
    "3": "guard REJECT (edge): the sword spans the width; blue floor shadow",
    "4": "guard REJECT (edge): the sword lies across the top of her, touching both sides"
   },
-  "verdict": "FAIL: All four are guard rejects on the edges (the named fault is not fixed); the sword grows past the canvas every time."
+  "verdict": "FAIL: All four are guard rejects on the edges (the named fault is not fixed); the sword grows past the canvas every time.",
+  "method": {
+   "note": "Method run (METHOD-CHECK.md A, option 1): body rendered with no sword, the idle's own sword cut out and composited into her hand (pilot-warrior.mjs). Identity fixes this run: open palm on cast, chunky flat combat boots with red buckle straps, black thighhighs, heels and red legwear negated, hair weighting swapped from the spiked mane (round 2) through pompadour and crest variants. Agent look, not Bailey; nothing installed.",
+   "sheet": "docs/concepts/art5/round2/sheet3-paine-warrior.jpg",
+   "bodies": "n 4-7 on the 1344x768 ko canvas, seeds 36644-36647; the sword laid flat on the ground (no hand, squash 0.5 across the blade)",
+   "cands": {
+    "4": "PICK: lying face-up, eyes shut, head right; the idle's sword lies on the ground just below her open hand, as if dropped from it; one sword, well inside the canvas; silver hair",
+    "5": "lying face-up, eyes shut, sword on the ground beside her; a pink floor puddle under her (floor negated) and lavender hair",
+    "6": "guard REJECT (edge): a red-purple patterned floor fills the bottom of the frame",
+    "7": "lying face-up, small in the frame; sword on the ground but set apart from her; a blue floor shadow at her head; a wide studded red belt"
+   },
+   "verdict": "PASS, agent look: cand-4. The named fault (every round 2 ko touched the canvas edge because the sword grew past it) is gone: the sword is placed, not drawn, so all three composites pass the guard, and the rainbow blade and floor streak are gone. Residuals: she lies on her back rather than on her side, the boots have block heels (heels negated but kept in this body), the hair falls loose to the shoulder, the flat squashed sword is a 2D approximation of a blade seen edge-on.",
+   "pick": "cand-4",
+   "file": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/ko/cand-4-comp.png"
+  }
  },
  "paine-black-mage/hurt": {
   "cands": {
