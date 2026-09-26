@@ -104,3 +104,90 @@ round-13 screenshots.
 Junctions (`node_modules`, `public/art`) removed before finishing; the
 worktree itself is kept per the brief. Scratch scripts under
 `tools/zz-verify.tmp/` are left uncommitted (agent scratch).
+
+## CHECK (independent, 2026-09-26; checker did not build this batch)
+
+Verdict: **not ready to merge as claimed. 3 blockers.** Five items pass their round-13
+acceptance checks on a production build. PR-0171 fails its own check in battle. The
+PR-0151/PR-0189 key-column changes regress the CHAPTER and CONTROLS tabs at 4:3 and on the
+phone. PR-0117 must stay open, because half of its check still fails.
+
+How it was checked: `vite build` of `93950c49` served by `vite preview` on 5965, and the
+merge-base `3665f1eb` built the same way in a detached worktree on 5966, so every result
+below is candidate against base. Headless GPU Chromium (`PYREFLY_BROWSER=gpu`). The tests
+walked the real flow with real keys: title, Enter, the board with arrows, Enter, prep,
+Esc over the opening scene, the tabs with arrows, the cutscene skip, the first command
+menu, then Esc again. On the phone they used raw CDP touch events
+(`Input.dispatchTouchEvent`) and `touchscreen.tap`. Debug calls only read state, except
+for the PR-0014 chip captures, which used `gotoChapter`. Scripts are in
+`tools/zz-check.tmp/` (scratch, uncommitted). Frames and JSON are in
+`docs/screenshots/t1-b3b-check/` (uncommitted, per the brief: commit this section only).
+The `cmp-*` files are base and candidate side by side.
+
+### Gates
+
+- `tsc --noEmit`: clean.
+- Full `vitest run --testTimeout=60000`: exit 0, 450 files passed (4 skipped), 8317 tests
+  passed (29 skipped, 1 todo), 0 failed, no load flake.
+- `tests/e2e/portraits.spec.ts` against the candidate preview: 3/3 passed.
+- `tools/orphans.mjs`: 24, unchanged.
+- No file under `public/` or `docs/target/` is touched, so there is no art change.
+- The game case is recorded in every commit (rule 14).
+
+### Per issue
+
+| Issue | Acceptance check (round 13) | Result |
+|---|---|---|
+| PR-0168 | SCENE row equals the dossier LOCATION in every chapter | **Pass** in 14 of 15 chapters, live and over the opening scene. Chapter VII is locked ("COMING") on a fresh save, and its unit test covers the same code path. Caveat: at 1024x768 the value now shows as "MT. GA…" (see blocker 2). |
+| PR-0171 | No text box overlaps the face region of any ch2 or ch9 plate at 1600 or 2000 | **FAIL (blocker 1).** Over a scene it passes: THE PARTY is omitted, the dossier moves off the face, and only the pre-existing eyebrow grazes the mask edge on Ch IX at 1600x900. **In battle it fails in all four captures** (Ch II and Ch IX, at 1600x900 and 2000x1012): every THE PARTY row sits on Yuna's face or Yojimbo's mask, because the face box moves only the dossier. At 1600x900 the new `wide` on the party column also moves the party **keys** onto the face; on base only the values were. See `pause-yunalesca-1600x900-battle.jpg` and `pause-yojimbo-cavern-1600x900-battle.jpg`. |
+| PR-0189 (pause slice) | No ellipsis on these labels at 1280, 1600, 2000 and 3840 | **Pass**: FFX-2 Ch IV CHAPTER tab, 0 ellipsised at all four sizes. Base also showed "DRESSPHERE" in full at 2000x1012, so the `wide` flag was not what cleared it there. At 1024x768 the dressphere **values** ("white mage", "dark knight", "warrior") are still cut on both builds. |
+| PR-0121 | 3840x2160, ch1/ch4/ch9: the plate covers the window or has a feathered edge, with no hard bar; 2560x1440 unchanged | **Pass.** At 4K all six plates (member and CHAPTER, three chapters) carry `pause__plate--capped` with the mask, and the edge luminance ramps down smoothly (`cmp-3840-ch1-base-top-cand-bottom.jpg`). The plate rects at 2560x1440 are identical to base. |
+| PR-0151 | No ellipsis at 1280x960 and 1024x768 | **Pass** for the OPTIONS tab in both games: base cut MASTER VOLUME, SOUND EFFECTS and STRATEGY GUIDE, the candidate cuts none. But the same CSS floor causes blocker 2. |
+| PR-0066 | Fresh 390x844 sweep of title and board: 0 under 14px, no horizontal scroll, no clipped labels; 1600 and 2000 unchanged | **Pass.** Title and board minimum is 14px (base 12), horizontal scroll is 0. 1600x900 (14.44 / 14) and 2000x1012 (16.24 / 14) are identical to base. The capture shows no clipping (`cmp-390x844-board-title-base-cand.jpg`). |
+| PR-0112 (claimed "already fixed") | At 390x844 every settings row is reachable by touch scroll, no label is ellipsised, X-2 BATTLE flips by tap | **Pass.** A raw touch drag scrolls the column 0 to 58/58 and reaches all 8 rows, a tap flips X-2 BATTLE from WAIT to ACTIVE, and no label is cut. The builder had set `scrollTop` from script, and CDP `synthesizeScrollGesture` did not scroll here, so this is the first real-touch evidence. |
+| PR-0117 (claimed "already fixed") | 390x844, ch4 and ch6: the eyebrow overlaps no stat row, **and the grid name has no ellipsis** | **FAIL (blocker 3).** The eyebrow overlap is gone (eyebrow top 692, last row bottom 676). The garment grid name is still ellipsised on both builds: "PROTECTION …" in Ch IV and "hour of need" cut in Ch VI (`phone-ch4-member-grid-ellipsis-zoom.jpg`). This is not a regression, but the issue must stay open. |
+| PR-0014 (partial) | e2e over all rosters: head box fully inside the visible rect; Paine is the same image in battle, results, prep and pause | **Stays open, as the builder disclosed.** The new e2e check tests only the eye **point** inside the tile, not the head box, and does not cover the pause dossier chips. The new Yuna row matches the art: both marked eye centres land on the irises of `portraits/yuna.png`, and the FFX CTB chip now shows slightly more head. The FFX-2 party chips (Yuna, Rikku, Paine) still cut the top of the hair on both builds (`cmp-chips-ffx2-base-cand.jpg`). |
+
+### Blockers
+
+1. **PR-0171 in battle.** THE PARTY column crosses the Ch II face and the Ch IX mask at
+   1600x900 and 2000x1012. It is claimed fixed and fails its own check. At 1600x900 the
+   `wide` party column made the overlap larger (keys as well as values).
+2. **Regression from the wider key column (both games, shared chrome).** The
+   `.pause__col--wide .pause__k` floor went from 118 to 150px (PR-0151), and the gear column
+   is now `wide` (PR-0189). Together they squeeze the value columns. A sweep of every pause
+   tab, candidate against base, in Ch I and Ch IV in battle found:
+   - **1024x768, CHAPTER tab** (`cmp-1024x768-chapter-base-top-cand-bottom.jpg`):
+     - SCENE is now "MT. GA…" (base showed "GAGAZET" in full).
+     - ENCOUNTER is "BOSS …" (base "BOSS HP 1…").
+     - "YUNA'S ST…", "BLESSED …" and "MT. GAGAZET" are newly cut.
+   - **390x844, CHAPTER tab**: the party values "BAROQU…", "GLORIO…" and "YUNA'S …" are
+     newly cut.
+   - **390x844, CONTROLS tab**: the key bindings are now cut ("Q / L1 / …",
+     "↑↓ / D-P…", "ENTER /…", "ESC / S…", "H / TRIA…"), where base cut the descriptions
+     instead (`cmp-390x844-chapter-controls-base-cand.jpg`).
+
+   A narrower fix, for example scoping the floor to the settings column, would avoid this.
+   That is for the builder to choose.
+3. **PR-0117 must not be closed.** The grid name is still ellipsised at 390x844 in Ch IV and
+   Ch VI (acceptance check, second half).
+
+### Other findings (not blocking)
+
+- **Snapshots dropped, and the handoff says otherwise.** On Ch II and Ch IX the dossier
+  lands at `under-lean` (the three snapshots dropped) in 6 of the 8 captures. At 2000x1012
+  over a scene on Ch II it lands at `heading` (the quote dropped as well). The handoff and
+  commit 8c2b7218 say it "moves `under`". This is the existing FOC16-02 fallback, but on
+  these two chapters it removes approved snapshots, which Bailey can see. The driver should
+  weigh it (rule 9).
+- **Stale comments in `dossierPlace.ts`.** The new comment calls the Chapter II plate
+  "Yunalesca". `pause/ch2-yunalesca.png` is a painting of Yuna, and round 13 says "Yuna's
+  eyes". The file header still says Chapter XIII's is the only face box.
+- **Yojimbo face box stops short.** The box's `y1 0.7` ends above the mask's lowest tooth
+  point (about 0.78 of the plate). This is minor while FACE_MARGIN is applied.
+- **Environment.** `@exodus/bytes` is present in the shared `node_modules`. The builder's
+  offline repair holds, and jsdom tests run.
+
+Worktree: the junctions in `D:/pyrefly-t1-b3b` and the base worktree
+`D:/pyrefly-b3b-base-check` are removed after this check, and both preview servers (5965,
+5966) are stopped by PID.
