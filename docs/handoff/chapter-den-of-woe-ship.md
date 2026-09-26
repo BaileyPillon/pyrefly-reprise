@@ -87,3 +87,26 @@ scroll.
 - **Music:** the stand-in cue until a `boss-den-of-woe` sketch is picked by ear (rule 13).
 - `scenes/index.ts` is at 399 lines; Chapters XI and XIV's branches add their own entries, so the
   integrator must compact one more entry.
+
+## Bailey's pick built (2026-09-26): "Den: both, drop the prep"
+
+Bailey: "I pick your recommendation for Den of Woe". **FFX-2 only.** `main` 30420871 was merged first
+(commit `168ea0f2`). Both sides were kept on every conflict. The Den stays unlisted beside the unlisted
+Chapter XI. Chapter XI's rows in `den-of-woe-carry.test.ts` were re-recorded on an export of `main`,
+and the merged tree prints the same hashes.
+
+The pick is commit `f61b85e5`. `DEN_OF_WOE_HERO_DRINKS = 3` and `DEN_OF_WOE_LEVEL_BONUS = 8`, both
+`[estimate]`. `DEN_OF_WOE_LIGHTFALL_PREP = false`. `DEN_OF_WOE_RETRY_FROM_LINK = false`. The guide,
+tip and tactic teach Invincible from a Hero Drink against Lightfall.
+
+- **Measured:** 39 / 200 first try and 160 within five at the live default, as the sheet predicted. The
+  full table is in the sheet's "Bailey's pick" section and in `docs/plans/den-of-woe-bench.md`.
+- **Real flow:** production build, headless GPU, 1600x900 and 390x844. It covered prep, the pre scene,
+  a real Enter action, a drink that survives Lightfall, and a win to results. 0 errors. Frames are in
+  `docs/concepts/chapters/den-of-woe/ship/picked/`.
+- **For the driver:**
+  - The all-target wrap in `src/battle/ffx2/resolve.ts` `targetForHit` is shared FFX-2 plumbing, on
+    `main` too, and flatters the Den: 34 / 149 when fixed.
+  - Three presentation notes, all disclosed in the sheet: the phone pause GUIDE line has zero height;
+    the INV chip is clipped in a full row; the Lightfall forecast card was stale after the drink.
+- **Next:** the listing step (the driver's) and `decisions.json` on `main` (the merge agent's).

@@ -262,3 +262,37 @@ within-five under both options: 170/173 at 1.0 s, 153/160 at 1.5 s, 126/134 at 2
    asserted. This is not a correctness problem, because the first-try asserts already cover those speeds.
 
 The 7 minors from the first ship check are still out of scope and unchanged.
+
+## Builder's answers after Bailey's pick (2026-09-26; commits `168ea0f2` merge, `f61b85e5` pick)
+
+**Game case: FFX-2 only.** Bailey: "I pick your recommendation for Den of Woe" = "Den: both, drop the
+prep". This section is the builder's, not the checker's; it answers the re-check of `44fe6ce3`.
+
+- **B1 (listing blocker): answered by the pick, for the checker to confirm.** Both kit options are ON
+  (3 Hero Drinks, +8 levels, both `[estimate]`), the prep is dropped, and the retry stays from Baralai.
+  `den-of-woe-shipped-bench.test.ts` on the registered record: 39 / 200 first try and 115 / 160 within
+  3 / 5 tries at 1.5 s / 0.5 s (Wait split); 66 / 173 at 1.0 s; 48 / 134 at 2.5 s; bench 102; Active 7.
+  That matches the sheet cell for cell. Listing stays the driver's step.
+- **M1: closed by the pick** (`DEN_OF_WOE_LIGHTFALL_PREP = false`). The guide, the tactic and the tip
+  teach the Hero Drink against Lightfall and carry no prep hint (`den-of-woe-options.test.ts` pins it).
+
+The four wording minors:
+
+1. **"Anyone who retries" was too broad.** Fixed. The sheet's short version and recommendation 2 now
+   say "within five tries from Baralai", and they add that the prep still leads within three at 1.5 s
+   (125 against 115).
+2. **The kit's headline quoted the prep line.** Fixed. The short version and recommendation 1 now give
+   the recommended pair's 39 / 160 ("about 1 in 5 first try, 4 in 5 within five"). The 52 / 153 figures
+   are named as the pair *with* the prep.
+3. **A bare "Den: both" keeps the prep.** Fixed in "Replies": a bare "Den: both" does not settle the
+   prep, and the driver asks. It is moot for this pick, because Bailey named the recommendation, which
+   is both calls.
+4. **Within five was asserted only at 1.5 s.** Fixed. `den-of-woe-options-bench.test.ts` asserts no prep
+   ≥ prep within five at 1.0, 1.5 and 2.5 s (173 ≥ 170, 160 ≥ 153, 134 ≥ 126), and it passes.
+
+**New, for the driver (not fixed; shared FFX-2 plumbing, the same on `main`):** in
+`src/battle/ffx2/resolve.ts` `targetForHit`, an all-target move indexes `living[hitIndex %
+living.length]` over a list re-filtered after each hit. When a target dies mid-move, the last girl is
+skipped and an earlier one is hit twice. Seen live on seed 6: Lightfall hit Yuna, Rikku (KO), Yuna, and
+never Paine. Hitting each target once moves the shipped Den to 34 first try and 149 within five at
+1.5 s (scratch copy, not committed). The sheet's "Bailey's pick" section has the full figures.

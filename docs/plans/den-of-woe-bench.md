@@ -115,3 +115,23 @@ with no prep as the lean. The sheet for Bailey, with the full tables and replies
 | 2 Gippal | intended | Active, D=1.5 s | 7/40 | 208279 |
 | 3 Nooj | intended | Active, D=1.5 s | 0/40 | 177418 |
 | Den (1-2-3) | intended | Active, D=1.5 s | 0/40 | lost at Baralai 11, Gippal 28, Nooj 1 |
+
+## Bailey's pick, 2026-09-26: the chapter as shipped
+
+Bailey: "I pick your recommendation for Den of Woe" = "Den: both, drop the prep". The shipped kit is the
+preset + 3 Hero Drinks + 8 levels (both `[estimate]`), with no Lightfall prep. The retry is from Baralai.
+The rows above are the Chapter V preset's (the drive helper's default party) and stay as measured. The
+shipped chapter's own bench is `tests/unit/chapters/den-of-woe-shipped-bench.test.ts` (`PYREFLY_MEASURE=1`):
+
+| Speed | First try (of 200) | Within 3 / 5, retry from Baralai |
+|---|---:|---|
+| Human, Wait split 1.0 s / 0.3 s | 66 | 136 / 173 |
+| Human, Wait split 1.5 s / 0.5 s (live default) | 39 | 115 / 160 |
+| Human, Wait split 2.5 s / 0.8 s | 48 | 99 / 134 |
+| Bench, D = 0 | 102 | 173 / 199 |
+| Active, 1.5 s | 7 | 15 / 20 |
+
+The shipped tactic on the shipped kit, 20 seeds a link at bench speed, plays as the shipped line does:
+Baralai 20, Gippal 18, Nooj 13 (`den-of-woe-ship-content.test.ts`). The all-target wrap in
+`resolve.ts` flatters these rows. With each target hit once (scratch, not committed) the live default
+row reads 34 and 102 / 149 (see the options sheet).

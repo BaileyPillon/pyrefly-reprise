@@ -4,20 +4,23 @@
 `chapter-gippal-ship-0925` (`D:/pyrefly-ch-gippal-ship`), `tests/unit/chapters/den-of-woe-options-bench.test.ts`
 (the table below is copied from its output; run it with `PYREFLY_MEASURE=1`), `docs/plans/den-of-woe-bench.md`, and the ship check
 `docs/concepts/chapters/den-of-woe/ship/CHECK.md` (blocker B1, major M1). **No boss number changed.**
-Every option is **built and switched OFF**. With every switch off, the chapter is the one the ship check
-passed. Its guide, formations and kit are identical, and the tactic's 994 decisions over 60 fights match
-decision for decision.
+**Bailey picked on 2026-09-26: "I pick your recommendation for Den of Woe"**, that is "Den: both, drop
+the prep". The chapter now ships with both kit options on and no Lightfall prep; the retry from the
+lost shade stays off. See "Bailey's pick, 2026-09-26" at the end. Everything above that section is the
+sheet as Bailey read it, with the re-check's four wording minors corrected.
 
 ## The short version
 
 1. As shipped, **nobody wins the Den at human speed**: 0 of 200 first tries. Nooj's Lightfall does
    5,000 to everyone and kills Yuna (2,488 max HP) from full.
-2. **Levels plus Hero Drinks together** are the best: about **1 in 4 on the first try (52/200)**, and
-   **3 in 4 within five tries (153/200)**, retrying from Baralai as the game does.
+2. **Levels plus Hero Drinks together** are the best kit at every speed. With no prep (the recommended
+   pair) that is about **1 in 5 on the first try (39/200)** and **4 in 5 within five tries (160/200)**,
+   retrying from Baralai as the game does. (With the prep it is 52 and 153.)
 3. The guide's Lightfall advice (M1) is a **separate call**, and the measured lean is to **drop it**.
    On every kit without both options it loses at every speed tested. With both options on it wins only
-   one point: the first try at our 1.5 s speed (52 against 39). Faster or slower players, and anyone
-   who retries, do better without it (for example 160 against 153 within five tries at 1.5 s).
+   one point: the first try at our 1.5 s speed (52 against 39). Faster or slower players, and players
+   counted within five tries from Baralai, do better without it (for example 160 against 153 at 1.5 s).
+   Within three tries at 1.5 s the prep still leads (125 against 115).
 
 ## How to read the numbers
 
@@ -99,14 +102,15 @@ speed with either line. Within five tries means retrying from Baralai, as the ga
 
 **1. The kit: both options, and keep the retry from Baralai.** That is `DEN_OF_WOE_HERO_DRINKS = 3`
 and `DEN_OF_WOE_LEVEL_BONUS = 8`, with the retry switch unchanged. "Both" is the best kit at every speed
-tested. It gives **about 1 in 4 on the first try and 3 in 4 within five**, and it keeps the game's own
-retry. It rests on two estimates: the level raise and the Hero Drink count.
+tested, and it keeps the game's own retry. It rests on two estimates: the level raise and the Hero
+Drink count. With the prep dropped (call 2 below) the pair gives **about 1 in 5 on the first try and 4
+in 5 within five (39 / 160)**; with the prep kept it is about 1 in 4 and 3 in 4 (52 / 153).
 
 **2. The Lightfall prep: drop it (the measured lean).** That is `DEN_OF_WOE_LIGHTFALL_PREP = false`.
 Picking the kit does not settle this. The prep is the sources' advice (research §5), made for a
 party with more HP than the Chapter V preset. With both kit options on, it helps only a player at our
-1.5 s speed on the first try (52 against 39). Faster and slower players, and every player who retries,
-do better without it (66 / 39 / 48 first try against 60 / 52 / 38, and 173 / 160 / 134 within five
+1.5 s speed on the first try (52 against 39). Faster and slower players, and players counted within
+five tries from Baralai, do better without it (66 / 39 / 48 first try against 60 / 52 / 38, and 173 / 160 / 134 within five
 against 170 / 153 / 126). On every other kit, no prep wins at every speed. Keeping the prep would
 teach advice that costs or ties wins for most players. The honest price of dropping it: the guide no
 longer repeats a line the sources give.
@@ -135,8 +139,9 @@ The kit options change only Chapter XV.
 
 ## Replies you can send
 
-The kit and the prep are separate words. Name both, or name the kit alone and the prep stays as
-shipped.
+The kit and the prep are separate words; name both. A bare "Den: both" does not settle the prep: read
+alone it would keep the prep as then shipped (ON), which the sheet advises against, so the driver asks
+rather than assume the lean. (Bailey's reply named the recommendation, which is both calls.)
 
 - "Den: both, no prep" (the recommendation: 39 first try and 160 within five at 1.5 s; ahead at 1.0 s
   and 2.5 s)
@@ -145,3 +150,73 @@ shipped.
 - "Den: drinks, no prep" (no level raise; about 1 in 7 first try)
 - "Den: no prep" (the M1 fix alone; about 1 in 13 first try)
 - "Den: park" (stays unlisted)
+
+## Bailey's pick, 2026-09-26
+
+**Bailey, ~00:05 EDT: "I pick your recommendation for Den of Woe".** The recommendation was "Den: both,
+drop the prep". **FFX-2 only** (Chapter XV). Built on `chapter-gippal-ship-0925` after merging `main`
+30420871 (commit `168ea0f2`), in commit `f61b85e5`:
+
+| Switch | Value | What it means |
+|---|---|---|
+| `DEN_OF_WOE_HERO_DRINKS` | **3** `[estimate]` | 3 Hero Drinks in the Chapter XV bag. Near the end of Nooj (4,500 HP or less, our own line) a girl Lightfall would kill drinks one: Invincible, the sources' answer, reached with a Hero Drink because the preset has no Alchemist |
+| `DEN_OF_WOE_LEVEL_BONUS` | **8** `[estimate]`, in Bailey's name | Yuna 54, Rikku 56, Paine 58 (max HP 2,824 / 6,456 / 6,654) |
+| `DEN_OF_WOE_LIGHTFALL_PREP` | **false** | no Curaga or plain-swing hint on Nooj; the Dark Knights stay on Darkness |
+| `DEN_OF_WOE_RETRY_FROM_LINK` | **false** (not picked) | a loss retries from Baralai, as the game does |
+
+The guide's Lightfall rule, the pause and prep tip, and the tactic teach the picked line. No boss number
+changed. `farplaneBuild` itself is untouched; the kit is a copy with the two options on.
+
+### Measured on the shipped record (`den-of-woe-shipped-bench.test.ts`, `PYREFLY_MEASURE=1`, 200 seeds)
+
+| Speed | First try | Within 3 / 5, retry from Baralai |
+|---|---:|---|
+| Human, Wait split 1.0 s / 0.3 s | 66 | 136 / 173 |
+| **Human, Wait split 1.5 s / 0.5 s (the live default)** | **39** | **115 / 160** |
+| Human, Wait split 2.5 s / 0.8 s | 48 | 99 / 134 |
+| Bench speed (D = 0) | 102 | 173 / 199 |
+| Active, 1.5 s | 7 | 15 / 20 |
+
+This is what the sheet predicted: 39 first try and 160 within five at 1.5 s, and every cell of the
+speed table, reproduced exactly after the merge of `main`. The options bench prints the table above
+unchanged. At the live default about **1 in 5 clear on the first try and 4 in 5 within five tries**. The
+Active setting is still not rescued (7 of 200).
+
+### One engine finding that moves these numbers (not fixed here; for the driver)
+
+In `src/battle/ffx2/resolve.ts` `targetForHit`, an all-target move re-filters the living list on every
+hit and takes `living[hitIndex % living.length]`. When an earlier target dies mid-move, a later hit
+wraps back to a girl already hit, and the last girl is never hit. It was seen live (seed 6): Lightfall
+hit Yuna (Invincible, immune), killed Rikku, then hit Yuna again, and **Paine took nothing**. The same
+code is on `main`, so it is shared FFX-2 plumbing and affects every all-target move in every FFX-2
+chapter. It flatters the player. A scratch copy with each target hit once (not committed) measures
+the shipped Den at **34 first try and 102 / 149 within 3 / 5** at 1.5 s (59 / 169 at 1.0 s, 45 / 131
+at 2.5 s, bench 94). That is still about 1 in 6 first try and 3 in 4 within five, and still the best kit.
+
+### The real flow (production build, headless GPU, fresh profile each run)
+
+The chapter is unlisted, so every run opened it with `window.__pyrefly.gotoChapter`. Frames:
+`docs/concepts/chapters/den-of-woe/ship/picked/`. All runs had 0 page errors, 0 console errors and 0
+HTTP errors, and every image decoded (64 to 67 a run).
+
+- **1600x900 and 390x844:** prep shows LV 54 / 56 / 58. The Items tab, reached with the Right key,
+  lists Hero Drink ×3. The prep CHAPTER tab carries the new tip at both sizes, and the pause GUIDE tab carries it at 1600x900. Then the pre
+  scene, 8 lines, each advanced by Enter. The battle opens at levels 54 / 56 / 58 with max HP
+  2,824 / 6,456 / 6,654, and the first menu comes up in about 11 s. One real action by Enter presses:
+  Yuna, Pray on the party.
+- **The drink (seed 6; debug API: Baralai and Gippal at skip speed, then normal speed on Nooj):** Yuna
+  drank a Hero Drink at Nooj 524 HP and was Invincible when Lightfall came. Both hits on her were
+  "miss, immune", and she kept 2,151 HP. Rikku (4,527 HP, no drink yet) was KO'd.
+- **A win (seed 6, the shipped tactic at skip speed, real Enter through the pre scene, the post scene
+  and results):** all three shades, then the post scene (Paine's "Enough. Let them rest." first). The
+  results read "Victory, NEW BEST", and the flow resolved `victory` over 3 links.
+
+Disclosed, not changed here (shared presentation):
+
+- At 390x844 the pause GUIDE tab's "designed line" has zero height, the same on Chapter VI (listed).
+  The tip still shows on the phone prep CHAPTER tab.
+- Yuna's party row shows four chips at most. With Protect, Shell and Darkness up, the INV chip is cut
+  off at the row's edge, so Invincible is not visible there.
+- The "acts next: Lightfall" card read all three girls KO for a moment after Yuna's drink had landed.
+  Its figures match a forecast computed before the drink (stale, not refreshed on the status change).
+  The cause is inferred from the figures and was not proved on the engine.
