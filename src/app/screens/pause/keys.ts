@@ -9,7 +9,9 @@
  * for that frame — otherwise one press of `E` would both change tab and close
  * the menu.
  *
- * Pure, so the whole collision table can be asserted without a browser.
+ * Pure, so the whole collision table can be asserted without a browser (the
+ * one exception, {@link createPauseKeyLatch}, takes its event target as an
+ * argument).
  */
 
 import type { Button } from '../../Input.ts';
@@ -27,8 +29,14 @@ import type { Button } from '../../Input.ts';
  * CONTROLS tab lists (`H / Triangle`).
  */
 
-/** What a raw key press means on this screen. */
-export type PauseKeyIntent = 'hide' | 'photo' | 'tab-prev' | 'tab-next' | null;
+/**
+ * What a raw key press means on this screen.
+ *
+ * `resume` is **P** (PR-0115): the battle opens the pause on P (`BattleScreen`'s
+ * own `keydown` listener, since `Input.ts` binds P to nothing), so P closes it
+ * again, the way Esc does. P carries no abstract button, so nothing to drop.
+ */
+export type PauseKeyIntent = 'hide' | 'photo' | 'tab-prev' | 'tab-next' | 'resume' | null;
 
 export interface PauseKeyAnswer {
   intent: PauseKeyIntent;
@@ -47,6 +55,8 @@ export function pauseKeyIntent(code: string, shift = false): PauseKeyAnswer {
     // `H` has no abstract button at all, which is why it needs the claim.
     case 'KeyH':
       return { intent: 'hide', suppress: null };
+    case 'KeyP':
+      return { intent: 'resume', suppress: null };
     case 'KeyF':
       return { intent: 'photo', suppress: 'l1' };
     case 'KeyQ':
@@ -62,4 +72,35 @@ export function pauseKeyIntent(code: string, shift = false): PauseKeyAnswer {
     default:
       return NONE;
   }
+}
+
+/**
+ * P, for a screen that opens the pause itself (PR-0115): the pre-battle scene.
+ *
+ * `Input.ts` binds P to nothing, so a screen that wants it listens for the raw
+ * key, as `BattleScreen` does. While the pause is up it holds an exclusive
+ * keyboard claim, which stops the event before this listener, so the press
+ * that closes the pause never re-opens it.
+ */
+export interface PauseKeyLatch {
+  /** True once per P press since the last call. */
+  take(): boolean;
+  dispose(): void;
+}
+
+export function createPauseKeyLatch(target: Pick<Window, 'addEventListener' | 'removeEventListener'>): PauseKeyLatch {
+  let pressed = false;
+  const onKey = (e: Event): void => {
+    const k = e as KeyboardEvent;
+    if (k.code === 'KeyP' && !k.repeat && !k.ctrlKey && !k.metaKey && !k.altKey) pressed = true;
+  };
+  target.addEventListener('keydown', onKey);
+  return {
+    take: () => {
+      const was = pressed;
+      pressed = false;
+      return was;
+    },
+    dispose: () => target.removeEventListener('keydown', onKey),
+  };
 }

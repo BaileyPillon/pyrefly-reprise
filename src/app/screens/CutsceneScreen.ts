@@ -19,6 +19,7 @@ import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { PauseScreen } from './PauseScreen.ts';
+import { createPauseKeyLatch, type PauseKeyLatch } from './pause/keys.ts';
 import { CutsceneStage } from './CutsceneStage.ts';
 
 /**
@@ -141,6 +142,8 @@ export class CutsceneScreen extends Screen {
   private confirmDown = false;
   /** How long it has been held, in ms. Past {@link HOLD_TO_SKIP_MS} it fast-forwards. */
   private confirmHeldMs = 0;
+  /** P opens the pause here too, as in battle (PR-0115). */
+  private pKey: PauseKeyLatch | null = null;
 
   constructor(private readonly opts: CutsceneScreenOptions = {}) {
     super();
@@ -183,6 +186,7 @@ export class CutsceneScreen extends Screen {
 
     this.hint = new ControlsHint({ root: this.root, items: HINTS });
     this.hint.mount();
+    this.pKey = createPauseKeyLatch(window);
 
     this.runner = new CutsceneRunner(this.buildPorts());
     if (this.opts.startSkipped) this.runner.skip();
@@ -195,6 +199,7 @@ export class CutsceneScreen extends Screen {
     // paused when the screen went away would never finish its `run()`.
     this.setScriptPaused(false);
     this.pauseScreen = null;
+    this.pKey?.dispose();
     this.hint?.unmount();
     this.dialogueBox?.unmount();
     this.stage?.unmount();
@@ -233,7 +238,8 @@ export class CutsceneScreen extends Screen {
 
     const skippable = this.opts.skippable ?? true;
     const backedOut = input.consume('cancel') || input.actions.includes('cancel');
-    if (!backedOut && !input.justPressed('start')) return;
+    const pPressed = this.pKey?.take() === true;
+    if (!backedOut && !input.justPressed('start') && !pPressed) return;
 
     // Esc used to skip the scene outright. It now opens the same pause menu
     // the battle uses, with SKIP SCENE as one entry on it — so the key that
