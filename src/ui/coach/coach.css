@@ -286,6 +286,21 @@
   font-weight: 700;
 }
 
+/* PR-0073: a touch screen has no Enter, Esc or D. Each chip carries both
+   wordings and a coarse pointer shows the tap one (the same pure-CSS swap as
+   the title's chip, frontend.css). A tap anywhere on the briefing skips it
+   (Briefing.onClick) and a tap on the second chip opts out, so both taps the
+   touch wording names work. A keyboard or mouse player sees the approved
+   frame unchanged. */
+.coach-brief__tap {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .coach-brief__foot .coach-brief__key { display: none; }
+  .coach-brief__foot .coach-brief__tap { display: inline; }
+}
+
 /* Reduced motion: the fades are the only motion here, and they go. The timer
    still runs and still reads, because it is information, not decoration. */
 .coach-brief[data-still='1'],

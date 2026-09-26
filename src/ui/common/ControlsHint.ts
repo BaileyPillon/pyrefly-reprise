@@ -10,6 +10,12 @@ export interface ControlHintItem {
   /** Defaults to the keyboard wording. */
   pointer?: string;
   /**
+   * The wording on a touch screen (a coarse pointer), where there is no key to
+   * press and no mouse to hold (PR-0073). Defaults to {@link pointer}. `null`
+   * leaves the entry off the strip there: an action no tap reaches.
+   */
+  touch?: string | null;
+  /**
    * The `data-action` a click on this entry fires, making the chip a button for
    * a mouse or touch player — `'confirm'`, `'cancel'`, or a screen's own action
    * name. The screen must handle it in `input.actions` like the key it names.
@@ -23,52 +29,88 @@ export interface ControlsHintOptions {
   items?: ControlHintItem[];
 }
 
+/** True on a touch screen: the primary pointer is coarse (the same query chapter select and the title use). */
+export function isCoarsePointer(): boolean {
+  try {
+    return typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+  } catch {
+    return false;
+  }
+}
+
 /** The small "Arrows navigate - Enter confirm" strip shared by the chapter-select/results/cutscene screens. */
 export class ControlsHint {
   readonly el: HTMLElement;
   private items: ControlHintItem[];
   private lastDevice: InputSnapshot['lastDevice'] | null = null;
   private mounted = false;
+  /**
+   * PR-0073: on a touch screen the strip starts on the touch wording.
+   * `Input.lastDevice` reports `keyboard` until something else is used, so that
+   * default is not believed there until a real key goes down.
+   */
+  private readonly coarse = isCoarsePointer();
+  private keySeen = false;
+  private readonly onKey = (): void => {
+    this.keySeen = true;
+  };
 
   constructor(private readonly opts: ControlsHintOptions) {
     this.items = opts.items ?? [];
     this.el = document.createElement('div');
     this.el.className = 'chint';
     this.el.dataset['role'] = 'controls-hint';
-    this.render('keyboard');
+    this.render(this.device('keyboard'));
   }
 
   mount(): void {
     if (this.mounted) return;
     this.opts.root.appendChild(this.el);
+    if (this.coarse) window.addEventListener('keydown', this.onKey, true);
     this.mounted = true;
   }
 
   unmount(): void {
     if (!this.mounted) return;
     this.el.remove();
+    window.removeEventListener('keydown', this.onKey, true);
     this.mounted = false;
   }
 
   setItems(items: ControlHintItem[]): void {
     this.items = items;
     this.lastDevice = null; // force a re-render even if the device hasn't changed
-    this.render('keyboard');
+    this.render(this.device('keyboard'));
   }
 
   /** Call once per frame (or from `handleInput`) so wording follows whichever device the player last touched. */
   handleInput(input: InputSnapshot): void {
-    if (input.lastDevice === this.lastDevice) return;
-    this.render(input.lastDevice);
+    const device = this.device(input.lastDevice);
+    if (device === this.lastDevice) return;
+    this.render(device);
+  }
+
+  /** The device the wording follows: on a touch screen, the untouched keyboard default reads as the pointer. */
+  private device(reported: InputSnapshot['lastDevice']): InputSnapshot['lastDevice'] {
+    return reported === 'keyboard' && this.coarse && !this.keySeen ? 'pointer' : reported;
+  }
+
+  /** The words one entry shows on `device`, or `null` when it has none there. */
+  private keysFor(item: ControlHintItem, device: InputSnapshot['lastDevice']): string | null {
+    if (device === 'gamepad') return item.gamepad;
+    if (device !== 'pointer') return item.keyboard;
+    if (this.coarse && item.touch !== undefined) return item.touch;
+    return item.pointer ?? item.keyboard;
   }
 
   private render(device: InputSnapshot['lastDevice']): void {
     this.lastDevice = device;
     const html = this.items
-      .map((item) => {
-        const keys = device === 'gamepad' ? item.gamepad : device === 'pointer' ? (item.pointer ?? item.keyboard) : item.keyboard;
+      .flatMap((item) => {
+        const keys = this.keysFor(item, device);
+        if (keys === null) return [];
         const click = item.action ? ` data-action="${escapeHtml(item.action)}" role="button" tabindex="0"` : '';
-        return `<span class="chint__item"${click}><b>${escapeHtml(keys)}</b> ${escapeHtml(item.label)}</span>`;
+        return [`<span class="chint__item"${click}><b>${escapeHtml(keys)}</b> ${escapeHtml(item.label)}</span>`];
       })
       .join('<span class="chint__sep">&middot;</span>');
     this.el.innerHTML = html;

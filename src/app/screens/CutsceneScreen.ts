@@ -13,7 +13,7 @@ import {
   type CutsceneRunResult,
 } from '../../story/runner/CutsceneRunner.ts';
 import { DialogueBox } from '../../ui/common/DialogueBox.ts';
-import { ControlsHint } from '../../ui/common/ControlsHint.ts';
+import { ControlsHint, type ControlHintItem } from '../../ui/common/ControlsHint.ts';
 import { romanNumeral } from '../../ui/common/roman.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
@@ -33,11 +33,13 @@ import { CutsceneStage } from './CutsceneStage.ts';
  * {@link CutsceneScreen.handleInput}), holding it fast-forwards, and the strip
  * says both.
  */
-const HINTS = [
-  { keyboard: 'Enter', gamepad: 'Cross', label: 'advance', action: 'confirm' },
-  { keyboard: 'Hold Enter', gamepad: 'Hold Cross', label: 'skip', pointer: 'Hold click' },
+export const CUTSCENE_HINTS: ControlHintItem[] = [
+  // Touch (PR-0073): a tap on this chip or on the dialogue card advances (both carry `confirm`). A held
+  // touch fast-forwards nothing, so on touch skip is left to the menu's SKIP SCENE, which the chip opens.
+  { keyboard: 'Enter', gamepad: 'Cross', label: 'advance', action: 'confirm', touch: 'Tap' },
+  { keyboard: 'Hold Enter', gamepad: 'Hold Cross', label: 'skip', pointer: 'Hold click', touch: null },
   // Esc opens the pause menu, which is where SKIP SCENE also lives.
-  { keyboard: 'Esc', gamepad: 'Circle', label: 'menu', action: 'cancel' },
+  { keyboard: 'Esc', gamepad: 'Circle', label: 'menu', action: 'cancel', touch: 'Tap here' },
 ];
 
 /**
@@ -184,7 +186,7 @@ export class CutsceneScreen extends Screen {
     });
     this.dialogueBox.mount();
 
-    this.hint = new ControlsHint({ root: this.root, items: HINTS });
+    this.hint = new ControlsHint({ root: this.root, items: CUTSCENE_HINTS });
     this.hint.mount();
     this.pKey = createPauseKeyLatch(window);
 
