@@ -243,3 +243,31 @@ These figures are the lenses' estimates. Round 14 and later rounds score the rea
 - **Visual (weight 15, 8.3 in round 13).** Closes three stalled majors: PR-0181, PR-0031 and PR-0095/0094. Delivers five approved polish tiles: the pane, pyrefly death, air in the arena, living backdrops and the Ginnem glow. Brings the target gate from 11 of 13 undelivered polish tiles to 6 (or 5, if C-1 lands). B1 and B2 are the largest single gains after that: about +0.2 to +0.3 and about +0.15.
 - **Feel (weight 10, 7.8, stalled).** A-3 (the cold black), A-13, PR-0180 and the PR-0061 leftover. Then B1, B2 and B4, at about +0.2 to +0.3 each.
 - **Delivery and Onboarding.** A-3 and A-16 remove the two dead-black first impressions.
+
+---
+
+## 8. Iteration 2: presentation picks
+
+Bailey, 2026-09-26 ~19:30 EDT, verbatim: "i'll go with all your recommendations, i love it." — a
+single yes to all three of the driver's recommendations put to Bailey at ~19:15 EDT. Recorded as
+D-227 through D-231 in `docs/target/decisions.json`, and as picked-option tiles (state "approved",
+delivery "not-scheduled") in `docs/target/targets.json`. Nothing is built by this entry; each pick
+approves only the option named, per AGENTS.md rule 9 / rule 15.
+
+1. **Spell and skill effects: option B** (shader particles with a per-element shape and motion;
+   FFX gold eight-point cast ring and round motes, FFX-2 pink four-point sparkles; lookup by ability
+   id, falling back to element then today's bloom; reduce-flashes as parameters). Both games, two
+   skins. D-227. Builds on branch `iter2-spellfx-b`. See
+   `docs/concepts/spell-fx-2026-09-26/README.md`.
+2. **Vegnagun staging: option A** (per-link part position and scale, low camera looking up, the part
+   4.3 to 6.3 times a girl's height on desktop and kept on screen on phones). FFX-2 only, Chapter V.
+   D-228. Builds on branch `iter2-vegnagun-a`. See
+   `docs/concepts/vegnagun-colossus-2026-09-26/README.md`.
+3. **Seven boss pose picks**, to install after release 21: Yojimbo attack c45 (7.69) and hurt c35
+   (7.44), FFX only, Chapter IX (D-229); Trema c7, Logos c2, Leblanc c10, Ormi c7 (flipped) and the
+   Leblanc Syndicate male goon c4, FFX-2 only, Chapters VI and XIII (D-230). See
+   `docs/concepts/boss-poses-2026-09-26/README.md`.
+4. **Presenter fix: a physical enemy ability draws its `attack` painting**, not `cast` (today every
+   enemy action is `kind: 'ability'` and `poseForCommand` maps it to `cast`, so a new boss attack
+   painting would almost never be seen). Shared presenter plumbing, both games (AGENTS.md rule 14,
+   CHK-020). D-231. Builds on branch `iter2-attack-pose`.

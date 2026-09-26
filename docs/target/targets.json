@@ -236,6 +236,28 @@
           "approved": "Bailey, 19 Sep 2026",
           "build": "The chapter 5 battle backdrop as the camera first frames it.",
           "hashes": "scene:farplane"
+        },
+        {
+          "label": "Vegnagun staging: option A accepted",
+          "src": "docs/concepts/vegnagun-colossus-2026-09-26/02-option-A-1600.jpg",
+          "state": "approved",
+          "build": "Per-link part position and scale with a low master camera looking up; the part 4.3 to 6.3 times a girl's height on desktop and kept on screen on phones (fixes the today/C phone off-edge framing). Not yet built (D-228).",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "Vegnagun staging option A, the part filling the frame at colossus scale"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
+            ]
+          }
         }
       ]
     },
@@ -596,6 +618,160 @@
             "undecided": [],
             "inferred": [
               "the style gap common to all three options (heavier black cel shadows, flatter skin than the approved portrait set) is disclosed, not fixed, by this pick — not asked of Bailey"
+            ]
+          }
+        },
+        {
+          "label": "Yojimbo attack pose: c45 accepted",
+          "src": "docs/concepts/boss-poses-2026-09-26/yojimbo-attack.jpg",
+          "state": "approved",
+          "build": "Candidate c45, second-look score 7.69. Not yet installed into public/art (D-229/D-230); install after release 21.",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "Yojimbo attack candidate c45"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
+            ]
+          }
+        },
+        {
+          "label": "Yojimbo hurt pose: c35 accepted",
+          "src": "docs/concepts/boss-poses-2026-09-26/yojimbo-hurt.jpg",
+          "state": "approved",
+          "build": "Candidate c35, second-look score 7.44. Not yet installed into public/art (D-229/D-230); install after release 21.",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "Yojimbo hurt candidate c35"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
+            ]
+          }
+        },
+        {
+          "label": "Trema hurt pose: c7 accepted",
+          "src": "docs/concepts/boss-poses-2026-09-26/trema-hurt.jpg",
+          "state": "approved",
+          "build": "Candidate c7. Not yet installed into public/art (D-229/D-230); install after release 21.",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "Trema hurt candidate c7"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
+            ]
+          }
+        },
+        {
+          "label": "Logos hurt pose: c2 accepted",
+          "src": "docs/concepts/boss-poses-2026-09-26/logos-hurt.jpg",
+          "state": "approved",
+          "build": "Candidate c2. Not yet installed into public/art (D-229/D-230); install after release 21.",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "Logos hurt candidate c2"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
+            ]
+          }
+        },
+        {
+          "label": "Leblanc hurt pose: c10 accepted",
+          "src": "docs/concepts/boss-poses-2026-09-26/leblanc-hurt.jpg",
+          "state": "approved",
+          "build": "Candidate c10. Not yet installed into public/art (D-229/D-230); install after release 21.",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "Leblanc hurt candidate c10"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
+            ]
+          }
+        },
+        {
+          "label": "Ormi hurt pose: c7 (flipped) accepted",
+          "src": "docs/concepts/boss-poses-2026-09-26/ormi-hurt.jpg",
+          "state": "approved",
+          "build": "Candidate c7, flipped. Not yet installed into public/art (D-229/D-230); install after release 21.",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "Ormi hurt candidate c7, flipped"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
+            ]
+          }
+        },
+        {
+          "label": "Leblanc Syndicate male goon hurt pose: c4 accepted",
+          "src": "docs/concepts/boss-poses-2026-09-26/ffx2-dr-goon-hurt.jpg",
+          "state": "approved",
+          "build": "Candidate c4 (male); the female goon pilot failed per commit a253cae9 and is not part of this pick. Not yet installed into public/art (D-229/D-230); install after release 21.",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "Leblanc Syndicate male goon hurt candidate c4"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
             ]
           }
         }
@@ -1030,6 +1206,28 @@
             ],
             "undecided": [],
             "inferred": []
+          }
+        },
+        {
+          "label": "Spell and skill effects: option B accepted",
+          "src": "docs/concepts/spell-fx-2026-09-26/sheet-3-ffx-option-B.jpg",
+          "state": "approved",
+          "build": "Shader particles with a shape and motion per element (Fire a rising column, Ice floor crystals, Thunder one hard-flash bolt, Water a ring and sphere, Holy falling pillars, Cure rising motes, a physical hit a slash arc with sparks); FFX gold eight-point cast ring and round motes (see also sheet-6-ffx2-option-B.jpg for the FFX-2 pink four-point sparkle skin); lookup by ability id, falling back to element then to the current bloom; reduce-flashes as parameters. Not yet built (D-227).",
+          "delivery": "not-scheduled",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "i'll go with all your recommendations, i love it.",
+            "how": "Bailey, ~19:30 EDT, answering the driver's three recommendations (~19:15 EDT) as a single yes to all of them",
+            "liked": [
+              "spell effects option B, shader particles with a per-element shape and motion, on both games' own skins"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "the specific option letter, candidate id and score named here is the driver's own characterization of what the blanket \"all your recommendations\" covers, not itemized one by one in Bailey's words"
+            ]
           }
         }
       ]
