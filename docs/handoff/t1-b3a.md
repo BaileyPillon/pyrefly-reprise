@@ -63,3 +63,33 @@ Verified, no change needed (class X):
 ## Commits
 
 See `git log main..t1-b3a`. Every commit states its game case (rule 14).
+
+## CHECK (independent, 2026-09-26; not the builder)
+
+Verdict: **no blockers.** Every claimed fix meets its round-13 acceptance check on a fresh production
+build. I found no regression in the chapters these fixes touch, in either game. Every change is class A:
+no new perceivable element beyond the menu word the issue's fix names, no invented data and no boss
+number. The disc weight is an advisor score, not game data.
+
+- `tsc --noEmit` is clean. The full `vitest run --testTimeout=60000` exits 0: 462 files passed and 4 skipped; 8,361 tests passed, 29 skipped and 1 todo. There were no flakes this run.
+- Real input: I built with `vite build` in the worktree and served it with `vite preview` on port 5945, which was stopped by its PID. I used headless Chromium with `GPU_ARGS`, entered chapters through the debug API, then drove them with real keys (E, J, N, G, arrows, Enter) or a touch context at 390x844. The frames and JSON are in `docs/screenshots/t1-b3a-check/`, which is not committed (this commit holds only this section).
+
+| Issue | Acceptance check, as I ran it | Result |
+|---|---|---|
+| PR-0126 phone half | 390x844 touch, first card in XI, XII, VI, I and II | Pass. Every tip shows the menu (`White Magic`, `Switch`, `Item`) in view at 15 px, not clipped. `.mad__where` is hidden at 1600x900 and 2000x1012. The desktop 67-of-2,032 half was not re-measured, because this batch does not claim it. |
+| PR-0130 | Ch I and II at 1600x900 and 2000x1012: E, then E, then N, then E | Pass. After E the card and chip are both down. A second E brings both back. With the advisor off, the chip stays up ("best move") through E. N brings both back. |
+| PR-0110 | Ch VI and IV fresh profile, first menu | Pass. Chip opacity is 0 while the coach line is up (the rects overlap, but nothing shows) and 1 once the line goes. |
+| PR-0010 (verify) | Ch I and II at 1600x900 and 2000x1012, E then hold J | Pass. The MORE chip reads "+4" or "+2 more". Holding J fits the body (`scrollHeight <= clientHeight + 1`). |
+| PR-0193 (FFX-2) and FOC19-05 | Ch VI Item > Grenade at 1280x720, 1600x900 and 2560x1440; Den White Magic > Pray at 1600x900 | Pass. 14, 14, 22.4 and 14 px. Zero overlap with the slab, its chip, the party, the menu, the card, the guide, the help band and the plates. In view each time; shifts of -81, -78, -119 and +30 px. |
+| PR-0135 | Ch IV first menu at 2000x1012 and 2560x1080 (plus 1600x900 and 1280x960 for regressions) | Pass. The band runs 71 to 2000 and 72 to 2560 (only the PAUSE chip sits to its left), and the surface covers the full window. There is no flat strip in either frame. 16:9 and 4:3 are unchanged. |
+| PR-0146 (FFX-2) | Ch IV and VI from the story, holding Enter, sampled every frame | Pass. 0 frames of slab, slab chip, card or party before the battle-start banner ends. The first slab frame comes 3.8 s after it. FFX Ch I still shows the `.eint__toggle` chip during the banner (132 frames). That is the stopped FFX half, and it is not new. |
+| PR-0169 | Ch V from the first menu, real Enter, about 70 s, 213 samples, guide open | Pass. 54 badged frames, 0 that disagree with the guide's NEXT. This is a short route: every badge was on Black Sky. |
+| PR-0175 | Ch V: auto to head under 12% HP, then the head killed under an open menu, then real Enter through the link 5 dialogue and menus | Pass. Over 255 samples: no reticle part inside the 60 px corner, no plate matching `/^[a-z]+-[a-z-]+$/`, and link 5 menus reached. The head kill was forced (`forceCommand`) under the open menu, so the link ended under the menu, the case the fix handles. |
+| PR-0197 disc half | My own 40-seed advisor top-row bench | Pass. A disc turns in 40/40 runs, with 361 disc picks, all of them Attack and all landed as turns. Wins are 25/40, the same as the builder's figure. The win-rate half is correctly stopped. |
+| PR-0026, 0027, 0162, 0163, 0192, 0074 | Unit tests re-run; I checked for `ctb x`, `*…*` and the actor possessive in the source | Pass. |
+| PR-0131 (stopped) | `advisor-degenerate-boards.test.ts` | 22/40 against a bar of 20. Taken literally, the acceptance check is met (the test covers the Ch I telegraphed re-kill). The stop is still right, because the refused raises remain. |
+
+Findings (none blocking):
+1. `advisor-omnis.ts#discTurnOf` credits any landed hit on a disc. The engine's `discTurnFor` excludes items, all-target actions and status-only rows. So a Grenade or a -ga on a disc would earn the 2,500 bonus and escape the inert guard although nothing turns. The bench never hit this case (every disc pick was Attack). It is latent: mirror `discTurnFor` when the win-rate half is taken up.
+2. The FFX-2 guide polls `buildGuideView` on every `sync` while a card with a tactic row is open (`MoveAdvisor.sync`), because the ATB clock runs under the menu. I saw no stutter in these runs, but nobody has measured the cost.
+3. Seen, not caused by this batch: in Ch II, on a fresh profile at 1600x900, Auron's coach line covers the intent slab's IF YOU ATTACK list and its MORE chip (the builder noted this; it is batch 4's). In Ch V link 5 the guide's header still reads "Vegnagun" over Shuyin.
