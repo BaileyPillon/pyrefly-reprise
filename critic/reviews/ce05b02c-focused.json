@@ -1,0 +1,404 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-26T19:20:29.943Z",
+ "build": {
+  "mainSha": "ce05b02c",
+  "bundle": "i8Mr-QwD",
+  "candidateTree": "D:/pyrefly-rel20",
+  "previousLive": "43dca986"
+ },
+ "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect found in the changed area: every FFX-2 chapter (IV, V, VI, XI, XV) was won by real keys at 1600x900 under the default Wait split, and XIII lost and then reached its retry, as the brief allows.",
+  "No regression against release 19 (43dca986). The FFX chapters I and IX give the same seeded outcomes, turns and screens as release 19. The FFX-2 flows reach every destination they reached before.",
+  "Each change meets its acceptance check. Menu-cancel: a plain hit leaves an open list open and Supercollider closes it. Acta Est Fabula heals only the two Redoubts. Lightfall hits each girl once. All 23 poses load their locked painting at the sidecar scale. Yojimbo shows no Sensor plate, and an ordinary target still shows one.",
+  "The one major on record, FOC19-01 (IC-1, the sole-survivor chain lock), was not introduced by this build and is not a regression. By Bailey's option B its switch stays OFF, so it is disclosed and carried."
+ ],
+ "checks": [
+  {
+   "id": "CHK-003",
+   "result": "NOT APPLICABLE",
+   "reason": "No player-facing text was added or resized. The only copy change removes the SENSOR FAILED caption. Across the six route runs the advisor card had no clipped rows (\"FOC first\" clip [] in each run.json).",
+   "game": "both",
+   "chapter": "all changed",
+   "state": "battle HUD",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/ffx2-bahamut-win-w/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "The advisor route pressed the advisor's pick by real keys in all six FFX-2 chapters. Every pick was on the open menu and every target steer matched: IV 30/0, VI 74/0, XI 20/0, XV 17/0, XIII 17/0, V 36/0 (steer ok/miss).",
+   "game": "ffx2",
+   "chapter": "IV V VI XI XIII XV",
+   "state": "command menu, advisor card",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/ffx2-leblanc-win-w/run.json",
+    "critic/reviews/ce05b02c-focused/ffx2-vegnagun-shuyin-win-w/turn-log.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "Chapter VI under ACTIVE: Supercollider hit Yuna while her Skill list was open. The list closed and her fresh top-level menu came up with no stale title slab. A plain hit left the list open, as intended. The defeat path closed the menu (screen results).",
+   "game": "ffx2",
+   "chapter": "VI (ffx2-leblanc)",
+   "state": "ACTIVE, Skill submenu open, enemy hit",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/mc-ffx2-leblanc-1600x900/delay-x2-ormi-supercollider-closed.png",
+    "critic/reviews/ce05b02c-focused/mc-ffx2-leblanc-1600x900/plain-x2-fem-goon-blizzard-open-1.png",
+    "critic/reviews/ce05b02c-focused/mc-ffx2-leblanc-1600x900/mc.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-007",
+   "result": "NOT APPLICABLE",
+   "reason": "No player copy changed except the removed SENSOR FAILED caption. The captures I read (menu-cancel, Lightfall, poses, Sensor) show no developer vocabulary.",
+   "game": "both",
+   "chapter": "changed",
+   "state": "battle HUD",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "The new poses are drawn 0.83x to 1.26x the idle scale. I did not project the actors against the panels. I read the frames at 1600x900 and 390x844, and no panel covers a posed face, but that is a visual read, not a measurement.",
+   "game": "ffx2",
+   "chapter": "VI, XIII",
+   "state": "posed actors in battle",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/poses/"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-009",
+   "result": "NOT APPLICABLE",
+   "reason": "No names or labels changed.",
+   "game": "both",
+   "chapter": "-",
+   "state": "-",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-010",
+   "result": "NOT APPLICABLE",
+   "reason": "Targeting was not changed. Single-target selection and cancel ran in every route run (16-target-single / 16b-after-cancel).",
+   "game": "ffx2",
+   "chapter": "all FFX-2",
+   "state": "target cursor",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/ffx2-vegnagun-shuyin-win-w/16b-after-cancel.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real keys on the production bundle did all of the following. They drove six FFX-2 chapters from the title to their outcomes. They flipped X-2 BATTLE to ACTIVE in the pause OPTIONS (settings.ffx2Atb read \"active\"). They opened a Skill list with arrow keys and Enter, and they drove the Esc, P and H pause cases. Debug setSeed pinned the runs, and gotoChapter was used only as labelled setup in the probes.",
+   "game": "ffx2",
+   "chapter": "IV V VI XI XIII XV",
+   "state": "full flow",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/mc-ffx2-leblanc-1600x900/00-options-active.png",
+    "critic/reviews/ce05b02c-focused/ffx2-bahamut-win-w/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserts the screen first (route snap/want, mc shot(want), yoj awaitingMenu). No UNVERIFIED shot was written. Stale roots are recorded in index.jsonl. One probe pass went wrong: the Yojimbo target-cursor loop saw no cursor, because Attack auto-targets the lone valid enemy. That pass is recorded as a harness limit, not as evidence.",
+   "game": "both",
+   "chapter": "all",
+   "state": "every capture",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/index.jsonl"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "This is a focused review of the candidate. The build was deployed at 18:20Z during this review (docs/deploys.log, override=owner). The live URL now serves index-i8Mr-QwD.js, the same bundle as the candidate, but live verification is a separate obligation.",
+   "game": "both",
+   "chapter": "-",
+   "state": "-",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/sensor-live-yojimbo-cavern-1600x900/sensor.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Menu-cancel, all-target hits and Acta are ATB mechanics, so they are written as FFX-2 only. The Sensor plate is an FFX-only HUD element and changed only there. Both are deliberate one-game changes, not omissions.",
+   "game": "both",
+   "chapter": "VI, IX",
+   "state": "battle HUD in each game",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/mc-ffx2-leblanc-1600x900/mc.json",
+    "critic/reviews/ce05b02c-focused/sensor-cand-yojimbo-cavern-1600x900/sensor.json"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "FFX-2 changes are present in FFX-2 chapters: menu-cancel in VI, Acta in V, Lightfall in XV, poses in VI and XIII. They are absent from FFX: chapters I and IX give the same seeded outcomes as release 19, and the FFX engine did not change. The Sensor change is present in FFX IX (no plate for Yojimbo) and unchanged for normal FFX targets (Chapter I shows the plate). Sources: research/ffx2-combat-core.md 9.1-9.2, research/ffx2-vegnagun-shuyin.md 3.4, research/ffx-yojimbo.md 2. One record problem: D-196 is filed as game \"ffx2\" (FOC20-01).",
+   "game": "both",
+   "chapter": "I, IX, V, VI, XV",
+   "state": "-",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/sensor-cand-seymour-flux-1600x900/sensor.json",
+    "critic/reviews/ce05b02c-focused/sensor-cand-yojimbo-cavern-1600x900/sensor.json",
+    "critic/reviews/ce05b02c-focused/regress/"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "IV, V, VI, XI and XV were won by real keys, with results reached and a return to chapter select. XV lost first, retried and won. XIII lost and its retry reached a new battle. Seed 1, 1600x900, default Wait split.",
+   "game": "ffx2",
+   "chapter": "IV V VI XI XIII XV",
+   "state": "entry to outcome",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/ffx2-vegnagun-shuyin-win-w/31-results.png",
+    "critic/reviews/ce05b02c-focused/ffx2-trema-win-w/33-retry-battle.png",
+    "critic/reviews/ce05b02c-focused/ffx2-den-of-woe-win-w/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 70
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Menu-cancel runs through the real presenter: a keyboard list, an engine hit, then the HUD closes the list and a fresh menu opens. Acta ran 6 casts in the real-key Chapter V run, each healing redoubt-l and redoubt-r once and never the Head. Lightfall dealt 5000 once to each of yuna, rikku and paine (production bundle, auto sample).",
+   "game": "ffx2",
+   "chapter": "V, VI, XV",
+   "state": "engine event to HUD",
+   "artifact": "candidate ce05b02c dist-gate (bundle i8Mr-QwD; the deploy marker records artifactHash fc45319a...)",
+   "targetVersion": "c8039b2ad44bbb66eb6e04de90ee4fda23d5c3ab0a18e25b0e4af7f8d00d32bd",
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11, RTX 5070 Ti), vite preview of D:/pyrefly-rel20/dist-gate on 127.0.0.1:5412, bundle index-i8Mr-QwD.js",
+   "evidence": [
+    "critic/reviews/ce05b02c-focused/ffx2-vegnagun-shuyin-win-w/all-events.json",
+    "critic/reviews/ce05b02c-focused/col-ffx2-den-of-woe-s2/01-x2-den-nooj-lightfall.png",
+    "critic/reviews/ce05b02c-focused/mc-ffx2-leblanc-1600x900/mc.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3
+  }
+ ],
+ "targets": {
+  "required": 2,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 1,
+  "waiting": 0,
+  "detail": [
+   {
+    "tile": "Battle HUD, FFX-2",
+    "result": "matched",
+    "composite": "critic/reviews/ce05b02c-focused/battle-hud-ffx2.jpg",
+    "note": "Chapter IV command menu open. The approved composition holds: Ink & Gold menu stack right, party rows bottom right, boss plate top left."
+   },
+   {
+    "tile": "Targeting in FFX-2: a Vegnagun part",
+    "result": "unverified",
+    "composite": "critic/reviews/ce05b02c-focused/targeting-ffx2-vegnagun-part.jpg",
+    "note": "The capture is a White Magic list in Chapter V, not a single-target attack on a part. Targeting code is unchanged."
+   }
+  ]
+ },
+ "issues": [
+  {
+   "id": "FOC20-04",
+   "severity": "major",
+   "title": "Carried: IC-1, a lone FFX-2 girl can be chain-locked by a lone enemy (FOC19-01)",
+   "game": "ffx2",
+   "chapter": "XV (and any sole-survivor board)",
+   "expected": "The sole-survivor girl gets turns",
+   "observed": "Not re-tested here. By D-193 option B the IC-1 switch (IMMUNE_HITS_SKIP_CHAIN) stays OFF, so the engine behaves as it did in release 19",
+   "repro": "See FOC19-01 / D-191",
+   "evidence": "src/battle/ffx2/constants.ts IMMUNE_HITS_SKIP_CHAIN = false",
+   "confidence": "medium (carried, not re-run)",
+   "requirement": "research/ffx2-combat-core.md 9.2 (unsourced either way)",
+   "where": "src/battle/ffx2/constants.ts",
+   "fix": "Bailey's call (the switch exists)",
+   "acceptanceCheck": "Chapter XV sole-survivor board: the girl acts within one enemy cycle",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC20-01",
+   "severity": "polish",
+   "title": "D-196 is recorded as game \"ffx2\" and delivery \"not-scheduled\", but the shipped change is FFX-only and implemented",
+   "game": "ffx",
+   "chapter": "IX",
+   "expected": "game ffx, delivery implemented",
+   "observed": "game ffx2, delivery not-scheduled, with a correction note",
+   "repro": "docs/target/decisions.json D-196",
+   "evidence": "docs/target/decisions.json",
+   "confidence": "high",
+   "requirement": "CHK-021 written case; RUBRIC 7 delivery field",
+   "where": "docs/target/decisions.json",
+   "fix": "Set game to ffx and delivery to implemented",
+   "acceptanceCheck": "The record matches commit 05ae06e5 (FFX only)"
+  },
+  {
+   "id": "FOC20-02",
+   "severity": "polish",
+   "title": "Stale notes contradict the menu-cancel correction",
+   "game": "ffx2",
+   "chapter": "VI",
+   "expected": "Notes match 9.2",
+   "observed": "leblanc-syndicate-leblanc-abilities.ts says Mach Fan's weak-delay flag has \"no reader\", but menu-cancel.ts now reads it. research/ffx2-combat-core.md lines 50 and 213 still say any hit closes the menu",
+   "repro": "Read the files",
+   "evidence": "src/data/ffx2/enemies/leblanc-syndicate-leblanc-abilities.ts:128",
+   "confidence": "high",
+   "requirement": "hard rule 6 (sources stay coherent)",
+   "where": "see observed",
+   "fix": "Update the comment; mark the two research rows as corrected by 9.2",
+   "acceptanceCheck": "grep finds no contradicting line"
+  },
+  {
+   "id": "FOC20-03",
+   "severity": "suggestion",
+   "title": "Question for Bailey: under ACTIVE, Chapter VI Act I punishes a player who browses lists",
+   "game": "ffx2",
+   "chapter": "VI",
+   "expected": "-",
+   "observed": "The probe kept a list open for 12 to 30 seconds per turn, and the party wiped twice within about 2 minutes (the measured Active win rate for VI is 31/200)",
+   "repro": "mc.mjs",
+   "evidence": "critic/reviews/ce05b02c-focused/mc-ffx2-leblanc-1600x900/UNEXPECTED-x2-ormi-shield-bash-closed.png",
+   "confidence": "medium",
+   "requirement": "none (Active is canon real-time)",
+   "where": "-",
+   "fix": "None proposed. For Bailey's information only",
+   "acceptanceCheck": "-"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Six FFX-2 chapters by real keys at 1600x900, default Wait split, seed 1: IV, V, VI, XI and XV won (XV after one retry); XIII lost, then retried",
+   "Chapter VI under ACTIVE, flipped in the pause OPTIONS by keys: 10 plain hits over two runs left an open list open; Supercollider on the list owner closed it and a fresh top menu opened; Supercollider on another girl left the owner's list open",
+   "Chapter V: all 6 Acta Est Fabula casts in the real-key run healed only redoubt-l and redoubt-r",
+   "Chapter XV: Lightfall dealt 5000 once to each girl (auto sample, seed 2)",
+   "20 of the 23 new poses shown in battle with their locked painting (no placeholder) at a rendered scale equal to the sidecar scale; the Thief 3 at 1600x900 and 390x844, VI-Y at 390x844 and 2000x1012",
+   "Approved and judge-locked hashes: 255 ok, 0 mismatched, 0 missing; the 23 poses are locked and byte-identical in dist-gate",
+   "Chapter IX: no Sensor plate for Yojimbo at 1600x900 and 2000x1012; Chapter I still shows the plate for Seymour Flux and Mortiorchis",
+   "FFX regressions: Chapter IX (seed 7) and Chapter I (seed 1, 2000x1012) match release 19 (IX: victory in 11 turns with the same party turn counts; I: defeat, then a retry to prep, as on 43dca986)",
+   "tsc clean; 10 changed-area vitest files, 120 tests pass"
+  ],
+  "reused": [
+   {
+    "what": "Measured win rates (Wait / Active, 200 seeds)",
+    "from": "docs/plans/ffx2-engine-fixes-2026-09-26.md and the D-198 record",
+    "why": "Engine-only runs on the same commit; not re-run"
+   },
+   {
+    "what": "Three KO poses (paine-black-mage/ko, paine-dark-knight/ko, rikku-black-mage/ko) in battle",
+    "from": "docs/screenshots/poses-0926 (builder, same files)",
+    "why": "Hashes match the locked set; these KO moments need a staged HP setup that this review did not repeat"
+   },
+   {
+    "what": "Full unit suite",
+    "from": "the cutter's run for ce05b02c",
+    "why": "Only the changed-area files were re-run here"
+   }
+  ],
+  "notTested": [
+   "Audio",
+   "Performance",
+   "Real devices",
+   "The Vegnagun part-targeting tile moment",
+   "Sensor via the target cursor on Yojimbo (Attack auto-targets him, so no cursor opens)",
+   "Panel-versus-actor projection for the larger poses (CHK-008)",
+   "The Wait split top-level plain hit in a real-key capture (covered by unit tests and the builder frames)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of ce05b02c: it is already deployed (18:20Z, override=owner). Then the deep review owed on the live build (plan depth deep, deepAfterDeploy true; 43dca986's deep review is carried).",
+ "elapsedMinutes": 110,
+ "notes": "The server ran on 127.0.0.1:5412 as PID 39704. It was stopped by that PID and the port was confirmed closed. From about 15:18 another agent's Playwright run (D:/pyrefly-t1-b5 hud-collision) used a browser at the same time as my last probes."
+}
