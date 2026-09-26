@@ -130,3 +130,135 @@ prepared and listed. The scene cue is still Chapter I's `scene-gagazet` stand-in
 tab shows the excepted plate. Nothing is pushed, deployed or listed.
 
 BLOCKERS: 0
+
+## Re-check after repair cycle 1 (6146c4ad), 2026-09-25
+
+Edited nothing; this section is the only change.
+
+- **M1: still open on screen, correctly held for Bailey's pick. Not a blocker.** I searched
+  `docs/target/decisions.json` in both this worktree (171 records) and the main tree (175, through
+  D-182): no record answers the Macalania party-layout sheet. So keeping `MACALANIA_PARTY_LAYOUT =
+  'current'` is right under rules 9 and 10. `built/current-1600x900.jpg` still shows Yuna almost
+  wholly behind ATTACK/SPECIAL/ITEMS and Tidus half under them, the same as the first check.
+  `built/b-1600x900.jpg` shows option B clears every party head and torso. Rikku now overlaps
+  Seymour's robe hem, and that cost is disclosed.
+- **The landing is sound.** `src/scenes/macalania-temple-layout.ts` (103 lines) holds all four
+  options. `macalania-temple.ts` (392 lines, was 387, still under 400) spreads the option's
+  `holdParty`/`enemySpots` into both `MACALANIA_TEMPLE_SLOTS` and the build. The fiend light pools
+  map by `Object.keys(MACALANIA_ENEMY_SLOT)` order, which matches the slot indices 0-2. With
+  `'current'` the staging is `{}` and the slots are byte-identical to before.
+- **The unlock guard works.** The new test ties the constant to the `'party-layout'` open-pick row
+  in both directions. It also fails if the chapter leaves `LOCKED_CHAPTER_IDS` while the layout is
+  `'current'`.
+- **Re-run here:** `tsc --noEmit` is clean. The 10 Macalania test files (party-layout, ship, scene,
+  engine, story, bench and the others) pass, 106 tests. The diff touches no `public/`, battle
+  engine, `src/data/ffx`, `critic/` or contract file, and no boss number or art.
+- **Minor m1 is still open.** `chapter-meta-seymour-anima-macalania.ts:13` says "two open picks",
+  and there are three. Tactic rule 1b says 188/200 where the bench says 189/200. Out of scope for
+  this cycle; carry it forward.
+
+BLOCKERS: 0
+
+## Re-check after repair cycle 2 (8fc90fbb), 2026-09-25
+
+I edited nothing. This section is the only change.
+
+- **M1 is still open on screen and is correctly held for Bailey's pick 3. It is not a blocker.**
+  I searched `docs/target/decisions.json` again, in this worktree (171 records, through D-178) and
+  in the main tree (175, through D-182). The only records that mention Macalania with party or
+  layout are D-046, D-140, D-145 and D-150. They cover Guardian art, the phone HUD, Omnis and
+  Anima's painting folder, and none of them answers the party-layout sheet. So these stay as they
+  are: `src/scenes/macalania-temple-layout.ts:98` keeps `MACALANIA_PARTY_LAYOUT = 'current'`, the
+  `'party-layout'` row stays in `MACALANIA_OPEN_PICKS` (`src/data/chapter-macalania-ship.ts:75`),
+  and `'seymour-anima-macalania'` stays in `LOCKED_CHAPTER_IDS`
+  (`src/app/screens/frontend/comingChapters.ts:128`).
+- **Minor m1 is fixed.** Commit 8fc90fbb changes only comments. The meta header now says "three
+  open picks" and names the pause plate, the scene cue and the party layout. Tactic rule 1b now
+  says 189/200, which matches `docs/plans/macalania-bench.md:36` (intended 189/200, 94.5%). The
+  commit touches no number, art, contract, engine, `public/` or `critic/` file.
+- **Re-run here:** `tsc --noEmit` is clean. All 10 Macalania test files pass (106/106), including
+  `macalania-party-layout.test.ts`, the unlock guard. The touched files stay under 400 lines
+  (meta 85, tactic 281; `macalania-temple.ts` is still 392). I did not repeat the builder's
+  mutation proof, because this re-check edits nothing. I read the guard's logic in re-check 1.
+- **Carried and still open:** m2 to m4 as listed above, all minor or advisory.
+
+BLOCKERS: 0
+
+## Independent check of Bailey's picks (319288c1, 84608164), 2026-09-25 ~19:30 EDT
+
+Edited nothing; this section is the only change. Scope: pause plate A2 installed and locked,
+`MACALANIA_PARTY_LAYOUT = 'b'`, two rows gone from `MACALANIA_OPEN_PICKS`, the chapter still
+locked. **Game case: FFX only** (Chapter VII's plate, scene staging and FFX HUD). Bailey,
+2026-09-25 ~18:30 EDT, verbatim: "All your recommendations".
+
+**Re-run here**
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | clean (exit 0) |
+| Full vitest (`--testTimeout=60000`) | 393 files; 7,462 passed, 5 skipped, 1 todo; exit 0 |
+| `node tools/orphans.mjs` | 730 modules, 706 reachable, 24 orphaned: the same 24 as before, none new |
+| Bench, `PYREFLY_MEASURE=1`, 200 seeds per line | intended 189/200 (94.5%), advisor 192/200 (96.0%), mistake 0/200: the same as `docs/plans/macalania-bench.md`. The picks change no engine or tactic file, so this was expected |
+| `verify-approved` (`D:/Tools/pyrefly-lora/tools/verify-approved.mjs`, `ROOT` = this worktree) | 209 ok, 0 mismatched, 0 missing, **before and after** the browser runs. Main: 177 approved + 48 judge-locked ok, 0 mismatched |
+| A second hash script of my own (it also looks for one file with two different hashes) | 209 ok, no conflicts |
+| Scope of the two commits | nothing under `critic/`, `src/battle/**`, `src/data/ffx/**`, `public/` (the art arrives through the junction), no contract file, no NOW.md, no `decisions.json`. Touched sources stay under 400 lines (`macalania-temple.ts` 392, layout 104) |
+
+**The plate is A2, byte for byte, and locked**
+- `public/art/pause/macalania.png` = `446b5b7e…` = the options round's
+  `candidates/2026-09-25-picks/ch7-pause-plate/a2.png`. `.2x.webp` = `581741cd…`. Both equal
+  set `chapter:macalania-pause:2026-09-25` (words "All your recommendations"), the
+  `installed/` backup, and the files in my production build. The replaced CANDIDATE
+  (`68fa5225…`, never locked) is in `replaced/`. No approved or judge-locked file was replaced.
+- Nothing on main pins the old hash; main's two plate tests (`chapter-meta*.test.ts`) pass
+  against the new files (139/139), so the junction install breaks nothing on main.
+- My own look at A2 (whole plate, 3x mouth crop): the judge's 4-level box is real (I measured
+  a 2.5-level mean step on the top and right edges of x 585-690, y 392-455, against 0.4 on a
+  control row) and visible at 3x; invisible on the CHAPTER tab at both sizes. The crown now
+  reads silver-lilac like the idle and the portrait. Faint cheek lines remain at 1:1, which
+  research §9.2's facial veins allow. I agree with the pass; the residuals stay disclosed
+  (JUDGE-A2.md).
+
+**Real keys, production build, headless GPU** (`vite build` into scratch, `vite preview` on 5723
+`--strictPort`, RTX 5070 Ti via D3D11, seed 1, `gotoChapter` from a fresh load with `skipPrep:
+false`, no key pressed on the title; prep, the 30-31 line pre scene, the command menu, the target,
+the pause, the results and the post scene all by real keys. Frames and JSON:
+`D:/Tools/pyrefly-scratch/chapters/macalania-check3/shots/`. Server stopped by PID; nothing listens
+on 5720-5739.)
+
+| Size | First menu (Rikku) | Party under the command stack | One real action | Pause CHAPTER tab |
+|---|---|---|---|---|
+| 1600x900 | yes | Tidus 0, Rikku 0; Yuna 13.8% of her box, cape and staff only, head and torso clear (builder: 16.9%) | Attack → Guardian A, 69 damage, `action-end` | real P then E x3; plate decoded 1982x1132 from `macalania.2x.webp`; served png/webp/json hashes equal the lock |
+| 390x844 | yes (phone HUD B) | no party member under any panel; Guardian B 35.9% in frame (disclosed) | the same, through the phone target sheet | decoded 1477x844, same hashes; the phone crop centres the eye and ear (first capture of the plate on a phone) |
+
+- The 1600x900 first menu matches `docs/screenshots/macalania-picks/target-vs-build.jpg` (sheet B
+  beside the build) figure for figure.
+- **WIN at 1600x900** (twice): `autoBattle('intended')` after the real first action, victory in
+  1:34, OVERKILL x1, 6,330 AP, 8,600 gil, Ability Sphere x3 and a Blk Magic Sphere; real Enter
+  through results and the post scene; `gotoChapter` resolved `{ outcome: 'victory', links: 1 }`.
+- Every run: 0 console errors, 0 page errors, 0 warnings, 0 HTTP 4xx, no art served as HTML;
+  every fetched image decoded (`createImageBitmap`: 94/94 per win run, 77/77 phone); the stage
+  reported no placeholder.
+- Act two under B: Anima was staged in both runs, but my two frames caught her rise and then an
+  Ifrit action shot, not a menu. Her place at the act-two menu under B stays covered by repair
+  1's real-key proof (`../unlock/party-layout/built/b-act-two-1600x900.jpg`: Anima 0.82 in frame,
+  Seymour's face clear), which I viewed.
+
+**Lock:** `MACALANIA_OPEN_PICKS` is exactly `['scene-cue']`, `'seymour-anima-macalania'` is in
+`LOCKED_CHAPTER_IDS`, and `macalania-ship.test.ts` pins both plus the plate lock against the files
+on disk and layout B. Correctly held until Bailey picks the scene cue by ear.
+
+**Punch list**
+- **M1 (party under the command stack): closed** by layout B.
+- **Owed by the merge, not a defect of this branch:** record both picks in main's
+  `docs/target/decisions.json` (the branch correctly did not); main's `approved-hashes.json` gains
+  the plate lock only when this branch merges, and until then main's public/art already carries A2
+  unlocked.
+- **Minor, carried:** m2 (phone confirm bar clips "TTACK → GUADO GUARDIAN"; still seen here, the
+  shared phone HUD; the Guardian A name tag is no longer cut under B), m3 (the advisor card read
+  "Attack → Guado Guardian A" during an auto-played act-two action shot; debug path only), m4
+  (advisory). A2's disclosed residuals (mouth box at 3x, faint veins, greyer shoulder highlight,
+  teal eyebrow) are for Bailey; fixing any one makes a new file that needs a new lock.
+- **Advisory, shared:** on the phone pause, the CHAPTER tab's party list shows only Tidus and
+  Yuna above the fold and "BOSS HP 100…" is truncated. Shared pause layout, not introduced here.
+
+BLOCKERS: 0
