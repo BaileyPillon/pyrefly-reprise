@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Accessibility options</title>
+<style>
+@font-face{font-family:'Exo 2';src:url('../../../public/fonts/exo2/Exo2-Variable-wght.woff2') format('woff2');font-weight:100 900;}
+@font-face{font-family:'Chakra Petch';src:url('../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2') format('woff2');font-weight:700;}
+@font-face{font-family:'Chakra Petch';src:url('../../../public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2') format('woff2');font-weight:500;}
+@font-face{font-family:'Cormorant';src:url('../../../public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2') format('woff2');font-weight:300 700;font-style:italic;}
+:root{--ink:#0B0A12;--paper:#F4F1E8;--gold:#E3B94A;--goldp:#B8862A;--mute:#a9a4b4;}
+*{box-sizing:border-box;margin:0;}
+body{width:1200px;background:var(--ink);color:var(--paper);font:400 29px/1.36 'Exo 2',sans-serif;padding:0 0 40px;}
+.hd{background:var(--paper);color:var(--ink);padding:40px 44px 34px;border-bottom:8px solid var(--gold);}
+.eb{font:700 22px/1 'Chakra Petch';letter-spacing:.28em;text-transform:uppercase;color:var(--goldp);}
+h1{font:700 italic 76px/1 'Cormorant',serif;margin:.18em 0 .16em;}
+.hd p{font-size:28px;}
+.hd b{font-weight:700;}
+.sec{padding:40px 0 8px;}
+.tag{display:flex;align-items:baseline;gap:22px;padding:0 44px 18px;}
+.tag .l{font:700 70px/1 'Chakra Petch';color:var(--gold);}
+.tag h2{font:700 italic 56px/1.02 'Cormorant',serif;}
+.tag .rec{font:700 20px/1 'Chakra Petch';letter-spacing:.2em;background:var(--gold);color:var(--ink);padding:9px 14px 7px;text-transform:uppercase;align-self:center;}
+img{display:block;}
+.full{width:1200px;}
+.row{display:flex;gap:28px;padding:24px 44px 0;align-items:flex-start;}
+.ph{width:330px;flex:none;border:2px solid #2a2836;}
+.txt{flex:1;}
+.txt h3{font:700 22px/1 'Chakra Petch';letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:6px 0 10px;}
+.txt p{margin:0 0 16px;}
+.txt .cap{font:500 19px/1.3 'Chakra Petch';letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:6px 0 0;}
+.two{display:flex;gap:12px;padding:0 44px;}
+.two figure{flex:1;}
+.two img{width:100%;}
+figcaption{font:500 20px/1.3 'Chakra Petch';letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:8px 0 16px;}
+.cap44{font:500 20px/1.3 'Chakra Petch';letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:10px 44px 0;}
+.crop{width:1200px;height:380px;overflow:hidden;position:relative;}
+.crop img{width:1200px;position:absolute;left:0;top:-300px;}
+.phones{display:flex;gap:18px;padding:18px 44px 0;}
+.phones figure{width:358px;}
+.phones img{width:358px;border:2px solid #2a2836;}
+.box{margin:36px 44px 0;padding:28px 32px;border-left:8px solid var(--gold);background:#16141f;}
+.box h3{font:700 24px/1 'Chakra Petch';letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;}
+.box p,.box li{margin:0 0 12px;}
+.box ul{padding-left:1.1em;}
+hr{border:0;border-top:2px solid #2a2836;margin:34px 44px 0;}
+</style>
+</head>
+<body>
+<div class="hd">
+  <div class="eb">Accessibility · options round · 2026-09-26 · both games</div>
+  <h1>Where the comfort settings live</h1>
+  <p>Four new settings, <b>all OFF by default</b>: <b>TEXT SIZE</b> 100 / 115 / 130 %, <b>REDUCE MOTION</b>, <b>REDUCE FLASHES</b>, and <b>CONTROLS</b> remap. Three places to put them. Real frames of the live build with the rows drawn in. Nothing is built.</p>
+  <p style="margin-top:14px"><b>My pick: C</b> (A's rows plus a one-time comfort card at the title).</p>
+</div>
+
+<div class="sec">
+  <div class="tag"><span class="l">A</span><h2>Rows in the pause SETTINGS column</h2></div>
+  <img class="full" src="desk-A-options.jpg">
+  <div class="row">
+    <img class="ph" src="phone-A-options.jpg">
+    <div class="txt">
+      <h3>How it plays</h3>
+      <p>Pause, OPTIONS: three new rows under TEXT SPEED, nudged with Left / Right like the rest. REMAP CONTROLS opens the CONTROLS tab you already have, where Enter on a row waits for a key.</p>
+      <h3>Cost</h3>
+      <p>Smallest. No new screen and no new tab. But a player only finds it once a fight or scene is already running, after the first flash.</p>
+      <img src="desk-A-controls.jpg" style="width:100%">
+      <p class="cap">CONTROLS, rebinding BACK. Phone: no remap row (touch only).</p>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="sec">
+  <div class="tag"><span class="l">B</span><h2>Its own ACCESSIBILITY tab</h2></div>
+  <img class="full" src="desk-B-access.jpg">
+  <div class="row">
+    <img class="ph" src="phone-B-access.jpg">
+    <div class="txt">
+      <h3>How it plays</h3>
+      <p>A ninth tab after OPTIONS. READING AND COMFORT on the left, the key list and REMAP EVERY KEY on the right. Everything about comfort is in one named place.</p>
+      <h3>Cost</h3>
+      <p>Small to medium. A ninth tab makes the strip longer, and on a phone it is one more swipe. The keys now show in two tabs (here and CONTROLS). It has the same problem as A: you only find it after the first flash.</p>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="sec">
+  <div class="tag"><span class="l">C</span><h2>A's rows, plus a comfort card on first launch</h2><span class="rec">Recommended</span></div>
+  <img class="full" src="desk-C-prompt.jpg">
+  <div class="row">
+    <img class="ph" src="phone-C-prompt.jpg">
+    <div class="txt">
+      <h3>How it plays</h3>
+      <p>The first time you press Enter at the title, one ivory card asks three things. Each one shows what it does, and all three start OFF. BEGIN or Esc closes it, and it never asks again. After that, everything lives in A's rows.</p>
+      <h3>Cost</h3>
+      <p>A's cost, plus one card and one saved "asked" flag. Everyone sees the card once. In return, REDUCE FLASHES and TEXT SIZE can be set <b>before</b> the opening scene and the first battle flash, which is the only point where they fully help.</p>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="sec">
+  <div class="tag"><span class="l">130%</span><h2>What TEXT SIZE does</h2></div>
+  <img class="full" src="desk-hud-130.jpg">
+  <div class="cap44">Battle HUD at 130 %, as it would be built: each panel grows from its own corner. The command list shows 4 rows and scrolls (▲ ▼), the turn queue shows 5, and the enemy card moves up and to the left.</div>
+  <div class="two" style="padding-top:18px">
+    <figure><img src="desk-hud-100.jpg"><figcaption>Today, 100 %</figcaption></figure>
+    <figure><img src="desk-hud-130-naive.jpg"><figcaption>Naive: every font × 1.3. Things clip, which is why it costs work</figcaption></figure>
+  </div>
+  <div class="crop"><img src="desk-dbox-100.jpg"></div>
+  <div class="cap44" style="padding-bottom:12px">Dialogue card, 100 %</div>
+  <div class="crop"><img src="desk-dbox-130.jpg"></div>
+  <div class="cap44">Dialogue card, 130 %: the line, the name, the tag and the key strip all grow; the card keeps its size</div>
+  <div class="phones">
+    <figure><img src="phone-hud-100.jpg"><figcaption>Phone, 100 %</figcaption></figure>
+    <figure><img src="phone-hud-130.jpg"><figcaption>Phone, 130 %: reflows. The party card caps at 115 %</figcaption></figure>
+    <figure><img src="phone-dbox-130.jpg"><figcaption>Phone dialogue, 130 %</figcaption></figure>
+  </div>
+</div>
+
+<div class="box">
+  <h3>True for every option</h3>
+  <ul>
+    <li><b>Save data.</b> The settings live in the save file, so the build falls in the save-data class and needs a <b>deep review before deploy</b> and a schema default for old saves.</li>
+    <li><b>Both games.</b> This is shared plumbing. The FFX-2 HUD needs its own 130 % pass.</li>
+    <li>REDUCE MOTION is already in the save file and is used by the title and the pause. Battle cameras, shakes and cut-ins still need to follow it.</li>
+    <li>REDUCE FLASHES softens the white screen-flashes and hit flashes in both games' battle presenters.</li>
+  </ul>
+</div>
+<div class="box">
+  <h3>Found on the live build today</h3>
+  <p>CONTROLS cuts off four labels at 1600×900 (e.g. "RESUME THE FIG…"). The phone's OPTIONS tab cuts off "MASTER VOLUM…". Whichever option you pick, the build fixes both, because they are in the same files.</p>
+</div>
+</body>
+</html>
