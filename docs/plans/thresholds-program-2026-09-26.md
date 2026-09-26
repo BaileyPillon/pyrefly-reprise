@@ -394,3 +394,37 @@ Two limits apply throughout:
 - The play sessions of queue item 20.
 - Each deep round samples unchanged mechanics in both games against the coverage matrix.
 - **Stop rule:** two iterations with no category movement means a written method check for that category before a third (rule 15).
+
+---
+
+## 8. Iteration 2 additions (Bailey's yes, 2026-09-26 ~16:00 EDT)
+
+Bailey answered the driver's 16-item sheet (2026-09-26 ~15:45 EDT) with "I'll go with
+all of your recommendations." Each accepted item below is also recorded as its own
+decision in `docs/target/decisions.json` (D-202 to D-219; D-200 and D-201 stay
+reserved for the phone picks the release 21 merge will record). Batch ownership is
+from §2; an item waits for the batch (or in-flight branch) that owns its files to
+merge to `main` before it can be built there, per the shared-working-tree rule
+(never touch another batch's files).
+
+| Item | Game (rule 14) | Files it touches | Waits on | Acceptance check |
+|---|---|---|---|---|
+| Natus Talk lines (PR-0204, D-203) | FFX only | `src/story/**` (Chapter X script), `src/data/` guide/callout rows for Chapter X | Batch 4 merge | The three drafted lines and their callouts appear in a real-key Chapter X run; the dialogue-timeline scene walk (round 14, §6 Narrative) lists them; a unit test in the story suite. |
+| Banter rotation re-test (PR-0021, D-204) | both | `src/app/screens/ResultsScreen.ts` and the results CSS | The `r21-results-phone` branch (owns these files; PR-0001 option B lives there) | At attempts 0, 1 and 2 on one profile, the results screen serves each bank's first line with the speaker rotating per chapter, Chapter III's card staying quiet, matching D-173 exactly (docs/plans §6 Narrative coverage item). |
+| SFX lower for new profiles only (PR-0203, D-210) | both | `src/audio/AudioManager.ts` (batch 4 owns it only for unlock logging — the volume/profile change is new scope there) and the save schema/profile fields in `src/app/SaveData.ts`, which **no batch in §2 currently owns** | Batch 4 merge for `AudioManager.ts`; flag `SaveData.ts` to whichever batch or a dedicated small change picks it up, since it is unclaimed in §2's ownership table | **Save-data class** (AGENTS.md "Release": anything that can lose or change save behavior) — gets a deep review before the deploy that ships it, plus the CHK-024 upgrade matrix (PR-0195, batch 5) re-run so old saves keep their existing (louder) effects level and only new profiles default lower. |
+| XI epilogue staging (PR-0133, D-211) | FFX-2 only | `src/story/**` (Chapter XI epilogue script) | Batch 4 merge | A real-key Chapter XI epilogue run stands Leblanc, Ormi and Logos for their lines, matching how XII and XIV already stage their casts; story-text lint (CHK-007) still passes. |
+| Fielded-only speakers with fallback (PR-0037, D-212) | both | `src/story/**` (mid-battle line dispatch, `dsl.ts`) | Batch 4 merge | Within one frame of a bench-vs-fielded check, a benched character never delivers a mid-battle line; the authored fallback line fires instead. Unit test per game. |
+| Chapter VIII Rikku reword (PR-0160, D-213) | FFX only | `src/story/**` (Chapter VIII script) | Batch 4 merge | Rikku's Chapter VIII lines no longer repeat Brother's cipher lines verbatim; the story-text lint and a names-hidden re-read (per the VIII acceptance check in §2 batch 4) both pass. |
+| GameFAQs-labelled data (GP-G2, PR-0217, PR-0054, D-214) | GP-G2 and PR-0054 are FFX-2 only; PR-0217's game is unconfirmed in the sources reviewed here (flag for the Steam session, D-205, or research before coding) | `src/data/ffx2/**`, `src/battle/ffx2/**` | Batch 1 (paper preflight, then merge) | Each fixed value cites its GameFAQs source and is labelled "our estimate" in a code comment and in `research/*.md` if a row is added there (rule 6); a unit test asserts the labelled value. |
+| H legend rename (PR-0028, D-215) | both | `src/app/screens/pause/**` (the legend/HUD hint copy) | Batch 3 merge | The H hint text names exactly what H does (hide every optional panel, per the Until Dawn pause's existing behaviour); no copy still says something H does not do. |
+| Chapter XII disc-turning coach line (PR-0197 family, D-216) | FFX only | `src/engine/tactics/**` (PR-0197's disc-ranking logic, batch 3) and `src/ui/coach/**` (the coach line itself, batch 4) | Both batch 3 and batch 4 merge, in that order (the coach line reads the tactics ranking) | Over the same 40-seed advisor-top-row bench PR-0197 uses, the coach line appears when a disc turn is the top-ranked move, and never contradicts the advisor's own top row. |
+| Chapter V checkpoint at Shuyin (D-217) | FFX-2 only | Via Trema's checkpoint seam: `src/app/screens/BattleEncounterChain.ts`, `BattleChainCheckpoint.ts` (batch 1) | Batch 1 (paper preflight, then merge) | A real-key Chapter V run reaches a checkpoint at the Shuyin seam; the checkpoint and its handoff note are explicitly labelled as an adaptation, not a sourced rule (rule 6). |
+| Critic policy for coach copy (tools/critic-plan.mjs, D-219) | both (process rule, not game-specific) | `tools/critic-plan.mjs` (owned by `t1-b5`) | `t1-b5` merge | `tools/critic-plan.mjs` classifies a coach-copy-only change as `focusedBeforeDeploy`, never `deepBeforeDeploy`; covered by `tests/unit/critic-release-rules.test.ts`. |
+| Accessibility build (PR-0032, D-202) | both | Cross-cutting: the options-round UI (batch 3/4 CSS and screens) plus `src/app/SaveData.ts` for the stored settings (unclaimed in §2, same gap as the SFX item above) | The options round (§3 item 5) must run and Bailey must pick first; then whichever batch's files the picked layout falls in, plus SaveData.ts | Save-data class: a deep review before the deploy that ships it (AGENTS.md "Release"), all-off-by-default, and the CHK-024 upgrade matrix confirms an old save boots with every setting off. |
+| Each chapter's own cue (PR-0099, D-209) | each cue keeps its own chapter's game tag (VI, XI, XIII, XV are FFX-2; VII, X, XII, XIV are FFX) | `public/audio/**` (new renders) and `docs/audio/THEMES.md` (batch 5's docs-half rows land first) | The audio direction pick (§3 item 6, "Only after item 6's pick") | `tools/audio/themes-audit.mjs` finds a THEMES.md row and a matching audio file for every listed chapter; no chapter still plays a stand-in cue. |
+
+**Note on unclaimed files:** `src/app/SaveData.ts` is not listed under any of the five
+batches in §2. Both the accessibility build and the SFX-per-profile change need it.
+Whoever picks either item up should add it to their batch's ownership list in §2 (or
+take it as a small, separately-reviewed change) before editing it, so it is not
+touched by two batches at once.

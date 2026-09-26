@@ -421,10 +421,11 @@
         {
           "label": "Speaker portrait: Yu Yevon",
           "src": "docs/concepts/portraits/yu-yevon/cand-2.png",
-          "state": "approved",
+          "state": "rejected",
+          "pill": "None (D-208)",
           "approved": "Bailey, 21 Sep 2026: “yes to both recommendations” (Yu Yevon card 2)",
           "build": "A dialogue line spoken by Yu Yevon with the portrait showing (public/art/portraits/yu-yevon.png).",
-          "note": "FFX only. Picked on the agent's recommendation: the bright glyph core is nearest to the glowing Yevon disc. research/visual-bible.md #1.12: he has no dialogue and no human form, and no shipped line has him speaking, so this is a safety net against a 404 rather than a face.",
+          "note": "FFX only. Picked on the agent's recommendation: the bright glyph core is nearest to the glowing Yevon disc. research/visual-bible.md #1.12: he has no dialogue and no human form, and no shipped line has him speaking, so this is a safety net against a 404 rather than a face. SUPERSEDED 2026-09-26 by D-208: Bailey answered \"Yu Yevon speaker portrait: keep it with a line, drop it, or none?\" with NONE (queue item 7 of docs/plans/thresholds-program-2026-09-26.md, ~16:00 EDT). This schema's state vocabulary (proposed/approved/rejected/gap/verdict) has no dedicated \"removed by later decision\" value distinct from \"never approved\" (the same gap the art4 tile's comment notes for \"withdrawn\"), so this tile's state is recorded as the closest available value, 'rejected', and this note plus the 'pill' field are what preserve the 'none' verdict and its own decision id (D-208) rather than losing it to the enum. No portrait ships for Yu Yevon.",
           "hashes": "portrait:yu-yevon"
         },
         {
@@ -1034,8 +1035,10 @@
           "label": "Pause on a phone",
           "src": "docs/screenshots/fix3/pause/v6-390x844-phone.png",
           "state": "approved",
-          "note": "The one screen with a phone layout so far.",
+          "pill": "Superseded",
+          "note": "The one screen with a phone layout so far. Superseded by the Until Dawn remake's own phone frame (frame f, docs/concepts/pause-until-dawn/f-phone.png); D-207 (2026-09-26): \"the Until Dawn pause supersedes the old v5 and v6 pause tiles\" (queue item 6 of docs/plans/thresholds-program-2026-09-26.md, Bailey's yes ~16:00 EDT).",
           "approved": "Bailey, 19 Sep 2026",
+          "supersededBy": "Pause remade on the Until Dawn character screen",
           "build": "Pause during chapter 1 at 390 x 844."
         },
         {

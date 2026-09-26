@@ -36,6 +36,15 @@
       "expected": "Developer vocabulary in player-facing copy is reported: the CHAPTER LINE chip and the citation \"ffx-seymour-flux §6 rows 5-6\". Check CHK-007.",
       "source": "Bailey, 2026-09-18 (critic/CHECKS.md CHK-007, \"Owner saw\")",
       "confirmedIn": "critic/CHECKS.md CHK-007"
+    },
+    {
+      "id": "CAL-005",
+      "kind": "should-pass",
+      "game": "both",
+      "artefact": { "build": "TBD (the pinned-seed opening capture from docs/plans/pr-0061-method-check.md's round-13 addendum)", "state": "Chapter 1's opening, from load to the first real menu: the approved 2.2 s card and the approved 3.8 s sweep run in full, then the enemy callout and sensor line." },
+      "expected": "A reviewer must not report the full 2.2 s card time or the full 3.8 s sweep time as excess opening delay (PR-0061 feel defect). Those two durations are Bailey's own approved beats and are excluded from the passive-time measurement entirely; only the time left over after them (the callout and sensor line, target about 1.5 s at most, with a Confirm press reaching the first menu at about 4 s) is judged for PR-0061 and D-138.",
+      "source": "D-138 (docs/target/decisions.json), Bailey, 2026-09-26 ~16:00 EDT, \"I'll go with all of your recommendations\", answering queue item 5/8 of docs/plans/thresholds-program-2026-09-26.md \"the critic counts the approved 2.2 s card and 3.8 s sweep as authored beats and judges only the leftover\"",
+      "confirmedIn": "docs/target/decisions.json D-206; docs/plans/thresholds-program-2026-09-26.md §4 items 5 and 8, and §5 (docs/plans/pr-0061-method-check.md)"
     }
   ],
   "toConfirm": [
