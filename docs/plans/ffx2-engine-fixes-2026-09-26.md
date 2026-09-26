@@ -350,7 +350,9 @@ time. Within 5 is 1-(1-p)^5 from the first-try rate, except XV, which retries fr
 does (its "within 3 / 5" is counted). Chapters IV to XIII come from `ffx2-engine-fixes-bench.test.ts`
 (`PYREFLY_MEASURE=1`, 114 s). XV comes from a scratch export of `chapter-gippal-ship-0925` at
 `79434a56` with this branch's whole `src/battle/ffx2` patch applied (it applied cleanly), using that
-branch's driver, kit and line, as in section 7; the export was deleted afterwards. The B column
+branch's driver, kit and line, as in section 7. The scratch exports (`D:/pyrefly-scratch-xv0926`,
+`D:/pyrefly-scratch-mc0926`, each with a `node_modules` junction) are still on disk: deleting them was
+not permitted from this session. Unlink the junction (`rmdir`) before deleting either folder. The B column
 reproduces section 4 exactly (IV 200 / 200, V 175 / 188, VI 159 / 195, XI 157 / 174, XIII 16 / 14,
 XV 34 / 94 and 149 within 5).
 
