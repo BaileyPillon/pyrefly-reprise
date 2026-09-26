@@ -1,0 +1,73 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-26T19:10:00.000Z",
+  "build": {
+    "mainSha": "ce05b02c",
+    "bundle": "i8Mr-QwD",
+    "artifactHash": "fc45319a67de442052f25bc72daa242916e61180f76e4e361532ea4be2c00f2d"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/ce05b02c.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/43dca986.json -> {\"result\":\"PASS\",\"artifactHash\":\"fc45319a67de442052f25bc72daa242916e61180f76e4e361532ea4be2c00f2d\",\"liveManifest\":\"match\",\"checked\":94,\"mismatched\":[],\"missing\":[],\"wrongType\":[],\"errors\":[]}"
+      ],
+      "reason": null
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "Headless Playwright (GPU mode, --use-angle=d3d11) against the live URL with a cache-busting query, fresh context, 1600x900, real key presses throughout the changed FFX-2 flow.",
+        "Every state read asserted window.__pyrefly.screen()/snapshotState() before use, never a bare wait-then-shoot: boot->title, real Enter->chapter-select, trigger('select:ffx2-bahamut')->party-prep, real Enter (prep:begin)->cutscene, skipCutscene() to the first command menu (screen='battle')",
+        "In battle: real Enter opened and confirmed a command (positive path), real Enter+Escape opened then cancelled a submenu (cancel path), real 'P' opened the pause overlay (screen='pause'), real 'H' hid then restored the panels, real Escape resumed to 'battle'",
+        "0 console errors and 0 responses >=400 for the whole run",
+        "audioDebug() showed the currently-playing track (boss-ffx2-aeon) with cached:true, source:'prerendered' (not synth), prerendered.manifest:true with 25 cues and a decoded sfx sprite"
+      ],
+      "reason": null
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": [
+        "Lightweight only, per the task scope (full upgrade matrix not run, see coverage.notTested).",
+        "Progress: after one battle turn (battleLog length 31) and a reload, localStorage 'pyrefly-reprise:save:v1'.chapters.ffx2-bahamut showed attempts:1 and playTimeMs:36448.6, i.e. the attempt/play-time record survived the reload.",
+        "Setting change was attempted through the pause Options tab with real keys (P, E, E, ArrowDown, ArrowLeft x2, Escape, Escape) but the settings object was byte-identical before and after the adjustment attempt (masterVolume stayed 0.8) -- the key sequence did not land the intended row, so the settings-survive-reload half of this check is UNVERIFIED, not claimed as tested. Reported honestly under coverage.notTested rather than folded into this PASS."
+      ],
+      "reason": null
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact byte comparison, 94 files sampled against critic/artifacts/ce05b02c.json, changed-from the previous live build 43dca986",
+      "Real-input path: title -> chapter select -> ffx2-bahamut party prep -> battle, first FFX-2 command menu reached and used (positive submit + cancel-out) with real keys",
+      "Pause/resume (P), panel hide/restore (H), resume (Escape) in a live FFX-2 battle",
+      "Prerendered music confirmed playing (not the procedural synth fallback) via AudioManager debug surface",
+      "Console-error and 404 count for the entire run (0 and 0)",
+      "Reload smoke: one battle's attempt/play-time progress confirmed surviving a full page reload"
+    ],
+    "reused": [],
+    "notTested": [
+      "FFX-2 combat-core specifics beyond reaching and using the command menu: all-target abilities hitting once (not once per target) and the Acta Est Fabula fix on the Redoubts were not exercised turn-by-turn in this pass -- this is a live-deployment identity/smoke check (CHK-016/017/024), not the focused or deep review of the changed area, which the marker critic/pending/ce05b02c.json still lists as owed separately",
+      "The menu-cancel correction's specific claim (only a Delay or Action-cancel enemy ability closes an open menu) was not isolated: the cancel path exercised was the player's own Escape-to-back-out, not an enemy ability landing while a menu is open",
+      "The 23 new FFX-2 battle poses were not visually inspected frame by frame",
+      "The FFX Sensor panel hidden for Sensor-immune targets (Yojimbo) was not exercised live: Yojimbo is in the unlisted 'yojimbo-cavern' chapter, not reachable from the normal chapter-select flow in the 2-5 minute budget for a live pass; tests/e2e/sensor-immune-hidden.spec.ts covers this behaviour against a production build (not this live artifact)",
+      "ffx2-vegnagun-shuyin (the other FFX-2 chapter this build's marker names) was not separately played through",
+      "Settings-survive-reload (see CHK-024 evidence above: attempted, inconclusive)",
+      "Full save/reload upgrade matrix (fresh player, returning player, a save from the previous live build, invalid/truncated storage, the reset flow) -- out of scope for this lightweight pass per the task"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 22
+}
