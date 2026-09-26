@@ -789,9 +789,16 @@
 @media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
   .fe {
     --fe-k: max(0.5px, min(100vw / 430, 100vh / 1150));
-    /* FE-001: the phone floor is 12px, not 14 — the same floor pause-screen.css
-     * uses at this width (docs/handoff/fix3-pause.md). */
-    --fe-fs-floor: 12px;
+    /* PR-0066 (round 13 re-measure): FE-001 set this to 12px to match
+     * pause-screen.css's own phone floor (docs/handoff/fix3-pause.md), but a
+     * fresh 390x844 sweep of the title and chapter select found five text
+     * runs still rendering at 12 effective px — the chapter-select heading,
+     * "Chapter I", "/13", "CTB" and "Final Fantasy X" — below CHK-003's 14px
+     * floor. Chapter select v2 (D-183) shares this token
+     * (`chapter-select-c.css`), so raising it here clears both. Desktop keeps
+     * its own 14px floor (line 39 above); pause-screen.css's phone floor is
+     * a separate token and is unaffected. */
+    --fe-fs-floor: 14px;
   }
   /*
    * The slab is skewed, so its bottom-left corner sits further left than its
