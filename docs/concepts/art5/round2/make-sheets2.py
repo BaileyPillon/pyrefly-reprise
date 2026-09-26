@@ -212,8 +212,69 @@ def results():
         print('wrote', f'sheet2-{gid}.jpg', sheet.size, 'any_pick=', any_pick)
 
 
+def ready():
+    """round2-ready.jpg: every judge-PASS pick beside its idle in one overview, both at one
+    height, labelled slot and score. A slot counts when its judge2.json verdict starts with
+    PASS, or when its "method" sub-entry does (the Paine Warrior method run); a cut-out path
+    ("cutout") is used over "candidate" when present. Agent judge, NOT Bailey; nothing installed.
+        python make-sheets2.py ready
+    """
+    judge2 = json.loads((HERE / 'judge2.json').read_text(encoding='utf8'))
+    picks = []
+    for key in sorted(judge2['slots']):
+        e = judge2['slots'][key]
+        m = e.get('method') or {}
+        if str(m.get('verdict', '')).startswith('PASS'):
+            e = m
+        if not str(e.get('verdict', '')).startswith('PASS'):
+            continue
+        picks.append((key, pathlib.Path(e.get('cutout') or e['candidate']), e['verdict']))
+    f13, f16, f22 = font(13), font(16), font(24)
+    H, W, PAD = 190, 1600, 10
+    tiles = []
+    for key, png, verdict in picks:
+        gid = key.split('/')[0]
+        ims = []
+        for p in (ART / gid / 'idle.png', png):
+            im = Image.open(p).convert('RGBA')
+            im = im.resize((max(1, int(im.width * H / im.height)), H), Image.LANCZOS)
+            t = Image.new('RGB', (im.width + 10, H), BG)
+            t.paste(im, (5, 0), im)
+            ims.append(t)
+        tw = sum(i.width for i in ims) + 8 + 2 * PAD
+        tile = Image.new('RGB', (tw, H + 2 * PAD + 36), (205, 206, 212))
+        x = PAD
+        for i in ims:
+            tile.paste(i, (x, PAD)); x += i.width + 8
+        dr = ImageDraw.Draw(tile)
+        dr.rectangle([0, 0, tw - 1, tile.height - 1], outline=(150, 150, 158))
+        dr.text((PAD - 6, H + PAD + 2), key.replace('/', ' / '), fill=(20, 20, 30), font=f16)
+        dr.text((PAD - 6, H + PAD + 20), verdict, fill=(20, 110, 40), font=f13)
+        tiles.append(tile)
+    rows, cur, cw = [], [], 0
+    for t in tiles:
+        if cur and cw + t.width + PAD > W - PAD:
+            rows.append(cur); cur, cw = [], 0
+        cur.append(t); cw += t.width + PAD
+    if cur:
+        rows.append(cur)
+    th = tiles[0].height if tiles else 0
+    sheet = Image.new('RGB', (W, 44 + len(rows) * (th + PAD)), (232, 232, 236))
+    ImageDraw.Draw(sheet).text((12, 8), f'Pose round 2: {len(picks)} judge-PASS picks, idle beside pick (agent looks and agent judge, NOT Bailey; nothing installed)', fill=(10, 10, 10), font=f22)
+    y = 44
+    for r in rows:
+        x = PAD
+        for t in r:
+            sheet.paste(t, (x, y)); x += t.width + PAD
+        y += th + PAD
+    sheet.save(HERE / 'round2-ready.jpg', quality=82)
+    print('wrote round2-ready.jpg', sheet.size, len(picks), 'picks')
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'results':
         results()
+    elif len(sys.argv) > 1 and sys.argv[1] == 'ready':
+        ready()
     else:
         main()

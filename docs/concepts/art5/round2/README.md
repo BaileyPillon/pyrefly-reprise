@@ -5,13 +5,16 @@ committed changes `docs/target/approved-hashes.json` or `judge-locked-hashes.jso
 This section is generated from `looks.json` (try a and try b, the "agent look" pass)
 and `judge2.json` (the agent judge's scored pass against the round 1 rubric, mean >= 7.0
 to pass); see `make-sheets2.py results` for the per-girl `sheet2-<id>.jpg` picture sheets,
-and `round2-ready.jpg` for every judge-PASS pick beside its idle in one overview image.
+and `round2-ready.jpg` for every judge-PASS pick beside its idle in one overview image
+(`make-sheets2.py ready`). The Paine Warrior method run's own sheet is `sheet3-paine-warrior.jpg`;
+`sheet2-paine-warrior.jpg` still shows the pre-method picks.
 
 Counts across the 55 worklist slots (this pass judged every slot the makers
-passed): **19 judge PASS**, **21 judge FAIL** (the maker's own pick scored
-below the 7.0 bar), **5 maker FAIL** (no candidate the maker judged worth a judge
+passed): **21 judge PASS**, **23 judge FAIL** (the maker's own pick scored
+below the 7.0 bar), **1 maker FAIL** (no candidate the maker judged worth a judge
 pass), **10 STOPPED** (failed try b, rule 15: no third try), **0 not
-looked at yet**.
+looked at yet**. The five Paine Warrior slots count by their method-run judge (pass
+"method" in `judge2.json`, 2026-09-26): attack and cast PASS; item, hurt and ko FAIL.
 
 ## Ready for Bailey's pick (judge PASS at 7.0 or above)
 
@@ -23,6 +26,8 @@ hundredths of the bar and should be looked at again before it is trusted.
 |---|---|---|
 | paine-dark-knight/cast | cand-2.png | PASS 7.19 |
 | paine-dark-knight/ko | cand-1.png | PASS 7.06 |
+| paine-warrior/attack | method cand-7-comp.png | PASS 7.12 |
+| paine-warrior/cast | method cand-8-comp.png | PASS 7.00 (exactly on the bar) |
 | rikku-alchemist/attack | cand-4.png | PASS 7.12 |
 | rikku-thief/item | cand-8.png | PASS (narrow, try b) |
 | paine-black-mage/ko | cand-1.png | PASS 7.00 |
@@ -52,9 +57,15 @@ hundredths of the bar and should be looked at again before it is trusted.
 - **The Paine Warrior sword that floats or doubles.** Every one of Paine Warrior's 5 round 2
   slots (attack, cast, item, hurt, ko) failed with the same class of fault: the sword floats
   unheld beside or behind her, forks into two blades, or is held in the wrong (cast) hand,
-  across both try a and, where it ran, try b. No round 2 method fix has landed on this weapon
-  for this dressphere; it may need a different prompt approach (an inpaint pass on the sword
-  alone, or a different reference pose) rather than another word-tweak try.
+  across both try a and, where it ran, try b. **Method run (2026-09-26, METHOD-CHECK.md, commit
+  a3584d1d):** the maker rendered each body with no sword and pasted the idle's own sword into
+  her hand. This fixed the floating and doubling on all five slots: each pick has exactly one
+  sword. The judge passed attack (7.12) and cast (7.00). Item, hurt and ko still fail on the
+  body (an elf ear, a malformed hand, the wrong kit), not on the sword.
+  - **Sword size.** The pasted sword comes out at about 0.72 to 0.75 of the idle's sword on
+    attack, cast and hurt once the head-match scale is applied, so it reads thin at battle size.
+  - **Grip.** Where the hand should close around the grip, the composite shows a flat,
+    unshaded red rod.
 
 ## Per-girl, for Bailey
 
@@ -66,7 +77,7 @@ hundredths of the bar and should be looked at again before it is trusted.
 ### Paine
 
 - **paine-dark-knight** (3 slots): 2 judge PASS, 1 judge FAIL, 0 maker FAIL, 0 STOPPED.
-- **paine-warrior** (5 slots): 0 judge PASS, 1 judge FAIL, 4 maker FAIL, 0 STOPPED.
+- **paine-warrior** (5 slots): 2 judge PASS, 3 judge FAIL, 0 maker FAIL, 0 STOPPED (method run, 2026-09-26).
 - **paine-black-mage** (2 slots): 1 judge PASS, 0 judge FAIL, 1 maker FAIL, 0 STOPPED.
 - **paine-gunner** (6 slots): 3 judge PASS, 2 judge FAIL, 0 maker FAIL, 1 STOPPED.
 - **paine-white-mage** (6 slots): 1 judge PASS, 3 judge FAIL, 0 maker FAIL, 2 STOPPED.
@@ -91,11 +102,11 @@ hundredths of the bar and should be looked at again before it is trusted.
 | paine-dark-knight/victory | judge FAIL | cand-1.png | FAIL 6.88 | Hand on hip, smirk and heavy spiked plate: a victory stance. Worst: costume (5.5). The idle's greatsword is a short blade held low and nearly hidden, so at battle size she carries… |
 | rikku-alchemist/attack | judge PASS | cand-4.png | PASS 7.12 | Flask thrust toward the enemy reads at game size. Worst: costume (only one flame strip left, at the hip, idle has them down both legs; boots blue with black flaps not green cuffs;… |
 | rikku-alchemist/ko | judge FAIL | cand-3.png | FAIL 6.81: game read | Cheek pillowed on her forearm reads as asleep rather than fallen; flame strips spread under her as an orange-yellow mat, flask a pink blob at the chest. |
-| paine-warrior/attack | maker FAIL |  |  | FAIL: No candidate both reads as an attack and carries the named ornate red longsword; two of four touch the edges. |
-| paine-warrior/cast | maker FAIL |  |  | FAIL: The named fix (a single sword, not floating) fails: the sword floats (c1), multiplies (c2) or is raised in the cast hand (c3, c4). |
-| paine-warrior/item | judge FAIL | cand-4.png | FAIL 6.75 | The flask is held out at chest height, and she wears the white corset, black off-shoulder jacket, red skull belt and black shorts. Worst: identity (6), then seams and game read (6… |
-| paine-warrior/hurt | maker FAIL |  |  | FAIL: Three of four are edge rejects with extra blades; c1 has a floating sword plus a sheath and a second hilt (the rubric's extra-weapon fault). |
-| paine-warrior/ko | maker FAIL |  |  | FAIL: All four are guard rejects on the edges (the named fault is not fixed); the sword grows past the canvas every time. |
+| paine-warrior/attack | judge PASS (method) | method cand-7-comp.png | PASS 7.12 | Two-handed thrust at the enemy, one sword (the idle's own). Worst: hands, costume and seams (6.5): a flat unshaded red rod between the fists, the sword about 0.75 of the idle's at game size, one red strap per boot. Head-match scale 1.21, lunge stature 0.85. |
+| paine-warrior/cast | judge PASS (method) | method cand-8-comp.png | PASS 7.00 (exactly on the bar) | Open palm raised, sword trailing from the low fist; the crest is the closest to the idle's. Worst: costume (6): bare hands (no black elbow gloves), sheer thighhighs. Seam: the grip butts into a bare fist, and the sword is about 0.72 of the idle's. Scale 1.09, stature 0.83. |
+| paine-warrior/item | judge FAIL (method) | method cand-4-comp.png | FAIL 6.81 | The method fixed the giant unheld blade: the sword rests point-down in her fist at the right size (0.94). Worst: identity (5.5): a pointed elf ear shows even at battle size, a bob instead of the crest, and blue-violet scaled hip pouches. The pass-2 entry for the earlier cand-4 (6.75) is kept in judge2.json. |
+| paine-warrior/hurt | judge FAIL (method) | method cand-9-comp.png | FAIL 5.75 | Worst: hands (5): the sword hand is a malformed pale block and the pommel only touches it. Lavender hair, a red stroke down the neck, a hip pouch and glyphs on the boots. Planted upright, the sword reads as a cane with a wince, not a hit. |
+| paine-warrior/ko | judge FAIL (method) | method cand-4-comp.png | FAIL 6.56 | On her back with the sword dropped by her open hand: one sword, reads as down. Worst: costume (5.5): many red studded straps, a white zigzag fringe for the corset, block heels. The face is hidden (only the underside of the jaw shows), and the plank-straight body reads as levitating. |
 | rikku-dark-knight/ko | judge FAIL | cand-8 | FAIL (all try-a candidates guard-rejected for tou… | Judge pass covered the try-a set only; try-a had no candidate to score because every frame touched an edge. See the looker's try-b PASS on cand-8 in looks.json (not separately re-… |
 | rikku-thief/attack | STOPPED |  |  | FAIL (stops, rule 15): the head fix took (c7 is inside the gate) and the facing is fixed, but the only candidate with both loses the bandana, the puffy sleeves and the green skirt… |
 | rikku-thief/cast | STOPPED |  |  | FAIL (stops, rule 15): the head factor now works (c5-c7 inside the gate), but the other named fixes do not land: no candidate has the short curved second dagger, the puffy sleeves… |

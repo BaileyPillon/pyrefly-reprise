@@ -635,7 +635,35 @@
    "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
    "judge": "agent judge pass 2, not Bailey; made none of these frames",
    "pass": "2",
-   "earlierUnmergedJudge": "JUDGE FAIL 6.69: game read and identity (giant unheld sword behind her, bob hair) (cand-4) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)"
+   "earlierUnmergedJudge": "JUDGE FAIL 6.69: game read and identity (giant unheld sword behind her, bob hair) (cand-4) (scratch pose2b result-08/10, never merged into judge2.json; shown for comparison only)",
+   "method": {
+    "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/item/cand-4-comp.png",
+    "cutout": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/item/cand-4-comp.cut.png",
+    "try": "method (sword-free body + the idle sword composited, METHOD-CHECK.md, commit a3584d1d)",
+    "verdict": "FAIL 6.81",
+    "scores": {
+     "id": 5.5,
+     "anat": 7,
+     "hands": 7,
+     "cost": 6,
+     "seams": 6.5,
+     "edges": 8,
+     "finish": 7,
+     "game": 7.5
+    },
+    "scale": {
+     "headMatch": 1.42,
+     "stature": 1.05,
+     "pickEyeChin": 36,
+     "idleEyeChin": 51
+    },
+    "why": "The bottle is held out at chest height in a black glove, and the sword rests point-down in the other black fist like the idle's stance, so the swap is smooth. The boots are the closest to the idle (two red buckle straps each), with glossy black thighhighs. Worst: identity (5.5). A pointed elf ear shows clearly at 1:1 and at battle size, and the hair is a soft bob with a tuft and a navy shadow patch (idle: swept crest). Blue-violet scaled pouches hang on both hips (the idle has none), and the corset carries black bands.",
+    "seam": "The grip above the crossguard is a flat, unshaded red rectangle that rises into the black fist with a hard straight edge, which reads pasted at 1:1. The size is right: about 0.94 of the idle's sword after scaling. The lighting matches.",
+    "otherCandidateClearlyBetter": "No: c5 has pointed ears and bare arms, c6 a headband and spiked boots, and c7 a dangling belt and a bare hand.",
+    "mechanical": "border alpha 0 on the cut-out, maxRgb 255 (no black frame), guard ok",
+    "judge": "agent judge, method pass, not Bailey; made none of these frames",
+    "pass": "method"
+   }
   },
   "paine-black-mage/ko": {
    "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-day1/pose-round2/paine-black-mage/ko/cand-1.png",
@@ -892,7 +920,122 @@
    "mechanical": "border alpha 0, maxRgb 255 (no black frame), guard ok",
    "judge": "agent judge pass 2, not Bailey; made none of these frames",
    "pass": "2"
+  },
+  "paine-warrior/attack": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/attack/cand-7-comp.png",
+   "cutout": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/attack/cand-7-comp.cut.png",
+   "try": "method (sword-free body + the idle sword composited, METHOD-CHECK.md, commit a3584d1d)",
+   "verdict": "PASS 7.12",
+   "scores": {
+    "id": 7,
+    "anat": 7,
+    "hands": 6.5,
+    "cost": 6.5,
+    "seams": 6.5,
+    "edges": 8,
+    "finish": 7.5,
+    "game": 8
+   },
+   "scale": {
+    "headMatch": 1.21,
+    "stature": 0.85,
+    "pickEyeChin": 42,
+    "idleEyeChin": 51,
+    "note": "lunge, gate 0.60; eye-chin measured by eye on a 4x ruler, idle re-measured the same way (51; round 1 read 54.6)"
+   },
+   "why": "Two-handed low thrust toward the enemy: the strongest game read of the five, and one sword only, the idle's own ornate red one. Stern face, red eyes, silver hair swept back but layered and shaggy rather than the idle's tall crest. Worst: hands, costume and seams (6.5 each). At 3x the grip between the two black fists is a flat, unshaded bright red rod, much thinner than the idle's grip, and the fists are mitten-like. The boots carry one red buckle strap each (idle: three), the thighhighs are matte, and the jacket sleeve has a white print the idle does not have.",
+   "seam": "Reads as one painting at battle size. At 1:1 the rod between the fists and a ragged pale fringe along the lower crossguard wing give the paste away. The sword is at 0.62 of the idle cut, so after the head-match scale it is about 0.75 of the idle's sword when the pose swaps in: visibly thinner and shorter. The lighting matches (the idle's own paint), with no foreshortening.",
+   "otherCandidateClearlyBetter": "No: c4 has the best crest but a red collar flare; c5 has a spiky mane; c6 has a bob.",
+   "mechanical": "border alpha 0 on the cut-out, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge, method pass, not Bailey; made none of these frames",
+   "pass": "method"
+  },
+  "paine-warrior/cast": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/cast/cand-8-comp.png",
+   "cutout": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/cast/cand-8-comp.cut.png",
+   "try": "method (sword-free body + the idle sword composited, METHOD-CHECK.md, commit a3584d1d)",
+   "verdict": "PASS 7.00",
+   "scores": {
+    "id": 7,
+    "anat": 7.5,
+    "hands": 6.5,
+    "cost": 6,
+    "seams": 6.5,
+    "edges": 8,
+    "finish": 7,
+    "game": 7.5
+   },
+   "scale": {
+    "headMatch": 1.09,
+    "stature": 0.83,
+    "pickEyeChin": 47,
+    "idleEyeChin": 51,
+    "note": "stature to the top of the hair, not the raised hand"
+   },
+   "why": "A clean open palm raised high, the other fist low with the sword trailing to the floor: the cast reads, with one sword, held. The swept crest is the closest to the idle's in the run. Worst: costume (6). No black elbow gloves (both hands bare), sheer thighhighs (idle: opaque, glossy), one red strap per boot (idle: three), no pendant. At 1:1 a small cyan stroke sits above her right eye. PASS exactly on the bar.",
+   "seam": "The fist is bare and pale, and the grip does not pass through it: it butts into the knuckles as a short flat red stub, so at 3x it reads as tucked against the hand rather than gripped. There is a white fleck on the left crossguard wing. The sword is at 0.66 of the idle cut, so after the head-match scale it is about 0.72 of the idle's sword: thin at battle size. The lighting matches the body.",
+   "otherCandidateClearlyBetter": "No: c4 has open fingers on the hilt even after the grip pass, c7 a red sash, and c9 blue-tinted hair.",
+   "mechanical": "border alpha 0 on the cut-out, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge, method pass, not Bailey; made none of these frames",
+   "pass": "method"
+  },
+  "paine-warrior/hurt": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/hurt/cand-9-comp.png",
+   "cutout": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/hurt/cand-9-comp.cut.png",
+   "try": "method (sword-free body + the idle sword composited, METHOD-CHECK.md, commit a3584d1d)",
+   "verdict": "FAIL 5.75",
+   "scores": {
+    "id": 5,
+    "anat": 6,
+    "hands": 5,
+    "cost": 5.5,
+    "seams": 5.5,
+    "edges": 7.5,
+    "finish": 6,
+    "game": 5.5
+   },
+   "scale": {
+    "headMatch": 1.24,
+    "stature": 0.8,
+    "pickEyeChin": 41,
+    "idleEyeChin": 51,
+    "note": "head tipped back, so eye-chin is approximate"
+   },
+   "why": "Head tipped back with one eye shut. Worst: hands (5). The sword hand is a malformed pale block with a mark like an eye on it, and the pommel only touches its underside. The hair is lavender to purple (idle: silver), a red stroke runs from the ear down the neck, and the ear carries a yellow-green disc. There is a red hip pouch, chains and lace at the belt, a red strap dangling from one boot, and glyph-like marks on the boots. With the sword planted upright it reads as leaning on a cane with a wince, not as taking a hit.",
+   "seam": "The hand does not hold the grip, so the sword stands beside the fist like a sticker. It is at 0.60 of the idle cut, about 0.74 of the idle's sword after scaling.",
+   "otherCandidateClearlyBetter": "No: c4 winces but has a spiky mane and a weak recoil; the other bodies were guard rejects or unusable.",
+   "mechanical": "border alpha 0 on the cut-out, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge, method pass, not Bailey; made none of these frames",
+   "pass": "method"
+  },
+  "paine-warrior/ko": {
+   "candidate": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/ko/cand-4-comp.png",
+   "cutout": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-method/paine-warrior/ko/cand-4-comp.cut.png",
+   "try": "method (sword-free body + the idle sword composited, METHOD-CHECK.md, commit a3584d1d)",
+   "verdict": "FAIL 6.56",
+   "scores": {
+    "id": 6,
+    "anat": 6,
+    "hands": 7,
+    "cost": 5.5,
+    "seams": 6.5,
+    "edges": 8,
+    "finish": 7,
+    "game": 6.5
+   },
+   "scale": {
+    "headMatch": null,
+    "stature": null,
+    "note": "ko is not gated; at a length match (about 0.92) the sword is about 0.83 of the idle's"
+   },
+   "why": "On her back, head right, open hand relaxed above the dropped sword: it reads as down. Worst: costume (5.5). Five or six red studded straps cross the jacket (idle: one red belt), the corset turned into a white zigzag fringe, the boots have block heels, and the thighhighs are sheer. The head is thrown far back, so only the underside of the jaw and two closed-eye lines show, and the face does not read as Paine. The body lies rigid and straight like a plank, which reads closer to levitating than fallen.",
+   "seam": "The sword lies flat, squashed to half height, in front of her and below the hand. The grip is a flat, unshaded red rod with a black cap. There is no contact shadow, which at 1:1 reads a little like a decal. At battle size it reads as a sword dropped on the floor, and there is one sword only.",
+   "otherCandidateClearlyBetter": "No: c7 shows the face better but has a blue floor shadow and the sword well apart from her; c5 has a pink floor puddle.",
+   "mechanical": "border alpha 0 on the cut-out, maxRgb 255 (no black frame), guard ok",
+   "judge": "agent judge, method pass, not Bailey; made none of these frames",
+   "pass": "method"
   }
  },
- "note2": "Pass 2 (agent judge, not Bailey, 2026-09-26): scored the maker-passed slots the first pass had not scored. New slots carry \"pass\": \"2\". Two slots already had a first-pass entry without scores (rikku-dark-knight/ko, rikku-thief/item, both try-b picks); those first-pass fields are left as they were and pass 2 sits under their \"pass2\" key. Full notes: D:/Tools/pyrefly-scratch/pose2b/judge2b.json."
+ "note2": "Pass 2 (agent judge, not Bailey, 2026-09-26): scored the maker-passed slots the first pass had not scored. New slots carry \"pass\": \"2\". Two slots already had a first-pass entry without scores (rikku-dark-knight/ko, rikku-thief/item, both try-b picks); those first-pass fields are left as they were and pass 2 sits under their \"pass2\" key. Full notes: D:/Tools/pyrefly-scratch/pose2b/judge2b.json.",
+ "note3": "Method pass (agent judge, not Bailey, 2026-09-26): scored the five Paine Warrior method-run picks (sword-free bodies with the idle's own sword composited, commit a3584d1d) against the round 1 rubric. New slots carry \"pass\": \"method\"; paine-warrior/item already had a pass-2 entry, left as it was, and the method score sits under its \"method\" key. Each \"seam\" field is the composite check (edges, scale, lighting, grip)."
 }
