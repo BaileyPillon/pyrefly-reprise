@@ -45,6 +45,9 @@ const ARMS = (process.env['ENGINE_FIX_ARMS'] ?? 'built,menu,switch,both').split(
  * `built`: the branch, option B (IC-2 fix, Acta on the Redoubts only); `ic2-only`: Acta's old target
  * set; `switch`: plus IC-1's switch; `menu`: plus the menu-cancel correction (§9.2, only a Delay or
  * Action-cancel ability closes an open menu, `menuCancelOnlyDelayAbilities`); `both`: plus both.
+ * Since 2026-09-26 the menu-cancel correction ships ON (Bailey: "I'll take all your
+ * recommendations"; `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES), so `built` equals `menu`, and
+ * `r17` turns it back off (release 17's "any enemy hit closes the menu") to measure the before.
  */
 const ARM_OPTIONS: Record<string, Partial<Ffx2EngineOptions>> = {
   built: {},
@@ -52,6 +55,7 @@ const ARM_OPTIONS: Record<string, Partial<Ffx2EngineOptions>> = {
   switch: { immuneHitsSkipChain: true },
   menu: { menuCancelOnlyDelayAbilities: true },
   both: { immuneHitsSkipChain: true, menuCancelOnlyDelayAbilities: true },
+  r17: { menuCancelOnlyDelayAbilities: false },
 };
 
 interface Speed { name: string; decisionMs: number; topMs?: number; engine: Partial<Ffx2EngineOptions> }
