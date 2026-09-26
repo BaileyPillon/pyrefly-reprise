@@ -1,0 +1,94 @@
+{
+  "chapter": "ffx2-fallen-aeons",
+  "want": "defeat",
+  "tag": "ffx2-xi-defeat",
+  "viewport": "390x844",
+  "landed": {
+    "phone": true,
+    "outcome": "defeat",
+    "minFont": 14,
+    "small": [],
+    "buttons": [
+      {
+        "t": "RETRY",
+        "h": 58,
+        "top": 764,
+        "bottom": 822
+      },
+      {
+        "t": "CHAPTER SELECT",
+        "h": 58,
+        "top": 764,
+        "bottom": 822
+      }
+    ],
+    "boxes": {
+      "clock": {
+        "top": 16,
+        "bottom": 48,
+        "left": 16,
+        "right": 182
+      },
+      "caption": {
+        "top": 70,
+        "bottom": 329,
+        "left": 364,
+        "right": 382
+      },
+      "head": {
+        "top": 378,
+        "bottom": 464,
+        "left": 20,
+        "right": 372
+      },
+      "tallies": {
+        "top": 506,
+        "bottom": 653,
+        "left": 18,
+        "right": 372
+      },
+      "chips": {
+        "top": 663,
+        "bottom": 731,
+        "left": 18,
+        "right": 372
+      },
+      "dock": {
+        "top": 764,
+        "bottom": 822,
+        "left": 22,
+        "right": 368
+      },
+      "hero": {
+        "top": 0,
+        "bottom": 844,
+        "left": 0,
+        "right": 390
+      }
+    },
+    "scroll": {
+      "doc": 844,
+      "win": 844,
+      "page": 0
+    },
+    "chips": [
+      "Y Yuna LV 46",
+      "R Rikku LV 48",
+      "P Paine LV 50"
+    ],
+    "tallies": [
+      "TURNS 33",
+      "ATTEMPTS 1",
+      "BEST — NEVER CLEARED"
+    ],
+    "accent": "#f4f1e8"
+  },
+  "litAfterRight": "CHAPTER SELECT",
+  "litAfterLeft": "RETRY",
+  "afterTap": {
+    "screen": "battle",
+    "choice": null,
+    "gotoChapter": null
+  },
+  "errors": []
+}

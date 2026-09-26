@@ -1,0 +1,110 @@
+{
+  "chapter": "seymour-flux",
+  "want": "defeat",
+  "tag": "ffx-i-defeat",
+  "viewport": "390x844",
+  "landed": {
+    "phone": true,
+    "outcome": "defeat",
+    "minFont": 14,
+    "small": [],
+    "buttons": [
+      {
+        "t": "RETRY",
+        "h": 58,
+        "top": 764,
+        "bottom": 822
+      },
+      {
+        "t": "CHAPTER SELECT",
+        "h": 58,
+        "top": 764,
+        "bottom": 822
+      }
+    ],
+    "boxes": {
+      "clock": {
+        "top": 16,
+        "bottom": 48,
+        "left": 16,
+        "right": 179
+      },
+      "caption": {
+        "top": 70,
+        "bottom": 378,
+        "left": 346,
+        "right": 382
+      },
+      "head": {
+        "top": 378,
+        "bottom": 464,
+        "left": 20,
+        "right": 372
+      },
+      "tallies": {
+        "top": 506,
+        "bottom": 653,
+        "left": 18,
+        "right": 372
+      },
+      "chips": {
+        "top": 663,
+        "bottom": 731,
+        "left": 18,
+        "right": 372
+      },
+      "dock": {
+        "top": 764,
+        "bottom": 822,
+        "left": 22,
+        "right": 368
+      },
+      "hero": {
+        "top": 0,
+        "bottom": 844,
+        "left": 0,
+        "right": 390
+      }
+    },
+    "scroll": {
+      "doc": 844,
+      "win": 844,
+      "page": 0
+    },
+    "chips": [
+      "T Tidus S.LV 30",
+      "Y Yuna S.LV 32",
+      "K Kimahri S.LV 25"
+    ],
+    "tallies": [
+      "TURNS 12",
+      "ATTEMPTS 1",
+      "BEST — NEVER CLEARED"
+    ],
+    "accent": "#f4f1e8"
+  },
+  "litAfterRight": "CHAPTER SELECT",
+  "litAfterLeft": "RETRY",
+  "afterTap": {
+    "screen": "results",
+    "choice": null,
+    "gotoChapter": null,
+    "screenState": {
+      "chapterId": "seymour-flux",
+      "outcome": "defeat",
+      "silent": false,
+      "dismissed": false,
+      "clearMs": 1675,
+      "newBest": false,
+      "choice": "continue",
+      "actionIndex": 0,
+      "members": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ]
+    },
+    "tallies": "TURNS 22 ATTEMPTS 2 BEST — NEVER CLEARED"
+  },
+  "errors": []
+}

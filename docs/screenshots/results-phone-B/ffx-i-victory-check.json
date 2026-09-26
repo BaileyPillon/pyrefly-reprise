@@ -1,0 +1,100 @@
+{
+  "chapter": "seymour-flux",
+  "want": "victory",
+  "tag": "ffx-i-victory",
+  "viewport": "390x844",
+  "landed": {
+    "phone": true,
+    "outcome": "victory",
+    "minFont": 14,
+    "small": [],
+    "buttons": [
+      {
+        "t": "CONFIRM ▸",
+        "h": 58,
+        "top": 764,
+        "bottom": 822
+      }
+    ],
+    "boxes": {
+      "clock": {
+        "top": 16,
+        "bottom": 48,
+        "left": 16,
+        "right": 181
+      },
+      "caption": {
+        "top": 70,
+        "bottom": 324,
+        "left": 346,
+        "right": 382
+      },
+      "head": {
+        "top": 324,
+        "bottom": 443,
+        "left": 20,
+        "right": 372
+      },
+      "tallies": {
+        "top": 485,
+        "bottom": 631,
+        "left": 18,
+        "right": 372
+      },
+      "chips": {
+        "top": 641,
+        "bottom": 731,
+        "left": 18,
+        "right": 372
+      },
+      "dock": {
+        "top": 764,
+        "bottom": 822,
+        "left": 22,
+        "right": 368
+      },
+      "hero": {
+        "top": 0,
+        "bottom": 844,
+        "left": -41,
+        "right": 536
+      }
+    },
+    "scroll": {
+      "doc": 844,
+      "win": 844,
+      "page": 0
+    },
+    "chips": [
+      "T Tidus +10,000 AP+9 S.LV",
+      "Y Yuna +0 AP",
+      "K Kimahri +0 AP"
+    ],
+    "tallies": [
+      "AP 10,000 ×3 PARTY",
+      "GIL 6,000",
+      "ITEMS Lv. 4 Key Sphere"
+    ],
+    "accent": "#e3b94a"
+  },
+  "afterTap": {
+    "screen": "results",
+    "state": {
+      "chapterId": "seymour-flux",
+      "outcome": "victory",
+      "silent": false,
+      "dismissed": true,
+      "clearMs": 4949,
+      "newBest": true,
+      "choice": "continue",
+      "actionIndex": 0,
+      "members": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ]
+    },
+    "gotoChapter": "victory"
+  },
+  "errors": []
+}
