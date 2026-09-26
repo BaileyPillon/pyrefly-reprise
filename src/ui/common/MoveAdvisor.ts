@@ -487,17 +487,28 @@ function num(n: number): string {
 /**
  * How much of each suggestion the card prints.
  *
- * Ordered by what a player can most afford to lose, cheapest first. Until the
- * last, phone-compact rung, four things are never dropped: the move's name,
- * the submenu it lives in (with its cost), the reason under a *runner-up*
- * (which is where the revive lives, and "why" is the whole of Bailey's second
- * question), and any warning.
+ * Ordered by what a player can most afford to lose, cheapest first. At every
+ * rung, including the last, three things are never dropped: the move's name,
+ * the submenu it lives in (CHK-004, "say where" — critic round 13, PR-0126
+ * narrowed, below), and the reason under a *runner-up* until the rung that
+ * takes the runner-up down to its bar line (which is where the revive lives,
+ * and "why" is the whole of Bailey's second question).
  *
  * Critic round 09, PR-0126: the lead used to lose its "in <submenu>" chip and
  * cost a rung early, at density 5 — the same rung that sheds only its badge
  * now — because `bare` folded the two together. Chapter 5's real route hit
- * that rung on 27 of 283 decisions. The menu path and cost now survive every
- * rung but the last.
+ * that rung on 27 of 283 decisions. The menu path and cost survived every rung
+ * but the last from that fix on.
+ *
+ * Critic round 13, PR-0126 narrowed: the last, phone-compact rung was still
+ * the one place the chip vanished — "TIP Wakka" for a Switch, "TIP Darkness →
+ * all enemies" with no menu named, on **every** phone tip, and on desktop
+ * whenever `hudSafeZones.ts` fitted the card into a narrow "compact" box,
+ * because a narrow box walks this same ladder to this same last rung. The
+ * lead's own cost line was already the first thing that rung dropped in
+ * favour of the bar line the runner-up uses from density 3; the last rung now
+ * takes that bar line too, rather than the empty string it fell back to —
+ * the menu path is worth a whole line on its own when nothing else fits.
  *
  * | density | what goes |
  * |---|---|
@@ -507,7 +518,7 @@ function num(n: number): string {
  * | 3 | + the runner-up's numbers, down to the submenu chip |
  * | 4 | + the lead's reason and its secondary chips |
  * | 5 | + the lead's badge |
- * | 6 (phone compact) | + every "in <submenu>" chip, cost, reason, warning and the title: named moves, the actor, the board's note |
+ * | 6 (phone compact) | + the lead's warning and the title: named moves, their submenu, the actor, the board's note |
  *
  * Seven rungs rather than the four the first pass shipped, because the room
  * the card is given is much smaller than the stylesheet's 104px suggests. The
@@ -517,9 +528,10 @@ function num(n: number): string {
  * above the party's heads, which is four lines of anything.
  *
  * Rung 6 is what makes "the card never hides its own bottom edge" true even
- * there: two moves named, the note that answers the board, and no prose. It is
- * a last resort and it reads like one; the 35px shelf is the real defect and it
- * belongs to the HUD's `hudSafeZones.ts` — see `docs/handoff/fix3-advisor.md`.
+ * there: two moves named, where each lives, the note that answers the board,
+ * and no prose. It is a last resort and it reads like one; the 35px shelf is
+ * the real defect and it belongs to the HUD's `hudSafeZones.ts` — see
+ * `docs/handoff/fix3-advisor.md`.
  */
 export type Density = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 export const MAX_DENSITY: Density = 6;
@@ -583,21 +595,27 @@ function moveHtml(s: MoveSuggestion, rank: number, total: number, density: Densi
     : '';
   const rankChip = total > 1 ? `<span class="mad__rank"><b>${rank}</b></span>` : '';
   // See {@link Density}. A runner-up loses its decoration before the lead does,
-  // the lead's reason goes before the runner-up's, and only the last, phone-
-  // compact rung takes the menu path and cost down to a name and a target
-  // (critic round 09 PR-0126: `bare` used to fire for the lead a rung early,
-  // at density 5, which is now only the badge's rung).
+  // the lead's reason goes before the runner-up's, and the last, phone-compact
+  // rung takes cost, reason and warning down to a name, a target and — same as
+  // every other rung — the path to the row (critic round 09 PR-0126: `bare`
+  // used to fire for the lead a rung early, at density 5, which is now only
+  // the badge's rung; critic round 13, PR-0126 narrowed: the last rung was
+  // still taking the menu chip down with everything else, on the phone tip and
+  // on any desktop card `hudSafeZones.ts` fits into a narrow "compact" box —
+  // the same density ladder, walked to the same last rung. CHK-004 "say
+  // where": the menu chip now survives it too, same as the runner-up's own bar
+  // line already did).
   const bare = density >= MAX_DENSITY;
   const badge = s.source === 'tactic' && density < 5 ? '<span class="mad__badge">Guide’s pick</span>' : '';
   const menu = s.menu ? `<span class="mad__stat">in ${escapeHtml(s.menu)}</span>` : '';
   const showEffect = !bare && (alt ? density < 1 : density < 2);
   const trimStats = alt ? density >= 2 : density >= 4;
-  const barStats = alt && density >= 3;
+  const barStats = (alt && density >= 3) || bare;
   const showReason = !bare && (alt || density < 4);
   return [
     `<article class="mad__move${alt ? ' mad__move--alt' : ''}">`,
     `<p class="mad__line">${rankChip}<span class="mad__label">${escapeHtml(s.label)}</span>${target}${badge}</p>`,
-    bare ? '' : barStats ? (menu ? `<p class="mad__stats">${menu}</p>` : '') : statsHtml(s, menu, trimStats),
+    barStats ? (menu ? `<p class="mad__stats">${menu}</p>` : '') : statsHtml(s, menu, trimStats),
     showEffect && s.effect ? `<p class="mad__effect">${escapeHtml(s.effect)}</p>` : '',
     showReason && s.reason ? `<p class="mad__why">${escapeHtml(s.reason)}.</p>` : '',
     !bare && s.warning ? `<p class="mad__warn">${escapeHtml(s.warning)}.</p>` : '',
