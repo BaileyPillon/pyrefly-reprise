@@ -77,6 +77,9 @@ export const paintedFragmentShader = /* glsl */ `
   uniform vec2 texel;
   uniform float alphaCut;
   uniform float edgeFade;
+  // 1 = the feather runs round the whole plane; 0 = sides and top only, the
+  // base left whole for a figure standing on it (PR-0164).
+  uniform float edgeFadeBase;
 
   varying vec2 vUv;
 
@@ -95,6 +98,7 @@ export const paintedFragmentShader = /* glsl */ `
     // properly cropped art never needs it.
     if (edgeFade > 0.0) {
       vec2 d = abs(vUv - 0.5) * 2.0;
+      if (vUv.y < 0.5) d.y *= edgeFadeBase;
       float box = max(d.x, d.y);
       a *= 1.0 - smoothstep(1.0 - edgeFade, 1.0, box);
     }
