@@ -1,0 +1,306 @@
+[
+  {
+    "name": "ch5-link5-1600x900",
+    "chapterId": "ffx2-vegnagun-shuyin link 5",
+    "intent": {
+      "phone": false,
+      "panelHidden": false,
+      "text": "SHUYIN\nACTS NEXT\n\nTerror of Zanarkand\nSCRIPTED\n\nPhysical non-elemental damage to one girl - 9 hits - ignores Defense.\n\nDAMAGE\nYUNA\n2,101\nKO\n\n9 hits each.",
+      "move": "Terror of Zanarkand",
+      "conf": "Scripted",
+      "confVisible": true,
+      "head": "Damage",
+      "random": false,
+      "rows": [
+        {
+          "text": "Yuna2,101KO",
+          "visible": true,
+          "lethal": true
+        }
+      ],
+      "odds": [],
+      "rect": {
+        "x": 1029.390625,
+        "y": 74.59375,
+        "w": 375,
+        "h": 197.96875
+      }
+    },
+    "guide": "Vegnagun\n\nNEXT\n\nYUNA\n\nLight Curtain\n→\nthe party\n\nProtect is the one mitigation Terror of Zanarkand still respects — it ignores Defense, but it is Protect-reducible.\n\nWATCH\n\nTerror of Zanarkand\nTHIS TURN\n\nSHUYIN\n\nRULES\nPick a command at once\nG\nHIDE GUIDE",
+    "log": [
+      [
+        0,
+        "atb",
+        "",
+        ""
+      ],
+      [
+        1,
+        "atb",
+        "",
+        ""
+      ],
+      [
+        2,
+        "turn-start",
+        "shuyin",
+        ""
+      ],
+      [
+        3,
+        "action-start",
+        "shuyin-attack",
+        ""
+      ],
+      [
+        4,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        5,
+        "damage",
+        "yuna",
+        313
+      ],
+      [
+        6,
+        "action-end",
+        "shuyin",
+        ""
+      ],
+      [
+        7,
+        "atb",
+        "",
+        ""
+      ],
+      [
+        8,
+        "script-trigger",
+        "shuyin-appears",
+        ""
+      ],
+      [
+        9,
+        "atb",
+        "",
+        ""
+      ],
+      [
+        10,
+        "turn-start",
+        "shuyin",
+        ""
+      ],
+      [
+        11,
+        "charge",
+        "Terror of Zanarkand",
+        ""
+      ],
+      [
+        12,
+        "action-start",
+        "terror-of-zanarkand",
+        ""
+      ],
+      [
+        13,
+        "atb",
+        "",
+        ""
+      ],
+      [
+        14,
+        "atb",
+        "",
+        ""
+      ],
+      [
+        15,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        16,
+        "damage",
+        "yuna",
+        192
+      ],
+      [
+        17,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        18,
+        "damage",
+        "yuna",
+        298
+      ],
+      [
+        19,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        20,
+        "damage",
+        "yuna",
+        314
+      ],
+      [
+        21,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        22,
+        "damage",
+        "yuna",
+        313
+      ],
+      [
+        23,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        24,
+        "damage",
+        "yuna",
+        341
+      ],
+      [
+        25,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        26,
+        "damage",
+        "yuna",
+        324
+      ],
+      [
+        27,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        28,
+        "damage",
+        "yuna",
+        357
+      ],
+      [
+        29,
+        "chain",
+        "yuna",
+        ""
+      ],
+      [
+        30,
+        "ko",
+        "yuna",
+        ""
+      ],
+      [
+        31,
+        "action-end",
+        "shuyin",
+        ""
+      ],
+      [
+        32,
+        "atb",
+        "",
+        ""
+      ],
+      [
+        33,
+        "atb",
+        "",
+        ""
+      ]
+    ],
+    "eng": {
+      "hp": {
+        "yuna": [
+          0,
+          false,
+          "null"
+        ],
+        "rikku": [
+          2917,
+          true,
+          "null"
+        ],
+        "paine": [
+          2734,
+          true,
+          "null"
+        ],
+        "shuyin": [
+          23850,
+          true,
+          "null"
+        ]
+      },
+      "intent": [
+        "Attack",
+        "likely",
+        "[{\"abilityId\":\"shuyin-attack\",\"label\":\"Attack\",\"percent\":92,\"rolled\":true},{\"abilityId\":null,\"label\":\"No action\",\"percent\":8}]"
+      ],
+      "snap": "{\"speed\":\"normal\",\"timeScale\":1,\"auto\":false,\"aborted\":false,\"phase\":\"play:ko\",\"awaitingMenu\":true,\"played\":4838,\"lastEvents\":[{\"seq\":18,\"type\":\"damage\",\"ms\":191},{\"seq\":19,\"type\":\"chain\",\"ms\":0},{\"seq\":20,\"type\":\"damage\",\"ms\":197},{\"seq\":21,\"type\":\"chain\",\"ms\":0},{\"seq\":22,\"type\":\"damage\",\"ms\":200},{\"seq\":23,\"type\":\"chain\",\"ms\":0},{\"seq\":24,\"type\":\"damage\",\"ms\":198},{\"seq\":25,\"type\":\"chain\",\"ms\":0},{\"seq\":26,\"type\":\"damage\",\"ms\":193},{\"seq\":27,\"type\":\"chain\",\"ms\":0},{\"seq\":28,\"type\":\"damage\",\"ms\":191},{\"seq\":29,\"type\":\"chain\",\"ms\":0}],\"lastCommand\":{\"kind\":\"ability\",\"id\":\"x2-dark-knight-darkness\",\"targets\":[\"vegnagun-head\"]}}"
+    },
+    "errors": []
+  },
+  {
+    "name": "ch5-link5-1600x900-settled",
+    "intent": {
+      "phone": false,
+      "panelHidden": false,
+      "text": "SHUYIN\nACTS NEXT\n\nAttack\nMOST LIKELY 92%\n\nPhysical non-elemental damage to one girl.\n\nDAMAGE · RANDOM TARGET\nRIKKU\n158–178\n6% HP\nPAINE\n157–177\n6% HP\n\nLands on one of these, picked when it acts.\n\nODDS\nAttack\n92%\nNo action\n8%",
+      "move": "Attack",
+      "conf": "Most likely 92%",
+      "confVisible": true,
+      "head": "Damage · random target",
+      "random": true,
+      "rows": [
+        {
+          "text": "Rikku158–1786% HP",
+          "visible": true,
+          "lethal": false
+        },
+        {
+          "text": "Paine157–1776% HP",
+          "visible": true,
+          "lethal": false
+        }
+      ],
+      "odds": [
+        "Attack92%",
+        "No action8%"
+      ],
+      "rect": {
+        "x": 41.390625,
+        "y": 605.59375,
+        "w": 375,
+        "h": 281.40625
+      }
+    },
+    "guide": "Vegnagun\n\nNEXT\n\nRIKKU\n\nMega Phoenix\n→\nthe party\n\nA party-wide answer, because the hit that got here was party-wide — Nemo Ante Mortem Beatus fires at every 20% HP milestone the Head crosses.\n\nWATCH\n\nSHUYIN\n\nRULES\nPick a command at once\nG\nHIDE GUIDE",
+    "phase": "play:action-start",
+    "awaiting": true
+  }
+]

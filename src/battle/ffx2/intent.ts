@@ -57,6 +57,7 @@ export interface IntentBranch {
   abilityId: AbilityId | null;
   label: string;
   percent: number;
+  rolled?: boolean; // PR-0123: the branch `moveName` names
 }
 
 /** A live telegraph, and what it is counting down to. */
@@ -506,7 +507,12 @@ export function predictFFX2EnemyIntent(
   const base = env.rng.saveState();
   const abilities = chainRegistries(env.abilities, defaultAbilities);
 
-  const first = dryRun(env, enemyId, base);
+  // PR-0123: a command already on the purple charge bar is the move this enemy
+  // makes next, committed (`gauges.ts#beginCharge`). Dry-running the *next*
+  // decision instead put "No action" over a Terror of Zanarkand the guide was
+  // correctly calling for this turn. FFX-2 only: FFX's CTB has no charge bar.
+  const committed = unit.atb.charging?.commandRef ?? null;
+  const first: DryRun | null = committed ? { command: committed, events: [] } : dryRun(env, enemyId, base);
   if (!first) return null;
 
   const defFor = (command: Command | null): AbilityDef | undefined => {
@@ -514,7 +520,7 @@ export function predictFFX2EnemyIntent(
     return abilities.get(command.id);
   };
 
-  const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null }>();
+  const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null; key: string }>();
   const keyOf = (run: DryRun): string => {
     const def = defFor(run.command);
     const charge = run.events.find((e) => e.type === 'charge') as { name: string } | undefined;
@@ -533,12 +539,13 @@ export function predictFFX2EnemyIntent(
     }
     tally.set(key, {
       count: 1,
-      label: def?.name ?? (run.command ? run.command.kind : 'no action'),
+      label: def?.name ?? (run.command ? run.command.kind : 'No action'),
       abilityId: def?.id ?? null,
+      key,
     });
   };
   record(first);
-  for (let i = 1; i < samples; i++) {
+  for (let i = 1; i < (committed ? 1 : samples); i++) {
     const run = dryRun(env, enemyId, (base + Math.imul(i, 0x9e3779b1)) >>> 0);
     if (run) record(run);
   }
@@ -550,6 +557,7 @@ export function predictFFX2EnemyIntent(
     abilityId: t.abilityId,
     label: t.label,
     percent: percents[i]!,
+    ...(t.key === firstKey ? { rolled: true } : {}),
   }));
   const confidence: EnemyIntent['confidence'] = tally.size <= 1 ? 'scripted' : 'likely';
 

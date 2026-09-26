@@ -93,6 +93,8 @@ export interface IntentBranch {
   label: string;
   /** 0–100, rounded. Shares sum to 100 up to rounding. */
   percent: number;
+  /** PR-0123: the branch `moveName` names (the badge reads its percent). */
+  rolled?: boolean;
 }
 
 /** A live telegraph, and what it is counting down to. */
@@ -549,7 +551,7 @@ export function predictEnemyIntent(
   // Sampling: one run per RNG position, tallied by branch. The stride is the
   // golden-ratio constant mulberry32 already advances its state by, so the
   // samples are spread across the stream rather than clustered behind it.
-  const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null }>();
+  const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null; key: string }>();
   const firstKey = branchKey(ctx, first);
   const sampledTargets: CombatantId[][] = []; // PR-0153: whom each sample of this move aimed at
   const record = (run: DryRun): void => {
@@ -563,8 +565,9 @@ export function predictEnemyIntent(
     }
     tally.set(key, {
       count: 1,
-      label: def?.name ?? (run.command ? run.command.kind : 'no action'),
+      label: def?.name ?? (run.command ? run.command.kind : 'No action'),
       abilityId: def?.id ?? null,
+      key,
     });
   };
   record(first);
@@ -580,6 +583,7 @@ export function predictEnemyIntent(
     abilityId: t.abilityId,
     label: t.label,
     percent: percents[i]!,
+    ...(t.key === firstKey ? { rolled: true } : {}),
   }));
   const confidence: EnemyIntent['confidence'] = tally.size <= 1 ? 'scripted' : 'likely';
 

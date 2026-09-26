@@ -97,6 +97,8 @@ export interface IntentChargeView {
 export interface IntentBranchView {
   label: string;
   percent: number;
+  /** PR-0123: set on the branch `moveName` names, so the badge reads its own odds. */
+  rolled?: boolean;
 }
 
 /** PR-0153: a rolled victim — every candidate, each estimated. */
@@ -785,7 +787,11 @@ function confidenceHtml(view: IntentView): string {
   if (view.confidence === 'scripted') {
     return '<span class="eint__conf eint__conf--scripted">Scripted</span>';
   }
-  const match = view.branches.find((b) => b.label === view.moveName) ?? view.branches[0];
+  // Round 13: the label match failed live on case alone ("No action" vs the
+  // engine's "no action") and fell back to the top branch, so the engines now
+  // mark the rolled branch outright; the label match is the fallback.
+  const named = view.moveName.toLowerCase();
+  const match = view.branches.find((b) => b.rolled === true) ?? view.branches.find((b) => b.label.toLowerCase() === named) ?? view.branches[0];
   if (!match) return '';
   const isTop = view.branches[0] === match;
   const word = match.percent < 50 ? 'Possible' : isTop ? 'Most likely' : 'Likely';
