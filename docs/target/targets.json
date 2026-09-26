@@ -1060,6 +1060,24 @@
             "undecided": [],
             "inferred": []
           }
+        },
+        {
+          "label": "PR-0201 phone framing of Chapter XI, Road to the Farplane (FFX-2 only)",
+          "src": "docs/concepts/phone-2026-09-26/sheet-pr0201.jpg",
+          "state": "verdict",
+          "delivery": "not-scheduled",
+          "game": "ffx2",
+          "gameNote": "FFX-2 only: Chapter XI's Road scene (src/scenes/road-to-the-farplane.ts). Option C alone would touch the shared phone HUD.",
+          "note": "docs/concepts/phone-2026-09-26/README.md. At 390x844 the Road's wide formation does not fit the 390 px slice, and Yuna or Mindy falls out (round 13, PR-0201). Options: A pull back on the phone (72% / 60% figure size, recommended), B close ranks on the phone (full size, crowded), C party first with edge tabs (fails CHK-011 as written). Awaiting Bailey."
+        },
+        {
+          "label": "PR-0001 phone Victory and Defeat results (both)",
+          "src": "docs/concepts/phone-2026-09-26/sheet-pr0001.jpg",
+          "state": "verdict",
+          "delivery": "not-scheduled",
+          "game": "both",
+          "gameNote": "Both: ResultsScreen is shared; each game keeps its accent (FFX gold, FFX-2 pink), and a defeat has none.",
+          "note": "docs/concepts/phone-2026-09-26/README.md. Today the results are the 640x360 stage scaled to 390 px (text about 3 px). Options: A stacked page that scrolls under a pinned dock, B full-bleed painting with an ink sheet on one screen (recommended), C compact card with the party folded. Awaiting Bailey."
         }
       ]
     },

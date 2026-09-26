@@ -1,0 +1,178 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Results phone mockup</title>
+<style>
+@font-face{font-family:'Cormorant Garamond';src:url('../../../public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2');font-style:italic;font-weight:300 700}
+@font-face{font-family:'Chakra Petch';src:url('../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2');font-weight:700}
+@font-face{font-family:'Rajdhani';src:url('../../../public/fonts/rajdhani/Rajdhani-Bold-700.woff2');font-weight:700}
+@font-face{font-family:'Exo 2';src:url('../../../public/fonts/exo2/Exo2-Variable-wght.woff2');font-weight:100 900}
+:root{--ink:#0b0a12;--paper:#f4f1e8;--acc:#e3b94a;--acc-paper:#b8862a;--sky:#7fc6e8}
+.ffx2{--acc:#f7b6d9;--acc-paper:#b8437e}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:390px;background:var(--ink)}
+body{font-family:'Exo 2',sans-serif;color:var(--ink);position:relative;overflow-x:hidden}
+.serif{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700}
+.lab{font-family:'Chakra Petch',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.2em;font-size:14px}
+.num{font-family:'Rajdhani',sans-serif;font-weight:700}
+.chip{display:inline-block;background:var(--ink);color:var(--paper);padding:6px 12px;border:1px solid rgba(244,241,232,.35)}
+.defeat{--acc:#f4f1e8;--acc-paper:#9d97ab}
+/* grain */
+.grain::after{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+/* ---------- shared bits ---------- */
+.vcap{position:absolute;right:10px;top:70px;writing-mode:vertical-rl;color:var(--paper);font-size:14px;letter-spacing:.14em;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.title{font-size:84px;line-height:.9;letter-spacing:-.03em}
+.uline{height:5px;width:190px;background:var(--acc);margin-top:6px}
+.tag{display:inline-block;background:var(--ink);color:var(--acc);padding:4px 10px;font-size:14px;letter-spacing:.2em;transform:skewX(-12deg)}
+.ffx2 .tag{transform:skewX(12deg)}
+.btn{display:flex;align-items:center;justify-content:center;height:58px;font-family:'Chakra Petch';font-weight:700;letter-spacing:.24em;font-size:17px;text-transform:uppercase;transform:skewX(-12deg);box-shadow:0 8px 20px rgba(0,0,0,.45)}
+.ffx2 .btn{transform:skewX(12deg)}
+.btn span{transform:skewX(12deg);white-space:nowrap}
+.dock .btn:nth-child(2){letter-spacing:.1em;font-size:16px}
+.capline{font-size:14px;letter-spacing:.14em;color:var(--acc-paper);margin:10px 0 2px}
+.defeat .capline{color:#9d97ab}
+.btn.pri{background:var(--acc);color:var(--ink)}
+.btn.paper{background:var(--paper);color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--paper);border:2px solid rgba(244,241,232,.55)}
+.face{width:44px;height:44px;object-fit:cover;object-position:50% 12%;border:2px solid var(--paper);flex:none}
+.defeat .face{filter:grayscale(1) brightness(.75)}
+/* ---------- A: stacked page ---------- */
+.A .band{position:relative;height:300px;overflow:hidden;clip-path:polygon(0 0,100% 0,100% 84%,0 100%)}
+.A .band img{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.A.defeat .band img{object-fit:contain;object-position:50% 20%;filter:grayscale(1) brightness(.5);background:#15131c}
+.A .stripe{position:absolute;left:0;right:0;top:246px;height:60px;background:var(--acc);clip-path:polygon(0 94%,100% 0,100% 8%,0 100%)}
+.A .chip{position:absolute;left:16px;top:16px}
+.A .sheet{background:var(--paper);padding:10px 20px 110px;margin-top:-30px;min-height:600px}
+.A.defeat .sheet{background:#17151f;color:var(--paper)}
+.A .ledger{margin-top:18px}
+.A .row{display:grid;grid-template-columns:116px 1fr auto;align-items:baseline;border-bottom:2px solid var(--ink);padding:9px 0 6px}
+.A.defeat .row{border-color:#3a3646}
+.A .row .lab{color:var(--acc-paper)}
+.A .row .v{font-size:30px}
+.A .row .v.items{font-family:'Cormorant Garamond';font-style:italic;font-size:24px}
+.A .row .d{font-size:14px;color:#6d6878;letter-spacing:.14em}
+.A.defeat .row .d{color:#9d97ab}
+.A .party{margin-top:16px}
+.A .mem{display:flex;align-items:center;gap:12px;padding:7px 0}
+.A .mem .n{font-size:22px;line-height:1}
+.A .mem .dt{font-size:14px;color:#6d6878;letter-spacing:.06em;margin-top:3px;white-space:nowrap}
+.A.defeat .mem .dt{color:#9d97ab}
+.A .mem .g{margin-left:auto;font-size:22px}
+.A .mem .g small{font-family:'Chakra Petch';font-size:14px;color:var(--acc-paper);letter-spacing:.14em;margin-left:3px}
+.A .dock{position:fixed;left:0;right:0;bottom:0;padding:14px 22px 20px;background:linear-gradient(to top,rgba(11,10,18,.96) 70%,rgba(11,10,18,0));display:flex;gap:14px}
+.A .dock .btn{flex:1}
+.A .more{position:fixed;right:16px;bottom:94px;background:var(--ink);color:var(--paper);font-size:14px;padding:5px 12px}
+/* ---------- B: full-bleed painting + ink sheet ---------- */
+.B{height:844px;overflow:hidden}
+.B .bleed{position:absolute;inset:0}
+.B .bleed img{width:100%;height:100%;object-fit:cover;object-position:50% 0%}
+.B.defeat .bleed img{object-fit:cover;object-position:50% 30%;filter:grayscale(1) brightness(.45)}
+.B .shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(11,10,18,0) 30%,rgba(11,10,18,.55) 50%,rgba(11,10,18,.9) 62%)}
+.B .chip{position:absolute;left:16px;top:16px}
+.B .head{position:absolute;left:20px;top:372px;color:var(--paper)}
+.B .head .title{text-shadow:0 4px 18px rgba(0,0,0,.6)}
+.B .head .tag{margin-left:10px;vertical-align:middle}
+.B .sheet{position:absolute;left:0;right:0;top:484px;bottom:0;padding:18px 18px 0;color:var(--paper)}
+.B .tallies{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.B .t{background:rgba(11,10,18,.84);border-left:4px solid var(--acc);padding:7px 10px 6px}
+.B .t .lab{color:var(--acc);font-size:14px}
+.B .t .v{font-size:28px;line-height:1.05}
+.B .t .v.items{font-family:'Cormorant Garamond';font-style:italic;font-size:22px;line-height:1.3}
+.B .t .d{font-size:14px;color:#b9b3c6;letter-spacing:.1em}
+.B .chips{display:grid;gap:8px;margin-top:10px}
+.B .chips.n3{grid-template-columns:repeat(3,1fr)}
+.B .chips.n4{grid-template-columns:repeat(2,1fr)}
+.B .pc{display:grid;grid-template-columns:34px 1fr;gap:4px 8px;align-items:center;background:rgba(11,10,18,.62);padding:6px 8px}
+.B .pc .face{width:34px;height:34px}
+.B .pc .n{font-size:19px;line-height:1}
+.B .pc .g{font-size:17px;white-space:nowrap;grid-column:1/3}
+.B .pc .g small{font-family:'Chakra Petch';font-size:14px;color:var(--acc);letter-spacing:.1em}
+.B .dock{position:absolute;left:22px;right:22px;bottom:22px;display:flex;gap:14px}
+.B .dock .btn{flex:1}
+/* ---------- C: compact card, party folded ---------- */
+.C{min-height:844px;background:var(--paper)}
+.C.defeat{background:#17151f;color:var(--paper)}
+.C .band{position:relative;height:210px;overflow:hidden;clip-path:polygon(0 0,100% 0,100% 78%,0 100%)}
+.C .band img{width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+.C.defeat .band img{filter:grayscale(1) brightness(.45)}
+.C .chip{position:absolute;left:16px;top:14px}
+
+.C .body{padding:6px 22px 0}
+.C .title{font-size:92px}
+.C .line{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.C .line .k{color:var(--acc-paper);font-size:14px}
+.C .line .v{font-size:40px;line-height:1}
+.C .line .v.items{font-family:'Cormorant Garamond';font-style:italic;font-size:28px;line-height:1.3}
+.C .fold{margin-top:22px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:8px;padding:10px 0;min-height:56px}
+.C.defeat .fold{border-color:#3a3646}
+.C .fold .face{width:36px;height:36px}
+.C .fold .lab{margin-left:auto;color:var(--acc-paper)}
+.C .dock{position:absolute;left:22px;right:22px;bottom:24px;display:flex;gap:14px}
+.C .dock .btn{flex:1}
+</style></head>
+<body class="grain">
+<div id="root"></div>
+<script>
+const q = new URLSearchParams(location.search);
+const V = q.get('v') || 'A';
+const O = q.get('o') || 'victory';
+const ART = '../../../public/art/';
+const DATA = window.__DATA || {
+  victory: {
+    game: 'ffx2', chip: 'RESULTS · 12:36', caption: 'ROAD TO THE FARPLANE · CLEARED', title: 'Victory', tag: 'NEW BEST',
+    hero: 'portraits/yuna-x2.png',
+    ledger: [['EXP', '6,000', '×3 PARTY'], ['AP', '15', 'PER DRESSPHERE'], ['GIL', '2,000', ''], ['ITEMS', 'Tetra Band', '', 'items']],
+    party: [['Yuna', 'portraits/yuna-x2.png', 'WHITE MAGE · MASTERED', '+6,000', 'EXP'], ['Rikku', 'portraits/rikku-x2.png', 'DARK KNIGHT · MASTERED', '+6,000', 'EXP'], ['Paine', 'portraits/paine.png', 'DARK KNIGHT · MASTERED', '+6,000', 'EXP']],
+    buttons: [['CONFIRM ▸', 'pri']],
+  },
+  defeat: {
+    game: 'ffx', chip: 'RESULTS · 0:03', caption: 'INSIDE SIN — THE GARDEN OF PAIN · FELL', title: 'Defeat', tag: '',
+    hero: 'characters/tidus/hurt.png',
+    ledger: [['TURNS', '29', ''], ['ATTEMPTS', '1', ''], ['BEST', '—', 'NEVER CLEARED']],
+    party: [['Tidus', 'portraits/tidus.png', 'S.LV 180 · 0/22,000 AP', '', ''], ['Yuna', 'portraits/yuna.png', 'S.LV 175 · 0/22,000 AP', '', ''], ['Auron', 'portraits/auron.png', 'S.LV 180 · 0/22,000 AP', '', '']],
+    buttons: [['RETRY', 'paper'], ['CHAPTER SELECT', 'ghost']],
+  },
+};
+const d = DATA[O];
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+const root = document.getElementById('root');
+const cls = [V, d.game === 'ffx2' ? 'ffx2' : 'ffx', O === 'defeat' ? 'defeat' : ''].join(' ');
+document.body.className += ' ' + cls;
+const btns = d.buttons.map(([t, k]) => `<div class="btn ${k}"><span>${esc(t)}</span></div>`).join('');
+const tag = d.tag ? `<span class="tag lab">${esc(d.tag)}</span>` : '';
+if (V === 'A') {
+  root.innerHTML = `
+  <div class="band"><img src="${ART + d.hero}"><div class="chip lab">${esc(d.chip)}</div></div>
+  <div class="sheet">
+    <div class="capline lab">${esc(d.caption)}</div>
+    <div class="title serif">${esc(d.title)}</div>
+    <div style="display:flex;align-items:center;gap:12px"><div class="uline"></div>${tag}</div>
+    <div class="ledger">${d.ledger.map(([k, v, dd, x]) => `<div class="row"><span class="lab">${esc(k)}</span><span class="v num ${x || ''}">${esc(v)}</span><span class="d lab">${esc(dd)}</span></div>`).join('')}</div>
+    <div class="party">${d.party.map(([n, f, dt, g, u]) => `<div class="mem"><img class="face" src="${ART + f}"><div><div class="n serif">${esc(n)}</div><div class="dt lab">${esc(dt)}</div></div>${g ? `<div class="g num">${esc(g)}<small>${esc(u)}</small></div>` : ''}</div>`).join('')}</div>
+  </div>
+  <div class="dock">${btns}</div>`;
+  if (document.documentElement.scrollHeight > 860) root.insertAdjacentHTML('beforeend', '<div class="more lab">▾ MORE BELOW</div>');
+} else if (V === 'B') {
+  root.innerHTML = `
+  <div class="bleed"><img src="${ART + (d.bleed || d.hero)}"></div><div class="shade"></div>
+  <div class="chip lab">${esc(d.chip)}</div><div class="vcap lab">${esc(d.caption)}</div>
+  <div class="head"><span class="title serif">${esc(d.title)}</span>${tag}<div class="uline"></div></div>
+  <div class="sheet">
+    <div class="tallies">${d.ledger.map(([k, v, dd, x]) => `<div class="t"><div class="lab">${esc(k)}</div><div class="v num ${x || ''}">${esc(v)}</div>${dd ? `<div class="d lab">${esc(dd)}</div>` : ''}</div>`).join('')}</div>
+    <div class="chips n${d.party.length}">${d.party.map(([n, f, dt, g, u]) => `<div class="pc"><img class="face" src="${ART + f}"><div class="n serif">${esc(n)}</div>${g ? `<div class="g num">${esc(g)} <small>${esc(u)}</small></div>` : `<div class="g lab" style="font-size:14px;color:#b9b3c6">${esc(dt.split(' · ')[0])}</div>`}</div>`).join('')}</div>
+  </div>
+  <div class="dock">${btns}</div>`;
+} else {
+  const heads = d.ledger.slice(0, 4);
+  root.innerHTML = `
+  <div class="band"><img src="${ART + (d.bleed || d.hero)}"><div class="chip lab">${esc(d.chip)}</div></div>
+  <div class="body">
+    <div class="capline lab">${esc(d.caption)}</div>
+    <div class="title serif">${esc(d.title)}</div>
+    <div style="display:flex;align-items:center;gap:12px"><div class="uline"></div>${tag}</div>
+    <div class="line">${heads.map(([k, v, dd, x]) => `<div><div class="k lab">${esc(k)}</div><div class="v num ${x || ''}">${esc(v)}</div></div>`).join('')}</div>
+    <div class="fold">${d.party.map(([n, f]) => `<img class="face" src="${ART + f}">`).join('')}<span class="lab">PARTY ▾</span></div>
+  </div>
+  <div class="dock">${btns}</div>`;
+}
+</script>
+</body></html>
