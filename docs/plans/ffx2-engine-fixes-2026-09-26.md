@@ -169,3 +169,92 @@ the repo, deleted afterwards): the unmodified engine first, then with this branc
 `src/battle/ffx2` patch applied. It used that branch's own driver (`denOfWoeDrive.ts`), its shipped
 kit and line, 200 seeds, and within 3 / 5 retried from Baralai, as its shipped bench does. Once both
 branches are on main, re-run `den-of-woe-shipped-bench.test.ts`.
+
+## 8. Independent check, 2026-09-26 (a separate agent that did not build this branch)
+
+**Game case: FFX-2 only.** Checked branch head `71974277` against main `ea05f877`. Every number
+below was re-run, none was copied. The runs used scratch exports on D: (`git archive` of
+`71974277`, `ea05f877` and `79434a56`), and those exports are deleted. Nothing was pushed or
+deployed. NOW.md, critic/ and the main tree were not touched.
+
+### Verdict
+
+- **The IC-2 fix is right and goes no further than the sources.** Hit `t` of an all-target move
+  now belongs to `pool[t]`, taken once when the action starts. A target KO'd partway is skipped,
+  and nothing is redirected. Random-target and single-target moves are unchanged. This matches
+  `research/ffx2-combat-core.md` §9.1. Skipping, rather than redirecting, when a target dies
+  partway is correctly labelled our reading.
+- **Acta Est Fabula on the Redoubts is sourced, and no boss number moved.** §3.4 says "both
+  Redoubts", and the Head's script already names exactly the two Redoubts (`ai/vegnagun-head.ts`).
+  The switch filters only on those ids. No power, HP, stat or timer changed.
+- **IC-1 ships OFF, and the sheet says honestly that it is unsourced.** The code change is safe
+  with the switch off: `computeDamage` takes `chainCount` as an argument and is pure, so moving
+  the `chain` emit after it changes no default log. Chapter IV's 400 logs are unchanged at both
+  speeds, which confirms this.
+- **Blocker: the full unit suite is not green, and the change causes it.** See B1 below.
+
+### Re-run results
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | clean |
+| `tools/orphans.mjs` | 24, the same as `ea05f877` |
+| `ffx2-all-target-hits.test.ts` on the branch | 11 / 11 pass |
+| The same file with `targetForHit` reverted to the old wrap (scratch copy) | the 3 IC-2 cases fail: Ultima `[2, 1, 0]` twice (boss side and party side), Sword Dance `[4, 1, 1]`. The other 8 pass. Restored afterwards, and the copy is byte-identical to the branch |
+| Full vitest `--testTimeout=60000` | 429 passed, 4 skipped, 8,016 tests, **exit 1**: `audio-fade-units.test.ts` never finishes (see B1) |
+| Bench, before (`ea05f877`) | IV 200/200, 200/200 · V 159, 187 · VI 158, 194 · XI 159, 174 · XIII 16, 15. **Exact** |
+| Bench, after (branch) | IV 200, 200 · V 175, 188 · VI 159, 195 · XI 157, 174 · XIII 16, 14. **Exact** |
+| `ic2-only` arm (Acta's old target set) | V 0 / 200 at both speeds. **Exact** |
+| Acta on the Redoubts with the old wrap (scratch revert of `targetForHit` only) | V 175 human, 186 bench. **Exact** |
+| Event logs that move vs `ea05f877` (per-seed hashes compared) | IV 0 / 0, V 197 / 200, VI 54 / 27, XI 176 / 184, XIII 34 / 29. **Exact** |
+| IC-1 switch arm | IV, VI, XI and XIII logs are identical to the built arm. **V's wins are identical, but 13 / 6 of V's logs move** (human / bench; average minutes 4.85 -> 4.86 at bench). Section 4's "identical rows" holds for wins only |
+| XV (`79434a56`, and the same with this branch's `src/battle/ffx2` patch; shipped line, retry from Baralai) | human 39 -> 34, within 3 115 -> 102, within 5 160 -> 149; bench 102 -> 94, within 5 199 -> 196. With the switch on: 48, 133 / 171; bench 112. **Exact** |
+| `strategy-ffx2-bahamut` routes, base -> branch | heal-only 27 / 30 -> 1 / 30. Shell and Magic Break stay 30 / 30. Mash seed 1 goes from a defeat with 3,718 HP left on Bahamut to undecided with 5,408 left. **Exact** |
+
+### Blocker
+
+- **B1. `audio-fade-units.test.ts` runs out of memory on this branch. It passes on main in about
+  40 ms.** The builder's notes call this crash "unrelated test-runner noise", but it is caused
+  by the change. The file's first test drives the real Chapter IV fight (`ffx2-bahamut`, seed 1)
+  through `BattlePresenter` with no HUD. With no HUD the presenter picks `firstEnabled` for every
+  command, and the loop has no decision cap. On `ea05f877` the fight ends in a defeat after about
+  170 decisions: Mega Flare's wrapped hit killed Yuna. On the branch, Mega Flare hits each girl
+  once, so Rikku and Paine fall and the White Mage Yuna is left alone. Mega Flare does about 527
+  to her (MDef 132), and Bahamut spends his other turns on the countdown. Once her MP is gone,
+  Vigor (about 340 a cast) keeps her up forever. Probe on seeds 1 to 5: no outcome after 20,000
+  decisions, 3,368 Vigor casts, and Bahamut still on 4,924 to 5,436 HP. The event log grows until
+  the worker hits the 4 GB heap limit and exits with code 134. With `targetForHit` reverted, the
+  file passes again, so the IC-2 fix alone is the cause.
+  - The run exits 1, so `npm test` is red, and "full `npm test` before any push" (AGENTS.md,
+    "Done means") fails. The summary line "429 passed" hides it: 429 + 4 skipped is 433 of 434
+    files.
+  - The engine fix itself is not wrong. This is the same lone White Mage the sheet already
+    describes for the heal-only route. But the branch needs one of the following before it merges:
+    (a) the test drives a fight that reaches a decision (a strategy, a different chapter or seed,
+    or a cap on the presenter loop in the test), or (b) Bailey rules on the stalemate first.
+    The shipped line and the e2e specs play `intended`, which still wins 200 / 200, so no player
+    path hangs. `window.__pyrefly.autoBattle('defend' | 'attack' | 'random')` on Chapter IV could
+    run without end. That is a debug path only, and it was not run here.
+
+### Findings that do not block
+
+- **F1.** Section 4 says the IC-1 switch leaves the other chapters "identical rows". That is true
+  of wins, but Chapter V's logs move on 13 human / 6 bench seeds (see the table).
+- **F2.** Add to section 6, for Bailey: under option B, a lone White Mage Yuna cannot be killed by
+  Bahamut, and she cannot kill him without a spherechange. The fight turns into a stalemate the
+  player must break, which the old wrap hid. Whether a lone White Mage outlasts Mega Flare in the
+  real game is unsourced, and it is worth one look in the Steam HD Remaster before anything is
+  built on it.
+- **F3.** `resolve.ts` is 485 lines (it was 469) and `engine.ts` is 636 (it was 634). Both were
+  already over the 400-line house rule, and this branch adds 18 lines.
+- **F4.** Outside this change, not touched: the data layer has a second Acta row,
+  `x2-vegnagun-acta-est-fabula` (`src/data/ffx2/enemies/shuyin-abilities.ts`), with
+  `misses-if-target-alive`. The engine plays its own row, `acta-est-fabula`
+  (`abilities-shuyin.ts`), which carries the new key. If a later change routes the data row
+  into the engine, the Head-heal question comes back in a different form.
+- The re-pinned golden logs (`ffx2-atb-golden` CH5 x2, `ffx2-hit-closes-menu` V and VI seed 3) are
+  covered by the log-movement counts above: CH4 unchanged, CH5 D1500 seed 6 unchanged
+  (`0fa90654a8923b1e`, the same as before). Each re-pin has its reason written in the test. The
+  relaxed assertions in `strategy-ffx2-bahamut` (mash no longer "must reach a decision" or "whole
+  party down") and in `combat-fixes-bench` (a) ch4 "wrong" are explained and match the reproduced
+  runs.
