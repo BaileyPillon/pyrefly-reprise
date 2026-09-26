@@ -3,8 +3,10 @@
 // Labelled FORCED COMMAND in the report.
 import { chromium } from 'playwright';
 import { writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { currentChromiumArgs } from '../../../tools/browser-mode.mjs';
-const OUT = 'D:/pyrefly-iter2-spellfx/docs/screenshots/spellfx-b/';
+const OUT = fileURLToPath(new URL('./', import.meta.url));
+const BASE = process.env.SPELLFX_BASE ?? 'http://127.0.0.1:6050/';
 const PLAN = {
   ffx: { chapter: 'seymour-flux', enemy: 'seymour-flux', ally: 'tidus', spells: ['fire', 'blizzard', 'thunder', 'water', 'holy', 'cure', 'attack'] },
   ffx2: { chapter: 'ffx2-bahamut', enemy: 'bahamut', ally: 'rikku', spells: ['x2-black-mage-fire', 'x2-black-mage-blizzard', 'x2-black-mage-thunder', 'x2-black-mage-water', 'x2-shared-holy', 'x2-white-mage-cure', 'attack'] },
@@ -15,7 +17,7 @@ const report = {};
 const browser = await chromium.launch({ headless: true, args: [...currentChromiumArgs()] });
 const page = await browser.newPage(SZ);
 page.on('console', (m) => { if (m.type() === 'error') console.log('console', m.text().slice(0, 200)); });
-await page.goto('http://127.0.0.1:6050/'); await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 120000 });
+await page.goto(BASE); await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 120000 });
 for (const [game, p] of Object.entries(PLAN)) {
   report[game] = [];
   for (const spell of p.spells) {
