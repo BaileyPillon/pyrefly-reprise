@@ -964,3 +964,8 @@
   color: var(--ig-ink); background: var(--ig-accent);
   padding: 1px 3px; border-radius: 2px;
 }
+
+/* PR-0128 (FFX only): while an Overdrive overlay is open the strategy-guide
+   card steps aside for the actor's OVERDRIVE plate above the slab (the
+   approved Swordplay tile). `overdriveFocus.ts` sets the modifier. */
+.ffxhud.ffxhud--overdrive-open .sgd { visibility: hidden; }

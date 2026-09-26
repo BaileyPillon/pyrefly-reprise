@@ -25,10 +25,12 @@ import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
 import { sensorSteerDx } from './sensorSteer.ts';
+import { partyFaceRects } from './plateFaces.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
+import { withOverdriveFocus } from './overdriveFocus.ts';
 import { INTENT_AVOID_SELECTORS, OMNIS_READOUT_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
@@ -607,7 +609,8 @@ export class FFXBattleHud implements HudPort {
     // outlives its decision" true even for an overlay that threw, or that was
     // abandoned by a strategy racing the menu.
     this.removeMinigameOverlays();
-    return dispatchMinigame(this.stage, kind, params).finally(() => this.removeMinigameOverlays());
+    // PR-0128: the guide card steps aside for the overlay's plate (`overdriveFocus.ts`).
+    return withOverdriveFocus(this.el, () => dispatchMinigame(this.stage, kind, params)).finally(() => this.removeMinigameOverlays());
   }
 
   setVisible(visible: boolean): void {
@@ -785,7 +788,9 @@ export class FFXBattleHud implements HudPort {
     // the figure the name plate hangs off, so the plate can never be printed
     // across the command list's own rows (`TargetCursor.dockFor`).
     const panels = this.panelRects();
-    this.commandMenu.setPanels(panels);
+    // PR-0183: and off the party's faces (`plateFaces.ts`); the field's own
+    // visibility sums below still get the panels alone.
+    this.commandMenu.setPanels([...panels, ...partyFaceRects(this.fieldPartyIds(), (id) => this.targeting?.rect(id) ?? null)]);
     // The cursor drew itself before this call (the selection is published from
     // `TargetCursor.publish`, downstream of `reposition`), so the first frame
     // of a new aim would otherwise dock its plate against the *previous*
@@ -893,6 +898,14 @@ export class FFXBattleHud implements HudPort {
     const dx = sensorSteerDx(home, figure, STAGE.width);
     if (dx === null) el.style.removeProperty('--ffx-sensor-dx');
     else el.style.setProperty('--ffx-sensor-dx', `${Math.round(dx * 10) / 10}px`);
+  }
+
+  /** The party-side fighters on the field now, the aeon too while one is out (the party stays staged beside it). */
+  private fieldPartyIds(): CombatantId[] {
+    const state = this.lastState;
+    if (!state) return [];
+    const ids = state.aeonId ? [...state.activeIds, state.aeonId] : [...state.activeIds];
+    return ids.filter((id) => state.combatants[id]?.alive !== false);
   }
 
   /**
