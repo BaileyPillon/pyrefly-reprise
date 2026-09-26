@@ -11,6 +11,7 @@
  * (CONTRACTS.md, playback rule 4).
  */
 
+import type { ActingAction } from './BattlePresenterSpellFx.ts';
 import type { BattleEvent, CombatantId, ElementId, MessageKind } from '../battle/common/types.ts';
 import { BattleMoments } from './BattleMoments.ts';
 import {
@@ -128,6 +129,8 @@ export interface EventCtx {
   readonly speed: () => PlaybackSpeed;
   /** Mid-battle arrivals revealed but not yet played (`BattlePresenterArrivals.ts`). */
   readonly pendingArrivals: CombatantId[];
+  /** The action on screen, for the spell effects (`BattlePresenterSpellFx.ts`). */
+  acting?: ActingAction | undefined;
 }
 
 export function createEventCtx(

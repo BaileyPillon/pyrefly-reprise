@@ -104,6 +104,8 @@ export class Renderer {
 
   private readonly renderPass: RenderPass;
   private readonly maxPixelRatio: number;
+  /** Drawn after the post chain, straight onto the finished frame (the spell effects, `SpellFxLayer`). */
+  private readonly overlays = new Set<(renderer: WebGLRenderer) => void>();
   private readonly onWindowResize = (): void => this.resize();
   private disposed = false;
 
@@ -284,6 +286,16 @@ export class Renderer {
     const t = this.gradePass.uniforms['time'];
     if (t) t.value = performance.now() / 1000;
     this.composer.render();
+    for (const draw of this.overlays) draw(this.renderer);
+  }
+
+  /**
+   * Draw something over every frame after the post chain: no bloom, no
+   * tilt-shift, no grade. Returns the function that removes it.
+   */
+  addOverlay(draw: (renderer: WebGLRenderer) => void): () => void {
+    this.overlays.add(draw);
+    return () => this.overlays.delete(draw);
   }
 
   dispose(): void {

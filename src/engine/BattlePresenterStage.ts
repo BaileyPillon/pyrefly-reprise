@@ -29,6 +29,8 @@ import { layProneFigures } from './ProneLay.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 import * as SA from './StageAnchors.ts';
+import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
+import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -43,6 +45,8 @@ export interface PaintedStageOptions {
   rim?: { color: number | string; dir: [number, number] };
   /** Mid-battle entrances by combatant id. Defaults to what the scene published (`StageArrivals.ts`). */
   arrivals?: ArrivalDirectors;
+  /** The spell effects' skin, overlay hook, quality tier and flash rules (`spellfx/`). Without `overlay` they never draw. */
+  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash'>;
 }
 
 interface StagedActor {
@@ -111,6 +115,9 @@ export class PaintedStage implements BattleStage {
   private readonly arrivalCleanups = new Map<CombatantId, ArrivalCleanup>();
   /** The rings a figure-less part wears on its parent (Vegnagun's Bulwarks and Redoubts, D-044). */
   private readonly partRings: PartRings;
+  /** The B1 spell effects (option B); `impact` skips the bloom where they carry the hit. */
+  readonly spellFx: SpellFxLayer;
+  private readonly unhookSpellFx: () => void;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
@@ -127,6 +134,9 @@ export class PaintedStage implements BattleStage {
       { color: 0xdff0ff, size: 3.0 },
     );
     opts.scene.add(this.hits);
+    const fx = stageSpellFx({ ...opts.spellFx, canvas: opts.canvas, projectRect: (id) => this.projectRect(id) });
+    this.spellFx = fx.layer;
+    this.unhookSpellFx = fx.unhook;
     this.vfx = this.makeVfxPort();
   }
 
@@ -567,8 +577,10 @@ export class PaintedStage implements BattleStage {
 
     return {
       play: (key, at) => impactAt(at, key, false),
-      impact: (at, o) => impactAt(at, o?.element && o.element !== 'none' ? o.element : 'slash', o?.crit === true),
+      impact: async (at, o) =>
+        this.spellFx.covers(at) ? undefined : impactAt(at, o?.element && o.element !== 'none' ? o.element : 'slash', o?.crit === true),
       screenFlash: (colour, ms) => this.screenFlash(colour, ms),
+      land: (at, o) => this.spellFx.land(at, o),
     };
   }
 
@@ -644,6 +656,7 @@ export class PaintedStage implements BattleStage {
       pinned,
     );
     this.hits.update(dt, this.opts.camera);
+    this.spellFx.update(dt);
   }
 
   setPixelScale(v: number): void {
@@ -682,6 +695,8 @@ export class PaintedStage implements BattleStage {
     this.actors.clear();
     this.partRings.dispose();
     this.hits.dispose();
+    this.unhookSpellFx();
+    this.spellFx.dispose();
     disposeStoneShards(this.opts.scene);
     this.flashEl?.remove();
     this.flashEl = null;
