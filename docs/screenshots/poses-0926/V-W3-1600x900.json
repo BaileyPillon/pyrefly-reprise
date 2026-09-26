@@ -1,0 +1,39 @@
+{
+ "healTopUps": 0,
+ "chapter": "ffx2-vegnagun-shuyin",
+ "numeral": "V-W3",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "results": [
+  {
+   "key": "paine-black-mage/ko",
+   "id": "paine",
+   "art": "paine-black-mage",
+   "pose": "ko",
+   "slotName": "ko",
+   "requested": "ko",
+   "staged": false,
+   "url": "/pyrefly-reprise/art/characters/paine-black-mage/ko.png",
+   "placeholder": false,
+   "fade": 1,
+   "actionKind": "ability",
+   "ability": "Fire",
+   "lastEvent": "chain",
+   "upp": 0.0013160493827160493,
+   "clamped": false,
+   "idleUpp": 0.0016049382716049384,
+   "sidecarScale": 0.82,
+   "refScale": null,
+   "hp": 0,
+   "frame": null,
+   "ratio": 0.82,
+   "file": "D:/Tools/pyrefly-scratch/pose-install-0926/frames/V-W3-1600x900-paine-black-mage-ko.jpg"
+  }
+ ],
+ "missing": [],
+ "debugNotes": [
+  "DEBUG STATE SETUP (labelled): paine HP set to 1 so the next enemy hit KOs her (the ko moment)"
+ ],
+ "errors": [],
+ "http4xx": []
+}

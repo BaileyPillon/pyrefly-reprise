@@ -1,0 +1,874 @@
+{
+ "note": "D-194 install (2026-09-26, FFX-2 only). Pose points: iris-colour centroids seeded by hand (iris.json), overrides and chins checked on gridded crops (over.json); idle points from the 09-25 repair (docs/concepts/art5/installed/rescale/head-measure.json) except paine-gunner and paine-white-mage idles, measured here (the paine-white-mage idle chin re-marked at the jaw: the judge's point sat on the mouth). Ratios are idle/pose, the scale that makes the pose head the idle head size (engine: pose px drawn at scale x idle px). Ko poses were read with the face rotated upright (angle), against the idle beside it. heads-1.jpg and heads-2.jpg show each idle head beside the pose at its installed scale (magenta lines: the idle's eye line and chin).",
+ "poses": {
+  "paine-dark-knight/cast": {
+   "scale": 1.2,
+   "basis": "eye spacing 1.07 is a floor (the idle is turned further, its far eye at the face edge), eye line to chin 1.33 a ceiling (the cast looks down); midpoint.",
+   "readings": {
+    "io": 35.2,
+    "ec": 36.8,
+    "idleIo": 37.5,
+    "idleEc": 49.0,
+    "eyeSpacing": 1.066,
+    "eyeToChin": 1.332,
+    "judge": 1.26
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 307.6145833333333,
+      "y": 153.02083333333334,
+      "n": 96,
+      "w": 13.0,
+      "h": 12.0,
+      "hue": 355
+     },
+     "R": {
+      "x": 338.9102564102564,
+      "y": 169.02564102564102,
+      "n": 78,
+      "w": 11.0,
+      "h": 15.0,
+      "hue": 7
+     },
+     "seedL": [
+      306.75,
+      152.5
+     ],
+     "seedR": [
+      336,
+      168.75
+     ],
+     "chin": [
+      327,
+      196
+     ]
+    },
+    "overrides": {
+     "chin": [
+      328,
+      197.5
+     ]
+    }
+   }
+  },
+  "paine-gunner/attack": {
+   "scale": 1.01,
+   "basis": "eye spacing 0.96 and eye line to chin 1.06 (the lunge turns and lowers her face a little, inflating both); mean.",
+   "readings": {
+    "io": 51.0,
+    "ec": 51.4,
+    "idleIo": 49.0,
+    "idleEc": 54.4,
+    "eyeSpacing": 0.962,
+    "eyeToChin": 1.058,
+    "judge": 1.23
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 276.97202797202794,
+      "y": 149.8006993006993,
+      "n": 286,
+      "w": 25.0,
+      "h": 20.0,
+      "hue": 0
+     },
+     "R": {
+      "x": 327.34831460674155,
+      "y": 157.5430711610487,
+      "n": 267,
+      "w": 19.0,
+      "h": 28.0,
+      "hue": 348
+     },
+     "seedL": [
+      276,
+      149
+     ],
+     "seedR": [
+      322.5,
+      157.5
+     ],
+     "chin": [
+      300,
+      190
+     ]
+    },
+    "overrides": {
+     "chin": [
+      305,
+      205
+     ]
+    }
+   }
+  },
+  "paine-gunner/item": {
+   "scale": 1.21,
+   "basis": "eye line to chin 1.21; eye spacing 1.44 is inflated by her three-quarter turn against a frontal idle.",
+   "readings": {
+    "io": 34.1,
+    "ec": 45.1,
+    "idleIo": 49.0,
+    "idleEc": 54.4,
+    "eyeSpacing": 1.436,
+    "eyeToChin": 1.205,
+    "judge": 1.54
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 110.09803921568627,
+      "y": 111.58823529411765,
+      "n": 51,
+      "w": 12.0,
+      "h": 9.0,
+      "hue": 335
+     },
+     "R": {
+      "x": 143.57471264367817,
+      "y": 118.32183908045977,
+      "n": 87,
+      "w": 17.0,
+      "h": 10.0,
+      "hue": 347
+     },
+     "seedL": [
+      113,
+      111.5
+     ],
+     "seedR": [
+      143.5,
+      115
+     ],
+     "chin": [
+      130,
+      152.5
+     ]
+    },
+    "overrides": {
+     "chin": [
+      124,
+      160
+     ]
+    }
+   }
+  },
+  "paine-gunner/victory": {
+   "scale": 1.2,
+   "basis": "eye line to chin 1.20; eye spacing 1.29 is inflated by the turn of her tilted head.",
+   "readings": {
+    "io": 37.9,
+    "ec": 45.5,
+    "idleIo": 49.0,
+    "idleEc": 54.4,
+    "eyeSpacing": 1.295,
+    "eyeToChin": 1.195,
+    "judge": 1.35
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 147.06338028169014,
+      "y": 364.4718309859155,
+      "n": 142,
+      "w": 16.0,
+      "h": 15.0,
+      "hue": 355
+     },
+     "R": {
+      "x": 182.3625,
+      "y": 378.1875,
+      "n": 80,
+      "w": 15.0,
+      "h": 12.0,
+      "hue": 353
+     },
+     "seedL": [
+      149,
+      367.5
+     ],
+     "seedR": [
+      181.5,
+      380
+     ],
+     "chin": [
+      154,
+      412.5
+     ]
+    },
+    "overrides": {
+     "chin": [
+      156,
+      416
+     ]
+    }
+   }
+  },
+  "paine-warrior/attack": {
+   "scale": 1.15,
+   "basis": "eye line to chin 1.15 (chin at the collar, low confidence); eye spacing 0.91 is deflated because the idle is turned further; the judge read 1.21.",
+   "readings": {
+    "io": 44.8,
+    "ec": 49.1,
+    "idleIo": 40.8,
+    "idleEc": 56.4,
+    "eyeSpacing": 0.911,
+    "eyeToChin": 1.15,
+    "judge": 1.21
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 397.4698795180723,
+      "y": 122.20481927710844,
+      "n": 83,
+      "w": 12.0,
+      "h": 13.0,
+      "hue": 1
+     },
+     "R": {
+      "x": 441.8481012658228,
+      "y": 128.26582278481013,
+      "n": 79,
+      "w": 17.0,
+      "h": 16.0,
+      "hue": 355
+     },
+     "seedL": [
+      397,
+      123
+     ],
+     "seedR": [
+      438,
+      132
+     ],
+     "chin": null
+    },
+    "overrides": {
+     "chin": [
+      425,
+      174
+     ],
+     "chinConf": "low (collar)"
+    }
+   }
+  },
+  "paine-warrior/cast": {
+   "scale": 1.09,
+   "basis": "eye spacing 1.07 and eye line to chin 1.10 agree; mean (the judge read 1.09).",
+   "readings": {
+    "io": 38.3,
+    "ec": 51.5,
+    "idleIo": 40.8,
+    "idleEc": 56.4,
+    "eyeSpacing": 1.066,
+    "eyeToChin": 1.095,
+    "judge": 1.09
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 359.1311475409836,
+      "y": 179.44262295081967,
+      "n": 122,
+      "w": 14.0,
+      "h": 12.0,
+      "hue": 1
+     },
+     "R": {
+      "x": 396.0,
+      "y": 179.5,
+      "n": 10,
+      "w": 5.0,
+      "h": 2.0,
+      "hue": 207
+     },
+     "seedL": [
+      361,
+      177.5
+     ],
+     "seedR": [
+      390,
+      182.5
+     ],
+     "chin": [
+      383,
+      222
+     ]
+    },
+    "overrides": {
+     "eyeR": [
+      393.75,
+      195.75
+     ],
+     "chin": [
+      387,
+      238
+     ]
+    }
+   }
+  },
+  "paine-white-mage/cast": {
+   "scale": 1.2,
+   "basis": "eye line to chin 1.29 is a ceiling (lowered face; idle chin re-marked at the jaw, the judge's idle point sat on the mouth); eye spacing 1.48 is off (her eyes are painted closer together); 1.20 matches the face outline beside the idle.",
+   "readings": {
+    "io": 31.7,
+    "ec": 41.7,
+    "idleIo": 46.9,
+    "idleEc": 35.3,
+    "eyeSpacing": 1.478,
+    "eyeToChin": 0.847,
+    "judge": 1.17
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 340.83516483516485,
+      "y": 376.0879120879121,
+      "n": 91,
+      "w": 17.0,
+      "h": 8.0,
+      "hue": 353
+     },
+     "R": {
+      "x": 372.18518518518516,
+      "y": 381.08641975308643,
+      "n": 81,
+      "w": 15.0,
+      "h": 9.0,
+      "hue": 352
+     },
+     "seedL": [
+      343.5,
+      382.5
+     ],
+     "seedR": [
+      371,
+      382.5
+     ],
+     "chin": [
+      361,
+      420
+     ]
+    },
+    "overrides": null
+   }
+  },
+  "rikku-alchemist/attack": {
+   "scale": 0.97,
+   "basis": "eye spacing 0.99, a little inflated by her turn; chin under the scarf; the judge read 0.94; bandana width agrees.",
+   "readings": {
+    "io": 47.4,
+    "ec": null,
+    "idleIo": 47.0,
+    "idleEc": 62.5,
+    "eyeSpacing": 0.991,
+    "eyeToChin": null,
+    "judge": 0.94
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 407.5308641975309,
+      "y": 207.46296296296296,
+      "n": 162,
+      "w": 15.0,
+      "h": 18.0,
+      "hue": 124
+     },
+     "R": {
+      "x": 453.725,
+      "y": 218.09166666666667,
+      "n": 120,
+      "w": 15.0,
+      "h": 17.0,
+      "hue": 131
+     },
+     "seedL": [
+      406,
+      204
+     ],
+     "seedR": [
+      454,
+      219
+     ],
+     "chin": [
+      427.5,
+      267.5
+     ]
+    },
+    "overrides": {
+     "chin": null,
+     "chinNote": "under the scarf"
+    }
+   }
+  },
+  "rikku-gunner/attack": {
+   "scale": 1.0,
+   "basis": "eye spacing 1.03, inflated by the three-quarter turn; chin under the scarf; the bandana width gives 0.95 to 1.0 (the judge's 1.23 read the tucked chin).",
+   "readings": {
+    "io": 41.3,
+    "ec": null,
+    "idleIo": 42.4,
+    "idleEc": 43.0,
+    "eyeSpacing": 1.026,
+    "eyeToChin": null,
+    "judge": 1.23
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 354.42857142857144,
+      "y": 157.03571428571428,
+      "n": 28,
+      "w": 8.0,
+      "h": 6.0,
+      "hue": 98
+     },
+     "R": {
+      "x": 395.0,
+      "y": 165.0,
+      "n": 1,
+      "w": 1.0,
+      "h": 1.0,
+      "hue": 68
+     },
+     "seedL": [
+      353,
+      156.5
+     ],
+     "seedR": [
+      394.5,
+      165
+     ],
+     "chin": [
+      377,
+      200
+     ]
+    },
+    "overrides": {
+     "chin": null,
+     "chinNote": "under the scarf"
+    }
+   }
+  },
+  "rikku-gunner/item": {
+   "scale": 0.92,
+   "basis": "eye spacing 0.92; the chin at the scarf top matches the idle's at the same scale.",
+   "readings": {
+    "io": 46.2,
+    "ec": null,
+    "idleIo": 42.4,
+    "idleEc": 43.0,
+    "eyeSpacing": 0.918,
+    "eyeToChin": null,
+    "judge": 1.13
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 158.21985815602838,
+      "y": 207.04255319148936,
+      "n": 141,
+      "w": 12.0,
+      "h": 19.0,
+      "hue": 137
+     },
+     "R": {
+      "x": 204.10344827586206,
+      "y": 212.3448275862069,
+      "n": 58,
+      "w": 9.0,
+      "h": 14.0,
+      "hue": 122
+     },
+     "seedL": [
+      160,
+      206
+     ],
+     "seedR": [
+      204,
+      211
+     ],
+     "chin": [
+      182.5,
+      252.5
+     ]
+    },
+    "overrides": {
+     "chin": null,
+     "chinNote": "under the scarf"
+    }
+   }
+  },
+  "rikku-white-mage/cast": {
+   "scale": 1.26,
+   "basis": "eye spacing 1.26; eye line to chin 1.59 is inflated by the idle's open grin (as for rikku-white-mage/attack on 09-25).",
+   "readings": {
+    "io": 43.5,
+    "ec": 42.5,
+    "idleIo": 54.8,
+    "idleEc": 67.7,
+    "eyeSpacing": 1.259,
+    "eyeToChin": 1.591,
+    "judge": 1.34
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 356.61290322580646,
+      "y": 423.63440860215053,
+      "n": 93,
+      "w": 12.0,
+      "h": 12.0,
+      "hue": 133
+     },
+     "R": {
+      "x": 399.87735849056605,
+      "y": 428.1698113207547,
+      "n": 106,
+      "w": 13.0,
+      "h": 13.0,
+      "hue": 144
+     },
+     "seedL": [
+      356.7,
+      425
+     ],
+     "seedR": [
+      400,
+      426.7
+     ],
+     "chin": [
+      375,
+      468.3
+     ]
+    },
+    "overrides": {
+     "chinConf": "low (scarf edge)"
+    }
+   }
+  },
+  "rikku-white-mage/victory": {
+   "scale": 1.1,
+   "basis": "eye spacing 1.44 is a ceiling (three-quarter turn and tilt); the grin width gives 1.10 and the face width beside the idle 1.08 (1.22 drew her face visibly wider than the idle's); chin under the scarf.",
+   "readings": {
+    "io": 38.1,
+    "ec": null,
+    "idleIo": 54.8,
+    "idleEc": 67.7,
+    "eyeSpacing": 1.435,
+    "eyeToChin": null,
+    "judge": 1.51
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 184.0648148148148,
+      "y": 363.50925925925924,
+      "n": 108,
+      "w": 12.0,
+      "h": 14.0,
+      "hue": 116
+     },
+     "R": {
+      "x": 219.1304347826087,
+      "y": 378.5217391304348,
+      "n": 23,
+      "w": 4.0,
+      "h": 9.0,
+      "hue": 159
+     },
+     "seedL": [
+      184,
+      363.5
+     ],
+     "seedR": [
+      221.5,
+      378.5
+     ],
+     "chin": [
+      205,
+      418.5
+     ]
+    },
+    "overrides": {
+     "chin": null,
+     "chinNote": "under the scarf"
+    }
+   }
+  },
+  "yuna-songstress/cast": {
+   "scale": 1.13,
+   "basis": "eye line to chin 1.13; eye spacing 1.24 is inflated by the turn of her tilted head.",
+   "readings": {
+    "io": 41.6,
+    "ec": 49.3,
+    "idleIo": 51.6,
+    "idleEc": 55.8,
+    "eyeSpacing": 1.242,
+    "eyeToChin": 1.131,
+    "judge": 1.33
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 122.16326530612245,
+      "y": 239.3673469387755,
+      "n": 49,
+      "w": 11.0,
+      "h": 13.0,
+      "hue": 83
+     },
+     "R": null,
+     "seedL": [
+      121.3,
+      240
+     ],
+     "seedR": [
+      151.3,
+      248.3
+     ],
+     "chin": [
+      138,
+      293.3
+     ]
+    },
+    "overrides": {
+     "eyeR": [
+      162.6,
+      249
+     ]
+    }
+   }
+  },
+  "yuna-songstress/victory": {
+   "scale": 1.16,
+   "basis": "eye spacing 1.18 (a little inflated by the turn) and the judge's 1.14; eye line to chin 1.28 is inflated by her raised face.",
+   "readings": {
+    "io": 43.7,
+    "ec": 43.6,
+    "idleIo": 51.6,
+    "idleEc": 55.8,
+    "eyeSpacing": 1.182,
+    "eyeToChin": 1.28,
+    "judge": 1.14
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 167.91596638655463,
+      "y": 200.5546218487395,
+      "n": 119,
+      "w": 17.0,
+      "h": 15.0,
+      "hue": 232
+     },
+     "R": {
+      "x": 211.22972972972974,
+      "y": 194.97297297297297,
+      "n": 74,
+      "w": 11.0,
+      "h": 10.0,
+      "hue": 136
+     },
+     "seedL": [
+      172,
+      200.3
+     ],
+     "seedR": [
+      211.3,
+      193.7
+     ],
+     "chin": [
+      194.7,
+      237
+     ]
+    },
+    "overrides": {
+     "chin": [
+      195,
+      241
+     ]
+    }
+   }
+  },
+  "yuna-warrior/hurt": {
+   "scale": 1.06,
+   "basis": "head thrown back: eye line to chin 1.03 and eye spacing 1.09 (one eye winked shut, lid centre); mean; face width agrees.",
+   "readings": {
+    "io": 48.4,
+    "ec": 48.9,
+    "idleIo": 52.8,
+    "idleEc": 50.6,
+    "eyeSpacing": 1.092,
+    "eyeToChin": 1.035,
+    "judge": 1.41
+   },
+   "points": {
+    "iris": {
+     "L": {
+      "x": 233.34188034188034,
+      "y": 82.16239316239316,
+      "n": 117,
+      "w": 23.0,
+      "h": 16.0,
+      "hue": 13
+     },
+     "R": {
+      "x": 273.3207547169811,
+      "y": 54.886792452830186,
+      "n": 53,
+      "w": 15.0,
+      "h": 13.0,
+      "hue": 16
+     },
+     "seedL": [
+      237,
+      78
+     ],
+     "seedR": [
+      277,
+      63.3
+     ],
+     "chin": [
+      273.7,
+      113
+     ]
+    },
+    "overrides": null
+   }
+  },
+  "paine-black-mage/ko": {
+   "scale": 0.82,
+   "basis": "lying, face rotated upright for the reading: hair mass 0.80, eye line to chin 0.89, face width 0.73; about 0.82 (ko not gated by the judge).",
+   "readings": null,
+   "points": {
+    "koRotation": {
+     "cx": 790,
+     "cy": 205,
+     "deg": 60
+    }
+   }
+  },
+  "paine-dark-knight/ko": {
+   "scale": 0.8,
+   "basis": "lying, face rotated upright: eye line to chin 0.80 beside the idle (ko not gated by the judge).",
+   "readings": null,
+   "points": {
+    "koRotation": {
+     "cx": 1000,
+     "cy": 200,
+     "deg": 80
+    }
+   }
+  },
+  "rikku-black-mage/ko": {
+   "scale": 0.75,
+   "basis": "lying, face rotated upright: closed-lid spacing and face width both about 0.73 to 0.75 (the judge's 1.17 draws her head about half again the idle's).",
+   "readings": null,
+   "points": {
+    "koRotation": {
+     "cx": 700,
+     "cy": 270,
+     "deg": 50
+    }
+   }
+  },
+  "rikku-gunner/ko": {
+   "scale": 0.83,
+   "basis": "lying, face rotated upright: bandana width 0.83 (matches the judge's 0.83); face outline 0.72 to 0.83; closed-lid spacing reads larger because the ko face is painted wider-eyed.",
+   "readings": null,
+   "points": {
+    "koRotation": {
+     "cx": 880,
+     "cy": 140,
+     "deg": 75
+    }
+   }
+  },
+  "yuna-songstress/ko": {
+   "scale": 0.85,
+   "basis": "lying, face rotated upright: face width about 0.83, eye line to chin (hand at the chin) about 0.9.",
+   "readings": null,
+   "points": {
+    "koRotation": {
+     "cx": 935,
+     "cy": 160,
+     "deg": 70
+    }
+   }
+  }
+ },
+ "idleOverrides": {
+  "paine-white-mage/idle": {
+   "chin": [
+    428,
+    223
+   ]
+  }
+ },
+ "newIdles": {
+  "paine-gunner/idle": {
+   "L": {
+    "x": 252.66666666666666,
+    "y": 143.66666666666666,
+    "n": 3,
+    "w": 2.0,
+    "h": 2.0,
+    "hue": 285
+   },
+   "R": {
+    "x": 301.6666666666667,
+    "y": 145.66666666666666,
+    "n": 3,
+    "w": 2.0,
+    "h": 2.0,
+    "hue": 296
+   },
+   "seedL": [
+    252,
+    145
+   ],
+   "seedR": [
+    300,
+    145
+   ],
+   "chin": [
+    275,
+    199
+   ]
+  },
+  "paine-white-mage/idle": {
+   "L": {
+    "x": 398.84326018808775,
+    "y": 167.89028213166145,
+    "n": 319,
+    "w": 26.0,
+    "h": 26.0,
+    "hue": 343
+   },
+   "R": {
+    "x": 445.6261682242991,
+    "y": 171.55140186915887,
+    "n": 107,
+    "w": 16.0,
+    "h": 11.0,
+    "hue": 1
+   },
+   "seedL": [
+    400,
+    170
+   ],
+   "seedR": [
+    441,
+    170
+   ],
+   "chin": [
+    422,
+    205
+   ]
+  }
+ }
+}
