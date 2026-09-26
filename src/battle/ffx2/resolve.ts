@@ -287,9 +287,9 @@ export function resolveAbility(
         : false;
       const randomRoll = randomiserRoll(ctx.rng);
 
-      // Delta Attack's "to 1 HP, 0 MP" (`aeon-effects.ts`, FFX-2 Chapter XI only).
-      if (setsPoolsTo(ability)) {
+      if (setsPoolsTo(ability)) { // Delta Attack (XI, no riders), Looming Glacier + Stop (XV)
         total += resolveSetTo(ctx, user, target, ability, index, hitCount);
+        applyRiders(ctx, user, target, ability);
         index += 1;
         continue;
       }

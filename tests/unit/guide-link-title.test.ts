@@ -56,6 +56,7 @@ describe('the guide headline names the link that stands (FOC16-06)', () => {
     }
     // + Chapter XIV (FFX only): the panel names the aeon of the standing link.
     // Plus Chapter XI (FFX-2, unlisted): Shiva, the Magus Sisters, Anima.
-    expect(GUIDES.filter((g) => g.linkTitles).map((g) => g.id)).toEqual(['ffx2-trema', 'ffx2-fallen-aeons', 'isaaru-via-purifico']);
+    // Plus Chapter XV (FFX-2, unlisted): Baralai, Gippal, Nooj.
+    expect(GUIDES.filter((g) => g.linkTitles).map((g) => g.id)).toEqual(['ffx2-trema', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'isaaru-via-purifico']);
   });
 });

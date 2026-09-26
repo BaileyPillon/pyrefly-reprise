@@ -317,8 +317,16 @@ export type VegnagunEnemyId =
  */
 export type TremaEnemyId = 'paragon' | 'trema';
 
-/** Every FFX-2 enemy combatant with an id in this file (Chapters 4 and 5, and XIII). */
-export type FFX2EnemyId = BahamutEnemyId | VegnagunEnemyId | TremaEnemyId;
+/**
+ * Chapter XV — the Den of Woe under Mushroom Rock Road, the three shades fought
+ * back to back [ffx2-gippal-den-of-woe §2, §3]: Baralai (Lv 52, HP 12 220) ->
+ * Gippal (Lv 56, HP 14 800) -> Nooj (Lv 63, HP 23 800). New ids, not the men's
+ * names, so the Chapter V people (who appear in its story) never match a shade.
+ */
+export type DenOfWoeEnemyId = 'shade-baralai' | 'shade-gippal' | 'shade-nooj';
+
+/** Every FFX-2 enemy combatant with an id in this file (Chapters 4 and 5, XIII and XV). */
+export type FFX2EnemyId = BahamutEnemyId | VegnagunEnemyId | TremaEnemyId | DenOfWoeEnemyId;
 
 /** Chapter XIII's two links, in order. */
 export const TREMA_CHAIN_ORDER: readonly TremaEnemyId[] = ['paragon', 'trema'] as const;

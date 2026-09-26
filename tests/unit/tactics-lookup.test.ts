@@ -45,6 +45,7 @@ const OWN_TACTIC: Record<string, string> = {
   'seymour-natus': 'seymourNatus', // Chapter X (FFX)
   'isaaru-via-purifico': 'isaaruViaPurifico', // Chapter XIV (FFX)
   'ffx2-fallen-aeons': 'ffx2FallenAeons', // Chapter XI (FFX-2), unlisted
+  'ffx2-den-of-woe': 'ffx2DenOfWoe', // Chapter XV (FFX-2), unlisted
 };
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS];

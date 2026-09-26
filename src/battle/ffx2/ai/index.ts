@@ -30,6 +30,8 @@ import { paragonScript } from './paragon.ts';
 import { tremaArenaScript, tremaScript } from './trema.ts';
 // Chapter XIII's OFF options: Oversoul Paragon (TR7 b) and Fiend Arena Trema (TR1 b).
 import { paragonOversoulScript } from './paragon-oversoul.ts';
+// Chapter XV, the shades of the Den of Woe (registered, unlisted).
+import { denOfWoeScripts } from './den-of-woe.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -65,6 +67,7 @@ const SCRIPTS: readonly AiScript[] = [
   tremaScript,
   paragonOversoulScript,
   tremaArenaScript,
+  ...denOfWoeScripts,
   idleScript,
   basicAttackScript,
 ];

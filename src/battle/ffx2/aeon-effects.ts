@@ -1,7 +1,8 @@
 /**
- * Two documented `AbilityDef.extra` keys for the fallen aeons of the Road to
- * the Farplane (Chapter XI). **FFX-2 only** [AGENTS.md rule 14]: no FFX ability
- * sets either key and no FFX code path reads them.
+ * Documented `AbilityDef.extra` keys for the fallen aeons of the Road to the
+ * Farplane (Chapter XI) and the shades of the Den of Woe (Chapter XV). **FFX-2
+ * only** [AGENTS.md rule 14]: no FFX ability sets any key and no FFX code path
+ * reads them.
  *
  * Plan: `docs/plans/chapter-fallen-aeons-review.md` §4.2, gaps FA-G1 and FA-G2.
  * Research: `research/ffx2-fallen-aeons.md` §4.1 (Heavenly Strike), §4.2
@@ -19,6 +20,13 @@
  *   (half of current HP **and** MP, `[verified: 4 sources]`); Cindy's Absorb is
  *   3 (3/16 of current HP and MP). With the `drains` flag the MP goes to the
  *   user. `percent-current` bases on HP only (`formulas.ts`), hence the key.
+ * - **`extra.mpFractionOfMax`** (sixteenths), Chapter XV (the Den of Woe): the
+ *   same, but of the target's **max** MP, capped at what she has. Nooj's Greedy
+ *   Aura is 3 ("3/16 of max HP and MP", research `ffx2-gippal-den-of-woe.md`
+ *   §4.3, plan GP-G3). `mpOnly` (`resolve.ts`) bases on max **HP**, hence the key.
+ *   A row sets one key or the other, never both.
+ * - Looming Glacier (Chapter XV) is `setMpTo: 0` with a Stop rider: the riders
+ *   now run after a "set to" hit too (`resolve.ts`); Delta Attack has none.
  *
  * Both run after the hit, crit and randomiser draws the caller already made and
  * take no draw of their own, so no replay at the same seed moves

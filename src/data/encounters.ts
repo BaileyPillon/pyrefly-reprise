@@ -57,12 +57,12 @@ import { FFX2_TREMA_SHIPPED } from './chapter-trema-ship.ts';
 import { ISAARU_VIA_PURIFICO_SHIPPED } from './chapter-isaaru-ship.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 
-/** Every registered chapter id (all fourteen listed since 2026-09-26). Also the keys used in `SaveData.chapters`. */
+/** Every registered chapter id (fourteen listed since 2026-09-26; `'ffx2-den-of-woe'` registered, unlisted). Also the keys used in `SaveData.chapters`. */
 export type ChapterId =
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
-  | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern'
-  | 'seymour-natus' | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico';
+  | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
+  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe';
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {

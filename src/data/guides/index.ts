@@ -18,6 +18,7 @@ import { SEYMOUR_ANIMA_MACALANIA_GUIDE } from './seymour-anima-macalania.ts';
 import { EVRAE_GUIDE } from './evrae.ts';
 import { YOJIMBO_CAVERN_GUIDE } from './yojimbo-cavern.ts';
 import { FFX2_TREMA_GUIDE } from './ffx2-trema.ts';
+import { FFX2_DEN_OF_WOE_GUIDE } from './ffx2-den-of-woe.ts';
 import { FFX2_FALLEN_AEONS_GUIDE } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_GUIDE } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_GUIDE } from './seymour-natus.ts';
@@ -45,6 +46,7 @@ export {
   EVRAE_GUIDE,
   YOJIMBO_CAVERN_GUIDE,
   FFX2_TREMA_GUIDE,
+  FFX2_DEN_OF_WOE_GUIDE,
   FFX2_FALLEN_AEONS_GUIDE,
   SEYMOUR_OMNIS_GUIDE,
   SEYMOUR_NATUS_GUIDE,
@@ -71,6 +73,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_TREMA_GUIDE,
   // Chapter XI (FFX-2 only), listed 2026-09-26 with its chapter.
   FFX2_FALLEN_AEONS_GUIDE,
+  // Chapter XV (FFX-2 only), registered and unlisted like its chapter: the three shades.
+  FFX2_DEN_OF_WOE_GUIDE,
   SEYMOUR_OMNIS_GUIDE,
   // Chapter X (FFX only), listed 2026-09-25: the research's line, Haste only Tidus and Auron.
   SEYMOUR_NATUS_GUIDE,

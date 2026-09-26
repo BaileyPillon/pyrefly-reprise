@@ -35,6 +35,9 @@ import { tremaAbilities } from './trema-abilities.ts';
 // Chapter XIII's OFF options (Oversoul Paragon, Fiend Arena Trema): `./trema-options.ts`.
 import { tremaArenaAbilities, tremaOptionGroups } from './trema-options.ts';
 import { paragonOversoulAbilities } from './paragon-oversoul.ts';
+// Chapter XV, the Den of Woe (registered, unlisted): `./den-of-woe.ts`.
+import { denOfWoeGroups } from './den-of-woe.ts';
+import { denOfWoeAbilities } from './den-of-woe-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -48,6 +51,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...fallenAeonsGroups,
   ...tremaGroups,
   ...tremaOptionGroups,
+  ...denOfWoeGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -71,6 +75,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...tremaAbilities,
   ...tremaArenaAbilities,
   ...paragonOversoulAbilities,
+  ...denOfWoeAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

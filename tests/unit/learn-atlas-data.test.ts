@@ -48,6 +48,7 @@ describe('buildChapterSpecimen', () => {
       'seymour-omnis': 'gold', // Chapter XII, FFX, unlisted
       'isaaru-via-purifico': 'gold', // Chapter XIV, FFX, unlisted
       'ffx2-trema': 'pink', // Chapter XIII, FFX-2, unlisted
+      'ffx2-den-of-woe': 'pink', // Chapter XV, FFX-2, unlisted
     };
     for (const id of CHAPTER_IDS) {
       const specimen = buildChapterSpecimen(id);

@@ -32,6 +32,7 @@ import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
 import { buildRoadToTheFarplaneScene, ROAD_TO_THE_FARPLANE_SLOTS } from './road-to-the-farplane.ts';
 import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.ts';
+import { buildDenOfWoeScene, DEN_OF_WOE_SLOTS } from './den-of-woe.ts';
 import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
 import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
@@ -221,6 +222,9 @@ SCENES.set('bevelle-highbridge', { key: 'bevelle-highbridge', title: 'Highbridge
 /** The Via Purifico, the last chamber (Chapter XIV, FFX only): real, `build` unreachable as for Leblanc [via-purifico.ts]. */
 SCENES.set('via-purifico', { key: 'via-purifico', title: 'Via Purifico — the last chamber',
   build: buildDemoScene, slots: VIA_PURIFICO_SLOTS, placeholder: false });
+/** The Den of Woe (Chapter XV, FFX-2 only): real, `build` unreachable as for Leblanc [den-of-woe.ts]. */
+SCENES.set('den-of-woe', { key: 'den-of-woe', title: 'The Den of Woe',
+  build: buildDemoScene, slots: DEN_OF_WOE_SLOTS, placeholder: false });
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -267,6 +271,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'garden-of-pain': buildGardenOfPainScene,
   'bevelle-highbridge': buildHighbridgeScene,
   'via-purifico': buildViaPurificoScene,
+  'den-of-woe': buildDenOfWoeScene,
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */

@@ -27,6 +27,7 @@ import { cloneData } from '../../battle/common/clone.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
+import { carryFfx2Full } from './BattleScreenCarry.ts';
 
 /**
  * Find a formation by id. Used to follow a `nextGroupId` from one link of a
@@ -88,7 +89,9 @@ export function setupForNextLink(
 ): BattleSetup {
   return {
     game: previous.game,
-    party: carryPartyForward(previous.party, state, nextGroup.carriesPartyState === true),
+    party: carryPartyForward(
+      previous.party, state, nextGroup.carriesPartyState === true, nextGroup.carriesFullPartyState === true,
+    ),
     enemies: nextGroup,
     triggers: previous.triggers,
     seed,
@@ -103,14 +106,23 @@ export function setupForNextLink(
  *
  * The build is the template (it carries the stats, equipment and grid the
  * engine needs); live state supplies the mutable half.
+ *
+ * `wholeState` (FFX-2, `carriesPartyState`, Chapter XIII) carries statuses and the worn
+ * dressphere with the gates reset (`carryWholeState`). `full` (FFX-2 only,
+ * `EnemyGroupDef.carriesFullPartyState`, Chapter XV's GP3 = a)
+ * also carries each girl's statuses, worn dressphere and grid progress
+ * (`./BattleScreenCarry.ts`). Without it the FFX-2 carry is HP, MP and items, as
+ * every shipped chain has it; the FFX carry ignores the flag.
  */
 export function carryPartyForward(
   build: FFXPartyBuild | FFX2PartyBuild,
   state: BattleState,
   wholeState = false,
+  full = false,
 ): FFXPartyBuild | FFX2PartyBuild {
   if (build.game === 'ffx') return carryFfx(build, state);
-  return carryFfx2(build, state, wholeState);
+  const carried = carryFfx2(build, state, wholeState);
+  return full ? carryFfx2Full(carried, state) : carried;
 }
 
 function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {

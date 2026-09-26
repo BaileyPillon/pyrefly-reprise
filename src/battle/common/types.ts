@@ -2611,6 +2611,15 @@ export interface EnemyGroupDef {
    */
   restoresPartyOnEntry?: boolean;
   /**
+   * **FFX-2, a chained link the party enters carrying everything** (Chapter XV,
+   * the Den of Woe; `docs/plans/chapter-gippal-review.md` GP3 = a, `[derived]`:
+   * the sources carry HP, the rest is our reading of "no break"). On top of the
+   * HP, MP, KO and items every chain carries, the girls keep their statuses, the
+   * dressphere they wear and their grid progress (node, passed gates, worn list)
+   * (`BattleScreenSetup.carryFfx2`). Absent everywhere else, so no other chain changes.
+   */
+  carriesFullPartyState?: boolean;
+  /**
    * **FFX, the mirror lock** (Chapter XIV, Isaaru's contest of aeons,
    * `docs/plans/chapter-isaaru-review.md` I-G2): Yuna cannot summon her own
    * copy of the aeon she is facing, "two aeons of the same type cannot fight
