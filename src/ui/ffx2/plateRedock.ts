@@ -1,4 +1,5 @@
 import type { TargetRect } from '../ffx/TargetCursor.ts';
+import { clearGroupLabels } from './allLabelClear.ts';
 
 /**
  * Keeps the field cursor's name plate docked clear of HUD panels that move
@@ -49,10 +50,13 @@ export function keepPlateDocked(
       return;
     }
     const next = panels().map((p) => ({ x: p.x, y: p.y, w: p.w, h: p.h }));
-    if (applied && !moved(applied, next)) return;
-    applied = next;
-    cursor.setPanels(next);
-    cursor.reposition();
+    if (!applied || moved(applied, next)) {
+      applied = next;
+      cursor.setPanels(next);
+      cursor.reposition();
+    }
+    // PR-0193 / FOC19-05: the whole-side label steps off the same panels.
+    clearGroupLabels(cursor.el, next);
   };
   requestAnimationFrame(tick);
 }

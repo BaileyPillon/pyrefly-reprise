@@ -46,10 +46,6 @@ const BOARD_SELECTORS = [
   '.ffx2-tplate',
   '.ffx2-aplate',
   '.ffx2-ctlhint',
-  // PR-0193 / FOC19-05: a whole-side command's "ALL ENEMIES" / "ALL ALLIES"
-  // field label (`TargetCursor.groupLabelHtml`); the slab sat over it in
-  // Chapter VI at 2560x1440 and in the Den at 1600x900.
-  '.ffx-target__all',
   // Not `.ffx2sc`: the spherechange wheel is a modal sized to the whole
   // overlay, so listing it would make every placement "covered" and send
   // the solver hunting for a spot that does not exist. It is *meant* to be
@@ -57,7 +53,7 @@ const BOARD_SELECTORS = [
 ] as const;
 
 /** PR-0150: the target-select plates, which the intent slab steers around with a margin. */
-const PLATE_SELECTORS: ReadonlySet<string> = new Set(['.ffx2-tplate', '.ffx2-aplate', '.ffx2-ctlhint', '.ffx-target__all']);
+const PLATE_SELECTORS: ReadonlySet<string> = new Set(['.ffx2-tplate', '.ffx2-aplate', '.ffx2-ctlhint']);
 
 export interface BoardOptions {
   skipChainChip?: boolean;
