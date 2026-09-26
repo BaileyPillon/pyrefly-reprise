@@ -296,3 +296,89 @@ living.length]` over a list re-filtered after each hit. When a target dies mid-m
 skipped and an earlier one is hit twice. Seen live on seed 6: Lightfall hit Yuna, Rikku (KO), Yuna, and
 never Paine. Hitting each target once moves the shipped Den to 34 first try and 149 within five at
 1.5 s (scratch copy, not committed). The sheet's "Bailey's pick" section has the full figures.
+
+## Independent check of Bailey's pick (2026-09-26, head `8acc88f5`)
+
+**Game case: FFX-2 only** (Chapter XV). Checker, not the builder; everything below was re-run, not
+copied. Pick: "I pick your recommendation for Den of Woe" = "Den: both, drop the prep".
+
+**Verdict: no blocker. The chapter can be listed.** B1 is closed by the pick: the chapter is winnable
+at human speed, and the numbers match the sheet exactly. M1 is closed: no Lightfall prep is left
+anywhere a player sees it.
+
+### Re-run
+
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| Full vitest, `--testTimeout=60000` | 436 files passed, 3 skipped, 0 failed (8,133 tests); no flake |
+| `node tools/orphans.mjs` | 24 orphaned, the same list as the main tree |
+| `verify-approved.mjs` (`ROOT` = this worktree) | 225 ok (177 approved + 48 judge-locked), 0 mismatched, 0 missing |
+| Shipped bench (`den-of-woe-shipped-bench.test.ts`, `PYREFLY_MEASURE=1`) | 66 / 136 / 173 at 1.0 s; **39 / 115 / 160 at 1.5 s**; 48 / 99 / 134 at 2.5 s; bench 102 / 173 / 199; Active 7 / 15 / 20. Identical to the builder's numbers and the sheet, cell for cell |
+| Options bench, all 8 rows and the three-speed prep table | identical to the sheet, cell for cell (for example "both, no prep" 39, 102, 7, 80, 39 / 115 / 160, 39 / 114 / 158) |
+| Chapter XI carry pins after the merge | recomputed on a fresh export of `main` 30420871 with the same helper: the 8 `ch11` and 8 `sisters` hashes match the test's pins, so the re-record is not circular |
+
+### The diff since `44fe6ce3` (the main merge read separately)
+
+- **No boss number moved.** `src/data/ffx2/enemies/den-of-woe*.ts` and `src/battle/ffx2/ai/den-of-woe.ts`
+  are byte-identical to `44fe6ce3`. `farplaneBuild` is untouched; the kit is a copy.
+- **Switches:** `DEN_OF_WOE_HERO_DRINKS` = 3, `DEN_OF_WOE_LEVEL_BONUS` = 8, `DEN_OF_WOE_LIGHTFALL_PREP` =
+  false, `DEN_OF_WOE_RETRY_FROM_LINK` = **false** (a loss retries from Baralai).
+- **Every `[estimate]` is labelled:** the drink count and the level raise, in the kit file, the record
+  header, the guide header, the tactic header and the sheet. The 4,500 HP drink line is marked "our
+  line, not game data".
+- **No Lightfall prep left:** the Curaga and plain-swing hints are added only when the switch is on,
+  the tactic's `prepWindow` returns false, and the tip and the guide rule no longer name the Phoenix Down.
+- **The merge of main is additive.** Outside the Den's own files, the branch differs from `main`
+  30420871 only by the Den's registrations: chapter meta numeral XV, the unlisted list, encounter
+  ids, the scene registry, and the guide and tactic indexes plus their tests. Every shared engine and
+  presentation delta equals the branch's pre-merge delta.
+
+### Real keys on my own production build
+
+Headless GPU Chromium, vite preview on 5810, fresh context each run. The chapter is unlisted, so each
+run opened it with `gotoChapter`. Frames and JSON are in `D:/Tools/pyrefly-scratch/den-check/`.
+
+- **1600x900 and 390x844:** prep shows LV 54 / 56 / 58. The CHAPTER tab carries the new tip at both
+  sizes. The Items tab, reached with the Right key, lists Hero Drink ×3. The pre scene plays its 8
+  lines by Enter. The battle opens at 2,824 / 6,456 / 6,654 max HP, and the first menu comes up in
+  11.3 to 11.6 s. Yuna's Pray went in by Enter. The pause CHAPTER and GUIDE tabs open, and at 1600x900
+  the GUIDE tab's designed line is the new tip.
+- **The Hero Drink on Nooj, by real keys (seed 6).** The shipped tactic played at skip speed to Nooj.
+  The debug API handed control back at 6,137 HP. From there every turn was real keys: Pray, Darkness
+  twice, then Yuna **Item > Hero Drink > Yuna** at Nooj 3,709. She was Invincible, and Lightfall
+  (Nooj 663 later) read "Yuna miss, immune; Rikku 5,000, KO".
+- **A win to results (seed 4, a seed of mine).** The shipped tactic played at skip speed, with real
+  Enter through the pre scene, all three shades, the 8-line post scene ("Enough. Let them rest." first)
+  and results: "CLEARED · Victory · NEW BEST". The flow resolved victory over 3 links. A scan of seeds 1
+  to 12 by the same tactic won 7.
+- Every run: 0 page errors, 0 console errors, 0 HTTP errors. Images decoded 61 to 67 per run, 0
+  broken. No placeholder, `{target}`, `undefined` or `NaN` text. No horizontal scroll at either size.
+
+### Findings (none blocks listing)
+
+1. **Major, disclosed, shared FFX-2 engine (the same on `main`): a girl left alone is chain-locked by
+   Nooj, and immune misses feed the lock.** Seed 6, after my keyed drink: Greedy Aura KO'd Paine and
+   Lightfall KO'd Rikku. Yuna, Invincible, then sat at a full gauge (ticks 29,779 of 12,727 needed)
+   while Nooj acted at least 5 times running. She never got a turn, Invincible expired, and the run
+   was a defeat. The log shows a `chain` event on Yuna before every "miss, immune". The cause is read
+   from the code, not measured apart: `registerHit` runs before the immunity check, the chain window
+   is 6,000 ticks (2 s), and Nooj's bar needs 5,737. So the Hero Drink saves a girl from Lightfall, but
+   a sole survivor cannot act. The benches already include this, so the 39 / 160 stand. Whether an
+   immune miss should chain in FFX-2 is unsourced here: a question for the driver, not a number to tune.
+2. **Major, disclosed, shared (the builder's finding, confirmed on the engine): all-target moves wrap
+   onto a girl already hit.** In a live Lightfall I read "Yuna immune, Rikku 5,000 KO, Yuna immune",
+   and Paine, who was alive, was never targeted (`resolve.ts` `targetForHit`,
+   `living[hitIndex % living.length]` over a list that shrinks each hit). I did not re-measure the
+   builder's scratch numbers (34 / 149).
+3. **Minor: in battle the Lightfall rule shows its short form.** At 1600x900 the guide panel's RULES
+   list shows "Nooj: Lightfall, 5,000 to all, once" (`fullShown` false), so the Hero Drink answer is
+   not taught in battle unless the advisor picks the drink. At my drink the advisor's pick was a
+   Mega-Potion. The drink is taught before the fight (the prep tip at both sizes, and the pause GUIDE
+   at desktop).
+4. **Minor, the builder's disclosures, re-seen:** at 390x844 the pause GUIDE "designed line" is empty.
+   Yuna's row cuts the INV chip after PRO / SHL / DRK, so Invincible is not visible there (seen at
+   1600x900).
+5. **Minor, a note:** when a Dark Knight picks Hero Drink by keys, the target cursor opens on Yuna,
+   not on herself. A knight who presses Enter at once drinks for Yuna (seed 7). It is legal, and the
+   cursor can be moved.
