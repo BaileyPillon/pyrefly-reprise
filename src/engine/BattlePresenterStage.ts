@@ -10,7 +10,8 @@
 
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
-import { artIdFor, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { artIdFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
@@ -51,6 +52,8 @@ interface StagedActor {
   slot: number;
   artId: string;
   kind: 'party' | 'enemy';
+  /** Poses with a painting of their own, not a fallback (`paints`, `EnemyActionPose.ts`). */
+  painted: ReadonlySet<string>;
   /** True for a destructible part of a larger machine (Vegnagun's leg). */
   isPart?: boolean;
   /** The machine this is a part of, when `isPart`. */
@@ -233,6 +236,7 @@ export class PaintedStage implements BattleStage {
       slot: c.slot,
       artId,
       kind,
+      painted: paintedPoses(artId, poses, characterUrl),
       // A destructible part is laid out along its machine rather than given a
       // lane of its own — Vegnagun's leg is not a fourth fiend.
       ...(c.flags.isPart ? { isPart: true } : {}),
@@ -255,6 +259,12 @@ export class PaintedStage implements BattleStage {
 
   sideOf(id: CombatantId): Side | undefined {
     return this.actors.get(id)?.side;
+  }
+
+  /** Its own painting for `pose`, not a fallback or a stand-in. See `BattleStage.paints`. */
+  paints(id: CombatantId, pose: string): boolean {
+    const staged = this.actors.get(id);
+    return !!staged && !staged.actor.isPlaceholder && staged.painted.has(pose);
   }
 
   /** Which standing slot this combatant is on. See `BattleStage.slotOf`. */
@@ -468,7 +478,9 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged || staged.artId === artId) return;
     staged.artId = artId;
-    await staged.actor.loadPoses(await resolvePoseMap(artId, staged.kind), 'idle');
+    const poses = await resolvePoseMap(artId, staged.kind);
+    staged.painted = paintedPoses(artId, poses, characterUrl);
+    await staged.actor.loadPoses(poses, 'idle');
   }
 
   async addCombatant(

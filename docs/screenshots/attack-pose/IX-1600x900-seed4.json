@@ -1,0 +1,37 @@
+{
+ "chapter": "yojimbo-cavern",
+ "numeral": "IX",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "seed": "4",
+ "results": [
+  {
+   "key": "yojimbo:yojimbo-wakizashi",
+   "enemy": "yojimbo",
+   "art": "yojimbo-cavern",
+   "ability": "Wakizashi",
+   "abilityId": "yojimbo-wakizashi",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/yojimbo-cavern/cast.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle",
+    "cast"
+   ],
+   "seq": 124,
+   "file": "docs/screenshots/attack-pose/IX-1600x900-yojimbo-yojimbo-wakizashi.jpg"
+  }
+ ],
+ "seen": [
+  "yojimbo:yojimbo-daigoro",
+  "daigoro:daigoro-attack",
+  "yojimbo:yojimbo-kozuka",
+  "yojimbo:yojimbo-wakizashi"
+ ],
+ "errors": []
+}

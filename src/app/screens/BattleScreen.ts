@@ -54,6 +54,7 @@ import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
+import { abilityFactsFor } from './battleAbilityFacts.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -295,6 +296,9 @@ export class BattleScreen extends Screen {
       // these; see `src/ui/common/transitions/`.
       moments: this.momentOverlay,
       midScripts: chapter.scriptsRef?.midScripts ?? {},
+      // The chapter's own ability rows: an enemy's physical ability draws its
+      // attack painting (iter2 attack-pose, `EnemyActionPose.ts`).
+      abilityFacts: abilityFactsFor(chapter.game),
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
     if (this.opts.auto) this.presenter.setAutoPlay(this.opts.auto);
