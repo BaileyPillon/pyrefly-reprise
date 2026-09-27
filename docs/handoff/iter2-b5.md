@@ -95,3 +95,60 @@ Frames: `docs/screenshots/iter2-b5/` (real keys unless the name says otherwise).
 - Browser checks: headless Chromium (`PYREFLY_BROWSER=gpu`), one at a time, on the scratch dev server at
   6720 (stopped by PID at the end), real keys unless labelled; the A-4 check is debug auto-play and
   PR-0215 debug-sets the engine's stalemate watch before real keys, both labelled.
+
+## CHECK (independent, 2026-09-27; did not build B5)
+
+Checked `iter2-b5` at `638e0f55` against `origin/main` `3e7d8d3e` (release 24, hotfix-24 merged). Game case of
+this section: both (a check of FFX-only, FFX-2-only and shared items). Scratch drivers `tools/zz-b5c-*.tmp.mjs` in
+the scratch merge worktree `D:/pyrefly-b5-mergecheck` (local branch `iter2-b5-mergecheck`, not pushed); raw runs and
+frames in `D:/Tools/pyrefly-scratch/b5-check/`. Headless Chromium from node (`PYREFLY_BROWSER=gpu`), one browser at a
+time; the candidate is my own production build of the merge (preview 6730), main's build is `3e7d8d3e` built in
+`D:/pyrefly-b5check-main` (preview 6731). Both servers stopped by PID; the junction links I made are removed.
+
+**Merge: not clean against today's main.** `git merge-tree origin/main iter2-b5` has one conflict,
+`src/ui/ffx/FFXBattleHud.ts`, the import block: hotfix-24 cherry-picked this branch's PR-0181 commit (`3ab05ec5` on
+main = `ddc1649d` here) and main's side adds only `import { statusRowIds } from './fieldRows.ts';`, which the branch's
+side already contains. Resolution: take the branch's side of the hunk (the result is byte-identical to the branch's
+file). Every other file merges on its own. The merged tree was checked, not only the branch:
+
+| Check | Branch `638e0f55` | Merged with main `3e7d8d3e` |
+|---|---|---|
+| `npx tsc --noEmit` | clean | clean (inside `npm run build`) |
+| full vitest `--testTimeout=60000` | 569 files, 9,264 tests pass (5 files, 37 tests skipped, 1 todo) | 572 files, 9,287 tests pass (same skips) |
+| `node tools/orphans.mjs` | 24 | 24 (main alone: 29) |
+| `verify-approved.mjs` | | 0 mismatched, 0 missing (267 ok) |
+
+**Items, real keys on the candidate build unless labelled.**
+
+| Item | Result |
+|---|---|
+| PR-0170 | II and XII at 1600: Enter on Attack opens the target step on the lone boss, 0 actions fired; Escape returns to the command menu, 0 actions. Main's build: Enter fires Attack at once and Escape opens the pause. **Pass.** |
+| PR-0180 | I at 1600: the top HELP bar reads Lance of Atrophy, Full-Life, Dispel, Cross Cleave within about 110 ms of each enemy action-start and clears after; the party's Attack and Talk show nothing. IV (FFX-2): no help-bar text. **Pass.** |
+| PR-0146 | I at 1600, scenes skipped: caption 5.05 s, first HUD panel 7.92 s, nothing before the caption. **Pass.** |
+| PR-0157 | I at 1600: 296 of 377 play-phase samples show the guide and turn column at 0.16 (the rest are between actions). Only the FFX HUD implements `setActing`, so the `CoachLayer` forward changes nothing in FFX-2. **Pass** (XII partial as disclosed above, not re-measured). |
+| PR-0031 / PR-0178 | III at 1280, 1600, 2000: the plate names each aimed enemy and never meets the advisor card or the command rows. Hastega shows the ally accent (main: `self`), the plate "Tidus · Yuna · Auron" and ALL ALLIES clear of every panel. 390x844: no TARGET plate. Against the picked mockup (`docs/concepts/targeting/b-ring-and-dim/s1.png`): halo, dim and top plate as drawn. The plate sits right of the moves card, not top-left, and the ally plate omits the mockup's "ALL THREE — ALLIES" tag. Only the plate was picked (D-249 Q5). **Pass**, differences disclosed. |
+| PR-0186 | III, aiming: the card is `ffx-sensor--folded` at 1280, 1600 and 2000. It misses both Pagodas everywhere. On Braska's Final Aeon at 1600 and 2000, the chip's lower edge meets the top of BFA's **projected body quad**, where the frame shows the spike tips; at 1280 it clears. During an ally step (Hastega), the folded chip stays at rest over BFA and Pagoda B (1600: y 415 to 439). On main the open 290x185 card sits there, so this is better, not a regression. **Pass with a minor.** |
+| PR-0193 | ALL ALLIES reads 16 px computed at 1280, 1600 and 2000 on `.ffx-target__all`, with no overlap. The handoff's 14 px at 1280 was not reproduced by this measure; 2560 was not measured. Legible. **Pass.** |
+| PR-0206 | I at 2000x1012, seed 1: the advisor card is up (320x275, 0 px² over the rows); N hides it and N shows it. **Pass.** |
+| PR-0215 | III, stalemate watch debug-set (labelled), then real Enter: "DREAM'S END — INSIDE SIN · WITHDREW", "Defeat", "The battle cannot be won from here.", RETRY; Enter on RETRY returns to the battle's command menu. At 390x844 the caption word is whole. **Pass.** |
+| A-2 | I with scenes (Enter through the cutscene): `pf-entry--blur`. I skipped: `pf-entry--shatter pf-entry--ffx`. IV skipped and with scenes: `pf-entry--shatter pf-entry--ffx2`. No swirl anywhere; main's build still swirls. **Pass.** |
+| A-4 / D-226 | Debug auto-play at fast speed (labelled). IV holds (cast, cast, idle; never `victory`). I on seed 2 poses (all three `victory`). **Pass** on the two sampled. |
+| PR-0181 + hotfix-24 | `tests/e2e/grand-summon-picker.spec.ts` on the merged source: IX and X pass (Escape backs out; the picked aeon comes out alone; Dismiss brings the party back). This settles the branch's open "Valefor picker needs an owner, then a real-keys IX check": main's hotfix-24 is that fix, and it passes on top of this staging. |
+| FOC23-01 | I at 390x844: Flux's head now sits under the intent strip (quad top 94 to 141 px) and the whole figure is in frame. Every FFX chapter's phone first menu shows each figure whole. **Pass.** |
+| D-221 | Not reachable by real keys here. The Sensor-immune combatants (Isaaru, Cid, the Mortiphasms) are never Attack candidates, and XIV's cursor skips Talk and Attack. Unit test only. |
+| PR-0138 | Unit test only. The real-key Chapter V retry is still owed, as the handoff says. |
+
+**Regression sweep.** Every chapter's first command menu (all 15 in `chapters()`) at 1600x900 and 390x844, reached
+by debug `gotoChapter` (scenes skipped, seed 1). Each build had the same menu rows and no page or console errors.
+Montages of main against the candidate are in `menus-cmp/`. The only intended differences are Chapter I's phone
+framing (FOC23-01) and nothing else visible. In FFX-2 IV, 45 s of real Enter presses produced 30 actions and no errors.
+FF7: `ff7-guard-scorpion.spec.ts` "1600x900, keys: LIMIT opens the fight ... then the board as it was" passes on
+the candidate (LIMIT typed on chapter select, won with Bolt and Defend).
+
+**Findings.**
+- Merge conflict in the `FFXBattleHud.ts` import block (above). Trivial, with the resolution given; must be done at merge.
+- Minor: PR-0186 chip against BFA's body quad at 1600 and 2000, and the chip resting over the enemies during an ally
+  step (both better than main).
+- Minor: the TARGET plate placement and ally wording differ from the mockup (disclosed; only the plate was picked).
+- Pre-existing, not B5: at 390x844 the phone confirm button clips "ATTACK → BRASKA'S FINAL AEON" to
+  "TACK → BRASKA'S FINAL AEC" on main's build too.
