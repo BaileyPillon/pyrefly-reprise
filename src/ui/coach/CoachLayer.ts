@@ -64,6 +64,7 @@ import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
 import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
 import { BeatHold, beatUp } from './coachHold.ts';
+import { keepMarkOffIntent } from './coachIntentAvoid.ts';
 import { ffx2CoachClock, markSeen, shouldShow } from './coachState.ts';
 import type { IntentSource } from '../common/EnemyIntent.ts';
 
@@ -90,8 +91,7 @@ interface IntentAwareHud {
 export interface CoachLayerOptions {
   /** Drop the fades. Defaults to `Settings.reduceMotion`. */
   reduceMotion?: boolean;
-  /** Injectable clock, for the unit tests' fake timers. */
-  setTimer?: (fn: () => void, ms: number) => number;
+  setTimer?: (fn: () => void, ms: number) => number; // injectable clock, for the unit tests' fake timers
   clearTimer?: (handle: number) => void;
   /**
    * FFX-2's ATB clock mode, for `ffx2-gauge`'s mode-aware body (see
@@ -265,6 +265,7 @@ class CoachedHud implements HudPort {
     // FOC-05: `.mad__card` is re-solved by `MoveAdvisor.layout()` on its own schedule
     // (`CoachMark.recheckPosition`), so an FFX line keeps checking, not only once.
     this.live?.recheckPosition();
+    if (this.game === 'ffx' && this.live && !this.live.finished && this.layer?.parentElement) keepMarkOffIntent(this.live.el, this.layer.parentElement); // t1-b3a: off the intent slab
   }
 
   // ----------------------------------------------------------- the teaching
