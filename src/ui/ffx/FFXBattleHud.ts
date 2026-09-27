@@ -27,6 +27,7 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { sensorSteerDx } from './sensorSteer.ts';
 import { partyFaceRects } from './plateFaces.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
+import { ActionHelpBar } from './actionBanner.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
@@ -139,6 +140,8 @@ export class FFXBattleHud implements HudPort {
    */
   private readonly commandMenu = new CommandMenu();
   private readonly telegraph = new TelegraphBanner();
+  /** PR-0180: the enemy's ability name, top centre, for the span of the action. */
+  private readonly actionHelp = new ActionHelpBar();
   private readonly sensorPanel = new SensorPanel();
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
@@ -328,6 +331,7 @@ export class FFXBattleHud implements HudPort {
       this.sensorPanel.el,
       this.telegraph.el,
       this.telegraph.borderEl,
+      this.actionHelp.el,
     );
     this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el);
     // PR-0019 (FFX only): so the "ALL ALLIES"/"ALL ENEMIES" chip can clear
@@ -554,6 +558,8 @@ export class FFXBattleHud implements HudPort {
 
   onEvent(event: BattleEvent): void {
     this.zanmato.onEvent(event);
+    this.actionHelp.onEvent(event, this.lastState?.combatants);
+    if (this.actionHelp.text) this.telegraph.hide(); // one top-centre slot
     this.damageNumbers.watch(event); // Doom's count ticks at the event, not at the burst's end
     switch (event.type) {
       case 'action-start':

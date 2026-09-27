@@ -645,6 +645,17 @@
 .ffx-telegraph__state { font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; font-size: 18px; }
 .ffx-telegraph--stage-1 .ffx-telegraph__state { color: #f2a33a; }
 .ffx-telegraph--stage-2 .ffx-telegraph__state { color: #e8412e; }
+/* PR-0180 (FFX only): the enemy's ability name, centred in the top HELP bar for
+   the span of the action (research/observed-ffx-steam-2026-09-26.md 2.2). A flat
+   ink band in the telegraph's top-centre slot; the telegraph yields to it. */
+.ffx-helpbar {
+  position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
+  min-width: 128px; padding: 3px 24px 4px; text-align: center; white-space: nowrap;
+  background: var(--ig-ink-panel); border-bottom: 1.5px solid var(--ig-accent);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45); pointer-events: none;
+  font-family: var(--ig-font-serif); font-weight: 700; font-style: italic;
+  font-size: 12px; line-height: 1.2; color: var(--ig-paper);
+}
 .ffx-screen-border {
   position: absolute; inset: 2px; border: 1px solid #e8412e;
   opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
