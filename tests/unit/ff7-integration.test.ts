@@ -173,9 +173,15 @@ describe('the presenter tells the FF7 engine when an action animates', () => {
   });
 });
 
-describe('FF7 spell effects wait for their options round', () => {
-  it('hands the stage no overlay and no skin for FF7', () => {
-    expect(battleSpellFx('ff7', {} as never)).toEqual({});
+describe('FF7 spell effects: its own, after the options round (D-260)', () => {
+  it('hands the stage the FF7 skin with its overlay, flash rules and landing hook; never FFX or FFX-2', () => {
+    const fx = battleSpellFx('ff7', { addOverlay: () => () => {}, renderer: { domElement: null } } as never);
+    expect(fx.game).toBe('ff7');
+    expect(typeof fx.overlay).toBe('function');
+    expect(typeof fx.flash).toBe('function');
+    expect(typeof fx.onLand).toBe('function');
+    expect(battleSpellFx('ffx', { addOverlay: () => () => {} } as never).game).toBe('ffx');
+    expect(battleSpellFx('ffx', { addOverlay: () => () => {} } as never)).not.toHaveProperty('onLand');
   });
 });
 

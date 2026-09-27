@@ -65,49 +65,51 @@ function stageWith(slots: typeof SECTOR1_SLOTS): InstanceType<typeof PaintedStag
 }
 const optsFor = (id: string): Record<string, unknown> => created.find((o) => o['name'] === id)!;
 
-/** The painted facing each installed FF7 painting declares (its sidecar), as installed on 2026-09-27. */
-const ART_FACING = { 'ff7-cloud': 'left', 'ff7-barret': 'left', 'ff7-guard-scorpion': 'right', 'ff7-guard-scorpion-tail-up': 'right' } as const;
+/** The painted facing each installed Film painting declares (its sidecar; D-259, D-262, installed 2026-09-27). */
+const ART_FACING = { 'ff7-film-cloud': 'right', 'ff7-film-barret': 'right', 'ff7-film-guard-scorpion': 'left', 'ff7-film-guard-scorpion-tail-up': 'left' } as const;
 
 describe('FF7 staging: sides and facing (research/ff7-battle-staging.md §2, §3.3)', () => {
   beforeEach(() => {
     created.length = 0;
   });
 
-  it('stands the party on the right and Guard Scorpion on the left, both starting in the front row', () => {
-    const [cloud, barret] = SECTOR1_SLOTS.party;
-    const boss = SECTOR1_SLOTS.enemySpots?.[S.SECTOR1_BOSS_ID];
-    expect(boss).toBeDefined();
-    expect(cloud![0]).toBeGreaterThan(boss![0]);
-    expect(barret![0]).toBeGreaterThan(boss![0]);
-    // One front row: about the same distance from the enemy (staging §5), both nearer it than any back-row spot.
-    const dist = (p: readonly number[]): number => Math.hypot(p[0]! - boss![0], p[2]! - boss![2]);
-    expect(Math.abs(dist(cloud!) - dist(barret!))).toBeLessThan(0.15);
-    for (const slot of [0, 1]) expect(dist(S.rowSpot(slot, 'back'))).toBeGreaterThan(Math.max(dist(cloud!), dist(barret!)));
+  it('stands the party on the LEFT and Guard Scorpion on the RIGHT (D-262), both starting in the front row', () => {
+    for (const layout of [S.SECTOR1_DESK, S.SECTOR1_PHONE]) {
+      const [cloud, barret] = layout.front;
+      const boss = layout.boss;
+      expect(cloud![0], layout.name).toBeLessThan(boss[0]);
+      expect(barret![0], layout.name).toBeLessThan(cloud![0]); // Barret further left, upstage
+      // The back row stands further from the enemy: further left, the same depth.
+      for (const slot of [0, 1]) expect(S.rowSpot(slot, 'back', layout)[0]).toBeLessThan(S.rowSpot(slot, 'front', layout)[0]);
+      // The camera sits between them: the party left of the axis, the boss right of it.
+      expect(cloud![0]).toBeLessThan(S.SECTOR1_CAMERA.position[0]);
+      expect(boss[0]).toBeGreaterThan(S.SECTOR1_CAMERA.position[0]);
+    }
+    expect(SECTOR1_SLOTS.enemySpots?.[S.SECTOR1_BOSS_ID]).toEqual([...S.SECTOR1_BOSS_SPOT]);
     expect(sector1ReactorBuild.members.map((m) => m.row)).toEqual(['front', 'front']);
-    // The camera sits between them: the boss is left of the axis, the party right of it.
-    expect(boss![0]).toBeLessThan(S.SECTOR1_CAMERA.position[0]);
-    expect(cloud![0]).toBeGreaterThan(S.SECTOR1_CAMERA.position[0]);
   });
 
-  it('turns the party toward -x and the boss toward +x through the stage', async () => {
+  it('turns the party toward +x (screen-right) and the boss toward -x through the stage', async () => {
     const stage = stageWith(SECTOR1_SLOTS);
-    await stage.add(fighter('cloud', 'party', 0, 'ff7-cloud'));
-    await stage.add(fighter('barret', 'party', 1, 'ff7-barret'));
-    await stage.add(fighter('guard-scorpion', 'enemy', 0, 'ff7-guard-scorpion', true));
-    expect(optsFor('cloud')).toMatchObject({ facing: -1 });
-    expect(optsFor('barret')).toMatchObject({ facing: -1 });
-    expect(optsFor('guard-scorpion')).toMatchObject({ facing: 1 });
+    await stage.add(fighter('cloud', 'party', 0, 'ff7-film-cloud'));
+    await stage.add(fighter('barret', 'party', 1, 'ff7-film-barret'));
+    await stage.add(fighter('guard-scorpion', 'enemy', 0, 'ff7-film-guard-scorpion', true));
+    expect(optsFor('cloud')).toMatchObject({ facing: 1 });
+    expect(optsFor('barret')).toMatchObject({ facing: 1 });
+    expect(optsFor('guard-scorpion')).toMatchObject({ facing: -1 });
+    expect(optsFor('guard-scorpion')).toMatchObject({ poseScaling: { maxExtent: 3.2 } }); // the long machine (figureExtent)
     for (const id of ['cloud', 'barret', 'guard-scorpion']) expect(optsFor(id)).not.toHaveProperty('side');
     for (const id of ['cloud', 'barret', 'guard-scorpion']) expect(optsFor(id)['turnRing'], id).toBe(false); // FF7's triangle is the only turn marker
   });
 
   it('never mirrors a painting: each faces the way its body turns (Barret keeps his right gun-arm)', () => {
-    expect(mirrorFor(ART_FACING['ff7-cloud'], -1)).toBe(1);
-    expect(mirrorFor(ART_FACING['ff7-barret'], -1)).toBe(1);
-    expect(mirrorFor(ART_FACING['ff7-guard-scorpion'], 1)).toBe(1);
-    expect(mirrorFor(ART_FACING['ff7-guard-scorpion-tail-up'], 1)).toBe(1);
-    // And had the house rule turned them (party +x), every one would have been flipped.
-    expect(mirrorFor(ART_FACING['ff7-barret'], facingForSide('party'))).toBe(-1);
+    expect(mirrorFor(ART_FACING['ff7-film-cloud'], 1)).toBe(1);
+    expect(mirrorFor(ART_FACING['ff7-film-barret'], 1)).toBe(1);
+    expect(mirrorFor(ART_FACING['ff7-film-guard-scorpion'], -1)).toBe(1);
+    expect(mirrorFor(ART_FACING['ff7-film-guard-scorpion-tail-up'], -1)).toBe(1);
+    // Painted facing right: turned the other way, it would have been flipped, which the staging never does.
+    expect(mirrorFor(ART_FACING['ff7-film-barret'], -1)).toBe(-1);
+    expect(facingForSide('party')).toBe(1);
   });
 
   it('reads the same facing from the installed sidecars and the art manifest, where the art is on disk', () => {
@@ -117,39 +119,43 @@ describe('FF7 staging: sides and facing (research/ff7-battle-staging.md §2, §3
     for (const [id, facing] of Object.entries(ART_FACING)) {
       expect(subjects[id]?.facing, id).toBe(facing);
       expect(subjects[id]?.states, id).toContain('idle');
-      const side = JSON.parse(readFileSync(`public/art/characters/${id}/idle.json`, 'utf8')) as { facing: string };
+      const side = JSON.parse(readFileSync(`public/art/characters/${id}/idle.json`, 'utf8')) as { facing: string; mirrored: boolean };
       expect(side.facing, id).toBe(facing);
+      expect(side.mirrored, id).toBe(false);
     }
   });
 
   it('points the FF7 data at the installed art ids, which cannot collide with an FFX or FFX-2 id', () => {
-    expect(sector1ReactorBuild.members.map((m) => m.spriteKey)).toEqual(['ff7-cloud', 'ff7-barret']);
-    expect(guardScorpion.forms.map((f) => f.spriteKey)).toEqual(['ff7-guard-scorpion', S.SECTOR1_TAIL_UP_ART]);
+    expect(sector1ReactorBuild.members.map((m) => m.spriteKey)).toEqual([S.SECTOR1_ART.cloud, S.SECTOR1_ART.barret]);
+    expect(guardScorpion.spriteKey).toBe(S.SECTOR1_ART.boss);
+    expect(guardScorpion.forms.map((f) => f.spriteKey)).toEqual([S.SECTOR1_ART.boss, S.SECTOR1_TAIL_UP_ART]);
+    expect(S.SECTOR1_TAIL_UP_ART).toBe('ff7-film-guard-scorpion-tail-up');
   });
 
-  it('sizes the boss larger than the party, from the composite', () => {
+  it('sizes Barret above Cloud and the boss at least as tall as Barret (its length is what towers)', () => {
     const h = S.SECTOR1_HEIGHTS;
-    expect(h['guard-scorpion']).toBeGreaterThan(h.barret);
+    expect(h['guard-scorpion']).toBeGreaterThanOrEqual(h.barret);
     expect(h.barret).toBeGreaterThan(h.cloud);
     expect(SECTOR1_SLOTS.figureHeights).toEqual(h);
   });
 });
 
 describe('FF7 rows (staging §5) and the raised tail', () => {
-  it('puts the back row further right (away from the enemy), same depth', () => {
+  it('puts the back row further left (away from the enemy, D-262), same depth', () => {
     for (const slot of [0, 1]) {
       const front = S.rowSpot(slot, 'front');
       const back = S.rowSpot(slot, 'back');
       expect(back[0] - front[0]).toBeCloseTo(S.SECTOR1_BACK_ROW_DX, 9);
-      expect(back[0]).toBeGreaterThan(front[0]);
+      expect(back[0]).toBeLessThan(front[0]);
       expect([back[1], back[2]]).toEqual([front[1], front[2]]);
     }
     expect(S.rowSpot(0, 'front')).toEqual([...SECTOR1_SLOTS.party[0]!]);
   });
 
-  it('shifts the boss only for the tail-raised painting, by the crop offset at the idle pixel scale', () => {
-    expect(S.bossArtShift('ff7-guard-scorpion')).toBe(0);
-    expect(S.bossArtShift(S.SECTOR1_TAIL_UP_ART)).toBeCloseTo((71 * S.SECTOR1_HEIGHTS['guard-scorpion']) / 681, 9);
+  it('needs no shift for any Film painting (each centred on the rear foot); the round-2 pair kept its crop offset', () => {
+    expect(S.bossArtShift(S.SECTOR1_ART.boss)).toBe(0);
+    expect(S.bossArtShift(S.SECTOR1_TAIL_UP_ART)).toBe(0);
+    expect(S.bossArtShift('ff7-guard-scorpion-tail-up')).toBeCloseTo((71 * S.SECTOR1_HEIGHTS['guard-scorpion']) / 681, 9);
   });
 
   it('steps a member whose row flipped and moves the boss when its painting swaps', () => {
@@ -236,24 +242,38 @@ describe("FF7's fixed camera (manual p. 30)", () => {
     expect(S.SECTOR1_FIXED_RIG.sway).toBe(0);
   });
 
-  it('opens the fov on an upright phone so the fight keeps its width', () => {
+  it('keeps the width on a narrower desk, and on an upright phone moves in on a drawn-in formation (E1)', () => {
     const wide = S.sector1RigsFor(16 / 9).idle;
-    const phone = S.sector1RigsFor(390 / 844).idle;
+    const four3 = S.sector1RigsFor(4 / 3).idle;
     const halfW = (fov: number, aspect: number): number => Math.tan((fov * Math.PI) / 360) * aspect;
-    expect(halfW(phone.fov!, 390 / 844)).toBeCloseTo(halfW(wide.fov!, 16 / 9), 3);
+    expect(halfW(four3.fov!, 4 / 3)).toBeCloseTo(halfW(wide.fov!, 16 / 9), 3);
+    const phone = S.sector1RigsFor(390 / 844).idle;
+    expect(phone.fov).toBe(S.SECTOR1_PHONE_FOV);
     expect(phone.position).toEqual(wide.position);
+    // Drawn in: the phone's party-to-boss spread is narrower than the desk's.
+    const spread = (l: typeof S.SECTOR1_DESK): number => l.boss[0] - l.front[1]![0];
+    expect(spread(S.SECTOR1_PHONE)).toBeLessThan(spread(S.SECTOR1_DESK));
+    expect(S.sector1Layout(390 / 844)).toBe(S.SECTOR1_PHONE);
+    expect(S.sector1Layout(16 / 9)).toBe(S.SECTOR1_DESK);
   });
 
-  it('sizes the painting to cover the 16:9 frame, and the full width of a phone frame (letterboxed, still registered)', () => {
-    const p = S.sector1Backdrop();
-    const plateH = (p.width * S.SECTOR1_PLATE.h) / S.SECTOR1_PLATE.w;
-    const d = S.SECTOR1_CAMERA.position[2] - p.distance;
-    for (const aspect of [16 / 9, 390 / 844]) {
+  it('the painting covers the whole frame at 16:9, 4:3 and an upright phone (no dark bands), its bottom on the frame bottom', () => {
+    for (const aspect of [16 / 9, 4 / 3, 390 / 844]) {
+      const p = S.sector1Backdrop(aspect);
+      const plateH = (p.width * S.SECTOR1_PLATE.h) / S.SECTOR1_PLATE.w;
+      const d = S.SECTOR1_BACKDROP_DISTANCE;
       const halfH = d * Math.tan((S.sector1RigsFor(aspect).idle.fov! * Math.PI) / 360);
       expect(p.width / 2, String(aspect)).toBeGreaterThanOrEqual(halfH * aspect * 0.999);
+      expect(plateH, String(aspect)).toBeGreaterThanOrEqual(2 * halfH * 0.999);
     }
-    const halfH169 = d * Math.tan((S.SECTOR1_FOV * Math.PI) / 360);
-    expect(plateH / 2).toBeGreaterThanOrEqual(halfH169);
+  });
+
+  it('publishes the opening and Game Over shots beside the fixed one (F1, G1)', () => {
+    const rigs = S.sector1RigsFor(16 / 9);
+    expect(rigs['ff7-open']).toBeDefined();
+    expect(rigs['ff7-gameover']).toBeDefined();
+    expect(rigs['ff7-open']!.position).not.toEqual(rigs.idle.position);
+    expect((rigs['ff7-gameover']!.lookAt as number[])[1]).toBeGreaterThan((rigs.idle.lookAt as number[])[1]!);
   });
 });
 

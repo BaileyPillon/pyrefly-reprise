@@ -9,7 +9,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
-import { MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
+import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -62,8 +62,7 @@ export async function actionStart(
 
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
-    void actor?.lunge(1.4, 440);
-    void actor?.squash(260, 0.45);
+    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(1.4, 440), actor?.squash(260, 0.45)]); // FF7: its painted keys
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
@@ -235,6 +234,8 @@ export async function charge(
 }
 
 export async function victory(ctx: EventCtx): Promise<void> {
+  const own = ctx.deps.actionMotion?.victory; // FF7: D1's win poses, then a hold in silence
+  if (own) return void (await settled(ctx, own.call(ctx.deps.actionMotion, motionCtx(ctx)), MOMENT_GUARD_MS));
   // A-4: where the sources withhold the celebration ('hold'), the figures keep
   // their battle stance and the fanfare stays quiet; the rig still settles.
   if (victoryPoseOf(ctx.deps) === 'hold') {
@@ -258,6 +259,8 @@ export async function defeat(ctx: EventCtx): Promise<void> {
     if (ctx.stage.sideOf(id) === 'party') ctx.stage.actor(id)?.setPose('ko');
   }
   await ctx.sleep(TIMING.defeat);
+  const own = ctx.deps.actionMotion?.defeat; // FF7: G1's pan up over the fallen party
+  if (own) await settled(ctx, own.call(ctx.deps.actionMotion, motionCtx(ctx)), MOMENT_GUARD_MS);
 }
 
 /**

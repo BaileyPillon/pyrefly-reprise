@@ -54,9 +54,14 @@ export function bodyFacingOption(
  * none.
  */
 export class FixedCamera extends HoldableCamera {
-  constructor(inner: CameraPort) {
-    super(inner);
+  constructor(private readonly free: CameraPort) {
+    super(free);
     super.hold(true, 0);
+  }
+
+  /** The unheld camera, for FF7's own scripted shots only (G1's pan up); the presenter never gets it. */
+  unheld(): CameraPort {
+    return this.free;
   }
 
   /** Held for good: a request to release (or re-hold) changes nothing. */

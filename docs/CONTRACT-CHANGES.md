@@ -6,6 +6,33 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — FF7 phase 3: the presenter and spell-FX ports gain FF7's hooks (all optional)
+
+**FF7 only**, through shared plumbing (both + FF7) [AGENTS.md hard rule 14]: every addition is
+optional or keyed to FF7's own ids and switches, so an FFX or FFX-2 chapter sees exactly what it saw
+before. Branch `ff7-phase3` (the high-fidelity fight; Bailey 2026-09-27, "I'll go with all of your
+recommendations": D-244, D-259 to D-262).
+
+- `ActionMotionPort` (`src/engine/BattlePresenterMotion.ts`) gains optional `ownsWindUp(event)`
+  (the game's painted keys replace the house lunge and squash), `victory(ctx)` and `defeat(ctx)`
+  (a game's own win and wipe-out moments), and `MOMENT_GUARD_MS`. `BattlePresenterBeats.ts` calls
+  them only when a port supplies them; FFX and FFX-2 supply no port.
+- `FixedCamera` (`src/engine/StageFacing.ts`, FF7's alone) gains `unheld()`: the free camera for
+  FF7's scripted Game Over pan.
+- `SceneStaging.figureExtent?` (`src/scenes/types.ts`): the longest side a painting may reach, as the
+  actor's `poseScaling.maxExtent`; `stagingOf` copies it and `BattlePresenterStage` passes it on
+  (same line count). Only the FF7 reactor sets it (3.2).
+- Spell FX: `FxGame` adds `'ff7'` and `SpellFxId` adds FF7's eleven ids (`spellfx/ff7/ff7FxSpecs.ts`,
+  spread into `FX_SPECS`); `SPECIAL_FX.ff7` is empty; `resolveAbilityFx` takes an optional
+  `sourceId` and answers `'ff7'` from FF7's own table only; `SpellFxLayerOptions.onLand?` and
+  `StageSpellFxOptions.onLand?` report a blow's landing; `FxTarget.members?` carries a group
+  effect's target rectangles (`groupTarget`). FFX and FFX-2 ids, looks and marks are unchanged
+  (`spellfx-effects.test.ts` now sweeps only the non-FF7 ids; `ff7-fx.test.ts` sweeps FF7's).
+- `AirshipBattleHook.opening?()` (`BattleScreenAirship.ts`): FF7's opening camera, awaited by
+  `BattleScreen.showBattleStart` for game `'ff7'` only (same line count).
+- `BattlePresenterArt.resolvePoseMap`: an `ff7-` art id also loads the extra key poses its
+  manifest lists (wind-up, follow-through, the victory keys). No other art id takes the branch.
+
 ## 2026-09-27 — minigame protocol: FFX picker params and backing out (hotfix 24)
 
 **FFX only** [AGENTS.md hard rule 14]. No contract file changes: `types.ts`, `FFXBattleEngine` and

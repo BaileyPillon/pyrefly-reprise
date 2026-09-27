@@ -1,0 +1,17 @@
+/*
+ * FF7's results windows and Game Over (FF7 only; D-244 C1 and G1). The windows are the HUD's own
+ * `.ff7hud` material (ff7-hud.css); this adds the black screen behind them, the portraits, the
+ * taps. Scoped under `.ff7res`: nothing here reaches an FFX or FFX-2 screen.
+ */
+.ff7hud.ff7res {
+  background: #000;
+  pointer-events: auto;
+  z-index: 40;
+}
+.ff7hud.ff7res[data-step='over'] { background: #000; }
+.ff7hud.ff7res .ff7-portrait { image-rendering: auto; box-shadow: 0 0 0 1px #000, 0 6px 16px rgba(0, 0, 0, 0.55); }
+.ff7hud.ff7res .ff7-res-next { z-index: 5; }
+.ff7hud.ff7res .ff7-win { z-index: 1; }
+.ff7hud.ff7res .ff7-cur { z-index: 2; }
+.ff7hud.ff7res .ff7-gameover-words { font-family: 'M PLUS Rounded 1c', 'Nunito', sans-serif; font-weight: 500; }
+.ff7hud.ff7res[data-step='over'] .ff7-hit { z-index: 3; }

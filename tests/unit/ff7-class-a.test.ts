@@ -42,9 +42,13 @@ afterEach(() => {
 
 // ------------------------------------------------------------------ boss scale
 
-/** The idle and raised paintings' pixel boxes (their sidecars): one 1216x832 frame, the ground on row 827. */
-const IDLE = { w: 1212, h: 686, baseline: 681 };
-const RAISED = { w: 1070, h: 753 };
+/**
+ * The installed Film paintings (`film-set/scripts/install.py`, x0.75, each padded to centre on the
+ * rear foot): the tail-down idle 1890x808 (baseline 795, painted box x 276..1878, top 12) and the
+ * tail-raised idle 1614x1094 (baseline 1082, box x 136..1601, top 12, subject scale 1442/1060).
+ */
+const IDLE = { w: 1890, baseline: 795, x0: 276, x1: 1878, top: 12 };
+const RAISED = { w: 1614, baseline: 1082, x0: 136, x1: 1601, top: 12, scale: 1442 / 1060 };
 
 function camera(w: number, h: number): PerspectiveCamera {
   const rig = S.sector1RigsFor(w / h).idle;
@@ -55,9 +59,10 @@ function camera(w: number, h: number): PerspectiveCamera {
   return cam;
 }
 
-describe('Guard Scorpion towers over the party (the review\'s boss-scale major)', () => {
+describe("Guard Scorpion towers over the party, sides switched (the boss-scale major; D-259, D-262)", () => {
   for (const [W, H] of [[1600, 900], [390, 844]] as const) {
-    it(`${W}x${H}: 1.6x to 2x the party's height, whole and raised tail inside the frame, above the band`, () => {
+    it(`${W}x${H}: the raised machine towers over Cloud and runs twice his height long; whole body in frame, above the band`, () => {
+      const layout = S.sector1Layout(W / H);
       const cam = camera(W, H);
       const sy = (p: readonly number[]): number => ((1 - new Vector3(p[0], p[1], p[2]).project(cam).y) / 2) * H;
       const sx = (p: readonly number[]): number => ((new Vector3(p[0], p[1], p[2]).project(cam).x + 1) / 2) * W;
@@ -66,41 +71,39 @@ describe('Guard Scorpion towers over the party (the review\'s boss-scale major)'
       const msgBottom = g.msg.y + g.msg.h;
 
       const hb = S.SECTOR1_HEIGHTS['guard-scorpion'];
-      const unit = hb / IDLE.baseline; // world units per source px, both paintings
-      const [bx, , bz] = S.SECTOR1_BOSS_SPOT;
-      const feet = sy(S.SECTOR1_BOSS_SPOT);
-      const idleTop = sy([bx, IDLE.h * unit, bz]);
-      const shift = S.bossArtShift(S.SECTOR1_TAIL_UP_ART);
-      const raisedTop = sy([bx + shift, RAISED.h * unit, bz]);
+      const unit = hb / IDLE.baseline; // world units per installed px, both paintings (the raised one's subject scale evens it)
+      const rUnit = (hb / RAISED.baseline) * RAISED.scale;
+      const [bx, , bz] = layout.boss;
+      const feet = sy(layout.boss);
+      const idleTop = sy([bx, (IDLE.baseline - IDLE.top) * unit, bz]);
+      const raisedTop = sy([bx, (RAISED.baseline - RAISED.top) * rUnit, bz]);
+      const head = sx([bx - (IDLE.w / 2 - IDLE.x0) * unit, 0, bz]);
+      const tail = sx([bx + (IDLE.x1 - IDLE.w / 2) * unit, 0, bz]);
 
-      const member = (slot: number, height: number): number => {
-        const p = S.rowSpot(slot, 'front');
-        return sy(p) - sy([p[0], height, p[2]]);
-      };
-      const bossPx = feet - idleTop;
-      for (const [name, px] of [['cloud', member(0, S.SECTOR1_HEIGHTS.cloud)], ['barret', member(1, S.SECTOR1_HEIGHTS.barret)]] as const) {
-        expect(bossPx / px, name).toBeGreaterThanOrEqual(1.6);
-        expect(bossPx / px, name).toBeLessThanOrEqual(2);
-      }
-      expect(feet).toBeLessThan(band - 20);
+      const cloud = S.rowSpot(0, 'front', layout);
+      const cloudPx = sy(cloud) - sy([cloud[0], S.SECTOR1_HEIGHTS.cloud, cloud[2]]);
+      expect((feet - raisedTop) / cloudPx).toBeGreaterThanOrEqual(1.4);
+      expect((tail - head) / cloudPx).toBeGreaterThanOrEqual(W > H ? 2.2 : 1.8);
+      expect(feet).toBeLessThan(band - 15);
       expect(idleTop).toBeGreaterThan(msgBottom);
-      expect(raisedTop).toBeGreaterThan(msgBottom);
-      // The tail tip (the idle painting's left edge) and the raised one inside the frame.
-      expect(sx([bx - (IDLE.w * unit) / 2, 0, bz])).toBeGreaterThan(0);
-      expect(sx([bx + shift - (RAISED.w * unit) / 2, 0, bz])).toBeGreaterThan(0);
-      // Its chest (where a numeral lands) is inside the frame and above the band.
+      expect(raisedTop).toBeGreaterThan(msgBottom - 12); // the lens tucks just under the message window
+      expect(head).toBeGreaterThan(0);
+      if (W > H) expect(tail).toBeLessThan(W); // on a phone the lowered tail may trail off the right edge (E1)
       const chest = (feet + idleTop) / 2;
       expect(chest).toBeGreaterThan(msgBottom);
       expect(chest).toBeLessThan(band);
     });
   }
 
-  it('keeps the melee strike point just in front of the bigger painting', () => {
-    const hb = S.SECTOR1_HEIGHTS['guard-scorpion'];
-    const halfWidth = ((IDLE.w * hb) / IDLE.baseline) / 2;
-    const gap = FF7_REACH_PER_HEIGHT * hb - halfWidth;
-    expect(gap).toBeGreaterThan(0.8);
-    expect(gap).toBeLessThan(1.4);
+  it('keeps the melee strike point just in front of the rifles, on the party side, in both layouts', () => {
+    for (const layout of [S.SECTOR1_DESK, S.SECTOR1_PHONE]) {
+      const [x] = S.strikeSpot(layout);
+      const rifles = layout.boss[0] - S.SECTOR1_BOSS_FRONT;
+      expect(rifles - x, layout.name).toBeGreaterThan(0.2);
+      expect(rifles - x, layout.name).toBeLessThan(0.8);
+      expect(x, layout.name).toBeGreaterThan(layout.front[0]![0]); // Cloud runs toward the boss
+    }
+    expect(FF7_REACH_PER_HEIGHT).toBeGreaterThan(0);
   });
 });
 

@@ -187,6 +187,12 @@ export interface SceneStaging {
    * §7 #15). Omitted everywhere else: FFX and FFX-2 keep their rings.
    */
   readonly turnRings?: false;
+  /**
+   * Longest side a figure's painting may reach, as a multiple of its world height (the actor's
+   * `poseScaling.maxExtent`, default 2.2). FF7 only today: Guard Scorpion is a long machine whose
+   * paintings are padded to register on its rear foot. Unset everywhere else.
+   */
+  readonly figureExtent?: number;
 }
 
 /** The staging switches a build set, and only those. */
@@ -201,6 +207,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.sideFacing) out.sideFacing = build.sideFacing;
   if (build.fixedCamera) out.fixedCamera = true;
   if (build.turnRings === false) out.turnRings = false;
+  if (build.figureExtent) out.figureExtent = build.figureExtent;
   return out;
 }
 

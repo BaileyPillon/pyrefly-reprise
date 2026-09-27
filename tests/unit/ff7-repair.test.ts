@@ -10,7 +10,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { MathUtils, PerspectiveCamera, Vector3 } from 'three';
 
-import { Ff7ActionMotion, FF7_ENEMY_MOVES, FF7_REACH_PER_HEIGHT } from '../../src/app/screens/BattleScreenFf7Motion.ts';
+import { Ff7ActionMotion, FF7_ENEMY_MOVES } from '../../src/app/screens/BattleScreenFf7Motion.ts';
 import { presenterGameDeps } from '../../src/app/screens/BattleScreenGameDeps.ts';
 import { createEngine } from '../../src/app/screens/BattleScreenWiring.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
@@ -49,7 +49,7 @@ function camera(w: number, h: number): PerspectiveCamera {
 const screenY = (cam: PerspectiveCamera, p: [number, number, number], h: number): number => ((1 - new Vector3(...p).project(cam).y) / 2) * h;
 const screenX = (cam: PerspectiveCamera, p: [number, number, number], w: number): number => ((new Vector3(...p).project(cam).x + 1) / 2) * w;
 
-describe('the raised fixed camera (review items 1 and 3)', () => {
+describe('the raised fixed camera, sides switched (review items 1 and 3; D-262)', () => {
   const W = 1600;
   const H = 900;
   const cam = camera(W, H);
@@ -68,31 +68,32 @@ describe('the raised fixed camera (review items 1 and 3)', () => {
     for (const [name, p, height] of figures) {
       const feet = screenY(cam, p, H);
       const head = screenY(cam, [p[0], height, p[2]], H);
-      expect(feet, name).toBeLessThan(band - 20); // the contact shadow clears the band too
+      expect(feet, name).toBeLessThan(band - 15); // the contact shadow clears the band too
       expect(head, name).toBeGreaterThan(msgBottom);
     }
     const pitch = MathUtils.radToDeg(Math.atan2(S.SECTOR1_CAMERA.position[1] - S.SECTOR1_CAMERA.lookAt[1], S.SECTOR1_CAMERA.position[2]));
     expect(pitch).toBeCloseTo(S.SECTOR1_PITCH_DEG, 6);
   });
 
-  it('stands Cloud and Barret side by side in depth, one front row, so they read as a diagonal', () => {
+  it('stands Barret upstage-left of Cloud, both on the left of the frame, so they read as a diagonal', () => {
     const [cloud, barret] = [S.rowSpot(0, 'front'), S.rowSpot(1, 'front')];
-    expect(cloud[0]).toBe(barret[0]); // the same row: the same distance across from the enemy
-    expect(barret[2]).toBeLessThan(cloud[2] - 2); // Barret upstage
+    expect(barret[2]).toBeLessThan(cloud[2] - 1); // Barret upstage
     const dy = screenY(cam, cloud, H) - screenY(cam, barret, H);
     const dx = screenX(cam, cloud, W) - screenX(cam, barret, W);
-    expect(dy).toBeGreaterThan(50);
-    expect(dx).toBeGreaterThan(60);
+    expect(dy).toBeGreaterThan(30);
+    expect(dx).toBeGreaterThan(120);
+    expect(screenX(cam, cloud, W)).toBeLessThan(W / 2);
+    expect(screenX(cam, [...S.SECTOR1_BOSS_SPOT], W)).toBeGreaterThan(W / 2);
   });
 
-  it('lifts the painting square to the view so its bottom edge sits at 72 % and it covers the width', () => {
-    const p = S.sector1Backdrop();
+  it('squares the painting to the view, covers the frame and sets its bottom edge on the frame bottom', () => {
+    const p = S.sector1Backdrop(W / H);
     const plateH = (p.width * S.SECTOR1_PLATE.h) / S.SECTOR1_PLATE.w;
     const up = new Vector3(0, Math.cos(p.pitch), -Math.sin(p.pitch));
     const centre = new Vector3(0, p.centreY, p.distance);
     const bottom = centre.clone().addScaledVector(up, -plateH / 2);
     const top = centre.clone().addScaledVector(up, plateH / 2);
-    expect(screenY(cam, [bottom.x, bottom.y, bottom.z], H) / H).toBeCloseTo(S.SECTOR1_PLATE_BOTTOM, 3);
+    expect(screenY(cam, [bottom.x, bottom.y, bottom.z], H) / H).toBeCloseTo(1, 3);
     expect(screenY(cam, [top.x, top.y, top.z], H)).toBeLessThan(0);
     const left = centre.clone().add(new Vector3(-p.width / 2, 0, 0));
     expect(screenX(cam, [left.x, left.y, left.z], W)).toBeLessThan(0);
@@ -152,8 +153,9 @@ describe("FF7's action motion (review items 4 and 5)", () => {
     const home = { ...stage.mover('cloud').position };
     await motion.open(start('cloud', 'attack', ['guard-scorpion'], 'attack'), ctx(stage));
     const strike = stage.mover('cloud').moves[0]!;
-    expect(strike.x).toBeCloseTo(S.SECTOR1_BOSS_SPOT[0] + FF7_REACH_PER_HEIGHT * S.SECTOR1_HEIGHTS['guard-scorpion'], 6);
-    expect(strike.x).toBeLessThan(home.x - 3); // a run, not a step
+    expect(strike.x).toBeCloseTo(S.strikeSpot()[0], 6); // just in front of the rifles' tips
+    expect(strike.x).toBeLessThan(S.SECTOR1_BOSS_SPOT[0] - S.SECTOR1_BOSS_FRONT);
+    expect(strike.x).toBeGreaterThan(home.x + 1.5); // a run to the right, toward the boss, not a step
     expect(motion.away('cloud')).toBe(true);
     await motion.close('cloud', ctx(stage));
     expect(stage.mover('cloud').moves[1]).toEqual(home);

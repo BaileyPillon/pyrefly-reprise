@@ -29,7 +29,16 @@ export interface ActionMotionPort {
   open(event: ActionStartEvent, ctx: MotionCtx): Promise<void> | void;
   /** At `action-end`, before the frame returns to neutral: e.g. run back home. */
   close(actorId: CombatantId, ctx: MotionCtx): Promise<void> | void;
+  /** True when this action's wind-up is the game's own (painted key poses): the house lunge and squash stay out. */
+  ownsWindUp?(event: ActionStartEvent): boolean;
+  /** The game's own victory moment in place of the house `victory` pose (FF7's D1 win poses and hold). */
+  victory?(ctx: MotionCtx): Promise<void>;
+  /** The game's own wipe-out moment after the party's KO poses (FF7's G1 pan up). */
+  defeat?(ctx: MotionCtx): Promise<void>;
 }
+
+/** How long a game's victory or defeat moment may take before playback moves on without it, ms (a guard). */
+export const MOMENT_GUARD_MS = 9_000;
 
 /** How long a motion step may take before playback moves on without it, ms (a guard, never the timing). */
 export const MOTION_GUARD_MS = 1_600;

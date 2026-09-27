@@ -1,0 +1,63 @@
+/*
+ * The punchier FF7 menu look (FF7 only; D-261, Bailey 2026-09-27: "I'll go with all of your
+ * recommendations", with "i need tons of eye candy it needs to be higher fidelity than the
+ * original in this regard" still in force): heavier letters, a glass sheen on every window, a
+ * soft blue outer glow, a lit active row, a glowing finger and ready marker, a blazing full Limit
+ * gauge and glowing damage digits, as in docs/concepts/ff7-eyecandy-quick-2026-09-27/. A look
+ * change on the D-237 layout: no box moves. Every effect is vector (text stroke, gradients,
+ * shadows, filters), so the text stays sharp at every device pixel ratio. Scoped under `.ff7hud`:
+ * nothing reaches an FFX or FFX-2 HUD, chrome or font stack (rule 14). Our estimates, all of it.
+ */
+
+/* Heavier letters: a stroke in the glyph's own colour, painted under the fill (so it thickens
+   outward), and a faint cool glow. The header caps keep their measured outline. */
+.ff7hud .ff7-t {
+  -webkit-text-stroke: 0.045em currentColor;
+  paint-order: stroke fill;
+  filter: drop-shadow(0 0 0.06em rgba(170, 205, 255, 0.55));
+}
+.ff7hud .ff7-t.ff7-hdr { -webkit-text-stroke: 0.02em currentColor; filter: none; }
+
+/* The window: a soft blue outer glow and a drop shadow, then a glass sheen over the face. */
+.ff7hud .ff7-win { filter: drop-shadow(0 0 12px rgba(70, 130, 255, 0.36)) drop-shadow(0 5px 9px rgba(0, 0, 0, 0.5)); }
+.ff7hud .ff7-win::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 6px;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 38%, rgba(255, 255, 255, 0) 39%, rgba(255, 255, 255, 0) 80%, rgba(120, 170, 255, 0.1) 100%),
+    linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.09) 34%, rgba(255, 255, 255, 0) 40%);
+}
+/* The translucent top message window keeps its half blend under the sheen. */
+.ff7hud .ff7-win[data-win='message']::after { opacity: 0.6; }
+
+/* The lit active row (`ff7MenuHtml.ts` draws it under the row's text). */
+.ff7hud .ff7-rowglow {
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(150, 210, 255, 0), rgba(150, 210, 255, 0.42) 18%, rgba(150, 210, 255, 0.22) 70%, rgba(150, 210, 255, 0));
+  box-shadow: 0 0 18px 4px rgba(120, 190, 255, 0.35);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* The finger and the ready marker glow. */
+.ff7hud .ff7-cur svg { filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 9px rgba(140, 200, 255, 0.7)); }
+.ff7hud .ff7-tri-wrap svg { filter: drop-shadow(0 0 5px rgba(255, 236, 90, 0.95)) drop-shadow(0 0 12px rgba(255, 210, 40, 0.6)); }
+
+/* A full Limit gauge blazes (the blink between its two colours still runs underneath). */
+.ff7hud .ff7-gb.ff7-limit.is-full {
+  box-shadow: 0 0 8px 2px rgba(255, 190, 240, 0.95), 0 0 22px 8px rgba(255, 120, 200, 0.6), 0 0 44px 16px rgba(255, 140, 60, 0.35);
+}
+.ff7hud .ff7-gb.ff7-time.is-full { box-shadow: 0 0 8px 1px rgba(255, 245, 160, 0.7); }
+
+/* Damage and heal digits glow. */
+.ff7hud .ff7-dmg svg { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 7px rgba(255, 122, 217, 0.85)); }
+
+/* The opening (F1): the band waits below the frame until the camera settles, then rises. */
+.ff7hud { transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 320ms ease-out; }
+.ff7hud[data-ff7-opening] { transform: translateY(34%); opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .ff7hud { transition: none; }
+}

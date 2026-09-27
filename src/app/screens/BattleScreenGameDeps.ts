@@ -8,15 +8,15 @@
  * build gets `actionMotion`.
  */
 
-import type { GameId } from '../../battle/common/types.ts';
+import type { BattleState, GameId } from '../../battle/common/types.ts';
 import type { Ff7PartyBuild } from '../../battle/common/types-ff7.ts';
 import type { PresenterDeps } from '../../engine/BattlePresenterPorts.ts';
 import { abilityFactsFor } from './battleAbilityFacts.ts';
 import { Ff7ActionMotion } from './BattleScreenFf7Motion.ts';
 
-export function presenterGameDeps(game: GameId, build: unknown): Pick<PresenterDeps, 'abilityFacts' | 'actionMotion'> {
+export function presenterGameDeps(game: GameId, build: unknown, state?: () => BattleState | null): Pick<PresenterDeps, 'abilityFacts' | 'actionMotion'> {
   const abilityFacts = abilityFactsFor(game);
   const ff7 = build as Partial<Ff7PartyBuild> | null | undefined;
   if (game !== 'ff7' || ff7?.game !== 'ff7' || !Array.isArray(ff7.members)) return { abilityFacts };
-  return { abilityFacts, actionMotion: Ff7ActionMotion.forBuild(ff7 as Ff7PartyBuild) };
+  return { abilityFacts, actionMotion: Ff7ActionMotion.forBuild(ff7 as Ff7PartyBuild, state) }; // FF7: who stands at the win (D1)
 }

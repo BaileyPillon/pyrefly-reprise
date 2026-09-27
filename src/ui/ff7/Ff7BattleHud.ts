@@ -20,6 +20,7 @@
  */
 
 import './ff7-hud.css';
+import './ff7-hud-look.css'; // D-261: the punchier look (heavier letters, sheen, glows, the lit row)
 import './ff7-screen.css'; // the unmarked PAUSE corner (BattleScreen's `battle-pause-chip--ff7`)
 import type {
   AtbSnapshot,

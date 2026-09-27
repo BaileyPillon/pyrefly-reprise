@@ -14,7 +14,9 @@ import {
   SECTOR1_PLATE,
   SECTOR1_STAGING,
   sector1Backdrop,
+  sector1Layout,
   sector1RigsFor,
+  sector1Staging,
 } from './sector1-reactor-staging.ts';
 
 // ---------------------------------------------------------------------------
@@ -27,18 +29,19 @@ import {
 // with pipes running to a valve at its base" [research/ff7-guard-scorpion.md
 // §10, single source: FF Wiki].
 //
-// On whose word: Bailey, 2026-09-27 (D-240): the painting is round 1
-// `reactor-core/core.1` (our own render, rule 8), installed unchanged as
-// `public/art/backdrops/ff7-sector1-reactor.png` and locked in set
-// `bailey:2026-09-27-ff7`. The staging (sides, facing, rows, the fixed camera)
-// and every number are in `./sector1-reactor-staging.ts`, with their sources
-// and which are our estimates.
+// On whose word: Bailey, 2026-09-27 ~13:00 EDT, "I'll go with all of your
+// recommendations" (D-259): the painting is the Film reactor core (our own
+// render, rule 8), installed as `public/art/backdrops/ff7-film-reactor.png` and
+// locked in set `bailey:2026-09-27-ff7-film`. The staging (sides switched,
+// facing, rows, the fixed camera, the phone's drawn-in formation) and every
+// number are in `./sector1-reactor-staging.ts`, with which are our estimates.
 //
-// THE PAINTING. One plane, no parallax layers (the camera never moves, so a
-// layer would only register), square to the raised camera's pitched view and
-// fit to the 16:9 width, lifted so its floor ends at the HUD band's top edge
-// (its crown cropped; `sector1Backdrop`). No 3D ground and no fog: the painting's own grated catwalk is the
-// floor, as in the composite, and each figure brings its contact shadow.
+// THE PAINTING. One plane, no parallax layers (the fixed camera only moves for
+// the FF7 opening and Game Over, too little for a layer to register), square to
+// the pitched view, covering the frame with its bottom on the frame's
+// (`sector1Backdrop`). No 3D ground and no fog: the painting's own grated floor
+// is the floor, and each figure brings its contact shadow. The layout (desk or
+// upright phone, E1) is chosen once, at build, from the viewport.
 
 /** The published slots, same shape every other scene exports. */
 export const SECTOR1_SLOTS: SceneSlots = {
@@ -84,7 +87,8 @@ export const buildSector1ReactorScene: SceneFactory = async (opts: SceneBuildOpt
   group.name = 'scene:sector1-reactor';
   const low = opts.quality === 'low';
   const aspect = viewportAspect();
-  const plane = sector1Backdrop();
+  const layout = sector1Layout(aspect);
+  const plane = sector1Backdrop(aspect);
   const rigs = sector1RigsFor(aspect);
 
   const backdropOptions = {
@@ -94,8 +98,8 @@ export const buildSector1ReactorScene: SceneFactory = async (opts: SceneBuildOpt
     centreY: plane.centreY,
     cameraRef: opts.cameraRef ?? [...SECTOR1_CAMERA.position],
     layers: [],
-    /** `horizon` the tower's lit base, `ground` the grated catwalk, `key` the lamps along the walls. */
-    sampleBands: { sky: [0.0, 0.12], horizon: [0.62, 0.74], ground: [0.86, 0.98], key: [0.3, 0.5] },
+    /** `horizon` the core's lit base, `ground` the grated floor, `key` the lamps along the walls. */
+    sampleBands: { sky: [0.0, 0.12], horizon: [0.52, 0.62], ground: [0.8, 0.96], key: [0.2, 0.45] },
     // No 3D ground: the painting's own grated floor stays visible under the fighters (each has its own contact shadow).
     ground: false,
     fog: false,
@@ -111,8 +115,8 @@ export const buildSector1ReactorScene: SceneFactory = async (opts: SceneBuildOpt
 
   const lights = new LightRig({
     palette: backdrop.palette,
-    // The core's lit crown is above and behind the centre; the mako column glows green below it.
-    keyFrom: [0.5, 6.0, -6.0],
+    // The mako column glows at the centre, behind and between the two sides.
+    keyFrom: [0.0, 5.0, -6.0],
     keyIntensity: 0.85,
     rimFrom: [0.0, 2.2, -9.0],
     rimColor: 0x8fe8c0,
@@ -130,11 +134,11 @@ export const buildSector1ReactorScene: SceneFactory = async (opts: SceneBuildOpt
     lights,
     particles: [],
     rigs,
-    partySlots: SECTOR1_FRONT.map((s) => new Vector3(s[0], s[1], s[2])),
-    enemySlots: [new Vector3(SECTOR1_BOSS_SPOT[0], SECTOR1_BOSS_SPOT[1], SECTOR1_BOSS_SPOT[2])],
+    partySlots: layout.front.map((s) => new Vector3(s[0], s[1], s[2])),
+    enemySlots: [new Vector3(layout.boss[0], layout.boss[1], layout.boss[2])],
     partyHeight: SECTOR1_HEIGHTS.cloud,
     enemyHeight: SECTOR1_HEIGHTS['guard-scorpion'],
-    ...SECTOR1_STAGING,
+    ...sector1Staging(layout),
     palette: { ...SECTOR1_PALETTE },
     update(dt: number): void {
       backdrop.update(dt);

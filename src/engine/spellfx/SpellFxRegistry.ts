@@ -10,8 +10,10 @@
  * `SpellFxLookup.ts`), so the rules can be tested on their own.
  */
 
-export type SpellFxId = 'fire' | 'ice' | 'thunder' | 'water' | 'holy' | 'cure' | 'hit' | 'spiral' | 'megaflare' | 'bloom';
-export type FxGame = 'ffx' | 'ffx2';
+import type { Ff7FxId } from './ff7/ff7FxSpecs.ts';
+
+export type SpellFxId = 'fire' | 'ice' | 'thunder' | 'water' | 'holy' | 'cure' | 'hit' | 'spiral' | 'megaflare' | 'bloom' | Ff7FxId; // FF7's own (ff7/ff7FxSpecs.ts)
+export type FxGame = 'ffx' | 'ffx2' | 'ff7'; // 'ff7': the hidden Guard Scorpion fight, its own effects only
 
 /**
  * Every effect id; `bloom` is today's tinted `ImpactFlash`. `spiral` and

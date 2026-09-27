@@ -212,8 +212,8 @@ export class BattleScreen extends Screen {
       slots: this.scene.slots,
       canvas: this.app.renderer.domElement,
       overlayRoot: this.root,
-      // FF7: none drawn until its options round (battleSpellFx answers 'ff7' with no overlay)
-      spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed),
+      // FF7: its own effects, Spectacle on A3 plus (battleSpellFx answers 'ff7' with battleFf7Fx.ts)
+      spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed, () => this.stage ?? null), // FF7: its hit flash and shake
       sceneKey: this.scene.key,
       grade: this.app.renderer,
     });
@@ -303,7 +303,7 @@ export class BattleScreen extends Screen {
       midScripts: chapter.scriptsRef?.midScripts ?? {},
       // The chapter's own ability rows: an enemy's physical ability draws its
       // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
-      ...presenterGameDeps(chapter.game, chapter.buildRef),
+      ...presenterGameDeps(chapter.game, chapter.buildRef, () => this.engine?.state() ?? null),
       victoryPose: getChapterMeta(chapter.id)?.victoryPose ?? 'pose', // A-4: II, IV, V, XIII hold the battle stance
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
@@ -365,7 +365,7 @@ export class BattleScreen extends Screen {
    */
   private async showBattleStart(): Promise<void> {
     const chapter = this.opts.chapter; // FF7 draws no Ink & Gold card (FF7 HUD spec §7 #15, §8)
-    if (this.opts.speed === 'skip' || this.preview || chapter.game === 'ff7') return;
+    if (this.opts.speed === 'skip' || this.preview || chapter.game === 'ff7') return this.opts.speed === 'skip' || this.preview ? undefined : this.airship?.opening?.(); // FF7: its opening camera (F1)
     const state = this.engine?.state();
     if (!state) return;
     const boss = state.enemyIds

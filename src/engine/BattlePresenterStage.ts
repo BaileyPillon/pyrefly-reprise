@@ -55,7 +55,7 @@ export interface PaintedStageOptions {
   /** Mid-battle entrances by combatant id. Defaults to what the scene published (`StageArrivals.ts`). */
   arrivals?: ArrivalDirectors;
   /** The spell effects' skin, overlay hook, quality tier and flash rules (`spellfx/`). Without `overlay` they never draw. */
-  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate'>;
+  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate' | 'onLand'>;
   /** The location's key, for its pyrefly canon row (`pyreflyCanon.ts`). */
   sceneKey?: string;
   /** The renderer's grade, which D-224's phase lighting turns (`PhaseLighting.ts`). */
@@ -261,7 +261,7 @@ export class PaintedStage implements BattleStage {
       rim: this.opts.rim
         ? { color: this.opts.rim.color, strength: 0.8, dir: this.opts.rim.dir, width: 3.4 }
         : { strength: 0.7 },
-      groundShade: 0.24,
+      groundShade: 0.24, ...(this.opts.slots.figureExtent ? { poseScaling: { maxExtent: this.opts.slots.figureExtent } } : {}), // FF7's long machine (scene switch)
       bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
       shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, ...shadowOf(this.groundLuma) },
       breathe: { amplitude: 0.016, speed: 0.4 },

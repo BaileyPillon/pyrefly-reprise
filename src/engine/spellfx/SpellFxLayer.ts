@@ -34,6 +34,12 @@ export interface SpellFxLayerOptions {
    * under held fast-forward. Unset = real time.
    */
   rate?(): number;
+  /**
+   * A blow is about to land in a drawn effect `ms` effect-milliseconds from now (the target's
+   * mark). Optional; FF7 alone uses it, for its hit flash, knock-back, cast light, shake and
+   * flash frame (`app/screens/battleFf7Fx.ts`).
+   */
+  onLand?(fx: SpellFxId, target: string, ms: number, o: LandOpts): void;
 }
 
 /** What `VfxPort.land` passes down. */
@@ -84,7 +90,7 @@ export class SpellFxLayer {
   /** Which effect this action draws here; `bloom` when the tier or the lookup says so. */
   resolve(o: LandOpts): SpellFxId {
     if (this.quality === 'low') return 'bloom';
-    return resolveAbilityFx(o.abilityId, this.opts.game, o.element, o.heal === true);
+    return resolveAbilityFx(o.abilityId, this.opts.game, o.element, o.heal === true, o.sourceId);
   }
 
   /**
@@ -102,7 +108,9 @@ export class SpellFxLayer {
     if (!run) return 0;
     if (o.crit) run.bloom = CRIT_BLOOM;
     this.covered.set(target, action);
-    return run.msToMark(o.hitIndex ?? 0);
+    const ms = run.msToMark(o.hitIndex ?? 0);
+    this.opts.onLand?.(fx, target, ms, o);
+    return ms;
   }
 
   /** Where a new copy's clock starts: a special that has played this battle skips part of its lead-in. */
@@ -283,5 +291,5 @@ export function groupTarget(r: RunningFx, rectOf: (id: string) => Rect | null, k
   const src = r.targetId ? rectOf(r.targetId) : null;
   const h = 560 * k;
   const from = src ?? { x: party.x - h * 0.375, y: party.y - h * 1.6, w: h * 0.75, h };
-  return { ...targetFromRect(from, k), party };
+  return { ...targetFromRect(from, k), party, members: rects };
 }
