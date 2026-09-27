@@ -30,7 +30,7 @@ export interface Look {
   over: boolean;
   message: string | null;
   seed: number | null;
-  /** Cloud's world x on the field (the melee run: home 4.1, the strike point near 0). */
+  /** Cloud's world x on the field (the melee run: home 4.1, the strike point about 0.9 since the boss scale fix). */
   cloudX: number | null;
 }
 

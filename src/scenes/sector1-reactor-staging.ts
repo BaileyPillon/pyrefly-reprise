@@ -70,8 +70,15 @@ export const SECTOR1_PLATE_BOTTOM = 0.72;
 /** The painting plane's distance from the camera along its view axis. The plane is sized in {@link sector1Backdrop} to fill the frame's width there. */
 export const SECTOR1_BACKDROP_DISTANCE = 26;
 
-/** World heights: Cloud the house human 1.75; Barret and the boss solved from the composite's pixel heights. */
-export const SECTOR1_HEIGHTS = { cloud: 1.75, barret: 2.03, 'guard-scorpion': 2.16 } as const;
+/**
+ * World heights: Cloud the house human 1.75; Barret solved from the composite's pixel heights. Guard
+ * Scorpion is the painting's full height (body and curled tail): 3.3, about 1.9x Cloud and 1.6x Barret in
+ * the world and 1.75x Cloud on screen at 1600x900 (it stands a little upstage of him), so the security mech
+ * towers over the party, its raised tail still under the message window and its tail tip inside the
+ * frame's left edge at 16:9 and upright (the FF7 purist review's boss-scale major; before: 2.16, 1.13x
+ * on screen). Presentation, not game data: our estimate.
+ */
+export const SECTOR1_HEIGHTS = { cloud: 1.75, barret: 2.03, 'guard-scorpion': 3.3 } as const;
 
 /**
  * Party slots by combatant `slot` (0 Cloud, 1 Barret), front row: side by side
@@ -90,7 +97,7 @@ export const SECTOR1_FRONT: ReadonlyArray<readonly [number, number, number]> = [
 /** How far the back row stands behind the front, in +x (away from the enemy). Our estimate. */
 export const SECTOR1_BACK_ROW_DX = 0.6;
 
-/** Guard Scorpion's spot, left of the hall axis (its tail tip just inside the frame's left edge), between the two members in depth. */
+/** Guard Scorpion's spot, left of the hall axis (its tail tip inside the frame's left edge, about 106 px in at 1600x900), between the two members in depth. */
 export const SECTOR1_BOSS_SPOT: readonly [number, number, number] = [-3.1, 0, -0.5];
 
 /** The boss's combatant id (`src/data/ff7/enemies/guard-scorpion.ts`). */

@@ -32,8 +32,8 @@ import { SECTOR1_HEIGHTS } from '../../scenes/sector1-reactor-staging.ts';
 export const FF7_RUN_MS = 460;
 export const FF7_RUN_BACK_MS = 400;
 
-/** How far in front of a target's centre the strike point is, per unit of its height. Our estimate (the boss: 3.0). */
-export const FF7_REACH_PER_HEIGHT = 1.4;
+/** How far in front of a target's centre the strike point is, per unit of its height. Our estimate (the boss: 4.0, about 1.1 in front of its painting's edge). */
+export const FF7_REACH_PER_HEIGHT = 1.22;
 /** The strike point stands this much nearer the camera than the target, so the attacker is drawn in front of it. */
 export const FF7_STRIKE_DZ = 0.5;
 

@@ -149,7 +149,7 @@ describe('FF7 rows (staging §5) and the raised tail', () => {
 
   it('shifts the boss only for the tail-raised painting, by the crop offset at the idle pixel scale', () => {
     expect(S.bossArtShift('ff7-guard-scorpion')).toBe(0);
-    expect(S.bossArtShift(S.SECTOR1_TAIL_UP_ART)).toBeCloseTo((71 * 2.16) / 681, 9);
+    expect(S.bossArtShift(S.SECTOR1_TAIL_UP_ART)).toBeCloseTo((71 * S.SECTOR1_HEIGHTS['guard-scorpion']) / 681, 9);
   });
 
   it('steps a member whose row flipped and moves the boss when its painting swaps', () => {

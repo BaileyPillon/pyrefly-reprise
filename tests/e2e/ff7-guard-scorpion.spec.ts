@@ -90,7 +90,7 @@ function momentShooter(page: Page): { moment: (n: string) => Promise<void>; onLo
       }
       if (l.message === HINT_2) await once('hint-2');
       if (l.message?.startsWith(HINT_3)) await once('hint-3');
-      if (l.cloudX !== null && l.cloudX < 0.6 && !seen.has('melee-strike')) await once('melee-strike'); // Cloud at the strike point
+      if (l.cloudX !== null && l.cloudX < 1.6 && !seen.has('melee-strike')) await once('melee-strike'); // Cloud at the strike point (about 0.9, 1.3 with the tail up; home 4.1)
     },
   };
 }

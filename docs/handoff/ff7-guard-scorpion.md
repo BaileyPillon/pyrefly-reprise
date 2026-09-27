@@ -22,7 +22,8 @@ On chapter select:
 - **Gamepad:** `L1 R1 L1 R1 Select` (on a keyboard `F R F R M`).
 
 The fight opens with the chapters' own transition (the battle swirl) and no other sign. No card,
-no count, no ribbon: the board still has 15 tiles and "of 15". Victory shows the results panel and
+no count, no ribbon: the board still has 15 tiles (14 playable, one COMING) and reads "0 OF 14
+BEATEN" on a fresh save, exactly as `main` does. Victory shows the results panel and
 returns to the board with the cursor where it was. Defeat shows the defeat panel: **RETRY** goes
 straight back in with a new seed (`seed + 1000`), **CHAPTER SELECT** returns. The pause's QUIT and
 RESTART work as in the chapters. Nothing writes `pyrefly-reprise:save:v1`; attempts, clears, best
@@ -156,6 +157,39 @@ over the whole HP field), `sheet-repair-390.jpg` (the phone before vs after), pl
 `sheet-game-*.jpg`. New frames: `game-1600x900-{hint-2,hint-3,melee-strike,defend}.jpg` and the
 same at 390x844.
 
+## Update and class-A fixes, 2026-09-27 (after release 22)
+
+**Game case: FF7 only**, with shared plumbing (both + FF7) for the merge, `battleSpellFx.ts`,
+`ResultsScreen.ts`, `PyreflyStage.ts` / `pyreflyCanon.ts` and the contract files; each answers
+`'ff7'` on its own branch and FFX and FFX-2 behave exactly as on `main`.
+
+| Item | What changed | Files |
+|---|---|---|
+| Merge | `origin/main` at `a44297ca` (iter2-b1, b3, b4, the FFX-2 engine and resolver split) merged `--no-ff`. Conflicts: `battleSpellFx.ts` (main's signature with the playback-speed `rate`, widened to `GameId`; `'ff7'` still returns `{}`), `BattleScreen.ts` (main's stage options: speed getter, `sceneKey`, `grade`), `CONTRACT-CHANGES.md` (both sides, newest first). Main's new `story-fielded-speakers.test.ts` skips FF7 chapters (a type narrowing; FF7 has no mid-battle lines) | merge commit |
+| Pyreflies | Main's A-5 / A-6 would have given the beaten Guard Scorpion the FFX pyrefly dissolve (every enemy defaults to `'dissolve'`). The canon table gets an FF7 row, `sector1-reactor`: absent (pyreflies are Spira's, `research/ffx-vs-ffx2-presentation.md` §3.1; derived), and `PyreflyStage` adds neither the band nor the dissolve for it. The boss keeps the house plain dissolve it had before | `src/engine/pyreflyCanon.ts`, `PyreflyStage.ts` |
+| Boss scale (review major) | `SECTOR1_HEIGHTS['guard-scorpion']` 2.16 to **3.3** (the painting's full height). World: 1.89x Cloud, 1.63x Barret. On screen at 1600x900: 387 px against Cloud's 221 and Barret's 213 (**1.75x / 1.82x**; before 251 px, 1.13x); feet at 560 (band 639), idle top 173, raised tail top 134 (message window ends at 121), tail tip 106 px inside the left edge. At 390x844 the same ratios, top 345, left edge 26 px in. The tail-up sidecar's relative scale (748/681) and its shift (scales with the height) are unchanged. The melee strike point is 1.22 x the target's height (was 1.4), so Cloud still stops about 1.1 in front of the bigger painting (x 0.93). Presentation, our estimate | `src/scenes/sector1-reactor-staging.ts`, `src/app/screens/BattleScreenFf7Motion.ts` |
+| C-2 | The defeat panel reads `pyrefly-reprise:experiments:v1` for an experimental chapter (attempts, best), read-only; the chapters still read the save | `src/app/screens/ResultsScreen.ts` (391 lines) |
+| C-3 | `types.ts` back to **2,667 lines, the same as `main`**: `EnemyDef.ff7` by module augmentation from `types-ff7.ts`, the `'limit-gauge'` fields as `Ff7LimitGaugeFields` there, the rest folded onto existing lines. CONTRACT-CHANGES entry | `src/battle/common/types.ts`, `types-ff7.ts` |
+| C-4 | The board wording above: 15 tiles, "0 OF 14 BEATEN" | this note |
+
+New tests: `tests/unit/ff7-class-a.test.ts` (7: the scale at both sizes through a real three.js
+camera, the strike gap, C-2 with the store and an empty store, C-3, the FF7 pyrefly row);
+`ff7-stage` reads the height from the staging; the e2e's strike-point check is `x < 1.6` (was 0.6).
+
+Checks on the merged tree: `tsc` app and e2e clean; full `vitest run` 533 files pass, 5 skipped,
+1 fails: the known `strategy-ffx2-bahamut` "heal-only route" timeout under full load (17 s), 19/19
+alone; `ffx2-atb-golden` 6/6; the FFX / FFX-2 engine and CTB suites (`ffx-ctb*`, `ffx-engine*`,
+`ffx-round04-engine`, `ffx2-engine*`, `engine/`) 25 files, 316 pass, 5 skipped (the bench);
+`orphans.mjs` 24, the same list; `verify-approved.mjs` 267 ok, 0 mismatched, 0 missing (219
+approved + 48 judge-locked). E2E on a production build (`vite preview`, port 6601, headless GPU
+Chromium): **5 of 5 pass** (the first run failed only the old strike-point threshold). Frames:
+`docs/screenshots/ff7/game-{1600x900,390x844}-{opening,hint-3,tail-laser}.jpg` (the opening, the
+tail raised with the third warning, Tail Laser), with the rest of the set re-shot.
+
+Still owed: the upright phone framing (item 9) makes the bigger boss about 94 px tall on a phone;
+the options round is unchanged. Main's A-8 contact shadows now draw under the FF7 figures too (the
+house shadow restyled, as for every scene).
+
 ## Estimates that show (say "our estimate" to Bailey)
 
 Everything in `docs/handoff/ff7-hud.md` and `ff7-engine.md` still stands. New here: the look of the
@@ -163,7 +197,7 @@ Change / Defend label beside the edge (FF7 draws the finger there; the small win
 touch strips; the item name without the engine's "xN" with the count in its own column; results:
 every member's row prints the full EXP (FF7 gives a member KO'd at the end 0; the result does not
 say who stood), levels gained are not computed. From the repair pass: the raised camera's height,
-pitch and the painting's lift; the party's depth spread; the melee run's strike point (1.4 x the
+pitch and the painting's lift; the party's depth spread; the melee run's strike point (1.22 x the
 target's height in front of it), its timings (460 ms there, 400 ms back) and which actions run; the
 boss's stand-in lunges; the numeral clamp.
 
