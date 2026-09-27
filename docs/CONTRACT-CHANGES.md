@@ -167,6 +167,20 @@ characters speak mid-battle lines, with an authored fallback. **FFX only** for `
 
 No signature changes; a script without `fallback` plays exactly as before.
 
+## 2026-09-26 — `types.ts`: `EnemyGroupDef.headline?` (PR-0205)
+
+**FFX-2 only** in use [AGENTS.md hard rule 14]: Chapter XI's second link, the Magus Sisters
+(`research/ffx2-fallen-aeons.md` §0.3: the three sisters are one formation on the second
+platform). The field itself is presentation plumbing, so either game may set it; nothing else does.
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef` gains an optional `headline?: string`,
+the formation's own name for its opening reveal plate. No engine reads it. `BattleEncounterChain`
+passes it to `BattlePresenter.run(engine, { headline })` (the second argument is optional, so every
+other caller is unchanged) and `openOn` prefers it over the first standing enemy's name. Only
+`roadSistersGroup` sets it ('Magus Sisters', matching the guide's `linkTitles`); every other formation
+still names its first enemy. Round 13 PR-0205: the seam-2 plate read "Sandy". Test:
+`tests/unit/chain-link-headline.test.ts`.
+
 ## 2026-09-26 — `dsl.ts`: `lintScript` also runs the story-text lint (CHK-007)
 
 **Both** [AGENTS.md hard rule 14]: the dialogue box is shared plumbing and prints its text literally in

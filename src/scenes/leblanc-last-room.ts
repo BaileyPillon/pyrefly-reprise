@@ -60,7 +60,7 @@ const BACKDROP = { width: 74, distance: -47, centreY: -1.9 } as const;
  * `midScripts` or `pre`/`post` names a bespoke rig (unlike Bevelle's
  * `bahamut` money shot), so none is authored here.
  */
-const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
+export const LEBLANC_LAST_ROOM_RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   /** The ambush's establishing shot: wide and a little high, door and trio both readable before the fight starts. */
   intro: { position: [0.3, 4.4, 14.6], lookAt: [0.9, 2.1, -3.4], fov: 30, sway: 1.4 },
   idle: { position: CAMERA_REF, lookAt: [0.55, 1.55, -1.35], fov: 32 },
@@ -121,8 +121,16 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
  * 804..867 stays just left of the enemy-intent card (868); Fem-Goon ends at
  * 989, inside the FFX-2 HUD rail (0.72 of the canvas, 1152). Staging only,
  * not game data.
+ *
+ * PR-0136 (round 13, FFX-2 only): 100 px was still one file behind the party.
+ * The lane moves to 1.0..3.0, so the opposing sides stand apart across the
+ * floor: measured at 1600x900 (GPU, seed 1, real keys to each link's first
+ * menu, 2026-09-26), the nearest fiend is 205 px from Paine in Act I (Dr. Goon
+ * 837..893), 225 px in Act II and 162 px in Act III (Logos 810..900); every
+ * fiend starts right of the frame's centre, ends by 1073 (inside the rail) and
+ * stands below the enemy-intent card rather than behind it.
  */
-const ENEMY_LANE_X: [number, number] = [0.0, 2.4];
+export const LEBLANC_ENEMY_LANE_X: [number, number] = [1.0, 3.0];
 
 /** Canonical world heights for the cast that fights here (presentation estimates, not sourced game data — see AGENTS.md rule 6; the stat block in `leblanc-syndicate.ts` carries no physical height). */
 export const LEBLANC_LAST_ROOM_ACTOR_HEIGHTS = {
@@ -308,7 +316,7 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     },
     lights,
     particles,
-    rigs: RIGS,
+    rigs: LEBLANC_LAST_ROOM_RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     // PR-0093: the trio is human-sized, not a boss the scale of Bahamut or
@@ -323,7 +331,7 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
     // a per-slot height table, which is out of this fix's scope.
     partyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.yuna,
     enemyHeight: LEBLANC_LAST_ROOM_ACTOR_HEIGHTS.leblanc,
-    enemyLaneX: ENEMY_LANE_X,
+    enemyLaneX: LEBLANC_ENEMY_LANE_X,
     palette: {
       ...ScenePalettes.chateauLeblanc,
     } satisfies ScenePalette,

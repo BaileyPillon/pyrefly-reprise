@@ -11,6 +11,7 @@ import {
 } from 'three';
 import { artUrl, configurePaintedTexture, tryLoadTexture } from '../engine/PaintedArt.ts';
 import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
+import { sakuraEdgeTexture } from './cavern-sakura-mask.ts';
 
 // ---------------------------------------------------------------------------
 // The night-sakura arrival over the Cavern chamber (FFX only)
@@ -45,6 +46,18 @@ export const SAKURA_FLOOR_GLOW = 70 / 255;
 
 /** The recoloured tree, when the art session has installed it; else {@link paintSakuraTree}. */
 export const SAKURA_TREE_URL = 'art/backdrops/cavern-stolen-fayth/sakura.png';
+
+/**
+ * Where the painted tree's roots end, as a fraction of the canvas from the top
+ * (PR-0184): the last row of `sakura.png` with more than 20 pixels brighter than
+ * 40/255 is 880 of 1024 (measured 2026-09-26). The plane is sunk by the rest, so
+ * the trunk meets the floor instead of hanging 0.9 units above it. The procedural
+ * stand-in roots at 0.98 (`paintSakuraTree`); both sit near enough on the floor.
+ */
+export const SAKURA_TREE_ROOT = 880 / 1024;
+
+/** The plate's edge mask lives in `cavern-sakura-mask.ts` (PR-0184); re-exported for its callers. */
+export { sakuraEdgeAlpha } from './cavern-sakura-mask.ts';
 
 /** The arrival's beats, in ms from the opening shot (the scene's `intro` rig). */
 export const SAKURA_ARRIVAL_MS = {
@@ -171,16 +184,6 @@ export function paintSakuraTree(w = 512, h = 512, seed = 7100): HTMLCanvasElemen
   return c;
 }
 
-/** Is the recoloured tree installed? A dev server answers a missing file with `index.html`. */
-async function treeInstalled(url: string): Promise<boolean> {
-  try {
-    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
-    return res.ok && (res.headers.get('content-type') ?? '').startsWith('image/');
-  } catch {
-    return false;
-  }
-}
-
 /** Where the overlay's pieces stand, in world units (the scene's own numbers). */
 export interface SakuraLayout {
   /** The plane the night veil covers: centre and size, just in front of the painting. */
@@ -227,9 +230,11 @@ export class SakuraArrival {
     this.group.add(this.floorVeil);
 
     const treeTex = configurePaintedTexture(new CanvasTexture(paintSakuraTree()));
-    this.textures.push(treeTex);
+    const edgeTex = sakuraEdgeTexture();
+    this.textures.push(treeTex, edgeTex);
     const treeMat = new MeshBasicMaterial({
       map: treeTex,
+      alphaMap: edgeTex, // PR-0184: no straight plate edge on the sides or top
       transparent: true,
       opacity: 0,
       depthWrite: false,
@@ -239,9 +244,12 @@ export class SakuraArrival {
     });
     const th = layout.tree.height;
     this.tree = new Mesh(new PlaneGeometry(th, th), treeMat);
-    this.tree.geometry.translate(0, th / 2, 0);
+    // PR-0184: the painting's roots, not the canvas bottom, stand on the floor.
+    this.tree.geometry.translate(0, th / 2 - th * (1 - SAKURA_TREE_ROOT), 0);
     this.tree.position.set(...layout.tree.foot);
-    this.tree.renderOrder = -45;
+    // After the night on the floor (2) and its glow (3), before every figure (10): the floor veil
+    // does not write depth, so drawn after the tree it laid the night over the trunk (PR-0184).
+    this.tree.renderOrder = 4;
     this.group.add(this.tree);
 
     const discTex = softDiscTexture();
@@ -276,15 +284,23 @@ export class SakuraArrival {
     this.group.add(this.petals);
   }
 
-  /** Swap in the recoloured painting when it is installed. Never rejects. */
+  /**
+   * Swap in the recoloured painting when it is installed. Never rejects. One GET:
+   * the HEAD probe that used to come first was aborted by Chromium on every entry
+   * (R15-02), and a missing file (a dev server's `index.html`) fails to decode, so
+   * `tryLoadTexture` already answers "not installed" with `null`.
+   */
   async loadPainting(): Promise<void> {
     const url = artUrl(SAKURA_TREE_URL);
-    if (!(await treeInstalled(url))) return;
     const tex = await tryLoadTexture(url);
     if (!tex) return;
     const mat = this.tree.material as MeshBasicMaterial;
     mat.map?.dispose();
     mat.map = tex;
+    // The edge mask keyed to the painting's own blossom (PR-0184); the procedural one stays as a fallback.
+    const keyed = sakuraEdgeTexture(tex.image as CanvasImageSource | undefined);
+    mat.alphaMap = keyed;
+    this.textures.push(keyed);
     mat.needsUpdate = true;
     this.textures.push(tex);
     this.painted = true;

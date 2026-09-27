@@ -148,6 +148,14 @@ export interface PaintedActorOptions {
    * 0 (default) is off; 0.12–0.2 is enough for a full-bleed glow.
    */
   edgeFade?: number;
+  /**
+   * Whether {@link edgeFade} also feathers the plane's base (default `true`, the
+   * whole rectangle). `false` feathers the sides and top only, for a figure whose
+   * feet or coils meet the floor at the bottom edge (PR-0164, `ActorEdgeFeather.ts`).
+   */
+  edgeFadeBase?: boolean;
+  /** How far the {@link edgeFade} start wanders in along each edge (0, default: straight; PR-0164). */
+  edgeJag?: number;
   shadow?: false | PaintedActorShadowOptions;
   /**
    * Whether this figure writes the whole-frame bloom's figure mask
@@ -464,6 +472,8 @@ export class PaintedActor extends Group {
     desaturate: { value: number };
     alphaCut: { value: number };
     edgeFade: { value: number };
+    edgeFadeBase: { value: number };
+    edgeJag: { value: number };
     noiseMap: { value: Texture };
   };
 
@@ -588,6 +598,8 @@ export class PaintedActor extends Group {
       desaturate: { value: 0 },
       alphaCut: { value: opts.alphaCut ?? 0.02 },
       edgeFade: { value: opts.edgeFade ?? 0 },
+      edgeFadeBase: { value: opts.edgeFadeBase === false ? 0 : 1 },
+      edgeJag: { value: opts.edgeJag ?? 0 },
       noiseMap: { value: noiseTexture() },
     };
 
