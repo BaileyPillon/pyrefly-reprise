@@ -46,7 +46,11 @@ import {
 const execFileAsync = promisify(execFile);
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const AUDIO_DIR = path.join(ROOT, 'public/audio');
+// PYREFLY_QA_AUDIO_DIR audits a candidate set (its own manifest.json, music
+// only) with the same gates, e.g. public/audio/candidates/direction-b-2026-09-27.
+const AUDIO_DIR = process.env.PYREFLY_QA_AUDIO_DIR
+  ? path.resolve(process.env.PYREFLY_QA_AUDIO_DIR)
+  : path.join(ROOT, 'public/audio');
 const FFMPEG =
   process.env.FFMPEG_PATH ?? 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe';
 
