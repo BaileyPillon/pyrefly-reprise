@@ -74,3 +74,81 @@ once per menu.
 4. `tests/unit/strategy-ffx2-bahamut.test.ts` "heal-only route" failed once in the full suite under
    load and passes alone (engine-only test, untouched by this branch).
 5. Merge, release and the deep review are the driver's (combat presentation; `critic-plan`).
+
+## CHECK (adversarial, 2026-09-27, a separate agent; branch at 575673ab)
+
+Everything below was measured by running the engine (rule 3). Scratch probes live in
+`.check-advisor-v3-tmp/` in this worktree and are not committed. Verdict: **HOLD for merge** on
+one blocker (Bailey's own case still happens) and four majors.
+
+### What holds
+
+- **Scorecard reproduces exactly.** Rerun of 40 seeds x 15 chapters, v2 and v3 on this tree: every
+  chapter's wins match the builder's table (v2 443, v3 457 of 600; no chapter lower), and so do
+  the duplicate counts (V 25/14, VI 62/54, XI 9/2, XV 16/5) and the missed raises (XI 113 -> 5).
+- **Purity and determinism.** 5 probe sweeps, about 60,000 decisions (FFX-2 and FFX, including
+  random presses to create every kind of pending action: heals, party heals, raises, buffs, Dispel,
+  items, attacks, two girls committing at once): the live engine's state, units, held command,
+  drafts, clock and RNG state were identical before and after every v3 card. 32 runs (8 chapters,
+  4 seeds) with the v3 card computed at every decision or never: identical logs and RNG state at
+  every decision. `ffx2-atb-golden`, `ffx2-engine-fork` and every engine suite pass; the branch
+  touches no engine test.
+- **Menu rows.** 0 off-menu or badly aimed rows in any sweep, including runs that injected Reflect
+  (1,031), Itchy (452), Zombie (540, FFX) and low MP (1,047) on the probe's own engine.
+- **Covered raises.** 0 cases where the card raised a girl a pending command was already raising.
+- **Checks.** tsc clean on the branch (the untracked `tests/unit/zz-scratch/` adds two TS6133
+  errors in this worktree only). Full suite: 1 failure, the known Bahamut "heal-only route"
+  timeout under load; it passes alone with the golden and fork suites.
+- **Time per decision, paired in the same process (v2 and v3 on the same board, alternating).**
+  Node, 10 seeds x 6 FFX-2 chapters: p50 / p95 equal to within 0.1 ms overall (worst v3 p95
+  9.2 ms, Vegnagun); on boards with something in flight v3 is 1.0-1.1x v2 at the median and
+  1.4-1.7x at the p95 of the per-board ratio. Browser, headless GPU, Vite dev: 1600x900 v3 p50
+  4.5-5.4 ms, p95 <= 8.0; 390x844 p50 4.4-6.4, p95 <= 9.5; 390x844 at 4x CPU throttle p50 29-32,
+  p95 34-42 for both v2 and v3. Parity, not the speed-up the table implies (v2's 18.0 ms p95 was
+  one noisy row).
+
+### Blocker
+
+1. **Bailey's own case still happens.** Clean card-following, 40 seeds x 6 FFX-2 chapters, 7,192
+   decisions with a command in flight: 6 top rows are the same move on the same target as a
+   command still charging, 5 of them **Mega-Potion at Chapter V** (seeds 12, 22, 37, 38, 39: Rikku
+   charging Mega-Potion, Paine's card says Mega-Potion). The projection lands the first one before
+   the enemy moves (Rikku 2,421 -> 4,475 of 5,652, Paine 3,666 -> 5,712 of 5,862), no threat is
+   forecast, and the card still spends a second Mega-Potion because it "Puts 1,327 HP back". The
+   module note says "Bailey's Mega-Potion is never advised twice"; it is. Same shape at Leblanc
+   (seed 15, random-press sweep): Paine's Potion and Rikku's Hi-Potion both charging on Yuna, Yuna's
+   card says Potion -> Yuna. Cause: `repeatsInFlight` only looks at commands still in flight on the
+   **projected** board, so a command that lands inside the projection is never checked; the rule
+   needs to run against the real board's in-flight list too (or price the top-up against the
+   chapter line, not against nothing).
+
+### Majors
+
+2. **The card ranks on a finished battle.** In 207 of 19,352 clean decisions the fork's battle (or
+   link) is already won when the projection stops (a charging or held hit finishes the boss), and
+   the card ranks rows on a board with no enemy: Megalixir "7,207 HP back" at Vegnagun seed 1,
+   Mega-Potions, Pray, Hi-Potions where v2 said Attack; once (Bahamut seed 12, low-stock sweep)
+   **Drain -> Yuna**, hitting an ally. Inventory carries to the next link, so this burns rare items.
+   `projectBoard` should return `null` (the v2 reading) when the fork ends the battle.
+3. **The last item already in flight is advised again (a v2 rule lost).** With the last Hi-Potion
+   charging (Leblanc seed 13), v2 said Potion -> Paine (`stockSpokenFor`); v3 says Hi-Potion ->
+   Yuna, because on the projected board the item has landed, nothing is in flight and the stock
+   check sees no committed use. 6 cases in the random-press sweep, 11 in the low-stock sweep
+   (Grenade, Potion, Hi-Potion). The engine then resolves the second copy at 0 stock (execute.ts
+   clamps at 0 and carries on), so it "works" in the engine but not by the menu's own count.
+4. **Lethal saves (Bailey's 2026-09-21 rule), open item 1, re-read on the projected board.** Of
+   v3's 184 real-board misses (V 97, VI 51, XV 28, XI 8), 70 are still misses on the very board the
+   card ranked on (V 51, VI 8, XV 9, XI 2), 85 were no threat there, 13 had no projection, 14
+   were unsavable. v2's real-board total was 61. So most of the rise is not a measuring artifact;
+   it needs a charge-time-aware check before merge.
+5. **The strategy guide's NEXT line is still not in-flight aware** (open item 2). Bailey reads the
+   guide rail and the card together; the guide saying "Mega-Potion" while one charges is the same
+   complaint.
+
+### Minors
+
+- `tests/unit/advisor.test.ts` Chapter 2: a raise override no longer has to say "the long plan
+  is still"; it is a looser check, not only a new exception.
+- `advisor.ts` (1,785 -> 1,812 lines) and `FFX2BattleHud.ts` (1,252 -> 1,262) grew past the 400-line
+  rule (both were already over; the new logic itself is in new modules).
+- Untracked `tests/unit/zz-scratch/` in this worktree would run under `npm test` here and breaks tsc.
