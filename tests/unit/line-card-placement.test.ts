@@ -14,8 +14,17 @@
 import { describe, expect, it } from 'vitest';
 
 import type { ScreenRect } from '../../src/engine/ScreenRects.ts';
-import { coveredArea, lineCardBand, lineCardSlots, pickLineCardPlace } from '../../src/ui/common/lineCardPlacement.ts';
-import { SETTLE_MS, beatSpeakers, createMidBeatLineCard, speakerCombatants } from '../../src/app/screens/midbeatLineCard.ts';
+import {
+  SMALL_CARD_SCALE,
+  coveredArea,
+  grow,
+  guardFor,
+  lineCardBand,
+  lineCardSlots,
+  pickLineCardPlace,
+  torsoOf,
+} from '../../src/ui/common/lineCardPlacement.ts';
+import { SETTLE_MS, STILL_MS, beatSpeakers, createMidBeatLineCard, speakerCombatants } from '../../src/app/screens/midbeatLineCard.ts';
 import { say } from '../../src/story/dsl.ts';
 import type { DialoguePort } from '../../src/story/runner/CutsceneRunner.ts';
 import type { SayStep } from '../../src/story/dsl.ts';
@@ -82,6 +91,41 @@ describe('pickLineCardPlace (pure)', () => {
         expect(s.rect.y + s.rect.h).toBeLessThanOrEqual(h);
       }
     }
+  });
+
+  // The boxes the 2026-09-27 check measured at Chapter III's opening camera
+  // ('bfa-low', Jecht speaking from the Aeon), where the old pick fell back to
+  // the band across Yuna's hips (13,000 to 25,000 px² of her top 65%).
+  const bfaLow = {
+    1600: { party: [R(694, 518, 252, 328), R(426, 516, 144, 335), R(578, 468, 171, 259)], aeon: R(657, 214, 391, 360) },
+    2000: { party: [R(887, 582, 283, 368), R(590, 580, 159, 375), R(754, 524, 192, 292)], aeon: R(857, 239, 439, 407) },
+  } as const;
+  for (const [w, h] of [[1600, 900], [2000, 1012]] as const) {
+    it(`Chapter III opening camera at ${w}x${h}: no 0.7 slot is clear, so a 0.6 card goes top-left, clear with room, not the band`, () => {
+      const { party, aeon } = bfaLow[w];
+      const hard = [...party.map(torsoOf), aeon];
+      for (const s of lineCardSlots(w, h)) expect(coveredArea(s.rect, hard) + coveredArea(s.rect, party)).toBeGreaterThan(0);
+      const pick = pickLineCardPlace({ width: w, height: h, hard, prefer: party });
+      expect(pick.place).toBe('top-left');
+      expect(pick.scale).toBe(SMALL_CARD_SCALE);
+      expect(coveredArea(pick.rect, [...party, aeon].map((r) => grow(r, guardFor(w))))).toBe(0);
+    });
+  }
+
+  it('a slot that only crosses legs beats the band, which crosses everyone', () => {
+    // A close camera: the party's whole boxes reach every slot, their torsos only the top ones.
+    const party = [R(100, 150, 400, 700), R(600, 150, 400, 700), R(1100, 150, 400, 700)];
+    const pick = pickLineCardPlace({ width: 1600, height: 900, hard: party.map(torsoOf), prefer: party });
+    expect(pick.place.startsWith('bottom-')).toBe(true);
+    expect(coveredArea(pick.rect, party.map(torsoOf))).toBe(0);
+  });
+
+  it('keeps room around a guarded box: a slot that clears it by less than the guard is passed over', () => {
+    const slot = lineCardSlots(1600, 900)[0]!;
+    const near = R(slot.rect.x + slot.rect.w + 4, 38, 200, 200); // 4 px right of the top-left card
+    const pick = pickLineCardPlace({ width: 1600, height: 900, hard: [near] });
+    expect(pick.place).not.toBe('top-left');
+    expect(pickLineCardPlace({ width: 1600, height: 900, hard: [near], guard: 0 }).place).toBe('top-left');
   });
 });
 
@@ -181,9 +225,63 @@ describe('the adapter on the live box', () => {
     rects.set('seymour-flux', R(0, 0, 900, 300)); // a fiend who is not speaking: the card stays
     await guarded.say(say('tidus', 'Two.'));
     expect(box.dataset['place']).toBe('top-left');
-    rects.set('tidus', R(0, 0, 1600, 900)); // the party now fills the frame
+    rects.set('tidus', R(0, 0, 1600, 520)); // the party's torso now reaches every top slot
     await guarded.say(say('tidus', 'Three.'));
+    expect(box.dataset['place']).toMatch(/^bottom-/);
+    rects.set('tidus', R(0, 0, 1600, 1500)); // and every slot: the band
+    await guarded.say(say('tidus', 'Four.'));
     expect(box.dataset['place']).toBe('band');
     expect(box.classList.contains('dbox--band')).toBe(true);
+  });
+
+  it('holds the line while the boxes move, shows it once they hold still, and never later than the cap', async () => {
+    const rects = new Map([['tidus', R(410, 520, 200, 330)]]);
+    const { card, box, guarded } = setup(rects, { tidus: 'party' });
+    card.beginBeat([say('tidus', 'One.')]);
+    await guarded.say(say('tidus', 'One.'));
+    expect(card.holding).toBe(true);
+    // The camera is still easing: every frame moves the party a few px.
+    for (let i = 1; i <= 5; i++) {
+      rects.set('tidus', R(410 + i * 5, 520, 200, 330));
+      expect(card.update(1 / 60)).toBe(true);
+    }
+    // Still: the line shows after STILL_MS, well inside the cap.
+    let frames = 0;
+    while (card.update(1 / 60)) frames++;
+    expect(frames * (1000 / 60)).toBeLessThanOrEqual(STILL_MS + 20);
+    expect(card.holding).toBe(false);
+    expect(box.classList.contains('dbox--settling')).toBe(false);
+
+    // A camera that never stops: the cap ends the hold.
+    card.beginBeat([say('tidus', 'Two.')]);
+    await guarded.say(say('tidus', 'Two.'));
+    let t = 0;
+    let x = 410;
+    while (card.update(1 / 60)) {
+      rects.set('tidus', R((x += 3), 520, 200, 330));
+      t += 1000 / 60;
+    }
+    expect(t).toBeGreaterThanOrEqual(SETTLE_MS - 20);
+    expect(t).toBeLessThanOrEqual(SETTLE_MS + 20);
+  });
+
+  it("a beat's camera move puts the card away, and the next line is placed afresh for the new camera", async () => {
+    const rects = new Map([['tidus', R(410, 520, 200, 330)], ['shuyin', R(781, 122, 261, 436)]]);
+    const { card, box, guarded } = setup(rects, { tidus: 'party', shuyin: 'enemy' });
+    const beat = [say('shuyin', "No. I'll end all of it."), say('shuyin', 'Why are you still standing?')];
+    card.beginBeat(beat);
+    await guarded.say(beat[0] as SayStep);
+    while (card.update(1 / 60));
+    expect(box.dataset['place']).toBe('top-left');
+    card.cameraMoves(); // camera('action', 700) after the line: Shuyin comes left, under the card's old place
+    expect(box.classList.contains('dbox--settling')).toBe(true);
+    expect(card.update(1 / 60)).toBe(false); // nothing is held: no line is waiting
+    rects.set('shuyin', R(600, 122, 261, 436));
+    await guarded.say(beat[1] as SayStep);
+    expect(card.holding).toBe(true);
+    while (card.update(1 / 60));
+    expect(box.classList.contains('dbox--settling')).toBe(false);
+    expect(box.dataset['place']).not.toBe('top-left');
+    expect(coveredArea(card.lastPick!.rect, [R(600, 122, 261, 436)])).toBe(0);
   });
 });

@@ -81,16 +81,12 @@ import '../../ui/common/cutscene.css';
 import type { BattleStage, CutsceneRunnerPort } from '../../engine/BattlePresenterPorts.ts';
 import type { AudioPort } from '../../engine/BattlePresenterPorts.ts';
 import type { InputSnapshot } from '../Input.ts';
-import { createMidBeatLineCard, type LineCardStage } from './midbeatLineCard.ts';
-import type { StoryGame } from '../../story/fieldedSpeakers.ts';
+import { createMidBeatLineCard, type LineCardStage, type StoryGame } from './midbeatLineCard.ts';
 
 export interface MidBattleCutsceneOptions {
   /** Where the dialogue box mounts. The battle screen's root. */
   root: HTMLElement;
-  /**
-   * The live field, for camera moves, actor poses and VFX. Its projected boxes
-   * (`PaintedStage.screenRects`, optional) place the line card (PR-0211).
-   */
+  /** The live field, for camera moves, poses and VFX; its boxes place the line card (PR-0211). */
   stage: BattleStage & Pick<LineCardStage, 'screenRects'>;
   /** Which game's party speaks (PR-0037). Read from the mounted HUD when absent. */
   game?: StoryGame;
@@ -317,6 +313,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
     // same end state, at no cost, and with no tween left running into the
     // fight that resumes underneath it.
     camera: (rig, ms) => {
+      card.cameraMoves();
       if (mode === 'instant') {
         opts.stage.camera.snapTo(rig);
         return;
@@ -476,8 +473,9 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
     },
     update: (dt) => {
       // Scene time: the beat's budget and its line deadlines are spent here,
-      // beside the tweens they are measuring.
+      // beside the tweens they are measuring. They hold while the line card settles.
       lastFrameAt = nowMs();
+      if (card.update(dt)) return;
       if (sceneWaiters.size > 0) {
         const ms = Math.max(0, dt * 1000);
         for (const waiter of [...sceneWaiters]) {
@@ -486,9 +484,8 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
         }
       }
       box.update(dt);
-      card.update(dt);
     },
-    handleInput: (input) => box.handleInput(input),
+    handleInput: (input) => (card.holding ? undefined : box.handleInput(input)),
     skip: () => runner.skip(),
     setAutoAdvance: (on, autoOpts) => {
       mode = !on ? 'manual' : autoOpts?.instant ? 'instant' : 'auto';

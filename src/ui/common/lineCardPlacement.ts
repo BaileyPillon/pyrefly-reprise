@@ -42,9 +42,20 @@ export interface LineCardPick {
  * concept's size.
  */
 export const CARD_SCALE = 0.7;
+
+/**
+ * The same card one step smaller (37.5% of the width), tried before the band.
+ * Chapter III's opening camera leaves no 0.7 slot: Braska's Final Aeon, who
+ * speaks, reaches both top slots and Yuna's torso both bottom ones (measured
+ * 2026-09-27 at 1600x900 and 2000x1012), while a 0.6 card fits top-left, left
+ * of the Aeon. The concept calls its sizes mockup values, not final CSS.
+ */
+export const SMALL_CARD_SCALE = 0.6;
 const WIN_W = 0.625;
 const WIN_H = 0.1319;
 const OVERHANG = 0.0695;
+/** The portrait's foot below the window (0.69vw): part of the card's box. */
+const FOOT = 0.0069;
 
 /** Below this width the box switches to its fixed-px phone layout (`dialogue-box.css`). */
 export const PHONE_MAX_WIDTH = 560;
@@ -57,14 +68,58 @@ export interface LineCardInput {
   /** Viewport width and height (CSS px): the frame the box is laid out in. */
   width: number;
   height: number;
-  /** Boxes the card must not touch: the party, and whoever is speaking. */
+  /**
+   * Boxes the card must never touch: the party's faces and torsos
+   * ({@link torsoOf}, PR-0211's acceptance) and whoever may speak in the beat.
+   */
   hard: readonly ScreenRect[];
+  /**
+   * Boxes the card should miss when a slot can (the party's whole boxes, legs
+   * included): option A's own rule. When no slot misses them, a slot that only
+   * crosses legs still beats the band, which crosses everyone's.
+   */
+  prefer?: readonly ScreenRect[];
   /** Boxes the card would rather miss (every other fiend): a tie-break only. */
   soft?: readonly ScreenRect[];
+  /** Room kept around the hard and preferred boxes, px. Defaults to {@link guardFor}. */
+  guard?: number;
 }
 
-/** The card's candidate places, in preference order, for a viewport. */
-export function lineCardSlots(width: number, height: number): LineCardPick[] {
+/**
+ * The share of a party member's projected box that is face and torso: the top
+ * 65%, the measure PR-0211's acceptance ("no intersection with a party face or
+ * torso") was checked with on 2026-09-27.
+ */
+export const TORSO_FRACTION = 0.65;
+
+/** A party member's face and torso. */
+export function torsoOf(r: ScreenRect): ScreenRect {
+  return { x: r.x, y: r.y, w: r.w, h: r.h * TORSO_FRACTION };
+}
+
+/** `r` grown by `m` on every side. */
+export function grow(r: ScreenRect, m: number): ScreenRect {
+  return { x: r.x - m, y: r.y - m, w: r.w + 2 * m, h: r.h + 2 * m };
+}
+
+/**
+ * Room between the card and a guarded box, as a share of the width.
+ *
+ * The card cannot move during a line, but the camera's idle sway and a
+ * `shake` keep the actors drifting a little under it: up to 8 px at 1600x900
+ * while a line was up, measured 2026-09-27 (`docs/handoff/iter2-b4.md`,
+ * REPAIR). A beat's camera moves are handled apart: the card is put away for
+ * them and placed again (`midbeatLineCard.ts`).
+ */
+export const GUARD_SHARE = 0.01;
+
+/** The default {@link LineCardInput.guard} for a viewport width. */
+export function guardFor(width: number): number {
+  return Math.round(width * GUARD_SHARE);
+}
+
+/** The card's candidate places, in preference order, for a viewport (at `scale` on a desktop). */
+export function lineCardSlots(width: number, height: number, scale: number = CARD_SCALE): LineCardPick[] {
   if (width <= PHONE_MAX_WIDTH) {
     // Portrait phone: a full-width card, stacked down the field. The first is
     // the concept's pick, under the boss bar and the intent card.
@@ -76,10 +131,10 @@ export function lineCardSlots(width: number, height: number): LineCardPick[] {
     return [at('upper', 0.17), at('middle', 0.3), at('lower', 0.43), at('top', 0.04)];
   }
   const vw = width / 100;
-  const w = WIN_W * 100 * vw * CARD_SCALE;
-  const winH = WIN_H * 100 * vw * CARD_SCALE;
-  const over = OVERHANG * 100 * vw * CARD_SCALE;
-  const h = winH + over;
+  const w = WIN_W * 100 * vw * scale;
+  const winH = WIN_H * 100 * vw * scale;
+  const over = OVERHANG * 100 * vw * scale;
+  const h = winH + over + FOOT * 100 * vw * scale;
   const margin = Math.max(16, 2 * vw);
   // Clear of the PAUSE chip in the corner (`BattleScreen.ts`).
   const top = Math.max(36, 2.4 * vw);
@@ -88,7 +143,7 @@ export function lineCardSlots(width: number, height: number): LineCardPick[] {
     place,
     rect: { x, y, w, h },
     winTop: y + over,
-    scale: CARD_SCALE,
+    scale,
   });
   return [
     at('top-left', margin, top),
@@ -110,7 +165,7 @@ export function lineCardBand(width: number, height: number): LineCardPick {
   const over = OVERHANG * 100 * vw;
   const bottom = 0.8 * vw;
   const winTop = height - bottom - winH;
-  return { place: 'band', rect: { x: 1.5 * vw, y: winTop - over, w: 97 * vw, h: winH + over }, winTop, scale: 1 };
+  return { place: 'band', rect: { x: 1.5 * vw, y: winTop - over, w: 97 * vw, h: winH + over + FOOT * 100 * vw }, winTop, scale: 1 };
 }
 
 /** Area of `r` covered by `boxes`, summed (overlaps between boxes counted twice: a ranking, not a measure). */
@@ -124,21 +179,43 @@ export function coveredArea(r: ScreenRect, boxes: readonly ScreenRect[]): number
 }
 
 /**
- * The place for one beat: the first slot that touches no hard box, preferring
- * among those the one that covers least of the soft boxes; the band when every
- * slot touches the party or the speaker.
+ * The place for one beat, with room ({@link LineCardInput.guard}) kept around
+ * every hard and preferred box. In order:
+ *
+ * 1. a slot that misses the hard and the preferred boxes (option A as picked),
+ *    at 0.7, else at {@link SMALL_CARD_SCALE}; among several, the one covering
+ *    least of the soft boxes;
+ * 2. else a slot that misses the hard boxes, covering least of the preferred
+ *    ones (a compact card over one member's legs rather than a band over all);
+ * 3. else option B's band, the picked fallback.
  */
 export function pickLineCardPlace(input: LineCardInput): LineCardPick {
+  const g = input.guard ?? guardFor(input.width);
+  const hard = input.hard.map((r) => grow(r, g));
+  const prefer = (input.prefer ?? []).map((r) => grow(r, g));
   const soft = input.soft ?? [];
-  let best: LineCardPick | null = null;
-  let bestSoft = Infinity;
-  for (const slot of lineCardSlots(input.width, input.height)) {
-    if (coveredArea(slot.rect, input.hard) > 0) continue;
-    const s = coveredArea(slot.rect, soft);
-    if (s < bestSoft) {
-      best = slot;
-      bestSoft = s;
+  const phone = input.width <= PHONE_MAX_WIDTH;
+  const sizes = (phone ? [1] : [CARD_SCALE, SMALL_CARD_SCALE]).map((k) => lineCardSlots(input.width, input.height, k));
+  const least = (from: readonly LineCardPick[], cost: (p: LineCardPick) => number): LineCardPick | null => {
+    let best: LineCardPick | null = null;
+    let bestCost = Infinity;
+    for (const p of from) {
+      const c = cost(p);
+      if (c < bestCost) {
+        best = p;
+        bestCost = c;
+      }
     }
+    return best;
+  };
+  const clearOfHard = sizes.map((slots) => slots.filter((s) => coveredArea(s.rect, hard) === 0));
+  for (const slots of clearOfHard) {
+    const pick = least(slots.filter((s) => coveredArea(s.rect, prefer) === 0), (s) => coveredArea(s.rect, soft));
+    if (pick) return pick;
   }
-  return best ?? lineCardBand(input.width, input.height);
+  for (const slots of clearOfHard) {
+    const pick = least(slots, (s) => coveredArea(s.rect, prefer) * 4 + coveredArea(s.rect, soft));
+    if (pick) return pick;
+  }
+  return lineCardBand(input.width, input.height);
 }
