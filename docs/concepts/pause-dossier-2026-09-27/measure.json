@@ -1,0 +1,202 @@
+{
+  "ch2-1600": {
+    "a-mirror": {
+      "file": "ch2-1600-a-mirror.jpg",
+      "face": [
+        0,
+        198,
+        637,
+        662
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 16,
+      "note": "plate 0.97x, slid -384px past the right edge"
+    },
+    "b-stack": {
+      "file": "ch2-1600-b-stack.jpg",
+      "face": [
+        669,
+        202,
+        1327,
+        681
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 161,
+      "note": null
+    },
+    "c-slide": {
+      "file": "ch2-1600-c-slide.jpg",
+      "face": [
+        963,
+        198,
+        1600,
+        662
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 16,
+      "note": "plate 0.97x, slid 248px"
+    },
+    "d-leave": {
+      "file": "ch2-1600-d-leave.jpg",
+      "face": [
+        669,
+        202,
+        1327,
+        681
+      ],
+      "blocks_on_face": 2,
+      "clearance_px": -1,
+      "note": null
+    }
+  },
+  "ch2-2000": {
+    "a-mirror": {
+      "file": "ch2-2000-a-mirror.jpg",
+      "face": [
+        105,
+        227,
+        845,
+        765
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 16,
+      "note": "plate 1.00x, slid -483px past the right edge"
+    },
+    "b-stack": {
+      "file": "ch2-2000-b-stack.jpg",
+      "face": [
+        823,
+        227,
+        1563,
+        765
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 212,
+      "note": null
+    },
+    "c-slide": {
+      "file": "ch2-2000-c-slide.jpg",
+      "face": [
+        1155,
+        227,
+        1895,
+        765
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 16,
+      "note": "plate 1.00x, slid 325px"
+    },
+    "d-leave": {
+      "file": "ch2-2000-d-leave.jpg",
+      "face": [
+        823,
+        227,
+        1563,
+        765
+      ],
+      "blocks_on_face": 2,
+      "clearance_px": -1,
+      "note": null
+    }
+  },
+  "ch9-1600": {
+    "a-mirror": {
+      "file": "ch9-1600-a-mirror.jpg",
+      "face": [
+        0,
+        200,
+        594,
+        699
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 16,
+      "note": "plate 0.88x, slid -552px past the right edge"
+    },
+    "b-stack": {
+      "file": "ch9-1600-b-stack.jpg",
+      "face": [
+        729,
+        225,
+        1407,
+        794
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 184,
+      "note": null
+    },
+    "c-slide": {
+      "file": "ch9-1600-c-slide.jpg",
+      "face": [
+        1006,
+        200,
+        1600,
+        699
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 16,
+      "note": "plate 0.88x, slid 307px"
+    },
+    "d-leave": {
+      "file": "ch9-1600-d-leave.jpg",
+      "face": [
+        729,
+        225,
+        1407,
+        794
+      ],
+      "blocks_on_face": 2,
+      "clearance_px": -1,
+      "note": null
+    }
+  },
+  "ch9-2000": {
+    "a-mirror": {
+      "file": "ch9-2000-a-mirror.jpg",
+      "face": [
+        31,
+        253,
+        793,
+        893
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 16,
+      "note": "plate 1.00x, slid -624px past the right edge"
+    },
+    "b-stack": {
+      "file": "ch9-2000-b-stack.jpg",
+      "face": [
+        890,
+        253,
+        1652,
+        893
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 234,
+      "note": null
+    },
+    "c-slide": {
+      "file": "ch9-2000-c-slide.jpg",
+      "face": [
+        1207,
+        253,
+        1969,
+        893
+      ],
+      "blocks_on_face": 0,
+      "clearance_px": 16,
+      "note": "plate 1.00x, slid 310px"
+    },
+    "d-leave": {
+      "file": "ch9-2000-d-leave.jpg",
+      "face": [
+        890,
+        253,
+        1652,
+        893
+      ],
+      "blocks_on_face": 2,
+      "clearance_px": -1,
+      "note": null
+    }
+  }
+}
