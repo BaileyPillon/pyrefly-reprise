@@ -27,7 +27,7 @@ import type {
   GarmentGridRegistry,
 } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
-import { ATB_SPEED_MULTIPLIER, MENU_CANCEL_ONLY_DELAY_ABILITIES, type AtbSpeed } from './constants.ts';
+import { ATB_SPEED_MULTIPLIER, MENU_CANCEL_ONLY_DELAY_ABILITIES, STATUS_CLOCKS_HELD_AT, type AtbSpeed } from './constants.ts';
 import { ActingAbilities } from './menu-cancel.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
@@ -130,7 +130,13 @@ export class Ffx2EngineCore {
 
   /** Regen and Poison payouts plus status expiries, for one sub-step. */
   protected advanceStatusClocks(step: number): void {
-    payStatusClocks(this.units, step, (e) => this.emit(e), this.resolveCtx(), (u) => this.aiContext(u));
+    payStatusClocks(this.units, step, (e) => this.emit(e), this.resolveCtx(), (u) => this.aiContext(u), this.heldClocks());
+  }
+
+  /** Status clocks the Config ATB speed holds (`constants.ts` STATUS_CLOCKS_HELD_AT; PR-0108, Sleep at Fast). */
+  protected heldClocks(): ReadonlySet<string> | undefined {
+    const held = STATUS_CLOCKS_HELD_AT[this.speed];
+    return held.size > 0 ? held : undefined;
   }
 
   /**

@@ -187,7 +187,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     }
 
     // Real ms until the next event: game ticks over the Config rate (§1.2).
-    const ms = ticksToMs(nextEventTicks(this.units)) / this.atbRate;
+    const ms = ticksToMs(nextEventTicks(this.units, this.heldClocks())) / this.atbRate;
     return { kind: 'waiting', nextEventMs: Math.max(1, Math.round(ms)) };
   }
 
@@ -278,8 +278,8 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
 
     while (remaining > 0.0001 && guard++ < TICK_SUBSTEP_LIMIT) {
       const step = throughInput
-        ? substepTicks(remaining, soonestEventTicks(this.units))
-        : Math.min(remaining, Math.max(1, nextEventTicks(this.units)));
+        ? substepTicks(remaining, soonestEventTicks(this.units, this.heldClocks()))
+        : Math.min(remaining, Math.max(1, nextEventTicks(this.units, this.heldClocks())));
       remaining -= step;
       this.elapsedMs += ticksToMs(step) / this.atbRate;
       this.battleState.ticks += step;

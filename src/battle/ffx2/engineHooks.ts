@@ -22,12 +22,13 @@ export function payStatusClocks(
   emit: Emit,
   ctx: ResolveContext,
   aiContext?: (unit: Ffx2Unit) => AiContext,
+  held?: ReadonlySet<string>,
 ): void {
   for (const unit of units) {
     if (!unit.alive) continue;
     const hpBefore = unit.hp;
     const payouts: number[] = [];
-    const delta = advanceStatuses(unit, step, emit, (amount) => payouts.push(amount));
+    const delta = advanceStatuses(unit, step, emit, (amount) => payouts.push(amount), held);
     if (delta > 0) {
       emit({
         type: 'damage',

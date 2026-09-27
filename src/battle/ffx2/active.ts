@@ -304,19 +304,19 @@ export function substepTicks(remaining: number, soonest: number): number {
  * reads the raw value ({@link substepTicks}); every other caller wants the
  * clamped {@link nextEventTicks}. Moved out of `engine.ts` (400-line cap).
  */
-export function soonestEventTicks(units: readonly Ffx2Unit[]): number {
+export function soonestEventTicks(units: readonly Ffx2Unit[], held?: ReadonlySet<string>): number {
   let soonest = ticksUntilChainBreak(units);
   for (const unit of units) {
     if (!unit.alive && unit.side === 'party') continue;
     if (isReady(unit)) continue;
-    soonest = Math.min(soonest, ticksUntilNextEvent(unit), ticksUntilStatusEvent(unit));
+    soonest = Math.min(soonest, ticksUntilNextEvent(unit), ticksUntilStatusEvent(unit, held));
   }
   return soonest;
 }
 
 /** {@link soonestEventTicks}, floored at one tick so a step always advances. */
-export function nextEventTicks(units: readonly Ffx2Unit[]): number {
-  const soonest = soonestEventTicks(units);
+export function nextEventTicks(units: readonly Ffx2Unit[], held?: ReadonlySet<string>): number {
+  const soonest = soonestEventTicks(units, held);
   if (!Number.isFinite(soonest) || soonest <= 0) return 1;
   return soonest;
 }

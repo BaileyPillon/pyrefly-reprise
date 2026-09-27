@@ -33,6 +33,18 @@ export const ATB_SPEED_MULTIPLIER: Readonly<Record<AtbSpeed, number>> = {
   fast: 0.53 / 0.42,
 };
 
+/**
+ * PR-0108: at Config ATB SPEED = **Fast**, a sleeping unit never wakes on its own; at Slow and Normal
+ * Sleep runs its clock [§1.5 and §2.8, `[single source: Split Infinity G1004]`; Bailey approved the ATB
+ * SPEED row "fine if it's faithful"]. The statuses whose clocks the engine holds at each speed; a
+ * hit still wakes a sleeper as before. FFX-2 only: FFX's CTB has no ATB speed.
+ */
+export const STATUS_CLOCKS_HELD_AT: Readonly<Record<AtbSpeed, ReadonlySet<string>>> = {
+  slow: new Set(),
+  normal: new Set(),
+  fast: new Set(['sleep']),
+};
+
 /** One *drawn* full HUD bar. 24 000 ticks = 8.00 s of runway. §1.2 `[single source]` */
 export const TICKS_PER_BAR = 24000;
 
