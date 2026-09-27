@@ -80,3 +80,33 @@ research note, with its sources.
 
 Checks: `node D:/Tools/pyrefly-lora/tools/verify-approved.mjs` gave 0 mismatched and 0 missing. `approved-hashes.json` and
 `judge-locked-hashes.json` are untouched. ComfyUI was never restarted, and there were no black frames.
+
+## Bailey 2026-09-27
+
+Bailey, verbatim: "full speed ahead please. godspeed. ill go with all your recommendations."
+Said after seeing the rough composite `06-composite-1600.jpg`. Recorded as `docs/target/decisions.json`
+D-240 (state: adopted, delivery: in-progress, game: FF7 only — schema gap noted there, same as D-237/D-238).
+
+Accepted: the driver's four recommendations —
+
+1. Barret is never mirrored (mirroring puts the gun on the wrong arm); FF7's canon puts his
+   gun-arm on his **right** arm; follow FF7's own battle staging (which side the party stands
+   on and which way it faces) and paint Barret fresh with the gun on the right arm for that
+   facing, using the method that worked for Guard Scorpion (our own flat layout sketch drawn in
+   code, then the pipeline's img2img).
+2. If FF7's staging faces the party the other way from the current candidates, Cloud is
+   repainted for that facing; his single pauldron stays on his **left** shoulder, never mirrored.
+3. Guard Scorpion's tail tip becomes a laser emitter, not a blade, and the body reads bulkier,
+   boss-sized.
+4. The other agent's per-subject picks above (Guard Scorpion `idle-a.3` and `raised-a.2` as the
+   base identity, Cloud `idle.1`, reactor core `core.1`) are accepted as Bailey's picks on
+   recommendation, except where (2) or (3) changes them.
+
+**reaction** — named: "all your recommendations" (the four items above). inferred (agent
+guesses, not yet named by Bailey): the per-subject picks under (4), and the practical read of
+(1) to (3) as repaint instructions for the next art round. undecided: the final Barret painting
+(no clean candidate exists yet — see "Barret: the gun-arm is not solved" above) and, if FF7's
+staging flips the facing, the final repainted Cloud.
+
+Nothing here is installed in `public/art/`. `approved-hashes.json` and `judge-locked-hashes.json`
+are untouched.
