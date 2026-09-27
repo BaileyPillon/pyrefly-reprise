@@ -144,3 +144,31 @@ tests fewer than before, because the back-out removed `flow-stalemate-results.te
 **Batch state after the repair.** Five items stay fixed and checked: PR-0109, PR-0214, PR-0158, PR-0100
 with PR-0173, and PR-0099's docs half. PR-0215 is open with the question above. PR-0216 was not
 reproduced. The branch is green but may not merge ahead of `t1-b5`'s `play.mjs` fix.
+
+## RE-CHECK (independent, 2026-09-26, neither the builder nor the repairer)
+
+Checked `3d914581`. The suite and the browser checks ran in this worktree. Its `node_modules` is its
+own copy and `public/art` is a junction. I made a fresh production build (`vite build`, where the plugin
+printed "left out 291 unshipped file(s)") and served it with `vite preview` on 5975. I stopped the
+server by its PID (60192), and nothing listens on 5975-5979 now. The browser was headless Chromium with
+`PYREFLY_BROWSER=gpu`, pressing real keys. My own driver is `tools/zz-t1b4b-recheck.tmp.mjs`
+(untracked), and the evidence is in `docs/screenshots/t1-b4b/recheck/` (`recheck.json` and JPEG
+frames, not committed).
+
+**Suite.** `npx tsc --noEmit` is clean. The full `vitest run --testTimeout=60000` exits 0, with 453 files
+passed and 4 skipped, and 8,343 tests passed. `node tools/orphans.mjs` reports 24 orphans, the same as
+main. `qa.mjs --strict` exits 0. `themes-audit` reports 0 chapters departing from the chapter cue map.
+
+| Item | What I ran | Result |
+|---|---|---|
+| PR-0215, backed out | The code first. Across `3665f1eb..3d914581`, `git diff` shows no change to `src/app/screens/BattleScreenFlow.ts` (`7d3d9081` is the exact inverse of `db0bd923`), and `flow-stalemate-results.test.ts` is gone. `main` has not touched `src/` since `3665f1eb`, so the file is byte-identical to main. Then the browser, in Ch III at 1600x900 and 390x844: I debug-set the engine's stalemate watch (`rt.progress`) and pressed real Enter. The screen history was `battle` → `chapter-select` at both sizes, **never `results`**, and the board came back on `braskas-final-aeon`. | **Fully gone.** Behaviour matches main and live. The item stays **open** with the wording question for Bailey (options A, B and C above). |
+| `critic/runner/lib/play.mjs` merge condition | `t1-b5` at `077a1816` still presses ArrowRight `idx` times after the prep Esc (lines 68-70, unchanged since `df9e588c`, which is already on this batch's base). Its new `route.mjs` moves to a target id (`selectedId === target`), so that driver is safe. `play.mjs` is not. | **Still open.** It blocks the merge, not the batch's code: `t1-b4b` must not merge to main before or without the `play.mjs` fix, which belongs to `critic/runner`'s owner. |
+| Kept items, spot regression check (both games) | PR-0109: prep Esc for `seymour-flux` and `ffx2-leblanc` came back on that card, 2 of 2. PR-0214: the Ch I pre-scene went null → `pause` → **null**, and the `ffx2-leblanc` battle went `boss-ffx2-aeon` → `pause` → `boss-ffx2-aeon`. PR-0158: in both chapters, Esc 0.5 s after mount was ignored, and at 3 s Esc opened the pause and Esc closed it. That was 4 runs with 0 console or page errors. PR-0100 and PR-0173: the fresh `dist/` has no `audio/candidates`, 0 `*.raw.png` and 0 numbered `*.N.png|json`, 825 files in all. | **Pass, no regression** |
+
+In every run there were 0 console errors, 0 page errors and 0 HTTP responses of 400 or above.
+
+**Stale records, minor, not changed here (the brief allows this section only).** The "Fixed" table at
+the top still lists PR-0215 as a row with `db0bd923`. The committed frames `stalemate-results-ch3.jpg`
+and `stalemate-retry-prep-ch3.jpg`, and `stalemate-run.json`, show the backed-out routing. The REPAIR
+section supersedes all three, but a reader who stops at the table would take PR-0215 as fixed.
+Whoever next edits this file should mark the row "backed out (`7d3d9081`)".
