@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "sampleRate": 44100,
+  "music": {
+    "ff7-guard-scorpion": {
+      "file": "ff7-guard-scorpion.mp3",
+      "loopStart": 6.233764,
+      "loopEnd": 49.870136,
+      "duration": 52.8701,
+      "bytes": 841939,
+      "lufs": -15.99,
+      "truePeakDb": -1.48,
+      "score": "a421c71b9eeaf9d1"
+    }
+  }
+}

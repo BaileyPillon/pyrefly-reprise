@@ -1,0 +1,41 @@
+{
+  "cues": [
+    {
+      "name": "ff7-guard-scorpion",
+      "file": "ff7-guard-scorpion.mp3",
+      "bytes": 841939,
+      "duration": 52.87013605442177,
+      "lufs": -15.991563321804326,
+      "truePeakDb": -1.4800098504105466,
+      "clipped": 0,
+      "clipRuns": 0,
+      "leadingSec": 0.007346938775510204,
+      "trailingSec": 0,
+      "loopStart": 6.233764,
+      "loopEnd": 49.870136,
+      "loopBodySec": 43.636372,
+      "seamStep": 0.007808268070220947,
+      "seamAllowed": 0.05381921030526471,
+      "seamOk": true,
+      "seamFluxRatio": 0.4769165708669392,
+      "seamFluxOk": true,
+      "spectrum": {
+        "sub": -3.4263386043755926,
+        "low": 0,
+        "low-mid": -2.7977699881954523,
+        "mid": -6.379460844644868,
+        "high-mid": -13.577379755567375,
+        "presence": -21.95510551159416,
+        "air": -32.13298827984425
+      },
+      "tilt": -7.333804572912199,
+      "balanceOk": true,
+      "failures": []
+    }
+  ],
+  "sfx": null,
+  "manifest": {
+    "problems": []
+  },
+  "totalBytes": 841939
+}

@@ -1,0 +1,445 @@
+{
+  "generatedBy": "tools/audio/modern/render-ff7-sketch.mjs",
+  "game": "FF7 only (hidden experimental Guard Scorpion encounter); not wired",
+  "score": "tools/audio/scores/2026-09-27/ff7-guard-scorpion.mjs",
+  "bpm": 154,
+  "key": "F minor (Phrygian flat second)",
+  "meter": "4/4",
+  "bars": 32,
+  "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, urgent industrial boss battle, driving synth bass ostinato, low strings, tense minor melody on violins and french horns, trumpets, brass stabs, snare drum, taiko, timpani, metallic industrial percussion, hollow square lead siren, instrumental, no vocals, F minor, 154 bpm, 4/4",
+  "method": {
+    "ckpt": "ace_step_v1_3.5b.safetensors",
+    "seeds": [
+      101,
+      202,
+      303
+    ],
+    "extraSeeds": [
+      404,
+      505,
+      606
+    ],
+    "denoise": 0.4,
+    "fallback": 0.35,
+    "lyrics": "[inst]",
+    "sampler": "euler/simple, 50 steps, cfg 5, shift 5, Reinhard 1.0"
+  },
+  "house": {
+    "file": "D:\\Tools\\pyrefly-scratch\\ff7-music-0927\\ff7-guard-scorpion-house-render.mp3",
+    "seconds": 52.87,
+    "notes": 1677,
+    "loopStart": 6.233764,
+    "loopEnd": 49.870136,
+    "lufs": -15.95,
+    "truePeakDb": -2.24,
+    "seamOk": true,
+    "spectrumOk": true,
+    "tilt": -7.31
+  },
+  "pick": "ff7-ff7-guard-scorpion-d35-s404",
+  "flagged": null,
+  "pickMeasure": {
+    "durationS": 52.85,
+    "centroidHz": 418,
+    "tempoEst": 157.75,
+    "tempoEstFolded": 157.75,
+    "gridHit": 0.465,
+    "gridHitChance": 0.411,
+    "keyEst": [
+      "C major",
+      0.775
+    ],
+    "onsets": 288,
+    "source": {
+      "centroidHz": 496,
+      "tempoEst": 77,
+      "gridHit": 0.827,
+      "onsets": 179
+    },
+    "onsetPrecision": 0.434,
+    "onsetRecall": 0.698,
+    "onsetF": 0.535,
+    "lagMedianAbsMs": 10,
+    "lagMaxAbsMs": 120,
+    "lagSlopeMsPerMin": -73.65,
+    "windowsCorrelated": "6/8",
+    "windowCorrMean": 0.295,
+    "chromaSim": 0.897,
+    "chromaBaselineTwoBarsApart": 0.808,
+    "centroidShiftHz": -78,
+    "structureFidelity": 0.432
+  },
+  "finish": {
+    "lagMs": -10,
+    "lagSeenMs": -10,
+    "lagWindows": 6,
+    "xfadeSec": 0.38961038961038963,
+    "gainDb": 1.42,
+    "ceilingDb": -1.4,
+    "lufs": -15.99,
+    "truePeakDb": -1.48
+  },
+  "lra": 7.3,
+  "candidate": {
+    "file": "ff7-guard-scorpion.mp3",
+    "manifest": "public/audio/candidates/ff7-2026-09-27/manifest.json",
+    "loopStart": 6.233764,
+    "loopEnd": 49.870136,
+    "duration": 52.8701,
+    "bytes": 841939,
+    "lufs": -15.99,
+    "truePeakDb": -1.48,
+    "score": "a421c71b9eeaf9d1"
+  },
+  "clip": {
+    "file": "D:\\Tools\\pyrefly-scratch\\ff7-music-0927\\ff7-guard-scorpion-sketch.mp3",
+    "start": 0,
+    "seconds": 45,
+    "lufs": -16,
+    "truePeakDb": -1.8
+  },
+  "takes": [
+    {
+      "stem": "ff7-ff7-guard-scorpion-d40-s101",
+      "seed": 101,
+      "denoise": 0.4,
+      "gpuSeconds": 57,
+      "tempoKept": false,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 329.9,
+        "tempoEst": 125,
+        "tempoEstFolded": 125,
+        "gridHit": 0.417,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "F major",
+          0.777
+        ],
+        "onsets": 247,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.336,
+        "onsetRecall": 0.464,
+        "onsetF": 0.39,
+        "lagMedianAbsMs": 50,
+        "lagMaxAbsMs": 240,
+        "lagSlopeMsPerMin": -203.49,
+        "windowsCorrelated": "3/8",
+        "windowCorrMean": 0.16,
+        "chromaSim": 0.884,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -166,
+        "structureFidelity": 0.315
+      }
+    },
+    {
+      "stem": "ff7-ff7-guard-scorpion-d40-s202",
+      "seed": 202,
+      "denoise": 0.4,
+      "gpuSeconds": 34.3,
+      "tempoKept": false,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 252.8,
+        "tempoEst": 71.5,
+        "tempoEstFolded": 143,
+        "gridHit": 0.456,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "C major",
+          0.907
+        ],
+        "onsets": 250,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.38,
+        "onsetRecall": 0.531,
+        "onsetF": 0.443,
+        "lagMedianAbsMs": 30,
+        "lagMaxAbsMs": 180,
+        "lagSlopeMsPerMin": -22.66,
+        "windowsCorrelated": "5/8",
+        "windowCorrMean": 0.212,
+        "chromaSim": 0.846,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -243.2,
+        "structureFidelity": 0.284
+      }
+    },
+    {
+      "stem": "ff7-ff7-guard-scorpion-d40-s303",
+      "seed": 303,
+      "denoise": 0.4,
+      "gpuSeconds": 8.1,
+      "tempoKept": false,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 133.4,
+        "tempoEst": 176.25,
+        "tempoEstFolded": 176.25,
+        "gridHit": 0.447,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "F major",
+          0.658
+        ],
+        "onsets": 206,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.403,
+        "onsetRecall": 0.464,
+        "onsetF": 0.431,
+        "lagMedianAbsMs": 10,
+        "lagMaxAbsMs": 10,
+        "lagSlopeMsPerMin": null,
+        "windowsCorrelated": "1/8",
+        "windowCorrMean": 0.145,
+        "chromaSim": 0.871,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -362.6,
+        "structureFidelity": 0.303
+      }
+    },
+    {
+      "stem": "ff7-ff7-guard-scorpion-d35-s101",
+      "seed": 101,
+      "denoise": 0.35,
+      "gpuSeconds": 8.2,
+      "tempoKept": false,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 384.4,
+        "tempoEst": 142.75,
+        "tempoEstFolded": 142.75,
+        "gridHit": 0.429,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "F major",
+          0.8
+        ],
+        "onsets": 280,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.329,
+        "onsetRecall": 0.514,
+        "onsetF": 0.401,
+        "lagMedianAbsMs": 45,
+        "lagMaxAbsMs": 60,
+        "lagSlopeMsPerMin": null,
+        "windowsCorrelated": "2/8",
+        "windowCorrMean": 0.139,
+        "chromaSim": 0.893,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -111.5,
+        "structureFidelity": 0.328
+      }
+    },
+    {
+      "stem": "ff7-ff7-guard-scorpion-d35-s202",
+      "seed": 202,
+      "denoise": 0.35,
+      "gpuSeconds": 10.1,
+      "tempoKept": true,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 273.6,
+        "tempoEst": 154,
+        "tempoEstFolded": 154,
+        "gridHit": 0.422,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "C major",
+          0.877
+        ],
+        "onsets": 230,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.426,
+        "onsetRecall": 0.547,
+        "onsetF": 0.479,
+        "lagMedianAbsMs": 25,
+        "lagMaxAbsMs": 180,
+        "lagSlopeMsPerMin": 43.17,
+        "windowsCorrelated": "4/8",
+        "windowCorrMean": 0.207,
+        "chromaSim": 0.868,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -222.3,
+        "structureFidelity": 0.334
+      }
+    },
+    {
+      "stem": "ff7-ff7-guard-scorpion-d35-s303",
+      "seed": 303,
+      "denoise": 0.35,
+      "gpuSeconds": 8.2,
+      "tempoKept": false,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 180.3,
+        "tempoEst": 127.5,
+        "tempoEstFolded": 127.5,
+        "gridHit": 0.413,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "F major",
+          0.735
+        ],
+        "onsets": 271,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.354,
+        "onsetRecall": 0.536,
+        "onsetF": 0.427,
+        "lagMedianAbsMs": 90,
+        "lagMaxAbsMs": 210,
+        "lagSlopeMsPerMin": -462.9,
+        "windowsCorrelated": "3/8",
+        "windowCorrMean": 0.166,
+        "chromaSim": 0.88,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -315.7,
+        "structureFidelity": 0.322
+      }
+    },
+    {
+      "stem": "ff7-ff7-guard-scorpion-d35-s404",
+      "seed": 404,
+      "denoise": 0.35,
+      "gpuSeconds": 8.2,
+      "tempoKept": true,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 418,
+        "tempoEst": 157.75,
+        "tempoEstFolded": 157.75,
+        "gridHit": 0.465,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "C major",
+          0.775
+        ],
+        "onsets": 288,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.434,
+        "onsetRecall": 0.698,
+        "onsetF": 0.535,
+        "lagMedianAbsMs": 10,
+        "lagMaxAbsMs": 120,
+        "lagSlopeMsPerMin": -73.65,
+        "windowsCorrelated": "6/8",
+        "windowCorrMean": 0.295,
+        "chromaSim": 0.897,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -78,
+        "structureFidelity": 0.432
+      }
+    },
+    {
+      "stem": "ff7-ff7-guard-scorpion-d35-s505",
+      "seed": 505,
+      "denoise": 0.35,
+      "gpuSeconds": 40.8,
+      "tempoKept": true,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 425,
+        "tempoEst": 77,
+        "tempoEstFolded": 154,
+        "gridHit": 0.524,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "F minor",
+          0.736
+        ],
+        "onsets": 210,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.519,
+        "onsetRecall": 0.609,
+        "onsetF": 0.56,
+        "lagMedianAbsMs": 30,
+        "lagMaxAbsMs": 30,
+        "lagSlopeMsPerMin": -4.14,
+        "windowsCorrelated": "5/8",
+        "windowCorrMean": 0.284,
+        "chromaSim": 0.873,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -70.9,
+        "structureFidelity": 0.394
+      }
+    },
+    {
+      "stem": "ff7-ff7-guard-scorpion-d35-s606",
+      "seed": 606,
+      "denoise": 0.35,
+      "gpuSeconds": 38.7,
+      "tempoKept": false,
+      "measure": {
+        "durationS": 52.85,
+        "centroidHz": 388.4,
+        "tempoEst": 181.75,
+        "tempoEstFolded": 181.75,
+        "gridHit": 0.41,
+        "gridHitChance": 0.411,
+        "keyEst": [
+          "F major",
+          0.787
+        ],
+        "onsets": 271,
+        "source": {
+          "centroidHz": 496,
+          "tempoEst": 77,
+          "gridHit": 0.827,
+          "onsets": 179
+        },
+        "onsetPrecision": 0.351,
+        "onsetRecall": 0.531,
+        "onsetF": 0.422,
+        "lagMedianAbsMs": 180,
+        "lagMaxAbsMs": 230,
+        "lagSlopeMsPerMin": -378.35,
+        "windowsCorrelated": "3/8",
+        "windowCorrMean": 0.162,
+        "chromaSim": 0.889,
+        "chromaBaselineTwoBarsApart": 0.808,
+        "centroidShiftHz": -107.6,
+        "structureFidelity": 0.336
+      }
+    }
+  ]
+}
