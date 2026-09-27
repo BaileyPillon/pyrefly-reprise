@@ -31,6 +31,8 @@ import { ActionHelpBar } from './actionBanner.ts';
 import { ActingFade } from './actingFade.ts';
 import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
+import { clipOffStack } from './bracketClip.ts';
+import { FfxTargetPlate } from './targetPlateFfx.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
@@ -147,6 +149,8 @@ export class FFXBattleHud implements HudPort {
   private readonly actionHelp = new ActionHelpBar();
   /** PR-0157: the cards step back while an action plays (B2's acting signal). */
   private readonly actingFade: ActingFade;
+  /** PR-0031 / PR-0178: the top TARGET plate, built OFF (`targetPlateFfx.ts`). */
+  private readonly targetPlate = new FfxTargetPlate();
   private readonly sensorPanel = new SensorPanel();
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
@@ -339,12 +343,16 @@ export class FFXBattleHud implements HudPort {
       this.telegraph.borderEl,
       this.actionHelp.el,
     );
-    this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el);
+    this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el, this.targetPlate.el);
     // PR-0019 (FFX only): so the "ALL ALLIES"/"ALL ENEMIES" chip can clear
     // the slab instead of painting over it — src/ui/ffx/targetChipClear.ts.
     this.commandMenu.targetCursor.setCmdInfoElement(this.infoEl);
-    // PR-0193 (FFX only): the ALL label steps off the panels and the intent card (`groupLabelFit.ts`).
-    this.commandMenu.targetCursor.setGroupLabelFit((el) => fitGroupLabel(el, this.el, this.panelRects()));
+    // PR-0193 (FFX only): the ALL label steps off the panels and the intent card (`groupLabelFit.ts`);
+    // PR-0178: the cursor's layer is clipped off the command rows, so brackets go behind them (`bracketClip.ts`).
+    this.commandMenu.targetCursor.setAfterLayout((el) => {
+      fitGroupLabel(el, this.el, this.panelRects());
+      clipOffStack(el, this.commandMenu.stackEl);
+    });
 
     // A CTB tile doubles as a click target while aiming: routes through the
     // same confirm path as the reticle and Enter, and is a no-op — returns
@@ -823,6 +831,7 @@ export class FFXBattleHud implements HudPort {
   private applySelection(sel: CursorSelection | null): void {
     const ids = new Set(sel?.ids ?? []);
     const kind = sel?.kind ?? 'enemy';
+    this.targetPlate.show(sel ? sel.ids.map((id) => this.nameOf(id)) : null); // PR-0031: OFF until §8 Q5
 
     // The same panel set the field measures against also decides which side of
     // the figure the name plate hangs off, so the plate can never be printed

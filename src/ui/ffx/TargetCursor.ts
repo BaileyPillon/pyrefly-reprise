@@ -124,7 +124,7 @@ export class TargetCursor {
   private cmdInfoEl: HTMLElement | null = null;
   /** FFX only: the menu row a group command was chosen from (PR-0019). */
   private groupAnchorRow: (() => HTMLElement | null) | null = null;
-  private groupLabelFit: ((cursorEl: HTMLElement) => void) | null = null;
+  private afterLayout: ((cursorEl: HTMLElement) => void) | null = null;
 
   constructor() {
     this.el = document.createElement('div');
@@ -201,9 +201,9 @@ export class TargetCursor {
     this.groupAnchorRow = provider;
   }
 
-  /** FFX only (PR-0193): re-seats the whole-side label off the panels after each layout (`groupLabelFit.ts`). */
-  setGroupLabelFit(fit: ((cursorEl: HTMLElement) => void) | null): void {
-    this.groupLabelFit = fit;
+  /** FFX only: runs after each layout (PR-0193 the ALL label's fit, `groupLabelFit.ts`; PR-0178 the stack clip, `bracketClip.ts`). */
+  setAfterLayout(fn: ((cursorEl: HTMLElement) => void) | null): void {
+    this.afterLayout = fn;
   }
 
   /**
@@ -290,7 +290,8 @@ export class TargetCursor {
     return {
       ids: this.targetIds,
       mode: this.mode === 'group' ? 'all' : 'single',
-      kind: this.entries[this.mode === 'group' ? 0 : this.activeIndex]?.kind ?? 'enemy',
+      // PR-0031: a group wears the group's accent (Hastega: ally green), not its first entry's (the caster's 'self').
+      kind: this.mode === 'group' ? this.groupKind() : (this.entries[this.activeIndex]?.kind ?? 'enemy'),
       activeId: this.activeTargetId,
     };
   }
@@ -419,8 +420,8 @@ export class TargetCursor {
       const chip = this.el.querySelector<HTMLElement>('.ffx-target__all');
       const row = this.groupAnchorRow?.() ?? null;
       if (chip && !(row && anchorChipToRow(chip, row, this.el))) clearChipOfSlab(chip, this.cmdInfoEl);
-      if (chip) this.groupLabelFit?.(this.el);
     }
+    this.afterLayout?.(this.el);
   }
 
   /** The ink name plate: name, letter tag, optional note, docked clear of the HUD. */
