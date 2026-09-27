@@ -1,4 +1,5 @@
 import '../../ui/common/results.css';
+import '../../ui/common/results-fit.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
@@ -6,7 +7,6 @@ import type { BattleResult } from '../../battle/common/types.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { createFullBleedStage, createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
-import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import {
   buildMemberRows,
@@ -20,7 +20,7 @@ import {
   victoryHeroHtml,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
-import { DEFEAT_ACTIONS, desktopPageHtml, pageHeading, type LedgerLine, type ResultsChoice, type ResultsPageModel } from '../../ui/common/resultsPage.ts';
+import { DEFEAT_ACTIONS, desktopPageHtml, pageHeading, resultsCaptionHtml, type LedgerLine, type ResultsChoice, type ResultsPageModel } from '../../ui/common/resultsPage.ts';
 import { isPhoneResults, phoneHeroFigure, phoneHeroHtml, phonePageHtml, phoneShellHtml, RESULTS_PHONE_QUERY } from '../../ui/common/resultsPhone.ts';
 import { victoryLine, victoryTurn, wedgeFallenArt, wedgeFigureId, wedgePortraitId, type VictoryLine } from '../../ui/common/victoryLine.ts';
 
@@ -184,9 +184,7 @@ export class ResultsScreen extends Screen {
     if (chapter?.game === 'ffx2') this.stage.el.classList.add('ig--ffx2');
     if (this.silent) this.stage.el.classList.add('rres--silent');
     if (!this.victory) this.stage.el.classList.add('rres--defeat');
-    this.caption = chapter
-      ? `${escapeHtml(chapter.location.toUpperCase())} &middot; ${this.victory ? 'CLEARED' : 'FELL'}`
-      : '';
+    this.caption = chapter ? resultsCaptionHtml(chapter.location, this.victory) : ''; // PR-0172: `results-fit.css`
     if (this.phone) {
       this.stage.el.classList.add('rres--phone');
       const { width, height } = this.phoneSize();

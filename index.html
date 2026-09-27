@@ -6,6 +6,12 @@
     <meta name="color-scheme" content="dark" />
     <meta name="description" content="Pyrefly Reprise - an unofficial HD-2D fan tribute to Final Fantasy X and X-2." />
     <title>Pyrefly Reprise</title>
+    <!-- A-16: the title plate, fetched before any script runs. The same candidates and sizes the
+         title's planes offer (src/app/screens/frontend/titleMarkup.ts), so the browser picks the
+         same file and the plane reuses this request. -->
+    <link rel="preload" as="image" fetchpriority="high" href="/art/title/keyart.png"
+      imagesrcset="/art/title/keyart.png 1344w, /art/title/keyart.2x.webp 2688w"
+      imagesizes="calc(1.11 * max(100vw, 1.750 * 100vh))" />
     <style>
       /* ---- font stack ------------------------------------------------------
          Self-hosted OFL webfonts (see research/assets-and-tech.md §1). The

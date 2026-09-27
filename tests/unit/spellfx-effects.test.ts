@@ -44,8 +44,8 @@ function sweep(id: keyof typeof FX_SPECS, game: FxGame, dens: number, flash = DE
 const IDS = Object.keys(FX_SPECS) as Array<keyof typeof FX_SPECS>;
 
 describe('spell effects (option B)', () => {
-  it('has the seven approved effects', () => {
-    expect(IDS.sort()).toEqual(['cure', 'fire', 'hit', 'holy', 'ice', 'thunder', 'water']);
+  it("has the seven approved effects, plus D-233's two special moments", () => {
+    expect(IDS.sort()).toEqual(['cure', 'fire', 'hit', 'holy', 'ice', 'megaflare', 'spiral', 'thunder', 'water']);
   });
 
   for (const game of ['ffx', 'ffx2'] as const) {

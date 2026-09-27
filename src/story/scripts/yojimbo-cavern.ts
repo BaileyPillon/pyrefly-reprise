@@ -221,7 +221,11 @@ export const yojimboCavernScripts: ChapterScripts = {
     // Gauge crosses 50 %: the Wakizashi joins his pool.
     'yojimbo-long-blade': callout(say('lulu', 'He draws the long blade now. Be quick.')),
     // Gauge full: Zanmato on his next turn.
-    'yojimbo-zanmato-next': callout(say('auron', 'Next turn, he kills us all. Move.')),
+    'yojimbo-zanmato-next': callout(
+      say('auron', 'Next turn, he kills us all. Move.', {
+        fallback: [{ who: 'kimahri', text: 'Next turn, all die. Move.' }, { who: 'lulu' }],
+      }),
+    ),
     // Doom lands on Yojimbo, count 5.
     'yojimbo-doomed': callout(say('kimahri', 'Five breaths. Then gone.')),
     // An aeon stands in front of Zanmato.

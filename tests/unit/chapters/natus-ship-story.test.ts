@@ -73,10 +73,44 @@ describe('the scenes', () => {
     expect(cutsceneFigure('seymour-natus')?.art).toBe('art/characters/seymour-natus/idle.png');
   });
 
-  it('no mid-battle callouts and no victory quips yet (B9 held for Bailey\'s read; grim tier)', () => {
-    expect(seymourNatusScripts.mid).toEqual([]);
-    expect(seymourNatusScripts.midScripts).toEqual({});
+  it('no victory quips (grim tier)', () => {
     expect(seymourNatusScripts.victoryQuips).toEqual({});
+  });
+});
+
+describe('the Talk exchanges (PR-0204, D-203: "put the three drafted lines in")', () => {
+  /** The draft's Talk table: `| Tidus talks (+10 Strength) | Tidus | "..." |` then `| | Seymour | "..." |`. */
+  function draftTalk(): { talker: string; line: string; answer: string }[] {
+    const md = readFileSync(new URL('../../../docs/plans/natus-story-draft.md', import.meta.url), 'utf8');
+    const rows = [...md.matchAll(/^\| (\w+) talks[^|]*\| (\w+) \| "(.+)" \|\s*\n\| \| Seymour \| "(.+)" \|/gm)];
+    return rows.map((m) => ({ talker: m[2]!.toLowerCase(), line: m[3]!, answer: m[4]! }));
+  }
+
+  it('the draft has three exchanges, and each is a Talk trigger that fires once on that member', () => {
+    const talk = draftTalk();
+    expect(talk.map((t) => t.talker)).toEqual(['tidus', 'auron', 'yuna']);
+    for (const t of talk) {
+      const trig = seymourNatusScripts.mid.find((m) => m.id === `natus-talk-${t.talker}`);
+      expect(trig).toEqual({
+        id: `natus-talk-${t.talker}`,
+        when: { type: 'ability-used', who: t.talker, ability: 'talk' },
+        once: true,
+        script: `natus-talk-${t.talker}`,
+      });
+    }
+  });
+
+  it("each script is the talker's drafted line, then Seymour's answer through the Natus portrait, word for word", () => {
+    for (const t of draftTalk()) {
+      const script = seymourNatusScripts.midScripts[`natus-talk-${t.talker}`] ?? [];
+      expect(scriptLines(script)).toEqual([
+        { speaker: t.talker, text: t.line },
+        { speaker: 'seymour-natus', text: t.answer },
+      ]);
+      expect(lintScript(script)).toEqual([]);
+      // Every mid-battle line auto-advances (registry rule 2).
+      expect(script.every((s) => s.type !== 'say' || typeof s.auto === 'number')).toBe(true);
+    }
   });
 
   it('the registered chapter plays these scripts', () => {

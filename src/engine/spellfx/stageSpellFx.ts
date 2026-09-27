@@ -19,6 +19,8 @@ export interface StageSpellFxOptions {
   overlay?: ((draw: (renderer: WebGLRenderer) => void) => () => void) | undefined;
   quality?: (() => FxQuality) | undefined;
   flash?: (() => Readonly<FlashParams>) | undefined;
+  /** The effect clock's rate (the playback speed, `SpellFxSpecials.SPEED_RATE`). */
+  rate?: (() => number) | undefined;
 }
 
 /** The layer, hooked to the renderer. Call the returned `unhook` on dispose. */
@@ -34,6 +36,7 @@ export function stageSpellFx(o: StageSpellFxOptions): { layer: SpellFxLayer; unh
     view: () => ({ w: o.canvas.clientWidth || 1600, h: o.canvas.clientHeight || 900 }),
     ...(o.quality ? { quality: o.quality } : {}),
     ...(o.flash ? { flash: o.flash } : {}),
+    ...(o.rate ? { rate: o.rate } : {}),
   });
   const unhook = o.overlay?.((renderer) => layer.render(renderer)) ?? (() => undefined);
   if (o.overlay && layer.quality !== 'low') layer.prepare();

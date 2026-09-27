@@ -93,6 +93,12 @@ export const shuyinGroup: EnemyGroupDef = {
   // closes on music('boss-shuyin'), the chapter's `phase2`; a chain cue here
   // started the theme a few seconds early, then the scene silenced and restarted it.
   musicCues: [{ at: 'start', track: null, fadeMs: 600 }],
+  // D-217 (Bailey, 2026-09-26, a critic proposal accepted): a loss to Shuyin retries at Shuyin, through
+  // the checkpoint seam Chapter XIII's Trema uses (`app/screens/BattleChainCheckpoint.ts`), with the party
+  // as it came out of the Head. **An adaptation, not a sourced rule** (rule 6):
+  // no research file records a checkpoint before Shuyin. Kept in memory for the run only, never saved.
+  // FFX-2 only.
+  checkpointOnEntry: true,
 };
 
 export default shuyinGroup;

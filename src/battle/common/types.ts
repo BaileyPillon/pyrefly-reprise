@@ -2672,4 +2672,11 @@ export interface EnemyGroupDef {
   carriesPartyState?: boolean;
   timedAilmentDefaults?: boolean; // FFX-2: a duration-0 ailment row lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES)
   actionTimeSeconds?: number; // FFX-2: seconds an action takes before its actor's gauge refills, an [estimate] (E4, `battle/ffx2/action-time.ts`; CONTRACT-CHANGES)
+  /**
+   * FFX-2: a chained link that the source makes a **separate battle** (Chapter VI's Acts II and III,
+   * with puzzles and scenes between them), so its bars open at randomised fills (§1.6, `[single
+   * source]`) instead of the continuation's zero, while HP, MP and items still carry (PR-0107).
+   * Absent everywhere else, so no other chain changes (CONTRACT-CHANGES).
+   */
+  opensAsSeparateBattle?: boolean;
 }

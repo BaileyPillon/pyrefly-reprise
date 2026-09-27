@@ -1,5 +1,5 @@
 /**
- * The seven option-B effects on a clock: when each one lands, when it is over,
+ * The seven option-B effects, and D-233's two special moments, on a clock: when each one lands, when it is over,
  * and one running copy of an effect on one target.
  *
  * A mark is the moment a blow lands inside the effect (the fire column's ring,
@@ -13,6 +13,8 @@
 
 import { fire, ice, thunder, water } from './effects-elements.ts';
 import { cure, hit, holy, X2_HOLY_STRIKES } from './effects-light.ts';
+import { MEGAFLARE_MARK, SPECIAL_END, SPIRAL_MARK, megaflare, spiral } from './effects-specials.ts';
+import { SPECIAL_HOLD_CAP_MS, SPECIAL_REPEAT_START_S, SPELL_HOLD_CAP_MS } from './SpellFxSpecials.ts';
 import type { FxTarget } from './effects-shared.ts';
 import type { FxDrawList } from './FxDrawList.ts';
 import type { FxGame, SpellFxId } from './SpellFxRegistry.ts';
@@ -31,16 +33,37 @@ export interface FxSpec {
   startAt: number;
   /** A fresh copy for every hit (the blow), rather than one per action. */
   perHit: boolean;
+  /**
+   * One copy for the whole action, drawn on the caster and landing on the
+   * centre of its targets (Mega Flare), rather than one copy per target.
+   */
+  group?: boolean;
+  /** The longest the numeral waits for a mark, ms at normal speed. */
+  holdCapMs: number;
+  /** Where the clock starts when this effect has already played this battle; unset = `startAt`. */
+  repeatStartAt?: number;
 }
 
 export const FX_SPECS: Readonly<Record<DrawnFxId, FxSpec>> = Object.freeze({
-  fire: { draw: fire, marks: () => [0.5], end: 2.35, startAt: 0, perHit: false },
-  ice: { draw: ice, marks: () => [0.5], end: 2.8, startAt: 0, perHit: false },
-  thunder: { draw: thunder, marks: () => [0.42], end: 1.65, startAt: 0, perHit: false },
-  water: { draw: water, marks: () => [0.8], end: 1.85, startAt: 0, perHit: false },
-  holy: { draw: holy, marks: (g: FxGame) => (g === 'ffx2' ? X2_HOLY_STRIKES : [0.85]), end: 2.1, startAt: 0, perHit: false },
-  cure: { draw: cure, marks: () => [0.5], end: 2.1, startAt: 0, perHit: false },
-  hit: { draw: hit, marks: () => [0.3], end: 0.8, startAt: 0.2, perHit: true },
+  fire: { draw: fire, marks: () => [0.5], end: 2.35, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },
+  ice: { draw: ice, marks: () => [0.5], end: 2.8, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },
+  thunder: { draw: thunder, marks: () => [0.42], end: 1.65, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },
+  water: { draw: water, marks: () => [0.8], end: 1.85, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },
+  holy: { draw: holy, marks: (g: FxGame) => (g === 'ffx2' ? X2_HOLY_STRIKES : [0.85]), end: 2.1, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },
+  cure: { draw: cure, marks: () => [0.5], end: 2.1, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },
+  hit: { draw: hit, marks: () => [0.3], end: 0.8, startAt: 0.2, perHit: true, holdCapMs: SPELL_HOLD_CAP_MS },
+  // D-233's special moments (`SpellFxSpecials.ts` has the hold rule).
+  spiral: { draw: spiral, marks: () => [SPIRAL_MARK], end: SPECIAL_END, startAt: 0, perHit: false, holdCapMs: SPECIAL_HOLD_CAP_MS, repeatStartAt: SPECIAL_REPEAT_START_S },
+  megaflare: {
+    draw: megaflare,
+    marks: () => [MEGAFLARE_MARK],
+    end: SPECIAL_END,
+    startAt: 0,
+    perHit: false,
+    group: true,
+    holdCapMs: SPECIAL_HOLD_CAP_MS,
+    repeatStartAt: SPECIAL_REPEAT_START_S,
+  },
 });
 
 /** Draw one effect at local time t into the list. */
@@ -64,13 +87,13 @@ export class RunningFx {
   /** Which action started it; the presenter's counter. */
   readonly action: number;
 
-  constructor(id: DrawnFxId, targetId: string, game: FxGame, dens: number, action: number) {
+  constructor(id: DrawnFxId, targetId: string, game: FxGame, dens: number, action: number, startAt = FX_SPECS[id].startAt) {
     this.id = id;
     this.targetId = targetId;
     this.game = game;
     this.dens = dens;
     this.action = action;
-    this.t = FX_SPECS[id].startAt;
+    this.t = startAt;
   }
 
   get spec(): FxSpec {
@@ -79,6 +102,10 @@ export class RunningFx {
 
   /** Debug captures only: the clock stays at `t` until the layer is cleared. */
   held = false;
+  /** How wide the bloom over the figure is: 1.3 once a crit lands in this copy. */
+  bloom = 1;
+  /** A group effect's targets (it is drawn on {@link targetId}, the caster, and lands on their centre). */
+  groupIds: readonly string[] = [];
 
   get done(): boolean {
     return !this.held && this.t >= this.spec.end;
@@ -88,9 +115,9 @@ export class RunningFx {
     if (!this.held) this.t += dt;
   }
 
-  /** Milliseconds until hit `k` lands; 0 when it has, or when the effect has no such mark. */
+  /** Milliseconds until hit `k` lands (at most the spec's hold cap); 0 when it has, or when the effect has no such mark. */
   msToMark(k: number): number {
     const m = this.spec.marks(this.game)[k];
-    return m === undefined ? 0 : Math.max(0, (m - this.t) * 1000);
+    return m === undefined ? 0 : Math.min(this.spec.holdCapMs, Math.max(0, Math.round((m - this.t) * 1000)));
   }
 }

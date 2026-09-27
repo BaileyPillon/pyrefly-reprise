@@ -155,3 +155,18 @@ function actionsHtml(actionIndex: number): string {
   }).join('');
   return `<div class="rres__actions">${slabs}</div>`;
 }
+
+/**
+ * The vertical chapter caption down the page's right edge: `LOCATION · CLEARED` or `· FELL`.
+ *
+ * PR-0172 (both games): the longest locations ran the caption into the button row (CHAPTER
+ * SELECT on a defeat, CONFIRM on a win). The location and the ending are two spans so
+ * `results-fit.css` can end the caption above the buttons by shortening the location, never
+ * the word that says how the fight ended.
+ */
+export function resultsCaptionHtml(location: string, victory: boolean): string {
+  return (
+    `<span class="rres__cap-loc">${escapeHtml(location.toUpperCase())}</span>` +
+    `<span class="rres__cap-end"> &middot; ${victory ? 'CLEARED' : 'FELL'}</span>`
+  );
+}

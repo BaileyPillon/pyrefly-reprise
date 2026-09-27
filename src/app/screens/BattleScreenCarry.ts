@@ -46,6 +46,33 @@ function carryMember(member: FFX2MemberBuild, live: FFX2Combatant | undefined): 
   return wearing(withStatuses, worn) ?? withStatuses;
 }
 
+/**
+ * PR-0124's switch, **OFF** until Bailey rules (plan §8 Q4): at a **plain** FFX-2 chain seam (a
+ * formation without `carriesPartyState` or `carriesFullPartyState`: Chapter V's links, Chapter VI's
+ * Acts, Chapter XI's platforms) each girl starts the next battle in the dressphere she ended the last
+ * one in, on the same grid layout. **GameFAQs' reading, our estimate** (`research/ffx2-combat-core.md`
+ * §10.2: KADFC, *Speed Guide*, FAQ 38278, whose menu step between the Chateau fights only has a purpose
+ * if the dressphere carries; one board post agrees). Gate effects and the worn-this-battle list never
+ * carry (§4.1, §8.2, `[verified: 2 sources]`), nor does the special-dressphere unlock (bremen FAQ
+ * 26991): a girl who ends a link in a special dressphere keeps the preset, an engine choice
+ * (unsourced). Statuses do not ride along either (only XIII's and XV's own approved carries do).
+ * `setupForNextLink(..., { dressphereCarries })` overrides it for a measurement run.
+ */
+export const FFX2_DRESSPHERE_CARRIES = false;
+
+/** PR-0124: every girl in the dressphere she wore at the seam, gates reset; the preset where it cannot be reproduced. */
+export function carryWornDresspheres(build: FFX2PartyBuild, state: BattleState): FFX2PartyBuild {
+  const members = build.members.map((m) => {
+    const live = state.combatants[m.id] as FFX2Combatant | undefined;
+    const worn = live?.dresspheres;
+    if (!worn || worn.special || (live as { sdspPartIds?: unknown[] }).sdspPartIds?.length) return m;
+    const next = wearing(m, worn);
+    if (!next) return m;
+    return { ...next, garmentGrid: { ...next.garmentGrid, passedGates: [], wornThisBattle: [] } };
+  });
+  return { ...build, members: members as FFX2PartyBuild['members'] };
+}
+
 /** The grid's node count as the engine's adapter reads it (`adapters.ts`: clamped 2–6; 6 unknown). */
 function nodeCount(gridId: string): number {
   const grid = (GARMENT_GRIDS as Partial<Record<string, { nodeCount: number }>>)[gridId];

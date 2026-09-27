@@ -38,6 +38,12 @@ export interface TargetingPort {
    * stack counts as hidden. The HUD publishes; the field reads.
    */
   setPanels(panels: ReadonlyArray<{ x: number; y: number; w: number; h: number }>): void;
+  /**
+   * The faces and weapons on the field no panel may cover (CHK-008), in CSS
+   * pixels: the key-feature boxes of the staged paintings that name some
+   * (`engine/keyFeatures.ts`). Optional and additive (PR-0094).
+   */
+  keyFeatures?(): ReadonlyArray<{ x: number; y: number; w: number; h: number }>;
 }
 
 export interface HudPort {

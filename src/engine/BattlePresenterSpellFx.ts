@@ -10,6 +10,7 @@
 
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
+import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
 
 /** The action whose effects are playing. */
 export interface ActingAction {
@@ -19,8 +20,13 @@ export interface ActingAction {
   targets: readonly CombatantId[];
 }
 
-/** The longest a numeral waits for its spell, at normal speed (FFX-2 Holy's first strike is 550 ms in). */
-export const SPELL_WAIT_CAP_MS = 900;
+/**
+ * The longest a numeral waits for its spell, at normal speed: the outer guard.
+ * Each effect caps its own wait (`FxSpec.holdCapMs`): 900 ms for a spell
+ * (FFX-2 Holy's first strike is 550 ms in), 1.5 s for D-233's special moments,
+ * which land about 1.45 s in.
+ */
+export const SPELL_WAIT_CAP_MS = SPECIAL_HOLD_CAP_MS;
 
 const serials = new WeakMap<EventCtx, number>();
 /**
@@ -59,7 +65,8 @@ export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEven
     element: event.element,
     heal,
     hitIndex: event.hitIndex,
-    ...(ours ? { targets: a.targets, action: a.serial } : {}),
+    ...(ours ? { targets: a.targets, action: a.serial, sourceId: a.actorId } : {}),
+    ...(event.crit ? { crit: true } : {}),
   });
   if (ms <= 0) return;
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex });

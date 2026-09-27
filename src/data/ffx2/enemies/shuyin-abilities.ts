@@ -113,7 +113,9 @@ export const shuyinAbilities: AbilityDef[] = [
     // Also the Phase A -> Phase B transition and the "Head becomes targetable" marker; re-fired if both
     // Redoubts are downed again mid-Phase-B (a wasted Head turn) [§4.1, §5.4].
     messageTemplate: 'Vegnagun uses Acta Est Fabula',
-    extra: { phaseTransition: 'A-to-B', headBecomesTargetable: true },
+    // Acta F4 guard (D-193): its sourced target is both Redoubts, never the Head [§3.4, verified: 2 sources], as
+    // the engine's own row (`battle/ffx2/abilities-shuyin.ts`) already says; `resolve.ts` reads the key.
+    extra: { phaseTransition: 'A-to-B', headBecomesTargetable: true, namedTargetsOnly: true },
   },
   // --- Battle 4: Redoubts --------------------------------------------------------
   {

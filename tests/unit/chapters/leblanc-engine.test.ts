@@ -246,14 +246,14 @@ describe('A5 — No Love Lost', () => {
     expect(picks).not.toContain('x2-nll-1');
   });
 
-  it('turn 1 and turn 5 are Not-So-Mighty Guard, turn 2 is Fan Slap [§5.3]', () => {
+  it('turn 1 and turn 5 are Not-So-Mighty Guard (the wiki transcription of turn 5; the SinirothX Fan Slap is the OFF switch of PR-0106, §19.3), turn 2 is Fan Slap [§5.3]', () => {
     const picks = leblancTurns(6, true);
     expect(picks[0]).toBe('x2-leblanc-not-so-mighty-guard');
     expect(picks[1]).toBe('x2-leblanc-fan-slap');
     expect(picks[4]).toBe('x2-leblanc-not-so-mighty-guard');
   });
 
-  it('the `25 + uses` failsafe forces Not-So-Mighty Guard [§5.3]', () => {
+  it('the `25 + uses` failsafe, AUTHORED reading (every turn past 25 + uses; §19.2 finds no source for it; the SinirothX once-only reading is the OFF switch of PR-0106) [§5.3]', () => {
     // Four uses by turn 27, so `turn > 25 + uses` opens at turn 30. The two
     // overrides are listed in the source in this order, so a later `[8x - 5]`
     // turn (35, 43 …) still takes No Love Lost rather than the failsafe.

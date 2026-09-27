@@ -66,8 +66,16 @@ export const vegnagunTailScript: AiScript = {
 
 /**
  * `Action1` — one in three each: Berserk, Break (Petrify) or Slow, each
- * preferring a target that does not already have it. If every target already
- * has the rolled status the Leg falls back to Absorb. §5.2
+ * preferring a target that does not already have it. §5.2
+ *
+ * The Absorb fallback when every target already has the rolled status is
+ * **sourced for Berserk and Slow only** (§5.2: "if all Berserked -> Absorb",
+ * "if all Slowed -> Absorb"). §5.2 gives the Break branch **no fallback**; using
+ * Absorb there too is an **inference** from the two sibling lines (PR-0054), not
+ * a source. D-214 takes GameFAQs' reading where one exists; none has been read
+ * yet (GameFAQs refuses non-browser fetches; the L-4 reading pass owns it). The
+ * state needs all three girls already Petrified, which PR-0145 now ends as a
+ * Game Over, so the inferred branch cannot be reached in a live battle.
  */
 function legAction1(ctx: AiContext): Command {
   const party = ctx.party();

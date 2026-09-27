@@ -281,14 +281,14 @@ export const braskasFinalAeonScripts: ChapterScripts = {
       sfx('yu-yevon-chant'), // Someone praying, too fast, forever.
       camera('idle', 900),
       wait(1400),
-      say('rikku', 'What is that noise? Make it stop—', { auto: 1100 }),
+      say('rikku', 'What is that noise? Make it stop—', { auto: 1100, fallback: [{ who: 'tidus' }] }),
       say('auron', 'That is Yu Yevon.', { auto: 900 }),
       say('tidus', 'Saying what?', { auto: 900 }),
       say('auron', 'Nothing.', { auto: 900 }),
       say('auron', 'It stopped meaning anything a long time ago.', { auto: 1200 }),
       beat(1400), // It enters Valefor. The aeon's eyes go wrong.
       say('yuna', '...Oh.', { emotion: 'pained', auto: 1200 }),
-      say('lulu', "Yuna. You don't have to be the one who—", { auto: 1000 }),
+      say('lulu', "Yuna. You don't have to be the one who—", { auto: 1000, fallback: [{ who: 'tidus' }] }),
       say('yuna', 'Yes. I do.', { auto: 1100 }),
       beat(1200),
       say('yuna', 'They came when I called.', { auto: 1000 }),

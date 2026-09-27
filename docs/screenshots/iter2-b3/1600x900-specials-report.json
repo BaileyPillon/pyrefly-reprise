@@ -1,0 +1,51 @@
+{
+ "mode": "specials",
+ "tag": "1600x900",
+ "errors": [],
+ "ffx": {
+  "lands": {
+   "lands": [
+    {
+     "t": "seymour-flux",
+     "a": "spiral-cut",
+     "fx": "spiral",
+     "ms": 1430
+    },
+    {
+     "t": "kimahri",
+     "a": "lance-of-atrophy",
+     "fx": "hit",
+     "ms": 100
+    },
+    {
+     "t": "kimahri",
+     "a": "full-life",
+     "fx": "cure",
+     "ms": 500
+    },
+    {
+     "t": "seymour-flux",
+     "a": "attack",
+     "fx": "hit",
+     "ms": 100
+    },
+    {
+     "t": "tidus",
+     "a": "lance-of-atrophy",
+     "fx": "hit",
+     "ms": 100
+    },
+    {
+     "t": "seymour-flux",
+     "a": "spiral-cut",
+     "fx": "spiral",
+     "ms": 1080
+    }
+   ],
+   "hadTidus": true
+  }
+ },
+ "x2": {
+  "party": "yuna,rikku,paine"
+ }
+}

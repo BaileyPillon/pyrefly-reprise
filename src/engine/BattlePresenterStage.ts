@@ -33,6 +33,11 @@ import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAn
 import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
 import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
+import { PyreflyStage } from './PyreflyStage.ts';
+import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
+import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
+import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
+import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -48,7 +53,13 @@ export interface PaintedStageOptions {
   /** Mid-battle entrances by combatant id. Defaults to what the scene published (`StageArrivals.ts`). */
   arrivals?: ArrivalDirectors;
   /** The spell effects' skin, overlay hook, quality tier and flash rules (`spellfx/`). Without `overlay` they never draw. */
-  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash'>;
+  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate'>;
+  /** The location's key, for its pyrefly canon row (`pyreflyCanon.ts`). */
+  sceneKey?: string;
+  /** The renderer's grade, which D-224's phase lighting turns (`PhaseLighting.ts`). */
+  grade?: GradeTarget | null;
+  /** REDUCE FLASHES: phase lighting lands without its tween. The accessibility batch wires it; default off. */
+  reduceFlashes?: () => boolean;
 }
 
 interface StagedActor {
@@ -122,10 +133,17 @@ export class PaintedStage implements BattleStage {
   /** The B1 spell effects (option B); `impact` skips the bloom where they carry the hit. */
   readonly spellFx: SpellFxLayer;
   private readonly unhookSpellFx: () => void;
+  /** A-5 / A-6 / D-225: the dissolve's lights, the lens band and held motes (`PyreflyStage.ts`). */
+  private readonly pyreflies: PyreflyStage;
+  /** D-224 phase lighting: the presenter's `lighting` port (`BattlePresenterPhase.ts`). */
+  readonly lighting: PhaseLighting;
+  /** A-8: the floor's luma, which sets how strong a contact shadow must be to read on it (`ContactShadow.ts`). */
+  private readonly groundLuma: number | null;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
     this.partRings = new PartRings(opts.scene);
+    this.groundLuma = groundLumaOf(opts.scene);
     this.arrivals = opts.arrivals ?? arrivalsOf(opts.scene);
     this.highlight = new TargetHighlight({
       actor: (id) => this.actor(id),
@@ -141,6 +159,15 @@ export class PaintedStage implements BattleStage {
     const fx = stageSpellFx({ ...opts.spellFx, canvas: opts.canvas, projectRect: (id) => this.projectRect(id) });
     this.spellFx = fx.layer;
     this.unhookSpellFx = fx.unhook;
+    this.pyreflies = new PyreflyStage(opts.scene, () => this.spellFx.quality, opts.sceneKey, opts.camera);
+    this.lighting = new PhaseLighting({
+      scene: opts.scene,
+      grade: opts.grade,
+      figures: () => [...this.actors.values()].map((s) => s.actor),
+      partyCentre: () => this.partyFloorCentre(),
+      baseRim: { color: opts.rim?.color ?? 0xbfe0ff, strength: opts.rim ? 0.8 : 0.7 },
+      ...(opts.reduceFlashes ? { reduceFlashes: opts.reduceFlashes } : {}),
+    });
     this.vfx = this.makeVfxPort();
   }
 
@@ -177,6 +204,23 @@ export class PaintedStage implements BattleStage {
     // Only after every actor exists: the solver needs each fiend's real world
     // height, which is not known until its idle painting has loaded.
     this.applyFormation();
+    // D-224: a Vegnagun link's seam re-stages the field (FFX-2, Ch V).
+    const link = phaseForFormation(state.enemyIds);
+    if (link) this.lighting.phase(link);
+  }
+
+  /** The party's centre on the floor, for the phase floor glow; null with no party staged. */
+  private partyFloorCentre(): { x: number; z: number } | null {
+    let n = 0;
+    let x = 0;
+    let z = 0;
+    for (const s of this.actors.values()) {
+      if (s.kind !== 'party') continue;
+      x += s.actor.position.x;
+      z += s.actor.position.z;
+      n++;
+    }
+    return n ? { x: x / n, z: z / n } : null;
   }
 
   /** Add (or replace) one combatant's actor. */
@@ -214,7 +258,7 @@ export class PaintedStage implements BattleStage {
         : { strength: 0.7 },
       groundShade: 0.24,
       bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
-      shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, opacity: 0.48 },
+      shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, ...shadowOf(this.groundLuma) },
       breathe: { amplitude: 0.016, speed: 0.4 },
       sway: { amplitude: 0.009, speed: 0.22 },
       // The turn highlight: gold under a party member, a cooler ring under a
@@ -240,6 +284,9 @@ export class PaintedStage implements BattleStage {
     }
 
     this.opts.scene.add(actor);
+    if (!anchor) this.pyreflies.stage(c.id, c.side, actor);
+    // A-8: a tight dark ellipse under the feet; a hovering figure keeps none.
+    if (!anchor && !actor.levitates) attachFootOcclusion(actor.shadow, contactShadowStyle(this.groundLuma));
     this.actors.set(c.id, {
       actor,
       side: c.side,
@@ -553,6 +600,8 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged) return;
     this.actors.delete(id);
+    this.pyreflies.leave(id);
+    disposeFootOcclusion(staged.actor.shadow);
     this.partRings.remove(id);
     staged.actor.dispose();
   }
@@ -617,6 +666,31 @@ export class PaintedStage implements BattleStage {
     return SA.anchoredQuad(staged.anchor!, this.parentPose(staged) ?? { x: p.x, y: p.y, z: p.z, height: 1 }, this.quad);
   }
 
+  /**
+   * The faces and weapons HUD panels must never cover (CHK-008), on screen:
+   * each staged idle painting's key-feature boxes (`keyFeatures.ts`), pushed
+   * through its live plane. PR-0094: the FFX-2 intent slab treats them as hard.
+   */
+  keyFeatureRects(): ScreenRect[] {
+    const out: ScreenRect[] = [];
+    const rect = this.opts.canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return out;
+    for (const [id, s] of this.actors) {
+      const table = KEY_FEATURES[s.artId] ?? KEY_FEATURES[id];
+      if (!table || s.anchor || s.actor.pose !== 'idle' || this.lastState?.combatants[id]?.alive === false) continue;
+      const toScreen = (u: number, t: number): { x: number; y: number } | null => {
+        const p = s.actor.paintPoint(u, t, this.paintScratch).project(this.opts.camera);
+        if (p.z > 1) return null;
+        return { x: rect.left + (p.x * 0.5 + 0.5) * rect.width, y: rect.top + (-p.y * 0.5 + 0.5) * rect.height };
+      };
+      for (const box of Object.values(table.boxes)) {
+        const r = featureRect(table, box, toScreen);
+        if (r) out.push(r);
+      }
+    }
+    return out;
+  }
+
   /** The part rings' state, for the debug surface and the tests. */
   partRingSnapshot(): ReturnType<PartRings['snapshot']> {
     return this.partRings.snapshot();
@@ -669,10 +743,21 @@ export class PaintedStage implements BattleStage {
     );
     this.hits.update(dt, this.opts.camera);
     this.spellFx.update(dt);
+    this.pyreflies.update(dt, (id) => this.lastState?.combatants[id]?.alive !== false);
+    // D-224: Evrae's range is a flag only its encounter sets (FFX, Ch VIII).
+    const range = phaseForFlags(this.lastState?.flags);
+    if (range) this.lighting.phase(range);
+    this.lighting.update(dt);
+  }
+
+  /** The pyreflies' state, for the debug snapshot and the capture script. */
+  pyreflySnapshot(): ReturnType<PyreflyStage['snapshot']> {
+    return this.pyreflies.snapshot();
   }
 
   setPixelScale(v: number): void {
     this.hits.sparks.setPixelScale(v);
+    this.pyreflies.setPixelScale(v);
   }
 
   /** Everything the debug snapshot wants about the field. */
@@ -709,10 +794,18 @@ export class PaintedStage implements BattleStage {
     this.hits.dispose();
     this.unhookSpellFx();
     this.spellFx.dispose();
+    this.pyreflies.dispose();
+    this.lighting.dispose();
     disposeStoneShards(this.opts.scene);
     this.flashEl?.remove();
     this.flashEl = null;
   }
+}
+
+/** The contact blob's opacity and colour for this floor (A-8, `ContactShadow.ts`). */
+function shadowOf(groundLuma: number | null): { opacity: number; color: number } {
+  const s = contactShadowStyle(groundLuma);
+  return { opacity: s.opacity, color: s.color };
 }
 
 function rank(side: Side): number {

@@ -27,6 +27,7 @@ export const SPEAKER_ROLES: Partial<Record<SpeakerId, string>> = {
   seymour: 'Maester',
   'seymour-macalania': 'Maester',
   'seymour-omnis': 'Maester',
+  'seymour-natus': 'Maester',
   yunalesca: 'Unsent',
   jecht: 'Final Aeon',
   braska: 'High Summoner',

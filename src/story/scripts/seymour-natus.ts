@@ -21,13 +21,23 @@
  * as the draft wrote them: nine interlude lines, Yuna's line 22 carries the
  * climax, Auron's Talk line kept, the shatter line spoken.
  *
+ * ## The Talk exchanges (PR-0204, D-203)
+ *
+ * The draft's three Talk exchanges are in, as drafted (Bailey, 2026-09-26,
+ * "I'll go with all of your recommendations", item 2: "put the three drafted
+ * lines in?"). Each fires on that member's first Talk (`ability-used`,
+ * ability `'talk'`, the id `battle/ffx/execute.ts` emits for a Trigger
+ * Command), once, beside the engine's own "+10" plate: the talker's line,
+ * then Seymour's answer with the Natus portrait (B12 = b, `seymour-natus`).
+ * The talker is on the field by definition, so no fallback is needed.
+ *
  * ## Not built, on purpose
  *
- * - **The mid-battle callouts** (B9: the three Talk exchanges, the Protect
- *   counter, the first Break, the first shatter, the Banish line, the third
- *   Haste). Bailey said yes to them "drafted in a story draft Bailey reads
- *   first" (D-085, the Yojimbo precedent D-068); that read is not recorded,
- *   so `mid` and `midScripts` stay empty until it is.
+ * - **The five telegraph callouts** (the Protect counter, the first Break, the
+ *   first shatter, the Banish line, the third Haste). The trigger vocabulary
+ *   cannot name most of them ("first Break" on any member, a shatter, a third
+ *   Haste); they need emitters in the Natus rules, as Omnis has, which is an
+ *   engine change with its own bench. Listed open in `docs/handoff/iter2-b4.md`.
  * - **No victory quips**: E10 is grim tier, so §5.4 suppresses the light ones.
  *
  * ## Staging and music
@@ -152,9 +162,26 @@ export const seymourNatusScripts: ChapterScripts = {
 
   // E10 is grim tier: §5.4 suppresses the light quips, and the draft writes none.
   victoryQuips: {},
-  // The B9 callouts are held until Bailey reads the draft (D-085; see the header).
-  mid: [],
-  midScripts: {},
+  // PR-0204 (D-203): the three Talk exchanges. `id === script` (registry rule 1).
+  mid: [
+    { id: 'natus-talk-tidus', when: { type: 'ability-used', who: 'tidus', ability: 'talk' }, once: true, script: 'natus-talk-tidus' },
+    { id: 'natus-talk-auron', when: { type: 'ability-used', who: 'auron', ability: 'talk' }, once: true, script: 'natus-talk-auron' },
+    { id: 'natus-talk-yuna', when: { type: 'ability-used', who: 'yuna', ability: 'talk' }, once: true, script: 'natus-talk-yuna' },
+  ],
+  midScripts: {
+    'natus-talk-tidus': [
+      say('tidus', 'Stop talking. You never say anything.', { auto: 1200 }),
+      say('seymour-natus', 'Then listen, son of Jecht. It is almost over.', { auto: 1400 }),
+    ],
+    'natus-talk-auron': [
+      say('auron', 'Kinoc was my friend once. Fool that he was.', { auto: 1300 }),
+      say('seymour-natus', 'He thanked me, at the end. Ask him yourself.', { auto: 1400 }),
+    ],
+    'natus-talk-yuna': [
+      say('yuna', "You belong on the Farplane. I'll send you there.", { auto: 1300, emotion: 'determined' }),
+      say('seymour-natus', 'Then you will have to catch me, Lady Yuna.', { auto: 1400 }),
+    ],
+  },
 };
 
 export default seymourNatusScripts;
