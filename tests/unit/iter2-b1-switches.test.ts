@@ -23,6 +23,10 @@ import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_ACT_I, LEBLANC_ACT_II } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
 import { FFX2_DRESSPHERE_CARRIES } from '../../src/app/screens/BattleScreenCarry.ts';
+import { ABILITIES } from '../../src/data/ffx2/index.ts';
+import { abilityRegistryFrom } from '../../src/battle/ffx2/index.ts';
+import { chainRegistries, defaultAbilities } from '../../src/battle/ffx2/abilities.ts';
+import { resolveAbility, type ResolveContext } from '../../src/battle/ffx2/resolve.ts';
 
 function leblancTurns(count: number, sinirothX: boolean, withHenchmen = true): Array<string | null> {
   const self = aiUnit('leblanc', 'enemy', 1380);
@@ -138,5 +142,30 @@ describe('PR-0124: the worn dressphere carries across a plain chain seam, an OFF
     const off = setupForNextLink(setup, trema, state, 5);
     const on = setupForNextLink(setup, trema, state, 5, { dressphereCarries: true });
     expect(on).toEqual(off);
+  });
+});
+
+describe('Acta F4 guard: both Acta Est Fabula rows hit only the ids named, the two Redoubts (FFX-2, D-193)', () => {
+  it('the data row carries namedTargetsOnly, as the engine row does', () => {
+    expect(ABILITIES['x2-vegnagun-acta-est-fabula']?.extra?.['namedTargetsOnly']).toBe(true);
+    expect(defaultAbilities.get('acta-est-fabula')?.extra?.['namedTargetsOnly']).toBe(true);
+  });
+
+  it('resolved from the data row, it heals the named Redoubts and never the Head', () => {
+    const head = aiUnit('vegnagun-head', 'enemy', 40000, 0);
+    head.hp = 20000;
+    const r = aiUnit('redoubt-r', 'enemy', 2500, 1);
+    const l = aiUnit('redoubt-l', 'enemy', 2500, 2);
+    for (const pod of [r, l]) { pod.hp = 0; pod.alive = false; }
+    const events: Array<{ type: string; targetId?: string }> = [];
+    const ctx: ResolveContext = {
+      units: [head, r, l], abilities: chainRegistries(abilityRegistryFrom(Object.values(ABILITIES)), defaultAbilities),
+      rng: new SeededRng(1), emit: (e) => events.push(e as never), breaksDamageLimit: () => false,
+    };
+    resolveAbility(ctx, head, ABILITIES['x2-vegnagun-acta-est-fabula']!, [r.id, l.id]);
+    const touched = new Set(events.filter((e) => e.targetId).map((e) => e.targetId));
+    expect(touched.has('vegnagun-head')).toBe(false);
+    expect(head.hp).toBe(20000);
+    expect(r.alive && l.alive).toBe(true);
   });
 });
