@@ -6,6 +6,25 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `types.ts`, `types-ff7.ts`: FF7's Change command (engine follow-up C1)
+
+**Shared plumbing (both + FF7)** for the union, **FF7 only** for the command [AGENTS.md hard
+rule 14]: only the FF7 engine offers or accepts it; FFX and FFX-2 never build it, and every FFX /
+FFX-2 suite and golden is unchanged. Handoff `docs/handoff/ff7-engine.md` (FOLLOW-UP).
+
+**Additive:**
+
+- `types-ff7.ts`: `RowChangeCommand = { kind: 'row-change'; targets: [] }` (FF7's **Change**: the
+  member swaps between the front and the back row; `research/ff7-battle-core.md` §5.1, §9; the
+  manual p. 18) and `Ff7Command = LimitCommand | RowChangeCommand`.
+- `types.ts`: the `Command` union's last member `LimitCommand` becomes `Ff7Command` (so
+  `Command += RowChangeCommand`), and the type import names `Ff7Command` instead of
+  `LimitCommand`; `types.ts` did not grow (same line count). The kind is `'row-change'`, not
+  `'change'`, because FFX-2's dressphere command is also called Change in game (`'spherechange'`).
+- The one exhaustive switch over `Command['kind']` outside the FF7 engine,
+  `src/ui/ffx2/withTargets.ts`, gains `case 'row-change':` in its no-target group (one line, the
+  same treatment `'limit'` got); FFX-2's menu never offers it, so its behaviour is unchanged.
+
 ## 2026-09-27 — `types.ts`, `types-ff7.ts`: the FF7 engine's events and clock (engine part 2)
 
 **FF7 only** [AGENTS.md hard rule 14]: every addition is optional or a new union member that

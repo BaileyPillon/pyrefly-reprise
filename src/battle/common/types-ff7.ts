@@ -284,3 +284,15 @@ export interface LimitCommand {
   id: AbilityId;
   targets: CombatantId[];
 }
+
+/**
+ * **Change**: the member swaps between the front and the back row [core §5.1, §9,
+ * single source: wiki battle system; manual p. 18 via staging §5]. Never targets.
+ */
+export interface RowChangeCommand {
+  kind: 'row-change';
+  targets: [];
+}
+
+/** FF7's own command kinds, widened into the shared `Command` union by `./types.ts`. */
+export type Ff7Command = LimitCommand | RowChangeCommand;

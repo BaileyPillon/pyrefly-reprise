@@ -30,7 +30,7 @@
 
 /** Which game a piece of content belongs to. `'ff7'`: the hidden Guard Scorpion experiment; each two-way branch is audited (`./game.ts`, `docs/plans/ff7-game-branch-audit.md`). */
 export type GameId = 'ffx' | 'ffx2' | 'ff7';
-import type { Ff7Combatant, Ff7EnemyFields, Ff7MessageTag, Ff7PartyBuild, LimitCommand } from './types-ff7.ts';
+import type { Ff7Combatant, Ff7Command, Ff7EnemyFields, Ff7MessageTag, Ff7PartyBuild } from './types-ff7.ts';
 export type * from './types-ff7.ts';
 
 /** Stable identifier for a combatant instance inside one battle. */
@@ -1681,7 +1681,7 @@ export type Command =
   | EscapeCommand
   | DefendCommand
   | TriggerCommand
-  | LimitCommand; // FF7 only: a Limit Break, never `'overdrive'` (`./types-ff7.ts`)
+  | Ff7Command; // FF7 only: Limit (never `'overdrive'`) and Change (`./types-ff7.ts`)
 
 /** Command kinds, for exhaustive switches. */
 export type CommandKind = Command['kind'];

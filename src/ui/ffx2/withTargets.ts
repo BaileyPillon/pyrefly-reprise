@@ -21,6 +21,7 @@ export function withTargets(command: Command, targets: CombatantId[]): Command {
     case 'spherechange':
     case 'escape':
     case 'defend':
+    case 'row-change': // FF7 only (Change); the FFX-2 menu never offers it
       return { ...command, targets: [] };
   }
 }
