@@ -347,6 +347,14 @@ export class MoveAdvisor {
     // No decision open and nothing to say: no card and no chip, rather than a
     // chip that opens an empty box.
     this.el.hidden = this.cached === null;
+    if (!this.cached && this.lastSignature !== '') {
+      // FOC22-02: a hidden card still held the last girl's move, and anything
+      // reading the card read advice for a board that was gone. Empty it, so
+      // the next decision paints afresh.
+      this.cardEl.innerHTML = '';
+      this.lastSignature = '';
+      this.fittedFor = '';
+    }
     if (!this.cached || !this.visible) return;
 
     const signature = signatureOf(this.cached);
