@@ -1,0 +1,458 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-27T18:00:46.740Z",
+ "build": {
+  "mainSha": "bc4e70ee",
+  "fullSha": "bc4e70ee8d4b19480f72d724279eb80fff1a73f5",
+  "bundle": "index-C-3hBxzq.js",
+  "candidate": "D:/pyrefly-rel24/dist-gate",
+  "previousLive": "ff3884fb (bundle BfW8CHQs)"
+ },
+ "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "The owner-reported defect is fixed by real keys on the production candidate: IX, X and phone runs summon the aeon on the chosen row (Ixion, Shiva, Bahamut), never a default Valefor; live still puts Valefor out with the party standing (reproduced on the live URL).",
+  "No critical defect found: Escape backs out to the actor menu with the gauge kept, Dismiss and KO bring the party back with its rows, and a win with an aeon out reaches the results screen.",
+  "No regression against live: FFX-2 Chapter IV plays by real keys with no aeon, three rows and no page error; Mix, which opened empty live, now lists 15 named items.",
+  "The two majors (phone picker hidden behind the Chapter IX boss panel; the aeon status row shows a letter instead of its portrait) are inside the newly working picker and the new aeon row, not regressions: disclosed, not holding."
+ ],
+ "checks": [
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real keys on production for pick (rows 3, 4, 5), Escape back-out (Mix), Attack, Dismiss and the KO exit; debug API only set the seed, chapter and Yuna/Rikku gauge (and enemy HP to 1 for the win route).",
+   "where": "FFX; IX yojimbo-cavern, X seymour-natus, VII seymour-anima-macalania",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-ixion.json",
+    "critic/reviews/bc4e70ee-focused/ch10-bahamut.json",
+    "critic/reviews/bc4e70ee-focused/ch09-shiva-ko.json",
+    "critic/reviews/bc4e70ee-focused/ch07-mix.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserts screen (and phase where one is defined) first; one harness path on the live URL failed its wait and is recorded as live-ch09-FAIL-unverified, not as evidence of a product state.",
+   "where": "all runs",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-ixion.json",
+    "critic/reviews/bc4e70ee-focused/live-ch09.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case FFX only (research/ffx-combat-core.md §5.4 player chooses the aeon; §6.1 aeon replaces the party, dismissal/KO returns it). Presence: IX, X, VII. Absence: FFX-2 Chapter IV, 45 s of real keys, 25 party actions, 26 damage events, 0 summon/dismiss events, three party figures at alpha 1 and three rows.",
+   "where": "FFX IX/X/VII; FFX-2 IV ffx2-bahamut",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch04-ffx2.json",
+    "critic/reviews/bc4e70ee-focused/ch04-ffx2-1-first-menu.jpg",
+    "critic/reviews/bc4e70ee-focused/ch09-ixion-4-aeon-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Win with Bahamut out (X, 2000x1012) reaches the results screen (Victory, AP 9,450 x3 party); the KO exit in IX (Yojimbo KOs Shiva, dismiss reason ko) brings the party back to alpha 1 with three rows and the next command menu.",
+   "where": "FFX X victory; IX aeon KO",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch10-bahamut-7-results.jpg",
+    "critic/reviews/bc4e70ee-focused/ch09-shiva-ko-6-party-back-after-ko.jpg",
+    "critic/reviews/bc4e70ee-focused/ch09-shiva-ko.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Driven through the real HUD overlay and the real presenter (askMinigame -> backOutOfMinigame / submit); no forceCommand used.",
+   "where": "FFX IX/X/VII",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-ixion.json",
+    "critic/reviews/bc4e70ee-focused/ch07-mix.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "The aeon's advisor card names the move, where it is (IN OVERDRIVE), its cost and its damage range (Mega Flare, Thor's Hammer, Diamond Dust).",
+   "where": "FFX IX/X aeon menu",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch10-bahamut-4-aeon-menu.jpg",
+    "critic/reviews/bc4e70ee-focused/ch09-ixion-4-aeon-menu.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The picker closes on pick and on Escape (0 list rows after Escape, no pause screen opened, Rikku menu back with gauge 100).",
+   "where": "FFX VII Mix, IX/X Grand Summon",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch07-mix.json",
+    "critic/reviews/bc4e70ee-focused/ch07-mix-2-back-to-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No raw ids or debug text in the picker, the aeon row, the Mix list (named items with counts) or the Mix preview.",
+   "where": "FFX IX/X/VII",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch07-mix-1-mix-list.jpg",
+    "critic/reviews/bc4e70ee-focused/ch09-ixion-2-picker-row3.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "At 1600x900 and 2000x1012 the command menu, advisor and aeon row sit clear of the aeon and the bosses.",
+   "where": "FFX IX/X",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-ixion-4-aeon-menu.jpg",
+    "critic/reviews/bc4e70ee-focused/ch10-bahamut-4-aeon-menu.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "All five aeon names, 15 Mix item names and the boss names show in full at desktop sizes.",
+   "where": "FFX IX/X/VII",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-ixion-2-picker-row3.jpg",
+    "critic/reviews/bc4e70ee-focused/ch07-mix-1-mix-list.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "FAIL",
+   "reason": "Desktop: the selected row is gold and the 5th row (Bahamut) and Mix row 12 (Grenade) scroll into view. Phone 390x844 in Chapter IX: the Yojimbo gauge panel covers the Grand Summon list below its second row, so Shiva and Bahamut are chosen out of sight (FOC24-01).",
+   "where": "FFX IX 390x844",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-phone-2-picker-row5.jpg",
+    "critic/reviews/bc4e70ee-focused/ch10-bahamut-2-picker-row5.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "UNVERIFIED",
+   "reason": "Effective rendered text size of the picker was not measured (the computed 5.33 px subtitle is inside the scaled HUD stage); by eye readable at 1600 and 2000, very small on the phone where it is also covered.",
+   "where": "FFX IX",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-phone-2-picker-row5.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "Shiva in game against the approved tile: identity, costume and palette match; aeon scale beside the enemies is the known open item that awaits Bailey (plan B.2), not changed here.",
+   "where": "FFX IX Shiva summoned",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/shiva.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared plumbing (presenter askMinigame / backOut) checked in both games: FFX pickers work; FFX-2 plays by real keys unchanged. The picker itself is FFX only by design.",
+   "where": "FFX IX; FFX-2 IV",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch04-ffx2.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused review of the production candidate; the live-artifact check is the separate live obligation after the deploy. The live URL was opened only to reproduce the owner bug for regressionVsLive.",
+   "where": "live ff3884fb",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/live-ch09.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "NOT APPLICABLE",
+   "reason": "No generated image ships in this change; the one new audio file (public/audio/candidates/ff7-2026-09-27/ff7-guard-scorpion.mp3) is an audition candidate pruned from the build (absent from dist-gate); ffprobe decodes the source, mp3, 52.87 s.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-001",
+   "result": "NOT APPLICABLE",
+   "reason": "No shipped cue or routing changed: the only audio path is an audition candidate that vite.config prunes from the build (verified absent in dist-gate). Listening is Bailey's via docs/audio/audition.html.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-B1",
+   "result": "NOT APPLICABLE",
+   "reason": "No shipped cue or mix changed; the FF7 candidate awaits Bailey's audition and is not part of the shipped build.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "bc4e70ee / D:/pyrefly-rel24/dist-gate index-C-3hBxzq.js",
+   "targetVersion": "9d08559de9eab711002019df727b48c211c3b935a3ee68fd05e96119e5854e17",
+   "environment": "candidate D:/pyrefly-rel24 bc4e70ee, dist-gate (built 13:43 after the 13:24 commit), vite preview 127.0.0.1:5400 (stopped by PID); headless Playwright Chromium, PYREFLY_BROWSER=gpu (ANGLE D3D11 RTX 5070 Ti, no black canvas, no fallback)"
+  }
+ ],
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "note": "No approved tile in the plan groups (audio, fight, presentation) is touched; canon is the target (research/ffx-combat-core.md §5.4, §6.1). One extra comparison for the summon moment: the Shiva tile (cast group).",
+  "list": [
+   {
+    "tile": "Shiva",
+    "result": "matched",
+    "evidence": "critic/reviews/bc4e70ee-focused/shiva.jpg",
+    "note": "identity matches in game; the status row shows a letter instead of the approved HUD portrait (FOC24-02)"
+   }
+  ]
+ },
+ "issues": [
+  {
+   "id": "FOC24-01",
+   "severity": "major",
+   "title": "Phone, Chapter IX: the Yojimbo gauge panel covers the Grand Summon list; rows 3 to 5 are picked blind",
+   "game": "FFX",
+   "chapter": "yojimbo-cavern",
+   "expected": "At 390x844 the picker list and its selected row are visible and on top of the battle panels",
+   "observed": "The Grand Summon panel sits under the Yojimbo gauge panel: only Ifrit and Ixion show; Shiva and Bahamut (the selected row) are hidden. The pick still summons the right aeon.",
+   "repro": "seed 1, yojimbo-cavern, 390x844, Yuna gauge 100, Overdrive, Grand Summon, ArrowDown x4",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-phone-2-picker-row5.jpg"
+   ],
+   "confidence": "high (capture); other chapters and Mix/Rage on the phone not checked",
+   "requirement": "CHK-010; interface",
+   "where": "suspected: stacking order of .ig-minigame vs the ZanmatoGauge / boss panel on the phone layout",
+   "fix": "Raise the Overdrive overlay above the boss panels on the phone (or hide those panels while a picker is open)",
+   "acceptanceCheck": "IX at 390x844: all five rows and the selected row visible when the cursor is on Bahamut",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC24-02",
+   "severity": "major",
+   "title": "The aeon's new status row shows a letter (I, S, B) instead of its approved portrait",
+   "game": "FFX",
+   "chapter": "yojimbo-cavern, seymour-natus",
+   "expected": "The aeon row uses the aeon's approved HUD portrait, as the turn list already does",
+   "observed": "A letter fallback in the portrait slot at every size",
+   "repro": "Summon any aeon; look at the status row",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-ixion-4-aeon-menu.jpg",
+    "critic/reviews/bc4e70ee-focused/ch10-bahamut-4-aeon-menu.jpg",
+    "critic/reviews/bc4e70ee-focused/shiva.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-012 (a fallback never ships as the final face); Shiva tile HUD portrait",
+   "where": "suspected: partyFaceRects / status row portrait lookup covers party ids only",
+   "fix": "Feed the aeon portrait to the status row",
+   "acceptanceCheck": "Summon each aeon: the row shows its portrait, not a letter",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC24-03",
+   "severity": "polish",
+   "title": "Grand Summon subtitle runs past the panel's slanted edge",
+   "game": "FFX",
+   "chapter": "all FFX with Grand Summon",
+   "expected": "Subtitle inside the panel",
+   "observed": "\"...WITH A FULL OVERDRIVE\" ends 28-31 px past the panel edge at 1600, 2000 and 390",
+   "repro": "open Grand Summon",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-ixion-2-picker-row3.jpg"
+   ],
+   "confidence": "high (rects measured)",
+   "requirement": "interface",
+   "where": "YunaGrandSummon.ts subtitle",
+   "fix": "Shorten or wrap the subtitle",
+   "acceptanceCheck": "subtitle right <= panel right at the three sizes",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC24-04",
+   "severity": "polish",
+   "title": "On the aeon KO the party status rows return before the dismiss beat plays",
+   "game": "FFX",
+   "chapter": "yojimbo-cavern",
+   "expected": "Rows and figures swap together",
+   "observed": "For the length of the queued beats the three party rows show while the KO'd aeon is still on the field and the party figures are at alpha 0; they come back when the beat plays",
+   "repro": "IX seed 1, summon Shiva, Attack; Yojimbo KOs Shiva",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch09-shiva-5-aeon-targeting.jpg"
+   ],
+   "confidence": "medium (one transient frame)",
+   "requirement": "interface",
+   "where": "suspected: HUD sync reads state ahead of presentation",
+   "fix": "Sync the status rows at the dismiss beat",
+   "acceptanceCheck": "no frame with party rows and the aeon figure both shown",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC24-05",
+   "severity": "suggestion",
+   "title": "Question for Bailey: who takes the victory pose when an aeon wins?",
+   "game": "FFX",
+   "chapter": "seymour-natus",
+   "expected": "research/ is silent",
+   "observed": "The aeon stands alone at victory; the party stays off the field into the results screen",
+   "repro": "X, Bahamut out, win",
+   "evidence": [
+    "critic/reviews/bc4e70ee-focused/ch10-bahamut-6-victory-pose.jpg"
+   ],
+   "confidence": "n/a",
+   "requirement": "AGENTS.md rule 14 (ask when sources are silent)",
+   "where": "SummonStaging / victory beat",
+   "fix": "Ask Bailey; no change until he says",
+   "acceptanceCheck": "n/a"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "critic-plan (depth deep, deepBeforeDeploy false, focusedBeforeDeploy true)",
+   "vitest ffx-overdrive-pickers, ffx-overdrive-picker-presenter, summon-staging: 3 files, 20 tests pass",
+   "IX real keys: Grand Summon row 3 Ixion then Dismiss (1600x900); row 4 Shiva then KO exit; row 5 Bahamut on 390x844",
+   "X real keys: row 5 Bahamut at 2000x1012, aeon targeting, win to results",
+   "VII Mix: 15 named items, row 12 in view, Escape back with gauge kept",
+   "FFX-2 IV 45 s real keys, absence of aeons",
+   "live URL: owner bug reproduced (0 picker rows, Valefor out, party at alpha 1)",
+   "Shiva tile composite",
+   "candidate audio pruned from the build; source decodes"
+  ],
+  "reused": [
+   {
+    "what": "Grand Summon every row in IX, X and I; Seymour Banish exits; first command menu of nine FFX chapters vs live; FF7 hidden fight to victory",
+    "from": "docs/handoff/hotfix-24.md CHECK section (independent checker, 3a027134 = same src as bc4e70ee)",
+    "why": "same product source; not repeated to stay within the focused budget"
+   }
+  ],
+  "notTested": [
+   "Mix pair execution and Kimahri Rage on the candidate (reused only)",
+   "Mix and Rage pickers on the phone",
+   "other FFX chapters on the phone with a picker open",
+   "gamepad and touch input for the picker",
+   "Chapter I Banish exit (reused)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy, then the deep review owed by this build (and carried from ff3884fb) on the live build: FFX CTB engine, presenter and HUD across the listed chapters.",
+ "elapsedMinutes": 50
+}
