@@ -33,6 +33,8 @@ import { TurnCutInBeat } from '../../src/engine/TurnCutIn.ts';
 import { buildAdvisorView } from '../../src/engine/tactics/advisor.ts';
 import { GAME_LABELS } from '../../src/data/chapter-meta.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { Ff7BattleHud } from '../../src/ui/ff7/Ff7BattleHud.ts';
+import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const FF7 = getChapter('ff7-guard-scorpion')!;
@@ -68,8 +70,10 @@ describe('construction never builds an FFX-2 engine or HUD for FF7', () => {
     await expect(createEngine('ff7', setupForChapter(FF7, 1))).rejects.toThrow(Ff7NotHandledError);
   });
 
-  it('createHud throws before any FFX-2 HUD or Rikku coach is built', () => {
-    expect(() => createHud('ff7')).toThrow(Ff7NotHandledError);
+  it('createHud builds the FF7 HUD: never the FFX-2 HUD, never a coach (FF7 only)', () => {
+    const hud = createHud('ff7');
+    expect(hud).toBeInstanceOf(Ff7BattleHud);
+    expect(hud).not.toBeInstanceOf(FFX2BattleHud);
   });
 
   it('the FFX-2 engine itself refuses an FF7 party (its own guard, unchanged)', () => {

@@ -31,6 +31,7 @@ import { withOversoulLook, type OversoulField } from '../../engine/OversoulLook.
 import { withOmnisDiscs } from '../../engine/OmnisDiscTap.ts';
 import { withOmnisGlow } from '../../engine/OmnisGlowLook.ts';
 import { withOmnisReadout } from '../../ui/ffx/OmnisReadout.ts';
+import { Ff7BattleHud } from '../../ui/ff7/Ff7BattleHud.ts';
 
 // ---------------------------------------------------------------- engines
 
@@ -132,8 +133,9 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
 export function createHud(game: GameId, field?: () => OversoulField | null): HudPort {
-  // FF7 gets its own HUD after Bailey's options round (option A, D-240s); never the FFX-2 HUD and Rikku's coach.
-  if (game === 'ff7') throw new Ff7NotHandledError('createHud (the FF7 HUD is not built yet)');
+  // FF7 gets its own HUD: Bailey's option A made more faithful (docs/plans/ff7-hud-faithful-a-spec.md).
+  // Never the FFX-2 HUD, never a coach, never the shared phone rail: it draws FF7's own phone band (FF7 only).
+  if (game === 'ff7') return new Ff7BattleHud();
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
   const hud: HudPort = game === 'ffx'
     ? withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))
