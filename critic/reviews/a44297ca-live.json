@@ -1,0 +1,63 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-27T13:58:20.000Z",
+  "build": {
+    "mainSha": "a44297ca",
+    "bundle": "DLvZcIgF",
+    "artifactHash": "2117c2b4f5ce92a112124d6756650c8f4077be49a690fc12d4656cd06b7640c8"
+  },
+  "verdicts": {
+    "deployment": "UNVERIFIED",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/a44297ca.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/d8837334.json -> {result: PASS, liveManifest: match, checked: 59, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "evidence": "Claude-in-Chrome browser (not the project's Playwright runner; PYREFLY_BROWSER=gpu does not apply to this tool), fresh tab, 1600x900, cache-busted URLs. Screen/state asserted via window.__pyrefly.screen()/battleState() before each step: title -> real click -> chapter-select (confirmed '1 of 14 beaten' and that it reopens on the last-played chapter, Yojimbo IX) -> real clicks selected Vegnagun (V) and Bahamut (IV) -> party-prep (correct chapter/objectives/party shown) -> real Enter presses advanced cutscene dialogue line-by-line -> battle. Positive/cancel path exercised on the pause menu itself: P opened the real stats/options panel (HP/MP/ATB/mode/chain/dressphere/garment-grid), H hid then restored it, Escape resumed cleanly. audioDebug() confirmed prerendered music playing (playing:'boss-ffx2-aeon', prerendered:{manifest:true, sprite:true, spriteDecoded:true}), not the synth fallback.",
+      "reason": "Could not positively confirm reaching an active player turn / visible command HUD in any of 3 battles tried (FFX-2 Bahamut, FFX-2 Vegnagun, and FFX CTB Seymour Flux as a baseline): window.__pyrefly.battleState().ticks stayed at 0 and the DOM ATB fill widths were bit-identical across repeated real-time waits (~20-40s cumulative per attempt). document.hidden was true / visibilityState 'hidden' for this tab throughout despite being frontmost in the extension's own bookkeeping, which is a plausible (but not confirmed) explanation via the tab's rendering/animation loop being throttled or intentionally paused by page code rather than a live regression; performance.now() advanced normally and the page stayed responsive and rendering throughout (not a hang). Recorded UNVERIFIED per RUBRIC SS5 rather than guessed as PASS or FAIL; recommend re-running via the project's own Playwright-based critic/runner/live.js (PYREFLY_BROWSER=gpu, real focused window) to get a decisive answer, since if it reproduces there it would be a critical, changed-flow-blocking finding across this deploy's named FFX-2 ATB engine and FFX CTB engine systems."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight pass only: changed Master Volume 80 -> 90 via a real click on the Options slider in the pause menu; confirmed on-screen and in localStorage['pyrefly-reprise:save:v1'].settings.masterVolume (0.9); reloaded the page (fresh navigation); value still 0.9 after reload, and Chapter Select still showed '1 of 14 beaten' and reopened on the last-played chapter.",
+      "reason": "Full save/settings upgrade matrix across older save shapes intentionally out of scope for this pass; recorded under coverage.notTested."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Exact-artifact byte identity of every shipped file (59 files) at the live URL",
+      "Title -> chapter-select real navigation, cache-busted, fresh tab",
+      "Chapter-select persistence: beaten count and reopening on the last-played chapter (t1-b4b)",
+      "Party-prep screen content for two FFX-2 chapters (Bahamut, Vegnagun)",
+      "Real Enter-key cutscene advance (dialogue line-by-line) into battle",
+      "Pause (P) real panel with HP/MP/ATB/mode/chain/dressphere/garment-grid; hide/restore (H); resume (Escape) -- all real key input, positive and cancel paths",
+      "Prerendered music fetched and playing (audioDebug prerendered.manifest/sprite/spriteDecoded all true) rather than synth fallback",
+      "Console error and 404/5xx count for the whole run",
+      "Lightweight reload smoke: one setting change (master volume) survives a reload, alongside existing save progress"
+    ],
+    "reused": [],
+    "notTested": [
+      "Confirmed arrival at an active player turn / visible command HUD in any chapter (CHK-016, see reason above -- inconclusive, not confirmed broken)",
+      "Any actual command execution (Attack/ability), win/loss, or results/retry path",
+      "Full save/settings upgrade matrix across older save shapes (CHK-024 full pass)",
+      "The other twelve shipped chapters beyond Bahamut, Vegnagun and the Seymour Flux baseline",
+      "Phone battle HUD on an actual phone viewport/device",
+      "Cross-browser (Edge/Firefox/Safari) or real-device/gamepad coverage",
+      "The deep review already owed for this build (separate obligation, not settled by this report)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 45
+}
