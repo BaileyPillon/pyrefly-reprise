@@ -6,6 +6,29 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `encounters.ts`: `ChapterId += 'sin'`, `Chapter.number` widens to 16 (Chapter XVI, unlisted)
+
+**FFX only** [AGENTS.md hard rule 14]: Sin, the assault from the *Fahrenheit* (`research/ffx-sin.md`
+§0.3). Bailey, 2026-09-27 ~13:40 EDT, "all your recommendations" (Sin: concept A reached through B;
+link 4, Overdrive Sin, first, shipped unlisted behind a switch). Branch `chapter-sin`.
+
+**Additive** in `src/data/encounters.ts` (the file does not grow: both edits are on existing lines):
+- `ChapterId` gains `'sin'` (so `ListedChapterId` does too, as every unlisted chapter's id did
+  before it was listed; the three `learn/atlas/cites.ts` records gain an entry).
+- `Chapter.number` gains `16` (the concept sheet's slot XVI).
+
+The record (`src/data/chapter-sin.ts`) sits in `UNLISTED_CHAPTERS`: `getChapter('sin')` and
+`window.__pyrefly.gotoChapter('sin')` reach it; `CHAPTERS` and `CHAPTER_IDS` do not change.
+
+Shared signatures outside the contract files (FFX only, each inert in every other battle; the FFX
+chapters' event logs and menus are byte-identical before and after, measured):
+- `src/battle/ffx/results.ts`: `SCRIPTED_GAME_OVER_FLAG` (`state.flags['battle.scriptedGameOver']`)
+  and `scriptedGameOver(ctx)`; `engine.ts#checkEnd` ends the battle as a defeat when it is set
+  (Overdrive Sin's Giga-Graviton, research §3.4, verified: 4 sources).
+- `src/battle/ffx/ai/evrae-rules.ts`: `airshipOrderAvailable` refuses when Cid is not on the field
+  (Overdrive Sin shares the `airship.range` gap but has no Trigger Command, §3.5);
+  `markEvraeRuntime` also marks the enemy named by `state.flags['airship.countsTargetings']`.
+
 ## 2026-09-27 — `types.ts`, `types-ff7.ts`: FF7's additions move out so `types.ts` does not grow (check C-3)
 
 **FF7 only** [AGENTS.md hard rule 14]; no FFX or FFX-2 type changes shape. The release-readiness check

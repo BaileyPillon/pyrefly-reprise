@@ -18,6 +18,7 @@ import { aiContextFor } from './types.ts';
 import { seymourDelayCounter, seymourThresholdCounters, stepFluxPhase } from './seymour-flux.ts';
 import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
 import { collectEvraeCounters } from './evrae-counters.ts';
+import { collectOverdriveSinCounters } from './overdrive-sin-rules.ts';
 import { yunalescaCounter } from './yunalesca.ts';
 import { yuYevonCounter } from './yu-yevon.ts';
 import { MORTIBODY_ID, NATUS_ID, natusActionCounters, stepNatusPhase } from './seymour-natus-rules.ts';
@@ -144,6 +145,14 @@ export function collectBossCounters(
   for (const c of collectEvraeCounters(ctx, def, damagedEnemyIds, statusAddedEnemyIds)) {
     const evrae = tryActor(ctx, c.actorId);
     if (!evrae || !canCounter(ctx, c.actorId)) continue;
+    out.push({ actorId: c.actorId, command: { kind: 'ability', id: c.abilityId, targets: [] }, cause: c.cause });
+  }
+
+  // **Overdrive Sin's Gaze** answers being *targeted*, six times (an aeon's
+  // count double), not being hurt [ffx-sin §5.4, verified: 2 sources]. Collected
+  // once per action, as Evrae's are. A no-op in every other battle.
+  for (const c of collectOverdriveSinCounters(ctx, attacker)) {
+    if (!canCounter(ctx, c.actorId)) continue;
     out.push({ actorId: c.actorId, command: { kind: 'ability', id: c.abilityId, targets: [] }, cause: c.cause });
   }
   return out;

@@ -48,6 +48,7 @@ import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.
 import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natus-abilities.ts';
 import { SEYMOUR_OMNIS_ABILITIES } from '../../src/data/ffx/enemies/seymour-omnis-abilities.ts';
 import { ISAARU_ABILITIES } from '../../src/data/ffx/enemies/isaaru-abilities.ts';
+import { OVERDRIVE_SIN_ABILITIES } from '../../src/data/ffx/enemies/overdrive-sin-abilities.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from '../../src/data/ffx2/enemies/magus-sisters-abilities.ts';
 import { paragonAbilities } from '../../src/data/ffx2/enemies/paragon-abilities.ts';
@@ -166,6 +167,10 @@ const COMBATANT_CITES: Record<ListedChapterId, Record<string, string>> = {
     'shade-gippal': 'research/ffx2-gippal-den-of-woe.md §3.1 (src/data/ffx2/enemies/den-of-woe.ts)',
     'shade-nooj': 'research/ffx2-gippal-den-of-woe.md §3.2 (src/data/ffx2/enemies/den-of-woe.ts)',
   },
+  // Chapter XVI (FFX), registered but unlisted: link 4, Overdrive Sin, first.
+  sin: {
+    'overdrive-sin': 'research/ffx-sin.md §2 (src/data/ffx/enemies/overdrive-sin.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -252,6 +257,9 @@ const ABILITY_FILE_CITES: Record<ListedChapterId, readonly AbilityFileCite[]> = 
     fileCite(shadeGippalAbilities, 'research/ffx2-gippal-den-of-woe.md §4.1 (src/data/ffx2/enemies/den-of-woe-abilities.ts)'),
     fileCite(shadeNoojAbilities, 'research/ffx2-gippal-den-of-woe.md §4.3 (src/data/ffx2/enemies/den-of-woe-abilities.ts)'),
   ],
+  sin: [
+    fileCite(OVERDRIVE_SIN_ABILITIES, 'research/ffx-sin.md §3.4 (src/data/ffx/enemies/overdrive-sin-abilities.ts)'),
+  ],
 };
 
 /**
@@ -307,7 +315,8 @@ const ABILITY_OVERRIDE_CITES: Record<ListedChapterId, Record<string, string>> = 
   // Every Paragon and Trema ability id is `paragon-`/`trema-`-prefixed (no shared reuse).
   'ffx2-trema': {},
   // Every Chapter XV ability id is `x2-den-`-prefixed and defined in the chapter's own ability file.
-  'ffx2-den-of-woe': {},
+  'ffx2-den-of-woe': {},  // Every Chapter XVI ability id is `overdrive-sin-`-prefixed and defined in the chapter's own ability file.
+  sin: {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

@@ -128,6 +128,10 @@ import { gardenOfPainBuild } from './builds/garden-of-pain.ts';
 import { ISAARU_ABILITIES } from './enemies/isaaru-abilities.ts';
 import { ISAARU_GROUPS } from './enemies/isaaru.ts';
 import { viaPurificoBuild } from './builds/via-purifico.ts';
+// Chapter XVI, Sin: link 4, Overdrive Sin, first (FFX only) — registered but unlisted.
+import { OVERDRIVE_SIN_ABILITIES } from './enemies/overdrive-sin-abilities.ts';
+import { overdriveSinGroup } from './enemies/overdrive-sin.ts';
+import { sinFahrenheitBuild } from './builds/sin-fahrenheit.ts';
 import { seymourFluxGroup } from './enemies/seymour-flux.ts';
 import { yunalescaGroup } from './enemies/yunalesca.ts';
 import { seymourAnimaMacalaniaGroup } from './enemies/seymour-anima-macalania.ts';
@@ -253,6 +257,7 @@ const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...Object.values(SEYMOUR_NATUS_ABILITIES),
   ...Object.values(SEYMOUR_OMNIS_ABILITIES),
   ...Object.values(ISAARU_ABILITIES),
+  ...Object.values(OVERDRIVE_SIN_ABILITIES),
 ];
 
 // Fold item-effect and boss abilities into the merged ABILITIES record.
@@ -320,6 +325,9 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   // Chapter XIV (`isaaru-via-purifico`, src/data/chapter-isaaru.ts), registered by id
   // but UNLISTED: three links, Grothia -> Pterya -> Spathi [docs/plans/chapter-isaaru-review.md].
   ...Object.fromEntries(ISAARU_GROUPS.map((g) => [g.id, g])),
+  // Chapter XVI (`sin`, src/data/chapter-sin.ts), registered by id but UNLISTED: link 4,
+  // Overdrive Sin, first; links 1-3 come in front later [research/ffx-sin.md].
+  [overdriveSinGroup.id]: overdriveSinGroup,
 };
 
 /** Convenience alias for the first group of the possessed-aeon gauntlet. */
@@ -350,6 +358,7 @@ export {
   highbridgeBuild,
   gardenOfPainBuild,
   viaPurificoBuild,
+  sinFahrenheitBuild,
 };
 
 export type { AeonCatalogDef, OverdriveModeDef, FFXStatusDef, FFXCharacterDef };

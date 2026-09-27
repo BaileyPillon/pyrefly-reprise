@@ -17,6 +17,7 @@
 
 import type { Chapter } from './encounters.ts';
 import { FF7_GUARD_SCORPION } from './chapter-ff7-guard-scorpion.ts';
+import { SIN } from './chapter-sin.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
@@ -29,5 +30,9 @@ import { FF7_GUARD_SCORPION } from './chapter-ff7-guard-scorpion.ts';
  *
  * The hidden FF7 experiment, Guard Scorpion, was registered here on 2026-09-27 (FF7 only; never listed:
  * `experimental`, `number: 0`, reached by the secret door, `./chapter-ff7-guard-scorpion.ts`).
+ *
+ * Chapter XVI, Sin (link 4, Overdrive Sin, first), was registered here on 2026-09-27 (FFX only;
+ * Bailey's "all your recommendations": concept A reached through B, link 4 shipped unlisted behind
+ * a switch; `./chapter-sin.ts`). Listing it is the switch.
  */
-export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION] as const;
+export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION, SIN] as const;
