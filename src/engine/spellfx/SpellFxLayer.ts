@@ -134,8 +134,13 @@ export class SpellFxLayer {
 
   /** One copy for the whole action, on the caster, landing on the targets' centre (Mega Flare). */
   private landGroup(fx: DrawnFxId, target: string, o: LandOpts, action: number): RunningFx | undefined {
-    const found = this.running.find((r) => r.action === action && r.id === fx && r.groupIds.includes(target));
-    if (found) return found;
+    // One copy per action: a target the action-start did not list (a party-wide
+    // spell whose targets resolve in the engine) joins the copy already playing.
+    const found = this.running.find((r) => r.action === action && r.id === fx && r.groupIds.length > 0);
+    if (found) {
+      if (!found.groupIds.includes(target) && this.opts.rectOf(target)) found.groupIds = [...found.groupIds, target];
+      return found;
+    }
     const group = (o.targets?.includes(target) ? o.targets : [target]).filter((id) => this.opts.rectOf(id));
     if (!group.length) return undefined;
     const r = new RunningFx(fx, o.sourceId ?? '', this.opts.game, QUALITY_DENSITY[this.quality], action, this.startFor(fx));

@@ -92,6 +92,14 @@ describe('special moments (D-233, option A)', () => {
     expect(l.covers('auron')).toBe(true);
   });
 
+  it('a party-wide special whose targets the action-start did not list still plays once, gathering its targets', () => {
+    const l = layer('ffx2');
+    l.land('tidus', { abilityId: 'mega-flare', targets: [], action: 3, sourceId: 'boss' });
+    l.land('yuna', { abilityId: 'mega-flare', targets: [], action: 3, sourceId: 'boss' });
+    l.land('auron', { abilityId: 'mega-flare', targets: [], action: 3, sourceId: 'boss' });
+    expect(l.snapshot().running).toHaveLength(1);
+  });
+
   it('the numeral waits for the landing on the first play; a repeat starts later and adds at most 1.2 s', () => {
     const l = layer('ffx');
     const first = l.land('boss', { abilityId: 'spiral-cut', targets: ['boss'], action: 1 });
