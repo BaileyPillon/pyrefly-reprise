@@ -57,6 +57,7 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__chip-icon {
   height: 8px;
 }
 html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__unknown,
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__immune,
 html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__failed {
   font-size: 14px;
 }

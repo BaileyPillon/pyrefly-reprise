@@ -590,6 +590,11 @@
   font-family: var(--ig-font-display); font-size: 5px; letter-spacing: 0.1em;
   color: rgba(244, 241, 232, 0.52); margin-top: 2px;
 }
+/* D-221: a Sensor-immune target, the retail HELP-bar line under its name. */
+.ffx-sensor__immune {
+  font-family: var(--ig-font-serif); font-style: italic; font-size: 6px;
+  color: var(--ig-paper); margin-top: 1px;
+}
 .ffx-sensor__name {
   font-family: var(--ig-font-serif); font-weight: 700; font-style: italic;
   font-size: 11px; color: var(--ig-paper); margin-bottom: 3px;

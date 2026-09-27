@@ -1,5 +1,6 @@
 import type { AnyCombatant, CombatantId, ElementId } from '../../battle/common/types.ts';
 import { ELEMENT_IDS } from '../../battle/common/types.ts';
+import { isSensorImmune, sensorImmuneBodyHtml } from './sensorImmune.ts';
 
 const ELEMENT_LABEL: Record<ElementId, string> = {
   fire: 'FIRE',
@@ -104,18 +105,12 @@ const TOGGLE_KEY_LABEL = 'I';
  * {@link SENSOR_OPEN_MS}, and reopens on a click or `I` — and a plate the player
  * opened by hand never folds itself under them.
  *
- * ## Sensor shows nothing (D-196, FFX only)
+ * ## "Immune to sensors." (D-221, supersedes D-196; FFX only)
  *
- * `research/ffx-yojimbo.md` §2: "Scan and Sensor show nothing" on a
- * Sensor-immune target (`immunityFlags` carries `'immune-to-sensor'` —
- * `src/data/ffx/enemies/yojimbo.ts` and the other bosses the research marks
- * this way). Bailey's correction to D-196 (`docs/target/decisions.json`):
- * the earlier build printed a name, an HP bar and a "SENSOR FAILED" caption
- * for such a target — a plate that exists says something ("Sensor tried and
- * came back empty") the source does not support. The fix is upstream of
- * rendering: `open()` refuses a Sensor-immune target outright, so the panel
- * is not shown at all — no name, no `? ? ?` HP, no caption — exactly as if
- * nothing had been aimed at. Every other target renders exactly as before.
+ * A Sensor-immune target (`immunityFlags` carries `'immune-to-sensor'`) shows
+ * its name and the retail HELP-bar line "Immune to sensors."
+ * (`research/observed-ffx-steam-2026-09-26.md` §2.3), and no HP, bar or chips.
+ * A `sensor` reveal on one reads nothing. See `sensorImmune.ts`.
  */
 export class SensorPanel {
   readonly el: HTMLElement;
@@ -192,6 +187,8 @@ export class SensorPanel {
    * here to the end of the battle, and the plate opens on it.
    */
   show(target: AnyCombatant): void {
+    // D-221: Sensor reads nothing off an immune target, so its reveal changes nothing.
+    if (isSensorImmune(target)) return;
     this.scanned.add(target.id);
     this.open(target, false);
   }
@@ -213,12 +210,6 @@ export class SensorPanel {
   }
 
   private open(target: AnyCombatant, byHand: boolean): void {
-    // D-196: a Sensor-immune target gets no plate at all, not a plate that
-    // says it found nothing. See the class doc's "Sensor shows nothing" note.
-    if (isSensorImmune(target)) {
-      this.hide();
-      return;
-    }
     this.current = target;
     this.folded = false;
     this.pinned = byHand;
@@ -310,8 +301,11 @@ export class SensorPanel {
   private render(): void {
     const target = this.current;
     if (!target) return;
-    // `open()` refuses a Sensor-immune target before `current` is ever set to
-    // it (D-196: "Sensor shows nothing"), so this method never runs for one.
+    // D-221: the name and the retail "Immune to sensors." line, nothing read.
+    if (isSensorImmune(target)) {
+      this.bodyEl.innerHTML = sensorImmuneBodyHtml(target.name);
+      return;
+    }
     const known = this.scanned.has(target.id);
     const maxHp = target.stats.maxHp || 1;
     const hpFrac = known ? Math.max(0, Math.min(1, target.hp / maxHp)) : 0;
@@ -355,15 +349,6 @@ export class SensorPanel {
       ${tail}
     `;
   }
-}
-
-/**
- * D-196: whether Sensor (and the plate it opens) shows nothing for this
- * target — `research/ffx-yojimbo.md` §2's "Scan and Sensor show nothing".
- * FFX only [AGENTS.md rule 14]: `immunityFlags` and this panel are both FFX's.
- */
-function isSensorImmune(target: AnyCombatant): boolean {
-  return target.immunityFlags.includes('immune-to-sensor');
 }
 
 function affinityClass(a: string): string {
