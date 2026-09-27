@@ -144,3 +144,78 @@ Checks on the final commit: `npx tsc --noEmit` clean; full `vitest run --testTim
 files passed, 5 skipped (9225 tests passed); `node tools/orphans.mjs` 29 orphaned, the same as
 main; `verify-approved.mjs` 0 mismatched, 0 missing (approved 219, judge-locked 48). The preview
 server on 6700 was stopped by PID.
+
+## CHECK (L-0), independent checker, 2026-09-27
+
+I re-checked L-0 (`5d4b829a`) on my own production build. I did not build any of it.
+**Verdict: no blocker.** Every item the builder called met is met again by real keys.
+PR-0185 is still open for the camera move only, as the builder disclosed, and nothing
+regressed against main in either game.
+
+**Method.** I made two production `vite build`s. The candidate is this branch at `5d4b829a`,
+bundle `index-DnWJf0Zm.js`. Main is `origin/main` exported by `git archive`, bundle
+`index-C-3hBxzq.js`. That is byte-for-byte the live release 24 bundle, because main's `src`
+has not changed since `bc4e70ee`. The candidate was served by `vite preview` on 6710 and main
+on 6711. I used headless Playwright Chromium from node with `PYREFLY_BROWSER=gpu`, one browser
+at a time, seed 1, and real keys from the title. One input was debug and is labelled:
+`autoBattle('intended')`, used to cross Chapter VI link 2 and to reach Yunalesca's forms 2 and
+3. Each measurement was taken at the link's first menu, or on real keys after that point. Frames
+and drivers are in `.chk3-tmp/` in this worktree (scratch, uncommitted).
+
+| Item | Game (rule 14) | Round-13 acceptance | My result |
+|---|---|---|---|
+| PR-0205 | FFX-2 only (XI) | the seam 2 caption reads 'Magus Sisters' | **Met.** I won link 1 with 175 Enter presses and nothing else. The frames every 300 ms after seam 2 show the reveal plate `pf-mom__slab-title` reading "Magus Sisters" from 0.9 s on, and never "Sandy" alone. No page errors (`ch11/cand-1600/seam2-05.jpg`). |
+| PR-0164 | FFX only (II) | Ch II attack frame at 2000x1012: no straight hard edge through the hair; the file stays byte-identical | **Met.** On main, the attack frame shows a hard vertical cut on the left and a hard horizontal cut on the top. On the candidate both are soft (`cmp-ch2-attack2-main-vs-cand.jpg`). The left fade line wanders over x 1010..1087 (sd 17.7 px against main's 6.3), with one near-straight run of about 50 px, soft at 2x zoom. Forms 2 and 3 (idle, attack, cast) show no straight side or top edge. `verify-approved`: 0 mismatched, 0 missing. |
+| PR-0212 | FFX only (XIV) | no straight edge in a Ch XIV summon frame (the mask route) | **Met by the mask route**, at 1600x900 and 2000x1012. I did Summon > Valefor by keys, and the far wing (on the left) fades on a lumpy line. The file half still fails as written: `valefor/idle.png` keeps its opaque right-border pixels, and a re-cut is Bailey's call. |
+| PR-0184 | FFX only (IX) | the arrival frames at 1600 and 2000 show no straight edge on the canopy, and the trunk meets the floor | **Met.** On main the tree floats high and ends in a straight vertical fade. On the candidate the tree sits lower and its roots meet the floor behind Yojimbo, closer to option A of `docs/concepts/chapters/yojimbo/chamber/sheet-arrival.jpg`. The right side is still a soft, mostly vertical fade, but it now follows the blossom (`cmp-ch9-right-main-vs-cand.jpg`). |
+| PR-0185 | FFX only (IX) | no party head is cut by the frame edge in the Ch IX enemy-action and arrival frames at 1600 and 2000 | **Met on held and swaying shots; open for the camera move.** I ran a per-frame sampler over the arrival plus 8 real-key turns. The candidate had 105 cut frames at 1600 and 100 at 2000. Every one came while the camera moved between the `enemy` and `idle` shots, with the camera between z 10.05 and 13.5 (the enemy shot sits at 9.8). None came on a held or swaying shot. Main at 2000 had 795 cut frames, 92 of them on held shots. So this is a large improvement, not a regression. A 250 ms arrival frame at 1600 (`ch9/cand-1600/arrival-14.jpg`) still lands on the move with the party's heads at the bottom edge. Choosing a hard cut or a party fade stays Bailey's camera call. |
+| R15-02 | FFX only (IX) | the network log shows no aborted sakura.png request | **Met** at 1600 and 2000: one `GET 200` for `sakura.png`, 0 failed requests, 0 page errors. |
+| PR-0136 | FFX-2 only (VI) | at 1600x900, no enemy within 150 px of a girl, and the enemies in the right half | **Met.** At 1600x900 the gaps are 202 / 211 / 164 px and the leftmost fiend is at x 835 / 858 / 810 (half is 800). Links 1 and 2 were played by real keys; link 3 was reached by debug auto. At 2000x1012 the gaps are 227 / 238 / 187 px and the leftmost fiend is at x 1040 / 1065 / 1013. The fiends stay left of the rail (1246 / 1501) and below the intent card. |
+| PR-0034, PR-0177 | | | Open by Bailey's D-249 answers, as the brief says. Not checked here. |
+
+**Regression sweep (both games, shared code).** I opened every chapter's first command menu on
+the candidate and on main, at 1600x900 and at 390x844: 14 chapters each, 56 runs. The acting
+member and the command rows are identical in every chapter at both sizes, and there are 0 page
+or console errors. The actor boxes differ by a few pixels of idle sway, except for two chapters:
+- Ch VI: the fiends moved right. That is PR-0136, intended.
+- Den of Woe: the HP differs because of ATB timing.
+
+**Side effect of PR-0136 at 390x844.** The portrait frame fits the wider enemy lane, so the whole
+Ch VI cast draws about 11 percent smaller: Yuna is 56x144 against 64x163 on main. Fem-Goon stands
+at x 350..366 of 390, still inside the frame (`cmp-leblanc-390-main-vs-cand.jpg`). This is minor
+and I built nothing for it.
+
+**Hidden FF7 fight.** I typed L I M I T on chapter select after reaching it from the title by
+keys. The FF7 fight opened with one `.ff7hud` and played to **victory** by real keys, with 0
+thrown errors.
+
+**Code and tree checks.**
+- `tsc --noEmit` is clean.
+- Full `vitest run --testTimeout=60000` passes: 552 files, 5 skipped; 9225 tests passed.
+- `node tools/orphans.mjs`: 29 orphaned, the same as main.
+- `verify-approved`: 0 mismatched, 0 missing.
+- `git merge-tree --write-tree origin/main HEAD` (origin/main `3e7d8d3e`) is clean.
+- The branch does not have hotfix 24 yet (`bc4e70ee`: the Grand Summon picker and summon
+  staging). I exported the merge result `0dd0632d` and checked it: tsc is clean. The full vitest
+  gives 554 passed and 1 failed. The failure is `audio-manifest-io`, a Windows `EPERM` on a
+  temporary lock file under load; that file passes when run alone and has nothing to do with this
+  branch.
+
+**Findings for the driver.**
+1. PR-0185 has not fully passed its check as written: arrival and sequence frames that land on
+   the enemy/idle move still cut heads (polish, not a regression). The call is Bailey's camera
+   grammar.
+2. The PR-0212 file half cannot pass without a re-cut (Bailey's call). The mask route passes the
+   frame half.
+3. PR-0164 and PR-0184 pass, with soft residual fades: a short near-straight soft run on
+   Yunalesca's left hair, and a mostly vertical soft right side on the canopy. A critic could
+   still call these "soft straight" at zoom (polish).
+4. On main, the hotfix 24 summon staging is not on this branch. Summon frames of the merged
+   build should be looked at once after the merge.
+5. House style: `PaintedActor.ts` (+12) and `BattlePresenter.ts` (+1) were already over 400
+   lines and grow slightly. The new logic sits in new modules.
+
+**Cleanup.** I stopped both preview servers (6710, 6711) by PID. I removed the junction links I
+created (`.chk3-tmp/main-src` and `.chk3-tmp/merged-src`: `node_modules` and `public/art`). I
+left the worktree's own `node_modules` and `public/art` junctions (13:33, made by the earlier,
+stopped check) in place, because I did not create them.
