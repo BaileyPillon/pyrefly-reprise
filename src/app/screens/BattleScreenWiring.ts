@@ -148,7 +148,7 @@ export function createHud(game: GameId, field?: () => OversoulField | null, engi
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
   const hud: HudPort = game === 'ffx'
     ? withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))
-    : withPhoneLayout(new FFX2BattleHud(), installFfx2PhoneHud);
+    : withPhoneLayout(new FFX2BattleHud({ engine: engine instanceof FFX2Engine ? engine : null }), installFfx2PhoneHud); // advisor v3
   // The Oversoul look (FFX-2 only: Oversoul exists only in FFX-2), on the field the screen passes in.
   // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`). The FFX side gets the
   // Mortiphasm disc colours and Omnis's red glow (FFX only, Chapter XII; inert without the Omnis state,

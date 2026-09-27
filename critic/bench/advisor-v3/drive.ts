@@ -104,10 +104,14 @@ export function chapterById(id: string): Chapter {
 }
 
 /** The registries the live FFX-2 HUD passes (`FFX2BattleHud`'s `advisor` option); FFX passes none. */
-export function liveAdvisorOptions(game: 'ffx' | 'ffx2'): AdvisorOptions {
-  if (game === 'ffx') return {};
+export function liveAdvisorOptions(game: 'ffx' | 'ffx2', engine?: BattleEngine): AdvisorOptions {
+  const v3 = process.env['SCORECARD_V3'];
+  const flag: AdvisorOptions = v3 === '1' ? { v3: true } : v3 === '0' ? { v3: false } : {};
+  if (game === 'ffx') return flag;
   const o = ffx2EngineOptions();
-  return { ffx2: { ...(o.abilities ? { abilities: o.abilities } : {}), ...(o.items ? { items: o.items } : {}) } };
+  // Since advisor v3 the live HUD also hands over the engine (read and forked, never driven).
+  const live = engine instanceof FFX2Engine ? { engine: () => engine } : {};
+  return { ...flag, ...live, ffx2: { ...(o.abilities ? { abilities: o.abilities } : {}), ...(o.items ? { items: o.items } : {}) } };
 }
 
 async function engineFor(setup: BattleSetup): Promise<BattleEngine> {
@@ -146,7 +150,7 @@ export async function runChapter(chapter: Chapter, seed: number, driver: Driver)
   let setup: BattleSetup = setupForChapter(chapter, seed);
   const engine = await engineFor(setup);
   const x2 = game === 'ffx2' ? (engine as unknown as FFX2Engine) : null;
-  const advisorOptions = liveAdvisorOptions(game);
+  const advisorOptions = liveAdvisorOptions(game, engine);
   const out: RunResult = {
     chapterId: chapter.id, seed, outcome: 'unresolved', linksCleared: 0, decisions: 0, closed: 0,
     refused: 0, fallbacks: 0, minutes: 0, finalLogLength: 0, finalLogDigest: '',

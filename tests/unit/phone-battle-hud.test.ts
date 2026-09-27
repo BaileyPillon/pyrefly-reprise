@@ -389,6 +389,7 @@ describe('the phone stylesheets', () => {
   it('the battle screen wraps both games\' HUDs', () => {
     const src = readFileSync(join(process.cwd(), 'src/app/screens/BattleScreenWiring.ts'), 'utf8');
     expect(src).toContain('withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud)');
-    expect(src).toContain('withPhoneLayout(new FFX2BattleHud(), installFfx2PhoneHud)');
+    // Since advisor v3 the FFX-2 HUD is handed the engine (read and forked for the card, never driven).
+    expect(src).toMatch(/withPhoneLayout\(new FFX2BattleHud\([^)]*\), installFfx2PhoneHud\)/);
   });
 });

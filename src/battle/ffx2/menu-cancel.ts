@@ -60,4 +60,10 @@ export class ActingAbilities {
   clear(): void {
     this.stacks.clear();
   }
+
+  /** Become an independent copy of `other` (for `FFX2Engine.fork`; the two never share a stack). */
+  copyFrom(other: ActingAbilities): void {
+    this.stacks.clear();
+    for (const [id, stack] of other.stacks) this.stacks.set(id, [...stack]);
+  }
 }

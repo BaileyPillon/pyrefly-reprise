@@ -235,6 +235,41 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     return this.flush();
   }
 
+  /**
+   * A private copy of this battle, for the move advisor's look-ahead (advisor v3, FFX-2 only).
+   *
+   * One `structuredClone` of the whole mutable bundle (state, units, grid nodes, pending drafts,
+   * the held command), so the aliasing between the units and the state survives; the registries
+   * and options are shared read-only; the event log is copied shallowly (events are immutable
+   * JSON). The copy draws from **its own** `SeededRng(seed)`: nothing it does reaches this
+   * engine's state or random stream, and nothing in a battle calls it. `rngState` (tests only)
+   * starts the copy's stream where this one stands, which is how its fidelity is proved.
+   */
+  fork(seed: number, rngState?: number): FFX2Engine {
+    const f = new FFX2Engine(this.options);
+    const { log, ...rest } = this.battleState;
+    const b = structuredClone({
+      battleState: rest, units: this.units, gridNodes: this.gridNodes, drafts: this.drafts,
+      held: this.held, awaitingMinigame: this.awaitingMinigame,
+    });
+    // `units` alias the state's combatants (`setup.ts`); one clone of both keeps that aliasing.
+    f.battleState = { ...(b.battleState as Omit<BattleState, 'log'>), log: log.slice() } as BattleState;
+    f.units = b.units;
+    f.gridNodes = b.gridNodes;
+    f.drafts = b.drafts;
+    f.held = b.held;
+    f.awaitingMinigame = b.awaitingMinigame;
+    f.abilities = this.abilities;
+    f.dresspheres = this.dresspheres;
+    f.grids = this.grids;
+    f.rng = new SeededRng(seed);
+    if (rngState !== undefined) f.rng.restoreState(rngState);
+    f.acting.copyFrom(this.acting);
+    [f.elapsedMs, f.inputOwner, f.hitClosed, f.carriedTicks] = [this.elapsedMs, this.inputOwner, this.hitClosed, this.carriedTicks];
+    [f.atbRate, f.speed, f.mode, f.split, f.level] = [this.atbRate, this.speed, this.mode, this.split, this.level];
+    return f;
+  }
+
   /** The command a chain-locked girl confirmed and is waiting to fire, if any. */
   heldCommand(): HeldCommand | null {
     return this.held ? { ...this.held } : null;

@@ -140,6 +140,8 @@ import {
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
 import { changeSuggestion, changeSuggestions, lockedToChange, sameChange } from './advisor-change.ts';
 import { holdingForTheBreath } from './airship-orders.ts';
+import type { InFlightSource } from './advisor-inflight.ts';
+import { boardFor, heldFor, repeatsInFlight, v3On, withRaiseFirst } from './advisor-v3.ts';
 import { isSelfOrder, scopeWord, targetDisplayName } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
@@ -298,6 +300,13 @@ export interface AdvisorOptions {
    * this adds the held one [`./advisor-committed.ts`, PR-0088].
    */
   queued?: () => readonly QueuedCommand[];
+  /**
+   * The live FFX-2 engine, read and forked (never driven) by advisor v3's projected board
+   * (`./advisor-inflight.ts`). **FFX-2 only**; the FFX HUD passes nothing.
+   */
+  engine?: () => InFlightSource | null;
+  /** Advisor v3 on or off for this call; the default is `ADVISOR_V3` (`./advisor-v3.ts`). */
+  v3?: boolean;
 }
 
 // ----------------------------------------------------------------- the knobs
@@ -369,7 +378,7 @@ const YUNALESCA_ID = 'yunalesca';
  * command list means a fresh decision whatever the counters say
  * [`./advisor-plan.ts`].
  */
-const PLAN_CACHE = new PlanCache<{ view: AdvisorView | null; commands: readonly AvailableCommand[] }>();
+const PLAN_CACHE = new PlanCache<{ view: AdvisorView | null; commands: readonly AvailableCommand[]; v3: boolean }>();
 
 /** Empty the plan cache. For tests that assert determinism across a cold start. */
 export function clearAdvisorCache(): void {
@@ -1147,13 +1156,17 @@ function switchCandidate(
  * legal to say.
  */
 export function buildAdvisorView(
-  state: Readonly<BattleState>,
+  board: Readonly<BattleState>,
   decision: GuideDecision,
-  options: AdvisorOptions = {},
+  given: AdvisorOptions = {},
 ): AdvisorView | null {
-  const actor = state.combatants[decision.actorId];
-  if (!actor || state.game === 'ff7') return null; // FF7: the advisor is off in the slice (ff7-game-branch-audit)
-  const planner = options.planner !== false;
+  const actor = board.combatants[decision.actorId];
+  if (!actor || board.game === 'ff7') return null; // FF7: the advisor is off in the slice (ff7-game-branch-audit)
+  const planner = given.planner !== false;
+  const v3 = v3On(given);
+  // v3 reads the held command off the engine itself: the HUD never passed it (method check §1).
+  const held = v3 ? heldFor(given) : [];
+  const keyed: AdvisorOptions = held.length > 0 && !given.queued ? { ...given, queued: () => held } : given;
 
   // **The cache.** FFX-2 runs an Active ATB clock and `syncGauges` pumps the
   // HUD at 20 Hz; without this, every one of those frames would re-plan a board
@@ -1161,12 +1174,16 @@ export function buildAdvisorView(
   // that *has* moved cannot share a key [`./advisor-plan.ts#cacheKeyFor`].
   // A held command (PR-0076) is set without an event, so `nextSeq` cannot see
   // it: a board carrying one is never served from the cache.
-  const cacheKey = planner && queuedFrom(options).length === 0 ? cacheKeyFor(state, decision.actorId) : null;
+  const cacheKey = planner && queuedFrom(keyed).length === 0 ? cacheKeyFor(board, decision.actorId) : null;
   if (cacheKey) {
     const hit = PLAN_CACHE.get(cacheKey);
-    if (hit && hit.commands === decision.commands) return hit.view;
+    if (hit && hit.commands === decision.commands && hit.v3 === v3) return hit.view;
   }
 
+  // **Advisor v3, the projected board** (FFX-2 only): with another girl's command still in
+  // flight, everything below ranks on the battle as it will stand once it has landed, enemy
+  // turns in between included (`./advisor-inflight.ts`). Otherwise `state` is `board`.
+  const { state, options } = boardFor(board, decision.actorId, keyed);
   const sim = simulatorFor(state, options);
   // The forecast: once per decision, shared by every candidate.
   //
@@ -1332,7 +1349,10 @@ export function buildAdvisorView(
   // demoted, so the revive runner-up below can never pick it back up; when it
   // is all the menu holds, the list stands as it was.
   const unspent = pressed.filter(
-    (c) => !spentAlready(state, c.suggestion.command, c.outcome, committed),
+    (c) =>
+      !spentAlready(state, c.suggestion.command, c.outcome, committed) &&
+      // v3: the same support move as one still in flight (Bailey's Mega-Potion, FFX-2 only).
+      !(v3 && repeatsInFlight(state, decision.actorId, c.suggestion.command, c.outcome, options)),
   );
   const legal = unspent.length > 0 ? unspent : pressed;
 
@@ -1373,10 +1393,17 @@ export function buildAdvisorView(
   const harmful = legal.filter((c) => harmsAZombie(state, c.outcome));
   const kept = (xs: Candidate[]): Candidate[] => xs.filter((c) => !harmful.includes(c));
   const safe = kept(legal);
-  const ordered =
+  // **Revive priority** (advisor v3, both games): a raise the card priced above the chapter's
+  // line, for an ally the line is not raising and Bailey's refusal rule lets through, goes on
+  // top; a lethal save stays where it is (`./advisor-v3.ts#withRaiseFirst`).
+  const ordered = withRaiseFirst(
+    state,
     safe.length === 0
       ? legal
-      : [...(kept(useful).length > 0 ? [...kept(useful), ...kept(inert)] : safe), ...harmful];
+      : [...(kept(useful).length > 0 ? [...kept(useful), ...kept(inert)] : safe), ...harmful],
+    intent,
+    v3 && planner,
+  );
 
   const shown: Candidate[] = [ordered[0]!];
   /** A revive this board was offered, priced, and refused. See {@link noteFor}. */
@@ -1429,7 +1456,7 @@ export function buildAdvisorView(
     note: noteFor(state, shown, refused, decision, options, actor.name, committed),
     considered: candidates.length,
   };
-  if (cacheKey) PLAN_CACHE.set(cacheKey, { view, commands: decision.commands });
+  if (cacheKey) PLAN_CACHE.set(cacheKey, { view, commands: decision.commands, v3 });
   return view;
 }
 

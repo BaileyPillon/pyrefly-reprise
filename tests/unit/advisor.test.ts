@@ -159,7 +159,15 @@ function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
         // sentence, so the card and the strategy panel never teach different
         // fights.
         const saves = (top.facts ?? []).some((f) => f.kind === 'saves-from-lethal');
-        if (saves) {
+        // **The second licensed exception** (advisor v3, both games): revive priority. A raise
+        // the card priced above the line, for an ally the line is not raising, goes on top unless
+        // Bailey's refusal rule speaks (`advisor-v3.ts#withRaiseFirst`; the scorecard in
+        // docs/plans/advisor-v3-method-check.md: Chapter 2 unchanged at 37 of 40).
+        const raises = (c: Command): boolean =>
+          (simulateFFXCommand(state, decision.actorId, c, { roll: 'mid', content })?.revives.length ?? 0) > 0;
+        if (raises(top.command) && !raises(tactic)) {
+          out.overrides.push(`${decision.actorId}: raise ${top.label} over ${shape(tactic)}`);
+        } else if (saves) {
           out.overrides.push(`${decision.actorId}: ${top.label} over ${shape(tactic)}`);
           expect(top.reason, 'an override names the long plan').toMatch(/long plan is still/);
         } else if (onTheMenu(state.game, tactic)) {
