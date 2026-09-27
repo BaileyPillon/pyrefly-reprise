@@ -25,7 +25,7 @@ Branch `t1-b4b` (worktree `D:/pyrefly-t1-b4b`), from main `3665f1eb`, 2026-09-26
 
 | Issue | Commit | Game | What changed | Acceptance evidence |
 |---|---|---|---|---|
-| PR-0215 | `db0bd923` | stalemate rule FFX only; routing both | `GameFlow.runChapter` sends `'escape'` through the existing defeat panel (RETRY / CHAPTER SELECT), the same way as a defeat. Automated runs (`skipResults`) are unchanged. The engine is unchanged. | Unit test `tests/unit/flow-stalemate-results.test.ts` (2 of 3 failed first). Browser: in Ch III the engine's own stalemate watch was debug-set (`rt.progress`), then real Enter presses ended the fight as `escape`. The results panel appeared (`outcome: escape`) and real Enter on RETRY led to prep and then battle. `docs/screenshots/t1-b4b/stalemate-*.jpg`, `stalemate-run.json`. **Half done, see Stopped.** |
+| PR-0215 | **backed out (`7d3d9081`)**, was `db0bd923` | stalemate rule FFX only; routing both | `GameFlow.runChapter` sent `'escape'` through the existing defeat panel (RETRY / CHAPTER SELECT), the same way as a defeat. Automated runs (`skipResults`) were unchanged. The engine was unchanged. **This routing was reverted in the REPAIR pass below (`7d3d9081`) because the acceptance check needs a results card that explains the withdrawal, which is new copy on a screen Bailey sees; see REPAIR and "The question for Bailey (PR-0215)".** | Unit test `tests/unit/flow-stalemate-results.test.ts` (2 of 3 failed first; the test was removed with the back-out). Browser: in Ch III the engine's own stalemate watch was debug-set (`rt.progress`), then real Enter presses ended the fight as `escape`. The results panel appeared (`outcome: escape`) and real Enter on RETRY led to prep and then battle. `docs/screenshots/t1-b4b/stalemate-*.jpg`, `stalemate-run.json`. **Superseded, see REPAIR and RE-CHECK below: PR-0215 is open, not fixed.** |
 | PR-0109 | `2f456d77` | both | New `src/app/screens/frontend/boardFocus.ts` remembers the confirmed chapter id, in module memory mirrored to `sessionStorage` inside try/catch, so a same-tab reload also lands on it. No save-schema change. `ChapterSelectScreen` opens on that tile when no `initialIndex` is given. A fresh session still opens on Chapter I. | Unit test `tests/unit/board-focus.test.ts` (14 of 17 failed first). Real keys, production build, at 1600x900, 2000x1012 and 390x844: Esc from prep for all 14 playable cards gave `selectedId` equal to the chapter, 42 of 42. The results return was checked for I, VI and XIV at all three sizes, 9 of 9, covering victory CONFIRM and defeat CHAPTER SELECT. In those runs the fight was settled by the debug `autoBattle` at skip speed; board, prep and results used real keys. 0 console errors, 0 HTTP errors. `docs/screenshots/t1-b4b/board-*.jpg`, `board-run.json`, `prep-esc/board-run.json`. |
 | PR-0214 | `8870bcf7` | both | `pauseMusic.ts` now uses `has()`. When the remembered cue is `null` (a silent scene), resuming calls `stopMusic` with the fade used when leaving the pause, which also cancels a pause cue that is still loading. | Unit test `tests/unit/pause-music-silence.test.ts` (2 of 4 failed first). Browser, real keys: Ch I pre-scene went null → pause → **null** 1.5 s after the resume. Ch I battle went boss-seymour → pause → boss-seymour. Ch V pre-scene went scene-farplane → pause → scene-farplane. `pause-audio-run.json`, `ch*-paused.jpg`. |
 | PR-0100 + PR-0173 | `da4ce73b` | both | New `tools/dist-filter.mjs` defines what never ships: `audio/candidates/**`, `art/**/*.raw.png` and `art/**/*.N.png|json`. The Vite plugin `pyrefly-dist-filter` prunes them after every build, using lstat so it never follows a link. `qa.mjs` stops counting the unshipped candidates as orphans. `deploy-pages.mjs` runs `qa --strict` in the preflight (never skipped) and refuses a build that still carries an unshipped file. | Unit test `tests/unit/dist-filter.test.ts` (the plugin check failed first). A fresh build removed 291 files (52 audio, 239 art) and left 0; the sources stay on disk (52 and 239). `qa.mjs --strict` exits 0 (it exited 1 before, on the 52 orphans only). All 72 local files `audition.html` references resolve. The board and results routes above recorded 0 HTTP errors. |
@@ -104,14 +104,54 @@ note: `BattleScreen.ts`, already over 400 lines, grew from 919 to 924, the guard
 `deploy-pages.mjs` (708 → 717) and `qa.mjs` (+5) were already over 400 too, and their new logic
 lives in `tools/dist-filter.mjs`.
 
-**Merge condition (regression in the critic tooling, not in the game).** After PR-0109,
-`critic/runner/lib/play.mjs:68-70` presses ArrowRight `idx` more times after an Esc from prep. The
+**Merge condition (regression in the critic tooling, not in the game) — FIXED below.** After PR-0109,
+`critic/runner/lib/play.mjs:68-70` pressed ArrowRight `idx` more times after an Esc from prep. The
 board now comes back on chapter `idx` and wraps (`chapterGrid.ts`, "wrapping"), so the capture harness
 would confirm chapter `2·idx mod n` and go on to capture the **wrong chapter** without an assertion
 failing. `supp.mjs` and `gap-audio.mjs` count presses only from a fresh profile, where the board still
-opens on Chapter I, so they are unaffected. `t1-b5`, which owns `critic/runner`, has no commit touching
-`play.mjs`. Do not merge this branch to main ahead of that fix: it has to land in the same merge or
-before it.
+opens on Chapter I, so they are unaffected. See "PLAY-MJS-MERGE-GATE fix" below for the resolution.
+
+## PLAY-MJS-MERGE-GATE fix (this branch, 2026-09-26, both games)
+
+`critic/runner/lib/play.mjs:68-73` (the re-selection after Esc from party-prep) now moves to the
+target chapter **by id**, the way `t1-b5`'s `route.mjs` `findCard()` does, instead of pressing
+ArrowRight a fixed `idx` times: `for (let i = 0; i < CH.length && (await st())?.selectedId !== id; i++)`.
+Since PR-0109 the board already returns on the chapter just left, so this loop now runs zero times in
+the common case and only advances if the board is ever on a different chapter than expected, bounded by
+`CH.length` so it cannot spin. The initial title→board navigation (`play.mjs:57`) is untouched: a fresh
+profile always opens on Chapter I, so counting `idx` presses from there is unaffected by PR-0109 (this
+is a separate, pre-existing mismatch between `play.mjs`'s 5-entry `CH` array and the live 15-chapter
+board order for the two FFX-2 slots, `ffx2-bahamut` and `ffx2-vegnagun-shuyin`; out of scope here, not
+touched).
+
+**Proof, both games, on a production build** (`vite build` + `vite preview` on port 5970, stopped by its
+PID afterwards; headless Chromium, `PYREFLY_BROWSER=gpu`, real keys). Because of the `CH`/board-order
+mismatch above, driving `play.mjs` itself for an FFX-2 index does not reach the intended chapter to
+begin with (verified: `node critic/runner/lib/play.mjs 3 ...` actually landed prep on `isaaru-via-purifico`,
+an FFX chapter, not `ffx2-bahamut`) — a pre-existing, separate bug, not this fix. To prove this fix
+in isolation, a scratch driver (`tools/zz-t1b4b-playmjsfix.tmp.mjs`, untracked) navigates to the target
+chapter **by id** first (not affected by the `CH` mismatch), opens party-prep, presses Escape, then runs
+the exact patched re-selection loop and reads back the chapter `party-prep` re-opened on:
+
+- FFX, `yunalesca`: prep opened on `yunalesca` before Esc; after Esc the board's `selectedId` was
+  already `yunalesca`; the patched loop (0 iterations) re-confirmed prep on `yunalesca`. **Captured
+  chapter equals requested.**
+- FFX-2, `ffx2-bahamut`: prep opened on `ffx2-bahamut` before Esc; after Esc the board's `selectedId`
+  was already `ffx2-bahamut`; the patched loop (0 iterations) re-confirmed prep on `ffx2-bahamut`.
+  **Captured chapter equals requested.**
+- Regression check: the same driver with the old count-based loop (`for (let i = 0; i < 3; i++)`, `idx`
+  for `ffx2-bahamut` in `play.mjs`'s `CH` array) re-confirmed prep on `ffx2-leblanc` instead —
+  reproducing the exact overshoot this fix removes.
+
+`npx tsc --noEmit` is clean. Full `vitest run --testTimeout=60000`: 453 files passed and 4 skipped,
+8,343 tests passed (unchanged from the RE-CHECK above). `node tools/orphans.mjs` reports 24, unchanged
+from main. This branch may now merge to main without the `play.mjs` blocker (`critic/runner` is
+otherwise `t1-b5`'s to own; this is the one line the merge gate required here).
+
+**HANDOFF-STALE-ROW.** The "Fixed" table's PR-0215 row (top of this file) is corrected to read
+**backed out (`7d3d9081`)**: the REPAIR pass below reverted that routing, and the RE-CHECK confirmed
+it is fully gone and behaviour matches main. PR-0215 stays **open**, pending Bailey's answer to "The
+question for Bailey (PR-0215)" below.
 
 ## REPAIR (one cycle, 2026-09-26, rule 15)
 
@@ -162,13 +202,14 @@ main. `qa.mjs --strict` exits 0. `themes-audit` reports 0 chapters departing fro
 | Item | What I ran | Result |
 |---|---|---|
 | PR-0215, backed out | The code first. Across `3665f1eb..3d914581`, `git diff` shows no change to `src/app/screens/BattleScreenFlow.ts` (`7d3d9081` is the exact inverse of `db0bd923`), and `flow-stalemate-results.test.ts` is gone. `main` has not touched `src/` since `3665f1eb`, so the file is byte-identical to main. Then the browser, in Ch III at 1600x900 and 390x844: I debug-set the engine's stalemate watch (`rt.progress`) and pressed real Enter. The screen history was `battle` → `chapter-select` at both sizes, **never `results`**, and the board came back on `braskas-final-aeon`. | **Fully gone.** Behaviour matches main and live. The item stays **open** with the wording question for Bailey (options A, B and C above). |
-| `critic/runner/lib/play.mjs` merge condition | `t1-b5` at `077a1816` still presses ArrowRight `idx` times after the prep Esc (lines 68-70, unchanged since `df9e588c`, which is already on this batch's base). Its new `route.mjs` moves to a target id (`selectedId === target`), so that driver is safe. `play.mjs` is not. | **Still open.** It blocks the merge, not the batch's code: `t1-b4b` must not merge to main before or without the `play.mjs` fix, which belongs to `critic/runner`'s owner. |
+| `critic/runner/lib/play.mjs` merge condition | *(as read at RE-CHECK time)* `t1-b5` at `077a1816` still pressed ArrowRight `idx` times after the prep Esc (lines 68-70, unchanged since `df9e588c`, which was already on this batch's base). Its `route.mjs` moved to a target id (`selectedId === target`), so that driver was safe; `play.mjs` was not. **Fixed on this branch since**, see "PLAY-MJS-MERGE-GATE fix" above: `play.mjs`'s re-selection loop now also moves by id, proved on a production build for one FFX and one FFX-2 chapter. | **Was open at RE-CHECK time; closed by this branch's own fix.** `t1-b4b` no longer needs `t1-b5`'s `play.mjs` to land first or in the same merge. |
 | Kept items, spot regression check (both games) | PR-0109: prep Esc for `seymour-flux` and `ffx2-leblanc` came back on that card, 2 of 2. PR-0214: the Ch I pre-scene went null → `pause` → **null**, and the `ffx2-leblanc` battle went `boss-ffx2-aeon` → `pause` → `boss-ffx2-aeon`. PR-0158: in both chapters, Esc 0.5 s after mount was ignored, and at 3 s Esc opened the pause and Esc closed it. That was 4 runs with 0 console or page errors. PR-0100 and PR-0173: the fresh `dist/` has no `audio/candidates`, 0 `*.raw.png` and 0 numbered `*.N.png|json`, 825 files in all. | **Pass, no regression** |
 
 In every run there were 0 console errors, 0 page errors and 0 HTTP responses of 400 or above.
 
-**Stale records, minor, not changed here (the brief allows this section only).** The "Fixed" table at
-the top still lists PR-0215 as a row with `db0bd923`. The committed frames `stalemate-results-ch3.jpg`
-and `stalemate-retry-prep-ch3.jpg`, and `stalemate-run.json`, show the backed-out routing. The REPAIR
-section supersedes all three, but a reader who stops at the table would take PR-0215 as fixed.
-Whoever next edits this file should mark the row "backed out (`7d3d9081`)".
+**Stale records — fixed, see "PLAY-MJS-MERGE-GATE fix" above.** The "Fixed" table's PR-0215 row now
+reads **backed out (`7d3d9081`)** instead of `db0bd923`. The committed frames
+`stalemate-results-ch3.jpg` and `stalemate-retry-prep-ch3.jpg`, and `stalemate-run.json`, still show
+the backed-out routing from before the REPAIR pass; they are historical evidence for that pass, not a
+claim that PR-0215 is fixed — the corrected row and the REPAIR/RE-CHECK sections above are the
+authoritative state (PR-0215 open, pending Bailey's wording pick).
