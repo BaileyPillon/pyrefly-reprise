@@ -94,3 +94,77 @@ means the debug API set it up), reports beside them.
   `D:/Tools/pyrefly-scratch/iter2-b3/`. The dev server on 6120 was stopped by PID. The two junction
   links (`node_modules`, `public/art`) were removed with `rmdir`; the worktree is kept.
 - No deploy, no NOW.md, nothing under `critic/`.
+
+## CHECK (independent, 2026-09-27; did not build it)
+
+Checked `5223a306` in `D:/pyrefly-iter2-b3` after `round14-capture.done`. The branch merges cleanly
+onto today's main `1a43fd7b` (`git merge-tree`; main's 22 new commits are FF7 docs and audio). My
+production build (`vite build`, served by `vite preview` on 6130, stopped by PID), headless Playwright
+with `PYREFLY_BROWSER=gpu`. Evidence and scripts are in `D:/Tools/pyrefly-scratch/iter2-b3-check/`
+(not committed). **Verdict: no blocker.** Items 2, 3 and 4 below are open against their acceptance.
+
+**Code.** `npx tsc --noEmit` is clean. The full `vitest run --testTimeout=60000`: 499 files passed and
+4 skipped, 8,620 tests passed. `node tools/orphans.mjs`: 24 orphans, the same list as main.
+
+**Engine, not grep (rule 3).** I played the real engines and fed each log to `phaseCue`:
+- Ch I (80 seeds): Flux's Reflect, the Mortiorchis ladder and its `total-annihilation` restore.
+- Ch II: Yunalesca's forms 2 and 3.
+- Ch VII: `anima-macalania`'s `part-restored`.
+- Ch VIII: the `airship.range` flag reads far, then near.
+- Ch IV (FFX-2): Bahamut's `charge` stages 1 and 2, then `mega-flare`.
+- Ch V: the formations read leg, body, head, then base.
+
+Every canon trigger fires, and nothing else does except the case in finding 5. `resolveAbilityFx`
+gives these results:
+
+| Ability id | FFX | FFX-2 |
+|---|---|---|
+| `spiral-cut` | `spiral` | `bloom` |
+| `mega-flare` | `bloom` | `megaflare` |
+| `x2-bahamut-mega-flare` | (not an FFX id) | `megaflare` |
+
+The game keying holds.
+
+| Item | What I ran on the production build | Result |
+|---|---|---|
+| D-233 Spiral Cut (FFX) | Ch I, seed 1: Spiral Cut handed in twice by `autoBattle` with the gauge filled (**FORCED setup**; the presenter path is real) | Numeral hold is **1,430 ms first, 1,080 ms repeat**, reproducing the builder's figures. The repeat is +0.98 s over today's 100 ms slash, inside the 1.2 s budget. Frames at 0.9 to 1.8 s show the helix, burst and white ring, as in sheet 2 option A. **Not done by keys:** the OVERDRIVE row never surfaced in the check's attempts, because the gauge was set after the decision was computed. |
+| D-233 Mega Flare (FFX-2) | Ch IV, seed 1, intended auto line at normal speed. **No forcing:** Bahamut's own countdown | Hold **1,450 ms** on the first target, then 0 ms on the others (they join the running copy). Frames show the chest core, beam, blast, pink ring and sparkles, matching sheet 3 option A. The numeral follows the blast. |
+| Spell-fx minors | Ch I: a Fire played through `land` at normal speed and at `fast` | At `fast` the rate is 3.125, the mark comes at 168 ms, and the presenter's sleep is 160 ms, so the Fire lands with its numeral. The crit bloom is covered by the unit tests. |
+| A-5 dissolve | Real KOs by the intended line: Seymour Flux (Ch I, seed 42), Yunalesca (Ch II), Seymour's Anima (Ch VII) | Erosion runs feet first with the bright burn edge. About 240 motes stay in the air after `removeCombatant`. The Flux column reads like `pyrefly-death/after.png`, though less dense. |
+| A-6 / D-225 | First menus of II, V, VII and VI; Ch VII to Seymour's KO | The lens band is on in the Dome and the Farplane and off in Macalania and Leblanc. There are no magenta or cyan motes in Leblanc. Macalania's held field is hidden until Seymour's KO, then visible about 12 s after Anima's dissolve. |
+| D-224 | Real flows, intended line (no forced cue). Ch I seed 42: Flux's Reflect, charge, imminent. Ch II: forms 2 and 3. Ch VII: Anima. Ch VIII: far, then base. Ch IV: countdown, imminent, base after Mega Flare. Ch V: leg, body, head, base | Every start tweens to 1 within 1.6 s at the table's exposure, with no more than three starts a second. This covers the **real-trigger captures the build owed**. The looks read subtle (open item 1 stands). |
+| PR-0095 | Ch V, seed 1, real keys (Enter, ArrowRight to the Left Bulwark or Left Redoubt, Escape) at 1600x900, 2000x1012 and 390x844 | Both Bulwark rings have scale-y 0.46 and both Redoubt rings are round. All rings are visible, the name plate sits on the aimed part as in `05-rings-plates-targeted-1600.jpg` option A, and Escape returns to the top menu. No errors. |
+| PR-0094 + Charge Core | Same runs | The intent slab covers **0 %** of every key-feature box at every link, at all three sizes, at the menu and while aiming. |
+| A-8 | **New measure:** the same frame with every blob shown and then hidden, HUD off, at each of 15 chapters' first menus. The drop is taken in a band under each baseline | **38 of 43 figures reach 12 %.** Below it: Ch IV Yuna 6.9 %, Ch V Yuna 6.9 %, Ch VII Rikku 10.4 %, Ch II Tidus 11.5 %, Ch V Rikku 11.7 %. Median is about 24 %. |
+
+**Findings** (none blocks; severity in brackets):
+1. [major, acceptance] **A-8 is not met at every first menu.** Five figures fall below the 12 % drop,
+   listed above; the bright floors (Ch V at 0.52 luma, Ch IV) keep the old 0.48 navy blob. This is not
+   a regression: the blob only got stronger.
+2. [major, acceptance, open design] **PR-0094's literal "misses the head" is not met at link 4.** The
+   intent card lies over the back of the helmet: at 1600 the card is at x 1163 to 1538, y 74 to 230,
+   and the head reaches x 1331. It misses the face and the horn. The builder's "face and weapon"
+   reading needs the driver's word.
+3. [major, open] **D-224 looks are subtle.** Mortiorchis-imminent at t+1.6 s is barely told from base.
+   The tile's `after.png` re-shoot and Bailey's eye are still owed, as the build says.
+4. [minor, open] **Spiral Cut chosen by real keys is unverified by this check** (see the table).
+5. [minor] **`phaseCanon` `PAYLOADS.bahamut` also catches FFX's aeon Bahamut.** Yuna's aeon casts
+   `mega-flare` in Ch I and II, and a `restore` fires on its action end. The comment says this changes
+   nothing, but if it ever lands inside a Mortiorchis ladder it ends the ladder's look early. It happened
+   in 0 of 80 seeds. Fix: key the payload table by game, or arm `restore` only after that charger's
+   `charge`.
+6. [minor] **A ladder's transient look outlives the battle.** In 16 of 80 Ch I seeds the fight ends
+   mid-ladder, and the red rim and floor stay on the party through the victory pose. Anima's look
+   likewise stays after Anima's KO. Reset to base on the last enemy's KO, or accept it.
+7. [minor] **`pyreflyCanon` says "Isaaru is never a combatant", which is false.** `isaaru` (and `cid`)
+   are untargetable enemy-side combatants whose departure defaults to `dissolve`. Their KO is
+   unreachable, so nothing shows, but add both to `NEVER_PYREFLIES` and fix the comment.
+8. [minor, house style] **`BattlePresenterStage.ts` grew by 97 lines, to 839.** It was already over 400;
+   `keyFeatureRects` and `partyFloorCentre` could move to a new module.
+9. [note] **Ch II's frame at the form-2 start is fully white.** That is the existing form-change flash;
+   the phase tween starts from base, so B3 cannot produce it.
+
+**Open items 3 (Gagazet) and 10 (goons)** stay with the driver or Bailey. The D-225 record reads
+"keeps today's snow-and-glitter treatment ... adding no pyreflies", and the scene has 80 motes. The
+check's scratch files are `tools/zz-b3check-*` (untracked). The junction links are
+removed with `rmdir`; the worktree is kept.
