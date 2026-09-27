@@ -125,11 +125,14 @@ export const CHAIN_MAX = 99;
 export const CHAIN_LOCKS_ACTIONS = true;
 
 /**
- * IC-1's alternative, a named **OFF** switch: when true, a hit whose result is immune (Invincible,
- * Null Physical / Null Magic, an immune affinity) opens and extends no chain window. Whether such a
- * hit staggers is **unsourced** (§9.2: misses never chain `[verified: 3 sources]`; immune hits are not
- * covered; Split_Infinity's "will fail" is the nearest wording, an `[estimate]`). Off keeps the engine
- * as it was; `Ffx2EngineOptions.immuneHitsSkipChain` overrides it for a measurement run.
+ * IC-1 / PR-0209, a named **OFF** switch until Bailey rules (plan §8 Q4): when true, a hit whose result
+ * is immune (Invincible, Null Physical / Null Magic, an immune affinity) opens and extends no chain
+ * window. No source says it in words (§9.2: misses never chain `[verified: 3 sources]`). ON is
+ * **GameFAQs' reading, our estimate** (`research/ffx2-combat-core.md` §10.1: Split_Infinity, FAQ 25872,
+ * G1032, attacks on an Invincible target "will fail"; G0905 rule 8, only damaging attacks disturb the
+ * gauge); SinirothX's step order (chain at step 13, immunity at step 20) is the one hint the other way.
+ * Off keeps the engine as it was; `Ffx2EngineOptions.immuneHitsSkipChain` overrides it for a
+ * measurement run (`tests/unit/iter2-b1-bench.test.ts`, arm `ic1`).
  */
 export const IMMUNE_HITS_SKIP_CHAIN = false;
 

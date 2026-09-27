@@ -155,7 +155,7 @@ export function resolveAbility(
       // `healing` formula), so the two cannot drift apart. Revives already
       // skipped this block above.
       const restorative = ability.flags.includes('heals') || ability.formula === 'healing';
-      // IC-1's OFF switch (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, unsourced §9.2): on, the count is
+      // IC-1's OFF switch (`constants.ts` IMMUNE_HITS_SKIP_CHAIN; ON = GameFAQs' reading, our estimate, §10.1): on, the count is
       // peeked and only a non-immune result registers. `computeDamage` is pure, so the chain event
       // still precedes the damage event and the default path's log is unchanged.
       const skipImmune = !restorative && (ctx.immuneHitsSkipChain ?? IMMUNE_HITS_SKIP_CHAIN);

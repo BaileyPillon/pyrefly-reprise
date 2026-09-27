@@ -14,6 +14,15 @@
 import { describe, expect, it } from 'vitest';
 import { aiHarness, aiUnit } from '../../src/battle/ffx2/fixtures.ts';
 import { IMMUNE_HITS_SKIP_CHAIN, LEBLANC_SCRIPT_SINIROTHX } from '../../src/battle/ffx2/constants.ts';
+import type { BattleSetup, FFX2Combatant, FFX2PartyBuild } from '../../src/battle/common/types.ts';
+import { SeededRng } from '../../src/battle/common/rng.ts';
+import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { buildState, gridNodeContents } from '../../src/battle/ffx2/setup.ts';
+import { ENEMY_GROUPS_BY_ID, GARMENT_GRIDS } from '../../src/data/ffx2/index.ts';
+import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
+import { LEBLANC_ACT_I, LEBLANC_ACT_II } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
+import { setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
+import { FFX2_DRESSPHERE_CARRIES } from '../../src/app/screens/BattleScreenCarry.ts';
 
 function leblancTurns(count: number, sinirothX: boolean, withHenchmen = true): Array<string | null> {
   const self = aiUnit('leblanc', 'enemy', 1380);
@@ -64,5 +73,70 @@ describe('PR-0106: the Leblanc script switch (FFX-2, Chapter VI)', () => {
 describe('IC-1: the immune-hit chain switch stays OFF (FFX-2)', () => {
   it('ships OFF; its reading is labelled GameFAQs (Split_Infinity G1032), our estimate', () => {
     expect(IMMUNE_HITS_SKIP_CHAIN).toBe(false);
+  });
+});
+
+describe('PR-0124: the worn dressphere carries across a plain chain seam, an OFF switch (FFX-2)', () => {
+  const nodesOf = (m: { garmentGrid: { id: string } }) =>
+    Math.max(2, Math.min(6, (GARMENT_GRIDS as Record<string, { nodeCount: number }>)[m.garmentGrid.id]!.nodeCount));
+
+  /** Act I of Chapter VI with Rikku moved onto another node of her grid, a gate passed and a special unlocked. */
+  function actOneEnd(): { setup: BattleSetup; state: ReturnType<FFX2Engine['state']>; worn: string; node: number } {
+    const engine = new FFX2Engine({ atbMode: 'wait' });
+    const setup: BattleSetup = { game: 'ffx2', party: chateauBuild, enemies: ENEMY_GROUPS_BY_ID[LEBLANC_ACT_I]!, triggers: [], seed: 4, condition: 'normal', canEscape: false };
+    engine.setSeed(4);
+    engine.init(setup);
+    const build = chateauBuild.members[1];
+    const layout = gridNodeContents(build, nodesOf(build));
+    const node = layout.findIndex((d, i) => i > 0 && d !== null);
+    const rikku = engine.state().combatants['rikku'] as FFX2Combatant;
+    rikku.dresspheres!.current = layout[node]!;
+    rikku.dresspheres!.garmentGrid.nodePosition = node;
+    rikku.dresspheres!.garmentGrid.passedGates = ['blue'];
+    rikku.dresspheres!.garmentGrid.wornThisBattle = [build.currentDressphere, layout[node]!];
+    return { setup, state: engine.state(), worn: layout[node]!, node };
+  }
+
+  it('ships OFF', () => {
+    expect(FFX2_DRESSPHERE_CARRIES).toBe(false);
+  });
+
+  it('OFF: the next Act reverts her to the dressphere set before the fight, as today', () => {
+    const { setup, state } = actOneEnd();
+    const next = setupForNextLink(setup, ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, state, 5);
+    const rikku = (next.party as FFX2PartyBuild).members[1];
+    expect(rikku.currentDressphere).toBe(chateauBuild.members[1].currentDressphere);
+    expect(rikku.garmentGrid.passedGates).toEqual([]);
+  });
+
+  it('ON: she starts the next Act in what she wore, on the same grid layout; gates and the worn list do not carry', () => {
+    const { setup, state, worn, node } = actOneEnd();
+    const next = setupForNextLink(setup, ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, state, 5, { dressphereCarries: true });
+    const rikku = (next.party as FFX2PartyBuild).members[1];
+    expect(rikku.currentDressphere).toBe(worn);
+    expect(rikku.garmentGrid.nodePosition).toBe(node);
+    expect(rikku.garmentGrid.passedGates).toEqual([]);
+    expect(rikku.garmentGrid.wornThisBattle).toEqual([]);
+    const built = buildState(next, {}, new SeededRng(5));
+    expect(built.gridNodes['rikku']).toEqual(gridNodeContents(chateauBuild.members[1], nodesOf(chateauBuild.members[1])));
+    expect((built.state.combatants['rikku'] as FFX2Combatant).dresspheres?.current).toBe(worn);
+    // Her statuses do not ride along on a plain seam (only XIII and XV carry them, each its own approved rule).
+    expect(rikku.statuses).toBeUndefined();
+  });
+
+  it('ON: a girl in a special dressphere at the seam keeps the preset (an engine choice, unsourced)', () => {
+    const { setup, state } = actOneEnd();
+    const rikku = state.combatants['rikku'] as FFX2Combatant;
+    rikku.dresspheres!.special = true as never;
+    const next = setupForNextLink(setup, ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, state, 5, { dressphereCarries: true });
+    expect((next.party as FFX2PartyBuild).members[1].currentDressphere).toBe(chateauBuild.members[1].currentDressphere);
+  });
+
+  it('XIII and XV keep their own approved carries whether the switch is on or off', () => {
+    const { setup, state } = actOneEnd();
+    const trema = { ...ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, carriesPartyState: true };
+    const off = setupForNextLink(setup, trema, state, 5);
+    const on = setupForNextLink(setup, trema, state, 5, { dressphereCarries: true });
+    expect(on).toEqual(off);
   });
 });
