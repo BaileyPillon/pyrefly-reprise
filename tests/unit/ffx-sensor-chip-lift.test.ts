@@ -13,6 +13,10 @@ describe('chipLiftDy', () => {
     expect(dy).not.toBeNull();
     expect(chip.bottom + dy!).toBeLessThanOrEqual(88 - 2);
   });
+  it('a lift that lands on a taller enemy rises again (2560x1440: Pagoda B, then the Final Aeon)', () => {
+    const dy = chipLiftDy(chip, [{ left: 470, right: 520, top: 150, bottom: 196 }, { left: 330, right: 480, top: 100, bottom: 150 }], 24);
+    expect(chip.bottom + dy!).toBeLessThanOrEqual(98);
+  });
   it('no enemy under it: stays', () => {
     expect(chipLiftDy(chip, [{ left: 100, right: 200, top: 80, bottom: 220 }], 24)).toBeNull();
   });

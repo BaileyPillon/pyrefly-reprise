@@ -36,8 +36,14 @@ export interface GridBox {
  * line under the top strips.
  */
 export function chipLiftDy(chip: GridBox, enemies: readonly GridBox[], floorTop: number, gap = 2): number | null {
-  const under = enemies.filter((e) => e.left < chip.right && chip.left < e.right && e.top < chip.bottom && chip.top < e.bottom);
-  if (under.length === 0) return null;
-  const want = Math.min(...under.map((e) => e.top)) - gap - (chip.bottom - chip.top);
-  return Math.max(floorTop, want) - chip.top;
+  const h = chip.bottom - chip.top;
+  let top = chip.top;
+  // Rise past the enemy met, then check again: a lift above Pagoda B can land on the Final Aeon's box.
+  for (let i = 0; i <= enemies.length; i++) {
+    const under = enemies.filter((e) => e.left < chip.right && chip.left < e.right && e.top < top + h && top < e.bottom);
+    if (under.length === 0) break;
+    top = Math.max(floorTop, Math.min(...under.map((e) => e.top)) - gap - h);
+    if (top === floorTop) break;
+  }
+  return top === chip.top ? null : top - chip.top;
 }
