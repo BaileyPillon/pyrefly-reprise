@@ -168,3 +168,51 @@ Nothing in `src` changed.
    when merged. Worth an explicit game check there.
 
 **Game case:** check only, no code change (both games).
+
+## REPAIR (one cycle, rule 15), 2026-09-27
+
+**Blocker fixed: CHK-B2-1, PR-0104's hold ran into the next girl's menu (FFX-2 only).**
+
+- `CUT_IN_WAIT_CAP_MS` is now 800 (was 5000), the plan's "at most 0.8 s", with the 300 ms effect beat counted inside it.
+  The menu opens about 0.6 s after an unheld cut-in would, so the slab can now land at most about 0.2 s into her menu.
+- A charge still running at the cap, or her menu answered while it waited, **moves her cut-in to her next turn**
+  instead of dropping it or landing late. "Next turn" means after she submits a command: the presenter calls
+  `TurnCutInBeat.acted()` on every submission, so an FFX-2 menu re-asked within the same turn (an abandoned Wait
+  menu) does not count. Moved once, the second time it plays at the cap regardless, so the approved slab is not lost.
+- FFX is unchanged: no charge, no wait (a test pins it).
+- Files: `src/engine/TurnCutIn.ts`, one line in `src/engine/BattlePresenter.ts` (the `acted` call before `submit`),
+  `tests/unit/turn-cut-in-hold.test.ts` (written first, failed 4 of 6 before the fix).
+
+**Real keys** (dev server on 6500, PYREFLY_BROWSER=gpu, 1600x900, seed 1, Wait, Yuna White Magic > Shell > party,
+then every open menu answered Attack after 1.2 s). Probe `tools/zz-b2rep-shell.tmp.mjs`; evidence
+`docs/screenshots/iter2-b2/pr0104-repair-cap-800ms-real-keys.jpg` and `pr0104-repair-report.jsonl`.
+
+| | Next menu | SHL tag | Cut-ins |
+|---|---|---|---|
+| XI | 1.65 s (Paine) | 4.11 s | Paine's moved off (no slab over her open menu, 1.65 to 5.3 s). Rikku's at 5.68 s, as her first menu opens, 0.4 s after Paine answered. Paine's at 21.5 s, on her next turn, phase `command:paine`, menu just open. |
+| IV | 1.56 s | 3.27 s | Rikku's at 7.03 s, Paine's at 12.59 s, each as that girl's menu opens. |
+
+The SHL tag shows before every cut-in, and the next menu is not later (base 1.55 to 1.63 s). No slab covers a menu
+that has been open more than about 0.2 s. A first run showed Rikku's slab "4 s into the menu": the DOM menu stays on
+screen between girls, and the pair frame (Paine's advisor card at 4.5 s, Rikku's at 5.68 s) shows it was Rikku's
+fresh menu.
+
+**Gates:** tsc clean; full vitest --testTimeout=60000: 505 files, 8,659 passed, 0 failed; orphans 29 (unchanged, the
+five unwired A-2 modules). No file under `public/`, `docs/target/` or `docs/concepts/` touched, so the approved
+hashes cannot change. Dev server on 6500 stopped by PID.
+
+**Left open (not blockers; no fix in this cycle):**
+- CHK-B2-2 (moderate, FFX only): PR-0185's zero needs t1-b2b's enemy rig; close it at t1-b2b's merge or say so in
+  the release note.
+- CHK-B2-3 (moderate, FFX-2 only): A-1 misses found by 200 ms sampling (XI Shiva 0.60-0.70 in the `party` rig in
+  5-6 of 133 samples; XV Yuna in the `action` rig, not reproduced; IV once). Needs a shot-rule pass with continuous
+  sampling as the acceptance method.
+- CHK-B2-4 (minor, both): PR-0061(a) thresholds: VI 4.66 and IX 4.36 s with Confirm; eight chapters over 7.5 s
+  passive. Nothing slower than the base.
+- CHK-B2-5 (minor, per game): A-2's held frame leaves out the dialogue box the approved tile shatters; judge when
+  B5 wires the line and Bailey sees the implosion frames (A-2 stays OFF until then).
+- CHK-B2-6 and later (minor): PR-0072 pool hidden under the command menu at 1600x900; the phone queue banner over
+  Seymour Flux's head (HUD batches); `ShotRules.ffx2Framing` duck typing to check at the FF7 merge.
+
+**Game case:** FFX-2 only (a confirmed FFX-2 command charges on the ATB while the next girl's menu opens; FFX's CTB
+has no charge and its cut-in is unchanged).

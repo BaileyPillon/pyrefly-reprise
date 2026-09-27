@@ -1,9 +1,12 @@
 /**
  * PR-0104 (FFX-2 only): under FFX-2's ATB a confirmed spell charges, and the
- * next girl's menu opens while it does. Her cut-in now waits until the charge
- * has resolved and its action has played (so the effect or the status tag
- * reads first), capped so it is never lost, and is dropped if her menu has
- * already been answered. The menu itself never waits (it opens as before).
+ * next girl's menu opens while it does. Her cut-in waits for the charge to
+ * resolve and its action to play (so the effect or the status tag reads
+ * first), but for at most {@link CUT_IN_WAIT_CAP_MS} (the plan's "at most
+ * 0.8 s"), so the slab never lands seconds into her open menu (iter2-b2 check,
+ * CHK-B2-1). A charge still running at the cap, or a menu answered while it
+ * waited, moves her cut-in to her next turn, once; the second time it shows
+ * at the cap regardless. The menu itself never waits (it opens as before).
  * FFX's CTB has no charge: its cut-in plays at once, as before.
  */
 
@@ -30,7 +33,11 @@ function port(calls: Req[]): MomentsPort {
 }
 
 describe('the next cut-in waits for the charging action (PR-0104)', () => {
-  it("waits while Yuna's Shell charges and plays, then shows Rikku's", async () => {
+  it('never waits longer than the plan allows (at most 0.8 s)', () => {
+    expect(CUT_IN_WAIT_CAP_MS).toBeLessThanOrEqual(800);
+  });
+
+  it("waits while Yuna's Shell charges and plays, then shows Rikku's, all inside the cap", async () => {
     const calls: Req[] = [];
     const s = state('ffx2', ['yuna']);
     let acting = false;
@@ -42,36 +49,88 @@ describe('the next cut-in waits for the charging action (PR-0104)', () => {
       menuFor: () => 'rikku',
       sleep: async (ms) => {
         slept += ms;
-        // The charge completes after 300 ms and the action plays for 600 ms more.
+        // The charge completes after 200 ms and the action plays for 200 ms more.
         const y = s.combatants['yuna'] as unknown as { atb: { charging: unknown } };
-        if (slept >= 300 && y.atb.charging) {
+        if (slept >= 200 && y.atb.charging) {
           y.atb.charging = null;
           acting = true;
         }
-        if (slept >= 900) acting = false;
+        if (slept >= 400) acting = false;
       },
     });
     await beat.play(s, 'rikku');
     expect(calls.map((c) => c.actorId)).toEqual(['rikku']);
-    expect(slept).toBeGreaterThanOrEqual(900);
-    expect(slept).toBeLessThan(CUT_IN_WAIT_CAP_MS);
+    expect(slept).toBeGreaterThanOrEqual(400);
+    expect(slept).toBeLessThanOrEqual(CUT_IN_WAIT_CAP_MS);
   });
 
-  it('gives up waiting at the cap and still shows it', async () => {
+  it('a charge still running at the cap moves the cut-in to her next turn, without covering this menu', async () => {
+    const calls: Req[] = [];
+    let slept = 0;
+    const beat = new TurnCutInBeat({ moments: port(calls), speed: () => 'normal', acting: () => false, menuFor: () => 'rikku', sleep: async (ms) => void (slept += ms) });
+    await beat.play(state('ffx2', ['yuna']), 'rikku');
+    expect(calls).toHaveLength(0);
+    expect(slept).toBeLessThanOrEqual(CUT_IN_WAIT_CAP_MS);
+    // Her menu re-asked within the same turn (an abandoned FFX-2 menu): still not.
+    await beat.play(state('ffx2'), 'rikku');
+    expect(calls).toHaveLength(0);
+    // Her next turn, after she submitted a command, the charge long resolved: it plays at once.
+    beat.acted('rikku');
+    slept = 0;
+    await beat.play(state('ffx2'), 'rikku');
+    expect(calls.map((c) => c.actorId)).toEqual(['rikku']);
+    expect(slept).toBe(0);
+    // And never a third time.
+    await beat.play(state('ffx2'), 'rikku');
+    expect(calls).toHaveLength(1);
+  });
+
+  it('moved once, it shows at the cap the second time rather than being lost', async () => {
     const calls: Req[] = [];
     let slept = 0;
     const beat = new TurnCutInBeat({ moments: port(calls), speed: () => 'normal', acting: () => true, menuFor: () => 'rikku', sleep: async (ms) => void (slept += ms) });
     await beat.play(state('ffx2', ['yuna']), 'rikku');
+    expect(calls).toHaveLength(0);
+    beat.acted('rikku');
+    slept = 0;
+    await beat.play(state('ffx2', ['yuna']), 'rikku');
     expect(calls).toHaveLength(1);
-    expect(slept).toBeGreaterThanOrEqual(CUT_IN_WAIT_CAP_MS);
+    expect(slept).toBeLessThanOrEqual(CUT_IN_WAIT_CAP_MS);
   });
 
-  it("drops it when her menu was answered while it waited", async () => {
+  it('a menu answered while it waited moves it to her next turn', async () => {
     const calls: Req[] = [];
     let menu: string | null = 'rikku';
-    const beat = new TurnCutInBeat({ moments: port(calls), speed: () => 'normal', acting: () => true, menuFor: () => menu, sleep: async () => void (menu = null) });
+    // Paine answers her menu 60 ms in, while Yuna's charge still runs.
+    const beat = new TurnCutInBeat({ moments: port(calls), speed: () => 'normal', acting: () => false, menuFor: () => menu, sleep: async () => void (menu = null) });
     await beat.play(state('ffx2', ['yuna']), 'rikku');
     expect(calls).toHaveLength(0);
+    beat.acted('rikku');
+    menu = 'rikku';
+    await beat.play(state('ffx2'), 'rikku');
+    expect(calls).toHaveLength(1);
+  });
+
+  it('a menu answered before the wait ended counts that answer as her turn', async () => {
+    const calls: Req[] = [];
+    let menu: string | null = 'rikku';
+    let beatRef: TurnCutInBeat | null = null;
+    const beat = new TurnCutInBeat({
+      moments: port(calls),
+      speed: () => 'normal',
+      acting: () => false,
+      menuFor: () => menu,
+      sleep: async () => {
+        if (menu) beatRef!.acted('rikku'); // she answers 60 ms in
+        menu = null;
+      },
+    });
+    beatRef = beat;
+    await beat.play(state('ffx2', ['yuna']), 'rikku');
+    expect(calls).toHaveLength(0);
+    menu = 'rikku';
+    await beat.play(state('ffx2'), 'rikku');
+    expect(calls).toHaveLength(1);
   });
 
   it('does not wait with nothing charging or acting, nor in FFX', async () => {
@@ -85,4 +144,3 @@ describe('the next cut-in waits for the charging action (PR-0104)', () => {
     }
   });
 });
-

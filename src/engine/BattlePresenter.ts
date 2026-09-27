@@ -398,6 +398,7 @@ export class BattlePresenter {
             break;
           }
           if (!command) return { kind: 'aborted' };
+          this.cutIns.acted(decision.actorId); // PR-0104: a moved cut-in waits for her next turn
           const out = await this.submit(engine, command);
           if (out) return out;
           break;
