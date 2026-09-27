@@ -11,7 +11,8 @@ import '../inkgold/index.ts';
 import './theme.css';
 import './ffx2-hud.css';
 import { installInkGoldStyles } from '../inkgold/index.ts';
-import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import type { ActingSignal, HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import { ActionFade } from './actionFade.ts';
 import type {
   AtbSnapshot,
   AvailableCommand,
@@ -227,6 +228,12 @@ export class FFX2BattleHud implements HudPort {
    * figures land.
    */
   private readonly intent = new EnemyIntentPanel({ game: 'ffx2' });
+  /** A-15 (PR-0157, FFX-2): advisory cards step back from an action on screen (ctionFade.ts). */
+  private readonly actionFade = new ActionFade({
+    // The cards themselves: `.mad` and `.sgd` are full-stage layers (inset 0).
+    cards: () => (this.mounted ? [...this.el.querySelectorAll<HTMLElement>('.mad__card, .sgd__stack, .eint__panel')] : []),
+    rect: (id) => this.targeting?.rect(id) ?? null,
+  });
   /**
    * The optional move advisor (`src/ui/common/MoveAdvisor.ts`).
    *
@@ -392,6 +399,7 @@ export class FFX2BattleHud implements HudPort {
     this.guide.unmount();
     this.advisor.unmount();
     this.intent.unmount();
+    this.actionFade.reset();
     // Nothing the cursor lit may outlive the HUD that lit it.
     this.applySelection(null);
     this.plates.unmount();
@@ -399,6 +407,11 @@ export class FFX2BattleHud implements HudPort {
     this.message.dispose();
     this.el.remove();
     this.mounted = false;
+  }
+
+  /** `HudPort.setActing` (B2's signal): the FFX-2 action fade, A-15. */
+  setActing(signal: ActingSignal): void {
+    this.actionFade.signal(signal);
   }
 
   /** Per-frame tick from `BattleScreen`, so numerals freeze with the game loop. */
@@ -410,6 +423,7 @@ export class FFX2BattleHud implements HudPort {
     this.guide.update(dt);
     this.advisor.update(dt);
     this.intent.update(dt);
+    this.actionFade.update();
     // GAME-AWARE (rule 14): the same shared plumbing FFX got. Panels were
     // published only on an engine sync, so between two syncs the field's idea
     // of where the chrome sits went stale and `visibleInFrame` lied.
