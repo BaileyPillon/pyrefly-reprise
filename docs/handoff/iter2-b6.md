@@ -209,3 +209,65 @@ disclosed.
 9. FOC23-01 is fixed on `main` by B5 (c85cfc22), not here.
 
 Game case: this note is a record only (FFX-2 for 1, 2 and 5; both for 3, 4 and the pause items).
+
+## REPAIR (one cycle, rule 15), 2026-09-27
+
+The CHECK's three blockers, each fixed against its own acceptance. Commits d7da9a8f and ecfcd118.
+
+1. **B6CHK-01, Delta Attack "Deals no damage." (FFX-2 only, Chapter XI).** PR-0188's inert branch
+   treated every `formula: 'none'` row with no status as harmless, but some FFX-2 rows carry their
+   harm in `AbilityDef.extra`. The new `src/battle/ffx2/intentLead.ts` reads Delta Attack's
+   `setHpTo: 1` / `setMpTo: 0` and says "Leaves the whole party at 1 HP and 0 MP." It also keeps any
+   row with another extra damage route (`formulaOverride`, the MP-fraction keys, `mpOnly`,
+   `percent`, `hitsBothPools`) off the inert branch. Mirror of Equity had also turned into "Deals no
+   damage." on the branch, and now reads as it does on main again.
+   - Engine: the CHECK's own probe (`tools/zz-b6check.tmp/delta2.test.ts`, every sister's AC at
+     100) now returns `Cindy | Delta Attack | Leaves the whole party at 1 HP and 0 MP.`
+   - Real keys: production build on 6740, headless GPU, seed 1. Title, chapter select and Chapter XI
+     by keys. One debug step put Shiva at 1 HP, because the fight itself is the 16-minute FOC22-02
+     route. Keys then attacked her. At the Magus Sisters the AC was set to 100, and keys passed a
+     turn.
+     - At 1600x900 the card reads "Sandy · Delta Attack · SCRIPTED · Leaves the whole party at 1 HP
+       and 0 MP."
+     - At 390x844 the phone line names Delta Attack; the phone shows no sentence, as before.
+     - 0 page errors.
+     - Frames: `docs/screenshots/iter2-b6/repair-delta-attack-card-ch11-1600x900.jpg` and `-390x844.jpg`.
+2. **B6CHK-02, the enemy Dispels "Cures ..." (FFX-2 only, Chapter V).** A removal now reads
+   "Removes Auto Life, Shell, Protect, Reflect, Regen, Haste, Spellspring from one girl." The same
+   wording holds for a Remedy ("Removes Poison ... from one ally"). This covers Bulwark Left, Redoubt
+   Left, Paragon Oversoul and the fallback `dispel`, all pinned in
+   `tests/unit/ffx2-intent-inert-lead.test.ts`. That test failed first: 4 of 5 red before the fix.
+   The card prints `describeAbility` through the same `plain(view.description)` path as item 1, so
+   the Delta frame covers the render. No real-key Dispel frame was taken: Vegnagun picks Dispel by
+   RNG.
+   - Every FFX-2 ability row was described on the branch and on main 625b018d. After the repair, the
+     only differences left are these three:
+     - "Deals no damage." on rows that truly deal none: Countdown, Charge Core, passives, Ether and
+       Steal.
+     - The Removes wording.
+     - Delta Attack's sentence.
+3. **B6CHK-03, the duplicate `setActing` on the merge with main 17fa71d3 (both games).** This branch
+   now carries main's `src/ui/coach/CoachLayer.ts` byte for byte: B5's forward after `onMenuLevel`
+   and B5's shorter PR-0122 comment. Both sides make the identical change, so git keeps one copy.
+   - `git merge-tree --write-tree ecfcd118 17fa71d3` is clean (tree b61652aa).
+   - A scratch merge commit (518149e0, not pushed, in D:/pyrefly-b6check-merge2) passes tsc and full
+     vitest: 597 files passed, 0 failed.
+   - On the branch alone the forward is still there (A-15).
+
+Checks on the branch at ecfcd118:
+- tsc clean.
+- Full vitest `--testTimeout=60000`: 568 files passed, 0 failed.
+- Orphans: 29, the same as main; `intentLead.ts` is imported.
+- verify-approved: 267 ok, 0 mismatched, 0 missing.
+- No FF7 file touched.
+
+The preview server on 6740 was stopped by PID. The scratch build and scripts are untracked in
+`tools/zz-b6repair.tmp/`.
+
+Not changed, noted:
+- Looming Glacier (Chapter XV, `setMpTo: 0` with a Stop rider) reads "Inflicts Stop on one girl." on
+  main and the branch alike. Its MP half is not named.
+- FFX's own builder has the same "Cures" wording for a `formula: 'none'` removal. No FFX enemy row
+  reaches that branch today: the FFX buff strippers all have damage formulas.
+
+Game case: 1 and 2 FFX-2 only (`src/battle/ffx2`); 3 both (the shared coach wrapper).
