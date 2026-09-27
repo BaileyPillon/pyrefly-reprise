@@ -136,3 +136,100 @@ frames. The harness sets `setFf7ExperimentReadyForTests(true)`; the constant sta
 5. The **rim light** outlines each figure; lower it for FF7 if Bailey finds it off the composite.
 6. Numbers to confirm or replace with a real-game check (Bailey's go-ahead only): the back-row
    step, the figure heights, the camera.
+
+## CHECK (independent, 2026-09-27; the checker built none of this)
+
+Scope: the engine follow-ups (`53a2657d`, `eebf1da9`), the art install (`a358b6e7`) and the staging
+(`6570dfd9`) on `ff7-engine`. Game case: FF7 only, plus the shared plumbing named in section 3.
+Verdict: **no blocker, no major.** Four minors, listed below.
+
+**Engine, proven by running it** (a scratch probe that imports the engine directly, apart from the
+branch's own tests):
+
+- **Change.** Barret's damage taken over 60 seeds, front vs back row: Rifle 35-37 vs 18, Scorpion
+  Tail 62-66 vs 30-32, split Tail Laser 72-77 vs 35-37. These agree with research
+  `ff7-guard-scorpion.md` §4 (35-38 / 17-19, 62-68 / 30-34, 72-77 / 35-38). His Long Range Gatling
+  deals 32-34 in front and 32-35 behind, so it is not halved (core §5.1). All 60 battles were won.
+  Change never targets, spends the turn and is labelled as our estimate. Research §5.1 now cites
+  the manual (p. 18).
+- **Clock** (500 ms ticks with `throughInput`). Recommended runs its top and deep menus (15 and 15
+  ticks). Wait runs its top menu (15) and holds its deep menu (0). Active runs both.
+  `setAnimating(true)` holds Recommended and Wait (0 ticks). In Active, 20 s of ticks runs 600
+  ticks and executes nothing. A summon animation holds Active (0). The queued action executes once
+  the animation ends. All of this matches core §2.5 and the manual p. 29 note, whose conflict is
+  labelled. **Defend** is set on submit and cleared when the gauge fills (manual p. 18).
+- `npx tsc --noEmit` is clean. Full vitest: 507 files pass. Two fail only under load:
+  `audio-manifest-io` (a Temp rmdir race) and `strategy-ffx2-bahamut` (a timeout). Neither is
+  touched by the branch, and both pass alone (28/28). `ffx2-atb-golden`, `ff7-golden`, every
+  `presenter-*` suite and `ff7-stage` pass. `node tools/orphans.mjs` lists the same four
+  directories on the branch as on main.
+
+**Art:**
+
+- All five installed PNGs are byte-identical (sha256) to the round 2 README's "Final install list"
+  files under `candidates/2026-09-27-ff7/` and to the backups in
+  `approved/2026-09-27-ff7/installed/`. The PNGs and sidecars match the backups one for one.
+- Sidecar `facing` is left for Cloud and Barret and right for both boss forms. The tail-up
+  `scale` is 1.098385 (748/681).
+- verify-approved gives 267 ok / 0 / 0 on the worktree and 262 ok / 0 / 0 on main's tree.
+- I hashed 30 of the 214 other locked files (spread evenly) against `approved-hashes.json`. All 30
+  hashes and all 30 mtimes match.
+- In `public/art`, the only files modified on 2026-09-27 are the ten FF7 files and
+  `manifest.json`. `node tools/gen/manifest.mjs --check` reports it unchanged, so the manifest is
+  exactly what the unchanged files produce.
+
+**Staging, headless** (own port 6311, gpu, seed 1, 1600x900 and 390x844; I looked at every
+frame):
+
+- The party is on the right, facing -1, and Guard Scorpion is on the left, facing +1. No figure
+  is mirrored.
+- Barret moves from x 2.15 to 2.75 after his Change.
+- On Raise Tail the painting swaps to `ff7-guard-scorpion-tail-up` and the figure moves to
+  x -1.575. The body's right edge stays at 829 px in both paintings, so the body does not jump.
+- The fixed camera holds [0, 1.9, 8.6] fov 30. Only the shake moves it (-0.028, 1.876 during a
+  hit).
+- No console errors and no failed requests.
+
+**FFX / FFX-2 untouched:**
+
+- `git diff main...ff7-engine` is empty under `src/battle/ffx*`. No FFX or FFX-2 scene module
+  changed.
+- `BattleScreen`, `BattlePresenterStage`, `BattleMoments` and `scenes/index` did not grow.
+  Without `sideFacing` or `fixedCamera` they take the old paths.
+- I rendered Chapter I (`seymour-flux`), the airship chapter (`evrae-airship`, the hook this
+  change reroutes) and FFX-2 `ffx2-bahamut` at seed 1 from the branch and from main (two ports).
+  I also rendered Chapter I and `ffx2-bahamut` from the live build.
+  - `seymour-flux` and `evrae-airship`: every figure's art, facing, mirror and x/y/z are
+    identical.
+  - `ffx2-bahamut`: party x differs by at most 0.05 between two main runs, and the branch and live
+    fall in the same run-to-run spread (ATB relax timing).
+  - The frames look the same. The only differences are the timing of Evrae's swim and the ATB
+    moment, and main differs from itself in the same way.
+
+**Findings (all minor):**
+
+1. **The hit makes an FF7 figure see-through for a moment.** Every FF7 figure has only an idle
+   painting. So `flinch()` asks for `hurt`, which resolves to `idle`, and `setPose` crossfades the
+   same texture across its two planes. Halfway through, both planes are part transparent. My
+   1600x900 hit frame shows the reactor pillar through the boss's head (the builder's frame caught
+   the fade finished).
+   - This is house behaviour, not new code. It shows on every FF7 hit because no FF7 figure has a
+     hurt painting.
+   - Fix: skip the crossfade when the resolved pose's texture is the one already shown. That would
+     change every idle-only FFX/FFX-2 figure too, so the case must be decided first (rule 14).
+     Alternatively, gate the fix to FF7.
+2. **Barret's back-row spot hides him behind Cloud.** At 1600x900 their screen boxes overlap by
+   about 110 of Barret's 205 px, and Cloud covers Barret's lower body and legs. The step (+0.6 in
+   x) and the spots are our estimates. Offer Bailey a different step (for example some z as well)
+   before any release.
+3. **The upright phone is a letterbox with tiny figures.** At 390x844 the fight is a 16:9 strip
+   about 230 px tall, and Cloud is about 50 px tall. This is disclosed as the FF7 HUD's call; it
+   must be settled before anyone plays this on a phone.
+4. **The Active animation rule and the field are not wired.** No presenter calls
+   `setAnimating`, and `BattleScreen` cannot reach the FF7 field yet (`createHud` and
+   `battleSpellFx` throw for `'ff7'`). Only the harness shows the scene. Both are disclosed.
+   Separately, `src/battle/common/types.ts` grew 2660 to 2675 lines over the branch (`4347dbf7`
+   +7, `862a0cd3` +8, both earlier commits); `53a2657d` itself is flat.
+
+Not checked: FF7's look against the real game (Steam copy; Bailey's go-ahead), and anything
+under `src/ui/**` on `ff7-plumbing`.
