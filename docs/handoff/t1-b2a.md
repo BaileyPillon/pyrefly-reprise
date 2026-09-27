@@ -141,3 +141,29 @@ orphaned.
 
 **Still open, unchanged:** PR-0128's tick-label wording (Bailey's choice, rule
 6) and PR-0186's placement choice ((a)/(b)/(c) above). Neither was touched.
+
+## FINAL CHECK (independent check of the FIX, 2026-09-26; the checker wrote none of it; FFX only)
+
+Scope: `e46698c1` on `t1-b2a` (3 files: `src/ui/ffx/FFXBattleHud.ts`,
+`tests/unit/ui-ffx-overdrive-plate.test.ts`, this note). The code change is one
+branch in `openMinigame`: when `html[data-phone-battle]` is set (only
+`phoneBattle.ts` sets it, and only under `(max-width: 599px) and (orientation:
+portrait)`), `showOverdrivePlate` is not called, so the banner stays hidden as
+on main. Nothing else in the batch changed since the RE-CHECK (`811ef0d8`).
+
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | Clean. |
+| Full `npx vitest run --testTimeout=60000` | 455 files passed, 4 skipped; 8,338 tests passed, 29 skipped, 1 todo. Includes the 2 new RCHK-B2A-01 cases. |
+| `node tools/orphans.mjs` | 24 orphaned of 805, unchanged; nothing new. |
+| Real keys, own production build (`vite build --outDir dist-finalcheck`, `vite preview` on 5985, stopped by its PID, build folder removed), headless Chromium, `PYREFLY_BROWSER=gpu`, Ch II seed 1, Tidus's gauge 100 (*injected*), OVERDRIVE > Slice & Dice > Enter, frame 0.5 s later | **390x844 (upright phone): met.** `data-phone-battle="ffx"`, banner hidden for the whole overlay (timeline: off, then overlay closes), 0 px overlap with the slab at 14,56 341x100, no page errors. **1600x900: met.** Plate "Tidus Overdrive" at 45,44 359x78, topmost at 15/50/85 %, above the slab at 36,140, 0 px overlap. **2000x1012: met.** Plate 151,50 403x88 above the slab at 140,157 (confirms RCHK-B2A-02's corrected number). **844x390 (landscape phone, no attribute): plate kept** at 95,19 155x34 above the slab at 91,61, 0 px overlap. A real Enter closes the overlay and takes the plate down at every size. |
+| RCHK-B2A-02 | The REPAIR row now reads 403x88; matches this build. |
+
+Frames: `docs/screenshots/t1-b2a/final/overlay-open-{390x844,1600x900,844x390,2000x1012}.jpg`
+(untracked). Probe: `tools/zz-b2a-final.tmp/` (untracked scratch).
+
+Verdict: **RCHK-B2A-01 and RCHK-B2A-02 fixed; no regression found in the batch.**
+Minor, not blocking: the layout is read once when the overlay opens, so rotating a
+phone during an Overdrive keeps the choice made at open (the overlay lasts seconds);
+the fix commit's attribution line names a different model than the brief asked for.
+PR-0128's tick-label wording and PR-0186 stay open for Bailey, as before.
