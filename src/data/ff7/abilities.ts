@@ -180,7 +180,8 @@ export const FF7_ENEMY_ABILITIES: Readonly<Record<Ff7EnemyAbilityId, Ff7AbilityD
   // No damage, no effect; always hits; picks the next target [gs §4, verified: 3 sources].
   'search-scope': enemy({
     id: 'search-scope', name: 'Search Scope', formula: 'none', power: 0, canMiss: false,
-    targeting: 'one-opponent', element: [], cite: 'gs §4 [verified: 3 sources]',
+    targeting: 'one-opponent', element: [], lockOn: 'Locked On Target', // the printed line [gs §4, verified: 2 sources]
+    cite: 'gs §4 [verified: 3 sources]',
   }),
   // Physical, 1x Base (16), PAt% 100, one, Shoot [gs §4, verified: 2 sources].
   rifle: enemy({

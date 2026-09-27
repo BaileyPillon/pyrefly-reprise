@@ -1,0 +1,326 @@
+{
+  "sensible": [
+    {
+      "seed": 1,
+      "hash": "08a000cefd4473ae",
+      "outcome": "victory",
+      "turns": 29,
+      "ticks": 3773,
+      "events": 112
+    },
+    {
+      "seed": 2,
+      "hash": "dd04bec46e512143",
+      "outcome": "victory",
+      "turns": 28,
+      "ticks": 3773,
+      "events": 106
+    },
+    {
+      "seed": 3,
+      "hash": "68535675189fd430",
+      "outcome": "victory",
+      "turns": 26,
+      "ticks": 3374,
+      "events": 100
+    },
+    {
+      "seed": 4,
+      "hash": "b0e56e5a82d75ad8",
+      "outcome": "victory",
+      "turns": 28,
+      "ticks": 3773,
+      "events": 107
+    },
+    {
+      "seed": 5,
+      "hash": "661940a175b641ce",
+      "outcome": "victory",
+      "turns": 28,
+      "ticks": 3700,
+      "events": 108
+    },
+    {
+      "seed": 6,
+      "hash": "689488ed5d46b7d6",
+      "outcome": "victory",
+      "turns": 29,
+      "ticks": 3813,
+      "events": 111
+    },
+    {
+      "seed": 7,
+      "hash": "4993758195e48ae0",
+      "outcome": "victory",
+      "turns": 30,
+      "ticks": 3980,
+      "events": 116
+    },
+    {
+      "seed": 8,
+      "hash": "0ae6f537975a953e",
+      "outcome": "victory",
+      "turns": 30,
+      "ticks": 3889,
+      "events": 116
+    },
+    {
+      "seed": 9,
+      "hash": "88ba907420bcf8e3",
+      "outcome": "victory",
+      "turns": 30,
+      "ticks": 3923,
+      "events": 117
+    },
+    {
+      "seed": 10,
+      "hash": "3bc110a0b78c2596",
+      "outcome": "victory",
+      "turns": 30,
+      "ticks": 3879,
+      "events": 116
+    },
+    {
+      "seed": 11,
+      "hash": "66a1588bed5b5c36",
+      "outcome": "victory",
+      "turns": 29,
+      "ticks": 3729,
+      "events": 114
+    },
+    {
+      "seed": 12,
+      "hash": "478b3942c601e72b",
+      "outcome": "victory",
+      "turns": 29,
+      "ticks": 3805,
+      "events": 111
+    },
+    {
+      "seed": 13,
+      "hash": "88b0da1da0bff98f",
+      "outcome": "victory",
+      "turns": 29,
+      "ticks": 3788,
+      "events": 111
+    },
+    {
+      "seed": 14,
+      "hash": "c0fbb5f017ebda41",
+      "outcome": "victory",
+      "turns": 30,
+      "ticks": 3814,
+      "events": 116
+    },
+    {
+      "seed": 15,
+      "hash": "9e907579f230bb23",
+      "outcome": "victory",
+      "turns": 29,
+      "ticks": 3565,
+      "events": 110
+    },
+    {
+      "seed": 16,
+      "hash": "556b9ab1c86624d4",
+      "outcome": "victory",
+      "turns": 29,
+      "ticks": 3810,
+      "events": 112
+    },
+    {
+      "seed": 17,
+      "hash": "d2767757be0e07bd",
+      "outcome": "victory",
+      "turns": 29,
+      "ticks": 3788,
+      "events": 112
+    },
+    {
+      "seed": 18,
+      "hash": "3c49e97a442424c9",
+      "outcome": "victory",
+      "turns": 30,
+      "ticks": 3840,
+      "events": 118
+    },
+    {
+      "seed": 19,
+      "hash": "17e1e63bd4cd3790",
+      "outcome": "victory",
+      "turns": 30,
+      "ticks": 3875,
+      "events": 116
+    },
+    {
+      "seed": 20,
+      "hash": "237150f94e7bb010",
+      "outcome": "victory",
+      "turns": 30,
+      "ticks": 3803,
+      "events": 117
+    }
+  ],
+  "naive": [
+    {
+      "seed": 1,
+      "hash": "d4de7a2e1c683bc5",
+      "outcome": "defeat",
+      "turns": 20,
+      "ticks": 2531,
+      "events": 120
+    },
+    {
+      "seed": 2,
+      "hash": "d9449f8a58036b29",
+      "outcome": "defeat",
+      "turns": 22,
+      "ticks": 2945,
+      "events": 126
+    },
+    {
+      "seed": 3,
+      "hash": "0605023f579dc9c8",
+      "outcome": "defeat",
+      "turns": 20,
+      "ticks": 2546,
+      "events": 113
+    },
+    {
+      "seed": 4,
+      "hash": "deba94c6c69e4b4b",
+      "outcome": "defeat",
+      "turns": 20,
+      "ticks": 2603,
+      "events": 113
+    },
+    {
+      "seed": 5,
+      "hash": "8bd629121127eae3",
+      "outcome": "defeat",
+      "turns": 22,
+      "ticks": 2888,
+      "events": 126
+    },
+    {
+      "seed": 6,
+      "hash": "029f4bc206216fa3",
+      "outcome": "defeat",
+      "turns": 20,
+      "ticks": 2571,
+      "events": 118
+    },
+    {
+      "seed": 7,
+      "hash": "2b2e6155f7f4fc18",
+      "outcome": "defeat",
+      "turns": 19,
+      "ticks": 2646,
+      "events": 106
+    },
+    {
+      "seed": 8,
+      "hash": "a448d186b11764f9",
+      "outcome": "defeat",
+      "turns": 19,
+      "ticks": 2482,
+      "events": 112
+    },
+    {
+      "seed": 9,
+      "hash": "d6e4d527291422be",
+      "outcome": "defeat",
+      "turns": 21,
+      "ticks": 2681,
+      "events": 126
+    },
+    {
+      "seed": 10,
+      "hash": "73e48f4877ec363b",
+      "outcome": "defeat",
+      "turns": 19,
+      "ticks": 2482,
+      "events": 112
+    },
+    {
+      "seed": 11,
+      "hash": "179b3bdf0ba5ebd8",
+      "outcome": "defeat",
+      "turns": 18,
+      "ticks": 2164,
+      "events": 105
+    },
+    {
+      "seed": 12,
+      "hash": "85742220e9e94756",
+      "outcome": "defeat",
+      "turns": 18,
+      "ticks": 2200,
+      "events": 107
+    },
+    {
+      "seed": 13,
+      "hash": "0427055a8997f25c",
+      "outcome": "defeat",
+      "turns": 22,
+      "ticks": 2945,
+      "events": 126
+    },
+    {
+      "seed": 14,
+      "hash": "aeff5465bcd9b940",
+      "outcome": "defeat",
+      "turns": 21,
+      "ticks": 2572,
+      "events": 126
+    },
+    {
+      "seed": 15,
+      "hash": "e74059e33d96ed10",
+      "outcome": "defeat",
+      "turns": 19,
+      "ticks": 2377,
+      "events": 108
+    },
+    {
+      "seed": 16,
+      "hash": "09c42308087685cd",
+      "outcome": "defeat",
+      "turns": 18,
+      "ticks": 2215,
+      "events": 108
+    },
+    {
+      "seed": 17,
+      "hash": "1e5e454626e3c1b0",
+      "outcome": "defeat",
+      "turns": 19,
+      "ticks": 2531,
+      "events": 108
+    },
+    {
+      "seed": 18,
+      "hash": "6a059cc4dd2053cc",
+      "outcome": "defeat",
+      "turns": 21,
+      "ticks": 2873,
+      "events": 122
+    },
+    {
+      "seed": 19,
+      "hash": "97c5616dfe0ea2c4",
+      "outcome": "defeat",
+      "turns": 20,
+      "ticks": 2618,
+      "events": 114
+    },
+    {
+      "seed": 20,
+      "hash": "246d4c174874f077",
+      "outcome": "defeat",
+      "turns": 18,
+      "ticks": 2172,
+      "events": 108
+    }
+  ]
+}

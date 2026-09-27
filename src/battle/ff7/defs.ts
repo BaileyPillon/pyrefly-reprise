@@ -84,6 +84,8 @@ export interface Ff7AbilityDef {
   revive?: { hpDivisor: number };
   /** Only ever used as a counter (Tail Laser) [gs §4]. */
   counterOnly?: boolean;
+  /** The line it prints as it locks on to its target (Search Scope: "Locked On Target", gs §4). */
+  lockOn?: string;
   /** Research section and tag, e.g. `"core §8.4 [single source: Fergusson PM §2.6]"`. */
   cite: string;
 }

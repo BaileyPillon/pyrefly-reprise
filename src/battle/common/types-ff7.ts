@@ -210,8 +210,36 @@ export interface Ff7Combatant extends Combatant {
     formIndex?: number;
     /** Enemy AI script id. */
     aiScriptId?: string;
+    /**
+     * Party members only: used Defend on the most recent turn, so physical damage
+     * taken is halved until the next action [core §5.2, §4.5 step 4]. Absent = false.
+     */
+    defending?: boolean;
   };
 }
+
+// ---------------------------------------------------------------------------
+// The clock and the lines (engine part 2)
+// ---------------------------------------------------------------------------
+
+/**
+ * FF7's three Config battle modes [core §2.5, single source: wiki battle system]:
+ * Active (time stops only for Summons), Recommended (the default: time stops during
+ * battle animations), Wait (also while the player targets or is in a sub-menu).
+ */
+export type Ff7AtbMode = 'active' | 'recommended' | 'wait';
+
+/** Which of the three Guard Scorpion warnings plays, by who is alive [gs §7.1, verified: 2 sources]. */
+export type Ff7HintCase = 'both-alive' | 'cloud-only' | 'barret-only';
+
+/**
+ * What an FF7 `message` event is, beyond its text (the event's optional `ff7` field).
+ * - `lock-on`: Search Scope's "Locked On Target" on `targetId` [gs §4].
+ * - `hint`: line `line` (0-based) of the tail warning, said by `speakerId` [gs §7.1].
+ */
+export type Ff7MessageTag =
+  | { kind: 'lock-on'; targetId: CombatantId }
+  | { kind: 'hint'; hintCase: Ff7HintCase; line: number; speakerId: CombatantId };
 
 // ---------------------------------------------------------------------------
 // Builds

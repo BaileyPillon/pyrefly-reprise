@@ -33,6 +33,7 @@ import { TurnCutInBeat } from '../../src/engine/TurnCutIn.ts';
 import { buildAdvisorView } from '../../src/engine/tactics/advisor.ts';
 import { GAME_LABELS } from '../../src/data/chapter-meta.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { Ff7Engine } from '../../src/battle/ff7/index.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const FF7 = getChapter('ff7-guard-scorpion')!;
@@ -64,8 +65,13 @@ describe('the guard itself', () => {
 });
 
 describe('construction never builds an FFX-2 engine or HUD for FF7', () => {
-  it('createEngine rejects', async () => {
-    await expect(createEngine('ff7', setupForChapter(FF7, 1))).rejects.toThrow(Ff7NotHandledError);
+  it('createEngine builds the FF7 engine (engine part 2), never an FFX-2 one', async () => {
+    const engine = await createEngine('ff7', setupForChapter(FF7, 1));
+    expect(engine).toBeInstanceOf(Ff7Engine);
+    expect(engine).not.toBeInstanceOf(FFX2Engine);
+    expect(engine.state().game).toBe('ff7');
+    // Never handed FFX-2's saved ATB mode: FF7 keeps its own default, Recommended (core §2.5).
+    expect((engine as Ff7Engine).ff7AtbMode()).toBe('recommended');
   });
 
   it('createHud throws before any FFX-2 HUD or Rikku coach is built', () => {
