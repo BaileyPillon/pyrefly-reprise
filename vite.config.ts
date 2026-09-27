@@ -1,4 +1,6 @@
-import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
+import { defineConfig, type Plugin } from 'vite';
+import { pruneUnshipped } from './tools/dist-filter.mjs';
 
 /** The base a production build is served from. Also used by tools/screenshot.mjs. */
 export const PROD_BASE = process.env.BASE_PATH ?? '/pyrefly-reprise/';
@@ -13,11 +15,33 @@ export const PROD_BASE = process.env.BASE_PATH ?? '/pyrefly-reprise/';
  * what Pages will serve. Override with BASE_PATH=/ for a user page or a custom
  * domain.
  */
+/**
+ * Audition candidates, raw renders and numbered art takes sit in `public/` but
+ * never ship (PR-0100, PR-0173; the rule is `tools/dist-filter.mjs`). Pruned
+ * after the build, so `npm run build` and `npm run deploy` both leave them out;
+ * the dev server still serves them for local auditions.
+ */
+function distFilter(): Plugin {
+  let outDir = 'dist';
+  return {
+    name: 'pyrefly-dist-filter',
+    apply: 'build',
+    configResolved(config) {
+      outDir = resolve(config.root, config.build.outDir);
+    },
+    closeBundle() {
+      const removed = pruneUnshipped(outDir);
+      if (removed.length) this.info?.(`dist-filter: left out ${removed.length} unshipped file(s)`);
+    },
+  };
+}
+
 export default defineConfig(({ command, isPreview }) => {
   const base = command === 'build' || isPreview ? PROD_BASE : '/';
 
   return {
     base,
+    plugins: [distFilter()],
     build: {
       target: 'es2022',
       outDir: 'dist',

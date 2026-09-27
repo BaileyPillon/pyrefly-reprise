@@ -502,9 +502,8 @@ export class BattleScreen extends Screen {
    * keyboard to lose and wants the menu on a predictable frame.
    */
   private get canPause(): boolean {
-    if (this.pauseScreen || this.app.overlayActive) return false;
-    if (!this.presenter || this.presenter.isAborted) return false;
-    const snap = this.presenter.snapshot();
+    if (this.pauseScreen || this.app.overlayActive || !this.presenterBound) return false;
+    const snap = this.presenter!.snapshot();
     // A minigame overlay owns the keyboard for the same reason a command menu
     // does (`ui/ffx/minigames/**` each attach a `RawInputWatcher`).
     return !String(snap['phase'] ?? '').includes('minigame');
@@ -532,9 +531,14 @@ export class BattleScreen extends Screen {
     return !menuOwnsCancel();
   }
 
+  /** PR-0158: a live presenter on a screen still up; nothing pauses a battle loading or torn down. */
+  private get presenterBound(): boolean {
+    return !this.exited && this.presenter !== null && !this.presenter.isAborted;
+  }
+
   /** Put the pause menu up over the frozen battle. */
   private async openPause(): Promise<void> {
-    if (this.pauseScreen || this.app.overlayActive) return;
+    if (this.pauseScreen || this.app.overlayActive || !this.presenterBound) return;
     const chapter = this.opts.chapter;
     const screen = new PauseScreen({
       chapter,
@@ -827,6 +831,7 @@ export class BattleScreen extends Screen {
     // on purpose — see that getter — so a screenshot lands on a known frame.
     if (name === 'pause:open') {
       if (this.pauseScreen) return true;
+      if (!this.presenterBound) return false;
       void this.openPause();
       return true;
     }

@@ -35,6 +35,7 @@ const h = vi.hoisted(() => ({
   presenters: 0,
   bannerShows: 0,
   scenesDisposed: 0,
+  overlays: 0,
   sceneGate: null as null | Promise<void>,
   /** Gates on the loads after the scene: the engine, the staging, the airship hook. */
   gates: {} as Partial<Record<'engine' | 'stage' | 'airship', Promise<void>>>,
@@ -149,6 +150,8 @@ function fakeApp(): unknown {
     fade: () => Promise.resolve(),
     save: { settings: { textSpeed: 1 }, flushPlayTime: () => undefined, addPlayTime: () => undefined, playTime: () => 0 },
     overlayActive: false,
+    pushOverlay: async () => void h.overlays++,
+    popOverlay: async () => undefined,
   };
 }
 
@@ -175,6 +178,7 @@ beforeEach(() => {
   h.presenters = 0;
   h.bannerShows = 0;
   h.scenesDisposed = 0;
+  h.overlays = 0;
   h.sceneGate = null;
   h.gates = {};
   keydownAdds = 0;
@@ -270,4 +274,46 @@ describe('BattleScreen torn down before the fight starts', () => {
       expect((await screen.finished).outcome).toBe('aborted');
     },
   );
+});
+
+/**
+ * PR-0158: the pause-open path is guarded until the presenter is bound. Real
+ * keys already go through `canPause`; the debug beat `pause:open` skips that
+ * getter on purpose, and it used to push the pause over a battle still
+ * loading or already torn down. Game case: both (shared battle plumbing).
+ */
+describe('the pause never opens over an unbound presenter (PR-0158)', () => {
+  it('pause:open while enter() is still loading opens nothing', async () => {
+    const gate = deferred<void>();
+    h.sceneGate = gate.promise;
+    const screen = makeScreen();
+    const entering = screen.enter();
+    await flush();
+    expect(screen.trigger('pause:open')).toBe(false);
+    await flush();
+    expect(h.overlays).toBe(0);
+    screen.exit();
+    gate.resolve();
+    await entering;
+  });
+
+  it('pause:open after exit() opens nothing', async () => {
+    const screen = makeScreen();
+    await screen.enter();
+    await flush();
+    screen.exit();
+    expect(screen.trigger('pause:open')).toBe(false);
+    await flush();
+    expect(h.overlays).toBe(0);
+  });
+
+  it('control: pause:open on a bound presenter opens the pause', async () => {
+    const screen = makeScreen();
+    await screen.enter();
+    await flush();
+    expect(screen.trigger('pause:open')).toBe(true);
+    await flush();
+    expect(h.overlays).toBe(1);
+    screen.exit();
+  });
 });

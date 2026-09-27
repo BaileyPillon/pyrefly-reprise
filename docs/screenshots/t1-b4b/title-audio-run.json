@@ -1,0 +1,1066 @@
+{
+  "which": "title-audio",
+  "base": "http://127.0.0.1:5970/pyrefly-reprise/",
+  "runs": [
+    {
+      "run": 1,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.20890456438064575
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 2,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.6708332896232605
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 3,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.34669527411460876
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 4,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.746932327747345
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 5,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 6,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.18762090802192688
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 7,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 8,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 9,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.3520582914352417
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 10,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.6708332896232605
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 11,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.11838079243898392
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 12,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.630881667137146
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 13,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 14,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.9998800754547119
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 15,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.01685056835412979
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 16,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.5011271238327026
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 17,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.5405501127243042
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 18,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 19,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    },
+    {
+      "run": 20,
+      "titleBy3": true,
+      "boardOk": true,
+      "samples": {
+        "+2s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 0.9998800754547119
+          }
+        },
+        "+3s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+4s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "+6s": {
+          "screen": "title",
+          "ready": true,
+          "playing": "title",
+          "current": {
+            "name": "title",
+            "gain": 1
+          }
+        },
+        "board": {
+          "screen": "chapter-select",
+          "ready": true,
+          "playing": "chapter-select",
+          "current": {
+            "name": "chapter-select",
+            "gain": 1
+          }
+        }
+      },
+      "errors": []
+    }
+  ]
+}

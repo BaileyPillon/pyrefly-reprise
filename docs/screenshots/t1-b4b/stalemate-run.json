@@ -1,0 +1,30 @@
+{
+  "which": "stalemate",
+  "base": "http://127.0.0.1:5970/pyrefly-reprise/",
+  "runs": [
+    {
+      "label": "ch3-stalemate",
+      "panel": {
+        "chapterId": "braskas-final-aeon",
+        "outcome": "escape",
+        "silent": false,
+        "dismissed": false,
+        "clearMs": 7320,
+        "newBest": false,
+        "choice": "continue",
+        "actionIndex": 0,
+        "members": [
+          "tidus",
+          "yuna",
+          "auron"
+        ]
+      },
+      "text": "DREAM'S END — INSIDE SIN · FELL\nRESULTS · 0:07\nDefeat\nTURNS\n0\nATTEMPTS\n1\nBEST\n—\nNEVER CLEARED\nT\nTidus\nS.LV 180 · 0/22,000 AP\nY\nYuna\nS.LV 175 · 0/22,000 AP\nA\nAuron\nS.LV 180 · 0/22,000 AP\nRETRY\nCHAPTER SELECT",
+      "afterRetry": [
+        "party-prep",
+        "battle"
+      ],
+      "errors": []
+    }
+  ]
+}

@@ -466,7 +466,12 @@ async function main() {
   }
 
   // Manifest vs disk.
-  const disk = (await filesOnDisk(AUDIO_DIR)).filter((f) => f !== 'manifest.json');
+  // Audition candidates are unlisted on purpose and never ship: the build prunes
+  // them (tools/dist-filter.mjs, PR-0100), so they are not orphans of the game.
+  const { isUnshippedPublicFile } = await import('../dist-filter.mjs');
+  const disk = (await filesOnDisk(AUDIO_DIR)).filter(
+    (f) => f !== 'manifest.json' && !isUnshippedPublicFile(`audio/${f}`),
+  );
   const listed = new Set(Object.values(manifest.music).map((m) => m.file));
   if (manifest.sfx) listed.add(manifest.sfx.file);
   for (const f of disk) {
