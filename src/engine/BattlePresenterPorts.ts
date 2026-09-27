@@ -162,6 +162,23 @@ export interface VfxPort {
   impact(at: CombatantId, opts?: { element?: string; crit?: boolean }): Promise<void>;
   /** Full-screen colour wash — battle start, form change, defeat. */
   screenFlash(colour?: string, ms?: number): void;
+  /**
+   * A blow is about to land (B1 spell effects, `spellfx/SpellFxLayer.ts`):
+   * start the action's spell effect on its targets if it has not begun, and
+   * return how many milliseconds until hit `hitIndex` lands in it, 0 when there
+   * is nothing to wait for. Optional, so a test fake need not implement it.
+   */
+  land?(
+    at: CombatantId,
+    opts: {
+      abilityId?: string;
+      element?: string;
+      heal?: boolean;
+      hitIndex?: number;
+      targets?: readonly CombatantId[];
+      action?: number;
+    },
+  ): number;
 }
 
 /** Rising damage/heal numerals. Supplied by `ui/common`, or the DOM fallback. */

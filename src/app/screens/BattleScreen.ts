@@ -53,6 +53,7 @@ import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
+import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
 import { abilityFactsFor } from './battleAbilityFacts.ts';
 
@@ -210,6 +211,7 @@ export class BattleScreen extends Screen {
       slots: this.scene.slots,
       canvas: this.app.renderer.domElement,
       overlayRoot: this.root,
+      spellFx: battleSpellFx(chapter.game, this.app.renderer),
     });
 
     // --- engine ------------------------------------------------------------
@@ -833,6 +835,8 @@ export class BattleScreen extends Screen {
       void this.closePause();
       return true;
     }
+    const fx = spellFxTrigger(name, this.stage?.spellFx);
+    if (fx !== null) return fx;
     return battleDebugTrigger(name, this.presenter, this.hud, this.scene);
   }
 
@@ -863,6 +867,7 @@ export class BattleScreen extends Screen {
       hud: this.hud !== null,
       rig: this.scene?.battleCamera.rigName ?? null,
       actors: this.stage?.snapshot() ?? [],
+      spellFx: this.stage?.spellFx.snapshot() ?? null,
       playback: this.presenter?.snapshot() ?? null,
       battle: battleStateSnapshot(state),
       /** The full ordered event log, which the e2e specs snapshot. */

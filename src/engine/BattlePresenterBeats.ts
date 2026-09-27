@@ -9,6 +9,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
+import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import {
   banner,
@@ -33,6 +34,7 @@ export async function actionStart(
   event: Extract<BattleEvent, { type: 'action-start' }>,
 ): Promise<void> {
   ctx.actingId = event.actorId;
+  beginSpellAction(ctx, event);
   const actor = ctx.stage.actor(event.actorId);
   // An enemy's physical ability draws its own attack painting (iter2
   // attack-pose, both games); everything else is `poseForCommand` as before.
@@ -68,6 +70,7 @@ export async function actionEnd(ctx: EventCtx): Promise<void> {
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   actor?.setPose('idle');
   ctx.actingId = null;
+  endSpellAction(ctx);
   // Whatever the shot was — Overdrive letterbox, telegraph zoom, a plain
   // punch-in — this is where the frame comes back to neutral.
   await ctx.moments.actionClose();
@@ -82,6 +85,7 @@ export async function damage(
 
   // Rule 5: a `heals`-flagged action is negative damage, not a `heal` event.
   if (event.amount < 0) {
+    await awaitSpellLanding(ctx, event, true);
     target?.flash(0x9dffc4, 320, 0.6);
     numeral(ctx, event.targetId, {
       kind: 'heal',
@@ -97,6 +101,9 @@ export async function damage(
     numeral(ctx, event.targetId, { kind: 'miss', text: event.affinity === 'immune' ? 'IMMUNE' : '0' });
     return ctx.sleep(TIMING.miss);
   }
+
+  // The spell reaches the target before its numeral does (B1 spell effects).
+  await awaitSpellLanding(ctx, event, false);
 
   // The cut to the target, on the frame the hit lands. Only the first hit of a
   // multi-hit action moves the camera (see `BattleMoments.impact`).
