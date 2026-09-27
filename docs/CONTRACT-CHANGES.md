@@ -6,6 +6,23 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `types.ts`: `EnemyGroupDef.opensAsSeparateBattle` (PR-0107, built OFF)
+
+**FFX-2 only** [AGENTS.md hard rule 14]: the flag marks Chapter VI's Acts II and III, which the
+FFX-2 source makes separate battles (`research/ffx2-combat-core.md` §1.6, single source). Bailey,
+2026-09-26 ~23:25 EDT, "i'll go with all of your recommends. full speed ahead please. godspeed."
+(iteration 2 batch B1; the switch stays off until Bailey answers plan §8 Q4).
+
+**Additive** in `src/battle/common/types.ts`:
+- `EnemyGroupDef.opensAsSeparateBattle?: boolean`: a chained link opens on randomised bars while HP,
+  MP and items still carry. Read only while `src/battle/ffx2/constants.ts` `SEPARATE_BATTLE_GAUGES`
+  is on (it ships `false`), so no chain changes today.
+
+Shared signatures outside the contract files (recorded for callers): `setupForNextLink(previous,
+next, state, seed, seam?)` gains an optional `SeamOptions` (PR-0124's override, also shipped off);
+`Ffx2EngineOptions` gains the measurement overrides `separateBattleGauges` and
+`leblancScriptSinirothX`. Merged from `iter2-b1`; handoff `docs/handoff/iter2-b1.md`.
+
 ## 2026-09-27 — `dsl.ts`: `SayStep.fallback` (fielded speakers only, PR-0037) and the `'seymour-natus'` speaker
 
 **Both** for `fallback` [AGENTS.md hard rule 14]: the mid-battle line dispatch is shared story plumbing.
