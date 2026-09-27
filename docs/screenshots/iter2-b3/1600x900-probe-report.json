@@ -1,0 +1,76 @@
+{
+ "mode": "probe",
+ "tag": "1600x900",
+ "errors": [],
+ "probe": {
+  "idle": {
+   "pose": "ready",
+   "tint": [
+    1,
+    1,
+    1
+   ],
+   "brightness": 1,
+   "desaturate": 0,
+   "flash": 0,
+   "rim": [
+    0.7,
+    "bfe0ff"
+   ],
+   "bounce": 0,
+   "dissolve": 0,
+   "map": [
+    730,
+    1132,
+    "tidus/idle.png"
+   ],
+   "pos": [
+    -1.31,
+    0,
+    1.55
+   ],
+   "scale": [
+    1,
+    1,
+    1
+   ],
+   "fog": false,
+   "sceneFog": true
+  },
+  "peak": {
+   "pose": "attack",
+   "tint": [
+    1,
+    1,
+    1
+   ],
+   "brightness": 1,
+   "desaturate": 0,
+   "flash": 0,
+   "rim": [
+    0.7,
+    "bfe0ff"
+   ],
+   "bounce": 0,
+   "dissolve": 0,
+   "map": [
+    816,
+    1135,
+    "tidus/attack.png"
+   ],
+   "pos": [
+    -1.31,
+    0,
+    1.55
+   ],
+   "scale": [
+    1,
+    1,
+    1
+   ],
+   "fog": false,
+   "sceneFog": true,
+   "offset": 2.864348102763021
+  }
+ }
+}

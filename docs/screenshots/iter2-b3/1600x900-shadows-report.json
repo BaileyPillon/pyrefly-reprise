@@ -1,0 +1,295 @@
+{
+ "mode": "shadows",
+ "tag": "1600x900",
+ "errors": [],
+ "shadows": {
+  "seymour-flux": [
+   {
+    "id": "tidus",
+    "under": 0.139,
+    "floor": 0.293,
+    "drop": 0.525
+   },
+   {
+    "id": "yuna",
+    "under": 0.112,
+    "floor": 0.13,
+    "drop": 0.136
+   },
+   {
+    "id": "kimahri",
+    "under": 0.111,
+    "floor": 0.11,
+    "drop": -0.013
+   }
+  ],
+  "yunalesca": [
+   {
+    "id": "tidus",
+    "under": 0.341,
+    "floor": 0.559,
+    "drop": 0.39
+   },
+   {
+    "id": "yuna",
+    "under": 0.359,
+    "floor": 0.526,
+    "drop": 0.318
+   },
+   {
+    "id": "auron",
+    "under": 0.353,
+    "floor": 0.28,
+    "drop": -0.261
+   }
+  ],
+  "braskas-final-aeon": [
+   {
+    "id": "tidus",
+    "under": 0.055,
+    "floor": 0.165,
+    "drop": 0.665
+   },
+   {
+    "id": "yuna",
+    "under": 0.05,
+    "floor": 0.058,
+    "drop": 0.127
+   },
+   {
+    "id": "auron",
+    "under": 0.064,
+    "floor": 0.068,
+    "drop": 0.061
+   }
+  ],
+  "ffx2-bahamut": [
+   {
+    "id": "yuna",
+    "under": 0.104,
+    "floor": 0.31,
+    "drop": 0.665
+   },
+   {
+    "id": "rikku",
+    "under": 0.091,
+    "floor": 0.246,
+    "drop": 0.63
+   },
+   {
+    "id": "paine",
+    "under": 0.088,
+    "floor": 0.108,
+    "drop": 0.179
+   }
+  ],
+  "ffx2-vegnagun-shuyin": [
+   {
+    "id": "yuna",
+    "under": 0.488,
+    "floor": 0.453,
+    "drop": -0.079
+   },
+   {
+    "id": "rikku",
+    "under": 0.463,
+    "floor": 0.458,
+    "drop": -0.011
+   },
+   {
+    "id": "paine",
+    "under": 0.438,
+    "floor": 0.433,
+    "drop": -0.011
+   }
+  ],
+  "ffx2-leblanc": [
+   {
+    "id": "yuna",
+    "under": 0.089,
+    "floor": 0.197,
+    "drop": 0.547
+   },
+   {
+    "id": "rikku",
+    "under": 0.114,
+    "floor": 0.159,
+    "drop": 0.281
+   },
+   {
+    "id": "paine",
+    "under": 0.103,
+    "floor": 0.14,
+    "drop": 0.263
+   }
+  ],
+  "seymour-anima-macalania": [
+   {
+    "id": "tidus",
+    "under": 0.152,
+    "floor": 0.156,
+    "drop": 0.027
+   },
+   {
+    "id": "yuna",
+    "under": 0.151,
+    "floor": 0.14,
+    "drop": -0.078
+   },
+   {
+    "id": "rikku",
+    "under": 0.267,
+    "floor": 0.363,
+    "drop": 0.264
+   }
+  ],
+  "evrae-airship": [
+   {
+    "id": "tidus",
+    "under": 0.249,
+    "floor": 0.177,
+    "drop": -0.408
+   },
+   {
+    "id": "wakka",
+    "under": 0.128,
+    "floor": 0.133,
+    "drop": 0.039
+   },
+   {
+    "id": "rikku",
+    "under": 0.135,
+    "floor": 0.135,
+    "drop": 0
+   }
+  ],
+  "yojimbo-cavern": [
+   {
+    "id": "lulu",
+    "under": 0.107,
+    "floor": 0.138,
+    "drop": 0.222
+   },
+   {
+    "id": "kimahri",
+    "under": 0.114,
+    "floor": 0.308,
+    "drop": 0.63
+   },
+   {
+    "id": "yuna",
+    "under": 0.115,
+    "floor": 0.16,
+    "drop": 0.283
+   }
+  ],
+  "seymour-natus": [
+   {
+    "id": "tidus",
+    "under": 0.1,
+    "floor": 0.237,
+    "drop": 0.58
+   },
+   {
+    "id": "yuna",
+    "under": 0.098,
+    "floor": 0.116,
+    "drop": 0.159
+   },
+   {
+    "id": "kimahri",
+    "under": 0.089,
+    "floor": 0.103,
+    "drop": 0.139
+   }
+  ],
+  "ffx2-fallen-aeons": [
+   {
+    "id": "yuna",
+    "under": 0.092,
+    "floor": 0.24,
+    "drop": 0.618
+   },
+   {
+    "id": "rikku",
+    "under": 0.065,
+    "floor": 0.069,
+    "drop": 0.055
+   },
+   {
+    "id": "paine",
+    "under": 0.102,
+    "floor": 0.121,
+    "drop": 0.155
+   }
+  ],
+  "seymour-omnis": [
+   {
+    "id": "tidus",
+    "under": 0.093,
+    "floor": 0.278,
+    "drop": 0.665
+   },
+   {
+    "id": "yuna",
+    "under": 0.076,
+    "floor": 0.093,
+    "drop": 0.182
+   },
+   {
+    "id": "auron",
+    "under": 0.096,
+    "floor": 0.074,
+    "drop": -0.29
+   }
+  ],
+  "ffx2-trema": [
+   {
+    "id": "yuna",
+    "under": 0.191,
+    "floor": 0.397,
+    "drop": 0.518
+   },
+   {
+    "id": "rikku",
+    "under": 0.146,
+    "floor": 0.201,
+    "drop": 0.276
+   },
+   {
+    "id": "paine",
+    "under": 0.145,
+    "floor": 0.33,
+    "drop": 0.561
+   }
+  ],
+  "isaaru-via-purifico": [
+   {
+    "id": "yuna",
+    "under": 0.116,
+    "floor": 0.2,
+    "drop": 0.422
+   }
+  ],
+  "ffx2-den-of-woe": [
+   {
+    "id": "yuna",
+    "under": 0.133,
+    "floor": 0.274,
+    "drop": 0.513
+   },
+   {
+    "id": "rikku",
+    "under": 0.122,
+    "floor": 0.124,
+    "drop": 0.013
+   },
+   {
+    "id": "paine",
+    "under": 0.116,
+    "floor": 0.121,
+    "drop": 0.041
+   }
+  ]
+ }
+}
