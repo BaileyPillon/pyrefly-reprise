@@ -1,0 +1,61 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-27T21:55:00Z",
+  "build": {
+    "mainSha": "79adc4ff",
+    "bundle": "ykS1QEe6",
+    "artifactHash": "7ff2045e08ba79145fe7c6cd2bb6a0ff1e8b06ac54169ebaad4e9cc7c283443d"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/79adc4ff.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/bc4e70ee.json -> {result: PASS, artifactHash: 7ff2045e08ba79145fe7c6cd2bb6a0ff1e8b06ac54169ebaad4e9cc7c283443d, liveManifest: match, checked: 56, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), 1600x900, fresh context per run, cache-busted URL. assertScreen/waitBattleMenu used throughout (throw rather than fall through on timeout). Board order changed again since ff3884fb-live (FFX chapters now grouped before FFX-2; ffx2-bahamut moved to index 9); script corrected to select by screenState.selectedId rather than a fixed ArrowRight count. FFX (Seymour Flux): title->chapter-select->party-prep->cutscene->battle reached; real Attack input grew battleLog() 12->17 and 14->19 across separate runs (one run showed no growth because the move-advisor 'NEXT BEST MOVE' overlay intercepted the first Enter -- confirmed by re-running with a third Enter, not a live defect). FFX-2 (ffx2-bahamut, corrected targeting): battleLog() grew 8->10 on real Attack input (commandRows confirmed Attack pre-selected). Hidden FF7 door (typed L-I-M-I-T on chapter-select) opened a real battle; battleLog() grew 4->8. Pause: P/Escape toggled battle<->pause; H changed visible panel text length (508->847 chars) confirming hide/restore is live. audioDebug() showed the active FFX battle track (boss-seymour) as cached/prerendered, not the synth fallback, and every sampled SFX cue cached:true/prerendered:true. 0 console errors, 0 responses >=400 across every context."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke: set masterVolume 0.8->0.37 in pyrefly-reprise:save:v1 localStorage on the FFX-2 context, reloaded, waited for window.__pyreflyReady, read masterVolume back as 0.37.",
+      "reason": "Full upgrade matrix (fresh player / returning player / previous-build save fixture / invalid storage / reset flow) not tested in this pass; this is the lightweight live check only, per RUBRIC.md section 5."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity (56 files, byte-diffed from bc4e70ee)",
+      "title -> chapter-select -> party-prep -> battle, real input, FFX chapter (Seymour Flux)",
+      "title -> chapter-select -> party-prep -> battle, real input, FFX-2 chapter (ffx2-bahamut, corrected board targeting after a board-order change)",
+      "hidden FF7 Guard Scorpion door (L-I-M-I-T keyboard sequence) to a real battle turn",
+      "pause (P), hide/restore panels (H), resume (Escape)",
+      "prerendered vs procedural-fallback music and SFX check",
+      "settings-reload persistence (masterVolume)",
+      "console error / network >=400 sweep across all browser contexts"
+    ],
+    "reused": [
+      "critic/runner/lib/lib.mjs (assertScreen, waitBattleMenu, commandRows)",
+      "script shape from critic/reviews/ff3884fb-live.json"
+    ],
+    "notTested": [
+      "full CHK-024 upgrade matrix (fresh/returning/previous-build-fixture/invalid-storage/reset)",
+      "win/loss/retry path for any chapter",
+      "the specific release-25 systems by name (A-2 battle-entry transitions/blur/shatter, FFX enemy-ability-name HELP bar text, TARGET plate content, Chapter III Sensor card fold, WITHDREW stalemate card, Grand Summon aeon choice in Chapter IX, art-mask fixes) beyond what this generic real-input pass exercises incidentally; those are the focused/deep review's obligation"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 55,
+  "notes": "LV-3 (informational, mirrors LV-2 from ff3884fb-live.json): the chapter board's tile order changed again between builds (FFX chapters now grouped before FFX-2 across 15 tiles, one COMING/locked). A live-smoke script must select chapters by screenState.selectedId, not a fixed ArrowRight count -- this recurred once already and should get a shared helper in critic/runner/lib/lib.mjs (e.g. selectChapterById) so it stops being rediscovered per release; not built in this pass since this is a live-verification review, not an implementation task. The move-advisor 'NEXT BEST MOVE' overlay can intercept the first real keypress in the battle menu; scripts should confirm awaitingMenu via commandRows/snapshotState rather than assume a fixed number of Enters. Neither is a live-build defect: CHK-017's byte-exact check is the authoritative test for what shipped, and real input was confirmed to progress every chapter tested once the harness accounted for these two behaviors."
+}
