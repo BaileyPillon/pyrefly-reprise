@@ -102,10 +102,11 @@ export const evraeAirshipScripts: ChapterScripts = {
 
     // --- Beat 2 — Brother finds her; Cid turns the ship -------------------
     sfx('cursor-move'), // requested: comm-click
-    // Brother speaks Al Bhed and Rikku carries it across, as she does all
-    // through FFX. See the handoff: this is uncertain line 1.
+    // Brother's Al Bhed-inflected English (§1.17) stays his. Rikku no longer
+    // "translates" a line the player has just read: she adds the when
+    // (PR-0160, D-213, Bailey 2026-09-26: the reword, not a cipher).
     say('brother', 'YUNA! Bevelle! They are marrying her to that man!'),
-    say('rikku', 'He says Bevelle. He says within the hour.'),
+    say('rikku', "It's in Bevelle. And it's within the hour!"),
     say('cid', 'Bevelle. Fine. Everybody hold on to something.'),
     say('cid', 'Nobody asked me twice. Nobody is going to have to.'),
     // §1.17's guardrail: one short, unfunny line of real fear for Yuna.
