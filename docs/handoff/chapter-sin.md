@@ -134,3 +134,123 @@ Settings: 200 seeds, first try, human pace equal to bench speed (CTB). Nothing w
    - S-28 (Use reaching after the 2nd pull, single source).
    - Aeon Overdrive lines in the bench (the preset's aeon gauges are not full).
    - The equipment drops (S-7).
+
+## CHECK (independent, 2026-09-27 ~16:15 EDT; did not build it)
+
+Branch `chapter-sin` at 410c4cf8, worktree `D:/pyrefly-ch-sin`. **FFX only**, as the build says.
+Every claim below comes from running the engine (rule 3), not from reading the code. The probes are
+untracked scratch in `tests/unit/zz-scratch/zz-check-sin*.test.ts` and `tools/zz-sin-*.tmp.mjs`.
+**Verdict: PASS. No blockers.**
+
+**Data against `research/ffx-sin.md`:** every field was read against its tag, and all of them match.
+
+- **§2.1 stats:** HP 140,000, MP 999, STR 30, DEF 40, MAG 30, MDEF 40, AGI 30, Luck 15, Eva 0, Acc 0.
+  Overkill 16,000; Zanmato 4; Doom 30. The head is Armored, immune to percentage damage and to Delay.
+- **§2.2 and §2.3 resistances:** no elemental affinities. Every 255 row in §2.3 is 255. Armor and
+  Mental Break and Reflect are landable. Threaten is immune (S-6).
+- **§2.4 rewards:** 12,000 gil and 20,000 AP (30,000 on Overkill); steal Ether / Supreme Gem; drop
+  Lv. 3 Key Sphere; Bribe immune.
+- **§3.4 rows:**
+  - Gaze: Magic, power 20, Special, whole party, one status at 30 %. There are three versions, and
+    the aeon version is power 50.
+  - Giga-Graviton: percent-total 16, Break Damage Limit, Death 255.
+  - Every row has `canMiss: false` (rule 5).
+  - The estimates are labelled: rank 3, and Confuse's duration of 254.
+
+**The clock, over seeds 1 to 25 with the party defending (engine log):**
+
+- **Giga-Graviton on turn 13:** all 25 seeds give the same shape.
+  - Drawn to Sin on turns 1, 2 and 3. The range is FAR, FAR, then NEAR from the third pull.
+  - `turnsLeft` counts down 12, 11, 10 ... 0.
+  - There are 9 mouth telegraphs and no action row on turns 4 to 12.
+  - Giga-Graviton comes on turn 13. The outcome is defeat, and `battle.scriptedGameOver` is set.
+- **Giga-Graviton on turn 12:** the same shape, with 8 telegraphs.
+- **What Giga-Graviton does:** it deals 100 % of max HP to anyone at full HP (Tidus 6492/6492), or
+  their current HP. The log shows `damage`, then `ko`, then `defeat`, in that order.
+
+**The scripted Game Over:**
+
+- **Auto-Life:** Auto-Life was put on all seven members over seeds 1 to 8. Three revives fire after
+  Giga-Graviton, and every seed still ends in defeat.
+- **Aeons:** an aeon was called on Yuna's first turn and held the field to turn 13. This was tried
+  with each of Valefor, Ifrit, Ixion, Shiva and Bahamut. Giga-Graviton hit only the aeon, and every
+  run still ended in defeat.
+
+**Gaze:**
+
+- **The count:** over 60 seeds, 1,466 party targetings drew 216 Gazes. That fits the six-count
+  resetting after each Gaze, with 0 to 5 left over at the end of each fight.
+- **What does not count:** five hits plus cures and defends draw no Gaze, and the count stays at 5.
+- **The variants:** Petrify 72, Confuse 77, Zombie 67, uniform as S-16 intends.
+- **How often the status lands:** on a member without a ward it lands 18 % to 33 % of the time
+  (Auron: Petrify 17/72, Confuse 18/77, Zombie 19/67). That fits a 30 % chance.
+  - The wards hold completely: Tidus and Yuna are never Confused (both wear Confuse Ward), and Yuna
+    is never Petrified (Stoneproof).
+- **The aeon version:** `sin-engine.test.ts` covers it (three aeon attacks draw it), and that test
+  passes here.
+
+**Reach at FAR, Sin's first turn:**
+
+- Tidus reaches with Slow only. It is White Magic, and Sin is immune to it.
+- Yuna reaches with Reflect and Dispel.
+- Auron reaches with nothing.
+- No Trigger Command is offered, and Cid is absent.
+- Asking for Sin's intent leaves `state.flags` byte-identical: the preview does not move the clock.
+
+**The bench reproduces exactly.** `npx vitest run tests/unit/chapters/sin-bench.test.ts` printed the
+same tables to the digit:
+
+- sensible line: 62/200 with Giga-Graviton on turn 13, and 7/200 on turn 12;
+- naive line: 0/200 both ways;
+- every other column matches too.
+
+The same seed gives the same log.
+
+**Unlisted:**
+
+- **The debug API:** `__pyrefly.chapters()` returns the 15 listed ids, and `sin` is not among them.
+- **Chapter select** (headless GPU Chromium, dev server on port 7410, since stopped) shows the same
+  cards as main.
+  - The FFX row is I, II, III, VII (coming), VIII, IX, X, XII and XIV.
+  - The FFX-2 row is IV, V, VI, XI, XIII and XV.
+  - There is no "Sin" and no "XVI" on the board.
+- **Nothing changed underneath:** `src/app/**`, `src/ui/**`, `CHAPTERS` and the chapter-select code
+  are unchanged, both from the branch base to HEAD and from the base to `origin/main`.
+- **Reaching it:**
+  - `gotoChapter('sin')` reaches the battle. It opens FAR, with 13 turns left.
+  - Real Enter keys submitted Tidus's Cheer.
+  - The fight ran to Giga-Graviton on turn 13 and ended in defeat.
+  - There were no page errors.
+
+**Goldens and the rest of the build:**
+
+- **FFX:** `tests/unit/tools/ffx-chapter-hashes.test.ts` was run with 6 seeds and 4 policies, skipping
+  `sin`. It was run on a `git archive` of the base 60cf703c and on HEAD, and the results are
+  identical: 408/408 entries across the nine FFX chapters.
+- **FFX-2:** `ffx2-atb-golden` passes, 6/6. `ff7-golden` passes.
+- **Type check:** `tsc --noEmit` is clean on tracked code. The only errors are in untracked
+  `tests/unit/zz-scratch/` probes: the builder's `sin-probe*.test.ts`, and two of mine that I have
+  since fixed.
+- **Orphans:** 29, and none of them is a Sin module.
+- **Full suite (run once):** 555 files pass and 2 fail, 9235 tests pass and 2 fail. The two failures
+  are timeouts under machine load:
+  - `strategy-ffx2-bahamut` heal-only route, 30.5 s;
+  - `ui-ffx2-atbmode` FFX HUD chip, 22.9 s.
+  Both pass when run alone (25/25), and neither touches Sin code.
+
+**Findings (all minor):**
+
+1. **The record still reads as concept A.** Bailey picked C on 2026-09-27 ("all your
+   recommendations"), which settles "Open" item 2. This link becomes "Sin: the Face", and links 1 to
+   3 become "Sin: the Fins and the Core". `src/data/chapter-sin.ts` still says `title: 'Sin'` and
+   number 16, and the handoff's Open list still asks the question. Rename it, renumber it and reword
+   the Open list before listing.
+2. **An aeon's targeting counts 2 toward the six.** That is a labelled reading of "three times by an
+   aeon". The research pseudocode keeps separate thresholds instead (3 for an aeon, 6 for the
+   party). The two agree when only one side attacks. They differ when a party count carries over
+   into a summon: at 5, one aeon hit fires Gaze. Neither is sourced, and it is already in
+   `OVERDRIVE_SIN_ASSUMPTIONS`.
+3. **Cosmetic, in `learn/atlas/cites.ts`:** the Chapter XVI comment was joined onto the
+   `'ffx2-den-of-woe': {},` line.
+4. **The worktree's scratch probes break `tsc` in this worktree.** They sit untracked under
+   `tests/unit/`, so the type check here is not clean. No tracked file is affected.
