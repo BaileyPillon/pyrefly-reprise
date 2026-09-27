@@ -262,3 +262,17 @@
   .pf-mom__vig[data-on='1'] { animation: none; opacity: 0.8; }
   .pf-beat { animation: none; opacity: 1; }
 }
+
+/* ------------------------------------------------------------- A-2 entry ---
+   The held outgoing frame the battle entry breaks, blurs or pinches
+   (`entry.ts`, `entryOverlay.ts`). A 2D canvas the size of the window, over
+   everything the swap puts beneath it; A-3's loading card sits above it. */
+.pf-entry {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 40;
+  pointer-events: none;
+  contain: strict;
+}

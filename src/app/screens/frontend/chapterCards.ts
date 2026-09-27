@@ -15,6 +15,8 @@
  */
 
 import type { Chapter } from '../../../data/encounters.ts';
+import { Ff7NotHandledError } from '../../../battle/common/game.ts';
+import { getChapterMeta } from '../../../data/chapter-meta.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 import { partyFaceHtml, type PartyFaceMember } from '../../../ui/common/partyFace.ts';
 import { formatClearTime } from '../../../ui/common/resultsMath.ts';
@@ -23,14 +25,19 @@ import { cardRibbonHtml, victorySashHtml } from './chapterProgress.ts';
 import { plateArtHtml } from './chapterPlates.ts';
 import './party-face-placeholder.css';
 
-/** Every enemy in the chapter's first formation, as one line. */
+/**
+ * The card's BOSS row: the chapter's own line where its first formation is not
+ * who the chapter is about (a chain that opens on henchmen or on one of three
+ * shades, PR-0134), otherwise every enemy in the first formation.
+ */
 export function bossNames(chapter: Chapter): string {
-  return chapter.enemyGroupRef.enemies.map((e) => e.name).join(' + ');
+  return getChapterMeta(chapter.id)?.bossLine ?? chapter.enemyGroupRef.enemies.map((e) => e.name).join(' + ');
 }
 
 /** The three who actually walk in — FFX's active slots, FFX-2's whole trio. */
 export function recommendedParty(chapter: Chapter): PartyFaceMember[] {
   const build = chapter.buildRef;
+  if (build.game === 'ff7') throw new Ff7NotHandledError('recommendedParty (FF7 never has a card)');
   if (build.game === 'ffx') {
     return build.activeSlots.flatMap((id) => {
       const m = build.members.find((x) => x.id === id);

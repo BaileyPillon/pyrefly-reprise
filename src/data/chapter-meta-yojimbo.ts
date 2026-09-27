@@ -23,6 +23,14 @@
  *   (strategy 1), let an aeon take Zanmato (strategy 3), and the win. The
  *   choice of these three rows is **ours** (the plan names none); each rule is
  *   one the evaluator in `src/ui/common/chapterObjectives.ts` already answers.
+ *   **The Doom row is a secret** (P-2 (b), Bailey 2026-09-26): "???" until Doom
+ *   lands or the player loses once (`src/ui/common/objectiveReveal.ts`). With
+ *   Kimahri arriving without Doom (P-1, `CAVERN_DOOM_PREP`), Doom cannot land
+ *   here, so the row reveals a fact about the real game, not a step this fight
+ *   offers: a Ghost in this cave teaches Kimahri Doom by Lancet (§5.3 row 1
+ *   [verified: 4 sources]). The other two rows and the tip teach the race.
+ *   Edited lines (for the t1-b4a merge): this note, the import, the first two
+ *   `objectives` entries and `tip`.
  * - `musicKeys` are the cues the chapter plays: `scene-gagazet` (the stand-in
  *   under the walk in, the Chapter VII precedent), `boss-yojimbo` (O-6 A,
  *   D-063; from Ginnem's appearance through the battle, research §6.4) and
@@ -34,6 +42,7 @@
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
+import { CAVERN_DOOM_PREP } from './ffx/builds/yojimbo-cavern.ts';
 
 /** Chapter IX — Yojimbo, the last chamber of the Cavern of the Stolen Fayth. */
 export const YOJIMBO_META: ChapterMeta = {
@@ -56,16 +65,18 @@ export const YOJIMBO_META: ChapterMeta = {
   objectives: [
     {
       // Strategy 1 [§5.3, verified: 4 sources]: Kimahri's Ronso Rage Doom,
-      // count 5 [§2.1]. Ticks once the Rage resolves with the party standing.
+      // count 5 [§2.1]. A secret row (P-2 (b)); without Doom (P-1) it reveals
+      // the game's fact, §5.3 row 1: a Ghost here teaches Doom by Lancet.
       id: 'doom-yojimbo',
-      label: 'Doom Yojimbo',
+      label: CAVERN_DOOM_PREP === 'not-learned' ? 'In the game, a Ghost teaches Doom' : 'Doom Yojimbo',
       rule: { kind: 'survived-ability', ability: 'doom' },
+      hideUntilLoss: true,
     },
     {
       // Strategy 3 [§5.3, verified: 2 sources]: 9,999 to everyone [§3.1]
       // is survivable only with an aeon in front of it [§3.3].
       id: 'survive-zanmato',
-      label: 'Survive Zanmato',
+      label: 'Let an aeon take Zanmato',
       rule: { kind: 'survived-ability', ability: 'yojimbo-zanmato' },
     },
     {
@@ -74,7 +85,8 @@ export const YOJIMBO_META: ChapterMeta = {
       rule: { kind: 'victory' },
     },
   ],
-  tip: 'Spells land at full strength and swords at about half. Every action that targets him fills his gauge, so hit him hard and rarely.',
+  // §2.1 (Defense 80, Magic Defense 0), §4.1 (+3 per targeting, Zanmato at 100), §3.1 (9,999 to all), §3.3.
+  tip: 'Spells land in full and swords at about half. Each action aimed at him fills his gauge, and at 100 comes Zanmato, 9,999 to all three: have an aeon out by then.',
   snapshots: [
     { image: 'backdrops/cavern-stolen-fayth.png', caption: 'the last chamber, cold light' },
     { image: 'characters/yojimbo-cavern/cast.png', caption: 'the long blade, drawn' },

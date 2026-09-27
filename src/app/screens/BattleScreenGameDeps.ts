@@ -1,0 +1,22 @@
+/**
+ * The presenter deps that depend on the chapter's game: the ability rows every
+ * game has (`battleAbilityFacts.ts`), and FF7's own action motion
+ * (`BattleScreenFf7Motion.ts`).
+ *
+ * Shared plumbing (both + FF7): an FFX or FFX-2 chapter gets exactly the deps it
+ * had before (its ability rows, no motion port); only an FF7 chapter with an FF7
+ * build gets `actionMotion`.
+ */
+
+import type { GameId } from '../../battle/common/types.ts';
+import type { Ff7PartyBuild } from '../../battle/common/types-ff7.ts';
+import type { PresenterDeps } from '../../engine/BattlePresenterPorts.ts';
+import { abilityFactsFor } from './battleAbilityFacts.ts';
+import { Ff7ActionMotion } from './BattleScreenFf7Motion.ts';
+
+export function presenterGameDeps(game: GameId, build: unknown): Pick<PresenterDeps, 'abilityFacts' | 'actionMotion'> {
+  const abilityFacts = abilityFactsFor(game);
+  const ff7 = build as Partial<Ff7PartyBuild> | null | undefined;
+  if (game !== 'ff7' || ff7?.game !== 'ff7' || !Array.isArray(ff7.members)) return { abilityFacts };
+  return { abilityFacts, actionMotion: Ff7ActionMotion.forBuild(ff7 as Ff7PartyBuild) };
+}

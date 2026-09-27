@@ -1,0 +1,65 @@
+[
+  {
+    "file": "public/art/characters/yojimbo-cavern/attack.png",
+    "sha256": "7a88b922e81de8c21544cabb26e705a55e75321242eae691d16dab88ef33d873",
+    "mtime": "2026-09-27T02:06:04.349Z",
+    "scale": 1.053,
+    "decision": "D-229",
+    "from": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/yojimbo/attack-h/cand-45.png",
+    "flip": false
+  },
+  {
+    "file": "public/art/characters/yojimbo-cavern/hurt.png",
+    "sha256": "02aee5bf1f6941d868626752779fd59be7ff40d114a494e28bf38e7612c4cb5b",
+    "mtime": "2026-09-27T02:06:04.368Z",
+    "scale": 1.25,
+    "decision": "D-229",
+    "from": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/yojimbo/hurt/cand-35.png",
+    "flip": false
+  },
+  {
+    "file": "public/art/characters/trema/hurt.png",
+    "sha256": "c6776df3f35a217f94321f4ddf71d9f8b803cdb7dfcc72b91b4e20b023e55fe5",
+    "mtime": "2026-09-27T02:06:04.379Z",
+    "scale": 0.93,
+    "decision": "D-230",
+    "from": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/trema/hurt/cand-7.png",
+    "flip": false
+  },
+  {
+    "file": "public/art/characters/logos/hurt.png",
+    "sha256": "44e6b283c68320b0e4600493e9bbc4969cdae68680c8e302bb162ec770fd3215",
+    "mtime": "2026-09-27T02:06:04.391Z",
+    "scale": 1.0,
+    "decision": "D-230",
+    "from": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/logos/hurt/cand-2.png",
+    "flip": false
+  },
+  {
+    "file": "public/art/characters/leblanc/hurt.png",
+    "sha256": "0af99e411ee90cefd26857ae4be07aea544905fdc7d8918b2838881868271bce",
+    "mtime": "2026-09-27T02:06:04.403Z",
+    "scale": 1.0,
+    "decision": "D-230",
+    "from": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/leblanc/hurt/cand-10.png",
+    "flip": false
+  },
+  {
+    "file": "public/art/characters/ormi/hurt.png",
+    "sha256": "1180578d500d87189c373704029b8cf8e190eed8d8b33a1bc2aedc85d155af94",
+    "mtime": "2026-09-27T02:06:04.470Z",
+    "scale": 1.0,
+    "decision": "D-230",
+    "from": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/ormi/hurt/cand-7.png",
+    "flip": true
+  },
+  {
+    "file": "public/art/characters/ffx2-dr-goon/hurt.png",
+    "sha256": "7749ea8fb2011de04222c5c64e3fd13ede6492286822f328ee18100aaeb98ae0",
+    "mtime": "2026-09-27T02:06:04.488Z",
+    "scale": 1.5,
+    "decision": "D-230",
+    "from": "D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/ffx2-dr-goon/hurt/cand-4.png",
+    "flip": false
+  }
+]

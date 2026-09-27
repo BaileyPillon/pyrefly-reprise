@@ -38,7 +38,23 @@ export interface TargetingPort {
    * stack counts as hidden. The HUD publishes; the field reads.
    */
   setPanels(panels: ReadonlyArray<{ x: number; y: number; w: number; h: number }>): void;
+  /**
+   * The faces and weapons on the field no panel may cover (CHK-008), in CSS
+   * pixels: the key-feature boxes of the staged paintings that name some
+   * (`engine/keyFeatures.ts`). Optional and additive (PR-0094).
+   */
+  keyFeatures?(): ReadonlyArray<{ x: number; y: number; w: number; h: number }>;
 }
+
+/**
+ * An action on screen (`ActingState.ts`, iteration 2 B2 part 1; PR-0157's hook,
+ * both games): `action-start` as it begins to play, `action-end` as it ends,
+ * `cancel` when it never finishes on screen (the burst stopped, the battle
+ * ended inside it, the screen aborted, a new turn started under it).
+ */
+export type ActingSignal =
+  | { phase: 'action-start'; actorId: CombatantId; targets: readonly CombatantId[] }
+  | { phase: 'action-end' | 'cancel'; actorId: CombatantId };
 
 export interface HudPort {
   mount(root: HTMLElement): void;
@@ -118,6 +134,13 @@ export interface HudPort {
    * FFX's CTB implements nothing; a HUD that never reports leaves Wait held.
    */
   onMenuLevel?(listener: (level: 'top' | 'deep') => void): () => void;
+  /**
+   * Hear when an action is on screen, so a card over the actor or the target
+   * can step back while it plays (PR-0157 FFX, A-15 FFX-2; the fades are the
+   * HUDs' own). Optional and additive: without it nothing is sent, the no-op
+   * default. See {@link ActingSignal}.
+   */
+  setActing?(signal: ActingSignal): void;
   /** Called for every event before the presenter animates it; may show a transient (telegraph banner, chain popup) but must resolve within ~600 ms. */
   onEvent(event: BattleEvent): Promise<void> | void;
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult>;

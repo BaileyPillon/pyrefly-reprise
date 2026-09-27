@@ -40,6 +40,8 @@ import type {
   PlaybackSpeed,
 } from './BattlePresenterPorts.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
+import { fittedPush } from './ShotFit.ts';
+import { ShotRules } from './ShotRules.ts';
 
 /** Authored durations, in ms at `speed: 'normal'`. The one place to tune. */
 export const MOMENT_TIMING = {
@@ -133,9 +135,14 @@ export class BattleMoments {
   private readonly revealed = new Set<CombatantId>();
   /** Set while a Confirm press is cutting the opening short (`OpeningSkip.ts`, PR-0061): every wait collapses. */
   hurry = false;
+  /** A-13: an attack was opened and its first hit has not landed yet. */
+  private rollOwed = false;
+  /** The framing rules a shot is checked against (A-11, A-1, A-12; `ShotRules.ts`). */
+  readonly shots: ShotRules;
 
   constructor(deps: MomentDeps) {
     this.deps = deps;
+    this.shots = new ShotRules(deps.stage, () => deps.moments);
   }
 
   // ------------------------------------------------------------------ timing
@@ -147,6 +154,15 @@ export class BattleMoments {
   /** True when playback is collapsing every wait (e2e, the critic). */
   get skipping(): boolean {
     return this.deps.speed() === 'skip';
+  }
+
+  /** The player's reduce-motion setting, as the overlay reports it (A-13). */
+  get reducedMotion(): boolean {
+    try {
+      return this.deps.moments?.reduceMotion?.() === true;
+    } catch {
+      return false;
+    }
   }
 
   /** `base` ms at the current playback speed. */
@@ -245,6 +261,8 @@ export class BattleMoments {
     bossId?: CombatantId | null;
     bossName?: string | null;
   } = {}): Promise<void> {
+    this.shots.headline = opts.bossId ?? this.shots.headline;
+    this.shots.fitPhone();
     const intro = this.pick('intro', 'idle');
     this.cut(intro);
     if (this.skipping) {
@@ -288,9 +306,9 @@ export class BattleMoments {
       const actor = this.deps.stage.actor(id);
       if (!actor) return Promise.resolve();
       const home = { x: actor.position.x, y: actor.position.y, z: actor.position.z };
-      // Off-stage on the party's own side of the frame (party slots sit left
-      // of the hall axis in every scene — see each scene's PARTY_SLOTS note).
-      actor.moveTo({ x: home.x - 4.2 - i * 0.5, y: home.y, z: home.z }, 0);
+      // Off-stage on the party's own side: left of the hall axis in every FFX/FFX-2 scene, right for FF7's
+      const right = (actor as { facingDir?: number }).facingDir === -1; // party, turned to -x (`sideFacing`)
+      actor.moveTo({ x: right ? home.x + 4.2 + i * 0.5 : home.x - 4.2 - i * 0.5, y: home.y, z: home.z }, 0);
       actor.setAlpha(0);
       void actor.fadeTo(1, ms * 0.5);
       return actor.moveTo(home, ms + i * 70);
@@ -309,7 +327,7 @@ export class BattleMoments {
 
     const rig = this.rigFor(bossId);
     this.cue('boss-roar', 0.9);
-    const push = this.cam.push?.(MOMENT_PUSH.reveal, this.ms(MOMENT_TIMING.revealPush));
+    const push = this.cam.push?.(fittedPush(this.deps.stage, this.cam, rig, MOMENT_PUSH.reveal), this.ms(MOMENT_TIMING.revealPush));
     const plate = bossName
       ? this.deps.moments?.nameSlab({
           title: bossName,
@@ -342,17 +360,19 @@ export class BattleMoments {
    * away fast, a `cast` holds on the caster long enough to see the spell wind
    * up before the impact cut takes the frame to the target.
    */
-  async actionOpen(actorId: CombatantId, pose: string): Promise<void> {
+  async actionOpen(actorId: CombatantId, pose: string, targets: readonly CombatantId[] = []): Promise<void> {
     this.actions++;
     this.onActionRig = true;
-    const rig = this.rigFor(actorId);
+    // A-13: the roll lands on the attack's first hit (`impact`), not the swing.
+    this.rollOwed = pose === 'attack';
+    this.shots.focus = this.shots.enemy(actorId) ?? targets.map((t) => this.shots.enemy(t)).find((t) => t !== null) ?? null;
     if (this.skipping) {
-      this.cut(rig);
+      this.cut(this.shots.fit(this.rigFor(actorId), 0).rig);
       return;
     }
-    void this.move(rig, MOMENT_TIMING.actionIn);
-    void this.cam.push?.(MOMENT_PUSH.action, this.ms(MOMENT_TIMING.actionIn * 2));
-    if (pose === 'attack') void this.cam.roll?.(ATTACK_ROLL_DEG, this.ms(MOMENT_TIMING.returnOut));
+    const shot = this.shots.fit(this.rigFor(actorId), MOMENT_PUSH.action);
+    void this.move(shot.rig, MOMENT_TIMING.actionIn);
+    void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.actionIn * 2));
     if (pose === 'cast') await this.deps.sleep(MOMENT_TIMING.castHold);
   }
 
@@ -362,14 +382,32 @@ export class BattleMoments {
    * frame would strobe through a twelve-hit Attack Reels.
    */
   impact(targetId: CombatantId, opts: { hitIndex?: number; heavy?: boolean } = {}): void {
-    if (this.skipping) return;
+    if (this.skipping) {
+      this.rollOwed = false;
+      return;
+    }
     if ((opts.hitIndex ?? 0) !== 0) return;
-    const rig = this.rigFor(targetId);
+    this.shots.focus = this.shots.focus ?? this.shots.enemy(targetId);
+    const rig = this.shots.fit(this.rigFor(targetId), MOMENT_PUSH.action).rig;
     if (rig && rig !== this.cam.rigName) {
       this.cut(rig);
       this.onActionRig = true;
     }
     if (opts.heavy) void this.cam.punch(0.11, this.ms(460));
+    this.rollOnHit();
+  }
+
+  /**
+   * A-13, the spec's "-4deg roll on every attack" (`presentation-ink-and-gold.md`
+   * "Motion & camera"; both games): kick the horizon over on the attack's first
+   * hit and let it fall back level, at the playback speed. Never awaited, so it
+   * adds no time to the action; none under reduce-motion.
+   */
+  private rollOnHit(): void {
+    if (!this.rollOwed) return;
+    this.rollOwed = false;
+    if (this.reducedMotion) return;
+    void this.cam.roll?.(ATTACK_ROLL_DEG, this.ms(MOMENT_TIMING.returnOut));
   }
 
   /**
@@ -381,6 +419,7 @@ export class BattleMoments {
    * border it raises from the same `charge` event.
    */
   async actionClose(): Promise<void> {
+    this.rollOwed = false;
     if (this.overdriveOpen) await this.overdriveEnd();
     if (this.telegraphOpen && this.actions > this.telegraphAtAction) await this.telegraphEnd();
     await this.turnStart();
@@ -395,6 +434,7 @@ export class BattleMoments {
   async overdriveStart(actorId: CombatantId, name: string): Promise<void> {
     this.actions++;
     this.onActionRig = true;
+    this.shots.focus = this.shots.enemy(actorId);
     const rig = this.rigFor(actorId);
     if (this.skipping) {
       this.cut(rig);
@@ -403,8 +443,9 @@ export class BattleMoments {
     this.overdriveOpen = true;
     this.cue('overdrive-full', 1);
     const bars = this.deps.moments?.letterbox(true, this.ms(MOMENT_TIMING.odLetterbox));
-    void this.move(rig, MOMENT_TIMING.actionIn);
-    void this.cam.push?.(MOMENT_PUSH.overdrive, this.ms(MOMENT_TIMING.odPush));
+    const shot = this.shots.fit(rig, MOMENT_PUSH.overdrive);
+    void this.move(shot.rig, MOMENT_TIMING.actionIn);
+    void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.odPush));
     await bars;
     await this.deps.moments?.nameSlab({
       title: name,
@@ -435,18 +476,16 @@ export class BattleMoments {
    */
   async telegraph(enemyId: CombatantId, stage: 1 | 2, name?: string): Promise<void> {
     if (this.skipping) return;
-    const rig = this.rigFor(enemyId);
+    this.shots.focus = enemyId;
     this.onActionRig = true;
     this.telegraphOpen = true;
     this.telegraphAtAction = this.actions;
     const imminent = stage === 2;
+    const shot = this.shots.fit(this.rigFor(enemyId), MOMENT_PUSH.telegraph * (imminent ? 1.35 : 1));
 
     this.deps.moments?.vignette(true, { bpm: TELEGRAPH_BPM[stage] });
-    void this.cam.push?.(
-      MOMENT_PUSH.telegraph * (imminent ? 1.35 : 1),
-      this.ms(MOMENT_TIMING.telegraphZoom),
-    );
-    await this.move(rig, MOMENT_TIMING.telegraphZoom * 0.4);
+    void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.telegraphZoom));
+    await this.move(shot.rig, MOMENT_TIMING.telegraphZoom * 0.4);
     if (imminent && name) {
       await this.deps.moments?.nameSlab({
         title: name,
@@ -472,8 +511,9 @@ export class BattleMoments {
     this.revealed.delete(enemyId);
     if (this.skipping) return;
     this.onActionRig = true;
-    void this.cam.push?.(MOMENT_PUSH.reveal, this.ms(MOMENT_TIMING.formHold));
-    await this.move(this.rigFor(enemyId), MOMENT_TIMING.formHold * 0.35);
+    const rig = this.rigFor(enemyId);
+    void this.cam.push?.(fittedPush(this.deps.stage, this.cam, rig, MOMENT_PUSH.reveal), this.ms(MOMENT_TIMING.formHold));
+    await this.move(rig, MOMENT_TIMING.formHold * 0.35);
   }
 
   /** Let the new form settle back into the neutral framing. */

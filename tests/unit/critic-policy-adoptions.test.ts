@@ -104,7 +104,7 @@ describe('4. delivery status and decision states', () => {
     expect(ids.size).toBe(decisions.length);
     for (const d of decisions) {
       expect(['proposed', 'adopted', 'deferred', 'rejected', 'superseded', 'verified'], d.id).toContain(d.state);
-      expect(['ffx', 'ffx2', 'both'], d.id).toContain(d.game);
+      expect(['ffx', 'ffx2', 'both', 'ff7'], d.id).toContain(d.game); // 'ff7': the hidden FF7 experiment (rule 14's third case, 2026-09-27)
       expect([null, ...DELIVERY], d.id).toContain(d.delivery);
       if (d.state === 'superseded') expect(ids.has(d.supersededBy), d.id).toBe(true);
       if (d.state === 'proposed') expect(d.delivery, `${d.id}: nothing is built before a yes`).toBeNull();

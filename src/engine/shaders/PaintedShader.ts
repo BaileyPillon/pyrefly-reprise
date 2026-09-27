@@ -45,6 +45,10 @@ export const paintedFragmentShader = /* glsl */ `
   uniform float bounceStrength;
   uniform float dissolve;
   uniform vec3 dissolveColor;
+  // 0 = the plain dissolve; 1 = the pyrefly death (A-5, the approved tile
+  // "Dissolved into pyreflies, not faded out"): eaten from the feet up by
+  // noise*0.56 + height*0.44, with a narrow gold burn along the edge.
+  uniform float dissolveSweep;
   uniform float groundShade;
   // 0 = the painting as painted, 1 = fully grey. The quiet dim that marks a
   // figure as "not the target you are choosing" (option B, approved
@@ -203,11 +207,15 @@ export const paintedFragmentShader = /* glsl */ `
     // --- dissolve -----------------------------------------------------------
     if (dissolve > 0.0) {
       float n = texture2D(noiseMap, uv * vec2(1.6, 2.4)).r;
-      // Bias so the figure burns away from the feet up, like pyreflies leaving.
-      n = clamp(n * 0.72 + (1.0 - vUv.y) * 0.34, 0.0, 1.0);
+      // The plain dissolve's bias (the head goes first).
+      float plain = clamp(n * 0.72 + (1.0 - vUv.y) * 0.34, 0.0, 1.0);
+      // The pyrefly death: the feet go first (the tile's prototype, dissolve.py).
+      float sweep = clamp(n * 0.56 + vUv.y * 0.44, 0.0, 1.0);
+      n = mix(plain, sweep, dissolveSweep);
       if (n < dissolve) discard;
-      float edge = 1.0 - smoothstep(dissolve, dissolve + 0.13, n);
-      c += dissolveColor * edge * 2.2;
+      float edge = 1.0 - smoothstep(dissolve, dissolve + mix(0.13, 0.06, dissolveSweep), n);
+      // The prototype's GOLD (1.0, 0.86, 0.52) along the pyrefly edge.
+      c += mix(dissolveColor, vec3(1.0, 0.86, 0.52), dissolveSweep) * edge * 2.2;
       a *= mix(1.0, 0.82, edge);
     }
 

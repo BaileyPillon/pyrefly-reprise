@@ -258,13 +258,37 @@ describe('the coach layer', () => {
       expect(heard, 'the cursor still moves under the line').toEqual(['ArrowDown']);
       expect(markEl(root), 'and a cursor key does not dismiss it').not.toBeNull();
 
+      // PR-0182 / PR-0190 (CHK-015): a player who has moved the cursor under
+      // the line is answering the menu, so that confirm takes the line down
+      // *and* opens the row they highlighted. Swallowing it was a dead press
+      // (Kimahri's OVERDRIVE row needed a second Enter in Chapter I).
       document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
       expect(markEl(root), 'the confirm takes the line down').toBeNull();
-      expect(heard, 'and the menu behind it never hears that press').toEqual(['ArrowDown']);
+      expect(heard, 'and, after a cursor move, the menu hears it too').toEqual(['ArrowDown', 'Enter']);
 
       // The very next confirm is the player's again, or the menu is dead.
       document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
-      expect(heard, 'the press after the line is live input').toEqual(['ArrowDown', 'Enter']);
+      expect(heard, 'the press after the line is live input').toEqual(['ArrowDown', 'Enter', 'Enter']);
+    } finally {
+      window.removeEventListener('keydown', menu);
+    }
+  });
+
+  it('PR-0051 (FFX) still holds: a bare confirm (no cursor move) takes the line down and reaches nothing else', () => {
+    const heard: string[] = [];
+    const menu = (e: KeyboardEvent): void => void heard.push(e.code);
+    window.addEventListener('keydown', menu);
+    try {
+      const spy = new SpyHud();
+      const hud = withCoach('ffx', spy, { reduceMotion: true });
+      hud.mount(root);
+      void hud.chooseCommand('tidus' as CombatantId, rows(['attack']), preview);
+      expect(markEl(root)).not.toBeNull();
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+      expect(markEl(root), 'the confirm takes the line down').toBeNull();
+      expect(heard, 'and the menu behind it never hears that press').toEqual([]);
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+      expect(heard, 'the press after the line is live input').toEqual(['Enter']);
     } finally {
       window.removeEventListener('keydown', menu);
     }
@@ -393,13 +417,37 @@ describe('the coach layer', () => {
       expect(heard, 'the cursor still moves under the line').toEqual(['ArrowDown']);
       expect(markEl(root), 'and a cursor key does not dismiss it').not.toBeNull();
 
+      // PR-0182 / PR-0190 (CHK-015): a player who has moved the cursor under
+      // the line is answering the menu, so that confirm takes the line down
+      // *and* opens the row they highlighted. Swallowing it was a dead press
+      // (Kimahri's OVERDRIVE row needed a second Enter in Chapter I).
       document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
       expect(markEl(root), 'the confirm takes the line down').toBeNull();
-      expect(heard, 'and the menu behind it never hears that press').toEqual(['ArrowDown']);
+      expect(heard, 'and, after a cursor move, the menu hears it too').toEqual(['ArrowDown', 'Enter']);
 
       // The very next confirm is the player's again, or the menu is dead.
       document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
-      expect(heard, 'the press after the line is live input').toEqual(['ArrowDown', 'Enter']);
+      expect(heard, 'the press after the line is live input').toEqual(['ArrowDown', 'Enter', 'Enter']);
+    } finally {
+      window.removeEventListener('keydown', menu);
+    }
+  });
+
+  it('PR-0051 (FFX-2) still holds: a bare confirm (no cursor move) takes the line down and reaches nothing else', async () => {
+    const heard: string[] = [];
+    const menu = (e: KeyboardEvent): void => void heard.push(e.code);
+    window.addEventListener('keydown', menu);
+    try {
+      const spy = new SpyHud();
+      const hud = withCoach('ffx2', spy, { reduceMotion: true, ffx2AtbMode: 'active' });
+      hud.mount(root);
+      await hud.chooseCommand('yuna' as CombatantId, rows(['attack']), preview);
+      expect(markEl(root)).not.toBeNull();
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+      expect(markEl(root), 'the confirm takes the line down').toBeNull();
+      expect(heard, 'and the menu behind it never hears that press').toEqual([]);
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+      expect(heard, 'the press after the line is live input').toEqual(['Enter']);
     } finally {
       window.removeEventListener('keydown', menu);
     }

@@ -25,6 +25,8 @@ export function requireChapter(chapterId: ChapterId): Chapter {
   if (chapter === undefined) {
     throw new Error(`learn/atlas: unknown chapter id "${chapterId}"`);
   }
+  // The atlas covers the board's chapters; the hidden FF7 experiment is not one (ff7-game-branch-audit).
+  if (chapter.experimental) throw new Error(`learn/atlas: "${chapterId}" is a hidden experiment, not a board chapter`);
   return chapter;
 }
 

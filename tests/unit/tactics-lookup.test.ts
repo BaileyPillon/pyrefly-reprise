@@ -48,7 +48,8 @@ const OWN_TACTIC: Record<string, string> = {
   'ffx2-den-of-woe': 'ffx2DenOfWoe', // Chapter XV (FFX-2), unlisted
 };
 
-const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS];
+// The hidden FF7 experiment has no engine yet (FF7_EXPERIMENT_READY off; ff7-game-branch-audit): it joins when it does.
+const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS].filter((c) => !c.experimental);
 const SEEDS = [1, 2];
 const MAX_TURNS = 160;
 

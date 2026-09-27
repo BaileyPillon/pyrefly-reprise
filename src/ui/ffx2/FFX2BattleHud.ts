@@ -43,13 +43,15 @@ import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
-import { BODY_HALF_WIDTH, boardRects, fighterBoxes, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
+import { BODY_HALF_WIDTH, boardRects, fighterBoxes, keyFeatureObstacles, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
 import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
 import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HEIGHT, type BandInput } from './commandHelpBand.ts';
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
 import { BattleMessageBanner } from './battleMessage.ts';
+import { displayNameOf } from './displayName.ts';
+import { IntentOpeningHold } from './intentOpeningHold.ts';
 
 /**
  * PR-0012 (round 09 built the description logic, round 10 gated the slab off
@@ -156,6 +158,8 @@ export class FFX2BattleHud implements HudPort {
   private readonly levels = new MenuLevelRelay();
   /** Tears the open command menu down from outside. Active ATB only. */
   private closeMenu: (() => void) | null = null;
+  /** PR-0146: the slab waits for the battle-start moment (./intentOpeningHold.ts). */
+  private readonly openingHold = new IntentOpeningHold((s) => this.intent.setSuspended(s));
   /** The painted field's targeting surface, when there is a field. */
   private targeting: TargetingPort | null = null;
   /** Countdown to the next panel re-measure, so `visibleInFrame` never goes stale. */
@@ -314,7 +318,6 @@ export class FFX2BattleHud implements HudPort {
     this.stage = document.createElement('div');
     this.stage.className = 'ffx2hud__stage';
     this.stage.innerHTML = `
-      <div class="ig-surface"><div class="ig-surface__grain"></div><div class="ig-surface__vignette"></div></div>
       <div class="ffx2hud__enemies"></div>
       <div class="ig-banner ffx2hud__telegraph" hidden></div>
       <div class="ig-stat-list ffx2hud__party"></div>
@@ -333,6 +336,13 @@ export class FFX2BattleHud implements HudPort {
     this.platesLayer = document.createElement('div');
     this.platesLayer.className = 'ffx2hud__plates';
 
+    // PR-0135: the grain and vignette cover the whole window, not the 16:9
+    // stage (a hard edge either side at 2000x1012 and 2560x1080). First child,
+    // so they still paint under every panel.
+    const surface = document.createElement('div');
+    surface.className = 'ig-surface';
+    surface.innerHTML = '<div class="ig-surface__grain"></div><div class="ig-surface__vignette"></div>';
+    this.el.appendChild(surface);
     this.el.appendChild(this.stage);
     this.el.appendChild(this.overlay);
     this.el.appendChild(this.platesLayer);
@@ -365,6 +375,7 @@ export class FFX2BattleHud implements HudPort {
       project: (id, anchor) => this.project(id, anchor),
       avoid: () => this.intentAvoidRects(),
     });
+    this.openingHold.start();
 
     this.mounted = true;
     this.layout();
@@ -430,7 +441,7 @@ export class FFX2BattleHud implements HudPort {
    * `EnemyIntentPanel.setSuspended` (PR-0122).
    */
   setIntentSuspended(suspended: boolean): void {
-    this.intent.setSuspended(suspended);
+    this.openingHold.pause(suspended); // folded with the opening hold (PR-0146)
   }
 
   /** The intent slab, for tests and the debug snapshot. */
@@ -471,6 +482,8 @@ export class FFX2BattleHud implements HudPort {
   private intentObstacles(opts: { skipChainChip?: boolean; addIntentPanel?: boolean } = {}): IntentAvoidRect[] {
     const out = boardRects(this.el, { ...opts, scale: this.stageScale || 1, chipReach: this.intentChipHeight() });
     for (const box of fighterBoxes(this.lastState, this.project)) out.push(box);
+    // PR-0094: a part's face and weapon rank with the chrome.
+    for (const box of keyFeatureObstacles(this.targeting?.keyFeatures?.() ?? [])) out.push(box);
     // PR-0012: in a portrait letterbox the help band sits in the bar above the
     // stage, outside the headroom `solveIntentPlacement` reserves; name it.
     if (battleHelpOn()) {
@@ -773,6 +786,16 @@ export class FFX2BattleHud implements HudPort {
       );
       return { kind: 'defend', targets: [] };
     }
+    this.openingHold.decision(); // PR-0146: the opening is over
+    // PR-0175: a menu still open from an earlier decision (a link that ended
+    // under it) is torn down before the next one opens. Overwriting its close
+    // handle left its cursor in the overlay, still on arrow keys, projecting
+    // the last link's Leg and Head onto the corner with their raw ids.
+    if (this.closeMenu) {
+      const stale = this.closeMenu;
+      this.closeMenu = null;
+      stale();
+    }
     this.actingId = actorId;
     if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
     this.commandEl.hidden = false;
@@ -794,7 +817,7 @@ export class FFX2BattleHud implements HudPort {
       // combatant id.
       projectRect: (id) => this.targeting?.rect(id) ?? null,
       panels: () => [...this.panelRects(), ...slabPanels(this.el)],
-      nameOf: (id) => this.lastState?.combatants[id]?.name ?? id,
+      nameOf: (id) => displayNameOf(this.lastState, id), // never the raw id (PR-0175)
       letterTagOf: (id) => this.letterTagOf(id),
       kindOf: (id) => {
         if (id === actorId) return 'self';
@@ -903,6 +926,7 @@ export class FFX2BattleHud implements HudPort {
 
   setVisible(visible: boolean): void {
     this.el.hidden = !visible;
+    this.openingHold.visible(visible);
   }
 
   setProjector(
@@ -1075,6 +1099,7 @@ export class FFX2BattleHud implements HudPort {
       stageX: host.left + this.stageX,
       stageY: host.top + this.stageY,
       pauseChip: chip?.getBoundingClientRect() ?? null,
+      hostLeft: host.left,
     };
   }
 

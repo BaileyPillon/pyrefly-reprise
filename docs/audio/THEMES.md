@@ -585,6 +585,42 @@ gesture). Rationing is what keeps them worth hearing.
 
 ---
 
+## The chapter cue map
+
+Which cue each listed chapter plays, and which of them are its own. Added
+2026-09-26 for PR-0099 (critic round 13): until then the bible had no row for
+the chapters that borrow other chapters' cues, so a stand-in and a choice
+looked the same. D-209 (Bailey): **every chapter gets its own composed cue
+after the audio direction pick (D-168), and a stand-in never counts as
+finished.** The owed cues are composed after that pick, never unheard (rule 13).
+
+`tools/audio/themes-audit.mjs` reads this table (`tools/audio/chapter-cue-map.mjs`)
+and fails a chapter with no row, or whose Scene, Battle or Victory cells differ
+from the chapter's `music` record in `src/data`. Scene is `music.scene`,
+Battle is `music.battle` then `music.phase2`, Victory is `music.victory`
+(`none` = the silent results of Chapter IV). Cues a story script calls on its
+own (a post-scene bed, an ending) are the script's, not this table's.
+
+| Ch | Chapter | Game | Scene | Battle | Victory | Status | Owed cue and decision |
+|---|---|---|---|---|---|---|---|
+| I | `seymour-flux` Seymour Flux | FFX | `scene-gagazet` | `boss-seymour` | `victory-ffx` | own (cue map rows 10, 6) | none |
+| II | `yunalesca` Lady Yunalesca | FFX | `scene-zanarkand-dome` | `boss-yunalesca` | `victory-ffx` | own (rows 11, 7) | none |
+| III | `braskas-final-aeon` Braska's Final Aeon | FFX | `scene-dreams-end` | `boss-jecht`, `boss-yu-yevon` | `victory-ffx` | own (rows 12, 8, 9) | none |
+| IV | `ffx2-bahamut` Bahamut | FFX-2 | `scene-bevelle-underground` | `boss-ffx2-aeon` | none | own (rows 13, 17) | none |
+| V | `ffx2-vegnagun-shuyin` Vegnagun | FFX-2 | `scene-farplane` | `boss-vegnagun`, `boss-shuyin` | `victory-ffx2` | own (rows 14, 18, 19) | none |
+| VI | `ffx2-leblanc` Leblanc | FFX-2 | `scene-bevelle-underground` | `boss-ffx2-aeon` | `victory-ffx2` | **stand-in**: Chapter IV's scene and battle cues | `scene-chateau-leblanc`, `boss-leblanc` and the Vegnagun-reveal `scene-disquiet` (D-018, `docs/plans/chapter-leblanc-review.md` §6); D-209 |
+| VII | `seymour-anima-macalania` Seymour and Anima (Macalania Temple) | FFX | `scene-gagazet` | `boss-seymour-macalania` | `victory-ffx` | battle own (row 24, D-048); **scene stand-in**: Chapter I's `scene-gagazet` (`MACALANIA_SCENE_CUE`); the chapter stays COMING until the pick | `scene-macalania-temple`, Bailey's pick by ear among sketches A/B/C (D-190, open); D-209 |
+| VIII | `evrae-airship` Evrae | FFX | `scene-fahrenheit` | `boss-evrae` | `victory-ffx` | own (rows 23, 22; D-039) | none |
+| IX | `yojimbo-cavern` Yojimbo | FFX | `scene-gagazet` | `boss-yojimbo` | `victory-ffx` | battle own (row 25, D-063); the scene borrows Chapter I's `scene-gagazet` | no decision names an IX scene cue (not in D-209's list): open for Bailey |
+| X | `seymour-natus` Seymour Natus | FFX | `scene-gagazet` | `boss-seymour-macalania` | `victory-ffx` | **stand-in**: Chapter VII's battle cue, Chapter I's scene cue | a new cue from the "Noble Rot" family built on `SEYMOUR_UNMOORED`, auditioned before it ships (D-091, Natus B15 a); D-209 |
+| XI | `ffx2-fallen-aeons` Fallen Aeons | FFX-2 | `scene-farplane` | `boss-ffx2-aeon` | `victory-ffx2` | **choice**: `boss-ffx2-aeon` on all three links, the game's one cue for every aeon fight, `scene-farplane` as the field bed (D-112, FA15 a) | its own cue after the direction pick (D-209 overrides "by choice" for the finished state) |
+| XII | `seymour-omnis` Seymour Omnis | FFX | `scene-dreams-end` | `boss-seymour` | `victory-ffx` | **stand-in**: Chapter I's battle cue, Chapter III's scene cue | a new cue spending `SEYMOUR_UNMOORED` as his last statement (D-145, B18); D-209 |
+| XIII | `ffx2-trema` Trema | FFX-2 | `scene-bevelle-underground` | `scene-bevelle-underground`, `boss-ffx2-aeon` | `victory-ffx2` | **stand-in**: Paragon's link on the scene bed, Trema's phase on Chapter IV's `boss-ffx2-aeon` | `boss-trema`, HYMN turned against itself, as phase 2 (D-146, TR16); D-209 |
+| XIV | `isaaru-via-purifico` Isaaru | FFX | `scene-gagazet` | `boss-yojimbo` | `victory-ffx` | **stand-in**: Chapter I's scene cue and Chapter IX's battle cue (D-186: shipped as is) | a new 'Still Water' cue from the HYMN family (D-147, B21); D-209 |
+| XV | `ffx2-den-of-woe` The Den of Woe | FFX-2 | `scene-bevelle-underground` | `boss-shuyin` | `victory-ffx2` | **stand-in**: Chapter V's `boss-shuyin`, Chapter IV's scene bed | `boss-den-of-woe` from the Shuyin / `SONGSTRESS_DARK` family (D-148, GP16); D-209 |
+
+---
+
 ## Harmonic language, by world
 
 ### FFX — Spira

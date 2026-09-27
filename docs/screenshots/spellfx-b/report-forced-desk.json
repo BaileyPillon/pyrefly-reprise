@@ -1,0 +1,159 @@
+{
+ "ffx": [
+  {
+   "spell": "fire",
+   "actor": "tidus",
+   "drawn": [
+    "fire"
+   ],
+   "waitMs": [
+    500
+   ]
+  },
+  {
+   "spell": "blizzard",
+   "actor": "tidus",
+   "drawn": [
+    "ice"
+   ],
+   "waitMs": [
+    500
+   ]
+  },
+  {
+   "spell": "thunder",
+   "actor": "tidus",
+   "drawn": [
+    "thunder"
+   ],
+   "waitMs": [
+    420
+   ]
+  },
+  {
+   "spell": "water",
+   "actor": "tidus",
+   "drawn": [
+    "water"
+   ],
+   "waitMs": [
+    800
+   ]
+  },
+  {
+   "spell": "holy",
+   "actor": "tidus",
+   "drawn": [
+    "holy"
+   ],
+   "waitMs": [
+    850
+   ]
+  },
+  {
+   "spell": "cure",
+   "actor": "tidus",
+   "drawn": [
+    "cure"
+   ],
+   "waitMs": [
+    500
+   ]
+  },
+  {
+   "spell": "attack",
+   "actor": "tidus",
+   "drawn": [
+    "hit"
+   ],
+   "waitMs": [
+    100
+   ]
+  }
+ ],
+ "ffx2": [
+  {
+   "spell": "x2-black-mage-fire",
+   "actor": "yuna",
+   "drawn": [
+    "fire"
+   ],
+   "waitMs": [
+    500
+   ]
+  },
+  {
+   "spell": "x2-black-mage-blizzard",
+   "actor": "yuna",
+   "drawn": [
+    "ice"
+   ],
+   "waitMs": [
+    500
+   ]
+  },
+  {
+   "spell": "x2-black-mage-thunder",
+   "actor": "yuna",
+   "drawn": [
+    "thunder"
+   ],
+   "waitMs": [
+    420
+   ]
+  },
+  {
+   "spell": "x2-black-mage-water",
+   "actor": "yuna",
+   "drawn": [
+    "water"
+   ],
+   "waitMs": [
+    800
+   ]
+  },
+  {
+   "spell": "x2-shared-holy",
+   "actor": "yuna",
+   "drawn": [
+    "holy"
+   ],
+   "waitMs": [
+    550,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "spell": "x2-white-mage-cure",
+   "actor": "yuna",
+   "drawn": [
+    "cure"
+   ],
+   "waitMs": [
+    500
+   ]
+  },
+  {
+   "spell": "attack",
+   "actor": "yuna",
+   "drawn": [
+    "hit"
+   ],
+   "waitMs": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ]
+  }
+ ]
+}

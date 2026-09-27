@@ -79,13 +79,41 @@ export function holdWidth(rig: CameraRig, aspect: number, design: number): Camer
   return { ...rig, fov: Math.round(fov * 100) / 100 };
 }
 
+/**
+ * {@link holdWidth}, then the aim tilted up by half the fov it opened, so the
+ * frame's **bottom** edge stays on the ray it has at `design` and every extra
+ * row lands at the top (PR-0185's remainder, FFX only). For a shot that keeps
+ * the party wholly below its bottom edge at 16:9 (the `enemy` rig on Yojimbo
+ * and Daigoro): opened evenly at 4:3, the extra rows at the bottom brought the
+ * tops of Kimahri's and Yuna's heads back in along the edge.
+ */
+export function holdBottom(rig: CameraRig, aspect: number, design: number): CameraRig {
+  const wide = holdWidth(rig, aspect, design);
+  if (wide === rig || rig.fov === undefined || wide.fov === undefined) return wide;
+  const p = Array.isArray(rig.position) ? rig.position : [rig.position.x, rig.position.y, rig.position.z];
+  const l = Array.isArray(rig.lookAt) ? rig.lookAt : [rig.lookAt.x, rig.lookAt.y, rig.lookAt.z];
+  const [dx, dy, dz] = [l[0]! - p[0]!, l[1]! - p[1]!, l[2]! - p[2]!];
+  const flat = Math.hypot(dx, dz);
+  const len = Math.hypot(flat, dy);
+  if (!(flat > 0)) return wide;
+  const pitch = Math.atan2(dy, flat) + (((wide.fov - rig.fov) / 2) * Math.PI) / 180;
+  const k = (Math.cos(pitch) * len) / flat;
+  const lookAt: [number, number, number] = [p[0]! + dx * k, p[1]! + Math.sin(pitch) * len, p[2]! + dz * k];
+  return { ...wide, lookAt: lookAt.map((v) => Math.round(v * 1000) / 1000) as [number, number, number] };
+}
+
+/** Rigs that keep the party below their bottom edge at 16:9, so a narrower screen opens them upward only. */
+const BOTTOM_HELD: ReadonlySet<string> = new Set(['enemy']);
+
 /** The rig set for a screen of this aspect (width over height). */
 export function cavernRigsFor(aspect: number): Record<SceneRigName, CameraRig> & Record<string, CameraRig> {
   const phone = aspect < 1;
   const base = phone ? CAVERN_PHONE_RIGS : CAVERN_WIDE_RIGS;
   const design = phone ? CAVERN_PHONE_ASPECT : CAVERN_DESIGN_ASPECT;
   const out: Record<string, CameraRig> = {};
-  for (const [name, rig] of Object.entries(base)) out[name] = holdWidth(rig, aspect, design);
+  for (const [name, rig] of Object.entries(base)) {
+    out[name] = !phone && BOTTOM_HELD.has(name) ? holdBottom(rig, aspect, design) : holdWidth(rig, aspect, design);
+  }
   return out as Record<SceneRigName, CameraRig> & Record<string, CameraRig>;
 }
 

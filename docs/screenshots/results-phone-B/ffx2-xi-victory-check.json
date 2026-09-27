@@ -1,0 +1,101 @@
+{
+  "chapter": "ffx2-fallen-aeons",
+  "want": "victory",
+  "tag": "ffx2-xi-victory",
+  "viewport": "390x844",
+  "landed": {
+    "phone": true,
+    "outcome": "victory",
+    "minFont": 14,
+    "small": [],
+    "buttons": [
+      {
+        "t": "CONFIRM ▸",
+        "h": 58,
+        "top": 764,
+        "bottom": 822
+      }
+    ],
+    "boxes": {
+      "clock": {
+        "top": 16,
+        "bottom": 48,
+        "left": 16,
+        "right": 182
+      },
+      "caption": {
+        "top": 70,
+        "bottom": 365,
+        "left": 364,
+        "right": 382
+      },
+      "head": {
+        "top": 374,
+        "bottom": 460,
+        "left": 20,
+        "right": 372
+      },
+      "tallies": {
+        "top": 502,
+        "bottom": 649,
+        "left": 18,
+        "right": 372
+      },
+      "chips": {
+        "top": 659,
+        "bottom": 731,
+        "left": 18,
+        "right": 372
+      },
+      "dock": {
+        "top": 764,
+        "bottom": 822,
+        "left": 22,
+        "right": 368
+      },
+      "hero": {
+        "top": 0,
+        "bottom": 844,
+        "left": -134,
+        "right": 444
+      }
+    },
+    "scroll": {
+      "doc": 844,
+      "win": 844,
+      "page": 0
+    },
+    "chips": [
+      "Y Yuna +6,000 EXP",
+      "R Rikku +6,000 EXP",
+      "P Paine +6,000 EXP"
+    ],
+    "tallies": [
+      "EXP 6,000 ×3 PARTY",
+      "AP 15 PER DRESSPHERE",
+      "GIL 2,000",
+      "ITEMS Tetra Band"
+    ],
+    "accent": "#f7b6d9"
+  },
+  "afterTap": {
+    "screen": "results",
+    "state": {
+      "chapterId": "ffx2-fallen-aeons",
+      "outcome": "victory",
+      "silent": false,
+      "dismissed": true,
+      "clearMs": 30950,
+      "newBest": true,
+      "choice": "continue",
+      "actionIndex": 0,
+      "members": [
+        "yuna",
+        "rikku",
+        "paine"
+      ]
+    },
+    "gotoChapter": "victory"
+  },
+  "errors": []
+}

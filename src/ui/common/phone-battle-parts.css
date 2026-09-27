@@ -110,6 +110,20 @@ html[data-phone-battle] .mad__target {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* Where the move lives: "TIP Darkness -> all enemies · Black Magic". Never
+   truncated; the label and target give way first (critic round 13 PR-0126,
+   phone half; CHK-004 "say where"). */
+html[data-phone-battle] .mad__where {
+  display: inline;
+  flex: none;
+  color: rgba(244, 241, 232, 0.75) !important;
+  font-weight: 600;
+}
+html[data-phone-battle] .mad__where::before {
+  content: '\00b7';
+  margin-right: 6px;
+  color: var(--ig-accent);
+}
 /* The switch: gone while the line is up (the line is the switch). */
 html[data-phone-battle] .mad:not(.mad--off) .mad__toggle {
   display: none !important;

@@ -24,6 +24,7 @@
 
 import type {
   BattleEngine,
+  BattleResult,
   BattleSetup,
   BattleState,
   EnemyGroupDef,
@@ -34,6 +35,7 @@ import type { BattleOutcome, BattlePresenter } from '../../engine/BattlePresente
 import { setupForNextLink } from './BattleScreenSetup.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
 import { checkpointAt, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
+import { chainSpoils } from './BattleChainSpoils.ts';
 
 /**
  * How many formations the chain starting at `group` has: walk `nextGroupId` to
@@ -99,7 +101,7 @@ export function cueForGroup(
   // faded it to silence and started it again (Chapter 3's 'valefor-enters',
   // Chapter 5's 'shuyin-appears').
   if (cue && cue.track === null) return { track: undefined, fadeMs: cue.fadeMs ?? 1200 };
-  return { track: cue?.track ?? fallback, fadeMs: cue?.fadeMs ?? (link === 'first' ? 1200 : 1200) };
+  return { track: cue?.track ?? fallback ?? undefined, fadeMs: cue?.fadeMs ?? (link === 'first' ? 1200 : 1200) };
 }
 
 export interface EncounterChainOptions {
@@ -173,6 +175,8 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
   let links = startLink - 1;
   let checkpoint: ChainCheckpoint | null = null;
   let outcome: BattleOutcome = { kind: 'aborted' };
+  // Each won link's result before the last, for an FFX-2 chain's summed spoils (PR-0138).
+  const won: BattleResult[] = [];
 
   // The first formation's own cue, resolved the same way a chained link's is.
   // Until this existed the pre-scene's boss theme was crossfaded straight back
@@ -210,6 +214,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
     }
 
     // Next link: same party, carried state, no results screen in between.
+    won.push(outcome.result);
     const state = engine.state();
     setup = setupForNextLink(setup, nextGroup, state, opts.seed + links);
     group = nextGroup;
@@ -250,5 +255,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
     if (cue.track) void opts.audio?.playMusic(cue.track, { fade: fadeMsToSec(cue.fadeMs, 1200) });
   }
 
+  // FFX-2 only: the results show every battle's spoils, not the last link's (`BattleChainSpoils.ts`).
+  if (outcome.kind === 'victory') outcome = { kind: 'victory', result: chainSpoils(chapter.game, won, outcome.result) };
   return { outcome, links: Math.max(1, links), checkpoint };
 }

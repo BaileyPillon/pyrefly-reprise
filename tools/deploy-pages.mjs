@@ -70,6 +70,7 @@ import { fileURLToPath } from 'node:url';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
 import { applyStoredReports } from './critic-clear.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
+import { findUnshipped } from './dist-filter.mjs';
 import {
   archiveMarker,
   buildPendingMarker,
@@ -396,6 +397,11 @@ async function main() {
   } else {
     log('preflight: skipping tsc/vitest (--skip-tests)');
   }
+  // CHK-001 step 1: the shipped audio is healthy and matches its manifest (PR-0100). Never skipped.
+  log('preflight: node tools/audio/qa.mjs --strict --quiet');
+  if (run(process.execPath, [join(ROOT, 'tools', 'audio', 'qa.mjs'), '--strict', '--quiet']).status !== 0) {
+    fail('audio QA failed (node tools/audio/qa.mjs --strict) — run it without --quiet to see why');
+  }
 
   // Only paths that can change what `vite build` emits stop the release. The
   // art fleet writes docs/screenshots, docs/handoff and tools/gen/sheet-*.json
@@ -460,6 +466,9 @@ async function main() {
     fail('vite build failed — see output above');
   }
 
+  // PR-0100 / PR-0173: candidates, raw renders and numbered takes never ship (vite.config.ts prunes them).
+  const unshipped = findUnshipped(DIST);
+  if (unshipped.length) fail(`build still carries ${unshipped.length} unshipped file(s), e.g. ${unshipped.slice(0, 3).join(', ')}`);
   const indexPath = join(DIST, 'index.html');
   const artCharactersDir = join(DIST, 'art', 'characters');
   if (!existsSync(indexPath)) fail(`build did not produce ${indexPath}`);

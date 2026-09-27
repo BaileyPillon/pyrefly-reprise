@@ -49,7 +49,13 @@ export const SUPERCOLLIDER_TARGETS_BACK_OF_FORMATION = true;
 const NO_LOVE_LOST_PHASE = 3;
 const NO_LOVE_LOST_PERIOD = 8;
 
-/** "After her [25 + times No Love Lost was used] turn -> Not-So-Mighty Guard." §5.3 */
+/**
+ * "After her [25 + times No Love Lost was used] turn -> Not-So-Mighty Guard." §5.3, §19.2.
+ * Two readings (PR-0106): OFF, the **AUTHORED** one this script has always used, every turn past
+ * 25 + uses (no source says "every turn", §19.2); ON (`constants.ts` LEBLANC_SCRIPT_SINIROTHX,
+ * `flags.leblancScriptSinirothX`), SinirothX's, once, **on** turn 25 + uses, as the No Love Lost line
+ * is read (GameFAQs' reading, our estimate).
+ */
 const FAILSAFE_TURN = 25;
 
 /** Leblanc reaches for Osmose only at or below this MP. She starts on 460. §4.4 */
@@ -176,18 +182,21 @@ export const leblancScript: AiScript = {
       return { kind: 'ability', id: 'x2-nll-1', targets: [] };
     }
 
-    // Override 2 — the failsafe.
-    if (turn > FAILSAFE_TURN + uses) {
+    // Override 2 — the failsafe (PR-0106: the AUTHORED every-turn reading OFF, SinirothX's once ON).
+    const sinirothX = ctx.flags['leblancScriptSinirothX'] === true;
+    if (sinirothX ? turn === FAILSAFE_TURN + uses && !mem(ctx.self, 'failsafeFired') : turn > FAILSAFE_TURN + uses) {
+      if (sinirothX) setMem(ctx.self, 'failsafeFired', 1);
       return { kind: 'ability', id: 'x2-leblanc-not-so-mighty-guard', targets: [] };
     }
 
     // The basic loop: turn 1 once, then turns 2..6 repeating.
     const step = turn === 1 ? 1 : ((turn - 2) % 5) + 2;
 
-    if (step === 1 || step === 5) {
+    // Turn 5: the wiki's "repeat turn 1" (OFF, §5.3) or SinirothX's Normal Attack (ON, §19.3).
+    if (step === 1 || (step === 5 && !sinirothX)) {
       return { kind: 'ability', id: 'x2-leblanc-not-so-mighty-guard', targets: [] };
     }
-    if (step === 2) {
+    if (step === 2 || step === 5) {
       return { kind: 'ability', id: 'x2-leblanc-fan-slap', targets: randomPartyTarget(ctx) };
     }
     if (step === 3) {

@@ -240,7 +240,8 @@ describe('Chapter XI: RESTART ENCOUNTER past a Save Sphere restarts that link (F
 });
 
 describe('every other chapter restarts exactly as before (both games)', () => {
-  const others = [...CHAPTERS, ...UNLISTED_CHAPTERS].filter((c) => c.id !== ROAD.id);
+  // An experiment (the hidden FF7 fight) has its own flow, `BattleScreenExperiment.ts`, with no prep and no restart memory.
+  const others = [...CHAPTERS, ...UNLISTED_CHAPTERS].filter((c) => c.id !== ROAD.id && !c.experimental);
   for (const chapter of others) {
     it(`${chapter.number}. ${chapter.id}: RESTART is a fresh run from the first formation, on the restart's options`, async () => {
       endings = [{ outcome: 'aborted', elapsedMs: 5_000 }, { outcome: 'victory', elapsedMs: 6_000 }];

@@ -9,16 +9,20 @@
  * ## The line, and where each rule comes from
  *
  * It is the **intended** line of `tests/unit/chapters/yojimbo-bench.test.ts`,
- * which wins 200 of 200 seeds on the real engine and the Cavern build
- * (`docs/plans/chapter-yojimbo-review.md`, "Measured"), written as a tactic:
+ * written as a tactic. On the shipped party Kimahri arrives **without** Doom
+ * (`CAVERN_DOOM_PREP = 'not-learned'`, P-1, Bailey 2026-09-26), so step 3
+ * never fires and the line is the race: 161 of 200 seeds on the first try
+ * (`docs/plans/yojimbo-faithfulness-2026-09-26.md` §3.2). On the
+ * `'preloaded'` party it is the Doom route, 200 of 200:
  *
  * 1. **Revive** a downed member (`./common.ts#revive`).
  * 2. **Yuna heals** the lowest member under 45 % (Curaga when two are that
  *    low, Cura for one). A heal names no enemy, so it adds nothing to his
  *    gauge [§4.1].
- * 3. **Kimahri Dooms him** while Doom is not on him: strategy 1, count 5
- *    [§2.1, §2.3, §5.3, verified: 4 sources]. Kimahri arrives with Doom and a
- *    full gauge (B8, D-056).
+ * 3. **Kimahri Dooms him** while Doom is not on him, **only if Doom is a row
+ *    on his menu**: strategy 1, count 5 [§2.1, §2.3, §5.3, verified: 4
+ *    sources]. The tactic reads the rows the engine offers, so with no Doom it
+ *    can never suggest one.
  * 4. **Lulu casts Fira**: strategy 4, Magic Defense 0 against Defense 80
  *    [§2.1, §3.3]. One cast is one targeting, +3 [§4.1].
  * 5. **Yuna summons an aeon** once his gauge reads 80 or more, so Zanmato hits

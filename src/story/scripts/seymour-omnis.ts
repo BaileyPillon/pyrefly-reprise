@@ -103,14 +103,14 @@ const T = OMNIS_STORY_TRIGGERS;
 const LESSON = 'The discs. Every one of them faces him with fire.';
 
 const MID_SCRIPTS: Record<string, StoryScript> = {
-  [T.lesson]: callout(say('auron', LESSON)),
+  [T.lesson]: callout(say('auron', LESSON, { fallback: [{ who: 'tidus' }, { who: 'yuna' }] })),
   [T.lessonLulu]: callout(say('lulu', LESSON)),
   [T.turnedWakka]: callout(say('wakka', "It moved! Hit 'em, and they turn, ya?")),
-  [T.turned]: callout(say('tidus', "It moved! Hit 'em, and they turn!")),
-  [T.glow]: callout(say('auron', "He's gathering himself. Brace.")),
+  [T.turned]: callout(say('tidus', "It moved! Hit 'em, and they turn!", { fallback: [{ who: 'yuna', text: 'It moved! Hit them, and they turn!' }] })),
+  [T.glow]: callout(say('auron', "He's gathering himself. Brace.", { fallback: [{ who: 'tidus', text: "He's gathering himself! Brace!" }] })),
   [T.dispel]: callout(say(OMNIS_ACTOR, 'Your little blessings. Let me take them from you.')),
   [T.ultima]: callout(say(OMNIS_ACTOR, 'Rest now. All of you, together.')),
-  [T.reset]: callout(say('tidus', 'They all changed colour. Start again!')),
+  [T.reset]: callout(say('tidus', 'They all changed colour. Start again!', { fallback: [{ who: 'yuna' }] })),
   [T.low]: callout(say(OMNIS_ACTOR, 'Pain is a gift, Lady Yuna. I give it back to you.')),
 };
 

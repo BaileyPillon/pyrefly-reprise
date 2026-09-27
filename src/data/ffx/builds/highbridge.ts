@@ -89,6 +89,8 @@
 import type { FFXMemberBuild, FFXPartyBuild, StatBlock } from '../../../battle/common/types.ts';
 import { fahrenheitBuild } from './fahrenheit.ts';
 import { gagazetBuild } from './gagazet.ts';
+import { GAGAZET_SHIPPED_AEONS } from './gagazet-kit.ts';
+import { GAGAZET_AEON_ARM, armHighbridgeAeons } from './gagazet-aeon-arms.ts';
 import { macalaniaBuild } from './macalania.ts';
 
 /** The *Fahrenheit*'s orders to Cid [ffx-evrae-airship §4.2]: Chapter VIII only. */
@@ -160,7 +162,8 @@ function pinRikkuMp(m: FFXMemberBuild): FFXMemberBuild {
 
 function aeons(): FFXPartyBuild['aeons'] {
   const early = macalaniaBuild.aeons.map((a) => structuredClone(a));
-  const bahamut = gagazetBuild.aeons.find((a) => a.id === 'bahamut');
+  // PR-0179: the shipped Gagazet row (D-186); arm a replaces it below (`armHighbridgeAeons`).
+  const bahamut = GAGAZET_SHIPPED_AEONS.find((a) => a.id === 'bahamut');
   if (!bahamut) throw new Error('highbridge: no Bahamut row in the Gagazet preset');
   return [...early, { ...structuredClone(bahamut), overdriveGauge: BAHAMUT_GAUGE }];
 }
@@ -173,7 +176,7 @@ export const highbridgeBuild: FFXPartyBuild = {
   // B2 = a: Tidus, Yuna, Kimahri (`forced_party "tyk"`, N-11).
   activeSlots: ['tidus', 'yuna', 'kimahri'],
   reserve: ['auron', 'wakka', 'lulu', 'rikku'],
-  aeons: aeons(),
+  aeons: armHighbridgeAeons(aeons(), GAGAZET_AEON_ARM), // PR-0179, OFF
   // B5 = a: Chapter VIII's inventory and gil, carried forward.
   inventory: fahrenheitBuild.inventory.map((e) => ({ ...e })),
   gil: fahrenheitBuild.gil,

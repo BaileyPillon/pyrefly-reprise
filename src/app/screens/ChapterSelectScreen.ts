@@ -1,7 +1,7 @@
 import './frontend/frontend.css';
 import './frontend/chapter-select-c.css';
 import { Screen } from '../Screen.ts';
-import type { InputSnapshot } from '../Input.ts';
+import { BUTTONS, type InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { ChapterId } from '../../data/encounters.ts';
 import { ControlsHint } from '../../ui/common/ControlsHint.ts';
@@ -16,6 +16,12 @@ import {
 } from './frontend/chapterGrid.ts';
 import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCards.ts';
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
+import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
+import { SecretDoor } from './frontend/secretDoor.ts';
+import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
+
+/** Where the secret door leads: the hidden FF7 experiment (`data/chapter-ff7-guard-scorpion.ts`). */
+const SECRET_CHAPTER: ChapterId = 'ff7-guard-scorpion';
 
 export interface ChapterSelectScreenOptions {
   /** Called when the player confirms a card. The presenter wires the actual transition. */
@@ -96,6 +102,9 @@ export class ChapterSelectScreen extends Screen {
   private tiles: ChapterTile[] = [];
   private selected = 0;
   private confirming = false;
+  /** The secret door (Bailey's approved option A); fed by keys, taps and pad buttons, shows nothing. */
+  private door = new SecretDoor();
+  private eyebrow: HTMLElement | null = null;
 
   constructor(private readonly opts: ChapterSelectScreenOptions = {}) {
     super();
@@ -107,9 +116,8 @@ export class ChapterSelectScreen extends Screen {
   override enter(): void {
     installInkGoldStyles();
     this.tiles = buildChapterTiles(this.app.save);
-    const wanted = this.opts.initialIndex ?? 0;
-    this.selected = this.tiles[wanted]?.playable ? wanted : this.tiles.findIndex((t) => t.playable);
-    if (this.selected < 0) this.selected = 0;
+    // PR-0109: back on the chapter the player last chose (prep Esc, results CONFIRM, reload).
+    this.selected = initialBoardIndex(this.tiles, this.opts.initialIndex);
 
     this.root.className = 'screen fe fe-cselect ig';
     // `__scroll` is the page on a phone (one scrolling column); on a desktop
@@ -126,6 +134,7 @@ export class ChapterSelectScreen extends Screen {
     `;
     this.hint = new ControlsHint({ root: this.root, items: isTouchScreen() ? TOUCH_HINTS : HINTS });
     this.hint.mount();
+    this.armDoor();
     // The list is drawn once: after this only its selected mark moves.
     const rail = this.root.querySelector('.fe-rail');
     if (rail instanceof HTMLElement) {
@@ -136,6 +145,7 @@ export class ChapterSelectScreen extends Screen {
   }
 
   override exit(): void {
+    this.disarmDoor();
     this.hint?.unmount();
     this.root.innerHTML = '';
     this.settle(null);
@@ -143,6 +153,9 @@ export class ChapterSelectScreen extends Screen {
 
   override handleInput(input: InputSnapshot): void {
     this.hint?.handleInput(input);
+    if (this.confirming) return;
+    // The door reads edges without consuming them, so the board below sees every press as before.
+    for (const button of BUTTONS) if (input.justPressed(button) && this.door.feedButton(button, now()) === 'open') this.openDoor();
     if (this.confirming) return;
 
     if (input.consume('left')) this.move(-1);
@@ -246,10 +259,58 @@ export class ChapterSelectScreen extends Screen {
     this.confirming = true;
     audio.playSfx('confirm');
     const id = tile.id as ChapterId;
+    rememberBoardChapter(id);
     (this.opts.onSelect ?? defaultOnSelect)(id);
     this.settle(id);
     // A standalone (non-flow) registration keeps living after confirm — the
     // flow instead replaces this screen, which resolves `confirming` moot.
+    window.setTimeout(() => {
+      this.confirming = false;
+    }, 250);
+  }
+
+  // ---------------------------------------------------------- secret door
+
+  /**
+   * Listen for the door: letters on `window` (after `Input`'s capture listener,
+   * so an overlay that claims the keyboard also shuts the door) and taps on the
+   * "Chapter select" label, which `chapter-select-c.css` makes tappable with no
+   * pointer, hover, press state or tap highlight. Nothing visible changes.
+   */
+  private armDoor(): void {
+    this.door = new SecretDoor();
+    window.addEventListener('keydown', this.onDoorKey);
+    this.eyebrow = this.root.querySelector<HTMLElement>('.fe-cselect__eyebrow');
+    this.eyebrow?.addEventListener('click', this.onDoorTap);
+  }
+
+  private disarmDoor(): void {
+    window.removeEventListener('keydown', this.onDoorKey);
+    this.eyebrow?.removeEventListener('click', this.onDoorTap);
+    this.eyebrow = null;
+  }
+
+  private readonly onDoorKey = (e: KeyboardEvent): void => {
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || this.confirming) return;
+    if (this.door.feedKey(e.key, now()) === 'open') this.openDoor();
+  };
+
+  private readonly onDoorTap = (): void => {
+    if (!this.confirming && this.door.feedTap(now()) === 'open') this.openDoor();
+  };
+
+  /**
+   * Through the door. With `FF7_EXPERIMENT_READY` off (the default until the FF7
+   * engine and HUD exist) nothing happens at all. With it on, the board settles
+   * on the hidden chapter **without** `rememberBoardChapter`, so the board never
+   * reopens on an id it has no card for, and with no sound or sign (the success
+   * flash is Bailey's pick, plan §2.2).
+   */
+  private openDoor(): void {
+    if (this.confirming || !ff7ExperimentReady()) return;
+    this.confirming = true;
+    (this.opts.onSelect ?? defaultOnSelect)(SECRET_CHAPTER);
+    this.settle(SECRET_CHAPTER);
     window.setTimeout(() => {
       this.confirming = false;
     }, 250);
@@ -306,6 +367,10 @@ export class ChapterSelectScreen extends Screen {
       aside.innerHTML = asideHtml(tile, best);
     }
   }
+}
+
+function now(): number {
+  return typeof performance !== 'undefined' ? performance.now() : Date.now();
 }
 
 function defaultOnSelect(id: ChapterId): void {

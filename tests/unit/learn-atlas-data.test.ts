@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildChapterSpecimen } from '../../learn/atlas/data.ts';
 import { accentForGame } from '../../learn/shared/model.ts';
 import { CHAPTER_IDS } from '../../src/data/encounters.ts';
-import type { ChapterId } from '../../src/data/encounters.ts';
+import type { ListedChapterId as ChapterId } from '../../src/data/encounters.ts';
 import type { EnemyDef } from '../../src/battle/common/types.ts';
 
 import {

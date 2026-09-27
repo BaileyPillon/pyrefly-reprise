@@ -15,7 +15,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { BattleEngine, BattleEvent, Command, Decision } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
-import { yojimboCavernBuild } from '../../src/data/ffx/builds/yojimbo-cavern.ts';
+import { buildCavernParty } from '../../src/data/ffx/builds/yojimbo-cavern.ts';
 import { openKimahriRage } from '../../src/ui/ffx/minigames/index.ts';
 import { incomingText } from '../../src/engine/tactics/advisor-eval.ts';
 
@@ -29,7 +29,7 @@ function newEngine(autoResolveMinigames: boolean): BattleEngine {
   const group = ENEMY_GROUPS_BY_ID['yojimbo-cavern'];
   if (!group) throw new Error('yojimbo-cavern missing');
   const engine = createFFXEngine({ content, autoResolveMinigames });
-  engine.init({ game: 'ffx', party: yojimboCavernBuild, enemies: group, triggers: [], seed: 14, condition: 'normal', canEscape: false });
+  engine.init({ game: 'ffx', party: buildCavernParty('preloaded') /* Ronso Rage with Doom on it, not the shipped prep (P-1) */, enemies: group, triggers: [], seed: 14, condition: 'normal', canEscape: false });
   const st = engine.state();
   for (const id of [...st.activeIds, ...st.reserveIds]) {
     const c = st.combatants[id];
@@ -79,12 +79,25 @@ describe('Kimahri — Ronso Rage takes the Rages the way the engine sends them',
     expect((params['rages'] as unknown[]).every((r) => typeof r === 'string')).toBe(true);
     expect(params['rages']).toContain('doom');
 
+    // PR-0182: the command menu's OVERDRIVE list already chose the Rage, so
+    // there is one chooser, not two: the request resolves to that choice with
+    // no second list and no extra confirm.
     const root = document.createElement('div');
     document.body.appendChild(root);
+    expect(params['abilityId']).toBe('doom');
     const pending = openKimahriRage(root, params);
+    expect(root.querySelector('.ig-minigame'), 'no second chooser').toBeNull();
+    await expect(pending).resolves.toMatchObject({ kind: 'kimahri-rage', rage: { rageId: 'doom' } });
+  });
+
+  it('still opens the list, named and on the first Rage, when the request names no Rage it knows', async () => {
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    const pending = openKimahriRage(root, { rages: ['jump', 'doom'] });
     const rows = [...root.querySelectorAll('.ffx-mg-list__row')].map((r) => r.textContent);
     expect(rows).toContain('Doom');
-    expect(root.querySelector('.ffx-mg-list__row--selected')?.textContent).toBe('Doom');
+    expect(root.querySelector('.ffx-mg-list__row--selected')?.textContent).toBe('Jump');
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
     await expect(pending).resolves.toMatchObject({ kind: 'kimahri-rage', rage: { rageId: 'doom' } });
   });

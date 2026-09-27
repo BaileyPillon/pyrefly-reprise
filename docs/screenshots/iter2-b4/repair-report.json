@@ -1,0 +1,349 @@
+{
+  "measure": "the checker script .b4chk-linecard-tmp.mjs, every visible frame (opacity > 0.3), card = .dbox__win + .dbox__portrait boxes, party top 65% and the speaking boss quad",
+  "build": "iter2-b4 at 22fefb80, vite build --outDir dist-rep, vite preview :6140, headless GPU Chromium",
+  "normal": [
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "390x844",
+      "speed": "normal",
+      "outcome": "victory",
+      "lines": 41,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 683,
+      "minVisibleMs": 1084,
+      "places": {
+        "band": 6,
+        "top": 35
+      }
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "2000x1012",
+      "speed": "normal",
+      "outcome": "victory",
+      "lines": 41,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 683,
+      "minVisibleMs": 1084,
+      "places": {
+        "top-left": 34,
+        "bottom-right": 3,
+        "top-right": 4
+      }
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "1600x900",
+      "speed": "normal",
+      "outcome": "victory",
+      "lines": 41,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 683,
+      "minVisibleMs": 1083,
+      "places": {
+        "top-left": 39,
+        "bottom-right": 2
+      }
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "390x844",
+      "speed": "normal",
+      "outcome": "victory",
+      "lines": 45,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 8289,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 684,
+      "minVisibleMs": 916,
+      "places": {
+        "top": 13,
+        "upper": 16,
+        "lower": 16
+      }
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "2000x1012",
+      "speed": "normal",
+      "outcome": "victory",
+      "lines": 45,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 666,
+      "minVisibleMs": 918,
+      "places": {
+        "top-left": 39,
+        "bottom-right": 6
+      }
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "1600x900",
+      "speed": "normal",
+      "outcome": "victory",
+      "lines": 45,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 649,
+      "minVisibleMs": 916,
+      "places": {
+        "top-left": 39,
+        "bottom-right": 6
+      }
+    }
+  ],
+  "fast": [
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "1600x900",
+      "speed": "fast",
+      "outcome": "victory",
+      "lines": 41,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 684,
+      "minVisibleMs": 1070,
+      "places": {
+        "top-left": 41
+      }
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "2000x1012",
+      "speed": "fast",
+      "outcome": "victory",
+      "lines": 41,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 667,
+      "minVisibleMs": 1082,
+      "places": {
+        "top-left": 23,
+        "top-right": 15,
+        "bottom-right": 3
+      }
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "390x844",
+      "speed": "fast",
+      "outcome": "victory",
+      "lines": 41,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 682,
+      "minVisibleMs": 1085,
+      "places": {
+        "band": 6,
+        "top": 35
+      }
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "390x844",
+      "speed": "fast",
+      "outcome": "victory",
+      "lines": 45,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 8310,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 351,
+      "minVisibleMs": 901,
+      "places": {
+        "top": 13,
+        "upper": 16,
+        "lower": 16
+      }
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "1600x900",
+      "speed": "fast",
+      "outcome": "victory",
+      "lines": 45,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 667,
+      "minVisibleMs": 901,
+      "places": {
+        "top-left": 26,
+        "bottom-right": 19
+      }
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "2000x1012",
+      "speed": "fast",
+      "outcome": "victory",
+      "lines": 45,
+      "maxTorsoPx2": 0,
+      "maxFullPx2": 0,
+      "maxSpeakerPx2": 0,
+      "movesWhileVisible": 0,
+      "maxHiddenMs": 453,
+      "minVisibleMs": 918,
+      "places": {
+        "top-left": 25,
+        "bottom-right": 20
+      }
+    }
+  ],
+  "realKeys": {
+    "natus": {
+      "presses": 31,
+      "enterWhileHeld": 3,
+      "lines": [
+        {
+          "name": "Tidus",
+          "text": "Stop talking. You never say anything.",
+          "place0": "top-left",
+          "places": [
+            "top-left"
+          ],
+          "hiddenMs": 482,
+          "visibleMs": 2001,
+          "visFrames": 120,
+          "torso": 0,
+          "full": 0,
+          "speaker": 0,
+          "fielded": true
+        },
+        {
+          "name": "Seymour",
+          "text": "Then listen, son of Jecht. It is almost over.",
+          "place0": "top-left",
+          "places": [
+            "top-left"
+          ],
+          "hiddenMs": 0,
+          "visibleMs": 2491,
+          "visFrames": 149,
+          "torso": 0,
+          "full": 0,
+          "speaker": 0,
+          "fielded": null
+        },
+        {
+          "name": "Auron",
+          "text": "Kinoc was my friend once. Fool that he was.",
+          "place0": "top-left",
+          "places": [
+            "top-left"
+          ],
+          "hiddenMs": 517,
+          "visibleMs": 2266,
+          "visFrames": 136,
+          "torso": 0,
+          "full": 0,
+          "speaker": 0,
+          "fielded": true
+        },
+        {
+          "name": "Seymour",
+          "text": "He thanked me, at the end. Ask him yourself.",
+          "place0": "top-left",
+          "places": [
+            "top-left"
+          ],
+          "hiddenMs": 0,
+          "visibleMs": 2456,
+          "visFrames": 147,
+          "torso": 0,
+          "full": 0,
+          "speaker": 0,
+          "fielded": null
+        },
+        {
+          "name": "Yuna",
+          "text": "You belong on the Farplane. I'll send you there.",
+          "place0": "top-left",
+          "places": [
+            "top-left"
+          ],
+          "hiddenMs": 500,
+          "visibleMs": 2383,
+          "visFrames": 143,
+          "torso": 0,
+          "full": 0,
+          "speaker": 0,
+          "fielded": true
+        },
+        {
+          "name": "Seymour",
+          "text": "Then you will have to catch me, Lady Yuna.",
+          "place0": "top-left",
+          "places": [
+            "top-left"
+          ],
+          "hiddenMs": 0,
+          "visibleMs": 2406,
+          "visFrames": 144,
+          "torso": 0,
+          "full": 0,
+          "speaker": 0,
+          "fielded": null
+        }
+      ]
+    },
+    "braskasFinalAeon": {
+      "presses": 160,
+      "enterWhileHeld": 1,
+      "lines": [
+        {
+          "name": "Tidus",
+          "text": "Hey! You still in there?",
+          "place0": "top-left",
+          "places": [
+            "top-left"
+          ],
+          "hiddenMs": 497,
+          "visibleMs": 3134,
+          "visFrames": 188,
+          "torso": 0,
+          "full": 0,
+          "speaker": 0,
+          "fielded": true
+        },
+        {
+          "name": "Jecht",
+          "text": "...",
+          "place0": "top-left",
+          "places": [
+            "top-left"
+          ],
+          "hiddenMs": 0,
+          "visibleMs": 1091,
+          "visFrames": 65,
+          "torso": 0,
+          "full": 0,
+          "speaker": 0,
+          "fielded": null
+        }
+      ]
+    }
+  }
+}

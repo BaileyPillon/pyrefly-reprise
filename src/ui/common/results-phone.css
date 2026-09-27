@@ -1,0 +1,399 @@
+/*
+ * The results on an upright phone: PR-0001 option B, "full-bleed painting,
+ * ink sheet" (Bailey, 2026-09-26). Target: docs/concepts/phone-2026-09-26/
+ * pr0001-victory-B.jpg and pr0001-defeat-B.jpg (results-mock.html?v=B at
+ * 390x844). `resultsPhone.ts` puts `.rres--phone` on the page only while the
+ * window matches the phone battle HUD's upright-phone query, so every rule here
+ * is scoped under it and no desktop or landscape size can match one.
+ *
+ * Plain CSS px: the phone stage is `createFullBleedStage` (no 640x360 grid, no
+ * scale). Floors: no text under 14 px, buttons 58 px tall.
+ *
+ * Both games. The accent is `--rresp-acc`: the game's own (`--ig-accent`, gold
+ * or FFX-2 pink) on a win, drained on Chapter IV's silent page, and paper on a
+ * defeat (no gold, no pink).
+ */
+
+.rres--phone {
+  --rresp-acc: var(--ig-accent, #e3b94a);
+  --rresp-paper: #f4f1e8;
+  --rresp-ink: #0b0a12;
+  --rresp-dim: #b9b3c6;
+  /* The chips' face and name: 34 / 19 px on a 390 phone, a touch smaller on a
+     narrower one, so "Kimahri" still fits a third of a 360 px screen. */
+  --rresp-face: clamp(30px, 8.72vw, 34px);
+  --rresp-name: clamp(17px, 4.87vw, 19px);
+  background: var(--rresp-ink);
+}
+.rres--phone.rres--silent {
+  --rresp-acc: #b9b2c6;
+}
+.rres--phone.rres--defeat {
+  --rresp-acc: #f4f1e8;
+  --rresp-dim: #9d97ab;
+  background: var(--rresp-ink);
+}
+.rres--phone .rres__stage {
+  color: var(--rresp-paper);
+  overflow: hidden;
+}
+
+/* The grain over everything, as the mock lays it. */
+.rres--phone .rres__stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.13;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ------------------------------------------------------------ the painting */
+
+.rres--phone .rresp__bleed {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+/* A win's portrait is placed by `phoneHeroStyle` (inline box). */
+.rres--phone.rres--silent .rresp__hero {
+  filter: grayscale(0.7) brightness(0.62);
+}
+.rres--phone .rresp__hero--fallen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  filter: grayscale(1) brightness(0.45);
+}
+.rres--phone .rresp__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(11, 10, 18, 0) 30%,
+    rgba(11, 10, 18, 0.55) 50%,
+    rgba(11, 10, 18, 0.9) 62%
+  );
+}
+
+/* ----------------------------------------------------------------- the page */
+
+/* One column standing on the bottom edge: whatever the phone's height, the
+   dock stays at the thumb and the title rides on top of the tallies. */
+.rres--phone .rresp__page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px 22px 16px;
+}
+.rres--phone .rresp__top {
+  flex: 1 1 auto;
+  min-height: 0;
+  container-type: size;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.rres--phone .rresp__clock {
+  flex: none;
+  padding: 6px 12px;
+  background: var(--rresp-ink);
+  border: 1px solid rgba(244, 241, 232, 0.35);
+  color: var(--rresp-paper);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+}
+/* The chapter caption down the right edge; a long place name wraps into a
+   second column rather than running under the title. */
+.rres--phone .rresp__caption {
+  margin: 54px -10px 0 0;
+  max-height: calc(100% - 54px);
+  overflow: hidden;
+  writing-mode: vertical-rl;
+  color: var(--rresp-paper);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+/* A short phone with a long page (a four-member FFX win on 375x667) leaves the
+   caption no room for even one readable column: it steps aside rather than
+   breaking into a column per word. */
+@container (max-height: 200px) {
+  .rres--phone .rresp__caption {
+    display: none;
+  }
+}
+
+/* The three gaps and the title give way on a shorter phone (42 / 33 / 84 px
+   at 844 tall, the target's); nothing else changes size. */
+.rres--phone .rresp__head {
+  flex: none;
+  margin: 0 0 clamp(14px, 5vh, 42px) 4px;
+}
+/* The tags hang at the foot of the title, as the target sets them. */
+.rres--phone .rresp__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 10px;
+}
+.rres--phone .rresp__title {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(60px, 10vh, 84px);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--rresp-paper);
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+}
+.rres--phone.rres--silent .rresp__title {
+  font-size: 64px;
+}
+.rres--phone .rresp__tag {
+  padding: 4px 10px;
+  background: var(--rresp-ink);
+  color: var(--rresp-acc);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+  transform: skewX(var(--ig-skew, -12deg));
+  margin-bottom: 3px;
+}
+.rres--phone .rresp__rule {
+  margin-top: 6px;
+  width: 190px;
+  height: 5px;
+  background: var(--rresp-acc);
+}
+.rres--phone .rresp__quip {
+  margin-top: 10px;
+  max-width: 320px;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.25;
+  color: var(--rresp-paper);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* -------------------------------------------------------------- the tallies */
+
+.rres--phone .rresp__tallies {
+  flex: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-left: 2px;
+}
+.rres--phone .rresp__tally {
+  min-width: 0;
+  padding: 7px 10px 6px;
+  background: rgba(11, 10, 18, 0.84);
+  border-left: 4px solid var(--rresp-acc);
+}
+.rres--phone .rresp__tally--wide {
+  grid-column: 1 / -1;
+}
+.rres--phone .rresp__k {
+  color: var(--rresp-acc);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+.rres--phone .rresp__v {
+  font-family: var(--font-numbers, 'Rajdhani', sans-serif);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--rresp-paper);
+}
+.rres--phone .rresp__v--items {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.rres--phone .rresp__d {
+  color: var(--rresp-dim);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------------------------------------------------------------- the party */
+
+.rres--phone .rresp__chips {
+  flex: none;
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0 2px;
+}
+.rres--phone .rresp__chips--n1 {
+  grid-template-columns: 1fr;
+}
+.rres--phone .rresp__chips--n2,
+.rres--phone .rresp__chips--n4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.rres--phone .rresp__chips--n3,
+.rres--phone .rresp__chips--many {
+  grid-template-columns: repeat(3, 1fr);
+}
+.rres--phone .rresp__chip-member {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: var(--rresp-face) 1fr;
+  gap: 4px 6px;
+  align-items: center;
+  padding: 6px;
+  background: rgba(11, 10, 18, 0.62);
+}
+.rres--phone .rresp__face {
+  position: relative;
+  width: var(--rresp-face);
+  height: var(--rresp-face);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--rresp-ink);
+  border: 2px solid var(--rresp-paper);
+  color: var(--rresp-paper);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+}
+.rres--phone .rresp__face span {
+  position: absolute;
+}
+.rres--phone .rresp__face img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 12%;
+  display: block;
+}
+.rres--phone.rres--defeat .rresp__face img {
+  filter: grayscale(1) brightness(0.75);
+}
+.rres--phone .rresp__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: var(--rresp-name);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--rresp-paper);
+}
+/* The gain, and a level gained beside it where the chip is wide enough. */
+.rres--phone .rresp__gains {
+  grid-column: 1 / 3;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 10px;
+}
+.rres--phone .rresp__gain {
+  white-space: nowrap;
+  overflow: hidden;
+  font-family: var(--font-numbers, 'Rajdhani', sans-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--rresp-paper);
+}
+.rres--phone .rresp__gain small {
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--rresp-acc);
+}
+.rres--phone .rresp__up,
+.rres--phone .rresp__lv {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--rresp-dim);
+}
+.rres--phone .rresp__lv {
+  grid-column: 1 / 3;
+}
+.rres--phone .rresp__up {
+  color: var(--rresp-acc);
+  letter-spacing: 0.12em;
+}
+
+/* ----------------------------------------------------------------- the dock */
+
+.rres--phone .rresp__dock {
+  flex: none;
+  display: flex;
+  gap: 14px;
+  margin: clamp(12px, 3.9vh, 33px) 4px 0 6px;
+}
+.rres--phone .rresp__btn {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  transform: skewX(var(--ig-skew, -12deg));
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.rres--phone .rresp__btn > span {
+  transform: skewX(var(--ig-skew-inverse, 12deg));
+  white-space: nowrap;
+}
+.rres--phone .rresp__btn + .rresp__btn {
+  font-size: 16px;
+  letter-spacing: 0.1em;
+}
+.rres--phone .rresp__btn--lit {
+  background: var(--rresp-acc);
+  color: var(--rresp-ink);
+}
+.rres--phone .rresp__btn--ghost {
+  background: transparent;
+  color: var(--rresp-paper);
+  border: 2px solid rgba(244, 241, 232, 0.55);
+}

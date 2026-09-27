@@ -1,0 +1,301 @@
+{
+ "base": "http://127.0.0.1:6050/",
+ "at": "2026-09-26T22:59:24.458Z",
+ "browser": "gpu",
+ "frames-ffx-desk": [
+  {
+   "name": "ffx-desk-fire",
+   "target": "seymour-flux",
+   "t": 0.78,
+   "ok": true,
+   "quads": 176,
+   "quality": "full"
+  },
+  {
+   "name": "ffx-desk-ice",
+   "target": "seymour-flux",
+   "t": 0.95,
+   "ok": true,
+   "quads": 42,
+   "quality": "full"
+  },
+  {
+   "name": "ffx-desk-thunder",
+   "target": "seymour-flux",
+   "t": 0.5,
+   "ok": true,
+   "quads": 109,
+   "quality": "full"
+  },
+  {
+   "name": "ffx-desk-water",
+   "target": "seymour-flux",
+   "t": 0.62,
+   "ok": true,
+   "quads": 273,
+   "quality": "full"
+  },
+  {
+   "name": "ffx-desk-holy",
+   "target": "seymour-flux",
+   "t": 0.72,
+   "ok": true,
+   "quads": 22,
+   "quality": "full"
+  },
+  {
+   "name": "ffx-desk-cure",
+   "target": "tidus",
+   "t": 0.8,
+   "ok": true,
+   "quads": 65,
+   "quality": "full"
+  },
+  {
+   "name": "ffx-desk-hit",
+   "target": "mortiorchis",
+   "t": 0.34,
+   "ok": true,
+   "quads": 38,
+   "quality": "full"
+  },
+  {
+   "name": "ffx-desk-thunder-reduced",
+   "target": "seymour-flux",
+   "t": 0.5,
+   "ok": true,
+   "quads": 109,
+   "quality": "full"
+  },
+  {
+   "name": "ffx-desk-holy-reduced",
+   "target": "seymour-flux",
+   "t": 0.72,
+   "ok": true,
+   "quads": 22,
+   "quality": "full"
+  }
+ ],
+ "frames-ffx-phone": [
+  {
+   "name": "ffx-phone-fire",
+   "target": "seymour-flux",
+   "t": 0.78,
+   "ok": true,
+   "quads": 111,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx-phone-ice",
+   "target": "seymour-flux",
+   "t": 0.95,
+   "ok": true,
+   "quads": 28,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx-phone-thunder",
+   "target": "seymour-flux",
+   "t": 0.5,
+   "ok": true,
+   "quads": 104,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx-phone-water",
+   "target": "seymour-flux",
+   "t": 0.62,
+   "ok": true,
+   "quads": 169,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx-phone-holy",
+   "target": "seymour-flux",
+   "t": 0.72,
+   "ok": true,
+   "quads": 22,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx-phone-cure",
+   "target": "tidus",
+   "t": 0.8,
+   "ok": true,
+   "quads": 42,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx-phone-hit",
+   "target": "mortiorchis",
+   "t": 0.34,
+   "ok": true,
+   "quads": 24,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx-phone-thunder-reduced",
+   "target": "seymour-flux",
+   "t": 0.5,
+   "ok": true,
+   "quads": 104,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx-phone-holy-reduced",
+   "target": "seymour-flux",
+   "t": 0.72,
+   "ok": true,
+   "quads": 22,
+   "quality": "phone"
+  }
+ ],
+ "frames-ffx2-desk": [
+  {
+   "name": "ffx2-desk-fire",
+   "target": "bahamut",
+   "t": 0.78,
+   "ok": true,
+   "quads": 176,
+   "quality": "full"
+  },
+  {
+   "name": "ffx2-desk-ice",
+   "target": "bahamut",
+   "t": 0.95,
+   "ok": true,
+   "quads": 42,
+   "quality": "full"
+  },
+  {
+   "name": "ffx2-desk-thunder",
+   "target": "bahamut",
+   "t": 0.5,
+   "ok": true,
+   "quads": 105,
+   "quality": "full"
+  },
+  {
+   "name": "ffx2-desk-water",
+   "target": "bahamut",
+   "t": 0.62,
+   "ok": true,
+   "quads": 269,
+   "quality": "full"
+  },
+  {
+   "name": "ffx2-desk-holy",
+   "target": "bahamut",
+   "t": 0.66,
+   "ok": true,
+   "quads": 23,
+   "quality": "full"
+  },
+  {
+   "name": "ffx2-desk-cure",
+   "target": "rikku",
+   "t": 0.8,
+   "ok": true,
+   "quads": 61,
+   "quality": "full"
+  },
+  {
+   "name": "ffx2-desk-hit",
+   "target": "bahamut",
+   "t": 0.34,
+   "ok": true,
+   "quads": 38,
+   "quality": "full"
+  },
+  {
+   "name": "ffx2-desk-thunder-reduced",
+   "target": "bahamut",
+   "t": 0.5,
+   "ok": true,
+   "quads": 105,
+   "quality": "full"
+  },
+  {
+   "name": "ffx2-desk-holy-reduced",
+   "target": "bahamut",
+   "t": 0.66,
+   "ok": true,
+   "quads": 23,
+   "quality": "full"
+  }
+ ],
+ "frames-ffx2-phone": [
+  {
+   "name": "ffx2-phone-fire",
+   "target": "bahamut",
+   "t": 0.78,
+   "ok": true,
+   "quads": 111,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx2-phone-ice",
+   "target": "bahamut",
+   "t": 0.95,
+   "ok": true,
+   "quads": 28,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx2-phone-thunder",
+   "target": "bahamut",
+   "t": 0.5,
+   "ok": true,
+   "quads": 100,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx2-phone-water",
+   "target": "bahamut",
+   "t": 0.62,
+   "ok": true,
+   "quads": 165,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx2-phone-holy",
+   "target": "bahamut",
+   "t": 0.66,
+   "ok": true,
+   "quads": 19,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx2-phone-cure",
+   "target": "rikku",
+   "t": 0.8,
+   "ok": true,
+   "quads": 38,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx2-phone-hit",
+   "target": "bahamut",
+   "t": 0.34,
+   "ok": true,
+   "quads": 24,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx2-phone-thunder-reduced",
+   "target": "bahamut",
+   "t": 0.5,
+   "ok": true,
+   "quads": 100,
+   "quality": "phone"
+  },
+  {
+   "name": "ffx2-phone-holy-reduced",
+   "target": "bahamut",
+   "t": 0.66,
+   "ok": true,
+   "quads": 19,
+   "quality": "phone"
+  }
+ ]
+}

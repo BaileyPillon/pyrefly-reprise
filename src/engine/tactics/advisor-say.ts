@@ -95,6 +95,33 @@ const LEAD_KINDS: ReadonlySet<BoardFact['kind']> = new Set([
   'certain-status',
 ]);
 
+/**
+ * How the second clause hangs off the lead, by what it is (critic round 13
+ * PR-0074). A bare ", and" glued a figure or a forecast on as if it were a
+ * second deed: "It finishes Fem-Goon, and 565 damage".
+ *
+ *  - `phase` (the damage the move deals): "with N damage" after a kill, else
+ *    ", and it deals N damage";
+ *  - `incoming` (the pre-action forecast) is context, never a consequence
+ *    (rule 2): "; next, <move> hits for about N";
+ *  - `tempo` that costs places is a price: ", but it costs N places";
+ *  - everything else is a second deed of the move: ", and <clause>".
+ */
+function joined(lead: BoardFact, second: BoardFact): string {
+  switch (second.kind) {
+    case 'phase': {
+      const n = Math.round(second.value).toLocaleString('en-US');
+      return lead.kind === 'kills' ? ` with ${n} damage` : `, and it deals ${n} damage`;
+    }
+    case 'incoming':
+      return `; next, ${second.text}`;
+    case 'tempo':
+      return second.value > 0 ? `, but ${second.text}` : `, and ${second.text}`;
+    default:
+      return `, and ${second.text}`;
+  }
+}
+
 function clears(f: BoardFact): boolean {
   const t = THRESHOLD[f.kind];
   return t !== undefined && Math.abs(f.value) >= t;
@@ -124,7 +151,7 @@ export function sentenceFor(
   const second = usable.find((f) => f !== lead && RANK[f.kind] > RANK[lead.kind]);
 
   let text = lead.text;
-  if (second) text += `, and ${second.text}`;
+  if (second) text += joined(lead, second);
 
   // Rule 3: the word, inside the sentence. Only when the board really does turn
   // on a draw, and only when the lead clause is the draw itself — a confidence

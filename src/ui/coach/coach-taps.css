@@ -1,0 +1,15 @@
+/*
+ * Coach lines stay out of the player's way (both games). Kept out of
+ * `coach.css`, which is at the house 400-line limit; imported by
+ * `coachIntentAvoid.ts`, the module that keeps the line off the intent slab.
+ */
+
+/* A line never eats a tap meant for a target (t1-b5, both games). On a phone
+   the line spans the top band, where the enemies' reticles are; while an
+   enemy is being aimed at, the HUD root carries `--targeting-enemy`
+   (`FFXBattleHud`, `FFX2BattleHud`), and the line lets the tap through to the
+   reticle under it. Mouse and keys are unchanged: this only moves hit-testing. */
+.ffxhud--targeting-enemy ~ .coach-layer .coach-mark,
+.ffx2hud--targeting-enemy ~ .coach-layer .coach-mark {
+  pointer-events: none;
+}

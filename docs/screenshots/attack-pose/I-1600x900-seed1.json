@@ -1,0 +1,63 @@
+{
+ "chapter": "seymour-flux",
+ "numeral": "I",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "seed": "1",
+ "results": [
+  {
+   "key": "seymour-flux:lance-of-atrophy",
+   "enemy": "seymour-flux",
+   "art": "seymour-flux-body",
+   "ability": "Lance of Atrophy",
+   "abilityId": "lance-of-atrophy",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "attack",
+   "slotPose": "attack",
+   "url": "/art/characters/seymour-flux-body/attack.png",
+   "paintsAttack": true,
+   "painted": [
+    "idle",
+    "attack",
+    "cast",
+    "hurt",
+    "ko"
+   ],
+   "seq": 8,
+   "file": "docs/screenshots/attack-pose/I-1600x900-seymour-flux-lance-of-atrophy.jpg"
+  },
+  {
+   "key": "mortiorchis:cross-cleave",
+   "enemy": "mortiorchis",
+   "art": "mortiorchis",
+   "ability": "Cross Cleave",
+   "abilityId": "cross-cleave",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "attack",
+   "slotPose": "attack",
+   "url": "/art/characters/mortiorchis/attack.png",
+   "paintsAttack": true,
+   "painted": [
+    "idle",
+    "attack",
+    "cast",
+    "hurt"
+   ],
+   "seq": 44,
+   "file": "docs/screenshots/attack-pose/I-1600x900-mortiorchis-cross-cleave.jpg"
+  }
+ ],
+ "seen": [
+  "seymour-flux:lance-of-atrophy",
+  "mortiorchis:full-life",
+  "seymour-flux:dispel",
+  "mortiorchis:cross-cleave"
+ ],
+ "errors": []
+}

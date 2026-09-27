@@ -9,7 +9,8 @@
  *   record's ("Three men she knows, made of what they felt") trimmed at the listing to the pause
  *   card's 2-4 word tagline, "Three Men She Knows": an agent's trim (inferred, not Bailey's words),
  *   flagged in D-191. Chapter select's own card keeps the record's subtitle.
- * - `blurb`, `handwritten` and `tip` are our own words over the research's sourced facts (§2 the
+ * - `blurb` is the record's own (FOC19-06: one premise on the card and the prep). `handwritten`
+ *   and `tip` are our own words over the research's sourced facts (§2 the
  *   three shades back to back with no break `[verified: 4 sources]`; §4.2 Baralai's counter and
  *   Drill Shot's three quarters of max HP; §4.3 Lightfall, 5,000 to everyone once near the end).
  *   The tip teaches the Hero Drink against Lightfall: Invincible is the sources' answer (§5, reached
@@ -42,9 +43,12 @@ export const DEN_OF_WOE_META: ChapterMeta = {
   title: FFX2_DEN_OF_WOE_SHIPPED.title,
   subtitle: 'Three Men She Knows',
   location: FFX2_DEN_OF_WOE_SHIPPED.location,
-  blurb:
-    "Paine's old recordings open a sealed cave under the ravine, where her squad once turned on each other. " +
-    'The pyreflies there still hold what the survivors felt, and they rise as Baralai, Gippal and Nooj, one after another.',
+  // FOC19-06: one premise. The card and the prep told it twice in different words; the prep now
+  // reads the record's own blurb, as Chapter XIV's does.
+  blurb: FFX2_DEN_OF_WOE_SHIPPED.blurb,
+  // FOC19-06: the card's BOSS row read "Baralai", the first link only. The three shades rise one
+  // after another with no break (research §2, [verified: 4 sources]).
+  bossLine: 'Baralai, Gippal and Nooj',
   heroArt: 'pause/ch15-ffx2-den-of-woe',
   heroArtFallback: 'portraits/paine.png',
   quote: { text: 'Two years I thought they chose it.', speaker: 'Paine' },

@@ -7,195 +7,19 @@
  * at the *end* of its step (`docs/CONTRACTS.md`, engine agents).
  */
 
-import type {
-  AbilityDef,
-  CombatantId,
-  Rng,
-  StatusId,
-} from '../common/types.ts';
-import type { AbilityRegistry, Emit, Ffx2Unit } from './internal.ts';
-import { breakChain, cannotEvade, chainMultiplier, peekChainCount, registerHit } from './chain.ts';
+import type { AbilityDef, CombatantId } from '../common/types.ts';
+import type { Ffx2Unit } from './internal.ts';
+import { cannotEvade, chainMultiplier, peekChainCount, registerHit } from './chain.ts';
 import { computeDamage, critPercent, hitPercent, randomiserRoll } from './formulas.ts';
 import { resolveSensor, sensorKind } from './sensor.ts';
-import { applyStatus, removeStatus, statusChanceLinear } from './statuses.ts';
 import { hpCostFor, resolveTargets } from './targeting.ts';
-import { AUTO_LIFE_REVIVE_FRACTION, IMMUNE_HITS_SKIP_CHAIN, NAMED_TARGETS_ONLY } from './constants.ts';
+import { IMMUNE_HITS_SKIP_CHAIN, NAMED_TARGETS_ONLY } from './constants.ts';
 import { applyMpFraction, mpOnlyTaken, resolveSetTo, setsPoolsTo } from './aeon-effects.ts';
 
-export interface ResolveContext {
-  units: Ffx2Unit[];
-  abilities: AbilityRegistry;
-  rng: Rng;
-  emit: Emit;
-  breaksDamageLimit(unit: Ffx2Unit): boolean; // per girl: an accessory or a Garment Grid gate
-  timedAilmentDefaults?: boolean; // `EnemyGroupDef.timedAilmentDefaults` (`statuses.ts`, Chapter XIII)
-  immuneHitsSkipChain?: boolean; // IC-1's OFF switch; absent = `constants.ts` IMMUNE_HITS_SKIP_CHAIN
-  namedTargetsOnly?: boolean; // `extra.namedTargetsOnly` rows; absent = `constants.ts` NAMED_TARGETS_ONLY
-}
+import { applyHpDelta, heal, revive, type ResolveContext } from './resolve-hp.ts';
+import { applyRiders, targetForHit } from './resolve-targets.ts';
 
-/**
- * Apply a signed HP delta. Positive damages, negative heals — the whole engine
- * speaks in one sign convention because X-2's own pipeline does.
- *
- * Emits `ko` (consuming Auto-Life when present) but never the `damage` event
- * itself; the caller owns that, so multi-hit actions keep `hitIndex` ordering.
- */
-export function applyHpDelta(
-  ctx: ResolveContext,
-  target: Ffx2Unit,
-  delta: number,
-  sourceId?: CombatantId,
-): void {
-  if (delta === 0) return;
-  const wasAlive = target.alive;
-  target.hp = Math.max(0, Math.min(target.stats.maxHp, target.hp - delta));
-
-  if (target.hp > 0) {
-    if (!wasAlive) target.alive = true;
-    return;
-  }
-  if (!wasAlive) return;
-
-  if (target.statuses['auto-life']) {
-    removeStatus(target, 'auto-life');
-    ctx.emit({ type: 'status-remove', targetId: target.id, status: 'auto-life', reason: 'consumed' });
-    target.hp = Math.max(1, Math.floor(target.stats.maxHp * AUTO_LIFE_REVIVE_FRACTION));
-    target.alive = true;
-    ctx.emit({ type: 'revive', targetId: target.id, hp: target.hp, cause: 'auto-life' });
-    return;
-  }
-
-  target.alive = false;
-  if (breakChain(target)) {
-    ctx.emit({ type: 'chain', targetId: target.id, count: 0, multiplier: 1 });
-  }
-  applyStatus(target, { status: 'ko', chance: 255, duration: 0 }, sourceId);
-  ctx.emit({ type: 'ko', targetId: target.id, ...(sourceId ? { sourceId } : {}) });
-  if (target.flags.isPart) {
-    ctx.emit({
-      type: 'part-destroyed',
-      partId: target.id,
-      ...(target.flags.partOf ? { ownerId: target.flags.partOf } : {}),
-    });
-  }
-}
-
-/** Restore HP outside the damage chain (a Regen tick, a revival). */
-export function heal(ctx: ResolveContext, target: Ffx2Unit, amount: number, cause: string): void {
-  if (amount <= 0) return;
-  const before = target.hp;
-  target.hp = Math.min(target.stats.maxHp, target.hp + amount);
-  const gained = target.hp - before;
-  if (gained > 0) ctx.emit({ type: 'heal', targetId: target.id, amount: gained, cause });
-}
-
-/** Bring a KO'd unit back. `fraction` is of max HP: Phoenix Down 0.25, Full-Life 1.0. */
-export function revive(ctx: ResolveContext, target: Ffx2Unit, fraction: number, cause: string): void {
-  if (target.alive) return;
-  removeStatus(target, 'ko');
-  target.alive = true;
-  target.removed = false;
-  target.hp = Math.max(1, Math.floor(target.stats.maxHp * Math.max(0, Math.min(1, fraction))));
-  ctx.emit({ type: 'revive', targetId: target.id, hp: target.hp, cause });
-  if (target.flags.isPart) {
-    ctx.emit({
-      type: 'part-restored',
-      partId: target.id,
-      hp: target.hp,
-      ...(target.flags.partOf ? { ownerId: target.flags.partOf } : {}),
-    });
-  }
-}
-
-/**
- * Per-hit target selection; `random-*` re-rolls a fresh target each strike. §2.9
- *
- * **All-target (IC-2, §9.1 `[verified: 3 sources]`):** the move is defined per character, so hit
- * `hitIndex` belongs to `pool[hitIndex]`, the targets taken once at the action's start. A target
- * KO'd partway takes nothing more and its hit is **not** handed on (the mid-move death case is
- * unsourced; this is the per-target definition's reading). It used to index a list re-filtered
- * after every hit, so a death wrapped later hits onto a girl already hit and the last went free.
- */
-function targetForHit(
-  ability: AbilityDef,
-  pool: readonly Ffx2Unit[],
-  hitIndex: number,
-  rng: Rng,
-): Ffx2Unit | undefined {
-  const standing = (u: Ffx2Unit) => u.alive || ability.flags.includes('can-target-dead');
-  if (ability.targeting === 'all-enemies' || ability.targeting === 'all-allies' || ability.targeting === 'all') {
-    const own = pool[hitIndex];
-    return own && standing(own) ? own : undefined;
-  }
-  const living = pool.filter(standing);
-  if (living.length === 0) return undefined;
-  if (ability.targeting === 'random-enemy' || ability.targeting === 'random-ally') {
-    return rng.pick(living);
-  }
-  return living[0];
-}
-
-/**
- * Apply an ability's status riders to one target. §2.6a "Status 1".
- *
- * **`extra.statusRollOneOf`** — a documented one-off key
- * (`docs/CONTRACTS.md`: "Genuinely one-off scripted rules … go in
- * `AbilityDef.extra`, with the keys documented in the data file that sets
- * them"). Set, the loop below rolls **exactly one** of the listed applications
- * instead of rolling each independently. Its only caller is Logos' Russian
- * Roulette, whose canon is one of six outcomes, not up to six at once
- * [`src/data/ffx2/enemies/leblanc-syndicate-abilities.ts`,
- * `research/ffx2-leblanc-syndicate.md` §4.3]. FFX-2 only: no FFX ability sets
- * the key and no FFX code path reads it.
- *
- * The draw is taken at the **end** of the step it belongs to — after the hit,
- * crit and randomiser rolls the caller already made — so no existing replay at
- * the same seed moves (`docs/CONTRACTS.md`, engine agents, rule 1).
- */
-function applyRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, ability: AbilityDef): void {
-  const rollOneOf = ability.extra?.['statusRollOneOf'] === true && ability.statusEffects.length > 1;
-  const applications = rollOneOf ? [ctx.rng.pick([...ability.statusEffects])] : ability.statusEffects;
-
-  for (const application of applications) {
-    const resist = target.immunities[application.status] ?? 0;
-    if (resist >= 255) continue;
-    const chance =
-      application.chance >= 254
-        ? 100
-        : statusChanceLinear(user.level ?? 1, application.chance, target.level ?? 1, resist);
-    if (chance < 100 && ctx.rng.int(0, 99) >= chance) continue;
-    const instance = applyStatus(target, application, user.id, ability.id, ctx.timedAilmentDefaults === true);
-    if (!instance) continue;
-    ctx.emit({
-      type: 'status-add',
-      targetId: target.id,
-      sourceId: user.id,
-      status: application.status,
-      instance,
-    });
-    if (application.status === 'ko') applyHpDelta(ctx, target, target.hp, user.id);
-    // **Eject removes the character from the battle.** `eject` has always been
-    // a live `FFX2StatusId`, has always been in `INFINITE_STATUSES` and has
-    // always had a HUD chip (`statusChips.ts: eject: 'EJT'`) — but nothing ever
-    // set `removed`, so an ejected girl kept an EJT badge and kept playing.
-    // (`resolve.ts`'s own "X-2 has no eject" note below is true of *Charon*,
-    // not of the status.) `targeting.ts::isTargetable`, `engine.ts`'s `party()`,
-    // `gauges.ts` and `results.ts` all already test `!u.removed`, so removal,
-    // untargetability, a frozen gauge and "all three gone = defeat" fall out
-    // with no further work; `revive()` above already clears the flag. FFX-2
-    // only: `eject` is settable by no FFX ability [§4.3, and the absence test].
-    if (application.status === 'eject') target.removed = true;
-  }
-
-  if (ability.flags.includes('removes-statuses')) {
-    // `EnemyDef.autoStatuses` (Trema's Spellspring) stay: "auto-status" read as undispellable, `[estimate]`.
-    for (const id of (ability.removesStatuses as StatusId[]).filter((s) => !target.autoStatuses?.includes(s))) {
-      if (removeStatus(target, id)) {
-        ctx.emit({ type: 'status-remove', targetId: target.id, status: id, reason: 'dispelled' });
-      }
-    }
-  }
-}
+export { applyHpDelta, heal, revive, type ResolveContext } from './resolve-hp.ts';
 
 /**
  * Resolve one ability from `user` against `requested`, emitting every event it
@@ -331,7 +155,7 @@ export function resolveAbility(
       // `healing` formula), so the two cannot drift apart. Revives already
       // skipped this block above.
       const restorative = ability.flags.includes('heals') || ability.formula === 'healing';
-      // IC-1's OFF switch (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, unsourced §9.2): on, the count is
+      // IC-1's OFF switch (`constants.ts` IMMUNE_HITS_SKIP_CHAIN; ON = GameFAQs' reading, our estimate, §10.1): on, the count is
       // peeked and only a non-immune result registers. `computeDamage` is pure, so the chain event
       // still precedes the damage event and the default path's log is unchanged.
       const skipImmune = !restorative && (ctx.immuneHitsSkipChain ?? IMMUNE_HITS_SKIP_CHAIN);

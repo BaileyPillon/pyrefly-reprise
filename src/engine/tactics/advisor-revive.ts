@@ -468,7 +468,9 @@ export function reviveReason(state: Readonly<BattleState>, fallenId: CombatantId
   };
   const role = PARTY_ROLES[String(fallenId)];
   const all = lost.map((f) => words[f] ?? f);
-  if (role === 'Summoner') all.unshift('call an aeon');
+  // FFX only: FFX-2 Yuna has no Summon command, so "call an aeon" there is a
+  // claim about the wrong game (critic round 13 PR-0192; AGENTS.md rule 14).
+  if (role === 'Summoner' && state.game === 'ffx') all.unshift('call an aeon');
   // The card is 226px wide at its widest and 104px tall at its tallest, and it
   // is sharing that with a second suggestion. Three clauses is the point at
   // which the sentence stops being read and starts being scrolled past — and

@@ -2,11 +2,9 @@
  * Scene registry: `sceneKey` -> diorama builder + the field slots a battle
  * stages its actors on.
  *
- * `Chapter.sceneKey` (see `src/data/encounters.ts`) is the key. Every chapter
- * currently points at a **placeholder** builder that re-uses the painted
- * Mt. Gagazet composition from `demo.ts`; the art session replaces each entry
- * with its own `src/scenes/<key>.ts` module by editing the one line in
- * {@link SCENES}, or at runtime with {@link registerScene}.
+ * `Chapter.sceneKey` (see `src/data/encounters.ts`) is the key. A key with no module of its own draws the
+ * painted Mt. Gagazet composition from `demo.ts` as a **placeholder**; a location's own `src/scenes/<key>.ts`
+ * replaces it with one line in {@link SCENES} and {@link SCENE_FACTORIES}, or at runtime ({@link registerScene}).
  *
  * The scene builder owns the diorama (backdrop, lights, particles, camera
  * rigs, its own demo figures). The **battle** owns the fighters: it reads
@@ -35,6 +33,7 @@ import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.t
 import { buildDenOfWoeScene, DEN_OF_WOE_SLOTS } from './den-of-woe.ts';
 import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
 import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
+import { buildSector1ReactorScene, SECTOR1_SLOTS } from './sector1-reactor.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
 import { attachArrivals } from '../engine/StageArrivals.ts';
 
@@ -114,10 +113,7 @@ const GAGAZET_SLOTS: SceneSlots = {
   enemyHeight: 4.1,
 };
 
-/**
- * Registry. `demo` is real; the five chapter keys are placeholders drawing the
- * Gagazet diorama until the art session lands their own modules.
- */
+/** Registry: every key with its title, slots and whether it is still a placeholder. */
 const SCENES = new Map<string, SceneEntry>();
 
 function placeholderEntry(key: string, title: string): SceneEntry {
@@ -225,6 +221,9 @@ SCENES.set('via-purifico', { key: 'via-purifico', title: 'Via Purifico — the l
 /** The Den of Woe (Chapter XV, FFX-2 only): real, `build` unreachable as for Leblanc [den-of-woe.ts]. */
 SCENES.set('den-of-woe', { key: 'den-of-woe', title: 'The Den of Woe',
   build: buildDemoScene, slots: DEN_OF_WOE_SLOTS, placeholder: false });
+/** The No. 1 Reactor core (the hidden Guard Scorpion experiment, FF7 only): real, `build` unreachable [sector1-reactor.ts]. */
+SCENES.set('sector1-reactor', { key: 'sector1-reactor', title: 'No. 1 Reactor — the core',
+  build: buildDemoScene, slots: SECTOR1_SLOTS, placeholder: false });
 
 /** Every registered key, in insertion order. */
 export function sceneKeys(): string[] {
@@ -272,6 +271,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'bevelle-highbridge': buildHighbridgeScene,
   'via-purifico': buildViaPurificoScene,
   'den-of-woe': buildDenOfWoeScene,
+  'sector1-reactor': buildSector1ReactorScene, // FF7 only
 };
 
 /** Look up a location's `SceneBuild` factory. `undefined` for an unknown key. */
@@ -329,6 +329,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
   if (build.arrivals) attachArrivals(scene, build.arrivals);
 
   const battleCamera = new BattleCamera(camera, { rigs: build.rigs, initial: 'idle' });
+  build.bindCamera?.(battleCamera); // a scene that re-frames itself mid-battle (the Road's phone camera)
   const toSpot = (v: Vector3): Spot => [v.x, v.y, v.z];
 
   return {

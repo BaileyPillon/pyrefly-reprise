@@ -1,0 +1,34 @@
+{
+  "_note": "CHK-024 upgrade fixture (PR-0195). Written by the LIVE release-20 build itself (main ce05b02c, bundle index-i8Mr-QwD.js) on 2026-09-26: a fresh profile on https://baileypillon.github.io/pyrefly-reprise/, then that build own SaveStore methods (recordAttempt, recordClear, addPlayTime, markCoachSeen, setSettings), then localStorage read back verbatim. Non-default values on purpose so a reset to defaults cannot pass. Replace with the previous live build export at each persistence change.",
+  "release": 20,
+  "mainSha": "ce05b02c",
+  "bundle": "index-i8Mr-QwD.js",
+  "appVersion": "0.1.0",
+  "expect": {
+    "cleared": [
+      "seymour-flux",
+      "ffx2-bahamut",
+      "yojimbo-cavern"
+    ],
+    "bestTimeMs": {
+      "seymour-flux": 312450,
+      "ffx2-bahamut": 455120,
+      "yojimbo-cavern": 268900
+    },
+    "notCleared": [
+      "braskas-final-aeon"
+    ],
+    "settings": {
+      "masterVolume": 0.55,
+      "musicVolume": 0.35,
+      "sfxVolume": 0.65,
+      "textSpeed": 1.5,
+      "ffx2Atb": "active",
+      "ffx2AtbSpeed": "fast",
+      "guideVisible": false
+    }
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790449211893,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":true,\"bestTimeMs\":312450,\"bestTurns\":21,\"attempts\":2,\"playTimeMs\":0},\"ffx2-bahamut\":{\"id\":\"ffx2-bahamut\",\"cleared\":true,\"bestTimeMs\":455120,\"bestTurns\":34,\"attempts\":1,\"playTimeMs\":0},\"yojimbo-cavern\":{\"id\":\"yojimbo-cavern\",\"cleared\":true,\"bestTimeMs\":268900,\"bestTurns\":17,\"attempts\":1,\"playTimeMs\":0},\"braskas-final-aeon\":{\"id\":\"braskas-final-aeon\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":3,\"playTimeMs\":900}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.55,\"musicVolume\":0.35,\"sfxVolume\":0.65,\"textSpeed\":1.5,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"guideVisible\":false,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"active\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":false,\"ffx2AtbSpeed\":\"fast\"},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

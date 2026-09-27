@@ -42,6 +42,7 @@
 
 import type { FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
 import { highbridgeBuild } from './highbridge.ts';
+import { GAGAZET_AEON_ARM, armViaPurificoAeons } from './gagazet-aeon-arms.ts';
 
 /** B3 = b: Bahamut's gauge on arrival, `[estimate]` (named at Bevelle Temple, filled later by Pterya). */
 export const BAHAMUT_GAUGE = 50;
@@ -74,7 +75,7 @@ export const viaPurificoBuild: FFXPartyBuild = {
   members: [yuna()],
   activeSlots: ['yuna'], // forced_party "y" [§1.2, verified: 3 sources]
   reserve: [],
-  aeons: aeons(),
+  aeons: armViaPurificoAeons(aeons(), GAGAZET_AEON_ARM), // PR-0179, OFF
   // B7 = a: Chapter X's bag and gil (Chapter VIII's, carried).
   inventory: highbridgeBuild.inventory.map((e) => ({ ...e })),
   gil: highbridgeBuild.gil,

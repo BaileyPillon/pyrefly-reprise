@@ -465,6 +465,7 @@ export class PaintedActor extends Group {
     bounceStrength: { value: number };
     dissolve: { value: number };
     dissolveColor: { value: Color };
+    dissolveSweep: { value: number };
     groundShade: { value: number };
     desaturate: { value: number };
     alphaCut: { value: number };
@@ -589,6 +590,7 @@ export class PaintedActor extends Group {
       bounceStrength: { value: opts.bounce?.strength ?? 0 },
       dissolve: { value: 0 },
       dissolveColor: { value: new Color(0x9dffc4) },
+      dissolveSweep: { value: 0 },
       groundShade: { value: opts.groundShade ?? 0.24 },
       desaturate: { value: 0 },
       alphaCut: { value: opts.alphaCut ?? 0.02 },
@@ -1548,6 +1550,19 @@ export class PaintedActor extends Group {
 
   setDissolve(value: number): void {
     this.u.dissolve.value = value;
+  }
+
+  /** How far the dissolve has eaten the figure, 0..1 (the stage's pyrefly release reads it, `PyreflyStage.ts`). */
+  get dissolveLevel(): number {
+    return this.u.dissolve.value;
+  }
+
+  /**
+   * `'pyrefly'`: the death of a fiend that is sent (A-5): eaten from the feet
+   * up with a gold burn edge. `'plain'` (the default) is the old dissolve.
+   */
+  setDissolveStyle(style: 'plain' | 'pyrefly'): void {
+    this.u.dissolveSweep.value = style === 'pyrefly' ? 1 : 0;
   }
 
   fadeTo(alpha: number, ms = 300, easing: EasingName | EasingFn = 'quadInOut'): Promise<void> {

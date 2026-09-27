@@ -19,7 +19,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { diffManifests, shippedToRepoPaths } from './artifact-manifest.mjs';
 import { readPendingMarkers } from './critic-pending.mjs';
@@ -57,8 +57,39 @@ function activeDaysSince(root, sha, head) {
   return out === null ? null : new Set(out.split('\n').filter(Boolean)).size;
 }
 
+/**
+ * The listed chapters, from the chapter registry itself: `CHAPTERS` in
+ * src/data/encounters.ts minus `LOCKED_CHAPTER_IDS` (the COMING cards), as
+ * `{ id: { game, scene } }`. NEW-C3 / PR-0141 (round 13): policy.json named only
+ * the first five chapters, so an FFX-2 ATB engine change owed IV and V and
+ * silently skipped VI, XI, XIII and XV. Both games: shared critic plumbing.
+ *
+ * Read in a child Node (type stripping imports the .ts registry) so this stays
+ * synchronous for deploy-pages.mjs. Returns null when the registry cannot be
+ * read (a checkout without src/), and the plan falls back to policy.json.
+ */
+export function registryChapters(root = ROOT) {
+  const url = (rel) => pathToFileURL(join(root, ...rel.split('/'))).href;
+  const script = `const e = await import(${JSON.stringify(url('src/data/encounters.ts'))});
+const c = await import(${JSON.stringify(url('src/app/screens/frontend/comingChapters.ts'))});
+const out = {};
+for (const ch of e.CHAPTERS) if (!c.LOCKED_CHAPTER_IDS.has(ch.id)) out[ch.id] = { game: ch.game, scene: ch.sceneKey };
+process.stdout.write(JSON.stringify(out));`;
+  const r = spawnSync(process.execPath, ['--no-warnings', '--input-type=module', '-e', script], { cwd: root, encoding: 'utf8', timeout: 30000 });
+  if (r.status !== 0) return null;
+  try {
+    const out = JSON.parse(r.stdout);
+    return Object.keys(out).length ? out : null;
+  } catch {
+    return null;
+  }
+}
+
 export function planForRepo({ root = ROOT, since = null, head = 'HEAD', paths = null, manifest = null, previousManifest = null, claim = null, minimum = null, extraPaths = [] } = {}) {
   const policy = loadPolicy(root);
+  const registry = registryChapters(root);
+  const chapterSource = registry ? 'registry' : 'policy.json';
+  if (registry) policy.chapters = registry;
   const ledger = readLedger(root, policy);
   const previous = since ?? lastDeployedSha(root);
   let changed = paths;
@@ -80,8 +111,9 @@ export function planForRepo({ root = ROOT, since = null, head = 'HEAD', paths = 
     paths: changed, policy, carriedDeep, claim, minimum,
     ledger: { substantialSinceDeep: ledger.deploysSinceDeep.filter((d) => d.substantial).length, activeDaysSinceDeep: activeDays ?? 0 },
   });
+  if (!registry) plan.reasons.push('the chapter registry (src/data/encounters.ts) could not be read, so the chapter list falls back to policy.json and may miss listed chapters');
   if (manifest && !previousManifest) plan.reasons.push('no artifact manifest exists for the previous build, so changed art and audio could not be listed: treat shipped media as unverified until the live check');
-  return { previousBuild: previous, head: git(root, ['rev-parse', '--short', head]), lastDeep: ledger.lastDeep, ...plan };
+  return { previousBuild: previous, head: git(root, ['rev-parse', '--short', head]), lastDeep: ledger.lastDeep, chapterSource, ...plan };
 }
 
 function main(argv) {

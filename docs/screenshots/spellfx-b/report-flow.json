@@ -1,0 +1,85 @@
+{
+ "base": "http://127.0.0.1:6050/",
+ "at": "2026-09-26T23:38:15.347Z",
+ "browser": "gpu",
+ "flow-ffx-desk": {
+  "effectsSeen": [
+   "hit@yuna",
+   "cure@yuna",
+   "hit@tidus"
+  ],
+  "actions": [
+   "tidus:hastega",
+   "seymour-flux:lance-of-atrophy",
+   "mortiorchis:full-life",
+   "kimahri:mighty-guard",
+   "seymour-flux:lance-of-atrophy",
+   "mortiorchis:full-life",
+   "tidus:poison-fang",
+   "kimahri:talk",
+   "tidus:phoenix-down"
+  ]
+ },
+ "flow-ffx-phone": {
+  "effectsSeen": [
+   "hit@yuna",
+   "cure@yuna",
+   "hit@tidus"
+  ],
+  "actions": [
+   "tidus:hastega",
+   "seymour-flux:lance-of-atrophy",
+   "mortiorchis:full-life",
+   "kimahri:mighty-guard",
+   "seymour-flux:lance-of-atrophy",
+   "mortiorchis:full-life",
+   "tidus:poison-fang",
+   "kimahri:talk",
+   "tidus:phoenix-down"
+  ]
+ },
+ "flow-ffx2-desk": {
+  "effectsSeen": [
+   "hit@rikku",
+   "hit@bahamut",
+   "hit@yuna",
+   "hit@paine"
+  ],
+  "actions": [
+   "bahamut:bahamut-curse",
+   "yuna:x2-white-mage-shell",
+   "paine:x2-warrior-magic-break",
+   "bahamut:attack",
+   "rikku:x2-dark-knight-darkness",
+   "bahamut:attack",
+   "paine:x2-warrior-magic-break",
+   "yuna:x2-white-mage-protect",
+   "bahamut:attack",
+   "rikku:x2-dark-knight-darkness",
+   "paine:x2-warrior-magic-break",
+   "bahamut:impulse"
+  ]
+ },
+ "flow-ffx2-phone": {
+  "effectsSeen": [
+   "hit@rikku",
+   "hit@bahamut",
+   "hit@yuna",
+   "hit@paine"
+  ],
+  "actions": [
+   "bahamut:bahamut-curse",
+   "yuna:x2-white-mage-shell",
+   "paine:x2-warrior-magic-break",
+   "bahamut:attack",
+   "rikku:x2-dark-knight-darkness",
+   "bahamut:attack",
+   "paine:x2-warrior-magic-break",
+   "yuna:x2-white-mage-protect",
+   "bahamut:attack",
+   "rikku:x2-dark-knight-darkness",
+   "paine:x2-warrior-magic-break",
+   "bahamut:impulse"
+  ]
+ }
+}

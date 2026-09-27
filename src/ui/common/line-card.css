@@ -1,0 +1,75 @@
+/*
+ * PR-0211, option A (D-232): the mid-battle line card.
+ *
+ * `app/screens/midbeatLineCard.ts` picks the place once per beat and sets
+ * `.dbox--card` (a slot clear of the party and the speaker) or `.dbox--band`
+ * (the fallback: option B's band along the bottom), plus three custom
+ * properties on `.dbox`, in px of the battle root:
+ *   --lc-x        the card's left edge
+ *   --lc-win-top  the window's top edge (the portrait breaks out above it)
+ *   --lc-scale    0.7 on a desktop card, the concept's compact size
+ *
+ * The card is the same Ink & Gold box as every scene (`dialogue-box.css`),
+ * scaled as a whole: a uniform scale keeps the -12deg plates, the upright
+ * portrait and the body text in their mockup proportions, where re-deriving
+ * every vw offset would not. Both games share it (rule 14: both).
+ *
+ * Scoped to the classes, so a pre- or post-battle scene, which never gets
+ * them, keeps the box exactly where it was.
+ */
+
+.dbox--card:not(.dbox--narrate) .dbox__win {
+  left: var(--lc-x, 2vw);
+  top: var(--lc-win-top, 6vw);
+  bottom: auto;
+  transform: scale(var(--lc-scale, 0.7));
+  transform-origin: 0 0;
+}
+
+/* The band: the box's own height, most of the width, down at the foot of the
+   frame over the party panel and the command menu, which wait during a beat. */
+.dbox--band .dbox__win {
+  left: 1.5vw;
+  bottom: 0.8vw;
+  width: 97vw;
+}
+.dbox--band .dbox__body {
+  width: calc(97vw - 19.58vw - 5vw);
+}
+.dbox--band.dbox--no-portrait .dbox__body {
+  width: calc(97vw - 8vw);
+}
+.dbox--band .dbox__advance {
+  left: auto;
+  right: 3vw;
+}
+
+@media (max-width: 560px) {
+  /* The phone box is fixed px and full width already; only its height moves. */
+  .dbox--card:not(.dbox--narrate) .dbox__win,
+  .dbox--band .dbox__win {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    top: var(--lc-win-top, 140px);
+    bottom: auto;
+    transform: none;
+  }
+  .dbox--band .dbox__body {
+    width: calc(100% - 96px);
+  }
+  .dbox--band.dbox--no-portrait .dbox__body {
+    width: calc(100% - 28px);
+  }
+  .dbox--band .dbox__advance {
+    right: 10px;
+  }
+}
+
+/* The first half-second of a beat, while the camera settles and the place is
+   re-picked every frame (`SETTLE_MS`): the card is held out of sight, then fades
+   in where it will stay for the line. */
+.dbox--visible.dbox--settling {
+  opacity: 0;
+  transition: none;
+}

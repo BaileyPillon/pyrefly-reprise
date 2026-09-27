@@ -28,12 +28,16 @@ import type { AutoStrategy } from '../../engine/BattlePresenter.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
+import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
 import { preloadBattle } from './battlePreload.ts';
+import { entryCardWait } from './entryCard.ts';
 import { boardWhenWarm } from './frontendWarm.ts';
 import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun } from './pause/restartCarry.ts';
+import { runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
+import { drawRunSeed } from '../runSeed.ts';
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -132,22 +136,15 @@ export function resetFlowScreens(): void {
   for (const key of Object.keys(factories)) delete (factories as Record<string, unknown>)[key];
 }
 
-/**
- * The last chapter of each game's arc.
- *
- * Chapter 3 ends the FFX story (Yu Yevon, then Auron's sending and Tidus
- * going) and Chapter 5 ends the FFX-2 one. `BattleScreenFlow` needs to know
- * because the flow used to be a bare `for(;;)` with no notion of having
- * finished anything (critic round 02 #32).
- */
-export const ARC_FINALE: Readonly<Record<GameId, ChapterId>> = {
+/** The last chapter of each game's arc: Chapter 3 ends FFX, Chapter 5 FFX-2 (critic round 02 #32: the flow once had no notion of finishing). */
+export const ARC_FINALE: Readonly<Record<Exclude<GameId, 'ff7'>, ChapterId>> = { // FF7: no arc (never reached)
   ffx: 'braskas-final-aeon',
   ffx2: 'ffx2-vegnagun-shuyin',
 };
 
 /** True once every chapter of `game` is recorded as cleared. */
 export function arcCleared(game: GameId, cleared: (id: ChapterId) => boolean): boolean {
-  return CHAPTERS.filter((c) => c.game === game).every((c) => cleared(c.id));
+  return game !== 'ff7' && CHAPTERS.filter((c) => c.game === game).every((c) => cleared(c.id));
 }
 
 export interface RunChapterOptions {
@@ -301,6 +298,11 @@ export class GameFlow {
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
     const chapter = getChapter(id);
     if (!chapter) return null;
+    if (chapter.experimental) {
+      if (!this.running) [this.owned, this.handedOver] = [null, false]; // a fresh owner, as below
+      return runExperiment(chapter, { ...opts, seed: opts.seed ?? drawRunSeed() }, { show: (s) => this.show(s), setStep: (s) => void (this.step = s), makeBattle: (o) => factories.battle?.(o) ?? new BattleScreen(o), results: (c, o) => this.showResults(c, o), // the chapters' swirl in, their results and defeat panels (FF7)
+        playIn: async (swap, o) => { let up: Promise<boolean> = Promise.resolve(true); await playBattleSwirl(this.app.uiRoot, { instant: o.speed === 'skip', onCover: () => (up = swap()).then(() => undefined) }); return up; } });
+    }
     const save = this.app.save;
     // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
     let { attempt, carry, opts: { seed } } = ({ opts } = openRun(this, id, opts)); // a fresh first seed (PR-0008)
@@ -356,14 +358,14 @@ export class GameFlow {
       let swapped: Promise<boolean> = Promise.resolve(true);
       await playBattleSwirl(this.app.uiRoot, {
         instant: opts.speed === 'skip',
+        whileCovered: entryCardWait(this.app.uiRoot, chapter), // A-3: the card over the ink on a slow load
         onCover: () => {
           swapped = this.show(battle);
           return swapped.then(() => undefined);
         },
       });
       if (!(await swapped)) return null;
-      // The real screen resolves `finished`; a registered stand-in (tests
-      // only) resolves the `FlowScreen` contract's `done`. Same value.
+      // The real screen resolves `finished`; a test stand-in resolves `done`. Same value.
       const fought = await ('finished' in battle ? battle.finished : battle.done);
       attempt++;
       // A clear through a checkpoint retry is timed from the chapter's start.
@@ -393,6 +395,8 @@ export class GameFlow {
       }
 
       if (outcome.outcome === 'defeat') {
+        // A secret objective row shows from now on (Chapter IX's Doom row, objectiveReveal.ts).
+        noteChapterLost(id);
         // The defeat panel owns the retry decision: `RETRY` re-enters the loop
         // (through the prep menu when there is one), `CHAPTER SELECT` gives up
         // and hands the outcome back to the caller. An automated run never

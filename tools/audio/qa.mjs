@@ -46,7 +46,11 @@ import {
 const execFileAsync = promisify(execFile);
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const AUDIO_DIR = path.join(ROOT, 'public/audio');
+// PYREFLY_QA_AUDIO_DIR audits a candidate set (its own manifest.json, music
+// only) with the same gates, e.g. public/audio/candidates/direction-b-2026-09-27.
+const AUDIO_DIR = process.env.PYREFLY_QA_AUDIO_DIR
+  ? path.resolve(process.env.PYREFLY_QA_AUDIO_DIR)
+  : path.join(ROOT, 'public/audio');
 const FFMPEG =
   process.env.FFMPEG_PATH ?? 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe';
 
@@ -466,7 +470,12 @@ async function main() {
   }
 
   // Manifest vs disk.
-  const disk = (await filesOnDisk(AUDIO_DIR)).filter((f) => f !== 'manifest.json');
+  // Audition candidates are unlisted on purpose and never ship: the build prunes
+  // them (tools/dist-filter.mjs, PR-0100), so they are not orphans of the game.
+  const { isUnshippedPublicFile } = await import('../dist-filter.mjs');
+  const disk = (await filesOnDisk(AUDIO_DIR)).filter(
+    (f) => f !== 'manifest.json' && !isUnshippedPublicFile(`audio/${f}`),
+  );
   const listed = new Set(Object.values(manifest.music).map((m) => m.file));
   if (manifest.sfx) listed.add(manifest.sfx.file);
   for (const f of disk) {

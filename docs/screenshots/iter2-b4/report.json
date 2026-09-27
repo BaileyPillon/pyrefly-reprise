@@ -1,0 +1,287 @@
+{
+  "linecard": [
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "1600x900",
+      "lines": 14,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "top-left"
+      ]
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "2000x1012",
+      "lines": 14,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "top-left",
+        "bottom-right",
+        "top-right"
+      ]
+    },
+    {
+      "chapter": "braskas-final-aeon",
+      "viewport": "390x844",
+      "lines": 14,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "band",
+        "top"
+      ]
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "1600x900",
+      "lines": 14,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "top-left",
+        "bottom-right"
+      ]
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "2000x1012",
+      "lines": 14,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "top-left"
+      ]
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "390x844",
+      "lines": 14,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "top",
+        "upper"
+      ]
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "1600x900",
+      "lines": 80,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "top-left",
+        "bottom-right"
+      ]
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "2000x1012",
+      "lines": 80,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "top-left",
+        "bottom-right"
+      ]
+    },
+    {
+      "chapter": "ffx2-vegnagun-shuyin",
+      "viewport": "390x844",
+      "lines": 80,
+      "maxPartyTorsoPx2": 0,
+      "maxSpeakingBossPx2": 0,
+      "places": [
+        "top",
+        "upper",
+        "band"
+      ]
+    }
+  ],
+  "title": {
+    "1600x900": {
+      "minLuma": 0.352,
+      "frames": 85,
+      "keyartRequests": [
+        "keyart.2x.webp"
+      ],
+      "failed": []
+    },
+    "390x844": {
+      "minLuma": 0.396,
+      "frames": 88,
+      "keyartRequests": [
+        "keyart.2x.webp"
+      ],
+      "failed": []
+    }
+  },
+  "defeat": {
+    "caption": {
+      "x": 1531.09375,
+      "y": 66.640625,
+      "w": 20,
+      "h": 705
+    },
+    "actions": {
+      "x": 1146.09375,
+      "y": 790.5859375,
+      "w": 387.265625,
+      "h": 51.640625
+    },
+    "overlapPx2": 0,
+    "text": "DECK OF THE FAHRENHEIT — THE APPROACH TO BEVELLE · FELL",
+    "errors": []
+  },
+  "wide": {
+    "yojimbo-cavern": {
+      "outcome": "victory",
+      "cols": [
+        {
+          "x": 1999,
+          "creamRows": 0
+        },
+        {
+          "x": 1960,
+          "creamRows": 0
+        },
+        {
+          "x": 1910,
+          "creamRows": 0
+        }
+      ],
+      "errors": []
+    },
+    "ffx2-leblanc": {
+      "outcome": "victory",
+      "cols": [
+        {
+          "x": 1999,
+          "creamRows": 0
+        },
+        {
+          "x": 1960,
+          "creamRows": 0
+        },
+        {
+          "x": 1910,
+          "creamRows": 0
+        }
+      ],
+      "errors": []
+    }
+  },
+  "coach2": {
+    "markBefore": {
+      "x": 556.40625,
+      "y": 299.5,
+      "w": 400,
+      "h": 145.625
+    },
+    "mark": {
+      "x": 556.40625,
+      "y": 364.78125,
+      "w": 400,
+      "h": 145.625
+    },
+    "slab": {
+      "x": 473,
+      "y": 31.296875,
+      "w": 375,
+      "h": 321.484375
+    },
+    "ifYouAttack": {
+      "x": 488.40350341796875,
+      "y": 274.890625,
+      "w": 342.09649658203125,
+      "h": 123.125
+    },
+    "overlapList": 9109.33447265625,
+    "overlapSlab": 0,
+    "errors": []
+  },
+  "taps": {},
+  "cards": {
+    "faces": {
+      "ffx2-bahamut": [
+        "idle.png",
+        "yuna-x2.png",
+        "idle.png",
+        "rikku-x2.png",
+        "idle.png",
+        "paine.png"
+      ],
+      "seymour-flux": [
+        "tidus.png",
+        "yuna.png",
+        "kimahri.png"
+      ],
+      "braskas-final-aeon": [
+        "tidus.png",
+        "yuna.png",
+        "auron.png"
+      ]
+    },
+    "errors": []
+  },
+  "xi": {
+    "seen": [
+      {
+        "name": "Leblanc",
+        "text": "Took you long enou",
+        "figures": [
+          "leblanc"
+        ]
+      },
+      {
+        "name": "Ormi",
+        "text": "B",
+        "figures": [
+          "ormi"
+        ]
+      },
+      {
+        "name": "Logos",
+        "text": "Su",
+        "figures": [
+          "logos"
+        ]
+      },
+      {
+        "name": "Logos",
+        "text": "Supplies. For a price, naturally.",
+        "figures": [
+          "logos"
+        ]
+      },
+      {
+        "name": "Paine",
+        "text": "Back to the ship. ",
+        "figures": []
+      },
+      {
+        "name": "Paine",
+        "text": "Back to the ship. Then down.",
+        "figures": []
+      }
+    ],
+    "errors": []
+  },
+  "natus": {
+    "talks": [
+      "tidus",
+      "auron",
+      "yuna"
+    ],
+    "lines": [
+      "Tidus: Stop talking. You never say anything.",
+      "Seymour: Then listen, son of Jecht. It is almost over.",
+      "Auron: Kinoc was my friend once. Fool that he was.",
+      "Seymour: He thanked me, at the end. Ask him yourself.",
+      "Yuna: You belong on the Farplane. I'll send you there.",
+      "Seymour: Then you will have to catch me, Lady Yuna."
+    ]
+  }
+}

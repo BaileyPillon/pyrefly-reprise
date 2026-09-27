@@ -31,6 +31,7 @@
 import './phone-battle.css';
 import './phone-battle-parts.css';
 import type { GameId } from '../../battle/common/types.ts';
+import { ffxFamily, type FfxFamilyGame } from '../../battle/common/game.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { createPhoneField, type PhoneField } from './phoneFraming.ts';
 import { confirmLabel, sendKey, targetHint, type PhoneTextReader } from './phoneBattleText.ts';
@@ -60,7 +61,7 @@ export interface PhoneBattle {
  * shows (`phoneFraming.ts`): FFX centred on the window (0), FFX-2 the sheet's
  * left-anchored 0.93 frame (`frames/B-ffx2-*.jpg`).
  */
-export const HOME_ASPECT: Record<GameId, number> = { ffx: 0, ffx2: 0.93 };
+export const HOME_ASPECT: Record<FfxFamilyGame, number> = { ffx: 0, ffx2: 0.93 }; // FF7: its own phone HUD, later
 
 /** Extras a game's half passes in; both optional (tests pass neither). */
 export interface PhoneBattleOptions {
@@ -107,6 +108,7 @@ export function installPhoneBattle(
   const win = doc.defaultView ?? window;
   const html = doc.documentElement;
   const mq = win.matchMedia?.(PHONE_BATTLE_QUERY) ?? null;
+  const family = ffxFamily(game, 'installPhoneBattle'); // FFX and FFX-2 only; every branch below is two-way
 
   // ------------------------------------------------------------ the chrome
   const panel = make('div', 'phud-panel');
@@ -252,8 +254,8 @@ export function installPhoneBattle(
     // The field's slide (`phoneFraming.ts`): with a menu up, the party and the
     // boss; while aiming at one figure, that figure first.
     const aimed = hud.querySelector<HTMLElement>('.ffx-targeting .ffx-target[data-target-id]:not(.ffx-target--dim)');
-    if (text.targeting && !text.group && aimed?.dataset['targetId']) opts.field?.frame(HOME_ASPECT[game], [aimed.dataset['targetId']]);
-    else if (!text.targeting && hud.querySelector('.ig-cmd')) opts.field?.frame(HOME_ASPECT[game]);
+    if (text.targeting && !text.group && aimed?.dataset['targetId']) opts.field?.frame(HOME_ASPECT[family], [aimed.dataset['targetId']]);
+    else if (!text.targeting && hud.querySelector('.ig-cmd')) opts.field?.frame(HOME_ASPECT[family]);
     placeUnderRail();
     const key = JSON.stringify(text);
     if (key === last) return;

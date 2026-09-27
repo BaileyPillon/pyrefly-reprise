@@ -178,6 +178,12 @@ export function wirePortraitFallbacks(root: ParentNode): void {
       },
       { once: true },
     );
+    // The monogram is only a stand-in while art lands. Once any painting layer
+    // has loaded it goes, so a translucent painting (Mortibody's) no longer
+    // shows its letter through (FOC18-02). A chip whose every layer fails
+    // keeps it.
+    if (img.complete && img.naturalWidth > 0) hideMonogram(img);
+    else img.addEventListener('load', () => hideMonogram(img), { once: true });
   });
   root.querySelectorAll<HTMLImageElement>('img[data-body-id]').forEach((img) => {
     const id = img.dataset['bodyId'];
@@ -198,6 +204,12 @@ export function wirePortraitFallbacks(root: ParentNode): void {
   // Paintings already in the browser cache fire no `load` event after this
   // runs, so measure the complete ones now rather than waiting for one.
   refineBodyCropsIn(root);
+}
+
+/** Hide the ink monogram sitting behind `img` in the same chip. */
+function hideMonogram(img: HTMLImageElement): void {
+  const letter = img.parentElement?.querySelector<HTMLElement>(':scope > .ffx-portrait-fallback');
+  if (letter) letter.style.visibility = 'hidden';
 }
 
 /**

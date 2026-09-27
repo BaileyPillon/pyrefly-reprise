@@ -61,7 +61,7 @@ describe('every shipped party build resolves to a painted portrait', () => {
           expect(resolvedCandidate(m.id, undefined), `${m.id} in public/art/manifest.json`).not.toBeNull();
         });
       }
-    } else {
+    } else if (build.game === 'ffx2') {
       for (const m of build.members) {
         it(`${chapter.id}: ${m.name} (${m.id}, ${m.currentDressphere}) has a painted portrait`, () => {
           expect(

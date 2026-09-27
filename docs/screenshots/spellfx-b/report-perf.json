@@ -1,0 +1,51 @@
+{
+ "base": "http://127.0.0.1:6050/",
+ "at": "2026-09-26T23:21:16.289Z",
+ "browser": "gpu",
+ "perf-ffx": {
+  "low": {
+   "frames": 481,
+   "meanMs": 16.65,
+   "p95Ms": 18,
+   "maxMs": 25.7,
+   "fxCpuMeanMs": 0
+  },
+  "full": {
+   "frames": 481,
+   "meanMs": 16.66,
+   "p95Ms": 18.2,
+   "maxMs": 19.6,
+   "fxCpuMeanMs": 0.218
+  },
+  "phone": {
+   "frames": 481,
+   "meanMs": 16.66,
+   "p95Ms": 18.1,
+   "maxMs": 19.1,
+   "fxCpuMeanMs": 0.183
+  }
+ },
+ "perf-ffx2": {
+  "low": {
+   "frames": 478,
+   "meanMs": 16.75,
+   "p95Ms": 18.3,
+   "maxMs": 60.1,
+   "fxCpuMeanMs": 0
+  },
+  "full": {
+   "frames": 481,
+   "meanMs": 16.65,
+   "p95Ms": 18.4,
+   "maxMs": 31.2,
+   "fxCpuMeanMs": 0.26
+  },
+  "phone": {
+   "frames": 481,
+   "meanMs": 16.66,
+   "p95Ms": 18.3,
+   "maxMs": 20,
+   "fxCpuMeanMs": 0.206
+  }
+ }
+}

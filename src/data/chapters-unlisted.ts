@@ -16,6 +16,7 @@
  */
 
 import type { Chapter } from './encounters.ts';
+import { FF7_GUARD_SCORPION } from './chapter-ff7-guard-scorpion.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
@@ -25,5 +26,8 @@ import type { Chapter } from './encounters.ts';
  * Chapter XIII, Trema, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter XII).
  * Chapter XIV, Isaaru, was listed on 2026-09-25 (now in `CHAPTERS`, after Chapter XIII).
  * Chapter XV, The Den of Woe, was listed on 2026-09-26 (now in `CHAPTERS`, after Chapter XIV).
+ *
+ * The hidden FF7 experiment, Guard Scorpion, was registered here on 2026-09-27 (FF7 only; never listed:
+ * `experimental`, `number: 0`, reached by the secret door, `./chapter-ff7-guard-scorpion.ts`).
  */
-export const UNLISTED_CHAPTERS: readonly Chapter[] = [] as const;
+export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION] as const;

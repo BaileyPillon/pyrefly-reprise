@@ -11,6 +11,7 @@
  */
 
 import type {
+  AbilityId,
   AvailableCommand,
   BattleEngine,
   BattleResult,
@@ -19,6 +20,8 @@ import type {
   BattleEvent,
   CameraRigId,
   CombatantId,
+  DamageType,
+  FormulaKey,
   MessageKind,
   VfxKey,
 } from '../battle/common/types.ts';
@@ -100,6 +103,23 @@ export interface CameraPort {
    * (`BattlePresenterDepartures.ts`, `BODY_SHOT`); `BattleCamera.addRig`.
    */
   addRig?(name: string, rig: { position: [number, number, number]; lookAt: [number, number, number]; fov?: number; sway?: number }): void;
+  /**
+   * How `rig`, pushed in by `push`, frames these figures (`FrameFit.ts`):
+   * whether each keeps its minimum share of its painted quad inside the frame
+   * with no push, and the largest push up to `push` that cuts nobody who was
+   * in. Optional and additive (A-11, A-1): without it every shot plays as asked.
+   */
+  frame?(
+    rig: string,
+    push: number,
+    subjects: ReadonlyArray<{ actor: ActorHandle; min: number; floor?: number }>,
+  ): { fits: boolean; push: number; worst: number } | null;
+  /**
+   * A-12, option A's phone rule: dolly `rig` straight back until these figures
+   * fit a slice `slice` wide (0..1 of the frame). True when it moved the rig.
+   * Optional and additive; without it the phone keeps the desktop rigs.
+   */
+  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number }>): boolean;
   readonly rigNames: string[];
   readonly rigName: string;
 }
@@ -147,6 +167,18 @@ export interface MomentsPort {
    * the battle's opening sweep short (`OpeningSkip.ts`).
    */
   confirmPress?(): { pressed: Promise<void>; dispose(): void };
+  /**
+   * The player's reduce-motion setting (Settings.reduceMotion or the OS
+   * preference), read by the DOM side so the presenter stays DOM-free.
+   * Optional and additive (A-13): absent reads as "motion on".
+   */
+  reduceMotion?(): boolean;
+  /**
+   * On an upright phone (the phone battle HUD), how much of the 16:9 render's
+   * width the window shows, 0..1; `null` anywhere else. Optional and additive
+   * (A-12): absent reads as "not a phone".
+   */
+  phoneSlice?(): number | null;
   /** Tear every layer down. */
   clear(): void;
 }
@@ -159,6 +191,27 @@ export interface VfxPort {
   impact(at: CombatantId, opts?: { element?: string; crit?: boolean }): Promise<void>;
   /** Full-screen colour wash — battle start, form change, defeat. */
   screenFlash(colour?: string, ms?: number): void;
+  /**
+   * A blow is about to land (B1 spell effects, `spellfx/SpellFxLayer.ts`):
+   * start the action's spell effect on its targets if it has not begun, and
+   * return how many milliseconds until hit `hitIndex` lands in it, 0 when there
+   * is nothing to wait for. Optional, so a test fake need not implement it.
+   */
+  land?(
+    at: CombatantId,
+    opts: {
+      abilityId?: string;
+      element?: string;
+      heal?: boolean;
+      hitIndex?: number;
+      targets?: readonly CombatantId[];
+      action?: number;
+      /** Who cast it: a group effect (Mega Flare, D-233) is drawn from them. */
+      sourceId?: CombatantId;
+      /** A critical hit: the drawn effect keeps the impact bloom's 1.3x crit size. */
+      crit?: boolean;
+    },
+  ): number;
 }
 
 /** Rising damage/heal numerals. Supplied by `ui/common`, or the DOM fallback. */
@@ -224,9 +277,20 @@ export type { HudPort } from './HudPort.ts';
  *
  * Implemented by `PaintedStage` over Three.js; faked in unit tests.
  */
+/**
+ * The arena's phase lighting (D-224): a canon phase beat, or `'restore'` to
+ * return to the phase under a charge ladder (`phaseCanon.ts`). Optional: a
+ * stage without it (a test fake) plays every beat unlit.
+ */
+export interface LightingPort {
+  cue(c: import('./phaseCanon.ts').PhaseCue): void;
+}
+
 export interface BattleStage {
   readonly camera: CameraPort;
   readonly vfx: VfxPort;
+  /** D-224 phase lighting; see {@link LightingPort}. */
+  readonly lighting?: LightingPort;
   /** Live actor for a combatant, or `undefined` if it has none (hidden parts). */
   actor(id: CombatantId): ActorHandle | undefined;
   /** Which team a staged combatant fights for. Drives KO and victory poses. */
@@ -267,6 +331,14 @@ export interface BattleStage {
    * actor that already exists, and does nothing for one that does not).
    */
   arrive?(id: CombatantId, clock: ArrivalClock): Promise<ActorHandle | undefined>;
+  /**
+   * Does this combatant have a painting of its **own** for `pose`, not a
+   * fallback (`BattlePresenterArt.resolvePoseMap` points a missing pose at the
+   * nearest one there is)? Optional and additive (iter2 attack-pose,
+   * `EnemyActionPose.ts`): a stage without it reads as "no", which keeps an
+   * enemy's physical ability on `cast`, as before.
+   */
+  paints?(id: CombatantId, pose: string): boolean;
 }
 
 /** The presenter's clock, handed to a staged arrival so it obeys speed and pause. */
@@ -279,6 +351,16 @@ export interface ArrivalClock {
 
 /** Playback speed, driven by the skip/fast-forward controls. */
 export type PlaybackSpeed = 'normal' | 'fast' | 'skip';
+
+/**
+ * What an ability's own data row says about it, for presentation choices: the
+ * painted pose an enemy's action draws (`EnemyActionPose.ts`). Read from the
+ * chapter's game's ability table, never guessed from the name.
+ */
+export interface AbilityFacts {
+  damageType: DamageType;
+  formula: FormulaKey;
+}
 
 /** What the presenter needs from the outside world. */
 export interface PresenterDeps {
@@ -305,6 +387,16 @@ export interface PresenterDeps {
   now?: () => number;
   /** Overall pacing multiplier applied to every wait. 1 = authored timing. */
   timeScale?: number;
+  /** The chapter's game's ability rows, by id (`app/screens/battleAbilityFacts.ts`); without them every enemy ability keeps `cast`. */
+  abilityFacts?: ((id: AbilityId) => AbilityFacts | undefined) | null;
+  /**
+   * A-4: `'pose'` (the default) strikes the victory pose; `'hold'` keeps the
+   * battle stance and a quiet cue where the sources withhold the celebration
+   * (`VictoryPose.ts`). Per chapter, passed in by the screen; never read from the DOM.
+   */
+  victoryPose?: import('./VictoryPose.ts').VictoryPose;
+  /** A game's own motion around each action (FF7's melee run, `BattlePresenterMotion.ts`); none for FFX and FFX-2. */
+  actionMotion?: import('./BattlePresenterMotion.ts').ActionMotionPort | null;
 }
 
 /** One line of the presenter's own trace, for the debug API and e2e. */

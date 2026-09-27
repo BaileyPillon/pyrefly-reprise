@@ -1292,20 +1292,48 @@
         {
           "label": "PR-0201 phone framing of Chapter XI, Road to the Farplane (FFX-2 only)",
           "src": "docs/concepts/phone-2026-09-26/sheet-pr0201.jpg",
-          "state": "verdict",
-          "delivery": "not-scheduled",
+          "state": "approved",
+          "delivery": "implemented",
           "game": "ffx2",
           "gameNote": "FFX-2 only: Chapter XI's Road scene (src/scenes/road-to-the-farplane.ts). Option C alone would touch the shared phone HUD.",
-          "note": "docs/concepts/phone-2026-09-26/README.md. At 390x844 the Road's wide formation does not fit the 390 px slice, and Yuna or Mindy falls out (round 13, PR-0201). Options: A pull back on the phone (72% / 60% figure size, recommended), B close ranks on the phone (full size, crowded), C party first with edge tabs (fails CHK-011 as written). Awaiting Bailey."
+          "note": "docs/concepts/phone-2026-09-26/README.md. At 390x844 the Road's wide formation does not fit the 390 px slice, and Yuna or Mindy falls out (round 13, PR-0201). Options: A pull back on the phone (72% / 60% figure size, recommended), B close ranks on the phone (full size, crowded), C party first with edge tabs (fails CHK-011 as written). Picked A, docs/target/decisions.json D-201.",
+          "build": "Built on r21-road-phone (src/scenes/road-to-the-farplane-phone.ts), merged for release 21. Target vs build: docs/screenshots/road-phone-A/ (compare-*.jpg, CHECK.md). Disclosed major: after a party KO Mindy can slip off the right edge (docs/handoff/road-phone-A.md).",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "I’ll go with all of your recommendations",
+            "how": "Bailey answered the phone options round (PR-0001 and PR-0201 sheets) ~13:00 EDT, taking the recommended option on each.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "option A, pull the camera back on the phone (figures 72% in the Shiva and Anima links, 60% in the Sisters link) so every fighter stays whole; not B (close ranks, crowded) or C (party first with edge tabs)"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
         },
         {
           "label": "PR-0001 phone Victory and Defeat results (both)",
           "src": "docs/concepts/phone-2026-09-26/sheet-pr0001.jpg",
-          "state": "verdict",
-          "delivery": "not-scheduled",
+          "state": "approved",
+          "delivery": "implemented",
           "game": "both",
           "gameNote": "Both: ResultsScreen is shared; each game keeps its accent (FFX gold, FFX-2 pink), and a defeat has none.",
-          "note": "docs/concepts/phone-2026-09-26/README.md. Today the results are the 640x360 stage scaled to 390 px (text about 3 px). Options: A stacked page that scrolls under a pinned dock, B full-bleed painting with an ink sheet on one screen (recommended), C compact card with the party folded. Awaiting Bailey."
+          "note": "docs/concepts/phone-2026-09-26/README.md. Today the results are the 640x360 stage scaled to 390 px (text about 3 px). Options: A stacked page that scrolls under a pinned dock, B full-bleed painting with an ink sheet on one screen (recommended), C compact card with the party folded. Picked B, docs/target/decisions.json D-200.",
+          "build": "Built on r21-results-phone (src/ui/common/resultsPhone.ts, resultsPage.ts, results-phone.css), merged for release 21. Target vs build: docs/screenshots/results-phone-B/ (side-by-side-*.jpg, CHECK.md). Desktop and landscape unchanged.",
+          "reaction": {
+            "date": "2026-09-26",
+            "words": "I’ll go with all of your recommendations",
+            "how": "Bailey answered the phone options round (PR-0001 and PR-0201 sheets) ~13:00 EDT, taking the recommended option on each.",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [
+              "option B, the painting full-bleed with ink tallies, party chips and a thumb dock on one upright-phone screen; not A (stacked page under a pinned dock) or C (compact card with the party folded)"
+            ],
+            "undecided": [],
+            "inferred": []
+          }
         }
       ]
     },
@@ -1572,7 +1600,7 @@
         },
         {
           "label": "Yojimbo's look, boss's own painting (FFX)",
-          "src": "docs/concepts/chapters/yojimbo/boss/a-new-frame.jpg",
+          "src": "docs/concepts/chapters/yojimbo/boss/a-repaint-frame.jpg",
           "state": "approved",
           "delivery": "not-scheduled",
           "game": "ffx",

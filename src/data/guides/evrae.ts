@@ -50,7 +50,7 @@ export const EVRAE_GUIDE: ChapterGuide = {
   hints: [
     {
       when: { labels: ['Pull back', 'Pull Back'] },
-      text: "Cid pulls the {actor}'s ship out of reach — Poison Breath and Swooping Scythe cannot land while it is FAR, and Cid's missiles only fire from out here",
+      text: "Cid pulls the ship out of reach — Poison Breath and Swooping Scythe cannot land while it is FAR, and Cid's missiles only fire from out here",
       cite: 'ffx-evrae-airship §4.1, §4.2',
     },
     {

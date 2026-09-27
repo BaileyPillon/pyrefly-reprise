@@ -150,6 +150,19 @@ export function readPendingMarkers(pendingDir, now = new Date()) {
 
 const sameSha = (a, b) => Boolean(a && b) && (String(a).startsWith(String(b)) || String(b).startsWith(String(a)));
 
+// A bundle identity can arrive either as the deploy records it (just the hash,
+// e.g. "DLvZcIgF") or as the page reports it (the file name it loaded, e.g.
+// "index-DLvZcIgF.js" or "index-DLvZcIgF.js?query"). Normalise both sides to
+// the bare hash before comparing so a real reviewer reading the page is not
+// refused over that formatting difference (PR-0166).
+export function normalizeBundle(value) {
+  const s = String(value ?? '');
+  const m = s.match(/^index-([\w-]+)\.js/);
+  return m ? m[1] : s;
+}
+
+const sameBundle = (a, b) => normalizeBundle(a) === normalizeBundle(b);
+
 /**
  * Which of a marker's obligations does this report settle? Pure. The report
  * must already have passed `validateReport`. Returns the updated marker, what
@@ -172,7 +185,7 @@ export function applyReport(marker, report, reportFile = null) {
   });
   const b = report.build ?? {};
   if (!sameSha(b.mainSha, marker.mainSha)) return refuseAll(`report is for build ${b.mainSha ?? '(none)'}, this marker is ${marker.mainSha}`);
-  if (b.bundle && marker.bundle && b.bundle !== marker.bundle) return refuseAll(`report bundle ${b.bundle} is not the deployed bundle ${marker.bundle}`);
+  if (b.bundle && marker.bundle && !sameBundle(b.bundle, marker.bundle)) return refuseAll(`report bundle ${b.bundle} is not the deployed bundle ${marker.bundle}`);
   if (marker.artifactHash && b.artifactHash && b.artifactHash !== marker.artifactHash) return refuseAll('report artifact hash is not the deployed artifact');
 
   const rank = { live: 0, focused: 1, deep: 2, milestone: 3 };

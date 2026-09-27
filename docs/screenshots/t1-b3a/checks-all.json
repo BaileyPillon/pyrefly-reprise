@@ -1,0 +1,200 @@
+{
+  "phoneTip": [
+    {
+      "id": "ffx2-fallen-aeons",
+      "line": "Shell→the partyWhite MagicGuide’s pick",
+      "where": "White Magic",
+      "whereShown": true,
+      "whereInsideCard": true,
+      "whereFontPx": 15
+    },
+    {
+      "id": "seymour-omnis",
+      "line": "1WakkaSwitchGuide’s pick",
+      "where": "Switch",
+      "whereShown": true,
+      "whereInsideCard": true,
+      "whereFontPx": 15
+    },
+    {
+      "id": "ffx2-leblanc",
+      "line": "Grenade→all enemiesItemGuide’s pick",
+      "where": "Item",
+      "whereShown": true,
+      "whereInsideCard": true,
+      "whereFontPx": 15
+    }
+  ],
+  "intentE": [
+    {
+      "id": "seymour-flux",
+      "size": "1600x900",
+      "before": {
+        "card": true,
+        "chip": true
+      },
+      "after": {
+        "card": false,
+        "chip": false,
+        "panel": true,
+        "bodyClipped": true,
+        "clippedClass": true,
+        "moreText": "J hold · +4 more"
+      },
+      "jHeld": {
+        "fits": true
+      }
+    },
+    {
+      "id": "yunalesca",
+      "size": "1600x900",
+      "before": {
+        "card": true,
+        "chip": true
+      },
+      "after": {
+        "card": false,
+        "chip": false,
+        "panel": true,
+        "bodyClipped": true,
+        "clippedClass": true,
+        "moreText": "J hold · +2 more"
+      },
+      "jHeld": {
+        "fits": true
+      }
+    },
+    {
+      "id": "seymour-flux",
+      "size": "2000x1012",
+      "before": {
+        "card": true,
+        "chip": true
+      },
+      "after": {
+        "card": false,
+        "chip": false,
+        "panel": true,
+        "bodyClipped": true,
+        "clippedClass": true,
+        "moreText": "J hold · +4 more"
+      },
+      "jHeld": {
+        "fits": true
+      }
+    },
+    {
+      "id": "yunalesca",
+      "size": "2000x1012",
+      "before": {
+        "card": true,
+        "chip": true
+      },
+      "after": {
+        "card": false,
+        "chip": false,
+        "panel": true,
+        "bodyClipped": true,
+        "clippedClass": true,
+        "moreText": "J hold · +2 more"
+      },
+      "jHeld": {
+        "fits": true
+      }
+    }
+  ],
+  "coach": [
+    {
+      "id": "ffx2-leblanc",
+      "coach": true,
+      "chipOpacity": 0,
+      "chipCoachOverlapPx2": 3382.7369689941406,
+      "flag": "ffx2"
+    },
+    {
+      "id": "ffx2-bahamut",
+      "coach": true,
+      "chipOpacity": 0,
+      "chipCoachOverlapPx2": 3382.7369689941406,
+      "flag": "ffx2"
+    }
+  ],
+  "allLabel": [
+    {
+      "id": "ffx2-leblanc",
+      "size": "1280x720",
+      "label": "ALL ENEMIES",
+      "fontPx": 14,
+      "overlapPx2": 0,
+      "panelVisible": true
+    },
+    {
+      "id": "ffx2-leblanc",
+      "size": "2560x1440",
+      "label": "ALL ENEMIES",
+      "fontPx": 22.4,
+      "overlapPx2": 0,
+      "panelVisible": true
+    },
+    {
+      "id": "ffx2-den-of-woe",
+      "size": "1600x900",
+      "label": "ALL ALLIES",
+      "fontPx": 14,
+      "overlapPx2": 0,
+      "panelVisible": true
+    }
+  ],
+  "wide": [
+    {
+      "size": "2000x1012",
+      "band": {
+        "l": 71.45053100585938,
+        "r": 1999.9528503417969,
+        "w": 1928.5023193359375
+      },
+      "canvas": {
+        "l": 0,
+        "r": 2000,
+        "w": 2000,
+        "h": 1012
+      },
+      "vw": 2000
+    },
+    {
+      "size": "2560x1080",
+      "band": {
+        "l": 72.21875,
+        "r": 2559.96875,
+        "w": 2487.75
+      },
+      "canvas": {
+        "l": 0,
+        "r": 2560,
+        "w": 2560,
+        "h": 1080
+      },
+      "vw": 2560
+    }
+  ],
+  "opening": [
+    {
+      "id": "ffx2-bahamut",
+      "battleScreenMs": 426,
+      "momentStartMs": 3093,
+      "momentEndMs": 6880,
+      "firstVisibleMs": 6915,
+      "firstMenuMs": 8309,
+      "framesWithPanelBeforeMomentEnd": 0
+    },
+    {
+      "id": "ffx2-leblanc",
+      "battleScreenMs": 400,
+      "momentStartMs": 3015,
+      "momentEndMs": 6820,
+      "firstVisibleMs": 6856,
+      "firstMenuMs": 9662,
+      "framesWithPanelBeforeMomentEnd": 0
+    }
+  ]
+}

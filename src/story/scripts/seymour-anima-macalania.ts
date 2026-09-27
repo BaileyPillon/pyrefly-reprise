@@ -324,13 +324,19 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
       // §1.15's guardrail: let Rikku be right on a technical point. One line,
       // not a tutorial; Lulu supplies the consequence, not the instruction.
       say('rikku', "She's winding up! That wasn't a spell!", { auto: 1300 }),
-      say('lulu', 'Whatever lands next lands twice as hard.', { auto: 1400 }),
+      say('lulu', 'Whatever lands next lands twice as hard.', {
+        auto: 1400,
+        fallback: [{ who: 'tidus', text: 'Whatever hits next hits twice as hard!' }],
+      }),
     ],
     'mac-seymour-restored': [
       // An HP bar is not a progress bar. Auron says the chapter's thesis in
       // six words and does not explain it.
-      say('wakka', "His bar — hey! It's all the way back!", { auto: 1300 }),
-      say('auron', 'You killed his weapon. Not him.', { auto: 1500 }),
+      say('wakka', "His bar — hey! It's all the way back!", { auto: 1300, fallback: [{ who: 'tidus' }, { who: 'rikku' }] }),
+      say('auron', 'You killed his weapon. Not him.', {
+        auto: 1500,
+        fallback: [{ who: 'yuna', text: 'We only broke his weapon. Not him.' }],
+      }),
     ],
   },
 };

@@ -29,6 +29,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { buildPendingMarker, deepOwedBuilds, supersedeMarkers } from '../../tools/critic-pending.mjs';
 import type { CriticReport } from '../../tools/critic-policy.mjs';
 import { loadPolicy, planReview, releasePolicy, shipVerdict, validateReport } from '../../tools/critic-policy.mjs';
+import { planForRepo, registryChapters } from '../../tools/critic-plan.mjs';
 import { formatOwnerOverrideWarning, parseOwnerOverride, resolveReleaseGate, shipEvidenceFor } from '../../tools/deploy-pages.mjs';
 
 const REPO = resolve(__dirname, '..', '..');
@@ -343,5 +344,29 @@ describe('shipEvidenceFor: which report the gate is allowed to read', () => {
       issues: [issue({ severity: 'major', introducedByCandidate: true, regressionVsLive: true })],
     }));
     expect(shipEvidenceFor(root, 'abc1234')).toMatchObject({ ship: 'HOLD' });
+  });
+});
+
+// NEW-C3 (round 13, the PR-0141 family): the plan's chapter list comes from the
+// chapter registry (encounters.ts minus LOCKED_CHAPTER_IDS), not from the five
+// chapters policy.json knew about in September, so an FFX-2 ATB engine change
+// owes every listed FFX-2 chapter. Both games: shared critic plumbing.
+describe('the plan owes every listed chapter of the game a change touches', () => {
+  const LISTED_FFX2 = ['ffx2-bahamut', 'ffx2-vegnagun-shuyin', 'ffx2-leblanc', 'ffx2-fallen-aeons', 'ffx2-trema', 'ffx2-den-of-woe'];
+
+  it('an FFX-2 ATB engine change (resolve.ts) lists all six listed FFX-2 chapters, Leblanc included', () => {
+    const p = planForRepo({ root: REPO, paths: ['src/battle/ffx2/resolve.ts'], since: 'HEAD' });
+    expect(p.games).toBe('ffx2');
+    for (const id of LISTED_FFX2) expect(p.chapters).toContain(id);
+    expect(p.chapters).toContain('ffx2-leblanc');
+    expect(p.chapters.some((c: string) => !c.startsWith('ffx2-'))).toBe(false);
+  });
+
+  it('a chapter still shown as COMING is not owed, and an all-chapters change lists both games', () => {
+    const chapters = registryChapters(REPO);
+    expect(chapters).not.toBeNull();
+    expect(Object.keys(chapters ?? {})).not.toContain('seymour-anima-macalania');
+    const p = planForRepo({ root: REPO, paths: ['src/battle/common/types.ts'], since: 'HEAD' });
+    for (const id of [...LISTED_FFX2, 'seymour-flux', 'seymour-omnis', 'isaaru-via-purifico']) expect(p.chapters).toContain(id);
   });
 });

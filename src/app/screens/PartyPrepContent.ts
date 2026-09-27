@@ -9,12 +9,19 @@
  * unchanged from the approved board; the shell still owns the cursor.
  */
 
-import type { FFX2PartyBuild, FFXPartyBuild } from '../../battle/common/types.ts';
+import type { AnyPartyBuild, FFX2PartyBuild, FFXPartyBuild } from '../../battle/common/types.ts';
+import { Ff7NotHandledError } from '../../battle/common/game.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 import { partyFaceHtml, type PartyFaceMember } from '../../ui/common/partyFace.ts';
 import { partyRole } from '../../ui/common/party-roles.ts';
 
 type PartyBuild = FFXPartyBuild | FFX2PartyBuild;
+
+/** Prep is FFX and FFX-2 only: the FF7 experiment has no prep screen (audit), so an FF7 build throws here. */
+function prepBuild(build: AnyPartyBuild): PartyBuild {
+  if (build.game === 'ff7') throw new Ff7NotHandledError('party prep (FF7 has no prep screen)');
+  return build;
+}
 
 /**
  * A portrait cropped to the head with its initial underneath, so a missing
@@ -33,7 +40,8 @@ export function faceHtml(m: PartyFaceMember): string {
 }
 
 /** The roster column: every member the chapter lets the player look at. */
-export function rosterHtml(build: PartyBuild, selected: number): string {
+export function rosterHtml(anyBuild: AnyPartyBuild, selected: number): string {
+  const build = prepBuild(anyBuild);
   const levels =
     build.game === 'ffx'
       ? build.members.map((m) => `S.LV ${m.sphereGrid.sLv}`)
@@ -62,7 +70,8 @@ export function rosterHtml(build: PartyBuild, selected: number): string {
 }
 
 /** The three who actually walk in, along the bottom. */
-export function slotsHtml(build: PartyBuild): string {
+export function slotsHtml(anyBuild: AnyPartyBuild): string {
+  const build = prepBuild(anyBuild);
   type Slot = { id: string; name: string; sub: string; role: string | undefined; dressphere?: string };
   const slots: Slot[] =
     build.game === 'ffx'
@@ -112,7 +121,8 @@ export function slotsHtml(build: PartyBuild): string {
  * `[label, value, isWord?]` — `isWord` sets the value in the serif, for a
  * dressphere name rather than a number.
  */
-export function statSheetHtml(build: PartyBuild, member: number): string {
+export function statSheetHtml(anyBuild: AnyPartyBuild, member: number): string {
+  const build = prepBuild(anyBuild);
   let rows: Array<[string, string, boolean?]>;
 
   if (build.game === 'ffx') {

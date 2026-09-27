@@ -62,6 +62,8 @@ export interface ChapterObjective {
   id: string;
   label: string;
   rule: ObjectiveRule;
+  /** A secret row: "???" until met or the chapter is lost once, never the headline (`ui/common/objectiveReveal.ts`). */
+  hideUntilLoss?: true;
 }
 
 /**
@@ -103,12 +105,15 @@ export interface ChapterMeta {
   snapshots: readonly [ChapterSnapshot, ChapterSnapshot, ChapterSnapshot];
   focalCharacterId: string;
   musicKeys: readonly string[];
+  /** The chapter card's BOSS row when the first formation is not who the chapter is about (PR-0134). */
+  bossLine?: string;
 }
 
-/** `GameId` ('ffx' | 'ffx2') → the pause screen's display label. */
-export const GAME_LABELS: Record<GameId, 'FFX' | 'FFX-2'> = {
+/** `GameId` → the pause screen's display label (FF7 added 2026-09-27 for the hidden experiment). */
+export const GAME_LABELS: Record<GameId, 'FFX' | 'FFX-2' | 'FF7'> = {
   ffx: 'FFX',
   ffx2: 'FFX-2',
+  ff7: 'FF7',
 };
 
 /**

@@ -76,9 +76,11 @@ import {
   camera,
   fade,
   fx,
+  ifFlag,
   music,
   results,
   say,
+  setFlag,
   setPose,
   sfx,
   wait,
@@ -257,7 +259,7 @@ export const ffx2LeblancScripts: ChapterScripts = {
     say('leblanc', "Oh, don't gloat, pet. You'll crease."),
     say('leblanc', "Fine. Take it. I'd memorised the good part anyway."),
     say('yuna-x2', 'You had the other half. The whole time.'),
-    say('leblanc', 'I had the *better* half, dearie.'),
+    say('leblanc', 'I had the better half, dearie.'),
     say('rikku-x2', 'Is she flirting with a sphere?'),
     say('paine', 'Play it.'),
 
@@ -328,7 +330,7 @@ export const ffx2LeblancScripts: ChapterScripts = {
       say('yuna-x2', 'Paine? What is it?', { auto: 1200 }),
       say('paine', 'Turn it off.', { auto: 1400 }),
       wait(1600),
-      say('rikku-x2', '...Okay. Next room.', { auto: 1300 }),
+      say('rikku-x2', '...Okay. Round two.', { auto: 1300 }),
       camera('idle', 600),
     ],
 
@@ -369,19 +371,40 @@ export const ffx2LeblancScripts: ChapterScripts = {
 
     // --- Act III beat 3a. The combo is off the board and she says so. This
     // is the fight teaching its own target priority out loud [§5.4].
+    //
+    // Either henchman can fall first [§5.4], so each KO beat sets a flag and
+    // reads the other's (PR-0103). With Ormi already down, Ormi cannot call
+    // out and nobody names him as next: Leblanc is alone.
     'logos-down': [
-      say('ormi', 'Logos! Logos, get up!', { auto: 1200 }),
-      say('leblanc', "Leave him, lamb. He's resting.", { auto: 1300 }),
-      say('leblanc', '...And there goes the routine.', { auto: 1400 }),
-      say('paine', "Combo's gone. Ormi next.", { auto: 1200 }),
+      setFlag('logos-down', true),
+      ifFlag(
+        'ormi-down',
+        [
+          say('leblanc', 'Logos? Not you as well, darling.', { auto: 1300 }),
+          say('leblanc', 'Well. Nobody left to be clever with.', { auto: 1400 }),
+          say('paine', 'Just her now.', { auto: 1100 }),
+        ],
+        [
+          say('ormi', 'Logos! Logos, get up!', { auto: 1200 }),
+          say('leblanc', "Leave him, lamb. He's resting.", { auto: 1300 }),
+          say('leblanc', '...And there goes the routine.', { auto: 1400 }),
+          say('paine', "Combo's gone. Ormi next.", { auto: 1200 }),
+        ],
+      ),
     ],
 
     // --- Act III beat 3b. Her one unexplained kindness [§9.3, "the seam"].
-    // It is late, it is short, and nobody comments on it.
+    // It is late, it is short, and nobody comments on it. It plays in either
+    // order; only her last line depends on whether Logos is still standing.
     'ormi-down': [
+      setFlag('ormi-down', true),
       say('ormi', 'Boss... I held the door.', { auto: 1100 }),
       say('leblanc', 'You did, lamb. Badly. But you did.', { auto: 1300 }),
-      say('leblanc', 'Well. Nobody left to be clever with.', { auto: 1400 }),
+      ifFlag(
+        'logos-down',
+        [say('leblanc', 'Well. Nobody left to be clever with.', { auto: 1400 })],
+        [say('leblanc', 'Logos, darling. Do try to last longer.', { auto: 1400 })],
+      ),
       say('rikku-x2', 'No more combo! Go, go, go!', { auto: 1200 }),
     ],
   },

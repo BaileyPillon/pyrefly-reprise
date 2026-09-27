@@ -15,12 +15,8 @@
  */
 
 import type { Camera, Scene, Vector3 } from 'three';
-import type {
-  BattleEngine,
-  BattleResult,
-  BattleSetup,
-  EnemyGroupDef,
-} from '../../battle/common/types.ts';
+import type { BattleEngine, BattleResult, BattleSetup, EnemyGroupDef } from '../../battle/common/types.ts';
+import { addExperimentPlayTime } from '../experiments/experimentRecords.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { audio } from '../../audio/index.ts';
 import { BattlePresenter, type AutoStrategy, type BattleOutcome } from '../../engine/BattlePresenter.ts';
@@ -51,9 +47,12 @@ import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
 import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
-import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
+import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleScreenStageHook.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
+import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
+import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
+import { presenterGameDeps } from './BattleScreenGameDeps.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -209,6 +208,10 @@ export class BattleScreen extends Screen {
       slots: this.scene.slots,
       canvas: this.app.renderer.domElement,
       overlayRoot: this.root,
+      // FF7: none drawn until its options round (battleSpellFx answers 'ff7' with no overlay)
+      spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed),
+      sceneKey: this.scene.key,
+      grade: this.app.renderer,
     });
 
     // --- engine ------------------------------------------------------------
@@ -221,11 +224,11 @@ export class BattleScreen extends Screen {
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
     if (this.exited) return this.releaseParts();
-    this.airship = await attachAirshipBattle(this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8 only
+    this.airship = await attachStageHook(chapter.game, this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8; FF7's rows
     if (this.exited) return this.releaseParts();
 
     // --- HUD + ports -------------------------------------------------------
-    this.hud = createHud(chapter.game, () => this.stage); // the field, for the FFX-2 Oversoul look
+    this.hud = createHud(chapter.game, () => this.stage, this.engine); // the field (FFX-2 Oversoul look); the engine (FF7's item counts)
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
@@ -243,6 +246,7 @@ export class BattleScreen extends Screen {
         xray: (id) => this.stage?.xray(id),
         visibility: (id) => this.stage?.visibility().get(id) ?? 1,
         setPanels: (panels) => this.stage?.setPanels(panels),
+        keyFeatures: () => this.stage?.keyFeatureRects() ?? [],
       });
       // The enemy-intent slab needs the live engine, not just the state the HUD
       // is synced with: predicting a rotation means dry-running its AI script,
@@ -252,10 +256,8 @@ export class BattleScreen extends Screen {
       attachEnemyIntent(this.hud, this.engine);
     }
 
-    // A real HUD sees every event through `onEvent` and draws its own numerals
-    // and banner, so the presenter only drives these when `ui/common` asked it
-    // to (via the factory hooks) or when there is no HUD at all. Otherwise a
-    // hit would print twice.
+    // A real HUD draws its own numerals and banner (`onEvent`), so the presenter drives these only
+    // when `ui/common` asked it to (the factory hooks) or with no HUD at all; else a hit prints twice.
     // Mid-battle story beats play on the field that is already on screen.
     this.cutscenes = createMidBattleCutscenes({
       root: this.root,
@@ -293,11 +295,15 @@ export class BattleScreen extends Screen {
       audio,
       // Letterbox / name slab / heartbeat vignette. `BattleMoments` raises
       // these; see `src/ui/common/transitions/`.
-      moments: this.momentOverlay,
+      moments: chapter.game === 'ff7' ? null : this.momentOverlay, // FF7: no Ink & Gold name slab or letterbox (FF7 HUD spec §8)
       midScripts: chapter.scriptsRef?.midScripts ?? {},
+      // The chapter's own ability rows: an enemy's physical ability draws its
+      // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
+      ...presenterGameDeps(chapter.game, chapter.buildRef),
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
     if (this.opts.auto) this.presenter.setAutoPlay(this.opts.auto);
+    bracketAnimations(this.presenter, this.engine, this.hud); // FF7's ATB modes read the animation (setAnimating), its dialogue holds the action; a no-op for FFX and FFX-2
 
     // The battle's own cue is resolved by `runEncounterChain` from the
     // formation's `musicCues`, so the boss theme the pre-scene faded in is the
@@ -322,7 +328,7 @@ export class BattleScreen extends Screen {
     // `.ig` so the chip can read `--ig-accent` (it sits on the battle screen's
     // root, outside the HUD's own themed stage); `.ig--ffx2` so an X-2 chapter
     // gets pyre pink rather than the FFX gold fallback.
-    chip.className = chapter.game === 'ffx2' ? 'battle-pause-chip ig ig--ffx2' : 'battle-pause-chip ig';
+    chip.className = chapter.game === 'ffx2' ? 'battle-pause-chip ig ig--ffx2' : chapter.game === 'ff7' ? 'battle-pause-chip ig battle-pause-chip--ff7' : 'battle-pause-chip ig'; // FF7: unmarked (ff7-hud.css)
     chip.dataset['action'] = 'pause:open';
     chip.textContent = 'PAUSE';
     chip.setAttribute('aria-label', 'Pause');
@@ -353,8 +359,8 @@ export class BattleScreen extends Screen {
    * has no boss to name.
    */
   private async showBattleStart(): Promise<void> {
-    if (this.opts.speed === 'skip' || this.preview) return;
-    const chapter = this.opts.chapter;
+    const chapter = this.opts.chapter; // FF7 draws no Ink & Gold card (FF7 HUD spec §7 #15, §8)
+    if (this.opts.speed === 'skip' || this.preview || chapter.game === 'ff7') return;
     const state = this.engine?.state();
     if (!state) return;
     const boss = state.enemyIds
@@ -496,9 +502,8 @@ export class BattleScreen extends Screen {
    * keyboard to lose and wants the menu on a predictable frame.
    */
   private get canPause(): boolean {
-    if (this.pauseScreen || this.app.overlayActive) return false;
-    if (!this.presenter || this.presenter.isAborted) return false;
-    const snap = this.presenter.snapshot();
+    if (this.pauseScreen || this.app.overlayActive || !this.presenterBound) return false;
+    const snap = this.presenter!.snapshot();
     // A minigame overlay owns the keyboard for the same reason a command menu
     // does (`ui/ffx/minigames/**` each attach a `RawInputWatcher`).
     return !String(snap['phase'] ?? '').includes('minigame');
@@ -526,9 +531,14 @@ export class BattleScreen extends Screen {
     return !menuOwnsCancel();
   }
 
+  /** PR-0158: a live presenter on a screen still up; nothing pauses a battle loading or torn down. */
+  private get presenterBound(): boolean {
+    return !this.exited && this.presenter !== null && !this.presenter.isAborted;
+  }
+
   /** Put the pause menu up over the frozen battle. */
   private async openPause(): Promise<void> {
-    if (this.pauseScreen || this.app.overlayActive) return;
+    if (this.pauseScreen || this.app.overlayActive || !this.presenterBound) return;
     const chapter = this.opts.chapter;
     const screen = new PauseScreen({
       chapter,
@@ -704,7 +714,9 @@ export class BattleScreen extends Screen {
     // while this screen is on top, so the clock stops of its own accord the
     // moment the pause overlay goes up — time spent reading the menu is not
     // time spent playing. `SaveStore.addPlayTime` buffers the writes.
-    if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
+    // A hidden experiment (FF7) keeps its time in its own store, never the save (BattleScreenExperiment.ts).
+    if (!this.preview && this.opts.chapter.experimental) addExperimentPlayTime(this.opts.chapter.id, dt * 1000);
+    else if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
 
     this.scene?.update(dt);
     // Settle the enemy lane against the camera, before the player's first
@@ -821,6 +833,7 @@ export class BattleScreen extends Screen {
     // on purpose — see that getter — so a screenshot lands on a known frame.
     if (name === 'pause:open') {
       if (this.pauseScreen) return true;
+      if (!this.presenterBound) return false;
       void this.openPause();
       return true;
     }
@@ -829,6 +842,8 @@ export class BattleScreen extends Screen {
       void this.closePause();
       return true;
     }
+    const fx = spellFxTrigger(name, this.stage?.spellFx);
+    if (fx !== null) return fx;
     return battleDebugTrigger(name, this.presenter, this.hud, this.scene);
   }
 
@@ -859,6 +874,7 @@ export class BattleScreen extends Screen {
       hud: this.hud !== null,
       rig: this.scene?.battleCamera.rigName ?? null,
       actors: this.stage?.snapshot() ?? [],
+      spellFx: this.stage?.spellFx.snapshot() ?? null,
       playback: this.presenter?.snapshot() ?? null,
       battle: battleStateSnapshot(state),
       /** The full ordered event log, which the e2e specs snapshot. */

@@ -66,7 +66,11 @@ try {
   await page.keyboard.press('Escape'); await page.waitForTimeout(900);
   note('prep.afterEsc', await scr());
   if (await scr() === 'chapter-select') {
-    for (let i = 0; i < idx; i++) { await page.keyboard.press('ArrowRight'); await page.waitForTimeout(300); }
+    // PLAY-MJS-MERGE-GATE: after PR-0109 the board returns ON the chapter
+    // just left, so pressing ArrowRight `idx` more times here would overshoot
+    // (and wrap) instead of re-selecting `id`. Move to the target id, the way
+    // t1-b5's route.mjs findCard() does, instead of counting presses.
+    for (let i = 0; i < CH.length && (await st())?.selectedId !== id; i++) { await page.keyboard.press('ArrowRight'); await page.waitForTimeout(300); }
     await page.keyboard.press('Enter'); await page.waitForTimeout(1600);
   }
   await assertScreen(page, 'party-prep');

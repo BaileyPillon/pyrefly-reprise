@@ -93,8 +93,8 @@ export const evraeAirshipScripts: ChapterScripts = {
     wait(1200),
 
     // --- Beat 1 — home is gone, and the Al Bhed are flying anyway ---------
-    say('wakka', 'A thousand years under the sea. And she still flies.'),
-    say('rikku', 'She flies because we fixed her. You are welcome.'),
+    say('wakka', 'Thousand years under the sea, and she still flies, ya?'),
+    say('rikku', "She flies 'cause we fixed her. You're welcome!"),
     beat(1300),
     say('lulu', 'Everything they owned is behind us.'),
     beat(1500), // Rikku does not have a bright answer. That is the answer.
@@ -102,10 +102,11 @@ export const evraeAirshipScripts: ChapterScripts = {
 
     // --- Beat 2 — Brother finds her; Cid turns the ship -------------------
     sfx('cursor-move'), // requested: comm-click
-    // Brother speaks Al Bhed and Rikku carries it across, as she does all
-    // through FFX. See the handoff: this is uncertain line 1.
+    // Brother's Al Bhed-inflected English (§1.17) stays his. Rikku no longer
+    // "translates" a line the player has just read: she adds the when
+    // (PR-0160, D-213, Bailey 2026-09-26: the reword, not a cipher).
     say('brother', 'YUNA! Bevelle! They are marrying her to that man!'),
-    say('rikku', 'He says Bevelle. He says within the hour.'),
+    say('rikku', "It's in Bevelle. And it's within the hour!"),
     say('cid', 'Bevelle. Fine. Everybody hold on to something.'),
     say('cid', 'Nobody asked me twice. Nobody is going to have to.'),
     // §1.17's guardrail: one short, unfunny line of real fear for Yuna.
@@ -115,11 +116,11 @@ export const evraeAirshipScripts: ChapterScripts = {
     say('brother', 'I am flying! Be quiet and be impressed!'),
 
     // --- Beat 3 — the thesis, stated once ---------------------------------
-    say('tidus', 'Okay. Weapons, plan, go. What have we got?'),
+    say('tidus', "Okay. Weapons, plan, go. What've we got?"),
     say('lulu', 'Six of us. No summoner.'),
     beat(1400), // Nobody argues with it. That is what makes it land.
     say('lulu', 'Nobody on this deck can heal anything.'),
-    say('rikku', 'I have potions. Lots of potions. That... that is it.'),
+    say('rikku', "I've got potions! Lots of potions. That's... kinda it."),
     say('auron', 'Then ration them.'),
 
     // --- Beat 4 — Bevelle comes up over the cloud line --------------------
@@ -132,8 +133,8 @@ export const evraeAirshipScripts: ChapterScripts = {
 
     // --- Beat 5 — it was already up here ----------------------------------
     shake(5, 420),
-    say('tidus', 'Something just came off the city.'),
-    say('lulu', 'It is not scrambling.'),
+    say('tidus', 'Hey! Something just came off the city!'),
+    say('lulu', "It isn't scrambling."),
     beat(1400),
     say('lulu', 'It was already up here. Waiting for us.'),
 
@@ -164,7 +165,7 @@ export const evraeAirshipScripts: ChapterScripts = {
     say('wakka', 'It just... dropped.'),
     beat(1600),
     say('kimahri', 'It was told to stand there. It stood.'),
-    say('tidus', 'That is it? We just won?'),
+    say('tidus', "That's it? We just won?"),
     beat(1300),
     say('auron', 'No.'),
 
@@ -186,13 +187,13 @@ export const evraeAirshipScripts: ChapterScripts = {
     shake(14, 900),
     say('cid', 'Incoming! That is the city shooting at us!'),
     say('cid', 'She is holed. I have to pull her off.'),
-    say('rikku', 'We are not going in?', { emotion: 'surprised' }),
+    say('rikku', "Wait, we're not going in?!", { emotion: 'surprised' }),
     say('cid', 'Not like this.'),
     beat(1600),
 
     // --- Beat 10 — the chains. Understate, one unguarded line, cut. ------
-    say('tidus', 'Then get us over the roof. Once.'),
-    say('lulu', 'You would be alone down there.'),
+    say('tidus', "C'mon, just get us over the roof. Once."),
+    say('lulu', "You'd be alone down there."),
     beat(1400),
     say('tidus', 'Yeah.', { emotion: 'determined' }),
     beat(1500),
@@ -277,22 +278,25 @@ export const evraeAirshipScripts: ChapterScripts = {
     'evrae-first-inhale': [
       camera('action', 300),
       wait(700), // hold the throat, uncovered, before the callout arrives
-      say('wakka', 'Its throat! Look at its throat!', { auto: 1200 }),
-      say('auron', 'Out of its reach. Now.', { auto: 1200 }),
+      say('wakka', 'Its throat! Watch its throat, ya?', { auto: 1200 }),
+      say('auron', 'Out of its reach. Now.', { auto: 1200, fallback: [{ who: 'tidus', text: 'Get out of its reach! Now!' }] }),
       camera('idle', 300),
     ],
     'evrae-out-of-breath': [
       say('rikku', 'It missed! It totally missed!', { auto: 1200 }),
-      say('lulu', 'The distance did that. Not you.', { auto: 1400 }),
+      say('lulu', 'The distance did that. Not you.', { auto: 1400, fallback: [{ who: 'wakka', text: 'Distance did that, ya? Not you.' }] }),
     ],
     'evrae-haste-phase': [
       camera('action', 300),
-      say('tidus', 'It is faster. Why is it faster?', { auto: 1200 }),
-      say('auron', 'It stopped guarding. Now it hunts.', { auto: 1400 }),
+      say('tidus', "It's faster. Why's it faster?", { auto: 1200 }),
+      say('auron', 'It stopped guarding. Now it hunts.', {
+        auto: 1400,
+        fallback: [{ who: 'wakka', text: "It quit guarding, ya? Now it's hunting." }],
+      }),
       camera('idle', 300),
     ],
     'evrae-first-petrify': [
-      say('rikku', 'He is turning to stone! Hold still!', { auto: 1300 }),
+      say('rikku', "He's turning to stone! Hold still!", { auto: 1300 }),
       say('rikku', 'Al Bhed Potion. Trust me.', { auto: 1200 }),
     ],
     'cid-first-volley': [

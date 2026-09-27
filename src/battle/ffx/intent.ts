@@ -338,7 +338,12 @@ export function statusWord(id: string): string {
   if (id === 'ko') return 'Death';
   return id
     .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w) => {
+      // "Max HP x2", not "Max Hp X2" (critic round 13 PR-0074).
+      if (w === 'hp' || w === 'mp') return w.toUpperCase();
+      if (/^x\d+$/.test(w)) return w;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
     .join(' ');
 }
 
@@ -358,7 +363,7 @@ export function countersFor(ctx: Ctx, enemy: FFXCombatant): string[] {
     const form = enemy.enemy?.formIndex ?? 0;
     if (form === 0) {
       out.push('Answers a physical hit with Blind, a magical one with Silence, anything else with Sleep [ffx-yunalesca §5.1]');
-      out.push('Her Blind/Silence gate reads the target *she* last picked, not your attacker — keep one member Blinded and the Blind counter never fires [ffx-yunalesca §5.1]');
+      out.push('Her Blind/Silence gate reads the target she last picked, not your attacker — keep one member Blinded and the Blind counter never fires [ffx-yunalesca §5.1]');
     } else if (form === 1) {
       out.push('49% chance to answer any hit with Dispelling Slap [ffx-yunalesca §5.2]');
     } else {

@@ -128,6 +128,8 @@ import {
   cacheKeyFor,
 } from './advisor-plan.ts';
 import { sentenceFor } from './advisor-say.ts';
+import { dropRepeatedStatuses, statusWords } from './advisor-copy.ts';
+import { discTurnOf, discTurnValue } from './advisor-omnis.ts';
 import {
   type Committed,
   type QueuedCommand,
@@ -137,7 +139,7 @@ import {
 } from './advisor-committed.ts';
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
 import { holdingForTheBreath } from './airship-orders.ts';
-import { scopeWord, targetDisplayName } from './targetLabel.ts';
+import { isSelfOrder, scopeWord, targetDisplayName } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
 export { changesNothing } from './advisor-guard.ts';
@@ -558,10 +560,7 @@ function primaryBoss(state: Readonly<BattleState>): AnyCombatant | null {
 
 /** `'power-break'` → `'Power Break'`. There is no status-name table to share. */
 export function statusLabel(status: StatusId | string): string {
-  return String(status)
-    .split('-')
-    .map((w) => (w ? w[0]!.toUpperCase() + w.slice(1) : w))
-    .join(' ');
+  return statusWords(String(status)); // "Max HP x2", not "Max Hp X2" (PR-0074)
 }
 
 /**
@@ -1065,7 +1064,7 @@ function candidateFor(
     label: row.label,
     menu: menuChipFor(state.game, commands, row),
     targetId,
-    targetName: scoped ?? targetDisplayName(state, targetId),
+    targetName: isSelfOrder(state.game, command) ? null : (scoped ?? targetDisplayName(state, targetId)),
     effect: describeAbility(def, row, command),
     estimate,
     mpCost: row.mpCost,
@@ -1086,7 +1085,7 @@ function candidateFor(
       ...base,
       reason: reasonFor(state, base, mid, chances),
       cite: '',
-      score: scored.score,
+      score: scored.score + discTurnValue(discTurnOf(state, command, mid)), // Ch XII (PR-0197)
       source: 'simulated',
     },
   };
@@ -1150,7 +1149,7 @@ export function buildAdvisorView(
   options: AdvisorOptions = {},
 ): AdvisorView | null {
   const actor = state.combatants[decision.actorId];
-  if (!actor) return null;
+  if (!actor || state.game === 'ff7') return null; // FF7: the advisor is off in the slice (ff7-game-branch-audit)
   const planner = options.planner !== false;
 
   // **The cache.** FFX-2 runs an Active ATB clock and `syncGauges` pumps the
@@ -1349,7 +1348,10 @@ export function buildAdvisorView(
   for (const c of legal) {
     const dead = !(hold && c.suggestion.source === 'tactic') && (planner
       ? inertAcrossBand(decision.actorId, c.suggestion.command, c.outcome, c.chances)
-      : changesNothing(decision.actorId, c.suggestion.command, c.outcome));
+      : changesNothing(decision.actorId, c.suggestion.command, c.outcome)) &&
+      // Chapter XII: a zero-damage hit that turns a disc off a -ga is the
+      // fight's signature move, not a no-op (./advisor-omnis.ts, PR-0197).
+      !((discTurnOf(state, c.suggestion.command, c.outcome)?.gaLost ?? 0) > 0);
     (dead ? inert : useful).push(c);
   }
   // **The Zombie guard** (PR-0198): a row that hurts a living Zombie ally goes
@@ -1401,7 +1403,11 @@ export function buildAdvisorView(
     const longPlan =
       override !== null && c === override && tactic ? tactic.suggestion.label : null;
     const said = sentenceFor(c.facts, confidenceOf(c.chances), longPlan);
-    return { ...s, facts: c.facts, ...(said ? { reason: said } : {}) };
+    const reason = said || s.reason;
+    // One claim, said once: the effect line gives up a status the reason
+    // already names ("Inflicts Shell" over "It puts Shell on the party").
+    const effect = dropRepeatedStatuses(s.effect, reason, s.statuses);
+    return { ...s, facts: c.facts, reason, effect };
   });
 
   const view: AdvisorView = {
@@ -1629,7 +1635,7 @@ function defFor(
  * FFX-2 fields no switch at all, which `advisor-plan.test.ts` asserts rather
  * than assumes.
  */
-function sameCommand(a: Command, b: Command): boolean {
+export function sameCommand(a: Command, b: Command): boolean {
   if (a.kind !== b.kind) return false;
   const idA = 'id' in a ? String(a.id) : '';
   const idB = 'id' in b ? String(b.id) : '';

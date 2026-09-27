@@ -76,6 +76,13 @@ export interface PendingMarkerEntry {
   parseError?: string;
 }
 
+/**
+ * Normalises a bundle identity to the bare hash, so `"index-DLvZcIgF.js"` (the
+ * file name the page reports) and `"DLvZcIgF"` (the hash the deploy records)
+ * compare equal.
+ */
+export declare function normalizeBundle(value: string | null | undefined): string;
+
 export declare function pendingMarkerFileName(mainSha: string): string;
 
 export declare function pendingMarkerPath(pendingDir: string, mainSha: string): string;

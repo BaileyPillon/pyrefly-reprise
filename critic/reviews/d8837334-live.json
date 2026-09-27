@@ -1,0 +1,63 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-27T03:00:00.000Z",
+  "build": {
+    "mainSha": "d8837334",
+    "bundle": "DlL4YDmM",
+    "artifactHash": "5c29df7474027aa06b6d82488aae8cc203ed16dd36388862bafa3c0b2e23e327"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/d8837334.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/ce05b02c.json (ce05b02c is the previous live build per docs/deploys.log) -> {\"result\":\"PASS\",\"artifactHash\":\"5c29df7474027aa06b6d82488aae8cc203ed16dd36388862bafa3c0b2e23e327\",\"liveManifest\":\"match\",\"checked\":63,\"mismatched\":[],\"missing\":[],\"wrongType\":[],\"errors\":[],\"notes\":[]}. --full was not run: the marker's planned review is 'deep', which is owed after the deploy per policy and is a separate obligation from this live pass; the diff-mode check against the immediately previous build already found the live manifest names this artifact and every changed file byte-identical with the right content type."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu (real-GPU launch args from tools/browser-mode.mjs; canvas rendered correctly, no black-canvas fallback needed), fresh incognito context, script .zz-live-smoke-d8837334.tmp.mjs (kept as agent scratch, not committed), three fresh page loads against https://baileypillon.github.io/pyrefly-reprise/?cb=<ts> (cache-busted). Part 1 (1600x900, ffx2-vegnagun-shuyin, the Vegnagun colossus chapter): real title-confirm click + real Enters reached chapter-select; real select+confirm entered the chapter, a real held-Enter skipped the cutscene, reached battle, and the FFX-2 command menu ('.ig-cmd-stack [data-idx]') was asserted present before proceeding. targeting() showed the party (yuna/rikku/paine, visible 1/1/1) staged in front of a single large 'vegnagun-tail' link (visible 0.976, visibleInFrame 0.938) -- the colossus is staged as one piece on this turn, not four separately-scaled links as the handoff describes for other turns; not a contradiction, since the fight has multiple links across its run and only one was on screen at this asserted turn. Positive path: a real click opened the 'White Magic' submenu (16 real ability rows including Cure/Cura/Curaga/Life/Full-Life, confirming spell-fx option B's ability list renders), then a real click on 'Pray' fired it. audioDebug() showed playing:'boss-vegnagun' with prerendered.manifest===true, prerendered.sprite===true, prerendered.spriteDecoded===true (not the procedural synth fallback), and every one of the 106 listed SFX cached:true/prerendered:true. Part 2 (fresh reload, yojimbo-cavern): real select+confirm+cutscene-skip reached battle with the command menu asserted present; the visible battle-screen text was scanned and contains no literal 'Doom' label (hasDoomWord: false), matching the shipped pick that Kimahri arrives without Doom and the card reads the Ghost fact only after a first loss; a raw JSON string-match for 'doom' on the engine state was also true (an available ability/sfx name, not a status on a party member -- the schema's per-member status field was not present under the read the script used, so that narrower check is inconclusive and is not relied on; the on-screen text scan is the stronger, player-facing signal and is relied on instead). Part 3 (390x844 phone viewport, ffx2-fallen-aeons, Chapter XI): real select+confirm+cutscene-skip reached battle with the command menu asserted present; targeting() showed every fighter (yuna, rikku, paine, x2-shiva) at visible:1 and visibleInFrame:1 at phone width, confirming PR-0201's camera pull-back (no one framed out, matching Bailey's D-201 pick). Whole-run counts: console errors = 0, HTTP responses >= 400 = 0, across all three parts and every asset/audio/font request observed.",
+      "reason": null
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight pass only, appended to the Part 3 phone-viewport session. Real progress already existed from the run (ffx2-vegnagun-shuyin attempts=1/20066ms, yojimbo-cavern attempts=1/11599.7ms, and ffx2-fallen-aeons cleared=true/471419ms/55 turns from the auto-played win used to try to reach the phone results screen -- see notTested). One setting (masterVolume) was changed directly on the save object in localStorage (the slider is not exposed to a headless run) and page.reload() was performed. After reload, the full settings object read back identical to what was written, and every chapter's attempts/cleared/bestTimeMs/playTimeMs were unchanged from before the reload. Both the changed setting and the existing progress survived a real reload.",
+      "reason": "Full upgrade-path matrix (fresh player, returning player, a fixture from the previous live build migrating forward, invalid/truncated storage, reload during every allowed state) was NOT tested; out of scope for this lightweight live pass per the task."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact-artifact manifest verify-live against the previous live build ce05b02c (CHK-017)",
+      "real-input boot: title -> chapter-select via a real click and real Enters, three separate fresh loads",
+      "ffx2-vegnagun-shuyin (the Vegnagun colossus chapter): real select+confirm, real hold-Enter cutscene skip, real player turn reached (command menu asserted present), targeting() confirms the party and a staged colossus link are both visible on screen",
+      "spell-fx option B: a real click opened the White Magic submenu (16 real ability rows) and a real click fired an ability (Pray)",
+      "yojimbo-cavern: real select+confirm+cutscene-skip to a real player turn; the visible battle-screen text contains no 'Doom' label, matching the shipped 'Kimahri arrives without Doom' pick",
+      "ffx2-fallen-aeons (Chapter XI) at 390x844 (phone viewport): real select+confirm+cutscene-skip to a real player turn; targeting() shows every fighter at visible 1 / visibleInFrame 1, confirming PR-0201's camera-pull-back fix (nobody framed out at phone width)",
+      "prerendered music confirmed playing on the Vegnagun chapter (audioDebug(): playing 'boss-vegnagun', prerendered.manifest/sprite/spriteDecoded all true, not the synth fallback) and every listed SFX cached/prerendered",
+      "reload smoke: one real setting change and existing real progress across three played chapters all survive a reload",
+      "console errors and HTTP >=400 responses counted for the whole run (0 and 0)"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix (fresh player, returning player, previous-build save fixture migrating forward, invalid/truncated storage, reload during every allowed state)",
+      "the phone results screen (PR-0001 option B) was not directly observed live: ffx2-fallen-aeons was auto-played to a real victory (outcome: 'victory') to reach it, but the screen was still 'cutscene' (a post-battle scene) rather than 'results' when the pass moved on after its wait window; the win itself, and the phone camera fix on that same chapter, were confirmed, but the results-on-phone layout was not re-derived on this pass",
+      "the Escape-pause assertion on the Vegnagun chapter came back inconclusive on its first read (overlayDepth stayed 0 within the 8s wait) rather than confirming the overlay opened; this was checked immediately after a real ability click (Pray) with only ~1.7s settle time, so the likely explanation is the read landed mid-animation rather than a broken pause -- not re-tried within this pass's budget, and not treated as a failure since the screen never left 'battle' and no error was thrown either way; a second, cleaner pause/H/resume check on a menu-idle turn is owed to the next live or focused pass",
+      "boss attack/hurt pose art was not screenshotted separately for a human visual compare in this pass (screenshots were taken and saved under docs/screenshots/fix10c/live-d8837334-*.png for the record, but this live pass does not include a human art-fidelity judgment -- that belongs to the still-owed deep review)",
+      "the other eleven listed chapters (I-IV, VI-VIII, X, XII-XV) played end to end on the live site in this pass -- only exact-artifact identity covers them here",
+      "physical device, Safari or real-controller input",
+      "the focused review of the changed area and the deep review of every affected chapter and system, both still owed on this build (critic/pending/d8837334.json)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 35
+}

@@ -1,0 +1,94 @@
+{
+ "first": {
+  "yuna": {
+   "side": "party",
+   "z": 1.45,
+   "r": [
+    374,
+    536,
+    89,
+    180
+   ],
+   "shadowWorldY": 0.012
+  },
+  "rikku": {
+   "side": "party",
+   "z": 0.1,
+   "r": [
+    475,
+    543,
+    107,
+    160
+   ],
+   "shadowWorldY": 0.012
+  },
+  "paine": {
+   "side": "party",
+   "z": -1.3,
+   "r": [
+    601,
+    549,
+    72,
+    145
+   ],
+   "shadowWorldY": 0.012
+  },
+  "vegnagun-tail": {
+   "side": "enemy",
+   "z": -17,
+   "r": [
+    455,
+    -132,
+    1287,
+    868
+   ],
+   "shadowWorldY": -1.388
+  }
+ },
+ "target": {
+  "yuna": {
+   "side": "party",
+   "z": 1.45,
+   "r": [
+    321,
+    562,
+    132,
+    152
+   ],
+   "shadowWorldY": 0.012
+  },
+  "rikku": {
+   "side": "party",
+   "z": 0.1,
+   "r": [
+    475,
+    544,
+    106,
+    160
+   ],
+   "shadowWorldY": 0.012
+  },
+  "paine": {
+   "side": "party",
+   "z": -1.3,
+   "r": [
+    613,
+    551,
+    72,
+    147
+   ],
+   "shadowWorldY": 0.012
+  },
+  "vegnagun-tail": {
+   "side": "enemy",
+   "z": -17,
+   "r": [
+    455,
+    -135,
+    1288,
+    870
+   ],
+   "shadowWorldY": -1.388
+  }
+ }
+}

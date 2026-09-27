@@ -1,0 +1,169 @@
+# t1-b2a: FFX HUD half of batch 2 (thresholds program, 2026-09-26)
+
+Branch `t1-b2a` (worktree `D:/pyrefly-t1-b2a`, from main 3665f1eb). Plan:
+`docs/plans/thresholds-program-2026-09-26.md` §2 "Batch 2". Issue texts:
+`critic/rounds/round-13.json`. Evidence: `docs/screenshots/t1-b2a/`.
+
+No item here was stalled under rule 15 (none had two failed attempts or two
+reviews leaving the same issue open after a repair), so no method check was
+owed.
+
+## Fixed (class A)
+
+| Item | Game | What changed | Check |
+|---|---|---|---|
+| PR-0149 | both (shared loader) | New `src/engine/fetchRetry.ts`. `tryLoadMeta` retries once after 500 ms on a 5xx or a thrown fetch, never on a 4xx. `tryLoadImage` and `tryLoadTexture` retry once only when the art manifest says the file ships, because the image loaders cannot tell a 503 from a 404. | `painted-art-retry.test.ts`: a 503 then 200 stub still gets the sidecar, and a 404 still makes one request. |
+| PR-0176, FOC18-02 | FFX only | Aeon rows in `CtbList` take `resolvePortraitKey(spriteKey)` plus the idle crop. Both are skipped for Yojimbo: his navy painting is not approved (D-054). `wirePortraitFallbacks` hides the ink monogram once any painting layer has loaded, which fixes Mortibody's M showing through. A chip whose layers all fail keeps its letter. | `ui-ffx-ctb-aeon-portraits.test.ts`. Production build at 1600x900, first menu of Ch I, III and IX, plus Ch X after summoning Bahamut and Ch XIV after summoning Valefor (real keys): every tile has a painting and no monogram is visible. Frames: `ctb-*.jpg`. |
+| PR-0191 | FFX only | When the gauge drops from full, `ZanmatoGauge` holds the full view until Yojimbo's `action-end`. A gauge drop no longer clears the banner, which now ends on its own 2.6 s timer. Running the engine showed why this matters: the 100 -> 0 `overdrive-gauge` event plays before the strike's `action-start`. | `ui-ffx-zanmato-hold.test.ts` replays a real engine route to the first Zanmato. The old widget test that pinned the early banner cut was updated. Browser: `zanmato-replay.json` (see the note on injection below). The banner showed for 2.86 s. The panel read full "Next: Zanmato" at all three 9999s and changed to 0 only at Yojimbo's action-end. |
+| PR-0190, PR-0182 | coach rule: both; Ronso Rage: FFX only | **Root cause, measured with real keys:** the cut-in never swallowed Enter. Auron's held coach line on Kimahri's first turn took the confirm in the capture phase. `CoachMark` now remembers a cursor move made under the line and lets the next confirm through, while still taking the line down. A bare confirm still dies with the line in both games, which is all PR-0051 and FOC-01 asked for. `openKimahriRage` now resolves straight to `params.abilityId`, so there is one chooser, not two; the list remains only as a fallback. | `ui-coach-layer.test.ts` (FOC-01 contract updated; bare-confirm cases added for FFX and FFX-2) and `ui-ffx-yojimbo-minors.test.ts`. Production build, Ch I at 1600x900: Arrow then Enter at 100, 300 and 600 ms after the cut-in starts, with and without the coach line, opens the highlighted row every time. Enter on OVERDRIVE opens the list on the first press. Enter, arrows, Enter plus one party-target confirm fires Mighty Guard (checked in the battle log). |
+| PR-0183 | FFX only | New `src/ui/ffx/plateFaces.ts`. The top third of each party figure, and of the aeon when one is out, now counts as an obstacle for the plate's dock (plate docking only; the field's visibility sums are unchanged). | `ui-ffx-plate-faces.test.ts`. Real keys, Ch I and Ch III single-target frames at 1600x900 and 2000x1012: no plate touches a party face, and each plate sits against its own figure. Frames: `seymour-flux-*.jpg`, `braskas-final-aeon-*.jpg`. |
+| PR-0128 (guide half) | FFX only | New `src/ui/ffx/overdriveFocus.ts` marks the HUD root while an Overdrive overlay is open. `ffx-hud.css` hides `.sgd` under that mark. The mark comes off on a result, a throw or a rejection. | `ui-ffx-overdrive-focus.test.ts`. Frames `overlay-open-1600.jpg` and `overlay-open-2000.jpg`, 0.5 s after the overlay opens: the "Tidus · USES SLICE & DICE" plate is clear, and a real Enter closes the overlay and brings the guide back. |
+
+## Stopped
+
+- **PR-0186 (the Sensor card in Ch III): stopped because it needs a design choice.** Measured on the production build in grid px (1600x900 and 2000x1012 give the same numbers). The card is 116x74 and rests at 428..544 x 166..240. The only free space in its column is the band above Braska's Final Aeon, which is 69 px tall with the grown obstacle box (BFA top at 77) and 78 px with the tight box. Below BFA (bottom 230), the party-status panel starts at 258. The column has no height that clears both Pagodas, BFA and the fixed panels, and the band left of the turn list is 12 px wide. A column solver was built and measured, then removed (it found no slot). Meeting "misses both Pagodas and BFA" needs one of these, which is Bailey's or the driver's call: (a) fold the card while an enemy is aimed at (it has a folded state already); (b) a smaller card; (c) allow a tight fit against the top edge using the tight silhouette box, with no slack. Nothing about the Sensor card was changed.
+- **PR-0128 (the HIT ×2 / ×4 / ×6 tick labels): stopped under rule 6.** The approved tile prints MISS / HIT ×2 / HIT ×4 / HIT ×6 across the bar. Our Swordplay has one centred success zone (`resolveTidusTiming`), and the sources give no hit count that depends on bar position (research/assets-and-tech.md §2A, ffx-combat-core §5.3: success versus the fail row; the bonus comes from time remaining). Restoring the labels would tell the player that the right edge gives six hits, which is unsourced game data. What the ticks should say needs a decision: keep MISS / HIT, or pick words that match the real mechanic.
+
+## Checks
+
+- `npx tsc --noEmit`: clean.
+- Full `npx vitest run --testTimeout=60000`: exit 0, 454 files passed, 4 skipped, 8,333 tests.
+- `node tools/orphans.mjs`: 24 orphaned, the same as main. The three new modules are all reachable.
+- No art was touched. `target-approved-hashes-judge-locked` is in the full suite and green.
+- Browser: production build (`vite build`) served by `vite preview` on port 5980, headless Chromium with GPU args. Keys were real Playwright keypresses. The server was stopped by its PID.
+- **Injected, and labelled as such.** PR-0128's overlay was opened through the HUD port (`openMinigame`), because Tidus's gauge does not fill on a real-key route; a real Enter resolved it. PR-0191's replay started Yojimbo's gauge at 95; everything after that is the live engine, presenter and HUD.
+
+## Notes for the merge
+
+- `src/ui/coach/CoachMark.ts` is in batch 4's folder. Batch 4 (t1-b4a) changed `CoachLayer.ts`, `coachHold.ts`, `coach.css` and `Briefing.ts`, not this file, so there is no textual overlap.
+- `FFXBattleHud.ts` gained wiring lines only (about 1,560 lines now). The logic lives in the new modules.
+- Nothing under `src/scenes/**`, `BattlePresenter*.ts`, `PaintedActor.ts` or `TargetHighlight.ts` was touched.
+
+## CHECK (independent check, 2026-09-26; the checker did not build this batch)
+
+Branch `t1-b2a` at ba7696c9. The checker used its own production build (`vite build`, served by `vite preview` on port 5985, stopped by its PID), headless Chromium with `PYREFLY_BROWSER=gpu`, and real Playwright keys. Probes are in `tools/zz-b2a-check.tmp/` (untracked). Frames and JSON are in `docs/screenshots/t1-b2a/check/`. They are not committed: this commit adds only this section.
+
+**Suite.** `tsc --noEmit` is clean. Full `vitest run --testTimeout=60000`: exit 0, 8,333 tests passed, 29 skipped, no flakes. The 8 touched test files pass (61 tests). `orphans.mjs` reports 24, the same as main, and the three new modules are reachable. No file under `public/` or `docs/target/` changed.
+
+| Item | Round-13 acceptance check | Result |
+|---|---|---|
+| PR-0149 (both) | A unit test with a fetch stub that answers 503, then 200, gets the sidecar. | **Met.** `painted-art-retry.test.ts` calls the real `tryLoadMeta`: a 503 then a 200 gives the sidecar in 2 calls, and a 404 makes exactly 1 call. |
+| PR-0176 / FOC18-02 (FFX) | No turn-order tile in Ch I, III, IX, X or XIV shows the monogram layer. | **Met.** On the first menu of Ch I, III, IX, X and XIV, and after real-key summons (Valefor in Ch IX and XIV, Bahamut in Ch X): 0 visible monograms and 0 unpainted tiles. Mortibody, Bahamut and Valefor each use their own painting. Frames: `ctb-*.jpg`. |
+| PR-0191 (FFX) | In a replay of the route, the banner stays up at least 2.6 s, and the panel reads Zanmato (full) until the 9999 has landed. | **Met.** The replay follows round 13's shape: a party-side Attack on Yojimbo takes the gauge to 100, and Yojimbo acts next. *Injected:* his gauge was set to 97 once, when he was next in the CTB list. The banner class was on for 2,599 ms and visible for 2,879 ms including the fade. At the 9999 on Valefor the panel read full with "Next: Zanmato"; it changed to 0% and "Next: Daigoro" only at Yojimbo's action-end. `zanmato-check-1600x900.json`. The case where the reset lands 0.6 s into the banner was **not** reproduced live: here the reset arrived 3.1 s after the banner started. The engine-fed unit test covers that case. |
+| PR-0190 (FFX) | Real keys press Arrow then Enter at 100, 300 and 600 ms after a cut-in starts. Each time, either the arrow is ignored or the Enter opens the highlighted row. | **Met, 12 of 12 runs**, with the coach line on and off. Headless key dispatch lags: the Enter reached the page 614, 769 and 985 ms after the cut-in was inserted with the coach line on, and 133, 335 and 644 ms with it off. In every run the arrow moved the cursor to Attack and the Enter opened targeting on Attack. With the arrows taken to OVERDRIVE, the Enter opened Jump / Mighty Guard / White Wind. `cutin2-*.jpg`. |
+| PR-0182 (FFX) | Overdrive > Mighty Guard fires with Enter, arrows, Enter and at most one confirm, with no dead press. | **Met, with the coach line on and off.** Enter on OVERDRIVE opens the Rage list on the first press. Then 1 arrow, Enter, 1 party-target confirm: the battle log shows `kimahri:mighty-guard`. No second Rage picker appears. `cutin2-mighty-guard-*.jpg`. |
+| PR-0183 (FFX) | In Ch I and Ch III single-target frames, the name plate does not touch any party face. | **Met at 1600x900 and 2000x1012.** Every Attack target in both chapters was checked, using a stricter face band than the build's own (the top 45 % of each figure's box, not the top third). No plate touches a face, and each plate sits 0 to 7 px from its own target. Ch X was also checked, with the same result. `plate-*.jpg`. |
+| PR-0128, guide half (FFX) | The frame 0.5 s after Enter on Slice & Dice shows the name plate unobstructed (and four tick labels; that half is stopped). | **NOT met under real input.** Route: Ch II, Tidus's gauge set to 100 (*injected*, as round 13's own repro was), then real keys for OVERDRIVE > Slice & Dice > Enter. The guide card is hidden while the overlay is open and comes back after a real Enter, which is correct. But **no "Tidus · OVERDRIVE" plate is drawn above the slab at all**: the message banner stayed off for the whole time the overlay was open (`overlay-open-1600x900.jpg`, `-2000x1012.jpg`). The builder's `overlay-open-*.jpg` show a "Tidus · USES SLICE & DICE" plate only because that probe called `hud.setMessage(...)` before `openMinigame`. That is a staging hook, and under CHK-015 it cannot establish the plate. The card change is harmless and causes no regression, but PR-0128 stays **open**, not "fixed in part". Drawing the approved tile's actor plate above the slab (`A-swordplay-overlay.jpg`) would restore an approved target, so it is class A work for the next batch. |
+
+**Stops.** Both stops agree with the sources and rules. PR-0186 needs a placement choice: the checker did not re-measure it, and the frames show the Sensor card still over Pagoda B. The HIT ×2 / ×4 / ×6 tick labels would print unsourced data (rule 6).
+
+**Notes (not blockers).**
+- The coach-line rule in `CoachMark.ts` is shared, so it also changes FFX-2. In Ch IV (`ffx2-bahamut`), with Rikku's line up, ArrowDown then Enter now takes the line down **and** opens the Change submenu. A bare Enter still only takes the line down (PR-0051 holds; `ffx2-coach-*.jpg`). This loosens e30ea5e's rule that the press dismissing an overlay dies with it, but only after the player has moved the cursor. It is one of the fixes PR-0190 itself names, so the next focused review should look at it. `navigated` is set by any button other than confirm or cancel, including triangle, L1 and R1 (Shift, Q, F, R, PageUp, PageDown), not only by arrows. That is minor.
+- PR-0183: in Ch III at 1600x900, the "Yu Pagoda A" plate now sits right of the Pagoda, over Braska's Final Aeon's arm and blade (`plate-braskas-final-aeon-1600x900-t0.jpg`). It is clear of the faces, so the check is met, but it should be disclosed.
+- Rule 14: every commit states its game case.
+
+**Verdict.** 6 of the 7 claimed fixes meet their round-13 checks on the checker's own build. There are no regressions in the chapters checked (Ch I, II, III, IX, X and XIV, plus FFX-2 Ch IV for the shared coach rule) and no rule broken in the code. **1 blocker:** PR-0128's guide half fails its check under real input, so it must not be recorded as fixed.
+
+## REPAIR (the one repair cycle, 2026-09-26; rule 15)
+
+The single blocker from the CHECK above was repaired. Nothing was backed out.
+
+| Item | Result | What changed | Check |
+|---|---|---|---|
+| CHK-B2A-01: PR-0128, name-plate half (FFX only) | **Fixed** (a8bb6434) | **Root cause:** the engine emits `minigame-request` before any `message`, and the decision that picked the Overdrive had already hidden `.ig-banner` (`clearTransientOverlays`). So nothing put a plate above the slab. The builder's frame had one only because the probe called `hud.setMessage` by hand. The HUD now records who the `minigame-request` names. `openMinigame` writes "<name> · Overdrive" into the HUD's own banner (new `src/ui/ffx/overdrivePlate.ts`). The plate comes down when the overlay settles, including on a throw or a rejection, unless a `message` has replaced it in the meantime. It applies to every FFX Overdrive overlay because `targets.json` says the others follow the Swordplay pattern. No new element was designed: this is the approved tile's plate. | `ui-ffx-overdrive-plate.test.ts` (3 tests) failed before the fix and passes after. It drives the HUD the way the presenter does and never calls a message path. **Real keys**, production build (`vite build` + `vite preview` on 5980, stopped by its PID), headless Chromium with `PYREFLY_BROWSER=gpu`, Ch II seed 1, Tidus's gauge set to 100 (*injected*, as in round 13's own repro), then OVERDRIVE > Slice & Dice > Enter. Frame 0.5 s later: the plate reads "Tidus OVERDRIVE". At 1600x900 its box is 45,44 359x78, above the slab at 36,140. At 2000x1012 its box is 151,50 403x88, above the slab at 140,157. It is the topmost element at 15/50/85 % of its width, and the guide card is hidden. The same result holds with the coach line on at 1600x900. A real Enter closes the overlay, and the plate and guide card follow correctly. Frames: `docs/screenshots/t1-b2a/repair/overlay-open-1600x900.jpg`, `-2000x1012.jpg`, `-1600x900-coach.jpg`. Probe: `tools/zz-b2a-repair.tmp/` (untracked). |
+
+**Still open (not blockers of this batch, and unchanged):** PR-0128's tick labels (the HIT ×2 / ×4 / ×6 half) wait on Bailey's choice of words under rule 6. PR-0186 waits on a placement choice among options (a) to (c) in "Stopped" above. The acceptance check for PR-0128 names "four tick labels", so **PR-0128 as a whole stays open** until Bailey picks the tick wording. Only its plate half and its guide half are now met under real keys.
+
+**Checks after the repair.** `tsc --noEmit` is clean. Full `vitest run --testTimeout=60000` exits 0: 455 files passed, 4 skipped, 8,336 tests passed, 29 skipped. `orphans.mjs` reports 24, the same as main, and `overdrivePlate.ts` is reachable.
+
+## RE-CHECK (independent re-check after the repair, 2026-09-26; the re-checker built and repaired none of it)
+
+Branch `t1-b2a` at c62ee298. Own production build (`vite build --outDir dist-recheck`, served by `vite preview` on port 5985, stopped by its PID; the copy was removed afterwards), headless Chromium with `PYREFLY_BROWSER=gpu`, real Playwright keys. Probes: `tools/zz-b2a-recheck.tmp/` (untracked). Frames: `docs/screenshots/t1-b2a/recheck/` (not committed; this commit adds only this section).
+
+**Suite.** `tsc --noEmit` clean. Full `vitest run --testTimeout=60000`: exit 0, 455 files passed, 4 skipped, 8,336 tests passed, 29 skipped. The diff of a8bb6434 touches only `src/ui/ffx/` (FFX only; FFX-2 overlays and HUD untouched).
+
+| Check | Result |
+|---|---|
+| CHK-B2A-01, PR-0128 plate half, 1600x900 (Ch II seed 1, Tidus's gauge 100 *injected*, then OVERDRIVE > Slice & Dice > Enter, frame 0.5 s later) | **Met.** Banner reads "Tidus Overdrive" at 45,44 359x78, slab at 36,140; the banner is topmost at 15/50/85 % of its width; guide card hidden. A real Enter closes the overlay; plate and overlay go together (about 1.1 s), guide returns. `overlay-open-1600x900.jpg`. |
+| Same, 2000x1012 | **Met.** Banner 151,50 403x88 (the REPAIR table's "252x88" is a typo for 403x88), slab 140,157. `overlay-open-2000x1012.jpg`. |
+| Same, coach line on, 1600x900 | **Met**, same boxes. `overlay-open-1600x900-coach.jpg`. |
+| Other FFX Overdrives (regression) | Auron, Dragon Fang (Ch II, real keys): "Auron Overdrive" above the slab, 0 px overlap, closes cleanly. Yuna's Grand Summon opens no overlay on this route, and no plate is left behind. All `.ig-minigame.ffx-mg` overlays share one placement, so Wakka, Lulu, Rikku and Kimahri take the same layout at desktop sizes. |
+| Landscape phone, 844x390 | Plate 95,19 155x34 above the slab 91,61; 0 px overlap. |
+| **Upright phone, 390x844 (the phone battle layout)** | **Regression.** `phone-hud-parts.css` moves `.ig-banner` under the rail (top about 142), while the Overdrive slab keeps today's place (14,56 341x100, per the phone plan's "Overdrive minigames keep today's layout"). The new plate lands at 6,142 192x35, overlapping the slab by 2,629 px², and the slab's bottom edge clips the top of "Tidus OVERDRIVE". Before a8bb6434 the banner stayed hidden while an overlay was open on every size (CHECK timeline above; the code path is the same), so this collision is new. The slab itself stays readable. `od-yunalesca-tidus-390x844.jpg`. |
+
+**Verdict.** The original blocker (CHK-B2A-01) now meets its acceptance check at 1600x900 and 2000x1012, coach on and off, under real keys. **1 new blocker:** on an upright phone the new plate collides with the slab (introduced by a8bb6434, a regression against main and live). Keeping main's behaviour there (no plate while the overlay is open under `html[data-phone-battle='ffx']`) would remove it without a design choice; placing the plate somewhere on the phone is Bailey's call under rule 9. PR-0128 as a whole stays open for the tick-label wording, and PR-0186 for its placement choice, as recorded above.
+
+## FIX (RCHK-B2A-01, RCHK-B2A-02; 2026-09-26; FFX only)
+
+**RCHK-B2A-01, without a design choice.** `FFXBattleHud.openMinigame` now checks
+`this.el.ownerDocument.documentElement.dataset['phoneBattle']` (set only by
+`phoneBattle.ts`, only while the upright phone layout is on) before calling
+`showOverdrivePlate`. Under that layout the call is skipped and `takePlateDown`
+is a no-op, so the banner stays off for the whole overlay, matching main's
+behaviour before a8bb6434. Desktop and landscape phone (no `data-phone-battle`
+attribute) are untouched and still get the plate. No plate placement was
+designed for the phone; this only restores main's fallback.
+
+*Test first:* two cases were added to `tests/unit/ui-ffx-overdrive-plate.test.ts`
+("the upright phone battle layout (RCHK-B2A-01)"): with
+`document.documentElement.dataset.phoneBattle = 'ffx'` set, the banner stays
+`hidden` through `openMinigame`'s request and its settle; with the attribute
+absent, the plate still shows. The phone case failed (`expected false to be
+true`) before the fix and both pass after it.
+
+*Real keys, production build* (`vite build --outDir dist-fixcheck`, served by
+`vite preview` on port 5981, stopped by its PID; the build copy was removed
+afterwards), headless Chromium with `PYREFLY_BROWSER=gpu`, Ch "yunalesca"
+(Chapter XIV), Tidus's Overdrive gauge set to 100 (*injected*, as in every
+earlier round-13/CHECK repro), then real OVERDRIVE > Slice & Dice > Enter:
+
+- **390x844 (upright phone, `data-phone-battle="ffx"`):** no plate. `bannerText`
+  and `bannerBox` are both `null` through the whole overlay; the slab
+  (`14,56 341x100`) shows with 0 px overlap. `docs/screenshots/t1-b2a/fixcheck/od-yunalesca-tidus-390x844.jpg`.
+- **1600x900 (desktop, no `data-phone-battle`):** plate restored. Banner reads
+  "Tidus Overdrive" at `45,44 359x78`, topmost at 15/50/85% of its width, above
+  the slab at `36,140 853x251`; closes with the overlay in the same key press.
+  `docs/screenshots/t1-b2a/fixcheck/od-yunalesca-tidus-1600x900.jpg`.
+
+Probe: `tools/zz-b2a-fixcheck.tmp/` (untracked; copy of the recheck's `anyod.mjs`
+pointed at a fresh `SHOTS` dir).
+
+**RCHK-B2A-02.** The REPAIR table's 2000x1012 box read "252x88"; the RE-CHECK
+above had already found the real number from its own frame ("403x88") and
+called the REPAIR number a typo without fixing it. The REPAIR table (CHK-B2A-01
+row, above) now reads 403x88.
+
+**Checks after the fix.** `npx tsc --noEmit`: clean. Full
+`npx vitest run --testTimeout=60000`: exit 0, 455 files passed, 4 skipped, 8,338
+tests passed, 29 skipped, 1 todo (2 tests added to the plate suite). `node
+tools/orphans.mjs`: 24 orphaned, the same as main; no module touched here is
+orphaned.
+
+**Still open, unchanged:** PR-0128's tick-label wording (Bailey's choice, rule
+6) and PR-0186's placement choice ((a)/(b)/(c) above). Neither was touched.
+
+## FINAL CHECK (independent check of the FIX, 2026-09-26; the checker wrote none of it; FFX only)
+
+Scope: `e46698c1` on `t1-b2a` (3 files: `src/ui/ffx/FFXBattleHud.ts`,
+`tests/unit/ui-ffx-overdrive-plate.test.ts`, this note). The code change is one
+branch in `openMinigame`: when `html[data-phone-battle]` is set (only
+`phoneBattle.ts` sets it, and only under `(max-width: 599px) and (orientation:
+portrait)`), `showOverdrivePlate` is not called, so the banner stays hidden as
+on main. Nothing else in the batch changed since the RE-CHECK (`811ef0d8`).
+
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | Clean. |
+| Full `npx vitest run --testTimeout=60000` | 455 files passed, 4 skipped; 8,338 tests passed, 29 skipped, 1 todo. Includes the 2 new RCHK-B2A-01 cases. |
+| `node tools/orphans.mjs` | 24 orphaned of 805, unchanged; nothing new. |
+| Real keys, own production build (`vite build --outDir dist-finalcheck`, `vite preview` on 5985, stopped by its PID, build folder removed), headless Chromium, `PYREFLY_BROWSER=gpu`, Ch II seed 1, Tidus's gauge 100 (*injected*), OVERDRIVE > Slice & Dice > Enter, frame 0.5 s later | **390x844 (upright phone): met.** `data-phone-battle="ffx"`, banner hidden for the whole overlay (timeline: off, then overlay closes), 0 px overlap with the slab at 14,56 341x100, no page errors. **1600x900: met.** Plate "Tidus Overdrive" at 45,44 359x78, topmost at 15/50/85 %, above the slab at 36,140, 0 px overlap. **2000x1012: met.** Plate 151,50 403x88 above the slab at 140,157 (confirms RCHK-B2A-02's corrected number). **844x390 (landscape phone, no attribute): plate kept** at 95,19 155x34 above the slab at 91,61, 0 px overlap. A real Enter closes the overlay and takes the plate down at every size. |
+| RCHK-B2A-02 | The REPAIR row now reads 403x88; matches this build. |
+
+Frames: `docs/screenshots/t1-b2a/final/overlay-open-{390x844,1600x900,844x390,2000x1012}.jpg`
+(untracked). Probe: `tools/zz-b2a-final.tmp/` (untracked scratch).
+
+Verdict: **RCHK-B2A-01 and RCHK-B2A-02 fixed; no regression found in the batch.**
+Minor, not blocking: the layout is read once when the overlay opens, so rotating a
+phone during an Overdrive keeps the choice made at open (the overlay lasts seconds);
+the fix commit's attribution line names a different model than the brief asked for.
+PR-0128's tick-label wording and PR-0186 stay open for Bailey, as before.

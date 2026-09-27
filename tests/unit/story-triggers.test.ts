@@ -241,7 +241,7 @@ function abilityIds(chapter: (typeof CHAPTERS)[number]): Set<string> {
     for (const aeon of chapter.buildRef.aeons) {
       for (const id of aeon.abilityIds ?? []) ids.add(id);
     }
-  } else {
+  } else if (chapter.buildRef.game === 'ffx2') {
     for (const member of chapter.buildRef.members) {
       for (const progress of Object.values(member.abilitiesLearned)) {
         for (const id of progress.learned ?? []) ids.add(id);

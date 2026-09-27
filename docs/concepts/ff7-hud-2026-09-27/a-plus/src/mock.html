@@ -1,0 +1,43 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FF7 HUD A+</title>
+<style>
+/* The HUD type on every frame is PR7 Line, our own glyph set (glyphs.js, SVG paths, no font file).
+   The type-sheet candidates are OFL: M PLUS Rounded 1c (latin subset in fonts/, OFL file beside it)
+   and the repo's own Rajdhani, Exo 2 and Chakra Petch (public/fonts). Chakra also sets the sheet
+   chips. Russo One (fonts/) is no longer used: the damage digits are our own drawing now. */
+@font-face{font-family:'M PLUS Rounded 1c';src:url(fonts/MPLUSRounded1c-Medium-500.latin.woff2);font-weight:500}
+@font-face{font-family:Rajdhani;src:url(../../../../../public/fonts/rajdhani/Rajdhani-SemiBold-600.woff2);font-weight:600}
+@font-face{font-family:Rajdhani;src:url(../../../../../public/fonts/rajdhani/Rajdhani-Bold-700.woff2);font-weight:700}
+@font-face{font-family:'Exo 2';src:url(../../../../../public/fonts/exo2/Exo2-Variable-wght.woff2);font-weight:100 900}
+@font-face{font-family:Chakra;src:url(../../../../../public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2);font-weight:500}
+@font-face{font-family:Chakra;src:url(../../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2);font-weight:700}
+body{margin:0;background:#222}
+section{position:relative;overflow:hidden;margin:0 0 20px;background:#000}
+section.desk{width:1600px;height:900px}
+section.phone{width:390px;height:844px}
+.stage{position:absolute;left:0;top:0;width:100%;height:100%}
+.stage.pillar{left:200px;width:1200px}
+.scene{width:100%;height:100%;display:block}
+.hud{position:absolute;inset:0}
+.hud div{position:absolute;box-sizing:border-box}
+.t{white-space:nowrap;font-variant-numeric:tabular-nums}
+.bg{inset:0;background:linear-gradient(to right,var(--bl),var(--br))}
+.bg::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to right,var(--tl),var(--tr));
+ -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent)}
+.fr{inset:0}
+.gb{border-style:solid;border-color:#A8A8A8 #5F5F5F #3B3B3B #929292}
+.cur{line-height:0}
+.cur svg{display:block}
+.strip{left:0;right:0;background:#000}
+/* sheet furniture, outside the HUD layer */
+.chip{position:absolute;right:14px;top:132px;font:700 12px Chakra;letter-spacing:.16em;color:rgba(244,241,232,.72);background:rgba(0,0,0,.5);padding:4px 8px}
+.chip.pillar{right:214px}
+.chip.phone{top:110px;right:8px;font-size:8.5px;letter-spacing:.1em;padding:2px 5px}
+.chip.est{top:164px;color:#F0C86E;border:1px dashed rgba(240,200,110,.7)}
+.chip.est.phone{top:130px}
+.safe{position:absolute;left:0;right:0;top:0;height:46px;border-bottom:1px dashed rgba(244,241,232,.55);background:rgba(0,0,0,.35);
+ font:700 8.5px Chakra;letter-spacing:.12em;color:rgba(244,241,232,.7);display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;box-sizing:border-box}
+</style></head>
+<body><div id="root"></div>
+<script src="glyphs.js"></script><script src="glove.js"></script><script src="scene.js"></script><script src="hud.js"></script><script src="frames.js"></script>
+</body></html>

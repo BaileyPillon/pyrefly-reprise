@@ -20,6 +20,8 @@
 export interface PauseMusicPort {
   readonly currentMusic: string | null;
   playMusic(name: string, options?: { fade?: number }): Promise<void> | unknown;
+  /** Fades the music out; how a silent scene gets its silence back (PR-0214). */
+  stopMusic?(fade?: number): void;
 }
 
 /** The cue key, as `src/audio/tracks/pause.ts` composes it. */
@@ -59,9 +61,18 @@ export function setPauseMusic(audio: PauseMusicPort, paused: boolean): void {
       });
       return;
     }
-    const previous = resumeTo.get(audio);
+    // `has`, not a falsy test: a remembered `null` is a scoreless scene (Ch I's
+    // "Wind only" pre-scene), and it comes back as silence, not as the pause cue
+    // left running (PR-0214). Nothing remembered means there was no pause.
+    if (!resumeTo.has(audio)) return;
+    const previous = resumeTo.get(audio) ?? null;
     resumeTo.delete(audio);
-    if (!previous || previous === PAUSE_CUE) return;
+    if (previous === PAUSE_CUE) return;
+    if (previous === null) {
+      // Unconditional: it also cancels a pause cue still loading (`stopMusic` bumps the request id).
+      audio.stopMusic?.(OUT_OF_PAUSE_FADE);
+      return;
+    }
     void Promise.resolve(audio.playMusic(previous, { fade: OUT_OF_PAUSE_FADE })).catch(() => {
       /* same */
     });

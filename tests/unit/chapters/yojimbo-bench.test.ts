@@ -15,12 +15,17 @@
  * - **The odds inside each gauge band are our estimate** (B2: an even split),
  *   so the rates move when Bailey's pick or a source replaces it.
  *
+ * The shipped party is `CAVERN_DOOM_PREP = 'not-learned'` (P-1, Bailey
+ * 2026-09-26): Kimahri arrives without Doom, so the shipped fight is the race.
+ *
  * The lines (research §5.3, the four sourced strategies):
- * - **intended** — Kimahri opens with Doom (strategy 1); Lulu casts Fira every
- *   turn (strategy 4: Magic Defense 0 against Defense 80); Yuna keeps the party
- *   up and summons an aeon in front of Zanmato once the gauge reads 80 or more
- *   (strategy 3); nobody else feeds the gauge.
- * - **magic race** — the same, without Doom: strategies 2, 3 and 4 only.
+ * - **intended** — Kimahri Dooms him if Doom is on his menu (strategy 1; it is
+ *   not, on the shipped party); Lulu casts Fira every turn (strategy 4: Magic
+ *   Defense 0 against Defense 80); Yuna keeps the party up and summons an aeon
+ *   in front of Zanmato once the gauge reads 80 or more (strategy 3); nobody
+ *   else feeds the gauge.
+ * - **preloaded** — the intended line on the `'preloaded'` party (D-056, kept
+ *   as a switch value): the Doom route, for comparison.
  * - **credibly wrong** — every member swings the physical Attack at him every
  *   turn, Yuna heals when someone is low, no Doom, no aeon: the habit every
  *   earlier chapter rewards, and the one this fight punishes (many small hits
@@ -33,14 +38,15 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import type { AvailableCommand, BattleEngine, Command, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
-import { yojimboCavernBuild } from '../../../src/data/ffx/builds/yojimbo-cavern.ts';
+import { CAVERN_DOOM_PREP, buildCavernParty, yojimboCavernBuild } from '../../../src/data/ffx/builds/yojimbo-cavern.ts';
 
 const SEEDS = 200;
 const content = new FFXContentRegistry();
 content.addAbilities(ALL_ABILITIES);
 content.addItems(Object.values(ITEMS));
 
-type Line = 'intended' | 'magic-race' | 'wrong';
+type Line = 'intended' | 'preloaded' | 'wrong';
+const PRELOADED = buildCavernParty('preloaded');
 interface Outcome { outcome: string; turns: number; zanmatos: number; doomKill: boolean }
 
 const defend: Command = { kind: 'defend', targets: [] };
@@ -80,7 +86,7 @@ function choose(line: Line, engine: BattleEngine, actorId: string, commands: rea
     return row(commands, 'attack')?.validTargets.includes('yojimbo') ? { kind: 'attack', targets: ['yojimbo'] } : defend;
   }
 
-  if (actorId === 'kimahri' && line === 'intended' && y.statuses['doom'] === undefined && row(commands, 'overdrive', 'doom')) {
+  if (actorId === 'kimahri' && y.statuses['doom'] === undefined && row(commands, 'overdrive', 'doom')) {
     return { kind: 'overdrive', id: 'doom', targets: ['yojimbo'] };
   }
   if (actorId === 'lulu' && row(commands, 'ability', 'fira')) return { kind: 'ability', id: 'fira', targets: ['yojimbo'] };
@@ -95,7 +101,7 @@ function choose(line: Line, engine: BattleEngine, actorId: string, commands: rea
 function play(line: Line, seed: number): Outcome {
   const engine = createFFXEngine({ content, autoResolveMinigames: true });
   engine.init({
-    game: 'ffx', party: yojimboCavernBuild, enemies: ENEMY_GROUPS_BY_ID['yojimbo-cavern']!,
+    game: 'ffx', party: line === 'preloaded' ? PRELOADED : yojimboCavernBuild, enemies: ENEMY_GROUPS_BY_ID['yojimbo-cavern']!,
     triggers: [], seed, condition: 'normal', canEscape: false,
   });
   for (let i = 0; i < 6000; i++) {
@@ -131,7 +137,7 @@ describe(`Yojimbo — win rates across ${SEEDS} seeds (measured, not tuned)`, ()
   type Bench = ReturnType<typeof bench>;
   let results: Record<Line, Bench>;
   beforeAll(() => {
-    results = { intended: bench('intended'), 'magic-race': bench('magic-race'), wrong: bench('wrong') };
+    results = { intended: bench('intended'), preloaded: bench('preloaded'), wrong: bench('wrong') };
     // The report the chapter's review and Bailey read. Printed on every run.
     for (const [line, r] of Object.entries(results)) {
       console.log(
@@ -150,8 +156,10 @@ describe(`Yojimbo — win rates across ${SEEDS} seeds (measured, not tuned)`, ()
     expect(results.intended.wins).toBeGreaterThan(results.wrong.wins);
   });
 
-  it('Doom is how the intended line wins, and the wrong line eats Zanmato', () => {
-    expect(results.intended.doomKills).toBeGreaterThan(0);
-    expect(results.wrong.zanmatoRate).toBeGreaterThan(results.intended.zanmatoRate);
+  it('the shipped party has no Doom, so the intended line wins the race; the preloaded party wins by Doom', () => {
+    expect(CAVERN_DOOM_PREP).toBe('not-learned');
+    expect(results.intended.doomKills).toBe(0);
+    expect(results.preloaded.doomKills).toBeGreaterThan(0);
+    expect(results.wrong.zanmatoRate).toBeGreaterThan(results.preloaded.zanmatoRate);
   });
 });

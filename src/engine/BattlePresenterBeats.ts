@@ -9,6 +9,10 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
+import { MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
+import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
+import { poseForAction } from './EnemyActionPose.ts';
+import { victoryPoseOf } from './VictoryPose.ts';
 import {
   banner,
   cue,
@@ -16,7 +20,6 @@ import {
   numeral,
   settled,
   TIMING,
-  poseForCommand,
   type EventCtx,
 } from './BattlePresenterEvents.ts';
 
@@ -33,9 +36,16 @@ export async function actionStart(
   event: Extract<BattleEvent, { type: 'action-start' }>,
 ): Promise<void> {
   ctx.actingId = event.actorId;
+  beginSpellAction(ctx, event);
   const actor = ctx.stage.actor(event.actorId);
-  const pose = poseForCommand(event.command.kind);
+  // An enemy's physical ability draws its own attack painting (iter2
+  // attack-pose, both games); everything else is `poseForCommand` as before.
+  const pose = poseForAction(event, ctx.stage.sideOf(event.actorId), ctx.deps.abilityFacts, (p) =>
+    ctx.stage.paints?.(event.actorId, p) === true,
+  );
   actor?.setPose(pose);
+  const motion = ctx.deps.actionMotion; // FF7: the melee run to the target (none for FFX and FFX-2)
+  if (motion) await settled(ctx, motion.open(event, motionCtx(ctx)), MOTION_GUARD_MS);
 
   if (event.abilityName) {
     void ctx.deps.messageBar?.show(event.abilityName, 'ability');
@@ -46,7 +56,7 @@ export async function actionStart(
   if (event.command.kind === 'overdrive') {
     await ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE');
   } else {
-    await ctx.moments.actionOpen(event.actorId, pose);
+    await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? []);
   }
 
   if (pose === 'attack') {
@@ -62,12 +72,20 @@ export async function actionStart(
 
 export async function actionEnd(ctx: EventCtx): Promise<void> {
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
+  const motion = ctx.deps.actionMotion; // FF7: the run back home
+  if (motion && ctx.actingId) await settled(ctx, motion.close(ctx.actingId, motionCtx(ctx)), MOTION_GUARD_MS);
   actor?.setPose('idle');
   ctx.actingId = null;
+  endSpellAction(ctx);
   // Whatever the shot was — Overdrive letterbox, telegraph zoom, a plain
   // punch-in — this is where the frame comes back to neutral.
   await ctx.moments.actionClose();
   await ctx.sleep(TIMING.settle);
+}
+
+/** The slice of the playback a game's motion may use. */
+function motionCtx(ctx: EventCtx): MotionCtx {
+  return { stage: ctx.stage, speed: ctx.speed(), sleep: (ms) => ctx.sleep(ms) };
 }
 
 export async function damage(
@@ -78,6 +96,7 @@ export async function damage(
 
   // Rule 5: a `heals`-flagged action is negative damage, not a `heal` event.
   if (event.amount < 0) {
+    await awaitSpellLanding(ctx, event, true);
     target?.flash(0x9dffc4, 320, 0.6);
     numeral(ctx, event.targetId, {
       kind: 'heal',
@@ -93,6 +112,9 @@ export async function damage(
     numeral(ctx, event.targetId, { kind: 'miss', text: event.affinity === 'immune' ? 'IMMUNE' : '0' });
     return ctx.sleep(TIMING.miss);
   }
+
+  // The spell reaches the target before its numeral does (B1 spell effects).
+  await awaitSpellLanding(ctx, event, false);
 
   // The cut to the target, on the frame the hit lands. Only the first hit of a
   // multi-hit action moves the camera (see `BattleMoments.impact`).
@@ -211,6 +233,13 @@ export async function charge(
 }
 
 export async function victory(ctx: EventCtx): Promise<void> {
+  // A-4: where the sources withhold the celebration ('hold'), the figures keep
+  // their battle stance and the fanfare stays quiet; the rig still settles.
+  if (victoryPoseOf(ctx.deps) === 'hold') {
+    void ctx.moments.victory();
+    await ctx.sleep(TIMING.victory);
+    return;
+  }
   cue(ctx, 'victory');
   for (const id of ctx.stage.staged()) {
     const side = ctx.stage.sideOf(id);

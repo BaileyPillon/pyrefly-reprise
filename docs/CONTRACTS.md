@@ -8,7 +8,15 @@ Five files are written first and imported by everyone else:
 | `src/battle/common/rng.ts` | The one seeded RNG both engines use |
 | `src/story/dsl.ts` | Cutscene steps, speakers, builder helpers, `ChapterScripts` |
 | `src/data/encounters.ts` | The five `Chapter` records |
-| `src/data/ffx/ids.ts`, `src/data/ffx2/ids.ts` | Every string-literal id union |
+| `src/data/ffx/ids.ts`, `src/data/ffx2/ids.ts`, `src/data/ff7/ids.ts` | Every string-literal id union |
+| `src/battle/common/types-ff7.ts` | FF7's own combat types (the hidden Guard Scorpion experiment); `types.ts` re-exports them |
+
+**A third game, FF7 (2026-09-27).** `GameId` is `'ffx' | 'ffx2' | 'ff7'`. A two-way branch on
+the game must answer `'ff7'` explicitly or narrow through `ffxFamily()` in
+`src/battle/common/game.ts`, which throws `Ff7NotHandledError` naming the site; never let FF7
+fall into FFX-2's branch. The audit of every such site is
+`docs/plans/ff7-game-branch-audit.md`; an FF7 Limit is the `'limit'` command and the
+`'limit-gauge'` event, never `'overdrive'`.
 
 `src/sprites/format.ts` and `src/engine/SpriteActor.ts` were on this list while
 the game was pixel-art. They are **retired** — the game renders painted 2.5D

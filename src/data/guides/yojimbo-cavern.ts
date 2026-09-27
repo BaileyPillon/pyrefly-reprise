@@ -11,6 +11,13 @@
  * gauge and Ronso Rage Doom; research §0.3: "None of these facts transfers
  * across games". The FFX-2 Yojimbo (§8.2) is a different fight.
  *
+ * **Kimahri arrives without Doom** (`CAVERN_DOOM_PREP = 'not-learned'`, P-1
+ * of `docs/plans/yojimbo-faithfulness-2026-09-26.md`, Bailey 2026-09-26), so
+ * the shipped guide is the race (§5.3 strategies 2-4) and names Doom nowhere:
+ * the chapter card keeps the Doom fact as a "???" row until the first loss
+ * (P-2 (b)), and a guide that said it would spoil the row. The Doom rule and
+ * hint below come back only on the `'preloaded'` / `'learned-spent'` values.
+ *
  * Every number is the research's: HP 33,000, Defense 80 and Magic Defense 0
  * (§2.1), Doom count 5 (§2.1, [verified: 4 sources]), +3 % per targeting and
  * +2 % per attack (§4.1, [single source]), the 25 / 50 / 100 bands (§4.1,
@@ -19,7 +26,35 @@
  * the guide never states them.
  */
 
-import type { ChapterGuide } from './types.ts';
+import type { ChapterGuide, GuideHint, GuideRule } from './types.ts';
+import { CAVERN_DOOM_PREP } from '../ffx/builds/yojimbo-cavern.ts';
+
+/** Does the shipped Cavern party hold Doom? (P-1) */
+const HAS_DOOM = CAVERN_DOOM_PREP !== 'not-learned';
+
+/** The opening rule: the Doom route when Kimahri holds it, the race when he does not. */
+const OPENING: GuideRule = HAS_DOOM
+  ? {
+      text: 'Kimahri arrives with Doom. Doom lands on Yojimbo, and he falls five of his own turns later, whatever his HP. This is the only fight where it works on him.',
+      short: 'Open with Kimahri’s Doom: five turns, then gone',
+      cite: 'ffx-yojimbo §2.1, §2.3, §5.3 row 1',
+    }
+  : {
+      text: 'This is a race. He has 33,000 HP, and every action aimed at him brings Zanmato closer, so each one has to count: spells, a healthy party, and an aeon ready.',
+      short: 'A race: 33,000 HP before his gauge fills',
+      cite: 'ffx-yojimbo §2.1, §4.1, §5.3 rows 2-4',
+    };
+
+/** The Doom hint, only when Doom is on Kimahri's menu. */
+const DOOM_HINTS: GuideHint[] = HAS_DOOM
+  ? [
+      {
+        when: { labels: ['Doom'] },
+        text: 'Doom lands on him and counts down five of his turns, then kills him outright',
+        cite: 'ffx-yojimbo §2.1, §2.3, §5.3 row 1',
+      },
+    ]
+  : [];
 
 export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
   id: 'yojimbo-cavern',
@@ -28,11 +63,7 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
   bossIds: ['yojimbo'],
 
   rules: [
-    {
-      text: 'Kimahri arrives with Doom and a full gauge. Doom lands on Yojimbo, and he falls five of his own turns later, whatever his HP. This is the only fight where it works on him.',
-      short: 'Open with Kimahri’s Doom: five turns, then gone',
-      cite: 'ffx-yojimbo §2.1, §2.3, §5.3 row 1',
-    },
+    OPENING,
     {
       text: 'Every action that targets him adds 3 to his gauge, and every attack he makes adds 2. At 100 he uses Zanmato: 9,999 to each member of the party, fatal to all three.',
       short: 'Each action aimed at him fills his gauge',
@@ -56,11 +87,7 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
   ],
 
   hints: [
-    {
-      when: { labels: ['Doom'] },
-      text: 'Doom lands on him and counts down five of his turns, then kills him outright',
-      cite: 'ffx-yojimbo §2.1, §2.3, §5.3 row 1',
-    },
+    ...DOOM_HINTS,
     {
       when: { labels: ['Fira', 'Blizzara', 'Thundara', 'Watera'] },
       text: 'Magic Defense 0 takes a -ra spell at full strength, and one cast fills his gauge by one targeting, not one per hit',
@@ -73,7 +100,7 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Curaga', 'Cura', 'Cure'] },
-      text: 'Keep the party up while Doom counts down. A heal names no enemy, so it adds nothing to his gauge',
+      text: 'Keep the party up. A heal names no enemy, so it adds nothing to his gauge',
       cite: 'ffx-yojimbo §4.1, §5.3 row 2',
     },
     {

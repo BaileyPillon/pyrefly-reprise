@@ -11,6 +11,8 @@
  * (CONTRACTS.md, playback rule 4).
  */
 
+import { cuePhase } from './BattlePresenterPhase.ts';
+import type { ActingAction } from './BattlePresenterSpellFx.ts';
 import type { BattleEvent, CombatantId, ElementId, MessageKind } from '../battle/common/types.ts';
 import { BattleMoments } from './BattleMoments.ts';
 import {
@@ -128,6 +130,10 @@ export interface EventCtx {
   readonly speed: () => PlaybackSpeed;
   /** Mid-battle arrivals revealed but not yet played (`BattlePresenterArrivals.ts`). */
   readonly pendingArrivals: CombatantId[];
+  /** The action on screen, for the spell effects (`BattlePresenterSpellFx.ts`). */
+  acting?: ActingAction | undefined;
+  /** PR-0061(a): still before the first command menu (`OpeningCallouts.ts`). */
+  opening?: boolean;
 }
 
 export function createEventCtx(
@@ -194,6 +200,7 @@ export async function banner(ctx: EventCtx, text: string, kind: MessageKind): Pr
 export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void> {
   // A held arrival plays before whatever comes after the beat that named it.
   if (ctx.pendingArrivals.length > 0) await flushArrivals(ctx);
+  cuePhase(ctx, event); // D-224: a canon phase beat turns the arena's light
   switch (event.type) {
     case 'turn-start':
       return turnStart(ctx, event.actorId);
@@ -262,6 +269,12 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return ctx.sleep(TIMING.message);
 
     case 'sensor':
+      // PR-0061(a): before the first menu a sensor read stays up on its own
+      // banner while the opening goes on, instead of holding it for 1.6 s.
+      if (ctx.opening) {
+        void banner(ctx, event.text, 'system');
+        return;
+      }
       await banner(ctx, event.text, 'system');
       return ctx.sleep(TIMING.message);
 

@@ -1,0 +1,106 @@
+{
+  "which": "esc",
+  "base": "http://127.0.0.1:5970/pyrefly-reprise/",
+  "runs": [
+    {
+      "id": "seymour-flux",
+      "delay": 500,
+      "afterEsc": "battle",
+      "pausedSnap": false,
+      "overlay": false,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "seymour-flux",
+      "delay": 1000,
+      "afterEsc": "battle",
+      "pausedSnap": false,
+      "overlay": false,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "seymour-flux",
+      "delay": 2000,
+      "afterEsc": "battle",
+      "pausedSnap": false,
+      "overlay": false,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "seymour-flux",
+      "delay": 3000,
+      "afterEsc": "pause",
+      "pausedSnap": null,
+      "overlay": true,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "seymour-flux",
+      "delay": 4000,
+      "afterEsc": "pause",
+      "pausedSnap": null,
+      "overlay": true,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "ffx2-leblanc",
+      "delay": 500,
+      "afterEsc": "battle",
+      "pausedSnap": false,
+      "overlay": false,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "ffx2-leblanc",
+      "delay": 1000,
+      "afterEsc": "battle",
+      "pausedSnap": false,
+      "overlay": false,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "ffx2-leblanc",
+      "delay": 2000,
+      "afterEsc": "battle",
+      "pausedSnap": false,
+      "overlay": false,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "ffx2-leblanc",
+      "delay": 3000,
+      "afterEsc": "pause",
+      "pausedSnap": null,
+      "overlay": true,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    },
+    {
+      "id": "ffx2-leblanc",
+      "delay": 4000,
+      "afterEsc": "pause",
+      "pausedSnap": null,
+      "overlay": true,
+      "later": "battle",
+      "presenterAborted": false,
+      "errors": []
+    }
+  ]
+}

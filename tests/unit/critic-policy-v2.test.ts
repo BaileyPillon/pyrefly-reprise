@@ -232,6 +232,20 @@ describe('5. an old score cannot certify a new build', () => {
     expect(applyReport(marker(), otherArtifact).settled).toEqual([]);
   });
 
+  it('a report naming the bundle as the page loaded it ("index-<hash>.js") settles against a marker recording the bare hash (PR-0166)', () => {
+    const pageForm = report({ build: { ...BUILD, bundle: `index-${BUILD.bundle}.js` } });
+    const { settled, refused } = applyReport(marker(), pageForm);
+    expect(settled).toEqual([{ kind: 'focused', result: 'PASS' }]);
+    expect(refused.map((r) => r.kind)).toEqual(['live', 'deep']);
+  });
+
+  it('a report for a genuinely different bundle still settles nothing, page-form or not', () => {
+    const wrong = report({ build: { ...BUILD, bundle: 'index-SomethingElse.js' } });
+    expect(applyReport(marker(), wrong).settled).toEqual([]);
+    const wrongBare = report({ build: { ...BUILD, bundle: 'SomethingElse' } });
+    expect(applyReport(marker(), wrongBare).settled).toEqual([]);
+  });
+
   it('the status line names the build a score belongs to, and rubric v1 rounds are history', () => {
     const v1 = { file: 'round-03.json', id: 'round-03', rubricVersion: 1, sha: '7191674', total: 4.09 };
     expect(qualityLine([v1], '7191674')).toMatch(/no full score under rubric v2 yet.*history/);

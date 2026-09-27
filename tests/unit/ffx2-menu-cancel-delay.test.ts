@@ -58,14 +58,15 @@ describe('carriesMenuCancel reads the sourced rows (no row is flagged here)', ()
 });
 
 describe('the default is ON; the option `false` replays release 17\'s logs, byte for byte', () => {
-  // Release 17's rule, from `d0d53cb4`, before the switch existed (`ffx2ChapterDrive`, human pace:
+  // Release 17's rule, from `d0d53cb4` (one row re-pinned for PR-0145, below), before the switch existed (`ffx2ChapterDrive`, human pace:
   // Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the top list).
   const PINNED: Record<string, string> = {
     'IV|active|1': 'd059f64cfe4afce9', 'IV|split|1': 'c9ed16c44755cdd7',
     'IV|active|2': 'f6f806a146e9e13a', 'IV|split|2': 'eee3244f250d5099',
     'IV|active|3': 'f83208beb680732e', 'IV|split|3': '7261df9d93c54c46',
     'V|active|1': 'cccd73412d81d111', 'V|split|1': '36d75afe39f7487e',
-    'V|active|2': '1248968158cd4baa', 'V|split|2': '172b35bec210c2b2',
+    'V|active|2': 'bfedb9c944b8d128', // re-pinned 2026-09-26, PR-0145 (iter2-b1): Rikku falls with Yuna and Paine petrified, now a Game Over at once (was 1248968158cd4baa)
+    'V|split|2': '172b35bec210c2b2',
     'V|active|3': '31ebf80e1112a172', 'V|split|3': '488b65aa589d1d7b',
     'VI|active|1': '2479ed7e82b3f22d', 'VI|split|1': 'e3a104259dcaae53',
     'VI|active|2': '8f610b1001a7c91d', 'VI|split|2': '2dced3deffa86083',
@@ -82,7 +83,8 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
     'V|active|2': 'd87ae9b34cf3f68c', 'V|split|2': 'bf0e82af326cd75c',
     'V|active|3': '0f23aa5c24c2e101', 'V|split|3': '65d1ac6fe36018f8',
     'VI|active|1': '1e6d2254c421cf97', 'VI|split|1': '5a15ae3d9a79c6c3',
-    'VI|active|2': 'a1fc93804dedb8cb', 'VI|split|2': 'cdb3630f1780026d',
+    'VI|active|2': '0bf6ef40005301d3', // re-pinned 2026-09-26, PR-0145 (iter2-b1): Yuna and Paine down, Rikku petrified, now a Game Over at once (was a1fc93804dedb8cb)
+    'VI|split|2': 'cdb3630f1780026d',
     'VI|active|3': '4fb96e507ba8ac03', 'VI|split|3': 'a8af26bfad0124a1',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;

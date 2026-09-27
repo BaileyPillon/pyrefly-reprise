@@ -20,7 +20,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import type { BattleEngine, Command, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
-import { yojimboCavernBuild } from '../../../src/data/ffx/builds/yojimbo-cavern.ts';
+import { CAVERN_DOOM_PREP, yojimboCavernBuild } from '../../../src/data/ffx/builds/yojimbo-cavern.ts';
 import { CHAPTERS, getChapter } from '../../../src/data/encounters.ts';
 import { CHAPTER_META, getChapterMeta } from '../../../src/data/chapter-meta.ts';
 import { YOJIMBO_META } from '../../../src/data/chapter-meta-yojimbo.ts';
@@ -30,6 +30,7 @@ import { lintScript, type SayStep, type Step } from '../../../src/story/dsl.ts';
 import { yojimboCavernScripts } from '../../../src/story/scripts/yojimbo-cavern.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { buildGuideView, guideForState, stateOnlyEngine } from '../../../src/engine/tactics/guide.ts';
+import { buildAdvisorView } from '../../../src/engine/tactics/advisor.ts';
 import { tacticFor, yojimboCavern } from '../../../src/engine/tactics/index.ts';
 import { evaluateObjective } from '../../../src/ui/common/chapterObjectives.ts';
 
@@ -159,14 +160,19 @@ describe('chapter meta', () => {
     for (const snap of YOJIMBO_META.snapshots) expect(existsSync(join(ART, snap.image)), snap.image).toBe(true);
   });
 
-  it('objectives: Doom and the win tick on the intended line; Survive Zanmato ticks when an aeon takes it', () => {
-    const engine = newEngine(1);
-    playOut(engine, (id, cmds) => intendedStrategy(id, cmds, engine));
+  it('objectives: on a won race the win and Zanmato rows tick; the Doom row cannot, with no Doom (P-1)', () => {
+    let engine = newEngine(1);
+    for (let seed = 1; seed <= 10; seed++) {
+      engine = newEngine(seed);
+      const e = engine;
+      playOut(e, (id, cmds) => intendedStrategy(id, cmds, e));
+      if (e.state().result?.outcome === 'victory') break;
+    }
     const ctx = { log: engine.state().log, state: engine.state(), links: 1 };
     const [doom, zanmato, win] = YOJIMBO_META.objectives;
-    expect(evaluateObjective(doom.rule, ctx)).toBe(true);
+    expect(engine.state().result?.outcome).toBe('victory');
+    expect(evaluateObjective(doom.rule, ctx)).toBe(false);
     expect(evaluateObjective(win.rule, ctx)).toBe(true);
-    // The intended line wins before the gauge fills, so this one is the optional row.
     expect(zanmato.rule).toEqual({ kind: 'survived-ability', ability: 'yojimbo-zanmato' });
   });
 });
@@ -176,13 +182,31 @@ describe('chapter meta', () => {
 // ---------------------------------------------------------------------------
 
 describe('prep', () => {
-  it('opens with Lulu, Kimahri, Yuna; no Candle of Life; Kimahri holds Doom with a full gauge', () => {
+  it('opens with Lulu, Kimahri, Yuna (D-066); no Candle of Life; Kimahri arrives without Doom (P-1, Bailey 2026-09-26)', () => {
     expect(CHAPTER.buildRef).toBe(yojimboCavernBuild);
+    expect(CAVERN_DOOM_PREP).toBe('not-learned');
     expect(yojimboCavernBuild.activeSlots).toEqual(['lulu', 'kimahri', 'yuna']);
     expect(yojimboCavernBuild.inventory.some((e) => e.itemId === 'candle-of-life')).toBe(false);
     const kimahri = yojimboCavernBuild.members.find((m) => m.id === 'kimahri');
-    expect(kimahri?.overdrive?.unlockedOverdriveIds).toContain('doom');
-    expect(kimahri?.overdrive?.gauge).toBe(100);
+    expect(kimahri?.overdrive?.unlockedOverdriveIds).not.toContain('doom');
+    expect(kimahri?.overdrive?.gauge).toBe(45); // ffx-seymour-flux C-16 [estimate]
+  });
+
+  it('Doom is on no row of Kimahri’s menu at the start, so neither the advisor nor the tactic can show it', () => {
+    const engine = newEngine(1);
+    for (let i = 0; i < 200; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      if (d.actorId === 'kimahri') {
+        const ids = d.commands.map((c) => ('id' in c.command ? String(c.command.id) : c.command.kind));
+        expect(ids).not.toContain('doom');
+        expect(d.commands.some((c) => c.label === 'Doom')).toBe(false);
+        return;
+      }
+      engine.submit({ kind: 'defend', targets: [] });
+    }
+    throw new Error('Kimahri never took a turn');
   });
 });
 
@@ -226,6 +250,32 @@ describe('guide', () => {
     expect(guideForState(engine.state())?.id).toBe('yojimbo-cavern');
   });
 
+  it('names Doom nowhere while Kimahri has none (P-1), so it cannot spoil the card’s ??? row (P-2 (b))', () => {
+    expect(CAVERN_DOOM_PREP).toBe('not-learned');
+    const text = [
+      ...guide.rules.flatMap((r) => [r.text, r.short]),
+      ...guide.hints.flatMap((h) => [h.text, ...(h.when.labels ?? [])]),
+      ...guide.phases.map((p) => p.note),
+    ].join(' ');
+    expect(text).not.toMatch(/doom|ghost|lancet/i);
+  });
+
+  it('the advisor never suggests Doom across a whole fight: it reads the menu, and Doom is not on it', () => {
+    const engine = newEngine(2);
+    let suggestions = 0;
+    for (let i = 0; i < 6000; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      for (const s of buildAdvisorView(engine.state(), { actorId: d.actorId, commands: d.commands }, {})?.suggestions ?? []) {
+        suggestions++;
+        expect('id' in s.command ? s.command.id : s.command.kind).not.toBe('doom');
+      }
+      engine.submit(intendedStrategy(d.actorId, d.commands, engine) ?? { kind: 'defend', targets: [] });
+    }
+    expect(suggestions).toBeGreaterThan(0);
+  });
+
   it('explains the tactic’s picks on a real battle, with a citation', () => {
     const engine = newEngine(3);
     let recommended = 0;
@@ -254,7 +304,7 @@ describe('tactic', () => {
     expect(tacticFor(stateOnlyEngine(x2))).toBeNull();
   });
 
-  it('opens with Kimahri’s Doom and Lulu’s Fira, and never names him from anyone else', () => {
+  it('never picks Doom; Lulu casts Fira, and nobody else names him (P-1: no Doom to open with)', () => {
     const engine = newEngine(1);
     const seen: string[] = [];
     for (let i = 0; i < 6000; i++) {
@@ -266,9 +316,9 @@ describe('tactic', () => {
       if ((c.targets as readonly string[]).includes('yojimbo')) seen.push(`${d.actorId}:${c.kind}:${id}`);
       engine.submit(c);
     }
-    expect(seen).toContain('kimahri:overdrive:doom');
-    expect(seen.filter((s) => s.startsWith('lulu:')).every((s) => s === 'lulu:ability:fira')).toBe(true);
-    expect(seen.filter((s) => !s.startsWith('lulu:')).every((s) => s === 'kimahri:overdrive:doom')).toBe(true);
+    expect(seen.some((s) => s.endsWith(':doom'))).toBe(false);
+    expect(seen).toContain('lulu:ability:fira');
+    expect(seen.every((s) => s === 'lulu:ability:fira')).toBe(true);
   });
 });
 
@@ -293,8 +343,8 @@ describe('the autopilot’s line across 200 seeds (measured, not tuned)', () => 
   }, 180_000);
 
   it('every battle ends', () => expect(unfinished).toBe(0));
-  it('beats the credibly wrong line (0 / 200 on the bench), by the Doom route', () => {
+  it('beats the credibly wrong line (0 / 200 on the bench), by the race, never by Doom (P-1)', () => {
     expect(wins).toBeGreaterThan(0);
-    expect(doomKills).toBeGreaterThan(0);
+    expect(doomKills).toBe(0);
   });
 });

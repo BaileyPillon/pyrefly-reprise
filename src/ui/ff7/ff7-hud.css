@@ -1,0 +1,97 @@
+/*
+ * FF7 battle HUD (FF7 only; docs/plans/ff7-hud-faithful-a-spec.md).
+ * Every rule is scoped under .ff7hud and every token is --ff7-*: nothing here
+ * reaches an FFX or FFX-2 HUD, chrome, menu or font stack (rule 14, spec §8).
+ * The body face is M PLUS Rounded 1c 500 (OFL, public/fonts/ff7/ with its OFL
+ * file); it loads only when the FF7 HUD draws text. Never the retail font.
+ */
+@font-face {
+  font-family: 'M PLUS Rounded 1c';
+  src: url('/fonts/ff7/MPLUSRounded1c-Medium-500.latin.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+
+.ff7hud {
+  /* Window corners, PS1 default [spec §3.1, verified: 3 sources]; a Config "Window color" would set these. */
+  --ff7-win-tl: #0000b0;
+  --ff7-win-tr: #000080;
+  --ff7-win-bl: #000050;
+  --ff7-win-br: #000020;
+  --ff7-text: #e7e7e7;
+  --ff7-text-command: #ffffff;
+  --ff7-text-off: #6b6b6b;
+  --ff7-gauge-light: #a8a8a8;
+  --ff7-gauge-left: #929292;
+  --ff7-gauge-right: #5f5f5f;
+  --ff7-gauge-dark: #3b3b3b;
+  --ff7-strip: #000000;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 20;
+  font-family: 'M PLUS Rounded 1c', 'Nunito', sans-serif;
+  font-weight: 500;
+  color: var(--ff7-text);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+.ff7hud[hidden] { display: none; }
+.ff7hud div { position: absolute; box-sizing: border-box; }
+.ff7hud .ff7-layer { inset: 0; }
+
+/* Windows: the four-corner bilinear gradient, then the bevel, then the content [spec §5.3]. */
+.ff7hud .ff7-win { pointer-events: auto; }
+.ff7hud .ff7-bg {
+  inset: 0;
+  background: linear-gradient(to right, var(--bl, var(--ff7-win-bl)), var(--br, var(--ff7-win-br)));
+}
+.ff7hud .ff7-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to right, var(--tl, var(--ff7-win-tl)), var(--tr, var(--ff7-win-tr)));
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+  mask-image: linear-gradient(to bottom, #000, transparent);
+}
+/* The top message window: our estimate of the PS1 half blend [spec §3.1]. */
+.ff7hud .ff7-bg--half { opacity: 0.5; }
+.ff7hud .ff7-fr { inset: 0; }
+.ff7hud .ff7-win[data-win='message'] { pointer-events: none; }
+
+/* Text: placed by baseline in ff7Draw.ts; tabular digits for HP and MP [spec §5.5]. */
+.ff7hud .ff7-t { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ff7hud .ff7-row { inset: 0; }
+
+/* Gauge boxes: 1 u raised frame, light top and left, dark right and bottom [spec §3.4]. */
+.ff7hud .ff7-gb {
+  border-style: solid;
+  border-color: var(--ff7-gauge-light) var(--ff7-gauge-right) var(--ff7-gauge-dark) var(--ff7-gauge-left);
+}
+.ff7hud .ff7-strip { background: var(--ff7-strip); }
+
+/* The finger, the ready triangle, damage numerals. */
+.ff7hud .ff7-cur { line-height: 0; }
+.ff7hud .ff7-cur svg,
+.ff7hud .ff7-dmg svg,
+.ff7hud .ff7-tri-wrap svg { display: block; overflow: visible; }
+.ff7hud .ff7-dmg { line-height: 0; }
+/* The triangle spins about its vertical axis; the rate is our estimate (spec §9 #4). */
+.ff7hud .ff7-tri-wrap svg { animation: ff7-tri-spin 1.4s linear infinite; transform-origin: 50% 50%; }
+@keyframes ff7-tri-spin {
+  0% { transform: scaleX(1); }
+  25% { transform: scaleX(0.15); }
+  50% { transform: scaleX(-1); }
+  75% { transform: scaleX(0.15); }
+  100% { transform: scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ff7hud .ff7-tri-wrap svg { animation: none; }
+}
+
+/* Tap areas: invisible; the scrim backs out one step while a list or the target step is open. */
+.ff7hud .ff7-hit { pointer-events: auto; cursor: pointer; background: transparent; }
+.ff7hud .ff7-scrim { inset: 0; pointer-events: auto; background: transparent; }

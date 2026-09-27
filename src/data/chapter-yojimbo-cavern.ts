@@ -17,7 +17,10 @@
  *
  * Bailey's picks (docs/target/decisions.json D-049 to D-076): title "Yojimbo"
  * (D-053), Chapter IX (D-058), line-up Lulu, Kimahri, Yuna (D-066), no Candle
- * of Life (D-067), Kimahri with Doom (D-056), battle music O-6 A (D-063).
+ * of Life (D-067), battle music O-6 A (D-063). Kimahri arrives **without**
+ * Doom (`CAVERN_DOOM_PREP = 'not-learned'`, P-1 of
+ * `docs/plans/yojimbo-faithfulness-2026-09-26.md`, Bailey 2026-09-26: "I'll go
+ * with all of your recommendations"; it re-opens D-056).
  *
  * - `scriptsRef` — the pre and post scenes of
  *   `docs/plans/yojimbo-story-draft.md` (`src/story/scripts/yojimbo-cavern.ts`),

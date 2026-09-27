@@ -50,6 +50,12 @@ export interface BandInput {
   stageY: number;
   /** `.battle-pause-chip`'s rect in viewport px, when it is laid out. */
   pauseChip?: DeviceRect | null;
+  /**
+   * The HUD root's left edge in viewport px. With it, a window wider than 16:9
+   * lets the band run out over the letterbox pillars to the viewport's edges
+   * (critic round 13 PR-0135); without it the band keeps to the stage.
+   */
+  hostLeft?: number;
 }
 
 export interface BandGeometry {
@@ -59,6 +65,8 @@ export interface BandGeometry {
   left: number;
   /** The zoom applied on top of the stage scale (1 in `stage` mode). */
   zoom: number;
+  /** Grid units of pillar either side of the stage the band reaches over (0 at 16:9 or narrower). */
+  pillar: number;
 }
 
 /** Solve the band's placement for one screen. */
@@ -66,18 +74,21 @@ export function bandGeometry(input: BandInput): BandGeometry {
   const scale = input.scale > 0 ? input.scale : 1;
   const realText = BAND_GRID_TEXT * scale;
   if (realText < MIN_TEXT_PX && input.stageY >= BAR_MIN_ROOM_PX) {
-    return { mode: 'bar', left: 0, zoom: MIN_TEXT_PX / realText };
+    return { mode: 'bar', left: 0, zoom: MIN_TEXT_PX / realText, pillar: 0 };
   }
-  let left = 0;
+  // PR-0135: at a window wider than 16:9 the stage sits between two pillars;
+  // the band runs out over them so the frame's top row is edge to edge.
+  const pillar = input.hostLeft === undefined ? 0 : Math.max(0, (input.stageX - input.hostLeft) / scale);
+  let left = pillar > 0 ? -pillar : 0;
   const chip = input.pauseChip;
   if (chip && chip.right > chip.left && chip.bottom > chip.top) {
     const bandTop = input.stageY;
     const bandBottom = input.stageY + BAND_GRID_HEIGHT * scale;
     if (chip.top < bandBottom && chip.bottom > bandTop) {
-      left = Math.max(0, (chip.right - input.stageX) / scale + CHIP_GAP);
+      left = Math.max(-pillar, (chip.right - input.stageX) / scale + CHIP_GAP);
     }
   }
-  return { mode: 'stage', left, zoom: 1 };
+  return { mode: 'stage', left, zoom: 1, pillar };
 }
 
 /**
@@ -107,4 +118,5 @@ export function applyBandGeometry(el: HTMLElement, geom: BandGeometry): void {
   el.classList.toggle('ffx2-cmd-info--bar', geom.mode === 'bar');
   el.style.setProperty('--band-left', `${geom.left.toFixed(2)}px`);
   el.style.setProperty('--band-zoom', geom.zoom.toFixed(4));
+  el.style.setProperty('--band-pillar', `${geom.pillar.toFixed(2)}px`);
 }

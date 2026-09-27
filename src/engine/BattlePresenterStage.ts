@@ -10,7 +10,8 @@
 
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
-import { artIdFor, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { artIdFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
@@ -24,12 +25,20 @@ import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './Sc
 import { laneFrom, relaxActorsOf, relaxField } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
+import { bodyFacingOption, stageCamera } from './StageFacing.ts';
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 import * as SA from './StageAnchors.ts';
+import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
+import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
+import { PyreflyStage } from './PyreflyStage.ts';
+import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
+import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
+import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
+import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -44,6 +53,14 @@ export interface PaintedStageOptions {
   rim?: { color: number | string; dir: [number, number] };
   /** Mid-battle entrances by combatant id. Defaults to what the scene published (`StageArrivals.ts`). */
   arrivals?: ArrivalDirectors;
+  /** The spell effects' skin, overlay hook, quality tier and flash rules (`spellfx/`). Without `overlay` they never draw. */
+  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate'>;
+  /** The location's key, for its pyrefly canon row (`pyreflyCanon.ts`). */
+  sceneKey?: string;
+  /** The renderer's grade, which D-224's phase lighting turns (`PhaseLighting.ts`). */
+  grade?: GradeTarget | null;
+  /** REDUCE FLASHES: phase lighting lands without its tween. The accessibility batch wires it; default off. */
+  reduceFlashes?: () => boolean;
 }
 
 interface StagedActor {
@@ -52,6 +69,8 @@ interface StagedActor {
   slot: number;
   artId: string;
   kind: 'party' | 'enemy';
+  /** Poses with a painting of their own, not a fallback (`paints`, `EnemyActionPose.ts`). */
+  painted: ReadonlySet<string>;
   /** True for a destructible part of a larger machine (Vegnagun's leg). */
   isPart?: boolean;
   /** The machine this is a part of, when `isPart`. */
@@ -112,22 +131,44 @@ export class PaintedStage implements BattleStage {
   private readonly arrivalCleanups = new Map<CombatantId, ArrivalCleanup>();
   /** The rings a figure-less part wears on its parent (Vegnagun's Bulwarks and Redoubts, D-044). */
   private readonly partRings: PartRings;
+  /** The B1 spell effects (option B); `impact` skips the bloom where they carry the hit. */
+  readonly spellFx: SpellFxLayer;
+  private readonly unhookSpellFx: () => void;
+  /** A-5 / A-6 / D-225: the dissolve's lights, the lens band and held motes (`PyreflyStage.ts`). */
+  private readonly pyreflies: PyreflyStage;
+  /** D-224 phase lighting: the presenter's `lighting` port (`BattlePresenterPhase.ts`). */
+  readonly lighting: PhaseLighting;
+  /** A-8: the floor's luma, which sets how strong a contact shadow must be to read on it (`ContactShadow.ts`). */
+  private readonly groundLuma: number | null;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
     this.partRings = new PartRings(opts.scene);
+    this.groundLuma = groundLumaOf(opts.scene);
     this.arrivals = opts.arrivals ?? arrivalsOf(opts.scene);
     this.highlight = new TargetHighlight({
       actor: (id) => this.actor(id),
       staged: () => this.staged(),
     });
-    this.camera = new HoldableCamera(opts.battleCamera);
+    this.camera = stageCamera(opts.battleCamera, opts.slots.fixedCamera); // FF7's fixed angle when the scene asks (StageFacing.ts)
     this.hits = new HitEffects(
       { size: 4.2, coreColor: 0xffffff, edgeColor: 0x9fd8ff, arc: 2.45, thickness: 0.075 },
       { count: 110, speed: 6.4, life: 0.5, size: 10, bias: [0.4, 0.45, 0.2], focus: 0.5 },
       { color: 0xdff0ff, size: 3.0 },
     );
     opts.scene.add(this.hits);
+    const fx = stageSpellFx({ ...opts.spellFx, canvas: opts.canvas, projectRect: (id) => this.projectRect(id) });
+    this.spellFx = fx.layer;
+    this.unhookSpellFx = fx.unhook;
+    this.pyreflies = new PyreflyStage(opts.scene, () => this.spellFx.quality, opts.sceneKey, opts.camera);
+    this.lighting = new PhaseLighting({
+      scene: opts.scene,
+      grade: opts.grade,
+      figures: () => [...this.actors.values()].map((s) => s.actor),
+      partyCentre: () => this.partyFloorCentre(),
+      baseRim: { color: opts.rim?.color ?? 0xbfe0ff, strength: opts.rim ? 0.8 : 0.7 },
+      ...(opts.reduceFlashes ? { reduceFlashes: opts.reduceFlashes } : {}),
+    });
     this.vfx = this.makeVfxPort();
   }
 
@@ -164,6 +205,23 @@ export class PaintedStage implements BattleStage {
     // Only after every actor exists: the solver needs each fiend's real world
     // height, which is not known until its idle painting has loaded.
     this.applyFormation();
+    // D-224: a Vegnagun link's seam re-stages the field (FFX-2, Ch V).
+    const link = phaseForFormation(state.enemyIds);
+    if (link) this.lighting.phase(link);
+  }
+
+  /** The party's centre on the floor, for the phase floor glow; null with no party staged. */
+  private partyFloorCentre(): { x: number; z: number } | null {
+    let n = 0;
+    let x = 0;
+    let z = 0;
+    for (const s of this.actors.values()) {
+      if (s.kind !== 'party') continue;
+      x += s.actor.position.x;
+      z += s.actor.position.z;
+      n++;
+    }
+    return n ? { x: x / n, z: z / n } : null;
   }
 
   /** Add (or replace) one combatant's actor. */
@@ -183,11 +241,10 @@ export class PaintedStage implements BattleStage {
     const actor = await PaintedActor.create({
       name: c.id,
       ...(anchor ? SA.anchoredActorOptions(anchor) : {}),
-      // The *body's* facing, from the side — party and aeons turn toward +x,
-      // enemies toward -x. Whether the painting is mirrored is a separate
-      // question, answered by each pose's sidecar; art painted to the contract
-      // (party faces right, enemies face left) is drawn exactly as painted.
-      side: c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party',
+      // The *body's* facing, from the side: party and aeons toward +x, enemies toward -x, unless the scene
+      // turns them (FF7, `sideFacing`). Mirroring is a separate question, answered by each pose's sidecar;
+      // art painted the way its body faces is drawn exactly as painted.
+      ...bodyFacingOption(this.opts.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
       worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? own ?? worldHeightFor(c, heights)),
       crossfadeMs: kind === 'party' ? 120 : 140,
       poses,
@@ -203,12 +260,12 @@ export class PaintedStage implements BattleStage {
         : { strength: 0.7 },
       groundShade: 0.24,
       bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
-      shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, opacity: 0.48 },
+      shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, ...shadowOf(this.groundLuma) },
       breathe: { amplitude: 0.016, speed: 0.4 },
       sway: { amplitude: 0.009, speed: 0.22 },
       // The turn highlight: gold under a party member, a cooler ring under a
       // fiend, so whose turn it is reads even in a screenshot.
-      turnRing: {
+      turnRing: this.opts.slots.turnRings === false ? false : { // FF7: no ring, its triangle marks the turn (scene switch)
         color: kind === 'party' ? 0xf0cf92 : 0xc8a0ff,
         radius: anchor ? SA.anchoredRingRadius(anchor) : (kind === 'party' ? 0.78 : 1.7) * k,
         opacity: kind === 'party' ? 0.85 : 0.7,
@@ -229,12 +286,16 @@ export class PaintedStage implements BattleStage {
     }
 
     this.opts.scene.add(actor);
+    if (!anchor) this.pyreflies.stage(c.id, c.side, actor);
+    // A-8: a tight dark ellipse under the feet; a hovering figure keeps none.
+    if (!anchor && !actor.levitates) attachFootOcclusion(actor.shadow, contactShadowStyle(this.groundLuma));
     this.actors.set(c.id, {
       actor,
       side: c.side,
       slot: c.slot,
       artId,
       kind,
+      painted: paintedPoses(artId, poses, characterUrl),
       // A destructible part is laid out along its machine rather than given a
       // lane of its own — Vegnagun's leg is not a fourth fiend.
       ...(c.flags.isPart ? { isPart: true } : {}),
@@ -257,6 +318,12 @@ export class PaintedStage implements BattleStage {
 
   sideOf(id: CombatantId): Side | undefined {
     return this.actors.get(id)?.side;
+  }
+
+  /** Its own painting for `pose`, not a fallback or a stand-in. See `BattleStage.paints`. */
+  paints(id: CombatantId, pose: string): boolean {
+    const staged = this.actors.get(id);
+    return !!staged && !staged.actor.isPlaceholder && staged.painted.has(pose);
   }
 
   /** Which standing slot this combatant is on. See `BattleStage.slotOf`. */
@@ -470,7 +537,9 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged || staged.artId === artId) return;
     staged.artId = artId;
-    await staged.actor.loadPoses(await resolvePoseMap(artId, staged.kind), 'idle');
+    const poses = await resolvePoseMap(artId, staged.kind);
+    staged.painted = paintedPoses(artId, poses, characterUrl);
+    await staged.actor.loadPoses(poses, 'idle');
   }
 
   async addCombatant(
@@ -533,6 +602,8 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged) return;
     this.actors.delete(id);
+    this.pyreflies.leave(id);
+    disposeFootOcclusion(staged.actor.shadow);
     this.partRings.remove(id);
     staged.actor.dispose();
   }
@@ -569,8 +640,10 @@ export class PaintedStage implements BattleStage {
 
     return {
       play: (key, at) => impactAt(at, key, false),
-      impact: (at, o) => impactAt(at, o?.element && o.element !== 'none' ? o.element : 'slash', o?.crit === true),
+      impact: async (at, o) =>
+        this.spellFx.covers(at) ? undefined : impactAt(at, o?.element && o.element !== 'none' ? o.element : 'slash', o?.crit === true),
       screenFlash: (colour, ms) => this.screenFlash(colour, ms),
+      land: (at, o) => this.spellFx.land(at, o),
     };
   }
 
@@ -593,6 +666,31 @@ export class PaintedStage implements BattleStage {
   private anchoredQuad(staged: StagedActor): [Vector3, Vector3, Vector3, Vector3] {
     const p = staged.actor.position;
     return SA.anchoredQuad(staged.anchor!, this.parentPose(staged) ?? { x: p.x, y: p.y, z: p.z, height: 1 }, this.quad);
+  }
+
+  /**
+   * The faces and weapons HUD panels must never cover (CHK-008), on screen:
+   * each staged idle painting's key-feature boxes (`keyFeatures.ts`), pushed
+   * through its live plane. PR-0094: the FFX-2 intent slab treats them as hard.
+   */
+  keyFeatureRects(): ScreenRect[] {
+    const out: ScreenRect[] = [];
+    const rect = this.opts.canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return out;
+    for (const [id, s] of this.actors) {
+      const table = KEY_FEATURES[s.artId] ?? KEY_FEATURES[id];
+      if (!table || s.anchor || s.actor.pose !== 'idle' || this.lastState?.combatants[id]?.alive === false) continue;
+      const toScreen = (u: number, t: number): { x: number; y: number } | null => {
+        const p = s.actor.paintPoint(u, t, this.paintScratch).project(this.opts.camera);
+        if (p.z > 1) return null;
+        return { x: rect.left + (p.x * 0.5 + 0.5) * rect.width, y: rect.top + (-p.y * 0.5 + 0.5) * rect.height };
+      };
+      for (const box of Object.values(table.boxes)) {
+        const r = featureRect(table, box, toScreen);
+        if (r) out.push(r);
+      }
+    }
+    return out;
   }
 
   /** The part rings' state, for the debug surface and the tests. */
@@ -646,10 +744,22 @@ export class PaintedStage implements BattleStage {
       pinned,
     );
     this.hits.update(dt, this.opts.camera);
+    this.spellFx.update(dt);
+    this.pyreflies.update(dt, (id) => this.lastState?.combatants[id]?.alive !== false);
+    // D-224: Evrae's range is a flag only its encounter sets (FFX, Ch VIII).
+    const range = phaseForFlags(this.lastState?.flags);
+    if (range) this.lighting.phase(range);
+    this.lighting.update(dt);
+  }
+
+  /** The pyreflies' state, for the debug snapshot and the capture script. */
+  pyreflySnapshot(): ReturnType<PyreflyStage['snapshot']> {
+    return this.pyreflies.snapshot();
   }
 
   setPixelScale(v: number): void {
     this.hits.sparks.setPixelScale(v);
+    this.pyreflies.setPixelScale(v);
   }
 
   /** Everything the debug snapshot wants about the field. */
@@ -684,10 +794,20 @@ export class PaintedStage implements BattleStage {
     this.actors.clear();
     this.partRings.dispose();
     this.hits.dispose();
+    this.unhookSpellFx();
+    this.spellFx.dispose();
+    this.pyreflies.dispose();
+    this.lighting.dispose();
     disposeStoneShards(this.opts.scene);
     this.flashEl?.remove();
     this.flashEl = null;
   }
+}
+
+/** The contact blob's opacity and colour for this floor (A-8, `ContactShadow.ts`). */
+function shadowOf(groundLuma: number | null): { opacity: number; color: number } {
+  const s = contactShadowStyle(groundLuma);
+  return { opacity: s.opacity, color: s.color };
 }
 
 function rank(side: Side): number {

@@ -1,21 +1,18 @@
 import '../../ui/common/results.css';
+import '../../ui/common/results-fit.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { BattleResult } from '../../battle/common/types.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
+import { experimentRecord } from '../experiments/experimentRecords.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
-import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
-import { escapeHtml } from '../../ui/common/html.ts';
-import { partyFaceHtml } from '../../ui/common/partyFace.ts';
+import { createFullBleedStage, createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import {
   buildMemberRows,
   clearTimeMs,
   dropsLabel,
-  ITEMS_LONG_CHARS,
-  ledgerValueClass,
-  resultsDensity,
   formatClearTime,
   formatNumber,
   isNewBest,
@@ -24,13 +21,14 @@ import {
   victoryHeroHtml,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
+import { DEFEAT_ACTIONS, desktopPageHtml, pageHeading, resultsCaptionHtml, type LedgerLine, type ResultsChoice, type ResultsPageModel } from '../../ui/common/resultsPage.ts';
+import { isPhoneResults, phoneHeroFigure, phoneHeroHtml, phonePageHtml, phoneShellHtml, RESULTS_PHONE_QUERY } from '../../ui/common/resultsPhone.ts';
 import { victoryLine, victoryTurn, wedgeFallenArt, wedgeFigureId, wedgePortraitId, type VictoryLine } from '../../ui/common/victoryLine.ts';
+
+export type { ResultsChoice } from '../../ui/common/resultsPage.ts';
 
 /** How long the gil/AP counters take to roll up to their final value [visual-bible §3.8 step 6]. */
 const COUNT_UP_MS = 1150;
-
-/** What the player asked for from the panel. Only a defeat offers a choice. */
-export type ResultsChoice = 'continue' | 'retry' | 'chapter-select';
 
 export interface ResultsScreenOptions {
   chapterId: ChapterId;
@@ -56,21 +54,6 @@ export interface ResultsScreenOptions {
   onChoice?: (choice: ResultsChoice) => void;
 }
 
-/** One printed row of the spoils ledger. */
-type LedgerLine =
-  /** A number that rolls up with the reveal. */
-  | { kind: 'count'; key: string; value: number; detail?: string }
-  /** A settled value (a time, a turn count) — no roll-up. */
-  | { kind: 'text'; key: string; value: string; detail?: string }
-  /** The drops, set as a printed list rather than a tally. */
-  | { kind: 'items'; key: string; value: string; detail?: string };
-
-/** The two things the defeat panel offers, in cursor order. */
-const DEFEAT_ACTIONS: ReadonlyArray<{ choice: ResultsChoice; label: string }> = [
-  { choice: 'retry', label: 'RETRY' },
-  { choice: 'chapter-select', label: 'CHAPTER SELECT' },
-];
-
 /**
  * The post-battle panel (`research/visual-bible.md` §3.8, Ink & Gold spec
  * `docs/handoff/presentation-ink-and-gold.md`).
@@ -84,6 +67,9 @@ const DEFEAT_ACTIONS: ReadonlyArray<{ choice: ResultsChoice; label: string }> = 
  * - **Defeat** — a sombre slab: no gold, no quip, no spoils, the leader's
  *   fallen pose sunk into the ink, and `RETRY` / `CHAPTER SELECT` in place of
  *   `CONFIRM`.
+ *
+ * On an upright phone all three leave the 640x360 letterbox for the
+ * full-bleed phone page (PR-0001 option B, `ui/common/resultsPhone.ts`).
  */
 export class ResultsScreen extends Screen {
   readonly name = 'results';
@@ -97,6 +83,11 @@ export class ResultsScreen extends Screen {
   private resolveDone!: () => void;
 
   private stage: Stage | null = null;
+  /** Whether the stage up now is the phone page (PR-0001 B). */
+  private phone = false;
+  private phoneQuery: MediaQueryList | null = null;
+  /** `LOCATION · CLEARED` / `· FELL`, escaped. */
+  private caption = '';
   private readonly silent: boolean;
   private readonly victory: boolean;
   private readonly rows: ResultsMemberRow[];
@@ -107,6 +98,8 @@ export class ResultsScreen extends Screen {
   private readonly awardUnit: 'AP' | 'EXP';
   /** The real clear time, not the engine's unadvanced `elapsedMs`. */
   private readonly clearMs: number;
+  /** FF7's rows carry no house clear-time chip, NEW BEST or party-count tag (the FF7 purist review, item 7). */
+  private readonly ff7: boolean;
   private ledger: LedgerLine[] = [];
 
   private revealMs = 0;
@@ -123,21 +116,16 @@ export class ResultsScreen extends Screen {
     this.silent = opts.silent ?? isSilentResultsChapter(opts.chapterId);
     this.victory = opts.result.outcome === 'victory';
 
-    const game = chapter?.buildRef.game ?? 'ffx';
+    const game = chapter?.buildRef.game ?? 'ffx'; // FF7 pays EXP (and AP to Materia), like FFX-2's EXP ledger
     this.awardUnit = game === 'ffx' ? 'AP' : 'EXP';
     this.clearMs = clearTimeMs(opts.result, opts.elapsedMs, game);
+    this.ff7 = game === 'ff7';
     this.rows = buildMemberRows(chapter, opts.result);
   }
 
   override enter(): void {
     installInkGoldStyles();
-    this.stage = createStage(this.root, 'rres');
-    this.stage.el.classList.add('ig');
     const chapter = getChapter(this.opts.chapterId);
-    if (chapter?.game === 'ffx2') this.stage.el.classList.add('ig--ffx2');
-    if (this.silent) this.stage.el.classList.add('rres--silent');
-    if (!this.victory) this.stage.el.classList.add('rres--defeat');
-
     // A quip is a victory register, never under "Defeat". PR-0021: the speaker rotates
     // with the save's attempts (both games); chosen first, as they stand in the wedge (VL-1).
     if (this.victory && !this.silent) {
@@ -145,21 +133,16 @@ export class ResultsScreen extends Screen {
       const turn = victoryTurn(this.app.save.value.chapters);
       this.quip = victoryLine(banks, this.rows.map((r) => r.id), turn);
     }
-    // The wedge, the standing figure and the caption never change once the
-    // screen is up; only the ledger's numbers roll, so `refresh()` rewrites
-    // just `.rres__page` and leaves the artwork alone.
-    const caption = chapter
-      ? `${escapeHtml(chapter.location.toUpperCase())} &middot; ${this.victory ? 'CLEARED' : 'FELL'}`
-      : '';
-    this.stage.stage.innerHTML = `
-      <div class="rres__ink">${this.heroHtml()}</div>
-      <div class="rres__stripe"></div>
-      <div class="rres__caption">${caption}</div>
-      <div class="rres__page"></div>
-    `;
+    this.mountStage();
+    // PR-0001 B: turning the phone (or resizing a window across the phone
+    // query) swaps the page between its phone and desktop forms.
+    this.phoneQuery = typeof window.matchMedia === 'function' ? window.matchMedia(RESULTS_PHONE_QUERY) : null;
+    this.phoneQuery?.addEventListener?.('change', this.onLayoutChange);
+    window.addEventListener('resize', this.onResize, { passive: true });
 
-    const record = this.app.save.chapter(this.opts.chapterId);
-    if (this.victory) {
+    // A hidden experiment (FF7) reads its own store, read-only (C-2); the chapters read the save.
+    const record = chapter?.experimental ? experimentRecord(this.opts.chapterId) : this.app.save.chapter(this.opts.chapterId);
+    if (this.victory && !chapter?.experimental) { // an experiment never records into the save
       const previousBestMs =
         this.opts.previousBestMs !== undefined ? this.opts.previousBestMs : record.bestTimeMs;
       this.wasNewBest = isNewBest(previousBestMs, this.clearMs);
@@ -179,7 +162,62 @@ export class ResultsScreen extends Screen {
 
   override exit(): void {
     this.stage?.destroy();
+    this.phoneQuery?.removeEventListener?.('change', this.onLayoutChange);
+    window.removeEventListener('resize', this.onResize);
     this.resolveDone();
+  }
+
+  /**
+   * Build the stage for the window as it is now: today's 640x360 letterboxed
+   * page, or on an upright phone the full-bleed page (PR-0001 B,
+   * `resultsPhone.ts`). The painting and the caption never change once the
+   * screen is up; only the numbers roll, so `refresh()` rewrites just
+   * `.rres__page` and leaves the artwork alone.
+   */
+  private mountStage(): void {
+    if (this.stage) {
+      this.stage.destroy();
+      this.stage.el.remove();
+    }
+    this.phone = isPhoneResults(window);
+    this.stage = this.phone ? createFullBleedStage(this.root, 'rres') : createStage(this.root, 'rres');
+    this.stage.el.classList.add('ig');
+    const chapter = getChapter(this.opts.chapterId);
+    if (chapter?.game === 'ffx2') this.stage.el.classList.add('ig--ffx2');
+    if (this.silent) this.stage.el.classList.add('rres--silent');
+    if (!this.victory) this.stage.el.classList.add('rres--defeat');
+    this.caption = chapter ? resultsCaptionHtml(chapter.location, this.victory) : ''; // PR-0172: `results-fit.css`
+    if (this.phone) {
+      this.stage.el.classList.add('rres--phone');
+      const { width, height } = this.phoneSize();
+      this.stage.stage.innerHTML = phoneShellHtml(phoneHeroHtml(phoneHeroFigure(getChapter(this.opts.chapterId), this.victory, this.quip), width, height));
+      return;
+    }
+    this.stage.stage.innerHTML = `
+      <div class="rres__ink">${this.heroHtml()}</div>
+      <div class="rres__stripe"></div>
+      <div class="rres__caption">${this.caption}</div>
+      <div class="rres__page"></div>
+    `;
+  }
+
+  private readonly onLayoutChange = (): void => {
+    if (!this.stage || isPhoneResults(window) === this.phone) return;
+    this.mountStage();
+    this.refresh();
+  };
+
+  /** The phone's face crop is in screen px: re-place the painting when the screen changes size. */
+  private readonly onResize = (): void => {
+    if (!this.phone || !this.stage) return;
+    const bleed = this.stage.stage.querySelector('.rresp__bleed');
+    const { width, height } = this.phoneSize();
+    if (bleed) bleed.innerHTML = phoneHeroHtml(phoneHeroFigure(getChapter(this.opts.chapterId), this.victory, this.quip), width, height);
+  };
+
+  private phoneSize(): { width: number; height: number } {
+    const rect = this.stage?.el.getBoundingClientRect();
+    return { width: rect?.width || window.innerWidth, height: rect?.height || window.innerHeight };
   }
 
   override handleInput(input: InputSnapshot): void {
@@ -302,14 +340,14 @@ export class ResultsScreen extends Screen {
         kind: 'count',
         key: this.awardUnit,
         value: this.awardUnit === 'AP' ? result.ap : result.exp,
-        detail: `×${this.rows.length} PARTY`,
+        detail: this.ff7 ? undefined : `×${this.rows.length} PARTY`,
       },
     ];
     // FFX-2 pays EXP to the girl and AP to the dressphere she is wearing, so
     // both belong on the ledger [ffx2-combat-core §3.0] — but a formation that
     // pays no AP gets no row, rather than a printed zero.
     if (this.awardUnit === 'EXP' && result.ap > 0) {
-      lines.push({ kind: 'count', key: 'AP', value: result.ap, detail: 'PER DRESSPHERE' });
+      lines.push({ kind: 'count', key: 'AP', value: result.ap, detail: getChapter(this.opts.chapterId)?.game === 'ff7' ? 'PER MATERIA' : 'PER DRESSPHERE' }); // FF7: AP goes to each Materia [ff7-battle-core §11]
     }
     lines.push({ kind: 'count', key: 'GIL', value: result.gil });
     if (result.drops.length > 0) {
@@ -328,102 +366,26 @@ export class ResultsScreen extends Screen {
   private refresh(): void {
     if (!this.stage) return;
     const page = this.stage.stage.querySelector('.rres__page') as HTMLElement;
-    const p = this.countProgress();
-
-    const heading = this.victory ? (this.silent ? 'Results' : 'Victory') : 'Defeat';
 
     const tags: string[] = [];
     if (this.victory && this.opts.result.overkilled.length > 0) {
       tags.push(`OVERKILL ×${this.opts.result.overkilled.length}`);
     }
-    if (this.wasNewBest) tags.push('NEW BEST');
+    if (this.wasNewBest && !this.ff7) tags.push('NEW BEST');
 
-    // A wrapped `.rres__v--items-long` row (two lines) needs more room than a
-    // normal-height ledger row budgets for in compact mode — see
-    // `resultsDensity`'s own doc for the measured gap this closes.
-    const itemsLine = this.ledger.find((line) => line.kind === 'items');
-    const itemsLong = itemsLine !== undefined && itemsLine.value.length > ITEMS_LONG_CHARS;
-    const density = resultsDensity(this.ledger.length, this.rows.length, itemsLong);
-    const ledgerHtml = this.ledger
-      .map((line) => {
-        const value =
-          line.kind === 'count' ? formatNumber(Math.round(line.value * p)) : escapeHtml(line.value);
-        const valueClass = ledgerValueClass(line.kind === 'items' ? line.value : null);
-        const detail = line.detail ? `<div class="rres__d">${escapeHtml(line.detail)}</div>` : '';
-        return `<div class="rres__line">
-            <div class="rres__k">${escapeHtml(line.key)}</div>
-            <div class="${valueClass}">${value}</div>
-            ${detail}
-          </div>`;
-      })
-      .join('');
-
-    page.innerHTML = `
-      <div class="rres__head">
-        <div class="rres__chip">RESULTS &middot; ${escapeHtml(formatClearTime(this.clearMs))}</div>
-        <div class="rres__heading">${heading}</div>
-        <div class="rres__rule-row">
-          <div class="rres__rule"></div>
-          ${tags.map((t) => `<span class="rres__tag">${escapeHtml(t)}</span>`).join('')}
-        </div>
-        ${this.quip ? `<div class="rres__quip" data-speaker="${escapeHtml(this.quip.speakerId)}">${escapeHtml(this.quip.line)}</div>` : ''}
-      </div>
-
-      <div class="rres__ledger rres__ledger--${density.ledger}">${ledgerHtml}</div>
-
-      <div class="rres__party rres__party--${density.party}">${this.membersHtml(p)}</div>
-      ${this.victory ? this.confirmHtml() : this.actionsHtml()}
-    `;
+    const model: ResultsPageModel = {
+      victory: this.victory,
+      silent: this.silent,
+      heading: pageHeading(this.victory, this.silent),
+      clock: this.ff7 ? '' : formatClearTime(this.clearMs),
+      tags,
+      quip: this.quip,
+      ledger: this.ledger,
+      rows: this.rows,
+      progress: this.countProgress(),
+      actionIndex: this.actionIndex,
+    };
+    page.innerHTML = this.phone ? phonePageHtml(model, this.caption) : desktopPageHtml(model);
     this.stage.el.classList.add('rres--visible');
-  }
-
-  private membersHtml(p: number): string {
-    return this.rows
-      .map((row) => {
-        // The initial is the face's fallback, not its alternative: a portrait
-        // that 404s removes its own <img> and reveals the letter underneath.
-        // `partyFaceHtml` is the same dressphere/`-x2`-aware ladder the pause
-        // screen and battle HUD climb (LIVE-A2-1, docs/handoff/fix3-ffx2-hud-prep.md) —
-        // this row used to ask only `portraits/<row.id>.png`, right for FFX,
-        // a gap for FFX-2.
-        const face = `<span>${escapeHtml(row.name.charAt(0).toUpperCase())}</span>${partyFaceHtml({
-          id: row.id,
-          name: row.name,
-          dressphere: row.dressphere,
-        })}`;
-        const levelHtml =
-          this.victory && row.levelDelta > 0 && p >= 1
-            ? `<span class="rres__level-up">+${row.levelDelta} ${escapeHtml(row.levelUnit)}</span>`
-            : '';
-        const award = this.victory
-          ? `<span class="rres__member-ap">+${formatNumber(Math.round(row.award * p))}<small>${row.awardUnit}</small></span>`
-          : '';
-        return `
-          <div class="rres__member">
-            <div class="rres__face">${face}</div>
-            <div class="rres__member-text">
-              <div class="rres__member-line">
-                <span class="rres__member-name">${escapeHtml(row.name)}</span>
-                ${levelHtml}
-              </div>
-              <div class="rres__member-detail">${escapeHtml(row.detail)}</div>
-            </div>
-            ${award}
-          </div>
-        `;
-      })
-      .join('');
-  }
-
-  private confirmHtml(): string {
-    return `<div class="rres__confirm" data-action="confirm"><span>CONFIRM ▸</span></div>`;
-  }
-
-  private actionsHtml(): string {
-    const slabs = DEFEAT_ACTIONS.map((action, i) => {
-      const selected = i === this.actionIndex ? ' rres__action--selected' : '';
-      return `<div class="rres__action${selected}" data-action="results:${action.choice}" role="button" tabindex="0"><span>${action.label}</span></div>`;
-    }).join('');
-    return `<div class="rres__actions">${slabs}</div>`;
   }
 }

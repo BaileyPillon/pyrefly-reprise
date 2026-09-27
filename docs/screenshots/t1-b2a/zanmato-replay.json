@@ -1,0 +1,153 @@
+{
+ "done": true,
+ "errors": [],
+ "bannerLife": [
+  [
+   12635,
+   "shown"
+  ],
+  [
+   15496,
+   "hidden"
+  ],
+  [
+   26845,
+   "hidden"
+  ],
+  [
+   27090,
+   "hidden"
+  ]
+ ],
+ "around": [
+  {
+   "t": 2784,
+   "k": "gauge-event",
+   "v": "95->97"
+  },
+  {
+   "t": 2784,
+   "k": "panel",
+   "v": {
+    "gauge": "97",
+    "full": false,
+    "next": "Next: Daigoro, Kozuka or Wakizashi"
+   }
+  },
+  {
+   "t": 3843,
+   "k": "yojimbo-action-end",
+   "v": null
+  },
+  {
+   "t": 7198,
+   "k": "gauge-event",
+   "v": "97->99"
+  },
+  {
+   "t": 7198,
+   "k": "panel",
+   "v": {
+    "gauge": "99",
+    "full": false,
+    "next": "Next: Daigoro, Kozuka or Wakizashi"
+   }
+  },
+  {
+   "t": 8005,
+   "k": "yojimbo-action-end",
+   "v": null
+  },
+  {
+   "t": 12633,
+   "k": "gauge-event",
+   "v": "99->100"
+  },
+  {
+   "t": 12635,
+   "k": "banner",
+   "v": "shown"
+  },
+  {
+   "t": 12635,
+   "k": "panel",
+   "v": {
+    "gauge": "100",
+    "full": true,
+    "next": "Next: Zanmato · 9,999 to each on the field"
+   }
+  },
+  {
+   "t": 13443,
+   "k": "yojimbo-action-end",
+   "v": null
+  },
+  {
+   "t": 15496,
+   "k": "banner",
+   "v": "hidden"
+  },
+  {
+   "t": 21683,
+   "k": "gauge-event",
+   "v": "100->0"
+  },
+  {
+   "t": 21683,
+   "k": "zanmato-start",
+   "v": "yojimbo"
+  },
+  {
+   "t": 22489,
+   "k": "9999",
+   "v": {
+    "gauge": "100",
+    "full": true,
+    "next": "Next: Zanmato · 9,999 to each on the field"
+   }
+  },
+  {
+   "t": 23500,
+   "k": "9999",
+   "v": {
+    "gauge": "100",
+    "full": true,
+    "next": "Next: Zanmato · 9,999 to each on the field"
+   }
+  },
+  {
+   "t": 24516,
+   "k": "9999",
+   "v": {
+    "gauge": "100",
+    "full": true,
+    "next": "Next: Zanmato · 9,999 to each on the field"
+   }
+  },
+  {
+   "t": 25529,
+   "k": "yojimbo-action-end",
+   "v": null
+  },
+  {
+   "t": 25529,
+   "k": "panel",
+   "v": {
+    "gauge": "0",
+    "full": false,
+    "next": "Next: Daigoro"
+   }
+  },
+  {
+   "t": 26845,
+   "k": "banner",
+   "v": "hidden"
+  },
+  {
+   "t": 27090,
+   "k": "banner",
+   "v": "hidden"
+  }
+ ],
+ "note": "Ch IX, production build, 1600x900, autoBattle(defend). INJECTED: Yojimbo gauge set to 95 at battle start so the first Zanmato arrives in seconds; everything after is the real engine, presenter and HUD. t = ms since the hook was installed."
+}

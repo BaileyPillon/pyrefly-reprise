@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FF7 options round</title>
+<style>
+  :root { --bg: #0f0f13; --card: #17171d; --ink: #ece7dc; --dim: #a9a39a; --gold: #e2b85a; --line: #2c2c36; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 20px/1.4 "Segoe UI", system-ui, sans-serif; width: 1080px; }
+  .wrap { padding: 26px 28px 30px; }
+  h1 { font-size: 36px; margin: 0 0 4px; letter-spacing: .01em; }
+  .sub { color: var(--dim); font-size: 19px; margin-bottom: 18px; }
+  h2 { font-size: 28px; margin: 22px 0 8px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  figure { margin: 0; }
+  figure canvas { display: block; width: 100%; height: auto; border: 1px solid var(--line); background: #000; }
+  figcaption { font-size: 19px; color: var(--ink); margin-top: 5px; }
+  figcaption b { color: var(--gold); font-weight: 600; }
+  .opt { background: var(--card); border-left: 4px solid var(--line); padding: 10px 14px; margin: 12px 0; }
+  .opt.rec { border-left-color: var(--gold); }
+  .opt h3 { margin: 0 0 4px; font-size: 23px; }
+  .opt h3 .tag { font-size: 16px; color: #111; background: var(--gold); padding: 1px 8px; margin-left: 8px; vertical-align: 3px; border-radius: 3px; }
+  .opt p { margin: 2px 0; font-size: 19px; }
+  .opt p span { color: var(--dim); }
+  table { width: 100%; border-collapse: collapse; font-size: 19px; }
+  td, th { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--gold); font-weight: 600; }
+  .note { color: var(--dim); font-size: 17px; margin-top: 10px; }
+</style>
+</head>
+<body><div class="wrap" id="root"></div>
+<script type="module">
+import { build } from './parts.js';
+const n = Number(new URLSearchParams(location.search).get('part') ?? 1);
+build(n, document.getElementById('root')).then(() => { window.__done = true; }, (e) => { console.error(String(e && e.stack || e)); window.__done = true; });
+</script>
+</body>
+</html>
