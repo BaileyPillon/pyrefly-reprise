@@ -1,0 +1,85 @@
+{
+ "method": "the five demo results screens (results, results-victory, results-defeat, results-ffx2, results-silent) captured on main ce05b02c (before) and on r21-results-phone (after), 1600x900 and 844x390 landscape, headless Chromium GPU, DPR 1; PNG compared per pixel",
+ "frames": {
+  "desk-results-defeat.png": {
+   "size": [
+    1600,
+    900
+   ],
+   "changedPixels": 0,
+   "maxChannelDiff": 0
+  },
+  "desk-results-ffx2.png": {
+   "size": [
+    1600,
+    900
+   ],
+   "changedPixels": 26,
+   "maxChannelDiff": 2
+  },
+  "desk-results-silent.png": {
+   "size": [
+    1600,
+    900
+   ],
+   "changedPixels": 0,
+   "maxChannelDiff": 0
+  },
+  "desk-results-victory.png": {
+   "size": [
+    1600,
+    900
+   ],
+   "changedPixels": 6,
+   "maxChannelDiff": 1
+  },
+  "desk-results.png": {
+   "size": [
+    1600,
+    900
+   ],
+   "changedPixels": 6,
+   "maxChannelDiff": 1
+  },
+  "land-results-defeat.png": {
+   "size": [
+    844,
+    390
+   ],
+   "changedPixels": 0,
+   "maxChannelDiff": 0
+  },
+  "land-results-ffx2.png": {
+   "size": [
+    844,
+    390
+   ],
+   "changedPixels": 0,
+   "maxChannelDiff": 0
+  },
+  "land-results-silent.png": {
+   "size": [
+    844,
+    390
+   ],
+   "changedPixels": 0,
+   "maxChannelDiff": 0
+  },
+  "land-results-victory.png": {
+   "size": [
+    844,
+    390
+   ],
+   "changedPixels": 0,
+   "maxChannelDiff": 0
+  },
+  "land-results.png": {
+   "size": [
+    844,
+    390
+   ],
+   "changedPixels": 0,
+   "maxChannelDiff": 0
+  }
+ }
+}

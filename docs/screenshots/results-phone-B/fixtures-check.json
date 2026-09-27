@@ -1,0 +1,659 @@
+{
+ "390x844 results": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   181
+  ],
+  "cap": [
+   70,
+   225,
+   328,
+   382
+  ],
+  "head": [
+   225,
+   381,
+   20,
+   372
+  ],
+  "tallies": [
+   423,
+   569,
+   18,
+   372
+  ],
+  "chips": [
+   579,
+   731,
+   18,
+   372
+  ],
+  "dock": [
+   764,
+   822,
+   22,
+   368
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "390x844 results-victory": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   177
+  ],
+  "cap": [
+   70,
+   258,
+   328,
+   382
+  ],
+  "head": [
+   258,
+   415,
+   20,
+   372
+  ],
+  "tallies": [
+   457,
+   631,
+   18,
+   372
+  ],
+  "chips": [
+   641,
+   731,
+   18,
+   372
+  ],
+  "dock": [
+   764,
+   822,
+   22,
+   368
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "390x844 results-ffx2": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   180
+  ],
+  "cap": [
+   70,
+   323,
+   328,
+   382
+  ],
+  "head": [
+   323,
+   442,
+   20,
+   372
+  ],
+  "tallies": [
+   484,
+   631,
+   18,
+   372
+  ],
+  "chips": [
+   641,
+   731,
+   18,
+   372
+  ],
+  "dock": [
+   764,
+   822,
+   22,
+   368
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "390x844 results-silent": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   180
+  ],
+  "cap": [
+   70,
+   442,
+   346,
+   382
+  ],
+  "head": [
+   442,
+   511,
+   20,
+   372
+  ],
+  "tallies": [
+   553,
+   631,
+   18,
+   372
+  ],
+  "chips": [
+   641,
+   731,
+   18,
+   372
+  ],
+  "dock": [
+   764,
+   822,
+   22,
+   368
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "390x844 results-defeat": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   178
+  ],
+  "cap": [
+   70,
+   396,
+   346,
+   382
+  ],
+  "head": [
+   396,
+   482,
+   20,
+   372
+  ],
+  "tallies": [
+   524,
+   653,
+   18,
+   372
+  ],
+  "chips": [
+   663,
+   731,
+   18,
+   372
+  ],
+  "dock": [
+   764,
+   822,
+   22,
+   368
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "turn": {
+  "sideways": {
+   "phone": false,
+   "desktop": true,
+   "stages": 1
+  },
+  "upright": {
+   "phone": true,
+   "desktop": false,
+   "stages": 1
+  }
+ },
+ "375x667 results": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   181
+  ],
+  "cap": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "head": [
+   82,
+   222,
+   20,
+   357
+  ],
+  "tallies": [
+   256,
+   402,
+   18,
+   357
+  ],
+  "chips": [
+   412,
+   561,
+   18,
+   357
+  ],
+  "dock": [
+   587,
+   645,
+   22,
+   353
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "375x667 results-victory": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   177
+  ],
+  "cap": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "head": [
+   114,
+   254,
+   20,
+   357
+  ],
+  "tallies": [
+   288,
+   462,
+   18,
+   357
+  ],
+  "chips": [
+   472,
+   561,
+   18,
+   357
+  ],
+  "dock": [
+   587,
+   645,
+   22,
+   353
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "375x667 results-ffx2": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   180
+  ],
+  "cap": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "head": [
+   179,
+   282,
+   20,
+   357
+  ],
+  "tallies": [
+   316,
+   462,
+   18,
+   357
+  ],
+  "chips": [
+   472,
+   561,
+   18,
+   357
+  ],
+  "dock": [
+   587,
+   645,
+   22,
+   353
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "375x667 results-silent": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   180
+  ],
+  "cap": [
+   70,
+   282,
+   331,
+   367
+  ],
+  "head": [
+   282,
+   351,
+   20,
+   357
+  ],
+  "tallies": [
+   384,
+   462,
+   18,
+   357
+  ],
+  "chips": [
+   472,
+   561,
+   18,
+   357
+  ],
+  "dock": [
+   587,
+   645,
+   22,
+   353
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "375x667 results-defeat": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   178
+  ],
+  "cap": [
+   70,
+   251,
+   331,
+   367
+  ],
+  "head": [
+   251,
+   322,
+   20,
+   357
+  ],
+  "tallies": [
+   356,
+   484,
+   18,
+   357
+  ],
+  "chips": [
+   494,
+   561,
+   18,
+   357
+  ],
+  "dock": [
+   587,
+   645,
+   22,
+   353
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "360x780 results": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   181
+  ],
+  "cap": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "head": [
+   149,
+   299,
+   20,
+   342
+  ],
+  "tallies": [
+   338,
+   513,
+   18,
+   342
+  ],
+  "chips": [
+   523,
+   670,
+   18,
+   342
+  ],
+  "dock": [
+   700,
+   758,
+   22,
+   338
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "360x780 results-victory": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   177
+  ],
+  "cap": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "head": [
+   208,
+   359,
+   20,
+   342
+  ],
+  "tallies": [
+   398,
+   572,
+   18,
+   342
+  ],
+  "chips": [
+   582,
+   670,
+   18,
+   342
+  ],
+  "dock": [
+   700,
+   758,
+   22,
+   338
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "360x780 results-ffx2": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   180
+  ],
+  "cap": [
+   70,
+   273,
+   280,
+   352
+  ],
+  "head": [
+   273,
+   386,
+   20,
+   342
+  ],
+  "tallies": [
+   425,
+   572,
+   18,
+   342
+  ],
+  "chips": [
+   582,
+   670,
+   18,
+   342
+  ],
+  "dock": [
+   700,
+   758,
+   22,
+   338
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "360x780 results-silent": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   180
+  ],
+  "cap": [
+   70,
+   386,
+   316,
+   352
+  ],
+  "head": [
+   386,
+   455,
+   20,
+   342
+  ],
+  "tallies": [
+   494,
+   572,
+   18,
+   342
+  ],
+  "chips": [
+   582,
+   670,
+   18,
+   342
+  ],
+  "dock": [
+   700,
+   758,
+   22,
+   338
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ },
+ "360x780 results-defeat": {
+  "phone": true,
+  "min": 14,
+  "clock": [
+   16,
+   48,
+   16,
+   178
+  ],
+  "cap": [
+   70,
+   345,
+   316,
+   352
+  ],
+  "head": [
+   345,
+   426,
+   20,
+   342
+  ],
+  "tallies": [
+   465,
+   594,
+   18,
+   342
+  ],
+  "chips": [
+   604,
+   670,
+   18,
+   342
+  ],
+  "dock": [
+   700,
+   758,
+   22,
+   338
+  ],
+  "headClearOfClock": true,
+  "captionClearOfHead": true,
+  "overflow": false
+ }
+}
