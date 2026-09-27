@@ -9,6 +9,7 @@ import { onboardingLive } from '../../ui/coach/coachState.ts';
 import { ParallaxField, normalisePointer } from './frontend/parallax.ts';
 import { MoteField } from './frontend/motes.ts';
 import { titleMarkup, upgradeTitlePlanes } from './frontend/titleMarkup.ts';
+import { revealTitleWhenDecoded } from './frontend/titleReveal.ts';
 import { readSetting } from '../SaveData.ts';
 import { holdForNextScreen, warmFrontEnd } from './frontendWarm.ts';
 import { briefingDue } from './raiseBriefing.ts';
@@ -89,6 +90,8 @@ export class TitleScreen extends Screen {
     this.root.className = 'screen fe fe-title ig';
     this.root.innerHTML = titleMarkup({ briefingChip: onboardingLive() });
     this.stage = this.root;
+    // A-16: the placeholder first, every layer in once decoded (`frontend/titleReveal.ts`).
+    void revealTitleWhenDecoded(this.root);
     // The 2688px master, once the manifest says it is on disk. Never awaited:
     // the 1x plate is already decoding and the screen is correct without it.
     void upgradeTitlePlanes(this.root);
@@ -210,6 +213,7 @@ export class TitleScreen extends Screen {
       advancing: this.advancing,
       skin: 'ink-and-gold',
       reduceMotion: this.reduceMotion,
+      reveal: this.root.dataset['titleReveal'] ?? 'pending',
       motes: this.motes?.size ?? 0,
       parallax: this.parallax?.offset() ?? null,
     };

@@ -183,6 +183,9 @@ export function upgradeTitlePlanes(root: ParentNode): Promise<void> {
     if (!retina) return;
     for (const img of imgs) {
       if (!(img instanceof HTMLImageElement) || img.getAttribute('src') !== url) continue;
+      // Already offered in the markup: setting the same srcset again restarts the image
+      // request, and the browser aborts the one in flight (t1-b2b's aborted keyart request, A-16).
+      if (img.hasAttribute('srcset')) continue;
       img.sizes = titlePlateSizes();
       img.srcset = `${url} ${PLATE_1X_WIDTH}w, ${retina} ${PLATE_2X_WIDTH}w`;
     }
