@@ -36,6 +36,7 @@ import { PyreflyStage } from './PyreflyStage.ts';
 import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
 import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
+import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -135,10 +136,13 @@ export class PaintedStage implements BattleStage {
   private readonly pyreflies: PyreflyStage;
   /** D-224 phase lighting: the presenter's `lighting` port (`BattlePresenterPhase.ts`). */
   readonly lighting: PhaseLighting;
+  /** A-8: the floor's luma, which sets how strong a contact shadow must be to read on it (`ContactShadow.ts`). */
+  private readonly groundLuma: number | null;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
     this.partRings = new PartRings(opts.scene);
+    this.groundLuma = groundLumaOf(opts.scene);
     this.arrivals = opts.arrivals ?? arrivalsOf(opts.scene);
     this.highlight = new TargetHighlight({
       actor: (id) => this.actor(id),
@@ -254,7 +258,7 @@ export class PaintedStage implements BattleStage {
         : { strength: 0.7 },
       groundShade: 0.24,
       bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
-      shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, opacity: 0.48 },
+      shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, ...shadowOf(this.groundLuma) },
       breathe: { amplitude: 0.016, speed: 0.4 },
       sway: { amplitude: 0.009, speed: 0.22 },
       // The turn highlight: gold under a party member, a cooler ring under a
@@ -281,6 +285,8 @@ export class PaintedStage implements BattleStage {
 
     this.opts.scene.add(actor);
     if (!anchor) this.pyreflies.stage(c.id, c.side, actor);
+    // A-8: a tight dark ellipse under the feet; a hovering figure keeps none.
+    if (!anchor && !actor.levitates) attachFootOcclusion(actor.shadow, contactShadowStyle(this.groundLuma));
     this.actors.set(c.id, {
       actor,
       side: c.side,
@@ -595,6 +601,7 @@ export class PaintedStage implements BattleStage {
     if (!staged) return;
     this.actors.delete(id);
     this.pyreflies.leave(id);
+    disposeFootOcclusion(staged.actor.shadow);
     this.partRings.remove(id);
     staged.actor.dispose();
   }
@@ -793,6 +800,12 @@ export class PaintedStage implements BattleStage {
     this.flashEl?.remove();
     this.flashEl = null;
   }
+}
+
+/** The contact blob's opacity and colour for this floor (A-8, `ContactShadow.ts`). */
+function shadowOf(groundLuma: number | null): { opacity: number; color: number } {
+  const s = contactShadowStyle(groundLuma);
+  return { opacity: s.opacity, color: s.color };
 }
 
 function rank(side: Side): number {
