@@ -1,6 +1,6 @@
 import type { Object3D } from 'three';
 import type { BattleCamera, CameraRig } from '../engine/BattleCamera.ts';
-import type { PartAnchor, PartAnchors } from '../engine/PartAnchors.ts';
+import { GROUND_RING_SQUASH, type PartAnchor, type PartAnchors } from '../engine/PartAnchors.ts';
 import { PHONE_BATTLE_QUERY } from '../ui/common/phoneBattle.ts';
 import { findFigure } from './cavern-stolen-fayth-cast.ts';
 import { FARPLANE_STAGING } from './farplane-parts.ts';
@@ -137,7 +137,8 @@ function colossusAnchors(t: ColossusTable): PartAnchors {
     out[id] = {
       ...a,
       ...(bulwark ? { px: [a.px[0], 700] as [number, number] } : {}),
-      ring: { radius: a.ring.radius * k, ground: bulwark ? false : a.ring.ground },
+      // Upright, and flattened as in the picked frames (PR-0095, iteration 2 B3).
+      ring: { radius: a.ring.radius * k, ground: bulwark ? false : a.ring.ground, ...(bulwark ? { squash: GROUND_RING_SQUASH } : {}) },
     };
   }
   out['node-a'] = { mode: 'overhead', offset: [6, 40, -4] };

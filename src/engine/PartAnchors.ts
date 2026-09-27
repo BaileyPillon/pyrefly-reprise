@@ -45,8 +45,13 @@ export interface OnParentAnchor {
   paint: { width: number; height: number; baselineY: number; contentTop: number };
   /** The chest point the cursor and the damage numbers aim at, when it differs from the ring. */
   chestPx?: [x: number, y: number];
-  /** The ring: `ground` lies flat on the floor (a foot), otherwise it stands upright facing the camera. */
-  ring: { radius: number; ground: boolean };
+  /**
+   * The ring: `ground` lies flat on the floor (a foot), otherwise it stands
+   * upright facing the camera. `squash` flattens an upright ring vertically
+   * (1 = round; Vegnagun's colossus Bulwarks use {@link GROUND_RING_SQUASH},
+   * the look of the picked frame).
+   */
+  ring: { radius: number; ground: boolean; squash?: number };
 }
 
 /** A part hung in the air relative to its parent's feet, typically off-frame (the Nodes). */
@@ -118,6 +123,14 @@ export function anchorFor(anchors: PartAnchors | undefined, id: string): PartAnc
   return anchors ? anchors[id] : undefined;
 }
 
+/**
+ * How flat a ground ring is drawn (its height over its width on screen). The
+ * picked colossus frames (D-228) show the Bulwark rings upright but still at
+ * this squash, because the mock stood a ground ring up without resetting it;
+ * an upright anchor asks for it with `ring.squash`.
+ */
+export const GROUND_RING_SQUASH = 0.46;
+
 /** Violet, the fiend turn-ring colour the C* mock used. */
 export const PART_RING_COLOUR = 0xc8a0ff;
 
@@ -180,8 +193,11 @@ export class PartRings {
       if (!parent) continue;
       const [x, y, z] = anchorPoint(e.anchor, parent);
       e.mesh.position.set(x, e.anchor.ring.ground ? parent.y + 0.03 : y, z);
-      if (e.anchor.ring.ground) e.mesh.scale.set(1, 0.46, 1);
-      else if (camera) e.mesh.quaternion.copy(camera.quaternion);
+      if (e.anchor.ring.ground) e.mesh.scale.set(1, GROUND_RING_SQUASH, 1);
+      else {
+        e.mesh.scale.set(1, e.anchor.ring.squash ?? 1, 1);
+        if (camera) e.mesh.quaternion.copy(camera.quaternion);
+      }
     }
   }
 
