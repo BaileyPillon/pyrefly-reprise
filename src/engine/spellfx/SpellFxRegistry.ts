@@ -10,11 +10,14 @@
  * `SpellFxLookup.ts`), so the rules can be tested on their own.
  */
 
-export type SpellFxId = 'fire' | 'ice' | 'thunder' | 'water' | 'holy' | 'cure' | 'hit' | 'bloom';
+export type SpellFxId = 'fire' | 'ice' | 'thunder' | 'water' | 'holy' | 'cure' | 'hit' | 'spiral' | 'megaflare' | 'bloom';
 export type FxGame = 'ffx' | 'ffx2';
 
-/** Every effect id; `bloom` is today's tinted `ImpactFlash`. */
-export const SPELL_FX_IDS: readonly SpellFxId[] = ['fire', 'ice', 'thunder', 'water', 'holy', 'cure', 'hit', 'bloom'];
+/**
+ * Every effect id; `bloom` is today's tinted `ImpactFlash`. `spiral` and
+ * `megaflare` are D-233's special moments, keyed by game (`SpellFxSpecials.ts`).
+ */
+export const SPELL_FX_IDS: readonly SpellFxId[] = ['fire', 'ice', 'thunder', 'water', 'holy', 'cure', 'hit', 'spiral', 'megaflare', 'bloom'];
 
 /** The fields of an `AbilityDef` the lookup reads. */
 export interface AbilityFxShape {
@@ -27,9 +30,9 @@ export interface AbilityFxShape {
 
 /**
  * The spells named in the pick, by id. Each entry agrees with what the element
- * rule would give; the table is where a future exception goes (an Overdrive or
- * a boss special with its own look needs Bailey's yes first: the pick names
- * the six elements, the heal and the hit only).
+ * rule would give. An Overdrive or a boss special with its own look needs
+ * Bailey's yes first; the two he has said yes to (D-233) are keyed by game in
+ * `SpellFxSpecials.ts`, because FFX and FFX-2 share the id `mega-flare`.
  */
 export const ABILITY_FX: Readonly<Record<string, SpellFxId>> = Object.freeze({
   // FFX black magic

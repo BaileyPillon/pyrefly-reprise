@@ -304,7 +304,7 @@ export const buildMacalaniaTempleScene: SceneFactory = async (
     }),
   );
   glitter.position.set(0.5, 2.0, -2.0);
-  /** Pyreflies near the Chamber door: the fayth is in the next room. */
+  /** Pyreflies near the Chamber door: the fayth is in the next room; they come at Seymour's death (D-225). */
   const pyreflies = new ParticleField(
     ParticlePresets.pyreflies({
       count: Math.round(40 * k),
@@ -314,6 +314,12 @@ export const buildMacalaniaTempleScene: SceneFactory = async (
     }),
   );
   pyreflies.position.set(0.8, 2.2, -12);
+  // D-225 (Bailey, 2026-09-26; FFX only): "Save pyreflies for the moment
+  // Seymour dies" (research/ffx-vs-ffx2-presentation.md §8.1). Hidden until
+  // then; the battle stage fades them in at his KO (`PyreflyStage`, keyed by
+  // this name in `HELD_PYREFLIES`).
+  pyreflies.name = 'pyreflies:after-seymour-macalania';
+  pyreflies.visible = false;
   const particles = [glitter, pyreflies];
   for (const p of particles) group.add(p);
 

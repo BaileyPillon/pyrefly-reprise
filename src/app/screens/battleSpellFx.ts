@@ -12,11 +12,19 @@ import type { Renderer } from '../../engine/Renderer.ts';
 import type { StageSpellFxOptions } from '../../engine/spellfx/stageSpellFx.ts';
 import { DEFAULT_FLASH_PARAMS, REDUCED_FLASH_PARAMS, resolveFxQuality, type FxQuality } from '../../engine/spellfx/SpellFxParams.ts';
 import type { SpellFxLayer } from '../../engine/spellfx/SpellFxLayer.ts';
+import { SPEED_RATE } from '../../engine/spellfx/SpellFxSpecials.ts';
+import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { readSetting } from '../SaveData.ts';
 
-export function battleSpellFx(game: 'ffx' | 'ffx2', renderer: Renderer): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality'> {
+export function battleSpellFx(
+  game: 'ffx' | 'ffx2',
+  renderer: Renderer,
+  speed?: () => PlaybackSpeed | undefined,
+): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'rate'> {
   return {
     game,
+    // The effect clock follows the presenter's playback speed (held fast-forward).
+    rate: () => SPEED_RATE(speed?.() ?? 'normal'),
     overlay: (draw) => renderer.addOverlay(draw),
     quality: () =>
       resolveFxQuality({
@@ -32,6 +40,7 @@ export function battleSpellFx(game: 'ffx' | 'ffx2', renderer: Renderer): Pick<St
  * `__pyrefly.trigger(...)` for captures and checks only, never a player path:
  * - `spellfx:<effect>:<combatant id>` plays one effect on a combatant now;
  * - `spellfx:<effect>:<combatant id>:<seconds>` holds it at that local time;
+ * - `spellfx:megaflare:<caster>+<target>,<target>:<seconds>` plays a group effect from the caster;
  * - `spellfx:clear` removes every effect; `spellfx:quality:<full|phone|low|auto>` forces a tier;
  * - `spellfx:flash:<reduced|default|auto>` forces the flash rules.
  * The capture labels every frame it forces.
@@ -54,5 +63,7 @@ export function spellFxTrigger(name: string, layer: SpellFxLayer | undefined): b
     layer.qualityOverride = tier === 'auto' ? null : tier;
     return true;
   }
-  return !!(id && target && layer.play(id, target, at === undefined ? undefined : Number(at)));
+  const [from, group] = (target ?? '').split('+');
+  const holdAt = at === undefined ? undefined : Number(at);
+  return !!(id && from && layer.play(id, from, holdAt, group ? group.split(',') : []));
 }

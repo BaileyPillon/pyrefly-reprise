@@ -11,6 +11,7 @@
  * (CONTRACTS.md, playback rule 4).
  */
 
+import { cuePhase } from './BattlePresenterPhase.ts';
 import type { ActingAction } from './BattlePresenterSpellFx.ts';
 import type { BattleEvent, CombatantId, ElementId, MessageKind } from '../battle/common/types.ts';
 import { BattleMoments } from './BattleMoments.ts';
@@ -197,6 +198,7 @@ export async function banner(ctx: EventCtx, text: string, kind: MessageKind): Pr
 export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void> {
   // A held arrival plays before whatever comes after the beat that named it.
   if (ctx.pendingArrivals.length > 0) await flushArrivals(ctx);
+  cuePhase(ctx, event); // D-224: a canon phase beat turns the arena's light
   switch (event.type) {
     case 'turn-start':
       return turnStart(ctx, event.actorId);

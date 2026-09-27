@@ -211,7 +211,9 @@ export class BattleScreen extends Screen {
       slots: this.scene.slots,
       canvas: this.app.renderer.domElement,
       overlayRoot: this.root,
-      spellFx: battleSpellFx(chapter.game, this.app.renderer),
+      spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed),
+      sceneKey: this.scene.key,
+      grade: this.app.renderer,
     });
 
     // --- engine ------------------------------------------------------------
@@ -246,6 +248,7 @@ export class BattleScreen extends Screen {
         xray: (id) => this.stage?.xray(id),
         visibility: (id) => this.stage?.visibility().get(id) ?? 1,
         setPanels: (panels) => this.stage?.setPanels(panels),
+        keyFeatures: () => this.stage?.keyFeatureRects() ?? [],
       });
       // The enemy-intent slab needs the live engine, not just the state the HUD
       // is synced with: predicting a rotation means dry-running its AI script,

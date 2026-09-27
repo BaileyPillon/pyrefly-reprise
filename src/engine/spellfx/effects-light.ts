@@ -31,7 +31,7 @@ export function holy(o: FxDrawList, t: number, T: FxTarget): void {
       if (t > 0.12 + j * 0.03 && t < tk) o.sprite('spark4', '#FFE6F4', lerp(ox, T.cx, u * u), lerp(oy, T.cy, u * u), 44 * sc, 0.95);
       const a = env(t, tk, tk + 0.3, 0.01, 0.28);
       if (a) {
-        o.sprite('glow', '#FFFFFF', T.cx + ((j % 3) - 1) * 20 * k, T.cy + (((j * 7) % 5) - 2) * 14 * k, 230 * sc, a * o.actorCap(0.8));
+        o.bloom('#FFFFFF', T.cx + ((j % 3) - 1) * 20 * k, T.cy + (((j * 7) % 5) - 2) * 14 * k, 230 * sc, 0.8, a);
         o.wash(j, '#FFF6FF', 0.28 * pulse(t, tk, 0.07));
       }
       parts(o.n(10), 50 + j, tk, tk + 0.02, t, (p, age) => {
@@ -56,7 +56,7 @@ export function holy(o: FxDrawList, t: number, T: FxTarget): void {
       o.sprite('glow', '#FFF2C0', x, bottom, 60 * sc, a);
     }
     const R = 260 * sc * outCubic((t - 0.85) / 0.35);
-    o.sprite('glow', '#FFFFFF', T.cx, T.cy, R * 2.2, o.actorCap(0.95) * env(t, 0.85, 1.6, 0.02, 0.6));
+    o.bloom('#FFFFFF', T.cx, T.cy, R * 2.2, 0.95, env(t, 0.85, 1.6, 0.02, 0.6));
     parts(o.n(70), 51, 0.86, 0.95, t, (p, age) => {
       if (age > 1.1) return;
       const an = p.a * Math.PI * 2;
@@ -87,7 +87,7 @@ export function cure(o: FxDrawList, t: number, T: FxTarget): void {
     const y = T.fy - age * (300 + 200 * p.c) * sc + Math.sin(ang) * rad * 0.28;
     o.sprite(o.bit, cols[p.i % 3]!, x, y, (o.game === 'ffx2' ? 30 : 18) * sc * (1 - u * 0.5), Math.sin(u * Math.PI));
   });
-  o.sprite('glow', '#C8FFE0', T.cx, T.cy, 360 * sc, o.actorCap(0.4) * env(t, 0.5, 1.4, 0.2, 0.5));
+  o.bloom('#C8FFE0', T.cx, T.cy, 360 * sc, 0.4, env(t, 0.5, 1.4, 0.2, 0.5));
   o.add = false;
 }
 
@@ -106,7 +106,7 @@ export function hit(o: FxDrawList, t: number, T: FxTarget): void {
     if (o.game === 'ffx2') o.sprite('spark4', edge, x, y, 22 * sc, 1 - age / 0.4);
     else o.bar(x, y, x - Math.cos(ang) * 22 * k, y - Math.sin(ang) * 22 * k, 2.5 * k, p.c > 0.5 ? '#FFFFFF' : edge, 1 - age / 0.4);
   });
-  o.sprite('glow', '#FFFFFF', T.cx, T.cy, 300 * sc, o.actorCap(0.7) * env(t, 0.3, 0.55, 0.01, 0.22));
+  o.bloom('#FFFFFF', T.cx, T.cy, 300 * sc, 0.7, env(t, 0.3, 0.55, 0.01, 0.22));
   o.add = false;
   o.wash(0, '#FFFFFF', 0.1 * pulse(t, 0.31, 0.1));
 }

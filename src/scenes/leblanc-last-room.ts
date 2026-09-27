@@ -235,20 +235,10 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
   // --------------------------------------------------------------- particles
   const k = low ? 0.5 : 1;
 
-  /** Drifting Syndicate glow — magenta and cyan motes standing in for the neon signage and the terminal screens. */
-  const glowMotes = new ParticleField(
-    ParticlePresets.pyreflies({
-      count: Math.round(120 * k),
-      bounds: { x: 9, y: 4.2, z: 6 },
-      colors: [0xff8fd6, 0xffffff, 0x9de8ff, 0xe7a8ff],
-      size: 6.4,
-      drift: [0.03, 0.28, 0],
-      wobble: [0.4, 0.14, 0.26],
-      twinkle: 0.85,
-      opacity: 0.85,
-    }),
-  );
-  glowMotes.position.set(0.4, 1.8, -2.4);
+  // D-225 (Bailey, 2026-09-26; FFX-2 only): no glow motes here. The room is
+  // an interior, "Indoor dust at most. No pyreflies." (research/ffx-vs-ffx2-
+  // presentation.md §8, Chateau Leblanc); the magenta and cyan motes that
+  // stood in for the neon signage are gone. The warm dust stays.
 
   /** Fine warm dust hanging in the floor's light shaft — non-additive, so it reads as motes in air rather than as more glow. */
   const dust = new ParticleField(
@@ -269,7 +259,7 @@ export const buildLeblancLastRoomScene: SceneFactory = async (
   );
   dust.position.set(0, 1.2, 1.0);
 
-  const particles = [glowMotes, dust];
+  const particles = [dust];
   for (const p of particles) group.add(p);
 
   // ------------------------------------------------------------- light pools

@@ -43,7 +43,7 @@ import { MoveAdvisor } from '../common/MoveAdvisor.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
-import { BODY_HALF_WIDTH, boardRects, fighterBoxes, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
+import { BODY_HALF_WIDTH, boardRects, fighterBoxes, keyFeatureObstacles, slabPanels, solveSlab, type IntentAvoidRect } from './intentBoard.ts';
 import { solveAdvisorLane, type LaneFigure } from './advisorLane.ts';
 import { battleHelpOn } from '../coach/coachState.ts';
 import { NodeEdgeMarkers } from './nodeEdgeMarkers.ts';
@@ -482,6 +482,8 @@ export class FFX2BattleHud implements HudPort {
   private intentObstacles(opts: { skipChainChip?: boolean; addIntentPanel?: boolean } = {}): IntentAvoidRect[] {
     const out = boardRects(this.el, { ...opts, scale: this.stageScale || 1, chipReach: this.intentChipHeight() });
     for (const box of fighterBoxes(this.lastState, this.project)) out.push(box);
+    // PR-0094: a part's face and weapon rank with the chrome.
+    for (const box of keyFeatureObstacles(this.targeting?.keyFeatures?.() ?? [])) out.push(box);
     // PR-0012: in a portrait letterbox the help band sits in the bar above the
     // stage, outside the headroom `solveIntentPlacement` reserves; name it.
     if (battleHelpOn()) {
