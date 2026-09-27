@@ -1,0 +1,63 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-27T19:12:29Z",
+  "build": {
+    "mainSha": "bc4e70ee",
+    "bundle": "C-3hBxzq",
+    "artifactHash": "9ec5397f7de4c34a847f1f249c99fdf2c3a3d0add252cbd49f6eea2cc8583401"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/bc4e70ee.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/ff3884fb.json --full -> {result: PASS, artifactHash: 9ec5397f7de4c34a847f1f249c99fdf2c3a3d0add252cbd49f6eea2cc8583401, liveManifest: match, checked: 852, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu, ANGLE NVIDIA GeForce RTX 5070 Ti D3D11, no black canvas), 1600x900, fresh context per chapter, cache-busted URL. Every wait asserts screen/phase and throws on timeout. Title->chapter-select by real Enter; hidden FF7 door (typed L-I-M-I-T) opened straight to battle. Chapter IX yojimbo-cavern: debug API used only to set seed 1 and fill Yuna's overdrive gauge; real Attack keys advanced the CTB queue to Yuna's menu; real arrow keys + Enter opened Overdrive->Grand Summon and picked row 3 of [Valefor,Ifrit,Ixion,Shiva,Bahamut] = Ixion; Ixion came out (aeonSummoned=ixion, matches pick), party faded to alpha 0 while Ixion stood at alpha 1 (PR-0181), aeon menu opened; real Dismiss (cursor+Enter) restored the party to alpha 1 with all three rows. Pause (P), hide/restore (H), resume (Escape) all fired real-key mid-battle. audioDebug() reported the playing track boss-yojimbo with source=prerendered (not the synth fallback). One FFX-2 chapter (ffx2-bahamut, seed 2, its own fresh context) reached battle then a real command-menu phase (reachedPlayerTurn=true); a narrow 2s battleLog-length sample taken immediately at battle open did not show growth (1->1), recorded as an instrumentation caveat since the same run went on to reach a live player turn, which requires the clock to have advanced. 0 console errors and 0 responses >=400 across four browser contexts (main ch9, FF7, FFX-2, reload).",
+      "reason": "Instrumentation caveat only: the FFX-2 tick-advance sample window (2s at battle open) was inconclusive; the stronger claim (chapter reaches a live player turn under running ticks) passed."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke on the Chapter IX context: set pausePanelsHidden=true via app.save.setSettings and recorded a marker via markCoachSeen('live-smoke-bc4e70ee') as one piece of progress; reloaded (fresh load, waited for __pyreflyReady); both read back correctly after reload (pausePanelsHidden=true, marker present in seenCoach).",
+      "reason": "Full upgrade matrix (fresh player / returning player / previous-live-build save fixture / invalid or truncated storage / reset flow) not tested in this pass; this is the lightweight live check only, per RUBRIC.md section 5."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity (852 files, full byte diff from ff3884fb's manifest)",
+      "title -> chapter-select, real input",
+      "hidden FF7 Guard Scorpion door (L-I-M-I-T) to a real battle",
+      "Chapter IX Grand Summon: pick a non-default row (Ixion) by real keys, party fades off, aeon menu opens, Dismiss restores the party",
+      "pause (P) / hide-restore (H) / resume (Escape), real keys, mid-battle",
+      "prerendered-vs-synth-fallback audio check via audioDebug()",
+      "one FFX-2 chapter (ffx2-bahamut) real-key run to a live player turn",
+      "lightweight reload persistence: one setting, one progress marker",
+      "console-error and >=400-response sweep across four browser contexts"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix (fresh/returning/previous-build-fixture/invalid-storage/reset)",
+      "phone-viewport Grand Summon picker (already disclosed by the focused review as FOC24-01/FOC24-02; not re-verified live in this pass)",
+      "gamepad and touch input",
+      "Mix and Rage pickers",
+      "other FFX chapters' Grand Summon rows",
+      "win/loss/retry outcome paths beyond the KO-exit-equivalent shown by Dismiss"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 12,
+  "notes": "The artifact-manifest verify and the smoke script were drafted by an interrupted earlier pass in this same session (session scratch file .a44297ca-live-smoke-bc4e70ee-tmp.mjs, 3 of 15 screenshots already present); this pass completed the run, added a WebGL UNMASKED_RENDERER_WEBGL check and PYREFLY_BROWSER launch args to make the GPU-mode claim verifiable, and wrote this report. Deployment PASS per RUBRIC.md section 3 (exact artifact plus a clean smoke on the intended states); no ship verdict is set here (ship is decided by the focused/deep review, already SHIP in critic/reviews/bc4e70ee-focused.json)."
+}
