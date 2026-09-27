@@ -17,7 +17,7 @@ export interface ResolveContext {
   emit: Emit;
   breaksDamageLimit(unit: Ffx2Unit): boolean; // per girl: an accessory or a Garment Grid gate
   timedAilmentDefaults?: boolean; // `EnemyGroupDef.timedAilmentDefaults` (`statuses.ts`, Chapter XIII)
-  immuneHitsSkipChain?: boolean; // IC-1's OFF switch; absent = `constants.ts` IMMUNE_HITS_SKIP_CHAIN
+  immuneHitsSkipChain?: boolean; // IC-1's switch; absent = `constants.ts` IMMUNE_HITS_SKIP_CHAIN (ON, D-242)
   namedTargetsOnly?: boolean; // `extra.namedTargetsOnly` rows; absent = `constants.ts` NAMED_TARGETS_ONLY
 }
 

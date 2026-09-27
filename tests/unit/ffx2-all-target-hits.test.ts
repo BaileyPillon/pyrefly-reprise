@@ -10,8 +10,8 @@
  * moves keep their per-strike roll among whoever is standing (`[verified: 3 sources]`).
  *
  * IC-1, unsourced (§9.2): whether an immune or Invincible hit opens or extends a chain. The engine
- * keeps its behaviour (it registers); the alternative is built as the named OFF switch
- * `immuneHitsSkipChain` and measured (`docs/plans/ffx2-engine-fixes-2026-09-26.md`).
+ * kept its behaviour (it registers) behind the named switch `immuneHitsSkipChain`, measured
+ * (`docs/plans/ffx2-engine-fixes-2026-09-26.md`); since D-242 (2026-09-27) the switch ships ON.
  *
  * Acta Est Fabula (found by the IC-2 measurement): its sourced target is "both Redoubts"
  * (`research/ffx2-vegnagun-shuyin.md` §3.4); as `all-allies` it also healed the Head for 9,999 a cast.
@@ -105,7 +105,7 @@ describe('IC-2: an all-target move hits each target taken at its start, once per
   });
 });
 
-describe('IC-1: an immune hit and the chain (unsourced, §9.2): built as an OFF switch', () => {
+describe('IC-1: an immune hit and the chain (unsourced, §9.2): a named switch, ON since D-242', () => {
   function invincibleGirl(): { user: Ffx2Unit; girl: Ffx2Unit } {
     const user = aiUnit('nooj', 'enemy', 50000, 0);
     const girl = aiUnit('yuna', 'party', 50000, 0); // survives the damaging hit, so its window stays open
@@ -113,10 +113,19 @@ describe('IC-1: an immune hit and the chain (unsourced, §9.2): built as an OFF 
     return { user, girl };
   }
 
-  it('the switch ships OFF: the engine keeps registering an immune hit', () => {
-    expect(IMMUNE_HITS_SKIP_CHAIN).toBe(false);
+  it('the switch ships ON since D-242 (2026-09-27): by default an immune hit opens no window', () => {
+    expect(IMMUNE_HITS_SKIP_CHAIN).toBe(true);
     const { user, girl } = invincibleGirl();
     const { ctx, events } = ctxFor([user, girl]);
+    resolveAbility(ctx, user, ability('x2-shared-ultima'), []);
+    expect(events.some((e) => e.type === 'miss' && (e as { reason?: string }).reason === 'immune')).toBe(true);
+    expect(events.some((e) => e.type === 'chain')).toBe(false);
+    expect(girl.chainWindowTicks).toBe(0);
+  });
+
+  it('switched off (the engine before D-242): an immune hit still registers', () => {
+    const { user, girl } = invincibleGirl();
+    const { ctx, events } = ctxFor([user, girl], { immuneHitsSkipChain: false });
     resolveAbility(ctx, user, ability('x2-shared-ultima'), []);
     expect(events.some((e) => e.type === 'miss' && (e as { reason?: string }).reason === 'immune')).toBe(true);
     expect(events.some((e) => e.type === 'chain')).toBe(true);

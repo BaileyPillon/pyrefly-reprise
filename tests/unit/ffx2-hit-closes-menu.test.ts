@@ -223,7 +223,9 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
     // all-target action is skipped, not wrapped) and Acta Est Fabula's target (the Redoubts only);
     // `ffx2-atb-golden.test.ts` has the measurement. Old hashes in git at ea05f877.
     ['7a91c483c3dd8d2c', '054c5f01b9f23ffe', '678d9b991119fa5a'],
-    ['0aadde1f8d3aff80', '995cb5ec3f5834e0', 'd86662749c9fb7e1'],
+    // Chapter VI re-pinned 2026-09-27 for PR-0106 (D-242, FFX-2 only): Leblanc's SinirothX script (failsafe
+    // once, turn 5 Fan Slap) is the default. Was 0aadde1f8d3aff80 / 995cb5ec3f5834e0 / d86662749c9fb7e1.
+    ['ff75b7a41d90dd0d', '8a604a6a1de93b29', 'edaa14f94ca3e923'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

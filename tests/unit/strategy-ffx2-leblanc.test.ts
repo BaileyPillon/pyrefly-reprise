@@ -279,7 +279,11 @@ describe('A2 — the credible mistake: leave Ormi for last', () => {
     // `docs/plans/ffx2-item-accuracy-review.md`) 10 of 11 do, and seed 13
     // heals through it. No boss number moved; the player's Cure now lands.
     const costly = withHuggles.filter((r) => r.aliveAtEnd < 3).length;
-    expect(costly / withHuggles.length).toBeGreaterThanOrEqual(0.8);
+    // 0.8 -> 0.75 on 2026-09-27 for PR-0106 (D-242, FFX-2 only): with Leblanc's SinirothX script the default
+    // (turn 5 Fan Slap, the failsafe once), Huggles still comes on 9 of these 20 seeds and 7 cost a member
+    // (8 of 9 with the switch forced off, nothing else changed). The lesson stays: most Huggles runs cost.
+    console.log(`[A2] Huggles on ${withHuggles.length} of 20 seeds; ${costly} cost a member`);
+    expect(costly / withHuggles.length).toBeGreaterThanOrEqual(0.75);
   }, 300_000);
 
   it('the shipped order all but disarms it — Logos first, Ormi second', () => {
