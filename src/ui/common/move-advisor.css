@@ -66,7 +66,9 @@
    * on any viewport without touching rows that already clear it (12.2px, not
    * 12.0, for the same margin `ffx-hud.css` keeps over its 12px ask).
    */
-  --mad-fs-floor: calc(12.2px / var(--lb-scale, 1));
+  /* FOC-06 (iteration 2, B6; docs/plans/foc-06-method-check.md): CHK-003's line is 14 px, not the
+     12 px FOC-04 floor this first copied; 14.2 keeps the same small margin over the ask. */
+  --mad-fs-floor: calc(14.2px / var(--lb-scale, 1));
 }
 
 /* -------------------------------------------------------------------- card */

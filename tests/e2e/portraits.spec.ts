@@ -26,8 +26,36 @@
  */
 
 import { expect, test, type Page, type Response } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import './support/pyrefly-window.ts';
+import type { ChapterId } from '../../src/data/encounters.ts';
+
+/**
+ * `src/ui/common/face-crops.json`'s `fx`/`fy`, read directly off disk rather
+ * than through `ui/common/portrait.ts`'s own import of it: that file is built
+ * for Vite, whose bundler resolves a bare `.json` import for it; Playwright's
+ * Node-ESM loader for *this* file cannot ("needs an import attribute of
+ * 'type: json'"), and the rest of `portrait.ts` (DOM listeners guarded by
+ * `typeof document`) is more than this file needs anyway. The two fallbacks
+ * mirror `DEFAULT_CROP`/`GENERIC_BODY_CROP` there; kept in sync by
+ * `tests/unit/ui-portrait-face-crop.test.ts`, which reads the same JSON and
+ * every id `portraitImgHtml`/`bodyFaceImgHtml` can emit.
+ */
+const HERE = dirname(fileURLToPath(import.meta.url));
+const FACE_CROPS = JSON.parse(
+  readFileSync(join(HERE, '..', '..', 'src', 'ui', 'common', 'face-crops.json'), 'utf8'),
+) as { portraits: Record<string, { fx: number; fy: number }>; bodies: Record<string, { fx: number; fy: number }> };
+const DEFAULT_CROP = { fx: 0.5, fy: 0.295 };
+const GENERIC_BODY_CROP = { fx: 0.5, fy: 0.15 };
+function portraitCrop(id: string): { fx: number; fy: number } {
+  return FACE_CROPS.portraits[id] ?? DEFAULT_CROP;
+}
+function bodyCrop(id: string): { fx: number; fy: number } {
+  return FACE_CROPS.bodies[id] ?? GENERIC_BODY_CROP;
+}
 
 /** One portrait/crop layer inside a chip, as read back out of the DOM. */
 interface Layer {
@@ -130,6 +158,143 @@ async function raiseHud(page: Page): Promise<void> {
     null,
     { timeout: 15_000 },
   );
+}
+
+/**
+ * Raise the FFX-2 battle HUD's party window and wait for its rows to have
+ * real geometry — the same "hud:on" hook {@link raiseHud} uses, checked
+ * against `.ffx2hud__party`'s own row markup (`ui/ffx2/PartyRows.ts`)
+ * instead of the FFX CTB list's.
+ */
+async function raiseFfx2Party(page: Page): Promise<void> {
+  const ok = await page.evaluate(() => window.__pyrefly!.trigger('hud:on'));
+  expect(ok, 'the battle screen must accept the "hud:on" debug trigger').toBe(true);
+  await page.evaluate(() => window.__pyrefly!.frames(4));
+  await page.waitForFunction(
+    () => {
+      const rows = [...document.querySelectorAll<HTMLElement>('.ffx2hud__party [data-actor-id]')];
+      return rows.length > 0 && rows.every((r) => r.getBoundingClientRect().width > 0);
+    },
+    null,
+    { timeout: 15_000 },
+  );
+}
+
+/** One chip's DOM read-back: its tile box, its layers and its fallback monogram. */
+interface Chip {
+  actor: string;
+  tile: { width: number; height: number };
+  layers: Array<Layer & { id: string | null; body: boolean; style: string; naturalH: number }>;
+  fallbackZ: number | null;
+  fallbackText: string;
+}
+
+/**
+ * Every chip under `rowSelector`, reading each row's `data-actor`/
+ * `data-actor-id`, the face tile inside it (`faceSelector`, or the row itself
+ * when there is none), its `<img>` layers and its fallback monogram
+ * (`fallbackSelector`). Shared between the FFX CTB list and the FFX-2 party
+ * window, whose markup differs but whose shape (a monogram floor under
+ * stacked portrait layers, `ui/common/portrait.ts`) does not.
+ */
+async function collectChips(
+  page: Page,
+  rowSelector: string,
+  faceSelector: string | null,
+  fallbackSelector: string,
+): Promise<Chip[]> {
+  return page.evaluate(
+    ({ rowSelector, faceSelector, fallbackSelector }) => {
+      return [...document.querySelectorAll<HTMLElement>(rowSelector)].map((row) => {
+        const face = (faceSelector ? row.querySelector<HTMLElement>(faceSelector) : null) ?? row;
+        const tile = face.getBoundingClientRect();
+        const fb = row.querySelector<HTMLElement>(fallbackSelector);
+        return {
+          actor: row.dataset['actor'] ?? row.dataset['actorId'] ?? '?',
+          tile: { width: tile.width, height: tile.height },
+          layers: [...face.querySelectorAll('img')].map((img) => {
+            const box = img.getBoundingClientRect();
+            return {
+              id: img.getAttribute('data-face-crop'),
+              body: img.hasAttribute('data-face-body'),
+              tag: img.tagName,
+              src: img.getAttribute('src'),
+              natural: img.naturalWidth,
+              naturalH: img.naturalHeight,
+              z: Number(getComputedStyle(img).zIndex) || 0,
+              width: box.width,
+              height: box.height,
+              style: img.getAttribute('style') ?? '',
+            };
+          }),
+          fallbackZ: fb ? Number(getComputedStyle(fb).zIndex) || 0 : null,
+          fallbackText: fb?.textContent ?? '',
+        };
+      });
+    },
+    { rowSelector, faceSelector, fallbackSelector },
+  );
+}
+
+/** One `prop:N%` declaration out of an inline `style` attribute. */
+function parsePct(style: string, prop: string): number | null {
+  const m = new RegExp(`(?:^|;)\\s*${prop}\\s*:\\s*(-?[\\d.]+)%`).exec(style);
+  return m ? Number(m[1]) : null;
+}
+
+/**
+ * Whether a chip's measured head point — {@link portraitCrop}/{@link
+ * bodyCrop}'s `fx`/`fy` for this layer's id — lands inside the tile it is
+ * cropped into, given the tile's box and the layer's own inline placement.
+ *
+ * `cropStyle` (`ui/common/portrait.ts`) guarantees the *image* always covers
+ * the tile (its clamp forbids empty page at any edge); this checks the
+ * stronger thing PR-0014 is actually about — that the **subject**, not just
+ * some part of the file, is what ends up on screen. `null` when the layer
+ * carries no id (nothing to look up) or the tile has not been measured yet.
+ */
+function headInsideTile(layer: Chip['layers'][number], tile: Chip['tile']): boolean | null {
+  if (!layer.id || tile.width <= 0 || tile.height <= 0 || !layer.natural || !layer.naturalH) return null;
+  const crop = layer.body ? bodyCrop(layer.id) : portraitCrop(layer.id);
+  const leftPct = parsePct(layer.style, 'left');
+  const topPct = parsePct(layer.style, 'top');
+  const widthPct = parsePct(layer.style, 'width');
+  if (leftPct === null || topPct === null || widthPct === null) return null;
+  const imgW = tile.width * (widthPct / 100);
+  const imgH = imgW * (layer.naturalH / layer.natural);
+  const imgLeft = tile.width * (leftPct / 100);
+  const imgTop = tile.height * (topPct / 100);
+  const headX = imgLeft + imgW * crop.fx;
+  const headY = imgTop + imgH * crop.fy;
+  const eps = 0.5;
+  return headX >= -eps && headX <= tile.width + eps && headY >= -eps && headY <= tile.height + eps;
+}
+
+/**
+ * Assert the shared shape every chip in {@link collectChips} owes: a real
+ * painted layer, loaded, occupying real screen space, outranking its
+ * monogram, and showing its actual head rather than some other part of the
+ * file (PR-0014).
+ */
+function assertChip(chip: Chip, chapter: string): void {
+  expect(chip.layers.length, `${chapter}/${chip.actor}: no painted layer at all, only "${chip.fallbackText}"`).toBeGreaterThan(0);
+  for (const layer of chip.layers) {
+    expect(layer.natural, `${chapter}/${chip.actor}: ${layer.src} did not load`).toBeGreaterThan(0);
+    expect(
+      Math.min(layer.width, layer.height),
+      `${chapter}/${chip.actor}: ${layer.src} loaded but occupies a 0x0 box`,
+    ).toBeGreaterThan(0);
+    const inside = headInsideTile(layer, chip.tile);
+    if (inside !== null) {
+      expect(inside, `${chapter}/${chip.actor}: ${layer.src}'s measured head lands outside the visible tile`).toBe(true);
+    }
+  }
+  const loaded = chip.layers.filter((l) => l.natural > 0 && l.width > 0 && l.height > 0);
+  expect(loaded.length, `${chapter}/${chip.actor}: shows no painted art, only "${chip.fallbackText}"`).toBeGreaterThan(0);
+  if (chip.fallbackZ !== null) {
+    const top = Math.max(...loaded.map((l) => l.z));
+    expect(top, `${chapter}/${chip.actor}: a loaded portrait must paint above the monogram`).toBeGreaterThan(chip.fallbackZ);
+  }
 }
 
 /**
@@ -273,6 +438,100 @@ test.describe('art URLs respect the production base', () => {
       );
       for (const bg of bgs) {
         expect(bg, `${screen}: a background image ignores the deployed base "${base}"`).toContain(`${base}art/`);
+      }
+    }
+
+    expect(art404s, `art requests that failed: ${art404s.join(' | ')}`).toEqual([]);
+  });
+
+  /**
+   * PR-0014: the roster of every one of the five shipped chapters, not just
+   * whichever one `goto('battle')` defaults to, each chip's head actually on
+   * screen (not merely some part of its file), and Paine — who has no
+   * `portraits/paine.png` painting of her own on the FFX side of this check —
+   * shown as the same face wherever the game draws her.
+   */
+  test('every chip in all five chapters shows a real, on-screen head, and Paine is one face everywhere', async ({
+    page,
+    baseURL,
+  }) => {
+    test.slow();
+    const base = basePathOf(baseURL);
+    const art404s = watchArt404s(page);
+    await boot(page);
+
+    const CHAPTERS: Array<{ id: ChapterId; game: 'ffx' | 'ffx2' }> = [
+      { id: 'seymour-flux', game: 'ffx' },
+      { id: 'yunalesca', game: 'ffx' },
+      { id: 'braskas-final-aeon', game: 'ffx' },
+      { id: 'ffx2-bahamut', game: 'ffx2' },
+      { id: 'ffx2-vegnagun-shuyin', game: 'ffx2' },
+    ];
+
+    let paineBattleSrc: string | null = null;
+
+    for (const { id, game } of CHAPTERS) {
+      await page.evaluate(() => window.__pyrefly!.setSeed(1));
+      void page
+        .evaluate(
+          (cid) => window.__pyrefly!.gotoChapter(cid as ChapterId, { skipCutscenes: true, skipPrep: true, speed: 'skip' }),
+          id,
+        )
+        .catch(() => undefined);
+      await page.waitForFunction(() => window.__pyrefly!.screen() === 'battle', null, { timeout: 60_000 });
+
+      let chips: Chip[];
+      if (game === 'ffx') {
+        await raiseHud(page);
+        chips = await collectChips(page, '[data-role="ctb-list"] .ig-ctb__row', '.ig-ctb__tile', '.ffx-portrait-fallback');
+      } else {
+        await raiseFfx2Party(page);
+        chips = await collectChips(page, '.ffx2hud__party [data-actor-id]', '.ffx2stat__face', '.ffx2stat__mono');
+      }
+
+      expect(chips.length, `${id}: no chips rendered at all`).toBeGreaterThan(0);
+      const activeIds = await page.evaluate(() => window.__pyrefly!.battleState()?.activeIds ?? []);
+      expect(activeIds.length, `${id}: no live party to check`).toBeGreaterThan(0);
+      for (const memberId of activeIds) {
+        expect(chips.some((c) => c.actor === memberId), `${id}: ${memberId} has no chip in the roster sweep`).toBe(true);
+      }
+
+      for (const chip of chips) {
+        for (const layer of chip.layers) {
+          expect(layer.src ?? '', `${id}/${chip.actor}: every art URL is built under the deployed base`).toContain(
+            `${base}art/`,
+          );
+        }
+        assertChip(chip, id);
+      }
+
+      if (id === 'ffx2-bahamut') {
+        const paine = chips.find((c) => c.actor === 'paine');
+        const top = paine?.layers.filter((l) => l.natural > 0).sort((a, b) => b.z - a.z)[0];
+        paineBattleSrc = top?.src ?? null;
+        expect(paineBattleSrc, 'ffx2-bahamut: Paine\'s battle chip must resolve to some painted layer').not.toBeNull();
+      }
+    }
+
+    // Paine's face is the same file in the results row and the prep roster —
+    // both build their chip through the same `ui/common/portrait.ts` stack,
+    // so a real regression here is a different id winning on one screen and
+    // not the other, not merely a different crop of the same file.
+    for (const screen of ['results', 'party-prep']) {
+      await show(page, screen);
+      // Every `data-face-crop` this screen drew for a "paine*" id (her plain
+      // portrait, or the dressphere body layer under it) — not scoped by a
+      // wrapping `data-actor`, because neither screen's roster row carries
+      // one; the layer's own id is unambiguous.
+      const paineSrc = await page.evaluate(() => {
+        const layers = [...document.querySelectorAll<HTMLImageElement>('img[data-face-crop]')]
+          .filter((img) => /^paine(-|$)/.test(img.getAttribute('data-face-crop') ?? ''))
+          .filter((img) => img.naturalWidth > 0)
+          .sort((a, b) => (Number(getComputedStyle(b).zIndex) || 0) - (Number(getComputedStyle(a).zIndex) || 0));
+        return layers[0]?.getAttribute('src') ?? null;
+      });
+      if (paineSrc && paineBattleSrc) {
+        expect(paineSrc, `${screen}: Paine's chip is a different image than the battle row's`).toBe(paineBattleSrc);
       }
     }
 

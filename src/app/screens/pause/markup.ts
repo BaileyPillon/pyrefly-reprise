@@ -19,6 +19,7 @@ import type { MeterColumn, MeterRow } from './meters.ts';
 import type { PanelColumn, PanelRow } from './panels.ts';
 import type { PauseTab } from './tabs.ts';
 import { artUrl } from '../../../engine/PaintedArt.ts';
+import '../../../ui/common/pause-labels.css';
 
 /** The one row shape the renderer draws. Both columns funnel into it. */
 export interface RenderRow {
@@ -216,13 +217,16 @@ export function objectiveHtml(eyebrow: string, line: string): string {
   );
 }
 
-/** `Esc RESUME`, with `H hide panels` under it. */
+/**
+ * `Esc RESUME`, with `H painting only` under it. PR-0028 / D-215: the legend says what `H`
+ * does, which is leave the painting and nothing else; "hide panels" read as a battle key.
+ */
 export function backHtml(): string {
   return (
     `<div class="pause__back" data-action="cancel" role="button" tabindex="0">` +
     `<span class="pause__key">Esc</span>Resume</div>` +
     `<div class="pause__hide" data-action="pause:panels" role="button" tabindex="0">` +
-    `H&nbsp;&nbsp;hide panels</div>`
+    `H&nbsp;&nbsp;painting only</div>`
   );
 }
 

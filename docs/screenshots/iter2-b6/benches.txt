@@ -1,0 +1,27 @@
+iter2 B6 benches, 2026-09-27 (engine harness unless noted; candidate = branch iter2-b6, base = main 36f506ba)
+
+Advisor top row (card follower), FFX-2, Wait split, seeds 1-40 (tests/unit/zz-b6-advisor-bench, scratch):
+  chapter  base          candidate
+  IV       40/40         40/40
+  V        38/40         38/40
+  VI       39/40         39/40
+  XI       34/40 (59 declines: an idle card)   34/40 (0 declines)
+
+Chapter IV intended line (NEW-C1), seeds 1-200: 200/200 victories.
+
+Chapter I intended line (PR-0071), seeds 1-100: 46 victories, 54 defeats; seed 1 = defeat (23 decisions).
+  Browser: window.__pyrefly.gotoChapter('seymour-flux', { auto: 'intended', seed: 1, speed: 'skip' }) -> defeat.
+  Tried and reverted (no gain): Talk gated on nobody downed (45/100); the tactic reading the stored
+  seymour.phase instead of HP (45/100); no raise of a zombified Yuna/Tidus (41/100).
+  Recorded 2026-09-19 (8e8cf569): 66-73/100; 2026-09-24 (6debabd9): 112/200 on seeds 1-200.
+Chapter V intended line, seeds 1-40: 40/40 (seed 1 victory: passes the Tail).
+
+A-3 board warm (browser, fresh profile, dwell on the card, real keys; ms from Enter):
+  unthrottled   base V: battle 4166, menu 10691, paintings requested while reading 0
+                cand V: battle 2765, menu 12956, requested while reading 39
+                base I: battle 2520, menu 10225, requested while reading 3
+                cand I: battle 2419, menu  9503, requested while reading 81
+  20 Mbps       base V: battle 2202, menu 44150, requested while reading 0 (8 s dwell)
+                cand V: battle 2160, menu 47643, requested while reading 2
+  The menu time includes the pre-battle scene skipped by held Enter (1.5 s steps) and the intro, so it is noisy;
+  at 20 Mbps the one-at-a-time preload (battlePreload.ts, not this batch's file) barely starts within 8 s.

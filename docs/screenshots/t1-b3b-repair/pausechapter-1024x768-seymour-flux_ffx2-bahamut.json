@@ -1,0 +1,98 @@
+[
+ {
+  "id": "seymour-flux",
+  "size": "1024x768",
+  "states": [
+   {
+    "tag": "scene",
+    "tabs": {
+     "chapter": [],
+     "guide": [
+      "Strategy guide"
+     ],
+     "options": [],
+     "controls": [
+      "Previous tab",
+      "Move down a menu",
+      "Adjust a setting",
+      "Resume the fight",
+      "Hide everything but the painting",
+      "Open this menu"
+     ],
+     "music": []
+    }
+   },
+   {
+    "tag": "battle",
+    "tabs": {
+     "member:tidus": [],
+     "member:yuna": [],
+     "member:kimahri": [],
+     "chapter": [],
+     "guide": [
+      "Strategy guide"
+     ],
+     "options": [],
+     "controls": [
+      "Previous tab",
+      "Move down a menu",
+      "Adjust a setting",
+      "Resume the fight",
+      "Hide everything but the painting",
+      "Open this menu"
+     ],
+     "music": []
+    }
+   }
+  ],
+  "errors": []
+ },
+ {
+  "id": "ffx2-bahamut",
+  "size": "1024x768",
+  "states": [
+   {
+    "tag": "scene",
+    "tabs": {
+     "chapter": [],
+     "guide": [
+      "Strategy guide"
+     ],
+     "options": [],
+     "controls": [
+      "Previous tab",
+      "Move down a menu",
+      "Adjust a setting",
+      "Resume the fight",
+      "Hide everything but the painting",
+      "Open this menu"
+     ],
+     "music": []
+    }
+   },
+   {
+    "tag": "battle",
+    "tabs": {
+     "member:yuna": [],
+     "member:rikku": [],
+     "member:paine": [],
+     "chapter": [],
+     "guide": [
+      "Strategy guide"
+     ],
+     "options": [],
+     "controls": [
+      "Previous tab",
+      "Move down a menu",
+      "Adjust a setting",
+      "Resume the fight",
+      "Hide everything but the painting",
+      "Open this menu"
+     ],
+     "music": []
+    }
+   }
+  ],
+  "errors": []
+ }
+]

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sin head round 3 sheet</title>
+<!-- The phone-readable sheet for Sin's head, round 3 (FFX only). ?part=1..8. Rendered by render.mjs sheets. -->
+<style>
+@font-face { font-family: Chakra; src: url(../../../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2); font-weight: 700; }
+@font-face { font-family: Corm; src: url(../../../../../../public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2); font-weight: 300 700; }
+@font-face { font-family: Exo; src: url(../../../../../../public/fonts/exo2/Exo2-Variable-wght.woff2); font-weight: 300 800; }
+:root { --ink: #0b0a12; --gold: #e3b94a; --vio: #b56cff; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #222; }
+#sheet { width: 1080px; background: var(--ink); color: #ece8dc; font: 400 28px/1.36 Exo, sans-serif; padding: 44px 46px 50px; }
+h1 { font: 700 52px/1.05 Corm; color: #fff; margin-bottom: 10px; }
+h3 { font: 700 21px Chakra; letter-spacing: .16em; color: var(--gold); text-transform: uppercase; margin: 22px 0 6px; }
+.eyebrow { font: 700 19px Chakra; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+.lede { color: #cfc9b8; font-size: 27px; }
+img.fr { width: 988px; display: block; margin: 14px 0 6px; border: 2px solid #333; }
+ul, ol { padding-left: 36px; } li { margin: 4px 0; }
+b { color: #fff; }
+.box { border: 2px solid var(--gold); padding: 14px 20px; margin: 20px 0 6px; background: rgba(227,185,74,.07); }
+table { border-collapse: collapse; width: 100%; font-size: 23px; margin: 10px 0; }
+td, th { border-bottom: 1px solid #333; padding: 7px 8px; text-align: left; vertical-align: top; }
+th { font: 700 17px Chakra; letter-spacing: .1em; color: var(--gold); text-transform: uppercase; }
+td.v { color: var(--vio); font-weight: 700; white-space: nowrap; }
+.phones { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0; }
+.phones figure { width: 320px; } .phones img { width: 320px; border: 2px solid #333; display: block; }
+figcaption { font: 700 17px Chakra; letter-spacing: .08em; color: #cfc9b8; margin-top: 4px; }
+.cap { color: #b8b2a2; font-size: 23px; }
+.foot { color: #9d978a; font-size: 20px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div id="sheet"></div>
+<script>
+const P = +(new URLSearchParams(location.search).get('part') || 1);
+const FR = '../frames/';
+const foot = '<p class="foot">Sin\'s head, round 3 · FFX only · 2026-09-27 · a candidate, not approved · nothing installed, nothing on the board · numbers from research/ffx-sin.md with their tags</p>';
+const NAMES = ['SHUT · turns 1–3', 'OPEN 1 · turns 4–6', 'OPEN 2 · turns 7–9', 'OPEN 3 · turns 10–11', 'FULLY OPEN · turn 12'];
+const desk = (k) => `<h3>Stage ${k} · ${NAMES[k]}</h3><img class="fr" src="${FR}frame-s${k}-1600.jpg">`;
+const parts = {
+  1: `<div class="eyebrow">Sin · link IV · the head, round 3 · FFX only</div>
+    <h1>One painting, one moving jaw: the mouth is the clock</h1>
+    <p class="lede">Rounds 1 and 2 failed an adversarial judge. Round 3 changes the method, not only the words: Sin is painted once, mouth fully open, and cut into layers; each clock stage is the same layers with only the lower jaw turned about its hinge. It is still an option: nothing is installed.</p>
+    <img class="fr" src="${FR}frame-s4-1600.jpg"><p class="cap">Stage 4, fully open, turn 12: the last turn before Giga-Graviton. A rough composite with a stand-in HUD.</p>
+    <h3>The judge's round-2 faults, and round 3</h3>
+    <table><tr><th>Round 2</th><th>Round 3</th></tr>
+    <tr><td>A chapel complex on Sin's head and back</td><td>No buildings anywhere on Sin: not in the sketch, not in the words</td></tr>
+    <tr><td>The tower a squat drum, cut off by the frame edge</td><td>A tall slender white tower with gold bands, its whole height in frame, the claw on its top</td></tr>
+    <tr><td>Right wing merged into the neck, left wing see-through</td><td>Two opaque feathered wings, purple-tipped, each rising from its own shoulder</td></tr>
+    <tr><td>The deck changed between stages</td><td>The deck is its own top layer, cut from the plate: 0 deck pixels differ between stages</td></tr>
+    <tr><td>Plates, rivets and jaw colour changed outside the mouth</td><td>Same pixels by construction: only the jaw's path changes (4.7 % of the picture)</td></tr>
+    <tr><td>Ladders, banners, curtains in the mouth</td><td>A dark organic throat: the painting's own interior colours, smoothed; no structure</td></tr>
+    <tr><td>A pink snout tip</td><td>The snout is the head's grey</td></tr></table>${foot}`,
+  2: `<div class="eyebrow">The method check (AGENTS.md rule 15)</div><h1>Why a third try needed a different route</h1>
+    <p class="lede">Both earlier rounds repainted the moving part for every stage, so every stage was a new painting of the jaw. A smallest test compared two routes on round 2's own paintings.</p>
+    <img class="fr" src="${FR}method-test.jpg">
+    <ul><li><b>Test A, a layered rig (no GPU):</b> round 2's open painting cut into skull, throat and jaw; only the jaw turned. The jaw stayed the same jaw at every angle; the faults were all at layer boundaries, which a rig designs for.</li>
+    <li><b>Test B, a tight masked repaint at 0.40 (one job):</b> the jaw stayed a flat pasted sketch, the mouth a blob, and 3.2 % of pixels outside the mask still moved. At round 2's 0.62 it paints, but a new jaw each stage.</li>
+    <li><b>Choice: A.</b> Consistent by construction, and it is how the engine can show the clock: one set of layers and a jaw angle per stage, with the tween for free. Full text: METHOD-CHECK.md.</li></ul>${foot}`,
+  3: `<div class="eyebrow">The clock</div><h1>Five stages from one jaw</h1>
+    <p class="lede">research/ffx-sin.md §5.4 and §9.3: turns 1–3 are "Drawn to Sin.", then the mouth opens in stages until fully open (three open stages and "fully open" in the wiki gallery), then Giga-Graviton ends the battle.</p>
+    <img class="fr" src="${FR}mouths.jpg">
+    <table><tr><th>Stage</th><th>Jaw open</th><th>Gap at the snout, phone</th><th>Sin's turns (default)</th><th>If S-1 is 12</th></tr>
+    <tr><td class="v">0 SHUT</td><td>shut</td><td>lips together</td><td>1–3, Drawn to Sin. (5 sources)</td><td>1–3</td></tr>
+    <tr><td class="v">1 OPEN 1</td><td>6.5°</td><td>≈15 px</td><td>4–6</td><td>4–6</td></tr>
+    <tr><td class="v">2 OPEN 2</td><td>13°</td><td>≈35 px</td><td>7–9</td><td>7–8</td></tr>
+    <tr><td class="v">3 OPEN 3</td><td>19.5°</td><td>≈55 px</td><td>10–11</td><td>9–10</td></tr>
+    <tr><td class="v">4 FULLY OPEN</td><td>26°</td><td>≈74 px</td><td>12, then Giga-Graviton on 13</td><td>11, then Giga-Graviton on 12</td></tr></table>
+    <img class="fr" src="${FR}phone-scale.jpg">
+    <p class="cap"><b>Sourced:</b> three pulls; the mouth opens in stages from turn 4; three open stages and "fully open"; Giga-Graviton on 12 or 13 (S-1, open until the Steam check). <b>Our estimate:</b> which turns each stage covers, and the angles. The strip above is 1 image px per CSS px on a 390-px phone.</p>${foot}`,
+  4: `<div class="eyebrow">Battle frames · 1600 × 900</div>${desk(0)}${desk(1)}${desk(2)}${foot}`,
+  5: `<div class="eyebrow">Battle frames · 1600 × 900</div>${desk(3)}${desk(4)}
+    <h3>The deck: dressed once, on its own layer</h3><img class="fr" src="${FR}deck.jpg">
+    <p class="cap">Our own type (Chakra Petch), worn like stencil paint. The dial's ring spells "Wind bless you" in the Al Bhed letter swap, written in Latin letters (FEHT PMACC OUI); the script's glyphs are a retail design and are not copied, and the swap table is not in research/ yet, so it is our estimate. The deck is cut from the plate and laid over everything, so it cannot change between stages.</p>${foot}`,
+  6: `<div class="eyebrow">Phone frames · 390 × 844</div><h1>The same five stages on a phone</h1>
+    <div class="phones">${[0, 1, 2, 3, 4].map((k) => `<figure><img src="${FR}frame-s${k}-390.jpg"><figcaption>${k} · ${NAMES[k]}</figcaption></figure>`).join('')}</div>
+    <p class="cap">The stage is a 390-px slice of the painting centred on Sin: snout, eye, claw and the tower in view. The HUD's mouth meter and clock name the stage shown.</p>${foot}`,
+  7: `<div class="eyebrow">The rig</div><h1>Six layers, one of which moves</h1>
+    <img class="fr" src="${FR}layers.jpg">
+    <ul><li><b>Two paint jobs:</b> the plate (sky, Bevelle, tower, deck; no creature), then the creature painted <i>into</i> the plate inside its own silhouette, mouth fully open. Each layer's alpha is where that painting differs from the plate, split along our sketch's jaw, mouth and head lines.</li>
+    <li><b>Stage k:</b> plate → throat (shown only inside the mouth of that stage) → hinge patch → the jaw turned back up by 26 × (1 − k/4) degrees about the hinge → skull, neck, arm, wings → deck.</li>
+    <li><b>Repairs are made once:</b> a masked repaint of the near wing, three spots mended with the painting's own nearby scales, the throat smoothed from its own colours. Because every layer is shared, they hold in all five stages.</li></ul>
+    <img class="fr" src="${FR}sketches.jpg"><p class="cap">Our code-drawn sketches, the only image input, and the rig run on the sketches before any render.</p>${foot}`,
+  8: `<div class="eyebrow">Every render of the round</div><h1>What was tried, and the verdicts</h1>
+    <img class="fr" src="${FR}renders.jpg">
+    <div class="box"><b>Faults left (an agent's look):</b>
+    <ul><li>At stage 0 the teeth stay bared: the jaws meet, the interlocked fangs show. A fully hidden-teeth "shut" needs the upper fangs on the skull layer.</li><li>The hide still reads as rounded river stones more than cliff rock.</li><li>Small white glints are sprinkled over the head.</li><li>The far wing's root sits behind the shoulder and reads less clearly than the near wing's; on desktop the turn-order column covers most of that wing.</li><li>The arm from the chest to the tower is short.</li><li>A faint dark line on the shoulder where the strap was greyed out.</li></ul></div>
+    <h3>For Bailey</h3><ol><li>Does the jaw-on-a-hinge clock read, shut to fully open?</li><li>Is this the head, or should it move further from a whale, or from stone?</li></ol>${foot}`,
+};
+window.partCount = Object.keys(parts).length;
+document.getElementById('sheet').innerHTML = parts[P];
+</script>
+</body>
+</html>

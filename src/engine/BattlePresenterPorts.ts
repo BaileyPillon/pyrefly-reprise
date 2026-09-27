@@ -119,7 +119,7 @@ export interface CameraPort {
    * fit a slice `slice` wide (0..1 of the frame). True when it moved the rig.
    * Optional and additive; without it the phone keeps the desktop rigs.
    */
-  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number }>): boolean;
+  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number }>, top?: number): boolean;
   readonly rigNames: string[];
   readonly rigName: string;
 }
@@ -179,6 +179,8 @@ export interface MomentsPort {
    * (A-12): absent reads as "not a phone".
    */
   phoneSlice?(): number | null;
+  /** FOC23-01: the share (0..1) of the field's top the phone HUD covers; absent reads as 0. Optional and additive. */
+  phoneTop?(): number;
   /** Tear every layer down. */
   clear(): void;
 }

@@ -34,6 +34,7 @@ import type { GameId } from '../../battle/common/types.ts';
 import { ffxFamily, type FfxFamilyGame } from '../../battle/common/game.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { createPhoneField, type PhoneField } from './phoneFraming.ts';
+import { placeLineSlot, withGuards, type GuardedPhoneField } from './phoneBattleGuard.ts';
 import { confirmLabel, sendKey, targetHint, type PhoneTextReader } from './phoneBattleText.ts';
 
 export { confirmLabel, readGroup, sendKey, targetHint, textOf } from './phoneBattleText.ts';
@@ -66,7 +67,7 @@ export const HOME_ASPECT: Record<FfxFamilyGame, number> = { ffx: 0, ffx2: 0.93 }
 /** Extras a game's half passes in; both optional (tests pass neither). */
 export interface PhoneBattleOptions {
   /** Picks the field's slide at each command menu (`phoneFraming.ts`). */
-  field?: PhoneField;
+  field?: GuardedPhoneField;
   /** A list that pages by its cursor, not by scrolling: a vertical drag on it steps the cursor a row. */
   dragList?: string;
 }
@@ -206,6 +207,7 @@ export function installPhoneBattle(
   let opened = false;
   let last = '';
   let under = '';
+  let lineSlot = '';
   // The enemy-move line hangs under the rail, which grows with the enemy count
   // (Chapter VI: three boss gauges; the line had covered the second), and the
   // banners and Yojimbo's gauge under the line, which runs to three lines.
@@ -256,6 +258,8 @@ export function installPhoneBattle(
     const aimed = hud.querySelector<HTMLElement>('.ffx-targeting .ffx-target[data-target-id]:not(.ffx-target--dim)');
     if (text.targeting && !text.group && aimed?.dataset['targetId']) opts.field?.frame(HOME_ASPECT[family], [aimed.dataset['targetId']]);
     else if (!text.targeting && hud.querySelector('.ig-cmd')) opts.field?.frame(HOME_ASPECT[family]);
+    // The line steps off a guarded feature (the Vegnagun leg's lens) before the rail is measured.
+    lineSlot = placeLineSlot(hud, html, opts.field?.guards?.() ?? [], win.innerWidth, lineSlot);
     placeUnderRail();
     const key = JSON.stringify(text);
     if (key === last) return;
@@ -297,6 +301,7 @@ export function installPhoneBattle(
       delete hud.dataset['phoneGroup'];
       html.style.removeProperty('--phud-rail-bottom');
       html.style.removeProperty('--phud-line-bottom');
+      lineSlot = placeLineSlot(hud, html, [], win.innerWidth, lineSlot);
       opts.field?.reset();
       hud.classList.remove('phud--sensor');
       if (active && html.dataset['phoneBattle'] === game) {
@@ -320,7 +325,7 @@ export function withPhoneLayout<T extends HudPort>(hud: T, install: (el: HTMLEle
   // What the field's slide is picked from (`phoneFraming.ts`): the figures'
   // boxes, who is on the field, and whose menu is up. Read, never changed.
   // (Each guarded: test doubles implement only part of the port.)
-  const field = createPhoneField();
+  const field = withGuards(createPhoneField());
   const { sync, chooseCommand, setTargetingPort, setVisible } = hud;
   if (sync) {
     hud.sync = (state, preview): void => {

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sin head round 3 frames</title>
+<!-- Rough battle frames for Sin's head, round 3 (FFX only). Our own candidate painting at one mouth stage, our own
+     party sprites and portraits, and a rough stand-in for the FFX HUD in the game's own fonts. The HUD's mouth
+     meter has the painting's five stages: SHUT, OPEN 1, OPEN 2, OPEN 3, FULLY OPEN.
+     Query: ?mode=desk|phone&stage=0..4&img=<painting url> -->
+<style>
+@font-face { font-family: Chakra; src: url(../../../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2); font-weight: 700; }
+@font-face { font-family: Chakra; src: url(../../../../../../public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2); font-weight: 500; }
+@font-face { font-family: Corm; src: url(../../../../../../public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2); font-weight: 300 700; }
+@font-face { font-family: Raj; src: url(../../../../../../public/fonts/rajdhani/Rajdhani-Bold-700.woff2); font-weight: 700; }
+:root { --ink: #0b0a12; --paper: #f4f1e8; --gold: #e3b94a; --blood: #b02a2a; --sky: #7fc6e8; --vio: #b56cff; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #111; }
+#f { position: relative; overflow: hidden; background: #111; font-family: Chakra, sans-serif; color: #fff; }
+#f > * { position: absolute; }
+.bg { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rough { left: 0; top: 0; background: var(--paper); color: var(--ink); font: 700 14px Chakra; letter-spacing: .12em; padding: 5px 12px; text-transform: uppercase; z-index: 5; }
+.rough b { color: var(--blood); }
+.tag { background: rgba(11,10,18,.86); font: 700 15px Chakra; letter-spacing: .1em; padding: 5px 10px; text-transform: uppercase; }
+.sprite { filter: drop-shadow(0 6px 6px rgba(0,0,0,.5)); }
+.cmd { left: 40px; width: 300px; height: 40px; transform: skewX(-12deg); background: rgba(11,10,18,.84); display: flex; align-items: center; padding-left: 22px; border-left: 4px solid #555; }
+.cmd span { transform: skewX(12deg); font: 700 19px Chakra; letter-spacing: .1em; }
+.cmd small { font: 500 13px Chakra; color: #cfc6a8; margin-left: 12px; letter-spacing: .02em; }
+.cmd.on { background: var(--gold); color: var(--ink); border-left-color: #fff; }
+.cmd.on small { color: #3a2e0c; }
+.cmd.od { border: 2px solid var(--gold); color: var(--gold); }
+.ctb { right: 26px; display: flex; align-items: center; gap: 8px; }
+.ctb .lbl { background: rgba(11,10,18,.86); font: 700 14px Chakra; letter-spacing: .06em; padding: 4px 8px; }
+.ctb .pic { width: 50px; height: 50px; object-fit: cover; object-position: 50% 18%; border: 2px solid #ddd; }
+.ctb.now .pic { width: 62px; height: 62px; border-color: var(--gold); }
+.ctb .foe, .p-ctb .foe { border: 3px solid var(--blood); overflow: hidden; position: relative; }
+.ctb .foe { width: 50px; height: 50px; }
+.foe img { position: absolute; }
+.ctb .clk { background: var(--gold); color: var(--ink); font: 700 13px Chakra; padding: 3px 7px; }
+.pp { right: 40px; width: 470px; height: 58px; background: rgba(11,10,18,.86); transform: skewX(-10deg); display: flex; align-items: center; padding-left: 10px; border-left: 4px solid #555; }
+.pp > * { transform: skewX(10deg); }
+.pp img { width: 44px; height: 44px; object-fit: cover; object-position: 50% 18%; margin-right: 12px; }
+.pp .n { font: italic 600 28px Corm; width: 92px; color: #f3ecd7; }
+.pp .hp { font: 700 27px Raj; width: 132px; }
+.pp .hp small { font-size: 15px; color: #aaa; }
+.pp .mp { font: 700 24px Raj; color: var(--sky); width: 58px; }
+.pp .od { width: 90px; height: 7px; background: #333; position: relative; }
+.pp .od i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--gold); }
+.pp.now { border-left-color: var(--gold); }
+/* the mouth meter: five pips, the painting's five stages */
+.mm { display: flex; gap: 5px; align-items: flex-end; }
+.mm span { display: flex; flex-direction: column; align-items: center; font: 700 11px Chakra; letter-spacing: .06em; color: #ccc; }
+.mm i { display: block; width: 42px; height: 14px; border: 2px solid #fff; background: rgba(255,255,255,.18); margin-bottom: 3px; }
+.mm span.on i { background: var(--vio); box-shadow: 0 0 10px var(--vio); }
+.mm span.past i { background: #6b3f96; }
+.mm span.on { color: #fff; }
+.p-ctb { display: flex; gap: 5px; left: 10px; top: 10px; }
+.p-ctb > * { width: 44px; height: 44px; border: 2px solid #ccc; overflow: hidden; position: relative; }
+.p-ctb img.pic { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
+.p-ctb .now { border-color: var(--gold); width: 50px; height: 50px; }
+.p-pause { right: 10px; top: 12px; width: 44px; height: 44px; background: rgba(11,10,18,.9); border: 1px solid #555; display: flex; align-items: center; justify-content: center; font: 700 16px Chakra; }
+.p-tel { left: 10px; top: 66px; width: 370px; background: rgba(11,10,18,.9); border-left: 3px solid var(--blood); padding: 5px 9px; font: 700 13px Chakra; letter-spacing: .06em; line-height: 1.3; }
+.p-tel b { color: #ff6b6b; }
+.p-boss { left: 10px; top: 100px; width: 370px; height: 52px; background: rgba(11,10,18,.72); border-left: 3px solid var(--blood); padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+.p-boss .t { font: italic 600 22px Corm; }
+.p-boss .mm i { width: 30px; height: 11px; }
+.p-boss .mm span { font-size: 9px; }
+.p-party { left: 10px; top: 540px; width: 370px; display: flex; gap: 6px; }
+.p-party > div { flex: 1; height: 60px; background: rgba(11,10,18,.92); border: 1px solid #444; display: flex; align-items: center; gap: 6px; padding: 4px; }
+.p-party > div.now { border: 2px solid var(--gold); }
+.p-party img { width: 40px; height: 40px; object-fit: cover; object-position: 50% 18%; }
+.p-party .n { font: italic 600 17px Corm; line-height: 1; }
+.p-party .v { font: 700 15px Raj; } .p-party .v i { color: var(--sky); font-style: normal; margin-left: 4px; }
+.p-tip { left: 10px; top: 608px; width: 370px; height: 40px; background: rgba(11,10,18,.92); border-left: 3px solid var(--gold); display: flex; align-items: center; padding: 0 10px; font: 700 13px Chakra; letter-spacing: .06em; gap: 8px; }
+.p-tip em { color: var(--gold); font-style: normal; }
+.p-btn { width: 180px; height: 54px; display: flex; flex-direction: column; justify-content: center; padding-left: 14px; font: 700 15px Chakra; letter-spacing: .1em; background: var(--paper); color: var(--ink); }
+.p-btn small { font: 500 11px Chakra; color: #555; }
+.p-btn.on { background: var(--gold); }
+.p-btn.od { background: var(--ink); color: var(--gold); border: 2px solid var(--gold); } .p-btn.od small { color: #b59442; }
+.p-foot { left: 0; width: 390px; top: 800px; text-align: center; font: 500 12px Chakra; color: #ddd; line-height: 1.35; }
+.p-foot b { color: var(--gold); }
+</style>
+</head>
+<body>
+<script>
+const Q = new URLSearchParams(location.search);
+const MODE = Q.get('mode') || 'desk', STAGE = +(Q.get('stage') || 0), IMG = Q.get('img');
+const ART = '../../../../../../public/art/';
+// the clock (research/ffx-sin.md 5.4): turns 1-3 Drawn to Sin; the mouth opens in stages until fully open; Giga-Graviton
+// on turn 13 (our default; S-1 is open: 12 or 13). Painting stages -> Sin's turns, our mapping of the 9 turns after the pulls:
+const STAGES = [
+  { name: 'SHUT', label: 'Mouth shut', turns: '1–3', turn: 2, tel: '<b>SIN ACTS 3RD</b> · Drawn to Sin.' },
+  { name: 'OPEN 1', label: 'Mouth open 1 of 3', turns: '4–6', turn: 5, tel: '<b>SIN ACTS 3RD</b> · the mouth opens (turn 6)' },
+  { name: 'OPEN 2', label: 'Mouth open 2 of 3', turns: '7–9', turn: 8, tel: '<b>SIN ACTS 3RD</b> · the mouth opens (turn 9)' },
+  { name: 'OPEN 3', label: 'Mouth open 3 of 3', turns: '10–11', turn: 10, tel: '<b>SIN ACTS 3RD</b> · the mouth opens (turn 11)' },
+  { name: 'FULLY OPEN', label: 'Mouth fully open', turns: '12', turn: 12, tel: '<b>SIN ACTS 3RD</b> · <b>GIGA-GRAVITON</b> (turn 13)' },
+];
+const S = STAGES[STAGE], TURN = S.turn;
+const f = document.createElement('div'); f.id = 'f'; document.body.appendChild(f);
+const add = (css, html, cls) => { const e = document.createElement('div'); if (cls) e.className = cls; e.style.cssText = css; e.innerHTML = html; f.appendChild(e); return e; };
+const im = (src, css, cls) => { const e = document.createElement('img'); e.src = src; e.style.cssText = css; if (cls) e.className = cls; f.appendChild(e); return e; };
+// Sin's turn-order icon: a window on this stage's painting around the mouth
+const icon = (size) => { const fx = .50, fy = .40, z = 4.2; const w = size * z, h = w * 9 / 16;
+  return `<img src="${IMG}" style="width:${w}px;height:${h}px;left:${size / 2 - fx * w}px;top:${size / 2 - fy * h}px">`; };
+const meter = () => `<div class="mm">${['SHUT', '1', '2', '3', 'FULL'].map((t, i) => `<span class="${i === STAGE ? 'on' : i < STAGE ? 'past' : ''}"><i></i>${t}</span>`).join('')}</div>`;
+function clock(cx, cy, r, th, now) {
+  let s = '';
+  for (let i = 0; i < 13; i++) {
+    const a0 = -90 + i * (360 / 13) + 1.5, a1 = a0 + 360 / 13 - 3, rad = (d) => d * Math.PI / 180;
+    const p = (a, rr) => `${cx + rr * Math.cos(rad(a))},${cy + rr * Math.sin(rad(a))}`;
+    const col = i < 3 ? '#7fc6e8' : i < 12 ? '#b56cff' : '#b02a2a';
+    s += `<path d="M${p(a0, r)} A${r},${r} 0 0 1 ${p(a1, r)} L${p(a1, r - th)} A${r - th},${r - th} 0 0 0 ${p(a0, r - th)} Z" fill="${col}" opacity="${i < now ? 1 : 0.3}" ${i === now - 1 ? 'stroke="#fff" stroke-width="2.5"' : ''}/>`;
+  }
+  return s;
+}
+const PARTY = [['Tidus', 'tidus', 6492, 6492, 140, 140], ['Yuna', 'yuna', 5130, 5130, 320, 320], ['Auron', 'auron', 6212, 6492, 100, 100]];
+function desk() {
+  f.style.cssText = 'width:1600px;height:900px';
+  im(IMG, '', 'bg');
+  add('left:0;right:0;bottom:0;height:200px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.35))', '');
+  [['yuna', 470, 800, 280], ['tidus', 590, 836, 300], ['auron', 350, 866, 318]].forEach(([n, x, feet, h]) =>
+    im(`${ART}characters/${n}/idle.png`, `left:${x}px;top:${feet - h}px;height:${h}px`, 'sprite'));
+  add('', `Rough composite · Sin's head round 3 (layered rig) · stage ${STAGE} of 0–4 (${S.name}) · <b>candidate painting, not approved · nothing built</b>`, 'rough');
+  // the clock and the mouth meter, top left in the open sky (the head fills the right)
+  add('left:0;top:0;width:400px;height:300px', `<svg width="400" height="300" viewBox="0 0 400 300" style="position:absolute;left:0;top:0">${clock(120, 150, 80, 22, TURN)}
+    <circle cx="120" cy="150" r="56" fill="rgba(11,10,18,.8)"/>
+    <text x="120" y="160" text-anchor="middle" style="font:700 50px Raj;fill:#fff">${TURN}</text>
+    <text x="120" y="184" text-anchor="middle" style="font:700 11px Chakra;fill:#fff;letter-spacing:.12em">OF 13</text></svg>`);
+  add('left:222px;top:66px', `${S.label} · Sin's turn${S.turns.length > 2 ? 's' : ''} ${S.turns}`, 'tag');
+  add('left:222px;top:104px;background:rgba(11,10,18,.8);padding:6px 10px 4px', meter());
+  add('left:222px;top:162px;background:rgba(11,10,18,.8);color:#ddd;font:500 13px Chakra;padding:4px 10px', 'Giga-Graviton on Sin\'s turn 13 (our default; S-1: 12 or 13) · a scripted Game Over');
+  add('left:222px;top:192px;display:flex;gap:6px;align-items:center', '<span class="tag">Gaze in 2</span>' +
+    [1, 1, 1, 1, 0, 0].map((x) => `<span style="width:16px;height:16px;display:inline-block;transform:rotate(45deg);background:${x ? '#b02a2a' : 'rgba(255,255,255,.25)'};border:2px solid #fff"></span>`).join(''));
+  const rows = [['Auron', 'auron'], ['Tidus', 'tidus'], ['Sin', 'foe', 'TURN ' + (TURN + 1)], ['Yuna', 'yuna'], ['Auron', 'auron'], ['Sin', 'foe', 'TURN ' + (TURN + 2)]];
+  rows.forEach(([l, k, b], i) => add(`top:${170 + i * 62}px`, (b ? `<span class="clk">${b}</span>` : '') + `<span class="lbl">${l}</span>` +
+    (k === 'foe' ? `<div class="foe">${icon(50)}</div>` : `<img class="pic" src="${ART}portraits/${k}.png">`), 'ctb' + (i === 0 ? ' now' : '')));
+  [['ATTACK', '', ''], ['SKILL', 'Armor Break', 'on'], ['SPECIAL', '', ''], ['ITEMS', '×27', ''], ['OVERDRIVE', STAGE === 4 ? 'now' : 'save it for the end', 'od']].forEach(([t, s, c], i) =>
+    add(`top:${430 + i * 48}px;left:${40 + i * 6}px`, `<span>${t}<small>${s}</small></span>`, 'cmd' + (c ? ' ' + c : '')));
+  PARTY.forEach(([n, k, hp, mx, mp], i) => add(`top:${692 + i * 64}px;right:${40 + i * 10}px`,
+    `<img src="${ART}portraits/${k}.png"><span class="n">${n}</span><span class="hp">${hp}<small>/${mx}</small></span><span class="mp">${mp}</span><span class="od"><i style="width:${[55, 30, 80][i]}%"></i></span>`, 'pp' + (k === 'auron' ? ' now' : '')));
+  add('left:40px;top:404px;font:500 13px Chakra;color:#eee;background:rgba(11,10,18,.7);padding:2px 8px', 'AURON · Armor Break: the head is Armored, a plain hit lands at a third');
+}
+function phone() {
+  f.style.cssText = 'width:390px;height:844px;background:#0b0a12';
+  // the stage: a 390 px slice of the 16:9 painting, centred on Sin (tower and snout both in view)
+  const ox = .61, sh = 380, sw = sh * 16 / 9, top = 150;
+  const st = add(`left:0;top:0;width:390px;height:${sh + top}px;overflow:hidden`, '');
+  const blur = document.createElement('img'); blur.src = IMG; blur.style.cssText = `position:absolute;height:${sh * 1.5}px;width:${sw * 1.5}px;left:${195 - ox * sw * 1.5}px;top:0;filter:blur(10px) brightness(.75)`; st.appendChild(blur);
+  const bg = document.createElement('img'); bg.src = IMG; bg.style.cssText = `position:absolute;height:${sh}px;width:${sw}px;left:${195 - ox * sw}px;top:${top}px;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 30px)`; st.appendChild(bg);
+  [['auron', 4, 528, 130], ['tidus', 58, 522, 130]].forEach(([n, x, feet, h]) => { const s = document.createElement('img'); s.src = `${ART}characters/${n}/idle.png`; s.className = 'sprite'; s.style.cssText = `position:absolute;left:${x}px;top:${feet - h}px;height:${h}px`; st.appendChild(s); });
+  add(`left:0;top:${sh + top - 40}px;width:390px;height:40px;background:linear-gradient(180deg,rgba(11,10,18,0),#0b0a12)`, '');
+  const ctb = [['auron'], ['tidus'], ['foe'], ['yuna'], ['auron'], ['foe']];
+  add('', ctb.map(([k], i) => k === 'foe' ? `<div class="foe">${icon(44)}</div>` : `<div class="${i === 0 ? 'now' : ''}"><img class="pic" src="${ART}portraits/${k}.png"></div>`).join(''), 'p-ctb');
+  add('', 'II', 'p-pause');
+  add('', S.tel, 'p-tel');
+  add('', `<svg width="46" height="46" viewBox="0 0 160 160">${clock(80, 80, 76, 24, TURN)}<text x="80" y="100" text-anchor="middle" style="font:700 58px Raj;fill:#fff">${TURN}</text></svg><div class="t">Sin</div>${meter()}`, 'p-boss');
+  add('', PARTY.map(([n, k, hp, mx, mp]) => `<div class="${k === 'auron' ? 'now' : ''}"><img src="${ART}portraits/${k}.png"><div><div class="n">${n}</div><div class="v">${hp}<i>${mp}</i></div></div></div>`).join(''), 'p-party');
+  add('', '<span>TIP</span><em>Armor Break</em> → Sin · Gaze in 2', 'p-tip');
+  [['ATTACK', '', '', 10, 660], ['SKILL', 'Armor Break', 'on', 200, 660], ['ITEMS', '×27', '', 10, 722], ['OVERDRIVE', STAGE === 4 ? 'now' : 'save it', 'od', 200, 722]].forEach(([t, s, c, x, y]) =>
+    add(`left:${x}px;top:${y}px`, `${t}<small>${s}</small>`, 'p-btn' + (c ? ' ' + c : '')));
+  add('', `<b>${S.label.toUpperCase()}</b> · Sin's turn ${TURN} of 13 · rough, not approved`, 'p-foot');
+}
+(MODE === 'phone' ? phone : desk)();
+</script>
+</body>
+</html>

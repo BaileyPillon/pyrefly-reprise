@@ -1,0 +1,106 @@
+[
+ {
+  "id": "seymour-flux",
+  "size": "390x844",
+  "states": [
+   {
+    "tag": "scene",
+    "tabs": {
+     "chapter": [],
+     "guide": [
+      "Strategy guide"
+     ],
+     "options": [],
+     "controls": [
+      "Move down a menu",
+      "Adjust a setting",
+      "Enter / Z / Cross",
+      "Resume the fight",
+      "Hide everything but the painting",
+      "Open this menu",
+      "Esc / P / Start"
+     ],
+     "music": []
+    }
+   },
+   {
+    "tag": "battle",
+    "tabs": {
+     "member:tidus": [],
+     "member:yuna": [],
+     "member:kimahri": [],
+     "chapter": [],
+     "guide": [
+      "Strategy guide"
+     ],
+     "options": [],
+     "controls": [
+      "Move down a menu",
+      "Adjust a setting",
+      "Enter / Z / Cross",
+      "Resume the fight",
+      "Hide everything but the painting",
+      "Open this menu",
+      "Esc / P / Start"
+     ],
+     "music": []
+    }
+   }
+  ],
+  "errors": []
+ },
+ {
+  "id": "ffx2-bahamut",
+  "size": "390x844",
+  "states": [
+   {
+    "tag": "scene",
+    "tabs": {
+     "chapter": [],
+     "guide": [
+      "Strategy guide"
+     ],
+     "options": [],
+     "controls": [
+      "Move down a menu",
+      "Adjust a setting",
+      "Enter / Z / Cross",
+      "Resume the fight",
+      "Hide everything but the painting",
+      "Open this menu",
+      "Esc / P / Start"
+     ],
+     "music": []
+    }
+   },
+   {
+    "tag": "battle",
+    "tabs": {
+     "member:yuna": [
+      "protection halo"
+     ],
+     "member:rikku": [
+      "hour of need"
+     ],
+     "member:paine": [],
+     "chapter": [],
+     "guide": [
+      "Strategy guide"
+     ],
+     "options": [],
+     "controls": [
+      "Move down a menu",
+      "Adjust a setting",
+      "Enter / Z / Cross",
+      "Resume the fight",
+      "Hide everything but the painting",
+      "Open this menu",
+      "Esc / P / Start"
+     ],
+     "music": []
+    }
+   }
+  ],
+  "errors": []
+ }
+]

@@ -81,6 +81,12 @@ export const paintedFragmentShader = /* glsl */ `
   uniform vec2 texel;
   uniform float alphaCut;
   uniform float edgeFade;
+  // 1 = the feather runs round the whole plane; 0 = sides and top only, the
+  // base left whole for a figure standing on it (PR-0164).
+  uniform float edgeFadeBase;
+  // 0 = a straight feather; above 0, how far (in the same units as edgeFade) the fade's
+  // start wanders inward along each edge, so it never runs parallel to it (PR-0164, PR-0212).
+  uniform float edgeJag;
 
   varying vec2 vUv;
 
@@ -99,8 +105,21 @@ export const paintedFragmentShader = /* glsl */ `
     // properly cropped art never needs it.
     if (edgeFade > 0.0) {
       vec2 d = abs(vUv - 0.5) * 2.0;
+      if (vUv.y < 0.5) d.y *= edgeFadeBase;
       float box = max(d.x, d.y);
-      a *= 1.0 - smoothstep(1.0 - edgeFade, 1.0, box);
+      float jag = 0.0;
+      if (edgeJag > 0.0) {
+        // Noise read along the nearest edge (y down a side, x across the top), so the whole
+        // fade, its end included, wanders inward in lumps: a fade that always ended on the
+        // plate edge left dense hair ending on one straight line (L-0 re-check, 2026-09-27).
+        // The plate edge itself stays 0. Mirrored by ActorEdgeFeather.featherAlpha.
+        const float JAG_MIN = 0.35;
+        float along = d.x >= d.y ? vUv.y : vUv.x + 0.5;
+        float n = texture2D(noiseMap, vec2(along * 2.7, d.x >= d.y ? 0.31 : 0.71)).r;
+        jag = edgeJag * mix(JAG_MIN, 1.0, smoothstep(0.33, 0.6, n));
+      }
+      float fadeEnd = 1.0 - jag;
+      a *= 1.0 - smoothstep(fadeEnd - edgeFade, fadeEnd, box);
     }
 
     if (a < alphaCut) discard;

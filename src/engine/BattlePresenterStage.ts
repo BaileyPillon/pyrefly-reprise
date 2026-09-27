@@ -16,6 +16,7 @@ import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresent
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
+import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
 import type { SceneSlots } from '../scenes/index.ts';
@@ -256,6 +257,7 @@ export class PaintedStage implements BattleStage {
           : (): HTMLCanvasElement => paintBossSilhouette({ seed: hash(c.id) }),
       placeholderBaseline: kind === 'party' ? 0.965 : 0.985,
       matte: { mode: 'auto' },
+      ...edgeFeatherFor(artId), // PR-0164 / PR-0212: paintings that touch their canvas edge
       rim: this.opts.rim
         ? { color: this.opts.rim.color, strength: 0.8, dir: this.opts.rim.dir, width: 3.4 }
         : { strength: 0.7 },

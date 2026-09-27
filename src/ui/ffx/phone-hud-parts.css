@@ -57,6 +57,7 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__chip-icon {
   height: 8px;
 }
 html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__unknown,
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__immune,
 html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__failed {
   font-size: 14px;
 }
@@ -204,4 +205,11 @@ html[data-phone-battle='ffx'] .mac-tag:not(.mac-tag--gold) .mac-tag__plate {
   html[data-phone-battle='ffx'] .ffxhud .ig-stat__value {
     letter-spacing: -0.02em;
   }
+}
+
+/* PR-0031 (FFX only): the desktop TARGET plate stays off the phone, whose top
+   strips already hold the turn order and the enemy move; the Sensor card above
+   is the phone's target card. */
+html[data-phone-battle='ffx'] .ffxhud .ffx-tplate {
+  display: none !important;
 }

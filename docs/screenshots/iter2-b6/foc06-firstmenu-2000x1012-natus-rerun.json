@@ -1,0 +1,62 @@
+[
+ {
+  "id": "seymour-natus",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Talk",
+    "target": null,
+    "chips": [
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    684,
+    223,
+    1350,
+    365
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 7
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Talk",
+    "target": null,
+    "chips": [
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    1145,
+    223,
+    1605,
+    365
+   ],
+   "intent": [
+    682,
+    192,
+    1104,
+    467
+   ],
+   "intentOffscreen": false,
+   "advRows": 7
+  }
+ }
+]

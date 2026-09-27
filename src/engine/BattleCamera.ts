@@ -132,9 +132,9 @@ export class BattleCamera {
   }
 
   /** A-12: dolly `rig` back until these figures fit a phone slice (`FrameFit.fitRigToSlice`). */
-  fitSlice(rig: string, slice: number, subjects: ReadonlyArray<{ actor: unknown; min: number }>): boolean {
+  fitSlice(rig: string, slice: number, subjects: ReadonlyArray<{ actor: unknown; min: number }>, top = 0): boolean {
     const r = this.rigs.get(rig);
-    return !!r && fitRigToSlice(this.camera, r, slice, subjects as readonly FitSubject[]);
+    return !!r && fitRigToSlice(this.camera, r, slice, subjects as readonly FitSubject[], top);
   }
 
   getRig(name: string): CameraRig | undefined {

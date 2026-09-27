@@ -116,7 +116,9 @@ export interface EncounterChainOptions {
   findGroup(id: string): Promise<EnemyGroupDef | null>;
   audio?: ChainAudioPort | null;
   /** Called at the head of every link, so the screen can keep its own bookkeeping. */
-  onLink?(info: { links: number; group: EnemyGroupDef; setup: BattleSetup }): void;
+  onLink?(info: { links: number; group: EnemyGroupDef; setup: BattleSetup; checkpoint?: ChainCheckpoint | null }): void;
+  /** A checkpoint retry's ledger: the links won before it (`ChainCheckpoint.won`, PR-0138). */
+  priorWon?: readonly BattleResult[];
   /**
    * Formations to walk before giving up, counted from the first.
    *
@@ -176,7 +178,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
   let checkpoint: ChainCheckpoint | null = null;
   let outcome: BattleOutcome = { kind: 'aborted' };
   // Each won link's result before the last, for an FFX-2 chain's summed spoils (PR-0138).
-  const won: BattleResult[] = [];
+  const won: BattleResult[] = [...(opts.priorWon ?? [])];
 
   // The first formation's own cue, resolved the same way a chained link's is.
   // Until this existed the pre-scene's boss theme was crossfaded straight back
@@ -189,10 +191,12 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
 
   for (;;) {
     links++;
-    checkpoint = checkpointAt(links, group, setup) ?? checkpoint;
-    opts.onLink?.({ links, group, setup });
+    const made = checkpointAt(links, group, setup);
+    // PR-0138: the checkpoint keeps the spoils won before it, so a retry there still sums them.
+    if (made) checkpoint = { ...made, won: [...won] };
+    opts.onLink?.({ links, group, setup, checkpoint: made ? checkpoint : null });
     presenter.syncHud(engine);
-    outcome = await presenter.run(engine);
+    outcome = await presenter.run(engine, { headline: group.headline }); // PR-0205
 
     if (outcome.kind !== 'victory') break;
 

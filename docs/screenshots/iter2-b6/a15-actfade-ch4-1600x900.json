@@ -1,0 +1,369 @@
+{
+ "id": "ffx2-bahamut",
+ "size": "1600x900",
+ "errors": [],
+ "samples": 742,
+ "actingSamples": 321,
+ "violations": [
+  {
+   "t": 4594,
+   "now": 17407,
+   "lastSig": {
+    "t": 17401,
+    "phase": "action-start",
+    "actor": "bahamut"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 29733,
+     "cls": true,
+     "op": 1
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  },
+  {
+   "t": 12171,
+   "now": 24985,
+   "lastSig": {
+    "t": 24889,
+    "phase": "action-start",
+    "actor": "bahamut"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 36480,
+     "cls": true,
+     "op": 0.34
+    },
+    {
+     "card": "eint__panel",
+     "zone": "rikku",
+     "px": 15421,
+     "cls": true,
+     "op": 0.34
+    }
+   ],
+   "faded": 1,
+   "awaiting": true
+  },
+  {
+   "t": 18436,
+   "now": 31250,
+   "lastSig": {
+    "t": 31247,
+    "phase": "action-start",
+    "actor": "bahamut"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "sgd__stack",
+     "zone": "yuna",
+     "px": 683,
+     "cls": true,
+     "op": 1
+    },
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26409,
+     "cls": true,
+     "op": 1
+    }
+   ],
+   "faded": 2,
+   "awaiting": true
+  },
+  {
+   "t": 23255,
+   "now": 36069,
+   "lastSig": {
+    "t": 35857,
+    "phase": "action-start",
+    "actor": "paine"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "paine",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "paine",
+     "px": 1476,
+     "cls": true,
+     "op": 0.22
+    },
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 20680,
+     "cls": true,
+     "op": 0.22
+    }
+   ],
+   "faded": 1,
+   "awaiting": true
+  },
+  {
+   "t": 23547,
+   "now": 36361,
+   "lastSig": {
+    "t": 35857,
+    "phase": "action-start",
+    "actor": "paine"
+   },
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "paine",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "paine",
+     "px": 11318,
+     "cls": true,
+     "op": 0.64
+    },
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 20333,
+     "cls": true,
+     "op": 0.64
+    }
+   ],
+   "faded": 1,
+   "awaiting": true
+  },
+  {
+   "t": 26387,
+   "now": 39201,
+   "lastSig": {
+    "t": 39193,
+    "phase": "action-start",
+    "actor": "bahamut"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Impulse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 28625,
+     "cls": true,
+     "op": 1
+    }
+   ],
+   "faded": 1,
+   "awaiting": true
+  },
+  {
+   "t": 26494,
+   "now": 39308,
+   "lastSig": {
+    "t": 39193,
+    "phase": "action-start",
+    "actor": "bahamut"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Impulse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26672,
+     "cls": true,
+     "op": 0.12
+    }
+   ],
+   "faded": 1,
+   "awaiting": true
+  },
+  {
+   "t": 42677,
+   "now": 55491,
+   "lastSig": {
+    "t": 54322,
+    "phase": "cancel",
+    "actor": "yuna"
+   },
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "yuna",
+   "ability": "Cure",
+   "hits": [
+    {
+     "card": "sgd__stack",
+     "zone": "yuna",
+     "px": 937,
+     "cls": true,
+     "op": 0.34
+    },
+    {
+     "card": "eint__panel",
+     "zone": "yuna",
+     "px": 2015,
+     "cls": true,
+     "op": 0.34
+    }
+   ],
+   "faded": 2,
+   "awaiting": true
+  },
+  {
+   "t": 43928,
+   "now": 56741,
+   "lastSig": {
+    "t": 56357,
+    "phase": "cancel",
+    "actor": "rikku"
+   },
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "rikku",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "sgd__stack",
+     "zone": "rikku",
+     "px": 1176,
+     "cls": true,
+     "op": 0.48
+    }
+   ],
+   "faded": 2,
+   "awaiting": false
+  },
+  {
+   "t": 49884,
+   "now": 62698,
+   "lastSig": {
+    "t": 62687,
+    "phase": "action-start",
+    "actor": "yuna"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "yuna",
+   "ability": "Cure",
+   "hits": [
+    {
+     "card": "sgd__stack",
+     "zone": "yuna",
+     "px": 274,
+     "cls": false,
+     "op": 1
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 53115,
+   "now": 65929,
+   "lastSig": {
+    "t": 65454,
+    "phase": "action-start",
+    "actor": "rikku"
+   },
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "rikku",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "sgd__stack",
+     "zone": "rikku",
+     "px": 1580,
+     "cls": true,
+     "op": 0.81
+    }
+   ],
+   "faded": 2,
+   "awaiting": false
+  },
+  {
+   "t": 62274,
+   "now": 75088,
+   "lastSig": {
+    "t": 75053,
+    "phase": "action-start",
+    "actor": "bahamut"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26181,
+     "cls": true,
+     "op": 0.81
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  }
+ ],
+ "fadedSeen": 226,
+ "shots": [
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand8/ffx2-bahamut-1600x900-hit-0.jpg",
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand8/ffx2-bahamut-1600x900-hit-1.jpg",
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand8/ffx2-bahamut-1600x900-hit-2.jpg"
+ ],
+ "violationCount": 21,
+ "byKind": {
+  "fadingOut": 26,
+  "notFaded": 1
+ },
+ "notFadedSamples": [
+  {
+   "t": 49884,
+   "now": 62698,
+   "lastSig": {
+    "t": 62687,
+    "phase": "action-start",
+    "actor": "yuna"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "yuna",
+   "ability": "Cure",
+   "hits": [
+    {
+     "card": "sgd__stack",
+     "zone": "yuna",
+     "px": 274,
+     "cls": false,
+     "op": 1
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  }
+ ]
+}

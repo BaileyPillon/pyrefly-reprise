@@ -29,7 +29,7 @@
      panel's other small badges (`.eint__els span`, `.eint__conf`) sit at
      3.9px, so this keeps the newest, most load-bearing signpost at the large
      end of that family instead of the small one. */
-  font-size: 4.2px;
+  font-size: max(4.2px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.12em;
   text-transform: uppercase;
   text-align: right;
