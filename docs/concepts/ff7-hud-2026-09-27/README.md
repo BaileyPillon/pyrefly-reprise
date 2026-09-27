@@ -1,5 +1,24 @@
 # The FF7 battle look for Guard Scorpion: options round, 2026-09-27
 
+## Bailey's pick (2026-09-27)
+
+> "ff7 screen layout ill go with a but it needs to be EVEN more faithful than a but remember it is
+> specific to the ff7 encounters not ffx or ffx-2 also look at our other project (lifestream encore
+> it might have done most of the menu look and feel already), push overnight"
+
+> "also the secret door to guard scorpion i really like your ideas there i will go with it"
+
+Option **A** ("FF7's classic windows, redrawn") is picked, with one named change: push it **even
+more faithful** to real FF7 than option A already was. Recorded as `docs/target/decisions.json`
+D-237 (the HUD pick), D-238 (the secret door, approved as proposed), and D-239 (a separate overnight
+release permission carried in the same message).
+
+- **liked:** A, FF7's classic windows.
+- **must change:** more faithful to FF7 than A.
+- **must remain:** FF7-only scope — nothing in the FFX or FFX-2 HUDs, chrome, menus or tokens changes.
+- **undecided:** the art for Cloud, Barret, Guard Scorpion and the reactor (candidates in
+  `docs/concepts/ff7-art-2026-09-27`, not yet shown to Bailey for a pick).
+
 Bailey, 2026-09-27 ~00:35 EDT: "go with guard scorpion first, full speed ahead, but make it a hidden
 selectable encounter since it's experimental". Guard Scorpion is the first FF7 boss (Mako Reactor 1,
 Cloud and Barret). Before any FF7 HUD is built, rule 9 needs Bailey to pick how it looks. These are
