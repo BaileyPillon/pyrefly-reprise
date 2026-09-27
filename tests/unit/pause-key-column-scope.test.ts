@@ -57,6 +57,30 @@ describe('pause key-column floors (REG-keycol)', () => {
     expect(CHAPTER).toMatch(/data-row='progress'\] \.pause__v\s*\{[^}]*white-space:\s*normal/);
   });
 
+  it('the wrapping SCENE and ENCOUNTER values are width-capped, so a long place name no longer sizes THIS ENCOUNTER (REG-keycol, iter2 B6)', () => {
+    // t1-b3b re-check: a wrapping cell still claimed its unwrapped length as the
+    // column's max-content, which squeezed THE PARTY from 1280 wide up (Ch X,
+    // Omnis, Leblanc) and pushed it onto Yojimbo's mask. `contain: inline-size`
+    // takes the text out of the column's sizing; the cap is what it adds instead.
+    const m = /\.pause__row\[data-row='progress'\] \.pause__v\s*\{([^}]*)\}/.exec(CHAPTER);
+    expect(m).not.toBeNull();
+    expect(m![1]).toMatch(/contain:\s*inline-size/);
+    expect(m![1]).toMatch(/min-width:\s*var\(--pu-detail-v\)/);
+    expect(m![1]).toMatch(/flex:\s*1 1 0/);
+    expect(CHAPTER).toMatch(/--pu-detail-v:\s*clamp\(/);
+  });
+
+  it('THIS ENCOUNTER and THE PARTY never shrink for the dossier: the prose column wraps instead (REG-keycol at 1024x768)', () => {
+    // Ch X at 1024x768: the dossier heading ("Highbridge of Bevelle — before the
+    // Main Gate") claimed its one-line width and the flex row shrank THE PARTY
+    // until five equipment names were cut.
+    const m = /@media \(min-width: 621px\) \{([\s\S]*?)\n\}/.exec(CHAPTER);
+    expect(m).not.toBeNull();
+    expect(m![1]).toContain(".pause__body[data-tab='chapter'] > .pause__col[data-col='detail']");
+    expect(m![1]).toContain(".pause__body[data-tab='chapter'] > .pause__col[data-col='gear']");
+    expect(m![1]).toMatch(/flex-shrink:\s*0/);
+  });
+
   it('under 1280 wide, the CHAPTER word columns give their empty bar cell to the values (1024x768)', () => {
     const m = /@media \(min-width: 621px\) and \(max-width: 1279px\) \{([\s\S]*?)\n\}/.exec(CHAPTER);
     expect(m).not.toBeNull();

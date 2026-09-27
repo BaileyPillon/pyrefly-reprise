@@ -110,6 +110,39 @@
   white-space: normal;
   text-overflow: clip;
   line-height: 1.35;
+  contain: inline-size;
+  flex: 1 1 0;
+  min-width: var(--pu-detail-v);
+}
+
+/*
+ * REG-keycol, the width cap (iter2 B6, from the t1-b3b re-check): a wrapping
+ * value still counted its unwrapped length when THIS ENCOUNTER was sized, so
+ * a long place name ("Highbridge of Bevelle — before the Main Gate") widened
+ * the column, squeezed THE PARTY's values from 1280 wide up (Ch X, Omnis,
+ * Leblanc) and pushed THE PARTY onto Yojimbo's mask. `contain: inline-size`
+ * takes the text out of the column's sizing; the cell adds this cap instead
+ * (about what the short scene key used to take), fills any wider column the
+ * other rows make, and wraps a longer name onto a second line.
+ * Game case: both (shared pause chrome).
+ */
+.pause__col[data-col='detail'] {
+  --pu-detail-v: clamp(128px, 10vw, 200px);
+}
+
+/*
+ * REG-keycol at 1024x768 (iter2 B6): the dossier is prose and wraps; the two
+ * reading columns are not. With all three free to shrink, a long location
+ * heading (Ch X's, as one line) took its share out of THE PARTY and cut five
+ * equipment names. The reading columns keep their width and the dossier gives.
+ * The phone stacks the columns (`pause-screen.css`), so this stops at 621.
+ * Game case: both (shared pause chrome).
+ */
+@media (min-width: 621px) {
+  .pause__body[data-tab='chapter'] > .pause__col[data-col='detail'],
+  .pause__body[data-tab='chapter'] > .pause__col[data-col='gear'] {
+    flex-shrink: 0;
+  }
 }
 
 /*
