@@ -15,12 +15,8 @@
  */
 
 import type { Camera, Scene, Vector3 } from 'three';
-import type {
-  BattleEngine,
-  BattleResult,
-  BattleSetup,
-  EnemyGroupDef,
-} from '../../battle/common/types.ts';
+import type { BattleEngine, BattleResult, BattleSetup, EnemyGroupDef } from '../../battle/common/types.ts';
+import { addExperimentPlayTime } from '../experiments/experimentRecords.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { audio } from '../../audio/index.ts';
 import { BattlePresenter, type AutoStrategy, type BattleOutcome } from '../../engine/BattlePresenter.ts';
@@ -714,7 +710,9 @@ export class BattleScreen extends Screen {
     // while this screen is on top, so the clock stops of its own accord the
     // moment the pause overlay goes up — time spent reading the menu is not
     // time spent playing. `SaveStore.addPlayTime` buffers the writes.
-    if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
+    // A hidden experiment (FF7) keeps its time in its own store, never the save (BattleScreenExperiment.ts).
+    if (!this.preview && this.opts.chapter.experimental) addExperimentPlayTime(this.opts.chapter.id, dt * 1000);
+    else if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
 
     this.scene?.update(dt);
     // Settle the enemy lane against the camera, before the player's first

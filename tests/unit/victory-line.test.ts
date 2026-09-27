@@ -147,7 +147,8 @@ describe('the lines each chapter serves are exactly the ones the sheet quotes (b
   });
 
   it('serves no line outside the chapter banks in any registered chapter', () => {
-    for (const chapter of [...CHAPTERS, ...UNLISTED_CHAPTERS]) {
+    // The hidden FF7 experiment has no results panel yet, so it serves nothing (ff7-game-branch-audit).
+    for (const chapter of [...CHAPTERS, ...UNLISTED_CHAPTERS].filter((c) => !c.experimental)) {
       for (const [who, line] of served(chapter.id)) {
         expect(chapter.scriptsRef.victoryQuips[who]?.[0], `${chapter.id} ${who}`).toBe(line);
       }
