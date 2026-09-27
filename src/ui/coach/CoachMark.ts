@@ -89,6 +89,12 @@ export class CoachMark {
   private timer = 0;
   private settle: ((outcome: CoachMarkOutcome) => void) | null = null;
   private done = false;
+  /**
+   * Set once the player moves the command cursor while the line is up. From
+   * then on the confirm is theirs: it takes the line down *and* reaches the
+   * menu (PR-0182 / PR-0190, CHK-015), instead of dying with the line.
+   */
+  private navigated = false;
 
   constructor(private readonly opts: CoachMarkOptions) {
     this.setTimer = opts.setTimer ?? ((fn, ms) => globalThis.setTimeout(fn, ms) as unknown as number);
@@ -108,6 +114,7 @@ export class CoachMark {
     this.watcher = new RawInputWatcher((button) => {
       if (button === 'confirm') this.finish('confirmed');
       else if (button === 'cancel') this.finish('cancelled');
+      else this.navigated = true;
     });
   }
 
@@ -180,6 +187,10 @@ export class CoachMark {
    * other key — arrows, cancel, the pause keys — is untouched, so the line
    * still blocks no input and a holding FFX line still waits for its own next
    * confirm rather than resolving twice.
+   *
+   * The one exception (PR-0182 / PR-0190): once the player has moved the
+   * cursor under the line, the confirm is an answer to the menu, so it takes
+   * the line down and is let through (see {@link navigated}).
    */
   private readonly onConfirmCapture = (e: KeyboardEvent): void => {
     if (this.done) return;
@@ -188,8 +199,14 @@ export class CoachMark {
     if (!this.el.isConnected) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.repeat || !CONFIRM_KEYS.has(e.code)) return;
-    e.preventDefault();
-    e.stopImmediatePropagation();
+    // The player has already moved the cursor under the line: this confirm
+    // answers the row they highlighted, so it is not swallowed (PR-0182, a
+    // dead press on Kimahri's OVERDRIVE row). A bare confirm still dies with
+    // the line, which is all PR-0051 was about.
+    if (!this.navigated) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
     this.finish('confirmed');
   };
 

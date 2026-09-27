@@ -51,6 +51,9 @@ const GRID_H = 360;
  */
 export const PHONE_BAND_MIN = 300;
 
+/** A full gauge: Zanmato on his next turn. */
+const BAND_FULL = 100;
+
 /** How long the one-shot banner holds before it fades, ms. */
 export const BANNER_HOLD_MS = 2600;
 /** Its fade, ms; matches `zanmato-gauge.css`. */
@@ -128,6 +131,14 @@ export class ZanmatoGauge {
   private ownerId: CombatantId | null = null;
   private name = '';
   private gauge: number | null = null;
+  /**
+   * PR-0191: set when the gauge drops from full before Yojimbo's strike has
+   * played out. The engine empties it when he decides on Zanmato, and that
+   * `overdrive-gauge` event is presented before the strike's `action-start`,
+   * so the panel keeps its full "Zanmato" view until his `action-end` (after
+   * the 9,999 has landed) and then shows this value.
+   */
+  private heldGauge: number | null = null;
   private painted = '';
   private holdTimer = 0;
   private fadeTimer = 0;
@@ -167,6 +178,7 @@ export class ZanmatoGauge {
     this.el.remove();
     this.ownerId = null;
     this.gauge = null;
+    this.heldGauge = null;
     this.painted = '';
   }
 
@@ -176,6 +188,7 @@ export class ZanmatoGauge {
     if (!owner) {
       this.ownerId = null;
       this.gauge = null;
+      this.heldGauge = null;
       this.clearBanner();
       this.el.hidden = true;
       return;
@@ -187,6 +200,12 @@ export class ZanmatoGauge {
 
   /** The `overdrive-gauge` event, so the bar moves on the beat that moved it. */
   onEvent(event: BattleEvent): void {
+    if (event.type === 'action-end' && event.actorId === this.ownerId && this.heldGauge !== null) {
+      const next = this.heldGauge;
+      this.heldGauge = null;
+      this.setGauge(next, true);
+      return;
+    }
     if (event.type !== 'overdrive-gauge' || event.who !== this.ownerId) return;
     this.setGauge(event.to);
   }
@@ -202,14 +221,22 @@ export class ZanmatoGauge {
     return this.bannerEl.hidden ? [this.panelEl] : [this.panelEl, this.bannerEl];
   }
 
-  private setGauge(raw: number): void {
+  private setGauge(raw: number, release = false): void {
     const prev = this.gauge;
     const view = zanmatoGaugeView(this.name, raw);
-    this.gauge = view.gauge;
     this.el.hidden = false;
+    // A drop from full is Zanmato being decided: hold the full view until his
+    // action has ended (see `heldGauge`). A later drop while held only moves
+    // the value it will settle on.
+    if (!release && (this.heldGauge !== null || (prev !== null && prev >= BAND_FULL && view.gauge < BAND_FULL))) {
+      this.heldGauge = view.gauge;
+      return;
+    }
+    this.gauge = view.gauge;
     this.paint(view);
+    // The one-shot banner always finishes its own hold (PR-0191): a reset
+    // arriving 0.6 s in no longer cuts it short.
     if (reachesFull(prev, view.gauge)) this.showBanner();
-    else if (!view.full) this.clearBanner();
   }
 
   private paint(view: ZanmatoGaugeView): void {
