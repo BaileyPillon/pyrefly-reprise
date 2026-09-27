@@ -16,6 +16,23 @@ row.
 
 ---
 
+## 2026-09-27 ~00:40 EDT — the live mix (release 21, d8837334): "still sounds like snes music"
+
+Bailey, in chat, about the game as it plays live (release 21, bundle DlL4YDmM), verbatim:
+
+> the game muisic still sounds like snes music...
+
+This **is** an ear verdict on the shipped mix, the first since 2026-09-21's
+"too reminiscent of SNES music", and it says the sampler rebuild has not escaped
+that sound yet. It gives no number out of 10, so CHK-B1 still has no score and
+audio stays UNVERIFIED in the critic's total. It came before he had listened to
+the 2026-09-26 direction pack (`D:/Tools/pyrefly-scratch/audio-pack-0926/`,
+tracks 05-08: control, A real orchestral samples, B ACE-Step restyle, C today
+plus choir and strings), which is the question that picks the re-render
+direction. PR-0148 stays open and is now owner-confirmed.
+
+---
+
 ## 2026-09-24 — Yojimbo (Chapter IX) battle music O-6: accepted on recommendation, not by ear
 
 Bailey answered five items sent together, about 13:35 EDT:
