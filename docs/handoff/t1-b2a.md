@@ -75,3 +75,20 @@ The single blocker from the CHECK above was repaired. Nothing was backed out.
 **Still open (not blockers of this batch, and unchanged):** PR-0128's tick labels (the HIT ×2 / ×4 / ×6 half) wait on Bailey's choice of words under rule 6. PR-0186 waits on a placement choice among options (a) to (c) in "Stopped" above. The acceptance check for PR-0128 names "four tick labels", so **PR-0128 as a whole stays open** until Bailey picks the tick wording. Only its plate half and its guide half are now met under real keys.
 
 **Checks after the repair.** `tsc --noEmit` is clean. Full `vitest run --testTimeout=60000` exits 0: 455 files passed, 4 skipped, 8,336 tests passed, 29 skipped. `orphans.mjs` reports 24, the same as main, and `overdrivePlate.ts` is reachable.
+
+## RE-CHECK (independent re-check after the repair, 2026-09-26; the re-checker built and repaired none of it)
+
+Branch `t1-b2a` at c62ee298. Own production build (`vite build --outDir dist-recheck`, served by `vite preview` on port 5985, stopped by its PID; the copy was removed afterwards), headless Chromium with `PYREFLY_BROWSER=gpu`, real Playwright keys. Probes: `tools/zz-b2a-recheck.tmp/` (untracked). Frames: `docs/screenshots/t1-b2a/recheck/` (not committed; this commit adds only this section).
+
+**Suite.** `tsc --noEmit` clean. Full `vitest run --testTimeout=60000`: exit 0, 455 files passed, 4 skipped, 8,336 tests passed, 29 skipped. The diff of a8bb6434 touches only `src/ui/ffx/` (FFX only; FFX-2 overlays and HUD untouched).
+
+| Check | Result |
+|---|---|
+| CHK-B2A-01, PR-0128 plate half, 1600x900 (Ch II seed 1, Tidus's gauge 100 *injected*, then OVERDRIVE > Slice & Dice > Enter, frame 0.5 s later) | **Met.** Banner reads "Tidus Overdrive" at 45,44 359x78, slab at 36,140; the banner is topmost at 15/50/85 % of its width; guide card hidden. A real Enter closes the overlay; plate and overlay go together (about 1.1 s), guide returns. `overlay-open-1600x900.jpg`. |
+| Same, 2000x1012 | **Met.** Banner 151,50 403x88 (the REPAIR table's "252x88" is a typo for 403x88), slab 140,157. `overlay-open-2000x1012.jpg`. |
+| Same, coach line on, 1600x900 | **Met**, same boxes. `overlay-open-1600x900-coach.jpg`. |
+| Other FFX Overdrives (regression) | Auron, Dragon Fang (Ch II, real keys): "Auron Overdrive" above the slab, 0 px overlap, closes cleanly. Yuna's Grand Summon opens no overlay on this route, and no plate is left behind. All `.ig-minigame.ffx-mg` overlays share one placement, so Wakka, Lulu, Rikku and Kimahri take the same layout at desktop sizes. |
+| Landscape phone, 844x390 | Plate 95,19 155x34 above the slab 91,61; 0 px overlap. |
+| **Upright phone, 390x844 (the phone battle layout)** | **Regression.** `phone-hud-parts.css` moves `.ig-banner` under the rail (top about 142), while the Overdrive slab keeps today's place (14,56 341x100, per the phone plan's "Overdrive minigames keep today's layout"). The new plate lands at 6,142 192x35, overlapping the slab by 2,629 px², and the slab's bottom edge clips the top of "Tidus OVERDRIVE". Before a8bb6434 the banner stayed hidden while an overlay was open on every size (CHECK timeline above; the code path is the same), so this collision is new. The slab itself stays readable. `od-yunalesca-tidus-390x844.jpg`. |
+
+**Verdict.** The original blocker (CHK-B2A-01) now meets its acceptance check at 1600x900 and 2000x1012, coach on and off, under real keys. **1 new blocker:** on an upright phone the new plate collides with the slab (introduced by a8bb6434, a regression against main and live). Keeping main's behaviour there (no plate while the overlay is open under `html[data-phone-battle='ffx']`) would remove it without a design choice; placing the plate somewhere on the phone is Bailey's call under rule 9. PR-0128 as a whole stays open for the tick-label wording, and PR-0186 for its placement choice, as recorded above.
