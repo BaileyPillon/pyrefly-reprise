@@ -6,6 +6,17 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `encounters.ts`: `ChapterId` gains `ffx2-ixion-djose`; `Chapter.number` widens to 17 (Ixion at Djose, unlisted)
+
+**FFX-2 only** [AGENTS.md hard rule 14]; the widening itself is shared plumbing, "both". Branch `chapter-ixion`.
+
+- `ChapterId` adds `'ffx2-ixion-djose'` (so `ListedChapterId` does too, which is why `learn/atlas/cites.ts`
+  and `learn-atlas-data.test.ts` gain a row, as every unlisted chapter before it did).
+- `Chapter.number` adds `16 | 17`: the record is Chapter XVII, registered in `UNLISTED_CHAPTERS`
+  (`src/data/chapter-ffx2-ixion-djose.ts`); listing it is the switch. Chapter XVI (Sin, branch `chapter-sin`)
+  widens the same line to 16; a merge of the two keeps `| 16 | 17` and both ids.
+- No other field, type or export changes; every importer compiles unchanged.
+
 ## 2026-09-27 — minigame protocol: FFX picker params and backing out (hotfix 24)
 
 **FFX only** [AGENTS.md hard rule 14]. No contract file changes: `types.ts`, `FFXBattleEngine` and

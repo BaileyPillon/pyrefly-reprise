@@ -120,13 +120,9 @@ function placeholderEntry(key: string, title: string): SceneEntry {
   return { key, title, build: buildDemoScene, slots: GAGAZET_SLOTS, placeholder: true };
 }
 
-SCENES.set('demo', {
-  key: 'demo',
-  title: 'Mt. Gagazet — the Prominence',
-  build: buildDemoScene,
-  slots: GAGAZET_SLOTS,
-  placeholder: false,
-});
+SCENES.set('demo', { key: 'demo', title: 'Mt. Gagazet — the Prominence', build: buildDemoScene, slots: GAGAZET_SLOTS, placeholder: false });
+// Ixion at Djose (FFX-2, unlisted): a labelled stand-in until the Chamber of the Fayth is painted.
+SCENES.set('djose-temple', placeholderEntry('djose-temple', 'Djose Temple (PLACEHOLDER: the demo diorama)'));
 // `gagazet` is the one chapter whose placeholder is already the right place.
 SCENES.set('gagazet', {
   key: 'gagazet',

@@ -38,6 +38,9 @@ import { paragonOversoulAbilities } from './paragon-oversoul.ts';
 // Chapter XV, the Den of Woe (registered, unlisted): `./den-of-woe.ts`.
 import { denOfWoeGroups } from './den-of-woe.ts';
 import { denOfWoeAbilities } from './den-of-woe-abilities.ts';
+// Ixion at Djose (FFX-2 Chapter 3 finale; registered, unlisted behind a switch): `./ixion-djose.ts`.
+import { ixionDjoseGroups } from './ixion-djose.ts';
+import { x2IxionAbilities } from './ixion-djose-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -52,6 +55,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...tremaGroups,
   ...tremaOptionGroups,
   ...denOfWoeGroups,
+  ...ixionDjoseGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -76,6 +80,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...tremaArenaAbilities,
   ...paragonOversoulAbilities,
   ...denOfWoeAbilities,
+  ...x2IxionAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

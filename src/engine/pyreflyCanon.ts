@@ -108,6 +108,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   'garden-of-pain': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-seymour-omnis.md §7: the arena rows name no particles' },
   'bevelle-highbridge': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-seymour-natus-highbridge.md §7: the arena rows name no particles' },
   'via-purifico': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-isaaru-bevelle.md §7: the arena rows name no particles' },
+  // Ixion at Djose (FFX-2, unlisted): the key draws the demo diorama as a labelled placeholder.
+  'djose-temple': { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-ixion-djose.md §6.1: the arena rows name no particles' },
   // FF7 only (the hidden Guard Scorpion experiment): pyreflies are Spira's, so the stage adds neither the band nor the dissolve.
   'sector1-reactor': {
     game: 'ff7',
