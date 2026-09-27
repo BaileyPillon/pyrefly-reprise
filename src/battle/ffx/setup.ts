@@ -236,7 +236,10 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
  * aeons stood up with **1 HP** and died to the first hit, which made five of
  * the chapter's seven links a walkover.
  *
- * Affinities are mirrored too, so "hit its weakness" means something. Luck 1 is
+ * Affinities are **not** mirrored (PR-0069): `AeonBuild` carries none to mirror,
+ * and `research/ffx-bfa-yu-yevon.md` §2 sources the possessed aeons' stats, moves
+ * and Luck 1 but is silent on their affinities, so each keeps the affinities its
+ * own data file gives it (`data/ffx/enemies/braskas-final-aeon.ts`). Luck 1 is
  * the one deliberate divergence from the player's copy, per the bestiary.
  *
  * No-ops for every other enemy in the game: the id has to start with
@@ -251,7 +254,7 @@ function mirrorPossessedAeon(c: FFXCombatant, party: FFXPartyBuild): void {
   c.hp = build.stats.maxHp;
   c.mp = build.stats.maxMp;
   c.alive = c.hp > 0;
-  c.affinities = { ...c.affinities };
+  c.affinities = { ...c.affinities }; // its own data file's affinities, copied (PR-0069: none to mirror)
   const form = c.enemy?.forms[0];
   if (form) form.hp = build.stats.maxHp;
 }

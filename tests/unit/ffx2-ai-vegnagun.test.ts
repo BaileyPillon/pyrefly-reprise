@@ -57,7 +57,7 @@ describe('Vegnagun (Leg) — the 26-step table [§5.2]', () => {
     expect(chosen.filter((c) => c === null).length).toBeGreaterThan(6);
   });
 
-  it('falls back to Absorb when everybody already has the rolled status', () => {
+  it('falls back to Absorb when everybody already has the rolled status (sourced for Berserk and Slow; the Break branch is an inference, PR-0054)', () => {
     const leg = unit('vegnagun-leg', 'enemy', 18220);
     const h = harness(leg);
     for (const p of h.ctx.party()) {

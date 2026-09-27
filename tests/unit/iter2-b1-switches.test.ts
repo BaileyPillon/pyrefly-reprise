@@ -11,6 +11,7 @@
  *   (`research/ffx2-combat-core.md` §10.2, KADFC FAQ 38278, our estimate).
  */
 
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { aiHarness, aiUnit } from '../../src/battle/ffx2/fixtures.ts';
 import { IMMUNE_HITS_SKIP_CHAIN, LEBLANC_SCRIPT_SINIROTHX } from '../../src/battle/ffx2/constants.ts';
@@ -167,5 +168,13 @@ describe('Acta F4 guard: both Acta Est Fabula rows hit only the ids named, the t
     expect(touched.has('vegnagun-head')).toBe(false);
     expect(head.hp).toBe(20000);
     expect(r.alive && l.alive).toBe(true);
+  });
+});
+
+describe('PR-0069 (FFX only): the possessed aeon keeps its own data file\'s affinities', () => {
+  it('research/ffx-bfa-yu-yevon.md §2 is silent on affinities, so none are mirrored from the player\'s aeon', () => {
+    const src = readFileSync('src/battle/ffx/setup.ts', 'utf8');
+    expect(src).toContain('Affinities are **not** mirrored (PR-0069)');
+    expect(src).not.toContain('Affinities are mirrored too');
   });
 });
