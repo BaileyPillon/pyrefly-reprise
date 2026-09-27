@@ -206,3 +206,10 @@ html[data-phone-battle='ffx'] .mac-tag:not(.mac-tag--gold) .mac-tag__plate {
     letter-spacing: -0.02em;
   }
 }
+
+/* PR-0031 (FFX only): the desktop TARGET plate stays off the phone, whose top
+   strips already hold the turn order and the enemy move; the Sensor card above
+   is the phone's target card. */
+html[data-phone-battle='ffx'] .ffxhud .ffx-tplate {
+  display: none !important;
+}

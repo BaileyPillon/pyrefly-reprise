@@ -657,16 +657,20 @@
   opacity: 0.16; transition: none; /* out at once, back in over 0.1 s */
 }
 
-/* PR-0031 / PR-0178 (FFX only; targetPlateFfx.ts): the top TARGET plate, built OFF until plan
-   §8 Q5. Paper slab with the gold edge, the approved tiles' top-centre place, viewport px. */
+/* PR-0031 / PR-0178 (FFX only; targetPlateFfx.ts): the top TARGET plate, ON since Bailey's yes to plan
+   §8 Q5 (D-249). Paper slab with the gold edge, the approved tiles' top-centre place. */
 .ffx-tplate {
-  position: absolute; left: 50%; top: 22px; transform: translateX(-50%) skewX(var(--ig-skew, -12deg));
-  display: flex; align-items: center; gap: 12px; white-space: nowrap; pointer-events: none;
-  padding: 6px 18px; background: var(--ig-paper, #f4f1e8); border-left: 4px solid var(--ig-accent, #f2c21e);
+  position: absolute; left: 50%; top: calc(8.8px * var(--lb-scale, 2.5)); transform: translateX(-50%) skewX(var(--ig-skew, -12deg));
+  display: flex; align-items: center; gap: calc(4.8px * var(--lb-scale, 2.5)); white-space: nowrap; pointer-events: none;
+  padding: calc(2.4px * var(--lb-scale, 2.5)) calc(7.2px * var(--lb-scale, 2.5));
+  background: var(--ig-paper, #f4f1e8); border-left: calc(1.6px * var(--lb-scale, 2.5)) solid var(--ig-accent, #f2c21e);
 }
 .ffx-tplate > * { transform: skewX(var(--ig-skew-inverse, 12deg)); }
-.ffx-tplate__label { font-family: var(--ig-font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.22em; color: #5c3f0a; }
-.ffx-tplate__name { font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; font-size: 20px; color: var(--ig-ink, #0b0a12); }
+/* Stepped aside from a panel (`plateLeft`): `left` is its own edge, not its centre. */
+.ffx-tplate--placed { transform: skewX(var(--ig-skew, -12deg)); }
+/* Scaled with the letterbox like the rest of the chrome (1600x900 = 14 / 20 px), with the 14 px floor. */
+.ffx-tplate__label { font-family: var(--ig-font-display); font-weight: 700; font-size: max(14px, calc(5.6px * var(--lb-scale, 2.5))); letter-spacing: 0.22em; color: #5c3f0a; }
+.ffx-tplate__name { font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; font-size: max(16px, calc(8px * var(--lb-scale, 2.5))); color: var(--ig-ink, #0b0a12); }
 
 /* PR-0180 (FFX only): the enemy's ability name, centred in the top HELP bar for
    the span of the action (research/observed-ffx-steam-2026-09-26.md 2.2). A flat

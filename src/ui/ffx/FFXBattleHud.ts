@@ -30,6 +30,7 @@ import { TelegraphBanner } from './TelegraphBanner.ts';
 import { ActionHelpBar } from './actionBanner.ts';
 import { ActingFade } from './actingFade.ts';
 import { IntentOpeningHold } from '../ffx2/intentOpeningHold.ts';
+import { AIM_FOLD_FLOOR_TOP, chipLiftDy, foldWhileAiming } from './sensorAimFold.ts';
 import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
 import { clipOffStack } from './bracketClip.ts';
@@ -155,6 +156,8 @@ export class FFXBattleHud implements HudPort {
   /** PR-0031 / PR-0178: the top TARGET plate, built OFF (`targetPlateFfx.ts`). */
   private readonly targetPlate = new FfxTargetPlate();
   private readonly sensorPanel = new SensorPanel();
+  /** PR-0186: this fight folds the Sensor card while aiming (Chapter III). */
+  private aimFoldDy = false;
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
   private readonly airship = new AirshipOrders(); // Evrae (FFX) only; inert without the range flag
@@ -801,7 +804,10 @@ export class FFXBattleHud implements HudPort {
     if (!id) return;
     const c = this.lastState?.combatants[id];
     if (!c || c.side === 'party') return;
-    this.sensorPanel.focus(c);
+    const onPhone = !!this.el.ownerDocument.documentElement.dataset['phoneBattle'];
+    this.aimFoldDy = foldWhileAiming(this.lastState?.enemyIds ?? [], onPhone);
+    this.sensorPanel.focus(c, this.aimFoldDy); // PR-0186
+    this.liftAimFoldChip(true);
   }
 
   /** The enemy plate, for tests and the debug snapshot. */
@@ -837,7 +843,7 @@ export class FFXBattleHud implements HudPort {
   private applySelection(sel: CursorSelection | null): void {
     const ids = new Set(sel?.ids ?? []);
     const kind = sel?.kind ?? 'enemy';
-    this.targetPlate.show(sel ? sel.ids.map((id) => this.nameOf(id)) : null); // PR-0031: OFF until §8 Q5
+    this.targetPlate.show(sel ? sel.ids.map((id) => this.nameOf(id)) : null); // PR-0031: ON since D-249
 
     // The same panel set the field measures against also decides which side of
     // the figure the name plate hangs off, so the plate can never be printed
@@ -852,6 +858,7 @@ export class FFXBattleHud implements HudPort {
     // decision's panels. One re-layout per change of selection, never per
     // frame.
     if (sel) this.commandMenu.targetCursor.reposition();
+    this.targetPlate.place(panels); // PR-0031: off the advisor card and the other panels
 
     // The field.
     if (this.targeting) {
@@ -887,6 +894,27 @@ export class FFXBattleHud implements HudPort {
     this.el.classList.toggle('ffxhud--targeting-enemy', !!sel && kind === 'enemy');
 
     this.steerSensor(sel);
+    this.liftAimFoldChip(!!sel && sel.kind === 'enemy');
+  }
+
+  /** PR-0186 (Chapter III): the folded chip, while aiming, rises above the enemies it meets (`sensorAimFold.ts`). */
+  private liftAimFoldChip(aimingEnemy: boolean): void {
+    if (!this.aimFoldDy) return; // every other chapter: untouched (Chapter XII's own dy is OmnisReadout's)
+    const el = this.sensorPanel.el;
+    const on = aimingEnemy && !el.hidden && this.sensorPanel.isFolded;
+    el.style.setProperty('--ffx-sensor-dy', '0px');
+    const chip = on ? this.stageRect(el) : null;
+    const scale = this.hudScale();
+    const host = this.el.getBoundingClientRect();
+    const ox = host.left + (host.width - STAGE.width * scale) / 2;
+    const oy = host.top + (host.height - STAGE.height * scale) / 2;
+    const enemies = (this.lastState?.enemyIds ?? []).flatMap((id) => {
+      const r = this.targeting?.rect(id);
+      return r && scale ? [{ left: (r.x - ox) / scale, right: (r.x + r.w - ox) / scale, top: (r.y - oy) / scale, bottom: (r.y + r.h - oy) / scale }] : [];
+    });
+    const dy = chip ? chipLiftDy(chip, enemies, AIM_FOLD_FLOOR_TOP) : null;
+    if (dy === null) el.style.removeProperty('--ffx-sensor-dy');
+    else el.style.setProperty('--ffx-sensor-dy', `${Math.round(dy * 10) / 10}px`);
   }
 
   /**
