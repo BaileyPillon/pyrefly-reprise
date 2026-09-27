@@ -881,6 +881,7 @@ export class FFX2BattleHud implements HudPort {
   }
 
   onEvent(event: BattleEvent): Promise<void> | void {
+    this.actionFade.observe(event); // A-15: overlapping ATB actions (actionFade.ts)
     // FFX-2 only: Active ATB can end the fight while a girl is choosing, and the presenter drops the menu only after
     // the burst (`runActivePump` -> `abandon`), so the menu goes with the deciding KO (or victory/defeat, if first).
     if (this.closeMenu && (event.type === 'victory' || event.type === 'defeat' || (event.type === 'ko' && this.lastState?.result))) {

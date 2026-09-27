@@ -14,7 +14,7 @@
  */
 
 import type { ActingSignal } from '../../engine/HudPort.ts';
-import type { CombatantId } from '../../battle/common/types.ts';
+import type { BattleEvent, CombatantId } from '../../battle/common/types.ts';
 import './action-fade.css';
 
 export interface FadeBox {
@@ -60,37 +60,100 @@ export interface ActionFadeOptions {
   cards: () => ReadonlyArray<HTMLElement | null | undefined>;
   /** A combatant's painted silhouette on screen (`TargetingPort.rect`). */
   rect: (id: CombatantId) => FadeBox | null;
+  /** A clock in ms (tests); `performance.now` by default. */
+  now?: () => number;
 }
 
-export class ActionFade {
-  private acting: { actorId: CombatantId; targets: readonly CombatantId[] } | null = null;
+/** An open action whose end never came is dropped after this long (an interrupted burst). */
+export const OPEN_ACTION_TTL_MS = 10_000;
 
-  constructor(private readonly opts: ActionFadeOptions) {}
+interface OpenAction {
+  actorId: CombatantId;
+  targets: readonly CombatantId[];
+  at: number;
+}
+
+/**
+ * FFX-2's ATB actions overlap: a cast's action-start, then another girl's whole action, then the
+ * cast's own damage or heal and its action-end (measured live, Chapter IV). The presenter's signal
+ * holds one action at a time and cancels the cast when the second starts, so the fade also reads
+ * the event stream the HUD hears first (`observe`), keeps every action still open, and protects
+ * the figures of all of them (a blow can land inside a later action's start). The presenter also cancels at every burst's end, and an
+ * FFX-2 cast can span two bursts, so once the stream is heard a cancel ends nothing: the action's
+ * own action-end does, or victory, defeat, the HUD's unmount, or {@link OPEN_ACTION_TTL_MS}.
+ */
+export class ActionFade {
+  private open: OpenAction[] = [];
+  private lastEvent: string | null = null;
+  private readonly now: () => number;
+
+  constructor(private readonly opts: ActionFadeOptions) {
+    this.now = opts.now ?? (() => (typeof performance !== 'undefined' ? performance.now() : Date.now()));
+  }
+
+  /** `HudPort.onEvent`: every event, heard just before it plays. */
+  observe(event: BattleEvent): void {
+    this.lastEvent = event.type;
+    if (event.type === 'action-start') this.push(event.actorId, event.targets ?? []);
+    else if (event.type === 'action-end') this.drop(event.actorId);
+    else if (event.type === 'victory' || event.type === 'defeat') this.open = [];
+    else return;
+    this.apply();
+  }
 
   /** `HudPort.setActing`. */
   signal(s: ActingSignal): void {
-    if (s.phase === 'action-start') this.acting = { actorId: s.actorId, targets: [...s.targets] };
-    else this.acting = null;
+    if (s.phase === 'action-start') {
+      if (this.lastEvent !== 'action-start') this.push(s.actorId, s.targets);
+    } else if (s.phase === 'action-end') {
+      if (this.lastEvent !== 'action-end') this.drop(s.actorId);
+    } else if (this.lastEvent === null) {
+      // A cancel: with no event stream (a test double) it clears. With one it is the presenter's
+      // one slot letting go (a second action started, a turn started, or the burst ended with the
+      // cast still going: it resumes in the next burst), and the stream's action-end, victory or
+      // defeat, or the stale timer, ends it instead.
+      this.open = [];
+    }
     this.apply();
   }
 
   /** Per frame while an action plays: the camera and the figures move. */
   update(): void {
-    if (this.acting) this.apply();
+    if (!this.open.length) return;
+    const t = this.now();
+    const live = this.open.filter((a) => t - a.at <= OPEN_ACTION_TTL_MS);
+    if (live.length !== this.open.length) this.open = live;
+    this.apply();
   }
 
   /** Every card back, and nothing acting (the HUD unmounted, the battle ended). */
   reset(): void {
-    this.acting = null;
+    this.open = [];
+    this.lastEvent = null;
     this.apply();
   }
 
   get active(): boolean {
-    return this.acting !== null;
+    return this.open.length > 0;
+  }
+
+  private push(actorId: CombatantId, targets: readonly CombatantId[]): void {
+    this.open.push({ actorId, targets: [...targets], at: this.now() });
+  }
+
+  private drop(actorId: CombatantId): void {
+    for (let i = this.open.length - 1; i >= 0; i--) {
+      if (this.open[i]!.actorId === actorId) {
+        this.open.splice(i, 1);
+        return;
+      }
+    }
   }
 
   private apply(): void {
-    const zones = this.acting ? actionZones(this.acting, this.opts.rect) : [];
+    // Every open action's figures: a blow can land inside a later action's start (Bahamut's Attack
+    // hit after Yuna's Cure began), so no one of them is safely "the" action on screen.
+    const zones = this.open.flatMap((a) => actionZones(a, this.opts.rect));
     for (const card of this.opts.cards()) {
       if (!card) continue;
       let hit = false;

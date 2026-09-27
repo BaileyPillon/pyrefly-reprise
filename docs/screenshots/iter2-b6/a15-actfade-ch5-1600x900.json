@@ -1,0 +1,344 @@
+{
+ "id": "ffx2-vegnagun-shuyin",
+ "size": "1600x900",
+ "errors": [],
+ "samples": 352,
+ "actingSamples": 160,
+ "violations": [
+  {
+   "t": 10594,
+   "now": 23927,
+   "lastSig": {
+    "t": 23859,
+    "phase": "action-start",
+    "actor": "vegnagun-tail"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "vegnagun-tail",
+   "ability": "Noli Me Tangere",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "vegnagun-tail",
+     "px": 90103,
+     "cls": true,
+     "op": 0.48
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  },
+  {
+   "t": 13120,
+   "now": 26453,
+   "lastSig": {
+    "t": 26087,
+    "phase": "action-start",
+    "actor": "paine"
+   },
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "paine",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "sgd__stack",
+     "zone": "vegnagun-tail",
+     "px": 2027,
+     "cls": true,
+     "op": 0.81
+    },
+    {
+     "card": "eint__panel",
+     "zone": "vegnagun-tail",
+     "px": 90571,
+     "cls": true,
+     "op": 0.81
+    }
+   ],
+   "faded": 2,
+   "awaiting": false
+  },
+  {
+   "t": 14999,
+   "now": 28331,
+   "lastSig": {
+    "t": 28299,
+    "phase": "action-start",
+    "actor": "vegnagun-tail"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "vegnagun-tail",
+   "ability": "Tail Beam",
+   "hits": [
+    {
+     "card": "mad__card",
+     "zone": "vegnagun-tail",
+     "px": 38009,
+     "cls": true,
+     "op": 0.81
+    },
+    {
+     "card": "eint__panel",
+     "zone": "vegnagun-tail",
+     "px": 90571,
+     "cls": true,
+     "op": 0.81
+    }
+   ],
+   "faded": 2,
+   "awaiting": true
+  },
+  {
+   "t": 16964,
+   "now": 30296,
+   "lastSig": {
+    "t": 30243,
+    "phase": "action-start",
+    "actor": "vegnagun-tail"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "vegnagun-tail",
+   "ability": "Tail Beam",
+   "hits": [
+    {
+     "card": "mad__card",
+     "zone": "vegnagun-tail",
+     "px": 37765,
+     "cls": true,
+     "op": 0.64
+    },
+    {
+     "card": "eint__panel",
+     "zone": "vegnagun-tail",
+     "px": 90571,
+     "cls": true,
+     "op": 0.64
+    }
+   ],
+   "faded": 2,
+   "awaiting": true
+  },
+  {
+   "t": 19171,
+   "now": 32503,
+   "lastSig": {
+    "t": 32491,
+    "phase": "action-start",
+    "actor": "yuna"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "yuna",
+   "ability": "Pray",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "yuna",
+     "px": 1439,
+     "cls": true,
+     "op": 1
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  },
+  {
+   "t": 19277,
+   "now": 32610,
+   "lastSig": {
+    "t": 32491,
+    "phase": "action-start",
+    "actor": "yuna"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "yuna",
+   "ability": "Pray",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "yuna",
+     "px": 1693,
+     "cls": true,
+     "op": 0.12
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  },
+  {
+   "t": 21525,
+   "now": 34856,
+   "lastSig": {
+    "t": 34774,
+    "phase": "action-start",
+    "actor": "vegnagun-tail"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "vegnagun-tail",
+   "ability": "Tail Beam",
+   "hits": [
+    {
+     "card": "mad__card",
+     "zone": "vegnagun-tail",
+     "px": 46587,
+     "cls": true,
+     "op": 0.48
+    },
+    {
+     "card": "eint__panel",
+     "zone": "vegnagun-tail",
+     "px": 90571,
+     "cls": true,
+     "op": 0.48
+    }
+   ],
+   "faded": 2,
+   "awaiting": true
+  },
+  {
+   "t": 26004,
+   "now": 39337,
+   "lastSig": {
+    "t": 38991,
+    "phase": "action-start",
+    "actor": "paine"
+   },
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "paine",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "vegnagun-tail",
+     "px": 90571,
+     "cls": true,
+     "op": 1
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  },
+  {
+   "t": 26098,
+   "now": 39430,
+   "lastSig": {
+    "t": 38991,
+    "phase": "action-start",
+    "actor": "paine"
+   },
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "paine",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "sgd__stack",
+     "zone": "vegnagun-tail",
+     "px": 1330,
+     "cls": true,
+     "op": 0.22
+    },
+    {
+     "card": "eint__panel",
+     "zone": "vegnagun-tail",
+     "px": 90571,
+     "cls": true,
+     "op": 0.12
+    }
+   ],
+   "faded": 2,
+   "awaiting": false
+  },
+  {
+   "t": 28302,
+   "now": 41635,
+   "lastSig": {
+    "t": 41624,
+    "phase": "action-start",
+    "actor": "yuna"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "yuna",
+   "ability": "Pray",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "yuna",
+     "px": 1602,
+     "cls": true,
+     "op": 1
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  },
+  {
+   "t": 28412,
+   "now": 41744,
+   "lastSig": {
+    "t": 41624,
+    "phase": "action-start",
+    "actor": "yuna"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "yuna",
+   "ability": "Pray",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "yuna",
+     "px": 1853,
+     "cls": true,
+     "op": 0.12
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  },
+  {
+   "t": 30541,
+   "now": 43873,
+   "lastSig": {
+    "t": 43826,
+    "phase": "action-start",
+    "actor": "vegnagun-tail"
+   },
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "vegnagun-tail",
+   "ability": "Tail Beam",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "vegnagun-tail",
+     "px": 90571,
+     "cls": true,
+     "op": 0.81
+    }
+   ],
+   "faded": 1,
+   "awaiting": false
+  }
+ ],
+ "fadedSeen": 168,
+ "shots": [
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand8/ffx2-vegnagun-shuyin-1600x900-faded.jpg",
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand8/ffx2-vegnagun-shuyin-1600x900-hit-1.jpg",
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand8/ffx2-vegnagun-shuyin-1600x900-hit-2.jpg"
+ ],
+ "violationCount": 22,
+ "byKind": {
+  "fadingOut": 27,
+  "notFaded": 0
+ },
+ "notFadedSamples": []
+}
