@@ -103,6 +103,17 @@ export interface CameraPort {
    * (`BattlePresenterDepartures.ts`, `BODY_SHOT`); `BattleCamera.addRig`.
    */
   addRig?(name: string, rig: { position: [number, number, number]; lookAt: [number, number, number]; fov?: number; sway?: number }): void;
+  /**
+   * How `rig`, pushed in by `push`, frames these figures (`FrameFit.ts`):
+   * whether each keeps its minimum share of its painted quad inside the frame
+   * with no push, and the largest push up to `push` that cuts nobody who was
+   * in. Optional and additive (A-11, A-1): without it every shot plays as asked.
+   */
+  frame?(
+    rig: string,
+    push: number,
+    subjects: ReadonlyArray<{ actor: ActorHandle; min: number; floor?: number }>,
+  ): { fits: boolean; push: number; worst: number } | null;
   readonly rigNames: string[];
   readonly rigName: string;
 }

@@ -53,7 +53,7 @@ export async function actionStart(
   if (event.command.kind === 'overdrive') {
     await ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE');
   } else {
-    await ctx.moments.actionOpen(event.actorId, pose);
+    await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? []);
   }
 
   if (pose === 'attack') {

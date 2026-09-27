@@ -1,5 +1,6 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { TweenGroup, damp, type EasingFn, type EasingName } from './Tween.ts';
+import { frameFit, type FitSubject, type FrameVerdict } from './FrameFit.ts';
 
 export interface CameraRig {
   /** Camera world position. */
@@ -128,6 +129,12 @@ export class BattleCamera {
     });
   }
 
+  /** How a rig, pushed in by `push`, frames these figures (`FrameFit.ts`; A-11, A-1). */
+  frame(rig: string, push: number, subjects: ReadonlyArray<{ actor: unknown; min: number; floor?: number }>): FrameVerdict | null {
+    const r = this.rigs.get(rig);
+    return r ? frameFit(this.camera, r, push, subjects as readonly FitSubject[]) : null;
+  }
+
   getRig(name: string): CameraRig | undefined {
     const r = this.rigs.get(name);
     if (!r) return undefined;
@@ -225,10 +232,7 @@ export class BattleCamera {
     this.targetPos.add(this.scratch.set(dx, dy, dz));
   }
 
-  /**
-   * Impact shake. `amplitude` is in world units (0.05–0.2 reads well at the
-   * battle distance) and damps linearly over `ms`.
-   */
+  /** Impact shake: `amplitude` in world units (0.05–0.2 reads well), damping linearly over `ms`. */
   shake(amplitude = 0.1, ms = 260): void {
     // Re-triggering during a shake takes the stronger of the two.
     if (this.shakeLeftMs > 0 && amplitude < this.shakeAmp) return;
@@ -238,10 +242,7 @@ export class BattleCamera {
     this.shakePhase = Math.random() * Math.PI * 2;
   }
 
-  /**
-   * Punch in toward the look-at point by `fraction` of the current distance and
-   * ease back out. FOV is never animated; this is a dolly.
-   */
+  /** Punch in toward the look-at point by `fraction` of the distance and ease back out (a dolly, never FOV). */
   punch(fraction = 0.12, ms = 420): Promise<void> {
     const inMs = Math.max(1, ms * 0.28);
     this.fx.to(this.punchAmount, fraction, {
@@ -292,9 +293,7 @@ export class BattleCamera {
   }
 
   /** How far in the held dolly currently is, as a fraction. Read by tests. */
-  get pushAmount(): number {
-    return this.punchAmount;
-  }
+  get pushAmount(): number { return this.punchAmount; }
 
   /** Current dutch roll, in degrees. */
   get rollDeg(): number {

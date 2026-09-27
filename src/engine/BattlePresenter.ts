@@ -291,6 +291,8 @@ export class BattlePresenter {
     // first burst of a fight (and of every later link of a chain, which re-runs
     // on a fresh engine) happens before any `syncHud` in the loop below.
     this.seedVitals(engine);
+    // A-1 (FFX-2 only): an engine with an ATB clock gets the wait-camera fit rule (`ShotFit.ts`).
+    this.ctx.moments.ffx2Framing = typeof (engine as { tick?: unknown }).tick === 'function';
 
     // The opening shot, once per encounter: the party slides in, then the
     // headline enemy gets its slow push and name plate. A chained formation

@@ -55,7 +55,9 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   intro: { position: [0.3, 2.9, 14.2], lookAt: [0.7, 2.6, -4.0], fov: 30, sway: 1.4 },
   idle: { position: CAMERA_REF, lookAt: [0.55, 1.95, -1.6], fov: 32 },
   action: { position: [0.3, 2.1, 9.7], lookAt: [1.25, 1.85, -1.6], fov: 32, sway: 0.7 },
-  party: { position: [-1.4, 1.9, 7.0], lookAt: [-2.3, 1.3, 0.4], fov: 32, sway: 0.7 },
+  // A-11: re-aimed onto layout B's party (x 0 to 1.3, Bailey's 2026-09-25 pick); the old aim framed
+  // the pre-B arc and left Rikku wholly out of the shot and Tidus cut at the edge.
+  party: { position: [0.6, 1.9, 7.7], lookAt: [-0.3, 1.3, 1.1], fov: 32, sway: 0.7 },
   enemy: { position: [1.2, 2.1, 6.4], lookAt: [2.2, 1.8, -3.0], fov: 32, sway: 0.7 },
   /**
    * Wide enough to hold the party and, behind them, Seymour's body (D-046: he

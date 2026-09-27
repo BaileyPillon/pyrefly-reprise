@@ -40,6 +40,7 @@ import type {
   PlaybackSpeed,
 } from './BattlePresenterPorts.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
+import { ffx2Push, ffx2Shot, fittedPush } from './ShotFit.ts';
 
 /** Authored durations, in ms at `speed: 'normal'`. The one place to tune. */
 export const MOMENT_TIMING = {
@@ -135,6 +136,15 @@ export class BattleMoments {
   hurry = false;
   /** A-13: an attack was opened and its first hit has not landed yet. */
   private rollOwed = false;
+  /**
+   * A-1 (FFX-2 only): shots keep the enemy in play and the party on screen,
+   * or fall back to the master (`ShotFit.ts`). Set by the presenter for an
+   * engine with an ATB clock; FFX's CTB keeps its cuts.
+   */
+  ffx2Framing = false;
+  /** The enemy in play for A-1: the acting one, else the one targeted, else the headline boss. */
+  private focus: CombatantId | null = null;
+  private headline: CombatantId | null = null;
 
   constructor(deps: MomentDeps) {
     this.deps = deps;
@@ -215,6 +225,22 @@ export class BattleMoments {
     await this.move(rig, base);
   }
 
+  /**
+   * The rig and push a moment actually takes: A-1's FFX-2 fallback, then
+   * A-11's push that stops short of cutting the party (`ShotFit.ts`).
+   */
+  private fit(rig: string | null, push: number): { rig: string | null; push: number } {
+    const stage = this.deps.stage;
+    if (!this.ffx2Framing) return { rig, push: fittedPush(stage, this.cam, rig, push) };
+    const focus = this.focus ?? this.headline;
+    const chosen = ffx2Shot(stage, this.cam, rig, push, focus);
+    return { rig: chosen, push: ffx2Push(stage, this.cam, chosen, push, focus) };
+  }
+
+  private enemy(id: CombatantId | undefined): CombatantId | null {
+    return id !== undefined && this.deps.stage.sideOf(id) === 'enemy' ? id : null;
+  }
+
   private cue(key: string, volume = 1): void {
     try {
       this.deps.audio?.playSfx(key, { volume });
@@ -256,6 +282,7 @@ export class BattleMoments {
     bossId?: CombatantId | null;
     bossName?: string | null;
   } = {}): Promise<void> {
+    this.headline = opts.bossId ?? this.headline;
     const intro = this.pick('intro', 'idle');
     this.cut(intro);
     if (this.skipping) {
@@ -320,7 +347,7 @@ export class BattleMoments {
 
     const rig = this.rigFor(bossId);
     this.cue('boss-roar', 0.9);
-    const push = this.cam.push?.(MOMENT_PUSH.reveal, this.ms(MOMENT_TIMING.revealPush));
+    const push = this.cam.push?.(fittedPush(this.deps.stage, this.cam, rig, MOMENT_PUSH.reveal), this.ms(MOMENT_TIMING.revealPush));
     const plate = bossName
       ? this.deps.moments?.nameSlab({
           title: bossName,
@@ -353,18 +380,19 @@ export class BattleMoments {
    * away fast, a `cast` holds on the caster long enough to see the spell wind
    * up before the impact cut takes the frame to the target.
    */
-  async actionOpen(actorId: CombatantId, pose: string): Promise<void> {
+  async actionOpen(actorId: CombatantId, pose: string, targets: readonly CombatantId[] = []): Promise<void> {
     this.actions++;
     this.onActionRig = true;
     // A-13: the roll lands on the attack's first hit (`impact`), not the swing.
     this.rollOwed = pose === 'attack';
-    const rig = this.rigFor(actorId);
+    this.focus = this.enemy(actorId) ?? targets.map((t) => this.enemy(t)).find((t) => t !== null) ?? null;
     if (this.skipping) {
-      this.cut(rig);
+      this.cut(this.fit(this.rigFor(actorId), 0).rig);
       return;
     }
-    void this.move(rig, MOMENT_TIMING.actionIn);
-    void this.cam.push?.(MOMENT_PUSH.action, this.ms(MOMENT_TIMING.actionIn * 2));
+    const shot = this.fit(this.rigFor(actorId), MOMENT_PUSH.action);
+    void this.move(shot.rig, MOMENT_TIMING.actionIn);
+    void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.actionIn * 2));
     if (pose === 'cast') await this.deps.sleep(MOMENT_TIMING.castHold);
   }
 
@@ -379,7 +407,8 @@ export class BattleMoments {
       return;
     }
     if ((opts.hitIndex ?? 0) !== 0) return;
-    const rig = this.rigFor(targetId);
+    this.focus = this.focus ?? this.enemy(targetId);
+    const rig = this.fit(this.rigFor(targetId), MOMENT_PUSH.action).rig;
     if (rig && rig !== this.cam.rigName) {
       this.cut(rig);
       this.onActionRig = true;
@@ -425,6 +454,7 @@ export class BattleMoments {
   async overdriveStart(actorId: CombatantId, name: string): Promise<void> {
     this.actions++;
     this.onActionRig = true;
+    this.focus = this.enemy(actorId);
     const rig = this.rigFor(actorId);
     if (this.skipping) {
       this.cut(rig);
@@ -433,8 +463,9 @@ export class BattleMoments {
     this.overdriveOpen = true;
     this.cue('overdrive-full', 1);
     const bars = this.deps.moments?.letterbox(true, this.ms(MOMENT_TIMING.odLetterbox));
-    void this.move(rig, MOMENT_TIMING.actionIn);
-    void this.cam.push?.(MOMENT_PUSH.overdrive, this.ms(MOMENT_TIMING.odPush));
+    const shot = this.fit(rig, MOMENT_PUSH.overdrive);
+    void this.move(shot.rig, MOMENT_TIMING.actionIn);
+    void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.odPush));
     await bars;
     await this.deps.moments?.nameSlab({
       title: name,
@@ -465,18 +496,16 @@ export class BattleMoments {
    */
   async telegraph(enemyId: CombatantId, stage: 1 | 2, name?: string): Promise<void> {
     if (this.skipping) return;
-    const rig = this.rigFor(enemyId);
+    this.focus = enemyId;
     this.onActionRig = true;
     this.telegraphOpen = true;
     this.telegraphAtAction = this.actions;
     const imminent = stage === 2;
+    const shot = this.fit(this.rigFor(enemyId), MOMENT_PUSH.telegraph * (imminent ? 1.35 : 1));
 
     this.deps.moments?.vignette(true, { bpm: TELEGRAPH_BPM[stage] });
-    void this.cam.push?.(
-      MOMENT_PUSH.telegraph * (imminent ? 1.35 : 1),
-      this.ms(MOMENT_TIMING.telegraphZoom),
-    );
-    await this.move(rig, MOMENT_TIMING.telegraphZoom * 0.4);
+    void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.telegraphZoom));
+    await this.move(shot.rig, MOMENT_TIMING.telegraphZoom * 0.4);
     if (imminent && name) {
       await this.deps.moments?.nameSlab({
         title: name,
@@ -502,8 +531,9 @@ export class BattleMoments {
     this.revealed.delete(enemyId);
     if (this.skipping) return;
     this.onActionRig = true;
-    void this.cam.push?.(MOMENT_PUSH.reveal, this.ms(MOMENT_TIMING.formHold));
-    await this.move(this.rigFor(enemyId), MOMENT_TIMING.formHold * 0.35);
+    const rig = this.rigFor(enemyId);
+    void this.cam.push?.(fittedPush(this.deps.stage, this.cam, rig, MOMENT_PUSH.reveal), this.ms(MOMENT_TIMING.formHold));
+    await this.move(rig, MOMENT_TIMING.formHold * 0.35);
   }
 
   /** Let the new form settle back into the neutral framing. */
