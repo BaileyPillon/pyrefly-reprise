@@ -31,6 +31,7 @@ import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
 import { preloadBattle } from './battlePreload.ts';
+import { entryCardWait } from './entryCard.ts';
 import { boardWhenWarm } from './frontendWarm.ts';
 import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
@@ -357,6 +358,7 @@ export class GameFlow {
       let swapped: Promise<boolean> = Promise.resolve(true);
       await playBattleSwirl(this.app.uiRoot, {
         instant: opts.speed === 'skip',
+        whileCovered: entryCardWait(this.app.uiRoot, chapter), // A-3: the card over the ink on a slow load
         onCover: () => {
           swapped = this.show(battle);
           return swapped.then(() => undefined);
