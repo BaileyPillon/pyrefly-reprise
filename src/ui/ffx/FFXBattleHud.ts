@@ -29,6 +29,7 @@ import { partyFaceRects } from './plateFaces.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { ActionHelpBar } from './actionBanner.ts';
 import { ActingFade } from './actingFade.ts';
+import { IntentOpeningHold } from '../ffx2/intentOpeningHold.ts';
 import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
 import { clipOffStack } from './bracketClip.ts';
@@ -149,6 +150,8 @@ export class FFXBattleHud implements HudPort {
   private readonly actionHelp = new ActionHelpBar();
   /** PR-0157: the cards step back while an action plays (B2's acting signal). */
   private readonly actingFade: ActingFade;
+  /** PR-0146 (FFX half): the slab waits for the opening, FFX-2's hold reused. */
+  private readonly openingHold = new IntentOpeningHold((s) => this.intent.setSuspended(s));
   /** PR-0031 / PR-0178: the top TARGET plate, built OFF (`targetPlateFfx.ts`). */
   private readonly targetPlate = new FfxTargetPlate();
   private readonly sensorPanel = new SensorPanel();
@@ -403,6 +406,7 @@ export class FFXBattleHud implements HudPort {
       // 2026-09-19: a change true of one game is not applied to the other.
       density: 'brief',
     });
+    this.openingHold.start();
     this.layout();
     window.addEventListener('resize', this.onResize, { passive: true });
   }
@@ -508,7 +512,7 @@ export class FFXBattleHud implements HudPort {
    * `EnemyIntentPanel.setSuspended` (PR-0122).
    */
   setIntentSuspended(suspended: boolean): void {
-    this.intent.setSuspended(suspended);
+    this.openingHold.pause(suspended); // folded with the opening hold (PR-0146)
   }
 
   /** The intent slab, for tests and the debug snapshot. */
@@ -536,6 +540,7 @@ export class FFXBattleHud implements HudPort {
     // "on actor change" hook both at once: the presenter only asks for the next
     // command after the previous one has been submitted and played out.
     this.clearTransientOverlays();
+    this.openingHold.decision(); // PR-0146: the opening is over
 
     const triggerOnly = commands.length > 0 && commands.every((c) => c.command.kind === 'trigger');
     if (triggerOnly) return this.triggerPrompt.open(commands, combatants);
@@ -663,6 +668,7 @@ export class FFXBattleHud implements HudPort {
 
   setVisible(visible: boolean): void {
     this.el.hidden = !visible;
+    this.openingHold.visible(visible);
     if (visible) this.layout();
   }
 
