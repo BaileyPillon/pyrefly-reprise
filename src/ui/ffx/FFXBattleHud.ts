@@ -616,10 +616,17 @@ export class FFXBattleHud implements HudPort {
     // abandoned by a strategy racing the menu.
     this.removeMinigameOverlays();
     // PR-0128: the actor's plate goes above the slab (`overdrivePlate.ts`),
-    // and the guide card steps aside for it (`overdriveFocus.ts`).
+    // and the guide card steps aside for it (`overdriveFocus.ts`). Under the
+    // upright phone battle layout (`html[data-phone-battle]`, phoneBattle.ts)
+    // the plate lands under the rail and overlaps the Overdrive slab
+    // (RCHK-B2A-01), so it stays off there, matching main's behaviour; desktop
+    // and landscape phone (no attribute) still get it.
     const actorId = this.minigameActorId ?? this.currentActorId;
     this.minigameActorId = null;
-    const takePlateDown = showOverdrivePlate(this.bannerEl, actorId ? this.nameOf(actorId) : '');
+    const onPhoneBattle = !!this.el.ownerDocument.documentElement.dataset['phoneBattle'];
+    const takePlateDown = onPhoneBattle
+      ? (): void => {}
+      : showOverdrivePlate(this.bannerEl, actorId ? this.nameOf(actorId) : '');
     return withOverdriveFocus(this.el, () => dispatchMinigame(this.stage, kind, params)).finally(() => {
       takePlateDown();
       this.removeMinigameOverlays();

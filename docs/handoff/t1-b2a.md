@@ -70,7 +70,7 @@ The single blocker from the CHECK above was repaired. Nothing was backed out.
 
 | Item | Result | What changed | Check |
 |---|---|---|---|
-| CHK-B2A-01: PR-0128, name-plate half (FFX only) | **Fixed** (a8bb6434) | **Root cause:** the engine emits `minigame-request` before any `message`, and the decision that picked the Overdrive had already hidden `.ig-banner` (`clearTransientOverlays`). So nothing put a plate above the slab. The builder's frame had one only because the probe called `hud.setMessage` by hand. The HUD now records who the `minigame-request` names. `openMinigame` writes "<name> · Overdrive" into the HUD's own banner (new `src/ui/ffx/overdrivePlate.ts`). The plate comes down when the overlay settles, including on a throw or a rejection, unless a `message` has replaced it in the meantime. It applies to every FFX Overdrive overlay because `targets.json` says the others follow the Swordplay pattern. No new element was designed: this is the approved tile's plate. | `ui-ffx-overdrive-plate.test.ts` (3 tests) failed before the fix and passes after. It drives the HUD the way the presenter does and never calls a message path. **Real keys**, production build (`vite build` + `vite preview` on 5980, stopped by its PID), headless Chromium with `PYREFLY_BROWSER=gpu`, Ch II seed 1, Tidus's gauge set to 100 (*injected*, as in round 13's own repro), then OVERDRIVE > Slice & Dice > Enter. Frame 0.5 s later: the plate reads "Tidus OVERDRIVE". At 1600x900 its box is 45,44 359x78, above the slab at 36,140. At 2000x1012 its box is 151,50 252x88, above the slab at 140,157. It is the topmost element at 15/50/85 % of its width, and the guide card is hidden. The same result holds with the coach line on at 1600x900. A real Enter closes the overlay, and the plate and guide card follow correctly. Frames: `docs/screenshots/t1-b2a/repair/overlay-open-1600x900.jpg`, `-2000x1012.jpg`, `-1600x900-coach.jpg`. Probe: `tools/zz-b2a-repair.tmp/` (untracked). |
+| CHK-B2A-01: PR-0128, name-plate half (FFX only) | **Fixed** (a8bb6434) | **Root cause:** the engine emits `minigame-request` before any `message`, and the decision that picked the Overdrive had already hidden `.ig-banner` (`clearTransientOverlays`). So nothing put a plate above the slab. The builder's frame had one only because the probe called `hud.setMessage` by hand. The HUD now records who the `minigame-request` names. `openMinigame` writes "<name> · Overdrive" into the HUD's own banner (new `src/ui/ffx/overdrivePlate.ts`). The plate comes down when the overlay settles, including on a throw or a rejection, unless a `message` has replaced it in the meantime. It applies to every FFX Overdrive overlay because `targets.json` says the others follow the Swordplay pattern. No new element was designed: this is the approved tile's plate. | `ui-ffx-overdrive-plate.test.ts` (3 tests) failed before the fix and passes after. It drives the HUD the way the presenter does and never calls a message path. **Real keys**, production build (`vite build` + `vite preview` on 5980, stopped by its PID), headless Chromium with `PYREFLY_BROWSER=gpu`, Ch II seed 1, Tidus's gauge set to 100 (*injected*, as in round 13's own repro), then OVERDRIVE > Slice & Dice > Enter. Frame 0.5 s later: the plate reads "Tidus OVERDRIVE". At 1600x900 its box is 45,44 359x78, above the slab at 36,140. At 2000x1012 its box is 151,50 403x88, above the slab at 140,157. It is the topmost element at 15/50/85 % of its width, and the guide card is hidden. The same result holds with the coach line on at 1600x900. A real Enter closes the overlay, and the plate and guide card follow correctly. Frames: `docs/screenshots/t1-b2a/repair/overlay-open-1600x900.jpg`, `-2000x1012.jpg`, `-1600x900-coach.jpg`. Probe: `tools/zz-b2a-repair.tmp/` (untracked). |
 
 **Still open (not blockers of this batch, and unchanged):** PR-0128's tick labels (the HIT ×2 / ×4 / ×6 half) wait on Bailey's choice of words under rule 6. PR-0186 waits on a placement choice among options (a) to (c) in "Stopped" above. The acceptance check for PR-0128 names "four tick labels", so **PR-0128 as a whole stays open** until Bailey picks the tick wording. Only its plate half and its guide half are now met under real keys.
 
@@ -92,3 +92,52 @@ Branch `t1-b2a` at c62ee298. Own production build (`vite build --outDir dist-rec
 | **Upright phone, 390x844 (the phone battle layout)** | **Regression.** `phone-hud-parts.css` moves `.ig-banner` under the rail (top about 142), while the Overdrive slab keeps today's place (14,56 341x100, per the phone plan's "Overdrive minigames keep today's layout"). The new plate lands at 6,142 192x35, overlapping the slab by 2,629 px², and the slab's bottom edge clips the top of "Tidus OVERDRIVE". Before a8bb6434 the banner stayed hidden while an overlay was open on every size (CHECK timeline above; the code path is the same), so this collision is new. The slab itself stays readable. `od-yunalesca-tidus-390x844.jpg`. |
 
 **Verdict.** The original blocker (CHK-B2A-01) now meets its acceptance check at 1600x900 and 2000x1012, coach on and off, under real keys. **1 new blocker:** on an upright phone the new plate collides with the slab (introduced by a8bb6434, a regression against main and live). Keeping main's behaviour there (no plate while the overlay is open under `html[data-phone-battle='ffx']`) would remove it without a design choice; placing the plate somewhere on the phone is Bailey's call under rule 9. PR-0128 as a whole stays open for the tick-label wording, and PR-0186 for its placement choice, as recorded above.
+
+## FIX (RCHK-B2A-01, RCHK-B2A-02; 2026-09-26; FFX only)
+
+**RCHK-B2A-01, without a design choice.** `FFXBattleHud.openMinigame` now checks
+`this.el.ownerDocument.documentElement.dataset['phoneBattle']` (set only by
+`phoneBattle.ts`, only while the upright phone layout is on) before calling
+`showOverdrivePlate`. Under that layout the call is skipped and `takePlateDown`
+is a no-op, so the banner stays off for the whole overlay, matching main's
+behaviour before a8bb6434. Desktop and landscape phone (no `data-phone-battle`
+attribute) are untouched and still get the plate. No plate placement was
+designed for the phone; this only restores main's fallback.
+
+*Test first:* two cases were added to `tests/unit/ui-ffx-overdrive-plate.test.ts`
+("the upright phone battle layout (RCHK-B2A-01)"): with
+`document.documentElement.dataset.phoneBattle = 'ffx'` set, the banner stays
+`hidden` through `openMinigame`'s request and its settle; with the attribute
+absent, the plate still shows. The phone case failed (`expected false to be
+true`) before the fix and both pass after it.
+
+*Real keys, production build* (`vite build --outDir dist-fixcheck`, served by
+`vite preview` on port 5981, stopped by its PID; the build copy was removed
+afterwards), headless Chromium with `PYREFLY_BROWSER=gpu`, Ch "yunalesca"
+(Chapter XIV), Tidus's Overdrive gauge set to 100 (*injected*, as in every
+earlier round-13/CHECK repro), then real OVERDRIVE > Slice & Dice > Enter:
+
+- **390x844 (upright phone, `data-phone-battle="ffx"`):** no plate. `bannerText`
+  and `bannerBox` are both `null` through the whole overlay; the slab
+  (`14,56 341x100`) shows with 0 px overlap. `docs/screenshots/t1-b2a/fixcheck/od-yunalesca-tidus-390x844.jpg`.
+- **1600x900 (desktop, no `data-phone-battle`):** plate restored. Banner reads
+  "Tidus Overdrive" at `45,44 359x78`, topmost at 15/50/85% of its width, above
+  the slab at `36,140 853x251`; closes with the overlay in the same key press.
+  `docs/screenshots/t1-b2a/fixcheck/od-yunalesca-tidus-1600x900.jpg`.
+
+Probe: `tools/zz-b2a-fixcheck.tmp/` (untracked; copy of the recheck's `anyod.mjs`
+pointed at a fresh `SHOTS` dir).
+
+**RCHK-B2A-02.** The REPAIR table's 2000x1012 box read "252x88"; the RE-CHECK
+above had already found the real number from its own frame ("403x88") and
+called the REPAIR number a typo without fixing it. The REPAIR table (CHK-B2A-01
+row, above) now reads 403x88.
+
+**Checks after the fix.** `npx tsc --noEmit`: clean. Full
+`npx vitest run --testTimeout=60000`: exit 0, 455 files passed, 4 skipped, 8,338
+tests passed, 29 skipped, 1 todo (2 tests added to the plate suite). `node
+tools/orphans.mjs`: 24 orphaned, the same as main; no module touched here is
+orphaned.
+
+**Still open, unchanged:** PR-0128's tick-label wording (Bailey's choice, rule
+6) and PR-0186's placement choice ((a)/(b)/(c) above). Neither was touched.

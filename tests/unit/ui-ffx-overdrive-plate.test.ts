@@ -71,4 +71,37 @@ describe('the actor plate above an Overdrive slab (PR-0128)', () => {
     expect(text(root, 'chip')).toContain('Spiral Cut');
     hud.unmount();
   });
+
+  // RCHK-B2A-01: on an upright phone (`html[data-phone-battle='ffx']`) the
+  // plate lands under the rail and overlaps the Overdrive slab. Under that
+  // layout the plate stays off, matching main's behaviour (the banner stayed
+  // hidden while an overlay was open, on every size, before a8bb6434).
+  // Desktop and landscape phone (no `data-phone-battle` attribute) keep it.
+  describe('the upright phone battle layout (RCHK-B2A-01)', () => {
+    afterEach(() => {
+      delete document.documentElement.dataset['phoneBattle'];
+    });
+
+    it('does not show the plate while data-phone-battle="ffx" is set', async () => {
+      const { hud, root } = mountHud();
+      document.documentElement.dataset['phoneBattle'] = 'ffx';
+      hud.onEvent(request('tidus', 'tidus-timing'));
+      const pending = hud.openMinigame('tidus-timing', { timerMs: 60 });
+      expect(root.querySelector('.ffx-mg'), 'the overlay is open').not.toBeNull();
+      expect(banner(root).hidden, 'no plate under the phone battle layout').toBe(true);
+      await pending;
+      expect(banner(root).hidden).toBe(true);
+      hud.unmount();
+    });
+
+    it('still shows the plate when data-phone-battle is not set (desktop and landscape phone)', async () => {
+      const { hud, root } = mountHud();
+      hud.onEvent(request('tidus', 'tidus-timing'));
+      const pending = hud.openMinigame('tidus-timing', { timerMs: 60 });
+      expect(banner(root).hidden).toBe(false);
+      expect(text(root, 'name')).toBe('Tidus');
+      await pending;
+      hud.unmount();
+    });
+  });
 });
