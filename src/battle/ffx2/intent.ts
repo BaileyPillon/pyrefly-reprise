@@ -48,6 +48,7 @@ import { canAct } from './statuses.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
 import type { RandomTarget } from '../common/intentTargets.ts';
 import { ffx2RandomTarget } from './intentRandom.ts';
+import { inertLead, setToLead } from './intentLead.ts';
 
 /** See the FFX twin: enough samples to catch a real branch, few enough to cache. */
 export const SAMPLE_COUNT = 24;
@@ -230,13 +231,17 @@ export function describeAbility(def: AbilityDef): string {
   const where = TARGET_WORD[def.targeting] ?? 'its target';
   const heals = def.flags.includes('heals');
 
-  // PR-0188, the FFX-2 half of the same builder (CHK-020): a `formula: 'none'` row with no status
-  // deals no damage ("non-elemental damage to itself" was false), and a sentence starts upper case.
-  const inert = def.formula === 'none' && def.statusEffects.length === 0 && !heals;
+  // PR-0188, the FFX-2 half of the same builder (CHK-020): a `formula: 'none'` row that does nothing
+  // says so. `intentLead.ts` keeps Delta Attack's "set to" and a Dispel's removal true (B6CHK-01/02).
+  const setTo = def.formula === 'none' ? setToLead(def, where) : null;
+  const lead = inertLead(def, where, statusWord);
+  const inert = lead !== null;
   if (def.formula === 'none' && def.statusEffects.length > 0) {
     parts.push(`Inflicts ${def.statusEffects.map((s) => statusWord(s.status)).join(', ')} on ${where}`);
-  } else if (inert) {
-    parts.push(def.removesStatuses.length > 0 ? `Cures ${def.removesStatuses.map(statusWord).join(', ')} on ${where}` : 'Deals no damage');
+  } else if (setTo) {
+    parts.push(setTo);
+  } else if (lead) {
+    parts.push(lead);
   } else if (heals) {
     parts.push(`Restores HP to ${where}`);
   } else {
