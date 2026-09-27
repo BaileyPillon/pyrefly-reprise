@@ -32,7 +32,7 @@ import { activeGateBonuses, breaksDamageLimit, gateStatTotal, waitDownPercent, w
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { applyStatus } from './statuses.ts';
-import { SEPARATE_BATTLE_GAUGES } from './constants.ts';
+import { LEBLANC_SCRIPT_SINIROTHX, SEPARATE_BATTLE_GAUGES } from './constants.ts';
 
 function emptyAtb(agi: number): Ffx2Unit['atb'] {
   return { ticks: 0, required: baseRequired(agi), gauge: 0, charging: null, recovery: 0 };
@@ -332,6 +332,8 @@ export function buildState(
       ...(enemies.timedAilmentDefaults ? { timedAilmentDefaults: true } : {}), // `statuses.ts`, Chapter XIII
       ...(enemies.actionTimeSeconds ? { actionTimeSeconds: enemies.actionTimeSeconds } : {}), // `action-time.ts` (E4), OFF
       canEscape: setup.canEscape ?? enemies.canEscape ?? false,
+      // PR-0106's switch, read by `ai/leblanc-syndicate.ts`; absent (OFF) leaves every state as it was.
+      ...((options.leblancScriptSinirothX ?? LEBLANC_SCRIPT_SINIROTHX) ? { leblancScriptSinirothX: true } : {}),
       ...inventoryFlags(party, options),
     },
   };

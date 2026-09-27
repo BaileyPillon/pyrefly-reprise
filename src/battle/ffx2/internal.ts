@@ -197,6 +197,8 @@ export interface Ffx2EngineOptions {
   menuCancelOnlyDelayAbilities?: boolean;
   /** `constants.ts` SEPARATE_BATTLE_GAUGES (PR-0107, Chapter VI's Acts II and III), for a measurement run. */
   separateBattleGauges?: boolean;
+  /** `constants.ts` LEBLANC_SCRIPT_SINIROTHX (PR-0106, Chapter VI's Leblanc), for a measurement run. */
+  leblancScriptSinirothX?: boolean;
 }
 
 /** The party's live state as it crosses from one chained group to the next. */

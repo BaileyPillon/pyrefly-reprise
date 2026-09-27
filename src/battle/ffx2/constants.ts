@@ -46,6 +46,17 @@ export const STATUS_CLOCKS_HELD_AT: Readonly<Record<AtbSpeed, ReadonlySet<string
 };
 
 /**
+ * PR-0106's switch, **OFF** until Bailey rules (plan §8 Q4): Leblanc's script as SinirothX prints it
+ * (`research/ffx2-leblanc-syndicate.md` §19, GameFAQs FAQ 31807, **GameFAQs' reading, our estimate**):
+ * the failsafe Not-So-Mighty Guard fires **once**, on her turn 25 + No Love Lost uses (read "on", as
+ * the No Love Lost line is), and turn 5 of her loop is Fan Slap, not a repeat of turn 1. It conflicts
+ * with the FF Wiki transcription, which the OFF script follows (§5.3; its every-turn failsafe is an
+ * AUTHORED reading with no source, §19.2). The engine sets `flags.leblancScriptSinirothX` for the AI
+ * when on; `Ffx2EngineOptions.leblancScriptSinirothX` overrides it for a measurement run. FFX-2 only.
+ */
+export const LEBLANC_SCRIPT_SINIROTHX = false;
+
+/**
  * PR-0107's switch, **OFF** until Bailey rules: a chained link flagged
  * `EnemyGroupDef.opensAsSeparateBattle` (Chapter VI's Acts II and III, separate battles in the
  * source) opens on randomised bars (§1.6, `[single source]`) instead of the continuation's zero.
