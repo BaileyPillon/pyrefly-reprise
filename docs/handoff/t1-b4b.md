@@ -213,3 +213,38 @@ reads **backed out (`7d3d9081`)** instead of `db0bd923`. The committed frames
 the backed-out routing from before the REPAIR pass; they are historical evidence for that pass, not a
 claim that PR-0215 is fixed — the corrected row and the REPAIR/RE-CHECK sections above are the
 authoritative state (PR-0215 open, pending Bailey's wording pick).
+
+## FINAL CHECK (independent, 2026-09-26, not the fixer)
+
+Checked `fc43a768` (the PLAY-MJS-MERGE-GATE fix and the HANDOFF-STALE-ROW correction). Case: both games
+(critic harness plumbing). `git diff 77d66c75..fc43a768` touches only `critic/runner/lib/play.mjs` (one
+loop) and this file, so no other item in the batch could have moved.
+
+**Suite.** `npx tsc --noEmit` is clean. The full `vitest run --testTimeout=60000` exits 0: 453 files
+passed and 4 skipped, 8,343 tests passed, the same as the RE-CHECK. `node tools/orphans.mjs` reports 24,
+the same as main.
+
+**The real harness, not a scratch driver.** Fresh production build (`vite build`), `vite preview` on
+5976, stopped by its PID (62668); nothing listens on 5975-5979 now. I ran `critic/runner/lib/play.mjs`
+itself, headless with `PYREFLY_BROWSER=gpu`, for index 1 (FFX, `yunalesca`) and index 3 (FFX-2,
+`ffx2-bahamut`), `--budget=1500`. Evidence in `docs/screenshots/t1-b4b/final/` (not committed).
+
+| Run | Board after title (line 57) | After Esc from prep (the fix) | `prepChapterConfirmed.chapter` |
+|---|---|---|---|
+| 1, FFX | `yunalesca` | back on `yunalesca`, 0 presses | `yunalesca` (equals requested) |
+| 3, FFX-2 | **`evrae-airship`** (count-based, pre-existing) | moved by id to `ffx2-bahamut` | `ffx2-bahamut` (equals requested) |
+
+0 console errors in both runs. **Verdict: the fix does what it says; the merge gate is closed.**
+
+Findings that do not block this branch (they are pre-existing, in `t1-b5`'s `critic/runner`):
+- **Line 57 still counts presses.** On a fresh profile index 3 lands on `evrae-airship` (the board has 15
+  tiles and skips the coming `seymour-anima-macalania`), so an FFX-2 run's `01-chapter-select.png` and
+  `02-prep.png` show Evrae while their metadata says `ffx2-bahamut`. The fix then rescues the chapter that
+  is actually played. Move line 57 by id the same way.
+- **The id loop is bounded by `CH.length` (5) and has no assertion after it.** Both FFX-2 slots happen to
+  be exactly 5 presses from where line 57 leaves them (4 to 9, 5 to 10), so they land by coincidence; any
+  other gap would confirm the wrong chapter silently. Bound by the tile count and assert
+  `selectedId === id` (and `prepChapterConfirmed.chapter === id`) before Enter.
+- **The FFX Yunalesca run did not reach battle** (`ASSERT-FAIL screen expected=battle after 60009ms`,
+  still in the cutscene after `sampleCutsceneSpeakers` sampled 30 lines). This is after prep, unrelated to
+  the fix; the FFX-2 run reached battle.
