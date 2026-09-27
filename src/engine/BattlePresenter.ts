@@ -40,6 +40,7 @@ import { settleForMenu } from './BattlePresenterBeats.ts';
 import { playOpening } from './OpeningSkip.ts';
 import { playUnheld } from './TargetFrameHold.ts';
 import { ActingState } from './ActingState.ts';
+import { OpeningCallouts } from './OpeningCallouts.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
 import {
@@ -78,6 +79,8 @@ export class BattlePresenter {
   private readonly menuWake = new MenuWaker();
   /** Tells the HUD when an action is on screen (PR-0157's hook, `ActingState.ts`). */
   private readonly actingState: ActingState;
+  /** PR-0061(a): before the first menu, a callout of lines runs under the fight (`OpeningCallouts.ts`). */
+  private readonly callouts = new OpeningCallouts();
 
   private speed: PlaybackSpeed = 'normal';
   private timeScale: number;
@@ -239,6 +242,11 @@ export class BattlePresenter {
 
       if (event.type === 'script-trigger') {
         this.phase = `script:${event.name}`;
+        if (this.callouts.detach(this.deps.midScripts?.[event.name], () => this.runScript(event.name))) {
+          this.trace.push({ seq: event.seq, type: event.type, ms: 0 });
+          continue;
+        }
+        await this.callouts.settle(); // two beats never overlap
         await playUnheld(this.ctx.stage.camera, () => this.runScript(event.name)); // a beat's camera cues play under an FFX-2 menu too
         this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
         continue;
@@ -255,6 +263,8 @@ export class BattlePresenter {
 
       this.phase = `play:${event.type}`;
       this.actingState.observe(event);
+      if (event.type === 'victory' || event.type === 'defeat') await this.callouts.settle(); // the end waits for a callout on screen
+      this.ctx.opening = this.callouts.isOpening;
       if (event.type === 'victory' || event.type === 'defeat') this.ctx.stage.camera.hold?.(false); // PR-0150: the end shot always plays
       await playEvent(this.ctx, event);
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
@@ -455,6 +465,7 @@ export class BattlePresenter {
     actorId: CombatantId,
     commands: AvailableCommand[],
   ): Promise<Command | null> {
+    this.callouts.close(); // PR-0061(a): from the first menu on, every beat is held
     if (this.auto) {
       // Taken over mid-fight on an engine built for a human: a timed Overdrive
       // would suspend forever, so the strategy simply does not see those rows.

@@ -131,6 +131,8 @@ export interface EventCtx {
   readonly pendingArrivals: CombatantId[];
   /** The action on screen, for the spell effects (`BattlePresenterSpellFx.ts`). */
   acting?: ActingAction | undefined;
+  /** PR-0061(a): still before the first command menu (`OpeningCallouts.ts`). */
+  opening?: boolean;
 }
 
 export function createEventCtx(
@@ -265,6 +267,12 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return ctx.sleep(TIMING.message);
 
     case 'sensor':
+      // PR-0061(a): before the first menu a sensor read stays up on its own
+      // banner while the opening goes on, instead of holding it for 1.6 s.
+      if (ctx.opening) {
+        void banner(ctx, event.text, 'system');
+        return;
+      }
       await banner(ctx, event.text, 'system');
       return ctx.sleep(TIMING.message);
 

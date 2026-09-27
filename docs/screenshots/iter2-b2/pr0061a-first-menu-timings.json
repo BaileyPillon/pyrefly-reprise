@@ -1,0 +1,80 @@
+{
+ "rule": "PR-0061(a), CAL-005 form: from the battle screen appearing (after the pre-scene, left with Enter) to the first command menu, seed 1, 1600x900, dev server, GPU. confirm = Enter every 400 ms (target about 4 s); passive = no presses (target the approved 2.2 s card + 3.8 s sweep = 6.0 s, plus at most 1.5 s)",
+ "chapters": {
+  "yunalesca": {
+   "confirm": 1667,
+   "events": "turn-start",
+   "passive": 6737
+  },
+  "braskas-final-aeon": {
+   "passive": 6974,
+   "events": "turn-start",
+   "confirm": 2075
+  },
+  "ffx2-bahamut": {
+   "confirm": 3042,
+   "events": "turn-start,action-start,status-add,action-end",
+   "passive": 8154
+  },
+  "ffx2-leblanc": {
+   "confirm": 4523,
+   "events": "turn-start,action-start,miss,action-end,turn-start,action-start,miss,action-end",
+   "passive": 9562
+  },
+  "seymour-anima-macalania": {
+   "confirm": 1757,
+   "events": "turn-start",
+   "passive": 7382
+  },
+  "evrae-airship": {
+   "confirm": 2344,
+   "events": "turn-start",
+   "passive": 7262
+  },
+  "yojimbo-cavern": {
+   "confirm": 4183,
+   "events": "sensor,sensor,sensor,turn-start,action-start,action-end,action-start,damage,action-end,turn-start",
+   "passive": 9798
+  },
+  "seymour-natus": {
+   "confirm": 2167,
+   "events": "sensor,sensor,turn-start",
+   "passive": 7180
+  },
+  "ffx2-fallen-aeons": {
+   "confirm": 3289,
+   "events": "turn-start,action-start,chain,damage,mp-damage,action-end,script:shiva-entrance",
+   "passive": 8192
+  },
+  "seymour-omnis": {
+   "confirm": 1898,
+   "events": "turn-start",
+   "passive": 6964
+  },
+  "ffx2-trema": {
+   "confirm": 4072,
+   "events": "turn-start,message,action-end,script:paragon-mourned,turn-start,action-end,turn-start,action-end,turn-start,action-end",
+   "passive": 9291
+  },
+  "isaaru-via-purifico": {
+   "confirm": 2789,
+   "events": "turn-start,action-start,damage,action-end,script:grothia-ready,turn-start",
+   "passive": 7733
+  },
+  "ffx2-den-of-woe": {
+   "confirm": 2975,
+   "events": "turn-start,action-start,chain,damage,action-end,script:baralai-entrance,turn-start,action-start,chain,damage,chain,damage,chain,damage",
+   "passive": 7999
+  },
+  "seymour-flux": {
+   "confirm": 1989,
+   "events": "sensor,sensor,turn-start",
+   "passive": 6950
+  },
+  "ffx2-vegnagun-shuyin": {
+   "confirm": 2079,
+   "events": "turn-start,script:farplane-voice-braska,...",
+   "passive": 7126
+  }
+ }
+}
