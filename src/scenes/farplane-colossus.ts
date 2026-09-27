@@ -4,6 +4,7 @@ import { GROUND_RING_SQUASH, type PartAnchor, type PartAnchors } from '../engine
 import { PHONE_BATTLE_QUERY } from '../ui/common/phoneBattle.ts';
 import { findFigure } from './cavern-stolen-fayth-cast.ts';
 import { FARPLANE_STAGING } from './farplane-parts.ts';
+import { ColossusContactShadow } from './farplane-colossus-shadow.ts';
 
 // ---------------------------------------------------------------------------
 // Vegnagun as a colossus: option A, part-scale staging (FFX-2 only)
@@ -200,6 +201,8 @@ export class VegnagunColossus {
   private camera: BattleCamera | null = null;
   private on = false;
   private readonly backdropOrig = new Map<Object3D, { sx: number; sy: number; y: number }>();
+  /** PR-0072: the part's contact shadow, where it meets the plain on screen. */
+  private readonly contact: ColossusContactShadow;
 
   constructor(
     private readonly today: Readonly<Record<string, CameraRig>>,
@@ -208,6 +211,7 @@ export class VegnagunColossus {
   ) {
     this.table = phone ? COLOSSUS_TABLES.phone : COLOSSUS_TABLES.desktop;
     this.staging = colossusStaging(phone);
+    this.contact = new ColossusContactShadow(group);
   }
 
   /** The battle camera to drive, or null to let go of it. */
@@ -229,6 +233,7 @@ export class VegnagunColossus {
     if (!this.on || !root) return;
     const head = findFigure(root, COLOSSUS_LINK_IDS.head);
     if (head && this.table.parts.head.mirror && head.scale.x > 0) head.scale.x = -head.scale.x;
+    this.contact.update(root, this.camera?.camera ?? null);
     for (const child of root.children) {
       if (child.name.startsWith(RING_PREFIX) && child.renderOrder < RING_ORDER_OVER) child.renderOrder = RING_ORDER_OVER;
     }
@@ -236,6 +241,7 @@ export class VegnagunColossus {
 
   private switchTo(on: boolean): void {
     this.on = on;
+    if (!on) this.contact.hide();
     this.setRigs(on);
     this.setBackdrop(on);
   }

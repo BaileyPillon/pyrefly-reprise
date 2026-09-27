@@ -39,6 +39,8 @@ import { TurnCutInBeat } from './TurnCutIn.ts';
 import { settleForMenu } from './BattlePresenterBeats.ts';
 import { playOpening } from './OpeningSkip.ts';
 import { playUnheld } from './TargetFrameHold.ts';
+import { ActingState } from './ActingState.ts';
+import { OpeningCallouts } from './OpeningCallouts.ts';
 import type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import type { PlaybackSpeed, PlaybackTrace, PresenterDeps } from './BattlePresenterPorts.ts';
 import {
@@ -75,6 +77,10 @@ export class BattlePresenter {
   private inputAbandoned = false;
   /** Parks and wakes an FFX-2 Wait menu in `runMenuClock` ({@link atbModeChanged}, the menu level). */
   private readonly menuWake = new MenuWaker();
+  /** Tells the HUD when an action is on screen (PR-0157's hook, `ActingState.ts`). */
+  private readonly actingState: ActingState;
+  /** PR-0061(a): before the first menu, a callout of lines runs under the fight (`OpeningCallouts.ts`). */
+  private readonly callouts = new OpeningCallouts();
 
   private speed: PlaybackSpeed = 'normal';
   private timeScale: number;
@@ -120,7 +126,15 @@ export class BattlePresenter {
       (ms) => this.sleep(ms),
       () => this.speed,
     );
-    this.cutIns = new TurnCutInBeat({ moments: deps.moments ?? null, speed: () => this.speed });
+    this.actingState = new ActingState(() => this.deps.hud);
+    this.cutIns = new TurnCutInBeat({
+      moments: deps.moments ?? null,
+      speed: () => this.speed,
+      // PR-0104 (FFX-2 only): the next girl's cut-in waits for a charging action to play.
+      sleep: (ms) => this.baseSleep(ms),
+      acting: () => this.actingState.acting !== null,
+      menuFor: () => this.pendingMenu?.actorId ?? null,
+    });
   }
 
   /** The shot picker, so the screen can tear its overlays down on exit. */
@@ -188,6 +202,7 @@ export class BattlePresenter {
    */
   abort(): void {
     this.aborted = true;
+    this.actingState.cancel();
     this.atbModeChanged();
   }
 
@@ -207,6 +222,14 @@ export class BattlePresenter {
    * `victory` or `defeat`; pauses (but does not stop) on `script-trigger`.
    */
   async play(events: BattleEvent[]): Promise<PlayResult> {
+    try {
+      return await this.playBurst(events);
+    } finally {
+      this.actingState.cancel(); // an action the burst stopped inside never ends on screen
+    }
+  }
+
+  private async playBurst(events: BattleEvent[]): Promise<PlayResult> {
     for (let i = 0; i < events.length; i++) {
       if (this.aborted) return { dropped: events.length - i };
       const event = events[i]!;
@@ -226,6 +249,11 @@ export class BattlePresenter {
 
       if (event.type === 'script-trigger') {
         this.phase = `script:${event.name}`;
+        if (this.callouts.detach(this.deps.midScripts?.[event.name], () => this.runScript(event.name))) {
+          this.trace.push({ seq: event.seq, type: event.type, ms: 0 });
+          continue;
+        }
+        await this.callouts.settle(); // two beats never overlap
         await playUnheld(this.ctx.stage.camera, () => this.runScript(event.name)); // a beat's camera cues play under an FFX-2 menu too
         this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
         continue;
@@ -241,6 +269,9 @@ export class BattlePresenter {
       this.presentVitals(event);
 
       this.phase = `play:${event.type}`;
+      this.actingState.observe(event);
+      if (event.type === 'victory' || event.type === 'defeat') await this.callouts.settle(); // the end waits for a callout on screen
+      this.ctx.opening = this.callouts.isOpening;
       if (event.type === 'victory' || event.type === 'defeat') this.ctx.stage.camera.hold?.(false); // PR-0150: the end shot always plays
       await playEvent(this.ctx, event);
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
@@ -277,6 +308,8 @@ export class BattlePresenter {
     // first burst of a fight (and of every later link of a chain, which re-runs
     // on a fresh engine) happens before any `syncHud` in the loop below.
     this.seedVitals(engine);
+    // A-1 (FFX-2 only): an engine with an ATB clock gets the wait-camera fit rule (`ShotFit.ts`).
+    this.ctx.moments.shots.ffx2Framing = typeof (engine as { tick?: unknown }).tick === 'function';
 
     // The opening shot, once per encounter: the party slides in, then the
     // headline enemy gets its slow push and name plate. A chained formation
@@ -365,6 +398,7 @@ export class BattlePresenter {
             break;
           }
           if (!command) return { kind: 'aborted' };
+          this.cutIns.acted(decision.actorId); // PR-0104: a moved cut-in waits for her next turn
           const out = await this.submit(engine, command);
           if (out) return out;
           break;
@@ -439,6 +473,7 @@ export class BattlePresenter {
     actorId: CombatantId,
     commands: AvailableCommand[],
   ): Promise<Command | null> {
+    this.callouts.close(); // PR-0061(a): from the first menu on, every beat is held
     if (this.auto) {
       // Taken over mid-fight on an engine built for a human: a timed Overdrive
       // would suspend forever, so the strategy simply does not see those rows.

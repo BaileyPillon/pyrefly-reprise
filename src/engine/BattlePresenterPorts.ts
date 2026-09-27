@@ -103,6 +103,23 @@ export interface CameraPort {
    * (`BattlePresenterDepartures.ts`, `BODY_SHOT`); `BattleCamera.addRig`.
    */
   addRig?(name: string, rig: { position: [number, number, number]; lookAt: [number, number, number]; fov?: number; sway?: number }): void;
+  /**
+   * How `rig`, pushed in by `push`, frames these figures (`FrameFit.ts`):
+   * whether each keeps its minimum share of its painted quad inside the frame
+   * with no push, and the largest push up to `push` that cuts nobody who was
+   * in. Optional and additive (A-11, A-1): without it every shot plays as asked.
+   */
+  frame?(
+    rig: string,
+    push: number,
+    subjects: ReadonlyArray<{ actor: ActorHandle; min: number; floor?: number }>,
+  ): { fits: boolean; push: number; worst: number } | null;
+  /**
+   * A-12, option A's phone rule: dolly `rig` straight back until these figures
+   * fit a slice `slice` wide (0..1 of the frame). True when it moved the rig.
+   * Optional and additive; without it the phone keeps the desktop rigs.
+   */
+  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number }>): boolean;
   readonly rigNames: string[];
   readonly rigName: string;
 }
@@ -150,6 +167,18 @@ export interface MomentsPort {
    * the battle's opening sweep short (`OpeningSkip.ts`).
    */
   confirmPress?(): { pressed: Promise<void>; dispose(): void };
+  /**
+   * The player's reduce-motion setting (Settings.reduceMotion or the OS
+   * preference), read by the DOM side so the presenter stays DOM-free.
+   * Optional and additive (A-13): absent reads as "motion on".
+   */
+  reduceMotion?(): boolean;
+  /**
+   * On an upright phone (the phone battle HUD), how much of the 16:9 render's
+   * width the window shows, 0..1; `null` anywhere else. Optional and additive
+   * (A-12): absent reads as "not a phone".
+   */
+  phoneSlice?(): number | null;
   /** Tear every layer down. */
   clear(): void;
 }
@@ -363,6 +392,12 @@ export interface PresenterDeps {
    * Optional: without it every enemy ability keeps the `cast` painting.
    */
   abilityFacts?: ((id: AbilityId) => AbilityFacts | undefined) | null;
+  /**
+   * A-4: `'pose'` (the default) strikes the victory pose; `'hold'` keeps the
+   * battle stance and a quiet cue where the sources withhold the celebration
+   * (`VictoryPose.ts`). Per chapter, passed in by the screen; never read from the DOM.
+   */
+  victoryPose?: import('./VictoryPose.ts').VictoryPose;
 }
 
 /** One line of the presenter's own trace, for the debug API and e2e. */

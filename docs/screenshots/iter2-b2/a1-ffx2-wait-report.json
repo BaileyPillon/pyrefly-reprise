@@ -1,0 +1,3102 @@
+{
+ "rule": "A-1: no menu open; enemy in play >= 0.75 of its quad in frame, every standing party figure >= 0.90; real keys (Enter, Enter) on seed 1",
+ "sizes": {
+  "1600x900": {
+   "ffx2-bahamut": {
+    "waitSamples": 110,
+    "waitSamplesFailing": 3,
+    "frames": [
+     {
+      "file": "1600x900-ffx2-bahamut-wait-01.jpg",
+      "rig": "party",
+      "push": 0.007,
+      "phase": "idle",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-02.jpg",
+      "rig": "party",
+      "push": 0.009,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-03.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "idle",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-04.jpg",
+      "rig": "action",
+      "push": 0.03,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-05.jpg",
+      "rig": "party",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-06.jpg",
+      "rig": "party",
+      "push": 0.049,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-07.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-08.jpg",
+      "rig": "party",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-09.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-bahamut-wait-10.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-vegnagun-shuyin": {
+    "waitSamples": 102,
+    "waitSamplesFailing": 12,
+    "frames": [
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-01.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.75
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-02.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.75
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-03.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.74
+       ]
+      },
+      "pass": false
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-04.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.75
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-05.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.75
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-06.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.76
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-07.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.76
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-08.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.69
+       ]
+      },
+      "pass": false
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-09.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.75
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-vegnagun-shuyin-wait-10.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.75
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-leblanc": {
+    "waitSamples": 111,
+    "waitSamplesFailing": 0,
+    "frames": [
+     {
+      "file": "1600x900-ffx2-leblanc-wait-01.jpg",
+      "rig": "action",
+      "push": 0.051,
+      "phase": "idle",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.92
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "dr-goon": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-02.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:ko",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "dr-goon": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-03.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.98
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-04.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-05.jpg",
+      "rig": "action",
+      "push": 0.009,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-06.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.98
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-07.jpg",
+      "rig": "action",
+      "push": 0.032,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-08.jpg",
+      "rig": "action",
+      "push": 0.007,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-09.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-leblanc-wait-10.jpg",
+      "rig": "idle",
+      "push": 0.045,
+      "phase": "idle",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-fallen-aeons": {
+    "waitSamples": 113,
+    "waitSamplesFailing": 5,
+    "frames": [
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-01.jpg",
+      "rig": "action",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-02.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.99
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-03.jpg",
+      "rig": "action",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-04.jpg",
+      "rig": "idle",
+      "push": 0.045,
+      "phase": "idle",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-05.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.99
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-06.jpg",
+      "rig": "idle",
+      "push": 0.038,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-07.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-08.jpg",
+      "rig": "idle",
+      "push": 0.047,
+      "phase": "idle",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-09.jpg",
+      "rig": "action",
+      "push": 0.025,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-fallen-aeons-wait-10.jpg",
+      "rig": "idle",
+      "push": 0.051,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-trema": {
+    "waitSamples": 122,
+    "waitSamplesFailing": 0,
+    "frames": [
+     {
+      "file": "1600x900-ffx2-trema-wait-01.jpg",
+      "rig": "action",
+      "push": 0.049,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.98
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-02.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:counter",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-03.jpg",
+      "rig": "action",
+      "push": 0.047,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-04.jpg",
+      "rig": "idle",
+      "push": 0.05,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-05.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.96
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-06.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:status-add",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-07.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-08.jpg",
+      "rig": "action",
+      "push": 0.029,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-09.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:counter",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-trema-wait-10.jpg",
+      "rig": "action",
+      "push": 0.051,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-den-of-woe": {
+    "waitSamples": 45,
+    "waitSamplesFailing": 2,
+    "frames": [
+     {
+      "file": "1600x900-ffx2-den-of-woe-wait-01.jpg",
+      "rig": "action",
+      "push": 0.006,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-den-of-woe-wait-02.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.99
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-den-of-woe-wait-03.jpg",
+      "rig": "idle",
+      "push": 0.047,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-den-of-woe-wait-04.jpg",
+      "rig": "action",
+      "push": 0.035,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-den-of-woe-wait-05.jpg",
+      "rig": "idle",
+      "push": 0.051,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-den-of-woe-wait-06.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-den-of-woe-wait-07.jpg",
+      "rig": "action",
+      "push": 0.007,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "1600x900-ffx2-den-of-woe-wait-08.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   }
+  },
+  "2000x1012": {
+   "ffx2-bahamut": {
+    "waitSamples": 117,
+    "waitSamplesFailing": 0,
+    "frames": [
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-01.jpg",
+      "rig": "party",
+      "push": 0.007,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-02.jpg",
+      "rig": "party",
+      "push": 0.007,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-03.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-04.jpg",
+      "rig": "action",
+      "push": 0.031,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-05.jpg",
+      "rig": "party",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-06.jpg",
+      "rig": "party",
+      "push": 0.051,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-07.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-08.jpg",
+      "rig": "party",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-09.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-bahamut-wait-10.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "bahamut": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-vegnagun-shuyin": {
+    "waitSamples": 115,
+    "waitSamplesFailing": 14,
+    "frames": [
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-01.jpg",
+      "rig": "idle",
+      "push": 0.007,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.81
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-02.jpg",
+      "rig": "idle",
+      "push": 0.054,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.78
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-03.jpg",
+      "rig": "idle",
+      "push": 0.007,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.81
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-04.jpg",
+      "rig": "idle",
+      "push": 0.044,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.79
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-05.jpg",
+      "rig": "idle",
+      "push": 0.053,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.78
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-06.jpg",
+      "rig": "idle",
+      "push": 0.041,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.79
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-07.jpg",
+      "rig": "idle",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.81
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-08.jpg",
+      "rig": "idle",
+      "push": 0.044,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.78
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-09.jpg",
+      "rig": "idle",
+      "push": 0.053,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.78
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-vegnagun-shuyin-wait-10.jpg",
+      "rig": "idle",
+      "push": 0.031,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "vegnagun-tail": [
+        "e",
+        0.79
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-leblanc": {
+    "waitSamples": 117,
+    "waitSamplesFailing": 0,
+    "frames": [
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-01.jpg",
+      "rig": "action",
+      "push": 0.051,
+      "phase": "idle",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.92
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "dr-goon": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-02.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:ko",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "dr-goon": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-03.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.98
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-04.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-05.jpg",
+      "rig": "action",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-06.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.98
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-07.jpg",
+      "rig": "action",
+      "push": 0.032,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-08.jpg",
+      "rig": "action",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-09.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-leblanc-wait-10.jpg",
+      "rig": "action",
+      "push": 0.016,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "ormi-entrance": [
+        "e",
+        1
+       ],
+       "fem-goon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-fallen-aeons": {
+    "waitSamples": 115,
+    "waitSamplesFailing": 1,
+    "frames": [
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-01.jpg",
+      "rig": "party",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-02.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        0.9
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-03.jpg",
+      "rig": "party",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-04.jpg",
+      "rig": "idle",
+      "push": 0.043,
+      "phase": "idle",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-05.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        0.9
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-06.jpg",
+      "rig": "idle",
+      "push": 0.04,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-07.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        0.87
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-08.jpg",
+      "rig": "party",
+      "push": 0.009,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-09.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.92
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-fallen-aeons-wait-10.jpg",
+      "rig": "party",
+      "push": 0.049,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "x2-shiva": [
+        "e",
+        0.92
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-trema": {
+    "waitSamples": 124,
+    "waitSamplesFailing": 0,
+    "frames": [
+     {
+      "file": "2000x1012-ffx2-trema-wait-01.jpg",
+      "rig": "action",
+      "push": 0.049,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.98
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-02.jpg",
+      "rig": "action",
+      "push": 0.06,
+      "phase": "play:counter",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-03.jpg",
+      "rig": "action",
+      "push": 0.045,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-04.jpg",
+      "rig": "idle",
+      "push": 0.051,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-05.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.98
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-06.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:status-add",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-07.jpg",
+      "rig": "idle",
+      "push": 0,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-08.jpg",
+      "rig": "action",
+      "push": 0.031,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-09.jpg",
+      "rig": "idle",
+      "push": 0.06,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-trema-wait-10.jpg",
+      "rig": "action",
+      "push": 0.051,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "paragon": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   },
+   "ffx2-den-of-woe": {
+    "waitSamples": 50,
+    "waitSamplesFailing": 0,
+    "frames": [
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-01.jpg",
+      "rig": "party",
+      "push": 0.008,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-02.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-03.jpg",
+      "rig": "party",
+      "push": 0.012,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-04.jpg",
+      "rig": "party",
+      "push": 0.06,
+      "phase": "play:damage",
+      "inFrame": {
+       "yuna": [
+        "p",
+        0.92
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-05.jpg",
+      "rig": "party",
+      "push": 0.049,
+      "phase": "play:action-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-06.jpg",
+      "rig": "idle",
+      "push": 0.058,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-07.jpg",
+      "rig": "idle",
+      "push": 0.059,
+      "phase": "play:action-end",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-08.jpg",
+      "rig": "idle",
+      "push": 0.009,
+      "phase": "play:turn-start",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     },
+     {
+      "file": "2000x1012-ffx2-den-of-woe-wait-09.jpg",
+      "rig": "idle",
+      "push": 0.04,
+      "phase": "play:status-tick",
+      "inFrame": {
+       "yuna": [
+        "p",
+        1
+       ],
+       "rikku": [
+        "p",
+        1
+       ],
+       "paine": [
+        "p",
+        1
+       ],
+       "shade-baralai": [
+        "e",
+        1
+       ]
+      },
+      "pass": true
+     }
+    ]
+   }
+  }
+ }
+}

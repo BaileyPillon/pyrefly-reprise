@@ -38,6 +38,12 @@ export interface SwirlOptions {
    * whose diorama and art are still loading.
    */
   onCover?: () => void | Promise<void>;
+  /**
+   * Run while the frame is covered, with `onCover`'s promise: the swirl stays
+   * closed until this resolves. A-3's loading card (`loadingCard.ts`) raises
+   * the battle-start card over the ink here when the load runs long.
+   */
+  whileCovered?: (settled: Promise<unknown>) => Promise<void>;
   /** Ink colour of the blades. Defaults to the Ink & Gold ink token. */
   ink?: string;
   /** Accent of the seam that rides the leading edge. */
@@ -61,6 +67,7 @@ interface ResolvedSwirl {
   gold: string;
   instant: boolean;
   onCover?: (() => void | Promise<void>) | undefined;
+  whileCovered?: ((settled: Promise<unknown>) => Promise<void>) | undefined;
 }
 
 /** Fills in every optional field. Exported so its defaults are testable. */
@@ -73,6 +80,7 @@ export function resolveSwirlOptions(opts: SwirlOptions = {}): ResolvedSwirl {
     // does: the transition carries no information, only motion.
     instant: opts.instant ?? prefersReducedMotion(),
     onCover: opts.onCover,
+    whileCovered: opts.whileCovered,
   };
 }
 
@@ -138,7 +146,8 @@ export function playBattleSwirl(root: HTMLElement, opts: SwirlOptions = {}): Pro
 
       // `onCover` rejecting is the caller's problem, not the transition's —
       // the swirl still has to come back off the screen either way.
-      void Promise.resolve(o.onCover?.())
+      const settled = Promise.resolve(o.onCover?.());
+      void (o.whileCovered ? o.whileCovered(settled).catch(() => undefined) : settled)
         .catch(() => undefined)
         .then(() => {
           for (const layer of layers()) layer.style.animationPlayState = 'running';

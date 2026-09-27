@@ -11,6 +11,7 @@ import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
+import { victoryPoseOf } from './VictoryPose.ts';
 import {
   banner,
   cue,
@@ -52,7 +53,7 @@ export async function actionStart(
   if (event.command.kind === 'overdrive') {
     await ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE');
   } else {
-    await ctx.moments.actionOpen(event.actorId, pose);
+    await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? []);
   }
 
   if (pose === 'attack') {
@@ -222,6 +223,13 @@ export async function charge(
 }
 
 export async function victory(ctx: EventCtx): Promise<void> {
+  // A-4: where the sources withhold the celebration ('hold'), the figures keep
+  // their battle stance and the fanfare stays quiet; the rig still settles.
+  if (victoryPoseOf(ctx.deps) === 'hold') {
+    void ctx.moments.victory();
+    await ctx.sleep(TIMING.victory);
+    return;
+  }
   cue(ctx, 'victory');
   for (const id of ctx.stage.staged()) {
     const side = ctx.stage.sideOf(id);

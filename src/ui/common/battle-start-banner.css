@@ -287,3 +287,39 @@
     transition: none;
   }
 }
+
+/* A-3: the card over the entry transition's ink while a cold battle loads
+   (`transitions/loadingCard.ts`). Above the swirl, and a thin Ink & Gold
+   hairline running along the top of the gold strip: a token of the card's own
+   stripe, not a new element of its layout. */
+.bstart--loading {
+  z-index: 41;
+}
+.bstart--loading .bstart__skip {
+  visibility: hidden;
+}
+.bstart__load {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(clamp(58px, 6.7vh, 96px) + 2px);
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bstart__load::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 28%;
+  background: linear-gradient(90deg, transparent, var(--ig-accent, #e3b94a), transparent);
+  animation: bstart-load 1.4s linear infinite;
+}
+@keyframes bstart-load {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(460%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bstart__load::before { animation: none; left: 0; width: 100%; opacity: 0.6; }
+}

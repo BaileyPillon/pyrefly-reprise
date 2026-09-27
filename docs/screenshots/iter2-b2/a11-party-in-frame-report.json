@@ -1,0 +1,4016 @@
+{
+ "rule": "A-11: party quads >= 0.85 inside the viewport on the idle, action, party and victory rigs, at rest and under the fitted action (0.06) and Overdrive (0.14) pushes; the enemy target cut and the authored boss-angle rigs (yunalesca, bahamut) are reported, not judged",
+ "sizes": {
+  "1280x720": {
+   "seymour-flux": {
+    "worstJudged": 0.916,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.916,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "yunalesca": {
+    "worstJudged": 0.885,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.886,
+      "push": 0.1380517578125
+     },
+     "action": {
+      "minParty": 0.94,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.885,
+      "push": 0.0358154296875
+     },
+     "action+push0.14": {
+      "minParty": 0.885,
+      "push": 0.03588867187500001
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.967,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.745,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.718,
+      "push": 0.018662109375
+     },
+     "enemy+push0.14": {
+      "minParty": 0.718,
+      "push": 0.01873046875
+     },
+     "yunalesca": {
+      "minParty": 0.51,
+      "push": 0
+     },
+     "yunalesca+push0.06": {
+      "minParty": 0.337,
+      "push": 0.06
+     },
+     "yunalesca+push0.14": {
+      "minParty": 0.311,
+      "push": 0.068974609375
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 0.988,
+      "push": 0.14
+     }
+    }
+   },
+   "braskas-final-aeon": {
+    "worstJudged": 0.875,
+    "worstAt": "idle+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 0.912,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.869,
+      "push": 0.0162890625
+     },
+     "intro+push0.14": {
+      "minParty": 0.869,
+      "push": 0.016132812500000003
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.875,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.992,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.892,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.875,
+      "push": 0.0701025390625
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-bahamut": {
+    "worstJudged": 0.888,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.888,
+      "push": 0.13528320312499997
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.007,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "bahamut": {
+      "minParty": 0,
+      "push": 0
+     },
+     "bahamut+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "bahamut+push0.14": {
+      "minParty": 0,
+      "push": 0.13596679687500002
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-vegnagun-shuyin": {
+    "worstJudged": 0.865,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.964,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.881,
+      "push": 0.0940283203125
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.865,
+      "push": 0.10807617187500002
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.95,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 1,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.982,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-leblanc": {
+    "worstJudged": 0.861,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.951,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.861,
+      "push": 0.12561035156250003
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "seymour-anima-macalania": {
+    "worstJudged": 0.929,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.982,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.929,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.599,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.385,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.151,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "anima-low": {
+      "minParty": 0.882,
+      "push": 0
+     },
+     "anima-low+push0.06": {
+      "minParty": 0.876,
+      "push": 0.0013037109375
+     },
+     "anima-low+push0.14": {
+      "minParty": 0.876,
+      "push": 0.001298828125
+     },
+     "anima": {
+      "minParty": 0.87,
+      "push": 0
+     },
+     "anima+push0.06": {
+      "minParty": 0.87,
+      "push": 0
+     },
+     "anima+push0.14": {
+      "minParty": 0.869,
+      "push": 0
+     }
+    }
+   },
+   "evrae-airship": {
+    "worstJudged": 1,
+    "worstAt": "",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.07382812500000002
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle-far+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle-far+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action-far+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action-far+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "enemy-far+push0.06": {
+      "minParty": 0.882,
+      "push": 0.039755859374999994
+     },
+     "enemy-far+push0.14": {
+      "minParty": 0.883,
+      "push": 0.039682617187500005
+     }
+    }
+   },
+   "yojimbo-cavern": {
+    "worstJudged": 0.882,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.995,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.94,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.882,
+      "push": 0.028110351562499997
+     },
+     "action+push0.14": {
+      "minParty": 0.882,
+      "push": 0.028164062500000003
+     },
+     "enemy": {
+      "minParty": 0.056,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "seymour-natus": {
+    "worstJudged": 0.884,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.992,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.931,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.884,
+      "push": 0.022998046874999997
+     },
+     "action+push0.14": {
+      "minParty": 0.884,
+      "push": 0.022797851562500002
+     },
+     "enemy": {
+      "minParty": 0.062,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-fallen-aeons": {
+    "worstJudged": 0.867,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.952,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.868,
+      "push": 0.09368652343750003
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.867,
+      "push": 0.10940917968750002
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.944,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "road-links": {
+      "minParty": 1,
+      "push": 0
+     },
+     "road-links+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "road-links+push0.14": {
+      "minParty": 0.873,
+      "push": 0.10954589843750001
+     }
+    }
+   },
+   "seymour-omnis": {
+    "worstJudged": 0.885,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.891,
+      "push": 0.11638183593750001
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.893,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.911,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.885,
+      "push": 0.07591308593750001
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-trema": {
+    "worstJudged": 0.877,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.877,
+      "push": 0.13319824218749998
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "trema-link": {
+      "minParty": 1,
+      "push": 0
+     },
+     "trema-link+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "trema-link+push0.14": {
+      "minParty": 0.875,
+      "push": 0.10582031250000001
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "isaaru-via-purifico": {
+    "worstJudged": 0.936,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.977,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.936,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.94,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.274,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.13,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.011,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-den-of-woe": {
+    "worstJudged": 0.88,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.953,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.875,
+      "push": 0.09102050781250001
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.88,
+      "push": 0.10623046875000001
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.947,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   }
+  },
+  "1600x900": {
+   "seymour-flux": {
+    "worstJudged": 0.922,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.922,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "yunalesca": {
+    "worstJudged": 0.885,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.887,
+      "push": 0.13876953125000002
+     },
+     "action": {
+      "minParty": 0.942,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.885,
+      "push": 0.036826171874999994
+     },
+     "action+push0.14": {
+      "minParty": 0.885,
+      "push": 0.03698242187500001
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.966,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.747,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.717,
+      "push": 0.0202880859375
+     },
+     "enemy+push0.14": {
+      "minParty": 0.718,
+      "push": 0.020234375000000002
+     },
+     "yunalesca": {
+      "minParty": 0.495,
+      "push": 0
+     },
+     "yunalesca+push0.06": {
+      "minParty": 0.321,
+      "push": 0.06
+     },
+     "yunalesca+push0.14": {
+      "minParty": 0.291,
+      "push": 0.070888671875
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 0.986,
+      "push": 0.14
+     }
+    }
+   },
+   "braskas-final-aeon": {
+    "worstJudged": 0.876,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 0.915,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.872,
+      "push": 0.01669921875
+     },
+     "intro+push0.14": {
+      "minParty": 0.872,
+      "push": 0.0166796875
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.88,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.991,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.895,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.876,
+      "push": 0.0714697265625
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-bahamut": {
+    "worstJudged": 0.866,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.866,
+      "push": 0.12284179687499999
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "bahamut": {
+      "minParty": 0,
+      "push": 0
+     },
+     "bahamut+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "bahamut+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-vegnagun-shuyin": {
+    "worstJudged": 0.892,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.969,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.885,
+      "push": 0.09419921875000001
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.892,
+      "push": 0.10862304687500002
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.95,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 1,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.981,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-leblanc": {
+    "worstJudged": 0.895,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.948,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.895,
+      "push": 0.1269091796875
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "seymour-anima-macalania": {
+    "worstJudged": 0.917,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.961,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.917,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.584,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.374,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.15,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "anima-low": {
+      "minParty": 0.882,
+      "push": 0
+     },
+     "anima-low+push0.06": {
+      "minParty": 0.876,
+      "push": 0.00134765625
+     },
+     "anima-low+push0.14": {
+      "minParty": 0.876,
+      "push": 0.0013330078125000002
+     },
+     "anima": {
+      "minParty": 0.86,
+      "push": 0
+     },
+     "anima+push0.06": {
+      "minParty": 0.86,
+      "push": 0
+     },
+     "anima+push0.14": {
+      "minParty": 0.861,
+      "push": 0
+     }
+    }
+   },
+   "evrae-airship": {
+    "worstJudged": 1,
+    "worstAt": "",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.07375976562500003
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle-far+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle-far+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action-far+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action-far+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "enemy-far+push0.06": {
+      "minParty": 0.875,
+      "push": 0.03971191406249999
+     },
+     "enemy-far+push0.14": {
+      "minParty": 0.875,
+      "push": 0.03964843750000001
+     }
+    }
+   },
+   "yojimbo-cavern": {
+    "worstJudged": 0.883,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.946,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.883,
+      "push": 0.0307177734375
+     },
+     "action+push0.14": {
+      "minParty": 0.883,
+      "push": 0.030590820312500003
+     },
+     "enemy": {
+      "minParty": 0.076,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.001,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "seymour-natus": {
+    "worstJudged": 0.877,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.979,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.922,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.877,
+      "push": 0.0231005859375
+     },
+     "action+push0.14": {
+      "minParty": 0.877,
+      "push": 0.023173828125000004
+     },
+     "enemy": {
+      "minParty": 0.067,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-fallen-aeons": {
+    "worstJudged": 0.895,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.957,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.875,
+      "push": 0.092216796875
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.895,
+      "push": 0.10684570312500002
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.947,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "road-links": {
+      "minParty": 1,
+      "push": 0
+     },
+     "road-links+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "road-links+push0.14": {
+      "minParty": 0.887,
+      "push": 0.10828125000000002
+     }
+    }
+   },
+   "seymour-omnis": {
+    "worstJudged": 0.884,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.891,
+      "push": 0.117099609375
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.892,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.911,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.884,
+      "push": 0.076083984375
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.002,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-trema": {
+    "worstJudged": 0.878,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.878,
+      "push": 0.129267578125
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "trema-link": {
+      "minParty": 1,
+      "push": 0
+     },
+     "trema-link+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "trema-link+push0.14": {
+      "minParty": 0.879,
+      "push": 0.10274414062500001
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "isaaru-via-purifico": {
+    "worstJudged": 0.937,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.979,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.937,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.94,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.288,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.141,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.018,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-den-of-woe": {
+    "worstJudged": 0.873,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.968,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.887,
+      "push": 0.09214843750000001
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.873,
+      "push": 0.1061962890625
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.953,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   }
+  },
+  "2000x1012": {
+   "seymour-flux": {
+    "worstJudged": 0.927,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.927,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "yunalesca": {
+    "worstJudged": 0.877,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.878,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.936,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.877,
+      "push": 0.038408203125
+     },
+     "action+push0.14": {
+      "minParty": 0.877,
+      "push": 0.03814453125
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.963,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.738,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.705,
+      "push": 0.0208740234375
+     },
+     "enemy+push0.14": {
+      "minParty": 0.704,
+      "push": 0.021054687500000002
+     },
+     "yunalesca": {
+      "minParty": 0.695,
+      "push": 0
+     },
+     "yunalesca+push0.06": {
+      "minParty": 0.501,
+      "push": 0.06
+     },
+     "yunalesca+push0.14": {
+      "minParty": 0.424,
+      "push": 0.0839794921875
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 0.98,
+      "push": 0.14
+     }
+    }
+   },
+   "braskas-final-aeon": {
+    "worstJudged": 0.875,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 0.909,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.868,
+      "push": 0.016171875000000002
+     },
+     "intro+push0.14": {
+      "minParty": 0.868,
+      "push": 0.016303710937500004
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.879,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.991,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.895,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.875,
+      "push": 0.07218750000000002
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-bahamut": {
+    "worstJudged": 0.942,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.942,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.141,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "bahamut": {
+      "minParty": 0,
+      "push": 0
+     },
+     "bahamut+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "bahamut+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-vegnagun-shuyin": {
+    "worstJudged": 0.952,
+    "worstAt": "party+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.964,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.883,
+      "push": 0.09341308593750003
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.952,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 1,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.981,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-leblanc": {
+    "worstJudged": 0.915,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.954,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.915,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "seymour-anima-macalania": {
+    "worstJudged": 0.932,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.984,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.932,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.623,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.491,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.231,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "anima-low": {
+      "minParty": 1,
+      "push": 0
+     },
+     "anima-low+push0.06": {
+      "minParty": 0.878,
+      "push": 0.054931640625
+     },
+     "anima-low+push0.14": {
+      "minParty": 0.878,
+      "push": 0.054926757812500004
+     },
+     "anima": {
+      "minParty": 0.871,
+      "push": 0
+     },
+     "anima+push0.06": {
+      "minParty": 0.871,
+      "push": 0
+     },
+     "anima+push0.14": {
+      "minParty": 0.871,
+      "push": 0
+     }
+    }
+   },
+   "evrae-airship": {
+    "worstJudged": 1,
+    "worstAt": "",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle-far+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle-far+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action-far+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action-far+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy-far": {
+      "minParty": 1,
+      "push": 0
+     },
+     "enemy-far+push0.06": {
+      "minParty": 0.876,
+      "push": 0.04000488281249999
+     },
+     "enemy-far+push0.14": {
+      "minParty": 0.876,
+      "push": 0.04009277343750001
+     }
+    }
+   },
+   "yojimbo-cavern": {
+    "worstJudged": 0.884,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.944,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.884,
+      "push": 0.0293115234375
+     },
+     "action+push0.14": {
+      "minParty": 0.884,
+      "push": 0.029189453125
+     },
+     "enemy": {
+      "minParty": 0.1,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "seymour-natus": {
+    "worstJudged": 0.88,
+    "worstAt": "action+push0.06",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.984,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 0.924,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.88,
+      "push": 0.02138671875
+     },
+     "action+push0.14": {
+      "minParty": 0.88,
+      "push": 0.021499023437500004
+     },
+     "enemy": {
+      "minParty": 0.067,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-fallen-aeons": {
+    "worstJudged": 0.947,
+    "worstAt": "party+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.949,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.869,
+      "push": 0.09259277343750003
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.947,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.047666015625
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.04771484375
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "road-links": {
+      "minParty": 1,
+      "push": 0
+     },
+     "road-links+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "road-links+push0.14": {
+      "minParty": 0.932,
+      "push": 0.14
+     }
+    }
+   },
+   "seymour-omnis": {
+    "worstJudged": 0.878,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.877,
+      "push": 0.11692871093750001
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 0.884,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 0.906,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.878,
+      "push": 0.0774853515625
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.032,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-trema": {
+    "worstJudged": 0.905,
+    "worstAt": "action+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.905,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.142,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.14
+     },
+     "trema-link": {
+      "minParty": 1,
+      "push": 0
+     },
+     "trema-link+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "trema-link+push0.14": {
+      "minParty": 0.878,
+      "push": 0.1259521484375
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "isaaru-via-purifico": {
+    "worstJudged": 0.939,
+    "worstAt": "party+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.993,
+      "push": 0.14
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 0.945,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.939,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0.365,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0.188,
+      "push": 0.06
+     },
+     "enemy+push0.14": {
+      "minParty": 0.038,
+      "push": 0.14
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   },
+   "ffx2-den-of-woe": {
+    "worstJudged": 0.951,
+    "worstAt": "party+push0.14",
+    "rigs": {
+     "(menu)": {
+      "minParty": 1
+     },
+     "intro": {
+      "minParty": 1,
+      "push": 0
+     },
+     "intro+push0.06": {
+      "minParty": 0.971,
+      "push": 0.06
+     },
+     "intro+push0.14": {
+      "minParty": 0.888,
+      "push": 0.09337890625000002
+     },
+     "idle": {
+      "minParty": 1,
+      "push": 0
+     },
+     "idle+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "idle+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "action": {
+      "minParty": 1,
+      "push": 0
+     },
+     "action+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "action+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "party": {
+      "minParty": 1,
+      "push": 0
+     },
+     "party+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "party+push0.14": {
+      "minParty": 0.951,
+      "push": 0.14
+     },
+     "enemy": {
+      "minParty": 0,
+      "push": 0
+     },
+     "enemy+push0.06": {
+      "minParty": 0,
+      "push": 0.04442871093749999
+     },
+     "enemy+push0.14": {
+      "minParty": 0,
+      "push": 0.044296875
+     },
+     "victory": {
+      "minParty": 1,
+      "push": 0
+     },
+     "victory+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "victory+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     },
+     "reveal": {
+      "minParty": 1,
+      "push": 0
+     },
+     "reveal+push0.06": {
+      "minParty": 1,
+      "push": 0.06
+     },
+     "reveal+push0.14": {
+      "minParty": 1,
+      "push": 0.14
+     }
+    }
+   }
+  }
+ }
+}
