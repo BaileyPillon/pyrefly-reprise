@@ -25,6 +25,7 @@ import {
   computeAgeHours,
   formatPendingMarker,
   formatPendingWarningBlock,
+  normalizeBundle,
   pendingMarkerFileName,
   pendingMarkerPath,
   readPendingMarkers,
@@ -97,6 +98,21 @@ describe('computeAgeHours', () => {
     const now = new Date('2026-09-18T12:00:00.000Z');
     expect(computeAgeHours('not-a-date', now)).toBe(0);
     expect(computeAgeHours(undefined as unknown as string, now)).toBe(0);
+  });
+});
+
+describe('normalizeBundle', () => {
+  it('strips the "index-" prefix and ".js" suffix the page reports', () => {
+    expect(normalizeBundle('index-DLvZcIgF.js')).toBe('DLvZcIgF');
+  });
+
+  it('leaves a bare hash, the form the deploy records, unchanged', () => {
+    expect(normalizeBundle('DLvZcIgF')).toBe('DLvZcIgF');
+  });
+
+  it('is stable for null/undefined rather than throwing', () => {
+    expect(normalizeBundle(null)).toBe('');
+    expect(normalizeBundle(undefined)).toBe('');
   });
 });
 
