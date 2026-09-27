@@ -30,8 +30,8 @@ byte-identical, no file under `src/battle/ffx*` touched).
 
 ## What is next (not done here)
 
-1. The FF7 engine (`src/battle/ff7/`, plan steps 2 to 5) and Bailey's HUD (option A, made
-   more faithful; `docs/plans/ff7-hud-faithful-a-spec.md`).
+1. The FF7 engine (`src/battle/ff7/`, plan steps 2 to 5). Bailey's HUD (option A, made more
+   faithful) is built: `docs/handoff/ff7-hud.md`.
 2. Replace the three guards that stop the flow (`battleSpellFx`, `createEngine`,
    `createHud`) with `'ff7'` branches, give FF7 its own results and defeat panels (RETRY),
    then flip `FF7_EXPERIMENT_READY`.

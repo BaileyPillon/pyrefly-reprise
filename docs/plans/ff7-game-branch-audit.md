@@ -34,8 +34,9 @@ and is unreachable today anyway, because the battle screen throws first (below).
 secret door nor `__pyrefly.gotoChapter('ff7-guard-scorpion')` reaches a battle
 (`BattleScreenExperiment.ts` returns in its holding state). With the switch on, the
 first unbuilt piece throws a named error: `battleSpellFx` in `BattleScreen.enter`,
-then `createEngine`, then `createHud`. The FF7 engine and HUD tracks replace those
-guards with `'ff7'` branches; every other site below then becomes reachable and is
+then `createEngine`. (`createHud` answers `'ff7'` since 2026-09-27: the FF7 HUD,
+no coach; `docs/handoff/ff7-hud.md`.) The FF7 engine track replaces the rest with
+`'ff7'` branches; every other site below then becomes reachable and is
 already safe.
 
 ## Dispositions
@@ -68,7 +69,7 @@ already safe.
 | `BattleScreenSetup.ts:61` | N | FFX-2 slot warning only |
 | `BattleScreenSetup.ts:124-125` | G ×2 | `carryPartyForward`: FF7 has no chained link |
 | `BattleScreenWiring.ts:68, 73` | G ×2 | `createEngine`: never an `FFX2Engine` |
-| `BattleScreenWiring.ts:136, 138, 146` | G ×3 | `createHud`: never the FFX-2 HUD, Oversoul look or Rikku's coach |
+| `BattleScreenWiring.ts:136, 138, 146` | G ×3 | `createHud`: never the FFX-2 HUD, Oversoul look or Rikku's coach; since 2026-09-27 an explicit `'ff7'` branch returns `Ff7BattleHud` (no coach, no shared phone rail) |
 | `BattleScreenWiring.ts` `applyAtbConfig` (not grep) | U | only inside `createEngine`, after its guard |
 | `BattleEncounterChain.ts` `cueForGroup` (not grep) | E | a `null` (silent) chapter cue starts nothing |
 | `ChapterSelectScreen.ts:339` | U | board tiles are FFX and FFX-2 only |
@@ -161,8 +162,8 @@ yet), `victory-line.test.ts` (no FF7 results panel yet), `pause-restart-checkpoi
 
 ## What the FF7 engine and HUD tracks owe this list
 
-Replace the three G sites that stop the flow today (`battleSpellFx`, `createEngine`,
-`createHud`) with `'ff7'` branches, give the pause meters and `buildMemberRows` an FF7
+Replace the G sites that stop the flow today (`battleSpellFx`, `createEngine`; `createHud`
+is done, 2026-09-27) with `'ff7'` branches, give the pause meters and `buildMemberRows` an FF7
 answer (or keep them throwing and route FF7's pause and results through its own
 panels), and decide `BattleScreen.ts:327`, `BattleStartBanner` and the N rows against
 Bailey's picked HUD (option A, made more faithful; FF7 only). Re-run the grep above
