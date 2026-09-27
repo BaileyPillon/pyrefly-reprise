@@ -1,0 +1,208 @@
+{
+ "id": "ffx2-bahamut",
+ "size": "1600x900",
+ "errors": [],
+ "samples": 638,
+ "actingSamples": 301,
+ "violations": [
+  {
+   "t": 5954,
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26378
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 6163,
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 23723
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 6319,
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 25684
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 6470,
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26086
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 6578,
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26219
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 6671,
+   "phase": "play:action-start",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26394
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 6764,
+   "phase": "play:status-add",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26598
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 6871,
+   "phase": "play:status-add",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 26947
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 6964,
+   "phase": "play:status-add",
+   "acting": true,
+   "actor": "bahamut",
+   "ability": "Curse",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 27194
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 18179,
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "paine",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 30993
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 18279,
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "paine",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 44281
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  },
+  {
+   "t": 18389,
+   "phase": "play:damage",
+   "acting": true,
+   "actor": "paine",
+   "ability": "Attack",
+   "hits": [
+    {
+     "card": "eint__panel",
+     "zone": "bahamut",
+     "px": 45580
+    }
+   ],
+   "faded": 0,
+   "awaiting": false
+  }
+ ],
+ "fadedSeen": 0,
+ "shots": [
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand/ffx2-bahamut-1600x900-hit-0.jpg",
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand/ffx2-bahamut-1600x900-hit-1.jpg",
+  "D:/pyrefly-iter2-b6/tools/zz-b6.tmp/out/actfade-cand/ffx2-bahamut-1600x900-hit-2.jpg"
+ ],
+ "violationCount": 231
+}

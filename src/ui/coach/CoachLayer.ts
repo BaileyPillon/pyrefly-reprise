@@ -59,7 +59,7 @@ import type {
   MinigameResult,
   TurnPreview,
 } from '../../battle/common/types.ts';
-import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import type { ActingSignal, HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
 import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
@@ -252,9 +252,8 @@ class CoachedHud implements HudPort {
     this.inner.setProjector(project);
   }
 
-  setTargetingPort(port: TargetingPort): void {
-    this.inner.setTargetingPort?.(port);
-  }
+  setTargetingPort(port: TargetingPort): void { this.inner.setTargetingPort?.(port); }
+  setActing(signal: ActingSignal): void { this.inner.setActing?.(signal); } // A-15 / PR-0157: the fades hear the presenter
 
   update(dt: number): void {
     this.inner.update?.(dt);
