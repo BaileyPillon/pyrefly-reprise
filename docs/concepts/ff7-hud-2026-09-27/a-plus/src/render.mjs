@@ -14,7 +14,7 @@ try {
     const page = await browser.newPage({ viewport: { width: 1700, height: 1000 }, deviceScaleFactor: dpr });
     await page.goto(pathToFileURL(join(here, 'mock.html')).href);
     const m = await page.evaluate(async () => {
-      for (const f of ["500 20px 'M PLUS Rounded 1c'", '20px Dmg', "600 20px Rajdhani", '700 20px Silkscreen', '700 20px Chakra'])
+      for (const f of ["500 20px 'M PLUS Rounded 1c'", '600 20px Rajdhani', '700 20px Rajdhani', "600 20px 'Exo 2'", "800 20px 'Exo 2'", '500 20px Chakra', '700 20px Chakra'])
         await document.fonts.load(f, 'LimitAttack0123456789/“');
       build();
       await document.fonts.ready;

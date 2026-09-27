@@ -109,15 +109,24 @@ function sceneMarks(m) {
     s += `<g opacity=".85"><path d="M684 182 L990 520 M684 182 L1108 520" stroke="#ff4a3a" stroke-width="22" filter="url(#glow)"/>
       <path d="M684 182 L990 520 M684 182 L1108 520" stroke="#ffd8d0" stroke-width="5"/></g>`;
   }
-  if (m.ready) { // yellow ready triangle over the acting character (40 x 28)
-    s += `<path d="M965 408 H1005 L985 436Z" fill="#F7E30D" stroke="#3a3000" stroke-width="3" stroke-linejoin="round"/>`;
+  if (m.ready) { // yellow ready triangle over the actor, about 40 x 28: solid, no outline, caught
+    // part-way through its spin about the vertical axis (two faces shaded; spin rate our estimate)
+    s += `<path d="M966 408 L990 411 L985 437Z" fill="#F7E30D"/><path d="M990 411 L1004 405 L985 437Z" fill="#BFA800"/>
+      <path d="M966 408 L990 411 L1004 405 L982 404Z" fill="#FFF27A"/>`;
   }
   if (m.target) { // the same finger, pointing at the target
     s += `<g transform="translate(${m.target[0] - 84} ${m.target[1] - 22})">${gloveSVG(84, 44)}</g>`;
   }
-  for (const d of m.damage || []) {
-    s += `<text x="${d[0]}" y="${d[1]}" text-anchor="middle" font-family="Dmg" font-size="${DMG_FS}" fill="${d[3] || '#FFFFFF'}"
-      stroke="#181818" stroke-width="8" stroke-linejoin="round" paint-order="stroke fill" letter-spacing="2">${d[2]}</text>`;
-  }
+  for (const d of m.damage || []) s += damageDigits(d[0], d[1], d[2], d[3]);
   return s;
+}
+// Damage numerals: our own set, the PR7 digit skeletons (glyphs.js) drawn heavy on EQUAL cells
+// (a "1" takes a full cell), 40 px tall (10 u), white with an even 1 u (4 px) near-black edge.
+function damageDigits(cx, base, str, fill = '#FFFFFF') {
+  const k = 5, cell = 7.4, sw = 2.3, edge = 4 / k; // glyph units: cap 8 = 40 px
+  const L = GL.layout(str, { cell });
+  const x0 = cx - (L.width * k) / 2, y0 = base - 8 * k;
+  const paths = (col, w) => L.glyphs.map((g) => `<path d="${g.d}" stroke="${col}" stroke-width="${w}"/>`).join('');
+  return `<g transform="translate(${x0} ${y0}) scale(${k})" fill="none" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2">
+    ${paths('#181818', sw + 2 * edge)}${paths(fill, sw)}</g>`;
 }
