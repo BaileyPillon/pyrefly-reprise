@@ -107,6 +107,7 @@ export interface ChapterMeta {
   musicKeys: readonly string[];
   /** The chapter card's BOSS row when the first formation is not who the chapter is about (PR-0134). */
   bossLine?: string;
+  victoryPose?: 'pose' | 'hold'; // A-4: 'hold' where the sources withhold the pose (ffx-vs-ffx2-presentation §2.1, §2.2)
 }
 
 /** `GameId` → the pause screen's display label (FF7 added 2026-09-27 for the hidden experiment). */
@@ -171,7 +172,7 @@ const SEYMOUR_FLUX_META: ChapterMeta = {
 const YUNALESCA_META: ChapterMeta = {
   id: 'yunalesca',
   gameLabel: 'FFX',
-  numeral: 'II',
+  numeral: 'II', victoryPose: 'hold', // Zanarkand: "no one will pose" [ffx-vs-ffx2-presentation §2.1]
   title: 'Lady Yunalesca',
   subtitle: 'What Was Promised',
   location: 'Zanarkand Dome',
@@ -275,7 +276,7 @@ const BRASKAS_FINAL_AEON_META: ChapterMeta = {
 const FFX2_BAHAMUT_META: ChapterMeta = {
   id: 'ffx2-bahamut',
   gameLabel: 'FFX-2',
-  numeral: 'IV',
+  numeral: 'IV', victoryPose: 'hold', // no pose after Bahamut [ffx-vs-ffx2-presentation §2.2]
   title: 'Bahamut',
   subtitle: 'Something She Named',
   location: 'Bevelle Underground',
@@ -324,7 +325,7 @@ const FFX2_BAHAMUT_META: ChapterMeta = {
 const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   id: 'ffx2-vegnagun-shuyin',
   gameLabel: 'FFX-2',
-  numeral: 'V',
+  numeral: 'V', victoryPose: 'hold', // no pose after Shuyin [ffx-vs-ffx2-presentation §2.2]
   title: 'Vegnagun',
   subtitle: 'Before the Last Note',
   location: 'Heart of the Farplane',

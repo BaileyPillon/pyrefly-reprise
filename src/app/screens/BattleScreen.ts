@@ -53,6 +53,7 @@ import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
 import { presenterGameDeps } from './BattleScreenGameDeps.ts';
+import { getChapterMeta } from '../../data/chapter-meta.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -300,6 +301,7 @@ export class BattleScreen extends Screen {
       // The chapter's own ability rows: an enemy's physical ability draws its
       // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
       ...presenterGameDeps(chapter.game, chapter.buildRef),
+      victoryPose: getChapterMeta(chapter.id)?.victoryPose ?? 'pose', // A-4: II, IV, V, XIII hold the battle stance
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
     if (this.opts.auto) this.presenter.setAutoPlay(this.opts.auto);
