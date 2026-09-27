@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FF7 hi-fi frame</title>
+<!-- Hi-fi round: the painted scene (compose.py) under the A+ target HUD, drawn crisp by the A+ code
+     itself (docs/concepts/ff7-hud-2026-09-27/a-plus/src: our own PR7 glyph set, our own glove).
+     FF7 only. Frame 1 of the A+ set: Cloud's turn, the cursor on Attack. -->
+<style>
+body{margin:0;background:#000}
+section{position:relative;overflow:hidden;background:#000}
+.stage{position:absolute;inset:0}
+.stage img{width:100%;height:100%;display:block}
+.hud{position:absolute;inset:0}
+.hud div{position:absolute;box-sizing:border-box}
+.t{white-space:nowrap;font-variant-numeric:tabular-nums}
+.bg{inset:0;background:linear-gradient(to right,var(--bl),var(--br))}
+.bg::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to right,var(--tl),var(--tr));
+ -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent)}
+.fr{inset:0}
+.gb{border-style:solid;border-color:#A8A8A8 #5F5F5F #3B3B3B #929292}
+.cur{line-height:0}
+.cur svg{display:block}
+.strip{left:0;right:0;background:#000}
+.tri{position:absolute}
+</style></head>
+<body>
+<section id="s"><div class="stage"><img id="scene"></div><div id="h"></div></section>
+<script src="../../../ff7-hud-2026-09-27/a-plus/src/glyphs.js"></script>
+<script src="../../../ff7-hud-2026-09-27/a-plus/src/glove.js"></script>
+<script src="../../../ff7-hud-2026-09-27/a-plus/src/hud.js"></script>
+<script>
+// Same numbers as A+ frame 1 (frames.js): research preset max HP/MP, placeholder current HP.
+const C = { n: 'Cloud', hp: 279, max: 316, mp: 57, mpMax: 57, lim: 0.48, time: 1 };
+const B = { n: 'Barret', hp: 150, max: 317, mp: 43, mpMax: 43, lim: 0.4, time: 0.55 };
+const F1 = { id: 'f1', msg: '“Attack while it\'s tail\'s up!', party: [C, B], cmd: { slots: ['Attack', 'Magic', '', 'Item'], cur: 0 } };
+function build(sceneUrl, mode, tri) {
+  const s = document.getElementById('s');
+  const phone = mode === 'phone';
+  s.style.width = phone ? '390px' : '1600px'; s.style.height = phone ? '844px' : '900px';
+  document.getElementById('scene').src = sceneUrl;
+  measureFonts();
+  // the ready triangle (A+ scene.js shape, solid yellow, mid-spin) over Cloud's head, in page px
+  const k = phone ? 0.5 * 1.3 : 1;
+  const t = `<svg class="tri" style="left:${tri[0] - 19 * k}px;top:${tri[1] - 40 * k}px" width="${40 * k}" height="${36 * k}" viewBox="964 402 42 37">
+    <path d="M966 408 L990 411 L985 437Z" fill="#F7E30D"/><path d="M990 411 L1004 405 L985 437Z" fill="#BFA800"/>
+    <path d="M966 408 L990 411 L1004 405 L982 404Z" fill="#FFF27A"/></svg>`;
+  document.getElementById('h').innerHTML = t + hud(F1, mode, 'PR7');
+  return new Promise((r) => { const i = document.getElementById('scene'); if (i.complete) r(); else i.onload = r; });
+}
+</script>
+</body></html>
