@@ -98,6 +98,7 @@ describe('FF7 staging: sides and facing (research/ff7-battle-staging.md §2, §3
     expect(optsFor('barret')).toMatchObject({ facing: -1 });
     expect(optsFor('guard-scorpion')).toMatchObject({ facing: 1 });
     for (const id of ['cloud', 'barret', 'guard-scorpion']) expect(optsFor(id)).not.toHaveProperty('side');
+    for (const id of ['cloud', 'barret', 'guard-scorpion']) expect(optsFor(id)['turnRing'], id).toBe(false); // FF7's triangle is the only turn marker
   });
 
   it('never mirrors a painting: each faces the way its body turns (Barret keeps his right gun-arm)', () => {
@@ -267,6 +268,7 @@ describe('FFX and FFX-2 scenes are untouched', () => {
     await stage.add(fighter('yojimbo', 'enemy', 1, 'yojimbo', true));
     expect(optsFor('lulu')).toMatchObject({ side: 'party' });
     expect(optsFor('yojimbo')).toMatchObject({ side: 'enemy' });
+    expect(optsFor('lulu')['turnRing']).toMatchObject({ color: 0xf0cf92 }); // FFX keeps its gold ring
     expect(optsFor('lulu')).not.toHaveProperty('facing');
     expect(bodyFacingOption(undefined, 'aeon')).toEqual({ side: 'aeon' });
   });

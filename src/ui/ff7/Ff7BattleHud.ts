@@ -20,6 +20,7 @@
  */
 
 import './ff7-hud.css';
+import './ff7-screen.css'; // the unmarked PAUSE corner (BattleScreen's `battle-pause-chip--ff7`)
 import type {
   AtbSnapshot,
   AvailableCommand,
@@ -37,7 +38,7 @@ import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { Ff7CommandMenu } from './Ff7CommandMenu.ts';
 import { FF7_PHONE_LAYOUT, ff7Geometry, type Ff7Geometry, type Ff7PhoneLayout } from './ff7Geometry.ts';
 import { Ff7HelpLine } from './Ff7HelpLine.ts';
-import { partyRows, snapshotOf, withGauges, withLimit, type Ff7RowView, type LimitNote } from './ff7HudModel.ts';
+import { LIMIT_FULL, partyRows, snapshotOf, withGauges, withLimit, type Ff7RowView, type LimitNote } from './ff7HudModel.ts';
 import { Ff7Marks, type Projector } from './ff7Marks.ts';
 import { highlighted, type Ff7MenuState } from './ff7MenuModel.ts';
 import { namesWindowHtml, stripHtml, statusWindowHtml, type BlinkPhase } from './Ff7PartyRows.ts';
@@ -65,6 +66,16 @@ function phoneLayoutFromUrl(): Ff7PhoneLayout | null {
 /** Actions FF7 plays with no name in the top window [research/ff7-guard-scorpion.md §5: "<>" self]. */
 const NAMELESS = new Set(['raise-tail', 'drop-tail']);
 
+/** Each party member's Limit gauge in `state`, as a note. */
+function heldLimits(state: BattleState): Map<CombatantId, LimitNote> {
+  const out = new Map<CombatantId, LimitNote>();
+  for (const id of state.activeIds) {
+    const gauge = (state.combatants[id] as Ff7Combatant | undefined)?.ff7?.limit?.gauge;
+    if (typeof gauge === 'number') out.set(id, { value: gauge, ready: gauge >= LIMIT_FULL });
+  }
+  return out;
+}
+
 function layer(name: string): HTMLDivElement {
   const el = document.createElement('div');
   el.className = `ff7-layer ff7-layer--${name}`;
@@ -86,6 +97,8 @@ export class Ff7BattleHud implements HudPort {
   private rows: Ff7RowView[] = [];
   private gauges: AtbSnapshot | null = null;
   private readonly limits = new Map<CombatantId, LimitNote>();
+  /** Each gauge as of the last full sync: a burst's vitals keep it until that member's own `limit-gauge` event. */
+  private held = new Map<CombatantId, LimitNote>();
   private projector: Projector | null = null;
   private targeting: TargetingPort | null = null;
   private actor: CombatantId | null = null;
@@ -139,13 +152,15 @@ export class Ff7BattleHud implements HudPort {
     this.state = state;
     this.gauges = snapshotOf(preview) ?? this.gauges;
     this.limits.clear(); // the engine's own gauge is current again
+    this.held = heldLimits(state);
     this.rows = partyRows(state, this.gauges, this.limits);
     this.renderBand();
   }
 
   syncVitals(state: BattleState): void {
     this.state = state;
-    this.rows = partyRows(state, this.gauges, this.limits);
+    // The engine's state is already the end of the burst: its gauges would rise before the blow that fills them lands.
+    this.rows = partyRows(state, this.gauges, new Map([...this.held, ...this.limits]));
     this.renderBand();
   }
 
@@ -184,7 +199,7 @@ export class Ff7BattleHud implements HudPort {
     switch (event.type) {
       case 'message':
         // Battle dialogue has no speaker name and opens with a quote mark [spec §3.3, §5.9; measured + S8].
-        this.line.say(event.kind === 'story' ? `“${event.text}` : event.text);
+        this.line.say(event.kind === 'story' ? `“${event.text}` : event.text, false, event.kind === 'story');
         break;
       case 'action-start':
         // The ability's name in the top window [spec §5.9: enemy actions; party spells and Limits, our estimate].
@@ -246,6 +261,11 @@ export class Ff7BattleHud implements HudPort {
   }
 
   // --------------------------------------------------------------- helpers
+
+  /** Resolves when every queued line of battle dialogue has shown (playback holds on it: `bracketAnimations`). */
+  dialogueShown(): Promise<void> {
+    return this.line.dialogueShown();
+  }
 
   /** For tests and the harness: what the HUD shows now. */
   inspect(): { rows: Ff7RowView[]; message: string | null; menu: Ff7MenuState | null; ready: CombatantId | null; atbMode: 'wait' | 'active'; geometry: Ff7Geometry } {

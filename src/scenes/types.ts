@@ -180,6 +180,13 @@ export interface SceneStaging {
    * everywhere else.
    */
   readonly fixedCamera?: boolean;
+  /**
+   * `false`: no turn ring under any figure (the house gold ring under the
+   * fighter whose turn it is, the cooler one under an acting fiend). FF7 marks
+   * the ready fighter only with its triangle (`docs/plans/ff7-hud-faithful-a-spec.md`
+   * §7 #15). Omitted everywhere else: FFX and FFX-2 keep their rings.
+   */
+  readonly turnRings?: false;
 }
 
 /** The staging switches a build set, and only those. */
@@ -193,6 +200,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.figureHeights) out.figureHeights = build.figureHeights;
   if (build.sideFacing) out.sideFacing = build.sideFacing;
   if (build.fixedCamera) out.fixedCamera = true;
+  if (build.turnRings === false) out.turnRings = false;
   return out;
 }
 

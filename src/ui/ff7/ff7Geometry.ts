@@ -6,22 +6,26 @@
  * target's rules (`docs/concepts/ff7-hud-2026-09-27/a-plus/README.md` point 14)
  * with the three repairs its fidelity review asked for:
  *
- * 1. **The status window's right-hand cluster keeps FF7's spacing.** MP, LIMIT
- *    and TIME hang from the window's right edge at FF7's own scale: TIME ends
+ * 1. **The status window's columns keep FF7's spacing.** On a phone, MP, LIMIT
+ *    and TIME hang from the window's right edge at FF7's own scale (TIME ends
  *    6 u inside the frame, LIMIT ends 2 u before TIME, the MP digits end 3 u
- *    before LIMIT. HP keeps its place at the window's left. On a 16:9 screen the
- *    stretch slack falls between HP and MP, not inside the LIMIT/TIME pair
- *    (A+ put it inside, 44 px gaps where FF7 has 8).
+ *    before LIMIT). On a desktop every column is a fraction of the width, as
+ *    spec §5.1 / §5.2 lay them (HP max ends at 204 u, MP at 236 u, LIMIT 239 to
+ *    275 u, TIME 277 to 313 u; gauge widths use the horizontal scale), so the
+ *    16:9 slack is shared out between the columns instead of all falling between
+ *    HP and MP (the FF7 purist review, 2026-09-27, item 11).
  * 2. **Header caps are small**: 3 u at the body's 8 u (the stills read about
  *    3.5 u including the outline; A+ drew 4.5 u).
  * 3. **On a phone the command window only overlaps the names window**, as in
  *    FF7: its bottom sits on the names window's bottom, so it never reaches the
  *    status window's header line (A+ phone A clipped MP, LIMIT and TIME).
  *
- * Desktop: every x anchor is a fraction of the width (`hx` px per u), every y
- * a fraction of the height (`vs`), every size (type, frames, gauges, the
- * cursor) the smaller of the two (`s`), so type is never stretched (Bailey's
- * pick D-238: stretch on 16:9, no pillarbox). Phone (an upright window under
+ * Desktop: every x anchor and window edge is a fraction of the width (`hx` px
+ * per u), every y a fraction of the height (`vs`), every other size (type,
+ * frames, gauge heights, the cursor) the smaller of the two (`s`), so type is
+ * never stretched (Bailey's pick D-238: stretch on 16:9, no pillarbox). The
+ * command window is FF7's measured box, 72 to 131 u (360 to 655 px at 1600,
+ * text at 390; spec §5.2; the review's item 14). Phone (an upright window under
  * 600 px): one uniform scale `p` for both band windows, stacked (spec §6).
  * Two phone adaptations exist (A+ sheet 7): **A**, the status window filling
  * the width (2.05 px/u), and **B**, 1.64 px/u with each name repeated at the
@@ -134,6 +138,12 @@ function rightCluster(windowRight: number, hp0: number, s: number) {
     hdr: { hp: hp0, mp: mpLine0 + 4 * s, limit: limitX + 1 * s, time: timeX + 3 * s } };
 }
 
+/** The desktop status window's columns, each at its own u as a fraction of the width [spec §3.2, §5.2]. */
+function deskRightCluster(X: (u: number) => number, s: number, hx: number) {
+  return { hp0: X(144), curEnd: X(172), maxEnd: X(204), mpLine0: X(207), mpEnd: X(236), limitX: X(239), timeX: X(277), gaugeW: 36 * hx, gaugeH: 9 * s,
+    hdr: { hp: X(144), mp: X(211), limit: X(240), time: X(280) } };
+}
+
 function desk(W: number, H: number): Ff7Geometry {
   const vs = H / 224;
   const hx = W / 320;
@@ -144,8 +154,8 @@ function desk(W: number, H: number): Ff7Geometry {
   const bandR = R4(138, 159, 319, 213); // FF7's 3 u gap after the left window
   const rows = ROWS_U.map(Y);
   const slots = SLOTS_U.map(Y);
-  const cmdX = X(131) - 59 * s; // right edge on the Barrier column, FF7's 59 u width
-  const list = { x: cmdX, y: Y(163), w: 156 * s, h: 54 * vs };
+  const cmdX = X(72); // FF7's measured box, 72 to 131 u: its right edge on the Barrier column
+  const list = { x: cmdX, y: Y(163), w: 156 * hx, h: 54 * vs };
   return {
     mode: 'desk', W, H, s,
     cap: 8 * s, hdrCap: 3 * s, hdrEdge: Math.max(1, s / 4), shadow: s, frame: 3 * s, radius: 2 * s,
@@ -154,11 +164,11 @@ function desk(W: number, H: number): Ff7Geometry {
     bandL: R4(1, 159, 135, 213),
     bandR,
     left: { hdrBase: Y(165), rows, nameX: X(13), barrierRight: X(131) },
-    right: { hdrBase: Y(165), rows, ...rightCluster(bandR.x + bandR.w, X(144), s) },
-    cmd: { r: { x: cmdX, y: Y(163), w: 59 * s, h: 54 * vs }, cols: [cmdX + 6 * s], rows: slots },
-    list: { r: list, cols: [6, 58, 102].map((d) => cmdX + d * s), rows: slots },
-    mpWin: { x: list.x + list.w + s, y: Y(197), w: 66 * s, h: 18 * s },
-    lim: { r: { x: cmdX + 9 * s, y: Y(166), w: 133 * s, h: 24 * vs }, hdrX: cmdX + 16 * s, hdrBase: Y(173.5), textX: cmdX + 38 * s, textBase: Y(186) },
+    right: { hdrBase: Y(165), rows, ...deskRightCluster(X, s, hx) },
+    cmd: { r: { x: cmdX, y: Y(163), w: 59 * hx, h: 54 * vs }, cols: [X(78)], rows: slots },
+    list: { r: list, cols: [78, 130, 174].map(X), rows: slots },
+    mpWin: { x: Math.min(list.x + list.w + s, W - 4 - 66 * s), y: Y(197), w: 66 * s, h: 18 * s },
+    lim: { r: { x: X(81), y: Y(166), w: 133 * hx, h: 24 * vs }, hdrX: X(88), hdrBase: Y(173.5), textX: X(110), textBase: Y(186) },
     cursor: { w: 20 * s, h: 10 * s, tip: 2 * s },
     dmgCap: 10 * s,
     tri: { w: 10 * s, h: 7 * s },

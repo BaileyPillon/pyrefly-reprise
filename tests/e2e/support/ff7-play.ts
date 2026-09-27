@@ -30,6 +30,8 @@ export interface Look {
   over: boolean;
   message: string | null;
   seed: number | null;
+  /** Cloud's world x on the field (the melee run: home 4.1, the strike point near 0). */
+  cloudX: number | null;
 }
 
 /** What is on screen now, read through the debug API (never written). */
@@ -39,7 +41,7 @@ export function look(page: Page): Promise<Look> {
     const stack = api.app.screens.map((s) => s.name);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const b = api.battle() as any;
-    if (!b || !b.hud || !b.engine) return { stack, battle: false, ready: null, menu: null, tailUp: false, over: false, message: null, seed: null };
+    if (!b || !b.hud || !b.engine) return { stack, battle: false, ready: null, menu: null, tailUp: false, over: false, message: null, seed: null, cloudX: null };
     const seen = b.hud.inspect?.() ?? {};
     const m = seen.menu ?? null;
     const st = b.engine.state();
@@ -62,6 +64,7 @@ export function look(page: Page): Promise<Look> {
       over: !!st.result,
       message: seen.message ?? null,
       seed: b.opts?.seed ?? null,
+      cloudX: b.stage?.actor?.('cloud')?.position?.x ?? null,
     };
   });
 }
@@ -71,7 +74,7 @@ export type Via = 'keys' | 'taps';
 
 export interface TurnHooks {
   /** Called with a moment name when the HUD reaches it (the spec takes the frame). */
-  moment: (name: 'turn' | 'magic' | 'target' | 'limit-full' | 'limit-window') => Promise<void>;
+  moment: (name: 'turn' | 'magic' | 'target' | 'limit-full' | 'limit-window' | 'defend') => Promise<void>;
   /** Attack into the raised tail once (the Tail Laser frame), then play sensibly. */
   laserOnce: boolean;
 }
@@ -108,12 +111,14 @@ async function confirmBoss(page: Page, via: Via): Promise<void> {
   await press(page, 'Enter');
 }
 
-async function defend(page: Page, via: Via): Promise<void> {
+async function defend(page: Page, via: Via, hooks: TurnHooks): Promise<void> {
   if (via === 'taps') {
     await tapSel(page, '.ff7-layer--menu .ff7-hit[data-edge="defend"]'); // the finger goes off the right edge
+    await hooks.moment('defend');
     return tapSel(page, '.ff7-layer--menu .ff7-hit[data-edge="defend"]'); // and Defend is chosen
   }
   await press(page, 'ArrowRight');
+  await hooks.moment('defend');
   await press(page, 'Enter');
 }
 
@@ -127,7 +132,7 @@ export async function takeTurn(page: Page, via: Via, policy: Policy, hooks: Turn
   if (!now.menu || now.menu.view !== 'top') return;
   const actor = now.ready;
   const slots = now.menu.slots;
-  if (now.tailUp && policy === 'sensible' && !(hooks.laserOnce && !state.lasered)) return defend(page, via);
+  if (now.tailUp && policy === 'sensible' && !(hooks.laserOnce && !state.lasered)) return defend(page, via, hooks);
   if (now.tailUp) state.lasered = true;
   if (slots[0] === 'Limit') {
     await hooks.moment('limit-full');

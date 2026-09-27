@@ -12,6 +12,12 @@
  *    [our estimate; FF7's Battle Message speed is a Config value];
  * 3. otherwise the window is closed (the A+ frames 2 and 3).
  *
+ * A line of battle **dialogue** (a `story` message: Guard Scorpion's three
+ * warnings) belongs to the action that says it [research/ff7-guard-scorpion.md
+ * §5.1: shown within the Raise Tail turn], so an action name never cuts it
+ * short, and {@link dialogueShown} lets playback wait until every queued line
+ * has had its full time before the next action starts (FF7 only).
+ *
  * Time runs only through {@link update}, so the window freezes with the game
  * loop when a capture stops it.
  */
@@ -26,8 +32,10 @@ export function messageSeconds(line: string): number {
 }
 
 export class Ff7HelpLine {
-  private readonly queue: string[] = [];
+  private readonly queue: Array<{ line: string; story: boolean }> = [];
   private current: string | null = null;
+  private currentStory = false;
+  private waiters: Array<() => void> = [];
   private left = 0;
   private help: string | null = null;
   private dirty = true;
@@ -43,12 +51,25 @@ export class Ff7HelpLine {
    * Queue a battle message. With `now` (an action's name) it replaces the line on
    * screen at once (that line is dropped) and the queue resumes after it: the name belongs to the moment
    * the action happens, not to the end of a long queue of script lines [our estimate].
+   * Dialogue (`story` lines) is never cut or split: the name comes after its last line.
    */
-  say(line: string, now = false): void {
+  say(line: string, now = false, story = false): void {
     const t = line.trim();
     if (!t) return;
-    if (this.current === null || now) this.start(t);
-    else this.queue.push(t);
+    if (this.current === null || (now && !this.currentStory)) this.start(t, story);
+    else if (now) this.queue.splice(this.lastStory() + 1, 0, { line: t, story }); // dialogue keeps its time; the name follows the block
+    else this.queue.push({ line: t, story });
+  }
+
+  /** True while a line of dialogue is on screen or queued. */
+  get dialogueBusy(): boolean {
+    return this.currentStory || this.queue.some((q) => q.story);
+  }
+
+  /** Resolves once every queued line of dialogue has been shown for its full time (at once when none is). */
+  dialogueShown(): Promise<void> {
+    if (!this.dialogueBusy) return Promise.resolve();
+    return new Promise((resolve) => this.waiters.push(resolve));
   }
 
   /** SELECT's help text, or null to close it. */
@@ -63,9 +84,11 @@ export class Ff7HelpLine {
   clear(): void {
     this.queue.length = 0;
     this.current = null;
+    this.currentStory = false;
     this.help = null;
     this.dirty = true;
     this.render();
+    this.release();
   }
 
   update(dt: number): void {
@@ -73,12 +96,14 @@ export class Ff7HelpLine {
     this.left -= dt;
     if (this.left > 0) return;
     const next = this.queue.shift();
-    if (next !== undefined) this.start(next);
+    if (next !== undefined) this.start(next.line, next.story);
     else {
       this.current = null;
+      this.currentStory = false;
       this.dirty = true;
       this.render();
     }
+    this.release();
   }
 
   /** True while a message is on screen or queued. */
@@ -118,8 +143,22 @@ export class Ff7HelpLine {
     return range.getBoundingClientRect?.().width ?? 0;
   }
 
-  private start(line: string): void {
+  /** Index of the last queued line of dialogue, or -1. */
+  private lastStory(): number {
+    for (let i = this.queue.length - 1; i >= 0; i--) if (this.queue[i]!.story) return i;
+    return -1;
+  }
+
+  private release(): void {
+    if (this.dialogueBusy || this.waiters.length === 0) return;
+    const waiting = this.waiters;
+    this.waiters = [];
+    for (const resolve of waiting) resolve();
+  }
+
+  private start(line: string, story = false): void {
     this.current = line;
+    this.currentStory = story;
     this.left = messageSeconds(line);
     this.dirty = true;
     this.render();

@@ -97,6 +97,8 @@ export class ResultsScreen extends Screen {
   private readonly awardUnit: 'AP' | 'EXP';
   /** The real clear time, not the engine's unadvanced `elapsedMs`. */
   private readonly clearMs: number;
+  /** FF7's rows carry no house clear-time chip, NEW BEST or party-count tag (the FF7 purist review, item 7). */
+  private readonly ff7: boolean;
   private ledger: LedgerLine[] = [];
 
   private revealMs = 0;
@@ -116,6 +118,7 @@ export class ResultsScreen extends Screen {
     const game = chapter?.buildRef.game ?? 'ffx'; // FF7 pays EXP (and AP to Materia), like FFX-2's EXP ledger
     this.awardUnit = game === 'ffx' ? 'AP' : 'EXP';
     this.clearMs = clearTimeMs(opts.result, opts.elapsedMs, game);
+    this.ff7 = game === 'ff7';
     this.rows = buildMemberRows(chapter, opts.result);
   }
 
@@ -337,7 +340,7 @@ export class ResultsScreen extends Screen {
         kind: 'count',
         key: this.awardUnit,
         value: this.awardUnit === 'AP' ? result.ap : result.exp,
-        detail: `×${this.rows.length} PARTY`,
+        detail: this.ff7 ? undefined : `×${this.rows.length} PARTY`,
       },
     ];
     // FFX-2 pays EXP to the girl and AP to the dressphere she is wearing, so
@@ -368,13 +371,13 @@ export class ResultsScreen extends Screen {
     if (this.victory && this.opts.result.overkilled.length > 0) {
       tags.push(`OVERKILL ×${this.opts.result.overkilled.length}`);
     }
-    if (this.wasNewBest) tags.push('NEW BEST');
+    if (this.wasNewBest && !this.ff7) tags.push('NEW BEST');
 
     const model: ResultsPageModel = {
       victory: this.victory,
       silent: this.silent,
       heading: pageHeading(this.victory, this.silent),
-      clock: formatClearTime(this.clearMs),
+      clock: this.ff7 ? '' : formatClearTime(this.clearMs),
       tags,
       quip: this.quip,
       ledger: this.ledger,

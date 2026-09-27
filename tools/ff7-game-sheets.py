@@ -5,8 +5,11 @@ Bailey's pick D-237 made more faithful; the art composite for the field, D-240).
 running game, captured by tests/e2e/ff7-guard-scorpion.spec.ts with real keys and taps
 (docs/screenshots/ff7/game-*.jpg). Each sheet stays under 2000 px tall so it reads on a phone.
 
-    python tools/ff7-game-sheets.py
+    python tools/ff7-game-sheets.py [<dir of the frames before the purist-review repair>]
+
+With a before-dir it also writes the repair sheets (before vs after, and the new moments).
 """
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -94,6 +97,35 @@ def main() -> None:
     ]
     sheet('sheet-game-vs-composite.jpg', 'The field: the art composite Bailey accepted (D-240) vs the running game',
           'Left: round 2 composite. Right: the running game at 1600x900 (opening; the Tail Laser with the raised tail).', art, 780, 1)
+
+    if len(sys.argv) > 1:
+        repair(Path(sys.argv[1]))
+
+
+def repair(before: Path) -> None:
+    """The FF7 purist review's repair pass (2026-09-27): the same moments before and after, and the new ones."""
+    pairs = [
+        ('framing (items 1, 3, 11, 14)', before / 'game-1600x900-turn.jpg', BUILD / 'game-1600x900-turn.jpg'),
+        ('Tail Laser numerals (item 2)', before / 'game-1600x900-tail-laser.jpg', BUILD / 'game-1600x900-tail-laser.jpg'),
+        ('results rows (item 7)', before / 'game-1600x900-victory.jpg', BUILD / 'game-1600x900-victory.jpg'),
+    ]
+    sheet('sheet-repair-1600.jpg', 'FF7 purist review repairs, 1600x900: before vs after',
+          'Same fight, real keys. Raised fixed camera: every fighter whole above the band; the party a diagonal in depth.', pairs, 780, 1,
+          ('before', 'after'))
+    moments = [
+        ('warnings (item 6)', BUILD / 'game-1600x900-hint-2.jpg', BUILD / 'game-1600x900-hint-3.jpg'),
+        ('run and edge (items 4, 12)', BUILD / 'game-1600x900-melee-strike.jpg', BUILD / 'game-1600x900-defend.jpg'),
+    ]
+    sheet('sheet-repair-moments.jpg', 'New moments: the warnings as one block, the melee run, Defend over whole fields',
+          'Left pair: line 2 then line 3, nothing between. Right pair: Cloud at the strike point; Defend covering the whole HP field.',
+          moments, 780, 1, ('first', 'then'))
+    phone = [
+        ('turn', before / 'game-390x844-turn.jpg', BUILD / 'game-390x844-turn.jpg'),
+        ('Tail Laser', before / 'game-390x844-tail-laser.jpg', BUILD / 'game-390x844-tail-laser.jpg'),
+    ]
+    sheet('sheet-repair-390.jpg', 'FF7 at 390x844 (phone B): before vs after the repair',
+          'No ground rings, no PAUSE chip, each name once; the upright framing is still an options question.', phone, 300, 2,
+          ('before', 'after'))
 
 
 if __name__ == '__main__':

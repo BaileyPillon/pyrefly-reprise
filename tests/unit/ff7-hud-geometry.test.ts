@@ -25,17 +25,17 @@ describe('desktop 1600 x 900', () => {
     expect((g.bandR.x - (g.bandL.x + g.bandL.w)) / (1600 / 320)).toBeCloseTo(3, 6); // FF7's 3 u gap
   });
 
-  it("keeps FF7's spacing in the status window's right cluster: MP 3 u, LIMIT 2 u, TIME 6 u from the edge", () => {
+  it("lays the status window's columns at FF7's u as fractions of the width (spec §5.2; the purist review's item 11)", () => {
     const R = g.right;
-    const edge = g.bandR.x + g.bandR.w;
-    expect((R.limitX - R.mpEnd) / u).toBeCloseTo(3, 6);
-    expect((R.timeX - (R.limitX + R.gaugeW)) / u).toBeCloseTo(2, 6);
-    expect((edge - (R.timeX + R.gaugeW)) / u).toBeCloseTo(6, 6);
-    expect(R.gaugeW / R.gaugeH).toBeCloseTo(4, 6); // 36 x 9 u
-    expect((R.mpEnd - R.mpLine0) / u).toBeCloseTo(29, 6);
-    // HP keeps its place at the left; the stretch slack sits between HP and MP.
-    expect(R.hp0).toBeCloseTo(144 * 5, 6);
-    expect(R.mpLine0).toBeGreaterThan(R.maxEnd);
+    const hx = 1600 / 320;
+    // HP 720, current ends 860, max ends 1020; MP ends 1180 (line from 1035); LIMIT 1195-1375; TIME 1385-1565.
+    expect([R.hp0, R.curEnd, R.maxEnd, R.mpLine0, R.mpEnd, R.limitX, R.timeX].map((x) => Math.round(x))).toEqual([720, 860, 1020, 1035, 1180, 1195, 1385]);
+    expect(R.gaugeW).toBeCloseTo(36 * hx, 6); // 180 px: gauge widths use the horizontal scale
+    expect(R.gaugeH).toBeCloseTo(9 * u, 6); // 36 px
+    expect(R.timeX - (R.limitX + R.gaugeW)).toBeCloseTo(2 * hx, 6);
+    // No hole between HP and MP: the 16:9 slack is shared out, MP starts 3 u after HP's max.
+    expect((R.mpLine0 - R.maxEnd) / hx).toBeCloseTo(3, 6);
+    expect([R.hdr.mp, R.hdr.limit, R.hdr.time].map((x) => Math.round(x))).toEqual([1055, 1200, 1400]);
   });
 
   it('draws header caps at 3 u against the 8 u body cap (the stills read about 0.44 with the edge)', () => {
@@ -43,10 +43,11 @@ describe('desktop 1600 x 900', () => {
     expect((g.hdrCap + 2 * g.hdrEdge) / g.cap).toBeLessThan(0.5);
   });
 
-  it('opens the command window 59 u wide, over the names window, 4 u below the band (§7 item 8)', () => {
+  it('opens the command window at FF7s measured 72 to 131 u (360 to 655 px, text at 390), over the names window, 4 u below the band (§7 item 8)', () => {
     const c = g.cmd.r;
-    expect(c.w / u).toBeCloseTo(59, 6);
+    expect([Math.round(c.x), Math.round(c.x + c.w), Math.round(g.cmd.cols[0]!)]).toEqual([360, 655, 390]);
     expect(c.x + c.w).toBeCloseTo(g.left.barrierRight, 6);
+    expect(g.list.cols.map((x) => Math.round(x))).toEqual([390, 650, 870]); // columns at 78, 130, 174 u
     expect((c.y + c.h - (g.bandL.y + g.bandL.h)) / (900 / 224)).toBeCloseTo(4, 6);
     expect(g.cmd.rows[1]! - g.cmd.rows[0]!).toBeCloseTo(12 * (900 / 224), 6);
   });

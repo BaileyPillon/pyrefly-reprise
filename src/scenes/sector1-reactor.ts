@@ -35,9 +35,9 @@ import {
 // and which are our estimates.
 //
 // THE PAINTING. One plane, no parallax layers (the camera never moves, so a
-// layer would only register), sized to cover the frame at z -12 as the
-// composite shows it: fit to the width at 16:9, a sliver cropped top and
-// bottom. No 3D ground and no fog: the painting's own grated catwalk is the
+// layer would only register), square to the raised camera's pitched view and
+// fit to the 16:9 width, lifted so its floor ends at the HUD band's top edge
+// (its crown cropped; `sector1Backdrop`). No 3D ground and no fog: the painting's own grated catwalk is the
 // floor, as in the composite, and each figure brings its contact shadow.
 
 /** The published slots, same shape every other scene exports. */
@@ -105,6 +105,9 @@ export const buildSector1ReactorScene: SceneFactory = async (opts: SceneBuildOpt
 
   const backdrop = await Backdrop.create(backdropOptions);
   backdrop.applyTo(group);
+  // Square to the pitched view (`sector1Backdrop`): the plane leans back by the camera's pitch, so the painting reads undistorted.
+  const painting = backdrop.group.getObjectByName('backdrop-painting');
+  if (painting) painting.rotation.x = -plane.pitch;
 
   const lights = new LightRig({
     palette: backdrop.palette,

@@ -65,9 +65,14 @@ async function waitForScreen(page: Page, name: string, timeoutMs = 60_000): Prom
   await page.waitForFunction((n) => window.__pyrefly!.app.screens.some((s) => s.name === n) && window.__pyrefly!.app.current?.name === n, name, { timeout: timeoutMs });
 }
 
-/** Moments the play loop reaches; each is shot once. */
-function momentShooter(page: Page): { moment: (n: string) => Promise<void>; onLook: (l: Look) => Promise<void>; seen: Set<string> } {
+/** The three warnings' openings (research/ff7-guard-scorpion.md §5.1); line 2 and 3 are the same in both cases. */
+const HINT_2 = "“Attack while it's tail's up!";
+const HINT_3 = '“It';
+
+/** Moments the play loop reaches; each is shot once. `messages` is every top-window line seen, in order. */
+function momentShooter(page: Page): { moment: (n: string) => Promise<void>; onLook: (l: Look) => Promise<void>; seen: Set<string>; messages: string[] } {
   const seen = new Set<string>();
+  const messages: string[] = [];
   const once = async (n: string): Promise<void> => {
     if (seen.has(n)) return;
     seen.add(n);
@@ -75,14 +80,26 @@ function momentShooter(page: Page): { moment: (n: string) => Promise<void>; onLo
   };
   return {
     seen,
+    messages,
     moment: once,
     onLook: async (l) => {
+      if (l.message && l.message !== messages[messages.length - 1]) messages.push(l.message);
       if (l.message === 'Tail Laser' && !seen.has('tail-laser')) {
-        await page.waitForTimeout(700); // the numerals land
+        await page.waitForTimeout(1300); // the boss's stand-in recoil, then the numerals land
         await once('tail-laser');
       }
+      if (l.message === HINT_2) await once('hint-2');
+      if (l.message?.startsWith(HINT_3)) await once('hint-3');
+      if (l.cloudX !== null && l.cloudX < 0.6 && !seen.has('melee-strike')) await once('melee-strike'); // Cloud at the strike point
     },
   };
+}
+
+/** The three warnings are one block: line 3 follows line 2 with no other top-window line between (review item 6). */
+function expectHintBlock(messages: readonly string[]): void {
+  const two = messages.indexOf(HINT_2);
+  expect(two, `the second warning shows (${messages.join(' | ')})`).toBeGreaterThan(-1);
+  expect(messages[two + 1] ?? '', 'the third warning follows the second at once').toMatch(/^“It/);
 }
 
 async function snapshotBoard(page: Page): Promise<{ board: Awaited<ReturnType<typeof boardView>>; save: string | null }> {
@@ -128,7 +145,9 @@ test('1600x900, keys: LIMIT opens the fight, Bolt and Defend win it, results, th
   await expectBoardUnchanged(page, before);
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? '{}'), EXPERIMENTS_KEY);
   expect(record['ff7-guard-scorpion']?.clears).toBe(1);
-  console.log(`[ff7] desktop win: moments ${[...shots.seen].join(', ')}`);
+  expectHintBlock(shots.messages);
+  expect(shots.seen.has('melee-strike'), 'Cloud ran to the strike point').toBe(true);
+  console.log(`[ff7] desktop win: moments ${[...shots.seen].join(', ')}; messages ${shots.messages.join(' | ')}`);
 });
 
 test('390x844, taps: seven taps on the label open the fight, taps win it, then the board as it was', async ({ browser }) => {
@@ -157,7 +176,8 @@ test('390x844, taps: seven taps on the label open the fight, taps win it, then t
   if (await confirm.count()) await confirm.first().tap();
   else await page.keyboard.press('Enter');
   await expectBoardUnchanged(page, before);
-  console.log(`[ff7] phone win: moments ${[...shots.seen].join(', ')}`);
+  expectHintBlock(shots.messages);
+  console.log(`[ff7] phone win: moments ${[...shots.seen].join(', ')}; messages ${shots.messages.join(' | ')}`);
   await ctx.close();
 });
 

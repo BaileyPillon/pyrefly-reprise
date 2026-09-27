@@ -52,7 +52,7 @@ import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts'
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
-import { abilityFactsFor } from './battleAbilityFacts.ts';
+import { presenterGameDeps } from './BattleScreenGameDeps.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -294,12 +294,12 @@ export class BattleScreen extends Screen {
       moments: chapter.game === 'ff7' ? null : this.momentOverlay, // FF7: no Ink & Gold name slab or letterbox (FF7 HUD spec §8)
       midScripts: chapter.scriptsRef?.midScripts ?? {},
       // The chapter's own ability rows: an enemy's physical ability draws its
-      // attack painting (iter2 attack-pose, `EnemyActionPose.ts`).
-      abilityFacts: abilityFactsFor(chapter.game),
+      // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
+      ...presenterGameDeps(chapter.game, chapter.buildRef),
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
     if (this.opts.auto) this.presenter.setAutoPlay(this.opts.auto);
-    bracketAnimations(this.presenter, this.engine); // FF7's ATB modes read the animation (setAnimating); a no-op for FFX and FFX-2
+    bracketAnimations(this.presenter, this.engine, this.hud); // FF7's ATB modes read the animation (setAnimating), its dialogue holds the action; a no-op for FFX and FFX-2
 
     // The battle's own cue is resolved by `runEncounterChain` from the
     // formation's `musicCues`, so the boss theme the pre-scene faded in is the
@@ -324,7 +324,7 @@ export class BattleScreen extends Screen {
     // `.ig` so the chip can read `--ig-accent` (it sits on the battle screen's
     // root, outside the HUD's own themed stage); `.ig--ffx2` so an X-2 chapter
     // gets pyre pink rather than the FFX gold fallback.
-    chip.className = chapter.game === 'ffx2' ? 'battle-pause-chip ig ig--ffx2' : 'battle-pause-chip ig';
+    chip.className = chapter.game === 'ffx2' ? 'battle-pause-chip ig ig--ffx2' : chapter.game === 'ff7' ? 'battle-pause-chip ig battle-pause-chip--ff7' : 'battle-pause-chip ig'; // FF7: unmarked (ff7-hud.css)
     chip.dataset['action'] = 'pause:open';
     chip.textContent = 'PAUSE';
     chip.setAttribute('aria-label', 'Pause');

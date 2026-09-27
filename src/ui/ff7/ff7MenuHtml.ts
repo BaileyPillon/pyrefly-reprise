@@ -65,15 +65,25 @@ function commandWindow(g: Ff7Geometry, st: Ff7MenuState, ctx: MenuContext, withC
     }).join(''));
 }
 
-/** Change or Defend beside the command window, the finger on it [S1; look our estimate]. */
+/**
+ * Change or Defend beside the command window, the finger on it [S1; look our estimate]. It covers
+ * whole fields, never half a word under it (the review's item 12): on a desktop Change reaches to
+ * the names window's left edge (the whole name), Defend to the end of the HP field; on a phone
+ * the label keeps a pad inside the frame on both sides.
+ */
 function edgeWindow(g: Ff7Geometry, st: Ff7MenuState, kind: EdgeKind): string {
   const c = g.cmd;
   const label = kind === 'change' ? 'Change' : 'Defend';
   const pad = 5 * g.s;
-  const w = Math.round(label.length * g.cap * 0.62 + g.cursor.w + g.cursor.tip + 2 * pad);
+  const inner = Math.round(label.length * g.cap * 0.72 + g.cursor.w + g.cursor.tip + 2 * pad + g.frame);
   const h = Math.round(g.mode === 'phone' ? 44 : 14 * g.s);
   const yc = c.rows[st.topIdx] ?? c.rows[0] ?? c.r.y + c.r.h / 2;
-  const x = kind === 'change' ? Math.max(4, c.r.x - w - g.s) : Math.min(c.r.x + c.r.w + g.s, g.W - 4 - w);
+  const desk = g.mode === 'desk';
+  const left = desk ? g.bandL.x : 4;
+  const changeX = Math.max(left, c.r.x - inner - g.s);
+  const defendX = Math.min(c.r.x + c.r.w + g.s, g.W - 4 - inner);
+  const x = kind === 'change' ? (desk ? left : changeX) : defendX;
+  const w = kind === 'change' ? (desk ? c.r.x - g.s - left : inner) : desk ? Math.max(inner, g.right.maxEnd + 3 * g.s - x) : inner;
   const r = { x, y: yc - h / 2, w, h };
   const tx = x + pad + g.cursor.w + g.cursor.tip;
   return windowHtml(r, { colour: FF7_WINDOW_COLOUR, frame: g.frame, radius: g.radius, name: `edge-${kind}` }, (o) =>

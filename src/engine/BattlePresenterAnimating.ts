@@ -26,6 +26,20 @@ export interface PlayingPresenter {
   play(events: BattleEvent[]): Promise<PlayResult>;
 }
 
+/**
+ * A HUD that queues battle dialogue and can say when it has all been shown
+ * (FF7's top window, `Ff7BattleHud.dialogueShown`).
+ */
+export interface DialogueHud {
+  dialogueShown(): Promise<void>;
+}
+
+/** Whether `hud` can hold playback on its dialogue. */
+export function dialogueHud(hud: unknown): DialogueHud | null {
+  const h = hud as Partial<DialogueHud> | null | undefined;
+  return h && typeof h.dialogueShown === 'function' ? (h as DialogueHud) : null;
+}
+
 /** Whether `engine` wants to hear about animations. */
 export function animatingEngine(engine: unknown): AnimatingEngine | null {
   const e = engine as Partial<AnimatingEngine> | null;
@@ -37,16 +51,25 @@ export function animatingEngine(engine: unknown): AnimatingEngine | null {
  * `this.play` and the Active pump's `play` go through it) for an engine with
  * `setAnimating`. Returns whether it wrapped. A burst with no events is not an
  * animation and passes straight through.
+ *
+ * With a {@link DialogueHud}, a burst that said a line of dialogue (a `story`
+ * message) also holds, still animating, until the HUD has shown every line:
+ * FF7's battle dialogue is part of the action that says it (Guard Scorpion's
+ * three warnings belong to Raise Tail, research/ff7-guard-scorpion.md §5.1), so
+ * no other action may come between its lines.
  */
-export function bracketAnimations(presenter: PlayingPresenter, engine: unknown): boolean {
+export function bracketAnimations(presenter: PlayingPresenter, engine: unknown, hud?: unknown): boolean {
   const e = animatingEngine(engine);
   if (!e) return false;
+  const dialogue = dialogueHud(hud);
   const play = presenter.play.bind(presenter);
   presenter.play = async (events: BattleEvent[]): Promise<PlayResult> => {
     if (events.length === 0) return play(events);
     e.setAnimating(true);
     try {
-      return await play(events);
+      const res = await play(events);
+      if (dialogue && events.some((ev) => ev.type === 'message' && ev.kind === 'story')) await dialogue.dialogueShown();
+      return res;
     } finally {
       e.setAnimating(false);
     }

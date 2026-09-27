@@ -85,10 +85,13 @@ export class Ff7Marks {
         h += `<div class="ff7-tri-wrap" data-ready="${this.ready}" style="left:${px(p.x - t.w / 2)};top:${px(p.y - t.h - 2 * g.s)};width:${px(t.w)};height:${px(t.h)}">${triangleSvg(t.w, t.h, TRIANGLE)}</div>`;
       }
     }
+    // FF7 draws numbers over the figure in the scene, never over the windows: the anchor stays at
+    // least one numeral height above the band (and a phone's command window) [spec §3.6; the review's item 2].
+    const ceiling = Math.min(g.bandL.y, g.bandR.y, g.mode === 'phone' ? g.cmd.r.y : Infinity) - 1.5 * g.dmgCap;
     for (const n of this.numerals) {
       const p = project?.(n.target, 'chest');
       if (!p) continue;
-      h += this.numeralHtml(g, n, p);
+      h += this.numeralHtml(g, n, { x: p.x, y: Math.min(p.y, ceiling) });
     }
     this.layer.innerHTML = h;
   }

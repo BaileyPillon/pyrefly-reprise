@@ -219,7 +219,7 @@ export class PaintedStage implements BattleStage {
       sway: { amplitude: 0.009, speed: 0.22 },
       // The turn highlight: gold under a party member, a cooler ring under a
       // fiend, so whose turn it is reads even in a screenshot.
-      turnRing: {
+      turnRing: this.opts.slots.turnRings === false ? false : { // FF7: no ring, its triangle marks the turn (scene switch)
         color: kind === 'party' ? 0xf0cf92 : 0xc8a0ff,
         radius: anchor ? SA.anchoredRingRadius(anchor) : (kind === 'party' ? 0.78 : 1.7) * k,
         opacity: kind === 'party' ? 0.85 : 0.7,

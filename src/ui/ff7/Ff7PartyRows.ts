@@ -26,15 +26,19 @@ function limitFill(r: Ff7RowView, blink: BlinkPhase): CylinderKey {
   return r.limitMode === 'fury' ? 'fury' : r.limitMode === 'sadness' ? 'sadness' : 'limit';
 }
 
-/** The names window. */
+/**
+ * The names window. On phone B each name is already at the left of its status row, so this
+ * window keeps only its BARRIER column (FF7 shows each name once; the review's item 16).
+ */
 export function namesWindowHtml(g: Ff7Geometry, rows: readonly Ff7RowView[]): string {
   const L = g.left;
+  const names = g.right.nameX === undefined;
   return windowHtml(g.bandL, { colour: FF7_WINDOW_COLOUR, frame: g.frame, radius: g.radius, name: 'names' }, (o) => {
-    let h = header(g, o, L.nameX, L.hdrBase, 'NAME') + header(g, o, L.barrierRight, L.hdrBase, 'BARRIER', 'r');
+    let h = (names ? header(g, o, L.nameX, L.hdrBase, 'NAME') : '') + header(g, o, L.barrierRight, L.hdrBase, 'BARRIER', 'r');
     rows.forEach((r, i) => {
       const yc = L.rows[i];
       if (yc === undefined) return;
-      h += text(o, L.nameX, yc + g.cap / 2, g.cap, r.name, { shadow: g.shadow, color: TEXT.body, cls: 'ff7-name', data: { id: r.id } }) +
+      h += (names ? text(o, L.nameX, yc + g.cap / 2, g.cap, r.name, { shadow: g.shadow, color: TEXT.body, cls: 'ff7-name', data: { id: r.id } }) : '') +
         barrierBox(o, L.barrierRight, yc, g.s, r.barrier, r.mbarrier);
     });
     return h;
@@ -56,7 +60,7 @@ export function statusWindowHtml(g: Ff7Geometry, rows: readonly Ff7RowView[], bl
       const hpCol = r.hpLow ? TEXT.low : TEXT.body;
       const t = { shadow: g.shadow, color: hpCol };
       h += `<div class="ff7-row" data-id="${r.id}">` +
-        (R.nameX !== undefined ? text(o, R.nameX, base, g.cap, r.name, { shadow: g.shadow, color: TEXT.body, cls: 'ff7-name ff7-name--row' }) : '') +
+        (R.nameX !== undefined ? text(o, R.nameX, base, g.cap, r.name, { shadow: g.shadow, color: TEXT.body, cls: 'ff7-name ff7-name--row', data: { id: r.id } }) : '') +
         text(o, R.curEnd, base, g.cap, String(r.hp), { ...t, align: 'r', cls: 'ff7-hp' }) +
         text(o, R.curEnd, base, g.cap, '/', t) +
         text(o, R.maxEnd, base, g.cap, String(r.maxHp), { ...t, align: 'r', cls: 'ff7-hpmax' }) +
