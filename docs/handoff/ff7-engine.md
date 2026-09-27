@@ -36,7 +36,7 @@ no `three`, no `src/data`/`engine`/`ui` import, no `Math.random`; every file und
   Main section and acts inside that `tick` (core §2.4). A party member whose gauge fills
   joins a first-in first-out input queue; without `throughInput` the clock stops there,
   with it (a running menu) time goes on. Wait holds only while the menu is below its top
-  list (`setMenuLevel('deep')`, the default for a fresh menu).
+  list (`setMenuLevel('deep')`; a fresh menu starts at the top list since the FOLLOW-UP).
 - **Queue (our estimate, core §2.6):** one action at a time; party actions queue on
   confirm, a Limit jumps the queue (core §7.2), a KO'd actor's queued action is dropped,
   counters jump the queue and never touch the counterer's gauge (core §12, estimate).
@@ -171,3 +171,85 @@ Findings:
 7. Minor: Defend ends when the member's next action executes (labelled as our estimate). At
    real decision times this lasts longer than the wiki's "until their next turn begins" when
    read as the gauge filling. That is worth a line to Bailey if the HUD shows Defend.
+
+## FOLLOW-UP (2026-09-27, after the CHECK)
+
+**Game case:** FF7 only, plus one shared-plumbing contract change (both + FF7): `Command`
+gains FF7's Change. `git diff main...ff7-engine -- src/battle/ffx src/battle/ffx2` is still
+empty; `ffx2-atb-golden` and every FFX / FFX-2 suite pass; no FFX or FFX-2 chapter changes.
+
+**New source read for this pass:** the North American FF7 manual (PlayStation's manual archive,
+URL in `research/ff7-battle-core.md` Sources, read 2026-09-27): p. 16 (Change is barred in a Side
+Attack and an Attack From Both Sides), p. 18 (Change; Defend "until the Time gauge fills up"), p. 29
+(Config ATB wording). The notes are added to core §2.5, §5.1 and §5.2.
+
+What changed, by finding:
+
+- **C1, Change (major): done.** `RowChangeCommand = { kind: 'row-change'; targets: [] }` in
+  `types-ff7.ts`, in the `Command` union through `Ff7Command` (`docs/CONTRACT-CHANGES.md`, same
+  date; `types.ts` did not grow). The command window offers **Change** to every member, enabled,
+  no target, category `'special'`, listed just before Defend (the manual puts it off the window's
+  left edge and Defend off its right edge: the HUD places them). It is offered with a full Limit
+  gauge too. It executes like Defend: `turn-start`, `action-start` (the command), the row flips
+  front <-> back, `action-end`; the new row is on the combatant (`ff7.row`). Sourced: that it
+  swaps the row [core §5.1, 2 sources now], who has it (every member, manual p. 18), and that the
+  row then halves physical damage both ways unless Long Range (`formulas.rowHalves`, unchanged).
+  **Our estimate:** that it spends the turn and resets the gauge, and that it queues like any
+  command and starts the grace pause (no source says either way). Tests: a battle where Barret
+  moves back (12 seeds): Rifle 17-19, Scorpion Tail 30-34, split Tail Laser 35-38 on him, his
+  Long Range Gatling Gun still 32-35; Cloud at the back attacks for 18-20 instead of 38-41
+  `[derived]`. The one file outside `src/battle` this needed is `src/ui/ffx2/withTargets.ts`
+  (FFX-2's, not the FF7 HUD's): one `case 'row-change':` line in its exhaustive no-target group,
+  or `tsc` fails. The FF7 HUD track should know the kind exists.
+- **C2, Active mode (minor): done in the engine.** New engine input
+  `setAnimating(on, { summon? })` (and `animating()`): while an action animates, `clockHeld()` is
+  true under Recommended and Wait, and under Active only for a Summon; under Active `tick(ms)` runs
+  every gauge (a party member who fills joins the input queue, an enemy commits) but executes
+  nothing until the animation ends [core §2.5; queue model our estimate]. Default off, so the
+  existing path is unchanged. **Not wired to the presenter:** the FF7 presenter/HUD path must call
+  `setAnimating(true)` when an action's playback starts, keep calling `tick(dt)` during it, and
+  `setAnimating(false)` at the end. The headless runner now takes `animationMs` and
+  `menuMs: { top, deep }` (the bench's player model, **our numbers**), and the bench has a third
+  table: with 1.5 s animations and 0.5 s + 1.5 s menus the boss's share of turns is 0.333 (Wait),
+  0.360 (Recommended), 0.368 (Active) for the sensible player, the wiki's difficulty order.
+  Outcomes barely move for the sensible (200/200 in every mode) and naive (0/200) players; the
+  literal-hint player wins 106 (Wait), 66 (Recommended), 74 (Active), where the Active /
+  Recommended gap is about one binomial standard deviation (`docs/plans/ff7-engine-bench.md`).
+  The zero-time row "Active = Recommended" is kept and now labelled as true by construction.
+- **C3, Wait's fresh menu (minor): done.** A newly offered menu starts at the top list
+  (`level = 'top'`), where Wait's clock runs; it holds only after the HUD reports
+  `setMenuLevel('deep')` (a sub-menu or targeting) [core §2.5; manual p. 29]. The HUD must still
+  report `'deep'` when the player enters Magic, Item or targeting, or Wait will never hold.
+- **C4, the static import (minor): open.** `createEngine` in `BattleScreenWiring.ts` is
+  synchronous; a dynamic import would ripple into the app's engine construction. No source
+  settles it; an engineering call for the merge.
+- **C5, the unsplit one-target Tail Laser (minor): labelled.** `formulas.splits` now says a
+  one-target hit never splits `[derived from "a multi-target hit", core §4.5 step 8]`.
+- **C6, an item on an ally who fell (minor): labelled** as our estimate in `resolve.payFor` (the
+  item is used and misses; no source says whether FF7 refunds it).
+- **C7, when Defend ends (minor): settled by a source and changed.** The manual says damage is
+  halved "until the Time gauge fills up" (p. 18), which agrees with the wiki's "until their next
+  turn begins" read as the gauge filling. Defend now ends at the fill (`resolve.gaugeFilled`),
+  not when the member's next action executes. The golden fixture did **not** move (seeds 1 to 20,
+  sensible and naive: no boss turn fell between a defender's fill and their command). The bench's
+  literal-hint Recommended row moved from 107 to 106 wins (the only policy that Defends on every
+  tail-down turn).
+
+Checks run: `npx tsc --noEmit` clean; the 16 FF7 files plus `ffx2-atb-golden` (17 files, 260 tests;
+FF7 254, of which 12 new in `ff7-engine-followups`); the full `npm test` once: 507 files pass,
+1 failure, `strategy-ffx2-bahamut` "heal-only route" timing out at 15 s under the full load, which
+passes alone (19/19); `node tools/ff7-bench.mjs` re-run (about 2 s) and
+`docs/plans/ff7-engine-bench.md` updated. Engine files stay under 400 lines (`engine.ts` 360).
+
+Still open after the follow-ups:
+
+1. Presenter wiring for `setAnimating` (C2) and the HUD's `setMenuLevel('deep')` reports (C3),
+   and the HUD's Change slot on the command window's left edge: HUD / presenter track.
+2. Whether Change spends the turn (our estimate: yes, like Defend): no source read says.
+3. Manual vs wiki on Recommended's animation hold: the manual names only Magic and Item effects
+   (p. 29); the engine follows the wiki's "battle animations" [core §2.5, marked conflict]. A
+   question for Bailey only if the presenter ever distinguishes animation kinds.
+4. C4 (dynamic import), C6 (refund or not): unsourced; left as they are.
+5. The earlier Open list (Config rows, hint wording, results screen, unreachable statuses, merge
+   order) is unchanged, except that items 1 (Change) and 2 (Active's animations, now an engine
+   input awaiting the presenter) are addressed as above.

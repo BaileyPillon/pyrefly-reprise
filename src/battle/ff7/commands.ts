@@ -2,9 +2,10 @@
  * The FF7 command window for one party member [core §9, single source: wiki
  * battle system]: **Attack** (replaced by **Limit** while the gauge is full,
  * core §7.2), **Magic** (the spells the equipped Materia grants, core §8.4),
- * **Item**, **Defend**. `enabled` and `disabledReason` are decided here, never
- * in the UI. Change (row swap) is not offered yet: it needs a command kind the
- * shared contract does not have (listed as open in `docs/handoff/ff7-engine.md`).
+ * **Item**, **Change** (row swap) and **Defend**. `enabled` and `disabledReason`
+ * are decided here, never in the UI. In FF7 Change sits off the window's left edge
+ * and Defend off its right edge (manual p. 18); the list order here is Change then
+ * Defend, and the HUD places them.
  *
  * Also the command check `submit` runs, and the target retarget rule.
  *
@@ -106,12 +107,16 @@ export function buildCommands(env: Ff7Env, actor: Ff7Combatant): AvailableComman
     out.push({ ...row({ kind: 'item', id: itemId, targets: [] }, `${item.name} x${count}`, 'item', a, legalTargets(env, actor, a), true), help: `${count} left` });
   }
 
-  // Defend: halves physical damage taken until the next action [core §5.2].
+  // Change: swap between the front and the back row [core §5.1, §9; manual p. 18]. Every
+  // member has it in a Normal formation; the manual bars it only in a Side Attack and an
+  // Attack From Both Sides (p. 16), which this fixed Normal battle never is [core §2.4].
+  out.push(row({ kind: 'row-change', targets: [] }, 'Change', 'special', null, [], true));
+  // Defend: halves physical damage taken until the Time gauge fills again [core §5.2; manual p. 18].
   out.push(row({ kind: 'defend', targets: [] }, 'Defend', 'special', null, [], true));
   return out;
 }
 
-/** The ability a command resolves: Attack, a spell, a Limit, an item's effect; null for Defend. */
+/** The ability a command resolves: Attack, a spell, a Limit, an item's effect; null for Defend and Change. */
 export function abilityForCommand(env: Ff7Env, command: Command): Ff7AbilityDef | null {
   switch (command.kind) {
     case 'attack':
@@ -125,6 +130,7 @@ export function abilityForCommand(env: Ff7Env, command: Command): Ff7AbilityDef 
       return abilityDef(env, item.effect);
     }
     case 'defend':
+    case 'row-change':
       return null;
     default:
       throw new Error(`FF7 engine: command '${command.kind}' is not an FF7 command`);

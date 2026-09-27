@@ -85,18 +85,19 @@ describe('the three modes [core §2.5]', () => {
     expect(newEngine(1, { atbMode: 'active' }).atbMode()).toBe('active');
   });
 
-  it('Wait: an open menu in a sub-menu holds every timer; at the top list time runs', () => {
+  it('Wait: a fresh menu opens at the top list, where time runs; a sub-menu holds every timer', () => {
     const e = newEngine(2, { atbMode: 'wait' });
     const who = toNextMenu(e);
     expect(who).not.toBeNull();
+    expect(e.clockHeld()).toBe(false); // a fresh menu starts at the top list [core §2.5]
     const before = e.state().ticks;
-    expect(e.clockHeld()).toBe(true); // a fresh menu starts deep
-    expect(e.tick(5000, { throughInput: true })).toEqual([]);
-    expect(e.state().ticks).toBe(before);
-    e.setMenuLevel('top');
-    expect(e.clockHeld()).toBe(false);
     e.tick(100, { throughInput: true });
     expect(e.state().ticks).toBeGreaterThan(before);
+    e.setMenuLevel('deep');
+    expect(e.clockHeld()).toBe(true);
+    const held = e.state().ticks;
+    expect(e.tick(5000, { throughInput: true })).toEqual([]);
+    expect(e.state().ticks).toBe(held);
   });
 
   it('FF7 never takes the FFX-2 setters the app duck-types (applyAtbConfig)', () => {

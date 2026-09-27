@@ -40,6 +40,19 @@ export function runSetups(env: Ff7Env): void {
   for (const c of living(env.state, 'enemy')) scriptFor(c)?.setup?.(aiApi(env, c));
 }
 
+/**
+ * A gauge filled. A party member joins the input queue [core §2.6, estimate], and a
+ * Defend it used ends now: "damage incurred will be reduced by half until the Time gauge
+ * fills up" (manual p. 18; the wiki's "until their next turn begins", core §5.2). An
+ * enemy's Main section chooses and commits at once [core §2.4].
+ */
+export function gaugeFilled(env: Ff7Env, c: Ff7Combatant): void {
+  if (isParty(c)) {
+    c.ff7.defending = false;
+    env.rt.inputQueue.push(c.id);
+  } else commitEnemyTurn(env, c);
+}
+
 /** An enemy's gauge filled: its Main section chooses and commits at once [core §2.4]. */
 export function commitEnemyTurn(env: Ff7Env, enemy: Ff7Combatant): void {
   const script = scriptFor(enemy);
@@ -67,7 +80,11 @@ function changeForm(env: Ff7Env, c: Ff7Combatant, formIndex: number): void {
   env.emit({ type: 'form-change', enemyId: c.id, formIndex, name: c.name, spriteKey: c.spriteKey });
 }
 
-/** `turn-start`: the counter, the elapsed ticks, the Turn Timer back to 0, Defend over [core §2.3, §5.2]. */
+/**
+ * `turn-start`: the counter, the elapsed ticks, the Turn Timer back to 0 [core §2.3].
+ * Defend already ended when this member's gauge filled ({@link gaugeFilled}); clearing it
+ * here again only covers a turn that starts without a fill (none in this slice).
+ */
 function beginTurn(env: Ff7Env, actor: Ff7Combatant): void {
   const s = env.state;
   s.turn += 1;
@@ -121,7 +138,12 @@ function runCounters(env: Ff7Env, attacker: Ff7Combatant, targets: Ff7Combatant[
   }
 }
 
-/** Spend what the command costs as it executes: MP, the item, a full Limit gauge [core §7.2, §8.5, §8.6]. */
+/**
+ * Spend what the command costs as it executes: MP, the item, a full Limit gauge
+ * [core §7.2, §8.5, §8.6]. The cost is paid before the target check, so an item aimed
+ * at an ally who fell while the menu was open is used up and misses (**our estimate**:
+ * no source we read says whether FF7 refunds it).
+ */
 function payFor(env: Ff7Env, actor: Ff7Combatant, action: Ff7QueuedAction, ability: Ff7AbilityDef): boolean {
   const cmd = action.command;
   if (ability.mpCost > 0) {
@@ -155,9 +177,12 @@ export function executeAction(env: Ff7Env, action: Ff7QueuedAction): void {
     settleBattle(env);
     return;
   }
-  if (action.command?.kind === 'defend') {
+  if (action.command?.kind === 'defend' || action.command?.kind === 'row-change') {
     env.emit({ type: 'action-start', actorId: actor.id, command: action.command, targets: [] });
-    actor.ff7.defending = true;
+    if (action.command.kind === 'defend') actor.ff7.defending = true;
+    // Change: front <-> back [core §5.1; manual p. 18]. It is a command like Defend, so it
+    // spends the turn and resets the gauge (**our estimate**: no source says it is free).
+    else actor.ff7.row = actor.ff7.row === 'front' ? 'back' : 'front';
     env.emit({ type: 'action-end', actorId: actor.id });
     settleBattle(env);
     return;

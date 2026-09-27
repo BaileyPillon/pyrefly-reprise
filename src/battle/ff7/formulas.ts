@@ -250,6 +250,9 @@ export function rowHalves(attacker: Ff7RowSubject, target: Ff7RowSubject, longRa
 /**
  * Does a hit split (`x 2/3`) [core §4.5 step 8]? Physical and Cure split on more
  * than one target; Magical only when the ability can toggle between one and all.
+ * One target never splits, so an all-opponents attack with one opponent left (Tail
+ * Laser with a member down) lands whole [`derived` from "a multi-target hit", core
+ * §4.5 step 8; the research does not state the one-target case].
  */
 export function splits(formula: Ff7Formula, targetCount: number, canToggleAll: boolean): boolean {
   if (targetCount <= 1) return false;

@@ -22,9 +22,11 @@
  *   core §2.5). Its setter is **`setFf7AtbMode`**, deliberately not `setAtbMode`:
  *   the app's `applyAtbConfig` duck-types `setAtbMode` / `setAtbSpeed` to push
  *   **FFX-2's** saved setting, which must never reach FF7.
- * - Animations never pay the clock in the presenter, which is Recommended's and
- *   Wait's rule [core §2.5]. Active's "time runs during animations" would need the
- *   presenter to hand animation time to `tick`; not wired (open in the handoff).
+ * - Animations: the presenter brackets an action's playback with
+ *   `setAnimating(true)` / `setAnimating(false)` and may keep calling `tick` meanwhile.
+ *   Recommended and Wait hold the clock then; Active lets every gauge run (a party
+ *   member who fills joins the input queue, an enemy commits) but nothing executes
+ *   until the animation ends; a Summon's animation holds Active too [core §2.5].
  *
  * Pure (AGENTS.md rule 1): no DOM, no `three`, no `src/data`; the app hands the
  * registry in. Game case: **FF7 only.**
@@ -35,6 +37,7 @@ import type { AtbSnapshot, BattleEngine, BattleEvent, BattleSetup, BattleState, 
 import { DEFAULT_BATTLE_SPEED, ticksToFill, vTimerIncrease } from './atb.ts';
 import {
   advanceTimers,
+  clockHeldByAnimation,
   clockHeldByMenu,
   DEFAULT_FF7_ATB_MODE,
   gracePauseTicks,
@@ -48,7 +51,7 @@ import {
 import { abilityForCommand, buildCommands, commandError } from './commands.ts';
 import type { Ff7Registry } from './defs.ts';
 import { allUnits, isParty, unit, type EventDraft, type Ff7Env, type Ff7QueuedAction, type Ff7Runtime } from './internal.ts';
-import { commitEnemyTurn, executeNext, runSetups } from './resolve.ts';
+import { executeNext, gaugeFilled, runSetups } from './resolve.ts';
 import { buildFf7Battle, turnIncreases } from './setup.ts';
 
 /** Options for {@link Ff7Engine}. */
@@ -82,8 +85,10 @@ export class Ff7Engine implements BattleEngine {
   private speed: number;
   /** Whose menu was last offered (engine-private, so `nextDecision` leaves `BattleState` alone). */
   private offered: CombatantId | null = null;
-  /** Where the open menu's cursor is (`HudPort.onMenuLevel`); a fresh menu starts `'deep'` (held under Wait). */
-  private level: 'top' | 'deep' = 'deep';
+  /** Where the open menu's cursor is (`HudPort.onMenuLevel`); a fresh menu opens at its top list, which Wait runs [core §2.5]. */
+  private level: 'top' | 'deep' = 'top';
+  /** An action's animation is on screen (`setAnimating`); `'summon'` for a Summon's. */
+  private anim: false | 'plain' | 'summon' = false;
   /** Grace-pause ticks still to wait [core §2.5; length our estimate]. */
   private grace = 0;
   /** Real ms handed to `tick` that did not make a whole tick yet. */
@@ -104,7 +109,8 @@ export class Ff7Engine implements BattleEngine {
     this.rt = built.rt;
     this.pending = [];
     this.offered = null;
-    this.level = 'deep';
+    this.level = 'top';
+    this.anim = false;
     this.grace = 0;
     this.carryMs = 0;
     runSetups(this.env());
@@ -130,7 +136,7 @@ export class Ff7Engine implements BattleEngine {
     if (head) {
       if (this.offered !== head) {
         this.offered = head;
-        this.level = 'deep';
+        this.level = 'top';
       }
       return { kind: 'player-input', actorId: head, commands: buildCommands(this.env(), unit(this.st, head)) };
     }
@@ -185,17 +191,19 @@ export class Ff7Engine implements BattleEngine {
    */
   tick(ms: number, opts?: { throughInput?: boolean }): BattleEvent[] {
     if (this.st.result || this.clockHeld()) return this.flush();
-    const through = opts?.throughInput === true;
+    const through = opts?.throughInput === true || this.anim !== false;
     const conv = msToTicks(ms + this.carryMs);
     this.carryMs = conv.restMs;
     let left = conv.ticks;
     const env = this.env();
     const units = allUnits(this.st);
     const v = vTimerIncrease(this.speed);
+    // Under an animation (Active only reaches here) nothing executes: one action at a time.
+    const execute = this.anim === false;
     const grace = modeHasGracePause(this.mode) ? gracePauseTicks(this.speed) : 0;
 
     while (left > 0 && !this.st.result) {
-      if (this.rt.actions.length > 0) {
+      if (execute && this.rt.actions.length > 0) {
         executeNext(env);
         break;
       }
@@ -217,12 +225,11 @@ export class Ff7Engine implements BattleEngine {
       this.st.ticks += k;
       left -= k;
       for (const c of filled) {
-        if (isParty(c)) this.rt.inputQueue.push(c.id);
-        else commitEnemyTurn(env, c);
+        gaugeFilled(env, c);
         // A party gauge filling, or an action queued, starts the grace pause [core §2.5].
         if (grace > 0) this.grace = grace;
       }
-      if (this.rt.actions.length > 0) {
+      if (execute && this.rt.actions.length > 0) {
         executeNext(env);
         break;
       }
@@ -262,10 +269,25 @@ export class Ff7Engine implements BattleEngine {
     return presenterMode(this.mode);
   }
 
-  /** Whether an open menu holds the clock now (Wait, below the top list) [core §2.5]. */
+  /** Whether the clock is held now: an animation (not Active, bar a Summon), or Wait's menu below the top list [core §2.5]. */
   clockHeld(): boolean {
+    if (clockHeldByAnimation(this.mode, this.anim !== false, this.anim === 'summon')) return true;
     const open = this.offered !== null && this.rt.inputQueue.includes(this.offered);
     return clockHeldByMenu(this.mode, open, this.level);
+  }
+
+  /**
+   * The presenter says an action's animation started (`on`) or ended. While it plays,
+   * `tick` runs every gauge under Active and holds under Recommended and Wait, and never
+   * executes a queued action [core §2.5, §2.6 estimate]. `summon` holds Active too.
+   */
+  setAnimating(on: boolean, opts?: { summon?: boolean }): void {
+    this.anim = on ? (opts?.summon === true ? 'summon' : 'plain') : false;
+  }
+
+  /** Whether an animation is on screen (`setAnimating`). */
+  animating(): boolean {
+    return this.anim !== false;
   }
 
   setMenuLevel(level: 'top' | 'deep'): void {

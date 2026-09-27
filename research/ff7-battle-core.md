@@ -169,6 +169,8 @@ Fergusson does not document these; the wiki does. **Recommended is the default.*
 | Recommended (default) | during battle animations |
 | Wait | during battle animations, **and** while the player targets or is in a sub-menu (Item, Magic, Summon lists) |
 
+**The manual's wording** (Config, ATB, p. 29; read 2026-09-27, see Sources): Active, "Time lapses even while you are selecting commands such as Magic and Items"; Recommended, "Time stops while the screen effects are displayed when using Magic and Items"; Wait, "Time stops while you are selecting commands such as Magic and Items". It agrees with the table on the menus. On animations it is narrower than the wiki (Recommended names only Magic and Item effects) `[conflict: manual vs wiki on which animations hold Recommended]`; the engine follows the wiki's "battle animations" and lists this as open.
+
 **Grace pause** (wiki footnote, Recommended and Wait): each turn, time pauses briefly after another action is queued or when a party member's gauge fills; the pause length depends on Battle Speed; it cannot be triggered by a member who was already full; Limit Breaks and counters do not update the pause trigger. **The pause length in ticks is `[unsourced]`.** Difficulty order per the wiki: Wait (easiest), Recommended, Active (hardest).
 
 ### 2.6 Queueing `[estimate]`
@@ -309,12 +311,12 @@ Overflow bugs exist past about 262,144 predicted damage; unreachable at the firs
 - The check is once, not twice, if both sides are in the back row (the formula halves once) `[single source: Fergusson]`.
 - **Limits, Magic, Summons and Items ignore row** `[single source: wiki]`. The Magical formula has no row step, which agrees `[derived]`.
 - Long Range is a flag on the weapon or ability, **not** an element. Barret's Gatling Gun and Assault Gun are Long Range; the Buster Sword is not `[single source: Fergusson PM §4.1.1, §4.1.2]`.
-- **Change** swaps a member's row in battle `[single source: wiki battle system]`.
+- **Change** swaps a member's row in battle `[verified: 2 sources — wiki battle system; manual p. 18]`. The manual: it appears when you press left at the left edge of the battle command window (Defend: right at the right edge), and "the changed status will not be carried over to the next battle"; it cannot be used in a Side Attack or an Attack From Both Sides (p. 16). Whether it spends the turn is not stated in any source read `[unsourced]`; the engine treats it as a command like Defend that spends the turn `[estimate]`.
 - Enemies have rows for targeting but no "back row" damage rule `[single source: wiki "Final Fantasy VII statuses" §Back Row]`.
 
 ### 5.2 Defend `[verified: 2 sources — Fergusson BM §3.4.6 step 4; wiki battle system and statuses page]`
 
-The Defend command halves **physical** damage the character takes until their next turn begins. It does nothing against magic.
+The Defend command halves **physical** damage the character takes until their next turn begins. It does nothing against magic. The manual (p. 18): damage "will be reduced by half until the Time gauge fills up", which fixes the end at the gauge filling, not at the member's next action `[verified: 2 sources for the end point — wiki; manual p. 18]`.
 
 ### 5.3 Cover `[single source: wiki "Cover (Final Fantasy VII)"]` — not reachable at the first fight
 
@@ -547,6 +549,10 @@ All `[derived]` from this file's formulas and the companion file's stat block. P
 - No. 1 Reactor (Final Fantasy VII field), revid 3874852: https://finalfantasy.fandom.com/wiki/No._1_Reactor_(Final_Fantasy_VII_field)
 - Guard Scorpion (Final Fantasy VII), revid 4014097: https://finalfantasy.fandom.com/wiki/Guard_Scorpion_(Final_Fantasy_VII)
 - Row, revid 4028706 (read, not cited beyond the battle-system page): https://finalfantasy.fandom.com/wiki/Row
+
+**Official**
+
+- *Final Fantasy VII* instruction manual, North America, PlayStation (digital edition): https://secure.cdn.us.playstation.com/manuals/classic/games/final-fantasy-vii-manual-en.pdf — pp. 16 (formations and Change), 18 (Change, Defend), 29 (Config ATB). Read 2026-09-27 (WebFetch, text extracted locally; not saved in the repo).
 
 **Other**
 

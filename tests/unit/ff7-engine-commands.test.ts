@@ -24,7 +24,7 @@ function menuFor(seed: number, want: string, party?: Parameters<typeof newEngine
 }
 
 describe('the command window [core §9]', () => {
-  it("Cloud: Attack, Magic (Bolt, Ice from his Materia), Item, Defend", () => {
+  it("Cloud: Attack, Magic (Bolt, Ice from his Materia), Item, Change, Defend", () => {
     const { rows } = menuFor(1, 'cloud');
     expect(rows.map((r) => [r.label, r.category, r.enabled])).toEqual([
       ['Attack', 'attack', true],
@@ -32,15 +32,16 @@ describe('the command window [core §9]', () => {
       ['Ice', 'magic', true],
       ['Potion x3', 'item', true],
       ['Phoenix Down x1', 'item', false], // nobody is KO'd
+      ['Change', 'special', true],
       ['Defend', 'special', true],
     ]);
     expect(rows[1]?.mpCost).toBe(4);
     expect(rows[4]?.disabledReason).toBe('No target');
   });
 
-  it('Barret: Attack, Cure (Restore on his one slot, gs §8.4), Item, Defend', () => {
+  it('Barret: Attack, Cure (Restore on his one slot, gs §8.4), Item, Change, Defend', () => {
     const { rows } = menuFor(1, 'barret');
-    expect(rows.map((r) => r.label)).toEqual(['Attack', 'Cure', 'Potion x3', 'Phoenix Down x1', 'Defend']);
+    expect(rows.map((r) => r.label)).toEqual(['Attack', 'Cure', 'Potion x3', 'Phoenix Down x1', 'Change', 'Defend']);
     expect(rows[1]?.validTargets).toEqual(['cloud', 'barret']);
   });
 

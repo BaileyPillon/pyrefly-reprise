@@ -27,14 +27,17 @@ const median = (xs) => {
 };
 const span = (xs) => (xs.length ? `${Math.min(...xs)} to ${Math.max(...xs)}` : 'n/a');
 
-function bench(policyName, mode) {
+/** The timed player model (our numbers, not FF7's): each action animates 1.5 s; a menu stays 0.5 s at the top list, then 1.5 s in a sub-menu or targeting. */
+const TIMED = { animationMs: 1500, menuMs: { top: 500, deep: 1500 } };
+
+function bench(policyName, mode, timed = false) {
   const rows = [];
   for (let seed = 1; seed <= SEEDS; seed++) {
-    const run = runFf7Battle({ setup: setup(seed), registry: reg, policy: FF7_POLICIES[policyName], atbMode: mode });
+    const run = runFf7Battle({ setup: setup(seed), registry: reg, policy: FF7_POLICIES[policyName], atbMode: mode, ...(timed ? TIMED : {}) });
     const s = summarizeFf7Run(run);
     const cloud = run.state.combatants.cloud;
     const barret = run.state.combatants.barret;
-    rows.push({ ...s, hpLeft: (cloud.alive ? cloud.hp : 0) + (barret.alive ? barret.hp : 0) });
+    rows.push({ ...s, hpLeft: (cloud.alive ? cloud.hp : 0) + (barret.alive ? barret.hp : 0), bossShare: s.bossTurns / Math.max(1, s.turns) });
   }
   return rows;
 }
@@ -63,6 +66,19 @@ for (const p of policies) {
     const rows = bench(p, mode);
     const same = rows.filter((r, i) => r.outcome === byPolicy[p][i].outcome && r.turns === byPolicy[p][i].turns).length;
     console.log(`| ${p} | ${mode} | ${rows.filter((r) => r.outcome === 'victory').length}/${rows.length} | ${same}/${rows.length} |`);
+  }
+}
+
+console.log('\nTimed player model (our numbers: 1.5 s per action animation, menus 0.5 s at the top list then 1.5 s in a sub-menu), all three modes:\n');
+console.log('| Policy | Mode | Wins | Battle turns (median) | Boss share of turns (mean) | Attacks into the raised tail (mean) | Party KOs (mean) | Time (median ticks, ~s) |');
+console.log('|---|---|---|---|---|---|---|---|');
+for (const p of policies) {
+  for (const mode of ['active', 'recommended', 'wait']) {
+    const rows = bench(p, mode, true);
+    const ticks = median(rows.map((r) => r.ticks));
+    console.log(
+      `| ${p} | ${mode} | ${rows.filter((r) => r.outcome === 'victory').length}/${rows.length} | ${median(rows.map((r) => r.turns))} | ${mean(rows.map((r) => r.bossShare)).toFixed(3)} | ${mean(rows.map((r) => r.tailLasers)).toFixed(2)} | ${mean(rows.map((r) => r.kos)).toFixed(2)} | ${ticks} (~${Math.round(ticks / TICKS_PER_SECOND)} s) |`,
+    );
   }
 }
 

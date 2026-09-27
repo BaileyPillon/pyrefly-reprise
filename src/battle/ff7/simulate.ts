@@ -1,7 +1,9 @@
 /**
- * Headless FF7 auto-battle for tests, the golden log and the bench: a policy
- * answers every menu at zero decision time, and the clock runs through the
- * `'waiting'` path only (no menu is ever open while it runs).
+ * Headless FF7 auto-battle for tests, the golden log and the bench. By default a
+ * policy answers every menu at zero decision time and animations take no time, so
+ * the clock runs through the `'waiting'` path only. With `animationMs` and `menuMs`
+ * (the bench's player model, **our numbers**, not FF7's) each action's animation and
+ * each menu spend real time, and the three Config modes differ as core §2.5 says.
  *
  * The policies are **ours**, not game data (they model players, and no number in
  * them is FF7's): each is described where it is defined, and the thresholds are
@@ -115,9 +117,16 @@ export interface Ff7RunOptions {
   registry: Ff7Registry;
   policy: Ff7Policy;
   atbMode?: Ff7AtbMode;
+  /** Real ms each action's animation lasts (one per `action-start`); 0 by default. */
+  animationMs?: number;
+  /** Real ms a menu stays open: `top` at the command list, then `deep` in a sub-menu or targeting; none by default. */
+  menuMs?: { top: number; deep: number };
   /** Safety stop; a real battle needs a few hundred decisions. */
   maxSteps?: number;
 }
+
+/** The step the bench's clock moves in while a menu is open. */
+const MENU_STEP_MS = 100;
 
 export interface Ff7Run {
   result: BattleResult;
@@ -130,11 +139,34 @@ export function runFf7Battle(opts: Ff7RunOptions): Ff7Run {
   engine.setSeed(opts.setup.seed);
   engine.init(opts.setup);
   const max = opts.maxSteps ?? 20000;
+  const animMs = opts.animationMs ?? 0;
+  /** Play `events`: each action's animation, with the presenter's `setAnimating` bracket. */
+  const play = (events: readonly BattleEvent[]): void => {
+    const n = events.filter((e) => e.type === 'action-start').length;
+    if (animMs <= 0 || n === 0 || engine.state().result) return;
+    engine.setAnimating(true);
+    engine.tick(n * animMs);
+    engine.setAnimating(false);
+  };
+  /** Keep `actorId`'s menu open for `ms` at `level`, playing whatever acts meanwhile. */
+  const hold = (actorId: string, level: 'top' | 'deep', ms: number): void => {
+    engine.setMenuLevel(level);
+    for (let t = 0; t < ms && engine.inputValid(actorId); t += MENU_STEP_MS) play(engine.tick(MENU_STEP_MS, { throughInput: true }));
+  };
+  let thought: string | null = null;
   for (let step = 0; step < max; step++) {
     const d = engine.nextDecision();
     if (d.kind === 'battle-over') return { result: d.result, log: engine.state().log, state: engine.state() };
-    if (d.kind === 'waiting') engine.tick(d.nextEventMs);
-    else if (d.kind === 'player-input') engine.submit(opts.policy({ state: engine.state(), actorId: d.actorId, commands: d.commands }));
+    if (d.kind === 'resolved') play(d.events);
+    else if (d.kind === 'waiting') play(engine.tick(d.nextEventMs));
+    else if (opts.menuMs && thought !== d.actorId) {
+      hold(d.actorId, 'top', opts.menuMs.top);
+      hold(d.actorId, 'deep', opts.menuMs.deep);
+      thought = d.actorId; // the next offer to this actor is answered at once
+    } else {
+      thought = null;
+      play(engine.submit(opts.policy({ state: engine.state(), actorId: d.actorId, commands: d.commands })));
+    }
   }
   throw new Error(`FF7 simulate: no result after ${max} decisions (seed ${opts.setup.seed})`);
 }

@@ -49,6 +49,18 @@ export function clockHeldByMenu(mode: Ff7AtbMode, menuOpen: boolean, level: 'top
   return mode === 'wait' && menuOpen && level === 'deep';
 }
 
+/**
+ * Does a battle animation on screen hold the clock? Recommended and Wait stop time
+ * "during battle animations"; Active stops only for a Summon's [core §2.5, single
+ * source: wiki battle system]. The manual words it more narrowly (Recommended: "Time
+ * stops while the screen effects are displayed when using Magic and Items", p. 29); we
+ * follow the wiki's "battle animations" and list the difference as open.
+ */
+export function clockHeldByAnimation(mode: Ff7AtbMode, animating: boolean, summon: boolean): boolean {
+  if (!animating) return false;
+  return mode !== 'active' || summon;
+}
+
 /** The presenter's two-way view of the mode (its chip and its pump): Wait is `'wait'`, the others run under a menu. */
 export function presenterMode(mode: Ff7AtbMode): 'wait' | 'active' {
   return mode === 'wait' ? 'wait' : 'active';
