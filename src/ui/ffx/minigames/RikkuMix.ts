@@ -1,13 +1,31 @@
 import type { ItemId, MinigameResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher } from '../rawInput.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../cancelClaim.ts';
-import { arr, escapeHtml, MinigameCancelled } from './params.ts';
+import { arr, escapeHtml, keepRowInView, MinigameCancelled, num, str } from './params.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
 
 interface Ingredient {
   itemId: ItemId;
   name: string;
   count: number;
+}
+
+/**
+ * The engine's bag as rows, never throwing (hotfix 24). The engine sends
+ * `ingredients: { itemId, name, count }` (`battle/ffx/pickerParams.ts`); before
+ * that it sent only `inventory` (no names), and this overlay read nothing and
+ * opened empty. An entry with no item id or none in the bag is left out. FFX only.
+ */
+function ingredientRows(v: unknown): Ingredient[] {
+  const rows: Ingredient[] = [];
+  for (const raw of arr<unknown>(v, [])) {
+    if (!raw || typeof raw !== 'object') continue;
+    const entry = raw as Record<string, unknown>;
+    const itemId = str(entry['itemId'], '');
+    const count = num(entry['count'], 0);
+    if (itemId && count > 0) rows.push({ itemId, name: str(entry['name'], itemId), count });
+  }
+  return rows;
 }
 
 /**
@@ -20,8 +38,11 @@ interface Ingredient {
  * unknown pair, "Mix failed!").
  */
 export function openRikkuMix(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
-  const ingredients = arr<Ingredient>(params['ingredients'], []);
-  const recipes = (params['recipes'] as Record<string, string> | undefined) ?? {};
+  const ingredients = ingredientRows(params['ingredients'] ?? params['inventory']);
+  const rawRecipes = params['recipes'];
+  const recipes = (rawRecipes && typeof rawRecipes === 'object' ? rawRecipes : {}) as Record<string, string>;
+  const rawNames = params['recipeNames'];
+  const recipeNames = (rawNames && typeof rawNames === 'object' ? rawNames : {}) as Record<string, string>;
 
   const overlay = new OverdriveOverlay();
   root.appendChild(overlay.el);
@@ -58,6 +79,7 @@ export function openRikkuMix(root: HTMLElement, params: Record<string, unknown>)
           return `<div class="${cls}">${escapeHtml(ing.name)}<span class="ffx-mg-list__qty">x${Math.max(0, left)}</span></div>`;
         })
         .join('');
+      keepRowInView(listEl, cursor); // hotfix 24: an item past the fourth row stays in sight
     };
 
     const nameOf = (itemId: string | null): string => (itemId ? (ingredients.find((i) => i.itemId === itemId)?.name ?? itemId) : '');
@@ -70,7 +92,7 @@ export function openRikkuMix(root: HTMLElement, params: Record<string, unknown>)
       if (slotA && slotB) {
         const key = [slotA, slotB].sort().join('|');
         const resultId = recipes[key] ?? null;
-        previewEl.textContent = resultId ? resultId : '? ? ?';
+        previewEl.textContent = resultId ? (recipeNames[key] ?? resultId) : '? ? ?';
       } else {
         previewEl.textContent = '';
       }

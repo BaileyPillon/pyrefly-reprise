@@ -118,6 +118,17 @@ If `extra` is absent — AI, auto-battle, a deterministic test — the engine ro
 default outcome from the seeded RNG and never emits a `minigame-request` at all.
 That is what lets e2e run a chapter to victory headlessly.
 
+**Backing out (FFX, hotfix 24, 2026-09-27).** When the player cancels a picker
+overlay, or the overlay throws, the presenter does **not** re-submit bare (that
+rolled the engine's default: Grand Summon always gave Valefor). It calls the FFX
+engine's `backOutOfMinigame()` (a method on `FFXEngine`, not on the
+`FFXBattleEngine` interface; the presenter probes for it) and the same actor's
+menu opens again with the gauge kept; the next pick asks again. A thrown overlay
+is a `console.error`. An engine without the method (FFX-2, FF7) keeps the bare
+re-submit. The FFX picker params are `aeons: { id, name, storedGauge }[]` (Grand
+Summon) and `ingredients: { itemId, name, count }[]`, `recipes`, `recipeNames`
+next to the old `inventory` (Mix), built in `src/battle/ffx/pickerParams.ts`.
+
 ### Mid-battle story triggers
 
 `MidBattleTrigger`s are evaluated by the engine after each resolved action. When

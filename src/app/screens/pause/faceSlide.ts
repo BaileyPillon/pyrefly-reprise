@@ -81,11 +81,12 @@ export function frameFace(
   frameW: number,
   frameH: number,
   blocks: readonly Rect[],
+  minScale: number = SLIDE_MIN_SCALE,
 ): FramedBox {
   const box = clearFace(base, f, face, frameW, frameH, blocks);
   if (box !== base || !face || blocks.length === 0 || frameW < frameH) return box;
   if (faceOverlap(faceRectOn(base, face), blocks) === 0 && faceInFrame(base, face, frameW, frameH)) return base;
-  const slid = slideFace(base, f, face, frameW, frameH, blocks);
+  const slid = slideFace(base, f, face, frameW, frameH, blocks, minScale);
   return slid ? { ...slid, slid: true } : base;
 }
 
@@ -106,13 +107,16 @@ export function slideFace(
   frameW: number,
   frameH: number,
   blocks: readonly Rect[],
+  minScale: number = SLIDE_MIN_SCALE,
 ): PlateBox | null {
   if (frameW < frameH || blocks.length === 0) return null;
   const side = chromeSideOf(base, f, frameW);
   // The sheet's own range only: down to 0.8x of the approved framing at the end
-  // of the push-in, the full margin first.
+  // of the push-in, the full margin first. A caller may hold the plate larger
+  // (the CHAPTER tab's D-234 stops at 0.88x), never smaller.
+  const lo = Math.max(SLIDE_MIN_SCALE, minScale);
   for (const margin of SLIDE_MARGINS) {
-    const box = slideAt(base, side, face, frameW, frameH, blocks, margin, 1, SLIDE_MIN_SCALE);
+    const box = slideAt(base, side, face, frameW, frameH, blocks, margin, 1, lo);
     if (box) return box;
   }
   return null;
@@ -185,11 +189,12 @@ export function slideFeather(frameW: number): number {
 }
 
 /**
- * The CSS mask that feathers a slid plate's uncovered edges into the falloff,
- * or `''` when no page shows. One gradient per uncovered edge, intersected
- * (`.pause__plate--slid`). The stage applies it to a slid plate only
- * ({@link FramedBox.slid}): a plate the search framed is never masked, even
- * where it leaves page uncovered for another reason (the 4K magnify cap).
+ * The CSS mask that feathers a plate's uncovered edges into the falloff, or
+ * `''` when no page shows. One gradient per uncovered edge, intersected
+ * (`.pause__plate--slid`, `.pause__plate--capped`). The stage applies it to a
+ * slid plate ({@link FramedBox.slid}) and, since PR-0121, to a plate that
+ * leaves page uncovered for another reason (the 4K magnify cap) — either way
+ * the edge is feathered rather than cut flat.
  *
  * With `face`, each fade ends before the face begins (at rest; the push-in
  * scales the mask with the plate), so the feather never dims an eye or a chin.

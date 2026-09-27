@@ -585,3 +585,9 @@
   filter: grayscale(0.92) brightness(0.42) contrast(1.04);
   object-position: 50% 100%;
 }
+
+/* PR-0215 (Bailey's pick B, D-249): after a withdrawal the engine's own line sits
+   where a victory card puts its quip, in the defeat page's light ink. */
+.rres--defeat .rres__quip--note {
+  color: #cfc8bb;
+}

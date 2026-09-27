@@ -1,0 +1,672 @@
+[
+ {
+  "id": "seymour-flux",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "30 MP",
+     "always hits",
+     "+ Haste"
+    ]
+   },
+   "card": [
+    551,
+    57,
+    870,
+    323
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 11
+  },
+  "intentOpened": {
+   "advisorMinEffPx": null,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "30 MP",
+     "always hits",
+     "+ Haste"
+    ]
+   },
+   "card": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "intent": [
+    546,
+    41,
+    968,
+    406
+   ],
+   "intentOffscreen": false,
+   "advRows": 0
+  }
+ },
+ {
+  "id": "yunalesca",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "30 MP",
+     "always hits",
+     "+ Haste"
+    ]
+   },
+   "card": [
+    556,
+    103,
+    1033,
+    323
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 12
+  },
+  "intentOpened": {
+   "advisorMinEffPx": null,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "30 MP",
+     "always hits",
+     "+ Haste"
+    ]
+   },
+   "card": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "intent": [
+    634,
+    41,
+    1056,
+    406
+   ],
+   "intentOffscreen": false,
+   "advRows": 0
+  }
+ },
+ {
+  "id": "braskas-final-aeon",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Stamina Tonic",
+    "target": "the party",
+    "chips": [
+     "in Items",
+     "no MP",
+     "always hits",
+     "+ Max HP x2"
+    ]
+   },
+   "card": [
+    551,
+    52,
+    971,
+    275
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 11
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Stamina Tonic",
+    "target": "the party",
+    "chips": [
+     "in Items",
+     "no MP",
+     "always hits",
+     "+ Max HP x2"
+    ]
+   },
+   "card": [
+    551,
+    52,
+    983,
+    275
+   ],
+   "intent": [
+    1003,
+    41,
+    1425,
+    247
+   ],
+   "intentOffscreen": false,
+   "advRows": 11
+  }
+ },
+ {
+  "id": "evrae-airship",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Pull back",
+    "target": null,
+    "chips": [
+     "in Orders",
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    562,
+    155,
+    1227,
+    298
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 8
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Pull back",
+    "target": null,
+    "chips": [
+     "in Orders",
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    558,
+    124,
+    896,
+    298
+   ],
+   "intent": [
+    927,
+    90,
+    1349,
+    354
+   ],
+   "intentOffscreen": false,
+   "advRows": 8
+  }
+ },
+ {
+  "id": "yojimbo-cavern",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "chips": [
+     "in Items",
+     "2,810–3,175",
+     "5 hits",
+     "no MP",
+     "always hits",
+     "3% crit"
+    ]
+   },
+   "card": [
+    1332,
+    416,
+    1641,
+    708
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 13
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "chips": [
+     "in Items",
+     "2,810–3,175",
+     "5 hits"
+    ]
+   },
+   "card": [
+    1361,
+    441,
+    1634,
+    669
+   ],
+   "intent": [
+    482,
+    121,
+    903,
+    384
+   ],
+   "intentOffscreen": false,
+   "advRows": 8
+  }
+ },
+ {
+  "id": "seymour-natus",
+  "size": "2000x1012",
+  "errors": [],
+  "error": "Error: card not selected"
+ },
+ {
+  "id": "seymour-omnis",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Wakka",
+    "target": "the party",
+    "chips": [
+     "in Switch",
+     "in Special"
+    ]
+   },
+   "card": [
+    550,
+    48,
+    848,
+    323
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 11
+  },
+  "intentOpened": {
+   "advisorMinEffPx": null,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Wakka",
+    "target": "the party",
+    "chips": [
+     "in Switch",
+     "in Special"
+    ]
+   },
+   "card": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "intent": [
+    442,
+    72,
+    863,
+    284
+   ],
+   "intentOffscreen": false,
+   "advRows": 0
+  }
+ },
+ {
+  "id": "isaaru-via-purifico",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Grand Summon",
+    "target": null,
+    "chips": [
+     "in Overdrive",
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    562,
+    155,
+    1062,
+    323
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 9
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Grand Summon",
+    "target": null,
+    "chips": [
+     "in Overdrive",
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    1388,
+    249,
+    1666,
+    500
+   ],
+   "intent": [
+    939,
+    169,
+    1360,
+    352
+   ],
+   "intentOffscreen": false,
+   "advRows": 8
+  }
+ },
+ {
+  "id": "ffx2-bahamut",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Shell",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "10 MP",
+     "100% to hit",
+     "+ Shell"
+    ]
+   },
+   "card": [
+    819,
+    796,
+    1381,
+    939
+   ],
+   "intent": [
+    1223,
+    90,
+    1645,
+    454
+   ],
+   "intentOffscreen": false,
+   "advRows": 11
+  }
+ },
+ {
+  "id": "ffx2-vegnagun-shuyin",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Light Curtain",
+    "target": "the party",
+    "chips": [
+     "in Item",
+     "no MP",
+     "100% to hit",
+     "+ Protect"
+    ]
+   },
+   "card": [
+    881,
+    775,
+    1380,
+    939
+   ],
+   "intent": [
+    1562,
+    90,
+    1983,
+    351
+   ],
+   "intentOffscreen": false,
+   "advRows": 10
+  }
+ },
+ {
+  "id": "ffx2-leblanc",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Grenade",
+    "target": "all enemies",
+    "chips": [
+     "in Item",
+     "541–589",
+     "3 hits",
+     "kills",
+     "no MP",
+     "100% to hit",
+     "3% crit"
+    ]
+   },
+   "card": [
+    852,
+    739,
+    1378,
+    939
+   ],
+   "intent": [
+    1075,
+    148,
+    1497,
+    513
+   ],
+   "intentOffscreen": false,
+   "advRows": 15
+  }
+ },
+ {
+  "id": "ffx2-fallen-aeons",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Shell",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "10 MP"
+    ]
+   },
+   "card": [
+    757,
+    820,
+    1381,
+    939
+   ],
+   "intent": [
+    1164,
+    90,
+    1585,
+    454
+   ],
+   "intentOffscreen": false,
+   "advRows": 8
+  }
+ },
+ {
+  "id": "ffx2-trema",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Attack",
+    "target": "Paragon",
+    "chips": [
+     "3,218–3,634",
+     "no MP",
+     "100% to hit",
+     "23% crit"
+    ]
+   },
+   "card": [
+    839,
+    770,
+    1381,
+    939
+   ],
+   "intent": [
+    885,
+    135,
+    1307,
+    252
+   ],
+   "intentOffscreen": false,
+   "advRows": 12
+  }
+ },
+ {
+  "id": "ffx2-den-of-woe",
+  "size": "2000x1012",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Protect",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "12 MP",
+     "always hits",
+     "+ Protect"
+    ]
+   },
+   "card": [
+    962,
+    715,
+    1381,
+    939
+   ],
+   "intent": [
+    1424,
+    90,
+    1846,
+    330
+   ],
+   "intentOffscreen": false,
+   "advRows": 11
+  }
+ }
+]

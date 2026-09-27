@@ -1,0 +1,9 @@
+/*
+ * A-15 / PR-0157, FFX-2: an advisory card over the acting figure or a target's upper two thirds
+ * steps back while the action plays (`actionFade.ts`). Opacity only, so nothing moves.
+ */
+.ffx2-actfade {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 140ms ease-out;
+}

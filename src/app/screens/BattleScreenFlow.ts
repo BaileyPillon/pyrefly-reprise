@@ -32,6 +32,8 @@ import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { entryCardWait } from './entryCard.ts';
+import { entrySituationFor } from './entrySituation.ts';
+import { playBattleEntry } from '../../ui/common/transitions/entry.ts';
 import { boardWhenWarm } from './frontendWarm.ts';
 import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
@@ -89,6 +91,8 @@ export interface ResultsScreenOptions {
   previousBestMs?: number | null;
   /** Called with the player's pick. Only the defeat panel offers one. */
   onChoice?: (choice: ResultsChoice) => void;
+  /** PR-0215: the engine's stalemate line, for the withdrawal card (`withdrawal.ts`). */
+  withdrawLine?: string;
 }
 
 /** Factories `ui/common` can supply. Any it omits uses the placeholder. */
@@ -351,12 +355,13 @@ export class GameFlow {
         ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
       };
       const battle = factories.battle?.(battleOpts) ?? new BattleScreen(battleOpts);
-      // FFX spins into a battle rather than cutting. The swirl holds the frame
-      // covered while `replace` loads the diorama and stages the art, so the
-      // unwind always reveals a finished first frame
-      // (`src/ui/common/transitions/swirl.ts`).
+      // A-2: the entry by situation (FFX blur or shatter, FFX-2 shatter; the
+      // Vegnagun implosion stays OFF). It holds the outgoing frame while
+      // `replace` loads the diorama, so the reveal is a finished first frame.
       let swapped: Promise<boolean> = Promise.resolve(true);
-      await playBattleSwirl(this.app.uiRoot, {
+      await playBattleEntry(this.app.uiRoot, {
+        game: chapter.game,
+        situation: entrySituationFor(attempt, opts, chapter),
         instant: opts.speed === 'skip',
         whileCovered: entryCardWait(this.app.uiRoot, chapter), // A-3: the card over the ink on a slow load
         onCover: () => {
@@ -394,9 +399,10 @@ export class GameFlow {
         return outcome;
       }
 
-      if (outcome.outcome === 'defeat') {
+      if (outcome.outcome === 'defeat' || outcome.outcome === 'escape') {
         // A secret objective row shows from now on (Chapter IX's Doom row, objectiveReveal.ts).
-        noteChapterLost(id);
+        if (outcome.outcome === 'defeat') noteChapterLost(id);
+        // PR-0215: a withdrawal ('escape': the FFX stalemate) gets the same panel (Bailey's pick B, D-249).
         // The defeat panel owns the retry decision: `RETRY` re-enters the loop
         // (through the prep menu when there is one), `CHAPTER SELECT` gives up
         // and hands the outcome back to the caller. An automated run never
@@ -475,6 +481,7 @@ export class GameFlow {
       silent,
       elapsedMs: outcome.elapsedMs,
       ...(previousBestMs !== undefined ? { previousBestMs } : {}),
+      ...(outcome.withdrawLine ? { withdrawLine: outcome.withdrawLine } : {}),
       onChoice: (picked) => {
         choice = picked;
       },

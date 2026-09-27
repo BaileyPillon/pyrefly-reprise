@@ -10,7 +10,7 @@ import type {
   MinigameResult,
   TurnPreview,
 } from '../../battle/common/types.ts';
-import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import type { ActingSignal, HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { letterTagsOf } from '../../battle/ffx/letterTags.ts';
 import { installInkGoldStyles } from '../inkgold/index.ts';
 import { CommandMenu } from './CommandMenu.ts';
@@ -27,6 +27,14 @@ import { solidPanelRects } from '../common/panel-rects.ts';
 import { sensorSteerDx } from './sensorSteer.ts';
 import { partyFaceRects } from './plateFaces.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
+import { ActionHelpBar } from './actionBanner.ts';
+import { ActingFade } from './actingFade.ts';
+import { IntentOpeningHold } from '../ffx2/intentOpeningHold.ts';
+import { AIM_FOLD_FLOOR_TOP, chipLiftDy, foldWhileAiming } from './sensorAimFold.ts';
+import { statusRowIds } from './fieldRows.ts';
+import { fitGroupLabel } from './groupLabelFit.ts';
+import { clipOffStack } from './bracketClip.ts';
+import { FfxTargetPlate } from './targetPlateFfx.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
@@ -139,7 +147,17 @@ export class FFXBattleHud implements HudPort {
    */
   private readonly commandMenu = new CommandMenu();
   private readonly telegraph = new TelegraphBanner();
+  /** PR-0180: the enemy's ability name, top centre, for the span of the action. */
+  private readonly actionHelp = new ActionHelpBar();
+  /** PR-0157: the cards step back while an action plays (B2's acting signal). */
+  private readonly actingFade: ActingFade;
+  /** PR-0146 (FFX half): the slab waits for the opening, FFX-2's hold reused. */
+  private readonly openingHold = new IntentOpeningHold((s) => this.intent.setSuspended(s));
+  /** PR-0031 / PR-0178: the top TARGET plate, built OFF (`targetPlateFfx.ts`). */
+  private readonly targetPlate = new FfxTargetPlate();
   private readonly sensorPanel = new SensorPanel();
+  /** PR-0186: this fight folds the Sensor card while aiming (Chapter III). */
+  private aimFoldDy = false;
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
   private readonly airship = new AirshipOrders(); // Evrae (FFX) only; inert without the range flag
@@ -273,6 +291,7 @@ export class FFXBattleHud implements HudPort {
     this.el = document.createElement('div');
     this.el.className = 'ffxhud ig';
     this.el.dataset['role'] = 'ffx-battle-hud';
+    this.actingFade = new ActingFade(this.el);
 
     this.stage = document.createElement('div');
     this.stage.className = 'ffxhud__stage';
@@ -328,11 +347,18 @@ export class FFXBattleHud implements HudPort {
       this.sensorPanel.el,
       this.telegraph.el,
       this.telegraph.borderEl,
+      this.actionHelp.el,
     );
-    this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el);
+    this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el, this.targetPlate.el);
     // PR-0019 (FFX only): so the "ALL ALLIES"/"ALL ENEMIES" chip can clear
     // the slab instead of painting over it — src/ui/ffx/targetChipClear.ts.
     this.commandMenu.targetCursor.setCmdInfoElement(this.infoEl);
+    // PR-0193 (FFX only): the ALL label steps off the panels and the intent card (`groupLabelFit.ts`);
+    // PR-0178: the cursor's layer is clipped off the command rows, so brackets go behind them (`bracketClip.ts`).
+    this.commandMenu.targetCursor.setAfterLayout((el) => {
+      fitGroupLabel(el, this.el, this.panelRects());
+      clipOffStack(el, this.commandMenu.stackEl);
+    });
 
     // A CTB tile doubles as a click target while aiming: routes through the
     // same confirm path as the reticle and Enter, and is a no-op — returns
@@ -383,11 +409,18 @@ export class FFXBattleHud implements HudPort {
       // 2026-09-19: a change true of one game is not applied to the other.
       density: 'brief',
     });
+    this.openingHold.start();
     this.layout();
     window.addEventListener('resize', this.onResize, { passive: true });
   }
 
+  /** PR-0157 (FFX): B2's acting signal drives the fade (`actingFade.ts`). */
+  setActing(signal: ActingSignal): void {
+    this.actingFade.set(signal);
+  }
+
   unmount(): void {
+    this.actingFade.clear();
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
     this.guide.unmount();
@@ -434,7 +467,7 @@ export class FFXBattleHud implements HudPort {
       this.airship.dockChip(this.ctbList.el, state);
     }
     const actingId = state.log.length ? findLastActorId(state.log) : null;
-    this.partyStatus.render(state.activeIds, state.combatants, actingId);
+    this.partyStatus.render(statusRowIds(state), state.combatants, actingId); // PR-0181: the aeon's row while it is out
     this.guide.sync(state);
     this.advisor.sync(state);
     // Where the chrome is, so the field can settle its lane clear of it while
@@ -468,7 +501,7 @@ export class FFXBattleHud implements HudPort {
   syncVitals(state: BattleState): void {
     this.sensorPanel.release(state.combatants); // at the blow: a last enemy's fall plays with no `sync` (Evrae)
     const actingId = state.log.length ? findLastActorId(state.log) : null;
-    this.partyStatus.render(state.activeIds, state.combatants, actingId);
+    this.partyStatus.render(statusRowIds(state), state.combatants, actingId); // PR-0181: the aeon's row while it is out
   }
 
   /** Hand the panel its engine. See `EnemyIntent.attachEnemyIntent`. */
@@ -482,7 +515,7 @@ export class FFXBattleHud implements HudPort {
    * `EnemyIntentPanel.setSuspended` (PR-0122).
    */
   setIntentSuspended(suspended: boolean): void {
-    this.intent.setSuspended(suspended);
+    this.openingHold.pause(suspended); // folded with the opening hold (PR-0146)
   }
 
   /** The intent slab, for tests and the debug snapshot. */
@@ -510,6 +543,7 @@ export class FFXBattleHud implements HudPort {
     // "on actor change" hook both at once: the presenter only asks for the next
     // command after the previous one has been submitted and played out.
     this.clearTransientOverlays();
+    this.openingHold.decision(); // PR-0146: the opening is over
 
     const triggerOnly = commands.length > 0 && commands.every((c) => c.command.kind === 'trigger');
     if (triggerOnly) return this.triggerPrompt.open(commands, combatants);
@@ -554,6 +588,8 @@ export class FFXBattleHud implements HudPort {
 
   onEvent(event: BattleEvent): void {
     this.zanmato.onEvent(event);
+    this.actionHelp.onEvent(event, this.lastState?.combatants);
+    if (this.actionHelp.text) this.telegraph.hide(); // one top-centre slot
     this.damageNumbers.watch(event); // Doom's count ticks at the event, not at the burst's end
     switch (event.type) {
       case 'action-start':
@@ -635,6 +671,7 @@ export class FFXBattleHud implements HudPort {
 
   setVisible(visible: boolean): void {
     this.el.hidden = !visible;
+    this.openingHold.visible(visible);
     if (visible) this.layout();
   }
 
@@ -767,7 +804,10 @@ export class FFXBattleHud implements HudPort {
     if (!id) return;
     const c = this.lastState?.combatants[id];
     if (!c || c.side === 'party') return;
-    this.sensorPanel.focus(c);
+    const onPhone = !!this.el.ownerDocument.documentElement.dataset['phoneBattle'];
+    this.aimFoldDy = foldWhileAiming(this.lastState?.enemyIds ?? [], onPhone);
+    this.sensorPanel.focus(c, this.aimFoldDy); // PR-0186
+    this.liftAimFoldChip(true);
   }
 
   /** The enemy plate, for tests and the debug snapshot. */
@@ -803,6 +843,7 @@ export class FFXBattleHud implements HudPort {
   private applySelection(sel: CursorSelection | null): void {
     const ids = new Set(sel?.ids ?? []);
     const kind = sel?.kind ?? 'enemy';
+    this.targetPlate.show(sel ? sel.ids.map((id) => this.nameOf(id)) : null); // PR-0031: ON since D-249
 
     // The same panel set the field measures against also decides which side of
     // the figure the name plate hangs off, so the plate can never be printed
@@ -817,6 +858,7 @@ export class FFXBattleHud implements HudPort {
     // decision's panels. One re-layout per change of selection, never per
     // frame.
     if (sel) this.commandMenu.targetCursor.reposition();
+    this.targetPlate.place(panels); // PR-0031: off the advisor card and the other panels
 
     // The field.
     if (this.targeting) {
@@ -852,6 +894,27 @@ export class FFXBattleHud implements HudPort {
     this.el.classList.toggle('ffxhud--targeting-enemy', !!sel && kind === 'enemy');
 
     this.steerSensor(sel);
+    this.liftAimFoldChip(!!sel && sel.kind === 'enemy');
+  }
+
+  /** PR-0186 (Chapter III): the folded chip, while aiming, rises above the enemies it meets (`sensorAimFold.ts`). */
+  private liftAimFoldChip(aimingEnemy: boolean): void {
+    if (!this.aimFoldDy) return; // every other chapter: untouched (Chapter XII's own dy is OmnisReadout's)
+    const el = this.sensorPanel.el;
+    const on = aimingEnemy && !el.hidden && this.sensorPanel.isFolded;
+    el.style.setProperty('--ffx-sensor-dy', '0px');
+    const chip = on ? this.stageRect(el) : null;
+    const scale = this.hudScale();
+    const host = this.el.getBoundingClientRect();
+    const ox = host.left + (host.width - STAGE.width * scale) / 2;
+    const oy = host.top + (host.height - STAGE.height * scale) / 2;
+    const enemies = (this.lastState?.enemyIds ?? []).flatMap((id) => {
+      const r = this.targeting?.rect(id);
+      return r && scale ? [{ left: (r.x - ox) / scale, right: (r.x + r.w - ox) / scale, top: (r.y - oy) / scale, bottom: (r.y + r.h - oy) / scale }] : [];
+    });
+    const dy = chip ? chipLiftDy(chip, enemies, AIM_FOLD_FLOOR_TOP) : null;
+    if (dy === null) el.style.removeProperty('--ffx-sensor-dy');
+    else el.style.setProperty('--ffx-sensor-dy', `${Math.round(dy * 10) / 10}px`);
   }
 
   /**
@@ -920,11 +983,11 @@ export class FFXBattleHud implements HudPort {
     else el.style.setProperty('--ffx-sensor-dx', `${Math.round(dx * 10) / 10}px`);
   }
 
-  /** The party-side fighters on the field now, the aeon too while one is out (the party stays staged beside it). */
+  /** The party-side fighters on the field now: the aeon alone while one is out (PR-0181, the party has left the field). */
   private fieldPartyIds(): CombatantId[] {
     const state = this.lastState;
     if (!state) return [];
-    const ids = state.aeonId ? [...state.activeIds, state.aeonId] : [...state.activeIds];
+    const ids = statusRowIds(state);
     return ids.filter((id) => state.combatants[id]?.alive !== false);
   }
 

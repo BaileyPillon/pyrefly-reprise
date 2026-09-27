@@ -17,6 +17,7 @@ import {
 import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCards.ts';
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
+import { BoardWarmer } from './frontend/boardWarm.ts';
 import { SecretDoor } from './frontend/secretDoor.ts';
 import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
 
@@ -105,6 +106,8 @@ export class ChapterSelectScreen extends Screen {
   /** The secret door (Bailey's approved option A); fed by keys, taps and pad buttons, shows nothing. */
   private door = new SecretDoor();
   private eyebrow: HTMLElement | null = null;
+  /** A-3: the focused chapter's battle starts loading while its card is read. */
+  private readonly warmer = new BoardWarmer();
 
   constructor(private readonly opts: ChapterSelectScreenOptions = {}) {
     super();
@@ -146,6 +149,7 @@ export class ChapterSelectScreen extends Screen {
 
   override exit(): void {
     this.disarmDoor();
+    this.warmer.cancel();
     this.hint?.unmount();
     this.root.innerHTML = '';
     this.settle(null);
@@ -333,6 +337,7 @@ export class ChapterSelectScreen extends Screen {
   private refresh(): void {
     const tile = this.tiles[this.selected];
     if (!tile) return;
+    this.warmer.focus(tile.playable ? tile.chapter : null);
 
     // FFX-2's half of the board carries the pyre-pink accent, the existing
     // token swap — never a new colour (presentation-ink-and-gold.md).

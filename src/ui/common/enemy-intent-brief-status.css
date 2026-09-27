@@ -17,7 +17,7 @@
   color: var(--ig-blood, #b02a2a);
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
   font-weight: 700;
-  font-size: 3.9px;
+  font-size: max(3.9px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   filter: brightness(1.35);

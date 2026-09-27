@@ -7,6 +7,11 @@
  * fades into it: `--pu-slide-mask` (set by `PortraitStage`) holds one gradient
  * per uncovered edge, intersected.
  *
+ * PR-0121: the same hard-edge shape shows up at 3840x2160 with no slide
+ * involved — `framePlate`'s 1.25x magnify cap can leave the frame short of
+ * full cover on its own. `.pause__plate--capped` gets the identical mask
+ * treatment so that edge is feathered into the falloff instead of cut flat.
+ *
  * Kept out of `pause-screen.css`, which is past the 400-line house rule.
  * Game case: both (shared pause plumbing).
  */
@@ -17,9 +22,18 @@
   mask-composite: intersect;
 }
 
-/* A fallback portrait is shown whole and never slid. */
+.pause__plate--capped {
+  -webkit-mask-image: var(--pu-slide-mask);
+  mask-image: var(--pu-slide-mask);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* A fallback portrait is shown whole and never slid or feathered. */
 .pause__plate--slid[data-art='fallback'],
-.pause__plate--slid[data-art='missing'] {
+.pause__plate--slid[data-art='missing'],
+.pause__plate--capped[data-art='fallback'],
+.pause__plate--capped[data-art='missing'] {
   -webkit-mask-image: none;
   mask-image: none;
 }

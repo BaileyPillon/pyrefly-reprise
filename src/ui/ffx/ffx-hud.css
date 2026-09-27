@@ -590,6 +590,11 @@
   font-family: var(--ig-font-display); font-size: 5px; letter-spacing: 0.1em;
   color: rgba(244, 241, 232, 0.52); margin-top: 2px;
 }
+/* D-221: a Sensor-immune target, the retail HELP-bar line under its name. */
+.ffx-sensor__immune {
+  font-family: var(--ig-font-serif); font-style: italic; font-size: 6px;
+  color: var(--ig-paper); margin-top: 1px;
+}
 .ffx-sensor__name {
   font-family: var(--ig-font-serif); font-weight: 700; font-style: italic;
   font-size: 11px; color: var(--ig-paper); margin-bottom: 3px;
@@ -640,6 +645,44 @@
 .ffx-telegraph__state { font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; font-size: 18px; }
 .ffx-telegraph--stage-1 .ffx-telegraph__state { color: #f2a33a; }
 .ffx-telegraph--stage-2 .ffx-telegraph__state { color: #e8412e; }
+/* PR-0157 (FFX only; actingFade.ts): while an action plays, the cards step back so
+   none sits over the actor, the target or the party. The party rows, numerals,
+   help bar and banners stay. The layers are full-inset roots with no opacity of
+   their own, so this cannot un-hide anything. */
+.ffxhud .sgd, .ffxhud .mad, .ffxhud .eint, .ffxhud .ig-ctb, .ffxhud .ffx-sensor, .ffxhud .ffx-omr {
+  transition: opacity 0.1s ease;
+}
+.ffxhud--acting .sgd, .ffxhud--acting .mad, .ffxhud--acting .eint,
+.ffxhud--acting .ig-ctb, .ffxhud--acting .ffx-sensor, .ffxhud--acting .ffx-omr {
+  opacity: 0.16; transition: none; /* out at once, back in over 0.1 s */
+}
+
+/* PR-0031 / PR-0178 (FFX only; targetPlateFfx.ts): the top TARGET plate, ON since Bailey's yes to plan
+   §8 Q5 (D-249). Paper slab with the gold edge, the approved tiles' top-centre place. */
+.ffx-tplate {
+  position: absolute; left: 50%; top: calc(8.8px * var(--lb-scale, 2.5)); transform: translateX(-50%) skewX(var(--ig-skew, -12deg));
+  display: flex; align-items: center; gap: calc(4.8px * var(--lb-scale, 2.5)); white-space: nowrap; pointer-events: none;
+  padding: calc(2.4px * var(--lb-scale, 2.5)) calc(7.2px * var(--lb-scale, 2.5));
+  background: var(--ig-paper, #f4f1e8); border-left: calc(1.6px * var(--lb-scale, 2.5)) solid var(--ig-accent, #f2c21e);
+}
+.ffx-tplate > * { transform: skewX(var(--ig-skew-inverse, 12deg)); }
+/* Stepped aside from a panel (`plateLeft`): `left` is its own edge, not its centre. */
+.ffx-tplate--placed { transform: skewX(var(--ig-skew, -12deg)); }
+/* Scaled with the letterbox like the rest of the chrome (1600x900 = 14 / 20 px), with the 14 px floor. */
+.ffx-tplate__label { font-family: var(--ig-font-display); font-weight: 700; font-size: max(14px, calc(5.6px * var(--lb-scale, 2.5))); letter-spacing: 0.22em; color: #5c3f0a; }
+.ffx-tplate__name { font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; font-size: max(16px, calc(8px * var(--lb-scale, 2.5))); color: var(--ig-ink, #0b0a12); }
+
+/* PR-0180 (FFX only): the enemy's ability name, centred in the top HELP bar for
+   the span of the action (research/observed-ffx-steam-2026-09-26.md 2.2). A flat
+   ink band in the telegraph's top-centre slot; the telegraph yields to it. */
+.ffx-helpbar {
+  position: absolute; left: 50%; top: 4px; transform: translateX(-50%);
+  min-width: 128px; padding: 3px 24px 4px; text-align: center; white-space: nowrap;
+  background: var(--ig-ink-panel); border-bottom: 1.5px solid var(--ig-accent);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45); pointer-events: none;
+  font-family: var(--ig-font-serif); font-weight: 700; font-style: italic;
+  font-size: 12px; line-height: 1.2; color: var(--ig-paper);
+}
 .ffx-screen-border {
   position: absolute; inset: 2px; border: 1px solid #e8412e;
   opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
@@ -868,6 +911,9 @@
   font-family: var(--ig-font-display); font-weight: 700; font-size: 13px;
   letter-spacing: 0.22em; color: var(--ffx-all-mark, #f2c21e);
 }
+/* PR-0193 (FFX only): scales with the letterbox (5.6 grid px, 14 px at 1600x900)
+   and never renders under the 14 px floor (CHK-003), as FFX-2's does. */
+.ffxhud .ffx-target__all span { font-size: max(14px, calc(5.6px * var(--lb-scale, 2.5))); }
 
 /* While a target cursor is live the party-status panel yields: it drops to
    about a third and pulls in, so the spread enemy formation fits a 16:9 frame.

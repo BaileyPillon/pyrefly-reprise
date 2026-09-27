@@ -16,6 +16,7 @@ import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresent
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
+import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
 import type { SceneSlots } from '../scenes/index.ts';
@@ -38,6 +39,7 @@ import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
 import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
+import { heldOffStage } from './SummonStaging.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -204,6 +206,8 @@ export class PaintedStage implements BattleStage {
     // Only after every actor exists: the solver needs each fiend's real world
     // height, which is not known until its idle painting has loaded.
     this.applyFormation();
+    // PR-0181 (FFX): a re-stage while an aeon is out keeps the party off the field (`SummonStaging.ts`).
+    if (state.aeonId) for (const id of state.activeIds) this.actors.get(id)?.actor.setAlpha(0);
     // D-224: a Vegnagun link's seam re-stages the field (FFX-2, Ch V).
     const link = phaseForFormation(state.enemyIds);
     if (link) this.lighting.phase(link);
@@ -253,6 +257,7 @@ export class PaintedStage implements BattleStage {
           : (): HTMLCanvasElement => paintBossSilhouette({ seed: hash(c.id) }),
       placeholderBaseline: kind === 'party' ? 0.965 : 0.985,
       matte: { mode: 'auto' },
+      ...edgeFeatherFor(artId), // PR-0164 / PR-0212: paintings that touch their canvas edge
       rim: this.opts.rim
         ? { color: this.opts.rim.color, strength: 0.8, dir: this.opts.rim.dir, width: 3.4 }
         : { strength: 0.7 },
@@ -464,8 +469,9 @@ export class PaintedStage implements BattleStage {
     // to show the part would erase the very thing the ring marks (D-044).
     const anchored = id ? !!this.actors.get(id)?.anchor : false;
     const cover = id && !anchored ? new Set(this.occluders(id)) : new Set<CombatantId>();
+    const off = heldOffStage(this); // PR-0181: the party stays off while an aeon is out
     for (const [otherId, staged] of this.actors) {
-      const wanted = cover.has(otherId) ? alpha : 1;
+      const wanted = off.has(otherId) ? 0 : cover.has(otherId) ? alpha : 1;
       if (Math.abs(staged.actor.alpha - wanted) > 0.01) void staged.actor.fadeTo(wanted, 140);
     }
   }

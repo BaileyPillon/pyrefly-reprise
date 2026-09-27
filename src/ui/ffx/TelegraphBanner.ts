@@ -70,6 +70,12 @@ export class TelegraphBanner {
     }, holdMs);
   }
 
+  /** Takes the banner off at once (the action's own name takes the slot, PR-0180). */
+  hide(): void {
+    window.clearTimeout(this.hideTimer);
+    this.el.classList.remove('ffx-telegraph--visible');
+  }
+
   /** Clears the persistent screen border once the charged attack resolves. */
   clearBorder(): void {
     this.borderEl.classList.remove('ffx-screen-border--visible', 'pf-beat');

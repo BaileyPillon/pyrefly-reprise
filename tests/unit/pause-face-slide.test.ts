@@ -172,6 +172,19 @@ describe('one rule for every plate', () => {
     expect(slid.slid).toBe(true);
   });
 
+  it('PR-0121: the 4K cap shortfall still has a feather available, even though frameFace never marks it slid', () => {
+    // The framing pipeline correctly leaves `box.slid` unset for the 4K cap
+    // (it is not a face-clearing slide) — `PortraitStage.place` is the one
+    // that has to notice the uncovered edges and feather them anyway, using
+    // the same mask this plate's slide would have used.
+    const f = PLATE_FRAMING['tidus']!;
+    const base = framePlate(f, 3840, 2160);
+    const edges = emptyEdges(base, 3840, 2160);
+    expect(edges.right > 0 || edges.bottom > 0).toBe(true);
+    const mask = slideMask(base, 3840, 2160, FACE_BOXES['tidus']);
+    expect(mask).not.toBe('');
+  });
+
   it('keeps the approved framing when not even the slide can clear', () => {
     const f = PLATE_FRAMING['tidus']!;
     const base = framePlate(f, 1280, 960);
@@ -232,10 +245,16 @@ describe('the feather', () => {
     const css = read('src', 'ui', 'common', 'pause-slide.css');
     expect(css).toMatch(/\.pause__plate--slid\s*\{[^}]*mask-image:\s*var\(--pu-slide-mask\)/);
     expect(css).toMatch(/mask-composite:\s*intersect/);
+    expect(css).toMatch(/\.pause__plate--capped\s*\{[^}]*mask-image:\s*var\(--pu-slide-mask\)/);
     const stage = read('src', 'app', 'screens', 'pause', 'PortraitStage.ts');
     expect(stage).toContain("import '../../../ui/common/pause-slide.css';");
-    // Only a slid plate is masked, and its feather stops short of the face.
-    expect(stage).toContain('box.slid ? slideMask(box, w, h, FACE_BOXES[id]) :');
+    // A slid plate is masked, its feather stopping short of the face; since
+    // PR-0121 a plate the 4K magnify cap left short of cover (but never
+    // slid) gets the same mask. D-234: a slid chapter plate's feather stops
+    // short of its own face box too.
+    expect(stage).toContain(
+      'const mask = box.slid || capped ? slideMask(box, w, h, FACE_BOXES[id] ?? CHAPTER_SLIDE_FACES[id]) : ',
+    );
   });
 });
 

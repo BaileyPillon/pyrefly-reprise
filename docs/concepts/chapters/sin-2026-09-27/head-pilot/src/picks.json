@@ -1,0 +1,34 @@
+{
+ "A": {
+  "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-sin/A/p2.full.png",
+  "label": "dusk leviathan, head-on",
+  "ix": 0.6,
+  "iy": 0.4,
+  "iz": 4.5,
+  "ox": 0.6
+ },
+ "B": {
+  "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-sin/B/p5.full.png",
+  "label": "the maw fills the sky",
+  "ix": 0.5,
+  "iy": 0.4,
+  "iz": 3.5,
+  "ox": 0.5
+ },
+ "C": {
+  "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-sin/C/p2.full.png",
+  "label": "three-quarter on the tower",
+  "ix": 0.58,
+  "iy": 0.42,
+  "iz": 4.5,
+  "ox": 0.62
+ },
+ "D": {
+  "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-27-sin/D/p3.full.png",
+  "label": "backlit silhouette",
+  "ix": 0.5,
+  "iy": 0.47,
+  "iz": 4.5,
+  "ox": 0.5
+ }
+}

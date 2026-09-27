@@ -1,3 +1,4 @@
+import { selectAccentStyle } from './selectAccentStyle.ts';
 import {
   AdditiveBlending,
   CircleGeometry,
@@ -148,6 +149,14 @@ export interface PaintedActorOptions {
    * 0 (default) is off; 0.12–0.2 is enough for a full-bleed glow.
    */
   edgeFade?: number;
+  /**
+   * Whether {@link edgeFade} also feathers the plane's base (default `true`, the
+   * whole rectangle). `false` feathers the sides and top only, for a figure whose
+   * feet or coils meet the floor at the bottom edge (PR-0164, `ActorEdgeFeather.ts`).
+   */
+  edgeFadeBase?: boolean;
+  /** How far the {@link edgeFade} start wanders in along each edge (0, default: straight; PR-0164). */
+  edgeJag?: number;
   shadow?: false | PaintedActorShadowOptions;
   /**
    * Whether this figure writes the whole-frame bloom's figure mask
@@ -405,6 +414,8 @@ export class PaintedActor extends Group {
   private readonly matte: MatteOptions;
   private readonly fitBaseline: false | BaselineFitOptions;
   private readonly hoverHeight: number;
+  /** The selection accent is the upright halo (a lifted or levitating figure), not the floor pool. */
+  private accentHalo = false;
   private readonly hoverBobAmp: number;
   private readonly hoverBobSpeed: number;
   private readonly shadowBaseRadius: number;
@@ -464,6 +475,8 @@ export class PaintedActor extends Group {
     desaturate: { value: number };
     alphaCut: { value: number };
     edgeFade: { value: number };
+    edgeFadeBase: { value: number };
+    edgeJag: { value: number };
     noiseMap: { value: Texture };
   };
 
@@ -588,6 +601,8 @@ export class PaintedActor extends Group {
       desaturate: { value: 0 },
       alphaCut: { value: opts.alphaCut ?? 0.02 },
       edgeFade: { value: opts.edgeFade ?? 0 },
+      edgeFadeBase: { value: opts.edgeFadeBase === false ? 0 : 1 },
+      edgeJag: { value: opts.edgeJag ?? 0 },
       noiseMap: { value: noiseTexture() },
     };
 
@@ -1319,7 +1334,9 @@ export class PaintedActor extends Group {
     });
     const mesh = new Mesh(new CircleGeometry(1, 48), mat);
     mesh.name = 'select-accent';
-    if (this.levitates) {
+    // A station-lifted figure (the Yu Pagodas) wears the halo too: PR-0031, `selectAccentStyle.ts`.
+    this.accentHalo = selectAccentStyle(this.hoverHeight, this.position.y) === 'halo';
+    if (this.accentHalo) {
       // Behind the figure, not under it. A lower `renderOrder` than the planes,
       // with `depthWrite` off, is what makes the halo read as light around the
       // silhouette rather than a disc pasted over it.
@@ -1916,7 +1933,7 @@ export class PaintedActor extends Group {
         // A slow breathe, distinct from the turn ring's faster pulse, so the
         // two marks are still told apart when they land on the same figure.
         const pulse = 0.86 + Math.sin(this.clock * 2.4) * 0.14;
-        if (this.levitates) {
+        if (this.accentHalo) {
           const r = Math.max(0.6, this.worldHeight * 0.62) * (0.97 + 0.05 * pulse);
           this.accent.scale.set(r, r, 1);
         } else {

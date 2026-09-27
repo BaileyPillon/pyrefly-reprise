@@ -492,7 +492,18 @@
   text-overflow: ellipsis;
 }
 
+/*
+ * PR-0151 (round 13 re-measure, `docs/screenshots/t1-b3b/options-1280x960.png`):
+ * 118px floor still ellipsised "MASTER VOLUME" (139px), "SOUND EFFECTS"
+ * (135px) and "STRATEGY GUIDE" (140px, Chromium, --pu-fs floored at 14px) at
+ * 1280x960 and 1024x768. 150px clears all three with a few px to spare, the
+ * same margin the plain key column's own floor comment above keeps.
+ * REG-keycol (t1-b3b check): scoped to the settings column only. A 150px
+ * floor on every wide column squeezed the CHAPTER tab's values ("MT. GA…" at
+ * 1024x768) and the CONTROLS tab's key bindings at 390x844.
+ */
 .pause__col--wide .pause__k { width: clamp(118px, 9.5vw, 190px); }
+.pause__col--wide[data-col='settings'] .pause__k { width: clamp(150px, 9.5vw, 190px); }
 
 /* An objective is what the CHAPTER tab is opened for: it wraps, never "SURVIVE POIS…". */
 .pause__row--obj {

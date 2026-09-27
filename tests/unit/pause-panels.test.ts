@@ -218,7 +218,7 @@ describe('PauseScreen: H hides everything but the painting', () => {
     expect(h.screen.snapshot()['panelsHidden']).toBe(false);
     expect(isBare(h.root)).toBe(false);
     expect(h.root.querySelector('.pause__ui')).not.toBeNull();
-    expect(h.root.querySelector('.pause__hide')!.textContent).toContain('hide panels');
+    expect(h.root.querySelector('.pause__hide')!.textContent).toContain('painting only'); // PR-0028 / D-215
   });
 
   it('H leaves the painting and one line, and nothing else', () => {

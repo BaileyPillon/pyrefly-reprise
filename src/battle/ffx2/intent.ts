@@ -48,6 +48,7 @@ import { canAct } from './statuses.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
 import type { RandomTarget } from '../common/intentTargets.ts';
 import { ffx2RandomTarget } from './intentRandom.ts';
+import { inertLead, setToLead } from './intentLead.ts';
 
 /** See the FFX twin: enough samples to catch a real branch, few enough to cache. */
 export const SAMPLE_COUNT = 24;
@@ -215,7 +216,12 @@ export function statusWord(id: string): string {
   if (id === 'ko') return 'Death';
   return id
     .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w) => {
+      // "Max HP x2", not "Max Hp X2", as the FFX panel already says (PR-0074; B6).
+      if (w === 'hp' || w === 'mp') return w.toUpperCase();
+      if (/^x\d+$/.test(w)) return w;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
     .join(' ');
 }
 
@@ -225,8 +231,17 @@ export function describeAbility(def: AbilityDef): string {
   const where = TARGET_WORD[def.targeting] ?? 'its target';
   const heals = def.flags.includes('heals');
 
+  // PR-0188, the FFX-2 half of the same builder (CHK-020): a `formula: 'none'` row that does nothing
+  // says so. `intentLead.ts` keeps Delta Attack's "set to" and a Dispel's removal true (B6CHK-01/02).
+  const setTo = def.formula === 'none' ? setToLead(def, where) : null;
+  const lead = inertLead(def, where, statusWord);
+  const inert = lead !== null;
   if (def.formula === 'none' && def.statusEffects.length > 0) {
     parts.push(`Inflicts ${def.statusEffects.map((s) => statusWord(s.status)).join(', ')} on ${where}`);
+  } else if (setTo) {
+    parts.push(setTo);
+  } else if (lead) {
+    parts.push(lead);
   } else if (heals) {
     parts.push(`Restores HP to ${where}`);
   } else {
@@ -240,10 +255,11 @@ export function describeAbility(def: AbilityDef): string {
   if (def.flags.includes('drains')) parts.push('drains the damage back as HP');
   if (def.flags.includes('piercing') || def.ignoresDefense === true) parts.push('ignores Defense');
   if (def.flags.includes('always-break-damage-limit')) parts.push('cap 99 999');
-  if (def.removesStatuses.length > 0) {
+  if (def.removesStatuses.length > 0 && !inert) {
     parts.push(`strips ${def.removesStatuses.map(statusWord).join(', ')}`);
   }
-  return `${parts.join(' - ')}.`;
+  const text = parts.join(' - ');
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
 }
 
 /**

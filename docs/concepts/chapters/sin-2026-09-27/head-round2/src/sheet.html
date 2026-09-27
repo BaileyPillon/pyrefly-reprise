@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sin head round 2 sheet</title>
+<!-- The phone-readable sheet for Sin's head, round 2 (FFX only). ?part=1..7. Rendered by render.mjs sheets. -->
+<style>
+@font-face { font-family: Chakra; src: url(../../../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2); font-weight: 700; }
+@font-face { font-family: Corm; src: url(../../../../../../public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2); font-weight: 300 700; }
+@font-face { font-family: Exo; src: url(../../../../../../public/fonts/exo2/Exo2-Variable-wght.woff2); font-weight: 300 800; }
+:root { --ink: #0b0a12; --gold: #e3b94a; --vio: #b56cff; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #222; }
+#sheet { width: 1080px; background: var(--ink); color: #ece8dc; font: 400 28px/1.36 Exo, sans-serif; padding: 44px 46px 50px; }
+h1 { font: 700 52px/1.05 Corm; color: #fff; margin-bottom: 10px; }
+h3 { font: 700 21px Chakra; letter-spacing: .16em; color: var(--gold); text-transform: uppercase; margin: 22px 0 6px; }
+.eyebrow { font: 700 19px Chakra; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+.lede { color: #cfc9b8; font-size: 27px; }
+img.fr { width: 988px; display: block; margin: 14px 0 6px; border: 2px solid #333; }
+ul, ol { padding-left: 36px; } li { margin: 4px 0; }
+b { color: #fff; }
+.box { border: 2px solid var(--gold); padding: 14px 20px; margin: 20px 0 6px; background: rgba(227,185,74,.07); }
+table { border-collapse: collapse; width: 100%; font-size: 23px; margin: 10px 0; }
+td, th { border-bottom: 1px solid #333; padding: 7px 8px; text-align: left; vertical-align: top; }
+th { font: 700 17px Chakra; letter-spacing: .1em; color: var(--gold); text-transform: uppercase; }
+td.v { color: var(--vio); font-weight: 700; white-space: nowrap; }
+.phones { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0; }
+.phones figure { width: 320px; } .phones img { width: 320px; border: 2px solid #333; display: block; }
+figcaption { font: 700 17px Chakra; letter-spacing: .08em; color: #cfc9b8; margin-top: 4px; }
+.cap { color: #b8b2a2; font-size: 23px; }
+.foot { color: #9d978a; font-size: 20px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div id="sheet"></div>
+<script>
+const P = +(new URLSearchParams(location.search).get('part') || 1);
+const FR = '../frames/';
+const foot = '<p class="foot">Sin\'s head, round 2 · FFX only · 2026-09-27 · a candidate, not approved · nothing installed, nothing on the board · numbers from research/ffx-sin.md with their tags</p>';
+const NAMES = ['SHUT · turns 1–3', 'OPEN 1 · turns 4–6', 'OPEN 2 · turns 7–9', 'OPEN 3 · turns 10–11', 'FULLY OPEN · turn 12'];
+const desk = (k) => `<h3>Stage ${k} · ${NAMES[k]}</h3><img class="fr" src="${FR}frame-s${k}-1600.jpg">`;
+const parts = {
+  1: `<div class="eyebrow">Sin · link IV · the head, round 2 · FFX only</div>
+    <h1>Sin's head, repainted: the tower, the wings, and a mouth that is the clock</h1>
+    <p class="lede">Round 1 failed an adversarial judge on every option. This round repaints option C's look (three-quarter, whale-like, rock-scaled, turned towards the ship, over the white city in gold light) and fixes each fault. It is still an option: nothing is installed.</p>
+    <img class="fr" src="${FR}frame-s4-1600.jpg"><p class="cap">Stage 4, fully open, turn 12: the last turn before Giga-Graviton. A rough composite with a stand-in HUD.</p>
+    <h3>The judge's faults, and what changed</h3>
+    <table><tr><th>Round 1</th><th>Round 2</th></tr>
+    <tr><td>No tower under Sin, no wings (§9.1: it sprouts wings and props itself on a tower in Bevelle)</td><td>Our sketch draws both. The claw clamps the top of a white, gold-banded tower; feathered wings with purple tips rise behind the neck</td></tr>
+    <tr><td>The deck was a generic railing</td><td>The <i>Fahrenheit</i>'s riveted steel prow, "SALVAGE DREAM" and "CID" on the plates, a gold dial (evrae §12.1)</td></tr>
+    <tr><td>"Shut" was wide open with a ghost row of teeth</td><td>Stage 0 is painted shut from its own sketch: a closed lip line, only the fang tips over the lower lip</td></tr>
+    <tr><td>The open jaw was a bar ending in a tusk, cut and turned from the painting</td><td>Each open stage is repainted from its own sketch; one continuous jaw from hinge to chin</td></tr>
+    <tr><td>Stages 0–3 barely differed at game scale</td><td>The mouth gap at the snout opens by 0, 25, 49, 73 and 97 px on a 390-px phone (from the sketch geometry)</td></tr>
+    <tr><td>The HUD said "stage 2 of 3" beside a five-stage sheet</td><td>The HUD's mouth meter has the painting's five stages: SHUT, 1, 2, 3, FULL</td></tr></table>
+    <img class="fr" src="${FR}phone-scale.jpg"><p class="cap">The five stages at phone size: in the strip image, 1 px is 1 CSS px on a 390-px phone.</p>${foot}`,
+  2: `<div class="eyebrow">The clock</div><h1>The mouth is the clock: five painted stages</h1>
+    <p class="lede">research/ffx-sin.md §5.4 and §9.3: Sin spends turns 1–3 on "Drawn to Sin.", then opens its mouth in stages until it is fully open (the wiki gallery shows three open stages and "fully open"), then Giga-Graviton ends the battle.</p>
+    <img class="fr" src="${FR}mouths.jpg">
+    <table><tr><th>Stage</th><th>Sin's turns (default: Giga-Graviton on 13)</th><th>If S-1 settles on 12</th></tr>
+    <tr><td class="v">0 SHUT</td><td>1–3, Drawn to Sin. (5 sources)</td><td>1–3</td></tr>
+    <tr><td class="v">1 OPEN 1</td><td>4–6</td><td>4–6</td></tr>
+    <tr><td class="v">2 OPEN 2</td><td>7–9</td><td>7–8</td></tr>
+    <tr><td class="v">3 OPEN 3</td><td>10–11</td><td>9–10</td></tr>
+    <tr><td class="v">4 FULLY OPEN</td><td>12, then Giga-Graviton on 13</td><td>11, then Giga-Graviton on 12</td></tr></table>
+    <p class="cap"><b>Sourced:</b> three pulls; the mouth opens in stages from turn 4; three open stages and "fully open"; Giga-Graviton on 12 or 13 (S-1, open until the Steam check). <b>Our estimate:</b> which turns each painting covers. The research names the stages, not their turns. The clock's 13 segments match the default, and the table says how it shifts if S-1 settles on 12.</p>${foot}`,
+  3: `<div class="eyebrow">Battle frames · 1600 × 900</div>${desk(0)}${desk(1)}${desk(2)}${foot}`,
+  4: `<div class="eyebrow">Battle frames · 1600 × 900</div>${desk(3)}${desk(4)}
+    <h3>The deck, dressed on every stage</h3><img class="fr" src="${FR}deck.jpg">
+    <p class="cap">Our own type (Chakra Petch), worn like stencil paint on the painted plates. The dial's ring spells "Wind bless you" in the Al Bhed letter swap, written in Latin letters (FEHT PMACC OUI). The script's own glyphs are a retail design and are not copied. The swap table is not in research/ yet, so treat it as our estimate.</p>${foot}`,
+  5: `<div class="eyebrow">Phone frames · 390 × 844</div><h1>The same five stages on a phone</h1>
+    <div class="phones">${[0, 1, 2, 3, 4].map((k) => `<figure><img src="${FR}frame-s${k}-390.jpg"><figcaption>${k} · ${NAMES[k]}</figcaption></figure>`).join('')}</div>
+    <p class="cap">The stage is a 390-px slice of the painting centred on Sin, with the snout, the eye, the claw and most of the tower in view. The HUD's mouth meter and clock follow the painting.</p>${foot}`,
+  6: `<div class="eyebrow">Method</div><h1>How it was made</h1>
+    <ul><li><b>Written sources only.</b> research/ffx-sin.md §5.4, §9.1, §9.3; research/ffx-evrae-airship.md §12.1, §12.3; the FF Wiki's <i>Sin</i> Appearance text (revid 4045228) from round 1. No retail image was used as input, reference or IP-Adapter.</li>
+    <li><b>Our sketches</b>, drawn in code, one per stage. The lower jaw is drawn at 0, 6, 12, 18 and 24 degrees about its hinge. Everything else is the same pixels in every sketch.</li>
+    <li><b>Stage 0 (shut):</b> a z-image turbo img2img pass from sketch 0, then a RealESRGAN ×4 detail pass (2352 × 1344, denoise 0.30). Eight renders; <b>c3</b> picked.</li>
+    <li><b>Stages 1–4:</b> each is its own masked img2img pass (denoise 0.62, one seed for all) from its own sketch. The sketch is pasted into the stage-0 painting only where it differs from sketch 0, then repainted inside that mask. The result is set back into the stage-0 painting, so everything outside the mouth is stage 0's own pixels (7 to 12 % of the picture changes). No jaw was cut out and turned.</li>
+    <li><b>The deck</b> is dressed identically on all five (src/dress.py).</li>
+    <li><b>GPU:</b> ComfyUI was shared with the FF7 job. We submitted only while fewer than 3 prompts were pending and never restarted it. No render came out black.</li></ul>
+    <img class="fr" src="${FR}sketches.jpg">${foot}`,
+  7: `<div class="eyebrow">Every render of the round</div><h1>What was tried, and the verdicts</h1>
+    <img class="fr" src="${FR}renders.jpg">
+    <div class="box"><b>Faults left for one repair pass, if you pick this:</b>
+    <ul><li>The head still reads as an armoured humpback whale; the pick is the most rock-like of eight.</li><li>Rows of rivet-like dots near the jaw corner in stages 1–3 hint at machinery.</li><li>Stage 4's throat has vertical curtain-like folds.</li><li>The lower jaw's plates are paler and change a little from stage to stage.</li><li>A pink tip on the snout in stages 0–1.</li><li>On desktop, the party HUD covers half of the "SALVAGE DREAM" lettering and the dial.</li></ul></div>
+    <h3>For Bailey</h3><ol><li>Is this the head, or should it move further from a whale?</li><li>Do five stages (shut, three open, fully open) read as the clock?</li></ol>${foot}`,
+};
+window.partCount = Object.keys(parts).length;
+document.getElementById('sheet').innerHTML = parts[P];
+</script>
+</body>
+</html>

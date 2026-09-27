@@ -2588,6 +2588,8 @@ export interface EnemyGroupDef {
    * chain): the formation that follows this one with no menu between.
    */
   nextGroupId?: string;
+  /** Reveal-plate name when the first enemy would misname the formation (Ch XI link 2, PR-0205); no engine reads it. */
+  headline?: string;
   /**
    * The party fights this formation under a **permanent, non-consumable
    * Auto-Life granted by the fayth**, so a KO'd member revives immediately and

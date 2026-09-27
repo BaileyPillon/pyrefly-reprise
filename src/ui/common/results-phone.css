@@ -126,6 +126,11 @@
   text-transform: uppercase;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
+/* PR-0215: the ending takes the next column, whole, when the caption does not
+   fit one ("INSIDE SIN · WITHDREW" was cut to "WIT"). */
+.rres--phone .rresp__caption .rres__cap-end {
+  display: inline-block;
+}
 /* A short phone with a long page (a four-member FFX win on 375x667) leaves the
    caption no room for even one readable column: it steps aside rather than
    breaking into a column per word. */

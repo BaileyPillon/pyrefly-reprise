@@ -66,10 +66,15 @@ export interface DossierMeasure {
   width: number;
 }
 
+/** Whether a measured placement stays above the objective and inside the frame. */
+export function dossierFits(m: DossierMeasure): boolean {
+  return m.ink.every((r) => r.bottom <= m.floor && r.left >= 0 && r.right <= m.width);
+}
+
 /** Whether a measured placement keeps the face clear and fits the frame. */
 export function dossierClears(face: Rect, m: DossierMeasure): boolean {
   if (faceOverlap(face, m.ink, FACE_MARGIN) > 0) return false;
-  return m.ink.every((r) => r.bottom <= m.floor && r.left >= 0 && r.right <= m.width);
+  return dossierFits(m);
 }
 
 /** The first placement that clears the face; `heading` when none does. Pure: the caller measures. */
@@ -108,22 +113,16 @@ function plateBox(plate: HTMLElement): { left: number; top: number; width: numbe
 }
 
 /**
- * Place the dossier for the plate on screen, or put it back beside the columns
- * when the CHAPTER tab is not up, the plate has no face box, or the phone
- * stylesheet lays the screen out. Returns the placement, or `null` when there
- * was nothing to place.
+ * Lay the dossier out at `p` and measure its ink, relative to `art`; `null` when
+ * the tab has no dossier. Under the columns, the body rises only as far as the
+ * objective demands and never above the tab strip, as option A's stacked column
+ * does (`stackColumn.ts`). Also the CHAPTER tab's plate slide (`chapterSlide.ts`).
  */
-export function placeDossier(root: HTMLElement, art: HTMLElement, plate: HTMLImageElement | null): DossierPlace | null {
+export function applyDossier(root: HTMLElement, art: HTMLElement, p: DossierPlace): DossierMeasure | null {
   const body = root.querySelector<HTMLElement>('[data-role="body"]');
   const col = body?.querySelector<HTMLElement>('.pause__col[data-col="dossier"]') ?? null;
-  const id = plate?.dataset['plate'] ?? '';
-  const face = CHAPTER_FACE_BOXES[id];
-  const box = plate && face && plate.dataset['art'] !== 'fallback' && plate.dataset['art'] !== 'missing' ? plateBox(plate) : null;
-  if (!body || body.dataset['tab'] !== 'chapter' || !col || !face || !box || phoneLayout(root)) {
-    setPlace(root, 'beside');
-    return col ? 'beside' : null;
-  }
-  const faceRect = faceRectOn(box, face);
+  setPlace(root, p);
+  if (!body || !col) return null;
   const origin = art.getBoundingClientRect();
   const obj = root.querySelector<HTMLElement>('[data-role="obj"]')?.getBoundingClientRect();
   const floor = obj && obj.height > 0 ? obj.top - origin.top - STACK_AIR : origin.height - STACK_AIR;
@@ -137,24 +136,41 @@ export function placeDossier(root: HTMLElement, art: HTMLElement, plate: HTMLIma
     }
     return ink;
   };
-  const measure = (p: DossierPlace): DossierMeasure | null => {
-    setPlace(root, p);
-    let ink = inkOf();
-    if (ink.length === 0) return null;
-    // Under the columns, the body rises only as far as the objective demands and never
-    // above the tab strip, as option A's stacked column does (`stackColumn.ts`).
-    const over = Math.max(...ink.map((r) => r.bottom)) - floor;
-    const top = parseFloat(getComputedStyle(body).top);
-    const bodyTop = body.getBoundingClientRect().top - origin.top;
-    if (p !== 'beside' && over > 0 && Number.isFinite(top) && bodyTop - over >= ceiling) {
-      body.style.setProperty('--pu-dossier-top', `${(top - over).toFixed(1)}px`);
-      ink = inkOf();
-    }
-    return { ink, floor, width: origin.width };
-  };
-  const chosen = chooseDossier(faceRect, measure);
+  let ink = inkOf();
+  if (ink.length === 0) return null;
+  const over = Math.max(...ink.map((r) => r.bottom)) - floor;
+  const top = parseFloat(getComputedStyle(body).top);
+  const bodyTop = body.getBoundingClientRect().top - origin.top;
+  if (p !== 'beside' && p !== 'heading' && over > 0 && Number.isFinite(top) && bodyTop - over >= ceiling) {
+    body.style.setProperty('--pu-dossier-top', `${(top - over).toFixed(1)}px`);
+    ink = inkOf();
+  }
+  return { ink, floor, width: origin.width };
+}
+
+/**
+ * Place the dossier for the plate on screen, or put it back beside the columns
+ * when the CHAPTER tab is not up, the plate has no face box, or the phone
+ * stylesheet lays the screen out. Returns the placement, or `null` when there
+ * was nothing to place. A plate the CHAPTER slide framed (D-234,
+ * `chapterSlide.ts`) keeps the placement the slide measured it against.
+ */
+export function placeDossier(root: HTMLElement, art: HTMLElement, plate: HTMLImageElement | null): DossierPlace | null {
+  const body = root.querySelector<HTMLElement>('[data-role="body"]');
+  const col = body?.querySelector<HTMLElement>('.pause__col[data-col="dossier"]') ?? null;
+  const id = plate?.dataset['plate'] ?? '';
+  if (id && root.dataset['dossierSlid'] === id && body?.dataset['tab'] === 'chapter') {
+    return (root.dataset['dossier'] as DossierPlace | undefined) ?? 'beside';
+  }
+  const face = CHAPTER_FACE_BOXES[id];
+  const box = plate && face && plate.dataset['art'] !== 'fallback' && plate.dataset['art'] !== 'missing' ? plateBox(plate) : null;
+  if (!body || body.dataset['tab'] !== 'chapter' || !col || !face || !box || phoneLayout(root)) {
+    setPlace(root, 'beside');
+    return col ? 'beside' : null;
+  }
+  const faceRect = faceRectOn(box, face);
+  const chosen = chooseDossier(faceRect, (p) => applyDossier(root, art, p));
   // Measured last, so a raise the chosen placement needed is the one left standing.
-  if (chosen === 'heading') setPlace(root, chosen);
-  else measure(chosen);
+  applyDossier(root, art, chosen);
   return chosen;
 }

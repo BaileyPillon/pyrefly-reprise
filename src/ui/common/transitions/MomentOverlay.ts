@@ -25,7 +25,7 @@ import type { MomentsPort } from '../../../engine/BattlePresenterPorts.ts';
 import { playTurnCutIn, type TurnCutInRequest } from './TurnCutInLayer.ts';
 import { confirmPress, type ConfirmPress } from './confirmPress.ts';
 import { prefersReducedMotion } from './reduceMotion.ts';
-import { phoneSliceOf } from '../phoneSlice.ts';
+import { phoneSliceOf, phoneTopOf } from '../phoneSlice.ts';
 
 type SlabKind = 'reveal' | 'overdrive' | 'telegraph';
 
@@ -147,6 +147,11 @@ export class MomentOverlay implements MomentsPort {
   /** On an upright phone, the share of the 16:9 render the window shows (A-12); null elsewhere. */
   phoneSlice(): number | null {
     return phoneSliceOf(this.el.ownerDocument);
+  }
+
+  /** FOC23-01: the share of the field's top the FFX phone HUD covers (0 elsewhere). */
+  phoneTop(): number {
+    return phoneTopOf(this.el.ownerDocument);
   }
 
   /** The player's reduce-motion choice (A-13's roll skips under it). */

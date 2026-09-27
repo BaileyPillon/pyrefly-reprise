@@ -36,10 +36,11 @@
 import { artUrl } from '../../../engine/PaintedArt.ts';
 import { loadArtManifest, manifestKnowsAssetNow, pause2xUrlFor, pauseStemOf } from '../../../engine/ArtManifest.ts';
 import { coverSourceWidth, pauseFocal } from '../../../ui/common/chapterPanel.ts';
-import { framePlate, framingFor, type PlateFraming } from './plates.ts';
+import { framePlate, framingFor, type PlateBox, type PlateFraming } from './plates.ts';
 import { FACE_BOXES, type Rect } from './faceClear.ts';
 import { FaceFramer } from './faceFramer.ts';
-import { slideMask } from './faceSlide.ts';
+import { emptyEdges, slideMask, type FramedBox } from './faceSlide.ts';
+import { CHAPTER_SLIDE_FACES } from './chapterSlide.ts';
 import { chromeFor, type StackHost } from './faceStack.ts';
 import '../../../ui/common/pause-slide.css';
 
@@ -87,6 +88,8 @@ export interface PortraitStageOptions {
   stack?: StackHost;
   /** After every re-frame, with the plates placed (FOC16-02: the CHAPTER tab's dossier). */
   onLayout?: () => void;
+  /** D-234: a chapter plate slid clear of the CHAPTER tab's chrome (`chapterSlide.ts`), or null. */
+  slide?: (id: string, base: PlateBox, f: PlateFraming, w: number, h: number) => FramedBox | null;
 }
 
 export class PortraitStage {
@@ -115,6 +118,7 @@ export class PortraitStage {
   private readonly chrome: (() => Rect[] | null) | undefined;
   private readonly stack: StackHost | undefined;
   private readonly onLayout: (() => void) | undefined;
+  private readonly slide: PortraitStageOptions['slide'];
   /** The face-cleared framing per plate and window size, kept across fixed tabs. */
   private readonly framer = new FaceFramer();
 
@@ -123,6 +127,7 @@ export class PortraitStage {
     this.chrome = opts.chrome;
     this.stack = opts.stack;
     this.onLayout = opts.onLayout;
+    this.slide = opts.slide;
     this.reduceMotion = opts.reduceMotion;
     this.root.classList.toggle('pause__art--still', this.reduceMotion);
     if (typeof ResizeObserver === 'function') {
@@ -165,9 +170,10 @@ export class PortraitStage {
   private place(img: HTMLImageElement, id: string, w: number, h: number, live: boolean): void {
     const f = this.framingOf(id);
     const base = framePlate(f, w, h);
+    const slid = live ? (this.slide?.(id, base, f, w, h) ?? null) : null;
     // Option A (faceStack): the live plate picks the two columns or the stack first.
-    const chosen = live && this.chrome ? chromeFor(base, f, FACE_BOXES[id], w, h, this.chrome, this.stack) : null;
-    const { box, settled } = this.framer.frame(id, base, f, w, h, chosen?.blocks ?? null, chosen?.flat ?? null);
+    const chosen = !slid && live && this.chrome ? chromeFor(base, f, FACE_BOXES[id], w, h, this.chrome, this.stack) : null;
+    const { box, settled } = slid ? { box: slid, settled: false } : this.framer.frame(id, base, f, w, h, chosen?.blocks ?? null, chosen?.flat ?? null);
     if (settled && !this.reduceMotion) {
       img.classList.add('pause__plate--reframe');
       setTimeout(() => img.classList.remove('pause__plate--reframe'), REFRAME_MS + 60);
@@ -178,8 +184,18 @@ export class PortraitStage {
     img.style.height = `${box.height.toFixed(1)}px`;
     // Option B (faceSlide): only a plate slid under the falloff feathers the page
     // it uncovers, and never into its face.
-    const mask = box.slid ? slideMask(box, w, h, FACE_BOXES[id]) : '';
-    img.classList.toggle('pause__plate--slid', mask !== '');
+    //
+    // PR-0121: at very large windows (3840x2160) `framePlate`'s own magnify
+    // cap (never stretch a master past 1.25x) can leave the frame short of
+    // full cover on its own, with no slide involved — the hard edge Bailey
+    // saw as a black band. That is the same "page shows past the plate's
+    // edge" shape `slideMask` already solves for a slid plate, so an
+    // uncovered-but-not-slid box is feathered the same way instead of left as
+    // a flat cut.
+    const capped = !box.slid && Object.values(emptyEdges(box, w, h)).some((v) => v > 0);
+    const mask = box.slid || capped ? slideMask(box, w, h, FACE_BOXES[id] ?? CHAPTER_SLIDE_FACES[id]) : '';
+    img.classList.toggle('pause__plate--slid', !!box.slid && mask !== '');
+    img.classList.toggle('pause__plate--capped', capped && mask !== '');
     if (mask) img.style.setProperty('--pu-slide-mask', mask);
     else img.style.removeProperty('--pu-slide-mask');
   }

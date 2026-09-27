@@ -163,16 +163,39 @@ export function syncHud(hud: PresenterDeps['hud'], engine: BattleEngine): void {
   }
 }
 
-/** Ask the HUD to run a minigame. `undefined` = no HUD, or it failed. */
+/**
+ * What the player did with an Overdrive overlay: answered it, backed out of it
+ * (the overlay rejects with a `MinigameCancelled`, `ui/ffx/minigames/params.ts`),
+ * or the overlay itself broke. `undefined` = no HUD to ask.
+ */
+export type MinigameAnswer = { kind: 'result'; result: MinigameResult } | { kind: 'cancelled' } | { kind: 'failed' };
+
+/**
+ * Ask the HUD to run a minigame. A thrown overlay is an **error** on the console
+ * (hotfix 24): Grand Summon's picker threw on every open and the silent bare
+ * re-submit let the engine put Valefor out each time, with nothing logged but a
+ * warning. The name test keeps the UI module out of this layer (rule 1).
+ */
 export async function askMinigame(
   hud: PresenterDeps['hud'],
   request: { kind: MinigameKind; params: Record<string, unknown> },
-): Promise<MinigameResult | undefined> {
+): Promise<MinigameAnswer | undefined> {
   if (!hud) return undefined;
   try {
-    return await hud.openMinigame(request.kind, request.params);
+    return { kind: 'result', result: await hud.openMinigame(request.kind, request.params) };
   } catch (err) {
-    console.warn('[presenter] minigame overlay failed; re-submitting bare', err);
-    return undefined;
+    if (err instanceof Error && err.name === 'MinigameCancelled') return { kind: 'cancelled' };
+    console.error(`[presenter] the ${request.kind} overlay failed; the turn goes back to the menu`, err);
+    return { kind: 'failed' };
   }
+}
+
+/**
+ * Hand an abandoned or broken picker's turn back to the menu, if the engine can
+ * (the FFX engine's `backOutOfMinigame`). `false` = this engine cannot (FFX-2,
+ * FF7), and the caller keeps the bare re-submit it always made (rule 14).
+ */
+export function backOutOfMinigame(engine: BattleEngine): boolean {
+  const ffx = engine as { backOutOfMinigame?: () => boolean };
+  return typeof ffx.backOutOfMinigame === 'function' ? ffx.backOutOfMinigame() : false;
 }

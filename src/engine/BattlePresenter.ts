@@ -48,7 +48,7 @@ import {
   firstEnabled,
   INPUT_STREAK_LIMIT,
   LIVELOCK_SPINS,
-  askMinigame,
+  askMinigame, backOutOfMinigame,
   notifyHud,
   outcomeOf,
   previewOf,
@@ -303,7 +303,7 @@ export class BattlePresenter {
    * The CONTRACTS.md loop, start to finish. Returns how the battle ended; the
    * screen owns what happens next (chain, results, retry).
    */
-  async run(engine: BattleEngine): Promise<BattleOutcome> {
+  async run(engine: BattleEngine, link: { headline?: string } = {}): Promise<BattleOutcome> {
     // Ground the mid-burst row projection before a single event is played. The
     // first burst of a fight (and of every later link of a chain, which re-runs
     // on a fresh engine) happens before any `syncHud` in the loop below.
@@ -315,7 +315,7 @@ export class BattlePresenter {
     // headline enemy gets its slow push and name plate. A chained formation
     // (Yunalesca's forms, the Vegnagun chain) re-enters `run` on the same
     // presenter and gets the reveal for its *new* boss only.
-    await this.openOn(engine);
+    await this.openOn(engine, link.headline);
 
     /** Consecutive decisions that left `state().log` exactly as it was. */
     let idleSpins = 0;
@@ -417,16 +417,17 @@ export class BattlePresenter {
    * The "boss" is the first enemy that is not a destructible part — that is
    * Yunalesca rather than a coil, Braska's Final Aeon rather than the Yu
    * Pagodas — and an encounter with no enemies at all (the demo reel) simply
-   * gets the party slide.
+   * gets the party slide. A link's own `headline` (`EnemyGroupDef.headline`,
+   * PR-0205) names the plate when the first enemy would misname the formation.
    */
-  private async openOn(engine: BattleEngine): Promise<void> {
+  private async openOn(engine: BattleEngine, headline?: string): Promise<void> {
     if (this.aborted) return;
     const state = engine.state();
     const boss = state.enemyIds
       .map((id) => state.combatants[id])
       .find((c) => c && !c.removed && !c.flags.hidden && !c.flags.isPart);
     this.phase = 'moment:battle-start';
-    const opening = { partyIds: state.activeIds, bossId: boss?.id ?? null, bossName: boss?.name ?? null };
+    const opening = { partyIds: state.activeIds, bossId: boss?.id ?? null, bossName: (boss && headline) || boss?.name || null }; // PR-0205
     await playOpening(this.ctx, () => this.ctx.moments.battleStart(opening)); // a Confirm press ends it (PR-0061)
   }
 
@@ -450,10 +451,9 @@ export class BattlePresenter {
 
   /**
    * Open the overlay named by the request, then re-submit the **same** command
-   * with the outcome in `extra`. With nobody at the controls the command goes
-   * back bare — but note neither engine rolls a default for a bare re-submit
-   * (CONTRACTS.md says they should), which is why automated battles build their
-   * engine with minigames auto-resolved (`BattleScreenWiring.createEngine`).
+   * with the outcome in `extra`. With nobody at the controls it goes back bare
+   * (automated battles auto-resolve minigames, `BattleScreenWiring.createEngine`).
+   * Hotfix 24: a cancelled or broken picker returns an FFX turn to its menu.
    */
   private async resolveMinigame(
     engine: BattleEngine,
@@ -462,8 +462,9 @@ export class BattlePresenter {
   ): Promise<PlayResult> {
     const base = this.lastCommand;
     if (!base) return { dropped: 0 };
-    const human = !engineDefault && !this.auto;
-    const extra = human ? await askMinigame(this.deps.hud, request) : undefined;
+    const answer = !engineDefault && !this.auto ? await askMinigame(this.deps.hud, request) : undefined;
+    if (answer && answer.kind !== 'result' && backOutOfMinigame(engine)) return { dropped: 0 };
+    const extra = answer?.kind === 'result' ? answer.result : undefined;
     return this.play(engine.submit(extra && base.kind === 'overdrive' ? { ...base, extra } : { ...base }));
   }
 

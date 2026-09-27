@@ -66,5 +66,6 @@ registerFlowScreens({
       ...(opts.elapsedMs !== undefined ? { elapsedMs: opts.elapsedMs } : {}),
       ...(opts.previousBestMs !== undefined ? { previousBestMs: opts.previousBestMs } : {}),
       ...(opts.onChoice ? { onChoice: opts.onChoice } : {}),
+      ...(opts.withdrawLine ? { withdrawLine: opts.withdrawLine } : {}),
     }),
 });

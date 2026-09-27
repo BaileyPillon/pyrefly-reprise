@@ -29,6 +29,18 @@ chapters' event logs and menus are byte-identical before and after, measured):
   (Overdrive Sin shares the `airship.range` gap but has no Trigger Command, §3.5);
   `markEvraeRuntime` also marks the enemy named by `state.flags['airship.countsTargetings']`.
 
+## 2026-09-27 — minigame protocol: FFX picker params and backing out (hotfix 24)
+
+**FFX only** [AGENTS.md hard rule 14]. No contract file changes: `types.ts`, `FFXBattleEngine` and
+`HudPort` are untouched. The protocol text in `docs/CONTRACTS.md` gains a paragraph:
+- Grand Summon's `minigame-request.params.aeons` is now `{ id, name, storedGauge }[]` (was bare
+  ids, which the overlay could not read; it threw and Valefor came out every time). Mix adds
+  `ingredients`, `recipes` and `recipeNames` beside the unchanged `inventory`
+  (`src/battle/ffx/pickerParams.ts`).
+- A cancelled or thrown picker goes back to the actor's menu through `FFXEngine.backOutOfMinigame()`,
+  probed by `BattlePresenterUtil.backOutOfMinigame`; engines without it (FFX-2, FF7) keep the bare
+  re-submit. `askMinigame` now returns `{ kind: 'result' | 'cancelled' | 'failed' }` (presenter-internal).
+
 ## 2026-09-27 — `types.ts`, `types-ff7.ts`: FF7's additions move out so `types.ts` does not grow (check C-3)
 
 **FF7 only** [AGENTS.md hard rule 14]; no FFX or FFX-2 type changes shape. The release-readiness check
@@ -177,6 +189,20 @@ characters speak mid-battle lines, with an authored fallback. **FFX only** for `
   "Seymour") and `speaker-roles.ts` tags it Maester, as for `seymour-omnis`.
 
 No signature changes; a script without `fallback` plays exactly as before.
+
+## 2026-09-26 — `types.ts`: `EnemyGroupDef.headline?` (PR-0205)
+
+**FFX-2 only** in use [AGENTS.md hard rule 14]: Chapter XI's second link, the Magus Sisters
+(`research/ffx2-fallen-aeons.md` §0.3: the three sisters are one formation on the second
+platform). The field itself is presentation plumbing, so either game may set it; nothing else does.
+
+**Additive** in `src/battle/common/types.ts`: `EnemyGroupDef` gains an optional `headline?: string`,
+the formation's own name for its opening reveal plate. No engine reads it. `BattleEncounterChain`
+passes it to `BattlePresenter.run(engine, { headline })` (the second argument is optional, so every
+other caller is unchanged) and `openOn` prefers it over the first standing enemy's name. Only
+`roadSistersGroup` sets it ('Magus Sisters', matching the guide's `linkTitles`); every other formation
+still names its first enemy. Round 13 PR-0205: the seam-2 plate read "Sandy". Test:
+`tests/unit/chain-link-headline.test.ts`.
 
 ## 2026-09-26 — `dsl.ts`: `lintScript` also runs the story-text lint (CHK-007)
 

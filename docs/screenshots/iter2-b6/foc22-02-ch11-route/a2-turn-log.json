@@ -1,0 +1,2240 @@
+[
+ {
+  "turn": 0,
+  "ms": 6946,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Sandy",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5146/5652",
+   "paine:5862/5862",
+   "sandy:10330/10330",
+   "cindy:12240/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 1,
+  "ms": 11452,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2112/2488",
+   "rikku:4798/5652",
+   "paine:5862/5862",
+   "sandy:10330/10330",
+   "cindy:12240/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 3,
+  "ms": 25265,
+  "actor": "play:mp-damage",
+  "want": {
+   "label": "Fire",
+   "target": "Sandy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:1684/2488",
+   "rikku:1728/2500",
+   "paine:5130/5862",
+   "sandy:8628/10330",
+   "cindy:11394/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 4,
+  "ms": 32727,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1684/2488",
+   "rikku:1728/2500",
+   "paine:937/5862",
+   "sandy:8457/10330",
+   "cindy:11761/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 5,
+  "ms": 37960,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1502/2488",
+   "rikku:1728/2500",
+   "paine:5862/5862",
+   "sandy:8457/10330",
+   "cindy:12128/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 6,
+  "ms": 43928,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Sandy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:1502/2488",
+   "rikku:1728/2500",
+   "paine:4768/5862",
+   "sandy:6649/10330",
+   "cindy:10409/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 7,
+  "ms": 50375,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Cindy",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:1312/2488",
+   "rikku:1728/2500",
+   "paine:4672/5862",
+   "sandy:6487/10330",
+   "cindy:10776/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 8,
+  "ms": 59711,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1312/2488",
+   "rikku:1262/2500",
+   "paine:4570/5862",
+   "sandy:6487/10330",
+   "cindy:11143/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 9,
+  "ms": 63826,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Sandy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:1312/2488",
+   "rikku:1262/2500",
+   "paine:4198/5862",
+   "sandy:6487/10330",
+   "cindy:11143/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 10,
+  "ms": 68689,
+  "actor": "idle",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1312/2488",
+   "rikku:1262/2500",
+   "paine:3466/5862",
+   "sandy:4221/10330",
+   "cindy:9290/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 11,
+  "ms": 77269,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Sandy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2088/2500",
+   "paine:5341/5862",
+   "sandy:4221/10330",
+   "cindy:9290/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 12,
+  "ms": 80917,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2289/2488",
+   "rikku:2088/2500",
+   "paine:5341/5862",
+   "sandy:4221/10330",
+   "cindy:9290/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 13,
+  "ms": 88194,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Mindy",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:1179/2488",
+   "rikku:1538/2500",
+   "paine:3295/5862",
+   "sandy:2121/10330",
+   "cindy:7286/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 14,
+  "ms": 99127,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Sandy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:999/2488",
+   "rikku:1538/2500",
+   "paine:2922/5862",
+   "sandy:2121/10330",
+   "cindy:7286/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 15,
+  "ms": 102978,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:999/2488",
+   "rikku:1538/2500",
+   "paine:2922/5862",
+   "sandy:2346/10330",
+   "cindy:7653/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 16,
+  "ms": 105060,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:999/2488",
+   "rikku:1358/2500",
+   "paine:2922/5862",
+   "sandy:2346/10330",
+   "cindy:7653/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 17,
+  "ms": 112186,
+  "actor": "play:heal",
+  "want": {
+   "label": "Fire",
+   "target": "Sandy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2500/2500",
+   "paine:4202/5862",
+   "sandy:1028/10330",
+   "cindy:6443/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 18,
+  "ms": 120369,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Sandy",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:1938/2500",
+   "paine:4202/5862",
+   "sandy:1250/10330",
+   "cindy:6810/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 19,
+  "ms": 124115,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:1938/2500",
+   "paine:4202/5862",
+   "sandy:1250/10330",
+   "cindy:6810/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 20,
+  "ms": 135679,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Cindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2071/2488",
+   "rikku:1938/2500",
+   "paine:3470/5862",
+   "sandy:0/10330",
+   "cindy:5279/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 21,
+  "ms": 143504,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2071/2488",
+   "rikku:1938/2500",
+   "paine:2288/5862",
+   "sandy:0/10330",
+   "cindy:6598/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 22,
+  "ms": 147312,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2071/2488",
+   "rikku:1938/2500",
+   "paine:5862/5862",
+   "sandy:0/10330",
+   "cindy:6965/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 23,
+  "ms": 150222,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Cindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2071/2488",
+   "rikku:1938/2500",
+   "paine:5862/5862",
+   "sandy:0/10330",
+   "cindy:6965/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 24,
+  "ms": 158632,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Cindy",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2071/2488",
+   "rikku:1938/2500",
+   "paine:4660/5862",
+   "sandy:0/10330",
+   "cindy:4795/12240",
+   "mindy:8054/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 25,
+  "ms": 165072,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Cindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2071/2488",
+   "rikku:1578/2500",
+   "paine:4660/5862",
+   "sandy:0/10330",
+   "cindy:5522/12240",
+   "mindy:8347/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 26,
+  "ms": 170527,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2071/2488",
+   "rikku:1326/2500",
+   "paine:4660/5862",
+   "sandy:0/10330",
+   "cindy:5406/12240",
+   "mindy:8640/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 27,
+  "ms": 178149,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Mindy",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:1638/2488",
+   "rikku:1326/2500",
+   "paine:3928/5862",
+   "sandy:0/10330",
+   "cindy:3364/12240",
+   "mindy:7237/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 28,
+  "ms": 182217,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Cindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:1638/2488",
+   "rikku:1326/2500",
+   "paine:3928/5862",
+   "sandy:0/10330",
+   "cindy:3364/12240",
+   "mindy:7237/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 29,
+  "ms": 191291,
+  "actor": "command:paine",
+  "want": {
+   "label": "X-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1638/2488",
+   "rikku:1326/2500",
+   "paine:710/5862",
+   "sandy:0/10330",
+   "cindy:3244/12240",
+   "mindy:7237/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 30,
+  "ms": 195245,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Cindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:1638/2488",
+   "rikku:1326/2500",
+   "paine:5862/5862",
+   "sandy:0/10330",
+   "cindy:3244/12240",
+   "mindy:7530/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 31,
+  "ms": 198614,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:298/2488",
+   "rikku:1326/2500",
+   "paine:5862/5862",
+   "sandy:0/10330",
+   "cindy:3126/12240",
+   "mindy:7823/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 32,
+  "ms": 207810,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2235/2488",
+   "rikku:2500/2500",
+   "paine:5506/5862",
+   "sandy:0/10330",
+   "cindy:3493/12240",
+   "mindy:8409/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 33,
+  "ms": 210697,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Cindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2235/2488",
+   "rikku:2500/2500",
+   "paine:5506/5862",
+   "sandy:0/10330",
+   "cindy:3493/12240",
+   "mindy:8409/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 34,
+  "ms": 221518,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1666/2488",
+   "rikku:342/2500",
+   "paine:3452/5862",
+   "sandy:0/10330",
+   "cindy:1058/12240",
+   "mindy:8702/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 35,
+  "ms": 229930,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1666/2488",
+   "rikku:2242/2500",
+   "paine:3452/5862",
+   "sandy:0/10330",
+   "cindy:2159/12240",
+   "mindy:9288/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 36,
+  "ms": 232872,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Cindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:1666/2488",
+   "rikku:2242/2500",
+   "paine:3452/5862",
+   "sandy:0/10330",
+   "cindy:2159/12240",
+   "mindy:9581/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 37,
+  "ms": 236142,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Cindy",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:1666/2488",
+   "rikku:2242/2500",
+   "paine:3452/5862",
+   "sandy:0/10330",
+   "cindy:2098/12240",
+   "mindy:9581/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 38,
+  "ms": 245750,
+  "actor": "command:rikku",
+  "want": {
+   "label": "X-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1666/2488",
+   "rikku:409/2500",
+   "paine:2720/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 39,
+  "ms": 248262,
+  "actor": "play:damage",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1666/2488",
+   "rikku:77/2500",
+   "paine:2720/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 40,
+  "ms": 250438,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1666/2488",
+   "rikku:77/2500",
+   "paine:2720/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 41,
+  "ms": 257768,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2500/2500",
+   "paine:3698/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 42,
+  "ms": 259513,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Mindy",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2225/2500",
+   "paine:3698/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 43,
+  "ms": 263584,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2225/2500",
+   "paine:3698/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:9788/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 44,
+  "ms": 270086,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2321/2488",
+   "rikku:2225/2500",
+   "paine:2966/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:6842/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 45,
+  "ms": 274076,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2321/2488",
+   "rikku:2225/2500",
+   "paine:2966/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:6842/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 46,
+  "ms": 280422,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2321/2488",
+   "rikku:2225/2500",
+   "paine:3995/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:6711/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 47,
+  "ms": 288270,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:416/2488",
+   "rikku:2225/2500",
+   "paine:3263/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4669/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 48,
+  "ms": 291147,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:416/2488",
+   "rikku:2225/2500",
+   "paine:3263/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4669/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 49,
+  "ms": 296538,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:1960/2500",
+   "paine:3263/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4532/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 50,
+  "ms": 299753,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:1960/2500",
+   "paine:2531/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4532/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 51,
+  "ms": 302745,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:1960/2500",
+   "paine:2531/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4401/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 52,
+  "ms": 309029,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:1960/2500",
+   "paine:3595/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4401/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 53,
+  "ms": 311966,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:1960/2500",
+   "paine:3595/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4401/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 54,
+  "ms": 313699,
+  "actor": "play:miss",
+  "want": {
+   "label": "X-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:360/2500",
+   "paine:2863/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4401/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 55,
+  "ms": 321196,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2217/2500",
+   "paine:2863/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4277/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 56,
+  "ms": 324362,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2217/2500",
+   "paine:2863/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4277/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 57,
+  "ms": 327535,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:459/2488",
+   "rikku:2217/2500",
+   "paine:2863/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:4141/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 58,
+  "ms": 335680,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2500/2500",
+   "paine:735/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:1246/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 59,
+  "ms": 338798,
+  "actor": "command:paine",
+  "want": {
+   "label": "X-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2500/2500",
+   "paine:735/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:1113/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 60,
+  "ms": 341559,
+  "actor": "idle",
+  "want": {
+   "label": "X-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2500/2500",
+   "paine:346/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:1113/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 61,
+  "ms": 346826,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2500/2500",
+   "paine:5862/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:1113/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 62,
+  "ms": 350426,
+  "actor": "play:damage",
+  "want": {
+   "label": "X-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:459/2500",
+   "paine:5862/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:978/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 63,
+  "ms": 358290,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:464/2488",
+   "rikku:2500/2500",
+   "paine:5862/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:978/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 64,
+  "ms": 361775,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:464/2488",
+   "rikku:2500/2500",
+   "paine:5130/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:978/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 65,
+  "ms": 367084,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:304/2488",
+   "rikku:2500/2500",
+   "paine:5130/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:844/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 66,
+  "ms": 372302,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2500/2500",
+   "paine:4749/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:844/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 67,
+  "ms": 375376,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire",
+   "target": "Mindy",
+   "menu": "Black Magic"
+  },
+  "took": "Fire",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:2500/2500",
+   "paine:4749/5862",
+   "sandy:0/10330",
+   "cindy:0/12240",
+   "mindy:844/9788"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 68,
+  "ms": 398316,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shell",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:5652/5652",
+   "paine:5862/5862",
+   "x2-anima:36000/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 69,
+  "ms": 401578,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:5652/5652",
+   "paine:5862/5862",
+   "x2-anima:36000/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 70,
+  "ms": 427110,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:5652/5652",
+   "paine:5862/5862",
+   "x2-anima:36000/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 71,
+  "ms": 439794,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Protect",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:4946/5652",
+   "paine:4849/5862",
+   "x2-anima:30932/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 72,
+  "ms": 447154,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:4946/5652",
+   "paine:4756/5862",
+   "x2-anima:30932/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 73,
+  "ms": 451851,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:4946/5652",
+   "paine:4756/5862",
+   "x2-anima:30932/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 74,
+  "ms": 466511,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:4240/5652",
+   "paine:3928/5862",
+   "x2-anima:25932/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 75,
+  "ms": 481296,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:4082/5652",
+   "paine:4610/5862",
+   "x2-anima:25932/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 76,
+  "ms": 484761,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Gunner",
+   "target": null,
+   "menu": "Change"
+  },
+  "took": "Gunner",
+  "viaMenu": "Change",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:4082/5652",
+   "paine:4610/5862",
+   "x2-anima:25932/36000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 77,
+  "ms": 489982,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Remedy",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Remedy",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:2549/3530",
+   "paine:3878/5862",
+   "x2-anima:24041/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 78,
+  "ms": 499502,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2293/2488",
+   "rikku:2462/3530",
+   "paine:3878/5862",
+   "x2-anima:24041/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 79,
+  "ms": 508722,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2224/2488",
+   "rikku:2462/3530",
+   "paine:3878/5862",
+   "x2-anima:22918/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 80,
+  "ms": 514822,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Gunner",
+   "target": null,
+   "menu": "Change"
+  },
+  "took": "Gunner",
+  "viaMenu": "Change",
+  "engineHp": [
+   "yuna:2224/2488",
+   "rikku:2462/3530",
+   "paine:3878/5862",
+   "x2-anima:22918/36000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 81,
+  "ms": 519646,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:3054/3416",
+   "rikku:2462/3530",
+   "paine:3146/5862",
+   "x2-anima:20959/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 82,
+  "ms": 528307,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Remedy",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Remedy",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2962/3416",
+   "rikku:2462/3530",
+   "paine:3146/5862",
+   "x2-anima:19410/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 83,
+  "ms": 537627,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2962/3416",
+   "rikku:2462/3530",
+   "paine:3057/5862",
+   "x2-anima:19410/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 84,
+  "ms": 542318,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2962/3416",
+   "rikku:2462/3530",
+   "paine:3057/5862",
+   "x2-anima:18350/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 85,
+  "ms": 555521,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "X-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2962/3416",
+   "rikku:2462/3530",
+   "paine:2325/5862",
+   "x2-anima:16323/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 86,
+  "ms": 562154,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2828/3416",
+   "rikku:2260/3530",
+   "paine:2269/5862",
+   "x2-anima:16323/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 87,
+  "ms": 575936,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2828/3416",
+   "rikku:2260/3530",
+   "paine:5769/5862",
+   "x2-anima:15242/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 88,
+  "ms": 582023,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2828/3416",
+   "rikku:2260/3530",
+   "paine:5037/5862",
+   "x2-anima:13200/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 89,
+  "ms": 584827,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2828/3416",
+   "rikku:2260/3530",
+   "paine:5037/5862",
+   "x2-anima:11694/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 90,
+  "ms": 593427,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2739/3416",
+   "rikku:2260/3530",
+   "paine:5037/5862",
+   "x2-anima:11155/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 91,
+  "ms": 596316,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2739/3416",
+   "rikku:2260/3530",
+   "paine:5037/5862",
+   "x2-anima:10066/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 92,
+  "ms": 601457,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2739/3416",
+   "rikku:2260/3530",
+   "paine:5037/5862",
+   "x2-anima:10066/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 93,
+  "ms": 615610,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2558/3416",
+   "rikku:2260/3530",
+   "paine:4305/5862",
+   "x2-anima:6839/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 94,
+  "ms": 621017,
+  "actor": "command:yuna",
+  "want": {
+   "label": "White Mage",
+   "target": null,
+   "menu": "Change"
+  },
+  "took": "White Mage",
+  "viaMenu": "Change",
+  "engineHp": [
+   "yuna:2558/3416",
+   "rikku:2260/3530",
+   "paine:4305/5862",
+   "x2-anima:5805/36000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 95,
+  "ms": 629951,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1777/2488",
+   "rikku:2260/3530",
+   "paine:4305/5862",
+   "x2-anima:5805/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 96,
+  "ms": 636483,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Gunner",
+   "target": null,
+   "menu": "Change"
+  },
+  "took": "Gunner",
+  "viaMenu": "Change",
+  "engineHp": [
+   "yuna:1777/2488",
+   "rikku:2260/3530",
+   "paine:4305/5862",
+   "x2-anima:5805/36000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 97,
+  "ms": 640335,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2440/3416",
+   "rikku:2260/3530",
+   "paine:3573/5862",
+   "x2-anima:3869/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 98,
+  "ms": 646913,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Remedy",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Remedy",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2440/3416",
+   "rikku:2172/3530",
+   "paine:3573/5862",
+   "x2-anima:2332/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 99,
+  "ms": 657805,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2440/3416",
+   "rikku:2172/3530",
+   "paine:3483/5862",
+   "x2-anima:2332/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 100,
+  "ms": 662714,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2440/3416",
+   "rikku:2172/3530",
+   "paine:3483/5862",
+   "x2-anima:1213/36000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

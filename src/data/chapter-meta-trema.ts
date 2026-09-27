@@ -57,6 +57,9 @@ export function tremaMetaFor(shape: TremaShape): ChapterMeta {
     id: 'ffx2-trema',
     gameLabel: 'FFX-2',
     numeral: 'XIII',
+    // D-226, our estimate: no pose after a Via Infinito special boss's first fight
+    // [ffx2-trema.md §13; ffx-vs-ffx2-presentation §2.2; GameFAQs silent].
+    victoryPose: 'hold',
     title: 'Trema',
     subtitle: 'A Hundred Floors Down',
     location: 'Via Infinito — Cloister 100',
