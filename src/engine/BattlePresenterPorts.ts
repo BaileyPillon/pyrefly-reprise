@@ -348,6 +348,12 @@ export interface PresenterDeps {
    * Optional: without it every enemy ability keeps the `cast` painting.
    */
   abilityFacts?: ((id: AbilityId) => AbilityFacts | undefined) | null;
+  /**
+   * A-4: `'pose'` (the default) strikes the victory pose; `'hold'` keeps the
+   * battle stance and a quiet cue where the sources withhold the celebration
+   * (`VictoryPose.ts`). Per chapter, passed in by the screen; never read from the DOM.
+   */
+  victoryPose?: import('./VictoryPose.ts').VictoryPose;
 }
 
 /** One line of the presenter's own trace, for the debug API and e2e. */
