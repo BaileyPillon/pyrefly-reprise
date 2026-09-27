@@ -39,6 +39,22 @@ export interface BackdropPalette {
   bounce: number;
 }
 
+/**
+ * The painting's ground band as a hex and a Rec. 709 luma, 0..1 (iteration 2
+ * B2 part 1, for A-8: a contact shadow that reads on a dark floor derives its
+ * strength from the floor it stands on). `null` for a scene with no palette.
+ */
+export function paletteGround(
+  palette: Pick<BackdropPalette, 'ground'> | null | undefined,
+): { hex: number; luma: number } | null {
+  if (!palette) return null;
+  const hex = palette.ground;
+  const r = ((hex >> 16) & 255) / 255;
+  const g = ((hex >> 8) & 255) / 255;
+  const b = (hex & 255) / 255;
+  return { hex, luma: 0.2126 * r + 0.7152 * g + 0.0722 * b };
+}
+
 export interface ParallaxLayerSpec {
   /** Band of the painting this layer carries, as fractions of image height. */
   from: number;
