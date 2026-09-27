@@ -99,6 +99,19 @@ describe('no aborted keyart request', () => {
     expect(writes).toEqual([]);
   });
 
+  it('offers the preload\'s candidates before the manifest lands, and takes them back if the master is not on disk', async () => {
+    setArtManifest(null); // a cold, slow first visit: nothing known yet
+    const host = mount();
+    for (const img of host.querySelectorAll<HTMLImageElement>('.fe-title__plane img')) {
+      expect(img.getAttribute('srcset')).toMatch(/keyart\.png 1344w, .*keyart\.2x\.webp 2688w$/);
+    }
+    await upgradeTitlePlanes(host); // the manifest never arrives here: no master to promise
+    for (const img of host.querySelectorAll<HTMLImageElement>('.fe-title__plane img')) {
+      expect(img.hasAttribute('srcset')).toBe(false);
+      expect(img.getAttribute('src')).toContain('art/title/keyart.png');
+    }
+  });
+
   it('index.html preloads the plate with the same candidates and sizes the planes offer', () => {
     const html = read('index.html');
     expect(html).toMatch(/<link rel="preload" as="image"[^>]*imagesrcset="\/art\/title\/keyart\.png 1344w, \/art\/title\/keyart\.2x\.webp 2688w"/);
