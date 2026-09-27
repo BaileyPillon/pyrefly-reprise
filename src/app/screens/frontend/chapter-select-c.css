@@ -296,6 +296,20 @@
 }
 .cs-pip.is-sel.is-lit::after { background: var(--ig-ink); }
 
+/* ------------------------------------------------ the label, unchanged */
+
+/*
+ * The "Chapter select" label takes taps for the secret door (FF7 only; Bailey's
+ * approved option A, ChapterSelectScreen.armDoor) and looks exactly as before:
+ * no pointer, no hover, no press state, no tap flash, no double-tap zoom.
+ */
+.fe-cselect__eyebrow {
+  pointer-events: auto;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 /* ------------------------------------------------------------- the phone */
 
 @media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
