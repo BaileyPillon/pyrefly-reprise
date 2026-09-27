@@ -1044,6 +1044,45 @@
     "mtime": "2026-09-26T17:14:19.147Z",
     "approved": "2026-09-26"
    }
+  },
+  "bailey:2026-09-26-boss-poses": {
+   "words": "i'll go with all your recommendations, i love it.",
+   "note": "Bailey, 2026-09-26, verbatim \"i'll go with all your recommendations, i love it.\" (D-229 and D-230 in docs/target/decisions.json), answering the boss pose sheets in docs/concepts/boss-poses-2026-09-26/. Installed: Yojimbo (Ch IX, subject yojimbo-cavern) attack c45 and hurt c35, the hat-and-katana composites' cut-outs as picked; Trema hurt c7 (Ch XIII); Logos hurt c2, Leblanc hurt c10, Ormi hurt c7 flipped horizontally at install (no repaint), the Leblanc Syndicate male goon (ffx2-dr-goon) hurt c4 (Ch VI). Sources: D:/Tools/pyrefly-art-backup/candidates/2026-09-26-bosses-v2/<boss>/<slot>/cand-N.png; each PNG is the candidate byte for byte except Ormi's mirror. A pick approves only the pose as shown. Sidecars carry a head-matched 'scale' re-measured against each installed idle (Yojimbo attack 1.053, hurt 1.25; Trema 0.93; Logos 1.00; Leblanc 1.00; Ormi 1.00; goon 1.50; docs/concepts/boss-poses-2026-09-26/installed/). Every slot was empty; nothing replaced. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-26-boss-poses/ (installed/, replaced/). Game: Yojimbo FFX only; the other five FFX-2 only.",
+   "public/art/characters/yojimbo-cavern/attack.png": {
+    "sha256": "7a88b922e81de8c21544cabb26e705a55e75321242eae691d16dab88ef33d873",
+    "mtime": "2026-09-27T02:06:04.349Z",
+    "approved": "2026-09-26"
+   },
+   "public/art/characters/yojimbo-cavern/hurt.png": {
+    "sha256": "02aee5bf1f6941d868626752779fd59be7ff40d114a494e28bf38e7612c4cb5b",
+    "mtime": "2026-09-27T02:06:04.368Z",
+    "approved": "2026-09-26"
+   },
+   "public/art/characters/trema/hurt.png": {
+    "sha256": "c6776df3f35a217f94321f4ddf71d9f8b803cdb7dfcc72b91b4e20b023e55fe5",
+    "mtime": "2026-09-27T02:06:04.379Z",
+    "approved": "2026-09-26"
+   },
+   "public/art/characters/logos/hurt.png": {
+    "sha256": "44e6b283c68320b0e4600493e9bbc4969cdae68680c8e302bb162ec770fd3215",
+    "mtime": "2026-09-27T02:06:04.391Z",
+    "approved": "2026-09-26"
+   },
+   "public/art/characters/leblanc/hurt.png": {
+    "sha256": "0af99e411ee90cefd26857ae4be07aea544905fdc7d8918b2838881868271bce",
+    "mtime": "2026-09-27T02:06:04.403Z",
+    "approved": "2026-09-26"
+   },
+   "public/art/characters/ormi/hurt.png": {
+    "sha256": "1180578d500d87189c373704029b8cf8e190eed8d8b33a1bc2aedc85d155af94",
+    "mtime": "2026-09-27T02:06:04.470Z",
+    "approved": "2026-09-26"
+   },
+   "public/art/characters/ffx2-dr-goon/hurt.png": {
+    "sha256": "7749ea8fb2011de04222c5c64e3fd13ede6492286822f328ee18100aaeb98ae0",
+    "mtime": "2026-09-27T02:06:04.488Z",
+    "approved": "2026-09-26"
+   }
   }
  }
 }
