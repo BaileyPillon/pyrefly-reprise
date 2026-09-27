@@ -1,0 +1,658 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-27T13:26:44.564Z",
+ "build": {
+  "mainSha": "a44297ca",
+  "fullSha": "a44297cae60560d62102c7c2d90e774bf13fad66",
+  "candidate": "D:/pyrefly-rel22",
+  "bundle": "index-DLvZcIgF.js",
+  "candidateArtifactHash": "29ac7257333cc18e5485ac92c1062d9bdef6b5b1bcde688471626959a127ceac",
+  "live": {
+   "mainSha": "d8837334",
+   "bundle": "index-DlL4YDmM.js"
+  }
+ },
+ "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect found in the changed area, and no regression against release 21: every chapter played by real keys ends where the same route ends on release 20/21 (IV and V won, VI lost and retried, I lost and retried as on release 20, VIII and X won), with 0 console errors, 0 HTTP errors and 0 HTML-typed images in 12 routes.",
+  "Chapter V (Vegnagun and Shuyin) was WON by real keys under the default Wait split, 167 turns, 4 seams, summed spoils on the results (EXP 42,400 x3, gil 18,300): better than the release this replaces, where the deep review recorded Chapter V as not winnable by real keys on Wait.",
+  "FOC22-01 (major, introduced): ten FF7 concept files ship in the artifact and in art/manifest.json. Nothing in the bundle loads them and nothing that works live breaks, so under rule A it is disclosed, not held; it is a one-line dist-filter fix and should go before the next release.",
+  "FOC22-02 (major, not introduced): the Chapter XI advisor names Remedy for a girl under Itchy, whose menu correctly offers only Change. The advisor, Itchy and Anima data are byte-identical to live, so it is carried and disclosed.",
+  "Disclosed majors carried from the builder: A-8 contact shadows short on 5 of 43 figures, the PR-0094 Vegnagun head reading, D-224 phase lighting subtle. None is a regression; D-224 is new work that ships on (Bailey adopted option A)."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "PASS",
+   "reason": "Selected for music and sound files. No shipped cue changed: the candidate manifest has 0 added or changed audio files against live (critic/artifacts/d8837334.json); the only audio difference is that the 52 audio/candidates files no longer ship (PR-0100/0173) and nothing in the bundle references audio/candidates. Runtime routing sampled in every route (audio-debug.jsonl). PR-0214 pause-music unit test passes.",
+   "where": "both; every route",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/*/audio-debug.jsonl",
+    "scratchpad manifest diff (recorded in the .md)"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-002",
+   "result": "NOT APPLICABLE",
+   "reason": "The pause layer was not changed by this candidate (only pauseMusic.ts, audio). Pause opened with a real Esc in every route (14-pause-Esc) at 1600x900, 2000x1012 and 390x844 and rendered full-bleed; the six-size fresh-context measurement was not repeated.",
+   "where": "both",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "FAIL",
+   "reason": "Advisor card label \"Next best move\" measures 12.2 effective px at 1600x900 and 2000x1012 (15 px on the phone), under the 14 px floor. Identical on release 20 (ce05b02c focused run, 12.2 px): pre-existing, not introduced (FOC22-03). New copy in this batch (line card, results caption, Talk lines) read at >= 14 px in the captures.",
+   "where": "both; IV, III",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-bahamut-win/run.json",
+    "critic/reviews/a44297ca-focused/braskas-final-aeon-win/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "FAIL",
+   "reason": "Chapter XI link 3 (Anima), 2000x1012, seed 1: after Pain put Itchy on Yuna, her menu showed only CHANGE (canon, research/ffx2-combat-core.md Itchy row) while the advisor kept naming \"Remedy, in Item\" for 314 consecutive decisions (FOC22-02). Advisor and Itchy code are unchanged from live, so not introduced. Elsewhere every advisor pick named a row that existed and was pressed (IV, V, VIII, X, I).",
+   "where": "FFX-2; XI",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-fallen-aeons-win/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "Pause, intent, guide, target reticle and the new line card were opened and closed by real input; every capture index entry matches its stale-root screen (route-index: 279 items, 0 mismatches, 0 unverified). The Overdrive plate (t1-b2a) lifetime is covered by ui-ffx-overdrive-plate.test.ts (passes).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/index.json",
+    "critic/reviews/a44297ca-focused/linecard/lc-braskas-final-aeon-1600x900.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "New player-facing copy read in captures and the dbox timelines: Chapter X Talk exchanges, Chapter VIII stand-in lines, results captions, line cards. No ids, file stems or debug text.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/seymour-natus-win/run.json",
+    "critic/reviews/a44297ca-focused/evrae-airship-win/run.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Line card D-232 option A read back in Chapter III at 1600x900: placed top-left (32,105, 600x127), clear of the party, Braska's Final Aeon (the speaker) and both Pagodas; it covers the strategy-guide panel only (FOC22-05, polish). The route FOC measure found 0 panel overlaps on the first menu in IV, III (2000x1012) and I (390x844). The full nine-state projection was not re-run; the builder's 0 px2 torso measurement in III and V at three sizes is reused.",
+   "where": "both; III, IV, V",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/linecard/lc-braskas-final-aeon-1600x900-4.jpg",
+    "critic/reviews/a44297ca-focused/braskas-final-aeon-win/16-target-single.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)",
+   "reusedFrom": "docs/handoff/iter2-b4.md repair 48779371 (line card 0 px2 on party torsos, III and V, three sizes)",
+   "dependencyArgument": "lineCardPlacement.ts and midbeatLineCard.ts are byte-identical between 48779371 and a44297ca; same artifact class (production build)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Longest names present on screen in the captures (Braska's Final Aeon in the CTB list, Yu Pagoda plates, Vegnagun parts) are shown in full at 1600x900 and 2000x1012.",
+   "where": "both; III, V",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/braskas-final-aeon-win/16-target-single.jpg",
+    "critic/reviews/a44297ca-focused/ffx2-vegnagun-shuyin-win/24-seam-3-first-menu.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Single-target Attack in III (2000x1012): corner brackets on Yu Pagoda A, its name plate, the matching CTB entry framed, plate clear of every party face (PR-0183). Vegnagun Bulwark rings flat (0.46) and Redoubt rings round (PR-0095) visible at link 3 and 4 first menus. The Vegnagun-part targeting moment itself was not captured (no target cursor opened in the route's probe).",
+   "where": "both; III, V",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/braskas-final-aeon-win/16-target-single.jpg",
+    "critic/reviews/a44297ca-focused/ffx2-vegnagun-shuyin-win/24-seam-3-first-menu.jpg",
+    "critic/reviews/a44297ca-focused/Vegnagun-staging-A.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "reason": "Portrait chips painted in every captured CTB list, party row and results row (no monograms, PR-0176 aeon rows in III after summons); 0 requests with status >= 400 under /art/ in all 12 routes.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/braskas-final-aeon-win/11-advisor.jpg",
+    "critic/reviews/a44297ca-focused/*/network-media.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "No approved painting changed (verify-approved: 262 ok, 0 mismatched, 0 missing). The new particle work (A-5 dissolve, D-233 Spiral Cut / Mega Flare) was not caught in a frame by these routes; judged only from the builder's frames, so left unverified here.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/verify-approved.json"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real Playwright keys (and taps on the phone) drove title, briefing, board, prep, scenes, command menus, targeting, pause, results, retry and board return in 12 routes. PR-0109: the board reopens on the chapter just played after results and after a reload (IV, V). PR-0204 Talk fired from real input (X). The only hook is setSeed(1), labelled. The mouse-hint change (hold click skip) is covered by controls-hint-mouse.test.ts only.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-bahamut-win/run.json",
+    "critic/reviews/a44297ca-focused/ffx2-vegnagun-shuyin-win/run.json",
+    "critic/reviews/a44297ca-focused/seymour-natus-win/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "route-index acceptance: 279 captures, 0 unverified, 0 mismatches between asserted and stale-root screens.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/index.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused review of the production candidate before deploy; live verification of the exact artifact is a separate obligation after the deploy.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "grep for .N.png / .raw.png in src: one hit, a doc comment naming a docs/concepts source (titleMarkup.ts:11), not a shipped path. The dist filter removed every numbered and raw take from the artifact (295 removals vs live) and art/manifest.json references none.",
+   "where": "both",
+   "evidence": [
+    "recorded in the .md"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "buildManifest decode-check of dist-gate: 849 files, decodeChecked true, 0 problems, 0 audio unverified.",
+   "where": "both",
+   "evidence": [
+    "recorded in the .md"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared screens changed in this batch (results caption and gutter, coach, line card, board focus) exercised in both games: results in IV/V/VI (FFX-2) and I/VIII/X (FFX), coach in IV and III, line card in III and V, board focus in IV and V.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-leblanc-lose/31-results.jpg",
+    "critic/reviews/a44297ca-focused/seymour-flux-win-touch/31-results.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Every item has a written case (docs/handoff/iter2-b1.md, iter2-b3.md, iter2-b4.md, t1-b2a.md, t1-b4b.md, and commit subjects). Presence and absence checked: FFX-2-only summed spoils and Shuyin checkpoint data live only in FFX-2 files and the summed spoils show in V; FFX-only fielded stand-ins show in VIII (Wakka for Auron) and nothing moves in FFX-2 (Chapter V voices kept); FFX-only Talk lines in X; FFX-only plate faces and Overdrive plate live under src/ui/ffx only; both-game line card seen in III (FFX) and V (FFX-2).",
+   "where": "both",
+   "evidence": [
+    "docs/handoff/iter2-b4.md",
+    "docs/handoff/t1-b2a.md",
+    "critic/reviews/a44297ca-focused/evrae-airship-win/run.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 5,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Outcome to destination by real keys: IV and V victory -> post scene -> results -> CONFIRM -> scene -> chapter select, clear saved and back after reload; X and VIII victory to results; VI and I defeat -> results -> RETRY -> prep -> battle. III (15-min budget) and XI (22-min budget) were cut undecided by the harness budget, not by the game: III reached its second phase; XI reached link 3 and stalled on FOC22-02.",
+   "where": "both; I, III, IV, V, VI, VIII, X, XI",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-vegnagun-shuyin-win/run.json",
+    "critic/reviews/a44297ca-focused/ffx2-leblanc-lose/run.json",
+    "critic/reviews/a44297ca-focused/seymour-flux-win/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Talk (Trigger Command) traced from a real Enter to the engine's talk event and the scripted exchange with the Natus portrait; chained spoils traced from the real V win to the results text; checkpoint retry covered by the builder's real-key frames and iter2-b1 tests.",
+   "where": "both; X, V",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/seymour-natus-win/run.json",
+    "critic/reviews/a44297ca-focused/ffx2-vegnagun-shuyin-win/31-results.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-B1",
+   "result": "NOT APPLICABLE",
+   "reason": "No shipped cue changed, so no new listening judgment is owed; the direction-B candidates are committed but do not ship (checked in the artifact). Agents cannot hear.",
+   "where": "both",
+   "evidence": [],
+   "mode": "human",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "a44297ca / dist-gate artifactHash 29ac7257",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel22 a44297ca, dist-gate bundle index-DLvZcIgF.js, vite preview 127.0.0.1:5422; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  }
+ ],
+ "targets": {
+  "required": 10,
+  "matched": 7,
+  "failing": 0,
+  "unverified": 3,
+  "waiting": 0,
+  "list": [
+   {
+    "tile": "Title",
+    "result": "matched",
+    "evidence": "critic/reviews/a44297ca-focused/Title.jpg",
+    "note": "A-16: first frame painted, never black, at 1600x900 and 2000x1012"
+   },
+   {
+    "tile": "Battle HUD, FFX",
+    "result": "matched",
+    "evidence": "critic/reviews/a44297ca-focused/Battle-HUD-FFX.jpg"
+   },
+   {
+    "tile": "Battle HUD, FFX-2",
+    "result": "matched",
+    "evidence": "critic/reviews/a44297ca-focused/Battle-HUD-FFX2.jpg",
+    "note": "unchanged from release 20"
+   },
+   {
+    "tile": "Results",
+    "result": "matched",
+    "evidence": "critic/reviews/a44297ca-focused/Results.jpg; critic/reviews/a44297ca-focused/Results-2000.jpg",
+    "note": "PR-0120 wide gutter inked to the edge at 2000x1012"
+   },
+   {
+    "tile": "Onboarding C3",
+    "result": "matched",
+    "evidence": "critic/reviews/a44297ca-focused/Onboarding-C3.jpg"
+   },
+   {
+    "tile": "Vegnagun staging: option A",
+    "result": "matched",
+    "evidence": "critic/reviews/a44297ca-focused/Vegnagun-staging-A.jpg"
+   },
+   {
+    "tile": "PR-0001 phone Victory and Defeat results",
+    "result": "matched",
+    "evidence": "critic/reviews/a44297ca-focused/PR-0001-phone-results.jpg",
+    "note": "defeat, option B"
+   },
+   {
+    "tile": "Targeting in FFX-2: a Vegnagun part",
+    "result": "unverified",
+    "note": "no target cursor captured"
+   },
+   {
+    "tile": "Spell and skill effects: option B (D-233 specials)",
+    "result": "unverified",
+    "note": "no Spiral Cut / Mega Flare frame captured"
+   },
+   {
+    "tile": "Onboarding C2 (FFX first-use line)",
+    "result": "unverified",
+    "note": "frame 10 taken, no composite read"
+   }
+  ]
+ },
+ "issues": [
+  {
+   "id": "FOC22-01",
+   "severity": "major",
+   "title": "Ten FF7 concept-art files ship in the release artifact and are listed in art/manifest.json",
+   "game": "none (FF7 concepts; delivery of both games)",
+   "chapter": "none",
+   "expected": "FF7 is plans and concepts only on main (no FF7 code); nothing FF7 is published without Bailey's yes",
+   "observed": "dist-gate carries art/backdrops/ff7-sector1-reactor.{png,json} and art/characters/ff7-{barret,cloud,guard-scorpion,guard-scorpion-tail-up}/idle.{png,json}, and art/manifest.json lists them (backdrop index shifts). No code loads them. They came from public/art (local, untracked), written 2026-09-27 04:19.",
+   "repro": "build the candidate; diff its manifest against critic/artifacts/d8837334.json: 10 added art files, all ff7-*",
+   "evidence": [
+    "critic/reviews/a44297ca-focused.md (manifest diff section)"
+   ],
+   "confidence": "high",
+   "requirement": "AGENTS.md rule 10 (ideas need a yes), release manifest scope (RUBRIC section 2)",
+   "where": "tools/dist-filter.mjs (no ff7 rule); public/art/**/ff7-*",
+   "fix": "add art/**/ff7-* (and art/backdrops/ff7-*) to tools/dist-filter.mjs, or keep FF7 art outside public/art until approved",
+   "acceptanceCheck": "a fresh build and its artifact manifest contain 0 paths matching ff7",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC22-02",
+   "severity": "major",
+   "title": "Chapter XI advisor keeps naming Remedy for a girl under Itchy, whose menu only offers Change",
+   "game": "ffx2",
+   "chapter": "ffx2-fallen-aeons (XI), link 3 Anima",
+   "expected": "Itchy seals every command but spherechange (research/ffx2-combat-core.md, Itchy row, verified 2 sources); the advisor offers CHANGE for that girl (or a cure from another girl)",
+   "observed": "Yuna under Itchy: the menu shows only CHANGE (correct), the advisor card says Remedy in Item, 314 decisions in a row; a player following the card finds no such row",
+   "repro": "seed 1, real keys at 2000x1012, follow the advisor to Anima; Pain lands Itchy on Yuna",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-fallen-aeons-win/run.json (picks 87 to 400, misses)"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-004",
+   "where": "suspected: src/engine/tactics (the FFX-2 generic advisor has no Itchy rule; only ffx2-trema.ts mentions it)",
+   "fix": "treat Itchy like a command lock in the advisor: recommend Change for the itchy girl, or name the cure for another girl",
+   "acceptanceCheck": "an itchy girl's card names Change; XI seed 1 by the route reaches results",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC22-07",
+   "severity": "major",
+   "title": "Carried (builder disclosure): A-8 contact shadows still short on 5 of 43 figures",
+   "game": "both",
+   "chapter": "several",
+   "expected": "every grounded figure reads as standing on the floor",
+   "observed": "per docs/handoff/iter2-b3.md, 5 of 43 figures still short; not re-measured here",
+   "repro": "see iter2-b3 handoff",
+   "evidence": [
+    "docs/handoff/iter2-b3.md"
+   ],
+   "confidence": "medium (reused)",
+   "requirement": "A-8",
+   "where": "src/engine/ContactShadow.ts",
+   "fix": "per handoff",
+   "acceptanceCheck": "43 of 43 figures pass the builder's shadow measure",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC22-08",
+   "severity": "major",
+   "title": "Carried (builder disclosure): PR-0094 Vegnagun head key-feature reading",
+   "game": "ffx2",
+   "chapter": "ffx2-vegnagun-shuyin (V), link 4",
+   "expected": "the head reads as the head, its horn and skull clear of chrome",
+   "observed": "per iter2-b3 handoff the head reading remains open; the link-4 frame here shows the Redoubt rings over the head's jaw",
+   "repro": "V link 4 first menu",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-vegnagun-shuyin-win/20-link-4.jpg"
+   ],
+   "confidence": "medium",
+   "requirement": "PR-0094",
+   "where": "src/engine/keyFeatures.ts",
+   "fix": "per handoff",
+   "acceptanceCheck": "per PR-0094",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC22-09",
+   "severity": "major",
+   "title": "Carried (builder disclosure): D-224 phase lighting reads subtle",
+   "game": "both",
+   "chapter": "canon phase beats",
+   "expected": "the phase change is visible in the arena light (option A)",
+   "observed": "per builder, subtle; not judged here",
+   "repro": "see iter2-b3",
+   "evidence": [
+    "docs/handoff/iter2-b3.md"
+   ],
+   "confidence": "medium (reused)",
+   "requirement": "D-224",
+   "where": "src/engine/PhaseLighting.ts",
+   "fix": "Bailey to judge; tune strength",
+   "acceptanceCheck": "Bailey's look",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC22-03",
+   "severity": "polish",
+   "title": "Advisor card label at 12.2 effective px (CHK-003 floor 14)",
+   "game": "both",
+   "chapter": "all",
+   "expected": ">= 14 px",
+   "observed": "12.2 px at 1600x900 and 2000x1012, same on release 20",
+   "repro": "route measureFoc",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-bahamut-win/run.json focAfterCoach"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-003",
+   "where": "advisor card CSS",
+   "fix": "raise the label size",
+   "acceptanceCheck": "advisorMinEffPx >= 14",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC22-04",
+   "severity": "polish",
+   "title": "Phone: the touch route cannot reach Poison Fang in the Items list (same on live)",
+   "game": "ffx",
+   "chapter": "seymour-flux (I), 390x844",
+   "expected": "a tap-only player can pick any item the advisor names",
+   "observed": "after a tap on Items, Poison Fang was not among the visible rows and the route fell back to Attack; identical on the live site (seymour-flux-win-LIVE-touch). Suspected harness limitation (the touch chooser does not scroll), not proven product",
+   "repro": "route.mjs seymour-flux win --touch --size=390x844",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/seymour-flux-win-touch/run.json",
+    "critic/reviews/a44297ca-focused/seymour-flux-win-LIVE-touch/run.json"
+   ],
+   "confidence": "low",
+   "requirement": "CHK-015",
+   "where": "critic/runner/lib/route-ui.mjs choose() touch path, or the phone item list",
+   "fix": "teach the touch chooser to scroll the list; then re-judge",
+   "acceptanceCheck": "the touch route takes Poison Fang",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC22-05",
+   "severity": "polish",
+   "title": "The mid-battle line card sits on the strategy-guide panel, whose MORE row peeks out under it",
+   "game": "both",
+   "chapter": "braskas-final-aeon (III)",
+   "expected": "card over clear space or over chrome cleanly",
+   "observed": "top-left slot covers the guide panel; the MORE row shows below the card",
+   "repro": "III phase 2 line",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/linecard/lc-braskas-final-aeon-1600x900-4.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "D-232 option A",
+   "where": "src/ui/common/lineCardPlacement.ts",
+   "fix": "count the guide panel as soft chrome, or fold the guide while a card shows",
+   "acceptanceCheck": "no guide text visible around a card",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC22-06",
+   "severity": "polish",
+   "title": "A mid-battle line without an auto timer stays up for minutes while the fight goes on (same on live, round 14)",
+   "game": "both",
+   "chapter": "III, V",
+   "expected": "a mid-battle line leaves within a few seconds",
+   "observed": "e.g. Paine \"Focus.\" 212 s, Jecht \"Don't you dare slow down now.\" 135 s in the real-key runs; round 14 on live recorded the same class",
+   "repro": "real-key III or V, read run.json dboxTimeline",
+   "evidence": [
+    "critic/reviews/a44297ca-focused/ffx2-vegnagun-shuyin-win/run.json",
+    "critic/rounds/round-14/evidence/braskas-final-aeon-win-seed1/run.json"
+   ],
+   "confidence": "medium",
+   "requirement": "feel",
+   "where": "src/app/screens/BattleScreenCutscenes.ts manual mode",
+   "fix": "give every mid-battle line an auto hold",
+   "acceptanceCheck": "no battle line longer than about 6 s",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Real-key routes on the production candidate (seed 1): IV win 1600x900 and 2000x1012; V win 1600x900 (167 turns, 4 seams, 22.4 min); X win (Talk x3); VIII win (stand-in line); VI lose + retry; I lose + retry 1600x900; I phone 390x844 touch (lose + retry) and the same route on the live site; III 2000x1012 and XI 1600x900 / 2000x1012 cut by budget",
+   "Line card placement probe in III 1600x900 (debug setup, labelled)",
+   "tsc --noEmit clean; 45 changed-area vitest files (44 passed, 1 skipped): 427 tests passed, 8 skipped",
+   "Artifact manifest diff against live; decode check; dist filter; CHK-018 grep; verify-approved 262/262",
+   "Data audit of every changed value in src/data (Rikku S.Lv 41 estimate, Gagazet values moved byte-identical, aeon arms OFF, opensAsSeparateBattle behind SEPARATE_BATTLE_GAUGES=false, Acta namedTargetsOnly vs research 3.4, Shuyin checkpointOnEntry per D-217)",
+   "Target composites: Title, Battle HUD FFX, Battle HUD FFX-2, Results (1600 and 2000), Onboarding C3, Vegnagun staging A, PR-0001 phone results"
+  ],
+  "reused": [
+   {
+    "what": "line card 0 px2 on torsos in III and V at three sizes",
+    "from": "docs/handoff/iter2-b4.md (48779371 repair)",
+    "why": "placement code identical at a44297ca"
+   },
+   {
+    "what": "200 seeds x 3 paces byte identity of the FFX-2 engine split",
+    "from": "docs/handoff/iter2-b1.md",
+    "why": "engine files identical to the merged branch; not re-benched"
+   },
+   {
+    "what": "D-217 checkpoint retry at Shuyin by real Enter",
+    "from": "docs/handoff/iter2-b1.md frames",
+    "why": "our V run won without losing to Shuyin, so the checkpoint path was not exercised here"
+   },
+   {
+    "what": "Overdrive plate, plate faces, Zanmato hold, aeon CTB portraits",
+    "from": "docs/handoff/t1-b2a.md",
+    "why": "src/ui/ffx unchanged since that repair; unit tests re-run green"
+   }
+  ],
+  "notTested": [
+   "D-233 Spiral Cut / Mega Flare and A-5 dissolve in a captured frame",
+   "D-217 checkpoint retry by my own input",
+   "III and XI to their outcome (harness budgets)",
+   "CHK-008 nine-state projection; CHK-002 six-size pause measurement",
+   "Audio listening (agents cannot hear); performance and frame times; real devices, Safari, controllers",
+   "A-16 slow-network first visit (4 Mbps)"
+  ],
+  "requiredNotTested": []
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy (CHK-017), then the deep review the plan owes after the deploy (depth deep, deepAfterDeploy true, carriedDeep d8837334). Fix FOC22-01 before the next cut.",
+ "elapsedMinutes": 120,
+ "reviewOverheadMinutes": 40
+}
