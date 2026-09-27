@@ -1,0 +1,242 @@
+# Stage-2 additions to motion.json, imported by write_motion_json.py (exec'd after the stage-1 clips dict is built).
+# Defines update_stage2(clips, probe, CAPTURE, MOCK_TECH, EASE, shot) -> dict of extra top-level sections.
+import json
+
+LENS1 = json.load(open('D:/Tools/pyrefly-scratch/persp-b/lens-ch1.json'))
+LENS4 = json.load(open('D:/Tools/pyrefly-scratch/persp-b/lens-ch4.json'))
+
+
+def lens_table(L, names):
+    out = {}
+    for shot_name, figs in L.items():
+        if shot_name not in names:
+            continue
+        out[names[shot_name]] = {
+            fid: {'degOffLens': v['off'], 'widthKept': v['widthKept'], 'painting': v['painting'], 'shareInFrame': v['inFrame']}
+            for fid, v in figs.items()
+        }
+    return out
+
+
+def update_stage2(clips, probe, CAPTURE, MOCK_TECH, EASE, shot):
+    WAIT = ('FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; '
+            'SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds '
+            'in a submenu or the target cursor.')
+    REAR_TECH = ('Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY '
+                 '(the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on '
+                 "the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored "
+                 '(Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the '
+                 'fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. '
+                 'A warm back-rim and a cool bounce light the figures seen from behind.')
+    RIG2 = {
+        'ffx-ch1': {
+            'master': 'the live gagazet idle rig',
+            'ots_atk': shot([-1.7, 1.55, 2.7], [3.8, 2.6, -7.6], 40, 0.5, None, {'focus': 0.56, 'band': 0.3, 'blur': 1.6},
+                            "low hero shoulder behind Tidus's right shoulder (rear34-hi); Seymour Flux above him, Kimahri at left"),
+            'ots_mag': shot([-2.4, 5.0, 10.2], [0.9, 0.8, -4.0], 30, 0.8, None, {'focus': 0.42, 'band': 0.15, 'blur': 4.6},
+                            'high over-the-shoulder: the whole line from behind, both enemies'),
+            'ots_itm': shot([-0.55, 1.75, 3.2], [-1.6, 1.35, -1.6], 34, 0.45, {'on': 'tidus', 'ellipsePad': 1.05, 'blurPx': 12, 'rackMs': 900},
+                            {'focus': 0.56, 'band': 0.3, 'blur': 1.6}, "close behind his shoulder looking across the party; the field racks soft"),
+        },
+        'ffx2-ch4': {
+            'master': 'the live bevelle-underground idle rig',
+            'ots_atk': shot([-1.05, 1.75, 1.3], [1.6, 2.4, -5.8], 38, 0.5, None, {'focus': 0.58, 'band': 0.3, 'blur': 1.4},
+                            "behind Paine's shoulder, Bahamut towering (the flower reticle on him)"),
+            'ots_skill': shot([1.5, 5.2, 6.8], [-0.4, 0.9, -3.2], 30, 0.8, None, {'focus': 0.5, 'band': 0.14, 'blur': 4.4},
+                              'high from behind-right: the three girls in rear view, Bahamut upper right'),
+            'ots_itm': shot([-0.95, 1.7, -0.3], [0.8, 1.5, -4.5], 34, 0.45, {'on': 'paine', 'ellipsePad': 1.05, 'blurPx': 12, 'rackMs': 900},
+                            {'focus': 0.58, 'band': 0.3, 'blur': 1.4}, 'close behind Paine; the field racks soft'),
+        },
+    }
+    SWAPS = {
+        'ffx-ch1': {
+            'cut': ('The rear paintings go in on the cut frame itself, so there is nothing to see swap: each cut is one frame-difference '
+                    'spike of 24-36 (mean absolute difference, 0-255) and the next frames settle at 0.5-2.5 (sway and snow). No pop. '
+                    'It reads as coverage in a film edit: the view changes and the figures are their backs from the first frame.'),
+            'whip': ('A 0.32 s whip pan with a horizontal motion blur that peaks at mid-move; the paintings swap on that frame. The '
+                     'frame-difference curve stays smooth through each whip (8-26, no spike at the swap), so no pop is visible. The '
+                     'target reticle is hidden during the whip and redrawn on landing.'),
+        },
+        'ffx2-ch4': {
+            'cut': ('Same as Chapter I: one spike per cut (22-43), then 0.3-4 (the 2-4 after the Item cut is Bahamut\'s hit numeral '
+                    'and the focus rack starting). No pop.'),
+            'whip': ('Smooth frame-difference curves through every whip (9-31), no spike at the swap frames, no pop. At 8.0 s the whip into '
+                     'Item starts while Bahamut\'s hit on Rikku is landing, so its numeral rides the blur.'),
+        },
+        'whichReadsBetter': ('The HARD CUT. Both hide the swap completely, so the choice is about reading the game: the cut is legible on '
+                             'its first frame (menu, reticle and figures), costs no time, and reads like authored coverage. The whip spends '
+                             '0.32 s of illegible blur on every command change, six times in 11 s, and gets tiring on Esc and re-open. '
+                             'Keep the whip for one beat if it is kept at all: the first command of a new turn, or the confirm into an action.'),
+        'measuredAnglesPerShot': {
+            'ffx-ch1': lens_table(LENS1, {'ots_atk': 'Attack (sharp: all but the soft field edge)', 'ots_mag': 'White Magic (sharp: all)',
+                                          'ots_itm': 'Items (sharp: Tidus only; the rest racked soft)'}),
+            'ffx2-ch4': lens_table(LENS4, {'ots_atk': 'Attack (sharp: Paine, Bahamut; Rikku a soft foreground sliver)',
+                                           'ots_skill': 'Skill (sharp: all three girls, Bahamut)',
+                                           'ots_itm': 'Item (sharp: Paine only; Bahamut soft)'}),
+            'note': ('degOffLens: the angle between a painted plane and the lens after the engine\'s own eased yaw settles (0 = square on); '
+                     'widthKept = cos of it. shareInFrame: how much of the figure\'s projected box is in frame. Figures behind the camera '
+                     '(Chapter IV Item: Yuna 147, Rikku 129; Attack: Yuna 98) project badly and are not in the picture. Every SHARP figure '
+                     'in every M2 shot is within 27 degrees of the lens; the one squeezed card is Chapter I Attack\'s Yuna (-49 deg, 65 % '
+                     'width), half out of frame at the right edge.'),
+        },
+    }
+    CLOCK = {
+        'filmedIn': WAIT,
+        'whatHappened': [
+            'M2/M1/M0 Chapter IV (the same timeline, deterministic): Bahamut takes his turn at 6.92 s while the top-level list is up '
+            '(after Esc at 6.55 s), hits Rikku at 7.81 s; the player opens Item at 8.0 s, so the tail of his attack and its numeral '
+            'play into the Item shot (the shoulder shot in M2).',
+            "M3 Chapter IV: Bahamut's attack starts at 0.28 s under Yuna's top-level list and lands at 1.17 s, after the camera has gone "
+            'behind Yuna for her White Magic list; later Yuna\'s Cure plays while Paine\'s menu opens (the turn cut-in at about 4 s).',
+            'M4 Chapter IV: the take opens with Bahamut acting at 0.03 s (his gauge was full when Paine\'s list came up); his hit lands '
+            'on Paine during the command beat.',
+            'M5: filmed inside the Skill list, where Wait holds: nothing acts.',
+        ],
+        'underWait': ('The shoulder shots open with a submenu or the target cursor, and that is exactly where Wait holds the clock: no '
+                      'fiend can START acting while the camera is behind a girl. A fiend starts only at the top level, which in M2 is '
+                      'the master (wide) shot, the frame PR-0150 wants. The only overlap is an action that started at the top level and '
+                      'is still playing when the player opens a submenu (the Item beat above).'),
+        'underActive': ('The clock also runs in submenus and the target cursor, so a fiend can start and finish a whole action while the '
+                        'camera sits behind a girl with a list or the reticle up. That is the case PR-0150 fixed '
+                        "(src/engine/TargetFrameHold.ts: the shot grammar pushed in on the attacker, the party was framed out, the reticle "
+                        'sat on a camera that had moved under it; the approved targeting tile '
+                        'docs/concepts/targeting/b-ring-and-dim/s3.png is a WIDE frame). A per-command camera under Active needs one of: '
+                        '(a) hold the shoulder framing through the enemy action (the attacker may be out of frame and the hit lands on a '
+                        'girl behind the camera, like the numeral in the Item beat), (b) cut back to the wide frame for every enemy action '
+                        'under an open menu (the camera leaves the player\'s decision mid-choice), and in both cases re-project the reticle '
+                        'every frame of any move (the mock does this; the live HUD only re-projects it on a selection change). '
+                        'Chapter I is FFX (CTB): no clock runs during a menu, so none of this arises.'),
+    }
+
+    def add(cid, **kw):
+        clips[cid] = {**probe(cid), **kw}
+
+    L1 = LENS1
+    add('M2-ffx-ch1-cut', option="M2 Camera per command, TRUE over-the-shoulder, hard cut", chapter='Chapter I, seymour-flux (FFX), seed 1',
+        gameCase='FFX: sourced in spirit (ffx-vs-ffx2-presentation.md 2.1: an authored camera that reframes per action); the framings are ours',
+        shows=("M1's key timeline (Attack and aim at Seymour, Esc, White Magic, Esc, Items, Esc) with the camera CUTTING behind the party on "
+               "each open: behind Tidus's shoulder for Attack, high over the line for White Magic, close on his shoulder with the field "
+               'racked soft for Items; the rear paintings go in on each cut and the front paintings come back on each Esc.'),
+        captureMethod=CAPTURE, mockTechniques=MOCK_TECH + ' ' + REAR_TECH, eases=EASE, cameraKeyframes=RIG2['ffx-ch1'],
+        swap=SWAPS['ffx-ch1']['cut'], provenance='REAL ENGINE + NEW ART (candidate)',
+        weak=("Tidus's rear painting has two residuals the art sheet names (the red knit sleeve on the wrong arm, a lighter blade), and "
+              "in the Attack shot Yuna sits half out of frame at the right edge at 49 deg off the lens (a squeezed card)."))
+    add('M2-ffx-ch1-whip', option="M2 Camera per command, TRUE over-the-shoulder, whip pan", chapter='Chapter I, seymour-flux (FFX), seed 1',
+        gameCase=clips['M2-ffx-ch1-cut']['gameCase'],
+        shows='The same as the cut version, but every change of framing is a 0.32 s whip pan whose motion blur hides the painting swap.',
+        captureMethod=CAPTURE, mockTechniques=MOCK_TECH + ' ' + REAR_TECH + (' Whip: the camera eases slow-fast-slow (cubic-bezier(0.85, 0, '
+        '0.15, 1)) along a slight arc, and a 17-tap directional blur pass (inserted before the grade) peaks at 56 px at mid-move; the '
+        'swap runs on that frame.'), eases=EASE, cameraKeyframes=RIG2['ffx-ch1'], swap=SWAPS['ffx-ch1']['whip'],
+        provenance='REAL ENGINE + NEW ART (candidate)',
+        weak='Six whips in 11 s is a lot of blur for a menu: every command change costs a third of a second of an unreadable frame.')
+    add('M2-ffx2-ch4-cut', option="M2 Camera per command, TRUE over-the-shoulder, hard cut", chapter='Chapter IV, ffx2-bahamut (FFX-2), seed 1',
+        gameCase=("FFX-2: not sourced here, ours; it reverses PR-0150's held wide frame (see ffx2Clock: under the shipped Wait the "
+                  'shoulder shots coincide with the held clock)'),
+        shows=("Paine's menu by real keys on the live Wait clock: Attack cuts behind Paine with Bahamut towering over her and the flower "
+               'on him; Skill goes high behind the three girls; at the top level Bahamut acts (6.9 s); Item cuts close behind Paine, the '
+               'field racked soft, with the tail of his hit on Rikku playing in.'),
+        captureMethod=CAPTURE + ' ' + WAIT, mockTechniques=MOCK_TECH + ' ' + REAR_TECH, eases=EASE, cameraKeyframes=RIG2['ffx2-ch4'],
+        swap=SWAPS['ffx2-ch4']['cut'], provenance='REAL ENGINE + NEW ART (candidate)',
+        weak=("Paine's rear painting is 471 px wide and has no hi-res version, so the close Item shot magnifies it about 2.3x (soft, "
+              "slightly stepped edges); the flower reticle still spans most of Bahamut in the Attack shot."))
+    add('M2-ffx2-ch4-whip', option="M2 Camera per command, TRUE over-the-shoulder, whip pan", chapter='Chapter IV, ffx2-bahamut (FFX-2), seed 1',
+        gameCase=clips['M2-ffx2-ch4-cut']['gameCase'],
+        shows='The same as the cut version with 0.32 s whip pans; the Item whip starts while Bahamut\'s hit is landing.',
+        captureMethod=CAPTURE + ' ' + WAIT, mockTechniques=clips['M2-ffx-ch1-whip']['mockTechniques'], eases=EASE,
+        cameraKeyframes=RIG2['ffx2-ch4'], swap=SWAPS['ffx2-ch4']['whip'], provenance='REAL ENGINE + NEW ART (candidate)',
+        weak=clips['M2-ffx-ch1-whip']['weak'])
+    add('M3-ffx-ch1', option='M3 Shoulder hand-off', chapter='Chapter I, seymour-flux (FFX), seed 1',
+        gameCase='FFX: CTB, the real turn order at seed 1 (no clock runs during a menu)',
+        shows=("The REAL order at seed 1: Tidus's Attack from behind his shoulder; Seymour's turn craning the camera up over the line "
+               "(Lance of Atrophy on Yuna, his line, Mortiorchis's Full-Life that KOs her); then Kimahri's turn slides the camera down "
+               "to his shoulder (0.8 s). Once behind the party the camera stays there: no swaps after the first cut."),
+        captureMethod=CAPTURE, mockTechniques=MOCK_TECH + ' ' + REAR_TECH + ' The camera moves on the battle\'s own events (turn-start).',
+        cameraKeyframes={'m3_tidus': 'as M2 ots_atk', 'm3_high': 'as M2 ots_mag (1.1 s crane on Seymour\'s turn)',
+                         'm3_kim': shot([-1.45, 1.7, 0.7], [3.9, 2.5, -9.6], 38, 0.5, None, {'focus': 0.56, 'band': 0.3, 'blur': 1.6},
+                                        "behind Kimahri's shoulder, Seymour above him (0.8 s slide with an arc)")},
+        provenance='REAL ENGINE + NEW ART (candidate)',
+        weak=("Tidus is to Yuna's left in the formation, so the hand-off order at seed 1 (Tidus, then Kimahri) moves the camera away "
+              "from the figure the enemy just hit; the game's own turn cut-in card covers most of the slide to Kimahri."))
+    add('M3-ffx2-ch4', option='M3 Shoulder hand-off', chapter='Chapter IV, ffx2-bahamut (FFX-2), seed 1',
+        gameCase='FFX-2: the real order at seed 1 on the shipped Wait clock',
+        shows=("Yuna's first menu: the camera cuts behind her as White Magic opens; Cure on herself; Paine's menu opens (the game's turn "
+               "cut-in) and the camera slides past Rikku to Paine's shoulder (0.9 s). Bahamut's first attack plays under Yuna's list."),
+        captureMethod=CAPTURE + ' ' + WAIT, mockTechniques=MOCK_TECH + ' ' + REAR_TECH + (" In FFX-2 a girl's turn-start fires when she "
+        "ACTS, so the hand-off is triggered by her menu opening (read off the command list)."),
+        cameraKeyframes={'m3_yuna': shot([-2.17, 1.7, 3.6], [1.2, 2.2, -5.8], 38, 0.5, None, {'focus': 0.58, 'band': 0.3, 'blur': 1.4},
+                                         'behind Yuna (White Mage, rear34-hi)'), 'm3_paine': 'as M2 ots_atk'},
+        provenance='REAL ENGINE + NEW ART (candidate)',
+        weak=("The White Mage's hood in rear34-hi reads as a big white shape in the lower left of the first shot; the slide passes close "
+              "behind Rikku, whose rear painting fills a third of the frame for a moment."))
+    add('M4-ffx-ch1', option="M4 Director's Cut, complete", chapter='Chapter I, seymour-flux (FFX)',
+        gameCase='FFX: sourced in spirit (its camera reframes per action, ffx-vs-ffx2-presentation.md 2.1); every angle is ours',
+        shows=("The command over Tidus's shoulder (rear paintings) -> his hit from a low three-quarter side (no plane turned: 7-31 deg) -> "
+               "Seymour's Lance of Atrophy from the REVERSE: the painted far side of Gagazet (art/plate-reverse) behind the party, Seymour's "
+               "REAR painting in the right foreground, Mortiorchis a silhouette -> Mortiorchis's Full-Life from the worm's-eye angle -> "
+               "(seed-42 run) Auron's Dragon Fang side-on -> Mortiorchis's Mortibsorption (it drains Seymour: the last blow) on the reverse "
+               '-> the low hero angle through the victory poses into the Results wipe.'),
+        edit=['0.00-1.67 s command, over the shoulder', '1.67-2.50 s hit, side', '2.50-3.70 s enemy turn, reverse (painted)',
+              '3.70-5.37 s big attack, colossus', '5.37-6.73 s Dragon Fang, side (seed 42)', '6.73-8.20 s the last blow, reverse',
+              '8.20-10.93 s victory, hero angle; the last 0.2 s is the Results wipe'],
+        seeds='Beats 1-4 seed 1; seed 1 is a documented loss for the auto strategy, so the ending is a seed-42 run (as stage 1).',
+        captureMethod=CAPTURE, mockTechniques=MOCK_TECH + ' ' + REAR_TECH + (" Reverse: the party planes and the boss plane are turned "
+        "square to the lens for that shot (the engine has no such mode), the painted reverse plate stands on the view axis 62 units out "
+        "with its horizon at eye height, set dressing within 4.5 units of the reverse camera is hidden, mist planes hidden off-axis."),
+        cameraKeyframes={'command': 'M2 ots_atk', 'side4': shot([6, 0.95, 14], [0.2, 1.5, -3.0], 24, 0.5), 'rev4': shot([10, 2.1, -12], [-1.6, 1.25, 0.6], 22, 0.5),
+                         'colo4': shot([1.8, 0.3, -2.6], [2.2, 2.6, -7.6], 40, 0.4), 'hero4': shot([-0.4, 0.45, 5.6], [-0.5, 1.45, 0.5], 34, 0.6)},
+        provenance='REAL ENGINE + NEW ART (candidate)',
+        weak=("The stale enemy banner ('Mortiorchis uses Mortibsorption') stays over the victory beat: that is the build's own behaviour "
+              "(see observedDefects), not the mock. The reverse still needs the planes turned to the lens."))
+    add('M4-ffx2-ch4', option="M4 Director's Cut, complete", chapter='Chapter IV, ffx2-bahamut (FFX-2), seed 1',
+        gameCase='FFX-2: not sourced here, ours',
+        shows=("The command over Paine's shoulder (Bahamut's first hit lands on her while she aims: the live Wait clock) -> her hit "
+               "side-on (17-26 deg, no plane turned) -> Bahamut's attack from the REVERSE: the painted far side of Bevelle Underground "
+               "and his REAR painting in the right foreground -> Mega Flare's wind-up from the worm's-eye angle, cut to the reverse as it "
+               "lands -> Paine's last blow side-on -> the low hero angle into the Results wipe."),
+        edit=['0.00-1.67 s command, over the shoulder', '1.67-2.60 s hit, side', '2.60-3.73 s Bahamut, reverse (painted)',
+              '3.73-6.00 s Mega Flare: colossus, cut to reverse on impact', '6.00-6.87 s last blow, side', '6.87-9.60 s victory, hero angle'],
+        seeds='All seed 1: the Mega Flare and victory beats are separate seed-1 runs auto-played at skip speed up to the beat, filmed at normal speed.',
+        captureMethod=CAPTURE + ' ' + WAIT, mockTechniques=clips['M4-ffx-ch1']['mockTechniques'].replace('Gagazet', 'Bevelle Underground'),
+        cameraKeyframes={'command': 'M2 ots_atk', 'side4': shot([4, 0.95, 14], [0.4, 1.6, -2.5], 24, 0.5), 'rev4': shot([8.5, 1.8, -9.5], [-1.6, 1.2, 0.2], 24, 0.5),
+                         'colo4': shot([0.2, 0.3, -1.6], [1.05, 2.8, -5.8], 40, 0.4), 'hero4': shot([-1.2, 0.5, 5.2], [-1.3, 1.45, -0.2], 34, 0.6)},
+        provenance='REAL ENGINE + NEW ART (candidate)',
+        weak='Mega Flare is still a pink flash plus numerals; the colossus angle sells Bahamut, not the spell.')
+    add('M5-ffx2-ch4', option='M5 In the Round (FFX-2 only)', chapter='Chapter IV, ffx2-bahamut (FFX-2), seed 1',
+        gameCase=('FFX-2 only: free positions and back attacks are FFX-2\'s (ffx-vs-ffx2-presentation.md 9.1); in FFX it would imply '
+                  'a facing rule the engine does not have'),
+        shows=("The girls stand round Bahamut on three sides (Yuna near with her back to us, Paine on his left, Rikku on the far side) and "
+               "the camera makes a slow 60-degree orbit (9 s). At mid-orbit a foreground column (a copy of the arena's own pillar) wipes "
+               "the lens; Bahamut's painting swaps front -> rear and Paine's rear -> front on the frames the column covers each of them "
+               "(96-100 % covered, at -2.1 and -1.2 deg of orbit). Filmed with Paine's Skill list open, where Wait holds: nothing acts."),
+        captureMethod=CAPTURE + ' ' + WAIT, mockTechniques=MOCK_TECH + ' ' + REAR_TECH + (' Re-staged positions (Bahamut at (0.8, 0, -4.2) '
+        'with his floor pool and reflection moved with him); every plane turned square to the lens every frame (billboards), so the '
+        'painted VIEW changes only at the swaps.'),
+        cameraKeyframes={'orbit': 'centre (0.8, 0, -4.2), radius 10.5, height 4.6, look (1.9, 1.9, -4.2), fov 32, theta -30 -> +30 deg over 9 s (cubic in-out)',
+                         'column': 'the arena pillar (radius 0.58, height 18) copied to (0.8, 0, 5.0), 1.3 units inside the orbit at its midpoint'},
+        provenance='REAL ENGINE + NEW ART (candidate)',
+        weak=("It only works as billboards: the engine's planes are fixed with a 26-degree eased yaw, so a real orbit needs a billboard "
+              "mode for In the Round; and the column reads as a black wipe (about 0.25 s at 50 % or more of the frame), a cut in disguise."))
+    add('M6-ffx-ch1', option='M6 Cinematic Shoulder', chapter='Chapter I, seymour-flux (FFX), seed 1',
+        gameCase=clips['M2-ffx-ch1-cut']['gameCase'],
+        shows=("M2's hard cuts inside 2.39:1 letterbox bands, with the HUD moved into the bands: the turn order and the chips in the top "
+               "band, the party in the bottom band, the command list slimmer over the image (the stills rig's P11 layout, scaled to 1600)."),
+        captureMethod=CAPTURE, mockTechniques=MOCK_TECH + ' ' + REAR_TECH + (' HUD MOCK (from mock-scripts/persp-lib.js.txt P11): the turn '
+        'order and the party are drawn into the bands as a snapshot (they do not update; nothing changes HP in this clip); the real '
+        'command list, help line, chips and Sensor plate are moved; the best-move chip is re-pinned every frame (its own layout pass moves it).'),
+        eases=EASE, cameraKeyframes=RIG2['ffx-ch1'], provenance='REAL ENGINE + NEW ART (candidate)',
+        weak=("The Sensor plate hangs out of the top band into the picture when it opens, and the submenu lists sit at their own heights "
+              "(White Magic lower than the top list), so the menu wanders a little inside the frame."))
+    # M0/M1 Chapter IV re-filmed on the live Wait clock (replace the stage-1 files, which froze the clock)
+    for cid in ('M1-ffx2-ch4', 'M0-ffx2-ch4'):
+        c = clips[cid]
+        c.update(probe(cid))
+        c['captureMethod'] = CAPTURE + ' ' + WAIT
+        c['refilmed'] = ('Stage 2 re-film: the stage-1 file froze the ATB (presenter paused); this one runs the shipped Wait clock, so '
+                         'Bahamut acts at 6.92 s under the open top-level list, exactly as in M2 Chapter IV (the same deterministic timeline).')
+    clips['M1-ffx2-ch4']['shows'] = clips['M1-ffx2-ch4']['shows'] + ' Bahamut attacks Rikku at 6.9-8.2 s under the open top-level list.'
+    clips['M0-ffx2-ch4']['shows'] = ("Paine's menu with today's camera on the live Wait clock: the same key presses as M1; Bahamut's "
+                                     'attack at 6.9 s plays in the held wide frame (PR-0150).')
+    return {'ffx2Clock': CLOCK, 'm2Swaps': SWAPS,
+            'replacedInStage2': ['M4-ffx-ch1.mp4 and M4-ffx2-ch4.mp4 (+ strips): now the complete versions (command over the shoulder, '
+                                 'painted reverse plates, the bosses\' rear paintings); the stage-1 versions are superseded',
+                                 'M1-ffx2-ch4.mp4 and M0-ffx2-ch4.mp4 (+ strips): re-filmed on the live Wait clock']}

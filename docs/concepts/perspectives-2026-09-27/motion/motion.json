@@ -1,0 +1,1814 @@
+{
+ "round": "battle perspectives options round, 2026-09-27 (AGENTS.md rule 9: options before anything is built)",
+ "rig": "motion rig (agent \"b\"): vite 5242, REPL 5252, worktree D:/pyrefly-mock-persp",
+ "stage": "both stages done: M0, M1 (+ phone), M2 (cut + whip), M3, M4 complete, M5 (FFX-2 only), M6 (Chapter I)",
+ "deliverables": "each clip: <id>.mp4 + <id>-strip.jpg (key frames, JPEG q88, Pillow). Frames in the mp4s are clean; provenance lives in the strip captions and here.",
+ "scripts": "docs/concepts/perspectives-2026-09-27/mock-scripts/motion-*.txt",
+ "observedDefects": [
+  {
+   "id": "stale-enemy-banner-at-victory",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 42",
+   "question": "M4-ffx-ch1-strip.jpg frame 6 (victory) shows 'Mortiorchis · USES MORTIBSORPTION': a mock artifact (cut timing, paused presenter) or does the unmodified build show a stale enemy banner after the last blow?",
+   "answer": "BUILD BEHAVIOUR, not a mock artifact. The unmodified build keeps the enemy’s last banner up through the last blow (Mortibsorption drains Seymour) and about 1 s of the victory poses, and clears it about 0.13 s before the Results wipe. The M4 capture matches: the banner is up in the hero shot and clears about 0.3 s before the wipe.",
+   "method": "Plain REPL (the Vegnagun precedent script, tools/zz-persp-b-plain.tmp.mjs: no fake clock, no motion library, no hooks, no presenter pause), seed 42, today's camera, the auto 'intended' strategy at the 'fast' playback speed until Seymour Flux was at 15 % HP, then 'normal' to the end; a passive per-frame recorder that only reads .ig-banner; the ending filmed with the CDP screencast (1204 frames, 20.3 s).",
+   "timeline": [
+    "banner shown: \"Mortiorchis uses Mortibsorption\" at screencast t=15.06 s (correct: its own action)",
+    "victory poses on screen from about t=18.3 s with the banner still up (frames 1100-1132)",
+    "banner cleared at t=18.92 s (frame 1136); Results wipe starts at t=19.05 s (frame 1144)",
+    "page clock: shown 101.32 s, hidden 105.19 s, results 105.45 s: 3.9 s up, the last ~1 s over the victory"
+   ],
+   "frames": {
+    "strip": "evidence/banner-seed42-unmodified-strip.jpg",
+    "victoryPoseWithBanner": "evidence/banner-seed42-unmodified-victory-pose.jpg (frame 1120, t=18.65 s)",
+    "resultsWipe": "evidence/banner-seed42-unmodified-results-wipe.jpg (frame 1144, t=19.05 s: the banner is already gone)"
+   },
+   "likelyCause": "A reading of the code, not a fix: FFXBattleHud.clearTransientOverlays() hides .ig-banner on a new command, a turn-start for a different actor, or a state that carries the result. After the last enemy action there is no further command or turn, so the banner waits for the final sync, which lands about 1 s into the victory pose. The same class as the \"stale Ronso Rage banner\" (2026-09-18).",
+   "gameCase": "FFX (the .ig-banner path is FFXBattleHud); FFX-2 not checked",
+   "fixed": false
+  }
+ ],
+ "cardboard": {
+  "method": "mock-scripts/motion-probe-cardboard.js.txt: for each shot, the angle between each painted plane and the lens after the engine's eased yaw settles (0 = square on; cos of it = the share of the painting's width left; over 90 = the camera sees the plane's back, i.e. the painting mirrored).",
+  "ffx-ch1": {
+   "master": "all within 12 deg",
+   "attack": "all within 20 deg",
+   "magic": "all within 18 deg",
+   "items": "all within 20 deg",
+   "side (raw)": "party 46-55 deg (57-70 % width: squeezed cards); turned for the shot: 0",
+   "reverse (raw)": "party 145-152 deg: the camera sees the backs, every painting mirrored; turned for the shot: 0",
+   "colossus": "Seymour 19 deg, Mortiorchis 9 deg (the party is behind the camera)",
+   "hero": "all within 17 deg"
+  },
+  "ffx2-ch4": {
+   "master": "all within 14 deg",
+   "attack": "Paine 10, Rikku 32 (soft foreground blade), Yuna out of frame",
+   "skill": "all within 11 deg",
+   "item": "Paine 9, Rikku 41 (soft, frame edge), Yuna out of frame",
+   "side (raw)": "girls 49-63 deg; turned: 0",
+   "reverse (raw)": "girls 131-136 deg (mirrored backs); turned: 0",
+   "colossus": "Bahamut 12 deg",
+   "hero": "all within 12 deg"
+  },
+  "verdict": "The per-command moves (M1) never leave the safe cone: no painting in frame is more than 20 deg off the lens, so nothing reads as a card. The side and reverse angles (M4) only work because the mock turns each plane to face the lens for that shot, a per-shot billboard the engine does not have (its eased yaw stops at 26 deg, clamped at 34 deg off the camera). Without it the side shot squeezes the party to about 60 % width and the reverse shows every painting mirrored. No painting swap happens in stage 1, so there is no swap pop yet.",
+  "stage2": "Rear paintings: every SHARP figure in every M2/M3/M6 shot is within 27 deg of the lens (m2Swaps.measuredAnglesPerShot); the one squeezed card is Chapter I Attack’s Yuna (-49 deg), half out of frame. M4 side angles now need no plane turned (7-31 deg); the reverse angles still do (party and boss turned square to the lens; untouched, the boss plane sits 116-141 deg off the lens, i.e. its back, mirrored and squeezed to 44-56 %). M5 is billboards throughout. Swaps: no pop in any cut or whip (m2Swaps); the M5 swaps happen under the column."
+ },
+ "ffx2Clock": {
+  "filmedIn": "FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds in a submenu or the target cursor.",
+  "whatHappened": [
+   "M2/M1/M0 Chapter IV (the same timeline, deterministic): Bahamut takes his turn at 6.92 s while the top-level list is up (after Esc at 6.55 s), hits Rikku at 7.81 s; the player opens Item at 8.0 s, so the tail of his attack and its numeral play into the Item shot (the shoulder shot in M2).",
+   "M3 Chapter IV: Bahamut's attack starts at 0.28 s under Yuna's top-level list and lands at 1.17 s, after the camera has gone behind Yuna for her White Magic list; later Yuna's Cure plays while Paine's menu opens (the turn cut-in at about 4 s).",
+   "M4 Chapter IV: the take opens with Bahamut acting at 0.03 s (his gauge was full when Paine's list came up); his hit lands on Paine during the command beat.",
+   "M5: filmed inside the Skill list, where Wait holds: nothing acts."
+  ],
+  "underWait": "The shoulder shots open with a submenu or the target cursor, and that is exactly where Wait holds the clock: no fiend can START acting while the camera is behind a girl. A fiend starts only at the top level, which in M2 is the master (wide) shot, the frame PR-0150 wants. The only overlap is an action that started at the top level and is still playing when the player opens a submenu (the Item beat above).",
+  "underActive": "The clock also runs in submenus and the target cursor, so a fiend can start and finish a whole action while the camera sits behind a girl with a list or the reticle up. That is the case PR-0150 fixed (src/engine/TargetFrameHold.ts: the shot grammar pushed in on the attacker, the party was framed out, the reticle sat on a camera that had moved under it; the approved targeting tile docs/concepts/targeting/b-ring-and-dim/s3.png is a WIDE frame). A per-command camera under Active needs one of: (a) hold the shoulder framing through the enemy action (the attacker may be out of frame and the hit lands on a girl behind the camera, like the numeral in the Item beat), (b) cut back to the wide frame for every enemy action under an open menu (the camera leaves the player's decision mid-choice), and in both cases re-project the reticle every frame of any move (the mock does this; the live HUD only re-projects it on a selection change). Chapter I is FFX (CTB): no clock runs during a menu, so none of this arises."
+ },
+ "m2Swaps": {
+  "ffx-ch1": {
+   "cut": "The rear paintings go in on the cut frame itself, so there is nothing to see swap: each cut is one frame-difference spike of 24-36 (mean absolute difference, 0-255) and the next frames settle at 0.5-2.5 (sway and snow). No pop. It reads as coverage in a film edit: the view changes and the figures are their backs from the first frame.",
+   "whip": "A 0.32 s whip pan with a horizontal motion blur that peaks at mid-move; the paintings swap on that frame. The frame-difference curve stays smooth through each whip (8-26, no spike at the swap), so no pop is visible. The target reticle is hidden during the whip and redrawn on landing."
+  },
+  "ffx2-ch4": {
+   "cut": "Same as Chapter I: one spike per cut (22-43), then 0.3-4 (the 2-4 after the Item cut is Bahamut's hit numeral and the focus rack starting). No pop.",
+   "whip": "Smooth frame-difference curves through every whip (9-31), no spike at the swap frames, no pop. At 8.0 s the whip into Item starts while Bahamut's hit on Rikku is landing, so its numeral rides the blur."
+  },
+  "whichReadsBetter": "The HARD CUT. Both hide the swap completely, so the choice is about reading the game: the cut is legible on its first frame (menu, reticle and figures), costs no time, and reads like authored coverage. The whip spends 0.32 s of illegible blur on every command change, six times in 11 s, and gets tiring on Esc and re-open. Keep the whip for one beat if it is kept at all: the first command of a new turn, or the confirm into an action.",
+  "measuredAnglesPerShot": {
+   "ffx-ch1": {
+    "Attack (sharp: all but the soft field edge)": {
+     "tidus": {
+      "degOffLens": -17,
+      "widthKept": 0.95,
+      "painting": "rear34hi",
+      "shareInFrame": 0.24
+     },
+     "yuna": {
+      "degOffLens": -49,
+      "widthKept": 0.65,
+      "painting": "rear34",
+      "shareInFrame": 0.49
+     },
+     "kimahri": {
+      "degOffLens": -16,
+      "widthKept": 0.96,
+      "painting": "rear34",
+      "shareInFrame": 0.65
+     },
+     "seymour-flux": {
+      "degOffLens": -27,
+      "widthKept": 0.89,
+      "painting": "front",
+      "shareInFrame": 1
+     },
+     "mortiorchis": {
+      "degOffLens": -15,
+      "widthKept": 0.97,
+      "painting": "front",
+      "shareInFrame": 1
+     }
+    },
+    "White Magic (sharp: all)": {
+     "tidus": {
+      "degOffLens": -7,
+      "widthKept": 0.99,
+      "painting": "rear34",
+      "shareInFrame": 1
+     },
+     "yuna": {
+      "degOffLens": -16,
+      "widthKept": 0.96,
+      "painting": "rear34",
+      "shareInFrame": 1
+     },
+     "kimahri": {
+      "degOffLens": -9,
+      "widthKept": 0.99,
+      "painting": "rear34",
+      "shareInFrame": 1
+     },
+     "seymour-flux": {
+      "degOffLens": -18,
+      "widthKept": 0.95,
+      "painting": "front",
+      "shareInFrame": 1
+     },
+     "mortiorchis": {
+      "degOffLens": -11,
+      "widthKept": 0.98,
+      "painting": "front",
+      "shareInFrame": 1
+     }
+    },
+    "Items (sharp: Tidus only; the rest racked soft)": {
+     "tidus": {
+      "degOffLens": 26,
+      "widthKept": 0.9,
+      "painting": "rear34hi",
+      "shareInFrame": 0.47
+     },
+     "yuna": {
+      "degOffLens": -20,
+      "widthKept": 0.94,
+      "painting": "rear34",
+      "shareInFrame": 0.16
+     },
+     "kimahri": {
+      "degOffLens": 1,
+      "widthKept": 1,
+      "painting": "rear34",
+      "shareInFrame": 0.92
+     },
+     "seymour-flux": {
+      "degOffLens": -21,
+      "widthKept": 0.94,
+      "painting": "front",
+      "shareInFrame": 0.1
+     },
+     "mortiorchis": {
+      "degOffLens": -8,
+      "widthKept": 0.99,
+      "painting": "front",
+      "shareInFrame": 0.93
+     }
+    }
+   },
+   "ffx2-ch4": {
+    "Attack (sharp: Paine, Bahamut; Rikku a soft foreground sliver)": {
+     "yuna": {
+      "degOffLens": 98,
+      "widthKept": 0,
+      "painting": "rear34",
+      "shareInFrame": 0
+     },
+     "rikku": {
+      "degOffLens": 18,
+      "widthKept": 0.95,
+      "painting": "rear34",
+      "shareInFrame": 0.02
+     },
+     "paine": {
+      "degOffLens": -5,
+      "widthKept": 1,
+      "painting": "rear34",
+      "shareInFrame": 0.36
+     },
+     "bahamut": {
+      "degOffLens": -16,
+      "widthKept": 0.96,
+      "painting": "front",
+      "shareInFrame": 0.98
+     }
+    },
+    "Skill (sharp: all three girls, Bahamut)": {
+     "yuna": {
+      "degOffLens": 34,
+      "widthKept": 0.83,
+      "painting": "rear34",
+      "shareInFrame": 0.69
+     },
+     "rikku": {
+      "degOffLens": 24,
+      "widthKept": 0.91,
+      "painting": "rear34",
+      "shareInFrame": 1
+     },
+     "paine": {
+      "degOffLens": 16,
+      "widthKept": 0.96,
+      "painting": "rear34",
+      "shareInFrame": 1
+     },
+     "bahamut": {
+      "degOffLens": 2,
+      "widthKept": 1,
+      "painting": "front",
+      "shareInFrame": 0.83
+     }
+    },
+    "Item (sharp: Paine only; Bahamut soft)": {
+     "yuna": {
+      "degOffLens": 147,
+      "widthKept": 0,
+      "painting": "rear34",
+      "shareInFrame": 0.3
+     },
+     "rikku": {
+      "degOffLens": 129,
+      "widthKept": 0,
+      "painting": "rear34",
+      "shareInFrame": 0.03
+     },
+     "paine": {
+      "degOffLens": -7,
+      "widthKept": 0.99,
+      "painting": "rear34",
+      "shareInFrame": 0.26
+     },
+     "bahamut": {
+      "degOffLens": -20,
+      "widthKept": 0.94,
+      "painting": "front",
+      "shareInFrame": 0.75
+     }
+    }
+   },
+   "note": "degOffLens: the angle between a painted plane and the lens after the engine's own eased yaw settles (0 = square on); widthKept = cos of it. shareInFrame: how much of the figure's projected box is in frame. Figures behind the camera (Chapter IV Item: Yuna 147, Rikku 129; Attack: Yuna 98) project badly and are not in the picture. Every SHARP figure in every M2 shot is within 27 degrees of the lens; the one squeezed card is Chapter I Attack's Yuna (-49 deg, 65 % width), half out of frame at the right edge."
+  }
+ },
+ "replacedInStage2": [
+  "M4-ffx-ch1.mp4 and M4-ffx2-ch4.mp4 (+ strips): now the complete versions (command over the shoulder, painted reverse plates, the bosses' rear paintings); the stage-1 versions are superseded",
+  "M1-ffx2-ch4.mp4 and M0-ffx2-ch4.mp4 (+ strips): re-filmed on the live Wait clock"
+ ],
+ "clips": {
+  "M0-ffx-ch1": {
+   "file": "M0-ffx-ch1.mp4",
+   "strip": "M0-ffx-ch1-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 4.55,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M0 Today in motion",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 1",
+   "gameCase": "both (baseline)",
+   "shows": "Tidus's first menu with today's camera: the same key presses as M1 (Attack and aim at Seymour Flux, Esc, White Magic, Esc, Items, Esc). The HUD changes; the camera stays on the live master.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames.",
+   "cameraKeyframes": {
+    "master": {
+     "position": [
+      0,
+      3.05,
+      9.5
+     ],
+     "lookAt": [
+      0.15,
+      1.35,
+      -1.2
+     ],
+     "fov": 32,
+     "sway": 1,
+     "tiltShift": {
+      "focus": 0.4,
+      "band": 0.16,
+      "blur": 4.2
+     },
+     "note": "the live gagazet idle rig, unchanged"
+    }
+   },
+   "timeline": [
+    {
+     "t": 1.0,
+     "keys": "Enter, Right",
+     "menu": "Attack; reticle to Seymour Flux",
+     "camera": "master -> attack, 450 ms, ease move; focus 650 ms"
+    },
+    {
+     "t": 3.2,
+     "keys": "Esc",
+     "menu": "back to the command list",
+     "camera": "attack -> master, 450 ms, ease back; focus off 380 ms"
+    },
+    {
+     "t": 3.95,
+     "keys": "Down, Down (4.25)",
+     "menu": "cursor to White Magic",
+     "camera": "holds"
+    },
+    {
+     "t": 4.7,
+     "keys": "Enter",
+     "menu": "White Magic list (Haste)",
+     "camera": "master -> magic, 480 ms, ease move"
+    },
+    {
+     "t": 5.75,
+     "keys": "Down",
+     "menu": "Hastega",
+     "camera": "holds"
+    },
+    {
+     "t": 6.8,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "magic -> master, 450 ms, ease back"
+    },
+    {
+     "t": 7.55,
+     "keys": "Down",
+     "menu": "cursor to Items",
+     "camera": "holds"
+    },
+    {
+     "t": 8.05,
+     "keys": "Enter",
+     "menu": "Items list (Potion)",
+     "camera": "master -> items, 450 ms; focus rack 950 ms, ease inout"
+    },
+    {
+     "t": 10.2,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "items -> master, 450 ms, ease back; focus off 380 ms"
+    }
+   ],
+   "provenance": "REAL ENGINE / existing art",
+   "weak": "Nothing is wrong with it; that is the point: every menu looks the same, and the only motion is the HUD."
+  },
+  "M1-ffx-ch1": {
+   "file": "M1-ffx-ch1.mp4",
+   "strip": "M1-ffx-ch1-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 6.59,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M1 Camera per command (today's paintings)",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 1",
+   "gameCase": "FFX: sourced in spirit (research/ffx-vs-ffx2-presentation.md 2.1: an authored camera that reframes per action; the per-command framings themselves are ours)",
+   "shows": "The real command menu driven by real key presses (the HUD reacts as in play: submenus, help line, hand cursor, target brackets, enemy panel). Each open moves the camera: Attack cranes down and dollies in low on Tidus with Seymour Flux large and soft behind him; White Magic cranes up and trucks left so the whole line and both enemies read; Items pushes in on Tidus and racks the field soft; every Esc eases back to the live master.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change).",
+   "eases": {
+    "move": "cubic-bezier(0.5, 0, 0.12, 1): brisk start, long soft landing",
+    "back": "cubic-bezier(0.45, 0, 0.2, 1)",
+    "inout": "cubic-bezier(0.65, 0, 0.35, 1) (focus racks)",
+    "whip": "cubic-bezier(0.85, 0, 0.15, 1) (stage 2)"
+   },
+   "cameraKeyframes": {
+    "master": {
+     "position": [
+      0,
+      3.05,
+      9.5
+     ],
+     "lookAt": [
+      0.15,
+      1.35,
+      -1.2
+     ],
+     "fov": 32,
+     "sway": 1,
+     "tiltShift": {
+      "focus": 0.4,
+      "band": 0.16,
+      "blur": 4.2
+     },
+     "note": "the live gagazet idle rig, unchanged"
+    },
+    "attack": {
+     "position": [
+      -1.2,
+      1.3,
+      5.2
+     ],
+     "lookAt": [
+      0.15,
+      1.5,
+      -4.0
+     ],
+     "fov": 32,
+     "sway": 0.55,
+     "focus": {
+      "on": "tidus",
+      "ellipsePad": 1.12,
+      "blurPx": 7
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "crane down 3.05 -> 1.3 and dolly in 4.4 units; Seymour Flux (the target) large and soft behind Tidus"
+    },
+    "magic": {
+     "position": [
+      -2.6,
+      4.6,
+      10.6
+     ],
+     "lookAt": [
+      0.9,
+      1.5,
+      -3.2
+     ],
+     "fov": 32,
+     "sway": 0.8,
+     "tiltShift": {
+      "focus": 0.42,
+      "band": 0.15,
+      "blur": 4.6
+     },
+     "note": "crane up 1.55 and truck left 2.6: the whole line and both enemies"
+    },
+    "items": {
+     "position": [
+      -0.45,
+      1.62,
+      4.0
+     ],
+     "lookAt": [
+      -1.0,
+      1.32,
+      0.2
+     ],
+     "fov": 32,
+     "sway": 0.45,
+     "focus": {
+      "on": "tidus",
+      "ellipsePad": 1.05,
+      "blurPx": 12,
+      "rackMs": 950
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "push in on the actor; the focus racks until the field is soft"
+    }
+   },
+   "timeline": [
+    {
+     "t": 1.0,
+     "keys": "Enter, Right",
+     "menu": "Attack; reticle to Seymour Flux",
+     "camera": "master -> attack, 450 ms, ease move; focus 650 ms"
+    },
+    {
+     "t": 3.2,
+     "keys": "Esc",
+     "menu": "back to the command list",
+     "camera": "attack -> master, 450 ms, ease back; focus off 380 ms"
+    },
+    {
+     "t": 3.95,
+     "keys": "Down, Down (4.25)",
+     "menu": "cursor to White Magic",
+     "camera": "holds"
+    },
+    {
+     "t": 4.7,
+     "keys": "Enter",
+     "menu": "White Magic list (Haste)",
+     "camera": "master -> magic, 480 ms, ease move"
+    },
+    {
+     "t": 5.75,
+     "keys": "Down",
+     "menu": "Hastega",
+     "camera": "holds"
+    },
+    {
+     "t": 6.8,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "magic -> master, 450 ms, ease back"
+    },
+    {
+     "t": 7.55,
+     "keys": "Down",
+     "menu": "cursor to Items",
+     "camera": "holds"
+    },
+    {
+     "t": 8.05,
+     "keys": "Enter",
+     "menu": "Items list (Potion)",
+     "camera": "master -> items, 450 ms; focus rack 950 ms, ease inout"
+    },
+    {
+     "t": 10.2,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "items -> master, 450 ms, ease back; focus off 380 ms"
+    }
+   ],
+   "provenance": "REAL ENGINE / existing art",
+   "weak": "The HUD does not move with the camera: in the Attack hold the enemy panel still docks over the turn-order tiles (a collision today's HUD already has), and the wide White Magic shot drops the party to about a fifth of the frame height, so it reads more as \"pull back\" than as \"cast\"."
+  },
+  "M0-ffx2-ch4": {
+   "file": "M0-ffx2-ch4.mp4",
+   "strip": "M0-ffx2-ch4-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 4.78,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M0 Today in motion",
+   "chapter": "Chapter IV, ffx2-bahamut (FFX-2), seed 1",
+   "gameCase": "both (baseline)",
+   "shows": "Paine's menu with today's camera on the live Wait clock: the same key presses as M1; Bahamut's attack at 6.9 s plays in the held wide frame (PR-0150).",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds in a submenu or the target cursor.",
+   "cameraKeyframes": {
+    "master": {
+     "position": [
+      0,
+      3,
+      9.6
+     ],
+     "lookAt": [
+      0.15,
+      1.5,
+      -1.3
+     ],
+     "fov": 32,
+     "sway": 1,
+     "tiltShift": {
+      "focus": 0.54,
+      "band": 0.15,
+      "blur": 3.8
+     },
+     "note": "the live bevelle-underground idle rig, unchanged"
+    }
+   },
+   "timeline": [
+    {
+     "t": 1.0,
+     "keys": "Enter",
+     "menu": "Attack; flower reticle on Bahamut",
+     "camera": "master -> attack, 450 ms, ease move; focus 650 ms"
+    },
+    {
+     "t": 3.2,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "attack -> master, 450 ms, ease back"
+    },
+    {
+     "t": 3.95,
+     "keys": "Down",
+     "menu": "cursor to Skill",
+     "camera": "holds"
+    },
+    {
+     "t": 4.45,
+     "keys": "Enter",
+     "menu": "Skill list (Power Break)",
+     "camera": "master -> skill, 480 ms, ease move"
+    },
+    {
+     "t": 5.5,
+     "keys": "Down",
+     "menu": "Armor Break",
+     "camera": "holds"
+    },
+    {
+     "t": 6.55,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "skill -> master, 450 ms, ease back"
+    },
+    {
+     "t": 7.2,
+     "keys": "Down, Down (7.5)",
+     "menu": "past Change (cursed) to Item",
+     "camera": "holds"
+    },
+    {
+     "t": 8.0,
+     "keys": "Enter",
+     "menu": "Item list (Potion)",
+     "camera": "master -> item, 450 ms; focus rack 950 ms"
+    },
+    {
+     "t": 10.15,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "item -> master, 450 ms, ease back"
+    }
+   ],
+   "provenance": "REAL ENGINE / existing art",
+   "weak": "As M0 for Chapter I: the camera never answers the menu.",
+   "refilmed": "Stage 2 re-film: the stage-1 file froze the ATB (presenter paused); this one runs the shipped Wait clock, so Bahamut acts at 6.92 s under the open top-level list, exactly as in M2 Chapter IV (the same deterministic timeline)."
+  },
+  "M1-ffx2-ch4": {
+   "file": "M1-ffx2-ch4.mp4",
+   "strip": "M1-ffx2-ch4-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 6.7,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M1 Camera per command (today's paintings)",
+   "chapter": "Chapter IV, ffx2-bahamut (FFX-2), seed 1",
+   "gameCase": "FFX-2: not sourced here, ours. Note that the shipped FFX-2 camera deliberately HOLDS the wide idle frame while a menu is open (src/engine/TargetFrameHold.ts, PR-0150, from the approved targeting tile); a per-command camera for FFX-2 would reverse that decision and needs Bailey's word.",
+   "shows": "Paine's menu by real keys: Attack (flower on Bahamut) cranes down and dollies in past Rikku, whose blade becomes a soft foreground, Bahamut soft behind; Skill (Power Break, Armor Break) cranes up and trucks wide; Item pushes in on Paine with the field racked soft; Esc returns to the master. Bahamut attacks Rikku at 6.9-8.2 s under the open top-level list.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds in a submenu or the target cursor.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change).",
+   "eases": {
+    "move": "cubic-bezier(0.5, 0, 0.12, 1): brisk start, long soft landing",
+    "back": "cubic-bezier(0.45, 0, 0.2, 1)",
+    "inout": "cubic-bezier(0.65, 0, 0.35, 1) (focus racks)",
+    "whip": "cubic-bezier(0.85, 0, 0.15, 1) (stage 2)"
+   },
+   "cameraKeyframes": {
+    "master": {
+     "position": [
+      0,
+      3,
+      9.6
+     ],
+     "lookAt": [
+      0.15,
+      1.5,
+      -1.3
+     ],
+     "fov": 32,
+     "sway": 1,
+     "tiltShift": {
+      "focus": 0.54,
+      "band": 0.15,
+      "blur": 3.8
+     },
+     "note": "the live bevelle-underground idle rig, unchanged"
+    },
+    "attack": {
+     "position": [
+      -0.1,
+      1.1,
+      2.3
+     ],
+     "lookAt": [
+      0.35,
+      1.75,
+      -6.0
+     ],
+     "fov": 32,
+     "sway": 0.55,
+     "focus": {
+      "on": "paine",
+      "ellipsePad": 1.15,
+      "blurPx": 7
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "crane down 3.0 -> 1.1 and dolly in 7.3 units past Rikku (her blade is the soft foreground); Bahamut soft behind"
+    },
+    "skill": {
+     "position": [
+      -2.2,
+      5.6,
+      10.8
+     ],
+     "lookAt": [
+      -0.4,
+      1.2,
+      -2.2
+     ],
+     "fov": 32,
+     "sway": 0.8,
+     "tiltShift": {
+      "focus": 0.42,
+      "band": 0.15,
+      "blur": 4.6
+     },
+     "note": "the Magic move (Paine has Skill, not magic): crane up, truck left"
+    },
+    "item": {
+     "position": [
+      -0.35,
+      1.62,
+      1.35
+     ],
+     "lookAt": [
+      -0.8,
+      1.45,
+      -1.5
+     ],
+     "fov": 32,
+     "sway": 0.45,
+     "focus": {
+      "on": "paine",
+      "ellipsePad": 1.05,
+      "blurPx": 12,
+      "rackMs": 950
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     }
+    }
+   },
+   "timeline": [
+    {
+     "t": 1.0,
+     "keys": "Enter",
+     "menu": "Attack; flower reticle on Bahamut",
+     "camera": "master -> attack, 450 ms, ease move; focus 650 ms"
+    },
+    {
+     "t": 3.2,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "attack -> master, 450 ms, ease back"
+    },
+    {
+     "t": 3.95,
+     "keys": "Down",
+     "menu": "cursor to Skill",
+     "camera": "holds"
+    },
+    {
+     "t": 4.45,
+     "keys": "Enter",
+     "menu": "Skill list (Power Break)",
+     "camera": "master -> skill, 480 ms, ease move"
+    },
+    {
+     "t": 5.5,
+     "keys": "Down",
+     "menu": "Armor Break",
+     "camera": "holds"
+    },
+    {
+     "t": 6.55,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "skill -> master, 450 ms, ease back"
+    },
+    {
+     "t": 7.2,
+     "keys": "Down, Down (7.5)",
+     "menu": "past Change (cursed) to Item",
+     "camera": "holds"
+    },
+    {
+     "t": 8.0,
+     "keys": "Enter",
+     "menu": "Item list (Potion)",
+     "camera": "master -> item, 450 ms; focus rack 950 ms"
+    },
+    {
+     "t": 10.15,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "item -> master, 450 ms, ease back"
+    }
+   ],
+   "provenance": "REAL ENGINE / existing art",
+   "weak": "FFX-2's flower reticle and the target brackets scale with Bahamut's on-screen size, so the close Attack beat makes them fill the frame (a big pink ring over the boss); a per-command camera needs the reticle to shrink or anchor as the camera pushes. The best-move chip lands on Paine's waist in that beat.",
+   "refilmed": "Stage 2 re-film: the stage-1 file froze the ATB (presenter paused); this one runs the shipped Wait clock, so Bahamut acts at 6.92 s under the open top-level list, exactly as in M2 Chapter IV (the same deterministic timeline)."
+  },
+  "M1-ffx-ch1-phone": {
+   "file": "M1-ffx-ch1-phone.mp4",
+   "strip": "M1-ffx-ch1-phone-strip.jpg",
+   "size": "390x844",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 1.8,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M1 Camera per command, phone 390x844",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 1",
+   "gameCase": "as M1-ffx-ch1",
+   "shows": "M1 on the upright phone with the real phone HUD (two-column command grid, target panel with ATTACK -> SEYMOUR FLUX), same key timeline, shots refitted to the phone.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. Viewport 390x844, isMobile, captured at 390x844.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). The phone's own slide-picker (src/ui/common/phoneFraming.ts) re-slides the 16:9 canvas on every menu and every aim; here it is pinned at -244 px (the slide it picks for this menu) so the camera can be judged on its own.",
+   "eases": {
+    "move": "cubic-bezier(0.5, 0, 0.12, 1): brisk start, long soft landing",
+    "back": "cubic-bezier(0.45, 0, 0.2, 1)",
+    "inout": "cubic-bezier(0.65, 0, 0.35, 1) (focus racks)",
+    "whip": "cubic-bezier(0.85, 0, 0.15, 1) (stage 2)"
+   },
+   "cameraKeyframes": {
+    "master": {
+     "position": [
+      0,
+      3.05,
+      9.5
+     ],
+     "lookAt": [
+      0.15,
+      1.35,
+      -1.2
+     ],
+     "fov": 32,
+     "sway": 1,
+     "tiltShift": {
+      "focus": 0.4,
+      "band": 0.16,
+      "blur": 4.2
+     },
+     "note": "the live gagazet idle rig, unchanged"
+    },
+    "attack": {
+     "position": [
+      -1.6,
+      1.0,
+      8.4
+     ],
+     "lookAt": [
+      0.3,
+      1.55,
+      -1.0
+     ],
+     "fov": 32,
+     "sway": 0.55,
+     "focus": {
+      "on": "tidus",
+      "ellipsePad": 1.12,
+      "blurPx": 7
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "refitted to the phone band (the page shows 42 % of the 16:9 render): Tidus whole, Seymour whole and soft"
+    },
+    "magic": {
+     "position": [
+      -0.6,
+      6.8,
+      14.2
+     ],
+     "lookAt": [
+      0.8,
+      1.3,
+      -3.2
+     ],
+     "fov": 32,
+     "sway": 0.8,
+     "tiltShift": {
+      "focus": 0.42,
+      "band": 0.15,
+      "blur": 4.6
+     }
+    },
+    "items": {
+     "position": [
+      -0.2,
+      1.6,
+      4.4
+     ],
+     "lookAt": [
+      -1.31,
+      1.3,
+      0.55
+     ],
+     "fov": 32,
+     "sway": 0.45,
+     "focus": {
+      "on": "tidus",
+      "ellipsePad": 1.05,
+      "blurPx": 12,
+      "rackMs": 950
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     }
+    }
+   },
+   "timeline": [
+    {
+     "t": 1.0,
+     "keys": "Enter, Right",
+     "menu": "Attack; reticle to Seymour Flux",
+     "camera": "master -> attack, 450 ms, ease move; focus 650 ms"
+    },
+    {
+     "t": 3.2,
+     "keys": "Esc",
+     "menu": "back to the command list",
+     "camera": "attack -> master, 450 ms, ease back; focus off 380 ms"
+    },
+    {
+     "t": 3.95,
+     "keys": "Down, Down (4.25)",
+     "menu": "cursor to White Magic",
+     "camera": "holds"
+    },
+    {
+     "t": 4.7,
+     "keys": "Enter",
+     "menu": "White Magic list (Haste)",
+     "camera": "master -> magic, 480 ms, ease move"
+    },
+    {
+     "t": 5.75,
+     "keys": "Down",
+     "menu": "Hastega",
+     "camera": "holds"
+    },
+    {
+     "t": 6.8,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "magic -> master, 450 ms, ease back"
+    },
+    {
+     "t": 7.55,
+     "keys": "Down",
+     "menu": "cursor to Items",
+     "camera": "holds"
+    },
+    {
+     "t": 8.05,
+     "keys": "Enter",
+     "menu": "Items list (Potion)",
+     "camera": "master -> items, 450 ms; focus rack 950 ms, ease inout"
+    },
+    {
+     "t": 10.2,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "items -> master, 450 ms, ease back; focus off 380 ms"
+    }
+   ],
+   "provenance": "REAL ENGINE / existing art",
+   "weak": "The phone shows only the centre 42 % of the render, so every framing had to be refitted, and the phone's slide-picker and a per-command camera would have to become one system; the wide White Magic shot leaves the party small (about 15 % of the field height)."
+  },
+  "M0-ffx-ch1-phone": {
+   "file": "M0-ffx-ch1-phone.mp4",
+   "strip": "M0-ffx-ch1-phone-strip.jpg",
+   "size": "390x844",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 1.44,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M0 Today in motion, phone 390x844",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 1",
+   "gameCase": "both (baseline)",
+   "shows": "Today's phone with the same keys and the slide-picker live: aiming at Seymour jumps the canvas right to show him whole (cutting Tidus), which is today's only 'camera move' on the phone.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. Viewport 390x844, isMobile.",
+   "cameraKeyframes": {
+    "master": {
+     "position": [
+      0,
+      3.05,
+      9.5
+     ],
+     "lookAt": [
+      0.15,
+      1.35,
+      -1.2
+     ],
+     "fov": 32,
+     "sway": 1,
+     "tiltShift": {
+      "focus": 0.4,
+      "band": 0.16,
+      "blur": 4.2
+     },
+     "note": "the live gagazet idle rig, unchanged"
+    }
+   },
+   "timeline": [
+    {
+     "t": 1.0,
+     "keys": "Enter, Right",
+     "menu": "Attack; reticle to Seymour Flux",
+     "camera": "master -> attack, 450 ms, ease move; focus 650 ms"
+    },
+    {
+     "t": 3.2,
+     "keys": "Esc",
+     "menu": "back to the command list",
+     "camera": "attack -> master, 450 ms, ease back; focus off 380 ms"
+    },
+    {
+     "t": 3.95,
+     "keys": "Down, Down (4.25)",
+     "menu": "cursor to White Magic",
+     "camera": "holds"
+    },
+    {
+     "t": 4.7,
+     "keys": "Enter",
+     "menu": "White Magic list (Haste)",
+     "camera": "master -> magic, 480 ms, ease move"
+    },
+    {
+     "t": 5.75,
+     "keys": "Down",
+     "menu": "Hastega",
+     "camera": "holds"
+    },
+    {
+     "t": 6.8,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "magic -> master, 450 ms, ease back"
+    },
+    {
+     "t": 7.55,
+     "keys": "Down",
+     "menu": "cursor to Items",
+     "camera": "holds"
+    },
+    {
+     "t": 8.05,
+     "keys": "Enter",
+     "menu": "Items list (Potion)",
+     "camera": "master -> items, 450 ms; focus rack 950 ms, ease inout"
+    },
+    {
+     "t": 10.2,
+     "keys": "Esc",
+     "menu": "back",
+     "camera": "items -> master, 450 ms, ease back; focus off 380 ms"
+    }
+   ],
+   "provenance": "REAL ENGINE / existing art",
+   "weak": "Baseline only."
+  },
+  "M4-ffx-ch1": {
+   "file": "M4-ffx-ch1.mp4",
+   "strip": "M4-ffx-ch1-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 328,
+   "seconds": 10.93,
+   "megabytes": 6.74,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M4 Director's Cut, complete",
+   "chapter": "Chapter I, seymour-flux (FFX)",
+   "gameCase": "FFX: sourced in spirit (its camera reframes per action, ffx-vs-ffx2-presentation.md 2.1); every angle is ours",
+   "shows": "The command over Tidus's shoulder (rear paintings) -> his hit from a low three-quarter side (no plane turned: 7-31 deg) -> Seymour's Lance of Atrophy from the REVERSE: the painted far side of Gagazet (art/plate-reverse) behind the party, Seymour's REAR painting in the right foreground, Mortiorchis a silhouette -> Mortiorchis's Full-Life from the worm's-eye angle -> (seed-42 run) Auron's Dragon Fang side-on -> Mortiorchis's Mortibsorption (it drains Seymour: the last blow) on the reverse -> the low hero angle through the victory poses into the Results wipe.",
+   "edit": [
+    "0.00-1.67 s command, over the shoulder",
+    "1.67-2.50 s hit, side",
+    "2.50-3.70 s enemy turn, reverse (painted)",
+    "3.70-5.37 s big attack, colossus",
+    "5.37-6.73 s Dragon Fang, side (seed 42)",
+    "6.73-8.20 s the last blow, reverse",
+    "8.20-10.93 s victory, hero angle; the last 0.2 s is the Results wipe"
+   ],
+   "seeds": "Beats 1-4 seed 1; seed 1 is a documented loss for the auto strategy, so the ending is a seed-42 run (as stage 1).",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind. Reverse: the party planes and the boss plane are turned square to the lens for that shot (the engine has no such mode), the painted reverse plate stands on the view axis 62 units out with its horizon at eye height, set dressing within 4.5 units of the reverse camera is hidden, mist planes hidden off-axis.",
+   "cameraKeyframes": {
+    "command": "M2 ots_atk",
+    "side4": {
+     "position": [
+      6,
+      0.95,
+      14
+     ],
+     "lookAt": [
+      0.2,
+      1.5,
+      -3.0
+     ],
+     "fov": 24,
+     "sway": 0.5
+    },
+    "rev4": {
+     "position": [
+      10,
+      2.1,
+      -12
+     ],
+     "lookAt": [
+      -1.6,
+      1.25,
+      0.6
+     ],
+     "fov": 22,
+     "sway": 0.5
+    },
+    "colo4": {
+     "position": [
+      1.8,
+      0.3,
+      -2.6
+     ],
+     "lookAt": [
+      2.2,
+      2.6,
+      -7.6
+     ],
+     "fov": 40,
+     "sway": 0.4
+    },
+    "hero4": {
+     "position": [
+      -0.4,
+      0.45,
+      5.6
+     ],
+     "lookAt": [
+      -0.5,
+      1.45,
+      0.5
+     ],
+     "fov": 34,
+     "sway": 0.6
+    }
+   },
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "The stale enemy banner ('Mortiorchis uses Mortibsorption') stays over the victory beat: that is the build's own behaviour (see observedDefects), not the mock. The reverse still needs the planes turned to the lens."
+  },
+  "M4-ffx2-ch4": {
+   "file": "M4-ffx2-ch4.mp4",
+   "strip": "M4-ffx2-ch4-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 288,
+   "seconds": 9.6,
+   "megabytes": 6.82,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M4 Director's Cut, complete",
+   "chapter": "Chapter IV, ffx2-bahamut (FFX-2), seed 1",
+   "gameCase": "FFX-2: not sourced here, ours",
+   "shows": "The command over Paine's shoulder (Bahamut's first hit lands on her while she aims: the live Wait clock) -> her hit side-on (17-26 deg, no plane turned) -> Bahamut's attack from the REVERSE: the painted far side of Bevelle Underground and his REAR painting in the right foreground -> Mega Flare's wind-up from the worm's-eye angle, cut to the reverse as it lands -> Paine's last blow side-on -> the low hero angle into the Results wipe.",
+   "edit": [
+    "0.00-1.67 s command, over the shoulder",
+    "1.67-2.60 s hit, side",
+    "2.60-3.73 s Bahamut, reverse (painted)",
+    "3.73-6.00 s Mega Flare: colossus, cut to reverse on impact",
+    "6.00-6.87 s last blow, side",
+    "6.87-9.60 s victory, hero angle"
+   ],
+   "seeds": "All seed 1: the Mega Flare and victory beats are separate seed-1 runs auto-played at skip speed up to the beat, filmed at normal speed.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds in a submenu or the target cursor.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind. Reverse: the party planes and the boss plane are turned square to the lens for that shot (the engine has no such mode), the painted reverse plate stands on the view axis 62 units out with its horizon at eye height, set dressing within 4.5 units of the reverse camera is hidden, mist planes hidden off-axis.",
+   "cameraKeyframes": {
+    "command": "M2 ots_atk",
+    "side4": {
+     "position": [
+      4,
+      0.95,
+      14
+     ],
+     "lookAt": [
+      0.4,
+      1.6,
+      -2.5
+     ],
+     "fov": 24,
+     "sway": 0.5
+    },
+    "rev4": {
+     "position": [
+      8.5,
+      1.8,
+      -9.5
+     ],
+     "lookAt": [
+      -1.6,
+      1.2,
+      0.2
+     ],
+     "fov": 24,
+     "sway": 0.5
+    },
+    "colo4": {
+     "position": [
+      0.2,
+      0.3,
+      -1.6
+     ],
+     "lookAt": [
+      1.05,
+      2.8,
+      -5.8
+     ],
+     "fov": 40,
+     "sway": 0.4
+    },
+    "hero4": {
+     "position": [
+      -1.2,
+      0.5,
+      5.2
+     ],
+     "lookAt": [
+      -1.3,
+      1.45,
+      -0.2
+     ],
+     "fov": 34,
+     "sway": 0.6
+    }
+   },
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "Mega Flare is still a pink flash plus numerals; the colossus angle sells Bahamut, not the spell."
+  },
+  "M2-ffx-ch1-cut": {
+   "file": "M2-ffx-ch1-cut.mp4",
+   "strip": "M2-ffx-ch1-cut-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 5.12,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M2 Camera per command, TRUE over-the-shoulder, hard cut",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 1",
+   "gameCase": "FFX: sourced in spirit (ffx-vs-ffx2-presentation.md 2.1: an authored camera that reframes per action); the framings are ours",
+   "shows": "M1's key timeline (Attack and aim at Seymour, Esc, White Magic, Esc, Items, Esc) with the camera CUTTING behind the party on each open: behind Tidus's shoulder for Attack, high over the line for White Magic, close on his shoulder with the field racked soft for Items; the rear paintings go in on each cut and the front paintings come back on each Esc.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind.",
+   "eases": {
+    "move": "cubic-bezier(0.5, 0, 0.12, 1): brisk start, long soft landing",
+    "back": "cubic-bezier(0.45, 0, 0.2, 1)",
+    "inout": "cubic-bezier(0.65, 0, 0.35, 1) (focus racks)",
+    "whip": "cubic-bezier(0.85, 0, 0.15, 1) (stage 2)"
+   },
+   "cameraKeyframes": {
+    "master": "the live gagazet idle rig",
+    "ots_atk": {
+     "position": [
+      -1.7,
+      1.55,
+      2.7
+     ],
+     "lookAt": [
+      3.8,
+      2.6,
+      -7.6
+     ],
+     "fov": 40,
+     "sway": 0.5,
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "low hero shoulder behind Tidus's right shoulder (rear34-hi); Seymour Flux above him, Kimahri at left"
+    },
+    "ots_mag": {
+     "position": [
+      -2.4,
+      5.0,
+      10.2
+     ],
+     "lookAt": [
+      0.9,
+      0.8,
+      -4.0
+     ],
+     "fov": 30,
+     "sway": 0.8,
+     "tiltShift": {
+      "focus": 0.42,
+      "band": 0.15,
+      "blur": 4.6
+     },
+     "note": "high over-the-shoulder: the whole line from behind, both enemies"
+    },
+    "ots_itm": {
+     "position": [
+      -0.55,
+      1.75,
+      3.2
+     ],
+     "lookAt": [
+      -1.6,
+      1.35,
+      -1.6
+     ],
+     "fov": 34,
+     "sway": 0.45,
+     "focus": {
+      "on": "tidus",
+      "ellipsePad": 1.05,
+      "blurPx": 12,
+      "rackMs": 900
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "close behind his shoulder looking across the party; the field racks soft"
+    }
+   },
+   "swap": "The rear paintings go in on the cut frame itself, so there is nothing to see swap: each cut is one frame-difference spike of 24-36 (mean absolute difference, 0-255) and the next frames settle at 0.5-2.5 (sway and snow). No pop. It reads as coverage in a film edit: the view changes and the figures are their backs from the first frame.",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "Tidus's rear painting has two residuals the art sheet names (the red knit sleeve on the wrong arm, a lighter blade), and in the Attack shot Yuna sits half out of frame at the right edge at 49 deg off the lens (a squeezed card)."
+  },
+  "M2-ffx-ch1-whip": {
+   "file": "M2-ffx-ch1-whip.mp4",
+   "strip": "M2-ffx-ch1-whip-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 6.51,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M2 Camera per command, TRUE over-the-shoulder, whip pan",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 1",
+   "gameCase": "FFX: sourced in spirit (ffx-vs-ffx2-presentation.md 2.1: an authored camera that reframes per action); the framings are ours",
+   "shows": "The same as the cut version, but every change of framing is a 0.32 s whip pan whose motion blur hides the painting swap.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind. Whip: the camera eases slow-fast-slow (cubic-bezier(0.85, 0, 0.15, 1)) along a slight arc, and a 17-tap directional blur pass (inserted before the grade) peaks at 56 px at mid-move; the swap runs on that frame.",
+   "eases": {
+    "move": "cubic-bezier(0.5, 0, 0.12, 1): brisk start, long soft landing",
+    "back": "cubic-bezier(0.45, 0, 0.2, 1)",
+    "inout": "cubic-bezier(0.65, 0, 0.35, 1) (focus racks)",
+    "whip": "cubic-bezier(0.85, 0, 0.15, 1) (stage 2)"
+   },
+   "cameraKeyframes": {
+    "master": "the live gagazet idle rig",
+    "ots_atk": {
+     "position": [
+      -1.7,
+      1.55,
+      2.7
+     ],
+     "lookAt": [
+      3.8,
+      2.6,
+      -7.6
+     ],
+     "fov": 40,
+     "sway": 0.5,
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "low hero shoulder behind Tidus's right shoulder (rear34-hi); Seymour Flux above him, Kimahri at left"
+    },
+    "ots_mag": {
+     "position": [
+      -2.4,
+      5.0,
+      10.2
+     ],
+     "lookAt": [
+      0.9,
+      0.8,
+      -4.0
+     ],
+     "fov": 30,
+     "sway": 0.8,
+     "tiltShift": {
+      "focus": 0.42,
+      "band": 0.15,
+      "blur": 4.6
+     },
+     "note": "high over-the-shoulder: the whole line from behind, both enemies"
+    },
+    "ots_itm": {
+     "position": [
+      -0.55,
+      1.75,
+      3.2
+     ],
+     "lookAt": [
+      -1.6,
+      1.35,
+      -1.6
+     ],
+     "fov": 34,
+     "sway": 0.45,
+     "focus": {
+      "on": "tidus",
+      "ellipsePad": 1.05,
+      "blurPx": 12,
+      "rackMs": 900
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "close behind his shoulder looking across the party; the field racks soft"
+    }
+   },
+   "swap": "A 0.32 s whip pan with a horizontal motion blur that peaks at mid-move; the paintings swap on that frame. The frame-difference curve stays smooth through each whip (8-26, no spike at the swap), so no pop is visible. The target reticle is hidden during the whip and redrawn on landing.",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "Six whips in 11 s is a lot of blur for a menu: every command change costs a third of a second of an unreadable frame."
+  },
+  "M2-ffx2-ch4-cut": {
+   "file": "M2-ffx2-ch4-cut.mp4",
+   "strip": "M2-ffx2-ch4-cut-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 5.18,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M2 Camera per command, TRUE over-the-shoulder, hard cut",
+   "chapter": "Chapter IV, ffx2-bahamut (FFX-2), seed 1",
+   "gameCase": "FFX-2: not sourced here, ours; it reverses PR-0150's held wide frame (see ffx2Clock: under the shipped Wait the shoulder shots coincide with the held clock)",
+   "shows": "Paine's menu by real keys on the live Wait clock: Attack cuts behind Paine with Bahamut towering over her and the flower on him; Skill goes high behind the three girls; at the top level Bahamut acts (6.9 s); Item cuts close behind Paine, the field racked soft, with the tail of his hit on Rikku playing in.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds in a submenu or the target cursor.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind.",
+   "eases": {
+    "move": "cubic-bezier(0.5, 0, 0.12, 1): brisk start, long soft landing",
+    "back": "cubic-bezier(0.45, 0, 0.2, 1)",
+    "inout": "cubic-bezier(0.65, 0, 0.35, 1) (focus racks)",
+    "whip": "cubic-bezier(0.85, 0, 0.15, 1) (stage 2)"
+   },
+   "cameraKeyframes": {
+    "master": "the live bevelle-underground idle rig",
+    "ots_atk": {
+     "position": [
+      -1.05,
+      1.75,
+      1.3
+     ],
+     "lookAt": [
+      1.6,
+      2.4,
+      -5.8
+     ],
+     "fov": 38,
+     "sway": 0.5,
+     "tiltShift": {
+      "focus": 0.58,
+      "band": 0.3,
+      "blur": 1.4
+     },
+     "note": "behind Paine's shoulder, Bahamut towering (the flower reticle on him)"
+    },
+    "ots_skill": {
+     "position": [
+      1.5,
+      5.2,
+      6.8
+     ],
+     "lookAt": [
+      -0.4,
+      0.9,
+      -3.2
+     ],
+     "fov": 30,
+     "sway": 0.8,
+     "tiltShift": {
+      "focus": 0.5,
+      "band": 0.14,
+      "blur": 4.4
+     },
+     "note": "high from behind-right: the three girls in rear view, Bahamut upper right"
+    },
+    "ots_itm": {
+     "position": [
+      -0.95,
+      1.7,
+      -0.3
+     ],
+     "lookAt": [
+      0.8,
+      1.5,
+      -4.5
+     ],
+     "fov": 34,
+     "sway": 0.45,
+     "focus": {
+      "on": "paine",
+      "ellipsePad": 1.05,
+      "blurPx": 12,
+      "rackMs": 900
+     },
+     "tiltShift": {
+      "focus": 0.58,
+      "band": 0.3,
+      "blur": 1.4
+     },
+     "note": "close behind Paine; the field racks soft"
+    }
+   },
+   "swap": "Same as Chapter I: one spike per cut (22-43), then 0.3-4 (the 2-4 after the Item cut is Bahamut's hit numeral and the focus rack starting). No pop.",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "Paine's rear painting is 471 px wide and has no hi-res version, so the close Item shot magnifies it about 2.3x (soft, slightly stepped edges); the flower reticle still spans most of Bahamut in the Attack shot."
+  },
+  "M2-ffx2-ch4-whip": {
+   "file": "M2-ffx2-ch4-whip.mp4",
+   "strip": "M2-ffx2-ch4-whip-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 6.62,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M2 Camera per command, TRUE over-the-shoulder, whip pan",
+   "chapter": "Chapter IV, ffx2-bahamut (FFX-2), seed 1",
+   "gameCase": "FFX-2: not sourced here, ours; it reverses PR-0150's held wide frame (see ffx2Clock: under the shipped Wait the shoulder shots coincide with the held clock)",
+   "shows": "The same as the cut version with 0.32 s whip pans; the Item whip starts while Bahamut's hit is landing.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds in a submenu or the target cursor.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind. Whip: the camera eases slow-fast-slow (cubic-bezier(0.85, 0, 0.15, 1)) along a slight arc, and a 17-tap directional blur pass (inserted before the grade) peaks at 56 px at mid-move; the swap runs on that frame.",
+   "eases": {
+    "move": "cubic-bezier(0.5, 0, 0.12, 1): brisk start, long soft landing",
+    "back": "cubic-bezier(0.45, 0, 0.2, 1)",
+    "inout": "cubic-bezier(0.65, 0, 0.35, 1) (focus racks)",
+    "whip": "cubic-bezier(0.85, 0, 0.15, 1) (stage 2)"
+   },
+   "cameraKeyframes": {
+    "master": "the live bevelle-underground idle rig",
+    "ots_atk": {
+     "position": [
+      -1.05,
+      1.75,
+      1.3
+     ],
+     "lookAt": [
+      1.6,
+      2.4,
+      -5.8
+     ],
+     "fov": 38,
+     "sway": 0.5,
+     "tiltShift": {
+      "focus": 0.58,
+      "band": 0.3,
+      "blur": 1.4
+     },
+     "note": "behind Paine's shoulder, Bahamut towering (the flower reticle on him)"
+    },
+    "ots_skill": {
+     "position": [
+      1.5,
+      5.2,
+      6.8
+     ],
+     "lookAt": [
+      -0.4,
+      0.9,
+      -3.2
+     ],
+     "fov": 30,
+     "sway": 0.8,
+     "tiltShift": {
+      "focus": 0.5,
+      "band": 0.14,
+      "blur": 4.4
+     },
+     "note": "high from behind-right: the three girls in rear view, Bahamut upper right"
+    },
+    "ots_itm": {
+     "position": [
+      -0.95,
+      1.7,
+      -0.3
+     ],
+     "lookAt": [
+      0.8,
+      1.5,
+      -4.5
+     ],
+     "fov": 34,
+     "sway": 0.45,
+     "focus": {
+      "on": "paine",
+      "ellipsePad": 1.05,
+      "blurPx": 12,
+      "rackMs": 900
+     },
+     "tiltShift": {
+      "focus": 0.58,
+      "band": 0.3,
+      "blur": 1.4
+     },
+     "note": "close behind Paine; the field racks soft"
+    }
+   },
+   "swap": "Smooth frame-difference curves through every whip (9-31), no spike at the swap frames, no pop. At 8.0 s the whip into Item starts while Bahamut's hit on Rikku is landing, so its numeral rides the blur.",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "Six whips in 11 s is a lot of blur for a menu: every command change costs a third of a second of an unreadable frame."
+  },
+  "M3-ffx-ch1": {
+   "file": "M3-ffx-ch1.mp4",
+   "strip": "M3-ffx-ch1-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 360,
+   "seconds": 12.0,
+   "megabytes": 6.41,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M3 Shoulder hand-off",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 1",
+   "gameCase": "FFX: CTB, the real turn order at seed 1 (no clock runs during a menu)",
+   "shows": "The REAL order at seed 1: Tidus's Attack from behind his shoulder; Seymour's turn craning the camera up over the line (Lance of Atrophy on Yuna, his line, Mortiorchis's Full-Life that KOs her); then Kimahri's turn slides the camera down to his shoulder (0.8 s). Once behind the party the camera stays there: no swaps after the first cut.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind. The camera moves on the battle's own events (turn-start).",
+   "cameraKeyframes": {
+    "m3_tidus": "as M2 ots_atk",
+    "m3_high": "as M2 ots_mag (1.1 s crane on Seymour's turn)",
+    "m3_kim": {
+     "position": [
+      -1.45,
+      1.7,
+      0.7
+     ],
+     "lookAt": [
+      3.9,
+      2.5,
+      -9.6
+     ],
+     "fov": 38,
+     "sway": 0.5,
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "behind Kimahri's shoulder, Seymour above him (0.8 s slide with an arc)"
+    }
+   },
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "Tidus is to Yuna's left in the formation, so the hand-off order at seed 1 (Tidus, then Kimahri) moves the camera away from the figure the enemy just hit; the game's own turn cut-in card covers most of the slide to Kimahri."
+  },
+  "M3-ffx2-ch4": {
+   "file": "M3-ffx2-ch4.mp4",
+   "strip": "M3-ffx2-ch4-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 207,
+   "seconds": 6.9,
+   "megabytes": 4.45,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M3 Shoulder hand-off",
+   "chapter": "Chapter IV, ffx2-bahamut (FFX-2), seed 1",
+   "gameCase": "FFX-2: the real order at seed 1 on the shipped Wait clock",
+   "shows": "Yuna's first menu: the camera cuts behind her as White Magic opens; Cure on herself; Paine's menu opens (the game's turn cut-in) and the camera slides past Rikku to Paine's shoulder (0.9 s). Bahamut's first attack plays under Yuna's list.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds in a submenu or the target cursor.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind. In FFX-2 a girl's turn-start fires when she ACTS, so the hand-off is triggered by her menu opening (read off the command list).",
+   "cameraKeyframes": {
+    "m3_yuna": {
+     "position": [
+      -2.17,
+      1.7,
+      3.6
+     ],
+     "lookAt": [
+      1.2,
+      2.2,
+      -5.8
+     ],
+     "fov": 38,
+     "sway": 0.5,
+     "tiltShift": {
+      "focus": 0.58,
+      "band": 0.3,
+      "blur": 1.4
+     },
+     "note": "behind Yuna (White Mage, rear34-hi)"
+    },
+    "m3_paine": "as M2 ots_atk"
+   },
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "The White Mage's hood in rear34-hi reads as a big white shape in the lower left of the first shot; the slide passes close behind Rikku, whose rear painting fills a third of the frame for a moment."
+  },
+  "M5-ffx2-ch4": {
+   "file": "M5-ffx2-ch4.mp4",
+   "strip": "M5-ffx2-ch4-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 306,
+   "seconds": 10.2,
+   "megabytes": 5.49,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M5 In the Round (FFX-2 only)",
+   "chapter": "Chapter IV, ffx2-bahamut (FFX-2), seed 1",
+   "gameCase": "FFX-2 only: free positions and back attacks are FFX-2's (ffx-vs-ffx2-presentation.md 9.1); in FFX it would imply a facing rule the engine does not have",
+   "shows": "The girls stand round Bahamut on three sides (Yuna near with her back to us, Paine on his left, Rikku on the far side) and the camera makes a slow 60-degree orbit (9 s). At mid-orbit a foreground column (a copy of the arena's own pillar) wipes the lens; Bahamut's painting swaps front -> rear and Paine's rear -> front on the frames the column covers each of them (96-100 % covered, at -2.1 and -1.2 deg of orbit). Filmed with Paine's Skill list open, where Wait holds: nothing acts.",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames. FFX-2 clock: the SHIPPED default, Wait with its faithful split (src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true; SaveData ffx2Atb defaults to wait): the presenter is live, the ATB runs while the top-level command list is up and holds in a submenu or the target cursor.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind. Re-staged positions (Bahamut at (0.8, 0, -4.2) with his floor pool and reflection moved with him); every plane turned square to the lens every frame (billboards), so the painted VIEW changes only at the swaps.",
+   "cameraKeyframes": {
+    "orbit": "centre (0.8, 0, -4.2), radius 10.5, height 4.6, look (1.9, 1.9, -4.2), fov 32, theta -30 -> +30 deg over 9 s (cubic in-out)",
+    "column": "the arena pillar (radius 0.58, height 18) copied to (0.8, 0, 5.0), 1.3 units inside the orbit at its midpoint"
+   },
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "It only works as billboards: the engine's planes are fixed with a 26-degree eased yaw, so a real orbit needs a billboard mode for In the Round; and the column reads as a black wipe (about 0.25 s at 50 % or more of the frame), a cut in disguise."
+  },
+  "M6-ffx-ch1": {
+   "file": "M6-ffx-ch1.mp4",
+   "strip": "M6-ffx-ch1-strip.jpg",
+   "size": "1600x900",
+   "fps": 30,
+   "frames": 348,
+   "seconds": 11.6,
+   "megabytes": 5.03,
+   "codec": "H.264 yuv420p BT.709 limited range, CRF 21",
+   "option": "M6 Cinematic Shoulder",
+   "chapter": "Chapter I, seymour-flux (FFX), seed 1",
+   "gameCase": "FFX: sourced in spirit (ffx-vs-ffx2-presentation.md 2.1: an authored camera that reframes per action); the framings are ours",
+   "shows": "M2's hard cuts inside 2.39:1 letterbox bands, with the HUD moved into the bands: the turn order and the chips in the top band, the party in the bottom band, the command list slimmer over the image (the stills rig's P11 layout, scaled to 1600).",
+   "captureMethod": "Deterministic frame stepping in the real game (not a screencast): Playwright fake clock installed before load and paused while filming; requestAnimationFrame taken over and flushed at exact 1/60 s substeps (2 per 30 fps frame); every CSS and Web Animation paused and seeked to the same virtual time; each frame grabbed with CDP Page.captureScreenshot (JPEG q95), then encoded with ffmpeg. Headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), worktree D:/pyrefly-mock-persp (detached at d74b53f7, nothing under src/ changed). The screencast was not used: its frame pacing follows the page, and this way every clip is exactly 30 fps with no dropped or doubled frames.",
+   "mockTechniques": "Console-injected, all real-time Three.js techniques: the camera is driven from window.__motion (keyframes with cubic-bezier eases on top of the game's own idle sway); an elliptical focus-blur pass (two 11-tap passes inserted before the grade) stands in for depth of field; the scene's own tilt-shift band is re-set per shot; the target reticle is re-projected every frame of a move (the live HUD only re-projects it on a selection change). Rear paintings (art/READY.json, CANDIDATES) loaded as an extra pose with baseline fitting OFF, so the sidecar baselineY (the feet) is honoured, and sized against the idle, so the sidecar scale makes the figure as tall as the idle; shown on the actor's own planes under its current pose name, declared facing the way the body faces, so no painting is mirrored (Rikku alone is mirrored, in M5, as her front painting; she is not chiral). While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch) on the rear painting; a KO lets the prone painting through. A warm back-rim and a cool bounce light the figures seen from behind. HUD MOCK (from mock-scripts/persp-lib.js.txt P11): the turn order and the party are drawn into the bands as a snapshot (they do not update; nothing changes HP in this clip); the real command list, help line, chips and Sensor plate are moved; the best-move chip is re-pinned every frame (its own layout pass moves it).",
+   "eases": {
+    "move": "cubic-bezier(0.5, 0, 0.12, 1): brisk start, long soft landing",
+    "back": "cubic-bezier(0.45, 0, 0.2, 1)",
+    "inout": "cubic-bezier(0.65, 0, 0.35, 1) (focus racks)",
+    "whip": "cubic-bezier(0.85, 0, 0.15, 1) (stage 2)"
+   },
+   "cameraKeyframes": {
+    "master": "the live gagazet idle rig",
+    "ots_atk": {
+     "position": [
+      -1.7,
+      1.55,
+      2.7
+     ],
+     "lookAt": [
+      3.8,
+      2.6,
+      -7.6
+     ],
+     "fov": 40,
+     "sway": 0.5,
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "low hero shoulder behind Tidus's right shoulder (rear34-hi); Seymour Flux above him, Kimahri at left"
+    },
+    "ots_mag": {
+     "position": [
+      -2.4,
+      5.0,
+      10.2
+     ],
+     "lookAt": [
+      0.9,
+      0.8,
+      -4.0
+     ],
+     "fov": 30,
+     "sway": 0.8,
+     "tiltShift": {
+      "focus": 0.42,
+      "band": 0.15,
+      "blur": 4.6
+     },
+     "note": "high over-the-shoulder: the whole line from behind, both enemies"
+    },
+    "ots_itm": {
+     "position": [
+      -0.55,
+      1.75,
+      3.2
+     ],
+     "lookAt": [
+      -1.6,
+      1.35,
+      -1.6
+     ],
+     "fov": 34,
+     "sway": 0.45,
+     "focus": {
+      "on": "tidus",
+      "ellipsePad": 1.05,
+      "blurPx": 12,
+      "rackMs": 900
+     },
+     "tiltShift": {
+      "focus": 0.56,
+      "band": 0.3,
+      "blur": 1.6
+     },
+     "note": "close behind his shoulder looking across the party; the field racks soft"
+    }
+   },
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "weak": "The Sensor plate hangs out of the top band into the picture when it opens, and the submenu lists sit at their own heights (White Magic lower than the top list), so the menu wanders a little inside the frame."
+  }
+ }
+}

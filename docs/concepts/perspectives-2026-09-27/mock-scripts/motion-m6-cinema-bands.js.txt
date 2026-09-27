@@ -1,0 +1,41 @@
+// M6 "Cinematic Shoulder": the M2 hard-cut camera inside 2.39:1 letterbox bands, with the HUD moved into the bands.
+// Ported from the stills rig's P11 (mock-scripts/persp-lib.js.txt: W.letterbox, W.cinemaHud, W.moveHud), scaled from
+// its 1920 layout to this 1600x900 frame. A HUD MOCK: the turn order and the party are drawn into the bands as a
+// snapshot (they do not update; nothing changes HP during this clip); the real command list and help line are moved.
+const M = __motion; const k = innerWidth / 1920;
+const host = document.querySelector('.battle-screen');
+for (const d of document.querySelectorAll('.persp-dom')) d.remove();
+const dom = (html, where) => { const d = document.createElement('div'); d.className = 'persp-dom'; d.innerHTML = html;
+  if (where === 'under') host.insertBefore(d, host.firstChild); else host.appendChild(d);
+  d.style.cssText = 'position:absolute;inset:0;pointer-events:none;' + (where === 'under' ? 'z-index:0;' : 'z-index:60;'); return d; };
+const css = (text) => { let s = document.getElementById('persp-css'); if (!s) { s = document.createElement('style'); s.id = 'persp-css'; document.head.appendChild(s); } s.textContent = text; };
+const cssScale = (e) => { let s = 1, p = e.parentElement; while (p && p !== document.body) { const t = getComputedStyle(p).transform; if (t && t !== 'none') { const m = new DOMMatrix(t); s *= Math.hypot(m.a, m.b); } p = p.parentElement; } return s; };
+const moveHud = (e, dx, dy) => { const s = cssScale(e); e.style.translate = `${(dx / s).toFixed(2)}px ${(dy / s).toFixed(2)}px`; e.dataset.perspMoved = '1'; };
+// the bands
+const H = innerHeight, Wd = innerWidth; const ih = Math.round(Wd / 2.39); const band = Math.round((H - ih) / 2);
+dom(`<div style="position:absolute;left:0;right:0;top:0;height:${band}px;background:#000"></div><div style="position:absolute;left:0;right:0;bottom:0;height:${H - ih - band}px;background:#000"></div>`, 'under');
+// the turn order in the top band, the party in the bottom band
+const gold = '#e3b94a', paper = '#f4f1e8', mpc = '#7fc6e8', ink = 'rgba(20,18,32,0.92)';
+const st = __pyrefly.battleState();
+const rows = [...document.querySelectorAll('.ig-ctb__row')];
+const tiles = rows.map((r, i) => { const img = r.querySelector('img[data-role="portrait-img"]'); const nm = r.querySelector('.ig-ctb__name')?.textContent ?? ''; const enemy = !!r.querySelector('.ig-ctb__tile--enemy'); const sz = Math.round((i === 0 ? 96 : 74) * k);
+  return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;margin-left:${i ? 8 : 0}px"><div style="position:relative;width:${sz}px;height:${sz}px;overflow:hidden;background:#1a1526;border:${i === 0 ? 3 : 2}px solid ${i === 0 ? gold : enemy ? '#c0304a' : 'rgba(244,241,232,0.5)'};transform:skewX(-12deg)"><img src="${img?.getAttribute('src')}" style="${img?.getAttribute('style')}"></div><div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:${Math.round(13 * k)}px;letter-spacing:1px;color:${paper};white-space:nowrap">${nm}</div></div>`; }).join('');
+const top = `<div class="persp-hud" style="position:absolute;right:${Math.round(40 * k)}px;top:${Math.max(4, Math.round((band - 124 * k) / 2))}px;display:flex;align-items:flex-start">${tiles}</div>`;
+const faces = [...document.querySelectorAll('.ig-stat__face img')];
+const party = ['tidus', 'yuna', 'kimahri'];
+const ents = party.map((id, i) => { const c = st.combatants[id]; const img = faces[i]; const act = id === 'tidus'; const od = c.overdrive?.gauge ?? 0; const eh = band - Math.round(24 * k);
+  return `<div class="persp-hud" style="display:flex;align-items:center;gap:${Math.round(12 * k)}px;width:${Math.round(520 * k)}px;height:${eh}px;padding:0 ${Math.round(14 * k)}px 0 0;background:${ink};border-left:${act ? 5 : 2}px solid ${act ? gold : 'rgba(227,185,74,0.35)'};transform:skewX(-12deg)">
+    <div style="position:relative;width:${eh}px;height:${eh}px;overflow:hidden;flex:none;background:#1a1526"><img src="${img?.getAttribute('src')}" style="${img?.getAttribute('style')}"></div>
+    <div style="display:flex;flex-direction:column;gap:${Math.round(6 * k)}px;flex:1;transform:skewX(12deg)"><div style="display:flex;align-items:baseline;gap:${Math.round(12 * k)}px"><span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:${Math.round(32 * k)}px;color:${act ? gold : paper}">${c.name}</span><span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:${Math.round(30 * k)}px;color:${paper}">${c.hp}<span style="font-size:${Math.round(16 * k)}px;opacity:.7">/${c.stats.maxHp}</span></span><span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:${Math.round(24 * k)}px;color:${mpc}">${c.mp}<span style="font-size:${Math.round(14 * k)}px;opacity:.7">/${c.stats.maxMp}</span></span></div>
+    <div style="height:${Math.max(4, Math.round(7 * k))}px;background:rgba(255,255,255,.12)"><div style="width:${Math.min(100, od)}%;height:100%;background:${od >= 100 ? '#d8d05a' : gold}"></div></div></div></div>`; }).join('');
+const bottom = `<div style="position:absolute;left:0;right:0;bottom:${Math.round(12 * k)}px;display:flex;justify-content:center;gap:${Math.round(34 * k)}px">${ents}</div>`;
+dom(top + bottom, 'over');
+css('.ig-stat-list{visibility:hidden !important}.ig-ctb{visibility:hidden !important}.battle-pause-chip{position:relative;z-index:70;}');
+// the command list slimmer over the image on the left; the help line and the chips into the top band
+const cmd = document.querySelector('.ffx-cmd-area'); if (cmd) { cmd.style.scale = '0.8'; cmd.style.transformOrigin = 'top left'; const r = cmd.getBoundingClientRect(); moveHud(cmd, Math.round(60 * k) - r.left, band + Math.round(34 * k) - r.top); }
+const place = (sel, x, y) => { const e = document.querySelector(sel); if (!e) return; const r = e.getBoundingClientRect(); moveHud(e, x - r.left, y - r.top); };
+for (const [sel, x, y] of [['.ffx-cmd-info', 40, 22], ['.sgd__toggle', 470, 10], ['.eint__toggle', 470, 70], ['.ffx-sensor', 700, 8]]) place(sel, x, y);
+// the best-move chip is re-placed by its own layout pass every frame: pin it into the top band each tick
+M.m6 = { band, k, pin: () => place('.mad__toggle', 470, 40) };
+M.onTick = () => { const e = document.querySelector('.mad__toggle'); if (!e) return; e.style.translate = ''; const r = e.getBoundingClientRect(); moveHud(e, 470 - r.left, 40 - r.top); };
+return { band, ctbTiles: rows.length, faces: faces.length };

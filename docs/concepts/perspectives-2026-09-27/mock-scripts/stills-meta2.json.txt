@@ -1,0 +1,65 @@
+{
+ "options": {
+  "P2":   {"num": "P02",  "slug": "over-the-shoulder", "name": "Over the Shoulder", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["rear three-quarter party paintings are CANDIDATES from the art agent (art/READY.json), not approved"],
+           "changed": "Camera behind and beside the party at 1.3-1.35h looking at the boss's chest, long lens; each party painting swapped for its rear34 candidate (sidecar scale and baselineY honoured, no alpha re-fit, never mirrored); treatment: warm rim from the boss side on the party, cool rim on the boss, pre-blurred far plate, contact shadows 0.72, saturation +4%."},
+  "P2h":  {"num": "P02h", "slug": "over-the-shoulder-high", "name": "Over the Shoulder, high", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["rear paintings are candidates"],
+           "changed": "As P2 with the camera at about 1.8h looking down: the whole party readable, full figures."},
+  "P2l":  {"num": "P02l", "slug": "over-the-shoulder-low", "name": "Over the Shoulder, low", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["rear paintings are candidates"],
+           "changed": "As P2 with the camera at 0.9h (1.64 units) looking up, a tighter lens (fov 23-24) and the boss moved in: the boss towers."},
+  "P2wd": {"num": "P02wd", "slug": "over-the-shoulder-wide", "name": "Over the Shoulder, wide", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["rear paintings are candidates"],
+           "changed": "As P2 at fov 45 from a little further back: the whole arena in frame."},
+  "P2r":  {"num": "P02r", "slug": "over-the-shoulder-right", "name": "Over the Shoulder, right shoulder", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["rear paintings are candidates", "Ch IV only: Yuna (White Mage) and Rikku (Dark Knight) rear paintings mirrored to face the boss; READY.json marks both non-chiral. Chiral subjects are never mirrored"],
+           "changed": "Camera over the other shoulder: the party lower right, the boss centre-left."},
+  "P3":   {"num": "P03",  "slug": "hero-shoulder", "name": "Hero Shoulder", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["the lead is the high-resolution rear34-hi candidate; the other two are rear34 candidates"],
+           "changed": "Camera 1.9-1.95 high, about 3 units behind the lead, fov 40, pitched slightly down: the lead's back huge in the near foreground cropped at the thighs, the other two small in the middle distance, the boss centre-right; far plate pre-blurred harder."},
+  "P21":  {"num": "P21",  "slug": "cinematic-shoulder", "name": "Cinematic Shoulder", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["rear paintings are candidates", "HUD mock: turn order (FFX), chips and boss plate in the top band, party across the bottom band, the command list at 0.8 over the image"],
+           "changed": "The P3 Hero Shoulder framing (fov widened to 44-47 for the 2.39:1 window) inside the P11 bands with the HUD in the bands."},
+  "P22":  {"num": "P22",  "slug": "hero-poster", "name": "Hero Poster (moment shot)", "tag": "REAL ENGINE / existing art", "standIns": ["MOMENT SHOT, not a battle master: the intro beat with the HUD down and the turn rings off (alternate b keeps the command HUD)"],
+           "changed": "The P2-without discovery on purpose: the party in a V facing the camera in today's front paintings, the boss behind them made about 1.4-1.5x taller and looming, a low camera (1.45-1.55), backlight rim on everyone, pre-blurred far plate, lamp or snow bokeh near the lens."},
+  "P10":  {"num": "P10",  "slug": "in-the-round", "name": "In the Round", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["near girl = Yuna (White Mage) rear34 candidate", "Rikku's front painting mirrored so she faces the boss from the far side (non-chiral)"],
+           "changed": "Camera 30 degrees up, fov 35, orbited 45 degrees off the party-boss axis; the girls on three sides of Bahamut (near in rear view, Paine side-on facing him, Rikku on the far side facing us); floor lights raised for the high angle; tilt-shift band across the figures."},
+  "P15":  {"num": "P15",  "slug": "portrait-duel", "name": "Portrait Duel (phone)", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["rear paintings are candidates", "the boss made about 2x taller to fill the top half"],
+           "changed": "Phone 390x844 at DPR 3 with the game's own phone HUD; camera low behind the party looking up (fov 48): the boss looms over the top half facing down at the player, the party's backs along the bottom of the stage above the party cards."},
+  "P16":  {"num": "P16",  "slug": "directors-cut", "name": "Director's Cut (storyboard)", "tag": "COMPOSITE", "standIns": ["a strip of five real-engine stills; the command beat uses the rear-painting candidates", "beats 2-5 have the HUD down; the hit uses the lead's painted attack pose and the engine's own hit flash frozen mid-flash; victory uses the painted victory poses and the engine's pyrefly death dissolve"],
+           "changed": "Five beats laid side by side: command = P3 Hero Shoulder, the hit = P5 Side Stage low, enemy turn = P4 Reverse Angle, big attack = P7 Colossus, victory = P22 Hero Poster."},
+  "P4art": {"num": "P04", "slug": "reverse-angle", "name": "Reverse Angle", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["far plate = the art agent's painted reverse plate (candidate)", "boss = its rear34 candidate, darkened and rim-lit; Mortiorchis (Ch I) has no rear painting and stays a silhouette", "the stage-1 stand-in version (mirrored + blurred plate, front-painting silhouette) is kept as an alternate"],
+           "changed": "As stage 1 with the painted far-side plate (centred on the view, softened 3 px) and the boss's rear painting swapped in, lit at half brightness with a strong cool rim."},
+  "P13art": {"num": "P13", "slug": "proscenium", "name": "Proscenium", "tag": "REAL ENGINE + NEW ART (candidate)", "standIns": ["the arch is the art agent's painted proscenium overlay (candidate pick, violet curtains); crimson version and the stage-1 CSS/SVG stand-in kept as alternates"],
+           "changed": "As stage 1 with the painted Ink & Gold arch (1920x1080 overlay, transparent opening x 200-1720, y 118-1010) in place of the CSS/SVG stand-in."}
+ },
+ "weak": {
+  "ffx-ch1": {
+   "P2": "Kimahri is mostly hidden behind Tidus and the command list clips Tidus's left arm; the rear paintings drift a little (Tidus's knit sleeve is on the wrong arm).",
+   "P2h": "Seymour drops to 49% and Kimahri still overlaps Tidus.",
+   "P2l": "Kimahri disappears behind Tidus and the party rows clip Yuna's hem.",
+   "P2wd": "At fov 45 Seymour shrinks to 33% and the frame is mostly canyon.",
+   "P2r": "Tidus's and Kimahri's rear paintings are turned right and can't be mirrored (chiral), so on this shoulder they face away from Seymour; Mortiorchis sits under the command list.",
+   "P3": "The command list overlaps Kimahri and Tidus's hip; Seymour is only 43%.",
+   "P21": "The band HUD is a mock; Seymour is 39% of the height.",
+   "P22": "A moment shot, not a master; the party still wears today's front paintings.",
+   "P15": "Seymour is scaled to about 2x to fill the top half; the party cards cover the party's legs.",
+   "P16": "A storyboard of stills, not motion; the big-attack beat has no attack effect (the painted cast pose read as a different design and is left out).",
+   "P4art": "The party is only ~190 px; Mortiorchis has no rear painting; the turn order sits over Seymour's shoulder.",
+   "P13art": "The arch is a candidate painting; the stage inside it is smaller than today's."
+  },
+  "ffx2-ch4": {
+   "P2": "The game's best-move chip lands on Rikku's hair; Yuna's rear painting has an open back panel the idle doesn't have.",
+   "P2h": "Bahamut drops to 52%.",
+   "P2l": "The command stack covers Bahamut's right wing.",
+   "P2wd": "The girls bunch under Bahamut, who shrinks to 35%.",
+   "P2r": "Works because Yuna (White Mage) and Rikku are non-chiral and mirror to face Bahamut; Paine's back view faces straight ahead.",
+   "P3": "The best-move chip sits on Yuna's rod; Paine is half behind Rikku.",
+   "P21": "The band HUD is a mock; Bahamut is 41% of the height.",
+   "P22": "A moment shot, not a master; the girls still wear today's front paintings.",
+   "P10": "Figures are small (~250 px) on a plain deck and the pillar's and Bahamut's long cast shadows read as dark slabs.",
+   "P15": "Bahamut is scaled to about 2x; the girls overlap his tail.",
+   "P16": "A storyboard of stills, not motion; Bahamut has no painted attack or cast pose, so the big-attack beat is the colossus framing alone.",
+   "P4art": "The girls are ~240 px; the command stack and the party rows cover Bahamut's lower wing.",
+   "P13art": "The arch is a candidate painting; the stage inside it is smaller than today's."
+  }
+ },
+ "variants": {
+  "ffx-ch1": {"P2-b": "the shot spec's geometry (camera 0.45D behind, 0.3D aside, fov 36): Tidus leaves the frame and Yuna goes under the command list", "P3-b": "the lead closer, cropped at the waist", "P21-b": "the P2 framing inside the bands", "P22-b": "the same beat with the command HUD on", "P22-c": "victory beat: painted victory poses, Seymour and Mortiorchis in the engine's pyrefly dissolve", "P15-b": "higher camera (2.6): the party smaller", "P13art-b": "crimson curtains (the art agent's alternate)"},
+  "ffx2-ch4": {"P2r-b": "no mirroring: Rikku's rear painting faces away from Bahamut", "P3-b": "the lead closer", "P21-b": "the P2 framing inside the bands", "P22-b": "the same beat with the command HUD on", "P22-c": "victory beat: painted victory poses, Bahamut in the engine's pyrefly dissolve", "P10-b": "orbited the other way (-45 degrees)", "P15-b": "higher camera (2.6): the party smaller", "P13art-b": "crimson curtains (the art agent's alternate)"}
+ }
+}

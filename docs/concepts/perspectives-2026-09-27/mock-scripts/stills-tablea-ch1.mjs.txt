@@ -1,0 +1,5 @@
+// Chapter I, stage 2 with delivered art: P4 with the painted far-side plate and Seymour's rear view, P13 with the painted arch.
+import { readFileSync } from 'node:fs';
+import { ID as ID1 } from './table-ch1.mjs';
+export const ID = { ...ID1, stage: 2 };
+export const OPTS = JSON.parse(readFileSync('D:/Tools/pyrefly-scratch/persp-a/art-ch1.json', 'utf8'));

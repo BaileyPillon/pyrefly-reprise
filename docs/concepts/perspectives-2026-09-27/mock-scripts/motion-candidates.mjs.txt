@@ -1,0 +1,19 @@
+// render camera candidates: node cands.mjs <cands.json> <prefix> [prep.js]
+import { readFileSync } from 'node:fs';
+const R = 'http://127.0.0.1:5252';
+const post = async (p, body = '') => { const r = await fetch(R + p, { method: 'POST', body }); const j = await r.json(); if (!j.ok) throw new Error(p + ' ' + JSON.stringify(j).slice(0, 800)); return j; };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const [file, prefix, prep] = process.argv.slice(2);
+const C = JSON.parse(readFileSync(file, 'utf8'));
+if (prep) await post('/eval', readFileSync(prep, 'utf8'));
+const out = {};
+for (const [name, c] of Object.entries(C)) {
+  const r = await post('/eval', `const M = __motion; const c = ${JSON.stringify(c)};
+    if (c.pre) await (new Function('M', 'return (async () => { ' + c.pre + ' })()'))(M);
+    if (!c.keep) M.set('cam', { pos: c.pos, look: c.look, fov: c.fov, roll: c.roll ?? 0, sway: 0 });
+    if (!c.keep && !c.pre) M.cut({ pos: c.pos, look: c.look, fov: c.fov, roll: c.roll ?? 0, sway: 0, focus: c.focus ?? { ...M.FOCUS_OFF }, tilt: c.tilt ?? { focus: 0.5, band: 0.3, blur: 2 } });
+    await new Promise((r) => setTimeout(r, 650)); return M.lens(c.ids);`);
+  await post('/shot?path=' + encodeURIComponent(`D:/Tools/pyrefly-scratch/persp-b/ref/${prefix}-${name}.png`));
+  out[name] = r.r;
+}
+for (const [n, o] of Object.entries(out)) console.log(n, Object.entries(o).map(([id, v]) => `${id.slice(0, 7)}:${v.off}${v.rear ? 'R' : ''}${v.mirrored ? 'M' : ''}`).join(' '));

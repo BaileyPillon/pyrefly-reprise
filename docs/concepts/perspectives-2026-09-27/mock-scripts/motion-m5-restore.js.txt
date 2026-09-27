@@ -1,0 +1,4 @@
+const M = __motion; const S = M.m5; if (!S || !S.orig) return 'nothing';
+for (const [id, o] of Object.entries(S.orig)) { const a = M.act(id); a.position.set(...o.pos); a.setFacing(o.facing); }
+for (const [n, p] of S.follow || []) n.position.set(...p);
+if (S.col) S.col.visible = false; M.onTick = null; M.reset(); return 'restored';

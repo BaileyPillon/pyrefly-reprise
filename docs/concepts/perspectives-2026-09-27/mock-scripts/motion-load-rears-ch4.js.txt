@@ -1,0 +1,9 @@
+const M = __motion; const out = [];
+out.push(await M.loadRear('yuna', '/mock-art/yuna-white-mage/rear34.png', 'rear34'));
+out.push(await M.loadRear('yuna', '/mock-art/yuna-white-mage/rear34-hi.png', 'rear34hi'));
+out.push(await M.loadRear('rikku', '/mock-art/rikku-dark-knight/rear34.png', 'rear34'));
+out.push(await M.loadRear('paine', '/mock-art/paine-warrior/rear34.png', 'rear34'));
+out.push(await M.loadRear('bahamut', '/mock-art/ffx2-bahamut/rear34.png', 'rear34'));
+out.push(await M.loadPlate('rev', '/mock-art/bevelle-underground/plate-reverse.png'));
+for (const id of ['yuna', 'rikku', 'paine', 'bahamut']) { const a = M.act(id); out.push({ id, pose: a.pose, artFacing: a.artFacingDir, facingDir: a.facingDir, interim: a.interimYawDeg, yaw: +a.yawDeg.toFixed(1), mirrored: a.mirrored }); }
+return out;

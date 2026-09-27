@@ -1,0 +1,101 @@
+"""Perspectives round 2026-09-27 (art agent): contact sheets for the reverse-angle plates.
+
+Today's plate first, then every reverse candidate (and the graded alternates), labelled with the arm,
+seed and a short verdict; the pick in a gold frame; a footer on why. JPEG q88 into the main tree.
+
+    D:/Tools/ComfyUI/python_embeded/python.exe -s tools/zz-persp-art/plate-sheets.py
+"""
+import json
+import pathlib
+import textwrap
+
+from PIL import Image, ImageDraw, ImageFont
+
+CAND = pathlib.Path("D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/plates")
+PLATES = pathlib.Path("D:/Final Fantasy/public/art/backdrops")
+OUT = pathlib.Path("D:/Final Fantasy/docs/concepts/perspectives-2026-09-27/art")
+GOLD = (214, 172, 72)
+TW, TH = 672, 384
+PER_ROW = 4
+
+SHEETS = [
+    ("08", "gagazet", "E/cand-14", {
+        "A/1": "A txt2img + style ref 0.7: daylit", "A/2": "A: daylit, winged bugs", "A/3": "A: daylit",
+        "A/4": "A: new composition, daylit", "A/4g": "A #4 graded to today's palette: new layout, smoother",
+        "B/5": "B night words, ref 1.0: pale moon", "B/6": "B: pale, flat", "B/7": "B: moon in view", "B/8": "B: pale, flat",
+        "D/11": "D mirrored 0.75: ALTERNATE, horizon ~60 %", "D/12": "D mirrored init 0.75: busier, stiff blocks",
+        "E/13": "E horizon shift .17: runner-up",
+    }, "PICK E #14 (seed 276014): today's plate mirrored with the horizon moved up 17 %, repainted at 0.75: a level eye line with "
+       "the far ridges across about 45 % (REQUEST.md), the trail dropping into the valley, the plate's palette, no moon (behind the "
+       "camera). Txt2img with a style reference came back daylit (A) or pale (B) at every weight tried."),
+    ("09", "bevelle-underground", "F/cand-15", {
+        "A/1": "A txt2img + style ref 0.7: pastel, clean", "A/2": "A: pastel, floating disc", "A/3": "A: pastel",
+        "A/4": "A: pastel", "A/4g": "A #4 graded: still clean-lined, not the plate's grit",
+        "B/5": "B dark words, ref 1.0: still pale", "B/6": "B: pale", "B/7": "B: pale", "B/8": "B: pale",
+        "C/9": "C mirrored init 0.65: too close to today", "C/10": "C mirrored 0.65: reactor, runner-up",
+        "D/11": "D mirrored 0.75: ALTERNATE, vanishing pt ~62 %", "D/12": "D mirrored 0.75: column, less legible",
+        "E/13": "E shift .15: vanishing point still ~66 %", "E/14": "E shift .15: vanishing point ~66 %",
+        "F/16": "F shift .28: busy round lights",
+    }, "PICK F #15 (seed 277015): today's plate mirrored with the horizon moved up 28 %, repainted at 0.70: the floor runs to a "
+       "door with the vanishing point at about 48 % (REQUEST.md), a great sunburst seal above it, orange lamps down both walls, "
+       "a wet deck. Pale txt2img (A, B) and a too-low horizon (C, D, E) were the failures."),
+]
+
+
+def font(size):
+    for f in ("arialbd.ttf", "arial.ttf"):
+        try:
+            return ImageFont.truetype(f, size)
+        except Exception:
+            pass
+    return ImageFont.load_default()
+
+
+def tile(path, label, sub, pick=False):
+    im = Image.open(path).convert("RGB").resize((TW, TH), Image.LANCZOS)
+    t = Image.new("RGB", (TW + 12, TH + 12 + 44), (34, 34, 38))
+    t.paste(im, (6, 50))
+    d = ImageDraw.Draw(t)
+    if pick:
+        d.rectangle([0, 0, t.width - 1, t.height - 1], outline=GOLD, width=5)
+    d.text((8, 4), label, fill=GOLD if pick else (235, 235, 235), font=font(17))
+    d.text((8, 25), sub, fill=GOLD if pick else (175, 175, 175), font=font(14))
+    return t
+
+
+def main():
+    for nn, name, pick, verdicts, why in SHEETS:
+        tiles = [tile(PLATES / f"{name}.png", "TODAY'S PLATE (shipped)", "the view the camera sees today")]
+        for arm in sorted(p for p in (CAND / name).iterdir() if p.is_dir()):
+            for cj in sorted(arm.glob("cand-*.json"), key=lambda p: int(p.stem.split("-")[1])):
+                m = json.loads(cj.read_text(encoding="utf-8"))
+                key = f"{arm.name}/{m['candidate']}"
+                is_pick = f"{arm.name}/{cj.stem}" == pick
+                tiles.append(tile(cj.with_suffix(".png"), f"{'PICK  ' if is_pick else ''}{arm.name} #{m['candidate']}  s{m['seed']}",
+                                  "installed plate-reverse.png" if is_pick else verdicts.get(key, ""), is_pick))
+                graded = cj.with_name(f"{cj.stem}.graded.png")
+                if graded.exists():
+                    tiles.append(tile(graded, f"{arm.name} #{m['candidate']} graded", verdicts.get(f"{key}g", "")))
+        rows = [tiles[i:i + PER_ROW] for i in range(0, len(tiles), PER_ROW)]
+        W = PER_ROW * (tiles[0].width + 10) + 10
+        H = 56 + len(rows) * (tiles[0].height + 10) + 80
+        sheet = Image.new("RGB", (W, H), (22, 22, 26))
+        d = ImageDraw.Draw(sheet)
+        d.text((12, 14), f"{name}: reverse-angle plate candidates, every render (perspectives round 2026-09-27, art agent)",
+               fill=(240, 240, 240), font=font(24))
+        y = 56
+        for r in rows:
+            x = 10
+            for t in r:
+                sheet.paste(t, (x, y))
+                x += t.width + 10
+            y += tiles[0].height + 10
+        for i, line in enumerate(textwrap.wrap(why, int(W / 10.5))[:3]):
+            d.text((12, y + 6 + 24 * i), line, fill=GOLD, font=font(18))
+        out = OUT / f"sheet-{nn}-plate-{name}.jpg"
+        sheet.save(out, quality=88)
+        print(out.name, sheet.size, len(tiles) - 1, "tiles")
+
+
+if __name__ == "__main__":
+    main()

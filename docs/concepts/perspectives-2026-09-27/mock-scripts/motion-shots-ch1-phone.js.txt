@@ -1,0 +1,11 @@
+// Chapter I phone (390x844) shot table: the page shows only the centre band of the 16:9 render, so each
+// command's framing is re-fitted to that band (the approach the Vegnagun round used for its phone table).
+const M = __motion;
+const TIGHT = { focus: 0.56, band: 0.3, blur: 1.6 };
+const WIDE = { focus: 0.42, band: 0.15, blur: 4.6 };
+const HOME = { focus: 0.4, band: 0.16, blur: 4.2 };
+M.shots.master = { ...M.rigShot('idle'), focus: { ...M.FOCUS_OFF }, tilt: HOME };
+M.shots.atk = { pos: [-1.6, 1.0, 8.4], look: [0.3, 1.55, -1.0], fov: 32, roll: 0, sway: 0.55, focus: { id: 'tidus', pad: 1.12, blur: 7, feather: 0.55 }, tilt: TIGHT };
+M.shots.mag = { pos: [-0.6, 6.8, 14.2], look: [0.8, 1.3, -3.2], fov: 32, roll: 0, sway: 0.8, focus: { ...M.FOCUS_OFF }, tilt: WIDE };
+M.shots.itm = { pos: [-0.2, 1.6, 4.4], look: [-1.31, 1.3, 0.55], fov: 32, roll: 0, sway: 0.45, focus: { id: 'tidus', pad: 1.05, blur: 12, feather: 0.45 }, tilt: TIGHT };
+return Object.keys(M.shots).length;

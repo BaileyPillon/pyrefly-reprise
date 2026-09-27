@@ -1,0 +1,20 @@
+// agent scratch (perspectives round, MOTION rig "b"): the repo config on port 5242, HMR and the file
+// watcher off (no reloads mid-take, no 93k watches), a private dep cache so this server never shares
+// one with the stills rig (5241) or the main tree. Stop it by port when done (AGENTS.md).
+import base from './vite.config.ts';
+export default (env) => {
+  const c = typeof base === 'function' ? base(env) : base;
+  return {
+    ...c,
+    cacheDir: 'D:/pyrefly-mock-persp/.vite-cache-b',
+    server: {
+      ...(c.server ?? {}),
+      port: 5242,
+      strictPort: true,
+      host: '127.0.0.1',
+      hmr: false,
+      watch: { ignored: ['**/*'] },
+      fs: { strict: false },
+    },
+  };
+};

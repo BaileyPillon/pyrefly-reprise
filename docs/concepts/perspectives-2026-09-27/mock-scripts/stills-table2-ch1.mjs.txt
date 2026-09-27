@@ -1,0 +1,13 @@
+// Chapter I (seymour-flux, FFX), stage 2: tuned values in stage2-ch1.json; P16 beats reuse stage-1 P4-a and P7-a with
+// the HUD down (and Seymour's and Mortiorchis's painted cast poses for the big attack).
+import { readFileSync } from 'node:fs';
+import { ID as ID1, OPTS as S1 } from './table-ch1.mjs';
+const J = JSON.parse(readFileSync('D:/Tools/pyrefly-scratch/persp-a/stage2-ch1.json', 'utf8'));
+export const ID = { ...ID1, stage: 2 };
+const g = (o) => Object.fromEntries(Object.entries(o).map(([v, p]) => [v, { fn: 'G', ...p }]));
+export const OPTS = {
+  ...Object.fromEntries(Object.entries(J).map(([k, v]) => [k, g(v)])),
+  P16enemy: { a: { ...S1.P4.a, fn: 'P4', hudOff: true, noRing: true } },
+  // the painted cast poses read as a different design at colossal scale (kept as alt b); a: the idle
+  P16big: { a: { ...S1.P7.a, fn: 'G', hudOff: true, noRing: true }, b: { ...S1.P7.a, fn: 'G', poses: { 'seymour-flux': 'cast', mortiorchis: 'cast' }, hudOff: true, noRing: true } },
+};

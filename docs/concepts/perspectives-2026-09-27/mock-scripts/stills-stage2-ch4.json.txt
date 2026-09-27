@@ -1,0 +1,1839 @@
+{
+"P2": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.35,
+0,
+2.2
+]
+],
+"rikku": [
+[
+-1.2,
+0,
+1.05
+]
+],
+"paine": [
+[
+-0.05,
+0,
+-0.15
+]
+],
+"bahamut": [
+[
+2.73,
+0,
+-5.44
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-2.6,
+2.35,
+7.9
+],
+"look": [
+1.4,
+2.05,
+-5.8
+],
+"fov": 28.5,
+"bg": [
+1.25,
+4,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+}
+}
+},
+"P2h": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.35,
+0,
+2.2
+]
+],
+"rikku": [
+[
+-1.2,
+0,
+1.05
+]
+],
+"paine": [
+[
+-0.05,
+0,
+-0.15
+]
+],
+"bahamut": [
+[
+2.73,
+0,
+-5.44
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-2.7,
+3.35,
+9.2
+],
+"look": [
+1.2,
+1.45,
+-5.8
+],
+"fov": 28.5,
+"bg": [
+1.25,
+1.5,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+}
+}
+},
+"P2l": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.35,
+0,
+2.2
+]
+],
+"rikku": [
+[
+-1.2,
+0,
+1.05
+]
+],
+"paine": [
+[
+-0.05,
+0,
+-0.15
+]
+],
+"bahamut": [
+[
+2.6,
+0,
+-4.9
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-2.4,
+1.64,
+7.6
+],
+"look": [
+1.4,
+2.45,
+-5.8
+],
+"fov": 24,
+"bg": [
+1.4,
+7,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+}
+}
+},
+"P2wd": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.5,
+0,
+3.2
+]
+],
+"rikku": [
+[
+-1.35,
+0,
+2.3
+]
+],
+"paine": [
+[
+-0.3,
+0,
+1.2
+]
+],
+"bahamut": [
+[
+2.4,
+0,
+-5.44
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-3.1,
+2.3,
+7.8
+],
+"look": [
+1.0,
+1.9,
+-5.8
+],
+"fov": 45,
+"bg": [
+1.5,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+},
+"ground": [
+1.6,
+0
+]
+}
+},
+"P2r": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+0.75,
+0,
+1.9
+]
+],
+"rikku": [
+[
+1.75,
+0,
+0.85
+]
+],
+"paine": [
+[
+0.85,
+0,
+-1.35
+]
+],
+"bahamut": [
+[
+-1.9,
+0,
+-5.44
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+2.1,
+2.6,
+8.6
+],
+"look": [
+-0.3,
+1.95,
+-5.8
+],
+"fov": 28.5,
+"bg": [
+1.25,
+3,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+},
+"swapMirror": [
+"yuna",
+"rikku"
+]
+},
+"b": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+0.75,
+0,
+1.9
+]
+],
+"rikku": [
+[
+1.75,
+0,
+0.85
+]
+],
+"paine": [
+[
+0.85,
+0,
+-1.35
+]
+],
+"bahamut": [
+[
+-1.9,
+0,
+-5.44
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+2.1,
+2.6,
+8.6
+],
+"look": [
+-0.3,
+1.95,
+-5.8
+],
+"fov": 28.5,
+"bg": [
+1.25,
+3,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+},
+"swapMirror": []
+}
+},
+"P3": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34-hi.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.434,
+0,
+3.429
+]
+],
+"rikku": [
+[
+0.01,
+0,
+-0.264
+]
+],
+"paine": [
+[
+1.582,
+0,
+-1.292
+]
+],
+"bahamut": [
+[
+3.432,
+0,
+-4.316
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-2.2,
+1.9,
+6.6
+],
+"look": [
+0.92,
+1.6,
+-4.992
+],
+"fov": 40,
+"bg": [
+1.4,
+6,
+0
+],
+"softbg": 7,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+},
+"ground": [
+1.6,
+0
+]
+},
+"b": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34-hi.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.653,
+0,
+4.177
+]
+],
+"rikku": [
+[
+-0.192,
+0,
+0.229
+]
+],
+"paine": [
+[
+1.331,
+0,
+-0.811
+]
+],
+"bahamut": [
+[
+3.282,
+0,
+-4.016
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-2.35,
+1.95,
+6.9
+],
+"look": [
+0.77,
+1.7,
+-4.692
+],
+"fov": 40,
+"bg": [
+1.4,
+6,
+0
+],
+"softbg": 7,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+},
+"ground": [
+1.6,
+0
+]
+}
+},
+"P21": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34-hi.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.434,
+0,
+3.429
+]
+],
+"rikku": [
+[
+0.01,
+0,
+-0.264
+]
+],
+"paine": [
+[
+1.582,
+0,
+-1.292
+]
+],
+"bahamut": [
+[
+3.432,
+0,
+-4.316
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-2.2,
+1.9,
+6.6
+],
+"look": [
+0.92,
+1.6,
+-4.992
+],
+"fov": 47,
+"bg": [
+1.4,
+6,
+0
+],
+"softbg": 7,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+},
+"ground": [
+1.6,
+0
+],
+"band": {
+"hud": {
+"ctbRow": ".none",
+"hide": [
+".ffx2hud__party"
+],
+"faceSel": ".ffx2stat__face img[src*=portraits]",
+"cmd": ".ffx2hud__command",
+"cmdScale": 0.8,
+"cmdX": 1520,
+"cmdY": 185,
+"chips": [
+[
+".ffx2hud__enemies",
+1150,
+66
+],
+[
+".sgd__toggle",
+60,
+84
+],
+[
+".mad__toggle",
+250,
+84
+]
+],
+"gaugeKey": "atb",
+"accent": "#f4a8d0",
+"gaugeColor": "#f4a8d0"
+}
+},
+"bokeh": [
+{
+"ndc": [
+0.92,
+0.55
+],
+"d": 2.2,
+"s": 0.22,
+"o": 0.3
+},
+{
+"ndc": [
+0.62,
+0.7
+],
+"d": 2.8,
+"s": 0.14,
+"o": 0.24
+}
+],
+"bokehColor": "rgba(255,170,90,1)"
+},
+"b": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.35,
+0,
+2.2
+]
+],
+"rikku": [
+[
+-1.2,
+0,
+1.05
+]
+],
+"paine": [
+[
+-0.05,
+0,
+-0.15
+]
+],
+"bahamut": [
+[
+2.73,
+0,
+-5.44
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-2.6,
+2.35,
+7.9
+],
+"look": [
+1.4,
+2.05,
+-5.8
+],
+"fov": 36,
+"bg": [
+1.25,
+4,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+},
+"band": {
+"hud": {
+"ctbRow": ".none",
+"hide": [
+".ffx2hud__party"
+],
+"faceSel": ".ffx2stat__face img[src*=portraits]",
+"cmd": ".ffx2hud__command",
+"cmdScale": 0.8,
+"cmdX": 1520,
+"cmdY": 185,
+"chips": [
+[
+".ffx2hud__enemies",
+1150,
+66
+],
+[
+".sgd__toggle",
+60,
+84
+],
+[
+".mad__toggle",
+250,
+84
+]
+],
+"gaugeKey": "atb",
+"accent": "#f4a8d0",
+"gaugeColor": "#f4a8d0"
+}
+},
+"bokeh": [
+{
+"ndc": [
+0.92,
+0.55
+],
+"d": 2.2,
+"s": 0.22,
+"o": 0.3
+},
+{
+"ndc": [
+0.62,
+0.7
+],
+"d": 2.8,
+"s": 0.14,
+"o": 0.24
+}
+],
+"bokehColor": "rgba(255,170,90,1)"
+}
+},
+"P22": {
+"a": {
+"height": {
+"bahamut": 6.2
+},
+"pos": {
+"yuna": [
+[
+-0.2,
+0,
+2.5
+]
+],
+"rikku": [
+[
+-1.45,
+0,
+1.55
+]
+],
+"paine": [
+[
+1.05,
+0,
+1.35
+]
+],
+"bahamut": [
+[
+0.55,
+0,
+-4.6
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+0.1,
+1.45,
+9.4
+],
+"look": [
+0.3,
+2.3,
+-2.0
+],
+"fov": 33,
+"bg": [
+1.35,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 10545663,
+"rimStrength": 1.35,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6,
+"bounce": 8374015,
+"bounceStrength": 0.14
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.1,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6
+},
+"bokeh": [
+{
+"ndc": [
+-0.88,
+0.6
+],
+"d": 2.2,
+"s": 0.24,
+"o": 0.3
+},
+{
+"ndc": [
+0.85,
+0.7
+],
+"d": 2.6,
+"s": 0.18,
+"o": 0.26
+},
+{
+"ndc": [
+-0.6,
+-0.7
+],
+"d": 2.0,
+"s": 0.2,
+"o": 0.22
+},
+{
+"ndc": [
+0.75,
+-0.55
+],
+"d": 2.3,
+"s": 0.16,
+"o": 0.2
+}
+],
+"bokehColor": "rgba(255,170,90,1)",
+"grade": {
+"saturation": 1.14,
+"vignette": 0.58
+},
+"hudOff": true,
+"noRing": true
+},
+"b": {
+"height": {
+"bahamut": 6.2
+},
+"pos": {
+"yuna": [
+[
+-0.2,
+0,
+2.5
+]
+],
+"rikku": [
+[
+-1.45,
+0,
+1.55
+]
+],
+"paine": [
+[
+1.05,
+0,
+1.35
+]
+],
+"bahamut": [
+[
+0.55,
+0,
+-4.6
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+0.1,
+1.45,
+9.4
+],
+"look": [
+0.3,
+2.3,
+-2.0
+],
+"fov": 33,
+"bg": [
+1.35,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 10545663,
+"rimStrength": 1.35,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6,
+"bounce": 8374015,
+"bounceStrength": 0.14
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.1,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6
+},
+"bokeh": [
+{
+"ndc": [
+-0.88,
+0.6
+],
+"d": 2.2,
+"s": 0.24,
+"o": 0.3
+},
+{
+"ndc": [
+0.85,
+0.7
+],
+"d": 2.6,
+"s": 0.18,
+"o": 0.26
+},
+{
+"ndc": [
+-0.6,
+-0.7
+],
+"d": 2.0,
+"s": 0.2,
+"o": 0.22
+},
+{
+"ndc": [
+0.75,
+-0.55
+],
+"d": 2.3,
+"s": 0.16,
+"o": 0.2
+}
+],
+"bokehColor": "rgba(255,170,90,1)",
+"grade": {
+"saturation": 1.14,
+"vignette": 0.58
+},
+"hudOff": false
+},
+"c": {
+"height": {
+"bahamut": 6.2
+},
+"pos": {
+"yuna": [
+[
+-0.2,
+0,
+2.5
+]
+],
+"rikku": [
+[
+-1.45,
+0,
+1.55
+]
+],
+"paine": [
+[
+1.05,
+0,
+1.35
+]
+],
+"bahamut": [
+[
+0.55,
+0,
+-4.6
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+0.1,
+1.45,
+9.4
+],
+"look": [
+0.3,
+2.3,
+-2.0
+],
+"fov": 33,
+"bg": [
+1.35,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 10545663,
+"rimStrength": 1.35,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6,
+"bounce": 8374015,
+"bounceStrength": 0.14
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.1,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6
+},
+"bokeh": [
+{
+"ndc": [
+-0.88,
+0.6
+],
+"d": 2.2,
+"s": 0.24,
+"o": 0.3
+},
+{
+"ndc": [
+0.85,
+0.7
+],
+"d": 2.6,
+"s": 0.18,
+"o": 0.26
+},
+{
+"ndc": [
+-0.6,
+-0.7
+],
+"d": 2.0,
+"s": 0.2,
+"o": 0.22
+},
+{
+"ndc": [
+0.75,
+-0.55
+],
+"d": 2.3,
+"s": 0.16,
+"o": 0.2
+}
+],
+"bokehColor": "rgba(255,170,90,1)",
+"grade": {
+"saturation": 1.14,
+"vignette": 0.58
+},
+"hudOff": true,
+"poses": {
+"yuna": "victory",
+"paine": "victory"
+},
+"dissolve": {
+"bahamut": 0.28
+},
+"noRing": true
+}
+},
+"P10": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png"
+},
+"swapMirror": [],
+"pos": {
+"bahamut": [
+[
+0.3,
+0,
+-3.2
+]
+],
+"yuna": [
+[
+2.138,
+0,
+-0.372
+]
+],
+"rikku": [
+[
+1.467,
+0,
+-6.629
+],
+null,
+true
+],
+"paine": [
+[
+-2.175,
+0,
+-1.291
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+8.138,
+8.0,
+4.638
+],
+"look": [
+0.724,
+1.1,
+-3.624
+],
+"fov": 35,
+"ground": [
+1.6,
+0
+],
+"gbright": 1.25,
+"lights": {
+"key": 1.4,
+"fill": 1.4,
+"AmbientLight": 1.5
+},
+"softbg": 0,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.0,
+"rimDir": [
+0.3,
+1
+],
+"rimWidth": 3.0
+},
+"grade": {
+"saturation": 1.16,
+"vignette": 0.46
+},
+"tilt": {
+"focus": 0.5,
+"bandWidth": 0.2,
+"maxBlur": 8,
+"falloff": 1.2
+}
+},
+"b": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34.png"
+},
+"swapMirror": [],
+"pos": {
+"bahamut": [
+[
+0.3,
+0,
+-3.2
+]
+],
+"yuna": [
+[
+-2.528,
+0,
+-1.362
+]
+],
+"paine": [
+[
+-1.609,
+0,
+-5.675
+]
+],
+"rikku": [
+[
+3.729,
+0,
+-2.033
+],
+null,
+true
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-7.538,
+8.0,
+4.638
+],
+"look": [
+0.724,
+1.1,
+-2.776
+],
+"fov": 35,
+"ground": [
+1.6,
+0
+],
+"gbright": 1.25,
+"lights": {
+"key": 1.4,
+"fill": 1.4,
+"AmbientLight": 1.5
+},
+"softbg": 0,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.0,
+"rimDir": [
+0.3,
+1
+],
+"rimWidth": 3.0
+},
+"grade": {
+"saturation": 1.16,
+"vignette": 0.46
+},
+"tilt": {
+"focus": 0.5,
+"bandWidth": 0.2,
+"maxBlur": 8,
+"falloff": 1.2
+}
+}
+},
+"P16cmd": {
+"a": {
+"swap": {
+"yuna": "/mock-art/yuna-white-mage/rear34-hi.png",
+"rikku": "/mock-art/rikku-dark-knight/rear34.png",
+"paine": "/mock-art/paine-warrior/rear34.png"
+},
+"pos": {
+"yuna": [
+[
+-2.434,
+0,
+3.429
+]
+],
+"rikku": [
+[
+0.01,
+0,
+-0.264
+]
+],
+"paine": [
+[
+1.582,
+0,
+-1.292
+]
+],
+"bahamut": [
+[
+3.432,
+0,
+-4.316
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+-2.2,
+1.9,
+6.6
+],
+"look": [
+0.92,
+1.6,
+-4.992
+],
+"fov": 40,
+"bg": [
+1.4,
+6,
+0
+],
+"softbg": 7,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 1.15,
+"rimDir": [
+0.45,
+1
+],
+"rimWidth": 3.2,
+"bounce": 8374015,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 10545663,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.4
+],
+"rimWidth": 3.2
+},
+"grade": {
+"saturation": 1.1,
+"vignette": 0.44
+},
+"ground": [
+1.6,
+0
+]
+}
+},
+"P16hit": {
+"a": {
+"pos": {
+"yuna": [
+[
+0.2,
+0,
+-1.6
+]
+],
+"rikku": [
+[
+-3.6,
+0,
+-2.6
+]
+],
+"paine": [
+[
+-4.6,
+0,
+-1.8
+]
+],
+"bahamut": [
+[
+2.6,
+0,
+-3.0
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"poses": {
+"yuna": "attack"
+},
+"cam": [
+-0.3,
+1.1,
+22
+],
+"look": [
+-0.3,
+1.9,
+-2
+],
+"fov": 19,
+"bg": [
+1.2,
+5.5,
+0
+],
+"ground": [
+2.4,
+6
+],
+"softbg": 4,
+"rimParty": {
+"rim": 16761520,
+"rimStrength": 0.9,
+"rimDir": [
+1,
+0.3
+],
+"rimWidth": 2.8
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+},
+"hudOff": true,
+"noRing": true,
+"impact": {
+"id": "bahamut",
+"ms": 60
+}
+}
+},
+"P16win": {
+"a": {
+"height": {
+"bahamut": 6.2
+},
+"pos": {
+"yuna": [
+[
+-0.2,
+0,
+2.5
+]
+],
+"rikku": [
+[
+-1.45,
+0,
+1.55
+]
+],
+"paine": [
+[
+1.05,
+0,
+1.35
+]
+],
+"bahamut": [
+[
+0.55,
+0,
+-4.6
+]
+]
+},
+"follow": {
+"bahamut": [
+"enemy-reflection",
+"enemy-pool"
+]
+},
+"cam": [
+0.1,
+1.45,
+9.4
+],
+"look": [
+0.3,
+2.3,
+-2.0
+],
+"fov": 33,
+"bg": [
+1.35,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 10545663,
+"rimStrength": 1.35,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6,
+"bounce": 8374015,
+"bounceStrength": 0.14
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.1,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6
+},
+"bokeh": [
+{
+"ndc": [
+-0.88,
+0.6
+],
+"d": 2.2,
+"s": 0.24,
+"o": 0.3
+},
+{
+"ndc": [
+0.85,
+0.7
+],
+"d": 2.6,
+"s": 0.18,
+"o": 0.26
+},
+{
+"ndc": [
+-0.6,
+-0.7
+],
+"d": 2.0,
+"s": 0.2,
+"o": 0.22
+},
+{
+"ndc": [
+0.75,
+-0.55
+],
+"d": 2.3,
+"s": 0.16,
+"o": 0.2
+}
+],
+"bokehColor": "rgba(255,170,90,1)",
+"grade": {
+"saturation": 1.14,
+"vignette": 0.58
+},
+"hudOff": true,
+"poses": {
+"yuna": "victory",
+"paine": "victory"
+},
+"dissolve": {
+"bahamut": 0.28
+},
+"noRing": true
+}
+}
+}

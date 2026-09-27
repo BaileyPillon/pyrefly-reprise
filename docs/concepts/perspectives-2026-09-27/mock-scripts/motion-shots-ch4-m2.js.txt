@@ -1,0 +1,17 @@
+// Chapter IV (FFX-2) M2 shot table: the per-command camera with a TRUE over-the-shoulder on Paine's menu.
+const M = __motion;
+const PARTY = ['yuna', 'rikku', 'paine'];
+const RIM = { rim: 0xffcfe0, rimStrength: 1.1, rimDir: [0.45, 1], rimWidth: 3.2, bounce: 0x7fc6ff, bounceStrength: 0.12 };
+const RIM_CLOSE = { ...RIM, rimStrength: 0.7, bounceStrength: 0.08 };
+const TIGHT = { focus: 0.58, band: 0.3, blur: 1.4 };
+const behind = (rim) => () => { M.rearOn(PARTY, 'rear34'); for (const id of PARTY) M.rim(id, id === 'paine' ? rim : RIM); };
+M.shots.master = { ...M.rigShot('idle'), focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.54, band: 0.15, blur: 3.8 },
+  enter() { M.frontOn(PARTY); for (const id of PARTY) M.rim(id, null); } };
+// Attack: behind Paine's shoulder, Bahamut towering over her (the flower reticle on him).
+M.shots.ots_atk = { pos: [-1.05, 1.75, 1.3], look: [1.6, 2.4, -5.8], fov: 38, roll: 0, sway: 0.5, focus: { ...M.FOCUS_OFF }, tilt: TIGHT, enter: behind(RIM_CLOSE) };
+// Skill: high over the party from behind-right: the three girls in rear view, Bahamut upper right.
+M.shots.ots_skill = { pos: [1.5, 5.2, 6.8], look: [-0.4, 0.9, -3.2], fov: 30, roll: 0, sway: 0.8, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.5, band: 0.14, blur: 4.4 }, enter: behind(RIM) };
+// Item: close behind Paine; the field racks soft.
+M.shots.ots_itm = { pos: [-0.95, 1.7, -0.3], look: [0.8, 1.5, -4.5], fov: 34, roll: 0, sway: 0.45, focus: { ...M.FOCUS_OFF }, tilt: TIGHT, enter: behind(RIM_CLOSE) };
+M.FOCUS_ITM = { id: 'paine', pad: 1.05, blur: 12, feather: 0.45 };
+return ['master', 'ots_atk', 'ots_skill', 'ots_itm'];

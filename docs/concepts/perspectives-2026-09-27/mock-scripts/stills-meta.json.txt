@@ -1,0 +1,220 @@
+{
+ "options": {
+  "P0": {
+   "num": "P00",
+   "slug": "today",
+   "name": "Today",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [],
+   "changed": "Nothing: today's idle master rig (camera sway held at 0 for a still)."
+  },
+  "P0m": {
+   "num": "P00m",
+   "slug": "today-mirrored",
+   "name": "Today, mirrored",
+   "tag": "COMPOSITE (mirrored stand-in)",
+   "standIns": [
+    "every painting mirrored (chiral: asymmetric outfits, Kimahri's broken horn) - stand-in, a build would re-roll them",
+    "plate mirrored too (reads better: light and moon stay consistent with the mirrored key light)",
+    "HUD mirrored as a mock (per-element move, the skew is not flipped)"
+   ],
+   "changed": "Real engine: today's master; the whole 3D scene reflected about the camera axis (x -> -x), so the party stands right facing left and the boss left facing right. HUD blocks moved to their mirror positions as a mock."
+  },
+  "P1": {
+   "num": "P01",
+   "slug": "today-dressed",
+   "name": "Today, dressed",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [],
+   "changed": "Today's camera and staging; far plate and parallax layers swapped for pre-blurred copies (a real-time far-plane DoF), rim light from the boss side on the party and a moon/hole rim on the boss (the actors' rim uniform), contact shadows 0.48 -> 0.72, out-of-focus foreground silhouettes (camera-facing cards with pre-blurred textures), soft bokeh sprites near the lens, a little more mist, saturation +6%."
+  },
+  "P2w": {
+   "num": "P02w",
+   "slug": "over-the-shoulder-without",
+   "name": "Over the Shoulder, today's paintings",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [],
+   "changed": "Camera behind and beside the party at about 1.3h looking at the boss's chest; party re-placed in an arc in front of the camera, boss moved closer; every plane turned to face the lens (yaw only). No new art, so each figure shows its painted front."
+  },
+  "P4": {
+   "num": "P04",
+   "slug": "reverse-angle",
+   "name": "Reverse Angle",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [
+    "far plate = today's plate mirrored and blurred, placed behind the party (TAGGED stand-in; the real option needs a painting of the far side)",
+    "boss = today's front painting darkened to a rim-lit silhouette (no rear painting exists)"
+   ],
+   "changed": "Camera behind and beside the boss at about 0.9h looking back at the party; the default plate, layers and mist hidden, the stand-in plate centred on the view; boss darkened (brightness 0.14, cool tint) with a strong rim; set dressing near the lens cleared; planes turned to the lens."
+  },
+  "P5": {
+   "num": "P05",
+   "slug": "side-stage",
+   "name": "Side Stage",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [],
+   "changed": "Everyone re-placed on one line across the frame; camera square to that line at about 0.8h, long lens (fov 19-21), 23-24 units back; plate re-framed for the lower camera and the ground plane widened so the floor runs to the lens."
+  },
+  "P5m": {
+   "num": "P05m",
+   "slug": "side-stage-mirrored",
+   "name": "Side Stage, mirrored",
+   "tag": "COMPOSITE (mirrored stand-in)",
+   "standIns": [
+    "every painting mirrored (chiral subjects) - stand-in"
+   ],
+   "changed": "As P5 with the sides swapped: party on the right facing left, boss on the left facing right (negative plane scale). Plate not mirrored."
+  },
+  "P6": {
+   "num": "P06",
+   "slug": "diorama",
+   "name": "Diorama",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [
+    "floor = today's ground plane, brightened (it does not hold up from above; see art/REQUEST.md)"
+   ],
+   "changed": "Camera elevated 21-30 degrees, long lens (fov 17-19) from 34-40 units; formation tightened; tilt-shift band narrowed and strengthened (max blur 11-12) across the actors; contact shadows up; saturation lift; floor brightened (and the scene lights raised in Ch IV)."
+  },
+  "P7": {
+   "num": "P07",
+   "slug": "colossus",
+   "name": "Colossus",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [],
+   "changed": "Camera 0.36 units above the floor near the party, pitched up about 15 degrees, fov 45; the boss set back and made 4.3-4.6x taller through its world height (the plane, aim point, shadow and ring follow); plate scaled up and pre-blurred to cover the sky."
+  },
+  "P8": {
+   "num": "P08",
+   "slug": "partys-eyes",
+   "name": "Party's Eyes",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [
+    "HUD mock: the party rows restyled as three portrait cards along the bottom (today's numbers)"
+   ],
+   "changed": "Party figures hidden; camera at the party's eye line (1.6) looking at the boss, fov 35, so the boss fills about 70% of the height; far plate pre-blurred."
+  },
+  "P9": {
+   "num": "P09",
+   "slug": "tabletop",
+   "name": "Tabletop",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [
+    "tokens = today's portraits and turn-order crops in gold (party) and violet (boss) rings, built in the page",
+    "floor = today's ground plane, brightened (stand-in for a floor plate)"
+   ],
+   "changed": "All painted figures hidden; five medallion tokens laid on the floor at the formation's spots; camera 72 degrees down, long lens (fov 22)."
+  },
+  "P11": {
+   "num": "P11",
+   "slug": "cinemascope",
+   "name": "Cinemascope",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [
+    "HUD mock: turn order (FFX only), the chips and the boss plate in the top band; party rows across the bottom band; command list at 0.8 over the image"
+   ],
+   "changed": "Camera low (0.95) behind and beside the party, wide lens (fov 50); party left, boss right; 2.39:1 black bands; out-of-focus foreground silhouettes, soft light shafts (Ch I) or lamp bokeh (Ch IV); far plate pre-blurred."
+  },
+  "P12": {
+   "num": "P12",
+   "slug": "split-diopter",
+   "name": "Split-Diopter",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [
+    "the huge foreground face is the lead's painted PORTRAIT (public/art/portraits), not a crop of the battle idle"
+   ],
+   "changed": "Party figures hidden; the lead's portrait as a camera-facing card 1.4 units from the lens; long lens on the boss; a vertical soft band between face and boss (a two-pass band blur added to the composer, real time); far plate pre-blurred; bloom lowered so the portrait's highlights do not flare."
+  },
+  "P13": {
+   "num": "P13",
+   "slug": "proscenium",
+   "name": "Proscenium",
+   "tag": "REAL ENGINE / existing art",
+   "standIns": [
+    "arch, curtains, apron and footlights = CSS/SVG stand-in drawn over the canvas (TAGGED; the painted arch comes in stage 2)"
+   ],
+   "changed": "Today's master pulled back about 3.3 units; a warm lit pool and a soft additive cone on the lead; the others and the plate dimmed; vignette up."
+  },
+  "P14": {
+   "num": "P14",
+   "slug": "panels",
+   "name": "Panels",
+   "tag": "COMPOSITE",
+   "standIns": [
+    "three real-engine renders (lead close, the whole stage, boss close) assembled into angled panels in the page (2D)"
+   ],
+   "changed": "Three cameras rendered one after another and laid into three angled Ink & Gold panels with gold dividers; the HUD on top is unchanged."
+  }
+ },
+ "weak": {
+  "ffx-ch1": {
+   "P0": "The party reads as three cut-outs turned to the viewer; the boss is only 41% of the height and sits small at the upper right.",
+   "P0m": "Stand-in: Tidus's asymmetric outfit, Kimahri's broken horn and the moon are all flipped; a real version needs re-rolled paintings and a HUD layout.",
+   "P1": "Same angle as today; the dressing is subtle at phone size and two of the three foreground silhouettes sit under the HUD.",
+   "P2w": "Not a candidate, an explanation: every figure shows its painted front, so the party seems to face the camera and turn its back on Seymour.",
+   "P4": "The party is only ~190 px tall, the silhouette is Seymour's front painting darkened, and the turn order and party rows sit over it.",
+   "P5": "The long lens flattens everything and the figures are ~220 px; at the spec's upper-third horizon (alt b) the lower half is an empty floor under the HUD.",
+   "P5m": "Mirrored paintings are a stand-in; Seymour ends up close to the help line and the chips land on the party.",
+   "P6": "Today's ground is a flat tiled field from above; the frame reads empty and the figures are ~165 px. Needs a floor plate.",
+   "P7": "Seymour is today's painting at 4.6x (soft up close); the party overlaps his shins and Mortiorchis is half under the command list.",
+   "P8": "No party on the field at all; Mortiorchis sits behind the command list; the cards are a HUD mock.",
+   "P9": "An outlier: tokens replace the paintings, the floor is today's ground, and the action of the fight is gone.",
+   "P11": "The band HUD is a mock; at this wide lens Seymour is only 32% of the height.",
+   "P12": "The portrait is a different painting style from the battle figures; Mortiorchis is lost in the soft band; the turn order and party rows cover Seymour's right side.",
+   "P13": "The arch is a CSS stand-in, not a painting; the stage inside it is smaller than today's.",
+   "P14": "A composite: the command list covers the lower half of Tidus's panel and the turn order sits beside Seymour's face."
+  },
+  "ffx2-ch4": {
+   "P0": "Three cut-outs bunched on the left facing the viewer; Bahamut is 46% of the height.",
+   "P0m": "Mirrored paintings are a stand-in (Rikku's and Paine's outfits are asymmetric); the Bevelle plate is near-symmetric, so the flip itself reads naturally.",
+   "P1": "Same angle as today; the lamp bokeh can read as dust on the lens and the foreground silhouettes barely register on the dark plate.",
+   "P2w": "Not a candidate, an explanation: the girls show their painted fronts, so they face the camera instead of Bahamut.",
+   "P4": "The girls are ~240 px; the silhouette is Bahamut's front painting darkened and it sits under the command stack and party rows.",
+   "P5": "The long lens flattens depth; the girls are ~227 px on a large empty floor.",
+   "P5m": "Mirrored paintings are a stand-in; otherwise it mirrors P5 cleanly.",
+   "P6": "The deck from above is a dim plate grid; the frame is dark and empty and the figures are ~160 px. Needs a floor plate.",
+   "P7": "Bahamut is today's painting at 4.3x (soft up close) and his left wing crosses the boss HP bar.",
+   "P8": "No party figures on the field; the cards are a HUD mock; the command stack sits over the right wing.",
+   "P11": "The band HUD is a mock; at this wide lens Bahamut is only 39% of the height.",
+   "P12": "The portrait style differs from the battle figures; the boss HP bar crosses Yuna's hair.",
+   "P13": "The arch is a CSS stand-in; the party stays bunched in today's slots.",
+   "P14": "A composite: each panel is narrow, so the stage panel crops the formation."
+  }
+ },
+ "variants": {
+  "ffx-ch1": {
+   "P0m-b": "HUD left as today (not mirrored): the party rows then cover Tidus",
+   "P0m-c": "plate kept unmirrored (moon stays top-left), HUD mirrored",
+   "P1-b": "lighter treatment: one foreground silhouette, three bokeh sprites",
+   "P2w-b": "spec distance (camera about 0.45D behind): the party is huge and cropped, Yuna under the party rows",
+   "P2w-c": "a little wider; Kimahri hidden behind Tidus",
+   "P4-b": "closer silhouette, wider lens",
+   "P5-b": "spec height 0.6h with the horizon in the upper third: an empty floor band under the HUD",
+   "P5-c": "camera at 1.3h looking down",
+   "P5m-b": "boss further left, over the help line and command list",
+   "P6-b": "27 degrees, fov 23",
+   "P6-c": "40 degrees and closer: no plate in view at all",
+   "P7-b": "boss 4x instead of 4.6x: the head stays inside the frame",
+   "P8-b": "lower eye line, boss 62%",
+   "P9-b": "straight down (89 degrees)",
+   "P11-b": "wider lens (fov 54): the boss drops to 26%",
+   "P12-b": "face larger and further left: the help line and command list cross it",
+   "P13-b": "pulled back further, wider arch",
+   "P14-b": "two close-ups on top, the stage across the bottom (the HUD covers the stage)"
+  },
+  "ffx2-ch4": {
+   "P0-b": "enemy-intent slab open, as in the live build",
+   "P0m-b": "HUD left as today (not mirrored)",
+   "P0m-c": "plate kept unmirrored",
+   "P1-b": "lighter treatment",
+   "P2w-b": "boss centred with the girls under him",
+   "P4-b": "girls in today's order: Paine hidden behind the silhouette",
+   "P5-b": "wider lens, figures higher in the frame",
+   "P6-b": "24 degrees without the light boost: nearly black",
+   "P7-b": "boss 3x: he no longer passes the top edge",
+   "P8-b": "lower eye line: Bahamut 91%, the wings leave the frame",
+   "P11-b": "boss further back (32%)",
+   "P12-b": "face smaller, soft band further right",
+   "P13-b": "pulled back further, wider arch"
+  }
+ }
+}

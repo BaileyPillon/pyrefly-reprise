@@ -1,0 +1,59 @@
+// agent scratch (perspectives options round, stills rig A): drive the running REPL through one chapter's options.
+// node drive.mjs <table.mjs> [P,P,...] [--no-enter]
+// Enters the chapter fresh (seed 1, first command menu, presenter paused, guide and best-move panels folded),
+// loads persp-lib + persp-options, then stages, measures and shoots every variant of every option.
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+const DIR = 'D:/Tools/pyrefly-scratch/persp-a';
+const R = 'http://127.0.0.1:5251';
+const [tablePath, only = '', flag = ''] = process.argv.slice(2);
+const { ID, OPTS } = await import(pathToFileURL(tablePath).href);
+const post = async (path, body = '') => { const r = await fetch(R + path, { method: 'POST', body }); const j = await r.json(); if (!j.ok) throw new Error(path + ' ' + JSON.stringify(j).slice(0, 900)); return j; };
+const ev = (js) => post('/eval', js);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+mkdirSync(`${DIR}/raw`, { recursive: true });
+
+async function enter() {
+  await post('/reload');
+  await ev(`const P=window.__pyrefly; await P.waitReady(); P.setSeed(1); P.gotoChapter(${JSON.stringify(ID.chapter)},{skipCutscenes:true,auto:'intended',speed:'skip'}); return 1`);
+  await post('/wait', `(() => { const b = window.__pyrefly.battle(); if (!b?.stage || !b.battlePresenter || !b.stage.staged().includes(${JSON.stringify(ID.bossId)})) return false; b.battlePresenter.setAutoPlay(null); b.battlePresenter.setSpeed('normal'); return true; })()`);
+  await post('/wait', `(() => { const s = document.querySelector(${JSON.stringify(ID.menuSel ?? '.ffx-cmd-area .ig-cmd')}); return !!s && s.getBoundingClientRect().height > 20; })()`);
+  await ev(`__pyrefly.battle().setPresenterPaused(true); return 1`);
+  await sleep(2600); // turn cut-in and banners clear
+  // fold the guide, the best-move advisor and the enemy-intent slab to their chips (pressed only when open)
+  for (const [k, sel, off] of ID.fold ?? [['g', '.sgd', 'sgd--off'], ['n', '.mad', 'mad--off'], ['e', '.eint', 'eint--off']]) {
+    const open = (await ev(`const e=document.querySelector(${JSON.stringify(sel)}); return !!e && !e.classList.contains(${JSON.stringify(off)})`)).r;
+    if (open) { await post('/key?k=' + k); await sleep(400); }
+  }
+  if (ID.waitFolded) await post('/wait', `(() => !!document.querySelector(${JSON.stringify(ID.waitFolded)}))()`);
+  await sleep(600);
+}
+if (flag !== '--no-enter') await enter();
+await ev(readFileSync(`${DIR}/persp-lib.js`, 'utf8'));
+if (ID.pre) await ev(ID.pre);
+await ev(readFileSync(`${DIR}/persp-options.js`, 'utf8'));
+if (ID.pre) await ev(ID.pre);
+await ev(`const W=__persp; W.restore(); W.s0=null; W.init(); W.pinChips(true); ${ID.pin2 ? `W.pin2=${JSON.stringify(ID.pin2)}; W.pinChips(true);` : ''} await __pyrefly.frames(4); return 1`);
+
+const recPath = `${DIR}/raw/${ID.key}${ID.stage ? '-s' + ID.stage : ''}-records.json`;
+const records = existsSync(recPath) ? JSON.parse(readFileSync(recPath, 'utf8')) : {};
+const want = only ? only.split(',') : Object.keys(OPTS);
+const idsOnly = { party: ID.party, boss: ID.boss, lead: ID.lead, bossId: ID.bossId, extra: ID.extra, hudSel: ID.hudSel };
+for (const P of want) {
+  for (const [v, params] of Object.entries(OPTS[P] ?? {})) {
+    const fn = params.fn ?? (P === 'P5m' ? 'P5' : P);
+    const S = { ...idsOnly, ...params };
+    const t0 = Date.now();
+    const m = (await ev(`return await __persp.opts[${JSON.stringify(fn)}](${JSON.stringify(S)});`)).r;
+    for (const k of params.keysBefore ?? []) { await post('/key?k=' + k); await sleep(500); }
+    await sleep(700);
+    const file = `${ID.key}-${P}-${v}.png`;
+    await post('/shot?path=' + encodeURIComponent(`${DIR}/raw/${file}`));
+    for (const k of params.keysAfter ?? []) { await post('/key?k=' + k); await sleep(500); }
+    records[`${P}-${v}`] = { option: P, variant: v, chapter: ID.key, file, params: S, measure: m, ms: Date.now() - t0 };
+    writeFileSync(recPath, JSON.stringify(records, null, 1));
+    console.log(P, v, 'boss%', m?.bossHeightPct, 'group%', m?.bossGroupHeightPct, 'lead px', m?.leadPx, 'hud/boss', m?.hudOverBoss, 'hud/party', m?.hudOverParty);
+  }
+}
+await ev(`__persp.restore(); return 1`);
+console.log('DONE', ID.key, want.join(','));

@@ -1,0 +1,19 @@
+// Chapter I (FFX) M2 shot table: the per-command camera with a TRUE over-the-shoulder. Each command's camera sits
+// behind the party (the same +z side of the field as the master); the party's REAR paintings are swapped in on the cut
+// (or at the whip's blur peak) and the front ones restored on the way back. Formation unchanged (no re-staging).
+const M = __motion;
+const PARTY = ['tidus', 'yuna', 'kimahri'];
+const RIM = { rim: 0xffdad0, rimStrength: 1.15, rimDir: [0.35, 1], rimWidth: 3.2, bounce: 0x9fc4ff, bounceStrength: 0.12 };
+const RIM_CLOSE = { ...RIM, rimStrength: 0.75, bounceStrength: 0.08 };
+const TIGHT = { focus: 0.56, band: 0.3, blur: 1.6 };
+const behind = (lead, rim) => () => { M.rearOn(PARTY, { tidus: lead }); for (const id of PARTY) M.rim(id, id === 'tidus' ? rim : RIM); };
+M.shots.master = { ...M.rigShot('idle'), focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.4, band: 0.16, blur: 4.2 },
+  enter() { M.frontOn(PARTY); for (const id of PARTY) M.rim(id, null); } };
+// Attack: low hero shoulder behind Tidus's right shoulder; Seymour (the target) above him, Kimahri at left.
+M.shots.ots_atk = { pos: [-1.7, 1.55, 2.7], look: [3.8, 2.6, -7.6], fov: 40, roll: 0, sway: 0.5, focus: { ...M.FOCUS_OFF }, tilt: TIGHT, enter: behind('rear34hi', RIM_CLOSE) };
+// Magic: high over-the-shoulder, the whole line from behind and both enemies.
+M.shots.ots_mag = { pos: [-2.4, 5.0, 10.2], look: [0.9, 0.8, -4.0], fov: 30, roll: 0, sway: 0.8, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.42, band: 0.15, blur: 4.6 }, enter: behind('rear34', RIM) };
+// Items: close behind his shoulder looking across at the party; the field racks soft after the cut.
+M.shots.ots_itm = { pos: [-0.55, 1.75, 3.2], look: [-1.6, 1.35, -1.6], fov: 34, roll: 0, sway: 0.45, focus: { ...M.FOCUS_OFF }, tilt: TIGHT, enter: behind('rear34hi', RIM_CLOSE) };
+M.FOCUS_ITM = { id: 'tidus', pad: 1.05, blur: 12, feather: 0.45 };
+return Object.keys(M.shots).filter((k) => k.startsWith('ots') || k === 'master');

@@ -1,0 +1,8 @@
+// Chapter IV M3: behind Yuna (White Mage) for her Cure; the turn passes to Paine and the camera slides to her shoulder.
+const M = __motion;
+const PARTY = ['yuna', 'rikku', 'paine'];
+const RIM = { rim: 0xffcfe0, rimStrength: 1.1, rimDir: [0.45, 1], rimWidth: 3.2, bounce: 0x7fc6ff, bounceStrength: 0.12 };
+M.shots.m3_yuna = { pos: [-2.17, 1.7, 3.6], look: [1.2, 2.2, -5.8], fov: 38, roll: 0, sway: 0.5, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.58, band: 0.3, blur: 1.4 },
+  enter() { M.rearOn(PARTY, { yuna: 'rear34hi' }); for (const id of PARTY) M.rim(id, id === 'yuna' ? { ...RIM, rimStrength: 0.7, bounceStrength: 0.08 } : RIM); } };
+M.shots.m3_paine = { ...M.shots.ots_atk, enter() { M.rim('paine', { ...RIM, rimStrength: 0.7, bounceStrength: 0.08 }); M.rim('yuna', RIM); } };
+return ['m3_yuna', 'm3_paine'];

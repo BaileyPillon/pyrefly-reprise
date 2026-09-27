@@ -1,0 +1,129 @@
+#!/usr/bin/env node
+/**
+ * Perspectives round 2026-09-27 (art agent, stage 2 item 4): REVERSE-ANGLE plates, the far side of an
+ * arena (looking back the way today's camera faces), in the existing plate's style and palette.
+ *
+ *   node tools/zz-persp-art/plates.mjs <gagazet|bevelle-underground> [--n 1,2,3,4] [--ipa 0.7] [--dry]
+ *
+ * The house backdrop preset (tools/gen/comfy.mjs backdropWorkflow: 1344x768 txt2img -> RealESRGAN x4
+ * -> 0.5 = 2688x1536, the style block `detailed background, painterly, cinematic lighting, wide shot`,
+ * BACKDROP_NEGATIVE) plus the EXISTING plate as an IP-Adapter reference with the weight type
+ * "style transfer" (palette and brushwork, not layout), 0 to 1. Candidates only; nothing is installed
+ * into public/art.
+ */
+import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { backdropWorkflow, buildBackdropPrompt, BACKDROP_NEGATIVE, stageImage, joinTags } from '../gen/comfy.mjs';
+import { maxRgbOfPng, isBlackFrame } from '../gen/black-frame.mjs';
+
+const CAND = 'D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives';
+const PLATES = 'D:/Final Fantasy/public/art/backdrops';
+const COMFY = process.env.COMFY_URL || 'http://127.0.0.1:8188';
+const flag = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i >= 0 ? process.argv[i + 1] : d; };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+export const REVERSE = {
+  gagazet: {
+    seed0: 276000,
+    tags: 'snowy mountain trail at night seen looking back downhill, narrow path descending between jagged cliffs, snow drifts, '
+      + 'overhanging rock, blizzard haze, the dark valley far below, distant snowy ridges, cold blue moonlight, pyreflies floating, '
+      + 'dramatic, final fantasy x mt gagazet',
+    // round B: night held harder (round A came back bright and daylit; "pyreflies" drew winged bugs)
+    tagsB: 'night, dark blue night sky, full moon, stars, snowy mountain trail seen looking back downhill, narrow path descending '
+      + 'between jagged cliffs, snow drifts, overhanging rock, blizzard haze, the dark valley far below, distant snowy ridges, cold blue '
+      + 'moonlight, deep shadows, dramatic, final fantasy x mt gagazet',
+    negAdd: 'sun, daylight, sunset, warm light, orange sky, city, buildings, bridge, people, road sign',
+    negAddB: 'sun, daylight, bright sky, blue sky, white clouds, sunset, warm light, orange sky, city, buildings, bridge, people, road sign, insects, dragonflies, bugs, butterflies',
+    // round C (mirrored init): the moon is BEHIND the camera in a reverse view, so it is negated
+    tagsC: 'night, dark blue night sky, stars, snowy mountain trail seen looking back downhill, narrow path descending between jagged '
+      + 'cliffs, snow drifts, overhanging rock, blizzard haze, the dark valley far below, distant snowy ridges, cold blue moonlight, '
+      + 'deep shadows, dramatic, final fantasy x mt gagazet',
+    negAddC: 'moon, planet, sun, daylight, sunset, warm light, orange sky, city, buildings, bridge, people, road sign, insects, dragonflies, bugs',
+  },
+  'bevelle-underground': {
+    seed0: 277000,
+    tags: 'vast machina chamber deep underground seen from the opposite side, giant sealed round blast door, industrial cathedral '
+      + 'of riveted steel plate, ribbed vaults, catwalks at multiple heights, stairways, thick hanging cable bundles, orange emergency '
+      + 'lamps, dark navy steel, teal and rust, steam, deep shadows, immense scale, symmetrical',
+    // round B: round A came back bright, pastel and clean (skylights, lavender light): dark and gritty held harder
+    tagsB: 'dark, dimly lit, low key lighting, vast machina chamber deep underground seen from the opposite side, giant sealed round '
+      + 'blast door, grimy industrial cathedral of riveted black steel plate, dense pipes and machinery, catwalks at multiple heights, '
+      + 'thick hanging cable bundles, glowing orange emergency lamps, dark navy and black steel, rust, steam, deep shadows, immense scale, symmetrical',
+    negAdd: 'sky, outdoors, daylight, trees, people, text, sign',
+    negAddB: 'sky, skylight, glass roof, windows, outdoors, daylight, bright, pastel colors, white walls, clean, marble, trees, people, text, sign',
+  },
+};
+
+async function main() {
+  const [name] = process.argv.slice(2);
+  const R = REVERSE[name];
+  if (!R) throw new Error(`plate must be one of ${Object.keys(REVERSE).join(', ')}`);
+  const want = flag('n', '1,2,3,4').split(',').map(Number);
+  const ipa = { weight: Number(flag('ipa', 0.7)), type: flag('ipaType', 'style transfer'), start: 0, end: 1 };
+  const tag = flag('tag', 'A');
+  const round = flag('round', 'A');
+  const tags = (round === 'C' && R.tagsC) || (round !== 'A' && R.tagsB) || R.tags;
+  const neg = (round === 'C' && R.negAddC) || (round !== 'A' && R.negAddB) || R.negAdd;
+  const positive = buildBackdropPrompt({ tags });
+  const negative = joinTags(BACKDROP_NEGATIVE, neg);
+  if (process.argv.includes('--dry')) { console.log(`+ ${positive}\n- ${negative}`); return; }
+  const dir = join(CAND, 'plates', name, tag);
+  mkdirSync(dir, { recursive: true });
+  const ref = stageImage(join(PLATES, `${name}.png`));
+  // --init mirror: img2img from today's plate MIRRORED (a reverse view of a symmetric hall keeps the
+  // hall's own texture and palette; the SHOT-SPEC's stand-in is exactly that mirror, blurred), repainted
+  // at --denoise with the reverse-view words so the centrepiece and the details are new.
+  const initMode = flag('init', '');
+  const denoise = Number(flag('denoise', 0.7));
+  let init = null;
+  // --shift 0.15: move the horizon UP by that fraction (REQUEST.md: horizon at about 45 % from the top).
+  const shift = Number(flag('shift', 0));
+  if (initMode === 'mirror') {
+    const m = join('D:/Tools/pyrefly-scratch/persp-art', `mirror-${name}-s${shift}.png`);
+    const script = join(fileURLToPath(new URL('.', import.meta.url)), 'mirror-init.py');
+    const r = (await import('node:child_process')).spawnSync('D:/Tools/ComfyUI/python_embeded/python.exe', ['-s', script, join(PLATES, `${name}.png`), m, String(shift)], { encoding: 'utf8' });
+    if (r.status !== 0) throw new Error(r.stderr);
+    init = stageImage(m);
+  }
+  for (const n of want) {
+    if (existsSync(join(dir, `cand-${n}.json`))) continue;
+    for (;;) { const q = await (await fetch(`${COMFY}/queue`)).json(); if ((q.queue_pending?.length || 0) < 3) break; await sleep(4000); }
+    const seed = R.seed0 + n;
+    const t0 = Date.now();
+    const g = backdropWorkflow({
+      positive, negative, width: 1344, height: 768, seed, steps: 30, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal',
+      refImage: ipa.weight > 0 ? ref : null, refWeight: ipa.weight, refWeightType: ipa.type, refStart: ipa.start, refEnd: ipa.end, refScaling: 'K+V',
+      initImage: init, denoise: init ? denoise : 1,
+      prefix: `pyrefly/persp-2026-09-27/plate-${name}-${tag}`,
+    });
+    const res = await fetch(`${COMFY}/prompt`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: g, client_id: 'pyrefly-persp-art' }) });
+    const body = await res.json();
+    if (!res.ok || body.error) throw new Error(`ComfyUI rejected: ${JSON.stringify(body).slice(0, 1500)}`);
+    let e;
+    for (;;) {
+      await sleep(2500);
+      e = (await (await fetch(`${COMFY}/history/${body.prompt_id}`)).json())[body.prompt_id];
+      if (e?.status?.status_str === 'error') throw new Error(JSON.stringify(e.status.messages).slice(0, 800));
+      if (e?.outputs?.['9']?.images?.length) break;
+    }
+    const img = e.outputs['9'].images[0];
+    const qs = new URLSearchParams({ filename: img.filename, subfolder: img.subfolder || '', type: img.type || 'output' });
+    const out = join(dir, `cand-${n}.png`);
+    writeFileSync(out, Buffer.from(await (await fetch(`${COMFY}/view?${qs}`)).arrayBuffer()));
+    const maxRgb = maxRgbOfPng(readFileSync(out));
+    if (maxRgb != null && isBlackFrame(maxRgb)) throw new Error(`${name} #${n}: BLACK FRAME, stopping (no re-roll)`);
+    writeFileSync(join(dir, `cand-${n}.json`), JSON.stringify({
+      round: 'perspectives-2026-09-27', plate: name, view: 'reverse', candidate: n, seed, positive, negative,
+      styleReference: ipa.weight > 0 ? { image: `public/art/backdrops/${name}.png`, file: 'ip-adapter-plus_sdxl_vit-h.safetensors', ...ipa, scaling: 'K+V' } : null,
+      init: init ? { image: `public/art/backdrops/${name}.png MIRRORED, resized to 1344x768${shift ? `, horizon moved up by ${shift} (top cropped, near floor stretched; mirror-init.py)` : ''}`, denoise, shift } : null,
+      model: 'animagine-xl-4.0-opt.safetensors', steps: 30, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal',
+      canvas: { width: 1344, height: 768 }, upscaler: 'RealESRGAN_x4plus.pth', output: { width: 2688, height: 1536 }, maxRgb,
+      seconds: (Date.now() - t0) / 1000, generatedAt: new Date().toISOString(),
+    }, null, 1));
+    console.log(`[persp-plates] ${name}/${tag}#${n} seed ${seed} ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  }
+}
+
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) await main();

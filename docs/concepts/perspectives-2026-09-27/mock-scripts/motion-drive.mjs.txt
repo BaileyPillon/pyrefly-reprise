@@ -1,0 +1,275 @@
+// agent scratch (perspectives round, MOTION rig): drive the zz-persp-b REPL (port 5252) through the motion clips.
+//   node drive.mjs <cmd> [args]
+//   lib <chapterShotsFile>          load motion-lib.js + a shot table into the page
+//   film <clipId> <outDir> [fps]    film one clip deterministically (timeline below), frames to outDir
+//   eval <jsFile>                   run a file through /eval and print the result
+import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+const R = process.env.REPL || 'http://127.0.0.1:5252';
+const JS = 'D:/Tools/pyrefly-scratch/persp-b/js';
+const post = async (path, body = '') => {
+  const r = await fetch(R + path, { method: 'POST', body });
+  const j = await r.json();
+  if (!j.ok) throw new Error(path + ' ' + JSON.stringify(j).slice(0, 1500));
+  return j;
+};
+const ev = (js) => post('/eval', js);
+const [cmd, a1, a2, a3] = process.argv.slice(2);
+
+// ---------------------------------------------------------------- timelines
+// Each event fires on the frame whose time it reaches, BEFORE that frame is simulated: a key is a real
+// keydown/keyup through Playwright (the live HUD reacts to it), js runs in the page.
+const K = (t, key) => ({ t, key });
+const J = (t, js) => ({ t, js: js.includes('return') ? js : js + '; return 1' });
+const go = (t, shot, extra = '') => J(t, `__motion.go('${shot}'${extra ? ', ' + extra : ''})`);
+
+// Chapter I (FFX): the menu starts at the top level with the cursor on ATTACK.
+//   ATTACK (Enter, Right on the same frame) -> reticle on Seymour Flux, Esc
+//   Down Down -> WHITE MAGIC (Enter) -> Haste, Down -> Hastega, Esc
+//   Down -> ITEMS (Enter) -> Potion ..., Esc
+const CH1_KEYS = (cam) => [
+  K(1.0, 'Enter'), K(1.0, 'ArrowRight'), ...(cam ? [go(1.0, 'atk', "{ ms: 450, focusMs: 650 }")] : []),
+  K(3.2, 'Escape'), ...(cam ? [go(3.2, 'master', "{ ms: 450, ease: 'back', focusMs: 380 }")] : []),
+  K(3.95, 'ArrowDown'), K(4.25, 'ArrowDown'),
+  K(4.7, 'Enter'), ...(cam ? [go(4.7, 'mag', "{ ms: 480 }")] : []),
+  K(5.75, 'ArrowDown'),
+  K(6.8, 'Escape'), ...(cam ? [go(6.8, 'master', "{ ms: 450, ease: 'back' }")] : []),
+  K(7.55, 'ArrowDown'),
+  K(8.05, 'Enter'), ...(cam ? [go(8.05, 'itm', "{ ms: 450, focusMs: 950, focusEase: 'inout' }")] : []),
+  K(10.2, 'Escape'), ...(cam ? [go(10.2, 'master', "{ ms: 450, ease: 'back', focusMs: 380 }")] : []),
+];
+// Chapter IV (FFX-2): Paine's menu (Yuna has cast Cure), cursor on ATTACK.
+//   ATTACK (Enter) -> flower reticle on Bahamut, Esc
+//   Down -> SKILL (Enter) -> Power Break, Down -> Armor Break, Esc
+//   Down Down (past CHANGE, cursed) -> ITEM (Enter) -> Potion ..., Esc
+const CH4_KEYS = (cam) => [
+  K(1.0, 'Enter'), ...(cam ? [go(1.0, 'atk', "{ ms: 450, focusMs: 650 }")] : []),
+  K(3.2, 'Escape'), ...(cam ? [go(3.2, 'master', "{ ms: 450, ease: 'back', focusMs: 380 }")] : []),
+  K(3.95, 'ArrowDown'),
+  K(4.45, 'Enter'), ...(cam ? [go(4.45, 'magB', "{ ms: 480 }")] : []),
+  K(5.5, 'ArrowDown'),
+  K(6.55, 'Escape'), ...(cam ? [go(6.55, 'master', "{ ms: 450, ease: 'back' }")] : []),
+  K(7.2, 'ArrowDown'), K(7.5, 'ArrowDown'),
+  K(8.0, 'Enter'), ...(cam ? [go(8.0, 'itm', "{ ms: 450, focusMs: 950, focusEase: 'inout' }")] : []),
+  K(10.15, 'Escape'), ...(cam ? [go(10.15, 'master', "{ ms: 450, ease: 'back', focusMs: 380 }")] : []),
+];
+// M4 (Director's Cut), Chapter I: one continuous take from Tidus's confirm; the event director cuts per beat.
+const M4_CH1_PRE = `const M = __motion; M.reset(); M.hookEvents(); window.__evlog = [];
+M.rules = [
+  { when: (e) => e.type === 'action-start' && e.actorId === 'tidus', then: () => M.cut('side') },
+  { when: (e) => e.type === 'action-start' && e.actorId === 'seymour-flux', then: () => M.cut('rev') },
+  { when: (e) => e.type === 'turn-start' && e.actorId === 'mortiorchis', then: () => M.cut('colo') },
+  { when: (e) => e.type === 'turn-start' && e.actorId === 'kimahri', then: () => M.cut('master') },
+];
+M.direct('master'); M.passes(); __pyrefly.battle().setPresenterPaused(false); return 1`;
+const VICTORY_PRE = (sideShot) => `const M = __motion; M.reset(); M.hookEvents(); window.__evlog = [];
+M.rules = [
+  { when: (e) => e.type === 'action-start' && __pyrefly.battleState().combatants[e.actorId]?.side === 'party', then: () => M.cut('${sideShot}') },
+  { when: (e) => e.type === 'action-start' && __pyrefly.battleState().combatants[e.actorId]?.side !== 'party', then: () => M.cut('master') },
+  { when: (e) => e.type === 'victory', then: () => M.cut('hero') },
+  ...(window.__lastKo ? [{ when: (e) => e.type === 'ko' && e.targetId === window.__lastKo, then: () => { M.cut('hero'); M.rules = M.rules.filter((r) => !r.hero); } , hero: true }] : []),
+];
+M.direct('master'); M.passes(); __pyrefly.battle().setPresenterPaused(false); return 1`;
+// M4 (Director's Cut), Chapter IV: Paine's command -> her hit -> Bahamut's turn; the strategy plays the girls after the confirm.
+const M4_CH4_PRE = `const M = __motion; M.reset(); M.hookEvents(); window.__evlog = [];
+const party = (id) => ['yuna', 'rikku', 'paine'].includes(id);
+M.rules = [
+  { when: (e) => e.type === 'action-start' && party(e.actorId), then: () => M.cut('side') },
+  { when: (e) => e.type === 'action-start' && e.actorId === 'bahamut', then: (e) => { M._flare = /mega.?flare/i.test(e.abilityName || ''); M.cut(M._flare ? 'colo' : 'rev'); } },
+  { when: (e) => e.type === 'damage' && e.sourceId === 'bahamut' && M._flare, then: () => { M._flare = false; M.cut('rev'); } },
+  { when: (e) => e.type === 'victory', then: () => M.cut('hero') },
+  ...(window.__lastKo ? [{ when: (e) => e.type === 'ko' && e.targetId === window.__lastKo, then: () => { M.cut('hero'); M.rules = M.rules.filter((r) => !r.hero); }, hero: true }] : []),
+];
+M.direct('master'); M.passes(); __pyrefly.battle().setPresenterPaused(false); return 1`;
+// Phone: the game's slide-picker (src/ui/common/phoneFraming.ts) re-frames the field on every menu and aim; pinned here
+// to the slide it picks for this menu (-244 px) so the per-command camera can be judged on its own.
+const PIN = "const html = document.documentElement; __motion.onTick = () => { html.style.setProperty('--phud-pan-time', '0s'); html.style.setProperty('--phud-left', '-244px'); for (const l of document.querySelectorAll('.ffx-targeting')) l.style.removeProperty('transform'); __motion.reticle(); };";
+// M2: the per-command camera with a TRUE over-the-shoulder. Same key timeline as M1 (Chapter I).
+// cut: the camera cuts on the key and the rear paintings go in on the same frame.
+// whip: a 0.32 s whip pan with a horizontal motion blur; the paintings swap on the frame the blur peaks.
+const CUT = (t, shot, extra = '') => J(t, `__motion.cut('${shot}')${extra}`);
+const WHIP = (t, shot, arc, ms = 320) => J(t, `const s = __motion.shots['${shot}']; __motion.whip2(s, { ms: ${ms}, peak: 56, lookArc: ${JSON.stringify(arc)}, swap: () => s.enter() })`);
+const RACK = "; __motion.tween('focus', { ...__motion.FOCUS_OFF, ...__motion.FOCUS_ITM }, 900, 'inout')";
+const M2_CH1 = (mode) => [
+  K(1.0, 'Enter'), K(1.0, 'ArrowRight'), mode === 'cut' ? CUT(1.0, 'ots_atk') : WHIP(1.0, 'ots_atk', [2.4, 0, 0]),
+  K(3.2, 'Escape'), mode === 'cut' ? CUT(3.2, 'master') : WHIP(3.2, 'master', [-2.4, 0, 0]),
+  K(3.95, 'ArrowDown'), K(4.25, 'ArrowDown'),
+  K(4.7, 'Enter'), mode === 'cut' ? CUT(4.7, 'ots_mag') : WHIP(4.7, 'ots_mag', [1.6, 0.6, 0]),
+  K(5.75, 'ArrowDown'),
+  K(6.8, 'Escape'), mode === 'cut' ? CUT(6.8, 'master') : WHIP(6.8, 'master', [-1.6, 0.6, 0]),
+  K(7.55, 'ArrowDown'),
+  K(8.05, 'Enter'), mode === 'cut' ? CUT(8.05, 'ots_itm', RACK) : WHIP(8.05, 'ots_itm', [-2.0, 0, 0]), ...(mode === 'cut' ? [] : [J(8.4, RACK.slice(2))]),
+  K(10.2, 'Escape'), mode === 'cut' ? CUT(10.2, 'master') : WHIP(10.2, 'master', [2.0, 0, 0]),
+];
+const M2_PRE = "__motion.reset(); __motion.direct('master'); __motion.passes(); __motion.cut('master'); return 1";
+// M3 (shoulder hand-off), Chapter I, seed 1, the real order: Tidus attacks Seymour; Seymour's Lance of Atrophy, his
+// line, and Mortiorchis's Full-Life play from the high shoulder; Kimahri's turn slides the camera down to his shoulder.
+const M3_CH1_PRE = `const M = __motion; M.reset(); M.hookEvents(); window.__evlog = []; M.direct('master'); M.passes(); M.cut('master');
+M.rules = [
+  { when: (e) => e.type === 'turn-start' && e.actorId === 'seymour-flux', then: () => M.go('m3_high', { ms: 1100, ease: 'inout' }) },
+  { when: (e) => e.type === 'turn-start' && e.actorId === 'kimahri', then: () => M.go('m3_kim', { ms: 800, ease: 'move', arc: [-2.0, 0.3, 0] }) },
+];
+__pyrefly.battle().setPresenterPaused(false); return 1`;
+// M4 complete, Chapter I: the command over the shoulder, then the painted reverse plate + Seymour's rear painting.
+const M4B_CH1_PRE = `const M = __motion; M.reset(); M.hookEvents(); window.__evlog = []; M.direct('master'); M.passes(); M.cut('master');
+M.rules = [
+  { when: (e) => e.type === 'action-start' && e.actorId === 'tidus', then: () => M.cut('side4') },
+  { when: (e) => e.type === 'action-start' && e.actorId === 'seymour-flux', then: () => M.cut('rev4') },
+  { when: (e) => e.type === 'turn-start' && e.actorId === 'mortiorchis', then: () => M.cut('colo4') },
+  { when: (e) => e.type === 'turn-start' && e.actorId === 'kimahri', then: () => M.cut('master') },
+];
+__pyrefly.battle().setPresenterPaused(false); return 1`;
+const M4B_WIN_PRE = `const M = __motion; M.reset(); M.hookEvents(); window.__evlog = []; M.direct('master'); M.passes(); M.cut('master');
+const party = (id) => ['tidus', 'yuna', 'kimahri', 'auron', 'wakka', 'lulu', 'rikku'].includes(id);
+M.rules = [
+  { when: (e) => e.type === 'action-start' && party(e.actorId), then: () => M.cut('side4') },
+  { when: (e) => e.type === 'action-start' && !party(e.actorId), then: () => M.cut('rev4') },
+  { when: (e) => e.type === 'message' && /Mortibsorption/.test(e.text || ''), then: () => M.cut('rev4') },
+  { when: (e) => e.type === 'ko' && e.targetId === 'seymour-flux', then: () => M.cut('hero4') },
+  { when: (e) => e.type === 'victory', then: () => { if (M.val('cam')?.fov !== M.shots.hero4.fov) M.cut('hero4'); } },
+];
+__pyrefly.battle().setPresenterPaused(false); return 1`;
+// FFX-2 clips run the SHIPPED Wait clock: presenter live, Wait with its faithful split (the ATB runs while the top-level
+// list is up and holds in a submenu or the target cursor; src/app/waitSplitSwitch.ts, DEFAULT_WAIT_SPLIT = true).
+const LIVE = "__pyrefly.battle().setPresenterPaused(false);";
+const M2_CH4 = (mode) => [
+  K(1.0, 'Enter'), mode === 'cut' ? CUT(1.0, 'ots_atk') : WHIP(1.0, 'ots_atk', [2.0, 0, 0]),
+  K(3.2, 'Escape'), mode === 'cut' ? CUT(3.2, 'master') : WHIP(3.2, 'master', [-2.0, 0, 0]),
+  K(3.95, 'ArrowDown'),
+  K(4.45, 'Enter'), mode === 'cut' ? CUT(4.45, 'ots_skill') : WHIP(4.45, 'ots_skill', [1.8, 0.6, 0]),
+  K(5.5, 'ArrowDown'),
+  K(6.55, 'Escape'), mode === 'cut' ? CUT(6.55, 'master') : WHIP(6.55, 'master', [-1.8, 0.6, 0]),
+  K(7.2, 'ArrowDown'), K(7.5, 'ArrowDown'),
+  K(8.0, 'Enter'), mode === 'cut' ? CUT(8.0, 'ots_itm', RACK) : WHIP(8.0, 'ots_itm', [-1.6, 0, 0]), ...(mode === 'cut' ? [] : [J(8.35, RACK.slice(2))]),
+  K(10.15, 'Escape'), mode === 'cut' ? CUT(10.15, 'master') : WHIP(10.15, 'master', [1.6, 0, 0]),
+];
+const M2_CH4_PRE = `__motion.reset(); __motion.hookEvents(); window.__evlog = []; __motion.direct('master'); __motion.passes(); __motion.cut('master'); ${LIVE} return 1`;
+// M3 (shoulder hand-off), Chapter IV, seed 1, the real order: Yuna (White Mage) casts Cure on herself, then Paine's menu.
+const M3_CH4_PRE = `const M = __motion; M.reset(); M.hookEvents(); window.__evlog = []; M.direct('master'); M.passes(); M.cut('master');
+// In FFX-2 a girl's turn-start fires when she ACTS; her menu opening is read off the command list (Paine's has Attack).
+M._handoff = false; M._handoffAt = null;
+M.onTick = () => { if (M._handoff) return; const labels = [...document.querySelectorAll('.ffx2hud__command .ffx2cmd__label')].map((e) => e.textContent);
+  if (labels.includes('Attack')) { M._handoff = true; M._handoffAt = performance.now(); M.go('m3_paine', { ms: 900, ease: 'inout', arc: [0.35, 0.25, 0] }); } };
+${LIVE} return 1`;
+// M4 complete, Chapter IV (live Wait clock): Paine's command over her shoulder, the hit side-on, Bahamut from the painted
+// reverse with his rear painting, Mega Flare from the colossus angle (cut to the reverse on impact), the last blow, victory.
+const M4B_CH4_PRE = `const M = __motion; M.reset(); M.hookEvents(); window.__evlog = []; M.direct('master'); M.passes(); M.cut('master');
+const party = (id) => ['yuna', 'rikku', 'paine'].includes(id);
+M.rules = [
+  { when: (e) => e.type === 'action-start' && party(e.actorId), then: () => M.cut('side4') },
+  { when: (e) => e.type === 'action-start' && e.actorId === 'bahamut', then: (e) => { M._flare = /mega.?flare/i.test(e.abilityName || ''); M.cut(M._flare ? 'colo4' : 'rev4'); } },
+  { when: (e) => e.type === 'damage' && e.sourceId === 'bahamut' && M._flare, then: () => { M._flare = false; M.cut('rev4'); } },
+  { when: (e) => e.type === 'ko' && e.targetId === 'bahamut', then: () => M.cut('hero4') },
+  { when: (e) => e.type === 'victory', then: () => { if (M.val('cam')?.fov !== M.shots.hero4.fov) M.cut('hero4'); } },
+];
+${LIVE} return 1`;
+// M5 In the Round (Chapter IV): filmed with Paine's Skill list open, where the shipped Wait clock holds (nothing acts).
+const M5_PRE = () => readFileSync(`${JS}/m5-round.js`, 'utf8').replace(/return \{ pos: POS, swapped: S.swapped \};\s*$/, '') + ` ${LIVE} return 1`;
+// M6 Cinematic Shoulder (Chapter I): M2's hard cuts inside 2.39:1 bands with the HUD moved into them (mock, m6-cinema.js).
+const M6_PRE = () => "__motion.reset(); __motion.direct('master'); __motion.passes(); __motion.cut('master'); " + readFileSync(`${JS}/m6-cinema.js`, 'utf8').replace(/return \{ band, ctbTiles: rows.length, faces: faces.length \};\s*$/, '') + " return 1";
+const CLIPS = {
+  'M6-ffx-ch1': { dur: 11.6, pre: M6_PRE(), events: M2_CH1('cut') },
+  'M5-ffx2-ch4': { dur: 10.2, pre: M5_PRE(), events: [] },
+  'M4-ffx2-ch4-take2': { dur: 11.0, pre: M4B_CH4_PRE, events: [K(0.3, 'Enter'), CUT(0.3, 'm4_cmd'), K(1.95, 'Enter'), J(2.0, "__pyrefly.autoBattle('intended')")] },
+  'M4-ffx2-ch4-flare2': { dur: 30, pre: M4B_CH4_PRE, events: [], until: "return (window.__evlog || []).some((e) => e.type === 'action-end' && e.actor === 'bahamut')", after: 1.0 },
+  'M4-ffx2-ch4-win2': { dur: 60, pre: M4B_CH4_PRE, events: [], until: "return (window.__evlog || []).some((e) => e.type === 'victory')", after: 4.0 },
+  'M3-ffx2-ch4': { dur: 9.5, pre: M3_CH4_PRE, events: [K(0.5, 'Enter'), CUT(0.5, 'm3_yuna'), K(1.6, 'Enter'), K(2.6, 'Enter')],
+    until: "return window.__motion._handoff === true", after: 2.8 },
+  'M2-ffx2-ch4-cut': { dur: 11.6, pre: M2_CH4_PRE, events: M2_CH4('cut') },
+  'M2-ffx2-ch4-whip': { dur: 11.6, pre: M2_CH4_PRE, events: M2_CH4('whip') },
+  'M1-ffx2-ch4-wait': { dur: 11.6, pre: "__motion.reset(); __motion.hookEvents(); window.__evlog = []; __motion.direct('master'); __motion.passes(); " + LIVE + " return 1", events: CH4_KEYS(true) },
+  'M0-ffx2-ch4-wait': { dur: 11.6, pre: "__motion.reset(); __motion.hookEvents(); window.__evlog = []; " + LIVE + " return 1", events: CH4_KEYS(false) },
+  'M4-ffx-ch1-take2': { dur: 11.5, pre: M4B_CH1_PRE, events: [K(0.3, 'Enter'), K(0.3, 'ArrowRight'), CUT(0.3, 'm4_cmd'), K(1.95, 'Enter')] },
+  'M4-ffx-ch1-win2': { dur: 60, pre: M4B_WIN_PRE, events: [], until: "return (window.__evlog || []).some((e) => e.type === 'victory')", after: 4.0 },
+  'M3-ffx-ch1': { dur: 16, pre: M3_CH1_PRE, events: [K(0.5, 'Enter'), K(0.5, 'ArrowRight'), CUT(0.5, 'm3_tidus'), K(1.8, 'Enter')],
+    until: "return (window.__evlog || []).some((e) => e.type === 'turn-start' && e.actor === 'kimahri')", after: 2.3 },
+  'M2-ffx-ch1-cut': { dur: 11.6, pre: M2_PRE, events: M2_CH1('cut') },
+  'M2-ffx-ch1-whip': { dur: 11.6, pre: M2_PRE, events: M2_CH1('whip') },
+  'M1-ffx-ch1-phone': { dur: 11.6, pre: `__motion.reset(); ${PIN} __motion.direct('master'); __motion.passes(); return 1`, events: CH1_KEYS(true) },
+  'M0-ffx-ch1-phone': { dur: 11.6, pre: `__motion.reset(); return 1`, events: CH1_KEYS(false) },
+  'M4-ffx2-ch4-take': { dur: 12.0, pre: M4_CH4_PRE, events: [K(0.3, 'Enter'), go(0.3, 'atk', "{ ms: 450, focusMs: 650 }"), K(1.95, 'Enter'), J(2.0, "__pyrefly.autoBattle('intended')")] },
+  'M4-ffx2-ch4-flare': { dur: 30, pre: M4_CH4_PRE, events: [], until: "return (window.__evlog || []).some((e) => e.type === 'action-end' && e.actor === 'bahamut' && window.__flareSeen)", after: 1.0 },
+  'M4-ffx2-ch4-victory': { dur: 60, pre: M4_CH4_PRE, events: [], until: "return (window.__evlog || []).some((e) => e.type === 'victory')", after: 4.0 },
+  'M4-ffx-ch1-victory': { dur: 60, pre: VICTORY_PRE('side'), events: [], until: "return (window.__evlog || []).some((e) => e.type === 'victory')", after: 4.0 },
+  // command beat = M1's low attack framing (stage-1 stand-in for the over-the-shoulder), then the director takes over
+  'M4-ffx-ch1-take': { dur: 10.9, pre: M4_CH1_PRE, events: [K(0.3, 'Enter'), K(0.3, 'ArrowRight'), go(0.3, 'atk', "{ ms: 450, focusMs: 650 }"), K(1.95, 'Enter')] },
+  'M1-ffx2-ch4': { dur: 11.6, pre: "__motion.reset(); __motion.direct('master'); __motion.passes(); return 1", events: CH4_KEYS(true) },
+  'M0-ffx2-ch4': { dur: 11.6, pre: '__motion.reset(); return 1', events: CH4_KEYS(false) },
+  'M1-ffx-ch1': { dur: 11.6, pre: "__motion.reset(); __motion.direct('master'); __motion.passes(); return 1", events: CH1_KEYS(true) },
+  'M0-ffx-ch1': { dur: 11.6, pre: '__motion.reset(); return 1', events: CH1_KEYS(false) },
+};
+
+if (cmd === 'lib') {
+  await ev(readFileSync(`${JS}/motion-lib.js`, 'utf8'));
+  await ev(readFileSync(`${JS}/motion-lib2.js`, 'utf8'));
+  const r = await ev(readFileSync(a1, 'utf8'));
+  console.log('lib + shots:', JSON.stringify(r.r));
+} else if (cmd === 'film') {
+  const clip = CLIPS[a1];
+  if (!clip) throw new Error('no clip ' + a1);
+  const out = a2;
+  mkdirSync(out, { recursive: true });
+  // a re-take must not leave the previous take's extra frames behind (ffmpeg reads the numbered files until a gap)
+  const { readdirSync, unlinkSync } = await import('node:fs');
+  for (const f of readdirSync(out)) if (/^\d{5}\.jpg$/.test(f) || f === 'film.json' || f === 'evlog.json') unlinkSync(out + '/' + f);
+  await post('/clock/resume');
+  await ev(clip.pre);
+  const r = await post('/film', JSON.stringify({ dir: out, fps: +(a3 || 30), dur: clip.dur, events: clip.events, sub: 2, q: 95, warm: 6, until: clip.until, after: clip.after }));
+  await post('/clock/resume');
+  writeFileSync(`${out}/film.json`, JSON.stringify({ clip: a1, ...r, events: clip.events }, null, 1));
+  console.log(a1, 'frames', r.frames, 'real s', r.realSec, 'errs', JSON.stringify(r.errs).slice(0, 500));
+} else if (cmd === 'setup') {
+  // a fresh seed-1 run of the chapter to the first menu we film, presenter paused, tutorial panels hidden
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  await post('/clock/resume').catch(() => {});
+  const ch = a1 === 'ch4' ? 'ffx2-bahamut' : 'seymour-flux';
+  const sel = a1 === 'ch4' ? '.ffx2hud__command' : '.ig-cmd-stack';
+  await ev(`try { __motion.reset(); } catch (e) {} const P = window.__pyrefly; await P.waitReady(); P.setSeed(${+(a2 || 1)}); P.gotoChapter('${ch}', { skipCutscenes: true, speed: 'skip' }); return 1`);
+  await post('/wait', `(() => { const b = window.__pyrefly.battle(); const s = document.querySelector('${sel}'); return !!(b && b.stage && s && !s.hidden && s.getBoundingClientRect().height > 20); })()`);
+  await ev(`const b = __pyrefly.battle(); b.battlePresenter.setSpeed('normal'); b.setPresenterPaused(true); return 1`);
+  await sleep(600);
+  // hide the guide / best-move panels and the enemy-intent card if they are open (G, N, E toggle them)
+  const open = (await ev(`const q = (s) => [...document.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 60); return { g: q('.strategy-guide__panel, .sg-panel, [data-role=strategy-guide] .open'), txt: document.body.innerText.includes('HIDE GUIDE'), moves: document.body.innerText.includes('HIDE MOVES'), intent: document.body.innerText.includes('ACTS NEXT') }`)).r;
+  if (open.txt) { await post('/key?k=g'); await sleep(250); }
+  if (open.moves) { await post('/key?k=n'); await sleep(250); }
+  if (open.intent) { await post('/key?k=e'); await sleep(250); }
+  if (a1 === 'ch4' && process.env.YUNA_MENU === '1') {
+    console.log('stopped at the first menu of Yuna');
+  } else if (a1 === 'ch4') {
+    // Yuna (White Mage, no Attack) opens with Cure on herself by real keys; stop on Paine's menu after it lands
+    await post('/key?k=Enter'); await sleep(450); await post('/key?k=Enter'); await sleep(450); await post('/key?k=Enter'); await sleep(250);
+    await ev(`__pyrefly.battle().setPresenterPaused(false); return 1`);
+    await post('/wait', `(() => { const log = window.__pyrefly.battleLog(); let open = 0; for (const e of log) { if (e.type === 'action-start') open++; if (e.type === 'action-end') open--; } const s = document.querySelector('.ffx2hud__command'); const labels = s ? [...s.querySelectorAll('.ffx2cmd__label')].map(e => e.textContent) : []; const ok = open <= 0 && log.some(e => e.type === 'action-end' && e.actorId === 'yuna') && !!(s && s.getBoundingClientRect().height > 20 && labels.includes('Attack')); if (ok) window.__pyrefly.battle().setPresenterPaused(true); return ok; })()`);
+    await sleep(2500);
+    await ev(`__pyrefly.battle().stage.actor('yuna').setPose('idle', { immediate: true, force: true }); return 1`);
+  }
+  console.log('setup', a1, JSON.stringify(open), JSON.stringify((await ev(`return document.body.innerText.slice(0, 0) + [...document.querySelectorAll('${sel} .ig-cmd, ${sel} .ffx2cmd__label')].map(e => e.textContent.trim()).join('|')`)).r));
+} else if (cmd === 'nearend') {
+  // auto-play the chapter at skip speed until the boss is at <= a1 % HP, then drop to normal speed and pause there
+  const boss = a2 || 'seymour-flux'; const pct = +(a1 || 8) / 100;
+  await ev(`const M = __motion; M.reset(); M.hookEvents(); window.__nearEnd = false;
+    const b = __pyrefly.battle();
+    M.rules = [{ when: (e) => e.type === 'damage' || e.type === 'ko', then: () => { const c = __pyrefly.battleState().combatants['${boss}']; if (!window.__nearEnd && c && c.hp <= c.stats.maxHp * ${pct}) { window.__nearEnd = true; b.battlePresenter.setSpeed('normal'); b.setPresenterPaused(true); } } }];
+    __pyrefly.autoBattle('intended'); b.battlePresenter.setSpeed('skip'); b.setPresenterPaused(false); return 1`);
+  await post('/wait', `(() => window.__nearEnd === true || window.__pyrefly.screen() !== 'battle')()`);
+  const st = (await ev(`const s = __pyrefly.battleState(); return { screen: __pyrefly.screen(), hp: Object.fromEntries(Object.entries(s.combatants).map(([k, c]) => [k, c.hp + "/" + c.stats.maxHp])), turn: s.turn }`)).r;
+  console.log('nearend', JSON.stringify(st));
+} else if (cmd === 'untilab') {
+  // auto-play at skip speed until an action whose name matches a1 is about to play, then pause right there
+  await ev(`const M = __motion; M.reset(); M.hookEvents(); window.__flareSeen = false;
+    const b = __pyrefly.battle();
+    M.rules = [{ when: (e) => e.type === 'action-start' && new RegExp(${JSON.stringify(a1)}, 'i').test(e.abilityName || ''), then: () => { if (window.__flareSeen) return; window.__flareSeen = true; b.battlePresenter.setSpeed('normal'); b.setPresenterPaused(true); } }];
+    __pyrefly.autoBattle('intended'); b.battlePresenter.setSpeed('skip'); b.setPresenterPaused(false); return 1`);
+  await post('/wait', `(() => window.__flareSeen === true || window.__pyrefly.screen() !== 'battle')()`);
+  const st = (await ev(`const s = __pyrefly.battleState(); return { screen: __pyrefly.screen(), turn: s && s.turn, hp: s && Object.fromEntries(['yuna','rikku','paine','bahamut'].map((k) => [k, s.combatants[k] && s.combatants[k].hp])) }`)).r;
+  console.log('untilab', a1, JSON.stringify(st));
+} else if (cmd === 'menu') {
+  // back out to the top level, then walk the cursor to the row whose label starts with a1
+  const sel = async () => (await ev(`const s = document.querySelector('.ig-cmd-stack .ig-cmd--selected, .ffx2hud__command .is-selected, [class*="cmd"][class*="selected"]'); const c = document.querySelector('.ffx-cmd-breadcrumb'); return { sel: s ? s.textContent.trim() : null, sub: !!(c && !c.hidden), tgt: document.querySelectorAll('.ffx-target').length }`)).r;
+  for (let i = 0; i < 3; i++) { const s = await sel(); if (!s.sub && !s.tgt) break; await post('/key?k=Escape'); await new Promise((r) => setTimeout(r, 350)); }
+  for (let i = 0; i < 12; i++) { const s = await sel(); if (s.sel && s.sel.toLowerCase().startsWith(a1.toLowerCase())) { console.log('menu at', s.sel); break; } await post('/key?k=' + (a2 || 'ArrowUp')); await new Promise((r) => setTimeout(r, 250)); }
+} else if (cmd === 'eval') {
+  const r = await ev(readFileSync(a1, 'utf8'));
+  console.log(JSON.stringify(r.r, null, 1).slice(0, 4000));
+} else {
+  console.log('usage: lib|film|eval');
+}

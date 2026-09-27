@@ -1,0 +1,13 @@
+// Chapter IV (ffx2-bahamut, FFX-2), stage 2: the tuned values live in stage2-ch4.json (written while framing);
+// P16 beats reuse stage-1 P4-a and P7-a with the HUD down. Every option runs through the general staging `G`.
+import { readFileSync } from 'node:fs';
+import { ID as ID1, OPTS as S1 } from './table-ch4.mjs';
+const J = JSON.parse(readFileSync('D:/Tools/pyrefly-scratch/persp-a/stage2-ch4.json', 'utf8'));
+export const ID = { ...ID1, stage: 2 };
+const g = (o) => Object.fromEntries(Object.entries(o).map(([v, p]) => [v, { fn: 'G', ...p }]));
+const beat = (p, extra = {}) => ({ fn: p.fn ?? 'G', ...p, hudOff: true, noRing: true, ...extra });
+export const OPTS = {
+  ...Object.fromEntries(Object.entries(J).map(([k, v]) => [k, g(v)])),
+  P16enemy: { a: { ...beat({ ...S1.P4.a, fn: 'P4' }) } },
+  P16big: { a: { ...beat({ ...S1.P7.a, fn: 'P7' }) } },
+};

@@ -1,0 +1,10 @@
+// agent scratch (perspectives options round, stills rig A): repo config on port 5241, HMR and watcher off, private dep cache.
+import base from './vite.config.ts';
+export default (env) => {
+  const c = typeof base === 'function' ? base(env) : base;
+  return {
+    ...c,
+    cacheDir: 'D:/pyrefly-mock-persp/.vite-cache-a',
+    server: { ...(c.server ?? {}), port: 5241, strictPort: true, host: '127.0.0.1', hmr: false, watch: { ignored: ['**/*'] }, fs: { strict: false } },
+  };
+};

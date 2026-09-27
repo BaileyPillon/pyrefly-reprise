@@ -1,0 +1,10 @@
+// Chapter I M3: the shoulder hand-off in the REAL turn order at seed 1 (Tidus -> Seymour Flux -> Mortiorchis -> Kimahri).
+// Once the camera is behind the party it stays there: no painting swaps after the first cut, only camera moves.
+const M = __motion;
+const PARTY = ['tidus', 'yuna', 'kimahri'];
+const RIM = { rim: 0xffdad0, rimStrength: 1.15, rimDir: [0.35, 1], rimWidth: 3.2, bounce: 0x9fc4ff, bounceStrength: 0.12 };
+M.shots.m3_tidus = { ...M.shots.ots_atk, enter() { M.rearOn(PARTY, { tidus: 'rear34hi' }); for (const id of PARTY) M.rim(id, id === 'tidus' ? { ...RIM, rimStrength: 0.75, bounceStrength: 0.08 } : RIM); } };
+M.shots.m3_high = { ...M.shots.ots_mag, enter() { M.rim('tidus', RIM); } };
+M.shots.m3_kim = { pos: [-1.45, 1.7, 0.7], look: [3.9, 2.5, -9.6], fov: 38, roll: 0, sway: 0.5, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.56, band: 0.3, blur: 1.6 },
+  enter() { M.rim('kimahri', { ...RIM, rimStrength: 0.55, bounceStrength: 0.06 }); } };
+return ['m3_tidus', 'm3_high', 'm3_kim'];

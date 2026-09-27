@@ -1,0 +1,162 @@
+# Perspectives options round, stills rig A, FINAL pass: P6 Diorama (both chapters) and P9 Tabletop (Ch I) on the art
+# agent's painted floor plates; stage-1 stand-ins become frames/alt/*-standin.jpg; frames.json updated; sheets 03 and 04
+# rebuilt from the delivered JPEGs (raw captures of earlier passes are gone); sheets/06-final-all.jpg written.
+import json, os, shutil
+from PIL import Image, ImageDraw, ImageFont
+
+RAW = 'D:/Tools/pyrefly-scratch/persp-a/raw'
+OUT = 'D:/Final Fantasy/docs/concepts/perspectives-2026-09-27'
+CH = {'ffx-ch1': {'game': 'FFX', 'title': 'Chapter I (FFX) · Seymour Flux + Mortiorchis'},
+      'ffx2-ch4': {'game': 'FFX-2', 'title': 'Chapter IV (FFX-2) · Bahamut'}}
+NUM = {'P0': 'P00', 'P0m': 'P00m', 'P1': 'P01', 'P2-without': 'P02w', 'P2': 'P02', 'P2h': 'P02h', 'P2l': 'P02l', 'P2wd': 'P02wd', 'P2r': 'P02r', 'P3': 'P03',
+       'P4': 'P04', 'P5': 'P05', 'P5m': 'P05m', 'P6': 'P06', 'P7': 'P07', 'P8': 'P08', 'P9': 'P09', 'P10': 'P10', 'P11': 'P11', 'P12': 'P12', 'P13': 'P13',
+       'P14': 'P14', 'P15': 'P15', 'P16': 'P16', 'P21': 'P21', 'P22': 'P22'}
+TAG = 'REAL ENGINE + NEW ART (candidate)'
+FIN = {
+ ('ffx-ch1', 'P6'): {'rec': 'P6fin', 'name': 'Diorama', 'base': 'P06-diorama',
+   'standIns': ["floor = the art agent's painted Gagazet floor plate (candidate), laid 1:1 on the scene's ground mesh", 'the stage-1 version on today\'s tiled ground is kept as frames/alt/ffx-ch1-P06-diorama-standin.jpg'],
+   'changed': 'Camera 38 degrees up, fov 24, 21 units out; the painted floor plate (4096 px, straight down) replaces the tiled ground and the procedural snow drifts, lit by the scene\'s moon key; tilt-shift band across the actors; contact shadows 0.7; saturation +12%.',
+   'weak': 'The figures are ~190 px; the painted ice pockets glow like light sources (the art agent\'s own note); the command list covers the left of the floor.',
+   'b': '27 degrees, fov 23, from further back: more backdrop, smaller figures'},
+ ('ffx2-ch4', 'P6'): {'rec': 'P6fin', 'name': 'Diorama', 'base': 'P06-diorama',
+   'standIns': ["floor = the art agent's painted Bevelle deck plate (candidate), shown unlit exactly as painted on the scene's deck mesh (the deck-reflections overlay hidden)", 'the stage-1 version on today\'s deck is kept as frames/alt/ffx2-ch4-P06-diorama-standin.jpg'],
+   'changed': 'Camera 32 degrees up, fov 20, 32 units out, orbited 25 degrees to the right so the painted hole glows beside Bahamut; the girls spread in an arc; tilt-shift band across the actors.',
+   'weak': 'The girls are ~160 px and the lower third of the deck stays dark; the hole reads as a round portal more than torn plating (the art agent\'s own note).',
+   'b': 'the stage-1 side (18 degrees left): the painted hole hides behind Bahamut'},
+ ('ffx-ch1', 'P9'): {'rec': 'P9fin', 'name': 'Tabletop', 'base': 'P09-tabletop',
+   'standIns': ["tokens = today's portraits and turn-order crops in gold (party) and violet (boss) rings, built in the page", "floor = the art agent's painted Gagazet floor plate (candidate); the stage-1 version is kept as frames/alt/ffx-ch1-P09-tabletop-standin.jpg"],
+   'changed': 'All painted figures hidden; five medallion tokens on the painted floor plate at the formation\'s spots; camera 72 degrees down, long lens (fov 22).',
+   'weak': 'Still an outlier: tokens replace the paintings and the action of the fight is gone; the scene\'s low-poly rocks sit on the painted floor at the left edge.',
+   'b': 'straight down (89 degrees)'},
+}
+F = 'C:/Windows/Fonts/'
+def font(n, s): return ImageFont.truetype(F + n, s)
+BOLD, REG = 'segoeuib.ttf', 'segoeui.ttf'
+INK, PAPER, GOLD, GREY, PINK = (16, 12, 24), (246, 242, 234), (227, 185, 74), (170, 164, 186), (244, 155, 184)
+def tagcol(t):
+    for k, v in {'REAL ENGINE / existing art': (46, 125, 90), 'REAL ENGINE + NEW ART': (40, 90, 170), 'REAL ENGINE + POST': (150, 100, 30), 'COMPOSITE': (140, 40, 70)}.items():
+        if t.startswith(k): return v
+    return (90, 90, 90)
+def save_jpg(im, path, q=88):
+    os.makedirs(os.path.dirname(path), exist_ok=True); im.convert('RGB').save(path, quality=q, optimize=True, progressive=True)
+def rel(p): return os.path.relpath(p, OUT).replace('\\', '/')
+
+FJ = json.load(open(f'{OUT}/frames/frames.json', encoding='utf-8'))
+for (key, opt), spec in FIN.items():
+    if next(f for f in FJ['frames'] if f['chapter'] == key and f['option'] == opt).get('stage') == 3: continue  # already applied (re-runs only redraw the sheets)
+    rec = json.load(open(f'{RAW}/{key}-s3-records.json', encoding='utf-8'))
+    ra, rb = rec[f"{spec['rec']}-a"], rec[f"{spec['rec']}-b"]
+    main = f"{OUT}/frames/{key}/{spec['base']}.jpg"; standin = f"{OUT}/frames/alt/{key}-{spec['base']}-standin.jpg"
+    if not os.path.exists(standin): shutil.copyfile(main, standin)
+    save_jpg(Image.open(f"{RAW}/{ra['file']}"), main)
+    altb = f"{OUT}/frames/alt/{key}-{spec['base']}-floor-b.jpg"; save_jpg(Image.open(f"{RAW}/{rb['file']}"), altb)
+    old = next(f for f in FJ['frames'] if f['chapter'] == key and f['option'] == opt)
+    olds = [{'file': a['file'] if isinstance(a, dict) else a, 'note': 'stage 1, today\'s ground: ' + (a.get('note', '') if isinstance(a, dict) else '')} for a in old.get('alternates', [])]
+    ms = ra['measure'] or {}; c = ms.get('cam') or {}
+    boss, lead, bnote, lnote = ms.get('bossHeightPct'), ms.get('leadPx'), None, None
+    if opt == 'P9':
+        tr = ms.get('tokenRects', {}); boss = round(100 * tr['seymour-flux'][3] / 1080, 1); lead = tr['tidus'][3]
+        bnote = 'boss token diameter as % of frame height'; lnote = 'token diameter (px): the paintings are replaced by tokens'
+    hb, hp = ms.get('hudOverBoss'), ms.get('hudOverParty')
+    new = {'stage': 3, 'pass': 'final (floor plates)', 'option': opt, 'name': spec['name'], 'chapter': key, 'game': CH[key]['game'], 'file': rel(main), 'provenance': TAG,
+           'standIns': spec['standIns'], 'camera': {'position': [round(v, 3) for v in c.get('position', [])], 'lookAt': [round(v, 3) for v in c.get('lookAt', [])], 'fov': c.get('fov'), 'roll': c.get('roll', 0)},
+           'changed': spec['changed'], 'bossHeightPct': boss, 'bossNote': bnote, 'bossGroupHeightPct': ms.get('bossGroupHeightPct'), 'bossVisibleHeightPct': ms.get('bossVisibleHeightPct'),
+           'leadFigurePx': lead, 'leadNote': lnote,
+           'hudOverlap': {'boss': hb, 'party': hp, 'overlaps': [n for n, v in (('boss', hb), ('party', hp)) if v is not None and v >= 0.05] or ['none'], 'how': "share of the figure's screen box under a HUD panel (24x24 samples)"},
+           'weak': spec['weak'],
+           'alternates': [{'file': rel(altb), 'note': spec['b']}, {'file': rel(standin), 'note': "stage-1 kept frame on today's ground (stand-in floor)"}] + olds,
+           'params': {k: v for k, v in ra['params'].items() if k not in ('party', 'boss', 'lead', 'bossId', 'extra', 'hudSel', 'fn')}, 'replacesStage1': "the stage-1 frame on today's ground, now an alternate"}
+    if opt == 'P9': new['tokenRects'] = ms.get('tokenRects')
+    FJ['frames'][FJ['frames'].index(old)] = new
+FJ.pop('notWaiting', None); FJ['stage'] = '1, 2 and the final floor-plate pass'
+FJ['finalSheet'] = 'sheets/06-final-all.jpg'
+json.dump(FJ, open(f'{OUT}/frames/frames.json', 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
+print('frames', len(FJ['frames']))
+
+def get(key, opt): return next(f for f in FJ['frames'] if f['chapter'] == key and f['option'] == opt)
+def chip(d, x, y, tag, sz=13):
+    tf = font(BOLD, sz); tw = d.textlength(tag, font=tf); h = sz + 6
+    d.rectangle([x, y, x + tw + 12, y + h], fill=tagcol(tag)); d.text((x + 6, y + 1), tag, font=tf, fill=PAPER); return tw + 12
+def label(d, x0, y0, w, f, h=58):
+    d.rectangle([x0, y0, x0 + w, y0 + h], fill=INK); d.text((x0 + 10, y0 + 3), f"{NUM[f['option']]} · {f['name']}", font=font(BOLD, 21), fill=PAPER)
+    tw = chip(d, x0 + 10, y0 + 33, f['provenance'])
+    if f['standIns']:
+        s = 'STAND-IN: ' + f['standIns'][0]; sf = font(REG, 13); maxw = w - (tw + 32)
+        if d.textlength(s, font=sf) > maxw:
+            words = s.split(' ')
+            while words and d.textlength(' '.join(words) + ' …', font=sf) > maxw: words.pop()
+            s = ' '.join(words).rstrip(',;:') + ' …'
+        d.text((x0 + 18 + tw, y0 + 35), s, font=sf, fill=PINK)
+def header(S, d, title, lines, h):
+    d.rectangle([0, h - 4, S.width, h], fill=GOLD); d.text((24, 14), title, font=font(BOLD, 30), fill=PAPER); y = 58
+    for ln in lines: d.text((24, y), ln, font=font(REG, 18), fill=GREY); y += 24
+def save_sheet(S, name, limit=2_600_000):
+    path = f'{OUT}/sheets/{name}'; q = 86
+    while True:
+        S.save(path, quality=q, optimize=True, progressive=True)
+        if os.path.getsize(path) < limit or q < 60: break
+        q -= 6
+    print(name, S.size, os.path.getsize(path) // 1024, 'KB q', q)
+
+def stage2_sheet(key, name):
+    order = ['P2', 'P2h', 'P2l', 'P2wd', 'P2r', 'P3', 'P21', 'P22', 'P10', 'P4', 'P13', 'P6', 'P9']
+    fs = [f for f in FJ['frames'] if f['chapter'] == key and f['option'] in order]
+    fs.sort(key=lambda f: order.index(f['option']))
+    cw, chh, lab, cols, head = 640, 360, 58, 4, 118
+    rows = (len(fs) + cols - 1) // cols; bottom = 640
+    S = Image.new('RGB', (cw * cols, head + rows * (chh + lab) + bottom), INK); d = ImageDraw.Draw(S)
+    header(S, d, f'Battle perspectives · stage 2 · {CH[key]["title"]}', ['Real-engine frames at 1920x1080 (phone 390x844 at DPR 3) from the worktree, no src/ change. Rear paintings, far-side plates, boss rear views, the arch and the',
+                                                                          "floor plates are the art agent's CANDIDATES (art/READY.json). P4, P13, P6" + (' and P9' if key == 'ffx-ch1' else '') + " now use the painted art; their stage-1 stand-ins are frames/alt/*-standin.jpg."], head)
+    for i, f in enumerate(fs):
+        x0 = (i % cols) * cw; y0 = head + (i // cols) * (chh + lab)
+        S.paste(Image.open(f"{OUT}/{f['file']}").convert('RGB').resize((cw, chh), Image.LANCZOS), (x0, y0)); label(d, x0, y0 + chh, cw, f)
+    yb = head + rows * (chh + lab)
+    ph_ = get(key, 'P15'); pim = Image.open(f"{OUT}/{ph_['file']}").convert('RGB'); pw = round(pim.width * (bottom - 70) / pim.height)
+    S.paste(pim.resize((pw, bottom - 70), Image.LANCZOS), (20, yb + 6)); label(d, 0, yb + bottom - 62, pw + 40, ph_)
+    st = get(key, 'P16'); sim = Image.open(f"{OUT}/{st['file']}").convert('RGB'); sw = S.width - pw - 80; sh = round(sim.height * sw / sim.width)
+    S.paste(sim.resize((sw, sh), Image.LANCZOS), (pw + 60, yb + 60)); label(d, pw + 60, yb + 60 + sh + 8, 900, st)
+    d.text((pw + 60, yb + 16), "P16 · Director's Cut: a camera language across five beats (HUD down after the command beat)", font=font(BOLD, 22), fill=GOLD)
+    save_sheet(S, name)
+
+def final_sheet():
+    fam = lambda key: [('Today', ['P0', 'P0m', 'P1']), ('Over the shoulder', ['P2-without', 'P2', 'P2h', 'P2l', 'P2wd', 'P2r', 'P3', 'P21']),
+                       ('Other cameras', ['P4', 'P5', 'P5m', 'P6', 'P7', 'P8', 'P9' if key == 'ffx-ch1' else 'P10']),
+                       ('Frames and moments', ['P11', 'P12', 'P13', 'P14', 'P22']), ('Phone and sequence', ['P15', 'P16'])]
+    cw, chh, lab, gap, lm, cols = 336, 189, 42, 6, 180, 8
+    rowh = chh + lab + gap; chtitle = 52; head = 124
+    W_ = lm + cols * cw; H_ = head + 2 * (chtitle + 5 * rowh) + 10
+    S = Image.new('RGB', (W_, H_), INK); d = ImageDraw.Draw(S)
+    header(S, d, 'Battle perspectives · every kept option, both chapters (final)', ['Real-engine frames from the worktree (no src/ change), the lead\'s first command menu, seed 1. Provenance chip under each frame: green = existing art, blue = new',
+                                                                                     "candidate art from art/READY.json, red = composite. Details, cameras, measurements and stand-ins: frames/frames.json. P20 (canon reconstruction) is on hold."], head)
+    y = head
+    for key in CH:
+        d.text((24, y + 10), CH[key]['title'], font=font(BOLD, 28), fill=GOLD); y += chtitle
+        for fname, opts in fam(key):
+            words, lines, ff = fname.split(' '), [''], font(BOLD, 20)
+            for w_ in words:
+                t = (lines[-1] + ' ' + w_).strip()
+                if d.textlength(t, font=ff) <= lm - 34: lines[-1] = t
+                else: lines.append(w_)
+            for i_, ln in enumerate(lines): d.text((18, y + 12 + i_ * 26), ln, font=ff, fill=PAPER)
+            d.rectangle([18, y + 18 + len(lines) * 26, 150, y + 20 + len(lines) * 26], fill=GOLD)
+            col = 0
+            for o in opts:
+                f = get(key, o); x0 = lm + col * cw
+                if o == 'P15':
+                    cell = Image.new('RGB', (cw - 4, chh), (8, 6, 12)); pim = Image.open(f"{OUT}/{f['file']}").convert('RGB'); pw = round(pim.width * chh / pim.height)
+                    cell.paste(pim.resize((pw, chh), Image.LANCZOS), ((cw - 4 - pw) // 2, 0)); S.paste(cell, (x0, y)); span = 1
+                elif o == 'P16':
+                    span = 5; sim = Image.open(f"{OUT}/{f['file']}").convert('RGB'); sw = round(sim.width * chh / sim.height)
+                    if sw > span * cw - 4: sw = span * cw - 4
+                    sh = round(sim.height * sw / sim.width); S.paste(sim.resize((sw, sh), Image.LANCZOS), (x0, y + (chh - sh) // 2))
+                else:
+                    S.paste(Image.open(f"{OUT}/{f['file']}").convert('RGB').resize((cw - 4, chh), Image.LANCZOS), (x0, y)); span = 1
+                d.text((x0 + 4, y + chh + 2), f"{NUM[o]} · {f['name']}", font=font(BOLD, 15), fill=PAPER)
+                chip(d, x0 + 4, y + chh + 22, f['provenance'], 11)
+                col += span
+            y += rowh
+    save_sheet(S, '06-final-all.jpg', 3_000_000)
+
+stage2_sheet('ffx-ch1', '03-stage2-ffx.jpg')
+stage2_sheet('ffx2-ch4', '04-stage2-ffx2.jpg')
+final_sheet()

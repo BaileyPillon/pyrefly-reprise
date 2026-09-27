@@ -1,0 +1,37 @@
+// agent scratch (perspectives options round, stills rig A): keep one headless GPU page open and take commands over HTTP.
+// Adapted from docs/concepts/vegnagun-colossus-2026-09-26/mock-scripts/repl.mjs.txt (adds /reload, /resize, /console).
+// PYREFLY_BROWSER=gpu node tools/zz-persp-a-repl.tmp.mjs <gamePort> <replPort> <w> <h> [dpr]
+import http from 'node:http';
+import { chromium } from 'playwright';
+import { currentChromiumArgs } from './browser-mode.mjs';
+const [port, rport, w = '1920', h = '1080', dpr = '1'] = process.argv.slice(2);
+const browser = await chromium.launch({ args: [...currentChromiumArgs()] });
+const ctx = await browser.newContext({ viewport: { width: +w, height: +h }, deviceScaleFactor: +dpr, ...(+w < 768 ? { isMobile: true, hasTouch: true } : {}) });
+const page = await ctx.newPage();
+const t0 = Date.now();
+const logs = [];
+page.on('pageerror', (e) => { const s = 'ERR ' + String(e).slice(0, 300); logs.push(s); console.log(s); });
+page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') { logs.push(m.type() + ' ' + m.text().slice(0, 300)); if (logs.length > 400) logs.splice(0, 100); } });
+const url = `http://127.0.0.1:${port}/?coach=off`;
+async function boot() {
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 180000 });
+  await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 180000 });
+}
+await boot();
+const srv = http.createServer(async (req, res) => {
+  let body = ''; for await (const c of req) body += c;
+  try {
+    const u = new URL(req.url, 'http://x');
+    if (u.pathname === '/eval') { const r = await page.evaluate(`(async () => { ${body} })()`); res.end(JSON.stringify({ ok: true, t: Date.now() - t0, r }, null, 1)); }
+    else if (u.pathname === '/shot') { await page.screenshot({ path: u.searchParams.get('path') }); res.end(JSON.stringify({ ok: true, t: Date.now() - t0 })); }
+    else if (u.pathname === '/key') { await page.keyboard.press(u.searchParams.get('k')); res.end('{"ok":true}'); }
+    else if (u.pathname === '/wait') { await page.waitForFunction(body, null, { timeout: 900000, polling: 100 }); res.end(JSON.stringify({ ok: true, t: Date.now() - t0 })); }
+    else if (u.pathname === '/reload') { await boot(); res.end(JSON.stringify({ ok: true, t: Date.now() - t0 })); }
+    else if (u.pathname === '/resize') { await page.setViewportSize({ width: +u.searchParams.get('w'), height: +u.searchParams.get('h') }); res.end('{"ok":true}'); }
+    else if (u.pathname === '/console') { res.end(JSON.stringify({ ok: true, logs: logs.slice(-60) })); }
+    else if (u.pathname === '/t') { res.end(JSON.stringify({ t: Date.now() - t0 })); }
+    else if (u.pathname === '/quit') { res.end('{"ok":true}'); await ctx.close(); await browser.close(); process.exit(0); }
+    else res.end('{"ok":false}');
+  } catch (e) { res.end(JSON.stringify({ ok: false, err: String(e).slice(0, 800) })); }
+});
+srv.listen(+rport, '127.0.0.1', () => console.log('repl ready', rport));

@@ -1,0 +1,137 @@
+"""Perspectives round 2026-09-27 (art agent): one contact sheet per subject.
+
+The front idle first, then EVERY rear candidate rendered for that subject, all at the same height on
+a mid-grey ground, each labelled (arm, candidate, seed, a short verdict); the pick has a gold frame
+and shows the installed version (after any clean-up). The footer says why it was picked.
+JPEG q88 into the main tree: docs/concepts/perspectives-2026-09-27/art/sheet-<nn>-<subject>.jpg
+
+    D:/Tools/ComfyUI/python_embeded/python.exe -s tools/zz-persp-art/sheets.py
+"""
+import json
+import pathlib
+
+from PIL import Image, ImageDraw, ImageFont
+
+CAND = pathlib.Path("D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives")
+IDLES = pathlib.Path("D:/Final Fantasy/public/art/characters")
+OUT = pathlib.Path("D:/Final Fantasy/docs/concepts/perspectives-2026-09-27/art")
+TILE_H = 470
+PER_ROW = 8
+GOLD = (214, 172, 72)
+
+SUBJECTS = [
+    ("01", "tidus", "B3/cand-3", {
+        "A/1": "A: sword in LEFT hand", "A/2": "A: sword R, pauldron L", "A/3": "A: fully mirrored", "A/4": "A: sword L",
+        "B/1": "v1: huge blade, small figure", "B/2": "v1: blade both ends", "B/3": "v1: broken weapon", "B/4": "v1: R+R but small",
+        "B2/1": "v2: pauldrons on both", "B2/2": "v2: pauldron R+L", "B2/3": "v2: R+R, straight back", "B2/4": "v2: hood up",
+        "B3/1": "v3: pauldron L", "B3/2": "v3: pauldron L", "B3/4": "v3: two swords", "B3/5": "v3: pauldron L",
+        "B3/6": "v3: pauldron L", "B3/7": "v3: two pauldrons", "B3/8": "v3: guard reject",
+    }, "PICK v3 #3 (seed 270013): the one turned rear view with the sword in the RIGHT hand and the pauldron on the RIGHT "
+       "shoulder, as in the idle; clean hands and blade. Weak: red knit sleeve on the wrong arm, blade paler than the idle's."),
+    ("02", "yuna", "B4/cand-3", {
+        "B/1": "v3: staff in LEFT hand", "B/2": "v3: staff upside down", "B/3": "v3: staff upside down", "B/4": "v3: staff L hand",
+        "B4/1": "v4: staff upside down", "B4/2": "v4: staff upside down", "B4/4": "v4: guard reject",
+    }, "PICK v4 #3 (seed 271013): staff in the RIGHT hand, ring head up; obi bow, pink sleeves and hakama print intact. "
+       "Weak: near-straight back view; staff upright, not low and diagonal as in the idle."),
+    ("03", "kimahri", "B4/cand-1", {
+        "B/1": "v3: two spears, crest", "B/2": "v3: horn curl, spear cut", "B/3": "v3: faces left, 2 spears", "B/4": "v3: spear L, full horn",
+        "B4/2": "v4: double-ended spear", "B4h/3": "v4 no horn words: double spear", "B4h/4": "v4 no horn words: L hand",
+    }, "PICK v4 #1 (seed 272011): one spear in the RIGHT hand, turned toward screen-right; mane, armour, sash, tail read. "
+       "POST: the long thin horn trimmed by hand to a broken stub. Weak: gold spearhead, blue tail tuft."),
+    ("04", "yuna-white-mage", "B2/cand-2", {
+        "B/1": "r1: broom-like rod", "B/2": "r1: tube rod, red boots", "B/3": "r1: slit, red heels", "B/4": "r1: trumpet",
+        "B2/1": "r2: rod both ends", "B2/3": "r2: rod in LEFT hand", "B2/4": "r2: gold club",
+    }, "PICK r2 #2 (seed 273012): rod in the RIGHT hand, head low and behind as in the idle; crescent on the hood, zigzag "
+       "trim, white boots. Weak: open back panel, plain ring for the rod head, flatter shading."),
+    ("05", "rikku-dark-knight", "B3/cand-3", {
+        "B/1": "r1: bare thighs", "B/2": "r1: sword L, open back", "B/3": "r1: bare midriff", "B/4": "r1: bare back",
+        "B2/1": "r2: stage-1 pick, gold/bronze drift", "B2/2": "r2: bare thighs, ribbons", "B2/3": "r2: rainbow cloth",
+        "B2/4": "r2: sword on the left", "B3/1": "r3 dark: sword on the left", "B3/2": "r3 dark: small sword",
+        "B3/4": "r3 dark: bare thighs", "B3/5": "r3 dark: pole pommel, cape", "B3/6": "r3 dark: runner-up, flat",
+    }, "PICK r3 #3 (seed 274023, stage-2 reroll for the idle's dark palette): navy-black armour with gold trim, chainmail skirt, "
+       "blonde braids, right hand on a big planted greatsword; turned toward screen-right. Weak: dark cape panel at her left."),
+    ("06", "paine-warrior", "B3/cand-2", {
+        "B/1": "r1: stiletto thigh boots", "B/2": "r1: sword L, heels", "B/3": "r1: heels", "B/4": "r1: stiletto heels",
+        "B2/1": "r2: no thigh-highs", "B2/2": "r2: hanging ribbon", "B2/3": "r2: sword L", "B2/4": "r2: no thigh-highs",
+        "B3/1": "r3: silver-blue blade", "B3/3": "r3: sword L", "B3/4": "r3: flame blade",
+    }, "PICK r3 #2 (seed 275022): right hand on a planted red sword; thigh-highs and chunky strap boots as in the idle, "
+       "jacket, corset, belt. Weak: red strappy top at the shoulder blades, white-winged crossguard."),
+    ("11", "seymour-flux-body", "A3/cand-4", {
+        "A/1": "'fan crest' drew a blade arch", "A/2": "giant feather fan", "A/3": "clean, but hand fans, no crest",
+        "A/4": "giant maces", "A2/1": "plain long hair, sits on a ledge", "A2/2": "seated, plain hair: runner-up",
+        "A2/3": "hair flies up, robe billows", "A2/4": "arms spread, plain hair", "A3/5": "ribbons fill the frame",
+    }, "PICK A3 #4 (seed 279014): floating, arms spread, the red-trimmed blue robe, green sash and a tall swept-up hair crest, "
+       "seen from behind. Weak: the crest is spikier than the idle's fan of locks (no pink tips); the legs hang, not crossed."),
+    ("12", "ffx2-bahamut", "A/cand-1", {
+        "A/2": "fills the frame, trapped white", "A/3": "trapped white in the tail", "A/4": "reads as a front view, 4 wings",
+    }, "PICK A #1 (seed 279101): a true back view, dorsal plates down the spine, wings spread, the head in profile toward "
+       "screen-left (the party); trapped white background keyed out in post. Weak: the wings are brighter red than the idle's."),
+]
+
+
+def font(size):
+    for f in ("arialbd.ttf", "arial.ttf"):
+        try:
+            return ImageFont.truetype(f, size)
+        except Exception:
+            pass
+    return ImageFont.load_default()
+
+
+def tile(path, label, sub, pick=False):
+    im = Image.open(path).convert("RGBA")
+    s = TILE_H / im.height
+    im = im.resize((max(1, round(im.width * s)), TILE_H), Image.LANCZOS)
+    pad = 6
+    t = Image.new("RGB", (im.width + 2 * pad, TILE_H + 2 * pad + 44), (34, 34, 38))
+    ground = Image.new("RGBA", im.size, (120, 120, 124, 255))
+    ground.alpha_composite(im)
+    t.paste(ground.convert("RGB"), (pad, pad + 44))
+    d = ImageDraw.Draw(t)
+    if pick:
+        d.rectangle([0, 0, t.width - 1, t.height - 1], outline=GOLD, width=5)
+    d.text((pad + 2, 4), label, fill=GOLD if pick else (235, 235, 235), font=font(17))
+    d.text((pad + 2, 24), sub, fill=GOLD if pick else (175, 175, 175), font=font(14))
+    return t
+
+
+def main():
+    OUT.mkdir(parents=True, exist_ok=True)
+    for nn, subj, pick, verdicts, why in SUBJECTS:
+        tiles = [tile(IDLES / subj / "idle.png", "IDLE (front)", "shipped, public/art")]
+        for arm_dir in sorted(p for p in (CAND / subj).iterdir() if p.is_dir()):
+            for cj in sorted(arm_dir.glob("cand-*.json"), key=lambda p: int(p.stem.split("-")[1])):
+                meta = json.loads(cj.read_text(encoding="utf-8"))
+                key = f"{arm_dir.name}/{meta['candidate']}"
+                is_pick = f"{arm_dir.name}/{cj.stem}" == pick
+                path = (CAND / subj / "pick-rear34.png") if is_pick else cj.with_suffix(".png")
+                label = f"{'PICK  ' if is_pick else ''}{arm_dir.name} #{meta['candidate']}  s{meta['seed']}"
+                tiles.append(tile(path, label, "installed rear34.png" if is_pick else verdicts.get(key, ""), is_pick))
+        rows = [tiles[i:i + PER_ROW] for i in range(0, len(tiles), PER_ROW)]
+        W = max(sum(t.width for t in r) + 10 * (len(r) + 1) for r in rows)
+        rh = tiles[0].height
+        head = 52
+        foot = 70
+        H = head + len(rows) * (rh + 10) + foot
+        sheet = Image.new("RGB", (W, H), (22, 22, 26))
+        d = ImageDraw.Draw(sheet)
+        d.text((12, 12), f"{subj}: rear three-quarter candidates, every render (perspectives round 2026-09-27, art agent)",
+               fill=(240, 240, 240), font=font(24))
+        y = head
+        for r in rows:
+            x = 10
+            for t in r:
+                sheet.paste(t, (x, y))
+                x += t.width + 10
+            y += rh + 10
+        import textwrap
+        chars = max(60, int(W / 10.5))
+        for i, line in enumerate(textwrap.wrap(why, chars)[:2]):
+            d.text((12, y + 8 + 28 * i), line, fill=GOLD, font=font(18))
+        out = OUT / f"sheet-{nn}-{subj}.jpg"
+        sheet.save(out, quality=88)
+        print(out.name, sheet.size, len(tiles) - 1, "candidates")
+
+
+if __name__ == "__main__":
+    main()

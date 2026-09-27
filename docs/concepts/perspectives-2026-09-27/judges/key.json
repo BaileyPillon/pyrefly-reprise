@@ -1,0 +1,384 @@
+{
+ "frames": {
+  "F01.jpg": {
+   "option": "P15",
+   "name": "Portrait Duel (phone)",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P15-portrait-duel.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F02.jpg": {
+   "option": "P2wd",
+   "name": "Over the Shoulder, wide",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P02wd-over-the-shoulder-wide.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F03.jpg": {
+   "option": "P13",
+   "name": "Proscenium",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P13-proscenium.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F04.jpg": {
+   "option": "P5m",
+   "name": "Side Stage, mirrored",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P05m-side-stage-mirrored.jpg",
+   "provenance": "COMPOSITE (mirrored stand-in)"
+  },
+  "F05.jpg": {
+   "option": "P14",
+   "name": "Panels",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P14-panels.jpg",
+   "provenance": "COMPOSITE"
+  },
+  "F06.jpg": {
+   "option": "P21",
+   "name": "Cinematic Shoulder",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P21-cinematic-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F07.jpg": {
+   "option": "P0",
+   "name": "Today",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P00-today.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F08.jpg": {
+   "option": "P8",
+   "name": "Party's Eyes",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P08-partys-eyes.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F09.jpg": {
+   "option": "P11",
+   "name": "Cinemascope",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P11-cinemascope.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F10.jpg": {
+   "option": "P2",
+   "name": "Over the Shoulder",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P02-over-the-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F11.jpg": {
+   "option": "P0m",
+   "name": "Today, mirrored",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P00m-today-mirrored.jpg",
+   "provenance": "COMPOSITE (mirrored stand-in)"
+  },
+  "F12.jpg": {
+   "option": "P7",
+   "name": "Colossus",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P07-colossus.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F13.jpg": {
+   "option": "P9",
+   "name": "Tabletop",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P09-tabletop.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F14.jpg": {
+   "option": "P4",
+   "name": "Reverse Angle",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P04-reverse-angle.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F15.jpg": {
+   "option": "P2l",
+   "name": "Over the Shoulder, low",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P02l-over-the-shoulder-low.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F16.jpg": {
+   "option": "P1",
+   "name": "Today, dressed",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P01-today-dressed.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F17.jpg": {
+   "option": "P2wd",
+   "name": "Over the Shoulder, wide",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P02wd-over-the-shoulder-wide.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F18.jpg": {
+   "option": "P2h",
+   "name": "Over the Shoulder, high",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P02h-over-the-shoulder-high.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F19.jpg": {
+   "option": "P1",
+   "name": "Today, dressed",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P01-today-dressed.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F20.jpg": {
+   "option": "P3",
+   "name": "Hero Shoulder",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P03-hero-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F21.jpg": {
+   "option": "P2h",
+   "name": "Over the Shoulder, high",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P02h-over-the-shoulder-high.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F22.jpg": {
+   "option": "P2",
+   "name": "Over the Shoulder",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P02-over-the-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F23.jpg": {
+   "option": "P15",
+   "name": "Portrait Duel (phone)",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P15-portrait-duel.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F24.jpg": {
+   "option": "P22",
+   "name": "Hero Poster (moment shot)",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P22-hero-poster.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F25.jpg": {
+   "option": "P12",
+   "name": "Split-Diopter",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P12-split-diopter.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F26.jpg": {
+   "option": "P4",
+   "name": "Reverse Angle",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P04-reverse-angle.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F27.jpg": {
+   "option": "P14",
+   "name": "Panels",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P14-panels.jpg",
+   "provenance": "COMPOSITE"
+  },
+  "F28.jpg": {
+   "option": "P21",
+   "name": "Cinematic Shoulder",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P21-cinematic-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F29.jpg": {
+   "option": "P22",
+   "name": "Hero Poster (moment shot)",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P22-hero-poster.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F30.jpg": {
+   "option": "P0",
+   "name": "Today",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P00-today.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F31.jpg": {
+   "option": "P8",
+   "name": "Party's Eyes",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P08-partys-eyes.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F32.jpg": {
+   "option": "P5",
+   "name": "Side Stage",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P05-side-stage.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F33.jpg": {
+   "option": "P2l",
+   "name": "Over the Shoulder, low",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P02l-over-the-shoulder-low.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F34.jpg": {
+   "option": "P12",
+   "name": "Split-Diopter",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P12-split-diopter.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F35.jpg": {
+   "option": "P2r",
+   "name": "Over the Shoulder, right shoulder",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P02r-over-the-shoulder-right.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F36.jpg": {
+   "option": "P5m",
+   "name": "Side Stage, mirrored",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P05m-side-stage-mirrored.jpg",
+   "provenance": "COMPOSITE (mirrored stand-in)"
+  },
+  "F37.jpg": {
+   "option": "P6",
+   "name": "Diorama",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P06-diorama.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F38.jpg": {
+   "option": "P11",
+   "name": "Cinemascope",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P11-cinemascope.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F39.jpg": {
+   "option": "P13",
+   "name": "Proscenium",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P13-proscenium.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F40.jpg": {
+   "option": "P10",
+   "name": "In the Round",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P10-in-the-round.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F41.jpg": {
+   "option": "P3",
+   "name": "Hero Shoulder",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P03-hero-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F42.jpg": {
+   "option": "P5",
+   "name": "Side Stage",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P05-side-stage.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F43.jpg": {
+   "option": "P7",
+   "name": "Colossus",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P07-colossus.jpg",
+   "provenance": "REAL ENGINE / existing art"
+  },
+  "F44.jpg": {
+   "option": "P6",
+   "name": "Diorama",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P06-diorama.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F45.jpg": {
+   "option": "P2r",
+   "name": "Over the Shoulder, right shoulder",
+   "chapter": "ffx-ch1",
+   "file": "frames/ffx-ch1/P02r-over-the-shoulder-right.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)"
+  },
+  "F46.jpg": {
+   "option": "P0m",
+   "name": "Today, mirrored",
+   "chapter": "ffx2-ch4",
+   "file": "frames/ffx2-ch4/P00m-today-mirrored.jpg",
+   "provenance": "COMPOSITE (mirrored stand-in)"
+  }
+ },
+ "sequences": {
+  "S01.jpg": {
+   "id": "M4-ffx-ch1",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M4-ffx-ch1-strip.jpg"
+  },
+  "S02.jpg": {
+   "id": "M6-ffx-ch1",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M6-ffx-ch1-strip.jpg"
+  },
+  "S03.jpg": {
+   "id": "M1-ffx2-ch4",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M1-ffx2-ch4-strip.jpg"
+  },
+  "S04.jpg": {
+   "id": "M5-ffx2-ch4",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M5-ffx2-ch4-strip.jpg"
+  },
+  "S05.jpg": {
+   "id": "M2-ffx-ch1-cut",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M2-ffx-ch1-cut-strip.jpg"
+  },
+  "S06.jpg": {
+   "id": "M3-ffx2-ch4",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M3-ffx2-ch4-strip.jpg"
+  },
+  "S07.jpg": {
+   "id": "M1-ffx-ch1",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M1-ffx-ch1-strip.jpg"
+  },
+  "S08.jpg": {
+   "id": "M2-ffx2-ch4-cut",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M2-ffx2-ch4-cut-strip.jpg"
+  },
+  "S09.jpg": {
+   "id": "M3-ffx-ch1",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M3-ffx-ch1-strip.jpg"
+  },
+  "S10.jpg": {
+   "id": "M2-ffx-ch1-whip",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M2-ffx-ch1-whip-strip.jpg"
+  },
+  "S11.jpg": {
+   "id": "M0-ffx2-ch4",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M0-ffx2-ch4-strip.jpg"
+  },
+  "S12.jpg": {
+   "id": "M0-ffx-ch1",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M0-ffx-ch1-strip.jpg"
+  },
+  "S13.jpg": {
+   "id": "M4-ffx2-ch4",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M4-ffx2-ch4-strip.jpg"
+  },
+  "S14.jpg": {
+   "id": "M2-ffx2-ch4-whip",
+   "file": "D:/Final Fantasy/docs/concepts/perspectives-2026-09-27\\motion\\M2-ffx2-ch4-whip-strip.jpg"
+  }
+ }
+}

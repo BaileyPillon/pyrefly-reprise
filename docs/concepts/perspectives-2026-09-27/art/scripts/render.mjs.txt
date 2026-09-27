@@ -1,0 +1,251 @@
+#!/usr/bin/env node
+/**
+ * Perspectives round 2026-09-27 (art agent): REAR three-quarter candidates for the party.
+ * Options round only (AGENTS.md rule 9); nothing here touches public/art or the main tree's tools.
+ *
+ *   node tools/zz-persp-art/render.mjs <subject> <arm> [--n 1,2,3,4] [--dry]
+ *   subjects: tidus yuna kimahri yuna-white-mage rikku-dark-knight paine-warrior
+ *   arms:     A  txt2img + rear phrasing + Method F reference (square idle + head crop, concat)
+ *             B  A + xinsir OpenPose SDXL ControlNet with a rear skeleton (skeletons.py)
+ *   extra:    --ipa 0.28 --skel <name> --tag <arm folder suffix> --pose "<pose tags>" --seed0 <n>
+ *
+ * The view (SHOT-SPEC "Art facts" + the art brief): the camera behind the character and a little to
+ * the character's right; the character faces INTO the frame toward screen-right. Facing contract v3
+ * bans `from behind` in every sprite negative, so this graph is written here (the Trema pose round's
+ * graph, docs/concepts/chapters/trema/poses/render.mjs) with its own phrasing, and the shared
+ * FACING_NEGATIVE is NOT used.
+ *
+ * Shared ComfyUI: at most 3 of our prompts in flight and never while the queue holds more than 3
+ * pending; nobody else's job is touched. An all-black frame stops the run (no re-roll) and writes
+ * STOP-BLACK.txt beside the candidates.
+ */
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { SPRITE_NEGATIVE, STYLE_TAGS, QUALITY_TAGS, stageImage, cutout, escapeTags, lintSpritePrompt } from '../gen/comfy.mjs';
+import { checkCutoutFile } from '../gen/cutout-guard.mjs';
+import { maxRgbOfPng, isBlackFrame } from '../gen/black-frame.mjs';
+
+export const OUT = 'D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives';
+const SCRATCH = 'D:/Tools/pyrefly-scratch/persp-art';
+const COMFY = process.env.COMFY_URL || 'http://127.0.0.1:8188';
+const CKPT = 'animagine-xl-4.0-opt.safetensors';
+const CONTROLNET = 'xinsir-controlnet-openpose-sdxl-1.0.safetensors';
+const IPADAPTER = 'ip-adapter-plus_sdxl_vit-h.safetensors';
+const CLIPVISION = 'CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors';
+const flag = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i >= 0 ? process.argv[i + 1] : d; };
+const MAX_PENDING = 3;
+
+/** The rear view, weighted (the named-character prior is a front view; a bare tag loses to it). */
+export const REAR_VIEW = '(from behind:1.3), back view, facing away, looking ahead';
+/** Everything that turns a back view into the classic over-the-shoulder glance at the camera. */
+export const REAR_NEGATIVE = '(looking at viewer:1.2), looking back, facing viewer, front view, straight-on, symmetrical, portrait';
+const FRAMING = 'full body, standing, feet visible, simple background, white background';
+
+/**
+ * Identity: each shipped idle's own sidecar words (public/art/characters/<id>/idle.json), minus
+ * effect words (the lint), minus what a back view cannot show (eye colour, expression, necklace),
+ * minus the idle's facing and pose words. `pose` is the idle's own pose words minus the face.
+ */
+export const SUBJECTS = {
+  tidus: {
+    game: 'ffx', seed0: 270000, skel: 'tidus', chiral: true,
+    identity: '1boy, tidus, final fantasy x, safe, solo, male focus, blonde hair, spiky hair, yellow hooded vest, white hood, sleeveless, asymmetrical clothes, blue pauldron, shoulder armor, black overalls, uneven legwear, fingerless gloves, brotherhood (sword), longsword, blue sword, blue blade, holding sword',
+    pose: 'fighting stance, sword resting on shoulder',
+    neg: 'two swords, dual wielding, second sword, sheath, cape',
+  },
+  yuna: {
+    game: 'ffx', seed0: 271000, skel: 'yuna-v3', chiral: true,
+    identity: '1girl, yuna (ff10), final fantasy x, safe, solo, brown hair, short hair, single braid, japanese clothes, black camisole, white sash, yellow obi, obi, purple hakama, long skirt, pleated skirt, floral print, detached sleeves, pink and white sleeves, black boots, holding staff, summoner staff',
+    pose: 'standing, holding staff',
+    neg: 'two staffs, second staff, sword, spear, wings, hood, hood up, cape, long hair, ponytail',
+  },
+  kimahri: {
+    game: 'ffx', seed0: 272000, skel: 'kimahri-v3', chiral: true,
+    identity: '1other, kimahri ronso, final fantasy x, safe, solo, furry male, anthro, blue fur, blue lion beastman, very muscular, long white mane, white hair, pointy ears, pierced ears, gold earrings, broken horn, short blunt horn, gold shoulder armor, gold bracer, red waist sash, blue hakama trousers, barefoot, blue tail, white tail tip, one spear, plain brown wooden spear shaft, silver leaf shaped spearhead, holding spear',
+    pose: 'standing at rest, holding spear at his side',
+    neg: 'two horns, pair of horns, long horn, tall horn, curved horn, spiral horn, ram horns, bull horns, demon horns, antlers, horns on the sides of the head, unicorn horn, red horn, tree stump, tree trunk, log, wood grain, grass, outdoor scenery, second weapon, duplicate weapon, floating weapon, detached weapon, weapon standing on its own, ground shadow, cast shadow, sword, cape',
+  },
+  // FFX-2 (Chapter IV). Identity read off each shipped idle's PICTURE (the Trema lesson), not its
+  // sidecar words where they disagree (White Mage: red zigzag trim, not a yellow flame pattern;
+  // Dark Knight Rikku: no helmet; Paine: red sword).
+  'yuna-white-mage': {
+    game: 'ffx2', seed0: 273000, skel: 'ywm-v1', chiral: false,
+    identity: '1girl, yuna (ff10-2), final fantasy x-2, safe, solo, white mage, brown hair, short hair, white hooded robe, hood up, pink hood lining, gold crescent moon emblem on hood, shin-length robe, red zigzag trim, red triangle pattern, wide sleeves, purple lace hem, white gloves, white boots, holding rod, short rod, ornate gold head',
+    pose: 'standing, holding rod',
+    emph: '(white mage:1.3), (hood up:1.3), (white boots:1.2)',
+    neg: 'red boots, high heels, slit, side slit, bare legs, trumpet, broom, long staff, obi, kimono, japanese clothes, flower sash, detached sleeves, sleeveless, bare shoulders, long skirt, pleated skirt, summoner, blue dress, yellow sleeve, ring staff, cape, wings, two rods, sword',
+  },
+  'rikku-dark-knight': {
+    game: 'ffx2', seed0: 274000, skel: 'rdk-v1', chiral: false, size: [1024, 1216],
+    identity: '1girl, rikku (ff10-2), final fantasy x-2, safe, solo, dark knight, blonde hair, long hair, high ponytail, multiple braids, dark blue plate armor, gold trim, pauldrons, gauntlets, chainmail, brown leather belts, armored skirt, gold fringe, armored boots, greaves, armored legs, full armor, greatsword, huge sword, dark blue sword, gold filigree',
+    emph: '(full plate armor:1.3), (fully armored:1.2)',
+    pose: 'standing, hands on hilt, planted sword',
+    neg: '(bare thighs:1.3), (bare back:1.3), backless outfit, garter straps, high heels, helmet, horned helmet, bikini, midriff, navel, scarf, goggles, bare shoulders, revealing clothes, bare legs, full face helmet, mask, orange clothes, green skirt, bare midriff, crop top, short shorts, bare thighs, bikini armor, bare arms, thighhighs, cape, two swords, second sword, dual wielding',
+  },
+  'paine-warrior': {
+    game: 'ffx2', seed0: 275000, skel: 'pw-v1', chiral: true,
+    identity: '1girl, paine (ff10-2), final fantasy x-2, safe, solo, warrior, silver hair, white hair, short hair, layered hair, swept back hair, pale skin, black leather jacket, off shoulder jacket, white corset, silver studs, studded choker, red belt, black shorts, black thighhighs, black combat boots, red buckle straps, black elbow gloves, red sword, red hilt, silver blade',
+    emph: '(combat boots:1.3), (chunky boots:1.2)',
+    pose: 'standing, hands on hilt, planted sword',
+    neg: '(high heels:1.4), (stiletto heels:1.3), thigh boots, platform heels, blonde hair, brown hair, colorful dress, armor plate, helmet, dual wielding, two swords, multiple swords, white shirt, hands on hips, floating sword, cape',
+  },
+  // Bosses (stage 2 item 6): seen from behind they face INTO the frame toward screen-LEFT (toward the party).
+  // Both are near-symmetric, so a render facing the other way may be mirrored in post (flip.py rule).
+  'seymour-flux-body': {
+    game: 'ffx', seed0: 279000, skel: null, chiral: false, size: [832, 1216],
+    identity: '1boy, seymour guado, final fantasy x, safe, solo, male focus, adult man, light blue hair, hair lacquered and swept up into a tall wide fan-shaped crest, two long thick locks of hair falling down his back, ornate dark blue robe, red trimmings, tall high collar lined with red, green sash, wide sleeves, tattered robe hem',
+    pose: 'sitting cross-legged floating in midair, arms spread wide',
+    emph: '(tall wide fan-shaped hair crest:1.3), (dark blue robe with red trim:1.2), (floating:1.1)',
+    framing: 'full body, centered, imposing, simple background, white background',
+    neg: '1girl, female, woman, breasts, feminine, old man, beard, horns, antlers, wings, feathers, weapon, sword, staff, chair, stool, throne, standing, dark background, cast shadow, ponytail, hat, crown',
+  },
+  'ffx2-bahamut': {
+    game: 'ffx2', seed0: 279100, skel: null, chiral: false, size: [1024, 1024],
+    identity: 'no humans, dragon, black dragon, huge wings, red wings, mechanical wings, horns, spikes, long tail, armored scales, purple veins, aeon',
+    pose: 'wings spread, majestic, menacing',
+    emph: '(black dragon:1.2), (red wings:1.2), (back of the dragon:1.1)',
+    framing: 'full body, centered, imposing, simple background, white background',
+    neg: 'rider, 1girl, 1boy, human, person, saddle, white dragon, gold dragon, feathers, bird',
+  },
+};
+
+export const ARMS = {
+  A: { cn: null },
+  B: { cn: [0.75, 0.85, 0.8, 0.8, 0.75, 0.85] },
+};
+
+/** Variant knobs (CLI): pose override, identity words dropped/added, raw emphasis, extra negatives. */
+export function promptFor(sub, v = {}) {
+  const s = SUBJECTS[sub];
+  const drop = new Set((v.idDrop || '').split('|').map((x) => x.trim()).filter(Boolean));
+  let identity = s.identity.split(', ').filter((x) => !drop.has(x)).join(', ');
+  if (v.idAdd) identity = `${identity}, ${v.idAdd}`;
+  const lint = lintSpritePrompt({ tags: identity, poseTags: v.pose || s.pose, composition: s.framing ? 'boss' : 'full' });
+  if (lint.stripped.length) throw new Error(`lint stripped ${JSON.stringify(lint.stripped)}`);
+  return [escapeTags(lint.tags), escapeTags(lint.poseTags), v.emph || s.emph || '', REAR_VIEW, s.framing || FRAMING, STYLE_TAGS, QUALITY_TAGS]
+    .filter(Boolean).join(', ');
+}
+export function negativeFor(sub, v = {}) {
+  return [SPRITE_NEGATIVE, REAR_NEGATIVE, SUBJECTS[sub].neg, v.negAdd || ''].filter(Boolean).join(', ');
+}
+
+function graph({ positive, negative, seed, cn, skel, refA, refB, ipa, prefix, width = 832, height = 1216 }) {
+  const g = {
+    4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
+    5: { class_type: 'EmptyLatentImage', inputs: { width, height, batch_size: 1 } },
+    6: { class_type: 'CLIPTextEncode', inputs: { text: positive, clip: ['4', 1] } },
+    7: { class_type: 'CLIPTextEncode', inputs: { text: negative, clip: ['4', 1] } },
+    20: { class_type: 'LoadImage', inputs: { image: refA, upload: 'image' } },
+    24: { class_type: 'LoadImage', inputs: { image: refB, upload: 'image' } },
+    25: { class_type: 'ImageBatch', inputs: { image1: ['20', 0], image2: ['24', 0] } },
+    21: { class_type: 'IPAdapterModelLoader', inputs: { ipadapter_file: IPADAPTER } },
+    22: { class_type: 'CLIPVisionLoader', inputs: { clip_name: CLIPVISION } },
+    23: { class_type: 'IPAdapterAdvanced', inputs: { model: ['4', 0], ipadapter: ['21', 0], image: ['25', 0], weight: ipa.weight, weight_type: ipa.type, combine_embeds: 'concat', start_at: ipa.start, end_at: ipa.end, embeds_scaling: 'K+V', clip_vision: ['22', 0] } },
+    3: { class_type: 'KSampler', inputs: { seed, steps: 28, cfg: 6, sampler_name: 'euler_ancestral', scheduler: 'normal', denoise: 1, model: ['23', 0], positive: ['6', 0], negative: ['7', 0], latent_image: ['5', 0] } },
+    8: { class_type: 'VAEDecode', inputs: { samples: ['3', 0], vae: ['4', 2] } },
+    9: { class_type: 'SaveImage', inputs: { filename_prefix: prefix, images: ['8', 0] } },
+  };
+  if (cn != null) {
+    g[30] = { class_type: 'ControlNetLoader', inputs: { control_net_name: CONTROLNET } };
+    g[31] = { class_type: 'LoadImage', inputs: { image: skel, upload: 'image' } };
+    g[32] = { class_type: 'ControlNetApplyAdvanced', inputs: { positive: ['6', 0], negative: ['7', 0], control_net: ['30', 0], image: ['31', 0], strength: cn, start_percent: 0, end_percent: 1, vae: ['4', 2] } };
+    g[3].inputs.positive = ['32', 0];
+    g[3].inputs.negative = ['32', 1];
+  }
+  return g;
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+async function queueState() {
+  try {
+    const q = await (await fetch(`${COMFY}/queue`)).json();
+    return { pending: q.queue_pending?.length || 0, running: q.queue_running?.length || 0 };
+  } catch { return { pending: 99, running: 99 }; }
+}
+
+async function main() {
+  const [sub, arm] = process.argv.slice(2);
+  if (!SUBJECTS[sub] || !ARMS[arm]) throw new Error(`usage: render.mjs <${Object.keys(SUBJECTS).join('|')}> <${Object.keys(ARMS).join('|')}>`);
+  const S = SUBJECTS[sub];
+  const want = flag('n', '1,2,3,4').split(',').map(Number);
+  const ipa = { weight: Number(flag('ipa', 0.28)), type: 'ease in', start: 0.2, end: Number(flag('ipaEnd', 0.6)) };
+  const skelName = flag('skel', S.skel);
+  const tag = flag('tag', '');
+  const variant = { pose: flag('pose', null), idDrop: flag('idDrop', ''), idAdd: flag('idAdd', ''), emph: flag('emph', ''), negAdd: flag('negAdd', '') };
+  const [W, H] = (flag('size', (S.size || [832, 1216]).join('x'))).split('x').map(Number);
+  const seed0 = Number(flag('seed0', S.seed0));
+  const cnList = ARMS[arm].cn ? (flag('cn', null) ? flag('cn').split(',').map(Number) : ARMS[arm].cn) : null;
+  const folder = `${arm}${tag}`;
+  const dir = join(OUT, sub, folder);
+  const positive = promptFor(sub, variant);
+  const negative = negativeFor(sub, variant);
+  const jobs = want.filter((n) => !existsSync(join(dir, `cand-${n}.json`)))
+    .map((n) => ({ n, seed: seed0 + n, cn: cnList ? cnList[(n - 1) % cnList.length] : null }));
+  if (process.argv.includes('--dry')) {
+    console.log(`+ ${positive}\n- ${negative}\n`, jobs);
+    return;
+  }
+  mkdirSync(dir, { recursive: true });
+  const refA = stageImage(`${SCRATCH}/refs/${sub}-square.png`);
+  const refB = stageImage(`${SCRATCH}/refs/${sub}-head.png`);
+  const skel = ARMS[arm].cn ? stageImage(`${SCRATCH}/skeletons/${skelName}.png`) : null;
+  const inflight = [];
+  let stop = false;
+  const tStart = Date.now();
+  while ((jobs.length || inflight.length) && !stop) {
+    while (jobs.length && inflight.length < MAX_PENDING) {
+      const q = await queueState();
+      if (q.pending >= MAX_PENDING) break;
+      const j = jobs.shift();
+      const g = graph({ positive, negative, seed: j.seed, cn: j.cn, skel, refA, refB, ipa, width: W, height: H, prefix: `pyrefly/persp-2026-09-27/${sub}-${folder}` });
+      const res = await fetch(`${COMFY}/prompt`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: g, client_id: 'pyrefly-persp-art' }) });
+      const body = await res.json();
+      if (!res.ok || body.error) throw new Error(`ComfyUI rejected: ${JSON.stringify(body).slice(0, 1500)}`);
+      inflight.push({ ...j, id: body.prompt_id, t0: Date.now() });
+    }
+    await sleep(2000);
+    for (const j of [...inflight]) {
+      const e = (await (await fetch(`${COMFY}/history/${j.id}`)).json())[j.id];
+      if (!e) continue;
+      if (e.status?.status_str === 'error') { console.error(`[persp-art] ${sub}/${folder}#${j.n} FAILED ${JSON.stringify(e.status.messages).slice(0, 800)}`); inflight.splice(inflight.indexOf(j), 1); continue; }
+      const img = Object.values(e.outputs || {}).flatMap((o) => o.images || [])[0];
+      if (!img) continue;
+      inflight.splice(inflight.indexOf(j), 1);
+      const qs = new URLSearchParams({ filename: img.filename, subfolder: img.subfolder || '', type: img.type || 'output' });
+      const raw = join(dir, `cand-${j.n}.raw.png`);
+      const cut = join(dir, `cand-${j.n}.png`);
+      writeFileSync(raw, Buffer.from(await (await fetch(`${COMFY}/view?${qs}`)).arrayBuffer()));
+      const maxRgb = maxRgbOfPng(readFileSync(raw));
+      const black = maxRgb != null && isBlackFrame(maxRgb);
+      if (black) {
+        writeFileSync(join(OUT, 'STOP-BLACK.txt'), `${new Date().toISOString()} ${sub}/${folder}#${j.n} all-black frame (maxRgb ${maxRgb}); run stopped, no re-roll\n`, { flag: 'a' });
+        console.error(`[persp-art] BLACK FRAME ${sub}/${folder}#${j.n}: stopping`);
+        stop = true;
+      }
+      let cutMeta = null; let guard = { ok: false, reasons: ['black frame'] };
+      if (!black) {
+        cutMeta = cutout(raw, cut);
+        guard = await checkCutoutFile(cut, { sourceWidth: W, sourceHeight: H, composition: S.framing ? 'boss' : 'full' });
+      }
+      const side = {
+        round: 'perspectives-2026-09-27', game: S.game, subject: sub, view: 'rear34', arm: folder, candidate: j.n, seed: j.seed,
+        status: 'CANDIDATE', requestedFacing: S.framing ? 'away-left (rear view of a boss, faces into the frame toward screen-left)' : 'away-right (rear three-quarter, faces into the frame toward screen-right)', chiral: S.chiral,
+        method: ARMS[arm].cn ? 'B: txt2img + rear phrasing + Method F reference + OpenPose rear skeleton' : 'A: txt2img + rear phrasing + Method F reference',
+        controlnet: j.cn != null ? { file: CONTROLNET, strength: j.cn, start: 0, end: 1, skeleton: `${skelName}.png (tools/zz-persp-art/skeletons.py)` } : null,
+        ipadapter: { file: IPADAPTER, ...ipa, scaling: 'K+V', combine: 'concat', images: [`${sub}-square.png`, `${sub}-head.png`] },
+        variant, positive, negative, model: CKPT, steps: 28, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal', canvas: { width: W, height: H },
+        maxRgb, black, cutout: cutMeta, guard: { ok: guard.ok, reasons: guard.reasons },
+        seconds: (Date.now() - j.t0) / 1000, generatedAt: new Date().toISOString(),
+      };
+      if (cutMeta) Object.assign(side, { width: cutMeta.width, height: cutMeta.height, baselineY: cutMeta.baselineY });
+      writeFileSync(join(dir, `cand-${j.n}.json`), JSON.stringify(side, null, 1));
+      console.log(`[persp-art] ${sub}/${folder}#${j.n} seed ${j.seed}${j.cn != null ? ` cn ${j.cn}` : ''}: ${cutMeta ? `${cutMeta.width}x${cutMeta.height}` : '-'} guard ${guard.ok ? 'ok' : 'REJECT ' + guard.reasons.join('; ')}${black ? ' BLACK' : ''} ${side.seconds.toFixed(0)} s`);
+    }
+  }
+  console.log(`[persp-art] ${sub}/${folder}: wall ${((Date.now() - tStart) / 1000).toFixed(0)} s`);
+  if (stop) process.exit(3);
+}
+
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) await main();

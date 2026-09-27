@@ -1,0 +1,5 @@
+// Final stills pass: P6 Diorama (and P9 Tabletop, Ch I) on the art agent's painted floor plate. Values in final-ch1.json.
+import { readFileSync } from 'node:fs';
+import { ID as ID1 } from './table-ch1.mjs';
+export const ID = { ...ID1, stage: 3 };
+export const OPTS = JSON.parse(readFileSync('D:/Tools/pyrefly-scratch/persp-a/final-ch1.json', 'utf8'));

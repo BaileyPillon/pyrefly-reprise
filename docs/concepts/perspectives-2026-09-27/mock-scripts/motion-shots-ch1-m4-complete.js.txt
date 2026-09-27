@@ -1,0 +1,18 @@
+// Chapter I M4 complete: the command over the shoulder (rear paintings), then one camera per beat with the PAINTED
+// reverse plate and Seymour's rear painting on the enemy turn.
+const M = __motion;
+const PARTY = ['tidus', 'yuna', 'kimahri']; const BOSS = ['seymour-flux', 'mortiorchis'];
+const MIST = ['mist-0', 'mist-1', 'mist-2', 'mist-3'];
+const clean = () => { M.unhide?.(); M.frontOn(PARTY); M.showFront('seymour-flux'); for (const id of Object.keys(M.faces)) M.faceLens(id, null); for (const id of Object.keys(M.sil)) M.unsilhouette(id); M.sil = {}; for (const id of [...PARTY, ...BOSS]) M.rim(id, null); M.platesAllOff(); M.setVis(MIST, true); };
+M.shots.m4_cmd = { ...M.shots.m3_tidus, enter() { clean(); M.shots.m3_tidus.enter(); } };
+M.shots.side4 = { pos: [6, 0.95, 14], look: [0.2, 1.5, -3.0], fov: 24, roll: 0, sway: 0.5, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.45, band: 0.22, blur: 3.0 }, enter() { clean(); } };
+M.hideNear = (x, z, r, names = ['rock', 'snow-drift']) => { const sc = M.st().opts.scene; M._hidden = M._hidden || []; sc.traverse((n) => { if (names.includes(n.name) && n.visible && Math.hypot(n.position.x - x, n.position.z - z) < r) { n.visible = false; M._hidden.push(n); } }); return M._hidden.length; };
+M.unhide = () => { for (const n of M._hidden || []) n.visible = true; M._hidden = []; };
+M.shots.rev4 = { pos: [10, 2.1, -12], look: [-1.6, 1.25, 0.6], fov: 22, roll: 0, sway: 0.5, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.45, band: 0.18, blur: 3.0 },
+  enter() { clean(); M.setVis(MIST, false); M.hideNear(10, -12, 4.5); for (const id of PARTY) M.faceLens(id, 1); M.showRear('seymour-flux', 'rear34'); M.faceLens('seymour-flux', 1);
+    M.rim('seymour-flux', { rim: 0xbcd6ff, rimStrength: 1.3, rimDir: [-0.6, 1], rimWidth: 3.4 }); M.act('seymour-flux').setBrightness(0.62);
+    M.silhouette('mortiorchis', 0.08, '#bcd6ff', 1.6); M.faceLens('mortiorchis', 1); M.placePlate('rev', M.shots.rev4, { dist: 62, horizon: 0.45 }); } };
+M.shots.colo4 = { pos: [1.8, 0.3, -2.6], look: [2.2, 2.6, -7.6], fov: 40, roll: 0, sway: 0.4, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.55, band: 0.3, blur: 2.0 }, enter() { clean(); M.setVis(MIST, false); } };
+M.shots.hero4 = { pos: [-0.4, 0.45, 5.6], look: [-0.5, 1.45, 0.5], fov: 34, roll: 0, sway: 0.6, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.5, band: 0.3, blur: 2.0 }, enter() { clean(); } };
+M.m4clean = clean;
+return ['m4_cmd', 'side4', 'rev4', 'colo4', 'hero4'];

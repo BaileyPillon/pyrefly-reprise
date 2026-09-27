@@ -1,0 +1,18 @@
+// Chapter I Director's Cut shots (M4). World units. Stand-in plates are today's backdrop re-aimed (tagged).
+const M = __motion;
+await M.patchCursor();
+const ALL = () => M.st().staged();
+const PARTY = ['tidus', 'yuna', 'kimahri'];
+const BOSS = ['seymour-flux', 'mortiorchis'];
+const MIST = ['mist-0', 'mist-1', 'mist-2', 'mist-3'];
+const clean = () => { for (const id of Object.keys(M.faces)) M.faceLens(id, null); for (const id of Object.keys(M.sil)) M.unsilhouette(id); M.sil = {}; M.platesOff(); M.setVis(MIST, true); };
+const noMist = () => M.setVis(MIST, false);
+M.shots.side = { pos: [12.0, 0.9, 11.0], look: [-0.2, 1.45, -2.8], fov: 26, roll: 0, sway: 0.5, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.45, band: 0.2, blur: 3.0 },
+  enter() { clean(); noMist(); for (const id of ALL()) M.faceLens(id, 1); M.plateFor('side', M.shots.side, { dist: 70, y: -6, blur: 3 }); } };
+M.shots.rev = { pos: [7.2, 1.7, -12.2], look: [-1.2, 1.15, 0.4], fov: 22, roll: 0, sway: 0.5, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.45, band: 0.18, blur: 3.5 },
+  enter() { clean(); noMist(); for (const id of PARTY) M.faceLens(id, 1); for (const id of BOSS) M.silhouette(id, 0.05, '#bcd6ff', 1.8); M.plateFor('rev', M.shots.rev, { dist: 62, y: -6, mirror: true, blur: 7 }); } };
+M.shots.colo = { pos: [1.8, 0.3, -2.6], look: [2.2, 2.6, -7.6], fov: 40, roll: 0, sway: 0.4, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.55, band: 0.3, blur: 2.0 },
+  enter() { clean(); noMist(); } };
+M.shots.hero = { pos: [-0.4, 0.45, 5.6], look: [-0.5, 1.45, 0.5], fov: 34, roll: 0, sway: 0.6, focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.5, band: 0.3, blur: 2.0 },
+  enter() { clean(); } };
+return Object.keys(M.shots);

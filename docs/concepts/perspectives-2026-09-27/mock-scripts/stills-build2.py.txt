@@ -1,0 +1,165 @@
+# Perspectives options round, stills rig A, STAGE 2: write the stage-2 frames and alternates, the P16 storyboard strips,
+# swap P4/P13 to the painted versions (stage-1 stand-ins kept as alternates), merge frames.json, draw sheets 03-05.
+import json, os, shutil
+from PIL import Image, ImageDraw, ImageFont
+
+RAW = 'D:/Tools/pyrefly-scratch/persp-a/raw'
+OUT = 'D:/Final Fantasy/docs/concepts/perspectives-2026-09-27'
+M2 = json.load(open('D:/Tools/pyrefly-scratch/persp-a/meta2.json', encoding='utf-8'))
+CH = {'ffx-ch1': {'game': 'FFX', 'title': 'Chapter I (FFX) · Seymour Flux + Mortiorchis'},
+      'ffx2-ch4': {'game': 'FFX-2', 'title': 'Chapter IV (FFX-2) · Bahamut'}}
+ORDER = ['P2', 'P2h', 'P2l', 'P2wd', 'P2r', 'P3', 'P21', 'P22', 'P10', 'P15']
+F = 'C:/Windows/Fonts/'
+def font(n, s): return ImageFont.truetype(F + n, s)
+BOLD, REG = 'segoeuib.ttf', 'segoeui.ttf'
+INK, PAPER, GOLD, GREY, PINK = (16, 12, 24), (246, 242, 234), (227, 185, 74), (170, 164, 186), (244, 155, 184)
+def tagcol(t):
+    for k, v in {'REAL ENGINE / existing art': (46, 125, 90), 'REAL ENGINE + NEW ART': (40, 90, 170), 'REAL ENGINE + POST': (150, 100, 30), 'COMPOSITE': (140, 40, 70)}.items():
+        if t.startswith(k): return v
+    return (90, 90, 90)
+def save_jpg(im, path, q=88):
+    os.makedirs(os.path.dirname(path), exist_ok=True); im.convert('RGB').save(path, quality=q, optimize=True, progressive=True)
+def rel(p): return os.path.relpath(p, OUT).replace('\\', '/')
+def cam_of(ms):
+    c = (ms or {}).get('cam') or {}
+    return {'position': [round(v, 3) for v in c.get('position', [])], 'lookAt': [round(v, 3) for v in c.get('lookAt', [])], 'fov': c.get('fov'), 'roll': c.get('roll', 0)}
+def hud_of(ms):
+    hb, hp = ms.get('hudOverBoss'), ms.get('hudOverParty')
+    ov = [n for n, v in (('boss', hb), ('party', hp)) if v is not None and v >= 0.05]
+    return {'boss': hb, 'party': hp, 'overlaps': ov or ['none'], 'how': "share of the figure's screen box under a HUD panel (24x24 samples)"}
+def clean(p): return {k: v for k, v in p.items() if k not in ('party', 'boss', 'lead', 'bossId', 'extra', 'hudSel', 'fn')}
+
+FJ = json.load(open(f'{OUT}/frames/frames.json', encoding='utf-8'))
+frames1 = [f for f in FJ['frames'] if f.get('stage', 1) == 1]
+frames2 = []
+for key in CH:
+    rec = json.load(open(f'{RAW}/{key}-s2-records.json', encoding='utf-8'))
+    def entry(P, r, file_main, alts, extra=None):
+        m = M2['options'][P]; ms = r['measure'] or {}
+        e = {'stage': 2, 'option': P.replace('art', ''), 'name': m['name'], 'chapter': key, 'game': CH[key]['game'], 'file': file_main,
+             'provenance': m['tag'], 'standIns': m['standIns'], 'camera': cam_of(ms), 'changed': m['changed'],
+             'bossHeightPct': ms.get('bossHeightPct'), 'bossGroupHeightPct': ms.get('bossGroupHeightPct'), 'bossVisibleHeightPct': ms.get('bossVisibleHeightPct'),
+             'leadFigurePx': ms.get('leadPx'), 'hudOverlap': hud_of(ms), 'weak': M2['weak'][key].get(P, ''), 'alternates': alts,
+             'swaps': ms.get('swaps'), 'params': clean(r['params'])}
+        if extra: e.update(extra)
+        return e
+    # ---- stage-2 options
+    for P in ORDER:
+        vs = sorted([r for r in rec.values() if r['option'] == P], key=lambda r: r['variant'])
+        if not vs: continue
+        m = M2['options'][P]; alts = []
+        for r in vs:
+            im = Image.open(f"{RAW}/{r['file']}")
+            if r['variant'] == 'a': path = f"{OUT}/frames/{key}/{m['num']}-{m['slug']}.jpg"
+            else:
+                path = f"{OUT}/frames/alt/{key}-{m['num']}-{m['slug']}-{r['variant']}.jpg"
+                alts.append({'file': rel(path), 'note': M2['variants'][key].get(f"{P}-{r['variant']}", '')})
+            save_jpg(im, path)
+        extra = {'size': [390, 844], 'dpr': 3, 'phone': True} if P == 'P15' else ({'momentShot': True, 'hudDown': True} if P == 'P22' else None)
+        frames2.append(entry(P, vs[0], rel(f"{OUT}/frames/{key}/{m['num']}-{m['slug']}.jpg"), alts, extra))
+    # ---- P16 storyboard strip from five real-engine beats
+    beats = [('P16cmd', 'COMMAND', 'over the shoulder (P3)'), ('P16hit', 'THE HIT', 'side stage, low (P5)'), ('P16enemy', 'ENEMY TURN', 'reverse angle (P4)'),
+             ('P16big', 'BIG ATTACK', 'colossus (P7)'), ('P16win', 'VICTORY', 'hero poster (P22)')]
+    pw, ph, lab = 768, 432, 70
+    strip = Image.new('RGB', (pw * 5 + 16 * 4, ph + lab), INK); d = ImageDraw.Draw(strip); beat_info = []
+    for i, (bk, t1, t2) in enumerate(beats):
+        r = rec[f'{bk}-a']; im = Image.open(f"{RAW}/{r['file']}").convert('RGB')
+        save_jpg(im, f"{OUT}/frames/alt/{key}-P16-beat{i + 1}-{t1.lower().replace(' ', '-')}.jpg")
+        x = i * (pw + 16); strip.paste(im.resize((pw, ph), Image.LANCZOS), (x, 0))
+        d.rectangle([x, ph, x + pw, ph + lab], fill=INK); d.text((x + 12, ph + 6), f'{i + 1} · {t1}', font=font(BOLD, 26), fill=PAPER); d.text((x + 12, ph + 38), t2, font=font(REG, 20), fill=GREY)
+        if i < 4: d.polygon([(x + pw + 3, ph // 2 - 14), (x + pw + 13, ph // 2), (x + pw + 3, ph // 2 + 14)], fill=GOLD)
+        ms = r['measure'] or {}
+        beat_info.append({'beat': t1, 'from': t2, 'file': rel(f"{OUT}/frames/alt/{key}-P16-beat{i + 1}-{t1.lower().replace(' ', '-')}.jpg"), 'camera': cam_of(ms), 'bossHeightPct': ms.get('bossHeightPct'), 'leadFigurePx': ms.get('leadPx'), 'hud': 'on' if i == 0 else 'down'})
+    m = M2['options']['P16']; sp = f"{OUT}/frames/{key}/{m['num']}-{m['slug']}.jpg"; save_jpg(strip, sp)
+    e = entry('P16', rec['P16cmd-a'], rel(sp), [], {'beats': beat_info, 'size': list(strip.size)})
+    e.pop('camera'); e.pop('bossHeightPct'); e.pop('bossGroupHeightPct'); e.pop('bossVisibleHeightPct'); e.pop('leadFigurePx'); e.pop('hudOverlap'); e.pop('swaps'); e.pop('params')
+    frames2.append(e)
+    # ---- P4 / P13 with the delivered art; the stage-1 stand-ins become alternates
+    for P, n1 in (('P4art', 'P04-reverse-angle'), ('P13art', 'P13-proscenium')):
+        main = f'{OUT}/frames/{key}/{n1}.jpg'; standin = f'{OUT}/frames/alt/{key}-{n1}-standin.jpg'
+        if not os.path.exists(standin): shutil.copyfile(main, standin)
+        vs = sorted([r for r in rec.values() if r['option'] == P], key=lambda r: r['variant'])
+        save_jpg(Image.open(f"{RAW}/{vs[0]['file']}"), main)
+        alts = [{'file': rel(standin), 'note': 'stage-1 version with the stand-in ' + ('plate (today\'s plate mirrored + blurred) and a front-painting silhouette' if P == 'P4art' else 'CSS/SVG arch')}]
+        for r in vs[1:]:
+            ap = f"{OUT}/frames/alt/{key}-{n1}-{'crimson' if P == 'P13art' else r['variant']}.jpg"; save_jpg(Image.open(f"{RAW}/{r['file']}"), ap)
+            alts.append({'file': rel(ap), 'note': M2['variants'][key].get(f"{P}-{r['variant']}", '')})
+        old = next(f for f in frames1 if f['chapter'] == key and f['option'] == P.replace('art', ''))
+        new = entry(P, vs[0], rel(main), alts + old.get('alternates', []))
+        frames1[frames1.index(old)] = {**new, 'stage': 2, 'replacesStage1': 'the stage-1 stand-in frame, now an alternate'}
+
+FJ['frames'] = frames1 + frames2; FJ['stage'] = '1 and 2'
+FJ['notWaiting'] = 'P6 and P9 still use the stand-in floor: the floor plates (art/REQUEST.md section 1) are not delivered yet'
+json.dump(FJ, open(f'{OUT}/frames/frames.json', 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
+print('frames', len(FJ['frames']), 'stage-2', len(frames2))
+
+# ---- sheets
+def label(S, d, x0, y0, w, f, h=58):
+    d.rectangle([x0, y0, x0 + w, y0 + h], fill=INK)
+    M1 = json.load(open('D:/Tools/pyrefly-scratch/persp-a/meta.json', encoding='utf-8'))['options']
+    num = next((v['num'] for v in list(M2['options'].values()) + list(M1.values()) if v['name'] == f['name']), f.get('option', ''))
+    d.text((x0 + 10, y0 + 3), f"{num} · {f['name']}", font=font(BOLD, 21), fill=PAPER)
+    tag = f['provenance']; tf = font(BOLD, 13); tw = d.textlength(tag, font=tf)
+    d.rectangle([x0 + 10, y0 + 33, x0 + 22 + tw, y0 + 52], fill=tagcol(tag)); d.text((x0 + 16, y0 + 34), tag, font=tf, fill=PAPER)
+    if f['standIns']:
+        s = 'STAND-IN: ' + f['standIns'][0]; sf = font(REG, 13); maxw = w - (tw + 44)
+        if d.textlength(s, font=sf) > maxw:
+            words = s.split(' ')
+            while words and d.textlength(' '.join(words) + ' …', font=sf) > maxw: words.pop()
+            s = ' '.join(words).rstrip(',;:') + ' …'
+        d.text((x0 + 30 + tw, y0 + 35), s, font=sf, fill=PINK)
+def header(S, d, title, lines, h):
+    d.rectangle([0, h - 4, S.width, h], fill=GOLD); d.text((24, 14), title, font=font(BOLD, 30), fill=PAPER); y = 58
+    for ln in lines: d.text((24, y), ln, font=font(REG, 18), fill=GREY); y += 24
+def save_sheet(S, name):
+    path = f'{OUT}/sheets/{name}'; q = 86
+    while True:
+        S.save(path, quality=q, optimize=True, progressive=True)
+        if os.path.getsize(path) < 2_600_000 or q < 60: break
+        q -= 6
+    print(name, S.size, os.path.getsize(path) // 1024, 'KB q', q)
+
+def stage2_sheet(key, name):
+    fs = [f for f in FJ['frames'] if f['chapter'] == key and f.get('stage') == 2 and not f.get('phone') and f['option'] != 'P16']
+    order = ['P2', 'P2h', 'P2l', 'P2wd', 'P2r', 'P3', 'P21', 'P22', 'P10', 'P4', 'P13']
+    fs.sort(key=lambda f: order.index(f['option']) if f['option'] in order else 99)
+    cw, chh, lab, cols, head = 640, 360, 58, 4, 118
+    rows = (len(fs) + cols - 1) // cols; bottom = 640
+    S = Image.new('RGB', (cw * cols, head + rows * (chh + lab) + bottom), INK); d = ImageDraw.Draw(S)
+    header(S, d, f'Battle perspectives · stage 2 · {CH[key]["title"]}', ['Real-engine frames at 1920x1080 (phone 390x844 at DPR 3) from the worktree, no src/ change. Rear paintings, far-side plates, boss rear views and the arch are',
+                                                                          "the art agent's CANDIDATES (art/READY.json). P4 and P13 now use the painted art; their stage-1 stand-ins are alternates. P6/P9 wait for floor plates."], head)
+    for i, f in enumerate(fs):
+        x0 = (i % cols) * cw; y0 = head + (i // cols) * (chh + lab)
+        S.paste(Image.open(f"{OUT}/{f['file']}").convert('RGB').resize((cw, chh), Image.LANCZOS), (x0, y0)); label(S, d, x0, y0 + chh, cw, f)
+    yb = head + rows * (chh + lab)
+    ph_ = next(f for f in FJ['frames'] if f['chapter'] == key and f.get('phone'))
+    pim = Image.open(f"{OUT}/{ph_['file']}").convert('RGB'); pw = round(pim.width * (bottom - 70) / pim.height)
+    S.paste(pim.resize((pw, bottom - 70), Image.LANCZOS), (20, yb + 6)); label(S, d, 0, yb + bottom - 62, pw + 40, ph_)
+    st = next(f for f in FJ['frames'] if f['chapter'] == key and f['option'] == 'P16')
+    sim = Image.open(f"{OUT}/{st['file']}").convert('RGB'); sw = S.width - pw - 80; sh = round(sim.height * sw / sim.width)
+    S.paste(sim.resize((sw, sh), Image.LANCZOS), (pw + 60, yb + 60)); label(S, d, pw + 60, yb + 60 + sh + 8, 900, st)
+    d.text((pw + 60, yb + 16), 'P16 · Director\'s Cut: a camera language across five beats (HUD down after the command beat)', font=font(BOLD, 22), fill=GOLD)
+    save_sheet(S, name)
+
+def ots_sheet():
+    order = ['P2w', 'P2', 'P2h', 'P2l', 'P2wd', 'P2r', 'P3', 'P21']
+    cw, chh, lab, cols, head, gap = 640, 360, 58, 4, 118, 50
+    S = Image.new('RGB', (cw * cols, head + 2 * (2 * (chh + lab) + gap)), INK); d = ImageDraw.Draw(S)
+    header(S, d, 'Battle perspectives · the over-the-shoulder family, both chapters', ['P02w (today\'s front paintings), P02 true over the shoulder with the rear candidates, high, low, wide, right shoulder, P03 Hero Shoulder, P21 Cinematic Shoulder.',
+                                                                                        'Same moment and HUD as every other frame; P21 moves the HUD into 2.39:1 bands as a mock.'], head)
+    y = head
+    for key in CH:
+        d.text((24, y + 10), CH[key]['title'], font=font(BOLD, 26), fill=GOLD); y += gap
+        fs = []
+        for o in order:
+            name = 'P2-without' if o == 'P2w' else o
+            fs.append(next(f for f in FJ['frames'] if f['chapter'] == key and f['option'] == name))
+        for i, f in enumerate(fs):
+            x0 = (i % cols) * cw; y0 = y + (i // cols) * (chh + lab)
+            S.paste(Image.open(f"{OUT}/{f['file']}").convert('RGB').resize((cw, chh), Image.LANCZOS), (x0, y0)); label(S, d, x0, y0 + chh, cw, f)
+        y += 2 * (chh + lab)
+    save_sheet(S, '05-ots-family.jpg')
+
+stage2_sheet('ffx-ch1', '03-stage2-ffx.jpg')
+stage2_sheet('ffx2-ch4', '04-stage2-ffx2.jpg')
+ots_sheet()

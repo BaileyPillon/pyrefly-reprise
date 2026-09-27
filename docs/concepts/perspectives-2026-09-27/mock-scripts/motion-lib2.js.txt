@@ -1,0 +1,149 @@
+// __motion stage-2 additions (2026-09-27): rear paintings (the true over-the-shoulder), boss rear views, painted reverse
+// plates, a whip pan that hides a painting swap, the lens-angle meter per figure, and a letterboxed HUD (M6).
+// Loaded after motion-lib.js; console-only, never imported by src/.
+const M = window.__motion; const P = window.__pyrefly;
+// Per-battle state: a new battle (a fresh setup or chapter) brings new actors, a new scene and a new camera, so every
+// cache keyed by combatant id must start again (a stale hook on the old actor lets front paintings through).
+if (M._battle !== P.battle()) { M._battle = P.battle(); M.rear = {}; M.rimSave = {}; M.pplates = {}; M.faces = {}; M.rot0 = {}; M.ch = {}; M.on = false; M.whipFx = null; }
+
+// ------------------------------------------------------------------ rear paintings
+// Loaded as an extra pose with baseline fitting OFF, so the sidecar's baselineY (the feet) is honoured; sized against
+// the idle (the reference pose), so the sidecar's `scale` makes the figure as tall as the idle. Shown on the actor's
+// planes under the pose name it already has (life state, turn ring and lean kept). Declared facing = the side the body
+// already faces ('right' for the party, 'left' for enemies), so it is never mirrored and the interim yaw stays off.
+M.rear = M.rear || {};
+M.loadRear = async (id, url, key = 'rear34') => {
+  const a = M.act(id); if (!a) return 'no ' + id;
+  const name = '__' + key;
+  const fb = a.fitBaseline; a.fitBaseline = false;
+  try { await a.reloadPose(name, url); } finally { a.fitBaseline = fb; }
+  const tex = a.poses.get(name); if (!tex || tex.placeholder) return 'missing ' + url;
+  tex.meta = { ...tex.meta, facing: a.facingDir === 1 ? 'right' : 'left' };
+  M.rear[id] = M.rear[id] || { showing: null };
+  return { id, key, url, w: tex.meta.width, h: tex.meta.height, baselineY: tex.meta.baselineY, scale: tex.meta.scale, facing: tex.meta.facing };
+};
+M.zeroYaw = (a) => { a.appliedYaw = 0; a.inner.rotation.y = 0; };
+M.hookRear = (id) => {
+  const a = M.act(id); let r = M.rear[id] || (M.rear[id] = { showing: null });
+  if (r.actor && r.actor !== a) { r = M.rear[id] = { showing: null }; }
+  if (r.orig && r.actor === a) return;
+  r.actor = a;
+  r.orig = a.setPose.bind(a);
+  // While a rear painting is up, any pose the fight asks for keeps its life state (lunge, flinch, lean) but stays on the
+  // rear painting: no rear attack or cast paintings exist. A KO lets the real prone painting through.
+  a.setPose = function (name, opts) {
+    r.orig(name, opts);
+    if (r.showing && !/^(ko|dead)$/.test(name)) {
+      const t = a.poses.get('__' + r.showing);
+      for (let i = 0; i < a.slots.length; i++) if (a.slots[i].pose) a.applyPose(i, a.slots[i].pose, t);
+      a.syncOpacity(); M.zeroYaw(a);
+    }
+  };
+};
+M.showRear = (id, key = 'rear34') => {
+  const a = M.act(id); if (!a) return 'no ' + id;
+  const tex = a.poses.get('__' + key); if (!tex) return 'not loaded ' + id + ' ' + key;
+  M.hookRear(id); const r = M.rear[id];
+  if (/^(ko|dead)$/.test(a.requested || a.pose)) return 'down';
+  r.showing = key;
+  for (let i = 0; i < a.slots.length; i++) if (a.slots[i].pose) a.applyPose(i, a.slots[i].pose, tex);
+  a.syncOpacity(); M.zeroYaw(a);
+  return { id, key, mirrored: a.mirrored, poseSize: a.poseSize.map((v) => +v.toFixed(3)) };
+};
+M.showFront = (id) => {
+  const a = M.act(id); const r = M.rear[id]; if (!a || !r || !r.showing) return false;
+  r.showing = null;
+  r.orig(a.requested || a.pose, { immediate: true, force: true });
+  // a cut back must not show the plane easing into its yaw: land it now
+  const t = a.yawTarget(); a.appliedYaw = t; a.inner.rotation.y = (t * Math.PI) / 180;
+  return true;
+};
+M.rearOn = (ids, key) => ids.map((id) => M.showRear(id, typeof key === 'object' ? key[id] ?? 'rear34' : key ?? 'rear34'));
+M.frontOn = (ids) => ids.map((id) => M.showFront(id));
+
+// Rim and bounce light for the figures seen from behind (the light comes from the boss side: a back light).
+M.rimSave = M.rimSave || {};
+M.rim = (id, o) => {
+  const a = M.act(id); if (!a) return; const u = a.u;
+  if (M.rimSave[id] && M.rimSave[id].actor !== a) delete M.rimSave[id];
+  if (!M.rimSave[id]) M.rimSave[id] = { actor: a, rc: u.rimColor.value.getHex(), rs: u.rimStrength.value, rd: u.rimDir.value.toArray(), rw: u.rimWidth.value, bc: u.bounceColor.value.getHex(), bs: u.bounceStrength.value };
+  if (!o) { const s = M.rimSave[id]; u.rimColor.value.setHex(s.rc); u.rimStrength.value = s.rs; u.rimDir.value.fromArray(s.rd); u.rimWidth.value = s.rw; u.bounceColor.value.setHex(s.bc); u.bounceStrength.value = s.bs; return; }
+  if (o.rim != null) u.rimColor.value.setHex(o.rim); if (o.rimStrength != null) u.rimStrength.value = o.rimStrength;
+  if (o.rimDir) u.rimDir.value.fromArray(o.rimDir); if (o.rimWidth != null) u.rimWidth.value = o.rimWidth;
+  if (o.bounce != null) u.bounceColor.value.setHex(o.bounce); if (o.bounceStrength != null) u.bounceStrength.value = o.bounceStrength;
+};
+
+// ------------------------------------------------------------------ painted plates (the far side of the arena)
+M.pplates = M.pplates || {};
+M.loadPlate = async (name, url) => {
+  const sc = M.st().opts.scene; const bp = sc.getObjectByName('backdrop-painting');
+  const img = new Image(); img.src = url; await img.decode();
+  const tex = new bp.material.map.constructor(img); tex.colorSpace = bp.material.map.colorSpace; tex.anisotropy = bp.material.map.anisotropy; tex.needsUpdate = true;
+  const mat = bp.material.clone(); mat.map = tex; mat.needsUpdate = true;
+  const m = new bp.constructor(bp.geometry, mat); m.name = 'motion-pplate-' + name; m.renderOrder = bp.renderOrder; m.visible = false;
+  sc.add(m); M.pplates[name] = m;
+  return { name, w: img.naturalWidth, h: img.naturalHeight, geo: bp.geometry.parameters };
+};
+/** Stand the plate on a shot's view axis `dist` out, facing the lens, with its painted horizon (fraction from the top) at eye height. */
+M.placePlate = (name, shot, o = {}) => {
+  const m = M.pplates[name]; if (!m) return 'no plate ' + name;
+  const s = shotOf2(shot); const dx = s.look[0] - s.pos[0], dz = s.look[2] - s.pos[2]; const n = Math.hypot(dx, dz);
+  const dist = o.dist ?? 62, k = o.scale ?? 1, H = m.geometry.parameters.height * k;
+  const horizonY = (o.eyeY ?? s.pos[1]) + (o.lift ?? 0);
+  const cy = horizonY - (0.5 - (o.horizon ?? 0.45)) * H;
+  m.position.set(s.pos[0] + (dx / n) * dist + (o.dx ?? 0), cy, s.pos[2] + (dz / n) * dist);
+  m.rotation.set(0, Math.atan2(-dx, -dz), 0); m.scale.set(o.mirror ? -k : k, k, 1); m.visible = true;
+  return m.position.toArray().map((v) => +v.toFixed(2));
+};
+M.platesAllOff = () => { for (const m of Object.values(M.pplates)) m.visible = false; M.platesOff(); };
+const shotOf2 = (s) => (typeof s === 'string' ? M.shots[s] : s);
+
+// ------------------------------------------------------------------ whip pan: hide the reticle while the frame streaks
+const baseApplyFx = M.__baseApplyFx || (M.__baseApplyFx = M.applyFx);
+M.applyFx = (dt) => {
+  const wf = M.whipFx;
+  baseApplyFx(dt);
+  const layers = document.querySelectorAll('.ffx-targeting');
+  if (wf) { const k = (M.t - wf.t0) / wf.dur; const vis = k >= 0.98 ? 1 : 0; for (const l of layers) l.style.opacity = String(vis); M._whipHid = true; }
+  else if (M._whipHid) { for (const l of layers) l.style.opacity = ''; M._whipHid = false; }
+};
+// camera arcs on the look-at as well as the position (a pan swings the look, a dolly the position)
+const baseVal = M.__baseVal || (M.__baseVal = M.val);
+M.val = (name) => {
+  const v = baseVal(name); const c = M.ch[name];
+  if (name === 'cam' && v && c && c.dur && c.lookArc) { const k = Math.min(1, Math.max(0, (M.t - c.t0) / c.dur)); const p = (typeof c.ease === 'function' ? c.ease : M.E[c.ease] || M.E.move)(k); const a = 4 * p * (1 - p); v.look = v.look.map((x, i) => x + c.lookArc[i] * a); }
+  return v;
+};
+M.whip2 = (s, o = {}) => { const shot = M.whip(s, o); if (o.lookArc) M.ch.cam.lookArc = o.lookArc; return shot; };
+
+// ------------------------------------------------------------------ lens angles (the cardboard meter), per figure
+M.lens = (ids) => {
+  const c = M.cam(); const out = {};
+  for (const id of ids ?? M.st().staged()) {
+    const a = M.act(id); if (!a || !a.visible) continue;
+    const az = (Math.atan2(c.position.x - a.position.x, c.position.z - a.position.z) * 180) / Math.PI;
+    const yaw = ((a.rotation.y + (a.inner?.rotation.y ?? 0)) * 180) / Math.PI;
+    let d = az - yaw; while (d > 180) d -= 360; while (d < -180) d += 360;
+    const r = M.st().projectRect(id); const cv = M.R().domElement.getBoundingClientRect();
+    out[id] = { off: Math.round(d), widthKept: +Math.max(0, Math.cos((d * Math.PI) / 180)).toFixed(2), rear: M.rear[id]?.showing ?? null, mirrored: a.mirrored,
+      rect: r ? [Math.round(r.x - cv.x), Math.round(r.y - cv.y), Math.round(r.w), Math.round(r.h)] : null };
+  }
+  return out;
+};
+
+// ------------------------------------------------------------------ event log with targets
+M.hookEvents = () => {
+  const hud = M.hud(); if (!hud) return false;
+  if (!hud.__origOnEvent) hud.__origOnEvent = hud.onEvent.bind(hud);
+  hud.onEvent = (e) => { try { (window.__evlog || (window.__evlog = [])).push({ t: +performance.now().toFixed(0), type: e.type, actor: e.actorId || e.sourceId || '', target: e.targetId || (e.targets || []).join(','), name: e.abilityName || e.name || e.status || e.text || '' }); M.onEv(e); } catch (err) {} return hud.__origOnEvent(e); };
+  return true;
+};
+const baseReset = M.__baseReset || (M.__baseReset = M.reset);
+M.reset = () => {
+  for (const id of Object.keys(M.rear)) { try { M.showFront(id); } catch (e) {} }
+  for (const id of Object.keys(M.rimSave)) { try { M.rim(id, null); } catch (e) {} }
+  M.platesAllOff(); M.whipFx = null;
+  for (const l of document.querySelectorAll('.ffx-targeting')) l.style.opacity = '';
+  return baseReset();
+};
+return 'lib2 ' + Object.keys(M).length;
