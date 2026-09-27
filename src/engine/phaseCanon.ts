@@ -111,7 +111,8 @@ export function phaseForFormation(enemyIds: readonly CombatantId[]): PhaseId | n
   if (enemyIds.includes('vegnagun-head')) return 'vegnagun-head';
   if (enemyIds.includes('vegnagun-body')) return 'vegnagun-body';
   if (enemyIds.includes('vegnagun-leg')) return 'vegnagun-leg';
-  if (enemyIds.includes('vegnagun-tail')) return 'base';
+  // The tail's link is the start, and Shuyin's fight after the head is not Vegnagun's.
+  if (enemyIds.includes('vegnagun-tail') || enemyIds.includes('shuyin')) return 'base';
   return null;
 }
 

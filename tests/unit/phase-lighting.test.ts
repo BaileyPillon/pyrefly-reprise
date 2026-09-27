@@ -58,7 +58,8 @@ describe('phase lighting: the canon triggers (D-224)', () => {
     expect(phaseForFormation(['vegnagun-leg', 'node-a'])).toBe('vegnagun-leg');
     expect(phaseForFormation(['vegnagun-body', 'bulwark-r'])).toBe('vegnagun-body');
     expect(phaseForFormation(['vegnagun-head'])).toBe('vegnagun-head');
-    expect(phaseForFormation(['shuyin'])).toBeNull();
+    expect(phaseForFormation(['shuyin'])).toBe('base');
+    expect(phaseForFormation(['yunalesca'])).toBeNull();
   });
 
   it('nothing else turns the light: other actions, other charges, other forms, the same beat by someone else', () => {
