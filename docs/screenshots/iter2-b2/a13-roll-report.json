@@ -1,0 +1,818 @@
+{
+ "normal": {
+  "peak": {
+   "t": 801,
+   "roll": -4,
+   "rig": "enemy",
+   "phase": "play:damage"
+  },
+  "firstNonZero": {
+   "t": 635,
+   "roll": -0.69,
+   "rig": "enemy",
+   "phase": "play:damage"
+  },
+  "firstAttackActionMs": 807,
+  "trace": [
+   [
+    "action-start",
+    243
+   ],
+   [
+    "damage",
+    363
+   ],
+   [
+    "overdrive-gauge",
+    0
+   ],
+   [
+    "action-end",
+    201
+   ],
+   [
+    "turn-start",
+    95
+   ],
+   [
+    "action-start",
+    232
+   ],
+   [
+    "damage",
+    343
+   ],
+   [
+    "status-add",
+    224
+   ]
+  ],
+  "samples": [
+   {
+    "t": 116,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 134,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 168,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 201,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 235,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 268,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 300,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 335,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 367,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 409,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 433,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 467,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 501,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 534,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 567,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 600,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 635,
+    "roll": -0.69,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 668,
+    "roll": -1.86,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 700,
+    "roll": -2.78,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 739,
+    "roll": -3.44,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 768,
+    "roll": -3.85,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 801,
+    "roll": -4,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 834,
+    "roll": -3.96,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 866,
+    "roll": -3.83,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 900,
+    "roll": -3.6,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 933,
+    "roll": -3.28,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 968,
+    "roll": -2.86,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1000,
+    "roll": -2.56,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1033,
+    "roll": -2.28,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1067,
+    "roll": -2.01,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1100,
+    "roll": -1.76,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1133,
+    "roll": -1.53,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1167,
+    "roll": -1.31,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1199,
+    "roll": -1.11,
+    "rig": "idle",
+    "phase": "play:turn-start"
+   },
+   {
+    "t": 1233,
+    "roll": -0.93,
+    "rig": "idle",
+    "phase": "play:turn-start"
+   },
+   {
+    "t": 1266,
+    "roll": -0.76,
+    "rig": "idle",
+    "phase": "play:turn-start"
+   },
+   {
+    "t": 1310,
+    "roll": -0.61,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1332,
+    "roll": -0.48,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1367,
+    "roll": -0.36,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1400,
+    "roll": -0.26,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1433,
+    "roll": -0.17,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1466,
+    "roll": -0.11,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1501,
+    "roll": -0.06,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1533,
+    "roll": -0.72,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1567,
+    "roll": -1.88,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1600,
+    "roll": -2.79,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1640,
+    "roll": -3.45,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1666,
+    "roll": -3.85,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1700,
+    "roll": -4,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1733,
+    "roll": -3.96,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1767,
+    "roll": -3.83,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1801,
+    "roll": -3.6,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1833,
+    "roll": -3.27,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1867,
+    "roll": -2.86,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 1900,
+    "roll": -2.35,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 1934,
+    "roll": -1.76,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 1967,
+    "roll": -1.23,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 2000,
+    "roll": -0.79,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 2033,
+    "roll": -0.45,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 2067,
+    "roll": -0.21,
+    "rig": "party",
+    "phase": "play:status-add"
+   }
+  ]
+ },
+ "reduced": {
+  "peak": {
+   "t": 130,
+   "roll": 0,
+   "rig": "idle",
+   "phase": "command:tidus"
+  },
+  "firstAttackActionMs": 838,
+  "trace": [
+   [
+    "action-start",
+    268
+   ],
+   [
+    "damage",
+    367
+   ],
+   [
+    "overdrive-gauge",
+    0
+   ],
+   [
+    "action-end",
+    203
+   ],
+   [
+    "turn-start",
+    94
+   ],
+   [
+    "action-start",
+    226
+   ],
+   [
+    "damage",
+    343
+   ],
+   [
+    "status-add",
+    223
+   ]
+  ],
+  "samples": [
+   {
+    "t": 130,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 138,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 171,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 204,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 237,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 270,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 304,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 337,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 370,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "command:tidus"
+   },
+   {
+    "t": 446,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 455,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 487,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 520,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 554,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 587,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 620,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 653,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 688,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 721,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 754,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 796,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 821,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 855,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 887,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 935,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 954,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 988,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1020,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1054,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1087,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1120,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1154,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1188,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1220,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:action-end"
+   },
+   {
+    "t": 1253,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:turn-start"
+   },
+   {
+    "t": 1287,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:turn-start"
+   },
+   {
+    "t": 1320,
+    "roll": 0,
+    "rig": "idle",
+    "phase": "play:turn-start"
+   },
+   {
+    "t": 1364,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1386,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1420,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1455,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1488,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1522,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1553,
+    "roll": 0,
+    "rig": "enemy",
+    "phase": "play:action-start"
+   },
+   {
+    "t": 1587,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1620,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1653,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1693,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1722,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1754,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1786,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1821,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1854,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1887,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:damage"
+   },
+   {
+    "t": 1922,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 1954,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 1986,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 2020,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 2054,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:status-add"
+   },
+   {
+    "t": 2087,
+    "roll": 0,
+    "rig": "party",
+    "phase": "play:status-add"
+   }
+  ]
+ }
+}
