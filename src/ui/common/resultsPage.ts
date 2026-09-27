@@ -46,6 +46,8 @@ export interface ResultsPageModel {
   /** OVERKILL ×n, NEW BEST. */
   tags: string[];
   quip: VictoryLine | undefined;
+  /** PR-0215: the engine's own line after a withdrawal, printed in the quip's slot (`withdrawal.ts`). */
+  note?: string;
   ledger: LedgerLine[];
   rows: ResultsMemberRow[];
   /** The count-up's progress, 0..1. */
@@ -95,6 +97,7 @@ export function desktopPageHtml(m: ResultsPageModel): string {
           ${m.tags.map((t) => `<span class="rres__tag">${escapeHtml(t)}</span>`).join('')}
         </div>
         ${m.quip ? `<div class="rres__quip" data-speaker="${escapeHtml(m.quip.speakerId)}">${escapeHtml(m.quip.line)}</div>` : ''}
+        ${m.note ? `<div class="rres__quip rres__quip--note">${escapeHtml(m.note)}</div>` : ''}
       </div>
 
       <div class="rres__ledger rres__ledger--${density.ledger}">${ledgerHtml}</div>
@@ -164,9 +167,11 @@ function actionsHtml(actionIndex: number): string {
  * `results-fit.css` can end the caption above the buttons by shortening the location, never
  * the word that says how the fight ended.
  */
-export function resultsCaptionHtml(location: string, victory: boolean): string {
+export function resultsCaptionHtml(location: string, victory: boolean, withdrew = false): string {
+  // PR-0215 (Bailey's pick B, D-249): a withdrawal reads WITHDREW, not FELL.
+  const end = victory ? 'CLEARED' : withdrew ? 'WITHDREW' : 'FELL';
   return (
     `<span class="rres__cap-loc">${escapeHtml(location.toUpperCase())}</span>` +
-    `<span class="rres__cap-end"> &middot; ${victory ? 'CLEARED' : 'FELL'}</span>`
+    `<span class="rres__cap-end"> &middot; ${end}</span>`
   );
 }

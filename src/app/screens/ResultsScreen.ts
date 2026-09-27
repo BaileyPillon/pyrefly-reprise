@@ -48,6 +48,8 @@ export interface ResultsScreenOptions {
    * read the old record itself and would never light `NEW BEST`.
    */
   previousBestMs?: number | null;
+  /** PR-0215: the engine's stalemate line after a withdrawal (`withdrawal.ts`), printed in the quip's slot. */
+  withdrawLine?: string;
   /** Called once the player dismisses the panel. */
   onContinue?: () => void;
   /** Called with the player's pick. `'continue'` unless the defeat panel was used. */
@@ -186,7 +188,8 @@ export class ResultsScreen extends Screen {
     if (chapter?.game === 'ffx2') this.stage.el.classList.add('ig--ffx2');
     if (this.silent) this.stage.el.classList.add('rres--silent');
     if (!this.victory) this.stage.el.classList.add('rres--defeat');
-    this.caption = chapter ? resultsCaptionHtml(chapter.location, this.victory) : ''; // PR-0172: `results-fit.css`
+    const withdrew = this.opts.result.outcome === 'escape'; // PR-0215: WITHDREW, not FELL
+    this.caption = chapter ? resultsCaptionHtml(chapter.location, this.victory, withdrew) : ''; // PR-0172: `results-fit.css`
     if (this.phone) {
       this.stage.el.classList.add('rres--phone');
       const { width, height } = this.phoneSize();
@@ -380,6 +383,7 @@ export class ResultsScreen extends Screen {
       clock: this.ff7 ? '' : formatClearTime(this.clearMs),
       tags,
       quip: this.quip,
+      ...(this.opts.withdrawLine ? { note: this.opts.withdrawLine } : {}),
       ledger: this.ledger,
       rows: this.rows,
       progress: this.countProgress(),

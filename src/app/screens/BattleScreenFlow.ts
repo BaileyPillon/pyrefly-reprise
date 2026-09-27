@@ -91,6 +91,8 @@ export interface ResultsScreenOptions {
   previousBestMs?: number | null;
   /** Called with the player's pick. Only the defeat panel offers one. */
   onChoice?: (choice: ResultsChoice) => void;
+  /** PR-0215: the engine's stalemate line, for the withdrawal card (`withdrawal.ts`). */
+  withdrawLine?: string;
 }
 
 /** Factories `ui/common` can supply. Any it omits uses the placeholder. */
@@ -397,9 +399,10 @@ export class GameFlow {
         return outcome;
       }
 
-      if (outcome.outcome === 'defeat') {
+      if (outcome.outcome === 'defeat' || outcome.outcome === 'escape') {
         // A secret objective row shows from now on (Chapter IX's Doom row, objectiveReveal.ts).
-        noteChapterLost(id);
+        if (outcome.outcome === 'defeat') noteChapterLost(id);
+        // PR-0215: a withdrawal ('escape': the FFX stalemate) gets the same panel (Bailey's pick B, D-249).
         // The defeat panel owns the retry decision: `RETRY` re-enters the loop
         // (through the prep menu when there is one), `CHAPTER SELECT` gives up
         // and hands the outcome back to the caller. An automated run never
@@ -478,6 +481,7 @@ export class GameFlow {
       silent,
       elapsedMs: outcome.elapsedMs,
       ...(previousBestMs !== undefined ? { previousBestMs } : {}),
+      ...(outcome.withdrawLine ? { withdrawLine: outcome.withdrawLine } : {}),
       onChoice: (picked) => {
         choice = picked;
       },

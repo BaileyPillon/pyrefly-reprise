@@ -54,6 +54,7 @@ import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
 import { presenterGameDeps } from './BattleScreenGameDeps.ts';
 import { getChapterMeta } from '../../data/chapter-meta.ts';
+import { withdrawLineFrom } from './withdrawal.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -102,6 +103,8 @@ export interface BattleScreenResult {
   preview: boolean;
   /** The last Save Sphere link entered: where a defeat retries (FA3 = b). */
   checkpoint?: ChainCheckpoint;
+  /** PR-0215: the engine's stalemate line when the fight ended in a withdrawal (`withdrawal.ts`). */
+  withdrawLine?: string;
 }
 
 export class BattleScreen extends Screen {
@@ -639,6 +642,7 @@ export class BattleScreen extends Screen {
     const resolve = this.finishedResolve;
     if (!resolve) return;
     this.finishedResolve = null;
+    const withdrawLine = outcome.kind === 'escape' ? withdrawLineFrom(this.engine?.state().log) : null;
     resolve({
       chapterId: this.opts.chapter.id,
       outcome: outcome.kind,
@@ -647,6 +651,7 @@ export class BattleScreen extends Screen {
       links: Math.max(1, this.links),
       preview: this.preview,
       ...(this.checkpoint ? { checkpoint: this.checkpoint } : {}),
+      ...(withdrawLine ? { withdrawLine } : {}),
     });
   }
 
