@@ -290,7 +290,7 @@ export const seymourFluxScripts: ChapterScripts = {
     'first-zombie': [
       say('rikku', "Eeew! Yunie, don't heal him!", {
         auto: 1200,
-        fallback: [{ who: 'kimahri', text: 'Yuna. Do not heal him.' }, { who: 'tidus', text: "Yuna, don't heal me! Not now!" }],
+        fallback: [{ who: 'kimahri', text: 'Yuna. Do not heal him.' }, { who: 'tidus', text: 'Yuna, hold the cure! Not now!' }],
       }),
       say('lulu', "He's turned. Cures will kill him now.", {
         auto: 1400,
