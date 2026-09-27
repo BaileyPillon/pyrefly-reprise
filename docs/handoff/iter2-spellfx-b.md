@@ -152,3 +152,118 @@ here is the phone density at a desktop viewport, not a phone device.
   - `PYREFLY_BROWSER=gpu node docs/screenshots/spellfx-b/capture.mjs <dev url> frames|flow|perf`
   - `node docs/screenshots/spellfx-b/forced.mjs desk|phone` (port 6050)
   - `python docs/screenshots/spellfx-b/sheet.py`
+
+## CHECK (independent, 2026-09-26, not the builder)
+
+Checked `74b6ad19` in `D:/pyrefly-iter2-spellfx`. Game case: both (two skins). **Verdict: ready to
+merge. No blockers.** The findings below are for the merge note and the next batch.
+
+**Re-run on this branch:**
+- `tsc --noEmit` is clean.
+- Full vitest (`--testTimeout=60000`): 452 files passed, 4 skipped; 8336 tests passed.
+- `tools/orphans.mjs`: 24 orphans, the same list as main. None is in `spellfx/`.
+- No boss number moved: the diff against the branch point is empty for `src/data`, `src/battle`
+  and `research`.
+
+**Real keys, own production build** (`vite build` into this worktree's `dist/`, preview on 6055,
+headless GPU). Spells were chosen through the command menu with Playwright key presses (arrows,
+Enter, Escape). That includes Switch to Lulu in Chapter I and Change to Black Mage in Chapter IV.
+The stage's own `spellFx` snapshot then showed which effect drew.
+
+| | 1600x900 | 390x844 |
+|---|---|---|
+| Ch I (FFX) | Fire, Blizzard, Thunder, Water, Cure, Attack drew fire, ice, thunder, water, cure, hit | the same six |
+| Ch IV (FFX-2) | White Mage Cure, Attack, then Black Mage Fire, Blizzard, Thunder, Water: all six drew | the same six |
+
+- Holy is in neither chapter's kit. It was **forced through the debug API** (`autoBattle` with the
+  ability id), in both games at both sizes. FFX Holy is one mark, and the numeral waits 850 ms.
+  FFX-2 Holy is one effect with eight marks; the waits are 550 ms, then 0 for the other seven.
+- Peak quads per effect: 38 to 334 on desktop, and 24 to 202 on a phone (the phone tier is picked
+  on its own at 390x844).
+- No page errors in any run.
+
+**Target vs build.**
+- The builder's `target-vs-build-*.jpg` pairs use the approved stills
+  (`docs/concepts/spell-fx-2026-09-26/stills/<game>-B-<el>.jpg`), and they match.
+- I also paired each approved still with a **real-key** frame. The sheets are
+  `.scratch-check/tvb-ffx-realkeys.jpg` and `tvb-ffx2-realkeys.jpg`; they are untracked, and so is
+  `phone-sheet.jpg`.
+- Shape, colour, motion and skin match the mock:
+  - Fire: a column from a scorched mark.
+  - Ice: shards from the floor.
+  - Thunder: a bolt from the top of the frame.
+  - Water: a ring, motes and a sphere.
+  - Holy: the pillar (FFX) and eight sparkle strikes (FFX-2).
+  - Cure: rising motes.
+  - Hit: an arc with sparks.
+  - FFX has the gold eight-point ring and round motes; FFX-2 has the pink ring and four-point
+    sparkles.
+- The real-key frames land on Mortiorchis, the default target, rather than on the mock's Seymour.
+  The shapes are the same.
+
+**Frame time** (`.scratch-check/perf.mjs`). Same build and chapter, with effects forced every
+450 ms for 8 s, twice per tier. `low` is today's bloom path through `vfx.impact`.
+- The mean is 16.67 ms and p95 is 16.7 to 16.8 ms in every tier, in Chapters I and IV, desktop and
+  phone. The frame rate is vsync-capped.
+- The effects cost 0.1 to 0.3 ms of CPU per frame (median).
+- Under this stress loop the peak hit the caps exactly: 600 quads full, 400 phone. The budget holds.
+
+**No regression in the other chapters** (both games). Every chapter ran its `intended` auto-battle
+at `fast` speed on this build and on a build of the branch point `a253cae9` (worktree
+`D:/pyrefly-iter2-spellfx-base`, preview on 6056). That is 15 chapters: seymour-flux, yunalesca,
+braskas-final-aeon, ffx2-bahamut, ffx2-vegnagun-shuyin, ffx2-leblanc, evrae-airship,
+isaaru-via-purifico, seymour-anima-macalania, seymour-natus, seymour-omnis, yojimbo-cavern,
+ffx2-den-of-woe, ffx2-fallen-aeons and ffx2-trema.
+- Outcome and turn count are identical in all 15.
+- FFX: ticks and event counts are identical too.
+- FFX-2: ticks are equal or within a few hundred of 775k (Trema). Event counts vary from run to
+  run on **both** builds (Bahamut base 2077, 2077, 2012; branch 2003, 2042, 2018). That is the ATB
+  pump, not this change.
+- No page errors.
+- The effects drew in every chapter. Bloom stayed only on non-elemental magic, gravity and the
+  like.
+
+**Findings (none blocks; none is a regression against live):**
+1. **Major, not introduced: phone framing.** At 390x844 the impact cut leaves the target at or past
+   the right edge in **both** chapters, so the effects land half off-screen:
+   - Seymour Flux in Chapter I, which the builder found.
+   - Bahamut in Chapter IV too, contrary to the note above. See `rk-ffx2-bahamut-phone-*.jpg` and
+     `forced-holy-ffx2-phone.jpg` in `.scratch-check/out/`.
+   - Mortiorchis frames fine.
+   - The cause is the camera rig, not this change; disclose it and carry it to the camera or phone
+     batch.
+2. **Minor: fast-forward (held R1, `SPEED_SCALE.fast` 0.32).**
+   - The numeral hold goes through `ctx.sleep`, which scales with the speed. The effect clock
+     (`RunningFx.advance`, real `dt`) does not.
+   - Under fast-forward a Fire numeral shows at about 0.16 s, but the column lands at 0.5 s.
+     Effects up to 2.8 s long run on over later actions.
+   - Found by reading the code, not measured. The fix would scale the layer's `dt` by the playback
+     speed.
+3. **Minor: FFX-2 Holy numerals trail the strikes.**
+   - Strikes land 110 ms apart; numerals come at least 190 ms apart (`TIMING.perHit`).
+   - By the eighth hit the numeral is about 0.6 s behind its strike. It is never ahead.
+4. **Minor: heals now cut the camera.**
+   - `awaitSpellLanding` calls `moments.impact` for negative-damage heals, which had no cut before.
+   - It is usually the same party rig the caster's action already uses, and the mock does not show
+     it either way.
+5. **Minor: Full-Life on a zombie.**
+   - In Chapter I (the "cure-zombie-before-full-life" beat), Seymour Flux's Full-Life draws the
+     Cure motes on the party member it kills: the ability has the `heals` flag.
+   - This is defensible, since it is a life spell, but it reads as a heal while the numeral kills.
+     Leave it unless Bailey says otherwise.
+6. **Minor: crits lose the bigger bloom.** Where the drawn effect covers a hit, `vfx.impact` skips
+   `impactAt` entirely, so a critical hit loses the 1.3x crit bloom. The white actor flash, punch
+   and hit-stop remain, and the mock has no crit variant.
+7. **Trivial:**
+   - `SpellFxLayer.ts` has an orphaned doc comment ("Build the frame and draw it...") above
+     `prepare()`.
+   - The first registry test ("resolves to a known effect") cannot fail, because the resolver
+     always returns an id. The second test (a drawn effect for every elemental, heal and physical
+     ability) is the real guard.
+
+**Housekeeping.**
+- Servers 6055 and 6056 were stopped by PID.
+- Only the junction links were removed, with `rmdir` and no `/s`, in both worktrees. Both
+  worktrees are kept.
+- The branch `iter2-spellfx-check-base` (at `a253cae9`) exists only for the base build.
+- Scratch is in `.scratch-check/`, untracked. Nothing was deleted.
