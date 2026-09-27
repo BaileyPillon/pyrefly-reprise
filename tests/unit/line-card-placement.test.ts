@@ -15,7 +15,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { ScreenRect } from '../../src/engine/ScreenRects.ts';
 import { coveredArea, lineCardBand, lineCardSlots, pickLineCardPlace } from '../../src/ui/common/lineCardPlacement.ts';
-import { beatSpeakers, createMidBeatLineCard, speakerCombatants } from '../../src/app/screens/midbeatLineCard.ts';
+import { SETTLE_MS, beatSpeakers, createMidBeatLineCard, speakerCombatants } from '../../src/app/screens/midbeatLineCard.ts';
 import { say } from '../../src/story/dsl.ts';
 import type { DialoguePort } from '../../src/story/runner/CutsceneRunner.ts';
 import type { SayStep } from '../../src/story/dsl.ts';
@@ -152,16 +152,36 @@ describe('the adapter on the live box', () => {
     expect(box.style.getPropertyValue('--lc-x')).toBe('');
   });
 
-  it('the place is picked once per beat: a camera move between lines does not move the card', async () => {
-    const rects = new Map([['tidus', R(410, 520, 200, 330)]]);
+  it('while the camera settles the card is hidden and re-picked every frame; then it shows and stays', async () => {
+    const rects = new Map([['tidus', R(0, 0, 900, 400)]]); // an action push: the top-left slot is covered
     const { card, box, guarded } = setup(rects, { tidus: 'party' });
-    card.beginBeat([say('tidus', 'One.'), say('tidus', 'Two.')]);
+    card.beginBeat([say('tidus', 'One.')]);
     await guarded.say(say('tidus', 'One.'));
+    expect(box.classList.contains('dbox--settling')).toBe(true);
+    expect(box.dataset['place']).not.toBe('top-left');
+    rects.set('tidus', R(410, 520, 200, 330)); // the camera eases back to the wide frame
+    card.update(0.1);
     expect(box.dataset['place']).toBe('top-left');
-    rects.set('tidus', R(0, 0, 1600, 900)); // everything covered now
+    expect(box.classList.contains('dbox--settling')).toBe(true);
+    card.update(SETTLE_MS / 1000);
+    expect(box.classList.contains('dbox--settling')).toBe(false);
+    // After the settle nothing moves mid-line, whatever the camera does.
+    rects.set('tidus', R(0, 0, 1600, 900));
+    card.update(0.1);
+    expect(box.dataset['place']).toBe('top-left');
+  });
+
+  it('between lines the card moves only when the party or the speaker has come under it', async () => {
+    const rects = new Map([['tidus', R(410, 520, 200, 330)], ['seymour-flux', R(1000, 100, 300, 300)]]);
+    const { card, box, guarded } = setup(rects, { tidus: 'party', 'seymour-flux': 'enemy' });
+    card.beginBeat([say('tidus', 'One.'), say('tidus', 'Two.'), say('tidus', 'Three.')]);
+    await guarded.say(say('tidus', 'One.'));
+    card.update(1);
+    expect(box.dataset['place']).toBe('top-left');
+    rects.set('seymour-flux', R(0, 0, 900, 300)); // a fiend who is not speaking: the card stays
     await guarded.say(say('tidus', 'Two.'));
     expect(box.dataset['place']).toBe('top-left');
-    card.beginBeat([say('tidus', 'Three.')]);
+    rects.set('tidus', R(0, 0, 1600, 900)); // the party now fills the frame
     await guarded.say(say('tidus', 'Three.'));
     expect(box.dataset['place']).toBe('band');
     expect(box.classList.contains('dbox--band')).toBe(true);

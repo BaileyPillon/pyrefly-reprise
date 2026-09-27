@@ -65,3 +65,11 @@
     right: 10px;
   }
 }
+
+/* The first half-second of a beat, while the camera settles and the place is
+   re-picked every frame (`SETTLE_MS`): the card is held out of sight, then fades
+   in where it will stay for the line. */
+.dbox--visible.dbox--settling {
+  opacity: 0;
+  transition: none;
+}

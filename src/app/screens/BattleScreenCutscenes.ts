@@ -486,6 +486,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
         }
       }
       box.update(dt);
+      card.update(dt);
     },
     handleInput: (input) => box.handleInput(input),
     skip: () => runner.skip(),
