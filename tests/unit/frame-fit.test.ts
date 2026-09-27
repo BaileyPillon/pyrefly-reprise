@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { PerspectiveCamera, Vector3 } from 'three';
-import { frameFit, insideFraction, type FitSubject } from '../../src/engine/FrameFit.ts';
+import { fitRigToSlice, frameFit, insideFraction, SLICE_MAX_SCALE, type FitSubject } from '../../src/engine/FrameFit.ts';
 
 /** A 1 x 2 upright figure centred at (x, 1, z), facing +z. */
 function figure(x: number, z = 0): FitSubject['actor'] {
@@ -92,5 +92,41 @@ describe('frameFit with a sway margin', () => {
     const v = frameFit(live, rig, 0.2, [{ actor: figure(x), min: 0.95, floor: 0.85 }]);
     expect(v.fits).toBe(true);
     expect(insideFraction(live, rig, v.push, figure(x))).toBeGreaterThanOrEqual(at0 - 1e-6);
+  });
+});
+
+describe('fitRigToSlice (A-12)', () => {
+  it('leaves a rig alone when everyone already fits the slice', () => {
+    const r = { position: new Vector3(0, 1, 10), lookAt: new Vector3(0, 1, 0) };
+    expect(fitRigToSlice(live, r, 0.5, [{ actor: figure(-1), min: 1 }, { actor: figure(1), min: 1 }])).toBe(false);
+    expect(r.position.z).toBe(10);
+  });
+
+  it('dollies straight back until a wide formation fits a phone slice, and refits from the authored rig', () => {
+    const r = { position: new Vector3(0, 1, 10), lookAt: new Vector3(0, 1, 0) };
+    const wide = [{ actor: figure(-3), min: 1 }, { actor: figure(3), min: 1 }];
+    expect(fitRigToSlice(live, r, 0.42, wide)).toBe(true);
+    expect(r.position.z).toBeGreaterThan(10);
+    expect(r.position.z).toBeLessThanOrEqual(10 * SLICE_MAX_SCALE + 1e-6);
+    expect(r.position.x).toBeCloseTo(0, 6);
+    const z = r.position.z;
+    // A narrower formation on the next link comes forward again: the base is the authored rig.
+    fitRigToSlice(live, r, 0.42, [{ actor: figure(-1), min: 1 }, { actor: figure(1), min: 1 }]);
+    expect(r.position.z).toBeLessThan(z);
+  });
+});
+
+describe('fitRigToSlice leaves out a colossus part wider than the slice', () => {
+  it('fits the party and ignores an enemy that cannot fit a slice at any distance it may stand', () => {
+    const colossus = {
+      contentQuad(out?: [Vector3, Vector3, Vector3, Vector3]) {
+        const q = out ?? [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
+        q[0].set(-30, 0, -5); q[1].set(30, 0, -5); q[2].set(30, 4, -5); q[3].set(-30, 4, -5);
+        return q;
+      },
+    };
+    const r = { position: new Vector3(0, 1, 10), lookAt: new Vector3(0, 1, 0) };
+    expect(fitRigToSlice(live, r, 0.42, [{ actor: figure(-1), min: 1 }, { actor: figure(1), min: 1 }, { actor: colossus, min: 0.75 }])).toBe(false);
+    expect(r.position.z).toBe(10);
   });
 });

@@ -24,7 +24,7 @@ function setup(table: Record<string, { fits: boolean; maxPush: number }>, ffx2 =
   };
   (stage.camera as { frame?: Frame }).frame = frame;
   const moments = new BattleMoments({ stage, sleep: noSleep, speed: () => 'normal' });
-  moments.ffx2Framing = ffx2;
+  moments.shots.ffx2Framing = ffx2;
   const pushes = () => stage.calls.filter((c) => c.startsWith('camera:push'));
   return { stage, moments, asked, pushes };
 }
@@ -105,5 +105,43 @@ describe('A-1: the push on the fallback keeps the enemy in play too', () => {
     expect(idleAsk.length).toBeGreaterThan(0);
     expect(idleAsk.every((a) => a.n === 3)).toBe(true);
     expect(pushes()).toEqual(['camera:push=0.00']);
+  });
+});
+
+describe('A-12: an upright phone keeps the fight on its refitted master (both games)', () => {
+  function phoneSetup(slice: number | null) {
+    const stage = new FakeStage(['tidus', 'yuna'], ['seymour-flux']);
+    const fitted: Array<{ rig: string; slice: number; n: number }> = [];
+    (stage.camera as { fitSlice?: unknown }).fitSlice = (rig: string, s: number, subjects: unknown[]) => {
+      fitted.push({ rig, slice: s, n: subjects.length });
+      return true;
+    };
+    const overlay = { letterbox: async () => {}, nameSlab: async () => {}, vignette: () => {}, clear: () => {}, phoneSlice: () => slice };
+    const moments = new BattleMoments({ stage, moments: overlay, sleep: noSleep, speed: () => 'normal' });
+    return { stage, moments, fitted };
+  }
+
+  it('refits the master to the slice at the battle start, for everyone on the field', async () => {
+    const { moments, fitted } = phoneSetup(0.42);
+    await moments.battleStart({ partyIds: ['tidus', 'yuna'] });
+    expect(fitted).toEqual([{ rig: 'idle', slice: 0.42, n: 3 }]);
+  });
+
+  it('plays actions and impacts on the master with no push', async () => {
+    const { stage, moments } = phoneSetup(0.42);
+    await moments.battleStart({});
+    stage.calls.length = 0;
+    await moments.actionOpen('tidus', 'attack', ['seymour-flux']);
+    moments.impact('seymour-flux', { hitIndex: 0 });
+    expect(stage.calls.filter((c) => /^camera!?:(party|enemy|action)$/.test(c))).toEqual([]);
+    expect(stage.calls).toContain('camera:push=0.00');
+  });
+
+  it('changes nothing off the phone', async () => {
+    const { stage, moments, fitted } = phoneSetup(null);
+    await moments.battleStart({});
+    await moments.actionOpen('tidus', 'attack', ['seymour-flux']);
+    expect(fitted).toEqual([]);
+    expect(stage.calls).toContain('camera:party');
   });
 });

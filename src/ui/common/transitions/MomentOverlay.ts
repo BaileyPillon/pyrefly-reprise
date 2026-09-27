@@ -25,6 +25,7 @@ import type { MomentsPort } from '../../../engine/BattlePresenterPorts.ts';
 import { playTurnCutIn, type TurnCutInRequest } from './TurnCutInLayer.ts';
 import { confirmPress, type ConfirmPress } from './confirmPress.ts';
 import { prefersReducedMotion } from './reduceMotion.ts';
+import { phoneSliceOf } from '../phoneSlice.ts';
 
 type SlabKind = 'reveal' | 'overdrive' | 'telegraph';
 
@@ -141,6 +142,11 @@ export class MomentOverlay implements MomentsPort {
   /** The next Confirm press, for cutting the opening short (PR-0061). */
   confirmPress(): ConfirmPress {
     return confirmPress(this.el.ownerDocument.defaultView ?? window);
+  }
+
+  /** On an upright phone, the share of the 16:9 render the window shows (A-12); null elsewhere. */
+  phoneSlice(): number | null {
+    return phoneSliceOf(this.el.ownerDocument);
   }
 
   /** The player's reduce-motion choice (A-13's roll skips under it). */

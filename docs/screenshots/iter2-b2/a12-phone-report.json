@@ -1,0 +1,736 @@
+{
+ "rule": "A-12 at 390x844: boss >= 0.75 inside the field, every party quad inside; first menu, then 12 s of play answering menus with Enter, Enter (real keys), sampled every ~60 ms; the field is #game (the party cards below it are not field)",
+ "chapters": {
+  "braskas-final-aeon": {
+   "firstMenu": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "auron": [
+     "p",
+     1
+    ],
+    "braskas-final-aeon": [
+     "e",
+     1
+    ],
+    "yu-pagoda-left": [
+     "e",
+     1
+    ],
+    "yu-pagoda-right": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "auron": [
+     "p",
+     1
+    ],
+    "braskas-final-aeon": [
+     "e",
+     1
+    ],
+    "yu-pagoda-left": [
+     "e",
+     1
+    ],
+    "yu-pagoda-right": [
+     "e",
+     1
+    ]
+   },
+   "samples": 161,
+   "samplesWithAPartyFigureCut": 0
+  },
+  "evrae-airship": {
+   "firstMenu": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "wakka": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "evrae": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "wakka": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "evrae": [
+     "e",
+     1
+    ]
+   },
+   "samples": 168,
+   "samplesWithAPartyFigureCut": 0
+  },
+  "ffx2-bahamut": {
+   "firstMenu": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "bahamut": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "bahamut": [
+     "e",
+     0.99
+    ]
+   },
+   "samples": 140,
+   "samplesWithAPartyFigureCut": 0
+  },
+  "ffx2-den-of-woe": {
+   "firstMenu": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "shade-baralai": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "yuna": [
+     "p",
+     0.9
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "shade-baralai": [
+     "e",
+     1
+    ]
+   },
+   "samples": 122,
+   "samplesWithAPartyFigureCut": 46
+  },
+  "ffx2-fallen-aeons": {
+   "firstMenu": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "x2-shiva": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "yuna": [
+     "p",
+     0.82
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "x2-shiva": [
+     "e",
+     1
+    ]
+   },
+   "samples": 152,
+   "samplesWithAPartyFigureCut": 48
+  },
+  "ffx2-leblanc": {
+   "firstMenu": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "ormi-entrance": [
+     "e",
+     1
+    ],
+    "dr-goon": [
+     "e",
+     1
+    ],
+    "fem-goon": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "yuna": [
+     "p",
+     0.8
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "ormi-entrance": [
+     "e",
+     1
+    ],
+    "dr-goon": [
+     "e",
+     1
+    ],
+    "fem-goon": [
+     "e",
+     1
+    ]
+   },
+   "samples": 153,
+   "samplesWithAPartyFigureCut": 13
+  },
+  "ffx2-trema": {
+   "firstMenu": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "paragon": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "yuna": [
+     "p",
+     0.84
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "paragon": [
+     "e",
+     0.96
+    ]
+   },
+   "samples": 155,
+   "samplesWithAPartyFigureCut": 3
+  },
+  "ffx2-vegnagun-shuyin": {
+   "firstMenu": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "vegnagun-tail": [
+     "e",
+     0.74
+    ]
+   },
+   "minOverRun": {
+    "yuna": [
+     "p",
+     0.8
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "paine": [
+     "p",
+     1
+    ],
+    "vegnagun-tail": [
+     "e",
+     0.67
+    ]
+   },
+   "samples": 155,
+   "samplesWithAPartyFigureCut": 33
+  },
+  "isaaru-via-purifico": {
+   "firstMenu": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "isaaru": [
+     "e",
+     1
+    ],
+    "grothia": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "yuna": [
+     "p",
+     1
+    ],
+    "isaaru": [
+     "e",
+     0.98
+    ],
+    "grothia": [
+     "e",
+     1
+    ]
+   },
+   "samples": 135,
+   "samplesWithAPartyFigureCut": 0
+  },
+  "seymour-anima-macalania": {
+   "firstMenu": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "guado-guardian-a": [
+     "e",
+     1
+    ],
+    "seymour-macalania": [
+     "e",
+     1
+    ],
+    "guado-guardian-b": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "rikku": [
+     "p",
+     1
+    ],
+    "guado-guardian-a": [
+     "e",
+     1
+    ],
+    "seymour-macalania": [
+     "e",
+     1
+    ],
+    "guado-guardian-b": [
+     "e",
+     0.99
+    ]
+   },
+   "samples": 166,
+   "samplesWithAPartyFigureCut": 0
+  },
+  "seymour-flux": {
+   "firstMenu": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "kimahri": [
+     "p",
+     1
+    ],
+    "seymour-flux": [
+     "e",
+     1
+    ],
+    "mortiorchis": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "kimahri": [
+     "p",
+     1
+    ],
+    "seymour-flux": [
+     "e",
+     0.97
+    ],
+    "mortiorchis": [
+     "e",
+     1
+    ]
+   },
+   "samples": 171,
+   "samplesWithAPartyFigureCut": 0
+  },
+  "seymour-natus": {
+   "firstMenu": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "kimahri": [
+     "p",
+     1
+    ],
+    "seymour-natus": [
+     "e",
+     1
+    ],
+    "mortibody": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "kimahri": [
+     "p",
+     0.83
+    ],
+    "seymour-natus": [
+     "e",
+     1
+    ],
+    "mortibody": [
+     "e",
+     1
+    ]
+   },
+   "samples": 161,
+   "samplesWithAPartyFigureCut": 2
+  },
+  "seymour-omnis": {
+   "firstMenu": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "auron": [
+     "p",
+     1
+    ],
+    "seymour-omnis": [
+     "e",
+     1
+    ],
+    "mortiphasm-1": [
+     "e",
+     1
+    ],
+    "mortiphasm-2": [
+     "e",
+     1
+    ],
+    "mortiphasm-3": [
+     "e",
+     1
+    ],
+    "mortiphasm-4": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "auron": [
+     "p",
+     1
+    ],
+    "seymour-omnis": [
+     "e",
+     1
+    ],
+    "mortiphasm-1": [
+     "e",
+     1
+    ],
+    "mortiphasm-2": [
+     "e",
+     1
+    ],
+    "mortiphasm-3": [
+     "e",
+     1
+    ],
+    "mortiphasm-4": [
+     "e",
+     1
+    ]
+   },
+   "samples": 166,
+   "samplesWithAPartyFigureCut": 0
+  },
+  "yojimbo-cavern": {
+   "firstMenu": {
+    "lulu": [
+     "p",
+     1
+    ],
+    "kimahri": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "ginnem": [
+     "e",
+     1
+    ],
+    "yojimbo": [
+     "e",
+     1
+    ],
+    "daigoro": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "lulu": [
+     "p",
+     0.51
+    ],
+    "kimahri": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "ginnem": [
+     "e",
+     1
+    ],
+    "yojimbo": [
+     "e",
+     1
+    ],
+    "daigoro": [
+     "e",
+     1
+    ]
+   },
+   "samples": 159,
+   "samplesWithAPartyFigureCut": 16
+  },
+  "yunalesca": {
+   "firstMenu": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "auron": [
+     "p",
+     1
+    ],
+    "yunalesca": [
+     "e",
+     1
+    ]
+   },
+   "minOverRun": {
+    "tidus": [
+     "p",
+     1
+    ],
+    "yuna": [
+     "p",
+     1
+    ],
+    "auron": [
+     "p",
+     1
+    ],
+    "yunalesca": [
+     "e",
+     0.91
+    ]
+   },
+   "samples": 157,
+   "samplesWithAPartyFigureCut": 0
+  }
+ },
+ "ch4FiraRealKeys": {
+  "steps": [
+   "YUNA:WHITE MAGIC◂",
+   "PAINE:ATTACK",
+   "RIKKU:ATTACK",
+   "YUNA:BLACK MAGIC◂",
+   "list:FIRA12",
+   "target:FIRA → BAHAMUT"
+  ],
+  "log": [
+   "act:paine:attack",
+   "dmg>bahamut:137",
+   "act:rikku:attack",
+   "dmg>bahamut:114",
+   "act:bahamut:attack",
+   "dmg>yuna:173",
+   "act:yuna:x2-black-mage-fira",
+   "act:bahamut:attack",
+   "dmg>rikku:95",
+   "dmg>bahamut:326",
+   "act:bahamut:impulse",
+   "dmg>yuna:183",
+   "dmg>rikku:619",
+   "dmg>paine:662"
+  ],
+  "bahamutMinDuringDamage": 1
+ }
+}

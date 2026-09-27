@@ -114,6 +114,12 @@ export interface CameraPort {
     push: number,
     subjects: ReadonlyArray<{ actor: ActorHandle; min: number; floor?: number }>,
   ): { fits: boolean; push: number; worst: number } | null;
+  /**
+   * A-12, option A's phone rule: dolly `rig` straight back until these figures
+   * fit a slice `slice` wide (0..1 of the frame). True when it moved the rig.
+   * Optional and additive; without it the phone keeps the desktop rigs.
+   */
+  fitSlice?(rig: string, slice: number, subjects: ReadonlyArray<{ actor: ActorHandle; min: number }>): boolean;
   readonly rigNames: string[];
   readonly rigName: string;
 }
@@ -167,6 +173,12 @@ export interface MomentsPort {
    * Optional and additive (A-13): absent reads as "motion on".
    */
   reduceMotion?(): boolean;
+  /**
+   * On an upright phone (the phone battle HUD), how much of the 16:9 render's
+   * width the window shows, 0..1; `null` anywhere else. Optional and additive
+   * (A-12): absent reads as "not a phone".
+   */
+  phoneSlice?(): number | null;
   /** Tear every layer down. */
   clear(): void;
 }
