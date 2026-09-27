@@ -88,7 +88,7 @@ function follow(seed: number): Run {
 }
 
 describe('Chapter I, forty seeds of the card (PR-0131)', () => {
-  it('wins at least 20 of 40, and reports every raise led into a re-kill the forecast telegraphed', () => {
+  it('wins at least 18 of 40, and reports every raise led into a re-kill the forecast telegraphed', () => {
     const runs = Array.from({ length: 40 }, (_, i) => follow(i + 1));
     const wins = runs.filter((r) => r.win).length;
     const raises = runs.reduce((n, r) => n + r.raises, 0);
@@ -96,7 +96,10 @@ describe('Chapter I, forty seeds of the card (PR-0131)', () => {
     const telegraphed = runs.reduce((n, r) => n + r.telegraphed, 0);
     console.log('[PR-0131] led raises the forecast refuses:', JSON.stringify(refusedKinds));
     console.log(`[PR-0131] card-follower wins ${wins}/40; ${raises} raises led, ${rekills} re-KO'd before acting, ${telegraphed} by the move the forecast had scripted`);
-    expect(wins).toBeGreaterThanOrEqual(20);
+    // 20 -> 18 on 2026-09-27 (PR-0179 arm a, D-243, FFX only): with §6.4.3's Gagazet aeon rows the
+    // card-follower wins 18/40 (22/40 with the old 'shipped' rows, measured on the same tree with only
+    // the arm changed; 76 raises led instead of 98). The intended line gains (17 -> 18 of these seeds).
+    expect(wins).toBeGreaterThanOrEqual(18);
     expect(raises).toBeGreaterThan(0);
     // The measuring stick for the open half of PR-0131 (docs/handoff/t1-b3a.md,
     // stopped for a method check): on this branch the card still leads with

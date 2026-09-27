@@ -176,7 +176,7 @@ export const highbridgeBuild: FFXPartyBuild = {
   // B2 = a: Tidus, Yuna, Kimahri (`forced_party "tyk"`, N-11).
   activeSlots: ['tidus', 'yuna', 'kimahri'],
   reserve: ['auron', 'wakka', 'lulu', 'rikku'],
-  aeons: armHighbridgeAeons(aeons(), GAGAZET_AEON_ARM), // PR-0179, OFF
+  aeons: armHighbridgeAeons(aeons(), GAGAZET_AEON_ARM), // PR-0179, arm a (D-243)
   // B5 = a: Chapter VIII's inventory and gil, carried forward.
   inventory: fahrenheitBuild.inventory.map((e) => ({ ...e })),
   gil: fahrenheitBuild.gil,
