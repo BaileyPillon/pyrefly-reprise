@@ -20,15 +20,18 @@
  * files has opaque pixels (alpha > 32) on its left, right or top border
  * (scan of `public/art/characters/<id>/*.png`, 2026-09-26, `docs/handoff/t1-b2b.md`).
  * Values sit in the 0.12-0.2 band the PaintedActor option documents for a
- * full-bleed glow; 0.16 is the demo scene's boss value.
+ * full-bleed glow; 0.16 is the demo scene's boss value. Yunalesca's first form
+ * (a pale wash down a whole column) and Valefor (a wing cut mid-feather) take the
+ * band's top, 0.2: at 0.16 the in-game frames still showed a faint vertical line
+ * (captures 2026-09-26, docs/screenshots/t1-b2b/).
  */
 
 /** Feather width (a fraction of the plane's half-extent) per art id. */
 export const EDGE_FEATHER_ART: Readonly<Record<string, number>> = {
-  'yunalesca-1': 0.16, // attack: hair on the left and top border; hurt: a pale wash down the left column
+  'yunalesca-1': 0.2, // attack: hair on the left and top border; hurt: a pale wash down the left column
   'yunalesca-2': 0.16, // idle and attack: aura on the left, right and top borders
   'yunalesca-3': 0.16, // idle, attack, cast, hurt: aura on the top border (the coils fill the base)
-  valefor: 0.16, // idle: the far wing on the right border (PR-0212)
+  valefor: 0.2, // idle: the far wing on the right border (PR-0212)
   ixion: 0.16, // overdrive: the right border, the same class as Valefor
 };
 
