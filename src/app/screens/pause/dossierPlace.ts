@@ -50,19 +50,6 @@ export const CHAPTER_FACE_BOXES: Readonly<Record<string, FaceBox>> = {
   // chin 0.55, cheek to cheek 0.40 to 0.60. The dossier laid its quote and snapshots across his
   // right eye at 1600x900 (docs/concepts/chapters/natus/ship/).
   'ch10-seymour-natus': { x0: 0.4, x1: 0.6, y0: 0.25, y1: 0.55 },
-  // PR-0171: these two chapters' hero plates never got a face box, so
-  // `placeDossier` always fell back to `beside` for them and the quote and
-  // three polaroids sat wherever the columns put them — across Yunalesca's
-  // eyes and across Yojimbo's mask (round 12, `pausechapter.mjs`). Measured
-  // off `public/art/pause/ch2-yunalesca.png` and `ch9-yojimbo.png` the same
-  // way as the two entries above.
-  //
-  // Yunalesca (Chapter II), three-quarter turn: brow 0.18 (the visible
-  // hairline), chin 0.60, cheek (left, at the hair) to jaw (right) 0.37 to 0.70.
-  'ch2-yunalesca': { x0: 0.37, x1: 0.7, y0: 0.18, y1: 0.6 },
-  // Yojimbo (Chapter IX): the mask, not a face, is what must stay clear —
-  // top edge under the hat brim 0.2, chin/teeth 0.7, temple to temple 0.4 to 0.74.
-  'ch9-yojimbo': { x0: 0.4, x1: 0.74, y0: 0.2, y1: 0.7 },
 };
 
 export type DossierPlace = 'beside' | 'under' | 'under-lean' | 'heading';
