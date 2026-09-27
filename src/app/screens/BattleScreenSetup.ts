@@ -23,6 +23,7 @@ import type {
   InventoryEntry,
   MidBattleTrigger,
 } from '../../battle/common/types.ts';
+import { Ff7NotHandledError } from '../../battle/common/game.ts';
 import { cloneData } from '../../battle/common/clone.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
@@ -115,11 +116,12 @@ export function setupForNextLink(
  * every shipped chain has it; the FFX carry ignores the flag.
  */
 export function carryPartyForward(
-  build: FFXPartyBuild | FFX2PartyBuild,
+  build: BattleSetup['party'],
   state: BattleState,
   wholeState = false,
   full = false,
 ): FFXPartyBuild | FFX2PartyBuild {
+  if (build.game === 'ff7') throw new Ff7NotHandledError('carryPartyForward (FF7 has no chained link)');
   if (build.game === 'ffx') return carryFfx(build, state);
   const carried = carryFfx2(build, state, wholeState);
   return full ? carryFfx2Full(carried, state) : carried;

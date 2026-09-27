@@ -3,6 +3,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { BattleResult } from '../../battle/common/types.ts';
+import { ffxFamily } from '../../battle/common/game.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { createFullBleedStage, createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
@@ -113,7 +114,7 @@ export class ResultsScreen extends Screen {
     this.silent = opts.silent ?? isSilentResultsChapter(opts.chapterId);
     this.victory = opts.result.outcome === 'victory';
 
-    const game = chapter?.buildRef.game ?? 'ffx';
+    const game = ffxFamily(chapter?.buildRef.game ?? 'ffx', 'ResultsScreen'); // FF7: results off until its flow is built
     this.awardUnit = game === 'ffx' ? 'AP' : 'EXP';
     this.clearMs = clearTimeMs(opts.result, opts.elapsedMs, game);
     this.rows = buildMemberRows(chapter, opts.result);
@@ -137,7 +138,7 @@ export class ResultsScreen extends Screen {
     window.addEventListener('resize', this.onResize, { passive: true });
 
     const record = this.app.save.chapter(this.opts.chapterId);
-    if (this.victory) {
+    if (this.victory && !chapter?.experimental) { // an experiment never records into the save
       const previousBestMs =
         this.opts.previousBestMs !== undefined ? this.opts.previousBestMs : record.bestTimeMs;
       this.wasNewBest = isNewBest(previousBestMs, this.clearMs);

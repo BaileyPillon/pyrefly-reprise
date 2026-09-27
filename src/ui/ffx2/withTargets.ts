@@ -13,6 +13,7 @@ export function withTargets(command: Command, targets: CombatantId[]): Command {
     case 'item':
     case 'overdrive':
     case 'trigger':
+    case 'limit': // FF7 only; the FFX-2 menu never offers it
       return { ...command, targets };
     case 'summon':
     case 'dismiss':

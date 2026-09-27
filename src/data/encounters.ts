@@ -14,13 +14,7 @@
  *   [writing-bible §0.3].
  */
 
-import type {
-  EnemyGroupDef,
-  FFXPartyBuild,
-  FFX2PartyBuild,
-  GameId,
-  MusicKey,
-} from '../battle/common/types.ts';
+import type { EnemyGroupDef, FFXPartyBuild, FFX2PartyBuild, Ff7PartyBuild, GameId, MusicKey } from '../battle/common/types.ts';
 import type { ChapterScripts } from '../story/dsl.ts';
 
 import { gagazetBuild } from './ffx/builds/gagazet.ts';
@@ -58,12 +52,20 @@ import { ISAARU_VIA_PURIFICO_SHIPPED } from './chapter-isaaru-ship.ts';
 import { FFX2_DEN_OF_WOE_SHIPPED } from './chapter-den-of-woe-ship.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 
-/** Every registered chapter id (all fifteen listed since 2026-09-26). Also the keys used in `SaveData.chapters`. */
+/**
+ * Every registered chapter id (fifteen listed since 2026-09-26, plus the hidden FF7 experiment
+ * `'ff7-guard-scorpion'`, 2026-09-27, which never writes `SaveData.chapters`: `app/experiments/`).
+ * Also the keys used in `SaveData.chapters`.
+ */
 export type ChapterId =
+  | 'ff7-guard-scorpion'
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
   | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe';
+
+/** Every id that can hold a place on the board: all but the hidden experiments. */
+export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion'>;
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -77,7 +79,7 @@ export interface ChapterMusic {
    * one the script would immediately crossfade away
    * (`BattleScreenFlow.playCutscene`).
    */
-  scene: MusicKey;
+  scene: MusicKey | null; // null = silence: only the FF7 experiment, until Bailey hears an original cue (rules 8, 13)
   /**
    * The chapter's own boss theme.
    *
@@ -86,7 +88,7 @@ export interface ChapterMusic {
    * five chapters. FFX chapters name FFX cues and FFX-2 chapters FFX-2 cues —
    * the cue map in `docs/audio/THEMES.md` never crosses the two scores.
    */
-  battle: MusicKey;
+  battle: MusicKey | null; // null = silence (the FF7 experiment, as `scene`)
   /** The cue the chapter's second phase or later link switches to, when it has one. */
   phase2?: MusicKey;
   /**
@@ -96,13 +98,7 @@ export interface ChapterMusic {
    * rows 15 and 20. Chapter 4 is deliberately silent — see its record.
    */
   victory?: MusicKey;
-  /**
-   * The cue the post-battle scene plays under, when the script does not set
-   * one itself. All five scripts do (each opens with `music(null)` — the coda
-   * lands in silence and brings its own theme up afterwards), so this is
-   * absent everywhere and exists for a chapter whose post scene is scored from
-   * the outside.
-   */
+  /** The post-scene cue when the script sets none. Every script does (each opens with `music(null)`), so this is absent everywhere. */
   post?: MusicKey;
 }
 
@@ -110,8 +106,10 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on the chapter-select screen, 1–15 (an unlisted chapter keeps its number). */
-  number: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15;
+  /** Display order on chapter select, 1–15 (an unlisted chapter keeps its number); 0 = no place on the board (FF7 experiment). */
+  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15;
+  /** A hidden experiment (FF7's Guard Scorpion): no card, no count, no save record; the flow hands it to `BattleScreenExperiment`. */
+  experimental?: true;
   /** Card title. The encounter's name. */
   title: string;
   /** Card subtitle. One clause, no period. */
@@ -125,7 +123,7 @@ export interface Chapter {
   /** Chapter-select card art key. */
   thumbnailKey: string;
   /** The party at this chapter's build point. */
-  buildRef: FFXPartyBuild | FFX2PartyBuild;
+  buildRef: FFXPartyBuild | FFX2PartyBuild | Ff7PartyBuild;
   /** The first (or only) enemy formation. Chained encounters link on via `nextGroupId`. */
   enemyGroupRef: EnemyGroupDef;
   /** Pre/post cutscenes, mid-battle triggers and victory quips. */
@@ -377,7 +375,7 @@ export const CHAPTERS: readonly Chapter[] = [
 ] as const;
 
 /** Chapter ids, in play order. */
-export const CHAPTER_IDS: readonly ChapterId[] = [
+export const CHAPTER_IDS: readonly ListedChapterId[] = [
   'seymour-flux', 'yunalesca', 'braskas-final-aeon',
   'ffx2-bahamut',
   'ffx2-vegnagun-shuyin',

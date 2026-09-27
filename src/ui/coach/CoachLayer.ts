@@ -394,5 +394,6 @@ class CoachedHud implements HudPort {
  * (AGENTS.md hard rule 4) rather than a subsystem nothing imports.
  */
 export function withCoach(game: GameId, hud: HudPort, opts: CoachLayerOptions = {}): HudPort {
+  if (game === 'ff7') return hud; // FF7: no coach (never Rikku's lines on an FF7 HUD; audit)
   return new CoachedHud(game, hud, opts);
 }

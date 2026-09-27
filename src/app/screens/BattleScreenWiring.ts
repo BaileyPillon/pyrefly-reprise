@@ -14,6 +14,7 @@
  */
 
 import type { BattleEngine, BattleSetup, GameId } from '../../battle/common/types.ts';
+import { Ff7NotHandledError } from '../../battle/common/game.ts';
 import { FFXEngine } from '../../battle/ffx/index.ts';
 import { FFX2Engine, type AtbMode, type AtbSpeed } from '../../battle/ffx2/index.ts';
 import { readSetting } from '../SaveData.ts';
@@ -62,6 +63,9 @@ export async function createEngine(
   setup: BattleSetup,
   opts: CreateEngineOptions = {},
 ): Promise<BattleEngine> {
+  // FF7 (the hidden Guard Scorpion experiment) gets its own engine, `src/battle/ff7/`, which is not
+  // built yet: never an FFX2Engine by default (docs/plans/ff7-game-branch-audit.md).
+  if (game === 'ff7') throw new Ff7NotHandledError('createEngine (the FF7 engine is not built yet)');
   await registerBattleContent();
   const automated = opts.automated === true;
   // A used engine holds a finished battle's state, so every battle gets its own.
@@ -128,6 +132,8 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
 export function createHud(game: GameId, field?: () => OversoulField | null): HudPort {
+  // FF7 gets its own HUD after Bailey's options round (option A, D-240s); never the FFX-2 HUD and Rikku's coach.
+  if (game === 'ff7') throw new Ff7NotHandledError('createHud (the FF7 HUD is not built yet)');
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
   const hud: HudPort = game === 'ffx'
     ? withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))

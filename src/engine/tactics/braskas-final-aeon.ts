@@ -431,7 +431,7 @@ function bossGauge(engine: BattleEngine, boss: AnyCombatant): number {
  * and the boss agree on the phase to the tick.
  */
 function ultimateJechtShotPhase(boss: AnyCombatant): boolean {
-  const form = boss.enemy?.formIndex ?? 0;
+  const form = ('enemy' in boss ? boss.enemy?.formIndex : undefined) ?? 0;
   return form === 1 && boss.hp * 2 <= boss.stats.maxHp;
 }
 
@@ -1129,7 +1129,7 @@ function braskasLine(
   const party = activeParty(engine);
   const living = party.filter((c) => c.alive);
   const standing = pagodas(engine);
-  const form = boss.enemy?.formIndex ?? 0;
+  const form = ('enemy' in boss ? boss.enemy?.formIndex : undefined) ?? 0;
 
   // 0. Someone is down. Phoenix Down on a party member only - the boss is
   //    `immune-to-life`, so a revive item thrown at him does nothing (§1.2).

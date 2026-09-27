@@ -14,7 +14,7 @@ export function auditChapterCueMap(
   chapters: ReadonlyArray<{
     id: string;
     game: string;
-    music: { scene?: string; battle?: string; phase2?: string; victory?: string };
+    music: { scene?: string | null; battle?: string | null; phase2?: string; victory?: string };
   }>,
   rows: ReadonlyArray<ChapterCueMapRow>,
 ): Array<{ id: string; problem: string }>;

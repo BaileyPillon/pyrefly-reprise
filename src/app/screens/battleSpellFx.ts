@@ -13,10 +13,13 @@ import type { StageSpellFxOptions } from '../../engine/spellfx/stageSpellFx.ts';
 import { DEFAULT_FLASH_PARAMS, REDUCED_FLASH_PARAMS, resolveFxQuality, type FxQuality } from '../../engine/spellfx/SpellFxParams.ts';
 import type { SpellFxLayer } from '../../engine/spellfx/SpellFxLayer.ts';
 import { readSetting } from '../SaveData.ts';
+import type { GameId } from '../../battle/common/types.ts';
+import { ffxFamily } from '../../battle/common/game.ts';
 
-export function battleSpellFx(game: 'ffx' | 'ffx2', renderer: Renderer): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality'> {
+export function battleSpellFx(game: GameId, renderer: Renderer): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality'> {
   return {
-    game,
+    // FF7's spell effects wait for its options round: throw, never FFX's or FFX-2's skin (audit).
+    game: ffxFamily(game, 'battleSpellFx'),
     overlay: (draw) => renderer.addOverlay(draw),
     quality: () =>
       resolveFxQuality({

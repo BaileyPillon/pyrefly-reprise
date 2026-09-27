@@ -133,22 +133,15 @@ export function resetFlowScreens(): void {
   for (const key of Object.keys(factories)) delete (factories as Record<string, unknown>)[key];
 }
 
-/**
- * The last chapter of each game's arc.
- *
- * Chapter 3 ends the FFX story (Yu Yevon, then Auron's sending and Tidus
- * going) and Chapter 5 ends the FFX-2 one. `BattleScreenFlow` needs to know
- * because the flow used to be a bare `for(;;)` with no notion of having
- * finished anything (critic round 02 #32).
- */
-export const ARC_FINALE: Readonly<Record<GameId, ChapterId>> = {
+/** The last chapter of each game's arc: Chapter 3 ends FFX, Chapter 5 FFX-2 (critic round 02 #32: the flow once had no notion of finishing). */
+export const ARC_FINALE: Readonly<Record<Exclude<GameId, 'ff7'>, ChapterId>> = { // FF7: no arc (never reached)
   ffx: 'braskas-final-aeon',
   ffx2: 'ffx2-vegnagun-shuyin',
 };
 
 /** True once every chapter of `game` is recorded as cleared. */
 export function arcCleared(game: GameId, cleared: (id: ChapterId) => boolean): boolean {
-  return CHAPTERS.filter((c) => c.game === game).every((c) => cleared(c.id));
+  return game !== 'ff7' && CHAPTERS.filter((c) => c.game === game).every((c) => cleared(c.id));
 }
 
 export interface RunChapterOptions {

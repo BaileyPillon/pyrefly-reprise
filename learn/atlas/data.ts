@@ -19,6 +19,7 @@
  */
 
 import type { ChapterId } from '../../src/data/encounters.ts';
+import { ffxFamily } from '../../src/battle/common/game.ts';
 import { CHAPTER_IDS } from '../../src/data/encounters.ts';
 import { guideForChapter } from '../../src/data/guides/index.ts';
 import type { Specimen, SystemInput } from '../shared/model.ts';
@@ -86,7 +87,7 @@ export function buildChapterSpecimen(chapterId: ChapterId): Specimen {
     title: chapter.title,
     eyebrow: `Chapter ${chapter.number} · ${gameLabel}`,
     factsLine: `${countNoun(pieces.length, 'piece')} · ${countNoun(parts.chain.length, 'battle')} · ${chapter.subtitle}`,
-    game: chapter.game,
+    game: ffxFamily(chapter.game, 'learn atlas specimen'), // the atlas covers the board's fifteen only
     systems: withCounts(SYSTEMS_INPUT, pieces),
     pieces,
     ...(idle !== undefined ? { idle } : {}),

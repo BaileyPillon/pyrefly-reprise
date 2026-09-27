@@ -26,6 +26,7 @@
  */
 
 import './battle-start-banner.css';
+import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from './html.ts';
 import { faceImgHtml, faceLayersHtml } from './portrait.ts';
 import { romanNumeral } from './roman.ts';
@@ -64,8 +65,8 @@ export interface BattleStartBannerOptions {
   backdropKey?: string;
   /** The party as the card lists it, left to right. */
   party?: readonly BattleStartBannerMember[];
-  /** `'ffx2'` repaints the accent. */
-  game?: 'ffx' | 'ffx2';
+  /** `'ffx2'` repaints the accent; FFX and FF7 keep the base card (FF7 never gets here yet: `battleSpellFx` throws first). */
+  game?: GameId;
   /** How long the card holds with no input. */
   holdMs?: number;
 }

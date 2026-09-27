@@ -6,6 +6,53 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `types.ts`, new `types-ff7.ts`, `encounters.ts`, new `data/ff7/ids.ts`: a third game, FF7 (the hidden Guard Scorpion experiment)
+
+**FF7 only** for the new types and records; **shared plumbing (both + FF7)** for the union
+members and the guards [AGENTS.md hard rule 14]. Bailey, 2026-09-27 ~00:35 EDT: "go with guard
+scorpion first, full speed ahead, but make it a hidden selectable encounter since it's
+experimental"; plan `docs/plans/ff7-guard-scorpion-architecture.md` steps 1, 6 and 7 (branch
+`ff7-plumbing`). FFX and FFX-2 replay byte-identical (every golden and suite passes).
+
+**Additive:**
+
+- `GameId = 'ffx' | 'ffx2' | 'ff7'`. Every two-way `game === 'ffx' ? A : B` is audited in
+  `docs/plans/ff7-game-branch-audit.md` (134 grep lines: explicit `'ff7'` answer, or
+  `ffxFamily()` from the new pure `src/battle/common/game.ts`, which throws
+  `Ff7NotHandledError` naming the site; never a silent FFX-2 branch).
+- New contract file `src/battle/common/types-ff7.ts` (re-exported type-only by `types.ts`, so
+  `types.ts` grew 7 lines): `Ff7BaseStats`, `Ff7DerivedStats`, `Ff7EnemyStats`, `Ff7Row`,
+  `LimitState`, `MateriaInstance`, `MateriaSlotLayout`, `Ff7EquipmentDef`, `Ff7AtbState`,
+  `Ff7EnemyFields`, `Ff7Combatant` (the engine reads only its `ff7` block; `stats` is a
+  display mirror), `Ff7MemberBuild`, `Ff7PartyBuild`, `LimitCommand`. No numbers.
+- Unions: `AnyCombatant += Ff7Combatant`, `AnyPartyBuild` and `BattleSetup.party += Ff7PartyBuild`,
+  `EnemyDef.ff7?: Ff7EnemyFields`, `Command += LimitCommand` (`{ kind: 'limit'; id; targets }`;
+  an FF7 Limit is `'limit'`, never `'overdrive'`), `BattleEvent += { type: 'limit-gauge';
+  actorId; value (0–255); level (1–4); ready }` (never `overdrive-gauge`, which shared UI prints
+  as "Overdrive").
+- `src/data/encounters.ts`: `ChapterId += 'ff7-guard-scorpion'`; `Chapter.number` gains `0`
+  ("no place on the board"); `Chapter.experimental?: true`; `Chapter.buildRef += Ff7PartyBuild`;
+  new `ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion'>`, and `CHAPTER_IDS` is typed
+  with it (it never held the experiment). `UNLISTED_CHAPTERS = [FF7_GUARD_SCORPION]`
+  (`src/data/chapter-ff7-guard-scorpion.ts`): game `'ff7'`, number 0, experimental.
+- New contract file `src/data/ff7/ids.ts`: the slice's FF7 id unions.
+
+**Not purely additive, both readers fixed in the same change:** `ChapterMusic.scene` and
+`.battle` widen to `MusicKey | null`, `null` = silence, used only by the FF7 experiment (the
+retail cue may never ship, rule 8, and an original needs Bailey's ear, rule 13).
+`BattleEncounterChain.cueForGroup` turns a `null` fallback into "start nothing";
+`tools/audio/chapter-cue-map.d.mts` accepts it; `BattleScreenFlow.playCutscene` and the pause
+jukebox already skipped falsy keys.
+
+**Where it lands:** nowhere visible. `runChapter` hands `chapter.experimental` to
+`app/screens/BattleScreenExperiment.ts` before prep or any save write; its records go to
+`pyrefly-reprise:experiments:v1` (`app/experiments/experimentRecords.ts`), never
+`pyrefly-reprise:save:v1`, so it stays out of the save-data class and every count. The whole
+path sits behind `FF7_EXPERIMENT_READY = false` (`app/experiments/ff7Flag.ts`); the secret door
+on chapter select (`app/screens/frontend/secretDoor.ts`, Bailey's approved option A) does
+nothing while it is off. CHK-025 in `critic/CHECKS.md`; tests `ff7-hidden-board`,
+`ff7-secret-door`, `ff7-game-branch`, `ff7-experiment-records`.
+
 ## 2026-09-26 — `dsl.ts`: `lintScript` also runs the story-text lint (CHK-007)
 
 **Both** [AGENTS.md hard rule 14]: the dialogue box is shared plumbing and prints its text literally in

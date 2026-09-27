@@ -1149,7 +1149,7 @@ export function buildAdvisorView(
   options: AdvisorOptions = {},
 ): AdvisorView | null {
   const actor = state.combatants[decision.actorId];
-  if (!actor) return null;
+  if (!actor || state.game === 'ff7') return null; // FF7: the advisor is off in the slice (ff7-game-branch-audit)
   const planner = options.planner !== false;
 
   // **The cache.** FFX-2 runs an Active ATB clock and `syncGauges` pumps the

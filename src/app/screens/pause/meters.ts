@@ -41,6 +41,7 @@ import type {
   StatusId,
   TurnPreview,
 } from '../../../battle/common/types.ts';
+import { ffxFamily } from '../../../battle/common/game.ts';
 import { FFX_STATUSES, type FFXStatusDef } from '../../../data/ffx/statuses/index.ts';
 
 /**
@@ -270,7 +271,7 @@ export function inThisFightRows(
   game: GameId,
   opts: { turnOrder?: readonly TurnPreview[] | null; atbMode?: 'active' | 'wait' } = {},
 ): MeterRow[] {
-  return game === 'ffx2'
+  return ffxFamily(game, 'pause IN THIS FIGHT rows') === 'ffx2'
     ? ffx2FightRows(c, opts.atbMode ?? 'active')
     : ffxFightRows(c, opts.turnOrder ?? null);
 }

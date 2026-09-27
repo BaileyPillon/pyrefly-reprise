@@ -99,7 +99,7 @@ export function cueForGroup(
   // faded it to silence and started it again (Chapter 3's 'valefor-enters',
   // Chapter 5's 'shuyin-appears').
   if (cue && cue.track === null) return { track: undefined, fadeMs: cue.fadeMs ?? 1200 };
-  return { track: cue?.track ?? fallback, fadeMs: cue?.fadeMs ?? (link === 'first' ? 1200 : 1200) };
+  return { track: cue?.track ?? fallback ?? undefined, fadeMs: cue?.fadeMs ?? (link === 'first' ? 1200 : 1200) };
 }
 
 export interface EncounterChainOptions {
