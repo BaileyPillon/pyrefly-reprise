@@ -210,6 +210,8 @@ class CoachedHud implements HudPort {
   onMenuLevel(listener: (level: 'top' | 'deep') => void): () => void {
     return this.inner.onMenuLevel?.(listener) ?? (() => undefined);
   }
+  // B2's acting signal (PR-0157 FFX, A-15 FFX-2), the same hole a fourth time: `coached-hud-acting.test.ts`.
+  setActing(signal: ActingSignal): void { this.inner.setActing?.(signal); }
 
   // PR-0090: forwards `attachEnemyIntent`'s duck-typed wiring to the real HUD. Always present (not
   // `?.`-guarded on this side) so a HUD mock that lacks it still gets `undefined` from the inner call,
@@ -220,14 +222,9 @@ class CoachedHud implements HudPort {
   }
 
   /**
-   * PR-0122, the exact same wrapper hole `setIntentSource` above documents for
-   * PR-0090: `BattleScreen.openPause`'s `onPause` callback calls
-   * `EnemyIntent.setIntentSuspended(this.hud, paused)` to hide the slab while
-   * the pause is up, and `this.hud` is always this wrapper, never the
-   * concrete `FFXBattleHud` / `FFX2BattleHud`. Left out, the duck-typed probe
-   * in `EnemyIntent.ts` finds nothing here and the slab keeps painting over
-   * the pause — round 09's own repro, confirmed live (a fresh `CoachedHud`
-   * had no `setIntentSuspended` at all until this line).
+   * PR-0122, the same wrapper hole as `setIntentSource` (PR-0090): `BattleScreen.openPause` calls
+   * `EnemyIntent.setIntentSuspended(this.hud, paused)`, and `this.hud` is always this wrapper. Left
+   * out, the duck-typed probe finds nothing here and the slab paints over the pause (round 09, live).
    */
   setIntentSuspended(suspended: boolean): void {
     (this.inner as IntentAwareHud).setIntentSuspended?.(suspended);
@@ -252,8 +249,9 @@ class CoachedHud implements HudPort {
     this.inner.setProjector(project);
   }
 
-  setTargetingPort(port: TargetingPort): void { this.inner.setTargetingPort?.(port); }
-  setActing(signal: ActingSignal): void { this.inner.setActing?.(signal); } // A-15 / PR-0157: the fades hear the presenter
+  setTargetingPort(port: TargetingPort): void {
+    this.inner.setTargetingPort?.(port);
+  }
 
   update(dt: number): void {
     this.inner.update?.(dt);
