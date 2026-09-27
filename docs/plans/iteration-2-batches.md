@@ -169,8 +169,8 @@ the acceptance check and the effort for every A item.
 | PR-0197 win-rate half (stopped: it depends on Bailey's 2026-09-21 advisor policy) | FFX | C | §8 |
 | PR-0014 remainder (`t1-b3b` found the rows accurate and needs the exact repro) | both | **D** (a repro-first paragraph) | L-4, then B6 |
 | PR-0117 (open after `t1-b3b`: the grid name is still ellipsised at 390x844) | FFX-2 | A | B6 |
-| PR-0171 (backed out in `t1-b3b`'s repair) | FFX data; shared layout | **B** | §7 |
-| PR-0211 (reverted at 717dece6) | both | **B** | §7 |
+| PR-0171 (backed out in `t1-b3b`'s repair) | FFX data; shared layout | A (D-234: option C picked 2026-09-26) | B6, after the width cap |
+| PR-0211 (reverted at 717dece6) | both | A (D-232: option A picked 2026-09-26) | B4 |
 | PR-0215 (routing backed out; the card needs wording) | FFX rule; shared screen | C, then A (revert 7d3d9081, plus the copy) | §8 Q6, then B5 |
 | PR-0127 (stopped in `t1-b4a`: what gives way on the prep card) | FFX-2 | C/B | §7, §8 |
 | PR-0186 (stopped in `t1-b2a`: no slot clears the Pagodas and BFA) | FFX | C (a pick of (a) to (c)) | §8 Q7, then B5 |
@@ -428,6 +428,7 @@ and Q4.
 | PR-0095, plus the flat Bulwark rings | FFX-2 (V) | `PartAnchors.ts`, `TargetPlates.ts` | First probe `partRingSnapshot()` at links 3 and 4. Then, at 1600 and 2000, the link-3 and link-4 first menus show a ring and a plate on each part, unoccluded, and the Bulwark rings squashed as in the picked frame. | M |
 | PR-0094, plus the Charge Core slab | FFX-2 (V) | `intentPlacement.ts` | A link-4 rule with a unit test that treats the head quad as an obstacle. At 1600 and 2000 the link-4 card misses the head, and the Charge Core slab misses the core's rim. One Chapter V capture closes both with PR-0095. | S |
 | Spell-effect minors | both / FFX-2 | `spellfx/**`, `VFX.ts` | The effect layer's `dt` scales with playback speed: under held fast-forward a Fire column lands with its numeral. A crit keeps its 1.3x bloom. The Holy numeral pacing goes to B5 if it lives in Beats. | S |
+| OR-2 / D-233: Spiral Cut and Mega Flare, option A | Spiral Cut FFX; Mega Flare FFX-2 | `spellfx/**` | A dolly and a hit-freeze on the last hit, in the new-spells particle language (D-227). One capture per game as a first play and as a repeat (the repeat at most 1.2 s longer). `docs/concepts/specials-2026-09-27/` is the picked frame. | M |
 
 ### B4: Story, results, title and coach (medium)
 
@@ -462,6 +463,7 @@ and Q4.
 | The coach eats reticle taps on a phone | both | coach layer | At 390x844 with a coach mark up, a tap on an enemy reticle targets it. | S |
 | The Chapter II coach line over the intent slab | FFX (II) | coach placement | At 1600x900 on a fresh profile the coach rect misses the IF YOU ATTACK list. | S |
 | PR-0063: capture first | FFX-2 cards | `chapterCards.ts` (only if the capture fails) | An FFX-2 card shows `yuna-x2`, `rikku-x2` and `paine`. An FFX card shows its own party. | S |
+| OR-1 / D-232: mid-battle line card, option A | both | `DialogueBox.ts`, `dialogue-box.css`, `cutscene.css` | A compact card takes whichever of four slots is clear of the party and the speaker, chosen once per beat; falls back to option B's bottom band when no slot is clear. III and V at 1600, 2000 and 390 show no boss occlusion. `docs/concepts/line-card-2026-09-27/` is the picked frame. | M |
 
 ---
 
@@ -539,6 +541,7 @@ finishing.
 | A-3: warm the board | both | `ChapterSelectScreen.ts` | `preloadBattle` starts on card focus. Cold time to the card falls, and a warm run is unchanged. | S |
 | PR-0014 (after L-4's repro) | both | `face-crops.json`, `portraits.spec.ts` | Every chip's head box is inside its visible rect, on the screen the repro names. | S |
 | PR-0171, PR-0127 (after their picks) | FFX data / FFX-2 | pause dossier; prep card | As picked in §7. | S |
+| OR-3 / D-234: pause CHAPTER dossier, option C | FFX data (II, IX); shared pause chrome | `pause/**` (needs the THIS ENCOUNTER width cap first, this batch's own REG-keycol fix) | The plate slides right under the member-tab rule (2026-09-24), at most to 0.88x, never below the 0.755x floor. II and IX plates at 1600 and 2000, in battle and over a scene, show the in-battle case fixed. `docs/concepts/pause-dossier-2026-09-27/` is the picked frame. | M |
 
 ### B7: Accessibility option C, plus PR-0203 (heavy; save-data class; merges LAST)
 
@@ -642,9 +645,9 @@ remain / must change / undecided.
 
 | # | Round | Game | Options | Unblocks |
 |---|---|---|---|---|
-| OR-1 ★ | **PR-0211: mid-battle line card placement.** `t1-b4a`'s top band covered the boss in III and failed at 2000 in V. | both | (a) the left column the dimmed HUD leaves free; (b) a narrower top card that clears the boss quad; (c) a card anchored beside the speaker's own figure. III and V at 1600, 2000 and 390. | B4 or B5 (`cutscene.css`) |
-| OR-2 ★ | **Spiral Cut and Mega Flare: the special moments** (presentation B4, plus their effects in D-227's particle language) | Spiral Cut FFX; Mega Flare FFX-2 | (A) today, plus a dolly and a hit-freeze on the last hit; (B) three cuts in about 1.5 s with the HUD wiped; (C) `clair-impact-feel`, shown only as the declined reference. Each shown as a first play and as a repeat (the repeat adds at most 1.2 s). | B3 or B5 |
-| OR-3 ★ | **PR-0171: the pause CHAPTER dossier placement** (backed out of `t1-b3b`) | FFX data (II, IX); shared layout | (a) the text column moves to the side away from the face; (b) dimmed and inset; (c) under the columns, with the in-battle case fixed. II and IX plates at 1600 and 2000, in battle and over a scene. | B6 |
+| OR-1 ★ | **PR-0211: mid-battle line card placement.** `t1-b4a`'s top band covered the boss in III and failed at 2000 in V. **Picked 2026-09-26 (D-232): option A.** | both | (a) the left column the dimmed HUD leaves free; (b) a narrower top card that clears the boss quad; (c) a card anchored beside the speaker's own figure. III and V at 1600, 2000 and 390. | B4 |
+| OR-2 ★ | **Spiral Cut and Mega Flare: the special moments** (presentation B4, plus their effects in D-227's particle language). **Picked 2026-09-26 (D-233): option A.** | Spiral Cut FFX; Mega Flare FFX-2 | (A) today, plus a dolly and a hit-freeze on the last hit; (B) three cuts in about 1.5 s with the HUD wiped; (C) `clair-impact-feel`, shown only as the declined reference. Each shown as a first play and as a repeat (the repeat adds at most 1.2 s). | B3 |
+| OR-3 ★ | **PR-0171: the pause CHAPTER dossier placement** (backed out of `t1-b3b`). **Picked 2026-09-26 (D-234): option C.** | FFX data (II, IX); shared layout | (a) the text column moves to the side away from the face; (b) dimmed and inset; (c) under the columns, with the in-battle case fixed. II and IX plates at 1600 and 2000, in battle and over a scene. | B6, after the width cap |
 | OR-4 | PR-0033 + PR-0007 Defeat cause line, with **PR-0215's withdrawal card** | both; II is FFX; the stalemate rule is FFX | Defeat: (a) the finishing move; (b) the move plus its set-up status; (c) the move plus a one-line sourced tip. Withdrawal: `t1-b4b`'s A, B and C. | B5 |
 | OR-5 | Attack camera (presentation B2) | both; the FFX approach stays OFF until C-8 | (A) over the shoulder; (B) A plus the approach; (C) today plus a hold frame on the hit. Tidus in I, Paine Warrior in IV. | iteration 3 |
 | OR-6 | Boss presence (presentation B5), with PR-0036 and PR-0177's FAR scale | per chapter from the boss-size table | (A) the slot forward and scaled; (B) the camera lower and pushed; (C) today. VI, IX, X, XV, IV (PR-0036), and VIII FAR (the streak today against 1.3x to 1.7x). | B2 or B3, iteration 3 |
