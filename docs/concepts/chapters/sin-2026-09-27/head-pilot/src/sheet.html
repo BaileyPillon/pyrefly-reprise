@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sin head pilot sheet</title>
+<!-- The phone-readable sheet for the Sin head pilot (FFX only). ?part=1..6. Rendered by render.mjs sheets. -->
+<style>
+@font-face { font-family: Chakra; src: url(../../../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2); font-weight: 700; }
+@font-face { font-family: Corm; src: url(../../../../../../public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2); font-weight: 300 700; }
+@font-face { font-family: Exo; src: url(../../../../../../public/fonts/exo2/Exo2-Variable-wght.woff2); font-weight: 300 800; }
+:root { --ink: #0b0a12; --gold: #e3b94a; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #222; }
+#sheet { width: 1080px; background: var(--ink); color: #ece8dc; font: 400 29px/1.36 Exo, sans-serif; padding: 44px 46px 50px; }
+h1 { font: 700 54px/1.05 Corm; color: #fff; margin-bottom: 10px; }
+h2 { font: 700 44px/1.1 Corm; color: var(--gold); margin: 26px 0 8px; }
+h3 { font: 700 21px Chakra; letter-spacing: .16em; color: var(--gold); text-transform: uppercase; margin: 22px 0 4px; }
+.eyebrow { font: 700 19px Chakra; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+.lede { color: #cfc9b8; font-size: 27px; }
+img.fr { width: 988px; display: block; margin: 16px 0 8px; border: 2px solid #333; }
+ul, ol { padding-left: 38px; } li { margin: 3px 0; }
+b { color: #fff; }
+.box { border: 2px solid var(--gold); padding: 16px 22px; margin: 22px 0 6px; background: rgba(227,185,74,.07); }
+.row { display: flex; gap: 20px; align-items: flex-start; margin: 16px 0; }
+.row img { width: 400px; border: 2px solid #333; flex: none; }
+.row img.ph { width: 300px; }
+.row div { font-size: 26px; line-height: 1.3; }
+.row .t { font: 700 34px/1.05 Corm; color: #fff; margin-bottom: 4px; }
+.k { color: #9d978a; font-size: 22px; }
+.foot { color: #9d978a; font-size: 21px; margin-top: 20px; }
+.pick { display: inline-block; font: 700 17px Chakra; letter-spacing: .12em; background: var(--gold); color: var(--ink); padding: 3px 9px; margin-left: 8px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<div id="sheet"></div>
+<script>
+const P = +(new URLSearchParams(location.search).get('part') || 1);
+const FR = '../frames/';
+const foot = '<p class="foot">Sin head pilot · FFX only · 2026-09-27 · candidates, not approved · nothing installed, nothing listed on the board · every number from research/ffx-sin.md with its tag</p>';
+const opt = (k, name, pick, bullets) => `
+  <div class="eyebrow">Option ${k}${pick ? '<span class="pick">recommended</span>' : ''}</div><h1>${name}</h1>
+  <img class="fr" src="${FR}frame-${k}-1600.jpg">
+  <div class="row"><img class="ph" src="${FR}frame-${k}-390.jpg"><div>${bullets}</div></div>`;
+const parts = {
+  1: `<div class="eyebrow">Sin · link IV · painted pilot · FFX only</div>
+    <h1>Overdrive Sin's head: four painted options</h1>
+    <p class="lede">You chose concept A reached through B. Step one is this pilot: can our pipeline paint a colossus seen from the <i>Fahrenheit</i>'s deck, and can its mouth carry the Giga-Graviton clock? These are options. Nothing is installed or wired.</p>
+    <div class="row"><img src="${FR}frame-A-1600.jpg"><div><div class="t">A · Dusk leviathan</div>Head-on at sunset, wings spread, a wide violet grin. The clock reads best here.</div></div>
+    <div class="row"><img src="${FR}frame-B-1600.jpg"><div><div class="t">B · The maw fills the sky</div>An extreme close-up: the mouth is a band across the sky. The face is lost.</div></div>
+    <div class="row"><img src="${FR}frame-C-1600.jpg"><div><div class="t">C · Three-quarter on the tower <span class="pick">recommended</span></div>The whale-like head turns towards the ship over the white city. It is the most faithful and the best painting.</div></div>
+    <div class="row"><img src="${FR}frame-D-1600.jpg"><div><div class="t">D · Backlit silhouette</div>The sun sets behind the head. Only the eyes and the mouth carry colour.</div></div>
+    <div class="box"><b>Recommendation: C</b> (an agent's look). It matches the written description best: whale-like, scaled, huge. Its jaw also opened and shut through five stages <b>derived from the one painting</b> (part 4), so the clock can stay one creature. Add the wings in production: the sources say Sin sprouts them before this fight. <b>A</b> is the runner-up if you want the face square to the camera.</div>
+    <h3>What we need from you</h3>
+    <ol><li>Pick a look, or mix (say what you like in each).</li><li>Are the wings a must? C has none, A and D do.</li></ol>${foot}`,
+  2: opt('A', 'Dusk leviathan, head-on', false, `<ul>
+    <li><b>Reads:</b> the grin is a wide violet band in the middle of the frame. The clock is legible even on a phone.</li>
+    <li><b>Sources held:</b> scales, feathered wings with purple tips, dusk.</li>
+    <li><b>Faults:</b> six glowing eyes (no source gives a count). It looks more demon than whale. The city behind the rail glows like lava.</li>
+    <li><b>Stages:</b> a head-on grin opens by stretching the lower lip. That was not tried here.</li></ul>`) + foot,
+  3: opt('B', 'The maw fills the sky', false, `<ul>
+    <li><b>Reads:</b> the biggest clock of the four. The mouth spans the frame.</li>
+    <li><b>Faults:</b> no eyes or brow, so Gaze has no face to come from. The deck became a trestle. It took five renders to get this one.</li>
+    <li><b>Best used as:</b> the last two turns. A camera push from A or C to this crop could be the "fully open" beat, with no new painting (our estimate).</li></ul>`) + foot,
+  4: opt('C', 'Three-quarter on the tower', true, `<ul>
+    <li><b>Reads:</b> a whale-like head, scaled like rock, turned towards the ship. The violet throat is lit. The white city lies below in gold light.</li>
+    <li><b>Faults:</b> no wings. The tower under it is not clear. On desktop, the turn-order column covers the back of the jaw.</li></ul>`) +
+    `<h3>The clock: one painting, five stages</h3><img class="fr" src="${FR}stages-C.jpg">
+    <p style="font-size:25px">The lower jaw is cut out and turned about its hinge. The gap is filled, and a light img2img pass heals the seams. Only the jaw area (about 10% of the picture) takes new pixels, so eyes, sky and deck stay the painting's own. It is the same in-place method as Evrae's breath. <b>Faults:</b> in stages 0 and 1 the turned jaw leaves a pale fringe of teeth under the top row, and stage 0 keeps a sliver under the chin; the back of the mouth never fully shuts; stage 4 grew a small tusk at the tip. One repair pass on the pick would fix these.</p>` + foot,
+  5: opt('D', 'Backlit silhouette', false, `<ul>
+    <li><b>Reads:</b> the most dramatic. The violet grin and the red eyes are the only lights, and the wings glow at the tips.</li>
+    <li><b>Faults:</b> a thin vertical beam through the head needs painting out. The silhouette hides the scales, so the head reads as a shape more than a creature.</li>
+    <li><b>Best used as:</b> the Gaze beat or the defeat, as a lighting state of the pick (our estimate).</li></ul>`) + foot,
+  6: `<div class="eyebrow">How this was made</div><h1>Method, sources, every render</h1>
+    <ul>
+    <li><b>Written sources only.</b> <code>research/ffx-sin.md</code> §9.1 and §9.3 set the scene: the deck over Bevelle at evenfall, Sin winged and propped on a tower, and a mouth that opens in stages. The FF Wiki's Sin article, Appearance section (revid 4045228, read as text through the MediaWiki API), adds a whale-like body, scales, part of a city on its body near the head, and feathery wings purple at the tips. No character tag for Sin was used.</li>
+    <li><b>No retail image</b> was used as input, reference or IP-Adapter. The only image input is our own layout sketches, drawn in code (below).</li>
+    <li><b>House finish:</b> animagine-xl-4.0-opt, the checkpoint of the installed FFX paintings, with the backdrop words of the Evrae deck. Each render: sketch img2img at 0.70 to 0.82, then a RealESRGAN detail pass at 1.75x (2352 × 1344).</li>
+    <li><b>The frames</b> put the Garden of Pain party you picked (Tidus, Yuna, Auron; Yuna's Tetra Ring back is S-29, our estimate) on the deck, with a rough stand-in for the FFX HUD. Giga-Graviton is on turn 13, our default (S-1: 12 or 13).</li>
+    </ul>
+    <img class="fr" src="${FR}sketches.jpg"><img class="fr" src="${FR}renders.jpg">
+    <h3>Next, after your pick</h3>
+    <ol><li>Record the reaction on the target tile. Nothing is listed on the board before that.</li><li>One repair pass on the pick: wings if wanted, and the stage 0 and 4 faults.</li><li>The other head states: approach far, mid and near, Gaze and defeat.</li><li>Bench link IV at human speed with this party, as the plan says.</li></ol>${foot}`,
+};
+document.getElementById('sheet').innerHTML = parts[P];
+window.partCount = Object.keys(parts).length;
+</script>
+</body>
+</html>
