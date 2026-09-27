@@ -1,11 +1,12 @@
 import { Group, Vector3 } from 'three';
 import { Backdrop, type BackdropOptions } from '../engine/Backdrop.ts';
-import type { CameraRig } from '../engine/BattleCamera.ts';
+import type { BattleCamera, CameraRig } from '../engine/BattleCamera.ts';
 import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
+import { RoadPhoneCamera, roadOnPhone, type RoadLinkIds } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
 
@@ -88,6 +89,13 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 
 /** Combatant ids this scene stages (`src/data/ffx2/enemies/fallen-aeons-road.ts`, `magus-sisters.ts`). */
 export const ROAD_IDS = { shiva: 'x2-shiva', sandy: 'sandy', cindy: 'cindy', mindy: 'mindy', anima: 'x2-anima' } as const;
+
+/** Who fields each link, for the phone's per-link camera (`road-to-the-farplane-phone.ts`, PR-0201 A). */
+export const ROAD_LINK_IDS: RoadLinkIds = {
+  shiva: [ROAD_IDS.shiva],
+  sisters: [ROAD_IDS.sandy, ROAD_IDS.cindy, ROAD_IDS.mindy],
+  anima: [ROAD_IDS.anima],
+};
 
 /**
  * Where each fighter stands. Shiva keeps the spot Chapter V's relaxation settled
@@ -248,6 +256,9 @@ export const buildRoadToTheFarplaneScene: SceneFactory = async (opts: SceneBuild
     backdrop.group.visible = !want;
   };
 
+  // PR-0201 A (Bailey, 2026-09-26): on an upright phone the idle camera pulls back per link; nothing on a desktop.
+  const phoneCamera = roadOnPhone() ? new RoadPhoneCamera(ROAD_RIGS.idle, ROAD_LINK_IDS) : null;
+
   const watchEnabled = opts.watchAssets ?? Boolean(import.meta.env.DEV);
   let watcher: AssetWatcher | null = null;
   if (watchEnabled && backdrop.placeholder) {
@@ -276,7 +287,9 @@ export const buildRoadToTheFarplaneScene: SceneFactory = async (opts: SceneBuild
     enemyHeight: ROAD_TO_THE_FARPLANE_SLOTS.enemyHeight!,
     ...ROAD_STAGING,
     palette: { ...ROAD_TO_THE_FARPLANE_PALETTE },
+    ...(phoneCamera ? { bindCamera: (camera: BattleCamera | null): void => phoneCamera.bind(camera) } : {}),
     update(dt: number): void {
+      phoneCamera?.update(group.parent);
       backdrop.update(dt);
       plateB.update(dt);
       lights.update(dt);
@@ -284,6 +297,7 @@ export const buildRoadToTheFarplaneScene: SceneFactory = async (opts: SceneBuild
     },
     dispose(): void {
       watcher?.stop();
+      phoneCamera?.bind(null);
       for (const p of pools) {
         p.geometry.dispose();
         (p.material as { dispose(): void }).dispose();

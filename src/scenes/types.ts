@@ -2,7 +2,7 @@ import type { ArrivalDirectors } from '../engine/StageArrivals.ts';
 import type { PartAnchors } from '../engine/PartAnchors.ts';
 import type { Group, Scene, Vector3 } from 'three';
 import type { Backdrop } from '../engine/Backdrop.ts';
-import type { CameraRig } from '../engine/BattleCamera.ts';
+import type { BattleCamera, CameraRig } from '../engine/BattleCamera.ts';
 import type { LightRig } from '../engine/Lighting.ts';
 import type { ParticleField } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
@@ -88,6 +88,13 @@ export interface SceneBuild extends SceneStaging {
    */
   readonly partyHeight?: number;
   readonly enemyHeight?: number;
+
+  /**
+   * Optional: the battle camera the loaded scene drives from {@link rigs}, handed over once it
+   * exists (`src/scenes/index.ts`), for a scene that re-frames itself mid-battle. The Road to the
+   * Farplane's phone camera (PR-0201 A) is the one user; every other scene omits it.
+   */
+  bindCamera?(camera: BattleCamera | null): void;
 
   /** @param dt seconds. The caller must call this every frame. */
   update(dt: number): void;
