@@ -100,3 +100,74 @@ item effects never miss; the preset party (gs §8.2, §8.5).
    Cover, back attacks, Recovery's effect.
 7. Merge order: this branch sits on `ff7-plumbing`; the HUD track (`D:/pyrefly-ff7`) owns
    `src/ui/**` and `createHud`.
+
+## CHECK (adversarial engine check, 2026-09-27, a second agent that did not build it)
+
+Method (rule 3, run, not grepped): a scratch replay verifier, `tools/zz-ff7check.tmp.mjs` and
+`tools/zz-ff7check2.tmp.mjs` (not committed), with its **own** implementation of the formulas
+taken from `research/ff7-battle-core.md` and `research/ff7-guard-scorpion.md`. It played 800
+seeded battles (seeds 1 to 200 for the sensible, naive and literal-hint policies, plus a
+fourth, "Bolt/Ice always", that casts into the raised tail) and checked every event in every
+log against the hand formula. No browser was used (the machine was busy); the sources were
+the two research files and their worked tables.
+
+**Verdict: no blocker.** One major (a missing command the research lists as needed now), six minors.
+
+What was proven:
+
+- **Formulas, 18 hand anchors** against the research's printed ranges (core §14, gs §4, §9):
+  Cloud Attack 38-41, critical 76-82, tail up 20-22; Bolt 90-96 / 44-48; Ice 45-48; Braver
+  116-124 / 62-67; Barret Attack 32-35; Big Shot 105-113 / 57-61; Cure 232-248; Rifle on Cloud
+  front 35-38, back row 17-19, Defended 17-19; Scorpion Tail 63-68 on Cloud (the research's
+  62-68 spans Cloud and Barret); Tail Laser split 72-77, split and Defended 35-38. All match.
+- **Every damage event in the 800 logs** (24,658 hits, 2,900 heals, 133 Phoenix Downs at
+  `[MaxHP / 4]` = 79) fell inside the independent min-max for its attacker, target, form
+  (Def 40/255, MDf 256/384), Defend, critical and split. Zero outside.
+- **Limit fill**: all 12,760 enemy hits on a party member produced exactly
+  `[[300 * HPLost / MaxHP] * 256 / LNum]` (LNum 140 / 129); gs §9's anchors 65/69, 117/127,
+  133/142 reproduce. Gauge empties on use and on KO.
+- **Rates**: party Attack crit 2.2% (want [10/4] and [11/4] = 2%), boss crit 1.1% (want 1%),
+  Lucky Evade Cloud 3.2% / Barret 4.0% (want 3% / 4%), party Attack misses 0 of 3,305
+  (Hit% 100 and 101). Turn Timer fills in 369 / 361 / 361 ticks (core §2.3); Normal start puts
+  the highest timer at 57,344; derived stats Max HP 316/317, MP 57/43.
+- **AI cycle**: 1,219 full 8-turn cycles (up to 5 in one battle) all read Search Scope, attack,
+  Search Scope, attack, Raise Tail, pass, pass, Drop Tail. All 3,389 attacks hit the locked
+  target while it lived; below 400 HP it was always Scorpion Tail; at 400 or more the Scorpion
+  Tail share was 0.342 (want 1/3). The warning played once in every battle (three lines).
+- **Tail-up counter**: 5,119 counters; every party action on the boss while the tail was up
+  was answered by one Tail Laser (0 missing), none while it was down (0), and the 107 killing
+  blows landed with the tail up each got Drop Tail and no laser (0 lasers).
+- **Determinism**: same seed, identical log (47 kB JSON); the clock stepped in 17 ms chunks
+  gives the same events as whole steps. The golden fixture test passes.
+- **Rewards**: 100 EXP, 10 AP, 100 gil, Assault Gun on a win.
+- **FFX / FFX-2 untouched**: `git diff main...ff7-engine -- src/battle/ffx src/battle/ffx2` is
+  empty; `ffx2-atb-golden` (6), `ffx-engine`, `ffx-ctb`, `ffx2-engine`, `ffx-formulas`,
+  `ffx2-formulas`, `ffx-fixtures` and all 15 `ff7-*` files pass (22 files, 423 tests);
+  `tsc --noEmit` is clean. Engine files are under 400 lines, with no `Math.random`, DOM or `three`.
+- **Cites**: every registry record carries a § and a tag (`ff7-data-cites`), and every estimate
+  in the brief is labelled in the code. The one exception is minor 5 below.
+
+Findings:
+
+1. **Major: no Change (row swap).** core §13 lists "Row, Long Range, Defend, Change" as
+   needed now, and the wiki's strategy is to move Barret to the back row. The row rule works
+   (back row 17-19 was proven through the formula), but the player cannot reach it. Already
+   listed as Open 1; it needs a contract `Command` kind.
+2. Minor: **Active is Recommended without the grace pause**, because animation time never
+   reaches `tick` (Open 2). The bench's "Active = Recommended" is true by construction, so it
+   does not show that Active works.
+3. Minor: **Wait holds at the top list by default.** A fresh menu starts `'deep'`, so until the
+   FF7 HUD reports `onMenuLevel('top')` Wait also stops the clock at the top command list,
+   which core §2.5 says keeps running. The FF7 HUD must wire `onMenuLevel`.
+4. Minor: `createEngine` imports `Ff7Engine` and `ff7Registry` statically into
+   `BattleScreenWiring.ts`, so the hidden experiment's engine and data ship in every player's
+   bundle. FFX and FFX-2 behaviour does not change. Consider a dynamic import.
+5. Minor, not labelled: when one party member is down, Tail Laser has a single target, so it
+   does not split and deals the full 109-116. This is a fair reading of core §4.5 step 8
+   ("a multi-target hit"), but the research does not state it. Label it `[derived]` or
+   `[estimate]` in `perform.ts` and the handoff.
+6. Minor, not labelled: an item aimed at an ally who fell while the menu was open is used up
+   and misses (`payFor` runs before the wrong-state miss). This is unsourced; label it or refund.
+7. Minor: Defend ends when the member's next action executes (labelled as our estimate). At
+   real decision times this lasts longer than the wiki's "until their next turn begins" when
+   read as the gauge filling. That is worth a line to Bailey if the HUD shows Defend.
