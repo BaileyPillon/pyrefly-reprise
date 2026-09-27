@@ -31,7 +31,11 @@ describe('chapterColumns', () => {
     expect(columns.map((c) => c.heading)).not.toContain('The party');
   });
 
-  it('with a live state, THE PARTY column is present and wide (PR-0189: room for "Dressphere")', () => {
+  it('with a live state, THE PARTY column is present and keeps the plain key column (REG-keycol)', () => {
+    // REG-keycol (t1-b3b check): a `wide` party column squeezed the party
+    // values at 1024x768 and 390x844 and, in battle, moved the party keys onto
+    // the Ch II / Ch IX plate faces. DRESSPHERE is fitted by FOC16-03's own
+    // gear-column rule in `pause-chapter.css` instead.
     const state = {
       activeIds: ['yuna'],
       combatants: { yuna: ffx2Member },
@@ -40,7 +44,7 @@ describe('chapterColumns', () => {
     const gear = columns.find((c) => c.id === 'gear');
     expect(gear).toBeDefined();
     expect(gear!.heading).toBe('The party');
-    expect(gear!.wide).toBe(true);
+    expect(gear!.wide).toBeFalsy();
     expect(gear!.rows.some((r) => r.label === 'Dressphere' && r.value === 'gunner')).toBe(true);
   });
 });

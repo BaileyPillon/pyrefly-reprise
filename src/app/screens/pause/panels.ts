@@ -258,11 +258,11 @@ export function chapterColumns(ctx: ChapterContext): PanelColumn[] {
   // PR-0171: the pause can open over a cutscene, where there is no live
   // battle state and so no party — printing "The party" with nothing under
   // it (round 12, chapters II and IX) said there was a column with nothing
-  // in it. Widened to `wide` at the same time: `gearRows` prints the label
-  // "Dressphere" (10 characters) in the plain key column, which the narrow
-  // floor ellipsised at 2000x1012 (PR-0189).
+  // in it. Not `wide` (REG-keycol, t1-b3b check): a wide party column
+  // squeezed the values at 1024x768 and 390x844; FFX-2's "Dressphere" key is
+  // fitted by FOC16-03's own gear-column rule in `pause-chapter.css`.
   if (members.length > 0) {
-    columns.push({ id: 'gear', heading: 'The party', rows: gearRows(members), wide: true });
+    columns.push({ id: 'gear', heading: 'The party', rows: gearRows(members) });
   }
   if (meta) {
     columns.push({
