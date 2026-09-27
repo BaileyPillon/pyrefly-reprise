@@ -1,0 +1,486 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-27T14:08:04.753Z",
+ "build": {
+  "mainSha": "ff3884fb",
+  "fullSha": "ff3884fbe69185e9fb1adbdeb3db07757891f178",
+  "bundle": "index-BfW8CHQs.js",
+  "candidate": "D:/pyrefly-rel23/dist-gate",
+  "previousLive": "a44297ca (bundle DLvZcIgF)"
+ },
+ "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect in the changed area: every route finished (IV won, I lost and retried as on live, FF7 won and lost by keys and taps) with 0 page errors and 0 missing files.",
+  "No regression against live: Ch I picks and HP ledger identical to release 22 at 1600x900 and 390x844 touch; Ch IV won in 56 turns and saved (1 OF 14 BEATEN after reload); the board is identical to the live site at three sizes.",
+  "The FF7 experiment is a brand-new hidden feature: it stays off the board, writes only pyrefly-reprise:experiments:v1, and its known gaps (stand-in effects, slide attack, house results, silence, small phone letterbox) are disclosed.",
+  "changedArea is FAIL only because A-12 is not visibly met for Seymour Flux on a phone (FOC23-01, polish, same as live); the A-2 transitions are knowingly unwired."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Full-screen layers (battle-start card, pause, results, FF7 HUD and results) own the window at 1600x900, 2000x1012 and 390x844 in every route; no stage-sized overlay seen.",
+   "where": "both + FF7; I, IV, FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/run.json",
+    "critic/reviews/ff3884fb-focused/ffx2-bahamut-win/run.json",
+    "critic/reviews/ff3884fb-focused/seymour-flux-win-phone-touch/run.json",
+    "critic/reviews/ff3884fb-focused/ch1-transition-strip.jpg",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/game-1600x900-victory.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Text on the changed screens read at 1600, 2000 and 390; FF7 HUD type legible at 390 (phone B, 13 px cap, disclosed small letterbox). No new FFX/FFX-2 text surface changed.",
+   "where": "FF7 + both",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/ff7-e2e/game-390x844-magic.jpg",
+    "critic/reviews/ff3884fb-focused/ch1-phone-first-menu-r22-vs-cand.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "Advisor text in I and IV identical to release 22 (composites); FF7 has no advisor (abilityFactsFor(ff7) empty, by design).",
+   "where": "both; I, IV",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/ch1-first-menu-r22-vs-cand.jpg",
+    "critic/reviews/ff3884fb-focused/ch4-first-menu-r22-vs-cand-2000.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-005",
+   "result": "PASS",
+   "reason": "Advisor code unchanged in behaviour for I and IV: the Ch I route replays the identical 23 picks and HP ledger as release 22 (broken board included: Yuna KO, recovery by Phoenix Down).",
+   "where": "FFX; I",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "PR-0061(a) opening callouts clear before the first menu; FF7 hint block is one block and clears; no stale overlay in any route frame after cancel, pause or results.",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/run.json",
+    "critic/reviews/ff3884fb-focused/ffx2-bahamut-win/run.json",
+    "critic/reviews/ff3884fb-focused/seymour-flux-win-phone-touch/run.json",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/run.log",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No developer vocabulary on the board, FF7 HUD, FF7 results (EXP/AP PER MATERIA/GIL/Assault Gun) or FFX/FFX-2 surfaces read.",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/ff7-e2e/game-1600x900-victory.jpg",
+    "critic/reviews/ff3884fb-focused/board/board.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Panels vs painted actors at 1600 and 2000 identical to release 22 in I and IV; FF7 fighters above the band (feet clear) at 1600.",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/ch1-first-menu-r22-vs-cand.jpg",
+    "critic/reviews/ff3884fb-focused/ch4-first-menu-r22-vs-cand-2000.jpg",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/game-1600x900-tail-laser.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Longest names shown whole on the board and HUDs (Seymour Flux, Mortiorchis, Guard Scorpion, Tail Laser).",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/A-chapter-select.jpg",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/game-1600x900-target.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Target selection in I (desktop and phone) as release 22; FF7 targeting by the pointing finger, Locked On Target shown.",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/16-target-single.jpg",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/game-1600x900-target.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-011",
+   "result": "FAIL",
+   "reason": "At 390x844 in Chapter I the Seymour Flux body is cut at the right edge on the first menu and through the fight (FOC23-01), although A-12 claims 1.0 for him. Identical to release 22, so not a regression. Desktop I and IV: every enemy visible; FF7 boss whole at 1600.",
+   "where": "FFX; I at 390x844",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/ch1-phone-first-menu-r22-vs-cand.jpg",
+    "critic/reviews/ff3884fb-focused/ch1-phone-strip.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "FF7 art (D-240) judged in the running game at 1600 and 390: boss, Cloud, Barret, reactor backdrop render with contact and scale; approved art hashes intact (267 ok, 0 mismatched, 0 missing).",
+   "where": "FF7; approved art both",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/ff7-e2e/game-1600x900-tail-laser.jpg",
+    "critic/reviews/ff3884fb-focused/verify-approved.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-014",
+   "result": "PASS",
+   "reason": "Facing: Ch I and IV actors facing as release 22 (firstState facing 1 party / -1 enemy); FF7 party faces the boss.",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/run.json",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/game-1600x900-turn.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real input only: FF7 door by keys (LIMIT, FRFRM), 7 taps, pad shim; FF7 win by keys and by taps, loss, RETRY, CHAPTER SELECT; Ch I by keys and by touch; Ch IV to a win by keys at 2000x1012 with save and reload. Debug API only for seed and the board entry in the FF7 spec.",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/run.json",
+    "critic/reviews/ff3884fb-focused/ffx2-bahamut-win/run.json",
+    "critic/reviews/ff3884fb-focused/seymour-flux-win-phone-touch/run.json",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/run.log",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every route capture asserts screen/state (index.json, 0 fails); the FF7 spec asserts battle/HUD/results before shooting.",
+   "where": "all",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/index.json",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/run.log",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused pre-deploy review: the live verification of this artifact is a separate obligation after the deploy.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared screens (board, results, pause, battle-start card) behave the same in FFX and FFX-2 routes; FF7 results reuse the house panel (disclosed).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/run.json",
+    "critic/reviews/ff3884fb-focused/ffx2-bahamut-win/run.json",
+    "critic/reviews/ff3884fb-focused/seymour-flux-win-phone-touch/run.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Cases: A-1 and PR-0104, PR-0072 FFX-2 only (A-1 gated on ATB tick and game !== ff7, ff3884fb); PR-0185 FFX IX only; A-13, A-11, A-12, A-3, PR-0061(a) both; FF7 items FF7 only. Presence: FF7 fight via the door, IV wait frames keep boss and girls in frame. Absence: FFX I picks and HP ledger byte-identical to release 22 at 1600 and 390; no FF7 text on the board; FF7 fight shows no Ink & Gold card or moments.",
+   "where": "FFX, FFX-2, FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/run.json",
+    "critic/reviews/ff3884fb-focused/ffx2-bahamut-win/run.json",
+    "critic/reviews/ff3884fb-focused/seymour-flux-win-phone-touch/run.json",
+    "critic/reviews/ff3884fb-focused/ch4-seq-action-playing-strip.jpg",
+    "critic/reviews/ff3884fb-focused/board/board.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Win: IV to results, post scene, board with 1 OF 14 BEATEN and after reload. Loss: I to the defeat panel, RETRY to prep (seed 1001) and the retried fight. FF7: win to results to board; loss to defeat panel, RETRY at seed+1000, CHAPTER SELECT.",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/seymour-flux-win/run.json",
+    "critic/reviews/ff3884fb-focused/ffx2-bahamut-win/run.json",
+    "critic/reviews/ff3884fb-focused/seymour-flux-win-phone-touch/run.json",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/run.log",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Subsystems invoked through the real presentation path: A-3 card over the ink seen in the Ch I transition; PR-0061(a) callouts, A-11/A-1 fitting seen in play. A-2 entry transitions are knowingly unwired (5 orphans, disclosed; orphans.mjs 29 = 24 + 5).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/ch1-transition-strip.jpg",
+    "critic/reviews/ff3884fb-focused/ch4-seq-party-action-strip.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-025",
+   "result": "PASS",
+   "reason": "Board identical on candidate and live at 1600x900, 2000x1012 and 390x844 (15 tiles, same order, one COMING, 0 OF 14 BEATEN, no FF7 text); partial codes LIMI and FRFR do nothing; X backs to title on both builds; LIMIT opens the fight with pyrefly-reprise:save:v1 still absent and only pyrefly-reprise:experiments:v1 written; the FF7 e2e 5/5 asserts the main save byte-identical and the board unchanged after win and loss; ff7-hidden-board, ff7-secret-door, ff7-game-branch, ff7-experiment-records unit tests pass. The debug route gotoChapter reaches the fight (intended per the brief; R-1 of the re-check).",
+   "where": "FF7 + shared plumbing",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/board/board.json",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/run.log",
+    "critic/reviews/ff3884fb-focused/ff7-e2e/",
+    "critic/reviews/ff3884fb-focused/vitest.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "ff3884fb / dist-gate index-BfW8CHQs.js",
+   "targetVersion": "77707685ee62e77e091e7e74d516b49065872a4fc4ff46d1dffa3e44eef68967",
+   "environment": "candidate D:/pyrefly-rel23 ff3884fb, dist-gate bundle index-BfW8CHQs.js (built 09:43 after the 09:40 commit), vite preview 127.0.0.1:5431; headless Playwright Chromium, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  }
+ ],
+ "targets": {
+  "required": 5,
+  "matched": 4,
+  "failing": 0,
+  "unverified": 1,
+  "waiting": 0,
+  "list": [
+   {
+    "tile": "Chapter select",
+    "result": "matched",
+    "evidence": "critic/reviews/ff3884fb-focused/A-chapter-select.jpg; critic/reviews/ff3884fb-focused/board/board.json",
+    "note": "identical snapshot and words to live at 1600, 2000, 390; no FF7 card"
+   },
+   {
+    "tile": "Battle start",
+    "result": "matched",
+    "evidence": "critic/reviews/ff3884fb-focused/A-battle-start.jpg",
+    "note": "A-3: the approved card over the ink on the Ch I entry; composition as verified before"
+   },
+   {
+    "tile": "Battle HUD, FFX",
+    "result": "matched",
+    "evidence": "critic/reviews/ff3884fb-focused/A-ink-and-gold-battle.jpg; critic/reviews/ff3884fb-focused/ch1-first-menu-r22-vs-cand.jpg",
+    "note": "identical to release 22"
+   },
+   {
+    "tile": "Battle HUD, FFX-2",
+    "result": "matched",
+    "evidence": "critic/reviews/ff3884fb-focused/A-ffx2-battle.jpg; critic/reviews/ff3884fb-focused/ch4-first-menu-r22-vs-cand-2000.jpg",
+    "note": "identical to release 22; A-1 wait frames keep Bahamut and the girls in frame"
+   },
+   {
+    "tile": "Vegnagun staging: option A accepted",
+    "result": "unverified",
+    "note": "PR-0072 contact pool not captured (Ch V not played); builder frame only"
+   }
+  ]
+ },
+ "issues": [
+  {
+   "id": "FOC23-01",
+   "severity": "polish",
+   "title": "Chapter I on a phone: Seymour Flux cut at the right edge despite A-12",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "A-12: at 390x844 the master is refitted so the party and every enemy fit one slice (handoff: Seymour Flux 0.44 to 1.0)",
+   "observed": "On the first menu and through the fight the Seymour Flux figure is mostly past the right edge (head and body cut); Mortiorchis and the party are whole. Release 22 looks the same.",
+   "repro": "route.mjs seymour-flux win --size=390x844 --touch --seed=1; frames 10 to 23",
+   "evidence": [
+    "critic/reviews/ff3884fb-focused/ch1-phone-first-menu-r22-vs-cand.jpg",
+    "critic/reviews/ff3884fb-focused/ch1-phone-strip.jpg"
+   ],
+   "confidence": "medium (by eye; the builder measured the painted quad, which may not match the visible figure)",
+   "requirement": "CHK-011; A-12 claim",
+   "where": "src/ui/common/phoneSlice.ts / FrameFit (suspected: the fit uses the seymour-flux-body quad, not the visible figure)",
+   "fix": "Measure the visible silhouette (or the rider quad) in the phone fit for Ch I",
+   "acceptanceCheck": "Ch I at 390x844 first menu: Seymour Flux head and body inside the field",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC23-02",
+   "severity": "polish",
+   "title": "FF7 experiment reachable by window.__pyrefly.gotoChapter on production",
+   "game": "FF7",
+   "chapter": "ff7-guard-scorpion",
+   "expected": "Hidden experiment",
+   "observed": "gotoChapter opens it; the brief names it the intended debug route (re-check R-1)",
+   "repro": "console: __pyrefly.gotoChapter(\"ff7-guard-scorpion\")",
+   "evidence": [
+    "docs/handoff/ff7-guard-scorpion.md RE-CHECK"
+   ],
+   "confidence": "high (reused)",
+   "requirement": "CHK-025",
+   "where": "src/debug/api.ts",
+   "fix": "Keep as the testers route, or refuse experimental ids outside DEV (Bailey)",
+   "acceptanceCheck": "decision recorded",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "tsc clean",
+   "50 vitest files (49 pass, 1 skipped; 664 tests) incl. 22 FF7 suites, B2 presenter suites, ffx2-atb-golden",
+   "FF7 e2e 5/5 by real keys, taps and pad on the production candidate",
+   "Ch I win route 1600x900 keys; Ch I 390x844 touch; Ch IV win 2000x1012 keys with save and reload",
+   "board vs live at 3 sizes; door negatives",
+   "verify-approved 267/0/0",
+   "orphans 29 (24 + 5 A-2)",
+   "data audit of every FF7 value vs research/ff7-*.md (no FFX/FFX-2 data changed)"
+  ],
+  "reused": [
+   {
+    "what": "A-13 roll on the first hit (-4.00 at the hit)",
+    "from": "docs/screenshots/iter2-b2/a13-roll-report.json",
+    "why": "same presenter code merged unchanged; ff3884fb touched only the ffx2Framing line"
+   },
+   {
+    "what": "A-3 throttled cold-load timings, PR-0104 cut-in cap, PR-0185 IX 4:3 rig, A-11 sweep",
+    "from": "docs/handoff/iter2-b2.md and its independent CHECK",
+    "why": "code unchanged since; not re-measured here"
+   },
+   {
+    "what": "gotoChapter reaches FF7; door negative sweep; save byte-identical with a non-empty save",
+    "from": "docs/handoff/ff7-guard-scorpion.md RE-CHECK at d21e4587",
+    "why": "FF7 code unchanged after the re-check except the ffx2Framing guard"
+   }
+  ],
+  "notTested": [
+   "Chapters II, III, V to XV in the candidate",
+   "PR-0072 Vegnagun pool (Ch V)",
+   "A-12 on IV at 390x844 (Fira on Bahamut)",
+   "audio listening",
+   "performance and device coverage",
+   "the live deploy (separate obligation)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of ff3884fb after the deploy (CHK-017), then the deep review owed on the live build (depth deep, deepAfterDeploy true, carriedDeep a44297ca).",
+ "elapsedMinutes": 27
+}
