@@ -35,7 +35,7 @@ import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
 import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
 import { chainLengthOf, runEncounterChain } from './BattleEncounterChain.ts';
-import { checkpointAt, resumeSetup, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
+import { resumeSetup, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
 import { playSaveSphereCard } from './SaveSphereCard.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
@@ -421,6 +421,7 @@ export class BattleScreen extends Screen {
       findGroup: findEnemyGroup,
       audio,
       startLink: this.opts.resumeAt?.link ?? 1,
+      priorWon: this.opts.resumeAt?.won ?? [], // PR-0138: the links won before the checkpoint
       saveSphere: (swap) =>
         playSaveSphereCard({
           root: this.root,
@@ -429,9 +430,9 @@ export class BattleScreen extends Screen {
           instant: presenter.playbackSpeed === 'skip',
           cancelled: () => presenter.isAborted,
         }),
-      onLink: ({ links, group, setup }) => {
+      onLink: ({ links, group, setup, checkpoint }) => {
         this.links = links;
-        this.checkpoint = checkpointAt(links, group, setup) ?? this.checkpoint;
+        this.checkpoint = checkpoint ?? this.checkpoint;
         this.group = group;
         this.setup = setup;
         // A new formation has been staged — Yunalesca's second form, the next
