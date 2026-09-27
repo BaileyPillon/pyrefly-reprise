@@ -215,7 +215,12 @@ export function statusWord(id: string): string {
   if (id === 'ko') return 'Death';
   return id
     .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w) => {
+      // "Max HP x2", not "Max Hp X2", as the FFX panel already says (PR-0074; B6).
+      if (w === 'hp' || w === 'mp') return w.toUpperCase();
+      if (/^x\d+$/.test(w)) return w;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
     .join(' ');
 }
 
@@ -225,8 +230,13 @@ export function describeAbility(def: AbilityDef): string {
   const where = TARGET_WORD[def.targeting] ?? 'its target';
   const heals = def.flags.includes('heals');
 
+  // PR-0188, the FFX-2 half of the same builder (CHK-020): a `formula: 'none'` row with no status
+  // deals no damage ("non-elemental damage to itself" was false), and a sentence starts upper case.
+  const inert = def.formula === 'none' && def.statusEffects.length === 0 && !heals;
   if (def.formula === 'none' && def.statusEffects.length > 0) {
     parts.push(`Inflicts ${def.statusEffects.map((s) => statusWord(s.status)).join(', ')} on ${where}`);
+  } else if (inert) {
+    parts.push(def.removesStatuses.length > 0 ? `Cures ${def.removesStatuses.map(statusWord).join(', ')} on ${where}` : 'Deals no damage');
   } else if (heals) {
     parts.push(`Restores HP to ${where}`);
   } else {
@@ -240,10 +250,11 @@ export function describeAbility(def: AbilityDef): string {
   if (def.flags.includes('drains')) parts.push('drains the damage back as HP');
   if (def.flags.includes('piercing') || def.ignoresDefense === true) parts.push('ignores Defense');
   if (def.flags.includes('always-break-damage-limit')) parts.push('cap 99 999');
-  if (def.removesStatuses.length > 0) {
+  if (def.removesStatuses.length > 0 && !inert) {
     parts.push(`strips ${def.removesStatuses.map(statusWord).join(', ')}`);
   }
-  return `${parts.join(' - ')}.`;
+  const text = parts.join(' - ');
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
 }
 
 /**
