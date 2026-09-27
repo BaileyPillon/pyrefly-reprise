@@ -1,0 +1,717 @@
+[
+ {
+  "id": "seymour-flux",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "30 MP"
+    ]
+   },
+   "card": [
+    406,
+    102,
+    679,
+    288
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 8
+  },
+  "intentOpened": {
+   "advisorMinEffPx": null,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "30 MP"
+    ]
+   },
+   "card": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "intent": [
+    397,
+    39,
+    772,
+    366
+   ],
+   "intentOffscreen": false,
+   "advRows": 0
+  }
+ },
+ {
+  "id": "yunalesca",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "30 MP",
+     "always hits",
+     "+ Haste"
+    ]
+   },
+   "card": [
+    404,
+    83,
+    831,
+    288
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 12
+  },
+  "intentOpened": {
+   "advisorMinEffPx": null,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Hastega",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "30 MP",
+     "always hits",
+     "+ Haste"
+    ]
+   },
+   "card": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "intent": [
+    473,
+    39,
+    848,
+    366
+   ],
+   "intentOffscreen": false,
+   "advRows": 0
+  }
+ },
+ {
+  "id": "braskas-final-aeon",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Stamina Tonic",
+    "target": "the party",
+    "chips": [
+     "in Items",
+     "no MP",
+     "always hits",
+     "+ Max HP x2"
+    ]
+   },
+   "card": [
+    400,
+    43,
+    775,
+    245
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 11
+  },
+  "intentOpened": {
+   "advisorMinEffPx": null,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Stamina Tonic",
+    "target": "the party",
+    "chips": [
+     "in Items",
+     "no MP",
+     "always hits",
+     "+ Max HP x2"
+    ]
+   },
+   "card": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "intent": [
+    441,
+    39,
+    816,
+    263
+   ],
+   "intentOffscreen": false,
+   "advRows": 0
+  }
+ },
+ {
+  "id": "evrae-airship",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Pull back",
+    "target": null,
+    "chips": [
+     "in Orders",
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    410,
+    135,
+    1002,
+    265
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 8
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Pull back",
+    "target": null,
+    "chips": [
+     "in Orders"
+    ]
+   },
+   "card": [
+    407,
+    111,
+    648,
+    288
+   ],
+   "intent": [
+    736,
+    52,
+    1111,
+    314
+   ],
+   "intentOffscreen": false,
+   "advRows": 5
+  }
+ },
+ {
+  "id": "yojimbo-cavern",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "chips": [
+     "in Items",
+     "2,810–3,175",
+     "5 hits"
+    ]
+   },
+   "card": [
+    1104,
+    451,
+    1361,
+    630
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 8
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "chips": [
+     "in Items",
+     "2,810–3,175",
+     "5 hits"
+    ]
+   },
+   "card": [
+    1120,
+    384,
+    1365,
+    595
+   ],
+   "intent": [
+    339,
+    100,
+    714,
+    341
+   ],
+   "intentOffscreen": false,
+   "advRows": 8
+  }
+ },
+ {
+  "id": "seymour-natus",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Talk",
+    "target": null,
+    "chips": [
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    519,
+    195,
+    1111,
+    325
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 7
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Talk",
+    "target": null,
+    "chips": [
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    929,
+    195,
+    1339,
+    325
+   ],
+   "intent": [
+    517,
+    142,
+    892,
+    415
+   ],
+   "intentOffscreen": false,
+   "advRows": 7
+  }
+ },
+ {
+  "id": "seymour-omnis",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Wakka",
+    "target": "the party",
+    "chips": [
+     "in Switch",
+     "in Special"
+    ]
+   },
+   "card": [
+    408,
+    114,
+    657,
+    288
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 9
+  },
+  "intentOpened": {
+   "advisorMinEffPx": null,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Wakka",
+    "target": "the party",
+    "chips": [
+     "in Switch",
+     "in Special"
+    ]
+   },
+   "card": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "intent": [
+    303,
+    58,
+    678,
+    252
+   ],
+   "intentOffscreen": false,
+   "advRows": 0
+  }
+ },
+ {
+  "id": "isaaru-via-purifico",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": null,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Grand Summon",
+    "target": null,
+    "chips": [
+     "in Overdrive",
+     "no MP",
+     "always hits"
+    ]
+   },
+   "card": [
+    410,
+    133,
+    855,
+    288
+   ],
+   "intent": null,
+   "intentOffscreen": null,
+   "advRows": 9
+  },
+  "intentOpened": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Grand Summon",
+    "target": null,
+    "chips": [
+     "in Overdrive"
+    ]
+   },
+   "card": [
+    1150,
+    268,
+    1388,
+    445
+   ],
+   "intent": [
+    745,
+    124,
+    1120,
+    313
+   ],
+   "intentOffscreen": false,
+   "advRows": 5
+  }
+ },
+ {
+  "id": "ffx2-bahamut",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Shell",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "10 MP",
+     "100% to hit",
+     "+ Shell"
+    ]
+   },
+   "card": [
+    636,
+    705,
+    1139,
+    835
+   ],
+   "intent": [
+    998,
+    82,
+    1373,
+    409
+   ],
+   "intentOffscreen": false,
+   "advRows": 11
+  }
+ },
+ {
+  "id": "ffx2-vegnagun-shuyin",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Light Curtain",
+    "target": "the party",
+    "chips": [
+     "in Item",
+     "no MP",
+     "100% to hit",
+     "+ Protect"
+    ]
+   },
+   "card": [
+    694,
+    684,
+    1139,
+    835
+   ],
+   "intent": [
+    476,
+    184,
+    851,
+    424
+   ],
+   "intentOffscreen": false,
+   "advRows": 10
+  }
+ },
+ {
+  "id": "ffx2-leblanc",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Grenade",
+    "target": "all enemies",
+    "chips": [
+     "in Item",
+     "541–589",
+     "3 hits",
+     "kills",
+     "no MP",
+     "100% to hit",
+     "3% crit"
+    ]
+   },
+   "card": [
+    670,
+    651,
+    1137,
+    835
+   ],
+   "intent": [
+    867,
+    129,
+    1242,
+    456
+   ],
+   "intentOffscreen": false,
+   "advRows": 15
+  }
+ },
+ {
+  "id": "ffx2-fallen-aeons",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Shell",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "10 MP",
+     "always hits",
+     "+ Shell"
+    ]
+   },
+   "card": [
+    586,
+    705,
+    1139,
+    835
+   ],
+   "intent": [
+    945,
+    82,
+    1320,
+    409
+   ],
+   "intentOffscreen": false,
+   "advRows": 11
+  }
+ },
+ {
+  "id": "ffx2-trema",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Attack",
+    "target": "Paragon",
+    "chips": [
+     "3,218–3,634",
+     "no MP",
+     "100% to hit",
+     "23% crit"
+    ]
+   },
+   "card": [
+    659,
+    681,
+    1136,
+    835
+   ],
+   "intent": [
+    697,
+    117,
+    1072,
+    224
+   ],
+   "intentOffscreen": false,
+   "advRows": 12
+  }
+ },
+ {
+  "id": "ffx2-den-of-woe",
+  "size": "1600x900",
+  "errors": [],
+  "menu": {
+   "advisorMinEffPx": 14.2,
+   "advisorUnder14": [],
+   "intentMinEffPx": 14.2,
+   "intentUnder14": [],
+   "chipsUnder14": [],
+   "advisorClipped": [],
+   "lead": {
+    "label": "Protect",
+    "target": "the party",
+    "chips": [
+     "in White Magic",
+     "12 MP",
+     "always hits",
+     "+ Protect"
+    ]
+   },
+   "card": [
+    586,
+    705,
+    1139,
+    835
+   ],
+   "intent": [
+    661,
+    82,
+    1036,
+    302
+   ],
+   "intentOffscreen": false,
+   "advRows": 11
+  }
+ }
+]

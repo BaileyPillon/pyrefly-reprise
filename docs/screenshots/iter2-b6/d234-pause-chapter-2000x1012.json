@@ -1,0 +1,218 @@
+[
+ {
+  "id": "yunalesca",
+  "size": "2000x1012",
+  "states": [
+   {
+    "tag": "scene",
+    "tabs": {
+     "chapter": [],
+     "chapter:face": [],
+     "guide": [],
+     "options": [],
+     "controls": [],
+     "music": []
+    }
+   },
+   {
+    "tag": "battle",
+    "tabs": {
+     "member:tidus": [],
+     "member:yuna": [],
+     "member:auron": [],
+     "chapter": [],
+     "chapter:face": [],
+     "guide": [],
+     "options": [],
+     "controls": [],
+     "music": []
+    }
+   }
+  ],
+  "errors": [],
+  "chapterGeom": {
+   "scene": {
+    "dossier": "beside",
+    "plate": [
+     312,
+     -3,
+     2553,
+     1277
+    ],
+    "plateCls": "pause__plate pause__plate--slid",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 5,
+      "wide": true,
+      "x": [
+       72,
+       636
+      ]
+     },
+     {
+      "col": "dossier",
+      "heading": "Zanarkand Dome",
+      "rows": 0,
+      "wide": false,
+      "x": [
+       694,
+       1104
+      ]
+     }
+    ]
+   },
+   "battle": {
+    "dossier": "under",
+    "plate": [
+     373,
+     -2,
+     2611,
+     1276
+    ],
+    "plateCls": "pause__plate pause__plate--slid",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 6,
+      "wide": true,
+      "x": [
+       72,
+       636
+      ]
+     },
+     {
+      "col": "gear",
+      "heading": "The party",
+      "rows": 9,
+      "wide": false,
+      "x": [
+       694,
+       1163
+      ]
+     },
+     {
+      "col": "dossier",
+      "heading": "Zanarkand Dome",
+      "rows": 0,
+      "wide": false,
+      "x": [
+       72,
+       1928
+      ]
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "yojimbo-cavern",
+  "size": "2000x1012",
+  "states": [
+   {
+    "tag": "scene",
+    "tabs": {
+     "chapter": [],
+     "chapter:face": [],
+     "guide": [],
+     "options": [],
+     "controls": [],
+     "music": []
+    }
+   },
+   {
+    "tag": "battle",
+    "tabs": {
+     "member:lulu": [],
+     "member:kimahri": [],
+     "member:yuna": [],
+     "chapter": [],
+     "chapter:face": [],
+     "guide": [],
+     "options": [],
+     "controls": [],
+     "music": []
+    }
+   }
+  ],
+  "errors": [],
+  "chapterGeom": {
+   "scene": {
+    "dossier": "beside",
+    "plate": [
+     312,
+     -3,
+     2319,
+     1144
+    ],
+    "plateCls": "pause__plate pause__plate--slid",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 5,
+      "wide": true,
+      "x": [
+       72,
+       636
+      ]
+     },
+     {
+      "col": "dossier",
+      "heading": "Cavern of the Stolen Fayth",
+      "rows": 0,
+      "wide": false,
+      "x": [
+       694,
+       1104
+      ]
+     }
+    ]
+   },
+   "battle": {
+    "dossier": "under-lean",
+    "plate": [
+     380,
+     -2,
+     2383,
+     1142
+    ],
+    "plateCls": "pause__plate pause__plate--slid",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 6,
+      "wide": true,
+      "x": [
+       72,
+       636
+      ]
+     },
+     {
+      "col": "gear",
+      "heading": "The party",
+      "rows": 9,
+      "wide": false,
+      "x": [
+       694,
+       1170
+      ]
+     },
+     {
+      "col": "dossier",
+      "heading": "Cavern of the Stolen Fayth",
+      "rows": 0,
+      "wide": false,
+      "x": [
+       72,
+       1623
+      ]
+     }
+    ]
+   }
+  }
+ }
+]

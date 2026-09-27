@@ -1,0 +1,118 @@
+{
+ "size": "1600x900",
+ "errors": [],
+ "moves": [
+  {
+   "step": 1,
+   "selected": "yunalesca",
+   "changed": [
+    {
+     "id": "seymour-flux",
+     "sel": false,
+     "dy": 0,
+     "dh": 0,
+     "dx": 8.9
+    },
+    {
+     "id": "yunalesca",
+     "sel": true,
+     "dy": 0,
+     "dh": 0,
+     "dx": -8.9
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "selected": "braskas-final-aeon",
+   "changed": [
+    {
+     "id": "yunalesca",
+     "sel": false,
+     "dy": 0,
+     "dh": 0,
+     "dx": 8.9
+    },
+    {
+     "id": "braskas-final-aeon",
+     "sel": true,
+     "dy": 0,
+     "dh": 0,
+     "dx": -8.9
+    }
+   ]
+  },
+  {
+   "step": 3,
+   "selected": "evrae-airship",
+   "changed": [
+    {
+     "id": "braskas-final-aeon",
+     "sel": false,
+     "dy": 0,
+     "dh": 0,
+     "dx": 8.9
+    },
+    {
+     "id": "evrae-airship",
+     "sel": true,
+     "dy": 0,
+     "dh": 0,
+     "dx": -8.9
+    }
+   ]
+  }
+ ],
+ "aside": {
+  "names": [
+   {
+    "t": 476.6,
+    "l": 1273.3,
+    "r": 1346.7,
+    "b": 494.6
+   },
+   {
+    "t": 476.6,
+    "l": 1355.5,
+    "r": 1428.9,
+    "b": 494.6
+   },
+   {
+    "t": 476.6,
+    "l": 1437.7,
+    "r": 1511.1,
+    "b": 494.6
+   }
+  ],
+  "best": {
+   "l": 1273.3,
+   "r": 1510.3,
+   "t": 537.8,
+   "b": 555.8
+  },
+  "bestVal": {
+   "l": 1273.3,
+   "r": 1510.3,
+   "t": 562.4,
+   "b": 583.8
+  },
+  "hint": {
+   "l": 452,
+   "r": 1148,
+   "t": 837.6,
+   "b": 875.6
+  },
+  "coming": [
+   {
+    "l": 1129.6,
+    "r": 1210.1,
+    "t": 284.2,
+    "b": 303.8,
+    "topIsBadge": false,
+    "top": ""
+   }
+  ],
+  "scrollY": 0,
+  "docH": 900
+ }
+}
