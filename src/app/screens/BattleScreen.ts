@@ -35,7 +35,7 @@ import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
 import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
 import { chainLengthOf, runEncounterChain } from './BattleEncounterChain.ts';
-import { checkpointAt, resumeSetup, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
+import { resumeSetup, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
 import { playSaveSphereCard } from './SaveSphereCard.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
@@ -53,6 +53,8 @@ import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
 import { presenterGameDeps } from './BattleScreenGameDeps.ts';
+import { getChapterMeta } from '../../data/chapter-meta.ts';
+import { withdrawLineFrom } from './withdrawal.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -101,6 +103,8 @@ export interface BattleScreenResult {
   preview: boolean;
   /** The last Save Sphere link entered: where a defeat retries (FA3 = b). */
   checkpoint?: ChainCheckpoint;
+  /** PR-0215: the engine's stalemate line when the fight ended in a withdrawal (`withdrawal.ts`). */
+  withdrawLine?: string;
 }
 
 export class BattleScreen extends Screen {
@@ -300,6 +304,7 @@ export class BattleScreen extends Screen {
       // The chapter's own ability rows: an enemy's physical ability draws its
       // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
       ...presenterGameDeps(chapter.game, chapter.buildRef),
+      victoryPose: getChapterMeta(chapter.id)?.victoryPose ?? 'pose', // A-4: II, IV, V, XIII hold the battle stance
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
     if (this.opts.auto) this.presenter.setAutoPlay(this.opts.auto);
@@ -419,6 +424,7 @@ export class BattleScreen extends Screen {
       findGroup: findEnemyGroup,
       audio,
       startLink: this.opts.resumeAt?.link ?? 1,
+      priorWon: this.opts.resumeAt?.won ?? [], // PR-0138: the links won before the checkpoint
       saveSphere: (swap) =>
         playSaveSphereCard({
           root: this.root,
@@ -427,9 +433,9 @@ export class BattleScreen extends Screen {
           instant: presenter.playbackSpeed === 'skip',
           cancelled: () => presenter.isAborted,
         }),
-      onLink: ({ links, group, setup }) => {
+      onLink: ({ links, group, setup, checkpoint }) => {
         this.links = links;
-        this.checkpoint = checkpointAt(links, group, setup) ?? this.checkpoint;
+        this.checkpoint = checkpoint ?? this.checkpoint;
         this.group = group;
         this.setup = setup;
         // A new formation has been staged — Yunalesca's second form, the next
@@ -636,6 +642,7 @@ export class BattleScreen extends Screen {
     const resolve = this.finishedResolve;
     if (!resolve) return;
     this.finishedResolve = null;
+    const withdrawLine = outcome.kind === 'escape' ? withdrawLineFrom(this.engine?.state().log) : null;
     resolve({
       chapterId: this.opts.chapter.id,
       outcome: outcome.kind,
@@ -644,6 +651,7 @@ export class BattleScreen extends Screen {
       links: Math.max(1, this.links),
       preview: this.preview,
       ...(this.checkpoint ? { checkpoint: this.checkpoint } : {}),
+      ...(withdrawLine ? { withdrawLine } : {}),
     });
   }
 

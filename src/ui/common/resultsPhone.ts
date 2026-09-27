@@ -173,7 +173,9 @@ export function phonePageHtml(m: ResultsPageModel, caption: string): string {
   const tags = m.tags.map((t) => `<span class="rresp__tag">${escapeHtml(t)}</span>`).join('');
   const quip = m.quip
     ? `<div class="rresp__quip" data-speaker="${escapeHtml(m.quip.speakerId)}">${escapeHtml(m.quip.line)}</div>`
-    : '';
+    : m.note
+      ? `<div class="rresp__quip rresp__quip--note">${escapeHtml(m.note)}</div>` // PR-0215: the engine's line
+      : '';
   return `
       <div class="rresp__top">
         <div class="rresp__clock">RESULTS${m.clock ? ` &middot; ${escapeHtml(m.clock)}` : ''}</div>

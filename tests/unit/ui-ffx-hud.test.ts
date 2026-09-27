@@ -541,6 +541,8 @@ describe('FFXBattleHud.chooseCommand', () => {
 
     const lastRow = [...root.querySelectorAll('.ig-cmd')].find((r) => r.textContent?.includes('Spell 19')) as HTMLElement;
     lastRow.click();
+    // PR-0170: the lone target still gets its FFX confirm step.
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
     const command = await promise;
     expect(command).toMatchObject({ id: 'spell-19', targets: ['seymour-flux'] });
   });

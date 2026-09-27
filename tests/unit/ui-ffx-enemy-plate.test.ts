@@ -205,41 +205,42 @@ describe('one enemy-health presentation, and Sensor is what unlocks it', () => {
   });
 });
 
-// --------------------------------------------------- D-196: Sensor shows nothing
+// ------------------------------------ D-221: "Immune to sensors." (supersedes D-196)
 
-describe('a Sensor-immune target gets no plate at all (D-196, FFX only)', () => {
+describe('a Sensor-immune target shows its name and "Immune to sensors." (D-221, FFX only)', () => {
+  // Source: research/observed-ffx-steam-2026-09-26.md §2.3 (Spherimorph, Steam HD
+  // Remaster): the HELP bar printed "Immune to sensors." beside the boss's name.
   function sensorImmuneTarget(): FFXCombatant {
     return { ...enemy('mortiorchis'), id: 'yojimbo', name: 'Yojimbo', immunityFlags: ['immune-to-sensor'] };
   }
 
-  it('focus() on a Sensor-immune target opens nothing: no name, no HP, no caption', () => {
+  it('focus() on a Sensor-immune target opens the plate with the name and the canon line, no HP', () => {
     const panel = new SensorPanel();
     panel.focus(sensorImmuneTarget());
-    // Hidden entirely — not merely folded — and the body that would carry a
-    // name, an HP figure or a caption was never populated.
-    expect(panel.el.hidden).toBe(true);
-    expect(panel.el.querySelector('.ffx-sensor__name')).toBeNull();
+    expect(panel.el.hidden).toBe(false);
+    expect(panel.el.querySelector('.ffx-sensor__name')?.textContent).toBe('Yojimbo');
+    expect(panel.el.querySelector('.ffx-sensor__immune')?.textContent).toBe('Immune to sensors.');
     expect(panel.el.querySelector('.ffx-sensor__hp')).toBeNull();
-    expect(panel.el.querySelector('.ffx-sensor__failed')).toBeNull();
-    expect(panel.el.textContent).not.toContain('Yojimbo');
+    expect(panel.el.querySelector('.ffx-sensor__bar')).toBeNull();
+    expect(panel.el.textContent).not.toContain('? ? ?');
+    expect(panel.el.textContent).not.toContain('Sensor reads');
   });
 
-  it('show() (a Sensor reveal) on a Sensor-immune target opens nothing either', () => {
+  it('show() (a Sensor reveal) on a Sensor-immune target reads nothing and leaves the plate alone', () => {
     const panel = new SensorPanel();
     panel.show(sensorImmuneTarget());
     expect(panel.el.hidden).toBe(true);
-    expect(panel.el.querySelector('.ffx-sensor__name')).toBeNull();
-    expect(panel.el.textContent).not.toContain('Yojimbo');
+    expect(panel.isScanned('yojimbo')).toBe(false);
   });
 
   it('a normal target right after a Sensor-immune one renders exactly as before', () => {
     const panel = new SensorPanel();
     panel.focus(sensorImmuneTarget());
-    expect(panel.el.hidden).toBe(true);
     panel.focus(enemy('mortiorchis'));
     expect(panel.el.hidden).toBe(false);
     expect(panel.el.textContent).toContain('Mortiorchis');
     expect(panel.el.textContent).toContain('? ? ?');
+    expect(panel.el.querySelector('.ffx-sensor__immune')).toBeNull();
   });
 });
 

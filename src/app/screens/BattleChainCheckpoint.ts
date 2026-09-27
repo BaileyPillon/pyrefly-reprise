@@ -23,7 +23,7 @@
  * Layering: no `three`, no DOM.
  */
 
-import type { BattleSetup, EnemyGroupDef } from '../../battle/common/types.ts';
+import type { BattleResult, BattleSetup, EnemyGroupDef } from '../../battle/common/types.ts';
 
 /** Where a defeat in a chained encounter retries from. */
 export interface ChainCheckpoint {
@@ -33,6 +33,8 @@ export interface ChainCheckpoint {
   setup: BattleSetup;
   /** Its 1-based position in the chain: 2 for the Sisters, 3 for Anima. */
   link: number;
+  /** The results of the links won before it in this run, so a retry here still sums them (PR-0138). */
+  won?: readonly BattleResult[];
 }
 
 /**

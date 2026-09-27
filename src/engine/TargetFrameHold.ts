@@ -122,8 +122,8 @@ export class HoldableCamera implements CameraPort {
   }
 
   /** Forwarded untouched: refitting a rig for a phone moves nothing by itself (A-12). */
-  fitSlice(rig: string, slice: number, subjects: Parameters<NonNullable<CameraPort['fitSlice']>>[2]): boolean {
-    return this.inner.fitSlice?.(rig, slice, subjects) ?? false;
+  fitSlice(rig: string, slice: number, subjects: Parameters<NonNullable<CameraPort['fitSlice']>>[2], top?: number): boolean {
+    return this.inner.fitSlice?.(rig, slice, subjects, top) ?? false;
   }
 
   /** Forwarded untouched: registering a rig moves nothing, held or not. */
