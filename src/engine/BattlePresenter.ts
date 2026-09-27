@@ -126,8 +126,15 @@ export class BattlePresenter {
       (ms) => this.sleep(ms),
       () => this.speed,
     );
-    this.cutIns = new TurnCutInBeat({ moments: deps.moments ?? null, speed: () => this.speed });
     this.actingState = new ActingState(() => this.deps.hud);
+    this.cutIns = new TurnCutInBeat({
+      moments: deps.moments ?? null,
+      speed: () => this.speed,
+      // PR-0104 (FFX-2 only): the next girl's cut-in waits for a charging action to play.
+      sleep: (ms) => this.baseSleep(ms),
+      acting: () => this.actingState.acting !== null,
+      menuFor: () => this.pendingMenu?.actorId ?? null,
+    });
   }
 
   /** The shot picker, so the screen can tear its overlays down on exit. */
