@@ -31,6 +31,7 @@ import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
+import { showOverdrivePlate } from './overdrivePlate.ts';
 import { INTENT_AVOID_SELECTORS, OMNIS_READOUT_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
@@ -230,6 +231,8 @@ export class FFXBattleHud implements HudPort {
   private lastState: BattleState | null = null;
   /** Whoever's `turn-start`/`action-start` fired most recently, for the message banner's name slab. `message` events carry no actor of their own. */
   private currentActorId: CombatantId | null = null;
+  /** Who the last `minigame-request` named: the actor on the Overdrive plate (PR-0128). */
+  private minigameActorId: CombatantId | null = null;
   private mounted = false;
   /**
    * Bumped every time a decision opens or closes, so the advisor's placement is
@@ -572,6 +575,9 @@ export class FFXBattleHud implements HudPort {
       case 'message':
         this.setMessage(event.text, event.kind);
         return;
+      case 'minigame-request':
+        this.minigameActorId = event.who;
+        return;
       case 'charge':
         this.telegraph.show(this.nameOf(event.enemyId), event.name, event.stage);
         return;
@@ -609,8 +615,15 @@ export class FFXBattleHud implements HudPort {
     // outlives its decision" true even for an overlay that threw, or that was
     // abandoned by a strategy racing the menu.
     this.removeMinigameOverlays();
-    // PR-0128: the guide card steps aside for the overlay's plate (`overdriveFocus.ts`).
-    return withOverdriveFocus(this.el, () => dispatchMinigame(this.stage, kind, params)).finally(() => this.removeMinigameOverlays());
+    // PR-0128: the actor's plate goes above the slab (`overdrivePlate.ts`),
+    // and the guide card steps aside for it (`overdriveFocus.ts`).
+    const actorId = this.minigameActorId ?? this.currentActorId;
+    this.minigameActorId = null;
+    const takePlateDown = showOverdrivePlate(this.bannerEl, actorId ? this.nameOf(actorId) : '');
+    return withOverdriveFocus(this.el, () => dispatchMinigame(this.stage, kind, params)).finally(() => {
+      takePlateDown();
+      this.removeMinigameOverlays();
+    });
   }
 
   setVisible(visible: boolean): void {
