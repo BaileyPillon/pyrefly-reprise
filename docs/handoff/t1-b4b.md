@@ -112,3 +112,35 @@ failing. `supp.mjs` and `gap-audio.mjs` count presses only from a fresh profile,
 opens on Chapter I, so they are unaffected. `t1-b5`, which owns `critic/runner`, has no commit touching
 `play.mjs`. Do not merge this branch to main ahead of that fix: it has to land in the same merge or
 before it.
+
+## REPAIR (one cycle, 2026-09-26, rule 15)
+
+Blockers in scope: PR-0215, whose acceptance check failed in the CHECK above, and the `play.mjs` merge
+condition.
+
+| Item | Outcome | Commit | Evidence |
+|---|---|---|---|
+| PR-0215 (FFX stalemate to results with RETRY) | **Backed out, still open.** | `7d3d9081` reverts `db0bd923` (the routing and its unit test) | The acceptance needs "a results card explains the withdrawal". The only card the routing could reuse is the Defeat panel, and it reads "Defeat" and "`<LOCATION>` · FELL". Explaining the withdrawal means new copy on a screen Bailey sees (rules 9 and 10) in `ResultsScreen.ts`, which branch `r21-results-phone` owns (its `4924aa79` rebuilds the phone results). That is a design choice, so the item goes back out rather than shipping a card that says the party fell when it did not. Real keys on a fresh production build (`vite preview` on 5970, stopped by its PID): Ch III with the stalemate watch debug-set and Enter presses goes `battle` → `chapter-select`, with the board on `braskas-final-aeon`, at 1600x900 and 390x844, 0 console errors and 0 HTTP ≥ 400. That is the live behaviour again. Evidence: `docs/screenshots/t1-b4b/repair/` (not committed; driver `tools/zz-t1b4b-repair.tmp.mjs`, untracked). |
+| `critic/runner/lib/play.mjs` overshoot after PR-0109 | **Still open, not this batch's to fix.** | none | The brief keeps this batch out of `critic/`; `t1-b5` owns `critic/runner`. The merge condition in the CHECK stands: `t1-b4b` must not merge to main before or without the `play.mjs` change (move to a target chapter id, not a count of ArrowRight presses). |
+
+**The question for Bailey (PR-0215).** When an FFX fight trips the stalemate rule ("The battle
+cannot be won from here."), what should the results card say, and where? The earlier routing and its
+test can come back unchanged once the wording is chosen (`git revert 7d3d9081`). Options to show him as
+frames, cheapest first:
+- A. The Defeat panel as it is, with only the caption changed: "INSIDE SIN · WITHDREW" in place of "FELL".
+- B. A: plus the engine's own line, "The battle cannot be won from here.", set under the heading where
+  a victory card puts its quip.
+- C. A heading of its own ("Withdrawn" in place of "Defeat"), the engine line under it, then RETRY /
+  CHAPTER SELECT as now.
+
+Every option is copy on `ResultsScreen.ts`, so it lands after `r21-results-phone` merges, or in that
+branch. The rule is FFX only (the FFX-2 engine has no stalemate watch); the card is a shared screen.
+
+**After the repair.** `npx tsc --noEmit` is clean. The full `vitest run --testTimeout=60000` result is
+below. `node tools/orphans.mjs` reports 24, the same as main.
+The suite exits 0: 453 files passed and 4 skipped, 8,343 tests passed. That is one file and three
+tests fewer than before, because the back-out removed `flow-stalemate-results.test.ts`.
+
+**Batch state after the repair.** Five items stay fixed and checked: PR-0109, PR-0214, PR-0158, PR-0100
+with PR-0173, and PR-0099's docs half. PR-0215 is open with the question above. PR-0216 was not
+reproduced. The branch is green but may not merge ahead of `t1-b5`'s `play.mjs` fix.
