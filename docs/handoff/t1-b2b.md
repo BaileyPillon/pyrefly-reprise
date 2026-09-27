@@ -194,7 +194,7 @@ thrown errors.
 - Full `vitest run --testTimeout=60000` passes: 552 files, 5 skipped; 9225 tests passed.
 - `node tools/orphans.mjs`: 29 orphaned, the same as main.
 - `verify-approved`: 0 mismatched, 0 missing.
-- `git merge-tree --write-tree origin/main HEAD` (origin/main `3e7d8d3e`) is clean.
+- `git merge-tree --write-tree origin/main HEAD` is clean against `3e7d8d3e`, and again against `8140a461`: main then added only docs and FF7 art, with no `src` or `tests` change.
 - The branch does not have hotfix 24 yet (`bc4e70ee`: the Grand Summon picker and summon
   staging). I exported the merge result `0dd0632d` and checked it: tsc is clean. The full vitest
   gives 554 passed and 1 failed. The failure is `audio-manifest-io`, a Windows `EPERM` on a
