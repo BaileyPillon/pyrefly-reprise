@@ -10,6 +10,105 @@ were: Barret is never mirrored and has his gun-arm on his right arm; the art fol
 battle staging; Cloud is repainted if that staging flips his facing, with the pauldron kept on his
 left shoulder; and Guard Scorpion gets a laser-emitter tail tip and a bulkier, boss-sized body.
 
+## Final install list (after the cleanup round, 2026-09-27)
+
+The canon judge passed the round 2 picks with a short list of small faults. The cleanup round
+below fixes them. **These are the files to install. Nothing is installed yet.** All paths are under
+`D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/`. Each cut-out has a sidecar `.json` next to
+it (provenance, every pass's seed, prompt and mask, and both cut-out reports) and its full frame
+(`.full.png`).
+
+| Subject | Install file | Size, baselineY | Built from |
+|---|---|---|---|
+| Cloud, idle | `cloud/cleanup/idle-c.1.png` | 617 x 1141, 1125 | `cloud/round2/turn-a.2` (seed 840006496) + 2 inpaints |
+| Barret, idle | `barret/cleanup/idle-c.1.png` | 670 x 1106, 1090 | `barret/round2-repair/idle-r2.1` (seed 160852785, hair seed 8301) + 6 inpaints |
+| Guard Scorpion, idle (tail lowered) | `guard-scorpion/cleanup/idle-c.1.png` | 1212 x 686, 681 | `guard-scorpion/round2/idle-a.2` (seed 603731043) + 2 inpaints |
+| Guard Scorpion, tail raised | `guard-scorpion/cleanup/raised-c.1.png` | 1070 x 753, 748 | `guard-scorpion/round2-repair/cut-raised-r.a.2` + the idle's cleanup + 1 inpaint |
+| Backdrop | `reactor-core/core.1.png` (unchanged) | 2688 x 1536 | seed 383424147 |
+
+`13-composite-1600-clean.jpg` (and `-tail-raised`) shows them together on `core.1`, with the party
+on the right facing left and the boss on the left facing right (`research/ff7-battle-staging.md`
+§2, §3.3). `12-cleanup-before-after.jpg` shows every fix, before and after.
+
+## Cleanup round (2026-09-27): the judge's small faults
+
+**Method, for every fix.** The method is the same as in the repair round: a masked latent inpaint
+(`tools/gen/inpaint.mjs --latent`, `animagine-xl-4.0-opt`) on a paintover of our own render. Each
+fault gets its own paintover and mask (`scripts/cleanup/paint.py`) and its own pass
+(`scripts/cleanup/run-cleanup.sh`). The chosen render is then pasted back through its feathered mask
+(`paint.py chain`), so every pixel outside the masks stays identical to the round 2 pick. Nothing
+was mirrored. No retail image was used as input, and no IP-Adapter. ComfyUI was never restarted,
+prompts were submitted only while fewer than 2 were pending, and there were no black frames. I
+looked at every render: 41 inpaints, 11 picked.
+
+**The re-cut.** `scripts/cleanup/final-cut.mjs` runs the pipeline's rembg cut on each cleaned
+frame. Then `scripts/cleanup/defringe.py` makes edge pixels transparent when they are clearly
+lighter and no more colourful than the figure just inside them (white background bleeding into the
+edge), for two passes. It drops specks under 24 px and pulls the remaining edge colours halfway
+toward the colour just inside. It then runs both checks from `scripts/repair/cutout-check.mjs` on
+the final file. **All four pass both the guard and the strict check, with 1 component each.**
+
+### Barret: `barret/cleanup/idle-c.1`
+
+| Fault | Fix | Pass (seed, denoise) |
+|---|---|---|
+| The hi-top read as a hat (a flat black block) | Paintover: rounded top corners, an uneven top edge, coarse texture, and the hair thins into the fade. Now dark, textured, soft-edged, flat on top. At composite scale it reads as hair | `hair-048.1` (9121, 0.48) |
+| Pale fleece trim at the vest armholes | The trim, including its pure-white inside, is painted as leather. The near shoulder's outer edge is refitted to one clean arc, and loose fibres are removed | near shoulder `vest-d42.1` (9251, 0.42); far collar `vest-d42.2` (9252, 0.42) |
+| Diagonal hip strap and navel canister | Both removed, with pants and stomach filled in from the nearest pixels. Three metal bands are painted around the waist, for canon's "several bands of metal around his waist" (FF Wiki *Barret Wallace*, revid 4042820) | `waist-058.3` (9303, 0.58) |
+| Glossy boot highlights | Highlights compressed toward the local mean, then a matte-leather pass on the boots only | `finish-035.2` (9402, 0.35) |
+| Reddish sheen on the far (RIGHT) upper arm | The red skin and its white and pink rim streaks are repainted in a darker shadow-side skin tone, with the vest and gun untouched | `arm-036.2` (9422, 0.36) |
+
+Rejected along the way: at 0.55 the hair became straight flaring spikes; at 0.42 a hat-band line
+or a crown of vertical stripes appeared. The first two vest passes brought the fleece back, because
+the trim's pure-white pixels had been skipped as "background". The third pass had a ragged edge.
+Also rejected: waist `.2` (it had a hanging strap) and arm `040.*` (a beige patch, or still red).
+
+### Cloud: `cloud/cleanup/idle-c.1`
+
+- The **white SOLDIER wristband is now on his RIGHT wrist**, which is the far arm, since he faces
+  left and shows his left side. The grey metal cuff there became a white cloth band (`far-040.1`,
+  9511, 0.40; the 0.50 pass came back as a silver ring). Canon: FF Wiki *Cloud Strife*, revid 4045701,
+  "a SOLDIER band on his right wrist".
+- The **white wrap on the LEFT (near) forearm is gone**: bare forearm, filled from the nearest
+  skin pixels. The gear armlet is kept (`near-042.1`, 9611, 0.42; at 0.50 it came back as a wrap or
+  as metal).
+- **Pale fringe on the hair and arm edges**: the re-cut removed 214 fringe pixels (the white specks
+  at the spike tips are gone) and cleaned the edge colour of 1,371 more.
+
+### Guard Scorpion: `guard-scorpion/cleanup/idle-c.1` and `raised-c.1`
+
+- **Idle.** The pseudo-glyphs on the black box on its back (red "E J" marks) became a plain dark
+  panel (`idle-body-045.1`, 9701). The pseudo-text on the red plate under the eye became a plain
+  plate (`idle-body-045.2`, 9702). Both are 0.45 passes on a median-filtered paintover. Nothing else
+  in the frame changed.
+- **Raised.** The idle's cleaned box and plate were pasted onto the raised frame through the same
+  mask, since it is the same body. Then five tail segments (the "~X" marks on the upper segment,
+  and the labels on four side faces) were cleaned the same way (`raised-tail-045.2`, 9802, 0.45).
+  So idle and raised are still one machine: same body, same box, same plate, same eye.
+
+### Still looks off (disclosed, not fixed)
+
+- Barret: a short dark hook remains at the top of the near shoulder's new arc, and the far upper
+  arm is a slightly patchy tan. Both are small at game scale. His hair is dark brown-black, with
+  brown highlights, and has a spiky flat top rather than a dense coiled texture, since the model
+  draws hair as strands. The strap end sticking out of the right boot top is unchanged from round 2.
+- Cloud: the belt buckle and the pauldron still carry square-spiral marks. The judge did not list
+  them and they read as ornament, but they are pseudo-glyph-like.
+- Guard Scorpion: the faint dash vents by the eye and on the flank, and the two cyan "II" slits,
+  were kept (they read as vents and lights). The idle's eye is yellow-green and its lens cyan, as in
+  round 2.
+
+### Reproducing
+
+Run `paint.py barret|cloud` on the round 2 frames, and `paint.py gs`: for `gs-idle` on `idle-a.2.raw.png`,
+use rects `676,256,718,284 956,574,1020,596`. For `gs-raised`, first paste the cleaned idle onto
+`raised-r.a.2.full.png` (`paint.py chain`, the `gs-idle` mask), then use rects
+`366,110,414,128 220,188,244,212 176,250,200,278 160,318,182,362 166,398,188,436`. Then run `run-cleanup.sh` in this order: `barret`,
+`cloud`, `gs-idle`, `barret-b`, `cloud-b`, `gs-raised`, `barret-c`, `barret-arm`, `barret-d`. Then
+`paint.py chain` with the picks and clip rects recorded in each `*.prov.json`, then `final-cut.mjs`.
+One caveat: `finish-035.2` was rendered while the finish mask still included the far arm. Only its
+boots are used (`b-finish-mask.png` is now boots only).
+
 ## The staging these renders follow (from `research/ff7-battle-staging.md`, commit 7dc45c56)
 
 - The party stands on the **right** and faces **left**. Guard Scorpion is on the **left** and faces
@@ -211,4 +310,6 @@ chip passed. Results:
 - `07-layout-sketches.jpg`: our original layout sketches (Guard Scorpion low and raised; Barret; Cloud first and turned)
 - `09-repair-guard-scorpion-raised.jpg`, `10-repair-barret.jpg`, `11-repair-sketches.jpg`: the repair round's sheets (each under 1 MB, at most 1252 px tall); the repair round rebuilt `05`/`06` with the repaired picks
 - `scripts/repair/`: `gs-raised-paintover.py`, `run-gs-raised.sh`, `barret-r2b-sketch.py`, `run-barret.sh`, `barret-hair-paintover.py`, `run-barret-hair.sh`, `cutout-check.mjs`
+- `12-cleanup-before-after.jpg`, `13-composite-1600-clean.jpg` (+ `-tail-raised`): the cleanup round's before/after sheet and the final picks on `core.1`
+- `scripts/cleanup/`: `paint.py` (paintovers, masks, the paste-back chain), `run-cleanup.sh` (every inpaint pass), `defringe.py` and `final-cut.mjs` (the re-cut and both checks), `sheet-cleanup.py`, `composite-clean.py`, `gridcrop.py` (a coordinate-grid viewer)
 - `scripts/`: `gs-r2-sketch.py`, `party-r2-sketch.py` (the sketches), `common.sh` (every prompt and negative), `run-r2-pilot.sh`, `run-r2-main.sh`, `run-r2-second.sh` (the batches in order), `sheet.py`, `composite-r2.py`
