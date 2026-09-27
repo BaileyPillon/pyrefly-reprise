@@ -645,11 +645,23 @@
 .ffx-telegraph__state { font-family: var(--ig-font-serif); font-weight: 700; font-style: italic; font-size: 18px; }
 .ffx-telegraph--stage-1 .ffx-telegraph__state { color: #f2a33a; }
 .ffx-telegraph--stage-2 .ffx-telegraph__state { color: #e8412e; }
+/* PR-0157 (FFX only; actingFade.ts): while an action plays, the cards step back so
+   none sits over the actor, the target or the party. The party rows, numerals,
+   help bar and banners stay. The layers are full-inset roots with no opacity of
+   their own, so this cannot un-hide anything. */
+.ffxhud .sgd, .ffxhud .mad, .ffxhud .eint, .ffxhud .ig-ctb, .ffxhud .ffx-sensor, .ffxhud .ffx-omr {
+  transition: opacity 0.1s ease;
+}
+.ffxhud--acting .sgd, .ffxhud--acting .mad, .ffxhud--acting .eint,
+.ffxhud--acting .ig-ctb, .ffxhud--acting .ffx-sensor, .ffxhud--acting .ffx-omr {
+  opacity: 0.16; transition: none; /* out at once, back in over 0.1 s */
+}
+
 /* PR-0180 (FFX only): the enemy's ability name, centred in the top HELP bar for
    the span of the action (research/observed-ffx-steam-2026-09-26.md 2.2). A flat
    ink band in the telegraph's top-centre slot; the telegraph yields to it. */
 .ffx-helpbar {
-  position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
+  position: absolute; left: 50%; top: 4px; transform: translateX(-50%);
   min-width: 128px; padding: 3px 24px 4px; text-align: center; white-space: nowrap;
   background: var(--ig-ink-panel); border-bottom: 1.5px solid var(--ig-accent);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45); pointer-events: none;
@@ -884,6 +896,9 @@
   font-family: var(--ig-font-display); font-weight: 700; font-size: 13px;
   letter-spacing: 0.22em; color: var(--ffx-all-mark, #f2c21e);
 }
+/* PR-0193 (FFX only): scales with the letterbox (5.6 grid px, 14 px at 1600x900)
+   and never renders under the 14 px floor (CHK-003), as FFX-2's does. */
+.ffxhud .ffx-target__all span { font-size: max(14px, calc(5.6px * var(--lb-scale, 2.5))); }
 
 /* While a target cursor is live the party-status panel yields: it drops to
    about a third and pulls in, so the spread enemy formation fits a 16:9 frame.

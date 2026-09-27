@@ -10,7 +10,7 @@ import type {
   MinigameResult,
   TurnPreview,
 } from '../../battle/common/types.ts';
-import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import type { ActingSignal, HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { letterTagsOf } from '../../battle/ffx/letterTags.ts';
 import { installInkGoldStyles } from '../inkgold/index.ts';
 import { CommandMenu } from './CommandMenu.ts';
@@ -28,6 +28,8 @@ import { sensorSteerDx } from './sensorSteer.ts';
 import { partyFaceRects } from './plateFaces.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { ActionHelpBar } from './actionBanner.ts';
+import { ActingFade } from './actingFade.ts';
+import { fitGroupLabel } from './groupLabelFit.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
@@ -142,6 +144,8 @@ export class FFXBattleHud implements HudPort {
   private readonly telegraph = new TelegraphBanner();
   /** PR-0180: the enemy's ability name, top centre, for the span of the action. */
   private readonly actionHelp = new ActionHelpBar();
+  /** PR-0157: the cards step back while an action plays (B2's acting signal). */
+  private readonly actingFade: ActingFade;
   private readonly sensorPanel = new SensorPanel();
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
@@ -276,6 +280,7 @@ export class FFXBattleHud implements HudPort {
     this.el = document.createElement('div');
     this.el.className = 'ffxhud ig';
     this.el.dataset['role'] = 'ffx-battle-hud';
+    this.actingFade = new ActingFade(this.el);
 
     this.stage = document.createElement('div');
     this.stage.className = 'ffxhud__stage';
@@ -337,6 +342,8 @@ export class FFXBattleHud implements HudPort {
     // PR-0019 (FFX only): so the "ALL ALLIES"/"ALL ENEMIES" chip can clear
     // the slab instead of painting over it — src/ui/ffx/targetChipClear.ts.
     this.commandMenu.targetCursor.setCmdInfoElement(this.infoEl);
+    // PR-0193 (FFX only): the ALL label steps off the panels and the intent card (`groupLabelFit.ts`).
+    this.commandMenu.targetCursor.setGroupLabelFit((el) => fitGroupLabel(el, this.el, this.panelRects()));
 
     // A CTB tile doubles as a click target while aiming: routes through the
     // same confirm path as the reticle and Enter, and is a no-op — returns
@@ -391,7 +398,13 @@ export class FFXBattleHud implements HudPort {
     window.addEventListener('resize', this.onResize, { passive: true });
   }
 
+  /** PR-0157 (FFX): B2's acting signal drives the fade (`actingFade.ts`). */
+  setActing(signal: ActingSignal): void {
+    this.actingFade.set(signal);
+  }
+
   unmount(): void {
+    this.actingFade.clear();
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
     this.guide.unmount();
