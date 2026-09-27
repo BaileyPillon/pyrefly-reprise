@@ -13,6 +13,7 @@ import { MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
+import { partyOffStage } from './SummonStaging.ts';
 import {
   banner,
   cue,
@@ -187,7 +188,8 @@ export async function summon(ctx: EventCtx, combatantId: CombatantId, aeonId: st
     slot: 1,
   });
   actor?.setAlpha(0);
-  await settled(ctx, actor?.fadeTo(1, 620), 620);
+  // PR-0181: the party leaves the field as the aeon arrives (`SummonStaging.ts`).
+  await settled(ctx, Promise.all([actor?.fadeTo(1, 620), partyOffStage(ctx.stage, combatantId)]).then(() => undefined), 620);
   void actor?.hop(0.5, 520);
   await ctx.sleep(TIMING.summon - 620);
 }

@@ -29,6 +29,7 @@ import { partyFaceRects } from './plateFaces.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { ActionHelpBar } from './actionBanner.ts';
 import { ActingFade } from './actingFade.ts';
+import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
@@ -451,7 +452,7 @@ export class FFXBattleHud implements HudPort {
       this.airship.dockChip(this.ctbList.el, state);
     }
     const actingId = state.log.length ? findLastActorId(state.log) : null;
-    this.partyStatus.render(state.activeIds, state.combatants, actingId);
+    this.partyStatus.render(statusRowIds(state), state.combatants, actingId); // PR-0181: the aeon's row while it is out
     this.guide.sync(state);
     this.advisor.sync(state);
     // Where the chrome is, so the field can settle its lane clear of it while
@@ -485,7 +486,7 @@ export class FFXBattleHud implements HudPort {
   syncVitals(state: BattleState): void {
     this.sensorPanel.release(state.combatants); // at the blow: a last enemy's fall plays with no `sync` (Evrae)
     const actingId = state.log.length ? findLastActorId(state.log) : null;
-    this.partyStatus.render(state.activeIds, state.combatants, actingId);
+    this.partyStatus.render(statusRowIds(state), state.combatants, actingId); // PR-0181: the aeon's row while it is out
   }
 
   /** Hand the panel its engine. See `EnemyIntent.attachEnemyIntent`. */
@@ -939,11 +940,11 @@ export class FFXBattleHud implements HudPort {
     else el.style.setProperty('--ffx-sensor-dx', `${Math.round(dx * 10) / 10}px`);
   }
 
-  /** The party-side fighters on the field now, the aeon too while one is out (the party stays staged beside it). */
+  /** The party-side fighters on the field now: the aeon alone while one is out (PR-0181, the party has left the field). */
   private fieldPartyIds(): CombatantId[] {
     const state = this.lastState;
     if (!state) return [];
-    const ids = state.aeonId ? [...state.activeIds, state.aeonId] : [...state.activeIds];
+    const ids = statusRowIds(state);
     return ids.filter((id) => state.combatants[id]?.alive !== false);
   }
 
