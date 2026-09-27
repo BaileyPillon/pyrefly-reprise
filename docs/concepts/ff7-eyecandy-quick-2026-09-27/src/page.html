@@ -1,0 +1,46 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FF7 eye candy, quick</title>
+<style>
+/* HUD = the A+ layout (../../ff7-hud-2026-09-27/a-plus/src, PR7 Line glyphs, our own), plus a glass
+   sheen, a soft outer glow, a glow on the active row, a blazing Limit gauge and glowing damage digits. */
+@font-face{font-family:Chakra;src:url(../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2);font-weight:700}
+body{margin:0;background:#111}
+section{position:relative;overflow:hidden;background:#000}
+.scene{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.hud{position:absolute;inset:0}
+.hud div{position:absolute;box-sizing:border-box}
+.t{white-space:nowrap;font-variant-numeric:tabular-nums}
+.bg{inset:0;background:linear-gradient(to right,var(--bl),var(--br))}
+.bg::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to right,var(--tl),var(--tr));
+ -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent)}
+.fr{inset:0}
+.gb{border-style:solid;border-color:#A8A8A8 #5F5F5F #3B3B3B #929292}
+.cur{line-height:0}
+.cur svg{display:block;filter:drop-shadow(0 0 3px rgba(255,255,255,.85)) drop-shadow(0 0 9px rgba(140,200,255,.7))}
+.strip{left:0;right:0;background:#000}
+/* eye candy on the windows */
+.w{filter:drop-shadow(0 0 14px rgba(70,130,255,.38)) drop-shadow(0 6px 10px rgba(0,0,0,.55))}
+.w::after{content:"";position:absolute;inset:3px;border-radius:6px;pointer-events:none;
+ background:linear-gradient(180deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,.07) 38%,rgba(255,255,255,0) 39%,rgba(255,255,255,0) 80%,rgba(120,170,255,.10) 100%),
+            linear-gradient(115deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.10) 34%,rgba(255,255,255,0) 40%)}
+.w .t svg{filter:drop-shadow(0 0 2px rgba(170,205,255,.55))}
+.rowglow{border-radius:6px;background:linear-gradient(90deg,rgba(150,210,255,.0),rgba(150,210,255,.42) 18%,rgba(150,210,255,.22) 70%,rgba(150,210,255,0));
+ box-shadow:0 0 18px 4px rgba(120,190,255,.35);mix-blend-mode:screen}
+.blaze{border-radius:2px;mix-blend-mode:screen;
+ background:linear-gradient(90deg,#ff6fcf,#ffd48a 30%,#ffffff 50%,#ffd48a 70%,#ff6fcf);
+ box-shadow:0 0 8px 2px rgba(255,190,240,.95),0 0 22px 8px rgba(255,120,200,.6),0 0 44px 16px rgba(255,140,60,.35)}
+.flame{border-radius:50% 50% 40% 40%;mix-blend-mode:screen;filter:blur(1.5px);
+ background:radial-gradient(ellipse at 50% 90%,rgba(255,255,255,.95),rgba(255,200,120,.8) 30%,rgba(255,90,190,.45) 60%,rgba(255,90,190,0) 75%)}
+.tag{position:absolute;font:700 10.5px/1 Chakra,sans-serif;letter-spacing:.13em;color:rgba(244,241,232,.86);background:rgba(0,0,0,.58);
+ padding:4px 7px;border:1px solid rgba(244,241,232,.25);white-space:nowrap}
+.tag.ph{border-style:dashed;color:#F0C86E;border-color:rgba(240,200,110,.7)}
+.phone .tag{font-size:7.5px;padding:2px 4px;letter-spacing:.08em}
+svg.fx{position:absolute;left:0;top:0;overflow:visible}
+</style></head>
+<body><div id="root"></div>
+<script src="../../ff7-hud-2026-09-27/a-plus/src/glyphs.js"></script>
+<script src="../../ff7-hud-2026-09-27/a-plus/src/glove.js"></script>
+<script src="../../ff7-hud-2026-09-27/a-plus/src/scene.js"></script>
+<script src="../../ff7-hud-2026-09-27/a-plus/src/hud.js"></script>
+<script src="page.js"></script>
+</body></html>
