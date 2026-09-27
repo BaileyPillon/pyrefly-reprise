@@ -196,7 +196,7 @@ for n, (a, b) in enumerate([('f1', 'f2'), ('f3', 'f3b'), ('f4', 'f5')], start=3)
 c, d, y = new('5b \u00b7 the Limit window, and close-ups')
 y = block(c, d, y, FR['f5b1600'], '5b \u00b7 the Limit window (magenta to red), "LIMIT LEVEL 1", Braver; the window covers slot 1, as in FF7')
 cmr = M['sections']['f5-1600']['wins']['command']
-cmd_box = (round(cmr['x']) - 30, round(cmr['y']) - 4, round(cmr['x'] + cmr['w']) + 6, round(cmr['y'] + cmr['h']) + 4)
+cmd_box = (round(cmr['x']) - 76, round(cmr['y']) - 4, round(cmr['x'] + cmr['w']) + 6, round(cmr['y'] + cmr['h']) + 4)
 zoom = lambda im, box, f: im.crop(box).resize(((box[2] - box[0]) * f, (box[3] - box[1]) * f), Image.LANCZOS)
 tiles = [(zoom(FR['f51600'], cmd_box, 2), '"Limit", step 1 of 8'), (zoom(FR['f5p11600'], cmd_box, 2), 'the next step (100 ms later)'),
          (zoom(FR['f11600'], (940, 392, 1030, 446), 5), 'ready triangle (mid-spin)'),
@@ -289,7 +289,7 @@ d.text((44, y), 'Shown on the frames but unsourced (our estimate)', font=H2, fil
 y += 38
 for val, where in ESTIMATES:
     d.text((44, y), '\u2022', font=CAP, fill=EST)
-    y = para(d, 70, y, f'{val}  \u2192  {where}', CAP, W - 120, PAPER, 3) + 4
+    y = para(d, 70, y, f'{val}  \u2014 shows in: {where}', CAP, W - 120, PAPER, 3) + 4
 d.text((44, y + 10), 'To settle in the running game (spec \u00a79 #4)', font=H2, fill=BLUE)
 y = bullets(d, y + 48, INGAME, fnt=CAP)
 d.text((44, y + 10), 'Still not FF7, and why', font=H2, fill=BLUE)

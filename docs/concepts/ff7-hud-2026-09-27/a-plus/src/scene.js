@@ -2,7 +2,7 @@
 // folder up): the reactor bridge, a generic mech-scorpion silhouette and two labelled
 // figure silhouettes. No retail image, model, sprite or screenshot is used or traced.
 // Changes from A: the deck runs further down (the phone frame shows more of it), the
-// labels moved clear of the ready triangle, and the scene carries the in-scene HUD marks
+// labels moved clear of the ready triangle and the sheet chips, and the scene carries the in-scene HUD marks
 // (ready triangle, target finger, damage digits, a laser stroke), so they scale with it.
 // scene(mode, marks) returns an <svg> string. mode: 'desk' | 'pillar' | 'phone'.
 const VB = { desk: '0 0 1600 900', pillar: '200 0 1200 900', phone: '500 40 700 1515' };
@@ -14,7 +14,7 @@ function scene(mode, marks) {
     <text x="5" y="-1" font-family="Chakra" font-weight="700" font-size="15" letter-spacing="2" fill="#f4f1e8">${t}</text></g>`;
   const labels = phone
     ? L(520, 720, 'PLACEHOLDER · GUARD SCORPION') + L(520, 790, 'PLACEHOLDER · CLOUD') + L(520, 860, 'PLACEHOLDER · BARRET')
-    : L(560, 150, 'PLACEHOLDER · GUARD SCORPION (TAIL RAISED)') + L(826, 360, 'PLACEHOLDER · CLOUD') + L(1150, 440, 'PLACEHOLDER · BARRET');
+    : L(250, 300, 'PLACEHOLDER · GUARD SCORPION (TAIL RAISED)') + L(826, 360, 'PLACEHOLDER · CLOUD') + L(1150, 440, 'PLACEHOLDER · BARRET');
   return `<svg class="scene" viewBox="${VB[mode]}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">

@@ -1,6 +1,6 @@
 // "PR7 Line": Pyrefly's own monoline glyph set for the FF7 battle HUD (FF7 only). Drawn from
 // scratch as centre-line paths on FF7's own grid: cap height 8 u, x-height about 5.7 u, stroke
-// 1.25 u, square caps, rounded-square shoulders. It is NOT traced from, and was not drawn over,
+// 1.15 u in the HUD (2.0 for header caps), square caps, rounded-square shoulders. It is NOT traced from, and was not drawn over,
 // any retail glyph or fan font (rule 8); only two measured proportions were taken from the
 // reference stills: digit pitch about 0.86 to 0.90 of the cap height, and "Cloud" about 3.8 caps
 // wide (spec §3.3; our reading of cs-bottom-x3). Everything else is our own letter design.

@@ -80,7 +80,7 @@ function txt(x, base, cap, str, o = {}) {
   const fam = o.fam || 'PR7', a = o.align || 'l';
   if (fam === 'PR7') {
     const k = cap / 8, g = glyphSVG(str, k, { color: o.color, shadow: o.shadow, outline: o.outline,
-      stroke: o.head ? 2.0 : 1.25, track: o.head ? 0.9 : 0 });
+      stroke: o.head ? 2.0 : 1.15, track: o.head ? 0.9 : 0 });
     const left = a === 'l' ? x : a === 'r' ? x - g.width : x - g.width / 2;
     return `<div class="t" data-s="${str.replace(/"/g, '&quot;')}" data-pad="${g.padPx}" data-w="${g.width}" style="left:${px(left - g.padPx - O.x)};top:${px(base - 8 * k - g.padPx - O.y)}">${g.svg}</div>`;
   }
