@@ -89,12 +89,41 @@ describe('PR-0164 / PR-0212: a feathered edge for paintings that touch their can
     }
   });
 
-  it('wanders the fade start along the edge in the shader, and still reaches 0 at the plate edge', async () => {
+  it('wanders the whole fade, its end included, along the edge in the shader', async () => {
     const { paintedFragmentShader } = await import('../../../src/engine/shaders/PaintedShader.ts');
     expect(paintedFragmentShader).toMatch(/uniform float edgeJag;/);
-    // The fade ends at the plate edge (box 1.0) whatever the wander; only its start moves inward.
-    expect(paintedFragmentShader).toMatch(/smoothstep\(fadeStart, 1\.0, box\)/);
-    expect(paintedFragmentShader).toMatch(/fadeStart -= edgeJag \*/);
+    // L-0 re-check (2026-09-27, Ch II 2000x1012, frozen camera, her plane shown and hidden): with only
+    // the fade's START wandering, every fade still ENDED on the plate edge, and her attack pose's hair,
+    // dense right up to its left border, faded into one straight pale column. The end wanders now.
+    expect(paintedFragmentShader).toMatch(/float fadeEnd = 1\.0 - jag;/);
+    expect(paintedFragmentShader).toMatch(/smoothstep\(fadeEnd - edgeFade, fadeEnd, box\)/);
+    expect(paintedFragmentShader).toMatch(/jag = edgeJag \* mix\(JAG_MIN, 1\.0, smoothstep\(0\.33, 0\.6, n\)\);/);
+    const { JAG_MIN } = await import('../../../src/engine/ActorEdgeFeather.ts');
+    expect(paintedFragmentShader).toContain(`const float JAG_MIN = ${JAG_MIN};`);
+  });
+
+  it('ends the feather on a wandering line that never lies on the plate edge (the shader math, mirrored)', async () => {
+    const { featherAlpha, JAG_MIN } = await import('../../../src/engine/ActorEdgeFeather.ts');
+    const fade = 0.2;
+    const jag = 0.2;
+    // Where the feather first reaches 0, for noise values along the edge.
+    const zeroAt = (n: number): number => {
+      for (let box = 0; box <= 1.0001; box += 0.001) if (featherAlpha(box, fade, jag, n) === 0) return box;
+      return 2;
+    };
+    const ends = [0, 0.25, 0.5, 0.75, 1].map(zeroAt);
+    // Always inside the plate edge, by at least JAG_MIN of the jag...
+    for (const e of ends) expect(e).toBeLessThanOrEqual(1 - JAG_MIN * jag + 1e-3);
+    // ...and not one line: it moves by most of the jag's width along the edge.
+    expect(Math.max(...ends) - Math.min(...ends)).toBeGreaterThan(0.5 * jag);
+    // The plate edge itself is always 0, and the interior untouched.
+    for (const n of [0, 0.5, 1]) {
+      expect(featherAlpha(1, fade, jag, n)).toBe(0);
+      expect(featherAlpha(0.3, fade, jag, n)).toBe(1);
+    }
+    // No jag: the old straight feather, ending on the edge.
+    expect(zeroAt(0.5)).toBeLessThan(1);
+    expect(featherAlpha(0.99, fade, 0, 0.5)).toBeGreaterThan(0);
   });
 
   it('leaves everyone else exactly as before (no feather option at all)', async () => {

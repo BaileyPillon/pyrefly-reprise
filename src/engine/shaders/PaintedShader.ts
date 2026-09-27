@@ -107,15 +107,19 @@ export const paintedFragmentShader = /* glsl */ `
       vec2 d = abs(vUv - 0.5) * 2.0;
       if (vUv.y < 0.5) d.y *= edgeFadeBase;
       float box = max(d.x, d.y);
-      float fadeStart = 1.0 - edgeFade;
+      float jag = 0.0;
       if (edgeJag > 0.0) {
-        // Noise read along the nearest edge (y down a side, x across the top), so the start
-        // of the fade wanders in lumps; the end stays on the plate edge, which is always 0.
+        // Noise read along the nearest edge (y down a side, x across the top), so the whole
+        // fade, its end included, wanders inward in lumps: a fade that always ended on the
+        // plate edge left dense hair ending on one straight line (L-0 re-check, 2026-09-27).
+        // The plate edge itself stays 0. Mirrored by ActorEdgeFeather.featherAlpha.
+        const float JAG_MIN = 0.35;
         float along = d.x >= d.y ? vUv.y : vUv.x + 0.5;
-        float n = texture2D(noiseMap, vec2(along * 1.3, d.x >= d.y ? 0.31 : 0.71)).r;
-        fadeStart -= edgeJag * smoothstep(0.3, 0.7, n);
+        float n = texture2D(noiseMap, vec2(along * 2.7, d.x >= d.y ? 0.31 : 0.71)).r;
+        jag = edgeJag * mix(JAG_MIN, 1.0, smoothstep(0.33, 0.6, n));
       }
-      a *= 1.0 - smoothstep(fadeStart, 1.0, box);
+      float fadeEnd = 1.0 - jag;
+      a *= 1.0 - smoothstep(fadeEnd - edgeFade, fadeEnd, box);
     }
 
     if (a < alphaCut) discard;

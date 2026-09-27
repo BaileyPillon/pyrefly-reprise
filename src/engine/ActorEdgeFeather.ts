@@ -36,6 +36,32 @@ export const EDGE_FEATHER_ART: Readonly<Record<string, number>> = {
 };
 
 /**
+ * The least share of `edgeJag` the feather's end sits inside the plate edge. Mirrored in
+ * `PaintedShader.ts` (`JAG_MIN`); the two are pinned together by `stage-edge-feather.test.ts`.
+ */
+export const JAG_MIN = 0.35;
+
+const smoothstep = (e0: number, e1: number, x: number): number => {
+  const t = Math.min(1, Math.max(0, (x - e0) / (e1 - e0)));
+  return t * t * (3 - 2 * t);
+};
+
+/**
+ * The shader's edge feather, mirrored in TypeScript so its shape can be tested without WebGL:
+ * the alpha multiplier at `box` (0 at the plane's centre line, 1 on its edge) for a feather of
+ * width `fade`, a wander of `jag`, and the edge noise `n` (0..1) at that point along the edge.
+ * The whole ramp moves inward by `jag` scaled into [JAG_MIN, 1] by the noise, so the line where
+ * the painting ends wanders and never lies on the plate edge (L-0 re-check, 2026-09-27: a
+ * feather that always ENDED on the edge left Yunalesca's attack hair, dense up to its left
+ * border, fading into one straight pale column at 2000x1012).
+ */
+export function featherAlpha(box: number, fade: number, jag: number, n: number): number {
+  const j = jag > 0 ? jag * (JAG_MIN + (1 - JAG_MIN) * smoothstep(0.33, 0.6, n)) : 0;
+  const fadeEnd = 1 - j;
+  return 1 - smoothstep(fadeEnd - fade, fadeEnd, box);
+}
+
+/**
  * The stage options for one painting: a sides-and-top feather, or `null` for none. The fade's
  * start wanders in by up to the feather's own width again (`edgeJag`): a feather parallel to the
  * plane's side still read as a soft straight column through Yunalesca's hair (Ch II, 2000x1012)
