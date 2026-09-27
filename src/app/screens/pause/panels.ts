@@ -163,7 +163,8 @@ export function controlsColumns(): PanelColumn[] {
       wide: true,
       rows: [
         row('resume', 'Resume the fight', 'Esc  /  Start'),
-        row('hide', 'Hide everything but the painting', 'H  /  Triangle'),
+        // PR-0028 / D-215: `H` is a pause key; battle has none, so the row says where it works.
+        row('hide', 'In pause, the painting alone', 'H  /  Triangle'),
         row('photo', 'Photo mode', 'F'),
         row('pause', 'Open this menu', 'Esc  /  P  /  Start'),
       ],

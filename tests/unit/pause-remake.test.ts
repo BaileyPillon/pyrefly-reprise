@@ -484,7 +484,7 @@ describe('every function of the old pause screen is still reachable', () => {
 
   it('4. HIDE / SHOW PANELS — the H hint, and the line that survives it', () => {
     const h = mount('seymour-flux');
-    expect(h.root.querySelector('.pause__hide')!.textContent).toContain('hide panels');
+    expect(h.root.querySelector('.pause__hide')!.textContent).toContain('painting only'); // PR-0028 / D-215
     keydown('KeyH');
     expect(h.screen.snapshot()['panelsHidden']).toBe(true);
     expect(h.root.querySelector('.pause__baseline')!.textContent).toContain('show panels');
