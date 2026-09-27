@@ -248,6 +248,7 @@ export class BattleScreen extends Screen {
         xray: (id) => this.stage?.xray(id),
         visibility: (id) => this.stage?.visibility().get(id) ?? 1,
         setPanels: (panels) => this.stage?.setPanels(panels),
+        keyFeatures: () => this.stage?.keyFeatureRects() ?? [],
       });
       // The enemy-intent slab needs the live engine, not just the state the HUD
       // is synced with: predicting a rotation means dry-running its AI script,

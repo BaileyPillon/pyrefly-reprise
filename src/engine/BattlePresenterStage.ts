@@ -35,6 +35,7 @@ import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
 import { PyreflyStage } from './PyreflyStage.ts';
 import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
+import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -656,6 +657,31 @@ export class PaintedStage implements BattleStage {
   private anchoredQuad(staged: StagedActor): [Vector3, Vector3, Vector3, Vector3] {
     const p = staged.actor.position;
     return SA.anchoredQuad(staged.anchor!, this.parentPose(staged) ?? { x: p.x, y: p.y, z: p.z, height: 1 }, this.quad);
+  }
+
+  /**
+   * The faces and weapons HUD panels must never cover (CHK-008), on screen:
+   * each staged idle painting's key-feature boxes (`keyFeatures.ts`), pushed
+   * through its live plane. PR-0094: the FFX-2 intent slab treats them as hard.
+   */
+  keyFeatureRects(): ScreenRect[] {
+    const out: ScreenRect[] = [];
+    const rect = this.opts.canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return out;
+    for (const [id, s] of this.actors) {
+      const table = KEY_FEATURES[s.artId] ?? KEY_FEATURES[id];
+      if (!table || s.anchor || s.actor.pose !== 'idle' || this.lastState?.combatants[id]?.alive === false) continue;
+      const toScreen = (u: number, t: number): { x: number; y: number } | null => {
+        const p = s.actor.paintPoint(u, t, this.paintScratch).project(this.opts.camera);
+        if (p.z > 1) return null;
+        return { x: rect.left + (p.x * 0.5 + 0.5) * rect.width, y: rect.top + (-p.y * 0.5 + 0.5) * rect.height };
+      };
+      for (const box of Object.values(table.boxes)) {
+        const r = featureRect(table, box, toScreen);
+        if (r) out.push(r);
+      }
+    }
+    return out;
   }
 
   /** The part rings' state, for the debug surface and the tests. */

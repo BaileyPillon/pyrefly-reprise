@@ -155,6 +155,20 @@ export function fighterBoxes(state: BattleState | null, project: ProjectFn): Int
 }
 
 /**
+ * PR-0094 (FFX-2 only in practice: the one table is Vegnagun's, Ch V): the
+ * faces and weapons on the field (`TargetingPort.keyFeatures`) as **hard**
+ * obstacles. A frame-filling part's body box stays soft (the slab would have
+ * nowhere to go), but under `placeSlab`'s tiered rule a soft box may be covered
+ * when nothing is free, which is how the link-4 Redoubt card came to sit on the
+ * head's horn ring and the link-3 Charge Core slab on the core's rim. A key
+ * feature ranks with the chrome instead: the slab covers a painting's armour
+ * before it covers its face or its weapon.
+ */
+export function keyFeatureObstacles(features: ReadonlyArray<{ x: number; y: number; w: number; h: number }>): IntentAvoidRect[] {
+  return features.map((r) => ({ left: r.x, top: r.y, right: r.x + r.w, bottom: r.y + r.h }));
+}
+
+/**
  * The intent slab and its `E HIDE` chip while painted, as panels the field's
  * target plate docks clear of (`dockPlate`). FFX-2 only. At Vegnagun's link 3
  * (D-044, the Body on option C's spot) the slab's only free spot while aiming
