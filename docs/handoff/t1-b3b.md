@@ -15,10 +15,10 @@ portrait.ts` and `face-crops.json`.
 |---|---|---|---|
 | PR-0168 | both | Pause CHAPTER tab's SCENE row reads `ChapterMeta.location` (what the dossier heading already uses) instead of re-deriving words from the internal scene key | `pause-remake.test.ts` (new test); was printing "cavern stolen fayth" / "dreams end" |
 | PR-0171 (companion) | both, FFX-only data | THE PARTY column is omitted, not printed empty, when the pause opens over a cutscene with no live state | `pause-chapter-columns.test.ts` (new file) |
-| PR-0189 (pause slice only) | both | THE PARTY column marked `wide`, so "Dressphere" (10 chars) stops ellipsising in the plain key column at 2000x1012 | same test; the other two thirds of PR-0189 (an FFX-2 command-row status tag, the advisor effect chip) are `src/ui/ffx2/**` and `move-advisor.css` — t1-b3a's files, not touched here |
-| PR-0171 | FFX only | Chapter II (Yunalesca) and Chapter IX (Yojimbo) each get a `CHAPTER_FACE_BOXES` row, measured off the shipped plates by a canvas colour-cluster scan; the dossier now moves `under` the two columns on both instead of laying the quote across the face/mask | `pause-dossier-place.test.ts`; `docs/screenshots/t1-b3b/dossier-ch{2,9}-{1600x900,2000x1012}.png` |
+| PR-0189 (pause slice only; `wide` flag removed in REPAIR) | both | THE PARTY column marked `wide`, so "Dressphere" (10 chars) stops ellipsising in the plain key column at 2000x1012 | same test; the other two thirds of PR-0189 (an FFX-2 command-row status tag, the advisor effect chip) are `src/ui/ffx2/**` and `move-advisor.css` — t1-b3a's files, not touched here |
+| ~~PR-0171~~ BACKED OUT in REPAIR, still open | FFX only | Chapter II (Yunalesca) and Chapter IX (Yojimbo) each get a `CHAPTER_FACE_BOXES` row, measured off the shipped plates by a canvas colour-cluster scan; the dossier now moves `under` the two columns on both instead of laying the quote across the face/mask | `pause-dossier-place.test.ts`; `docs/screenshots/t1-b3b/dossier-ch{2,9}-{1600x900,2000x1012}.png` |
 | PR-0121 | both | The 3840x2160 magnify-cap shortfall (never a slide) is feathered with the same `slideMask` a slid plate already uses (`.pause__plate--capped`), instead of a hard black edge | `pause-face-slide.test.ts`, `pause-chapter-plate-fallback.test.ts`; `docs/screenshots/t1-b3b/4k-ch{1,4,9}-pause.png` |
-| PR-0151 | both | `.pause__col--wide .pause__k`'s floor raised 118px → 150px: "MASTER VOLUME" (139px), "SOUND EFFECTS" (135px) and "STRATEGY GUIDE" (140px) all cleared it at 1280x960/1024x768 | `docs/screenshots/t1-b3b/options-{1280x960,1024x768}.png` (zero ellipsis, DOM-measured) |
+| PR-0151 (floor scoped to the settings column in REPAIR) | both | `.pause__col--wide .pause__k`'s floor raised 118px → 150px: "MASTER VOLUME" (139px), "SOUND EFFECTS" (135px) and "STRATEGY GUIDE" (140px) all cleared it at 1280x960/1024x768 | `docs/screenshots/t1-b3b/options-{1280x960,1024x768}.png` (zero ellipsis, DOM-measured) |
 | PR-0066 | both | `frontend.css`'s phone `--fe-fs-floor` raised 12px → 14px; `--fe-k` (layout) untouched | `frontend-css-type-floor.test.ts` (rewritten for the new floor); live leaf-text sweep at 390x844: min 14px (was 12) |
 | PR-0014 (partial) | both | `face-crops.json`'s `yuna` row re-measured (ipd was under-measured by ~20%, over-zooming the crop and pushing hair out the tile top); `rikku`/`paine` re-measured and found already accurate, not touched | `ui-portrait-face-crop.test.ts` (116 tests, unchanged, still green); `tests/e2e/portraits.spec.ts` new test: all five chapters' full rosters, head-inside-tile check, Paine cross-screen consistency |
 
@@ -29,7 +29,9 @@ portrait.ts` and `face-crops.json`.
   scrolling to the end reached every row (X-2 BATTLE, ATB SPEED, STRATEGY
   GUIDE, BATTLE HELP) and flipped X-2 BATTLE ACTIVE ↔ WAIT.
   `docs/screenshots/t1-b3b/phone-options-{before,after}-scroll.png`.
-- **PR-0117** (phone eyebrow/GARMENT GRID overlap, Chapter IV): real capture
+- **PR-0117** (phone eyebrow/GARMENT GRID overlap, Chapter IV) -- **CORRECTED BY THE
+  CHECK: STILL OPEN.** Only the overlap half is gone; the grid name is still ellipsised
+  at 390x844 (see CHECK and REPAIR below). Original note: real capture
   at 390x844 shows the "CHAPTER IV · BEVELLE UNDERGROUND — SOMETHING SHE
   NAMED" eyebrow (top 692px) sitting cleanly below the 5-row-capped stats
   column (last row bottom 680px). Re-checked on Chapter VI too, same result.
@@ -191,3 +193,56 @@ The `cmp-*` files are base and candidate side by side.
 Worktree: the junctions in `D:/pyrefly-t1-b3b` and the base worktree
 `D:/pyrefly-b3b-base-check` are removed after this check, and both preview servers (5965,
 5966) are stopped by PID.
+
+## REPAIR (the one repair cycle, 2026-09-26; AGENTS.md rule 15)
+
+Commits on `t1-b3b`: `92c6402b` (REG-keycol, key floors), `8a42fa61` (PR-0171 back-out),
+`569d792f` (REG-keycol, CHAPTER value cells). Checked on a production build (`vite build`
++ `vite preview` on 5960, stopped by PID), headless GPU Chromium, the checker's own
+real-key flow (title, Enter, board arrows, prep, Esc over the opening scene, tab arrows,
+cutscene skip, first command menu, Esc), scripts in `tools/zz-repair.tmp/` (scratch),
+frames and JSON in `docs/screenshots/t1-b3b-repair/`.
+
+| Blocker | Outcome | What |
+|---|---|---|
+| REG-keycol | **Fixed** | The 150px key floor now applies only to `.pause__col--wide[data-col='settings']` (the OPTIONS labels PR-0151 is about); every other wide column is back at base's 118px. THE PARTY is no longer `wide`: FFX-2's DRESSPHERE key is fitted by FOC16-03's gear-column rule in `pause-chapter.css`, so PR-0189's pause slice still holds (0 cut at 1280x720, 1600x900, 2000x1012, 3840x2160 in Ch IV). SCENE (now the place name, PR-0168) and ENCOUNTER values wrap instead of ellipsising, and between 621 and 1279px wide THIS ENCOUNTER and THE PARTY (word rows only) give their empty bar cell to the values. Result: 0 ellipsised CHAPTER keys or values in Ch I (FFX) and Ch IV (FFX-2), in battle and over the scene, at 1024x768, 1280x720, 1280x960, 1600x900, 2000x1012, 3840x2160 and 390x844 (base cut "BOSS HP 1...", "BAROQUE SWO..." and "WHITE MA..." at 1024x768). OPTIONS: 0 cut at 1024x768 and 1280x960 (PR-0151 still passes). Phone OPTIONS: all 8 rows reached by raw touch drag, a tap flips X-2 BATTLE WAIT to ACTIVE, 0 cut (PR-0112 still passes). CONTROLS CSS is now byte-identical to base, so the key bindings are no longer the cut side. |
+| PR-0171 | **Backed out, still open** | `8c2b7218` (the Ch II / Ch IX `CHAPTER_FACE_BOXES` rows) is hand-reverted. It met the check only over a scene, never in battle, and on these two chapters it dropped the approved snapshots (and on Ch II at 2000x1012 the quote). With it gone the dossier is where live has it (`beside`). The companion change (THE PARTY omitted, not printed empty, with no live state) stays. The overlap measurement after the back-out, as on live: over the scene the dossier heading, quote and snapshots cross Yuna's face (Ch II) and Yojimbo's mask (Ch IX) at 1600x900 and 2000x1012; in battle THE PARTY values (and on Ch IX its keys) cross them too. |
+| PR-0117 | **Still open (correction)** | Not fixed, and the "verified, no change needed" note above was wrong. Real 390x844 capture on the repaired build: the eyebrow no longer overlaps any row (eyebrow top 692, last row bottom 676), but the garment grid name is still ellipsised: "protection halo" (Ch IV, Yuna) and "hour of need" (Ch VI, Rikku). No change was made in this cycle. |
+
+### The question for Bailey (PR-0171, a placement choice, rule 9)
+
+The Chapter II painting (Yuna) and the Chapter IX painting (Yojimbo) put the face in
+the middle-right of the frame, exactly where the pause CHAPTER tab lays its three
+columns (THIS ENCOUNTER, THE PARTY, the dossier) at 1600x900 and 2000x1012. Moving
+only the dossier does not clear the face, because in battle THE PARTY sits there too.
+Which of these should the CHAPTER tab do on a plate whose face is in the text area?
+
+- **A. Mirror the layout** on those plates: the columns go to the left of the frame,
+  the face stays clear on the right (the pause already has a `pause--mirror` mode).
+- **B. Stack the columns** into one narrower block on the empty side, dropping or
+  shrinking the snapshots to fit.
+- **C. Slide or re-crop the painting** so the face moves out of the text area
+  (the pause already slides plates for the member tabs).
+- **D. Leave it**, and accept text over the face on these two chapters.
+
+Each is a change Bailey will see, so it needs a mockup and a pick before it is built.
+
+### Found, not introduced, not fixed here
+
+- CONTROLS: the key-column descriptions ("MOVE DOWN A M...", "HIDE EVERYTHIN...",
+  "RESUME THE FIG...") are cut at every size, and at 390x844 two bindings ("Enter / Z /
+  Cross", "Esc / P / Start") are cut too. The CSS for this tab is identical to the
+  merge base, so this is pre-existing; a fix is a layout choice for the tab.
+- The dossier snapshot captions break mid-word at 1024x768 ("Prominen ce",
+  "unhurrie d"), on base as well.
+
+### Checks after the repair
+
+- `tsc --noEmit`: clean.
+- Full `vitest run --testTimeout=60000`: exit 0, 451 files passed (4 skipped), 8322
+  tests passed (29 skipped, 1 todo). (A first run hit one wall-clock flake in
+  `ui-ffx-zanmato-gauge.test.ts`, an untouched file that passes alone; the rerun was
+  clean.)
+- `tools/orphans.mjs`: 24, unchanged.
+- Game case: REG-keycol both (shared pause chrome); PR-0171 back-out FFX only (the two
+  plates are FFX paintings); PR-0117 FFX-2 only (garment grids).

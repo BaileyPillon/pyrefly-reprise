@@ -1,0 +1,40 @@
+[
+ {
+  "id": "ffx2-bahamut",
+  "size": "3840x2160",
+  "states": [
+   {
+    "tag": "scene",
+    "tabs": {
+     "chapter": [],
+     "guide": [],
+     "options": [],
+     "controls": [
+      "Move down a menu",
+      "Resume the fight",
+      "Hide everything but the painting"
+     ],
+     "music": []
+    }
+   },
+   {
+    "tag": "battle",
+    "tabs": {
+     "member:yuna": [],
+     "member:rikku": [],
+     "member:paine": [],
+     "chapter": [],
+     "guide": [],
+     "options": [],
+     "controls": [
+      "Move down a menu",
+      "Resume the fight",
+      "Hide everything but the painting"
+     ],
+     "music": []
+    }
+   }
+  ],
+  "errors": []
+ }
+]

@@ -1,0 +1,259 @@
+[
+ {
+  "id": "yunalesca",
+  "size": "2000x1012",
+  "states": [
+   {
+    "plateRect": [
+     -119,
+     -5,
+     2127,
+     1279
+    ],
+    "plateCls": "pause__plate",
+    "plateMask": "none",
+    "vw": 2000,
+    "vh": 1012,
+    "plateId": "ch2-yunalesca",
+    "dossier": "beside",
+    "scene": "Zanarkand Dome",
+    "location": "Zanarkand Dome",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 5,
+      "wide": true
+     },
+     {
+      "col": "dossier",
+      "heading": "Zanarkand Dome",
+      "rows": 0,
+      "wide": false
+     }
+    ],
+    "face": {
+     "left": 712.3576025390624,
+     "right": 1453.5888427734374,
+     "top": 226.47425048828123,
+     "bottom": 765.5703979492188
+    },
+    "overlaps": [
+     "Zanarkand Dome <>",
+     "“You are so very tired. Let me be the la <pause__quote-text>",
+     "Yunalesca <pause__quote-who>",
+     "she is telling the truth <pause__hand>",
+     "[snap] <pause__snap>",
+     "the great hall <>",
+     "[snap] <pause__snap>",
+     "the third shape <>",
+     "[snap] <pause__snap>",
+     "it isn't over <>"
+    ],
+    "ellipsised": [],
+    "tag": "scene",
+    "tab": "chapter"
+   },
+   {
+    "plateRect": [
+     -7,
+     -3,
+     2235,
+     1278
+    ],
+    "plateCls": "pause__plate",
+    "plateMask": "none",
+    "vw": 2000,
+    "vh": 1012,
+    "plateId": "ch2-yunalesca",
+    "dossier": "beside",
+    "scene": "Zanarkand Dome",
+    "location": "Zanarkand Dome",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 6,
+      "wide": true
+     },
+     {
+      "col": "gear",
+      "heading": "The party",
+      "rows": 9,
+      "wide": false
+     },
+     {
+      "col": "dossier",
+      "heading": "Zanarkand Dome",
+      "rows": 0,
+      "wide": false
+     }
+    ],
+    "face": {
+     "left": 822.83369140625,
+     "right": 1562.64599609375,
+     "top": 227.1143212890625,
+     "bottom": 765.1785156249999
+    },
+    "overlaps": [
+     "S.Lv 46 <pause__v>",
+     "Baroque Sword <pause__v>",
+     "Glorious Shield <pause__v>",
+     "S.Lv 44 <pause__v>",
+     "Yuna's Staff <pause__v>",
+     "Blessed Ring <pause__v>",
+     "S.Lv 48 <pause__v>",
+     "Auron's Katana <pause__v>",
+     "Blessed Bracer <pause__v>",
+     "Zanarkand Dome <>",
+     "“You are so very tired. Let me be the la <pause__quote-text>",
+     "Yunalesca <pause__quote-who>",
+     "she is telling the truth <pause__hand>",
+     "[snap] <pause__snap>",
+     "the great hall <>",
+     "[snap] <pause__snap>",
+     "the third shape <>",
+     "[snap] <pause__snap>",
+     "it isn't over <>"
+    ],
+    "ellipsised": [],
+    "tag": "battle",
+    "tab": "chapter"
+   }
+  ],
+  "errors": []
+ },
+ {
+  "id": "yojimbo-cavern",
+  "size": "2000x1012",
+  "states": [
+   {
+    "plateRect": [
+     -9,
+     -5,
+     2238,
+     1279
+    ],
+    "plateCls": "pause__plate",
+    "plateMask": "none",
+    "vw": 2000,
+    "vh": 1012,
+    "plateId": "ch9-yojimbo",
+    "dossier": "beside",
+    "scene": "Cavern of the Stolen Fayth",
+    "location": "Cavern of the Stolen Fayth",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 5,
+      "wide": true
+     },
+     {
+      "col": "dossier",
+      "heading": "Cavern of the Stolen Fayth",
+      "rows": 0,
+      "wide": false
+     }
+    ],
+    "face": {
+     "left": 889.7316650390626,
+     "right": 1653.4696142578125,
+     "top": 252.12729492187503,
+     "bottom": 893.94638671875
+    },
+    "overlaps": [
+     "Cavern of the Stolen Fayth <>",
+     "“I still owe her a guardian.” <pause__quote-text>",
+     "every hit feeds his blade <pause__hand>",
+     "[snap] <pause__snap>",
+     "the last chamber, cold light <>",
+     "[snap] <pause__snap>",
+     "the long blade, drawn <>",
+     "[snap] <pause__snap>",
+     "Lady Ginnem, never sent <>"
+    ],
+    "ellipsised": [],
+    "tag": "scene",
+    "tab": "chapter"
+   },
+   {
+    "plateRect": [
+     -7,
+     -3,
+     2235,
+     1278
+    ],
+    "plateCls": "pause__plate",
+    "plateMask": "none",
+    "vw": 2000,
+    "vh": 1012,
+    "plateId": "ch9-yojimbo",
+    "dossier": "beside",
+    "scene": "Cavern of the Stolen Fayth",
+    "location": "Cavern of the Stolen Fayth",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 6,
+      "wide": true
+     },
+     {
+      "col": "gear",
+      "heading": "The party",
+      "rows": 9,
+      "wide": false
+     },
+     {
+      "col": "dossier",
+      "heading": "Cavern of the Stolen Fayth",
+      "rows": 0,
+      "wide": false
+     }
+    ],
+    "face": {
+     "left": 890.1000732421876,
+     "right": 1652.2849462890624,
+     "top": 252.754931640625,
+     "bottom": 893.2689697265624
+    },
+    "overlaps": [
+     "The party <>",
+     "Lulu <pause__k>",
+     "S.Lv 30 <pause__v>",
+     "Weapon <pause__k>",
+     "Lulu's Moogle <pause__v>",
+     "Armour <pause__k>",
+     "Glorious Bangle <pause__v>",
+     "Kimahri <pause__k>",
+     "S.Lv 25 <pause__v>",
+     "Weapon <pause__k>",
+     "Kimahri's Spear <pause__v>",
+     "Armour <pause__k>",
+     "Glorious Armlet <pause__v>",
+     "Yuna <pause__k>",
+     "S.Lv 32 <pause__v>",
+     "Weapon <pause__k>",
+     "Yuna's Staff <pause__v>",
+     "Armour <pause__k>",
+     "Blessed Ring <pause__v>",
+     "Cavern of the Stolen Fayth <>",
+     "“I still owe her a guardian.” <pause__quote-text>",
+     "Lulu <pause__quote-who>",
+     "every hit feeds his blade <pause__hand>",
+     "[snap] <pause__snap>",
+     "the last chamber, cold light <>",
+     "[snap] <pause__snap>",
+     "the long blade, drawn <>",
+     "[snap] <pause__snap>",
+     "Lady Ginnem, never sent <>"
+    ],
+    "ellipsised": [],
+    "tag": "battle",
+    "tab": "chapter"
+   }
+  ],
+  "errors": []
+ }
+]
