@@ -27,6 +27,9 @@ import { FFX2_DRESSPHERE_CARRIES } from '../../src/app/screens/BattleScreenCarry
 import { checkpointAt } from '../../src/app/screens/BattleChainCheckpoint.ts';
 import { shuyinGroup } from '../../src/data/ffx2/enemies/shuyin.ts';
 import { VEGNAGUN_CHAIN_ORDER } from '../../src/data/ffx2/ids.ts';
+import { macalaniaBuild } from '../../src/data/ffx/builds/macalania.ts';
+import { fahrenheitBuild } from '../../src/data/ffx/builds/fahrenheit.ts';
+import { gagazetBuild } from '../../src/data/ffx/builds/gagazet.ts';
 import { ABILITIES } from '../../src/data/ffx2/index.ts';
 import { abilityRegistryFrom } from '../../src/battle/ffx2/index.ts';
 import { chainRegistries, defaultAbilities } from '../../src/battle/ffx2/abilities.ts';
@@ -190,5 +193,16 @@ describe('D-217 (FFX-2, Chapter V): a checkpoint at Shuyin, labelled an adaptati
       expect(ENEMY_GROUPS_BY_ID[id]?.checkpointOnEntry).not.toBe(true);
     }
     expect(readFileSync('src/data/ffx2/enemies/shuyin.ts', 'utf8')).toContain('An adaptation, not a sourced rule');
+  });
+});
+
+describe('PR-0174 (FFX only, Chapters VIII and X): Rikku\'s S.Lv sits between the presets either side', () => {
+  it('Macalania 40 <= Fahrenheit <= Gagazet 42, with its source tag, and X inherits it', () => {
+    const at = (b: { members: Array<{ id: string; sphereGrid: { sLv: number } }> }) => b.members.find((m) => m.id === 'rikku')!.sphereGrid.sLv;
+    const mac = at(macalaniaBuild as never);
+    const fah = at(fahrenheitBuild as never);
+    const gag = at(gagazetBuild as never);
+    expect([mac, fah, gag]).toEqual([40, 41, 42]);
+    expect(readFileSync('src/data/ffx/builds/fahrenheit.ts', 'utf8')).toContain('PR-0174, `[estimate]`');
   });
 });

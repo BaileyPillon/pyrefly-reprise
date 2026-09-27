@@ -208,8 +208,12 @@ function rikku(): FFXMemberBuild {
       unlockedModes: ['stoic', 'comrade'],
       unlockedOverdriveIds: ['mix'],
     },
-    // §9.2's note: Rikku carries a +25 starting S.Lv offset, folded in here.
-    sphereGrid: { position: 'rikku-sphere-53', activatedNodeIds: [], sLv: 53, ap: 0, spheres: {} },
+    // PR-0174, `[estimate]`: Rikku carries a +25 starting S.Lv offset over the sphere levels she has used
+    // (ffx-seymour-anima-macalania.md §8.3, "14-22 per character ... excluding Rikku's +25 starting offset").
+    // The Fahrenheit comes between Macalania Temple and Mt. Gagazet in the story, whose presets give her
+    // 40 (`macalania.ts`) and 42 (`gagazet.ts`); 41 sits between them (it read 53, above both). S.Lv sets
+    // only the prep and results display (`battle/ffx/results.ts` apForLevel), no combat stat.
+    sphereGrid: { position: 'rikku-sphere-41', activatedNodeIds: [], sLv: 41, ap: 0, spheres: {} },
   };
 }
 
