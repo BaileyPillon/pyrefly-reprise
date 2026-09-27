@@ -72,9 +72,18 @@
 /* ------------------------------------------ the selected card, in place */
 
 .fe-rail { gap: calc(6 * var(--fe-k)); }
+/*
+ * FOC18-04: the heavier gold rule is the card's own 1 px border plus an outline
+ * outside it, not a thicker border. A 2k border took its width out of the rail's
+ * flex share, so selecting a card grew it 2 px and nudged every card below it.
+ * An outline costs no layout: only the selected and the previously selected
+ * card change, and no card changes height. Game case: both (the shared board).
+ */
 .fe-card--sel {
   overflow: visible;
-  border: calc(2 * var(--fe-k)) solid var(--fe-accent);
+  border-color: var(--fe-accent);
+  outline: max(0px, calc(2 * var(--fe-k) - 1px)) solid var(--fe-accent);
+  outline-offset: 0;
   box-shadow: 0 0 calc(18 * var(--fe-k)) rgba(227, 185, 74, 0.28), 0 calc(8 * var(--fe-k)) calc(20 * var(--fe-k)) rgba(0, 0, 0, 0.6);
   transform: translate3d(calc(-8 * var(--fe-k)), 0, 0);
 }
