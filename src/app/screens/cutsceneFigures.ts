@@ -156,6 +156,38 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     portrait: { x: 0.5, feet: 0.74, height: 0.46 },
     unsent: true,
   },
+  /**
+   * Leblanc, Ormi and Logos, living (FFX-2 only: Chapter XI's epilogue, PR-0133, D-211: "stand
+   * Leblanc, Ormi and Logos for their lines, as XII and XIV do"). Their battle idles from
+   * Chapter VI (`public/art/characters/<id>/idle.png`, used as installed; sizes and feet from the
+   * sidecars). Each stands for their own line, one at a time in the one spot right of the box that
+   * XII and XIV use: three figures side by side is a layout no approved frame shows.
+   * Leblanc and Logos are painted facing left, Ormi facing right (the sidecars' `facing`).
+   */
+  leblanc: {
+    art: 'art/characters/leblanc/idle.png',
+    aspect: 591 / 1118,
+    baseline: 1102 / 1118,
+    artFacing: -1,
+    landscape: { x: 0.8, feet: 0.9, height: 0.56 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.44 },
+  },
+  ormi: {
+    art: 'art/characters/ormi/idle.png',
+    aspect: 489 / 1189,
+    baseline: 1173 / 1189,
+    artFacing: 1,
+    landscape: { x: 0.8, feet: 0.9, height: 0.6 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+  },
+  logos: {
+    art: 'art/characters/logos/idle.png',
+    aspect: 604 / 1160,
+    baseline: 1144 / 1160,
+    artFacing: -1,
+    landscape: { x: 0.8, feet: 0.9, height: 0.6 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+  },
 };
 
 /** The staged figure for `actor`, or `undefined` when cutscenes do not stage it. */
