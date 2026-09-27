@@ -81,12 +81,19 @@ import '../../ui/common/cutscene.css';
 import type { BattleStage, CutsceneRunnerPort } from '../../engine/BattlePresenterPorts.ts';
 import type { AudioPort } from '../../engine/BattlePresenterPorts.ts';
 import type { InputSnapshot } from '../Input.ts';
+import { createMidBeatLineCard, type LineCardStage } from './midbeatLineCard.ts';
+import type { StoryGame } from '../../story/fieldedSpeakers.ts';
 
 export interface MidBattleCutsceneOptions {
   /** Where the dialogue box mounts. The battle screen's root. */
   root: HTMLElement;
-  /** The live field, for camera moves, actor poses and VFX. */
-  stage: BattleStage;
+  /**
+   * The live field, for camera moves, actor poses and VFX. Its projected boxes
+   * (`PaintedStage.screenRects`, optional) place the line card (PR-0211).
+   */
+  stage: BattleStage & Pick<LineCardStage, 'screenRects'>;
+  /** Which game's party speaks (PR-0037). Read from the mounted HUD when absent. */
+  game?: StoryGame;
   audio?: AudioPort | null;
   /** `SaveData.settings.textSpeed`. */
   textSpeed?: number;
@@ -172,6 +179,8 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
   box.mount();
   // The box only belongs on screen while a beat is actually playing.
   box.el.hidden = true;
+  // PR-0037 (fielded speakers only) and PR-0211 (the card clear of the party): `midbeatLineCard.ts`.
+  const card = createMidBeatLineCard({ root: opts.root, box: box.el, stage: opts.stage, ...(opts.game ? { game: opts.game } : {}) });
 
   /**
    * Which dialogue port the runner talks to.
@@ -285,7 +294,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
     return raceLine(box.narrate(line), line);
   };
 
-  const dialogue: DialoguePort = {
+  const dialogue: DialoguePort = card.guard({
     say: (step) => (mode === 'instant' ? noop.say(step) : mode === 'auto' ? speakSay(step) : box.say(step)),
     narrate: (step) =>
       mode === 'instant' ? noop.narrate(step) : mode === 'auto' ? speakNarrate(step) : box.narrate(step),
@@ -293,7 +302,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
     // (`blockingSteps`); if one reaches here with nobody to answer it, take the
     // first option rather than wedging the fight.
     choice: (step) => (mode === 'manual' ? box.choice(step) : noop.choice(step)),
-  };
+  });
 
   const actor = (id: string | undefined): ReturnType<BattleStage['actor']> =>
     id ? opts.stage.actor(id) : undefined;
@@ -393,6 +402,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
   return {
     async play(script: StoryScript, playOpts?: { midBattle?: boolean; name?: string }): Promise<void> {
       if (!shows.admit(playOpts?.name)) return;
+      card.beginBeat(script);
       // Nothing to show when every line resolves instantly.
       box.el.hidden = mode === 'instant';
       // The HUD stays where it is; the scene behind the line just dims.
@@ -461,6 +471,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
         opts.root.classList.remove(MIDBEAT_CLASS);
         box.hide();
         box.el.hidden = true;
+        card.endBeat();
       }
     },
     update: (dt) => {

@@ -49,6 +49,11 @@ export type SpeakerId =
    */
   | 'seymour-macalania'
   | 'seymour-omnis' // Chapter XII (FFX): `portraits/seymour-omnis.png` (B17 = c); the plate reads "Seymour"
+  /**
+   * Seymour after the Highbridge transformation, Chapter X (FFX only): `portraits/seymour-natus.png`
+   * (O-5 A), per the draft's B12 = b. The plate reads "Seymour" (`DialogueBox.defaultName`).
+   */
+  | 'seymour-natus'
   | 'yunalesca'
   | 'jecht'
   | 'braska'
@@ -169,6 +174,24 @@ export interface SayStep {
   auto?: number;
   /** Optional VO/clip key for a future voice pass. Unused today. */
   voiceKey?: string;
+  /**
+   * Who says this line instead, in order, when `who` is a party member who is
+   * **not on the field** during a mid-battle beat (PR-0037, D-212, both games):
+   * only fielded characters speak mid-battle lines. The first candidate who is
+   * fielded, or who is not a party member at all (a boss, a comm or Farplane
+   * voice), speaks; with no such candidate the line is dropped. Ignored in
+   * pre- and post-battle scenes, where the whole party is on stage. See
+   * `src/story/fieldedSpeakers.ts`.
+   */
+  fallback?: SpeakerFallback[];
+}
+
+/** One authored stand-in for a {@link SayStep} whose speaker is benched (PR-0037). */
+export interface SpeakerFallback {
+  who: SpeakerId;
+  /** The stand-in's own wording. Omit to have them say the line as written. */
+  text?: string;
+  emotion?: Emotion;
 }
 
 /** Retrospective narration over black or a slow pan. Rendered without a name plate. */
@@ -429,7 +452,7 @@ export interface ChapterScripts {
 export function say(
   who: SpeakerId,
   text: string,
-  opts: { portrait?: string; emotion?: Emotion; auto?: number; voiceKey?: string } = {},
+  opts: { portrait?: string; emotion?: Emotion; auto?: number; voiceKey?: string; fallback?: SpeakerFallback[] } = {},
 ): SayStep {
   return { type: 'say', who, text, ...opts };
 }
@@ -598,6 +621,14 @@ export function lintScript(script: StoryScript): LineIssue[] {
     if (text.includes(' ...')) issues.push({ index, message: 'space before an ellipsis' });
     // CHK-007: the box prints text literally (markup, citations, ids); see `./textLint.ts`.
     for (const message of storyTextIssues(text)) issues.push({ index, message });
+    // PR-0037: an authored stand-in line is shown in the same box, so it meets the same rules.
+    if (step.type === 'say') {
+      for (const alt of step.fallback ?? []) {
+        if (alt.text === undefined) continue;
+        if (alt.text.length > MAX_SAY_CHARS) issues.push({ index, message: `fallback line is ${alt.text.length} chars` });
+        for (const message of storyTextIssues(alt.text)) issues.push({ index, message: `fallback: ${message}` });
+      }
+    }
   });
   return issues;
 }

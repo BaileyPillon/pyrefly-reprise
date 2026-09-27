@@ -278,17 +278,20 @@ export const evraeAirshipScripts: ChapterScripts = {
       camera('action', 300),
       wait(700), // hold the throat, uncovered, before the callout arrives
       say('wakka', 'Its throat! Watch its throat, ya?', { auto: 1200 }),
-      say('auron', 'Out of its reach. Now.', { auto: 1200 }),
+      say('auron', 'Out of its reach. Now.', { auto: 1200, fallback: [{ who: 'tidus', text: 'Get out of its reach! Now!' }] }),
       camera('idle', 300),
     ],
     'evrae-out-of-breath': [
       say('rikku', 'It missed! It totally missed!', { auto: 1200 }),
-      say('lulu', 'The distance did that. Not you.', { auto: 1400 }),
+      say('lulu', 'The distance did that. Not you.', { auto: 1400, fallback: [{ who: 'wakka', text: 'Distance did that, ya? Not you.' }] }),
     ],
     'evrae-haste-phase': [
       camera('action', 300),
       say('tidus', "It's faster. Why's it faster?", { auto: 1200 }),
-      say('auron', 'It stopped guarding. Now it hunts.', { auto: 1400 }),
+      say('auron', 'It stopped guarding. Now it hunts.', {
+        auto: 1400,
+        fallback: [{ who: 'wakka', text: "It quit guarding, ya? Now it's hunting." }],
+      }),
       camera('idle', 300),
     ],
     'evrae-first-petrify': [

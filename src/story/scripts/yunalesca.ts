@@ -245,8 +245,8 @@ export const yunalescaScripts: ChapterScripts = {
       camera('idle', 500),
     ],
     'yunalesca-first-zombie': [
-      say('rikku', "Everybody's grey! Is that bad?!", { auto: 1200 }),
-      say('lulu', 'Stay grey. Her kindness kills the living.', { auto: 1400 }),
+      say('rikku', "Everybody's grey! Is that bad?!", { auto: 1200, fallback: [{ who: 'tidus' }] }),
+      say('lulu', 'Stay grey. Her kindness kills the living.', { auto: 1400, fallback: [{ who: 'auron' }, { who: 'yuna' }] }),
     ],
     'yunalesca-mega-death': [
       say('yunalesca', 'Rest now. All of you.', { auto: 1200 }),

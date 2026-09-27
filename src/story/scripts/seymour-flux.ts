@@ -281,12 +281,21 @@ export const seymourFluxScripts: ChapterScripts = {
     'mortiorchis-first-charge': [
       camera('action', 300),
       fx('mortiorchis-charge', 'mortiorchis'),
-      say('auron', "It's charging. End this.", { auto: 1100 }),
+      say('auron', "It's charging. End this.", {
+        auto: 1100,
+        fallback: [{ who: 'kimahri', text: 'It gathers. End it now.' }, { who: 'tidus', text: "It's charging up! End this!" }],
+      }),
       camera('idle', 300),
     ],
     'first-zombie': [
-      say('rikku', "Eeew! Yunie, don't heal him!", { auto: 1200 }),
-      say('lulu', "He's turned. Cures will kill him now.", { auto: 1400 }),
+      say('rikku', "Eeew! Yunie, don't heal him!", {
+        auto: 1200,
+        fallback: [{ who: 'kimahri', text: 'Yuna. Do not heal him.' }, { who: 'tidus', text: "Yuna, don't heal me! Not now!" }],
+      }),
+      say('lulu', "He's turned. Cures will kill him now.", {
+        auto: 1400,
+        fallback: [{ who: 'yuna', text: "He's turned. A cure would hurt him now." }],
+      }),
     ],
     'seymour-lance': [
       say('seymour', 'Let it in.', { auto: 1000 }),
