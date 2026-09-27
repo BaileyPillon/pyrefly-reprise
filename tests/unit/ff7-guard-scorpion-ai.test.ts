@@ -124,7 +124,7 @@ describe('the raised tail [gs §2.1, §5.5]', () => {
     const dmg = ofType(e.submit(bolt), 'damage').find((d) => d.targetId === BOSS);
     expect(dmg?.amount).toBeGreaterThanOrEqual(44);
     expect(dmg?.amount).toBeLessThanOrEqual(48);
-    expect(ofType(e.state().log, 'form-change')[0]).toMatchObject({ enemyId: BOSS, formIndex: 1, spriteKey: 'guard-scorpion-tail-up' });
+    expect(ofType(e.state().log, 'form-change')[0]).toMatchObject({ enemyId: BOSS, formIndex: 1, spriteKey: 'ff7-guard-scorpion-tail-up' });
   });
 
   it('every hostile action while the tail is up is answered by one Tail Laser on the whole party, 100%', () => {

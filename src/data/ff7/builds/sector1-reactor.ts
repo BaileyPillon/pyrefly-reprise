@@ -24,7 +24,7 @@ export const sector1ReactorBuild: Ff7PartyBuild = {
     {
       id: 'cloud',
       name: 'Cloud',
-      spriteKey: 'cloud',
+      spriteKey: 'ff7-cloud', // painted art id: public/art/characters/ff7-cloud (D-240); ff7- keeps FF7 ids apart
       portraitKey: 'cloud',
       // Lv 7 [gs §8.1, derived from verified inputs; preset estimate]; stats gs §8.2 preset [estimate].
       base: { level: 7, hp: 329, mp: 55, str: 21, vit: 17, mag: 21, spr: 18, dex: 9, lck: 15 },
@@ -42,7 +42,7 @@ export const sector1ReactorBuild: Ff7PartyBuild = {
     {
       id: 'barret',
       name: 'Barret',
-      spriteKey: 'barret',
+      spriteKey: 'ff7-barret', // painted art id: public/art/characters/ff7-barret (D-240)
       portraitKey: 'barret',
       // Lv 6 [gs §8.1, verified: 2 sources]; stats gs §8.2 preset [estimate].
       base: { level: 6, hp: 323, mp: 43, str: 19, vit: 19, mag: 16, spr: 15, dex: 10, lck: 17 },
