@@ -47,6 +47,27 @@ describe('pause key-column floors (REG-keycol)', () => {
     expect(hits.length).toBe(1);
   });
 
+  it('the CHAPTER tab SCENE and ENCOUNTER values wrap instead of ellipsising (PR-0168 made SCENE longer)', () => {
+    // "Mt. Gagazet" / "Bevelle Underground" replaced the short scene key and
+    // were cut at 1024x768 and 390x844; a place name is read, not scanned.
+    for (const id of ['scene', 'progress']) {
+      const sel = `.pause__col[data-col='detail'] .pause__row[data-row='${id}'] .pause__v`;
+      expect(CHAPTER, id).toContain(sel);
+    }
+    expect(CHAPTER).toMatch(/data-row='progress'\] \.pause__v\s*\{[^}]*white-space:\s*normal/);
+  });
+
+  it('under 1280 wide, the CHAPTER word columns give their empty bar cell to the values (1024x768)', () => {
+    const m = /@media \(min-width: 621px\) and \(max-width: 1279px\) \{([\s\S]*?)\n\}/.exec(CHAPTER);
+    expect(m).not.toBeNull();
+    const body = m![1]!;
+    expect(body).toContain(".pause__col[data-col='detail'] .pause__row--word .pause__bar");
+    expect(body).toContain(".pause__col[data-col='gear'] .pause__row--word .pause__bar");
+    // FFX-2's dress rule outranks the plain selector, so it is named too.
+    expect(body).toContain(".pause__col[data-col='gear']:has(.pause__row[data-row$='-dress']) .pause__row--word .pause__bar");
+    expect(body).toMatch(/width:\s*0;/);
+  });
+
   it("FFX-2's DRESSPHERE key is fitted by the gear column's own rule, not by a wide flag", () => {
     expect(CHAPTER).toContain(".pause__col[data-col='gear']:has(.pause__row[data-row$='-dress']) .pause__k");
     expect(widthOf(CHAPTER, ".pause__col[data-col='gear']:has(.pause__row[data-row$='-dress']) .pause__k")).toBe(

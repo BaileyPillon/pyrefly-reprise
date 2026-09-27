@@ -90,3 +90,39 @@
 .pause__col--wide:has(.pause__row[data-row='grid']) .pause__bar {
   width: max(0px, calc(var(--pu-bar) - (var(--pu-grid-key) - clamp(118px, 9.5vw, 190px))));
 }
+
+/*
+ * REG-keycol / PR-0168 (t1-b3b repair): SCENE now reads the chapter's place
+ * name ("Mt. Gagazet", "Bevelle Underground") instead of the short scene key,
+ * and the value cell cut it at 1024x768 and 390x844, as it already cut the
+ * ENCOUNTER reading ("BOSS HP 1..."). Both are read, not scanned: they wrap
+ * onto a second line like an objective's label, never an ellipsis.
+ * Game case: both (shared pause chrome).
+ */
+.pause__col[data-col='detail'] .pause__row[data-row='scene'],
+.pause__col[data-col='detail'] .pause__row[data-row='progress'] {
+  height: auto;
+  min-height: var(--pu-row);
+}
+
+.pause__col[data-col='detail'] .pause__row[data-row='scene'] .pause__v,
+.pause__col[data-col='detail'] .pause__row[data-row='progress'] .pause__v {
+  white-space: normal;
+  text-overflow: clip;
+  line-height: 1.35;
+}
+
+/*
+ * REG-keycol (t1-b3b repair): THIS ENCOUNTER and THE PARTY hold word rows
+ * only, so their bar cells are empty space. Under 1280 wide (the 4:3
+ * 1024x768 window) that empty space is what cut "BAROQUE SWO..." and
+ * FFX-2's "WHITE MA...", so there it gives its width to the values. From 1280 up nothing is cut and
+ * the columns keep their shared rhythm. Game case: both.
+ */
+@media (min-width: 621px) and (max-width: 1279px) {
+  .pause__col[data-col='detail'] .pause__row--word .pause__bar,
+  .pause__col[data-col='gear'] .pause__row--word .pause__bar,
+  .pause__col[data-col='gear']:has(.pause__row[data-row$='-dress']) .pause__row--word .pause__bar {
+    width: 0;
+  }
+}
