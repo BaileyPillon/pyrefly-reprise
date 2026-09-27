@@ -119,3 +119,93 @@ merge is the driver's, plan section 6):
   17 lines (the new logic went into new modules: `advisor-change.ts`, `actionFade.ts`,
   `phoneBattleGuard.ts`, `chapterSlide.ts`, `boardWarm.ts`, `pause-labels.css`, `action-fade.css`). One inherited exception: `tests/e2e/portraits.spec.ts` went from 281 to 540 lines in
   t1-b3b's 7c2b56b6 (merged in, not re-split here: splitting an e2e spec wants its own run).
+
+## CHECK (independent, 2026-09-27, did not build this batch)
+
+Checked `iter2-b6` at 0678dafe by a separate agent: fresh production builds (`vite build`, own
+outDirs, served by `vite preview` on 6750 = branch, 6751 = `main` 625b018d, 6752 = the scratch merge
+of the branch into 625b018d), headless GPU Chromium from node (`PYREFLY_BROWSER=gpu`), one browser at
+a time, real keys, seed 1. Evidence (untracked scratch): `tools/zz-b6check.tmp/out/` in this worktree.
+
+**Verdict: HOLD until two things are fixed** (both small): the FFX-2 intent sentences that
+343d9eda made false (1, 2) and the merge with today's `main` (3). Everything else passed or is
+disclosed.
+
+### Blockers
+
+1. **Delta Attack's intent sentence reads "Deals no damage."** (FFX-2, Chapter XI, the Magus
+   Sisters; introduced by 343d9eda, a regression against live). Delta Attack has `formula: 'none'`
+   and sets the whole party to 1 HP and 0 MP (`extra.setHpTo / setMpTo`); the new `inert` branch in
+   `src/battle/ffx2/intent.ts#describeAbility` calls that "Deals no damage". Proved on the engine:
+   Chapter XI link 2 with all three sisters' AC at `AC_OVERDRIVE`, `engine.intent()` returns
+   Cindy / Delta Attack / "Deals no damage." on the branch and "non-elemental damage to the whole
+   party." on `main` (`tools/zz-b6check.tmp/delta2.test.ts`). Fix: leave rows with `setHpTo` /
+   `setMpTo` (or any `extra` effect) out of `inert`, and say what they do; pin every FFX-2 enemy row
+   with `formula: 'none'` in a unit test.
+2. **FFX-2 enemy Dispels now read "Cures Auto Life, Shell, Protect, Reflect, Regen, Haste,
+   Spellspring on one girl."** (FFX-2: Vegnagun's Bulwark Left, the Redoubt Left, Paragon Oversoul's
+   dispel; same commit). "Cures" says the opposite of stripping the girls' buffs; `main` said
+   "strips ...". Fix: the inert branch says "Strips ..." when the removed statuses are buffs.
+   (Bahamut's Countdown and Vegnagun's charge now read "Deals no damage.", which is right.)
+3. **The merge with today's `main` (17fa71d3, release 25) is textually clean but does not type-check.**
+   B5 (aaff96bb) and this batch (a5fb37a4) each added `setActing` to `CoachedHud`;
+   `git merge-tree` places both, and `tsc --noEmit` on the merge fails:
+   `src/ui/coach/CoachLayer.ts(214,3)` and `(253,3)`: TS2393 Duplicate function implementation.
+   Full vitest on that merge passes (596 files, 0 failed; vitest does not type-check). Fix at merge
+   time: keep one of the two identical lines (both games, the shared wrapper).
+
+### Re-run, passed
+
+- Branch: `tsc --noEmit` clean; full vitest `--testTimeout=60000` 567 files passed, 0 failed.
+  Scratch merge into 625b018d: tsc clean, full vitest 571 passed, 0 failed. `git merge-tree` with
+  origin/main clean (625b018d and 17fa71d3, see 3) and with `iter2-b5`. Orphans 29, the same count as
+  `main`. `verify-approved.mjs` 267 ok, 0 mismatched, 0 missing. No file under `src/*/ff7` touched.
+- **First command menu, all 14 chapters, 1600x900 and 390x844, branch vs `main`:** reached by real
+  keys on both, 0 page errors, the same menu rows and the same advisor lead move in every chapter,
+  0 cut labels (the phone PAUSE chip text is an icon on both). Differences: the advisor card sits a
+  few px higher (FOC-06's 14 px floor), and on the FFX-2 chapters the intent (IV, V, Den of Woe) and
+  on V also the advisor card are faded at the capture moment because an enemy action was playing
+  (A-15, see 5).
+- **Hidden FF7 fight:** `L I M I T` on the board opens Guard Scorpion on the branch build and on the
+  merge build, the board still reads 0 OF 14 BEATEN, 40 s of Enter plays turns both ways, 0 page errors.
+- **D-234 (option C):** Chapters II and IX at 1600x900 and 2000x1012, over the scene and in battle,
+  plate `pause__plate--slid`, 0 text boxes on the face, also 12 s later in the push-in; measured with
+  the IX box widened to the union of round 13's and this batch's (x 0.40 to 0.74, y 0.20 to 0.78).
+  `main`: 11 to 23 boxes on the faces. Layout matches the picked frames `ch{2,9}-*-c-slide.jpg`.
+- **REG-keycol, PR-0151, CONTROLS, OPTIONS, PR-0117, GUIDE:** every pause tab over the scene and in
+  battle for Chapters X, XII, VI (Leblanc), IV and IX at 1024x768, 1280x720, 1280x960, 1600x900,
+  2000x1012 and 390x844: 0 ellipsised, clipped or overlapping labels, except one pre-existing cut (8).
+- **FOC22-02 by real keys:** `route.mjs ffx2-fallen-aeons win --size=2000x1012 --seed=1`: 231 picks
+  over two runs, **0 misses**; the card named Change twice at Anima and real keys took it from the
+  CHANGE menu. With `--budget=2400000` seed 1 **reached results on the first attempt** (Victory,
+  ROAD TO THE FARPLANE · CLEARED, board after reload), fight 16.6 min. No Itchy was logged in these
+  runs (the saved battle log holds link 1 only), so the Itchy branch itself rests on
+  `advisor-itchy-change.test.ts` and the builder's run. The White Mage revive finding did not show:
+  the Sisters were cleared on seed 1 both times.
+- **Phone lens (Chapter V link 2, 390x844):** lens 0 % covered (main 16 %), leg box unchanged.
+- **Board:** FOC18-04 at 1600x900, three steps: only the selected and previous cards move, dy 0, dh 0.
+  PR-0113 at 390x844: party names 5.9 px apart, BEST's value ends at 716 px above the hint bar at
+  777 px (main passes the same). The COMING badge is unobstructed by eye.
+- **A-15:** Chapter IV, 329 acting samples: 2 with the strategy guide card at full opacity over Yuna
+  casting Cure (after another girl's action-end or a cancel signal); Chapter V, 169 acting samples, 0.
+
+### Not blocking (disclosed or pre-existing)
+
+4. Tooling (critic runner, not this batch): `route-fight.mjs` reports `outcome: "victory"` when the
+   attempt's budget runs out mid-Anima (it reads a battle log that still holds link 1's victory);
+   the first run stopped at 900 s with Anima at 6,843/36,000 HP, results never shown, and no retry
+   was made. The default 900 s budget is shorter than seed 1's 16.6 min fight: FOC22-02's acceptance
+   needs `--budget`.
+5. A-15 at Chapter V: Vegnagun's figure spans most of the field, so every Vegnagun action fades the
+   advisor and intent cards, also while the command menu waits for input (177 of 361 samples with a
+   faded card). This is what the acceptance asks for; Bailey may want to see it.
+6. D-234: the picked C frames drop the dossier snapshots; the build keeps the three snapshots beside
+   the quote on Chapter II at 1600 and 2000 in battle (the face stays clear).
+7. Pre-existing on `main` too: Chapter X's pause CHAPTER tab in battle puts THE PARTY's values on
+   Seymour Natus's face from 1024 to 2000 wide (not in D-234's two plates).
+8. Pre-existing on `main` too: at 390x844 Chapter IX's CHAPTER tab in battle cuts "GLORIOUS BANG..."
+   (the builder's sweep did not cover IX at 390x844). The branch fixes main's other phone cuts
+   (BOSS HP 100%, the scene names).
+9. FOC23-01 is fixed on `main` by B5 (c85cfc22), not here.
+
+Game case: this note is a record only (FFX-2 for 1, 2 and 5; both for 3, 4 and the pause items).
