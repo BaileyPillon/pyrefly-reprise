@@ -5,6 +5,7 @@ import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { BattleResult } from '../../battle/common/types.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
+import { experimentRecord } from '../experiments/experimentRecords.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { createFullBleedStage, createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
@@ -139,7 +140,8 @@ export class ResultsScreen extends Screen {
     this.phoneQuery?.addEventListener?.('change', this.onLayoutChange);
     window.addEventListener('resize', this.onResize, { passive: true });
 
-    const record = this.app.save.chapter(this.opts.chapterId);
+    // A hidden experiment (FF7) reads its own store, read-only (C-2); the chapters read the save.
+    const record = chapter?.experimental ? experimentRecord(this.opts.chapterId) : this.app.save.chapter(this.opts.chapterId);
     if (this.victory && !chapter?.experimental) { // an experiment never records into the save
       const previousBestMs =
         this.opts.previousBestMs !== undefined ? this.opts.previousBestMs : record.bestTimeMs;

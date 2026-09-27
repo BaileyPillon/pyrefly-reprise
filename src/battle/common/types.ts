@@ -28,10 +28,8 @@
 // 0. Primitives
 // ---------------------------------------------------------------------------
 
-/** Which game a piece of content belongs to. `'ff7'`: the hidden Guard Scorpion experiment; each two-way branch is audited (`./game.ts`, `docs/plans/ff7-game-branch-audit.md`). */
-export type GameId = 'ffx' | 'ffx2' | 'ff7';
-import type { Ff7Combatant, Ff7Command, Ff7EnemyFields, Ff7MessageTag, Ff7PartyBuild } from './types-ff7.ts';
-export type * from './types-ff7.ts';
+/** Which game a piece of content belongs to (`'ff7'`: the hidden experiment, `./types-ff7.ts`; branches audited in `./game.ts`). */ export type GameId = 'ffx' | 'ffx2' | 'ff7';
+import type { Ff7Combatant, Ff7Command, Ff7LimitGaugeFields, Ff7MessageTag, Ff7PartyBuild } from './types-ff7.ts'; export type * from './types-ff7.ts';
 
 /** Stable identifier for a combatant instance inside one battle. */
 export type CombatantId = string;
@@ -1308,9 +1306,7 @@ export type AbilityCategory =
   /** An X-2 dressphere command set entry. */
   | 'dressphere'
   /** An enemy-only action, including scripted no-damage flavour turns. */
-  | 'enemy'
-  /** FF7 only: the one Magic menu the party's Materia fills (Bolt, Ice, Cure) [ff7-battle-core §8.4, §9]. */
-  | 'magic';
+  | 'enemy' | 'magic'; // 'magic': FF7 only, the one Magic menu the Materia fills [ff7-battle-core §8.4, §9]
 
 /** One status this ability tries to apply. */
 export interface StatusApplication {
@@ -1680,8 +1676,7 @@ export type Command =
   | SpherechangeCommand
   | EscapeCommand
   | DefendCommand
-  | TriggerCommand
-  | Ff7Command; // FF7 only: Limit (never `'overdrive'`) and Change (`./types-ff7.ts`)
+  | TriggerCommand | Ff7Command; // Ff7Command: FF7 only, Limit (never `'overdrive'`) and Change (`./types-ff7.ts`)
 
 /** Command kinds, for exhaustive switches. */
 export type CommandKind = Command['kind'];
@@ -1891,15 +1886,7 @@ export type BattleEvent =
       /** Which mode or scripted rule paid out, for debugging. */
       cause?: string;
     })
-  | (BattleEventBase & {
-      type: 'message';
-      text: string;
-      kind: MessageKind;
-      /** FF7 only: what the line is (Search Scope's lock-on, a hint line and its speaker); absent in FFX and FFX-2. */
-      ff7?: Ff7MessageTag;
-    })
-  /** FF7 only: a Limit gauge changed; `value` 0–255 (full at 255), `level` 1–4, `ready` = Limit replaces Attack [ff7-battle-core §7]. Never `overdrive-gauge`. */
-  | (BattleEventBase & { type: 'limit-gauge'; actorId: CombatantId; value: number; level: number; ready: boolean })
+  | (BattleEventBase & { type: 'message'; text: string; kind: MessageKind; ff7?: Ff7MessageTag }) | (BattleEventBase & Ff7LimitGaugeFields) // FF7 only: `ff7` and `'limit-gauge'` (`./types-ff7.ts`)
   /**
    * Sensor / Scan revealed an enemy. The HUD opens the info panel.
    *
@@ -2571,8 +2558,6 @@ export interface EnemyDef {
   thinkingPeriod?: number;
   /** FFX-2: statuses held from the start that no Dispel removes (`[estimate]` reading; Trema's Spellspring; CONTRACT-CHANGES). */
   autoStatuses?: StatusId[];
-  /** FF7 only: the enemy's own FF7 stat block (`./types-ff7.ts`); the FF7 engine reads this, not `stats`. */
-  ff7?: Ff7EnemyFields;
 }
 
 /** A music change wired to a battle phase. */

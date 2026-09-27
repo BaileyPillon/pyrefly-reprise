@@ -296,3 +296,31 @@ export interface RowChangeCommand {
 
 /** FF7's own command kinds, widened into the shared `Command` union by `./types.ts`. */
 export type Ff7Command = LimitCommand | RowChangeCommand;
+
+/**
+ * A Limit gauge changed (FF7 only): `value` 0 to 255 (full at 255), `level` 1 to 4, `ready` = Limit
+ * replaces Attack [core §7]. Never `overdrive-gauge`. `./types.ts` joins it to `BattleEvent` with the
+ * shared event base (`seq`).
+ */
+export interface Ff7LimitGaugeFields {
+  type: 'limit-gauge';
+  actorId: CombatantId;
+  value: number;
+  level: number;
+  ready: boolean;
+}
+
+/**
+ * FF7's message tag, `BattleEvent` `'message'`'s optional `ff7` field: what the line is (Search
+ * Scope's lock-on, a hint line and its speaker); absent in FFX and FFX-2. The type is
+ * {@link Ff7MessageTag} above.
+ *
+ * `EnemyDef.ff7` is added here by module augmentation, so `./types.ts` does not grow (C-3): the
+ * enemy's own FF7 stat block; the FF7 engine reads this, not `stats`.
+ */
+declare module './types.ts' {
+  interface EnemyDef {
+    /** FF7 only: the enemy's own FF7 stat block; the FF7 engine reads this, not `stats`. */
+    ff7?: Ff7EnemyFields;
+  }
+}

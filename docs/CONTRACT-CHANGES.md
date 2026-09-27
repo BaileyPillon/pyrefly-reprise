@@ -6,6 +6,27 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `types.ts`, `types-ff7.ts`: FF7's additions move out so `types.ts` does not grow (check C-3)
+
+**FF7 only** [AGENTS.md hard rule 14]; no FFX or FFX-2 type changes shape. The release-readiness check
+(C-3) found `types.ts`, a contract file over 400 lines, grown from 2,660 to 2,675 lines by the FF7
+additions (rule 7: a file over 400 lines must not grow). After the merge of `main` at `a44297ca`
+(2,667 lines there) it is back at **2,667**, the same as `main`:
+
+- `EnemyDef.ff7` now arrives by **module augmentation** from `types-ff7.ts`
+  (`declare module './types.ts' { interface EnemyDef { ff7?: Ff7EnemyFields } }`); the field, its
+  type and every reader are unchanged. `types-ff7.ts` is always in the program (re-exported by
+  `types.ts`), so the augmentation always applies.
+- The `'limit-gauge'` event's fields move to `types-ff7.ts` as `Ff7LimitGaugeFields`;
+  `BattleEvent` joins them with the shared base (`BattleEventBase & Ff7LimitGaugeFields`), so the
+  union member is the same type as before. The `'message'` event's optional `ff7?: Ff7MessageTag`
+  is on its one line.
+- `AbilityCategory`'s `'magic'`, `Command`'s `Ff7Command` and `GameId`'s doc comment are folded onto
+  existing lines; the import and the `export type *` re-export of `types-ff7.ts` share one line.
+
+No renamed or removed export; every importer compiles unchanged. `tests/unit/ff7-class-a.test.ts`
+checks the one-line form and the augmentation.
+
 ## 2026-09-27 — `types.ts`: `EnemyGroupDef.opensAsSeparateBattle` (PR-0107, built OFF)
 
 **FFX-2 only** [AGENTS.md hard rule 14]: the flag marks Chapter VI's Acts II and III, which the
