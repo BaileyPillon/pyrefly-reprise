@@ -44,6 +44,12 @@ describe('pause labels (iter2 B6)', () => {
     expect(rule(".pause__body[data-tab='controls'] .pause__k", phone)).toMatch(/white-space:\s*normal/);
   });
 
+  it('GUIDE: the STRATEGY GUIDE switch label has the settings floor, so it is whole at 1280x720', () => {
+    // Measured on a production build: 140 px of text in a 122 px cell at 1280x720 ("STRATEGY GU…").
+    const k = rule(".pause__col--wide[data-col='guide-switch'] .pause__k");
+    expect(k).toMatch(/width:\s*clamp\(150px,/);
+  });
+
   it('PR-0117: on the phone the Garment Grid name wraps instead of ellipsising', () => {
     const phone = /@media \(max-width: 620px\) \{([\s\S]*)\}\s*$/.exec(CSS)![1]!;
     const v = rule(".pause__col .pause__row[data-row='grid'] .pause__v", phone);

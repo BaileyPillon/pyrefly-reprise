@@ -42,6 +42,16 @@
   margin-right: clamp(18px, 1.6vw, 32px);
 }
 
+/*
+ * The GUIDE tab's one switch reads STRATEGY GUIDE, the same 140 px of text the
+ * OPTIONS column's floor was sized for (PR-0151), in the plain wide key column:
+ * cut to "STRATEGY GU…" at 1280x720 (iter2 B6 label sweep). It takes the
+ * settings floor. Game case: both (one pause).
+ */
+.pause__col--wide[data-col='guide-switch'] .pause__k {
+  width: clamp(150px, 9.5vw, 190px);
+}
+
 @media (max-width: 620px) {
   /* A phone column is 350 px: the sentence wraps, the binding never does. */
   .pause__body[data-tab='controls'] .pause__row {
