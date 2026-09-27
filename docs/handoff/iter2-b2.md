@@ -212,7 +212,7 @@ hashes cannot change. Dev server on 6500 stopped by PID.
 - CHK-B2-5 (minor, per game): A-2's held frame leaves out the dialogue box the approved tile shatters; judge when
   B5 wires the line and Bailey sees the implosion frames (A-2 stays OFF until then).
 - CHK-B2-6 and later (minor): PR-0072 pool hidden under the command menu at 1600x900; the phone queue banner over
-  Seymour Flux's head (HUD batches); `ShotRules.ffx2Framing` duck typing to check at the FF7 merge.
+  Seymour Flux's head (HUD batches); `ShotRules.ffx2Framing` duck typing to check at the FF7 merge (closed at the merge, 2026-09-27: the presenter now also requires `engine.state().game !== 'ff7'`; FF7's fixed camera and null moment overlay already kept A-1, A-12 and the roll off its fight).
 
 **Game case:** FFX-2 only (a confirmed FFX-2 command charges on the ATB while the next girl's menu opens; FFX's CTB
 has no charge and its cut-in is unchanged).
