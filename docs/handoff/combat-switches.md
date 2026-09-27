@@ -146,3 +146,44 @@ Code: `src/battle/ffx2/{constants,internal,resolve,resolve-hp}.ts`, `src/battle/
 Tests: the eleven files in the re-pin table. Paper: this file.
 Scratch (not committed): `D:/Tools/pyrefly-scratch/combat-switches/` (bench logs and hash files, the
 build, the real-key scripts and frames).
+
+## CHECK (independent, 2026-09-27 ~19:30 EDT; the checker did not build this branch)
+
+Branch `combat-switches` at `1d98403a`, worktree clean, nothing merged into main. `origin/main` is
+`47ab4ae8`, an ancestor of the branch; `git merge-tree --write-tree origin/main HEAD` is clean (exit 0).
+
+| Claim | How it was checked | Result |
+|---|---|---|
+| Switches set as decided | read the diff: `IMMUNE_HITS_SKIP_CHAIN = true`, `LEBLANC_SCRIPT_SINIROTHX = true`, `SEPARATE_BATTLE_GAUGES = false`, `GAGAZET_AEON_ARM = 'a'`; PR-0124 files untouched; no boss number in the diff (rule 6) | holds |
+| IC-1 on by default (FFX-2) | engine, not grep: Chapter XV (`driveDen`, shipped kit, D = 0) seeds 1-30, every immune `miss` checked for a `chain` event on the same target just before it | default: 93 immune hits, **0** chained; forced off: 108 immune hits, 43 chained |
+| PR-0106 on by default (FFX-2) | engine: `driveChapter6` seeds 1-20, D = 0, Leblanc's `action-start`s in Act III | default: turn 5 is Fan Slap on **20/20**, the guard only on turn 1; forced off: turn 5 Fan Slap 0/20, guard on 5, 10, 15 (seed 1 default: guard, Fan Slap, Fira, White Wind, **Fan Slap**, Mach Fan) |
+| PR-0179 arm a (FFX) | read the built `gagazetBuild`, `yojimboCavernBuild`, `highbridgeBuild`, `viaPurificoBuild` | I and IX carry §6.4.3's five rows (HP, STR, DEF, MAG, MDEF, AGI checked against `research/ffx-combat-core.md` §6.4.3); X and XIV Bahamut 2,935 / 2,935, their other four D-186's rows, as arm a was defined and benched |
+| FFX-2 benches reproduce | `PYREFLY_MEASURE=1 B1_ARMS=off,pre` (IV, V, VI, XI, XIII, XV; 200 seeds x 3 speeds) | every win count in the table above reproduced exactly; my 3,600 `pre` hashes equal `before-hash.json` (0 differ), my `off` hashes equal `after-hash.json` (0 differ); 775 logs move |
+| FFX benches reproduce | `yojimbo-bench`, `natus-shipped-bench`, `isaaru-tactic-bench` under arm a and under `B1_AEON_ARM=shipped` | 143 -> 153, 169 -> 159, 125 -> 173 (and 98 / 50 / 124 -> 33 / 17 / 200 for XIV's other lines): exact |
+| FFX-2 goldens moved only for these switches | main's versions of the six FFX-2 files (`iter2-b1-switches`, `ffx2-all-target-hits`, `ffx2-hit-closes-menu`, `den-of-woe-carry`, `ffx2-menu-cancel-delay`, `strategy-ffx2-leblanc`) run against this branch with the two constants mocked | mocked **off**: 59/59 pass; mocked **on** (control): exactly 7 fail, the re-pins listed above |
+| FFX re-pins moved only for arm a | `strategy-seymour-flux` and `advisor-degenerate-boards` under `B1_AEON_ARM=shipped` vs the default | shipped: seeds 7 and 20260916 lose (the two re-pinned cases fail), 17/40, 78/160, card-follower 22/40; arm a: all pass, 18/40, 79/160, 18/40 |
+| Real-key evidence | read `D:/Tools/pyrefly-scratch/combat-switches/shots/` and the run logs; the build (18:15) postdates every source edit (last 18:12) | `xiv-2-bahamut-menu-2935.jpg` shows Bahamut 2935/2935 in the HUD; `xv-seed1.log` 2 Hero Drinks by real keys, 2 immune hits, 0 chains opened by them, 0 page errors. Not re-driven by the checker |
+| `tsc --noEmit` | run | clean (exit 0) |
+| orphans | `node tools/orphans.mjs` here and in the main tree | 24 and 24 |
+| Full suite (once) | `vitest run --testTimeout=60000` | **597 files pass, 5 skipped, 0 fail** (9,411 tests) |
+| House style | line counts of every touched src/test file | largest 377 (`gagazet.ts`); all under 400 |
+
+Findings (none blocks the merge):
+
+- **minor, disclosed:** arm a makes Gagazet's aeons stronger than Zanarkand's and Dream's End's (open
+  item 1), and `data-ffx-builds` now pins that inversion as a known gap instead of the monotonic rule.
+  Needs Bailey's word on Chapters II and III.
+- **minor, disclosed:** Chapter X's shipped tactic drops 169 -> 159 of 200 and XIV's non-shipped
+  lines collapse (98 -> 33, 50 -> 17) under arm a; this is the measured table Bailey answered.
+- **minor, disclosed:** the Chapter I advisor card-follower drops 22 -> 18 of 40, and its floor was
+  lowered 20 -> 18. Advisor v3 (D-271, due in the next build) touches the same board: whichever
+  merges second must re-measure this floor rather than inherit either number.
+- **minor:** in Chapters X and XIV Bahamut (2,935) now sits far above the other four aeons (1,146 to
+  1,515, D-186's rows). That is arm a as defined in the method check ("X and XIV inherit" the
+  Gagazet preset, whose only inherited aeon is Bahamut), but D-243's record reads more broadly
+  ("superseding D-186's Chapter-XIV-specific figures"); worth one line to Bailey.
+- **process, disclosed by the builder:** one `rmdir` of an empty scratch folder it had created
+  (`tests/unit/zz`), against the brief's no-deletes rule; nothing tracked was affected.
+
+Checker's scratch (not committed): `D:/Tools/pyrefly-scratch/combat-switches-check/` (bench log,
+hash file, the engine probe, the mocked-constant runs, the suite log). No server was started.
