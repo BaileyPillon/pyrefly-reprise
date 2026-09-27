@@ -72,10 +72,12 @@ describe('spell effect registry', () => {
     expect(resolveSpellFx(undefined, undefined, true)).toBe('cure');
     expect(resolveAbilityFx('no-such-ability', 'ffx', 'ice')).toBe('ice');
     expect(resolveAbilityFx(undefined, 'ffx2', undefined)).toBe('bloom');
-    // Non-elemental magic keeps today's bloom (Flare, Mega Flare): the
-    // specials are not part of the approved pick.
+    // Non-elemental magic keeps today's bloom (Flare, FFX's Mega Flares).
+    // D-233 draws FFX-2 Bahamut's Mega Flare, and only that one
+    // (tests/unit/spellfx-specials.test.ts).
     expect(resolveAbilityFx('flare', 'ffx')).toBe('bloom');
-    expect(resolveAbilityFx('x2-bahamut-mega-flare', 'ffx2')).toBe('bloom');
+    expect(resolveAbilityFx('mega-flare', 'ffx')).toBe('bloom');
+    expect(resolveAbilityFx('x2-bahamut-mega-flare', 'ffx2')).toBe('megaflare');
   });
 
   it("reads the engines' own fallback abilities (the ATB Attack, Bahamut's Curse)", () => {

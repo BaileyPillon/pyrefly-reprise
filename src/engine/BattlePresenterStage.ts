@@ -47,7 +47,7 @@ export interface PaintedStageOptions {
   /** Mid-battle entrances by combatant id. Defaults to what the scene published (`StageArrivals.ts`). */
   arrivals?: ArrivalDirectors;
   /** The spell effects' skin, overlay hook, quality tier and flash rules (`spellfx/`). Without `overlay` they never draw. */
-  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash'>;
+  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate'>;
 }
 
 interface StagedActor {

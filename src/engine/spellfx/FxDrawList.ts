@@ -95,6 +95,17 @@ export class FxDrawList {
     return capActor(this.flash, a);
   }
 
+  /** How wide the bloom over a figure is: 1.3 on a crit (the old impact bloom's crit size). */
+  bloomScale = 1;
+
+  /**
+   * The big glow laid over a figure: capped by REDUCE FLASHES at its `peak`,
+   * times `k` (the effect's envelope), and widened on a crit.
+   */
+  bloom(col: string, x: number, y: number, size: number, peak: number, k = 1): void {
+    this.sprite('glow', col, x, y, size * this.bloomScale, this.actorCap(peak) * k);
+  }
+
   /** A full-screen wash, after the REDUCE FLASHES rules. */
   wash(id: number, col: string, a: number): void {
     if (a <= 0.003) return;

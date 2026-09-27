@@ -177,6 +177,10 @@ export interface VfxPort {
       hitIndex?: number;
       targets?: readonly CombatantId[];
       action?: number;
+      /** Who cast it: a group effect (Mega Flare, D-233) is drawn from them. */
+      sourceId?: CombatantId;
+      /** A critical hit: the drawn effect keeps the impact bloom's 1.3x crit size. */
+      crit?: boolean;
     },
   ): number;
 }

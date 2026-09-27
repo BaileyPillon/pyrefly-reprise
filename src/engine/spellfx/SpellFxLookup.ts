@@ -13,6 +13,7 @@ import { ABILITIES as FFX2_ABILITIES } from '../../data/ffx2/index.ts';
 import { CORE_ABILITIES as FFX_CORE } from '../../battle/ffx/registry.ts';
 import { defaultAbilities as FFX2_FALLBACK } from '../../battle/ffx2/abilities.ts';
 import { resolveSpellFx, type AbilityFxShape, type FxGame, type SpellFxId } from './SpellFxRegistry.ts';
+import { specialFx } from './SpellFxSpecials.ts';
 
 const FFX_CORE_BY_ID = new Map(FFX_CORE.map((a) => [a.id, a]));
 
@@ -35,7 +36,10 @@ export function abilityShapeFor(id: string | undefined, game: FxGame): AbilityFx
   };
 }
 
-/** The effect an action draws, from its ability id, its element and whether it healed. */
+/**
+ * The effect an action draws, from its ability id, its element and whether it
+ * healed. A special moment (D-233) is looked up by id in its own game first.
+ */
 export function resolveAbilityFx(id: string | undefined, game: FxGame, element?: string, heal = false): SpellFxId {
-  return resolveSpellFx(abilityShapeFor(id, game), element, heal);
+  return specialFx(id, game) ?? resolveSpellFx(abilityShapeFor(id, game), element, heal);
 }

@@ -159,7 +159,7 @@ export function thunder(o: FxDrawList, t: number, T: FxTarget): void {
     for (let i = 1; i < 5; i++) pts.push([x + i * 14 * k * (r() - 0.3), y + (r() - 0.5) * 30 * k]);
     o.path(pts, 2 * k, '#FFF4B0', 0.9);
   }
-  o.sprite('glow', '#FFF2A0', T.cx, T.cy, 420 * sc, o.actorCap(0.6) * env(t, 0.42, 1.2, 0.02, 0.6));
+  o.bloom('#FFF2A0', T.cx, T.cy, 420 * sc, 0.6, env(t, 0.42, 1.2, 0.02, 0.6));
   o.add = false;
 }
 

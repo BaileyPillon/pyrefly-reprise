@@ -24,6 +24,8 @@ export interface FxTarget {
   fy: number;
   sc: number;
   k: number;
+  /** A group effect's landing point (Mega Flare: the party's centre), in CSS pixels. */
+  party?: { x: number; y: number };
 }
 
 export function targetFromRect(r: { x: number; y: number; w: number; h: number }, k: number): FxTarget {
