@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FF7 HUD A+</title>
+<style>
+/* Fonts: all OFL. M PLUS Rounded 1c and Russo One (latin subsets from Google Fonts, OFL files
+   beside them in fonts/); Rajdhani, Silkscreen and Chakra Petch are the repo's own public/fonts. */
+@font-face{font-family:'M PLUS Rounded 1c';src:url(fonts/MPLUSRounded1c-Medium-500.latin.woff2);font-weight:500}
+@font-face{font-family:Dmg;src:url(fonts/RussoOne-Regular.latin.woff2)}
+@font-face{font-family:Rajdhani;src:url(../../../../../public/fonts/rajdhani/Rajdhani-SemiBold-600.woff2);font-weight:600}
+@font-face{font-family:Silkscreen;src:url(../../../../../public/fonts/silkscreen/Silkscreen-Bold-700.woff2);font-weight:700}
+@font-face{font-family:Chakra;src:url(../../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2);font-weight:700}
+body{margin:0;background:#222}
+section{position:relative;overflow:hidden;margin:0 0 20px;background:#000}
+section.desk{width:1600px;height:900px}
+section.phone{width:390px;height:844px}
+.stage{position:absolute;left:0;top:0;width:100%;height:100%}
+.stage.pillar{left:200px;width:1200px}
+.scene{width:100%;height:100%;display:block}
+.hud{position:absolute;inset:0}
+.hud div{position:absolute;box-sizing:border-box}
+.t{white-space:nowrap;font-variant-numeric:tabular-nums}
+.bg{inset:0;background:linear-gradient(to right,var(--bl),var(--br))}
+.bg::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to right,var(--tl),var(--tr));
+ -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent)}
+.fr{inset:0}
+.gb{border-style:solid;border-color:#A8A8A8 #5F5F5F #3B3B3B #929292}
+.cur{line-height:0}
+.cur svg{display:block}
+.strip{left:0;right:0;background:#000}
+/* sheet furniture, outside the HUD layer */
+.chip{position:absolute;right:14px;top:132px;font:700 12px Chakra;letter-spacing:.16em;color:rgba(244,241,232,.72);background:rgba(0,0,0,.5);padding:4px 8px}
+.chip.pillar{right:214px}
+.chip.phone{top:60px;right:8px;font-size:8.5px;letter-spacing:.1em;padding:2px 5px}
+</style></head>
+<body><div id="root"></div>
+<script src="glove.js"></script><script src="scene.js"></script><script src="hud.js"></script><script src="frames.js"></script>
+</body></html>
