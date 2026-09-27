@@ -102,10 +102,11 @@ export const evraeAirshipScripts: ChapterScripts = {
 
     // --- Beat 2 — Brother finds her; Cid turns the ship -------------------
     sfx('cursor-move'), // requested: comm-click
-    // Brother speaks Al Bhed and Rikku carries it across, as she does all
-    // through FFX. See the handoff: this is uncertain line 1.
+    // Brother's Al Bhed-inflected English (§1.17) stays his. Rikku no longer
+    // "translates" a line the player has just read: she adds the when
+    // (PR-0160, D-213, Bailey 2026-09-26: the reword, not a cipher).
     say('brother', 'YUNA! Bevelle! They are marrying her to that man!'),
-    say('rikku', 'He says Bevelle. He says within the hour.'),
+    say('rikku', "It's in Bevelle. And it's within the hour!"),
     say('cid', 'Bevelle. Fine. Everybody hold on to something.'),
     say('cid', 'Nobody asked me twice. Nobody is going to have to.'),
     // §1.17's guardrail: one short, unfunny line of real fear for Yuna.
@@ -278,17 +279,20 @@ export const evraeAirshipScripts: ChapterScripts = {
       camera('action', 300),
       wait(700), // hold the throat, uncovered, before the callout arrives
       say('wakka', 'Its throat! Watch its throat, ya?', { auto: 1200 }),
-      say('auron', 'Out of its reach. Now.', { auto: 1200 }),
+      say('auron', 'Out of its reach. Now.', { auto: 1200, fallback: [{ who: 'tidus', text: 'Get out of its reach! Now!' }] }),
       camera('idle', 300),
     ],
     'evrae-out-of-breath': [
       say('rikku', 'It missed! It totally missed!', { auto: 1200 }),
-      say('lulu', 'The distance did that. Not you.', { auto: 1400 }),
+      say('lulu', 'The distance did that. Not you.', { auto: 1400, fallback: [{ who: 'wakka', text: 'Distance did that, ya? Not you.' }] }),
     ],
     'evrae-haste-phase': [
       camera('action', 300),
       say('tidus', "It's faster. Why's it faster?", { auto: 1200 }),
-      say('auron', 'It stopped guarding. Now it hunts.', { auto: 1400 }),
+      say('auron', 'It stopped guarding. Now it hunts.', {
+        auto: 1400,
+        fallback: [{ who: 'wakka', text: "It quit guarding, ya? Now it's hunting." }],
+      }),
       camera('idle', 300),
     ],
     'evrae-first-petrify': [

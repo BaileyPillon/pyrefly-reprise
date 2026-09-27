@@ -34,10 +34,10 @@ import { CutsceneStage } from './CutsceneStage.ts';
  * says both.
  */
 export const CUTSCENE_HINTS: ControlHintItem[] = [
-  // Touch (PR-0073): a tap on this chip or on the dialogue card advances (both carry `confirm`). A held
-  // touch fast-forwards nothing, so on touch skip is left to the menu's SKIP SCENE, which the chip opens.
+  // Touch (PR-0073): a tap on this chip or on the dialogue card advances (both carry `confirm`). A held touch or
+  // mouse button fast-forwards nothing (`Input` reports clicks only, CHK-015), so skip is left to the menu chip.
   { keyboard: 'Enter', gamepad: 'Cross', label: 'advance', action: 'confirm', touch: 'Tap' },
-  { keyboard: 'Hold Enter', gamepad: 'Hold Cross', label: 'skip', pointer: 'Hold click', touch: null },
+  { keyboard: 'Hold Enter', gamepad: 'Hold Cross', label: 'skip', pointer: null, touch: null },
   // Esc opens the pause menu, which is where SKIP SCENE also lives.
   { keyboard: 'Esc', gamepad: 'Circle', label: 'menu', action: 'cancel', touch: 'Tap here' },
 ];

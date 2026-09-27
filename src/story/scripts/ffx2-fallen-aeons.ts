@@ -41,7 +41,7 @@
 
 import type { MidBattleTrigger } from '../../battle/common/types.ts';
 import type { ChapterScripts, StoryScript } from '../dsl.ts';
-import { battleStart, beat, camera, fade, music, results, say } from '../dsl.ts';
+import { battleStart, beat, camera, fade, hideActor, music, parallel, results, say, showActor } from '../dsl.ts';
 
 /** The between-links rig the Road scene publishes and watches for (`ROAD_LINKS_RIG`; a test pins the two). */
 export const FALLEN_AEONS_LINKS_RIG = 'road-links';
@@ -150,9 +150,15 @@ const POST: StoryScript = [
   say('yuna-x2', 'Rest now. All of you.'), // 18
   say('rikku-x2', 'Flowers? Down here?'), // 19
   results(),
+  // PR-0133 (D-211): each of the trio stands on the plate for their own line, in the one spot
+  // right of the box (`app/screens/cutsceneFigures.ts`), as Chapters XII and XIV stand theirs.
+  showActor('leblanc', { ms: 500, facing: -1 }),
   say('leblanc', 'Took you long enough, Gullwings.'), // 20
+  parallel(hideActor('leblanc', 300), showActor('ormi', { ms: 400, facing: -1 })),
   say('ormi', 'Boss, they look tired.'), // 21
+  parallel(hideActor('ormi', 300), showActor('logos', { ms: 400, facing: -1 })),
   say('logos', 'Supplies. For a price, naturally.'), // 22
+  hideActor('logos', 500),
   say('paine', 'Back to the ship. Then down.'), // 23
 ];
 

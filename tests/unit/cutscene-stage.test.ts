@@ -88,6 +88,9 @@ describe('which chapters the stage changes (measured, pinned)', () => {
       // (writing-bible §3 E5 post; the script already posed and hid him).
       '5 ffx2-vegnagun-shuyin post': ['show shuyin', 'fx pyreflies-rising', 'hide shuyin'],
       '7 seymour-anima-macalania post': ['fx sending-dance @yuna'],
+      // Chapter XI (FFX-2 only, PR-0133, D-211): Leblanc, Ormi and Logos each stand on the plate for their
+      // epilogue line, one at a time in the one spot right of the box, as XII and XIV stand theirs.
+      '11 ffx2-fallen-aeons post': ['show leblanc', 'hide leblanc', 'show ormi', 'hide ormi', 'show logos', 'hide logos'],
     });
   });
 
@@ -97,7 +100,18 @@ describe('which chapters the stage changes (measured, pinned)', () => {
     // Seymour Natus (FFX only, Chapter X, listed 2026-09-25) stands up in his own pre scene only.
     // Isaaru (FFX only, Chapter XIV): he waits in his own pre scene and kneels in his own post scene.
     // Shuyin (FFX-2 only, Chapter V, PR-0133) stands in his own post scene only.
-    expect(Object.keys(CUTSCENE_FIGURES)).toEqual(['ginnem', 'trema', 'seymour-omnis', 'seymour-natus', 'isaaru', 'shuyin']);
+    // Leblanc, Ormi and Logos (FFX-2 only, Chapter XI, PR-0133, D-211) stand in their own epilogue only.
+    expect(Object.keys(CUTSCENE_FIGURES)).toEqual([
+      'ginnem',
+      'trema',
+      'seymour-omnis',
+      'seymour-natus',
+      'isaaru',
+      'shuyin',
+      'leblanc',
+      'ormi',
+      'logos',
+    ]);
     const own: Record<string, string[]> = {
       'yojimbo-cavern': ['ginnem'],
       'ffx2-trema': ['trema'],
@@ -105,6 +119,7 @@ describe('which chapters the stage changes (measured, pinned)', () => {
       'seymour-natus': ['seymour-natus'],
       'isaaru-via-purifico': ['isaaru', 'isaaru'],
       'ffx2-vegnagun-shuyin': ['shuyin'],
+      'ffx2-fallen-aeons': ['leblanc', 'ormi', 'logos'],
     };
     for (const c of [...CHAPTERS, ...UNLISTED_CHAPTERS]) {
       const shown = [...figuresIn(c.scriptsRef?.pre ?? []), ...figuresIn(c.scriptsRef?.post ?? [])];

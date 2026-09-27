@@ -17,7 +17,7 @@
  */
 
 import { artUrl } from '../../../engine/PaintedArt.ts';
-import { loadArtManifest, title2xUrlFor } from '../../../engine/ArtManifest.ts';
+import { artManifest, loadArtManifest, title2xUrlFor } from '../../../engine/ArtManifest.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 
 /**
@@ -164,10 +164,19 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
  * leaves the 1x plate exactly as it is rather than risking a 404 on the one
  * image the screen is.
  */
-/** `srcset`/`sizes` attributes for the markup, or `''` when we cannot say yet. */
+/**
+ * `srcset`/`sizes` attributes for the markup.
+ *
+ * With the manifest not yet in hand (a cold, slow first visit, A-16) the list is
+ * offered anyway: `index.html` preloads the plate with exactly these candidates,
+ * and a plane that starts on `src` alone and gains a `srcset` later has the 1x
+ * request aborted under it (the t1-b2b finding, measured again at 4 Mbps).
+ * `upgradeTitlePlanes` takes the list back if the manifest then says the master
+ * is not on disk.
+ */
 function titleSrcsetNow(): string {
   const url = artUrl(TITLE_PLATE);
-  const retina = title2xUrlFor(url);
+  const retina = title2xUrlFor(url) ?? (artManifest() === null ? url.replace(/\.png(?=$|[?#])/i, '.2x.webp') : null);
   if (!retina) return '';
   return (
     `srcset="${escapeHtml(`${url} ${PLATE_1X_WIDTH}w, ${retina} ${PLATE_2X_WIDTH}w`)}" ` +
@@ -180,9 +189,17 @@ export function upgradeTitlePlanes(root: ParentNode): Promise<void> {
   const imgs = Array.from(root.querySelectorAll('.fe-title__plane img'));
   return loadArtManifest().then(() => {
     const retina = title2xUrlFor(url);
-    if (!retina) return;
     for (const img of imgs) {
       if (!(img instanceof HTMLImageElement) || img.getAttribute('src') !== url) continue;
+      // The markup offered the master before the manifest could say (A-16); it is not there.
+      if (!retina) {
+        img.removeAttribute('srcset');
+        img.removeAttribute('sizes');
+        continue;
+      }
+      // Already offered in the markup: setting the same srcset again restarts the image
+      // request, and the browser aborts the one in flight (t1-b2b's aborted keyart request, A-16).
+      if (img.hasAttribute('srcset')) continue;
       img.sizes = titlePlateSizes();
       img.srcset = `${url} ${PLATE_1X_WIDTH}w, ${retina} ${PLATE_2X_WIDTH}w`;
     }

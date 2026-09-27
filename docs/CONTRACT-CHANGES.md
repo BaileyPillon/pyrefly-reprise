@@ -6,6 +6,27 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `dsl.ts`: `SayStep.fallback` (fielded speakers only, PR-0037) and the `'seymour-natus'` speaker
+
+**Both** for `fallback` [AGENTS.md hard rule 14]: the mid-battle line dispatch is shared story plumbing.
+Bailey, 2026-09-26 ~16:00 EDT, "I'll go with all of your recommendations" (D-212): only fielded
+characters speak mid-battle lines, with an authored fallback. **FFX only** for `'seymour-natus'`
+(Chapter X, the Natus portrait, B12 = b of the Natus draft; D-203).
+
+**Additive** in `src/story/dsl.ts`:
+- `SayStep.fallback?: SpeakerFallback[]` and the new `SpeakerFallback { who; text?; emotion? }`. During a
+  mid-battle beat, a line whose speaker is a party member not on the field goes to the first stand-in who
+  is (or who is not a party member at all), in the stand-in's own words when given; with none, the line
+  is dropped. Pre- and post-battle scenes ignore it. The rule lives in `src/story/fieldedSpeakers.ts`
+  (per-game party tables: FFX's bare ids, FFX-2's `-x2` voices and Paine) and is applied by
+  `src/app/screens/midbeatLineCard.ts` through `BattleScreenCutscenes.ts`.
+- `say()`'s options accept `fallback`.
+- `lintScript` lints each stand-in's own text like any line (length, CHK-007).
+- `SpeakerId` gains `'seymour-natus'`; `DialogueBox.defaultName` strips `-natus` (the plate reads
+  "Seymour") and `speaker-roles.ts` tags it Maester, as for `seymour-omnis`.
+
+No signature changes; a script without `fallback` plays exactly as before.
+
 ## 2026-09-26 — `dsl.ts`: `lintScript` also runs the story-text lint (CHK-007)
 
 **Both** [AGENTS.md hard rule 14]: the dialogue box is shared plumbing and prints its text literally in

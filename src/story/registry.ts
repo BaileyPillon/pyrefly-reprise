@@ -127,7 +127,7 @@ export const AI_EMITTED_TRIGGERS: Readonly<Record<ChapterKey, readonly string[]>
   'seymour-anima-macalania': [], // No Macalania AI emits one: its three beats go through `mid` [docs/handoff/chapter-macalania-script.md].
   'evrae-airship': [], // No Evrae AI emits one: its five beats go through `mid` [docs/handoff/chapter-evrae-script.md].
   'yojimbo-cavern': [],
-  'seymour-natus': [], // No Natus AI emits one (the B9 callouts are held, D-085); no `mid` beats either.
+  'seymour-natus': [], // No Natus AI emits one; the three Talk exchanges go through `mid` (PR-0204, D-203).
   'seymour-omnis': Object.values(OMNIS_STORY_TRIGGERS), // Omnis's nine callouts (`battle/ffx/ai/seymour-omnis-callouts.ts`)
   'ffx2-trema': TREMA_AI_TRIGGERS, // Trema's Meteor and Ultima lines (`battle/ffx2/ai/trema.ts`)
   'isaaru-via-purifico': [], // No Isaaru AI emits one: his beats go through `mid` (listed as is, 2026-09-25)

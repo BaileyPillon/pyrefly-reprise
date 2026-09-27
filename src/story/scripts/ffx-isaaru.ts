@@ -125,7 +125,8 @@ const MID_SCRIPTS: Record<string, StoryScript> = {
   [ISAARU_SEAMS.pterya]: seam('Pterya. Rise, and hold her here.', "Valefor... You can't come to me while he holds you."),
   [ISAARU_SEAMS.spathi]: seam('Spathi... let this be the last.', 'Not Bahamut. Not against himself.'),
   // Link 1: Grothia's gauge is full at the start (research §4.1), so Hellfire is his first move with an aeon out.
-  'grothia-ready': callout(say('lulu', 'Yuna. His aeon is ready. Guard first.')),
+  // PR-0037: Yuna fights alone here, so Lulu's warning is Yuna's own thought when Lulu stands back.
+  'grothia-ready': callout(say('lulu', 'Yuna. His aeon is ready. Guard first.', { fallback: [{ who: 'yuna', text: 'His aeon is ready. Guard first.' }] })),
 };
 
 const MID: MidBattleTrigger[] = [

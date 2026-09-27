@@ -1,0 +1,39 @@
+/*
+ * A-16 (both games): the title's first frame is the picture, never black.
+ * See `titleReveal.ts`. A new file because `frontend.css` is another batch's.
+ *
+ * The placeholder sits in the far plane's own stacking context (the plane is
+ * transformed, so `z-index: -1` stays inside it, under the `<img>`), graded
+ * like the far `<img>` (`frontend.css`) and softened so its 32 pixels read as
+ * distance, not as blocks.
+ */
+.fe-title__plane--far::before {
+  content: '';
+  position: absolute;
+  inset: -4%;
+  z-index: -1;
+  background: var(--fe-title-ph, none) center / cover no-repeat;
+  filter: saturate(0.94) brightness(0.78) contrast(1.08) blur(10px);
+  pointer-events: none;
+}
+/* A plate that 404s keeps the dusk gradient it has always fallen back on. */
+.fe-title__plane--far[data-art='missing']::before {
+  display: none;
+}
+
+/* Every layer waits for its decode, then all come in together. */
+.fe-title__plane img,
+.fe-title__cast {
+  transition: opacity 360ms ease;
+}
+.fe-title--decoding .fe-title__plane img,
+.fe-title--decoding .fe-title__cast {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fe-title__plane img,
+  .fe-title__cast {
+    transition: none;
+  }
+}

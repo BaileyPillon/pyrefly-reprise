@@ -6,9 +6,9 @@
  * contractions in 47 lines, so Tidus, Rikku, Wakka and Cid read alike.
  *
  * Kept as written, by the thresholds program's brief: Brother (§1.17's
- * Al Bhed-inflected English is his voice), Cid (untouched), and Rikku's
- * translation of Brother (PR-0160, a question for Bailey). The beats and the
- * line count stay.
+ * Al Bhed-inflected English is his voice) and Cid (untouched). Rikku's line
+ * after Brother's is reworded so it no longer repeats him (PR-0160, D-213:
+ * Bailey picked the reword over a cipher). The beats and the line count stay.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -55,7 +55,7 @@ describe('Chapter VIII voice pass (PR-0159)', () => {
     expect(says.filter((s) => stilted.test(s.text)).map((s) => `${s.who}: ${s.text}`)).toEqual([]);
   });
 
-  it('Brother, Cid and Rikku\'s translation of Brother are untouched', () => {
+  it('Brother and Cid are untouched', () => {
     expect(by('brother').map((l) => l.text)).toEqual([
       'YUNA! Bevelle! They are marrying her to that man!',
       'She is in there alone.',
@@ -71,6 +71,20 @@ describe('Chapter VIII voice pass (PR-0159)', () => {
       'Not like this.',
       'Missiles away! Count them, they are not free!',
     ]);
-    expect(by('rikku').map((l) => l.text)).toContain('He says Bevelle. He says within the hour.');
+  });
+
+  it('PR-0160 (D-213): Rikku no longer repeats Brother; she carries Bevelle and "within the hour"', () => {
+    const pre = flatten(evraeAirshipScripts.pre).filter((x): x is SayStep => x.type === 'say');
+    const i = pre.findIndex((s) => s.who === 'brother');
+    const brother = pre[i]!;
+    const rikku = pre[i + 1]!;
+    expect(rikku.who).toBe('rikku');
+    expect(rikku.text).toMatch(/Bevelle/);
+    expect(rikku.text).toMatch(/within the hour/);
+    expect(rikku.text).not.toMatch(/\bHe says\b/);
+    // No clause of Brother's line comes back in hers.
+    for (const clause of brother.text.split(/[!.?]\s*/).filter((c) => c.split(' ').length > 2)) {
+      expect(rikku.text).not.toContain(clause);
+    }
   });
 });
