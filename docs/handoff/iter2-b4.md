@@ -169,3 +169,68 @@ matches the picked frame, and never jumps mid-line. It does **not** meet "no int
 torsos or the speaking boss" in III and V at 1600 and 2000 when measured on every visible frame, at
 either speed. The builder's 0 px² was measured once per line, at a moment when the card was not yet
 shown.
+
+## REPAIR (one cycle, rule 15, 2026-09-27)
+
+Repairer: the builder's session, on the check's findings. Worktree `D:/pyrefly-iter2-b4`, from `5f66f8df`.
+Browser work only after `round14-capture.done` existed.
+
+**Method check (rule 15).** PR-0211 had failed twice (the fixed band in `t1-b4a`, then option A under the
+check's every-frame measure), so the method changed before the third try. Before touching code, the
+check's own script was re-run with two extra fields (the boxes at a line's first visible frame and at
+its worst frame, and the camera's state), on this branch's production build. It showed the cause
+exactly:
+
+- Every Chapter III hit on `bottom-right` and Shuyin's hit in Chapter V came **after the line had
+  played**, at 2.2 to 2.4 s into its visible time: the beat's next step is a camera move
+  (`camera('idle', 400)` after Auron's two Chapter III lines, `camera('action', 700)` after "No. I'll
+  end all of it."), and it ran while the finished line was still up. Yuna moved 114 px and Shuyin 92 px
+  under the card. Inside a line the boxes drift at most about 8 px (idle sway).
+- At Chapter III's opening camera ('bfa-low', 'bfa-talk'), no 0.7 slot is clear: the speaking Aeon's
+  box reaches both top slots and Yuna's top 65% both bottom ones, so the band came up.
+
+Then the fix was measured with the check's **unchanged** script, not the builder's.
+
+**Fixed (commit 22fefb80, game case both: one shared box and runner, Chapters III FFX and V FFX-2).**
+
+| Finding | Fix |
+|---|---|
+| PR-0211 acceptance (blocker) | (1) A beat's camera step now tells the card first (`cameraMoves`): the finished line is put away, and the next line is placed afresh for the new camera. (2) The pick keeps 1% of the width as room around every guarded box (the drift inside a line), counts the portrait's foot in the card's box, guards the party at face and torso (top 65%, the acceptance's measure) and prefers their whole boxes, and tries the same four slots at 0.6 before the band (`SMALL_CARD_SCALE`); a slot that crosses only legs still beats the band. |
+| Settle hid first lines (minor) | The hold now stops the box's own clock (typing and auto) and the beat's scene-time budgets, and ends once the boxes have held still for 120 ms (600 ms at most). Enter during the hold is ignored. |
+| Band used at the III opening (minor) | Gone at 1600 and 2000: those lines now take the 0.6 card top-left (`repair-iii-1600-small-card.jpg`). |
+| House style (minor) | `coach.css` back to 398 lines: the tap rule moved to `coach-taps.css` (4b326bff). `BattleScreenCutscenes.ts` is 500 (491 on main, 503 before): the wiring shrank; the file was already over. `dsl.ts` (634, contract file) and `CoachLayer.ts` (399) unchanged. |
+| Stand-in copy (minor, one line) | Tidus's Chapter I Zombie stand-in reads "Yuna, hold the cure! Not now!", right whoever is turned (ce3fb5c0, FFX only). |
+
+Unit tests first: 6 new cases in `line-card-placement.test.ts` and 2 in `line-card-hold.test.ts` fail on
+the old modules and pass now (the measured Chapter III boxes, legs over band, the guard, the hold and its
+cap, the camera step).
+
+**Checks.** `npx tsc --noEmit` clean. Full `vitest run --testTimeout=60000`: 500 files passed, 4 skipped;
+8,662 passed, 29 skipped, 1 todo. `node tools/orphans.mjs`: 24, as main. Production build `dist-rep`,
+`vite preview` on 6140, headless GPU Chromium; the server was stopped by its PID and `dist-rep` removed.
+Numbers in `docs/screenshots/iter2-b4/repair-report.json`.
+
+| Check (the checker's script, every visible frame, seed 1) | Result |
+|---|---|
+| III and V at 1600x900, 2000x1012, 390x844, **normal** speed (258 lines) | **0 px²** against every party top 65% and every speaking boss, on every visible frame; 0 moves while visible. Full party boxes: 0 on desktop; V at 390x844 8,289 px² (legs, on `lower`). |
+| The same at **fast** speed (258 lines) | **0 px²** torso and speaker everywhere; V 390 full box 8,310 px² (legs). |
+| Places | III 1600: top-left (the 0.6 card at the opening camera) and bottom-right; III 2000: top-left, top-right, bottom-right; V: top-left and bottom-right; phones: top, upper, lower, and in III the band (6 lines, in the empty dock under the party panel, `repair-iii-390-band.jpg`). |
+| Legibility | Shortest visible time 0.90 s ("Hn."; was 0.40 s), "Ifrit." 1.08 s (was 0.59), "Let it fire." 1.13 s (was 0.62). Held at most 0.68 s, typically 0.2 s in V and 0.5 s in III. |
+| Real keys, Chapter X (1600x900) | Enter on each menu, Q and the arrows for Auron: all three Talk exchanges, six lines, card top-left, 0 px²; Enter pressed three times while a card was held did not skip its line (`repair-natus-realkeys.jpg`). |
+| Real keys, Chapter III (1600x900) | Enter on each menu for 7 minutes: the Talk beat ("Hey! You still in there?", "..."), 0 px², card top-left; one Enter during the hold, the line kept its time. |
+| Frames | Shuyin's last line with the boxes outlined, the card clear of his box (`repair-v-1600-shuyin-last-line.jpg`); Paine's "Hn." (`repair-v-1600-paine-hn.jpg`); III at 2000 (`repair-iii-2000.jpg`). |
+
+**Open after the repair (for Bailey or a later batch).**
+
+- **The 0.6 card is an agent's addition, not a named property of the pick.** Bailey picked a compact
+  card in four slots with the band as fallback; the concept calls its sizes mockup values. The smaller
+  card (37.5% of the width, body text about 13 px at 1600x900) appears only when no 0.7 slot is clear,
+  which on seed 1 is Chapter III's opening camera. Question for Bailey: at that camera, the smaller card
+  top-left (`repair-iii-1600-small-card.jpg`), or the band over the party's legs as picked
+  (the check's `braskas-final-aeon-1600x900-s1-normal-01.jpg`)? Recorded as inferred, not named.
+- **The phone card and the intent bar** (minor): at 390x844 the `upper` slot still covers the second
+  line of the intent bar. Not changed here.
+- **The stand-in copy** (PR-0037): new agent wording across eight FFX chapters, still unread by Bailey.
+  One line was reworded above; the rest is unchanged.
+- **The phone results caption** (`.rresp`, outside PR-0172's acceptance, likely on main) and **the XI
+  idle costumes** (a note for the art track) stay as the check left them.
