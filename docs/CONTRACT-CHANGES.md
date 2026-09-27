@@ -6,6 +6,18 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — minigame protocol: FFX picker params and backing out (hotfix 24)
+
+**FFX only** [AGENTS.md hard rule 14]. No contract file changes: `types.ts`, `FFXBattleEngine` and
+`HudPort` are untouched. The protocol text in `docs/CONTRACTS.md` gains a paragraph:
+- Grand Summon's `minigame-request.params.aeons` is now `{ id, name, storedGauge }[]` (was bare
+  ids, which the overlay could not read; it threw and Valefor came out every time). Mix adds
+  `ingredients`, `recipes` and `recipeNames` beside the unchanged `inventory`
+  (`src/battle/ffx/pickerParams.ts`).
+- A cancelled or thrown picker goes back to the actor's menu through `FFXEngine.backOutOfMinigame()`,
+  probed by `BattlePresenterUtil.backOutOfMinigame`; engines without it (FFX-2, FF7) keep the bare
+  re-submit. `askMinigame` now returns `{ kind: 'result' | 'cancelled' | 'failed' }` (presenter-internal).
+
 ## 2026-09-27 — `types.ts`, `types-ff7.ts`: FF7's additions move out so `types.ts` does not grow (check C-3)
 
 **FF7 only** [AGENTS.md hard rule 14]; no FFX or FFX-2 type changes shape. The release-readiness check

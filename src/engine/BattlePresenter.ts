@@ -48,7 +48,7 @@ import {
   firstEnabled,
   INPUT_STREAK_LIMIT,
   LIVELOCK_SPINS,
-  askMinigame,
+  askMinigame, backOutOfMinigame,
   notifyHud,
   outcomeOf,
   previewOf,
@@ -450,10 +450,9 @@ export class BattlePresenter {
 
   /**
    * Open the overlay named by the request, then re-submit the **same** command
-   * with the outcome in `extra`. With nobody at the controls the command goes
-   * back bare — but note neither engine rolls a default for a bare re-submit
-   * (CONTRACTS.md says they should), which is why automated battles build their
-   * engine with minigames auto-resolved (`BattleScreenWiring.createEngine`).
+   * with the outcome in `extra`. With nobody at the controls it goes back bare
+   * (automated battles auto-resolve minigames, `BattleScreenWiring.createEngine`).
+   * Hotfix 24: a cancelled or broken picker returns an FFX turn to its menu.
    */
   private async resolveMinigame(
     engine: BattleEngine,
@@ -462,8 +461,9 @@ export class BattlePresenter {
   ): Promise<PlayResult> {
     const base = this.lastCommand;
     if (!base) return { dropped: 0 };
-    const human = !engineDefault && !this.auto;
-    const extra = human ? await askMinigame(this.deps.hud, request) : undefined;
+    const answer = !engineDefault && !this.auto ? await askMinigame(this.deps.hud, request) : undefined;
+    if (answer && answer.kind !== 'result' && backOutOfMinigame(engine)) return { dropped: 0 };
+    const extra = answer?.kind === 'result' ? answer.result : undefined;
     return this.play(engine.submit(extra && base.kind === 'overdrive' ? { ...base, extra } : { ...base }));
   }
 

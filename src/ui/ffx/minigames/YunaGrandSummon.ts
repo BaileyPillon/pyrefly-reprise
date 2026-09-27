@@ -2,7 +2,7 @@ import type { MinigameResult } from '../../../battle/common/types.ts';
 import { RawInputWatcher } from '../rawInput.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../cancelClaim.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
-import { arr, escapeHtml, MinigameCancelled } from './params.ts';
+import { arr, escapeHtml, keepRowInView, MinigameCancelled, num, str } from './params.ts';
 
 interface AeonEntry {
   id: string;
@@ -12,13 +12,30 @@ interface AeonEntry {
 }
 
 /**
+ * The engine's `aeons` param as rows, never throwing (hotfix 24). The engine
+ * sends `{ id, name, storedGauge }` (`battle/ffx/pickerParams.ts`); a bare id is
+ * shown by its id, and an entry with no id is left out, because a picker that
+ * throws hands the choice to the engine's default roll. FFX only.
+ */
+function aeonRows(v: unknown): AeonEntry[] {
+  const rows: AeonEntry[] = [];
+  for (const raw of arr<unknown>(v, [])) {
+    const entry = typeof raw === 'string' ? { id: raw } : raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : null;
+    const id = entry && typeof entry['id'] === 'string' && entry['id'] ? entry['id'] : null;
+    if (!entry || !id) continue;
+    rows.push({ id, name: str(entry['name'], id), storedGauge: num(entry['storedGauge'], 0) });
+  }
+  return rows;
+}
+
+/**
  * Yuna — Grand Summon [visual-bible §3.11.6]: pick any owned aeon; it arrives
  * with a full temporary gauge and its own stored gauge is untouched, so an
  * aeon already at 100 can fire two Overdrives back to back. Flag that case
  * with a `x2` chip — it is the entire reason Grand Summon exists.
  */
 export function openYunaGrandSummon(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
-  const aeons = arr<AeonEntry>(params['aeons'], []);
+  const aeons = aeonRows(params['aeons']);
 
   const overlay = new OverdriveOverlay();
   root.appendChild(overlay.el);
@@ -44,6 +61,7 @@ export function openYunaGrandSummon(root: HTMLElement, params: Record<string, un
             })
             .join('')
         : `<div class="ffx-mg-list__empty">No aeon is available to summon.</div>`;
+      keepRowInView(listEl, cursor); // the 5th aeon (Bahamut) sits below the list's four visible rows
     };
 
     const finish = async (aeonId: string): Promise<void> => {

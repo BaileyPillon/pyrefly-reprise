@@ -10,28 +10,12 @@
  */
 
 import type {
-  BattleEvent,
-  BattleResult,
-  BattleSetup,
-  BattleState,
-  Command,
-  Decision,
-  FFXBattleEngine,
-  FFXCombatant,
-  TurnPreview,
+  BattleEvent, BattleResult, BattleSetup, BattleState, Command, Decision, FFXBattleEngine, FFXCombatant, TurnPreview,
 } from '../common/types.ts';
 import { SeededRng } from '../common/rng.ts';
 import { FFXContentRegistry, getFFXRegistry } from './registry.ts';
 import {
-  type Ctx,
-  type EventInput,
-  canAct,
-  commandAbility,
-  has,
-  isAlive,
-  livingFriendlies,
-  rtOf,
-  tryActor,
+  type Ctx, type EventInput, canAct, commandAbility, has, isAlive, livingFriendlies, rtOf, tryActor,
 } from './state.ts';
 import { buildBattle } from './setup.ts';
 import { availableCommands } from './commands.ts';
@@ -162,6 +146,14 @@ export class FFXEngine implements FFXBattleEngine {
     this.awaitingInput = false;
     this.runTurn(actor, command);
     return this.buffer.slice();
+  }
+
+  /** Hotfix 24 (FFX only): the player left an Overdrive picker; the turn goes back to the menu, and the next pick asks again. */
+  backOutOfMinigame(): boolean {
+    const rt = this.ctx?.rt;
+    if (!rt?.pendingMinigame || !this.awaitingInput || rt.pendingMinigame.actorId !== rt.currentActorId) return false;
+    rt.pendingMinigame = null;
+    return true;
   }
 
   // -- internals ------------------------------------------------------------

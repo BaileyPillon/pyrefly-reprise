@@ -3,7 +3,7 @@ import { RawInputWatcher } from '../rawInput.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../cancelClaim.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
 import { ABILITIES } from '../../../data/ffx/index.ts';
-import { arr, escapeHtml, MinigameCancelled } from './params.ts';
+import { arr, escapeHtml, keepRowInView, MinigameCancelled } from './params.ts';
 
 interface RageEntry {
   id: AbilityId;
@@ -77,6 +77,7 @@ export function openKimahriRage(root: HTMLElement, params: Record<string, unknow
             })
             .join('')
         : `<div class="ffx-mg-list__empty">Kimahri has learned no Rage yet — Lancet one first.</div>`;
+      keepRowInView(listEl, cursor); // hotfix 24: a Rage past the fourth row stays in sight
     };
 
     const finish = async (rageId: AbilityId): Promise<void> => {

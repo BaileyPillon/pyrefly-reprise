@@ -38,6 +38,7 @@ import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
 import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
+import { heldOffStage } from './SummonStaging.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -204,6 +205,8 @@ export class PaintedStage implements BattleStage {
     // Only after every actor exists: the solver needs each fiend's real world
     // height, which is not known until its idle painting has loaded.
     this.applyFormation();
+    // PR-0181 (FFX): a re-stage while an aeon is out keeps the party off the field (`SummonStaging.ts`).
+    if (state.aeonId) for (const id of state.activeIds) this.actors.get(id)?.actor.setAlpha(0);
     // D-224: a Vegnagun link's seam re-stages the field (FFX-2, Ch V).
     const link = phaseForFormation(state.enemyIds);
     if (link) this.lighting.phase(link);
@@ -464,8 +467,9 @@ export class PaintedStage implements BattleStage {
     // to show the part would erase the very thing the ring marks (D-044).
     const anchored = id ? !!this.actors.get(id)?.anchor : false;
     const cover = id && !anchored ? new Set(this.occluders(id)) : new Set<CombatantId>();
+    const off = heldOffStage(this); // PR-0181: the party stays off while an aeon is out
     for (const [otherId, staged] of this.actors) {
-      const wanted = cover.has(otherId) ? alpha : 1;
+      const wanted = off.has(otherId) ? 0 : cover.has(otherId) ? alpha : 1;
       if (Math.abs(staged.actor.alpha - wanted) > 0.01) void staged.actor.fadeTo(wanted, 140);
     }
   }
