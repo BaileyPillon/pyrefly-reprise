@@ -269,10 +269,69 @@ not assumed; every other chapter within one seed of its baseline, Chapters III a
 decision cost at most 25 ms. Not expected from A: Isaaru (16 of 40 against the line's 28), which is
 the one open case for the later search track.
 
+## 6a. Built and measured (2026-09-27, branch `advisor-v3`)
+
+What was built differs from §6 in one place, and the difference was measured. The projection
+first ran on through the enemy's turns until everything in flight had landed and ranked on the
+worse of two sampled futures: on Chapter V (10 seeds) it lost 2 runs v2 won, once telling a girl a
+*sampled* Tail Beam had KO'd to raise herself. The built projection runs the fork **until
+everything in flight has landed or the next enemy moves, whichever is first** (one fixed seed; a
+replay of the same fork to the step before the enemy moved). What landed is on the board the card
+ranks; what did not is still in flight there, where the committed reading sees its cures, raises
+and item use, and a new rule drops a support row that is **the same move** as one still in flight
+(it cannot overtake it). Chapter V then went 10 of 10. The revive priority is built as §6 item 4,
+including "the card priced the raise above the line"; the FFX-2 held command is read off the engine
+(`engine` option), which the live HUD now passes.
+
+**Scorecard, 40 seeds, v2 vs v3, same tree** (`SCORECARD_V3=0` / `1`; FFX-2 at Wait split 0.5 s top
+/ 1.0 s held; raw `critic/bench/advisor-v3/results-v2-control.json`, `results-v3-run1.json`; the v2
+control reproduces the baseline above exactly):
+
+| Chapter | Game | Wins v2 → v3 | Dup strict / same v2 → v3 | Missed revive v2 → v3 | Lethal-save miss (current-board reading) v2 → v3 | p50 / p95 ms v2 → v3 |
+|---|---|---|---|---|---|---|
+| I Seymour Flux | FFX | 22 → 22 | n/a | 450 → 453 (441 → 449 refused with a note) | 0 → 0 | 3.4 / 4.8 → 3.5 / 4.6 |
+| II Yunalesca | FFX | 37 → 37 | n/a | 4 → 4 | 0 → 0 | 2.0 / 3.0 → 1.9 / 2.9 |
+| III Braska's Final Aeon | FFX | 39 → 39 | n/a | 8 → 8 | 1 → 1 | 4.3 / 6.9 → 4.3 / 6.4 |
+| IV Bahamut | FFX-2 | 40 → 40 | 0 / 0 → 2 / 0 | 0 → 0 | 0 → 0 | 5.8 / 18.0 → 3.6 / 4.8 |
+| V Vegnagun | FFX-2 | 37 → 37 | 140 / 145 → **25 / 14** | 4 → 3 | 29 → **97** | 6.2 / 12.2 → 6.1 / 11.3 |
+| VI Leblanc | FFX-2 | 33 → **38** | 387 / 617 → **62 / 54** | 23 → 5 | 23 → **51** | 5.1 / 9.0 → 5.7 / 12.3 |
+| VII Anima, Macalania | FFX | 37 → 37 | n/a | 16 → 16 | 21 → 21 | 2.5 / 5.0 → 2.5 / 5.1 |
+| VIII Evrae | FFX | 40 → 40 | n/a | 1 → 1 | 0 → 0 | 1.8 / 2.7 → 1.8 / 2.7 |
+| IX Yojimbo | FFX | 40 → 40 | n/a | 2 → 2 | 2 → 2 | 3.7 / 5.5 → 4.2 / 5.8 |
+| X Natus | FFX | 36 → 36 | n/a | 1 → 1 | 0 → 0 | 2.7 / 4.1 → 2.7 / 4.3 |
+| XI Fallen Aeons | FFX-2 | 33 → **37** | 33 / 33 → 9 / 2 | **113 → 5** | 1 → 8 | 5.8 / 9.9 → 4.5 / 7.4 |
+| XII Omnis | FFX | 25 → 25 | n/a | 188 → 188 | 14 → 14 | 4.1 / 6.1 → 4.4 / 6.4 |
+| XIII Trema | FFX-2 | 0 → 1 | 6 / 4 → 0 / 0 | 1 → 0 | 0 → 0 | 3.1 / 4.2 → 3.2 / 5.8 |
+| XIV Isaaru | FFX | 16 → 16 | n/a | 0 → 0 | 0 → 0 | 0.8 / 1.3 → 0.9 / 1.5 |
+| XV Den of Woe | FFX-2 | 8 → **12** | 28 / 14 → 16 / 5 | 22 → 12 | 8 → 28 | 3.8 / 5.3 → 4.1 / 5.8 |
+| **All** | | **443 → 457 of 600** | **594 / 813 → 114 / 75** | | | worst p95 18.0 → 12.3 |
+
+Better or equal on every chapter, better overall by 14 runs, so **`ADVISOR_V3` defaults ON**. Not on
+the menu, bad aim, fallbacks: 0 everywhere. The purity check passes with the projection running.
+
+**What did not go as §6 expected:**
+
+- **The lethal-save reading went up** on the FFX-2 chapters (V 29 → 97, VI 23 → 51, XV 8 → 28): the
+  acceptance line in §6 is **not met on this reading**. The reading prices every row as if it
+  landed before the enemy, on the board as it stands; v3 ranks on the projected board. Classified on
+  10 seeds (scratch): of V's 17 misses, 3 are safe once the charging command lands, 4 are still
+  lethal after everything landed, and **10 are "the enemy moves before the charging heal lands"**;
+  of VI's 9, 7 are safe on the projection. Wins did not drop anywhere (V 37 = 37, VI +5), which is
+  the evidence the misses are mostly unsavable or already covered, but the 10 + 4 on V are the next
+  thing to measure: whether any row the girl could press would land before that enemy move.
+- **XII Omnis: 188 missed revives unchanged**, by the rails: every one sampled has a
+  `saves-from-lethal` top row with the raise priced negative, or a refusal with a note (PR-0197).
+- **XIV Isaaru** unchanged (16 against the line's 28), as §6 said: the later search track.
+- Duplicates are not zero: most left are a different item for the same need (Hi-Potion charging ->
+  Potion, Megalixir -> X-Potion) or the same single heal on a *different* girl (the census counts a
+  same-id heal whoever it is aimed at; v3 drops it only on the same girl or the party). Bailey's
+  exact case, the same move, fell from 813 to 75.
+
 ## 7. For Bailey
 
-- Nothing here changes what you see yet. The next step builds the chosen method on this branch,
-  measured on the scorecard against these baseline numbers, before any merge.
+- Built on this branch (§6a): the card's *picks* change; no new line of text was added to it. A
+  Mega-Potion on the way is no longer advised again, and the fallen White Mage at the Sisters is
+  raised. Not merged into main; the handoff is `docs/handoff/advisor-v3.md`.
 - The advisor card itself still has no approved target tile (rule 9): if v3 changes what the card
   *shows* (for example "Mega-Potion already on its way" as a line), that line gets options first.
 
