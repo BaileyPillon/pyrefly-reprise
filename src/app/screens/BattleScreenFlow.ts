@@ -392,11 +392,11 @@ export class GameFlow {
         return outcome;
       }
 
-      if (outcome.outcome === 'defeat' || outcome.outcome === 'escape') {
+      if (outcome.outcome === 'defeat') {
         // The defeat panel owns the retry decision: `RETRY` re-enters the loop
         // (through the prep menu when there is one), `CHAPTER SELECT` gives up
-        // and hands the outcome back. An FFX stalemate ('escape', PR-0215) gets
-        // the same panel. `skipResults` (automated runs) keeps the old behaviour.
+        // and hands the outcome back to the caller. An automated run never
+        // sees the panel (`skipResults`), so it keeps the old behaviour.
         const choice = opts.skipResults ? 'continue' : await this.showResults(chapter, outcome);
         carry = carryAfterDefeat(carry, fought);
         if (choice === 'retry' || (choice === 'continue' && !opts.skipPrep)) continue;
