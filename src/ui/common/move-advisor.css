@@ -193,6 +193,11 @@
   color: var(--ig-paper);
   font-weight: 600;
 }
+/* The menu path on the label line is for the phone tip (phone-battle-parts.css);
+   on desktop the "in <menu>" chip under the line already says it. */
+.mad__where {
+  display: none;
+}
 /* "CHAPTER LINE" — this row is the tactic the encounter was designed around,
    not merely the best-scoring simulation. */
 .mad__badge {
@@ -332,3 +337,18 @@
    `MoveAdvisor.layout` measures and the 104px cap above, which is what the live
    build has always drawn, and the chip reads `hide moves` like any other
    frame. */
+
+/* The chip goes where the card goes (advisorChipFollow.ts, critic round 13
+   PR-0130): with the advisor on and the card folded by the HUD, the chip is
+   [hidden] too. The display: flex above would otherwise outrank the attribute. */
+.mad__toggle[hidden] {
+  display: none;
+}
+
+/* PR-0110 (FFX-2 only, mirroring coach.css): the first-turn coach line fades
+   the card out while it is up; the chip fades with it, so "HIDE MOVES" never
+   shows through the coach's header. */
+[data-coach-mark-game='ffx2'] .mad__toggle {
+  opacity: 0;
+  pointer-events: none;
+}

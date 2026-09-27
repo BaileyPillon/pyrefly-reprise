@@ -12,6 +12,7 @@ import {
   type PlacedPlate,
   type PlateMode,
 } from './targetPlateGeometry.ts';
+import { displayNameOf } from './displayName.ts';
 
 /**
  * The three plates the approved Targeting s3 tile draws while an FFX-2 target
@@ -63,7 +64,7 @@ export function targetPlateText(
   } else {
     const id = sel.activeId ?? sel.ids[0] ?? null;
     const c = id ? combatants[id] : undefined;
-    target = { name: c?.name ?? id ?? '', tag: c?.flags?.isPart ? 'PART' : null };
+    target = { name: displayNameOf(state, id), tag: c?.flags?.isPart ? 'PART' : null }; // never the raw id (PR-0175)
   }
   const who = actorId ? (combatants[actorId] as FFX2Combatant | undefined) : undefined;
   const dress = who?.dresspheres?.special?.id ?? who?.dresspheres?.current ?? null;

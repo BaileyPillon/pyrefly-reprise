@@ -90,7 +90,21 @@ function targetingFor(game: GameId, command: Command): Targeting | undefined {
  * for everything else — a single ally/enemy, `self`, or a random pick.
  */
 export function targetLabel(game: GameId, command: Command, fallbackName: string | null): string | null {
+  if (isSelfOrder(game, command)) return null;
   return scopeWord(targetingFor(game, command)) ?? fallbackName;
+}
+
+/**
+ * A Trigger Command whose catalog row targets `self`: Evrae's "Pull back" and
+ * "Close in" orders to Cid. The row is aimed at its own actor so the engine has
+ * an id to resolve, but the order moves the ship, so neither panel prints a
+ * target for it ("Pull back", never "Pull back -> Tidus"; critic round 13
+ * PR-0163). FFX only in practice: FFX-2 has no Trigger Commands.
+ */
+export function isSelfOrder(game: GameId, command: Command): boolean {
+  if (command.kind !== 'trigger') return false;
+  const abilities: Record<string, AbilityDef> = game === 'ffx2' ? FFX2_ABILITIES : FFX_ABILITIES;
+  return abilities[command.id]?.targeting === 'self';
 }
 
 /**
