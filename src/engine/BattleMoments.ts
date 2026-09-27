@@ -133,6 +133,8 @@ export class BattleMoments {
   private readonly revealed = new Set<CombatantId>();
   /** Set while a Confirm press is cutting the opening short (`OpeningSkip.ts`, PR-0061): every wait collapses. */
   hurry = false;
+  /** A-13: an attack was opened and its first hit has not landed yet. */
+  private rollOwed = false;
 
   constructor(deps: MomentDeps) {
     this.deps = deps;
@@ -147,6 +149,15 @@ export class BattleMoments {
   /** True when playback is collapsing every wait (e2e, the critic). */
   get skipping(): boolean {
     return this.deps.speed() === 'skip';
+  }
+
+  /** The player's reduce-motion setting, as the overlay reports it (A-13). */
+  get reducedMotion(): boolean {
+    try {
+      return this.deps.moments?.reduceMotion?.() === true;
+    } catch {
+      return false;
+    }
   }
 
   /** `base` ms at the current playback speed. */
@@ -345,6 +356,8 @@ export class BattleMoments {
   async actionOpen(actorId: CombatantId, pose: string): Promise<void> {
     this.actions++;
     this.onActionRig = true;
+    // A-13: the roll lands on the attack's first hit (`impact`), not the swing.
+    this.rollOwed = pose === 'attack';
     const rig = this.rigFor(actorId);
     if (this.skipping) {
       this.cut(rig);
@@ -352,7 +365,6 @@ export class BattleMoments {
     }
     void this.move(rig, MOMENT_TIMING.actionIn);
     void this.cam.push?.(MOMENT_PUSH.action, this.ms(MOMENT_TIMING.actionIn * 2));
-    if (pose === 'attack') void this.cam.roll?.(ATTACK_ROLL_DEG, this.ms(MOMENT_TIMING.returnOut));
     if (pose === 'cast') await this.deps.sleep(MOMENT_TIMING.castHold);
   }
 
@@ -362,7 +374,10 @@ export class BattleMoments {
    * frame would strobe through a twelve-hit Attack Reels.
    */
   impact(targetId: CombatantId, opts: { hitIndex?: number; heavy?: boolean } = {}): void {
-    if (this.skipping) return;
+    if (this.skipping) {
+      this.rollOwed = false;
+      return;
+    }
     if ((opts.hitIndex ?? 0) !== 0) return;
     const rig = this.rigFor(targetId);
     if (rig && rig !== this.cam.rigName) {
@@ -370,6 +385,20 @@ export class BattleMoments {
       this.onActionRig = true;
     }
     if (opts.heavy) void this.cam.punch(0.11, this.ms(460));
+    this.rollOnHit();
+  }
+
+  /**
+   * A-13, the spec's "-4deg roll on every attack" (`presentation-ink-and-gold.md`
+   * "Motion & camera"; both games): kick the horizon over on the attack's first
+   * hit and let it fall back level, at the playback speed. Never awaited, so it
+   * adds no time to the action; none under reduce-motion.
+   */
+  private rollOnHit(): void {
+    if (!this.rollOwed) return;
+    this.rollOwed = false;
+    if (this.reducedMotion) return;
+    void this.cam.roll?.(ATTACK_ROLL_DEG, this.ms(MOMENT_TIMING.returnOut));
   }
 
   /**
@@ -381,6 +410,7 @@ export class BattleMoments {
    * border it raises from the same `charge` event.
    */
   async actionClose(): Promise<void> {
+    this.rollOwed = false;
     if (this.overdriveOpen) await this.overdriveEnd();
     if (this.telegraphOpen && this.actions > this.telegraphAtAction) await this.telegraphEnd();
     await this.turnStart();

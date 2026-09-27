@@ -150,6 +150,12 @@ export interface MomentsPort {
    * the battle's opening sweep short (`OpeningSkip.ts`).
    */
   confirmPress?(): { pressed: Promise<void>; dispose(): void };
+  /**
+   * The player's reduce-motion setting (Settings.reduceMotion or the OS
+   * preference), read by the DOM side so the presenter stays DOM-free.
+   * Optional and additive (A-13): absent reads as "motion on".
+   */
+  reduceMotion?(): boolean;
   /** Tear every layer down. */
   clear(): void;
 }

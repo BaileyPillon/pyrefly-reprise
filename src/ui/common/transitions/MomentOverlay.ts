@@ -24,6 +24,7 @@ import './transitions.css';
 import type { MomentsPort } from '../../../engine/BattlePresenterPorts.ts';
 import { playTurnCutIn, type TurnCutInRequest } from './TurnCutInLayer.ts';
 import { confirmPress, type ConfirmPress } from './confirmPress.ts';
+import { prefersReducedMotion } from './reduceMotion.ts';
 
 type SlabKind = 'reveal' | 'overdrive' | 'telegraph';
 
@@ -140,6 +141,11 @@ export class MomentOverlay implements MomentsPort {
   /** The next Confirm press, for cutting the opening short (PR-0061). */
   confirmPress(): ConfirmPress {
     return confirmPress(this.el.ownerDocument.defaultView ?? window);
+  }
+
+  /** The player's reduce-motion choice (A-13's roll skips under it). */
+  reduceMotion(): boolean {
+    return prefersReducedMotion(this.el.ownerDocument.defaultView as (Window & typeof globalThis) | null);
   }
 
   /** The approved turn cut-in (PR-0005); see `TurnCutInLayer.ts`. */

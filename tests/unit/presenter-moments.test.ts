@@ -83,12 +83,13 @@ describe('rig choice', () => {
 // -------------------------------------------------------------- per action
 
 describe('the action moment', () => {
-  it('pushes in on the attacker and rolls the horizon on a swing', async () => {
+  it('pushes in on the attacker and rolls the horizon on the first hit', async () => {
     const { stage, moments } = setup();
     await moments.actionOpen('tidus', 'attack');
     expect(stage.calls).toContain('camera:party');
     expect(stage.calls.some((c) => c.startsWith('camera:push'))).toBe(true);
-    // Spec "Motion & camera": -4deg roll on every attack.
+    // Spec "Motion & camera": -4deg roll on every attack, on its first hit (A-13).
+    moments.impact('yunalesca', { hitIndex: 0 });
     expect(stage.calls).toContain('camera:roll=-4');
   });
 
