@@ -244,17 +244,26 @@ export function chapterColumns(ctx: ChapterContext): PanelColumn[] {
   );
   detail.push(row('play-time', 'Play time', formatPlayTime(ctx.playTimeMs)));
   if (ctx.progress) detail.push(row('progress', 'Encounter', ctx.progress.label));
-  detail.push(row('scene', 'Scene', ctx.sceneKey.replace(/-/g, ' ')));
+  // PR-0168: this used to print the internal scene id (e.g. "cavern stolen
+  // fayth", "dreams end" with the apostrophe silently dropped by the slug).
+  // The dossier's own heading already reads `meta.location` (below), so the
+  // SCENE row now reads the same field instead of re-deriving a word list
+  // from the scene key.
+  detail.push(row('scene', 'Scene', meta ? meta.location : ctx.sceneKey.replace(/-/g, ' ')));
 
-  const members = ctx.state ? ctx.state.activeIds.map((id) => ctx.state!.combatants[id]) : [];
-  const columns: PanelColumn[] = [
-    { id: 'detail', heading: 'This encounter', rows: detail, wide: true },
-    {
-      id: 'gear',
-      heading: 'The party',
-      rows: gearRows(members.filter((c): c is AnyCombatant => !!c)),
-    },
-  ];
+  const members = ctx.state
+    ? ctx.state.activeIds.map((id) => ctx.state!.combatants[id]).filter((c): c is AnyCombatant => !!c)
+    : [];
+  const columns: PanelColumn[] = [{ id: 'detail', heading: 'This encounter', rows: detail, wide: true }];
+  // PR-0171: the pause can open over a cutscene, where there is no live
+  // battle state and so no party — printing "The party" with nothing under
+  // it (round 12, chapters II and IX) said there was a column with nothing
+  // in it. Not `wide` (REG-keycol, t1-b3b check): a wide party column
+  // squeezed the values at 1024x768 and 390x844; FFX-2's "Dressphere" key is
+  // fitted by FOC16-03's own gear-column rule in `pause-chapter.css`.
+  if (members.length > 0) {
+    columns.push({ id: 'gear', heading: 'The party', rows: gearRows(members) });
+  }
   if (meta) {
     columns.push({
       id: 'dossier',

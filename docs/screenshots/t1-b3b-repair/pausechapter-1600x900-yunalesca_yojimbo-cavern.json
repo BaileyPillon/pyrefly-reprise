@@ -1,0 +1,262 @@
+[
+ {
+  "id": "yunalesca",
+  "size": "1600x900",
+  "states": [
+   {
+    "plateRect": [
+     -209,
+     -4,
+     1789,
+     1137
+    ],
+    "plateCls": "pause__plate",
+    "plateMask": "none",
+    "vw": 1600,
+    "vh": 900,
+    "plateId": "ch2-yunalesca",
+    "dossier": "beside",
+    "scene": "Zanarkand Dome",
+    "location": "Zanarkand Dome",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 5,
+      "wide": true
+     },
+     {
+      "col": "dossier",
+      "heading": "Zanarkand Dome",
+      "rows": 0,
+      "wide": false
+     }
+    ],
+    "face": {
+     "left": 529.9836303710938,
+     "right": 1189.2069702148438,
+     "top": 201.41271728515625,
+     "bottom": 680.8526123046875
+    },
+    "overlaps": [
+     "Zanarkand Dome <>",
+     "“You are so very tired. Let me be the la <pause__quote-text>",
+     "Yunalesca <pause__quote-who>",
+     "she is telling the truth <pause__hand>",
+     "[snap] <pause__snap>",
+     "the great hall <>",
+     "[snap] <pause__snap>",
+     "the third shape <>",
+     "[snap] <pause__snap>",
+     "it isn't over <>"
+    ],
+    "ellipsised": [],
+    "tag": "scene",
+    "tab": "chapter"
+   },
+   {
+    "plateRect": [
+     -69,
+     -3,
+     1925,
+     1136
+    ],
+    "plateCls": "pause__plate",
+    "plateMask": "none",
+    "vw": 1600,
+    "vh": 900,
+    "plateId": "ch2-yunalesca",
+    "dossier": "beside",
+    "scene": "Zanarkand Dome",
+    "location": "Zanarkand Dome",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 6,
+      "wide": true
+     },
+     {
+      "col": "gear",
+      "heading": "The party",
+      "rows": 9,
+      "wide": false
+     },
+     {
+      "col": "dossier",
+      "heading": "Zanarkand Dome",
+      "rows": 0,
+      "wide": false
+     }
+    ],
+    "face": {
+     "left": 669.1232568359375,
+     "right": 1327.0448852539062,
+     "top": 201.9997900390625,
+     "bottom": 680.4929931640625
+    },
+    "overlaps": [
+     "The party <>",
+     "S.Lv 46 <pause__v>",
+     "Baroque Sword <pause__v>",
+     "Glorious Shield <pause__v>",
+     "S.Lv 44 <pause__v>",
+     "Yuna's Staff <pause__v>",
+     "Blessed Ring <pause__v>",
+     "S.Lv 48 <pause__v>",
+     "Auron's Katana <pause__v>",
+     "Blessed Bracer <pause__v>",
+     "Zanarkand Dome <>",
+     "“You are so very tired. Let me be the la <pause__quote-text>",
+     "Yunalesca <pause__quote-who>",
+     "she is telling the truth <pause__hand>",
+     "[snap] <pause__snap>",
+     "the great hall <>",
+     "[snap] <pause__snap>",
+     "the third shape <>",
+     "[snap] <pause__snap>",
+     "it isn't over <>"
+    ],
+    "ellipsised": [],
+    "tag": "battle",
+    "tab": "chapter"
+   }
+  ],
+  "errors": []
+ },
+ {
+  "id": "yojimbo-cavern",
+  "size": "1600x900",
+  "states": [
+   {
+    "plateRect": [
+     -70,
+     -4,
+     1927,
+     1137
+    ],
+    "plateCls": "pause__plate",
+    "plateMask": "none",
+    "vw": 1600,
+    "vh": 900,
+    "plateId": "ch9-yojimbo",
+    "dossier": "beside",
+    "scene": "Cavern of the Stolen Fayth",
+    "location": "Cavern of the Stolen Fayth",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 5,
+      "wide": true
+     },
+     {
+      "col": "dossier",
+      "heading": "Cavern of the Stolen Fayth",
+      "rows": 0,
+      "wide": false
+     }
+    ],
+    "face": {
+     "left": 728.6065673828125,
+     "right": 1407.846630859375,
+     "top": 224.2269287109375,
+     "bottom": 795.0225219726562
+    },
+    "overlaps": [
+     "Cavern of the Stolen Fayth <>",
+     "“I still owe her a guardian.” <pause__quote-text>",
+     "every hit feeds his blade <pause__hand>",
+     "[snap] <pause__snap>",
+     "the last chamber, cold light <>",
+     "[snap] <pause__snap>",
+     "the long blade, drawn <>",
+     "[snap] <pause__snap>",
+     "Lady Ginnem, never sent <>",
+     "Chapter IX · Cavern of the Stolen Fayth  <pause__eyebrow>"
+    ],
+    "ellipsised": [],
+    "tag": "scene",
+    "tab": "chapter"
+   },
+   {
+    "plateRect": [
+     -69,
+     -3,
+     1925,
+     1136
+    ],
+    "plateCls": "pause__plate",
+    "plateMask": "none",
+    "vw": 1600,
+    "vh": 900,
+    "plateId": "ch9-yojimbo",
+    "dossier": "beside",
+    "scene": "Cavern of the Stolen Fayth",
+    "location": "Cavern of the Stolen Fayth",
+    "cols": [
+     {
+      "col": "detail",
+      "heading": "This encounter",
+      "rows": 6,
+      "wide": true
+     },
+     {
+      "col": "gear",
+      "heading": "The party",
+      "rows": 9,
+      "wide": false
+     },
+     {
+      "col": "dossier",
+      "heading": "Cavern of the Stolen Fayth",
+      "rows": 0,
+      "wide": false
+     }
+    ],
+    "face": {
+     "left": 728.934375,
+     "right": 1406.7932299804688,
+     "top": 224.785107421875,
+     "bottom": 794.4199951171875
+    },
+    "overlaps": [
+     "The party <>",
+     "Lulu <pause__k>",
+     "S.Lv 30 <pause__v>",
+     "Weapon <pause__k>",
+     "Lulu's Moogle <pause__v>",
+     "Armour <pause__k>",
+     "Glorious Bangle <pause__v>",
+     "Kimahri <pause__k>",
+     "S.Lv 25 <pause__v>",
+     "Weapon <pause__k>",
+     "Kimahri's Spear <pause__v>",
+     "Armour <pause__k>",
+     "Glorious Armlet <pause__v>",
+     "Yuna <pause__k>",
+     "S.Lv 32 <pause__v>",
+     "Weapon <pause__k>",
+     "Yuna's Staff <pause__v>",
+     "Armour <pause__k>",
+     "Blessed Ring <pause__v>",
+     "Cavern of the Stolen Fayth <>",
+     "“I still owe her a guardian.” <pause__quote-text>",
+     "Lulu <pause__quote-who>",
+     "every hit feeds his blade <pause__hand>",
+     "[snap] <pause__snap>",
+     "the last chamber, cold light <>",
+     "[snap] <pause__snap>",
+     "the long blade, drawn <>",
+     "[snap] <pause__snap>",
+     "Lady Ginnem, never sent <>",
+     "Chapter IX · Cavern of the Stolen Fayth  <pause__eyebrow>"
+    ],
+    "ellipsised": [],
+    "tag": "battle",
+    "tab": "chapter"
+   }
+  ],
+  "errors": []
+ }
+]
