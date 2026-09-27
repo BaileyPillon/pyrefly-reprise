@@ -1,0 +1,414 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-27T21:55:22.556Z",
+ "build": {
+  "mainSha": "79adc4ff",
+  "candidate": "D:/pyrefly-rel25/dist-gate",
+  "bundle": "index-ykS1QEe6.js",
+  "previousLive": "bc4e70ee (release 24, bundle C-3hBxzq)",
+  "note": "Release 25 was already deployed on the owner's words before this review; this is the focused review it owed."
+ },
+ "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect in the changed area: every route finished with 0 page errors (stalemate to WITHDREW and back by RETRY at 1600 and 390 touch; II and XI won; XI lost to its Defeat card; I won on seed 2 with poses).",
+  "No regression seen against release 24 behaviour: first menus of I, III, IV, VI at 1600 and 390 load in 9.4-11.7 s with the same rows; PR-0206 advisor card unchanged; tsc clean and 28 changed test files (165 tests) pass.",
+  "The changed items meet their targets: PR-0170, PR-0180, PR-0146, PR-0157, PR-0031/PR-0178 plate, PR-0186 fold, PR-0215, A-2 transitions, A-4 hold, PR-0205, PR-0136; only two polish issues found.",
+  "Nothing critical or major is open, so nothing is disclosed; PR-0138 (Chapter V retry spoils), D-221 in the browser, PR-0164/PR-0212 art and PR-0184/PR-0185 frame judgement stay for the deep review."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Full-screen layers (entry overlays, results/WITHDREW card at 1600 and 390 touch, Chapter XI Defeat) own the window; no stage-sized overlay seen.",
+   "where": "both; I, III, IV, V, XI",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/pr0215-1600x900.jpg",
+    "critic/reviews/79adc4ff-focused/r25/pr0215-390x844t.jpg",
+    "critic/reviews/79adc4ff-focused/r25/ch11/ch11-1600x900-seam2-06.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "TARGET plate, ALL ALLIES label (16 px), help-bar ability names and the WITHDREW card read at 1600, 2000 and 390; nothing clipped in the captures read.",
+   "where": "FFX; I, III",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/ch3-1600x900-aim-braskas-final-aeon.jpg",
+    "critic/reviews/79adc4ff-focused/r25/ch3-2000x1012-hastega.jpg",
+    "critic/reviews/79adc4ff-focused/r25/flow-seymour-flux-1600-help-1.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "PR-0206: at 2000x1012 the advisor card is up (320x275, 0 px2 over the rows), N hides it, N shows it, by real keys.",
+   "where": "FFX; I",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/pr0206-2000x1012-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The FFX help-bar ability name clears itself after every enemy action (12 show/clear pairs in Chapter I); target cues and plate are gone after Escape (0 actions fired); entry overlays are gone at the first menu.",
+   "where": "FFX + both; I, II, III, XII",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/flow-seymour-flux-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "New copy is player language: \"Immune to sensors.\" (unit-tested), \"WITHDREW\", \"The battle cannot be won from here.\", \"Magus Sisters\".",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/pr0215-1600x900.jpg",
+    "critic/reviews/79adc4ff-focused/r25/pr0205-ch11-magus-plate-1.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "TARGET plate never meets the advisor card or the command rows at 1600/2000/390 for all three III targets; folded Sensor strip clears the painted figures at 2000, and at 1600 only touches Braska's Final Aeon's bracket corner above its horns (polish, P-01).",
+   "where": "FFX; III",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/ch3-1600x900-aim-braskas-final-aeon.jpg",
+    "critic/reviews/79adc4ff-focused/r25/ch3-2000x1012-aim-braskas-final-aeon.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Names shown in full: \"Braska's Final Aeon\" on the plate, \"Magus Sisters\" on the seam plate (captured mid slide-in), enemy ability names in the help bar.",
+   "where": "both; III, XI",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/ch3-1600x900-aim-braskas-final-aeon.jpg",
+    "critic/reviews/79adc4ff-focused/r25/pr0205-ch11-magus-plate-1.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Selection obvious: bracket, hand, ring and TARGET plate on the aimed enemy; ally accent and ALL ALLIES for Hastega.",
+   "where": "FFX; III",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/fight-targeting-s1.jpg",
+    "critic/reviews/79adc4ff-focused/fight-targeting-s2.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Every III enemy stays visible while aiming (s2 composite); Chapter VI links 1 and 2 put all fiends on screen across x 836-1061 / 859-992 with 203/226 px gaps to the party.",
+   "where": "FFX III; FFX-2 VI",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/fight-targeting-s2.jpg",
+    "critic/reviews/79adc4ff-focused/r25/ch6/ch6-1600x900-link1.jpg",
+    "critic/reviews/79adc4ff-focused/r25/ch6/ch6-1600x900-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "PR-0164 judged in the running game: Yunalesca (II) during her Blind action at 1600, real keys; her hair ends in a soft wandering fade, no hard straight column (a faint soft vertical near x 1040 remains, acceptable). PR-0212 Valefor wing (XIV) was not captured in this pass and is carried to the deep review.",
+   "where": "FFX II (XIV not captured)",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/flow-yunalesca-1600-help-2.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-014",
+   "result": "PASS",
+   "reason": "A-4: Chapter I (pose chapter) ends with tidus/yuna/kimahri in victory pose; Chapter II ends with all three in idle battle stance as the source requires. Debug auto-play (labelled).",
+   "where": "FFX I, II",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/a4-seymour-flux-victory-autoplay.jpg",
+    "critic/reviews/79adc4ff-focused/r25/a4-yunalesca-victory-autoplay.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real keys: PR-0170 Attack on a lone boss opens the target step with 0 actions and Escape returns (II, XII); III aim through every target by Right; stalemate Enter spam then RETRY back at a menu; Chapter I help bar, fade and opening by Enter.",
+   "where": "FFX I, II, III, XII",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/pr0170-yunalesca-1600-step.jpg",
+    "critic/reviews/79adc4ff-focused/r25/pr0170-seymour-omnis-1600-step.jpg",
+    "critic/reviews/79adc4ff-focused/r25/pr0215-1600x900.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every harness asserted screen (battle/results), phase and selection before capturing; the Chapter XI real-key seam run lost link 1 and its frames are recorded as the Defeat card, not as seam evidence (seam proved separately by a labelled debug run).",
+   "where": "all captured",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/ch11/ch11-1600x900-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused review of the production candidate; the live check is the separate live obligation.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared pieces landed in both games: entry shatter FFX and FFX-2 variants, WITHDREW results card is shared code, victoryPose hold in FFX II and FFX-2 IV/V/XIII.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/pr0215-390x844t.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "FFX-only items absent in FFX-2: no lone-target step or FFX target plate in IV (targeting null, rows White Magic/Change/Item), no help-bar ability name recorded in IV while Bahamut acted; entry variant pf-entry--ffx2 in IV and V, pf-entry--ffx in I; FFX-only blur after a scene in I.",
+   "where": "FFX I vs FFX-2 IV, V",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/x2lone-ffx2-bahamut-after-enter.jpg",
+    "critic/reviews/79adc4ff-focused/r25/flow-ffx2-bahamut-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Win and loss reach real destinations: stalemate reaches results (WITHDREW) and RETRY returns to a battle menu at 1600 and 390 touch; Chapter XI real-key loss reaches its Defeat card; II and XI debug wins end in victory. Chapter V PR-0138 retry route not run (see coverage).",
+   "where": "both; II, III, XI",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/pr0215-1600x900.jpg",
+    "critic/reviews/79adc4ff-focused/r25/ch11/ch11-1600x900-seam2-06.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "A-2 entry transitions invoked through the real chapter start: blur after the Chapter I scene (Enter through the cutscene), shatter FFX / FFX-2 with scenes skipped, cut under reduced motion, no swirl.",
+   "where": "both; I, IV, V",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/flow-seymour-flux-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "79adc4ff / dist-gate index-ykS1QEe6.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel25 79adc4ff, dist-gate built 21:21Z, bundle index-ykS1QEe6.js (same name as the live bundle), vite preview 127.0.0.1:5433 (stopped by PID 77444); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  }
+ ],
+ "targets": {
+  "required": 3,
+  "matched": 3,
+  "failing": 0,
+  "unverified": 1,
+  "waiting": 0,
+  "detail": [
+   {
+    "tile": "fight / Targeting: a spell on the whole party (s1)",
+    "result": "matched",
+    "composite": "critic/reviews/79adc4ff-focused/fight-targeting-s1.jpg",
+    "note": "ring + ally accent + ALL ALLIES + plate; plate top-right of the moves card, not top-left (only the plate was picked, D-249 Q5)"
+   },
+   {
+    "tile": "fight / Targeting: one Yu Pagoda, every enemy visible (s2)",
+    "result": "matched",
+    "composite": "critic/reviews/79adc4ff-focused/fight-targeting-s2.jpg"
+   },
+   {
+    "tile": "phone / PR-0001 Victory and Defeat results",
+    "result": "matched",
+    "composite": "critic/reviews/79adc4ff-focused/phone-pr0001-withdrew.jpg",
+    "note": "option B Defeat layout with WITHDREW in the title band"
+   },
+   {
+    "tile": "fight / Targeting in FFX-2: a Vegnagun part (s3)",
+    "result": "unverified",
+    "note": "FFX-2 targeting was not changed beyond shared accent code; not captured"
+   }
+  ]
+ },
+ "issues": [
+  {
+   "id": "P-01",
+   "severity": "polish",
+   "title": "Chapter III at 1600x900: the folded Sensor strip sits on the aimed Final Aeon's bracket corner and adds a third name label",
+   "game": "FFX",
+   "chapter": "III braskas-final-aeon",
+   "expected": "Folded Sensor strip clear of the aimed figure and its bracket",
+   "observed": "Strip box meets braskas-final-aeon box at 1600 (clear at 2000); horns clear",
+   "repro": "III, seed 1, Attack, Right to the Final Aeon",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/ch3-1600x900-aim-braskas-final-aeon.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-008",
+   "where": "src/ui/ffx/sensorAimFold.ts (not traced)",
+   "fix": "Nudge the folded strip above the bracket top or hide it when the TARGET plate names the same enemy",
+   "acceptanceCheck": "III aim at 1600: sensorMeetsEnemies empty"
+  },
+  {
+   "id": "P-02",
+   "severity": "polish",
+   "title": "FOC23-01: Seymour Flux's hair tips reach the right edge on a 390x844 phone",
+   "game": "FFX",
+   "chapter": "I seymour-flux",
+   "expected": "Seymour Flux whole on a phone",
+   "observed": "Figure whole except hair spikes touching x=390",
+   "repro": "I at 390x844 touch, first menu",
+   "evidence": [
+    "critic/reviews/79adc4ff-focused/r25/menus/seymour-flux-390x844.jpg"
+   ],
+   "confidence": "medium",
+   "requirement": "A-12 / FOC23-01",
+   "where": "phone framing (not traced)",
+   "fix": "A few px more right margin in the phone frame",
+   "acceptanceCheck": "Figure bbox inside the viewport at 390x844"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "I opening/help bar/fade by Enter (1600)",
+   "I entry blur after scene, shatter, reduced-motion cut",
+   "II and XII lone-target step by real keys",
+   "III aim, fold, plate, Hastega at 1600/2000/390 touch",
+   "III stalemate WITHDREW + RETRY at 1600 and 390 touch",
+   "IV FFX-2 absence of FFX items; IV and V shatter ffx2",
+   "VI links 1-2 fiend lane by real keys",
+   "IX arrival and held frames by real keys (sampler)",
+   "XI real-key link 1 (lost); XI seam plate by debug auto-play",
+   "A-4 pose in I, hold in II (debug auto-play)",
+   "first menus I, III, IV, VI at 1600 and 390",
+   "PR-0206 at 2000",
+   "tsc, 28 changed vitest files",
+   "data audit: victoryPose sources, Magus Sisters headline"
+  ],
+  "reused": [
+   {
+    "what": "Trema (XIII) victory hold",
+    "from": "unit test chapter-victory-pose.test.ts on this commit",
+    "why": "data-only flag, same code path as II which was observed"
+   }
+  ],
+  "notTested": [
+   "PR-0138 real-key Chapter V win after a Shuyin retry (owed by the handoff; unit test only)",
+   "D-221 \"Immune to sensors.\" in the browser (no Sensor-immune target reachable by the harness in XIV; unit test only)",
+   "PR-0212 Valefor wing mask (XIV) in the running game",
+   "PR-0184 / PR-0185 IX: sampler recorded 145 head-cut samples during enemy and idle rigs as figures slide (not judged frame by frame here)",
+   "live site (separate live obligation)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Deep review of 79adc4ff on the live build (owed: shared combat core, presenter, global layout, chapter registry across 14 chapters), including PR-0138 in Chapter V, D-221, the IX held-frame judgement and the II/XIV art edges.",
+ "elapsedMinutes": 40
+}

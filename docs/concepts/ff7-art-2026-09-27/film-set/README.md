@@ -12,21 +12,31 @@ A figure facing screen-right shows its RIGHT side. So Barret's gun-arm (his righ
 arm, and Cloud's single pauldron (left shoulder) is on the far side. **Nothing is mirrored**; every
 sidecar says `mirrored: false`.
 
+This README is the state after the **repair round** (same day): a judge LOOKed at the first set and failed
+16 poses (Cloud's idle and all seven of his other poses; Barret's aim, fire, squat, punch and hurt; Guard
+Scorpion's recoil). Every one was repaired or remade, and every result was LOOKed at before it was picked.
+What each fault was and what was done is under "The repair round" below.
+
 ## Look at these first (phone-readable, each under 1 MB)
 
 | File | What |
 |---|---|
 | `01-frame-idle-1600.jpg`, `01-frame-idle-390.jpg` | The idle set on the Film reactor core, desk and phone (scene only, no HUD) |
 | `02-frame-action-1600.jpg`, `02-frame-action-390.jpg` | The action moment: Cloud's strike, Barret firing, Guard Scorpion with the tail raised |
+| `11-frame-hit-1600.jpg`, `11-frame-hit-390.jpg` | The hit moment: Cloud's follow-through, Barret aiming, Guard Scorpion recoiling |
 | `03-cloud.jpg` | Cloud's 8 picks, on one scale |
 | `04-barret.jpg` | Barret's 6 picks, on one scale |
-| `05-guard-scorpion.jpg` | Guard Scorpion's 3 picks, on one scale |
-| `06-backdrop.jpg` | The backdrop pick, and the glyph-like mark painted out |
-| `07-faults-fixed.jpg` | The judge's Film faults: the hi-fi pick against this set |
-| `08`, `09`, `10-renders-*.jpg` | Every render of the round (full frames), with the picks framed |
+| `05-guard-scorpion.jpg` | Guard Scorpion's picks (the recoil in both tail forms), on one scale |
+| `12-repair-cloud.jpg` | **The repair round, Cloud**: the first set's pick beside this round's, per pose |
+| `13-repair-barret-gs.jpg` | **The repair round, Barret and Guard Scorpion**, the same way |
+| `06-backdrop.jpg` | The backdrop pick, and the glyph-like mark painted out (unchanged this round) |
+| `07-faults-fixed.jpg` | The judge's first Film faults: the hi-fi pick against this set |
+| `08`, `09`, `10-renders-*.jpg` | Every render of the first round (full frames), with the first round's picks framed |
+| `14`, `15-renders-repair-*.jpg` | Every render and local repair of the repair round, with this round's picks framed |
 
-The two frames were composed by the hi-fi round's own `../hifi/scripts/compose.py` (film grade), with
-per-frame heights in `layout/` so each subject keeps one scale.
+The frames were composed by the hi-fi round's own `../hifi/scripts/compose.py` (film grade), with
+per-frame heights in `layout/` computed so each subject keeps one scale (`frame-idle.json`,
+`frame-action2.json`, `frame-hit.json`).
 
 ## Recommended file per pose
 
@@ -37,48 +47,52 @@ All paths are under `D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/
 - `baselineY` (the lowest opaque row: the feet, or the legs' contact line) and `anchorX` (the centre of
   the bottom 6 % of the figure).
 - `scaleToIdle` and the size.
-- The provenance (engine, seed, reference, prompt) and every post-process step.
-- Both cut-out reports: the pipeline guard and the strict one-component check.
+- The provenance (engine, seed, reference, prompt) and **every** post-process step, in order.
+- Both cut-out reports: the pipeline guard and the strict one-component check (`recheck`), re-run on the
+  final file.
 
-**Every pick passes both checks** (one component, no halo on dark), re-run on the final file.
+**Every pick passes both checks** (no detached piece of 24 px or more, no halo on dark).
 
 ### Cloud (facing screen-right)
 
-| Pose | Recommended file | Scale to idle | Notes |
+| Pose | Recommended file | Scale to idle | What this round changed |
 |---|---|---|---|
-| Idle | `cloud/idle/cut-p4w.png` | 1 | The approved hi-fi Film pick (seed 730012). The metal cuff on the far wrist became the brown glove cuff. The back-edge rim is off |
-| Attack: wind-up | `cloud/windup/cut-p6.png` | 1.06 | Sword raised back over the shoulder, both hands on the grip |
-| Attack: strike | `cloud/strike/cut-p1w.png` | 1.02 | A lunge with the blade level to the right. The earlier pick `p2` drew three hands on the grip, so the pick moved to `p1`, where the second white band on the far wrist became the glove cuff (a long cuff) |
-| Attack: follow-through | `cloud/follow/cut-p2.png` | 1 | The blade swung down past his right side |
-| Victory: fist pump | `cloud/fistpump/cut-p2w.png` | 0.99 | The near (right) fist is raised. The far-wrist band was repaired |
-| Victory: one-hand sword spin | `cloud/spin/cut-p3w.png` | 1.1 | The sword is held up in one hand, turning. A still image cannot show the spin itself, which is motion for code (a rotation tween) |
-| Victory: sword onto his back | `cloud/back/cut-p2w.png` | 0.99 | The blade is laid back over the shoulder. The far-wrist band was repaired |
-| Hurt flinch | `cloud/hurt/cut-p3w.png` | 0.99 | A grimace, arms pulled in. The far-wrist band was repaired |
+| Idle | `cloud/idle/cut-p4x.png` | 1 | From `cut-p4w`: the slate/olive band outside the ink on the back of the near leg and boot became ink (`inkback.py`); the studio-grey shell by the pauldron spikes, on the far arm and round the hair was trimmed (`trim.py`); the "KWUO" scribble on the boot strap was repainted as plain stitched leather (`patch2.py`, seed 790002) |
+| Attack: wind-up | `cloud/windup/cut-g.png` | 1.11 | From the first pick `p6`. Its only visible arm comes from under the pauldron, so that arm is his LEFT: its white band became the brown glove cuff (his right wrist is hidden behind it, which is canon). The dome pauldron came off and **the idle's own pauldron** was grafted on (`graft.py`). Blade and sweater green tint neutralised, skin matched to the idle, blade cut by a traced outline |
+| Attack: strike | `cloud/strike/cut-r.png` | 1.02 | The pauldron repainted against the idle's (image 2), with its spike; the strap under it re-coloured from red to his straps' brown (`recolor.py`); the back rim on the near trouser cuff and boot inked; the grey fringe behind the head trimmed |
+| Attack: follow-through | `cloud/follow/cut-y2.png` | 1 | The second white band (far wrist) became the glove cuff; the pauldron came off and the idle's was grafted on; the shirt edge and arm under it blended; the dark blob by the chin is gone with the trim |
+| Victory: fist pump | `cloud/fistpump/cut-b2.png` | 0.99 | The extra white band round the near upper arm became bare skin; the pink band on the far wrist became skin down to the glove cuff; the scribble on the boot cuff was painted out |
+| Victory: one-hand sword spin | `cloud/spin/cut-k.png` | 1 | **Remade.** An edit of the fist pump (so it has the idle's costume): the raised near fist, with the white band, holds the Buster Sword up, the broad blade angled over his head mid-twirl; the far hand is empty with only the glove cuff. The idle's pauldron was grafted on, the knit re-matched to the idle's indigo, the grey blade cut by a traced outline. The spin itself is motion for code |
+| Victory: sword onto his back | `cloud/back/cut-y2.png` | 0.99 | A white SOLDIER band added on the raised near (right) wrist; the four-spike disc pauldron came off and the idle's was grafted on; the studio grey between arm and blade trimmed |
+| Hurt flinch | `cloud/hurt/cut-z2.png` | 0.99 | The four-spike disc pauldron came off and the idle's was grafted on (so idle and hurt no longer pop); the grey smudge round the spikes trimmed; the scratch marks on the blade painted out |
 
 ### Barret (facing screen-right; gun-arm grafted on the near RIGHT arm, the left hand a hand)
 
-| Pose | Recommended file | Scale to idle | Notes |
+| Pose | Recommended file | Scale to idle | What this round changed |
 |---|---|---|---|
-| Idle | `barret/idle/cut-p1.png` | 1 | Re-rendered from the hi-fi Film pick: three steel bands round the waist and no belt buckle. The pale back-edge rim was taken off (`derim.py` pale pass) |
-| Attack: aim | `barret/aim/cut-p8.png` | 1 | This is the fire pick with the mouth closed, so aim and fire share one body |
-| Attack: fire | `barret/fire/cut-p2.png` | 1 | The same stance, shouting. The muzzle flash is drawn by code |
-| Victory: squat | `barret/squat/cut-p4.png` | 0.85 | Crouched and grinning |
-| Victory: air punch | `barret/punch/cut-p6.png` | 0.99 | His normal (left) hand punches the air, and the gun-arm hangs at his near side |
-| Hurt flinch | `barret/hurt/cut-p3.png` | 0.99 | Left hand to his chest, teeth set |
+| Idle | `barret/idle/cut-p1.png` | 1 | Unchanged (it passed) |
+| Attack: aim | `barret/aim/cut-k.png` | 1 | The canvas was extended and the clipped near boot completed (sole and heel), cut by colour key on a flattened background (`extend.py`, `patch2.py`, `flatbg.py`, `keycut.py`) and matched to the far boot's leather; the face scars taken off (expression kept); the skin matched to the idle; the mint rim on the back of the arm and vest inked (outer edge `derim.py` + `inkback.py`, inner edge `degreen.py` ink) |
+| Attack: fire | `barret/fire/cut-k.png` | 1 | The same repairs on the fire render. Aim and fire are the same stance with a different face; the muzzle flash is drawn by code |
+| Victory: squat | `barret/squat/cut-t2.png` | 0.85 | The gatling repainted as **the idle's** (four barrels in the stepped cylinder; the box magazine gone), from a crop of the idle as image 2; the extra steel band on the near upper arm became skin; the box seams on the arm and trousers blended; a stray curl off the top muzzle erased; the faint back rim inked |
+| Victory: air punch | `barret/punch/cut-y2.png` | 0.99 | The seven-barrel cluster repainted as the idle's gatling; the elbow join made crisp; the back rim inked |
+| Hurt flinch | `barret/hurt/cut-y1.png` | 0.99 | The two guns repainted as **one** idle gatling; the red stains the repaint left on the vest taken off; the back rim inked |
 
 ### Guard Scorpion (painted facing screen-LEFT, never flipped)
 
 | Pose | Recommended file | Scale | Notes |
 |---|---|---|---|
-| Idle, tail lowered | `gs/idle/cut-tj.png` | 1 | **The tail-raised pick, pixel for pixel, with only the tail repainted**, so the game can swap idle and raised without the body changing. See the method below |
-| Tail raised (laser lens) | `gs/raised/cut-p1s.png` | 1 | The same machine: red riveted shell with rust scuffs, six legs, twin rifles, sensor eye, back disc, segmented tail with a cyan emitter lens |
-| Hit / recoil | `gs/recoil/cut-p1s.png` | 1 | A shell plate knocked up, legs braced. Its body fits the raised body at 1.01 (a similarity fit), so it is on the same scale |
+| Idle, tail lowered | `gs/idle/cut-tj.png` | 1 | Unchanged: the tail-raised pick, pixel for pixel, with only the tail repainted |
+| Tail raised (laser lens) | `gs/raised/cut-p1s.png` | 1 | Unchanged |
+| Hit / recoil, tail raised | `gs/recoil/cut-r12.png` | 1 | **Remade as an edit of `raised/cut-p1s`** (`recoil.py`), so it is the same machine: the whole body tilted 12 degrees about the rear foot, head end up and front legs off the floor; the sensor eye flared white-hot; the tail lens flickered dim. `pivotInOutput` in the sidecar is where the rear foot lands, so the game can keep it planted |
+| Hit / recoil, tail lowered | `gs/recoil/cut-l12.png` | 1 | The same edit of `idle/cut-tj`, for a hit taken in the tail-down form |
+
+The first recoil (`cut-p1s`, a separate painting that lost the dome, the visor and moved the eye) is retired.
 
 ### Backdrop
 
 | Pick | Notes |
 |---|---|
-| `core/p1b.full.png` (2304 x 1296) | The hi-fi Film core (`../hifi/`, seed 733002). Two glyph-like marks were painted out: a small framed sign on the left wall (`core/p1.full.png`) and the mark on a pipe clamp at lower left (`p1b`, seed 770011). The rest was looked at in two half-frame crops, and no other marks were found |
+| `core/p1b.full.png` (2304 x 1296) | Unchanged: the hi-fi Film core (`../hifi/`, seed 733002) with two glyph-like marks painted out |
 
 ## Written source of each victory pose
 
@@ -91,89 +105,96 @@ FF Wiki, "Final Fantasy VII victory poses" (text only, read 2026-09-27, as cited
   `squat` and `punch`, with the left hand, because the right arm is the gun.
 
 The attack keys follow the accepted B1 blocking (`../../ff7-options-2026-09-27/sheet-5-B-attack-motion.jpg`),
-turned to face right. Cloud has a wind-up, a strike and a follow-through. Barret has an aim and a fire.
-Canon costume points come from `research/ff7-battle-staging.md` (FF Wiki "Barret Wallace": "a
-mechanical gun grafted in place of his right arm") and the hi-fi round's prompts. Guard Scorpion
-follows `research/ff7-guard-scorpion.md`: the Raise Tail and Drop Tail forms, so the set has an idle
-with the tail down and a pose with the tail up.
+turned to face right. Canon costume points come from `research/ff7-battle-staging.md` (FF Wiki "Barret
+Wallace": "a mechanical gun grafted in place of his right arm") and the hi-fi round's prompts. Guard Scorpion
+follows `research/ff7-guard-scorpion.md` (the Raise Tail and Drop Tail forms).
 
-## The Film faults, fixed
+## The repair round
 
-The judge found four faults in the Film picks. Here is what was done about each (`07-faults-fixed.jpg`).
+### What the judge failed, and how it was handled
 
-1. **The green/cyan rim on the BACK edge of Cloud and Barret.** `scripts/derim.py` works on every
-   party pick. On edges that face screen-left, it replaces the rim hue with the colour further inside,
-   darkened to a shadowed edge. There are three passes:
-   - the green rim;
-   - a new teal pass: green and blue both well above red;
-   - a new pale pass for Barret (`PALE=1`), because his rim is a pale grey-green that the hue test missed.
+| Pose | Fault (the judge) | Handled by |
+|---|---|---|
+| cloud/idle | slate/olive band on the back of the near leg and boot; "KWUO" on the boot strap; grey smudge by the spike and on the far arm | `inkback.py`, `patch2.py` (strap), `trim.py` |
+| cloud/windup | the band on the arm from under the pauldron; red forearm; green front; dome pauldron | band to glove cuff; pauldron off + idle's grafted; `skinmatch.py`, `degreen.py` |
+| cloud/strike | olive rim on the back of the cuff and boot; grey halo behind the head; round pauldron | `inkback.py`, `trim.py`, pauldron repaint against the idle's, `recolor.py` (strap) |
+| cloud/follow | band on both wrists; background blob by the face; pauldron without spike | far band to cuff; `trim.py`; pauldron off + idle's grafted |
+| cloud/fistpump | band on the upper arm; pink band on the far wrist; boot scribble | three local repaints |
+| cloud/spin | wrench-like weapon; a shoulder carry; no strap; odd pauldron; green tint | remade as an edit of the fist pump; idle's pauldron grafted; `matchto.py` |
+| cloud/back | no white band; four-spike disc; grey wedge | band added; pauldron off + idle's grafted; `trim.py` |
+| cloud/hurt | four-spike disc; grey smudge; blade scratches | pauldron off + idle's grafted; `trim.py`; blade repaint |
+| barret/aim, fire | mint back rim; feet clipped; scars and browner skin; aim weakly different | outer and inner rim inked; boot completed; scars off; `skinmatch.py`. The pose is unchanged (see limits) |
+| barret/squat | 5-6 barrels and a magazine; extra upper-arm band; faint rim | gatling repainted as the idle's; band off; rim inked |
+| barret/punch | seven barrels; pale green rim | gatling repainted as the idle's; rim inked |
+| barret/hurt | two guns, about nine barrels; green rim | one idle gatling; rim inked |
+| gs/recoil | not the same machine; no tilt | an edit of the raised (and idle) pick: tilt + eye flare + lens flicker |
 
-   A rim on the edges facing the core (screen-right) is kept, since that one is lit correctly. Every
-   pose prompt also asks for no rim on the left edges.
-2. **Cloud's far-wrist metal cuff** (canon: only the white SOLDIER band, on his RIGHT wrist). The idle
-   and five poses got a local repair (`scripts/patch.py`): the far-wrist cuff or second band became
-   the brown glove cuff. The white band stays on the near wrist.
-3. **Barret's belt buckle** (canon: metal bands round the waist). His idle was re-rendered with three
-   steel bands and no buckle. The squat, punch and hurt were drawn from that idle. The fire was drawn
-   from the hi-fi pick with the same bands in its prompt, and the aim is an edit of the fire. All six
-   show the bands and no buckle.
-4. **Guard Scorpion's floor-shadow patch.** `scripts/cut2.py` has three new options:
-   - `FLOORBAND`: clears the flat dark floor band below its top edge, and its anti-aliased threads;
-   - `SHADEBOX`: clears the studio grey inside boxes;
-   - `CLEARBOX`: clears one stray edge line on the recoil pose.
+### What did not work (LOOKed at, not picked; all on sheets 14 and 15)
 
-   The values are in each sidecar's `cutParams`. The party's soft contact shadow round the boots is
-   taken off by `scripts/defloor.py`. It clears only grey that can be reached from outside without
-   crossing an ink line, so the dark soles and the steel blade stay. The game draws its own contact
-   shadow.
+- **Fresh renders on the fixed idle** (Cloud wind-up `r1-r2`, spin `ra1-rb2`; Barret aim `r1-r2`): bands on both
+  wrists, a second pauldron, a pauldron on the near shoulder, a hand-held gun, a belt with a buckle.
+- **Edits of the idle into the new pose** (Cloud `e1-e2`, Barret aim `e1-e2`): the proportions drifted (head-fit
+  0.81 and 0.87 of the idle's head) and Barret's aim became a hand-held gun with new hair.
+- **Edits of a close pose** worked for the spin (`f2`, from the fist pump) but not for the wind-up (`f1-f2`, from
+  the sword-on-back pose: a second blade, the band on the far arm), so the wind-up is the first pick repaired.
+- **A pauldron repaint with the idle's pauldron as image 2** worked on the strike but kept the pose's own disc on
+  the back and the hurt, so those (and the follow, wind-up and spin) got the **graft**: the old plate taken off by a
+  local repaint, then the idle's own plate pasted from `cloud/idle/cut-p4x.png` along a hand-traced outline, scaled
+  by 1/scaleToIdle, and the arm under it blended.
+- **The first gatling repaints** (`p6x1`, `p3x1`, `p4a1`) grew a bright red bare forearm; the second try started the
+  box below the elbow rings and said there is no forearm skin.
+- The first aim/fire face box was misplaced (it drew a faint face in the empty background); redone at the face.
 
-## Method
+### New tools (all in `scripts/`, all on our own renders, nothing mirrored)
 
-- **Engine**: FLUX.2 Klein 9B in edit mode (`scripts/gen2.py`), the Film method from `../hifi/README.md`.
-  The references are our own Film renders as ReferenceLatents: the Film idle picks, then our own pose
-  picks. There is no retail image, no IP-Adapter and no trace. The prompts are written from canon text
-  (`scripts/poses.py`). Every render is a base render at about 1536 px, then the same detail pass as
-  the hi-fi round: RealESRGAN x4, then a low-denoise re-render.
-- **Pilot 2, LOOK, keep the best.** Every pose had two pilots, and each render was read as an image.
-  Where both pilots failed a canon point, more tries or a local repair followed. Examples: two swords
-  in the spin, a hand-held gun in the aim, a band on both wrists, a floating lens. The runners are
-  `scripts/run-*.sh`, and the prompt changes are recorded in `scripts/_edit_poses*.py`. **91 renders
-  in all** (Cloud 41, Barret 28, Guard Scorpion 20, core 2). Every one is on sheets 08 to 10.
-- **Guard Scorpion idle on the raised body.** A full-frame "lower the tail" edit repainted the body as
-  well; in `idle/p3`, `p3t`, `q781001` and `q781011` the body is cleaner, loses its rust, or the tail
-  stays up. So the idle is built on the raised pick itself:
-  1. `scripts/lowertail.py` edits a crop around the tail, and Klein draws a low tail.
-  2. `scripts/tailgraft.py` grafts only that new tail onto the raised pick. It uses a similarity fit
-     on the shared rear hip and leg, clears the old raised tail to the source's own studio grey, and
-     re-bases the lens glow on it.
-  3. `scripts/patch.py` repaints the tail root (seed 782011), so the tail passes cleanly behind the
-     rear hub.
-- **Cut-outs**: `scripts/finish.sh` runs `scripts/cut2.mjs`. That is the round 2 `final-cut.mjs` with
-  the cut from `cut2.py`: the per-pixel max of isnet-anime and isnet-general-use, with non-background
-  holes filled, so grey steel on the grey studio stays whole. It is followed by defringe and both
-  checks. `scripts/refinish.sh` re-finishes a pick from its checked raw cut-out: `defloor.py`, then
-  `derim.py`, then `scale.py`, then `../hifi/scripts/recheck.mjs`, which runs both checks again on
-  the final file.
-- **One scale per subject (the idle's).** Poses were resampled to their idle's scale, using three
-  checks:
-  - stature (hair top to baseline) for upright poses;
-  - `scripts/headfit.py`, a registration of the head onto the idle's head, for a crouch, a lunge or a
-    sword overhead;
-  - a same-scale lineup read by eye (boots and head).
+- `patch2.py`: `patch.py` plus identity references (crops of our own idle as images 2..), an optional colour
+  match of the repaint to the source (`MATCH=1`), and a prov chain for the output.
+- `trim.py`: clears the studio-grey shell the cut kept outside the ink outline (reachable from outside, near the
+  studio colour stored under the transparent pixels).
+- `inkback.py`: a slate/olive/mint band outside the ink on edges that do not face screen-right becomes ink.
+- `degreen.py`: green tint off named parts (to grey, to the part's own hue, or to ink for an unlit inner edge).
+- `graft.py`: the idle's pauldron onto a pose (see above).
+- `skinmatch.py`, `matchto.py`, `regionmatch.py`, `recolor.py`: colour matches to the idle or to the same material.
+- `extend.py`, `flatbg.py`, `keycut.py`: more canvas under clipped feet, a flat studio grey around the repaint, and
+  a colour-key (or hand-traced, `POLY`) cut where both rembg models fail (a grey blade on the grey studio).
+- `erase.py`: clears alpha in named boxes (a stray curl off a muzzle, a smear left of an elbow).
+- `recoil.py`: Guard Scorpion's recoil as a tilt of its own pick, with the eye flare and lens flicker.
+- `finish2.sh`: cut2 (or keycut), defloor, trim, derim, inkback, degreen, skinmatch, scale, the sidecar
+  (`merge-steps.py`) and both checks on the final file (`../hifi/scripts/recheck.mjs`).
+- `poses2.py`: the repair-round prompts (bands named by the shoulder their arm hangs from, a thin rim only,
+  Barret's idle face, a taller canvas). Runners: `run-rep-*.sh`.
 
-  The factors are in the tables above and in each sidecar (`scaleToIdle`). Stature and head size
-  disagree by up to about 5 % on the crouched poses, so treat those factors as within about 5 %.
-- **GPU**: ComfyUI was shared. A job was submitted only while fewer than 3 prompts were pending
-  (`gen2.py`), with one runner at a time behind a lock file. ComfyUI was never restarted, and there
-  were no black frames. **Nothing was downloaded, and nothing was installed.**
+About 107 GPU jobs this round: 18 full renders or edits and about 89 local repaints (two seeds each). ComfyUI was
+shared: a job was submitted only while fewer than 3 prompts were pending, ComfyUI was never restarted, and there were
+no black frames. **Nothing was downloaded, and nothing was installed.**
+
+## Method (the first round, unchanged)
+
+- **Engine**: FLUX.2 Klein 9B in edit mode (`scripts/gen2.py`), the Film method from `../hifi/README.md`, with our
+  own Film renders as ReferenceLatents. There is no retail image, no IP-Adapter and no trace. Every render is a base
+  render at about 1536 px, then RealESRGAN x4 and a low-denoise re-render.
+- **Cut-outs**: `scripts/cut2.mjs` (the per-pixel max of isnet-anime and isnet-general-use, non-background holes
+  filled), then defringe and both checks.
+- **One scale per subject (the idle's)**: stature for upright poses, `scripts/headfit.py` for crouches, lunges and
+  swords overhead, and a same-scale lineup read by eye. The factors are in the tables and in each sidecar.
+- **Guard Scorpion idle on the raised body**: `lowertail.py`, `tailgraft.py`, `patch.py` (see the first round's notes
+  in git history of this file).
 
 ## Known limits (for the next step)
 
-- Barret's gatling shows four barrels in the idle, aim and fire, and six or seven in the squat, punch
-  and hurt. A code-drawn muzzle flash covers the fire frame. An idle-matched repaint of the barrel
-  cluster is possible if Bailey wants them identical.
-- Cloud's pauldron has a small spike in the idle and hurt poses (inherited from the approved hi-fi pick).
-- The strike's repaired far-wrist cuff is a longer leather cuff than on the other poses.
-- The sword spin is one still. The spin itself is motion for code (a rotation tween), as are the hit
-  flash, the knock-back and the victory hold (options B1 and D1).
-- Music stays silent, as Bailey decided, until Bailey hears the sketch.
+- **Spin scale**: the edit drew the body a little longer and the head a little smaller than the fist pump it came
+  from (head-fit 1.087, stature about 0.95). It is placed at 1.0, so the head is about 8 % smaller and the body
+  about 5 % taller than the idle's. The wind-up uses its head-fit, 1.11 (the first round used 1.06).
+- **Wind-up**: his right wrist (the band) is hidden behind the left forearm, so no band shows; the forearm's
+  shadow is still redder than the idle's skin shadow.
+- **Aim**: the pose is still the first round's (the gun at chest height against the idle's waist height, a set jaw);
+  new aim renders all broke identity. Code can add the difference in play (a raise tween, a sight glint).
+- **Aim and fire boots**: the completed near boot's rolled trouser cuff is a little paler than the trousers.
+- **Barret's face**: the aim and fire faces are now unscarred like the idle's; the squat, punch and hurt still
+  have small cheek scars (the judge did not flag them). One face patch each would match them.
+- **Barret's barrels**: the idle shows four; the repaired squat, punch and hurt show four in the 2 x 2 cluster from
+  most angles (the punch's end view shows the cluster's rim). The aim and fire keep the first round's four.
+- **Pauldron**: the grafted plate is the idle's own pixels, so it is the same shape and size everywhere; on the
+  twisted follow-through and the raised wind-up it keeps the idle's angle.
+- The sword spin, hit flash, knock-back and victory hold are motion for code (options B1 and D1). Music stays
+  silent until Bailey hears the sketch.
