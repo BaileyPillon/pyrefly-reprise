@@ -118,6 +118,54 @@ instead of a best-effort `d.music ?? d.currentTrack ?? d.track`, none of
 which exist on that object — every prior sample recorded `music: null` even
 while the raw debug object showed a track playing.
 
+### `route.mjs` — one chapter, title to board again, the full capture route
+
+Promoted from `critic/rounds/round-13/cap/route.mjs` (gitignored, one round
+only) by batch t1-b5 of `docs/plans/thresholds-program-2026-09-26.md`. Split in
+four: `route.mjs` (the flow), `route-fight.mjs` (one attempt of the fight),
+`route-ui.mjs` (reading and choosing from the HUD), `route-evidence.mjs` (the
+browser context, the input path and the evidence files).
+
+```
+node critic/runner/lib/route.mjs <chapterId> <win|lose> --base=<url> --evidence=<dir>
+     [--size=1600x900] [--budget=900000] [--tag=x] [--seed=1|drawn] [--attempts=1]
+     [--touch] [--gamepad] [--reduce-motion] [--nochange] [--jpeg]
+```
+
+- **The seed (PR-0202).** `--seed=N` (default 1) calls
+  `window.__pyrefly.setSeed(N)` before the first key and lists it in
+  `run.json.hooks` (a labelled setup hook, CHK-015). `run.json.seed` is the
+  engine's own `battleState().seed` at the first menu, `battleSeeds` has it at
+  every link and retry, and `firstEnemyAction` is the first enemy
+  `action-start` of the attempt, so two routes on one pinned seed can be
+  compared. `--seed=drawn` pins nothing and still records the drawn seed.
+  Never again read `__pyrefly.seed()`: it is the next run's pin, not the seed a
+  battle used.
+- **Captures assert the named state (PR-0213).** `snap(file, state, want)`
+  reads the screen, the menu and the target cursor in the same call as the
+  CHK-016 stale roots; `asserted` is written from that read, and a wanted state
+  that was not there is written `UNVERIFIED (...)` with `verified: false`.
+  The mid-fight shot resumes from the pause first; 16 and 16b are only shot
+  when a target cursor really opened (one retry after a scripted line).
+  `node critic/runner/lib/route-index.mjs <evidence>/index.json` is the
+  acceptance check: it exits 1 if any entry's asserted screen differs from its
+  stale-root screen (it finds round 13's own "in battle" pause frames).
+- **Chapter VIII's Orders widget.** The PULL BACK / CLOSE IN widget is a second
+  `.ig-cmd-stack` over the main one. `readRows` reads only visible rows and
+  prefers the overlay stack, and a target is confirmed only when a cursor is
+  up, so the advisor's "Pull back, in Orders" is played like any other move.
+  The lose route takes Defend, else a standing order in VIII, else Attack.
+- **Evidence contexts.** `--touch` (hasTouch, isMobile; command rows and
+  reticles chosen with `page.tap`, every tap and every keyboard fallback
+  counted), `--gamepad` (an init script replaces `navigator.getGamepads` with
+  one standard-mapping pad; Enter, Escape and the arrows go through it, other
+  keys are counted as fallbacks), `--reduce-motion` (context `reducedMotion`
+  plus `emulateMedia`; the page's `matchMedia` and the save's setting are read
+  back). `run.json.contexts` records each. Every run writes
+  `audio-debug.jsonl` (one whole `audioDebug()` per line, no 4,000-character
+  cut) and `run.json.dboxTimeline` (every dialogue line shown, speaker,
+  portrait, screen and timing, from an init-script recorder).
+
 ### `cli.mjs` — small arg helper
 
 `parseArgs`, `requireBase`, `requireEvidence`. `requireBase` /
@@ -174,8 +222,7 @@ nothing captured with these scripts is trustworthy either.
 
 ## What this does not fix
 
-**PR-0062** (`critic/rounds/round-06.json`) asks to expose the per-link seed
-a chapter actually used through the debug API, so a bench seed can be
-reproduced in play. That is a change to `src/debug/api.ts` — product code,
-not the harness — and is out of scope here; AGENTS.md rule 10 requires
-Bailey's yes before anything new is built there. Listed, not built.
+**PR-0062** (`critic/rounds/round-06.json`) asked to expose the per-link seed
+a chapter actually used. No new debug API was needed after all:
+`battleState().seed` is the engine's own seed, and `route.mjs` records it at
+every battle start, link and retry (PR-0202, batch t1-b5).
