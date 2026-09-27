@@ -1,0 +1,1490 @@
+{
+ "report": {
+  "sawSeam": true,
+  "markEver": "ffx2-chain",
+  "framesWithBeat": 96,
+  "framesWithMark": 4,
+  "markDuringBeat": 0,
+  "overlaps": 0,
+  "marksAfterSeam": [
+   {
+    "t": 14853,
+    "id": "ffx2-chain"
+   },
+   {
+    "t": 15007,
+    "id": "ffx2-chain"
+   },
+   {
+    "t": 15161,
+    "id": "ffx2-chain"
+   }
+  ]
+ },
+ "frames": [
+  {
+   "beat": false,
+   "mark": {
+    "x": 608,
+    "y": 621,
+    "w": 400,
+    "h": 146
+   },
+   "markId": "ffx2-chain",
+   "card": null,
+   "screen": "battle",
+   "t": 14853
+  },
+  {
+   "beat": false,
+   "mark": {
+    "x": 608,
+    "y": 621,
+    "w": 400,
+    "h": 146
+   },
+   "markId": "ffx2-chain",
+   "card": null,
+   "screen": "battle",
+   "t": 15007
+  },
+  {
+   "beat": false,
+   "mark": {
+    "x": 608,
+    "y": 621,
+    "w": 400,
+    "h": 146
+   },
+   "markId": "ffx2-chain",
+   "card": null,
+   "screen": "battle",
+   "t": 15161
+  },
+  {
+   "beat": false,
+   "mark": {
+    "x": 608,
+    "y": 621,
+    "w": 400,
+    "h": 146
+   },
+   "markId": "ffx2-chain",
+   "card": null,
+   "screen": "battle",
+   "t": 15316
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": null,
+   "screen": "battle",
+   "t": 24122
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": null,
+   "screen": "battle",
+   "t": 24275
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": null,
+   "screen": "battle",
+   "t": 24429
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": null,
+   "screen": "battle",
+   "t": 24586
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He l",
+   "screen": "battle",
+   "t": 24742
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his",
+   "screen": "battle",
+   "t": 24898
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door o",
+   "screen": "battle",
+   "t": 25053
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. R",
+   "screen": "battle",
+   "t": 25208
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and ",
+   "screen": "battle",
+   "t": 25424
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and helpful.",
+   "screen": "battle",
+   "t": 25623
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and helpful.",
+   "screen": "battle",
+   "t": 25825
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and helpful.",
+   "screen": "battle",
+   "t": 26039
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and helpful.",
+   "screen": "battle",
+   "t": 26240
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and helpful.",
+   "screen": "battle",
+   "t": 26441
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and helpful.",
+   "screen": "battle",
+   "t": 26596
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and helpful.",
+   "screen": "battle",
+   "t": 26753
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "He left his door open. Rude, and helpful.",
+   "screen": "battle",
+   "t": 26906
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Du",
+   "screen": "battle",
+   "t": 27062
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud spher",
+   "screen": "battle",
+   "t": 27228
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud ",
+   "screen": "battle",
+   "t": 27385
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere",
+   "screen": "battle",
+   "t": 27540
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— ",
+   "screen": "battle",
+   "t": 27694
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 27848
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 28004
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 28157
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 28309
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 28475
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 28631
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 28784
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 28939
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 29090
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 29245
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 29409
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 29565
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 29720
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 29878
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 30030
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 30185
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 30339
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "Dud sphere. Dud sphere. Dud— huh.",
+   "screen": "battle",
+   "t": 30494
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn t",
+   "screen": "battle",
+   "t": 30647
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn that of",
+   "screen": "battle",
+   "t": 30801
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn that off.",
+   "screen": "battle",
+   "t": 30955
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn that off.",
+   "screen": "battle",
+   "t": 31121
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn that off.",
+   "screen": "battle",
+   "t": 31272
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn that off.",
+   "screen": "battle",
+   "t": 31427
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn that off.",
+   "screen": "battle",
+   "t": 31581
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn that off.",
+   "screen": "battle",
+   "t": 31734
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn that off.",
+   "screen": "battle",
+   "t": 31886
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Pai",
+   "screen": "battle",
+   "t": 32040
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? Wha",
+   "screen": "battle",
+   "t": 32196
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is i",
+   "screen": "battle",
+   "t": 32350
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is it?",
+   "screen": "battle",
+   "t": 32505
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is it?",
+   "screen": "battle",
+   "t": 32658
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is it?",
+   "screen": "battle",
+   "t": 32811
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is it?",
+   "screen": "battle",
+   "t": 32965
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is it?",
+   "screen": "battle",
+   "t": 33118
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is it?",
+   "screen": "battle",
+   "t": 33272
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is it?",
+   "screen": "battle",
+   "t": 33427
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Yuna",
+   "text": "Paine? What is it?",
+   "screen": "battle",
+   "t": 33582
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn ",
+   "screen": "battle",
+   "t": 33736
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off",
+   "screen": "battle",
+   "t": 33890
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 34045
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 34199
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 34354
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 34511
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 34665
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 34819
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 34974
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 35129
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 35284
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 35435
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 35588
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 35742
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 35895
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 36050
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 36215
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 36369
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 36521
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 36675
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Paine",
+   "text": "Turn it off.",
+   "screen": "battle",
+   "t": 36828
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...",
+   "screen": "battle",
+   "t": 36992
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. R",
+   "screen": "battle",
+   "t": 37146
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round t",
+   "screen": "battle",
+   "t": 37301
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 37455
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 37611
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 37764
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 37918
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 38070
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 38222
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 38378
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 38534
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 38687
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 38841
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 38995
+  },
+  {
+   "beat": true,
+   "mark": null,
+   "markId": null,
+   "card": {
+    "x": 100,
+    "y": 128,
+    "w": 1000,
+    "h": 211
+   },
+   "speaker": "Rikku",
+   "text": "...Okay. Round two.",
+   "screen": "battle",
+   "t": 39149
+  }
+ ]
+}

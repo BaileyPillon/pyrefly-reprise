@@ -103,6 +103,8 @@ export interface ChapterMeta {
   snapshots: readonly [ChapterSnapshot, ChapterSnapshot, ChapterSnapshot];
   focalCharacterId: string;
   musicKeys: readonly string[];
+  /** The chapter card's BOSS row when the first formation is not who the chapter is about (PR-0134). */
+  bossLine?: string;
 }
 
 /** `GameId` ('ffx' | 'ffx2') → the pause screen's display label. */

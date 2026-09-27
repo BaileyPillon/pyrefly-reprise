@@ -45,6 +45,9 @@ export const FFX2_LEBLANC_META: ChapterMeta = {
   numeral: 'VI',
   title: 'Leblanc',
   subtitle: 'A Farce, Armed',
+  // PR-0134: the card's BOSS row read Act I's formation ("Ormi + Dr. Goon + Fem-Goon") on a card
+  // titled "Leblanc". Act III is the real fight: Leblanc with Logos and Ormi (research §5, §9.2).
+  bossLine: 'Leblanc, Logos and Ormi',
   location: 'Chateau Leblanc, Guadosalam',
   blurb:
     'Three stolen uniforms get the girls through the front door of a mansion playing dress-up as a rival crew, ' +

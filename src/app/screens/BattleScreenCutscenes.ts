@@ -73,6 +73,7 @@ import {
   type DialoguePort,
 } from '../../story/runner/CutsceneRunner.ts';
 import { MID_LINE_HOLD_MS, midBattleDeadlineMs } from '../../story/registry.ts';
+import { createShowCounter } from '../../story/showCaps.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
 import { DialogueBox } from '../../ui/common/DialogueBox.ts';
 import { typingDurationMs } from '../../ui/common/typewriter.ts';
@@ -386,9 +387,12 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
   const runner = new CutsceneRunner(ports);
   /** Beats started, so a stale budget timer can tell whose it is. */
   let beatsPlayed = 0;
+  /** Per-battle showings of capped beats (PR-0194, `story/showCaps.ts`). */
+  const shows = createShowCounter();
 
   return {
     async play(script: StoryScript, playOpts?: { midBattle?: boolean; name?: string }): Promise<void> {
+      if (!shows.admit(playOpts?.name)) return;
       // Nothing to show when every line resolves instantly.
       box.el.hidden = mode === 'instant';
       // The HUD stays where it is; the scene behind the line just dims.
@@ -404,8 +408,9 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
       try {
         // `reset()` keeps the `'skip'` latch (`CutsceneRunner.setInstant`), so a
         // run at that speed starts *every* beat fast-forwarded, not just the
-        // one that happened to be in flight when the speed was set.
-        runner.reset();
+        // one that happened to be in flight when the speed was set. Flags are
+        // kept: they live for the chapter, so a beat can read an earlier one's.
+        runner.reset({ keepFlags: true });
         if (mode === 'instant') {
           // Nothing to race. Every timed step resolves at once, so the beat
           // costs a handful of microtasks and cannot overrun a budget it is

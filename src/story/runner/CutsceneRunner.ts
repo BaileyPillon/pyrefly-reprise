@@ -185,9 +185,13 @@ export class CutsceneRunner {
    * {@link setInstant} is deliberately **not** cleared: it is a property of the
    * playback speed, not of the script, so the next script starts already
    * fast-forwarded.
+   *
+   * `keepFlags` is the battle's between-beats reset: chapter flags live for the
+   * chapter (the DSL's `SetFlagStep`), so one beat can read what an earlier one
+   * set (PR-0103, the Act III kill-order guard in Chapter VI).
    */
-  reset(): void {
-    this.flags.clear();
+  reset(opts: { keepFlags?: boolean } = {}): void {
+    if (!opts.keepFlags) this.flags.clear();
     this.skippedFlag = this.instantFlag;
     this.skipWaiters = [];
     this.jumpCount = 0;

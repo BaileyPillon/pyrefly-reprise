@@ -300,6 +300,7 @@ export class PauseScreen extends Screen {
       if (suppress) this.suppressed.add(suppress);
       return;
     }
+    if (intent === 'resume') return this.close(); // PR-0115: P closes what P opened
     if (intent === 'hide') {
       if (!this.overlays?.photoUp) this.togglePanels();
       return;

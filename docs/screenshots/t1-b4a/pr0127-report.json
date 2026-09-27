@@ -1,0 +1,9 @@
+{
+  "issue": "PR-0127",
+  "build": "t1-b4a working tree, vite preview of a production build, PYREFLY_BROWSER=gpu",
+  "what": "Chapter VI party prep, CHAPTER tab. Each caption is not itself clipped (scrollHeight == clientHeight per .cpanel__snap-cap); the text column (.prepchap__col, overflow scroll, 102 grid px tall) is taller than its band, so the caption row sits below its fold. The bottom scroll cue is visible at all three sizes.",
+  "columnScrollHeightVsClientHeight_gridPx": { "1280x720": [148, 102], "1600x900": [114, 102], "2000x1012": [110, 102] },
+  "columnBottom_screenPx": { "1280x720": 354, "1600x900": 443, "2000x1012": 498 },
+  "captionBottoms_screenPx": { "1280x720": [445, 428, 444], "1600x900": [471, 470, 470], "2000x1012": [519, 519, 518] },
+  "verdict": "STOPPED: making room needs a design choice (photo height on every prep card, VI's blurb length, or the 14 px floor at 1280x720, which is FOC-06's open question)"
+}

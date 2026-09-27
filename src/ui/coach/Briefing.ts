@@ -165,8 +165,8 @@ export class Briefing {
       </div>
       <div class="coach-brief__timer"><i data-role="coach-brief-fill"></i></div>
       <div class="coach-brief__foot">
-        <span data-action="briefing:skip" role="button" tabindex="0"><b>Enter / Esc</b> Skip &mdash; ${seconds} seconds, once</span>
-        <span data-action="briefing:never" role="button" tabindex="0"><b>${NEVER_KEY_LABEL}</b> Never show this again</span>
+        <span data-action="briefing:skip" role="button" tabindex="0"><b class="coach-brief__key">Enter / Esc</b><b class="coach-brief__tap">Tap</b> Skip &mdash; ${seconds} seconds, once</span>
+        <span data-action="briefing:never" role="button" tabindex="0"><b class="coach-brief__key">${NEVER_KEY_LABEL}</b><b class="coach-brief__tap">Tap here</b> Never show this again</span>
       </div>
     `;
   }

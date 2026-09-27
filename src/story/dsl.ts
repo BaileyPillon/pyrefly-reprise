@@ -15,6 +15,7 @@
  */
 
 import type { MidBattleTrigger, CameraRigId, MusicKey, SfxKey, VfxKey } from '../battle/common/types.ts';
+import { storyTextIssues } from './textLint.ts';
 
 // ---------------------------------------------------------------------------
 // Speakers
@@ -595,6 +596,8 @@ export function lintScript(script: StoryScript): LineIssue[] {
     const ellipses = text.split('...').length - 1;
     if (ellipses > 1) issues.push({ index, message: 'more than one ellipsis in a line' });
     if (text.includes(' ...')) issues.push({ index, message: 'space before an ellipsis' });
+    // CHK-007: the box prints text literally (markup, citations, ids); see `./textLint.ts`.
+    for (const message of storyTextIssues(text)) issues.push({ index, message });
   });
   return issues;
 }
