@@ -1118,6 +1118,30 @@
     "mtime": "2026-09-27T08:19:30.713Z",
     "approved": "2026-09-27"
    }
+  },
+  "bailey:2026-09-27-ixion": {
+   "words": "all your recommendations",
+   "note": "Bailey, 2026-09-27 ~15:20 EDT, verbatim \"all your recommendations\" (D-268 in docs/target/decisions.json), answering the driver on docs/concepts/chapters/ixion-djose-2026-09-27/look/README.md (Q6, four painted options; B recommended): Ixion's FFX-2 look is option B, possessed violet. Installed under the new subject x2-ixion (FFX-2 only; the FFX ixion/ paintings are untouched). idle = opt-b.png byte for byte, the picture Bailey saw. attack, cast and overdrive are DERIVED by the same no-GPU method from the shipped FFX attack and overdrive paintings (possess_b.py; cast adds recharge_glow.py, the Recharge glow), as the driver's brief of the same message asked; Bailey has not seen those three as poses, and a pick approves only what Bailey named (rule 15). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-27-ixion/ (installed/, NOTHING-REPLACED.txt). Game: FFX-2 only.",
+   "public/art/characters/x2-ixion/idle.png": {
+    "sha256": "d24f15dfd00a5f146b183a9eb8d4c6065f26cc804905151d23eb73554a890691",
+    "mtime": "2026-09-27T19:30:14.811Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/x2-ixion/attack.png": {
+    "sha256": "cb52a3caef3229bf4a60b2ca0537d1a642f9cf7348605c70583adf0ca15872ec",
+    "mtime": "2026-09-27T19:30:14.894Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/x2-ixion/cast.png": {
+    "sha256": "5bebcfef78958941b0798a2d0497a7f63215915c46b90cadc2c51f9b5db0dcd3",
+    "mtime": "2026-09-27T19:30:14.933Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/x2-ixion/overdrive.png": {
+    "sha256": "e151da4e7d5651d49a5e943553cf88b5336c1d2ebed24fdbef4c5a5a09ca01eb",
+    "mtime": "2026-09-27T19:30:14.981Z",
+    "approved": "2026-09-27"
+   }
   }
  }
 }

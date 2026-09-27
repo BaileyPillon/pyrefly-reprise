@@ -21,7 +21,8 @@
  * - `enemyGroupRef` — Ixion, research §3.1 and §4 (every row tagged in `./ffx2/enemies/ixion-djose*.ts`).
  * - `sceneKey: 'djose-temple'` — **placeholder**: the registry's stand-in diorama (the demo composition,
  *   `src/scenes/index.ts`), titled as a placeholder. No Djose plate exists; the Chamber is a painting round.
- * - Ixion's painting — **placeholder**: the FFX Ixion (D-089), until Bailey picks the FFX-2 look (Q6).
+ * - Ixion's painting — **look B, possessed violet** (D-268, Bailey 2026-09-27): `x2-ixion`, derived from the FFX
+ *   Ixion (D-089). His fall poses (hurt, ko) are not painted: the presenter falls back to the idle.
  * - `music` — **placeholder**: our original FFX-2 aeon cue for the fight (the game plays "Aeons",
  *   `[single source]`); the Farplane bed as the field stand-in; the FFX-2 fanfare. Bailey's call by ear.
  * - `scriptsRef` — **a stub** (`../story/scripts/ffx2-ixion-djose.ts`): concept A's order in placeholder

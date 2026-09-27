@@ -10,8 +10,9 @@
  * then the fall and a short Abyss cutscene ending on a playable four-whistle beat). Built **unlisted behind a
  * switch** (`src/data/chapter-ffx2-ixion-djose.ts`).
  *
- * **Placeholder art.** `spriteKey: 'ixion'` is the **FFX** Ixion painting (shipped by D-089), standing in
- * until Bailey picks the FFX-2 look (research Q6; the options are commit 247cb985). It is not a proposal.
+ * **Art: look B, possessed violet** (D-268; Bailey, 2026-09-27 ~15:20 EDT, "all your recommendations"):
+ * `spriteKey: 'x2-ixion'`, the house violet treatment of our FFX Ixion painting (`public/art/characters/x2-ixion/`,
+ * locked as `bailey:2026-09-27-ixion`). Not canon (research F-12); the FFX `ixion` paintings are untouched.
  *
  * Every stat is §3.1 with its tag, carried verbatim (rule 6).
  */
@@ -21,8 +22,8 @@ import { STANDARD_AILMENT_IMMUNITY } from './vegnagun-shared.ts';
 
 export const DJOSE_IXION = 'ffx2-djose-ixion';
 export const IXION_ID = 'x2-ixion';
-/** The placeholder painting: the FFX Ixion (D-089). Swap for the FFX-2 look once Bailey picks (Q6). */
-export const IXION_PLACEHOLDER_SPRITE = 'ixion';
+/** Ixion's FFX-2 painting: look B, possessed violet (D-268), derived from the FFX Ixion (D-089) by `possess_b.py`. */
+export const IXION_SPRITE = 'x2-ixion';
 
 /**
  * §3.1's immunity list: Instant Death, Petrify, Sleep, Silence, Darkness, Poison, Confuse, Berserk, Curse,
@@ -33,13 +34,13 @@ export const IXION_PLACEHOLDER_SPRITE = 'ixion';
 const IXION_IMMUNE: StatusImmunities = { ...STANDARD_AILMENT_IMMUNITY, stop: 255 };
 
 /**
- * **Action time, OFF: Bailey's pick** (the Chapter XI and XIII switch; `src/battle/ffx2/action-time.ts`).
- * The rule is sourced `[verified: 2 sources]`, its length is not (`research/ffx2-trema.md` §12.4). The Road
- * (Chapter XI) and Cloister 100 (Chapter XIII) ship 3 s by Bailey's word; this chapter ships **without**
- * until Bailey says otherwise. `docs/plans/ixion-bench.md` measures both: with it off the preset almost never
- * wins at human pace. `true` turns it on at {@link DJOSE_ACTION_TIME_SECONDS}; no boss number moves either way.
+ * **Action time, ON at 3 s: Bailey's pick** (2026-09-27 ~15:20 EDT, "all your recommendations", D-269; the
+ * Chapter XI and XIII switch, `src/battle/ffx2/action-time.ts`). The rule is sourced `[verified: 2 sources]`, its
+ * length is not (`research/ffx2-trema.md` §12.4); the Road (Chapter XI) and Cloister 100 (Chapter XIII) ship the
+ * same 3 s. `docs/plans/ixion-bench.md` measures both: with it off the preset almost never wins at human pace.
+ * `false` turns it off; no boss number moves either way.
  */
-export const DJOSE_ACTION_TIME_ON: boolean = false;
+export const DJOSE_ACTION_TIME_ON: boolean = true;
 /** **`[estimate]`**: the length the Road and the Cloister ship, measured here as the option. Unsourced (§12.4). */
 export const DJOSE_ACTION_TIME_SECONDS = 3;
 const actionTime = DJOSE_ACTION_TIME_ON ? { actionTimeSeconds: DJOSE_ACTION_TIME_SECONDS } : {};
@@ -51,7 +52,7 @@ const AEON_CUE = [{ at: 'start' as const, track: 'boss-ffx2-aeon' as const, fade
 export const x2Ixion: EnemyDef = {
   id: IXION_ID,
   name: 'Ixion',
-  spriteKey: IXION_PLACEHOLDER_SPRITE, // PLACEHOLDER: the FFX painting (see the file header)
+  spriteKey: IXION_SPRITE, // look B (D-268; see the file header)
   slot: 0,
   stats: {
     hp: 12380, // [verified: 8 sources]
@@ -75,7 +76,7 @@ export const x2Ixion: EnemyDef = {
   immunities: IXION_IMMUNE,
   // "fractional damage" is on §3.1's immunity list [verified: 3 sources].
   immunityFlags: ['boss', 'immune-to-percentage-damage'],
-  forms: [{ name: 'Ixion', spriteKey: IXION_PLACEHOLDER_SPRITE, hp: 12380 }],
+  forms: [{ name: 'Ixion', spriteKey: IXION_SPRITE, hp: 12380 }],
   aiScriptId: 'x2-ixion',
   rewards: {
     ap: 15, // EXP / AP / Gil 2,600 / 15 / 1,800 [verified: 6 sources]
@@ -108,7 +109,7 @@ export const djoseIxionGroup: EnemyGroupDef = {
   enemies: [x2Ixion],
   canEscape: false,
   musicCues: AEON_CUE,
-  ...actionTime, // DJOSE_ACTION_TIME_ON: off until Bailey picks
+  ...actionTime, // DJOSE_ACTION_TIME_ON: on, 3 s (Bailey, 2026-09-27)
 };
 
 export const ixionDjoseGroups: readonly EnemyGroupDef[] = [djoseIxionGroup];

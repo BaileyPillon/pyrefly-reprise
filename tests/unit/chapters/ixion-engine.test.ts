@@ -292,11 +292,12 @@ describe('registration: unlisted behind the switch', () => {
     expect((CHAPTER_IDS as readonly string[]).includes('ffx2-ixion-djose')).toBe(false);
   });
 
-  it('the scene is a labelled placeholder, and so is the painting (the FFX Ixion, D-089)', () => {
+  it('the scene is a labelled placeholder; the painting is look B, its own FFX-2 subject (D-268), not the FFX one', () => {
     expect(FFX2_IXION_DJOSE.sceneKey).toBe(IXION_DJOSE_SCENE_KEY);
     expect(isPlaceholderScene(IXION_DJOSE_SCENE_KEY)).toBe(true);
     expect(getScene(IXION_DJOSE_SCENE_KEY)?.title).toMatch(/PLACEHOLDER/);
-    expect(x2Ixion.spriteKey).toBe('ixion');
+    expect(x2Ixion.spriteKey).toBe('x2-ixion');
+    expect(x2Ixion.forms?.map((f) => f.spriteKey)).toEqual(['x2-ixion']);
   });
 
   it('the party: Yuna White Mage, Rikku and Paine Dark Knight, Lv 32 / 33 / 34 (our estimate), Samurai owned', () => {

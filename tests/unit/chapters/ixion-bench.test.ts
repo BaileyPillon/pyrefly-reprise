@@ -7,8 +7,9 @@
  * inside a submenu, held). 200 seeds a row. Lines (`../helpers/ixionDrive.ts`): **sensible** (the guides'
  * clear, answering the Recharge tell) and **naive** (no Shell, no Protect, the tell ignored).
  *
- * The chapter is built with action time **off** (`DJOSE_ACTION_TIME_ON`, Bailey's pick); the "ON" rows are
- * the same fight with the switch's 3 s, the length Chapters XI and XIII ship. The table is copied into
+ * The chapter is built with action time **on, 3 s** (`DJOSE_ACTION_TIME_ON`, Bailey's pick, 2026-09-27, D-269;
+ * the length Chapters XI and XIII ship); the "OFF" rows are the same fight with the switch's time taken away by
+ * the engine option (`actionTimeSeconds: 0`, the most specific switch). The table is copied into
  * `docs/plans/ixion-bench.md`.
  */
 
@@ -21,8 +22,8 @@ import { driveIxion, type IxionDriveOptions, type IxionLine, type IxionRun } fro
 const SEEDS = 200;
 const HUMAN: IxionDriveOptions = { decisionMs: 1500, topMs: 500, engine: { atbMode: 'wait', waitSplit: true } };
 const BENCH: IxionDriveOptions = {};
-/** The switch's length laid on as an engine option (the same ticks the formation field would give). */
-const on = (o: IxionDriveOptions): IxionDriveOptions => ({ ...o, engine: { ...o.engine, actionTimeSeconds: DJOSE_ACTION_TIME_SECONDS } });
+/** The switch taken away: the engine option outranks the formation's field (`action-time.ts`), and 0 is off. */
+const off = (o: IxionDriveOptions): IxionDriveOptions => ({ ...o, engine: { ...o.engine, actionTimeSeconds: 0 } });
 const rows: string[] = [];
 
 interface Tally {
@@ -68,12 +69,14 @@ const withLevels = (lv: [number, number, number]): FFX2PartyBuild => ({
 describe('Ixion at Djose: 200 seeds, sensible and naive, bench and human pace (Wait split)', () => {
   const tallies = new Map<string, Tally>();
 
-  it('the chapter is built with action time off (the switch is Bailey\'s)', () => {
-    expect(DJOSE_ACTION_TIME_ON).toBe(false);
-    expect(djoseIxionGroup.actionTimeSeconds).toBeUndefined();
+  it('the chapter is built with action time on, 3 s (Bailey\'s pick, 2026-09-27)', () => {
+    expect(DJOSE_ACTION_TIME_ON).toBe(true);
+    expect(DJOSE_ACTION_TIME_SECONDS).toBe(3);
+    expect(djoseIxionGroup.actionTimeSeconds).toBe(3);
   });
 
-  for (const [label, wrap] of [['action time OFF (as built)', (o: IxionDriveOptions) => o], [`action time ON, ${DJOSE_ACTION_TIME_SECONDS} s (the switch)`, on]] as const) {
+  const ON_LABEL = `action time ON, ${DJOSE_ACTION_TIME_SECONDS} s (as built)`;
+  for (const [label, wrap] of [['action time OFF (the switch off)', off], [ON_LABEL, (o: IxionDriveOptions) => o]] as const) {
     for (const line of ['sensible', 'naive'] as const) {
       it(`${line}, ${label}: bench and human`, () => {
         const b = measure(line, wrap(BENCH));
@@ -87,7 +90,7 @@ describe('Ixion at Djose: 200 seeds, sensible and naive, bench and human pace (W
     }
   }
 
-  it('measured options at human pace, the switch off and on (none is built; each is one flag or preset away)', () => {
+  it('measured options at human pace, the switch off and on (none is built; each is one flag or preset away; the switch is ON as built)', () => {
     const options: Array<[string, IxionLine, IxionDriveOptions]> = [
       ['F-8 other reading: 2/3 : 1/3 (wiki)', 'sensible', { ...HUMAN, flags: { ixionThundaraSplit: 'wiki' } }],
       ['Q4 / FA8 b: landed damage only feeds the counter', 'sensible', { ...HUMAN, flags: { fallenAeonsAcTrigger: 'damaged' } }],
@@ -97,19 +100,23 @@ describe('Ixion at Djose: 200 seeds, sensible and naive, bench and human pace (W
       ['action time 1.5 s', 'naive', { ...HUMAN, engine: { ...HUMAN.engine, actionTimeSeconds: 1.5 } }],
     ];
     for (const [name, line, o] of options) {
-      const off = measure(line, o);
-      row(`${line}; OPTION ${name}`, 'human, Wait split, switch OFF', off);
-      expect(off.unfinished).toBe(0);
-      if (name.startsWith('action time')) continue;
-      const withOn = measure(line, on(o));
-      row(`${line}; OPTION ${name}`, 'human, Wait split, switch ON', withOn);
+      if (name.startsWith('action time')) {
+        const t = measure(line, o);
+        row(`${line}; OPTION ${name}`, 'human, Wait split, instead of the switch', t);
+        expect(t.unfinished).toBe(0);
+        continue;
+      }
+      const withOff = measure(line, off(o));
+      row(`${line}; OPTION ${name}`, 'human, Wait split, switch OFF', withOff);
+      expect(withOff.unfinished).toBe(0);
+      const withOn = measure(line, o);
+      row(`${line}; OPTION ${name}`, 'human, Wait split, switch ON (as built)', withOn);
       expect(withOn.unfinished).toBe(0);
     }
   }, 1_800_000);
 
-  it('the switch ON separates the lines: sensible wins more often than naive at human pace', () => {
-    const label = `action time ON, ${DJOSE_ACTION_TIME_SECONDS} s (the switch)`;
-    expect(tallies.get(`sensible|${label}|human`)!.wins).toBeGreaterThan(tallies.get(`naive|${label}|human`)!.wins);
+  it('as built (switch ON) the lines separate: sensible wins more often than naive at human pace', () => {
+    expect(tallies.get(`sensible|${ON_LABEL}|human`)!.wins).toBeGreaterThan(tallies.get(`naive|${ON_LABEL}|human`)!.wins);
   });
 
   it('prints the table', () => {
