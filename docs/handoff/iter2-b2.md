@@ -89,3 +89,82 @@ scratch scripts `tools/zz-b2-*.tmp.mjs`, `.b2-vite-tmp.config.mjs`; raw captures
 6. PR-0061(a): seven chapters open with an enemy turn (the fight itself), 7.7-9.8 s passive.
 7. A-3: the hairline, if the driver judges it new (rule 9).
 8. A-7 not built.
+
+## CHECK (independent, 2026-09-27; checker did not build B2)
+
+Checked `iter2-b2` at 6d6d3449 in `D:/pyrefly-iter2-b2`. The baseline is the branch point `1a43fd7b`, exported
+and built on its own, so every difference is B2's. Both production builds were served by `vite preview`
+(6510 is B2, 6511 is the base) and stopped by PID. One headless browser at a time, `PYREFLY_BROWSER=gpu`.
+Scratch probes are `tools/zz-b2chk-*.tmp.mjs`; raw frames and JSON are in `D:/Tools/pyrefly-scratch/iter2-b2-check/`.
+Nothing in `src` changed.
+
+**Gates.**
+- `tsc --noEmit`: clean.
+- Full vitest (`--testTimeout=60000`): 505 files and 8,656 tests passed, 0 failed.
+- `tools/orphans.mjs`: 29. That is main's 24 plus the five unwired A-2 modules, as disclosed.
+- `verify-approved`: 0 mismatched, 0 missing. The branch touches nothing under `public/`,
+  `docs/target/` or `docs/concepts/`.
+- Merge with today's main (a44297ca, which includes B1, B3 and B4): `git merge-tree` is clean. The merged tree is
+  also clean under `tsc`, and full vitest passes 8,826 tests with 0 failures.
+
+**Regression sweep: every chapter's first command menu, B2 against the base, seed 1.**
+- 1600x900: no framing change in any of the 15 chapters.
+  - Same rig everywhere.
+  - The camera moves at most 0.12 units, which is idle sway.
+  - Same fov, and every quad has the same share inside the frame.
+- 390x844: the change is A-12's and intended.
+  - Eleven chapters stand the master back by 1.6 to 3.6 units; IV, VIII, X and XII are unchanged.
+  - Every party quad is whole, and the enemies are now whole too.
+  - Before and after: Seymour Flux 0.44 to 1.0, Isaaru 0.11 to 1.0, the Guado guardian 0.36 to 1.0,
+    the Fem-Goon 0 to 1.0, Bahamut 0.72 to 1.0.
+  - Vegnagun's tail stays at 0.74 on both builds.
+- Time to the first menu is equal or shorter in every chapter at both sizes.
+
+**Per item, rechecked with real keys on the production build.**
+
+| Item | Result |
+|---|---|
+| A-13 roll | **pass.** Ch I, Attack by keys. The roll starts on the `damage` phase and peaks at -4.00 there; it is level by the end. The base rolls on the swing. The action takes 837 ms on B2 and 825 ms on the base, so no time is added. With the OS `prefers-reduced-motion` emulated (no stub): no roll at all. |
+| A-11 party in frame | **pass, as disclosed.** The same rig-sweep method ran at 1600x900 and 1280x720; the `enemy` and `intro` rigs are excluded. The only party quads under 0.85 are in the authored `yunalesca` and `bahamut` rigs. On the base, 12 chapters cut the party under a push. |
+| A-1 FFX-2 wait camera | **much better, not clean.** I sampled every 200 ms instead of taking ten frames. Samples under the 75% enemy / 90% party rule, B2 against the base, 40 s per chapter at 1600x900: IV 1/137 vs 49; V 22/141 vs 139 (the tail at 0.68-0.74, disclosed); VI 0 vs 0; XI 6/134 vs 107; XIII 0 vs 62; XV 21/70 vs 50. New misses the ten-frame method did not catch are listed below. |
+| A-12 phone | **pass.** Ch IV: Yuna changes to Black Mage by keys and casts Fira on Bahamut; Bahamut stays at 0.99 or more through the impact (base 0.63). Ch I: Lulu swapped in by keys (Q), Black Magic, Fire, target Seymour Flux; the Fire lands on him (790). Seymour Flux stays at 1.0 through the action and impact on the master (base 0: the side cuts lose him). |
+| PR-0185 remainder | **not met on this branch alone.** At 1280x960 in IX (real keys, 14 s of turns), the held `enemy`-rig frames still show slices of the party's heads along the bottom edge: Kimahri 0.08-0.15 and Yuna 0.06-0.29 of their quads, over about 90 samples. The base shows 0.4 for both. The zero the handoff reports needs t1-b2b's enemy rig, which is not in main. |
+| PR-0061(a) opening waits | **no regression; the thresholds are not all met.** From the battle screen to the first menu. With Confirm: 1.8 to 4.7 s. VI 4.66 and IX 4.36 are over the "about 4 s". The XII Confirm reading (11.2 s) is a probe artefact: key spam answered the first menu. Passive: B2 is at or below the base in all 15 chapters (I 8.8 to 7.2, V 10.1 to 7.8, IX 12.1 to 9.4, XV 12.6 to 8.3). Eight chapters are still over 7.5 s: IV 8.35, V 7.85, VI 9.60, IX 9.43, XI 8.54, XIII 8.95, XIV 7.67, XV 8.31. V was reported at 7.4 or less. |
+| A-3 cold black | **pass.** Fresh profile, 16 Mbps. Ch I: card at 403 ms, longest dark run 424 ms (base 7,501 ms). Ch IV: card at 404 ms, longest dark run 244 ms (base 15,024 ms). Warm re-entries in I and IV raise no loading card, as on the base. |
+| PR-0104 cut-in hold | **built as described; the hold is too long (finding 1).** Shell by keys, Wait mode. XI: menu 1.63 s, SHL 4.04 s, cut-in 4.39 s. IV: menu 1.55 s, SHL 3.23 s, cut-in 3.52 s. Base: cut-in 0.93 s, before the menu. |
+| PR-0072 contact shadow | **present, faint.** With the HUD off, a darker pool shows on the plain under the tail's barrel; the base has none. With the HUD on at 1600x900 it sits under the command menu and party rows, at the first menu and at target selection. Party billboards stand 15.7 or more units in front of it. |
+| A-2 entry | **checked on paper only (unwired by design).** The unit tests pass. The FORCED stills were viewed against the tile. |
+| A-4, A-10, Part 1 | A-4 and Part 1 are covered by unit tests only; the values and wiring are B5's. A-10: Dream's End's first menu is identical to the base at 1600x900. |
+
+**Findings, most severe first.**
+
+1. **Major, introduced by the candidate: PR-0104's hold runs into the next girl's menu.**
+   - The cut-in waits up to 5 s (`CUT_IN_WAIT_CAP_MS`). It now lands 2.8 s (XI) and 2.0 s (IV) after Paine's menu has
+     opened: the frame dims and her portrait covers the left third while she chooses.
+   - A player who answers in that window never sees the approved slab (`menuFor() !== actorId`).
+   - The plan's item says "at most 0.8 s". Either cap the wait at 800 ms, or drop the cut-in once her menu is up.
+   - Frame: `shell/b2/ffx2-fallen-aeons-shell-19-4509ms.jpg`. Regression against the live build: yes (live shows the
+     cut-in before the menu).
+2. **Moderate: PR-0185's acceptance holds only with t1-b2b's enemy rig.** With main's rig, the IX 4:3 held shots still
+   slice Kimahri's and Yuna's heads (better than the base, not zero). Close it at t1-b2b's merge, or say so in the
+   release note.
+3. **Moderate: A-1 misses found by continuous sampling.**
+   - Ch XI: in the `party` rig during Shiva's attack, Shiva stays at 0.60-0.70. Seen in 5 or 6 of about 133 samples,
+     in both runs.
+   - Ch XV: in the `action` rig, Yuna is at 0.50-0.78 for about 2 s. Seen in one run and not reproduced. Her pose was
+     not recorded, so it may be a KO'd girl, which is excluded by design.
+   - Ch IV: Yuna at 0.73 once.
+4. **Minor: PR-0061(a) thresholds.** Listed above: two Confirm times over about 4 s, and eight passive times over 7.5 s,
+   including V at 7.85 s. None is slower than the base.
+5. **Minor, disclosed by the builder: A-2 fidelity.** The approved "pane breaks" tile carries the dialogue box and the
+   chapter line into the shards. The build's held frame leaves the dialogue box and HUD out by design
+   (`entryOverlay.ts`). Worth a look when B5 wires the line and Bailey sees the implosion frames.
+6. **Minor: PR-0072.** The pool reads only with the HUD off; in play at 1600x900 the command menu covers it.
+7. **Minor, for the HUD batches: the phone queue banner covers Seymour Flux's head.** With A-12, Seymour Flux is now
+   in the phone frame at Ch I's first menu, and his head sits under the enemy-queue banner. HUD placement is not
+   B2's file.
+8. **Low, merge note: A-1's engine detection.** `ShotRules.ffx2Framing` is set by duck typing,
+   `typeof engine.tick === 'function'`. An FF7 ATB engine from `ff7-integration` would inherit the FFX-2 wait rules
+   when merged. Worth an explicit game check there.
+
+**Game case:** check only, no code change (both games).
