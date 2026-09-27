@@ -18,6 +18,7 @@
 
 import { CHAPTER_PANEL_SELECTORS, INTENT_AVOID_SELECTORS, rectsOf } from '../ffx/hudAvoidSelectors.ts';
 import { clearOfPanels, overlaps } from './coachAvoid.ts';
+import './coach-taps.css'; // t1-b5: the line lets reticle taps through (both games)
 
 /** The slab itself: its solid panel, never the `inset: 0` `.eint` wrapper. */
 export const INTENT_SLAB_SELECTORS: readonly string[] = ['.eint__panel'];

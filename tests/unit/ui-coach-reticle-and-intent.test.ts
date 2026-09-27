@@ -4,7 +4,7 @@
  *
  * - `t1-b5` (both games): at 390x844 a coach line took a tap meant for an
  *   enemy reticle. While an enemy is being aimed at, the line must let taps
- *   through (`coach.css`).
+ *   through (`coach-taps.css`).
  * - `t1-b3a` (FFX only, Chapter II): Auron's line sat over the intent slab's
  *   IF YOU ATTACK list at 1600x900. The line must step off the slab
  *   (`coachIntentAvoid.ts`), and stay put when it already misses it.
@@ -19,7 +19,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { keepMarkOffIntent } from '../../src/ui/coach/coachIntentAvoid.ts';
 
-const CSS = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../../src/ui/coach/coach.css'), 'utf8');
+const COACH = join(dirname(fileURLToPath(import.meta.url)), '../../src/ui/coach');
+const CSS = ['coach.css', 'coach-taps.css'].map((f) => readFileSync(join(COACH, f), 'utf8')).join('\n');
 
 afterEach(() => {
   document.body.innerHTML = '';
