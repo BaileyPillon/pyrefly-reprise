@@ -7,8 +7,12 @@ export interface ControlHintItem {
   label: string;
   keyboard: string;
   gamepad: string;
-  /** Defaults to the keyboard wording. */
-  pointer?: string;
+  /**
+   * Defaults to the keyboard wording. `null` leaves the entry off the strip
+   * for a mouse: an action `Input` never reports from a pointer, such as a
+   * held button (CHK-015).
+   */
+  pointer?: string | null;
   /**
    * The wording on a touch screen (a coarse pointer), where there is no key to
    * press and no mouse to hold (PR-0073). Defaults to {@link pointer}. `null`
@@ -100,6 +104,7 @@ export class ControlsHint {
     if (device === 'gamepad') return item.gamepad;
     if (device !== 'pointer') return item.keyboard;
     if (this.coarse && item.touch !== undefined) return item.touch;
+    if (item.pointer === null) return null;
     return item.pointer ?? item.keyboard;
   }
 
