@@ -16,6 +16,42 @@ row.
 
 ---
 
+## 2026-09-27 ~00:50 EDT — the direction pack (D:/Tools/pyrefly-scratch/audio-pack-0926/): Direction B is the only one that sounds good
+
+Bailey, in chat, answering the driver's question about tracks 5 to 8 of the
+2026-09-26 listening pack ("5 control today's sound, 6 A real orchestral
+samples, 7 B an AI restyle, 8 C today plus choir and strings. Tell me which
+sounds least like SNES, and whether the AI restyle may ship"), verbatim:
+
+> 7 is the only one that sounds good to me.
+
+**This is an ear verdict.** Bailey heard all four 12-second clips
+(`05-direction-control-battle-ffx.mp3` through `08-direction-c-layers.mp3`,
+the round-1 comparison set `public/audio/candidates/C-round1-battle-ffx-{current,A,B,C}-x12.ogg`
+presented in `docs/audio/audition.html`) and picked track 7,
+`07-direction-b-acestep.mp3` — Direction B, the ACE-Step AI restyle
+(`tools/audio/ace-step.mjs --mode=restyle`, the shipped renderer's output
+re-styled by ACE-Step v1 3.5B at a denoise below 1.0, same notes and timing,
+only the sound moved). This answers pack.md's question 2 two ways at once:
+Direction B is the only one of control / A / B / C that sounds good to him,
+which both picks the direction and — by picking the AI restyle specifically —
+answers "may the AI-restyle layers ship?" in favour of shipping them. Recorded
+as D-235 in `docs/target/decisions.json`. Each cue actually re-rendered in this
+direction still needs Bailey's ear before it ships; this verdict covers the
+12-second comparison clip, not a finished cue.
+
+Question 1 of the same pack (a number out of 10 for today's music, tracks 1-4)
+is **still unanswered** beyond the separate ~00:40 EDT verdict below ("still
+sounds like snes music," which named no number). Question 3 (Macalania A / B
+/ C, tracks 9-11) is **still unanswered**.
+
+Bailey also said, in the same message: "also you can download whatever you
+need but on the D: drive you have my permission" — standing permission to
+download onto D: (not C:) from official/reputable sources for this work,
+recorded as D-236 in `docs/target/decisions.json`.
+
+---
+
 ## 2026-09-27 ~00:40 EDT — the live mix (release 21, d8837334): "still sounds like snes music"
 
 Bailey, in chat, about the game as it plays live (release 21, bundle DlL4YDmM), verbatim:
