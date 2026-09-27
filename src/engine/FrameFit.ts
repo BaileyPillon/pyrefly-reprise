@@ -129,7 +129,7 @@ export function frameFit(
 // ------------------------------------------------------------------ A-12
 
 /** The rig each fitted rig started from, so a refit never dollies from an already dollied rig. */
-const bases = new WeakMap<FitRig, Vector3>();
+const bases = new WeakMap<FitRig, { position: Vector3; lookAt: Vector3 }>();
 
 /** How far back a phone refit may stand the camera, as a multiple of the rig's own distance. */
 export const SLICE_MAX_SCALE = 1.9;
@@ -162,14 +162,28 @@ function boxOf(cam: PerspectiveCamera, subject: FitSubject['actor']): Box | null
  * `min` under 1 that is wider than the slice on its own is left out. Moves `rig.position`
  * in place (from the rig's first position, so a refit on the next link starts
  * from the authored rig) and says whether it changed anything.
+ *
+ * FOC23-01: `top` (0..1 of the frame's height) is what the phone HUD's top band
+ * covers (`ui/common/phoneSlice.ts`; only the FFX phone HUD reports one). The
+ * figures must then stand below it: the rig rises on its pedestal (position and
+ * aim together, so the angle is the authored one) until the tallest top clears
+ * the band, and stands back only when what the band leaves is too short. With
+ * `top` 0 nothing rises and the fit is exactly as before.
  */
-export function fitRigToSlice(live: PerspectiveCamera, rig: FitRig, slice: number, subjects: readonly FitSubject[]): boolean {
-  const base = bases.get(rig) ?? rig.position.clone();
+export function fitRigToSlice(live: PerspectiveCamera, rig: FitRig, slice: number, subjects: readonly FitSubject[], top = 0): boolean {
+  const base = bases.get(rig) ?? { position: rig.position.clone(), lookAt: rig.lookAt.clone() };
   bases.set(rig, base);
-  const at = (k: number): FitRig => ({ ...rig, position: new Vector3().subVectors(base, rig.lookAt).multiplyScalar(k).add(rig.lookAt) });
+  const at = (k: number, lift = 0): FitRig => ({
+    ...rig,
+    position: new Vector3().subVectors(base.position, base.lookAt).multiplyScalar(k).add(base.lookAt).setY(
+      (base.position.y - base.lookAt.y) * k + base.lookAt.y + lift,
+    ),
+    lookAt: base.lookAt.clone().setY(base.lookAt.y + lift),
+  });
   const room = 2 * slice * (1 - 2 * SLICE_MARGIN);
-  const fits = (k: number): boolean => {
-    const cam = pose(live, at(k), 0);
+  const ceiling = 1 - 2 * Math.min(0.45, Math.max(0, top));
+  const groupBox = (r: FitRig): Box | null => {
+    const cam = pose(live, r, 0);
     let b: Box | null = null;
     for (const s of subjects) {
       const o = boxOf(cam, s.actor);
@@ -179,24 +193,46 @@ export function fitRigToSlice(live: PerspectiveCamera, rig: FitRig, slice: numbe
       if (!o || (s.min < 1 && o.x1 - o.x0 > room)) continue;
       b = b ? { x0: Math.min(b.x0, o.x0), x1: Math.max(b.x1, o.x1), y0: Math.min(b.y0, o.y0), y1: Math.max(b.y1, o.y1) } : o;
     }
-    if (!b) return true;
-    return b.x1 - b.x0 <= room && b.y0 >= -1 && b.y1 <= 1;
+    return b;
+  };
+  /** The pedestal lift that brings the group's top under the band at `k`, or null when it cannot fit. */
+  const liftFor = (k: number): number | null => {
+    const b = groupBox(at(k));
+    if (!b) return 0;
+    if (b.x1 - b.x0 > room) return null;
+    if (b.y1 <= ceiling && b.y0 >= -1) return 0;
+    if (b.y1 - b.y0 > ceiling + 1) return null;
+    if (b.y1 <= ceiling) return null; // the feet are cut and the head is not: rising cannot help
+    let lo = 0;
+    let hi = Math.max(1, base.position.distanceTo(base.lookAt) * k);
+    const under = (l: number): boolean => { const g = groupBox(at(k, l)); return !g || g.y1 <= ceiling; };
+    if (!under(hi)) return null;
+    for (let i = 0; i < 20; i++) {
+      const mid = (lo + hi) / 2;
+      if (under(mid)) hi = mid;
+      else lo = mid;
+    }
+    const g = groupBox(at(k, hi));
+    return g && g.y0 >= -1 - 1e-6 ? hi : null;
   };
   let k = 1;
-  if (!fits(1)) {
+  let lift = liftFor(1);
+  if (lift === null) {
     let lo = 1;
     let hi = SLICE_MAX_SCALE;
-    if (fits(hi)) {
+    if (liftFor(hi) !== null) {
       for (let i = 0; i < 12; i++) {
         const mid = (lo + hi) / 2;
-        if (fits(mid)) hi = mid;
+        if (liftFor(mid) !== null) hi = mid;
         else lo = mid;
       }
     }
     k = hi;
+    lift = liftFor(k) ?? 0;
   }
-  const next = at(k).position;
-  const changed = next.distanceToSquared(rig.position) > 1e-8;
-  rig.position.copy(next);
+  const next = at(k, lift);
+  const changed = next.position.distanceToSquared(rig.position) > 1e-8 || next.lookAt.distanceToSquared(rig.lookAt) > 1e-8;
+  rig.position.copy(next.position);
+  rig.lookAt.copy(next.lookAt);
   return changed;
 }

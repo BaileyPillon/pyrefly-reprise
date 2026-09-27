@@ -62,6 +62,12 @@ export class ShotRules {
       .filter((s): s is { actor: NonNullable<typeof s.actor>; enemy: boolean } => s.actor !== undefined)
       // The party whole; an enemy whole too, unless it is a part wider than the slice (FrameFit).
       .map(({ actor, enemy }) => ({ actor, min: enemy ? 0.75 : 1 }));
-    cam.fitSlice('idle', this.phone, subjects);
+    let top = 0;
+    try {
+      top = this.overlay()?.phoneTop?.() ?? 0; // FOC23-01: keep heads below the phone HUD's top band
+    } catch {
+      top = 0;
+    }
+    cam.fitSlice('idle', this.phone, subjects, top);
   }
 }
