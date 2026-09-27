@@ -15,7 +15,8 @@ import { hasAuto } from './equipment.ts';
 import type { TimingBonus } from './formulas.ts';
 import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furySpellIdsFor, furyTierOf } from './fury.ts';
 import { attackReelHits } from './reels.ts';
-import { defaultGrandSummonAeon, grandSummonChoices } from './aeon-duel.ts';
+import { defaultGrandSummonAeon } from './aeon-duel.ts';
+import { grandSummonEntries, mixPickerParams } from './pickerParams.ts';
 
 /** The Attack Reels strip, in both spellings the tree uses [§5.6, `reels.ts`]. */
 const ATTACK_REEL_SYMBOLS = new Set(['1-hit', '2-hit', 'miss', '1hit', '2hit']);
@@ -338,12 +339,11 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
       Object.assign(base, { rages: user.overdrive?.unlockedOverdriveIds ?? [] });
       break;
     case 'rikku-mix':
-      Object.assign(base, {
-        inventory: [...ctx.rt.inventory.entries()].map(([itemId, count]) => ({ itemId, count })),
-      });
+      // Hotfix 24: the named bag and the recipes the overlay reads (`pickerParams.ts`).
+      Object.assign(base, mixPickerParams(ctx, mixablePairs(ctx)));
       break;
     case 'yuna-grand-summon':
-      Object.assign(base, { aeons: grandSummonChoices(ctx) }); // the whole roster, unless an aeon duel narrows it
+      Object.assign(base, { aeons: grandSummonEntries(ctx) }); // the roster unless a duel narrows it, as the picker reads it (hotfix 24)
       break;
     default:
       break;

@@ -16,6 +16,21 @@ export function arr<T>(v: unknown, fallback: T[]): T[] {
   return Array.isArray(v) ? (v as T[]) : fallback;
 }
 
+/**
+ * Scroll a picker list so row `index` is inside it (hotfix 24). `.ffx-mg-list`
+ * shows four rows and scrolls, but nothing followed the cursor: Grand Summon's
+ * fifth row, Bahamut, was chosen out of sight. Offsets, not client rects, so the
+ * scaled HUD stage does not skew it; a no-op where there is no layout (jsdom).
+ */
+export function keepRowInView(listEl: HTMLElement, index: number): void {
+  const row = listEl.children[index] as HTMLElement | undefined;
+  const first = listEl.firstElementChild as HTMLElement | null;
+  if (!row || !first) return;
+  const top = row.offsetTop - first.offsetTop;
+  if (top < listEl.scrollTop) listEl.scrollTop = top;
+  else if (top + row.offsetHeight > listEl.scrollTop + listEl.clientHeight) listEl.scrollTop = top + row.offsetHeight - listEl.clientHeight;
+}
+
 export function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 }
