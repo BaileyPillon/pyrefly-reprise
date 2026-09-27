@@ -212,6 +212,7 @@ export class BattleScreen extends Screen {
       canvas: this.app.renderer.domElement,
       overlayRoot: this.root,
       spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed),
+      sceneKey: this.scene.key,
     });
 
     // --- engine ------------------------------------------------------------

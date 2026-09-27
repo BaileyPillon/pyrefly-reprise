@@ -32,6 +32,7 @@ import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAn
 import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
 import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
+import { PyreflyStage } from './PyreflyStage.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -48,6 +49,8 @@ export interface PaintedStageOptions {
   arrivals?: ArrivalDirectors;
   /** The spell effects' skin, overlay hook, quality tier and flash rules (`spellfx/`). Without `overlay` they never draw. */
   spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate'>;
+  /** The location's key, for its pyrefly canon row (`pyreflyCanon.ts`). */
+  sceneKey?: string;
 }
 
 interface StagedActor {
@@ -121,6 +124,8 @@ export class PaintedStage implements BattleStage {
   /** The B1 spell effects (option B); `impact` skips the bloom where they carry the hit. */
   readonly spellFx: SpellFxLayer;
   private readonly unhookSpellFx: () => void;
+  /** A-5 / A-6 / D-225: the dissolve's lights, the lens band and held motes (`PyreflyStage.ts`). */
+  private readonly pyreflies: PyreflyStage;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
@@ -140,6 +145,7 @@ export class PaintedStage implements BattleStage {
     const fx = stageSpellFx({ ...opts.spellFx, canvas: opts.canvas, projectRect: (id) => this.projectRect(id) });
     this.spellFx = fx.layer;
     this.unhookSpellFx = fx.unhook;
+    this.pyreflies = new PyreflyStage(opts.scene, () => this.spellFx.quality, opts.sceneKey, opts.camera);
     this.vfx = this.makeVfxPort();
   }
 
@@ -240,6 +246,7 @@ export class PaintedStage implements BattleStage {
     }
 
     this.opts.scene.add(actor);
+    if (!anchor) this.pyreflies.stage(c.id, c.side, actor);
     this.actors.set(c.id, {
       actor,
       side: c.side,
@@ -553,6 +560,7 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged) return;
     this.actors.delete(id);
+    this.pyreflies.leave(id);
     this.partRings.remove(id);
     staged.actor.dispose();
   }
@@ -669,10 +677,17 @@ export class PaintedStage implements BattleStage {
     );
     this.hits.update(dt, this.opts.camera);
     this.spellFx.update(dt);
+    this.pyreflies.update(dt, (id) => this.lastState?.combatants[id]?.alive !== false);
+  }
+
+  /** The pyreflies' state, for the debug snapshot and the capture script. */
+  pyreflySnapshot(): ReturnType<PyreflyStage['snapshot']> {
+    return this.pyreflies.snapshot();
   }
 
   setPixelScale(v: number): void {
     this.hits.sparks.setPixelScale(v);
+    this.pyreflies.setPixelScale(v);
   }
 
   /** Everything the debug snapshot wants about the field. */
@@ -709,6 +724,7 @@ export class PaintedStage implements BattleStage {
     this.hits.dispose();
     this.unhookSpellFx();
     this.spellFx.dispose();
+    this.pyreflies.dispose();
     disposeStoneShards(this.opts.scene);
     this.flashEl?.remove();
     this.flashEl = null;
