@@ -47,7 +47,7 @@ import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
 import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
-import { attachAirshipBattle, type AirshipBattleHook } from './BattleScreenAirship.ts';
+import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleScreenStageHook.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
@@ -220,7 +220,7 @@ export class BattleScreen extends Screen {
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
     if (this.exited) return this.releaseParts();
-    this.airship = await attachAirshipBattle(this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8 only
+    this.airship = await attachStageHook(chapter.game, this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8; FF7's rows
     if (this.exited) return this.releaseParts();
 
     // --- HUD + ports -------------------------------------------------------

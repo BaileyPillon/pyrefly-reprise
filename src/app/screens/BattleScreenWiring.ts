@@ -17,6 +17,8 @@ import type { BattleEngine, BattleSetup, GameId } from '../../battle/common/type
 import { Ff7NotHandledError } from '../../battle/common/game.ts';
 import { FFXEngine } from '../../battle/ffx/index.ts';
 import { FFX2Engine, type AtbMode, type AtbSpeed } from '../../battle/ffx2/index.ts';
+import { Ff7Engine } from '../../battle/ff7/index.ts';
+import { ff7Registry } from '../../data/ff7/index.ts';
 import { readSetting } from '../SaveData.ts';
 import { waitSplitFromUrl } from '../waitSplitSwitch.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
@@ -64,9 +66,16 @@ export async function createEngine(
   setup: BattleSetup,
   opts: CreateEngineOptions = {},
 ): Promise<BattleEngine> {
-  // FF7 (the hidden Guard Scorpion experiment) gets its own engine, `src/battle/ff7/`, which is not
-  // built yet: never an FFX2Engine by default (docs/plans/ff7-game-branch-audit.md).
-  if (game === 'ff7') throw new Ff7NotHandledError('createEngine (the FF7 engine is not built yet)');
+  // FF7 (the hidden Guard Scorpion experiment) gets its own engine, `src/battle/ff7/`: never an
+  // FFX2Engine (docs/plans/ff7-game-branch-audit.md). FF7 only: its content is the FF7 registry,
+  // and it is not handed FFX-2's saved ATB mode (`applyAtbConfig`); FF7's own mode is its default,
+  // Recommended (research/ff7-battle-core.md §2.5), until a Config row exists.
+  if (game === 'ff7') {
+    const engine = new Ff7Engine({ registry: ff7Registry() });
+    engine.setSeed(setup.seed);
+    engine.init(setup);
+    return engine;
+  }
   await registerBattleContent();
   const automated = opts.automated === true;
   // A used engine holds a finished battle's state, so every battle gets its own.

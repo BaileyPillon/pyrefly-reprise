@@ -34,9 +34,9 @@ and is unreachable today anyway, because the battle screen throws first (below).
 secret door nor `__pyrefly.gotoChapter('ff7-guard-scorpion')` reaches a battle
 (`BattleScreenExperiment.ts` returns in its holding state). With the switch on, the
 first unbuilt piece throws a named error: `battleSpellFx` in `BattleScreen.enter`,
-then `createEngine`. (`createHud` answers `'ff7'` since 2026-09-27: the FF7 HUD,
-no coach; `docs/handoff/ff7-hud.md`.) The FF7 engine track replaces the rest with
-`'ff7'` branches; every other site below then becomes reachable and is
+then `createHud` was the last guard; since 2026-09-27 `createEngine` builds the FF7
+engine (engine part 2) and `createHud` answers `'ff7'` with the FF7 HUD, no coach
+(`docs/handoff/ff7-hud.md`). Every other site below is reachable and is
 already safe.
 
 ## Dispositions
@@ -68,9 +68,9 @@ already safe.
 | `BattleScreenFlow.ts` `clearTimeToRecord` (not grep) | G | through `clearTimeMs` |
 | `BattleScreenSetup.ts:61` | N | FFX-2 slot warning only |
 | `BattleScreenSetup.ts:124-125` | G ×2 | `carryPartyForward`: FF7 has no chained link |
-| `BattleScreenWiring.ts:68, 73` | G ×2 | `createEngine`: never an `FFX2Engine` |
+| `BattleScreenWiring.ts` `createEngine` | E | builds `Ff7Engine` with `ff7Registry()` (engine part 2, branch `ff7-engine`); never an `FFX2Engine` (`ff7-game-branch.test.ts`) |
 | `BattleScreenWiring.ts:136, 138, 146` | G ×3 | `createHud`: never the FFX-2 HUD, Oversoul look or Rikku's coach; since 2026-09-27 an explicit `'ff7'` branch returns `Ff7BattleHud` (no coach, no shared phone rail) |
-| `BattleScreenWiring.ts` `applyAtbConfig` (not grep) | U | only inside `createEngine`, after its guard |
+| `BattleScreenWiring.ts` `applyAtbConfig` (not grep) | E | not called for FF7 at build; `BattleScreen` still calls it on every pause close, where it is a no-op: `Ff7Engine` has no `setAtbMode` / `setAtbSpeed` / `setWaitSplit` (its setter is `setFf7AtbMode`; pinned in `ff7-engine-clock.test.ts`) |
 | `BattleEncounterChain.ts` `cueForGroup` (not grep) | E | a `null` (silent) chapter cue starts nothing |
 | `ChapterSelectScreen.ts:339` | U | board tiles are FFX and FFX-2 only |
 | `CutsceneScreen.ts:163` | U | the experiment flow plays no cutscene |

@@ -37,7 +37,7 @@ const LCK = 1;
 export const guardScorpion: EnemyDef = {
   id: ID,
   name: 'Guard Scorpion',
-  spriteKey: ID,
+  spriteKey: 'ff7-guard-scorpion', // painted art id (D-240); the forms below swap it
   slot: 0,
   // Mirrors (display only): str = Att, def, mag = MAt, mdef = MDf, agi = Dex, luck, eva = Df%.
   // FF7 enemies have no accuracy stat (each action carries its own hit%, gs §4): acc 0.
@@ -51,10 +51,11 @@ export const guardScorpion: EnemyDef = {
   affinities: { lightning: 'weak', gravity: 'immune' },
   immunities: {}, // FFX byte table: not FF7's; the list is `ff7.statusImmune`
   immunityFlags: [],
-  // Tail down, tail up: the raise is a form change [gs §2.1, §5.1]; the form keys are the plan's (§1.4).
+  // Tail down, tail up: the raise is a form change [gs §2.1, §5.1]. The form keys are the painted art ids
+  // (public/art/characters/ff7-guard-scorpion[-tail-up], D-240), so `form-change` swaps the painting.
   forms: [
-    { name: 'Guard Scorpion', spriteKey: 'guard-scorpion', hp: HP },
-    { name: 'Guard Scorpion', spriteKey: 'guard-scorpion-tail-up', hp: HP },
+    { name: 'Guard Scorpion', spriteKey: 'ff7-guard-scorpion', hp: HP },
+    { name: 'Guard Scorpion', spriteKey: 'ff7-guard-scorpion-tail-up', hp: HP },
   ],
   aiScriptId: ID,
   rewards: {

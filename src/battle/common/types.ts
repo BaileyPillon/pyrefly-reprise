@@ -30,7 +30,7 @@
 
 /** Which game a piece of content belongs to. `'ff7'`: the hidden Guard Scorpion experiment; each two-way branch is audited (`./game.ts`, `docs/plans/ff7-game-branch-audit.md`). */
 export type GameId = 'ffx' | 'ffx2' | 'ff7';
-import type { Ff7Combatant, Ff7EnemyFields, Ff7PartyBuild, LimitCommand } from './types-ff7.ts';
+import type { Ff7Combatant, Ff7Command, Ff7EnemyFields, Ff7MessageTag, Ff7PartyBuild } from './types-ff7.ts';
 export type * from './types-ff7.ts';
 
 /** Stable identifier for a combatant instance inside one battle. */
@@ -1308,7 +1308,9 @@ export type AbilityCategory =
   /** An X-2 dressphere command set entry. */
   | 'dressphere'
   /** An enemy-only action, including scripted no-damage flavour turns. */
-  | 'enemy';
+  | 'enemy'
+  /** FF7 only: the one Magic menu the party's Materia fills (Bolt, Ice, Cure) [ff7-battle-core §8.4, §9]. */
+  | 'magic';
 
 /** One status this ability tries to apply. */
 export interface StatusApplication {
@@ -1679,7 +1681,7 @@ export type Command =
   | EscapeCommand
   | DefendCommand
   | TriggerCommand
-  | LimitCommand; // FF7 only: a Limit Break, never `'overdrive'` (`./types-ff7.ts`)
+  | Ff7Command; // FF7 only: Limit (never `'overdrive'`) and Change (`./types-ff7.ts`)
 
 /** Command kinds, for exhaustive switches. */
 export type CommandKind = Command['kind'];
@@ -1889,7 +1891,13 @@ export type BattleEvent =
       /** Which mode or scripted rule paid out, for debugging. */
       cause?: string;
     })
-  | (BattleEventBase & { type: 'message'; text: string; kind: MessageKind })
+  | (BattleEventBase & {
+      type: 'message';
+      text: string;
+      kind: MessageKind;
+      /** FF7 only: what the line is (Search Scope's lock-on, a hint line and its speaker); absent in FFX and FFX-2. */
+      ff7?: Ff7MessageTag;
+    })
   /** FF7 only: a Limit gauge changed; `value` 0–255 (full at 255), `level` 1–4, `ready` = Limit replaces Attack [ff7-battle-core §7]. Never `overdrive-gauge`. */
   | (BattleEventBase & { type: 'limit-gauge'; actorId: CombatantId; value: number; level: number; ready: boolean })
   /**

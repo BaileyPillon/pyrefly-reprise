@@ -6,6 +6,49 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `types.ts`, `types-ff7.ts`: FF7's Change command (engine follow-up C1)
+
+**Shared plumbing (both + FF7)** for the union, **FF7 only** for the command [AGENTS.md hard
+rule 14]: only the FF7 engine offers or accepts it; FFX and FFX-2 never build it, and every FFX /
+FFX-2 suite and golden is unchanged. Handoff `docs/handoff/ff7-engine.md` (FOLLOW-UP).
+
+**Additive:**
+
+- `types-ff7.ts`: `RowChangeCommand = { kind: 'row-change'; targets: [] }` (FF7's **Change**: the
+  member swaps between the front and the back row; `research/ff7-battle-core.md` §5.1, §9; the
+  manual p. 18) and `Ff7Command = LimitCommand | RowChangeCommand`.
+- `types.ts`: the `Command` union's last member `LimitCommand` becomes `Ff7Command` (so
+  `Command += RowChangeCommand`), and the type import names `Ff7Command` instead of
+  `LimitCommand`; `types.ts` did not grow (same line count). The kind is `'row-change'`, not
+  `'change'`, because FFX-2's dressphere command is also called Change in game (`'spherechange'`).
+- The one exhaustive switch over `Command['kind']` outside the FF7 engine,
+  `src/ui/ffx2/withTargets.ts`, gains `case 'row-change':` in its no-target group (one line, the
+  same treatment `'limit'` got); FFX-2's menu never offers it, so its behaviour is unchanged.
+
+## 2026-09-27 — `types.ts`, `types-ff7.ts`: the FF7 engine's events and clock (engine part 2)
+
+**FF7 only** [AGENTS.md hard rule 14]: every addition is optional or a new union member that
+only the FF7 engine (`src/battle/ff7/`, branch `ff7-engine`) sets; FFX and FFX-2 never set or
+read them, and every FFX / FFX-2 suite and golden is unchanged. Plan
+`docs/plans/ff7-guard-scorpion-architecture.md` steps 4 and 5; handoff `docs/handoff/ff7-engine.md`.
+
+**Additive:**
+
+- `types.ts`, the `message` event gains optional `ff7?: Ff7MessageTag`: Search Scope's
+  "Locked On Target" (`{ kind: 'lock-on'; targetId }`) and each line of the Guard Scorpion
+  warning (`{ kind: 'hint'; hintCase; line; speakerId }`, `research/ff7-guard-scorpion.md` §7.1),
+  so the FF7 HUD can place the lock-on and the speaker without parsing text.
+- `types.ts`, `AbilityCategory += 'magic'`: FF7's one Magic menu (Bolt, Ice, Cure from Materia).
+  Only a `Partial<Record<AbilityCategory, …>>` label map reads the union; no switch.
+- `types-ff7.ts`: `Ff7AtbMode = 'active' | 'recommended' | 'wait'` (core §2.5),
+  `Ff7HintCase = 'both-alive' | 'cloud-only' | 'barret-only'`, `Ff7MessageTag`, and
+  `Ff7Combatant.ff7.defending?: boolean` (Defend on the most recent turn, core §5.2).
+
+**Not a contract change, noted for the HUD track:** the FF7 engine's Config setter is
+`setFf7AtbMode`, not `setAtbMode`, so `applyAtbConfig` (at engine build and on every pause
+close) can never push FFX-2's saved mode into it; `atbMode()` returns the presenter's two-way
+view (`'wait'` under Wait, else `'active'`) and `clockHeld()` decides the Wait sub-menu hold.
+
 ## 2026-09-27 — `types.ts`, new `types-ff7.ts`, `encounters.ts`, new `data/ff7/ids.ts`: a third game, FF7 (the hidden Guard Scorpion experiment)
 
 **FF7 only** for the new types and records; **shared plumbing (both + FF7)** for the union
