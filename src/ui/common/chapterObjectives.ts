@@ -27,6 +27,7 @@
 
 import type { BattleEvent, BattleState, CombatantId } from '../../battle/common/types.ts';
 import type { ChapterMeta, ChapterObjective, ObjectiveRule } from '../../data/chapter-meta.ts';
+import { isSecretObjective, shownObjectiveLabel } from './objectiveReveal.ts';
 
 /** Everything an {@link ObjectiveRule} can be asked about. */
 export interface ObjectiveContext {
@@ -43,13 +44,21 @@ export interface ObjectiveContext {
    * is the only rule that reads it.
    */
   links: number;
+  /**
+   * The player has lost this chapter once, so a secret row shows its label
+   * (`./objectiveReveal.ts`). Unset reads as false.
+   */
+  lostOnce?: boolean;
 }
 
 /** One evaluated checklist row. */
 export interface ObjectiveStatus {
   id: string;
+  /** The label to show: "???" for a secret row that is still hidden. */
   label: string;
   done: boolean;
+  /** A secret row (`ChapterObjective.hideUntilLoss`), revealed or not: never the headline. */
+  secret?: boolean;
 }
 
 /**
@@ -203,7 +212,12 @@ export function evaluateObjectives(
   objectives: readonly ChapterObjective[],
   ctx: ObjectiveContext,
 ): ObjectiveStatus[] {
-  return objectives.map((o) => ({ id: o.id, label: o.label, done: evaluateObjective(o.rule, ctx) }));
+  return objectives.map((o) => {
+    const done = evaluateObjective(o.rule, ctx);
+    const row: ObjectiveStatus = { id: o.id, label: shownObjectiveLabel(o, done, ctx.lostOnce === true), done };
+    if (isSecretObjective(o)) row.secret = true;
+    return row;
+  });
 }
 
 /** How many of a chapter's objectives are ticked. */

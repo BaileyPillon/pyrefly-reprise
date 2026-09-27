@@ -25,7 +25,7 @@ import * as rules from '../../../src/battle/ffx/ai/yojimbo-rules.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
 import * as data from '../../../src/data/ffx/enemies/yojimbo.ts';
 import * as rows from '../../../src/data/ffx/enemies/yojimbo-abilities.ts';
-import { yojimboCavernBuild } from '../../../src/data/ffx/builds/yojimbo-cavern.ts';
+import { CAVERN_DOOM_PREP, buildCavernParty, yojimboCavernBuild } from '../../../src/data/ffx/builds/yojimbo-cavern.ts';
 import { gagazetBuild } from '../../../src/data/ffx/builds/gagazet.ts';
 import { CHAPTERS, CHAPTER_IDS, UNLISTED_CHAPTERS, getChapter } from '../../../src/data/encounters.ts';
 import { ALL_ABILITIES as FFX2_ABILITIES } from '../../../src/data/ffx2/index.ts';
@@ -48,11 +48,11 @@ const content = new FFXContentRegistry();
 content.addAbilities([...ALL_ABILITIES, QUAD, GRAVITY]);
 content.addItems(Object.values(ITEMS));
 
-function newEngine(seed = 1): ReturnType<typeof createFFXEngine> {
+function newEngine(seed = 1, party = yojimboCavernBuild): ReturnType<typeof createFFXEngine> {
   const group = ENEMY_GROUPS_BY_ID[GROUP_ID];
   if (!group) throw new Error(`${GROUP_ID} missing from the data layer`);
   const engine = createFFXEngine({ content, autoResolveMinigames: true });
-  engine.init({ game: 'ffx', party: yojimboCavernBuild, enemies: group, triggers: [], seed, condition: 'normal', canEscape: false });
+  engine.init({ game: 'ffx', party, enemies: group, triggers: [], seed, condition: 'normal', canEscape: false });
   return engine;
 }
 
@@ -425,8 +425,10 @@ describe('Capability: the Zanmato gauge is exposed in state and events [§4.1]',
 // ---------------------------------------------------------------------------
 
 describe('Yojimbo — Doom, and what fails on him [§2.3, §5.3]', () => {
-  it('Kimahri arrives with Doom and a full gauge, and Doom kills him as his fifth turn opens', () => {
-    const engine = newEngine(14);
+  // Doom's rule on him is the engine's, whatever the chapter ships: the
+  // 'preloaded' value (D-056, kept as a switch value) is the party that holds it.
+  it('with Doom preloaded, Doom kills him as his fifth turn opens', () => {
+    const engine = newEngine(14, buildCavernParty('preloaded'));
     makeInvincible(engine);
     let doomed = false;
     drive(engine, (d) => {
@@ -474,13 +476,13 @@ describe('Yojimbo — Doom, and what fails on him [§2.3, §5.3]', () => {
 // ---------------------------------------------------------------------------
 
 describe('The Cavern build and the chapter registration', () => {
-  it('the build is the Gagazet upper bound without Gagazet: no Mighty Guard / White Wind, Doom with a full gauge (B8)', () => {
+  it('the build is the Gagazet upper bound without Gagazet: no Mighty Guard / White Wind; Kimahri without Doom (P-1, Bailey 2026-09-26)', () => {
     const k = yojimboCavernBuild.members.find((m) => m.id === 'kimahri')!;
     expect(k.learnedAbilityIds).not.toContain('mighty-guard');
     expect(k.learnedAbilityIds).not.toContain('white-wind');
-    expect(k.overdrive?.unlockedOverdriveIds).toContain('doom');
-    expect(k.overdrive?.unlockedOverdriveIds).not.toContain('mighty-guard');
-    expect(k.overdrive?.gauge).toBe(100);
+    expect(CAVERN_DOOM_PREP).toBe('not-learned');
+    expect(k.overdrive?.unlockedOverdriveIds).toEqual(['jump']);
+    expect(k.overdrive?.gauge).toBe(45); // ffx-seymour-flux C-16 [estimate]
     expect(yojimboCavernBuild.activeSlots).toEqual(['lulu', 'kimahri', 'yuna']);
     expect(yojimboCavernBuild.aeons.map((a) => a.id)).toEqual(['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut']);
     expect(yojimboCavernBuild.inventory.some((e) => e.itemId === 'candle-of-life')).toBe(false);

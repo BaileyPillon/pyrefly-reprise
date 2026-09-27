@@ -15,7 +15,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { BattleEngine, BattleEvent, Command, Decision } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
-import { yojimboCavernBuild } from '../../src/data/ffx/builds/yojimbo-cavern.ts';
+import { buildCavernParty } from '../../src/data/ffx/builds/yojimbo-cavern.ts';
 import { openKimahriRage } from '../../src/ui/ffx/minigames/index.ts';
 import { incomingText } from '../../src/engine/tactics/advisor-eval.ts';
 
@@ -29,7 +29,7 @@ function newEngine(autoResolveMinigames: boolean): BattleEngine {
   const group = ENEMY_GROUPS_BY_ID['yojimbo-cavern'];
   if (!group) throw new Error('yojimbo-cavern missing');
   const engine = createFFXEngine({ content, autoResolveMinigames });
-  engine.init({ game: 'ffx', party: yojimboCavernBuild, enemies: group, triggers: [], seed: 14, condition: 'normal', canEscape: false });
+  engine.init({ game: 'ffx', party: buildCavernParty('preloaded') /* Ronso Rage with Doom on it, not the shipped prep (P-1) */, enemies: group, triggers: [], seed: 14, condition: 'normal', canEscape: false });
   const st = engine.state();
   for (const id of [...st.activeIds, ...st.reserveIds]) {
     const c = st.combatants[id];

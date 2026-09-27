@@ -17,6 +17,7 @@ import type { ChapterMeta } from '../../../data/chapter-meta.ts';
 import type { SaveStore } from '../../SaveData.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 import { MusicPlayer } from '../../../ui/common/MusicPlayer.ts';
+import { chapterLostOnce } from '../../../ui/common/objectiveReveal.ts';
 import { battleHelpOn, onboardingLive } from '../../../ui/coach/coachState.ts';
 import {
   encounterProgress,
@@ -270,7 +271,8 @@ export class PauseView {
       return;
     }
     const rows = this.objectives();
-    const current = rows.find((o) => !o.done) ?? rows[rows.length - 1];
+    // A secret row (Chapter IX's "???") is never the headline.
+    const current = rows.find((o) => !o.done && !o.secret) ?? rows[rows.length - 1];
     // "CHAPTER n · location, or the battle tally in a chained chapter"
     // (options.json, contentMap.bottomLeft). Chapter 3 is four battles and
     // chapter 5 is five; the other three have no tally to print, and a
@@ -323,7 +325,7 @@ export class PauseView {
 
   objectives(): ObjectiveStatus[] {
     const meta = this.deps.meta;
-    return meta ? evaluateObjectives(meta.objectives, this.deps.context()) : [];
+    return meta ? evaluateObjectives(meta.objectives, { ...this.deps.context(), lostOnce: chapterLostOnce(meta.id) }) : [];
   }
 
   progress(): ReturnType<typeof encounterProgress> {

@@ -23,6 +23,7 @@ import { ART_INDEX_CACHE, loadArtManifest, manifestKnowsAssetNow, pause2xUrlFor,
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { escapeHtml } from './html.ts';
 import { formatPlayTime, type EncounterProgress, type ObjectiveStatus } from './chapterObjectives.ts';
+import { chapterLostOnce, shownObjectiveLabel } from './objectiveReveal.ts';
 
 /**
  * Where to look for a chapter's pause-screen hero art, best first.
@@ -401,8 +402,10 @@ export function objectivesHtml(meta: ChapterMeta, opts: ObjectiveListOptions = {
       const mark = live
         ? `<span class="cpanel__check" aria-hidden="true">${isDone ? '&#10003;' : ''}</span>`
         : `<span class="cpanel__bullet" aria-hidden="true"></span>`;
+      // A secret row reads "???" until it is met or the chapter was lost once (objectiveReveal.ts).
+      const label = live ? (statuses[i]?.label ?? objective.label) : shownObjectiveLabel(objective, false, chapterLostOnce(meta.id));
       return `<li class="cpanel__objective${isDone ? ' cpanel__objective--done' : ''}">${mark}<span class="cpanel__objective-label">${escapeHtml(
-        objective.label,
+        label,
       )}</span></li>`;
     })
     .join('');

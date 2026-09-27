@@ -62,6 +62,8 @@ export interface ChapterObjective {
   id: string;
   label: string;
   rule: ObjectiveRule;
+  /** A secret row: "???" until met or the chapter is lost once, never the headline (`ui/common/objectiveReveal.ts`). */
+  hideUntilLoss?: true;
 }
 
 /**
