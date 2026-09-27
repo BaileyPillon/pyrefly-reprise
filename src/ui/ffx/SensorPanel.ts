@@ -197,8 +197,10 @@ export class SensorPanel {
    * The player is aiming at this combatant (or it is the one acting). Opens the
    * plate on it with whatever is known — which for an unscanned enemy is its
    * name and the fact that Sensor would read the rest.
+   *
+   * `folded` (PR-0186, Chapter III: `sensorAimFold.ts`) opens it on its one-line chip instead.
    */
-  focus(target: AnyCombatant): void {
+  focus(target: AnyCombatant, folded = false): void {
     if (this.current?.id === target.id && !this.el.hidden) {
       // Same subject, refreshed numbers (it just took a hit): redraw without
       // restarting the lifetime, so an HP tick cannot keep the plate up for ever.
@@ -207,6 +209,11 @@ export class SensorPanel {
       return;
     }
     this.open(target, false);
+    if (folded) {
+      this.folded = true;
+      this.openMs = 0;
+      this.applyFolded();
+    }
   }
 
   private open(target: AnyCombatant, byHand: boolean): void {
