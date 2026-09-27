@@ -1,0 +1,130 @@
+# Perspectives options round, stills rig A: write the kept frames, the alternates, frames.json and the contact sheets.
+# python build.py <stage>   (stage 1 writes sheets/01-stage1-ffx.jpg and sheets/02-stage1-ffx2.jpg)
+import json, os, sys
+from PIL import Image, ImageDraw, ImageFont
+
+RAW = 'D:/Tools/pyrefly-scratch/persp-a/raw'
+OUT = 'D:/Final Fantasy/docs/concepts/perspectives-2026-09-27'
+META = json.load(open('D:/Tools/pyrefly-scratch/persp-a/meta.json', encoding='utf-8'))
+ORDER = ['P0', 'P0m', 'P1', 'P2w', 'P4', 'P5', 'P5m', 'P6', 'P7', 'P8', 'P9', 'P11', 'P12', 'P13', 'P14']
+CH = {'ffx-ch1': {'game': 'FFX', 'title': 'Chapter I (FFX) · Seymour Flux + Mortiorchis · Tidus\'s first command menu'},
+      'ffx2-ch4': {'game': 'FFX-2', 'title': 'Chapter IV (FFX-2) · Bahamut · Yuna\'s first command menu'}}
+F = 'C:/Windows/Fonts/'
+def font(n, s): return ImageFont.truetype(F + n, s)
+BOLD, REG = 'segoeuib.ttf', 'segoeui.ttf'
+INK, PAPER, GOLD, GREY = (16, 12, 24), (246, 242, 234), (227, 185, 74), (170, 164, 186)
+TAGCOL = {'REAL ENGINE / existing art': (46, 125, 90), 'REAL ENGINE + NEW ART (candidate)': (40, 90, 170), 'REAL ENGINE + POST': (150, 100, 30), 'COMPOSITE': (140, 40, 70)}
+
+def tagcol(t):
+    for k, v in TAGCOL.items():
+        if t.startswith(k): return v
+    return (90, 90, 90)
+
+def save_jpg(im, path, q=88):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    im.convert('RGB').save(path, quality=q, optimize=True, progressive=True)
+
+def rel(p): return os.path.relpath(p, OUT).replace('\\', '/')
+
+frames = []
+for key in CH:
+    rec = json.load(open(f'{RAW}/{key}-records.json', encoding='utf-8'))
+    for P in ORDER:
+        vs = sorted([r for r in rec.values() if r['option'] == P], key=lambda r: r['variant'])
+        if not vs: continue
+        m = META['options'][P]
+        alts = []
+        for r in vs:
+            im = Image.open(f"{RAW}/{r['file']}")
+            if r['variant'] == 'a':
+                path = f"{OUT}/frames/{key}/{m['num']}-{m['slug']}.jpg"
+            else:
+                path = f"{OUT}/frames/alt/{key}-{m['num']}-{m['slug']}-{r['variant']}.jpg"
+                alts.append({'file': rel(path), 'note': META.get('variants', {}).get(key, {}).get(f"{P}-{r['variant']}", '')})
+            save_jpg(im, path)
+        a = vs[0]; ms = a['measure'] or {}
+        cam = ms.get('cam') or {}
+        lead = ms.get('leadPx')
+        note_lead = None
+        boss_pct = ms.get('bossHeightPct'); boss_note = None
+        if P == 'P8': note_lead = 'party figures hidden (first person); the party is the three portrait cards'
+        if P == 'P12':
+            hf = a['params'].get('face', {}).get('hFrac', 1)
+            note_lead = f'party figures hidden; the lead is the portrait card, {round(hf * 100)}% of the frame height (runs off the top and bottom)'
+        if P == 'P9':
+            tr = ms.get('tokenRects', {}); lid = a['params']['lead']; bid = a['params']['bossId']
+            if lid in tr: lead = tr[lid][3]; note_lead = 'token diameter (px): the paintings are replaced by tokens'
+            if bid in tr: boss_pct = round(100 * tr[bid][3] / 1080, 1); boss_note = 'boss token diameter as % of frame height'
+        if P == 'P14': note_lead = 'measured on the whole-stage panel camera before compositing'
+        hb, hp = ms.get('hudOverBoss'), ms.get('hudOverParty')
+        ov = [n for n, v in (('boss', hb), ('party', hp)) if v is not None and v >= 0.05]
+        rec_out = {
+            'option': P if P != 'P2w' else 'P2-without', 'name': m['name'], 'chapter': key, 'game': CH[key]['game'],
+            'file': rel(f"{OUT}/frames/{key}/{m['num']}-{m['slug']}.jpg"),
+            'provenance': m['tag'], 'standIns': m['standIns'],
+            'camera': {'position': [round(v, 3) for v in cam.get('position', [])], 'lookAt': [round(v, 3) for v in cam.get('lookAt', [])], 'fov': cam.get('fov'), 'roll': cam.get('roll', 0)},
+            'changed': m['changed'],
+            'bossHeightPct': boss_pct, 'bossNote': boss_note, 'bossGroupHeightPct': ms.get('bossGroupHeightPct'), 'bossVisibleHeightPct': ms.get('bossVisibleHeightPct'),
+            'leadFigurePx': lead, 'leadNote': note_lead,
+            'hudOverlap': {'boss': hb, 'party': hp, 'overlaps': ov or ['none'], 'how': 'share of the figure\'s screen box under a HUD panel (24x24 samples)'},
+            'weak': META['weak'][key][P],
+            'alternates': alts,
+            'params': {k: v for k, v in a['params'].items() if k not in ('party', 'boss', 'lead', 'bossId', 'extra', 'hudSel')},
+        }
+        if P == 'P14': rec_out['panelCameras'] = ms.get('views')
+        if P == 'P11': rec_out['bandPx'] = ms.get('band')
+        frames.append(rec_out)
+
+os.makedirs(f'{OUT}/frames', exist_ok=True)
+json.dump({'round': 'battle perspectives 2026-09-27', 'rig': 'stills rig A', 'stage': 1, 'size': [1920, 1080],
+           'moment': 'seed 1, the lead member\'s first command menu, presenter paused; guide, best-move and enemy-intent panels folded to their chips',
+           'worktree': 'D:/pyrefly-mock-persp (detached d74b53f7, no src/ change)', 'frames': frames},
+          open(f'{OUT}/frames/frames.json', 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
+print('frames', len(frames))
+
+# contact sheets: 4 columns of 640x360 with a label strip under each frame
+def sheet(key, name, extra_lines):
+    items = [f for f in frames if f['chapter'] == key]
+    cw, chh, lab = 640, 360, 58
+    cols = 4; rows = (len(items) + cols - 1) // cols; head = 118
+    S = Image.new('RGB', (cw * cols, head + rows * (chh + lab)), INK)
+    d = ImageDraw.Draw(S)
+    d.rectangle([0, head - 4, S.width, head], fill=GOLD)
+    d.text((24, 14), f'Battle perspectives · stage 1 · {CH[key]["title"]}', font=font(BOLD, 30), fill=PAPER)
+    y = 58
+    for ln in extra_lines:
+        d.text((24, y), ln, font=font(REG, 18), fill=GREY); y += 24
+    for i, f in enumerate(items):
+        x0 = (i % cols) * cw; y0 = head + (i // cols) * (chh + lab)
+        im = Image.open(f"{OUT}/{f['file']}").convert('RGB').resize((cw, chh), Image.LANCZOS)
+        S.paste(im, (x0, y0))
+        num = META['options'][[k for k, v in META['options'].items() if v['name'] == f['name']][0]]['num']
+        t1 = f"{num} · {f['name']}"
+        d.rectangle([x0, y0 + chh, x0 + cw, y0 + chh + lab], fill=INK)
+        d.text((x0 + 10, y0 + chh + 3), t1, font=font(BOLD, 21), fill=PAPER)
+        tag = f['provenance']; tf = font(BOLD, 13)
+        tw = d.textlength(tag, font=tf)
+        d.rectangle([x0 + 10, y0 + chh + 33, x0 + 22 + tw, y0 + chh + 52], fill=tagcol(tag))
+        d.text((x0 + 16, y0 + chh + 34), tag, font=tf, fill=PAPER)
+        si = f['standIns']
+        if si:
+            s = 'STAND-IN: ' + si[0].split(' (')[0].split(' - ')[0]
+            sf = font(REG, 13); maxw = cw - (tw + 44)
+            if d.textlength(s, font=sf) > maxw:
+                words = s.split(' ')
+                while words and d.textlength(' '.join(words) + ' …', font=sf) > maxw: words.pop()
+                s = ' '.join(words).rstrip(',;:') + ' …'
+            d.text((x0 + 30 + tw, y0 + chh + 35), s, font=sf, fill=(244, 155, 184))
+    path = f'{OUT}/sheets/{name}'
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    q = 86
+    while True:
+        S.save(path, quality=q, optimize=True, progressive=True)
+        if os.path.getsize(path) < 2_400_000 or q < 60: break
+        q -= 6
+    print(name, S.size, os.path.getsize(path) // 1024, 'KB q', q)
+
+common = ['Real-engine frames at 1920x1080 from the worktree (no src/ change); every option composed as if it were the one we ship. Provenance chip under each frame;',
+          'stand-ins are named beside it. Measurements, cameras and one honest weak point per frame: frames/frames.json. Alternates: frames/alt/.']
+sheet('ffx-ch1', '01-stage1-ffx.jpg', common)
+sheet('ffx2-ch4', '02-stage1-ffx2.jpg', common)

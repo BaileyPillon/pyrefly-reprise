@@ -1,0 +1,460 @@
+// persp-lib: console staging library for the battle-perspectives options round (stills rig A, 2026-09-27).
+// Evaluated in the page through the REPL's /eval; installs window.__persp. Nothing here is wired into the game.
+// Built from docs/concepts/vegnagun-colossus-2026-09-26/mock-scripts/stage-lib.js.txt.
+const P = window.__pyrefly;
+const W = window.__persp = window.__persp || {};
+W.P = P;
+W.b = () => P.battle(); W.st = () => P.battle().stage; W.o = () => P.battle().stage.opts;
+W.bc = () => W.o().battleCamera; W.camera = () => W.o().camera; W.scene = () => W.o().scene; W.R = () => P.app.renderer;
+W.act = (id) => W.st().actor(id);
+W.ids = () => W.st().staged();
+W.T = async () => {
+  if (W._T) return W._T;
+  const url = performance.getEntriesByType('resource').map((e) => e.name).find((n) => /\/deps\/three\.js\?v=/.test(n));
+  W._T = await import(url); // same URL as the app's import, so the same module instance
+  return W._T;
+};
+const V3 = (v) => (Array.isArray(v) ? v : [v.x, v.y, v.z]);
+
+// ------------------------------------------------------------------ pristine state
+W.uSave = (a) => { const u = a.u; return { tint: u.tint.value.getHex(), brightness: u.brightness.value, desaturate: u.desaturate.value, rimColor: u.rimColor.value.getHex(), rimStrength: u.rimStrength.value, rimDir: u.rimDir.value.toArray(), rimWidth: u.rimWidth.value, bounceColor: u.bounceColor.value.getHex(), bounceStrength: u.bounceStrength.value, groundShade: u.groundShade.value, dissolve: u.dissolve.value }; };
+W.uLoad = (a, s) => { const u = a.u; u.tint.value.setHex(s.tint); u.brightness.value = s.brightness; u.desaturate.value = s.desaturate; u.rimColor.value.setHex(s.rimColor); u.rimStrength.value = s.rimStrength; u.rimDir.value.fromArray(s.rimDir); u.rimWidth.value = s.rimWidth; u.bounceColor.value.setHex(s.bounceColor); u.bounceStrength.value = s.bounceStrength; u.groundShade.value = s.groundShade; u.dissolve.value = s.dissolve ?? 0; };
+W.passU = (p) => Object.fromEntries(Object.entries(p.uniforms).filter(([, v]) => typeof v.value === 'number' || v.value?.toArray).map(([k, v]) => [k, typeof v.value === 'number' ? v.value : v.value.toArray()]));
+W.passLoad = (p, s) => { for (const [k, v] of Object.entries(s)) { const u = p.uniforms[k]; if (!u) continue; if (typeof v === 'number') u.value = v; else u.value.fromArray(v); } };
+W.init = () => {
+  const b = W.b();
+  if (W.s0 && W.s0.b === b) return 'kept';
+  const R = W.R(); const sc = W.scene();
+  W.s0 = { b, actors: {}, rigs: {}, meshes: new Map(), rig: W.bc().rigName };
+  W.added = []; W.over = {}; W.passes = [];
+  for (const id of W.ids()) { const a = W.act(id); W.s0.actors[id] = { pos: a.position.toArray(), rot: a.rotation.toArray(), scale: a.scale.toArray(), visible: a.visible, u: W.uSave(a), shadowBase: a.shadowBaseOpacity, pose: a.requested || a.pose }; }
+  for (const n of W.bc().rigNames) W.s0.rigs[n] = W.bc().getRig(n);
+  W.s0.post = { tH: W.passU(R.tiltH), tV: W.passU(R.tiltV), grade: W.passU(R.gradePass), bloom: [R.bloomPass.strength, R.bloomPass.radius, R.bloomPass.threshold], exposure: R.renderer.toneMappingExposure };
+  W.s0.fog = sc.fog ? { near: sc.fog.near, far: sc.fog.far, color: sc.fog.color.getHex() } : null;
+  W.s0.bg = sc.background?.isColor ? sc.background.getHex() : null;
+  return 'init';
+};
+
+// ------------------------------------------------------------------ per-frame overrides
+// W.over[id] = { face, yawOff, tint, brightness, desaturate, rim, rimStrength, rimDir, rimWidth, bounce, bounceStrength }
+W.tick = () => {
+  try {
+    if (!W.s0 || W.b() !== W.s0.b) return;
+    const cam = W.camera().position;
+    for (const [id, o] of Object.entries(W.over)) {
+      const a = W.act(id); if (!a) continue; const u = a.u;
+      if (o.face) a.rotation.y = Math.atan2(cam.x - a.position.x, cam.z - a.position.z) + (o.yawOff || 0);
+      else if (o.yaw != null) a.rotation.y = o.yaw;
+      if (o.tint != null) u.tint.value.setHex(o.tint);
+      if (o.brightness != null) u.brightness.value = o.brightness;
+      if (o.desaturate != null) u.desaturate.value = o.desaturate;
+      if (o.rim != null) u.rimColor.value.setHex(o.rim);
+      if (o.rimStrength != null) u.rimStrength.value = o.rimStrength;
+      if (o.rimDir) u.rimDir.value.set(o.rimDir[0] * (a.mirrored ? -1 : 1), o.rimDir[1]);
+      if (o.rimWidth != null) u.rimWidth.value = o.rimWidth;
+      if (o.bounce != null) u.bounceColor.value.setHex(o.bounce);
+      if (o.bounceStrength != null) u.bounceStrength.value = o.bounceStrength;
+    }
+    for (const f of W.ticks || []) f();
+  } catch (e) { W.err = String(e); }
+};
+if (!W.loop) { W.loop = true; const t = () => { W.tick(); requestAnimationFrame(t); }; requestAnimationFrame(t); }
+W.set = (id, patch) => { W.over[id] = { ...(W.over[id] || {}), ...patch }; return W.over[id]; };
+W.setAll = (ids, patch) => ids.map((id) => W.set(id, patch));
+
+// ------------------------------------------------------------------ camera
+W.cam = (c) => {
+  const bc = W.bc();
+  bc.addRig('persp', { position: V3(c.position), lookAt: V3(c.lookAt), fov: c.fov ?? 32, sway: c.sway ?? 0 });
+  bc.snapTo('persp'); bc.setRoll(c.roll ?? 0);
+  W.curCam = { position: V3(c.position), lookAt: V3(c.lookAt), fov: c.fov ?? 32, roll: c.roll ?? 0 };
+  return W.curCam;
+};
+W.today = () => { const r = W.s0.rigs.idle; return W.cam({ position: V3(r.position), lookAt: V3(r.lookAt), fov: r.fov ?? 32, sway: 0 }); };
+
+// ------------------------------------------------------------------ actors
+W.place = (id, pos, s, mirror) => {
+  const a = W.act(id); if (!a) return 'no ' + id;
+  if (pos) a.position.set(...pos);
+  if (s != null) a.scale.set(mirror ? -s : s, s, s);
+  else if (mirror != null) a.scale.x = Math.abs(a.scale.x) * (mirror ? -1 : 1);
+  a.updateMatrixWorld(true); return a.position.toArray();
+};
+// Re-size a figure through its own world height (plane, aim point, shadow and ring follow), so HUD anchors stay right.
+W.setHeight = (id, h) => { const a = W.act(id); if (!a) return; const o = W.s0.actors[id]; if (o.h0 == null) { o.h0 = a.worldHeight; o.sr0 = a.shadowBaseRadius; o.rr0 = a.ringBaseRadius; } const k = h / o.h0; a.worldHeight = h; a.shadowBaseRadius = o.sr0 * k; a.ringBaseRadius = o.rr0 * k; a.resize(); };
+// Swap a figure's painting for a candidate PNG (e.g. /mock-art/tidus/rear34.png). Loaded as an extra pose with alpha
+// fitting OFF, so the sidecar's baselineY (the feet) is honoured; sized against the idle, so the sidecar's `scale` makes
+// the figure as tall as the idle; shown on the active plane under the pose name it already had (life state, turn ring
+// kept). Declared facing 'right' for the party side: never mirrored, and the interim yaw stays off.
+W.swapped = W.swapped || new Set();
+W.swap = async (id, url, facing = 'right') => {
+  const a = W.act(id); if (!a) return 'no ' + id;
+  const fb = a.fitBaseline; a.fitBaseline = false;
+  try { await a.reloadPose('persp-alt', url); } finally { a.fitBaseline = fb; }
+  const tex = a.poses.get('persp-alt'); if (!tex || tex.placeholder) return 'missing ' + url;
+  tex.meta = { ...tex.meta, facing };
+  a.applyPose(a.active, a.slots[a.active].pose, tex); a.syncOpacity(); W.swapped.add(id);
+  return { baselineY: tex.meta.baselineY, scale: tex.meta.scale, size: a.poseSize.map((v) => +v.toFixed(3)), mirrored: a.mirrored };
+};
+// Show a painted pose the subject already has (attack, cast, victory) on a still figure.
+W.posed = W.posed || new Set();
+W.pose = (id, name) => { const a = W.act(id); if (a) { a.setPose(name, { immediate: true, force: true }); W.posed.add(id); } };
+// Fire the engine's own hit effect on a figure and freeze it at `ms`, so a still can hold the impact (thaw() to resume).
+W.impact = async (id, ms = 70, o = { element: 'none', crit: true }) => { const st = W.st(); const h = st.hits; W.thaw?.(); st.vfx.impact(id, o); await new Promise((r) => setTimeout(r, ms)); const upd = h.update; h.update = () => {}; W.thaw = () => { h.update = upd; W.thaw = null; }; return true; };
+W.hide = (id, h = true) => { const a = W.act(id); if (a) a.visible = !h; };
+
+// ------------------------------------------------------------------ meshes (backdrop, props)
+W.meshes = (name) => { const out = []; W.scene().traverse((n) => { if (n.name === name) out.push(n); }); return out; };
+W.touch = (m) => { if (!W.s0.meshes.has(m)) W.s0.meshes.set(m, { pos: m.position.toArray(), rot: m.rotation.toArray(), scale: m.scale.toArray(), visible: m.visible, material: m.material, map: m.material?.map ?? null, alphaMap: m.material?.alphaMap ?? null, transparent: m.material?.transparent, opacity: m.material?.opacity, color: m.material?.color?.getHex?.() }); return m; };
+W.xf = (name, f) => { for (const m of W.meshes(name)) { W.touch(m); f(m); } };
+W.bgNames = ['backdrop-painting', 'backdrop-layer-0', 'backdrop-layer-1'];
+// Scale the painted backdrop stack about its own centre and shift it: re-solve the framing for a new camera.
+W.bg = (k = 1, dy = 0, dx = 0, names = W.bgNames) => { for (const n of names) W.xf(n, (m) => { const o = W.s0.meshes.get(m); m.scale.set(o.scale[0] * k, o.scale[1] * k, o.scale[2]); m.position.set(o.pos[0] + dx, o.pos[1] + dy, o.pos[2]); }); };
+W.showMesh = (name, v) => W.xf(name, (m) => { m.visible = v; });
+// Widen the hue-matched ground plane (it is 44 units square with a radial fade): same tile size, the fade pushed out.
+W.groundNames = W.groundNames ?? ['ground'];
+W.ground = (k = 2, dz = 0) => { for (const m of W.groundNames.flatMap((n) => W.meshes(n))) { W.touch(m); const o = W.s0.meshes.get(m); if (o.repeat == null) o.repeat = m.material.map.repeat.toArray(); m.scale.set(o.scale[0] * k, o.scale[1] * k, 1); m.position.z = o.pos[2] + dz; m.material.map.repeat.set(o.repeat[0] * k, o.repeat[1] * k); } };
+// Move set pieces tied to a figure (a boss's floor pool or reflection) by that figure's displacement from its staged spot.
+W.follow = (names, id) => { const a = W.act(id); const o = W.s0.actors[id]; if (!a || !o) return; const dx = a.position.x - o.pos[0], dz = a.position.z - o.pos[2]; for (const n of names) W.xf(n, (m) => { const t = W.s0.meshes.get(m); m.position.x = t.pos[0] + dx; m.position.z = t.pos[2] + dz; }); };
+// Lay a painted floor plate (painted straight down) on the scene's ground mesh: it covers that mesh's own square 1:1
+// (image top = world -z, image left = world -x: PlaneGeometry UVs after the mesh's -90 degree x rotation), clamped, no
+// tiling, no radial alpha fade (the plate paints its own falloff). `basic` shows it unlit, exactly as painted.
+W.floorPlate = async (url, o = {}) => {
+  const T = await W.T(); const tex = await new T.TextureLoader().loadAsync(url);
+  tex.colorSpace = T.SRGBColorSpace; tex.anisotropy = W.R().renderer.capabilities.getMaxAnisotropy(); tex.wrapS = tex.wrapT = T.ClampToEdgeWrapping;
+  const m = W.meshes(o.mesh ?? W.groundNames[0])[0]; W.touch(m);
+  if (o.basic) { m.material = new T.MeshBasicMaterial({ map: tex, color: new T.Color().setScalar(o.bright ?? 1), fog: true, toneMapped: false }); }
+  else { m.material.map = tex; m.material.alphaMap = null; m.material.transparent = false; m.material.color.setScalar(o.bright ?? 1); m.material.needsUpdate = true; }
+  for (const n of o.hide ?? []) W.showMesh(n, false);
+  return [tex.image.width, tex.image.height, m.geometry.parameters.width, m.position.toArray()];
+};
+// Hide set dressing (rocks, drifts) within r of a point on the ground plane (x, z): clears a camera placed inside the set.
+W.clearNear = (x, z, r, names = ['rock', 'snow-drift']) => { let n = 0; for (const nm of names) for (const m of W.meshes(nm)) { const d = Math.hypot(m.position.x - x, m.position.z - z); if (d < r) { W.touch(m); m.visible = false; n++; } } return n; };
+// A pre-blurred backdrop: the far plate softened as a depth-of-field on the far plane would (real-time technique).
+W.blurTex = async (tex, px, mirror = false, dim = 1) => {
+  const T = await W.T(); const img = tex.image; const w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+  const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d');
+  if (mirror) { g.translate(w, 0); g.scale(-1, 1); }
+  g.filter = `blur(${px}px)${dim !== 1 ? ` brightness(${dim})` : ''}`; g.drawImage(img, 0, 0, w, h);
+  const t = new T.CanvasTexture(c); t.colorSpace = tex.colorSpace; t.wrapS = tex.wrapS; t.wrapT = tex.wrapT; t.needsUpdate = true; return t;
+};
+W.softBg = async (px = 6, layerPx = null) => {
+  const map = { 'backdrop-painting': px, 'backdrop-layer-0': layerPx ?? px * 0.6, 'backdrop-layer-1': layerPx != null ? layerPx * 0.6 : px * 0.35 };
+  for (const [n, p] of Object.entries(map)) for (const m of W.meshes(n)) { W.touch(m); const orig = W.s0.meshes.get(m).map; if (!orig || p <= 0) continue; m.material.map = await W.blurTex(orig, p); m.material.needsUpdate = true; }
+};
+// Reverse plate: the far side of the arena, behind the default camera, facing -z. Stand-in = today's plate mirrored + softened.
+W.plate = async (o = {}) => {
+  const T = await W.T(); const src = W.meshes('backdrop-painting')[0]; const tex0 = W.s0.meshes.get(src)?.map ?? src.material.map;
+  let tex = o.url ? await new T.TextureLoader().loadAsync(o.url) : await W.blurTex(tex0, o.blur ?? 8, o.mirror !== false, o.dim ?? 1);
+  if (o.url) { tex.colorSpace = T.SRGBColorSpace; if (o.blur) { const b = await W.blurTex(tex, o.blur, false, o.dim ?? 1); tex.dispose(); tex = b; } }
+  const gw = src.geometry.parameters.width * (o.k ?? 1), gh = src.geometry.parameters.height * (o.k ?? 1);
+  const m = new T.Mesh(new T.PlaneGeometry(gw, gh), new T.MeshBasicMaterial({ map: tex, fog: false, depthWrite: false, toneMapped: false }));
+  if (o.dist) { // centred on the camera's horizontal view direction, facing the camera
+    const cam = W.camera(); const la = W.curCam?.lookAt ?? [0, 0, 0]; let dx = la[0] - cam.position.x, dz = la[2] - cam.position.z; const L = Math.hypot(dx, dz); dx /= L; dz /= L;
+    const rot = o.turn ?? 0; const c = Math.cos(rot), s2 = Math.sin(rot); const ex = dx * c - dz * s2, ez = dx * s2 + dz * c;
+    m.position.set(cam.position.x + ex * o.dist, o.y ?? src.position.y, cam.position.z + ez * o.dist); m.rotation.y = Math.atan2(-ex, -ez);
+  } else { m.position.set(o.x ?? 0, o.y ?? src.position.y, o.z ?? 48); m.rotation.y = Math.PI; }
+  m.renderOrder = -90; m.name = 'persp-plate';
+  W.scene().add(m); W.added.push(m); return [gw, gh];
+};
+W.addRock = (pos, s = 1, rotY = 0, tint = null) => {
+  const src = W.meshes('rock')[0]; const r = src.clone(); r.material = src.material.clone(); if (tint != null) r.material.color.setHex(tint);
+  r.position.set(...pos); r.scale.set(...(Array.isArray(s) ? s : [s, s, s])); r.rotation.y = rotY; r.name = 'persp-rock';
+  W.scene().add(r); W.added.push(r); return r;
+};
+W.radialTex = async (stops, size = 256) => {
+  const T = await W.T(); const c = document.createElement('canvas'); c.width = c.height = size; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  for (const [t, col] of stops) gr.addColorStop(t, col);
+  g.fillStyle = gr; g.fillRect(0, 0, size, size); const t = new T.CanvasTexture(c); t.colorSpace = T.SRGBColorSpace; return t;
+};
+// Soft additive discs near the lens: out-of-focus snow or pyreflies (bokeh).
+W.bokeh = async (list, color = 'rgba(200,225,255,1)') => {
+  const T = await W.T(); const tex = await W.radialTex([[0, color.replace(/,1\)$/, ',0.75)')], [0.62, color.replace(/,1\)$/, ',0.6)')], [0.8, color.replace(/,1\)$/, ',0.9)')], [0.9, color.replace(/,1\)$/, ',0.3)')], [1, 'rgba(0,0,0,0)']]);
+  for (const b of list) {
+    const m = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ map: tex, transparent: true, opacity: b.o ?? 0.35, depthWrite: false, blending: T.AdditiveBlending, fog: false, toneMapped: false }));
+    const p = b.ndc ? await W.ndc(b.ndc[0], b.ndc[1], b.d ?? 2) : b.p;
+    m.position.set(...p); m.scale.setScalar(b.s ?? 0.3); m.renderOrder = 60; m.name = 'persp-bokeh'; m.onBeforeRender = (r, s, cam) => m.quaternion.copy(cam.quaternion);
+    W.scene().add(m); W.added.push(m);
+  }
+};
+// Light shafts: additive gradient planes (god rays).
+W.rays = async (list) => {
+  const T = await W.T(); const c = document.createElement('canvas'); c.width = 64; c.height = 256; const g = c.getContext('2d');
+  const gx = g.createLinearGradient(0, 0, 64, 0); gx.addColorStop(0, 'rgba(255,255,255,0)'); gx.addColorStop(0.5, 'rgba(255,255,255,1)'); gx.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gx; g.fillRect(0, 0, 64, 256); g.globalCompositeOperation = 'destination-in';
+  const gy = g.createLinearGradient(0, 0, 0, 256); gy.addColorStop(0, 'rgba(0,0,0,0.9)'); gy.addColorStop(0.6, 'rgba(0,0,0,0.5)'); gy.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gy; g.fillRect(0, 0, 64, 256);
+  const tex = new T.CanvasTexture(c); tex.colorSpace = T.SRGBColorSpace;
+  for (const r of list) {
+    const m = new T.Mesh(new T.PlaneGeometry(r.w ?? 1.5, r.h ?? 20), new T.MeshBasicMaterial({ map: tex, color: r.color ?? 0xbfd8ff, transparent: true, opacity: r.o ?? 0.12, depthWrite: false, blending: T.AdditiveBlending, fog: false, toneMapped: false, side: T.DoubleSide }));
+    m.position.set(...r.p); m.rotation.set(...(r.rot ?? [0, 0, 0])); m.renderOrder = 55; m.name = 'persp-ray';
+    W.scene().add(m); W.added.push(m);
+  }
+};
+// A textured plane in the scene (portrait, medallion, foreground face), optionally facing the camera.
+W.card = async (o) => {
+  const T = await W.T(); const tex = await new T.TextureLoader().loadAsync(o.url); tex.colorSpace = T.SRGBColorSpace; tex.anisotropy = 8;
+  const w = o.w ?? 1, h = o.h ?? (w * tex.image.height / tex.image.width);
+  const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, fog: false, toneMapped: false, side: T.DoubleSide, opacity: o.o ?? 1 }));
+  m.position.set(...o.p); if (o.rot) m.rotation.set(...o.rot); m.renderOrder = o.order ?? 70; m.name = o.name ?? 'persp-card';
+  if (o.faceCam) m.onBeforeRender = (r, s, cam) => m.quaternion.copy(cam.quaternion);
+  W.scene().add(m); W.added.push(m); return [w, h];
+};
+// A world point at distance d along the camera ray through NDC (x, y) in -1..1.
+W.ndc = async (x, y, d) => { const T = await W.T(); const cam = W.camera(); cam.updateMatrixWorld(true); const p = new T.Vector3(x, y, 0.5).unproject(cam); const dir = p.sub(cam.position).normalize(); return cam.position.clone().add(dir.multiplyScalar(d)).toArray(); };
+// An out-of-focus foreground silhouette (rock, ice crystal, pillar) as a camera-facing card with a pre-blurred texture.
+// pts: polygon in 0..1 card space (y down); placed at NDC (x, y), d units from the lens, w world units wide.
+W.fgCard = async (o) => {
+  const T = await W.T(); const S = 512; const c = document.createElement('canvas'); c.width = S; c.height = Math.round(S * (o.aspect ?? 1)); const g = c.getContext('2d');
+  const pad = (o.blur ?? 14) * 2.2; g.filter = `blur(${o.blur ?? 14}px)`;
+  const grd = g.createLinearGradient(0, 0, 0, c.height); grd.addColorStop(0, o.top ?? o.color ?? '#0b1424'); grd.addColorStop(1, o.color ?? '#0b1424');
+  const path = () => { g.beginPath(); o.pts.forEach(([px, py], i) => { const X = pad + px * (S - 2 * pad), Y = pad + py * (c.height - 2 * pad); if (i) g.lineTo(X, Y); else g.moveTo(X, Y); }); g.closePath(); };
+  g.fillStyle = grd; path(); g.fill();
+  // an opaque core under the soft edge, so the silhouette holds against a bright plate
+  if (o.core !== false) { g.filter = `blur(${(o.blur ?? 14) * 0.45}px)`; path(); g.fill(); path(); g.fill(); }
+  if (o.glint) { g.filter = `blur(${(o.blur ?? 14) * 0.6}px)`; g.strokeStyle = o.glint; g.lineWidth = 6; g.beginPath(); o.pts.slice(0, o.glintN ?? 3).forEach(([px, py], i) => { const X = pad + px * (S - 2 * pad), Y = pad + py * (c.height - 2 * pad); if (i) g.lineTo(X, Y); else g.moveTo(X, Y); }); g.stroke(); }
+  const tex = new T.CanvasTexture(c); tex.colorSpace = T.SRGBColorSpace;
+  const cam = W.camera(); const halfW = (o.d ?? 2) * Math.tan((cam.fov * Math.PI) / 360) * cam.aspect;
+  const w = o.sw != null ? o.sw * 2 * halfW : (o.w ?? 2), h = w * (o.aspect ?? 1);
+  const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ map: tex, transparent: true, opacity: o.o ?? 1, depthWrite: false, depthTest: false, fog: false, toneMapped: false }));
+  m.position.fromArray(await W.ndc(o.at[0], o.at[1], o.d ?? 2)); m.renderOrder = 80; m.name = 'persp-fg'; m.onBeforeRender = (r, s, cam) => m.quaternion.copy(cam.quaternion);
+  W.scene().add(m); W.added.push(m); return m.position.toArray();
+};
+// Scale the scene lights by name (key, fill, rim, the ambient under '' ): lights the floor for a high camera.
+W.lights = (mul) => { W.s0.lights = W.s0.lights ?? new Map(); W.scene().traverse((n) => { if (!n.isLight) return; const k = n.name || n.type; const f = mul[k] ?? mul['*']; if (f == null) return; if (!W.s0.lights.has(n)) W.s0.lights.set(n, n.intensity); n.intensity = W.s0.lights.get(n) * f; }); };
+W.fog = (near, far, color) => { const f = W.scene().fog; if (!f) return; if (near != null) f.near = near; if (far != null) f.far = far; if (color != null) f.color.setHex(color); };
+
+// ------------------------------------------------------------------ post
+W.tilt = (o) => { const R = W.R(); for (const [p, key] of [[R.tiltH, 'h'], [R.tiltV, 'v']]) { for (const k of ['focus', 'bandWidth', 'maxBlur', 'falloff']) if (o[k] != null) p.uniforms[k].value = o[k]; } };
+W.grade = (o) => { const u = W.R().gradePass.uniforms; for (const [k, v] of Object.entries(o)) { if (!u[k]) continue; if (typeof v === 'number') u[k].value = v; else u[k].value.set(...v); } };
+W.bloom = (strength, radius, threshold) => { const b = W.R().bloomPass; if (strength != null) b.strength = strength; if (radius != null) b.radius = radius; if (threshold != null) b.threshold = threshold; };
+W.exposure = (e) => { W.R().renderer.toneMappingExposure = e; };
+// A vertical-band blur (split-diopter): soft between x0 and x1 (0..1 of width), sharp outside. Two passes before the grade.
+W.diopter = async (o) => {
+  const R = W.R(); const SP = R.tiltH.constructor; const Vc = R.tiltH.uniforms.direction.value.constructor;
+  const shader = { name: 'PerspDiopter', uniforms: { tDiffuse: { value: null }, resolution: { value: R.tiltH.uniforms.resolution.value.clone() }, direction: { value: new Vc(1, 0) }, x0: { value: o.x0 }, x1: { value: o.x1 }, soft: { value: o.soft ?? 0.06 }, maxBlur: { value: o.maxBlur ?? 9 } },
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+    fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 resolution; uniform vec2 direction; uniform float x0; uniform float x1; uniform float soft; uniform float maxBlur; varying vec2 vUv;
+      void main(){ float a = smoothstep(x0 - soft, x0 + soft, vUv.x) * (1.0 - smoothstep(x1 - soft, x1 + soft, vUv.x)); float radius = maxBlur * a;
+        vec4 base = texture2D(tDiffuse, vUv); if (radius < 0.05) { gl_FragColor = base; return; } vec2 st = direction * resolution * radius;
+        vec4 s = base * 0.2270270270; s += texture2D(tDiffuse, vUv + st) * 0.1945945946; s += texture2D(tDiffuse, vUv - st) * 0.1945945946;
+        s += texture2D(tDiffuse, vUv + st * 2.0) * 0.1216216216; s += texture2D(tDiffuse, vUv - st * 2.0) * 0.1216216216;
+        s += texture2D(tDiffuse, vUv + st * 3.0) * 0.0540540541; s += texture2D(tDiffuse, vUv - st * 3.0) * 0.0540540541;
+        s += texture2D(tDiffuse, vUv + st * 4.0) * 0.0162162162; s += texture2D(tDiffuse, vUv - st * 4.0) * 0.0162162162; gl_FragColor = s; }` };
+  const h = new SP(shader), v = new SP(shader); v.uniforms.direction.value.set(0, 1);
+  const passes = R.composer.passes; const gi = passes.indexOf(R.gradePass);
+  passes.splice(gi, 0, h, v); W.passes.push(h, v); return passes.length;
+};
+
+// ------------------------------------------------------------------ HUD, DOM overlays
+W.css = (text) => { let s = document.getElementById('persp-css'); if (!s) { s = document.createElement('style'); s.id = 'persp-css'; document.head.appendChild(s); } s.textContent = text; };
+// Pin the collapsed-panel chips where they sit in today's frame, so every option carries the same HUD state
+// (the best-move chip is re-placed by a layout pass and otherwise wanders with the staging), and keep the in-flow
+// PAUSE chip above the mock overlays (bands, arch, panels), which are positioned and would otherwise paint over it.
+W.pinChips = (on = true) => { let s = document.getElementById('persp-pin'); if (!on) { s?.remove(); return; } if (!s) { s = document.createElement('style'); s.id = 'persp-pin'; document.head.appendChild(s); } s.textContent = '.battle-pause-chip{position:relative;z-index:70;}' + (W.game() === 'ffx' ? '.mad__toggle{left:15px !important;bottom:245px !important;top:auto !important;right:auto !important;}' : (W.pin2 ?? '')); };
+W.screenEl = () => document.querySelector('.battle-screen');
+W.dom = (html, where = 'under') => {
+  const host = W.screenEl(); const d = document.createElement('div'); d.className = 'persp-dom'; d.innerHTML = html;
+  const el = d.firstElementChild ? d : d;
+  if (where === 'under') host.insertBefore(d, host.firstChild); else host.appendChild(d);
+  d.style.cssText = 'position:absolute;inset:0;pointer-events:none;' + (where === 'under' ? 'z-index:0;' : 'z-index:60;');
+  return d;
+};
+W.letterbox = (ratio = 2.39, color = '#000') => { const H = innerHeight, Wd = innerWidth; const ih = Math.round(Wd / ratio); const band = Math.round((H - ih) / 2); W.dom(`<div style="position:absolute;left:0;right:0;top:0;height:${band}px;background:${color}"></div><div style="position:absolute;left:0;right:0;bottom:0;height:${H - ih - band}px;background:${color}"></div>`, 'under'); return band; };
+// Mirror the whole 3D frame about the camera's axis (x = 0 in both scenes): party right, boss left. The HUD is DOM and untouched.
+W.mirrorScene = (on = true, keepPlate = false) => { const sc = W.scene(); sc.scale.x = on ? -1 : 1; const bd = W.meshes('backdrop')[0]; if (bd) { W.touch(bd); bd.scale.x = on && keepPlate ? -1 : 1; } sc.updateMatrixWorld(true); };
+// HUD mock: move each matched element to its mirror-image x position (per element, so a staggered stack reverses its stagger).
+// the cumulative CSS scale above an element (the HUD stages are a 640-wide grid scaled up), so a screen offset can be set in local px
+W.cssScale = (e) => { let k = 1, p = e.parentElement; while (p && p !== document.body) { const t = getComputedStyle(p).transform; if (t && t !== 'none') { const m = new DOMMatrix(t); k *= Math.hypot(m.a, m.b); } p = p.parentElement; } return k; };
+W.moveHud = (e, dxScreen, dyScreen = 0) => { const k = W.cssScale(e); e.style.translate = `${(dxScreen / k).toFixed(2)}px ${(dyScreen / k).toFixed(2)}px`; e.dataset.perspMoved = '1'; };
+W.mirrorHud = (sels) => { const Wd = innerWidth; const moved = []; for (const s of sels) for (const e of document.querySelectorAll(s)) { const r = e.getBoundingClientRect(); if (r.width < 2) continue; const dx = Wd - 2 * r.left - r.width; W.moveHud(e, dx, 0); moved.push([s, Math.round(dx)]); } return moved; };
+W.unmoveHud = () => { for (const e of document.querySelectorAll('[data-persp-moved]')) { e.style.translate = ''; e.style.scale = ''; delete e.dataset.perspMoved; } };
+W.hudSel = {
+  ffx: ['.sgd__toggle', '.mad__toggle', '.eint__toggle', '.ffx-sensor', '.ig-ctb__row', '.ig-stat', '.ig-cmd', '.ffx-cmd-info', '.battle-pause-chip', '.persp-hud'],
+  ffx2: ['.sgd__toggle', '.mad__toggle', '.eint__toggle', '.ig-bosshp', '.ig-stat', '.ig-cmd', '.ffx2-cmd-info', '.battle-pause-chip', '.persp-hud'],
+};
+W.game = () => (document.querySelector('.ffx2hud') ? 'ffx2' : 'ffx');
+W.hudRects = () => { const out = []; for (const s of W.hudSel[W.game()]) for (const e of document.querySelectorAll(s)) { const cs = getComputedStyle(e); const r = e.getBoundingClientRect(); if (r.width < 4 || r.height < 4 || cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity < 0.05) continue; let p = e, hidden = false; while ((p = p.parentElement)) { const c2 = getComputedStyle(p); if (c2.display === 'none' || c2.visibility === 'hidden' || +c2.opacity < 0.05) { hidden = true; break; } } if (!hidden) out.push({ s, x: r.left, y: r.top, r: r.right, b: r.bottom }); } return out; };
+
+// ------------------------------------------------------------------ measurement
+W.measure = (lead, boss, extraBoss = []) => {
+  const st = W.st(); const H = innerHeight, Wd = innerWidth; const hud = W.hudRects();
+  const out = { frame: [Wd, H], cam: W.curCam ?? null, actors: {} };
+  for (const id of W.ids()) {
+    const a = W.act(id); if (!a || !a.visible) continue; const r = st.projectRect(id); if (!r) continue;
+    // sample a 24x24 grid inside the rect: share inside the frame, share under a HUD panel
+    let inF = 0, under = 0, n = 0;
+    for (let i = 0; i < 24; i++) for (let j = 0; j < 24; j++) { const x = r.x + (i + 0.5) * r.w / 24, y = r.y + (j + 0.5) * r.h / 24; n++; if (x < 0 || y < 0 || x > Wd || y > H) continue; inF++; if (hud.some((h) => x >= h.x && x <= h.r && y >= h.y && y <= h.b)) under++; }
+    out.actors[id] = { rect: [Math.round(r.x), Math.round(r.y), Math.round(r.w), Math.round(r.h)], hPct: +(100 * r.h / H).toFixed(1), inFrame: +(inF / n).toFixed(2), underHud: +(inF ? under / inF : 0).toFixed(2), depth: +r.depth.toFixed(2) };
+  }
+  const B = out.actors[boss]; out.bossHeightPct = B ? B.hPct : null;
+  // boss group (e.g. Seymour on Mortiorchis): union of rects
+  const grp = [boss, ...extraBoss].map((id) => out.actors[id]).filter(Boolean);
+  if (grp.length) { const y0 = Math.min(...grp.map((g) => g.rect[1])), y1 = Math.max(...grp.map((g) => g.rect[1] + g.rect[3])); out.bossGroupHeightPct = +(100 * (y1 - y0) / H).toFixed(1); out.bossVisibleHeightPct = +(100 * (Math.min(H, y1) - Math.max(0, y0)) / H).toFixed(1); }
+  out.leadPx = out.actors[lead] ? out.actors[lead].rect[3] : null;
+  out.hudOverBoss = grp.length ? Math.max(...grp.map((g) => g.underHud)) : null;
+  out.hudOverParty = Math.max(0, ...Object.entries(out.actors).filter(([id]) => st.sideOf(id) === 'party').map(([, g]) => g.underHud));
+  return out;
+};
+
+// ------------------------------------------------------------------ restore
+W.restore = () => {
+  if (!W.s0) return 'no s0';
+  for (const [id, s] of Object.entries(W.s0.actors)) { const a = W.act(id); if (!a) continue; if (s.h0 != null) { a.worldHeight = s.h0; a.shadowBaseRadius = s.sr0; a.ringBaseRadius = s.rr0; a.resize(); delete s.h0; } a.position.fromArray(s.pos); a.rotation.fromArray(s.rot); a.scale.fromArray(s.scale); a.visible = s.visible; W.uLoad(a, s.u); }
+  for (const id of W.swapped ?? []) { const a = W.act(id); if (!a) continue; const t = a.poses.get('persp-alt'); a.poses.delete('persp-alt'); a.resize(); if (t) a.retire(t); }
+  W.swapped = new Set();
+  for (const id of W.posed ?? []) { const a = W.act(id); if (a) a.setPose(W.s0.actors[id]?.pose ?? 'idle', { immediate: true, force: true }); }
+  W.posed = new Set();
+  W.thaw?.();
+  for (const id of W.ids()) W.act(id)?.clearTurnRing?.();
+  W.over = {}; W.ticks = [];
+  for (const [m, s] of W.s0.meshes) { if (s.material && m.material !== s.material) { m.material.map?.dispose?.(); m.material.dispose(); m.material = s.material; } if (m.material && 'alphaMap' in s && m.material.alphaMap !== s.alphaMap) { m.material.alphaMap = s.alphaMap; m.material.transparent = s.transparent; m.material.needsUpdate = true; } if (s.repeat && m.material?.map) m.material.map.repeat.fromArray(s.repeat); m.position.fromArray(s.pos); m.rotation.fromArray(s.rot); m.scale.fromArray(s.scale); m.visible = s.visible; if (m.material) { if (m.material.map !== s.map) { m.material.map?.dispose?.(); m.material.map = s.map; m.material.needsUpdate = true; } if (s.opacity != null) m.material.opacity = s.opacity; if (s.color != null && m.material.color) m.material.color.setHex(s.color); } }
+  W.s0.meshes.clear();
+  for (const m of W.added) { m.removeFromParent(); if (m.name !== 'persp-rock') m.traverse((n) => { n.geometry?.dispose?.(); n.material?.map?.dispose?.(); n.material?.dispose?.(); }); }
+  W.added = [];
+  const R = W.R(); const passes = R.composer.passes; for (const p of W.passes) { const i = passes.indexOf(p); if (i >= 0) passes.splice(i, 1); } W.passes = [];
+  W.passLoad(R.tiltH, W.s0.post.tH); W.passLoad(R.tiltV, W.s0.post.tV); W.passLoad(R.gradePass, W.s0.post.grade);
+  [R.bloomPass.strength, R.bloomPass.radius, R.bloomPass.threshold] = W.s0.post.bloom; R.renderer.toneMappingExposure = W.s0.post.exposure;
+  if (W.s0.lights) { for (const [n, i] of W.s0.lights) n.intensity = i; W.s0.lights.clear(); }
+  const sc = W.scene(); if (W.s0.fog && sc.fog) { sc.fog.near = W.s0.fog.near; sc.fog.far = W.s0.fog.far; sc.fog.color.setHex(W.s0.fog.color); }
+  if (W.s0.bg != null && sc.background?.isColor) sc.background.setHex(W.s0.bg);
+  const bc = W.bc(); for (const [n, r] of Object.entries(W.s0.rigs)) bc.addRig(n, r); bc.setRoll(0); bc.snapTo('idle'); W.curCam = null;
+  document.getElementById('persp-css')?.remove(); for (const d of document.querySelectorAll('.persp-dom')) d.remove();
+  W.unmoveHud(); sc.scale.set(1, 1, 1); sc.updateMatrixWorld(true);
+  if (W.hudIsOff) { P.trigger('hud:on'); W.hudIsOff = false; }
+  for (const id of W.ids()) { const a = W.act(id); if (a && a.shadowBaseOpacity !== undefined && W.s0.actors[id]) a.shadowBaseOpacity = W.s0.actors[id].shadowBase ?? a.shadowBaseOpacity; }
+  P.interimYaw(true);
+  return 'restored';
+};
+// P8 HUD mock: the party as three portrait cards along the bottom (the stat rows restyled; values are today's).
+W.partyCards = (members, o = {}) => {
+  const Wd = innerWidth, H = innerHeight; const n = members.length; const cw = o.w ?? 330, ch = o.h ?? 176, gap = o.gap ?? 22;
+  const x0 = o.x0 ?? (Wd - (n * cw + (n - 1) * gap) - 40); const y0 = H - ch - (o.bottom ?? 26);
+  const gold = o.accent ?? '#e3b94a', paper = '#f4f1e8', mp = '#7fc6e8', ink = 'rgba(20,18,32,0.95)';
+  const cards = members.map((m, i) => {
+    const x = x0 + i * (cw + gap), up = m.acting ? 18 : 0;
+    return `<div class="persp-hud" style="position:absolute;left:${x}px;top:${y0 - up}px;width:${cw}px;height:${ch}px;transform:skewX(-12deg);background:${ink};border-top:${m.acting ? 5 : 2}px solid ${m.acting ? gold : 'rgba(227,185,74,0.35)'};box-shadow:0 8px 28px rgba(0,0,0,0.55);overflow:hidden">
+      <div style="position:absolute;left:-14px;top:0;width:${Math.round(cw * 0.5)}px;height:100%;overflow:hidden;transform:skewX(12deg);transform-origin:bottom left">
+        <img src="${m.portrait}" style="position:absolute;left:${m.px ?? -10}%;top:${m.py ?? -12}%;width:${m.pw ?? 150}%;height:auto;max-width:none">
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,18,32,0) 55%,rgba(20,18,32,0.95) 100%)"></div></div>
+      <div style="position:absolute;left:${Math.round(cw * 0.47)}px;top:14px;right:10px;transform:skewX(12deg);font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:700;font-size:36px;color:${m.acting ? gold : paper}">${m.name}</div>
+      <div style="position:absolute;left:${Math.round(cw * 0.47)}px;top:66px;right:10px;transform:skewX(12deg);font-family:Rajdhani,Bahnschrift,sans-serif;font-weight:700;color:${paper};font-size:34px;line-height:1">${m.hp}<span style="font-size:17px;opacity:0.75">/${m.hpMax}</span></div>
+      <div style="position:absolute;left:${Math.round(cw * 0.47)}px;top:106px;right:10px;transform:skewX(12deg);font-family:Rajdhani,Bahnschrift,sans-serif;font-weight:700;color:${mp};font-size:26px;line-height:1">${m.mp}<span style="font-size:15px;opacity:0.75">/${m.mpMax}</span></div>
+      <div style="position:absolute;left:${Math.round(cw * 0.47)}px;bottom:18px;right:18px;height:7px;background:rgba(255,255,255,0.12)"><div style="width:${m.od ?? 50}%;height:100%;background:${m.odReady ? '#d8d05a' : gold}"></div></div>
+    </div>`; }).join('');
+  W.dom(cards, 'over');
+};
+
+// Face crops the HUD already uses (turn-order tiles), keyed by image URL: [left, top, width] as fractions of a square tile.
+W.faceCrops = () => { const out = {}; for (const img of document.querySelectorAll('img[data-role="portrait-img"]')) { const st = img.style; const src = img.getAttribute('src'); if (!src || out[src]) continue; out[src] = [parseFloat(st.left) / 100, parseFloat(st.top) / 100, parseFloat(st.width) / 100]; } return out; };
+W.loadImg = (url) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+// A tabletop token: the portrait in a gold ring, lying on the floor (or standing, `stand`), with a thin gold edge.
+W.medallion = async (o) => {
+  const T = await W.T(); const S = 512; const c = document.createElement('canvas'); c.width = c.height = S; const g = c.getContext('2d');
+  const img = await W.loadImg(o.url); const [L, Tp, Wd] = o.crop ?? [0, 0, 1]; const ring = o.ringW ?? 30;
+  g.save(); g.beginPath(); g.arc(S / 2, S / 2, S / 2 - ring * 0.5, 0, Math.PI * 2); g.closePath(); g.clip();
+  g.fillStyle = o.bg ?? '#1a1526'; g.fillRect(0, 0, S, S);
+  const inner = S - ring; const dw = Wd * inner; g.drawImage(img, ring / 2 + L * inner, ring / 2 + Tp * inner, dw, dw * img.height / img.width); g.restore();
+  g.lineWidth = ring; g.strokeStyle = o.ring ?? '#e3b94a'; g.beginPath(); g.arc(S / 2, S / 2, S / 2 - ring / 2, 0, Math.PI * 2); g.stroke();
+  g.lineWidth = 4; g.strokeStyle = 'rgba(255,240,200,0.9)'; g.beginPath(); g.arc(S / 2, S / 2, S / 2 - ring * 0.95, 0, Math.PI * 2); g.stroke();
+  const tex = new T.CanvasTexture(c); tex.colorSpace = T.SRGBColorSpace; tex.anisotropy = 8;
+  const grp = new T.Group(); grp.name = 'persp-token';
+  const face = new T.Mesh(new T.CircleGeometry(o.r, 64), new T.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false, fog: false }));
+  const h = o.thick ?? 0.14; face.position.y = h; face.rotation.x = -Math.PI / 2; face.renderOrder = 12;
+  const edge = new T.Mesh(new T.CylinderGeometry(o.r, o.r * 1.02, h, 64, 1, true), new T.MeshBasicMaterial({ color: o.edge ?? 0x8a6a22, toneMapped: false, fog: false }));
+  edge.position.y = h / 2; edge.renderOrder = 11;
+  const shadow = new T.Mesh(new T.CircleGeometry(o.r * 1.25, 48), new T.MeshBasicMaterial({ map: await W.radialTex([[0, 'rgba(0,0,0,0.75)'], [0.7, 'rgba(0,0,0,0.35)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false, toneMapped: false, fog: false }));
+  shadow.rotation.x = -Math.PI / 2; shadow.position.set(o.shadowDx ?? 0.12, 0.012, o.shadowDz ?? 0.12); shadow.renderOrder = 4;
+  grp.add(shadow, edge, face); grp.position.set(...o.p); if (o.rotY) grp.rotation.y = o.rotY;
+  W.scene().add(grp); W.added.push(grp); return grp;
+};
+
+// P11 HUD mock: turn order and the chips in the top band, the party in the bottom band, the command list slim over the image.
+W.cinemaHud = (o = {}) => {
+  const Wd = innerWidth, H = innerHeight, band = o.band ?? 139; const gold = o.accent ?? '#e3b94a', paper = '#f4f1e8', mpc = '#7fc6e8', ink = 'rgba(20,18,32,0.92)';
+  const st = __pyrefly.battleState();
+  // turn order: the CTB tiles, laid out left to right in the top band
+  const rows = [...document.querySelectorAll(o.ctbRow ?? '.ig-ctb__row')];
+  const tiles = rows.map((r, i) => { const img = r.querySelector('img[data-role="portrait-img"]'); const nm = r.querySelector(o.ctbName ?? '.ig-ctb__name')?.textContent ?? ''; const enemy = !!r.querySelector('.ig-ctb__tile--enemy'); const sz = i === 0 ? 96 : 74;
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-left:${i ? 10 : 0}px"><div style="position:relative;width:${sz}px;height:${sz}px;overflow:hidden;background:#1a1526;border:${i === 0 ? 4 : 2}px solid ${i === 0 ? gold : enemy ? '#c0304a' : 'rgba(244,241,232,0.5)'};transform:skewX(-12deg)"><img src="${img?.getAttribute('src')}" style="${img?.getAttribute('style')}"></div><div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;color:${paper};white-space:nowrap">${nm}</div></div>`; }).join('');
+  const top = `<div class="persp-hud" style="position:absolute;right:48px;top:${Math.max(6, (band - 124) / 2)}px;display:flex;align-items:flex-start">${tiles}</div>`;
+  // party: compact entries across the bottom band
+  const faces = [...document.querySelectorAll(o.faceSel ?? '.ig-stat__face img')];
+  const ents = (o.party ?? []).map((id, i) => { const c = st.combatants[id]; const img = faces[i]; const act = id === o.lead; const od = o.gaugeKey === 'atb' ? (c.atb?.gauge ?? 0) : (c.overdrive?.gauge ?? 0);
+    return `<div class="persp-hud" style="display:flex;align-items:center;gap:14px;width:${o.entW ?? 520}px;height:${band - 30}px;padding:0 16px 0 0;background:${ink};border-left:${act ? 6 : 2}px solid ${act ? gold : 'rgba(227,185,74,0.35)'};transform:skewX(-12deg)">
+      <div style="position:relative;width:${band - 30}px;height:${band - 30}px;overflow:hidden;flex:none;background:#1a1526"><img src="${img?.getAttribute('src')}" style="${img?.getAttribute('style')}"></div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex:1;transform:skewX(12deg)"><div style="display:flex;align-items:baseline;gap:14px"><span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:700;font-size:32px;color:${act ? gold : paper}">${c.name}</span><span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:30px;color:${paper}">${c.hp}<span style="font-size:16px;opacity:.7">/${c.stats.maxHp}</span></span><span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:24px;color:${mpc}">${c.mp}<span style="font-size:14px;opacity:.7">/${c.stats.maxMp}</span></span></div>
+      <div style="height:7px;background:rgba(255,255,255,.12)"><div style="width:${Math.min(100, od)}%;height:100%;background:${o.gaugeColor ?? (od >= 100 ? '#d8d05a' : gold)}"></div></div></div></div>`; }).join('');
+  const bottom = `<div style="position:absolute;left:0;right:0;bottom:15px;display:flex;justify-content:center;gap:34px">${ents}</div>`;
+  W.dom(top + bottom, 'over');
+  W.css((o.hide ?? ['.ig-stat-list', '.ig-ctb']).map((q) => `${q}{visibility:hidden !important}`).join('') + (o.css ?? ''));
+  // the command list: slimmer, over the image on the left; the help line and the chips into the top band
+  const cmd = document.querySelector(o.cmd ?? '.ffx-cmd-area'); if (cmd) { cmd.style.scale = String(o.cmdScale ?? 0.8); cmd.style.transformOrigin = 'top left'; const r = cmd.getBoundingClientRect(); W.moveHud(cmd, (o.cmdX ?? 70) - r.left, (o.cmdY ?? (band + 40)) - r.top); }
+  const place = (sel, x, y) => { const e = document.querySelector(sel); if (!e) return; const r = e.getBoundingClientRect(); W.moveHud(e, x - r.left, y - r.top); };
+  for (const [sel, x, y] of o.chips ?? [['.ffx-cmd-info', 60, 36], ['.sgd__toggle', 620, 20], ['.mad__toggle', 620, 58], ['.ffx-sensor', 620, 96], ['.eint__toggle', 1720, 116 - 110]]) place(sel, x, y);
+};
+
+// A camera-facing painted card placed in screen terms: centre at NDC (x, y), d from the lens, hFrac of the frame height tall.
+W.faceCard = async (o) => {
+  const T = await W.T(); const tex = await new T.TextureLoader().loadAsync(o.url); tex.colorSpace = T.SRGBColorSpace; tex.anisotropy = 8;
+  const cam = W.camera(); const d = o.d ?? 1.5; const fh = 2 * d * Math.tan((cam.fov * Math.PI) / 360); const h = fh * (o.hFrac ?? 1.1); const w = h * tex.image.width / tex.image.height;
+  const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, depthTest: false, fog: false, toneMapped: false }));
+  if (o.mirror) m.scale.x = -1;
+  m.position.fromArray(await W.ndc(o.at[0], o.at[1], d)); m.renderOrder = 85; m.name = 'persp-face'; m.onBeforeRender = (r, s, c) => m.quaternion.copy(c.quaternion);
+  W.scene().add(m); W.added.push(m); return [w, h];
+};
+
+// P13 stand-in: a CSS/SVG proscenium (gold arch, curtains, apron with footlights) over the canvas, under the HUD. Tagged stand-in.
+W.proscenium = (o = {}) => {
+  const Wd = innerWidth, H = innerHeight; const L = o.left ?? 200, R = Wd - (o.right ?? 200), Tp = o.top ?? 118, B = H - (o.bottom ?? 70);
+  const cur = o.curtain ?? ['#3a0d1c', '#6b1830', '#8e2440'];
+  const folds = (x0, x1, flip) => { let p = ''; const n = 7; for (let i = 0; i < n; i++) { const a = x0 + (x1 - x0) * i / n, b = x0 + (x1 - x0) * (i + 1) / n; p += `<rect x="${a}" y="0" width="${b - a + 1}" height="${H}" fill="url(#fold)" opacity="${0.75 + 0.25 * ((i % 2) ? 1 : 0.6)}"/>`; } return p; };
+  const lights = Array.from({ length: 13 }, (_, i) => { const x = L + 40 + (R - L - 80) * i / 12; return `<ellipse cx="${x}" cy="${B + 22}" rx="16" ry="7" fill="#ffe7a8"/><ellipse cx="${x}" cy="${B + 8}" rx="42" ry="30" fill="url(#bulb)"/>`; }).join('');
+  const svg = `<svg width="${Wd}" height="${H}" viewBox="0 0 ${Wd} ${H}" style="position:absolute;inset:0">
+    <defs>
+      <linearGradient id="gold" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset="0.35" stop-color="#e3b94a"/><stop offset="0.7" stop-color="#8a6420"/><stop offset="1" stop-color="#e8c25a"/></linearGradient>
+      <linearGradient id="goldv" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8a6420"/><stop offset="0.4" stop-color="#f5d77a"/><stop offset="0.6" stop-color="#e3b94a"/><stop offset="1" stop-color="#6e4e16"/></linearGradient>
+      <linearGradient id="fold" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="${cur[0]}"/><stop offset="0.45" stop-color="${cur[2]}"/><stop offset="0.6" stop-color="${cur[1]}"/><stop offset="1" stop-color="${cur[0]}"/></linearGradient>
+      <radialGradient id="bulb"><stop offset="0" stop-color="rgba(255,226,150,0.55)"/><stop offset="1" stop-color="rgba(255,226,150,0)"/></radialGradient>
+      <linearGradient id="apron" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1b1328"/><stop offset="1" stop-color="#07050c"/></linearGradient>
+      <linearGradient id="spillL" x1="0" x2="1"><stop offset="0" stop-color="rgba(0,0,0,0.65)"/><stop offset="1" stop-color="rgba(0,0,0,0)"/></linearGradient>
+      <mask id="open"><rect width="${Wd}" height="${H}" fill="white"/><path d="M${L},${B} L${L},${Tp + 90} Q${L},${Tp} ${L + 150},${Tp} L${R - 150},${Tp} Q${R},${Tp} ${R},${Tp + 90} L${R},${B} Z" fill="black"/></mask>
+    </defs>
+    <g mask="url(#open)">
+      <rect width="${Wd}" height="${H}" fill="#0b0814"/>
+      ${folds(0, L + 40, false)}${folds(R - 40, Wd, true)}
+      <rect x="0" y="0" width="${Wd}" height="${Tp + 40}" fill="url(#fold)" opacity="0.9"/>
+    </g>
+    <path d="M${L},${B} L${L},${Tp + 90} Q${L},${Tp} ${L + 150},${Tp} L${R - 150},${Tp} Q${R},${Tp} ${R},${Tp + 90} L${R},${B}" fill="none" stroke="url(#goldv)" stroke-width="26"/>
+    <path d="M${L - 20},${B} L${L - 20},${Tp + 80} Q${L - 20},${Tp - 20} ${L + 150},${Tp - 20} L${R - 150},${Tp - 20} Q${R + 20},${Tp - 20} ${R + 20},${Tp + 80} L${R + 20},${B}" fill="none" stroke="#e3b94a" stroke-width="3" opacity="0.8"/>
+    <path d="M${Wd / 2 - 90},${Tp - 6} L${Wd / 2},${Tp - 58} L${Wd / 2 + 90},${Tp - 6} Z" fill="url(#gold)" stroke="#6e4e16" stroke-width="2"/>
+    <circle cx="${Wd / 2}" cy="${Tp - 26}" r="13" fill="#14121f" stroke="#fff0b8" stroke-width="3"/>
+    <rect x="0" y="${B}" width="${Wd}" height="${H - B}" fill="url(#apron)"/>
+    <rect x="0" y="${B}" width="${Wd}" height="5" fill="url(#gold)"/>
+    ${lights}
+  </svg>`;
+  W.dom(svg, 'under');
+};
+
+// A theatre spotlight: a soft additive cone (narrow at the top, wide at the floor) standing over a point, facing the camera.
+W.spotCone = async (o) => {
+  const T = await W.T(); const c = document.createElement('canvas'); c.width = 256; c.height = 512; const g = c.getContext('2d');
+  g.filter = 'blur(10px)'; const gr = g.createLinearGradient(0, 0, 0, 512); gr.addColorStop(0, 'rgba(255,255,255,0.05)'); gr.addColorStop(0.7, 'rgba(255,255,255,0.45)'); gr.addColorStop(1, 'rgba(255,255,255,0.8)');
+  g.fillStyle = gr; g.beginPath(); g.moveTo(128 - 18, 0); g.lineTo(128 + 18, 0); g.lineTo(256 - 20, 512); g.lineTo(20, 512); g.closePath(); g.fill();
+  const tex = new T.CanvasTexture(c); tex.colorSpace = T.SRGBColorSpace;
+  const m = new T.Mesh(new T.PlaneGeometry(o.w ?? 2.4, o.h ?? 7), new T.MeshBasicMaterial({ map: tex, color: o.color ?? 0xffe2a8, transparent: true, opacity: o.o ?? 0.3, depthWrite: false, blending: T.AdditiveBlending, fog: false, toneMapped: false }));
+  m.position.set(o.p[0], (o.h ?? 7) / 2 + (o.y0 ?? 0), o.p[2]); m.renderOrder = 9; m.name = 'persp-cone';
+  m.onBeforeRender = (r, s, cam) => { m.rotation.set(0, Math.atan2(cam.position.x - m.position.x, cam.position.z - m.position.z), 0); };
+  W.scene().add(m); W.added.push(m); return m;
+};
+
+// P14 composite: grab the canvas under several cameras, then lay the grabs into angled Ink & Gold panels (DOM, under the HUD).
+W.grab = async (n = 4) => { await __pyrefly.frames(n); return W.R().renderer.domElement.toDataURL('image/jpeg', 0.94); };
+W.panels = (list, dividers = [], o = {}) => {
+  const Wd = innerWidth, H = innerHeight;
+  const divs = list.map((p) => `<div style="position:absolute;inset:0;clip-path:polygon(${p.poly.map(([x, y]) => `${x}px ${y}px`).join(',')});background:url(${p.img}) ${p.dx ?? 0}px ${p.dy ?? 0}px / ${Math.round(Wd * (p.k ?? 1))}px ${Math.round(H * (p.k ?? 1))}px no-repeat"></div>`).join('');
+  const lines = dividers.map(([x0, y0, x1, y1]) => `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="#0b0814" stroke-width="${o.gutter ?? 22}"/><line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="#e3b94a" stroke-width="${o.gold ?? 5}"/>`).join('');
+  W.dom(`<div style="position:absolute;inset:0;background:#0b0814">${divs}<svg width="${Wd}" height="${H}" style="position:absolute;inset:0">${lines}</svg></div>`, 'under');
+};
+return Object.keys(W).length;

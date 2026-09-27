@@ -1,0 +1,99 @@
+"""Perspectives round 2026-09-27 (art agent): cut-out clean-ups on picked candidates, recorded in the
+pick's sidecar. Two operations, both on the ALPHA of an existing rembg cut-out (no repaint):
+
+  erase <in.png> <out.png> "x,y x,y ..."   set alpha 0 inside a polygon (source pixel coords), then
+                                            re-crop to the content with a 16 px margin
+  keepmain <in.png> <out.png>               keep the largest opaque component (8-connected, alpha>=8)
+                                            plus anything within 6 px of it, drop detached blobs,
+                                            re-crop the same way
+
+Prints JSON {width, height, baselineY, crop, removedPx}.
+"""
+import json
+import sys
+
+import numpy as np
+from PIL import Image, ImageDraw
+
+MARGIN = 16
+ALPHA_MIN = 8
+
+
+def recrop(arr):
+    a = arr[:, :, 3]
+    ys, xs = np.nonzero(a >= ALPHA_MIN)
+    y0, y1, x0, x1 = ys.min(), ys.max(), xs.min(), xs.max()
+    H, W = a.shape
+    cx0, cy0 = max(0, x0 - MARGIN), max(0, y0 - MARGIN)
+    cx1, cy1 = min(W, x1 + 1 + MARGIN), min(H, y1 + 1 + MARGIN)
+    out = arr[cy0:cy1, cx0:cx1]
+    return out, [int(cx0), int(cy0), int(cx1), int(cy1)], int(y1 - cy0)
+
+
+def erase(src, dst, poly):
+    im = Image.open(src).convert("RGBA")
+    arr = np.array(im)
+    mask = Image.new("L", im.size, 0)
+    ImageDraw.Draw(mask).polygon(poly, fill=255)
+    m = np.array(mask) > 0
+    removed = int(((arr[:, :, 3] >= ALPHA_MIN) & m).sum())
+    arr[m, 3] = 0
+    out, crop, base = recrop(arr)
+    Image.fromarray(out).save(dst, optimize=True)
+    return {"width": out.shape[1], "height": out.shape[0], "baselineY": base, "crop": crop, "removedPx": removed}
+
+
+def keepmain(src, dst):
+    from scipy import ndimage  # noqa: WPS433 (only this op needs it)
+    im = Image.open(src).convert("RGBA")
+    arr = np.array(im)
+    solid = arr[:, :, 3] >= ALPHA_MIN
+    lab, n = ndimage.label(solid, structure=np.ones((3, 3)))
+    sizes = ndimage.sum(solid, lab, range(1, n + 1))
+    main = lab == (int(np.argmax(sizes)) + 1)
+    near = ndimage.binary_dilation(main, iterations=6)
+    keep_labels = set(np.unique(lab[near & solid])) - {0}
+    keep = np.isin(lab, list(keep_labels))
+    drop = solid & ~keep
+    removed = int(drop.sum())
+    # also clear the faint halo pixels of dropped blobs
+    halo = ndimage.binary_dilation(drop, iterations=2) & ~ndimage.binary_dilation(keep, iterations=2)
+    arr[drop | halo, 3] = 0
+    out, crop, base = recrop(arr)
+    Image.fromarray(out).save(dst, optimize=True)
+    return {"width": out.shape[1], "height": out.shape[0], "baselineY": base, "crop": crop, "removedPx": removed, "components": int(n)}
+
+
+def keywhite(src, dst, min_area=200):
+    """Background that rembg left trapped between limbs (e.g. between a dragon's neck and wing): near-white,
+    near-grey opaque pixels in connected regions of at least `min_area` px go to alpha 0, with a 2 px ring
+    of light fringe around them. Only for subjects with no white parts of their own."""
+    from scipy import ndimage  # noqa: WPS433
+    im = Image.open(src).convert("RGBA")
+    arr = np.array(im)
+    rgb = arr[:, :, :3].astype(int)
+    white = (rgb.min(axis=2) > 222) & ((rgb.max(axis=2) - rgb.min(axis=2)) < 30) & (arr[:, :, 3] >= ALPHA_MIN)
+    lab, n = ndimage.label(white, structure=np.ones((3, 3)))
+    sizes = ndimage.sum(white, lab, range(1, n + 1))
+    big = np.isin(lab, [i + 1 for i, a in enumerate(sizes) if a >= min_area])
+    light = rgb.min(axis=2) > 170
+    ring = ndimage.binary_dilation(big, iterations=2) & light & ~big
+    removed = int(big.sum() + ring.sum())
+    arr[big | ring, 3] = 0
+    out, crop, base = recrop(arr)
+    Image.fromarray(out).save(dst, optimize=True)
+    return {"width": out.shape[1], "height": out.shape[0], "baselineY": base, "crop": crop, "removedPx": removed,
+            "regions": int(sum(1 for a in sizes if a >= min_area))}
+
+
+if __name__ == "__main__":
+    op = sys.argv[1]
+    if op == "erase":
+        pts = [tuple(float(v) for v in p.split(",")) for p in sys.argv[4].split()]
+        print(json.dumps(erase(sys.argv[2], sys.argv[3], pts)))
+    elif op == "keepmain":
+        print(json.dumps(keepmain(sys.argv[2], sys.argv[3])))
+    elif op == "keywhite":
+        print(json.dumps(keywhite(sys.argv[2], sys.argv[3])))
+    else:
+        raise SystemExit("op must be erase or keepmain")

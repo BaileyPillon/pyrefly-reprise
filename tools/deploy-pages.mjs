@@ -34,7 +34,8 @@
  * only a focused report, or when the deep-review debt is already at its cap
  * (critic/RUBRIC.md sections 3 and 4) -> re-init dist-release as a
  * throwaway single-commit `gh-pages` git repo and force-push it -> kick a
- * Pages build and poll it to completion -> verify that the live URL serves
+ * Pages build and poll every build recorded for the pushed commit until one
+ * of them reports "built" (pagesOutcome) -> verify that the live URL serves
  * this exact artifact, byte for byte (tools/artifact-manifest.mjs) -> append a
  * line to docs/deploys.log -> leave a `critic/pending/<mainShortSha>.json`
  * marker listing the separate review obligations this build owes.
@@ -149,6 +150,41 @@ export function latestDeepReportFor(root, mainSha) {
     }
   }
   return best ? { path: best.path, changedArea: best.changedArea } : null;
+}
+
+/**
+ * Decide what a batch of `repos/<repo>/pages/builds` rows says about ONE
+ * commit — the gh-pages commit this run just pushed, not necessarily the
+ * newest build GitHub has queued.
+ *
+ * 2026-09-27: the push to gh-pages kicks a Pages build on its own, and the
+ * POST this script sends right after kicks a second one for the same commit.
+ * Polling only `pages/builds/latest` saw the first of the two error
+ * ("Page build failed.") and failed the whole deploy — skipping verification
+ * and every record — while the second build, for the identical commit,
+ * finished clean and the site served it (release 22 hit the same double
+ * build and passed only by luck of which one `latest` returned last).
+ *
+ * So: look at every build for the pushed commit, not just the latest one.
+ * BUILT if any of them succeeded; ERRORED only once every build recorded for
+ * that commit has errored (each one's message is reported so nothing is
+ * swallowed); PENDING otherwise — nothing for this commit yet, or one is
+ * still `building`/`queued`. A build for any other commit is ignored
+ * entirely, so an unrelated push or an old build never decides this one's
+ * outcome. Pure: no network, no git, no clock.
+ */
+export function pagesOutcome(builds, commit) {
+  const forCommit = (builds ?? []).filter((b) => b && b.commit === commit);
+  if (forCommit.some((b) => b.status === 'built')) {
+    return { status: 'built' };
+  }
+  if (forCommit.length > 0 && forCommit.every((b) => b.status === 'errored')) {
+    return {
+      status: 'errored',
+      errors: forCommit.map((b) => b.error?.message || '(no error message)'),
+    };
+  }
+  return { status: 'pending' };
 }
 
 const OWNER_OVERRIDE_MIN_LENGTH = 8;
@@ -555,30 +591,42 @@ async function main() {
   if (EXTRA_MESSAGE) commitMessage += `: ${EXTRA_MESSAGE}`;
   const commitRes = run('git', ['commit', '-m', commitMessage], { cwd: DIST });
   if (commitRes.status !== 0) fail('git commit in dist-release failed — see output above');
+  const ghPagesCommit = capture('git', ['rev-parse', 'HEAD'], { cwd: DIST });
 
   const pushRes = run('git', ['push', '-f', REPO_URL, 'gh-pages:gh-pages'], { cwd: DIST });
   if (pushRes.status !== 0) fail('git push to gh-pages failed — see output above');
 
   // ---- 4. Kick a Pages build and poll it ------------------------------------
+  // The push above already kicked its own Pages build; this POST kicks a
+  // second one for the same commit. Both are watched together (pagesOutcome)
+  // so an errored one does not fail the deploy while its sibling, for the
+  // identical commit, goes on to build fine (2026-09-27 incident).
   log('kicking a Pages build');
   ghApi(['-X', 'POST', `repos/${REPO}/pages/builds`]);
+  log(`polling Pages builds for gh-pages commit ${ghPagesCommit}`);
 
   const POLL_INTERVAL_MS = 15_000;
   const POLL_TIMEOUT_MS = 6 * 60_000;
   const deadline = Date.now() + POLL_TIMEOUT_MS;
-  let pagesStatus = '';
+  let outcome = { status: 'pending' };
   while (Date.now() < deadline) {
-    pagesStatus = ghApi(['repos/' + REPO + '/pages/builds/latest', '--jq', '.status']);
-    log(`pages build status: ${pagesStatus}`);
-    if (pagesStatus === 'built') break;
-    if (pagesStatus === 'errored') {
-      const errMsg = ghApi(['repos/' + REPO + '/pages/builds/latest', '--jq', '.error.message']);
-      fail(`Pages build errored: ${errMsg}`);
+    let builds = [];
+    try {
+      builds = JSON.parse(ghApi([`repos/${REPO}/pages/builds?per_page=10`]));
+    } catch (err) {
+      log(`could not parse Pages builds list, retrying: ${err.message}`);
     }
+    outcome = pagesOutcome(builds, ghPagesCommit);
+    log(`pages builds status for ${ghPagesCommit.slice(0, 7)}: ${outcome.status}`);
+    if (outcome.status === 'built' || outcome.status === 'errored') break;
     await sleep(POLL_INTERVAL_MS);
   }
-  if (pagesStatus !== 'built') {
-    fail(`Pages build did not report "built" within ${POLL_TIMEOUT_MS / 60000} minutes (last status: ${pagesStatus})`);
+  if (outcome.status === 'errored') {
+    for (const msg of outcome.errors) log(`  pages build error: ${msg}`);
+    fail(`every Pages build for commit ${ghPagesCommit} errored (${outcome.errors.length} build(s))`);
+  }
+  if (outcome.status !== 'built') {
+    fail(`no Pages build for commit ${ghPagesCommit} reported "built" within ${POLL_TIMEOUT_MS / 60000} minutes (last status: ${outcome.status})`);
   }
 
   // ---- 5. Verify the live site ----------------------------------------------
@@ -708,7 +756,7 @@ async function main() {
 
 // Guarded so tests can import this module's pure helper functions (parseOwnerOverride,
 // resolveReleaseGate, shipEvidenceFor, formatOwnerOverrideWarning, formatWhenLine,
-// formatDeployLogLine, latestDeepReportFor)
+// formatDeployLogLine, latestDeepReportFor, pagesOutcome)
 // without triggering a real deploy — same pattern as critic-status.mjs / critic-plan.mjs.
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main().catch((err) => {

@@ -1,0 +1,47 @@
+// agent scratch (motion rig): is the "Mortiorchis uses Mortibsorption" banner still up at the victory in an UNMODIFIED
+// build? Plain REPL (no fake clock, no motion library, no hooks): seed 42, today's camera, the auto strategy.
+// The bulk of the fight runs at the 'fast' playback speed; from 15 % boss HP it plays at 'normal'. A passive recorder
+// logs the banner's state every animation frame (it changes nothing); the CDP screencast films the ending.
+import { writeFileSync, mkdirSync } from 'node:fs';
+const R = 'http://127.0.0.1:5252';
+const OUT = process.argv[2] || 'D:/Tools/pyrefly-scratch/persp-b/banner';
+mkdirSync(OUT, { recursive: true });
+const post = async (p, body = '') => { const r = await fetch(R + p, { method: 'POST', body }); const t = await r.text(); try { const j = JSON.parse(t); if (j.ok === false) throw new Error(p + ' ' + t.slice(0, 800)); return j; } catch (e) { if (String(e).includes(p)) throw e; return { raw: t }; } };
+const ev = (js) => post('/eval', js);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+await ev(`const P = window.__pyrefly; await P.waitReady(); P.setSeed(42); P.gotoChapter('seymour-flux', { skipCutscenes: true, speed: 'normal' }); return 1`);
+await post('/wait', `(() => { const b = window.__pyrefly.battle(); const s = document.querySelector('.ig-cmd-stack'); return !!(b && b.stage && s && !s.hidden && s.getBoundingClientRect().height > 20); })()`);
+await sleep(800);
+for (const k of ['g', 'n']) { if ((await ev(`return document.body.innerText.includes('${k === 'g' ? 'HIDE GUIDE' : 'HIDE MOVES'}')`)).r) { await post('/key?k=' + k); await sleep(300); } }
+// passive banner recorder: one row per change, with the time and the screen name
+await ev(`window.__bl = []; let last = ''; const t0 = performance.now();
+  const tick = () => { const el = document.querySelector('.ig-banner'); const s = el ? (el.hidden ? 'hidden' : 'shown: ' + el.textContent.replace(/\\s+/g, ' ').trim()) : 'absent';
+    const scr = window.__pyrefly.screen(); const key = s + ' | ' + scr; if (key !== last) { last = key; window.__bl.push([+((performance.now() - t0) / 1000).toFixed(2), scr, s, (window.__pyrefly.battleLog() || []).length]); }
+    requestAnimationFrame(tick); }; requestAnimationFrame(tick); return 1`);
+await ev(`__pyrefly.autoBattle('intended'); __pyrefly.setBattleSpeed('fast'); return 1`);
+const t0 = Date.now();
+for (;;) {
+  const s = (await ev(`const s = __pyrefly.battleState(); const c = s && s.combatants['seymour-flux']; return { scr: __pyrefly.screen(), hp: c ? c.hp : null, max: c ? c.stats.maxHp : null, turn: s && s.turn }`)).r;
+  if (!s || s.scr !== 'battle' || (s.hp !== null && s.hp <= s.max * 0.15)) { console.log('slow down at', JSON.stringify(s), (Date.now() - t0) / 1000, 's'); break; }
+  await sleep(250);
+}
+await ev(`__pyrefly.setBattleSpeed('normal'); return 1`);
+for (;;) {
+  const s = (await ev(`const s = __pyrefly.battleState(); const c = s && s.combatants['seymour-flux']; return { scr: __pyrefly.screen(), hp: c ? c.hp : null, max: c ? c.stats.maxHp : null }`)).r;
+  if (!s || s.scr !== 'battle' || (s.hp !== null && s.hp <= s.max * 0.06)) { console.log('film from', JSON.stringify(s)); break; }
+  await sleep(150);
+}
+await post('/cast/start');
+const castStart = Date.now();
+for (;;) {
+  const scr = (await ev(`return __pyrefly.screen()`)).r;
+  if (scr !== 'battle') { await sleep(3500); break; }
+  if (Date.now() - castStart > 120000) break;
+  await sleep(200);
+}
+const c = await post('/cast/stop?dir=' + encodeURIComponent(OUT + '/cast'));
+const bl = (await ev(`return window.__bl`)).r;
+const log = (await ev(`return (__pyrefly.battleLog() || []).slice(-40).map((e) => [e.seq, e.type, e.actorId || e.sourceId || '', e.targetId || '', e.abilityName || e.text || ''])`)).r;
+writeFileSync(OUT + '/banner-log.json', JSON.stringify({ castFrames: c.n, castStartedAt: castStart, banner: bl, tailEvents: log }, null, 1));
+console.log('cast frames', c.n); console.log(JSON.stringify(bl.slice(-14), null, 0));

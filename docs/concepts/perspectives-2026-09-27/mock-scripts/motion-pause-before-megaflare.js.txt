@@ -1,0 +1,9 @@
+const M = __motion; M.reset(); M.hookEvents(); window.__flareSeen = false;
+const b = __pyrefly.battle();
+M.rules = [
+  { when: (e) => e.type === 'turn-start' && e.actorId === 'bahamut', then: (e) => {
+      const next = __pyrefly.battleLog().find((x) => x.seq > e.seq && x.type === 'action-start' && x.actorId === 'bahamut');
+      if (!window.__flareSeen && next && /mega\s*flare/i.test(next.abilityName || '')) { window.__flareSeen = true; b.battlePresenter.setSpeed('normal'); b.setPresenterPaused(true); window.__flareAt = e.seq; }
+  } },
+];
+__pyrefly.autoBattle('intended'); b.battlePresenter.setSpeed('skip'); b.setPresenterPaused(false); return 1;

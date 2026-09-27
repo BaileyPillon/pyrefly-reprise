@@ -1,0 +1,222 @@
+"""Perspectives round 2026-09-27 (art agent): REAR three-quarter OpenPose skeletons.
+
+OpenPose COCO-18, drawn in PIL with controlnet_aux's colours and limb order (the same drawing as
+docs/concepts/chapters/trema/poses/skeletons.py, which the xinsir OpenPose SDXL ControlNet held).
+
+The view: the camera is behind the character and a little to the character's right; the
+character faces INTO the frame toward screen-right. So, unlike every battle sprite so far:
+  - the character's RIGHT shoulder, elbow, wrist, hip, knee and ankle sit on SCREEN-RIGHT
+    (seen from behind, their right is our right: the OpenPose colours carry that);
+  - no nose and no eyes (the face is turned away); only the right ear, at the right of the head,
+    the near side (the left ear is hidden behind the skull).
+Scale 1.0 = the shipped idles (neck about y 340, hip about y 590, ankles about y 1110 on
+832x1216); every standing skeleton is then shrunk to 0.8 about the ground line, the Trema
+lesson (heads otherwise land about 1.3x the idle's size).
+
+    D:/Tools/ComfyUI/python_embeded/python.exe -s tools/zz-persp-art/skeletons.py
+    -> D:/Tools/pyrefly-scratch/persp-art/skeletons/<name>.png and overview.jpg
+"""
+from __future__ import annotations
+
+import math
+import pathlib
+import sys
+
+from PIL import Image, ImageDraw
+
+OUT = pathlib.Path("D:/Tools/pyrefly-scratch/persp-art/skeletons")
+COLORS = [(255, 0, 0), (255, 85, 0), (255, 170, 0), (255, 255, 0), (170, 255, 0),
+          (85, 255, 0), (0, 255, 0), (0, 255, 85), (0, 255, 170), (0, 255, 255),
+          (0, 170, 255), (0, 85, 255), (0, 0, 255), (85, 0, 255), (170, 0, 255),
+          (255, 0, 255), (255, 0, 170), (255, 0, 85)]
+LIMBS = [(1, 2), (1, 5), (2, 3), (3, 4), (5, 6), (6, 7), (1, 8), (8, 9), (9, 10),
+         (1, 11), (11, 12), (12, 13), (1, 0), (0, 14), (14, 16), (0, 15), (15, 17)]
+
+
+def P(o, length, deg):
+    """Point `length` px from `o` at screen angle `deg` (0 right, 90 down, 180 left, 270 up)."""
+    r = math.radians(deg)
+    return (o[0] + length * math.cos(r), o[1] + length * math.sin(r))
+
+
+def rear_body(hip, *, s=1.0, sh=46, hp=34, rarm=(88, 80), larm=(96, 94), rleg=(88, 90), lleg=(94, 92),
+              head_dx=10, ear_dx=22, ear_dy=-66, torso_lean=0):
+    """Forward kinematics for a rear three-quarter figure facing into the frame toward screen-right.
+    rarm/larm/rleg/lleg = (upper, lower) screen angles. The RIGHT side is screen-right (near side)."""
+    T, UA, FA, TH, SH = 250 * s, 150 * s, 135 * s, 265 * s, 255 * s
+    k = {}
+    neck = P(hip, T, 270 + torso_lean)
+    k[1] = neck
+    k[2] = (neck[0] + sh * s, neck[1])        # right shoulder: screen-right (seen from behind)
+    k[5] = (neck[0] - sh * s, neck[1])        # left shoulder: screen-left
+    k[8] = (hip[0] + hp * s, hip[1])          # right hip
+    k[11] = (hip[0] - hp * s, hip[1])         # left hip
+    k[3] = P(k[2], UA, rarm[0]); k[4] = P(k[3], FA, rarm[1])
+    k[6] = P(k[5], UA, larm[0]); k[7] = P(k[6], FA, larm[1])
+    k[9] = P(k[8], TH, rleg[0]); k[10] = P(k[9], SH, rleg[1])
+    k[12] = P(k[11], TH, lleg[0]); k[13] = P(k[12], SH, lleg[1])
+    head = (neck[0] + head_dx * s, neck[1] + ear_dy * s)
+    k[16] = (head[0] + ear_dx * s, head[1])   # right ear only (near side); no nose, no eyes, no left ear
+    return k
+
+
+def ground_scale(size, k, f, gy=1170):
+    cx = size[0] / 2
+    return {i: (cx + (x - cx) * f, gy + (y - gy) * f) for i, (x, y) in k.items()}
+
+
+SCALE = 0.8
+
+
+def poses_raw():
+    W, H = 832, 1216
+    return {
+        # Tidus: the sword hand raised to the right shoulder as in the idle (elbow out and down,
+        # forearm up, fist at shoulder height in front of the shoulder); the left arm hangs.
+        'tidus': ((W, H), rear_body((410, 600), rarm=(62, 290), larm=(100, 95), rleg=(80, 92), lleg=(98, 94))),
+        # Tidus, alternate: the sword held low at his right side, pointing down and forward.
+        'tidus-low': ((W, H), rear_body((410, 600), rarm=(80, 60), larm=(100, 95), rleg=(80, 92), lleg=(98, 94))),
+        # Yuna: the staff in the right hand at hip height, a little forward; the left arm hangs.
+        'yuna': ((W, H), rear_body((410, 600), rarm=(78, 55), larm=(98, 92), rleg=(84, 90), lleg=(96, 92))),
+        # Kimahri: the spear in the right hand at the hip, the left arm hangs; a broad stance.
+        'kimahri': ((W, H), rear_body((410, 600), sh=52, hp=38, rarm=(80, 62), larm=(100, 96), rleg=(78, 90), lleg=(100, 94))),
+        # FFX-2 girls with one hand on a weapon at the side (White Mage rod).
+        'girl-side': ((W, H), rear_body((410, 600), sh=42, hp=32, rarm=(80, 70), larm=(98, 94), rleg=(84, 90), lleg=(96, 92))),
+        # FFX-2 girls with both hands on a sword planted point-down in front (Dark Knight, Warrior).
+        'girl-planted': ((W, H), rear_body((400, 600), sh=42, hp=32, rarm=(40, 20), larm=(30, 15), rleg=(82, 90), lleg=(98, 92))),
+    }
+
+
+def pts_v2(**kw):
+    """v2 (pilot 2): absolute canvas points, proportions traced off a natural rear render the
+    checkpoint drew unaided (tidus/A cand-2: head top ~145, neck 322, hips 590, knees ~805,
+    ankles ~1020 on 832x1216; anime proportions, the head ~18 % of the height, like the idles).
+    Keys: neck rs ls re rw le lw rh lh rk ra lk la rear (right ear). R = screen-right (rear view)."""
+    names = {'neck': 1, 'rs': 2, 're': 3, 'rw': 4, 'ls': 5, 'le': 6, 'lw': 7, 'rh': 8, 'rk': 9, 'ra': 10,
+             'lh': 11, 'lk': 12, 'la': 13, 'rear': 16}
+    return {names[k]: v for k, v in kw.items()}
+
+
+# Tidus v2: A2's own layout, narrowed to a three-quarter turn toward screen-right (shoulders and
+# hips narrower, head a little right, only the right ear), the RIGHT hand raised above the right
+# shoulder holding the hilt (A2's own sword pose, which is the idle's sword hand).
+TIDUS_V2 = pts_v2(neck=(458, 322), rs=(530, 336), ls=(388, 340), re=(640, 405), rw=(652, 252),
+                  le=(352, 522), lw=(346, 640), rh=(506, 590), lh=(410, 588), rk=(548, 808), ra=(574, 1030),
+                  lk=(378, 800), la=(356, 1012), rear=(500, 240))
+
+
+# Tidus v3: v2 turned toward screen-right: the head and the right ear further right, the shoulders
+# a little narrower, the RIGHT foot a step forward into the frame (higher, further right), the left
+# foot back (lower, further left), so the stance itself points at a boss off to the upper right.
+TIDUS_V3 = pts_v2(neck=(462, 322), rs=(528, 334), ls=(398, 342), re=(640, 400), rw=(654, 250),
+                  le=(362, 522), lw=(352, 640), rh=(508, 588), lh=(418, 592), rk=(560, 792), ra=(600, 990),
+                  lk=(384, 812), la=(350, 1040), rear=(522, 236))
+
+
+# Yuna v3: Tidus v3's turned, stepping stance; narrower shoulders; the RIGHT hand low and a little
+# forward at the hip, holding the staff (the idle holds it in the right hand at the hip, head behind).
+YUNA_V3 = pts_v2(neck=(462, 330), rs=(522, 342), ls=(404, 348), re=(548, 475), rw=(590, 580),
+                 le=(384, 510), lw=(380, 620), rh=(504, 598), lh=(420, 600), rk=(552, 800), ra=(590, 995),
+                 lk=(390, 815), la=(360, 1040), rear=(520, 250))
+
+# Kimahri v3: bigger and broader; the RIGHT paw at the hip holding the spear shaft; the left arm hangs.
+KIMAHRI_V3 = pts_v2(neck=(462, 318), rs=(548, 332), ls=(380, 340), re=(592, 480), rw=(612, 610),
+                    le=(350, 515), lw=(340, 655), rh=(512, 600), lh=(412, 604), rk=(566, 820), ra=(602, 1040),
+                    lk=(392, 832), la=(356, 1075), rear=(530, 232))
+
+
+# v4 (chirality reroll): the RIGHT hand raised to chest height and out to the side, so the weapon can
+# only sit in that hand (a low hand at the hip was ignored: the checkpoint put the staff and the spear
+# in the left hand in 5 of 8 renders).
+YUNA_V4 = dict(YUNA_V3)
+YUNA_V4.update(pts_v2(re=(575, 455), rw=(604, 362)))
+
+
+def shift_x(k, dx):
+    return {i: (x + dx, y) for i, (x, y) in k.items()}
+
+
+# Kimahri v4 on a 1024-wide canvas (the spear left the 832 frame): the right paw at chest height
+# holding the spear upright; everything else as v3, moved 96 px right to stay centred.
+KIMAHRI_V4 = dict(KIMAHRI_V3)
+KIMAHRI_V4.update(pts_v2(re=(600, 470), rw=(642, 378)))
+KIMAHRI_V4 = shift_x(KIMAHRI_V4, 96)
+
+
+# FFX-2 girls (Chapter IV), same turned stance as Yuna v3/v4.
+# White Mage: the rod in the RIGHT hand, raised to chest height (the idle holds it in the right hand).
+YWM_V1 = dict(YUNA_V4)
+# Dark Knight Rikku: a greatsword planted in front of her, BOTH hands on the hilt at chest height, the
+# arms reaching forward (from behind: the hands sit right of the body); 1024 wide for the blade.
+RDK_V1 = shift_x({**YUNA_V3, **pts_v2(re=(585, 440), rw=(640, 420), le=(470, 452), lw=(622, 432))}, 96)
+# Warrior Paine: a longsword planted point-down at her right front, both hands on the pommel at the hip.
+PW_V1 = {**YUNA_V3, **pts_v2(re=(560, 455), rw=(602, 540), le=(452, 478), lw=(588, 548))}
+
+
+def poses_v2():
+    W, H = 832, 1216
+    return {
+        'ywm-v1': ((W, H), YWM_V1),
+        'rdk-v1': ((1024, H), RDK_V1),
+        'pw-v1': ((W, H), PW_V1),
+        'yuna-v4': ((W, H), YUNA_V4),
+        'kimahri-v4': ((1024, H), KIMAHRI_V4),
+        'tidus-v2': ((W, H), TIDUS_V2),
+        'tidus-v3': ((W, H), TIDUS_V3),
+        'yuna-v3': ((W, H), YUNA_V3),
+        'kimahri-v3': ((W, H), KIMAHRI_V3),
+    }
+
+
+def poses():
+    out = {n: (size, ground_scale(size, k, SCALE)) for n, (size, k) in poses_raw().items()}
+    out.update(poses_v2())
+    return out
+
+
+def draw(size, pts, stick=8, radius=7):
+    W, H = size
+    over = Image.new('RGB', (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(over)
+    for li, (a, b) in enumerate(LIMBS):
+        if a not in pts or b not in pts:
+            continue
+        (x1, y1), (x2, y2) = pts[a], pts[b]
+        length = math.hypot(x2 - x1, y2 - y1)
+        ang = math.atan2(y2 - y1, x2 - x1)
+        mx, my = (x1 + x2) / 2, (y1 + y2) / 2
+        poly = []
+        for i in range(36):
+            th = 2 * math.pi * i / 36
+            ex, ey = length / 2 * math.cos(th), stick * math.sin(th)
+            poly.append((mx + ex * math.cos(ang) - ey * math.sin(ang), my + ex * math.sin(ang) + ey * math.cos(ang)))
+        d.polygon(poly, fill=COLORS[li])
+    img = Image.blend(Image.new('RGB', (W, H)), over, 0.6)
+    d2 = ImageDraw.Draw(img)
+    for kk, (x, y) in pts.items():
+        d2.ellipse((x - radius, y - radius, x + radius, y + radius), fill=COLORS[kk])
+    return img
+
+
+def main(only=None):
+    OUT.mkdir(parents=True, exist_ok=True)
+    tiles = []
+    for name, (size, pts) in poses().items():
+        if only and name not in only:
+            continue
+        im = draw(size, pts)
+        im.save(OUT / f'{name}.png')
+        oob = [k for k, (x, y) in pts.items() if not (0 <= x < size[0] and 0 <= y < size[1])]
+        print(name, size, 'out of frame:', oob or 'none')
+        tiles.append((name, im))
+    h = 480
+    row = [t.resize((int(t.width * h / t.height), h)) for _, t in tiles]
+    sheet = Image.new('RGB', (sum(r.width for r in row) + 6 * len(row), h), (60, 60, 60))
+    x = 0
+    for r in row:
+        sheet.paste(r, (x, 0)); x += r.width + 6
+    sheet.save(OUT / 'overview.jpg', quality=85)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:] or None)

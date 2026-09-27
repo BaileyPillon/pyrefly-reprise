@@ -1,0 +1,22 @@
+"""Init image for the reverse plates: today's plate mirrored, at 1344x768, optionally with the horizon
+moved UP by `shift` (a fraction of the height): the top `shift` is cropped away and the nearest floor
+strip (the bottom 15 %) is stretched to fill the space it leaves, so perspective still widens toward
+the viewer.   python mirror-init.py <plate.png> <out.png> [shift]"""
+import sys
+from PIL import Image, ImageOps
+
+src, out = sys.argv[1], sys.argv[2]
+shift = float(sys.argv[3]) if len(sys.argv) > 3 else 0.0
+W, H = 1344, 768
+m = ImageOps.mirror(Image.open(src).convert("RGB")).resize((W, H), Image.LANCZOS)
+if shift > 0:
+    s = round(shift * H)
+    near = round(0.15 * H)                       # the nearest floor strip, M[H-near : H]
+    top = m.crop((0, s, W, H - near))            # M[s : H-near] -> N[0 : H-near-s]
+    strip = m.crop((0, H - near, W, H)).resize((W, near + s), Image.LANCZOS)
+    n = Image.new("RGB", (W, H))
+    n.paste(top, (0, 0))
+    n.paste(strip, (0, H - near - s))
+    m = n
+m.save(out)
+print(out, m.size, "shift", shift)

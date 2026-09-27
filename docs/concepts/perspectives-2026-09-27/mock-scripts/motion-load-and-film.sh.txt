@@ -1,0 +1,15 @@
+#!/bin/sh
+# fresh seed-N Chapter I battle with every motion table loaded
+cd "D:/Tools/pyrefly-scratch/persp-b/js" && node drive.mjs setup ch1 ${1:-1} && node drive.mjs lib shots-ch1.js > /dev/null && node drive.mjs eval rears-ch1.js > /dev/null && node drive.mjs eval shots-ch1-m2.js > /dev/null && node drive.mjs eval shots-ch1-m3.js > /dev/null && node drive.mjs eval shots-ch1-m4b.js > /dev/null && echo loaded
+
+#!/bin/sh
+cd "D:/Tools/pyrefly-scratch/persp-b/js" && node drive.mjs setup ch4 ${1:-1} && node drive.mjs lib shots-ch4.js > /dev/null && node drive.mjs eval rears-ch4.js && echo loaded
+
+#!/bin/sh
+# fresh seed-1 Chapter IV at Paine's menu (Yuna's Cure by keys), all tables, then film clip $1
+cd "D:/Tools/pyrefly-scratch/persp-b/js" && ./load-ch4.sh 1 > /dev/null && node drive.mjs eval shots-ch4-m2.js > /dev/null && for f in $EXTRA; do node drive.mjs eval $f > /dev/null; done && node drive.mjs film $1 "D:/Tools/pyrefly-scratch/persp-b/frames/$1" && curl -s -X POST --data-binary "__pyrefly.battle().setPresenterPaused(true); return (window.__evlog || []).map(e => [e.t, e.type, e.actor, e.target, e.name])" http://127.0.0.1:5252/eval > "D:/Tools/pyrefly-scratch/persp-b/frames/$1/evlog.json" && python -c "
+import json,sys
+d=json.load(open('D:/Tools/pyrefly-scratch/persp-b/frames/$1/evlog.json'))['r']
+base=json.load(open('D:/Tools/pyrefly-scratch/persp-b/frames/$1/film.json'))['base']
+print([(round((t-base)/1000,2), ty, a, tg, n) for t,ty,a,tg,n in d if ty not in ('atb','status-tick','chain')])
+"

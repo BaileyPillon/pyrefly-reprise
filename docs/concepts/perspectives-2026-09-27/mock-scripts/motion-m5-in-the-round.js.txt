@@ -1,0 +1,48 @@
+// M5 In the Round (Chapter IV, FFX-2): the girls stand round Bahamut on three sides; the camera makes a slow 60-degree
+// orbit round him. Planes are turned square to the lens every frame (billboards), so no figure goes to cardboard; the
+// painted VIEW of a figure can only change by swapping its painting, and that happens at a hidden cut: a foreground
+// column (a copy of the arena's own pillar) wipes across the lens at mid-orbit, and each figure's painting swaps on the
+// frame the column covers it (Paine rear -> front, Bahamut front -> rear). Rikku, on the far side facing us and screen-left,
+// is her front painting mirrored (she is not chiral); Yuna and Paine are never mirrored.
+const M = __motion; const st = M.st(); const sc = st.opts.scene; const P_BATTLE = () => __pyrefly.battle();
+const B = [0.8, 0, -4.2];
+const POS = { bahamut: [B[0], 0, B[2]], paine: [B[0] - 2.7, 0, B[2] + 0.9], yuna: [B[0] + 0.6, 0, B[2] + 3.4], rikku: [B[0] + 2.4, 0, B[2] - 2.6] };
+// one staging per battle: a new battle has new actors and a new scene (the column and the pools belong to the old one)
+if (!M.m5 || M.m5.battle !== P_BATTLE()) M.m5 = { battle: P_BATTLE() };
+const S = M.m5;
+if (!S.orig) { S.orig = {}; for (const id of Object.keys(POS)) { const a = M.act(id); S.orig[id] = { pos: a.position.toArray(), facing: a.facingDir }; } }
+for (const [id, p] of Object.entries(POS)) { const a = M.act(id); a.position.set(...p); a.updateMatrixWorld(true); }
+// the boss's floor pool and reflection follow him
+const dx = POS.bahamut[0] - S.orig.bahamut.pos[0], dz = POS.bahamut[2] - S.orig.bahamut.pos[2];
+S.follow = S.follow || []; if (!S.follow.length) sc.traverse((n) => { if (n.name === 'enemy-pool' || n.name === 'enemy-reflection') S.follow.push([n, n.position.toArray()]); });
+for (const [n, p] of S.follow) n.position.set(p[0] + dx, p[1], p[2] + dz);
+M.act('rikku').setFacing(-1);                 // far side, facing Bahamut on her screen-left: the front painting mirrored
+M.rearOn(['yuna', 'paine'], 'rear34'); M.showFront('rikku'); M.showFront('bahamut');
+for (const id of Object.keys(POS)) M.faceLens(id, 1);
+// the foreground column: a copy of the arena's pillar, standing just inside the orbit at its midpoint
+if (!S.col) { let pil = null; sc.traverse((n) => { if (!pil && n.name === 'pillar') pil = n; }); S.col = pil.clone(); S.col.name = 'motion-m5-column'; sc.add(S.col); }
+S.col.position.set(B[0], 0, B[2] + 9.2); S.col.visible = true;
+// aimed right of Bahamut, so the figures clear the command list
+S.R = 10.5; S.h = 4.6; S.look = [B[0] + 1.1, 1.9, B[2]]; S.th0 = -30; S.th1 = 30; S.dur = 9.0; S.t0 = null; S.swapped = {};
+M.m5cam = (th) => { const r = (th * Math.PI) / 180; return { pos: [B[0] + S.R * Math.sin(r), S.h, B[2] + S.R * Math.cos(r)], look: S.look, fov: 32, roll: 0, sway: 0.3,
+  focus: { ...M.FOCUS_OFF }, tilt: { focus: 0.5, band: 0.2, blur: 3.2 } }; };
+// the column's screen x-extent, from its bounding box
+S.colX = () => { const box = new (sc.getObjectByName('backdrop-painting').geometry.boundingBox?.constructor || Object)();
+  const g = S.col.geometry; if (!g.boundingBox) g.computeBoundingBox(); const bb = g.boundingBox; const c = M.cam(); const cv = M.R().domElement.getBoundingClientRect();
+  const V = S.col.position.constructor; let x0 = Infinity, x1 = -Infinity;
+  for (const x of [bb.min.x, bb.max.x]) for (const y of [0.5, 3]) for (const z of [bb.min.z, bb.max.z]) { const v = new V(x, y, z).applyMatrix4(S.col.matrixWorld).project(c); if (v.z < 1) { const px = (v.x + 1) / 2 * cv.width; x0 = Math.min(x0, px); x1 = Math.max(x1, px); } }
+  return [x0, x1]; };
+S.swap = { paine: () => { M.showFront('paine'); M.faceLens('paine', 1); }, bahamut: () => { M.showRear('bahamut', 'rear34'); } };
+M.onTick = (dt) => {
+  if (S.t0 === null) S.t0 = M.t;
+  const k = Math.min(1, (M.t - S.t0) / S.dur); const e = M.E.inout(k);
+  const th = S.th0 + (S.th1 - S.th0) * e; S.th = th;
+  M.set('cam', M.m5cam(th)); M.apply(0);
+  S.col.updateMatrixWorld(true);
+  const [c0, c1] = S.colX(); const cv = M.R().domElement.getBoundingClientRect();
+  for (const id of ['paine', 'bahamut']) { if (S.swapped[id]) continue; const r = st.projectRect(id); if (!r) continue;
+    const f0 = r.x - cv.x, f1 = f0 + r.w; const cover = Math.max(0, Math.min(c1, f1) - Math.max(c0, f0)) / Math.max(1, r.w);
+    if (cover > 0.92) { S.swap[id](); S.swapped[id] = { at: +(M.t - S.t0).toFixed(3), theta: +th.toFixed(1), cover: +cover.toFixed(2) }; } }
+};
+M.direct(M.m5cam(S.th0)); M.passes(); M.cut(M.m5cam(S.th0));
+return { pos: POS, swapped: S.swapped };

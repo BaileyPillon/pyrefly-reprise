@@ -1,0 +1,12 @@
+// For each named shot: cut to it (its enter() swaps the paintings), let the engine's eased yaw settle, then record each
+// figure's angle to the lens, the share of its width kept, which painting it shows, and how much of it is in frame.
+const M = __motion; const st = M.st(); const cv = M.R().domElement.getBoundingClientRect(); const out = {};
+for (const name of JSON.parse(SHOTS)) {
+  M.cut(name); await new Promise((r) => setTimeout(r, 1400));
+  const L = M.lens(); const o = {};
+  for (const [id, v] of Object.entries(L)) { const r = st.projectRect(id); let inF = 0;
+    if (r) { const x0 = Math.max(0, r.x - cv.x), x1 = Math.min(cv.width, r.x - cv.x + r.w), y0 = Math.max(0, r.y - cv.y), y1 = Math.min(cv.height, r.y - cv.y + r.h); inF = Math.max(0, x1 - x0) * Math.max(0, y1 - y0) / Math.max(1, r.w * r.h); }
+    o[id] = { off: v.off, widthKept: v.widthKept, painting: v.rear ?? 'front', mirrored: v.mirrored, inFrame: +inF.toFixed(2), heightFrac: r ? +(r.h / cv.height).toFixed(2) : 0 }; }
+  out[name] = o;
+}
+M.cut('master'); return out;

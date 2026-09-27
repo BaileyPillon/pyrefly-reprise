@@ -1,0 +1,94 @@
+#!/usr/bin/env node
+/**
+ * Perspectives round 2026-09-27 (art agent, stage 2 item 5): paint the P13 proscenium over its layout
+ * sketch (proscenium.py sketch), then finish it (proscenium.py finish: opening cut to alpha, footlight
+ * glow). House backdrop preset: 1344x768 img2img -> RealESRGAN x4 -> 0.5 = 2688x1536.
+ *
+ *   node tools/zz-persp-art/proscenium.mjs <ink|crimson> <n> <seed> <denoise>
+ *
+ * The sketch is squashed to exactly 1344x768 BEFORE staging, so ComfyUI's ImageScale (crop: center)
+ * is a no-op and the final 2688x1536 -> 1920x1080 resize maps the opening back to x 200-1720, y 118-1010
+ * exactly. Candidates only.
+ */
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
+import { backdropWorkflow, buildBackdropPrompt, BACKDROP_NEGATIVE, stageImage, joinTags } from '../gen/comfy.mjs';
+import { maxRgbOfPng, isBlackFrame } from '../gen/black-frame.mjs';
+
+const CAND = 'D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/proscenium';
+const SCR = 'D:/Tools/pyrefly-scratch/persp-art/prosc';
+const PY = 'D:/Tools/ComfyUI/python_embeded/python.exe';
+const HERE = fileURLToPath(new URL('.', import.meta.url));
+const COMFY = process.env.COMFY_URL || 'http://127.0.0.1:8188';
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+const TAGS = {
+  ink: 'theater stage seen from the audience, ornate gilded proscenium arch, carved gold baroque frame with rosettes, gold cartouche '
+    + 'crest with gold sun rays at the top center, heavy black velvet curtains with gold trim, draped black velvet swag with gold fringe '
+    + 'and gold tassels, gold rope tie-backs with tassels, dark wooden stage apron with brass footlights glowing warm, dark theater, '
+    + 'dramatic lighting, rich ornate detail',
+  crimson: 'theater stage seen from the audience, ornate gilded proscenium arch, carved gold baroque frame with rosettes, gold cartouche '
+    + 'crest with gold sun rays at the top center, heavy dark crimson velvet curtains with gold trim, draped crimson velvet swag with '
+    + 'gold fringe and gold tassels, gold rope tie-backs with tassels, dark wooden stage apron with brass footlights glowing warm, dark '
+    + 'theater, dramatic lighting, rich ornate detail',
+};
+const NEG = {
+  ink: 'text, letters, words, audience, seats, people, actor, silhouette, modern, screen, projector, red curtains, red velvet, blue curtains',
+  crimson: 'text, letters, words, audience, seats, people, actor, silhouette, modern, screen, projector, black curtains, blue curtains',
+};
+
+function py(args) {
+  const r = spawnSync(PY, ['-s', ...args], { encoding: 'utf8' });
+  if (r.status !== 0) throw new Error(r.stderr || r.stdout);
+  return r.stdout.trim();
+}
+
+async function main() {
+  const [pal, nArg, seedArg, denArg] = process.argv.slice(2);
+  if (!TAGS[pal]) throw new Error('palette must be ink or crimson');
+  const n = Number(nArg); const seed = Number(seedArg); const denoise = Number(denArg);
+  mkdirSync(CAND, { recursive: true });
+  const sketch = join(SCR, `sketch-${pal}.png`);
+  const squashed = join(SCR, `sketch-${pal}-1344.png`);
+  py(['-c', 'from PIL import Image; import sys; Image.open(sys.argv[1]).convert("RGB").resize((1344, 768), Image.LANCZOS).save(sys.argv[2])', sketch, squashed]);
+  const init = stageImage(squashed);
+  const positive = buildBackdropPrompt({ tags: TAGS[pal] });
+  const negative = joinTags(BACKDROP_NEGATIVE, NEG[pal]);
+  for (;;) { const q = await (await fetch(`${COMFY}/queue`)).json(); if ((q.queue_pending?.length || 0) < 3) break; await sleep(4000); }
+  const t0 = Date.now();
+  const g = backdropWorkflow({
+    positive, negative, width: 1344, height: 768, seed, steps: 30, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal',
+    initImage: init, denoise, prefix: `pyrefly/persp-2026-09-27/proscenium-${pal}`,
+  });
+  const res = await fetch(`${COMFY}/prompt`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: g, client_id: 'pyrefly-persp-art' }) });
+  const body = await res.json();
+  if (!res.ok || body.error) throw new Error(`ComfyUI rejected: ${JSON.stringify(body).slice(0, 1500)}`);
+  let e;
+  for (;;) {
+    await sleep(2500);
+    e = (await (await fetch(`${COMFY}/history/${body.prompt_id}`)).json())[body.prompt_id];
+    if (e?.status?.status_str === 'error') throw new Error(JSON.stringify(e.status.messages).slice(0, 800));
+    if (e?.outputs?.['9']?.images?.length) break;
+  }
+  const img = e.outputs['9'].images[0];
+  const qs = new URLSearchParams({ filename: img.filename, subfolder: img.subfolder || '', type: img.type || 'output' });
+  const painted = join(CAND, `cand-${n}.painted.png`);
+  writeFileSync(painted, Buffer.from(await (await fetch(`${COMFY}/view?${qs}`)).arrayBuffer()));
+  const maxRgb = maxRgbOfPng(readFileSync(painted));
+  if (maxRgb != null && isBlackFrame(maxRgb)) throw new Error(`#${n}: BLACK FRAME, stopping (no re-roll)`);
+  const fin = py([join(HERE, 'proscenium.py'), 'finish', painted, join(CAND, `cand-${n}.png`)]);
+  writeFileSync(join(CAND, `cand-${n}.json`), JSON.stringify({
+    round: 'perspectives-2026-09-27', subject: 'proscenium', view: 'proscenium', candidate: n, palette: pal, seed, denoise,
+    positive, negative, init: `layout sketch (tools/zz-persp-art/proscenium.py sketch ${pal}), squashed to 1344x768`,
+    model: 'animagine-xl-4.0-opt.safetensors', steps: 30, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal',
+    upscaler: 'RealESRGAN_x4plus.pth', finish: fin, output: { width: 1920, height: 1080, alpha: true },
+    opening: { x0: 200, y0: 118, x1: 1720, y1: 1010, topCornerRadius: 70 },
+    seconds: (Date.now() - t0) / 1000, generatedAt: new Date().toISOString(),
+  }, null, 1));
+  console.log(`[persp-prosc] #${n} ${pal} seed ${seed} d${denoise} ${((Date.now() - t0) / 1000).toFixed(0)} s | ${fin}`);
+}
+
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) await main();

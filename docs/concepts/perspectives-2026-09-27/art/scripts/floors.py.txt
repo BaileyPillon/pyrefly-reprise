@@ -1,0 +1,338 @@
+"""Perspectives round 2026-09-27 (art agent, stage 2 item 7; REQUEST.md section 1): diorama floor plates,
+painted STRAIGHT DOWN. Two steps around one ComfyUI img2img pass (floors.mjs):
+
+  sketch <gagazet|bevelle> <out.png>   the 1024x1024 flat-colour layout (house method: layout, then img2img)
+  finish <gagazet|bevelle> <painted_4096.png> <out.png>   soft falloff to the fog colour over the outer 10 %
+
+Mapping (the rig's, REQUEST.md, and the scene code's own: bevelle-underground.ts "row y / size = (z + 28) / 46"):
+image TOP = world -z (the far side, toward today's backdrop), image LEFT = world -x.
+  gagazet: 44 x 44 units centred on (0, -2): x -22..22, z -24..20
+  bevelle: 46 x 46 units centred on (0, -5): x -23..23, z -28..18
+The arena (x -4..5, z -8..3) stays calm: soft, low-contrast detail only; the interest is around it.
+"""
+import math
+import random
+import sys
+
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter
+
+S = 1024
+SPEC = {
+    "gagazet": dict(size=44.0, cx=0.0, cz=-2.0, fog=(0x42, 0x6B, 0x9E)),
+    "bevelle": dict(size=46.0, cx=0.0, cz=-5.0, fog=(0x32, 0x27, 0x2D)),
+}
+HOLE = dict(x=2.4, z=-7.8, rx=2.5, rz=1.6, rim_rx=3.8, rim_rz=2.45)   # bevelle-underground.ts HOLE + REQUEST.md rim
+
+
+def w2p(name, x, z, size=S):
+    sp = SPEC[name]
+    half = sp["size"] / 2
+    return ((x - (sp["cx"] - half)) / sp["size"] * size, (z - (sp["cz"] - half)) / sp["size"] * size)
+
+
+def upp(name, size=S):
+    return size / SPEC[name]["size"]
+
+
+def arena_box(name, size=S):
+    (x0, y0), (x1, y1) = w2p(name, -4, -8, size), w2p(name, 5, 3, size)
+    return x0, y0, x1, y1
+
+
+def noise(seed, size=S, scale=64, octaves=4):
+    rng = np.random.default_rng(seed)
+    out = np.zeros((size, size), np.float32)
+    amp, tot = 1.0, 0.0
+    for o in range(octaves):
+        n = max(2, size // (scale >> o) if (scale >> o) > 0 else size)
+        base = rng.random((n, n)).astype(np.float32)
+        img = Image.fromarray((base * 255).astype(np.uint8)).resize((size, size), Image.BICUBIC)
+        out += amp * (np.asarray(img).astype(np.float32) / 255.0)
+        tot += amp
+        amp *= 0.5
+    return out / tot
+
+
+def sketch_gagazet(out):
+    rnd = random.Random(7)
+    n = noise(11, scale=128)
+    base = np.array([196, 214, 236], np.float32)
+    shade = np.array([122, 150, 196], np.float32)
+    img = base[None, None, :] * (0.88 + 0.12 * n[..., None]) + 0 * shade
+    im = Image.fromarray(np.clip(img, 0, 255).astype(np.uint8))
+    d = ImageDraw.Draw(im, "RGBA")
+    ax0, ay0, ax1, ay1 = arena_box("gagazet")
+    cxa, cya = (ax0 + ax1) / 2, (ay0 + ay1) / 2
+    # wind-carved drifts (sastrugi): long curved ridges running diagonally, a lit edge and a blue shadow;
+    # sparse and faint inside the arena
+    for i in range(46):
+        x = rnd.uniform(-100, S + 100)
+        y = rnd.uniform(-100, S + 100)
+        L = rnd.uniform(120, 320)
+        ang = math.radians(rnd.uniform(-35, -15))
+        inside = ax0 - 60 < x < ax1 + 60 and ay0 - 60 < y < ay1 + 60
+        a_sh = 40 if inside else 120
+        pts_l, pts_s = [], []
+        for t in np.linspace(0, 1, 24):
+            px = x + L * t * math.cos(ang)
+            py = y + L * t * math.sin(ang) + 18 * math.sin(t * math.pi)
+            pts_s.append((px + 3, py + 5))
+            pts_l.append((px, py))
+        d.line(pts_s, fill=(92, 122, 178, a_sh), width=rnd.randint(5, 10))
+        d.line(pts_l, fill=(240, 247, 255, a_sh + 30), width=rnd.randint(3, 6))
+    # cracked blue ice sheets around (not under) the arena
+    for (wx, wz, r) in ((-9.5, -12.0, 3.2), (9.0, 1.5, 2.6), (-8.0, 6.0, 2.2), (11.5, -11.0, 2.8)):
+        px, py = w2p("gagazet", wx, wz)
+        rr = r * upp("gagazet")
+        poly = [(px + rr * (0.75 + 0.25 * rnd.random()) * math.cos(a), py + rr * 0.7 * (0.75 + 0.25 * rnd.random()) * math.sin(a))
+                for a in np.linspace(0, 2 * math.pi, 18, endpoint=False)]
+        d.polygon(poly, fill=(150, 205, 235, 235))
+        for k in range(9):
+            a = rnd.uniform(0, 2 * math.pi)
+            d.line([(px, py), (px + rr * 0.9 * math.cos(a), py + rr * 0.6 * math.sin(a))], fill=(60, 110, 160, 200), width=2)
+        d.ellipse([px - rr * 0.3, py - rr * 0.2, px + rr * 0.3, py + rr * 0.2], fill=(200, 235, 250, 180))
+    # dark rock outcrops at the edges, snow-capped
+    for i in range(22):
+        side = rnd.choice(["l", "r", "t", "b"])
+        if side == "l":
+            x, y = rnd.uniform(40, 200), rnd.uniform(60, S - 60)
+        elif side == "r":
+            x, y = rnd.uniform(S - 200, S - 40), rnd.uniform(60, S - 60)
+        elif side == "t":
+            x, y = rnd.uniform(60, S - 60), rnd.uniform(40, 170)
+        else:
+            x, y = rnd.uniform(60, S - 60), rnd.uniform(S - 170, S - 40)
+        r = rnd.uniform(18, 55)
+        poly = [(x + r * (0.6 + 0.4 * rnd.random()) * math.cos(a), y + r * (0.6 + 0.4 * rnd.random()) * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 11, endpoint=False)]
+        d.polygon([(px + 6, py + 8) for px, py in poly], fill=(70, 96, 150, 150))
+        d.polygon(poly, fill=(44, 56, 84, 255))
+        d.polygon([(px, py) for px, py in poly[:5]] + [(x, y)], fill=(215, 228, 245, 230))
+    # faint footprint trails crossing the field (they stop short of the arena)
+    for trail in (((-20, 14), (-5, 5)), ((6, -9), (20, -20)), ((-18, -20), (-6, -10))):
+        (x0, z0), (x1, z1) = trail
+        for t in np.linspace(0, 1, 26):
+            wx, wz = x0 + (x1 - x0) * t, z0 + (z1 - z0) * t
+            px, py = w2p("gagazet", wx, wz)
+            off = 5 if int(t * 26) % 2 else -5
+            d.ellipse([px + off - 3, py - 4, px + off + 3, py + 4], fill=(120, 150, 200, 150))
+    # scattered pyrefly glints (soft cyan-white points), fewer in the arena
+    glow = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    for i in range(70):
+        x, y = rnd.uniform(0, S), rnd.uniform(0, S)
+        if ax0 < x < ax1 and ay0 < y < ay1 and rnd.random() < 0.8:
+            continue
+        r = rnd.uniform(2, 5)
+        gd.ellipse([x - r * 3, y - r * 3, x + r * 3, y + r * 3], fill=(160, 230, 255, 70))
+        gd.ellipse([x - r, y - r, x + r, y + r], fill=(235, 252, 255, 255))
+    im = Image.alpha_composite(im.convert("RGBA"), glow.filter(ImageFilter.GaussianBlur(1.5)))
+    # moonlight: brighter toward the upper left, a cooler shade toward the lower right
+    yy, xx = np.mgrid[0:S, 0:S].astype(np.float32) / S
+    light = 1.06 - 0.16 * (xx + yy) / 2
+    arr = np.asarray(im.convert("RGB")).astype(np.float32) * light[..., None]
+    Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8)).save(out)
+    print(out)
+
+
+def sketch_bevelle(out, ring=True, hole=True):
+    rnd = random.Random(5)
+    u = upp("bevelle")
+    n = noise(21, scale=96)
+    steel = np.array([58, 62, 76], np.float32)
+    img = steel[None, None, :] * (0.8 + 0.3 * n[..., None])
+    im = Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).convert("RGBA")
+    d = ImageDraw.Draw(im, "RGBA")
+    # plates: a 3-unit grid, worn lighter edges, rivets, some grating slots
+    step = 3.0 * u
+    x0p, y0p = w2p("bevelle", -23, -28)
+    for i in range(-1, int(S / step) + 2):
+        for j in range(-1, int(S / step) + 2):
+            px, py = i * step + (x0p % step), j * step + (y0p % step)
+            tone = rnd.uniform(-10, 10)
+            d.rectangle([px + 2, py + 2, px + step - 2, py + step - 2], fill=(int(56 + tone), int(60 + tone), int(74 + tone), 255))
+            d.rectangle([px, py, px + step, py + step], outline=(96, 104, 122, 255), width=2)
+            d.line([(px + 3, py + step - 3), (px + step - 3, py + step - 3)], fill=(22, 24, 32, 255), width=2)
+            for k in range(4):
+                for (rx_, ry_) in ((px + 6 + k * (step - 12) / 3, py + 6), (px + 6 + k * (step - 12) / 3, py + step - 6)):
+                    d.ellipse([rx_ - 2, ry_ - 2, rx_ + 2, ry_ + 2], fill=(130, 136, 150, 255))
+            if rnd.random() < 0.18:
+                for s_ in range(5):
+                    d.rectangle([px + 10, py + 12 + s_ * 10, px + step - 10, py + 16 + s_ * 10], fill=(14, 15, 20, 255))
+    # the big circular inlay around the arena (a generic brass medallion ring, NOT the Yevon emblem)
+    cx, cy = w2p("bevelle", 0.5, -2.5)
+    for r, wdt, col in (((6.4 * u, 7, (176, 140, 72, 255)), (5.8 * u, 3, (120, 96, 50, 255)), (7.0 * u, 3, (120, 96, 50, 255))) if ring else ()):
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=col, width=wdt)
+    for k in (range(24) if ring else ()):
+        a = 2 * math.pi * k / 24
+        d.line([(cx + 5.8 * u * math.cos(a), cy + 5.8 * u * math.sin(a)), (cx + 7.0 * u * math.cos(a), cy + 7.0 * u * math.sin(a))],
+               fill=(150, 118, 60, 255), width=3)
+    # glowing cyan conduit seams: long straight runs along plate seams, around (not across) the arena
+    for (a_, b_) in (((-23, -14.5), (-6, -14.5)), ((8, -14.5), (23, -14.5)), ((-9.5, -28), (-9.5, -14.5)), ((12.5, -28), (12.5, -12)),
+                     ((-9.5, 6), (-9.5, 18)), ((10.5, 5), (10.5, 18)), ((-23, 9.5), (-12, 9.5)), ((13, 9.5), (23, 9.5))):
+        p0, p1 = w2p("bevelle", *a_), w2p("bevelle", *b_)
+        d.line([p0, p1], fill=(40, 200, 230, 110), width=11)
+        d.line([p0, p1], fill=(150, 250, 255, 255), width=3)
+    # the torn hole: jagged bent plating out to the rim ellipse, the open shaft glowing cyan from below
+    hx, hy = w2p("bevelle", HOLE["x"], HOLE["z"])
+    if not hole:
+        HOLE_SKIP = True
+    rim = [(hx + HOLE["rim_rx"] * u * (0.82 + 0.3 * rnd.random()) * math.cos(a), hy + HOLE["rim_rz"] * u * (0.82 + 0.3 * rnd.random()) * math.sin(a))
+           for a in np.linspace(0, 2 * math.pi, 28, endpoint=False)]
+    if hole:
+        d.polygon(rim, fill=(34, 38, 48, 255), outline=(150, 160, 180, 255))
+    shaft = [(hx + HOLE["rx"] * u * (0.9 + 0.2 * rnd.random()) * math.cos(a), hy + HOLE["rz"] * u * (0.9 + 0.2 * rnd.random()) * math.sin(a))
+             for a in np.linspace(0, 2 * math.pi, 22, endpoint=False)]
+    if hole:
+        d.polygon(shaft, fill=(8, 30, 40, 255))
+    glow = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    gd.ellipse([hx - HOLE["rx"] * u * 0.8, hy - HOLE["rz"] * u * 0.7, hx + HOLE["rx"] * u * 0.8, hy + HOLE["rz"] * u * 0.7], fill=(70, 230, 255, 255))
+    gd.ellipse([hx - HOLE["rx"] * u * 0.4, hy - HOLE["rz"] * u * 0.35, hx + HOLE["rx"] * u * 0.4, hy + HOLE["rz"] * u * 0.35], fill=(220, 255, 255, 255))
+    if hole:
+        im = Image.alpha_composite(im, glow.filter(ImageFilter.GaussianBlur(9)))
+    halo = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    ImageDraw.Draw(halo).ellipse([hx - HOLE["rim_rx"] * u * 1.5, hy - HOLE["rim_rz"] * u * 1.5, hx + HOLE["rim_rx"] * u * 1.5, hy + HOLE["rim_rz"] * u * 1.5], fill=(60, 210, 240, 70))
+    if hole:
+        im = Image.alpha_composite(im, halo.filter(ImageFilter.GaussianBlur(30)))
+    # warm lamp spill along the side walls, and oil sheen patches away from the arena
+    spill = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(spill)
+    for wz in (-22, -14, -6, 2, 10):
+        for wx in (-21.5, 21.5):
+            px, py = w2p("bevelle", wx, wz)
+            sd.ellipse([px - 110, py - 70, px + 110, py + 70], fill=(255, 150, 60, 80))
+    im = Image.alpha_composite(im, spill.filter(ImageFilter.GaussianBlur(40)))
+    oil = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    od = ImageDraw.Draw(oil)
+    for (wx, wz) in ((-14, -4), (15, -2), (-12, 12), (7, 12.5)):
+        px, py = w2p("bevelle", wx, wz)
+        for k, col in enumerate(((180, 80, 200, 60), (60, 200, 170, 60), (80, 120, 230, 60))):
+            od.ellipse([px - 60 + k * 10, py - 34 + k * 6, px + 60 - k * 10, py + 34 - k * 6], outline=col, width=8)
+    im = Image.alpha_composite(im, oil.filter(ImageFilter.GaussianBlur(5)))
+    im.convert("RGB").save(out)
+    print(out)
+
+
+def sketch_bevelle2(out, base_sketch=None):
+    """Bevelle, second layout: round 1's deck WITHOUT the big ring (it ran through the hole, and the checkpoint
+    then painted ring + hole as one neat round device), a small generic brass inlay on the near side outside
+    the arena (not the Yevon emblem), and the torn hole drawn with its shards (the holeinit drawing)."""
+    u = upp("bevelle")
+    base = out + ".base.png"
+    sketch_bevelle(base, ring=False, hole=False)
+    im = Image.open(base).convert("RGBA")
+    d = ImageDraw.Draw(im, "RGBA")
+    ix, iy = w2p("bevelle", 0.5, 9.5)
+    for r, wdt in ((2.4 * u, 6), (1.8 * u, 3), (0.8 * u, 3)):
+        d.ellipse([ix - r, iy - r, ix + r, iy + r], outline=(176, 140, 72, 255), width=wdt)
+    for k in range(8):
+        a = 2 * math.pi * k / 8
+        d.line([(ix + 0.8 * u * math.cos(a), iy + 0.8 * u * math.sin(a)), (ix + 1.8 * u * math.cos(a), iy + 1.8 * u * math.sin(a))], fill=(150, 118, 60, 255), width=3)
+    im.convert("RGB").save(base)
+    _holedraw(base, out)
+    print(out)
+
+
+def _holedraw(src, dst):
+    rnd = random.Random(9)
+    u = upp("bevelle")
+    im = Image.open(src).convert("RGBA")
+    d = ImageDraw.Draw(im, "RGBA")
+    hx, hy = w2p("bevelle", HOLE["x"], HOLE["z"])
+    ratio_rim = HOLE["rim_rz"] / HOLE["rim_rx"]
+    ratio_in = HOLE["rz"] / HOLE["rx"]
+    halo = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    ImageDraw.Draw(halo).ellipse([hx - HOLE["rim_rx"] * u * 1.6, hy - HOLE["rim_rz"] * u * 1.6, hx + HOLE["rim_rx"] * u * 1.6, hy + HOLE["rim_rz"] * u * 1.6], fill=(60, 210, 240, 90))
+    im = Image.alpha_composite(im, halo.filter(ImageFilter.GaussianBlur(26)))
+    d = ImageDraw.Draw(im, "RGBA")
+    for k in range(18):
+        a = 2 * math.pi * k / 18 + rnd.uniform(-0.1, 0.1)
+        r_out = HOLE["rim_rx"] * u * rnd.uniform(0.95, 1.15)
+        r_in = HOLE["rx"] * u * rnd.uniform(0.7, 0.95)
+        w = rnd.uniform(0.13, 0.22)
+        pts = [(hx + r_out * math.cos(a - w), hy + r_out * ratio_rim * math.sin(a - w)),
+               (hx + r_out * math.cos(a + w), hy + r_out * ratio_rim * math.sin(a + w)),
+               (hx + r_in * math.cos(a), hy + r_in * ratio_in * math.sin(a))]
+        tone = rnd.randint(80, 140)
+        d.polygon(pts, fill=(tone, tone + 8, tone + 22, 255), outline=(120, 230, 250, 255))
+    shaft = [(hx + HOLE["rx"] * u * rnd.uniform(0.7, 1.05) * math.cos(a), hy + HOLE["rz"] * u * rnd.uniform(0.7, 1.05) * math.sin(a))
+             for a in np.linspace(0, 2 * math.pi, 26, endpoint=False)]
+    d.polygon(shaft, fill=(4, 30, 40, 255), outline=(120, 240, 255, 255))
+    glow = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    gd.ellipse([hx - HOLE["rx"] * u * 0.7, hy - HOLE["rz"] * u * 0.62, hx + HOLE["rx"] * u * 0.7, hy + HOLE["rz"] * u * 0.62], fill=(40, 210, 245, 240))
+    gd.ellipse([hx - HOLE["rx"] * u * 0.32, hy - HOLE["rz"] * u * 0.28, hx + HOLE["rx"] * u * 0.32, hy + HOLE["rz"] * u * 0.28], fill=(225, 255, 255, 255))
+    im = Image.alpha_composite(im, glow.filter(ImageFilter.GaussianBlur(6)))
+    im.convert("RGB").save(dst)
+
+
+def finish(name, src, out):
+    """Resize guard, then the soft falloff to the fog colour over the outer 10 % (smoothstep on the
+    distance to the nearest edge), so the plate never shows a border."""
+    im = Image.open(src).convert("RGB")
+    if im.size != (4096, 4096):
+        im = im.resize((4096, 4096), Image.LANCZOS)
+    a = np.asarray(im).astype(np.float32)
+    N = a.shape[0]
+    idx = np.arange(N, dtype=np.float32)
+    e = np.minimum(idx, N - 1 - idx) / (0.10 * N)
+    e = np.clip(e, 0, 1)
+    e = e * e * (3 - 2 * e)
+    m = np.minimum(e[None, :], e[:, None])[..., None]
+    fog = np.array(SPEC[name]["fog"], np.float32)[None, None, :]
+    outa = a * m + fog * (1 - m)
+    Image.fromarray(np.clip(outa, 0, 255).astype(np.uint8)).save(out, optimize=True)
+    print(out, "corner", outa[5, 5].astype(int).tolist(), "centre", outa[N // 2, N // 2].astype(int).tolist())
+
+
+def holeinit(painted_4096, out_init, out_mask):
+    """Bevelle only: the painted deck back at 1024 with a stronger torn-hole sketch pasted over the hole
+    (a jagged black shaft with a cyan core, bent plate shards pointing into it, a cyan-lit rim), and the
+    feathered repaint mask for a masked img2img of just that region."""
+    rnd = random.Random(9)
+    u = upp("bevelle")
+    im = Image.open(painted_4096).convert("RGB").resize((S, S), Image.LANCZOS).convert("RGBA")
+    d = ImageDraw.Draw(im, "RGBA")
+    hx, hy = w2p("bevelle", HOLE["x"], HOLE["z"])
+    ratio_rim = HOLE["rim_rz"] / HOLE["rim_rx"]
+    ratio_in = HOLE["rz"] / HOLE["rx"]
+    for k in range(16):
+        a = 2 * math.pi * k / 16 + rnd.uniform(-0.1, 0.1)
+        r_out = HOLE["rim_rx"] * u * rnd.uniform(0.95, 1.12)
+        r_in = HOLE["rx"] * u * rnd.uniform(0.75, 0.95)
+        w = rnd.uniform(0.14, 0.24)
+        pts = [(hx + r_out * math.cos(a - w), hy + r_out * ratio_rim * math.sin(a - w)),
+               (hx + r_out * math.cos(a + w), hy + r_out * ratio_rim * math.sin(a + w)),
+               (hx + r_in * math.cos(a), hy + r_in * ratio_in * math.sin(a))]
+        tone = rnd.randint(70, 130)
+        d.polygon(pts, fill=(tone, tone + 6, tone + 18, 255), outline=(20, 22, 30, 255))
+    shaft = [(hx + HOLE["rx"] * u * rnd.uniform(0.7, 1.05) * math.cos(a), hy + HOLE["rz"] * u * rnd.uniform(0.7, 1.05) * math.sin(a))
+             for a in np.linspace(0, 2 * math.pi, 26, endpoint=False)]
+    d.polygon(shaft, fill=(4, 18, 26, 255), outline=(90, 230, 255, 255))
+    glow = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    gd.ellipse([hx - HOLE["rx"] * u * 0.62, hy - HOLE["rz"] * u * 0.55, hx + HOLE["rx"] * u * 0.62, hy + HOLE["rz"] * u * 0.55], fill=(40, 200, 240, 230))
+    gd.ellipse([hx - HOLE["rx"] * u * 0.28, hy - HOLE["rz"] * u * 0.25, hx + HOLE["rx"] * u * 0.28, hy + HOLE["rz"] * u * 0.25], fill=(210, 255, 255, 255))
+    im = Image.alpha_composite(im, glow.filter(ImageFilter.GaussianBlur(7)))
+    im.convert("RGB").save(out_init)
+    m = Image.new("L", (S, S), 0)
+    ImageDraw.Draw(m).ellipse([hx - HOLE["rim_rx"] * u * 1.3, hy - HOLE["rim_rz"] * u * 1.3, hx + HOLE["rim_rx"] * u * 1.3, hy + HOLE["rim_rz"] * u * 1.3], fill=255)
+    m.filter(ImageFilter.GaussianBlur(10)).save(out_mask)
+    print(out_init, out_mask, "hole px", round(hx), round(hy))
+
+
+if __name__ == "__main__":
+    if sys.argv[1] == "sketch":
+        (sketch_gagazet if sys.argv[2] == "gagazet" else sketch_bevelle)(sys.argv[3])
+    elif sys.argv[1] == "finish":
+        finish(sys.argv[2], sys.argv[3], sys.argv[4])
+    elif sys.argv[1] == "sketch2":
+        sketch_bevelle2(sys.argv[2])
+    elif sys.argv[1] == "holeinit":
+        holeinit(sys.argv[2], sys.argv[3], sys.argv[4])
+    elif sys.argv[1] == "where":
+        name = sys.argv[2]
+        print("arena px (1024):", [round(v) for v in arena_box(name)], "hole px (1024):", [round(v) for v in w2p(name, HOLE["x"], HOLE["z"])] if name == "bevelle" else "-")
+    else:
+        raise SystemExit("sketch | finish | where")

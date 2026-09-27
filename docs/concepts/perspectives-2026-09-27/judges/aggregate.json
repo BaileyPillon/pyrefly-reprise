@@ -1,0 +1,426 @@
+{
+ "options": [
+  {
+   "option": "P22",
+   "name": "Hero Poster (moment shot)",
+   "eyeCandy": 7.75,
+   "readability": 3,
+   "cardboard": 6.25,
+   "bossPresence": 8.0,
+   "heroPresence": 8.17,
+   "n": 6
+  },
+  {
+   "option": "P21",
+   "name": "Cinematic Shoulder",
+   "eyeCandy": 7.5,
+   "readability": 7.83,
+   "cardboard": 6.92,
+   "bossPresence": 6.42,
+   "heroPresence": 6.75,
+   "n": 6
+  },
+  {
+   "option": "P2h",
+   "name": "Over the Shoulder, high",
+   "eyeCandy": 7.5,
+   "readability": 6.83,
+   "cardboard": 6.75,
+   "bossPresence": 8,
+   "heroPresence": 6.08,
+   "n": 6
+  },
+  {
+   "option": "P3",
+   "name": "Hero Shoulder",
+   "eyeCandy": 7.5,
+   "readability": 7,
+   "cardboard": 7.17,
+   "bossPresence": 6.92,
+   "heroPresence": 6.92,
+   "n": 6
+  },
+  {
+   "option": "P11",
+   "name": "Cinemascope",
+   "eyeCandy": 7.25,
+   "readability": 7.67,
+   "cardboard": 6.33,
+   "bossPresence": 6.25,
+   "heroPresence": 7.17,
+   "n": 6
+  },
+  {
+   "option": "P2",
+   "name": "Over the Shoulder",
+   "eyeCandy": 7.25,
+   "readability": 6.17,
+   "cardboard": 6.75,
+   "bossPresence": 8.17,
+   "heroPresence": 6.08,
+   "n": 6
+  },
+  {
+   "option": "P0",
+   "name": "Today",
+   "eyeCandy": 7.0,
+   "readability": 7.42,
+   "cardboard": 6.17,
+   "bossPresence": 6.92,
+   "heroPresence": 6.75,
+   "n": 6
+  },
+  {
+   "option": "P1",
+   "name": "Today, dressed",
+   "eyeCandy": 7.0,
+   "readability": 7.42,
+   "cardboard": 6.08,
+   "bossPresence": 6.92,
+   "heroPresence": 6.75,
+   "n": 6
+  },
+  {
+   "option": "P15",
+   "name": "Portrait Duel (phone)",
+   "eyeCandy": 6.92,
+   "readability": 7.92,
+   "cardboard": 5.75,
+   "bossPresence": 8.33,
+   "heroPresence": 5.67,
+   "n": 6
+  },
+  {
+   "option": "P0m",
+   "name": "Today, mirrored",
+   "eyeCandy": 6.92,
+   "readability": 7,
+   "cardboard": 6.17,
+   "bossPresence": 6.92,
+   "heroPresence": 6.92,
+   "n": 6
+  },
+  {
+   "option": "P2l",
+   "name": "Over the Shoulder, low",
+   "eyeCandy": 6.92,
+   "readability": 5.58,
+   "cardboard": 6.42,
+   "bossPresence": 7.75,
+   "heroPresence": 6.33,
+   "n": 6
+  },
+  {
+   "option": "P14",
+   "name": "Panels",
+   "eyeCandy": 6.83,
+   "readability": 5.0,
+   "cardboard": 4.67,
+   "bossPresence": 7.5,
+   "heroPresence": 7.17,
+   "n": 6
+  },
+  {
+   "option": "P7",
+   "name": "Colossus",
+   "eyeCandy": 6.75,
+   "readability": 5.67,
+   "cardboard": 4.25,
+   "bossPresence": 9.17,
+   "heroPresence": 4.0,
+   "n": 6
+  },
+  {
+   "option": "P4",
+   "name": "Reverse Angle",
+   "eyeCandy": 6.67,
+   "readability": 4.42,
+   "cardboard": 6.33,
+   "bossPresence": 6.92,
+   "heroPresence": 3.58,
+   "n": 6
+  },
+  {
+   "option": "P2r",
+   "name": "Over the Shoulder, right shoulder",
+   "eyeCandy": 6.25,
+   "readability": 5.08,
+   "cardboard": 6.42,
+   "bossPresence": 7.0,
+   "heroPresence": 6,
+   "n": 6
+  },
+  {
+   "option": "P10",
+   "name": "In the Round",
+   "eyeCandy": 6.17,
+   "readability": 5,
+   "cardboard": 4.5,
+   "bossPresence": 6.67,
+   "heroPresence": 4.17,
+   "n": 3
+  },
+  {
+   "option": "P8",
+   "name": "Party's Eyes",
+   "eyeCandy": 6,
+   "readability": 7.33,
+   "cardboard": 4.17,
+   "bossPresence": 8.67,
+   "heroPresence": 4.83,
+   "n": 6
+  },
+  {
+   "option": "P2wd",
+   "name": "Over the Shoulder, wide",
+   "eyeCandy": 5.92,
+   "readability": 5.58,
+   "cardboard": 6,
+   "bossPresence": 5.5,
+   "heroPresence": 5.5,
+   "n": 6
+  },
+  {
+   "option": "P13",
+   "name": "Proscenium",
+   "eyeCandy": 5.83,
+   "readability": 5.5,
+   "cardboard": 5.33,
+   "bossPresence": 5.83,
+   "heroPresence": 5.17,
+   "n": 6
+  },
+  {
+   "option": "P5",
+   "name": "Side Stage",
+   "eyeCandy": 5.83,
+   "readability": 6.67,
+   "cardboard": 5.17,
+   "bossPresence": 6.25,
+   "heroPresence": 4,
+   "n": 6
+  },
+  {
+   "option": "P12",
+   "name": "Split-Diopter",
+   "eyeCandy": 5.58,
+   "readability": 4.67,
+   "cardboard": 2.83,
+   "bossPresence": 5.67,
+   "heroPresence": 7.25,
+   "n": 6
+  },
+  {
+   "option": "P5m",
+   "name": "Side Stage, mirrored",
+   "eyeCandy": 5.42,
+   "readability": 5.42,
+   "cardboard": 5.17,
+   "bossPresence": 6.75,
+   "heroPresence": 3.92,
+   "n": 6
+  },
+  {
+   "option": "P6",
+   "name": "Diorama",
+   "eyeCandy": 5.33,
+   "readability": 5.33,
+   "cardboard": 4.33,
+   "bossPresence": 4.75,
+   "heroPresence": 3.58,
+   "n": 6
+  },
+  {
+   "option": "P9",
+   "name": "Tabletop",
+   "eyeCandy": 1.67,
+   "readability": 6,
+   "cardboard": 1,
+   "bossPresence": 2.17,
+   "heroPresence": 2.5,
+   "n": 3
+  }
+ ],
+ "perChapterEyeCandy": {
+  "P15": {
+   "ffx2-ch4": 6.33,
+   "ffx-ch1": 7.5
+  },
+  "P2wd": {
+   "ffx-ch1": 6.33,
+   "ffx2-ch4": 5.5
+  },
+  "P13": {
+   "ffx-ch1": 5.83,
+   "ffx2-ch4": 5.83
+  },
+  "P5m": {
+   "ffx-ch1": 5.17,
+   "ffx2-ch4": 5.67
+  },
+  "P14": {
+   "ffx-ch1": 7,
+   "ffx2-ch4": 6.67
+  },
+  "P21": {
+   "ffx2-ch4": 7.33,
+   "ffx-ch1": 7.67
+  },
+  "P0": {
+   "ffx2-ch4": 7.17,
+   "ffx-ch1": 6.83
+  },
+  "P8": {
+   "ffx2-ch4": 6,
+   "ffx-ch1": 6
+  },
+  "P11": {
+   "ffx-ch1": 7.17,
+   "ffx2-ch4": 7.33
+  },
+  "P2": {
+   "ffx-ch1": 7,
+   "ffx2-ch4": 7.5
+  },
+  "P0m": {
+   "ffx-ch1": 6.67,
+   "ffx2-ch4": 7.17
+  },
+  "P7": {
+   "ffx2-ch4": 6.83,
+   "ffx-ch1": 6.67
+  },
+  "P9": {
+   "ffx-ch1": 1.67
+  },
+  "P4": {
+   "ffx-ch1": 7,
+   "ffx2-ch4": 6.33
+  },
+  "P2l": {
+   "ffx2-ch4": 7.83,
+   "ffx-ch1": 6
+  },
+  "P1": {
+   "ffx-ch1": 6.83,
+   "ffx2-ch4": 7.17
+  },
+  "P2h": {
+   "ffx-ch1": 7,
+   "ffx2-ch4": 8
+  },
+  "P3": {
+   "ffx-ch1": 7.5,
+   "ffx2-ch4": 7.5
+  },
+  "P22": {
+   "ffx2-ch4": 7.33,
+   "ffx-ch1": 8.17
+  },
+  "P12": {
+   "ffx2-ch4": 5.67,
+   "ffx-ch1": 5.5
+  },
+  "P5": {
+   "ffx2-ch4": 6,
+   "ffx-ch1": 5.67
+  },
+  "P2r": {
+   "ffx2-ch4": 6.5,
+   "ffx-ch1": 6
+  },
+  "P6": {
+   "ffx-ch1": 5.17,
+   "ffx2-ch4": 5.5
+  },
+  "P10": {
+   "ffx2-ch4": 6.17
+  }
+ },
+ "sequences": [
+  {
+   "clip": "M4-ffx2-ch4",
+   "eyeCandy": 8.83,
+   "readability": 6.17,
+   "motionClarity": 7.5
+  },
+  {
+   "clip": "M4-ffx-ch1",
+   "eyeCandy": 8.5,
+   "readability": 6.67,
+   "motionClarity": 7.5
+  },
+  {
+   "clip": "M3-ffx-ch1",
+   "eyeCandy": 8.17,
+   "readability": 6.5,
+   "motionClarity": 6.5
+  },
+  {
+   "clip": "M3-ffx2-ch4",
+   "eyeCandy": 8,
+   "readability": 6,
+   "motionClarity": 5.67
+  },
+  {
+   "clip": "M2-ffx-ch1-cut",
+   "eyeCandy": 7.17,
+   "readability": 7,
+   "motionClarity": 6.33
+  },
+  {
+   "clip": "M1-ffx-ch1",
+   "eyeCandy": 7.67,
+   "readability": 6,
+   "motionClarity": 5.83
+  },
+  {
+   "clip": "M6-ffx-ch1",
+   "eyeCandy": 7,
+   "readability": 7.5,
+   "motionClarity": 6.17
+  },
+  {
+   "clip": "M0-ffx-ch1",
+   "eyeCandy": 5.83,
+   "readability": 8.17,
+   "motionClarity": 7.33
+  },
+  {
+   "clip": "M0-ffx2-ch4",
+   "eyeCandy": 5.33,
+   "readability": 7.83,
+   "motionClarity": 7.33
+  },
+  {
+   "clip": "M1-ffx2-ch4",
+   "eyeCandy": 7,
+   "readability": 5.67,
+   "motionClarity": 5.5
+  },
+  {
+   "clip": "M2-ffx2-ch4-cut",
+   "eyeCandy": 6.83,
+   "readability": 6.17,
+   "motionClarity": 5.67
+  },
+  {
+   "clip": "M5-ffx2-ch4",
+   "eyeCandy": 6.17,
+   "readability": 4.33,
+   "motionClarity": 4
+  },
+  {
+   "clip": "M2-ffx-ch1-whip",
+   "eyeCandy": 5.67,
+   "readability": 4.17,
+   "motionClarity": 3.17
+  },
+  {
+   "clip": "M2-ffx2-ch4-whip",
+   "eyeCandy": 5.17,
+   "readability": 3.33,
+   "motionClarity": 2.33
+  }
+ ]
+}

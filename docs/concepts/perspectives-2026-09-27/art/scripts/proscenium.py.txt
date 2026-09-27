@@ -1,0 +1,226 @@
+"""Perspectives round 2026-09-27 (art agent, stage 2 item 5): the P13 "stage play" proscenium.
+
+Two steps around one ComfyUI img2img pass (proscenium.mjs):
+
+  sketch <out.png> [ink|crimson]     the flat-colour layout at 1920x1080 (the house "layout sketch then
+                                     img2img" method): gold arch around the stage opening, a crest at the
+                                     top centre, velvet curtains at both sides, a swag with gold fringe at
+                                     the top, a dark apron with footlights at the bottom, a dim stage in
+                                     the opening (cut away later)
+  finish <painted.png> <out.png>     resize the painted frame to 1920x1080, cut the opening to alpha 0
+                                     (the crest stays opaque where it dips in), add the footlight glow as
+                                     a warm semi-transparent wash over the bottom of the opening
+
+The opening is the stills rig's (REQUEST.md): x 200-1720, y 118-1010, top corners rounded.
+"""
+import math
+import sys
+
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter
+
+W, H = 1920, 1080
+OX0, OY0, OX1, OY1, OR = 200, 118, 1720, 1010, 70      # the opening and its top-corner radius
+BX0, BY0, BX1, BY1, BR = 150, 70, 1770, 1022, 110      # outer edge of the gold arch band
+CREST_C, CREST_R = (960, 76), (96, 70)                 # the crest's oval (centre, radii)
+LAMPS = [260 + round(i * 1400 / 11) for i in range(12)]
+PALETTES = {
+    "ink": dict(base=(26, 20, 38), hi=(78, 62, 108), lo=(7, 6, 13)),
+    "crimson": dict(base=(104, 16, 26), hi=(176, 46, 58), lo=(38, 4, 10)),
+}
+GOLD, GOLD_HI, GOLD_LO, GOLD_DK = (201, 158, 70), (243, 214, 128), (140, 104, 36), (92, 66, 22)
+
+
+def rounded_top_rect(x0, y0, x1, y1, r):
+    """Polygon of a rectangle with rounded TOP corners only."""
+    pts = []
+    for a in range(180, 271, 5):
+        pts.append((x0 + r + r * math.cos(math.radians(a)), y0 + r + r * math.sin(math.radians(a))))
+    for a in range(270, 361, 5):
+        pts.append((x1 - r + r * math.cos(math.radians(a)), y0 + r + r * math.sin(math.radians(a))))
+    pts += [(x1, y1), (x0, y1)]
+    return pts
+
+
+def opening_mask(size=(W, H)):
+    m = Image.new("L", size, 0)
+    ImageDraw.Draw(m).polygon(rounded_top_rect(OX0, OY0, OX1, OY1, OR), fill=255)
+    return m
+
+
+def crest_mask(size=(W, H)):
+    m = Image.new("L", size, 0)
+    d = ImageDraw.Draw(m)
+    cx, cy = CREST_C
+    rx, ry = CREST_R
+    d.ellipse([cx - rx - 6, cy - ry - 6, cx + rx + 6, cy + ry + 6], fill=255)
+    return m
+
+
+def velvet_column(d, x0, x1, pal, tie_y, side):
+    """Vertical velvet folds from the top to the apron, pinched toward a tie-back at tie_y."""
+    folds = 5
+    tie_x = x0 + (x1 - x0) * (0.35 if side == "left" else 0.65)
+    for y in range(0, 1040):
+        # pinch factor: 1 at the top and bottom, ~0.35 at the tie-back
+        k = 1 - 0.65 * math.exp(-((y - tie_y) / 140.0) ** 2)
+        for x in range(x0, x1):
+            u = tie_x + (x - tie_x) / k                     # un-pinched coordinate
+            ph = (u - x0) / (x1 - x0) * folds * 2 * math.pi
+            v = 0.5 + 0.5 * math.sin(ph)
+            v = v ** 1.6
+            c = tuple(int(pal["lo"][i] + (pal["hi"][i] - pal["lo"][i]) * v * (0.55 + 0.45 * (1 - abs(y - tie_y) / 1040))) for i in range(3))
+            d.point((x, y), fill=c)
+
+
+def sketch(out, palette="ink"):
+    pal = PALETTES[palette]
+    im = Image.new("RGB", (W, H), (11, 10, 18))
+    d = ImageDraw.Draw(im)
+    # the dim stage inside the opening (cut away later): back wall, a soft spotlight pool, a plank floor
+    for y in range(OY0, OY1):
+        t = (y - OY0) / (OY1 - OY0)
+        c = (int(18 + 20 * t), int(22 + 22 * t), int(34 + 26 * t)) if t < 0.68 else (int(52 - 18 * (t - 0.68)), int(56 - 18 * (t - 0.68)), int(72 - 20 * (t - 0.68)))
+        d.line([(OX0, y), (OX1, y)], fill=c)
+    spot = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(spot).ellipse([700, 520, 1220, 900], fill=90)
+    im.paste(Image.new("RGB", (W, H), (120, 126, 150)), (0, 0), spot.filter(ImageFilter.GaussianBlur(60)))
+    d = ImageDraw.Draw(im)
+    # side curtains, outside the arch
+    velvet_column(d, 0, BX0 + 4, pal, 640, "left")
+    velvet_column(d, BX1 - 4, W, pal, 640, "right")
+    # gold tie-back cords with tassels
+    for (xa, xb, tx) in ((0, BX0, 50), (BX1, W, W - 50)):
+        d.line([(xa, 610), (xb, 660)], fill=GOLD, width=12)
+        d.line([(xa, 604), (xb, 654)], fill=GOLD_HI, width=3)
+        d.ellipse([tx - 16, 650, tx + 16, 682], fill=GOLD)
+        d.polygon([(tx - 14, 676), (tx + 14, 676), (tx + 20, 760), (tx - 20, 760)], fill=GOLD_LO)
+    # the swag across the top: scallops with a gold fringe, the crest covers the middle
+    ties = [0, 300, 600, 860, 1060, 1320, 1620, 1920]
+    for a, b in zip(ties, ties[1:]):
+        if a == 860:
+            continue
+        pts_top = [(a, 0), (b, 0)]
+        curve = [(x, 14 + 76 * math.sin(math.pi * (x - a) / (b - a))) for x in range(a, b + 1, 6)]
+        d.polygon(pts_top + curve[::-1], fill=pal["base"])
+        for i, (x, y) in enumerate(curve):
+            if i % 2 == 0:
+                d.line([(x, 0), (x, y - 6)], fill=pal["hi"] if (i // 2) % 3 == 0 else pal["lo"], width=3)
+        d.line(curve, fill=GOLD, width=10)
+        for (x, y) in curve[::3]:
+            d.line([(x, y + 4), (x, y + 16)], fill=GOLD_HI, width=3)
+    for x in ties[1:-1]:
+        if x in (860, 1060):
+            continue
+        d.ellipse([x - 12, 8, x + 12, 32], fill=GOLD)
+        d.polygon([(x - 10, 30), (x + 10, 30), (x + 14, 92), (x - 14, 92)], fill=GOLD_LO)
+    # the gold arch band (outer minus the opening), bevelled, with rosettes
+    band = Image.new("L", (W, H), 0)
+    bd = ImageDraw.Draw(band)
+    bd.polygon(rounded_top_rect(BX0, BY0, BX1, BY1, BR), fill=255)
+    bd.polygon(rounded_top_rect(OX0, OY0, OX1, OY1, OR), fill=0)
+    gold = Image.new("RGB", (W, H), GOLD)
+    im.paste(gold, (0, 0), band)
+    arr = np.array(im).astype(np.int32)
+    bmask = np.array(band) > 0
+    omask = np.array(opening_mask()) > 0
+    from scipy import ndimage
+    dist_in = ndimage.distance_transform_edt(~omask)          # distance from the opening
+    dist_out = ndimage.distance_transform_edt(bmask)          # distance from the band's outer edge
+    shade = np.zeros(bmask.shape)
+    shade[bmask] = np.clip((dist_in[bmask] - 6) / 42.0, 0, 1)
+    lip = bmask & (dist_in <= 7)
+    bead = bmask & (np.abs(dist_in - 26) < 3)
+    outer = bmask & (dist_out < 5)
+    for c in range(3):
+        ch = arr[..., c]
+        ch[bmask] = (GOLD_HI[c] * (1 - shade[bmask]) + GOLD_LO[c] * shade[bmask]).astype(np.int32)
+        ch[bead] = GOLD_HI[c]
+        ch[outer] = GOLD_DK[c]
+        ch[lip] = GOLD_DK[c] // 2
+    im = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8))
+    d = ImageDraw.Draw(im)
+    # rosettes along the band
+    for y in range(220, 1000, 130):
+        for x in (175, W - 175):
+            d.ellipse([x - 13, y - 13, x + 13, y + 13], fill=GOLD_HI)
+            d.ellipse([x - 6, y - 6, x + 6, y + 6], fill=GOLD_DK)
+    for x in list(range(330, 860, 130)) + list(range(1100, 1600, 130)):
+        d.ellipse([x - 12, 94 - 12, x + 12, 94 + 12], fill=GOLD_HI)
+        d.ellipse([x - 5, 94 - 5, x + 5, 94 + 5], fill=GOLD_DK)
+    # the crest: rays, an oval cartouche, an ink medallion with a gold ring, two scrolls
+    cx, cy = CREST_C
+    for k in range(13):
+        a = math.radians(195 + k * 12.5)
+        tip = (cx + 170 * math.cos(a), cy + 130 * math.sin(a))
+        l = (cx + 40 * math.cos(a - 0.12), cy + 40 * math.sin(a - 0.12))
+        r = (cx + 40 * math.cos(a + 0.12), cy + 40 * math.sin(a + 0.12))
+        d.polygon([l, tip, r], fill=GOLD if k % 2 else GOLD_HI)
+    for sx in (-1, 1):
+        d.arc([cx + sx * 120 - 60, cy - 10, cx + sx * 120 + 60, cy + 70], 0, 360, fill=GOLD, width=12)
+    rx, ry = CREST_R
+    d.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=GOLD, outline=GOLD_DK, width=6)
+    d.ellipse([cx - rx + 16, cy - ry + 14, cx + rx - 16, cy + ry - 14], fill=GOLD_HI)
+    d.ellipse([cx - 56, cy - 40, cx + 56, cy + 40], fill=(16, 13, 24), outline=GOLD_DK, width=4)
+    d.ellipse([cx - 30, cy - 20, cx + 30, cy + 20], outline=GOLD, width=5)
+    # the apron: dark wood, a gold nosing, footlights
+    for y in range(OY1, H):
+        t = (y - OY1) / (H - OY1)
+        d.line([(0, y), (W, y)], fill=(int(34 - 20 * t), int(25 - 15 * t), int(18 - 9 * t)))
+    d.rectangle([0, OY1, W, OY1 + 10], fill=GOLD)
+    d.line([(0, OY1 + 2), (W, OY1 + 2)], fill=GOLD_HI, width=2)
+    for x in LAMPS:
+        d.ellipse([x - 34, 1030, x + 34, 1056], fill=(24, 18, 14), outline=GOLD_LO, width=3)
+        d.ellipse([x - 20, 1032, x + 20, 1044], fill=(255, 214, 140))
+    # darker lower corners
+    im = im.convert("RGBA")
+    vig = Image.new("L", (W, H), 0)
+    vd = ImageDraw.Draw(vig)
+    vd.ellipse([-420, 700, 420, 1500], fill=150)
+    vd.ellipse([W - 420, 700, W + 420, 1500], fill=150)
+    im.paste(Image.new("RGBA", (W, H), (6, 5, 10, 255)), (0, 0), vig.filter(ImageFilter.GaussianBlur(90)))
+    im.convert("RGB").save(out)
+    print(out, palette)
+
+
+def finish(src, out):
+    """Cut the opening, then light it: a warm footlight wash over the bottom of the opening (semi-transparent),
+    and each footlight lit on the apron (a screen-blended warm glow; the painting drew the lamps unlit).
+    The painted crest ends above the opening's top edge, so nothing dips into the opening."""
+    im = Image.open(src).convert("RGB").resize((W, H), Image.LANCZOS)
+    o = np.array(opening_mask().filter(ImageFilter.GaussianBlur(1.2))).astype(np.float32) / 255.0
+    rgb = np.array(im).astype(np.float32)
+    yy, xx = np.mgrid[0:H, 0:W]
+    # lamps on the apron: a bright core and a warm halo, screen blend, opaque region only
+    lamp = np.zeros((H, W), np.float32)
+    for x in LAMPS:
+        lamp += 0.95 * np.exp(-(((xx - x) / 16.0) ** 2) - (((yy - 1037) / 6.0) ** 2))
+        lamp += 0.55 * np.exp(-(((xx - x) / 46.0) ** 2) - (((yy - 1030) / 20.0) ** 2))
+    lamp = np.clip(lamp, 0, 1) * (1 - o)
+    warm = np.array([255, 200, 128], np.float32)
+    for c in range(3):
+        rgb[..., c] = 255 - (255 - rgb[..., c]) * (1 - lamp * warm[c] / 255.0)
+    # the footlight wash inside the opening
+    glow = np.zeros((H, W), np.float32)
+    for x in LAMPS:
+        glow += np.exp(-(((xx - x) / 90.0) ** 2) - (((yy - OY1) / 70.0) ** 2))
+    glow += 0.35 * np.exp(-(((yy - OY1) / 55.0) ** 2))
+    glow = np.clip(glow, 0, 1) * 0.42
+    inside = o > 0.5
+    for c in range(3):
+        rgb[..., c] = np.where(inside, warm[c], rgb[..., c])
+    alpha = np.where(inside, glow, 1.0 - o)
+    outim = np.dstack([np.clip(rgb, 0, 255), np.clip(alpha * 255, 0, 255)]).astype(np.uint8)
+    Image.fromarray(outim, "RGBA").save(out, optimize=True)
+    a = outim[..., 3]
+    print(out, "opening alpha==0 share (above the wash)", round(float((a[OY0 + 4:OY1 - 180, OX0 + 4:OX1 - 4] == 0).mean()), 4),
+          "frame opaque share", round(float((a[:, :OX0 - 10] == 255).mean()), 4))
+
+
+if __name__ == "__main__":
+    if sys.argv[1] == "sketch":
+        sketch(sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else "ink")
+    elif sys.argv[1] == "finish":
+        finish(sys.argv[2], sys.argv[3])
+    else:
+        raise SystemExit("sketch | finish")

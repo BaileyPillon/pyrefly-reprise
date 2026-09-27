@@ -1,0 +1,1695 @@
+{
+"P2": {
+"a": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"seymour-flux": [
+[
+3.0,
+0,
+-6.9
+]
+],
+"mortiorchis": [
+[
+0.4,
+1.05,
+-7.0
+]
+],
+"tidus": [
+[
+-0.3,
+0,
+1.6
+]
+],
+"yuna": [
+[
+1.05,
+0,
+-0.85
+]
+],
+"kimahri": [
+[
+0.35,
+0,
+-2.9
+]
+]
+},
+"cam": [
+-0.5,
+2.45,
+8.6
+],
+"look": [
+1.35,
+2.2,
+-6.8
+],
+"fov": 26.5,
+"bg": [
+1.45,
+7,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+}
+},
+"b": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"seymour-flux": [
+[
+3.0,
+0,
+-6.9
+]
+],
+"mortiorchis": [
+[
+0.4,
+1.05,
+-7.0
+]
+],
+"tidus": [
+[
+-0.3,
+0,
+1.6
+]
+],
+"yuna": [
+[
+1.05,
+0,
+-0.85
+]
+],
+"kimahri": [
+[
+0.35,
+0,
+-2.9
+]
+]
+},
+"cam": [
+1.19,
+2.37,
+3.9
+],
+"look": [
+3.0,
+2.3,
+-6.9
+],
+"fov": 36,
+"bg": [
+1.5,
+8,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+}
+}
+},
+"P2h": {
+"a": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"seymour-flux": [
+[
+3.0,
+0,
+-6.9
+]
+],
+"mortiorchis": [
+[
+0.4,
+1.05,
+-7.0
+]
+],
+"tidus": [
+[
+-0.3,
+0,
+1.6
+]
+],
+"yuna": [
+[
+1.05,
+0,
+-0.85
+]
+],
+"kimahri": [
+[
+0.35,
+0,
+-2.9
+]
+]
+},
+"cam": [
+-0.5,
+3.35,
+10.4
+],
+"look": [
+1.3,
+1.55,
+-6.9
+],
+"fov": 27,
+"bg": [
+1.4,
+4,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+}
+}
+},
+"P2l": {
+"a": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"seymour-flux": [
+[
+3.0,
+0,
+-6.2
+]
+],
+"mortiorchis": [
+[
+0.5,
+1.05,
+-6.3
+]
+],
+"tidus": [
+[
+-0.3,
+0,
+1.6
+]
+],
+"yuna": [
+[
+1.05,
+0,
+-0.85
+]
+],
+"kimahri": [
+[
+0.35,
+0,
+-2.9
+]
+]
+},
+"cam": [
+-0.55,
+1.64,
+7.9
+],
+"look": [
+1.35,
+2.35,
+-6.9
+],
+"fov": 23,
+"bg": [
+1.6,
+10,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+}
+}
+},
+"P2wd": {
+"a": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"seymour-flux": [
+[
+3.0,
+0,
+-6.9
+]
+],
+"mortiorchis": [
+[
+0.4,
+1.05,
+-7.0
+]
+],
+"tidus": [
+[
+-0.55,
+0,
+2.2
+]
+],
+"yuna": [
+[
+1.05,
+0,
+1.0
+]
+],
+"kimahri": [
+[
+0.1,
+0,
+-0.9
+]
+]
+},
+"cam": [
+-0.9,
+2.3,
+7.2
+],
+"look": [
+1.2,
+2.0,
+-6.9
+],
+"fov": 45,
+"bg": [
+1.7,
+9,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+},
+"ground": [
+1.6,
+0
+]
+}
+},
+"P2r": {
+"a": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"seymour-flux": [
+[
+0.3,
+0,
+-6.9
+]
+],
+"mortiorchis": [
+[
+-2.3,
+1.05,
+-7.2
+]
+],
+"tidus": [
+[
+2.35,
+0,
+1.2
+]
+],
+"yuna": [
+[
+1.25,
+0,
+-1.1
+]
+],
+"kimahri": [
+[
+2.2,
+0,
+-2.9
+]
+]
+},
+"cam": [
+3.3,
+2.9,
+9.8
+],
+"look": [
+0.9,
+1.9,
+-6.9
+],
+"fov": 26.5,
+"bg": [
+1.45,
+7,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+}
+}
+},
+"P3": {
+"a": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34-hi.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"tidus": [
+[
+-0.053,
+0,
+3.26
+]
+],
+"yuna": [
+[
+1.792,
+0,
+-0.458
+]
+],
+"kimahri": [
+[
+-0.079,
+0,
+-1.841
+]
+],
+"seymour-flux": [
+[
+4.825,
+0,
+-5.575
+]
+],
+"mortiorchis": [
+[
+2.583,
+1.2,
+-6.623
+]
+]
+},
+"cam": [
+-0.2,
+1.95,
+6.9
+],
+"look": [
+2.283,
+1.55,
+-5.866
+],
+"fov": 40,
+"bg": [
+1.6,
+9,
+0
+],
+"softbg": 7,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+},
+"ground": [
+1.6,
+0
+]
+},
+"b": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34-hi.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"tidus": [
+[
+-0.325,
+0,
+3.153
+]
+],
+"yuna": [
+[
+1.576,
+0,
+-0.859
+]
+],
+"kimahri": [
+[
+-0.208,
+0,
+-2.429
+]
+],
+"seymour-flux": [
+[
+4.55,
+0,
+-6.192
+]
+],
+"mortiorchis": [
+[
+2.357,
+1.2,
+-7.23
+]
+]
+},
+"cam": [
+-0.35,
+1.9,
+5.9
+],
+"look": [
+2.133,
+1.7,
+-6.866
+],
+"fov": 40,
+"bg": [
+1.6,
+9,
+0
+],
+"softbg": 7,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+},
+"ground": [
+1.6,
+0
+]
+}
+},
+"P21": {
+"a": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34-hi.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"tidus": [
+[
+-0.053,
+0,
+3.26
+]
+],
+"yuna": [
+[
+1.792,
+0,
+-0.458
+]
+],
+"kimahri": [
+[
+-0.079,
+0,
+-1.841
+]
+],
+"seymour-flux": [
+[
+4.825,
+0,
+-5.575
+]
+],
+"mortiorchis": [
+[
+2.583,
+1.2,
+-6.623
+]
+]
+},
+"cam": [
+-0.2,
+1.95,
+6.9
+],
+"look": [
+2.283,
+1.55,
+-5.866
+],
+"fov": 44,
+"bg": [
+1.6,
+9,
+0
+],
+"softbg": 7,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+},
+"ground": [
+1.6,
+0
+],
+"band": {
+"hud": {
+"chips": [
+[
+".ffx-cmd-info",
+60,
+36
+],
+[
+".sgd__toggle",
+620,
+14
+],
+[
+".mad__toggle",
+620,
+52
+],
+[
+".ffx-sensor",
+620,
+90
+],
+[
+".eint__toggle",
+860,
+14
+]
+]
+}
+},
+"bokeh": [
+{
+"ndc": [
+-0.9,
+0.5
+],
+"d": 2.4,
+"s": 0.2,
+"o": 0.3
+},
+{
+"ndc": [
+0.62,
+0.6
+],
+"d": 2.6,
+"s": 0.16,
+"o": 0.26
+},
+{
+"ndc": [
+0.97,
+0.08
+],
+"d": 2.2,
+"s": 0.22,
+"o": 0.2
+}
+]
+},
+"b": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"seymour-flux": [
+[
+3.0,
+0,
+-6.9
+]
+],
+"mortiorchis": [
+[
+0.4,
+1.05,
+-7.0
+]
+],
+"tidus": [
+[
+-0.3,
+0,
+1.6
+]
+],
+"yuna": [
+[
+1.05,
+0,
+-0.85
+]
+],
+"kimahri": [
+[
+0.35,
+0,
+-2.9
+]
+]
+},
+"cam": [
+-0.5,
+2.45,
+8.6
+],
+"look": [
+1.35,
+2.2,
+-6.8
+],
+"fov": 34,
+"bg": [
+1.45,
+7,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+},
+"band": {
+"hud": {
+"chips": [
+[
+".ffx-cmd-info",
+60,
+36
+],
+[
+".sgd__toggle",
+620,
+14
+],
+[
+".mad__toggle",
+620,
+52
+],
+[
+".ffx-sensor",
+620,
+90
+],
+[
+".eint__toggle",
+860,
+14
+]
+]
+}
+},
+"bokeh": [
+{
+"ndc": [
+-0.9,
+0.5
+],
+"d": 2.4,
+"s": 0.2,
+"o": 0.3
+},
+{
+"ndc": [
+0.62,
+0.6
+],
+"d": 2.6,
+"s": 0.16,
+"o": 0.26
+},
+{
+"ndc": [
+0.97,
+0.08
+],
+"d": 2.2,
+"s": 0.22,
+"o": 0.2
+}
+]
+}
+},
+"P22": {
+"a": {
+"height": {
+"seymour-flux": 5.6,
+"mortiorchis": 3.1
+},
+"pos": {
+"tidus": [
+[
+0.05,
+0,
+2.6
+]
+],
+"yuna": [
+[
+-1.25,
+0,
+1.75
+]
+],
+"kimahri": [
+[
+1.3,
+0,
+1.6
+]
+],
+"seymour-flux": [
+[
+1.45,
+0,
+-4.6
+]
+],
+"mortiorchis": [
+[
+-1.5,
+1.6,
+-5.4
+]
+]
+},
+"cam": [
+0.1,
+1.55,
+10.2
+],
+"look": [
+0.3,
+2.2,
+-2.0
+],
+"fov": 32,
+"bg": [
+1.35,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 14140159,
+"rimStrength": 1.3,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6,
+"bounce": 10470655,
+"bounceStrength": 0.14
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6
+},
+"bokeh": [
+{
+"ndc": [
+-0.88,
+0.6
+],
+"d": 2.2,
+"s": 0.24,
+"o": 0.3
+},
+{
+"ndc": [
+0.85,
+0.7
+],
+"d": 2.6,
+"s": 0.18,
+"o": 0.26
+},
+{
+"ndc": [
+-0.6,
+-0.7
+],
+"d": 2.0,
+"s": 0.2,
+"o": 0.22
+},
+{
+"ndc": [
+0.75,
+-0.55
+],
+"d": 2.3,
+"s": 0.16,
+"o": 0.2
+}
+],
+"grade": {
+"saturation": 1.14,
+"vignette": 0.58
+},
+"hudOff": true,
+"noRing": true
+},
+"b": {
+"height": {
+"seymour-flux": 5.6,
+"mortiorchis": 3.1
+},
+"pos": {
+"tidus": [
+[
+0.05,
+0,
+2.6
+]
+],
+"yuna": [
+[
+-1.25,
+0,
+1.75
+]
+],
+"kimahri": [
+[
+1.3,
+0,
+1.6
+]
+],
+"seymour-flux": [
+[
+1.45,
+0,
+-4.6
+]
+],
+"mortiorchis": [
+[
+-1.5,
+1.6,
+-5.4
+]
+]
+},
+"cam": [
+0.1,
+1.55,
+10.2
+],
+"look": [
+0.3,
+2.2,
+-2.0
+],
+"fov": 32,
+"bg": [
+1.35,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 14140159,
+"rimStrength": 1.3,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6,
+"bounce": 10470655,
+"bounceStrength": 0.14
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6
+},
+"bokeh": [
+{
+"ndc": [
+-0.88,
+0.6
+],
+"d": 2.2,
+"s": 0.24,
+"o": 0.3
+},
+{
+"ndc": [
+0.85,
+0.7
+],
+"d": 2.6,
+"s": 0.18,
+"o": 0.26
+},
+{
+"ndc": [
+-0.6,
+-0.7
+],
+"d": 2.0,
+"s": 0.2,
+"o": 0.22
+},
+{
+"ndc": [
+0.75,
+-0.55
+],
+"d": 2.3,
+"s": 0.16,
+"o": 0.2
+}
+],
+"grade": {
+"saturation": 1.14,
+"vignette": 0.58
+},
+"hudOff": false,
+"noRing": true
+},
+"c": {
+"height": {
+"seymour-flux": 5.6,
+"mortiorchis": 3.1
+},
+"pos": {
+"tidus": [
+[
+0.05,
+0,
+2.6
+]
+],
+"yuna": [
+[
+-1.25,
+0,
+1.75
+]
+],
+"kimahri": [
+[
+1.3,
+0,
+1.6
+]
+],
+"seymour-flux": [
+[
+1.45,
+0,
+-4.6
+]
+],
+"mortiorchis": [
+[
+-1.5,
+1.6,
+-5.4
+]
+]
+},
+"cam": [
+0.1,
+1.55,
+10.2
+],
+"look": [
+0.3,
+2.2,
+-2.0
+],
+"fov": 32,
+"bg": [
+1.35,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 14140159,
+"rimStrength": 1.3,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6,
+"bounce": 10470655,
+"bounceStrength": 0.14
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6
+},
+"bokeh": [
+{
+"ndc": [
+-0.88,
+0.6
+],
+"d": 2.2,
+"s": 0.24,
+"o": 0.3
+},
+{
+"ndc": [
+0.85,
+0.7
+],
+"d": 2.6,
+"s": 0.18,
+"o": 0.26
+},
+{
+"ndc": [
+-0.6,
+-0.7
+],
+"d": 2.0,
+"s": 0.2,
+"o": 0.22
+},
+{
+"ndc": [
+0.75,
+-0.55
+],
+"d": 2.3,
+"s": 0.16,
+"o": 0.2
+}
+],
+"grade": {
+"saturation": 1.14,
+"vignette": 0.58
+},
+"hudOff": true,
+"noRing": true,
+"poses": {
+"tidus": "victory",
+"yuna": "victory",
+"kimahri": "victory"
+},
+"dissolve": {
+"seymour-flux": 0.28,
+"mortiorchis": 0.28
+}
+}
+},
+"P16cmd": {
+"a": {
+"swap": {
+"tidus": "/mock-art/tidus/rear34-hi.png",
+"yuna": "/mock-art/yuna/rear34.png",
+"kimahri": "/mock-art/kimahri/rear34.png"
+},
+"pos": {
+"tidus": [
+[
+-0.053,
+0,
+3.26
+]
+],
+"yuna": [
+[
+1.792,
+0,
+-0.458
+]
+],
+"kimahri": [
+[
+-0.079,
+0,
+-1.841
+]
+],
+"seymour-flux": [
+[
+4.825,
+0,
+-5.575
+]
+],
+"mortiorchis": [
+[
+2.583,
+1.2,
+-6.623
+]
+]
+},
+"cam": [
+-0.2,
+1.95,
+6.9
+],
+"look": [
+2.283,
+1.55,
+-5.866
+],
+"fov": 40,
+"bg": [
+1.6,
+9,
+0
+],
+"softbg": 7,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 1.15,
+"rimDir": [
+0.35,
+1
+],
+"rimWidth": 3.2,
+"bounce": 10470655,
+"bounceStrength": 0.12
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+-1,
+0.35
+],
+"rimWidth": 3.4
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+},
+"ground": [
+1.6,
+0
+]
+}
+},
+"P16hit": {
+"a": {
+"pos": {
+"tidus": [
+[
+2.2,
+0,
+-1.9
+]
+],
+"kimahri": [
+[
+-2.1,
+0,
+-2.7
+]
+],
+"yuna": [
+[
+-3.1,
+0,
+-1.7
+]
+],
+"seymour-flux": [
+[
+4.6,
+0,
+-2.6
+]
+],
+"mortiorchis": [
+[
+2.9,
+1.6,
+-3.6
+]
+]
+},
+"poses": {
+"tidus": "attack"
+},
+"cam": [
+0.2,
+1.1,
+24
+],
+"look": [
+0.2,
+1.9,
+-2
+],
+"fov": 19,
+"bg": [
+1.25,
+5.0,
+0
+],
+"ground": [
+2.4,
+6
+],
+"softbg": 4,
+"rimParty": {
+"rim": 16767440,
+"rimStrength": 0.9,
+"rimDir": [
+1,
+0.3
+],
+"rimWidth": 2.8
+},
+"grade": {
+"saturation": 1.12,
+"vignette": 0.5
+},
+"hudOff": true,
+"noRing": true,
+"impact": {
+"id": "seymour-flux",
+"ms": 60
+}
+}
+},
+"P16win": {
+"a": {
+"height": {
+"seymour-flux": 5.6,
+"mortiorchis": 3.1
+},
+"pos": {
+"tidus": [
+[
+0.05,
+0,
+2.6
+]
+],
+"yuna": [
+[
+-1.25,
+0,
+1.75
+]
+],
+"kimahri": [
+[
+1.3,
+0,
+1.6
+]
+],
+"seymour-flux": [
+[
+1.45,
+0,
+-4.6
+]
+],
+"mortiorchis": [
+[
+-1.5,
+1.6,
+-5.4
+]
+]
+},
+"cam": [
+0.1,
+1.55,
+10.2
+],
+"look": [
+0.3,
+2.2,
+-2.0
+],
+"fov": 32,
+"bg": [
+1.35,
+6,
+0
+],
+"softbg": 5,
+"rimParty": {
+"rim": 14140159,
+"rimStrength": 1.3,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6,
+"bounce": 10470655,
+"bounceStrength": 0.14
+},
+"rimBoss": {
+"rim": 13625087,
+"rimStrength": 1.0,
+"rimDir": [
+0,
+1
+],
+"rimWidth": 3.6
+},
+"bokeh": [
+{
+"ndc": [
+-0.88,
+0.6
+],
+"d": 2.2,
+"s": 0.24,
+"o": 0.3
+},
+{
+"ndc": [
+0.85,
+0.7
+],
+"d": 2.6,
+"s": 0.18,
+"o": 0.26
+},
+{
+"ndc": [
+-0.6,
+-0.7
+],
+"d": 2.0,
+"s": 0.2,
+"o": 0.22
+},
+{
+"ndc": [
+0.75,
+-0.55
+],
+"d": 2.3,
+"s": 0.16,
+"o": 0.2
+}
+],
+"grade": {
+"saturation": 1.14,
+"vignette": 0.58
+},
+"hudOff": true,
+"noRing": true,
+"poses": {
+"tidus": "victory",
+"yuna": "victory",
+"kimahri": "victory"
+},
+"dissolve": {
+"seymour-flux": 0.28,
+"mortiorchis": 0.28
+}
+}
+}
+}

@@ -1,0 +1,7236 @@
+{
+ "round": "battle perspectives 2026-09-27",
+ "rig": "stills rig A",
+ "stage": "1, 2 and the final floor-plate pass",
+ "size": [
+  1920,
+  1080
+ ],
+ "moment": "seed 1, the lead member's first command menu, presenter paused; guide, best-move and enemy-intent panels folded to their chips",
+ "worktree": "D:/pyrefly-mock-persp (detached d74b53f7, no src/ change)",
+ "frames": [
+  {
+   "option": "P0",
+   "name": "Today",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P00-today.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     0,
+     3.05,
+     9.5
+    ],
+    "lookAt": [
+     0.15,
+     1.35,
+     -1.2
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "Nothing: today's idle master rig (camera sway held at 0 for a still).",
+   "bossHeightPct": 40.8,
+   "bossNote": null,
+   "bossGroupHeightPct": 40.8,
+   "bossVisibleHeightPct": 40.8,
+   "leadFigurePx": 416,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.02,
+    "party": 0.26,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The party reads as three cut-outs turned to the viewer; the boss is only 41% of the height and sits small at the upper right.",
+   "alternates": [],
+   "params": {}
+  },
+  {
+   "option": "P0m",
+   "name": "Today, mirrored",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P00m-today-mirrored.jpg",
+   "provenance": "COMPOSITE (mirrored stand-in)",
+   "standIns": [
+    "every painting mirrored (chiral: asymmetric outfits, Kimahri's broken horn) - stand-in, a build would re-roll them",
+    "plate mirrored too (reads better: light and moon stay consistent with the mirrored key light)",
+    "HUD mirrored as a mock (per-element move, the skew is not flipped)"
+   ],
+   "camera": {
+    "position": [
+     0,
+     3.05,
+     9.5
+    ],
+    "lookAt": [
+     0.15,
+     1.35,
+     -1.2
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "Real engine: today's master; the whole 3D scene reflected about the camera axis (x -> -x), so the party stands right facing left and the boss left facing right. HUD blocks moved to their mirror positions as a mock.",
+   "bossHeightPct": 42.5,
+   "bossNote": null,
+   "bossGroupHeightPct": 42.5,
+   "bossVisibleHeightPct": 42.5,
+   "leadFigurePx": 407,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.02,
+    "party": 0.1,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Stand-in: Tidus's asymmetric outfit, Kimahri's broken horn and the moon are all flipped; a real version needs re-rolled paintings and a HUD layout.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P00m-today-mirrored-b.jpg",
+     "note": "HUD left as today (not mirrored): the party rows then cover Tidus"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P00m-today-mirrored-c.jpg",
+     "note": "plate kept unmirrored (moon stays top-left), HUD mirrored"
+    }
+   ],
+   "params": {}
+  },
+  {
+   "option": "P1",
+   "name": "Today, dressed",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P01-today-dressed.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     0,
+     3.05,
+     9.5
+    ],
+    "lookAt": [
+     0.15,
+     1.35,
+     -1.2
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "Today's camera and staging; far plate and parallax layers swapped for pre-blurred copies (a real-time far-plane DoF), rim light from the boss side on the party and a moon/hole rim on the boss (the actors' rim uniform), contact shadows 0.48 -> 0.72, out-of-focus foreground silhouettes (camera-facing cards with pre-blurred textures), soft bokeh sprites near the lens, a little more mist, saturation +6%.",
+   "bossHeightPct": 41.9,
+   "bossNote": null,
+   "bossGroupHeightPct": 41.9,
+   "bossVisibleHeightPct": 41.9,
+   "leadFigurePx": 411,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.02,
+    "party": 0.25,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Same angle as today; the dressing is subtle at phone size and two of the three foreground silhouettes sit under the HUD.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P01-today-dressed-b.jpg",
+     "note": "lighter treatment: one foreground silhouette, three bokeh sprites"
+    }
+   ],
+   "params": {
+    "rimParty": {
+     "rim": 16766648,
+     "rimStrength": 0.8,
+     "rimDir": [
+      1,
+      0.3
+     ],
+     "rimWidth": 2.6,
+     "bounce": 10470655,
+     "bounceStrength": 0.16
+    },
+    "rimBoss": {
+     "rim": 14085375,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.35
+     ],
+     "rimWidth": 3.4
+    },
+    "softbg": 5,
+    "fg": [
+     {
+      "at": [
+       -0.62,
+       0.86
+      ],
+      "d": 2.2,
+      "sw": 0.78,
+      "aspect": 0.36,
+      "blur": 12,
+      "color": "#081222",
+      "top": "#04080f",
+      "pts": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        0.97,
+        0.12
+       ],
+       [
+        0.86,
+        0.22
+       ],
+       [
+        0.8,
+        0.14
+       ],
+       [
+        0.7,
+        0.4
+       ],
+       [
+        0.62,
+        0.2
+       ],
+       [
+        0.52,
+        0.3
+       ],
+       [
+        0.44,
+        0.62
+       ],
+       [
+        0.37,
+        0.34
+       ],
+       [
+        0.26,
+        0.5
+       ],
+       [
+        0.16,
+        0.36
+       ],
+       [
+        0.08,
+        0.8
+       ],
+       [
+        0,
+        0.95
+       ]
+      ]
+     },
+     {
+      "at": [
+       -0.78,
+       -0.86
+      ],
+      "d": 2,
+      "sw": 0.5,
+      "aspect": 0.5,
+      "blur": 12,
+      "color": "#050a14",
+      "top": "#10203a",
+      "pts": [
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        0.35
+       ],
+       [
+        0.1,
+        0.22
+       ],
+       [
+        0.24,
+        0.3
+       ],
+       [
+        0.38,
+        0.12
+       ],
+       [
+        0.55,
+        0.3
+       ],
+       [
+        0.7,
+        0.42
+       ],
+       [
+        0.84,
+        0.66
+       ],
+       [
+        1,
+        1
+       ]
+      ]
+     },
+     {
+      "at": [
+       0.33,
+       -0.99
+      ],
+      "d": 2,
+      "sw": 0.34,
+      "aspect": 0.3,
+      "blur": 12,
+      "color": "#0a1528",
+      "top": "#2a4670",
+      "pts": [
+       [
+        0,
+        1
+       ],
+       [
+        0.1,
+        0.62
+       ],
+       [
+        0.24,
+        0.45
+       ],
+       [
+        0.4,
+        0.36
+       ],
+       [
+        0.55,
+        0.4
+       ],
+       [
+        0.72,
+        0.55
+       ],
+       [
+        0.88,
+        0.72
+       ],
+       [
+        1,
+        1
+       ]
+      ]
+     }
+    ],
+    "bokeh": [
+     {
+      "ndc": [
+       -0.9,
+       0.5
+      ],
+      "d": 2.4,
+      "s": 0.2,
+      "o": 0.3
+     },
+     {
+      "ndc": [
+       0.62,
+       0.93
+      ],
+      "d": 2.6,
+      "s": 0.16,
+      "o": 0.26
+     },
+     {
+      "ndc": [
+       0.97,
+       0.08
+      ],
+      "d": 2.2,
+      "s": 0.22,
+      "o": 0.2
+     },
+     {
+      "ndc": [
+       -0.3,
+       0.64
+      ],
+      "d": 3.2,
+      "s": 0.12,
+      "o": 0.22
+     },
+     {
+      "ndc": [
+       0.12,
+       0.84
+      ],
+      "d": 2.8,
+      "s": 0.1,
+      "o": 0.24
+     },
+     {
+      "ndc": [
+       -0.98,
+       -0.1
+      ],
+      "d": 2,
+      "s": 0.24,
+      "o": 0.18
+     }
+    ],
+    "tilt": {
+     "maxBlur": 6,
+     "bandWidth": 0.22,
+     "focus": 0.44
+    },
+    "grade": {
+     "saturation": 1.14,
+     "vignette": 0.52
+    },
+    "mist": {
+     "mist-3": 0.22,
+     "mist-2": 0.26
+    }
+   }
+  },
+  {
+   "option": "P2-without",
+   "name": "Over the Shoulder, today's paintings",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P02w-over-the-shoulder-without.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     -0.35,
+     2.5,
+     8.4
+    ],
+    "lookAt": [
+     1.4,
+     2.25,
+     -6.6
+    ],
+    "fov": 27,
+    "roll": 0
+   },
+   "changed": "Camera behind and beside the party at about 1.3h looking at the boss's chest; party re-placed in an arc in front of the camera, boss moved closer; every plane turned to face the lens (yaw only). No new art, so each figure shows its painted front.",
+   "bossHeightPct": 56.4,
+   "bossNote": null,
+   "bossGroupHeightPct": 56.4,
+   "bossVisibleHeightPct": 56.4,
+   "leadFigurePx": 634,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.06,
+    "party": 0.16,
+    "overlaps": [
+     "boss",
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Not a candidate, an explanation: every figure shows its painted front, so the party seems to face the camera and turn its back on Seymour.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P02w-over-the-shoulder-without-b.jpg",
+     "note": "spec distance (camera about 0.45D behind): the party is huge and cropped, Yuna under the party rows"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P02w-over-the-shoulder-without-c.jpg",
+     "note": "a little wider; Kimahri hidden behind Tidus"
+    }
+   ],
+   "params": {
+    "pos": {
+     "seymour-flux": [
+      [
+       3.15,
+       0,
+       -6.6
+      ]
+     ],
+     "mortiorchis": [
+      [
+       0.6,
+       1.01,
+       -6.6
+      ]
+     ],
+     "tidus": [
+      [
+       -0.15,
+       0,
+       2
+      ]
+     ],
+     "yuna": [
+      [
+       1.05,
+       0,
+       1.2
+      ]
+     ],
+     "kimahri": [
+      [
+       0.1,
+       0,
+       -1.3
+      ]
+     ]
+    },
+    "cam": [
+     -0.35,
+     2.5,
+     8.4
+    ],
+    "look": [
+     1.4,
+     2.25,
+     -6.6
+    ],
+    "fov": 27,
+    "bg": [
+     1.45,
+     7,
+     0
+    ]
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P4",
+   "name": "Reverse Angle",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P04-reverse-angle.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "far plate = the art agent's painted reverse plate (candidate)",
+    "boss = its rear34 candidate, darkened and rim-lit; Mortiorchis (Ch I) has no rear painting and stays a silhouette",
+    "the stage-1 stand-in version (mirrored + blurred plate, front-painting silhouette) is kept as an alternate"
+   ],
+   "camera": {
+    "position": [
+     11.4,
+     1.7,
+     -13.7
+    ],
+    "lookAt": [
+     0.7,
+     1.75,
+     -1
+    ],
+    "fov": 29,
+    "roll": 0
+   },
+   "changed": "As stage 1 with the painted far-side plate (centred on the view, softened 3 px) and the boss's rear painting swapped in, lit at half brightness with a strong cool rim.",
+   "bossHeightPct": 83.6,
+   "bossGroupHeightPct": 102.7,
+   "bossVisibleHeightPct": 85.7,
+   "leadFigurePx": 193,
+   "hudOverlap": {
+    "boss": 0.31,
+    "party": 0,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The party is only ~190 px; Mortiorchis has no rear painting; the turn order sits over Seymour's shoulder.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P04-reverse-angle-standin.jpg",
+     "note": "stage-1 version with the stand-in plate (today's plate mirrored + blurred) and a front-painting silhouette"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P04-reverse-angle-b.jpg",
+     "note": "closer silhouette, wider lens"
+    }
+   ],
+   "swaps": {
+    "seymour-flux": {
+     "baselineY": 1072,
+     "scale": 1.116,
+     "size": [
+      2.877,
+      4.162
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "pos": {
+     "seymour-flux": [
+      [
+       3.54,
+       0,
+       -7.6
+      ]
+     ],
+     "mortiorchis": [
+      [
+       2.6,
+       2.3,
+       -9.8
+      ]
+     ]
+    },
+    "swap": {
+     "seymour-flux": "/mock-art/seymour-flux-body/rear34.png"
+    },
+    "swapFacing": {
+     "seymour-flux": "left"
+    },
+    "cam": [
+     11.4,
+     1.7,
+     -13.7
+    ],
+    "look": [
+     0.7,
+     1.75,
+     -1
+    ],
+    "fov": 29,
+    "clear": [
+     [
+      11.4,
+      -13.7,
+      7
+     ]
+    ],
+    "plate": {
+     "url": "/mock-art/gagazet/plate-reverse.png",
+     "y": 0,
+     "dist": 56,
+     "k": 1.15,
+     "blur": 3
+    },
+    "set": {
+     "seymour-flux": {
+      "brightness": 0.55,
+      "tint": 12108799,
+      "desaturate": 0.2,
+      "rim": 13625087,
+      "rimStrength": 1.6,
+      "rimDir": [
+       -1,
+       0.5
+      ],
+      "rimWidth": 3.2
+     },
+     "mortiorchis": {
+      "brightness": 0.16,
+      "tint": 7309000,
+      "desaturate": 0.55,
+      "rim": 13625087,
+      "rimStrength": 1.6,
+      "rimDir": [
+       -1,
+       0.45
+      ],
+      "rimWidth": 3
+     }
+    }
+   },
+   "replacesStage1": "the stage-1 stand-in frame, now an alternate"
+  },
+  {
+   "option": "P5",
+   "name": "Side Stage",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P05-side-stage.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     -0.45,
+     1.45,
+     23
+    ],
+    "lookAt": [
+     -0.45,
+     1.05,
+     -2
+    ],
+    "fov": 21,
+    "roll": 0
+   },
+   "changed": "Everyone re-placed on one line across the frame; camera square to that line at about 0.8h, long lens (fov 19-21), 23-24 units back; plate re-framed for the lower camera and the ground plane widened so the floor runs to the lens.",
+   "bossHeightPct": 43.1,
+   "bossNote": null,
+   "bossGroupHeightPct": 43.1,
+   "bossVisibleHeightPct": 43.1,
+   "leadFigurePx": 221,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.1,
+    "party": 0,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The long lens flattens everything and the figures are ~220 px; at the spec's upper-third horizon (alt b) the lower half is an empty floor under the HUD.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P05-side-stage-b.jpg",
+     "note": "spec height 0.6h with the horizon in the upper third: an empty floor band under the HUD"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P05-side-stage-c.jpg",
+     "note": "camera at 1.3h looking down"
+    }
+   ],
+   "params": {
+    "pos": {
+     "tidus": [
+      [
+       -0.6,
+       0,
+       -1.3
+      ]
+     ],
+     "kimahri": [
+      [
+       -1.7,
+       0,
+       -2.7
+      ]
+     ],
+     "yuna": [
+      [
+       -2.7,
+       0,
+       -1.7
+      ]
+     ],
+     "seymour-flux": [
+      [
+       4.6,
+       0,
+       -2.6
+      ]
+     ],
+     "mortiorchis": [
+      [
+       2.6,
+       1.15,
+       -3.4
+      ]
+     ]
+    },
+    "cam": [
+     -0.45,
+     1.45,
+     23
+    ],
+    "look": [
+     -0.45,
+     1.05,
+     -2
+    ],
+    "fov": 21,
+    "bg": [
+     1.25,
+     6.5,
+     0
+    ],
+    "ground": [
+     2.4,
+     6
+    ]
+   }
+  },
+  {
+   "option": "P5m",
+   "name": "Side Stage, mirrored",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P05m-side-stage-mirrored.jpg",
+   "provenance": "COMPOSITE (mirrored stand-in)",
+   "standIns": [
+    "every painting mirrored (chiral subjects) - stand-in"
+   ],
+   "camera": {
+    "position": [
+     0,
+     1.6,
+     23
+    ],
+    "lookAt": [
+     0,
+     0.75,
+     -2
+    ],
+    "fov": 21,
+    "roll": 0
+   },
+   "changed": "As P5 with the sides swapped: party on the right facing left, boss on the left facing right (negative plane scale). Plate not mirrored.",
+   "bossHeightPct": 42.1,
+   "bossNote": null,
+   "bossGroupHeightPct": 42,
+   "bossVisibleHeightPct": 42,
+   "leadFigurePx": 217,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.15,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Mirrored paintings are a stand-in; Seymour ends up close to the help line and the chips land on the party.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P05m-side-stage-mirrored-b.jpg",
+     "note": "boss further left, over the help line and command list"
+    }
+   ],
+   "params": {
+    "mirror": true,
+    "pos": {
+     "tidus": [
+      [
+       2.55,
+       0,
+       -1.3
+      ]
+     ],
+     "kimahri": [
+      [
+       3.55,
+       0,
+       -2.7
+      ]
+     ],
+     "yuna": [
+      [
+       4.45,
+       0,
+       -1.7
+      ]
+     ],
+     "seymour-flux": [
+      [
+       -1.3,
+       0,
+       -2.6
+      ]
+     ],
+     "mortiorchis": [
+      [
+       0.55,
+       1.15,
+       -3.4
+      ]
+     ]
+    },
+    "cam": [
+     0,
+     1.6,
+     23
+    ],
+    "look": [
+     0,
+     0.75,
+     -2
+    ],
+    "fov": 21,
+    "bg": [
+     1.25,
+     6,
+     0
+    ],
+    "ground": [
+     2.4,
+     6
+    ]
+   }
+  },
+  {
+   "stage": 3,
+   "pass": "final (floor plates)",
+   "option": "P6",
+   "name": "Diorama",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P06-diorama.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "floor = the art agent's painted Gagazet floor plate (candidate), laid 1:1 on the scene's ground mesh",
+    "the stage-1 version on today's tiled ground is kept as frames/alt/ffx-ch1-P06-diorama-standin.jpg"
+   ],
+   "camera": {
+    "position": [
+     -3.661,
+     13.929,
+     14.707
+    ],
+    "lookAt": [
+     0.9,
+     1,
+     -1.2
+    ],
+    "fov": 24,
+    "roll": 0
+   },
+   "changed": "Camera 38 degrees up, fov 24, 21 units out; the painted floor plate (4096 px, straight down) replaces the tiled ground and the procedural snow drifts, lit by the scene's moon key; tilt-shift band across the actors; contact shadows 0.7; saturation +12%.",
+   "bossHeightPct": 37.9,
+   "bossNote": null,
+   "bossGroupHeightPct": 38,
+   "bossVisibleHeightPct": 38,
+   "leadFigurePx": 192,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The figures are ~190 px; the painted ice pockets glow like light sources (the art agent's own note); the command list covers the left of the floor.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P06-diorama-floor-b.jpg",
+     "note": "27 degrees, fov 23, from further back: more backdrop, smaller figures"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P06-diorama-standin.jpg",
+     "note": "stage-1 kept frame on today's ground (stand-in floor)"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P06-diorama-b.jpg",
+     "note": "stage 1, today's ground: 27 degrees, fov 23"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P06-diorama-c.jpg",
+     "note": "stage 1, today's ground: 40 degrees and closer: no plate in view at all"
+    }
+   ],
+   "params": {
+    "pos": {
+     "tidus": [
+      [
+       -1.4,
+       0,
+       1.2
+      ]
+     ],
+     "yuna": [
+      [
+       0.4,
+       0,
+       1
+      ]
+     ],
+     "kimahri": [
+      [
+       -0.5,
+       0,
+       -0.5
+      ]
+     ],
+     "seymour-flux": [
+      [
+       3.4,
+       0,
+       -3
+      ]
+     ],
+     "mortiorchis": [
+      [
+       1.6,
+       1,
+       -3.6
+      ]
+     ]
+    },
+    "center": [
+     0.9,
+     1,
+     -1.2
+    ],
+    "el": 38,
+    "az": -16,
+    "dist": 21,
+    "fov": 24,
+    "floor": {
+     "url": "/mock-art/floor-gagazet/top.png",
+     "hide": [
+      "snow-drift"
+     ]
+    },
+    "tilt": {
+     "focus": 0.52,
+     "bandWidth": 0.16,
+     "maxBlur": 11,
+     "falloff": 1.15
+    },
+    "grade": {
+     "saturation": 1.2
+    }
+   },
+   "replacesStage1": "the stage-1 frame on today's ground, now an alternate"
+  },
+  {
+   "option": "P7",
+   "name": "Colossus",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P07-colossus.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     -2.4,
+     0.36,
+     10.4
+    ],
+    "lookAt": [
+     0.6,
+     4.8,
+     -6
+    ],
+    "fov": 45,
+    "roll": 0
+   },
+   "changed": "Camera 0.36 units above the floor near the party, pitched up about 15 degrees, fov 45; the boss set back and made 4.3-4.6x taller through its world height (the plane, aim point, shadow and ring follow); plate scaled up and pre-blurred to cover the sky.",
+   "bossHeightPct": 88.5,
+   "bossNote": null,
+   "bossGroupHeightPct": 88.4,
+   "bossVisibleHeightPct": 84.4,
+   "leadFigurePx": 273,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.09,
+    "party": 0.04,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Seymour is today's painting at 4.6x (soft up close); the party overlaps his shins and Mortiorchis is half under the command list.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P07-colossus-b.jpg",
+     "note": "boss 4x instead of 4.6x: the head stays inside the frame"
+    }
+   ],
+   "params": {
+    "height": {
+     "seymour-flux": 18.86,
+     "mortiorchis": 8.34
+    },
+    "pos": {
+     "tidus": [
+      [
+       -1.1,
+       0,
+       1.3
+      ]
+     ],
+     "yuna": [
+      [
+       0.75,
+       0,
+       0.9
+      ]
+     ],
+     "kimahri": [
+      [
+       0.05,
+       0,
+       -1
+      ]
+     ],
+     "seymour-flux": [
+      [
+       3.6,
+       0,
+       -11.5
+      ]
+     ],
+     "mortiorchis": [
+      [
+       -1.1,
+       3.9,
+       -13
+      ]
+     ]
+    },
+    "cam": [
+     -2.4,
+     0.36,
+     10.4
+    ],
+    "look": [
+     0.6,
+     4.8,
+     -6
+    ],
+    "fov": 45,
+    "bg": [
+     2.7,
+     17,
+     0
+    ],
+    "ground": [
+     2.2,
+     0
+    ],
+    "softbg": 4,
+    "clear": [
+     [
+      -2.4,
+      10.4,
+      3
+     ]
+    ]
+   }
+  },
+  {
+   "option": "P8",
+   "name": "Party's Eyes",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P08-partys-eyes.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [
+    "HUD mock: the party rows restyled as three portrait cards along the bottom (today's numbers)"
+   ],
+   "camera": {
+    "position": [
+     1.6,
+     1.6,
+     1.6
+    ],
+    "lookAt": [
+     1.9,
+     2.35,
+     -7.6
+    ],
+    "fov": 35,
+    "roll": 0
+   },
+   "changed": "Party figures hidden; camera at the party's eye line (1.6) looking at the boss, fov 35, so the boss fills about 70% of the height; far plate pre-blurred.",
+   "bossHeightPct": 69.9,
+   "bossNote": null,
+   "bossGroupHeightPct": 69.9,
+   "bossVisibleHeightPct": 69.9,
+   "leadFigurePx": null,
+   "leadNote": "party figures hidden (first person); the party is the three portrait cards",
+   "hudOverlap": {
+    "boss": 0.16,
+    "party": 0,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "No party on the field at all; Mortiorchis sits behind the command list; the cards are a HUD mock.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P08-partys-eyes-b.jpg",
+     "note": "lower eye line, boss 62%"
+    }
+   ],
+   "params": {
+    "pos": {
+     "seymour-flux": [
+      [
+       3.2,
+       0,
+       -7.6
+      ]
+     ],
+     "mortiorchis": [
+      [
+       0.9,
+       1.1,
+       -7.9
+      ]
+     ]
+    },
+    "cam": [
+     1.6,
+     1.6,
+     1.6
+    ],
+    "look": [
+     1.9,
+     2.35,
+     -7.6
+    ],
+    "fov": 35,
+    "bg": [
+     1.35,
+     7,
+     0
+    ],
+    "softbg": 3,
+    "crop": {
+     "tidus": {
+      "px": -12,
+      "py": -18,
+      "pw": 150
+     },
+     "yuna": {
+      "px": -8,
+      "py": -18,
+      "pw": 150
+     },
+     "kimahri": {
+      "px": -40,
+      "py": -22,
+      "pw": 160
+     }
+    }
+   }
+  },
+  {
+   "stage": 3,
+   "pass": "final (floor plates)",
+   "option": "P9",
+   "name": "Tabletop",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P09-tabletop.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "tokens = today's portraits and turn-order crops in gold (party) and violet (boss) rings, built in the page",
+    "floor = the art agent's painted Gagazet floor plate (candidate); the stage-1 version is kept as frames/alt/ffx-ch1-P09-tabletop-standin.jpg"
+   ],
+   "camera": {
+    "position": [
+     1.5,
+     32.336,
+     9.207
+    ],
+    "lookAt": [
+     1.5,
+     0,
+     -1.3
+    ],
+    "fov": 22,
+    "roll": 0
+   },
+   "changed": "All painted figures hidden; five medallion tokens on the painted floor plate at the formation's spots; camera 72 degrees down, long lens (fov 22).",
+   "bossHeightPct": 24.8,
+   "bossNote": "boss token diameter as % of frame height",
+   "bossGroupHeightPct": null,
+   "bossVisibleHeightPct": null,
+   "leadFigurePx": 164,
+   "leadNote": "token diameter (px): the paintings are replaced by tokens",
+   "hudOverlap": {
+    "boss": null,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Still an outlier: tokens replace the paintings and the action of the fight is gone; the scene's low-poly rocks sit on the painted floor at the left edge.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P09-tabletop-floor-b.jpg",
+     "note": "straight down (89 degrees)"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P09-tabletop-standin.jpg",
+     "note": "stage-1 kept frame on today's ground (stand-in floor)"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P09-tabletop-b.jpg",
+     "note": "stage 1, today's ground: straight down (89 degrees)"
+    }
+   ],
+   "params": {
+    "tokens": [
+     {
+      "id": "tidus",
+      "url": "/art/portraits/tidus.png",
+      "p": [
+       -0.7,
+       0,
+       1.5
+      ],
+      "r": 1
+     },
+     {
+      "id": "yuna",
+      "url": "/art/portraits/yuna.png",
+      "p": [
+       1.4,
+       0,
+       1.9
+      ],
+      "r": 1
+     },
+     {
+      "id": "kimahri",
+      "url": "/art/portraits/kimahri.png",
+      "p": [
+       0.3,
+       0,
+       -0.5
+      ],
+      "r": 1
+     },
+     {
+      "id": "seymour-flux",
+      "url": "/art/characters/seymour-flux-body/idle.png",
+      "p": [
+       4,
+       0,
+       -3.8
+      ],
+      "r": 1.8,
+      "ring": "#c9a0ff",
+      "edge": 5913226
+     },
+     {
+      "id": "mortiorchis",
+      "url": "/art/characters/mortiorchis/idle.png",
+      "p": [
+       1.2,
+       0,
+       -4.8
+      ],
+      "r": 1.3,
+      "ring": "#c9a0ff",
+      "edge": 5913226
+     }
+    ],
+    "center": [
+     1.5,
+     0,
+     -1.3
+    ],
+    "el": 72,
+    "az": 0,
+    "dist": 34,
+    "fov": 22,
+    "grade": {
+     "saturation": 1.18
+    },
+    "floor": {
+     "url": "/mock-art/floor-gagazet/top.png",
+     "hide": [
+      "snow-drift"
+     ]
+    }
+   },
+   "replacesStage1": "the stage-1 frame on today's ground, now an alternate",
+   "tokenRects": {
+    "tidus": [
+     690,
+     679,
+     168,
+     164
+    ],
+    "yuna": [
+     867,
+     711,
+     168,
+     165
+    ],
+    "kimahri": [
+     778,
+     520,
+     165,
+     158
+    ],
+    "seymour-flux": [
+     1016,
+     213,
+     288,
+     268
+    ],
+    "mortiorchis": [
+     832,
+     177,
+     206,
+     190
+    ]
+   }
+  },
+  {
+   "option": "P11",
+   "name": "Cinemascope",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P11-cinemascope.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [
+    "HUD mock: turn order (FFX only), the chips and the boss plate in the top band; party rows across the bottom band; command list at 0.8 over the image"
+   ],
+   "camera": {
+    "position": [
+     -3,
+     0.95,
+     6
+    ],
+    "lookAt": [
+     3,
+     1.9,
+     -13.08
+    ],
+    "fov": 50,
+    "roll": 0
+   },
+   "changed": "Camera low (0.95) behind and beside the party, wide lens (fov 50); party left, boss right; 2.39:1 black bands; out-of-focus foreground silhouettes, soft light shafts (Ch I) or lamp bokeh (Ch IV); far plate pre-blurred.",
+   "bossHeightPct": 31.8,
+   "bossNote": null,
+   "bossGroupHeightPct": 31.9,
+   "bossVisibleHeightPct": 31.9,
+   "leadFigurePx": 480,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.07,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The band HUD is a mock; at this wide lens Seymour is only 32% of the height.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P11-cinemascope-b.jpg",
+     "note": "wider lens (fov 54): the boss drops to 26%"
+    }
+   ],
+   "params": {
+    "pos": {
+     "tidus": [
+      [
+       -3.08,
+       0,
+       1.26
+      ]
+     ],
+     "yuna": [
+      [
+       -1.73,
+       0,
+       0.63
+      ]
+     ],
+     "kimahri": [
+      [
+       -2.2,
+       0,
+       -1.6
+      ]
+     ],
+     "seymour-flux": [
+      [
+       5.49,
+       0,
+       -6
+      ]
+     ],
+     "mortiorchis": [
+      [
+       2.97,
+       1.3,
+       -7.64
+      ]
+     ]
+    },
+    "cam": [
+     -3,
+     0.95,
+     6
+    ],
+    "look": [
+     3,
+     1.9,
+     -13.08
+    ],
+    "fov": 50,
+    "bg": [
+     1.6,
+     9,
+     0
+    ],
+    "ground": [
+     1.8,
+     0
+    ],
+    "softbg": 4,
+    "clear": [
+     [
+      -3,
+      6,
+      3
+     ]
+    ],
+    "fg": [
+     {
+      "at": [
+       -0.9,
+       -0.5
+      ],
+      "d": 1.6,
+      "sw": 0.36,
+      "aspect": 0.9,
+      "blur": 14,
+      "color": "#050a14",
+      "top": "#0c1830",
+      "pts": [
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        0.25
+       ],
+       [
+        0.18,
+        0.1
+       ],
+       [
+        0.36,
+        0.2
+       ],
+       [
+        0.5,
+        0.05
+       ],
+       [
+        0.66,
+        0.3
+       ],
+       [
+        0.8,
+        0.55
+       ],
+       [
+        0.92,
+        0.8
+       ],
+       [
+        1,
+        1
+       ]
+      ]
+     },
+     {
+      "at": [
+       0.93,
+       -0.62
+      ],
+      "d": 1.8,
+      "sw": 0.22,
+      "aspect": 1.1,
+      "blur": 14,
+      "color": "#050a14",
+      "top": "#0e1c36",
+      "pts": [
+       [
+        0,
+        1
+       ],
+       [
+        0.12,
+        0.6
+       ],
+       [
+        0.3,
+        0.35
+       ],
+       [
+        0.5,
+        0.18
+       ],
+       [
+        0.72,
+        0.1
+       ],
+       [
+        1,
+        0.05
+       ],
+       [
+        1,
+        1
+       ]
+      ]
+     }
+    ],
+    "rays": [
+     {
+      "p": [
+       -6,
+       9,
+       -16
+      ],
+      "w": 2.2,
+      "h": 30,
+      "rot": [
+       0,
+       0.2,
+       -0.55
+      ],
+      "o": 0.16
+     },
+     {
+      "p": [
+       -3.5,
+       9,
+       -15
+      ],
+      "w": 1.4,
+      "h": 30,
+      "rot": [
+       0,
+       0.2,
+       -0.5
+      ],
+      "o": 0.12
+     },
+     {
+      "p": [
+       -1,
+       9,
+       -17
+      ],
+      "w": 2.8,
+      "h": 30,
+      "rot": [
+       0,
+       0.2,
+       -0.52
+      ],
+      "o": 0.11
+     },
+     {
+      "p": [
+       1.8,
+       9,
+       -18
+      ],
+      "w": 1.6,
+      "h": 30,
+      "rot": [
+       0,
+       0.2,
+       -0.48
+      ],
+      "o": 0.09
+     }
+    ],
+    "hud": {
+     "chips": [
+      [
+       ".ffx-cmd-info",
+       60,
+       36
+      ],
+      [
+       ".sgd__toggle",
+       620,
+       14
+      ],
+      [
+       ".mad__toggle",
+       620,
+       52
+      ],
+      [
+       ".ffx-sensor",
+       620,
+       90
+      ],
+      [
+       ".eint__toggle",
+       860,
+       14
+      ]
+     ]
+    }
+   },
+   "bandPx": 139
+  },
+  {
+   "option": "P12",
+   "name": "Split-Diopter",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P12-split-diopter.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [
+    "the huge foreground face is the lead's painted PORTRAIT (public/art/portraits), not a crop of the battle idle"
+   ],
+   "camera": {
+    "position": [
+     0.2,
+     2,
+     6.5
+    ],
+    "lookAt": [
+     1.15,
+     2.35,
+     -7.6
+    ],
+    "fov": 25,
+    "roll": 0
+   },
+   "changed": "Party figures hidden; the lead's portrait as a camera-facing card 1.4 units from the lens; long lens on the boss; a vertical soft band between face and boss (a two-pass band blur added to the composer, real time); far plate pre-blurred; bloom lowered so the portrait's highlights do not flare.",
+   "bossHeightPct": 65.5,
+   "bossNote": null,
+   "bossGroupHeightPct": 68.8,
+   "bossVisibleHeightPct": 68.8,
+   "leadFigurePx": null,
+   "leadNote": "party figures hidden; the lead is the portrait card, 108% of the frame height (runs off the top and bottom)",
+   "hudOverlap": {
+    "boss": 0.27,
+    "party": 0,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The portrait is a different painting style from the battle figures; Mortiorchis is lost in the soft band; the turn order and party rows cover Seymour's right side.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P12-split-diopter-b.jpg",
+     "note": "face larger and further left: the help line and command list cross it"
+    }
+   ],
+   "params": {
+    "hideIds": [
+     "tidus",
+     "yuna",
+     "kimahri"
+    ],
+    "pos": {
+     "seymour-flux": [
+      [
+       3.9,
+       0,
+       -7.6
+      ]
+     ],
+     "mortiorchis": [
+      [
+       2.5,
+       2.3,
+       -8.8
+      ]
+     ]
+    },
+    "cam": [
+     0.2,
+     2,
+     6.5
+    ],
+    "look": [
+     1.15,
+     2.35,
+     -7.6
+    ],
+    "fov": 25,
+    "bg": [
+     1.3,
+     5,
+     0
+    ],
+    "softbg": 6,
+    "face": {
+     "url": "/art/portraits/tidus.png",
+     "at": [
+      -0.1,
+      -0.05
+     ],
+     "d": 1.4,
+     "hFrac": 1.08
+    },
+    "faceDim": 0.86,
+    "bloom": [
+     0.3
+    ],
+    "diop": {
+     "x0": 0.6,
+     "x1": 0.66,
+     "soft": 0.04,
+     "maxBlur": 10
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P13",
+   "name": "Proscenium",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P13-proscenium.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "the arch is the art agent's painted proscenium overlay (candidate pick, violet curtains); crimson version and the stage-1 CSS/SVG stand-in kept as alternates"
+   ],
+   "camera": {
+    "position": [
+     0.1,
+     3.4,
+     12.8
+    ],
+    "lookAt": [
+     0.3,
+     1.6,
+     -1.2
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "As stage 1 with the painted Ink & Gold arch (1920x1080 overlay, transparent opening x 200-1720, y 118-1010) in place of the CSS/SVG stand-in.",
+   "bossHeightPct": 33.9,
+   "bossGroupHeightPct": 34,
+   "bossVisibleHeightPct": 34,
+   "leadFigurePx": 298,
+   "hudOverlap": {
+    "boss": 0.02,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The arch is a candidate painting; the stage inside it is smaller than today's.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P13-proscenium-standin.jpg",
+     "note": "stage-1 version with the stand-in CSS/SVG arch"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P13-proscenium-crimson.jpg",
+     "note": "crimson curtains (the art agent's alternate)"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P13-proscenium-b.jpg",
+     "note": "pulled back further, wider arch"
+    }
+   ],
+   "swaps": null,
+   "params": {
+    "cam": [
+     0.1,
+     3.4,
+     12.8
+    ],
+    "look": [
+     0.3,
+     1.6,
+     -1.2
+    ],
+    "fov": 32,
+    "bg": [
+     1,
+     0,
+     0
+    ],
+    "stageDark": 0.55,
+    "dimOthers": 0.74,
+    "coneO": 0.32,
+    "archUrl": "/mock-art/proscenium/proscenium.png"
+   },
+   "replacesStage1": "the stage-1 stand-in frame, now an alternate"
+  },
+  {
+   "option": "P14",
+   "name": "Panels",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P14-panels.jpg",
+   "provenance": "COMPOSITE",
+   "standIns": [
+    "three real-engine renders (lead close, the whole stage, boss close) assembled into angled panels in the page (2D)"
+   ],
+   "camera": {
+    "position": [
+     0.3,
+     3.3,
+     11.5
+    ],
+    "lookAt": [
+     0.6,
+     1.5,
+     -2.2
+    ],
+    "fov": 30,
+    "roll": 0
+   },
+   "changed": "Three cameras rendered one after another and laid into three angled Ink & Gold panels with gold dividers; the HUD on top is unchanged.",
+   "bossHeightPct": 40.1,
+   "bossNote": null,
+   "bossGroupHeightPct": 40.1,
+   "bossVisibleHeightPct": 40.1,
+   "leadFigurePx": 360,
+   "leadNote": "measured on the whole-stage panel camera before compositing",
+   "hudOverlap": {
+    "boss": 0.03,
+    "party": 0.37,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "A composite: the command list covers the lower half of Tidus's panel and the turn order sits beside Seymour's face.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P14-panels-b.jpg",
+     "note": "two close-ups on top, the stage across the bottom (the HUD covers the stage)"
+    }
+   ],
+   "params": {
+    "views": [
+     {
+      "cam": {
+       "position": [
+        -0.35,
+        1.8,
+        4.9
+       ],
+       "lookAt": [
+        -1.4,
+        1.45,
+        1.4
+       ],
+       "fov": 26
+      }
+     },
+     {
+      "cam": {
+       "position": [
+        0.3,
+        3.3,
+        11.5
+       ],
+       "lookAt": [
+        0.6,
+        1.5,
+        -2.2
+       ],
+       "fov": 30
+      }
+     },
+     {
+      "cam": {
+       "position": [
+        2.2,
+        2.6,
+        -2.2
+       ],
+       "lookAt": [
+        3.3,
+        3,
+        -7.6
+       ],
+       "fov": 30
+      },
+      "bg": [
+       1.2,
+       4,
+       0
+      ]
+     }
+    ],
+    "panels": [
+     {
+      "view": 0,
+      "poly": [
+       [
+        0,
+        0
+       ],
+       [
+        720,
+        0
+       ],
+       [
+        490,
+        1080
+       ],
+       [
+        0,
+        1080
+       ]
+      ],
+      "dx": -600,
+      "dy": -190
+     },
+     {
+      "view": 1,
+      "poly": [
+       [
+        720,
+        0
+       ],
+       [
+        1380,
+        0
+       ],
+       [
+        1150,
+        1080
+       ],
+       [
+        490,
+        1080
+       ]
+      ],
+      "dx": -40,
+      "dy": 0
+     },
+     {
+      "view": 2,
+      "poly": [
+       [
+        1380,
+        0
+       ],
+       [
+        1920,
+        0
+       ],
+       [
+        1920,
+        1080
+       ],
+       [
+        1150,
+        1080
+       ]
+      ],
+      "dx": 330,
+      "dy": -120
+     }
+    ],
+    "dividers": [
+     [
+      720,
+      0,
+      490,
+      1080
+     ],
+     [
+      1380,
+      0,
+      1150,
+      1080
+     ]
+    ]
+   },
+   "panelCameras": [
+    {
+     "position": [
+      -0.35,
+      1.8,
+      4.9
+     ],
+     "lookAt": [
+      -1.4,
+      1.45,
+      1.4
+     ],
+     "fov": 26
+    },
+    {
+     "position": [
+      0.3,
+      3.3,
+      11.5
+     ],
+     "lookAt": [
+      0.6,
+      1.5,
+      -2.2
+     ],
+     "fov": 30
+    },
+    {
+     "position": [
+      2.2,
+      2.6,
+      -2.2
+     ],
+     "lookAt": [
+      3.3,
+      3,
+      -7.6
+     ],
+     "fov": 30
+    }
+   ]
+  },
+  {
+   "option": "P0",
+   "name": "Today",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P00-today.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     0,
+     3,
+     9.6
+    ],
+    "lookAt": [
+     0.15,
+     1.5,
+     -1.3
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "Nothing: today's idle master rig (camera sway held at 0 for a still).",
+   "bossHeightPct": 45.9,
+   "bossNote": null,
+   "bossGroupHeightPct": 45.8,
+   "bossVisibleHeightPct": 45.8,
+   "leadFigurePx": 406,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.03,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Three cut-outs bunched on the left facing the viewer; Bahamut is 46% of the height.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P00-today-b.jpg",
+     "note": "enemy-intent slab open, as in the live build"
+    }
+   ],
+   "params": {}
+  },
+  {
+   "option": "P0m",
+   "name": "Today, mirrored",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P00m-today-mirrored.jpg",
+   "provenance": "COMPOSITE (mirrored stand-in)",
+   "standIns": [
+    "every painting mirrored (chiral: asymmetric outfits, Kimahri's broken horn) - stand-in, a build would re-roll them",
+    "plate mirrored too (reads better: light and moon stay consistent with the mirrored key light)",
+    "HUD mirrored as a mock (per-element move, the skew is not flipped)"
+   ],
+   "camera": {
+    "position": [
+     0,
+     3,
+     9.6
+    ],
+    "lookAt": [
+     0.15,
+     1.5,
+     -1.3
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "Real engine: today's master; the whole 3D scene reflected about the camera axis (x -> -x), so the party stands right facing left and the boss left facing right. HUD blocks moved to their mirror positions as a mock.",
+   "bossHeightPct": 46.2,
+   "bossNote": null,
+   "bossGroupHeightPct": 46.2,
+   "bossVisibleHeightPct": 46.2,
+   "leadFigurePx": 404,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.05,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Mirrored paintings are a stand-in (Rikku's and Paine's outfits are asymmetric); the Bevelle plate is near-symmetric, so the flip itself reads naturally.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P00m-today-mirrored-b.jpg",
+     "note": "HUD left as today (not mirrored)"
+    },
+    {
+     "file": "frames/alt/ffx2-ch4-P00m-today-mirrored-c.jpg",
+     "note": "plate kept unmirrored"
+    }
+   ],
+   "params": {}
+  },
+  {
+   "option": "P1",
+   "name": "Today, dressed",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P01-today-dressed.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     0,
+     3,
+     9.6
+    ],
+    "lookAt": [
+     0.15,
+     1.5,
+     -1.3
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "Today's camera and staging; far plate and parallax layers swapped for pre-blurred copies (a real-time far-plane DoF), rim light from the boss side on the party and a moon/hole rim on the boss (the actors' rim uniform), contact shadows 0.48 -> 0.72, out-of-focus foreground silhouettes (camera-facing cards with pre-blurred textures), soft bokeh sprites near the lens, a little more mist, saturation +6%.",
+   "bossHeightPct": 47,
+   "bossNote": null,
+   "bossGroupHeightPct": 46.9,
+   "bossVisibleHeightPct": 46.9,
+   "leadFigurePx": 396,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.01,
+    "party": 0.05,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Same angle as today; the lamp bokeh can read as dust on the lens and the foreground silhouettes barely register on the dark plate.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P01-today-dressed-b.jpg",
+     "note": "lighter treatment"
+    }
+   ],
+   "params": {
+    "rimParty": {
+     "rim": 16761968,
+     "rimStrength": 0.85,
+     "rimDir": [
+      1,
+      0.3
+     ],
+     "rimWidth": 2.6,
+     "bounce": 8374015,
+     "bounceStrength": 0.14
+    },
+    "rimBoss": {
+     "rim": 10545407,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.4
+     ],
+     "rimWidth": 3.2
+    },
+    "softbg": 4,
+    "fg": [
+     {
+      "at": [
+       -0.72,
+       0.9
+      ],
+      "d": 2.2,
+      "sw": 0.62,
+      "aspect": 0.22,
+      "blur": 10,
+      "color": "#05070c",
+      "top": "#0a0d14",
+      "pts": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        1,
+        0.18
+       ],
+       [
+        0.55,
+        0.55
+       ],
+       [
+        0.35,
+        1
+       ],
+       [
+        0,
+        1
+       ]
+      ]
+     },
+     {
+      "at": [
+       -0.86,
+       -0.8
+      ],
+      "d": 2,
+      "sw": 0.36,
+      "aspect": 0.62,
+      "blur": 12,
+      "color": "#040508",
+      "top": "#12151f",
+      "pts": [
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        0.3
+       ],
+       [
+        0.2,
+        0.3
+       ],
+       [
+        0.2,
+        0.12
+       ],
+       [
+        0.46,
+        0.12
+       ],
+       [
+        0.46,
+        0.4
+       ],
+       [
+        0.72,
+        0.46
+       ],
+       [
+        0.9,
+        0.7
+       ],
+       [
+        1,
+        1
+       ]
+      ]
+     }
+    ],
+    "bokeh": [
+     {
+      "ndc": [
+       -0.93,
+       0.3
+      ],
+      "d": 2.2,
+      "s": 0.24,
+      "o": 0.3
+     },
+     {
+      "ndc": [
+       -0.78,
+       -0.05
+      ],
+      "d": 2.6,
+      "s": 0.16,
+      "o": 0.26
+     },
+     {
+      "ndc": [
+       0.9,
+       0.62
+      ],
+      "d": 2.4,
+      "s": 0.2,
+      "o": 0.24
+     },
+     {
+      "ndc": [
+       0.62,
+       0.86
+      ],
+      "d": 3,
+      "s": 0.13,
+      "o": 0.22
+     },
+     {
+      "ndc": [
+       -0.45,
+       0.8
+      ],
+      "d": 2.8,
+      "s": 0.11,
+      "o": 0.2
+     }
+    ],
+    "bokehColor": "rgba(255,170,90,1)",
+    "tilt": {
+     "maxBlur": 5.5,
+     "bandWidth": 0.2,
+     "focus": 0.52
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.44
+    }
+   }
+  },
+  {
+   "option": "P2-without",
+   "name": "Over the Shoulder, today's paintings",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P02w-over-the-shoulder-without.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     -2.4,
+     2.3,
+     7
+    ],
+    "lookAt": [
+     1.6,
+     2.1,
+     -5.8
+    ],
+    "fov": 29,
+    "roll": 0
+   },
+   "changed": "Camera behind and beside the party at about 1.3h looking at the boss's chest; party re-placed in an arc in front of the camera, boss moved closer; every plane turned to face the lens (yaw only). No new art, so each figure shows its painted front.",
+   "bossHeightPct": 59.2,
+   "bossNote": null,
+   "bossGroupHeightPct": 59.2,
+   "bossVisibleHeightPct": 59.2,
+   "leadFigurePx": 934,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.02,
+    "party": 0.03,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Not a candidate, an explanation: the girls show their painted fronts, so they face the camera instead of Bahamut.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P02w-over-the-shoulder-without-b.jpg",
+     "note": "boss centred with the girls under him"
+    }
+   ],
+   "params": {
+    "pos": {
+     "yuna": [
+      [
+       -2.68,
+       0,
+       2.51
+      ]
+     ],
+     "rikku": [
+      [
+       -1.46,
+       0,
+       1.63
+      ]
+     ],
+     "paine": [
+      [
+       -0.33,
+       0,
+       0.73
+      ]
+     ],
+     "bahamut": [
+      [
+       2.73,
+       0,
+       -5.44
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -2.4,
+     2.3,
+     7
+    ],
+    "look": [
+     1.6,
+     2.1,
+     -5.8
+    ],
+    "fov": 29,
+    "bg": [
+     1.25,
+     4,
+     0
+    ]
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P4",
+   "name": "Reverse Angle",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P04-reverse-angle.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "far plate = the art agent's painted reverse plate (candidate)",
+    "boss = its rear34 candidate, darkened and rim-lit; Mortiorchis (Ch I) has no rear painting and stays a silhouette",
+    "the stage-1 stand-in version (mirrored + blurred plate, front-painting silhouette) is kept as an alternate"
+   ],
+   "camera": {
+    "position": [
+     9.64,
+     1.6,
+     -11.92
+    ],
+    "lookAt": [
+     -1.2,
+     1.7,
+     -0.2
+    ],
+    "fov": 29,
+    "roll": 0
+   },
+   "changed": "As stage 1 with the painted far-side plate (centred on the view, softened 3 px) and the boss's rear painting swapped in, lit at half brightness with a strong cool rim.",
+   "bossHeightPct": 79.1,
+   "bossGroupHeightPct": 79.1,
+   "bossVisibleHeightPct": 79.1,
+   "leadFigurePx": 241,
+   "hudOverlap": {
+    "boss": 0.19,
+    "party": 0.08,
+    "overlaps": [
+     "boss",
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The girls are ~240 px; the command stack and the party rows cover Bahamut's lower wing.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P04-reverse-angle-standin.jpg",
+     "note": "stage-1 version with the stand-in plate (today's plate mirrored + blurred) and a front-painting silhouette"
+    },
+    {
+     "file": "frames/alt/ffx2-ch4-P04-reverse-angle-b.jpg",
+     "note": "girls in today's order: Paine hidden behind the silhouette"
+    }
+   ],
+   "swaps": {
+    "bahamut": {
+     "baselineY": 1008,
+     "scale": 1.002,
+     "size": [
+      4.173,
+      4.169
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "pos": {
+     "rikku": [
+      [
+       -0.38,
+       0,
+       1.91
+      ]
+     ],
+     "paine": [
+      [
+       -0.75,
+       0,
+       0.72
+      ]
+     ],
+     "yuna": [
+      [
+       -1.04,
+       0,
+       -0.41
+      ]
+     ]
+    },
+    "swap": {
+     "bahamut": "/mock-art/ffx2-bahamut/rear34.png"
+    },
+    "swapFacing": {
+     "bahamut": "left"
+    },
+    "cam": [
+     9.64,
+     1.6,
+     -11.92
+    ],
+    "look": [
+     -1.2,
+     1.7,
+     -0.2
+    ],
+    "fov": 29,
+    "clear": [
+     [
+      9.64,
+      -11.92,
+      4
+     ]
+    ],
+    "plate": {
+     "url": "/mock-art/bevelle-underground/plate-reverse.png",
+     "y": 0.2,
+     "dist": 56,
+     "k": 1.15,
+     "blur": 3
+    },
+    "set": {
+     "bahamut": {
+      "brightness": 0.5,
+      "tint": 11587327,
+      "desaturate": 0.2,
+      "rim": 10545663,
+      "rimStrength": 1.7,
+      "rimDir": [
+       -1,
+       0.5
+      ],
+      "rimWidth": 3.2
+     }
+    }
+   },
+   "replacesStage1": "the stage-1 stand-in frame, now an alternate"
+  },
+  {
+   "option": "P5",
+   "name": "Side Stage",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P05-side-stage.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     -0.8,
+     1.45,
+     24
+    ],
+    "lookAt": [
+     -0.8,
+     1.75,
+     -2
+    ],
+    "fov": 19,
+    "roll": 0
+   },
+   "changed": "Everyone re-placed on one line across the frame; camera square to that line at about 0.8h, long lens (fov 19-21), 23-24 units back; plate re-framed for the lower camera and the ground plane widened so the floor runs to the lens.",
+   "bossHeightPct": 44.4,
+   "bossNote": null,
+   "bossGroupHeightPct": 44.4,
+   "bossVisibleHeightPct": 44.4,
+   "leadFigurePx": 227,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.08,
+    "party": 0.11,
+    "overlaps": [
+     "boss",
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The long lens flattens depth; the girls are ~227 px on a large empty floor.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P05-side-stage-b.jpg",
+     "note": "wider lens, figures higher in the frame"
+    }
+   ],
+   "params": {
+    "pos": {
+     "yuna": [
+      [
+       -2.3,
+       0,
+       -1.4
+      ]
+     ],
+     "rikku": [
+      [
+       -3.4,
+       0,
+       -2.6
+      ]
+     ],
+     "paine": [
+      [
+       -4.4,
+       0,
+       -1.8
+      ]
+     ],
+     "bahamut": [
+      [
+       2.3,
+       0,
+       -3
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -0.8,
+     1.45,
+     24
+    ],
+    "look": [
+     -0.8,
+     1.75,
+     -2
+    ],
+    "fov": 19,
+    "bg": [
+     1.2,
+     5.5,
+     0
+    ],
+    "ground": [
+     2.4,
+     6
+    ]
+   }
+  },
+  {
+   "option": "P5m",
+   "name": "Side Stage, mirrored",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P05m-side-stage-mirrored.jpg",
+   "provenance": "COMPOSITE (mirrored stand-in)",
+   "standIns": [
+    "every painting mirrored (chiral subjects) - stand-in"
+   ],
+   "camera": {
+    "position": [
+     -0.5,
+     1.45,
+     24
+    ],
+    "lookAt": [
+     -0.5,
+     1.75,
+     -2
+    ],
+    "fov": 19,
+    "roll": 0
+   },
+   "changed": "As P5 with the sides swapped: party on the right facing left, boss on the left facing right (negative plane scale). Plate not mirrored.",
+   "bossHeightPct": 44.6,
+   "bossNote": null,
+   "bossGroupHeightPct": 44.6,
+   "bossVisibleHeightPct": 44.6,
+   "leadFigurePx": 235,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.01,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Mirrored paintings are a stand-in; otherwise it mirrors P5 cleanly.",
+   "alternates": [],
+   "params": {
+    "mirror": true,
+    "pos": {
+     "yuna": [
+      [
+       0.9,
+       0,
+       -1.4
+      ]
+     ],
+     "rikku": [
+      [
+       2,
+       0,
+       -2.6
+      ]
+     ],
+     "paine": [
+      [
+       3,
+       0,
+       -1.8
+      ]
+     ],
+     "bahamut": [
+      [
+       -3.9,
+       0,
+       -3
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -0.5,
+     1.45,
+     24
+    ],
+    "look": [
+     -0.5,
+     1.75,
+     -2
+    ],
+    "fov": 19,
+    "bg": [
+     1.2,
+     5.5,
+     0
+    ],
+    "ground": [
+     2.4,
+     6
+    ]
+   }
+  },
+  {
+   "stage": 3,
+   "pass": "final (floor plates)",
+   "option": "P6",
+   "name": "Diorama",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P06-diorama.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "floor = the art agent's painted Bevelle deck plate (candidate), shown unlit exactly as painted on the scene's deck mesh (the deck-reflections overlay hidden)",
+    "the stage-1 version on today's deck is kept as frames/alt/ffx2-ch4-P06-diorama-standin.jpg"
+   ],
+   "camera": {
+    "position": [
+     12.069,
+     17.957,
+     21.595
+    ],
+    "lookAt": [
+     0.6,
+     1,
+     -3
+    ],
+    "fov": 20,
+    "roll": 0
+   },
+   "changed": "Camera 32 degrees up, fov 20, 32 units out, orbited 25 degrees to the right so the painted hole glows beside Bahamut; the girls spread in an arc; tilt-shift band across the actors.",
+   "bossHeightPct": 32,
+   "bossNote": null,
+   "bossGroupHeightPct": 32,
+   "bossVisibleHeightPct": 32,
+   "leadFigurePx": 162,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.1,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The girls are ~160 px and the lower third of the deck stays dark; the hole reads as a round portal more than torn plating (the art agent's own note).",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P06-diorama-floor-b.jpg",
+     "note": "the stage-1 side (18 degrees left): the painted hole hides behind Bahamut"
+    },
+    {
+     "file": "frames/alt/ffx2-ch4-P06-diorama-standin.jpg",
+     "note": "stage-1 kept frame on today's ground (stand-in floor)"
+    },
+    {
+     "file": "frames/alt/ffx2-ch4-P06-diorama-b.jpg",
+     "note": "stage 1, today's ground: 24 degrees without the light boost: nearly black"
+    }
+   ],
+   "params": {
+    "pos": {
+     "yuna": [
+      [
+       -1.49,
+       0,
+       1.35
+      ]
+     ],
+     "rikku": [
+      [
+       -0.6,
+       0,
+       -0.05
+      ]
+     ],
+     "paine": [
+      [
+       -3.14,
+       0,
+       1.13
+      ]
+     ],
+     "bahamut": [
+      [
+       0.4,
+       0,
+       -3.4
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "center": [
+     0.6,
+     1,
+     -3
+    ],
+    "el": 32,
+    "az": 25,
+    "dist": 32,
+    "fov": 20,
+    "floor": {
+     "url": "/mock-art/floor-bevelle/top.png",
+     "mesh": "machina-deck",
+     "hide": [
+      "deck-reflections"
+     ],
+     "basic": true,
+     "bright": 1.3
+    },
+    "tilt": {
+     "focus": 0.5,
+     "bandWidth": 0.15,
+     "maxBlur": 11,
+     "falloff": 1.1
+    },
+    "grade": {
+     "saturation": 1.2
+    }
+   },
+   "replacesStage1": "the stage-1 frame on today's ground, now an alternate"
+  },
+  {
+   "option": "P7",
+   "name": "Colossus",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P07-colossus.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [],
+   "camera": {
+    "position": [
+     -4.6,
+     0.36,
+     9.6
+    ],
+    "lookAt": [
+     -0.4,
+     4.6,
+     -6
+    ],
+    "fov": 45,
+    "roll": 0
+   },
+   "changed": "Camera 0.36 units above the floor near the party, pitched up about 15 degrees, fov 45; the boss set back and made 4.3-4.6x taller through its world height (the plane, aim point, shadow and ring follow); plate scaled up and pre-blurred to cover the sky.",
+   "bossHeightPct": 81.5,
+   "bossNote": null,
+   "bossGroupHeightPct": 81.5,
+   "bossVisibleHeightPct": 81.5,
+   "leadFigurePx": 353,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0.14,
+    "party": 0.03,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Bahamut is today's painting at 4.3x (soft up close) and his left wing crosses the boss HP bar.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P07-colossus-b.jpg",
+     "note": "boss 3x: he no longer passes the top edge"
+    }
+   ],
+   "params": {
+    "height": {
+     "bahamut": 17.5
+    },
+    "pos": {
+     "yuna": [
+      [
+       -4.52,
+       0,
+       2.37
+      ]
+     ],
+     "rikku": [
+      [
+       -3.2,
+       0,
+       2.1
+      ]
+     ],
+     "paine": [
+      [
+       -3.66,
+       0,
+       0.74
+      ]
+     ],
+     "bahamut": [
+      [
+       4.4,
+       0,
+       -12.8
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -4.6,
+     0.36,
+     9.6
+    ],
+    "look": [
+     -0.4,
+     4.6,
+     -6
+    ],
+    "fov": 45,
+    "bg": [
+     2.6,
+     16,
+     0
+    ],
+    "ground": [
+     2.2,
+     0
+    ],
+    "softbg": 4,
+    "clear": [
+     [
+      -4.6,
+      9.6,
+      2
+     ]
+    ]
+   }
+  },
+  {
+   "option": "P8",
+   "name": "Party's Eyes",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P08-partys-eyes.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [
+    "HUD mock: the party rows restyled as three portrait cards along the bottom (today's numbers)"
+   ],
+   "camera": {
+    "position": [
+     0.3,
+     1.6,
+     2.6
+    ],
+    "lookAt": [
+     0.9,
+     2.2,
+     -6.2
+    ],
+    "fov": 35,
+    "roll": 0
+   },
+   "changed": "Party figures hidden; camera at the party's eye line (1.6) looking at the boss, fov 35, so the boss fills about 70% of the height; far plate pre-blurred.",
+   "bossHeightPct": 72.1,
+   "bossNote": null,
+   "bossGroupHeightPct": 72.1,
+   "bossVisibleHeightPct": 72.1,
+   "leadFigurePx": null,
+   "leadNote": "party figures hidden (first person); the party is the three portrait cards",
+   "hudOverlap": {
+    "boss": 0.11,
+    "party": 0,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "No party figures on the field; the cards are a HUD mock; the command stack sits over the right wing.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P08-partys-eyes-b.jpg",
+     "note": "lower eye line: Bahamut 91%, the wings leave the frame"
+    }
+   ],
+   "params": {
+    "pos": {
+     "bahamut": [
+      [
+       1.4,
+       0,
+       -6.2
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     0.3,
+     1.6,
+     2.6
+    ],
+    "look": [
+     0.9,
+     2.2,
+     -6.2
+    ],
+    "fov": 35,
+    "bg": [
+     1.3,
+     5,
+     0
+    ],
+    "softbg": 3,
+    "hideHud": [
+     ".ffx2hud__party"
+    ],
+    "faces": [
+     "/art/portraits/yuna-x2.png",
+     "/art/portraits/rikku-x2.png",
+     "/art/portraits/paine.png"
+    ],
+    "crop": {
+     "yuna": {
+      "px": -2,
+      "py": -6,
+      "pw": 104
+     },
+     "rikku": {
+      "px": -2,
+      "py": -14,
+      "pw": 104
+     },
+     "paine": {
+      "px": -4,
+      "py": -10,
+      "pw": 110
+     }
+    },
+    "gaugeKey": "atb",
+    "cards": {
+     "accent": "#f4a8d0"
+    }
+   }
+  },
+  {
+   "option": "P11",
+   "name": "Cinemascope",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P11-cinemascope.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [
+    "HUD mock: turn order (FFX only), the chips and the boss plate in the top band; party rows across the bottom band; command list at 0.8 over the image"
+   ],
+   "camera": {
+    "position": [
+     -3,
+     0.95,
+     6
+    ],
+    "lookAt": [
+     3,
+     1.9,
+     -13.08
+    ],
+    "fov": 50,
+    "roll": 0
+   },
+   "changed": "Camera low (0.95) behind and beside the party, wide lens (fov 50); party left, boss right; 2.39:1 black bands; out-of-focus foreground silhouettes, soft light shafts (Ch I) or lamp bokeh (Ch IV); far plate pre-blurred.",
+   "bossHeightPct": 39.3,
+   "bossNote": null,
+   "bossGroupHeightPct": 39.3,
+   "bossVisibleHeightPct": 39.3,
+   "leadFigurePx": 503,
+   "leadNote": null,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The band HUD is a mock; at this wide lens Bahamut is only 39% of the height.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P11-cinemascope-b.jpg",
+     "note": "boss further back (32%)"
+    }
+   ],
+   "params": {
+    "pos": {
+     "yuna": [
+      [
+       -3.3,
+       0,
+       1.4
+      ]
+     ],
+     "rikku": [
+      [
+       -1.95,
+       0,
+       0.8
+      ]
+     ],
+     "paine": [
+      [
+       -2.5,
+       0,
+       -1.2
+      ]
+     ],
+     "bahamut": [
+      [
+       3.35,
+       0,
+       -3.9
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -3,
+     0.95,
+     6
+    ],
+    "look": [
+     3,
+     1.9,
+     -13.08
+    ],
+    "fov": 50,
+    "bg": [
+     1.5,
+     6,
+     0
+    ],
+    "ground": [
+     1.8,
+     0
+    ],
+    "softbg": 4,
+    "clear": [
+     [
+      -3,
+      6,
+      2
+     ]
+    ],
+    "fg": [
+     {
+      "at": [
+       -0.9,
+       -0.5
+      ],
+      "d": 1.6,
+      "sw": 0.3,
+      "aspect": 1,
+      "blur": 12,
+      "color": "#040508",
+      "top": "#12151f",
+      "pts": [
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        0.2
+       ],
+       [
+        0.3,
+        0.2
+       ],
+       [
+        0.3,
+        0.05
+       ],
+       [
+        0.6,
+        0.05
+       ],
+       [
+        0.6,
+        0.35
+       ],
+       [
+        0.85,
+        0.5
+       ],
+       [
+        1,
+        1
+       ]
+      ]
+     }
+    ],
+    "bokeh": [
+     {
+      "ndc": [
+       0.92,
+       0.55
+      ],
+      "d": 2.2,
+      "s": 0.22,
+      "o": 0.3
+     },
+     {
+      "ndc": [
+       0.62,
+       0.7
+      ],
+      "d": 2.8,
+      "s": 0.14,
+      "o": 0.24
+     },
+     {
+      "ndc": [
+       -0.7,
+       0.6
+      ],
+      "d": 2.6,
+      "s": 0.16,
+      "o": 0.22
+     }
+    ],
+    "bokehColor": "rgba(255,170,90,1)",
+    "hud": {
+     "ctbRow": ".none",
+     "hide": [
+      ".ffx2hud__party"
+     ],
+     "faceSel": ".ffx2stat__face img[src*=portraits]",
+     "cmd": ".ffx2hud__command",
+     "cmdScale": 0.8,
+     "cmdX": 1520,
+     "cmdY": 185,
+     "chips": [
+      [
+       ".ffx2hud__enemies",
+       1150,
+       66
+      ],
+      [
+       ".sgd__toggle",
+       60,
+       84
+      ],
+      [
+       ".mad__toggle",
+       250,
+       84
+      ]
+     ],
+     "gaugeKey": "atb",
+     "accent": "#f4a8d0",
+     "gaugeColor": "#f4a8d0"
+    }
+   },
+   "bandPx": 139
+  },
+  {
+   "option": "P12",
+   "name": "Split-Diopter",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P12-split-diopter.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [
+    "the huge foreground face is the lead's painted PORTRAIT (public/art/portraits), not a crop of the battle idle"
+   ],
+   "camera": {
+    "position": [
+     -1.2,
+     2,
+     6.5
+    ],
+    "lookAt": [
+     0.2,
+     2.2,
+     -6
+    ],
+    "fov": 26,
+    "roll": 0
+   },
+   "changed": "Party figures hidden; the lead's portrait as a camera-facing card 1.4 units from the lens; long lens on the boss; a vertical soft band between face and boss (a two-pass band blur added to the composer, real time); far plate pre-blurred; bloom lowered so the portrait's highlights do not flare.",
+   "bossHeightPct": 69.7,
+   "bossNote": null,
+   "bossGroupHeightPct": 69.7,
+   "bossVisibleHeightPct": 69.7,
+   "leadFigurePx": null,
+   "leadNote": "party figures hidden; the lead is the portrait card, 110% of the frame height (runs off the top and bottom)",
+   "hudOverlap": {
+    "boss": 0.14,
+    "party": 0,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The portrait style differs from the battle figures; the boss HP bar crosses Yuna's hair.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P12-split-diopter-b.jpg",
+     "note": "face smaller, soft band further right"
+    }
+   ],
+   "params": {
+    "hideIds": [
+     "yuna",
+     "rikku",
+     "paine"
+    ],
+    "pos": {
+     "bahamut": [
+      [
+       1.8,
+       0,
+       -6
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -1.2,
+     2,
+     6.5
+    ],
+    "look": [
+     0.2,
+     2.2,
+     -6
+    ],
+    "fov": 26,
+    "bg": [
+     1.2,
+     3,
+     0
+    ],
+    "softbg": 6,
+    "face": {
+     "url": "/art/portraits/yuna-x2.png",
+     "at": [
+      -0.52,
+      -0.06
+     ],
+     "d": 1.4,
+     "hFrac": 1.1
+    },
+    "faceDim": 0.9,
+    "bloom": [
+     0.35
+    ],
+    "diop": {
+     "x0": 0.43,
+     "x1": 0.5,
+     "soft": 0.04,
+     "maxBlur": 10
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P13",
+   "name": "Proscenium",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P13-proscenium.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "the arch is the art agent's painted proscenium overlay (candidate pick, violet curtains); crimson version and the stage-1 CSS/SVG stand-in kept as alternates"
+   ],
+   "camera": {
+    "position": [
+     0.1,
+     3.3,
+     12.9
+    ],
+    "lookAt": [
+     0.3,
+     1.7,
+     -1.3
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "As stage 1 with the painted Ink & Gold arch (1920x1080 overlay, transparent opening x 200-1720, y 118-1010) in place of the CSS/SVG stand-in.",
+   "bossHeightPct": 38.1,
+   "bossGroupHeightPct": 38.1,
+   "bossVisibleHeightPct": 38.1,
+   "leadFigurePx": 294,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.05,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The arch is a candidate painting; the stage inside it is smaller than today's.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P13-proscenium-standin.jpg",
+     "note": "stage-1 version with the stand-in CSS/SVG arch"
+    },
+    {
+     "file": "frames/alt/ffx2-ch4-P13-proscenium-crimson.jpg",
+     "note": "crimson curtains (the art agent's alternate)"
+    },
+    {
+     "file": "frames/alt/ffx2-ch4-P13-proscenium-b.jpg",
+     "note": "pulled back further, wider arch"
+    }
+   ],
+   "swaps": null,
+   "params": {
+    "cam": [
+     0.1,
+     3.3,
+     12.9
+    ],
+    "look": [
+     0.3,
+     1.7,
+     -1.3
+    ],
+    "fov": 32,
+    "stageDark": 0.6,
+    "dimOthers": 0.74,
+    "coneO": 0.3,
+    "archUrl": "/mock-art/proscenium/proscenium.png"
+   },
+   "replacesStage1": "the stage-1 stand-in frame, now an alternate"
+  },
+  {
+   "option": "P14",
+   "name": "Panels",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P14-panels.jpg",
+   "provenance": "COMPOSITE",
+   "standIns": [
+    "three real-engine renders (lead close, the whole stage, boss close) assembled into angled panels in the page (2D)"
+   ],
+   "camera": {
+    "position": [
+     0.2,
+     3.2,
+     11.8
+    ],
+    "lookAt": [
+     0.5,
+     1.6,
+     -2.4
+    ],
+    "fov": 30,
+    "roll": 0
+   },
+   "changed": "Three cameras rendered one after another and laid into three angled Ink & Gold panels with gold dividers; the HUD on top is unchanged.",
+   "bossHeightPct": 43.2,
+   "bossNote": null,
+   "bossGroupHeightPct": 43.1,
+   "bossVisibleHeightPct": 43.1,
+   "leadFigurePx": 354,
+   "leadNote": "measured on the whole-stage panel camera before compositing",
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.03,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "A composite: each panel is narrow, so the stage panel crops the formation.",
+   "alternates": [],
+   "params": {
+    "views": [
+     {
+      "cam": {
+       "position": [
+        -1.2,
+        1.75,
+        4.8
+       ],
+       "lookAt": [
+        -2.25,
+        1.45,
+        1.4
+       ],
+       "fov": 26
+      }
+     },
+     {
+      "cam": {
+       "position": [
+        0.2,
+        3.2,
+        11.8
+       ],
+       "lookAt": [
+        0.5,
+        1.6,
+        -2.4
+       ],
+       "fov": 30
+      }
+     },
+     {
+      "cam": {
+       "position": [
+        0.1,
+        2.9,
+        -0.9
+       ],
+       "lookAt": [
+        1.15,
+        3,
+        -5.8
+       ],
+       "fov": 32
+      },
+      "bg": [
+       1.2,
+       3,
+       0
+      ]
+     }
+    ],
+    "panels": [
+     {
+      "view": 0,
+      "poly": [
+       [
+        0,
+        0
+       ],
+       [
+        720,
+        0
+       ],
+       [
+        490,
+        1080
+       ],
+       [
+        0,
+        1080
+       ]
+      ],
+      "dx": -830,
+      "dy": -60
+     },
+     {
+      "view": 1,
+      "poly": [
+       [
+        720,
+        0
+       ],
+       [
+        1380,
+        0
+       ],
+       [
+        1150,
+        1080
+       ],
+       [
+        490,
+        1080
+       ]
+      ],
+      "dx": -40,
+      "dy": 0
+     },
+     {
+      "view": 2,
+      "poly": [
+       [
+        1380,
+        0
+       ],
+       [
+        1920,
+        0
+       ],
+       [
+        1920,
+        1080
+       ],
+       [
+        1150,
+        1080
+       ]
+      ],
+      "dx": 690,
+      "dy": -90
+     }
+    ],
+    "dividers": [
+     [
+      720,
+      0,
+      490,
+      1080
+     ],
+     [
+      1380,
+      0,
+      1150,
+      1080
+     ]
+    ]
+   },
+   "panelCameras": [
+    {
+     "position": [
+      -1.2,
+      1.75,
+      4.8
+     ],
+     "lookAt": [
+      -2.25,
+      1.45,
+      1.4
+     ],
+     "fov": 26
+    },
+    {
+     "position": [
+      0.2,
+      3.2,
+      11.8
+     ],
+     "lookAt": [
+      0.5,
+      1.6,
+      -2.4
+     ],
+     "fov": 30
+    },
+    {
+     "position": [
+      0.1,
+      2.9,
+      -0.9
+     ],
+     "lookAt": [
+      1.15,
+      3,
+      -5.8
+     ],
+     "fov": 32
+    }
+   ]
+  },
+  {
+   "stage": 2,
+   "option": "P2",
+   "name": "Over the Shoulder",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P02-over-the-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear three-quarter party paintings are CANDIDATES from the art agent (art/READY.json), not approved"
+   ],
+   "camera": {
+    "position": [
+     -0.5,
+     2.45,
+     8.6
+    ],
+    "lookAt": [
+     1.35,
+     2.2,
+     -6.8
+    ],
+    "fov": 26.5,
+    "roll": 0
+   },
+   "changed": "Camera behind and beside the party at 1.3-1.35h looking at the boss's chest, long lens; each party painting swapped for its rear34 candidate (sidecar scale and baselineY honoured, no alpha re-fit, never mirrored); treatment: warm rim from the boss side on the party, cool rim on the boss, pre-blurred far plate, contact shadows 0.72, saturation +4%.",
+   "bossHeightPct": 54.8,
+   "bossGroupHeightPct": 54.8,
+   "bossVisibleHeightPct": 54.8,
+   "leadFigurePx": 710,
+   "hudOverlap": {
+    "boss": 0.06,
+    "party": 0.07,
+    "overlaps": [
+     "boss",
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Kimahri is mostly hidden behind Tidus and the command list clips Tidus's left arm; the rear paintings drift a little (Tidus's knit sleeve is on the wrong arm).",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P02-over-the-shoulder-b.jpg",
+     "note": "the shot spec's geometry (camera 0.45D behind, 0.3D aside, fov 36): Tidus leaves the frame and Yuna goes under the command list"
+    }
+   ],
+   "swaps": {
+    "tidus": {
+     "baselineY": 1103,
+     "scale": 1.182,
+     "size": [
+      1.369,
+      2.188
+     ],
+     "mirrored": false
+    },
+    "yuna": {
+     "baselineY": 1187,
+     "scale": 0.997,
+     "size": [
+      1.051,
+      2.059
+     ],
+     "mirrored": false
+    },
+    "kimahri": {
+     "baselineY": 1156,
+     "scale": 1.07,
+     "size": [
+      1.344,
+      1.947
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "tidus": "/mock-art/tidus/rear34.png",
+     "yuna": "/mock-art/yuna/rear34.png",
+     "kimahri": "/mock-art/kimahri/rear34.png"
+    },
+    "pos": {
+     "seymour-flux": [
+      [
+       3,
+       0,
+       -6.9
+      ]
+     ],
+     "mortiorchis": [
+      [
+       0.4,
+       1.05,
+       -7
+      ]
+     ],
+     "tidus": [
+      [
+       -0.3,
+       0,
+       1.6
+      ]
+     ],
+     "yuna": [
+      [
+       1.05,
+       0,
+       -0.85
+      ]
+     ],
+     "kimahri": [
+      [
+       0.35,
+       0,
+       -2.9
+      ]
+     ]
+    },
+    "cam": [
+     -0.5,
+     2.45,
+     8.6
+    ],
+    "look": [
+     1.35,
+     2.2,
+     -6.8
+    ],
+    "fov": 26.5,
+    "bg": [
+     1.45,
+     7,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16767440,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.35,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 10470655,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.35
+     ],
+     "rimWidth": 3.4
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.5
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P2h",
+   "name": "Over the Shoulder, high",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P02h-over-the-shoulder-high.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates"
+   ],
+   "camera": {
+    "position": [
+     -0.5,
+     3.35,
+     10.4
+    ],
+    "lookAt": [
+     1.3,
+     1.55,
+     -6.9
+    ],
+    "fov": 27,
+    "roll": 0
+   },
+   "changed": "As P2 with the camera at about 1.8h looking down: the whole party readable, full figures.",
+   "bossHeightPct": 48.7,
+   "bossGroupHeightPct": 48.7,
+   "bossVisibleHeightPct": 48.7,
+   "leadFigurePx": 522,
+   "hudOverlap": {
+    "boss": 0.01,
+    "party": 0.01,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Seymour drops to 49% and Kimahri still overlaps Tidus.",
+   "alternates": [],
+   "swaps": {
+    "tidus": {
+     "baselineY": 1103,
+     "scale": 1.182,
+     "size": [
+      1.369,
+      2.188
+     ],
+     "mirrored": false
+    },
+    "yuna": {
+     "baselineY": 1187,
+     "scale": 0.997,
+     "size": [
+      1.051,
+      2.059
+     ],
+     "mirrored": false
+    },
+    "kimahri": {
+     "baselineY": 1156,
+     "scale": 1.07,
+     "size": [
+      1.344,
+      1.947
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "tidus": "/mock-art/tidus/rear34.png",
+     "yuna": "/mock-art/yuna/rear34.png",
+     "kimahri": "/mock-art/kimahri/rear34.png"
+    },
+    "pos": {
+     "seymour-flux": [
+      [
+       3,
+       0,
+       -6.9
+      ]
+     ],
+     "mortiorchis": [
+      [
+       0.4,
+       1.05,
+       -7
+      ]
+     ],
+     "tidus": [
+      [
+       -0.3,
+       0,
+       1.6
+      ]
+     ],
+     "yuna": [
+      [
+       1.05,
+       0,
+       -0.85
+      ]
+     ],
+     "kimahri": [
+      [
+       0.35,
+       0,
+       -2.9
+      ]
+     ]
+    },
+    "cam": [
+     -0.5,
+     3.35,
+     10.4
+    ],
+    "look": [
+     1.3,
+     1.55,
+     -6.9
+    ],
+    "fov": 27,
+    "bg": [
+     1.4,
+     4,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16767440,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.35,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 10470655,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.35
+     ],
+     "rimWidth": 3.4
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.5
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P2l",
+   "name": "Over the Shoulder, low",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P02l-over-the-shoulder-low.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates"
+   ],
+   "camera": {
+    "position": [
+     -0.55,
+     1.64,
+     7.9
+    ],
+    "lookAt": [
+     1.35,
+     2.35,
+     -6.9
+    ],
+    "fov": 23,
+    "roll": 0
+   },
+   "changed": "As P2 with the camera at 0.9h (1.64 units) looking up, a tighter lens (fov 23-24) and the boss moved in: the boss towers.",
+   "bossHeightPct": 69.9,
+   "bossGroupHeightPct": 69.9,
+   "bossVisibleHeightPct": 69.9,
+   "leadFigurePx": 913,
+   "hudOverlap": {
+    "boss": 0.12,
+    "party": 0.11,
+    "overlaps": [
+     "boss",
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Kimahri disappears behind Tidus and the party rows clip Yuna's hem.",
+   "alternates": [],
+   "swaps": {
+    "tidus": {
+     "baselineY": 1103,
+     "scale": 1.182,
+     "size": [
+      1.369,
+      2.188
+     ],
+     "mirrored": false
+    },
+    "yuna": {
+     "baselineY": 1187,
+     "scale": 0.997,
+     "size": [
+      1.051,
+      2.059
+     ],
+     "mirrored": false
+    },
+    "kimahri": {
+     "baselineY": 1156,
+     "scale": 1.07,
+     "size": [
+      1.344,
+      1.947
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "tidus": "/mock-art/tidus/rear34.png",
+     "yuna": "/mock-art/yuna/rear34.png",
+     "kimahri": "/mock-art/kimahri/rear34.png"
+    },
+    "pos": {
+     "seymour-flux": [
+      [
+       3,
+       0,
+       -6.2
+      ]
+     ],
+     "mortiorchis": [
+      [
+       0.5,
+       1.05,
+       -6.3
+      ]
+     ],
+     "tidus": [
+      [
+       -0.3,
+       0,
+       1.6
+      ]
+     ],
+     "yuna": [
+      [
+       1.05,
+       0,
+       -0.85
+      ]
+     ],
+     "kimahri": [
+      [
+       0.35,
+       0,
+       -2.9
+      ]
+     ]
+    },
+    "cam": [
+     -0.55,
+     1.64,
+     7.9
+    ],
+    "look": [
+     1.35,
+     2.35,
+     -6.9
+    ],
+    "fov": 23,
+    "bg": [
+     1.6,
+     10,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16767440,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.35,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 10470655,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.35
+     ],
+     "rimWidth": 3.4
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.5
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P2wd",
+   "name": "Over the Shoulder, wide",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P02wd-over-the-shoulder-wide.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates"
+   ],
+   "camera": {
+    "position": [
+     -0.9,
+     2.3,
+     7.2
+    ],
+    "lookAt": [
+     1.2,
+     2,
+     -6.9
+    ],
+    "fov": 45,
+    "roll": 0
+   },
+   "changed": "As P2 at fov 45 from a little further back: the whole arena in frame.",
+   "bossHeightPct": 33.4,
+   "bossGroupHeightPct": 33.4,
+   "bossVisibleHeightPct": 33.4,
+   "leadFigurePx": 566,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.08,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "At fov 45 Seymour shrinks to 33% and the frame is mostly canyon.",
+   "alternates": [],
+   "swaps": {
+    "tidus": {
+     "baselineY": 1103,
+     "scale": 1.182,
+     "size": [
+      1.369,
+      2.188
+     ],
+     "mirrored": false
+    },
+    "yuna": {
+     "baselineY": 1187,
+     "scale": 0.997,
+     "size": [
+      1.051,
+      2.059
+     ],
+     "mirrored": false
+    },
+    "kimahri": {
+     "baselineY": 1156,
+     "scale": 1.07,
+     "size": [
+      1.344,
+      1.947
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "tidus": "/mock-art/tidus/rear34.png",
+     "yuna": "/mock-art/yuna/rear34.png",
+     "kimahri": "/mock-art/kimahri/rear34.png"
+    },
+    "pos": {
+     "seymour-flux": [
+      [
+       3,
+       0,
+       -6.9
+      ]
+     ],
+     "mortiorchis": [
+      [
+       0.4,
+       1.05,
+       -7
+      ]
+     ],
+     "tidus": [
+      [
+       -0.55,
+       0,
+       2.2
+      ]
+     ],
+     "yuna": [
+      [
+       1.05,
+       0,
+       1
+      ]
+     ],
+     "kimahri": [
+      [
+       0.1,
+       0,
+       -0.9
+      ]
+     ]
+    },
+    "cam": [
+     -0.9,
+     2.3,
+     7.2
+    ],
+    "look": [
+     1.2,
+     2,
+     -6.9
+    ],
+    "fov": 45,
+    "bg": [
+     1.7,
+     9,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16767440,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.35,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 10470655,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.35
+     ],
+     "rimWidth": 3.4
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.5
+    },
+    "ground": [
+     1.6,
+     0
+    ]
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P2r",
+   "name": "Over the Shoulder, right shoulder",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P02r-over-the-shoulder-right.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates",
+    "Ch IV only: Yuna (White Mage) and Rikku (Dark Knight) rear paintings mirrored to face the boss; READY.json marks both non-chiral. Chiral subjects are never mirrored"
+   ],
+   "camera": {
+    "position": [
+     3.3,
+     2.9,
+     9.8
+    ],
+    "lookAt": [
+     0.9,
+     1.9,
+     -6.9
+    ],
+    "fov": 26.5,
+    "roll": 0
+   },
+   "changed": "Camera over the other shoulder: the party lower right, the boss centre-left.",
+   "bossHeightPct": 51.3,
+   "bossGroupHeightPct": 51.3,
+   "bossVisibleHeightPct": 51.3,
+   "leadFigurePx": 565,
+   "hudOverlap": {
+    "boss": 0.33,
+    "party": 0.03,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Tidus's and Kimahri's rear paintings are turned right and can't be mirrored (chiral), so on this shoulder they face away from Seymour; Mortiorchis sits under the command list.",
+   "alternates": [],
+   "swaps": {
+    "tidus": {
+     "baselineY": 1103,
+     "scale": 1.182,
+     "size": [
+      1.369,
+      2.188
+     ],
+     "mirrored": false
+    },
+    "yuna": {
+     "baselineY": 1187,
+     "scale": 0.997,
+     "size": [
+      1.051,
+      2.059
+     ],
+     "mirrored": false
+    },
+    "kimahri": {
+     "baselineY": 1156,
+     "scale": 1.07,
+     "size": [
+      1.344,
+      1.947
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "tidus": "/mock-art/tidus/rear34.png",
+     "yuna": "/mock-art/yuna/rear34.png",
+     "kimahri": "/mock-art/kimahri/rear34.png"
+    },
+    "pos": {
+     "seymour-flux": [
+      [
+       0.3,
+       0,
+       -6.9
+      ]
+     ],
+     "mortiorchis": [
+      [
+       -2.3,
+       1.05,
+       -7.2
+      ]
+     ],
+     "tidus": [
+      [
+       2.35,
+       0,
+       1.2
+      ]
+     ],
+     "yuna": [
+      [
+       1.25,
+       0,
+       -1.1
+      ]
+     ],
+     "kimahri": [
+      [
+       2.2,
+       0,
+       -2.9
+      ]
+     ]
+    },
+    "cam": [
+     3.3,
+     2.9,
+     9.8
+    ],
+    "look": [
+     0.9,
+     1.9,
+     -6.9
+    ],
+    "fov": 26.5,
+    "bg": [
+     1.45,
+     7,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16767440,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.35,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 10470655,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.35
+     ],
+     "rimWidth": 3.4
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.5
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P3",
+   "name": "Hero Shoulder",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P03-hero-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "the lead is the high-resolution rear34-hi candidate; the other two are rear34 candidates"
+   ],
+   "camera": {
+    "position": [
+     -0.2,
+     1.95,
+     6.9
+    ],
+    "lookAt": [
+     2.283,
+     1.55,
+     -5.866
+    ],
+    "fov": 40,
+    "roll": 0
+   },
+   "changed": "Camera 1.9-1.95 high, about 3 units behind the lead, fov 40, pitched slightly down: the lead's back huge in the near foreground cropped at the thighs, the other two small in the middle distance, the boss centre-right; far plate pre-blurred harder.",
+   "bossHeightPct": 43,
+   "bossGroupHeightPct": 43.1,
+   "bossVisibleHeightPct": 43.1,
+   "leadFigurePx": 894,
+   "hudOverlap": {
+    "boss": 0.01,
+    "party": 0.14,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The command list overlaps Kimahri and Tidus's hip; Seymour is only 43%.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P03-hero-shoulder-b.jpg",
+     "note": "the lead closer, cropped at the waist"
+    }
+   ],
+   "swaps": {
+    "tidus": {
+     "baselineY": 2194,
+     "scale": 0.589,
+     "size": [
+      1.334,
+      2.154
+     ],
+     "mirrored": false
+    },
+    "yuna": {
+     "baselineY": 1187,
+     "scale": 0.997,
+     "size": [
+      1.051,
+      2.059
+     ],
+     "mirrored": false
+    },
+    "kimahri": {
+     "baselineY": 1156,
+     "scale": 1.07,
+     "size": [
+      1.344,
+      1.947
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "tidus": "/mock-art/tidus/rear34-hi.png",
+     "yuna": "/mock-art/yuna/rear34.png",
+     "kimahri": "/mock-art/kimahri/rear34.png"
+    },
+    "pos": {
+     "tidus": [
+      [
+       -0.053,
+       0,
+       3.26
+      ]
+     ],
+     "yuna": [
+      [
+       1.792,
+       0,
+       -0.458
+      ]
+     ],
+     "kimahri": [
+      [
+       -0.079,
+       0,
+       -1.841
+      ]
+     ],
+     "seymour-flux": [
+      [
+       4.825,
+       0,
+       -5.575
+      ]
+     ],
+     "mortiorchis": [
+      [
+       2.583,
+       1.2,
+       -6.623
+      ]
+     ]
+    },
+    "cam": [
+     -0.2,
+     1.95,
+     6.9
+    ],
+    "look": [
+     2.283,
+     1.55,
+     -5.866
+    ],
+    "fov": 40,
+    "bg": [
+     1.6,
+     9,
+     0
+    ],
+    "softbg": 7,
+    "rimParty": {
+     "rim": 16767440,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.35,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 10470655,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.35
+     ],
+     "rimWidth": 3.4
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.5
+    },
+    "ground": [
+     1.6,
+     0
+    ]
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P21",
+   "name": "Cinematic Shoulder",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P21-cinematic-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates",
+    "HUD mock: turn order (FFX), chips and boss plate in the top band, party across the bottom band, the command list at 0.8 over the image"
+   ],
+   "camera": {
+    "position": [
+     -0.2,
+     1.95,
+     6.9
+    ],
+    "lookAt": [
+     2.283,
+     1.55,
+     -5.866
+    ],
+    "fov": 44,
+    "roll": 0
+   },
+   "changed": "The P3 Hero Shoulder framing (fov widened to 44-47 for the 2.39:1 window) inside the P11 bands with the HUD in the bands.",
+   "bossHeightPct": 39.3,
+   "bossGroupHeightPct": 39.3,
+   "bossVisibleHeightPct": 39.3,
+   "leadFigurePx": 783,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.16,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The band HUD is a mock; Seymour is 39% of the height.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P21-cinematic-shoulder-b.jpg",
+     "note": "the P2 framing inside the bands"
+    }
+   ],
+   "swaps": {
+    "tidus": {
+     "baselineY": 2194,
+     "scale": 0.589,
+     "size": [
+      1.334,
+      2.154
+     ],
+     "mirrored": false
+    },
+    "yuna": {
+     "baselineY": 1187,
+     "scale": 0.997,
+     "size": [
+      1.051,
+      2.059
+     ],
+     "mirrored": false
+    },
+    "kimahri": {
+     "baselineY": 1156,
+     "scale": 1.07,
+     "size": [
+      1.344,
+      1.947
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "tidus": "/mock-art/tidus/rear34-hi.png",
+     "yuna": "/mock-art/yuna/rear34.png",
+     "kimahri": "/mock-art/kimahri/rear34.png"
+    },
+    "pos": {
+     "tidus": [
+      [
+       -0.053,
+       0,
+       3.26
+      ]
+     ],
+     "yuna": [
+      [
+       1.792,
+       0,
+       -0.458
+      ]
+     ],
+     "kimahri": [
+      [
+       -0.079,
+       0,
+       -1.841
+      ]
+     ],
+     "seymour-flux": [
+      [
+       4.825,
+       0,
+       -5.575
+      ]
+     ],
+     "mortiorchis": [
+      [
+       2.583,
+       1.2,
+       -6.623
+      ]
+     ]
+    },
+    "cam": [
+     -0.2,
+     1.95,
+     6.9
+    ],
+    "look": [
+     2.283,
+     1.55,
+     -5.866
+    ],
+    "fov": 44,
+    "bg": [
+     1.6,
+     9,
+     0
+    ],
+    "softbg": 7,
+    "rimParty": {
+     "rim": 16767440,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.35,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 10470655,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.35
+     ],
+     "rimWidth": 3.4
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.5
+    },
+    "ground": [
+     1.6,
+     0
+    ],
+    "band": {
+     "hud": {
+      "chips": [
+       [
+        ".ffx-cmd-info",
+        60,
+        36
+       ],
+       [
+        ".sgd__toggle",
+        620,
+        14
+       ],
+       [
+        ".mad__toggle",
+        620,
+        52
+       ],
+       [
+        ".ffx-sensor",
+        620,
+        90
+       ],
+       [
+        ".eint__toggle",
+        860,
+        14
+       ]
+      ]
+     }
+    },
+    "bokeh": [
+     {
+      "ndc": [
+       -0.9,
+       0.5
+      ],
+      "d": 2.4,
+      "s": 0.2,
+      "o": 0.3
+     },
+     {
+      "ndc": [
+       0.62,
+       0.6
+      ],
+      "d": 2.6,
+      "s": 0.16,
+      "o": 0.26
+     },
+     {
+      "ndc": [
+       0.97,
+       0.08
+      ],
+      "d": 2.2,
+      "s": 0.22,
+      "o": 0.2
+     }
+    ]
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P22",
+   "name": "Hero Poster (moment shot)",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P22-hero-poster.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [
+    "MOMENT SHOT, not a battle master: the intro beat with the HUD down and the turn rings off (alternate b keeps the command HUD)"
+   ],
+   "camera": {
+    "position": [
+     0.1,
+     1.55,
+     10.2
+    ],
+    "lookAt": [
+     0.3,
+     2.2,
+     -2
+    ],
+    "fov": 32,
+    "roll": 0
+   },
+   "changed": "The P2-without discovery on purpose: the party in a V facing the camera in today's front paintings, the boss behind them made about 1.4-1.5x taller and looming, a low camera (1.45-1.55), backlight rim on everyone, pre-blurred far plate, lamp or snow bokeh near the lens.",
+   "bossHeightPct": 66,
+   "bossGroupHeightPct": 66,
+   "bossVisibleHeightPct": 66,
+   "leadFigurePx": 457,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "A moment shot, not a master; the party still wears today's front paintings.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P22-hero-poster-b.jpg",
+     "note": "the same beat with the command HUD on"
+    },
+    {
+     "file": "frames/alt/ffx-ch1-P22-hero-poster-c.jpg",
+     "note": "victory beat: painted victory poses, Seymour and Mortiorchis in the engine's pyrefly dissolve"
+    }
+   ],
+   "swaps": {},
+   "params": {
+    "height": {
+     "seymour-flux": 5.6,
+     "mortiorchis": 3.1
+    },
+    "pos": {
+     "tidus": [
+      [
+       0.05,
+       0,
+       2.6
+      ]
+     ],
+     "yuna": [
+      [
+       -1.25,
+       0,
+       1.75
+      ]
+     ],
+     "kimahri": [
+      [
+       1.3,
+       0,
+       1.6
+      ]
+     ],
+     "seymour-flux": [
+      [
+       1.45,
+       0,
+       -4.6
+      ]
+     ],
+     "mortiorchis": [
+      [
+       -1.5,
+       1.6,
+       -5.4
+      ]
+     ]
+    },
+    "cam": [
+     0.1,
+     1.55,
+     10.2
+    ],
+    "look": [
+     0.3,
+     2.2,
+     -2
+    ],
+    "fov": 32,
+    "bg": [
+     1.35,
+     6,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 14140159,
+     "rimStrength": 1.3,
+     "rimDir": [
+      0,
+      1
+     ],
+     "rimWidth": 3.6,
+     "bounce": 10470655,
+     "bounceStrength": 0.14
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1,
+     "rimDir": [
+      0,
+      1
+     ],
+     "rimWidth": 3.6
+    },
+    "bokeh": [
+     {
+      "ndc": [
+       -0.88,
+       0.6
+      ],
+      "d": 2.2,
+      "s": 0.24,
+      "o": 0.3
+     },
+     {
+      "ndc": [
+       0.85,
+       0.7
+      ],
+      "d": 2.6,
+      "s": 0.18,
+      "o": 0.26
+     },
+     {
+      "ndc": [
+       -0.6,
+       -0.7
+      ],
+      "d": 2,
+      "s": 0.2,
+      "o": 0.22
+     },
+     {
+      "ndc": [
+       0.75,
+       -0.55
+      ],
+      "d": 2.3,
+      "s": 0.16,
+      "o": 0.2
+     }
+    ],
+    "grade": {
+     "saturation": 1.14,
+     "vignette": 0.58
+    },
+    "hudOff": true,
+    "noRing": true
+   },
+   "momentShot": true,
+   "hudDown": true
+  },
+  {
+   "stage": 2,
+   "option": "P15",
+   "name": "Portrait Duel (phone)",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P15-portrait-duel.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates",
+    "the boss made about 2x taller to fill the top half"
+   ],
+   "camera": {
+    "position": [
+     0.15,
+     1.3,
+     8.6
+    ],
+    "lookAt": [
+     0.4,
+     4.9,
+     -5.4
+    ],
+    "fov": 48,
+    "roll": 0
+   },
+   "changed": "Phone 390x844 at DPR 3 with the game's own phone HUD; camera low behind the party looking up (fov 48): the boss looms over the top half facing down at the player, the party's backs along the bottom of the stage above the party cards.",
+   "bossHeightPct": 38.7,
+   "bossGroupHeightPct": 38.6,
+   "bossVisibleHeightPct": 38.6,
+   "leadFigurePx": 253,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.32,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Seymour is scaled to about 2x to fill the top half; the party cards cover the party's legs.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx-ch1-P15-portrait-duel-b.jpg",
+     "note": "higher camera (2.6): the party smaller"
+    }
+   ],
+   "swaps": {
+    "tidus": {
+     "baselineY": 1103,
+     "scale": 1.182,
+     "size": [
+      1.369,
+      2.188
+     ],
+     "mirrored": false
+    },
+    "yuna": {
+     "baselineY": 1187,
+     "scale": 0.997,
+     "size": [
+      1.051,
+      2.059
+     ],
+     "mirrored": false
+    },
+    "kimahri": {
+     "baselineY": 1156,
+     "scale": 1.07,
+     "size": [
+      1.344,
+      1.947
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "tidus": "/mock-art/tidus/rear34.png",
+     "yuna": "/mock-art/yuna/rear34.png",
+     "kimahri": "/mock-art/kimahri/rear34.png"
+    },
+    "pos": {
+     "tidus": [
+      [
+       -0.55,
+       0,
+       3.2
+      ]
+     ],
+     "yuna": [
+      [
+       0.85,
+       0,
+       2.7
+      ]
+     ],
+     "kimahri": [
+      [
+       0.15,
+       0,
+       1.2
+      ]
+     ],
+     "seymour-flux": [
+      [
+       1.15,
+       0,
+       -5.4
+      ]
+     ],
+     "mortiorchis": [
+      [
+       -1.3,
+       3.4,
+       -6.4
+      ]
+     ]
+    },
+    "cam": [
+     0.15,
+     1.3,
+     8.6
+    ],
+    "look": [
+     0.4,
+     4.9,
+     -5.4
+    ],
+    "fov": 48,
+    "bg": [
+     2,
+     13,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16767440,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.35,
+      1
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.12,
+     "vignette": 0.45
+    },
+    "height": {
+     "seymour-flux": 8.2,
+     "mortiorchis": 4.5
+    }
+   },
+   "size": [
+    390,
+    844
+   ],
+   "dpr": 3,
+   "phone": true
+  },
+  {
+   "stage": 2,
+   "option": "P16",
+   "name": "Director's Cut (storyboard)",
+   "chapter": "ffx-ch1",
+   "game": "FFX",
+   "file": "frames/ffx-ch1/P16-directors-cut.jpg",
+   "provenance": "COMPOSITE",
+   "standIns": [
+    "a strip of five real-engine stills; the command beat uses the rear-painting candidates",
+    "beats 2-5 have the HUD down; the hit uses the lead's painted attack pose and the engine's own hit flash frozen mid-flash; victory uses the painted victory poses and the engine's pyrefly death dissolve"
+   ],
+   "changed": "Five beats laid side by side: command = P3 Hero Shoulder, the hit = P5 Side Stage low, enemy turn = P4 Reverse Angle, big attack = P7 Colossus, victory = P22 Hero Poster.",
+   "weak": "A storyboard of stills, not motion; the big-attack beat has no attack effect (the painted cast pose read as a different design and is left out).",
+   "alternates": [],
+   "beats": [
+    {
+     "beat": "COMMAND",
+     "from": "over the shoulder (P3)",
+     "file": "frames/alt/ffx-ch1-P16-beat1-command.jpg",
+     "camera": {
+      "position": [
+       -0.2,
+       1.95,
+       6.9
+      ],
+      "lookAt": [
+       2.283,
+       1.55,
+       -5.866
+      ],
+      "fov": 40,
+      "roll": 0
+     },
+     "bossHeightPct": 43.5,
+     "leadFigurePx": 904,
+     "hud": "on"
+    },
+    {
+     "beat": "THE HIT",
+     "from": "side stage, low (P5)",
+     "file": "frames/alt/ffx-ch1-P16-beat2-the-hit.jpg",
+     "camera": {
+      "position": [
+       0.2,
+       1.1,
+       24
+      ],
+      "lookAt": [
+       0.2,
+       1.9,
+       -2
+      ],
+      "fov": 19,
+      "roll": 0
+     },
+     "bossHeightPct": 45.1,
+     "leadFigurePx": 224,
+     "hud": "down"
+    },
+    {
+     "beat": "ENEMY TURN",
+     "from": "reverse angle (P4)",
+     "file": "frames/alt/ffx-ch1-P16-beat3-enemy-turn.jpg",
+     "camera": {
+      "position": [
+       11.4,
+       1.7,
+       -13.7
+      ],
+      "lookAt": [
+       0.7,
+       1.75,
+       -1
+      ],
+      "fov": 29,
+      "roll": 0
+     },
+     "bossHeightPct": 81.6,
+     "leadFigurePx": 195,
+     "hud": "down"
+    },
+    {
+     "beat": "BIG ATTACK",
+     "from": "colossus (P7)",
+     "file": "frames/alt/ffx-ch1-P16-beat4-big-attack.jpg",
+     "camera": {
+      "position": [
+       -2.4,
+       0.36,
+       10.4
+      ],
+      "lookAt": [
+       0.6,
+       4.8,
+       -6
+      ],
+      "fov": 45,
+      "roll": 0
+     },
+     "bossHeightPct": 90.2,
+     "leadFigurePx": 265,
+     "hud": "down"
+    },
+    {
+     "beat": "VICTORY",
+     "from": "hero poster (P22)",
+     "file": "frames/alt/ffx-ch1-P16-beat5-victory.jpg",
+     "camera": {
+      "position": [
+       0.1,
+       1.55,
+       10.2
+      ],
+      "lookAt": [
+       0.3,
+       2.2,
+       -2
+      ],
+      "fov": 32,
+      "roll": 0
+     },
+     "bossHeightPct": 66.2,
+     "leadFigurePx": 446,
+     "hud": "down"
+    }
+   ],
+   "size": [
+    3904,
+    502
+   ]
+  },
+  {
+   "stage": 2,
+   "option": "P2",
+   "name": "Over the Shoulder",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P02-over-the-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear three-quarter party paintings are CANDIDATES from the art agent (art/READY.json), not approved"
+   ],
+   "camera": {
+    "position": [
+     -2.6,
+     2.35,
+     7.9
+    ],
+    "lookAt": [
+     1.4,
+     2.05,
+     -5.8
+    ],
+    "fov": 28.5,
+    "roll": 0
+   },
+   "changed": "Camera behind and beside the party at 1.3-1.35h looking at the boss's chest, long lens; each party painting swapped for its rear34 candidate (sidecar scale and baselineY honoured, no alpha re-fit, never mirrored); treatment: warm rim from the boss side on the party, cool rim on the boss, pre-blurred far plate, contact shadows 0.72, saturation +4%.",
+   "bossHeightPct": 56.9,
+   "bossGroupHeightPct": 56.9,
+   "bossVisibleHeightPct": 56.9,
+   "leadFigurePx": 705,
+   "hudOverlap": {
+    "boss": 0.03,
+    "party": 0.02,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The game's best-move chip lands on Rikku's hair; Yuna's rear painting has an open back panel the idle doesn't have.",
+   "alternates": [],
+   "swaps": {
+    "yuna": {
+     "baselineY": 1049,
+     "scale": 1.113,
+     "size": [
+      1.163,
+      1.849
+     ],
+     "mirrored": false
+    },
+    "rikku": {
+     "baselineY": 1166,
+     "scale": 1.019,
+     "size": [
+      1.261,
+      1.842
+     ],
+     "mirrored": false
+    },
+    "paine": {
+     "baselineY": 1052,
+     "scale": 1.107,
+     "size": [
+      0.815,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34.png",
+     "rikku": "/mock-art/rikku-dark-knight/rear34.png",
+     "paine": "/mock-art/paine-warrior/rear34.png"
+    },
+    "pos": {
+     "yuna": [
+      [
+       -2.35,
+       0,
+       2.2
+      ]
+     ],
+     "rikku": [
+      [
+       -1.2,
+       0,
+       1.05
+      ]
+     ],
+     "paine": [
+      [
+       -0.05,
+       0,
+       -0.15
+      ]
+     ],
+     "bahamut": [
+      [
+       2.73,
+       0,
+       -5.44
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -2.6,
+     2.35,
+     7.9
+    ],
+    "look": [
+     1.4,
+     2.05,
+     -5.8
+    ],
+    "fov": 28.5,
+    "bg": [
+     1.25,
+     4,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.45,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 8374015,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 10545663,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.4
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.1,
+     "vignette": 0.44
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P2h",
+   "name": "Over the Shoulder, high",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P02h-over-the-shoulder-high.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates"
+   ],
+   "camera": {
+    "position": [
+     -2.7,
+     3.35,
+     9.2
+    ],
+    "lookAt": [
+     1.2,
+     1.45,
+     -5.8
+    ],
+    "fov": 28.5,
+    "roll": 0
+   },
+   "changed": "As P2 with the camera at about 1.8h looking down: the whole party readable, full figures.",
+   "bossHeightPct": 51.8,
+   "bossGroupHeightPct": 51.9,
+   "bossVisibleHeightPct": 51.9,
+   "leadFigurePx": 558,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.01,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Bahamut drops to 52%.",
+   "alternates": [],
+   "swaps": {
+    "yuna": {
+     "baselineY": 1049,
+     "scale": 1.113,
+     "size": [
+      1.163,
+      1.849
+     ],
+     "mirrored": false
+    },
+    "rikku": {
+     "baselineY": 1166,
+     "scale": 1.019,
+     "size": [
+      1.261,
+      1.842
+     ],
+     "mirrored": false
+    },
+    "paine": {
+     "baselineY": 1052,
+     "scale": 1.107,
+     "size": [
+      0.815,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34.png",
+     "rikku": "/mock-art/rikku-dark-knight/rear34.png",
+     "paine": "/mock-art/paine-warrior/rear34.png"
+    },
+    "pos": {
+     "yuna": [
+      [
+       -2.35,
+       0,
+       2.2
+      ]
+     ],
+     "rikku": [
+      [
+       -1.2,
+       0,
+       1.05
+      ]
+     ],
+     "paine": [
+      [
+       -0.05,
+       0,
+       -0.15
+      ]
+     ],
+     "bahamut": [
+      [
+       2.73,
+       0,
+       -5.44
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -2.7,
+     3.35,
+     9.2
+    ],
+    "look": [
+     1.2,
+     1.45,
+     -5.8
+    ],
+    "fov": 28.5,
+    "bg": [
+     1.25,
+     1.5,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.45,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 8374015,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 10545663,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.4
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.1,
+     "vignette": 0.44
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P2l",
+   "name": "Over the Shoulder, low",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P02l-over-the-shoulder-low.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates"
+   ],
+   "camera": {
+    "position": [
+     -2.4,
+     1.64,
+     7.6
+    ],
+    "lookAt": [
+     1.4,
+     2.45,
+     -5.8
+    ],
+    "fov": 24,
+    "roll": 0
+   },
+   "changed": "As P2 with the camera at 0.9h (1.64 units) looking up, a tighter lens (fov 23-24) and the boss moved in: the boss towers.",
+   "bossHeightPct": 71.4,
+   "bossGroupHeightPct": 71.4,
+   "bossVisibleHeightPct": 71.4,
+   "leadFigurePx": 926,
+   "hudOverlap": {
+    "boss": 0.15,
+    "party": 0.02,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The command stack covers Bahamut's right wing.",
+   "alternates": [],
+   "swaps": {
+    "yuna": {
+     "baselineY": 1049,
+     "scale": 1.113,
+     "size": [
+      1.163,
+      1.849
+     ],
+     "mirrored": false
+    },
+    "rikku": {
+     "baselineY": 1166,
+     "scale": 1.019,
+     "size": [
+      1.261,
+      1.842
+     ],
+     "mirrored": false
+    },
+    "paine": {
+     "baselineY": 1052,
+     "scale": 1.107,
+     "size": [
+      0.815,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34.png",
+     "rikku": "/mock-art/rikku-dark-knight/rear34.png",
+     "paine": "/mock-art/paine-warrior/rear34.png"
+    },
+    "pos": {
+     "yuna": [
+      [
+       -2.35,
+       0,
+       2.2
+      ]
+     ],
+     "rikku": [
+      [
+       -1.2,
+       0,
+       1.05
+      ]
+     ],
+     "paine": [
+      [
+       -0.05,
+       0,
+       -0.15
+      ]
+     ],
+     "bahamut": [
+      [
+       2.6,
+       0,
+       -4.9
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -2.4,
+     1.64,
+     7.6
+    ],
+    "look": [
+     1.4,
+     2.45,
+     -5.8
+    ],
+    "fov": 24,
+    "bg": [
+     1.4,
+     7,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.45,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 8374015,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 10545663,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.4
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.1,
+     "vignette": 0.44
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P2wd",
+   "name": "Over the Shoulder, wide",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P02wd-over-the-shoulder-wide.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates"
+   ],
+   "camera": {
+    "position": [
+     -3.1,
+     2.3,
+     7.8
+    ],
+    "lookAt": [
+     1,
+     1.9,
+     -5.8
+    ],
+    "fov": 45,
+    "roll": 0
+   },
+   "changed": "As P2 at fov 45 from a little further back: the whole arena in frame.",
+   "bossHeightPct": 35.3,
+   "bossGroupHeightPct": 35.3,
+   "bossVisibleHeightPct": 35.3,
+   "leadFigurePx": 510,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.02,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The girls bunch under Bahamut, who shrinks to 35%.",
+   "alternates": [],
+   "swaps": {
+    "yuna": {
+     "baselineY": 1049,
+     "scale": 1.113,
+     "size": [
+      1.163,
+      1.849
+     ],
+     "mirrored": false
+    },
+    "rikku": {
+     "baselineY": 1166,
+     "scale": 1.019,
+     "size": [
+      1.261,
+      1.842
+     ],
+     "mirrored": false
+    },
+    "paine": {
+     "baselineY": 1052,
+     "scale": 1.107,
+     "size": [
+      0.815,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34.png",
+     "rikku": "/mock-art/rikku-dark-knight/rear34.png",
+     "paine": "/mock-art/paine-warrior/rear34.png"
+    },
+    "pos": {
+     "yuna": [
+      [
+       -2.5,
+       0,
+       3.2
+      ]
+     ],
+     "rikku": [
+      [
+       -1.35,
+       0,
+       2.3
+      ]
+     ],
+     "paine": [
+      [
+       -0.3,
+       0,
+       1.2
+      ]
+     ],
+     "bahamut": [
+      [
+       2.4,
+       0,
+       -5.44
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -3.1,
+     2.3,
+     7.8
+    ],
+    "look": [
+     1,
+     1.9,
+     -5.8
+    ],
+    "fov": 45,
+    "bg": [
+     1.5,
+     6,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.45,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 8374015,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 10545663,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.4
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.1,
+     "vignette": 0.44
+    },
+    "ground": [
+     1.6,
+     0
+    ]
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P2r",
+   "name": "Over the Shoulder, right shoulder",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P02r-over-the-shoulder-right.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates",
+    "Ch IV only: Yuna (White Mage) and Rikku (Dark Knight) rear paintings mirrored to face the boss; READY.json marks both non-chiral. Chiral subjects are never mirrored"
+   ],
+   "camera": {
+    "position": [
+     2.1,
+     2.6,
+     8.6
+    ],
+    "lookAt": [
+     -0.3,
+     1.95,
+     -5.8
+    ],
+    "fov": 28.5,
+    "roll": 0
+   },
+   "changed": "Camera over the other shoulder: the party lower right, the boss centre-left.",
+   "bossHeightPct": 54.9,
+   "bossGroupHeightPct": 54.9,
+   "bossVisibleHeightPct": 54.9,
+   "leadFigurePx": 556,
+   "hudOverlap": {
+    "boss": 0.01,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Works because Yuna (White Mage) and Rikku are non-chiral and mirror to face Bahamut; Paine's back view faces straight ahead.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P02r-over-the-shoulder-right-b.jpg",
+     "note": "no mirroring: Rikku's rear painting faces away from Bahamut"
+    }
+   ],
+   "swaps": {
+    "yuna": {
+     "baselineY": 1049,
+     "scale": 1.113,
+     "size": [
+      1.163,
+      1.849
+     ],
+     "mirrored": true
+    },
+    "rikku": {
+     "baselineY": 1166,
+     "scale": 1.019,
+     "size": [
+      1.261,
+      1.842
+     ],
+     "mirrored": true
+    },
+    "paine": {
+     "baselineY": 1052,
+     "scale": 1.107,
+     "size": [
+      0.815,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34.png",
+     "rikku": "/mock-art/rikku-dark-knight/rear34.png",
+     "paine": "/mock-art/paine-warrior/rear34.png"
+    },
+    "pos": {
+     "yuna": [
+      [
+       0.75,
+       0,
+       1.9
+      ]
+     ],
+     "rikku": [
+      [
+       1.75,
+       0,
+       0.85
+      ]
+     ],
+     "paine": [
+      [
+       0.85,
+       0,
+       -1.35
+      ]
+     ],
+     "bahamut": [
+      [
+       -1.9,
+       0,
+       -5.44
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     2.1,
+     2.6,
+     8.6
+    ],
+    "look": [
+     -0.3,
+     1.95,
+     -5.8
+    ],
+    "fov": 28.5,
+    "bg": [
+     1.25,
+     3,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.45,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 8374015,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 10545663,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.4
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.1,
+     "vignette": 0.44
+    },
+    "swapMirror": [
+     "yuna",
+     "rikku"
+    ]
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P3",
+   "name": "Hero Shoulder",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P03-hero-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "the lead is the high-resolution rear34-hi candidate; the other two are rear34 candidates"
+   ],
+   "camera": {
+    "position": [
+     -2.2,
+     1.9,
+     6.6
+    ],
+    "lookAt": [
+     0.92,
+     1.6,
+     -4.992
+    ],
+    "fov": 40,
+    "roll": 0
+   },
+   "changed": "Camera 1.9-1.95 high, about 3 units behind the lead, fov 40, pitched slightly down: the lead's back huge in the near foreground cropped at the thighs, the other two small in the middle distance, the boss centre-right; far plate pre-blurred harder.",
+   "bossHeightPct": 48.5,
+   "bossGroupHeightPct": 48.4,
+   "bossVisibleHeightPct": 48.4,
+   "leadFigurePx": 936,
+   "hudOverlap": {
+    "boss": 0.06,
+    "party": 0,
+    "overlaps": [
+     "boss"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The best-move chip sits on Yuna's rod; Paine is half behind Rikku.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P03-hero-shoulder-b.jpg",
+     "note": "the lead closer"
+    }
+   ],
+   "swaps": {
+    "yuna": {
+     "baselineY": 2083,
+     "scale": 0.556,
+     "size": [
+      1.137,
+      1.82
+     ],
+     "mirrored": false
+    },
+    "rikku": {
+     "baselineY": 1166,
+     "scale": 1.019,
+     "size": [
+      1.261,
+      1.842
+     ],
+     "mirrored": false
+    },
+    "paine": {
+     "baselineY": 1052,
+     "scale": 1.107,
+     "size": [
+      0.815,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34-hi.png",
+     "rikku": "/mock-art/rikku-dark-knight/rear34.png",
+     "paine": "/mock-art/paine-warrior/rear34.png"
+    },
+    "pos": {
+     "yuna": [
+      [
+       -2.434,
+       0,
+       3.429
+      ]
+     ],
+     "rikku": [
+      [
+       0.01,
+       0,
+       -0.264
+      ]
+     ],
+     "paine": [
+      [
+       1.582,
+       0,
+       -1.292
+      ]
+     ],
+     "bahamut": [
+      [
+       3.432,
+       0,
+       -4.316
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -2.2,
+     1.9,
+     6.6
+    ],
+    "look": [
+     0.92,
+     1.6,
+     -4.992
+    ],
+    "fov": 40,
+    "bg": [
+     1.4,
+     6,
+     0
+    ],
+    "softbg": 7,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.45,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 8374015,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 10545663,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.4
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.1,
+     "vignette": 0.44
+    },
+    "ground": [
+     1.6,
+     0
+    ]
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P21",
+   "name": "Cinematic Shoulder",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P21-cinematic-shoulder.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates",
+    "HUD mock: turn order (FFX), chips and boss plate in the top band, party across the bottom band, the command list at 0.8 over the image"
+   ],
+   "camera": {
+    "position": [
+     -2.2,
+     1.9,
+     6.6
+    ],
+    "lookAt": [
+     0.92,
+     1.6,
+     -4.992
+    ],
+    "fov": 47,
+    "roll": 0
+   },
+   "changed": "The P3 Hero Shoulder framing (fov widened to 44-47 for the 2.39:1 window) inside the P11 bands with the HUD in the bands.",
+   "bossHeightPct": 40.8,
+   "bossGroupHeightPct": 40.8,
+   "bossVisibleHeightPct": 40.8,
+   "leadFigurePx": 763,
+   "hudOverlap": {
+    "boss": 0.02,
+    "party": 0.24,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "The band HUD is a mock; Bahamut is 41% of the height.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P21-cinematic-shoulder-b.jpg",
+     "note": "the P2 framing inside the bands"
+    }
+   ],
+   "swaps": {
+    "yuna": {
+     "baselineY": 2083,
+     "scale": 0.556,
+     "size": [
+      1.137,
+      1.82
+     ],
+     "mirrored": false
+    },
+    "rikku": {
+     "baselineY": 1166,
+     "scale": 1.019,
+     "size": [
+      1.261,
+      1.842
+     ],
+     "mirrored": false
+    },
+    "paine": {
+     "baselineY": 1052,
+     "scale": 1.107,
+     "size": [
+      0.815,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34-hi.png",
+     "rikku": "/mock-art/rikku-dark-knight/rear34.png",
+     "paine": "/mock-art/paine-warrior/rear34.png"
+    },
+    "pos": {
+     "yuna": [
+      [
+       -2.434,
+       0,
+       3.429
+      ]
+     ],
+     "rikku": [
+      [
+       0.01,
+       0,
+       -0.264
+      ]
+     ],
+     "paine": [
+      [
+       1.582,
+       0,
+       -1.292
+      ]
+     ],
+     "bahamut": [
+      [
+       3.432,
+       0,
+       -4.316
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     -2.2,
+     1.9,
+     6.6
+    ],
+    "look": [
+     0.92,
+     1.6,
+     -4.992
+    ],
+    "fov": 47,
+    "bg": [
+     1.4,
+     6,
+     0
+    ],
+    "softbg": 7,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.45,
+      1
+     ],
+     "rimWidth": 3.2,
+     "bounce": 8374015,
+     "bounceStrength": 0.12
+    },
+    "rimBoss": {
+     "rim": 10545663,
+     "rimStrength": 1,
+     "rimDir": [
+      -1,
+      0.4
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.1,
+     "vignette": 0.44
+    },
+    "ground": [
+     1.6,
+     0
+    ],
+    "band": {
+     "hud": {
+      "ctbRow": ".none",
+      "hide": [
+       ".ffx2hud__party"
+      ],
+      "faceSel": ".ffx2stat__face img[src*=portraits]",
+      "cmd": ".ffx2hud__command",
+      "cmdScale": 0.8,
+      "cmdX": 1520,
+      "cmdY": 185,
+      "chips": [
+       [
+        ".ffx2hud__enemies",
+        1150,
+        66
+       ],
+       [
+        ".sgd__toggle",
+        60,
+        84
+       ],
+       [
+        ".mad__toggle",
+        250,
+        84
+       ]
+      ],
+      "gaugeKey": "atb",
+      "accent": "#f4a8d0",
+      "gaugeColor": "#f4a8d0"
+     }
+    },
+    "bokeh": [
+     {
+      "ndc": [
+       0.92,
+       0.55
+      ],
+      "d": 2.2,
+      "s": 0.22,
+      "o": 0.3
+     },
+     {
+      "ndc": [
+       0.62,
+       0.7
+      ],
+      "d": 2.8,
+      "s": 0.14,
+      "o": 0.24
+     }
+    ],
+    "bokehColor": "rgba(255,170,90,1)"
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P22",
+   "name": "Hero Poster (moment shot)",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P22-hero-poster.jpg",
+   "provenance": "REAL ENGINE / existing art",
+   "standIns": [
+    "MOMENT SHOT, not a battle master: the intro beat with the HUD down and the turn rings off (alternate b keeps the command HUD)"
+   ],
+   "camera": {
+    "position": [
+     0.1,
+     1.45,
+     9.4
+    ],
+    "lookAt": [
+     0.3,
+     2.3,
+     -2
+    ],
+    "fov": 33,
+    "roll": 0
+   },
+   "changed": "The P2-without discovery on purpose: the party in a V facing the camera in today's front paintings, the boss behind them made about 1.4-1.5x taller and looming, a low camera (1.45-1.55), backlight rim on everyone, pre-blurred far plate, lamp or snow bokeh near the lens.",
+   "bossHeightPct": 72.4,
+   "bossGroupHeightPct": 72.4,
+   "bossVisibleHeightPct": 72.4,
+   "leadFigurePx": 483,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "A moment shot, not a master; the girls still wear today's front paintings.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P22-hero-poster-b.jpg",
+     "note": "the same beat with the command HUD on"
+    },
+    {
+     "file": "frames/alt/ffx2-ch4-P22-hero-poster-c.jpg",
+     "note": "victory beat: painted victory poses, Bahamut in the engine's pyrefly dissolve"
+    }
+   ],
+   "swaps": {},
+   "params": {
+    "height": {
+     "bahamut": 6.2
+    },
+    "pos": {
+     "yuna": [
+      [
+       -0.2,
+       0,
+       2.5
+      ]
+     ],
+     "rikku": [
+      [
+       -1.45,
+       0,
+       1.55
+      ]
+     ],
+     "paine": [
+      [
+       1.05,
+       0,
+       1.35
+      ]
+     ],
+     "bahamut": [
+      [
+       0.55,
+       0,
+       -4.6
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     0.1,
+     1.45,
+     9.4
+    ],
+    "look": [
+     0.3,
+     2.3,
+     -2
+    ],
+    "fov": 33,
+    "bg": [
+     1.35,
+     6,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 10545663,
+     "rimStrength": 1.35,
+     "rimDir": [
+      0,
+      1
+     ],
+     "rimWidth": 3.6,
+     "bounce": 8374015,
+     "bounceStrength": 0.14
+    },
+    "rimBoss": {
+     "rim": 13625087,
+     "rimStrength": 1.1,
+     "rimDir": [
+      0,
+      1
+     ],
+     "rimWidth": 3.6
+    },
+    "bokeh": [
+     {
+      "ndc": [
+       -0.88,
+       0.6
+      ],
+      "d": 2.2,
+      "s": 0.24,
+      "o": 0.3
+     },
+     {
+      "ndc": [
+       0.85,
+       0.7
+      ],
+      "d": 2.6,
+      "s": 0.18,
+      "o": 0.26
+     },
+     {
+      "ndc": [
+       -0.6,
+       -0.7
+      ],
+      "d": 2,
+      "s": 0.2,
+      "o": 0.22
+     },
+     {
+      "ndc": [
+       0.75,
+       -0.55
+      ],
+      "d": 2.3,
+      "s": 0.16,
+      "o": 0.2
+     }
+    ],
+    "bokehColor": "rgba(255,170,90,1)",
+    "grade": {
+     "saturation": 1.14,
+     "vignette": 0.58
+    },
+    "hudOff": true,
+    "noRing": true
+   },
+   "momentShot": true,
+   "hudDown": true
+  },
+  {
+   "stage": 2,
+   "option": "P10",
+   "name": "In the Round",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P10-in-the-round.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "near girl = Yuna (White Mage) rear34 candidate",
+    "Rikku's front painting mirrored so she faces the boss from the far side (non-chiral)"
+   ],
+   "camera": {
+    "position": [
+     8.138,
+     8,
+     4.638
+    ],
+    "lookAt": [
+     0.724,
+     1.1,
+     -3.624
+    ],
+    "fov": 35,
+    "roll": 0
+   },
+   "changed": "Camera 30 degrees up, fov 35, orbited 45 degrees off the party-boss axis; the girls on three sides of Bahamut (near in rear view, Paine side-on facing him, Rikku on the far side facing us); floor lights raised for the high angle; tilt-shift band across the figures.",
+   "bossHeightPct": 46.2,
+   "bossGroupHeightPct": 46.2,
+   "bossVisibleHeightPct": 46.2,
+   "leadFigurePx": 248,
+   "hudOverlap": {
+    "boss": 0.01,
+    "party": 0,
+    "overlaps": [
+     "none"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Figures are small (~250 px) on a plain deck and the pillar's and Bahamut's long cast shadows read as dark slabs.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P10-in-the-round-b.jpg",
+     "note": "orbited the other way (-45 degrees)"
+    }
+   ],
+   "swaps": {
+    "yuna": {
+     "baselineY": 1049,
+     "scale": 1.113,
+     "size": [
+      1.163,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34.png"
+    },
+    "swapMirror": [],
+    "pos": {
+     "bahamut": [
+      [
+       0.3,
+       0,
+       -3.2
+      ]
+     ],
+     "yuna": [
+      [
+       2.138,
+       0,
+       -0.372
+      ]
+     ],
+     "rikku": [
+      [
+       1.467,
+       0,
+       -6.629
+      ],
+      null,
+      true
+     ],
+     "paine": [
+      [
+       -2.175,
+       0,
+       -1.291
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     8.138,
+     8,
+     4.638
+    ],
+    "look": [
+     0.724,
+     1.1,
+     -3.624
+    ],
+    "fov": 35,
+    "ground": [
+     1.6,
+     0
+    ],
+    "gbright": 1.25,
+    "lights": {
+     "key": 1.4,
+     "fill": 1.4,
+     "AmbientLight": 1.5
+    },
+    "softbg": 0,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1,
+     "rimDir": [
+      0.3,
+      1
+     ],
+     "rimWidth": 3
+    },
+    "grade": {
+     "saturation": 1.16,
+     "vignette": 0.46
+    },
+    "tilt": {
+     "focus": 0.5,
+     "bandWidth": 0.2,
+     "maxBlur": 8,
+     "falloff": 1.2
+    }
+   }
+  },
+  {
+   "stage": 2,
+   "option": "P15",
+   "name": "Portrait Duel (phone)",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P15-portrait-duel.jpg",
+   "provenance": "REAL ENGINE + NEW ART (candidate)",
+   "standIns": [
+    "rear paintings are candidates",
+    "the boss made about 2x taller to fill the top half"
+   ],
+   "camera": {
+    "position": [
+     0.15,
+     1.3,
+     8.6
+    ],
+    "lookAt": [
+     0.35,
+     4.8,
+     -5.2
+    ],
+    "fov": 48,
+    "roll": 0
+   },
+   "changed": "Phone 390x844 at DPR 3 with the game's own phone HUD; camera low behind the party looking up (fov 48): the boss looms over the top half facing down at the player, the party's backs along the bottom of the stage above the party cards.",
+   "bossHeightPct": 39.9,
+   "bossGroupHeightPct": 39.9,
+   "bossVisibleHeightPct": 39.9,
+   "leadFigurePx": 218,
+   "hudOverlap": {
+    "boss": 0,
+    "party": 0.36,
+    "overlaps": [
+     "party"
+    ],
+    "how": "share of the figure's screen box under a HUD panel (24x24 samples)"
+   },
+   "weak": "Bahamut is scaled to about 2x; the girls overlap his tail.",
+   "alternates": [
+    {
+     "file": "frames/alt/ffx2-ch4-P15-portrait-duel-b.jpg",
+     "note": "higher camera (2.6): the party smaller"
+    }
+   ],
+   "swaps": {
+    "yuna": {
+     "baselineY": 1049,
+     "scale": 1.113,
+     "size": [
+      1.163,
+      1.849
+     ],
+     "mirrored": false
+    },
+    "rikku": {
+     "baselineY": 1166,
+     "scale": 1.019,
+     "size": [
+      1.261,
+      1.842
+     ],
+     "mirrored": false
+    },
+    "paine": {
+     "baselineY": 1052,
+     "scale": 1.107,
+     "size": [
+      0.815,
+      1.849
+     ],
+     "mirrored": false
+    }
+   },
+   "params": {
+    "swap": {
+     "yuna": "/mock-art/yuna-white-mage/rear34.png",
+     "rikku": "/mock-art/rikku-dark-knight/rear34.png",
+     "paine": "/mock-art/paine-warrior/rear34.png"
+    },
+    "height": {
+     "bahamut": 8.4
+    },
+    "pos": {
+     "yuna": [
+      [
+       -0.6,
+       0,
+       3.2
+      ]
+     ],
+     "rikku": [
+      [
+       0.6,
+       0,
+       2.6
+      ]
+     ],
+     "paine": [
+      [
+       1.15,
+       0,
+       1.1
+      ]
+     ],
+     "bahamut": [
+      [
+       0.4,
+       0,
+       -5.2
+      ]
+     ]
+    },
+    "follow": {
+     "bahamut": [
+      "enemy-reflection",
+      "enemy-pool"
+     ]
+    },
+    "cam": [
+     0.15,
+     1.3,
+     8.6
+    ],
+    "look": [
+     0.35,
+     4.8,
+     -5.2
+    ],
+    "fov": 48,
+    "bg": [
+     1.9,
+     11,
+     0
+    ],
+    "softbg": 5,
+    "rimParty": {
+     "rim": 16761520,
+     "rimStrength": 1.15,
+     "rimDir": [
+      0.45,
+      1
+     ],
+     "rimWidth": 3.2
+    },
+    "grade": {
+     "saturation": 1.1,
+     "vignette": 0.44
+    }
+   },
+   "size": [
+    390,
+    844
+   ],
+   "dpr": 3,
+   "phone": true
+  },
+  {
+   "stage": 2,
+   "option": "P16",
+   "name": "Director's Cut (storyboard)",
+   "chapter": "ffx2-ch4",
+   "game": "FFX-2",
+   "file": "frames/ffx2-ch4/P16-directors-cut.jpg",
+   "provenance": "COMPOSITE",
+   "standIns": [
+    "a strip of five real-engine stills; the command beat uses the rear-painting candidates",
+    "beats 2-5 have the HUD down; the hit uses the lead's painted attack pose and the engine's own hit flash frozen mid-flash; victory uses the painted victory poses and the engine's pyrefly death dissolve"
+   ],
+   "changed": "Five beats laid side by side: command = P3 Hero Shoulder, the hit = P5 Side Stage low, enemy turn = P4 Reverse Angle, big attack = P7 Colossus, victory = P22 Hero Poster.",
+   "weak": "A storyboard of stills, not motion; Bahamut has no painted attack or cast pose, so the big-attack beat is the colossus framing alone.",
+   "alternates": [],
+   "beats": [
+    {
+     "beat": "COMMAND",
+     "from": "over the shoulder (P3)",
+     "file": "frames/alt/ffx2-ch4-P16-beat1-command.jpg",
+     "camera": {
+      "position": [
+       -2.2,
+       1.9,
+       6.6
+      ],
+      "lookAt": [
+       0.92,
+       1.6,
+       -4.992
+      ],
+      "fov": 40,
+      "roll": 0
+     },
+     "bossHeightPct": 47.8,
+     "leadFigurePx": 914,
+     "hud": "on"
+    },
+    {
+     "beat": "THE HIT",
+     "from": "side stage, low (P5)",
+     "file": "frames/alt/ffx2-ch4-P16-beat2-the-hit.jpg",
+     "camera": {
+      "position": [
+       -0.3,
+       1.1,
+       22
+      ],
+      "lookAt": [
+       -0.3,
+       1.9,
+       -2
+      ],
+      "fov": 19,
+      "roll": 0
+     },
+     "bossHeightPct": 49,
+     "leadFigurePx": 222,
+     "hud": "down"
+    },
+    {
+     "beat": "ENEMY TURN",
+     "from": "reverse angle (P4)",
+     "file": "frames/alt/ffx2-ch4-P16-beat3-enemy-turn.jpg",
+     "camera": {
+      "position": [
+       9.64,
+       1.6,
+       -11.92
+      ],
+      "lookAt": [
+       -1.2,
+       1.7,
+       -0.2
+      ],
+      "fov": 29,
+      "roll": 0
+     },
+     "bossHeightPct": 79,
+     "leadFigurePx": 243,
+     "hud": "down"
+    },
+    {
+     "beat": "BIG ATTACK",
+     "from": "colossus (P7)",
+     "file": "frames/alt/ffx2-ch4-P16-beat4-big-attack.jpg",
+     "camera": {
+      "position": [
+       -4.6,
+       0.36,
+       9.6
+      ],
+      "lookAt": [
+       -0.4,
+       4.6,
+       -6
+      ],
+      "fov": 45,
+      "roll": 0
+     },
+     "bossHeightPct": 82.8,
+     "leadFigurePx": 348,
+     "hud": "down"
+    },
+    {
+     "beat": "VICTORY",
+     "from": "hero poster (P22)",
+     "file": "frames/alt/ffx2-ch4-P16-beat5-victory.jpg",
+     "camera": {
+      "position": [
+       0.1,
+       1.45,
+       9.4
+      ],
+      "lookAt": [
+       0.3,
+       2.3,
+       -2
+      ],
+      "fov": 33,
+      "roll": 0
+     },
+     "bossHeightPct": 73.6,
+     "leadFigurePx": 492,
+     "hud": "down"
+    }
+   ],
+   "size": [
+    3904,
+    502
+   ]
+  }
+ ],
+ "finalSheet": "sheets/06-final-all.jpg"
+}

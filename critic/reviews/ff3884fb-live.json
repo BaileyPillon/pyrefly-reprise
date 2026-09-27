@@ -1,0 +1,59 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-27T14:42:09Z",
+  "build": {
+    "mainSha": "ff3884fb",
+    "bundle": "BfW8CHQs",
+    "artifactHash": "eee16687d4cf7a5f62bec7920edaf2fb250cf566fda3915ccbf10bce6fa91356"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/ff3884fb.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/a44297ca.json -> {result: PASS, artifactHash: eee16687d4cf7a5f62bec7920edaf2fb250cf566fda3915ccbf10bce6fa91356, liveManifest: match, checked: 49, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), 1600x900, fresh context per run, cache-busted URL. assertScreen/waitBattleMenu used throughout (throws rather than falling through on timeout): title->chapter-select->party-prep->cutscene->battle asserted for Seymour Flux (FFX), ffx2-bahamut confirmed by screenState.selectedId (FFX-2), and the FF7 hidden Guard Scorpion door (typed L-I-M-I-T on chapter-select, straight to battle). Real Attack input grew battleLog(): FFX 12->17, FFX-2 (Attack via ArrowDown,Enter,Enter after finding Orders is the default top row) 1->6, FF7 0->4. Pause: P->pause, H hides/H restores panel text, Escape resumes; audioDebug() showed the pause track cached/prerendered (not the synth fallback) on two chapters. 0 console errors, 0 responses >=400, 0 image responses served as text/html across four contexts."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke: set masterVolume 0.8->0.42 in pyrefly-reprise:save:v1 localStorage on the FFX-2 context, reloaded, waited for window.__pyreflyReady, read masterVolume back as 0.42.",
+      "reason": "Full upgrade matrix (fresh player / returning player / previous-build save fixture / invalid storage / reset flow) not tested in this pass; this is the lightweight live check only, per RUBRIC.md section 5."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity (49 files, byte-diffed from a44297ca)",
+      "title -> chapter-select -> party-prep -> battle, real input, FFX chapter (Seymour Flux)",
+      "title -> chapter-select -> party-prep -> battle, real input, FFX-2 chapter (ffx2-bahamut, id-confirmed)",
+      "hidden FF7 Guard Scorpion door (L-I-M-I-T keyboard sequence) to a real battle turn",
+      "pause (P), hide/restore panels (H), resume (Escape) on the FFX chapter",
+      "prerendered vs procedural-fallback music check on two chapters",
+      "settings-reload persistence (masterVolume)",
+      "console error / network >=400 / mis-typed image response sweep across four browser contexts"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix (fresh/returning/previous-build-fixture/invalid-storage/reset)",
+      "Vegnagun's four-part targeting UI (landed on this tile once by accident during navigation-method debugging; not exercised to a resolved turn)",
+      "win/loss/retry path for any chapter",
+      "the specific release-23 systems (camera roll on first hit, phone refit per battle, opening callouts, cold-load battle-start card, FFX-2 cut-in wait cap, Vegnagun contact pool) beyond what a generic real-input pass exercises; those are the focused review's obligation, not this live check's"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 50,
+  "notes": "LV-2 (informational): the first smoke script this session wrote assumed the old four-chapter board order and a fixed ArrowRight count; the live board now groups FFX chapters before FFX-2 across 15 tiles (one COMING/locked), so that script actually reached evrae-airship while labeled ffx2-bahamut, and its generic Enter,Enter input hit FFX-2's default 'Orders' row instead of 'Attack'. Both were found and corrected within this session (select by screenState.selectedId; ArrowDown before Enter,Enter for Attack); the corrected, verified ffx2-bahamut run is what this report's CHK-016 evidence reflects. This was a review-script defect, not a live-build defect: the exact-artifact byte check (CHK-017) is the authoritative test for what shipped, and it passed."
+}

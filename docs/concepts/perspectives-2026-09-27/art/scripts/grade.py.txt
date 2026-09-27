@@ -1,0 +1,33 @@
+"""Perspectives round 2026-09-27 (art agent): match a reverse plate's colour statistics to today's plate.
+
+Reinhard colour transfer in CIELAB (per-channel mean and standard deviation), blended with the
+original by `--amount` (1.0 = full match). The same place at the same hour should share a palette;
+the structure of the new painting is untouched.
+
+    python grade.py <in.png> <reference.png> <out.png> [--amount 0.85]
+"""
+import sys
+import numpy as np
+from PIL import Image
+from skimage import color
+
+
+def main():
+    src, ref, out = sys.argv[1:4]
+    amount = float(sys.argv[sys.argv.index("--amount") + 1]) if "--amount" in sys.argv else 0.85
+    a = np.asarray(Image.open(src).convert("RGB")).astype(np.float64) / 255.0
+    b = np.asarray(Image.open(ref).convert("RGB")).astype(np.float64) / 255.0
+    la, lb = color.rgb2lab(a), color.rgb2lab(b)
+    res = np.empty_like(la)
+    for c in range(3):
+        ma, sa = la[..., c].mean(), la[..., c].std() + 1e-6
+        mb, sb = lb[..., c].mean(), lb[..., c].std() + 1e-6
+        res[..., c] = (la[..., c] - ma) * (sb / sa) + mb
+    rgb = np.clip(color.lab2rgb(res), 0, 1)
+    rgb = a * (1 - amount) + rgb * amount
+    Image.fromarray((rgb * 255 + 0.5).astype(np.uint8)).save(out)
+    print(out, "L mean", round(float(la[..., 0].mean()), 1), "->", round(float(color.rgb2lab(rgb)[..., 0].mean()), 1), "ref", round(float(lb[..., 0].mean()), 1))
+
+
+if __name__ == "__main__":
+    main()

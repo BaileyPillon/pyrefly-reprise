@@ -1,0 +1,105 @@
+#!/usr/bin/env node
+/**
+ * Perspectives round 2026-09-27 (art agent, stage 2 item 3): HIGH-RESOLUTION rear views for the
+ * "Hero Shoulder" framing (the lead member cropped mid-thigh, filling most of a 1920x1080 frame).
+ *
+ *   node tools/zz-persp-art/hires.mjs <subject> <arm/cand-N> [--denoise 0.3,0.4] [--scale 2]
+ *
+ * "Hires fix" on the PICKED render, so the close-up is the same painting as the full-figure pick:
+ * raw render -> RealESRGAN x4 -> scale to 2x (1664x2432) -> VAEEncode -> KSampler at a low denoise
+ * with the pick's own prompt, negative and seed -> VAEDecode. The plain 2x upscale is saved too, as
+ * the no-diffusion baseline. No IP-Adapter or ControlNet: at this denoise the init image holds both
+ * identity and pose (and an adapter window of 0.2-0.6 would never switch on in the last 30-40 % of
+ * the schedule). Every output is cut out with rembg and gets a sidecar. Candidates only.
+ */
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { stageImage, cutout } from '../gen/comfy.mjs';
+import { checkCutoutFile } from '../gen/cutout-guard.mjs';
+import { maxRgbOfPng, isBlackFrame } from '../gen/black-frame.mjs';
+
+const CAND = 'D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives';
+const COMFY = process.env.COMFY_URL || 'http://127.0.0.1:8188';
+const CKPT = 'animagine-xl-4.0-opt.safetensors';
+const UPSCALER = 'RealESRGAN_x4plus.pth';
+const flag = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i >= 0 ? process.argv[i + 1] : d; };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function graph({ init, positive, negative, seed, denoise, scaleBy, prefix, saveUpscale }) {
+  const g = {
+    4: { class_type: 'CheckpointLoaderSimple', inputs: { ckpt_name: CKPT } },
+    6: { class_type: 'CLIPTextEncode', inputs: { text: positive, clip: ['4', 1] } },
+    7: { class_type: 'CLIPTextEncode', inputs: { text: negative, clip: ['4', 1] } },
+    30: { class_type: 'LoadImage', inputs: { image: init, upload: 'image' } },
+    10: { class_type: 'UpscaleModelLoader', inputs: { model_name: UPSCALER } },
+    11: { class_type: 'ImageUpscaleWithModel', inputs: { upscale_model: ['10', 0], image: ['30', 0] } },
+    12: { class_type: 'ImageScaleBy', inputs: { image: ['11', 0], upscale_method: 'lanczos', scale_by: scaleBy / 4 } },
+    32: { class_type: 'VAEEncode', inputs: { pixels: ['12', 0], vae: ['4', 2] } },
+    3: { class_type: 'KSampler', inputs: { seed, steps: 28, cfg: 6, sampler_name: 'euler_ancestral', scheduler: 'normal', denoise, model: ['4', 0], positive: ['6', 0], negative: ['7', 0], latent_image: ['32', 0] } },
+    8: { class_type: 'VAEDecode', inputs: { samples: ['3', 0], vae: ['4', 2] } },
+    9: { class_type: 'SaveImage', inputs: { filename_prefix: prefix, images: ['8', 0] } },
+  };
+  if (saveUpscale) g[13] = { class_type: 'SaveImage', inputs: { filename_prefix: `${prefix}-upscale`, images: ['12', 0] } };
+  return g;
+}
+
+async function waitFor(id) {
+  for (;;) {
+    await sleep(2500);
+    const e = (await (await fetch(`${COMFY}/history/${id}`)).json())[id];
+    if (!e) continue;
+    if (e.status?.status_str === 'error') throw new Error(JSON.stringify(e.status.messages).slice(0, 800));
+    if (e.outputs && Object.keys(e.outputs).length && e.status?.completed) return e.outputs;
+  }
+}
+async function fetchImage(img) {
+  const qs = new URLSearchParams({ filename: img.filename, subfolder: img.subfolder || '', type: img.type || 'output' });
+  return Buffer.from(await (await fetch(`${COMFY}/view?${qs}`)).arrayBuffer());
+}
+
+async function main() {
+  const [sub, pick] = process.argv.slice(2);
+  const denoises = flag('denoise', '0.3,0.4').split(',').map(Number);
+  const scaleBy = Number(flag('scale', 2));
+  const meta = JSON.parse(readFileSync(join(CAND, sub, `${pick}.json`), 'utf8'));
+  const dir = join(CAND, sub, 'hires');
+  mkdirSync(dir, { recursive: true });
+  const init = stageImage(join(CAND, sub, `${pick}.raw.png`));
+  const W = meta.canvas.width * scaleBy; const H = meta.canvas.height * scaleBy;
+  for (const [k, denoise] of denoises.entries()) {
+    const tag = `d${String(denoise).replace('.', '')}`;
+    if (existsSync(join(dir, `${tag}.json`))) continue;
+    for (;;) { const q = await (await fetch(`${COMFY}/queue`)).json(); if ((q.queue_pending?.length || 0) < 3) break; await sleep(4000); }
+    const t0 = Date.now();
+    const g = graph({ init, positive: meta.positive, negative: meta.negative, seed: meta.seed, denoise, scaleBy, prefix: `pyrefly/persp-2026-09-27/${sub}-hires-${tag}`, saveUpscale: k === 0 });
+    const res = await fetch(`${COMFY}/prompt`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: g, client_id: 'pyrefly-persp-art' }) });
+    const body = await res.json();
+    if (!res.ok || body.error) throw new Error(`ComfyUI rejected: ${JSON.stringify(body).slice(0, 1500)}`);
+    const outputs = await waitFor(body.prompt_id);
+    const jobs = [[tag, outputs['9']?.images?.[0]]];
+    if (outputs['13']?.images?.[0]) jobs.push(['upscale', outputs['13'].images[0]]);
+    for (const [name, img] of jobs) {
+      if (!img) continue;
+      const raw = join(dir, `${name}.raw.png`);
+      writeFileSync(raw, await fetchImage(img));
+      const maxRgb = maxRgbOfPng(readFileSync(raw));
+      if (maxRgb != null && isBlackFrame(maxRgb)) throw new Error(`${name}: BLACK FRAME, stopping (no re-roll)`);
+      const cut = join(dir, `${name}.png`);
+      const cm = cutout(raw, cut);
+      const guard = await checkCutoutFile(cut, { sourceWidth: W, sourceHeight: H, composition: 'full' });
+      writeFileSync(join(dir, `${name}.json`), JSON.stringify({
+        round: 'perspectives-2026-09-27', subject: sub, view: 'rear34-hi', from: `${pick}.raw.png`, seed: meta.seed,
+        method: name === 'upscale' ? `RealESRGAN x4 -> lanczos to ${scaleBy}x, no diffusion` : `RealESRGAN x4 -> lanczos to ${scaleBy}x -> img2img denoise ${denoise}, the pick's prompt and seed`,
+        denoise: name === 'upscale' ? 0 : denoise, canvas: { width: W, height: H }, positive: meta.positive, negative: meta.negative,
+        model: CKPT, steps: 28, cfg: 6, sampler: 'euler_ancestral', scheduler: 'normal', upscaler: UPSCALER,
+        cutout: cm, guard: { ok: guard.ok, reasons: guard.reasons }, width: cm.width, height: cm.height, baselineY: cm.baselineY,
+        seconds: (Date.now() - t0) / 1000, generatedAt: new Date().toISOString(),
+      }, null, 1));
+      console.log(`[persp-hires] ${sub} ${name}: ${cm.width}x${cm.height} guard ${guard.ok ? 'ok' : 'REJECT ' + guard.reasons.join('; ')} ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+    }
+  }
+}
+
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) await main();

@@ -1,0 +1,6 @@
+// Phone (390x844, DPR 3), stage 2: P15 Portrait Duel. Tuned values in phone-ch4.json; staged through `G`.
+import { readFileSync } from 'node:fs';
+import { ID as ID1 } from './table-ch4.mjs';
+const J = JSON.parse(readFileSync('D:/Tools/pyrefly-scratch/persp-a/phone-ch4.json', 'utf8'));
+export const ID = { ...ID1, stage: 2 };
+export const OPTS = Object.fromEntries(Object.entries(J).map(([k, v]) => [k, Object.fromEntries(Object.entries(v).map(([n, p]) => [n, { fn: 'G', ...p }]))]));

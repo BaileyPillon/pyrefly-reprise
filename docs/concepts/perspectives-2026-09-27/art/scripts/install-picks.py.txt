@@ -1,0 +1,339 @@
+"""Perspectives round 2026-09-27 (art agent): install the picked REAR three-quarter paintings for the
+rigs and (re)write READY.json. Never touches public/art (a junction to the main tree's art).
+
+    D:/Tools/ComfyUI/python_embeded/python.exe -s tools/zz-persp-art/install-picks.py
+
+For each pick: copies the cut-out (or its cleaned version) to public/mock-art/<subject>/rear34.png in
+this worktree, writes rear34.json beside it, copies the installed PNG to the candidates backup as
+<subject>/pick-rear34.png, then rewrites docs/concepts/perspectives-2026-09-27/art/READY.json in the
+MAIN tree (the rigs read it there).
+"""
+import datetime
+import json
+import pathlib
+import shutil
+
+from PIL import Image
+
+WT = pathlib.Path("D:/pyrefly-mock-persp")
+MOCK = WT / "public/mock-art"
+CAND = pathlib.Path("D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives")
+POST = pathlib.Path("D:/Tools/pyrefly-scratch/persp-art/post")
+READY = pathlib.Path("D:/Final Fantasy/docs/concepts/perspectives-2026-09-27/art/READY.json")
+IDLES = pathlib.Path("D:/Final Fantasy/public/art/characters")
+
+# figurePx = head top (hair or hood, weapons excluded) to the feet row; scale = idle figurePx / rear
+# figurePx, i.e. PoseFrame.scale when the idle is the reference pose (src/engine/PaintedScale.ts).
+PICKS = [
+    dict(subject="tidus", cand="tidus/B3/cand-3", post=None, feetY=1103, headTopY=183, idleFigurePx=1087,
+         facing="away-right", chiral=True, chiralityOk=True,
+         notes="Sword in the RIGHT hand and the blue pauldron on the RIGHT shoulder, as in the idle. "
+               "Residual: the red knit sleeve sits on the right arm (the idle has it on the left). "
+               "Blade a lighter cyan than the idle's deep blue. Stepping toward screen-right; no cheek visible. "
+               "baselineY is the back (left) foot; the blade tip hangs 16 px lower (it is nearer the camera)."),
+    dict(subject="yuna", cand="yuna/B4/cand-3", post=None, feetY=None, headTopY=141, idleFigurePx=1043,
+         facing="away", chiral=True, chiralityOk=True,
+         notes="Staff held upright in the RIGHT hand, ring head up (the idle holds it low and diagonal in the "
+               "right hand). Obi bow, detached pink sleeves, hakama print, bob all read. Near-straight back view, "
+               "body only slightly toward screen-right; the left sleeve flies out to the left."),
+    dict(subject="kimahri", cand="kimahri/B4/cand-1", post="kimahri-rear34.png", feetY=1156, headTopY=157,
+         idleFigurePx=1069, facing="away-right", chiral=True, chiralityOk=True,
+         notes="Spear upright in the RIGHT hand. POST: the render's long thin horn was trimmed by hand to a short "
+               "jagged stub (alpha only, tools/zz-persp-art/post.py erase), so he has ONE broken horn. Head in "
+               "profile toward screen-right (more than a sliver of cheek). Spearhead gold, not the idle's silver; "
+               "tail tuft blue, not white. baselineY is the feet; the spear butt ends 9 px lower."),
+    dict(subject="yuna-white-mage", cand="yuna-white-mage/B2/cand-2", post=None, feetY=None, headTopY=16,
+         idleFigurePx=1150, facing="away", chiral=False, chiralityOk=True,
+         notes="Rod in the RIGHT hand, head (gold ring) low and behind her as in the idle. Hood up with the gold "
+               "crescent, red zigzag trim, white boots. Drift: an open back with a pink panel (the idle's robe is "
+               "closed); the rod head is a plain ring, not the idle's openwork disc. Straight back view."),
+    dict(subject="rikku-dark-knight", cand="rikku-dark-knight/B3/cand-3", post=None, feetY=None, headTopY=16,
+         idleFigurePx=1172, facing="away-right", chiral=False, chiralityOk=True,
+         notes="Stage-2 reroll pick (replaces B2 #1, whose armour had drifted to gold and bronze with orange and teal "
+               "panels): the idle's dark navy-black armour with gold trim, chainmail skirt, dark armoured legs, the "
+               "blonde braided ponytail; the right hand on the pommel of a big planted greatsword with a navy, gold and "
+               "lavender blade. Turned toward screen-right. Drift: a dark blue cape panel with orange tips hangs at her "
+               "left; outlines a little orange; the idle's hands are both on the hilt."),
+    dict(subject="paine-warrior", cand="paine-warrior/B3/cand-2", post=None, feetY=None, headTopY=16,
+         idleFigurePx=1147, facing="away", chiral=True, chiralityOk=True,
+         notes="Sword planted at her right, hands on the pommel. Swept silver hair, studded choker, off-shoulder "
+               "jacket, corset, red belt, sheer black thigh-highs, chunky combat boots. Drift: a red strappy top "
+               "shows between the shoulder blades; the crossguard has white wings (the idle's is red gothic). "
+               "Near-straight back view, a little toward screen-right."),
+    # Stage 2 item 6: boss rear views for the reverse angle (bosses face INTO the frame toward screen-LEFT).
+    dict(subject="seymour-flux-body", cand="seymour-flux-body/A3/cand-4", post=None, feetY=None, headTopY=16,
+         idleFigurePx=1179, facing="away", chiral=False, chiralityOk=True,
+         notes="Seymour Flux (FFX, Chapter I) from behind, floating, arms spread wide: the blue robe with red trim, the "
+               "green sash, a tall swept-up crest of light blue hair. Straight back view. Drift: the crest is spikier than "
+               "the idle's fan of thick locks (no pink tips); legs hang instead of crossing. baselineY is the robe hem (he "
+               "floats, as the idle). Method A (no skeleton), third batch: the word 'fan-shaped crest' drew giant fans."),
+    dict(subject="ffx2-bahamut", cand="ffx2-bahamut/A/cand-1", post="ffx2-bahamut-rear34.png", feetY=None, headTopY=16,
+         idleFigurePx=994, facing="away-left", chiral=False, chiralityOk=True,
+         notes="Bahamut (FFX-2, Chapter IV) from behind: dorsal plates down the spine, wings spread, the head turned in "
+               "profile toward screen-LEFT (toward the party), the tail curling right. POST: rembg left white background "
+               "trapped between the neck and the right wing; keyed out (post.py keywhite). Drift: the wings are a more "
+               "saturated red than the idle's salmon; no violet glow on the scales."),
+]
+
+
+# Stage 2 item 3: hi-res rear views for the "Hero Shoulder" framing (the same painting as the pick,
+# 2x: RealESRGAN x4 -> lanczos to 2x -> img2img denoise 0.4 with the pick's prompt and seed).
+HIRES = [
+    dict(subject="tidus", src="tidus/hires/d04", pick="tidus/B3/cand-3", feetY=2194, headTopY=350, idleFigurePx=1087,
+         facing="away-right", chiral=True,
+         notes="2x of the rear34 pick, refined at denoise 0.4 (crisper hair, straps, pauldron than a plain upscale). "
+               "Figure 1844 px head to feet, so a mid-thigh crop (about 60 %) fills about 1100 px: 1:1 or smaller "
+               "on a 1080 frame. Same chirality and residuals as rear34. baselineY is the back foot; the blade tip "
+               "hangs 33 px lower."),
+    dict(subject="yuna-white-mage", src="yuna-white-mage/hires/d04", pick="yuna-white-mage/B2/cand-2", feetY=None,
+         headTopY=16, idleFigurePx=1150, facing="away", chiral=False,
+         notes="2x of the rear34 pick, refined at denoise 0.4. Figure 2066 px head to feet; a mid-thigh crop fills "
+               "about 1200 px. Same drift as rear34 (open back panel, plain ring rod head)."),
+]
+
+# Stage 2 item 4: reverse-angle plates (the far side of each arena), 2688x1536 opaque.
+PLATE_PICKS = [
+    dict(subject="gagazet", cand="plates/gagazet/E/cand-14", rigName="plate-gagazet-reverse", horizon="about 45 %",
+         notes="Looking back down the trail (FFX, Chapter I): a level eye line with the distant ridges across about 45 % "
+               "of the height and the trail dropping into the valley below it. img2img from today's plate MIRRORED with "
+               "the horizon moved up 17 % (top cropped, near snow stretched), repainted at denoise 0.75 in the plate's "
+               "palette; no moon (it is behind the camera). Alternate with today's framing (horizon about 60 %): "
+               "plates/gagazet/D/cand-11.png."),
+    dict(subject="bevelle-underground", cand="plates/bevelle-underground/F/cand-15", rigName="plate-bevelle-reverse",
+         horizon="about 48 %",
+         notes="The other end of the machina hall (FFX-2, Chapter IV): the floor runs away to a door, the vanishing point "
+               "at about 48 %, a great round sunburst seal above it, orange lamps down both walls, a wet reflective deck. "
+               "img2img from today's plate MIRRORED with the horizon moved up 28 %, repainted at denoise 0.70. Alternate "
+               "with today's framing (a giant blast door, vanishing point about 62 %): plates/bevelle-underground/D/cand-11.png."),
+]
+
+# Stage 2 item 5: the P13 proscenium (1920x1080 RGBA overlay; the opening is REQUEST.md's x 200-1720, y 118-1010).
+PROSC = [
+    dict(view="proscenium", cand="proscenium/cand-2",
+         notes="PICK. Ink & Gold read literally: a carved gilded arch with filigree and a sunburst crest at the top centre, "
+               "violet-black velvet curtains with gold rope tie-backs and tassels, a black swag behind gold scallops, a "
+               "dark apron with lit footlights. The opening (x 200-1720, y 118-1010, top corners r 70) is alpha 0 except a "
+               "warm footlight wash over its bottom ~90 px (alpha up to 0.42). The lower corners are dark for the HUD. POST: "
+               "the opening cut and the footlight glows (proscenium.py finish). For FFX-2 chapters the Ink & Gold accent is "
+               "pyre pink; the arch is left gold (a painted object), tint it if the main session wants the pink accent."),
+    dict(view="proscenium-crimson", cand="proscenium/cand-4",
+         notes="ALTERNATE: the classic theatre look, crimson velvet curtains and swag with gold fringe, gold columns and "
+               "crest (the stand-in's colours). Blood red is the enemies' colour in Ink & Gold, hence not the pick. Same "
+               "opening, glow and post as the pick."),
+]
+
+# Stage 2 item 7 (REQUEST.md section 1): diorama floor plates, straight down, 4096x4096, opaque.
+FLOORS = [
+    dict(subject="floor-gagazet", cand="floors/gagazet/cand-1", world="44 x 44 units centred on (0, -2): x -22..22, z -24..20",
+         pxPerUnit=round(4096 / 44, 2), fog="#426b9e",
+         notes="Moonlit snowfield from directly above: wind-carved drifts on a diagonal, pockets of cracked blue ice, a footprint "
+               "trail, dark rocks at the edges, a calm arena in the middle (x -4..5, z -8..3). Weak: the rocks came out small and "
+               "few; the ice pockets glow like light sources. 1024 img2img from a layout sketch (floors.py), RealESRGAN x4, then "
+               "a smoothstep falloff to the fog colour over the outer 10 %."),
+    dict(subject="floor-bevelle", cand="floors/bevelle/cand-8", world="46 x 46 units centred on (0, -5): x -23..23, z -28..18",
+         pxPerUnit=round(4096 / 46, 2), fog="#32272d (the plate's horizon band, the scene's own fog source)",
+         hole="world (2.4, -7.8) = px (2260, 1799); the open shaft is the scene's HOLE ellipse (rx 2.5, rz 1.6 units), the cracks "
+              "and rim reach about the 7.6 x 4.9 units REQUEST.md asks",
+         notes="Riveted steel deck from directly above: 3-unit plates with grating slots, cyan-lit seams around (not across) the "
+               "arena, warm lamp spill along both side walls, oil sheen, and the hole at the scene's position, glowing cyan-white "
+               "with cracks radiating through the plates. Weak: it reads as a punched hole with cracks, less as torn-up plating; "
+               "the small brass inlay I sketched did not survive. Third pass: a brass ring I first drew round the arena ran "
+               "through the hole and the checkpoint painted the two as one neat round porthole (cand-3), a masked repaint of "
+               "the hole region failed twice (cand-5, cand-6)."),
+]
+
+def main():
+    items = []
+    for p in PICKS:
+        sub = p["subject"]
+        cj = json.loads((CAND / f"{p['cand']}.json").read_text(encoding="utf-8"))
+        src = POST / p["post"] if p["post"] else CAND / f"{p['cand']}.png"
+        dst_dir = MOCK / sub
+        dst_dir.mkdir(parents=True, exist_ok=True)
+        dst = dst_dir / "rear34.png"
+        shutil.copyfile(src, dst)
+        shutil.copyfile(src, CAND / sub / "pick-rear34.png")
+        w, h = Image.open(dst).size
+        rembg_base = cj["cutout"]["baselineY"] if not p["post"] else None
+        if p["post"]:
+            # the cleaned PNG was re-cropped: its last content row is the new cut-out baseline
+            import numpy as np
+            a = np.array(Image.open(dst).convert("RGBA"))[:, :, 3] >= 8
+            rembg_base = int(np.nonzero(a.any(axis=1))[0].max())
+        base = p["feetY"] or rembg_base
+        fig = base - p["headTopY"]
+        scale = round(p["idleFigurePx"] / fig, 3)
+        idle = json.loads((IDLES / sub / "idle.json").read_text(encoding="utf-8"))
+        side = {
+            "width": w, "height": h, "baselineY": base,
+            "baselineNote": "feet row" + ("" if base == rembg_base else f"; the last opaque row is {rembg_base} (a weapon end, nearer the camera)"),
+            "headTopY": p["headTopY"], "figurePx": fig,
+            "scale": scale,
+            "scaleNote": "PoseFrame.scale with the idle as the reference pose: idle figure (head top to feet) "
+                         f"{p['idleFigurePx']} px / this figure {fig} px, so the rear figure stands as tall as the idle.",
+            "facingInImage": p["facing"],
+            "facingNote": ("boss rear view: seen from behind, faces INTO the frame " + ("toward screen-left (the head in profile to the left)" if p["facing"] == "away-left" else "(straight back view)"))
+                          if sub in ("seymour-flux-body", "ffx2-bahamut") else
+                          ("rear three-quarter: seen from behind and a little to the character's right; faces INTO the frame, "
+                           + ("turned toward screen-right" if p["facing"] == "away-right" else "near-straight, only slightly toward screen-right")),
+            "view": "rear34", "chiral": p["chiral"], "chiralityOk": p["chiralityOk"],
+            "seed": cj["seed"], "prompt": cj["positive"], "negative": cj["negative"],
+            "method": "B: Animagine XL 4.0 Opt txt2img, rear phrasing, IP-Adapter Method F reference (idle square + head crop, concat), "
+                      "xinsir OpenPose SDXL rear skeleton (tools/zz-persp-art/skeletons.py), rembg isnet-anime",
+            "controlnet": cj["controlnet"], "ipadapter": cj["ipadapter"],
+            "model": cj["model"], "steps": cj["steps"], "cfg": cj["cfg"], "sampler": cj["sampler"], "scheduler": cj["scheduler"],
+            "canvas": cj["canvas"], "cropBox": cj["cutout"]["cropBox"],
+            "post": ("alpha clean-up after rembg: " + {"kimahri": "horn trimmed to a stub", "ffx2-bahamut": "trapped white background keyed out"}.get(sub, "detached second sword removed")) if p["post"] else None,
+            "flipped": False,
+            "source": f"D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/{p['cand']}.png",
+            "idle": {"path": f"/art/characters/{sub}/idle.png", "width": idle["width"], "height": idle["height"], "baselineY": idle["baselineY"]},
+            "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+            "notes": p["notes"],
+            "generatedAt": cj["generatedAt"],
+        }
+        (dst_dir / "rear34.json").write_text(json.dumps(side, indent=1) + "\n", encoding="utf-8")
+        items.append({
+            "subject": sub, "view": "rear34", "path": f"/mock-art/{sub}/rear34.png", "w": w, "h": h,
+            "baselineY": base, "headTopY": p["headTopY"], "scale": scale,
+            "facingInImage": p["facing"], "chiral": p["chiral"], "chiralityOk": p["chiralityOk"], "hiRes": False,
+            "notes": p["notes"],
+        })
+        print(sub, w, h, "base", base, "fig", fig, "scale", scale)
+    for p in HIRES:
+        sub = p["subject"]
+        hj = json.loads((CAND / f"{p['src']}.json").read_text(encoding="utf-8"))
+        pj = json.loads((CAND / f"{p['pick']}.json").read_text(encoding="utf-8"))
+        src = CAND / f"{p['src']}.png"
+        dst = MOCK / sub / "rear34-hi.png"
+        shutil.copyfile(src, dst)
+        shutil.copyfile(src, CAND / sub / "pick-rear34-hi.png")
+        w, h = Image.open(dst).size
+        base = p["feetY"] or hj["cutout"]["baselineY"]
+        fig = base - p["headTopY"]
+        scale = round(p["idleFigurePx"] / fig, 3)
+        side = {
+            "width": w, "height": h, "baselineY": base,
+            "baselineNote": "feet row" + ("" if base == hj["cutout"]["baselineY"] else f"; the last opaque row is {hj['cutout']['baselineY']} (a weapon end)"),
+            "headTopY": p["headTopY"], "figurePx": fig, "scale": scale,
+            "scaleNote": f"PoseFrame.scale with the idle as the reference pose: idle figure {p['idleFigurePx']} px / this figure {fig} px. "
+                         "For the Hero Shoulder close-up the rig sizes it by eye; this number only makes it match the idle.",
+            "facingInImage": p["facing"], "view": "rear34-hi", "hiRes": True, "chiral": p["chiral"], "chiralityOk": True,
+            "seed": pj["seed"], "prompt": pj["positive"], "negative": pj["negative"],
+            "method": hj["method"] + "; then rembg isnet-anime", "denoise": hj["denoise"], "upscaler": hj["upscaler"],
+            "canvas": hj["canvas"], "cropBox": hj["cutout"]["cropBox"], "flipped": False,
+            "source": f"D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/{p['src']}.png",
+            "from": f"/mock-art/{sub}/rear34.png (the same painting at 1x)",
+            "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+            "notes": p["notes"], "generatedAt": hj["generatedAt"],
+        }
+        (MOCK / sub / "rear34-hi.json").write_text(json.dumps(side, indent=1) + chr(10), encoding="utf-8")
+        items.append({
+            "subject": sub, "view": "rear34-hi", "path": f"/mock-art/{sub}/rear34-hi.png", "w": w, "h": h,
+            "baselineY": base, "headTopY": p["headTopY"], "scale": scale,
+            "facingInImage": p["facing"], "chiral": p["chiral"], "chiralityOk": True, "hiRes": True,
+            "notes": p["notes"],
+        })
+        print(sub, "hi", w, h, "base", base, "fig", fig, "scale", scale)
+    for p in PLATE_PICKS:
+        sub = p["subject"]
+        cj = json.loads((CAND / f"{p['cand']}.json").read_text(encoding="utf-8"))
+        dst_dir = MOCK / sub
+        dst_dir.mkdir(parents=True, exist_ok=True)
+        dst = dst_dir / "plate-reverse.png"
+        shutil.copyfile(CAND / f"{p['cand']}.png", dst)
+        shutil.copyfile(CAND / f"{p['cand']}.png", CAND / "plates" / sub / "pick-plate-reverse.png")
+        w, h = Image.open(dst).size
+        side = {
+            "width": w, "height": h, "view": "plate-reverse", "of": f"/art/backdrops/{sub}.png",
+            "seed": cj["seed"], "prompt": cj["positive"], "negative": cj["negative"],
+            "method": "house backdrop preset (tools/gen/comfy.mjs backdropWorkflow: 1344x768 -> RealESRGAN x4 -> 0.5) with an "
+                      f"img2img init of today's plate mirrored (horizon moved up {cj['init'].get('shift', 0)}), denoise {cj['init']['denoise']}",
+            "init": cj["init"], "styleReference": cj.get("styleReference"), "model": cj["model"], "steps": cj["steps"], "cfg": cj["cfg"],
+            "sampler": cj["sampler"], "scheduler": cj["scheduler"], "canvas": cj["canvas"], "upscaler": cj["upscaler"],
+            "source": f"D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/{p['cand']}.png",
+            "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+            "rigName": p["rigName"], "horizon": p["horizon"],
+            "notes": p["notes"], "generatedAt": cj["generatedAt"],
+        }
+        (dst_dir / "plate-reverse.json").write_text(json.dumps(side, indent=1) + chr(10), encoding="utf-8")
+        items.append({
+            "subject": sub, "view": "plate-reverse", "rigName": p["rigName"], "path": f"/mock-art/{sub}/plate-reverse.png",
+            "w": w, "h": h, "horizon": p["horizon"],
+            "baselineY": None, "facingInImage": None, "chiral": False, "chiralityOk": True, "hiRes": False,
+            "notes": p["notes"],
+        })
+        print(sub, "plate", w, h)
+    for p in PROSC:
+        cj = json.loads((CAND / f"{p['cand']}.json").read_text(encoding="utf-8"))
+        dst_dir = MOCK / "proscenium"
+        dst_dir.mkdir(parents=True, exist_ok=True)
+        dst = dst_dir / f"{p['view']}.png"
+        shutil.copyfile(CAND / f"{p['cand']}.png", dst)
+        w, h = Image.open(dst).size
+        side = {
+            "width": w, "height": h, "view": p["view"], "alpha": True, "opening": cj["opening"],
+            "seed": cj["seed"], "denoise": cj["denoise"], "palette": cj["palette"], "prompt": cj["positive"], "negative": cj["negative"],
+            "method": "a code-drawn layout sketch (tools/zz-persp-art/proscenium.py sketch) painted over by img2img with the house backdrop "
+                      f"preset at denoise {cj['denoise']} (1344x768 -> RealESRGAN x4 -> 0.5), resized to 1920x1080, then the opening cut "
+                      "to alpha and the footlights lit (proscenium.py finish)",
+            "model": cj["model"], "steps": cj["steps"], "cfg": cj["cfg"], "sampler": cj["sampler"], "scheduler": cj["scheduler"],
+            "source": f"D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/{p['cand']}.painted.png",
+            "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+            "notes": p["notes"], "generatedAt": cj["generatedAt"],
+        }
+        (dst_dir / f"{p['view']}.json").write_text(json.dumps(side, indent=1) + chr(10), encoding="utf-8")
+        items.append({
+            "subject": "proscenium", "view": p["view"], "path": f"/mock-art/proscenium/{p['view']}.png", "w": w, "h": h,
+            "opening": cj["opening"], "baselineY": None, "facingInImage": None, "chiral": False, "chiralityOk": True,
+            "hiRes": False, "notes": p["notes"],
+        })
+        print("proscenium", p["view"], w, h)
+    for p in FLOORS:
+        cj = json.loads((CAND / f"{p['cand']}.json").read_text(encoding="utf-8"))
+        dst_dir = MOCK / p["subject"]
+        dst_dir.mkdir(parents=True, exist_ok=True)
+        dst = dst_dir / "top.png"
+        shutil.copyfile(CAND / f"{p['cand']}.png", dst)
+        w, h = Image.open(dst).size
+        mapping = {"world": p["world"], "pxPerUnit": p["pxPerUnit"],
+                   "orientation": "image top = world -z (the far side, toward today's backdrop), image left = world -x; the same "
+                                  "mapping as bevelle-underground.ts (row y / size = (z + 28) / 46)",
+                   "arena": "x -4..5, z -8..3 kept calm", "edgeFalloff": f"smoothstep to {p['fog']} over the outer 10 %"}
+        if p.get("hole"):
+            mapping["hole"] = p["hole"]
+        side = {
+            "width": w, "height": h, "view": "top", "mapping": mapping, "seed": cj["seed"], "denoise": cj["denoise"],
+            "prompt": cj["positive"], "negative": cj["negative"], "init": cj["init"], "sketch": cj.get("sketch"),
+            "method": "1024x1024 img2img over a code-drawn layout sketch (tools/zz-persp-art/floors.py), RealESRGAN x4 to 4096, "
+                      "then the edge falloff (floors.py finish)",
+            "model": cj["model"], "steps": cj["steps"], "cfg": cj["cfg"], "sampler": cj["sampler"], "scheduler": cj["scheduler"],
+            "source": f"D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/{p['cand']}.png",
+            "status": "CANDIDATE (options round 2026-09-27; not approved, not for public/art)",
+            "notes": p["notes"], "generatedAt": cj["generatedAt"],
+        }
+        (dst_dir / "top.json").write_text(json.dumps(side, indent=1) + chr(10), encoding="utf-8")
+        items.append({
+            "subject": p["subject"], "view": "top", "path": f"/mock-art/{p['subject']}/top.png", "w": w, "h": h,
+            "mapping": mapping, "baselineY": None, "facingInImage": None, "chiral": False, "chiralityOk": True, "hiRes": True,
+            "notes": p["notes"],
+        })
+        print(p["subject"], "top", w, h)
+    READY.parent.mkdir(parents=True, exist_ok=True)
+    doc = {
+        "updated": datetime.datetime.now(datetime.timezone.utc).astimezone().isoformat(timespec="seconds"),
+        "readme": "Rear three-quarter party paintings for the perspectives round (CANDIDATES). Each PNG is a rembg cut-out "
+                  "served by the worktree dev server at `path`; the sidecar beside it (rear34.json) has the full settings. "
+                  "baselineY = the feet row (plant it on the ground). scale = PoseFrame.scale when the idle is the "
+                  "reference pose, so the rear figure is as tall as the idle. facingInImage 'away-right' = faces into "
+                  "the frame turned toward screen-right; 'away' = near-straight back view. None of these is mirrored.",
+        "items": items,
+    }
+    tmp = READY.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(doc, indent=1) + "\n", encoding="utf-8")
+    json.loads(tmp.read_text(encoding="utf-8"))
+    tmp.replace(READY)
+    print("READY.json", len(items), "items")
+
+
+if __name__ == "__main__":
+    main()

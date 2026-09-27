@@ -1,0 +1,52 @@
+"""Perspectives round 2026-09-27 (art agent): IP-Adapter reference pairs for the rear-view renders.
+
+Method F (docs/plans/leblanc-art-method-check.md section 4): the idle padded to a square on white
+(CLIP-Vision centre-crops a square, so a tall idle loses its head) plus a square head crop.
+Reads the shipped idles under D:/Final Fantasy/public/art (read only), writes to the scratch folder.
+
+    D:/Tools/ComfyUI/python_embeded/python.exe -s tools/zz-persp-art/make-refs.py
+"""
+import pathlib
+from PIL import Image
+
+ART = pathlib.Path("D:/Final Fantasy/public/art/characters")
+OUT = pathlib.Path("D:/Tools/pyrefly-scratch/persp-art/refs")
+OUT.mkdir(parents=True, exist_ok=True)
+
+# head boxes (x0, y0, x1, y1) in each idle's own pixels, square-ish, head + hair + collar
+HEADS = {
+    "tidus": (262, 8, 512, 258),
+    "yuna": (255, 8, 495, 248),
+    "kimahri": (330, 60, 610, 340),
+    "yuna-white-mage": (262, 4, 532, 274),
+    "rikku-dark-knight": (105, 10, 385, 290),
+    "paine-warrior": (60, 8, 290, 238),
+    "seymour-flux-body": (150, 30, 450, 330),
+    "ffx2-bahamut": (560, 30, 900, 370),
+}
+
+import sys
+only = sys.argv[1:]
+for sub, box in HEADS.items():
+    if only and sub not in only:
+        continue
+    im = Image.open(ART / sub / "idle.png").convert("RGBA")
+    flat = Image.new("RGB", im.size, (255, 255, 255))
+    flat.paste(im, mask=im.split()[-1])
+    s = max(im.size)
+    sq = Image.new("RGB", (s, s), (255, 255, 255))
+    sq.paste(flat, ((s - im.width) // 2, (s - im.height) // 2))
+    sq.resize((1024, 1024), Image.LANCZOS).save(OUT / f"{sub}-square.png")
+    x0, y0, x1, y1 = box
+    side = max(x1 - x0, y1 - y0)
+    head = Image.new("RGB", (side, side), (255, 255, 255))
+    head.paste(flat.crop((x0, y0, x0 + side, y0 + side)), (0, 0))
+    head.resize((1024, 1024), Image.LANCZOS).save(OUT / f"{sub}-head.png")
+    print(sub, im.size, "head", box)
+
+# one look sheet of all the heads
+tiles = [Image.open(OUT / f"{s}-head.png").resize((256, 256)) for s in HEADS if (OUT / f"{s}-head.png").exists()]
+sheet = Image.new("RGB", (256 * len(tiles), 256), (80, 80, 80))
+for i, t in enumerate(tiles):
+    sheet.paste(t, (256 * i, 0))
+sheet.save(OUT / "_heads.jpg", quality=88)

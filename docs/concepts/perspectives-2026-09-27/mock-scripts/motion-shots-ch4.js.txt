@@ -1,0 +1,15 @@
+// Chapter IV (ffx2-bahamut, FFX-2) shot table. Paine (Warrior) is the first girl with an Attack command at
+// seed 1 (Yuna's White Mage has none; she opens the fight with Cure). Her Skill list stands in for Magic.
+const M = __motion;
+await M.patchCursor();
+const TIGHT = { focus: 0.58, band: 0.3, blur: 1.4 };
+const WIDE = { focus: 0.5, band: 0.14, blur: 4.4 };
+const HOME = { focus: 0.54, band: 0.15, blur: 3.8 };
+M.shots.master = { ...M.rigShot('idle'), focus: { ...M.FOCUS_OFF }, tilt: HOME };
+M.shots.atk = { pos: [-0.1, 1.1, 2.3], look: [0.35, 1.75, -6.0], fov: 32, roll: 0, sway: 0.55, focus: { id: 'paine', pad: 1.15, blur: 7, feather: 0.55 }, tilt: TIGHT };
+M.shots.atkB = { pos: [0.3, 1.2, 2.8], look: [0.1, 1.7, -6.0], fov: 32, roll: 0, sway: 0.55, focus: { id: 'paine', pad: 1.15, blur: 7, feather: 0.55 }, tilt: TIGHT };
+M.shots.mag = { pos: [-3.0, 4.8, 9.8], look: [-0.2, 1.4, -2.8], fov: 32, roll: 0, sway: 0.8, focus: { ...M.FOCUS_OFF }, tilt: WIDE };
+M.shots.magB = { pos: [-2.2, 5.6, 10.8], look: [-0.4, 1.2, -2.2], fov: 32, roll: 0, sway: 0.8, focus: { ...M.FOCUS_OFF }, tilt: WIDE };
+M.shots.itm = { pos: [-0.35, 1.62, 1.35], look: [-0.8, 1.45, -1.5], fov: 32, roll: 0, sway: 0.45, focus: { id: 'paine', pad: 1.05, blur: 12, feather: 0.45 }, tilt: TIGHT };
+M.shots.itmB = { pos: [-0.05, 1.55, 1.6], look: [-0.75, 1.4, -1.5], fov: 32, roll: 0, sway: 0.45, focus: { id: 'paine', pad: 1.05, blur: 12, feather: 0.45 }, tilt: TIGHT };
+return Object.keys(M.shots);

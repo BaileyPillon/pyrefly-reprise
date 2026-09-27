@@ -1,0 +1,10 @@
+const M = __motion; const out = [];
+out.push(await M.loadRear('tidus', '/mock-art/tidus/rear34.png', 'rear34'));
+out.push(await M.loadRear('tidus', '/mock-art/tidus/rear34-hi.png', 'rear34hi'));
+out.push(await M.loadRear('yuna', '/mock-art/yuna/rear34.png', 'rear34'));
+out.push(await M.loadRear('kimahri', '/mock-art/kimahri/rear34.png', 'rear34'));
+out.push(await M.loadRear('seymour-flux', '/mock-art/seymour-flux-body/rear34.png', 'rear34'));
+out.push(await M.loadPlate('rev', '/mock-art/gagazet/plate-reverse.png'));
+const a = M.act('tidus');
+out.push({ tidusPose: a.pose, requested: a.requested, artFacing: a.artFacingDir, facingDir: a.facingDir, interim: a.interimYawDeg, yaw: a.yawDeg });
+return out;

@@ -1,0 +1,193 @@
+// persp-options: one staging function per option (stills rig A). Needs persp-lib (window.__persp) loaded first.
+// Each function takes S = the chapter's ids + that option's tuned values (see the driver's tables), stages the
+// paused battle, and returns W.measure(...). Nothing here is wired into the game.
+const W = window.__persp;
+W.opts = {};
+const ids = (S) => [...S.party, ...S.boss];
+const placeAll = (S) => { for (const [id, h] of Object.entries(S.height || {})) W.setHeight(id, h); for (const [id, p] of Object.entries(S.pos || {})) W.place(id, p[0], p[1] ?? null, p[2] ?? null); for (const [id, names] of Object.entries(S.follow || {})) W.follow(names, id); for (const n of S.hideMesh || []) W.showMesh(n, false); };
+const common = async (S) => {
+  if (S.bg) W.bg(...S.bg);
+  if (S.floor) await W.floorPlate(S.floor.url, S.floor);
+  if (S.ground) W.ground(...S.ground);
+  if (S.gbright) W.xf('ground', (m) => { m.material.color.multiplyScalar(S.gbright); });
+  if (S.clear) for (const c of S.clear) W.clearNear(...c);
+  if (S.softbg) await W.softBg(S.softbg, S.softbg * 0.6);
+  if (S.fg) for (const f of S.fg) await W.fgCard(f);
+  if (S.bokeh) await W.bokeh(S.bokeh, S.bokehColor);
+  if (S.rays) await W.rays(S.rays);
+  if (S.tilt) W.tilt(S.tilt);
+  if (S.grade) W.grade(S.grade);
+  if (S.bloom) W.bloom(...S.bloom);
+  if (S.fog) W.fog(...S.fog);
+  if (S.exposure) W.exposure(S.exposure);
+  if (S.lights) W.lights(S.lights);
+  if (S.css) W.css(S.css);
+};
+const done = async (S, n = 10) => {
+  if (S.noRing && !S.__ringDone) for (const id of [...S.party, ...S.boss]) W.act(id)?.setTurnRing(false);
+  if (S.hudOff && !W.hudIsOff) { __pyrefly.trigger('hud:off'); W.hudIsOff = true; }
+  await __pyrefly.frames(n); return W.measure(S.lead, S.bossId, S.extra);
+};
+
+// P0 Today: the live master, untouched (sway held at 0 for a still).
+W.opts.P0 = async (S) => { W.restore(); W.init(); W.today(); return done(S); };
+
+// P0m Today, mirrored: the whole 3D frame reflected about the camera axis (party right facing left, boss left facing
+// right; paintings and plate mirrored = chiral stand-in), HUD mirrored as a mock (S.hudMirror false keeps it).
+W.opts.P0m = async (S) => {
+  W.restore(); W.init(); W.today(); W.mirrorScene(true, !!S.keepPlate);
+  await __pyrefly.frames(6);
+  if (S.hudMirror !== false) W.mirrorHud(S.hudSel);
+  return done(S);
+};
+
+// P1 Today, dressed: same camera; pre-blurred far plate, rim from the boss side, stronger contact shadows,
+// out-of-focus foreground silhouettes and snow bokeh, a little more haze, a touch more saturation.
+W.opts.P1 = async (S) => {
+  W.restore(); W.init(); W.today();
+  W.setAll(S.party, S.rimParty); W.setAll(S.boss, S.rimBoss);
+  for (const id of ids(S)) W.act(id).shadowBaseOpacity = S.shadow ?? 0.72;
+  await common(S);
+  for (const [n, o] of Object.entries(S.mist || {})) W.xf(n, (m) => { m.material.opacity = o; });
+  return done(S);
+};
+
+// P2-without: the over-the-shoulder camera with today's paintings (planes turned to the lens, fronts showing).
+W.opts.P2w = async (S) => {
+  W.restore(); W.init(); placeAll(S); W.setAll(ids(S), { face: true });
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov }); await common(S); return done(S);
+};
+
+// P4 Reverse Angle: behind the boss; boss darkened and rim-lit as a silhouette; stand-in far plate = today's plate
+// mirrored + softened, centred on the view (TAGGED stand-in).
+W.opts.P4 = async (S) => {
+  W.restore(); W.init(); placeAll(S); W.setAll(ids(S), { face: true });
+  W.setAll(S.boss, { brightness: S.bb ?? 0.14, tint: S.btint ?? 0x6f86c8, desaturate: 0.55, rim: S.rimc ?? 0xcfe6ff, rimStrength: S.rs ?? 1.7, rimDir: S.rd ?? [-1, 0.45], rimWidth: S.rw ?? 3.0 });
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov });
+  for (const n of [...W.bgNames, 'mist-0', 'mist-1', 'mist-2', 'mist-3']) W.showMesh(n, false);
+  await W.plate({ blur: S.pblur ?? 6, mirror: true, y: S.py ?? 4, dist: S.pdist ?? 56, k: S.pk ?? 1.1, dim: S.pdim ?? 1 });
+  await common(S); return done(S);
+};
+
+// P5 Side Stage (and P5m with S.mirror): everyone on one line across the frame, long lens, planes square to the lens.
+W.opts.P5 = async (S) => {
+  W.restore(); W.init(); placeAll(S);
+  if (S.mirror) for (const id of ids(S)) W.place(id, null, null, true);
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov }); await common(S); return done(S);
+};
+
+// P6 Diorama: elevated, long lens, tilt-shift band across the actors, contact shadows, saturation lift.
+W.opts.P6 = async (S) => {
+  W.restore(); W.init(); placeAll(S); W.setAll(ids(S), { face: true });
+  const el = S.el * Math.PI / 180, az = S.az * Math.PI / 180, c = S.center;
+  const cam = [c[0] + S.dist * Math.sin(az) * Math.cos(el), c[1] + S.dist * Math.sin(el), c[2] + S.dist * Math.cos(az) * Math.cos(el)];
+  W.cam({ position: cam, lookAt: c, fov: S.fov });
+  for (const id of ids(S)) W.act(id).shadowBaseOpacity = S.shadow ?? 0.7;
+  if (S.drift) W.xf('snow-drift', (m) => { if (m.material.opacity != null) m.material.opacity = Math.min(1, (m.material.opacity || 1) * S.drift); });
+  await common(S); return done(S);
+};
+
+// P7 Colossus: camera near the ground, pitched up; the boss scaled up and set back so he towers past the top edge.
+W.opts.P7 = async (S) => {
+  W.restore(); W.init(); placeAll(S); W.setAll(ids(S), { face: true });
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov, roll: S.roll ?? 0 }); await common(S); return done(S);
+};
+
+// P8 Party's Eyes: first person at the party's eye line; no party figures; HUD mock = three portrait cards.
+W.opts.P8 = async (S) => {
+  W.restore(); W.init(); for (const id of S.party) W.hide(id, true); placeAll(S); W.setAll(S.boss, { face: true });
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov }); await common(S);
+  W.css((S.hideHud ?? ['.ig-stat-list']).map((q) => `${q}{visibility:hidden !important}`).join(''));
+  const st = __pyrefly.battleState(); const faces = S.faces ?? [...document.querySelectorAll('.ig-stat__face img')].map((i) => i.getAttribute('src'));
+  W.partyCards(S.party.map((id, i) => { const c = st.combatants[id]; return { name: c.name, hp: c.hp, hpMax: c.stats.maxHp, mp: c.mp, mpMax: c.stats.maxMp, od: S.gaugeKey === 'atb' ? (c.atb?.gauge ?? 0) : (c.overdrive?.gauge ?? 0), odReady: S.gaugeKey !== 'atb' && (c.overdrive?.gauge ?? 0) >= 100, portrait: faces[i] ?? `/art/portraits/${id}.png`, acting: id === S.lead, ...(S.crop?.[id] ?? {}) }; }), S.cards ?? {});
+  return done(S);
+};
+
+// P9 Tabletop: portrait medallions with gold rings on the floor (stand-in floor = today's ground), seen from high above.
+W.opts.P9 = async (S) => {
+  W.restore(); W.init(); for (const id of ids(S)) W.hide(id, true);
+  const crops = W.faceCrops();
+  for (const t of S.tokens) await W.medallion({ url: t.url, crop: t.crop ?? crops[t.url], p: t.p, r: t.r, ring: t.ring, edge: t.edge, thick: t.thick });
+  const el = S.el * Math.PI / 180, az = S.az * Math.PI / 180, c = S.center;
+  const cam = [c[0] + S.dist * Math.sin(az) * Math.cos(el), c[1] + S.dist * Math.sin(el), c[2] + S.dist * Math.cos(az) * Math.cos(el)];
+  W.cam({ position: cam, lookAt: c, fov: S.fov }); await common(S);
+  await __pyrefly.frames(10);
+  const T = await W.T(); const cm = W.camera(); const H = innerHeight, Wd = innerWidth; const tokens = {};
+  W.added.filter((g) => g.name === 'persp-token').forEach((g, i) => { const r = S.tokens[i].r; let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; for (let k = 0; k < 24; k++) { const a = k / 24 * Math.PI * 2; const v = new T.Vector3(g.position.x + Math.cos(a) * r, g.position.y + 0.14, g.position.z + Math.sin(a) * r).project(cm); const x = (v.x * 0.5 + 0.5) * Wd, y = (-v.y * 0.5 + 0.5) * H; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); } tokens[S.tokens[i].id] = [x0 | 0, y0 | 0, (x1 - x0) | 0, (y1 - y0) | 0]; });
+  const m = W.measure(S.lead, S.bossId, S.extra); m.tokenRects = tokens; return m;
+};
+
+// P11 Cinemascope: low, wide, behind-and-beside the party; 2.39:1 bands with the HUD moved into them (mock).
+W.opts.P11 = async (S) => {
+  W.restore(); W.init(); placeAll(S); W.setAll(ids(S), { face: true });
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov, roll: S.roll ?? 0 }); await common(S);
+  const band = W.letterbox(2.39); W.cinemaHud({ band, party: S.party, lead: S.lead, ...(S.hud ?? {}) });
+  const m = await done(S); m.band = band; return m;
+};
+
+// P12 Split-Diopter: the lead's painted portrait huge and sharp in front, the boss sharp and far, a soft band between.
+W.opts.P12 = async (S) => {
+  W.restore(); W.init(); placeAll(S); for (const id of S.hideIds ?? []) W.hide(id, true); W.setAll(ids(S), { face: true });
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov }); await common(S);
+  await W.faceCard(S.face);
+  if (S.faceDim) { const fm = W.added.filter((m) => m.name === 'persp-face').pop(); fm.material.color.setScalar(S.faceDim); }
+  if (S.diop) await W.diopter(S.diop);
+  return done(S);
+};
+
+// P13 Proscenium: today's master pulled back inside a CSS/SVG stand-in arch (TAGGED), footlights, a spotlight on the lead.
+W.opts.P13 = async (S) => {
+  W.restore(); W.init(); placeAll(S);
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov }); await common(S);
+  const a = W.act(S.lead); const T = await W.T();
+  const pool = new T.Mesh(new T.CircleGeometry(1, 48), new T.MeshBasicMaterial({ map: await W.radialTex([[0, 'rgba(255,236,190,0.9)'], [0.5, 'rgba(255,226,160,0.45)'], [1, 'rgba(255,220,150,0)']]), transparent: true, depthWrite: false, blending: T.AdditiveBlending, toneMapped: false, fog: false }));
+  pool.rotation.x = -Math.PI / 2; pool.scale.set(S.poolR ?? 1.35, (S.poolR ?? 1.35) * 0.66, 1); pool.position.set(a.position.x, 0.03, a.position.z); pool.renderOrder = 6; W.scene().add(pool); W.added.push(pool);
+  await W.spotCone({ p: [a.position.x, 0, a.position.z - 0.05], w: S.coneW ?? 2.2, h: S.coneH ?? 6.5, o: S.coneO ?? 0.3 });
+  for (const id of ids(S)) if (id !== S.lead) W.set(id, { brightness: S.dimOthers ?? 0.74 });
+  W.set(S.lead, { brightness: 1.12, rim: 0xffe6b0, rimStrength: 1.0, rimDir: [0, 1], rimWidth: 3 });
+  W.grade({ vignette: 0.62 });
+  if (S.stageDark) { for (const n of W.bgNames) W.xf(n, (m) => { m.material.color.setScalar(S.stageDark); }); W.xf('ground', (m) => { m.material.color.multiplyScalar(S.stageDark); }); }
+  if (S.archUrl) W.dom(`<img src="${S.archUrl}" style="position:absolute;inset:0;width:100%;height:100%">`, 'under'); else W.proscenium(S.arch || {});
+  return done(S);
+};
+
+// P14 Panels (COMPOSITE): three real-engine renders (lead close, the whole stage, boss close) cut into angled panels.
+W.opts.P14 = async (S) => {
+  W.restore(); W.init(); placeAll(S); W.setAll(ids(S), { face: true });
+  const shots = [];
+  for (const v of S.views) { W.cam(v.cam); if (v.bg) W.bg(...v.bg); else W.bg(1, 0, 0); shots.push(await W.grab(6)); }
+  W.cam(S.views[S.masterIdx ?? 1].cam); W.bg(...(S.views[S.masterIdx ?? 1].bg ?? [1, 0, 0]));
+  W.panels(S.panels.map((p) => ({ ...p, img: shots[p.view] })), S.dividers, S.style || {});
+  const m = await done(S, 4); m.views = S.views.map((v) => v.cam); return m;
+};
+
+// G: the general staging used by every stage-2 option (P2 family, P3, P21, P22, P10, P16 beats). Order matters: heights
+// and placement, then painting swaps (a resize would undo them), then poses, camera, set, treatment, HUD.
+W.opts.G = async (S) => {
+  W.restore(); W.init(); placeAll(S);
+  for (const id of S.hideIds ?? []) W.hide(id, true);
+  W.setAll(ids(S), { face: true });
+  // S.swapMirror: subjects the art agent marks non-chiral (READY.json `chiral: false`) may be mirrored; chiral ones never.
+  const swaps = {}; for (const [id, url] of Object.entries(S.swap ?? {})) swaps[id] = await W.swap(id, url, S.swapFacing?.[id] ?? ((S.swapMirror ?? []).includes(id) ? 'left' : 'right'));
+  for (const [id, name] of Object.entries(S.poses ?? {})) W.pose(id, name);
+  W.cam({ position: S.cam, lookAt: S.look, fov: S.fov, roll: S.roll ?? 0 });
+  if (S.plate) { for (const n of [...W.bgNames, 'mist-0', 'mist-1', 'mist-2', 'mist-3']) W.showMesh(n, false); await W.plate(S.plate); }
+  await common(S);
+  if (S.rimParty) W.setAll(S.party, S.rimParty);
+  if (S.rimBoss) W.setAll(S.boss, S.rimBoss);
+  if (S.silhouette) W.setAll(S.boss, { brightness: 0.14, tint: S.silhouette.tint ?? 0x6f86c8, desaturate: 0.55, rim: S.silhouette.rim ?? 0xcfe6ff, rimStrength: S.silhouette.rs ?? 1.7, rimDir: S.silhouette.rd ?? [-1, 0.45], rimWidth: S.silhouette.rw ?? 3.0 });
+  for (const [id, o] of Object.entries(S.set ?? {})) W.set(id, o);
+  for (const id of ids(S)) W.act(id).shadowBaseOpacity = S.shadow ?? 0.72;
+  if (S.noRing) for (const id of ids(S)) W.act(id).setTurnRing(false);
+  if (S.face) { await W.faceCard(S.face); if (S.faceDim) W.added.filter((m) => m.name === 'persp-face').pop().material.color.setScalar(S.faceDim); }
+  if (S.diop) await W.diopter(S.diop);
+  if (S.spot) { const a = W.act(S.spot.id ?? S.lead); await W.spotCone({ p: [a.position.x, 0, a.position.z - 0.05], w: S.spot.w ?? 2.2, h: S.spot.h ?? 6.5, o: S.spot.o ?? 0.3 }); }
+  if (S.arch) W.dom(`<img src="${S.arch}" style="position:absolute;inset:0;width:100%;height:100%">`, 'under');
+  let band = null;
+  if (S.band) { band = W.letterbox(2.39); if (!S.hudOff) W.cinemaHud({ band, party: S.party, lead: S.lead, ...(S.band.hud ?? {}) }); }
+  if (S.hudOff) { __pyrefly.trigger('hud:off'); W.hudIsOff = true; }
+  if (S.impact) await W.impact(S.impact.id, S.impact.ms ?? 70, S.impact.o);
+  if (S.dissolve) for (const [id, k] of Object.entries(S.dissolve)) W.act(id).setDissolve(k);
+  const m = await done(S, S.impact ? 1 : 10); m.swaps = swaps; if (band) m.band = band; return m;
+};
+return Object.keys(W.opts);

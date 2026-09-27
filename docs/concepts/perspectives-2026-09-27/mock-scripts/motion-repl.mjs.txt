@@ -1,0 +1,132 @@
+// agent scratch (perspectives round, MOTION rig "b"): one headless GPU page on the game, driven over HTTP.
+// Based on docs/concepts/vegnagun-colossus-2026-09-26/mock-scripts/repl.mjs.txt (the /eval /shot /key /wait
+// /cast endpoints are unchanged), plus a DETERMINISTIC film mode:
+//   - Playwright's fake clock is installed before the game loads (it flows naturally until paused), so every
+//     setTimeout, Date and performance.now in the page is under our control;
+//   - requestAnimationFrame is taken over by window.__vf (a plain queue we flush once per sim substep), so
+//     the game loop steps exactly `sub` times per output frame at exact 1/(fps*sub) intervals;
+//   - every CSS / Web Animation is paused and seeked to the same virtual time before each capture;
+//   - each frame is grabbed with CDP Page.captureScreenshot (JPEG q95) into a numbered folder.
+// Usage: PYREFLY_BROWSER=gpu node tools/zz-persp-b-repl.tmp.mjs <gamePort> <replPort> <w> <h> [dpr] [mobile] [query]
+import http from 'node:http';
+import fs from 'node:fs';
+import { chromium } from 'playwright';
+import { currentChromiumArgs } from './browser-mode.mjs';
+const [port, rport, w = '1600', h = '900', dpr = '1', mobile = '0', query = 'coach=off'] = process.argv.slice(2);
+const browser = await chromium.launch({ args: [...currentChromiumArgs()] });
+const ctx = await browser.newContext({
+  viewport: { width: +w, height: +h },
+  deviceScaleFactor: +dpr,
+  ...(mobile === '1' ? { isMobile: true, hasTouch: true } : {}),
+});
+const page = await ctx.newPage();
+await page.clock.install();
+const t0 = Date.now();
+const cdp = await ctx.newCDPSession(page); let cast = null;
+cdp.on('Page.screencastFrame', async (f) => { if (cast) cast.push({ t: Date.now(), data: f.data }); try { await cdp.send('Page.screencastFrameAck', { sessionId: f.sessionId }); } catch {} });
+page.on('pageerror', (e) => console.log('ERR', String(e).slice(0, 300)));
+page.on('console', (m) => { if (m.type() === 'error') console.log('CONSOLE', m.text().slice(0, 300)); });
+await page.goto(`http://127.0.0.1:${port}/?${query}`, { waitUntil: 'domcontentloaded', timeout: 180000 });
+await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 180000 });
+
+// ---- the virtual frame driver, installed in the page on demand -------------------------------------------
+const VF = `(() => {
+  if (window.__vf) return 'already';
+  const q = new Map(); let id = 1;
+  const S = { q, on: false, origRaf: window.requestAnimationFrame, origCaf: window.cancelAnimationFrame, errs: [], seen: new Set(), cap: 34 };
+  S.enable = () => { if (S.on) return; S.on = true;
+    window.requestAnimationFrame = (cb) => { const i = id++; q.set(i, cb); return i; };
+    window.cancelAnimationFrame = (i) => { q.delete(i); }; };
+  S.disable = () => { if (!S.on) return; S.on = false;
+    window.requestAnimationFrame = S.origRaf; window.cancelAnimationFrame = S.origCaf;
+    const cbs = [...q.values()]; q.clear(); for (const cb of cbs) S.origRaf(cb);
+    for (const a of document.getAnimations()) { if (a.__vt0 !== undefined && a.playState === 'paused') { try { a.play(); } catch {} } } };
+  S.flush = () => { const now = performance.now(); const cbs = [...q.values()]; q.clear();
+    for (const cb of cbs) { try { cb(now); } catch (e) { if (S.errs.length < 20) S.errs.push(String(e && e.stack || e).slice(0, 400)); } } return cbs.length; };
+  S.anims = () => { const vt = performance.now(); let n = 0;
+    for (const a of document.getAnimations()) {
+      if (a.__vt0 === undefined) { const ct = Math.min(Math.max(Number(a.currentTime) || 0, 0), S.cap); a.__vt0 = vt - ct; }
+      const t = vt - a.__vt0; let end = Infinity;
+      try { end = a.effect.getComputedTiming().endTime; } catch {}
+      if (Number.isFinite(end) && t >= end) { try { a.finish(); } catch {} }
+      else { try { if (a.playState !== 'paused') a.pause(); a.currentTime = t; } catch {} }
+      n++; }
+    return n; };
+  window.__vf = S; return 'installed';
+})()`;
+
+let paused = false;
+async function pause() { if (paused) return; for (let i = 0; i < 5; i++) { const now = await page.evaluate(() => Date.now()); try { await page.clock.pauseAt(now + 250 * (i + 1)); paused = true; return; } catch (e) { if (!String(e).includes('past')) throw e; } } throw new Error('could not pause the clock'); }
+async function resume() { if (!paused) return; await page.evaluate(() => window.__vf && window.__vf.disable()); await page.clock.resume(); paused = false; }
+/** Advance the page by one output frame of 1000/fps ms in `sub` exact substeps. `base` = fake ms at frame 0. */
+async function stepFrame(base, f, fps, sub) {
+  for (let s = 1; s <= sub; s++) {
+    const target = base + (f + s / sub) * 1000 / fps;
+    const now = await page.evaluate(() => performance.now());
+    const d = Math.ceil(target - now);
+    if (d > 0) await page.clock.runFor(d);
+    await page.evaluate(() => window.__vf.flush());
+  }
+  return page.evaluate(() => window.__vf.anims());
+}
+async function capture(path, q = 95) {
+  const r = await cdp.send('Page.captureScreenshot', { format: 'jpeg', quality: q, optimizeForSpeed: true });
+  fs.writeFileSync(path, Buffer.from(r.data, 'base64'));
+}
+async function runEvent(e) {
+  if (e.key) await page.keyboard.press(e.key);
+  if (e.js) { const r = await page.evaluate(`(async () => { ${e.js} })()`); if (e.log) console.log('EV', e.t, JSON.stringify(r).slice(0, 300)); }
+}
+async function film(spec) {
+  const { dir, fps = 30, dur, events = [], sub = 2, q = 95, warm = 4 } = spec;
+  fs.mkdirSync(dir, { recursive: true });
+  await page.evaluate(VF);
+  await pause();
+  await page.evaluate(() => window.__vf.enable());
+  await page.clock.runFor(20); // drain the fake clock's own pending frames into our queue
+  const base = await page.evaluate(() => performance.now());
+  for (let f = -warm; f < 0; f++) await stepFrame(base, f + warm, fps, sub); // settle, not captured
+  const base2 = await page.evaluate(() => performance.now());
+  const N = Math.round(dur * fps);
+  const evs = [...events].sort((a, b) => a.t - b.t); let k = 0; const t1 = Date.now();
+  let stopAt = Infinity, n = 0;
+  for (let f = 0; f < N && f < stopAt; f++) {
+    const tf = f / fps;
+    while (k < evs.length && evs[k].t <= tf + 1e-6) await runEvent(evs[k++]);
+    await stepFrame(base2, f, fps, sub);
+    await capture(`${dir}/${String(f).padStart(5, '0')}.jpg`, q);
+    n = f + 1;
+    if (spec.until && stopAt === Infinity && (f % 3 === 0) && await page.evaluate(`(() => { ${spec.until} })()`)) stopAt = f + Math.round((spec.after ?? 2) * fps);
+  }
+  const errs = await page.evaluate(() => window.__vf.errs.splice(0));
+  return { frames: n, fps, base: base2, realSec: (Date.now() - t1) / 1000, errs };
+}
+
+const srv = http.createServer(async (req, res) => {
+  let body = ''; for await (const c of req) body += c;
+  try {
+    const u = new URL(req.url, 'http://x');
+    if (u.pathname === '/eval') { const r = await page.evaluate(`(async () => { ${body} })()`); res.end(JSON.stringify({ ok: true, t: Date.now() - t0, r }, null, 1)); }
+    else if (u.pathname === '/shot') { await page.screenshot({ path: u.searchParams.get('path') }); res.end(JSON.stringify({ ok: true, t: Date.now() - t0 })); }
+    else if (u.pathname === '/cap') { await capture(u.searchParams.get('path'), +(u.searchParams.get('q') || 95)); res.end(JSON.stringify({ ok: true })); }
+    else if (u.pathname === '/key') { await page.keyboard.press(u.searchParams.get('k')); res.end('{"ok":true}'); }
+    else if (u.pathname === '/wait') { await page.waitForFunction(body, null, { timeout: 900000, polling: 100 }); res.end(JSON.stringify({ ok: true, t: Date.now() - t0 })); }
+    else if (u.pathname === '/clock/pause') { await page.evaluate(VF); await pause(); res.end('{"ok":true}'); }
+    else if (u.pathname === '/clock/resume') { await resume(); res.end('{"ok":true}'); }
+    else if (u.pathname === '/vf/step') {
+      // paused-mode stepping without capture: n frames at fps with sub substeps
+      await page.evaluate(VF); await pause(); await page.evaluate(() => window.__vf.enable());
+      const n = +(u.searchParams.get('n') || 1), fps = +(u.searchParams.get('fps') || 30), sub = +(u.searchParams.get('sub') || 2);
+      const base = await page.evaluate(() => performance.now());
+      for (let f = 0; f < n; f++) await stepFrame(base, f, fps, sub);
+      res.end(JSON.stringify({ ok: true, n }));
+    }
+    else if (u.pathname === '/film') { const r = await film(JSON.parse(body)); res.end(JSON.stringify({ ok: true, ...r })); }
+    else if (u.pathname === '/cast/start') { cast = []; await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92, everyNthFrame: 1 }); res.end('{"ok":true}'); }
+    else if (u.pathname === '/cast/stop') { await cdp.send('Page.stopScreencast'); const dir = u.searchParams.get('dir'); fs.mkdirSync(dir, { recursive: true }); const fr = cast || []; cast = null; const meta = fr.map((f, i) => { const n = String(i).padStart(4, '0') + '.jpg'; fs.writeFileSync(dir + '/' + n, Buffer.from(f.data, 'base64')); return { n, t: f.t }; }); fs.writeFileSync(dir + '/frames.json', JSON.stringify(meta)); res.end(JSON.stringify({ ok: true, n: meta.length })); }
+    else if (u.pathname === '/t') { res.end(JSON.stringify({ t: Date.now() - t0, paused })); }
+    else if (u.pathname === '/quit') { res.end('{"ok":true}'); await ctx.close(); await browser.close(); process.exit(0); }
+    else res.end('{"ok":false}');
+  } catch (e) { res.end(JSON.stringify({ ok: false, err: String(e && e.stack || e).slice(0, 1200) })); }
+});
+srv.listen(+rport, '127.0.0.1', () => console.log('repl ready', rport));
