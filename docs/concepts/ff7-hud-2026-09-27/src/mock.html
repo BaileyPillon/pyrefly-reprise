@@ -1,0 +1,192 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FF7 HUD options</title>
+<style>
+@font-face{font-family:Corm;src:url(../../../../public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2);font-style:italic;font-weight:300 700}
+@font-face{font-family:Exo;src:url(../../../../public/fonts/exo2/Exo2-Variable-wght.woff2);font-weight:100 900}
+@font-face{font-family:Chakra;src:url(../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2);font-weight:700}
+@font-face{font-family:Raj;src:url(../../../../public/fonts/rajdhani/Rajdhani-Bold-700.woff2);font-weight:700}
+@font-face{font-family:Raj;src:url(../../../../public/fonts/rajdhani/Rajdhani-SemiBold-600.woff2);font-weight:600}
+:root{--ink:#0B0A12;--paper:#F4F1E8;--mako:#5CE6A8;--mako-deep:#1F8A5E;--sky:#7FC6E8;--blood:#B02A2A}
+body{margin:0;background:#222}
+section{position:relative;overflow:hidden;margin:0 0 20px;background:#08100e}
+section.desk{width:1600px;height:900px}
+section.phone{width:390px;height:844px;background:linear-gradient(#0c1614,#050807)}
+.stage{position:absolute;left:0;top:0;width:100%;height:100%}
+.phone .stage{height:560px}
+.phone .stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,#0a1110)}
+.scene{width:100%;height:100%;display:block}
+.hud{position:absolute;inset:0}
+.tag{position:absolute;right:14px;top:104px;font:700 12px Chakra;letter-spacing:.18em;color:rgba(244,241,232,.7);background:rgba(0,0,0,.45);padding:4px 8px}
+.tag .short,.phone .tag .long{display:none}.phone .tag .short{display:inline}
+.phone .tag{font-size:8.5px;right:8px;top:auto;bottom:4px;letter-spacing:.12em;padding:2px 5px}
+i>b{display:block;height:100%}
+
+/* ===== A: classic blue windows ===== */
+.A .win{position:absolute;box-sizing:border-box;border-radius:10px;border:3px solid #e9edf6;
+ background:linear-gradient(162deg,#5a82e0 0%,#2a47a8 38%,#142a78 70%,#070f3e 100%);
+ box-shadow:inset 0 0 0 2px #7d8cb8,inset 0 3px 18px rgba(255,255,255,.22),0 8px 22px rgba(0,0,0,.55);
+ color:#fff;font-family:Exo;font-weight:600;text-shadow:0 2px 0 rgba(0,0,30,.7)}
+.A .win::after{content:"";position:absolute;inset:0;border-radius:8px;opacity:.16;mix-blend-mode:overlay;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
+.A.dk .a-msg{left:360px;top:22px;width:880px;height:66px;font-size:27px;display:flex;align-items:center;justify-content:center}
+.A .who{color:#ffe98a;margin-right:12px}
+.A.dk .a-enemy{left:20px;bottom:18px;width:560px;height:210px;padding:26px 30px}
+.A .a-ename{font-size:28px}
+.A.dk .a-cmds{left:300px;bottom:34px;width:250px;height:176px;padding:16px 0 0 58px}
+.A .a-cmd{position:relative;font-size:29px;line-height:48px}
+.A .a-cmd.sel{color:#fff}
+.A .ptr{position:absolute;left:-40px;top:13px;width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:26px solid #f4f1e8;filter:drop-shadow(0 2px 0 #001)}
+.A.dk .a-party{left:596px;right:20px;bottom:18px;height:210px;padding:16px 28px}
+.A .a-head,.A .a-row{display:grid;grid-template-columns:170px 170px 130px 1fr;align-items:center}
+.A .a-head{font:700 15px Chakra;letter-spacing:.2em;color:#a9c4ff;text-shadow:none;margin-bottom:8px}
+.A .a-row{height:66px}
+.A .a-name{font-size:30px}
+.A .a-row.act .a-name{color:#ffe98a}
+.A .a-num{font:700 30px Raj;position:relative;padding-bottom:6px}
+.A .a-num small{font-size:20px;margin:0 3px;opacity:.85}
+.A .a-thin{position:absolute;left:0;bottom:0;width:120px;height:4px;background:#0a1030;border-radius:2px}
+.A .a-thin.hp b{background:linear-gradient(90deg,#6fd0ff,#e8f6ff)}
+.A .a-thin.mpb b{background:linear-gradient(90deg,#7de0a0,#e8fff0)}
+.A .a-num.mp{font-size:26px}
+.A .a-bars{display:grid;grid-template-columns:60px 1fr;gap:4px 10px;align-items:center}
+.A .a-bars em{font:700 12px Chakra;font-style:normal;letter-spacing:.14em;color:#c9d6ff;text-shadow:none}
+.A .a-bar{height:11px;background:#0a0f34;border:2px solid #c6cfe6;border-radius:3px;overflow:hidden}
+.A .a-bar.lim b{background:linear-gradient(90deg,#b54ec0,#ff8ad2)}
+.A .a-bar.atb b{background:linear-gradient(90deg,#c9a94a,#fff4a8)}
+.A .a-bar.atb.full b{background:linear-gradient(90deg,#fff08a,#fffbe0);box-shadow:0 0 10px #fff4a8}
+.A.ph .a-msg{left:10px;right:10px;top:12px;height:auto;padding:10px 12px;font-size:16px;text-align:center}
+.A.ph .a-enemy{left:8px;width:170px;bottom:196px;height:128px;padding:14px 12px}
+.A.ph .a-ename{font-size:17px}
+.A.ph .a-cmds{left:186px;right:8px;bottom:196px;height:128px;padding:10px 0 0 44px}
+.A.ph .a-cmd{font-size:20px;line-height:35px}
+.A.ph .ptr{left:-30px;top:9px;border-top-width:8px;border-bottom-width:8px;border-left-width:19px}
+.A.ph .a-party{left:8px;right:8px;bottom:22px;height:168px;padding:10px 12px}
+.A.ph .a-head{display:none}
+.A.ph .a-row{grid-template-columns:78px 96px 1fr;grid-template-rows:30px 34px;height:74px;row-gap:0}
+.A.ph .a-name{font-size:19px}
+.A.ph .a-num{font-size:20px}
+.A.ph .a-num small{font-size:14px}
+.A.ph .a-thin{width:80px;height:3px}
+.A.ph .a-num.mp{font-size:17px}
+.A.ph .a-bars{grid-column:1/4;grid-template-columns:46px 1fr 42px 1fr;gap:6px}
+.A.ph .a-bars em{font-size:10px}
+.A.ph .a-bar{height:8px}
+
+/* ===== shared ink surface for B and C ===== */
+.shade{position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 90% at 55% 40%,transparent 45%,rgba(11,10,18,.55)),linear-gradient(rgba(11,10,18,.35),transparent 16%,transparent 66%,rgba(11,10,18,.7))}
+.shade::after{content:"";position:absolute;inset:0;opacity:.13;mix-blend-mode:overlay;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ===== B: Ink & Gold, mako skin ===== */
+.B .b-banner,.B .b-hint,.B .b-cmd,.B .b-plate{position:absolute;transform:skewX(-12deg);box-shadow:0 8px 20px rgba(0,0,0,.45)}
+.B .b-banner>span,.B .b-hint>span,.B .b-cmd>span,.B .b-plate>span{display:block;transform:skewX(12deg)}
+.B .b-banner{left:53px;top:44px;background:var(--paper);border-bottom:4px solid var(--mako);padding:10px 38px 12px 30px}
+.B .b-banner b{font:700 italic 52px/1 Corm;color:var(--ink);margin-right:18px;vertical-align:middle}
+.B .b-banner i{font:700 15px Chakra;font-style:normal;letter-spacing:.26em;color:var(--mako);background:var(--ink);padding:6px 10px;vertical-align:middle}
+.B .b-hint{left:70px;top:132px;background:rgba(11,10,18,.84);border-left:4px solid var(--mako);padding:9px 22px}
+.B .b-hint span{font:italic 400 21px Exo;color:var(--paper)}
+.B .b-hint em{font:700 13px Chakra;font-style:normal;letter-spacing:.26em;color:var(--mako);margin-right:12px}
+.B .bracket{position:absolute}
+.B .bracket>i{position:absolute;width:33px;height:33px;border:3px solid var(--mako);filter:drop-shadow(0 0 4px rgba(92,230,168,.6))}
+.B .bracket>i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+.B .bracket>i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.B .bracket>i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+.B .bracket>i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.B .b-plate{left:-40px;bottom:40px;background:var(--ink);border-left:4px solid var(--mako);padding:6px 20px;white-space:nowrap}
+.B .b-plate span{font:700 italic 27px Corm;letter-spacing:.08em;color:var(--paper)}
+.B .b-cmds{position:absolute;left:75px;bottom:64px;width:420px;height:200px}
+.B .b-cmd{left:calc(var(--i) * 18px);top:calc(var(--i) * 67px);width:324px;height:58px;background:var(--paper);display:flex;align-items:center}
+.B .b-cmd span{font:700 25px Chakra;letter-spacing:.12em;color:var(--ink);padding-left:44px;position:relative}
+.B .b-cmd.sel{background:var(--mako)}
+.B .tri{position:absolute;left:14px;top:6px;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:14px solid var(--ink)}
+.B .b-party{position:absolute;right:58px;bottom:60px;width:560px;height:190px}
+.B .b-row{position:absolute;right:calc((1 - var(--i)) * 18px);top:calc(var(--i) * 93px);width:520px;height:84px;background:rgba(11,10,18,.84);border-left:6px solid var(--paper);
+ box-shadow:0 8px 20px rgba(0,0,0,.45);display:grid;grid-template-columns:84px 1fr 190px;grid-template-rows:44px 40px;align-items:center}
+.B .b-row.act{background:rgba(11,10,18,.94);border-left-color:var(--mako)}
+.B .b-por{grid-row:1/3;width:70px;height:70px;margin-left:8px;border:2px dashed rgba(244,241,232,.45);color:rgba(244,241,232,.7);font:700 22px Chakra;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a2320}
+.B .b-por small{font-size:7px;letter-spacing:.12em}
+.B .b-name{font:700 italic 29px Corm;color:var(--paper);padding-left:4px}
+.B .b-row.act .b-name{color:var(--mako)}
+.B .b-vals{grid-column:3;grid-row:1;display:flex;gap:16px;justify-content:flex-end;padding-right:16px}
+.B .hpv{font:700 29px Raj;color:var(--paper)} .B .mpv{font:700 23px Raj;color:var(--sky)}
+.B .b-vals small{font-size:14px;color:#9fb0c4}
+.B .b-bars{grid-column:2/4;grid-row:2;display:grid;grid-template-columns:52px 1fr 36px 1fr;gap:10px;align-items:center;padding:0 16px 0 4px}
+.B .b-bars em{font:700 11px Chakra;font-style:normal;letter-spacing:.2em;color:#9fb0c4}
+.B .b-bar{height:9px;background:#1e2a26;transform:skewX(-12deg)}
+.B .b-bar.lim b{background:var(--mako)}
+.B .b-bar.atb b{background:var(--paper)}
+.B .b-bar.atb.full b{background:var(--paper);box-shadow:0 0 12px rgba(92,230,168,.9)}
+.B.ph .b-banner{left:14px;top:14px;padding:6px 18px 8px 16px}
+.B.ph .b-banner b{font-size:30px;margin-right:10px}
+.B.ph .b-banner i{font-size:9px;padding:4px 6px}
+.B.ph .b-hint{left:20px;top:70px;padding:6px 12px}
+.B.ph .b-hint span{font-size:13px} .B.ph .b-hint em{font-size:9px;margin-right:6px}
+.B.ph .bracket>i{width:20px;height:20px;border-width:2px}
+.B.ph .b-plate{left:-6px;bottom:18px;padding:3px 10px}
+.B.ph .b-plate span{font-size:17px}
+.B.ph .b-cmds{left:20px;bottom:212px;width:260px;height:130px}
+.B.ph .b-cmd{left:calc(var(--i) * 12px);top:calc(var(--i) * 44px);width:200px;height:38px}
+.B.ph .b-cmd span{font-size:17px;padding-left:30px}
+.B.ph .tri{left:9px;top:4px;border-top-width:6px;border-bottom-width:6px;border-left-width:10px}
+.B.ph .b-party{right:10px;bottom:24px;width:376px;height:180px}
+.B.ph .b-row{right:calc((1 - var(--i)) * 10px);top:calc(var(--i) * 88px);width:362px;height:80px;grid-template-columns:62px 1fr 150px;grid-template-rows:42px 38px}
+.B.ph .b-por{width:50px;height:50px;margin-left:5px;font-size:16px}
+.B.ph .b-name{font-size:22px}
+.B.ph .hpv{font-size:22px} .B.ph .mpv{font-size:17px} .B.ph .b-vals small{font-size:11px}
+.B.ph .b-vals{gap:10px;padding-right:10px}
+.B.ph .b-bars{grid-template-columns:40px 1fr 28px 1fr;gap:6px;padding-right:10px}
+.B.ph .b-bars em{font-size:9px;letter-spacing:.12em}
+.B.ph .b-bar{height:7px}
+
+/* ===== C: FF7 layout, Ink & Gold materials ===== */
+.C .cw{position:absolute;box-sizing:border-box;border-radius:8px;background:rgba(11,10,18,.86);border:1.5px solid rgba(244,241,232,.55);
+ box-shadow:inset 0 0 0 4px rgba(11,10,18,.86),inset 0 0 0 5px rgba(92,230,168,.35),0 8px 20px rgba(0,0,0,.45);color:var(--paper)}
+.C .cw em{font:700 13px Chakra;font-style:normal;letter-spacing:.26em;color:var(--mako)}
+.C.dk .c-msg{left:340px;top:22px;width:920px;height:70px;display:flex;align-items:center;gap:18px;padding:0 28px}
+.C .c-msg span{font:600 italic 32px Corm;flex:1}
+.C .c-state{font:700 13px Chakra;letter-spacing:.26em;color:var(--ink);background:var(--mako);padding:6px 10px}
+.C.dk .c-enemy{left:20px;bottom:18px;width:560px;height:210px;padding:22px 30px}
+.C .c-enemy em{color:#d88}
+.C .c-ename{font:700 italic 34px Corm;margin-top:10px;padding-left:14px;border-left:3px solid var(--blood)}
+.C.dk .c-cmds{left:300px;bottom:34px;width:250px;height:176px;padding:18px 18px;border-color:var(--mako);background:rgba(11,10,18,.94)}
+.C .c-cmd{font:700 25px Chakra;letter-spacing:.12em;line-height:46px;padding-left:22px;margin-bottom:2px}
+.C .c-cmd.sel{background:var(--mako);color:var(--ink)}
+.C.dk .c-party{left:596px;right:20px;bottom:18px;height:210px;padding:16px 28px}
+.C .c-head,.C .c-row{display:grid;grid-template-columns:170px 180px 130px 1fr;align-items:center}
+.C .c-head{font:700 12px Chakra;letter-spacing:.26em;color:#9fb0c4;margin-bottom:8px}
+.C .c-row{height:66px}
+.C .c-name{font:700 italic 32px Corm}
+.C .c-row.act .c-name{color:var(--mako)}
+.C .c-num{font:700 31px Raj;position:relative;padding-bottom:6px}
+.C .c-num small{font-size:15px;color:#9fb0c4}
+.C .c-num.mp{color:var(--sky);font-size:26px}
+.C .c-thin{position:absolute;left:0;bottom:0;width:120px;height:3px;background:#2a3246}
+.C .c-thin.hp b{background:var(--paper)} .C .c-thin.mpb b{background:var(--sky)}
+.C .c-bars{display:grid;grid-template-columns:60px 1fr;gap:5px 10px;align-items:center}
+.C .c-bars em{font-size:11px;letter-spacing:.2em;color:#9fb0c4}
+.C .c-bar{height:9px;background:#1e2a26;border-radius:2px;overflow:hidden}
+.C .c-bar.lim b{background:var(--mako)}
+.C .c-bar.atb b{background:var(--paper)}
+.C .c-bar.atb.full b{box-shadow:0 0 12px rgba(92,230,168,.9)}
+.C.ph .c-msg{left:10px;right:10px;top:12px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 10px}
+.C.ph .c-msg span{font-size:19px;grid-column:1/3}
+.C.ph .cw em{font-size:9px}
+.C.ph .c-state{font-size:9px;padding:3px 6px;justify-self:end}
+.C.ph .c-enemy{left:8px;width:170px;bottom:196px;height:128px;padding:12px}
+.C.ph .c-ename{font-size:21px;padding-left:8px}
+.C.ph .c-cmds{left:186px;right:8px;bottom:196px;height:128px;padding:10px 10px;border-color:var(--mako);background:rgba(11,10,18,.94)}
+.C.ph .c-cmd{font-size:17px;line-height:33px;padding-left:14px;margin-bottom:2px}
+.C.ph .c-party{left:8px;right:8px;bottom:22px;height:168px;padding:10px 12px}
+.C.ph .c-head{display:none}
+.C.ph .c-row{grid-template-columns:84px 104px 1fr;grid-template-rows:30px 34px;height:74px}
+.C.ph .c-name{font-size:23px}
+.C.ph .c-num{font-size:21px} .C.ph .c-num small{font-size:11px} .C.ph .c-num.mp{font-size:17px}
+.C.ph .c-thin{width:80px}
+.C.ph .c-bars{grid-column:1/4;grid-template-columns:46px 1fr 42px 1fr;gap:6px}
+.C.ph .c-bars em{font-size:9px}
+.C.ph .c-bar{height:7px}
+</style></head>
+<body><div id="root"></div>
+<script src="scene.js"></script><script src="hud.js"></script><script>build()</script>
+</body></html>
