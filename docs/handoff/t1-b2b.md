@@ -96,3 +96,51 @@ browser evidence, listed below.
 5. PR-0185: Ch IX first ATTACK plus the following Yojimbo turn, with sequence frames at 350 ms, at **1600x900 and 2000x1012**, **including frames inside the enemy/idle tween**. Also run one reveal push at **1280x720**. 4:3 (1280x960) is known open and should be recorded, not failed on.
 6. R15-02: a network log of Ch IX entry that records `requestfailed`. It should show no `ERR_ABORTED` for sakura.png and exactly one GET 200.
 7. PR-0136: Ch VI links 1 to 3 to the first menu at **1600x900** (the acceptance size). Add **2000x1012** once as a regression look at the rail and the intent card.
+
+## L-0 finish (browser check with real keys, 2026-09-27)
+
+Merged `origin/main` again (`769e25d9`: Bailey's 2026-09-27 answers, the perspectives and
+Valefor-bug records, the deploy-pages polling fix; no conflict, no source overlap with this
+branch). The first L-0 pass (same day, 10:26 to 11:26) had already reconciled PR-0184, PR-0185 and
+R15-02 with iter2-b2's scene rigs (`a7735fbf`, `f5c75036`, `b2bffe86`) and wandered the start of
+the stage feather (`7f051136`); this pass ran the whole checklist on the final build.
+
+Method: production `vite build` (`dist-l0/`, not the shared `dist/`) served by `vite preview` on
+6700, headless Playwright Chromium with `PYREFLY_BROWSER=gpu`, one browser at a time, seed 1, real
+keys from the title. Two inputs are debug and labelled where used: `autoBattle('intended')` to
+reach Yunalesca's forms 2 and 3, and to cross Chapter VI's link 2 (the measurement at each link's
+first menu is unchanged by how the link was reached). Scratch drivers `tools/zz-l0-*.tmp.mjs`
+(uncommitted); raw frames under `D:/Tools/pyrefly-scratch/t1-b2b-l0/`.
+
+| Item | Game (rule 14) | Round-13 acceptance | Result | Frames (`docs/screenshots/t1-b2b/`) |
+|---|---|---|---|---|
+| PR-0205 | FFX-2 only (XI) | seam 2 caption reads 'Magus Sisters' | **Met.** Link 1 won by real keys (79 s); frames every 350 ms after the seam: the reveal plate reads "Magus Sisters" from 0.7 s on, never "Sandy" (the boss HP card later names Sandy, the formation's first HP bar, as intended). | `l0-ch11-1600-seam2-magus-sisters.jpg` |
+| PR-0164 | FFX only (II) | attack frame at 2000x1012: no straight hard edge through the hair; the file byte-identical | **Met after a fix (below).** Frozen-camera pairs (her plane shown, then hidden) proved the straight pale column in the attack frame was her own plane: the hair runs dense up to the PNG's left border, and a feather that always ENDED on the plate edge left it ending on one straight line. The feather's end now wanders inside the edge. Forms 2 and 3 checked too (2000x1012): no straight edge on the sides or top. | `l0-ch2-2000-attack-hair-edge-before-after.jpg` (left: before, a hard vertical line; right: after), `l0-ch2-2000-form1-attack.jpg`, `-form1-hurt.jpg`, `-form2-attack.jpg`, `-form3-attack.jpg` |
+| PR-0212 | FFX only (XIV) | no straight edge in a Ch XIV summon frame (shader-mask route; the file half cannot pass without a re-cut, Bailey's call) | **Met by the mask route.** Summon > Valefor by real keys; the far wing (mirrored, so on the left) fades out along a wandering line at 1600x900 and 2000x1012. | `l0-ch14-{1600,2000}-valefor-midfight.jpg`, `l0-ch14-valefor-wing-zoom-1600-2000.jpg` |
+| PR-0184 | FFX only (IX) | arrival frames at 1600 and 2000: no straight edge on the canopy, the trunk meets the floor | **Met.** The canopy ends on its own blossom along a wandering, rounded line; the trunk goes down behind Yojimbo to the floor line. | `l0-ch9-{1600,2000,1280}-arrival-enemy-held.jpg`, `l0-ch9-{1600,2000}-canopy-crop-brightened.jpg` |
+| PR-0185 | FFX only (IX) | no party head cut in the enemy-action and arrival frames at 1600 and 2000 | **Met on held frames** at 1280x720, 1600x900 and 2000x1012: a per-frame sampler over arrival plus 8 real-key turns counted 0 cut heads with the camera on a held rig. **Disclosed, open:** the 100 to 150 ms dolly between `enemy` and `idle` still passes heads through the bottom edge (camera z 10 to 13.5; 17 or 18 such runs per fight); a 350 ms sequence can land on one (`l0-ch9-2000-arrival-enemy-tween.jpg`: Kimahri's horn and spear tip at the bottom edge). Any continuous dolly from a frame with the party to one without it crosses the edge; the choices are a cut instead of a dolly on that pair, or fading the party during it. That is a camera-grammar call for Bailey, not built. 4:3 is pinned by `f5c75036` (0 held cuts at 1280x960 in the first L-0 pass). | as above |
+| R15-02 | FFX only (IX) | a network log that records aborted requests shows none for sakura.png on Chapter IX entry | **Met** at all three sizes: `REQ GET .../sakura.png`, `DONE GET 200`, 0 failed requests, 0 page errors. | (log only) |
+| PR-0136 | FFX-2 only (VI) | 1600x900: no enemy within 150 px of a girl, enemies in the right half | **Met.** 1600x900 nearest fiend 202 / 226 / 168 px, leftmost fiend x 836 / 858 / 812 (half 800). 2000x1012 (regression look) 226 / 240 / 202 px, leftmost 1040 / 1066 / 1013 (half 1000); the fiends stay left of the command rail and below the intent card. | `l0-ch6-{1600,2000}-links-1-2-3.jpg` |
+
+**Fix in this pass (FFX only; PR-0164, PR-0212).** `PaintedShader.ts`: with `edgeJag` above 0 the
+whole feather ramp moves inward by `edgeJag` scaled into [0.35, 1] by edge noise, so its end (not
+only its start) wanders and never lies on the plate edge; the noise is read at 2.7x along the edge
+with a contrast of smoothstep(0.33, 0.6), because the dissolve noise's side row sits in 0.31..0.66
+and the old smoothstep(0.25, 0.75) barely moved the line (measured by `tools/zz-l0-noise-row.tmp.mjs`).
+`edgeJag` 0 is the old straight feather exactly, so no other figure changes. The math is mirrored
+in `ActorEdgeFeather.featherAlpha` (with `JAG_MIN`) and pinned to the GLSL by
+`tests/unit/engine/stage-edge-feather.test.ts` (written failing first).
+
+**Observed, not an item here.** Yunalesca's third form ends on a straight horizontal base line where
+its coils meet the floor (`l0-ch2-2000-form3-attack.jpg`); the base is kept whole by design
+(`edgeFadeBase: false`) because the coils fill the painting's base. Not in any round-13 item.
+
+**Still open, by Bailey's answers of 2026-09-27 (D-249).** PR-0034 (Q11): yes to the four-scene
+before/after sheet (OR-15) before any colour-pipeline change; the sheet is not this batch's.
+PR-0177 (Q9): "keep the streak", so the issue closes as intended; that closure is the critic's to
+record, not built here.
+
+Checks on the final commit: `npx tsc --noEmit` clean; full `vitest run --testTimeout=60000` 552
+files passed, 5 skipped (9225 tests passed); `node tools/orphans.mjs` 29 orphaned, the same as
+main; `verify-approved.mjs` 0 mismatched, 0 missing (approved 219, judge-locked 48). The preview
+server on 6700 was stopped by PID.
