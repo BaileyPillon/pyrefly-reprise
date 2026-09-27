@@ -11,6 +11,7 @@ import {
 } from 'three';
 import { artUrl, configurePaintedTexture, tryLoadTexture } from '../engine/PaintedArt.ts';
 import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
+import { sakuraEdgeTexture } from './cavern-sakura-mask.ts';
 
 // ---------------------------------------------------------------------------
 // The night-sakura arrival over the Cavern chamber (FFX only)
@@ -55,42 +56,8 @@ export const SAKURA_TREE_URL = 'art/backdrops/cavern-stolen-fayth/sakura.png';
  */
 export const SAKURA_TREE_ROOT = 880 / 1024;
 
-/** The tree plate's side and top feather, as a fraction of its width and height (PR-0184). */
-const SAKURA_EDGE = { side: 0.12, top: 0.08 } as const;
-
-/**
- * The tree plate's alpha at canvas point (u, v), v = 0 at the top: 0 on the
- * left, right and top edges, easing to 1 over {@link SAKURA_EDGE}, and 1 all the
- * way down the base, where the roots stand on the floor. The approved painting
- * has a vignette that stops a few pixels short of its right edge (the canopy
- * reaches column 991 of 1024), which read as a straight vertical cut; this ramp
- * is what ends it softly. The PNG is untouched.
- */
-export function sakuraEdgeAlpha(u: number, v: number): number {
-  const ramp = (d: number, band: number): number => {
-    const k = Math.min(1, Math.max(0, d / band));
-    return k * k * (3 - 2 * k);
-  };
-  return Math.min(ramp(u, SAKURA_EDGE.side), ramp(1 - u, SAKURA_EDGE.side), ramp(v, SAKURA_EDGE.top));
-}
-
-/** {@link sakuraEdgeAlpha} as an alpha map (three reads its green channel). */
-function edgeAlphaTexture(size = 128): CanvasTexture {
-  const c = document.createElement('canvas');
-  c.width = c.height = size;
-  const ctx = c.getContext('2d')!;
-  const img = ctx.createImageData(size, size);
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      const a = Math.round(255 * sakuraEdgeAlpha((x + 0.5) / size, (y + 0.5) / size));
-      const i = (y * size + x) * 4;
-      img.data[i] = img.data[i + 1] = img.data[i + 2] = a;
-      img.data[i + 3] = 255;
-    }
-  }
-  ctx.putImageData(img, 0, 0);
-  return new CanvasTexture(c);
-}
+/** The plate's edge mask lives in `cavern-sakura-mask.ts` (PR-0184); re-exported for its callers. */
+export { sakuraEdgeAlpha } from './cavern-sakura-mask.ts';
 
 /** The arrival's beats, in ms from the opening shot (the scene's `intro` rig). */
 export const SAKURA_ARRIVAL_MS = {
@@ -263,7 +230,7 @@ export class SakuraArrival {
     this.group.add(this.floorVeil);
 
     const treeTex = configurePaintedTexture(new CanvasTexture(paintSakuraTree()));
-    const edgeTex = edgeAlphaTexture();
+    const edgeTex = sakuraEdgeTexture();
     this.textures.push(treeTex, edgeTex);
     const treeMat = new MeshBasicMaterial({
       map: treeTex,
@@ -330,6 +297,10 @@ export class SakuraArrival {
     const mat = this.tree.material as MeshBasicMaterial;
     mat.map?.dispose();
     mat.map = tex;
+    // The edge mask keyed to the painting's own blossom (PR-0184); the procedural one stays as a fallback.
+    const keyed = sakuraEdgeTexture(tex.image as CanvasImageSource | undefined);
+    mat.alphaMap = keyed;
+    this.textures.push(keyed);
     mat.needsUpdate = true;
     this.textures.push(tex);
     this.painted = true;

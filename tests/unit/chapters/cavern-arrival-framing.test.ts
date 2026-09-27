@@ -108,10 +108,46 @@ describe('PR-0184: the sakura tree stands on the floor with no plate edge', () =
     expect(sakuraEdgeAlpha(0.5, 0.5)).toBe(1);
     expect(sakuraEdgeAlpha(0.5, 0.86)).toBe(1); // the root line
     expect(sakuraEdgeAlpha(0.5, 1)).toBe(1); // the base is never faded
-    // A soft ramp, not a step: halfway into the side band is part-transparent.
-    const mid = sakuraEdgeAlpha(0.06, 0.5);
-    expect(mid).toBeGreaterThan(0.1);
-    expect(mid).toBeLessThan(0.9);
+    // A soft ramp, not a step: the row through the canopy passes through part-transparent values.
+    const row = Array.from({ length: 200 }, (_, i) => sakuraEdgeAlpha(i / 199, 0.5));
+    expect(row.filter((a) => a > 0.1 && a < 0.9).length).toBeGreaterThanOrEqual(8);
+  });
+
+  // L-0 browser check (2026-09-27): a fade that runs parallel to the plate's side still read as a
+  // soft vertical column where the canopy ends at 2000x1012. The half-alpha line must wander.
+  it('ends the canopy on an irregular line, not a straight fade parallel to the plate edge', () => {
+    const halfLine = (side: 'left' | 'right' | 'top', lum = 0): number[] =>
+      Array.from({ length: 23 }, (_, j) => {
+        const t = 0.12 + (j / 22) * 0.6; // along the edge, through the canopy
+        for (let i = 0; i <= 400; i++) {
+          const d = i / 800; // inward from the edge
+          const a = side === 'left' ? sakuraEdgeAlpha(d, t, lum) : side === 'right' ? sakuraEdgeAlpha(1 - d, t, lum) : sakuraEdgeAlpha(t, d, lum);
+          if (a >= 0.5) return d;
+        }
+        return 0.5;
+      });
+    // Keyed to the painting: a bright blossom clump in the band keeps more of itself than the dark
+    // gap beside it, so the canopy ends along its own clumps; the plate edge is 0 whatever the pixel.
+    for (const side of ['left', 'right', 'top'] as const) {
+      const dark = halfLine(side, 0);
+      const bright = halfLine(side, 1);
+      const gain = dark.reduce((s, d, j) => s + d - bright[j]!, 0) / dark.length;
+      expect(gain, `${side}: a bright clump keeps itself ${gain.toFixed(3)} nearer the edge`).toBeGreaterThanOrEqual(0.03);
+    }
+    for (const t of [0.1, 0.3, 0.5, 0.7]) {
+      expect(sakuraEdgeAlpha(0, t, 1)).toBe(0);
+      expect(sakuraEdgeAlpha(1, t, 1)).toBe(0);
+      expect(sakuraEdgeAlpha(t, 0, 1)).toBe(0);
+    }
+    for (const side of ['left', 'right', 'top'] as const) {
+      const line = halfLine(side);
+      const range = Math.max(...line) - Math.min(...line);
+      expect(range, `${side} half-alpha line spans ${range.toFixed(3)}`).toBeGreaterThanOrEqual(0.05);
+      // Not a straight slope either: it turns back at least twice.
+      let turns = 0;
+      for (let j = 2; j < line.length; j++) if ((line[j]! - line[j - 1]!) * (line[j - 1]! - line[j - 2]!) < 0) turns++;
+      expect(turns, `${side} half-alpha line direction changes`).toBeGreaterThanOrEqual(2);
+    }
   });
 });
 
