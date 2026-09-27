@@ -35,8 +35,13 @@ export const EDGE_FEATHER_ART: Readonly<Record<string, number>> = {
   ixion: 0.16, // overdrive: the right border, the same class as Valefor
 };
 
-/** The stage options for one painting: a sides-and-top feather, or `null` for none. */
-export function edgeFeatherFor(artId: string): { edgeFade: number; edgeFadeBase: false } | null {
+/**
+ * The stage options for one painting: a sides-and-top feather, or `null` for none. The fade's
+ * start wanders in by up to the feather's own width again (`edgeJag`): a feather parallel to the
+ * plane's side still read as a soft straight column through Yunalesca's hair (Ch II, 2000x1012)
+ * and Valefor's wing (Ch XIV, 1600x900) in the L-0 browser check, 2026-09-27.
+ */
+export function edgeFeatherFor(artId: string): { edgeFade: number; edgeFadeBase: false; edgeJag: number } | null {
   const edgeFade = EDGE_FEATHER_ART[artId];
-  return edgeFade === undefined ? null : { edgeFade, edgeFadeBase: false };
+  return edgeFade === undefined ? null : { edgeFade, edgeFadeBase: false, edgeJag: edgeFade };
 }

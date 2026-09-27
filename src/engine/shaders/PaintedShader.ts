@@ -84,6 +84,9 @@ export const paintedFragmentShader = /* glsl */ `
   // 1 = the feather runs round the whole plane; 0 = sides and top only, the
   // base left whole for a figure standing on it (PR-0164).
   uniform float edgeFadeBase;
+  // 0 = a straight feather; above 0, how far (in the same units as edgeFade) the fade's
+  // start wanders inward along each edge, so it never runs parallel to it (PR-0164, PR-0212).
+  uniform float edgeJag;
 
   varying vec2 vUv;
 
@@ -104,7 +107,15 @@ export const paintedFragmentShader = /* glsl */ `
       vec2 d = abs(vUv - 0.5) * 2.0;
       if (vUv.y < 0.5) d.y *= edgeFadeBase;
       float box = max(d.x, d.y);
-      a *= 1.0 - smoothstep(1.0 - edgeFade, 1.0, box);
+      float fadeStart = 1.0 - edgeFade;
+      if (edgeJag > 0.0) {
+        // Noise read along the nearest edge (y down a side, x across the top), so the start
+        // of the fade wanders in lumps; the end stays on the plate edge, which is always 0.
+        float along = d.x >= d.y ? vUv.y : vUv.x + 0.5;
+        float n = texture2D(noiseMap, vec2(along * 1.3, d.x >= d.y ? 0.31 : 0.71)).r;
+        fadeStart -= edgeJag * smoothstep(0.3, 0.7, n);
+      }
+      a *= 1.0 - smoothstep(fadeStart, 1.0, box);
     }
 
     if (a < alphaCut) discard;

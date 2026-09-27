@@ -154,6 +154,8 @@ export interface PaintedActorOptions {
    * feet or coils meet the floor at the bottom edge (PR-0164, `ActorEdgeFeather.ts`).
    */
   edgeFadeBase?: boolean;
+  /** How far the {@link edgeFade} start wanders in along each edge (0, default: straight; PR-0164). */
+  edgeJag?: number;
   shadow?: false | PaintedActorShadowOptions;
   /**
    * Whether this figure writes the whole-frame bloom's figure mask
@@ -471,6 +473,7 @@ export class PaintedActor extends Group {
     alphaCut: { value: number };
     edgeFade: { value: number };
     edgeFadeBase: { value: number };
+    edgeJag: { value: number };
     noiseMap: { value: Texture };
   };
 
@@ -596,6 +599,7 @@ export class PaintedActor extends Group {
       alphaCut: { value: opts.alphaCut ?? 0.02 },
       edgeFade: { value: opts.edgeFade ?? 0 },
       edgeFadeBase: { value: opts.edgeFadeBase === false ? 0 : 1 },
+      edgeJag: { value: opts.edgeJag ?? 0 },
       noiseMap: { value: noiseTexture() },
     };
 

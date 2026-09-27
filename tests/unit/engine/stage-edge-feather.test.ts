@@ -83,7 +83,18 @@ describe('PR-0164 / PR-0212: a feathered edge for paintings that touch their can
       const o = optsFor(id);
       expect(o['edgeFade'], id).toBe(EDGE_FEATHER_ART[id]);
       expect(o['edgeFadeBase'], id).toBe(false);
+      // L-0 browser check (2026-09-27): a feather parallel to the plane's side still read as a soft
+      // straight column through her hair (Ch II, 2000x1012) and Valefor's wing (Ch XIV, 1600x900).
+      expect(o['edgeJag'], id).toBeGreaterThan(0);
     }
+  });
+
+  it('wanders the fade start along the edge in the shader, and still reaches 0 at the plate edge', async () => {
+    const { paintedFragmentShader } = await import('../../../src/engine/shaders/PaintedShader.ts');
+    expect(paintedFragmentShader).toMatch(/uniform float edgeJag;/);
+    // The fade ends at the plate edge (box 1.0) whatever the wander; only its start moves inward.
+    expect(paintedFragmentShader).toMatch(/smoothstep\(fadeStart, 1\.0, box\)/);
+    expect(paintedFragmentShader).toMatch(/fadeStart -= edgeJag \*/);
   });
 
   it('leaves everyone else exactly as before (no feather option at all)', async () => {
