@@ -201,3 +201,53 @@ In the worktree: `npx vite --port 6400 --base /pyrefly-reprise/`, open
 `http://127.0.0.1:6400/pyrefly-reprise/`, go to chapter select, type LIMIT. The e2e:
 `PREVIEW_PORT=6400 PYREFLY_BROWSER=gpu npx playwright test tests/e2e/ff7-guard-scorpion.spec.ts`
 (reuses the running server). Stop the server by its port when done.
+
+## CHECK: independent release-readiness check of 54916f56, 2026-09-27
+
+An independent checker who built none of this checked the branch. **Verdict: no blocker.** One major:
+the branch is now behind `main`, so these results hold only against the merge base. Five minors.
+Game case: FF7 only. The FFX and FFX-2 results below are the proof that neither game changed.
+
+**Method.** The checker made two production builds of their own with the art, both served by `vite
+preview` on ports 6420 (branch) and 6421 (`main` at the merge base `1a43fd7b`, from `git archive`).
+Everything ran in headless Chromium with `PYREFLY_BROWSER=gpu`, one browser at a time. Scratch
+scripts: `tools/zz-ffcheck-*.tmp.mjs` (not committed). Frames: `D:/Tools/pyrefly-scratch/ff7-check/`.
+Both servers were stopped by their PIDs.
+
+| Check | Result |
+|---|---|
+| tsc (app, e2e) | Both clean |
+| Full `vitest run` | 513 files pass, 4 skipped, 1 fails: the known `strategy-ffx2-bahamut` timeout under full load (18 s). It passes 19/19 alone. `ffx2-atb-golden` 6/6, `critic-policy-adoptions` 12/12 |
+| `orphans.mjs` | 24, none of them FF7 |
+| Approved art | Every hash in `approved-hashes.json` (219) and `judge-locked-hashes.json` (48) matches, in `public/art` and in the built `dist`: 0 mismatched, 0 missing |
+| (a) Board unchanged | At 1600x900, 1024x768 and 390x844 the board's snapshot and words match `main`'s build exactly: 15 tiles, the same order, "0 OF 14 BEATEN" with one COMING. No FF7 text in the DOM. Pixel diff against `main`: 0 px at 1600 and 390; 97 px at 1024, a thumbnail fading in, the same layout |
+| (a) Door stays shut | These do nothing: H, h, L, l, I, M and T pressed alone (0.02 mean px against the board frame); LIMI, a 2.6 s pause, then T; LIMXT (X is cancel, back to the title as on `main`); every arrow, WASD, Q/E/R/F/V/H, Tab, PgUp/PgDn/Home/End ×18 (the cursor reached all 14 playable tiles, never FF7, never left the board); six taps, a 4.5 s wait, then one more; a click or tap on each of the 15 rail tiles. `__pyrefly.chapters()` lists the same 15 ids as `main`, and the API has the same keys. Only `scenes()` adds `sector1-reactor` |
+| (b) Door and fight by real input | **Keys, 1600x900.** LIMIT, then Esc pause and resume, then a sensible fight: a win in 21 turns. Enter goes back to the board. F R F R M (the pad sequence on its keyboard mapping) opens it again: a naive loss, RETRY (seed +1000, checked), a second loss, ↓ Enter to CHAPTER SELECT. **Taps, 390x844.** Seven taps, then a win in 20 turns. The three warnings came in a row every time. No page errors |
+| (c) Save untouched | A non-empty `pyrefly-reprise:save:v1` (527 B) was byte-identical after the win, and again after two losses and a RETRY. No other key changed except `pyrefly-reprise:experiments:v1`, which counted 3 attempts, 1 clear and the best time. Board snapshot unchanged each time |
+| (d) FFX / FFX-2 | **Real keys from the title.** Chapter I (Seymour Flux) and Chapter IV (Bahamut), each through prep, cutscene and first command menu, on both builds: same layout, and the only pixel differences are sway. The guide card's text rotation is the same on both. Chapter I played to the end by keys gives the identical defeat on both (turn 9, 42 ticks, the same HP). Chapter IV by Enter alone does not finish in 7 minutes on either build (turn 224 on both). **Flow autoplayer (seed 1).** Chapters I, II, IV and VI give identical outcomes, turns, ticks, links, EXP and AP, and saves that differ only in `updatedAt` and `playTimeMs`. **Code.** The diff against the merge base touches `src/battle/ffx*` and `src/ui/ffx*` only in `withTargets.ts` (two `case` lines). Every engine, UI and results edit is an explicit `'ff7'` branch, or is equivalent for FFX and FFX-2 (for example `leaderId`) |
+| (e) Bundle (gzip -9, first load) | Branch 839,104 B (3,255,869 raw) against `main` at `1a43fd7b` 811,033 B (3,172,804 raw): **+28.1 kB gzip**, +83 kB raw. Matches the builder's figures to within 30 B |
+| (f) `critic-plan --json` | Against `1a43fd7b`: **deep class, focused before deploy, deep after deploy** (`deepBeforeDeploy: false`), obligations `live`, `focused`, `deep`, games `both`, 101 product paths. Against the last deploy (`d8837334`): the same class |
+
+**Findings**
+
+- **Major C-1: the branch is behind `main`.** `origin/main` moved to `a44297ca` during the check: 48
+  commits, including the iter2 B1/B3/B4 merges and the FFX-2 engine split. `git merge-tree` finds
+  conflicts in `src/app/screens/BattleScreen.ts`, `battleSpellFx.ts` and `docs/CONTRACT-CHANGES.md`.
+  Everything above is proven only against `1a43fd7b`. The merged candidate needs (a) to (f) run
+  again, above all the FFX-2 checks and the `BattleScreen` wiring.
+- Minor C-2: FF7's defeat panel reads the main save's (empty) record for the hidden chapter. It
+  shows "ATTEMPTS 1" and "BEST — NEVER CLEARED" after 3 attempts and a clear (frame
+  `fight-1600x900/025`). It only reads, never writes. FF7 only. It could read the experiments store,
+  or drop those rows until the FF7 results options round.
+- Minor C-3: `src/battle/common/types.ts` (a contract file, already over 400 lines) grew from 2660
+  to 2675 lines. Rule 7 says files over 400 must not grow, and the line-count list above leaves it
+  out. The CONTRACT-CHANGES entries exist.
+- Minor C-4: this note says the board still reads "of 15". Both builds actually read "0 OF 14
+  BEATEN" (15 tiles, one COMING). The behaviour is the same; only the wording here is wrong.
+- Minor C-5: a debug-only route shows the wrong picture. If `__pyrefly.gotoChapter(...)` runs over
+  a live board and `goto('chapter-select')` follows, the FF7 fight opened next by the door draws
+  under the title screen's DOM: only the HUD and the turn triangle show. A player cannot reach this.
+  The player's route (title, Enter, board, LIMIT or seven taps) is clean at 1600x900 and 390x844.
+  It matters only to an e2e that uses that debug route.
+- Minor C-6: FFX-2 Chapter IV was not played to an outcome by real keys. Enter alone stalls on both
+  builds. Its whole battle was checked by the flow's autoplayer instead (identical results).
