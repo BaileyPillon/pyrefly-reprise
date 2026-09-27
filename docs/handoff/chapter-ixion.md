@@ -103,3 +103,52 @@ load; browser on 7310 walked the fight and the whole post-battle stub with real 
    `learn/atlas/cites.ts` and `tests/unit/learn-atlas-data.test.ts` are touched at the same lines by
    `chapter-sin`; keep both (`| 16 | 17`, both ids, both rows). `docs/target/approved-hashes.json` gains the set
    `bailey:2026-09-27-ixion` at its end; if main has appended sets since, keep every set.
+
+## CHECK (independent, 2026-09-27 ~16:00-16:25 EDT; checked c562a5b2, not built by the checker)
+
+**Verdict: PASS, 0 blockers.** FFX-2 only (the check touches nothing; this section is the only change).
+
+- **Data vs `research/ffx2-ixion-djose.md` (rule 6), asserted by an engine-side probe:** Lv 28; HP 12,380, MP
+  9,999; 62 / 21 / 106 / 82; 138 / 35 / 4 / 0; absorb Lightning, weak Water, immune Gravity; immunities exactly
+  §3.1's list (ko, petrify, sleep, silence, darkness, poison, confuse, berserk, curse, eject, stop, doom, delay,
+  interrupt) with no Slow or Break immunity; fractional-immune; EXP / AP / Gil / Pilfer 2,600 / 15 / 1,800 / 3,000;
+  drop Soul of Thamasa; steal Sprint Shoes both slots, rate 128; no Bribe. Actions: Attack DC 16 physical (rolls);
+  Thundara DC 12, 12 MP, Lightning, all, `canMiss: false`; Aerospark 10/16 of current HP, single; Recharge flat 200
+  HP / 200 MP to self; Thor's Hammer DC 30 magic, all, `canMiss: false`, non-elemental (IX-2, labelled estimate).
+  Every value matches its tag; `baseChance: 50` and the held-item prices are labelled estimates / unsourced.
+- **Counter and tell, run through the engine (rule 3):** 30 seeds at human pace (Wait split), the counter
+  **re-derived from the event log independently of the AI's memory** (+5 Attack / Thundara, +10 Aerospark, +5 per
+  party action with a damage / miss / status / MP-damage / dispel event on him, credited at that action's end):
+  **0 mismatches** over ~960 Ixion actions: steps 1-2 are always Attack or Thundara, step 3 always Aerospark,
+  Recharge exactly when the counter reaches 100 and never before, Thor's Hammer always the very next Ixion action
+  (60 Recharges, 58 Hammers). Recharge emits `damage -200` on himself plus an MP restore (capped at 9,999).
+  Split over 200 seeds: Thundara 24.3 % of free turns (3/4 : 1/4 build) and 32.6 % with the `wiki` flag (2/3 :
+  1/3). First Recharge by his 12th turn at the latest (mean 10.2), consistent with §4.4 once hits count.
+- **Switch and bench:** `DJOSE_ACTION_TIME_ON = true`, group field 3, battle flag `actionTimeSeconds` 3 in the
+  browser. `ixion-bench.test.ts` re-run: every row of `docs/plans/ixion-bench.md` reproduces exactly (sensible
+  191/200 human, 197/200 bench; naive 48/200, 90/200; OFF 2 / 5 / 0 / 0; F-8 wiki 190, FA8 b 194, Lv 30 169, Lv 36
+  199; 30 KO'ing Hammers of ~404 sensible, 180 naive).
+- **Art (look B):** the four `x2-ixion` PNGs equal their backups byte for byte (`installed/`, `record.json`); idle
+  = `candidates/2026-09-27-ixion/opt-b.png` (sha `d24f15df…`). `verify-approved` (ROOT = this worktree): 271 ok,
+  0 mismatched, 0 missing. The FFX `ixion/` PNGs keep their 2026-09-18 mtimes; `approved-hashes.json` diff is
+  additions only. Note: this worktree's `public/art` is a junction to the main tree's, so the four files already
+  sit in `D:/Final Fantasy/public/art/characters/x2-ixion/` (additive, gitignored).
+- **Unlisted:** `chapters()` omits `ffx2-ixion-djose` (engine and browser); `getChapter` finds it (number 17).
+- **Unchanged elsewhere:** `ffx2-atb-golden` untouched and passing; the only other test edits are the
+  trema-options Djose row and the two unsourced-price ids (both additive). Orphans 29 (main 29).
+- **tsc** clean. **Full suite once:** 552 files passed, 1 failed: `strategy-ffx2-bahamut` heal-only route timed out
+  (17 s vs 15 s) under the full run; alone it passes in 9.3 s here and 9.9 s on main: load, not this branch.
+- **Browser** (headless Playwright from node, `PYREFLY_BROWSER=gpu`, Vite 7420 stopped by PID, 1600x900,
+  seed 11): reached via `gotoChapter`, `spriteKey` `x2-ixion`; served idle / cast / attack PNGs hash-equal to the
+  locked files; a real Enter chain acted (Yuna Pray); counter set to 100 → Thundara (already chosen), Recharge,
+  Thor's Hammer, with Ixion in the cast (Recharge-glow) pose; 0 page errors. Frames in the checker's scratch only.
+
+**Findings (none blocks; for Bailey / the next track):**
+1. *Major, disclosed by the builder (Open 1):* concept A's tell, the game's "Recharge" line, has no banner in the
+   FFX-2 HUD; only the house intent slab names it. Needed before listing.
+2. *Minor:* `ixion-bench.test.ts` prints the table but pins none of its numbers (only "no unfinished" and
+   sensible > naive), so a drift in the measured win rates would pass silently.
+3. *Minor:* the Soul of Thamasa description "Spells 150 % stronger" can read as x2.5; the source says "strengthens
+   spells by 150 %" (x1.5 reading). Text only; no effect is wired.
+4. *Minor, pre-existing:* the Bahamut heal-only strategy test sits near its 15 s limit and times out under full-suite
+   load on this branch and on main.
