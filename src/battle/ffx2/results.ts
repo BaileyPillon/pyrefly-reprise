@@ -56,7 +56,9 @@ export function battleOutcome(
   units: readonly Ffx2Unit[],
   state: BattleState,
 ): BattleResult['outcome'] | null {
-  const partyAlive = units.some((u) => u.side === 'party' && u.alive && !u.removed);
+  // PR-0145: a petrified girl is not standing. 'All three girls petrified = Game Over'
+  // [ffx2-combat-core §2.8, `[verified: 2 sources]`], so the helpless party is not beaten down first.
+  const partyAlive = units.some((u) => u.side === 'party' && u.alive && !u.removed && !u.statuses.petrify);
   const bossesAlive = units.some((u) => u.side === 'enemy' && !u.flags.isPart && u.alive && !u.removed);
 
   if (state.flags['badEnding'] === true || !partyAlive) return 'defeat';

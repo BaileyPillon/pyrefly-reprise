@@ -243,13 +243,13 @@ export function removeStatus(target: FFX2Combatant, id: StatusId): boolean {
 }
 
 /** Ticks until this unit's soonest status expiry, or `Infinity`. */
-export function ticksUntilStatusEvent(c: Ffx2Unit): number {
+export function ticksUntilStatusEvent(c: Ffx2Unit, held?: ReadonlySet<string>): number {
   const rate = durationRate(c);
   if (rate <= 0) return Infinity;
   let soonest = Infinity;
   for (const key of Object.keys(c.statuses) as StatusId[]) {
     const inst = c.statuses[key];
-    if (!inst || inst.ticksRemaining === null) continue;
+    if (!inst || inst.ticksRemaining === null || held?.has(key)) continue;
     const t = inst.ticksRemaining / rate;
     if (t < soonest) soonest = t;
   }
@@ -274,13 +274,15 @@ export function advanceStatuses(
   emit: Emit,
   /** Called once per Regen payout, in order, with that payout's HP (Chapter XI's Sisters count them). */
   onRegenPayout?: (amount: number) => void,
+  /** Statuses whose clocks do not run (`constants.ts` STATUS_CLOCKS_HELD_AT: Sleep at Fast, PR-0108). */
+  held?: ReadonlySet<string>,
 ): number {
   if (ticks <= 0 || !c.alive) return 0;
   const rate = durationRate(c);
 
   for (const key of Object.keys(c.statuses) as StatusId[]) {
     const inst = c.statuses[key];
-    if (!inst || inst.ticksRemaining === null || inst.permanent) continue;
+    if (!inst || inst.ticksRemaining === null || inst.permanent || held?.has(key)) continue;
     inst.ticksRemaining -= ticks * rate;
     if (inst.ticksRemaining > 0) {
       emit({ type: 'status-tick', targetId: c.id, status: key, remaining: Math.round(inst.ticksRemaining) });

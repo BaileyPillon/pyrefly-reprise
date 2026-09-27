@@ -27,7 +27,13 @@ import { cloneData } from '../../battle/common/clone.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
-import { carryFfx2Full } from './BattleScreenCarry.ts';
+import { carryFfx2Full, carryWornDresspheres, FFX2_DRESSPHERE_CARRIES } from './BattleScreenCarry.ts';
+
+/** What a chain seam carries beyond the defaults: PR-0124's measurement override. */
+export interface SeamOptions {
+  /** `BattleScreenCarry.ts` FFX2_DRESSPHERE_CARRIES (the worn dressphere at a plain FFX-2 seam). */
+  dressphereCarries?: boolean;
+}
 
 /**
  * Find a formation by id. Used to follow a `nextGroupId` from one link of a
@@ -86,12 +92,16 @@ export function setupForNextLink(
   nextGroup: EnemyGroupDef,
   state: BattleState,
   seed: number,
+  seam: SeamOptions = {},
 ): BattleSetup {
+  const wholeState = nextGroup.carriesPartyState === true;
+  const full = nextGroup.carriesFullPartyState === true;
+  const carried = carryPartyForward(previous.party, state, wholeState, full);
+  // PR-0124 (OFF): a plain FFX-2 seam may carry the worn dressphere too; XIII and XV carry their own way.
+  const worn = !wholeState && !full && carried.game === 'ffx2' && (seam.dressphereCarries ?? FFX2_DRESSPHERE_CARRIES);
   return {
     game: previous.game,
-    party: carryPartyForward(
-      previous.party, state, nextGroup.carriesPartyState === true, nextGroup.carriesFullPartyState === true,
-    ),
+    party: worn ? carryWornDresspheres(carried as FFX2PartyBuild, state) : carried,
     enemies: nextGroup,
     triggers: previous.triggers,
     seed,

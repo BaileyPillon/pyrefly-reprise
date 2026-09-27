@@ -309,6 +309,7 @@ export const leblancLastRoomGroup: EnemyGroupDef = {
   game: 'ffx2',
   canEscape: false,
   enemies: [leblancAct3, logosAct3, ormiAct3],
+  opensAsSeparateBattle: true, // PR-0107: a separate battle, randomised opening bars (§1.6); HP and MP carry
   // §0 A7 / §10.3 — the tonal inverse of Chapter 4: let them celebrate, loudly.
   // The music keys are the integrator's to add to `MUSIC_KEYS`; until then this
   // group ships no `musicCues` rather than naming a key the registry lacks.

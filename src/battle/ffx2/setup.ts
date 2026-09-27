@@ -32,6 +32,7 @@ import { activeGateBonuses, breaksDamageLimit, gateStatTotal, waitDownPercent, w
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { applyStatus } from './statuses.ts';
+import { LEBLANC_SCRIPT_SINIROTHX, SEPARATE_BATTLE_GAUGES } from './constants.ts';
 
 function emptyAtb(agi: number): Ffx2Unit['atb'] {
   return { ticks: 0, required: baseRequired(agi), gauge: 0, charging: null, recovery: 0 };
@@ -216,13 +217,17 @@ function restoreAtSaveSphere(unit: Ffx2Unit): void {
  * Opening ATB fill. §1.6: normal battles start every bar at a randomised level;
  * a pre-emptive strike fills the party's, an ambush fills the enemies'.
  */
-function seedOpeningGauges(units: Ffx2Unit[], condition: BattleSetup['condition'], rng: { int(a: number, b: number): number }): void {
+function seedOpeningGauges(
+  units: Ffx2Unit[], condition: BattleSetup['condition'], rng: { int(a: number, b: number): number }, separate = false,
+): void {
   for (const unit of units) {
     if (condition === 'preemptive') {
       unit.atb.ticks = unit.side === 'party' ? unit.atb.required : 0;
     } else if (condition === 'ambush') {
       unit.atb.ticks = unit.side === 'enemy' ? unit.atb.required : 0;
-    } else if (condition === 'scripted') {
+    } else if (condition === 'scripted' && !separate) {
+      // A continuation opens at zero; a link the source makes a separate battle (PR-0107,
+      // `EnemyGroupDef.opensAsSeparateBattle`) rolls its fills like any normal battle below.
       unit.atb.ticks = 0;
     } else {
       unit.atb.ticks = Math.floor((unit.atb.required * rng.int(0, 60)) / 100);
@@ -300,7 +305,8 @@ export function buildState(
   for (const enemy of enemies.enemies) units.push(buildEnemy(enemy, false));
   for (const part of enemies.parts ?? []) units.push(buildEnemy(part, true));
 
-  seedOpeningGauges(units, setup.condition, rng);
+  const separate = enemies.opensAsSeparateBattle === true && (options.separateBattleGauges ?? SEPARATE_BATTLE_GAUGES);
+  seedOpeningGauges(units, setup.condition, rng, separate);
 
   const combatants: BattleState['combatants'] = {};
   for (const unit of units) combatants[unit.id] = unit;
@@ -326,6 +332,8 @@ export function buildState(
       ...(enemies.timedAilmentDefaults ? { timedAilmentDefaults: true } : {}), // `statuses.ts`, Chapter XIII
       ...(enemies.actionTimeSeconds ? { actionTimeSeconds: enemies.actionTimeSeconds } : {}), // `action-time.ts` (E4), OFF
       canEscape: setup.canEscape ?? enemies.canEscape ?? false,
+      // PR-0106's switch, read by `ai/leblanc-syndicate.ts`; absent (OFF) leaves every state as it was.
+      ...((options.leblancScriptSinirothX ?? LEBLANC_SCRIPT_SINIROTHX) ? { leblancScriptSinirothX: true } : {}),
       ...inventoryFlags(party, options),
     },
   };
