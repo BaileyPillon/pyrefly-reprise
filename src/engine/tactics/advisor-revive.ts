@@ -439,7 +439,9 @@ export function reviveValue(
 
   let value = REVIVE_BASE;
   value += capabilityLoss(state, fallenId).length * KEYSTONE_VALUE;
-  value += ROLE_VALUE[PARTY_ROLES[String(fallenId)] ?? ''] ?? 0;
+  // FFX only: PARTY_ROLES are FFX's archetypes. FFX-2 shares the id `yuna`, and weighting her
+  // as a Summoner there priced an aeon X-2 has no row for (t1-b3a finding; B6; rule 14).
+  if (state.game === 'ffx') value += ROLE_VALUE[PARTY_ROLES[String(fallenId)] ?? ''] ?? 0;
 
   const down = downedActives(state).length;
   if (down > 1) value += (down - 1) * COLLAPSE_VALUE;

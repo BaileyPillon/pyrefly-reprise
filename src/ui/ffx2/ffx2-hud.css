@@ -705,9 +705,13 @@
   letter-spacing: 0.08em;
   color: var(--ig-gold-on-paper);
 }
-.ffx2hud .ig-cmd--overdrive .ffx2cmd__grants,
-.ffx2hud .ig-cmd--selected .ffx2cmd__grants {
+.ffx2hud .ig-cmd--overdrive .ffx2cmd__grants {
   color: var(--ig-accent);
+}
+/* PR-0018 (FFX-2, B6): the selected face is pyre pink, so a pink gate line was 1:1 on the row
+   being chosen. Ink on pink is 12:1. */
+.ffx2hud .ig-cmd--selected .ffx2cmd__grants {
+  color: var(--ig-ink);
 }
 /*
  * A row that carries a gate line gives the gate line its own line.
@@ -756,6 +760,17 @@
 }
 .ffx2hud .ig-cmd--disabled .ffx2cmd__reason {
   color: rgba(244, 241, 232, 0.7);
+}
+/* PR-0018 (FFX-2, B6): the shared 42 % fade blended a disabled row into the dark scene (FFX
+   measured 1.98 to 2.25:1 on the same rule). FFX-2 takes FFX's round-10 answer, an opaque
+   inverted slab, so the row's contrast never depends on the painting behind it. */
+.ffx2hud .ig-cmd--disabled {
+  opacity: 1;
+  background: #2a2a30;
+  color: #d8d8de;
+}
+.ffx2hud .ig-cmd--disabled .ffx2cmd__label {
+  color: #d8d8de;
 }
 .ffx2cmd__arrow {
   margin-left: auto;

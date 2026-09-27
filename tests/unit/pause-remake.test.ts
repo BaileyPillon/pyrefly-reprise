@@ -58,6 +58,7 @@ import {
   type MeterRow,
 } from '../../src/app/screens/pause/meters.ts';
 import { getChapter, type Chapter } from '../../src/data/encounters.ts';
+import { getChapterMeta } from '../../src/data/chapter-meta.ts';
 import type { App } from '../../src/app/App.ts';
 import type { BattleEngine, TurnPreview } from '../../src/battle/common/types.ts';
 import { FFXEngine } from '../../src/battle/ffx/index.ts';
@@ -483,7 +484,7 @@ describe('every function of the old pause screen is still reachable', () => {
 
   it('4. HIDE / SHOW PANELS — the H hint, and the line that survives it', () => {
     const h = mount('seymour-flux');
-    expect(h.root.querySelector('.pause__hide')!.textContent).toContain('hide panels');
+    expect(h.root.querySelector('.pause__hide')!.textContent).toContain('painting only'); // PR-0028 / D-215
     keydown('KeyH');
     expect(h.screen.snapshot()['panelsHidden']).toBe(true);
     expect(h.root.querySelector('.pause__baseline')!.textContent).toContain('show panels');
@@ -597,6 +598,21 @@ describe('every function of the old pause screen is still reachable', () => {
     expect(h.root.querySelector('.pause__hand')!.textContent!.length).toBeGreaterThan(2);
     expect(h.root.querySelectorAll('.pause__snap')).toHaveLength(3);
     assertSnapImagesResolve(h.root);
+  });
+
+  it('PR-0168. the SCENE row reads the dossier LOCATION, not the internal scene key', () => {
+    // Was `ctx.sceneKey.replace(/-/g, ' ')`: dropped small words ("of the")
+    // and apostrophes, so "Dream's End" showed as "dreams end" and "Cavern of
+    // the Stolen Fayth" as "cavern stolen fayth".
+    for (const chapterId of ['seymour-flux', 'yunalesca', 'ffx2-bahamut', 'yojimbo-cavern']) {
+      const h = mount(chapterId);
+      h.screen.trigger('pause:tab:chapter');
+      const row = h.root.querySelector<HTMLElement>('.pause__row[data-row="scene"] .pause__v');
+      expect(row, chapterId).not.toBeNull();
+      const meta = getChapterMeta(chapterId);
+      expect(meta, chapterId).toBeDefined();
+      expect(row!.textContent, chapterId).toBe(meta!.location);
+    }
   });
 
   it('PR-0077. every CHAPTER tab snapshot resolves under public/art in all five shipped chapters', () => {

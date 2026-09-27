@@ -1,0 +1,58 @@
+[
+ {
+  "id": "ffx2-bahamut",
+  "size": "390x844",
+  "states": 2,
+  "cuts": 0,
+  "list": []
+ },
+ {
+  "id": "ffx2-leblanc",
+  "size": "1600x900",
+  "states": 2,
+  "cuts": 0,
+  "list": []
+ },
+ {
+  "id": "ffx2-leblanc",
+  "size": "2000x1012",
+  "states": 2,
+  "cuts": 0,
+  "list": []
+ },
+ {
+  "id": "ffx2-leblanc",
+  "size": "390x844",
+  "states": 2,
+  "cuts": 0,
+  "list": []
+ },
+ {
+  "id": "seymour-flux",
+  "size": "1280x720",
+  "states": 2,
+  "cuts": 0,
+  "list": []
+ },
+ {
+  "id": "yojimbo-cavern",
+  "size": "1024x768",
+  "states": 2,
+  "cuts": 0,
+  "list": []
+ },
+ {
+  "id": "yojimbo-cavern",
+  "size": "1280x720",
+  "states": 2,
+  "cuts": 0,
+  "list": []
+ },
+ {
+  "id": "yojimbo-cavern",
+  "size": "1280x960",
+  "states": 2,
+  "cuts": 0,
+  "list": []
+ }
+]

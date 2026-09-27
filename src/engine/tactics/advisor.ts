@@ -138,6 +138,7 @@ import {
   spentAlready,
 } from './advisor-committed.ts';
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
+import { changeSuggestion, changeSuggestions, lockedToChange, sameChange } from './advisor-change.ts';
 import { holdingForTheBreath } from './airship-orders.ts';
 import { isSelfOrder, scopeWord, targetDisplayName } from './targetLabel.ts';
 
@@ -406,6 +407,8 @@ export function ownedRow(
     if (row.command.kind !== command.kind) continue;
     const rowId = 'id' in row.command ? String((row.command as { id?: unknown }).id) : '';
     if (rowId !== id) continue;
+    // A Change row is its destination (FOC22-02): the gate must not hand back the first one.
+    if (command.kind === 'spherechange' && !sameChange(row.command, command)) continue;
     if (command.kind === 'switch') {
       const rowIn = (row.command as { extra?: { inId?: CombatantId } }).extra?.inId;
       if (inId !== undefined && rowIn !== undefined && inId !== rowIn) continue;
@@ -1218,6 +1221,15 @@ export function buildAdvisorView(
       if (candidate) candidates.push(candidate);
     }
   }
+  // **Locked to Change** (FOC22-02, FFX-2 only): Itchy leaves the L1 row and
+  // Escape. A spherechange has no preview to price, so without this the card
+  // had nothing to say on the one board where the answer is certain
+  // [`./advisor-change.ts`].
+  if (state.game === 'ffx2' && lockedToChange(decision.commands)) {
+    for (const s of changeSuggestions(state, decision.actorId, decision.commands)) {
+      candidates.push({ outcome: null, origin: null, chances: [], facts: [], suggestion: s });
+    }
+  }
 
   // **The evaluation.** Every candidate is re-priced against what the enemy is
   // about to do, and carries the facts that proved it
@@ -1641,6 +1653,8 @@ export function sameCommand(a: Command, b: Command): boolean {
   const idB = 'id' in b ? String(b.id) : '';
   if (idA !== idB) return false;
   if (a.targets.join(',') !== b.targets.join(',')) return false;
+  // Every Change row shares kind, id and aim: the destination is its identity (FOC22-02).
+  if (a.kind === 'spherechange') return sameChange(a, b);
   const inA = (a as { extra?: { inId?: CombatantId } }).extra?.inId;
   const inB = (b as { extra?: { inId?: CombatantId } }).extra?.inId;
   return inA === inB;
@@ -1734,7 +1748,10 @@ function tacticSuggestion(
     candidate =
       command.kind === 'switch'
         ? switchCandidate(state, decision.commands, row, aimedId)
-        : candidateFor(state, decision.actorId, decision.commands, row, aimedId, sim, intent, planner, false, wrapped ? command : null);
+        : command.kind === 'spherechange'
+          ? // Priced, not simulated: the preview has no outcome for a Change (FOC22-02).
+            { outcome: null, origin: null, chances: [], facts: [], suggestion: changeSuggestion(state, decision.actorId, decision.commands, row) }
+          : candidateFor(state, decision.actorId, decision.commands, row, aimedId, sim, intent, planner, false, wrapped ? command : null);
   }
   if (!candidate) return null;
 

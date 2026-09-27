@@ -330,7 +330,10 @@ export function describeAbility(def: AbilityDef): string {
   if (def.flags.includes('always-break-damage-limit')) parts.push('cap 99 999');
   if (def.removesStatuses.length > 0 && !inert) parts.push(`strips ${def.removesStatuses.map(statusWord).join(', ')}`);
   if (def.canMiss === false && !inert) parts.push('never misses');
-  return `${parts.join(' - ')}.`;
+  // PR-0188: a row with no damage kind (Zanmato, `damageType: 'special'`) began "non-elemental
+  // damage…" in lower case; a sentence starts with a capital.
+  const text = parts.join(' - ');
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
 }
 
 /** Title-case a status id for display: `power-break` -> `Power Break`. */

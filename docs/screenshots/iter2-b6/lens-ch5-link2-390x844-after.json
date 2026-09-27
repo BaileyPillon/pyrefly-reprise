@@ -1,0 +1,68 @@
+{
+ "size": "390x844",
+ "errors": [],
+ "steps": [
+  {
+   "k": "link1",
+   "v": "debug auto-play (labelled): autoBattle intended, fast"
+  },
+  {
+   "k": "link2",
+   "v": {
+    "links": 1,
+    "enemies": "vegnagun-leg,node-a,node-b,node-c"
+   }
+  }
+ ],
+ "menu": {
+  "lens": {
+   "x": 128,
+   "y": 192,
+   "w": 38,
+   "h": 25
+  },
+  "lensCovered": 0,
+  "slot": [
+   "172px",
+   "208px"
+  ],
+  "stripText": "Node Aacts nextDies IraePossible 46%Physical non-elemental damage to a random girl - 9 hits.Damage · random targetYuna105–1195% HP 89% to hitRikku55–611% HP 90% to hitPaine54–611% HP 90% to hit9 hits, each on a random one of these. Damage shown per hit.OddsMissile54%Dies Irae46%",
+  "stripOver": 0,
+  "strip": {
+   "x": 172,
+   "y": 145,
+   "w": 208,
+   "h": 89
+  },
+  "chip": null,
+  "legs": [
+   {
+    "id": "vegnagun-leg",
+    "x": 68.88976094056665,
+    "y": 4.654377781812111,
+    "w": 243.1415338752103,
+    "h": 348.102322054393,
+    "depth": 37.50866926887511,
+    "visible": 0.9430319382169339,
+    "visibleInFrame": 0.5609603702507255,
+    "dim": 0,
+    "ringed": false,
+    "occludedBy": []
+   }
+  ],
+  "keyFeatures": [
+   {
+    "x": 88.76222049065342,
+    "y": 239.90159101039183,
+    "w": 82.2030375394043,
+    "h": 124.57089162710537
+   }
+  ],
+  "enemies": [
+   "vegnagun-leg",
+   "node-a",
+   "node-b",
+   "node-c"
+  ]
+ }
+}

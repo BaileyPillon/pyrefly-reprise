@@ -105,6 +105,11 @@
  *   never is: Bahamut is dead first. Dropping a Warrior mid-fight would also
  *   throw away her Break stacks' upkeep and cost a turn for nothing.
  *
+ * Both have one exception, which the shipped line never reaches (nobody dies):
+ * the White Mage left alone with nothing to raise the others (NEW-C1,
+ * {@link loneHealer}) lifts Curse and changes out, because healing herself is a
+ * stalemate with no end.
+ *
  * ### Engine defects this encounter surfaced (both fixed, both cited)
  *
  * * `validTargetIds` collapsed every `single-*` ability to **one** legal
@@ -233,6 +238,40 @@ function whiteMage(commands: AvailableCommand[], party: AnyCombatant[]): Command
   return vigor ? aim(vigor) : null;
 }
 
+/** Where a lone healer goes: Black Mage first (his Magic Defense is 10, §1.2), then Gunner. */
+const LONE_CHANGE_ORDER: readonly string[] = ['black-mage', 'gunner'];
+
+/**
+ * NEW-C1 (`docs/plans/combat-polish-0926-review.md` §4): the White Mage left standing alone, with
+ * no Phoenix Down or Life to raise the others ({@link revive} runs first).
+ *
+ * She has no Attack row, and healing herself is a stall with no end: in this engine Bahamut
+ * cannot kill a White Mage who only heals, and she cannot touch him (no outcome after 1,500
+ * decisions on 10 of 12 seeds). So the line leaves the loop:
+ *
+ * 1. **Curse first.** X-2 Curse is "cannot spherechange" (§2.3), and Bahamut's Curse had both
+ *    Change rows disabled on 6 of 12 seeds in the probe. Esuna lifts it (research/ffx2-combat-core.md,
+ *    Esuna / Remedy / Holy Water all cure Curse, `[verified: 2 sources]`), else the kit's Holy
+ *    Water or Remedy.
+ * 2. **Then a spherechange** out of the healer's dressphere, to one that deals damage.
+ *
+ * Returns `null` when she is not alone, or when neither step is on the menu (the heals follow).
+ * Game case: FFX-2 only (Chapter IV; Curse and spherechange are X-2 rules).
+ */
+function loneHealer(commands: AvailableCommand[], actor: AnyCombatant, party: AnyCombatant[]): Command | null {
+  if (party.some((c) => c.alive && c.id !== actor.id)) return null;
+  if (has(actor, 'curse')) {
+    const r = row(commands, ['Esuna', 'Holy Water', 'Remedy'], actor.id);
+    if (r) return aim(r, actor.id);
+  }
+  for (const to of LONE_CHANGE_ORDER) {
+    const r = commands.find((c) => c.enabled && c.command.kind === 'spherechange' && c.command.extra.toDressphere === to);
+    if (r) return { ...r.command, targets: [] } as Command;
+  }
+  const any = commands.find((c) => c.enabled && c.command.kind === 'spherechange');
+  return any ? ({ ...any.command, targets: [] } as Command) : null;
+}
+
 /**
  * The Warrior's turn — §3.3's corrected Break ranking, in order.
  *
@@ -309,12 +348,16 @@ export const ffx2Bahamut: Tactic | null = (actorId, commands, engine) => {
   if (up) return up;
 
   if (row(commands, ['Shell']) || row(commands, ['Cure', 'Cura', 'Vigor'])) {
-    return whiteMage(commands, party);
+    return loneHealer(commands, actor, party) ?? whiteMage(commands, party);
   }
   if (row(commands, ['Magic Break', 'Mental Break', 'Armor Break'], boss.id)) {
     return warrior(commands, boss);
   }
   if (row(commands, ['Darkness'])) return darkKnight(commands, actor, boss);
+  // NEW-C1: the healer who changed to Black Mage alone. Magic Defense 10 is "almost nothing"
+  // and Defense 160 is enormous (§1.2), so a spell before a swing.
+  const spell = row(commands, ['Firaga', 'Fira', 'Fire'], boss.id);
+  if (spell) return aim(spell, boss.id);
 
   const attack = row(commands, ['Attack'], boss.id);
   return attack ? aim(attack, boss.id) : null;

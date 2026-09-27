@@ -70,7 +70,7 @@
   background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
   color: var(--ig-paper, #f4f1e8);
   font-family: var(--ig-font-text, 'Exo 2', 'Segoe UI', sans-serif);
-  font-size: 5.3px;
+  font-size: max(5.3px, calc(14.2px / var(--eint-scale, 1)));
   line-height: 1.45;
   /* Enemies are blood in this house, not gold: the slab is the *threat*, and
      Direction A reserves --ig-blood for the enemy side. The accent bar sits on
@@ -145,7 +145,7 @@
   gap: 4px;
   margin: 0 0 1px;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 4.6px;
+  font-size: max(4.6px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #d8b6b6;
@@ -166,7 +166,7 @@
   gap: 4px;
   margin: 0 0 1.5px;
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 10px;
+  font-size: max(10px, calc(14.2px / var(--eint-scale, 1)));
   line-height: 1.1;
 }
 .eint__label {
@@ -177,7 +177,7 @@
 .eint__conf {
   padding: 0.6px 3px 0.9px;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 3.9px;
+  font-size: max(3.9px, calc(14.2px / var(--eint-scale, 1)));
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -212,7 +212,7 @@
   background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
   border: 0.5px solid #4c5563;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 3.9px;
+  font-size: max(3.9px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #b9c6d6;
@@ -224,7 +224,7 @@
   display: inline-block;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
   font-weight: 700;
-  font-size: 4.2px;
+  font-size: max(4.2px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--ig-ink, #0b0a12);
@@ -258,7 +258,7 @@
 }
 .eint__charge-name {
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 7px;
+  font-size: max(7px, calc(14.2px / var(--eint-scale, 1)));
   font-weight: 700;
   color: #f2d79a;
 }
@@ -267,7 +267,7 @@
 }
 .eint__charge-when {
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 4.4px;
+  font-size: max(4.4px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #e9d7a6;
@@ -293,7 +293,7 @@
   flex: 1 1 auto;
   color: #b9c6d6;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 4.4px;
+  font-size: max(4.4px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -302,7 +302,7 @@
 }
 .eint__amt {
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 7.5px;
+  font-size: max(7.5px, calc(14.2px / var(--eint-scale, 1)));
   font-weight: 700;
   color: var(--ig-paper, #f4f1e8);
 }
@@ -310,14 +310,14 @@
   min-width: 26px;
   text-align: right;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 4px;
+  font-size: max(4px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #8d99a8;
 }
 .eint__dmg i {
   font-style: normal;
-  font-size: 3.9px;
+  font-size: max(3.9px, calc(14.2px / var(--eint-scale, 1)));
   color: #7f8a99;
 }
 /* Lethal is the one thing on this panel that must be unmissable. */
@@ -336,7 +336,7 @@
   display: inline;
   color: #b9c6d6;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 4.4px;
+  font-size: max(4.4px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -391,7 +391,7 @@
   display: block;
   margin: 1.5px 0 0;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
-  font-size: 3.7px;
+  font-size: max(3.7px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.08em;
   color: #7f8a99;
 }
@@ -416,7 +416,7 @@
   color: #cfd6de;
   font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
   font-weight: 700;
-  font-size: 4.2px;
+  font-size: max(4.2px, calc(14.2px / var(--eint-scale, 1)));
   letter-spacing: 0.18em;
   text-transform: uppercase;
   white-space: nowrap;

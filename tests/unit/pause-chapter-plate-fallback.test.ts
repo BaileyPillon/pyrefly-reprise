@@ -39,6 +39,46 @@ afterEach(() => {
   document.body.innerHTML = '';
 });
 
+/** Runs `body` with the window sized to `w`x`h`, restoring the previous size after. */
+function atWindowSize<T>(w: number, h: number, body: () => T): T {
+  const prevW = window.innerWidth;
+  const prevH = window.innerHeight;
+  Object.defineProperty(window, 'innerWidth', { value: w, configurable: true });
+  Object.defineProperty(window, 'innerHeight', { value: h, configurable: true });
+  try {
+    return body();
+  } finally {
+    Object.defineProperty(window, 'innerWidth', { value: prevW, configurable: true });
+    Object.defineProperty(window, 'innerHeight', { value: prevH, configurable: true });
+  }
+}
+
+describe('PR-0121: the pause plate is feathered rather than cut short at 3840x2160', () => {
+  it('a member plate at the 3840x2160 magnify cap gets the capped-feather mask, not a hard edge', () => {
+    atWindowSize(3840, 2160, () => {
+      const s = stage();
+      s.show('tidus');
+      const img = s.plate!;
+      expect(img.classList.contains('pause__plate--capped')).toBe(true);
+      expect(img.style.getPropertyValue('--pu-slide-mask')).not.toBe('');
+      // The box itself is still short of the frame (the cap, not a cover fix) —
+      // it is the feather, not the geometry, that removes the hard edge.
+      const width = Number.parseFloat(img.style.width);
+      expect(width).toBeLessThan(3840);
+    });
+  });
+
+  it('2560x1440 is unchanged: no cap applies, so no capped class', () => {
+    atWindowSize(2560, 1440, () => {
+      const s = stage();
+      s.show('tidus');
+      const img = s.plate!;
+      expect(img.classList.contains('pause__plate--capped')).toBe(false);
+      expect(img.style.getPropertyValue('--pu-slide-mask')).toBe('');
+    });
+  });
+});
+
 describe('the pause CHAPTER plate falls back to heroArtFallback (both games)', () => {
   it('a plate the manifest denies goes straight to the fallback, with no request for the plate', () => {
     setArtManifest(MANIFEST);

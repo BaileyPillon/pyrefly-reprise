@@ -6,9 +6,16 @@
  * px, down to 9.54. `--fe-k` cannot simply be raised on the phone — it also
  * drives the slab, the rail and the card geometry the same breakpoint depends
  * on — so the fix is a floor on TYPE only: every `font-size` in this sheet is
- * `max(var(--fe-fs-floor), calc(N * var(--fe-k)))`, and `--fe-fs-floor` is
- * 14px on a desktop window and 12px on the phone (the same two numbers
- * `pause-screen.css` / `tests/unit/pause-remake-css.test.ts` floor at).
+ * `max(var(--fe-fs-floor), calc(N * var(--fe-k)))`.
+ *
+ * PR-0066 round-13 re-measure: `--fe-fs-floor` originally went to 12px on the
+ * phone (matching `pause-screen.css`'s own phone floor), but the focused
+ * review of the live build still measured five text runs at 12 effective px
+ * on the 390x844 chapter select v2 board (D-183) — CHK-003 wants **14px
+ * everywhere text is meant to be read**, phone included; only pause's own
+ * chrome keeps a 12px allowance, and that is a separate token this file does
+ * not touch. So `--fe-fs-floor` is 14px on every window now, phone and
+ * desktop alike.
  *
  * This file evaluates that arithmetic the way a browser would, at the five
  * viewports the brief names, and fails if any `.fe-*` label can still compute
@@ -50,9 +57,9 @@ function feK(w: number, h: number): number {
   return Math.max(0.5, Math.min(w / gw, h / gh));
 }
 
-/** `--fe-fs-floor` as frontend.css defines it: 14px desktop, 12px phone. */
-function fsFloor(w: number, h: number): number {
-  return isPhone(w, h) ? 12 : 14;
+/** `--fe-fs-floor` as frontend.css defines it: 14px everywhere (PR-0066). */
+function fsFloor(_w: number, _h: number): number {
+  return 14;
 }
 
 const PHONE_QUERY = '@media (max-width: 760px), (max-aspect-ratio: 3 / 4)';
@@ -115,39 +122,39 @@ describe('nothing on a desktop window can compute below 14px', () => {
   }
 });
 
-describe('the phone runs at a 12px floor and nowhere lower', () => {
+describe('the phone runs at the same 14px floor and nowhere lower (PR-0066)', () => {
   // At the phone breakpoint a selector may be re-declared in the phone block;
   // where it is, that coefficient wins (the cascade), and `--fe-fs-floor` is
-  // 12px there either way because it is redeclared on `.fe` itself.
+  // 14px there either way because it is redeclared on `.fe` itself.
   const base = extractTokens(baseSheet);
   const phoneOverrides = new Map(extractTokens(phoneSheet).map((t) => [t.selector, t.coefficient]));
 
   for (const [w, h] of VIEWPORTS.filter(([w, h]) => isPhone(w, h))) {
-    it(`holds the 12px floor at ${w}x${h}`, () => {
+    it(`holds the 14px floor at ${w}x${h}`, () => {
       const k = feK(w, h);
       const floor = fsFloor(w, h);
-      expect(floor).toBe(12);
+      expect(floor).toBe(14);
       for (const { selector, coefficient } of base) {
         const effective = phoneOverrides.get(selector) ?? coefficient;
         const px = Math.max(floor, effective * k);
-        expect(px, `${selector} at ${w}x${h}`).toBeGreaterThanOrEqual(12);
+        expect(px, `${selector} at ${w}x${h}`).toBeGreaterThanOrEqual(14);
       }
       // And the phone block's own re-declarations, which are not necessarily
       // present in the base list at all (e.g. `.fe-title__name` restates a
       // different coefficient here).
       for (const [selector, coefficient] of phoneOverrides) {
         const px = Math.max(floor, coefficient * k);
-        expect(px, `${selector} (phone override) at ${w}x${h}`).toBeGreaterThanOrEqual(12);
+        expect(px, `${selector} (phone override) at ${w}x${h}`).toBeGreaterThanOrEqual(14);
       }
     });
   }
 });
 
 describe('the floor variable itself', () => {
-  it('is 14px on the base sheet and 12px inside the phone query', () => {
+  it('is 14px on the base sheet and 14px inside the phone query (PR-0066)', () => {
     const baseFloor = /--fe-fs-floor:\s*(\d+)px;/.exec(baseSheet);
     const phoneFloor = /--fe-fs-floor:\s*(\d+)px;/.exec(phoneSheet);
     expect(baseFloor?.[1]).toBe('14');
-    expect(phoneFloor?.[1]).toBe('12');
+    expect(phoneFloor?.[1]).toBe('14');
   });
 });

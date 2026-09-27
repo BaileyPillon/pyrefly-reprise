@@ -1,0 +1,114 @@
+{
+ "note": "FOC22-02 acceptance, iter2-b6 build (0d3a10a2), Chapter XI by real keys, 2000x1012, seed 1 pinned; attempt 2 (retry seed 1002) from the Magus Sisters link through Anima. Extracted from the attempt-2 engine log and turn log (the full logs stay in the scratch run).",
+ "itchyLanded": [
+  {
+   "who": "rikku",
+   "seq": 350
+  },
+  {
+   "who": "yuna",
+   "seq": 573
+  },
+  {
+   "who": "yuna",
+   "seq": 1458
+  },
+  {
+   "who": "yuna",
+   "seq": 1575
+  }
+ ],
+ "itchyRemoved": [
+  {
+   "who": "rikku",
+   "seq": 425
+  },
+  {
+   "who": "yuna",
+   "seq": 648
+  },
+  {
+   "who": "yuna",
+   "seq": 1542
+  },
+  {
+   "who": "yuna",
+   "seq": 1662
+  }
+ ],
+ "spherechanges": [
+  {
+   "who": "rikku",
+   "from": "dark-knight",
+   "to": "gunner",
+   "seq": 426
+  },
+  {
+   "who": "yuna",
+   "from": "white-mage",
+   "to": "gunner",
+   "seq": 649
+  },
+  {
+   "who": "yuna",
+   "from": "gunner",
+   "to": "white-mage",
+   "seq": 1543
+  },
+  {
+   "who": "yuna",
+   "from": "white-mage",
+   "to": "gunner",
+   "seq": 1663
+  }
+ ],
+ "cardNamedChange": [
+  {
+   "turn": 76,
+   "actor": "play:status-tick",
+   "card": {
+    "label": "Gunner",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Gunner",
+   "viaMenu": "Change"
+  },
+  {
+   "turn": 80,
+   "actor": "play:status-tick",
+   "card": {
+    "label": "Gunner",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Gunner",
+   "viaMenu": "Change"
+  },
+  {
+   "turn": 94,
+   "actor": "command:yuna",
+   "card": {
+    "label": "White Mage",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "White Mage",
+   "viaMenu": "Change"
+  },
+  {
+   "turn": 96,
+   "actor": "play:status-tick",
+   "card": {
+    "label": "Gunner",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Gunner",
+   "viaMenu": "Change"
+  }
+ ],
+ "picks": 100,
+ "misses": 0,
+ "outcome": "victory (results: ROAD TO THE FARPLANE · CLEARED), back to chapter select"
+}
