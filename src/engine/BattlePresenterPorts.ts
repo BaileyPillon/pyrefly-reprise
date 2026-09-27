@@ -248,9 +248,20 @@ export type { HudPort } from './HudPort.ts';
  *
  * Implemented by `PaintedStage` over Three.js; faked in unit tests.
  */
+/**
+ * The arena's phase lighting (D-224): a canon phase beat, or `'restore'` to
+ * return to the phase under a charge ladder (`phaseCanon.ts`). Optional: a
+ * stage without it (a test fake) plays every beat unlit.
+ */
+export interface LightingPort {
+  cue(c: import('./phaseCanon.ts').PhaseCue): void;
+}
+
 export interface BattleStage {
   readonly camera: CameraPort;
   readonly vfx: VfxPort;
+  /** D-224 phase lighting; see {@link LightingPort}. */
+  readonly lighting?: LightingPort;
   /** Live actor for a combatant, or `undefined` if it has none (hidden parts). */
   actor(id: CombatantId): ActorHandle | undefined;
   /** Which team a staged combatant fights for. Drives KO and victory poses. */

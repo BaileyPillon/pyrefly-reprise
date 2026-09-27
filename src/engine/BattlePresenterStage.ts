@@ -33,6 +33,8 @@ import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
 import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
 import { PyreflyStage } from './PyreflyStage.ts';
+import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
+import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -51,6 +53,10 @@ export interface PaintedStageOptions {
   spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate'>;
   /** The location's key, for its pyrefly canon row (`pyreflyCanon.ts`). */
   sceneKey?: string;
+  /** The renderer's grade, which D-224's phase lighting turns (`PhaseLighting.ts`). */
+  grade?: GradeTarget | null;
+  /** REDUCE FLASHES: phase lighting lands without its tween. The accessibility batch wires it; default off. */
+  reduceFlashes?: () => boolean;
 }
 
 interface StagedActor {
@@ -126,6 +132,8 @@ export class PaintedStage implements BattleStage {
   private readonly unhookSpellFx: () => void;
   /** A-5 / A-6 / D-225: the dissolve's lights, the lens band and held motes (`PyreflyStage.ts`). */
   private readonly pyreflies: PyreflyStage;
+  /** D-224 phase lighting: the presenter's `lighting` port (`BattlePresenterPhase.ts`). */
+  readonly lighting: PhaseLighting;
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
@@ -146,6 +154,14 @@ export class PaintedStage implements BattleStage {
     this.spellFx = fx.layer;
     this.unhookSpellFx = fx.unhook;
     this.pyreflies = new PyreflyStage(opts.scene, () => this.spellFx.quality, opts.sceneKey, opts.camera);
+    this.lighting = new PhaseLighting({
+      scene: opts.scene,
+      grade: opts.grade,
+      figures: () => [...this.actors.values()].map((s) => s.actor),
+      partyCentre: () => this.partyFloorCentre(),
+      baseRim: { color: opts.rim?.color ?? 0xbfe0ff, strength: opts.rim ? 0.8 : 0.7 },
+      ...(opts.reduceFlashes ? { reduceFlashes: opts.reduceFlashes } : {}),
+    });
     this.vfx = this.makeVfxPort();
   }
 
@@ -182,6 +198,23 @@ export class PaintedStage implements BattleStage {
     // Only after every actor exists: the solver needs each fiend's real world
     // height, which is not known until its idle painting has loaded.
     this.applyFormation();
+    // D-224: a Vegnagun link's seam re-stages the field (FFX-2, Ch V).
+    const link = phaseForFormation(state.enemyIds);
+    if (link) this.lighting.phase(link);
+  }
+
+  /** The party's centre on the floor, for the phase floor glow; null with no party staged. */
+  private partyFloorCentre(): { x: number; z: number } | null {
+    let n = 0;
+    let x = 0;
+    let z = 0;
+    for (const s of this.actors.values()) {
+      if (s.kind !== 'party') continue;
+      x += s.actor.position.x;
+      z += s.actor.position.z;
+      n++;
+    }
+    return n ? { x: x / n, z: z / n } : null;
   }
 
   /** Add (or replace) one combatant's actor. */
@@ -678,6 +711,10 @@ export class PaintedStage implements BattleStage {
     this.hits.update(dt, this.opts.camera);
     this.spellFx.update(dt);
     this.pyreflies.update(dt, (id) => this.lastState?.combatants[id]?.alive !== false);
+    // D-224: Evrae's range is a flag only its encounter sets (FFX, Ch VIII).
+    const range = phaseForFlags(this.lastState?.flags);
+    if (range) this.lighting.phase(range);
+    this.lighting.update(dt);
   }
 
   /** The pyreflies' state, for the debug snapshot and the capture script. */
@@ -725,6 +762,7 @@ export class PaintedStage implements BattleStage {
     this.unhookSpellFx();
     this.spellFx.dispose();
     this.pyreflies.dispose();
+    this.lighting.dispose();
     disposeStoneShards(this.opts.scene);
     this.flashEl?.remove();
     this.flashEl = null;
