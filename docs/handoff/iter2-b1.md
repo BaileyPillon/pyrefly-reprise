@@ -199,3 +199,55 @@ plus the re-pins and renames named above. Paper: `docs/plans/iter2-b1-review.md`
 Scratch (not committed): `D:/Tools/pyrefly-scratch/iter2-b1/` (bench outputs, hash files, the
 real-key scripts, a scratch build and a base-commit export with a `node_modules` junction; unlink the
 junction with `rmdir` before deleting that folder).
+
+## CHECK (independent, 2026-09-27; the checker did not build B1)
+
+Head `465a9459`, worktree `D:/pyrefly-iter2-b1` (junctions recreated for the check, links removed after).
+Round-14 capture done file present before any browser or bench work. Production build into a scratch
+folder (not the shared `dist/`), `vite preview` on **6110**, headless Chromium on the real GPU, server
+stopped by its PID. Scratch: `D:/Tools/pyrefly-scratch/iter2-b1-check/` (logs, frames in `shots/`).
+Game case of the check: **both** (FFX-2 engine and data; FFX builds and the shared chain loop).
+
+**Verdict: 0 blockers.** Everything the handoff claims reproduces, with the corrections below.
+
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| Full `vitest run --testTimeout=60000`, once | **496 files pass, 5 skipped, 0 fail** (8,619 tests; the `load-time-gates` flake did not recur) |
+| `node tools/orphans.mjs` | 24 orphans, the same count as main |
+| Byte identity, independent base | my own export of `0bf77169` against the branch, arm off, 200 seeds x 3 paces x IV, V, VI, XI, XIII, XV, outcome + log hash per seed: win counts identical everywhere; logs moved only on V (6 / 22 / 6) and VI (1 / 15 / 0), **every moved log a defeat in both trees** (PR-0145); IV, XI, XIII, XV 0 moved |
+| Switch arms (200 seeds) | reproduced exactly: IC-1 V 181 / 89 / 188, XV 48 / 18 / 112, others unchanged; PR-0106 VI 165 / 52 / 198; PR-0107 VI 124 / 26 / 183; PR-0124 "change once" V 184 / 85 / 192 -> 0 / 0 / 0, VI 120 / 13 / 177 -> 27 / 2 / 98 |
+| PR-0179 arms | reproduced exactly (IX 143 -> 153; X 169 -> 159 under a; XIV 125 -> 173 under a, 159 under c) |
+| PR-0174, real keys | title -> board -> ArrowRight -> Enter: VIII prep shows **Rikku S.LV 41**, X prep **Rikku S.LV 41** (`shots/prep-Evrae.jpg`, `prep-Natus.jpg`) |
+| D-217, real keys, seed 2 (a seed the builder did not use) | links 1-4 by debug auto-play (labelled); Shuyin by real Enter lost after 183 presses; one real Enter on RETRY re-entered with `enemyIds = ["shuyin"]` and the **same carried HP** as the first entry (Yuna 2,488, Rikku 3,954, Paine 4,642) (`shots/d217-*.jpg`) |
+| PR-0138, debug auto-play (labelled) | XI reads **EXP 23,000 / AP 54 / gil 7,000**, Shiva's 8,000 and 2,000 included, Tetra Band listed; VI reads 1,640 / 14 / 1,590 summed over the Acts |
+| FFX regression (shared chain loop) | III reads AP 0 / gil 0 (the last link, as before); II reads AP 14,000 / gil 9,000 (the last link); 0 page errors in every run |
+| Mockups | B1 has no picked visual item; nothing to compare |
+
+**Findings**
+
+1. **PR-0138, Chapter V's total (major, not a blocker; introduced as a visible number, not a
+   regression: live shows 0).** V's 42,400 EXP / 18,300 gil includes rows of parts that are never
+   killed: the Leg link's three Nodes (8,000 EXP / 3,000 gil each; research: "the Nodes are not meant
+   to be killed") and the Body link's two Bulwarks (200 / 150 each). `results.ts buildResult` pays every
+   enemy unit with a rewards row, alive or not. Round 13's acceptance expects the link rows
+   (5,000 + 6,000 + 7,000 + 0 + 0 = 26,000 EXP, 12,000 gil). The V unit test in `iter2-b1-spoils` sums
+   the engine's own per-link results, so it cannot catch this; it should pin the sourced totals once
+   the rule is decided. Needs a reading or Bailey's word (pay killed units only / skip parts); the
+   drops list has the same question.
+2. **House rule 7 (minor).** `src/battle/ffx/setup.ts` is **402** lines (399 at `0bf77169`); PR-0069's
+   comment pushed it over 400. The "none left over" line in Checks above is wrong for this file. A
+   two-line trim of the comment fixes it.
+3. **PR-0179 table for Bailey (minor, decision input).** Under **arm c** the Chapter XIV bench's own
+   assertion fails (`isaaru-tactic-bench.test.ts:66`: shipped line 159 < "sourced order as written"
+   163), so picking c also means re-choosing XIV's tactic. Under **arm a** XIV's other lines collapse
+   (sourced order 98 -> 33, Shield-at-full 50 -> 17) while Grand Summon Bahamut goes 124 -> 200; the
+   fight becomes one-line. Both belong in the §8 Q3 table beside the shipped-tactic numbers.
+4. **PR-0124's probe overstates (minor, decision input).** The "change once" bot turns all three girls
+   into Gunners on their first turn and never changes back, even mid-battle; the 0 / 200 on V is the
+   Body link's Bulwarks countering three Gunners' physical attacks (seeds 1 and 2 lose in link 3). A
+   player can spherechange mid-battle, so "can lose the chapter outright" is the bot, not the rule.
+   Keeping the switch off is still sound (no between-link menu); the stated reason should say this.
+5. **Still open (carried, as the handoff says):** no Chapter V win by real keys (Enter-only also lost
+   on seed 2); a checkpoint retry shows only the retried links' spoils (B5); GP-G2 and PR-0217 wait on
+   L-4's GameFAQs read; the contract entry for `EnemyGroupDef.opensAsSeparateBattle` is the driver's.
