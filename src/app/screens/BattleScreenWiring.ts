@@ -14,7 +14,6 @@
  */
 
 import type { BattleEngine, BattleSetup, GameId } from '../../battle/common/types.ts';
-import { Ff7NotHandledError } from '../../battle/common/game.ts';
 import { FFXEngine } from '../../battle/ffx/index.ts';
 import { FFX2Engine, type AtbMode, type AtbSpeed } from '../../battle/ffx2/index.ts';
 import { Ff7Engine } from '../../battle/ff7/index.ts';
@@ -141,10 +140,11 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * sources). The wrapper is transparent when coaching is off, already seen, or
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
-export function createHud(game: GameId, field?: () => OversoulField | null): HudPort {
+export function createHud(game: GameId, field?: () => OversoulField | null, engine?: BattleEngine | null): HudPort {
   // FF7 gets its own HUD: Bailey's option A made more faithful (docs/plans/ff7-hud-faithful-a-spec.md).
   // Never the FFX-2 HUD, never a coach, never the shared phone rail: it draws FF7's own phone band (FF7 only).
-  if (game === 'ff7') return new Ff7BattleHud();
+  // The Item list's counts come from the engine's bag (the HUD holds no numbers of its own).
+  if (game === 'ff7') return new Ff7BattleHud(engine instanceof Ff7Engine ? { itemCount: (id) => engine.inventory()[id] } : {});
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
   const hud: HudPort = game === 'ffx'
     ? withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))

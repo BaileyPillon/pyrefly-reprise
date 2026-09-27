@@ -172,11 +172,12 @@ async function flush(): Promise<void> {
 }
 
 describe('the door on chapter select', () => {
-  it('ships closed: FF7_EXPERIMENT_READY is false', () => {
-    expect(FF7_EXPERIMENT_READY).toBe(false);
+  it('ships open since the FF7 engine, HUD and stage are wired: FF7_EXPERIMENT_READY is true (D-237 to D-240)', () => {
+    expect(FF7_EXPERIMENT_READY).toBe(true);
   });
 
   it('with the switch off, LIMIT, seven taps and the pad sequence change nothing at all', async () => {
+    setFf7ExperimentReadyForTests(false);
     const rig = mount();
     const before = { snap: rig.screen.snapshot(), html: rig.root.innerHTML };
     for (const [key, code] of LIMIT) rig.type(key, code);

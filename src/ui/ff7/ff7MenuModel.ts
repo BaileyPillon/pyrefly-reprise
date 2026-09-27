@@ -14,7 +14,11 @@
  * for the engine step, `docs/handoff/ff7-hud.md`): `command.kind` `'limit'` ->
  * Limit; `'attack'` -> Attack; `'ability'` in category `'blackmagic'` or
  * `'whitemagic'` -> Magic; `'summon'` (or category `'summon'`) -> Summon;
- * `'item'` -> Item. Any other row is not an FF7 battle command and is ignored.
+ * `'item'` -> Item (the FF7 engine files its spells under category `'magic'`).
+ * **Change** (`'row-change'`) and **Defend** (`'defend'`) are not slots: FF7
+ * puts them off the window's edges, "press left" for Change and "press right"
+ * for Defend [spec §3.5, S1; manual p. 18]. {@link Ff7MenuState.edge} holds
+ * the finger there. Any other row is not an FF7 battle command and is ignored.
  *
  * Wait [spec §3.7; S1, S2]: time stops in a submenu and while choosing a
  * target, so {@link menuLevel} reports `'deep'` there and `'top'` on the four
@@ -52,7 +56,13 @@ export interface Ff7MenuState {
   targetAll: boolean;
   /** SELECT's help window is on [spec §3.5]. */
   help: boolean;
+  /** The finger off the window's left edge (Change) or right edge (Defend), else null. */
+  edge: EdgeKind | null;
+  /** The two edge commands, when the engine offers them. */
+  edges: Readonly<Record<EdgeKind, AvailableCommand | null>>;
 }
+
+export type EdgeKind = 'change' | 'defend';
 
 export type MenuInput = 'up' | 'down' | 'left' | 'right' | 'confirm' | 'cancel' | 'help';
 
@@ -66,7 +76,7 @@ export interface StepResult {
   handled: boolean;
 }
 
-const MAGIC_CATEGORIES = new Set(['blackmagic', 'whitemagic']);
+const MAGIC_CATEGORIES = new Set(['magic', 'blackmagic', 'whitemagic']);
 /** Columns in the Magic list [spec §5.8, our estimate: three]. */
 export const MAGIC_COLS = 3;
 
@@ -92,7 +102,11 @@ export function buildSlots(commands: readonly AvailableCommand[]): Array<Ff7Slot
 export function openMenu(commands: readonly AvailableCommand[]): Ff7MenuState {
   const slots = buildSlots(commands);
   const first = slots.findIndex((s) => s !== null);
-  return { slots, view: 'top', topIdx: Math.max(0, first), sub: null, subIdx: 0, pending: null, targets: [], targetIdx: 0, targetAll: false, help: false };
+  const edge = (kind: string): AvailableCommand | null => commands.find((c) => c.command.kind === kind) ?? null;
+  return {
+    slots, view: 'top', topIdx: Math.max(0, first), sub: null, subIdx: 0, pending: null, targets: [], targetIdx: 0, targetAll: false, help: false,
+    edge: null, edges: { change: edge('row-change'), defend: edge('defend') },
+  };
 }
 
 /** `'top'` on the four slots, `'deep'` in a list or the target step (Wait stops time there). */
@@ -111,6 +125,7 @@ export function subRows(state: Ff7MenuState): AvailableCommand[] {
 export function highlighted(state: Ff7MenuState): AvailableCommand | null {
   if (state.view === 'target') return state.pending;
   if (state.view !== 'top') return subRows(state)[state.subIdx] ?? null;
+  if (state.edge) return state.edges[state.edge];
   const slot = state.slots[state.topIdx];
   return slot && slot.rows.length === 1 ? (slot.rows[0] ?? null) : null;
 }
@@ -174,9 +189,11 @@ export function step(state: Ff7MenuState, input: MenuInput, order: (ids: Combata
   if (input === 'help') return { state: { ...state, help: !state.help }, handled: true };
   switch (state.view) {
     case 'top': {
-      if (input === 'up' || input === 'left') return { state: stepTop(state, -1), handled: true };
-      if (input === 'down' || input === 'right') return { state: stepTop(state, 1), handled: true };
-      if (input === 'cancel') return { state, handled: false };
+      if (input === 'left' || input === 'right') return { state: stepEdge(state, input), handled: true };
+      if (input === 'up') return { state: stepTop({ ...state, edge: null }, -1), handled: true };
+      if (input === 'down') return { state: stepTop({ ...state, edge: null }, 1), handled: true };
+      if (input === 'cancel') return state.edge ? { state: { ...state, edge: null }, handled: true } : { state, handled: false };
+      if (state.edge) return chooseEdge(state, state.edge, order);
       return chooseSlot(state, state.topIdx, order);
     }
     case 'magic':
@@ -198,11 +215,36 @@ export function step(state: Ff7MenuState, input: MenuInput, order: (ids: Combata
   }
 }
 
+/**
+ * Left and right on the four slots: off the left edge is Change, off the right
+ * edge Defend; the other way brings the finger back to its slot [spec §3.5, S1].
+ * A window without the command keeps the finger where it is.
+ */
+function stepEdge(state: Ff7MenuState, input: 'left' | 'right'): Ff7MenuState {
+  const toward: EdgeKind = input === 'left' ? 'change' : 'defend';
+  if (state.edge && state.edge !== toward) return { ...state, edge: null };
+  return state.edges[toward] ? { ...state, edge: toward } : state;
+}
+
+/** Choose an edge command (the confirm key on it, or a second tap). */
+export function chooseEdge(state: Ff7MenuState, kind: EdgeKind, order: (ids: CombatantId[]) => CombatantId[] = (ids) => ids): StepResult {
+  const row = state.edges[kind];
+  if (!row) return { state, refused: true, handled: true };
+  return aim({ ...state, edge: kind }, row, order);
+}
+
+/** A tap beside the window's edge: the first moves the finger there, a second chooses it. */
+export function tapEdge(state: Ff7MenuState, kind: EdgeKind): StepResult {
+  if (state.view !== 'top' || !state.edges[kind]) return { state, refused: true, handled: true };
+  if (state.edge === kind) return chooseEdge(state, kind);
+  return { state: { ...state, edge: kind }, handled: true };
+}
+
 /** Choose slot `i` (the confirm key on it, or a tap). */
 export function chooseSlot(state: Ff7MenuState, i: number, order: (ids: CombatantId[]) => CombatantId[] = (ids) => ids): StepResult {
   const slot = state.slots[i];
   if (!slot) return { state, refused: true, handled: true };
-  const at = { ...state, topIdx: i };
+  const at = { ...state, topIdx: i, edge: null };
   if (!slot.enabled) return { state: at, refused: true, handled: true };
   if (slot.label === 'Magic') return { state: openSub(at, 'magic'), handled: true };
   if (slot.label === 'Item') return { state: openSub(at, 'item'), handled: true };

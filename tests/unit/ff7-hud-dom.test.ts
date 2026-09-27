@@ -132,11 +132,11 @@ describe('the command window, by real keys', () => {
 });
 
 describe('what the battle tells it', () => {
-  it('queues messages one at a time and closes the window after the last', () => {
+  it('queues messages one at a time, each dialogue line opening with a quote mark, and closes the window after the last', () => {
     for (const text of HINT_LINES) hud.onEvent({ seq: 0, type: 'message', text, kind: 'story' });
-    expect(q('.ff7-msg')?.textContent).toBe(HINT_LINES[0]);
-    hud.update(messageSeconds(HINT_LINES[0]) + 0.01);
-    expect(q('.ff7-msg')?.textContent).toBe(HINT_LINES[1]);
+    expect(q('.ff7-msg')?.textContent).toBe(`“${HINT_LINES[0]}`); // no speaker name, an opening quote [spec §3.3]
+    hud.update(messageSeconds(`“${HINT_LINES[0]}`) + 0.01);
+    expect(q('.ff7-msg')?.textContent).toBe(`“${HINT_LINES[1]}`);
     hud.update(10);
     hud.update(10);
     expect(q('[data-win="message"]')).toBeNull();

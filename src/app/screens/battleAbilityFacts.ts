@@ -36,7 +36,8 @@ function facts(def: AbilityDef | undefined): AbilityFacts | undefined {
 
 /** The lookup a chapter of `game` hands its presenter. */
 export function abilityFactsFor(game: GameId): (id: AbilityId) => AbilityFacts | undefined {
-  // FF7 has no ability rows here yet: throw rather than read FFX-2's (docs/plans/ff7-game-branch-audit.md).
+  // FF7 has no ability rows here (no attack paintings for its enemy): none, never FFX-2's (ff7-game-branch-audit).
+  if (game === 'ff7') return () => undefined;
   if (ffxFamily(game, 'abilityFactsFor') === 'ffx') return (id) => facts(ffxRows().get(id));
   const rows = FFX2_ABILITIES as Readonly<Record<AbilityId, AbilityDef | undefined>>;
   return (id) => facts(rows[id] ?? ffx2Fallback.get(id));

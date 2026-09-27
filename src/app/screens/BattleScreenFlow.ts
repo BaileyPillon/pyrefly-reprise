@@ -299,7 +299,8 @@ export class GameFlow {
     if (!chapter) return null;
     if (chapter.experimental) {
       if (!this.running) [this.owned, this.handedOver] = [null, false]; // a fresh owner, as below
-      return runExperiment(chapter, { ...opts, seed: opts.seed ?? drawRunSeed() }, { show: (s) => this.show(s), setStep: (s) => void (this.step = s), makeBattle: (o) => factories.battle?.(o) ?? new BattleScreen(o) });
+      return runExperiment(chapter, { ...opts, seed: opts.seed ?? drawRunSeed() }, { show: (s) => this.show(s), setStep: (s) => void (this.step = s), makeBattle: (o) => factories.battle?.(o) ?? new BattleScreen(o), results: (c, o) => this.showResults(c, o), // the chapters' swirl in, their results and defeat panels (FF7)
+        playIn: async (swap, o) => { let up: Promise<boolean> = Promise.resolve(true); await playBattleSwirl(this.app.uiRoot, { instant: o.speed === 'skip', onCover: () => (up = swap()).then(() => undefined) }); return up; } });
     }
     const save = this.app.save;
     // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
@@ -362,8 +363,7 @@ export class GameFlow {
         },
       });
       if (!(await swapped)) return null;
-      // The real screen resolves `finished`; a registered stand-in (tests
-      // only) resolves the `FlowScreen` contract's `done`. Same value.
+      // The real screen resolves `finished`; a test stand-in resolves `done`. Same value.
       const fought = await ('finished' in battle ? battle.finished : battle.done);
       attempt++;
       // A clear through a checkpoint retry is timed from the chapter's start.

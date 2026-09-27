@@ -17,8 +17,10 @@ import type { GameId } from '../../battle/common/types.ts';
 import { ffxFamily } from '../../battle/common/game.ts';
 
 export function battleSpellFx(game: GameId, renderer: Renderer): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality'> {
+  // FF7's spell effects wait for their options round (rule 9): no overlay, so the layer draws nothing,
+  // never FFX's or FFX-2's skin; the stage's plain impact still lands (FF7 only).
+  if (game === 'ff7') return {};
   return {
-    // FF7's spell effects wait for its options round: throw, never FFX's or FFX-2's skin (audit).
     game: ffxFamily(game, 'battleSpellFx'),
     overlay: (draw) => renderer.addOverlay(draw),
     quality: () =>

@@ -3,7 +3,6 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { BattleResult } from '../../battle/common/types.ts';
-import { ffxFamily } from '../../battle/common/game.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { createFullBleedStage, createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
@@ -114,7 +113,7 @@ export class ResultsScreen extends Screen {
     this.silent = opts.silent ?? isSilentResultsChapter(opts.chapterId);
     this.victory = opts.result.outcome === 'victory';
 
-    const game = ffxFamily(chapter?.buildRef.game ?? 'ffx', 'ResultsScreen'); // FF7: results off until its flow is built
+    const game = chapter?.buildRef.game ?? 'ffx'; // FF7 pays EXP (and AP to Materia), like FFX-2's EXP ledger
     this.awardUnit = game === 'ffx' ? 'AP' : 'EXP';
     this.clearMs = clearTimeMs(opts.result, opts.elapsedMs, game);
     this.rows = buildMemberRows(chapter, opts.result);
@@ -345,7 +344,7 @@ export class ResultsScreen extends Screen {
     // both belong on the ledger [ffx2-combat-core §3.0] — but a formation that
     // pays no AP gets no row, rather than a printed zero.
     if (this.awardUnit === 'EXP' && result.ap > 0) {
-      lines.push({ kind: 'count', key: 'AP', value: result.ap, detail: 'PER DRESSPHERE' });
+      lines.push({ kind: 'count', key: 'AP', value: result.ap, detail: getChapter(this.opts.chapterId)?.game === 'ff7' ? 'PER MATERIA' : 'PER DRESSPHERE' }); // FF7: AP goes to each Materia [ff7-battle-core §11]
     }
     lines.push({ kind: 'count', key: 'GIL', value: result.gil });
     if (result.drops.length > 0) {

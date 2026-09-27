@@ -20,10 +20,23 @@
  *
  * Desktop: every x anchor is a fraction of the width (`hx` px per u), every y
  * a fraction of the height (`vs`), every size (type, frames, gauges, the
- * cursor) the smaller of the two (`s`), so type is never stretched. Phone
- * (an upright window under 600 px): one uniform scale `p` for both band
- * windows, stacked (spec §6).
+ * cursor) the smaller of the two (`s`), so type is never stretched (Bailey's
+ * pick D-238: stretch on 16:9, no pillarbox). Phone (an upright window under
+ * 600 px): one uniform scale `p` for both band windows, stacked (spec §6).
+ * Two phone adaptations exist (A+ sheet 7): **A**, the status window filling
+ * the width (2.05 px/u), and **B**, 1.64 px/u with each name repeated at the
+ * left of its status row so a row reads across as in FF7.
  */
+
+/** The two upright-phone adaptations of the A+ target (sheet 7). */
+export type Ff7PhoneLayout = 'a' | 'b';
+/**
+ * The layout the real-input check chose (2026-09-27, `docs/handoff/ff7-guard-scorpion.md`): **B**.
+ * In A the names sit in their own window at other heights than the HP rows, so on a turn nothing
+ * says whose row is whose; B's rows read across ("Cloud 176/ 316 37") as FF7's do, and its lower
+ * command window leaves the fighters' feet clear. A stays reachable with `?ff7phone=a`.
+ */
+export const FF7_PHONE_LAYOUT: Ff7PhoneLayout = 'b';
 
 export interface Rect {
   x: number;
@@ -76,6 +89,8 @@ export interface Ff7Geometry {
     gaugeW: number;
     gaugeH: number;
     hdr: { hp: number; mp: number; limit: number; time: number };
+    /** Phone B only: each row's name at the left of the status window. */
+    nameX?: number;
   };
   /** Command window: one column, four fixed slots [spec §3.2]. */
   cmd: ListGeometry;
@@ -103,8 +118,8 @@ export function isPhoneShape(W: number, H: number): boolean {
   return W < 600 && H > W;
 }
 
-export function ff7Geometry(W: number, H: number): Ff7Geometry {
-  return isPhoneShape(W, H) ? phone(W, H) : desk(W, H);
+export function ff7Geometry(W: number, H: number, phoneLayout: Ff7PhoneLayout = FF7_PHONE_LAYOUT): Ff7Geometry {
+  return isPhoneShape(W, H) ? phone(W, H, phoneLayout) : desk(W, H);
 }
 
 /** The status window's right-hand cluster, laid from its right edge at scale `s` (point 1). */
@@ -153,8 +168,12 @@ function desk(W: number, H: number): Ff7Geometry {
 /** Command slot pitch on a phone: 44 px for a thumb (spec §6). */
 const PHONE_SLOT = 44;
 
-function phone(W: number, H: number): Ff7Geometry {
-  const p = (W - 16) / 181; // the status window's 181 u fill the width inside two 8 px gutters
+/** Phone B's scale, px per u (A+ sheet 7). */
+const PHONE_B_SCALE = 1.64;
+
+function phone(W: number, H: number, layout: Ff7PhoneLayout): Ff7Geometry {
+  // A: the status window's 181 u fill the width inside two 8 px gutters; B: one smaller scale.
+  const p = layout === 'b' ? PHONE_B_SCALE : (W - 16) / 181;
   const h = 54 * p;
   const strip = H - 23;
   const statusY = strip - h;
@@ -177,7 +196,9 @@ function phone(W: number, H: number): Ff7Geometry {
     bandL: { x: 8, y: namesY, w: 134 * p, h },
     bandR,
     left: { hdrBase: Ly(165), rows: ROWS_U.map(Ly), nameX: Lx(13), barrierRight: Lx(131) },
-    right: { hdrBase: Ry(165), rows: ROWS_U.map(Ry), ...rightCluster(bandR.x + bandR.w, Rx(144), p) },
+    right: layout === 'b'
+      ? { hdrBase: Ry(165), rows: ROWS_U.map(Ry), ...rightCluster(bandR.x + bandR.w, 8 + 50 * p, p), nameX: 8 + 6 * p }
+      : { hdrBase: Ry(165), rows: ROWS_U.map(Ry), ...rightCluster(bandR.x + bandR.w, Rx(144), p) },
     cmd: { r: { x: cmdX, y: cmdY, w: W - cmdX - 44, h: cmdH }, cols: [cmdX + 48], rows },
     list: { r: { x: 8, y: cmdY, w: W - 16, h: cmdH }, cols: [0.1436, 0.4513, 0.759].map((f) => Math.round(W * f)), rows },
     mpWin: { x: W - 158, y: cmdY - 58, w: 150, h: 54 },

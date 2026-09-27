@@ -107,9 +107,10 @@ describe('presentation sites answer FF7 explicitly or throw', () => {
     expect(buildAdvisorView(ff7State() as never, { actorId: 'cloud', commands: [] } as never)).toBeNull();
   });
 
-  it('ability facts, pause meters, phone layout and party prep throw rather than read FFX-2', () => {
-    expect(() => abilityFactsFor('ff7')).toThrow(Ff7NotHandledError);
-    expect(() => inThisFightRows({} as never, 'ff7')).toThrow(Ff7NotHandledError);
+  it('ability facts and pause meters answer FF7 with nothing; the shared phone layout and party prep still throw', () => {
+    // Since the integration (2026-09-27): no FFX-2 row reaches an FF7 fight, and none is guessed.
+    expect(abilityFactsFor('ff7')('attack' as never)).toBeUndefined();
+    expect(inThisFightRows({} as never, 'ff7')).toEqual([]);
     expect(() => installPhoneBattle(document.createElement('div'), 'ff7', (() => ({})) as never)).toThrow(Ff7NotHandledError);
     expect(() => rosterHtml(FF7.buildRef, 0)).toThrow(Ff7NotHandledError);
     expect(() => slotsHtml(FF7.buildRef)).toThrow(Ff7NotHandledError);
@@ -117,11 +118,14 @@ describe('presentation sites answer FF7 explicitly or throw', () => {
     expect(() => recommendedParty(FF7)).toThrow(Ff7NotHandledError);
   });
 
-  it('results: rows throw, the leader is active slot 1, and a tick-only clear time throws (FF7 tick unsourced)', () => {
-    expect(() => buildMemberRows(FF7, { exp: 0, ap: 0 } as never)).toThrow(Ff7NotHandledError);
+  it('results: FF7 rows (full EXP each, AP to Materia), the leader is active slot 1, the clear time is its own clock', () => {
+    const rows = buildMemberRows(FF7, { outcome: 'victory', exp: 100, ap: 10 } as never);
+    expect(rows.map((r) => [r.id, r.award, r.awardUnit])).toEqual([['cloud', 100, 'EXP'], ['barret', 100, 'EXP']]);
+    expect(rows[0]?.detail).toMatch(/^LV \d+ · 10 AP to \d+ MATERIA$/);
+    expect(buildMemberRows(FF7, { outcome: 'defeat', exp: 0, ap: 0 } as never).every((r) => r.award === 0)).toBe(true);
     expect(leaderId(FF7)).toBe('cloud');
     expect(clearTimeMs({ elapsedMs: 120_000, elapsedTicks: 0 }, undefined, 'ff7')).toBe(120_000);
-    expect(() => clearTimeMs({ elapsedMs: 0, elapsedTicks: 900 }, undefined, 'ff7')).toThrow(Ff7NotHandledError);
+    expect(clearTimeMs({ elapsedMs: 300, elapsedTicks: 9 }, undefined, 'ff7')).toBe(300); // never FFX's or FFX-2's tick rate
   });
 
   it('labels FF7 as FF7, never as FFX', () => {

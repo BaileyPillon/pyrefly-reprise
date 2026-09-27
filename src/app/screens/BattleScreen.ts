@@ -50,6 +50,7 @@ import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleScreenStageHook.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
+import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
 import { abilityFactsFor } from './battleAbilityFacts.ts';
 
@@ -207,7 +208,7 @@ export class BattleScreen extends Screen {
       slots: this.scene.slots,
       canvas: this.app.renderer.domElement,
       overlayRoot: this.root,
-      spellFx: battleSpellFx(chapter.game, this.app.renderer), // throws for FF7: no look yet (ff7-game-branch-audit)
+      spellFx: battleSpellFx(chapter.game, this.app.renderer), // FF7: none drawn until its options round
     });
 
     // --- engine ------------------------------------------------------------
@@ -224,7 +225,7 @@ export class BattleScreen extends Screen {
     if (this.exited) return this.releaseParts();
 
     // --- HUD + ports -------------------------------------------------------
-    this.hud = createHud(chapter.game, () => this.stage); // the field, for the FFX-2 Oversoul look
+    this.hud = createHud(chapter.game, () => this.stage, this.engine); // the field (FFX-2 Oversoul look); the engine (FF7's item counts)
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
@@ -251,10 +252,8 @@ export class BattleScreen extends Screen {
       attachEnemyIntent(this.hud, this.engine);
     }
 
-    // A real HUD sees every event through `onEvent` and draws its own numerals
-    // and banner, so the presenter only drives these when `ui/common` asked it
-    // to (via the factory hooks) or when there is no HUD at all. Otherwise a
-    // hit would print twice.
+    // A real HUD draws its own numerals and banner (`onEvent`), so the presenter drives these only
+    // when `ui/common` asked it to (the factory hooks) or with no HUD at all; else a hit prints twice.
     // Mid-battle story beats play on the field that is already on screen.
     this.cutscenes = createMidBattleCutscenes({
       root: this.root,
@@ -292,7 +291,7 @@ export class BattleScreen extends Screen {
       audio,
       // Letterbox / name slab / heartbeat vignette. `BattleMoments` raises
       // these; see `src/ui/common/transitions/`.
-      moments: this.momentOverlay,
+      moments: chapter.game === 'ff7' ? null : this.momentOverlay, // FF7: no Ink & Gold name slab or letterbox (FF7 HUD spec §8)
       midScripts: chapter.scriptsRef?.midScripts ?? {},
       // The chapter's own ability rows: an enemy's physical ability draws its
       // attack painting (iter2 attack-pose, `EnemyActionPose.ts`).
@@ -300,6 +299,7 @@ export class BattleScreen extends Screen {
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
     if (this.opts.auto) this.presenter.setAutoPlay(this.opts.auto);
+    bracketAnimations(this.presenter, this.engine); // FF7's ATB modes read the animation (setAnimating); a no-op for FFX and FFX-2
 
     // The battle's own cue is resolved by `runEncounterChain` from the
     // formation's `musicCues`, so the boss theme the pre-scene faded in is the
@@ -355,8 +355,8 @@ export class BattleScreen extends Screen {
    * has no boss to name.
    */
   private async showBattleStart(): Promise<void> {
-    if (this.opts.speed === 'skip' || this.preview) return;
-    const chapter = this.opts.chapter;
+    const chapter = this.opts.chapter; // FF7 draws no Ink & Gold card (FF7 HUD spec §7 #15, §8)
+    if (this.opts.speed === 'skip' || this.preview || chapter.game === 'ff7') return;
     const state = this.engine?.state();
     if (!state) return;
     const boss = state.enemyIds

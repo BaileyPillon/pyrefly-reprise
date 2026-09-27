@@ -46,7 +46,8 @@ export function statusWindowHtml(g: Ff7Geometry, rows: readonly Ff7RowView[], bl
   const R = g.right;
   return windowHtml(g.bandR, { colour: FF7_WINDOW_COLOUR, frame: g.frame, radius: g.radius, name: 'status' }, (o) => {
     let h = header(g, o, R.hdr.hp, R.hdrBase, 'HP') + header(g, o, R.hdr.mp, R.hdrBase, 'MP') +
-      header(g, o, R.hdr.limit, R.hdrBase, 'LIMIT') + header(g, o, R.hdr.time, R.hdrBase, 'TIME');
+      header(g, o, R.hdr.limit, R.hdrBase, 'LIMIT') + header(g, o, R.hdr.time, R.hdrBase, 'TIME') +
+      (R.nameX !== undefined ? header(g, o, R.nameX, R.hdrBase, 'NAME') : ''); // phone B
     rows.forEach((r, i) => {
       const yc = R.rows[i];
       if (yc === undefined) return;
@@ -55,6 +56,7 @@ export function statusWindowHtml(g: Ff7Geometry, rows: readonly Ff7RowView[], bl
       const hpCol = r.hpLow ? TEXT.low : TEXT.body;
       const t = { shadow: g.shadow, color: hpCol };
       h += `<div class="ff7-row" data-id="${r.id}">` +
+        (R.nameX !== undefined ? text(o, R.nameX, base, g.cap, r.name, { shadow: g.shadow, color: TEXT.body, cls: 'ff7-name ff7-name--row' }) : '') +
         text(o, R.curEnd, base, g.cap, String(r.hp), { ...t, align: 'r', cls: 'ff7-hp' }) +
         text(o, R.curEnd, base, g.cap, '/', t) +
         text(o, R.maxEnd, base, g.cap, String(r.maxHp), { ...t, align: 'r', cls: 'ff7-hpmax' }) +

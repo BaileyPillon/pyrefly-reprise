@@ -271,6 +271,7 @@ export function inThisFightRows(
   game: GameId,
   opts: { turnOrder?: readonly TurnPreview[] | null; atbMode?: 'active' | 'wait' } = {},
 ): MeterRow[] {
+  if (game === 'ff7') return []; // FF7: no FFX/FFX-2 meters for an FF7 fighter (ff7-game-branch-audit)
   return ffxFamily(game, 'pause IN THIS FIGHT rows') === 'ffx2'
     ? ffx2FightRows(c, opts.atbMode ?? 'active')
     : ffxFightRows(c, opts.turnOrder ?? null);

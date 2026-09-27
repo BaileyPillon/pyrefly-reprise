@@ -4,7 +4,7 @@
  */
 
 import type { BattleResult, GameId } from '../../battle/common/types.ts';
-import { Ff7NotHandledError } from '../../battle/common/game.ts';
+import { ff7MemberRows } from '../ff7/ff7ResultRows.ts';
 import { apForLevel } from '../../battle/ffx/results.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ITEMS as FFX_ITEMS } from '../../data/ffx/index.ts';
@@ -135,7 +135,7 @@ export function clearTimeMs(
     return Math.round(wallClockMs);
   }
   if (result.elapsedMs >= MIN_PLAUSIBLE_WALL_CLOCK_MS) return Math.round(result.elapsedMs);
-  if (game === 'ff7') throw new Ff7NotHandledError('clearTimeMs (the FF7 tick length is unsourced, ff7-battle-core §2.2)');
+  if (game === 'ff7') return Math.max(0, Math.round(result.elapsedMs)); // FF7's own clock (its tick length is our estimate, ff7-battle-core §2.2)
   const perTick = game === 'ffx2' ? FFX2_MS_PER_TICK : FFX_MS_PER_TICK;
   return Math.max(0, Math.round((result.elapsedTicks || 0) * perTick));
 }
@@ -248,7 +248,7 @@ export function buildMemberRows(
 ): ResultsMemberRow[] {
   const build = chapter?.buildRef;
   if (!build) return [];
-  if (build.game === 'ff7') throw new Ff7NotHandledError('buildMemberRows (FF7 results rows)');
+  if (build.game === 'ff7') return ff7MemberRows(build, result); // FF7 only (`ui/ff7/ff7ResultRows.ts`)
 
   if (build.game === 'ffx') {
     const earnedIds = new Set(Object.keys(result.sphereLevelsGained));

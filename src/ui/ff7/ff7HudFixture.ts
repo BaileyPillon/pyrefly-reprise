@@ -17,8 +17,8 @@
  * - **Placeholders** (the A+ target's story, not canon): the current HP (279 and 150),
  *   the starting Limit gauges (122 and 102; the Tail Laser adds gs §9's 133 and 142
  *   units, the figures for a 77 hit, bringing them to 255 and 244) and the TIME fills.
- * - The three hint lines, the game's own text and spelling [gs §7.1]; keeping "it's" is
- *   still Bailey's call (spec §9 #3).
+ * - The three hint lines, the game's own text and spelling [gs §7.1]; Bailey kept "it's"
+ *   and the wording verbatim (D-237 to D-240, "ill go with all your recommendations").
  */
 
 import type { AtbSnapshot, AvailableCommand, BattleEvent, BattleState, Command, CombatantId } from '../../battle/common/types.ts';
@@ -27,7 +27,7 @@ import type { Ff7Combatant } from '../../battle/common/types-ff7.ts';
 export const FIXTURE_IDS = { cloud: 'cloud', barret: 'barret', boss: 'guard-scorpion' } as const;
 
 /** The hint, three messages in order, Cloud and Barret alive [gs §7.1, verbatim; "(Barret)" is the player's name]. */
-export const HINT_LINES = ['“Barret, be careful!', '“Attack while it\'s tail\'s up!', '“It\'s gonna counterattack with its laser.'] as const;
+export const HINT_LINES = ['Barret, be careful!', 'Attack while it\'s tail\'s up!', 'It\'s gonna counterattack with its laser.'] as const; // as the engine sends them; the HUD adds the quote mark
 
 interface Fighter {
   id: CombatantId;

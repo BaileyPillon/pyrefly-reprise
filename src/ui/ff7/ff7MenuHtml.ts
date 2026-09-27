@@ -11,15 +11,20 @@
  * - **Limit** [spec §3.1, §5.8]: the magenta-to-red window over the command
  *   window, headed "LIMIT LEVEL n".
  *
+ * - **Change / Defend** [spec §3.5, S1: off the window's left and right edges]:
+ *   a small window beside the edge with the finger on the word, only while the
+ *   finger is there (its look is our estimate; FF7 draws no label until then).
+ *
  * Every row carries a transparent hit box (`data-slot` / `data-row`) so a tap
- * chooses it (spec §6: "Tapping a command row chooses it").
+ * chooses it (spec §6: "Tapping a command row chooses it"); an unmarked strip
+ * beside each edge (`data-edge`) is the touch way to Change and Defend.
  */
 
 import type { AvailableCommand, ItemId } from '../../battle/common/types.ts';
 import { box, text, windowHtml, type Origin } from './ff7Draw.ts';
 import { gloveSvg } from './ff7Art.ts';
 import type { Ff7Geometry, ListGeometry } from './ff7Geometry.ts';
-import { MAGIC_COLS, subRows, type Ff7MenuState } from './ff7MenuModel.ts';
+import { MAGIC_COLS, subRows, type EdgeKind, type Ff7MenuState } from './ff7MenuModel.ts';
 import { FF7_LIMIT_WINDOW_COLOUR, FF7_WINDOW_COLOUR, limitLetterColours, TEXT } from './ff7Tokens.ts';
 
 export interface MenuContext {
@@ -60,6 +65,31 @@ function commandWindow(g: Ff7Geometry, st: Ff7MenuState, ctx: MenuContext, withC
     }).join(''));
 }
 
+/** Change or Defend beside the command window, the finger on it [S1; look our estimate]. */
+function edgeWindow(g: Ff7Geometry, st: Ff7MenuState, kind: EdgeKind): string {
+  const c = g.cmd;
+  const label = kind === 'change' ? 'Change' : 'Defend';
+  const pad = 5 * g.s;
+  const w = Math.round(label.length * g.cap * 0.62 + g.cursor.w + g.cursor.tip + 2 * pad);
+  const h = Math.round(g.mode === 'phone' ? 44 : 14 * g.s);
+  const yc = c.rows[st.topIdx] ?? c.rows[0] ?? c.r.y + c.r.h / 2;
+  const x = kind === 'change' ? Math.max(4, c.r.x - w - g.s) : Math.min(c.r.x + c.r.w + g.s, g.W - 4 - w);
+  const r = { x, y: yc - h / 2, w, h };
+  const tx = x + pad + g.cursor.w + g.cursor.tip;
+  return windowHtml(r, { colour: FF7_WINDOW_COLOUR, frame: g.frame, radius: g.radius, name: `edge-${kind}` }, (o) =>
+    text(o, tx, yc + g.cap / 2, g.cap, label, { shadow: g.shadow, color: TEXT.command, cls: 'ff7-edge-label' }) +
+    cursor(g, o, tx, yc) + hit(g, o, r, yc, `data-edge="${kind}"`));
+}
+
+/** The unmarked touch strips beside the command window's edges (Change left, Defend right). */
+function edgeHits(g: Ff7Geometry, st: Ff7MenuState): string {
+  const c = g.cmd.r;
+  const w = g.mode === 'phone' ? 44 : 14 * g.s;
+  const strip = (kind: EdgeKind, x: number): string => (st.edges[kind] && st.edge !== kind
+    ? `<div class="ff7-hit" data-edge="${kind}" style="left:${x}px;top:${c.y}px;width:${w}px;height:${c.h}px"></div>` : '');
+  return strip('change', c.x - w) + strip('defend', Math.min(c.x + c.w, g.W - w));
+}
+
 function firstRow(index: number, cols: number): number {
   return Math.max(0, Math.floor(index / cols) - (VISIBLE_ROWS - 1));
 }
@@ -78,7 +108,8 @@ function listWindow(g: Ff7Geometry, st: Ff7MenuState, ctx: MenuContext, rows: Av
       const color = row.enabled ? TEXT.command : TEXT.off;
       const count = st.sub === 'item' && row.command.kind === 'item' ? ctx.itemCount?.(row.command.id) : undefined;
       const colW = cols === 1 ? L.r.w : L.r.w / cols;
-      return text(o, x, yc + g.cap / 2, g.cap, row.label, { shadow: g.shadow, color, cls: 'ff7-row-label', data: { row: String(i) } }) +
+      const label = count !== undefined ? row.label.replace(/ x\d+$/, '') : row.label; // the engine's "Potion x3": the count has its own column
+      return text(o, x, yc + g.cap / 2, g.cap, label, { shadow: g.shadow, color, cls: 'ff7-row-label', data: { row: String(i) } }) +
         (count !== undefined ? text(o, countX, yc + g.cap / 2, g.cap, String(count), { shadow: g.shadow, color, align: 'r' }) : '') +
         (withCursor && st.subIdx === i ? cursor(g, o, x, yc) : '') +
         hit(g, o, { x: x - g.cursor.w - g.cursor.tip, w: colW }, yc, `data-row="${i}"`);
@@ -114,7 +145,7 @@ export function menuHtml(g: Ff7Geometry, st: Ff7MenuState, ctx: MenuContext): st
   if (st.sub === 'magic') return listWindow(g, st, ctx, rows, !aiming) + mpWindow(g, st, ctx, rows);
   if (st.sub === 'item') return listWindow(g, st, ctx, rows, !aiming);
   if (st.sub === 'limit') return commandWindow(g, st, ctx, false) + limitWindow(g, st, ctx, rows, !aiming);
-  return commandWindow(g, st, ctx, !aiming);
+  return commandWindow(g, st, ctx, !aiming && !st.edge) + (st.edge && !aiming ? edgeWindow(g, st, st.edge) : '') + (aiming ? '' : edgeHits(g, st));
 }
 
 /** The finger on each aimed target: tip at the left of the figure, pointing right [spec §5.6]. */

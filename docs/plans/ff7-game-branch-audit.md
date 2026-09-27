@@ -57,9 +57,9 @@ already safe.
 | Site | Code | Note |
 |---|---|---|
 | `battleAbilityFacts.ts:28` | F | FFX ability data filter |
-| `battleAbilityFacts.ts:40` | G | `abilityFactsFor` |
+| `battleAbilityFacts.ts:40` | E | `abilityFactsFor`: FF7 has no rows (`() => undefined`), never FFX-2's (integration, 2026-09-27) |
 | `BattleScreen.ts:327` | N | pause chip class; behind `battleSpellFx` |
-| `BattleScreen.ts` spell effects (not grep) | G | `battleSpellFx(game)` now takes `GameId` and throws for FF7 |
+| `BattleScreen.ts` spell effects (not grep) | E | `battleSpellFx('ff7')` returns no overlay and no skin: nothing drawn until FF7's options round (integration) |
 | `BattleScreen.ts` play time (not grep) | E | an experiment's play time goes to `experiments:v1`, never the save |
 | `BattleScreenContent.ts:65-66` | F ×2 | FFX data filters |
 | `BattleScreenFlow.ts:146` `arcCleared` | E | `false` for FF7: never a vacuous "arc cleared" |
@@ -84,12 +84,12 @@ already safe.
 | `PartyPrepContent.ts:46, 54, 77, 128` | G ×4 | behind `prepBuild` |
 | `PartyPrepScreen.ts:94, 101` | F ×2 | panel registry filters (exact match) |
 | `PartyPrepScreen.ts:158` | U | no prep for FF7 |
-| `pause/meters.ts:274` | G | IN THIS FIGHT rows |
+| `pause/meters.ts:274` | E | IN THIS FIGHT rows: none for FF7 (integration) |
 | `pause/panels.ts:104` | N | drops FFX-2's ATB row for FF7, which is right (FF7's mode is its own) |
 | `pause/PauseView.ts:108` | E | "Final Fantasy VII" |
 | `pause/plates.ts:231` | N | FF7 uses the plain id |
 | `PauseScreen.ts:92` | N | base chrome |
-| `ResultsScreen.ts:118` | G | `ffxFamily` at `:117` |
+| `ResultsScreen.ts:118` | E | FF7 reads EXP (and AP "PER MATERIA"), recording off (integration) |
 | `ResultsScreen.ts:182` | N | base chrome |
 | `ResultsScreen.ts` best-time write (not grep) | E | an experiment never records into the save |
 | `src/data/chapter-meta.ts` `GAME_LABELS` (not grep) | E | `ff7: 'FF7'` |
@@ -127,8 +127,8 @@ already safe.
 | `common/MusicPlayer.ts:32` | F | a word in a cue key |
 | `common/phoneBattle.ts:217, 246` | G ×2 | `installPhoneBattle` guards at its entry; `HOME_ASPECT` is `Record<FfxFamilyGame, number>` |
 | `common/phoneBattleText.ts:46, 47` | N ×2 | "the whole party" / "ally", which is also FF7's wording |
-| `common/resultsMath.ts:138-139` | G ×2 | `clearTimeMs`: the FF7 tick length is unsourced (core §2.2) |
-| `common/resultsMath.ts:251, 253` | G ×2 | `buildMemberRows` |
+| `common/resultsMath.ts:138-139` | E | `clearTimeMs`: FF7 uses its own engine clock, never FFX's or FFX-2's tick rate (integration) |
+| `common/resultsMath.ts:251, 253` | E | `buildMemberRows`: FF7 rows from `ui/ff7/ff7ResultRows.ts` (integration) |
 | `common/resultsMath.ts:305` | E | `leaderId`: FF7 leads with active slot 1 |
 | `common/transitions/index.ts:36` | N | left-to-right wipe |
 | `common/transitions/TurnCutInLayer.ts:50, 65, 78` | C ×3 | `TurnCutInRequest.game` is `'ffx' \| 'ffx2'` |
@@ -162,7 +162,7 @@ yet), `victory-line.test.ts` (no FF7 results panel yet), `pause-restart-checkpoi
 
 ## What the FF7 engine and HUD tracks owe this list
 
-Replace the G sites that stop the flow today (`battleSpellFx`, `createEngine`; `createHud`
+**Done 2026-09-27 on `ff7-integration`** (`docs/handoff/ff7-guard-scorpion.md`); the battle-start card and the Ink & Gold moments are off for FF7. Earlier text: replace the G sites that stop the flow today (`battleSpellFx`, `createEngine`; `createHud`
 is done, 2026-09-27) with `'ff7'` branches, give the pause meters and `buildMemberRows` an FF7
 answer (or keep them throwing and route FF7's pause and results through its own
 panels), and decide `BattleScreen.ts:327`, `BattleStartBanner` and the N rows against

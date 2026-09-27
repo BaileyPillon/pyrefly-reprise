@@ -118,6 +118,8 @@ class FakeApp {
 }
 
 let battles: BattleScreenOptions[] = [];
+/** No swirl and no results panel: these checks are about the save (the panel loop: `ff7-flow.test.ts`). */
+const QUIET = { speed: 'skip', skipResults: true } as const;
 let outcome: 'victory' | 'defeat' = 'victory';
 
 beforeEach(() => {
@@ -142,6 +144,7 @@ function seededSave(): { app: FakeApp; raw: string | null } {
 
 describe('the flow and the save (invariant I3)', () => {
   it('with the switch off, runChapter is an inert holding state: no battle, no write anywhere', async () => {
+    setFf7ExperimentReadyForTests(false);
     const { app, raw } = seededSave();
     expect(raw).not.toBeNull();
     await expect(app.flow.runChapter(ID, {})).resolves.toBeNull();
@@ -153,7 +156,7 @@ describe('the flow and the save (invariant I3)', () => {
   it('with the switch on, a win goes to the experiments store and leaves the save byte-identical', async () => {
     setFf7ExperimentReadyForTests(true);
     const { app, raw } = seededSave();
-    const result = await app.flow.runChapter(ID, { seed: 7 });
+    const result = await app.flow.runChapter(ID, { seed: 7, ...QUIET });
     expect(result?.outcome).toBe('victory');
     expect(battles).toHaveLength(1);
     expect(battles[0]!.chapter.id).toBe(ID);
@@ -170,9 +173,9 @@ describe('the flow and the save (invariant I3)', () => {
     setFf7ExperimentReadyForTests(true);
     const { app, raw } = seededSave();
     outcome = 'defeat';
-    expect((await app.flow.runChapter(ID, {}))?.outcome).toBe('defeat');
+    expect((await app.flow.runChapter(ID, { ...QUIET }))?.outcome).toBe('defeat');
     outcome = 'victory';
-    expect((await app.flow.runChapter(ID, { auto: 'aggressive' as never }))?.outcome).toBe('victory');
+    expect((await app.flow.runChapter(ID, { auto: 'aggressive' as never, ...QUIET }))?.outcome).toBe('victory');
     expect(localStorage.getItem(SAVE_KEY)).toBe(raw);
     expect(experimentRecord(ID)).toMatchObject({ attempts: 2, clears: 1, bestTimeMs: null });
   });

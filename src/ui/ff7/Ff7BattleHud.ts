@@ -35,20 +35,35 @@ import type {
 import type { Ff7Combatant } from '../../battle/common/types-ff7.ts';
 import type { HudPort, TargetingPort } from '../../engine/HudPort.ts';
 import { Ff7CommandMenu } from './Ff7CommandMenu.ts';
-import { ff7Geometry, type Ff7Geometry } from './ff7Geometry.ts';
+import { FF7_PHONE_LAYOUT, ff7Geometry, type Ff7Geometry, type Ff7PhoneLayout } from './ff7Geometry.ts';
 import { Ff7HelpLine } from './Ff7HelpLine.ts';
 import { partyRows, snapshotOf, withGauges, withLimit, type Ff7RowView, type LimitNote } from './ff7HudModel.ts';
 import { Ff7Marks, type Projector } from './ff7Marks.ts';
 import { highlighted, type Ff7MenuState } from './ff7MenuModel.ts';
 import { namesWindowHtml, stripHtml, statusWindowHtml, type BlinkPhase } from './Ff7PartyRows.ts';
-import { LIMIT_BLINK_MS, LIMIT_STEP_MS } from './ff7Tokens.ts';
+import { LIMIT_BLINK_MS, LIMIT_STEP_MS, limitLetterColours } from './ff7Tokens.ts';
 
 export interface Ff7HudOptions {
   /** Items in the bag, for the Item list's counts (the engine owns the inventory). */
   itemCount?: (id: ItemId) => number | undefined;
   /** Fixed size, for tests and captures; otherwise the mount root's box (or the window). */
   size?: () => { w: number; h: number };
+  /** Upright-phone adaptation; default {@link FF7_PHONE_LAYOUT}, or `?ff7phone=a|b` for the side-by-side check. */
+  phoneLayout?: Ff7PhoneLayout;
 }
+
+/** `?ff7phone=a` / `?ff7phone=b`: the two phone adaptations, for the real-input comparison. */
+function phoneLayoutFromUrl(): Ff7PhoneLayout | null {
+  try {
+    const v = new URLSearchParams(window.location.search).get('ff7phone');
+    return v === 'a' || v === 'b' ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Actions FF7 plays with no name in the top window [research/ff7-guard-scorpion.md §5: "<>" self]. */
+const NAMELESS = new Set(['raise-tail', 'drop-tail']);
 
 function layer(name: string): HTMLDivElement {
   const el = document.createElement('div');
@@ -168,11 +183,13 @@ export class Ff7BattleHud implements HudPort {
   onEvent(event: BattleEvent): void {
     switch (event.type) {
       case 'message':
-        this.line.say(event.text);
+        // Battle dialogue has no speaker name and opens with a quote mark [spec §3.3, §5.9; measured + S8].
+        this.line.say(event.kind === 'story' ? `“${event.text}` : event.text);
         break;
       case 'action-start':
         // The ability's name in the top window [spec §5.9: enemy actions; party spells and Limits, our estimate].
-        if (event.abilityName && event.command.kind !== 'attack') this.line.say(event.abilityName, true);
+        // Raise Tail and Drop Tail print nothing: their name in the script is blank ("<>") [gs §5.2, Fergusson].
+        if (event.abilityName && event.command.kind !== 'attack' && !NAMELESS.has(event.abilityId ?? '')) this.line.say(event.abilityName, true);
         break;
       case 'damage':
         if (event.amount !== 0) this.marks.add(event.targetId, String(Math.abs(event.amount)), event.amount < 0, event.hitIndex);
@@ -224,7 +241,7 @@ export class Ff7BattleHud implements HudPort {
     const phase = Math.floor(this.clockMs / LIMIT_STEP_MS);
     if (phase !== this.limitPhase) {
       this.limitPhase = phase;
-      if (this.menu.state?.slots[0]?.label === 'Limit') this.menu.render();
+      if (this.menu.state?.slots[0]?.label === 'Limit' && !this.menu.recolourLimit(limitLetterColours(phase))) this.menu.render();
     }
   }
 
@@ -241,8 +258,12 @@ export class Ff7BattleHud implements HudPort {
   }
 
   private geometry(): Ff7Geometry {
-    if (!this.geo) this.geo = ff7Geometry(...this.size());
+    if (!this.geo) this.geo = ff7Geometry(...this.size(), this.phoneLayout);
     return this.geo;
+  }
+
+  private get phoneLayout(): Ff7PhoneLayout {
+    return this.opts.phoneLayout ?? phoneLayoutFromUrl() ?? FF7_PHONE_LAYOUT;
   }
 
   private size(): [number, number] {
@@ -254,7 +275,7 @@ export class Ff7BattleHud implements HudPort {
   }
 
   private relayout(): void {
-    this.geo = ff7Geometry(...this.size());
+    this.geo = ff7Geometry(...this.size(), this.phoneLayout);
     this.root.dataset['mode'] = this.geo.mode;
     this.renderBand();
     this.menu.render();

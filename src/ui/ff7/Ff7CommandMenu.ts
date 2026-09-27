@@ -6,7 +6,9 @@
  * Keys (the app's own map, as the FFX-2 menu reads them): arrows move; Enter,
  * Space or Z confirm; Esc, X or Backspace cancel; **H is SELECT**, the help
  * window [spec §3.5, §5.9]. Taps: a command row chooses it; a figure moves the
- * finger to it and a second tap confirms; a tap on the scene while a list or
+ * finger to it and a second tap confirms; an unmarked strip beside the window's
+ * left or right edge moves the finger to Change or Defend, a second tap chooses
+ * it (our estimate of a touch way to FF7's "press left / right"); a tap on the scene while a list or
  * the target step is open backs out one step (a touch stand-in for cancel,
  * our estimate). The field is never lit or dimmed: FF7 marks a target with the
  * finger alone (spec §8: no bracket).
@@ -23,7 +25,9 @@ import {
   menuLevel,
   openMenu,
   step,
+  tapEdge,
   tapTarget,
+  type EdgeKind,
   type Ff7MenuState,
   type MenuInput,
   type StepResult,
@@ -109,7 +113,22 @@ export class Ff7CommandMenu {
     return () => this.levelListeners.delete(listener);
   }
 
-  /** Redraw (a resize, the Limit colour step). */
+  /**
+   * The "Limit" letter colour step, in place: the slot's letters are recoloured, nothing is rebuilt,
+   * so a tap that lands between two steps still finds the row it pressed (a rebuild every 100 ms
+   * swapped the element out from under a touch). False when there is no such label to recolour.
+   */
+  recolourLimit(colours: readonly string[]): boolean {
+    const spans = this.deps.layer.querySelectorAll<HTMLElement>('.ff7-slot[data-slot="0"] span');
+    if (!this.st || spans.length === 0) return false;
+    spans.forEach((span, i) => {
+      const c = colours[i];
+      if (c && span.style.color !== c) span.style.color = c;
+    });
+    return true;
+  }
+
+  /** Redraw (a resize, a change of state). */
   render(): void {
     const layer = this.deps.layer;
     if (!this.st) {
@@ -142,13 +161,14 @@ export class Ff7CommandMenu {
 
   private click(e: MouseEvent): void {
     if (!this.st) return;
-    const el = (e.target as Element | null)?.closest?.('[data-slot],[data-row],[data-target],[data-scrim]') as HTMLElement | null;
+    const el = (e.target as Element | null)?.closest?.('[data-slot],[data-row],[data-target],[data-edge],[data-scrim]') as HTMLElement | null;
     if (!el) return;
     e.preventDefault();
     e.stopPropagation();
     const order = (ids: CombatantId[]): CombatantId[] => this.order(ids);
     const d = el.dataset;
     if (d['target'] !== undefined) this.apply(tapTarget(this.st, d['target']), false);
+    else if (d['edge'] !== undefined && this.st.view === 'top') this.apply(tapEdge(this.st, d['edge'] as EdgeKind), false);
     else if (d['slot'] !== undefined && this.st.view === 'top') this.apply(chooseSlot(this.st, Number(d['slot']), order), false);
     else if (d['row'] !== undefined && this.st.view !== 'top' && this.st.view !== 'target') this.apply(chooseRow(this.st, Number(d['row']), order), false);
     else if (d['scrim'] !== undefined) this.press('cancel');

@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { ff7Geometry, isPhoneShape } from '../../src/ui/ff7/ff7Geometry.ts';
+import { FF7_PHONE_LAYOUT, ff7Geometry, isPhoneShape } from '../../src/ui/ff7/ff7Geometry.ts';
 
 describe('desktop 1600 x 900', () => {
   const g = ff7Geometry(1600, 900);
@@ -56,8 +56,8 @@ describe('desktop 1600 x 900', () => {
   });
 });
 
-describe('phone 390 x 844', () => {
-  const g = ff7Geometry(390, 844);
+describe('phone 390 x 844, layout A (stacked, 2.05 px/u; `?ff7phone=a`)', () => {
+  const g = ff7Geometry(390, 844, 'a');
 
   it('is an upright phone and uses one scale for both band windows', () => {
     expect(isPhoneShape(390, 844)).toBe(true);
@@ -91,6 +91,41 @@ describe('phone 390 x 844', () => {
     expect((R.timeX - (R.limitX + R.gaugeW)) / g.s).toBeCloseTo(2, 6);
     expect((g.bandR.x + g.bandR.w - (R.timeX + R.gaugeW)) / g.s).toBeCloseTo(6, 6);
     expect((R.mpLine0 - R.maxEnd) / g.s).toBeCloseTo(3, 6); // 204 -> 207 u
+  });
+});
+
+describe('phone 390 x 844, layout B (the default: names on the status rows, 1.64 px/u)', () => {
+  const g = ff7Geometry(390, 844);
+
+  it('is the default, at 1.64 px per u, the status window across the width', () => {
+    expect(FF7_PHONE_LAYOUT).toBe('b');
+    expect(g.s).toBeCloseTo(1.64, 6);
+    expect(g.bandR.w).toBe(390 - 16);
+    expect(g.bandL.w).toBeCloseTo(134 * g.s, 6);
+  });
+
+  it('puts each name at the left of its status row, before the HP field', () => {
+    const R = g.right;
+    expect(R.nameX).toBeDefined();
+    expect(R.nameX!).toBeGreaterThan(g.bandR.x);
+    expect(R.hp0 - R.nameX!).toBeGreaterThan(8 * g.cap * 0.5); // room for "Barret"
+    expect(R.maxEnd).toBeLessThan(R.mpLine0);
+  });
+
+  it('keeps every window inside the frame, the command window over the names window only, 44 px slots', () => {
+    for (const r of [g.msg, g.bandL, g.bandR, g.cmd.r, g.list.r, g.mpWin, g.lim.r]) {
+      expect(r.x).toBeGreaterThanOrEqual(0);
+      expect(r.x + r.w).toBeLessThanOrEqual(390);
+    }
+    expect(g.cmd.r.y + g.cmd.r.h).toBeLessThan(g.bandR.y);
+    expect(g.cmd.rows[1]! - g.cmd.rows[0]!).toBeGreaterThanOrEqual(44);
+  });
+
+  it("keeps FF7's spacing in the right-hand cluster", () => {
+    const R = g.right;
+    expect((R.limitX - R.mpEnd) / g.s).toBeCloseTo(3, 6);
+    expect((R.timeX - (R.limitX + R.gaugeW)) / g.s).toBeCloseTo(2, 6);
+    expect((g.bandR.x + g.bandR.w - (R.timeX + R.gaugeW)) / g.s).toBeCloseTo(6, 6);
   });
 });
 
