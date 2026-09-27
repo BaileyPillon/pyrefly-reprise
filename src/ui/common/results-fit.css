@@ -1,0 +1,59 @@
+/*
+ * The results page, fitted to windows the 640x360 grid does not fill.
+ * Kept apart from `results.css` (587 lines; house style: new rules, new file).
+ * Both games share the page, so both rules are "both" (AGENTS.md rule 14).
+ */
+
+/*
+ * PR-0120: the painting stops short of the right edge on a window wider than
+ * 16:9 (2000x1012 measured, Chapters VI and IX). The page is a letterboxed
+ * 640x360 stage centred on a paper-coloured `.rres`, so the side gutters were
+ * paper, and on the right that read as a cream strip beyond the ink wedge. The
+ * right gutter now carries the wedge's own ink out to the window's edge, and
+ * fades in with the stage, as the wedge does. The left gutter stays paper, the
+ * page's own colour. A window 16:9 or taller has no side gutter.
+ */
+@media (min-aspect-ratio: 16/9) {
+  .rres:not(.rres--phone)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    /* The gutter: half of what the 16:9 stage leaves of the width, plus a pixel of overlap. */
+    width: calc((100% - 177.7778vh) / 2 + 1px);
+    background: var(--ig-ink, #0b0a12);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .rres--visible:not(.rres--phone)::before {
+    opacity: 1;
+  }
+  .rres--defeat:not(.rres--phone)::before {
+    background: #08070d; /* `.rres--defeat .rres__ink` */
+  }
+}
+
+/*
+ * PR-0172: the vertical caption ends above the button row. Rotated 90deg, its
+ * width runs down the page: from its top (26.67 = 60) to 8 grid px above the
+ * top of the buttons (bottom 23.11 = 52, about 20 tall), 282 grid px. The
+ * location gives way with an ellipsis; the ending ("CLEARED", "FELL") never
+ * does. Unrotated on a phone (`.rresp__caption`), where these spans are plain
+ * inline text.
+ */
+.rres__caption {
+  display: flex;
+  width: 282px;
+}
+.rres__cap-loc {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rres__cap-end {
+  flex: none;
+  white-space: pre;
+}
