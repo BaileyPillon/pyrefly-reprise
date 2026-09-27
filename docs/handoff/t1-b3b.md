@@ -246,3 +246,66 @@ Each is a change Bailey will see, so it needs a mockup and a pick before it is b
 - `tools/orphans.mjs`: 24, unchanged.
 - Game case: REG-keycol both (shared pause chrome); PR-0171 back-out FFX only (the two
   plates are FFX paintings); PR-0117 FFX-2 only (garment grids).
+
+## RE-CHECK (independent, 2026-09-26; the re-checker did not build or repair this batch)
+
+Verdict: **not ready to merge. 1 blocker.** REG-keycol is **not fixed**. The repair
+cleared Ch I and Ch IV, the two chapters it measured. On chapters with a long place
+name, the regression moved from the SCENE value to THE PARTY column. The PR-0171
+back-out and the PR-0117 correction are right.
+
+How it was checked:
+- Head `ecc08ab5`: `vite build` served by `vite preview` on 5965.
+- Merge base `3665f1eb`: `git archive` into `tools/zz-recheck.tmp/base-src`, built with
+  the same `public/` and served on 5966.
+- Main has not touched any pause file since the merge base, so base means main here.
+- Headless GPU Chromium, with the checker's real-key flow: title, board arrows, prep,
+  Esc over the opening scene, tab arrows, cutscene skip, first command menu, Esc.
+- The cut detector also counts text clipped **without** an ellipsis. The repair's
+  detector counted only `text-overflow: ellipsis`. It also counts rows that overlap
+  inside a column.
+- Scripts are in `tools/zz-recheck.tmp/` (scratch). Frames and JSON are in
+  `docs/screenshots/t1-b3b-recheck/{cand,base}/`. Both are uncommitted.
+- Both servers are stopped by their PIDs.
+
+### Gates
+
+- `tsc --noEmit`: clean.
+- Full `vitest run --testTimeout=60000`: exit 0. 451 files passed (4 skipped); 8322 tests
+  passed (29 skipped, 1 todo); 0 failed.
+- `tools/orphans.mjs`: 24, unchanged.
+- The game case is in every repair commit.
+
+### Per blocker
+
+| Blocker | Result |
+|---|---|
+| REG-keycol (both) | **FAIL (blocker).** **Ch I and Ch IV sweep, candidate against base:** every pause tab, in battle and over the scene, at 1024x768, 1280x720, 1280x960, 1600x900, 2000x1012, 3840x2160 and 390x844. **Nothing is newly cut** (the one Ch IV exception, "Bevelle Underground" at 390x844, is below), and no rows overlap. Base's CHAPTER cuts at 1024 and 390 are gone, and OPTIONS is clean where base cut three labels. **But the PR-0168 place names grow THIS ENCOUNTER to its full text width, because a wrapping value still sizes the column by its unwrapped length. THE PARTY is squeezed from 1280 wide up, and the `max-width: 1279px` release does not reach those widths.** New party-value cuts, candidate against base (base cut none of these party values): <br>- **1280x720:** Ch X (Natus), all 9 values ("S.L…", "BR…", "SE…"; `cand/all-seymour-natus-1280x720-battle-chapter.jpg` against `base/…`). Ch IX, "Lulu's Moogle" and "Kimahri's Spear". Isaaru, "Ductile Rod" and "Seeker's Ring". Omnis, 6 values. Evrae, "Seeker's Shield". **FFX-2 Ch VI (Leblanc), dressphere values "gunner" and "warrior".** <br>- **1366x768:** Omnis, 5 values. **1440x900:** Omnis, 2 values. On base both of these sizes show 0 cuts. <br>At 1024x768, Ch IX and Ch X cut fewer values than base (4 against 8, 9 against 11), but they are still cut. The acceptance check ("both columns readable at 1024x768, 1280x720, 1600x900, 2000x1012, 390x844") fails at 1280x720. |
+| PR-0171 back-out (FFX) | **Correct: the code is gone.** `dossierPlace.ts` and its test are byte-identical to the merge base, and the dossier lands `beside` as on base in all 8 Ch II and Ch IX captures. **The layout is not back to live, though.** The wider THIS ENCOUNTER (same cause as above) pushes THE PARTY about 62 px to the right. In battle at 1600x900 and 2000x1012, Ch IX's party **keys and heading** now sit on Yojimbo's mask: 29 to 30 text boxes on the face, against 19 to 20 on base, where only the S.Lv values touched it. Ch X (Natus, which has a face box) has the whole party column on Seymour's face at 1600x900: 20 boxes against 9 (`cand/pause-chapter-seymour-natus-1600x900-battle.jpg`). Ch II is unchanged from base. The REPAIR note "in battle THE PARTY values (and on Ch IX its keys) cross them too", described as on live, is wrong for Ch IX: on live only the values cross. The companion change (THE PARTY omitted when there is no live state) is present and matches the round-13 fix text. |
+| PR-0117 (FFX-2) | **Correct to keep open.** At 390x844 on both builds, the eyebrow overlaps no row (top 692, last row 676). The grid name is still ellipsised: "protection halo" in Ch IV and "hour of need" in Ch VI. There is no change from base. |
+
+### Still passing
+
+- **PR-0151:** OPTIONS cuts nothing at 1024x768 or 1280x960, in both games. Base cut MASTER VOLUME, SOUND EFFECTS and STRATEGY GUIDE.
+- **PR-0189 (pause slice):** Ch IV CHAPTER cuts nothing at 1280x720, 1280x960, 1600x900, 2000x1012 or 3840x2160.
+- **PR-0112:** at 390x844 a raw touch drag reaches all 8 rows (58/58), a tap flips X-2 BATTLE from WAIT to ACTIVE, and nothing is cut. Base cut STRATEGY GUIDE.
+- **CONTROLS:** the cut lists are identical to base at every size. This is pre-existing.
+
+### Other findings
+
+- **The "0 cut at 390x844" claim is not quite true.** Over the Ch IV scene, "UNDERGROUND" is 104 px wide in a 98 px cell. The cell is now `text-overflow: clip`, so the D is sliced in half with no ellipsis (`cand/scene-row-ffx2-bahamut-390x844.png`). Base was worse ("bevelle underg…"), so this is not a regression, but it is still a cut. The long names in Ch IX, Ch X, Isaaru and Leblanc fit.
+- **`pause-screen.css` is 938 lines**, far past the 400-line house rule, and the batch adds 11 more. This was already so on base.
+
+### What a fix needs (for the builder, not done here)
+
+THIS ENCOUNTER needs a width cap, so its wrapping values stop claiming their unwrapped
+width. One option is a `max-width` or `min-width: 0` basis on the detail value cell.
+Another is to stretch the "give the bar cell to the values" release past 1279.
+
+The fix needs its own acceptance sweep: every chapter with a long place name
+(Ch IX, X, Isaaru, Omnis, Evrae, Leblanc) at 1280x720, 1366x768, 1440x900, 1600x900 and
+2000x1012, against base. Checking only Ch I and Ch IV missed this.
+
+If the fix does not converge, the only way to back it out cleanly is to return SCENE to
+the short key (reverting PR-0168's `6ed38e89` hunk) together with the wrap rule. This is
+the cause of both the party cuts and the extra face overlap on Ch IX and Ch X.
