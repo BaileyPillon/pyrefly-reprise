@@ -250,8 +250,11 @@ describe('the feather', () => {
     expect(stage).toContain("import '../../../ui/common/pause-slide.css';");
     // A slid plate is masked, its feather stopping short of the face; since
     // PR-0121 a plate the 4K magnify cap left short of cover (but never
-    // slid) gets the same mask.
-    expect(stage).toContain('const mask = box.slid || capped ? slideMask(box, w, h, FACE_BOXES[id]) : ');
+    // slid) gets the same mask. D-234: a slid chapter plate's feather stops
+    // short of its own face box too.
+    expect(stage).toContain(
+      'const mask = box.slid || capped ? slideMask(box, w, h, FACE_BOXES[id] ?? CHAPTER_SLIDE_FACES[id]) : ',
+    );
   });
 });
 
