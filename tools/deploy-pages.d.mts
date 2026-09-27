@@ -62,3 +62,19 @@ export declare function formatDeployLogLine(input: {
 
 /** The newest deep or milestone report on record for this commit, whatever its verdict — informational only. */
 export declare function latestDeepReportFor(root: string, mainSha: string): { path: string; changedArea: string | null } | null;
+
+/** One row of `repos/<repo>/pages/builds` (only the fields `pagesOutcome` reads). */
+export interface PagesBuild {
+  status: string;
+  commit: string;
+  error?: { message?: string | null } | null;
+}
+
+/** What every recorded build for one commit says: BUILT if any succeeded, ERRORED only once all of them have, PENDING otherwise. */
+export interface PagesOutcome {
+  status: 'built' | 'errored' | 'pending';
+  errors?: string[];
+}
+
+/** Decide the Pages build outcome for the pushed gh-pages commit from a `pages/builds` listing (2026-09-27 fix: watch every build for that commit, not just `builds/latest`). */
+export declare function pagesOutcome(builds: PagesBuild[], commit: string): PagesOutcome;
