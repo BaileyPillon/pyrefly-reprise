@@ -36,10 +36,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const SHEET = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'common', 'move-advisor.css'), 'utf8');
 
 /** The floor the round applied to this card, at every viewport it measured. */
-const FLOOR_PX = 12;
+const FLOOR_PX = 14; // CHK-003's pass line (FOC-06 method check, iteration 2 B6); was FOC-04's 12
 
 /** `--mad-fs-floor`'s own numerator, which the sheet defines with a small margin over the ask. */
-const FLOOR_NUMERATOR_PX = 12.2;
+const FLOOR_NUMERATOR_PX = 14.2;
 
 /** `min(w / 640, h / 360)`, `LetterboxStage.ts`'s own formula — what both hosts publish as `--lb-scale`. */
 function stageScale(w: number, h: number): number {
@@ -70,7 +70,7 @@ function effective(authoredPx: number, scale: number): number {
   return Math.max(authoredPx, floorPx) * scale;
 }
 
-describe('FOC-06: no move-advisor card row falls under 12 effective px, on desktop or phone', () => {
+describe('FOC-06: no move-advisor card row falls under 14 effective px, on desktop or phone', () => {
   const sizes = declaredSizes(SHEET);
 
   it('finds every font-size in the sheet wrapped in the floor (no bare declaration left)', () => {
@@ -86,8 +86,8 @@ describe('FOC-06: no move-advisor card row falls under 12 effective px, on deskt
     expect(stat?.px, "the four stat chips (.mad__stat)").toBe(4.2);
   });
 
-  it('declares --mad-fs-floor as calc(12.2px / var(--lb-scale, 1))', () => {
-    expect(SHEET).toContain('--mad-fs-floor: calc(12.2px / var(--lb-scale, 1));');
+  it('declares --mad-fs-floor as calc(14.2px / var(--lb-scale, 1))', () => {
+    expect(SHEET).toContain('--mad-fs-floor: calc(14.2px / var(--lb-scale, 1));');
   });
 
   for (const [label, w, h] of VIEWPORTS) {
@@ -101,11 +101,14 @@ describe('FOC-06: no move-advisor card row falls under 12 effective px, on deskt
   }
 
   it('does not shrink a row that was already comfortably above the floor', () => {
-    // .mad__stat--dmg / --heal (5.2px authored) render at 13.0px effective at
-    // 1600x900 today; the floor must not clamp them down to 12.2.
+    // The move line (.mad__line, 8.4px authored) renders at 21px effective at
+    // 1600x900; the floor must not clamp it down to 14.2. (The damage chip,
+    // 5.2px = 13.0 effective, is under 14 and is now lifted to the floor.)
     const scale = stageScale(1600, 900);
+    const line = sizes.find((s) => s.selector === '.mad__line');
+    expect(line?.px, '.mad__line').toBe(8.4);
+    expect(effective(line!.px, scale)).toBeCloseTo(21.0, 5);
     const dmg = sizes.find((s) => s.selector === '.mad__stat--dmg');
-    expect(dmg?.px, '.mad__stat--dmg').toBe(5.2);
-    expect(effective(dmg!.px, scale)).toBeCloseTo(13.0, 5);
+    expect(effective(dmg!.px, scale)).toBeCloseTo(14.2, 5);
   });
 });
