@@ -176,7 +176,7 @@ export function phonePageHtml(m: ResultsPageModel, caption: string): string {
     : '';
   return `
       <div class="rresp__top">
-        <div class="rresp__clock">RESULTS &middot; ${escapeHtml(m.clock)}</div>
+        <div class="rresp__clock">RESULTS${m.clock ? ` &middot; ${escapeHtml(m.clock)}` : ''}</div>
         <div class="rresp__caption">${caption}</div>
       </div>
       <div class="rresp__head">

@@ -105,7 +105,7 @@ export class PauseView {
 
   /** The static layers. Everything else is rendered into the `data-role` holes. */
   private frameHtml(): string {
-    const game = this.game === 'ffx2' ? 'Final Fantasy X-2' : 'Final Fantasy X';
+    const game = this.game === 'ff7' ? 'Final Fantasy VII' : this.game === 'ffx2' ? 'Final Fantasy X-2' : 'Final Fantasy X';
     return `
       <div class="pause__art" data-role="art"></div>
       <div class="pause__tint" aria-hidden="true"></div>

@@ -17,6 +17,7 @@
  */
 
 import type { GameId } from '../../../battle/common/types.ts';
+import type { FfxFamilyGame } from '../../../battle/common/game.ts';
 import { CHAPTERS, type Chapter } from '../../../data/encounters.ts';
 import { romanNumeral } from '../../../ui/common/roman.ts';
 import { COMING_CHAPTERS, LOCKED_CHAPTER_IDS, type ComingChapter } from './comingChapters.ts';
@@ -87,7 +88,8 @@ export interface ChapterGroup {
   readonly tiles: readonly ChapterTile[];
 }
 
-const GROUP_LABELS: Readonly<Record<GameId, string>> = {
+/** The board's two groups; FF7 never has one (the experiment is unlisted, no card, no group). */
+const GROUP_LABELS: Readonly<Record<FfxFamilyGame, string>> = {
   ffx: 'Final Fantasy X',
   ffx2: 'Final Fantasy X-2',
 };

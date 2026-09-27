@@ -88,7 +88,7 @@ export function desktopPageHtml(m: ResultsPageModel): string {
 
   return `
       <div class="rres__head">
-        <div class="rres__chip">RESULTS &middot; ${escapeHtml(m.clock)}</div>
+        <div class="rres__chip">RESULTS${m.clock ? ` &middot; ${escapeHtml(m.clock)}` : ''}</div>
         <div class="rres__heading">${m.heading}</div>
         <div class="rres__rule-row">
           <div class="rres__rule"></div>

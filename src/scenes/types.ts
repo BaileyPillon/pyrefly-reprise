@@ -162,6 +162,31 @@ export interface SceneStaging {
    * rule would stand as tall as the party (Daigoro, Chapter IX).
    */
   readonly figureHeights?: Readonly<Record<string, number>>;
+  /**
+   * Which way each side's bodies turn, overriding the house rule (party and
+   * aeons toward +x, enemies toward -x, `facingForSide`). For FF7, whose party
+   * stands on the right facing left and whose enemies face right
+   * (`research/ff7-battle-staging.md` §2, §3; `src/scenes/sector1-reactor-staging.ts`).
+   * Mirroring still follows each painting's declared `facing`
+   * (`mirrorFor`), so art painted the way it stands is never flipped.
+   * Omitted everywhere else: FFX and FFX-2 keep the house rule.
+   */
+  readonly sideFacing?: Readonly<{ party: 1 | -1; enemy: 1 | -1 }>;
+  /**
+   * The camera never changes its angle: the stage's camera port holds the
+   * `idle` rig for the whole battle and swallows every rig move, cut, push,
+   * roll and punch (shake still plays), as FF7's Config "Camera Angle: Fixed"
+   * (manual p. 30; `src/engine/StageFacing.ts` `FixedCamera`). Omitted
+   * everywhere else.
+   */
+  readonly fixedCamera?: boolean;
+  /**
+   * `false`: no turn ring under any figure (the house gold ring under the
+   * fighter whose turn it is, the cooler one under an acting fiend). FF7 marks
+   * the ready fighter only with its triangle (`docs/plans/ff7-hud-faithful-a-spec.md`
+   * §7 #15). Omitted everywhere else: FFX and FFX-2 keep their rings.
+   */
+  readonly turnRings?: false;
 }
 
 /** The staging switches a build set, and only those. */
@@ -173,6 +198,9 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.holdParty) out.holdParty = true;
   if (build.enemySpots) out.enemySpots = build.enemySpots;
   if (build.figureHeights) out.figureHeights = build.figureHeights;
+  if (build.sideFacing) out.sideFacing = build.sideFacing;
+  if (build.fixedCamera) out.fixedCamera = true;
+  if (build.turnRings === false) out.turnRings = false;
   return out;
 }
 

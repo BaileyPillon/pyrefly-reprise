@@ -3,7 +3,8 @@
  * are unit-testable (`tests/unit/ui-common-results.test.ts`).
  */
 
-import type { BattleResult } from '../../battle/common/types.ts';
+import type { BattleResult, GameId } from '../../battle/common/types.ts';
+import { ff7MemberRows } from '../ff7/ff7ResultRows.ts';
 import { apForLevel } from '../../battle/ffx/results.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ITEMS as FFX_ITEMS } from '../../data/ffx/index.ts';
@@ -128,12 +129,13 @@ export const MIN_PLAUSIBLE_WALL_CLOCK_MS = 1000;
 export function clearTimeMs(
   result: { elapsedMs: number; elapsedTicks: number },
   wallClockMs?: number,
-  game: 'ffx' | 'ffx2' = 'ffx',
+  game: GameId = 'ffx',
 ): number {
   if (wallClockMs !== undefined && wallClockMs >= MIN_PLAUSIBLE_WALL_CLOCK_MS) {
     return Math.round(wallClockMs);
   }
   if (result.elapsedMs >= MIN_PLAUSIBLE_WALL_CLOCK_MS) return Math.round(result.elapsedMs);
+  if (game === 'ff7') return Math.max(0, Math.round(result.elapsedMs)); // FF7's own clock (its tick length is our estimate, ff7-battle-core §2.2)
   const perTick = game === 'ffx2' ? FFX2_MS_PER_TICK : FFX_MS_PER_TICK;
   return Math.max(0, Math.round((result.elapsedTicks || 0) * perTick));
 }
@@ -246,6 +248,7 @@ export function buildMemberRows(
 ): ResultsMemberRow[] {
   const build = chapter?.buildRef;
   if (!build) return [];
+  if (build.game === 'ff7') return ff7MemberRows(build, result); // FF7 only (`ui/ff7/ff7ResultRows.ts`)
 
   if (build.game === 'ffx') {
     const earnedIds = new Set(Object.keys(result.sphereLevelsGained));
@@ -299,7 +302,7 @@ export function buildMemberRows(
 export function leaderId(chapter: Chapter | undefined): string | undefined {
   const build = chapter?.buildRef;
   if (!build) return undefined;
-  return build.game === 'ffx' ? build.activeSlots[0] : build.members[0].id;
+  return build.game === 'ffx2' ? build.members[0].id : build.activeSlots[0]; // FFX and FF7 both lead with active slot 1
 }
 
 /** The drops as one printed list: `Elixir, Phoenix Down ×2`. */

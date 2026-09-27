@@ -30,7 +30,7 @@
  *    per-chapter override maps below.
  */
 
-import type { ChapterId } from '../../src/data/encounters.ts';
+import type { ChapterId, ListedChapterId } from '../../src/data/encounters.ts'; // the maps list the board's fifteen, never the FF7 experiment
 import type { AbilityDef, AbilityId } from '../../src/battle/common/types.ts';
 
 import { SEYMOUR_FLUX_ABILITIES } from '../../src/data/ffx/enemies/seymour-flux-abilities.ts';
@@ -63,7 +63,7 @@ import {
 // Per combatant — from each enemy file's own header comment.
 // ---------------------------------------------------------------------------
 
-const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
+const COMBATANT_CITES: Record<ListedChapterId, Record<string, string>> = {
   'seymour-flux': {
     'seymour-flux': 'research/ffx-seymour-flux.md §1.1 (src/data/ffx/enemies/seymour-flux.ts)',
     mortiorchis: 'research/ffx-seymour-flux.md §2 (src/data/ffx/enemies/seymour-flux.ts)',
@@ -170,7 +170,7 @@ const COMBATANT_CITES: Record<ChapterId, Record<string, string>> = {
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
 export function citeForCombatant(chapterId: ChapterId, combatantId: string): string {
-  const cite = COMBATANT_CITES[chapterId]?.[combatantId];
+  const cite = (COMBATANT_CITES as Partial<Record<ChapterId, Record<string, string>>>)[chapterId]?.[combatantId];
   if (cite === undefined) {
     throw new Error(`learn/atlas/cites: no cite entered for chapter "${chapterId}" combatant "${combatantId}"`);
   }
@@ -191,7 +191,7 @@ function fileCite(abilities: Record<AbilityId, AbilityDef> | readonly AbilityDef
   return { ids: new Set(ids), cite };
 }
 
-const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
+const ABILITY_FILE_CITES: Record<ListedChapterId, readonly AbilityFileCite[]> = {
   'seymour-flux': [
     fileCite(SEYMOUR_FLUX_ABILITIES, 'research/ffx-seymour-flux.md §3-§5 (src/data/ffx/enemies/seymour-flux-abilities.ts)'),
   ],
@@ -260,7 +260,7 @@ const ABILITY_FILE_CITES: Record<ChapterId, readonly AbilityFileCite[]> = {
  * the *enemy* file cites inline, next to that id, in its own `abilityIds`
  * array.
  */
-const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
+const ABILITY_OVERRIDE_CITES: Record<ListedChapterId, Record<string, string>> = {
   'seymour-flux': {
     protect: 'research/ffx-seymour-flux.md §3.1 (src/data/ffx/enemies/seymour-flux.ts, reusing the shared Protect)',
     reflect: 'research/ffx-seymour-flux.md §3.1 (src/data/ffx/enemies/seymour-flux.ts, reusing the shared Reflect)',
@@ -312,10 +312,10 @@ const ABILITY_OVERRIDE_CITES: Record<ChapterId, Record<string, string>> = {
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */
 export function citeForAbility(chapterId: ChapterId, abilityId: AbilityId): string {
-  const override = ABILITY_OVERRIDE_CITES[chapterId]?.[abilityId];
+  const override = (ABILITY_OVERRIDE_CITES as Partial<Record<ChapterId, Record<string, string>>>)[chapterId]?.[abilityId];
   if (override !== undefined) return override;
 
-  for (const file of ABILITY_FILE_CITES[chapterId] ?? []) {
+  for (const file of (ABILITY_FILE_CITES as Partial<Record<ChapterId, readonly AbilityFileCite[]>>)[chapterId] ?? []) {
     if (file.ids.has(abilityId)) return file.cite;
   }
 

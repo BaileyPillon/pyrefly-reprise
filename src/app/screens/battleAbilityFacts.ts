@@ -12,6 +12,7 @@
  */
 
 import type { AbilityDef, AbilityId, GameId } from '../../battle/common/types.ts';
+import { ffxFamily } from '../../battle/common/game.ts';
 import { CORE_ABILITIES as FFX_CORE } from '../../battle/ffx/index.ts';
 import { defaultAbilities as ffx2Fallback } from '../../battle/ffx2/index.ts';
 import { ALL_ABILITIES as FFX_ABILITIES } from '../../data/ffx/index.ts';
@@ -35,7 +36,9 @@ function facts(def: AbilityDef | undefined): AbilityFacts | undefined {
 
 /** The lookup a chapter of `game` hands its presenter. */
 export function abilityFactsFor(game: GameId): (id: AbilityId) => AbilityFacts | undefined {
-  if (game === 'ffx') return (id) => facts(ffxRows().get(id));
+  // FF7 has no ability rows here (no attack paintings for its enemy): none, never FFX-2's (ff7-game-branch-audit).
+  if (game === 'ff7') return () => undefined;
+  if (ffxFamily(game, 'abilityFactsFor') === 'ffx') return (id) => facts(ffxRows().get(id));
   const rows = FFX2_ABILITIES as Readonly<Record<AbilityId, AbilityDef | undefined>>;
   return (id) => facts(rows[id] ?? ffx2Fallback.get(id));
 }

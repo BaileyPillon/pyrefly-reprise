@@ -1,0 +1,10 @@
+/*
+ * FF7 rules for the battle screen's own chrome, outside the HUD's `.ff7hud` root (FF7 only).
+ * Every selector names an FF7-only class, set by BattleScreen for game 'ff7'.
+ */
+/* The house PAUSE chip on an FF7 battle (the review's item 10): FF7 has no on-screen pause
+   affordance, so the chip is an unmarked corner tap zone. Esc / Start still pause; a click or tap
+   on the top-left corner still does. Scoped to the FF7 class BattleScreen sets for game 'ff7'. */
+.battle-pause-chip.battle-pause-chip--ff7,
+html[data-phone-battle] .battle-pause-chip.battle-pause-chip--ff7 { opacity: 0; box-shadow: none; }
+.battle-pause-chip.battle-pause-chip--ff7::before { display: none; }

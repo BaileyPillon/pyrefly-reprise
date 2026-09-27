@@ -1,8 +1,8 @@
 /**
- * Shared battle contracts for both engines (FFX CTB and FFX-2 ATB).
+ * Shared battle contracts for both engines (FFX CTB and FFX-2 ATB); FF7's own types are `./types-ff7.ts`.
  *
  * **This file is a contract.** ~30 implementation agents import it. It is pure
- * data and type declarations: no DOM, no Three.js, no imports at all. Changing
+ * data and type declarations: no DOM, no Three.js, no runtime imports. Changing
  * anything here requires a note in `docs/CONTRACT-CHANGES.md` (see
  * `docs/ARCHITECTURE.md` "Layering rule" and `docs/CONTRACTS.md` for how each
  * kind of agent consumes it).
@@ -28,8 +28,8 @@
 // 0. Primitives
 // ---------------------------------------------------------------------------
 
-/** Which game a piece of content belongs to. */
-export type GameId = 'ffx' | 'ffx2';
+/** Which game a piece of content belongs to (`'ff7'`: the hidden experiment, `./types-ff7.ts`; branches audited in `./game.ts`). */ export type GameId = 'ffx' | 'ffx2' | 'ff7';
+import type { Ff7Combatant, Ff7Command, Ff7LimitGaugeFields, Ff7MessageTag, Ff7PartyBuild } from './types-ff7.ts'; export type * from './types-ff7.ts';
 
 /** Stable identifier for a combatant instance inside one battle. */
 export type CombatantId = string;
@@ -1144,8 +1144,8 @@ export interface FFX2Combatant extends Combatant {
   enemy?: EnemyFields;
 }
 
-/** Either engine's combatant. Presentation code accepts this. */
-export type AnyCombatant = FFXCombatant | FFX2Combatant;
+/** Any engine's combatant. Presentation code accepts this. `Ff7Combatant` joined 2026-09-27 (FF7 only). */
+export type AnyCombatant = FFXCombatant | FFX2Combatant | Ff7Combatant;
 
 // ---------------------------------------------------------------------------
 // 8. Abilities and items
@@ -1306,7 +1306,7 @@ export type AbilityCategory =
   /** An X-2 dressphere command set entry. */
   | 'dressphere'
   /** An enemy-only action, including scripted no-damage flavour turns. */
-  | 'enemy';
+  | 'enemy' | 'magic'; // 'magic': FF7 only, the one Magic menu the Materia fills [ff7-battle-core §8.4, §9]
 
 /** One status this ability tries to apply. */
 export interface StatusApplication {
@@ -1676,7 +1676,7 @@ export type Command =
   | SpherechangeCommand
   | EscapeCommand
   | DefendCommand
-  | TriggerCommand;
+  | TriggerCommand | Ff7Command; // Ff7Command: FF7 only, Limit (never `'overdrive'`) and Change (`./types-ff7.ts`)
 
 /** Command kinds, for exhaustive switches. */
 export type CommandKind = Command['kind'];
@@ -1886,7 +1886,7 @@ export type BattleEvent =
       /** Which mode or scripted rule paid out, for debugging. */
       cause?: string;
     })
-  | (BattleEventBase & { type: 'message'; text: string; kind: MessageKind })
+  | (BattleEventBase & { type: 'message'; text: string; kind: MessageKind; ff7?: Ff7MessageTag }) | (BattleEventBase & Ff7LimitGaugeFields) // FF7 only: `ff7` and `'limit-gauge'` (`./types-ff7.ts`)
   /**
    * Sensor / Scan revealed an enemy. The HUD opens the info panel.
    *
@@ -2278,7 +2278,7 @@ export interface BattleState {
 export interface BattleSetup {
   game: GameId;
   /** Party build for this chapter. */
-  party: FFXPartyBuild | FFX2PartyBuild;
+  party: FFXPartyBuild | FFX2PartyBuild | Ff7PartyBuild;
   enemies: EnemyGroupDef;
   /** Mid-battle story hooks. */
   triggers: MidBattleTrigger[];
@@ -2493,8 +2493,8 @@ export interface FFX2PartyBuild {
   gil: number;
 }
 
-/** Either build. */
-export type AnyPartyBuild = FFXPartyBuild | FFX2PartyBuild;
+/** Any game's build (`Ff7PartyBuild` joined 2026-09-27, FF7 only). */
+export type AnyPartyBuild = FFXPartyBuild | FFX2PartyBuild | Ff7PartyBuild;
 
 /** One enemy in a formation. */
 export interface EnemyDef {

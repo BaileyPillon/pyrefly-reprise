@@ -50,6 +50,7 @@ export class PyreflyStage {
   private readonly lens: ParticleField | null;
   private readonly held: Array<{ field: Object3D & { setOpacity?(v: number): void }; releasedBy: string; opacity: number; t: number | null }> = [];
   private carry = 0;
+  private readonly noDissolve: boolean;
   private rand = 7;
 
   constructor(
@@ -61,13 +62,14 @@ export class PyreflyStage {
     this.emitter = new PyreflyEmitter({ capacity: 900 });
     root.add(this.emitter);
     this.lens = pyreflyCanonFor(sceneKey)?.verdict === 'attested' && camera ? this.makeLens() : null;
+    this.noDissolve = pyreflyCanonFor(sceneKey)?.game === 'ff7'; // FF7: no Spira pyreflies (the canon row)
     if (this.lens) root.add(this.lens);
     this.collectHeld();
   }
 
   /** A combatant has been staged: a fiend that is sent gets the pyrefly dissolve. */
   stage(id: string, side: string, actor: DissolveSource): void {
-    if (side !== 'enemy' || !pyreflyDissolves(id)) return;
+    if (this.noDissolve || side !== 'enemy' || !pyreflyDissolves(id)) return;
     // A stand-in figure (a test's fake actor) that cannot dissolve is left alone.
     if (typeof actor.setDissolveStyle !== 'function' || typeof actor.contentQuad !== 'function') return;
     actor.setDissolveStyle('pyrefly');

@@ -813,6 +813,30 @@ chapter unlocks, and anything a new chapter adds to the schema.
 
 ---
 
+## CHK-025. A hidden experiment stays hidden and writes nothing to the save
+
+**Rubric:** `delivery`, `prep`.
+**Why it exists (2026-09-27, before any failure):** Bailey asked for the FF7 Guard Scorpion
+fight as a hidden, experimental encounter ("dont make it so obvious on the encounter/chapter
+menu"). A third `GameId` and a registered-but-unlisted chapter can leak in three quiet ways: a
+two-way `game === 'ffx' ? A : B` hands FF7 to FFX-2's branch; the board, strip or briefing
+counts it; and a run writes `pyrefly-reprise:save:v1`, which would put the experiment in the
+save-data class and every progress count.
+**THE CHECK:** for a change to the FF7 experiment or to a shared file it touches: the board
+still shows the fifteen listed tiles in two groups with no FF7 card, group, ribbon or count;
+`CHAPTER_IDS` is unchanged; a full run (win, loss, automated) leaves the main save key
+byte-identical and writes only `pyrefly-reprise:experiments:v1`; the secret door (L-I-M-I-T,
+seven taps on the "Chapter select" label, L1 R1 L1 R1 Select) moves no cursor, starts no
+chapter and changes nothing visible, and does nothing at all while `FF7_EXPERIMENT_READY` is
+off; every game-branch site in `docs/plans/ff7-game-branch-audit.md` answers FF7 explicitly or
+throws `Ff7NotHandledError`; the FFX and FFX-2 goldens are byte-identical.
+**AUTOMATE:** done: `tests/unit/ff7-hidden-board.test.ts`, `ff7-secret-door.test.ts`,
+`ff7-game-branch.test.ts`, `ff7-experiment-records.test.ts`. Re-run the audit's grep when a
+new two-way game branch lands.
+**SCOPE:** FF7 only for the experiment; the board, flow and save are shared plumbing (both).
+
+---
+
 ## Blind spots that no agent can close
 
 These are not gaps in the checks; they are things the checks structurally

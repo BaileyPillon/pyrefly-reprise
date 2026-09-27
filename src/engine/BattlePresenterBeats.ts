@@ -9,6 +9,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
+import { MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -43,6 +44,8 @@ export async function actionStart(
     ctx.stage.paints?.(event.actorId, p) === true,
   );
   actor?.setPose(pose);
+  const motion = ctx.deps.actionMotion; // FF7: the melee run to the target (none for FFX and FFX-2)
+  if (motion) await settled(ctx, motion.open(event, motionCtx(ctx)), MOTION_GUARD_MS);
 
   if (event.abilityName) {
     void ctx.deps.messageBar?.show(event.abilityName, 'ability');
@@ -69,6 +72,8 @@ export async function actionStart(
 
 export async function actionEnd(ctx: EventCtx): Promise<void> {
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
+  const motion = ctx.deps.actionMotion; // FF7: the run back home
+  if (motion && ctx.actingId) await settled(ctx, motion.close(ctx.actingId, motionCtx(ctx)), MOTION_GUARD_MS);
   actor?.setPose('idle');
   ctx.actingId = null;
   endSpellAction(ctx);
@@ -76,6 +81,11 @@ export async function actionEnd(ctx: EventCtx): Promise<void> {
   // punch-in — this is where the frame comes back to neutral.
   await ctx.moments.actionClose();
   await ctx.sleep(TIMING.settle);
+}
+
+/** The slice of the playback a game's motion may use. */
+function motionCtx(ctx: EventCtx): MotionCtx {
+  return { stage: ctx.stage, speed: ctx.speed(), sleep: (ms) => ctx.sleep(ms) };
 }
 
 export async function damage(

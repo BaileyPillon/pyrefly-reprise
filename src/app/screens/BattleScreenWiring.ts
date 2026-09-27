@@ -16,6 +16,8 @@
 import type { BattleEngine, BattleSetup, GameId } from '../../battle/common/types.ts';
 import { FFXEngine } from '../../battle/ffx/index.ts';
 import { FFX2Engine, type AtbMode, type AtbSpeed } from '../../battle/ffx2/index.ts';
+import { Ff7Engine } from '../../battle/ff7/index.ts';
+import { ff7Registry } from '../../data/ff7/index.ts';
 import { readSetting } from '../SaveData.ts';
 import { waitSplitFromUrl } from '../waitSplitSwitch.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
@@ -30,6 +32,7 @@ import { withOversoulLook, type OversoulField } from '../../engine/OversoulLook.
 import { withOmnisDiscs } from '../../engine/OmnisDiscTap.ts';
 import { withOmnisGlow } from '../../engine/OmnisGlowLook.ts';
 import { withOmnisReadout } from '../../ui/ffx/OmnisReadout.ts';
+import { Ff7BattleHud } from '../../ui/ff7/Ff7BattleHud.ts';
 
 // ---------------------------------------------------------------- engines
 
@@ -62,6 +65,16 @@ export async function createEngine(
   setup: BattleSetup,
   opts: CreateEngineOptions = {},
 ): Promise<BattleEngine> {
+  // FF7 (the hidden Guard Scorpion experiment) gets its own engine, `src/battle/ff7/`: never an
+  // FFX2Engine (docs/plans/ff7-game-branch-audit.md). FF7 only: its content is the FF7 registry,
+  // and it is not handed FFX-2's saved ATB mode (`applyAtbConfig`); FF7's own mode is its default,
+  // Recommended (research/ff7-battle-core.md §2.5), until a Config row exists.
+  if (game === 'ff7') {
+    const engine = new Ff7Engine({ registry: ff7Registry() });
+    engine.setSeed(setup.seed);
+    engine.init(setup);
+    return engine;
+  }
   await registerBattleContent();
   const automated = opts.automated === true;
   // A used engine holds a finished battle's state, so every battle gets its own.
@@ -127,7 +140,11 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * sources). The wrapper is transparent when coaching is off, already seen, or
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
-export function createHud(game: GameId, field?: () => OversoulField | null): HudPort {
+export function createHud(game: GameId, field?: () => OversoulField | null, engine?: BattleEngine | null): HudPort {
+  // FF7 gets its own HUD: Bailey's option A made more faithful (docs/plans/ff7-hud-faithful-a-spec.md).
+  // Never the FFX-2 HUD, never a coach, never the shared phone rail: it draws FF7's own phone band (FF7 only).
+  // The Item list's counts come from the engine's bag (the HUD holds no numbers of its own).
+  if (game === 'ff7') return new Ff7BattleHud(engine instanceof Ff7Engine ? { itemCount: (id) => engine.inventory()[id] } : {});
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
   const hud: HudPort = game === 'ffx'
     ? withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))

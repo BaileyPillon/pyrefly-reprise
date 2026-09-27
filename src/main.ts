@@ -11,6 +11,7 @@ import { makeChapterSelect } from './app/screens/BattleScreenFlow.ts';
 import { CHAPTERS } from './data/encounters.ts';
 import { installDebugApi, markReady } from './debug/api.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
+import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
 import './ui/ffx/party-prep/index.ts';
 // Side-effect only: registers ChapterSelectScreen/CutsceneScreen/ResultsScreen
@@ -55,6 +56,8 @@ async function boot(): Promise<void> {
   app.register('title', () => new TitleScreen());
   app.register('demo', () => new DemoScene());
   app.register('ffx-hud-demo', () => new FFXHudDemoScreen());
+  // The FF7 HUD harness (FF7 only): development builds only, so the hidden experiment stays hidden.
+  if (import.meta.env.DEV) app.register('ff7-hud-demo', () => new Ff7HudDemoScreen());
 
   // The chapter flow. `goto('chapter-select')` enters it and keeps it running:
   // the screen resolves with a chapter id, the flow plays it, and we come back

@@ -15,6 +15,7 @@
  */
 
 import type { Chapter } from '../../../data/encounters.ts';
+import { Ff7NotHandledError } from '../../../battle/common/game.ts';
 import { getChapterMeta } from '../../../data/chapter-meta.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
 import { partyFaceHtml, type PartyFaceMember } from '../../../ui/common/partyFace.ts';
@@ -36,6 +37,7 @@ export function bossNames(chapter: Chapter): string {
 /** The three who actually walk in — FFX's active slots, FFX-2's whole trio. */
 export function recommendedParty(chapter: Chapter): PartyFaceMember[] {
   const build = chapter.buildRef;
+  if (build.game === 'ff7') throw new Ff7NotHandledError('recommendedParty (FF7 never has a card)');
   if (build.game === 'ffx') {
     return build.activeSlots.flatMap((id) => {
       const m = build.members.find((x) => x.id === id);

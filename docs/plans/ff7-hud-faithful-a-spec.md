@@ -486,7 +486,10 @@ Score as the share of items passed; any fail on 1, 3, 7, 8, 9 or 17 blocks the t
    (2026-09-27): when a party name turns grey (four stills show one: Yuffie, Cid, Red XIII), and
    whether it goes with the orange full TIME bar; the Magic list's grid order (Config "Magic
    order"), blanks for spells not owned, and whether the command window stays open; the ready
-   triangle's spin rate and the "Limit" letter step rate.
+   triangle's spin rate and the "Limit" letter step rate. Added by the purist-review repair pass
+   (2026-09-27, item 17): **the SELECT help text is our estimate**: no sourced description of any
+   command, spell or item exists in `research/`, so the help window echoes the highlighted
+   command's own name ("Attack") until the in-game check reads FF7's help lines.
 
 ## 10. Build notes
 

@@ -113,6 +113,7 @@ export class TurnCutInBeat {
   wants(state: BattleState, actorId: CombatantId): boolean {
     if (this.shown.has(actorId)) return false;
     if (!state.activeIds.includes(actorId)) return false;
+    if (state.game === 'ff7') return false; // FF7: no cut-in until its options round (audit)
     return !!this.deps.moments?.turnCutIn;
   }
 

@@ -306,9 +306,9 @@ export class BattleMoments {
       const actor = this.deps.stage.actor(id);
       if (!actor) return Promise.resolve();
       const home = { x: actor.position.x, y: actor.position.y, z: actor.position.z };
-      // Off-stage on the party's own side of the frame (party slots sit left
-      // of the hall axis in every scene — see each scene's PARTY_SLOTS note).
-      actor.moveTo({ x: home.x - 4.2 - i * 0.5, y: home.y, z: home.z }, 0);
+      // Off-stage on the party's own side: left of the hall axis in every FFX/FFX-2 scene, right for FF7's
+      const right = (actor as { facingDir?: number }).facingDir === -1; // party, turned to -x (`sideFacing`)
+      actor.moveTo({ x: right ? home.x + 4.2 + i * 0.5 : home.x - 4.2 - i * 0.5, y: home.y, z: home.z }, 0);
       actor.setAlpha(0);
       void actor.fadeTo(1, ms * 0.5);
       return actor.moveTo(home, ms + i * 70);

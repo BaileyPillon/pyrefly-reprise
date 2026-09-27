@@ -43,7 +43,7 @@ export function pyreflyDissolves(id: CombatantId): boolean {
 export type PyreflyVerdict = 'attested' | 'absent' | 'unattested';
 
 export interface PyreflyCanonRow {
-  game: 'ffx' | 'ffx2';
+  game: 'ffx' | 'ffx2' | 'ff7';
   verdict: PyreflyVerdict;
   /** Where the verdict comes from (a research file and section, and its confidence tag). */
   cite: string;
@@ -108,6 +108,13 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   'garden-of-pain': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-seymour-omnis.md §7: the arena rows name no particles' },
   'bevelle-highbridge': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-seymour-natus-highbridge.md §7: the arena rows name no particles' },
   'via-purifico': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-isaaru-bevelle.md §7: the arena rows name no particles' },
+  // FF7 only (the hidden Guard Scorpion experiment): pyreflies are Spira's, so the stage adds neither the band nor the dissolve.
+  'sector1-reactor': {
+    game: 'ff7',
+    verdict: 'absent',
+    cite: `research/ffx-vs-ffx2-presentation.md §3.1: pyreflies are Spira's (the life of its fiends and unsent); FF7 is not set in Spira, so nothing attests them in the No. 1 Reactor [derived]`,
+    treatment: 'FF7: no lens band and no pyrefly dissolve; the beaten boss keeps the house plain dissolve it had before A-5',
+  },
 });
 
 /** The row for a scene key, or undefined for a key the table does not know. */

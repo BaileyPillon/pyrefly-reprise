@@ -15,14 +15,19 @@ import type { SpellFxLayer } from '../../engine/spellfx/SpellFxLayer.ts';
 import { SPEED_RATE } from '../../engine/spellfx/SpellFxSpecials.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { readSetting } from '../SaveData.ts';
+import type { GameId } from '../../battle/common/types.ts';
+import { ffxFamily } from '../../battle/common/game.ts';
 
 export function battleSpellFx(
-  game: 'ffx' | 'ffx2',
+  game: GameId,
   renderer: Renderer,
   speed?: () => PlaybackSpeed | undefined,
 ): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'rate'> {
+  // FF7's spell effects wait for their options round (rule 9): no overlay, so the layer draws nothing,
+  // never FFX's or FFX-2's skin; the stage's plain impact still lands (FF7 only).
+  if (game === 'ff7') return {};
   return {
-    game,
+    game: ffxFamily(game, 'battleSpellFx'),
     // The effect clock follows the presenter's playback speed (held fast-forward).
     rate: () => SPEED_RATE(speed?.() ?? 'normal'),
     overlay: (draw) => renderer.addOverlay(draw),

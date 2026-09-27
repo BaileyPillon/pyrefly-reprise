@@ -24,6 +24,7 @@ import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './Sc
 import { laneFrom, relaxActorsOf, relaxField } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
+import { bodyFacingOption, stageCamera } from './StageFacing.ts';
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
@@ -148,7 +149,7 @@ export class PaintedStage implements BattleStage {
       actor: (id) => this.actor(id),
       staged: () => this.staged(),
     });
-    this.camera = new HoldableCamera(opts.battleCamera);
+    this.camera = stageCamera(opts.battleCamera, opts.slots.fixedCamera); // FF7's fixed angle when the scene asks (StageFacing.ts)
     this.hits = new HitEffects(
       { size: 4.2, coreColor: 0xffffff, edgeColor: 0x9fd8ff, arc: 2.45, thickness: 0.075 },
       { count: 110, speed: 6.4, life: 0.5, size: 10, bias: [0.4, 0.45, 0.2], focus: 0.5 },
@@ -239,11 +240,10 @@ export class PaintedStage implements BattleStage {
     const actor = await PaintedActor.create({
       name: c.id,
       ...(anchor ? SA.anchoredActorOptions(anchor) : {}),
-      // The *body's* facing, from the side — party and aeons turn toward +x,
-      // enemies toward -x. Whether the painting is mirrored is a separate
-      // question, answered by each pose's sidecar; art painted to the contract
-      // (party faces right, enemies face left) is drawn exactly as painted.
-      side: c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party',
+      // The *body's* facing, from the side: party and aeons toward +x, enemies toward -x, unless the scene
+      // turns them (FF7, `sideFacing`). Mirroring is a separate question, answered by each pose's sidecar;
+      // art painted the way its body faces is drawn exactly as painted.
+      ...bodyFacingOption(this.opts.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
       worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? own ?? worldHeightFor(c, heights)),
       crossfadeMs: kind === 'party' ? 120 : 140,
       poses,
@@ -263,7 +263,7 @@ export class PaintedStage implements BattleStage {
       sway: { amplitude: 0.009, speed: 0.22 },
       // The turn highlight: gold under a party member, a cooler ring under a
       // fiend, so whose turn it is reads even in a screenshot.
-      turnRing: {
+      turnRing: this.opts.slots.turnRings === false ? false : { // FF7: no ring, its triangle marks the turn (scene switch)
         color: kind === 'party' ? 0xf0cf92 : 0xc8a0ff,
         radius: anchor ? SA.anchoredRingRadius(anchor) : (kind === 'party' ? 0.78 : 1.7) * k,
         opacity: kind === 'party' ? 0.85 : 0.7,

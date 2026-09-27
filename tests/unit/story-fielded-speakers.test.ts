@@ -92,6 +92,7 @@ function speakerGated(
 
 describe('every chapter: mid-battle lines are spoken by someone on the field', () => {
   for (const ch of CHAPTERS) {
+    if (ch.game === 'ff7') continue; // FF7's party speaks no mid-battle story lines (the hidden experiment)
     const game = ch.game;
     const build = ch.buildRef as { activeSlots?: readonly string[]; members: ReadonlyArray<{ id: string }> };
     // FFX: the opening formation. FFX-2: all three, always (no reserve).

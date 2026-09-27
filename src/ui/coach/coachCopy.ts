@@ -389,7 +389,7 @@ export const ALL_COACH_IDS: readonly CoachMarkId[] = ['briefing', ...ALL_MARKS.m
  * round. `tests/unit/ui-coach-copy.test.ts` asserts both directions.
  */
 export function marksFor(game: GameId): readonly CoachMark[] {
-  return game === 'ffx' ? FFX_MARKS : FFX2_MARKS;
+  return game === 'ffx' ? FFX_MARKS : game === 'ffx2' ? FFX2_MARKS : []; // FF7: no coach (audit)
 }
 
 /** One mark by id, or null. */

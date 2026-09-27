@@ -1,0 +1,348 @@
+# FF7 Guard Scorpion: the hidden experiment, integrated and turned on (FF7 only)
+
+Branch `ff7-integration` (worktree `D:/pyrefly-ff7-int`), 2026-09-27: `origin/ff7-engine` merged
+into `ff7-plumbing` (the HUD), then `origin/main` (already contained). Not merged into `main`, not
+deployed. **Game case: FF7 only** (AGENTS.md rule 14). Shared files touched are labelled
+"shared plumbing (both + FF7)" below; each answers `'ff7'` on its own line and leaves the FFX and
+FFX-2 paths as they were.
+
+On whose word: Bailey, 2026-09-27, verbatim: "ff7 screen layout ill go with a but it needs to be
+EVEN more faithful than a but remember it is specific to the ff7 encounters not ffx or ffx-2 ..."
+(D-237), "also the secret door to guard scorpion i really like your ideas there i will go with it"
+(D-238), "full speed ahead please. godspeed. ill go with all your recommendations." (D-240, with the
+driver's recommendations: M PLUS Rounded 1c body face; stretch on 16:9; Cloud's hint verbatim with
+"it's"; the phone layout by the real-input check; music silent; no door sign).
+
+## How to open it
+
+On chapter select:
+
+- **Keyboard:** type `L I M I T` (letters at most about 2 s apart).
+- **Phone or mouse:** tap the small "Chapter select" label at the top **seven times** within about 4 s.
+- **Gamepad:** `L1 R1 L1 R1 Select` (on a keyboard `F R F R M`).
+
+The fight opens with the chapters' own transition (the battle swirl) and no other sign. No card,
+no count, no ribbon: the board still has 15 tiles (14 playable, one COMING) and reads "0 OF 14
+BEATEN" on a fresh save, exactly as `main` does. Victory shows the results panel and
+returns to the board with the cursor where it was. Defeat shows the defeat panel: **RETRY** goes
+straight back in with a new seed (`seed + 1000`), **CHAPTER SELECT** returns. The pause's QUIT and
+RESTART work as in the chapters. Nothing writes `pyrefly-reprise:save:v1`; attempts, clears, best
+time and play time go to `pyrefly-reprise:experiments:v1`.
+
+Controls in the fight (FF7's): arrows move, Enter / Space / Z confirm, Esc / X / Backspace back,
+**left on the command window = Change, right = Defend** (manual p. 18), H = SELECT (help). Taps: a
+row chooses; a figure aims, a second tap confirms; an unmarked strip beside the command window's
+left / right edge moves the finger to Change / Defend, a second tap chooses it.
+
+## What is built
+
+| Area | What | Files |
+|---|---|---|
+| Switch | `FF7_EXPERIMENT_READY = true` | `src/app/experiments/ff7Flag.ts` |
+| Flow | The loop: swirl in, fight, results or defeat panel, RETRY reseeds, CHAPTER SELECT returns; nothing touches the save | `src/app/screens/BattleScreenExperiment.ts`, one call in `BattleScreenFlow.ts` (shared plumbing) |
+| HUD on the engine | Command window from the engine's rows: Attack or Limit, Magic (the engine's category `'magic'`, MP costs, targeting), the blank Summon slot, Item with the engine bag's counts; Change and Defend off the window's edges | `src/ui/ff7/ff7MenuModel.ts`, `ff7MenuHtml.ts`, `Ff7CommandMenu.ts`; `createHud('ff7', field, engine)` in `BattleScreenWiring.ts` |
+| Messages | Ability names up top (not Attack; not Raise Tail / Drop Tail, whose script name is blank "<>", gs §5.2), "Locked On Target", the three hint lines verbatim with the game's "it's", each opening with a quote mark and no speaker name (spec §3.3) | `src/ui/ff7/Ff7BattleHud.ts` |
+| Gauges | Limit (`limit-gauge` events, 0 to 255, blink when full) and TIME (the engine's `gaugeSnapshot` through `sync` / `syncGauges`), damage / heal / "Miss" numerals, KO through `syncVitals`, the Barrier boxes empty (unsourced fills) | already in the HUD; now fed by the real engine |
+| Clock | The presenter brackets every played burst with `engine.setAnimating(true/false)` (only engines that have it: FF7); the HUD reports `'top'` / `'deep'` so Wait and Recommended hold as core §2.5 says; FF7's default mode is **Recommended** | `src/engine/BattlePresenterAnimating.ts` (new, shared plumbing, inert without `setAnimating`), one line in `BattleScreen.ts` |
+| Tail | The raised tail's painting swap and shift (the stage hook from `ff7-engine`) | unchanged |
+| Screen | FF7 gets no Ink & Gold battle-start card and no Ink & Gold moments (name slab, letterbox) (spec §7 #15, §8); spell effects draw nothing until their options round (the stage's plain impact still lands) | `BattleScreen.ts`, `battleSpellFx.ts` (shared plumbing) |
+| Results | The house results panel with recording off: EXP to each member, AP "PER MATERIA", gil, the Assault Gun; FF7 rows (`LV n · 10 AP to k MATERIA`); the clear time from FF7's own clock | `src/ui/ff7/ff7ResultRows.ts`; `resultsMath.ts`, `ResultsScreen.ts` (shared plumbing) |
+| Audit sites | `abilityFactsFor('ff7')` has no rows (no FFX-2 facts), the pause's IN THIS FIGHT column is empty for FF7 | `battleAbilityFacts.ts`, `pause/meters.ts` (shared plumbing) |
+| Phone | Two adaptations of the A+ target; **B is the default** (see below); `?ff7phone=a` shows A | `src/ui/ff7/ff7Geometry.ts`, `Ff7PartyRows.ts` |
+
+Settled by Bailey's picks: body face **M PLUS Rounded 1c** (OFL, `public/fonts/ff7/`), the band
+**stretches** on 16:9 (no pillarbox), the hint **verbatim**, **music silent** (`null` cues), **no
+door sign**.
+
+### Phone layout: B (real-input check, 390x844, taps)
+
+Both were played by taps in the same fight (`sheet-phone-a-vs-b.jpg`). **B reads better**: each
+status row carries its name ("Cloud 176/ 316 37"), so a row reads across as FF7's own rows do; in
+A the names sit in their own window at other heights than the HP rows, so on a turn nothing on
+the HP line says whose it is. B's smaller band also leaves the fighters' feet clear of the command
+window. A's larger type (cap 16 px against B's 13) is its one advantage; B's type still reads at
+arm's length in the frames.
+
+## Checks
+
+- `npx tsc --noEmit` clean; `npx tsc --noEmit -p tsconfig.e2e.json` clean.
+- FF7 unit suites (22 files) pass, including the new `tests/unit/ff7-integration.test.ts` (12:
+  the command window from the real engine, Change / Defend by keys and taps and the engine taking
+  them, item counts from the bag, quoted dialogue and nameless tail moves, the animation bracket
+  and Recommended's hold, an engine without `setAnimating` left untouched, the flow's results
+  panel, RETRY with `seed + 1000`, CHAPTER SELECT, `skipResults`).
+- Repair pass: the FF7 unit suites (22 files, 343 tests) and `enemy-action-pose` pass, including the new
+  `tests/unit/ff7-repair.test.ts` (15: every fighter's feet above the band and heads under the
+  message window through a real three.js camera, the diagonal, the painting's bottom at 72 %, no
+  turn rings for FF7 and a gold one for FFX, the melee run and the run back, Barret firing in
+  place, Braver running, the boss's stand-ins, no motion port for FFX / FFX-2, the presenter's
+  order (motion before the wind-up, the run back before idle), the warnings as one block and the
+  bracket holding on them, the held Limit gauge, the numeral clamp, Change / Defend over whole
+  fields, phone B's names once).
+- Full `npm test` (repair pass): 513 files pass, 4 skipped, 1 fails: `strategy-ffx2-bahamut`
+  "heal-only route" times out (21 s against 15 s) under the full load, the known timeout also on
+  `main`; alone it passes 19/19. `ffx2-atb-golden` passes (6/6); `critic-policy-adoptions` 12/12.
+- `node tools/orphans.mjs`: 24, the same list as before (no FF7 module orphaned).
+- Every touched shared file stayed under 400 lines or did not grow (`BattleScreen.ts` 931,
+  `BattleScreenFlow.ts` 510, `ResultsScreen.ts` 391, `BattlePresenterStage.ts` 746,
+  `BattlePresenterPorts.ts` 413, one shorter).
+
+### Real input (`tests/e2e/ff7-guard-scorpion.spec.ts`, one headless GPU Chromium)
+
+1. 1600x900, keys: L I M I T, the fight, Bolt while the tail is down, Defend while it is up, one
+   deliberate hit into the raised tail (the Tail Laser frame), Limits when full; victory; results;
+   Enter; the board: same snapshot (15 tiles, order, cursor, beaten of total), same words, the main
+   save key byte-identical, the experiments store shows the clear.
+2. 390x844, touch: seven taps on the label; the same play by taps (Defend by the edge strip);
+   victory; the board as it was.
+3. 1600x900, keys: attacking every turn into the raised tail loses; the defeat panel; RETRY is a
+   new fight at `seed + 1000`; lose again; CHAPTER SELECT; the board as it was; the store shows
+   2 attempts, 0 clears.
+4. 1600x900, pad: L1 R1 L1 R1 Select on a stand-in pad (`navigator.getGamepads`) opens the fight.
+5. 390x844: phone A by taps, for the layout comparison.
+
+Repair pass: runs 1 and 2 also assert that the three warnings are one block (the top window's
+line after "Attack while it's tail's up!" is "It's gonna counterattack with its laser.") and run 1
+that Cloud reached the strike point (`game-*-melee-strike.jpg`).
+
+Every run asserts no uncaught page error. Frames: `docs/screenshots/ff7/game-<size>-<moment>.jpg`
+(door, opening, turn, magic, target, hint-2, hint-3, melee-strike, tail-laser, defend, limit-full,
+limit-window, victory, defeat, retry, pad-open), `phoneA-390x844-*.jpg`. Sheets: `sheet-game-1600-a.jpg`, `sheet-game-1600-b.jpg`,
+`sheet-game-390.jpg`, `sheet-phone-a-vs-b.jpg`, `sheet-game-vs-composite.jpg`
+(`python tools/ff7-game-sheets.py`).
+
+### Bundle (vite build to a scratch outDir, no public dir, gzip -9)
+
+| | First load (entry JS + CSS), gzip | raw |
+|---|---|---|
+| `origin/main` 1a43fd7b (no FF7 code) | 811,018 B | 3,172,580 B |
+| `ff7-integration` (integration) | 837,625 B | 3,251,622 B |
+| `ff7-integration` after the repair pass | 839,075 B | 3,255,629 B |
+| Difference against main | **+28.1 kB** (the repair adds 1.5 kB) | +83 kB |
+
+Under the 60 kB line, so the FF7 engine, HUD and stage stay static imports (engine check C4
+closed by measurement). The M PLUS woff2 is not in the first load: the browser fetches it only
+when the FF7 HUD draws text.
+
+## Repair pass: the FF7 purist review (scored 6.8), 2026-09-27
+
+Every major fixed except the two that need Bailey's options round (5 and 7), where the stand-in the
+review asked for is built; the minors fixed except 9 and 15 (options) and 17 (kept, flagged).
+Game case: **FF7 only**; the four shared files touched are shared plumbing (both + FF7), inert for
+FFX and FFX-2 (each takes its FF7 path from a scene switch, a deps field or the game id).
+
+| # | Item | What changed | Files |
+|---|---|---|---|
+| 1 | Camera: the band hid every fighter below the knees | The fixed camera is raised (y 3.1, z 13.8) and pitched down 8.47 degrees; the painting is turned square to that view and lifted so its floor ends at 72 % of the frame, its crown cropped. At 1600x900 Cloud's feet are at about 66 %, Barret's 59 %, the boss's 62 %: every fighter whole above the band (71 %). Our estimate, solved against the A+ target's raised look. | `src/scenes/sector1-reactor-staging.ts`, `sector1-reactor.ts` |
+| 2 | Numerals on the band | Follows from 1; also the numeral anchor is clamped 1.5 numeral heights above the band (and a phone's command window). | `src/ui/ff7/ff7Marks.ts` |
+| 3 | Formation: Barret in front of Cloud | Both front row at the same x (4.1), side by side in depth (Cloud z 0.9 downstage, Barret z -1.9 upstage), so from the raised camera they read as a diagonal (Barret's feet about 70 px higher, 90 px nearer the middle). The back row still steps right. | `sector1-reactor-staging.ts` |
+| 4 | Melee Attack had no run-up | New presenter port `actionMotion` (optional deps field, called by the beats at action-start and action-end). FF7's: a member whose weapon is not Long Range (Cloud) runs to a strike point in front of the target for a physical action (Attack, Braver), the house wind-up strikes there, the numeral lands, and he runs back. Barret (Gatling Gun, Long Range) fires from his spot. Timings ours. | `src/engine/BattlePresenterMotion.ts` (new), `BattlePresenterBeats.ts`, `BattlePresenterPorts.ts` (one field, file shorter than before); `src/app/screens/BattleScreenFf7Motion.ts`, `BattleScreenGameDeps.ts` (new); `BattleScreen.ts` (same line count) |
+| 5 | Enemy abilities have no animation | Stand-ins until the options round: Rifle kicks the body back (-0.35), Scorpion Tail lunges forward (1.1), Tail Laser braces back (-0.5), on top of the house counter lunge. **The effects options round is still owed** (see Open). | `BattleScreenFf7Motion.ts` |
+| 6 | Hint lines split by other actions | The three warnings are one block: the HUD's top window never cuts or splits dialogue (an action name waits after its last line), and the animation bracket holds the burst that said dialogue, still animating, until every line has shown (`dialogueShown`). The e2e asserts line 3 follows line 2 with nothing between, at both sizes. | `src/ui/ff7/Ff7HelpLine.ts`, `Ff7BattleHud.ts`, `src/engine/BattlePresenterAnimating.ts`, one argument in `BattleScreen.ts` |
+| 7 | House results and defeat | FF7's results rows drop the "x2 PARTY" tag, the clear-time chip (it reads "RESULTS" alone) and NEW BEST. Victory poses (original art) and an FF7 results screen in the blue window material are **the options round still owed**. | `ResultsScreen.ts`, `ui/common/resultsPage.ts`, `resultsPhone.ts` (shared plumbing; FFX and FFX-2 always have a clock, their output is unchanged) |
+| 8 | Ground rings on the phone | Scene switch `turnRings: false` (FF7's staging only): no turn ring under any figure; the triangle is the only marker. | `src/scenes/types.ts`, `BattlePresenterStage.ts` (same line count), staging |
+| 9 | Phone framing | Not changed (options; see Open). The raised camera made the phone's figures smaller (the whole 16:9 field is shown in the upright letterbox). | |
+| 10 | PAUSE chip | For FF7 the chip is an unmarked corner tap zone (opacity 0): nothing drawn on desktop or phone, Esc / Start still pause, a click or tap on the corner still does. | `BattleScreen.ts` (class on the same line), `src/ui/ff7/ff7-screen.css` (new) |
+| 11 | Right window spacing | On a desktop every status column sits at its own u as a fraction of the width (spec §5.2): HP 720, max ends 1020, MP 1035-1180, LIMIT 1195-1375, TIME 1385-1565, gauges 180 x 36 px. | `src/ui/ff7/ff7Geometry.ts` |
+| 12 | Defend / Change cut words | On a desktop Change reaches to the names window's left edge (the whole name), Defend to the end of the HP field; on a phone the label keeps a pad inside the frame. | `src/ui/ff7/ff7MenuHtml.ts` |
+| 13 | Limit gauge before the blow | During a burst the band keeps each gauge where the last full sync left it until that member's own `limit-gauge` event, which the engine emits right after the damage (the engine's state is already the burst's end). | `Ff7BattleHud.ts` |
+| 14 | Command window position | FF7's measured box 72-131 u: 360-655 px at 1600, text at 390; the Magic grid's columns at 78 / 130 / 174 u. | `ff7Geometry.ts` |
+| 15 | Door and opening | No change (Bailey's picks); noted as approved departures on D-238 and D-240 in `docs/target/decisions.json`, with the FF7 swirl and camera intro as the options to offer. | |
+| 16 | Phone B names twice | Phone B's names window keeps only its BARRIER column; each name shows once, at the left of its status row. | `src/ui/ff7/Ff7PartyRows.ts` |
+| 17 | SELECT help echoes the name | Kept; flagged as our estimate in the spec's in-game-check list (§9 #4). | `docs/plans/ff7-hud-faithful-a-spec.md` |
+
+Sheets: `sheet-repair-1600.jpg` (before vs after: framing, the Tail Laser numerals, the results
+rows), `sheet-repair-moments.jpg` (the warnings' lines 2 then 3; Cloud at the strike point; Defend
+over the whole HP field), `sheet-repair-390.jpg` (the phone before vs after), plus the re-shot
+`sheet-game-*.jpg`. New frames: `game-1600x900-{hint-2,hint-3,melee-strike,defend}.jpg` and the
+same at 390x844.
+
+## Update and class-A fixes, 2026-09-27 (after release 22)
+
+**Game case: FF7 only**, with shared plumbing (both + FF7) for the merge, `battleSpellFx.ts`,
+`ResultsScreen.ts`, `PyreflyStage.ts` / `pyreflyCanon.ts` and the contract files; each answers
+`'ff7'` on its own branch and FFX and FFX-2 behave exactly as on `main`.
+
+| Item | What changed | Files |
+|---|---|---|
+| Merge | `origin/main` at `a44297ca` (iter2-b1, b3, b4, the FFX-2 engine and resolver split) merged `--no-ff`. Conflicts: `battleSpellFx.ts` (main's signature with the playback-speed `rate`, widened to `GameId`; `'ff7'` still returns `{}`), `BattleScreen.ts` (main's stage options: speed getter, `sceneKey`, `grade`), `CONTRACT-CHANGES.md` (both sides, newest first). Main's new `story-fielded-speakers.test.ts` skips FF7 chapters (a type narrowing; FF7 has no mid-battle lines) | merge commit |
+| Pyreflies | Main's A-5 / A-6 would have given the beaten Guard Scorpion the FFX pyrefly dissolve (every enemy defaults to `'dissolve'`). The canon table gets an FF7 row, `sector1-reactor`: absent (pyreflies are Spira's, `research/ffx-vs-ffx2-presentation.md` §3.1; derived), and `PyreflyStage` adds neither the band nor the dissolve for it. The boss keeps the house plain dissolve it had before | `src/engine/pyreflyCanon.ts`, `PyreflyStage.ts` |
+| Boss scale (review major) | `SECTOR1_HEIGHTS['guard-scorpion']` 2.16 to **3.3** (the painting's full height). World: 1.89x Cloud, 1.63x Barret. On screen at 1600x900: 387 px against Cloud's 221 and Barret's 213 (**1.75x / 1.82x**; before 251 px, 1.13x); feet at 560 (band 639), idle top 173, raised tail top 134 (message window ends at 121), tail tip 106 px inside the left edge. At 390x844 the same ratios, top 345, left edge 26 px in. The tail-up sidecar's relative scale (748/681) and its shift (scales with the height) are unchanged. The melee strike point is 1.22 x the target's height (was 1.4), so Cloud still stops about 1.1 in front of the bigger painting (x 0.93). Presentation, our estimate | `src/scenes/sector1-reactor-staging.ts`, `src/app/screens/BattleScreenFf7Motion.ts` |
+| C-2 | The defeat panel reads `pyrefly-reprise:experiments:v1` for an experimental chapter (attempts, best), read-only; the chapters still read the save | `src/app/screens/ResultsScreen.ts` (391 lines) |
+| C-3 | `types.ts` back to **2,667 lines, the same as `main`**: `EnemyDef.ff7` by module augmentation from `types-ff7.ts`, the `'limit-gauge'` fields as `Ff7LimitGaugeFields` there, the rest folded onto existing lines. CONTRACT-CHANGES entry | `src/battle/common/types.ts`, `types-ff7.ts` |
+| C-4 | The board wording above: 15 tiles, "0 OF 14 BEATEN" | this note |
+
+New tests: `tests/unit/ff7-class-a.test.ts` (7: the scale at both sizes through a real three.js
+camera, the strike gap, C-2 with the store and an empty store, C-3, the FF7 pyrefly row);
+`ff7-stage` reads the height from the staging; the e2e's strike-point check is `x < 1.6` (was 0.6).
+
+Checks on the merged tree: `tsc` app and e2e clean; full `vitest run` 533 files pass, 5 skipped,
+1 fails: the known `strategy-ffx2-bahamut` "heal-only route" timeout under full load (17 s), 19/19
+alone; `ffx2-atb-golden` 6/6; the FFX / FFX-2 engine and CTB suites (`ffx-ctb*`, `ffx-engine*`,
+`ffx-round04-engine`, `ffx2-engine*`, `engine/`) 25 files, 316 pass, 5 skipped (the bench);
+`orphans.mjs` 24, the same list; `verify-approved.mjs` 267 ok, 0 mismatched, 0 missing (219
+approved + 48 judge-locked). E2E on a production build (`vite preview`, port 6601, headless GPU
+Chromium): **5 of 5 pass** (the first run failed only the old strike-point threshold). Frames:
+`docs/screenshots/ff7/game-{1600x900,390x844}-{opening,hint-3,tail-laser}.jpg` (the opening, the
+tail raised with the third warning, Tail Laser), with the rest of the set re-shot.
+
+Still owed: the upright phone framing (item 9) makes the bigger boss about 94 px tall on a phone;
+the options round is unchanged. Main's A-8 contact shadows now draw under the FF7 figures too (the
+house shadow restyled, as for every scene).
+
+## Estimates that show (say "our estimate" to Bailey)
+
+Everything in `docs/handoff/ff7-hud.md` and `ff7-engine.md` still stands. New here: the look of the
+Change / Defend label beside the edge (FF7 draws the finger there; the small window is ours) and the
+touch strips; the item name without the engine's "xN" with the count in its own column; results:
+every member's row prints the full EXP (FF7 gives a member KO'd at the end 0; the result does not
+say who stood), levels gained are not computed. From the repair pass: the raised camera's height,
+pitch and the painting's lift; the party's depth spread; the melee run's strike point (1.22 x the
+target's height in front of it), its timings (460 ms there, 400 ms back) and which actions run; the
+boss's stand-in lunges; the numeral clamp.
+
+## Open
+
+1. **Options owed to Bailey (rule 9), cheapest first:**
+   - **FF7 action effects** (review item 5): the Tail Laser beam from the raised tail across both
+     members, the Scorpion Tail strike, the Search Scope lock-on; then Bolt / Ice / Cure and the two
+     Limits. Today: the stand-in lunges and the house impact flash.
+   - **FF7 results screen** (item 7): blue four-corner windows, the EXP and AP rows, the Gil and
+     Items window, and victory poses (a new "win" painting per fighter); Game Over for a wipe.
+   - **Upright phone framing** (item 9): (a) a taller crop with the camera moved in on the fight so
+     the fighters fill the width, (b) the top message window moved down onto the scene, (c) keep
+     the letterbox. Since the raised camera, the phone shows the whole field small (Cloud about
+     50 px tall) with dark bands above and below.
+   - **Opening** (item 15): an FF7-style battle swirl for the FF7 fight only, and a short camera
+     intro; today the chapters' own transition, by Bailey's pick.
+2. **Target vs build**: windows, band, command window, finger, Magic grid with the MP window, the
+   Limit colours and the Limit window match A+; the field is now framed like the target (raised,
+   everyone whole above the band). Differences to judge: the real paintings instead of the
+   target's placeholders; no laser beam or spell effects (item 1 above).
+3. **Pause** is the house Ink & Gold screen with FF7 rows; an FF7 pause would be a new screen
+   (options first).
+4. **Active mode's running gauges during animations**: the engine and the bracket support it, but no
+   presenter ticks the clock during playback and no FF7 Config row can choose Active; Recommended
+   is the only reachable mode.
+5. Music stays `null` until an original FF7 cue exists and Bailey hears it (approved departure).
+6. `critic/policy.json` has no `ff7` game or `ff7-engine` system row yet (driver to-do from the
+   architecture plan §2.4); `decisions.json` allows `game: 'ff7'` (D-237, D-238, D-240).
+7. The deep review for a new engine is owed after the deploy (architecture plan §2.4).
+
+## Run it
+
+In the worktree: `npx vite --port 6400 --base /pyrefly-reprise/`, open
+`http://127.0.0.1:6400/pyrefly-reprise/`, go to chapter select, type LIMIT. The e2e:
+`PREVIEW_PORT=6400 PYREFLY_BROWSER=gpu npx playwright test tests/e2e/ff7-guard-scorpion.spec.ts`
+(reuses the running server). Stop the server by its port when done.
+
+## CHECK: independent release-readiness check of 54916f56, 2026-09-27
+
+An independent checker who built none of this checked the branch. **Verdict: no blocker.** One major:
+the branch is now behind `main`, so these results hold only against the merge base. Five minors.
+Game case: FF7 only. The FFX and FFX-2 results below are the proof that neither game changed.
+
+**Method.** The checker made two production builds of their own with the art, both served by `vite
+preview` on ports 6420 (branch) and 6421 (`main` at the merge base `1a43fd7b`, from `git archive`).
+Everything ran in headless Chromium with `PYREFLY_BROWSER=gpu`, one browser at a time. Scratch
+scripts: `tools/zz-ffcheck-*.tmp.mjs` (not committed). Frames: `D:/Tools/pyrefly-scratch/ff7-check/`.
+Both servers were stopped by their PIDs.
+
+| Check | Result |
+|---|---|
+| tsc (app, e2e) | Both clean |
+| Full `vitest run` | 513 files pass, 4 skipped, 1 fails: the known `strategy-ffx2-bahamut` timeout under full load (18 s). It passes 19/19 alone. `ffx2-atb-golden` 6/6, `critic-policy-adoptions` 12/12 |
+| `orphans.mjs` | 24, none of them FF7 |
+| Approved art | Every hash in `approved-hashes.json` (219) and `judge-locked-hashes.json` (48) matches, in `public/art` and in the built `dist`: 0 mismatched, 0 missing |
+| (a) Board unchanged | At 1600x900, 1024x768 and 390x844 the board's snapshot and words match `main`'s build exactly: 15 tiles, the same order, "0 OF 14 BEATEN" with one COMING. No FF7 text in the DOM. Pixel diff against `main`: 0 px at 1600 and 390; 97 px at 1024, a thumbnail fading in, the same layout |
+| (a) Door stays shut | These do nothing: H, h, L, l, I, M and T pressed alone (0.02 mean px against the board frame); LIMI, a 2.6 s pause, then T; LIMXT (X is cancel, back to the title as on `main`); every arrow, WASD, Q/E/R/F/V/H, Tab, PgUp/PgDn/Home/End ×18 (the cursor reached all 14 playable tiles, never FF7, never left the board); six taps, a 4.5 s wait, then one more; a click or tap on each of the 15 rail tiles. `__pyrefly.chapters()` lists the same 15 ids as `main`, and the API has the same keys. Only `scenes()` adds `sector1-reactor` |
+| (b) Door and fight by real input | **Keys, 1600x900.** LIMIT, then Esc pause and resume, then a sensible fight: a win in 21 turns. Enter goes back to the board. F R F R M (the pad sequence on its keyboard mapping) opens it again: a naive loss, RETRY (seed +1000, checked), a second loss, ↓ Enter to CHAPTER SELECT. **Taps, 390x844.** Seven taps, then a win in 20 turns. The three warnings came in a row every time. No page errors |
+| (c) Save untouched | A non-empty `pyrefly-reprise:save:v1` (527 B) was byte-identical after the win, and again after two losses and a RETRY. No other key changed except `pyrefly-reprise:experiments:v1`, which counted 3 attempts, 1 clear and the best time. Board snapshot unchanged each time |
+| (d) FFX / FFX-2 | **Real keys from the title.** Chapter I (Seymour Flux) and Chapter IV (Bahamut), each through prep, cutscene and first command menu, on both builds: same layout, and the only pixel differences are sway. The guide card's text rotation is the same on both. Chapter I played to the end by keys gives the identical defeat on both (turn 9, 42 ticks, the same HP). Chapter IV by Enter alone does not finish in 7 minutes on either build (turn 224 on both). **Flow autoplayer (seed 1).** Chapters I, II, IV and VI give identical outcomes, turns, ticks, links, EXP and AP, and saves that differ only in `updatedAt` and `playTimeMs`. **Code.** The diff against the merge base touches `src/battle/ffx*` and `src/ui/ffx*` only in `withTargets.ts` (two `case` lines). Every engine, UI and results edit is an explicit `'ff7'` branch, or is equivalent for FFX and FFX-2 (for example `leaderId`) |
+| (e) Bundle (gzip -9, first load) | Branch 839,104 B (3,255,869 raw) against `main` at `1a43fd7b` 811,033 B (3,172,804 raw): **+28.1 kB gzip**, +83 kB raw. Matches the builder's figures to within 30 B |
+| (f) `critic-plan --json` | Against `1a43fd7b`: **deep class, focused before deploy, deep after deploy** (`deepBeforeDeploy: false`), obligations `live`, `focused`, `deep`, games `both`, 101 product paths. Against the last deploy (`d8837334`): the same class |
+
+**Findings**
+
+- **Major C-1: the branch is behind `main`.** `origin/main` moved to `a44297ca` during the check: 48
+  commits, including the iter2 B1/B3/B4 merges and the FFX-2 engine split. `git merge-tree` finds
+  conflicts in `src/app/screens/BattleScreen.ts`, `battleSpellFx.ts` and `docs/CONTRACT-CHANGES.md`.
+  Everything above is proven only against `1a43fd7b`. The merged candidate needs (a) to (f) run
+  again, above all the FFX-2 checks and the `BattleScreen` wiring.
+- Minor C-2: FF7's defeat panel reads the main save's (empty) record for the hidden chapter. It
+  shows "ATTEMPTS 1" and "BEST — NEVER CLEARED" after 3 attempts and a clear (frame
+  `fight-1600x900/025`). It only reads, never writes. FF7 only. It could read the experiments store,
+  or drop those rows until the FF7 results options round.
+- Minor C-3: `src/battle/common/types.ts` (a contract file, already over 400 lines) grew from 2660
+  to 2675 lines. Rule 7 says files over 400 must not grow, and the line-count list above leaves it
+  out. The CONTRACT-CHANGES entries exist.
+- Minor C-4: this note says the board still reads "of 15". Both builds actually read "0 OF 14
+  BEATEN" (15 tiles, one COMING). The behaviour is the same; only the wording here is wrong.
+- Minor C-5: a debug-only route shows the wrong picture. If `__pyrefly.gotoChapter(...)` runs over
+  a live board and `goto('chapter-select')` follows, the FF7 fight opened next by the door draws
+  under the title screen's DOM: only the HUD and the turn triangle show. A player cannot reach this.
+  The player's route (title, Enter, board, LIMIT or seven taps) is clean at 1600x900 and 390x844.
+  It matters only to an e2e that uses that debug route.
+- Minor C-6: FFX-2 Chapter IV was not played to an outcome by real keys. Enter alone stalls on both
+  builds. Its whole battle was checked by the flow's autoplayer instead (identical results).
+
+## RE-CHECK: independent check of d21e4587 after the merge with main and the class-A fixes, 2026-09-27
+
+A second independent checker, who built none of this, checked `ff7-integration` at `d21e4587`, which
+has `origin/main` `a44297ca` merged in. `origin/main` has since moved to `cd9e8d0a`, but that commit
+only adds `docs/concepts/`, so the product is the same. **Verdict: no blocker.** One major, which is
+a judgement call for the driver (R-1), and four minors. Game case: FF7 only. The FFX and FFX-2 rows
+below are the proof that neither game changed.
+
+**Method.** The checker made two production builds with the art: the branch, and `main` at
+`a44297ca` (from `git archive`). They were served by `vite preview` on ports 6620 (branch) and 6621
+(main), with headless Chromium, `PYREFLY_BROWSER=gpu` and one browser at a time. Both servers were
+stopped by their PIDs. The scratch scripts are `tools/zz-recheck-*.tmp.mjs` (not committed). Frames
+and reports are in `D:/Tools/pyrefly-scratch/ff7-recheck/`. The FF7 fights began from a non-empty
+main save. It was made in a separate page and injected before boot, so each fight page reached the
+board only the player's way (title, then Enter or a tap).
+
+| Check | Result |
+|---|---|
+| tsc (app, e2e) | Both clean |
+| Full `vitest run` | 533 files pass, 5 skipped, 1 fails: the known `strategy-ffx2-bahamut` "heal-only route" timeout under full load (15 s limit). It passes alone (19/19, 8.2 s). `ffx2-atb-golden` 6/6, `ff7-class-a` 7/7 |
+| `orphans.mjs` | 24, the same list, none of them FF7 |
+| Approved art | sha256 of every file in `approved-hashes.json` (219) and `judge-locked-hashes.json` (48): all match in `public/art` and in the built `dist`. 0 mismatched, 0 missing |
+| (a) Board unchanged | At 1600x900, 1024x768 and 390x844 the board's snapshot and words match `main`'s build: 15 tiles in the same order, one COMING, "0 OF 14 BEATEN". No FF7 text in the DOM. Pixel diff against `main`: 0 px at 1024 and 390. At 1600 there are 383 px (mean 0.03), all inside the rail's thumbnails, a fade-in caught at a different moment; the layout is the same |
+| (a) Door stays shut | Nothing opened on: H, h, L, l, I, M and T pressed alone; LIMI, a 2.6 s pause, then T; LIMXT (X cancels back to the title, as on `main`); arrows, WASD, Q/E/R/F/V/H, Tab, PgUp/PgDn/Home/End x18 (the cursor visited all 14 playable tiles and never FF7); a click on each of the 15 rail tiles; at 390x844, six taps, a 4.5 s wait, one more tap, then a tap on each tile. `?chapter=ff7-guard-scorpion#ff7-guard-scorpion` does nothing, and `goto('ff7-hud-demo')` does nothing (DEV only, not in the bundle). `__pyrefly.chapters()` and the API's keys are identical to `main`'s; only `scenes()` adds `sector1-reactor`. **But `__pyrefly.gotoChapter('ff7-guard-scorpion')` opens the fight** (R-1) |
+| (b) Door and fight by real input | **Keys, 1600x900.** Typing LIMIT opened the fight; Esc paused and Esc resumed. A sensible fight won in 19 turns, and Enter on the results returned to the board. F R F R M (the pad sequence on keys) opened it again. A naive loss; the defeat panel reads "ATTEMPTS 2, BEST 0:49" (**C-2 fixed**). RETRY re-entered with seed +1000. A second loss, then Down and Enter to CHAPTER SELECT. **Keys, 1024x768.** The same sequence: a win in 21 turns, two losses, RETRY at +1000. **Taps, 390x844.** Seven taps on the label opened it; a win in 19 turns; CONFIRM returned to the board. No page errors in any run |
+| (b) Scale and numerals | The boss is clearly the biggest figure and stays inside the frame. At 1600x900 the tail tip is at about y 195, the turret top about 235 and the feet about 545, against Cloud at about 385 to 595. Measured by eye, the visible silhouette is about 1.5x Cloud (body) and about 1.65x (tail tip); the builder's 1.75x measures the painting's box. The raised tail stays under the message window. Every damage numeral was sampled on each frame (`.ff7-dmg` boxes; about 4,000 samples per desktop run, 974 on the phone). None left the viewport: at 1600x900 x 364 to 1402 and y 278 to 522; at 1024x768 x 231 to 908 and y 265 to 435; at 390x844 x 79 to 351 and y 383 to 447 |
+| (c) Save untouched | A non-empty `pyrefly-reprise:save:v1` (501 B) was byte-identical after the win, and again after two losses and a RETRY, in all three runs. No other key changed except `pyrefly-reprise:experiments:v1` (attempts 3, clears 1, best time, play time). The board snapshot was unchanged each time |
+| (d) FFX / FFX-2 by real keys | **Chapter I (Seymour Flux)**, from the title through prep and the cutscene, on both builds. The first command menus have the same HUD, the same guide card and the same text. The best pixel match between builds (mean 5.9) sits within the difference between two `main` runs (mean 5.6): idle sway and camera phase. The whole battle by Enter gives the identical defeat on both builds: turn 9, 42 ticks, the same HP. **Chapter IV (Bahamut)**, played to a **win by real keys** on both builds with the critic's route driver (`critic/runner/lib/route.mjs`, seed 1). Both: victory in 56 turns, the same first enemy action (Curse on Paine), **the same 55 picks in the same order**, the same results ledger (only the clear time differs: 6:36 against 6:49), and the same board afterwards. The event counts are identical except `status-tick`, which runs on the wall clock under Active. First-menu frames: within the sway baseline. **C-6 closed** |
+| (d) Code | `src/battle/ffx*`: no diff against `main`. `src/ui/ffx*`: only `withTargets.ts` (two `case` lines for FF7 commands). Every edit to a shared file was read. Each one is an explicit `'ff7'` branch; or goes through `ffxFamily()` (FF7 throws, FFX and FFX-2 unchanged); or is equivalent for both games (`leaderId`, `bodyFacingOption`/`stageCamera` with no scene switch, `bracketAnimations`, which is a no-op because no FFX or FFX-2 engine has `setAnimating`, `presenterGameDeps`, and `BattleMoments.slidePartyIn`, where every FFX and FFX-2 party actor is built with `facing` 1). The merge took `main`'s `battleSpellFx` rate and `BattleScreen` stage options as they were |
+| (e) Bundle (gzip -9, first load) | Branch 853,627 B (3,296,327 raw) against `main` at `a44297ca`, 824,783 B (3,212,761 raw): **+28.8 kB gzip**, +83.6 kB raw |
+| (f) `critic-plan --json` | Against the last deploy in the worktree's log (`d8837334`), and with `--since a44297ca`: **deep** class, `focusedBeforeDeploy: true`, `deepBeforeDeploy: false`, `deepAfterDeploy: true`, obligations `live`, `focused`, `deep`, games `both`, 103 product paths since `a44297ca`, carried deep `d8837334`. No save-data reason |
+
+**Findings**
+
+- **Major R-1: a debug route reaches the fight.** On the production build,
+  `window.__pyrefly.gotoChapter('ff7-guard-scorpion')` opens the FF7 battle and draws it correctly
+  (frame `debugroute-branch.jpg`). On `main` the same call resolves `null`. The brief's (a) says no
+  debug route may reach it except the door, so (a) fails on this point. A player needs the console
+  and the literal id, which neither `chapters()` nor the page shows. `ff7Flag.ts` says this route is
+  intended. The checker rates it major, not a blocker, and leaves the call to the driver. Two ways
+  out: keep it and record it as the testers' route, or let `gotoChapter` refuse `experimental`
+  chapters outside `import.meta.env.DEV`. FF7 only.
+- Minor R-2 (was C-5, still there): after `gotoChapter(...)` plus `goto('chapter-select')` over a
+  live board, the door's FF7 fight draws under the title screen's DOM. Only the HUD shows (frames
+  `fight-1600x900/009`, `011`). The player's route is clean at all three sizes. Only a harness that
+  uses the debug route is affected.
+- Minor R-3: C-3 is met by the letter, since `types.ts` has exactly 2,667 lines. It got there by
+  folding statements onto existing lines. Line 31 is a doc comment followed by
+  `export type GameId` on the same line. Line 32 is `import type { ... } from './types-ff7.ts';
+  export type * from './types-ff7.ts';`, an import placed after the header and not at the top.
+  Readability suffers. It is a contract file, and it was already over 400 lines.
+- Minor R-4 (known, disclosed): on an upright phone the whole field is small. The boss is about
+  110 px wide and about 90 px tall at 390x844 (frame `fight-390x844-taps/008`), with dark bands
+  above and below. This is the handoff's open item 9, and its options round is still owed.
+- Minor R-5 (informational): the "1.75x Cloud" figure measures the painting's box. The visible
+  silhouette is about 1.5x (body) to about 1.65x (tail tip). The boss clearly towers over the party
+  either way.
+
+C-1 (behind `main`) is settled by the merge. C-2, C-4 and C-6 are fixed or closed as described
+above. C-3 is covered by R-3.

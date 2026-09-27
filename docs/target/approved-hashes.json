@@ -1083,6 +1083,41 @@
     "mtime": "2026-09-27T02:06:04.488Z",
     "approved": "2026-09-26"
    }
+  },
+  "bailey:2026-09-27-ff7": {
+   "words": "full speed ahead please. godspeed. ill go with all your recommendations. what is your question about barret?",
+   "note": "Bailey, 2026-09-27 ~00:45 EDT, verbatim \"full speed ahead please. godspeed. ill go with all your recommendations. what is your question about barret?\" (D-240 in docs/target/decisions.json; the same message also accepted the FF7 staging and party-preset recommendations, and D-237 to D-239 are its context: the FF7 HUD pick, the secret door, overnight releases). The driver's recommendations it accepted: never mirror Barret (gun-arm on his right arm), follow FF7's own battle staging (research/ff7-battle-staging.md: party right facing left, boss left facing right), repaint Cloud for that facing with the pauldron on his left shoulder, and a bulkier Guard Scorpion with a laser tail tip. Installed: the final list after the cleanup round, docs/concepts/ff7-art-2026-09-27/round2/README.md \"Final install list\": Cloud cloud/cleanup/idle-c.1 -> ff7-cloud/idle, Barret barret/cleanup/idle-c.1 -> ff7-barret/idle, Guard Scorpion guard-scorpion/cleanup/idle-c.1 -> ff7-guard-scorpion/idle (tail lowered) and guard-scorpion/cleanup/raised-c.1 -> ff7-guard-scorpion-tail-up/idle (tail raised; sidecar scale 748/681 so the body keeps the idle's pixel scale), backdrop reactor-core/core.1 -> backdrops/ff7-sector1-reactor. Sources: D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7/; each PNG is the candidate byte for byte, never mirrored. A pick approves only the art as shown. The ff7- prefix keeps every id apart from FFX and FFX-2 (as ffx2- does for X-2). Every slot was empty; nothing replaced. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-27-ff7/installed/. Game: FF7 only.",
+   "decisions": [
+    "D-240",
+    "D-237",
+    "D-238",
+    "D-239"
+   ],
+   "public/art/characters/ff7-cloud/idle.png": {
+    "sha256": "932e475584e09e3b840f7a116d2d43988cc29287a3f69e8f8cbec14e49c5a901",
+    "mtime": "2026-09-27T08:19:30.656Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-barret/idle.png": {
+    "sha256": "8d89f44f2357bd958fa000920ad1c7fb41d85cf264d7f35ecfbb82e5f6640f7d",
+    "mtime": "2026-09-27T08:19:30.672Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-guard-scorpion/idle.png": {
+    "sha256": "343ce516d95cf72572d3974edb84d8ac5e084b30be0a412d8982ec597a46bc19",
+    "mtime": "2026-09-27T08:19:30.685Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-guard-scorpion-tail-up/idle.png": {
+    "sha256": "dd7a70fbe5613ed4724bce9106f96f38eaee29ab43f07064cc3102439ee76456",
+    "mtime": "2026-09-27T08:19:30.699Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/backdrops/ff7-sector1-reactor.png": {
+    "sha256": "2d458b4c691e5c343592a1c7392c8e2c00d63dffc9ac0f559f84a22f441a266b",
+    "mtime": "2026-09-27T08:19:30.713Z",
+    "approved": "2026-09-27"
+   }
   }
  }
 }

@@ -5,6 +5,7 @@ import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { BattleResult } from '../../battle/common/types.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
+import { experimentRecord } from '../experiments/experimentRecords.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { createFullBleedStage, createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
@@ -97,6 +98,8 @@ export class ResultsScreen extends Screen {
   private readonly awardUnit: 'AP' | 'EXP';
   /** The real clear time, not the engine's unadvanced `elapsedMs`. */
   private readonly clearMs: number;
+  /** FF7's rows carry no house clear-time chip, NEW BEST or party-count tag (the FF7 purist review, item 7). */
+  private readonly ff7: boolean;
   private ledger: LedgerLine[] = [];
 
   private revealMs = 0;
@@ -113,9 +116,10 @@ export class ResultsScreen extends Screen {
     this.silent = opts.silent ?? isSilentResultsChapter(opts.chapterId);
     this.victory = opts.result.outcome === 'victory';
 
-    const game = chapter?.buildRef.game ?? 'ffx';
+    const game = chapter?.buildRef.game ?? 'ffx'; // FF7 pays EXP (and AP to Materia), like FFX-2's EXP ledger
     this.awardUnit = game === 'ffx' ? 'AP' : 'EXP';
     this.clearMs = clearTimeMs(opts.result, opts.elapsedMs, game);
+    this.ff7 = game === 'ff7';
     this.rows = buildMemberRows(chapter, opts.result);
   }
 
@@ -136,8 +140,9 @@ export class ResultsScreen extends Screen {
     this.phoneQuery?.addEventListener?.('change', this.onLayoutChange);
     window.addEventListener('resize', this.onResize, { passive: true });
 
-    const record = this.app.save.chapter(this.opts.chapterId);
-    if (this.victory) {
+    // A hidden experiment (FF7) reads its own store, read-only (C-2); the chapters read the save.
+    const record = chapter?.experimental ? experimentRecord(this.opts.chapterId) : this.app.save.chapter(this.opts.chapterId);
+    if (this.victory && !chapter?.experimental) { // an experiment never records into the save
       const previousBestMs =
         this.opts.previousBestMs !== undefined ? this.opts.previousBestMs : record.bestTimeMs;
       this.wasNewBest = isNewBest(previousBestMs, this.clearMs);
@@ -335,14 +340,14 @@ export class ResultsScreen extends Screen {
         kind: 'count',
         key: this.awardUnit,
         value: this.awardUnit === 'AP' ? result.ap : result.exp,
-        detail: `×${this.rows.length} PARTY`,
+        detail: this.ff7 ? undefined : `×${this.rows.length} PARTY`,
       },
     ];
     // FFX-2 pays EXP to the girl and AP to the dressphere she is wearing, so
     // both belong on the ledger [ffx2-combat-core §3.0] — but a formation that
     // pays no AP gets no row, rather than a printed zero.
     if (this.awardUnit === 'EXP' && result.ap > 0) {
-      lines.push({ kind: 'count', key: 'AP', value: result.ap, detail: 'PER DRESSPHERE' });
+      lines.push({ kind: 'count', key: 'AP', value: result.ap, detail: getChapter(this.opts.chapterId)?.game === 'ff7' ? 'PER MATERIA' : 'PER DRESSPHERE' }); // FF7: AP goes to each Materia [ff7-battle-core §11]
     }
     lines.push({ kind: 'count', key: 'GIL', value: result.gil });
     if (result.drops.length > 0) {
@@ -366,13 +371,13 @@ export class ResultsScreen extends Screen {
     if (this.victory && this.opts.result.overkilled.length > 0) {
       tags.push(`OVERKILL ×${this.opts.result.overkilled.length}`);
     }
-    if (this.wasNewBest) tags.push('NEW BEST');
+    if (this.wasNewBest && !this.ff7) tags.push('NEW BEST');
 
     const model: ResultsPageModel = {
       victory: this.victory,
       silent: this.silent,
       heading: pageHeading(this.victory, this.silent),
-      clock: formatClearTime(this.clearMs),
+      clock: this.ff7 ? '' : formatClearTime(this.clearMs),
       tags,
       quip: this.quip,
       ledger: this.ledger,
