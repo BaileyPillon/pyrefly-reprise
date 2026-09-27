@@ -1,0 +1,69 @@
+{
+ "chapter": "ffx2-fallen-aeons",
+ "numeral": "XI",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "seed": "1",
+ "results": [
+  {
+   "key": "x2-shiva:x2-shiva-kick",
+   "enemy": "x2-shiva",
+   "art": "x2-shiva",
+   "ability": "Kick",
+   "abilityId": "x2-shiva-kick",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "attack",
+   "slotPose": "attack",
+   "url": "/art/characters/x2-shiva/attack.png",
+   "paintsAttack": true,
+   "painted": [
+    "idle",
+    "attack"
+   ],
+   "seq": 35,
+   "file": "docs/screenshots/attack-pose/XI-1600x900-x2-shiva-x2-shiva-kick.jpg"
+  },
+  {
+   "key": "x2-shiva:x2-shiva-blizzaga",
+   "enemy": "x2-shiva",
+   "art": "x2-shiva",
+   "ability": "Blizzaga",
+   "abilityId": "x2-shiva-blizzaga",
+   "facts": {
+    "damageType": "magical",
+    "formula": "magic"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/x2-shiva/attack.png",
+   "paintsAttack": true,
+   "painted": [
+    "idle",
+    "attack"
+   ],
+   "seq": 107,
+   "file": "docs/screenshots/attack-pose/XI-1600x900-x2-shiva-x2-shiva-blizzaga.jpg"
+  }
+ ],
+ "seen": [
+  "x2-shiva:x2-shiva-heavenly-strike",
+  "x2-shiva:x2-shiva-kick",
+  "x2-shiva:x2-shiva-blizzaga",
+  "x2-shiva:x2-shiva-diamond-dust",
+  "mindy:x2-mindy-thundaga",
+  "sandy:x2-sandy-attack",
+  "cindy:x2-cindy-not-so-mighty-guard",
+  "mindy:x2-mindy-passado",
+  "sandy:x2-sandy-razzia",
+  "cindy:x2-cindy-regen",
+  "cindy:x2-cindy-camisade",
+  "mindy:x2-mindy-waterga",
+  "cindy:x2-cindy-absorb",
+  "cindy:x2-cindy-demi",
+  "mindy:x2-mindy-blizzaga"
+ ],
+ "errors": []
+}

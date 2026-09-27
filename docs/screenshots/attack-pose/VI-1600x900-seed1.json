@@ -1,0 +1,125 @@
+{
+ "chapter": "ffx2-leblanc",
+ "numeral": "VI",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "seed": "1",
+ "results": [
+  {
+   "key": "ormi-entrance:x2-ormi-shield-bash",
+   "enemy": "ormi-entrance",
+   "art": "ormi",
+   "ability": "Shield Bash",
+   "abilityId": "x2-ormi-shield-bash",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle",
+    "cast"
+   ],
+   "seq": 3,
+   "file": "docs/screenshots/attack-pose/VI-1600x900-ormi-entrance-x2-ormi-shield-bash.jpg"
+  },
+  {
+   "key": "dr-goon:x2-goon-strike",
+   "enemy": "dr-goon",
+   "art": "ffx2-dr-goon",
+   "ability": "Strike",
+   "abilityId": "x2-goon-strike",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/ffx2-dr-goon/idle.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle"
+   ],
+   "seq": 9,
+   "file": "docs/screenshots/attack-pose/VI-1600x900-dr-goon-x2-goon-strike.jpg"
+  },
+  {
+   "key": "fem-goon:x2-fem-goon-fire",
+   "enemy": "fem-goon",
+   "art": "ffx2-fem-goon",
+   "ability": "Fire",
+   "abilityId": "x2-fem-goon-fire",
+   "facts": {
+    "damageType": "magical",
+    "formula": "magic"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/ffx2-fem-goon/idle.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle"
+   ],
+   "seq": 38,
+   "file": "docs/screenshots/attack-pose/VI-1600x900-fem-goon-x2-fem-goon-fire.jpg"
+  },
+  {
+   "key": "logos-room:x2-logos-double-shot",
+   "enemy": "logos-room",
+   "art": "logos",
+   "ability": "Double Shot",
+   "abilityId": "x2-logos-double-shot",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/logos/cast.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle",
+    "cast"
+   ],
+   "seq": 24,
+   "file": "docs/screenshots/attack-pose/VI-1600x900-logos-room-x2-logos-double-shot.jpg"
+  },
+  {
+   "key": "ormi-logos-room:x2-ormi-shield-bash",
+   "enemy": "ormi-logos-room",
+   "art": "ormi",
+   "ability": "Shield Bash",
+   "abilityId": "x2-ormi-shield-bash",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/ormi/cast.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle",
+    "cast"
+   ],
+   "seq": 34,
+   "file": "docs/screenshots/attack-pose/VI-1600x900-ormi-logos-room-x2-ormi-shield-bash.jpg"
+  }
+ ],
+ "seen": [
+  "ormi-entrance:x2-ormi-shield-bash",
+  "dr-goon:x2-goon-strike",
+  "fem-goon:x2-fem-goon-fire",
+  "fem-goon:x2-fem-goon-fira",
+  "ormi-entrance:x2-ormi-concussive-blast",
+  "logos-room:x2-logos-double-shot",
+  "ormi-logos-room:x2-ormi-shield-bash",
+  "logos-room:x2-logos-russian-roulette",
+  "ormi-logos-room:x2-ormi-supercollider",
+  "ormi-logos-room:x2-ormi-concussive-blast"
+ ],
+ "errors": []
+}

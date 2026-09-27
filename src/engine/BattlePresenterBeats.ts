@@ -9,6 +9,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
+import { poseForAction } from './EnemyActionPose.ts';
 import {
   banner,
   cue,
@@ -16,7 +17,6 @@ import {
   numeral,
   settled,
   TIMING,
-  poseForCommand,
   type EventCtx,
 } from './BattlePresenterEvents.ts';
 
@@ -34,7 +34,11 @@ export async function actionStart(
 ): Promise<void> {
   ctx.actingId = event.actorId;
   const actor = ctx.stage.actor(event.actorId);
-  const pose = poseForCommand(event.command.kind);
+  // An enemy's physical ability draws its own attack painting (iter2
+  // attack-pose, both games); everything else is `poseForCommand` as before.
+  const pose = poseForAction(event, ctx.stage.sideOf(event.actorId), ctx.deps.abilityFacts, (p) =>
+    ctx.stage.paints?.(event.actorId, p) === true,
+  );
   actor?.setPose(pose);
 
   if (event.abilityName) {

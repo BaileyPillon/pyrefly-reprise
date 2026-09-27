@@ -11,6 +11,7 @@
  */
 
 import type {
+  AbilityId,
   AvailableCommand,
   BattleEngine,
   BattleResult,
@@ -19,6 +20,8 @@ import type {
   BattleEvent,
   CameraRigId,
   CombatantId,
+  DamageType,
+  FormulaKey,
   MessageKind,
   VfxKey,
 } from '../battle/common/types.ts';
@@ -267,6 +270,14 @@ export interface BattleStage {
    * actor that already exists, and does nothing for one that does not).
    */
   arrive?(id: CombatantId, clock: ArrivalClock): Promise<ActorHandle | undefined>;
+  /**
+   * Does this combatant have a painting of its **own** for `pose`, not a
+   * fallback (`BattlePresenterArt.resolvePoseMap` points a missing pose at the
+   * nearest one there is)? Optional and additive (iter2 attack-pose,
+   * `EnemyActionPose.ts`): a stage without it reads as "no", which keeps an
+   * enemy's physical ability on `cast`, as before.
+   */
+  paints?(id: CombatantId, pose: string): boolean;
 }
 
 /** The presenter's clock, handed to a staged arrival so it obeys speed and pause. */
@@ -279,6 +290,16 @@ export interface ArrivalClock {
 
 /** Playback speed, driven by the skip/fast-forward controls. */
 export type PlaybackSpeed = 'normal' | 'fast' | 'skip';
+
+/**
+ * What an ability's own data row says about it, for presentation choices: the
+ * painted pose an enemy's action draws (`EnemyActionPose.ts`). Read from the
+ * chapter's game's ability table, never guessed from the name.
+ */
+export interface AbilityFacts {
+  damageType: DamageType;
+  formula: FormulaKey;
+}
 
 /** What the presenter needs from the outside world. */
 export interface PresenterDeps {
@@ -305,6 +326,11 @@ export interface PresenterDeps {
   now?: () => number;
   /** Overall pacing multiplier applied to every wait. 1 = authored timing. */
   timeScale?: number;
+  /**
+   * The chapter's game's ability rows, by id (`app/screens/battleAbilityFacts.ts`).
+   * Optional: without it every enemy ability keeps the `cast` painting.
+   */
+  abilityFacts?: ((id: AbilityId) => AbilityFacts | undefined) | null;
 }
 
 /** One line of the presenter's own trace, for the debug API and e2e. */

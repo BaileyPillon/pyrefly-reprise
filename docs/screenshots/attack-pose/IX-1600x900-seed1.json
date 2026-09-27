@@ -1,0 +1,78 @@
+{
+ "chapter": "yojimbo-cavern",
+ "numeral": "IX",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "seed": "1",
+ "results": [
+  {
+   "key": "yojimbo:yojimbo-daigoro",
+   "enemy": "yojimbo",
+   "art": "yojimbo-cavern",
+   "ability": "Daigoro",
+   "abilityId": "yojimbo-daigoro",
+   "facts": {
+    "damageType": "other",
+    "formula": "none"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/yojimbo-cavern/cast.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle",
+    "cast"
+   ],
+   "seq": 5,
+   "file": "docs/screenshots/attack-pose/IX-1600x900-yojimbo-yojimbo-daigoro.jpg"
+  },
+  {
+   "key": "daigoro:daigoro-attack",
+   "enemy": "daigoro",
+   "art": "daigoro",
+   "ability": "Daigoro",
+   "abilityId": "daigoro-attack",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/daigoro/cast.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle",
+    "cast"
+   ],
+   "seq": 7,
+   "file": "docs/screenshots/attack-pose/IX-1600x900-daigoro-daigoro-attack.jpg"
+  },
+  {
+   "key": "yojimbo:yojimbo-kozuka",
+   "enemy": "yojimbo",
+   "art": "yojimbo-cavern",
+   "ability": "Kozuka",
+   "abilityId": "yojimbo-kozuka",
+   "facts": {
+    "damageType": "physical",
+    "formula": "strength"
+   },
+   "requested": "cast",
+   "slotPose": "cast",
+   "url": "/art/characters/yojimbo-cavern/cast.png",
+   "paintsAttack": false,
+   "painted": [
+    "idle",
+    "cast"
+   ],
+   "seq": 93,
+   "file": "docs/screenshots/attack-pose/IX-1600x900-yojimbo-yojimbo-kozuka.jpg"
+  }
+ ],
+ "seen": [
+  "yojimbo:yojimbo-daigoro",
+  "daigoro:daigoro-attack",
+  "yojimbo:yojimbo-kozuka"
+ ],
+ "errors": []
+}
