@@ -482,7 +482,11 @@ Score as the share of items passed; any fail on 1, 3, 7, 8, 9 or 17 blocks the t
 4. **In-game checks** (the running game, not memory; our repo's rule prefers the Steam copy, which
    is the PC build: note its window colours differ, §1): what the orange full TIME bar means; whether
    the target name shows without SELECT; the Magic list's shape and MP readout; the damage-number
-   motion; the full Limit gauge's blink rate; the message duration.
+   motion; the full Limit gauge's blink rate; the message duration. Added by the A+ repair pass
+   (2026-09-27): when a party name turns grey (four stills show one: Yuffie, Cid, Red XIII), and
+   whether it goes with the orange full TIME bar; the Magic list's grid order (Config "Magic
+   order"), blanks for spells not owned, and whether the command window stays open; the ready
+   triangle's spin rate and the "Limit" letter step rate.
 
 ## 10. Build notes
 

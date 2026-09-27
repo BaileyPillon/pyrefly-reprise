@@ -1,0 +1,4969 @@
+{
+  "generatedBy": "tools/audio/modern/render-b-score.mjs",
+  "method": {
+    "ckpt": "ace_step_v1_3.5b.safetensors",
+    "seeds": [
+      101,
+      202,
+      303
+    ],
+    "denoise": 0.4,
+    "fallback": 0.35,
+    "lyrics": "[inst]",
+    "sampler": "euler/simple, 50 steps, cfg 5, shift 5, Reinhard 1.0"
+  },
+  "cues": {
+    "battle-ffx": {
+      "game": "ffx",
+      "plays": "ordinary-fight cue (FFX encounters, chapters I-III era; THEMES row 4)",
+      "key": "E minor",
+      "bpm": 150,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, epic battle music, live symphony orchestra, large concert hall, driving string ostinato, french horns, trumpets and trombones, timpani, taiko, orchestral percussion, modern fantasy RPG soundtrack, dramatic, instrumental, no vocals, E minor, 150 bpm, 4/4",
+      "duration": 79.8,
+      "loopStart": 6.4,
+      "loopEnd": 76.8,
+      "file": "public/audio/candidates/direction-b-2026-09-27/battle-ffx.mp3",
+      "pick": "B-battle-ffx-d40-s101",
+      "flagged": null,
+      "finish": {
+        "lagMs": -10,
+        "lagSeenMs": -10,
+        "lagWindows": 12,
+        "xfadeSec": 0.4,
+        "gainDb": 2.89,
+        "ceilingDb": -1.4,
+        "lufs": -16.02,
+        "truePeakDb": -1.21
+      },
+      "lra": 6,
+      "takes": [
+        {
+          "stem": "B-battle-ffx-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 79.78,
+            "centroidHz": 439.1,
+            "tempoEst": 75,
+            "tempoEstFolded": 150,
+            "gridHit": 0.932,
+            "gridHitChance": 0.4,
+            "keyEst": [
+              "E minor",
+              0.787
+            ],
+            "onsets": 295,
+            "source": {
+              "centroidHz": 343,
+              "tempoEst": 75,
+              "gridHit": 0.95,
+              "onsets": 322
+            },
+            "onsetPrecision": 0.847,
+            "onsetRecall": 0.776,
+            "onsetF": 0.81,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 240,
+            "lagSlopeMsPerMin": 3.93,
+            "windowsCorrelated": "12/12",
+            "windowCorrMean": 0.587,
+            "chromaSim": 0.888,
+            "chromaBaselineTwoBarsApart": 0.78,
+            "centroidShiftHz": 96.2,
+            "structureFidelity": 0.629
+          }
+        },
+        {
+          "stem": "B-battle-ffx-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 79.78,
+            "centroidHz": 388.9,
+            "tempoEst": 75,
+            "tempoEstFolded": 150,
+            "gridHit": 0.808,
+            "gridHitChance": 0.4,
+            "keyEst": [
+              "E minor",
+              0.831
+            ],
+            "onsets": 364,
+            "source": {
+              "centroidHz": 343,
+              "tempoEst": 75,
+              "gridHit": 0.95,
+              "onsets": 322
+            },
+            "onsetPrecision": 0.679,
+            "onsetRecall": 0.767,
+            "onsetF": 0.72,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 210,
+            "lagSlopeMsPerMin": 40.65,
+            "windowsCorrelated": "12/12",
+            "windowCorrMean": 0.56,
+            "chromaSim": 0.868,
+            "chromaBaselineTwoBarsApart": 0.78,
+            "centroidShiftHz": 45.9,
+            "structureFidelity": 0.56
+          }
+        },
+        {
+          "stem": "B-battle-ffx-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 79.78,
+            "centroidHz": 544.4,
+            "tempoEst": 75,
+            "tempoEstFolded": 150,
+            "gridHit": 0.971,
+            "gridHitChance": 0.4,
+            "keyEst": [
+              "E minor",
+              0.895
+            ],
+            "onsets": 275,
+            "source": {
+              "centroidHz": 343,
+              "tempoEst": 75,
+              "gridHit": 0.95,
+              "onsets": 322
+            },
+            "onsetPrecision": 0.8,
+            "onsetRecall": 0.683,
+            "onsetF": 0.737,
+            "lagMedianAbsMs": 15,
+            "lagMaxAbsMs": 180,
+            "lagSlopeMsPerMin": 18.68,
+            "windowsCorrelated": "12/12",
+            "windowCorrMean": 0.567,
+            "chromaSim": 0.852,
+            "chromaBaselineTwoBarsApart": 0.78,
+            "centroidShiftHz": 201.5,
+            "structureFidelity": 0.543
+          }
+        }
+      ]
+    },
+    "boss-dread": {
+      "game": "ffx",
+      "plays": "demo cutscene (CutsceneScreen.ts DEMO_CUTSCENE_SCRIPT); no chapter row",
+      "key": "D minor",
+      "bpm": 90,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, dark sacred choir, low strings, brass, timpani, tubular bells, ominous, patient, dread, D minor, 90 bpm, 4/4",
+      "duration": 88.3333,
+      "loopStart": 10.666667,
+      "loopEnd": 85.333333,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-dread.mp3",
+      "pick": "B-boss-dread-d40-s404",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 1,
+        "xfadeSec": 0.6666666666666666,
+        "gainDb": 1.61,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.24
+      },
+      "lra": 6.4,
+      "takes": [
+        {
+          "stem": "B-boss-dread-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 88.33,
+            "centroidHz": 469.1,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 81.12,
+            "gridHit": 0.245,
+            "gridHitChance": 0.24,
+            "keyEst": [
+              "D minor",
+              0.813
+            ],
+            "onsets": 670,
+            "source": {
+              "centroidHz": 427.5,
+              "tempoEst": 130.5,
+              "gridHit": 0.247,
+              "onsets": 681
+            },
+            "onsetPrecision": 0.651,
+            "onsetRecall": 0.64,
+            "onsetF": 0.645,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/8",
+            "windowCorrMean": 0.09,
+            "chromaSim": 0.859,
+            "chromaBaselineTwoBarsApart": 0.858,
+            "centroidShiftHz": 41.6,
+            "structureFidelity": 0.247
+          }
+        },
+        {
+          "stem": "B-boss-dread-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 88.33,
+            "centroidHz": 375.1,
+            "tempoEst": 107.25,
+            "tempoEstFolded": 107.25,
+            "gridHit": 0.264,
+            "gridHitChance": 0.24,
+            "keyEst": [
+              "D minor",
+              0.836
+            ],
+            "onsets": 766,
+            "source": {
+              "centroidHz": 427.5,
+              "tempoEst": 130.5,
+              "gridHit": 0.247,
+              "onsets": 681
+            },
+            "onsetPrecision": 0.664,
+            "onsetRecall": 0.747,
+            "onsetF": 0.704,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/8",
+            "windowCorrMean": 0.085,
+            "chromaSim": 0.894,
+            "chromaBaselineTwoBarsApart": 0.858,
+            "centroidShiftHz": -52.4,
+            "structureFidelity": 0.347
+          }
+        },
+        {
+          "stem": "B-boss-dread-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 88.33,
+            "centroidHz": 346.8,
+            "tempoEst": 176.5,
+            "tempoEstFolded": 88.25,
+            "gridHit": 0.262,
+            "gridHitChance": 0.24,
+            "keyEst": [
+              "D major",
+              0.753
+            ],
+            "onsets": 431,
+            "source": {
+              "centroidHz": 427.5,
+              "tempoEst": 130.5,
+              "gridHit": 0.247,
+              "onsets": 681
+            },
+            "onsetPrecision": 0.712,
+            "onsetRecall": 0.451,
+            "onsetF": 0.552,
+            "lagMedianAbsMs": 140,
+            "lagMaxAbsMs": 140,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/8",
+            "windowCorrMean": 0.1,
+            "chromaSim": 0.901,
+            "chromaBaselineTwoBarsApart": 0.858,
+            "centroidShiftHz": -80.7,
+            "structureFidelity": 0.318
+          }
+        },
+        {
+          "stem": "B-boss-dread-d40-s404",
+          "seed": 404,
+          "denoise": 0.4,
+          "gpuSeconds": 18.1,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 88.33,
+            "centroidHz": 467.3,
+            "tempoEst": 181.75,
+            "tempoEstFolded": 90.88,
+            "gridHit": 0.284,
+            "gridHitChance": 0.24,
+            "keyEst": [
+              "D minor",
+              0.873
+            ],
+            "onsets": 563,
+            "source": {
+              "centroidHz": 427.5,
+              "tempoEst": 130.5,
+              "gridHit": 0.247,
+              "onsets": 681
+            },
+            "onsetPrecision": 0.707,
+            "onsetRecall": 0.584,
+            "onsetF": 0.64,
+            "lagMedianAbsMs": 0,
+            "lagMaxAbsMs": 0,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/8",
+            "windowCorrMean": 0.115,
+            "chromaSim": 0.888,
+            "chromaBaselineTwoBarsApart": 0.858,
+            "centroidShiftHz": 39.8,
+            "structureFidelity": 0.322
+          }
+        },
+        {
+          "stem": "B-boss-dread-d40-s505",
+          "seed": 505,
+          "denoise": 0.4,
+          "gpuSeconds": 14.2,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 88.33,
+            "centroidHz": 502.9,
+            "tempoEst": 130.5,
+            "tempoEstFolded": 65.25,
+            "gridHit": 0.242,
+            "gridHitChance": 0.24,
+            "keyEst": [
+              "D minor",
+              0.796
+            ],
+            "onsets": 550,
+            "source": {
+              "centroidHz": 427.5,
+              "tempoEst": 130.5,
+              "gridHit": 0.247,
+              "onsets": 681
+            },
+            "onsetPrecision": 0.675,
+            "onsetRecall": 0.545,
+            "onsetF": 0.603,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 10,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/8",
+            "windowCorrMean": 0.126,
+            "chromaSim": 0.879,
+            "chromaBaselineTwoBarsApart": 0.858,
+            "centroidShiftHz": 75.4,
+            "structureFidelity": 0.292
+          }
+        },
+        {
+          "stem": "B-boss-dread-d40-s606",
+          "seed": 606,
+          "denoise": 0.4,
+          "gpuSeconds": 14.4,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 88.33,
+            "centroidHz": 471.4,
+            "tempoEst": 187.5,
+            "tempoEstFolded": 93.75,
+            "gridHit": 0.244,
+            "gridHitChance": 0.24,
+            "keyEst": [
+              "D minor",
+              0.824
+            ],
+            "onsets": 652,
+            "source": {
+              "centroidHz": 427.5,
+              "tempoEst": 130.5,
+              "gridHit": 0.247,
+              "onsets": 681
+            },
+            "onsetPrecision": 0.673,
+            "onsetRecall": 0.645,
+            "onsetF": 0.659,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/8",
+            "windowCorrMean": 0.08,
+            "chromaSim": 0.874,
+            "chromaBaselineTwoBarsApart": 0.858,
+            "centroidShiftHz": 43.9,
+            "structureFidelity": 0.284
+          }
+        }
+      ]
+    },
+    "boss-evrae": {
+      "game": "ffx",
+      "plays": "battle: VIII Evrae (airship)",
+      "key": "A minor",
+      "bpm": 144,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, airborne boss battle, driving strings, brass stabs, french horns, taiko, timpani, drum kit, piano, flute, urgent, soaring, A minor, 144 bpm, 4/4",
+      "duration": 83,
+      "loopStart": 6.666667,
+      "loopEnd": 80,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-evrae.mp3",
+      "pick": "B-boss-evrae-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": -20,
+        "lagSeenMs": -20,
+        "lagWindows": 10,
+        "xfadeSec": 0.4166666666666667,
+        "gainDb": 1.19,
+        "ceilingDb": -1.4,
+        "lufs": -15.99,
+        "truePeakDb": -1.29
+      },
+      "lra": 9,
+      "takes": [
+        {
+          "stem": "B-boss-evrae-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 82.94,
+            "centroidHz": 360.5,
+            "tempoEst": 153.75,
+            "tempoEstFolded": 153.75,
+            "gridHit": 0.492,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "E minor",
+              0.722
+            ],
+            "onsets": 329,
+            "source": {
+              "centroidHz": 380.7,
+              "tempoEst": 72.25,
+              "gridHit": 0.89,
+              "onsets": 272
+            },
+            "onsetPrecision": 0.368,
+            "onsetRecall": 0.445,
+            "onsetF": 0.403,
+            "lagMedianAbsMs": 80,
+            "lagMaxAbsMs": 240,
+            "lagSlopeMsPerMin": 256.03,
+            "windowsCorrelated": "3/12",
+            "windowCorrMean": 0.199,
+            "chromaSim": 0.841,
+            "chromaBaselineTwoBarsApart": 0.658,
+            "centroidShiftHz": -20.2,
+            "structureFidelity": 0.38
+          }
+        },
+        {
+          "stem": "B-boss-evrae-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 82.94,
+            "centroidHz": 383,
+            "tempoEst": 72.25,
+            "tempoEstFolded": 144.5,
+            "gridHit": 0.672,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "G major",
+              0.661
+            ],
+            "onsets": 421,
+            "source": {
+              "centroidHz": 380.7,
+              "tempoEst": 72.25,
+              "gridHit": 0.89,
+              "onsets": 272
+            },
+            "onsetPrecision": 0.511,
+            "onsetRecall": 0.79,
+            "onsetF": 0.62,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 230,
+            "lagSlopeMsPerMin": -53.27,
+            "windowsCorrelated": "10/12",
+            "windowCorrMean": 0.41,
+            "chromaSim": 0.837,
+            "chromaBaselineTwoBarsApart": 0.658,
+            "centroidShiftHz": 2.3,
+            "structureFidelity": 0.518
+          }
+        },
+        {
+          "stem": "B-boss-evrae-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 82.94,
+            "centroidHz": 402.6,
+            "tempoEst": 92.5,
+            "tempoEstFolded": 185,
+            "gridHit": 0.406,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "A minor",
+              0.733
+            ],
+            "onsets": 520,
+            "source": {
+              "centroidHz": 380.7,
+              "tempoEst": 72.25,
+              "gridHit": 0.89,
+              "onsets": 272
+            },
+            "onsetPrecision": 0.329,
+            "onsetRecall": 0.629,
+            "onsetF": 0.432,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 190,
+            "lagSlopeMsPerMin": -87.9,
+            "windowsCorrelated": "4/12",
+            "windowCorrMean": 0.218,
+            "chromaSim": 0.836,
+            "chromaBaselineTwoBarsApart": 0.658,
+            "centroidShiftHz": 21.9,
+            "structureFidelity": 0.39
+          }
+        }
+      ]
+    },
+    "boss-ffx2-aeon": {
+      "game": "ffx2",
+      "plays": "battle: IV Bahamut, VI Leblanc (stand-in), XI Fallen Aeons, XIII Trema (Trema phase)",
+      "key": "Bb minor",
+      "bpm": 160,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, brass stabs, electric bass, punchy drum kit, electric piano, synth pads, epic boss battle, modern fantasy RPG soundtrack, instrumental, no vocals, Bb minor, 160 bpm, 4/4",
+      "duration": 117,
+      "loopStart": 12,
+      "loopEnd": 114,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-ffx2-aeon.mp3",
+      "pick": "B-boss-ffx2-aeon-d40-s303",
+      "flagged": null,
+      "finish": {
+        "lagMs": -20,
+        "lagSeenMs": -20,
+        "lagWindows": 19,
+        "xfadeSec": 0.375,
+        "gainDb": 0.45,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.42
+      },
+      "lra": 3.9,
+      "takes": [
+        {
+          "stem": "B-boss-ffx2-aeon-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 116.94,
+            "centroidHz": 208.9,
+            "tempoEst": 80,
+            "tempoEstFolded": 160,
+            "gridHit": 0.8,
+            "gridHitChance": 0.427,
+            "keyEst": [
+              "Bb major",
+              0.805
+            ],
+            "onsets": 380,
+            "source": {
+              "centroidHz": 281.7,
+              "tempoEst": 80,
+              "gridHit": 0.896,
+              "onsets": 375
+            },
+            "onsetPrecision": 0.684,
+            "onsetRecall": 0.693,
+            "onsetF": 0.689,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": -0.7,
+            "windowsCorrelated": "19/19",
+            "windowCorrMean": 0.549,
+            "chromaSim": 0.87,
+            "chromaBaselineTwoBarsApart": 0.828,
+            "centroidShiftHz": -72.8,
+            "structureFidelity": 0.493
+          }
+        },
+        {
+          "stem": "B-boss-ffx2-aeon-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 116.94,
+            "centroidHz": 219.2,
+            "tempoEst": 80,
+            "tempoEstFolded": 160,
+            "gridHit": 0.744,
+            "gridHitChance": 0.427,
+            "keyEst": [
+              "F major",
+              0.89
+            ],
+            "onsets": 422,
+            "source": {
+              "centroidHz": 281.7,
+              "tempoEst": 80,
+              "gridHit": 0.896,
+              "onsets": 375
+            },
+            "onsetPrecision": 0.64,
+            "onsetRecall": 0.72,
+            "onsetF": 0.678,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": 3.74,
+            "windowsCorrelated": "18/19",
+            "windowCorrMean": 0.475,
+            "chromaSim": 0.882,
+            "chromaBaselineTwoBarsApart": 0.828,
+            "centroidShiftHz": -62.5,
+            "structureFidelity": 0.488
+          }
+        },
+        {
+          "stem": "B-boss-ffx2-aeon-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 116.94,
+            "centroidHz": 283.9,
+            "tempoEst": 80,
+            "tempoEstFolded": 160,
+            "gridHit": 0.646,
+            "gridHitChance": 0.427,
+            "keyEst": [
+              "Bb minor",
+              0.739
+            ],
+            "onsets": 424,
+            "source": {
+              "centroidHz": 281.7,
+              "tempoEst": 80,
+              "gridHit": 0.896,
+              "onsets": 375
+            },
+            "onsetPrecision": 0.594,
+            "onsetRecall": 0.672,
+            "onsetF": 0.631,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": 30,
+            "windowsCorrelated": "19/19",
+            "windowCorrMean": 0.549,
+            "chromaSim": 0.89,
+            "chromaBaselineTwoBarsApart": 0.828,
+            "centroidShiftHz": 2.2,
+            "structureFidelity": 0.513
+          }
+        }
+      ]
+    },
+    "boss-jecht": {
+      "game": "ffx",
+      "plays": "battle: III Braska's Final Aeon (Jecht)",
+      "key": "D minor",
+      "bpm": 144,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, epic rock orchestral boss battle, distorted electric guitar riff, electric bass, rock drum kit, brass, strings, choir, heroic, tragic, D minor, 144 bpm, 4/4",
+      "duration": 110.1217,
+      "loopStart": 6.666667,
+      "loopEnd": 107.121678,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-jecht.mp3",
+      "pick": "B-boss-jecht-d40-s101",
+      "flagged": null,
+      "finish": {
+        "lagMs": -40,
+        "lagSeenMs": -40,
+        "lagWindows": 4,
+        "xfadeSec": 0.4166666666666667,
+        "gainDb": 0.77,
+        "ceilingDb": -1.4,
+        "lufs": -15.98,
+        "truePeakDb": -1.23
+      },
+      "lra": 5.3,
+      "takes": [
+        {
+          "stem": "B-boss-jecht-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 110.06,
+            "centroidHz": 621.3,
+            "tempoEst": 74,
+            "tempoEstFolded": 148,
+            "gridHit": 0.451,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "A minor",
+              0.842
+            ],
+            "onsets": 530,
+            "source": {
+              "centroidHz": 1042.3,
+              "tempoEst": 72.25,
+              "gridHit": 0.674,
+              "onsets": 411
+            },
+            "onsetPrecision": 0.415,
+            "onsetRecall": 0.535,
+            "onsetF": 0.468,
+            "lagMedianAbsMs": 50,
+            "lagMaxAbsMs": 180,
+            "lagSlopeMsPerMin": 273.93,
+            "windowsCorrelated": "4/16",
+            "windowCorrMean": 0.195,
+            "chromaSim": 0.924,
+            "chromaBaselineTwoBarsApart": 0.883,
+            "centroidShiftHz": -421,
+            "structureFidelity": 0.339
+          }
+        },
+        {
+          "stem": "B-boss-jecht-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 110.06,
+            "centroidHz": 507.6,
+            "tempoEst": 115.25,
+            "tempoEstFolded": 115.25,
+            "gridHit": 0.378,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "D minor",
+              0.759
+            ],
+            "onsets": 558,
+            "source": {
+              "centroidHz": 1042.3,
+              "tempoEst": 72.25,
+              "gridHit": 0.674,
+              "onsets": 411
+            },
+            "onsetPrecision": 0.396,
+            "onsetRecall": 0.538,
+            "onsetF": 0.456,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 180,
+            "lagSlopeMsPerMin": 0,
+            "windowsCorrelated": "5/16",
+            "windowCorrMean": 0.167,
+            "chromaSim": 0.926,
+            "chromaBaselineTwoBarsApart": 0.883,
+            "centroidShiftHz": -534.8,
+            "structureFidelity": 0.33
+          }
+        },
+        {
+          "stem": "B-boss-jecht-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 110.06,
+            "centroidHz": 538.2,
+            "tempoEst": 117.75,
+            "tempoEstFolded": 117.75,
+            "gridHit": 0.388,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "A minor",
+              0.758
+            ],
+            "onsets": 600,
+            "source": {
+              "centroidHz": 1042.3,
+              "tempoEst": 72.25,
+              "gridHit": 0.674,
+              "onsets": 411
+            },
+            "onsetPrecision": 0.392,
+            "onsetRecall": 0.572,
+            "onsetF": 0.465,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 30,
+            "lagSlopeMsPerMin": 1.57,
+            "windowsCorrelated": "4/16",
+            "windowCorrMean": 0.16,
+            "chromaSim": 0.921,
+            "chromaBaselineTwoBarsApart": 0.883,
+            "centroidShiftHz": -504.1,
+            "structureFidelity": 0.316
+          }
+        },
+        {
+          "stem": "B-boss-jecht-d40-s404",
+          "seed": 404,
+          "denoise": 0.4,
+          "gpuSeconds": 20.1,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 110.06,
+            "centroidHz": 287,
+            "tempoEst": 71.5,
+            "tempoEstFolded": 143,
+            "gridHit": 0.404,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "D major",
+              0.743
+            ],
+            "onsets": 800,
+            "source": {
+              "centroidHz": 1042.3,
+              "tempoEst": 72.25,
+              "gridHit": 0.674,
+              "onsets": 411
+            },
+            "onsetPrecision": 0.369,
+            "onsetRecall": 0.718,
+            "onsetF": 0.487,
+            "lagMedianAbsMs": 100,
+            "lagMaxAbsMs": 180,
+            "lagSlopeMsPerMin": -11.09,
+            "windowsCorrelated": "4/16",
+            "windowCorrMean": 0.158,
+            "chromaSim": 0.925,
+            "chromaBaselineTwoBarsApart": 0.883,
+            "centroidShiftHz": -755.3,
+            "structureFidelity": 0.335
+          }
+        },
+        {
+          "stem": "B-boss-jecht-d40-s505",
+          "seed": 505,
+          "denoise": 0.4,
+          "gpuSeconds": 18.3,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 110.06,
+            "centroidHz": 476.7,
+            "tempoEst": 109,
+            "tempoEstFolded": 109,
+            "gridHit": 0.38,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "D minor",
+              0.791
+            ],
+            "onsets": 555,
+            "source": {
+              "centroidHz": 1042.3,
+              "tempoEst": 72.25,
+              "gridHit": 0.674,
+              "onsets": 411
+            },
+            "onsetPrecision": 0.398,
+            "onsetRecall": 0.538,
+            "onsetF": 0.458,
+            "lagMedianAbsMs": 50,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/16",
+            "windowCorrMean": 0.142,
+            "chromaSim": 0.917,
+            "chromaBaselineTwoBarsApart": 0.883,
+            "centroidShiftHz": -565.7,
+            "structureFidelity": 0.298
+          }
+        },
+        {
+          "stem": "B-boss-jecht-d40-s606",
+          "seed": 606,
+          "denoise": 0.4,
+          "gpuSeconds": 18.3,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 110.06,
+            "centroidHz": 552.3,
+            "tempoEst": 71.5,
+            "tempoEstFolded": 143,
+            "gridHit": 0.427,
+            "gridHitChance": 0.384,
+            "keyEst": [
+              "A minor",
+              0.773
+            ],
+            "onsets": 618,
+            "source": {
+              "centroidHz": 1042.3,
+              "tempoEst": 72.25,
+              "gridHit": 0.674,
+              "onsets": 411
+            },
+            "onsetPrecision": 0.385,
+            "onsetRecall": 0.579,
+            "onsetF": 0.463,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": -11.98,
+            "windowsCorrelated": "3/16",
+            "windowCorrMean": 0.161,
+            "chromaSim": 0.913,
+            "chromaBaselineTwoBarsApart": 0.883,
+            "centroidShiftHz": -490,
+            "structureFidelity": 0.294
+          }
+        }
+      ]
+    },
+    "boss-seymour": {
+      "game": "ffx",
+      "plays": "battle: I Seymour Flux, XII Seymour Omnis (stand-in)",
+      "key": "C# minor",
+      "bpm": 132,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, epic boss battle, pipe organ, contrabasses, driving strings, brass, orchestral drums, baroque, sinister, grand, C# minor, 132 bpm, 4/4",
+      "duration": 101.6618,
+      "loopStart": 7.272721,
+      "loopEnd": 98.661791,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-seymour.mp3",
+      "pick": "B-boss-seymour-d40-s404",
+      "flagged": null,
+      "finish": {
+        "lagMs": -20,
+        "lagSeenMs": -20,
+        "lagWindows": 3,
+        "xfadeSec": 0.45454545454545453,
+        "gainDb": 0.86,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.3
+      },
+      "lra": 7.2,
+      "takes": [
+        {
+          "stem": "B-boss-seymour-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 101.61,
+            "centroidHz": 436.9,
+            "tempoEst": 171.5,
+            "tempoEstFolded": 171.5,
+            "gridHit": 0.385,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "G# minor",
+              0.751
+            ],
+            "onsets": 423,
+            "source": {
+              "centroidHz": 428.7,
+              "tempoEst": 130.5,
+              "gridHit": 0.895,
+              "onsets": 361
+            },
+            "onsetPrecision": 0.378,
+            "onsetRecall": 0.443,
+            "onsetF": 0.408,
+            "lagMedianAbsMs": 90,
+            "lagMaxAbsMs": 140,
+            "lagSlopeMsPerMin": 240.88,
+            "windowsCorrelated": "3/13",
+            "windowCorrMean": 0.145,
+            "chromaSim": 0.869,
+            "chromaBaselineTwoBarsApart": 0.795,
+            "centroidShiftHz": 8.2,
+            "structureFidelity": 0.304
+          }
+        },
+        {
+          "stem": "B-boss-seymour-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 101.61,
+            "centroidHz": 377.3,
+            "tempoEst": 130.25,
+            "tempoEstFolded": 130.25,
+            "gridHit": 0.378,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "G# minor",
+              0.654
+            ],
+            "onsets": 818,
+            "source": {
+              "centroidHz": 428.7,
+              "tempoEst": 130.5,
+              "gridHit": 0.895,
+              "onsets": 361
+            },
+            "onsetPrecision": 0.341,
+            "onsetRecall": 0.773,
+            "onsetF": 0.473,
+            "lagMedianAbsMs": 170,
+            "lagMaxAbsMs": 230,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "2/13",
+            "windowCorrMean": 0.141,
+            "chromaSim": 0.853,
+            "chromaBaselineTwoBarsApart": 0.795,
+            "centroidShiftHz": -51.5,
+            "structureFidelity": 0.299
+          }
+        },
+        {
+          "stem": "B-boss-seymour-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 101.61,
+            "centroidHz": 375.9,
+            "tempoEst": 117.75,
+            "tempoEstFolded": 117.75,
+            "gridHit": 0.36,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "E major",
+              0.597
+            ],
+            "onsets": 580,
+            "source": {
+              "centroidHz": 428.7,
+              "tempoEst": 130.5,
+              "gridHit": 0.895,
+              "onsets": 361
+            },
+            "onsetPrecision": 0.378,
+            "onsetRecall": 0.607,
+            "onsetF": 0.465,
+            "lagMedianAbsMs": 110,
+            "lagMaxAbsMs": 110,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/13",
+            "windowCorrMean": 0.132,
+            "chromaSim": 0.865,
+            "chromaBaselineTwoBarsApart": 0.795,
+            "centroidShiftHz": -52.8,
+            "structureFidelity": 0.312
+          }
+        },
+        {
+          "stem": "B-boss-seymour-d40-s404",
+          "seed": 404,
+          "denoise": 0.4,
+          "gpuSeconds": 14.1,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 101.61,
+            "centroidHz": 502.4,
+            "tempoEst": 130.5,
+            "tempoEstFolded": 130.5,
+            "gridHit": 0.401,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "G# minor",
+              0.591
+            ],
+            "onsets": 745,
+            "source": {
+              "centroidHz": 428.7,
+              "tempoEst": 130.5,
+              "gridHit": 0.895,
+              "onsets": 361
+            },
+            "onsetPrecision": 0.362,
+            "onsetRecall": 0.748,
+            "onsetF": 0.488,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": 123.8,
+            "windowsCorrelated": "3/13",
+            "windowCorrMean": 0.167,
+            "chromaSim": 0.871,
+            "chromaBaselineTwoBarsApart": 0.795,
+            "centroidShiftHz": 73.7,
+            "structureFidelity": 0.341
+          }
+        },
+        {
+          "stem": "B-boss-seymour-d40-s505",
+          "seed": 505,
+          "denoise": 0.4,
+          "gpuSeconds": 14.1,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 101.61,
+            "centroidHz": 510,
+            "tempoEst": 193.5,
+            "tempoEstFolded": 96.75,
+            "gridHit": 0.359,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "G# minor",
+              0.624
+            ],
+            "onsets": 732,
+            "source": {
+              "centroidHz": 428.7,
+              "tempoEst": 130.5,
+              "gridHit": 0.895,
+              "onsets": 361
+            },
+            "onsetPrecision": 0.342,
+            "onsetRecall": 0.693,
+            "onsetF": 0.457,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/13",
+            "windowCorrMean": 0.117,
+            "chromaSim": 0.876,
+            "chromaBaselineTwoBarsApart": 0.795,
+            "centroidShiftHz": 81.3,
+            "structureFidelity": 0.322
+          }
+        },
+        {
+          "stem": "B-boss-seymour-d40-s606",
+          "seed": 606,
+          "denoise": 0.4,
+          "gpuSeconds": 14.1,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 101.61,
+            "centroidHz": 549,
+            "tempoEst": 125,
+            "tempoEstFolded": 125,
+            "gridHit": 0.41,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "G# minor",
+              0.565
+            ],
+            "onsets": 300,
+            "source": {
+              "centroidHz": 428.7,
+              "tempoEst": 130.5,
+              "gridHit": 0.895,
+              "onsets": 361
+            },
+            "onsetPrecision": 0.38,
+            "onsetRecall": 0.316,
+            "onsetF": 0.345,
+            "lagMedianAbsMs": 80,
+            "lagMaxAbsMs": 80,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/13",
+            "windowCorrMean": 0.145,
+            "chromaSim": 0.845,
+            "chromaBaselineTwoBarsApart": 0.795,
+            "centroidShiftHz": 120.2,
+            "structureFidelity": 0.245
+          }
+        }
+      ]
+    },
+    "boss-seymour-macalania": {
+      "game": "ffx",
+      "plays": "battle: VII Seymour and Anima (Macalania), X Seymour Natus (stand-in)",
+      "key": "C# minor",
+      "bpm": 126,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, baroque pavane, harpsichord, solo oboe, pizzicato strings, string quartet, clarinet, low brass, bell, timpani, elegant, polite, sinister, C# minor, 126 bpm, 4/4",
+      "duration": 124.9048,
+      "loopStart": 7.619048,
+      "loopEnd": 121.904762,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-seymour-macalania.mp3",
+      "pick": "B-boss-seymour-macalania-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": -30,
+        "lagSeenMs": -30,
+        "lagWindows": 12,
+        "xfadeSec": 0.47619047619047616,
+        "gainDb": 2.32,
+        "ceilingDb": -1.4,
+        "lufs": -16.01,
+        "truePeakDb": -1.2
+      },
+      "lra": 7.5,
+      "takes": [
+        {
+          "stem": "B-boss-seymour-macalania-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 124.83,
+            "centroidHz": 595.6,
+            "tempoEst": 84.5,
+            "tempoEstFolded": 169,
+            "gridHit": 0.58,
+            "gridHitChance": 0.336,
+            "keyEst": [
+              "G# minor",
+              0.651
+            ],
+            "onsets": 479,
+            "source": {
+              "centroidHz": 906.9,
+              "tempoEst": 125,
+              "gridHit": 0.993,
+              "onsets": 272
+            },
+            "onsetPrecision": 0.349,
+            "onsetRecall": 0.614,
+            "onsetF": 0.445,
+            "lagMedianAbsMs": 70,
+            "lagMaxAbsMs": 230,
+            "lagSlopeMsPerMin": 7.17,
+            "windowsCorrelated": "12/16",
+            "windowCorrMean": 0.343,
+            "chromaSim": 0.836,
+            "chromaBaselineTwoBarsApart": 0.73,
+            "centroidShiftHz": -311.3,
+            "structureFidelity": 0.393
+          }
+        },
+        {
+          "stem": "B-boss-seymour-macalania-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 124.83,
+            "centroidHz": 538.3,
+            "tempoEst": 125,
+            "tempoEstFolded": 125,
+            "gridHit": 0.783,
+            "gridHitChance": 0.336,
+            "keyEst": [
+              "G# minor",
+              0.493
+            ],
+            "onsets": 341,
+            "source": {
+              "centroidHz": 906.9,
+              "tempoEst": 125,
+              "gridHit": 0.993,
+              "onsets": 272
+            },
+            "onsetPrecision": 0.654,
+            "onsetRecall": 0.82,
+            "onsetF": 0.728,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": 2.78,
+            "windowsCorrelated": "12/16",
+            "windowCorrMean": 0.518,
+            "chromaSim": 0.857,
+            "chromaBaselineTwoBarsApart": 0.73,
+            "centroidShiftHz": -368.6,
+            "structureFidelity": 0.573
+          }
+        },
+        {
+          "stem": "B-boss-seymour-macalania-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 124.83,
+            "centroidHz": 512.5,
+            "tempoEst": 125,
+            "tempoEstFolded": 125,
+            "gridHit": 0.779,
+            "gridHitChance": 0.336,
+            "keyEst": [
+              "E major",
+              0.625
+            ],
+            "onsets": 457,
+            "source": {
+              "centroidHz": 906.9,
+              "tempoEst": 125,
+              "gridHit": 0.993,
+              "onsets": 272
+            },
+            "onsetPrecision": 0.484,
+            "onsetRecall": 0.812,
+            "onsetF": 0.606,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": 4.13,
+            "windowsCorrelated": "12/16",
+            "windowCorrMean": 0.451,
+            "chromaSim": 0.851,
+            "chromaBaselineTwoBarsApart": 0.73,
+            "centroidShiftHz": -394.4,
+            "structureFidelity": 0.502
+          }
+        }
+      ]
+    },
+    "boss-shuyin": {
+      "game": "ffx2",
+      "plays": "battle: V Shuyin, XV Den of Woe (stand-in)",
+      "key": "C# minor",
+      "bpm": 154,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, piano and strings boss battle, harp, pad, bell, light drums, shaker, timpani, grief, tragic, emotional, C# minor, 154 bpm, 4/4",
+      "duration": 105.796,
+      "loopStart": 12.551406,
+      "loopEnd": 102.796009,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-shuyin.mp3",
+      "pick": "B-boss-shuyin-d40-s303",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 8,
+        "xfadeSec": 0.38961038961038963,
+        "gainDb": 0.66,
+        "ceilingDb": -1.4,
+        "lufs": -16.01,
+        "truePeakDb": -1.24
+      },
+      "lra": 7.9,
+      "takes": [
+        {
+          "stem": "B-boss-shuyin-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 105.79,
+            "centroidHz": 491.1,
+            "tempoEst": 162,
+            "tempoEstFolded": 162,
+            "gridHit": 0.411,
+            "gridHitChance": 0.411,
+            "keyEst": [
+              "E major",
+              0.891
+            ],
+            "onsets": 706,
+            "source": {
+              "centroidHz": 525.3,
+              "tempoEst": 77,
+              "gridHit": 0.502,
+              "onsets": 253
+            },
+            "onsetPrecision": 0.218,
+            "onsetRecall": 0.609,
+            "onsetF": 0.321,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 180,
+            "lagSlopeMsPerMin": -158.87,
+            "windowsCorrelated": "4/16",
+            "windowCorrMean": 0.146,
+            "chromaSim": 0.884,
+            "chromaBaselineTwoBarsApart": 0.79,
+            "centroidShiftHz": -34.2,
+            "structureFidelity": 0.305
+          }
+        },
+        {
+          "stem": "B-boss-shuyin-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 105.79,
+            "centroidHz": 426.1,
+            "tempoEst": 103.5,
+            "tempoEstFolded": 207,
+            "gridHit": 0.393,
+            "gridHitChance": 0.411,
+            "keyEst": [
+              "E major",
+              0.716
+            ],
+            "onsets": 313,
+            "source": {
+              "centroidHz": 525.3,
+              "tempoEst": 77,
+              "gridHit": 0.502,
+              "onsets": 253
+            },
+            "onsetPrecision": 0.39,
+            "onsetRecall": 0.482,
+            "onsetF": 0.431,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": -19.26,
+            "windowsCorrelated": "6/16",
+            "windowCorrMean": 0.237,
+            "chromaSim": 0.861,
+            "chromaBaselineTwoBarsApart": 0.79,
+            "centroidShiftHz": -99.2,
+            "structureFidelity": 0.335
+          }
+        },
+        {
+          "stem": "B-boss-shuyin-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 105.79,
+            "centroidHz": 315.9,
+            "tempoEst": 154,
+            "tempoEstFolded": 154,
+            "gridHit": 0.467,
+            "gridHitChance": 0.411,
+            "keyEst": [
+              "E major",
+              0.896
+            ],
+            "onsets": 567,
+            "source": {
+              "centroidHz": 525.3,
+              "tempoEst": 77,
+              "gridHit": 0.502,
+              "onsets": 253
+            },
+            "onsetPrecision": 0.277,
+            "onsetRecall": 0.621,
+            "onsetF": 0.383,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 230,
+            "lagSlopeMsPerMin": -84.85,
+            "windowsCorrelated": "8/16",
+            "windowCorrMean": 0.241,
+            "chromaSim": 0.88,
+            "chromaBaselineTwoBarsApart": 0.79,
+            "centroidShiftHz": -209.4,
+            "structureFidelity": 0.351
+          }
+        }
+      ]
+    },
+    "boss-vegnagun": {
+      "game": "ffx2",
+      "plays": "battle: V Vegnagun",
+      "key": "F minor",
+      "bpm": 168,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, mechanical boss battle, synth arpeggio, synth bass, 808 kick, low brass octaves, choir, pipe organ, staccato strings, metallic hits, relentless, F minor, 168 bpm, 4/4",
+      "duration": 94.4286,
+      "loopStart": 11.428571,
+      "loopEnd": 91.428571,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-vegnagun.mp3",
+      "pick": "B-boss-vegnagun-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": -20,
+        "lagSeenMs": -20,
+        "lagWindows": 16,
+        "xfadeSec": 0.35714285714285715,
+        "gainDb": -0.71,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.62
+      },
+      "lra": 3.8,
+      "takes": [
+        {
+          "stem": "B-boss-vegnagun-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 94.37,
+            "centroidHz": 111.2,
+            "tempoEst": 71.5,
+            "tempoEstFolded": 143,
+            "gridHit": 0.44,
+            "gridHitChance": 0.448,
+            "keyEst": [
+              "F minor",
+              0.85
+            ],
+            "onsets": 816,
+            "source": {
+              "centroidHz": 158.5,
+              "tempoEst": 166.75,
+              "gridHit": 0.706,
+              "onsets": 671
+            },
+            "onsetPrecision": 0.62,
+            "onsetRecall": 0.754,
+            "onsetF": 0.681,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/16",
+            "windowCorrMean": 0.115,
+            "chromaSim": 0.929,
+            "chromaBaselineTwoBarsApart": 0.938,
+            "centroidShiftHz": -47.2,
+            "structureFidelity": 0.265
+          }
+        },
+        {
+          "stem": "B-boss-vegnagun-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 94.37,
+            "centroidHz": 91.4,
+            "tempoEst": 166.75,
+            "tempoEstFolded": 166.75,
+            "gridHit": 0.995,
+            "gridHitChance": 0.448,
+            "keyEst": [
+              "F minor",
+              0.801
+            ],
+            "onsets": 382,
+            "source": {
+              "centroidHz": 158.5,
+              "tempoEst": 166.75,
+              "gridHit": 0.706,
+              "onsets": 671
+            },
+            "onsetPrecision": 0.906,
+            "onsetRecall": 0.516,
+            "onsetF": 0.657,
+            "lagMedianAbsMs": 100,
+            "lagMaxAbsMs": 220,
+            "lagSlopeMsPerMin": -11.44,
+            "windowsCorrelated": "16/16",
+            "windowCorrMean": 0.528,
+            "chromaSim": 0.949,
+            "chromaBaselineTwoBarsApart": 0.938,
+            "centroidShiftHz": -67.1,
+            "structureFidelity": 0.456
+          }
+        },
+        {
+          "stem": "B-boss-vegnagun-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 94.37,
+            "centroidHz": 132.3,
+            "tempoEst": 130.5,
+            "tempoEstFolded": 130.5,
+            "gridHit": 0.456,
+            "gridHitChance": 0.448,
+            "keyEst": [
+              "F minor",
+              0.855
+            ],
+            "onsets": 704,
+            "source": {
+              "centroidHz": 158.5,
+              "tempoEst": 166.75,
+              "gridHit": 0.706,
+              "onsets": 671
+            },
+            "onsetPrecision": 0.636,
+            "onsetRecall": 0.668,
+            "onsetF": 0.652,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/16",
+            "windowCorrMean": 0.142,
+            "chromaSim": 0.939,
+            "chromaBaselineTwoBarsApart": 0.938,
+            "centroidShiftHz": -26.2,
+            "structureFidelity": 0.27
+          }
+        }
+      ]
+    },
+    "boss-yojimbo": {
+      "game": "ffx",
+      "plays": "battle: IX Yojimbo, XIV Isaaru (stand-in)",
+      "key": "C minor",
+      "bpm": 132,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, solo cello, solo violin, french horn, felt piano, string orchestra, taiko, timpani, grief, duty, dramatic, C minor, 132 bpm, 4/4",
+      "duration": 90.2727,
+      "loopStart": 14.545465,
+      "loopEnd": 87.272721,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-yojimbo.mp3",
+      "pick": "B-boss-yojimbo-d40-s101",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 4,
+        "xfadeSec": 0.45454545454545453,
+        "gainDb": 1.59,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.26
+      },
+      "lra": 5.9,
+      "takes": [
+        {
+          "stem": "B-boss-yojimbo-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 90.19,
+            "centroidHz": 511.8,
+            "tempoEst": 133.25,
+            "tempoEstFolded": 133.25,
+            "gridHit": 0.359,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "G minor",
+              0.822
+            ],
+            "onsets": 633,
+            "source": {
+              "centroidHz": 645.8,
+              "tempoEst": 88.25,
+              "gridHit": 0.431,
+              "onsets": 327
+            },
+            "onsetPrecision": 0.359,
+            "onsetRecall": 0.694,
+            "onsetF": 0.473,
+            "lagMedianAbsMs": 95,
+            "lagMaxAbsMs": 160,
+            "lagSlopeMsPerMin": -101.58,
+            "windowsCorrelated": "4/12",
+            "windowCorrMean": 0.208,
+            "chromaSim": 0.878,
+            "chromaBaselineTwoBarsApart": 0.766,
+            "centroidShiftHz": -134,
+            "structureFidelity": 0.386
+          }
+        },
+        {
+          "stem": "B-boss-yojimbo-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 90.19,
+            "centroidHz": 408.8,
+            "tempoEst": 130.5,
+            "tempoEstFolded": 130.5,
+            "gridHit": 0.381,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "C minor",
+              0.754
+            ],
+            "onsets": 603,
+            "source": {
+              "centroidHz": 645.8,
+              "tempoEst": 88.25,
+              "gridHit": 0.431,
+              "onsets": 327
+            },
+            "onsetPrecision": 0.33,
+            "onsetRecall": 0.609,
+            "onsetF": 0.428,
+            "lagMedianAbsMs": 50,
+            "lagMaxAbsMs": 120,
+            "lagSlopeMsPerMin": 111.6,
+            "windowsCorrelated": "5/12",
+            "windowCorrMean": 0.193,
+            "chromaSim": 0.869,
+            "chromaBaselineTwoBarsApart": 0.766,
+            "centroidShiftHz": -237,
+            "structureFidelity": 0.354
+          }
+        },
+        {
+          "stem": "B-boss-yojimbo-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 90.19,
+            "centroidHz": 505.8,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 162.25,
+            "gridHit": 0.354,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "C minor",
+              0.847
+            ],
+            "onsets": 710,
+            "source": {
+              "centroidHz": 645.8,
+              "tempoEst": 88.25,
+              "gridHit": 0.431,
+              "onsets": 327
+            },
+            "onsetPrecision": 0.331,
+            "onsetRecall": 0.719,
+            "onsetF": 0.453,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/12",
+            "windowCorrMean": 0.096,
+            "chromaSim": 0.856,
+            "chromaBaselineTwoBarsApart": 0.766,
+            "centroidShiftHz": -140,
+            "structureFidelity": 0.312
+          }
+        }
+      ]
+    },
+    "boss-yu-yevon": {
+      "game": "ffx",
+      "plays": "battle: III Yu Yevon (final phase)",
+      "key": "E minor",
+      "bpm": 40,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, vast slow sacred choir, pipe organ drone, low strings, celesta, organum, endless, awe, E minor, 40 bpm, 4/4",
+      "duration": 218.6,
+      "loopStart": 6,
+      "loopEnd": 215.6,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-yu-yevon.mp3",
+      "pick": "B-boss-yu-yevon-d40-s303",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 0,
+        "xfadeSec": 1,
+        "gainDb": -0.39,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.34
+      },
+      "lra": 8.8,
+      "takes": [
+        {
+          "stem": "B-boss-yu-yevon-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 218.55,
+            "centroidHz": 579.8,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 40.56,
+            "gridHit": 0.11,
+            "gridHitChance": 0.107,
+            "keyEst": [
+              "E minor",
+              0.808
+            ],
+            "onsets": 1895,
+            "source": {
+              "centroidHz": 615.9,
+              "tempoEst": 105.25,
+              "gridHit": 0.116,
+              "onsets": 1845
+            },
+            "onsetPrecision": 0.717,
+            "onsetRecall": 0.736,
+            "onsetF": 0.726,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/9",
+            "windowCorrMean": 0.068,
+            "chromaSim": 0.923,
+            "chromaBaselineTwoBarsApart": 0.723,
+            "centroidShiftHz": -36.1,
+            "structureFidelity": 0.506
+          }
+        },
+        {
+          "stem": "B-boss-yu-yevon-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 218.55,
+            "centroidHz": 592.5,
+            "tempoEst": 92.25,
+            "tempoEstFolded": 46.12,
+            "gridHit": 0.106,
+            "gridHitChance": 0.107,
+            "keyEst": [
+              "E minor",
+              0.851
+            ],
+            "onsets": 1869,
+            "source": {
+              "centroidHz": 615.9,
+              "tempoEst": 105.25,
+              "gridHit": 0.116,
+              "onsets": 1845
+            },
+            "onsetPrecision": 0.719,
+            "onsetRecall": 0.728,
+            "onsetF": 0.723,
+            "lagMedianAbsMs": 40,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/9",
+            "windowCorrMean": 0.115,
+            "chromaSim": 0.94,
+            "chromaBaselineTwoBarsApart": 0.723,
+            "centroidShiftHz": -23.4,
+            "structureFidelity": 0.541
+          }
+        },
+        {
+          "stem": "B-boss-yu-yevon-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 218.55,
+            "centroidHz": 657.3,
+            "tempoEst": 81,
+            "tempoEstFolded": 40.5,
+            "gridHit": 0.112,
+            "gridHitChance": 0.107,
+            "keyEst": [
+              "E minor",
+              0.79
+            ],
+            "onsets": 1838,
+            "source": {
+              "centroidHz": 615.9,
+              "tempoEst": 105.25,
+              "gridHit": 0.116,
+              "onsets": 1845
+            },
+            "onsetPrecision": 0.719,
+            "onsetRecall": 0.716,
+            "onsetF": 0.717,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/9",
+            "windowCorrMean": 0.079,
+            "chromaSim": 0.924,
+            "chromaBaselineTwoBarsApart": 0.723,
+            "centroidShiftHz": 41.4,
+            "structureFidelity": 0.507
+          }
+        }
+      ]
+    },
+    "boss-yunalesca": {
+      "game": "ffx",
+      "plays": "battle: II Lady Yunalesca",
+      "key": "F phrygian",
+      "bpm": 132,
+      "meter": "6/8",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, ritual boss battle, sacred choir in canon, harp, plucked ostinato, low strings, brass, timpani, taiko, relentless, F phrygian, 132 bpm, 6/8",
+      "duration": 103.9091,
+      "loopStart": 10.909093,
+      "loopEnd": 100.909093,
+      "file": "public/audio/candidates/direction-b-2026-09-27/boss-yunalesca.mp3",
+      "pick": "B-boss-yunalesca-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": -30,
+        "lagSeenMs": -30,
+        "lagWindows": 13,
+        "xfadeSec": 0.45454545454545453,
+        "gainDb": 2.58,
+        "ceilingDb": -1.4,
+        "lufs": -16.01,
+        "truePeakDb": -1.1
+      },
+      "lra": 8,
+      "takes": [
+        {
+          "stem": "B-boss-yunalesca-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 103.84,
+            "centroidHz": 402.2,
+            "tempoEst": 88.25,
+            "tempoEstFolded": 176.5,
+            "gridHit": 0.606,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "F minor",
+              0.728
+            ],
+            "onsets": 469,
+            "source": {
+              "centroidHz": 360.7,
+              "tempoEst": 88.25,
+              "gridHit": 0.925,
+              "onsets": 346
+            },
+            "onsetPrecision": 0.448,
+            "onsetRecall": 0.607,
+            "onsetF": 0.515,
+            "lagMedianAbsMs": 40,
+            "lagMaxAbsMs": 230,
+            "lagSlopeMsPerMin": 46.15,
+            "windowsCorrelated": "13/14",
+            "windowCorrMean": 0.397,
+            "chromaSim": 0.897,
+            "chromaBaselineTwoBarsApart": 0.86,
+            "centroidShiftHz": 41.5,
+            "structureFidelity": 0.393
+          }
+        },
+        {
+          "stem": "B-boss-yunalesca-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 103.84,
+            "centroidHz": 421.9,
+            "tempoEst": 88.25,
+            "tempoEstFolded": 176.5,
+            "gridHit": 0.583,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "F minor",
+              0.794
+            ],
+            "onsets": 496,
+            "source": {
+              "centroidHz": 360.7,
+              "tempoEst": 88.25,
+              "gridHit": 0.925,
+              "onsets": 346
+            },
+            "onsetPrecision": 0.496,
+            "onsetRecall": 0.711,
+            "onsetF": 0.584,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 250,
+            "lagSlopeMsPerMin": -55.95,
+            "windowsCorrelated": "13/14",
+            "windowCorrMean": 0.457,
+            "chromaSim": 0.879,
+            "chromaBaselineTwoBarsApart": 0.86,
+            "centroidShiftHz": 61.2,
+            "structureFidelity": 0.394
+          }
+        },
+        {
+          "stem": "B-boss-yunalesca-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 103.84,
+            "centroidHz": 380.6,
+            "tempoEst": 88.25,
+            "tempoEstFolded": 176.5,
+            "gridHit": 0.639,
+            "gridHitChance": 0.352,
+            "keyEst": [
+              "F major",
+              0.762
+            ],
+            "onsets": 468,
+            "source": {
+              "centroidHz": 360.7,
+              "tempoEst": 88.25,
+              "gridHit": 0.925,
+              "onsets": 346
+            },
+            "onsetPrecision": 0.455,
+            "onsetRecall": 0.616,
+            "onsetF": 0.523,
+            "lagMedianAbsMs": 40,
+            "lagMaxAbsMs": 240,
+            "lagSlopeMsPerMin": -36.28,
+            "windowsCorrelated": "13/14",
+            "windowCorrMean": 0.393,
+            "chromaSim": 0.864,
+            "chromaBaselineTwoBarsApart": 0.86,
+            "centroidShiftHz": 19.9,
+            "structureFidelity": 0.316
+          }
+        }
+      ]
+    },
+    "chapter-select": {
+      "game": "both",
+      "plays": "chapter select (BattleScreenFlow.ts on return)",
+      "key": "B minor",
+      "bpm": 84,
+      "meter": "3/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, gentle waltz, flute, piano, harp, soft strings, celesta, distant soft choir pad, calm, unhurried, B minor, 84 bpm, 3/4",
+      "duration": 77.7726,
+      "loopStart": 4.285714,
+      "loopEnd": 74.77263,
+      "file": "public/audio/candidates/direction-b-2026-09-27/chapter-select.mp3",
+      "pick": "B-chapter-select-d40-s303",
+      "flagged": null,
+      "finish": {
+        "lagMs": -10,
+        "lagSeenMs": -10,
+        "lagWindows": 4,
+        "xfadeSec": 0.7142857142857143,
+        "gainDb": 3.65,
+        "ceilingDb": -1.4,
+        "lufs": -16.08,
+        "truePeakDb": -1.14
+      },
+      "lra": 8.6,
+      "takes": [
+        {
+          "stem": "B-chapter-select-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 77.74,
+            "centroidHz": 627.7,
+            "tempoEst": 81,
+            "tempoEstFolded": 81,
+            "gridHit": 0.261,
+            "gridHitChance": 0.224,
+            "keyEst": [
+              "B minor",
+              0.887
+            ],
+            "onsets": 299,
+            "source": {
+              "centroidHz": 636.7,
+              "tempoEst": 83.5,
+              "gridHit": 0.346,
+              "onsets": 133
+            },
+            "onsetPrecision": 0.231,
+            "onsetRecall": 0.519,
+            "onsetF": 0.319,
+            "lagMedianAbsMs": 40,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": -7.5,
+            "windowsCorrelated": "3/6",
+            "windowCorrMean": 0.196,
+            "chromaSim": 0.88,
+            "chromaBaselineTwoBarsApart": 0.671,
+            "centroidShiftHz": -9,
+            "structureFidelity": 0.384
+          }
+        },
+        {
+          "stem": "B-chapter-select-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 77.74,
+            "centroidHz": 626.6,
+            "tempoEst": 85.75,
+            "tempoEstFolded": 85.75,
+            "gridHit": 0.231,
+            "gridHitChance": 0.224,
+            "keyEst": [
+              "B minor",
+              0.866
+            ],
+            "onsets": 364,
+            "source": {
+              "centroidHz": 636.7,
+              "tempoEst": 83.5,
+              "gridHit": 0.346,
+              "onsets": 133
+            },
+            "onsetPrecision": 0.228,
+            "onsetRecall": 0.624,
+            "onsetF": 0.334,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "2/6",
+            "windowCorrMean": 0.202,
+            "chromaSim": 0.882,
+            "chromaBaselineTwoBarsApart": 0.671,
+            "centroidShiftHz": -10.1,
+            "structureFidelity": 0.392
+          }
+        },
+        {
+          "stem": "B-chapter-select-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 77.74,
+            "centroidHz": 628.5,
+            "tempoEst": 84.5,
+            "tempoEstFolded": 84.5,
+            "gridHit": 0.288,
+            "gridHitChance": 0.224,
+            "keyEst": [
+              "B minor",
+              0.875
+            ],
+            "onsets": 302,
+            "source": {
+              "centroidHz": 636.7,
+              "tempoEst": 83.5,
+              "gridHit": 0.346,
+              "onsets": 133
+            },
+            "onsetPrecision": 0.291,
+            "onsetRecall": 0.662,
+            "onsetF": 0.405,
+            "lagMedianAbsMs": 15,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": -33.75,
+            "windowsCorrelated": "4/6",
+            "windowCorrMean": 0.292,
+            "chromaSim": 0.849,
+            "chromaBaselineTwoBarsApart": 0.671,
+            "centroidShiftHz": -8.2,
+            "structureFidelity": 0.413
+          }
+        }
+      ]
+    },
+    "ending-ffx": {
+      "game": "ffx",
+      "plays": "FFX ending (braskas-final-aeon story script)",
+      "key": "B minor",
+      "bpm": 58,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, solo piano then full orchestra, strings, brass, harp, choir, timpani, bell, farewell, emotional, peaceful, B minor, 58 bpm, 4/4",
+      "duration": 125.6537,
+      "loopStart": 33.642358,
+      "loopEnd": 122.653741,
+      "file": "public/audio/candidates/direction-b-2026-09-27/ending-ffx.mp3",
+      "pick": "B-ending-ffx-d35-s101",
+      "flagged": null,
+      "finish": {
+        "lagMs": -30,
+        "lagSeenMs": -30,
+        "lagWindows": 3,
+        "xfadeSec": 1,
+        "gainDb": 0.74,
+        "ceilingDb": -1.4,
+        "lufs": -16.03,
+        "truePeakDb": -1.08
+      },
+      "lra": 12.1,
+      "takes": [
+        {
+          "stem": "B-ending-ffx-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 125.57,
+            "centroidHz": 663.6,
+            "tempoEst": 109,
+            "tempoEstFolded": 54.5,
+            "gridHit": 0.15,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "B minor",
+              0.91
+            ],
+            "onsets": 822,
+            "source": {
+              "centroidHz": 713,
+              "tempoEst": 115.5,
+              "gridHit": 0.193,
+              "onsets": 326
+            },
+            "onsetPrecision": 0.28,
+            "onsetRecall": 0.706,
+            "onsetF": 0.401,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": 18.13,
+            "windowsCorrelated": "3/7",
+            "windowCorrMean": 0.225,
+            "chromaSim": 0.922,
+            "chromaBaselineTwoBarsApart": 0.703,
+            "centroidShiftHz": -49.4,
+            "structureFidelity": 0.455
+          }
+        },
+        {
+          "stem": "B-ending-ffx-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 125.57,
+            "centroidHz": 740.9,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 81.12,
+            "gridHit": 0.158,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "B minor",
+              0.904
+            ],
+            "onsets": 795,
+            "source": {
+              "centroidHz": 713,
+              "tempoEst": 115.5,
+              "gridHit": 0.193,
+              "onsets": 326
+            },
+            "onsetPrecision": 0.27,
+            "onsetRecall": 0.66,
+            "onsetF": 0.384,
+            "lagMedianAbsMs": 40,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": -18.13,
+            "windowsCorrelated": "3/7",
+            "windowCorrMean": 0.25,
+            "chromaSim": 0.919,
+            "chromaBaselineTwoBarsApart": 0.703,
+            "centroidShiftHz": 28,
+            "structureFidelity": 0.454
+          }
+        },
+        {
+          "stem": "B-ending-ffx-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 125.57,
+            "centroidHz": 677.2,
+            "tempoEst": 176.5,
+            "tempoEstFolded": 44.12,
+            "gridHit": 0.192,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "B minor",
+              0.907
+            ],
+            "onsets": 365,
+            "source": {
+              "centroidHz": 713,
+              "tempoEst": 115.5,
+              "gridHit": 0.193,
+              "onsets": 326
+            },
+            "onsetPrecision": 0.334,
+            "onsetRecall": 0.374,
+            "onsetF": 0.353,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 30,
+            "lagSlopeMsPerMin": 18.13,
+            "windowsCorrelated": "3/7",
+            "windowCorrMean": 0.218,
+            "chromaSim": 0.897,
+            "chromaBaselineTwoBarsApart": 0.703,
+            "centroidShiftHz": -35.7,
+            "structureFidelity": 0.408
+          }
+        },
+        {
+          "stem": "B-ending-ffx-d35-s101",
+          "seed": 101,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 125.57,
+            "centroidHz": 678.3,
+            "tempoEst": 113.25,
+            "tempoEstFolded": 56.62,
+            "gridHit": 0.156,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "B minor",
+              0.915
+            ],
+            "onsets": 831,
+            "source": {
+              "centroidHz": 713,
+              "tempoEst": 115.5,
+              "gridHit": 0.193,
+              "onsets": 326
+            },
+            "onsetPrecision": 0.29,
+            "onsetRecall": 0.739,
+            "onsetF": 0.417,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": 18.13,
+            "windowsCorrelated": "3/7",
+            "windowCorrMean": 0.272,
+            "chromaSim": 0.937,
+            "chromaBaselineTwoBarsApart": 0.703,
+            "centroidShiftHz": -34.7,
+            "structureFidelity": 0.492
+          }
+        },
+        {
+          "stem": "B-ending-ffx-d35-s202",
+          "seed": 202,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 125.57,
+            "centroidHz": 754.1,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 81.12,
+            "gridHit": 0.15,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "B minor",
+              0.906
+            ],
+            "onsets": 789,
+            "source": {
+              "centroidHz": 713,
+              "tempoEst": 115.5,
+              "gridHit": 0.193,
+              "onsets": 326
+            },
+            "onsetPrecision": 0.28,
+            "onsetRecall": 0.678,
+            "onsetF": 0.396,
+            "lagMedianAbsMs": 40,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": -18.13,
+            "windowsCorrelated": "3/7",
+            "windowCorrMean": 0.256,
+            "chromaSim": 0.937,
+            "chromaBaselineTwoBarsApart": 0.703,
+            "centroidShiftHz": 41.2,
+            "structureFidelity": 0.481
+          }
+        },
+        {
+          "stem": "B-ending-ffx-d35-s303",
+          "seed": 303,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 125.57,
+            "centroidHz": 672.3,
+            "tempoEst": 176.5,
+            "tempoEstFolded": 44.12,
+            "gridHit": 0.196,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "B minor",
+              0.909
+            ],
+            "onsets": 448,
+            "source": {
+              "centroidHz": 713,
+              "tempoEst": 115.5,
+              "gridHit": 0.193,
+              "onsets": 326
+            },
+            "onsetPrecision": 0.342,
+            "onsetRecall": 0.469,
+            "onsetF": 0.395,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": -36.25,
+            "windowsCorrelated": "3/7",
+            "windowCorrMean": 0.236,
+            "chromaSim": 0.917,
+            "chromaBaselineTwoBarsApart": 0.703,
+            "centroidShiftHz": -40.7,
+            "structureFidelity": 0.45
+          }
+        }
+      ]
+    },
+    "ending-ffx2": {
+      "game": "ffx2",
+      "plays": "FFX-2 ending (ffx2-vegnagun-shuyin story script)",
+      "key": "Bb major",
+      "bpm": 84,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, pop ballad, piano, strings, pad, flute, soft choir, harp, electric piano, electric bass, light drums, gentle, hopeful goodbye, Bb major, 84 bpm, 4/4",
+      "duration": 119.3317,
+      "loopStart": 12.082494,
+      "loopEnd": 116.331655,
+      "file": "public/audio/candidates/direction-b-2026-09-27/ending-ffx2.mp3",
+      "pick": "B-ending-ffx2-d40-s303",
+      "flagged": null,
+      "finish": {
+        "lagMs": 10,
+        "lagSeenMs": 10,
+        "lagWindows": 3,
+        "xfadeSec": 0.7142857142857143,
+        "gainDb": 0.61,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.22
+      },
+      "lra": 9.2,
+      "takes": [
+        {
+          "stem": "B-ending-ffx2-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 119.26,
+            "centroidHz": 464.7,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 81.12,
+            "gridHit": 0.242,
+            "gridHitChance": 0.224,
+            "keyEst": [
+              "D minor",
+              0.706
+            ],
+            "onsets": 654,
+            "source": {
+              "centroidHz": 603.5,
+              "tempoEst": 166.75,
+              "gridHit": 0.332,
+              "onsets": 358
+            },
+            "onsetPrecision": 0.324,
+            "onsetRecall": 0.592,
+            "onsetF": 0.419,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 30,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/10",
+            "windowCorrMean": 0.117,
+            "chromaSim": 0.824,
+            "chromaBaselineTwoBarsApart": 0.684,
+            "centroidShiftHz": -138.8,
+            "structureFidelity": 0.326
+          }
+        },
+        {
+          "stem": "B-ending-ffx2-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 119.26,
+            "centroidHz": 496.5,
+            "tempoEst": 83.25,
+            "tempoEstFolded": 83.25,
+            "gridHit": 0.232,
+            "gridHitChance": 0.224,
+            "keyEst": [
+              "D minor",
+              0.747
+            ],
+            "onsets": 724,
+            "source": {
+              "centroidHz": 603.5,
+              "tempoEst": 166.75,
+              "gridHit": 0.332,
+              "onsets": 358
+            },
+            "onsetPrecision": 0.322,
+            "onsetRecall": 0.651,
+            "onsetF": 0.431,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 30,
+            "lagSlopeMsPerMin": 18.9,
+            "windowsCorrelated": "5/10",
+            "windowCorrMean": 0.179,
+            "chromaSim": 0.852,
+            "chromaBaselineTwoBarsApart": 0.684,
+            "centroidShiftHz": -107,
+            "structureFidelity": 0.38
+          }
+        },
+        {
+          "stem": "B-ending-ffx2-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 119.26,
+            "centroidHz": 562,
+            "tempoEst": 84.5,
+            "tempoEstFolded": 84.5,
+            "gridHit": 0.254,
+            "gridHitChance": 0.224,
+            "keyEst": [
+              "F major",
+              0.727
+            ],
+            "onsets": 763,
+            "source": {
+              "centroidHz": 603.5,
+              "tempoEst": 166.75,
+              "gridHit": 0.332,
+              "onsets": 358
+            },
+            "onsetPrecision": 0.332,
+            "onsetRecall": 0.707,
+            "onsetF": 0.451,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": 183.73,
+            "windowsCorrelated": "3/10",
+            "windowCorrMean": 0.191,
+            "chromaSim": 0.847,
+            "chromaBaselineTwoBarsApart": 0.684,
+            "centroidShiftHz": -41.6,
+            "structureFidelity": 0.386
+          }
+        }
+      ]
+    },
+    "pause": {
+      "game": "both",
+      "plays": "pause menu (src/ui/common/pauseMusic.ts)",
+      "key": "E minor",
+      "bpm": 46,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, slow hymn, soft wordless choir, warm pad, harp, very quiet, still, suspended, E minor, 46 bpm, 4/4",
+      "duration": 49.9565,
+      "loopStart": 5.217392,
+      "loopEnd": 46.956531,
+      "file": "public/audio/candidates/direction-b-2026-09-27/pause.mp3",
+      "pick": "B-pause-d40-s101",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 160,
+        "lagWindows": 1,
+        "xfadeSec": 1,
+        "gainDb": 1.22,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.5
+      },
+      "lra": 8,
+      "takes": [
+        {
+          "stem": "B-pause-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 49.88,
+            "centroidHz": 679.9,
+            "tempoEst": 92.25,
+            "tempoEstFolded": 46.12,
+            "gridHit": 0.13,
+            "gridHitChance": 0.123,
+            "keyEst": [
+              "E minor",
+              0.86
+            ],
+            "onsets": 416,
+            "source": {
+              "centroidHz": 751.3,
+              "tempoEst": 139.5,
+              "gridHit": 0.125,
+              "onsets": 353
+            },
+            "onsetPrecision": 0.596,
+            "onsetRecall": 0.703,
+            "onsetF": 0.645,
+            "lagMedianAbsMs": 160,
+            "lagMaxAbsMs": 160,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/2",
+            "windowCorrMean": 0.172,
+            "chromaSim": 0.909,
+            "chromaBaselineTwoBarsApart": 0.667,
+            "centroidShiftHz": -71.4,
+            "structureFidelity": 0.515
+          }
+        },
+        {
+          "stem": "B-pause-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 49.88,
+            "centroidHz": 605.1,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 40.56,
+            "gridHit": 0.129,
+            "gridHitChance": 0.123,
+            "keyEst": [
+              "E minor",
+              0.848
+            ],
+            "onsets": 426,
+            "source": {
+              "centroidHz": 751.3,
+              "tempoEst": 139.5,
+              "gridHit": 0.125,
+              "onsets": 353
+            },
+            "onsetPrecision": 0.582,
+            "onsetRecall": 0.703,
+            "onsetF": 0.637,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/2",
+            "windowCorrMean": 0.115,
+            "chromaSim": 0.882,
+            "chromaBaselineTwoBarsApart": 0.667,
+            "centroidShiftHz": -146.2,
+            "structureFidelity": 0.466
+          }
+        },
+        {
+          "stem": "B-pause-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 49.88,
+            "centroidHz": 745.3,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 40.56,
+            "gridHit": 0.109,
+            "gridHitChance": 0.123,
+            "keyEst": [
+              "E minor",
+              0.864
+            ],
+            "onsets": 440,
+            "source": {
+              "centroidHz": 751.3,
+              "tempoEst": 139.5,
+              "gridHit": 0.125,
+              "onsets": 353
+            },
+            "onsetPrecision": 0.591,
+            "onsetRecall": 0.737,
+            "onsetF": 0.656,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/2",
+            "windowCorrMean": 0.099,
+            "chromaSim": 0.935,
+            "chromaBaselineTwoBarsApart": 0.667,
+            "centroidShiftHz": -6,
+            "structureFidelity": 0.52
+          }
+        }
+      ]
+    },
+    "scene-bevelle-underground": {
+      "game": "ffx2",
+      "plays": "scene: IV Bahamut, VI (stand-in), XIII Trema (and Paragon link), XV (stand-in)",
+      "key": "G minor",
+      "bpm": 100,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, dark ambient pulse, synth arpeggio, synth bass, pipe organ, low strings, harp, clarinet, metallic hits, 808, underground machine, G minor, 100 bpm, 4/4",
+      "duration": 108.6,
+      "loopStart": 19.2,
+      "loopEnd": 105.6,
+      "file": "public/audio/candidates/direction-b-2026-09-27/scene-bevelle-underground.mp3",
+      "pick": "B-scene-bevelle-underground-d40-s303",
+      "flagged": null,
+      "finish": {
+        "lagMs": -10,
+        "lagSeenMs": -10,
+        "lagWindows": 8,
+        "xfadeSec": 0.6,
+        "gainDb": -0.4,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.31
+      },
+      "lra": 7.8,
+      "takes": [
+        {
+          "stem": "B-scene-bevelle-underground-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 108.58,
+            "centroidHz": 153.2,
+            "tempoEst": 81,
+            "tempoEstFolded": 81,
+            "gridHit": 0.317,
+            "gridHitChance": 0.267,
+            "keyEst": [
+              "G minor",
+              0.853
+            ],
+            "onsets": 792,
+            "source": {
+              "centroidHz": 153.7,
+              "tempoEst": 100,
+              "gridHit": 0.836,
+              "onsets": 342
+            },
+            "onsetPrecision": 0.338,
+            "onsetRecall": 0.784,
+            "onsetF": 0.473,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 30,
+            "lagSlopeMsPerMin": -14.18,
+            "windowsCorrelated": "5/11",
+            "windowCorrMean": 0.259,
+            "chromaSim": 0.931,
+            "chromaBaselineTwoBarsApart": 0.834,
+            "centroidShiftHz": -0.6,
+            "structureFidelity": 0.439
+          }
+        },
+        {
+          "stem": "B-scene-bevelle-underground-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 108.58,
+            "centroidHz": 139.3,
+            "tempoEst": 92.25,
+            "tempoEstFolded": 92.25,
+            "gridHit": 0.273,
+            "gridHitChance": 0.267,
+            "keyEst": [
+              "G minor",
+              0.872
+            ],
+            "onsets": 776,
+            "source": {
+              "centroidHz": 153.7,
+              "tempoEst": 100,
+              "gridHit": 0.836,
+              "onsets": 342
+            },
+            "onsetPrecision": 0.302,
+            "onsetRecall": 0.684,
+            "onsetF": 0.419,
+            "lagMedianAbsMs": 115,
+            "lagMaxAbsMs": 230,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "2/11",
+            "windowCorrMean": 0.167,
+            "chromaSim": 0.892,
+            "chromaBaselineTwoBarsApart": 0.834,
+            "centroidShiftHz": -14.4,
+            "structureFidelity": 0.313
+          }
+        },
+        {
+          "stem": "B-scene-bevelle-underground-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 108.58,
+            "centroidHz": 107.9,
+            "tempoEst": 100,
+            "tempoEstFolded": 100,
+            "gridHit": 0.428,
+            "gridHitChance": 0.267,
+            "keyEst": [
+              "G minor",
+              0.906
+            ],
+            "onsets": 486,
+            "source": {
+              "centroidHz": 153.7,
+              "tempoEst": 100,
+              "gridHit": 0.836,
+              "onsets": 342
+            },
+            "onsetPrecision": 0.471,
+            "onsetRecall": 0.67,
+            "onsetF": 0.553,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": 4.38,
+            "windowsCorrelated": "8/11",
+            "windowCorrMean": 0.437,
+            "chromaSim": 0.938,
+            "chromaBaselineTwoBarsApart": 0.834,
+            "centroidShiftHz": -45.8,
+            "structureFidelity": 0.538
+          }
+        }
+      ]
+    },
+    "scene-dreams-end": {
+      "game": "ffx",
+      "plays": "scene: III Dream's End, XII (stand-in)",
+      "key": "atonal",
+      "bpm": 76,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, ambient, celesta, pad, strings, low strings, soft choir, flute, bell, dreamlike, drifting, unmoored, 76 bpm, 4/4",
+      "duration": 104.0526,
+      "loopStart": 12.63161,
+      "loopEnd": 101.052653,
+      "file": "public/audio/candidates/direction-b-2026-09-27/scene-dreams-end.mp3",
+      "pick": "B-scene-dreams-end-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 3,
+        "xfadeSec": 0.7894736842105263,
+        "gainDb": 1.68,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.24
+      },
+      "lra": 17.2,
+      "takes": [
+        {
+          "stem": "B-scene-dreams-end-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 104.03,
+            "centroidHz": 750.6,
+            "tempoEst": 76,
+            "tempoEstFolded": 76,
+            "gridHit": 0.202,
+            "gridHitChance": 0.203,
+            "keyEst": [
+              "A minor",
+              0.266
+            ],
+            "onsets": 644,
+            "source": {
+              "centroidHz": 778.9,
+              "tempoEst": 76,
+              "gridHit": 0.49,
+              "onsets": 296
+            },
+            "onsetPrecision": 0.272,
+            "onsetRecall": 0.591,
+            "onsetF": 0.372,
+            "lagMedianAbsMs": 40,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/8",
+            "windowCorrMean": 0.112,
+            "chromaSim": 0.889,
+            "chromaBaselineTwoBarsApart": 0.682,
+            "centroidShiftHz": -28.2,
+            "structureFidelity": 0.379
+          }
+        },
+        {
+          "stem": "B-scene-dreams-end-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 104.03,
+            "centroidHz": 760.7,
+            "tempoEst": 76,
+            "tempoEstFolded": 76,
+            "gridHit": 0.259,
+            "gridHitChance": 0.203,
+            "keyEst": [
+              "C major",
+              0.306
+            ],
+            "onsets": 713,
+            "source": {
+              "centroidHz": 778.9,
+              "tempoEst": 76,
+              "gridHit": 0.49,
+              "onsets": 296
+            },
+            "onsetPrecision": 0.299,
+            "onsetRecall": 0.72,
+            "onsetF": 0.422,
+            "lagMedianAbsMs": 60,
+            "lagMaxAbsMs": 60,
+            "lagSlopeMsPerMin": -21.93,
+            "windowsCorrelated": "3/8",
+            "windowCorrMean": 0.183,
+            "chromaSim": 0.86,
+            "chromaBaselineTwoBarsApart": 0.682,
+            "centroidShiftHz": -18.1,
+            "structureFidelity": 0.388
+          }
+        },
+        {
+          "stem": "B-scene-dreams-end-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 104.03,
+            "centroidHz": 672.6,
+            "tempoEst": 75.75,
+            "tempoEstFolded": 75.75,
+            "gridHit": 0.224,
+            "gridHitChance": 0.203,
+            "keyEst": [
+              "A minor",
+              0.441
+            ],
+            "onsets": 776,
+            "source": {
+              "centroidHz": 778.9,
+              "tempoEst": 76,
+              "gridHit": 0.49,
+              "onsets": 296
+            },
+            "onsetPrecision": 0.273,
+            "onsetRecall": 0.716,
+            "onsetF": 0.396,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/8",
+            "windowCorrMean": 0.136,
+            "chromaSim": 0.855,
+            "chromaBaselineTwoBarsApart": 0.682,
+            "centroidShiftHz": -106.3,
+            "structureFidelity": 0.358
+          }
+        }
+      ]
+    },
+    "scene-fahrenheit": {
+      "game": "ffx",
+      "plays": "scene: VIII Evrae (Fahrenheit deck)",
+      "key": "D minor",
+      "bpm": 104,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, violins, flute, piano open fifths, brass, low strings, taiko heartbeat, timpani, wind, urgent, no way back, D minor, 104 bpm, 4/4",
+      "duration": 76.8461,
+      "loopStart": 9.230771,
+      "loopEnd": 73.846145,
+      "file": "public/audio/candidates/direction-b-2026-09-27/scene-fahrenheit.mp3",
+      "pick": "B-scene-fahrenheit-d35-s303",
+      "flagged": "no take kept the tempo within 3 % at 0.4 or 0.35; best 0.35 take used",
+      "finish": {
+        "lagMs": -10,
+        "lagSeenMs": -10,
+        "lagWindows": 3,
+        "xfadeSec": 0.5769230769230769,
+        "gainDb": 0.26,
+        "ceilingDb": -1.4,
+        "lufs": -16,
+        "truePeakDb": -1.2
+      },
+      "lra": 16.4,
+      "takes": [
+        {
+          "stem": "B-scene-fahrenheit-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 76.81,
+            "centroidHz": 632.4,
+            "tempoEst": 107.25,
+            "tempoEstFolded": 107.25,
+            "gridHit": 0.284,
+            "gridHitChance": 0.277,
+            "keyEst": [
+              "A minor",
+              0.808
+            ],
+            "onsets": 595,
+            "source": {
+              "centroidHz": 888.9,
+              "tempoEst": 103.5,
+              "gridHit": 0.409,
+              "onsets": 389
+            },
+            "onsetPrecision": 0.452,
+            "onsetRecall": 0.692,
+            "onsetF": 0.547,
+            "lagMedianAbsMs": 180,
+            "lagMaxAbsMs": 180,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/8",
+            "windowCorrMean": 0.137,
+            "chromaSim": 0.879,
+            "chromaBaselineTwoBarsApart": 0.769,
+            "centroidShiftHz": -256.4,
+            "structureFidelity": 0.386
+          }
+        },
+        {
+          "stem": "B-scene-fahrenheit-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 76.81,
+            "centroidHz": 805.9,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 81.12,
+            "gridHit": 0.266,
+            "gridHitChance": 0.277,
+            "keyEst": [
+              "D major",
+              0.761
+            ],
+            "onsets": 638,
+            "source": {
+              "centroidHz": 888.9,
+              "tempoEst": 103.5,
+              "gridHit": 0.409,
+              "onsets": 389
+            },
+            "onsetPrecision": 0.437,
+            "onsetRecall": 0.717,
+            "onsetF": 0.543,
+            "lagMedianAbsMs": 250,
+            "lagMaxAbsMs": 250,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/8",
+            "windowCorrMean": 0.104,
+            "chromaSim": 0.902,
+            "chromaBaselineTwoBarsApart": 0.769,
+            "centroidShiftHz": -82.9,
+            "structureFidelity": 0.407
+          }
+        },
+        {
+          "stem": "B-scene-fahrenheit-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 76.81,
+            "centroidHz": 746.6,
+            "tempoEst": 158,
+            "tempoEstFolded": 79,
+            "gridHit": 0.279,
+            "gridHitChance": 0.277,
+            "keyEst": [
+              "A minor",
+              0.801
+            ],
+            "onsets": 527,
+            "source": {
+              "centroidHz": 888.9,
+              "tempoEst": 103.5,
+              "gridHit": 0.409,
+              "onsets": 389
+            },
+            "onsetPrecision": 0.497,
+            "onsetRecall": 0.674,
+            "onsetF": 0.572,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": -17.5,
+            "windowsCorrelated": "3/8",
+            "windowCorrMean": 0.215,
+            "chromaSim": 0.887,
+            "chromaBaselineTwoBarsApart": 0.769,
+            "centroidShiftHz": -142.2,
+            "structureFidelity": 0.433
+          }
+        },
+        {
+          "stem": "B-scene-fahrenheit-d35-s101",
+          "seed": 101,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 76.81,
+            "centroidHz": 683.6,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 81.12,
+            "gridHit": 0.28,
+            "gridHitChance": 0.277,
+            "keyEst": [
+              "A minor",
+              0.794
+            ],
+            "onsets": 585,
+            "source": {
+              "centroidHz": 888.9,
+              "tempoEst": 103.5,
+              "gridHit": 0.409,
+              "onsets": 389
+            },
+            "onsetPrecision": 0.467,
+            "onsetRecall": 0.702,
+            "onsetF": 0.561,
+            "lagMedianAbsMs": 180,
+            "lagMaxAbsMs": 180,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/8",
+            "windowCorrMean": 0.117,
+            "chromaSim": 0.9,
+            "chromaBaselineTwoBarsApart": 0.769,
+            "centroidShiftHz": -205.3,
+            "structureFidelity": 0.415
+          }
+        },
+        {
+          "stem": "B-scene-fahrenheit-d35-s202",
+          "seed": 202,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 76.81,
+            "centroidHz": 788.3,
+            "tempoEst": 72.25,
+            "tempoEstFolded": 144.5,
+            "gridHit": 0.265,
+            "gridHitChance": 0.277,
+            "keyEst": [
+              "A minor",
+              0.737
+            ],
+            "onsets": 631,
+            "source": {
+              "centroidHz": 888.9,
+              "tempoEst": 103.5,
+              "gridHit": 0.409,
+              "onsets": 389
+            },
+            "onsetPrecision": 0.463,
+            "onsetRecall": 0.751,
+            "onsetF": 0.573,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/8",
+            "windowCorrMean": 0.091,
+            "chromaSim": 0.928,
+            "chromaBaselineTwoBarsApart": 0.769,
+            "centroidShiftHz": -100.6,
+            "structureFidelity": 0.45
+          }
+        },
+        {
+          "stem": "B-scene-fahrenheit-d35-s303",
+          "seed": 303,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 76.81,
+            "centroidHz": 756.4,
+            "tempoEst": 162,
+            "tempoEstFolded": 81,
+            "gridHit": 0.28,
+            "gridHitChance": 0.277,
+            "keyEst": [
+              "A minor",
+              0.785
+            ],
+            "onsets": 550,
+            "source": {
+              "centroidHz": 888.9,
+              "tempoEst": 103.5,
+              "gridHit": 0.409,
+              "onsets": 389
+            },
+            "onsetPrecision": 0.498,
+            "onsetRecall": 0.704,
+            "onsetF": 0.584,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": -17.5,
+            "windowsCorrelated": "3/8",
+            "windowCorrMean": 0.211,
+            "chromaSim": 0.901,
+            "chromaBaselineTwoBarsApart": 0.769,
+            "centroidShiftHz": -132.5,
+            "structureFidelity": 0.456
+          }
+        }
+      ]
+    },
+    "scene-farplane": {
+      "game": "ffx2",
+      "plays": "scene: V Vegnagun, XI Fallen Aeons",
+      "key": "E major",
+      "bpm": 92,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, ethereal, strings, low strings, pad, soft choir, flute, harp, celesta, bell, restful, distant, E major, 92 bpm, 4/4",
+      "duration": 107.3478,
+      "loopStart": 20.869569,
+      "loopEnd": 104.347823,
+      "file": "public/audio/candidates/direction-b-2026-09-27/scene-farplane.mp3",
+      "pick": "B-scene-farplane-d40-s404",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 0,
+        "xfadeSec": 0.6521739130434783,
+        "gainDb": 1.07,
+        "ceilingDb": -1.4,
+        "lufs": -15.99,
+        "truePeakDb": -1.74
+      },
+      "lra": 3.5,
+      "takes": [
+        {
+          "stem": "B-scene-farplane-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 107.28,
+            "centroidHz": 496.6,
+            "tempoEst": 74,
+            "tempoEstFolded": 74,
+            "gridHit": 0.255,
+            "gridHitChance": 0.245,
+            "keyEst": [
+              "D major",
+              0.743
+            ],
+            "onsets": 718,
+            "source": {
+              "centroidHz": 563.5,
+              "tempoEst": 181.75,
+              "gridHit": 0.294,
+              "onsets": 763
+            },
+            "onsetPrecision": 0.627,
+            "onsetRecall": 0.59,
+            "onsetF": 0.608,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/10",
+            "windowCorrMean": 0.091,
+            "chromaSim": 0.917,
+            "chromaBaselineTwoBarsApart": 0.911,
+            "centroidShiftHz": -67,
+            "structureFidelity": 0.254
+          }
+        },
+        {
+          "stem": "B-scene-farplane-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 107.28,
+            "centroidHz": 497.9,
+            "tempoEst": 187.5,
+            "tempoEstFolded": 93.75,
+            "gridHit": 0.247,
+            "gridHitChance": 0.245,
+            "keyEst": [
+              "D major",
+              0.794
+            ],
+            "onsets": 336,
+            "source": {
+              "centroidHz": 563.5,
+              "tempoEst": 181.75,
+              "gridHit": 0.294,
+              "onsets": 763
+            },
+            "onsetPrecision": 0.658,
+            "onsetRecall": 0.29,
+            "onsetF": 0.402,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 30,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/10",
+            "windowCorrMean": 0.105,
+            "chromaSim": 0.888,
+            "chromaBaselineTwoBarsApart": 0.911,
+            "centroidShiftHz": -65.6,
+            "structureFidelity": 0.169
+          }
+        },
+        {
+          "stem": "B-scene-farplane-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 107.28,
+            "centroidHz": 488.4,
+            "tempoEst": 171.5,
+            "tempoEstFolded": 85.75,
+            "gridHit": 0.264,
+            "gridHitChance": 0.245,
+            "keyEst": [
+              "A major",
+              0.822
+            ],
+            "onsets": 621,
+            "source": {
+              "centroidHz": 563.5,
+              "tempoEst": 181.75,
+              "gridHit": 0.294,
+              "onsets": 763
+            },
+            "onsetPrecision": 0.615,
+            "onsetRecall": 0.501,
+            "onsetF": 0.552,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/10",
+            "windowCorrMean": 0.096,
+            "chromaSim": 0.924,
+            "chromaBaselineTwoBarsApart": 0.911,
+            "centroidShiftHz": -75.1,
+            "structureFidelity": 0.262
+          }
+        },
+        {
+          "stem": "B-scene-farplane-d40-s404",
+          "seed": 404,
+          "denoise": 0.4,
+          "gpuSeconds": 18.1,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 107.28,
+            "centroidHz": 452.1,
+            "tempoEst": 92.25,
+            "tempoEstFolded": 92.25,
+            "gridHit": 0.259,
+            "gridHitChance": 0.245,
+            "keyEst": [
+              "D major",
+              0.788
+            ],
+            "onsets": 900,
+            "source": {
+              "centroidHz": 563.5,
+              "tempoEst": 181.75,
+              "gridHit": 0.294,
+              "onsets": 763
+            },
+            "onsetPrecision": 0.61,
+            "onsetRecall": 0.72,
+            "onsetF": 0.66,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/10",
+            "windowCorrMean": 0.102,
+            "chromaSim": 0.916,
+            "chromaBaselineTwoBarsApart": 0.911,
+            "centroidShiftHz": -111.5,
+            "structureFidelity": 0.271
+          }
+        },
+        {
+          "stem": "B-scene-farplane-d40-s505",
+          "seed": 505,
+          "denoise": 0.4,
+          "gpuSeconds": 18.1,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 107.28,
+            "centroidHz": 578,
+            "tempoEst": 171.25,
+            "tempoEstFolded": 85.62,
+            "gridHit": 0.243,
+            "gridHitChance": 0.245,
+            "keyEst": [
+              "D major",
+              0.879
+            ],
+            "onsets": 518,
+            "source": {
+              "centroidHz": 563.5,
+              "tempoEst": 181.75,
+              "gridHit": 0.294,
+              "onsets": 763
+            },
+            "onsetPrecision": 0.629,
+            "onsetRecall": 0.427,
+            "onsetF": 0.509,
+            "lagMedianAbsMs": 90,
+            "lagMaxAbsMs": 120,
+            "lagSlopeMsPerMin": -291.74,
+            "windowsCorrelated": "3/10",
+            "windowCorrMean": 0.147,
+            "chromaSim": 0.903,
+            "chromaBaselineTwoBarsApart": 0.911,
+            "centroidShiftHz": 14.4,
+            "structureFidelity": 0.219
+          }
+        },
+        {
+          "stem": "B-scene-farplane-d40-s606",
+          "seed": 606,
+          "denoise": 0.4,
+          "gpuSeconds": 18.1,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 107.28,
+            "centroidHz": 587,
+            "tempoEst": 176.25,
+            "tempoEstFolded": 88.12,
+            "gridHit": 0.245,
+            "gridHitChance": 0.245,
+            "keyEst": [
+              "D major",
+              0.874
+            ],
+            "onsets": 682,
+            "source": {
+              "centroidHz": 563.5,
+              "tempoEst": 181.75,
+              "gridHit": 0.294,
+              "onsets": 763
+            },
+            "onsetPrecision": 0.613,
+            "onsetRecall": 0.548,
+            "onsetF": 0.579,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/10",
+            "windowCorrMean": 0.105,
+            "chromaSim": 0.896,
+            "chromaBaselineTwoBarsApart": 0.911,
+            "centroidShiftHz": 23.4,
+            "structureFidelity": 0.228
+          }
+        }
+      ]
+    },
+    "scene-gagazet": {
+      "game": "ffx",
+      "plays": "scene: I, VII (stand-in), IX, X (stand-in), XIV (stand-in)",
+      "key": "B minor",
+      "bpm": 72,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, solo french horn, solo cello, low strings drone, distant choir, harp, taiko, bell, cold mountain, vast, lonely, B minor, 72 bpm, 4/4",
+      "duration": 106.3333,
+      "loopStart": 40,
+      "loopEnd": 103.333333,
+      "file": "public/audio/candidates/direction-b-2026-09-27/scene-gagazet.mp3",
+      "pick": "B-scene-gagazet-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": -30,
+        "lagSeenMs": -30,
+        "lagWindows": 6,
+        "xfadeSec": 0.8333333333333334,
+        "gainDb": 1.61,
+        "ceilingDb": -1.4,
+        "lufs": -16.14,
+        "truePeakDb": -1.1
+      },
+      "lra": 10.6,
+      "takes": [
+        {
+          "stem": "B-scene-gagazet-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 106.25,
+            "centroidHz": 320.3,
+            "tempoEst": 143,
+            "tempoEstFolded": 71.5,
+            "gridHit": 0.256,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "A major",
+              0.722
+            ],
+            "onsets": 398,
+            "source": {
+              "centroidHz": 347,
+              "tempoEst": 72.25,
+              "gridHit": 0.887,
+              "onsets": 151
+            },
+            "onsetPrecision": 0.186,
+            "onsetRecall": 0.49,
+            "onsetF": 0.27,
+            "lagMedianAbsMs": 60,
+            "lagMaxAbsMs": 110,
+            "lagSlopeMsPerMin": 2.57,
+            "windowsCorrelated": "6/7",
+            "windowCorrMean": 0.391,
+            "chromaSim": 0.883,
+            "chromaBaselineTwoBarsApart": 0.867,
+            "centroidShiftHz": -26.7,
+            "structureFidelity": 0.26
+          }
+        },
+        {
+          "stem": "B-scene-gagazet-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 106.25,
+            "centroidHz": 241.7,
+            "tempoEst": 72.25,
+            "tempoEstFolded": 72.25,
+            "gridHit": 0.437,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "B minor",
+              0.634
+            ],
+            "onsets": 327,
+            "source": {
+              "centroidHz": 347,
+              "tempoEst": 72.25,
+              "gridHit": 0.887,
+              "onsets": 151
+            },
+            "onsetPrecision": 0.364,
+            "onsetRecall": 0.788,
+            "onsetF": 0.498,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": -27.65,
+            "windowsCorrelated": "6/7",
+            "windowCorrMean": 0.445,
+            "chromaSim": 0.841,
+            "chromaBaselineTwoBarsApart": 0.867,
+            "centroidShiftHz": -105.3,
+            "structureFidelity": 0.314
+          }
+        },
+        {
+          "stem": "B-scene-gagazet-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 106.25,
+            "centroidHz": 327.7,
+            "tempoEst": 74.25,
+            "tempoEstFolded": 74.25,
+            "gridHit": 0.24,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "E minor",
+              0.713
+            ],
+            "onsets": 733,
+            "source": {
+              "centroidHz": 347,
+              "tempoEst": 72.25,
+              "gridHit": 0.887,
+              "onsets": 151
+            },
+            "onsetPrecision": 0.15,
+            "onsetRecall": 0.728,
+            "onsetF": 0.249,
+            "lagMedianAbsMs": 40,
+            "lagMaxAbsMs": 40,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "2/7",
+            "windowCorrMean": 0.171,
+            "chromaSim": 0.856,
+            "chromaBaselineTwoBarsApart": 0.867,
+            "centroidShiftHz": -19.3,
+            "structureFidelity": 0.14
+          }
+        },
+        {
+          "stem": "B-scene-gagazet-d40-s404",
+          "seed": 404,
+          "denoise": 0.4,
+          "gpuSeconds": 14.1,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 106.25,
+            "centroidHz": 337.7,
+            "tempoEst": 92.25,
+            "tempoEstFolded": 92.25,
+            "gridHit": 0.197,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "D major",
+              0.654
+            ],
+            "onsets": 781,
+            "source": {
+              "centroidHz": 347,
+              "tempoEst": 72.25,
+              "gridHit": 0.887,
+              "onsets": 151
+            },
+            "onsetPrecision": 0.141,
+            "onsetRecall": 0.728,
+            "onsetF": 0.236,
+            "lagMedianAbsMs": 150,
+            "lagMaxAbsMs": 150,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/7",
+            "windowCorrMean": 0.126,
+            "chromaSim": 0.831,
+            "chromaBaselineTwoBarsApart": 0.867,
+            "centroidShiftHz": -9.3,
+            "structureFidelity": 0.121
+          }
+        },
+        {
+          "stem": "B-scene-gagazet-d40-s505",
+          "seed": 505,
+          "denoise": 0.4,
+          "gpuSeconds": 14.1,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 106.25,
+            "centroidHz": 315.3,
+            "tempoEst": 72.25,
+            "tempoEstFolded": 72.25,
+            "gridHit": 0.281,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "D major",
+              0.78
+            ],
+            "onsets": 583,
+            "source": {
+              "centroidHz": 347,
+              "tempoEst": 72.25,
+              "gridHit": 0.887,
+              "onsets": 151
+            },
+            "onsetPrecision": 0.178,
+            "onsetRecall": 0.689,
+            "onsetF": 0.283,
+            "lagMedianAbsMs": 45,
+            "lagMaxAbsMs": 60,
+            "lagSlopeMsPerMin": -5.14,
+            "windowsCorrelated": "6/7",
+            "windowCorrMean": 0.348,
+            "chromaSim": 0.872,
+            "chromaBaselineTwoBarsApart": 0.867,
+            "centroidShiftHz": -31.7,
+            "structureFidelity": 0.221
+          }
+        },
+        {
+          "stem": "B-scene-gagazet-d40-s606",
+          "seed": 606,
+          "denoise": 0.4,
+          "gpuSeconds": 12.4,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 106.25,
+            "centroidHz": 376.9,
+            "tempoEst": 92.25,
+            "tempoEstFolded": 92.25,
+            "gridHit": 0.201,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "G major",
+              0.807
+            ],
+            "onsets": 875,
+            "source": {
+              "centroidHz": 347,
+              "tempoEst": 72.25,
+              "gridHit": 0.887,
+              "onsets": 151
+            },
+            "onsetPrecision": 0.144,
+            "onsetRecall": 0.834,
+            "onsetF": 0.246,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/7",
+            "windowCorrMean": 0.084,
+            "chromaSim": 0.803,
+            "chromaBaselineTwoBarsApart": 0.867,
+            "centroidShiftHz": 29.9,
+            "structureFidelity": 0.11
+          }
+        }
+      ]
+    },
+    "scene-zanarkand-dome": {
+      "game": "ffx",
+      "plays": "scene: II Zanarkand Dome",
+      "key": "B minor",
+      "bpm": 48,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, piano nocturne, warm strings, low strings, soft choir, celesta, harp, bell, bittersweet, remembering, B minor, 48 bpm, 4/4",
+      "duration": 129.1652,
+      "loopStart": 10,
+      "loopEnd": 126.165193,
+      "file": "public/audio/candidates/direction-b-2026-09-27/scene-zanarkand-dome.mp3",
+      "pick": "B-scene-zanarkand-dome-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": -30,
+        "lagWindows": 1,
+        "xfadeSec": 1,
+        "gainDb": 2.44,
+        "ceilingDb": -1.7,
+        "lufs": -16.11,
+        "truePeakDb": -1.35
+      },
+      "lra": 16.9,
+      "takes": [
+        {
+          "stem": "B-scene-zanarkand-dome-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 129.1,
+            "centroidHz": 646,
+            "tempoEst": 88.25,
+            "tempoEstFolded": 44.12,
+            "gridHit": 0.147,
+            "gridHitChance": 0.128,
+            "keyEst": [
+              "B minor",
+              0.766
+            ],
+            "onsets": 505,
+            "source": {
+              "centroidHz": 622.9,
+              "tempoEst": 142.75,
+              "gridHit": 0.15,
+              "onsets": 632
+            },
+            "onsetPrecision": 0.584,
+            "onsetRecall": 0.467,
+            "onsetF": 0.519,
+            "lagMedianAbsMs": 20,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/6",
+            "windowCorrMean": 0.183,
+            "chromaSim": 0.887,
+            "chromaBaselineTwoBarsApart": 0.729,
+            "centroidShiftHz": 23.1,
+            "structureFidelity": 0.429
+          }
+        },
+        {
+          "stem": "B-scene-zanarkand-dome-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 129.1,
+            "centroidHz": 664.8,
+            "tempoEst": 139.5,
+            "tempoEstFolded": 34.88,
+            "gridHit": 0.145,
+            "gridHitChance": 0.128,
+            "keyEst": [
+              "B minor",
+              0.804
+            ],
+            "onsets": 489,
+            "source": {
+              "centroidHz": 622.9,
+              "tempoEst": 142.75,
+              "gridHit": 0.15,
+              "onsets": 632
+            },
+            "onsetPrecision": 0.544,
+            "onsetRecall": 0.421,
+            "onsetF": 0.475,
+            "lagMedianAbsMs": 30,
+            "lagMaxAbsMs": 30,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/6",
+            "windowCorrMean": 0.151,
+            "chromaSim": 0.903,
+            "chromaBaselineTwoBarsApart": 0.729,
+            "centroidShiftHz": 41.9,
+            "structureFidelity": 0.422
+          }
+        },
+        {
+          "stem": "B-scene-zanarkand-dome-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 129.1,
+            "centroidHz": 627.9,
+            "tempoEst": 103.25,
+            "tempoEstFolded": 51.62,
+            "gridHit": 0.124,
+            "gridHitChance": 0.128,
+            "keyEst": [
+              "D major",
+              0.765
+            ],
+            "onsets": 580,
+            "source": {
+              "centroidHz": 622.9,
+              "tempoEst": 142.75,
+              "gridHit": 0.15,
+              "onsets": 632
+            },
+            "onsetPrecision": 0.559,
+            "onsetRecall": 0.513,
+            "onsetF": 0.535,
+            "lagMedianAbsMs": 0,
+            "lagMaxAbsMs": 0,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/6",
+            "windowCorrMean": 0.137,
+            "chromaSim": 0.886,
+            "chromaBaselineTwoBarsApart": 0.729,
+            "centroidShiftHz": 5,
+            "structureFidelity": 0.416
+          }
+        }
+      ]
+    },
+    "title": {
+      "game": "both",
+      "plays": "title screen (TitleScreen.ts) and the demo scene",
+      "key": "A minor",
+      "bpm": 58,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, solo grand piano, gentle flute, harp, soft string orchestra, intimate, melancholy, nostalgic, rubato, A minor, 58 bpm, 4/4",
+      "duration": 97.8269,
+      "loopStart": 8.275873,
+      "loopEnd": 94.826893,
+      "file": "public/audio/candidates/direction-b-2026-09-27/title.mp3",
+      "pick": "B-title-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 4,
+        "xfadeSec": 1,
+        "gainDb": 1.73,
+        "ceilingDb": -1.4,
+        "lufs": -16.02,
+        "truePeakDb": -1.28
+      },
+      "lra": 13.6,
+      "takes": [
+        {
+          "stem": "B-title-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 97.8,
+            "centroidHz": 626.3,
+            "tempoEst": 107.25,
+            "tempoEstFolded": 53.62,
+            "gridHit": 0.167,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "A minor",
+              0.823
+            ],
+            "onsets": 335,
+            "source": {
+              "centroidHz": 644.6,
+              "tempoEst": 109.25,
+              "gridHit": 0.235,
+              "onsets": 136
+            },
+            "onsetPrecision": 0.2,
+            "onsetRecall": 0.493,
+            "onsetF": 0.285,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 50,
+            "lagSlopeMsPerMin": 54.38,
+            "windowsCorrelated": "4/5",
+            "windowCorrMean": 0.283,
+            "chromaSim": 0.875,
+            "chromaBaselineTwoBarsApart": 0.674,
+            "centroidShiftHz": -18.3,
+            "structureFidelity": 0.395
+          }
+        },
+        {
+          "stem": "B-title-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 97.8,
+            "centroidHz": 656.6,
+            "tempoEst": 109,
+            "tempoEstFolded": 54.5,
+            "gridHit": 0.17,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "A minor",
+              0.831
+            ],
+            "onsets": 412,
+            "source": {
+              "centroidHz": 644.6,
+              "tempoEst": 109.25,
+              "gridHit": 0.235,
+              "onsets": 136
+            },
+            "onsetPrecision": 0.184,
+            "onsetRecall": 0.559,
+            "onsetF": 0.277,
+            "lagMedianAbsMs": 5,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": 18.13,
+            "windowsCorrelated": "4/5",
+            "windowCorrMean": 0.345,
+            "chromaSim": 0.886,
+            "chromaBaselineTwoBarsApart": 0.674,
+            "centroidShiftHz": 12,
+            "structureFidelity": 0.424
+          }
+        },
+        {
+          "stem": "B-title-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 97.8,
+            "centroidHz": 622.9,
+            "tempoEst": 88.25,
+            "tempoEstFolded": 44.12,
+            "gridHit": 0.217,
+            "gridHitChance": 0.155,
+            "keyEst": [
+              "A minor",
+              0.872
+            ],
+            "onsets": 244,
+            "source": {
+              "centroidHz": 644.6,
+              "tempoEst": 109.25,
+              "gridHit": 0.235,
+              "onsets": 136
+            },
+            "onsetPrecision": 0.299,
+            "onsetRecall": 0.537,
+            "onsetF": 0.384,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": -10.88,
+            "windowsCorrelated": "4/5",
+            "windowCorrMean": 0.48,
+            "chromaSim": 0.851,
+            "chromaBaselineTwoBarsApart": 0.674,
+            "centroidShiftHz": -21.8,
+            "structureFidelity": 0.469
+          }
+        }
+      ]
+    },
+    "victory-ffx": {
+      "game": "ffx",
+      "plays": "results after an FFX win (I-III, VII-X, XII, XIV); opens with a one-shot fanfare before the loop",
+      "key": "C major",
+      "bpm": 120,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, victory fanfare, brass, strings, timpani, harp, flute, piano, light percussion, relief, warm, C major, 120 bpm, 4/4",
+      "duration": 75.1465,
+      "loopStart": 8.146508,
+      "loopEnd": 72.146508,
+      "file": "public/audio/candidates/direction-b-2026-09-27/victory-ffx.mp3",
+      "pick": "B-victory-ffx-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": 10,
+        "lagSeenMs": 10,
+        "lagWindows": 7,
+        "xfadeSec": 0.5,
+        "gainDb": 2.86,
+        "ceilingDb": -1.4,
+        "lufs": -16.05,
+        "truePeakDb": -1.22
+      },
+      "lra": 10.1,
+      "takes": [
+        {
+          "stem": "B-victory-ffx-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 75.14,
+            "centroidHz": 803.5,
+            "tempoEst": 120,
+            "tempoEstFolded": 120,
+            "gridHit": 0.568,
+            "gridHitChance": 0.32,
+            "keyEst": [
+              "E minor",
+              0.837
+            ],
+            "onsets": 359,
+            "source": {
+              "centroidHz": 776.2,
+              "tempoEst": 158,
+              "gridHit": 0.459,
+              "onsets": 220
+            },
+            "onsetPrecision": 0.404,
+            "onsetRecall": 0.659,
+            "onsetF": 0.501,
+            "lagMedianAbsMs": 5,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": -2.58,
+            "windowsCorrelated": "6/9",
+            "windowCorrMean": 0.287,
+            "chromaSim": 0.893,
+            "chromaBaselineTwoBarsApart": 0.637,
+            "centroidShiftHz": 27.3,
+            "structureFidelity": 0.498
+          }
+        },
+        {
+          "stem": "B-victory-ffx-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 75.14,
+            "centroidHz": 752.1,
+            "tempoEst": 120,
+            "tempoEstFolded": 120,
+            "gridHit": 0.605,
+            "gridHitChance": 0.32,
+            "keyEst": [
+              "E minor",
+              0.804
+            ],
+            "onsets": 334,
+            "source": {
+              "centroidHz": 776.2,
+              "tempoEst": 158,
+              "gridHit": 0.459,
+              "onsets": 220
+            },
+            "onsetPrecision": 0.485,
+            "onsetRecall": 0.736,
+            "onsetF": 0.585,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 20,
+            "lagSlopeMsPerMin": -2.05,
+            "windowsCorrelated": "7/9",
+            "windowCorrMean": 0.373,
+            "chromaSim": 0.871,
+            "chromaBaselineTwoBarsApart": 0.637,
+            "centroidShiftHz": -24.1,
+            "structureFidelity": 0.534
+          }
+        },
+        {
+          "stem": "B-victory-ffx-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 75.14,
+            "centroidHz": 761,
+            "tempoEst": 120,
+            "tempoEstFolded": 120,
+            "gridHit": 0.488,
+            "gridHitChance": 0.32,
+            "keyEst": [
+              "E minor",
+              0.867
+            ],
+            "onsets": 295,
+            "source": {
+              "centroidHz": 776.2,
+              "tempoEst": 158,
+              "gridHit": 0.459,
+              "onsets": 220
+            },
+            "onsetPrecision": 0.403,
+            "onsetRecall": 0.541,
+            "onsetF": 0.462,
+            "lagMedianAbsMs": 0,
+            "lagMaxAbsMs": 10,
+            "lagSlopeMsPerMin": 0.81,
+            "windowsCorrelated": "5/9",
+            "windowCorrMean": 0.257,
+            "chromaSim": 0.866,
+            "chromaBaselineTwoBarsApart": 0.637,
+            "centroidShiftHz": -15.2,
+            "structureFidelity": 0.45
+          }
+        }
+      ]
+    },
+    "victory-ffx2": {
+      "game": "ffx2",
+      "plays": "results after an FFX-2 win (V, VI, XI, XIII, XV); opens with a one-shot brass fanfare before the groove",
+      "key": "Eb major",
+      "bpm": 128,
+      "meter": "4/4",
+      "tags": "cinematic orchestral film score with modern hybrid pop production, live strings, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, brass fanfare then pop groove, flute, mallets, electric piano, electric bass, drum kit, celesta, fun, upbeat, Eb major, 128 bpm, 4/4",
+      "duration": 70.5,
+      "loopStart": 7.5,
+      "loopEnd": 67.5,
+      "file": "public/audio/candidates/direction-b-2026-09-27/victory-ffx2.mp3",
+      "pick": "B-victory-ffx2-d40-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 8,
+        "xfadeSec": 0.46875,
+        "gainDb": 2.28,
+        "ceilingDb": -1.4,
+        "lufs": -16.01,
+        "truePeakDb": -1.21
+      },
+      "lra": 3.8,
+      "takes": [
+        {
+          "stem": "B-victory-ffx2-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 70.5,
+            "centroidHz": 307,
+            "tempoEst": 127.75,
+            "tempoEstFolded": 127.75,
+            "gridHit": 0.768,
+            "gridHitChance": 0.341,
+            "keyEst": [
+              "G minor",
+              0.886
+            ],
+            "onsets": 203,
+            "source": {
+              "centroidHz": 317.3,
+              "tempoEst": 127.75,
+              "gridHit": 0.95,
+              "onsets": 159
+            },
+            "onsetPrecision": 0.645,
+            "onsetRecall": 0.824,
+            "onsetF": 0.724,
+            "lagMedianAbsMs": 0,
+            "lagMaxAbsMs": 140,
+            "lagSlopeMsPerMin": -74.67,
+            "windowsCorrelated": "9/9",
+            "windowCorrMean": 0.631,
+            "chromaSim": 0.861,
+            "chromaBaselineTwoBarsApart": 0.729,
+            "centroidShiftHz": -10.3,
+            "structureFidelity": 0.614
+          }
+        },
+        {
+          "stem": "B-victory-ffx2-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 70.5,
+            "centroidHz": 219.9,
+            "tempoEst": 127.75,
+            "tempoEstFolded": 127.75,
+            "gridHit": 0.933,
+            "gridHitChance": 0.341,
+            "keyEst": [
+              "G minor",
+              0.883
+            ],
+            "onsets": 178,
+            "source": {
+              "centroidHz": 317.3,
+              "tempoEst": 127.75,
+              "gridHit": 0.95,
+              "onsets": 159
+            },
+            "onsetPrecision": 0.742,
+            "onsetRecall": 0.83,
+            "onsetF": 0.783,
+            "lagMedianAbsMs": 10,
+            "lagMaxAbsMs": 10,
+            "lagSlopeMsPerMin": -21.9,
+            "windowsCorrelated": "8/9",
+            "windowCorrMean": 0.606,
+            "chromaSim": 0.872,
+            "chromaBaselineTwoBarsApart": 0.729,
+            "centroidShiftHz": -97.4,
+            "structureFidelity": 0.639
+          }
+        },
+        {
+          "stem": "B-victory-ffx2-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 70.5,
+            "centroidHz": 354,
+            "tempoEst": 127.75,
+            "tempoEstFolded": 127.75,
+            "gridHit": 0.949,
+            "gridHitChance": 0.341,
+            "keyEst": [
+              "G minor",
+              0.907
+            ],
+            "onsets": 175,
+            "source": {
+              "centroidHz": 317.3,
+              "tempoEst": 127.75,
+              "gridHit": 0.95,
+              "onsets": 159
+            },
+            "onsetPrecision": 0.811,
+            "onsetRecall": 0.893,
+            "onsetF": 0.85,
+            "lagMedianAbsMs": 0,
+            "lagMaxAbsMs": 10,
+            "lagSlopeMsPerMin": 7.62,
+            "windowsCorrelated": "8/9",
+            "windowCorrMean": 0.595,
+            "chromaSim": 0.853,
+            "chromaBaselineTwoBarsApart": 0.729,
+            "centroidShiftHz": 36.7,
+            "structureFidelity": 0.634
+          }
+        }
+      ]
+    }
+  },
+  "sketches": {
+    "macalania-a": {
+      "source": "docs/audio/sketches/2026-09-24/macalania-scene-a-frozen-temple.mp3",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, alto flute, soft strings, low strings, glockenspiel, harp, chimes, celesta, cold, still, glassy, frozen temple, F# minor, 56 bpm, 4/4",
+      "file": "public/audio/candidates/direction-b-sketches-2026-09-27/macalania-scene-a-frozen-temple-B.mp3",
+      "pick": "B-macalania-a-d35-s303",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 0,
+        "xfadeSec": 1,
+        "gainDb": 0.67,
+        "ceilingDb": -1.4,
+        "lufs": -15.99,
+        "truePeakDb": -1.19
+      },
+      "takes": [
+        {
+          "stem": "B-macalania-a-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 696,
+            "tempoEst": 107.25,
+            "tempoEstFolded": 53.62,
+            "gridHit": 0.144,
+            "gridHitChance": 0.149,
+            "keyEst": [
+              "F# minor",
+              0.85
+            ],
+            "onsets": 535,
+            "source": {
+              "centroidHz": 958.9,
+              "tempoEst": 157.75,
+              "gridHit": 0.157,
+              "onsets": 325
+            },
+            "onsetPrecision": 0.464,
+            "onsetRecall": 0.763,
+            "onsetF": 0.577,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/3",
+            "windowCorrMean": 0.064,
+            "chromaSim": 0.875,
+            "chromaBaselineTwoBarsApart": 0.726,
+            "centroidShiftHz": -262.9,
+            "structureFidelity": 0.395
+          }
+        },
+        {
+          "stem": "B-macalania-a-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 814.3,
+            "tempoEst": 92.25,
+            "tempoEstFolded": 46.12,
+            "gridHit": 0.168,
+            "gridHitChance": 0.149,
+            "keyEst": [
+              "F# minor",
+              0.863
+            ],
+            "onsets": 524,
+            "source": {
+              "centroidHz": 958.9,
+              "tempoEst": 157.75,
+              "gridHit": 0.157,
+              "onsets": 325
+            },
+            "onsetPrecision": 0.458,
+            "onsetRecall": 0.738,
+            "onsetF": 0.565,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/3",
+            "windowCorrMean": 0.069,
+            "chromaSim": 0.879,
+            "chromaBaselineTwoBarsApart": 0.726,
+            "centroidShiftHz": -144.6,
+            "structureFidelity": 0.397
+          }
+        },
+        {
+          "stem": "B-macalania-a-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 852.8,
+            "tempoEst": 162,
+            "tempoEstFolded": 40.5,
+            "gridHit": 0.158,
+            "gridHitChance": 0.149,
+            "keyEst": [
+              "F# minor",
+              0.877
+            ],
+            "onsets": 532,
+            "source": {
+              "centroidHz": 958.9,
+              "tempoEst": 157.75,
+              "gridHit": 0.157,
+              "onsets": 325
+            },
+            "onsetPrecision": 0.481,
+            "onsetRecall": 0.788,
+            "onsetF": 0.597,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/3",
+            "windowCorrMean": 0.058,
+            "chromaSim": 0.88,
+            "chromaBaselineTwoBarsApart": 0.726,
+            "centroidShiftHz": -106.1,
+            "structureFidelity": 0.406
+          }
+        },
+        {
+          "stem": "B-macalania-a-d35-s101",
+          "seed": 101,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 703.3,
+            "tempoEst": 107.25,
+            "tempoEstFolded": 53.62,
+            "gridHit": 0.151,
+            "gridHitChance": 0.149,
+            "keyEst": [
+              "F# minor",
+              0.861
+            ],
+            "onsets": 537,
+            "source": {
+              "centroidHz": 958.9,
+              "tempoEst": 157.75,
+              "gridHit": 0.157,
+              "onsets": 325
+            },
+            "onsetPrecision": 0.454,
+            "onsetRecall": 0.751,
+            "onsetF": 0.566,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/3",
+            "windowCorrMean": 0.065,
+            "chromaSim": 0.901,
+            "chromaBaselineTwoBarsApart": 0.726,
+            "centroidShiftHz": -255.6,
+            "structureFidelity": 0.423
+          }
+        },
+        {
+          "stem": "B-macalania-a-d35-s202",
+          "seed": 202,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 878.5,
+            "tempoEst": 92.25,
+            "tempoEstFolded": 46.12,
+            "gridHit": 0.133,
+            "gridHitChance": 0.149,
+            "keyEst": [
+              "F# minor",
+              0.868
+            ],
+            "onsets": 512,
+            "source": {
+              "centroidHz": 958.9,
+              "tempoEst": 157.75,
+              "gridHit": 0.157,
+              "onsets": 325
+            },
+            "onsetPrecision": 0.465,
+            "onsetRecall": 0.732,
+            "onsetF": 0.569,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/3",
+            "windowCorrMean": 0.069,
+            "chromaSim": 0.896,
+            "chromaBaselineTwoBarsApart": 0.726,
+            "centroidShiftHz": -80.5,
+            "structureFidelity": 0.419
+          }
+        },
+        {
+          "stem": "B-macalania-a-d35-s303",
+          "seed": 303,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 864.7,
+            "tempoEst": 158,
+            "tempoEstFolded": 79,
+            "gridHit": 0.149,
+            "gridHitChance": 0.149,
+            "keyEst": [
+              "F# minor",
+              0.884
+            ],
+            "onsets": 543,
+            "source": {
+              "centroidHz": 958.9,
+              "tempoEst": 157.75,
+              "gridHit": 0.157,
+              "onsets": 325
+            },
+            "onsetPrecision": 0.464,
+            "onsetRecall": 0.775,
+            "onsetF": 0.581,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/3",
+            "windowCorrMean": 0.071,
+            "chromaSim": 0.891,
+            "chromaBaselineTwoBarsApart": 0.726,
+            "centroidShiftHz": -94.3,
+            "structureFidelity": 0.418
+          }
+        }
+      ]
+    },
+    "macalania-b": {
+      "source": "docs/audio/sketches/2026-09-24/macalania-scene-b-wedding-proposal.mp3",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, courtly minuet, solo violin, string quartet, pizzicato, clarinet, strings, low strings, elegant, menacing, C# minor, 96 bpm, 3/4",
+      "file": "public/audio/candidates/direction-b-sketches-2026-09-27/macalania-scene-b-wedding-proposal-B.mp3",
+      "pick": "B-macalania-b-d40-s303",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 90,
+        "lagWindows": 1,
+        "xfadeSec": 0.625,
+        "gainDb": 2.39,
+        "ceilingDb": -1.4,
+        "lufs": -15.99,
+        "truePeakDb": -1.42
+      },
+      "takes": [
+        {
+          "stem": "B-macalania-b-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 63.99,
+            "centroidHz": 654.2,
+            "tempoEst": 125,
+            "tempoEstFolded": 125,
+            "gridHit": 0.285,
+            "gridHitChance": 0.256,
+            "keyEst": [
+              "C# minor",
+              0.753
+            ],
+            "onsets": 383,
+            "source": {
+              "centroidHz": 762.3,
+              "tempoEst": 93.75,
+              "gridHit": 0.287,
+              "onsets": 515
+            },
+            "onsetPrecision": 0.708,
+            "onsetRecall": 0.526,
+            "onsetF": 0.604,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/6",
+            "windowCorrMean": 0.096,
+            "chromaSim": 0.865,
+            "chromaBaselineTwoBarsApart": 0.716,
+            "centroidShiftHz": -108.1,
+            "structureFidelity": 0.408
+          }
+        },
+        {
+          "stem": "B-macalania-b-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 63.99,
+            "centroidHz": 756.7,
+            "tempoEst": 187.5,
+            "tempoEstFolded": 93.75,
+            "gridHit": 0.279,
+            "gridHitChance": 0.256,
+            "keyEst": [
+              "G# minor",
+              0.739
+            ],
+            "onsets": 469,
+            "source": {
+              "centroidHz": 762.3,
+              "tempoEst": 93.75,
+              "gridHit": 0.287,
+              "onsets": 515
+            },
+            "onsetPrecision": 0.701,
+            "onsetRecall": 0.639,
+            "onsetF": 0.669,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/6",
+            "windowCorrMean": 0.101,
+            "chromaSim": 0.855,
+            "chromaBaselineTwoBarsApart": 0.716,
+            "centroidShiftHz": -5.5,
+            "structureFidelity": 0.419
+          }
+        },
+        {
+          "stem": "B-macalania-b-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 63.99,
+            "centroidHz": 625.1,
+            "tempoEst": 187.5,
+            "tempoEstFolded": 93.75,
+            "gridHit": 0.267,
+            "gridHitChance": 0.256,
+            "keyEst": [
+              "C# minor",
+              0.823
+            ],
+            "onsets": 446,
+            "source": {
+              "centroidHz": 762.3,
+              "tempoEst": 93.75,
+              "gridHit": 0.287,
+              "onsets": 515
+            },
+            "onsetPrecision": 0.706,
+            "onsetRecall": 0.612,
+            "onsetF": 0.656,
+            "lagMedianAbsMs": 90,
+            "lagMaxAbsMs": 90,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/6",
+            "windowCorrMean": 0.137,
+            "chromaSim": 0.853,
+            "chromaBaselineTwoBarsApart": 0.716,
+            "centroidShiftHz": -137.1,
+            "structureFidelity": 0.425
+          }
+        }
+      ]
+    },
+    "macalania-c": {
+      "source": "docs/audio/sketches/2026-09-24/macalania-scene-c-crystal-and-pyreflies.mp3",
+      "tags": "cinematic orchestral film score, live symphony orchestra, large concert hall, modern fantasy RPG soundtrack, expressive live performance, instrumental, no vocals, shimmering strings, string tremolo, low strings, celesta, glockenspiel, solo violin, crystal lake, glowing, quiet, B minor, 72 bpm, 4/4",
+      "file": "public/audio/candidates/direction-b-sketches-2026-09-27/macalania-scene-c-crystal-and-pyreflies-B.mp3",
+      "pick": "B-macalania-c-d35-s202",
+      "flagged": null,
+      "finish": {
+        "lagMs": 0,
+        "lagSeenMs": 0,
+        "lagWindows": 0,
+        "xfadeSec": 0.8333333333333334,
+        "gainDb": 0.29,
+        "ceilingDb": -1.4,
+        "lufs": -15.99,
+        "truePeakDb": -1.68
+      },
+      "takes": [
+        {
+          "stem": "B-macalania-c-d40-s101",
+          "seed": 101,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 707.9,
+            "tempoEst": 187.5,
+            "tempoEstFolded": 93.75,
+            "gridHit": 0.196,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "B minor",
+              0.939
+            ],
+            "onsets": 516,
+            "source": {
+              "centroidHz": 864.7,
+              "tempoEst": 105.25,
+              "gridHit": 0.196,
+              "onsets": 491
+            },
+            "onsetPrecision": 0.657,
+            "onsetRecall": 0.69,
+            "onsetF": 0.673,
+            "lagMedianAbsMs": 230,
+            "lagMaxAbsMs": 230,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "1/4",
+            "windowCorrMean": 0.113,
+            "chromaSim": 0.905,
+            "chromaBaselineTwoBarsApart": 0.803,
+            "centroidShiftHz": -156.8,
+            "structureFidelity": 0.434
+          }
+        },
+        {
+          "stem": "B-macalania-c-d40-s202",
+          "seed": 202,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 767.8,
+            "tempoEst": 162.25,
+            "tempoEstFolded": 81.12,
+            "gridHit": 0.205,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "B minor",
+              0.956
+            ],
+            "onsets": 513,
+            "source": {
+              "centroidHz": 864.7,
+              "tempoEst": 105.25,
+              "gridHit": 0.196,
+              "onsets": 491
+            },
+            "onsetPrecision": 0.673,
+            "onsetRecall": 0.703,
+            "onsetF": 0.687,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/4",
+            "windowCorrMean": 0.079,
+            "chromaSim": 0.915,
+            "chromaBaselineTwoBarsApart": 0.803,
+            "centroidShiftHz": -96.9,
+            "structureFidelity": 0.445
+          }
+        },
+        {
+          "stem": "B-macalania-c-d40-s303",
+          "seed": 303,
+          "denoise": 0.4,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 621.6,
+            "tempoEst": 158,
+            "tempoEstFolded": 79,
+            "gridHit": 0.18,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "B minor",
+              0.838
+            ],
+            "onsets": 484,
+            "source": {
+              "centroidHz": 864.7,
+              "tempoEst": 105.25,
+              "gridHit": 0.196,
+              "onsets": 491
+            },
+            "onsetPrecision": 0.682,
+            "onsetRecall": 0.672,
+            "onsetF": 0.677,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/4",
+            "windowCorrMean": 0.093,
+            "chromaSim": 0.887,
+            "chromaBaselineTwoBarsApart": 0.803,
+            "centroidShiftHz": -243.1,
+            "structureFidelity": 0.4
+          }
+        },
+        {
+          "stem": "B-macalania-c-d35-s101",
+          "seed": 101,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 699.3,
+            "tempoEst": 74.25,
+            "tempoEstFolded": 74.25,
+            "gridHit": 0.211,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "B minor",
+              0.942
+            ],
+            "onsets": 532,
+            "source": {
+              "centroidHz": 864.7,
+              "tempoEst": 105.25,
+              "gridHit": 0.196,
+              "onsets": 491
+            },
+            "onsetPrecision": 0.665,
+            "onsetRecall": 0.721,
+            "onsetF": 0.692,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/4",
+            "windowCorrMean": 0.081,
+            "chromaSim": 0.914,
+            "chromaBaselineTwoBarsApart": 0.803,
+            "centroidShiftHz": -165.4,
+            "structureFidelity": 0.445
+          }
+        },
+        {
+          "stem": "B-macalania-c-d35-s202",
+          "seed": 202,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": true,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 790.7,
+            "tempoEst": 71.5,
+            "tempoEstFolded": 71.5,
+            "gridHit": 0.222,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "B minor",
+              0.946
+            ],
+            "onsets": 496,
+            "source": {
+              "centroidHz": 864.7,
+              "tempoEst": 105.25,
+              "gridHit": 0.196,
+              "onsets": 491
+            },
+            "onsetPrecision": 0.708,
+            "onsetRecall": 0.715,
+            "onsetF": 0.711,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/4",
+            "windowCorrMean": 0.089,
+            "chromaSim": 0.922,
+            "chromaBaselineTwoBarsApart": 0.803,
+            "centroidShiftHz": -73.9,
+            "structureFidelity": 0.468
+          }
+        },
+        {
+          "stem": "B-macalania-c-d35-s303",
+          "seed": 303,
+          "denoise": 0.35,
+          "gpuSeconds": null,
+          "tempoKept": false,
+          "measure": {
+            "durationS": 64.92,
+            "centroidHz": 632.1,
+            "tempoEst": 193.5,
+            "tempoEstFolded": 96.75,
+            "gridHit": 0.183,
+            "gridHitChance": 0.192,
+            "keyEst": [
+              "B minor",
+              0.858
+            ],
+            "onsets": 507,
+            "source": {
+              "centroidHz": 864.7,
+              "tempoEst": 105.25,
+              "gridHit": 0.196,
+              "onsets": 491
+            },
+            "onsetPrecision": 0.688,
+            "onsetRecall": 0.711,
+            "onsetF": 0.699,
+            "lagMedianAbsMs": null,
+            "lagMaxAbsMs": null,
+            "lagSlopeMsPerMin": null,
+            "windowsCorrelated": "0/4",
+            "windowCorrMean": 0.076,
+            "chromaSim": 0.901,
+            "chromaBaselineTwoBarsApart": 0.803,
+            "centroidShiftHz": -232.5,
+            "structureFidelity": 0.425
+          }
+        }
+      ]
+    }
+  }
+}

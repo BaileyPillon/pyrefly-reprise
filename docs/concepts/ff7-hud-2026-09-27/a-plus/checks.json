@@ -1,0 +1,372 @@
+{
+ "checks": [
+  {
+   "item": 1,
+   "ok": true,
+   "note": "corners (14 px inside) TL (0, 0, 168), TR (0, 0, 122), BL (0, 0, 85), BR (0, 0, 38); left-window centre (0, 0, 104) vs bilinear 104"
+  },
+  {
+   "item": 2,
+   "ok": true,
+   "note": "left-edge ramp #6C6C6C #6C6C6C #939393 #939393 #B7B7B7 #B7B7B7 #9C9C9C #9C9C9C #595959 #575757 #282828 #272727; 3 px outside the frame: (56, 69, 64) (scene, no shadow)"
+  },
+  {
+   "item": 3,
+   "ok": true,
+   "note": "band top 71.0 %, bottom 95.1 %, split 42.2 %, gap 3.0 u, black strip below: True"
+  },
+  {
+   "item": 8,
+   "ok": true,
+   "note": "command window 237 x 217 px (59 x 54 u), bottom 16.1 px below the band (4 u = 16.1)"
+  },
+  {
+   "item": 12,
+   "ok": true,
+   "note": "\"Cloud\" ink height 31 px = 3.44 % of 900 (FF7 3.6 %); our own glyph set, not the retail font"
+  },
+  {
+   "item": 16,
+   "ok": true,
+   "note": "phone A and B: 0 texts cross the 390 px edge; command slots 44 px; A at 2.05 px/u, B at 1.64 px/u"
+  }
+ ],
+ "spills": {
+  "f1MPR-1600": [
+   {
+    "win": "band-left",
+    "text": "NAME",
+    "rect": {
+     "x": 65,
+     "y": 635.2,
+     "w": 68.2,
+     "h": 35
+    }
+   },
+   {
+    "win": "band-left",
+    "text": "BARRIER",
+    "rect": {
+     "x": 555.4,
+     "y": 635.2,
+     "w": 99.6,
+     "h": 35
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "HP",
+    "rect": {
+     "x": 720,
+     "y": 635.2,
+     "w": 32.4,
+     "h": 35
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "MP",
+    "rect": {
+     "x": 1051.1,
+     "y": 635.2,
+     "w": 35.6,
+     "h": 35
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "LIMIT",
+    "rect": {
+     "x": 1199,
+     "y": 635.2,
+     "w": 67.3,
+     "h": 35
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "TIME",
+    "rect": {
+     "x": 1397,
+     "y": 635.2,
+     "w": 59.1,
+     "h": 35
+    }
+   }
+  ],
+  "f1Raj-1600": [
+   {
+    "win": "band-left",
+    "text": "NAME",
+    "rect": {
+     "x": 65,
+     "y": 636.7,
+     "w": 65.8,
+     "h": 36
+    }
+   },
+   {
+    "win": "band-left",
+    "text": "BARRIER",
+    "rect": {
+     "x": 556.9,
+     "y": 636.7,
+     "w": 98.1,
+     "h": 36
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "HP",
+    "rect": {
+     "x": 720,
+     "y": 636.7,
+     "w": 31,
+     "h": 36
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "MP",
+    "rect": {
+     "x": 1051.1,
+     "y": 636.7,
+     "w": 35.2,
+     "h": 36
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "LIMIT",
+    "rect": {
+     "x": 1199,
+     "y": 636.7,
+     "w": 60.3,
+     "h": 36
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "TIME",
+    "rect": {
+     "x": 1397,
+     "y": 636.7,
+     "w": 53.7,
+     "h": 36
+    }
+   }
+  ],
+  "f1Exo-1600": [
+   {
+    "win": "band-left",
+    "text": "NAME",
+    "rect": {
+     "x": 65,
+     "y": 636.3,
+     "w": 76.6,
+     "h": 31
+    }
+   },
+   {
+    "win": "band-left",
+    "text": "BARRIER",
+    "rect": {
+     "x": 544.8,
+     "y": 636.3,
+     "w": 110.2,
+     "h": 31
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "HP",
+    "rect": {
+     "x": 720,
+     "y": 636.3,
+     "w": 35,
+     "h": 31
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "MP",
+    "rect": {
+     "x": 1051.1,
+     "y": 636.3,
+     "w": 41.1,
+     "h": 31
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "LIMIT",
+    "rect": {
+     "x": 1199,
+     "y": 636.3,
+     "w": 71,
+     "h": 31
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "TIME",
+    "rect": {
+     "x": 1397,
+     "y": 636.3,
+     "w": 64,
+     "h": 31
+    }
+   }
+  ],
+  "f1Chk-1600": [
+   {
+    "win": "band-left",
+    "text": "NAME",
+    "rect": {
+     "x": 65,
+     "y": 636.2,
+     "w": 71,
+     "h": 34
+    }
+   },
+   {
+    "win": "band-left",
+    "text": "BARRIER",
+    "rect": {
+     "x": 545.9,
+     "y": 636.2,
+     "w": 109.1,
+     "h": 34
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "HP",
+    "rect": {
+     "x": 720,
+     "y": 636.2,
+     "w": 34.7,
+     "h": 34
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "MP",
+    "rect": {
+     "x": 1051.1,
+     "y": 636.2,
+     "w": 37.4,
+     "h": 34
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "LIMIT",
+    "rect": {
+     "x": 1199,
+     "y": 636.2,
+     "w": 64.5,
+     "h": 34
+    }
+   },
+   {
+    "win": "band-right",
+    "text": "TIME",
+    "rect": {
+     "x": 1397,
+     "y": 636.2,
+     "w": 58.6,
+     "h": 34
+    }
+   }
+  ]
+ },
+ "fonts": {
+  "PR7": {
+   "cap": 1,
+   "digitPerCap": 0.875,
+   "cloudPerCap": 3.7375000000000003,
+   "barretPerCap": 4.5562499999999995
+  },
+  "MPR": {
+   "cap": 0.73,
+   "asc": 1.075,
+   "desc": 0.32,
+   "w": 500,
+   "css": "M PLUS Rounded 1c",
+   "digitPerCap": 0.863013698630137,
+   "cloudPerCap": 3.6643835616438354,
+   "barretPerCap": 4.231507183754281
+  },
+  "MPRH": {
+   "cap": 0.73,
+   "asc": 1.075,
+   "desc": 0.32,
+   "w": 500,
+   "css": "M PLUS Rounded 1c",
+   "digitPerCap": 0.863013698630137,
+   "cloudPerCap": 3.6643835616438354,
+   "barretPerCap": 4.231507183754281
+  },
+  "Raj": {
+   "cap": 0.645,
+   "asc": 0.93,
+   "desc": 0.345,
+   "w": 600,
+   "css": "Rajdhani",
+   "digitPerCap": 0.8186045801916787,
+   "cloudPerCap": 3.58449584014656,
+   "barretPerCap": 3.9968990355499026
+  },
+  "RajH": {
+   "cap": 0.645,
+   "asc": 0.93,
+   "desc": 0.345,
+   "w": 700,
+   "css": "Rajdhani",
+   "digitPerCap": 0.8310077282809472,
+   "cloudPerCap": 3.632557950278585,
+   "barretPerCap": 4.058914539425872
+  },
+  "Exo": {
+   "cap": 0.69,
+   "asc": 1,
+   "desc": 0.2,
+   "w": 600,
+   "css": "Exo 2",
+   "digitPerCap": 0.8971014713895495,
+   "cloudPerCap": 3.8333333333333335,
+   "barretPerCap": 4.295074462890625
+  },
+  "ExoH": {
+   "cap": 0.69,
+   "asc": 1,
+   "desc": 0.2,
+   "w": 800,
+   "css": "Exo 2",
+   "digitPerCap": 0.9362318619437839,
+   "cloudPerCap": 3.994202987007473,
+   "barretPerCap": 4.5057404006736865
+  },
+  "Chk": {
+   "cap": 0.7,
+   "asc": 0.99,
+   "desc": 0.31,
+   "w": 500,
+   "css": "Chakra",
+   "digitPerCap": 0.9085714067731585,
+   "cloudPerCap": 3.744285365513393,
+   "barretPerCap": 4.2
+  },
+  "ChkH": {
+   "cap": 0.7,
+   "asc": 0.99,
+   "desc": 0.31,
+   "w": 700,
+   "css": "Chakra",
+   "digitPerCap": 0.9314285278320313,
+   "cloudPerCap": 3.8599997384207594,
+   "barretPerCap": 4.335714285714286
+  }
+ }
+}
