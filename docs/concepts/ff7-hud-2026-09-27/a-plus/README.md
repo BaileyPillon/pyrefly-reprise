@@ -42,7 +42,10 @@ manual, the FF wiki and GameFAQs.
 | `sheet-11-estimates-and-open.jpg` | every estimate and where it shows, the in-game check list, what is still not FF7 |
 
 Full-size frames in `frames/` (`*-1600.jpg`; phone `*-390.jpg` at 2x). `checks.json` holds the
-pixel checks, the spill report and the measured font ratios.
+pixel checks, the spill report and the measured font ratios. Two files are stray duplicates from a
+file-name clash on Windows (names ignore case), not phone B frames: `frames/phoneB-3-targeting-1600.jpg`
+is frame 3b and `frames/phoneB-5-limit-full-1600.jpg` is frame 5b; `sheet.py` no longer writes them
+(left in place: agents here delete nothing).
 
 ## What changed from A
 

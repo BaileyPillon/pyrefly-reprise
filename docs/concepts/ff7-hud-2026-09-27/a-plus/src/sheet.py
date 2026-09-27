@@ -34,7 +34,7 @@ NAMES = {'f1': '1-cloud-turn-attack', 'f2': '2-magic-mp-cost', 'f3': '3-targetin
          'f3B': 'phoneB-3-targeting', 'f4B': 'phoneB-4-tail-laser-damage', 'f5B': 'phoneB-5-limit-full'}
 FR = {}
 for key, name in NAMES.items():
-    for size in ('1600', '390'):
+    for size in (('390',) if key.endswith('B') else ('1600', '390')):  # Windows file names ignore case: f3B-1600 would open f3b-1600
         p = os.path.join(R, f'{key}-{size}.png')
         if not os.path.exists(p):
             continue
