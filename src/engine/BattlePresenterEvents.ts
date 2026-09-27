@@ -36,6 +36,7 @@ import {
   victory,
 } from './BattlePresenterBeats.ts';
 import { comeBack, flushArrivals, keptToReturn, restorePart, statusAdded, unstone } from './BattlePresenterArrivals.ts';
+import { PARTY_SWAP_MS, partyBack } from './SummonStaging.ts';
 
 /** One numeral, minus the screen position the stage supplies. */
 type Numeral = Omit<Parameters<DamageNumbersPort['show']>[0], 'x' | 'y'>;
@@ -285,7 +286,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       const a = ctx.stage.actor(event.combatantId);
       await settled(ctx, a?.fadeTo(0, TIMING.dismiss), TIMING.dismiss);
       ctx.stage.removeCombatant(event.combatantId);
-      return;
+      return settled(ctx, partyBack(ctx.stage), PARTY_SWAP_MS); // PR-0181: the party returns
     }
 
     case 'switch': {
