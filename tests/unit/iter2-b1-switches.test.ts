@@ -24,6 +24,9 @@ import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_ACT_I, LEBLANC_ACT_II } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
 import { FFX2_DRESSPHERE_CARRIES } from '../../src/app/screens/BattleScreenCarry.ts';
+import { checkpointAt } from '../../src/app/screens/BattleChainCheckpoint.ts';
+import { shuyinGroup } from '../../src/data/ffx2/enemies/shuyin.ts';
+import { VEGNAGUN_CHAIN_ORDER } from '../../src/data/ffx2/ids.ts';
 import { ABILITIES } from '../../src/data/ffx2/index.ts';
 import { abilityRegistryFrom } from '../../src/battle/ffx2/index.ts';
 import { chainRegistries, defaultAbilities } from '../../src/battle/ffx2/abilities.ts';
@@ -176,5 +179,16 @@ describe('PR-0069 (FFX only): the possessed aeon keeps its own data file\'s affi
     const src = readFileSync('src/battle/ffx/setup.ts', 'utf8');
     expect(src).toContain('Affinities are **not** mirrored (PR-0069)');
     expect(src).not.toContain('Affinities are mirrored too');
+  });
+});
+
+describe('D-217 (FFX-2, Chapter V): a checkpoint at Shuyin, labelled an adaptation', () => {
+  it('Shuyin\'s link is a retry checkpoint; the Vegnagun links before it are not', () => {
+    const setup = { game: 'ffx2', party: chateauBuild, enemies: shuyinGroup, triggers: [], seed: 5, condition: 'scripted', canEscape: false } as BattleSetup;
+    expect(checkpointAt(5, shuyinGroup, setup)).toMatchObject({ link: 5 });
+    for (const id of VEGNAGUN_CHAIN_ORDER.slice(0, 4)) {
+      expect(ENEMY_GROUPS_BY_ID[id]?.checkpointOnEntry).not.toBe(true);
+    }
+    expect(readFileSync('src/data/ffx2/enemies/shuyin.ts', 'utf8')).toContain('An adaptation, not a sourced rule');
   });
 });
