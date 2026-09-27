@@ -32,6 +32,8 @@ import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { entryCardWait } from './entryCard.ts';
+import { entrySituationFor } from './entrySituation.ts';
+import { playBattleEntry } from '../../ui/common/transitions/entry.ts';
 import { boardWhenWarm } from './frontendWarm.ts';
 import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
@@ -351,12 +353,13 @@ export class GameFlow {
         ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
       };
       const battle = factories.battle?.(battleOpts) ?? new BattleScreen(battleOpts);
-      // FFX spins into a battle rather than cutting. The swirl holds the frame
-      // covered while `replace` loads the diorama and stages the art, so the
-      // unwind always reveals a finished first frame
-      // (`src/ui/common/transitions/swirl.ts`).
+      // A-2: the entry by situation (FFX blur or shatter, FFX-2 shatter; the
+      // Vegnagun implosion stays OFF). It holds the outgoing frame while
+      // `replace` loads the diorama, so the reveal is a finished first frame.
       let swapped: Promise<boolean> = Promise.resolve(true);
-      await playBattleSwirl(this.app.uiRoot, {
+      await playBattleEntry(this.app.uiRoot, {
+        game: chapter.game,
+        situation: entrySituationFor(attempt, opts, chapter),
         instant: opts.speed === 'skip',
         whileCovered: entryCardWait(this.app.uiRoot, chapter), // A-3: the card over the ink on a slow load
         onCover: () => {
