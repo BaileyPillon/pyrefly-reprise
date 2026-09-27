@@ -48,10 +48,10 @@ describe('phase lighting: the canon triggers (D-224)', () => {
   it("FFX-2: Bahamut's countdown and Mega Flare, and Vegnagun's links", () => {
     expect(
       cues([
-        ev({ type: 'charge', enemyId: 'ffx2-bahamut', name: '5', turnsLeft: 5, stage: 1 }),
-        ev({ type: 'charge', enemyId: 'ffx2-bahamut', name: '2', turnsLeft: 2, stage: 2 }),
-        ev({ type: 'action-start', actorId: 'ffx2-bahamut', abilityId: 'mega-flare', targets: [] }),
-        ev({ type: 'action-end', actorId: 'ffx2-bahamut' }),
+        ev({ type: 'charge', enemyId: 'bahamut', name: '5', turnsLeft: 5, stage: 1 }),
+        ev({ type: 'charge', enemyId: 'bahamut', name: '2', turnsLeft: 2, stage: 2 }),
+        ev({ type: 'action-start', actorId: 'bahamut', abilityId: 'mega-flare', targets: [] }),
+        ev({ type: 'action-end', actorId: 'bahamut' }),
       ]),
     ).toEqual(['bahamut-countdown', 'bahamut-imminent', 'restore']);
     expect(phaseForFormation(['vegnagun-tail'])).toBe('base');
@@ -102,8 +102,9 @@ class FakeGrade implements GradeTarget {
   applyPalette(p: ScenePalette): void {
     this.applied.push(p);
   }
+  /** The phase's exposure, which rides the grade's gain (the renderer has no tone mapping). */
   get exposure(): number {
-    return this.applied.at(-1)?.exposure ?? 1;
+    return this.applied.at(-1)?.gain?.[1] !== undefined ? this.applied.at(-1)!.gain![1] / 1 : 1;
   }
 }
 
@@ -128,15 +129,17 @@ describe('phase lighting: the tween (D-224)', () => {
     L.update(0.75);
     const mid = grade.exposure;
     expect(mid).toBeLessThan(1);
-    expect(mid).toBeGreaterThan(PHASE_GRADES['flux-reflect'].exposure);
+    const g = PHASE_GRADES['flux-reflect'];
+    expect(mid).toBeGreaterThan(g.exposure * g.gain[1]);
     L.update(0.8);
-    expect(grade.exposure).toBeCloseTo(PHASE_GRADES['flux-reflect'].exposure, 5);
+    expect(grade.exposure).toBeCloseTo(g.exposure * g.gain[1], 5);
   });
 
   it('REDUCE FLASHES lands the look at once', () => {
     const { L, grade } = lit(true);
     L.phase('yunalesca-3');
-    expect(grade.exposure).toBeCloseTo(PHASE_GRADES['yunalesca-3'].exposure, 5);
+    const g = PHASE_GRADES['yunalesca-3'];
+    expect(grade.exposure).toBeCloseTo(g.exposure * g.gain[1], 5);
   });
 
   it('no more than three changes start in any second', () => {

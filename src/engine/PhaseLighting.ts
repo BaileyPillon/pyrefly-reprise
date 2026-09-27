@@ -207,8 +207,9 @@ export class PhaseLighting {
       const tint = b.shadowTint ?? [0.4, 0.5, 0.85];
       g.applyPalette({
         ...b,
-        gain: [gain[0] * L.gain[0], gain[1] * L.gain[1], gain[2] * L.gain[2]],
-        exposure: (b.exposure ?? 1) * L.exposure,
+        // The renderer runs NoToneMapping, so `exposure` would be a no-op: the
+        // phase's exposure goes into the grade's gain instead.
+        gain: [gain[0] * L.gain[0] * L.exposure, gain[1] * L.gain[1] * L.exposure, gain[2] * L.gain[2] * L.exposure],
         shadowTint: L.shadowTint ? [lerp(tint[0], L.shadowTint[0], w), lerp(tint[1], L.shadowTint[1], w), lerp(tint[2], L.shadowTint[2], w)] : tint,
         shadowTintAmount: (b.shadowTintAmount ?? 0.12) + L.shadowTintAdd,
         vignette: (b.vignette ?? 0.46) + L.vignetteAdd,

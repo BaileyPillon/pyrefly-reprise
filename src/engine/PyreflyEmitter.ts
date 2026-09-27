@@ -44,9 +44,10 @@ const fragmentShader = /* glsl */ `
     // The prototype's kernel: a small hard core inside a wide soft halo.
     float core = pow(clamp(1.0 - r * 3.4, 0.0, 1.0), 1.6);
     float halo = pow(1.0 - r, 2.6);
-    float a = clamp(core + halo * 0.42, 0.0, 1.0) * vBright * uOpacity;
+    float a = clamp(core * 1.4 + halo * 0.62, 0.0, 1.0) * vBright * uOpacity;
     if (a < 0.004) discard;
-    gl_FragColor = vec4(mix(vColor, vec3(1.0), core * 0.6), a);
+    // Hot enough at the core to cross the bloom threshold, as the tile's lights do.
+    gl_FragColor = vec4(mix(vColor, vec3(1.0), core * 0.6) * (1.0 + core * 0.8), a);
   }
 `;
 
@@ -144,7 +145,8 @@ export class PyreflyEmitter extends Points {
     this.vel.set([m.vx ?? (r() - 0.5) * 0.5, m.vy ?? 0.35 + r() * 1.25, m.vz ?? (r() - 0.5) * 0.2], i * 3);
     this.age[i] = 0;
     this.life[i] = m.life ?? 2.2 + r() * 2.3;
-    this.size[i] = m.size ?? 3 + r() * 6;
+    // The prototype stamps kernels 10 to 54 px across on a 1080-line frame: about 12 to 34 here at 10 units.
+    this.size[i] = m.size ?? 12 + r() * 22;
     this.bright[i] = 0;
     const c = this.palette[Math.floor(r() * this.palette.length)] ?? this.palette[0]!;
     this.col.set([c.r, c.g, c.b], i * 3);

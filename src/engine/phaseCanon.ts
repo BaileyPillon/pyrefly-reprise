@@ -57,7 +57,7 @@ export const PHASE_TRIGGERS: Readonly<Record<Exclude<PhaseId, 'base'>, { game: '
 export const TRANSIENT_PHASES: ReadonlySet<PhaseId> = new Set(['mortiorchis-charge', 'mortiorchis-imminent', 'bahamut-countdown', 'bahamut-imminent']);
 
 /** The payload each charger fires at the top of its ladder. */
-const PAYLOADS: Readonly<Record<CombatantId, string>> = { mortiorchis: 'total-annihilation', 'ffx2-bahamut': 'mega-flare' };
+const PAYLOADS: Readonly<Record<CombatantId, string>> = { mortiorchis: 'total-annihilation', bahamut: 'mega-flare' };
 
 /** What a cue asks for: a phase, or a return to the phase under a charge ladder. */
 export type PhaseCue = PhaseId | 'restore' | null;
@@ -67,9 +67,14 @@ export interface PhaseMemo {
   payloadBy?: CombatantId | undefined;
 }
 
-/** FFX-2 Bahamut's combatant id (`src/data/ffx2/enemies/bahamut.ts`). */
+/**
+ * FFX-2 Bahamut's combatant id in Chapter IV (its form id, `bahamut`, read
+ * live from the battle state; the enemy record is `ffx2-bahamut`). FFX's aeon
+ * Bahamut shares the id but emits no `charge` event, and a `'restore'` with no
+ * ladder running changes nothing.
+ */
 function isBahamut(id: CombatantId): boolean {
-  return id === 'ffx2-bahamut';
+  return id === 'bahamut';
 }
 
 /** The phase an event asks for, or null when it is not a canon beat. */

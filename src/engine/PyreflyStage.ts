@@ -37,8 +37,8 @@ export interface DissolveSource {
 
 export type PyreflyTier = 'full' | 'phone' | 'low';
 
-/** Motes a second the eroding band releases at its peak, at full density (~400 over a 620 ms KO). */
-export const RELEASE_PER_S = 650;
+/** Motes a second the eroding band releases at its peak, at full density (~550 over a 620 ms KO). */
+export const RELEASE_PER_S = 900;
 const TIER_DENSITY: Readonly<Record<PyreflyTier, number>> = { full: 1, phone: 0.6, low: 0 };
 /** Seconds a held field takes to come up once released. */
 export const HELD_FADE_S = 1.5;
