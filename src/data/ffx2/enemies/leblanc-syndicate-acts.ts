@@ -230,6 +230,10 @@ export const leblancLogosRoomGroup: EnemyGroupDef = {
   canEscape: false,
   enemies: [logosRoom, ormiLogosRoom],
   nextGroupId: LEBLANC_ACT_III,
+  // PR-0107: Acts I to III are three separate battles in the Chateau (§2, puzzles and scenes between
+  // them), so this one opens on randomised bars (ffx2-combat-core §1.6, `[single source]`); HP, MP
+  // and items still carry. FFX-2 only.
+  opensAsSeparateBattle: true,
   musicCues: [],
 };
 

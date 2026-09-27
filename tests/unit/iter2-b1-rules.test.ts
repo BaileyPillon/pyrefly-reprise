@@ -15,7 +15,10 @@ import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
 import { durationToTicks } from '../../src/battle/ffx2/statuses.ts';
-import type { AtbSpeed } from '../../src/battle/ffx2/constants.ts';
+import { SEPARATE_BATTLE_GAUGES, type AtbSpeed } from '../../src/battle/ffx2/constants.ts';
+import { ENEMY_GROUPS_BY_ID } from '../../src/data/ffx2/index.ts';
+import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
+import { LEBLANC_ACT_II, LEBLANC_ACT_III } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 
 function inst(id: string, ticksRemaining: number | null): StatusInstance {
   return { id, turnsRemaining: null, ticksRemaining, charges: null, stacks: 0, permanent: ticksRemaining === null } as StatusInstance;
@@ -77,5 +80,62 @@ describe('PR-0108: Sleep has no timed expiry at Fast (FFX-2)', () => {
     yuna.statuses.sleep = inst('sleep', 30);
     engine.tick(100, { throughInput: true });
     expect(yuna.statuses.sleep).toBeUndefined();
+  });
+});
+
+describe('PR-0107: Chapter VI Acts II and III open as separate battles, an OFF switch (FFX-2)', () => {
+  // `research/ffx2-leblanc-syndicate.md` §2 (three battles with puzzles between) and
+  // `ffx2-combat-core.md` §1.6 (a normal battle opens on randomised bars, `[single source]`).
+  function opening(groupId: string, seed: number, strip = false): { fills: number[] } {
+    const group = { ...ENEMY_GROUPS_BY_ID[groupId]! };
+    if (strip) delete (group as { opensAsSeparateBattle?: boolean }).opensAsSeparateBattle;
+    const engine = new FFX2Engine({ atbMode: 'wait', separateBattleGauges: true });
+    engine.setSeed(seed);
+    // A chained link, as `setupForNextLink` hands it on: condition 'scripted'.
+    engine.init({ game: 'ffx2', party: chateauBuild, enemies: group, triggers: [], seed, condition: 'scripted', canEscape: false });
+    const units = Object.values(engine.state().combatants) as Ffx2Unit[];
+    const fills = units.map((u) => u.atb.ticks / u.atb.required);
+    return { fills };
+  }
+
+  for (const act of [LEBLANC_ACT_II, LEBLANC_ACT_III]) {
+    it(`${act}: across seeds 1-20 the fills lie in 0-60 % and are not all zero`, () => {
+      const all: number[] = [];
+      for (let seed = 1; seed <= 20; seed++) all.push(...opening(act, seed).fills);
+      expect(Math.min(...all)).toBeGreaterThanOrEqual(0);
+      expect(Math.max(...all)).toBeLessThanOrEqual(0.6);
+      expect(all.filter((f) => f > 0).length).toBeGreaterThan(all.length / 2);
+    });
+    it(`${act}: across seeds 1-20 the first actor varies`, () => {
+      const firsts = new Set<string>();
+      for (let seed = 1; seed <= 20; seed++) {
+        const engine = new FFX2Engine({ atbMode: 'wait', separateBattleGauges: true });
+        engine.setSeed(seed);
+        engine.init({ game: 'ffx2', party: chateauBuild, enemies: ENEMY_GROUPS_BY_ID[act]!, triggers: [], seed, condition: 'scripted', canEscape: false });
+        for (let i = 0; i < 200; i++) {
+          const d = engine.nextDecision();
+          if (d.kind === 'waiting') { engine.tick(d.nextEventMs); continue; }
+          const start = engine.state().log.find((e) => e.type === 'turn-start');
+          firsts.add(d.kind === 'player-input' ? d.actorId : (start as { actorId: string } | undefined)?.actorId ?? '?');
+          break;
+        }
+      }
+      expect(firsts.size).toBeGreaterThan(1);
+    });
+    it(`${act}: without the flag the continuation opens at zero, as before`, () => {
+      expect(opening(act, 5, true).fills.every((f) => f === 0)).toBe(true);
+    });
+  }
+
+  it('the switch ships OFF (the stop rule: VI moves outside its band), so the chain still opens at zero', () => {
+    expect(SEPARATE_BATTLE_GAUGES).toBe(false);
+    const engine = new FFX2Engine({ atbMode: 'wait' });
+    engine.init({ game: 'ffx2', party: chateauBuild, enemies: ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, triggers: [], seed: 5, condition: 'scripted', canEscape: false });
+    expect((Object.values(engine.state().combatants) as Ffx2Unit[]).every((u) => u.atb.ticks === 0)).toBe(true);
+  });
+
+  it('Act I and every other chain are untouched: only the two Chateau links carry the flag', () => {
+    const flagged = Object.values(ENEMY_GROUPS_BY_ID).filter((g) => g?.opensAsSeparateBattle === true).map((g) => g!.id).sort();
+    expect(flagged).toEqual([LEBLANC_ACT_II, LEBLANC_ACT_III].sort());
   });
 });

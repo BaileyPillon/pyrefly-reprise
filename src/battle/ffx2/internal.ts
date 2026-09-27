@@ -195,6 +195,8 @@ export interface Ffx2EngineOptions {
   namedTargetsOnly?: boolean;
   /** `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (only a Delay / Action-cancel hit closes a menu), for a measurement run. */
   menuCancelOnlyDelayAbilities?: boolean;
+  /** `constants.ts` SEPARATE_BATTLE_GAUGES (PR-0107, Chapter VI's Acts II and III), for a measurement run. */
+  separateBattleGauges?: boolean;
 }
 
 /** The party's live state as it crosses from one chained group to the next. */

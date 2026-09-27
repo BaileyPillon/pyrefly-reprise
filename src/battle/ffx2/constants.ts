@@ -45,6 +45,16 @@ export const STATUS_CLOCKS_HELD_AT: Readonly<Record<AtbSpeed, ReadonlySet<string
   fast: new Set(['sleep']),
 };
 
+/**
+ * PR-0107's switch, **OFF** until Bailey rules: a chained link flagged
+ * `EnemyGroupDef.opensAsSeparateBattle` (Chapter VI's Acts II and III, separate battles in the
+ * source) opens on randomised bars (§1.6, `[single source]`) instead of the continuation's zero.
+ * Sourced, but it moves Chapter VI outside its band at human pace (measured in
+ * `docs/handoff/iter2-b1.md`), so the plan's stop rule keeps it off and asks.
+ * `Ffx2EngineOptions.separateBattleGauges` overrides it for a measurement run. FFX-2 only.
+ */
+export const SEPARATE_BATTLE_GAUGES = false;
+
 /** One *drawn* full HUD bar. 24 000 ticks = 8.00 s of runway. §1.2 `[single source]` */
 export const TICKS_PER_BAR = 24000;
 
