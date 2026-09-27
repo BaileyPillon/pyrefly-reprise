@@ -154,7 +154,11 @@ describe('a confirmed command ends the selection', () => {
       setHelp: () => {},
       onSelection: (sel) => seen.push(sel),
     });
-    key('Enter'); // one legal target: FFX confirms without a cursor (`auto`)
+    // PR-0170: one legal target still opens the FFX step (Steam, Spherimorph
+    // alone); the confirm then ends the selection like any other.
+    key('Enter');
+    expect(seen.at(-1)?.activeId).toBe('mortiorchis');
+    key('Enter');
     await done;
     expect(seen.at(-1) ?? null).toBeNull();
   });

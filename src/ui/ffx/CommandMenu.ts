@@ -5,7 +5,6 @@ import {
   firstEnabledCmdIndex,
   firstEnabledIndex,
   reticleKind,
-  resolveTargetMode,
   rowEnabled,
   switchRowIndex,
   wrapCommand,
@@ -14,6 +13,7 @@ import {
   type TopGroupRow,
   type TopRow,
 } from './CommandMenuLogic.ts';
+import { ffxTargetMode } from './loneTarget.ts';
 import { commandHelpText } from './commandHelp.ts';
 import type { CursorChrome, CursorSelection, RectProjector, TargetRect } from './TargetCursor.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
@@ -509,7 +509,8 @@ export class CommandMenu {
 
   private resolveCommand(cmd: AvailableCommand): void {
     if (cmd.wrapsCategory && !this.wrap) return this.openWrap(cmd);
-    const resolution = resolveTargetMode(cmd);
+    // PR-0170: a lone valid target still opens the step in FFX (`loneTarget.ts`).
+    const resolution = ffxTargetMode(cmd);
     if (resolution.mode === 'none' || resolution.mode === 'auto') {
       // Safe by construction: `resolution.targets` is `[]` for every command
       // kind whose own `Command.targets` type is the empty tuple (Defend,
