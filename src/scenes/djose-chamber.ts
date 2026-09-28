@@ -6,6 +6,7 @@ import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts'
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
+
 import { RoadPhoneCamera, roadOnPhone } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
@@ -19,11 +20,12 @@ import type { SceneSlots } from './index.ts';
 // (research `ffx2-ixion-djose.md` §6.1, `[verified: 3 sources]`; concept A,
 // Bailey 2026-09-27, D-265). No FFX chapter stands here.
 //
-// THE PAINTING IS A STAND-IN. The Chamber is a painting round still owed to
-// Bailey (rule 9). Until a judge-passed option is installed, the plate is the
-// stand-in the concept README names (`../data/ixion-plates.ts`,
-// `DJOSE_CHAMBER_PLATE`): the Macalania hall over the Den of Woe floor,
-// recoloured storm grey, with a greybox hole. Swapping it is that one constant.
+// THE PAINTING IS NOT BAILEY'S PICK YET (rule 9). The plate is the scene round's
+// recommended option C1 "Storm-lit stone", installed provisionally under
+// `backdrops/ffx2-djose-chamber-provisional` (`../data/ixion-plates.ts`,
+// `DJOSE_CHAMBER_PLATE`); the stand-in (the Macalania hall over the Den of Woe
+// floor, recoloured) stays on disk. Swapping is that one constant, plus a row in
+// {@link DJOSE_PLATE_FRAMES} for a plate with a different floor line.
 // The scene key is the plate's own key, so the cutscene screen, the board card
 // and the prep wash (which draw `backdrops/<sceneKey>.png`) find the same painting.
 //
@@ -41,8 +43,33 @@ import type { SceneSlots } from './index.ts';
 /** The camera the plate is solved for: the `idle` rig's position (Chapter V's). */
 export const DJOSE_CAMERA_REF: [number, number, number] = [0, 2.7, 9.8];
 
-/** The painting plane: Chapter V's solve for the same layout (`farplane.ts`, "Framing maths"). */
-export const DJOSE_BACKDROP = { width: 88, distance: -48, centreY: -0.5 } as const;
+/** How one plate sits behind the stage: the plane, its sampled bands, and whether a faded 3D floor helps. */
+export interface DjosePlateFrame {
+  width: number;
+  distance: number;
+  centreY: number;
+  horizon: [number, number];
+  groundBand: [number, number];
+  /** A radially faded floor under the party, for a plate whose painted floor is a thin strip. */
+  floor: boolean;
+}
+
+/**
+ * The framing of each plate the Chamber can show (`../data/ixion-plates.ts`). Staging, not game data.
+ * - The stand-in keeps the Den / Farplane layout (floor line at 0.44): Chapter V's solve as is.
+ * - Option C1 paints its floor line at about 0.76 of the height and its floor is a quarter of the picture, so the
+ *   plane is wider (130) and higher (centre 22.4): the floor line sits where the stand-in's did (y about 3 at z -48)
+ *   and the painted floor reaches the bottom of the frame. Measured headless at 1600x900 and 390x844 (widths 88,
+ *   130 and 150 and heights 10 to 25.2 tried; 130 keeps the most floor for the least magnification). Its hole sits
+ *   mostly behind Ixion at the standard spot (disclosed in the handoff).
+ */
+export const DJOSE_PLATE_FRAMES: Readonly<Record<string, DjosePlateFrame>> = {
+  'ffx2-djose-chamber-standin': { width: 88, distance: -48, centreY: -0.5, horizon: [0.42, 0.48], groundBand: [0.8, 0.97], floor: false },
+  'ffx2-djose-chamber-provisional': { width: 130, distance: -48, centreY: 22.4, horizon: [0.72, 0.78], groundBand: [0.84, 0.98], floor: false },
+};
+
+/** The frame for the plate the chapter shows now. */
+export const DJOSE_BACKDROP: DjosePlateFrame = DJOSE_PLATE_FRAMES[DJOSE_CHAMBER_PLATE] ?? DJOSE_PLATE_FRAMES['ffx2-djose-chamber-standin']!;
 
 type RigSet = Readonly<Record<SceneRigName, CameraRig> & Record<string, CameraRig>>;
 
@@ -119,9 +146,9 @@ function plateOptions(url: string, low: boolean, cameraRef: [number, number, num
     centreY: DJOSE_BACKDROP.centreY,
     cameraRef,
     // The hall above the floor line parts from the floor on a sway; the floor itself stays one plane.
-    layers: low ? [] : [{ from: 0.0, to: 0.4, feather: 0.1, featherBottom: 0.08, z: -36, opacity: 0.32 }],
-    sampleBands: { sky: [0.02, 0.2], horizon: [0.42, 0.48], ground: [0.8, 0.97], key: [0.1, 0.36] },
-    ground: false,
+    layers: low ? [] : [{ from: 0.0, to: DJOSE_BACKDROP.horizon[0] - 0.02, feather: 0.1, featherBottom: 0.08, z: -36, opacity: 0.32 }],
+    sampleBands: { sky: [0.02, 0.2], horizon: DJOSE_BACKDROP.horizon, ground: DJOSE_BACKDROP.groundBand, key: [0.1, 0.36] },
+    ground: DJOSE_BACKDROP.floor ? { size: 60, tintMix: 0.9, luma: 0.16, fade: true, fadeCore: 0.35, center: [0, -2] } : false,
     fog: { near: 12, far: 42, colorMix: 0.3 },
     fogPlanes: [{ z: -26, y: 1.4, width: 70, height: 9, opacity: 0.16, speed: 0.008 }],
   };

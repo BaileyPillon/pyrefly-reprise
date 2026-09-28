@@ -39,20 +39,21 @@ const HASHES = readFileSync(join(ROOT, 'docs', 'target', 'approved-hashes.json')
 const LOCKED = readFileSync(join(ROOT, 'docs', 'target', 'judge-locked-hashes.json'), 'utf8');
 const { pre, post } = ffx2IxionDjoseScripts;
 
-describe('the plates: stand-ins until the painting round, one line each to swap', () => {
-  it('the Chamber and the Abyss are the named stand-ins; the wake is the approved Chapter 4 plate', () => {
+describe('the plates: the recommended options, provisional until Bailey picks, one line each to swap', () => {
+  it('the Chamber and the Abyss are options C1 and A1 under provisional keys; the wake is the approved Chapter 4 plate', () => {
     expect([DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, DJOSE_WAKE_PLATE]).toEqual([
-      'ffx2-djose-chamber-standin', 'ffx2-abyss-standin', 'bevelle-underground',
+      'ffx2-djose-chamber-provisional', 'ffx2-abyss-provisional', 'bevelle-underground',
     ]);
-    expect([isIxionStandIn(DJOSE_CHAMBER_PLATE), isIxionStandIn(DJOSE_ABYSS_PLATE), isIxionStandIn(DJOSE_WAKE_PLATE)]).toEqual([true, true, false]);
+    expect([isIxionStandIn(DJOSE_CHAMBER_PLATE), isIxionStandIn(DJOSE_ABYSS_PLATE), isIxionStandIn(DJOSE_WAKE_PLATE)]).toEqual([true, true, false]); // none is Bailey's pick yet
     expect(FFX2_IXION_DJOSE.sceneKey).toBe(DJOSE_CHAMBER_PLATE);
   });
 
-  it.skipIf(!existsSync(join(ART, 'backdrops', 'farplane.png')))('the stand-ins are on disk, say PROVISIONAL and are locked in no list', () => {
-    for (const key of [DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE]) {
+  it.skipIf(!existsSync(join(ART, 'backdrops', 'farplane.png')))('options and stand-ins are on disk, say so in their sidecars and are locked in no list', () => {
+    for (const key of [DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, 'ffx2-djose-chamber-standin', 'ffx2-abyss-standin']) {
       expect(existsSync(join(ART, 'backdrops', `${key}.png`)), key).toBe(true);
       const side = JSON.parse(readFileSync(join(ART, 'backdrops', `${key}.json`), 'utf8')) as { status: string; notApproved: boolean };
-      expect([side.status, side.notApproved]).toEqual(['PROVISIONAL', true]);
+      expect(side.notApproved, key).toBe(true);
+      expect(side.status, key).toMatch(key.endsWith('-standin') ? /^PROVISIONAL$/ : /^OPTION \(provisional, awaiting Bailey's pick\)$/);
       expect(HASHES.includes(key), key).toBe(false);
       expect(LOCKED.includes(key), key).toBe(false);
     }

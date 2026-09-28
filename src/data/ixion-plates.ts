@@ -14,16 +14,24 @@
  * (research `ffx2-ixion-djose.md` §7.2 step 12, `[verified: 4 sources]`).
  */
 
-/** The Chamber of the Fayth at Djose: the fight and the fall. STAND-IN (Macalania hall over the Den floor, recoloured). */
-export const DJOSE_CHAMBER_PLATE = 'ffx2-djose-chamber-standin';
+/**
+ * The Chamber of the Fayth at Djose: the fight and the fall. **OPTION C1 "Storm-lit stone", provisional** (the
+ * scene round's recommendation, `docs/concepts/chapters/ixion-djose-2026-09-27/scenes/README.md`; awaiting Bailey's
+ * pick; not locked). C2 would be one more add-only file and this line. The stand-in was
+ * `'ffx2-djose-chamber-standin'`.
+ */
+export const DJOSE_CHAMBER_PLATE = 'ffx2-djose-chamber-provisional';
 
-/** The Farplane Abyss: the cutscene and the whistles. STAND-IN (the Chapter 5 Farplane washed white). */
-export const DJOSE_ABYSS_PLATE = 'ffx2-abyss-standin';
+/**
+ * The Farplane Abyss: the cutscene and the whistles. **OPTION A1 "White void", provisional** (same README; awaiting
+ * Bailey's pick). The stand-in was `'ffx2-abyss-standin'`.
+ */
+export const DJOSE_ABYSS_PLATE = 'ffx2-abyss-provisional';
 
 /** Where she wakes: the approved Chapter 4 plate. */
 export const DJOSE_WAKE_PLATE = 'bevelle-underground';
 
-/** True while a plate is one of the stand-ins (the handoff and a test read this). */
+/** True while a plate is not Bailey's pick: a stand-in or a provisional option (the handoff and a test read this). */
 export function isIxionStandIn(key: string): boolean {
-  return key.endsWith('-standin');
+  return key.endsWith('-standin') || key.endsWith('-provisional');
 }

@@ -24,12 +24,37 @@ build with advisor v3 (a separate branch).
 | Tactic | `src/engine/tactics/ffx2-ixion-djose.ts` (+ index, lookup) | The bench's **sensible** line as a tactic; 20 seeds at bench speed: at least 18 wins (test). Advisor v3 (other branch) touches `src/engine/tactics/**`: this branch only **adds** one file and three index lines. |
 | Recharge banner (the check's major) | `src/ui/ffx2/toldMoves.ts`, `battleMessage.ts` | The FFX-2 battle-message banner shows **"Ixion · Recharge"** as Recharge starts. Only moves a source says are read off the screen are listed (just `x2-ixion-recharge`); no other FFX-2 enemy move changes. FFX untouched (its own HELP bar). |
 | Scene | `src/scenes/djose-chamber.ts`, `scenes/index.ts`, `pyreflyCanon.ts` | The Chamber on the stand-in plate, framed as Chapter V frames its plate (the FFX-2 HUD's solved slots); no live motes (the research names none, 'unattested'); on an upright phone the idle camera dollies back to z 13.2 (PR-0201 option A, reused from Chapter XI) so Ixion stays in the slice. |
-| Plates (rule 9: options until Bailey picks) | `src/data/ixion-plates.ts`; `docs/concepts/chapters/ixion-djose-2026-09-27/stand-ins/` | **No scene options exist yet** (`.../scenes/` absent at 2026-09-27 20:00). So the stand-ins the concept README names are installed under **their own** keys, add-only: `backdrops/ffx2-djose-chamber-standin` (Macalania hall over the Den floor, storm grey, greybox hole) and `backdrops/ffx2-abyss-standin` (the Chapter 5 Farplane washed white); sidecars say PROVISIONAL; in no hash list. When the judge-passed options land, install them as `backdrops/ffx2-djose-chamber-provisional` / `ffx2-abyss-provisional` (add-only) and change **one constant each** in `ixion-plates.ts`. The wake is the approved `bevelle-underground`. Manifest regenerated: additions only (2 backdrops, 1 pause plate + its 2x). |
+| Plates (rule 9: options until Bailey picks) | `src/data/ixion-plates.ts`; `docs/concepts/chapters/ixion-djose-2026-09-27/stand-ins/` | **Now options C1 / A1, provisional (see below).** At the listing commit no scene options existed (`.../scenes/` absent at 2026-09-27 20:00). So the stand-ins the concept README names are installed under **their own** keys, add-only: `backdrops/ffx2-djose-chamber-standin` (Macalania hall over the Den floor, storm grey, greybox hole) and `backdrops/ffx2-abyss-standin` (the Chapter 5 Farplane washed white); sidecars say PROVISIONAL; in no hash list. When the judge-passed options land, install them as `backdrops/ffx2-djose-chamber-provisional` / `ffx2-abyss-provisional` (add-only) and change **one constant each** in `ixion-plates.ts`. The wake is the approved `bevelle-underground`. Manifest regenerated: additions only (2 backdrops, 1 pause plate + its 2x). |
 | Story | `src/story/scripts/ffx2-ixion-djose.ts` | pre: Gippal missing, fiends from the Chamber, the stairs, Rikku's **verbatim** "This can't be happening." post: results (mission complete) → the fall → the Abyss plate (Shuyin calls her Lenne, Vegnagun, the embrace, Nooj and Gippal, Baralai revealed, two spheres for Paine, Gippal's **verbatim** "Take care of things topside.", Yuna's **verbatim** "I'm all alone.") → **four whistles** (each a one-press `(Whistle)` prompt, the existing `whistle-answer` cue, a gold flash, a light line; skippable: hold Enter or pause > Skip Scene still ends on flag 4) → the Bevelle Underground plate. Every other line is ours, commented with its beat. Nooj is **text-only** (his portrait is not approved); Shuyin, Baralai, Gippal use approved portraits. |
 | DSL | `src/story/dsl.ts` (`backdrop()`), `CutsceneRunner.ts` (optional port), `app/screens/cutscenePlate.ts`, `CutsceneScreen.ts` (one line) | Additive step: swap the cutscene plate with a crossfade (cuts under a skip); the chapter eyebrow steps out once the scene has moved. |
 | Music (rule 13, nothing new) | record + script | Fight `boss-ffx2-aeon` (the sourced mood of "Aeons"); field bed `scene-bevelle-underground` (FFX-2 fallback, Chapter VI precedent); Abyss `scene-farplane` ("The Farplane Abyss"); wake `scene-bevelle-underground`. THEMES.md cue-map row XVI. Bailey's call by ear. |
 | Save | `tests/unit/save-ixion-listed-fixture.test.ts`, `tests/fixtures/saves/release-25-main.json` | A save exported from the **live release-25 main build** loads unchanged and gains XVI as unplayed; the board counts it; a clear moves "N of 15". `SaveData.ts` is untouched. |
 | e2e | `tests/e2e/ffx2-ixion.spec.ts` | From the title by real keys (desktop) / taps (phone): board, the XVI card, prep, the opening, the fight to a win following the guide's NEXT (the tactic), the Recharge banner and Thor's Hammer, results, the fall, the Abyss, four whistles, the wake, back on the board with the clear ("1 of 15"). Frames `docs/screenshots/chapter-ixion/listed/`. |
+
+### The scene options landed (main e2052a2a, ~21:00 EDT): C1 and A1 installed provisionally
+
+The scene round (`docs/concepts/chapters/ixion-djose-2026-09-27/scenes/README.md`, merged from main) recommends
+**Chamber C1 "Storm-lit stone"** with **Abyss A1 "White void"** (`[estimate]`, the round's own judgement; its README
+records the author's review of every render, not a separate judge pass). Installed **add-only, not locked, not
+approved**, copied byte for byte from `D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ixion-scenes/`:
+
+- `backdrops/ffx2-djose-chamber-provisional.png` = `chamber-c1.png` (sha `007992924372…`)
+- `backdrops/ffx2-abyss-provisional.png` = `abyss-a1.png` (sha `77cf1cde508f…`)
+
+Each sidecar is the candidate's own plus `status: "OPTION (provisional, awaiting Bailey's pick)"`. The manifest
+regenerated with only these two backdrops added (subjects byte-identical). `src/data/ixion-plates.ts` now points at
+them (one line each); the stand-ins stay on disk and are one line back. C1's floor is a quarter of the picture, so
+the Chamber scene frames it on its own row (`DJOSE_PLATE_FRAMES`: width 130, centre 22.4, measured headless at
+1600x900 and 390x844). **Disclosed:** at the standard spot Ixion stands mostly over C1's hole, so the hole reads
+only around his hooves during the fight (the README's own "weak spot"); the hero-plate stand-in still uses the
+Chamber stand-in behind Ixion. C2 / A2 would be one more add-only file and one line each.
+
+**Verified on the options commit (~21:20-22:10 EDT):** tsc and typecheck:e2e clean; full suite (second run) 602
+passed, 1 failed (the same Bahamut heal-only timeout); orphans 24; verify-approved 271 / 0 / 0; e2e on a fresh
+production build: **1600x900 keys PASS** (victory, 38 decisions, 2 Recharges / 2 Hammers, banner seen) and **390x844
+taps PASS** (victory, 47 decisions, 2 / 2, banner seen), the Abyss on A1 and the fight on C1; frames refreshed in
+`docs/screenshots/chapter-ixion/listed/`. Disclosed: the cutscene screen draws every plate at `center 35%`, so during
+the fall lines C1 shows its hall and lightning, not the hole.
 
 ### Verified (2026-09-27 ~20:00-21:15 EDT, on the listing commit)
 
@@ -108,7 +133,23 @@ Thor's Hammer 935-1,057 against MDef 35. Nothing to fix.
 load; browser on 7310 walked the fight and the whole post-battle stub with real keys (frames
 `docs/screenshots/ixion/`, script `.ixion-browser-tmp.mjs`).
 
-## Open (Bailey's, or the next track's)
+## Open after the listing (Bailey's picks and the next track)
+
+1. **Bailey's picks owed (rule 9):** Chamber C1 or C2, Abyss A1 or A2 (installed provisionally: C1 + A1); the pause
+   hero plate (a stand-in composite now); the pause tagline "Where the Fayth Stood" (ours, inferred); music by ear
+   (the Djose field bed and an Abyss cue: existing cues stand in, THEMES row XVI).
+2. **The hole behind Ixion (C1):** at the standard spot he covers most of C1's hole during the fight; moving him right
+   pushes the intent card and his tail toward the command list (tried at x 2.0 on 1600x900). A frame choice for the pick.
+3. **Merge order with `chapter-sin`:** Ixion is XVI; Sin's records (16, and D-270's second chapter) must move to 17+.
+   Both branches touch `encounters.ts` `ChapterId`, `chapters-unlisted.ts`, `learn/atlas/cites.ts`.
+4. **Advisor v3** (its own branch) edits `src/engine/tactics/**`; this branch adds `ffx2-ixion-djose.ts` and three lines
+   in `index.ts` / `lookup.ts`: a trivial merge. The e2e follows the guide's NEXT, so re-run it after v3 lands.
+5. **The whistle is a simple beat**: four one-press `(Whistle)` prompts, the existing `whistle-answer` cue, a gold
+   flash and a line; no bridge art, no new sound (rule 13). A richer moment is a future options round.
+6. The earlier open items 3 (derived poses unseen), 4 (Q1 / Q2 / Q4) and 5 (Eater grids read by nothing) still stand;
+   items 1 (the Recharge banner) and 2 (the phone field) are **done** (the banner; the phone dolly, PR-0201 A).
+
+## Open (the unlisted pass, kept for history)
 
 1. **No "Recharge" banner exists in the FFX-2 HUD (finding, 2026-09-27).** A DOM watch through the whole Recharge
    and Hammer beat, at both viewports, found the word "Recharge" only in the house intent slab ("IXION ACTS NEXT
