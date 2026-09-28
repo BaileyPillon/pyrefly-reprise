@@ -148,7 +148,7 @@ export class Ff7CommandMenu {
       })
       : [];
     layer.innerHTML = (deep ? '<div class="ff7-scrim" data-scrim="1"></div>' : '') +
-      menuHtml(g, this.st, this.deps.context()) + targetCursorsHtml(g, aimed) + targetHitsHtml(hits);
+      menuHtml(g, this.st, this.deps.context()) + targetCursorsHtml(g, aimed) + targetHitsHtml(hits, g);
   }
 
   // ------------------------------------------------------------------ input

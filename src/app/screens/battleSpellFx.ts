@@ -13,7 +13,8 @@ import type { StageSpellFxOptions } from '../../engine/spellfx/stageSpellFx.ts';
 import { DEFAULT_FLASH_PARAMS, REDUCED_FLASH_PARAMS, resolveFxQuality, type FxQuality } from '../../engine/spellfx/SpellFxParams.ts';
 import type { SpellFxLayer } from '../../engine/spellfx/SpellFxLayer.ts';
 import { SPEED_RATE } from '../../engine/spellfx/SpellFxSpecials.ts';
-import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
+import type { BattleStage, PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
+import { ff7SpellFxOptions } from './battleFf7Fx.ts';
 import { readSetting } from '../SaveData.ts';
 import type { GameId } from '../../battle/common/types.ts';
 import { ffxFamily } from '../../battle/common/game.ts';
@@ -22,10 +23,13 @@ export function battleSpellFx(
   game: GameId,
   renderer: Renderer,
   speed?: () => PlaybackSpeed | undefined,
-): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'rate'> {
-  // FF7's spell effects wait for their options round (rule 9): no overlay, so the layer draws nothing,
-  // never FFX's or FFX-2's skin; the stage's plain impact still lands (FF7 only).
-  if (game === 'ff7') return {};
+  stage: () => BattleStage | null = () => null,
+): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'rate' | 'flash' | 'onLand'> {
+  // FF7: its own effects (D-260 Spectacle on A3 plus), never FFX's or FFX-2's skin (FF7 only).
+  if (game === 'ff7') {
+    const { director: _director, ...ff7 } = ff7SpellFxOptions(renderer, speed, stage);
+    return ff7;
+  }
   return {
     game: ffxFamily(game, 'battleSpellFx'),
     // The effect clock follows the presenter's playback speed (held fast-forward).

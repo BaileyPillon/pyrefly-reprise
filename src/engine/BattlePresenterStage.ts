@@ -25,7 +25,7 @@ import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './Sc
 import { laneFrom, relaxActorsOf, relaxField } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
-import { bodyFacingOption, stageCamera } from './StageFacing.ts';
+import { bodyFacingOption, figureLightOf, poseScalingOf, stageCamera } from './StageFacing.ts';
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
@@ -55,7 +55,7 @@ export interface PaintedStageOptions {
   /** Mid-battle entrances by combatant id. Defaults to what the scene published (`StageArrivals.ts`). */
   arrivals?: ArrivalDirectors;
   /** The spell effects' skin, overlay hook, quality tier and flash rules (`spellfx/`). Without `overlay` they never draw. */
-  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate'>;
+  spellFx?: Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate' | 'onLand'>;
   /** The location's key, for its pyrefly canon row (`pyreflyCanon.ts`). */
   sceneKey?: string;
   /** The renderer's grade, which D-224's phase lighting turns (`PhaseLighting.ts`). */
@@ -249,7 +249,8 @@ export class PaintedStage implements BattleStage {
       // art painted the way its body faces is drawn exactly as painted.
       ...bodyFacingOption(this.opts.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
       worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? own ?? worldHeightFor(c, heights)),
-      crossfadeMs: kind === 'party' ? 120 : 140,
+      crossfadeMs: this.opts.slots.poseCut ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys
+      ...(this.opts.slots.poseShiftPx?.[artId] ? { poseShiftPx: this.opts.slots.poseShiftPx[artId] } : {}), // FF7: every key on the idle's stance
       poses,
       placeholder:
         kind === 'party'
@@ -261,7 +262,8 @@ export class PaintedStage implements BattleStage {
       rim: this.opts.rim
         ? { color: this.opts.rim.color, strength: 0.8, dir: this.opts.rim.dir, width: 3.4 }
         : { strength: 0.7 },
-      groundShade: 0.24,
+      ...figureLightOf(this.opts.slots.figureLight), // FF7: the core's green rim and bounce, the fringe trimmed
+      groundShade: 0.24, ...poseScalingOf(this.opts.slots), // FF7's long machine and upright keys (scene switches)
       bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
       shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, ...shadowOf(this.groundLuma) },
       breathe: { amplitude: 0.016, speed: 0.4 },
@@ -648,6 +650,7 @@ export class PaintedStage implements BattleStage {
         this.spellFx.covers(at) ? undefined : impactAt(at, o?.element && o.element !== 'none' ? o.element : 'slash', o?.crit === true),
       screenFlash: (colour, ms) => this.screenFlash(colour, ms),
       land: (at, o) => this.spellFx.land(at, o),
+      pendingLand: (at, action) => this.spellFx.pendingLand(at, action), // FF7: the numeral on the drawn strike
     };
   }
 

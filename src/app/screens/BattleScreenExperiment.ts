@@ -28,6 +28,10 @@ import type { BattleScreenOptions, BattleScreenResult } from './BattleScreen.ts'
 import type { RunChapterOptions } from './BattleScreenFlow.ts';
 import type { ResultsChoice } from '../../ui/common/resultsPage.ts';
 import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
+import type { Ff7PartyBuild } from '../../battle/common/types-ff7.ts';
+import { playBattleSwirl } from '../../ui/common/transitions/index.ts';
+import { playFf7Swirl } from '../../ui/ff7/ff7Swirl.ts';
+import { Ff7ResultsScreen } from './Ff7ResultsScreen.ts';
 import { recordExperimentAttempt, recordExperimentClear } from '../experiments/experimentRecords.ts';
 
 /** A battle the flow can await: the real screen resolves `finished`, a test stand-in `done`. */
@@ -88,4 +92,25 @@ export async function runExperiment(
     ports.setStep('idle');
     return fought;
   }
+}
+
+/**
+ * The way into an experiment's battle: FF7's own swirl of the frozen board (F1, D-244) for an FF7
+ * chapter, the chapters' swirl otherwise. `swap` shows the battle and says whether it is up.
+ */
+export async function experimentPlayIn(root: HTMLElement, chapter: Chapter, swap: () => Promise<boolean>, opts: RunChapterOptions): Promise<boolean> {
+  let up: Promise<boolean> = Promise.resolve(true);
+  const onCover = (): Promise<void> => (up = swap()).then(() => undefined);
+  if (chapter.game === 'ff7') await playFf7Swirl(root, { instant: opts.speed === 'skip', onCover });
+  else await playBattleSwirl(root, { instant: opts.speed === 'skip', onCover });
+  return up;
+}
+
+/** FF7's results windows or its Game Over (C1, G1, D-244) in place of the house panel; resolves with the pick. */
+export async function ff7Results(show: (s: Screen) => Promise<boolean>, chapter: Chapter, fought: BattleScreenResult): Promise<ResultsChoice> {
+  const screen = new Ff7ResultsScreen({
+    outcome: fought.outcome, result: fought.result, build: chapter.buildRef as unknown as Ff7PartyBuild, ...(fought.standing ? { standing: fought.standing } : {}),
+  });
+  if (!(await show(screen))) return 'continue';
+  return screen.done;
 }

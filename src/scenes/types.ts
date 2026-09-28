@@ -187,6 +187,42 @@ export interface SceneStaging {
    * §7 #15). Omitted everywhere else: FFX and FFX-2 keep their rings.
    */
   readonly turnRings?: false;
+  /**
+   * Longest side a figure's painting may reach, as a multiple of its world height (the actor's
+   * `poseScaling.maxExtent`, default 2.2). FF7 only today: Guard Scorpion is a long machine whose
+   * paintings are padded to register on its rear foot. Unset everywhere else.
+   */
+  readonly figureExtent?: number;
+  /**
+   * `true`: a pose change is a hard cut, never a crossfade (the actor's `crossfadeMs` 0). FF7's Film keys are
+   * different drawings of one body; a crossfade drew a see-through double of the outgoing one (the phase-3 judge,
+   * repair items 1 and 2). Unset everywhere else: FFX and FFX-2 keep their crossfades.
+   */
+  readonly poseCut?: true;
+  /**
+   * Per art id, a horizontal shift per pose in the painting's own pixels (the actor's `poseShiftPx`), so every
+   * pose stands on the idle's stance. FF7 only (`src/data/ff7/filmPoseAnchors.ts`). Unset everywhere else.
+   */
+  readonly poseShiftPx?: Readonly<Record<string, Readonly<Record<string, number>>>>;
+  /**
+   * `false`: no pose is laid to rest by its aspect (the actor's `poseScaling.proneAspect` at infinity), so a wide
+   * painting stands where it was registered instead of being rolled onto its underside and slid along the floor.
+   * FF7 only: Barret's aim (1302x1130) was rolled 17 degrees and moved about 90 px off his stance, Cloud's strike
+   * and the boss's recoil rolled too (the P3 check's P3C-2); FF7's KO is the motion port's `lieDown`. Unset
+   * everywhere else: FFX and FFX-2 KO paintings still come to rest.
+   */
+  readonly restPoses?: false;
+  /**
+   * How every figure is lit and trimmed, in place of the house rim (a pale blue rim from the upper left): the
+   * rim's colour, direction (painting space), strength and width; a ground bounce; a silhouette erosion in
+   * texels. FF7 only (the core's green light from screen-right, the Film art's matte fringe trimmed; repair
+   * item 9). Unset everywhere else.
+   */
+  readonly figureLight?: Readonly<{
+    rim: Readonly<{ color: number; dir: readonly [number, number]; strength: number; width: number }>;
+    bounce: Readonly<{ color: number; strength: number }>;
+    erode: number;
+  }>;
 }
 
 /** The staging switches a build set, and only those. */
@@ -201,6 +237,11 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.sideFacing) out.sideFacing = build.sideFacing;
   if (build.fixedCamera) out.fixedCamera = true;
   if (build.turnRings === false) out.turnRings = false;
+  if (build.figureExtent) out.figureExtent = build.figureExtent;
+  if (build.poseCut) out.poseCut = true;
+  if (build.poseShiftPx) out.poseShiftPx = build.poseShiftPx;
+  if (build.restPoses === false) out.restPoses = false;
+  if (build.figureLight) out.figureLight = build.figureLight;
   return out;
 }
 

@@ -1119,6 +1119,110 @@
     "approved": "2026-09-27"
    }
   },
+  "bailey:2026-09-27-ff7-film": {
+   "words": "I'll go with all of your recommendations",
+   "note": "Bailey, 2026-09-27 ~13:00 EDT, verbatim \"I'll go with all of your recommendations\", answering the driver's FF7 high-fidelity choice (docs/concepts/ff7-hifi-choice-2026-09-27/README.md): art direction 3 'Film' with its one fault fixed first, the green/cyan rim baked onto the BACK edge of Cloud and Barret (D-259), and the sides switched, never mirrored (D-262). Installed: the film-set repair round's recommended file per pose (docs/concepts/ff7-art-2026-09-27/film-set/README.md) under NEW keys ff7-film-cloud, ff7-film-barret, ff7-film-guard-scorpion, ff7-film-guard-scorpion-tail-up and backdrops/ff7-film-reactor, by film-set/scripts/install.py (back-edge de-mint on Cloud, a premultiplied resize, transparent columns to register each plane; never mirrored). Sources: D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ff7-film/; backups D:/Tools/pyrefly-art-backup/approved/2026-09-27-ff7-film/. The round-2 files of set bailey:2026-09-27-ff7 stay installed and unused. A pick approves only the art as shown. FF7 only.",
+   "decisions": [
+    "D-259",
+    "D-262",
+    "D-244"
+   ],
+   "public/art/characters/ff7-film-barret/aim.png": {
+    "sha256": "1023dd60024e64d818ab80488b9f0d69a1a86fd405ffd83d7f040ad877f7ea01",
+    "mtime": "2026-09-27T22:52:20.556Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-barret/attack.png": {
+    "sha256": "2a04cc5b41c804ce27599b3bead63aa677275845d2d74436c79349495545979a",
+    "mtime": "2026-09-27T22:52:21.009Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-barret/hurt.png": {
+    "sha256": "48a56b688666c3fca35a59ac1e34a2d09f297eb5eca8e39cbac6a47532a68c04",
+    "mtime": "2026-09-27T22:52:22.255Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-barret/idle.png": {
+    "sha256": "452e226d871735d18aaf8d53c8575204f2815c7b30b72a342f7a5ba5b5f1aee3",
+    "mtime": "2026-09-27T22:52:20.133Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-barret/punch.png": {
+    "sha256": "e9708f85e816c7cdbeeac81e936f75d535fa87f6ccacd257bc98e6ca3ee4a154",
+    "mtime": "2026-09-27T22:52:21.844Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-barret/victory.png": {
+    "sha256": "a06dc3c6f5c8a3da1b56fddcd35da82791c2de008e3bd1790866e34f42c3d1d9",
+    "mtime": "2026-09-27T22:52:21.391Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-cloud/attack.png": {
+    "sha256": "966a59dd5505a069bf841ecee196d51339d1cb76aad7747c633049a1cbe84032",
+    "mtime": "2026-09-27T22:52:17.698Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-cloud/back.png": {
+    "sha256": "cc172e58c83880f54ef5c4b293517f3a87ab28d514560b4d7fa3425fa2357fb0",
+    "mtime": "2026-09-27T22:52:19.308Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-cloud/follow.png": {
+    "sha256": "45badcd5f5b02335bd76945db22ecbec6ad583637a44cf607d61204160328286",
+    "mtime": "2026-09-27T22:52:18.096Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-cloud/hurt.png": {
+    "sha256": "501c625450162e78d7fb91cf9b95f8bbae62aaf8b0378980b75d3b084752a474",
+    "mtime": "2026-09-27T22:52:19.729Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-cloud/idle.png": {
+    "sha256": "f2c9a3b57669ab58225123840498155aca1ab34919d4f83d8d52282b28f9e6be",
+    "mtime": "2026-09-27T22:52:16.851Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-cloud/spin.png": {
+    "sha256": "f10084af995ba16b814a468b07a18762b22460d0a9ddea093a08c717185a0013",
+    "mtime": "2026-09-27T22:52:18.900Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-cloud/victory.png": {
+    "sha256": "350c8a9eaf64825339f9bd945f360681b71a6da10cb78e7f6c1a5b5f0db01485",
+    "mtime": "2026-09-27T22:52:18.476Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-cloud/windup.png": {
+    "sha256": "e03c0e7e7e69ea5625e9defc5efeffecc769ca6223f2e7cc55d66c8a50d83100",
+    "mtime": "2026-09-27T22:52:17.280Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-guard-scorpion-tail-up/hurt.png": {
+    "sha256": "2a6e7044fb5a0483d007ebd3fbf51cec58979c41775af3d215b56b5d9b4c48b0",
+    "mtime": "2026-09-27T22:52:25.301Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-guard-scorpion-tail-up/idle.png": {
+    "sha256": "9caeecfb93d77e69736845f48dde64dbf431f56411530ab4915cd7926db79214",
+    "mtime": "2026-09-27T22:52:24.500Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-guard-scorpion/hurt.png": {
+    "sha256": "dff8b188c47b15d16b5e687b083611c88f542d4681237daecf51da63a8b8fbcc",
+    "mtime": "2026-09-27T22:52:23.682Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/characters/ff7-film-guard-scorpion/idle.png": {
+    "sha256": "410911fd97965421ad3aedfe6039cc8f2710ee8fa515aafec4bdf10e25c44ad4",
+    "mtime": "2026-09-27T22:52:22.972Z",
+    "approved": "2026-09-27"
+   },
+   "public/art/backdrops/ff7-film-reactor.png": {
+    "sha256": "401c01ded90618c90b0679c9a1ef248d4ea6bba3490da8b184c806c1b80c7753",
+    "mtime": "2026-09-27T22:52:27.059Z",
+    "approved": "2026-09-27"
+   }
+  },
   "bailey:2026-09-27-ixion": {
    "words": "all your recommendations",
    "note": "Bailey, 2026-09-27 ~15:20 EDT, verbatim \"all your recommendations\" (D-268 in docs/target/decisions.json), answering the driver on docs/concepts/chapters/ixion-djose-2026-09-27/look/README.md (Q6, four painted options; B recommended): Ixion's FFX-2 look is option B, possessed violet. Installed under the new subject x2-ixion (FFX-2 only; the FFX ixion/ paintings are untouched). idle = opt-b.png byte for byte, the picture Bailey saw. attack, cast and overdrive are DERIVED by the same no-GPU method from the shipped FFX attack and overdrive paintings (possess_b.py; cast adds recharge_glow.py, the Recharge glow), as the driver's brief of the same message asked; Bailey has not seen those three as poses, and a pick approves only what Bailey named (rule 15). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-27-ixion/ (installed/, NOTHING-REPLACED.txt). Game: FFX-2 only.",

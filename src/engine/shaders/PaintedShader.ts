@@ -37,6 +37,9 @@ export const paintedFragmentShader = /* glsl */ `
   uniform vec3 tint;
   uniform vec3 flashColor;
   uniform float flashAmount;
+  // 0 = the flash lifts dark texels by FLASH_FLOOR (a hit reads on black armour); 1 = no floor, so the flash is light
+  // on what the painting already shows (FF7's cast light: a floor on a long cast read as a see-through veil, P3P-1).
+  uniform float flashFloorCut;
   uniform vec3 rimColor;
   uniform float rimStrength;
   uniform vec2 rimDir;
@@ -80,6 +83,9 @@ export const paintedFragmentShader = /* glsl */ `
   uniform float contactBand;
   uniform vec2 texel;
   uniform float alphaCut;
+  // Erode the silhouette by this many texels (0 = off): the alpha is the least of four neighbours', so a pale
+  // matte fringe outside the ink goes (FF7's Film paintings, the phase-3 judge's repair item 9).
+  uniform float erode;
   uniform float edgeFade;
   // 1 = the feather runs round the whole plane; 0 = sides and top only, the
   // base left whole for a figure standing on it (PR-0164).
@@ -120,6 +126,12 @@ export const paintedFragmentShader = /* glsl */ `
       }
       float fadeEnd = 1.0 - jag;
       a *= 1.0 - smoothstep(fadeEnd - edgeFade, fadeEnd, box);
+    }
+
+    if (erode > 0.0) {
+      vec2 e = texel * erode;
+      a = min(a, min(min(texture2D(map, uv + vec2(e.x, 0.0)).a, texture2D(map, uv - vec2(e.x, 0.0)).a),
+                     min(texture2D(map, uv + vec2(0.0, e.y)).a, texture2D(map, uv - vec2(0.0, e.y)).a)));
     }
 
     if (a < alphaCut) discard;
@@ -179,7 +191,7 @@ export const paintedFragmentShader = /* glsl */ `
     //   -- the renderer uses NoToneMapping, so anything above 1.0 is just
     //   clipping -- and max(c, ...) guarantees a flash can only ever
     //   brighten a texel, never darken one that was already brighter.
-    const float FLASH_FLOOR = 0.34;
+    float FLASH_FLOOR = 0.34 * (1.0 - clamp(flashFloorCut, 0.0, 1.0));
     const float FLASH_GAIN = 0.85;
     const float FLASH_CEIL = 1.0;
     float flashMask = clamp(flashAmount, 0.0, 1.0) * smoothstep(alphaCut, alphaCut + 0.38, a);
