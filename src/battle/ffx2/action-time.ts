@@ -35,7 +35,7 @@
  *    `CLOISTER_ACTION_TIME` (`src/data/ffx2/enemies/trema.ts`): ON, 3 s (`CLOISTER_ACTION_TIME_SECONDS`,
  *    an `[estimate]`, Bailey's pick on 2026-09-25). Chapter XI's three Road links read `ROAD_ACTION_TIME`
  *    (`src/data/ffx2/enemies/fallen-aeons-road.ts`): ON, 3 s (`ROAD_ACTION_TIME_SECONDS`, the same
- *    `[estimate]`, Bailey's option A on 2026-09-25). Chapter XVII's one Djose link reads `DJOSE_ACTION_TIME_ON`
+ *    `[estimate]`, Bailey's option A on 2026-09-25). Chapter XVI's one Djose link reads `DJOSE_ACTION_TIME_ON`
  *    (`src/data/ffx2/enemies/ixion-djose.ts`): ON, 3 s (the same `[estimate]`, Bailey's pick on 2026-09-27,
  *    D-269). No other formation carries one.
  * 3. {@link ACTION_TIME_ALL_FFX2} — every FFX-2 battle (Chapters 4, 5, 6, XI and XIII).

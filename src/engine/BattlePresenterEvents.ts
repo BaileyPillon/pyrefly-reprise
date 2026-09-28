@@ -182,6 +182,7 @@ export function elementCue(element: ElementId | undefined, crit: boolean): strin
 // ------------------------------------------------------------------ numerals
 
 export function numeral(ctx: EventCtx, id: CombatantId, n: Numeral): void {
+  ctx.deps.hud?.numeralLanded?.(id); // FF7: its HUD shows the number it held from the event, now the blow has landed
   const dn = ctx.deps.damageNumbers;
   if (!dn) return;
   const at = ctx.stage.project(id);

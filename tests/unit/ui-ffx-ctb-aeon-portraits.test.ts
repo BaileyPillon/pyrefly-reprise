@@ -14,6 +14,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AnyCombatant, CombatantId, TurnPreview } from '../../src/battle/common/types.ts';
 import { CtbList } from '../../src/ui/ffx/CtbList.ts';
+import { PartyStatusWindow } from '../../src/ui/ffx/PartyStatusWindow.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from '../../src/ui/ffx/portraits.ts';
 
 function row(actorId: string, isParty: boolean, extra: Partial<TurnPreview> = {}): TurnPreview {
@@ -57,6 +58,33 @@ describe('aeon turn-order tiles use the aeon painting (PR-0176)', () => {
     const srcs = srcsFor(list, 'tidus');
     expect(srcs).toHaveLength(1);
     expect(srcs[0]!.endsWith('art/portraits/tidus.png')).toBe(true);
+  });
+});
+
+describe("the aeon's status row wears the same face as its turn tile (FOC24-02, CHK-012)", () => {
+  function statusSrcs(win: PartyStatusWindow, actor: string): string[] {
+    const r = win.el.querySelector(`[data-actor="${actor}"]`);
+    return [...(r?.querySelectorAll('img') ?? [])].map((img) => img.getAttribute('src') ?? '');
+  }
+  const aeonRow = (id: string, name: string): AnyCombatant =>
+    ({ id, name, side: 'aeon', spriteKey: id, hp: 1830, mp: 59, alive: true, stats: { maxHp: 1830, maxMp: 59 }, statuses: {} }) as unknown as AnyCombatant;
+
+  it('Shiva, Ixion and Bahamut rows ask for portraits/<aeon>.png, as the turn list does, not only a letter', () => {
+    const win = new PartyStatusWindow();
+    const combatants = { shiva: aeonRow('shiva', 'Shiva'), ixion: aeonRow('ixion', 'Ixion'), bahamut: aeonRow('bahamut', 'Bahamut') } as Record<CombatantId, AnyCombatant>;
+    for (const id of ['shiva', 'ixion', 'bahamut']) {
+      win.render([id], combatants, id);
+      const list = new CtbList();
+      list.render([row(id, true)], combatants);
+      expect(statusSrcs(win, id).some((s) => s.endsWith(`art/portraits/${id}.png`)), id).toBe(true);
+      expect(statusSrcs(win, id)).toEqual(srcsFor(list, id));
+    }
+  });
+
+  it("Yuna's Yojimbo still never gets the unapproved navy painting (D-054)", () => {
+    const win = new PartyStatusWindow();
+    win.render(['yojimbo'], { yojimbo: aeonRow('yojimbo', 'Yojimbo') } as Record<CombatantId, AnyCombatant>, null);
+    expect(statusSrcs(win, 'yojimbo')).toEqual([]);
   });
 });
 

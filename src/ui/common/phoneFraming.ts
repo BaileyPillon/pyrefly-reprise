@@ -41,10 +41,21 @@ export interface FramingProblem {
   /** Where the left edge sits by default (the tie-break). */
   home: number;
   figures: readonly FramedFigure[];
+  /**
+   * P-02: a roomier margin, used when every figure fits whole inside it (else {@link FRAME_MARGIN} as before).
+   * 0 or absent: unchanged. The FFX phone passes {@link FRAME_COMFORT}.ffx.
+   */
+  comfort?: number;
 }
 
 /** Room kept between a figure and the window's edge, in CSS px. */
 export const FRAME_MARGIN = 8;
+/**
+ * P-02 (FFX only): the room an FFX slide keeps when the whole fight fits with it, CSS px. At 390x844 Chapter I
+ * fitted with 35 px left of Tidus and Seymour Flux's hair tips 8 to 10 px from the right edge (the slide stops at
+ * the first slide that shows everyone, nearest home). FFX-2 keeps 0: its slides are unchanged.
+ */
+export const FRAME_COMFORT = { ffx: 16, ffx2: 0 } as const;
 /** Scores this close count as equal, and the slide nearest home wins. */
 const TIE = 0.05;
 /**
@@ -60,21 +71,34 @@ function shown(f: FramedFigure, lo: number, hi: number): number {
   return Math.max(0, Math.min(f.x + f.w, hi) - Math.max(f.x, lo)) / f.w;
 }
 
-/** The weighted share of the figures a left edge at `left` shows. */
-export function frameScore(p: FramingProblem, left: number): number {
-  const lo = -left + FRAME_MARGIN;
-  const hi = -left + p.view - FRAME_MARGIN;
+/** The weighted share of the figures a left edge at `left` shows, `margin` px in from each window edge. */
+export function frameScore(p: FramingProblem, left: number, margin = FRAME_MARGIN): number {
+  const lo = -left + margin;
+  const hi = -left + p.view - margin;
   return p.figures.reduce((s, f) => s + f.weight * shown(f, lo, hi), 0);
 }
 
-/** The canvas's best left edge: the highest score, ties to the one nearest home. */
+/**
+ * The canvas's best left edge: the highest score, ties to the one nearest home. With `comfort` (P-02), the
+ * slide keeps that roomier margin whenever every figure fits whole inside it.
+ */
 export function bestLeft(p: FramingProblem): number {
+  const comfort = p.comfort ?? 0;
+  if (comfort > FRAME_MARGIN && p.figures.length) {
+    const roomy = bestLeftAt(p, comfort);
+    const whole = p.figures.reduce((s, f) => s + f.weight, 0);
+    if (frameScore(p, roomy, comfort) >= whole - TIE) return roomy;
+  }
+  return bestLeftAt(p, FRAME_MARGIN);
+}
+
+function bestLeftAt(p: FramingProblem, margin: number): number {
   const min = Math.min(0, Math.round(p.view - p.canvas));
   const home = Math.min(0, Math.max(min, p.home));
   if (!p.figures.length || min === 0) return home;
   const scores: Array<[number, number]> = [];
-  for (let left = min; left <= 0; left += 2) scores.push([left, frameScore(p, left)]);
-  scores.push([0, frameScore(p, 0)], [home, frameScore(p, home)]);
+  for (let left = min; left <= 0; left += 2) scores.push([left, frameScore(p, left, margin)]);
+  scores.push([0, frameScore(p, 0, margin)], [home, frameScore(p, home, margin)]);
   const top = Math.max(...scores.map(([, s]) => s));
   const good = scores.filter(([, s]) => s >= top - TIE).map(([left]) => left);
   return good.reduce((a, b) => (Math.abs(b - home) < Math.abs(a - home) ? b : a));
@@ -109,7 +133,7 @@ export interface PhoneField {
    * there; while aiming, `focus` is the aimed figure, kept whole above all, and
    * the slide jumps, carrying the drawn brackets with it (below).
    */
-  frame(homeAspect: number, focus?: readonly CombatantId[]): void;
+  frame(homeAspect: number, focus?: readonly CombatantId[], comfort?: number): void;
   /** Back to the stylesheet's default slide. */
   reset(): void;
 }
@@ -152,7 +176,7 @@ export function createPhoneField(doc: Document = document): PhoneField {
     setActor(id) {
       actor = id;
     },
-    frame(homeAspect, focus = []) {
+    frame(homeAspect, focus = [], comfort = 0) {
       const game = doc.getElementById('game');
       const view = doc.defaultView?.innerWidth ?? 0;
       if (!game || !rectOf || !state || view <= 0) return;
@@ -174,7 +198,7 @@ export function createPhoneField(doc: Document = document): PhoneField {
       }
       if (boss) boss.weight = FRAME_WEIGHTS.boss;
       const home = -(box.width - Math.max(view, box.height * homeAspect)) / 2;
-      const left = bestLeft({ view, canvas: box.width, home, figures });
+      const left = bestLeft({ view, canvas: box.width, home, figures, comfort });
       const jump = focus.length > 0;
       if (applied !== null && Math.abs(left - applied) < HYSTERESIS[jump ? 'jump' : 'glide']) return;
       applied = left;

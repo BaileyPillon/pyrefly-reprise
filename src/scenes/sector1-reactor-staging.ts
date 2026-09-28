@@ -1,6 +1,7 @@
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import type { SceneRigName, SceneStaging } from './types.ts';
 import { holdWidth } from './cavern-stolen-fayth-rigs.ts';
+import { FF7_FILM_POSE_SHIFT_PX } from '../data/ff7/filmPoseAnchors.ts';
 
 // ---------------------------------------------------------------------------
 // The No. 1 Reactor core: FF7's battle staging for Guard Scorpion (FF7 only)
@@ -10,142 +11,189 @@ import { holdWidth } from './cavern-stolen-fayth-rigs.ts';
 // Scorpion encounter (`src/data/chapter-ff7-guard-scorpion.ts`). No FFX or
 // FFX-2 scene reads this module.
 //
-// On whose word: Bailey, 2026-09-27 ~00:45 EDT, "full speed ahead please.
-// godspeed. ill go with all your recommendations." (D-240), which accepted
-// FF7's own battle staging (`research/ff7-battle-staging.md`, "staging") and
-// the art picks shown together in
-// `docs/concepts/ff7-art-2026-09-27/round2/13-composite-1600-clean.jpg`.
+// On whose word: Bailey, 2026-09-27, "cant you just have the characters and
+// enemy switch sides? not mirrored just literally switch sides" (D-262) and
+// "I'll go with all of your recommendations" (~13:00 EDT: D-259 the Film art,
+// D-244 E1 the phone framing). So the party stands on the LEFT and faces
+// screen-right; Guard Scorpion stands on the RIGHT and faces screen-left,
+// towering over them. Nothing is mirrored: each Film painting was painted
+// facing the way it stands (a figure facing right shows its right side, so
+// Barret's gun-arm is his near arm and Cloud's pauldron his far shoulder), each
+// sidecar says so, and `mirrorFor` never flips.
 //
-// What is sourced and what is ours:
-// - The party stands on the RIGHT and faces LEFT; Guard Scorpion is on the
-//   LEFT and faces RIGHT [staging §2, §3.3: verified by 2 informal sources for
-//   the side, derived for the facing]. Nothing is mirrored: every painting was
-//   painted facing the way it stands (the stage's `sideFacing` below turns the
-//   bodies, and each sidecar's `facing` agrees, so `mirrorFor` never flips).
-// - Both start in the FRONT row [staging §5, single source: FF Wiki Row]; the
-//   front row stands nearer the enemy, the back row further back, which with
-//   the party on the right is further RIGHT [staging §5, derived].
-// - The camera is FF7's "Fixed" Camera Angle setting (manual p. 30: "The
-//   camera angle is fixed to a specific angle when you encounter enemies. The
-//   battle continues at this fixed angle"; staging §4). The factory default is
-//   Auto, which moves [staging §4, S4]; the moving camera is a follow-up.
-// - Everything numeric here is **our estimate** (presentation, not game data,
-//   rule 6). Repair pass after the FF7 purist review (2026-09-27): FF7's
-//   Normal-formation stills and the A+ target look DOWN on the arena floor
-//   from a raised camera, with every combatant whole above the HUD band (whose
-//   top edge is 71% of a 16:9 frame). So the fixed camera stands high and
-//   pitches down {@link SECTOR1_PITCH_DEG}, the painting is turned square to
-//   that view and lifted so its grated floor ends at the band's top edge
-//   ({@link SECTOR1_PLATE_BOTTOM}), and every figure stands on that painted
-//   floor with its feet above the band (Cloud's lowest, about 66% of the
-//   frame). The party stands side by side across the field in depth, facing
-//   the enemy [staging §3.1, "stands in a line facing the opponents"], so from
-//   the raised camera Cloud (downstage) and Barret (upstage) read as a
-//   diagonal. The back-row step is ours.
+// What is ours: every number here is **our estimate** (presentation, not game
+// data, rule 6), solved so the fighters land where the approved Film frame
+// puts them (`docs/concepts/ff7-art-2026-09-27/hifi/scripts/compose.py`, the
+// desk and phone layouts: at 1600x900 Cloud 300 px tall with his feet near
+// 615, Barret 318 px upstage-left, Guard Scorpion's tail-down idle 362 px with
+// its raised tail under the message window). Both start in the FRONT row
+// [research/ff7-battle-staging.md §5]; the back row stands further from the
+// enemy, which with the party on the left is further LEFT. The camera is FF7's
+// "Fixed" Camera Angle (manual p. 30, staging §4). On an upright phone the
+// formation is drawn in and the camera moves in (E1, fighters about 2.5x the
+// letterboxed field), with the painting cropped to cover the frame.
 
-/** The painting: round 1 `reactor-core/core.1`, installed as `backdrops/ff7-sector1-reactor.png`. */
-export const SECTOR1_PLATE = { w: 2688, h: 1536, url: 'art/backdrops/ff7-sector1-reactor.png' } as const;
+/** The painting: the Film reactor core (D-259), installed as `backdrops/ff7-film-reactor.png`. */
+export const SECTOR1_PLATE = { w: 2304, h: 1296, url: 'art/backdrops/ff7-film-reactor.png' } as const;
 
-/** Vertical fov of the fixed camera, degrees. */
+/** The Film art ids (D-259). The round-2 `ff7-*` files stay installed and unused. */
+export const SECTOR1_ART = {
+  cloud: 'ff7-film-cloud',
+  barret: 'ff7-film-barret',
+  boss: 'ff7-film-guard-scorpion',
+  bossTailUp: 'ff7-film-guard-scorpion-tail-up',
+} as const;
+
+/** Vertical fov of the fixed camera on a desk, degrees. */
 export const SECTOR1_FOV = 30;
-/** The composite's frame the rigs were solved at. */
+/** Vertical fov on an upright phone (E1: the camera moved in on a drawn-in formation). */
+export const SECTOR1_PHONE_FOV = 60;
+/** The frame the desk layout was solved at. */
 export const SECTOR1_DESIGN_ASPECT = 16 / 9;
 
-/**
- * How far the fixed camera looks down, degrees: the painting's own vanishing
- * line (the floor grate's convergence, about 52% down the plate) lands at 22%
- * of the frame height, as high as FF7's raised battle camera puts its horizon.
- */
-export const SECTOR1_PITCH_DEG = 8.47;
+/** How far the fixed camera looks down, degrees. */
+export const SECTOR1_PITCH_DEG = 8;
 
 /** The fixed camera: raised, on the hall axis, pitched down {@link SECTOR1_PITCH_DEG} (its look point at z 0). */
 export const SECTOR1_CAMERA = {
-  position: [0, 3.1, 13.8],
-  lookAt: [0, 3.1 - 13.8 * Math.tan((SECTOR1_PITCH_DEG * Math.PI) / 180), 0],
+  position: [0, 2.6, 11],
+  lookAt: [0, 2.6 - 11 * Math.tan((SECTOR1_PITCH_DEG * Math.PI) / 180), 0],
 } as const;
 
-/** Where the painting's bottom edge sits, as a fraction of the 16:9 frame's height: the band's top edge (71%) and a sliver under it. */
-export const SECTOR1_PLATE_BOTTOM = 0.72;
-
-/** The painting plane's distance from the camera along its view axis. The plane is sized in {@link sector1Backdrop} to fill the frame's width there. */
+/** The painting plane's distance from the camera along its view axis. */
 export const SECTOR1_BACKDROP_DISTANCE = 26;
 
-/**
- * World heights: Cloud the house human 1.75; Barret solved from the composite's pixel heights. Guard
- * Scorpion is the painting's full height (body and curled tail): 3.3, about 1.9x Cloud and 1.6x Barret in
- * the world and 1.75x Cloud on screen at 1600x900 (it stands a little upstage of him), so the security mech
- * towers over the party, its raised tail still under the message window and its tail tip inside the
- * frame's left edge at 16:9 and upright (the FF7 purist review's boss-scale major; before: 2.16, 1.13x
- * on screen). Presentation, not game data: our estimate.
- */
-export const SECTOR1_HEIGHTS = { cloud: 1.75, barret: 2.03, 'guard-scorpion': 3.3 } as const;
+/** World heights, one per combatant (every pose of a subject shares its idle's pixel scale). Our estimate. */
+export const SECTOR1_HEIGHTS = { cloud: 1.95, barret: 2.35, 'guard-scorpion': 2.35 } as const;
+
+type Spot = readonly [number, number, number];
+
+/** One framing of the field: where everyone stands, the lens, how far the painting is zoomed past covering the frame. */
+export interface Sector1Layout {
+  readonly name: 'desk' | 'phone';
+  /** Front-row spots by combatant `slot` (0 Cloud downstage, 1 Barret upstage-left). */
+  readonly front: readonly Spot[];
+  /** Guard Scorpion's spot: its rear foot (every one of its paintings is centred there). */
+  readonly boss: Spot;
+  /** How far the back row stands from the front, in x (negative: away from the enemy, to the left). */
+  readonly backRowDx: number;
+  readonly fov: number;
+  /** The painting covers the frame, then this much more; its bottom edge sits on the frame's. */
+  readonly plateZoom: number;
+  /** How far in front of the rifles' tips a melee attacker stops, world units. */
+  readonly strikeGap: number;
+}
+
+/** 16:9 and wider (and every landscape window): the approved Film frame. */
+export const SECTOR1_DESK: Sector1Layout = {
+  name: 'desk',
+  front: [[-2.42, 0, 0.26], [-4.11, 0, -1.32], [-3.3, 0, 1.4]],
+  boss: [2.19, 0, 0.18],
+  backRowDx: -0.75,
+  fov: SECTOR1_FOV,
+  plateZoom: 1.12,
+  strikeGap: 0.55,
+};
+
+/** An upright phone (E1): the formation drawn in, the camera moved in, the painting cropped to cover. */
+export const SECTOR1_PHONE: Sector1Layout = {
+  name: 'phone',
+  front: [[-1.1, 0, 1.1], [-2.3, 0, -0.12], [-1.9, 0, 1.9]],
+  boss: [1.39, 0, 0.64],
+  backRowDx: -0.45,
+  fov: SECTOR1_PHONE_FOV,
+  plateZoom: 1.3,
+  strikeGap: 0.3,
+};
+
+/** The layout for a frame of this aspect. */
+export function sector1Layout(aspect: number): Sector1Layout {
+  return aspect > 0 && aspect < 1 ? SECTOR1_PHONE : SECTOR1_DESK;
+}
+
+/** Desk spots, kept under their old names for the published slots and the tests. */
+export const SECTOR1_FRONT = SECTOR1_DESK.front;
+export const SECTOR1_BOSS_SPOT = SECTOR1_DESK.boss;
+export const SECTOR1_BACK_ROW_DX = SECTOR1_DESK.backRowDx;
 
 /**
- * Party slots by combatant `slot` (0 Cloud, 1 Barret), front row: side by side
- * across the field in depth, facing the enemy [staging §3.1], Cloud downstage
- * (nearer the camera) and Barret upstage, both the same distance across from the
- * boss (x 4.1, 7.3 from it), so both are one front row [staging §5]. From the
- * raised camera they read as a diagonal: at 1600x900 Barret's feet stand about
- * 70 px above Cloud's and 90 px nearer the middle, Cloud's at 66% of the height.
+ * How far the rifles' tips stand in front of Guard Scorpion's spot (its rear
+ * foot), world units: 892 of the idle's 1060 source px above the floor, at its
+ * height (the painting, `gs/idle/cut-tj`).
  */
-export const SECTOR1_FRONT: ReadonlyArray<readonly [number, number, number]> = [
-  [4.1, 0, 0.9],
-  [4.1, 0, -1.9],
-  [4.1, 0, 2.3],
-];
+export const SECTOR1_BOSS_FRONT = (892 / 1060) * 2.35;
 
-/** How far the back row stands behind the front, in +x (away from the enemy). Our estimate. */
-export const SECTOR1_BACK_ROW_DX = 0.6;
-
-/** Guard Scorpion's spot, left of the hall axis (its tail tip inside the frame's left edge, about 106 px in at 1600x900), between the two members in depth. */
-export const SECTOR1_BOSS_SPOT: readonly [number, number, number] = [-3.1, 0, -0.5];
+/** Where a melee attacker stops to strike Guard Scorpion in `layout`: just in front of its rifles, a little nearer the camera. Our estimate. */
+export function strikeSpot(layout: Sector1Layout = SECTOR1_DESK): [number, number, number] {
+  const [bx, by, bz] = layout.boss;
+  return [bx - SECTOR1_BOSS_FRONT - layout.strikeGap, by, bz + 0.5];
+}
 
 /** The boss's combatant id (`src/data/ff7/enemies/guard-scorpion.ts`). */
 export const SECTOR1_BOSS_ID = 'guard-scorpion';
 /** The tail-raised painting's art id (the form's `spriteKey`). */
-export const SECTOR1_TAIL_UP_ART = 'ff7-guard-scorpion-tail-up';
+export const SECTOR1_TAIL_UP_ART = SECTOR1_ART.bossTailUp;
 
 /**
- * The two cut-outs come from one 1216x832 frame (ground on source row 827):
- * the idle's crop is x 4..1216 (centre 610), the raised one's x 146..1216
- * (centre 681). A plane is centred on its figure's position, so while the
- * raised form shows, the figure moves right by 71 source px to keep the body
- * still (the sidecar's `scale` 748/681 keeps its size).
+ * The round-2 paintings came from one frame with different crops, so the
+ * raised one had to stand 71 source px right to keep the body still. The Film
+ * paintings are all padded to centre on the rear foot (`film-set/scripts/
+ * install.py`), so the idle, the raised tail and both recoils need no shift.
  */
-export const SECTOR1_TAIL_UP_SHIFT_PX = 681 - 610;
-/** Idle painting's `baselineY`: its source px per world unit is `681 / height`. */
-export const SECTOR1_BOSS_IDLE_BASELINE = 681;
+const ROUND2_TAIL_UP = { art: 'ff7-guard-scorpion-tail-up', shiftPx: 681 - 610, baseline: 681 } as const;
 
-/** How far right the figure stands while `artId` shows, in world units. 0 for the idle painting. */
-export function bossArtShift(artId: string, height = SECTOR1_HEIGHTS['guard-scorpion']): number {
-  if (artId !== SECTOR1_TAIL_UP_ART) return 0;
-  return (SECTOR1_TAIL_UP_SHIFT_PX * height) / SECTOR1_BOSS_IDLE_BASELINE;
+/** How far right the figure stands while `artId` shows, in world units. 0 for every Film painting. */
+export function bossArtShift(artId: string, height: number = SECTOR1_HEIGHTS['guard-scorpion']): number {
+  return artId === ROUND2_TAIL_UP.art ? (ROUND2_TAIL_UP.shiftPx * height) / ROUND2_TAIL_UP.baseline : 0;
 }
 
 export type Ff7RowName = 'front' | 'back';
 
-/** Where a party member on `slot` stands in `row`. */
-export function rowSpot(slot: number, row: Ff7RowName): [number, number, number] {
-  const s = SECTOR1_FRONT[Math.max(0, Math.min(slot, SECTOR1_FRONT.length - 1))]!;
-  return [s[0] + (row === 'back' ? SECTOR1_BACK_ROW_DX : 0), s[1], s[2]];
+/** Where a party member on `slot` stands in `row`, in `layout` (the desk's by default). */
+export function rowSpot(slot: number, row: Ff7RowName, layout: Sector1Layout = SECTOR1_DESK): [number, number, number] {
+  const s = layout.front[Math.max(0, Math.min(slot, layout.front.length - 1))]!;
+  return [s[0] + (row === 'back' ? layout.backRowDx : 0), s[1], s[2]];
 }
 
 /**
- * FF7's staging switches (`src/scenes/types.ts`): bodies face the other way
- * from FFX/FFX-2, the camera is fixed, the party stands exactly on its row
- * spots, the boss on its own, each figure has its solved height, and no
- * figure gets a turn ring (FF7's triangle is the only turn marker).
+ * FF7's staging switches (`src/scenes/types.ts`) for a layout: the party turns
+ * toward +x (screen-right) and the boss toward -x, the camera is fixed, the
+ * party stands exactly on its row spots, the boss on its own, each figure has
+ * its solved height, and no figure gets a turn ring (FF7's triangle marks the turn).
  */
-export const SECTOR1_STAGING: SceneStaging = {
-  sideFacing: { party: -1, enemy: 1 },
-  fixedCamera: true,
-  turnRings: false,
-  holdParty: true,
-  enemySpots: { [SECTOR1_BOSS_ID]: [SECTOR1_BOSS_SPOT[0], SECTOR1_BOSS_SPOT[1], SECTOR1_BOSS_SPOT[2]] },
-  figureHeights: { ...SECTOR1_HEIGHTS },
-};
+export function sector1Staging(layout: Sector1Layout = SECTOR1_DESK): SceneStaging {
+  return {
+    sideFacing: { party: 1, enemy: -1 },
+    fixedCamera: true,
+    turnRings: false,
+    holdParty: true,
+    enemySpots: { [SECTOR1_BOSS_ID]: [layout.boss[0], layout.boss[1], layout.boss[2]] },
+    figureHeights: { ...SECTOR1_HEIGHTS },
+    figureExtent: 3.2, // Guard Scorpion's paintings, padded to its rear foot, run up to 2.7x its height
+    poseCut: true, // a hard cut between painted keys: no see-through double (repair items 1, 2)
+    poseShiftPx: FF7_FILM_POSE_SHIFT_PX, // every party key on the idle's stance (repair item 1)
+    restPoses: false, // every Film key stands where it was registered: none rolled to rest by its aspect (P3C-2)
+    figureLight: SECTOR1_FIGURE_LIGHT, // the core's green light from screen-right, the matte fringe trimmed (repair item 9)
+  };
+}
 
-/** The fixed shot. Every rig the presenter asks for is this one, so no cut or move changes the angle. */
+/**
+ * How the fighters are lit (repair item 9, our estimate matched to the Film frame `03-frame-film-1600.jpg`): a
+ * green rim from the core's side (screen-right in the painting's own space, where the party faces), a green
+ * bounce off the lit grating, and the pale matte fringe outside the ink trimmed by eroding the silhouette 2.5
+ * texels (under a screen pixel at 1600x900). It replaces the house rim, a pale blue from the upper left, which
+ * drew the grey-blue halo on the fighters' back edges.
+ */
+export const SECTOR1_FIGURE_LIGHT = {
+  rim: { color: 0xb8ffd8, dir: [1, 0.25], strength: 0.85, width: 3 },
+  bounce: { color: 0x8fe8b0, strength: 0.1 },
+  erode: 2.5,
+} as const;
+
+/** The desk staging (the published slots). */
+export const SECTOR1_STAGING: SceneStaging = sector1Staging(SECTOR1_DESK);
+
+/** The fixed shot at the desk fov. Every rig the presenter asks for is this one, so no cut or move changes the angle. */
 export const SECTOR1_FIXED_RIG: CameraRig = {
   position: [...SECTOR1_CAMERA.position],
   lookAt: [...SECTOR1_CAMERA.lookAt],
@@ -153,36 +201,93 @@ export const SECTOR1_FIXED_RIG: CameraRig = {
   sway: 0,
 };
 
-/** The rig set for a render of this aspect: all one fixed shot, its fov opened on a narrower screen to keep the width. */
+/** The fixed shot for a frame of this aspect: the desk lens opened to keep the width, or the phone's own lens. */
+export function sector1FixedRig(aspect: number): CameraRig {
+  const layout = sector1Layout(aspect);
+  if (layout.name === 'phone') return { ...SECTOR1_FIXED_RIG, fov: layout.fov };
+  return holdWidth(SECTOR1_FIXED_RIG, aspect, SECTOR1_DESIGN_ASPECT);
+}
+
+/**
+ * F1's opening shot (our estimate): close on the boss's face, slightly below
+ * it, before the camera settles on the fixed view. Only the FF7 opening moves
+ * the camera there (`BattleScreenFf7Opening.ts`); the presenter never asks.
+ */
+export function sector1OpeningRig(aspect: number): CameraRig {
+  const layout = sector1Layout(aspect);
+  const [bx, , bz] = layout.boss;
+  const phone = layout.name === 'phone';
+  return {
+    position: [bx - (phone ? 0.3 : 0.9), 1.35, bz + (phone ? 6.2 : 5.4)],
+    lookAt: [bx - (phone ? 0.2 : 0.7), 1.05, bz],
+    fov: phone ? 44 : 30,
+    sway: 0,
+  };
+}
+
+/**
+ * G1's pan up over the fallen party (our estimate: "the camera pans up showing
+ * the dead characters", FF Wiki "Game Over (term)", revid 4032692): the camera
+ * rises and tilts up toward the core, the party small at the bottom of the frame.
+ */
+export function sector1GameOverRig(aspect: number): CameraRig {
+  const fixed = sector1FixedRig(aspect);
+  const p = fixed.position as readonly number[];
+  const l = fixed.lookAt as readonly number[];
+  return { ...fixed, position: [p[0]!, p[1]! + 0.55, p[2]! - 0.8], lookAt: [l[0]!, l[1]! + 1.05, l[2]!] };
+}
+
+/**
+ * D1's framing (repair item 7; our estimate, matched by eye to the D1 concept): once the boss has gone the camera
+ * eases in and a little round to the right, so Cloud and Barret fill the field above the band instead of standing
+ * small in its lower left. The phone moves in closer still.
+ */
+export function sector1VictoryRig(aspect: number): CameraRig {
+  const layout = sector1Layout(aspect);
+  const [c, b] = [layout.front[0]!, layout.front[1]!];
+  const x = (c[0] + b[0]) / 2;
+  const z = (c[2] + b[2]) / 2;
+  const phone = layout.name === 'phone';
+  const fixed = sector1FixedRig(aspect);
+  // The desk moves in on a longer lens (fov 20 from 12 units) rather than walking the camera in: a closer camera
+  // turned toward the party let the frame run off the painting's left edge (a black strip in the first try).
+  if (phone) return { ...fixed, position: [x + 0.45, 1.55, z + 4.6], lookAt: [x + 0.1, 0.95, z] };
+  return { ...fixed, fov: 20, position: [x + 0.7, 1.75, z + 12], lookAt: [x + 0.3, 0.6, z] };
+}
+
+/** The rig set for a render of this aspect: the one fixed shot everywhere, plus F1's opening, G1's pan and D1's framing. */
 export function sector1RigsFor(aspect: number): Record<SceneRigName, CameraRig> & Record<string, CameraRig> {
-  const rig = holdWidth(SECTOR1_FIXED_RIG, aspect, SECTOR1_DESIGN_ASPECT);
+  const rig = sector1FixedRig(aspect);
   const out: Record<string, CameraRig> = {};
   for (const name of ['intro', 'idle', 'action', 'victory', 'enemy', 'party']) out[name] = { ...rig };
+  out['ff7-open'] = sector1OpeningRig(aspect);
+  out['ff7-gameover'] = sector1GameOverRig(aspect);
+  out['ff7-victory'] = sector1VictoryRig(aspect);
   return out as Record<SceneRigName, CameraRig> & Record<string, CameraRig>;
 }
 
 /**
  * The painting plane, square to the pitched view axis at
- * {@link SECTOR1_BACKDROP_DISTANCE}: as wide as the 16:9 frame there plus 2%
- * (its height follows the plate's 2688x1536), and lifted along the view's up
- * axis until its bottom edge sits at {@link SECTOR1_PLATE_BOTTOM} of the frame,
- * so the painted floor runs from about 56% of the frame down to the band. The
- * top of the painting (the core's lit crown) is cropped. The same plane at
- * every aspect: a narrower screen keeps the width (`holdWidth`), so the fight
- * stays registered on its painted floor and an upright window shows the
- * scene's background colour above and below.
+ * {@link SECTOR1_BACKDROP_DISTANCE}, for a frame of this aspect: big enough to
+ * cover the whole frame (width and height) times the layout's zoom, centred
+ * across, its bottom edge on the frame's bottom edge (the band hides the last
+ * of the floor). The core's lit crown is what a narrower frame crops.
  *
  * `distance` and `centreY` are the plane centre's world z and y (what
  * `Backdrop.create` places), `pitch` the tilt the scene gives the plane, radians.
  */
-export function sector1Backdrop(): { width: number; distance: number; centreY: number; pitch: number } {
+export function sector1Backdrop(aspect: number = SECTOR1_DESIGN_ASPECT): { width: number; distance: number; centreY: number; pitch: number } {
+  const layout = sector1Layout(aspect);
+  const fov = sector1FixedRig(aspect).fov ?? SECTOR1_FOV;
   const pitch = (SECTOR1_PITCH_DEG * Math.PI) / 180;
   const D = SECTOR1_BACKDROP_DISTANCE;
-  const halfH = D * Math.tan((SECTOR1_FOV * Math.PI) / 360);
-  const width = 2 * halfH * SECTOR1_DESIGN_ASPECT * 1.02;
-  const plateH = (width * SECTOR1_PLATE.h) / SECTOR1_PLATE.w;
-  // In the plane, up from the view axis: the frame's bottom edge is -halfH, a fraction s down the frame is halfH (1 - 2 s).
-  const up = halfH * (1 - 2 * SECTOR1_PLATE_BOTTOM) + plateH / 2;
+  const halfH = D * Math.tan((fov * Math.PI) / 360);
+  const halfW = halfH * aspect;
+  const plateAspect = SECTOR1_PLATE.w / SECTOR1_PLATE.h;
+  const plateH = Math.max(2 * halfH, (2 * halfW) / plateAspect) * layout.plateZoom;
+  const width = plateH * plateAspect;
+  // In the plane, up from the view axis: the frame's bottom edge is -halfH.
+  const up = -halfH + plateH / 2;
   const [, cy, cz] = SECTOR1_CAMERA.position;
   // Forward (0, -sin, -cos), up (0, cos, -sin).
   return {

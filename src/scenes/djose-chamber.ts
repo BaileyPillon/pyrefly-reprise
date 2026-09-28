@@ -56,6 +56,11 @@ export interface DjosePlateFrame {
   shiftX?: number;
   /** Ixion's stage spot on this plate, where his hooves meet painted floor (default {@link DJOSE_IXION_SPOT}). */
   ixion?: [number, number, number];
+  /**
+   * The plane's centre on an upright phone (default `centreY`). The phone's idle camera stands much farther back
+   * (z about 23 after the phone refit, not 9.8), so the painted floor seen behind a hoof is not the desktop's.
+   */
+  phoneCentreY?: number;
 }
 
 /** Ixion's default spot: Chapter XI's Anima spot, a little deeper for a wide aeon (staging, ours). */
@@ -75,11 +80,15 @@ export const DJOSE_IXION_SPOT: [number, number, number] = [1.0, 0, -6.0];
  *   2000x1012) and raised to 2.3, and Ixion stands at x 4.2: his hooves on the lit floor right of the pit, the pit
  *   open between him and the party. Measured headless against a gridded copy of C2 at 1600x900, 2000x1012 and
  *   390x844, every rig. Disclosed: the party stands at the pit's near rim (no framing clears both).
+ *   On an upright phone the idle camera stands at z about 23, and from there his hooves fell on the dark slab right
+ *   of the pit (IXS-1), so the phone's plane sits 4.5 lower (`phoneCentreY` -2.2): his hooves and the lunging
+ *   foreleg meet lit stone, Paine stands on lit stone, the pit stays in the slice. Measured headless at 390x844
+ *   against the camera, plane and figure read from the running game (handoff `fixes-r28.md`).
  */
 export const DJOSE_PLATE_FRAMES: Readonly<Record<string, DjosePlateFrame>> = {
   'ffx2-djose-chamber-standin': { width: 88, distance: -48, centreY: -0.5, horizon: [0.42, 0.48], groundBand: [0.8, 0.97], floor: false },
   'ffx2-djose-chamber-provisional': { width: 130, distance: -48, centreY: 22.4, horizon: [0.72, 0.78], groundBand: [0.84, 0.98], floor: false },
-  'djose-chamber-provisional': { width: 150, distance: -48, centreY: 2.3, shiftX: -27, horizon: [0.36, 0.42], groundBand: [0.6, 0.95], floor: false, ixion: [4.2, 0, -6.0] },
+  'djose-chamber-provisional': { width: 150, distance: -48, centreY: 2.3, shiftX: -27, horizon: [0.36, 0.42], groundBand: [0.6, 0.95], floor: false, ixion: [4.2, 0, -6.0], phoneCentreY: -2.2 },
 };
 
 /** The frame for the plate the chapter shows now. */
@@ -152,12 +161,17 @@ export const DJOSE_CHAMBER_PALETTE: ScenePalette = {
   saturation: 0.98,
 };
 
-function plateOptions(url: string, low: boolean, cameraRef: [number, number, number]): BackdropOptions {
+/** The plane's centre for this window: the plate's phone row on an upright phone (IXS-1), else its own. */
+export function djoseCentreY(onPhone: boolean, frame: DjosePlateFrame = DJOSE_BACKDROP): number {
+  return onPhone ? (frame.phoneCentreY ?? frame.centreY) : frame.centreY;
+}
+
+function plateOptions(url: string, low: boolean, cameraRef: [number, number, number], onPhone: boolean): BackdropOptions {
   return {
     url,
     width: DJOSE_BACKDROP.width,
     distance: DJOSE_BACKDROP.distance,
-    centreY: DJOSE_BACKDROP.centreY,
+    centreY: djoseCentreY(onPhone),
     cameraRef,
     // The hall above the floor line parts from the floor on a sway; the floor itself stays one plane.
     layers: low ? [] : [{ from: 0.0, to: DJOSE_BACKDROP.horizon[0] - 0.02, feather: 0.1, featherBottom: 0.08, z: -36, opacity: 0.32 }],
@@ -176,7 +190,10 @@ export const buildDjoseChamberScene: SceneFactory = async (opts: SceneBuildOptio
   const cameraRef = opts.cameraRef ?? DJOSE_CAMERA_REF;
   const url = artUrl(`art/backdrops/${DJOSE_CHAMBER_PLATE}.png`);
 
-  const options = plateOptions(url, low, cameraRef);
+  // PR-0201 A on an upright phone: the idle camera dollies back so Ixion stays in the slice, and the painting sits
+  // lower so his hooves meet lit stone from that camera (IXS-1). Desktop: nothing.
+  const onPhone = roadOnPhone();
+  const options = plateOptions(url, low, cameraRef, onPhone);
   let backdrop = await Backdrop.create(options);
   backdrop.group.position.x = DJOSE_BACKDROP.shiftX ?? 0;
   backdrop.applyTo(group);
@@ -205,8 +222,7 @@ export const buildDjoseChamberScene: SceneFactory = async (opts: SceneBuildOptio
 
   // No live motes: the research names no particles here (§6.1; `engine/pyreflyCanon.ts` row 'unattested').
 
-  // PR-0201 A on an upright phone: the idle camera dollies back so Ixion stays in the slice. Desktop: nothing.
-  const phoneCamera = roadOnPhone()
+  const phoneCamera = onPhone
     ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [DJOSE_IXION_ID], sisters: [], anima: [] })
     : null;
 

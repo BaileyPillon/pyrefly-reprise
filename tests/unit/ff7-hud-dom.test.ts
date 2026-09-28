@@ -149,6 +149,7 @@ describe('what the battle tells it', () => {
     const cmd = await chosen;
     for (const e of fx.respond('cloud', cmd)) {
       hud.onEvent(e);
+      if (e.type === 'damage') hud.numeralLanded(e.targetId); // the presenter's numeral beat (repair item 6)
       if (e.type === 'damage') hud.syncVitals(fx.state());
     }
     expect(hud.inspect().message).toBe('Tail Laser');
@@ -178,6 +179,7 @@ describe('what the battle tells it', () => {
 
   it('prints green for recovery and Miss for a whiff', () => {
     hud.onEvent({ seq: 1, type: 'damage', targetId: 'cloud', amount: -100, element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
+    hud.numeralLanded('cloud');
     hud.onEvent({ seq: 2, type: 'miss', targetId: 'guard-scorpion', sourceId: 'cloud', reason: 'evaded' });
     const nums = [...hud.root.querySelectorAll<HTMLElement>('.ff7-dmg')];
     expect(nums[0]!.innerHTML).toContain('#80F080');

@@ -14,8 +14,8 @@
  *   branch) was registered as XVI there and waits ("sin can wait for now"): it takes the numbers after this one.
  * - `buildRef: djoseBuild` — research §5; levels 32 / 33 / 34 are **our estimate** (IX-14).
  * - `enemyGroupRef` — Ixion, research §3.1 and §4 (every row tagged in `./ffx2/enemies/ixion-djose*.ts`).
- * - `sceneKey` — the Chamber of the Fayth on its **stand-in plate** (`./ixion-plates.ts`: not approved; the
- *   painting round is owed; the swap is one line there).
+ * - `sceneKey` — the Chamber of the Fayth on its **provisional plate**, option C2 (`./ixion-plates.ts`: not
+ *   approved; Bailey's pick is owed; the swap is one line there).
  * - Ixion's painting — **look B, possessed violet** (D-268), `x2-ixion`.
  * - `music` — the fight plays the house FFX-2 aeon cue `boss-ffx2-aeon` ("Static Coronation"), the sourced mood
  *   of the game's "Aeons" (research §6.3, `[single source]`); the field bed is `scene-bevelle-underground`, the
@@ -32,7 +32,7 @@ import { djoseIxionGroup } from './ffx2/enemies/ixion-djose.ts';
 import { ffx2IxionDjoseScripts } from '../story/scripts/ffx2-ixion-djose.ts';
 import { DJOSE_CHAMBER_PLATE } from './ixion-plates.ts';
 
-/** The scene key: the Chamber's plate (`./ixion-plates.ts`, a stand-in until the painting round lands). */
+/** The scene key: the Chamber's plate (`./ixion-plates.ts`, provisional until Bailey picks). */
 export const IXION_DJOSE_SCENE_KEY = DJOSE_CHAMBER_PLATE;
 
 /** Chapter XVI. */
@@ -47,7 +47,7 @@ export const FFX2_IXION_DJOSE: Chapter = {
   blurb:
     'Fiends pour out of Djose Temple, and the aeon that once answered Yuna waits at the top of the stairs. ' +
     'When it recharges, the hammer is next.',
-  sceneKey: IXION_DJOSE_SCENE_KEY, // the stand-in plate — see the file header
+  sceneKey: IXION_DJOSE_SCENE_KEY, // the provisional plate — see the file header
   thumbnailKey: 'chapter-ffx2-ixion-djose',
   buildRef: djoseBuild,
   enemyGroupRef: djoseIxionGroup,

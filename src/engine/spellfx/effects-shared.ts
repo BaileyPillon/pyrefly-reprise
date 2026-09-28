@@ -26,6 +26,8 @@ export interface FxTarget {
   k: number;
   /** A group effect's landing point (Mega Flare: the party's centre), in CSS pixels. */
   party?: { x: number; y: number };
+  /** A group effect's targets' own rectangles, in order (FF7's Tail Laser sweeps across them). */
+  members?: ReadonlyArray<{ x: number; y: number; w: number; h: number }>;
 }
 
 export function targetFromRect(r: { x: number; y: number; w: number; h: number }, k: number): FxTarget {

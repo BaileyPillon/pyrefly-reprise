@@ -20,6 +20,18 @@ describe('chipLiftDy', () => {
   it('no enemy under it: stays', () => {
     expect(chipLiftDy(chip, [{ left: 100, right: 200, top: 80, bottom: 220 }], 24)).toBeNull();
   });
+  it('P-01: with room to spare it clears a bracket it only grazed, then the name plate above it', () => {
+    // Chapter III at 1600x900, aiming at the Final Aeon: the chip rested 2 grid px from the bracket's corner.
+    const grazing = { left: 530, right: 624, top: 108, bottom: 118.7 };
+    const aeon = { left: 354, right: 522, top: 99.6, bottom: 254.7 };
+    expect(chipLiftDy(grazing, [aeon], 40)).toBeNull(); // no room kept: it stayed against the corner
+    const dy = chipLiftDy(grazing, [aeon], 40, 2, 10);
+    expect(grazing.bottom + dy!).toBeLessThanOrEqual(aeon.top - 10 - 2);
+    const above = { left: 483, right: 577, top: 86.7, bottom: 97.3 };
+    const plate = { left: 399, right: 478, top: 80.9, bottom: 96.9 };
+    const dy2 = chipLiftDy(above, [aeon, plate], 40, 2, 10);
+    expect(above.bottom + dy2!).toBeLessThanOrEqual(plate.top - 10 - 2);
+  });
   it('never rises past the floor line', () => {
     const dy = chipLiftDy(chip, [{ left: 400, right: 500, top: 20, bottom: 220 }], 24);
     expect(chip.top + dy!).toBe(24);

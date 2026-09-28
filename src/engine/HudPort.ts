@@ -143,6 +143,12 @@ export interface HudPort {
   setActing?(signal: ActingSignal): void;
   /** Called for every event before the presenter animates it; may show a transient (telegraph banner, chain popup) but must resolve within ~600 ms. */
   onEvent(event: BattleEvent): Promise<void> | void;
+  /**
+   * The presenter's numeral beat for `targetId` (the blow has landed in its effect). A HUD that draws its own
+   * numerals from `onEvent` may hold them until this (FF7: repair item 6, the number with the drawn strike).
+   * Optional; FFX and FFX-2 HUDs leave it out.
+   */
+  numeralLanded?(targetId: CombatantId): void;
   openMinigame(kind: MinigameKind, params: Record<string, unknown>): Promise<MinigameResult>;
   setVisible(visible: boolean): void;
   /**

@@ -551,12 +551,12 @@ export function hideActor(actor: string, ms?: number): HideActorStep {
   return ms === undefined ? { type: 'hideActor', actor } : { type: 'hideActor', actor, ms };
 }
 
-/** Set an actor's sprite state. */
 /** Swap the cutscene's painted backdrop (`public/art/backdrops/<key>.png`). `backdrop('bevelle-underground', 1200)` */
 export function backdrop(key: string, ms = 900): BackdropStep {
   return { type: 'backdrop', key, ms };
 }
 
+/** Set an actor's sprite state. */
 export function setPose(actor: string, state: PoseState): SetPoseStep {
   return { type: 'setPose', actor, state };
 }

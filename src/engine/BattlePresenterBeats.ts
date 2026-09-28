@@ -9,7 +9,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
-import { MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
+import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -62,8 +62,7 @@ export async function actionStart(
 
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
-    void actor?.lunge(1.4, 440);
-    void actor?.squash(260, 0.45);
+    if (!motion?.ownsWindUp?.(event)) void Promise.all([actor?.lunge(1.4, 440), actor?.squash(260, 0.45)]); // FF7: its painted keys
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
@@ -169,13 +168,17 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
     // round 02 #01 came down to. The last enemy's dissolve never resolved, so
     // the `victory` event queued behind it never played and the chapter never
     // ended. See `ACTOR_ANIM_GRACE_MS`.
-    await settled(ctx, actor?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko);
+    const off = ctx.deps.actionMotion?.sendOff; // FF7: the boss's own death (flash, sparks, debris, a 1 s fade)
+    if (off) await settled(ctx, off.call(ctx.deps.actionMotion, id, motionCtx(ctx)), MOMENT_GUARD_MS);
+    else await settled(ctx, actor?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko);
     ctx.stage.removeCombatant(id);
     return;
   }
   // A KO'd party member stays on the field, down.
   actor?.setPose('ko');
   actor?.flash(0x4a5a78, 320, 0.7);
+  const down = ctx.deps.actionMotion; // FF7: laid down at once, not at the wipe-out
+  if (down?.ko) void settled(ctx, down.ko(id, motionCtx(ctx)), MOTION_GUARD_MS);
   await ctx.sleep(TIMING.ko);
 }
 
@@ -205,11 +208,14 @@ export async function formChange(
   ctx.stage.vfx.screenFlash('#ffffff', 220);
   ctx.stage.camera.shake(0.2, 520);
   cue(ctx, 'form-change');
-  await settled(ctx, actor?.fadeTo(0.15, 320), 320);
+  const fade = ctx.deps.actionMotion?.opaqueForms !== true; // FF7: an opaque swap under the flash
+  if (fade) await settled(ctx, actor?.fadeTo(0.15, 320), 320);
+  else await ctx.sleep(120);
   // The art session ships boss forms as `<id>-<n>` (yunalesca-1/2/3), so an
   // event that omits `spriteKey` still resolves to the right painting.
   await ctx.stage.setArt(event.enemyId, event.spriteKey ?? `${event.enemyId}-${event.formIndex + 1}`);
-  await settled(ctx, actor?.fadeTo(1, 380), 380);
+  if (fade) await settled(ctx, actor?.fadeTo(1, 380), 380);
+  else await ctx.sleep(580);
   await ctx.sleep(TIMING.formChange - 700);
   await ctx.moments.formChangeEnd();
 }
@@ -235,6 +241,8 @@ export async function charge(
 }
 
 export async function victory(ctx: EventCtx): Promise<void> {
+  const own = ctx.deps.actionMotion?.victory; // FF7: D1's win poses, then a hold in silence
+  if (own) return void (await settled(ctx, own.call(ctx.deps.actionMotion, motionCtx(ctx)), MOMENT_GUARD_MS));
   // A-4: where the sources withhold the celebration ('hold'), the figures keep
   // their battle stance and the fanfare stays quiet; the rig still settles.
   if (victoryPoseOf(ctx.deps) === 'hold') {
@@ -258,6 +266,8 @@ export async function defeat(ctx: EventCtx): Promise<void> {
     if (ctx.stage.sideOf(id) === 'party') ctx.stage.actor(id)?.setPose('ko');
   }
   await ctx.sleep(TIMING.defeat);
+  const own = ctx.deps.actionMotion?.defeat; // FF7: G1's pan up over the fallen party
+  if (own) await settled(ctx, own.call(ctx.deps.actionMotion, motionCtx(ctx)), MOMENT_GUARD_MS);
 }
 
 /**

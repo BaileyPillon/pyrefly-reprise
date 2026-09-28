@@ -33,6 +33,7 @@ export type SpecialFxId = 'spiral' | 'megaflare';
 export const SPECIAL_FX: Readonly<Record<FxGame, Readonly<Record<string, SpecialFxId>>>> = Object.freeze({
   ffx: Object.freeze({ 'spiral-cut': 'spiral' }),
   ffx2: Object.freeze({ 'mega-flare': 'megaflare', 'x2-bahamut-mega-flare': 'megaflare' }),
+  ff7: Object.freeze({}), // FF7 draws its own (ff7/ff7FxSpecs.ts)
 });
 
 /** The special this ability draws in this game, or null. */

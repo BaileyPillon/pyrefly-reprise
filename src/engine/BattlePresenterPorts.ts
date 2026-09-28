@@ -49,7 +49,7 @@ export interface Point2 {
 export interface ActorHandle {
   readonly position: Point3;
   setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void;
-  flash(colour?: number | string, ms?: number, peak?: number): void;
+  flash(colour?: number | string, ms?: number, peak?: number, floorCut?: number): void; // floorCut 0..1: less dark-texel lift (FF7)
   shake(amount?: number, ms?: number): void;
   lunge(distance?: number, ms?: number): Promise<void>;
   recoil(ms?: number, distance?: number): Promise<void>;
@@ -63,7 +63,7 @@ export interface ActorHandle {
   setFacing(dir: 1 | -1): void;
   setBrightness(mult: number): void;
   /** Optional: fall onto its back and stay down (`PaintedActor.lieDown`; the `'body'` departure). */
-  lieDown?(ms?: number): Promise<void>;
+  lieDown?(ms?: number, tilt?: number): Promise<void>;
   /** Optional: petrified, 0..1 — the painting drained to stone grey (`PaintedActor.setStone`). */
   setStone?(amount: number): void;
   centerPoint(): Point3;
@@ -214,6 +214,12 @@ export interface VfxPort {
       crit?: boolean;
     },
   ): number;
+  /**
+   * Milliseconds until a landing `land` started for `at` in `action` is actually drawn, by the effect's own
+   * frame clock; 0 once it has (or when there is none). FF7 only: its numerals wait for the drawn strike, not
+   * for a wall-clock estimate that a slow frame outruns (repair item 6). Optional.
+   */
+  pendingLand?(at: CombatantId, action: number): number;
 }
 
 /** Rising damage/heal numerals. Supplied by `ui/common`, or the DOM fallback. */

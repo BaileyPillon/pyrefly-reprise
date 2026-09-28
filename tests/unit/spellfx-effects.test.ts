@@ -41,7 +41,8 @@ function sweep(id: keyof typeof FX_SPECS, game: FxGame, dens: number, flash = DE
   return { peak, washIds, tiles, maxWash, washCols };
 }
 
-const IDS = Object.keys(FX_SPECS) as Array<keyof typeof FX_SPECS>;
+// FFX and FFX-2's effects; FF7's own (`ff7-*`, the hidden Guard Scorpion fight) are `ff7-fx.test.ts`.
+const IDS = Object.keys(FX_SPECS).filter((id) => !id.startsWith('ff7-')) as Array<keyof typeof FX_SPECS>;
 
 describe('spell effects (option B)', () => {
   it("has the seven approved effects, plus D-233's two special moments", () => {

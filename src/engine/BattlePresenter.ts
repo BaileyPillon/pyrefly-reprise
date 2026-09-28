@@ -222,12 +222,17 @@ export class BattlePresenter {
    * `victory` or `defeat`; pauses (but does not stop) on `script-trigger`.
    */
   async play(events: BattleEvent[]): Promise<PlayResult> {
+    const run = this.playBurst(events);
+    this.playing = run.then(() => undefined, () => undefined); // FF7's submit waits on it (`submit`)
     try {
-      return await this.playBurst(events);
+      return await run;
     } finally {
       this.actingState.cancel(); // an action the burst stopped inside never ends on screen
     }
   }
+
+  /** The burst playing now: the ATB pump's enemy turn under an open menu, or a submitted command. */
+  private playing: Promise<void> = Promise.resolve();
 
   private async playBurst(events: BattleEvent[]): Promise<PlayResult> {
     for (let i = 0; i < events.length; i++) {
@@ -434,6 +439,9 @@ export class BattlePresenter {
   /** Submit one command and play everything it produced, minigames included. */
   private async submit(engine: BattleEngine, command: Command): Promise<BattleOutcome | null> {
     this.lastCommand = command;
+    // FF7 resolves one action at a time (research/ff7-battle-core.md §2.6): a command confirmed while the pump
+    // plays the boss's turn waits until that turn has finished on screen (repair item 3). FFX and FFX-2 as before.
+    if (engine.state().game === 'ff7') await this.playing;
     let res = await this.play(engine.submit(command));
     this.syncHud(engine);
 

@@ -1,0 +1,61 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-28T10:20:00.000Z",
+  "build": {
+    "mainSha": "be1e964a",
+    "bundle": "9QdEMZik",
+    "artifactHash": "8661ebe8e7e872a4cf6fa1d64955077b59360b3a999ce12bbd676454bf3e6e21"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/be1e964a.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/d89541b6.json -> {result: PASS, artifactHash: 8661ebe8e7e872a4cf6fa1d64955077b59360b3a999ce12bbd676454bf3e6e21, liveManifest: match, checked: 48, mismatched: [], missing: [], wrongType: [], errors: []}"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Live real-input smoke (.be1e964a-live-smoke-tmp.mjs, headless Playwright, PYREFLY_BROWSER=gpu, 1600x900) asserted screen/board state before every meaningful step via window.__pyrefly (app.current.name, board snapshot's selectedId, FF7 hud.inspect().menu) rather than fixed waits: title->chapter-select confirmed by screen name; Chapter XVI and seymour-flux each confirmed reaching party-prep, then battle, then a player command menu (or FF7's hud.inspect().menu) before any capture/action was logged as OK; pause/resume confirmed by screen name transitions; the FF7 door confirmed by screen==='battle' plus '.ff7hud' presence before playing turns; post-excursion board compared by full snapshot equality, not assumed. 0 console errors, 0 404s for the whole run."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke only (per task scope): captured pyrefly-reprise:* localStorage keys before reload (['pyrefly-reprise:save:v1']), reloaded, confirmed window.__pyreflyReady again and the same key set present after reload. The full upgrade matrix (fresh player / returning player / previous-live-build fixture / invalid storage / reset flow) was not run in this pass.",
+      "reason": "Lightweight check only, per this task's scope; the full CHK-024 upgrade matrix is listed under notTested."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "CHK-017 exact-artifact verify-live, 48 files sampled, changed-from d89541b6, 0 mismatched/missing/wrong-type",
+      "Title -> chapter-select by real Enter presses",
+      "Chapter XVI (ffx2-ixion-djose) selected by real ArrowLeft/ArrowRight via selectedId, confirmed into party-prep, cutscene-skipped into battle, reached a player command menu with ticks advancing",
+      "One FFX chapter (seymour-flux) by the same route to a player command menu with ticks advancing",
+      "Escape/P pause and resume, and H pause-panel toggle round trip, inside a live battle",
+      "Typing L I M I T on chapter select (real keys) opened the FF7 Guard Scorpion fight; its HUD came up; reached a player command menu; played 3 real-key turns (Attack, confirm target); exercised a cancel path (Escape) inside its menu",
+      "Prerendered music confirmed via network log: 22 audio requests, sample audio/music/title.mp3, not the procedural fallback",
+      "Reload smoke (lightweight): app re-boots, save storage key identical before/after reload",
+      "Board snapshot (tiles/order/cleared/selectedId) compared unchanged after the FF7 excursion on a fresh load",
+      "Console errors and 404s counted for the whole run"
+    ],
+    "reused": [],
+    "notTested": [
+      "The full CHK-024 upgrade matrix: fresh player vs returning player vs a previous-live-build save fixture migrating forward vs invalid/truncated storage vs the reset/confirmation flow",
+      "A real controller, a real phone device, or Safari/Firefox (headless Chromium only, per the harness rule)",
+      "Listening to audio by ear (network log confirms the right files were requested, not how they sound)",
+      "The deep review still owed on this build (separate obligation, tracked in critic/pending/be1e964a.json, unaffected by this pass)",
+      "The generic FFX2-HUD-style cancel-path probe on the seymour-flux (FFX) battle specifically (no menu was present in the polling window there; the FF7 fight's own cancel path was proven instead)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 20
+}

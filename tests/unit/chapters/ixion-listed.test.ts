@@ -15,7 +15,7 @@ import { getChapterMeta } from '../../../src/data/chapter-meta.ts';
 import { FFX2_IXION_DJOSE } from '../../../src/data/chapter-ffx2-ixion-djose.ts';
 import { DJOSE_ABYSS_PLATE, DJOSE_CHAMBER_PLATE, DJOSE_WAKE_PLATE, isIxionStandIn } from '../../../src/data/ixion-plates.ts';
 import { GUIDES } from '../../../src/data/guides/index.ts';
-import { DJOSE_BACKDROP, DJOSE_IXION_ID, DJOSE_IXION_SPOT, DJOSE_PLATE_FRAMES, DJOSE_SPOTS } from '../../../src/scenes/djose-chamber.ts';
+import { DJOSE_BACKDROP, DJOSE_IXION_ID, DJOSE_IXION_SPOT, DJOSE_PLATE_FRAMES, DJOSE_SPOTS, djoseCentreY } from '../../../src/scenes/djose-chamber.ts';
 import { djoseBuild } from '../../../src/data/ffx2/builds/djose.ts';
 import { djoseIxionGroup } from '../../../src/data/ffx2/enemies/ixion-djose.ts';
 import { TACTICS } from '../../../src/engine/tactics/index.ts';
@@ -45,7 +45,10 @@ describe('the plates: the recommended options, provisional until Bailey picks, o
     expect([DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, DJOSE_WAKE_PLATE]).toEqual([
       'djose-chamber-provisional', 'farplane-abyss-provisional', 'bevelle-underground',
     ]);
-    expect([isIxionStandIn(DJOSE_CHAMBER_PLATE), isIxionStandIn(DJOSE_ABYSS_PLATE), isIxionStandIn(DJOSE_WAKE_PLATE)]).toEqual([true, true, false]); // none is Bailey's pick yet
+    // Bailey picked both on 2026-09-28 (D-273; approved-hashes.json bailey:2026-09-28-ixion-scenes), but the files
+    // keep their original -provisional names (a rename would churn the manifest), so isIxionStandIn's suffix test
+    // still reads true for both — it is a filename check, not an approval check.
+    expect([isIxionStandIn(DJOSE_CHAMBER_PLATE), isIxionStandIn(DJOSE_ABYSS_PLATE), isIxionStandIn(DJOSE_WAKE_PLATE)]).toEqual([true, true, false]);
     expect(FFX2_IXION_DJOSE.sceneKey).toBe(DJOSE_CHAMBER_PLATE);
   });
 
@@ -62,9 +65,32 @@ describe('the plates: the recommended options, provisional until Bailey picks, o
     expect(DJOSE_IXION_SPOT).toEqual([1.0, 0, -6.0]);
   });
 
-  it.skipIf(!existsSync(join(ART, 'backdrops', 'farplane.png')))('options and stand-ins are on disk, say so in their sidecars and are locked in no list', () => {
-    const keys = [DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, 'ffx2-djose-chamber-provisional', 'ffx2-abyss-provisional', 'ffx2-djose-chamber-standin', 'ffx2-abyss-standin'];
-    for (const key of keys) {
+  it('IXS-1: on an upright phone C2 sits 4.5 lower, so Ixion stands on lit stone, not the dark slab; desktop unchanged', () => {
+    const c2 = DJOSE_PLATE_FRAMES['djose-chamber-provisional']!;
+    // Measured headless at 390x844 (handoff fixes-r28): the phone's idle camera stands at z about 23.
+    expect(djoseCentreY(true, c2)).toBe(-2.2);
+    expect(djoseCentreY(false, c2)).toBe(2.3);
+    expect(c2.ixion).toEqual([4.2, 0, -6.0]); // the same spot on both
+    // A plate without a phone row keeps its own centre on the phone.
+    const c1 = DJOSE_PLATE_FRAMES['ffx2-djose-chamber-provisional']!;
+    expect(djoseCentreY(true, c1)).toBe(c1.centreY);
+  });
+
+  it.skipIf(!existsSync(join(ART, 'backdrops', 'farplane.png')))('options and stand-ins are on disk, say so in their sidecars; the picked two are locked, the rest are locked nowhere', () => {
+    // Bailey picked C2 and the repaired A1 on 2026-09-28 (D-273): those two are now approved and locked under
+    // bailey:2026-09-28-ixion-scenes in approved-hashes.json. The unpicked C1, the unrepaired A1 and both stand-ins
+    // stay unapproved and unlocked, same as before.
+    const pickedKeys = [DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE];
+    const unpickedKeys = ['ffx2-djose-chamber-provisional', 'ffx2-abyss-provisional', 'ffx2-djose-chamber-standin', 'ffx2-abyss-standin'];
+    for (const key of pickedKeys) {
+      expect(existsSync(join(ART, 'backdrops', `${key}.png`)), key).toBe(true);
+      const side = JSON.parse(readFileSync(join(ART, 'backdrops', `${key}.json`), 'utf8')) as { status: string; notApproved: boolean };
+      expect(side.notApproved, key).toBe(false);
+      expect(side.status, key).toMatch(/^approved/);
+      expect(HASHES.includes(key), key).toBe(true);
+      expect(LOCKED.includes(key), key).toBe(false);
+    }
+    for (const key of unpickedKeys) {
       expect(existsSync(join(ART, 'backdrops', `${key}.png`)), key).toBe(true);
       const side = JSON.parse(readFileSync(join(ART, 'backdrops', `${key}.json`), 'utf8')) as { status: string; notApproved: boolean };
       expect(side.notApproved, key).toBe(true);

@@ -30,8 +30,12 @@ export interface Look {
   over: boolean;
   message: string | null;
   seed: number | null;
-  /** Cloud's world x on the field (the melee run: home 4.1, the strike point about 0.9 since the boss scale fix). */
+  /** Cloud's world x on the field (the melee run: home on the left, the strike point just in front of the rifles). */
   cloudX: number | null;
+  /** The pose Cloud's painting shows (B1's keys: windup, attack, follow). */
+  cloudPose: string | null;
+  /** FF7 effects running now (`spellFx.snapshot()`), by id. */
+  fx: string[];
 }
 
 /** What is on screen now, read through the debug API (never written). */
@@ -41,7 +45,7 @@ export function look(page: Page): Promise<Look> {
     const stack = api.app.screens.map((s) => s.name);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const b = api.battle() as any;
-    if (!b || !b.hud || !b.engine) return { stack, battle: false, ready: null, menu: null, tailUp: false, over: false, message: null, seed: null, cloudX: null };
+    if (!b || !b.hud || !b.engine) return { stack, battle: false, ready: null, menu: null, tailUp: false, over: false, message: null, seed: null, cloudX: null, cloudPose: null, fx: [] };
     const seen = b.hud.inspect?.() ?? {};
     const m = seen.menu ?? null;
     const st = b.engine.state();
@@ -65,6 +69,8 @@ export function look(page: Page): Promise<Look> {
       message: seen.message ?? null,
       seed: b.opts?.seed ?? null,
       cloudX: b.stage?.actor?.('cloud')?.position?.x ?? null,
+      cloudPose: b.stage?.actor?.('cloud')?.pose ?? null,
+      fx: (b.stage?.spellFx?.snapshot?.().running ?? []).map((r: { id: string }) => r.id),
     };
   });
 }

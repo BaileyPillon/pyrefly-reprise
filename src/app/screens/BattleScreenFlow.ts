@@ -35,10 +35,10 @@ import { entryCardWait } from './entryCard.ts';
 import { entrySituationFor } from './entrySituation.ts';
 import { playBattleEntry } from '../../ui/common/transitions/entry.ts';
 import { boardWhenWarm } from './frontendWarm.ts';
-import { playBattleSwirl, playResultsWipe } from '../../ui/common/transitions/index.ts';
+import { playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun } from './pause/restartCarry.ts';
-import { runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
+import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
 
 /** A screen the flow can await. */
@@ -304,8 +304,8 @@ export class GameFlow {
     if (!chapter) return null;
     if (chapter.experimental) {
       if (!this.running) [this.owned, this.handedOver] = [null, false]; // a fresh owner, as below
-      return runExperiment(chapter, { ...opts, seed: opts.seed ?? drawRunSeed() }, { show: (s) => this.show(s), setStep: (s) => void (this.step = s), makeBattle: (o) => factories.battle?.(o) ?? new BattleScreen(o), results: (c, o) => this.showResults(c, o), // the chapters' swirl in, their results and defeat panels (FF7)
-        playIn: async (swap, o) => { let up: Promise<boolean> = Promise.resolve(true); await playBattleSwirl(this.app.uiRoot, { instant: o.speed === 'skip', onCover: () => (up = swap()).then(() => undefined) }); return up; } });
+      return runExperiment(chapter, { ...opts, seed: opts.seed ?? drawRunSeed() }, { show: (s) => this.show(s), setStep: (s) => void (this.step = s), makeBattle: (o) => factories.battle?.(o) ?? new BattleScreen(o), results: (c, o) => (c.game === 'ff7' ? ff7Results((s) => this.show(s), c, o) : this.showResults(c, o)), // FF7: its own results windows and Game Over (C1, G1)
+        playIn: (swap, o) => experimentPlayIn(this.app.uiRoot, chapter, swap, o) }); // FF7: its own swirl of the frozen board (F1)
     }
     const save = this.app.save;
     // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
