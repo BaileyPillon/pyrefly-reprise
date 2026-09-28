@@ -90,7 +90,7 @@ export interface Evaluation {
 /** An ally the boss's telegraphed action would take to 0. */
 const LETHAL_WEIGHT = 6_000;
 /** Taking an ally out of the incoming action's lethal band. */
-const SAVED_WEIGHT = 5_000;
+export const SAVED_WEIGHT = 5_000;
 /** Per point of HP the party is short of surviving what is coming. */
 const EXPOSURE_WEIGHT = 0.8;
 /**

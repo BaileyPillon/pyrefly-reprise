@@ -1,0 +1,97 @@
+{
+  "chapter": "ffx2-vegnagun-shuyin",
+  "seed": 12,
+  "steps": [
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next card while it charges",
+      "next": "paine",
+      "inFlight": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "card": "Next best movePaineBlack Sky→all enemiesSkillin Skill2,346–2,64910 hits80 MP100% to hitMagic damage to all enemies · 10 hitsMost damage on the board — 2492 to Vegnagun.",
+      "computed": {
+        "actor": "paine",
+        "v2": "Megalixir -> the party",
+        "v3": "Black Sky -> all enemies",
+        "v3WithoutRule": "Black Sky -> all enemies",
+        "guideNext": "X-Potion -> Paine",
+        "guideLine": "x2-x-potion",
+        "railText": "VegnagunNextPaineX-Potion→PaineKeep everyone above the constant — Noli Me Tangere is a flat 1,323 and nothing in the party’s kit reduces it.ffx2-vegnagun-shuyin §7.2WatchTailBuffs are near-useless: Ta",
+        "v3ms": 5.9000000059604645,
+        "v3reason": "Most damage on the board — 2492 to Vegnagun",
+        "hudCard": "Black Sky -> all enemies",
+        "hudPassesEngine": true,
+        "projection": {
+          "enemyMovedFirst": false,
+          "now": "yuna 746/2488, rikku 1696/5652, paine 1759/5862",
+          "projected": "yuna 2488/2488, rikku 3750/5652, paine 3805/5862"
+        }
+      }
+    },
+    {
+      "name": "neither v2 nor v3-without-the-rule repeats it after a landed projection here; next attempt"
+    },
+    {
+      "name": "pressed",
+      "by": "rikku",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "yuna"
+    },
+    {
+      "name": "pressed",
+      "by": "paine",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "paine"
+    }
+  ],
+  "failures": [
+    "script error: TimeoutError: page.waitForFunction: Timeout 240000ms exceeded."
+  ]
+}
