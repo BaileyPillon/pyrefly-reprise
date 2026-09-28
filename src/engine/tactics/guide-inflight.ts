@@ -11,7 +11,9 @@
  * The rule is the card's, read without an engine or registries (the panel has neither; the
  * targeting comes off the always-loaded data tables, `./targetLabel.ts#targetingFor`): the
  * line's pick is dropped from NEXT when another active girl already has **the same support move**
- * on her charge bar, aimed at the same ally or at the party. The panel then shows no NEXT line
+ * on her charge bar **or held by the engine for a chain lock** (`FFX2Engine.heldCommand()`, handed
+ * in by the caller exactly as the card gets it; the second check, C2-B1, measured 38 of 686 held
+ * decisions where the rail named the held move), aimed at the same ally or at the party. The panel then shows no NEXT line
  * rather than new words (a line such as "Mega-Potion on the way" needs options first, rule 9).
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]: only FFX-2's ATB opens a menu while another
@@ -21,6 +23,8 @@
  */
 
 import type { BattleState, CombatantId, Command } from '../../battle/common/types.ts';
+import type { QueuedCommand } from './advisor-committed.ts';
+export type { QueuedCommand };
 import { inFlight } from './advisor-inflight.ts';
 import { ADVISOR_V3 } from './advisor-v3.ts';
 import { targetingFor } from './targetLabel.ts';
@@ -28,11 +32,12 @@ import { targetingFor } from './targetLabel.ts';
 const idOf = (c: Command): string => ('id' in c ? String((c as { id?: unknown }).id ?? '') : '');
 const aimOf = (c: Command): string => (c.targets as readonly CombatantId[]).join(',');
 
-/** True when `command` repeats a support move another girl already has charging (see the note). */
+/** True when `command` repeats a support move another girl already has charging or held (see the note). */
 export function chosenAlready(
   state: Readonly<BattleState>,
   actorId: CombatantId,
   command: Command,
+  held: readonly QueuedCommand[] = [],
   enabled: boolean = ADVISOR_V3,
 ): boolean {
   if (!enabled || state.game !== 'ffx2') return false;
@@ -42,7 +47,7 @@ export function chosenAlready(
   const aimed = command.targets as readonly CombatantId[];
   if (aimed.some((t) => state.combatants[t]?.side === 'enemy')) return false;
   const id = idOf(command);
-  return inFlight(state, actorId, []).some(
+  return inFlight(state, actorId, held).some(
     (p) => p.command.kind === command.kind && idOf(p.command) === id &&
       (targeting === 'all-allies' || aimOf(p.command) === aimOf(command)),
   );

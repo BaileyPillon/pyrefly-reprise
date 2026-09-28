@@ -143,6 +143,7 @@ import { holdingForTheBreath } from './airship-orders.ts';
 import type { InFlightSource } from './advisor-inflight.ts';
 import { alreadyOnItsWay, boardFor, heldFor, sourceOf, v3On, withRaiseFirst } from './advisor-v3.ts';
 import { provedSave } from './advisor-lethal.ts';
+import { coveredFacts, coveredHeals, discountCovered, type Covered } from './advisor-covered.ts';
 import { isSelfOrder, scopeWord, targetDisplayName } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
@@ -309,7 +310,7 @@ export interface AdvisorOptions {
   /** Advisor v3 on or off for this call; the default is `ADVISOR_V3` (`./advisor-v3.ts`). */
   v3?: boolean;
   /** Measurement only (tests, scorecard ablations): one v3 rule off. The HUD never passes it. */
-  v3Rules?: { onItsWay?: boolean; provedSave?: boolean };
+  v3Rules?: { onItsWay?: boolean; provedSave?: boolean; covered?: boolean };
 }
 
 // ----------------------------------------------------------------- the knobs
@@ -1251,6 +1252,36 @@ export function buildAdvisorView(
     }
   }
 
+  // **A heal already on its way counts** (advisor v3, FFX-2 only, `./advisor-covered.ts`, C2-M1):
+  // the part of a heal that another girl's heal in flight fills is not scored, nor "one hit from down".
+  let covered: Covered | null = null;
+  if (v3 && inFlightNow.length > 0 && given.v3Rules?.covered !== false) {
+    let threat: AdvisorIntent | null = intent;
+    try {
+      if (projection?.enemyActedFirst) threat = forecastFromState(board, options);
+    } catch {
+      threat = null;
+    }
+    const heldNow = inFlightNow.filter((p) => p.held).map((p) => p.actorId);
+    covered = coveredHeals(state, decision.actorId, options, threat, sourceOf(keyed), board, heldNow);
+  }
+  const discounted = new WeakSet<object>();
+  const cover = (c: Candidate): void => {
+    if (!covered || !c.outcome || discounted.has(c.outcome)) return;
+    discounted.add(c.outcome);
+    const d = discountCovered(state, c.outcome, c.suggestion.reason, covered, CRITICAL_HP, PREVENTS_KO_VALUE);
+    c.suggestion = { ...c.suggestion, score: c.suggestion.score - d.less, reason: d.reason };
+  };
+  candidates.forEach(cover);
+  // ...and a "lives through" for a girl the heal in flight reaches in time is not a save.
+  const uncover = (c: Candidate): void => {
+    const u = covered ? coveredFacts(c.facts, covered) : null;
+    if (u && u.less > 0) {
+      c.facts = u.facts;
+      c.suggestion = { ...c.suggestion, score: c.suggestion.score - u.less };
+    }
+  };
+
   // **The evaluation.** Every candidate is re-priced against what the enemy is
   // about to do, and carries the facts that proved it
   // (`./advisor-eval.ts`). The simulated score is untouched; this is added to
@@ -1268,6 +1299,7 @@ export function buildAdvisorView(
       );
       c.facts = ev.facts;
       c.suggestion = { ...c.suggestion, score: c.suggestion.score + ev.bonus };
+      uncover(c);
     }
   }
 
@@ -1283,6 +1315,7 @@ export function buildAdvisorView(
   // when it does, the sentence names the long plan in the same breath, so the
   // card and the strategy panel are never teaching different fights.
   const tactic = tacticSuggestion(state, decision, candidates, sim, intent, planner);
+  if (tactic) cover(tactic);
   if (tactic && planner) {
     const ev = evaluate(
       state,
@@ -1295,6 +1328,7 @@ export function buildAdvisorView(
     );
     tactic.facts = ev.facts;
     tactic.suggestion = { ...tactic.suggestion, score: tactic.suggestion.score + ev.bonus };
+    uncover(tactic);
   }
   const others = tactic
     ? candidates.filter((c) => !sameCommand(c.suggestion.command, tactic.suggestion.command))

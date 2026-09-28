@@ -341,3 +341,85 @@ There are also 2 majors.
   the rail is always v3.
 - The card's cite reads the guide on the projected board.
 - The untracked `tests/unit/zz-scratch/` still breaks tsc in this worktree and runs under `npm test`.
+
+## FINAL FIX (2026-09-27, after CHECK 2; branch at 8ddefed3)
+
+Everything below was measured by running the engine (rule 3). **Game case: FFX-2 only** (rule 14):
+both fixes read commands in flight, and only FFX-2's ATB opens a menu while one is charging or
+held for a chain lock [research/ffx2-combat-core.md §1.1, §1.7]. The FFX rows of the scorecard are
+unchanged. Scratch probes (not committed) live in `.final-advisor-v3-tmp/` in this worktree.
+
+| Finding | Fix | File |
+|---|---|---|
+| C2-B1, the rail repeats a **held** move | `GuideDecision.held` (optional); `chosenAlready` takes the held commands and reads them like the charge bar; the FFX-2 HUD hands the rail `engine.heldCommand()` at every render, exactly as the card gets it (`StrategyGuideOptions.held`). | `guide-inflight.ts`, `guide.ts`, `StrategyGuide.ts`, `FFX2BattleHud.ts` |
+| C2-M1, a different heal behind one in flight | Decided from the engine: **waste in the common case** (below). A heal row no longer scores the HP a charging heal already fills, nor "one hit from down" for a girl that heal takes out of the band, nor a "lives through" for her, when the heal **lands in time**: 4 forks of the live battle (her menu open, the clock running) show no KO before it lands. A command **held** for a chain lock covers nobody (the girl choosing may extend the chain). Without an engine, a girl the forecast says the enemy kills is not covered. | `advisor-covered.ts` (new), `advisor.ts`, `advisor-eval.ts` (`SAVED_WEIGHT` exported), `advisor-inflight.ts` (`stillPending` exported) |
+
+`AdvisorOptions.v3Rules.covered: false` switches the C2-M1 rule off for tests and ablations.
+
+### C2-M1: waste or save, measured
+
+Card followed, 6 FFX-2 chapters x seeds 41-80: every board where the top row was a pure HP heal on
+girls the heals in flight already fill (112), the top heal and the best row that heals none of them
+were each pressed on 8 forks and run to the enemy's next hit on those girls. She stood **equally
+often either way in 90** (8 of 8 both ways in 84), the heal saved her in at least half the futures
+more in 2, partly in 10, and did worse in 8. So it is waste in the common case; the real saves are
+where the heal in flight lands after the enemy's hit, which the in-time forks catch.
+
+Where the rule changes the card (same seeds, the rule on vs off, 8 forks each, the girls the old
+heal healed): 84 boards, **the same survival in 82**, one future of 8 lost in 2 (Leblanc, a Potion
+became Attack or Lunar Curtain with a Hi-Potion charging), **0 saves lost**. The first cut counted
+held commands and lost Vegnagun seed 52 (Yuna at 401 HP behind Paine's held Megalixir, 4 of 8
+futures); a held command now covers nobody, and `advisor-v3-final.test.ts` pins that board. In a
+further 31 boards the old top was not a heal: an override the old card picked, and then dropped by
+the same-move rule, now goes to the next saving row (Bailey's saves-from-lethal rule); survival the
+same on forks.
+
+What is left (the check's own "redundant heal" count, which ignores timing): card followed
+**139 -> 102**, random presses 174 -> 91, stress 23 -> 18. The same fork test on the card path
+now finds 80 such boards (was 112): 65 waste, 2 saves, 3 partial, 10 worse. Of the 65, 23 are girls
+who fall before the heal in flight lands whatever is pressed, 20 sit behind a held command (which
+covers nobody by design), and 21 are small top-ups ("Puts N HP back") that still beat everything
+else offered.
+
+### Proof
+
+- **Probe** (the check's probe2, now handing the rail the engine's held command as the HUD does,
+  and not counting an enemy-aimed move with no target, the check's Darkness artifact), 6 FFX-2
+  chapters: card followed, seeds 41-80 (20,024 decisions, 7,460 in flight, **701 held**); 35 %
+  random presses, seeds 1-40 (19,471 / 7,483 / 636 held); low stock and a low-HP rig, seeds 1-30
+  (54,417 / 1,757 / 143 held). **0 repeats of a chosen or held move on the card, 0 on the rail**
+  (the check: 38, 43 and 6 on the rail), 0 purity differences, 0 off-menu or badly aimed rows,
+  0 fallen targets left without a raise.
+- **`tests/unit/advisor-v3-final.test.ts`** (5 tests, boards found by running the engine): a held
+  Mega Phoenix (Vegnagun seed 59) and a held Phoenix Down (Den of Woe seed 62) are not the rail's
+  NEXT, through `buildGuideView` and through the mounted `StrategyGuide`, and were before the fix
+  (written first and failing); the HUD passes the held command; Leblanc seed 74, a Potion "one hit
+  from down" behind a charging Hi-Potion is no longer the card and forks show her standing as often;
+  Vegnagun seed 52 keeps its Mega-Potion. Mutation check: with the rail wiring, the coverage or the
+  held rule removed, the matching test fails.
+- **Scorecard** (40 seeds, `results-final-v3.json`): **453 of 600**, the same total as the repair
+  (v2 443). Every FFX chapter unchanged; FFX-2: Bahamut 40, V 36 (v2 37, as before), VI 39 (38),
+  XI 37, XIII 1, XV 8 (9; v2 8). Duplicates strict / same move 107 / 72 -> 97 / 79 (Leblanc's
+  same-move count rose 53 -> 61: another Potion on another girl); arithmetic lethal readings
+  221 -> 210.
+- **Time per decision** (paired in one process, node, 8 seeds, v2 / v3 before / v3 now): median
+  unchanged (1.01-1.05x the repair); p95 up 0.1 to 1.4 ms (Vegnagun 10.1 -> 10.9, Leblanc
+  8.4 -> 9.4, Den of Woe 6.9 -> 8.3); on boards with something in flight p95 up to 12.8 ms
+  (Leblanc); worst single decision 26 ms (Vegnagun). The in-time forks run only when a heal in
+  flight reaches a living girl.
+- **Real keys, headless GPU, 1600x900, port 7520** (`docs/screenshots/advisor-v3/final-*`): Chapter
+  XI seed 1, Rikku presses Item > Mega-Potion; while it charges Yuna's card says *Turbo Ether ->
+  Yuna* (v2: *Mega-Potion -> the party*), the rail shows no NEXT, 0 failures. Server stopped.
+- tsc clean (the untracked `tests/unit/zz-scratch/` still adds its two errors here only); advisor,
+  guide, strategy-guide, HUD and fork suites 472 passed; the full suite once: 9,424 passed, 1
+  failure, the known Bahamut "heal-only route" 15 s timeout under load (passes alone with the
+  golden and fork suites, 28 of 28); orphans 24, as main.
+
+### Still open
+
+1. The CHECK 2 bars as written stay the driver's call: V 36 vs v2 37 at 40 seeds (unchanged by this
+   fix), and the card is slower at the p95 than v2 by about 1 to 3 ms in node.
+2. The held-command rule is conservative: a heal held behind a chain never counts, so 20 top-ups
+   behind one remain.
+3. `advisor.ts` (about 1,870 lines) and `FFX2BattleHud.ts` are over the 400-line rule as before;
+   the new logic is in `advisor-covered.ts` (189 lines).

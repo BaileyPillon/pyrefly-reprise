@@ -218,6 +218,11 @@ export class FFX2BattleHud implements HudPort {
       top: 44,
       bottom: 104,
     },
+    // Advisor v3: the engine's held command, as the card gets it (never driven).
+    held: () => {
+      const h = this.inFlight?.heldCommand() ?? null;
+      return h ? [h] : [];
+    },
   });
   /**
    * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).

@@ -105,7 +105,8 @@ export function inFlight(
   return out;
 }
 
-function stillPending(fork: ForkedBattle, p: InFlight): boolean {
+/** The command has not landed on the fork yet (still charging, or still the held one). */
+export function stillPending(fork: ForkedBattle, p: InFlight): boolean {
   if (p.held) return fork.heldCommand()?.actorId === p.actorId;
   const c = fork.state().combatants[p.actorId] as { alive?: boolean; atb?: { charging?: unknown } } | undefined;
   return c !== undefined && c.alive !== false && (c.atb?.charging ?? null) !== null;

@@ -153,7 +153,7 @@ describe('advisor v3 repair (FFX-2 only)', () => {
     expect(found, 'a board where the chapter line picks a move another girl is already charging').not.toBeNull();
     const { ctx, d, line } = found!;
     // The v2 panel named it; the v3 panel does not.
-    expect(chosenAlready(ctx.state, d.actorId, line, false)).toBe(false);
+    expect(chosenAlready(ctx.state, d.actorId, line, [], false)).toBe(false);
     expect(buildGuideView(ctx.state, d)?.next ?? null).toBeNull();
     const charging = inFlight(ctx.state, d.actorId, []).map((p) => `${p.command.kind}:${idOf(p.command)}`);
     expect(charging).toContain(`${line.kind}:${idOf(line)}`);
