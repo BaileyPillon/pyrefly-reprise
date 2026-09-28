@@ -39,12 +39,23 @@ import { motionMs, type ActionMotionPort, type ActionStartEvent, type MotionCtx 
 import { FF7_ABILITIES } from '../../data/ff7/abilities.ts';
 import { viewportAspect } from '../../scenes/cavern-stolen-fayth-rigs.ts';
 import { SECTOR1_HEIGHTS, sector1Layout, strikeSpot, type Sector1Layout } from '../../scenes/sector1-reactor-staging.ts';
+import { FF7_BOSS_DOWN } from '../../engine/spellfx/ff7/ff7FxSpecs.ts';
+import { ff7Calm } from './battleFf7Fx.ts';
 
 /** The run to the strike point and the run back, ms at normal speed. Our estimate. */
 export const FF7_RUN_MS = 460;
 export const FF7_RUN_BACK_MS = 400;
 /** B1's holds, ms: the wind-up at the strike point, the follow-through after the blow, Barret's aim (Big Shot's charge). */
-export const FF7_KEYS_MS = { windUp: 140, follow: 240, aim: 260, charge: 620, leap: 560 } as const;
+export const FF7_KEYS_MS = { windUp: 140, follow: 240, aim: 260, charge: 620, leap: 1100 } as const;
+/** Braver's leap: how high, world units, and how far on toward the boss (repair item 13: the blow lands airborne). */
+export const FF7_BRAVER_LEAP = { height: 1.6, forward: 0.45, strikeAt: 0.4 } as const;
+/** A KO'd fighter goes down at once (repair item 4): the fall, ms, and the tip back, radians (our estimate). */
+export const FF7_KO_FALL_MS = 420;
+export const FF7_KO_TILT = 0.55;
+/** The boss's death (repair item 8, our estimate): the flash held, the fade, the beat after, ms. */
+export const FF7_DEATH_MS = { hold: 380, fade: 1000, after: 300 } as const;
+/** D1's camera: the ease in to frame the party (repair item 7), ms. */
+export const FF7_VICTORY_CAM_MS = 1400;
 /** D1: the hold in silence after the win poses, ms. */
 export const FF7_VICTORY_HOLD_MS = 2500;
 /** G1: the pan up, ms, and the beat it holds there. */
@@ -75,6 +86,8 @@ type Wait = (ms: number) => Promise<void>;
 
 export class Ff7ActionMotion implements ActionMotionPort {
   private readonly home = new Map<CombatantId, { x: number; y: number; z: number }>();
+  /** The raised tail swaps paintings under the flash with no see-through fade (repair item 2). */
+  readonly opaqueForms = true;
   /** Who is mid-action with which keys, so `close` knows what to undo. */
   private readonly acting = new Map<CombatantId, 'melee' | 'gun' | 'cast'>();
 
@@ -129,11 +142,13 @@ export class Ff7ActionMotion implements ActionMotionPort {
     const [x, y, z] = strikeSpot(this.layoutOf());
     await actor.moveTo({ x, y, z }, motionMs(FF7_RUN_MS, ctx.speed));
     if (event.abilityId === 'braver') {
-      // The leap, and the slash on the way down.
-      const leap = actor.hop(1.2, motionMs(FF7_KEYS_MS.leap, ctx.speed));
-      await wait(FF7_KEYS_MS.leap * 0.45);
+      // The leap on toward the boss, and the slash on the way down: return while still airborne, so the blow's
+      // beat (and its effect's mark) lands during the descent, not after he is back on the floor.
+      const up = motionMs(FF7_KEYS_MS.leap, ctx.speed);
+      void actor.hop(FF7_BRAVER_LEAP.height, up);
+      void actor.moveTo({ x: x + FF7_BRAVER_LEAP.forward, y, z }, up);
+      await wait(FF7_KEYS_MS.leap * FF7_BRAVER_LEAP.strikeAt);
       actor.setPose('attack', { force: true });
-      await leap;
       return;
     }
     await wait(FF7_KEYS_MS.windUp);
@@ -172,6 +187,27 @@ export class Ff7ActionMotion implements ActionMotionPort {
     }
   }
 
+  /** Repair item 4: a KO'd fighter drops at once, the hurt painting laid on the floor (no KO painting yet). */
+  ko(id: CombatantId, ctx: MotionCtx): Promise<void> | void {
+    return ctx.stage.actor(id)?.lieDown?.(motionMs(FF7_KO_FALL_MS, ctx.speed), FF7_KO_TILT);
+  }
+
+  /**
+   * Repair item 8: the boss's death (our estimate). A white flash and a shake, a chain of explosions with debris
+   * walking along the machine (`spellfx/ff7/effects-ff7-down.ts`, with the director's cast light on the party),
+   * then the painting burns away over about a second. The calm version has no shake.
+   */
+  async sendOff(id: CombatantId, ctx: MotionCtx): Promise<void> {
+    const a = ctx.stage.actor(id);
+    if (!a) return;
+    a.flash(0xffffff, 420, 1);
+    if (!ff7Calm()) ctx.stage.camera.shake(0.14, 700);
+    ctx.stage.vfx.land?.(id, { abilityId: FF7_BOSS_DOWN, targets: [id], action: -3 });
+    await ctx.sleep(FF7_DEATH_MS.hold);
+    await a.dissolveTo(1, motionMs(FF7_DEATH_MS.fade, ctx.speed), 0xffb870);
+    await ctx.sleep(FF7_DEATH_MS.after);
+  }
+
   /** Whether `id` is away from home mid-action (tests, the harness). */
   away(id: CombatantId): boolean {
     return this.home.has(id);
@@ -184,6 +220,9 @@ export class Ff7ActionMotion implements ActionMotionPort {
       return c ? c.alive && !c.removed : true;
     };
     const party = ctx.stage.staged().filter((id) => ctx.stage.sideOf(id) === 'party' && up(id));
+    // Repair item 7: the camera eases in and around to frame the party (the D1 concept; our estimate).
+    const cam = (ctx.stage.camera as { unheld?: () => MotionCtx['stage']['camera'] }).unheld?.();
+    void cam?.moveTo('ff7-victory', motionMs(FF7_VICTORY_CAM_MS, ctx.speed));
     const loop = { on: true };
     const moves = party.map((id) => {
       const a = ctx.stage.actor(id);
@@ -201,10 +240,9 @@ export class Ff7ActionMotion implements ActionMotionPort {
     if (!cam) return;
     // The band sinks away so the fallen party stays in the frame (the FF7 HUD root; `ff7-hud-look.css`).
     if (typeof document !== 'undefined') document.querySelector('.ff7hud')?.setAttribute('data-ff7-gameover', '');
-    // The fallen party lies on the floor (no KO painting yet: the hurt painting, laid down).
+    // The fallen party lies on the floor (already down since each KO; no KO painting yet: the hurt painting).
     for (const id of ctx.stage.staged()) {
-      const a = ctx.stage.sideOf(id) === 'party' ? (ctx.stage.actor(id) as unknown as { lieDown?: (ms: number) => Promise<void> } | undefined) : undefined;
-      void a?.lieDown?.(motionMs(520, ctx.speed));
+      if (ctx.stage.sideOf(id) === 'party') void ctx.stage.actor(id)?.lieDown?.(motionMs(FF7_KO_FALL_MS, ctx.speed), FF7_KO_TILT);
     }
     await cam.moveTo('ff7-gameover', motionMs(FF7_GAME_OVER_PAN_MS, ctx.speed));
     await ctx.sleep(FF7_GAME_OVER_HOLD_MS);

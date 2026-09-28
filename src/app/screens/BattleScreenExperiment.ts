@@ -108,7 +108,9 @@ export async function experimentPlayIn(root: HTMLElement, chapter: Chapter, swap
 
 /** FF7's results windows or its Game Over (C1, G1, D-244) in place of the house panel; resolves with the pick. */
 export async function ff7Results(show: (s: Screen) => Promise<boolean>, chapter: Chapter, fought: BattleScreenResult): Promise<ResultsChoice> {
-  const screen = new Ff7ResultsScreen({ outcome: fought.outcome, result: fought.result, build: chapter.buildRef as unknown as Ff7PartyBuild });
+  const screen = new Ff7ResultsScreen({
+    outcome: fought.outcome, result: fought.result, build: chapter.buildRef as unknown as Ff7PartyBuild, ...(fought.standing ? { standing: fought.standing } : {}),
+  });
   if (!(await show(screen))) return 'continue';
   return screen.done;
 }

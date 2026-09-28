@@ -15,7 +15,8 @@
  */
 
 import type { Camera, Scene, Vector3 } from 'three';
-import type { BattleEngine, BattleResult, BattleSetup, EnemyGroupDef } from '../../battle/common/types.ts';
+import type { BattleEngine, BattleResult, BattleSetup, CombatantId, EnemyGroupDef } from '../../battle/common/types.ts';
+import { ff7Standing } from './ff7Standing.ts';
 import { addExperimentPlayTime } from '../experiments/experimentRecords.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { audio } from '../../audio/index.ts';
@@ -105,6 +106,8 @@ export interface BattleScreenResult {
   checkpoint?: ChainCheckpoint;
   /** PR-0215: the engine's stalemate line when the fight ended in a withdrawal (`withdrawal.ts`). */
   withdrawLine?: string;
+  /** FF7: the party on their feet at the end; C1's EXP goes only to them (research/ff7-battle-core.md §11). */
+  standing?: CombatantId[];
 }
 
 export class BattleScreen extends Screen {
@@ -652,6 +655,7 @@ export class BattleScreen extends Screen {
       preview: this.preview,
       ...(this.checkpoint ? { checkpoint: this.checkpoint } : {}),
       ...(withdrawLine ? { withdrawLine } : {}),
+      ...ff7Standing(this.engine?.state()),
     });
   }
 

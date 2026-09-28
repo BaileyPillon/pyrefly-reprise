@@ -39,6 +39,9 @@ export const FF7_CALM_FLASH: Readonly<FlashParams> = Object.freeze({
   singleBolt: true,
 });
 
+/** The cast light (our estimate): peak at the blow, lost over `falloffPx` of screen, held `ms`; the target's own. */
+export const FF7_CAST = { peak: 0.9, falloffPx: 1700, ms: 680, target: 0.75, afterWhiteMs: 150 } as const;
+
 /** Each effect's light, cast onto the fighters and used for the tint. Ours. */
 export const FF7_FX_LIGHT: Readonly<Record<Ff7FxId, number>> = {
   'ff7-bolt': 0xffe070,
@@ -52,6 +55,7 @@ export const FF7_FX_LIGHT: Readonly<Record<Ff7FxId, number>> = {
   'ff7-rifle': 0xffc070,
   'ff7-tail': 0x8cdcff,
   'ff7-laser': 0x78d8ff,
+  'ff7-down': 0xffb060,
 };
 
 const isFf7Fx = (fx: SpellFxId): fx is Ff7FxId => fx.startsWith('ff7-');
@@ -70,6 +74,21 @@ export function flashFrame(canvas: HTMLCanvasElement | null): void {
   el.style.cssText = 'position:absolute;inset:0;background:#fff;opacity:0.82;pointer-events:none;z-index:5';
   host.appendChild(el);
   requestAnimationFrame(() => requestAnimationFrame(() => el.remove()));
+}
+
+/**
+ * Where FF7's effects may draw: below the top message window while it is up (repair item 10: Bolt crossed the
+ * translucent window; FF7 keeps its windows over the field). The band's windows are opaque and cover the rest.
+ * Null (the whole frame) when no message is up.
+ */
+export function ff7FxClip(canvas: HTMLCanvasElement | null): { x: number; y: number; w: number; h: number } | null {
+  const win = canvas && typeof document !== 'undefined' ? document.querySelector('.ff7hud .ff7-win[data-win="message"]') : null;
+  if (!canvas || !win) return null;
+  const c = canvas.getBoundingClientRect();
+  const r = win.getBoundingClientRect();
+  if (!c.height || r.height <= 0) return null;
+  const top = Math.max(0, Math.min(c.height, r.bottom - c.top));
+  return { x: 0, y: top, w: c.width, h: c.height - top };
 }
 
 /** The director: what each landing does to the fighters and the frame. */
@@ -104,7 +123,8 @@ export class Ff7FxDirector {
     // B1: the white hit flash, and a short knock-back on the boss.
     actor?.flash(heal ? 0xc8ffe0 : 0xffffff, heal ? 320 : 150, calm ? 0.35 : 0.95);
     if (!heal && stage.sideOf(target) === 'enemy') void actor?.lunge(fx === 'ff7-braver' || fx === 'ff7-bigshot' ? -0.55 : -0.3, 240);
-    // A3's cast light: the effect's colour on every fighter, falling off with distance on screen.
+    // A3's cast light: the effect's colour on every fighter, falling off with distance on screen, and on the
+    // target itself once the white flash has passed (repair item 5: the cast was too faint to see in live frames).
     const at = stage.project(target, 'chest');
     const light = FF7_FX_LIGHT[fx];
     for (const id of stage.staged()) {
@@ -112,9 +132,10 @@ export class Ff7FxDirector {
       const p = stage.project(id, 'chest');
       if (!p || !at) continue;
       const d = Math.hypot(p.x - at.x, p.y - at.y);
-      const peak = Math.max(0, 0.55 - d / 1400) * (calm ? 0.5 : 1);
-      if (peak > 0.04) stage.actor(id)?.flash(light, 420, peak);
+      const peak = Math.max(0, FF7_CAST.peak - d / FF7_CAST.falloffPx) * (calm ? 0.5 : 1);
+      if (peak > 0.04) stage.actor(id)?.flash(light, FF7_CAST.ms, peak);
     }
+    if (!heal) this.later(() => this.stage()?.actor(target)?.flash(light, FF7_CAST.ms, FF7_CAST.target * (calm ? 0.5 : 1)), FF7_CAST.afterWhiteMs);
     if (calm || !FF7_BIG_HITS.has(fx) || this.lastBigAction === action) return;
     this.lastBigAction = action;
     stage.camera.shake(fx === 'ff7-braver' ? 0.12 : 0.09, 340);
@@ -129,7 +150,7 @@ export function ff7SpellFxOptions(
   renderer: Renderer,
   speed: (() => PlaybackSpeed | undefined) | undefined,
   stage: () => BattleStage | null,
-): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate' | 'onLand'> & { director: Ff7FxDirector } {
+): Pick<StageSpellFxOptions, 'game' | 'overlay' | 'quality' | 'flash' | 'rate' | 'onLand' | 'clip'> & { director: Ff7FxDirector } {
   const rate = (): number => SPEED_RATE(speed?.() ?? 'normal');
   const director = new Ff7FxDirector(stage, rate, () => renderer.renderer.domElement);
   return {
@@ -141,6 +162,7 @@ export function ff7SpellFxOptions(
       resolveFxQuality({ lowEffects: readSetting('lowEffects') === true, reduceMotion: false, width: window.innerWidth, height: window.innerHeight }),
     flash: () => (ff7Calm() ? FF7_CALM_FLASH : DEFAULT_FLASH_PARAMS),
     onLand: (fx, target, ms, o) => director.onLand(fx, target, ms, o),
+    clip: () => ff7FxClip(renderer.renderer.domElement),
     director,
   };
 }

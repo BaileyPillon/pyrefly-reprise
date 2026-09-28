@@ -80,6 +80,9 @@ export const paintedFragmentShader = /* glsl */ `
   uniform float contactBand;
   uniform vec2 texel;
   uniform float alphaCut;
+  // Erode the silhouette by this many texels (0 = off): the alpha is the least of four neighbours', so a pale
+  // matte fringe outside the ink goes (FF7's Film paintings, the phase-3 judge's repair item 9).
+  uniform float erode;
   uniform float edgeFade;
   // 1 = the feather runs round the whole plane; 0 = sides and top only, the
   // base left whole for a figure standing on it (PR-0164).
@@ -120,6 +123,12 @@ export const paintedFragmentShader = /* glsl */ `
       }
       float fadeEnd = 1.0 - jag;
       a *= 1.0 - smoothstep(fadeEnd - edgeFade, fadeEnd, box);
+    }
+
+    if (erode > 0.0) {
+      vec2 e = texel * erode;
+      a = min(a, min(min(texture2D(map, uv + vec2(e.x, 0.0)).a, texture2D(map, uv - vec2(e.x, 0.0)).a),
+                     min(texture2D(map, uv + vec2(0.0, e.y)).a, texture2D(map, uv - vec2(0.0, e.y)).a)));
     }
 
     if (a < alphaCut) discard;

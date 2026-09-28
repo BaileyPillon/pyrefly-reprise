@@ -1,6 +1,7 @@
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import type { SceneRigName, SceneStaging } from './types.ts';
 import { holdWidth } from './cavern-stolen-fayth-rigs.ts';
+import { FF7_FILM_POSE_SHIFT_PX } from '../data/ff7/filmPoseAnchors.ts';
 
 // ---------------------------------------------------------------------------
 // The No. 1 Reactor core: FF7's battle staging for Guard Scorpion (FF7 only)
@@ -169,8 +170,24 @@ export function sector1Staging(layout: Sector1Layout = SECTOR1_DESK): SceneStagi
     enemySpots: { [SECTOR1_BOSS_ID]: [layout.boss[0], layout.boss[1], layout.boss[2]] },
     figureHeights: { ...SECTOR1_HEIGHTS },
     figureExtent: 3.2, // Guard Scorpion's paintings, padded to its rear foot, run up to 2.7x its height
+    poseCut: true, // a hard cut between painted keys: no see-through double (repair items 1, 2)
+    poseShiftPx: FF7_FILM_POSE_SHIFT_PX, // every party key on the idle's stance (repair item 1)
+    figureLight: SECTOR1_FIGURE_LIGHT, // the core's green light from screen-right, the matte fringe trimmed (repair item 9)
   };
 }
+
+/**
+ * How the fighters are lit (repair item 9, our estimate matched to the Film frame `03-frame-film-1600.jpg`): a
+ * green rim from the core's side (screen-right in the painting's own space, where the party faces), a green
+ * bounce off the lit grating, and the pale matte fringe outside the ink trimmed by eroding the silhouette 2.5
+ * texels (under a screen pixel at 1600x900). It replaces the house rim, a pale blue from the upper left, which
+ * drew the grey-blue halo on the fighters' back edges.
+ */
+export const SECTOR1_FIGURE_LIGHT = {
+  rim: { color: 0xb8ffd8, dir: [1, 0.25], strength: 0.85, width: 3 },
+  bounce: { color: 0x8fe8b0, strength: 0.1 },
+  erode: 2.5,
+} as const;
 
 /** The desk staging (the published slots). */
 export const SECTOR1_STAGING: SceneStaging = sector1Staging(SECTOR1_DESK);
@@ -219,13 +236,32 @@ export function sector1GameOverRig(aspect: number): CameraRig {
   return { ...fixed, position: [p[0]!, p[1]! + 0.55, p[2]! - 0.8], lookAt: [l[0]!, l[1]! + 1.05, l[2]!] };
 }
 
-/** The rig set for a render of this aspect: the one fixed shot everywhere, plus F1's opening and G1's pan. */
+/**
+ * D1's framing (repair item 7; our estimate, matched by eye to the D1 concept): once the boss has gone the camera
+ * eases in and a little round to the right, so Cloud and Barret fill the field above the band instead of standing
+ * small in its lower left. The phone moves in closer still.
+ */
+export function sector1VictoryRig(aspect: number): CameraRig {
+  const layout = sector1Layout(aspect);
+  const [c, b] = [layout.front[0]!, layout.front[1]!];
+  const x = (c[0] + b[0]) / 2;
+  const z = (c[2] + b[2]) / 2;
+  const phone = layout.name === 'phone';
+  const fixed = sector1FixedRig(aspect);
+  // The desk moves in on a longer lens (fov 20 from 12 units) rather than walking the camera in: a closer camera
+  // turned toward the party let the frame run off the painting's left edge (a black strip in the first try).
+  if (phone) return { ...fixed, position: [x + 0.45, 1.55, z + 4.6], lookAt: [x + 0.1, 0.95, z] };
+  return { ...fixed, fov: 20, position: [x + 0.7, 1.75, z + 12], lookAt: [x + 0.3, 0.6, z] };
+}
+
+/** The rig set for a render of this aspect: the one fixed shot everywhere, plus F1's opening, G1's pan and D1's framing. */
 export function sector1RigsFor(aspect: number): Record<SceneRigName, CameraRig> & Record<string, CameraRig> {
   const rig = sector1FixedRig(aspect);
   const out: Record<string, CameraRig> = {};
   for (const name of ['intro', 'idle', 'action', 'victory', 'enemy', 'party']) out[name] = { ...rig };
   out['ff7-open'] = sector1OpeningRig(aspect);
   out['ff7-gameover'] = sector1GameOverRig(aspect);
+  out['ff7-victory'] = sector1VictoryRig(aspect);
   return out as Record<SceneRigName, CameraRig> & Record<string, CameraRig>;
 }
 

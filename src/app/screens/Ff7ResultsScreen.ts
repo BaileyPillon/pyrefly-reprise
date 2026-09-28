@@ -17,7 +17,7 @@
 
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
-import type { BattleResult } from '../../battle/common/types.ts';
+import type { BattleResult, CombatantId } from '../../battle/common/types.ts';
 import type { Ff7PartyBuild } from '../../battle/common/types-ff7.ts';
 import type { ResultsChoice } from '../../ui/common/resultsPage.ts';
 import { FF7_EQUIPMENT } from '../../data/ff7/equipment.ts';
@@ -51,8 +51,11 @@ function itemRow(id: string, count: number, build: Ff7PartyBuild): { name: strin
   return { name: it?.name ?? id, count, line: '' };
 }
 
-/** The windows' numbers, from the engine's result and the party build. */
-export function ff7ResultsView(result: BattleResult, build: Ff7PartyBuild): Ff7ResultsView {
+/**
+ * The windows' numbers, from the engine's result and the party build. `standing` is who was on their feet at the
+ * end (`ff7Standing`): a KO'd member gets 0 EXP (core §11). Without it every member gets the award.
+ */
+export function ff7ResultsView(result: BattleResult, build: Ff7PartyBuild, standing?: readonly CombatantId[]): Ff7ResultsView {
   return {
     exp: result.exp,
     ap: result.ap,
@@ -66,7 +69,7 @@ export function ff7ResultsView(result: BattleResult, build: Ff7PartyBuild): Ff7R
         id,
         name: m.name,
         level: m.base.level,
-        exp: result.exp,
+        exp: !standing || standing.includes(id) ? result.exp : 0,
         ap: result.ap,
         materia,
         portrait: { url: artUrl(`art/characters/${m.spriteKey}/idle.png`), ...(HEADS[id] ?? { x: 0.2, y: 0, w: 0.5 }) },
@@ -79,6 +82,8 @@ export interface Ff7ResultsOptions {
   outcome: 'victory' | 'defeat' | string;
   result: BattleResult | null;
   build: Ff7PartyBuild;
+  /** Who stood at the end (a KO'd member earns 0 EXP). */
+  standing?: readonly CombatantId[];
   onChoice?: (choice: ResultsChoice) => void;
 }
 
@@ -96,7 +101,7 @@ export class Ff7ResultsScreen extends Screen {
   constructor(private readonly opts: Ff7ResultsOptions) {
     super();
     this.done = new Promise((r) => (this.resolve = r));
-    this.view = opts.outcome === 'victory' && opts.result ? ff7ResultsView(opts.result, opts.build) : null;
+    this.view = opts.outcome === 'victory' && opts.result ? ff7ResultsView(opts.result, opts.build, opts.standing) : null;
     if (!this.view) this.step = 'over';
   }
 

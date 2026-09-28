@@ -2,6 +2,7 @@ import { Group, Vector3 } from 'three';
 import { Backdrop, type BackdropOptions } from '../engine/Backdrop.ts';
 import { LightRig } from '../engine/Lighting.ts';
 import { artUrl } from '../engine/PaintedArt.ts';
+import { ParticleField } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import type { SceneSlots } from './index.ts';
@@ -128,11 +129,33 @@ export const buildSector1ReactorScene: SceneFactory = async (opts: SceneBuildOpt
   });
   group.add(lights.group);
 
+  // Mako motes drifting up out of the core and across the field (repair item 9: the Film frame's floating motes;
+  // our estimate). Two depths: a far band round the column, a sparser near band crossing the fighters. None on
+  // Low; fewer on a phone.
+  const motes: ParticleField[] = [];
+  if (!low) {
+    const n = layout.name === 'phone' ? 0.6 : 1;
+    const far = new ParticleField({
+      count: Math.round(260 * n), bounds: { x: 12, y: 6, z: 6 }, colors: [0x9dffd0, 0x7affc0, 0xd8fff0],
+      size: 6, sizeJitter: 0.6, drift: [0.02, 0.22, 0], wobble: [0.35, 0.2, 0.3], wobbleSpeed: 0.3,
+      twinkle: 0.55, opacity: 0.85, additive: true, hardness: 0.45,
+    });
+    far.position.set(0, 3.2, -5);
+    const near = new ParticleField({
+      count: Math.round(110 * n), bounds: { x: 13, y: 4.5, z: 4 }, colors: [0xb8ffe0, 0x7dffc8],
+      size: 8, sizeJitter: 0.6, drift: [0.03, 0.16, 0], wobble: [0.4, 0.25, 0.3], wobbleSpeed: 0.26,
+      twinkle: 0.5, opacity: 0.7, additive: true, hardness: 0.4,
+    });
+    near.position.set(-0.5, 2.0, 0.2);
+    motes.push(far, near);
+    for (const m of motes) group.add(m);
+  }
+
   return {
     group,
     backdrop,
     lights,
-    particles: [],
+    particles: motes,
     rigs,
     partySlots: layout.front.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: [new Vector3(layout.boss[0], layout.boss[1], layout.boss[2])],
@@ -143,8 +166,10 @@ export const buildSector1ReactorScene: SceneFactory = async (opts: SceneBuildOpt
     update(dt: number): void {
       backdrop.update(dt);
       lights.update(dt);
+      for (const m of motes) m.update(dt);
     },
     dispose(): void {
+      for (const m of motes) m.dispose();
       lights.dispose();
       backdrop.dispose();
       group.removeFromParent();

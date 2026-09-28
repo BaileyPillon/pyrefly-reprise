@@ -79,6 +79,17 @@ describe('C1: FF7\'s two results windows from the engine\'s result', () => {
     expect(v.members[0]!.portrait.url).toContain('ff7-film-cloud/idle.png');
   });
 
+  it("repair item 12: a member KO'd at the end gets 0 EXP (core §11); the standing member the full award", () => {
+    const v = ff7ResultsView(realWin(), sector1ReactorBuild, ['cloud']);
+    expect(v.members.map((m) => [m.id, m.exp])).toEqual([['cloud', 100], ['barret', 0]]);
+    const screen = new Ff7ResultsScreen({ outcome: 'victory', result: realWin(), build: sector1ReactorBuild, standing: ['cloud'] });
+    const root = mount(screen);
+    screen.update(1);
+    const award = (id: string): string | null | undefined => root.querySelector(`[data-win="res-member-${id}"] .ff7-res-award`)?.textContent;
+    expect(award('cloud')).toBe('+100');
+    expect(award('barret')).toBe('+0');
+  });
+
   it('step 1, confirm, step 2, confirm: resolves continue, never writing anything', async () => {
     const onChoice = vi.fn();
     const screen = new Ff7ResultsScreen({ outcome: 'victory', result: realWin(), build: sector1ReactorBuild, onChoice });
@@ -86,7 +97,7 @@ describe('C1: FF7\'s two results windows from the engine\'s result', () => {
     expect(root.querySelector('.ff7res')?.getAttribute('data-step')).toBe('1');
     screen.update(1);
     expect(root.textContent).toContain('+100');
-    expect(root.textContent).toContain('10 AP · Lightning, Ice');
+    expect(root.textContent).not.toContain('AP ·'); // FF7's member rows carry no AP line (repair item 12)
     screen.handleInput(input(['confirm']));
     expect(root.querySelector('.ff7res')?.getAttribute('data-step')).toBe('2');
     expect(root.textContent).toContain('Received 100 gil and the Assault Gun.');

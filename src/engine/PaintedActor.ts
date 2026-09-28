@@ -137,12 +137,20 @@ export interface PaintedActorOptions {
   life?: false;
   /** Crossfade duration between poses. */
   crossfadeMs?: number;
+  /**
+   * A horizontal shift per pose, in that painting's own pixels (+ = toward the painting's right), so poses whose
+   * canvases were centred on different points still stand on one stance (FF7's Film set,
+   * `src/data/ff7/filmPoseAnchors.ts`). Unset everywhere else: every upright plane is centred on the spot.
+   */
+  poseShiftPx?: Readonly<Record<string, number>>;
   /** Multiply tint. Used to mark stand-in party members. */
   tint?: number | string;
   brightness?: number;
   /** Strength of the contact darkening ramp at the figure's feet, 0..1. */
   groundShade?: number;
   alphaCut?: number;
+  /** Erode the silhouette by this many texels (0, default: off), trimming a pale matte fringe (FF7's Film art). */
+  erode?: number;
   /**
    * Feather the outer band of the plane, as a fraction of half-width, so art
    * whose aura bleeds to the PNG border does not end on a hard rectangle.
@@ -409,6 +417,7 @@ export class PaintedActor extends Group {
 
   private readonly worldHeight: number;
   private readonly crossfadeMs: number;
+  private readonly poseShiftPx: Readonly<Record<string, number>> | undefined;
   private readonly placeholderFactory: () => HTMLCanvasElement;
   private readonly placeholderBaseline: number;
   private readonly matte: MatteOptions;
@@ -474,6 +483,7 @@ export class PaintedActor extends Group {
     groundShade: { value: number };
     desaturate: { value: number };
     alphaCut: { value: number };
+    erode: { value: number };
     edgeFade: { value: number };
     edgeFadeBase: { value: number };
     edgeJag: { value: number };
@@ -509,6 +519,8 @@ export class PaintedActor extends Group {
   private fallDrop = 0;
   /** 0 standing, 1 lying on its back ({@link lieDown}). */
   private lieRoll = 0;
+  /** The tip back while lying, radians ({@link lieDown}). */
+  private lieTilt = LIE_TILT;
   private proneShift = 0;
   /** 0..1 damage tint, lerped from `baseTint` toward {@link HURT_TINT}. */
   private hurtTint = 0;
@@ -546,6 +558,7 @@ export class PaintedActor extends Group {
     this.name = opts.name ?? 'painted-actor';
     this.worldHeight = opts.worldHeight ?? 1.8;
     this.crossfadeMs = opts.crossfadeMs ?? 120;
+    this.poseShiftPx = opts.poseShiftPx;
     this.baseBrightness = opts.brightness ?? 1;
     this.placeholderFactory =
       opts.placeholder ?? ((): HTMLCanvasElement => paintPlaceholderFigure({ seed: 7 }));
@@ -600,6 +613,7 @@ export class PaintedActor extends Group {
       groundShade: { value: opts.groundShade ?? 0.24 },
       desaturate: { value: 0 },
       alphaCut: { value: opts.alphaCut ?? 0.02 },
+      erode: { value: opts.erode ?? 0 },
       edgeFade: { value: opts.edgeFade ?? 0 },
       edgeFadeBase: { value: opts.edgeFadeBase === false ? 0 : 1 },
       edgeJag: { value: opts.edgeJag ?? 0 },
@@ -1446,15 +1460,23 @@ export class PaintedActor extends Group {
     });
     this.flash(0xcfe9ff, 640, 0.55);
     void this.hop(this.worldHeight * 0.07, 520);
+    // A body laid down (`lieDown`) gets up with it (FF7's KO'd fighter revived by a Phoenix Down).
+    if (this.lieRoll > 0) {
+      const lying = this.lieRoll;
+      this.tweens.to(1, 0, { durationMs: 360, easing: 'quadOut', onUpdate: (v) => (this.lieRoll = lying * v) });
+    }
   }
 
   /**
    * Fall onto its back and stay there, flat on the floor over its own station
    * ({@link lieOffset}): a defeat that leaves a body with no painted `ko`
    * (Seymour at Macalania, D-046, the `'body'` departure). `ms` 0 lies down at
-   * once. Both games' plumbing; only FFX's Seymour uses it today.
+   * once. Both games' plumbing; only FFX's Seymour uses it today. `tilt` is the tip back, radians (default flat
+   * on the floor, face up); FF7 passes less, so a KO'd fighter lies on the floor still readable from its low
+   * camera instead of a flat smear (repair item 4). A revive stands the body back up (`rise`).
    */
-  lieDown(ms = 520): Promise<void> {
+  lieDown(ms = 520, tilt = LIE_TILT): Promise<void> {
+    this.lieTilt = tilt;
     if (ms <= 0) {
       this.lieRoll = 1;
       return Promise.resolve();
@@ -1478,7 +1500,7 @@ export class PaintedActor extends Group {
   /** Where the rolled body goes: `[dx, lift]`, on the floor over its own station (`LieFlat.ts`). */
   private lieOffset(angle: number): [number, number, number] {
     const slot = this.slots[this.active]!;
-    return lieOffset(slot.scale.contentBox, slot.mesh.scale.x < 0, angle, LIE_TILT * this.lieRoll);
+    return lieOffset(slot.scale.contentBox, slot.mesh.scale.x < 0, angle, this.lieTilt * this.lieRoll);
   }
 
   /** A plain delay on the actor's own tween group, so `dispose` kills it. */
@@ -1698,6 +1720,8 @@ export class PaintedActor extends Group {
 
   private placeSlot(slot: PlaneSlot): void {
     placePlane(slot.mesh, slot.scale, slot.meta, this.proneShift);
+    const dx = this.poseShiftPx?.[slot.pose];
+    if (dx) slot.mesh.position.x += dx * slot.scale.unitsPerPixel * (slot.mesh.scale.x < 0 ? -1 : 1);
   }
 
   /** Slide a prone body along the floor, world units (`ProneLay` picks it). */
@@ -1889,7 +1913,7 @@ export class PaintedActor extends Group {
     // turned, so it carries the facing), kept small and faded out with the pose.
     const bodyTilt = (tilt + this.fallTilt * 0.3) * upright * -this.facing;
     this.inner.rotation.z = sway + bodyTilt + lie;
-    this.inner.rotation.x = -LIE_TILT * this.lieRoll;
+    this.inner.rotation.x = -this.lieTilt * this.lieRoll;
 
     // --- the interim turn --------------------------------------------------
     // The plane yawed toward the enemy, for art not yet repainted turned. It

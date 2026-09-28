@@ -7,7 +7,8 @@
  *
  * - **Step 1** (EXP and AP): an EXP window and an AP window across the top, then
  *   a window per member with the portrait (a crop of our own painting), name, LV,
- *   the EXP award counting in with its gauge filling, and "10 AP · <Materia>".
+ *   the EXP award counting in with its gauge filling (the AP is the AP window's;
+ *   FF7's member rows carry no AP line, so the phase-3 repair dropped ours).
  * - **Step 2** (Gil and Items): the gil window, the Items window with the
  *   finger on the Assault Gun and its line, and the message "Received ...".
  * - **Game Over**: black, GAME OVER, then RETRY / CHAPTER SELECT in a window.
@@ -19,8 +20,8 @@
  * numbers are the engine's (`battle/ff7/results.ts`: 100 EXP, 10 AP, 100 gil,
  * the Assault Gun, gs §12). **Our estimate**: the window arrangement; the gauge
  * shows the award counting in, not the progress to the next level (the EXP
- * table is not in research/, so levels gained are not computed); every member
- * row prints the full EXP (the result does not say who stood at the end).
+ * table is not in research/, so levels gained are not computed). A member KO'd
+ * at the end gets 0 EXP and an empty gauge (core §11; `app/screens/ff7Standing.ts`).
  * Music and the retail reel stay out (silence).
  */
 
@@ -98,7 +99,7 @@ function expGauge(o: Origin, x: number, y: number, w: number, f: Ff7ResFrame, u:
     box(o, x + 1.5 * s, y + 1.5 * s, Math.max(0, (w - 3 * s) * Math.min(1, u)), 11 * s, 'ff7-res-gauge-fill', 'background:linear-gradient(#b8ccff,#6f8ff0 45%,#4b6be0)');
 }
 
-/** A member's window on a desk: portrait, name and LV on the left; EXP, the gauge and the AP line on the right. */
+/** A member's window on a desk: portrait, name and LV on the left; EXP and the gauge on the right. */
 function memberDesk(mem: Ff7ResultMember, r: Rect, f: Ff7ResFrame, u: number): string {
   const s = f.s;
   const p = r.h - 56 * s;
@@ -112,12 +113,11 @@ function memberDesk(mem: Ff7ResultMember, r: Rect, f: Ff7ResFrame, u: number): s
     text(o, tx + 40 * s, r.y + 124 * s, 34 * s, String(mem.level), { shadow: 2 * s, color: TEXT.command }) +
     hdr(o, colX, r.y + 62 * s, f, 'EXP') +
     text(o, r.x + r.w - 40 * s, r.y + 66 * s, 34 * s, `+${award}`, { shadow: 2 * s, color: TEXT.command, align: 'r', cls: 'ff7-res-award' }) +
-    expGauge(o, colX, r.y + 88 * s, r.x + r.w - 40 * s - colX, f, u) +
-    text(o, colX, r.y + 142 * s, 26 * s, `${mem.ap} AP · ${mem.materia.join(', ')}`, { shadow: 2 * s, color: TEXT.body, cls: 'ff7-res-ap' })) +
+    expGauge(o, colX, r.y + 88 * s, r.x + r.w - 40 * s - colX, f, mem.exp > 0 ? u : 0)) +
     portrait(mem, px, r.y + 28 * s, p, f);
 }
 
-/** A member's window on an upright phone: a small portrait, name, LV and EXP across the top; the gauge and the AP line full width below. */
+/** A member's window on an upright phone: a small portrait, name, LV and EXP across the top; the gauge full width below. */
 function memberPhone(mem: Ff7ResultMember, r: Rect, f: Ff7ResFrame, u: number): string {
   const s = f.s;
   const p = 104 * s;
@@ -130,8 +130,7 @@ function memberPhone(mem: Ff7ResultMember, r: Rect, f: Ff7ResFrame, u: number): 
     text(o, tx + 38 * s, r.y + 112 * s, 30 * s, String(mem.level), { shadow: 2 * s, color: TEXT.command }) +
     hdr(o, r.x + r.w - 150 * s, r.y + 54 * s, f, 'EXP') +
     text(o, r.x + r.w - 28 * s, r.y + 112 * s, 32 * s, `+${award}`, { shadow: 2 * s, color: TEXT.command, align: 'r', cls: 'ff7-res-award' }) +
-    expGauge(o, px, r.y + 150 * s, r.w - 50 * s, f, u) +
-    text(o, px, r.y + 212 * s, 26 * s, `${mem.ap} AP · ${mem.materia.join(', ')}`, { shadow: 2 * s, color: TEXT.body, cls: 'ff7-res-ap' })) +
+    expGauge(o, px, r.y + 150 * s, r.w - 50 * s, f, mem.exp > 0 ? u : 0)) +
     portrait(mem, px, r.y + 22 * s, p, f);
 }
 

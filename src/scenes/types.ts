@@ -193,6 +193,28 @@ export interface SceneStaging {
    * paintings are padded to register on its rear foot. Unset everywhere else.
    */
   readonly figureExtent?: number;
+  /**
+   * `true`: a pose change is a hard cut, never a crossfade (the actor's `crossfadeMs` 0). FF7's Film keys are
+   * different drawings of one body; a crossfade drew a see-through double of the outgoing one (the phase-3 judge,
+   * repair items 1 and 2). Unset everywhere else: FFX and FFX-2 keep their crossfades.
+   */
+  readonly poseCut?: true;
+  /**
+   * Per art id, a horizontal shift per pose in the painting's own pixels (the actor's `poseShiftPx`), so every
+   * pose stands on the idle's stance. FF7 only (`src/data/ff7/filmPoseAnchors.ts`). Unset everywhere else.
+   */
+  readonly poseShiftPx?: Readonly<Record<string, Readonly<Record<string, number>>>>;
+  /**
+   * How every figure is lit and trimmed, in place of the house rim (a pale blue rim from the upper left): the
+   * rim's colour, direction (painting space), strength and width; a ground bounce; a silhouette erosion in
+   * texels. FF7 only (the core's green light from screen-right, the Film art's matte fringe trimmed; repair
+   * item 9). Unset everywhere else.
+   */
+  readonly figureLight?: Readonly<{
+    rim: Readonly<{ color: number; dir: readonly [number, number]; strength: number; width: number }>;
+    bounce: Readonly<{ color: number; strength: number }>;
+    erode: number;
+  }>;
 }
 
 /** The staging switches a build set, and only those. */
@@ -208,6 +230,9 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.fixedCamera) out.fixedCamera = true;
   if (build.turnRings === false) out.turnRings = false;
   if (build.figureExtent) out.figureExtent = build.figureExtent;
+  if (build.poseCut) out.poseCut = true;
+  if (build.poseShiftPx) out.poseShiftPx = build.poseShiftPx;
+  if (build.figureLight) out.figureLight = build.figureLight;
   return out;
 }
 

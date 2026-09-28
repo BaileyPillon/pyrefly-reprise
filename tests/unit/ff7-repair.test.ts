@@ -172,10 +172,10 @@ describe("FF7's action motion (review items 4 and 5)", () => {
     const motion = Ff7ActionMotion.forBuild(sector1ReactorBuild);
     const stage = new MotionStage();
     await motion.open(start('cloud', 'braver', ['guard-scorpion'], 'limit'), ctx(stage));
-    expect(stage.mover('cloud').moves).toHaveLength(1);
+    expect(stage.mover('cloud').moves).toHaveLength(2); // the run, then the leap on toward the boss (phase-3 repair item 13)
     await motion.close('cloud', ctx(stage));
     await motion.open(start('cloud', 'cure', ['barret']), ctx(stage));
-    expect(stage.mover('cloud').moves).toHaveLength(2);
+    expect(stage.mover('cloud').moves).toHaveLength(3); // the run home; the heal adds none
   });
 
   it('gives the boss a stand-in lunge or recoil for Rifle, Scorpion Tail and Tail Laser, nothing for Search Scope', async () => {
@@ -277,6 +277,7 @@ describe('HUD repairs', () => {
     hud.mount(document.body);
     hud.setProjector(() => ({ x: 1300, y: 700 })); // a chest that projects onto the band
     hud.onEvent({ seq: 1, type: 'damage', targetId: 'cloud', amount: 76, crit: false, hitIndex: 0, hitCount: 1 } as never);
+    hud.numeralLanded('cloud');
     hud.update(0.5);
     const el = document.querySelector<HTMLElement>('.ff7-dmg')!;
     const g = ff7Geometry(1600, 900);

@@ -125,6 +125,19 @@ function momentShooter(page: Page): { moment: (n: string) => Promise<void>; onLo
       if (l.message === HINT_2) await once('hint-2');
       if (l.message?.startsWith(HINT_3)) await once('hint-3');
       if (l.cloudPose === 'attack' && !seen.has('melee-strike')) await once('melee-strike'); // B1: Cloud's strike key at the strike point
+      if (!seen.has('hits-clamped')) {
+        // Repair item 11: an aimed box never reaches past the frame, and the HUD never scrolls sideways.
+        const hits = await page.evaluate(() => {
+          const boxes = [...document.querySelectorAll('.ff7hud .ff7-hit--target')].map((e) => e.getBoundingClientRect());
+          const hud = document.querySelector('.ff7hud');
+          return { n: boxes.length, over: boxes.filter((b) => b.right > window.innerWidth + 1 || b.left < -1).length, scroll: hud?.scrollLeft ?? 0 };
+        });
+        if (hits.n > 0) {
+          seen.add('hits-clamped');
+          expect(hits.over, 'aimed boxes inside the frame').toBe(0);
+          expect(hits.scroll, 'the HUD never scrolls').toBe(0);
+        }
+      }
       for (const id of l.fx) {
         if (FX_FRAMES[id] === undefined || seen.has(`fx-${id}`)) continue;
         await atFxTime(page, id, FX_FRAMES[id]!);
@@ -164,7 +177,11 @@ async function winThenResults(page: Page, advance: () => Promise<void>): Promise
   const cloudPose = (p: string): Promise<unknown> =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     page.waitForFunction((want) => (window.__pyrefly!.battle() as any)?.stage?.actor?.('cloud')?.pose === want, p, { timeout: 30_000, polling: 50 });
+  const cloudH = (): Promise<number> =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    page.evaluate(() => ((window.__pyrefly!.battle() as any)?.stage?.projectRect?.('cloud')?.h as number | undefined) ?? 0);
   await cloudPose('victory'); // D1: the fist pump
+  const atWin = await cloudH();
   await page.waitForTimeout(250);
   await shoot(page, 'win-poses');
   await cloudPose('spin');
@@ -173,12 +190,15 @@ async function winThenResults(page: Page, advance: () => Promise<void>): Promise
   await cloudPose('back');
   await page.waitForTimeout(900);
   await shoot(page, 'win-hold'); // the sword on his back, Barret's loop, silence
+  // Repair item 7: the camera has eased in on the party (the D1 framing), so Cloud stands much larger.
+  expect(await cloudH(), 'D1 frames the party close').toBeGreaterThan(atWin * 1.3);
   await waitForScreen(page, 'results', 90_000);
   await page.waitForTimeout(1300);
   await shoot(page, 'results-1');
   expect(await page.locator('.ff7res[data-step="1"]').count(), 'C1 step 1: EXP and AP').toBe(1);
   const one = (await page.locator('.ff7res').textContent()) ?? '';
-  for (const w of ['EXP', 'AP', 'Cloud', 'Barret', '100', '10 AP']) expect(one, w).toContain(w);
+  for (const w of ['EXP', 'AP', 'Cloud', 'Barret', '100', '10']) expect(one, w).toContain(w);
+  expect(one, "FF7's member rows carry no AP line (repair item 12)").not.toContain('AP ·');
   await advance();
   await page.waitForTimeout(500);
   await shoot(page, 'results-2');

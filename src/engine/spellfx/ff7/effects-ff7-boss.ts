@@ -58,16 +58,20 @@ export function ff7TailLaser(o: FxDrawList, t: number, T: FxTarget): void {
   // The sweep: off the floor, through the far member, onto the near one (the key frame), held.
   const end: Pt = t < 0.35 ? s0 : t < 0.5 ? lerpPt(s0, chest(far), outCubic((t - 0.35) / 0.15)) : lerpPt(chest(far), chest(near), outCubic(clamp((t - 0.5) / 0.12)));
   withDensity(o, (spectacle) => {
-    dim(o, T, (spectacle ? 0.36 : 0.22) * env(t, 0.05, 1.4, 0.15, 0.4));
+    // Repair item 5: a darker stage, a wider brighter beam, a white impact wash (matched to the Spectacle frame).
+    dim(o, T, (spectacle ? 0.5 : 0.3) * env(t, 0.05, 1.4, 0.15, 0.4));
     o.add = true;
-    o.sprite('glow', '#6EC8FF', lens[0], lens[1], (80 + 160 * clamp(t / 0.35)) * k, 0.8 * env(t, 0, 1.2, 0.3, 0.3));
+    o.sprite('glow', '#6EC8FF', lens[0], lens[1], (120 + 240 * clamp(t / 0.35)) * k, 0.9 * env(t, 0, 1.2, 0.3, 0.3));
     chargeRings(o, lens[0], lens[1], 110 * k, t, 0, 0.36, '#8FDCFF', k);
     const fire = env(t, 0.35, 1.12, 0.02, 0.25);
     if (fire) {
       // The fan of light the beam throws, then the beam itself.
-      o.bar(lens[0], lens[1], end[0], end[1], 90 * k, '#5AA0FF', 0.08 * fire);
-      beam(o, lens, end, 20 * k, '#78E6FF', fire);
-      star(o, lens[0], lens[1], 90 * k, '#9CEBFF', fire, 4, 0.2);
+      o.bar(lens[0], lens[1], end[0], end[1], 190 * k, '#3C8CFF', 0.14 * fire);
+      o.bar(lens[0], lens[1], end[0], end[1], 96 * k, '#8FE4FF', 0.3 * fire);
+      beam(o, lens, end, 42 * k, '#9AF0FF', fire);
+      o.bar(lens[0], lens[1], end[0], end[1], 12 * k, '#FFFFFF', fire);
+      star(o, lens[0], lens[1], 160 * k, '#C8F4FF', fire, 6, 0.2);
+      o.sprite('glow', '#E8FBFF', lens[0], lens[1], 240 * k, 0.8 * fire);
     }
     // The scorch dragged across the floor.
     const drag = clamp((t - 0.35) / 0.27);
@@ -80,9 +84,11 @@ export function ff7TailLaser(o: FxDrawList, t: number, T: FxTarget): void {
     for (const [m, tm, s] of [[far, 0.5, 0.6], [near, FF7_LASER_MARK, 1]] as const) {
       const c = chest(m);
       const hitA = env(t, tm - 0.02, tm + 0.4, 0.01, 0.3);
-      star(o, c[0], c[1], 70 * s * k, '#A8E6FF', hitA, 8, 0.4);
-      shards(o, c[0], c[1], 8, 40 * s * k, 130 * s * k, '#D2F5FF', hitA, 1000 + tm * 100, 0.5 + outCubic((t - tm) / 0.3));
-      pool(o, feet(m)[0], feet(m)[1], 200 * s * k, '#6EC8FF', 0.5 * hitA);
+      o.sprite('glow', '#E6FAFF', c[0], c[1], 460 * s * k, 0.9 * hitA);
+      o.sprite('glow', '#FFFFFF', c[0], c[1], 200 * s * k, hitA);
+      star(o, c[0], c[1], 150 * s * k, '#C8F2FF', hitA, 8, 0.4);
+      shards(o, c[0], c[1], 12, 50 * s * k, 190 * s * k, '#E6FAFF', hitA, 1000 + tm * 100, 0.5 + outCubic((t - tm) / 0.3));
+      pool(o, feet(m)[0], feet(m)[1], 320 * s * k, '#8CD8FF', 0.8 * hitA);
     }
     if (spectacle) {
       along(o, s0, s1, t, 70, 1011, 0.4, 1.6, 12 * k, '#FF9646', 7 * k);
@@ -94,7 +100,7 @@ export function ff7TailLaser(o: FxDrawList, t: number, T: FxTarget): void {
       streak(o, chest(near)[0], chest(near)[1], 900 * k, '#8CD2FF', env(t, FF7_LASER_MARK, 1.1, 0.02, 0.35));
       streak(o, lens[0], lens[1], 420 * k, '#8CD2FF', fire * 0.7);
       haze(o, s0[0] - 40 * k, Math.min(chest(far)[1], chest(near)[1]) - 80 * k, s1[0] + 60 * k, s1[1] + 20 * k, t, fire);
-      o.wash(0, '#DDF2FF', 0.16 * env(t, FF7_LASER_MARK, FF7_LASER_MARK + 0.2, 0.01, 0.18));
+      o.wash(0, '#E6F6FF', 0.3 * env(t, FF7_LASER_MARK, FF7_LASER_MARK + 0.22, 0.01, 0.2));
     }
   });
 }

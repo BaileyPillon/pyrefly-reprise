@@ -71,4 +71,14 @@ export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEven
   if (ms <= 0) return;
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex });
   await ctx.sleep(Math.min(ms, SPELL_WAIT_CAP_MS));
+  // FF7: then until the effect's own frame clock has drawn the strike (a slow frame lags it; repair item 6).
+  if (!vfx.pendingLand || !ours) return;
+  for (let i = 0, left = vfx.pendingLand(event.targetId, a.serial); left > 0 && i < LAND_POLLS; i++) {
+    await ctx.sleep(Math.min(left, LAND_POLL_MS));
+    left = vfx.pendingLand(event.targetId, a.serial);
+  }
 }
+
+/** FF7's extra wait for a drawn strike: polled every 40 ms, at most 30 times (1.2 s, a guard). */
+const LAND_POLL_MS = 40;
+const LAND_POLLS = 30;

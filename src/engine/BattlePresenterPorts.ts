@@ -63,7 +63,7 @@ export interface ActorHandle {
   setFacing(dir: 1 | -1): void;
   setBrightness(mult: number): void;
   /** Optional: fall onto its back and stay down (`PaintedActor.lieDown`; the `'body'` departure). */
-  lieDown?(ms?: number): Promise<void>;
+  lieDown?(ms?: number, tilt?: number): Promise<void>;
   /** Optional: petrified, 0..1 — the painting drained to stone grey (`PaintedActor.setStone`). */
   setStone?(amount: number): void;
   centerPoint(): Point3;
@@ -214,6 +214,12 @@ export interface VfxPort {
       crit?: boolean;
     },
   ): number;
+  /**
+   * Milliseconds until a landing `land` started for `at` in `action` is actually drawn, by the effect's own
+   * frame clock; 0 once it has (or when there is none). FF7 only: its numerals wait for the drawn strike, not
+   * for a wall-clock estimate that a slow frame outruns (repair item 6). Optional.
+   */
+  pendingLand?(at: CombatantId, action: number): number;
 }
 
 /** Rising damage/heal numerals. Supplied by `ui/common`, or the DOM fallback. */

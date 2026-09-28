@@ -40,6 +40,11 @@ export interface SpellFxLayerOptions {
    * flash frame (`app/screens/battleFf7Fx.ts`).
    */
   onLand?(fx: SpellFxId, target: string, ms: number, o: LandOpts): void;
+  /**
+   * Where the effects may draw this frame, CSS px relative to the canvas; null = the whole frame. Read every frame.
+   * FF7 only: its effects stay under the translucent message window, which stays on top as in FF7 (repair item 10).
+   */
+  clip?(): { x: number; y: number; w: number; h: number } | null;
 }
 
 /** What `VfxPort.land` passes down. */
@@ -109,8 +114,20 @@ export class SpellFxLayer {
     if (o.crit) run.bloom = CRIT_BLOOM;
     this.covered.set(target, action);
     const ms = run.msToMark(o.hitIndex ?? 0);
-    this.opts.onLand?.(fx, target, ms, o);
+    // FF7: the landing is announced when the effect's own clock reaches the mark (`update`), so the hit flash and
+    // the numeral land with the drawn strike even when frames run slow (repair item 6). Elsewhere, at once.
+    if (this.opts.game === 'ff7' && ms > 0) this.lands.push({ run, k: o.hitIndex ?? 0, fx, target, o });
+    else this.opts.onLand?.(fx, target, ms, o);
     return ms;
+  }
+
+  /** FF7's landings not yet drawn: fired from `update` when their effect's clock passes the mark. */
+  private lands: Array<{ run: RunningFx; k: number; fx: SpellFxId; target: string; o: LandOpts }> = [];
+
+  /** Milliseconds (effect time) until the landing on `target` in `action` is drawn; 0 when it has or none waits. */
+  pendingLand(target: string, action: number): number {
+    const w = this.lands.find((l) => l.target === target && (l.o.action ?? -1) === action);
+    return w ? Math.max(1, w.run.msToMark(w.k)) : 0;
   }
 
   /** Where a new copy's clock starts: a special that has played this battle skips part of its lead-in. */
@@ -181,6 +198,7 @@ export class SpellFxLayer {
 
   clear(): void {
     this.running = [];
+    this.lands = [];
     this.covered.clear();
   }
 
@@ -206,6 +224,11 @@ export class SpellFxLayer {
       if (target) r.target = target;
     }
     this.running = this.running.filter((r) => !r.done);
+    if (this.lands.length) {
+      const due = this.lands.filter((l) => l.run.done || !this.running.includes(l.run) || l.run.msToMark(l.k) <= 0);
+      this.lands = this.lands.filter((l) => !due.includes(l));
+      for (const l of due) this.opts.onLand?.(l.fx, l.target, 0, l.o);
+    }
   }
 
   /** This frame's quads, or null when nothing is playing. */
@@ -248,7 +271,13 @@ export class SpellFxLayer {
     this.batch ??= new FxBatch();
     const view = this.opts.view();
     this.batch.set(list, view.w, view.h);
+    const clip = list ? this.opts.clip?.() : null;
+    if (clip) {
+      renderer.setScissor(clip.x, view.h - clip.y - clip.h, clip.w, clip.h);
+      renderer.setScissorTest(true);
+    }
     this.batch.render(renderer);
+    if (clip) renderer.setScissorTest(false);
     if (list) {
       this.cpuMs = performance.now() - t0;
       this.cpuMean = this.cpuMean ? this.cpuMean * 0.95 + this.cpuMs * 0.05 : this.cpuMs;

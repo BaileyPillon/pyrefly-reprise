@@ -159,6 +159,11 @@ export class Ff7BattleHud implements HudPort {
   }
 
   syncVitals(state: BattleState): void {
+    // A blow's HP change waits with its numeral for the drawn strike (repair item 6), then lands with it.
+    if (this.heldNums.length) {
+      this.pendingVitals = state;
+      return;
+    }
     this.state = state;
     // The engine's state is already the end of the burst: its gauges would rise before the blow that fills them lands.
     this.rows = partyRows(state, this.gauges, new Map([...this.held, ...this.limits]));
@@ -196,6 +201,24 @@ export class Ff7BattleHud implements HudPort {
     return this.menu.onLevel(listener);
   }
 
+  /** Damage numerals held from their event until the blow lands (`numeralLanded`), oldest first. */
+  private heldNums: Array<{ id: CombatantId; text: string; heal: boolean; hit: number | undefined; age: number }> = [];
+
+  numeralLanded(targetId: CombatantId): void {
+    const i = this.heldNums.findIndex((h) => h.id === targetId);
+    if (i < 0) return;
+    const [h] = this.heldNums.splice(i, 1);
+    this.marks.add(h!.id, h!.text, h!.heal, h!.hit);
+    const vitals = this.heldNums.length ? null : this.pendingVitals;
+    if (vitals) {
+      this.pendingVitals = null;
+      this.syncVitals(vitals);
+    }
+  }
+
+  /** The rows' state held back with a numeral (`syncVitals`), applied when the last held numeral lands. */
+  private pendingVitals: BattleState | null = null;
+
   onEvent(event: BattleEvent): void {
     switch (event.type) {
       case 'message':
@@ -208,7 +231,8 @@ export class Ff7BattleHud implements HudPort {
         if (event.abilityName && event.command.kind !== 'attack' && !NAMELESS.has(event.abilityId ?? '')) this.line.say(event.abilityName, true);
         break;
       case 'damage':
-        if (event.amount !== 0) this.marks.add(event.targetId, String(Math.abs(event.amount)), event.amount < 0, event.hitIndex);
+        // Held until the presenter's numeral beat, which waits for the effect's drawn strike (repair item 6).
+        if (event.amount !== 0) this.heldNums.push({ id: event.targetId, text: String(Math.abs(event.amount)), heal: event.amount < 0, hit: event.hitIndex, age: 0 });
         break;
       case 'heal':
         this.marks.add(event.targetId, String(event.amount), true);
@@ -247,6 +271,9 @@ export class Ff7BattleHud implements HudPort {
 
   update(dt: number): void {
     this.line.update(dt);
+    // A held numeral nobody released (a presenter without the beat) still shows, 2.5 s late at most.
+    for (const h of this.heldNums) h.age += dt;
+    while (this.heldNums[0] && this.heldNums[0].age > 2.5) this.numeralLanded(this.heldNums[0].id);
     this.marks.update(dt);
     this.clockMs += dt * 1000;
     const blink = (Math.floor(this.clockMs / LIMIT_BLINK_MS) % 2) as BlinkPhase;

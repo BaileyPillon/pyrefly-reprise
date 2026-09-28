@@ -18,10 +18,11 @@ import { SPELL_HOLD_CAP_MS } from '../SpellFxSpecials.ts';
 import { ff7Bolt, ff7Cure, ff7Ice, FF7_BOLT_MARK, FF7_CURE_MARK, FF7_ICE_MARK } from './effects-ff7-magic.ts';
 import { ff7BigShot, ff7Braver, ff7Shot, ff7Slash, FF7_BIGSHOT_MARK, FF7_BRAVER_MARK, FF7_SHOT_MARK, FF7_SLASH_MARK } from './effects-ff7-party.ts';
 import { ff7Rifle, ff7Scope, ff7ScorpionTail, ff7TailLaser, FF7_LASER_MARK, FF7_RIFLE_MARK, FF7_SCOPE_MARK, FF7_TAIL_MARK } from './effects-ff7-boss.ts';
+import { ff7BossDown, FF7_DOWN_MARK } from './effects-ff7-down.ts';
 
-export type Ff7FxId = 'ff7-bolt' | 'ff7-ice' | 'ff7-cure' | 'ff7-slash' | 'ff7-shot' | 'ff7-braver' | 'ff7-bigshot' | 'ff7-scope' | 'ff7-rifle' | 'ff7-tail' | 'ff7-laser';
+export type Ff7FxId = 'ff7-bolt' | 'ff7-ice' | 'ff7-cure' | 'ff7-slash' | 'ff7-shot' | 'ff7-braver' | 'ff7-bigshot' | 'ff7-scope' | 'ff7-rifle' | 'ff7-tail' | 'ff7-laser' | 'ff7-down';
 
-export const FF7_FX_IDS: readonly Ff7FxId[] = ['ff7-bolt', 'ff7-ice', 'ff7-cure', 'ff7-slash', 'ff7-shot', 'ff7-braver', 'ff7-bigshot', 'ff7-scope', 'ff7-rifle', 'ff7-tail', 'ff7-laser'];
+export const FF7_FX_IDS: readonly Ff7FxId[] = ['ff7-bolt', 'ff7-ice', 'ff7-cure', 'ff7-slash', 'ff7-shot', 'ff7-braver', 'ff7-bigshot', 'ff7-scope', 'ff7-rifle', 'ff7-tail', 'ff7-laser', 'ff7-down'];
 
 /** Effects whose flash frame and camera shake mark a big hit (the options sheet: "one flash frame on the two big hits"). */
 export const FF7_BIG_HITS: ReadonlySet<Ff7FxId> = new Set(['ff7-laser', 'ff7-braver']);
@@ -41,7 +42,12 @@ export const FF7_FX_SPECS: Readonly<Record<Ff7FxId, FxSpec>> = Object.freeze({
   'ff7-rifle': { draw: ff7Rifle, marks: one(FF7_RIFLE_MARK), end: 0.9, startAt: 0, perHit: true, group: true, holdCapMs: cap },
   'ff7-tail': { draw: ff7ScorpionTail, marks: one(FF7_TAIL_MARK), end: 1.1, startAt: 0, perHit: false, group: true, holdCapMs: cap },
   'ff7-laser': { draw: ff7TailLaser, marks: one(FF7_LASER_MARK), end: 1.9, startAt: 0, perHit: false, group: true, holdCapMs: cap },
+  // The boss's death (repair item 8): started by the FF7 motion's `sendOff`, never by an engine ability.
+  'ff7-down': { draw: ff7BossDown, marks: one(FF7_DOWN_MARK), end: 1.8, startAt: 0, perHit: false, holdCapMs: cap },
 });
+
+/** The id `sendOff` lands the death with (not an engine ability; `BattleScreenFf7Motion.ts`). */
+export const FF7_BOSS_DOWN = 'ff7-boss-down';
 
 /** The effect by the engine's ability id. */
 const BY_ABILITY: Readonly<Record<string, Ff7FxId>> = {
@@ -54,6 +60,7 @@ const BY_ABILITY: Readonly<Record<string, Ff7FxId>> = {
   rifle: 'ff7-rifle',
   'scorpion-tail': 'ff7-tail',
   'tail-laser': 'ff7-laser',
+  [FF7_BOSS_DOWN]: 'ff7-down',
 };
 
 /**

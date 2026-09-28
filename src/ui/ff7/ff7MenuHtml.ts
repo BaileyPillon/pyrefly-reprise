@@ -173,7 +173,18 @@ export function targetCursorsHtml(g: Ff7Geometry, points: ReadonlyArray<{ id: st
     `<div class="ff7-cur ff7-cur--target" data-target="${p.id}" style="left:${p.x - c.w}px;top:${p.y - c.h / 2}px">${gloveSvg(c.w, c.h)}</div>`).join('');
 }
 
-/** Tap areas over each valid target while aiming (a tap moves the finger, a second tap confirms). */
-export function targetHitsHtml(rects: ReadonlyArray<{ id: string; x: number; y: number; w: number; h: number }>): string {
-  return rects.map((r) => box({ x: 0, y: 0 }, r.x, r.y, r.w, r.h, 'ff7-hit ff7-hit--target', '').replace('<div ', `<div data-target="${r.id}" `)).join('');
+/**
+ * Tap areas over each valid target while aiming (a tap moves the finger, a second tap confirms), clamped to the
+ * frame `view` (W x H) so a long machine's box never reaches past the screen's edge (repair item 11: on a phone
+ * the boss's box ran to x 493 of 390, and a scroll-into-view slid the HUD sideways).
+ */
+export function targetHitsHtml(rects: ReadonlyArray<{ id: string; x: number; y: number; w: number; h: number }>, view?: { W: number; H: number }): string {
+  return rects.flatMap((r) => {
+    const x0 = view ? Math.max(0, r.x) : r.x;
+    const y0 = view ? Math.max(0, r.y) : r.y;
+    const x1 = view ? Math.min(view.W, r.x + r.w) : r.x + r.w;
+    const y1 = view ? Math.min(view.H, r.y + r.h) : r.y + r.h;
+    if (x1 - x0 < 1 || y1 - y0 < 1) return [];
+    return [box({ x: 0, y: 0 }, x0, y0, x1 - x0, y1 - y0, 'ff7-hit ff7-hit--target', '').replace('<div ', `<div data-target="${r.id}" `)];
+  }).join('');
 }

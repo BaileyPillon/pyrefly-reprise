@@ -49,6 +49,7 @@ const FRAME: Record<Ff7FxId, FxTarget> = {
   'ff7-rifle': T(BOSS, [CLOUD]),
   'ff7-tail': T(BOSS, [BARRET]),
   'ff7-laser': T(BOSS, [BARRET, CLOUD]),
+  'ff7-down': T(BOSS),
 };
 
 function sweep(id: Ff7FxId, dens: number, flash = DEFAULT_FLASH_PARAMS) {
@@ -70,8 +71,8 @@ function sweep(id: Ff7FxId, dens: number, flash = DEFAULT_FLASH_PARAMS) {
 }
 
 describe('FF7 effects: Spectacle on A3 plus, through the house particle system', () => {
-  it('draws the nine moves of the options round (and the two attacks), each with a mark inside its length', () => {
-    expect([...FF7_FX_IDS].sort()).toEqual(['ff7-bigshot', 'ff7-bolt', 'ff7-braver', 'ff7-cure', 'ff7-ice', 'ff7-laser', 'ff7-rifle', 'ff7-scope', 'ff7-shot', 'ff7-slash', 'ff7-tail']);
+  it('draws the nine moves of the options round (and the two attacks, and the boss death), each with a mark inside its length', () => {
+    expect([...FF7_FX_IDS].sort()).toEqual(['ff7-bigshot', 'ff7-bolt', 'ff7-braver', 'ff7-cure', 'ff7-down', 'ff7-ice', 'ff7-laser', 'ff7-rifle', 'ff7-scope', 'ff7-shot', 'ff7-slash', 'ff7-tail']);
     for (const id of FF7_FX_IDS) {
       const spec = FX_SPECS[id];
       const [mark] = spec.marks('ff7');
@@ -132,7 +133,16 @@ describe('which effect an FF7 action draws', () => {
     expect(ms1).toBeGreaterThan(500);
     expect(ms2).toBe(ms1);
     expect(layer.snapshot().running).toHaveLength(1);
+    // Repair item 6: the landing is reported when the effect's own clock reaches the mark, not at once.
+    expect(lands).toEqual([]);
+    expect(layer.pendingLand('cloud', 7)).toBe(ms1);
+    layer.update(ms1 / 2000);
+    expect(lands).toEqual([]);
+    expect(layer.pendingLand('cloud', 7)).toBeGreaterThan(0);
+    layer.update(ms1 / 2000 + 0.02);
     expect(lands.map((l) => l.slice(0, 2))).toEqual([['ff7-laser', 'cloud'], ['ff7-laser', 'barret']]);
+    expect(lands.every((l) => l[2] === 0)).toBe(true);
+    expect(layer.pendingLand('cloud', 7)).toBe(0);
   });
 });
 

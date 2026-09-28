@@ -42,8 +42,8 @@ def fit(im, w, hmax=None):
     return im.resize((w, h), Image.LANCZOS)
 
 
-def sheet(name, title, sub, rows):
-    """rows: list of (target image or None, [build images], caption)."""
+def sheet(name, title, sub, rows, labels=('TARGET (the picked concept)', 'BUILD (branch ff7-phase3)')):
+    """rows: list of (target image or None, [build images], caption); `labels` names the two columns."""
     pad = 20
     col = (W - 3 * pad) // 2
     blocks = []
@@ -60,8 +60,8 @@ def sheet(name, title, sub, rows):
     d.text((pad, 64), sub, fill=DIM, font=font(18))
     y = head
     for left, rights, cap, h in blocks:
-        d.text((pad, y), 'TARGET (the picked concept)', fill=GOLD, font=font(16, True))
-        d.text((2 * pad + col, y), 'BUILD (branch ff7-phase3)', fill=GOLD, font=font(16, True))
+        d.text((pad, y), labels[0], fill=GOLD, font=font(16, True))
+        d.text((2 * pad + col, y), labels[1], fill=GOLD, font=font(16, True))
         if left is not None:
             out.paste(left, (pad, y + 24))
         else:
@@ -122,9 +122,9 @@ def main():
     sheet('sheet-7-victory-d1.jpg', 'D1: the win poses, then a hold in silence (D-244)',
           'FF7 only. Cloud pumps his fist twice, spins his sword, puts it on his back; Barret squats, stands and punches the air, looping. Music stays null.',
           [(img(os.path.join(opt, 'sheet-8-D-victory.jpg'), (0.0, 0.08, 1.0, 0.57)), [s('game-1600x900-win-poses.jpg'), s('game-1600x900-win-hold.jpg')], 'The fist pump (Barret squatting), then the sword on his back in the hold.'),
-           (None, [img(os.path.join(SHOTS, f'game-1600x900-{n}.jpg'), (0.06, 0.2, 0.42, 0.72)) for n in ('win-poses', 'win-spin', 'win-hold')], 'Close: the fist pump, the one-hand spin, the sword on his back; Barret squats, stands and punches through the hold.')])
+           (None, [s('game-1600x900-win-spin.jpg'), s('game-390x844-win-hold.jpg')], 'The one-hand spin as the camera eases in on the party (repair item 7, our estimate), and the phone’s hold, framed close.')])
     sheet('sheet-8-results-c1.jpg', 'C1: two results windows (D-244)',
-          'FF7 only. Step 1: EXP and AP, a window per member (portrait, LV, the award counting in, the AP to Materia). Step 2: Gil, the Items with the Assault Gun, the message.',
+          'FF7 only. Step 1: EXP and AP, a window per member (portrait, LV, the award counting in; no AP line, as FF7; 0 EXP to a member KO’d at the end). Step 2: Gil, the Items with the Assault Gun, the message.',
           [(img(os.path.join(opt, 'sheet-6-C-results-two-windows.jpg'), (0.0, 0.08, 1.0, 0.45)), [s('game-1600x900-results-1.jpg')], 'Step 1 (100 EXP, 10 AP from the engine).'),
            (img(os.path.join(opt, 'sheet-6-C-results-two-windows.jpg'), (0.0, 0.47, 1.0, 0.84)), [s('game-1600x900-results-2.jpg')], 'Step 2 (100 gil, the Assault Gun).'),
            (None, [s('game-390x844-results-1.jpg'), s('game-390x844-results-2.jpg')], 'The same on a phone, advanced by taps.')])
@@ -139,6 +139,29 @@ def main():
           'FF7 only. 390x844: Cloud about 140 px tall (the letterboxed field drew him about 50); every window and numeral inside the frame.',
           [(img(os.path.join(hifi, '03-frame-film-390.jpg')), [s('game-390x844-first-turn.jpg'), s('game-390x844-fx-ff7-laser.jpg')], 'Target: the Film phone frame. Build: the first turn and Tail Laser.'),
            (img(os.path.join(eye, '4-tail-laser-phone-390.jpg')), [s('game-390x844-fx-ff7-bolt.jpg'), s('game-390x844-win-hold.jpg')], 'Target: the eye-candy phone mock. Build: Bolt and the victory hold.')])
+    repair_sheets()
 
 
-main()
+def repair_sheets():
+    """The judge’s repair pass: each fault as the judge captured it, beside the repaired build."""
+    R = os.path.join(SHOTS, 'repair')
+    r = lambda n, crop=None: img(os.path.join(R, n), crop)
+    lab = ('BEFORE (the judge’s capture)', 'AFTER (the repair build)')
+    sheet('sheet-12-repair-motion.jpg', 'Repair pass 1: the pose swaps, one action at a time, the KO, D1 (items 1, 2, 3, 4, 7)',
+          'FF7 only. Hard cuts between painted keys on the idle’s stance; the boss’s turn finishes before the player’s command plays; a KO’d fighter drops at once.',
+          [(r('before-1-ghost-barret.jpg'), [s('game-1600x900-fx-ff7-shot.jpg')], '1: Barret’s aim and fire now stand on his idle stance (no see-through double, no step onto Cloud); the sparks start at the painted barrel.'),
+           (r('before-2-ghost-boss.png'), [r('after-2-boss-recoil.jpg')], '2: the boss’s recoil is an opaque cut: no floor showing through its body.'),
+           (r('before-3-two-at-once.jpg'), [r('after-3-boss-turn-first.jpg'), r('after-3-then-bolt.jpg')], '3: Bolt confirmed during Search Scope waits: the boss’s turn plays out, then Bolt with its own name.'),
+           (r('before-4-ko-standing.jpg'), [r('after-4-ko-down.jpg'), r('after-4-g1-lying.jpg')], '4: Barret drops the moment he is KO’d; at G1 both lie on the floor, tipped back part way (our estimate), not squashed flat.'),
+           (r('before-7-d1-wide.jpg', (0, 0, 1, 0.5)), [s('game-1600x900-win-hold.jpg')], '7: D1 eases the camera in on the party (a longer lens; our estimate) and holds.')], lab)
+    sheet('sheet-13-repair-look.jpg', 'Repair pass 2: the effects, the numbers, the death, the light, the windows (items 5, 6, 8, 9, 10, 11, 12)',
+          'FF7 only. Wider, brighter beams with an impact wash; numerals with the drawn strike; a one-second boss death; the core’s green light; effects under the message window.',
+          [(r('before-5-laser-held.jpg'), [s('held-1600x900-full-laser.jpg'), s('game-1600x900-fx-ff7-laser.jpg')], '5: Tail Laser held at the landing, and live in the e2e fight (the cast light and wash on the fighters).'),
+           (r('before-6-8-number-and-death.jpg', (0, 0, 1, 0.5)), [r('after-6-8-kill-strip.jpg')], '6, 8: the 90 appears with the bolt (frame 7), then the flash, explosions and debris walk the machine and it burns away over about a second.'),
+           (r('before-9-halo.png'), [r('after-9-party.jpg')], '9: no pale halo (the house rim replaced by a green one from the core, the matte fringe eroded), mako motes drifting.'),
+           (r('before-10-bolt-over-window.jpg', (0.45, 0, 1, 0.5)), [s('held-1600x900-full-bolt.jpg')], '10: the effects draw only below the message window while it is up.'),
+           (r('before-11-phone-slid.jpg'), [s('game-390x844-target.jpg'), s('game-1600x900-results-1.jpg')], '11: the aimed boxes are clamped to the frame (the HUD cannot scroll); 12: no AP line on the member rows.')], lab)
+
+
+if __name__ == '__main__':
+    main()

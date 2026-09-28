@@ -35,6 +35,12 @@ export interface ActionMotionPort {
   victory?(ctx: MotionCtx): Promise<void>;
   /** The game's own wipe-out moment after the party's KO poses (FF7's G1 pan up). */
   defeat?(ctx: MotionCtx): Promise<void>;
+  /** An enemy's KO in place of the house dissolve (FF7's boss death, repair item 8). Resolves when it has gone. */
+  sendOff?(id: CombatantId, ctx: MotionCtx): Promise<void>;
+  /** A party member's KO, after the house `ko` pose: FF7 lays the fighter down at once (repair item 4). */
+  ko?(id: CombatantId, ctx: MotionCtx): Promise<void> | void;
+  /** True: a boss's form change swaps its painting under the flash with no see-through fade (FF7's raised tail). */
+  readonly opaqueForms?: boolean;
 }
 
 /** How long a game's victory or defeat moment may take before playback moves on without it, ms (a guard). */

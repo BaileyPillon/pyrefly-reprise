@@ -23,6 +23,8 @@ export interface StageSpellFxOptions {
   rate?: (() => number) | undefined;
   /** A blow's landing inside a drawn effect (FF7's hit flash, shake and flash frame). */
   onLand?: SpellFxLayerOptions['onLand'] | undefined;
+  /** Where the effects may draw (FF7: under its message window). */
+  clip?: SpellFxLayerOptions['clip'] | undefined;
 }
 
 /** The layer, hooked to the renderer. Call the returned `unhook` on dispose. */
@@ -40,6 +42,7 @@ export function stageSpellFx(o: StageSpellFxOptions): { layer: SpellFxLayer; unh
     ...(o.flash ? { flash: o.flash } : {}),
     ...(o.rate ? { rate: o.rate } : {}),
     ...(o.onLand ? { onLand: o.onLand } : {}),
+    ...(o.clip ? { clip: o.clip } : {}),
   });
   const unhook = o.overlay?.((renderer) => layer.render(renderer)) ?? (() => undefined);
   if (o.overlay && layer.quality !== 'low') layer.prepare();

@@ -22,14 +22,19 @@ import type { FxDrawList } from '../FxDrawList.ts';
 import type { FxTarget } from '../effects-shared.ts';
 import { clamp, env, lerp, outCubic, parts, pulse, rng } from '../fxMath.ts';
 import { at, beam, dim, haze, lerpPt, pool, shards, sparks, star, streak, withDensity, type Pt } from './ff7FxKit.ts';
+import { FF7_FILM_MUZZLE } from '../../../data/ff7/filmPoseAnchors.ts';
 
 export const FF7_SLASH_MARK = 0.3;
 export const FF7_SHOT_MARK = 0.3;
 export const FF7_BRAVER_MARK = 0.42;
 export const FF7_BIGSHOT_MARK = 0.82;
 
-/** Barret's gun muzzle in his fire and aim paintings, fractions of his painted box (measured, `ff7-film-barret/attack`). */
-const MUZZLE = [0.99, 0.27] as const;
+/**
+ * Barret's gun muzzle, fractions of his painted box: the fire painting's measured barrel tip (the aim's is the
+ * same to 0.001). The box is the active pose's, and the stage registers that pose on his stance, so the flash
+ * starts at the painted barrel, never at a ghost of the idle (repair item 1).
+ */
+const MUZZLE = FF7_FILM_MUZZLE.attack;
 
 /** The target's chest: the group effect's first member, or the landing point. */
 function chestOf(T: FxTarget): Pt {
@@ -107,7 +112,7 @@ export function ff7Braver(o: FxDrawList, t: number, T: FxTarget): void {
   const a0: Pt = [hit[0] - 120 * k, T.y - 180 * k];
   const a1: Pt = [hit[0] + 20 * k, T.fy + 10 * k];
   withDensity(o, (spectacle) => {
-    dim(o, T, (spectacle ? 0.42 : 0.24) * env(t, 0.05, 1.3, 0.1, 0.4));
+    dim(o, T, (spectacle ? 0.5 : 0.3) * env(t, 0.05, 1.3, 0.1, 0.4));
     o.add = true;
     const prog = clamp((t - 0.22) / 0.2);
     const fade = env(t, 0.22, 0.95, 0.01, 0.4);
@@ -122,11 +127,14 @@ export function ff7Braver(o: FxDrawList, t: number, T: FxTarget): void {
       for (const [w, col, al] of [[3.2, '#8CB4FF', 0.45], [1.6, '#D7E8FF', 0.85], [0.7, '#FFFFFF', 1]] as const) o.arc(cx, cy, R, s0, sEnd, 26 * k * w, col, al * fade, 1);
     }
     const blast = env(t, FF7_BRAVER_MARK - 0.02, FF7_BRAVER_MARK + 0.45, 0.01, 0.35);
-    star(o, hit[0], hit[1], 150 * k, '#E6F0FF', blast, 6, 0.1);
+    star(o, hit[0], hit[1], 190 * k, '#E6F0FF', blast, 6, 0.1);
+    // Repair item 5: the white burst lights the whole front of the machine (the Spectacle frame).
+    o.sprite('glow', '#F4F8FF', hit[0] + 60 * k, hit[1], 760 * k, 0.72 * blast);
+    o.sprite('glow', '#FFFFFF', hit[0], hit[1], 260 * k, blast);
     shards(o, hit[0], hit[1], spectacle ? 18 : 10, 60 * k, 240 * k, '#FFFFFF', blast, 940, 0.4 + outCubic((t - FF7_BRAVER_MARK) / 0.3));
     for (let i = 0; i < 3; i++) {
       const u = outCubic((t - FF7_BRAVER_MARK - i * 0.06) / 0.45);
-      o.ring(hit[0], T.fy, (120 + 300 * u + i * 40) * k, (7 - i * 2) * k, '#D7E8FF', (0.85 - i * 0.2) * env(t, FF7_BRAVER_MARK + i * 0.06, 1.3, 0.01, 0.45), 0.16);
+      o.ring(hit[0], T.fy, (140 + 320 * u + i * 40) * k, (13 - i * 3) * k, '#E6F0FF', (1 - i * 0.2) * env(t, FF7_BRAVER_MARK + i * 0.06, 1.3, 0.01, 0.45), 0.16);
     }
     pool(o, hit[0], T.fy, 420 * k, '#D7E8FF', 0.7 * blast);
     if (spectacle) {
@@ -148,7 +156,7 @@ export function ff7Braver(o: FxDrawList, t: number, T: FxTarget): void {
       });
       streak(o, hit[0], hit[1], 1100 * k, '#D7E8FF', blast);
       haze(o, hit[0] - 320 * k, hit[1] - 120 * k, hit[0] + 160 * k, T.fy, t, env(t, FF7_BRAVER_MARK, 1.3, 0.05, 0.4));
-      o.wash(0, '#EAF2FF', 0.2 * pulse(t, FF7_BRAVER_MARK, 0.14));
+      o.wash(0, '#EAF2FF', 0.36 * pulse(t, FF7_BRAVER_MARK, 0.16));
     }
   });
 }

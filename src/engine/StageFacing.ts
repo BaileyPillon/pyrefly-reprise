@@ -74,3 +74,21 @@ export class FixedCamera extends HoldableCamera {
 export function stageCamera(inner: CameraPort, fixed: boolean | undefined): HoldableCamera {
   return fixed ? new FixedCamera(inner) : new HoldableCamera(inner);
 }
+
+/** A scene's figure light (`SceneStaging.figureLight`), as it reaches the stage. */
+export interface FigureLight {
+  readonly rim: Readonly<{ color: number; dir: readonly [number, number]; strength: number; width: number }>;
+  readonly bounce: Readonly<{ color: number; strength: number }>;
+  readonly erode: number;
+}
+
+/**
+ * The lighting half of a `PaintedActor` option bag: the scene's rim, bounce and erosion (FF7's core light and
+ * trimmed fringe, repair item 9), or nothing, so the stage's own rim stands (every FFX and FFX-2 scene).
+ */
+export function figureLightOf(light: FigureLight | undefined):
+  | { rim: { color: number; dir: [number, number]; strength: number; width: number }; bounce: { color: number; strength: number }; erode: number }
+  | Record<string, never> {
+  if (!light) return {};
+  return { rim: { ...light.rim, dir: [light.rim.dir[0], light.rim.dir[1]] }, bounce: { ...light.bounce }, erode: light.erode };
+}

@@ -28,7 +28,7 @@ export function ff7Bolt(o: FxDrawList, t: number, T: FxTarget): void {
   const k = T.k;
   const top: Pt = [T.cx, T.y + T.h * 0.2];
   withDensity(o, (spectacle) => {
-    dim(o, T, (spectacle ? 0.3 : 0.18) * env(t, 0.1, 1.2, 0.1, 0.4));
+    dim(o, T, (spectacle ? 0.42 : 0.24) * env(t, 0.1, 1.2, 0.1, 0.4));
     o.add = true;
     // The charge: a gold glow gathering above the target.
     o.sprite('glow', '#FFE58A', T.cx, T.y - 40 * k, 220 * k, 0.5 * env(t, 0, 0.45, 0.25, 0.05));
@@ -36,7 +36,7 @@ export function ff7Bolt(o: FxDrawList, t: number, T: FxTarget): void {
     for (let j = 0; j < (spectacle ? 4 : 3); j++) {
       const flick = 0.55 + 0.45 * Math.abs(Math.sin(t * 60 + j * 1.9));
       const pts = zig([T.cx + (j - 1.5) * 90 * k, -40], [T.cx + (j - 1.5) * 12 * k, top[1]], 10, 26 * k, 700 + j + Math.floor(t * 18));
-      bolt(o, pts, 12 * k, '#FFD62A', strike * flick);
+      bolt(o, pts, 18 * k, '#FFD62A', strike * flick);
       if (spectacle && strike > 0.2 && o.dens > 0.7) {
         for (let b = 3; b < pts.length - 2; b += 4) {
           const q = pts[b]!;
@@ -45,10 +45,13 @@ export function ff7Bolt(o: FxDrawList, t: number, T: FxTarget): void {
         }
       }
     }
-    star(o, top[0], top[1], 120 * k, '#FFF078', strike, 6, t * 0.6);
+    star(o, top[0], top[1], 150 * k, '#FFF078', strike, 6, t * 0.6);
+    // Repair item 5: the whole body lit gold-white and a bright ring on the floor (the Spectacle frame).
+    o.sprite('glow', '#FFF2B0', T.cx, T.cy, Math.max(T.w, T.h) * 1.2, 0.62 * strike);
+    o.sprite('glow', '#FFFFFF', top[0], top[1] + T.h * 0.15, 300 * k, 0.8 * strike);
     shards(o, top[0], top[1], spectacle ? 16 : 10, 60 * k, 200 * k, '#FFF5A0', strike * 0.9, 760, 0.6 + 0.6 * outCubic((t - 0.4) / 0.3));
     pool(o, T.fx, T.fy, 260 * T.sc * 1.6, '#FFD84A', 0.7 * env(t, 0.38, 1.3, 0.05, 0.5));
-    for (let i = 0; i < 3; i++) o.ring(T.fx, T.fy, (170 + i * 80) * T.sc * outCubic((t - 0.4) / 0.4), (4 - i) * k, '#FFE878', (0.7 - i * 0.2) * env(t, 0.4, 1.2, 0.02, 0.5), 0.2);
+    for (let i = 0; i < 3; i++) o.ring(T.fx, T.fy, (190 + i * 90) * T.sc * outCubic((t - 0.4) / 0.4), (10 - i * 3) * k, '#FFE878', (0.95 - i * 0.22) * env(t, 0.4, 1.2, 0.02, 0.5), 0.2);
     if (spectacle) {
       // Arcs crawling over the body, sparks raining, a glow orb, the flare streak.
       const crawl = env(t, 0.45, 1.35, 0.05, 0.3);
@@ -61,7 +64,7 @@ export function ff7Bolt(o: FxDrawList, t: number, T: FxTarget): void {
       o.sprite('glow', '#FFF0AA', T.cx, T.y + T.h * 0.1, 520 * k, 0.35 * strike);
       streak(o, top[0], top[1], 900 * k, '#FFE070', strike * 0.8);
       haze(o, T.x, T.y - 60 * k, T.x + T.w, T.fy, t, env(t, 0.4, 1.3, 0.1, 0.4));
-      o.wash(0, '#FFE9A0', 0.18 * pulse(t, FF7_BOLT_MARK, 0.12));
+      o.wash(0, '#FFE9A0', 0.34 * pulse(t, FF7_BOLT_MARK, 0.14));
     }
   });
 }
