@@ -22,7 +22,7 @@ yy, xx = np.mgrid[0:H, 0:W]
 vx, vy = xx - ix, yy - iy                       # inward vector (from the nearest transparent pixel)
 n = np.maximum(dist, 1e-6)
 ux, uy = vx / n, vy / n
-facing_left = ux > 0.35                          # the nearest outside lies to the left
+facing_left = ux > float(os.environ.get('FACE', 0.35))   # the nearest outside lies to the left (FACE=-0.3: every edge not facing right)
 band = op & (dist <= B) & facing_left
 r, g, b = a[..., 0], a[..., 1], a[..., 2]
 w = np.clip((g - np.maximum(r, 0.9 * b) - 12) / 36, 0, 1) * (g >= b - 12) * band
@@ -66,4 +66,4 @@ if os.environ.get('PALE') == '1':
     out[..., :3] = cur * (1 - wp[..., None]) + refp * 0.72 * wp[..., None]
     pale_n = int((wp > 0.5).sum())
 Image.fromarray(out.clip(0, 255).astype(np.uint8)).save(dst)
-print(json.dumps({'step': 'derim', 'band': B, 'pixels': int((w > 0.05).sum()), 'strong': int((w > 0.5).sum()), 'pale': pale_n}))
+print(json.dumps({'step': 'derim', 'band': B, 'face': float(os.environ.get('FACE', 0.35)), 'pixels': int((w > 0.05).sum()), 'strong': int((w > 0.5).sum()), 'pale': pale_n}))
