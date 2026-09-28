@@ -1,0 +1,533 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-28T04:08:20.503Z",
+ "build": {
+  "mainSha": "d89541b6",
+  "bundle": "index-eoq6aKmL.js"
+ },
+ "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: Chapter XVI plays from the board to a win and back to the board by real keys (1600) and taps (390), 0 page errors.",
+  "No regression against live release 25: the release-25 save loads with both clears, ribbons, best times and settings; FFX and FFX-2 chapters sampled (I, II, IV, V, XI) behave.",
+  "Bailey's Mega-Potion case holds by real keys: in XI (twice) and V the next girl's card and the rail never name a Mega-Potion that is still charging.",
+  "The one major (M-01, phone slab under Ixion) is inside the brand-new chapter, not a regression, and is disclosed."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Pause, results, board and cutscene layers own the window at 1600x900, 2000x1012 and 390x844; nothing stage-sized.",
+   "where": "both; I, II, XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/pause/2000x1012-yunalesca-tab-chapter.jpg",
+    "critic/reviews/d89541b6-focused/ixion/390x844-09-results.jpg",
+    "critic/reviews/d89541b6-focused/ixion/1600x900-12-whistle-prompt.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Changed text (card, rail, Recharge banner, pause dossier, Ixion board card and results) is readable at 1600 and 390; the pause label sweep found no clipped leaf label at 1600, 2000 or 390. Two phone clips of decorative/secondary labels are logged as polish P-02, P-03.",
+   "where": "both; II, XVI, I",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/pause/1600x900-yunalesca.json",
+    "critic/reviews/d89541b6-focused/phone-ixion-strip.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "Every card move read in the real-key runs is a row on the open menu with the matching submenu chip: Darkness / Black Sky in Skill, Turbo Ether / Phoenix Down in Item, Bahamut in Summon, Shell in White Magic.",
+   "where": "both; XI, V, IV, I",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/mega/1600x900-ffx2-fallen-aeons-s1-report.json",
+    "critic/reviews/d89541b6-focused/mega/2000x1012-ffx2-vegnagun-shuyin-s4-report.json",
+    "critic/reviews/d89541b6-focused/revive/1600x900-ffx2-bahamut.json",
+    "critic/reviews/d89541b6-focused/revive/1600x900-seymour-flux-menu1-after-ko.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-005",
+   "result": "PASS",
+   "reason": "Broken boards: FFX-2 IV with Paine KO -> the card and the rail say Phoenix Down -> Paine on three consecutive menus; FFX I with Tidus Zombie-KO -> \"Leave Tidus down for now ... Full-Life kills a Zombie outright\" and Bahamut. Party at 30% with a Mega-Potion charging -> the next card never repeats it (XI twice, V once). Silence about a fixture-KO Kimahri logged as suggestion S-01.",
+   "where": "both; I, IV, V, XI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/revive/1600x900-ffx2-bahamut.json",
+    "critic/reviews/d89541b6-focused/revive/1600x900-seymour-flux.json",
+    "critic/reviews/d89541b6-focused/mega/1600x900-ffx2-fallen-aeons-s1-a0-next-card-while-Mega-Potion-in-flight.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The Ixion Recharge banner shows on Recharge and is gone by the results and later beats (desktop and phone); the first-turn coach card fades.",
+   "where": "FFX-2; XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-07-recharge-banner.jpg",
+    "critic/reviews/d89541b6-focused/ixion/1600x900-09-results.jpg",
+    "critic/reviews/d89541b6-focused/ixion/390x844-08-thors-hammer.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No developer vocabulary on the card, rail, banner, pause or Ixion screens read in this pass (research section cites in the guide rail are deliberate help citations).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-06-first-menu.jpg",
+    "critic/reviews/d89541b6-focused/mega/1600x900-ffx2-fallen-aeons-s1-a0-next-card-while-Mega-Potion-in-flight.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Card, rail, intent slab and banner clear of the painted actors at 1600 in XVI and XI; on the phone Ixion is visible in the slice (the C2 dark slab under him is the disclosed major M-01, a scene issue not a panel collision).",
+   "where": "FFX-2; XI, XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-07-recharge-banner.jpg",
+    "critic/reviews/d89541b6-focused/phone-ixion-strip.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Ixion, Chapter XVI, Djose Temple - Chamber of the Fayth shown in full on the board, prep, pause and HUD at 1600; the phone results vertical location label is cut (P-02).",
+   "where": "FFX-2; XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-02-board-ixion-card.jpg",
+    "critic/reviews/d89541b6-focused/ixion/390x844-09-results.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Board selection of the XVI card is obvious (gold bar, the pip underlined) at 1600 and 390; targeting in the fight was driven by the spec through the real target step.",
+   "where": "FFX-2; XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-02-board-ixion-card.jpg",
+    "critic/reviews/d89541b6-focused/ixion/390x844-02-board-ixion-card.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Ixion is visible on every battle frame at 1600 and 390 (phone dolly PR-0201 A); M-01 is about the slab he stands on, not his visibility.",
+   "where": "FFX-2; XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-05-field.jpg",
+    "critic/reviews/d89541b6-focused/ixion/390x844-07-recharge-banner.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "Ixion sprite and the stand-in C2 / A1 plates judged in the running game at 1600 and 390: consistent with the chapter-ixion CHECK; the phone slab is the disclosed major M-01. approvedArtCheck is false for this plan, and verify-approved on the candidate reads 271 ok, 0 mismatched, 0 missing.",
+   "where": "FFX-2; XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-10-the-fall.jpg",
+    "critic/reviews/d89541b6-focused/ixion/1600x900-11-abyss-shuyin.jpg",
+    "D:/pyrefly-rel26c/.verify-approved-out.txt"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real keys on production: title -> board -> XVI card -> prep -> fight (38 decisions) -> results -> fall -> whistles -> board 1 of 15; real taps on 390x844 (47 decisions); Item > Mega-Potion by arrow keys and Enter in XI and V; pause by Esc / ArrowRight / H; release-25 save board and FFX-2 pause OPTIONS by keys.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion-desktop.log",
+    "critic/reviews/d89541b6-focused/ixion-phone.log",
+    "critic/reviews/d89541b6-focused/mega/1600x900-ffx2-fallen-aeons-s1-report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 20,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Each capture was preceded by a screen/state assertion (spec expects on screen names, menu owner and in-flight command read from the engine before the card capture, pause tab id before each pause frame). Two harness ends (V at 2000x1012 and the FFX revive run reached the results screen because the HP fixture made the party lose) were recorded as harness state, not captured as evidence.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/mega/2000x1012-ffx2-vegnagun-shuyin-s4-report.json",
+    "critic/reviews/d89541b6-focused/revive/1600x900-seymour-flux.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused pre-deploy review of the candidate; the live check of the exact artifact is its own obligation after the deploy.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Revive priority is \"both\" and was seen in FFX (I) and FFX-2 (IV); the pause dossier chrome is shared and rendered in FFX II and FFX-2 XVI; the board lists both games.",
+   "where": "both; I, II, IV, XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/revive/1600x900-ffx2-bahamut.json",
+    "critic/reviews/d89541b6-focused/revive/1600x900-seymour-flux-menu1-after-ko.jpg",
+    "critic/reviews/d89541b6-focused/pause/1600x900-ffx2-ixion-djose-tab-chapter.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Cases written in each commit and handoff: Ixion FFX-2 only (research/ffx2-ixion-djose.md sec. 0) - XVI sits in the X-2 group, ATB tag, FFX-2 HUD, and the FFX Ixion aeon kept its FFX arm-a row (2,055 HP, research/ffx-combat-core.md sec. 6.4.3); in-flight / held reading FFX-2 only (FFX CTB has no charging); revive priority both (seen in both); D-243 aeon arm FFX only (aeons exist only in FFX); D-242 IC-1 / Leblanc FFX-2 only (unit-tested, 607 files green). Absence of the Recharge banner in FFX chapters not browser-tested (it is keyed to the Ixion enemy).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-02-board-ixion-card.jpg",
+    "D:/pyrefly-rel26c/.vitest-gate-out.txt"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Chapter XVI from the board to a win by real input at 1600x900 (keys) and 390x844 (touch): results, the fall, the Abyss, four whistles, the wake over Bevelle Underground, back on the board at \"1 of 15\" with XVI cleared, 0 page errors. Loss / RETRY / scene skip reused from the chapter-ixion CHECK (same commit contents).",
+   "where": "FFX-2; XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion-desktop.log",
+    "critic/reviews/d89541b6-focused/ixion-phone.log",
+    "critic/reviews/d89541b6-focused/ixion/1600x900-15-board-cleared.jpg",
+    "critic/reviews/d89541b6-focused/ixion/390x844-15-board-cleared.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 14,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Advisor v3 runs through the real HUD path: the on-screen card (not a module call) changed while a real-key Mega-Potion was charging; the Recharge banner fired from the running fight; the save loads through the real boot.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/mega/1600x900-ffx2-fallen-aeons-s1-a7-next-card-while-Mega-Potion-in-flight.jpg",
+    "critic/reviews/d89541b6-focused/ixion/1600x900-07-recharge-banner.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "reason": "Save written by the LIVE release-25 build (fixture tests/fixtures/saves/release-25-main.json, main 79adc4ff, bundle ykS1QEe6): booted this candidate on it, board reads \"2 of 15 beaten\" with both clears, ribbons and best times, not-cleared XI stays not cleared; volumes 45/30/90, text speed 1.25x, ATB ACTIVE in the FFX-2 pause; reload keeps it; a truncated save boots fresh with no error. 2/2 pass.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/save-r25-upgrade-board.jpg",
+    "critic/reviews/d89541b6-focused/save-r25-upgrade-pause-options.jpg",
+    "critic/reviews/d89541b6-focused/save-r25-truncated-board.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 4,
+   "artifact": "d89541b6 / D:/pyrefly-rel26c/dist-gate index-eoq6aKmL.js",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel26c at d89541b6 (clean apart from gate outputs and docs/deploys.log), dist-gate already built (index-eoq6aKmL.js), vite preview 127.0.0.1:5466 (PID 72424, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time"
+  }
+ ],
+ "targets": {
+  "required": 2,
+  "matched": 2,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 1,
+  "detail": [
+   {
+    "tile": "pause / D-234 option C, chapter dossier (decisions.json D-234; docs/concepts/pause-dossier-2026-09-27/ch2-2000-c-slide.jpg)",
+    "result": "matched",
+    "composite": "critic/reviews/d89541b6-focused/d234-c-slide-2000x1012-ch2.jpg",
+    "note": "plate slid, dossier clear of the face; the build keeps the three snapshots (handoff item 6)"
+   },
+   {
+    "tile": "pause / Until Dawn pause (docs/concepts/pause-until-dawn/sheet.png)",
+    "result": "matched",
+    "composite": "critic/reviews/d89541b6-focused/pause-until-dawn-2000x1012-ch2-chapter.jpg",
+    "note": "unchanged from live apart from D-234; the older v5 / v6 fix3 frames predate the tabbed layout and were compared for reference only (pause-v5-2000x1012.jpg, pause-v6-390x844-phone.jpg)"
+   },
+   {
+    "tile": "scenes / Ixion C2 vs A1 (docs/concepts/chapters/ixion-djose-2026-09-27/scenes)",
+    "result": "waiting",
+    "note": "Bailey's pick pending; provisional scenes shipped"
+   }
+  ]
+ },
+ "issues": [
+  {
+   "confidence": "high",
+   "id": "M-01",
+   "severity": "major",
+   "title": "On a phone, Ixion stands on a dark painted slab of the provisional C2 plate",
+   "game": "FFX-2",
+   "chapter": "XVI ffx2-ixion-djose",
+   "expected": "Ixion stands on the lit chamber floor, as at 1600x900",
+   "observed": "At 390x844 the dolly frames him over a dark slab region of the stand-in plate (the builder's disclosed major, reproduced)",
+   "repro": "Board > XVI > prep > fight at 390x844, any command turn",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/390x844-07-recharge-banner.jpg",
+    "critic/reviews/d89541b6-focused/phone-ixion-strip.jpg"
+   ],
+   "requirement": "visual; scenes pick pending (C2 / A1)",
+   "where": "src/scenes/djose-chamber.ts phone camera / the provisional C2 plate",
+   "fix": "Resolve with Bailey's scene pick; then set the phone rig so his hooves land on the lit floor",
+   "acceptanceCheck": "390x844 command-turn capture: Ixion's feet on the lit floor",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "confidence": "high",
+   "id": "P-01",
+   "severity": "polish",
+   "title": "The Recharge intent says \"Restores HP to itself.\" under a DAMAGE heading; the source says 200 HP and 200 MP",
+   "game": "FFX-2",
+   "chapter": "XVI",
+   "expected": "A heal line naming both halves (research/ffx2-ixion-djose.md: +200 HP and +200 MP, verified: 5 sources)",
+   "observed": "\"Restores HP to itself.\" / DAMAGE / IXION +200 HEALS",
+   "repro": "XVI until the action counter reaches 100",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-07-recharge-banner.jpg"
+   ],
+   "requirement": "CHK-004 scope (intent names what the enemy does)",
+   "where": "intent sentence for x2-ixion-recharge (not traced)",
+   "fix": "Say \"Restores 200 HP and 200 MP to itself.\"",
+   "acceptanceCheck": "Recharge slab text includes MP"
+  },
+  {
+   "confidence": "high",
+   "id": "P-02",
+   "severity": "polish",
+   "title": "Phone results: the vertical location label is cut (\"DJOSE TEMPLE - CHAMBER OF THE F...\")",
+   "game": "FFX-2",
+   "chapter": "XVI",
+   "expected": "Whole label or a shorter form",
+   "observed": "Cut at the bottom of the 390x844 results page",
+   "repro": "Win XVI at 390x844",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/390x844-09-results.jpg"
+   ],
+   "requirement": "CHK-009",
+   "where": "results phone layout (not traced)",
+   "fix": "Use the short location or wrap",
+   "acceptanceCheck": "label whole at 390x844"
+  },
+  {
+   "confidence": "high",
+   "id": "P-03",
+   "severity": "polish",
+   "title": "Phone board: the party names under the XVI portraits sit under the footer prompt",
+   "game": "both (board chrome)",
+   "chapter": "board",
+   "expected": "Names clear of the prompt bar",
+   "observed": "\"YUNA RIKKU PAINE\" half hidden at 390x844",
+   "repro": "Board at 390x844, select XVI",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/390x844-02-board-ixion-card.jpg"
+   ],
+   "requirement": "CHK-003",
+   "where": "chapter-select phone layout (not traced)",
+   "fix": "Pad the details column above the footer",
+   "acceptanceCheck": "names fully visible"
+  },
+  {
+   "confidence": "high",
+   "id": "P-04",
+   "severity": "polish",
+   "title": "Board pip strip: the new last pip \"XVI\" touches the card edge at 1600",
+   "game": "both (board chrome)",
+   "chapter": "board",
+   "expected": "Pip strip inside the frame",
+   "observed": "XVI pip meets the right edge of the hero frame",
+   "repro": "Board at 1600x900",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/ixion/1600x900-02-board-ixion-card.jpg",
+    "critic/reviews/d89541b6-focused/save-r25-upgrade-board.jpg"
+   ],
+   "requirement": "CHK-003",
+   "where": "src/app/screens/frontend/chapter-select-c.css (not traced)",
+   "fix": "Tighten pip spacing by a few px",
+   "acceptanceCheck": "strip ends >= 8 px inside the frame"
+  },
+  {
+   "confidence": "high",
+   "id": "P-05",
+   "severity": "polish",
+   "title": "Ixion pause CHAPTER tab: the dossier heading and snapshots sit over Ixion's mane and horn",
+   "game": "FFX-2",
+   "chapter": "XVI",
+   "expected": "Dossier clear of the painting's subject (the D-234 intent)",
+   "observed": "At 1600x900 \"DJOSE TEMPLE - CHAMBER OF THE FAYTH\" and three snapshots overlap the mane; the plate is not slid for XVI",
+   "repro": "XVI battle, Esc, ArrowRight to CHAPTER",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/pause/1600x900-ffx2-ixion-djose-tab-chapter.jpg"
+   ],
+   "requirement": "D-234 (applied to II and IX only)",
+   "where": "src/app/screens/pause/chapterSlide.ts (not traced)",
+   "fix": "Add XVI to the slid plates or move the dossier left",
+   "acceptanceCheck": "0 text boxes on the face region at 1600 and 2000"
+  },
+  {
+   "confidence": "low (the KO came from a debug fixture the presenter never saw)",
+   "id": "S-01",
+   "severity": "suggestion",
+   "title": "FFX card with Tidus Zombie-KO and Kimahri KO speaks only about Tidus",
+   "game": "FFX",
+   "chapter": "I",
+   "expected": "A word on the second fallen ally",
+   "observed": "\"Leave Tidus down for now...\" + Bahamut; Kimahri not mentioned",
+   "repro": "I seed 1, KO Kimahri by fixture at the first menu, press Enter",
+   "evidence": [
+    "critic/reviews/d89541b6-focused/revive/1600x900-seymour-flux-menu1-after-ko.jpg"
+   ],
+   "requirement": "CHK-005",
+   "where": "src/engine/tactics/advisor-revive.ts (not traced)",
+   "fix": "Re-test with a natural KO; if confirmed, mention the revivable ally",
+   "acceptanceCheck": "natural two-down board names a revive or a reason not to"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "XVI board -> win -> aftermath -> board, real keys 1600x900 and taps 390x844 (spec copy)",
+   "Mega-Potion in flight, real keys: XI seed 1 at 1600x900 (2 catches), V seed 4 at 2000x1012 (1 catch)",
+   "revive priority: I (FFX) and IV (FFX-2) at 1600x900",
+   "pause by keys: II at 1600 and 2000, I at 2000 and 390x844, XVI at 1600 (all tabs, H, Esc resume)",
+   "release-25 save upgrade + truncated save (spec copy on the candidate)",
+   "data audit: D-243 arm-a aeon rows vs ffx-combat-core 6.4.3; Ixion stats, rewards, Recharge 200/200 vs ffx2-ixion-djose.md; Delta Attack 1 HP / 0 MP vs ffx2-fallen-aeons.md (MP half single source, F-9)"
+  ],
+  "reused": [
+   {
+    "what": "unit suite 607 files / 9554 tests, tsc",
+    "from": "D:/pyrefly-rel26c/.vitest-gate-out.txt (release gate on d89541b6)",
+    "why": "same commit; covers D-242 IC-1 / Leblanc failsafe, PR-0188 sentences, advisor-v3 scorecards"
+   },
+   {
+    "what": "XVI loss / RETRY / scene skips; save rollback to main",
+    "from": "docs/handoff/chapter-ixion.md CHECK",
+    "why": "same code merged at e60afaff, nothing after it touches the chapter flow"
+   },
+   {
+    "what": "approved art hashes",
+    "from": "D:/pyrefly-rel26c/.verify-approved-out.txt",
+    "why": "same artifact; 271 ok, 0 mismatched, 0 missing"
+   }
+  ],
+  "notTested": [
+   "Leblanc (VI) turn-5 Fan Slap and failsafe in the browser",
+   "Chapters X and XIV Bahamut 2,935 HP in the browser",
+   "FFX-2 held-command (chain lock) case by real keys",
+   "Recharge banner absence in FFX chapters by browser",
+   "D-234 below 1600 wide (known, disclosed by the builder)",
+   "gamepad, Safari, real phone"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live check of the exact artifact after the deploy, then the deep review of d89541b6 on the live build (shared combat core, advisor, chapter registry: 15 chapters; carries 79adc4ff's deep obligation)",
+ "elapsedMinutes": 80
+}
