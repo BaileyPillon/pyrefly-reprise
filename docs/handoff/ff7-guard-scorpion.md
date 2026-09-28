@@ -14,6 +14,60 @@ and enemy switch sides? not mirrored just literally switch sides"; and the accep
 D-244: B1, C1 + G1, D1, E1, F1). Still in force: "i need tons of eye candy it needs to be higher
 fidelity than the original in this regard". Music stays `null` until Bailey hears the sketch.
 
+### Release prep: merged with main, the see-through boss, Barret's aim (2026-09-28)
+
+Game case: **FF7 only**; the shared hooks are optional and unset for FFX and FFX-2 (`docs/CONTRACT-CHANGES.md`,
+2026-09-28 "FF7 release prep"). No line was added to `PaintedActor.ts`, `BattlePresenterStage.ts` or
+`BattlePresenterPorts.ts` (P3C-3).
+
+- **P3C-1, merged.** `origin/main` d89541b6 (Ixion as Chapter XVI, advisor v3, the combat switches) merged into the
+  branch. The two conflicts were both-sides additions: `approved-hashes.json` keeps the `bailey:2026-09-27-ff7-film`
+  and `bailey:2026-09-27-ixion` sets; `CONTRACT-CHANGES.md` keeps both sides' entries (FF7's first). Main's FFX and
+  FFX-2 behaviour is untouched; the FF7 e2e now expects main's 16 tiles.
+- **Item 2, the see-through boss: fixed.** Cause, found by measuring, not by the suspects in the brief: the planes
+  were opaque at every pixel through every hit (rendered against white and against black, and against a flat green
+  in place of the painting: no background inside the silhouette), the pose change was already a hard cut, and depth
+  and post were ruled out one by one. The culprit was the **cast light**: 150 ms after B1's white pop the target took
+  the effect's colour at 0.75 for 680 ms, and the shader's flash floor (0.34, meant to make a black-armoured fiend
+  react) lifted every dark texel by about 0.22. Through the reactor's grade (gamma 2.0) the shaded belly and legs went
+  a flat pale that matched the dark grating behind them, so the lower body read as see-through for about half a
+  second. With the flash switched off the look vanished; with it on, it was there with the FX layer, bloom and
+  tilt-shift all off. Fix: the cast now carries no floor (light on what the painting shows: lit plates still catch
+  it, the darks stay dark), and B1's white pop keeps half the floor (`FF7_HIT_FLOOR_CUT` 0.5, our estimate). Measured
+  on the production build (the 20th-percentile luminance of the boss's red pixels in the leg band, 1600x900): idle
+  44 to 47; before the fix (the same seed on the dev build) 53 to 63 for about 250 ms after each hit; after it 38 to 49, with one 53 to 57 frame at
+  the white pop. Frames: `docs/screenshots/ff7-phase3/release-prep/dense-three-hits-1600x900.jpg` (three hits,
+  Barret's shot, Cloud's slash, the shot again, every other frame at about 50 ms), `before-after-boss-lower-body.jpg`,
+  `hit1-frame-1600x900.jpg`; the 180 raw frames are in `D:/Tools/pyrefly-scratch/ff7-p3-prep/dense-3hits/`. The
+  tail swap (`opaqueForms`, no fade) and the recoil painting (alpha 98 % solid, holes as in the idle) were checked
+  and needed nothing.
+- **P3C-2, Barret's aim 90 px off his stance: fixed.** Cause: the aim painting is 1302x1130, just over the house's
+  1.15 prone aspect, so the actor took it for a KO body: it was **rolled 0.30 rad** onto its underside (the gun
+  tilted up, which is most of the "aims over the boss's head" of repair item 13) and ProneLay slid it along the floor
+  (-1.057 world units instead of -0.450, and not the same each time). Cloud's strike (1230x947) was rolled 0.09 rad,
+  and the boss's idle (-0.06) and recoil (+0.15, undoing part of its painted 12-degree tilt) too. FF7's staging now
+  sets `restPoses: false`: no Film key is laid to rest by its aspect (FF7's KO is the motion port's `lieDown`,
+  unchanged). Measured live: the aim plane at -0.450 every frame, the aim, fire and idle stances within a few px
+  (`release-prep/before-after-barret-aim-stance.jpg`). Side effect, toward the target: the boss now stands level as
+  painted (it was tipped 3.5 degrees), registered on its rear foot as the installer meant, and its recoil shows the
+  full painted tilt.
+- P3C-4: the "Checks" of the first phase-3 pass name `verify-approved.mjs`, which does not exist in any tree; the
+  hash check here is the checker's scratch script (`tools/zz-p3prep-approved.tmp.mjs`, not committed), on the
+  worktree and the built `dist`.
+
+Checks (release prep): `tsc` (app and e2e) clean; full `vitest run` 610 files pass, 5 skipped, 1 fails: the known `strategy-ffx2-bahamut` "heal-only route" timeout under full load (alone: 19/19); `ffx2-atb-golden` and
+`ff7-golden` 9/9 unchanged (no engine change); `orphans.mjs` 24, the same list; approved art 242 + 48 judge-locked
+= 290 ok, 0 mismatched, 0 missing, in `public/art` and in the built `dist`; the FF7 e2e **5 of 5** on a production
+build (preview on 7801, PYREFLY_BROWSER=gpu, one browser); new `tests/unit/ff7-release-prep.test.ts` (6: every cast
+without the floor and the white pop at half, the shader's uniform, the dark-texel lift, the scene switch on desk and
+phone, FFX and FFX-2 without it, no Film pose prone with it and Barret's aim prone without it). Servers on 7800 and
+7801 were stopped by PID. The e2e re-shot `docs/screenshots/ff7-phase3/game-*.jpg`.
+
+Still open from this pass: the target-vs-build sheets 1 to 11 were not re-shot (the boss stands 3.5 degrees more
+level and the aim is upright); the FFX and FFX-2 real-key comparison against main (the checker's (d)) was not re-run
+here: the shared edits are optional hooks nobody else sets, and the suite passes, but the focused review should run it
+on the merged candidate.
+
 ### Repair pass (the judge's list: fidelity 7.6, eye candy 6.9), 2026-09-27
 
 Game case: **FF7 only**; the shared files gain only optional hooks nobody else sets (`docs/CONTRACT-CHANGES.md`,
