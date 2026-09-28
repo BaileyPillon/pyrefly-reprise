@@ -1,0 +1,62 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-28T00:00:00.000Z",
+  "build": {
+    "mainSha": "6ea8528f",
+    "bundle": "DecUADzw",
+    "artifactHash": "21bca0a425a75fe8670f12121fc29e247406a71cd8ad3e1255bcc634dbd71254"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/6ea8528f.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/be1e964a.json: result PASS, liveManifest match, checked 48, mismatched 0, missing 0, wrongType 0, errors 0"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), fresh contexts, cache-busting query. Desktop 1600x900 keyboard: title->chapter-select->Chapter III (seymour-omnis, P-01 Sensor strip)->player turn, pause/resume/H round trip, prerendered audio (7 requests) confirmed, Seymour Flux (P-02)->player turn, FF7 LIMIT door->battle. Desktop targeted pass on Chapter XVI (ffx2-ixion-djose, IXS-1/IXS-4, the changed encounter): ->player turn, pause/resume/H, cancel path (Item->Escape) all OK, 0 console errors. Mobile 390x844 hasTouch real taps: Chapter XVI (Ixion, lit floor) and Chapter IX (yojimbo-cavern, Grand Summon list/aeon portrait) both reach a player command menu via the two-tap card select/begin rule. Screen/chapter/state asserted via window.__pyrefly.app.current.name and board snapshot before every step. 0 console errors, 0 404s across every run."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight only: page.reload() on the desktop pass; the pyrefly-reprise:save:v1 localStorage key present before reload was present unchanged after, and the app re-booted cleanly.",
+      "reason": "No settings toggle was reachable from the mid-battle state at the point of reload, so only the existing save key's survival was checked; the full upgrade matrix was not run (notTested)."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Exact-artifact manifest verification against the live URL (48 files)",
+      "Title to chapter-select, desktop keyboard and mobile tap",
+      "Chapter III (Seymour Omnis / Dream's End) to a player turn, desktop",
+      "Chapter XVI (Ixion, ffx2-ixion-djose) to a player turn, desktop and mobile (390x844 taps)",
+      "Chapter IX (Yojimbo, yojimbo-cavern) to a player turn, mobile (390x844 taps)",
+      "Seymour Flux to a player turn, desktop",
+      "Pause (Escape/P) and resume, H panel toggle, on the changed Ixion chapter",
+      "Cancel path (Item submenu, Escape) on the FFX2-style HUD, Ixion chapter",
+      "Prerendered music requested over the network vs. synth fallback",
+      "FF7 hidden door (typing LIMIT) opens the hidden fight",
+      "Lightweight reload smoke (save key survives a reload)"
+    ],
+    "reused": [],
+    "notTested": [
+      "Full CHK-024 upgrade matrix (old save/settings through a version bump)",
+      "Physical device, Safari, or real controller input",
+      "Chapter III's Sensor strip and Chapter IX's Grand Summon list / aeon portrait visual composition at exact mockup fidelity (this pass confirms reachability and no crash/hang, not pixel-level target matching)",
+      "The deep review already owed on this build (critic/pending/6ea8528f.json); unaffected by this live pass"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 35,
+  "notes": "One observation, not a defect: on a cold cache, ffx2-ixion-djose's loading card took as little as ~12s and as much as ~40s across repeated headless runs before handing over to the battle screen, occasionally exceeding the documented 14-20s window (src/ui/common/transitions/loadingCard.ts). It always completed, with 0 console errors and 0 failed/4xx/5xx network requests in every attempt, including two final runs that confirmed a clean arrival at the player command menu on both desktop and mobile. Recorded for awareness, not scored as a defect."
+}
