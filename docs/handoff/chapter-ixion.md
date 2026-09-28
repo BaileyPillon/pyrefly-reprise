@@ -227,3 +227,112 @@ load; browser on 7310 walked the fight and the whole post-battle stub with real 
    spells by 150 %" (x1.5 reading). Text only; no effect is wired.
 4. *Minor, pre-existing:* the Bahamut heal-only strategy test sits near its 15 s limit and times out under full-suite
    load on this branch and on main.
+
+## CHECK: release readiness (independent, 2026-09-27 ~20:50-21:55 EDT; checked cafdf758, not built by the checker)
+
+**Verdict: READY, 0 blockers.** Game case as the builder wrote it: the chapter is FFX-2 only; the listing, the board
+counts and `backdrop()` are shared plumbing (both). This section is the only change the check makes.
+
+**Static and suite (worktree `D:/pyrefly-ch-ixion`, up to date with `origin/chapter-ixion`):**
+- `npx tsc --noEmit` clean; `npm run typecheck:e2e` clean.
+- Full unit suite, run once: 602 files passed, 1 failed. The failure is `strategy-ffx2-bahamut`'s heal-only route (19.7 s
+  against its 15 s limit under load). Run alone together with `ffx2-atb-golden`, `save-ixion-listed-fixture`,
+  `ixion-listed` and `ixion-recharge-banner`: 5 files, 43 of 43 pass. This is the known load timeout that main has too.
+- `node tools/orphans.mjs`: 24 orphans, the same as main (24).
+- `verify-approved` with `ROOT` set to this worktree: approved 223 ok and judge-locked 48 ok (271 in all), 0 mismatched,
+  0 missing.
+- `git merge-tree` against today's `origin/main` (47ab4ae8) is clean, and `origin/main` is an ancestor of the branch,
+  so the merge is a fast-forward.
+- `node tools/critic-plan.mjs --json`:
+  - Measured against the previous build 79adc4ff, which includes main's own changes: **deep**.
+  - The branch diff alone (`--paths`, 121 files): also **deep**. `deepBeforeDeploy: false`, so this is **not the
+    save-data class** (`SaveData.ts` is untouched). `focusedBeforeDeploy: true`, `deepAfterDeploy: true`,
+    `games: both`, obligations live / focused / deep.
+  - `carriedDeep: ["79adc4ff"]`: release 25's deep review is still owed, and the release rule counts it.
+
+**Production builds (mine):**
+- Branch: `vite build` in this worktree gives `dist/`, bundle `index-Dh5sXkv3.js`. That `dist/` belongs to this
+  worktree only.
+- Main 47ab4ae8: `vite build --outDir` into the checker's scratch, from the main tree with no tracked changes. Bundle
+  `index-C_9V59w1.js`. The shared `dist/` was not touched.
+- Served with `vite preview` on 7710 and 7711. Headless GPU Chromium from node. Every server was stopped by its PID.
+
+**Save compatibility (this is the save-data class, so each step was checked):**
+- I used one persistent browser profile on one origin (127.0.0.1:7710). Main's build served first, then the branch's,
+  then main's again.
+- **Main writes the save.** The save came from main's own flow: `gotoChapter` without `auto`, the fight handed to
+  `autoBattle`, and the results and defeat panels answered by Enter. That flow recorded real clears of Seymour Flux,
+  Bahamut, Leblanc and the Fallen Aeons, with their best times, turns, play time and attempts. Main's own SaveStore
+  added Natus and Isaaru clears. Several losses added attempts. Settings were changed on purpose: master 0.37,
+  music 0.21, sfx 0.66, text speed 1.5, guide off, intent off, reduce motion on, battle help off. Coach marks were
+  set. Main's board read **6 of 14 beaten** (15 tiles).
+- **The branch loads it.** The raw localStorage the branch saw at document start matched main's byte for byte. Three
+  things were each compared field for field against main's save:
+  1. the branch's stored save after booting and opening the board;
+  2. the branch's save as held in memory;
+  3. the branch's stored save after an Ixion clear.
+
+  Every chapter record, every setting, `seenCoach`, `flags`, `unlocked` and `version` is **identical** in all three.
+  Ixion has no record until it is played, and after the clear it is the only record added. The board read
+  **6 of 15** (16 tiles) with the same six cleared. After the Ixion clear it read **7 of 15** with XVI cleared.
+  Nothing was reset and no other key was written.
+- **Rollback.** Main's build then booted on the branch's save. Every record, Ixion's included, and every setting
+  survived. Main's board read 6 of 14, with XVI invisible. A rollback of the deploy loses nothing.
+- `save-upgrade.spec.ts` (CHK-024, the release-20 fixture) was run on the branch build as a scratch copy: 2 of 2 pass.
+  That covers the board ribbons and best times, the FFX-2 pause OPTIONS values, and a truncated save booting fresh.
+
+**Ixion by real input (branch build, 7711; the builder's spec, run from a scratch copy that writes frames to scratch):**
+- **1600x900, real keys: PASS.** Victory in 38 decisions, 2 Recharges, 2 Thor's Hammers. The "Ixion · RECHARGE"
+  banner showed as the Recharge started, before the Hammer.
+- **390x844, taps: PASS.** Victory in 47 decisions, 2 Recharges, 2 Hammers, banner seen.
+- Both runs then went on through results, the fall (C1), the Abyss (A1, Shuyin's "Lenne."), the four "(Whistle)"
+  prompts, the wake over `bevelle-underground`, and the board at "1 of 15" with XVI cleared. No page errors.
+
+**Loss, RETRY and skips (my own spec, 1600x900, real keys):**
+- Holding Enter skipped the opening.
+- A losing line by keys lost after 20 decisions: Dark Knights Attack, Yuna takes the first White Magic row.
+- On the defeat panel, Enter on RETRY went to party prep, and Enter there started the fight again.
+- The new fight opened on seed 1003, Ixion at 12,380 of 12,380, every girl at full HP. Attempts went from 1 to 2.
+- For the skip test only, Ixion's HP was set to 1 through the debug API, and a real Attack won. Enter cleared the
+  results. During the fall's line, Esc then E to OPTIONS, then down to **Skip Scene**, then Enter: the fall, the
+  Abyss, the whistles and the wake were all skipped. The board showed XVI cleared.
+
+**Other chapters are unchanged (main build compared with branch build):**
+- **FFX Chapter I (Seymour Flux) and FFX-2 Chapter IV (Bahamut)**, from the title by real keys: the card, prep, the
+  opening skipped by holding Enter, and the first menu. The first menu's rows, the party HP and the first actions were
+  **identical** on both builds.
+- One scripted battle each at seed 42 (`auto: 'intended'`). Outcome, turns, event count and the SHA-256 of the full
+  event log were **identical**: Flux victory, 104 turns, 678 events, `ce97adb7…`; Bahamut victory, 80 turns, 2,218
+  events, `d2d06f70…`.
+- **The hidden FF7 fight** ran from a scratch copy of `ff7-guard-scorpion.spec.ts` on the branch build: 5 of 5 pass.
+  That covers LIMIT by keys, the seven taps, the pad code, RETRY, the phone layout, and the board plus save key left
+  as they were (16 tiles).
+
+**Findings (none blocks):**
+1. *Minor (process):* the change is **deep**. Its focused review goes before the deploy and its deep review after it.
+   Release 25's deep review (79adc4ff) is still owed, and the release rule allows at most two deploys while a deep
+   review is owed. `approvedArtCheck` is false even though `approved-hashes.json` changed (by additions only).
+2. *Minor (release):* all of this art is local only and gitignored:
+   - `x2-ixion` (4 poses);
+   - the provisional C1 and A1 plates;
+   - the two stand-in plates;
+   - the pause stand-in.
+
+   The files are in `D:/Final Fantasy/public/art`, and this worktree's `public/art` is a junction to it. Every file is
+   in this build's `dist/` (checked). The release must be built from a tree whose `public/art` is that folder.
+   `D:/pyrefly-release` is not a git worktree at the moment.
+3. *Minor (stale comments):*
+   - `src/battle/ffx2/action-time.ts` still calls it "Chapter XVII".
+   - `src/data/ffx2/items/held.ts` still says "(Djose, unlisted)".
+   - `src/scenes/index.ts` and `src/data/chapter-ffx2-ixion-djose.ts` still describe the "stand-in plate", although
+     the key now points at the provisional C1.
+   - In `src/story/dsl.ts`, `backdrop()` was inserted between `setPose`'s doc comment and `setPose` itself. `setPose`
+     lost its doc comment and `backdrop()` carries two. `dsl.ts` is now 587 lines (570 on main, so it was already
+     over the 400-line house rule).
+4. *Info:* in every chapter, RETRY goes back through party prep (shared flow, `BattleScreenFlow`), so it takes two
+   presses to get back to the fight. This existed before the branch and is not Ixion's.
+5. *Info:* the whistle flag `ixionWhistles` is a flag in the cutscene runner. It is not stored in `SaveData.flags`,
+   which stayed `{}` after the skip, so the check could not read "4" in the browser. The unit test covers it, and
+   nothing is persisted.
+6. *Still Bailey's (rule 9, as disclosed):* the C1 or C2 and A1 or A2 picks, the pause hero plate, the tagline, and
+   the music by ear. None of these block a listing labelled provisional.
