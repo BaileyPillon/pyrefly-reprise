@@ -9,6 +9,8 @@
  *  - **Determinism**: two forks with the same seed agree; forking and driving a fork leaves the
  *    battle's state and random stream where they were.
  *
+ *  - **Transfer** (advisor v4's worker): `restore(structuredClone(transferable()))` is the same battle.
+ *
  * Game case: FFX only (the FFX-2 fork has its own test).
  */
 
@@ -81,5 +83,23 @@ describe('FFXEngine.fork (advisor v4 prototype, FFX only)', () => {
     expect(rngOf(real)).toBe(before);
     expect(logOf(real)).toBe(log);
     expect(JSON.stringify(real.state().combatants)).toBe(snap);
+  }, 300_000);
+
+  it('transferable + restore (advisor v4’s worker): a copy made by structuredClone ends on the real log', async () => {
+    let checked = 0;
+    for (const id of ['seymour-flux', 'braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico']) {
+      for (const at of [0, 7, 25]) {
+        const real = await engineAt(id, 3);
+        if (play(real, at) < at) continue;
+        const before = logOf(real);
+        const copy = FFXEngine.restore(structuredClone(real.transferable()), { autoResolveMinigames: true });
+        expect(logOf(real), 'making the copy leaves the battle alone').toBe(before);
+        play(real);
+        play(copy);
+        expect(logOf(copy)).toBe(logOf(real));
+        checked += 1;
+      }
+    }
+    expect(checked).toBeGreaterThanOrEqual(10);
   }, 300_000);
 });
