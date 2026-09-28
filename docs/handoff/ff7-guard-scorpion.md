@@ -14,6 +14,36 @@ and enemy switch sides? not mirrored just literally switch sides"; and the accep
 D-244: B1, C1 + G1, D1, E1, F1). Still in force: "i need tons of eye candy it needs to be higher
 fidelity than the original in this regard". Music stays `null` until Bailey hears the sketch.
 
+### Repair pass (the judge's list: fidelity 7.6, eye candy 6.9), 2026-09-27
+
+Game case: **FF7 only**; the shared files gain only optional hooks nobody else sets (`docs/CONTRACT-CHANGES.md`,
+"FF7 phase 3 repair pass"). Every item below is fixed on the branch; frames and before/after sheets are
+`docs/screenshots/ff7-phase3/sheet-12-repair-motion.jpg` and `sheet-13-repair-look.jpg` (the judge's frames in
+`repair/before-*`), and every target-vs-build sheet 1 to 11 was re-shot on the repaired production build.
+
+| # | What the judge saw | What changed |
+|---|---|---|
+| 1 major | A see-through idle Barret left behind; aim/fire 120 px right, over Cloud; sparks at the ghost's gun | The installer centred the idle on its stance but the aim and fire on the rear foot. The stage now shifts each Film party pose so its stance (the two boots' sole centres) lands on the idle's: `src/data/ff7/filmPoseAnchors.ts`, measured by `film-set/scripts/anchors.py` (the fire registers on the aim by leg overlap); the locked PNGs are untouched. FF7 pose changes are hard cuts (`poseCut`). The muzzle is the measured barrel tip of the active pose's box. Test: each pose's stance within 6 px of the idle's, read from the PNGs (`ff7-judge-repair.test.ts`) |
+| 2 major | Boss semi-transparent around recoil and its own attacks | Same hard cut for the boss; the raised tail's form change swaps under the flash with no fade (`opaqueForms`) |
+| 3 major | Scorpion Tail fired while Ice played; both numbers together | FF7's `submit` waits for the burst already playing (the ATB pump's boss turn) before its own (research/ff7-battle-core.md §2.6). The gauges keep their rules. Pinned through the real engine and presenter: the boss's `action-end` precedes the player's `action-start` (the test fails with the line removed) |
+| 4 major | A KO'd Barret stood upright; G1 bodies were flat smears | A KO lays the fighter down at once (`ActionMotionPort.ko`), the hurt painting rolled and tipped back 0.55 rad, not flat (our estimate); a Phoenix Down stands him up. **The two KO paintings G1 asked for are not painted**: an art request for Bailey (open) |
+| 5 major | Effects weaker than the Spectacle frames | Tail Laser: beam 42 px core with a 96 and a 190 px glow and a white centre, a white impact wash, a darker stage, bigger impact glows. Bolt and Braver: whole-body glow, heavier bright floor rings, stronger washes and dim. The cast light on the fighters is stronger (peak 0.9) and the target takes the effect's colour after the white hit flash |
+| 6 minor | Numbers before the blow | The FF7 HUD holds each numeral (and the HP rows) from the event until the presenter's numeral beat, which now waits for the effect's own frame clock to reach the mark (`pendingLand`); the director's hit flash fires on the drawn strike too |
+| 7 minor | D1 kept the wide camera | The camera eases to `ff7-victory` (desk: a 20-degree lens from 12 units, framed on the party; phone: moved in); our estimate |
+| 8 minor | A 0.3 s white pop for the boss | `sendOff`: a white flash and a shake, eight explosions with debris walking the machine (`effects-ff7-down.ts`, with the cast light), then a one-second burn-away; our estimate |
+| 9 minor | Pale grey-blue halo; not graded into the core | The house rim (pale blue from the upper left) is replaced for FF7 by a green rim from screen-right, a light green bounce, and a 2.5-texel silhouette erosion (the matte fringe); mako motes drift from the core (two particle fields, none on Low) |
+| 10 minor | Bolt over the message window | FF7's effects draw under a scissor that ends at the message window's bottom while it is up |
+| 11 minor | The boss's aim box ran to x 493 of 390; the HUD slid | Aim boxes are clamped to the frame; the FF7 HUD layers are `overflow: clip`; the e2e checks both |
+| 12 minor | Full EXP to a KO'd member; an AP line FF7 lacks | 0 EXP (and an empty gauge) to a member KO'd at the end (core §11, `ff7Standing.ts`); the AP line is gone. The gauge still shows the award counting in (disclosed estimate) |
+| 13 minor | No visible Braver leap; Barret aims over the boss | The leap is higher (1.6), carries on toward the boss, and the blow lands on the way down (the live frame shows him airborne). Barret's aim angle is an art limit: noted for the next art round; the locked paintings are not replaced without Bailey |
+
+Checks (repair pass): `tsc` (app and e2e) clean; full `vitest run` 599 files pass, 5 skipped, the known
+`strategy-ffx2-bahamut` heal-only timeout under load (alone: 19/19); `ffx2-atb-golden` and the FF7 golden pass
+**unchanged (no re-pin: the engine did not change)**; `orphans.mjs` 24, the same list; approved-hash check 286 ok,
+0 mismatched, 0 missing (no art file touched); the FF7 e2e **5 of 5** on a production build (preview on 7204),
+now also asserting D1's closer framing, no AP line, and the aim boxes inside the frame with the HUD unscrolled.
+New `tests/unit/ff7-judge-repair.test.ts` (11). Servers started on 7201 to 7204 were stopped by PID.
+
 ### What is built
 
 | Item | What | Files |
@@ -97,8 +127,12 @@ Tail is a shot from the tail's lens is our reading of its Shoot element.
 2. Known art limits carried from the film-set README: the spin pose's head about 8 % small, the
    wind-up forearm shadow a little red, Barret's aim at chest height, small cheek scars on squat,
    punch and hurt.
-3. No KO paintings: a KO'd member lies down in the hurt painting (the house fallback); G1's target
-   asked for two KO poses to paint.
+3. No KO paintings: a KO'd member lies down at once in the hurt painting, rolled and tipped back part
+   way (repair item 4); G1's target asked for two KO poses to paint, which needs Bailey's look first.
+8. Repair-pass leftovers: Barret's aim and fire point the gun up over the boss's head (art; the next art
+   round, shown to Bailey before any locked painting is replaced). Every new number in the repair (the
+   pose shifts are measured; the KO tilt, the death's timing and look, the victory rig, the rim, bounce,
+   erosion and motes, the beam widths and washes) is our estimate.
 4. Music stays silent (D-245's sketch awaits Bailey's ear); no retail fanfare, reel or "Continue?".
 5. Resizing a window mid-fight keeps the layout it was built with (desk or phone).
 6. Merge into `main`, the focused review and the release are the driver's.
