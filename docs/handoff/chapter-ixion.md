@@ -385,3 +385,59 @@ counts and `backdrop()` are shared plumbing (both). This section is the only cha
    nothing is persisted.
 6. *Still Bailey's (rule 9, as disclosed):* the C1 or C2 and A1 or A2 picks, the pause hero plate, the tagline, and
    the music by ear. None of these block a listing labelled provisional.
+
+## CHECK (scenes): C2 and the repaired A1 (independent, 2026-09-27 ~22:45-23:40 EDT; checked f3e8c1ac, not built by the checker)
+
+FFX-2 only (Chapter XVI). **Verdict: ready as a provisional option, 0 blockers, 1 major to fix or disclose (the
+phone framing).** Nothing merged, nothing deployed, no GPU used.
+
+**What passed**
+- `tsc --noEmit` and `tsc -p tsconfig.e2e.json` clean. Every unit file that names Ixion or Djose (40 files, 587
+  tests) passes.
+- **A1 repair at 1:1.** The fixed file differs from `abyss-a1.png` only inside three regions, all in y 1247-1535:
+  the spike box around x 1330-1440, the left corner and rock, and the right corner. Nothing above the horizon band
+  changed. The spike is gone and the fog reads clean behind the whistle beat. The black rock is gone. The corner
+  wedges are now soft grey-blue mounds rather than black, and no seam shows. In the cutscene frames at 1600x900,
+  the dialogue box covers most of the repaired band anyway.
+- **Install.** Both installed files are byte-identical to `chamber-c2.png` and `abyss-a1-fixed.png`. The earlier
+  C1 and A1 installs are still byte-identical to their candidates. `tools/gen/manifest.mjs --check` reports the
+  manifest up to date. Compared as sets with the 09-24 release manifest, nothing was removed and both new keys
+  are present. Neither key is in `approved-hashes.json` or `judge-locked-hashes.json`. `verify-approved`
+  (ROOT = this worktree) reports 0 mismatched and 0 missing. `ixion-plates.ts` swaps with one line each.
+- **e2e on the checker's own production build** (`vite build --outDir .ixqc-dist-tmp`, `vite preview` on 7741,
+  stopped by PID): `tests/e2e/ffx2-ixion.spec.ts` **2 passed** (1600x900 by keys and 390x844 by taps, 13.0 min).
+  The run rewrote the tracked `docs/screenshots/chapter-ixion/listed/*.jpg` frames in this worktree. The checker
+  did not commit them.
+- **`git merge-tree --write-tree origin/main f3e8c1ac`** is clean (origin/main 47ab4ae8).
+- **Ixion's spot at 1600x900 and 2000x1012** (headless GPU, production build, seed 3; also the `enemy` and `intro`
+  rigs at 2000x1012): in the idle pose his hooves stand on lit floor right of the pit, and his ring is on lit
+  stone. The painting covers both rigs at 2000x1012, with no dark strip on the right. The disclosed trade-offs
+  hold: the party is on the pit's near rim, and the HUD covers his back or tail.
+
+**Findings**
+1. **Major (390x844): Ixion stands on a dark painted slab.** At phone size his hooves land on the large dark
+   trapezoid right of the pit, the dark slab at about x 1920-2120, y 880-980 of C2 at 1:1. The render reads RGB
+   of about (22-25, 26-31, 37-50) under his hooves, so the slab looks like a void in the frame. The checker
+   confirmed that it is painting, not a cast shadow: served a copy of C2 lifted toward grey, the patch lifts with
+   the rest of the painting. So the claim "on lit floor at all three sizes" does not hold on the phone.
+   **Fix options:**
+   - Nudge the spot for phone aspect (a per-aspect `ixion` or `shiftX`).
+   - Lighten that slab in a provisional-only copy of C2.
+   - Disclose it with the other trade-offs.
+
+   Frames are in the checker's scratch `qc/hud-390.jpg` and `qc/z390.png`, not committed.
+2. **Minor (1600x900):** in the lunging battle pose (the `02-battle-c2-stage` frame and the checker's
+   `stage-1600`), his leading foreleg reaches over the same dark slab. His ring and rear hooves stay on lit floor.
+3. **Minor (naming):** the new keys `djose-chamber-provisional` and `farplane-abyss-provisional` drop the `ffx2-`
+   prefix that C1 and A1 carry (`ffx2-djose-chamber-provisional`, `ffx2-abyss-provisional`). The two chamber keys
+   differ only by that prefix, which invites a wrong one-line swap. The comments in `ixion-plates.ts` name both
+   correctly.
+4. **Minor (stale comments, carried from the release CHECK):** `src/scenes/index.ts` line 126 and line 272, and
+   `src/data/chapter-ffx2-ixion-djose.ts` lines 17, 35 and 50, still describe a "stand-in plate".
+5. **Info:** the pause hero plate is still `ch16-ffx2-ixion-djose-standin`, and the prep wash and board card follow
+   the scene key. Both scene picks remain Bailey's (rule 9).
+
+**Left behind (no deletes allowed):**
+- Scratch: `.ixqc-probe-tmp.mjs`, `.ixqc-probe2-tmp.mjs` and the build folder `.ixqc-dist-tmp/`, all in the
+  worktree root.
+- The e2e-refreshed `listed/` frames, uncommitted.
