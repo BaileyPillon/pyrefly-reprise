@@ -1,0 +1,399 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-28T10:09:46.459Z",
+ "build": {
+  "mainSha": "6ea8528f",
+  "bundle": "index-DecUADzw.js"
+ },
+ "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: four chapters run from the title to battle, a real-key action, the next menu and pause with 0 page or console errors; Ixion acts twice by Enter; Grand Summon summons the picked aeon.",
+  "No regression against live release 27: every measured value is equal or better (Ixion floor 28 -> 148 luma, Sensor chip 5 -> 30-72 px, Seymour Flux 384 -> 375 of 390, Chapter III phone 420 -> 387 of 390, FFX-2 IV framing and XVI desktop unchanged).",
+  "Each of the five items meets its acceptance in the running production build, in the intended game only (CHK-021).",
+  "No critical or major issue; two polish items and one suggestion, all carried from live."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Escape opens the full-window pause from Chapters XVI (390x844), I (390x844), III (2000x1012) and IX (1600x900); the phone Grand Summon overlay is window-scoped above the gauge.",
+   "where": "FFX I, III, IX; FFX-2 XVI; pause",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/supp-cand/ffx2-ixion-djose-390x844-pause.jpg",
+    "critic/reviews/6ea8528f-focused/supp-cand/seymour-flux-390x844-pause.jpg",
+    "critic/reviews/6ea8528f-focused/supp-cand/braskas-final-aeon-2000x1012-pause.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "FAIL",
+   "reason": "The changed rows read (five aeon rows, 22 px each, full names); the Grand Summon subtitle beside the title is still tiny and runs past the panel edge on the phone (FOC24-03, carried from live, not introduced). Recorded as FOC28-P02.",
+   "where": "FFX IX; Yuna Grand Summon picker; 390x844",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/foc24-390x844-row5-picker-cursor.jpg",
+    "critic/reviews/6ea8528f-focused/live/foc24-390x844-row5-picker-cursor.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "The picker names five aeons and every one is reachable: four Downs and Enter summon Bahamut at 390x844, three Downs and Enter summon Shiva at 1600x900 (engine aeonId read back).",
+   "where": "FFX IX; Grand Summon",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/foc24-390x844-row5-aeon-row.jpg",
+    "critic/reviews/6ea8528f-focused/cand/foc24-1600x900-row4-aeon-row.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "After the pick the overlay is gone and the aeon has its command menu (no picker left over the gauge).",
+   "where": "FFX IX; aeon out",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/foc24-390x844-row5-aeon-row.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No copy changed in product text (IXS-4 is comments only); no developer words seen in any captured frame.",
+   "where": "all captured frames",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/ixs1-390x844-menu.jpg",
+    "critic/reviews/6ea8528f-focused/cand/p02-seymour-flux-390x844-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "P-01: folded Sensor chip vs the Final Aeon while aiming it: 72 px from its bracket and 30 px from its name plate at 1600x900, 76/34 at 2000x1012 (live: 5 px and 9 px); with a Pagoda aimed, 30-34 px from every bracket; 71+ px from guide, advisor, turn list and TARGET plate. IXS-1: Ixion floor luma 148 with 0 % dark at 390x844 (live 28, 100 % dark).",
+   "where": "FFX III aiming; FFX-2 XVI phone",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/p01-braskas-final-aeon-1600x900-aim-braskas-final-aeon.jpg",
+    "critic/reviews/6ea8528f-focused/live/p01-braskas-final-aeon-1600x900-aim-braskas-final-aeon.jpg",
+    "critic/reviews/6ea8528f-focused/cand/ixs1-390x844-menu.jpg",
+    "critic/reviews/6ea8528f-focused/live/ixs1-390x844-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Aeon names in the picker, the aeon status row (Bahamut, Shiva) and target plates show in full.",
+   "where": "FFX IX, III",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/foc24-390x844-row5-picker-cursor.jpg",
+    "critic/reviews/6ea8528f-focused/cand/foc24-1600x900-row4-aeon-row.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "The selected Grand Summon row is a full gold bar and now visible on the phone (live: Bahamut row hidden under the gauge).",
+   "where": "FFX IX; picker",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/foc24-390x844-row5-picker-cursor.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Chapter III: all three enemies visible while aiming each; phone framing at 390x844 keeps every staged figure inside the window at the menu and while aiming in Chapters I (32-375), II (25-383), III (24-387; live 10-420), VIII (21-381) and FFX-2 IV (31-379, live 30-379); I at 360x780: 28-344.",
+   "where": "FFX I, II, III, VIII; FFX-2 IV; phone",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/p02-seymour-flux-390x844-menu.jpg",
+    "critic/reviews/6ea8528f-focused/cand/p02-braskas-final-aeon-390x844-aim.jpg",
+    "critic/reviews/6ea8528f-focused/cand/p02-ffx2-bahamut-390x844-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "IXS-1 judged in the running game: on the phone Ixion now stands on lit stone at the menu and both of his actions; the pit stays in the slice; the party stays on the rim (disclosed before, FOC28-P01). The plate itself is provisional (Bailey's pick owed), so only placement was judged.",
+   "where": "FFX-2 XVI; 390x844 and 1600x900",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/ixs1-390x844-menu.jpg",
+    "critic/reviews/6ea8528f-focused/cand/ixs1-390x844-ixion-act1.jpg",
+    "critic/reviews/6ea8528f-focused/cand/ixs1-1600x900-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Every changed behaviour driven by real keys: title -> board -> prep -> battle by Enter/arrows in four chapters; Attack/Right aiming in III; Enter-driven Ixion turns; Downs+Enter picking an aeon. Setup only via the debug API: chapter start in item probes, Yuna/Rikku gauge to 100.",
+   "where": "FFX I, III, IX, II; FFX-2 XVI",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/supp-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Each capture was preceded by an asserted screen (app.current.name), phase (command:<actor>), aimed ids or open list rows; the one failed harness step (FFX-2 XVI \"Attack starts an action\": the first FFX-2 menu has no Attack, the arrows landed on Change) is reported as a harness miss, not as evidence.",
+   "where": "all",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/supp-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "This is the pre-deploy focused review of the candidate; the live URL was opened only as the comparison baseline (release 27). The live verification of this artifact is the separate \"live\" obligation after the deploy.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The shared phone framing gets per-game work: FFX gets the 16 px comfort margin, FFX-2 passes 0 and frames exactly as live (Chapter IV 31-379 vs 30-379). Aeon chip and picker rules are FFX screens only.",
+   "where": "FFX I; FFX-2 IV",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/p02-ffx2-bahamut-390x844-menu.jpg",
+    "critic/reviews/6ea8528f-focused/live/p02-ffx2-bahamut-390x844-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Cases: IXS-1 FFX-2 only (Djose scene, phone only); IXS-4 comments; FOC24-01/02, P-01, P-02 FFX only. Presence: FFX III chip, FFX IX picker and aeon row, FFX I framing. Absence: FFX-2 phone uses data-phone-battle=ffx2 so the .ffx-mg rule cannot match, FFX-2 IV framing unchanged, the Djose plate is used by no FFX chapter; XVI desktop floor measures 145/0 % as before.",
+   "where": "both games",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/p02-ffx2-bahamut-390x844-menu.jpg",
+    "critic/reviews/6ea8528f-focused/cand/ixs1-1600x900-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Scene transitions exercised by real keys reach their destinations: title -> chapter select -> party prep -> story scenes -> battle, battle -> pause, in four chapters (0 page errors, 0 console errors). Win/loss routes are untouched by this change and were not replayed.",
+   "where": "FFX I, III, IX; FFX-2 XVI",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/supp-cand/report.json",
+    "critic/reviews/6ea8528f-focused/supp-cand/seymour-flux-390x844-first-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Every changed subsystem was reached through the real HUD and stage: the Overdrive overlay from Yuna's command menu, the aeon status row after a real summon, the Sensor chip through Attack targeting, the phone framing through the command menu, the Djose plate through the chapter's scene build.",
+   "where": "FFX I, III, IX; FFX-2 XVI",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/foc24-390x844-row5-aeon-row.jpg",
+    "critic/reviews/6ea8528f-focused/cand/p01-braskas-final-aeon-2000x1012-aim-braskas-final-aeon.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "6ea8528f / D:/pyrefly-rel28/dist-gate (index-DecUADzw.js, index-Dr6Gs8p0.css; built 05:51 after the 05:44 commit, contains the FOC24-01 rule)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel28 at 6ea8528f (clean apart from dist-gate and docs/deploys.log); vite preview 127.0.0.1:5480 (PID 67548, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparisons against https://baileypillon.github.io/pyrefly-reprise/ (release 27, be1e964a)"
+  }
+ ],
+ "targets": {
+  "required": 3,
+  "matched": 3,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "note": "Tiles touched: \"Targeting: one Yu Pagoda, every enemy visible\" (fight), \"Battle HUD on a phone (both)\" (presentation; build follows option B, compact rail), \"The Zanmato gauge (FFX)\" (chapters; the open picker now draws over it on the phone). Composites: targeting-one-pagoda.jpg, battle-hud-phone.jpg, zanmato-gauge.jpg. The Chapter XVI plate is provisional (Bailey's pick owed), not an approved target."
+ },
+ "issues": [
+  {
+   "id": "FOC28-P01",
+   "severity": "polish",
+   "title": "Chapter XVI on a phone: Yuna, Rikku and Paine stand on the pit rim, not on lit stone; the new source comment says Paine stands on lit stone",
+   "game": "FFX-2",
+   "chapter": "XVI (ffx2-ixion-djose)",
+   "expected": "The handoff/comment claim \"Paine stands on lit stone\" holds, or the comment says the whole party stands on the rim",
+   "observed": "Floor under Paine's feet: mean luma 53-56, 76-79 % dark at 390x844 (live 23-26, 96-97 %): lighter but still the rim wall; Yuna and Rikku 19-24, 100 % dark (unchanged)",
+   "repro": "Chapter XVI at 390x844, first menu; hide figures and read the floor box under each figure's feet",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/ixs1-390x844-menu-hidden.jpg",
+    "critic/reviews/6ea8528f-focused/cand/ixs1-390x844-menu.jpg"
+   ],
+   "confidence": "high (also found by the independent CHECK)",
+   "requirement": "CHK-013 in-game art judgment; accuracy of recorded measurements",
+   "where": "src/scenes/djose-chamber.ts comment on DJOSE_PLATE_FRAMES (IXS-1 paragraph)",
+   "fix": "Correct the comment; the party-on-rim framing stays with Bailey's C1/C2 plate pick",
+   "acceptanceCheck": "Comment matches the measurement; party placement decided with the plate pick",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC28-P02",
+   "severity": "polish",
+   "title": "Grand Summon subtitle runs past the panel edge and is sub-legible on the phone; the selected row's x2 count is gold on gold",
+   "game": "FFX",
+   "chapter": "IX (yojimbo-cavern)",
+   "expected": "Subtitle inside the panel at the legibility floor; count readable on the selected row",
+   "observed": "\"GRAND SUMMON - AEON ARRIVES WITH A FULL OVERDRIVE\" is clipped by the right edge at 390x844 (same on live); the x2 on the selected Bahamut row nearly vanishes",
+   "repro": "Chapter IX at 390x844, Yuna's gauge full, Overdrive -> Grand Summon, cursor on Bahamut",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/foc24-390x844-row5-picker-cursor.jpg",
+    "critic/reviews/6ea8528f-focused/zanmato-gauge.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-003 legibility floor (carried as FOC24-03)",
+   "where": "not traced (src/ui/ffx/minigames overlay styles)",
+   "fix": "Wrap or drop the subtitle on the phone; dark count text on the selected row",
+   "acceptanceCheck": "At 390x844 the subtitle sits inside the panel at >= the floor and the count reads on the selected row",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC28-S01",
+   "severity": "suggestion",
+   "title": "Desktop Grand Summon list still shows four rows; Bahamut scrolls",
+   "game": "FFX",
+   "chapter": "IX",
+   "expected": "All five aeons at once, as the phone now shows",
+   "observed": "At 1600x900 Bahamut (447-502) is below the list bottom (457) until the cursor reaches it; unchanged from live",
+   "repro": "Chapter IX at 1600x900, Grand Summon picker open",
+   "evidence": [
+    "critic/reviews/6ea8528f-focused/cand/foc24-1600x900-row4-picker-open.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-011 spirit (every choice visible)",
+   "where": "not traced",
+   "fix": "Raise the desktop list to five rows",
+   "acceptanceCheck": "Five rows visible without scrolling at 1600x900"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "tsc --noEmit clean in D:/pyrefly-rel28; touched unit tests 6 files / 66 tests pass",
+   "Source diff be1e964a..6ea8528f (14 src files): data files changed comments only, so no game value to audit (dataAudit: 0 changed values)",
+   "IXS-1: Chapter XVI floor luma under every figure at the menu and Ixion's two actions, 390x844 candidate vs live, 1600x900 candidate",
+   "FOC24-01/02: Chapter IX Grand Summon picker at 390x844 candidate vs live, pick Bahamut; 1600x900 pick Shiva; aeon status row portrait; Rikku's Mix picker on the phone (Chapter II)",
+   "P-01: Chapter III aim through all three targets at 1600x900 and 2000x1012 candidate, 1600x900 live",
+   "P-02: phone framing at 390x844 in Chapters I, II, III, VIII and FFX-2 IV, candidate and live; Chapter I at 360x780",
+   "Real-key path title -> board -> prep -> scenes -> battle -> action -> next menu -> pause in XVI 390x844, I 390x844, III 2000x1012, IX 1600x900"
+  ],
+  "reused": [
+   {
+    "what": "Independent CHECK measurements of fixes-r28 (cb507601)",
+    "from": "docs/handoff/fixes-r28.md CHECK section",
+    "why": "used only to choose probes; every number in this report was re-measured on the candidate artifact"
+   },
+   {
+    "what": "Probe scripts",
+    "from": "D:/pyrefly-fixes-r28/tools/zz-r28chk-*.tmp.mjs",
+    "why": "copied into s/ and pointed at the candidate preview and the live URL"
+   }
+  ],
+  "notTested": [
+   "Kimahri's Ronso Rage list on the phone (his Overdrive went straight to targeting in the CHECK run; the rule only raises the list and the overlay)",
+   "Win and loss outcomes (untouched by this change)",
+   "FFX-2 chapters other than IV and XVI; FFX chapters V to VIII except VIII framing and II Mix",
+   "Real phone, real touch, Safari/Firefox, audio",
+   "Full vitest suite (touched files only); approved-hash verification (plan approvedArtCheck false; no art file changed)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of this exact artifact after the deploy; the deep review owed (shared systems: phone framing, scene runner, chapter registry, FFX-2 ATB comments) runs on the live build, carrying be1e964a's owed deep review.",
+ "elapsedMinutes": 42
+}
