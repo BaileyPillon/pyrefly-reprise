@@ -228,3 +228,116 @@ off for tests and ablations (the HUD never passes it; a call carrying it skips t
 4. XIV Isaaru (16 vs the line's 28) and XII's missed raises by the rails, as before.
 5. `advisor.ts` (now about 1,830 lines) and `FFX2BattleHud.ts` are over the 400-line rule as they
    were before; the new logic is in new modules.
+
+## CHECK 2 (adversarial, 2026-09-27, a second separate agent; branch at 94634c5c)
+
+Everything below was measured by running the engine (rule 3). Scratch probes, not committed:
+`.check2-advisor-v3-tmp/` (probe2, determinism, replay, split, timing, dbg) and
+`.check2-advisor-v3-timing-tmp.mjs` / `.check2-advisor-v3-browser-tmp.mjs` in this worktree.
+Frames, uncommitted: `docs/screenshots/advisor-v3/check2-*`. Verdict: **HOLD for merge**. There are
+3 blockers as the brief defines them: one real defect and two narrow misses of the bar as written.
+There are also 2 majors.
+
+### What holds
+
+- **The scorecard reproduces exactly.** 40 seeds x 15 chapters, v2 (`SCORECARD_V3=0`) and v3 on
+  this tree give 443 and 453 of 600. Every chapter's wins, duplicate counts (594 / 813 -> 107 / 72),
+  missed raises (XI 113 -> 5), lethal readings and off-menu counts equal `results-v3-repair.json`
+  and `results-v2-control.json`.
+- **The card never repeats a chosen move.** Six FFX-2 chapters were run three ways. Following the
+  card on **new seeds 41-80** gave 19,855 decisions, 7,430 with something in flight and 686 with a
+  **held** command. Random presses at 35 % on seeds 1-40 gave about 20,000 decisions. Low stock plus
+  a low-HP rig gave 55,173 decisions. None of the three showed the same support move, on the same
+  ally or the party, as a charging **or held** command; the only hits were a probe artifact
+  (Darkness simulated with no target). None showed the last copy of an item re-advised, a raise
+  onto a girl already being raised, an off-menu or badly aimed row, or a row that hurts an ally.
+  My probe also counts non-damage moves on an enemy (Dispel, debuffs) as repeats: 0.
+- **A command whose target dies before it lands.** 83 decisions: 74 had the fallen girl already
+  covered by a raise in flight, 5 had the card raise her, 1 had the runner-up raise her, 3 had no
+  raise on the menu, and **0 missed the raise**.
+- **Status rigs** (Reflect 589, Itchy 212, Zombie 399 (FFX), low MP 579) on 6 FFX and 3 FFX-2
+  chapters, 12 seeds: 0 findings of any kind.
+- **Purity and determinism.** In every probe decision above, the live engine's state, units, held
+  command, drafts, clock, RNG, acting stacks and options were the same before and after the card
+  and guide. Random-press runs with the v3 card and guide computed at every decision, or not at
+  all, matched on 36 runs (9 chapters x 4 seeds, FFX and FFX-2): the same RNG and log hash at every
+  decision. Card-followed runs replayed with no advisor matched on 21 runs, including 5-link
+  Vegnagun wins (a full-state hash at every decision). `ffx2-atb-golden`, `ffx2-engine-fork`, both
+  v3 suites and `advisor.test.ts` pass.
+- **Bailey's 2026-09-21 rules hold.** On FFX the card is unchanged: wins, missed raises and notes
+  equal v2 on all 9 chapters, and every Flux / Omnis miss either shows the note or has the raise
+  as the runner-up.
+- **Real keys, headless GPU, 390x844 phone layout, Chapter XI seed 3.** Rikku presses Item >
+  Mega-Potion. While it charges, Yuna's card says *Megalixir -> the party*; v2 would have said
+  *Mega-Potion -> the party*. The guide rail says "Waiting for your turn." and the HUD hands the
+  engine over (`check2-390x844-*`). At 1600x900, Chapter VI seed 5: Rikku's Hi-Potion on Yuna, and
+  the card says Hi-Potion -> **Rikku**, a different girl, which the rule allows (the script's naive
+  check flags it).
+- **Checks.** tsc is clean, apart from the known untracked `tests/unit/zz-scratch/` (2 × TS6133).
+  The full suite has 1 failure, the known Bahamut "heal-only route" 15 s timeout under load; that
+  file passes alone, 19 of 19.
+
+### Blockers
+
+1. **The guide rail's NEXT repeats a held (chain-locked) command: Bailey's case on the rail.**
+   `guide-inflight.ts#chosenAlready` calls `inFlight(state, actorId, [])` and never passes the
+   engine's held command. The repair's probe skipped held commands (`!p.held`), which is where its
+   "0 guide repeats" came from. Following the card on seeds 41-80, **38 of 686 held decisions**
+   named the held move (Leblanc 28, Vegnagun 7, Den of Woe 2, Fallen Aeons 1). Random presses gave
+   43, and the stress rig 6. Examples:
+   - Vegnagun seeds 58, 59, 64, 73, 76, with Rikku's Mega Phoenix held: the rail says *Mega Phoenix*.
+   - Vegnagun seed 52, with Paine's Megalixir held: the rail says *Megalixir*.
+   - Leblanc seed 45, decision 45, with Rikku's Hi-Potion on Rikku held: the rail says *Hi-Potion ->
+     Rikku*, while the card correctly avoids it.
+
+   Fix: hand the rail the held command (`StrategyGuide` has no engine today). The card itself is
+   clean here.
+2. **The win-rate bar as written: Chapter V is below v2 at 40 seeds (37 -> 36).** This reproduces
+   exactly. At 120 seeds V is level (111 = 111), but **XV drops 29 -> 28**. Both gaps are within
+   one run and far inside the noise (binomial SD about 4 wins per 120).
+   - V seed 26 splits at decision 13 (`split.test.ts`): Yuna's Megalixir is **held**, and v2 tells
+     Paine to use a second Megalixir while v3 refuses.
+   - The engine then **drops** Yuna's held Megalixir: `fireHeld` drops a command when every target
+     in `command.targets` has died, and this party item's `command.targets` held only Rikku, who fell.
+   - v3 relied on a command that never landed and lost. This looks like an engine question
+     (FFX-2), not an advisor bug, but it is why V is one run short.
+3. **The speed bar as written: the card is measurably slower than today's on FFX-2.** Timings are
+   paired, v2 and v3 on the same board in the same process, node, 8 seeds.
+   - Median time per decision is 1.00x to 1.09x v2's.
+   - p95: Vegnagun 10.9 -> 11.4 ms, Leblanc 8.5 -> 9.7, Den of Woe 6.2 -> 7.8.
+   - On boards with a lethal forecast, where `provedSave` presses rows on forks: Vegnagun p50
+     4.2 -> 7.4 ms, p95 5.3 -> 12.0, worst 14.6 -> 22.8; Fallen Aeons p50 6.7 -> 12.1.
+   - FFX is level.
+   - Browser, headless GPU, Active, 30 menus each:
+     - 1600x900: p50 level (about 5 ms), p95 6.8-7.5 -> 8.2 ms.
+     - 390x844: p95 5.8 -> 7.8.
+     - 390x844 at 4x CPU throttle: the HUD's own card p50 32.7 -> 35.0 ms, worst 46.6 -> 71.5.
+
+   The absolute cost is small and paid once per menu. The driver decides whether the bar means "no
+   slower at all".
+
+### Majors
+
+4. **A different item with the same effect replaces the refused repeat.** While another girl's heal
+   is already on its way, the card often names a different heal on the same allies. This happens
+   when the enemy moves first: the projection stops before the heal lands, and the card prices
+   "one hit from down" on the real board, although her own heal would land after the one in flight.
+   - Card-followed: 131 of 7,430 in-flight decisions name a pure HP heal that the in-flight heals
+     already fill (Potion 75, X-Potion 40, Mega-Potion 13). Random presses: 161.
+   - The scorecard's strict duplicates show the same residue, 107 (v2: 594).
+   - The phone frame above shows it: Megalixir while Rikku's Mega-Potion charges. The Mega-Potion
+     lands 1.5 s later (Yuna 2,488 / 2,488), and the card still says Megalixir, because it is
+     computed once per menu. There, at least, Megalixir also restores MP.
+
+   Bailey may read this as the same complaint.
+5. **FFX gets nothing measurable from "WAY smarter".** Revive priority changes no FFX chapter's
+   wins, missed raises or notes. Flux still has 234 missed raises while losing, Omnis 103, all by
+   Bailey's rule or shown as the runner-up. This is not a regression, but the both-games half of
+   the ask is not visible on FFX.
+
+### Minors
+
+- `guide-inflight.ts#chosenAlready` follows the global `ADVISOR_V3`, not the per-call `v3` flag, so
+  the rail is always v3.
+- The card's cite reads the guide on the projected board.
+- The untracked `tests/unit/zz-scratch/` still breaks tsc in this worktree and runs under `npm test`.
