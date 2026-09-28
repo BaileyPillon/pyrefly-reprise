@@ -1,0 +1,63 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-09-28T05:15:00.000Z",
+ "build": {
+  "mainSha": "d89541b6",
+  "bundle": "eoq6aKmL",
+  "artifactHash": "2f45c735f70df5df59310681d1b130bc2d8c548578434e8d094d1bd011c2f61b"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/d89541b6.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/79adc4ff.json -> {result: PASS, artifactHash: 2f45c735f70df5df59310681d1b130bc2d8c548578434e8d094d1bd011c2f61b, liveManifest: match, checked: 101, mismatched: [], missing: [], wrongType: [], errors: []}",
+   "reason": null
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), 1600x900, live URL with cache-busting query, fresh context. Screen/board state read via window.__pyrefly (read-only) and asserted before each action; every input was a real page.keyboard.press. Title -> chapter-select (real Enter) -> board cursor walked to ffx2-ixion-djose via screenState.selectedId (14 real ArrowLeft/Right presses, checked after each) -> party-prep -> cutscene skip -> battle command menu open. Advisor v3 case: took Mega-Potion for Paine by real keys (Item -> Mega-Potion -> aim -> confirm); the next actor's (Rikku) advisor card read afterward did not name Mega-Potion. 1 further real-key Attack turn completed with ticks advancing. Cancel path: opened Item, Escape returned to the top-level menu. Escape opened pause; H toggled twice; P resumed to battle. Network log showed 6 audio requests including audio/music/title.mp3 (prerendered music fetched). One FFX chapter (seymour-flux) reached a player command menu the same way. Typing L-I-M-I-T on chapter-select (real keys) transitioned the screen from chapter-select to battle, opening the hidden FF7 fight. Console errors: 0. 404s: 0.",
+   "reason": null
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "page.reload() mid-session re-booted cleanly (__pyreflyReady true again) and localStorage keys (pyrefly-reprise:save:v1) were present and identical before and after the reload.",
+   "reason": "Lightweight only, as scoped: did not pair a deliberate settings change with a fresh piece of progress before reloading (no save-worthy checkpoint was reached in the time budget), and the full upgrade matrix (fresh/returning/previous-release-save-fixture/invalid-storage) was not run — both are listed under coverage.notTested per the brief."
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "exact-artifact byte comparison (101 files) against the live URL",
+   "title -> chapter-select -> Chapter XVI (ffx2-ixion-djose) by real input, cursor located via screenState.selectedId",
+   "party prep -> cutscene skip -> battle command menu, real input throughout",
+   "advisor v3: a chosen/charging Mega-Potion is not repeated on the next actor's card",
+   "a further real-key Attack turn with ticks advancing",
+   "cancel path out of a submenu (Escape)",
+   "pause: Escape/P open, H hides and restores, P resumes",
+   "prerendered audio requested over the network (not the synth fallback), by URL",
+   "reload mid-session: re-boot and existing save/localStorage keys unchanged",
+   "one FFX chapter (seymour-flux) reaches a player turn by real input",
+   "hidden FF7 fight opens by typing LIMIT on chapter-select (real keys), live"
+  ],
+  "reused": [],
+  "notTested": [
+   "the full CHK-024 upgrade matrix (fresh player, returning player, previous-release save fixture, invalid/truncated storage, reset/confirm flow) — explicitly out of scope for this lightweight pass",
+   "a reload paired with a deliberately changed setting plus a freshly made piece of progress (the session did not reach a save checkpoint in budget)",
+   "decoding/listening verification of the prerendered audio files themselves (only that they were requested over the network)",
+   "completing Chapter XVI to a decided outcome (only a player turn plus a few real-key turns were exercised, per the brief)"
+  ]
+ },
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 12
+}
