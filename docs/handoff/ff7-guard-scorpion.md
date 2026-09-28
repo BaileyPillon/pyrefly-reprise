@@ -489,3 +489,78 @@ board only the player's way (title, then Enter or a tap).
 
 C-1 (behind `main`) is settled by the merge. C-2, C-4 and C-6 are fixed or closed as described
 above. C-3 is covered by R-3.
+
+## CHECK: independent release-readiness check of ff7-phase3 at 09a74ad9 (the repair pass), 2026-09-27
+
+An independent checker, who built none of this, checked branch `ff7-phase3` at `09a74ad9`. **Verdict: no
+blocker.** Two majors: the branch no longer merges cleanly with today's `main` (P3C-1), and repair item 1 is
+only half fixed, because Barret's aim now stands about 90 px **left** of his idle (P3C-2). There are also
+three minors. Game case: **FF7 only**. The FFX and FFX-2 rows below show that neither game changed, against
+`47ab4ae8` (the branch's base, and `origin/main` when the check began).
+
+**Method.** The checker made two production builds with the art, using `vite build` into
+`D:/Tools/pyrefly-scratch/ff7-p3-check/dist-{branch,main}`. `main` is `47ab4ae8`, taken with `git archive`
+and built with the same `public/`. The two builds were served by `vite preview` on ports 7220 (branch) and
+7221 (main). Everything ran in headless Chromium with `PYREFLY_BROWSER=gpu`, one browser at a time. Both
+servers were stopped by their PIDs. The scratch scripts are `tools/zz-p3check-*.tmp.mjs`, and `main`'s
+source is in `zz-p3check-main.tmp/`. Neither is committed. Frames and reports are in
+`D:/Tools/pyrefly-scratch/ff7-p3-check/`. Each FF7 fight started from a non-empty main save, made in a
+separate page and injected before boot. The fight page then reached the board only the player's way: the
+title, then Enter or a tap.
+
+| Check | Result |
+|---|---|
+| tsc (app, e2e) | Both clean (TypeScript 7.0.2, 2,389 files) |
+| Full `vitest run` | 599 files pass, 5 skipped, 1 fails. The failure is the known `strategy-ffx2-bahamut` "heal-only route" timeout under full load (15 s). Run alone with `ffx2-atb-golden`, 25/25 pass. `ff7-golden` passes 3/3. The branch diff does not touch `tests/fixtures` or `src/battle` since `3afd0e4e`, so there was no re-pin |
+| Repair test is real | With the FF7 `await this.playing` line in `BattlePresenter.submit` disabled, `ff7-judge-repair`'s item-3 test fails (10/11). With the line restored, it passes 11/11 |
+| `orphans.mjs` | 24, the same list, none of them FF7 |
+| Approved art | The sha256 of every entry in `approved-hashes.json` (238) and `judge-locked-hashes.json` (48) matches, in `public/art` and in the built `dist`: 286 ok, 0 mismatched, 0 missing. `tools/verify-approved.mjs` does not exist in this tree, in `main`'s tree or anywhere in git history (P3C-4) |
+| `git merge-tree` | Against `47ab4ae8` (`origin/main` when the check began): clean, because the branch is a fast-forward. **Against today's `origin/main` `d89541b6` it is not clean** (P3C-1) |
+| (a) FF7 hidden | At 1600x900, 1024x768 and 390x844, the board reached by real input matches `main`'s build **pixel for pixel (0 px differ)**, and the snapshot and words are identical: 15 tiles, one COMING, "0 of 14 beaten". There is no FF7 text in the DOM. `__pyrefly` keys, `chapters()` and `scenes()` are identical to `main`'s. These do nothing: h, l, i, m, t, L, H, f and r pressed alone; LIMI, a 2.6 s pause, then T; FRFR, a 2.6 s pause, then M; LIMXT (X goes back to the title, as on `main`); 18 presses each of arrows, WASD, Q, E, Tab, PgUp/PgDn/Home/End (all 14 playable tiles visited, never FF7); a click, and at 390x844 a tap, on each of the 15 cards, twice (each opens its own party prep or does nothing; none opens FF7); six taps, a 4.5 s wait, one more tap. `?chapter=ff7-guard-scorpion#ff7-guard-scorpion` stays on the title. `goto('ff7-hud-demo')` does nothing. Only the intended debug route, `gotoChapter('ff7-guard-scorpion')`, opens the fight, and it does the same on `main`'s build |
+| (b) Door, win, Game Over and RETRY by real input | **Keys, 1600x900.** LIMIT, the swirl and the opening, then a sensible fight: a win in 19 turns with Bolt, Scope, Rifle, Tail, Tail Laser and the shot. Then D1, both C1 windows ("EXP 100, AP 10, Cloud LV 7 +100, Barret LV 6 +100"; "GIL 100, Assault Gun 1 (Barret: Att 17, Long Range), Received 100 gil and the Assault Gun."), and Enter twice to the board. LIMIT again, then a naive loss (Braver, Big Shot, a KO'd Barret laid down at once). G1 GAME OVER with RETRY / CHAPTER SELECT. RETRY by Enter uses seed + 1000 (checked). A second loss, then Down and Enter to CHAPTER SELECT. **Taps, 390x844, DPR 3.** Seven taps on the label, a win in 18 turns, the results by taps on `.ff7-res-next`, then a loss, RETRY by a tap (seed + 1000), a loss, and CHAPTER SELECT by a tap. The same run again at 4x CPU throttle won in 16 turns. There were no page or console errors in any run. Every damage numeral stayed inside the frame: 3,779 samples at 1600x900 (x 164 to 1212); 3,962 at 390x844 (x 2.4 to 334) |
+| (c) Save untouched | `pyrefly-reprise:save:v1` (511 B) was byte-identical after the win, and again after two losses and RETRY, in all three runs. The only other key that changed was `pyrefly-reprise:experiments:v1` (attempts 3, clears 1, best time). The board snapshot and words were unchanged each time |
+| (d) FFX / FFX-2 by real keys | **Chapter I (Seymour Flux)** and **Chapter IV (Bahamut)** were run from the title through prep and cutscene to the first command menu on both builds. The HUD, guide card, advisor card and text are the same. The best pixel match between builds (Ch I mean 4.2, Ch IV mean 4.2) is within the difference between two `main` frames (4.6 and 9.7): idle sway. **Whole battles** used the critic's route driver (`critic/runner/lib/route.mjs`, seed 1, real keys) on both builds. Ch I: the same 23 picks, the same first enemy action (Lance of Atrophy on Yuna), and the same defeat at turn 47. Ch IV: a **win** on both, the same first enemy action (Curse on Paine), and the same 30 picks with the same engine HP at every pick. The only difference is the route's wall-clock label of what was playing. The results are the same (EXP 1,300 x3, 15 AP, 1,000 gil, Gris Gris Bag), and only the clear time differs (4:01 against 3:59). **Code.** Every shared-file edit since `47ab4ae8` was read. Each one is either an explicit `game === 'ff7'` branch or an optional hook that only FF7 sets (`actionMotion` exists only for an FF7 build; `SpellFxLayer.lands` is filled only for `'ff7'`, so `pendingLand` returns 0 elsewhere; `erode` is 0 unless a scene sets `figureLight`). Nothing under `src/battle` changed |
+| Phone frame time (Spectacle) | This was measured on this PC's GPU in headless Chromium, not on a phone (P3C-5). At 390x844 and DPR 3, frames with an FF7 effect running averaged **16.67 ms** (p95 16.8, max 16.8, none over 33 ms; 4,854 frames). At 4x CPU throttle they averaged **16.89 ms** (p99 16.8; 15 of 4,554 frames over 33 ms). The effect layer's own CPU cost averaged 0.07 ms (0.36 ms throttled). At 1600x900 the average was 16.67 ms |
+| Bundle, first load (gzip -9) | Branch 882,678 B (JS 834,781 + CSS 47,897; 3,389,146 raw) against `main` at `47ab4ae8`, 866,115 B (818,822 + 47,293; 3,345,348 raw): **+16.6 kB gzip**, +43.8 kB raw |
+
+**Findings**
+
+- **Major P3C-1: the branch does not merge cleanly with today's `main`.** `origin/main` moved during the
+  check from `47ab4ae8` to `d89541b6`: 31 commits, including the advisor v3, combat-switches and
+  Chapter XVI Ixion merges, with 54 `src` files changed. `git merge-tree` reports conflicts in
+  `docs/target/approved-hashes.json` and `docs/CONTRACT-CHANGES.md`. In both files, both sides added a new
+  entry at the same place: the `bailey:2026-09-27-ff7-film` set against `bailey:2026-09-27-ixion`, and
+  two newest-first log entries. Keeping both sides resolves each one, but the JSON needs its comma back.
+  `tests/e2e/ff7-guard-scorpion.spec.ts` auto-merges to main's `tiles` value of 16, because Ixion is now
+  listed. Everything above is proven only against `47ab4ae8`. The merged candidate needs (a), (c) and
+  (d) run again, above all the board (16 tiles) and the FFX-2 chapters with advisor v3 and action time.
+- **Major P3C-2: repair item 1 is only half fixed. Barret's aim now stands about 90 px left of his idle.**
+  In the live fights at 1600x900, Barret's boots at idle are centred at about x 255. At aim they are at
+  about 165, and at fire at about 255. Each shot now jumps him about 90 px left, then back (frames
+  `fight-1600x900-keys/004`, `005`, `006`, `026`, `027`, `042`; a direct probe gives `stance-1600x900/sheet-barret.jpg`).
+  The phone shows the same thing. The fire plane sits where its offset puts it: world x -0.429, which is
+  -203 px x `unitsPerPixel` 0.002113. The aim plane measured -0.747 and -1.057 world units in two probes,
+  where -213 x 0.002113 gives -0.450. Something else moves the aim plane, and the amount is not the same
+  every time. The unit test (`ff7-judge-repair`, "within 6 px") works in PNG pixels with each sidecar's
+  `scale`, not on the drawn plane, so it passes regardless. Suggested test: measure the projected feet
+  (or the plane's x) per pose on a real `PaintedActor`. Cloud's keys stand on his idle within a few px.
+  His strike stands about 45 px forward, which is fine, because it is only drawn at the strike point.
+  FF7 only. This is not a blocker (the fight plays and is won), but it is the judge's pose-jump major in
+  the other direction.
+- Minor P3C-3 (rule 7): six contract or shared files that were already over 400 lines grew. They are
+  `PaintedActor.ts` (1,998 to 2,022), `BattlePresenter.ts` (689 to 697), `BattlePresenterPorts.ts` (465
+  to 471), `BattleScreen.ts` (943 to 947), `BattlePresenterStage.ts` (845 to 848) and
+  `BattlePresenterEvents.ts` (435 to 436). The CONTRACT-CHANGES entries exist.
+- Minor P3C-4: the "Checks" list of the first phase-3 pass above reports that `verify-approved.mjs` ran
+  ("ROOT = the worktree"). No such script exists in any tree or in git history. The repair note says so
+  and did the hash check by hand, and this check did the same. `NOW.md` and several handoffs still name
+  the script.
+- Minor P3C-5 (disclosure): no real phone was measured. The 60 fps figures are from a desktop GPU,
+  including the 4x CPU throttle run. A mid-range phone's GPU fill rate for the washes, glows and haze
+  at DPR 3 is still unknown.
+
+What the builder claimed and this check confirmed: tsc; the suite with the one known timeout; the
+goldens unchanged; orphans at 24; 286/0/0 on the approved art (also in the built `dist`); the item-3 test
+failing without its fix; D1, C1 without an AP line, and G1 with RETRY at + 1000; the KO'd member lying
+down at once; the board and the save untouched; FFX and FFX-2 identical. The checker did not re-run the
+builder's e2e and ran their own real-input fights instead.
