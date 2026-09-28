@@ -23,6 +23,12 @@ export function foldWhileAiming(enemyIds: readonly CombatantId[], onPhone: boole
 /** The chip never rises above this grid line (under the guide and advisor chips' row). */
 export const AIM_FOLD_FLOOR_TOP = 40;
 
+/**
+ * P-01 (FFX only, Chapter III): the room the chip keeps from every bracket and from the aimed target's name plate,
+ * grid px (about 22 CSS px at 1600x900). At 2 px it came to rest against the Final Aeon's bracket corner.
+ */
+export const AIM_FOLD_CLEAR = 10;
+
 export interface GridBox {
   left: number;
   right: number;
@@ -33,10 +39,11 @@ export interface GridBox {
 /**
  * How far (grid px, negative is up) the folded chip rises while aiming so it sits above every enemy
  * whose box it meets at its resting place; `null` when it meets none. Never above `floorTop`, the
- * line under the top strips.
+ * line under the top strips. `clear` grows every box on all four sides first (P-01: brackets and plates).
  */
-export function chipLiftDy(chip: GridBox, enemies: readonly GridBox[], floorTop: number, gap = 2): number | null {
+export function chipLiftDy(chip: GridBox, obstacles: readonly GridBox[], floorTop: number, gap = 2, clear = 0): number | null {
   const h = chip.bottom - chip.top;
+  const enemies = obstacles.map((e) => ({ left: e.left - clear, right: e.right + clear, top: e.top - clear, bottom: e.bottom + clear }));
   let top = chip.top;
   // Rise past the enemy met, then check again: a lift above Pagoda B can land on the Final Aeon's box.
   for (let i = 0; i <= enemies.length; i++) {

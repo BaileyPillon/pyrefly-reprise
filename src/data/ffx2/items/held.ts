@@ -18,7 +18,7 @@
  * | `white-lore` | White Lore | Shade of Gippal (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.1; effect `ffx2-bahamut.md` §accessories |
  * | `natures-lore` | Nature's Lore | Shade of Baralai (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.2; effect `ffx2-combat-core.md` Instinct |
  * | `arcane-lore` | Arcane Lore | Shade of Nooj (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.2; effect `ffx2-combat-core.md` Arcana |
- * | `soul-of-thamasa` | Soul of Thamasa | Ixion's drop (Djose, unlisted) | `ffx2-ixion-djose.md` §3.1, verified: 6 sources; effect wiki, single source |
+ * | `soul-of-thamasa` | Soul of Thamasa | Ixion's drop (Djose, Chapter XVI) | `ffx2-ixion-djose.md` §3.1, verified: 6 sources; effect wiki, single source |
  * | `sprint-shoes` | Sprint Shoes | Ixion (both slots) | `ffx2-ixion-djose.md` §3.1, verified: 4 sources; effect wiki, single source |
  *
  * What is **not** sourced, and so not written: an effect or description for

@@ -6,6 +6,11 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-28 — `dsl.ts`: doc comments only (IXS-4)
+
+**Both** (shared plumbing). Branch `fixes-r28`. `setPose` gets its doc comment back ("Set an actor's sprite state"),
+which the 2026-09-27 `backdrop()` insertion had left above `backdrop()`. No code, type or export changes.
+
 ## 2026-09-28 — FF7 release prep: the flash floor and the rest placement become optional per call and per scene
 
 **FF7 only**, through shared plumbing (both + FF7) [AGENTS.md hard rule 14]: every addition is optional and unset for

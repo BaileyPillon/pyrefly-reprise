@@ -15,7 +15,7 @@ import { getChapterMeta } from '../../../src/data/chapter-meta.ts';
 import { FFX2_IXION_DJOSE } from '../../../src/data/chapter-ffx2-ixion-djose.ts';
 import { DJOSE_ABYSS_PLATE, DJOSE_CHAMBER_PLATE, DJOSE_WAKE_PLATE, isIxionStandIn } from '../../../src/data/ixion-plates.ts';
 import { GUIDES } from '../../../src/data/guides/index.ts';
-import { DJOSE_BACKDROP, DJOSE_IXION_ID, DJOSE_IXION_SPOT, DJOSE_PLATE_FRAMES, DJOSE_SPOTS } from '../../../src/scenes/djose-chamber.ts';
+import { DJOSE_BACKDROP, DJOSE_IXION_ID, DJOSE_IXION_SPOT, DJOSE_PLATE_FRAMES, DJOSE_SPOTS, djoseCentreY } from '../../../src/scenes/djose-chamber.ts';
 import { djoseBuild } from '../../../src/data/ffx2/builds/djose.ts';
 import { djoseIxionGroup } from '../../../src/data/ffx2/enemies/ixion-djose.ts';
 import { TACTICS } from '../../../src/engine/tactics/index.ts';
@@ -60,6 +60,17 @@ describe('the plates: the recommended options, provisional until Bailey picks, o
     // The other plates keep the standard spot.
     expect(DJOSE_PLATE_FRAMES['ffx2-djose-chamber-provisional']!.ixion).toBeUndefined();
     expect(DJOSE_IXION_SPOT).toEqual([1.0, 0, -6.0]);
+  });
+
+  it('IXS-1: on an upright phone C2 sits 4.5 lower, so Ixion stands on lit stone, not the dark slab; desktop unchanged', () => {
+    const c2 = DJOSE_PLATE_FRAMES['djose-chamber-provisional']!;
+    // Measured headless at 390x844 (handoff fixes-r28): the phone's idle camera stands at z about 23.
+    expect(djoseCentreY(true, c2)).toBe(-2.2);
+    expect(djoseCentreY(false, c2)).toBe(2.3);
+    expect(c2.ixion).toEqual([4.2, 0, -6.0]); // the same spot on both
+    // A plate without a phone row keeps its own centre on the phone.
+    const c1 = DJOSE_PLATE_FRAMES['ffx2-djose-chamber-provisional']!;
+    expect(djoseCentreY(true, c1)).toBe(c1.centreY);
   });
 
   it.skipIf(!existsSync(join(ART, 'backdrops', 'farplane.png')))('options and stand-ins are on disk, say so in their sidecars and are locked in no list', () => {

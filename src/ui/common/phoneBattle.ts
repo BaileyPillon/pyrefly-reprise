@@ -33,7 +33,7 @@ import './phone-battle-parts.css';
 import type { GameId } from '../../battle/common/types.ts';
 import { ffxFamily, type FfxFamilyGame } from '../../battle/common/game.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
-import { createPhoneField, type PhoneField } from './phoneFraming.ts';
+import { createPhoneField, FRAME_COMFORT, type PhoneField } from './phoneFraming.ts';
 import { placeLineSlot, withGuards, type GuardedPhoneField } from './phoneBattleGuard.ts';
 import { confirmLabel, sendKey, targetHint, type PhoneTextReader } from './phoneBattleText.ts';
 
@@ -256,8 +256,8 @@ export function installPhoneBattle(
     // The field's slide (`phoneFraming.ts`): with a menu up, the party and the
     // boss; while aiming at one figure, that figure first.
     const aimed = hud.querySelector<HTMLElement>('.ffx-targeting .ffx-target[data-target-id]:not(.ffx-target--dim)');
-    if (text.targeting && !text.group && aimed?.dataset['targetId']) opts.field?.frame(HOME_ASPECT[family], [aimed.dataset['targetId']]);
-    else if (!text.targeting && hud.querySelector('.ig-cmd')) opts.field?.frame(HOME_ASPECT[family]);
+    if (text.targeting && !text.group && aimed?.dataset['targetId']) opts.field?.frame(HOME_ASPECT[family], [aimed.dataset['targetId']], FRAME_COMFORT[family]);
+    else if (!text.targeting && hud.querySelector('.ig-cmd')) opts.field?.frame(HOME_ASPECT[family], [], FRAME_COMFORT[family]);
     // The line steps off a guarded feature (the Vegnagun leg's lens) before the rail is measured.
     lineSlot = placeLineSlot(hud, html, opts.field?.guards?.() ?? [], win.innerWidth, lineSlot);
     placeUnderRail();

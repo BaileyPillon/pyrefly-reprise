@@ -1,5 +1,5 @@
 import type { AnyCombatant, CombatantId, StatusId, TurnPreview } from '../../battle/common/types.ts';
-import { portraitChipHtml, resolvePortraitKey, tintFor, wirePortraitFallbacks } from './portraits.ts';
+import { aeonChipHtml, portraitChipHtml, resolvePortraitKey, tintFor, wirePortraitFallbacks } from './portraits.ts';
 
 /** Ink & Gold spec: "CTB queue ... Six rows visible" (presentation-ink-and-gold.md "Components"). */
 const VISIBLE_ROWS = 6;
@@ -141,10 +141,8 @@ export class CtbList {
     // Its idle crop is skipped for the same reason as the portrait: Yojimbo's
     // `characters/yojimbo/idle.png` is that same navy painting.
     const aeon = combatant?.side === 'aeon';
-    const aeonKey = combatant?.spriteKey ?? row.actorId;
-    const aeonFace = resolvePortraitKey(aeonKey);
     const face = aeon
-      ? portraitChipHtml(row.portraitKey ?? aeonFace, name, tintFor('aeon'), aeonFace === undefined ? undefined : aeonKey)
+      ? aeonChipHtml(combatant?.spriteKey ?? row.actorId, name, row.portraitKey)
       : row.isParty
       ? portraitChipHtml(row.portraitKey, name, tintFor(side))
       : portraitChipHtml(row.portraitKey ?? resolvePortraitKey(row.actorId), name, tintFor(side), combatant?.spriteKey ?? row.actorId);
