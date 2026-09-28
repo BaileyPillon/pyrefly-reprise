@@ -123,7 +123,7 @@ function placeholderEntry(key: string, title: string): SceneEntry {
 }
 
 SCENES.set('demo', { key: 'demo', title: 'Mt. Gagazet — the Prominence', build: buildDemoScene, slots: GAGAZET_SLOTS, placeholder: false });
-// Ixion at Djose (Chapter XVI, FFX-2 only): the Chamber on its STAND-IN plate, keyed by the plate (`data/ixion-plates.ts`).
+// Ixion at Djose (Chapter XVI, FFX-2 only): the Chamber on its provisional plate (not Bailey's pick yet), keyed by the plate (`data/ixion-plates.ts`).
 SCENES.set(DJOSE_CHAMBER_PLATE, { key: DJOSE_CHAMBER_PLATE, title: 'Djose Temple — the Chamber of the Fayth', build: buildDemoScene, slots: DJOSE_CHAMBER_SLOTS, placeholder: false });
 // `gagazet` is the one chapter whose placeholder is already the right place.
 SCENES.set('gagazet', {
@@ -269,7 +269,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'bevelle-highbridge': buildHighbridgeScene,
   'via-purifico': buildViaPurificoScene,
   'den-of-woe': buildDenOfWoeScene,
-  [DJOSE_CHAMBER_PLATE]: buildDjoseChamberScene, // Chapter XVI (FFX-2 only); the stand-in plate's key
+  [DJOSE_CHAMBER_PLATE]: buildDjoseChamberScene, // Chapter XVI (FFX-2 only); the provisional plate's key
   'sector1-reactor': buildSector1ReactorScene, // FF7 only
 };
 

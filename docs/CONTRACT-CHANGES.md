@@ -6,6 +6,11 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-28 — `dsl.ts`: doc comments only (IXS-4)
+
+**Both** (shared plumbing). Branch `fixes-r28`. `setPose` gets its doc comment back ("Set an actor's sprite state"),
+which the 2026-09-27 `backdrop()` insertion had left above `backdrop()`. No code, type or export changes.
+
 ## 2026-09-27 — `encounters.ts` lists Chapter XVI, Ixion at Djose; `dsl.ts` gains the `backdrop()` step
 
 **FFX-2 only** for the chapter [AGENTS.md hard rule 14]; the listing and the new step are shared plumbing, "both".

@@ -39,7 +39,7 @@ const idOf = (c: Command | null): string | null => (c && 'id' in c ? (c as { id:
 const CLOISTER_GROUP_IDS = ['ffx2-cloister-paragon', 'ffx2-cloister-trema', 'ffx2-cloister-paragon-oversoul', 'ffx2-cloister-trema-arena'];
 /** Chapter XI's three Road links carry it too, at the same 3 s (Bailey's option A, 2026-09-25; `fallen-aeons-road.ts`). */
 const ROAD_GROUP_IDS = ['ffx2-road-shiva', 'ffx2-road-magus-sisters', 'ffx2-road-anima'];
-/** Chapter XVII's one Djose link carries it too, at the same 3 s (Bailey's pick, 2026-09-27, D-269; `ixion-djose.ts`). */
+/** Chapter XVI's one Djose link carries it too, at the same 3 s (Bailey's pick, 2026-09-27, D-269; `ixion-djose.ts`). */
 const DJOSE_GROUP_IDS = ['ffx2-djose-ixion'];
 
 describe('the shipped pick: Oversoul Paragon with Split_Infinity\'s kit, and 3 s of action time on the Cloister links only', () => {
