@@ -42,6 +42,7 @@ import { EVRAE_ID, evrae } from './evrae.ts';
 import { YOJIMBO_CAVERN_BOSS_ID, yojimboCavern } from './yojimbo-cavern.ts';
 import { TREMA_CHAPTER_BOSS_IDS, ffx2Trema } from './ffx2-trema.ts';
 import { DEN_OF_WOE_TACTIC_IDS, ffx2DenOfWoe } from './ffx2-den-of-woe.ts';
+import { IXION_DJOSE_BOSS_IDS, ffx2IxionDjose } from './ffx2-ixion-djose.ts';
 import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
@@ -76,6 +77,7 @@ export { evrae, EVRAE_ID } from './evrae.ts';
 export { yojimboCavern, YOJIMBO_CAVERN_BOSS_ID } from './yojimbo-cavern.ts';
 export { ffx2Trema, TREMA_CHAPTER_BOSS_IDS } from './ffx2-trema.ts';
 export { ffx2DenOfWoe, DEN_OF_WOE_TACTIC_IDS } from './ffx2-den-of-woe.ts';
+export { ffx2IxionDjose, IXION_DJOSE_BOSS_IDS } from './ffx2-ixion-djose.ts';
 export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
 export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymour-natus.ts';
@@ -136,6 +138,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...FALLEN_AEONS_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-fallen-aeons', bossId, tactic: ffx2FallenAeons })),
   // Chapter XV (FFX-2 only, listed 2026-09-26): the three shades, one tactic under all three ids.
   ...DEN_OF_WOE_TACTIC_IDS.map((bossId) => ({ chapterId: 'ffx2-den-of-woe', bossId, tactic: ffx2DenOfWoe })),
+  // Chapter XVI (FFX-2 only, listed 2026-09-27): Ixion at Djose, one fighter.
+  ...IXION_DJOSE_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-ixion-djose', bossId, tactic: ffx2IxionDjose })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
   // Chapter XIV (FFX only, listed 2026-09-25): his three aeons, one a link; Isaaru is an untargetable bystander.

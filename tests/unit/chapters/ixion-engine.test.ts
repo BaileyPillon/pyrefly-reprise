@@ -1,6 +1,6 @@
 /**
- * Ixion at Djose (FFX-2 Chapter 3 finale; our Chapter XVII, registered unlisted): data cites, the action
- * counter and the Recharge tell, the multi-target rule (IX-11), registration, the story stub, determinism.
+ * Ixion at Djose (FFX-2 Chapter 3 finale; our Chapter XVI, listed 2026-09-27): data cites, the action
+ * counter and the Recharge tell, the multi-target rule (IX-11), registration, the story's order, determinism.
  * **FFX-2 only** [AGENTS.md rule 14]. Every expected number is `research/ffx2-ixion-djose.md`'s.
  */
 
@@ -23,6 +23,7 @@ import { FFX2_IXION_DJOSE, IXION_DJOSE_SCENE_KEY } from '../../../src/data/chapt
 import { ffx2IxionDjoseScripts, IXION_WHISTLES, IXION_WHISTLE_FLAG } from '../../../src/story/scripts/ffx2-ixion-djose.ts';
 import { lintScript } from '../../../src/story/dsl.ts';
 import { getScene, isPlaceholderScene } from '../../../src/scenes/index.ts';
+import { DJOSE_CHAMBER_PLATE, isIxionStandIn } from '../../../src/data/ixion-plates.ts';
 import { ability, ctxFor } from '../helpers/fallenAeonsUnits.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { driveIxion } from '../helpers/ixionDrive.ts';
@@ -283,19 +284,21 @@ describe('resolution in the FFX-2 engine', () => {
   });
 });
 
-describe('registration: unlisted behind the switch', () => {
-  it('getChapter finds it; chapter select, CHAPTERS and CHAPTER_IDS do not', () => {
+describe('registration: listed as Chapter XVI (2026-09-27)', () => {
+  it('getChapter finds it; chapter select, CHAPTERS and CHAPTER_IDS list it last, number 16', () => {
     const ch = getChapter('ffx2-ixion-djose');
     expect(ch).toBe(FFX2_IXION_DJOSE);
-    expect([ch?.game, ch?.number, ch?.buildRef, ch?.enemyGroupRef]).toEqual(['ffx2', 17, djoseBuild, djoseIxionGroup]);
-    expect(CHAPTERS.some((c) => c.id === 'ffx2-ixion-djose')).toBe(false);
-    expect((CHAPTER_IDS as readonly string[]).includes('ffx2-ixion-djose')).toBe(false);
+    expect([ch?.game, ch?.number, ch?.buildRef, ch?.enemyGroupRef]).toEqual(['ffx2', 16, djoseBuild, djoseIxionGroup]);
+    expect(CHAPTERS.at(-1)).toBe(FFX2_IXION_DJOSE);
+    expect(CHAPTER_IDS.at(-1)).toBe('ffx2-ixion-djose');
   });
 
-  it('the scene is a labelled placeholder; the painting is look B, its own FFX-2 subject (D-268), not the FFX one', () => {
+  it('the scene is the Chamber on its stand-in plate (swappable in one line); the painting is look B, its own FFX-2 subject (D-268)', () => {
     expect(FFX2_IXION_DJOSE.sceneKey).toBe(IXION_DJOSE_SCENE_KEY);
-    expect(isPlaceholderScene(IXION_DJOSE_SCENE_KEY)).toBe(true);
-    expect(getScene(IXION_DJOSE_SCENE_KEY)?.title).toMatch(/PLACEHOLDER/);
+    expect(IXION_DJOSE_SCENE_KEY).toBe(DJOSE_CHAMBER_PLATE);
+    expect(isIxionStandIn(DJOSE_CHAMBER_PLATE)).toBe(true);
+    expect(isPlaceholderScene(IXION_DJOSE_SCENE_KEY)).toBe(false);
+    expect(getScene(IXION_DJOSE_SCENE_KEY)?.title).toMatch(/Djose/);
     expect(x2Ixion.spriteKey).toBe('x2-ixion');
     expect(x2Ixion.forms?.map((f) => f.spriteKey)).toEqual(['x2-ixion']);
   });
@@ -312,15 +315,15 @@ describe('registration: unlisted behind the switch', () => {
   });
 });
 
-describe('the story stub: concept A\'s order', () => {
+describe('the story: concept A\'s order', () => {
   const { pre, post } = ffx2IxionDjoseScripts;
 
   it('opens the battle, shows results, then the fall, the Abyss, four whistles and the wake in Bevelle', () => {
     expect(pre.at(-1)?.type).toBe('battleStart');
     expect(post[0]?.type).toBe('results');
-    const text = post.filter((s) => s.type === 'say').map((s) => (s as { text: string }).text);
-    expect(text.every((t) => t.startsWith('(Placeholder)'))).toBe(true);
-    const order = ['hole where the fayth stood', 'Ixion rises and charges', 'Songstress', 'Lenne', 'Baralai', 'kneels', 'Bevelle Underground'];
+    const text = post.filter((s) => s.type === 'say' || s.type === 'narrate').map((s) => (s as { text: string }).text);
+    expect(text.some((t) => t.startsWith('(Placeholder)'))).toBe(false);
+    const order = ['fayth stood', 'Ixion rises and charges', 'Songstress', 'Lenne', 'Baralai', "I'm all alone.", 'Bevelle Underground'];
     const at = order.map((k) => text.findIndex((t) => t.includes(k)));
     expect(at.every((i) => i >= 0)).toBe(true);
     expect([...at].sort((a, b) => a - b)).toEqual(at);

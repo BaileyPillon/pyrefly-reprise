@@ -27,6 +27,7 @@ import { TREMA_META } from './chapter-meta-trema.ts';
 import { FALLEN_AEONS_META } from './chapter-meta-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_META } from './chapter-meta-seymour-omnis.ts';
 import { DEN_OF_WOE_META } from './chapter-meta-den-of-woe.ts';
+import { IXION_DJOSE_META } from './chapter-meta-ixion-djose.ts';
 import { NATUS_META } from './chapter-meta-natus.ts';
 import { ISAARU_META } from './chapter-meta-isaaru.ts';
 
@@ -91,7 +92,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI';
   title: string;
   subtitle: string;
   location: string;
@@ -366,11 +367,9 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   musicKeys: ['scene-farplane', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'],
 };
 
-/** All fifteen listed chapters' pause-screen metadata, in play order. */
+/** All sixteen listed chapters' pause-screen metadata, in play order. */
 export const CHAPTER_META: readonly ChapterMeta[] = [
-  SEYMOUR_FLUX_META,
-  YUNALESCA_META,
-  BRASKAS_FINAL_AEON_META,
+  SEYMOUR_FLUX_META, YUNALESCA_META, BRASKAS_FINAL_AEON_META,
   FFX2_BAHAMUT_META,
   FFX2_VEGNAGUN_SHUYIN_META,
   FFX2_LEBLANC_META,
@@ -383,6 +382,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   TREMA_META, // Chapter XIII (FFX-2), listed 2026-09-25
   ISAARU_META, // Chapter XIV (FFX), listed 2026-09-25
   DEN_OF_WOE_META, // Chapter XV (FFX-2), listed 2026-09-26
+  IXION_DJOSE_META, // Chapter XVI (FFX-2), listed 2026-09-27
 ] as const;
 
 /**

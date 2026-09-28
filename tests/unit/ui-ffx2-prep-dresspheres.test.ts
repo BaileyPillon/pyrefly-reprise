@@ -31,8 +31,8 @@ function mountFor(chapterId: string, memberId: string): HTMLElement {
 const FFX2_CHAPTERS = CHAPTERS.filter((c) => c.game === 'ffx2').map((c) => c.id);
 
 describe('FFX-2 Dresspheres tab', () => {
-  it('covers all six listed X-2 chapters (IV, V, VI, XIII since 2026-09-25, XI and XV since 2026-09-26)', () => {
-    expect(FFX2_CHAPTERS.length).toBe(6);
+  it('covers all seven listed X-2 chapters (IV, V, VI, XIII since 2026-09-25, XI and XV since 2026-09-26, XVI since 2026-09-27)', () => {
+    expect(FFX2_CHAPTERS.length).toBe(7);
   });
 
   for (const chapterId of FFX2_CHAPTERS) {

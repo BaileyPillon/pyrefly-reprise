@@ -105,4 +105,6 @@ export const PHYSICAL_BY_CHAPTER: Record<string, string[]> = {
     'shade-gippal:x2-den-gippal-mortar',
     'shade-nooj:x2-den-nooj-attack',
   ],
+  // Chapter XVI (FFX-2, listed 2026-09-27): only his Normal Attack is physical (research ffx2-ixion-djose.md §4.1).
+  'ffx2-ixion-djose': ['x2-ixion:x2-ixion-attack'],
 };

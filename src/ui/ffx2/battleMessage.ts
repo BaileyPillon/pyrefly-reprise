@@ -1,6 +1,7 @@
 import './battle-message.css';
 import type { BattleEvent, BattleState, CombatantId } from '../../battle/common/types.ts';
 import { oversoulCaptionOf } from '../../engine/OversoulMoment.ts';
+import { isToldEnemyMove } from './toldMoves.ts';
 
 /**
  * PR-0143 (round 11, FFX-2 only): the FFX-2 HUD's battle-message banner.
@@ -201,10 +202,15 @@ export class BattleMessageBanner {
     return this.el;
   }
 
-  /** `action-start` tracks the speaker; `message` shows the line. Everything else is ignored. */
+  /** `action-start` tracks the speaker (and shows a told enemy move); `message` shows the line. Everything else is ignored. */
   onEvent(event: BattleEvent, state: BattleState | null): void {
     if (event.type === 'action-start') {
       this.actorId = event.actorId;
+      // A move whose name is the warning (Ixion's Recharge, `./toldMoves.ts`): the fiend's name, then the move's.
+      const actor = state?.combatants[event.actorId];
+      if (actor?.side === 'enemy' && isToldEnemyMove(event.abilityId) && event.abilityName) {
+        this.show({ name: actor.name, chip: event.abilityName });
+      }
       return;
     }
     if (event.type !== 'message') return;

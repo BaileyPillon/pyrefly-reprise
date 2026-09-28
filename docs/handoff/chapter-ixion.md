@@ -1,20 +1,54 @@
-# Chapter XVII — Ixion at Djose (FFX-2): engine, data, AI and a story stub, unlisted behind a switch
+# Chapter XVI — Ixion at Djose (FFX-2): LISTED and playable (2026-09-27), stand-in plates owed a painting round
 
-**Branch `chapter-ixion`** (worktree `D:/pyrefly-ch-ixion`, sparse: no `docs/screenshots` except what this track
-added). **Not merged, not deployed.** 2026-09-27.
+**Branch `chapter-ixion`** (worktree `D:/pyrefly-ch-ixion`, sparse). Merged `origin/main` 0cd8399c (release 25, iter2-b6)
+at 4417b4f6. **Not merged to main, not deployed.**
 
-**Game case: FFX-2 only** [AGENTS.md rule 14]: ATB, dresspheres, the fallen aeons' action counter
-(`research/ffx2-ixion-djose.md` §0: nothing transfers to the FFX Ixion). The registration, the scene-registry line
-and the `ChapterId` widening are shared plumbing, "both".
+**Bailey, 2026-09-27 ~18:30 EDT:** "full speed ahead, godspeed. advisor v3 needs to be in the very next build. ixion
+needs to be in the next build as well. sin can wait for now." So the chapter is listed here, ready to ride the next
+build with advisor v3 (a separate branch).
 
-**Bailey, 2026-09-27 ~13:40 EDT, "all your recommendations"**: Ixion **concept A**
-(`docs/concepts/chapters/ixion-djose-2026-09-27/README.md`): the fight with the game's "Recharge" line as the
-tell, then the fall and a short Abyss cutscene ending on a playable four-whistle beat.
+## LISTED (2026-09-27 ~18:40-20:00 EDT) — what changed
 
-**Bailey, 2026-09-27 ~15:20 EDT, "all your recommendations"** (D-268, D-269): Ixion's FFX-2 look is **option B,
-possessed violet** (installed, below), and the Djose **3-second action time is ON**.
+**Game case:** the chapter, story, guide, tactic, scene, plates and the Recharge banner are **FFX-2 only**. The listing
+(`encounters.ts`, the story registry, `CHAPTER_META`, the board and its counts, `CHAPTER_GAME`), the DSL's new
+`backdrop()` step and its cutscene-screen port are **shared plumbing, both**.
 
-## What is built
+| Part | Where | What |
+|---|---|---|
+| Number, title | `src/data/chapter-ffx2-ixion-djose.ts` | **Chapter XVI**, "Ixion" (was 17 while unlisted). Sin (FFX, D-270, two chapters, unlisted on `chapter-sin` as 16) waits and takes the numbers after this: **merging `chapter-sin` must renumber Sin, not Ixion.** |
+| Listing | `encounters.ts` (`CHAPTERS` / `CHAPTER_IDS` last), `chapters-unlisted.ts` (FF7 only now) | The board: 16 cards, "0 of 15 beaten", XVI last in the X-2 group; wrap-left from the first card lands on it. `CONTRACT-CHANGES.md` entry. |
+| Card | `frontend/chapterPlates.ts` | Look B idle over the Chamber stand-in; the card crops to head and horn (face 0.27, 0.39 of the idle). |
+| Meta / prep / pause | `src/data/chapter-meta-ixion-djose.ts` | Numeral XVI; tagline "Where the Fayth Stood" (ours, inferred); objectives Survive Thor's Hammer / below half / Defeat Ixion; tip (sourced facts); quote = Rikku's verbatim opening line; hero plate = **stand-in** `pause/ch16-ffx2-ixion-djose-standin` (PROVISIONAL, not approved). |
+| Briefing | automatic | "Fifteen fights" from the count (coachCopy number words), as Chapter XV listed. |
+| Guide | `src/data/guides/ffx2-ixion-djose.ts` | 4 rules (the loop, Recharge then the Hammer, Shell and heal on Recharge, Lightning heals / Water hurts), hints for every row the tactic picks, the Wait-split habit line; the Hammer's element is never named (IX-2). |
+| Tactic | `src/engine/tactics/ffx2-ixion-djose.ts` (+ index, lookup) | The bench's **sensible** line as a tactic; 20 seeds at bench speed: at least 18 wins (test). Advisor v3 (other branch) touches `src/engine/tactics/**`: this branch only **adds** one file and three index lines. |
+| Recharge banner (the check's major) | `src/ui/ffx2/toldMoves.ts`, `battleMessage.ts` | The FFX-2 battle-message banner shows **"Ixion · Recharge"** as Recharge starts. Only moves a source says are read off the screen are listed (just `x2-ixion-recharge`); no other FFX-2 enemy move changes. FFX untouched (its own HELP bar). |
+| Scene | `src/scenes/djose-chamber.ts`, `scenes/index.ts`, `pyreflyCanon.ts` | The Chamber on the stand-in plate, framed as Chapter V frames its plate (the FFX-2 HUD's solved slots); no live motes (the research names none, 'unattested'); on an upright phone the idle camera dollies back to z 13.2 (PR-0201 option A, reused from Chapter XI) so Ixion stays in the slice. |
+| Plates (rule 9: options until Bailey picks) | `src/data/ixion-plates.ts`; `docs/concepts/chapters/ixion-djose-2026-09-27/stand-ins/` | **No scene options exist yet** (`.../scenes/` absent at 2026-09-27 20:00). So the stand-ins the concept README names are installed under **their own** keys, add-only: `backdrops/ffx2-djose-chamber-standin` (Macalania hall over the Den floor, storm grey, greybox hole) and `backdrops/ffx2-abyss-standin` (the Chapter 5 Farplane washed white); sidecars say PROVISIONAL; in no hash list. When the judge-passed options land, install them as `backdrops/ffx2-djose-chamber-provisional` / `ffx2-abyss-provisional` (add-only) and change **one constant each** in `ixion-plates.ts`. The wake is the approved `bevelle-underground`. Manifest regenerated: additions only (2 backdrops, 1 pause plate + its 2x). |
+| Story | `src/story/scripts/ffx2-ixion-djose.ts` | pre: Gippal missing, fiends from the Chamber, the stairs, Rikku's **verbatim** "This can't be happening." post: results (mission complete) → the fall → the Abyss plate (Shuyin calls her Lenne, Vegnagun, the embrace, Nooj and Gippal, Baralai revealed, two spheres for Paine, Gippal's **verbatim** "Take care of things topside.", Yuna's **verbatim** "I'm all alone.") → **four whistles** (each a one-press `(Whistle)` prompt, the existing `whistle-answer` cue, a gold flash, a light line; skippable: hold Enter or pause > Skip Scene still ends on flag 4) → the Bevelle Underground plate. Every other line is ours, commented with its beat. Nooj is **text-only** (his portrait is not approved); Shuyin, Baralai, Gippal use approved portraits. |
+| DSL | `src/story/dsl.ts` (`backdrop()`), `CutsceneRunner.ts` (optional port), `app/screens/cutscenePlate.ts`, `CutsceneScreen.ts` (one line) | Additive step: swap the cutscene plate with a crossfade (cuts under a skip); the chapter eyebrow steps out once the scene has moved. |
+| Music (rule 13, nothing new) | record + script | Fight `boss-ffx2-aeon` (the sourced mood of "Aeons"); field bed `scene-bevelle-underground` (FFX-2 fallback, Chapter VI precedent); Abyss `scene-farplane` ("The Farplane Abyss"); wake `scene-bevelle-underground`. THEMES.md cue-map row XVI. Bailey's call by ear. |
+| Save | `tests/unit/save-ixion-listed-fixture.test.ts`, `tests/fixtures/saves/release-25-main.json` | A save exported from the **live release-25 main build** loads unchanged and gains XVI as unplayed; the board counts it; a clear moves "N of 15". `SaveData.ts` is untouched. |
+| e2e | `tests/e2e/ffx2-ixion.spec.ts` | From the title by real keys (desktop) / taps (phone): board, the XVI card, prep, the opening, the fight to a win following the guide's NEXT (the tactic), the Recharge banner and Thor's Hammer, results, the fall, the Abyss, four whistles, the wake, back on the board with the clear ("1 of 15"). Frames `docs/screenshots/chapter-ixion/listed/`. |
+
+### Verified (2026-09-27 ~20:00-21:15 EDT, on the listing commit)
+
+- `npx tsc --noEmit` clean; `npm run typecheck:e2e` clean. Full unit suite once: **602 files passed, 1 failed**:
+  `strategy-ffx2-bahamut`'s heal-only route timed out (15 s) under full-suite load, the known pre-existing timeout
+  (same on main, noted by both earlier passes). `ffx2-atb-golden` and every chapter suite passed inside it.
+- New tests: `chapters/ixion-listed.test.ts` (11), `chapters/ixion-recharge-banner.test.ts` (3, real engine to
+  Recharge), `cutscene-backdrop-step.test.ts` (5), `save-ixion-listed-fixture.test.ts` (4, the live release-25 save).
+- `node tools/orphans.mjs`: 24 orphaned (main: 24). `verify-approved` (ROOT = this worktree): 271 ok (223 approved +
+  48 judge-locked), 0 mismatched, 0 missing.
+- **e2e `tests/e2e/ffx2-ixion.spec.ts`**, production build (`npm run build` in this worktree, `vite preview` on 7701,
+  stopped by PID), headless GPU Chromium: **1600x900 by real keys: PASS** (victory; 49 decisions; 3 Recharges, 3
+  Hammers, the "Ixion · Recharge" banner seen; results, fall, Abyss, 4 whistles, wake; board "1 of 15", the XVI card
+  wears VICTORY); **390x844 by real taps: PASS** (victory; 47 decisions; 2 Recharges, 2 Hammers, banner seen; the
+  same post flow). 0 uncaught page errors. Frames `docs/screenshots/chapter-ixion/listed/{1600x900,390x844}-*.jpg`.
+- The fight is played by following the in-battle guide's NEXT (the chapter tactic); on the phone, where the guide
+  sits folded behind its chip and may be stale, the spec falls back to the same line read off the party's HP.
+
+## What was built before the listing (unlisted pass, kept for history)
 
 | Part | Where | Notes |
 |---|---|---|
