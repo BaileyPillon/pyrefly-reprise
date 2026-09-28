@@ -45,7 +45,10 @@ describe('the plates: the recommended options, provisional until Bailey picks, o
     expect([DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, DJOSE_WAKE_PLATE]).toEqual([
       'djose-chamber-provisional', 'farplane-abyss-provisional', 'bevelle-underground',
     ]);
-    expect([isIxionStandIn(DJOSE_CHAMBER_PLATE), isIxionStandIn(DJOSE_ABYSS_PLATE), isIxionStandIn(DJOSE_WAKE_PLATE)]).toEqual([true, true, false]); // none is Bailey's pick yet
+    // Bailey picked both on 2026-09-28 (D-273; approved-hashes.json bailey:2026-09-28-ixion-scenes), but the files
+    // keep their original -provisional names (a rename would churn the manifest), so isIxionStandIn's suffix test
+    // still reads true for both — it is a filename check, not an approval check.
+    expect([isIxionStandIn(DJOSE_CHAMBER_PLATE), isIxionStandIn(DJOSE_ABYSS_PLATE), isIxionStandIn(DJOSE_WAKE_PLATE)]).toEqual([true, true, false]);
     expect(FFX2_IXION_DJOSE.sceneKey).toBe(DJOSE_CHAMBER_PLATE);
   });
 
@@ -73,9 +76,21 @@ describe('the plates: the recommended options, provisional until Bailey picks, o
     expect(djoseCentreY(true, c1)).toBe(c1.centreY);
   });
 
-  it.skipIf(!existsSync(join(ART, 'backdrops', 'farplane.png')))('options and stand-ins are on disk, say so in their sidecars and are locked in no list', () => {
-    const keys = [DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, 'ffx2-djose-chamber-provisional', 'ffx2-abyss-provisional', 'ffx2-djose-chamber-standin', 'ffx2-abyss-standin'];
-    for (const key of keys) {
+  it.skipIf(!existsSync(join(ART, 'backdrops', 'farplane.png')))('options and stand-ins are on disk, say so in their sidecars; the picked two are locked, the rest are locked nowhere', () => {
+    // Bailey picked C2 and the repaired A1 on 2026-09-28 (D-273): those two are now approved and locked under
+    // bailey:2026-09-28-ixion-scenes in approved-hashes.json. The unpicked C1, the unrepaired A1 and both stand-ins
+    // stay unapproved and unlocked, same as before.
+    const pickedKeys = [DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE];
+    const unpickedKeys = ['ffx2-djose-chamber-provisional', 'ffx2-abyss-provisional', 'ffx2-djose-chamber-standin', 'ffx2-abyss-standin'];
+    for (const key of pickedKeys) {
+      expect(existsSync(join(ART, 'backdrops', `${key}.png`)), key).toBe(true);
+      const side = JSON.parse(readFileSync(join(ART, 'backdrops', `${key}.json`), 'utf8')) as { status: string; notApproved: boolean };
+      expect(side.notApproved, key).toBe(false);
+      expect(side.status, key).toMatch(/^approved/);
+      expect(HASHES.includes(key), key).toBe(true);
+      expect(LOCKED.includes(key), key).toBe(false);
+    }
+    for (const key of unpickedKeys) {
       expect(existsSync(join(ART, 'backdrops', `${key}.png`)), key).toBe(true);
       const side = JSON.parse(readFileSync(join(ART, 'backdrops', `${key}.json`), 'utf8')) as { status: string; notApproved: boolean };
       expect(side.notApproved, key).toBe(true);

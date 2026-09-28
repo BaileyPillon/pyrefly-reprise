@@ -1246,6 +1246,20 @@
     "mtime": "2026-09-27T19:30:14.981Z",
     "approved": "2026-09-27"
    }
+  },
+  "bailey:2026-09-28-ixion-scenes": {
+   "words": "all your recommendations",
+   "note": "Bailey, 2026-09-28 ~07:00 EDT, verbatim \"all your recommendations\" (D-273 in docs/target/decisions.json), answering item 4 of the driver's morning brief: \"Ixion's scenes: Chamber C2 and Abyss A1 are in provisionally. Keep them?\" Locks the two Chapter XVI plates already installed under their provisional filenames: option C2 \"The Faction's lamps\" for the Djose Chamber of the Fayth, and the repaired option A1 \"White void\" for the Farplane Abyss (docs/concepts/chapters/ixion-djose-2026-09-27/scenes/README.md; both judge PASS). Byte-identical to what was already shown (no repaint); filenames unchanged (a rename would churn the manifest) even though they still end -provisional. Sidecars moved from 'OPTION (provisional, awaiting Bailey's pick)' to approved and src/data/ixion-plates.ts's doc comments updated to record the pick (text only). Game: FFX-2 only.",
+   "public/art/backdrops/djose-chamber-provisional.png": {
+    "sha256": "b5ea052fc689951acd5b27433b13b7e3953d8ccb64ce240e48460917f7d1deb1",
+    "mtime": "2026-09-28T02:03:32.604Z",
+    "approved": "2026-09-28"
+   },
+   "public/art/backdrops/farplane-abyss-provisional.png": {
+    "sha256": "1518ea4e877cf11104ef320a58de12946deccd833804393e89f4cdfd7d866ce0",
+    "mtime": "2026-09-28T02:03:32.620Z",
+    "approved": "2026-09-28"
+   }
   }
  }
 }
