@@ -1,0 +1,69 @@
+{
+  "tag": "v4f-xii-a",
+  "config": {
+    "samples": 8,
+    "horizon": 400,
+    "extra": 4,
+    "margin": 0.04,
+    "confirm": 16,
+    "confirmGap": 2
+  },
+  "seeds": 20,
+  "first": 1,
+  "when": "2026-09-28T07:37:42.923Z",
+  "rows": [
+    {
+      "chapterId": "seymour-omnis",
+      "game": "ffx",
+      "driver": "v4",
+      "config": "ceiling",
+      "seeds": 20,
+      "wins": 15,
+      "winSeeds": [
+        1,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "linksCleared": 15,
+      "decisions": 1950,
+      "searched": 1684,
+      "switched": 220,
+      "switchOrigins": {
+        "ranked": 215,
+        "v3-runner-up": 5
+      },
+      "skipped": {
+        "lethal-save": 218,
+        "raise": 48
+      },
+      "simDecisions": 6591225,
+      "missedRevive": 41,
+      "dupStrict": 0,
+      "dupSame": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 231,
+      "savable": 222,
+      "lethalMiss": 4,
+      "closed": 0,
+      "msP50": 535.4037000000026,
+      "msP95": 1474.550500000012,
+      "msP99": 1675.2605999999796,
+      "msMax": 1930.2221000000136,
+      "searchP50": 530.3611000000383,
+      "searchP95": 1468.4472999999998
+    }
+  ]
+}

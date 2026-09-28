@@ -1,0 +1,122 @@
+{
+  "tag": "mini-b",
+  "config": {
+    "samples": 2,
+    "horizon": 400,
+    "extra": 1,
+    "margin": 0.04,
+    "confirm": 4,
+    "confirmGap": 2
+  },
+  "seeds": 20,
+  "first": 1,
+  "when": "2026-09-28T08:24:49.645Z",
+  "rows": [
+    {
+      "chapterId": "seymour-omnis",
+      "game": "ffx",
+      "driver": "v4",
+      "config": "mini",
+      "seeds": 20,
+      "wins": 13,
+      "winSeeds": [
+        1,
+        2,
+        4,
+        7,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "linksCleared": 13,
+      "decisions": 2043,
+      "searched": 1603,
+      "switched": 127,
+      "switchOrigins": {
+        "ranked": 125,
+        "v3-runner-up": 2
+      },
+      "skipped": {
+        "lethal-save": 350,
+        "raise": 90
+      },
+      "simDecisions": 1000976,
+      "missedRevive": 74,
+      "dupStrict": 0,
+      "dupSame": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 371,
+      "savable": 362,
+      "lethalMiss": 12,
+      "closed": 0,
+      "msP50": 74.6198000000004,
+      "msP95": 241.66629999999714,
+      "msP99": 287.41359999999986,
+      "msMax": 403.62069999999994,
+      "searchP50": 69.91940000001341,
+      "searchP95": 236.51309999999648
+    },
+    {
+      "chapterId": "yunalesca",
+      "game": "ffx",
+      "driver": "v4",
+      "config": "mini",
+      "seeds": 20,
+      "wins": 19,
+      "winSeeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "linksCleared": 19,
+      "decisions": 3421,
+      "searched": 3170,
+      "switched": 44,
+      "switchOrigins": {
+        "ranked": 44
+      },
+      "skipped": {
+        "raise": 251
+      },
+      "simDecisions": 2251315,
+      "missedRevive": 2,
+      "dupStrict": 0,
+      "dupSame": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 507,
+      "savable": 0,
+      "lethalMiss": 0,
+      "closed": 0,
+      "msP50": 78.40189999999711,
+      "msP95": 152.5170999999973,
+      "msP99": 229.33790000001318,
+      "msMax": 315.02430000001914,
+      "searchP50": 75.52670000004582,
+      "searchP95": 149.3871999999974
+    }
+  ]
+}

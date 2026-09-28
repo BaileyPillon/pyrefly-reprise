@@ -148,6 +148,32 @@ export class FFXEngine implements FFXBattleEngine {
     return this.buffer.slice();
   }
 
+  /**
+   * A private copy of this battle for the advisor's look-ahead (v4 prototype; the twin of
+   * `FFX2Engine.fork`). One `structuredClone` of `ctx.state` (log copied shallowly) and `ctx.rt`, so
+   * their aliasing survives; content shared read-only; its **own** `SeededRng(seed)`, so nothing it
+   * does reaches this battle. `rngState` (tests) starts at this stream's position: the fidelity proof.
+   */
+  fork(seed: number, rngState?: number): FFXEngine {
+    const ctx = this.requireCtx();
+    const f = new FFXEngine(this.options);
+    const { log, ...rest } = ctx.state;
+    const b = structuredClone({ state: rest, rt: ctx.rt });
+    f.rng = new SeededRng(seed);
+    if (rngState !== undefined) f.rng.restoreState(rngState);
+    f.setup = this.setup;
+    f.awaitingInput = this.awaitingInput;
+    f.buffer = [];
+    f.ctx = {
+      state: { ...(b.state as Omit<BattleState, 'log'>), log: log.slice() } as BattleState,
+      rt: b.rt,
+      rng: f.rng,
+      content: ctx.content,
+      emit: (event: EventInput): void => f.push(event),
+    };
+    return f;
+  }
+
   /** Hotfix 24 (FFX only): the player left an Overdrive picker; the turn goes back to the menu, and the next pick asks again. */
   backOutOfMinigame(): boolean {
     const rt = this.ctx?.rt;

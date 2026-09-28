@@ -1,0 +1,73 @@
+{
+  "tag": "v4f-i-b",
+  "config": {
+    "samples": 8,
+    "horizon": 400,
+    "extra": 4,
+    "margin": 0.04,
+    "confirm": 16,
+    "confirmGap": 2
+  },
+  "seeds": 20,
+  "first": 21,
+  "when": "2026-09-28T07:44:52.399Z",
+  "rows": [
+    {
+      "chapterId": "seymour-flux",
+      "game": "ffx",
+      "driver": "v4",
+      "config": "ceiling",
+      "seeds": 20,
+      "wins": 20,
+      "winSeeds": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "linksCleared": 20,
+      "decisions": 995,
+      "searched": 955,
+      "switched": 29,
+      "switchOrigins": {
+        "ranked": 29
+      },
+      "skipped": {
+        "lethal-save": 30,
+        "raise": 10
+      },
+      "simDecisions": 1473733,
+      "missedRevive": 288,
+      "dupStrict": 0,
+      "dupSame": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 76,
+      "savable": 30,
+      "lethalMiss": 0,
+      "closed": 0,
+      "msP50": 246.66909999999916,
+      "msP95": 484.8354000000036,
+      "msP99": 689.1179999999877,
+      "msMax": 835.3512000000046,
+      "searchP50": 242.22269999999844,
+      "searchP95": 482.41330000000016
+    }
+  ]
+}

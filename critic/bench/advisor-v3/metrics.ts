@@ -108,14 +108,14 @@ export function pendingCommands(ctx: DecisionContext): Pending[] {
 
 const isAlly = (s: Readonly<BattleState>, id: CombatantId): boolean => s.combatants[id]?.side !== 'enemy';
 
-function supportOnly(s: Readonly<BattleState>, o: SimOutcome): boolean {
+export function supportOnly(s: Readonly<BattleState>, o: SimOutcome): boolean {
   if (o.damageToEnemies > 0) return false;
   if (o.statusChanges.some((c) => c.applied && !isAlly(s, c.targetId))) return false;
   const heals = Object.entries(o.hpDelta).some(([id, d]) => d < 0 && isAlly(s, id));
   return heals || o.revives.length > 0 || o.statusChanges.some((c) => isAlly(s, c.targetId));
 }
 
-function duplicate(s: Readonly<BattleState>, top: SimOutcome, pend: SimOutcome[]): boolean {
+export function duplicate(s: Readonly<BattleState>, top: SimOutcome, pend: SimOutcome[]): boolean {
   if (!supportOnly(s, top)) return false;
   const raised = new Set(pend.flatMap((p) => p.revives));
   const buffs = new Set(pend.flatMap((p) => p.statusChanges.filter((c) => c.applied).map((c) => `${c.targetId}:${c.status}`)));

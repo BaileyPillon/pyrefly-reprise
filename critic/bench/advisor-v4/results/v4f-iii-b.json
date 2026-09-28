@@ -1,0 +1,62 @@
+{
+  "tag": "v4f-iii-b",
+  "config": {
+    "samples": 8,
+    "horizon": 400,
+    "extra": 4,
+    "margin": 0.04,
+    "confirm": 16,
+    "confirmGap": 2
+  },
+  "seeds": 10,
+  "first": 11,
+  "when": "2026-09-28T07:57:06.376Z",
+  "rows": [
+    {
+      "chapterId": "braskas-final-aeon",
+      "game": "ffx",
+      "driver": "v4",
+      "config": "ceiling",
+      "seeds": 10,
+      "wins": 10,
+      "winSeeds": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "linksCleared": 70,
+      "decisions": 1977,
+      "searched": 1973,
+      "switched": 74,
+      "switchOrigins": {
+        "ranked": 74
+      },
+      "skipped": {
+        "lethal-save": 4
+      },
+      "simDecisions": 13319432,
+      "missedRevive": 0,
+      "dupStrict": 0,
+      "dupSame": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 31,
+      "savable": 4,
+      "lethalMiss": 0,
+      "closed": 0,
+      "msP50": 1177.653099999996,
+      "msP95": 2368.692700000014,
+      "msP99": 2901.461099999957,
+      "msMax": 3172.445599999999,
+      "searchP50": 1171.2549000000581,
+      "searchP95": 2362.8004999998957
+    }
+  ]
+}
