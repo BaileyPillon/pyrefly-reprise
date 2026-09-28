@@ -46,22 +46,23 @@ export const STATUS_CLOCKS_HELD_AT: Readonly<Record<AtbSpeed, ReadonlySet<string
 };
 
 /**
- * PR-0106's switch, **OFF** until Bailey rules (plan §8 Q4): Leblanc's script as SinirothX prints it
+ * PR-0106's switch, **ON** since Bailey's word of 2026-09-27 (D-242, plan §8 Q4; built OFF by iter2-b1):
+ * Leblanc's script as SinirothX prints it
  * (`research/ffx2-leblanc-syndicate.md` §19, GameFAQs FAQ 31807, **GameFAQs' reading, our estimate**):
  * the failsafe Not-So-Mighty Guard fires **once**, on her turn 25 + No Love Lost uses (read "on", as
  * the No Love Lost line is), and turn 5 of her loop is Fan Slap, not a repeat of turn 1. It conflicts
- * with the FF Wiki transcription, which the OFF script follows (§5.3; its every-turn failsafe is an
+ * with the FF Wiki transcription, which the OFF script followed (§5.3; its every-turn failsafe is an
  * AUTHORED reading with no source, §19.2). The engine sets `flags.leblancScriptSinirothX` for the AI
  * when on; `Ffx2EngineOptions.leblancScriptSinirothX` overrides it for a measurement run. FFX-2 only.
  */
-export const LEBLANC_SCRIPT_SINIROTHX = false;
+export const LEBLANC_SCRIPT_SINIROTHX = true;
 
 /**
  * PR-0107's switch, **OFF** until Bailey rules: a chained link flagged
  * `EnemyGroupDef.opensAsSeparateBattle` (Chapter VI's Acts II and III, separate battles in the
  * source) opens on randomised bars (§1.6, `[single source]`) instead of the continuation's zero.
  * Sourced, but it moves Chapter VI outside its band at human pace (measured in
- * `docs/handoff/iter2-b1.md`), so the plan's stop rule keeps it off and asks.
+ * `docs/handoff/iter2-b1.md`), so the plan's stop rule keeps it off; Bailey kept it off on 2026-09-27 (D-242).
  * `Ffx2EngineOptions.separateBattleGauges` overrides it for a measurement run. FFX-2 only.
  */
 export const SEPARATE_BATTLE_GAUGES = false;
@@ -125,16 +126,16 @@ export const CHAIN_MAX = 99;
 export const CHAIN_LOCKS_ACTIONS = true;
 
 /**
- * IC-1 / PR-0209, a named **OFF** switch until Bailey rules (plan §8 Q4): when true, a hit whose result
+ * IC-1 / PR-0209, **ON** since Bailey's word of 2026-09-27 (D-242, plan §8 Q4; built OFF by iter2-b1): a hit whose result
  * is immune (Invincible, Null Physical / Null Magic, an immune affinity) opens and extends no chain
  * window. No source says it in words (§9.2: misses never chain `[verified: 3 sources]`). ON is
  * **GameFAQs' reading, our estimate** (`research/ffx2-combat-core.md` §10.1: Split_Infinity, FAQ 25872,
  * G1032, attacks on an Invincible target "will fail"; G0905 rule 8, only damaging attacks disturb the
  * gauge); SinirothX's step order (chain at step 13, immunity at step 20) is the one hint the other way.
- * Off keeps the engine as it was; `Ffx2EngineOptions.immuneHitsSkipChain` overrides it for a
+ * Off keeps the engine as it was before D-242; `Ffx2EngineOptions.immuneHitsSkipChain` overrides it for a
  * measurement run (`tests/unit/iter2-b1-bench.test.ts`, arm `ic1`).
  */
-export const IMMUNE_HITS_SKIP_CHAIN = false;
+export const IMMUNE_HITS_SKIP_CHAIN = true;
 
 /**
  * An all-target row carrying `extra.namedTargetsOnly` hits only the ids its caller named. Its one

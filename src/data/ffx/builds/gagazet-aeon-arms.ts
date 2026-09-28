@@ -3,12 +3,12 @@
  * the chapters that inherit it. **Game case: FFX only** [AGENTS.md rule 14]: summoned aeons exist
  * only in FFX (FFX-2 has none).
  *
- * The shipped rows (`gagazet.ts`) are an invented ~0.55x of a later table (Valefor 738, Ifrit 988,
+ * The rows shipped until D-243 (`gagazet-kit.ts` GAGAZET_SHIPPED_AEONS) are an invented ~0.55x of a later table (Valefor 738, Ifrit 988,
  * Ixion 983, Shiva 878, Bahamut 1,398 HP). The method check (`docs/plans/pr-0179-method-check.md`)
  * builds each sourced answer as an **OFF** value of one switch, benches Chapters I, IX, X and XIV per
  * arm, and asks Bailey once (plan §8 Q3). No boss number is touched: these are the player's aeons.
  *
- * - `'shipped'` (the default until Bailey picks): today's rows, byte for byte.
+ * - `'shipped'` (the default until 2026-09-27): the rows shipped before D-243, byte for byte.
  * - `'a'`: `research/ffx-combat-core.md` §6.4.3, the Mt. Gagazet block (N = 250, tier 7; `[estimate]`,
  *   mechanically derived from `[verified: 3 sources]` constants), in `gagazet.ts`; Chapter X's
  *   Bahamut (`highbridge.ts`) and Chapter XIV's (`via-purifico.ts`) inherit it.
@@ -23,8 +23,11 @@ import type { AeonBuild } from '../../../battle/common/types.ts';
 
 export type AeonArm = 'shipped' | 'a' | 'b' | 'c';
 
-/** The switch. `'shipped'` until Bailey picks an arm (plan §8 Q3; the recommendation is `'a'`). */
-export const GAGAZET_AEON_ARM: AeonArm = 'shipped';
+/**
+ * The switch. **Arm `'a'`** since Bailey's word of 2026-09-27 (D-243, plan §8 Q3: "I'll go with all of your
+ * recommendations"); it was `'shipped'` until then.
+ */
+export const GAGAZET_AEON_ARM: AeonArm = 'a';
 
 type Row = Pick<AeonBuild['stats'], 'hp' | 'mp' | 'str' | 'def' | 'mag' | 'mdef' | 'agi' | 'eva' | 'acc' | 'luck'>;
 

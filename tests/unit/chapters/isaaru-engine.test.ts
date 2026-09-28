@@ -95,7 +95,9 @@ describe('data (research §2, §3)', () => {
     expect(yuna.learnedAbilityIds).toEqual(x.learnedAbilityIds);
     expect(yuna.overdrive.gauge).toBe(YUNA_GAUGE);
     expect(viaPurificoBuild.aeons.map((a) => [a.id, a.stats.maxHp, a.overdriveGauge])).toEqual([
-      ['valefor', 1_146, 90], ['ifrit', 1_515, 60], ['ixion', 1_513, 60], ['shiva', 1_342, 0], ['bahamut', 1_398, BAHAMUT_GAUGE],
+      // Bahamut 1,398 -> 2,935 on 2026-09-27: PR-0179 arm a (D-243, FFX only) gives Chapter X's Bahamut, and so
+      // this chapter's, research/ffx-combat-core.md §6.4.3's Gagazet row; the other four keep D-186's rows.
+      ['valefor', 1_146, 90], ['ifrit', 1_515, 60], ['ixion', 1_513, 60], ['shiva', 1_342, 0], ['bahamut', 2_935, BAHAMUT_GAUGE],
     ]);
     expect(viaPurificoBuild.inventory).toEqual(highbridgeBuild.inventory);
   });
@@ -121,16 +123,21 @@ describe('damage, on the engine chain at roll 16 (research §5.2 [derived], §5.
     expect(hit(SPATHI, rows.spathiMegaFlare, aeon('shiva'))).toBe(2_353);
   });
 
-  it('Hellfire 1,765 to 1,898 kills every aeon from full HP; Shell does not touch it (type Other)', () => {
+  // Under PR-0179 arm a (D-243, 2026-09-27) Bahamut carries §6.4.3's Gagazet row (DEF 60, 2,935 HP): Hellfire
+  // reads 1,621 on him (1,840 on the old row) and no longer kills him from full HP. §5.2's "kills every aeon"
+  // was derived on D-186's rows; it still holds for the other three.
+  it('Hellfire 1,765 to 1,898 kills Ixion, Shiva and Valefor from full HP, 1,621 on arm a\'s Bahamut; Shell does not touch it (type Other)', () => {
     const hf = (id: string) => from(grothia, rows.grothiaHellfire, aeon(id));
-    expect([hf('ixion'), hf('bahamut'), hf('shiva'), hf('valefor')]).toEqual([1_765, 1_840, 1_885, 1_898]);
-    for (const id of ['valefor', 'ixion', 'shiva', 'bahamut']) expect(hf(id)).toBeGreaterThan(aeon(id).stats.maxHp);
+    expect([hf('ixion'), hf('bahamut'), hf('shiva'), hf('valefor')]).toEqual([1_765, 1_621, 1_885, 1_898]);
+    for (const id of ['valefor', 'ixion', 'shiva']) expect(hf(id)).toBeGreaterThan(aeon(id).stats.maxHp);
+    expect(hf('bahamut')).toBeLessThan(aeon('bahamut').stats.maxHp);
     expect(from(grothia, rows.grothiaHellfire, withStatus(aeon('ixion'), 'shell'))).toBe(1_765);
   });
 
-  it('Energy Ray 411 / 366 / 391 / 382; Shell halves it (Magical)', () => {
+  // Bahamut 382 -> 336 under PR-0179 arm a (D-243, 2026-09-27): §6.4.3's Gagazet row has MDEF 56.
+  it('Energy Ray 411 / 366 / 391 / 336; Shell halves it (Magical)', () => {
     const er = (id: string) => from(pterya, rows.pteryaEnergyRay, aeon(id));
-    expect([er('ifrit'), er('ixion'), er('shiva'), er('bahamut')]).toEqual([411, 366, 391, 382]);
+    expect([er('ifrit'), er('ixion'), er('shiva'), er('bahamut')]).toEqual([411, 366, 391, 336]);
     expect(from(pterya, rows.pteryaEnergyRay, withStatus(aeon('ixion'), 'shell'))).toBe(183);
   });
 });
@@ -169,7 +176,9 @@ describe('Pterya (§4.2)', () => {
     const engine = newEngine('isaaru-pterya', 2);
     expect(actor(engine, PTERYA).overdrive?.gauge).toBe(0);
     let t = 0;
-    drive(engine, (d) => (d.actorId === 'yuna' ? (t++ === 0 ? defend() : summon('bahamut')) : { kind: 'attack', targets: [PTERYA] }),
+    // Ifrit, not Bahamut, since PR-0179 arm a (D-243, 2026-09-27): arm a's Bahamut (STR 53) kills Pterya in
+    // three swings, at gauge 75, before Energy Ray can come; this case is about her gauge, not the duel.
+    drive(engine, (d) => (d.actorId === 'yuna' ? (t++ === 0 ? defend() : summon('ifrit')) : { kind: 'attack', targets: [PTERYA] }),
       (e) => starts(e.state().log, PTERYA).includes(rows.PTERYA_ENERGY_RAY));
     const log = engine.state().log;
     const moves = starts(log, PTERYA);
