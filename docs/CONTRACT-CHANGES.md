@@ -6,6 +6,26 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-28 — FF7 release prep: the flash floor and the rest placement become optional per call and per scene
+
+**FF7 only**, through shared plumbing (both + FF7) [AGENTS.md hard rule 14]: every addition is optional and unset for
+FFX and FFX-2, so their frames do not change. Branch `ff7-phase3`.
+
+- `PaintedShader`: a new uniform `flashFloorCut` (0..1) scales the flash's dark-texel floor, `FLASH_FLOOR = 0.34 * (1 -
+  flashFloorCut)`. Unset (every material that never sets it, and every FFX / FFX-2 flash) is 0: the floor as before.
+- `PaintedActor.flash(colour, ms, peak, floorCut = 0)` and the port `ActorHandle.flash(..., floorCut?)`: a fourth,
+  optional argument. Only FF7's director passes it: 1 for the cast light (on the target and each fighter nearby),
+  `FF7_HIT_FLOOR_CUT` 0.5 for B1's white hit flash. Why: the target's cast (0.75 for 680 ms) lifted the boss's dark
+  belly and legs to a flat pale that matched the grating behind them, so the lower body read as see-through for
+  about half a second after every hit (the phase-3 judge's item 2). The planes were opaque throughout.
+- `SceneStaging.restPoses?: false` (copied by `stagingOf`) and `StageFacing.poseScalingOf(slots)`: the stage turns
+  `figureExtent` and `restPoses: false` into the actor's `poseScaling` (`maxExtent`, `proneAspect: Infinity`). With
+  the switch no pose is laid to rest by its aspect. FF7's staging sets it: Barret's aim (1302x1130, over the 1.15
+  prone aspect) was rolled 0.30 rad and slid by ProneLay about 90 px off his stance (the P3 check's P3C-2); Cloud's
+  strike and the boss's idle and recoil were rolled too. Every other scene leaves it unset, so FFX and FFX-2 KO
+  paintings still come to rest. No line was added to `PaintedActor.ts`, `BattlePresenterStage.ts` or
+  `BattlePresenterPorts.ts` (P3C-3).
+
 ## 2026-09-27 — FF7 phase 3 repair pass: more optional FF7 hooks (the judge's items 1 to 12)
 
 **FF7 only**, through shared plumbing (both + FF7) [AGENTS.md hard rule 14]: every addition is optional

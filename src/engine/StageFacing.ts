@@ -92,3 +92,13 @@ export function figureLightOf(light: FigureLight | undefined):
   if (!light) return {};
   return { rim: { ...light.rim, dir: [light.rim.dir[0], light.rim.dir[1]] }, bounce: { ...light.bounce }, erode: light.erode };
 }
+
+/**
+ * The sizing half of a `PaintedActor` option bag from a scene's switches: FF7's long machine (`figureExtent`) and
+ * its upright keys (`restPoses: false`, no pose laid to rest by its aspect; the P3 check's P3C-2). Nothing for a
+ * scene that sets neither (every FFX and FFX-2 scene), so the actor's defaults stand.
+ */
+export function poseScalingOf(s: { readonly figureExtent?: number; readonly restPoses?: false }): { poseScaling?: { maxExtent?: number; proneAspect?: number } } {
+  if (!s.figureExtent && s.restPoses !== false) return {};
+  return { poseScaling: { ...(s.figureExtent ? { maxExtent: s.figureExtent } : {}), ...(s.restPoses === false ? { proneAspect: Number.POSITIVE_INFINITY } : {}) } };
+}

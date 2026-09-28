@@ -25,7 +25,7 @@ import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './Sc
 import { laneFrom, relaxActorsOf, relaxField } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
-import { bodyFacingOption, figureLightOf, stageCamera } from './StageFacing.ts';
+import { bodyFacingOption, figureLightOf, poseScalingOf, stageCamera } from './StageFacing.ts';
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
@@ -263,7 +263,7 @@ export class PaintedStage implements BattleStage {
         ? { color: this.opts.rim.color, strength: 0.8, dir: this.opts.rim.dir, width: 3.4 }
         : { strength: 0.7 },
       ...figureLightOf(this.opts.slots.figureLight), // FF7: the core's green rim and bounce, the fringe trimmed
-      groundShade: 0.24, ...(this.opts.slots.figureExtent ? { poseScaling: { maxExtent: this.opts.slots.figureExtent } } : {}), // FF7's long machine (scene switch)
+      groundShade: 0.24, ...poseScalingOf(this.opts.slots), // FF7's long machine and upright keys (scene switches)
       bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
       shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, ...shadowOf(this.groundLuma) },
       breathe: { amplitude: 0.016, speed: 0.4 },

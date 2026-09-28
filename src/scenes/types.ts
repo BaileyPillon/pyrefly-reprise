@@ -205,6 +205,14 @@ export interface SceneStaging {
    */
   readonly poseShiftPx?: Readonly<Record<string, Readonly<Record<string, number>>>>;
   /**
+   * `false`: no pose is laid to rest by its aspect (the actor's `poseScaling.proneAspect` at infinity), so a wide
+   * painting stands where it was registered instead of being rolled onto its underside and slid along the floor.
+   * FF7 only: Barret's aim (1302x1130) was rolled 17 degrees and moved about 90 px off his stance, Cloud's strike
+   * and the boss's recoil rolled too (the P3 check's P3C-2); FF7's KO is the motion port's `lieDown`. Unset
+   * everywhere else: FFX and FFX-2 KO paintings still come to rest.
+   */
+  readonly restPoses?: false;
+  /**
    * How every figure is lit and trimmed, in place of the house rim (a pale blue rim from the upper left): the
    * rim's colour, direction (painting space), strength and width; a ground bounce; a silhouette erosion in
    * texels. FF7 only (the core's green light from screen-right, the Film art's matte fringe trimmed; repair
@@ -232,6 +240,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.figureExtent) out.figureExtent = build.figureExtent;
   if (build.poseCut) out.poseCut = true;
   if (build.poseShiftPx) out.poseShiftPx = build.poseShiftPx;
+  if (build.restPoses === false) out.restPoses = false;
   if (build.figureLight) out.figureLight = build.figureLight;
   return out;
 }

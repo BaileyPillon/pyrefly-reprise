@@ -49,7 +49,7 @@ export interface Point2 {
 export interface ActorHandle {
   readonly position: Point3;
   setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void;
-  flash(colour?: number | string, ms?: number, peak?: number): void;
+  flash(colour?: number | string, ms?: number, peak?: number, floorCut?: number): void; // floorCut 0..1: less dark-texel lift (FF7)
   shake(amount?: number, ms?: number): void;
   lunge(distance?: number, ms?: number): Promise<void>;
   recoil(ms?: number, distance?: number): Promise<void>;

@@ -172,6 +172,7 @@ export function sector1Staging(layout: Sector1Layout = SECTOR1_DESK): SceneStagi
     figureExtent: 3.2, // Guard Scorpion's paintings, padded to its rear foot, run up to 2.7x its height
     poseCut: true, // a hard cut between painted keys: no see-through double (repair items 1, 2)
     poseShiftPx: FF7_FILM_POSE_SHIFT_PX, // every party key on the idle's stance (repair item 1)
+    restPoses: false, // every Film key stands where it was registered: none rolled to rest by its aspect (P3C-2)
     figureLight: SECTOR1_FIGURE_LIGHT, // the core's green light from screen-right, the matte fringe trimmed (repair item 9)
   };
 }

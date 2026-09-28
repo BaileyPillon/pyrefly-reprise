@@ -470,7 +470,7 @@ export class PaintedActor extends Group {
     brightness: { value: number };
     tint: { value: Color };
     flashColor: { value: Color };
-    flashAmount: { value: number };
+    flashAmount: { value: number }; flashFloorCut: { value: number };
     rimColor: { value: Color };
     rimStrength: { value: number };
     rimDir: { value: Vector2 };
@@ -600,7 +600,7 @@ export class PaintedActor extends Group {
       brightness: { value: this.baseBrightness },
       tint: { value: this.baseTint.clone() },
       flashColor: { value: new Color(0xffffff) },
-      flashAmount: { value: 0 },
+      flashAmount: { value: 0 }, flashFloorCut: { value: 0 },
       rimColor: { value: new Color(rim.color ?? 0xbfe0ff) },
       rimStrength: { value: rim.strength ?? 0 },
       rimDir: { value: this.rimDirBase.clone() },
@@ -1076,9 +1076,9 @@ export class PaintedActor extends Group {
    * the new one starts from whichever of the two is brighter so a weak flash
    * never cuts a strong one short.
    */
-  flash(colour: number | string = 0xffffff, ms = 180, peak = 1): void {
+  flash(colour: number | string = 0xffffff, ms = 180, peak = 1, floorCut = 0): void { // floorCut 0..1: less dark-texel lift (FF7)
     this.flashTween?.kill();
-    this.u.flashColor.value.set(colour as never);
+    this.u.flashColor.value.set(colour as never); this.u.flashFloorCut.value = clamp01(floorCut);
     const from = Math.max(clamp01(peak), this.u.flashAmount.value);
     this.u.flashAmount.value = from;
     this.flashTween = this.tweens.to(from, 0, {

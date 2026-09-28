@@ -40,6 +40,8 @@ export const FF7_CALM_FLASH: Readonly<FlashParams> = Object.freeze({
 });
 
 /** The cast light (our estimate): peak at the blow, lost over `falloffPx` of screen, held `ms`; the target's own. */
+/** How much of the flash floor B1's white hit flash drops (0 = the house flash); the cast light drops all of it. Ours. */
+export const FF7_HIT_FLOOR_CUT = 0.5;
 export const FF7_CAST = { peak: 0.9, falloffPx: 1700, ms: 680, target: 0.75, afterWhiteMs: 150 } as const;
 
 /** Each effect's light, cast onto the fighters and used for the tint. Ours. */
@@ -120,8 +122,9 @@ export class Ff7FxDirector {
     this.played.hits++;
     const actor = stage.actor(target);
     const heal = fx === 'ff7-cure';
-    // B1: the white hit flash, and a short knock-back on the boss.
-    actor?.flash(heal ? 0xc8ffe0 : 0xffffff, heal ? 320 : 150, calm ? 0.35 : 0.95);
+    // B1: the white hit flash, and a short knock-back on the boss. Neither flash lifts the painting's darks to a flat
+    // pale veil (the cast has no floor, the white pop half of it): a lifted dark lower body read as see-through (P3P-1).
+    actor?.flash(heal ? 0xc8ffe0 : 0xffffff, heal ? 320 : 150, calm ? 0.35 : 0.95, FF7_HIT_FLOOR_CUT);
     if (!heal && stage.sideOf(target) === 'enemy') void actor?.lunge(fx === 'ff7-braver' || fx === 'ff7-bigshot' ? -0.55 : -0.3, 240);
     // A3's cast light: the effect's colour on every fighter, falling off with distance on screen, and on the
     // target itself once the white flash has passed (repair item 5: the cast was too faint to see in live frames).
@@ -133,9 +136,9 @@ export class Ff7FxDirector {
       if (!p || !at) continue;
       const d = Math.hypot(p.x - at.x, p.y - at.y);
       const peak = Math.max(0, FF7_CAST.peak - d / FF7_CAST.falloffPx) * (calm ? 0.5 : 1);
-      if (peak > 0.04) stage.actor(id)?.flash(light, FF7_CAST.ms, peak);
+      if (peak > 0.04) stage.actor(id)?.flash(light, FF7_CAST.ms, peak, 1);
     }
-    if (!heal) this.later(() => this.stage()?.actor(target)?.flash(light, FF7_CAST.ms, FF7_CAST.target * (calm ? 0.5 : 1)), FF7_CAST.afterWhiteMs);
+    if (!heal) this.later(() => this.stage()?.actor(target)?.flash(light, FF7_CAST.ms, FF7_CAST.target * (calm ? 0.5 : 1), 1), FF7_CAST.afterWhiteMs);
     if (calm || !FF7_BIG_HITS.has(fx) || this.lastBigAction === action) return;
     this.lastBigAction = action;
     stage.camera.shake(fx === 'ff7-braver' ? 0.12 : 0.09, 340);
