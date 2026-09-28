@@ -618,3 +618,59 @@ goldens unchanged; orphans at 24; 286/0/0 on the approved art (also in the built
 failing without its fix; D1, C1 without an AP line, and G1 with RETRY at + 1000; the KO'd member lying
 down at once; the board and the save untouched; FFX and FFX-2 identical. The checker did not re-run the
 builder's e2e and ran their own real-input fights instead.
+
+## CHECK: independent check of the release prep, ff7-phase3 at 6807a000, 2026-09-28
+
+An independent checker, who built none of this, checked branch `ff7-phase3` at `6807a000`: the merge
+`68b7ceca`, the fix `15efd668` and the frames `6807a000`. **Verdict: 0 blockers, 0 majors, two minors.**
+P3C-1 and P3C-2 are settled. The see-through boss is fixed, and the measurement below shows it against the
+pre-fix build. Game case: **FF7 only**. FFX and FFX-2 were checked against `main` `d89541b6` and are
+unchanged.
+
+**Method.** The checker made three production builds with the art, using `vite build` into
+`D:/Tools/pyrefly-scratch/ff7-p3-check2/dist-{branch,main,prefix}`: the branch, `origin/main` `d89541b6` and the
+pre-fix merge `68b7ceca`. `main` and `prefix` came out of `git archive` and were built with the worktree's
+`public/`, which has no diff against `main`. The builds were served by `vite preview` on ports 7810 (branch),
+7811 (main) and 7812 (prefix). All three servers were stopped by their PIDs. Everything ran in headless
+Chromium (`PYREFLY_BROWSER=gpu`), one browser at a time. The scratch scripts are `tools/zz-p3check2-*.tmp.mjs`,
+with the sources in `zz-p3check2-{main,prefix}.tmp/`. None of them is committed. Frames and reports are in
+`D:/Tools/pyrefly-scratch/ff7-p3-check2/`. A path slip left the stance frames in `.../ff7-p3-check22/`.
+
+| Check | Result |
+|---|---|
+| tsc, typecheck:e2e | Both clean |
+| Full `vitest run` (once) | 607 files pass, 5 skipped and 4 fail. Every failure is a timeout under full load: `strategy-ffx2-bahamut` heal-only (the known one), `audio-manifest-io`, `ff7-judge-repair` item 3 and `ui-ffx2-atbmode`. Run alone, the four files pass 45/45 (minor P3C2-2) |
+| Goldens | `ffx2-atb-golden` 6/6 and `ff7-golden` 3/3 pass, and `ff7-release-prep` passes 6/6. Nothing under `src/battle`, `src/data` or `tests/fixtures` changed after the merge |
+| `orphans.mjs` | 24, the same list |
+| Approved art | `approved-hashes.json` 242 and `judge-locked-hashes.json` 48: 290 ok, 0 mismatched, 0 missing, in `public/art` and in the built `dist`. All 45 of `main`'s sets are present and byte-identical, plus `bailey:2026-09-27-ff7-film`. `CONTRACT-CHANGES.md` removes no line of `main`'s |
+| `git merge-tree` against `origin/main` `d89541b6` | Clean (the branch contains it) |
+| Rule 7 | `PaintedActor.ts` 2,022, `BattlePresenterStage.ts` 848 and `BattlePresenterPorts.ts` 471 lines, the same as at `68b7ceca`. The edits were made in place |
+| Code | `floorCut` defaults to 0, so every FFX and FFX-2 caller keeps `FLASH_FLOOR` 0.34. `poseScalingOf` returns `{}` unless a scene sets `figureExtent` or `restPoses: false`, and only `sector1Staging` sets either one. `proneAspect` is read only by `PaintedScale`'s prone test |
+| The boss stays opaque (dense frames, 1600x900, opened by the door) | **Green screen.** The backdrop was hidden and the background set to pure green (inspection only). Six hits were captured in 430 frames (shot, slash, scope, rifle, tail laser, the recoil painting, tail up). The green-tinted share of the boss's lower-body pixels was 0.029 to 0.071 through every hit. At idle it was 0.039 to 0.041, which is edge antialiasing. The spikes are the tracer and the numerals. The 10 other frames are full-screen washes that cover the HUD too. **Continuous frames**, about 50 ms apart, JPEG, seed 7, 150 s, the whole fight by Enter: 2,955 frames on the branch and 2,933 on the pre-fix build. On the branch, every boss slot sat at fade and opacity 0 or 1 in every frame. The tail swap is a hard cut between two frames (417 against 416), and the recoil is the same. **The cast light, before and after.** The measure is the 20th-percentile brightness of the boss's red plates in the leg band. On the pre-fix build it stayed above 52 for up to 250 to 266 ms after each hit, and the cast window held 55 to 62 for 5 to 7 frames (`crop-legs-before-after.jpg`, panel 2: pale legs). On the branch, the cast window (`flashFloorCut` 1) holds 31 to 39, against 36 to 38 at idle. Only the impact moment lifts: 1 to 3 frames, at most about 150 ms (minor P3C2-1) |
+| Barret's aim (P3C-2) | The live planes on the branch sit at idle 0, aim -0.4501, fire -0.429, hurt 0.013 and victory -0.013 world units. The aim is -213 px x 0.002113 exactly, the same in each probe. On screen at 1600x900, the boots at aim and at fire fall within about 20 px of the idle stance, with the gun level (`sheet-stance.jpg`). Cloud's keys are unchanged |
+| FF7 hidden | At 1600x900, 1024x768 and 390x844, the board reached by real input is **0 px different** from `main`'s build, with the same snapshot and words: 16 tiles including Chapter XVI Ixion, one COMING, "0 of 15 beaten", and no FF7 text in the DOM. The `__pyrefly` keys, `chapters()` and `scenes()` are identical. None of these opens it: the single keys, LIMI + pause + T, FRFR + pause + M, or LIMXT (back to the title, as on `main`). 18 presses of each of the arrow, WASD and paging keys visited all 15 playable tiles and never FF7. Neither did a click (1600x900) or a tap (390x844) on each of the 16 cards, nor six taps, a wait and one more tap. `?chapter=ff7-guard-scorpion` stays on the title, and `goto('ff7-hud-demo')` does nothing. Only `gotoChapter('ff7-guard-scorpion')` opens it, which it also does on `main` |
+| Win, Game Over, RETRY by real input | **Keys at 1600x900.** LIMIT, then a win in 18 turns. D1, then C1 ("EXP 100, AP 10, Cloud LV 7 +100, Barret LV 6 +100", then "GIL 100 ... Assault Gun"), and Enter to the board. LIMIT again, a loss, G1 GAME OVER, and RETRY by Enter (seed + 1000, checked). A second loss, then Down + Enter to CHAPTER SELECT. **Taps at 390x844, DPR 3.** The same sequence: a win in 18 turns, results by taps, a loss, RETRY by a tap (+ 1000), a loss, and CHAPTER SELECT by a tap. No page or console errors. The numerals stayed inside the frame: 3,717 samples at 1600x900 (x 164 to 1212) and 4,025 at 390x844 (x 13 to 333). Frames while an effect ran: mean 16.67 ms, none over 33 ms (desktop GPU) |
+| Main save | `pyrefly-reprise:save:v1` (511 B, from a Chapter I run in a separate page) is **byte-identical** after the win and after two losses and RETRY, in both runs. Only `pyrefly-reprise:experiments:v1` changed. The board was unchanged |
+| FFX and FFX-2 first menus, real keys, seed 1 | **Chapter I** (Seymour Flux), **Chapter IV** (Bahamut) and **Chapter XVI** (Ixion at Djose) were each played from the title through prep and the cutscene to the first command menu, on both builds. The engine snapshots are identical (turn, HP of every combatant). The best main-against-branch pixel match falls within main's own idle-sway baseline for all three (mean 5.2 against 4.5, 5.9 against 11.2, 4.7 against 6.6), and the Chapter I frames match by eye (`sheet-ch1.jpg`) |
+
+**Findings**
+
+- Minor P3C2-1 (accuracy of the note, not a regression): "B1's white pop keeps half the floor" is true only
+  for the first frame. On the same hit, the shared damage beat (`BattlePresenterBeats.ts` line 125,
+  `target.flash(0xffd0c0, 200, 0.8)`, or white at 1 on a crit) calls `flash` without a `floorCut` and resets it
+  to 0. For about 100 to 150 ms after the pop, the boss's darks therefore lift with the full floor (p20 47 to
+  83 against 37 at idle), and then the floorless cast takes over. This matches the builder's "one 53 to 57
+  frame at the white pop" only loosely. It reads as a hit flash, not a veil, and the 0.5 s veil is gone. If
+  Bailey still sees a flicker there, the FF7 director could re-send its white pop with `FF7_HIT_FLOOR_CUT`
+  after the beat's flash, or the beat could take an FF7 floor cut. FF7 only.
+- Minor P3C2-2: under full-suite load, four files timed out, against the builder's one
+  (`audio-manifest-io`, `ff7-judge-repair` item 3 and `ui-ffx2-atbmode` besides `strategy-ffx2-bahamut`). All
+  four pass alone (45/45). This is the machine's load, not the branch. `ff7-judge-repair`'s 30 s test is the
+  one to watch on the release tree.
+- Carried, not re-opened: P3C-5 (no real phone measured) stands.
+
+What the builder claimed and this check confirmed: the clean merge that keeps both sides; tsc; the goldens;
+orphans at 24; 290/0/0 on the approved art; no line added to the three files over 400 lines; the boss opaque
+through every hit, the tail swap and the recoil; the pre-fix veil and its cause (the cast light's floor); the aim
+plane at -0.450 every time and the stances together; the boss standing level; FF7 hidden; the save untouched;
+FFX and FFX-2 unchanged, including Chapter XVI.
