@@ -20,12 +20,12 @@ import type { SceneSlots } from './index.ts';
 // (research `ffx2-ixion-djose.md` §6.1, `[verified: 3 sources]`; concept A,
 // Bailey 2026-09-27, D-265). No FFX chapter stands here.
 //
-// THE PAINTING IS NOT BAILEY'S PICK YET (rule 9). The plate is the scene round's
-// recommended option C1 "Storm-lit stone", installed provisionally under
-// `backdrops/ffx2-djose-chamber-provisional` (`../data/ixion-plates.ts`,
-// `DJOSE_CHAMBER_PLATE`); the stand-in (the Macalania hall over the Den of Woe
-// floor, recoloured) stays on disk. Swapping is that one constant, plus a row in
-// {@link DJOSE_PLATE_FRAMES} for a plate with a different floor line.
+// THE PAINTING IS NOT BAILEY'S PICK YET (rule 9). The plate is option C2 "The
+// Faction's lamps", installed provisionally under `backdrops/djose-chamber-provisional`
+// (`../data/ixion-plates.ts`, `DJOSE_CHAMBER_PLATE`); C1 "Storm-lit stone"
+// (`ffx2-djose-chamber-provisional`) and the stand-in (the Macalania hall over the
+// Den of Woe floor, recoloured) stay on disk. Swapping is that one constant: each
+// plate has its own row in {@link DJOSE_PLATE_FRAMES} (framing and Ixion's spot).
 // The scene key is the plate's own key, so the cutscene screen, the board card
 // and the prep wash (which draw `backdrops/<sceneKey>.png`) find the same painting.
 //
@@ -52,7 +52,14 @@ export interface DjosePlateFrame {
   groundBand: [number, number];
   /** A radially faded floor under the party, for a plate whose painted floor is a thin strip. */
   floor: boolean;
+  /** Slides the whole painting sideways (world x at the plate), for a plate whose floor is off its centre. */
+  shiftX?: number;
+  /** Ixion's stage spot on this plate, where his hooves meet painted floor (default {@link DJOSE_IXION_SPOT}). */
+  ixion?: [number, number, number];
 }
+
+/** Ixion's default spot: Chapter XI's Anima spot, a little deeper for a wide aeon (staging, ours). */
+export const DJOSE_IXION_SPOT: [number, number, number] = [1.0, 0, -6.0];
 
 /**
  * The framing of each plate the Chamber can show (`../data/ixion-plates.ts`). Staging, not game data.
@@ -62,10 +69,17 @@ export interface DjosePlateFrame {
  *   and the painted floor reaches the bottom of the frame. Measured headless at 1600x900 and 390x844 (widths 88,
  *   130 and 150 and heights 10 to 25.2 tried; 130 keeps the most floor for the least magnification). Its hole sits
  *   mostly behind Ixion at the standard spot (disclosed in the handoff).
+ * - Option C2 is seen from above, with the pit (and its raised rim) in the middle of the painting, 38 % of its
+ *   width. Ixion's hooves must land on solid floor, not the rim (the judge's C2 fault), and the party slots are
+ *   fixed, so the painting is 150 wide, slid 27 left (its right edge still covers the enemy and intro rigs at
+ *   2000x1012) and raised to 2.3, and Ixion stands at x 4.2: his hooves on the lit floor right of the pit, the pit
+ *   open between him and the party. Measured headless against a gridded copy of C2 at 1600x900, 2000x1012 and
+ *   390x844, every rig. Disclosed: the party stands at the pit's near rim (no framing clears both).
  */
 export const DJOSE_PLATE_FRAMES: Readonly<Record<string, DjosePlateFrame>> = {
   'ffx2-djose-chamber-standin': { width: 88, distance: -48, centreY: -0.5, horizon: [0.42, 0.48], groundBand: [0.8, 0.97], floor: false },
   'ffx2-djose-chamber-provisional': { width: 130, distance: -48, centreY: 22.4, horizon: [0.72, 0.78], groundBand: [0.84, 0.98], floor: false },
+  'djose-chamber-provisional': { width: 150, distance: -48, centreY: 2.3, shiftX: -27, horizon: [0.36, 0.42], groundBand: [0.6, 0.95], floor: false, ixion: [4.2, 0, -6.0] },
 };
 
 /** The frame for the plate the chapter shows now. */
@@ -98,9 +112,9 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 /** Ixion's combatant id (`src/data/ffx2/enemies/ixion-djose.ts`). */
 export const DJOSE_IXION_ID = 'x2-ixion';
 
-/** Ixion's spot: Chapter XI's Anima spot, a little deeper for a wide aeon (staging, ours). */
+/** Ixion's spot on the plate shown: the plate's own row, else the default (staging, ours). */
 export const DJOSE_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  [DJOSE_IXION_ID]: [1.0, 0, -6.0],
+  [DJOSE_IXION_ID]: DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT,
 };
 
 /** The girls' world height (the FFX-2 chapters' 1.78). */
@@ -164,6 +178,7 @@ export const buildDjoseChamberScene: SceneFactory = async (opts: SceneBuildOptio
 
   const options = plateOptions(url, low, cameraRef);
   let backdrop = await Backdrop.create(options);
+  backdrop.group.position.x = DJOSE_BACKDROP.shiftX ?? 0;
   backdrop.applyTo(group);
 
   const lights = new LightRig({
@@ -201,6 +216,7 @@ export const buildDjoseChamberScene: SceneFactory = async (opts: SceneBuildOptio
     watcher = watchAssets([url], () => {
       void (async (): Promise<void> => {
         const next = await Backdrop.create(options);
+        next.group.position.x = DJOSE_BACKDROP.shiftX ?? 0;
         const wasIn = backdrop.group.parent;
         backdrop.dispose();
         backdrop = next;

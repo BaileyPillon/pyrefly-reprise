@@ -1,4 +1,4 @@
-# Chapter XVI — Ixion at Djose (FFX-2): LISTED and playable (2026-09-27), stand-in plates owed a painting round
+# Chapter XVI — Ixion at Djose (FFX-2): LISTED and playable (2026-09-27), provisional plates C2 + repaired A1 await Bailey's pick
 
 **Branch `chapter-ixion`** (worktree `D:/pyrefly-ch-ixion`, sparse). Merged `origin/main` 0cd8399c (release 25, iter2-b6)
 at 4417b4f6. **Not merged to main, not deployed.**
@@ -30,6 +30,53 @@ build with advisor v3 (a separate branch).
 | Music (rule 13, nothing new) | record + script | Fight `boss-ffx2-aeon` (the sourced mood of "Aeons"); field bed `scene-bevelle-underground` (FFX-2 fallback, Chapter VI precedent); Abyss `scene-farplane` ("The Farplane Abyss"); wake `scene-bevelle-underground`. THEMES.md cue-map row XVI. Bailey's call by ear. |
 | Save | `tests/unit/save-ixion-listed-fixture.test.ts`, `tests/fixtures/saves/release-25-main.json` | A save exported from the **live release-25 main build** loads unchanged and gains XVI as unplayed; the board counts it; a clear moves "N of 15". `SaveData.ts` is untouched. |
 | e2e | `tests/e2e/ffx2-ixion.spec.ts` | From the title by real keys (desktop) / taps (phone): board, the XVI card, prep, the opening, the fight to a win following the guide's NEXT (the tactic), the Recharge banner and Thor's Hammer, results, the fall, the Abyss, four whistles, the wake, back on the board with the clear ("1 of 15"). Frames `docs/screenshots/chapter-ixion/listed/`. |
+
+### C2 and a repaired A1 installed provisionally; Ixion's spot moved onto C2's floor (2026-09-27 ~22:00-23:15 EDT)
+
+**Game case (rule 14): FFX-2 only** (the Djose Chamber and the Farplane Abyss of Chapter XVI; no FFX chapter moves).
+**Still options (rule 9): Bailey has not picked.** The adversarial judge passed **Chamber C2** and **Abyss A1**, with
+faults; this pass fixes them and makes that pair the one the build shows. C1 and the unrepaired A1 stay installed.
+
+- **A1 repaired** (`D:/Tools/pyrefly-art-backup/candidates/2026-09-27-ixion-scenes/abyss-a1-fixed.png` + `.json`,
+  sha `1518ea4e877c…`; working files in `fix-a1/`): the ghostly spike on the horizon centre (where the whistle beat is
+  staged), the hard black floating rock at the left, and the dark wedges in both bottom corners. Method: `prep.py`
+  pre-fills the spike and the rock row by row from the fog beside them (a 21 px median reference, so no mote
+  streaks) and pulls the wedges 55 % toward the neighbouring fog, blurred; three 1024x768 crops go through
+  `tools/gen/inpaint.mjs --latent` (VAEEncode + SetLatentNoiseMask, animagine, denoise 0.5 / 0.45, 3 seeds each;
+  picks spike 9501, left 9513, right 9522); `composite.py` pastes each pick back through its own feathered mask, so
+  no pixel outside the masks changed (151,138 changed). Looked at 1:1: no spike, no rock, the corners are soft mist
+  shadows. ComfyUI was idle for every submit; no black render; not restarted.
+- **Installed add-only, not locked** (copied byte for byte; sidecars say `OPTION (provisional, awaiting Bailey's
+  pick)`, `notApproved: true`, in no hash list): `backdrops/djose-chamber-provisional` = `chamber-c2.png` (sha
+  `b5ea052fc689…`), `backdrops/farplane-abyss-provisional` = `abyss-a1-fixed.png`. Manifest regenerated with
+  `tools/gen/manifest.mjs`: the diff is `generatedAt` plus these two keys; every other entry byte-identical.
+- **One line each** in `src/data/ixion-plates.ts` (`DJOSE_CHAMBER_PLATE`, `DJOSE_ABYSS_PLATE`, each with a
+  "Bailey's pick is pending" comment). Back to C1 / A1 is `'ffx2-djose-chamber-provisional'` /
+  `'ffx2-abyss-provisional'`.
+- **The stage, not the art** (`src/scenes/djose-chamber.ts`): each plate's row in `DJOSE_PLATE_FRAMES` now carries
+  its own Ixion spot (`ixion`, default `DJOSE_IXION_SPOT` = the old [1.0, 0, -6.0], unchanged for C1 and the
+  stand-in) and an optional sideways slide (`shiftX`, applied to the backdrop group). C2 is seen from above with
+  its pit in the middle (38 % of the width), so at the standard spot Ixion stood on the rim or in the pit. C2's
+  row: width 150, centre 2.3, slid 27 left, **Ixion at (4.2, 0, -6.0)**. Measured headless against a gridded
+  copy of C2 with the pit marked (served in place of the plate by a Playwright route; scratch
+  `.ixion-c2-probe-tmp.mjs`): his hooves land on the lit floor right of the pit at about u 0.73-0.80, v 0.60 at
+  1600x900, 2000x1012 and 390x844, clear of the rim by about 150 px at 1600; the painting still covers every rig
+  (idle, intro, reveal, enemy, action, party, victory) at 2000x1012 and 1600x900 (width 100 and 130 left a dark
+  strip on the right in the enemy and intro rigs). New test in `ixion-listed.test.ts`.
+- **Disclosed:** (1) no framing puts both the fixed party slots and Ixion on open floor: the pit's width and the
+  party's spread overlap, so the party stands on the pit's near rim (it reads as the rim ledge, `scenes/1600x900-02`).
+  (2) Ixion now stands right of centre: at 1600x900 the advisor's intent card overlaps his head while it is up
+  (E hides it) and the command list overlaps his hindquarters and tail; at 2000x1012 only the tail. (3) The
+  magnification is higher than C1's (150 against 130): the room's walls show only at the top right. (4) The
+  cutscene screen still draws every plate at `center 35%`.
+- **Verified:** tsc and `typecheck:e2e` clean; Ixion suites (`ixion-listed`, `ixion-engine`, `ixion-bench`,
+  `trema-options`, `cutscene-backdrop-step`) pass; full suite once: 602 files passed, 1 failed (the known Bahamut
+  heal-only timeout, 17.9 s; alone 19/19 pass); orphans 24 (unchanged); `verify-approved` (ROOT = this worktree)
+  271 ok, 0 mismatched, 0 missing. **e2e on a fresh production build** (`vite preview` on 7731, stopped by PID):
+  **1600x900 keys PASS** (victory, 38 decisions, 2 Recharges / 2 Hammers, banner seen) and **390x844 taps PASS**
+  (victory, 47 decisions, 2 / 2, banner seen); `listed/` frames refreshed. Frames of the fight and the Abyss beat:
+  `docs/screenshots/chapter-ixion/scenes/{1600x900,390x844}-0{1..4}-*.jpg` (`01` battle with HUD, `02` the stage
+  alone, `03` Shuyin's "Lenne." on the repaired A1, `04` the first whistle). Scratch `.ixion-scenes-frames-tmp.mjs`.
 
 ### The scene options landed (main e2052a2a, ~21:00 EDT): C1 and A1 installed provisionally
 
@@ -135,11 +182,13 @@ load; browser on 7310 walked the fight and the whole post-battle stub with real 
 
 ## Open after the listing (Bailey's picks and the next track)
 
-1. **Bailey's picks owed (rule 9):** Chamber C1 or C2, Abyss A1 or A2 (installed provisionally: C1 + A1); the pause
+1. **Bailey's picks owed (rule 9):** Chamber C1 or C2, Abyss A1 or A2 (installed provisionally: all of C1, C2, A1 and
+   the repaired A1; **the build shows C2 + repaired A1**, one line each in `ixion-plates.ts`); the pause
    hero plate (a stand-in composite now); the pause tagline "Where the Fayth Stood" (ours, inferred); music by ear
    (the Djose field bed and an Abyss cue: existing cues stand in, THEMES row XVI).
-2. **The hole behind Ixion (C1):** at the standard spot he covers most of C1's hole during the fight; moving him right
-   pushes the intent card and his tail toward the command list (tried at x 2.0 on 1600x900). A frame choice for the pick.
+2. **The hole and Ixion:** on C2 (shown) his spot is x 4.2 so his hooves are on floor; the intent card and command
+   list overlap him at 1600x900 and the party stands on the pit's rim (see the C2 section). On C1 he still stands at
+   the standard spot over most of its hole. A frame choice for the pick.
 3. **Merge order with `chapter-sin`:** Ixion is XVI; Sin's records (16, and D-270's second chapter) must move to 17+.
    Both branches touch `encounters.ts` `ChapterId`, `chapters-unlisted.ts`, `learn/atlas/cites.ts`.
 4. **Advisor v3** (its own branch) edits `src/engine/tactics/**`; this branch adds `ffx2-ixion-djose.ts` and three lines

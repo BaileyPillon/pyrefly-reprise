@@ -363,7 +363,7 @@ test.describe('Chapter XVI, Ixion at Djose: listed and playable (FFX-2 only)', (
             await shoot(page, '09-results');
           }
           if (v.text.includes('Ixion rises and charges') && !seen.fall) { seen.fall = true; await shoot(page, '10-the-fall'); }
-          if (v.plate === 'ffx2-abyss-provisional' && v.text.includes('Lenne') && !seen.abyss) { seen.abyss = true; await shoot(page, '11-abyss-shuyin'); }
+          if (v.plate === 'farplane-abyss-provisional' && v.text.includes('Lenne') && !seen.abyss) { seen.abyss = true; await shoot(page, '11-abyss-shuyin'); }
           if (v.choice) {
             seen.whistles++;
             if (seen.whistles === 1) await shoot(page, '12-whistle-prompt');

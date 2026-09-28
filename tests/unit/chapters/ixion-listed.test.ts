@@ -15,6 +15,7 @@ import { getChapterMeta } from '../../../src/data/chapter-meta.ts';
 import { FFX2_IXION_DJOSE } from '../../../src/data/chapter-ffx2-ixion-djose.ts';
 import { DJOSE_ABYSS_PLATE, DJOSE_CHAMBER_PLATE, DJOSE_WAKE_PLATE, isIxionStandIn } from '../../../src/data/ixion-plates.ts';
 import { GUIDES } from '../../../src/data/guides/index.ts';
+import { DJOSE_BACKDROP, DJOSE_IXION_ID, DJOSE_IXION_SPOT, DJOSE_PLATE_FRAMES, DJOSE_SPOTS } from '../../../src/scenes/djose-chamber.ts';
 import { djoseBuild } from '../../../src/data/ffx2/builds/djose.ts';
 import { djoseIxionGroup } from '../../../src/data/ffx2/enemies/ixion-djose.ts';
 import { TACTICS } from '../../../src/engine/tactics/index.ts';
@@ -40,16 +41,30 @@ const LOCKED = readFileSync(join(ROOT, 'docs', 'target', 'judge-locked-hashes.js
 const { pre, post } = ffx2IxionDjoseScripts;
 
 describe('the plates: the recommended options, provisional until Bailey picks, one line each to swap', () => {
-  it('the Chamber and the Abyss are options C1 and A1 under provisional keys; the wake is the approved Chapter 4 plate', () => {
+  it('the Chamber and the Abyss are options C2 and the repaired A1 under provisional keys; the wake is the approved Chapter 4 plate', () => {
     expect([DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, DJOSE_WAKE_PLATE]).toEqual([
-      'ffx2-djose-chamber-provisional', 'ffx2-abyss-provisional', 'bevelle-underground',
+      'djose-chamber-provisional', 'farplane-abyss-provisional', 'bevelle-underground',
     ]);
     expect([isIxionStandIn(DJOSE_CHAMBER_PLATE), isIxionStandIn(DJOSE_ABYSS_PLATE), isIxionStandIn(DJOSE_WAKE_PLATE)]).toEqual([true, true, false]); // none is Bailey's pick yet
     expect(FFX2_IXION_DJOSE.sceneKey).toBe(DJOSE_CHAMBER_PLATE);
   });
 
+  it('every Chamber option has its own framing; on C2 Ixion stands on the floor right of the pit, not on its rim', () => {
+    for (const key of ['ffx2-djose-chamber-standin', 'ffx2-djose-chamber-provisional', 'djose-chamber-provisional']) {
+      expect(DJOSE_PLATE_FRAMES[key], key).toBeDefined();
+    }
+    expect(DJOSE_BACKDROP).toBe(DJOSE_PLATE_FRAMES[DJOSE_CHAMBER_PLATE]);
+    // Measured headless at 1600x900, 2000x1012 and 390x844 against a gridded copy of C2 (handoff): staging, ours.
+    expect(DJOSE_PLATE_FRAMES['djose-chamber-provisional']!.ixion).toEqual([4.2, 0, -6.0]);
+    expect(DJOSE_SPOTS[DJOSE_IXION_ID]).toEqual(DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT);
+    // The other plates keep the standard spot.
+    expect(DJOSE_PLATE_FRAMES['ffx2-djose-chamber-provisional']!.ixion).toBeUndefined();
+    expect(DJOSE_IXION_SPOT).toEqual([1.0, 0, -6.0]);
+  });
+
   it.skipIf(!existsSync(join(ART, 'backdrops', 'farplane.png')))('options and stand-ins are on disk, say so in their sidecars and are locked in no list', () => {
-    for (const key of [DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, 'ffx2-djose-chamber-standin', 'ffx2-abyss-standin']) {
+    const keys = [DJOSE_CHAMBER_PLATE, DJOSE_ABYSS_PLATE, 'ffx2-djose-chamber-provisional', 'ffx2-abyss-provisional', 'ffx2-djose-chamber-standin', 'ffx2-abyss-standin'];
+    for (const key of keys) {
       expect(existsSync(join(ART, 'backdrops', `${key}.png`)), key).toBe(true);
       const side = JSON.parse(readFileSync(join(ART, 'backdrops', `${key}.json`), 'utf8')) as { status: string; notApproved: boolean };
       expect(side.notApproved, key).toBe(true);
