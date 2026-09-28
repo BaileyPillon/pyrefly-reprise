@@ -1,5 +1,114 @@
 # FF7 Guard Scorpion: the hidden experiment, integrated and turned on (FF7 only)
 
+## Phase 3: the high-fidelity fight (branch `ff7-phase3`), 2026-09-27
+
+Branch `ff7-phase3` (worktree `D:/pyrefly-ff7-p3`, from `main` 47ab4ae8), pushed; not merged into
+`main`, not deployed. **Game case: FF7 only** (AGENTS.md rule 14); the shared files touched are
+shared plumbing (both + FF7), each change optional or keyed to FF7's own ids and switches
+(`docs/CONTRACT-CHANGES.md`, 2026-09-27 "FF7 phase 3").
+
+On whose word: Bailey, 2026-09-27 ~13:00 EDT, verbatim: "I'll go with all of your recommendations"
+(D-259 art direction 3 "Film" with the back-edge rim fixed first; D-260 effects "Spectacle" built on
+"A3 plus"; D-261 the punchier menu look on the D-237 layout; D-262 "cant you just have the characters
+and enemy switch sides? not mirrored just literally switch sides"; and the accepted options round
+D-244: B1, C1 + G1, D1, E1, F1). Still in force: "i need tons of eye candy it needs to be higher
+fidelity than the original in this regard". Music stays `null` until Bailey hears the sketch.
+
+### What is built
+
+| Item | What | Files |
+|---|---|---|
+| Sides (D-262) | The party stands on the LEFT facing screen-right, Guard Scorpion on the RIGHT facing screen-left, towering. Barret stands upstage-left of Cloud; on Change the back row steps further LEFT. Nothing is mirrored (every Film sidecar `mirrored: false`; the stage turns the bodies with `sideFacing { party: 1, enemy: -1 }`). The camera (y 2.6, z 11, pitched 8 degrees) and the formation are solved to the approved Film frame (`hifi/scripts/compose.py`'s desk layout: Cloud 300 px with his feet near 615 at 1600x900) | `src/scenes/sector1-reactor-staging.ts`, `sector1-reactor.ts`, `src/app/screens/BattleScreenFf7Stage.ts` |
+| Art (D-259) | The Film repair round's recommended file per pose (`docs/concepts/ff7-art-2026-09-27/film-set/README.md`), installed add-only under new keys: `ff7-film-cloud` (idle, windup, attack = strike, follow, victory = fist pump, spin, back, hurt), `ff7-film-barret` (idle, aim, attack = fire, victory = squat, punch, hurt), `ff7-film-guard-scorpion` (idle tail down, hurt = the recoil), `ff7-film-guard-scorpion-tail-up` (idle raised, hurt = the recoil), `backdrops/ff7-film-reactor`. The installer (`film-set/scripts/install.py`) turns the last mint on Cloud's BACK edge to ink (2 to 112 px per pose; the repair round had already inked the rest), resizes (party x0.5, the boss x0.75, premultiplied) and pads each plane to register on the feet (the boss on its rear foot, so idle, raised and both recoils need no shift). Manifest regenerated (only additions); backups in `D:/Tools/pyrefly-art-backup/approved/2026-09-27-ff7-film/`; locked as set `bailey:2026-09-27-ff7-film` in `docs/target/approved-hashes.json`. The round-2 `ff7-*` files stay installed and unused | `src/data/ff7/builds/sector1-reactor.ts`, `src/data/ff7/enemies/guard-scorpion.ts` |
+| Effects (D-260) | Eleven FF7 effects on the house spell-FX particle system (`FxDrawList`, `FxBatch`, its density tiers and phone cap): Bolt, Ice, Cure, Cloud's slash, Barret's shot (the muzzle flash drawn by code), Braver, Big Shot, Search Scope's lock-on, Rifle, Scorpion Tail, and Tail Laser as one beam swept up off the floor across both members, key frame on the nearer, with the scorch. A3 plus underneath (tapered beams, jagged bolts, faceted bursts, glow, floor light pools, a stage dim), Spectacle on top (sparks, embers, motes along beams, anamorphic streaks, heat haze, charge rings, washes). The director (`battleFf7Fx.ts`) adds B1's white hit flash, a knock-back on the boss, the effect's colour cast on every fighter by distance, and on Tail Laser and Braver a short camera shake and one flash frame (once per action). **Calm version** under reduced motion: particles at 40 %, no haze, streaks, washes, shake or flash frame. Low effects keeps the plain bloom | `src/engine/spellfx/ff7/*`, `src/app/screens/battleFf7Fx.ts`, `battleSpellFx.ts` (shared plumbing) |
+| B1 | Cloud runs in with the wind-up painting, strikes (the house lunge stays out: `ownsWindUp`), holds the follow-through, runs back in idle; Braver leaps and strikes on the way down; Barret aims, then fires from his spot (Big Shot charges longer); a caster raises Cloud's sword or Barret's free hand. The boss's hit shows its recoil painting (its `hurt`) | `BattleScreenFf7Motion.ts`; `BattlePresenterMotion.ts`, `BattlePresenterBeats.ts` (shared plumbing) |
+| D1 | Cloud pumps his fist twice, spins, puts the sword on his back; Barret squats, stands and punches the air, looping; a 2.5 s hold in silence; a KO'd member stays down | `BattleScreenFf7Motion.ts` (`victory`) |
+| C1 + G1 | FF7's own results: step 1 EXP and AP windows and a window per member (a crop of their Film idle as the portrait, LV, the award counting in, "10 AP · Lightning, Ice"), step 2 Gil and Items ("Assault Gun 1 (Barret: Att 17, Long Range)", "Received 100 gil and the Assault Gun."); a wipe-out pans the camera up with the band sunk away, then black, GAME OVER, RETRY / CHAPTER SELECT. Numbers from the engine (100 EXP, 10 AP, 100 gil, the Assault Gun). Named `'results'` like the house panel | `src/app/screens/Ff7ResultsScreen.ts`, `src/ui/ff7/ff7ResultsHtml.ts`, `ff7-results.css`; one line in `BattleScreenFlow.ts` (shared plumbing) |
+| E1 | An upright phone gets its own layout: the formation drawn in, the camera moved in (fov 60), the painting covering the frame (zoom 1.3). Cloud about 140 px at 390x844 (the letterbox drew him about 50); the lowered tail may trail off the right edge | `sector1-reactor-staging.ts` (`SECTOR1_PHONE`) |
+| F1 | FF7's swirl of the frozen board: an SVG vortex displacement plus a CSS turn and zoom on `#app` for 1 s, lightening, a cut to black, the battle swapped in under it, a fade up; then the opening camera from close on the boss to the fixed view in 2 s, the band rising after. Confirm (Enter, Space, Z, a tap) cuts to the fixed view; reduced motion cuts both | `src/ui/ff7/ff7Swirl.ts`, `BattleScreenFf7Opening.ts`; `BattleScreenExperiment.ts`; one line each in `BattleScreen.ts`, `BattleScreenAirship.ts` (shared plumbing) |
+| HUD look (D-261) | Heavier letters (a stroke in the glyph's colour under the fill), a glass sheen and a soft blue outer glow on every window, the lit active row, a glowing finger and ready marker, a blazing full Limit gauge, glowing digits. A look change: no box moved; all vector, sharp at DPR 1, 1.5 and 2 (`hud-crop-dpr*.png`) | `src/ui/ff7/ff7-hud-look.css`, `ff7MenuHtml.ts` |
+
+The shared-plumbing additions, all optional: `ActionMotionPort.ownsWindUp / victory / defeat`,
+`FixedCamera.unheld()`, `SceneStaging.figureExtent` (the long machine's paintings run 2.7x its
+height; the actor's `maxExtent`), the spell-FX `'ff7'` game with `onLand` and `FxTarget.members`,
+`AirshipBattleHook.opening`, and FF7-only extra key poses in `resolvePoseMap` (`ff7-` art ids only).
+
+### Checks
+
+- `npx tsc --noEmit` and `npx tsc --noEmit -p tsconfig.e2e.json` clean.
+- Full `vitest run`: 598 files pass, 5 skipped, 1 fails: the known `strategy-ffx2-bahamut` "heal-only
+  route" timeout under full load; alone it passes 19/19. `ffx2-atb-golden` 6/6. New:
+  `tests/unit/ff7-fx.test.ts` (20: every FF7 effect inside the peak budget at full and phone quality,
+  the calm version thinner with no wash, the lookup by FF7 id, FFX and FFX-2 never drawing an FF7
+  effect, Tail Laser as one copy over both, the director's hit flash, knock-back, shake and one flash
+  frame) and `tests/unit/ff7-phase3.test.ts` (13: C1 from the engine's real result, G1's choices by
+  keys and taps, B1's keys, D1 with a KO'd member staying down, G1's pan on the free camera, F1's
+  skip and reduced-motion cut, the instant swirl, the lit row, FF7's own-poses-only pose map).
+  Updated for the switch: `ff7-stage`, `ff7-repair`, `ff7-class-a` (the boss towers: raised height at
+  least 1.4x Cloud's, length at least 2.2x on a desk, everything above the band and under the message
+  window, at 1600x900 and 390x844), `ff7-integration`, `ff7-guard-scorpion-ai` (the form's art key),
+  `spellfx-effects` (sweeps the non-FF7 ids only).
+- **FF7 golden re-pinned for a staging reason only** (the art keys `ff7-*` became `ff7-film-*`):
+  replacing `ff7-film-` with `ff7-` in every seed's log reproduces all 40 old hashes; outcomes,
+  turns, ticks and event counts are unchanged.
+- `node tools/orphans.mjs`: 24, the same list (no FF7 module).
+- `verify-approved.mjs` (ROOT = the worktree): 286 ok, 0 mismatched, 0 missing (238 approved, of
+  them the 19 new Film files, + 48 judge-locked).
+- E2E on a production build (`vite build` to a scratch outDir, `vite preview`, headless GPU
+  Chromium, one browser): **5 of 5 pass** (`tests/e2e/ff7-guard-scorpion.spec.ts`): 1600x900 keys
+  (the door, the swirl, the opening, every window inside the frame, a win with effect frames for
+  Bolt, Search Scope, the shot, Rifle, Scorpion Tail, the slash and Tail Laser, Braver by the Limit,
+  D1, both results windows, the board and save unchanged); 390x844 taps (E1: Cloud at least 110 px,
+  the same win, the results by taps); 1600x900 keys loss (G1's pan, GAME OVER, RETRY at seed + 1000,
+  a second loss, CHAPTER SELECT, the store at 2 attempts); the pad door; phone A.
+- First load (the branch build, gzip -9): 879,897 B (JS 832,009 + CSS 47,888).
+- Every server this run started (ports 7200 to 7205) was stopped by its PID.
+
+### Frames and sheets
+
+`docs/screenshots/ff7-phase3/`: `game-<size>-<moment>.jpg` from the e2e on the production build
+(door, swirl, opening-close, opening-settled, first-turn, turn, magic, target, the effect frames
+`fx-ff7-*`, melee-strike, hint-2, hint-3, defend, limit-full, limit-window, win-poses, win-spin,
+win-hold, results-1, results-2, gameover-pan, gameover, gameover-chapter-select, retry, pad-open),
+the held effect frames `held-1600x900-{full,calm}-*.jpg`, the other aspects
+(`game-1024x768-first-turn`, `game-2000x1012-first-turn`), the DPR crops `hud-crop-dpr{1.5,2}.png`,
+and the target-vs-build sheets (`python tools/ff7-phase3-sheets.py`): `sheet-1-film-art-and-sides`,
+`sheet-2-hud-look`, `sheet-3-fx-tail-laser`, `sheet-4-fx-bolt-braver-scope`,
+`sheet-5-fx-more-and-calm`, `sheet-6-attack-b1`, `sheet-7-victory-d1`, `sheet-8-results-c1`,
+`sheet-9-gameover-g1`, `sheet-10-way-in-f1`, `sheet-11-phone-e1`.
+
+### Estimates that show (say "our estimate" to Bailey)
+
+Every number in the staging (camera, pitch, fov, spots, heights, the phone layout, the strike gap),
+every timing (the run, the holds, the victory sequence and its 2.5 s hold, the pan, the swirl, the
+opening), the look of every effect (no source describes FF7's), the cast-light falloff, the shake
+and the flash frame, the anchor points on the paintings (measured), the results window arrangement,
+the portrait crops, the Game Over fade. The results' EXP gauge shows the award counting in, not the
+progress to the next level (the EXP table is not in research/, so levels gained are not computed);
+every member row prints the full EXP (the result does not say who stood at the end). That Scorpion
+Tail is a shot from the tail's lens is our reading of its Shoot element.
+
+### Open
+
+1. Bailey's review of the build against the sheets (rule 9: the targets are approved; the build is
+   an agent's reading of them). The judge's earlier faults on the first Film picks were repaired
+   before this install (the film-set README); the repaired set was not re-judged by an independent
+   judge in this run.
+2. Known art limits carried from the film-set README: the spin pose's head about 8 % small, the
+   wind-up forearm shadow a little red, Barret's aim at chest height, small cheek scars on squat,
+   punch and hurt.
+3. No KO paintings: a KO'd member lies down in the hurt painting (the house fallback); G1's target
+   asked for two KO poses to paint.
+4. Music stays silent (D-245's sketch awaits Bailey's ear); no retail fanfare, reel or "Continue?".
+5. Resizing a window mid-fight keeps the layout it was built with (desk or phone).
+6. Merge into `main`, the focused review and the release are the driver's.
+7. Scratch: two broken junctions from this run's first `mklink` (a bad target) sit at
+   `D:/pyrefly-ff7-p3/zz-broken-junction-{nm,art}.tmp` (they point at `D:\D:\...`, nothing). Remove
+   them with `cmd /c rmdir` before any `git worktree remove`, as for the live junctions.
+
+
+## Before phase 3: integration, repair and class-A (branch `ff7-integration`)
+
 Branch `ff7-integration` (worktree `D:/pyrefly-ff7-int`), 2026-09-27: `origin/ff7-engine` merged
 into `ff7-plumbing` (the HUD), then `origin/main` (already contained). Not merged into `main`, not
 deployed. **Game case: FF7 only** (AGENTS.md rule 14). Shared files touched are labelled
