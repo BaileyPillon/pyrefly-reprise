@@ -423,3 +423,56 @@ else offered.
    behind one remain.
 3. `advisor.ts` (about 1,870 lines) and `FFX2BattleHud.ts` are over the 400-line rule as before;
    the new logic is in `advisor-covered.ts` (189 lines).
+
+## VERIFY (independent, 2026-09-27, a separate agent; branch at b2791133)
+
+Measured by running the engine (rule 3), with probes written for this pass (not the builder's),
+scratch only, not committed: `.verify-advisor-v3-tmp/` in this worktree. **Game case: FFX-2 only**
+(the in-flight and held rules). **Verdict: no blocker.** 0 repeats of a chosen or held move on
+the card or the rail, 0 off-menu rows, 0 changes to the battle.
+
+- **Repeat probe on new seeds 81-120**, 6 FFX-2 chapters, card and rail. The rail is built as the
+  HUD builds it, with the engine's `heldCommand()` passed in. A repeat is the same kind and id as
+  a command that another girl has charging or held, aimed at the same target or at the party.
+  Non-damage moves aimed at the enemy count too.
+
+  | Run | Decisions | In flight | Held | Support repeats, card / rail |
+  |---|---:|---:|---:|---|
+  | Card followed | 20,528 | 7,591 | 678 | 0 / 0 |
+  | 35 % random presses | 18,266 | 6,934 | 671 | 0 / 0 |
+
+  Every raw hit (card 43 / 16, rail 73 / 24) was Dark Knight **Darkness**. Darkness is an
+  all-enemies damage move with no named target, so the simulation counts it as non-damage. This
+  is the artifact the builder and CHECK 2 excluded, confirmed from
+  `src/data/ffx2/abilities/dark-knight.ts`. With it removed, 0 remain. Across the whole probe:
+  0 off-menu or badly aimed rows at any rank, and 0 purity differences (full engine snapshot
+  before and after the card and rail at every decision).
+- **Advisor on vs off, 10 runs each way** (Bahamut, Vegnagun x2, Leblanc x2, Fallen Aeons x2,
+  Trema, Den of Woe x2; seeds 91-119):
+  - Random presses, with the card, the cached card and the rail either computed at every
+    decision or never: the RNG state and the log hash matched at every decision in all 10 runs.
+  - Card followed, then the same presses replayed with no advisor: the logs matched in all 10.
+    These runs include 5-link Vegnagun wins.
+- **Scorecard, 40 seeds, rerun** (`results-verify-v3.json`, untracked): **453 of 600**. Every
+  column of every row equals `results-final-v3.json` except the latency columns, which were
+  measured under load.
+- **`git merge-tree --write-tree origin/main b2791133`**: clean (exit 0), and the branch already
+  contains origin/main (47ab4ae8).
+- tsc is clean apart from the known untracked `tests/unit/zz-scratch/` (2 x TS6133).
+  `advisor-v3-final`, `-repair`, `-inflight` and `ffx2-engine-fork`: 17 of 17 pass.
+- **Real keys, headless GPU, 1600x900, production build** (`vite build` + `vite preview`, port
+  7521, stopped by its PID), Chapter V (Vegnagun), seed 4. The party was set to 30 % HP as a
+  fixture. Yuna pressed Item > Mega-Potion. Paine's menu then opened while the Mega-Potion was
+  still charging, with Yuna alive at 746 / 2488. Paine's card said *Black Sky -> all enemies*
+  and the rail's NEXT said *X-Potion -> Paine*. Neither named Mega-Potion, and 1.5 s later both
+  were the same. Frames: `docs/screenshots/advisor-v3/final-verify-{1,2,3}-ffx2-vegnagun-shuyin-s4-*.jpg`.
+  - Seed 1 also passed, but Rikku was down with a stale charge there.
+  - Seeds 2 and 3 timed out in the script's menu wait, a harness issue; there was no card
+    reading.
+
+Observations (not blockers):
+- The rail's NEXT can name a different heal on a girl the charging Mega-Potion also heals. In the
+  seed 4 frame it says X-Potion -> Paine (Paine at 1,759 / 5,862). This is the chapter line, and it
+  is not a repeat. It is the rail's side of CHECK 2's M1, which the final fix addressed only on
+  the card.
+- The CHECK 2 bars that stay the driver's call (V 36 vs v2 37, p95 time) are unchanged.
