@@ -58,6 +58,7 @@ import {
   shadeGippalAbilities,
   shadeNoojAbilities,
 } from '../../src/data/ffx2/enemies/den-of-woe-abilities.ts';
+import { x2IxionAbilities } from '../../src/data/ffx2/enemies/ixion-djose-abilities.ts';
 
 // ---------------------------------------------------------------------------
 // Per combatant — from each enemy file's own header comment.
@@ -166,6 +167,10 @@ const COMBATANT_CITES: Record<ListedChapterId, Record<string, string>> = {
     'shade-gippal': 'research/ffx2-gippal-den-of-woe.md §3.1 (src/data/ffx2/enemies/den-of-woe.ts)',
     'shade-nooj': 'research/ffx2-gippal-den-of-woe.md §3.2 (src/data/ffx2/enemies/den-of-woe.ts)',
   },
+  // Chapter XVII (FFX-2), registered but unlisted: Ixion at Djose.
+  'ffx2-ixion-djose': {
+    'x2-ixion': 'research/ffx2-ixion-djose.md §3.1 (src/data/ffx2/enemies/ixion-djose.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -252,6 +257,9 @@ const ABILITY_FILE_CITES: Record<ListedChapterId, readonly AbilityFileCite[]> = 
     fileCite(shadeGippalAbilities, 'research/ffx2-gippal-den-of-woe.md §4.1 (src/data/ffx2/enemies/den-of-woe-abilities.ts)'),
     fileCite(shadeNoojAbilities, 'research/ffx2-gippal-den-of-woe.md §4.3 (src/data/ffx2/enemies/den-of-woe-abilities.ts)'),
   ],
+  'ffx2-ixion-djose': [
+    fileCite(x2IxionAbilities, 'research/ffx2-ixion-djose.md §4.1 (src/data/ffx2/enemies/ixion-djose-abilities.ts)'),
+  ],
 };
 
 /**
@@ -308,6 +316,8 @@ const ABILITY_OVERRIDE_CITES: Record<ListedChapterId, Record<string, string>> = 
   'ffx2-trema': {},
   // Every Chapter XV ability id is `x2-den-`-prefixed and defined in the chapter's own ability file.
   'ffx2-den-of-woe': {},
+  // Every Chapter XVII ability id is `x2-ixion-`-prefixed and defined in the chapter's own ability file.
+  'ffx2-ixion-djose': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

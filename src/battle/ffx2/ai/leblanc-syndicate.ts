@@ -51,8 +51,8 @@ const NO_LOVE_LOST_PERIOD = 8;
 
 /**
  * "After her [25 + times No Love Lost was used] turn -> Not-So-Mighty Guard." §5.3, §19.2.
- * Two readings (PR-0106): OFF, the **AUTHORED** one this script has always used, every turn past
- * 25 + uses (no source says "every turn", §19.2); ON (`constants.ts` LEBLANC_SCRIPT_SINIROTHX,
+ * Two readings (PR-0106): OFF, the **AUTHORED** one this script used until D-242, every turn past
+ * 25 + uses (no source says "every turn", §19.2); ON (the default since D-242, `constants.ts` LEBLANC_SCRIPT_SINIROTHX,
  * `flags.leblancScriptSinirothX`), SinirothX's, once, **on** turn 25 + uses, as the No Love Lost line
  * is read (GameFAQs' reading, our estimate).
  */

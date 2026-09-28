@@ -367,7 +367,7 @@ export const gagazetBuild: FFXPartyBuild = {
   activeSlots: ['tidus', 'yuna', 'kimahri'],
   reserve: ['auron', 'wakka', 'lulu', 'rikku'],
   // §7.6 [verified: 2 sources] — all five mandatory aeons available; Yojimbo/Anima/Magus Sisters assumed not yet obtained.
-  // PR-0179: the shipped rows while `GAGAZET_AEON_ARM` is 'shipped' (OFF); the sourced §6.4.3 rows under arms a to c.
+  // PR-0179 / D-243: arm a, the sourced §6.4.3 rows (`GAGAZET_AEON_ARM`); 'shipped' keeps the old rows.
   aeons: armGagazetAeons(GAGAZET_SHIPPED_AEONS, GAGAZET_AEON_ARM),
   inventory: GAGAZET_INVENTORY.map((e) => ({ ...e })), // §7.8 [estimate] (`gagazet-kit.ts`)
   gil: 27000, // §7.8 [estimate] midpoint of 15,000-40,000, includes the 20,000 found on the mountain

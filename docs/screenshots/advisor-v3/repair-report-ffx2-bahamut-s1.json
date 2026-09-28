@@ -1,0 +1,222 @@
+{
+  "chapter": "ffx2-bahamut",
+  "seed": 1,
+  "steps": [
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Hi-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next card while it charges",
+      "next": "paine",
+      "inFlight": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "card": "Next best movePaineMagic Break→BahamutSkillGuide’s pickin Skill145–1634 MP",
+      "computed": {
+        "actor": "paine",
+        "v2": "Magic Break -> Bahamut",
+        "v3": "Magic Break -> Bahamut",
+        "v3WithoutRule": "Magic Break -> Bahamut",
+        "guideNext": "Magic Break -> Bahamut",
+        "guideLine": "x2-warrior-magic-break",
+        "railText": "BahamutNextPaineMagic Break→BahamutFive Magic Breaks cap every spell he owns at x0.167: Mega Flare 1,152 becomes 192 and Impulse drops to 6.25% of current HP.ffx2-bahamut §3.3WatchThe 12-action loopCu",
+        "v3ms": 5.199999988079071,
+        "v3reason": "It puts Mag Down on Bahamut, and it deals 154 damage",
+        "hudCard": "Magic Break -> Bahamut",
+        "hudPassesEngine": true,
+        "projection": {
+          "enemyMovedFirst": false,
+          "now": "yuna 207/690, rikku 447/1839, paine 512/1706",
+          "projected": "yuna 690/690, rikku 447/1839, paine 512/1706"
+        }
+      }
+    },
+    {
+      "name": "neither v2 nor v3-without-the-rule repeats it after a landed projection here; next attempt"
+    },
+    {
+      "name": "pressed",
+      "by": "rikku",
+      "pressed": "Hi-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next card while it charges",
+      "next": "paine",
+      "inFlight": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "card": "Next best movePaineMagic Break→BahamutSkillGuide’s pickin Skill145–1634 MP",
+      "computed": {
+        "actor": "paine",
+        "v2": "Magic Break -> Bahamut",
+        "v3": "Magic Break -> Bahamut",
+        "v3WithoutRule": "Magic Break -> Bahamut",
+        "guideNext": "Magic Break -> Bahamut",
+        "guideLine": "x2-warrior-magic-break",
+        "railText": "BahamutNextPaineMagic Break→BahamutFive Magic Breaks cap every spell he owns at x0.167: Mega Flare 1,152 becomes 192 and Impulse drops to 6.25% of current HP.ffx2-bahamut §3.3WatchThe 12-action loopCu",
+        "v3ms": 6.199999988079071,
+        "v3reason": "It puts Mag Down on Bahamut, and it deals 154 damage",
+        "hudCard": "Magic Break -> Bahamut",
+        "hudPassesEngine": true,
+        "projection": {
+          "enemyMovedFirst": true,
+          "now": "yuna 207/690, rikku 453/1839, paine 512/1706",
+          "projected": "yuna 207/690, rikku 453/1839, paine 512/1706"
+        }
+      }
+    },
+    {
+      "name": "neither v2 nor v3-without-the-rule repeats it after a landed projection here; next attempt"
+    },
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Hi-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "paine"
+    },
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Hi-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next card while it charges",
+      "next": "rikku",
+      "inFlight": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "card": "Next best moveRikkuDarkness→all enemiesSkillin Skill458–5172 hitsCosts the party HP.",
+      "computed": {
+        "actor": "rikku",
+        "v2": "Darkness -> all enemies",
+        "v3": "Darkness -> all enemies",
+        "v3WithoutRule": "Darkness -> all enemies",
+        "guideNext": "Darkness -> all enemies",
+        "guideLine": "x2-dark-knight-darkness",
+        "railText": "BahamutNextRikkuDarkness→all enemiesDarkness ignores his Defense 160 and hits everything — it is why the Dark Knight dressphere is hidden in this dungeon, immediately before this test.ffx2-bahamut §3.",
+        "v3ms": 3.9000000059604645,
+        "v3reason": "Most damage on the board — 486 to Bahamut",
+        "hudCard": "Darkness -> all enemies",
+        "hudPassesEngine": true,
+        "projection": {
+          "enemyMovedFirst": true,
+          "now": "yuna 207/690, rikku 552/1839, paine 512/1706",
+          "projected": "yuna 207/690, rikku 552/1839, paine 512/1706"
+        }
+      }
+    },
+    {
+      "name": "neither v2 nor v3-without-the-rule repeats it after a landed projection here; next attempt"
+    },
+    {
+      "name": "pressed",
+      "by": "paine",
+      "pressed": "Hi-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next card while it charges",
+      "next": "yuna",
+      "inFlight": {
+        "kind": "item",
+        "id": "x2-hi-potion",
+        "targets": [
+          "yuna"
+        ]
+      },
+      "card": "Next best moveYunaHi-Potion→PaineItemin Item+937–1,058no MP100% to hitRecovers 1000 HP.Paine lives through Mega Flare; next, Mega Flare hits for about 1,600 in all; the long plan is still Shell.",
+      "computed": {
+        "actor": "yuna",
+        "v2": "Hi-Potion -> Yuna",
+        "v3": "Hi-Potion -> Paine",
+        "v3WithoutRule": "Hi-Potion -> Paine",
+        "guideNext": "Shell -> the party",
+        "guideLine": "x2-white-mage-shell",
+        "railText": "BahamutNextYunaShell→the partyShell halves Impulse and Mega Flare, the two biggest threats in the script, and stacks multiplicatively with Magic Break down to x0.083.ffx2-bahamut §3.3WatchMega Flarein",
+        "v3ms": 6.300000011920929,
+        "v3reason": "Paine lives through Mega Flare; next, Mega Flare hits for about 1,600 in all; the long plan is still Shell",
+        "hudCard": "Hi-Potion -> Paine",
+        "hudPassesEngine": true,
+        "projection": {
+          "enemyMovedFirst": false,
+          "now": "yuna 207/690, rikku 552/1839, paine 512/1706",
+          "projected": "yuna 690/690, rikku 552/1839, paine 512/1706"
+        }
+      }
+    },
+    {
+      "name": "card element 1.5 s later",
+      "fade": {
+        "opacity": "1",
+        "vis": "visible",
+        "hidden": false,
+        "rect": [
+          759,
+          610,
+          378,
+          225
+        ],
+        "text": "Next best moveYunaHi-Potion→PaineItemin Item+937–1,058no MP100% to hitRecovers 1000 HP.Paine lives through Mega Flare; n"
+      }
+    }
+  ],
+  "failures": [
+    "the next card still names Hi-Potion: \"Next best moveYunaHi-Potion→PaineItemin Item+937–1,058no MP100% to hitRecovers 1000 HP.Paine lives through Mega Flare; next, Mega Flare hits for about 1,600 in all; the long plan is still Shell.\""
+  ]
+}

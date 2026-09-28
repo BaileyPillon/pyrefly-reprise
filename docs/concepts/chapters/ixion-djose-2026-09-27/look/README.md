@@ -1,5 +1,10 @@
 # Ixion's FFX-2 look: four painted options (2026-09-27)
 
+**Picked: B, possessed violet** (Bailey, 2026-09-27 ~15:20 EDT, "all your recommendations"; D-268). Installed on
+branch `chapter-ixion` as `public/art/characters/x2-ixion/` (idle = `opt-b.png` byte for byte; attack, cast with the
+Recharge glow, and overdrive derived the same way by `scripts/install.py` and `scripts/recharge_glow.py`), locked as
+`bailey:2026-09-27-ixion`. See `docs/handoff/chapter-ixion.md`. The text below is the options round as it was.
+
 **Options only. Nothing is installed or wired.** No file under `src/`, `tests/`, `public/art/`,
 `critic/` or `docs/target/` was touched, and nothing is listed on the board (AGENTS.md rule 9).
 This is the painting round research Q6 asks for, after Bailey's "all your recommendations"

@@ -75,7 +75,7 @@ export const viaPurificoBuild: FFXPartyBuild = {
   members: [yuna()],
   activeSlots: ['yuna'], // forced_party "y" [§1.2, verified: 3 sources]
   reserve: [],
-  aeons: armViaPurificoAeons(aeons(), GAGAZET_AEON_ARM), // PR-0179, OFF
+  aeons: armViaPurificoAeons(aeons(), GAGAZET_AEON_ARM), // PR-0179, arm a (D-243)
   // B7 = a: Chapter X's bag and gil (Chapter VIII's, carried).
   inventory: highbridgeBuild.inventory.map((e) => ({ ...e })),
   gil: highbridgeBuild.gil,

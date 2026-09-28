@@ -1,6 +1,7 @@
 import './strategy-guide.css';
 import type { AvailableCommand, BattleState, CombatantId, GameId } from '../../battle/common/types.ts';
-import { buildGuideView, type GuideView } from '../../engine/tactics/guide.ts';
+import { buildGuideView, type GuideDecision, type GuideView } from '../../engine/tactics/guide.ts';
+import type { QueuedCommand } from '../../engine/tactics/guide-inflight.ts';
 import { ffx2CoachClock } from '../coach/coachState.ts';
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { GUIDE_HINT_ITEM } from './ControlsHint.ts';
@@ -70,6 +71,11 @@ export interface StrategyGuideOptions {
   /** Overridable for tests. */
   readVisible?: () => boolean;
   writeVisible?: (on: boolean) => void;
+  /**
+   * FFX-2: the engine's held (chain-locked) command, read at every render so NEXT never names a
+   * move already chosen (advisor v3, `engine/tactics/guide-inflight.ts`). FFX passes nothing.
+   */
+  held?: () => readonly QueuedCommand[];
 }
 
 /** The pad button the guide claims: standard index 2, unmapped by `Input.ts`. */
@@ -429,14 +435,24 @@ export class StrategyGuide {
   /** The view the panel would draw right now, for tests and the debug snapshot. */
   view(): GuideView | null {
     if (!this.lastState) return null;
-    return buildGuideView(this.lastState, this.decision, ffx2CoachClock());
+    return buildGuideView(this.lastState, this.withHeld(), ffx2CoachClock());
+  }
+
+  /** The open decision with the held command as it stands now (never throws: a bad read is none). */
+  private withHeld(): GuideDecision | null {
+    if (!this.decision || !this.opts.held) return this.decision;
+    try {
+      return { ...this.decision, held: this.opts.held() };
+    } catch {
+      return this.decision;
+    }
   }
 
   // -------------------------------------------------------------- rendering
 
   private render(): void {
     if (!this.mounted) return;
-    const view = this.lastState ? buildGuideView(this.lastState, this.decision, ffx2CoachClock()) : null;
+    const view = this.lastState ? buildGuideView(this.lastState, this.withHeld(), ffx2CoachClock()) : null;
     // No written guide for this encounter: no panel and no chip, never a chip that opens an empty box.
     this.el.hidden = view === null;
     if (!view || !this.visible) return;

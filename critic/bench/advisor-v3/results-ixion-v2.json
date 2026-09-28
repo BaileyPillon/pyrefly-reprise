@@ -1,0 +1,50 @@
+{
+  "tag": "ixion-v2",
+  "seeds": 40,
+  "when": "2026-09-28T03:22:25.573Z",
+  "rows": [
+    {
+      "chapterId": "ffx2-ixion-djose",
+      "game": "ffx2",
+      "driver": "card",
+      "seeds": 40,
+      "wins": 38,
+      "linksCleared": 38,
+      "outcomes": {
+        "victory": 38,
+        "defeat": 2
+      },
+      "decisions": 1516,
+      "closed": 6,
+      "refused": 4,
+      "fallbacks": 0,
+      "minutes": 96.9340888888889,
+      "pendingDecisions": 665,
+      "dupStrict": 5,
+      "dupSame": 8,
+      "dupCensus": {
+        "x2-mega-potion+x2-hi-potion -> x2-mega-potion": 1,
+        "x2-mega-potion -> x2-mega-potion": 4,
+        "x2-mega-potion -> x2-hi-potion": 2,
+        "x2-hi-potion -> x2-hi-potion": 2,
+        "x2-mega-potion+x2-dark-knight-darkness -> x2-mega-potion": 1,
+        "x2-mega-potion+x2-mega-potion -> x2-hi-potion": 1
+      },
+      "downDecisions": 63,
+      "raiseOnMenu": 63,
+      "topRaises": 3,
+      "runnerUpRaises": 58,
+      "noteOnMiss": 2,
+      "missedRevive": 60,
+      "missedWhileLosing": 27,
+      "lostRunsWithMissedRevive": 2,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 25,
+      "savable": 25,
+      "lethalMiss": 0,
+      "latencyP50": 3.5971000000008644,
+      "latencyP95": 5.309799999999086
+    }
+  ]
+}

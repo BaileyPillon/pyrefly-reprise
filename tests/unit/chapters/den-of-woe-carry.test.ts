@@ -161,7 +161,11 @@ describe('the flag is the only way in: every other chain carries what it always 
    */
   const BASE = {
     ch5: ['7a91c483c3dd8d2c', '054c5f01b9f23ffe', '678d9b991119fa5a', '06f41fb4fb006fbf', '1a487e798a11a864', 'a41b99982fd20f8c', '0c1cbbc0c51f3dcb', '417742a6b0ae62b6'],
-    ch6: ['0aadde1f8d3aff80', '995cb5ec3f5834e0', 'd86662749c9fb7e1', '31f76e6f441c188f', 'f25cf6be4eb333fd', '66b37dd52d704894', '5030ad54d4e4d192', '11b9c3bbc8f0a712'],
+    // Chapter 6 re-pinned 2026-09-27 for PR-0106 (D-242, FFX-2 only): Leblanc's SinirothX script is the
+    // default; no Den code changed. Chapters 5 and XI do not move (IC-1 changes nothing on these seeds).
+    // Was 0aadde1f8d3aff80 995cb5ec3f5834e0 d86662749c9fb7e1 31f76e6f441c188f f25cf6be4eb333fd
+    // 66b37dd52d704894 5030ad54d4e4d192 11b9c3bbc8f0a712.
+    ch6: ['ff75b7a41d90dd0d', '8a604a6a1de93b29', 'edaa14f94ca3e923', '37feb09f06e649e7', 'f195364d7a98d98b', '113622f5d5f90b2c', '2b69d499357ee067', 'f7b6db7d62e7a881'],
     ch11: ['f319b30327d9fa18', '4eafcc689be0d273', '4737582661062166', '5ef0c3e3c91f6248', '316435e39e8d936e', 'dd949f68a130511e', '076a5d7037502f95', 'b9fe2723647eb6cc'],
     sisters: ['99687484cc8094aa', '0229b3252a43a986', 'c794a775eeb15831', '5626b29ba82258dc', '6e58f2c1ade7d918', 'c6a29af6615c238b', '80a81c5b4a82be04', '03217cc660878ed9'],
   };

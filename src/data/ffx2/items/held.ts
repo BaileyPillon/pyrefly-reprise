@@ -18,6 +18,8 @@
  * | `white-lore` | White Lore | Shade of Gippal (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.1; effect `ffx2-bahamut.md` §accessories |
  * | `natures-lore` | Nature's Lore | Shade of Baralai (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.2; effect `ffx2-combat-core.md` Instinct |
  * | `arcane-lore` | Arcane Lore | Shade of Nooj (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.2; effect `ffx2-combat-core.md` Arcana |
+ * | `soul-of-thamasa` | Soul of Thamasa | Ixion's drop (Djose, unlisted) | `ffx2-ixion-djose.md` §3.1, verified: 6 sources; effect wiki, single source |
+ * | `sprint-shoes` | Sprint Shoes | Ixion (both slots) | `ffx2-ixion-djose.md` §3.1, verified: 4 sources; effect wiki, single source |
  *
  * What is **not** sourced, and so not written: an effect or description for
  * Snow Ring, Potpourri, Chaos Shock and Fury Shock (the research names them and
@@ -62,7 +64,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -95,6 +97,9 @@ export const heldItems: ItemDef[] = [
   held('white-lore', 'White Lore', 50000, 'Accessory. White Mage abilities in any dressphere; Mag +12.'),
   held('natures-lore', "Nature's Lore", 50000, 'Accessory. Instinct in any dressphere; Str +12.'),
   held('arcane-lore', 'Arcane Lore', 50000, 'Accessory. Arcana in any dressphere; Mag +12.'),
+  // Ixion at Djose (FFX-2 only): the effects are the wiki's accessory table (ffx2-ixion-djose §3.1, single source).
+  held('soul-of-thamasa', 'Soul of Thamasa', 'unsourced', 'Accessory. Spells 150 % stronger, MP cost doubled; Mag +15.'),
+  held('sprint-shoes', 'Sprint Shoes', 'unsourced', 'Accessory. Act first; Haste; Agi +10.'),
 ];
 
 export default heldItems;

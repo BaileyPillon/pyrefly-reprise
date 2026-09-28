@@ -31,6 +31,8 @@ import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
 import { buildRoadToTheFarplaneScene, ROAD_TO_THE_FARPLANE_SLOTS } from './road-to-the-farplane.ts';
 import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.ts';
 import { buildDenOfWoeScene, DEN_OF_WOE_SLOTS } from './den-of-woe.ts';
+import { buildDjoseChamberScene, DJOSE_CHAMBER_SLOTS } from './djose-chamber.ts';
+import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
 import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
 import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
 import { buildSector1ReactorScene, SECTOR1_SLOTS } from './sector1-reactor.ts';
@@ -120,13 +122,9 @@ function placeholderEntry(key: string, title: string): SceneEntry {
   return { key, title, build: buildDemoScene, slots: GAGAZET_SLOTS, placeholder: true };
 }
 
-SCENES.set('demo', {
-  key: 'demo',
-  title: 'Mt. Gagazet — the Prominence',
-  build: buildDemoScene,
-  slots: GAGAZET_SLOTS,
-  placeholder: false,
-});
+SCENES.set('demo', { key: 'demo', title: 'Mt. Gagazet — the Prominence', build: buildDemoScene, slots: GAGAZET_SLOTS, placeholder: false });
+// Ixion at Djose (Chapter XVI, FFX-2 only): the Chamber on its STAND-IN plate, keyed by the plate (`data/ixion-plates.ts`).
+SCENES.set(DJOSE_CHAMBER_PLATE, { key: DJOSE_CHAMBER_PLATE, title: 'Djose Temple — the Chamber of the Fayth', build: buildDemoScene, slots: DJOSE_CHAMBER_SLOTS, placeholder: false });
 // `gagazet` is the one chapter whose placeholder is already the right place.
 SCENES.set('gagazet', {
   key: 'gagazet',
@@ -271,6 +269,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'bevelle-highbridge': buildHighbridgeScene,
   'via-purifico': buildViaPurificoScene,
   'den-of-woe': buildDenOfWoeScene,
+  [DJOSE_CHAMBER_PLATE]: buildDjoseChamberScene, // Chapter XVI (FFX-2 only); the stand-in plate's key
   'sector1-reactor': buildSector1ReactorScene, // FF7 only
 };
 

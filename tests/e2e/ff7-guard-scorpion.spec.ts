@@ -163,7 +163,7 @@ async function expectBoardUnchanged(page: Page, before: Awaited<ReturnType<typeo
   await page.waitForTimeout(1500);
   const after = await snapshotBoard(page);
   expect(after.board.snap, 'the board: same tiles, order, cursor and count').toEqual(before.board.snap);
-  expect(after.board.snap?.['tiles']).toBe(15);
+  expect(after.board.snap?.['tiles']).toBe(16);
   expect(after.board.words, 'the board reads the same').toBe(before.board.words);
   expect(after.save, 'the main save key is untouched').toBe(before.save);
   expect(after.board.words.toLowerCase()).not.toContain('guard scorpion');
@@ -233,7 +233,7 @@ async function expectFramed(page: Page, minCloudPx: number): Promise<void> {
 test('1600x900, keys: LIMIT and the swirl open the fight, Bolt and Defend win it, D1 and the two results windows, then the board as it was', async ({ page }) => {
   await boot(page);
   const before = await snapshotBoard(page);
-  expect(before.board.snap?.['tiles']).toBe(15);
+  expect(before.board.snap?.['tiles']).toBe(16);
   for (const k of ['l', 'i', 'm', 'i', 't']) {
     await page.keyboard.press(k);
     await page.waitForTimeout(120);

@@ -187,7 +187,7 @@ export interface Ffx2EngineOptions {
    */
   actionTimeSeconds?: number;
   /**
-   * IC-1's alternative (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, OFF): an immune hit opens no chain
+   * IC-1 (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, ON since D-242): an immune hit opens no chain
    * window. Unsourced either way (`research/ffx2-combat-core.md` §9.2). For measurement runs.
    */
   immuneHitsSkipChain?: boolean;

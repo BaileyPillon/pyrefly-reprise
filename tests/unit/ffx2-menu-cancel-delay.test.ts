@@ -82,10 +82,13 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
     'V|active|1': '6be1a4346ecdd543', 'V|split|1': 'e628082551af56ff',
     'V|active|2': 'd87ae9b34cf3f68c', 'V|split|2': 'bf0e82af326cd75c',
     'V|active|3': '0f23aa5c24c2e101', 'V|split|3': '65d1ac6fe36018f8',
-    'VI|active|1': '1e6d2254c421cf97', 'VI|split|1': '5a15ae3d9a79c6c3',
-    'VI|active|2': '0bf6ef40005301d3', // re-pinned 2026-09-26, PR-0145 (iter2-b1): Yuna and Paine down, Rikku petrified, now a Game Over at once (was a1fc93804dedb8cb)
-    'VI|split|2': 'cdb3630f1780026d',
-    'VI|active|3': '4fb96e507ba8ac03', 'VI|split|3': 'a8af26bfad0124a1',
+    // Chapter VI's six re-pinned 2026-09-27 for PR-0106 (D-242, FFX-2 only): Leblanc's script as SinirothX
+    // prints it (failsafe once, turn 5 Fan Slap) is the default now. IV and V do not move (IC-1 changes
+    // nothing on these seeds). Was 1e6d2254c421cf97 / 5a15ae3d9a79c6c3 / 0bf6ef40005301d3 (PR-0145) /
+    // cdb3630f1780026d / 4fb96e507ba8ac03 / a8af26bfad0124a1.
+    'VI|active|1': '413e9acc6ea29f0b', 'VI|split|1': '432a8207584a9ae3',
+    'VI|active|2': 'c7313d74bb9b30e2', 'VI|split|2': 'c780441012c456a5',
+    'VI|active|3': '18d80f928c25021a', 'VI|split|3': '34c00bc638a6450d',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 
@@ -96,7 +99,8 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
   it('Chapters IV, V and VI at human pace: `false` replays the pre-switch logs; the default and `true` play the re-pinned ones', () => {
     for (const [name, drive] of Object.entries(DRIVES)) {
       for (let seed = 1; seed <= 3; seed++) {
-        const r17 = { menuCancelOnlyDelayAbilities: false };
+        // Release 17 also predates D-242 (2026-09-27): IC-1 and PR-0106 were off, so they are forced off here.
+        const r17 = { menuCancelOnlyDelayAbilities: false, immuneHitsSkipChain: false, leblancScriptSinirothX: false };
         expect(logHash(drive(seed, 1500, { atbMode: 'active', ...r17 })), `${name} active ${seed} r17`).toBe(PINNED[`${name}|active|${seed}`]);
         expect(logHash(drive(seed, 1500, { atbMode: 'wait', waitSplit: true, ...r17 }, undefined, 500)), `${name} split ${seed} r17`).toBe(PINNED[`${name}|split|${seed}`]);
         for (const on of [{}, { menuCancelOnlyDelayAbilities: true }] as Array<Partial<Ffx2EngineOptions>>) {
