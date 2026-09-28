@@ -91,6 +91,50 @@ function portrait(m: Ff7ResultMember, x: number, y: number, size: number, f: Ff7
   return box(O, x, y, size, size, 'ff7-portrait', style);
 }
 
+/** The EXP gauge filling with the award as it counts in (not the next-level progress: the EXP table is unsourced). */
+function expGauge(o: Origin, x: number, y: number, w: number, f: Ff7ResFrame, u: number): string {
+  const s = f.s;
+  return box(o, x, y, w, 14 * s, 'ff7-res-gauge', `background:#3a0c0c;border:${1.5 * s}px solid #9a9a9a`) +
+    box(o, x + 1.5 * s, y + 1.5 * s, Math.max(0, (w - 3 * s) * Math.min(1, u)), 11 * s, 'ff7-res-gauge-fill', 'background:linear-gradient(#b8ccff,#6f8ff0 45%,#4b6be0)');
+}
+
+/** A member's window on a desk: portrait, name and LV on the left; EXP, the gauge and the AP line on the right. */
+function memberDesk(mem: Ff7ResultMember, r: Rect, f: Ff7ResFrame, u: number): string {
+  const s = f.s;
+  const p = r.h - 56 * s;
+  const px = r.x + 28 * s;
+  const tx = px + p + 32 * s;
+  const colX = r.x + r.w * 0.42;
+  const award = Math.round(mem.exp * Math.min(1, u));
+  return win(r, `res-member-${mem.id}`, f, (o) =>
+    text(o, tx, r.y + 72 * s, 36 * s, mem.name, { shadow: 2 * s, color: TEXT.command, cls: 'ff7-res-name' }) +
+    hdr(o, tx, r.y + 120 * s, f, 'LV') +
+    text(o, tx + 40 * s, r.y + 124 * s, 34 * s, String(mem.level), { shadow: 2 * s, color: TEXT.command }) +
+    hdr(o, colX, r.y + 62 * s, f, 'EXP') +
+    text(o, r.x + r.w - 40 * s, r.y + 66 * s, 34 * s, `+${award}`, { shadow: 2 * s, color: TEXT.command, align: 'r', cls: 'ff7-res-award' }) +
+    expGauge(o, colX, r.y + 88 * s, r.x + r.w - 40 * s - colX, f, u) +
+    text(o, colX, r.y + 142 * s, 26 * s, `${mem.ap} AP · ${mem.materia.join(', ')}`, { shadow: 2 * s, color: TEXT.body, cls: 'ff7-res-ap' })) +
+    portrait(mem, px, r.y + 28 * s, p, f);
+}
+
+/** A member's window on an upright phone: a small portrait, name, LV and EXP across the top; the gauge and the AP line full width below. */
+function memberPhone(mem: Ff7ResultMember, r: Rect, f: Ff7ResFrame, u: number): string {
+  const s = f.s;
+  const p = 104 * s;
+  const px = r.x + 22 * s;
+  const tx = px + p + 24 * s;
+  const award = Math.round(mem.exp * Math.min(1, u));
+  return win(r, `res-member-${mem.id}`, f, (o) =>
+    text(o, tx, r.y + 62 * s, 34 * s, mem.name, { shadow: 2 * s, color: TEXT.command, cls: 'ff7-res-name' }) +
+    hdr(o, tx, r.y + 108 * s, f, 'LV') +
+    text(o, tx + 38 * s, r.y + 112 * s, 30 * s, String(mem.level), { shadow: 2 * s, color: TEXT.command }) +
+    hdr(o, r.x + r.w - 150 * s, r.y + 54 * s, f, 'EXP') +
+    text(o, r.x + r.w - 28 * s, r.y + 112 * s, 32 * s, `+${award}`, { shadow: 2 * s, color: TEXT.command, align: 'r', cls: 'ff7-res-award' }) +
+    expGauge(o, px, r.y + 150 * s, r.w - 50 * s, f, u) +
+    text(o, px, r.y + 212 * s, 26 * s, `${mem.ap} AP · ${mem.materia.join(', ')}`, { shadow: 2 * s, color: TEXT.body, cls: 'ff7-res-ap' })) +
+    portrait(mem, px, r.y + 22 * s, p, f);
+}
+
 /** Step 1: EXP, AP and a row per member; `u` is the count-in, 0..1. */
 export function stepOneHtml(v: Ff7ResultsView, f: Ff7ResFrame, u: number): string {
   const { W, H, s, phone } = f;
@@ -103,24 +147,7 @@ export function stepOneHtml(v: Ff7ResultsView, f: Ff7ResFrame, u: number): strin
   const rowH = (phone ? 250 : 210) * s;
   v.members.forEach((mem, i) => {
     const r: Rect = { x: m, y: top + th + (26 + i * (rowH / s + 26)) * s, w: W - 2 * m, h: rowH };
-    const p = rowH - 56 * s;
-    const px = r.x + 28 * s;
-    const py = r.y + 28 * s;
-    const tx = px + p + 32 * s;
-    const colX = phone ? tx : r.x + r.w * 0.42;
-    const colY = phone ? r.y + r.h * 0.5 : r.y;
-    const gaugeW = r.x + r.w - 40 * s - colX;
-    const award = Math.round(mem.exp * Math.min(1, u));
-    out += win(r, `res-member-${mem.id}`, f, (o) =>
-      text(o, tx, r.y + 72 * s, 36 * s, mem.name, { shadow: 2 * s, color: TEXT.command, cls: 'ff7-res-name' }) +
-      hdr(o, tx, r.y + 120 * s, f, 'LV') +
-      text(o, tx + 40 * s, r.y + 124 * s, 34 * s, String(mem.level), { shadow: 2 * s, color: TEXT.command }) +
-      hdr(o, colX, colY + (phone ? 20 : 62) * s, f, 'EXP') +
-      text(o, r.x + r.w - 40 * s, colY + (phone ? 24 : 66) * s, 34 * s, `+${award}`, { shadow: 2 * s, color: TEXT.command, align: 'r', cls: 'ff7-res-award' }) +
-      box(o, colX, colY + (phone ? 40 : 88) * s, gaugeW, 14 * s, 'ff7-res-gauge', `background:#3a0c0c;border:${1.5 * s}px solid #9a9a9a`) +
-      box(o, colX + 1.5 * s, colY + (phone ? 41.5 : 89.5) * s, Math.max(0, (gaugeW - 3 * s) * Math.min(1, u)), 11 * s, 'ff7-res-gauge-fill', 'background:linear-gradient(#b8ccff,#6f8ff0 45%,#4b6be0)') +
-      text(o, colX, colY + (phone ? 90 : 142) * s, 26 * s, `${mem.ap} AP · ${mem.materia.join(', ')}`, { shadow: 2 * s, color: TEXT.body, cls: 'ff7-res-ap' }));
-    out += portrait(mem, px, py, p, f);
+    out += phone ? memberPhone(mem, r, f, u) : memberDesk(mem, r, f, u);
   });
   out += glove(f, W - m + 8 * s, H - 70 * s) + box(O, 0, 0, W, H, 'ff7-hit ff7-res-next', '').replace('<div ', '<div data-action="results:continue" ');
   return out;
@@ -139,15 +166,16 @@ export function stepTwoHtml(v: Ff7ResultsView, f: Ff7ResFrame): string {
     hdr(o, ir.x + 22 * s, ir.y + 30 * s, f, 'ITEMS') +
     v.items.map((it, i) => {
       const yc = ir.y + (92 + i * 110) * s;
-      return glove(f, ir.x + 88 * s, yc - 12 * s, o) +
-        text(o, ir.x + 100 * s, yc, 36 * s, it.name, { shadow: 2 * s, color: TEXT.command, cls: 'ff7-res-item' }) +
-        text(o, ir.x + ir.w - 50 * s, yc, 36 * s, String(it.count), { shadow: 2 * s, color: TEXT.command, align: 'r' }) +
-        text(o, ir.x + 100 * s, yc + 56 * s, 24 * s, it.line, { shadow: 2 * s, color: TEXT.body });
+      const ix = ir.x + (phone ? 84 : 100) * s;
+      return glove(f, ix - 12 * s, yc - 12 * s, o) +
+        text(o, ix, yc, 36 * s, it.name, { shadow: 2 * s, color: TEXT.command, cls: 'ff7-res-item' }) +
+        text(o, ir.x + ir.w - (phone ? 24 : 50) * s, yc, 36 * s, String(it.count), { shadow: 2 * s, color: TEXT.command, align: 'r' }) +
+        text(o, phone ? ir.x + 30 * s : ix, yc + 56 * s, (phone ? 22 : 24) * s, it.line, { shadow: 2 * s, color: TEXT.body });
     }).join(''));
   const got = v.items.length ? ` and the ${v.items.map((i) => i.name).join(', the ')}` : '';
   const mr: Rect = { x: m, y: ir.y + ir.h + 30 * s, w: W - 2 * m, h: (phone ? 110 : 76) * s };
   out += win(mr, 'res-message', f, (o) =>
-    text(o, mr.x + mr.w / 2, mr.y + mr.h / 2 + 12 * s, 30 * s, `Received ${v.gil} gil${got}.`, { shadow: 2 * s, color: TEXT.command, align: 'c', cls: 'ff7-res-msg' }));
+    text(o, mr.x + mr.w / 2, mr.y + mr.h / 2 + (phone ? 8 : 12) * s, (phone ? 21 : 30) * s, `Received ${v.gil} gil${got}.`, { shadow: 2 * s, color: TEXT.command, align: 'c', cls: 'ff7-res-msg' }));
   out += glove(f, W - m + 8 * s, H - 70 * s) + box(O, 0, 0, W, H, 'ff7-hit ff7-res-next', '').replace('<div ', '<div data-action="results:continue" ');
   return out;
 }
@@ -163,12 +191,12 @@ export function gameOverHtml(f: Ff7ResFrame, menu: boolean, idx: number, alpha: 
   let out = `<div class="ff7-gameover-words" style="left:0;top:${H * 0.36 - 40 * s}px;width:${W}px;height:${80 * s}px;opacity:${alpha.toFixed(3)};` +
     `text-align:center;font-size:${54 * s}px;line-height:${80 * s}px;letter-spacing:0.08em;color:#e8e8e8;text-shadow:0 0 ${10 * s}px rgba(160,190,255,.45),${2 * s}px ${2 * s}px 0 #111">GAME OVER</div>`;
   if (!menu) return out;
-  const r: Rect = { x: W / 2 - 180 * s, y: H * 0.36 + 70 * s, w: 360 * s, h: 128 * s };
+  const r: Rect = { x: W / 2 - 220 * s, y: H * 0.36 + 70 * s, w: 440 * s, h: 128 * s };
   out += win(r, 'gameover-menu', f, (o) =>
     GAME_OVER_ACTIONS.map((a, i) => {
       const yc = r.y + (40 + i * 48) * s;
-      return text(o, r.x + 80 * s, yc + 11 * s, 28 * s, a.label, { shadow: 2 * s, color: TEXT.command, cls: 'ff7-go-row', data: { row: a.choice } }) +
-        (i === idx ? glove(f, r.x + 74 * s, yc, o) : '') +
+      return text(o, r.x + 92 * s, yc + 11 * s, 28 * s, a.label, { shadow: 2 * s, color: TEXT.command, cls: 'ff7-go-row', data: { row: a.choice } }) +
+        (i === idx ? glove(f, r.x + 84 * s, yc, o) : '') +
         box(o, r.x, yc - 24 * s, r.w, 48 * s, 'ff7-hit', '').replace('<div ', `<div data-action="results:${a.choice}" `);
     }).join(''));
   return out;

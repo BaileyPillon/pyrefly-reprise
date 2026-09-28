@@ -188,8 +188,10 @@ export function ff7ScorpionTail(o: FxDrawList, t: number, T: FxTarget): void {
       const p = lerpPt(lens, target, outCubic(fly));
       o.sprite('glow', '#78E6FF', p[0], p[1], 110 * k, 0.9);
       o.sprite('orb', '#BFF4FF', p[0], p[1], 40 * k, 1);
-      beam(o, lerpPt(lens, p, 0.55), p, 12 * k, '#78E6FF', 0.7);
+      beam(o, lerpPt(lens, p, 0.72), p, 12 * k, '#78E6FF', 0.7);
+      o.bar(lens[0], lens[1], p[0], p[1], 2.5 * k, '#9CE6FF', 0.3); // the thread back to the tail's lens
     }
+    star(o, lens[0], lens[1], 60 * k, '#9CEBFF', env(t, 0.18, 0.5, 0.02, 0.25), 4, 0.3);
     const land = env(t, FF7_TAIL_MARK - 0.02, FF7_TAIL_MARK + 0.35, 0.01, 0.3);
     star(o, target[0], target[1], 80 * k, '#A8E6FF', land, 6, 0.3);
     shards(o, target[0], target[1], 8, 40 * k, 120 * k, '#D2F5FF', land, 1301, 0.5 + outCubic((t - FF7_TAIL_MARK) / 0.3));

@@ -199,6 +199,13 @@ export class Ff7ActionMotion implements ActionMotionPort {
   async defeat(ctx: MotionCtx): Promise<void> {
     const cam = (ctx.stage.camera as { unheld?: () => MotionCtx['stage']['camera'] }).unheld?.();
     if (!cam) return;
+    // The band sinks away so the fallen party stays in the frame (the FF7 HUD root; `ff7-hud-look.css`).
+    if (typeof document !== 'undefined') document.querySelector('.ff7hud')?.setAttribute('data-ff7-gameover', '');
+    // The fallen party lies on the floor (no KO painting yet: the hurt painting, laid down).
+    for (const id of ctx.stage.staged()) {
+      const a = ctx.stage.sideOf(id) === 'party' ? (ctx.stage.actor(id) as unknown as { lieDown?: (ms: number) => Promise<void> } | undefined) : undefined;
+      void a?.lieDown?.(motionMs(520, ctx.speed));
+    }
     await cam.moveTo('ff7-gameover', motionMs(FF7_GAME_OVER_PAN_MS, ctx.speed));
     await ctx.sleep(FF7_GAME_OVER_HOLD_MS);
   }

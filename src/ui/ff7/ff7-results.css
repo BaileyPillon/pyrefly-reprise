@@ -9,7 +9,7 @@
   z-index: 40;
 }
 .ff7hud.ff7res[data-step='over'] { background: #000; }
-.ff7hud.ff7res .ff7-portrait { image-rendering: auto; box-shadow: 0 0 0 1px #000, 0 6px 16px rgba(0, 0, 0, 0.55); }
+.ff7hud.ff7res .ff7-portrait { z-index: 2; image-rendering: auto; box-shadow: 0 0 0 1px #000, 0 6px 16px rgba(0, 0, 0, 0.55); }
 .ff7hud.ff7res .ff7-res-next { z-index: 5; }
 .ff7hud.ff7res .ff7-win { z-index: 1; }
 .ff7hud.ff7res .ff7-cur { z-index: 2; }

@@ -238,9 +238,11 @@ export async function resolvePoseMap(
     const hit = chain.find((p) => found.get(p)) ?? pose;
     out[pose] = characterUrl(artId, hit);
   }
-  // FF7 only (`ff7-` art ids): its own key poses beyond the house set (B1's wind-up and follow-through,
-  // D1's victory keys), as the manifest lists them. FFX and FFX-2 art ids never take this branch.
-  if (set && artId.startsWith('ff7-')) for (const p of set) if (!(p in out)) out[p] = characterUrl(artId, p);
+  // FF7 only (`ff7-` art ids): exactly the poses the manifest lists (B1's wind-up and follow-through, D1's
+  // victory keys); a pose it lacks resolves by name on the actor to one that is loaded, so it shares that
+  // pose's texture and sidecar (a second copy of idle.png with a subject `scale` was sized twice). FFX and
+  // FFX-2 art ids never take this branch.
+  if (set && artId.startsWith('ff7-')) return Object.fromEntries([...set].sort().map((p) => [p, characterUrl(artId, p)]));
   return out;
 }
 

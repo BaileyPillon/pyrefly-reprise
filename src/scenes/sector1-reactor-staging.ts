@@ -46,7 +46,7 @@ export const SECTOR1_ART = {
 /** Vertical fov of the fixed camera on a desk, degrees. */
 export const SECTOR1_FOV = 30;
 /** Vertical fov on an upright phone (E1: the camera moved in on a drawn-in formation). */
-export const SECTOR1_PHONE_FOV = 68;
+export const SECTOR1_PHONE_FOV = 60;
 /** The frame the desk layout was solved at. */
 export const SECTOR1_DESIGN_ASPECT = 16 / 9;
 
@@ -97,8 +97,8 @@ export const SECTOR1_DESK: Sector1Layout = {
 /** An upright phone (E1): the formation drawn in, the camera moved in, the painting cropped to cover. */
 export const SECTOR1_PHONE: Sector1Layout = {
   name: 'phone',
-  front: [[-1.55, 0, 1.66], [-2.7, 0, 0], [-2.3, 0, 2.4]],
-  boss: [1.25, 0, 0.86],
+  front: [[-1.1, 0, 1.1], [-2.3, 0, -0.12], [-1.9, 0, 1.9]],
+  boss: [1.39, 0, 0.64],
   backRowDx: -0.45,
   fov: SECTOR1_PHONE_FOV,
   plateZoom: 1.3,
@@ -216,7 +216,7 @@ export function sector1GameOverRig(aspect: number): CameraRig {
   const fixed = sector1FixedRig(aspect);
   const p = fixed.position as readonly number[];
   const l = fixed.lookAt as readonly number[];
-  return { ...fixed, position: [p[0]!, p[1]! + 0.9, p[2]! - 1.2], lookAt: [l[0]!, l[1]! + 2.6, l[2]!] };
+  return { ...fixed, position: [p[0]!, p[1]! + 0.55, p[2]! - 0.8], lookAt: [l[0]!, l[1]! + 1.05, l[2]!] };
 }
 
 /** The rig set for a render of this aspect: the one fixed shot everywhere, plus F1's opening and G1's pan. */

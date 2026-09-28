@@ -30,8 +30,12 @@ recommendations": D-244, D-259 to D-262).
   (`spellfx-effects.test.ts` now sweeps only the non-FF7 ids; `ff7-fx.test.ts` sweeps FF7's).
 - `AirshipBattleHook.opening?()` (`BattleScreenAirship.ts`): FF7's opening camera, awaited by
   `BattleScreen.showBattleStart` for game `'ff7'` only (same line count).
-- `BattlePresenterArt.resolvePoseMap`: an `ff7-` art id also loads the extra key poses its
-  manifest lists (wind-up, follow-through, the victory keys). No other art id takes the branch.
+- `BattlePresenterArt.resolvePoseMap`: an `ff7-` art id loads exactly the poses its manifest lists
+  (with the extra key poses: wind-up, follow-through, the victory keys); a pose it lacks resolves by
+  name on the actor. No other art id takes the branch. (Found on the way, not changed: for any
+  subject whose `idle.json` carries a `scale`, a pose that falls back to `idle.png` loads a second
+  copy whose sidecar scale is applied on top of the reference's, so it draws that much larger;
+  FFX-2's shades and aeons carry such scales. Worth its own check; FF7 now avoids it.)
 
 ## 2026-09-27 — minigame protocol: FFX picker params and backing out (hotfix 24)
 

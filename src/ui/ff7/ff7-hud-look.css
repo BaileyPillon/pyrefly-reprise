@@ -57,7 +57,8 @@
 
 /* The opening (F1): the band waits below the frame until the camera settles, then rises. */
 .ff7hud { transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 320ms ease-out; }
-.ff7hud[data-ff7-opening] { transform: translateY(34%); opacity: 0; }
+.ff7hud[data-ff7-opening],
+.ff7hud[data-ff7-gameover] { transform: translateY(34%); opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   .ff7hud { transition: none; }
 }
