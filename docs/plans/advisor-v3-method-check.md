@@ -393,6 +393,37 @@ browser at 1600x900 the v3 card took 3.9 to 6.7 ms during the real-key check.
 The method check's own bar (better or equal on every chapter at 40 seeds) is **not met on V by one
 run**; the driver decides, and turning it off is one constant (`advisor-v3.ts`).
 
+## 6c. On main after the merges, with Chapter XVI (2026-09-27)
+
+Main at the merge of `combat-switches` (D-242, D-243), `advisor-v3` (D-271) and `chapter-ixion`
+(D-265, D-268, D-269). Same scorecard, 40 seeds, v2 (`SCORECARD_V3=0`) and v3 on the same tree
+(`results-merged-0927-v2.json` / `-v3.json`; Ixion alone with the chapter's own line for scale in
+`results-ixion-v2.json` / `-v3.json`). **Game case: FFX-2 only** for the new row (Chapter XVI; the
+in-flight rules read FFX-2's ATB).
+
+| Chapter | Game | Wins v2 → v3 | Line wins | Dup strict / same v2 → v3 | Missed revive v2 → v3 | Lethal miss (arithmetic) v2 → v3 | Not on menu / bad aim | p50 / p95 ms v3 |
+|---|---|---|---:|---|---|---|---|---|
+| **XVI Ixion at Djose** | FFX-2 | **38 → 40** | 37/40 | 5 / 8 → **2 / 2** (of 677 decisions with a command in flight) | 60 → **1** | 0 → 2 | **0 / 0** | 3.9 / 6.9 |
+
+**Nothing in flight is repeated there.** The final-fix repeat probe (a move of the same kind and id
+as one another girl has charging or held, aimed at the same girl or the party; the card and the
+guide rail, the rail handed `heldCommand()` as the HUD hands it; a full engine snapshot before and
+after every card), Chapter XVI only: card followed, seeds 1-40, 1,474 decisions, 677 with a command
+in flight, 34 held: **0 repeats on the card, 0 on the rail, 0 purity differences, 0 off-menu or
+badly aimed rows at any rank**, 40 of 40 won; 35 % random presses, seeds 41-80, 2,011 decisions,
+844 in flight, 43 held: the same four zeros. The scorecard's 2 / 2 are different-target or
+same-outcome rows (Hi-Potion on another girl, Hi-Potion behind a Mega-Potion that the enemy's move
+comes before), the "different heal behind one in flight" residue CHECK 2's M1 describes (the probe's
+redundant-heal count: 2 card followed, 8 under random presses).
+
+The other rows on the merged tree (wins v2 → v3): I 18 → 19, II 37 → 37, III 39 → 39, IV 40 → 40,
+V 37 → 36, VI 33 → **40**, VII 37 → 37, VIII 40 → 40, IX 40 → 40, X 38 → 38, XI 33 → 37,
+XII 25 → 25, XIII 0 → 1, XIV 35 → 35, XV 9 → 13: **499 → 517 of 640** with XVI. Against the branch's
+`results-final-v3.json`, only the chapters the merged switches touch moved: I 22 → 19 and X 36 → 38
+and XIV 16 → 35 (D-243 arm a), VI 39 → 40 and XV 8 → 13 (D-242). V's one-run gap to v2 is §6b's,
+unchanged. The Chapter I card-follower test (`advisor-degenerate-boards`) is pinned at 19 of 40 on
+this tree (v3 off: 18).
+
 ## 7. For Bailey
 
 - Built on this branch (§6a): the card's *picks* change; no new line of text was added to it. A
