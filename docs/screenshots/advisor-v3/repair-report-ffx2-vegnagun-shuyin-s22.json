@@ -1,0 +1,55 @@
+{
+  "chapter": "ffx2-vegnagun-shuyin",
+  "seed": 22,
+  "steps": [
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next card while it charges",
+      "next": "rikku",
+      "inFlight": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "card": "Next best moveRikku1Megalixir→the partyItemin Item+10,5042 hits2Mega Phoenix→the partyItemGuide’s pickin ItemStands Yuna back up.Vegnagun uses Tail Beam before Yuna can act.",
+      "computed": {
+        "actor": "paine",
+        "v2": "Mega Phoenix -> the party",
+        "v3": "Mega Phoenix -> the party",
+        "v3WithoutRule": "Mega Phoenix -> the party",
+        "guideNext": "Mega Phoenix -> the party",
+        "guideLine": "x2-mega-phoenix",
+        "railText": "VegnagunNextRikkuMega Phoenix→the partyA party-wide answer, because the hit that got here was party-wide — Nemo Ante Mortem Beatus fires at every 20% HP milestone the Head crosses.ffx2-vegnagun-shuyin",
+        "v3ms": 9.5,
+        "v3reason": "Two of the three are down — Yuna first",
+        "hudCard": "Megalixir -> the party",
+        "hudPassesEngine": true,
+        "projection": null
+      }
+    },
+    {
+      "name": "neither v2 nor v3-without-the-rule repeats it after a landed projection here; next attempt"
+    }
+  ],
+  "failures": [
+    "script error: TimeoutError: page.waitForFunction: Timeout 240000ms exceeded."
+  ]
+}

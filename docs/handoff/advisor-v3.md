@@ -152,3 +152,79 @@ one blocker (Bailey's own case still happens) and four majors.
 - `advisor.ts` (1,785 -> 1,812 lines) and `FFX2BattleHud.ts` (1,252 -> 1,262) grew past the 400-line
   rule (both were already over; the new logic itself is in new modules).
 - Untracked `tests/unit/zz-scratch/` in this worktree would run under `npm test` here and breaks tsc.
+
+## REPAIR (2026-09-27, one cycle after the CHECK)
+
+Every item was reproduced and its fix proved by running the engine (rule 3). Game case: the
+in-flight rules (FB1, FM2, FM3, FM5) and the fork-tested lethal save (FM4) are **FFX-2 only** (only
+ATB opens a menu while a command is in flight, research/ffx2-combat-core.md §1.1; FFX's CTB orders
+turns exactly); the FFX rows of the scorecard are unchanged. Scratch probes (not committed) live in
+`.repair-advisor-v3-tmp/` in this worktree.
+
+| Finding | Fix | File |
+|---|---|---|
+| FB1, Bailey's case after a projected landing | The same-move rule reads every command in flight on the **real** board (`boardFor(...).inFlightNow`), landed inside the projection or not. | `advisor-v3.ts` (`repeatsInFlight`, `alreadyOnItsWay`) |
+| FM2, ranking on a won battle | A projection whose fork ends the battle (or a link) returns `null`: the v2 reading stands. | `advisor-inflight.ts` |
+| FM3, last item in flight | v2's stock rule runs again, on the real board. | `advisor-v3.ts` (`stockInFlight`) |
+| FM4, lethal saves | `provedSave`: when the forecast names a girl the enemy kills, the top row and up to 3 saving rows are pressed on 4 forks of the live battle (fixed seeds) and run to the enemy's hit; a saving row goes on top only when she lives in at least half the futures more. The top row is tested even when it claims the save. When the enemy moves before what is in flight lands, the threat is read off the real board (the projection stops a step early, where the enemy's charge can already be off its bar and the projected forecast read "No action"). | `advisor-lethal.ts` (new), `advisor.ts` |
+| FM5, guide NEXT | The rail's NEXT drops the chapter line's pick when another girl already charges the same support move (same target, or the party); read off the data tables, no engine needed. | `guide-inflight.ts` (new), `guide.ts`, `targetLabel.ts` (`targetingFor` exported) |
+
+Also: `ForkedBattle` gained `submit` (the fork only); `AdvisorOptions.v3Rules` switches one v3 rule
+off for tests and ablations (the HUD never passes it; a call carrying it skips the plan cache).
+
+### Proof
+
+- **Sweeps, 6 FFX-2 chapters x 40 seeds** (the check's own probe, extended with a guide-rail check):
+  card followed (19,097 decisions, 7,098 with a command in flight), 35 % random presses (18,355 /
+  7,209) and low stock (10,718 / 3,669): **0** same move on the same girl or the party as a
+  command in flight (the check found 6 in the same card-followed run, and 14 and 2 in its smaller
+  random-press and low-stock runs), **0** last-copy items (the check: 6 and 11), **0** guide NEXT
+  repeats, 0 raises onto a girl already being raised, 0 off-menu or badly aimed rows, 0 rows that
+  hurt an ally, **0** purity differences (live state, held command, clock and RNG before and after
+  every card).
+- **`tests/unit/advisor-v3-repair.test.ts`** (5 tests, found by running the engine, each board
+  chosen where the rule is what changes the card: the v3 card with `v3Rules.onItsWay: false`
+  names the move): a Mega-Potion that lands inside the projection; a Grenade whose last copy is in
+  flight (A/B on one board: with a spare the card names it, without one it does not); a projection
+  whose fork wins the battle returns `null`; the guide's NEXT for a line pick already charging is
+  `null` where the v2 panel named it; `provedSave` is deterministic, leaves the live engine's
+  state, log, RNG and held command alone, and its pick keeps the girl alive at least as often as
+  the line on 8 forks it never sampled. Mutation check: with the result guard or the guide rule
+  removed the matching tests fail.
+- **Lethal saves, fork-tested** (V, VI, XI, XV, 40 seeds): v3 before the repair 6 real misses of
+  187 arithmetic ones; after it **2 of 183**; v2 1 of 61 on its own path.
+- **Scorecard** (40 seeds, same tree; table in the method check §6b): **443 → 453 of 600**
+  (v3 before the repair 457: XV's +4 came from ranking on finished links, FM2). Every chapter
+  better or equal **except V, 36 vs 37**; at 120 seeds V is **111 vs 111** and XV 28 vs 29. V's
+  seed 26 parts ways where v2 advised a second Megalixir while Yuna's was still charging
+  (Bailey's case) and v3 advised X-Potion on Paine; that run later loses to Noli Me Tangere.
+  Duplicates (strict / same move): 594 / 813 → 107 / 72. XI missed raises 113 → 5.
+- **Time per decision** (paired, node): about 1.1x v2 at the p95, worst v3 p95 11.3 ms (V; v2
+  10.4); browser 1600x900 3.9 to 6.7 ms.
+- **Real keys, headless GPU, 1600x900, port 7501** (`docs/screenshots/advisor-v3/repair-*`):
+  Chapter XI seed 1, Rikku presses Item > Mega-Potion, Yuna's menu opens while it charges: v2
+  would say *Mega-Potion -> the party*, the card says *Turbo Ether -> Yuna*, the guide rail no
+  longer says Mega-Potion (it shows its idle line), the HUD hands the advisor the engine.
+  Chapter IV seed 1: Rikku's Hi-Potion on Yuna charging; v2 would say *Hi-Potion -> Yuna*, the card
+  says *Hi-Potion -> Paine* ("Paine lives through Mega Flare"), a different girl, which the rule
+  allows (the script's naive "label appears" check flagged it; it is the complementary heal).
+  Chapter V seeds 12 and 22: no attempt caught the landed-projection shape by keys before the
+  fixture's low HP ended the run; that shape is proved by the engine test above. Server stopped.
+- tsc clean (the untracked `tests/unit/zz-scratch/` still adds its two errors in this worktree
+  only); the full suite passes except the known Bahamut "heal-only route" timeout under load (it
+  passes alone, 8.3 s); goldens and the fork suite pass; orphans: the same 24 as main.
+
+### Still open
+
+1. **Default switch.** `ADVISOR_V3` stays ON (better overall by 10, 14 of 15 chapters better or
+   equal, V at parity over 120 seeds, and V's gap is Bailey's own rule). The brief's bar, better or
+   equal on every chapter at 40 seeds, is **not met on V by one run**: the driver decides; off is
+   one constant in `advisor-v3.ts`.
+2. **The guide rail's idle line.** When NEXT is dropped because the line's pick is already
+   charging, the rail shows its existing "Waiting for your turn." while it is her turn. A line such
+   as "Mega-Potion on the way" is new text and needs options first (rule 9).
+3. The fork-tested lethal reading still has 2 misses on V (Vigor or Pray over a Curtain before an
+   Attack): four sampled futures are noisy; more samples cost time on a phone.
+4. XIV Isaaru (16 vs the line's 28) and XII's missed raises by the rails, as before.
+5. `advisor.ts` (now about 1,830 lines) and `FFX2BattleHud.ts` are over the 400-line rule as they
+   were before; the new logic is in new modules.

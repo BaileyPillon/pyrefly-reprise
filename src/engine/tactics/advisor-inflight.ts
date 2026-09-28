@@ -18,7 +18,7 @@
  * until every charging and held command of the other girls has resolved **or the next enemy
  * moves**, whichever is first ({@link projectBoard} says why it stops there). What landed is on
  * the board the card ranks; what did not is still in flight there, where the committed reading
- * and {@link ./advisor-v3.ts#repeatsInFlight} see it.
+ * sees it. {@link ./advisor-v3.ts#repeatsInFlight} reads the real board's list, landed or not.
  *
  * A first cut ran on through the enemy's turns and ranked on the worse of two sampled futures: on
  * Chapter V (10 seeds) it lost 2 runs v2 won, once telling a girl a sampled Tail Beam had KO'd to
@@ -47,6 +47,8 @@ export interface ForkedBattle {
   tick(ms: number, opts?: { throughInput?: boolean }): readonly BattleEvent[];
   inputValid(actorId: CombatantId): boolean;
   heldCommand(): QueuedCommand | null;
+  /** The girl whose menu is open answers it (`./advisor-lethal.ts` presses a row on a fork). */
+  submit(command: Command): readonly BattleEvent[];
 }
 
 /** A live FFX-2 engine the card may read and fork (never drive). `FFX2Engine` satisfies it. */
@@ -166,6 +168,10 @@ export function projectBoard(
     for (let i = 0; i < steps; i++) fork.tick(STEP_MS, { throughInput: true });
   }
   if (fork.state().combatants[actorId]?.alive === false) return null;
+  // A charging or held hit finished the battle (or this link) inside the projection: there is no
+  // enemy left to rank against, and inventory carries to the next link, so the v2 reading stands
+  // rather than a card spending a Megalixir on a won fight (adversarial check FM2).
+  if (fork.state().result) return null;
   const held = fork.heldCommand();
   return {
     state: fork.state() as BattleState,

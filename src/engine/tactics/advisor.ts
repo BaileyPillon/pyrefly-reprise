@@ -141,7 +141,8 @@ import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
 import { changeSuggestion, changeSuggestions, lockedToChange, sameChange } from './advisor-change.ts';
 import { holdingForTheBreath } from './airship-orders.ts';
 import type { InFlightSource } from './advisor-inflight.ts';
-import { boardFor, heldFor, repeatsInFlight, v3On, withRaiseFirst } from './advisor-v3.ts';
+import { alreadyOnItsWay, boardFor, heldFor, sourceOf, v3On, withRaiseFirst } from './advisor-v3.ts';
+import { provedSave } from './advisor-lethal.ts';
 import { isSelfOrder, scopeWord, targetDisplayName } from './targetLabel.ts';
 
 export type { AdvisorIntent } from './advisor-revive.ts';
@@ -307,6 +308,8 @@ export interface AdvisorOptions {
   engine?: () => InFlightSource | null;
   /** Advisor v3 on or off for this call; the default is `ADVISOR_V3` (`./advisor-v3.ts`). */
   v3?: boolean;
+  /** Measurement only (tests, scorecard ablations): one v3 rule off. The HUD never passes it. */
+  v3Rules?: { onItsWay?: boolean; provedSave?: boolean };
 }
 
 // ----------------------------------------------------------------- the knobs
@@ -1174,7 +1177,7 @@ export function buildAdvisorView(
   // that *has* moved cannot share a key [`./advisor-plan.ts#cacheKeyFor`].
   // A held command (PR-0076) is set without an event, so `nextSeq` cannot see
   // it: a board carrying one is never served from the cache.
-  const cacheKey = planner && queuedFrom(keyed).length === 0 ? cacheKeyFor(board, decision.actorId) : null;
+  const cacheKey = planner && !given.v3Rules && queuedFrom(keyed).length === 0 ? cacheKeyFor(board, decision.actorId) : null;
   if (cacheKey) {
     const hit = PLAN_CACHE.get(cacheKey);
     if (hit && hit.commands === decision.commands && hit.v3 === v3) return hit.view;
@@ -1183,7 +1186,7 @@ export function buildAdvisorView(
   // **Advisor v3, the projected board** (FFX-2 only): with another girl's command still in
   // flight, everything below ranks on the battle as it will stand once it has landed, enemy
   // turns in between included (`./advisor-inflight.ts`). Otherwise `state` is `board`.
-  const { state, options } = boardFor(board, decision.actorId, keyed);
+  const { state, options, inFlightNow, projection } = boardFor(board, decision.actorId, keyed);
   const sim = simulatorFor(state, options);
   // The forecast: once per decision, shared by every candidate.
   //
@@ -1351,8 +1354,8 @@ export function buildAdvisorView(
   const unspent = pressed.filter(
     (c) =>
       !spentAlready(state, c.suggestion.command, c.outcome, committed) &&
-      // v3: the same support move as one still in flight (Bailey's Mega-Potion, FFX-2 only).
-      !(v3 && repeatsInFlight(state, decision.actorId, c.suggestion.command, c.outcome, options)),
+      // v3: the same support move as one already chosen, or its last copy (Bailey's Mega-Potion, FFX-2 only).
+      !(given.v3Rules?.onItsWay !== false && alreadyOnItsWay(board, c.suggestion.command, c.outcome, inFlightNow)),
   );
   const legal = unspent.length > 0 ? unspent : pressed;
 
@@ -1396,7 +1399,7 @@ export function buildAdvisorView(
   // **Revive priority** (advisor v3, both games): a raise the card priced above the chapter's
   // line, for an ally the line is not raising and Bailey's refusal rule lets through, goes on
   // top; a lethal save stays where it is (`./advisor-v3.ts#withRaiseFirst`).
-  const ordered = withRaiseFirst(
+  const ranked3 = withRaiseFirst(
     state,
     safe.length === 0
       ? legal
@@ -1404,6 +1407,22 @@ export function buildAdvisorView(
     intent,
     v3 && planner,
   );
+  // **A lethal save, proved on the clock** (advisor v3, FFX-2 only): a saving row the forks show
+  // keeping the girl alive where the top row does not goes on top, and the card names the long
+  // plan beside it, like any override (`./advisor-lethal.ts#provedSave`). When the enemy moves
+  // before what is in flight lands, the threat is read off the real board: the projection stops a
+  // step early, where the enemy's charge may already be off its bar.
+  let proved: Candidate | null = null;
+  if (v3 && planner && given.v3Rules?.provedSave !== false) {
+    const threat = projection?.enemyActedFirst ? forecastFromState(board, options) : null;
+    const factsOf = threat
+      ? (c: Candidate) => evaluate(state, decision.actorId, c.suggestion.command, c.outcome, c.chances, threat, options.turnOrder).facts
+      : (c: Candidate) => c.facts;
+    proved = provedSave(board, decision.actorId, sourceOf(keyed), ranked3, (c) => harmful.includes(c), factsOf);
+    if (proved) proved.facts = factsOf(proved);
+  }
+  const ordered = proved ? [proved, ...ranked3.filter((c) => c !== proved)] : ranked3;
+  if (proved && proved !== tactic) override = proved;
 
   const shown: Candidate[] = [ordered[0]!];
   /** A revive this board was offered, priced, and refused. See {@link noteFor}. */

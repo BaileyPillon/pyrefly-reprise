@@ -327,6 +327,72 @@ the menu, bad aim, fallbacks: 0 everywhere. The purity check passes with the pro
   same-id heal whoever it is aimed at; v3 drops it only on the same girl or the party). Bailey's
   exact case, the same move, fell from 813 to 75.
 
+## 6b. Repair after the adversarial check (2026-09-27)
+
+The check (docs/handoff/advisor-v3.md CHECK) held the branch on one blocker and four majors. All
+five are fixed on this branch and proved by running the engine; details and probes in the handoff's
+REPAIR section.
+
+- **FB1** (Bailey's case after a projected landing): the same-move rule reads every command in
+  flight on the **real** board, landed inside the projection or not (`advisor-v3.ts`
+  `repeatsInFlight` / `alreadyOnItsWay`).
+- **FM2** (ranking on a won battle): a projection whose fork ends the battle or link returns
+  `null`; the v2 reading stands (`advisor-inflight.ts`).
+- **FM3** (last item in flight): v2's stock rule runs on the real board again (`stockInFlight`).
+- **FM4** (lethal saves): a saving row is pressed on 4 forks of the live battle with the top row and
+  promoted when the girl lives in at least half the futures more (`advisor-lethal.ts`
+  `provedSave`); when the enemy moves before what is in flight lands, the threat is read off the
+  real board.
+- **FM5** (guide NEXT): the strategy rail's NEXT drops the line's pick when another girl already
+  charges the same support move (`guide-inflight.ts`); it then shows its existing idle line.
+
+**Scorecard, 40 seeds, same tree** (`SCORECARD_V3=0/1`; FFX-2 at Wait split 0.5 s top / 1.0 s
+held; raw `critic/bench/advisor-v3/results-v3-repair.json`, `results-v2-control-repair.json`; the
+FFX-2 v2 control reproduces the baseline exactly and the FFX rows are untouched by every change):
+
+| Chapter | Game | Wins v2 → v3 (575673ab) → **v3 repair** | Dup strict / same, v2 → repair | Missed revive v2 → repair | Lethal miss, arithmetic v2 → repair | Lethal miss, fork-tested v2 → repair |
+|---|---|---|---|---|---|---|
+| I Seymour Flux | FFX | 22 → 22 → **22** | n/a | 450 → 453 (449 with a note) | 0 → 0 | n/a |
+| II Yunalesca | FFX | 37 → 37 → **37** | n/a | 4 → 4 | 0 → 0 | n/a |
+| III Braska's Final Aeon | FFX | 39 → 39 → **39** | n/a | 8 → 8 | 1 → 1 | n/a |
+| IV Bahamut | FFX-2 | 40 → 40 → **40** | 0 / 0 → 0 / 0 | 0 → 0 | 0 → 0 | 0 → 0 |
+| V Vegnagun | FFX-2 | 37 → 37 → **36** | 140 / 145 → 28 / 9 | 4 → 5 | 29 → 97 | 0 → 2 |
+| VI Leblanc | FFX-2 | 33 → 38 → **38** | 387 / 617 → 60 / 53 | 23 → 5 | 23 → 53 | 0 → 0 |
+| VII Anima, Macalania | FFX | 37 → 37 → **37** | n/a | 16 → 16 | 21 → 21 | n/a |
+| VIII Evrae | FFX | 40 → 40 → **40** | n/a | 1 → 1 | 0 → 0 | n/a |
+| IX Yojimbo | FFX | 40 → 40 → **40** | n/a | 2 → 2 | 2 → 2 | n/a |
+| X Natus | FFX | 36 → 36 → **36** | n/a | 1 → 1 | 0 → 0 | n/a |
+| XI Fallen Aeons | FFX-2 | 33 → 37 → **37** | 33 / 33 → 6 / 1 | **113 → 5** | 1 → 7 | 0 → 0 |
+| XII Omnis | FFX | 25 → 25 → **25** | n/a | 188 → 188 | 14 → 14 | n/a |
+| XIII Trema | FFX-2 | 0 → 1 → **1** | 6 / 4 → 0 / 0 | 1 → 0 | 0 → 0 | 0 → 0 |
+| XIV Isaaru | FFX | 16 → 16 → **16** | n/a | 0 → 0 | 0 → 0 | n/a |
+| XV Den of Woe | FFX-2 | 8 → 12 → **9** | 28 / 14 → 13 / 9 | 22 → 13 | 8 → 26 | 1 → 0 |
+| **All** | | **443 → 457 → 453 of 600** | **594 / 813 → 107 / 72** | | | **1 → 2** |
+
+"Fork-tested" presses the top row and every row the arithmetic says saves the girl on 4 forks of
+the live battle and runs to the enemy's hit; a miss is a saving row that keeps her alive in at
+least half the futures more than the top row. The arithmetic column prices every row as if it
+landed before the enemy, so it counts heals that cannot land in time; 170 of v3's 187 arithmetic
+misses were "the top row does as well" on the forks.
+
+**V and XV against v2, 120 seeds** (the same driver, scratch probe): V **111 vs 111**, XV **28 vs
+29**. At 40 seeds V is one run short (36 vs 37): seed 26, traced by running both cards, parts ways
+at decision 13, where **v2 advised a second Megalixir while Yuna's Megalixir was still charging**
+(Bailey's case) and v3 advised X-Potion on Paine; that run later loses to a Noli Me Tangere. XV's
+12 before the repair came from ranking on finished links (FM2): 28 vs 32 of 120 with and without
+the guard, v2 29.
+
+**Per decision, paired in the same process** (node, 10 seeds x 6 FFX-2 chapters, v2 and v3 on the
+same board, alternating; p50 / p95 ms): IV 3.3 / 4.4 → 3.5 / 5.1, V 6.1 / 10.4 → 6.3 / 11.3,
+VI 5.1 / 8.2 → 5.2 / 9.4, XI 5.8 / 10.0 → 5.9 / 10.2, XIII 3.8 / 5.5 → 3.8 / 5.5, XV 5.2 / 6.6 →
+5.6 / 8.1: about 1.1x v2 at the p95 (the fork test runs only on a lethal forecast). In the
+browser at 1600x900 the v3 card took 3.9 to 6.7 ms during the real-key check.
+
+**Default.** `ADVISOR_V3` stays **ON**: better overall by 10 runs at 40 seeds, better or equal on
+14 of 15 chapters, and V's one-run gap is the rule Bailey asked for, at parity over 120 seeds.
+The method check's own bar (better or equal on every chapter at 40 seeds) is **not met on V by one
+run**; the driver decides, and turning it off is one constant (`advisor-v3.ts`).
+
 ## 7. For Bailey
 
 - Built on this branch (§6a): the card's *picks* change; no new line of text was added to it. A

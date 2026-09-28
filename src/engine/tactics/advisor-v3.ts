@@ -4,8 +4,8 @@
  *
  *  1. **The projected board** (FFX-2 only, `./advisor-inflight.ts`): with another girl's command
  *     still charging or held, the card ranks on the board as it will stand once that command has
- *     landed, so Bailey's Mega-Potion is never advised twice, and a second heal stays only when
- *     the enemy gets there first.
+ *     landed; and the same support move as one already chosen (landed in the projection or not)
+ *     is never offered again, so Bailey's Mega-Potion is not advised twice.
  *  2. **Revive priority** (both games): when an active ally is down, nothing in flight raises
  *     them, the chapter's own line is not raising anybody this turn, the card priced the raise
  *     above the line, and Bailey's 2026-09-21 refusal rule does not speak (`reviveRisk`), the
@@ -26,7 +26,7 @@ import type { AdvisorIntent } from './advisor-revive.ts';
 import { reviveRisk } from './advisor-revive.ts';
 import type { BoardFact } from './advisor-eval.ts';
 import { queuedFrom, type QueuedCommand } from './advisor-committed.ts';
-import { inFlight, projectBoard, type InFlightSource, type Projection } from './advisor-inflight.ts';
+import { inFlight, projectBoard, type InFlight, type InFlightSource, type Projection } from './advisor-inflight.ts';
 
 /** The switch. See the module note and docs/handoff/advisor-v3.md for the scorecard behind it. */
 export const ADVISOR_V3 = true;
@@ -42,7 +42,8 @@ export function v3On(options: V3Options): boolean {
   return options.v3 ?? ADVISOR_V3;
 }
 
-function sourceOf(options: V3Options): InFlightSource | null {
+/** The live engine the caller passed (read and forked, never driven), or `null`. */
+export function sourceOf(options: V3Options): InFlightSource | null {
   try {
     return options.engine?.() ?? null;
   } catch {
@@ -62,54 +63,89 @@ export function heldFor<O extends V3Options>(options: O): readonly QueuedCommand
  * The board and options the card ranks with. v2 (or nothing in flight, or no engine to fork):
  * the board as it stands. v3 with something in flight: the projected board, and the held
  * commands still waiting on it (the ones that fired are on the board already).
+ *
+ * `inFlightNow` is every command in flight on the **real** board, including the ones the
+ * projection lands: the same-move rule and the stock rule read it, because a command that lands
+ * inside the projection is still a command Bailey has already chosen (adversarial check FB1, FM3).
  */
 export function boardFor<O extends V3Options>(
   state: Readonly<BattleState>,
   actorId: CombatantId,
   options: O,
-): { state: Readonly<BattleState>; options: O; projection: Projection | null } {
-  if (!v3On(options) || state.game !== 'ffx2') return { state, options, projection: null };
+): { state: Readonly<BattleState>; options: O; projection: Projection | null; inFlightNow: readonly InFlight[] } {
+  if (!v3On(options) || state.game !== 'ffx2') return { state, options, projection: null, inFlightNow: [] };
   const held = heldFor(options);
   const withHeld = held.length > 0 && !options.queued ? { ...options, queued: () => held } : options;
+  const inFlightNow = inFlight(state, actorId, held);
   const source = sourceOf(options);
-  if (!source) return { state, options: withHeld, projection: null };
+  if (!source) return { state, options: withHeld, projection: null, inFlightNow };
   let projection: Projection | null = null;
   try {
-    projection = projectBoard(state, actorId, source, inFlight(state, actorId, held));
+    projection = projectBoard(state, actorId, source, inFlightNow);
   } catch {
     projection = null; // a projection is never worth a card: the v2 reading stands
   }
-  if (!projection) return { state, options: withHeld, projection: null };
+  if (!projection) return { state, options: withHeld, projection: null, inFlightNow };
   const still = projection.stillHeld;
-  return { state: projection.state, options: { ...options, queued: () => still }, projection };
+  return { state: projection.state, options: { ...options, queued: () => still }, projection, inFlightNow };
 }
 
 const idOf = (c: Command): string => ('id' in c ? String((c as { id?: unknown }).id ?? '') : '');
 
 /**
  * Bailey's case, said as a rule: a **support** row (nothing on an enemy) that is the same move as
- * one still in flight for another girl, aimed at the same ally or the party, is not offered. It
- * lands after the one already charging, so it can only do what that one leaves undone, and the
- * projected board already shows what that is when it lands first. When the enemy moves first the
- * projection stops there and the charging one is still in flight on the board: a second copy of
- * it cannot overtake it. FFX-2 only: an FFX board has nothing in flight.
+ * one another girl has already chosen, aimed at the same ally or the party, is not offered.
+ * *"it shouldn't still tell me to mega potion"*, whichever lands first: read against every
+ * command in flight on the **real** board (`inFlightNow`), not only the ones still in flight on
+ * the projected board, because a Mega-Potion that lands inside the projection was measured being
+ * advised again to "put 1,327 HP back" (adversarial check FB1, Chapter V seeds 12, 22, 37-39).
+ * FFX-2 only: an FFX board has nothing in flight.
  */
 export function repeatsInFlight(
   state: Readonly<BattleState>,
-  actorId: CombatantId,
   command: Command,
   outcome: SimOutcome | null,
-  options: V3Options,
+  inFlightNow: readonly InFlight[],
 ): boolean {
+  if (inFlightNow.length === 0) return false;
   if (!outcome || outcome.damageToEnemies > 0) return false;
   if (outcome.statusChanges.some((c) => c.applied && state.combatants[c.targetId]?.side === 'enemy')) return false;
   const id = idOf(command);
   if (!id) return false;
   const aim = (command.targets as readonly CombatantId[]).join(',');
-  return inFlight(state, actorId, queuedFrom(options)).some(
+  return inFlightNow.some(
     (p) => p.command.kind === command.kind && idOf(p.command) === id &&
       (outcome.ability?.targeting === 'all-allies' || (p.command.targets as readonly CombatantId[]).join(',') === aim),
   );
+}
+
+/**
+ * v2's stock rule on the real board (adversarial check FM3): an item row whose every copy left
+ * on the shelf is already in flight is not offered. On the projected board the item has landed
+ * and nothing is in flight, so the committed reading there cannot see it; the menu still counts
+ * the real shelf.
+ */
+export function stockInFlight(
+  board: Readonly<BattleState>,
+  command: Command,
+  inFlightNow: readonly InFlight[],
+): boolean {
+  if (command.kind !== 'item') return false;
+  const id = idOf(command);
+  const used = inFlightNow.filter((p) => p.command.kind === 'item' && idOf(p.command) === id).length;
+  if (used === 0) return false;
+  const left = board.flags[`inventory:${id}`];
+  return typeof left === 'number' && left - used <= 0;
+}
+
+/** Either v3 rule: the card does not offer this row (FFX-2 only; empty `inFlightNow` elsewhere). */
+export function alreadyOnItsWay(
+  board: Readonly<BattleState>,
+  command: Command,
+  outcome: SimOutcome | null,
+  inFlightNow: readonly InFlight[],
+): boolean {
+  return stockInFlight(board, command, inFlightNow) || repeatsInFlight(board, command, outcome, inFlightNow);
 }
 
 /** The shape of a ranked row this needs (`advisor.ts`'s `Candidate`). */
