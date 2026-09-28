@@ -33,15 +33,17 @@
 
 import type { AvailableCommand, BattleState, Command, CombatantId } from '../../../src/battle/common/types.ts';
 import type { SimOutcome } from '../../../src/battle/ffx/simulate.ts';
-import { simulateFFXCommand } from '../../../src/battle/ffx/simulate.ts';
-import { simulateFFX2Command } from '../../../src/battle/ffx2/simulate.ts';
 import type { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
-import { metaRowFor, type AdvisorOptions, type AdvisorView } from '../../../src/engine/tactics/advisor.ts';
+import { metaRowFor, type AdvisorView } from '../../../src/engine/tactics/advisor.ts';
 import { pressable } from '../../../src/engine/tactics/advisor-menu.ts';
 import { sameChange } from '../../../src/engine/tactics/advisor-change.ts';
 import { evaluate } from '../../../src/engine/tactics/advisor-eval.ts';
 import { forecastFromState } from '../../../src/engine/tactics/advisor-forecast.ts';
 import type { DecisionContext } from './drive.ts';
+import { duplicate, simulateFor, supportOnly } from '../../../src/engine/tactics/advisor-v4/rails.ts';
+
+/** Moved to the game (advisor v4 reads them live); re-exported for the benches and tests. */
+export { duplicate, simulateFor, supportOnly };
 
 /** Most simulations one decision's readings may spend. */
 const MAX_SIMS = 160;
@@ -70,25 +72,6 @@ export interface DecisionObs {
 
 const idOf = (c: Command): string => ('id' in c ? String((c as { id?: unknown }).id ?? '') : '');
 
-export function simulateFor(
-  state: Readonly<BattleState>,
-  actorId: CombatantId,
-  command: Command,
-  options: AdvisorOptions,
-): SimOutcome | null {
-  try {
-    if (state.game === 'ffx2') {
-      return simulateFFX2Command(state, actorId, command, {
-        roll: 'mid',
-        ...(options.ffx2?.abilities ? { abilities: options.ffx2.abilities } : {}),
-        ...(options.ffx2?.items ? { items: options.ffx2.items } : {}),
-      }) as SimOutcome | null;
-    }
-    return simulateFFXCommand(state, actorId, command, { roll: 'mid', ...(options.ffxContent ? { content: options.ffxContent } : {}) });
-  } catch {
-    return null;
-  }
-}
 
 /** Every command in flight for another girl: on a charge bar, or held (FFX-2 only). */
 export function pendingCommands(ctx: DecisionContext): Pending[] {
@@ -106,35 +89,6 @@ export function pendingCommands(ctx: DecisionContext): Pending[] {
   return out;
 }
 
-const isAlly = (s: Readonly<BattleState>, id: CombatantId): boolean => s.combatants[id]?.side !== 'enemy';
-
-export function supportOnly(s: Readonly<BattleState>, o: SimOutcome): boolean {
-  if (o.damageToEnemies > 0) return false;
-  if (o.statusChanges.some((c) => c.applied && !isAlly(s, c.targetId))) return false;
-  const heals = Object.entries(o.hpDelta).some(([id, d]) => d < 0 && isAlly(s, id));
-  return heals || o.revives.length > 0 || o.statusChanges.some((c) => isAlly(s, c.targetId));
-}
-
-export function duplicate(s: Readonly<BattleState>, top: SimOutcome, pend: SimOutcome[]): boolean {
-  if (!supportOnly(s, top)) return false;
-  const raised = new Set(pend.flatMap((p) => p.revives));
-  const buffs = new Set(pend.flatMap((p) => p.statusChanges.filter((c) => c.applied).map((c) => `${c.targetId}:${c.status}`)));
-  const cures = new Set(pend.flatMap((p) => p.statusChanges.filter((c) => !c.applied).map((c) => `${c.targetId}:${c.status}`)));
-  if (!top.revives.every((id) => raised.has(id))) return false;
-  for (const c of top.statusChanges) {
-    if (!isAlly(s, c.targetId)) continue;
-    if (!(c.applied ? buffs : cures).has(`${c.targetId}:${c.status}`)) return false;
-  }
-  for (const [id, d] of Object.entries(top.hpDelta)) {
-    if (d >= 0 || !isAlly(s, id) || top.revives.includes(id)) continue;
-    const u = s.combatants[id];
-    if (!u || u.alive === false) continue;
-    const missing = u.stats.maxHp - u.hp;
-    const coming = pend.reduce((n, p) => n + Math.max(0, -(p.hpDelta[id] ?? 0)), 0);
-    if (coming < missing) return false;
-  }
-  return true;
-}
 
 /** Enabled, paintable rows, each aimed at every target it offers (bounded). */
 function candidates(ctx: DecisionContext, filter?: (row: AvailableCommand, t: CombatantId | null) => boolean): Command[] {

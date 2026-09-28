@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest';
 import { buildAdvisorView } from '../../../src/engine/tactics/advisor.ts';
 import { chapterById, runChapter, type DecisionContext } from '../advisor-v3/drive.ts';
 import { searchDecision, type SearchConfig } from './search.ts';
-import type { Forkable } from './rollout.ts';
+import { chainOf, type Forkable } from './rollout.ts';
 
 /** Small, so the check is quick; the full horizon, so every fork plays into later links. */
 const CFG: SearchConfig = { samples: 2, horizon: 400, extra: 2, margin: 0.04, confirm: 2, confirmGap: 1 };
@@ -28,7 +28,7 @@ describe('advisor v4 search purity', () => {
       let searched = 0;
       const on = await runChapter(chapterById(id), seed, (ctx) => {
         const view = card(ctx);
-        const s = searchDecision(ctx.engine as unknown as Forkable, ctx.state, ctx.decision, view, ctx.advisorOptions, CFG, ctx.chain ?? null);
+        const s = searchDecision(ctx.engine as unknown as Forkable, ctx.state, ctx.decision, view, ctx.advisorOptions, CFG, chainOf(ctx));
         if (s.searched) searched += 1;
         return view?.suggestions[0]?.command ?? null;
       });

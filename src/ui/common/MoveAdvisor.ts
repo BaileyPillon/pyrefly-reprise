@@ -103,6 +103,16 @@ export interface MoveAdvisorOptions {
 }
 
 /**
+ * **Advisor v4's finished cards** (FFX only; `src/app/advisorV4/host.ts`). Read once, when the
+ * menu opens: a card for this exact board if the background search finished, otherwise `null` and
+ * the card is v3's as always. The card never changes while the menu is open (rule 9).
+ */
+export interface MoveAdvisorLookAhead {
+  cardFor(state: Readonly<BattleState>, decision: { actorId: CombatantId; commands: readonly AvailableCommand[] }): AdvisorView | null;
+  closed(): void;
+}
+
+/**
  * The pad button the card claims: standard index 7, the right trigger.
  *
  * `src/app/Input.ts`'s `PAD_MAP` binds 0, 1, 3, 4, 5, 8, 9 and the d-pad, and
@@ -137,6 +147,8 @@ export class MoveAdvisor {
   private padWasDown = false;
   /** The computed advice, held until the decision changes. */
   private cached: AdvisorView | null = null;
+  /** Advisor v4 (FFX only), when the battle screen attached one. */
+  private lookAhead: MoveAdvisorLookAhead | null = null;
   /** Signature of the last render, so a per-frame tick does not rewrite the DOM. */
   private lastSignature = '';
   /** How much of each suggestion the last render printed. See {@link fitCard}. */
@@ -315,9 +327,15 @@ export class MoveAdvisor {
     this.render();
   }
 
+  /** Attach (or detach) advisor v4's background search (`src/app/advisorV4/wiring.ts`). */
+  setLookAhead(source: MoveAdvisorLookAhead | null): void {
+    this.lookAhead = source;
+  }
+
   /** The decision was taken (or abandoned). */
   clearDecision(): void {
     if (!this.decision && !this.cached) return;
+    this.lookAhead?.closed();
     this.decision = null;
     this.cached = null;
     this.render();
@@ -331,11 +349,24 @@ export class MoveAdvisor {
   private compute(): AdvisorView | null {
     if (!this.lastState || !this.decision) return null;
     try {
+      // Advisor v4's card for this board when its search finished in time; v3's otherwise.
+      const ahead = this.readAhead();
+      if (ahead) return ahead;
       return buildAdvisorView(this.lastState, this.decision, this.opts.advisor?.() ?? {});
     } catch (err) {
       // A scripted rule that did not expect this board. The card goes idle; the
       // battle is untouched, because nothing the advisor runs is the battle.
       console.warn('[move-advisor] the advice could not be computed', err);
+      return null;
+    }
+  }
+
+  /** v4's card, or `null`; a look-ahead that fails leaves v3's card, never an empty one. */
+  private readAhead(): AdvisorView | null {
+    if (!this.lookAhead || !this.lastState || !this.decision) return null;
+    try {
+      return this.lookAhead.cardFor(this.lastState, this.decision);
+    } catch {
       return null;
     }
   }

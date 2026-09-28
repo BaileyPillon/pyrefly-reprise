@@ -6,6 +6,7 @@
  */
 
 import { CEILING, type SearchConfig } from './search.ts';
+import { LEAN, MINI } from '../../../src/engine/tactics/advisor-v4/presets.ts';
 
 export const PRESETS: Record<string, SearchConfig> = {
   ceiling: CEILING,
@@ -18,9 +19,9 @@ export const PRESETS: Record<string, SearchConfig> = {
   b2: { samples: 4, horizon: 20, extra: 3, margin: 0.05, stage1: { samples: 1, horizon: 6, keep: 1 } },
   b3: { samples: 2, horizon: 20, extra: 1, margin: 0.06 },
   /** A fifth of the ceiling's futures: the budget a phone could spend during an animation (§5). */
-  lean: { samples: 4, horizon: 400, extra: 2, margin: 0.04, confirm: 8, confirmGap: 2 },
+  lean: LEAN,
   /** A tenth of the ceiling: what fits a blocking budget on a long fight's early turns (§5). */
-  mini: { samples: 2, horizon: 400, extra: 1, margin: 0.04, confirm: 4, confirmGap: 2 },
+  mini: MINI,
   /** The ceiling without the confirmation pass (the second measurement). */
   noConfirm: { ...CEILING, confirm: 0 },
   /** The v3 method check's naive search C, for the ablation: primary, short, two seeds, no margin. */

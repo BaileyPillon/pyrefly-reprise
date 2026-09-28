@@ -311,6 +311,13 @@ export interface AdvisorOptions {
   v3?: boolean;
   /** Measurement only (tests, scorecard ablations): one v3 rule off. The HUD never passes it. */
   v3Rules?: { onItsWay?: boolean; provedSave?: boolean; covered?: boolean };
+  /**
+   * **Advisor v4** (`./advisor-v4/`, FFX only in the game): the look-ahead's pick, put on top of
+   * the card when it is one of the rows this card priced; the row keeps its own numbers and
+   * sentence, and the chapter's line is named beside it like any override. Never cached. Only the
+   * v4 worker passes it, after the search's rails and switching rule chose the row.
+   */
+  lift?: Command;
 }
 
 // ----------------------------------------------------------------- the knobs
@@ -1178,7 +1185,7 @@ export function buildAdvisorView(
   // that *has* moved cannot share a key [`./advisor-plan.ts#cacheKeyFor`].
   // A held command (PR-0076) is set without an event, so `nextSeq` cannot see
   // it: a board carrying one is never served from the cache.
-  const cacheKey = planner && !given.v3Rules && queuedFrom(keyed).length === 0 ? cacheKeyFor(board, decision.actorId) : null;
+  const cacheKey = planner && !given.v3Rules && !given.lift && queuedFrom(keyed).length === 0 ? cacheKeyFor(board, decision.actorId) : null;
   if (cacheKey) {
     const hit = PLAN_CACHE.get(cacheKey);
     if (hit && hit.commands === decision.commands && hit.v3 === v3) return hit.view;
@@ -1455,8 +1462,12 @@ export function buildAdvisorView(
     proved = provedSave(board, decision.actorId, sourceOf(keyed), ranked3, (c) => harmful.includes(c), factsOf);
     if (proved) proved.facts = factsOf(proved);
   }
-  const ordered = proved ? [proved, ...ranked3.filter((c) => c !== proved)] : ranked3;
+  const provedFirst = proved ? [proved, ...ranked3.filter((c) => c !== proved)] : ranked3;
   if (proved && proved !== tactic) override = proved;
+  // Advisor v4's pick on top (`AdvisorOptions.lift`); absent from this card, the card stands.
+  const lifted = given.lift ? provedFirst.find((c) => sameCommand(c.suggestion.command, given.lift!)) ?? null : null;
+  const ordered = lifted ? [lifted, ...provedFirst.filter((c) => c !== lifted)] : provedFirst;
+  if (lifted) override = lifted !== tactic ? lifted : null;
 
   const shown: Candidate[] = [ordered[0]!];
   /** A revive this board was offered, priced, and refused. See {@link noteFor}. */

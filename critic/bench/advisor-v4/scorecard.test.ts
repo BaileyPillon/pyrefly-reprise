@@ -25,7 +25,7 @@ import { chapterById, listedChapters, runChapter, type DecisionContext, type Dri
 import { observe, type DecisionObs } from '../advisor-v3/metrics.ts';
 import { searchDecision, CEILING, type SearchConfig } from './search.ts';
 import { PRESETS } from './presets.ts';
-import type { Forkable } from './rollout.ts';
+import { chainOf, type Forkable } from './rollout.ts';
 
 const SEEDS = Number(process.env['V4_SEEDS'] ?? 40);
 const FIRST = Number(process.env['V4_FIRST_SEED'] ?? 1);
@@ -77,7 +77,7 @@ function driverFor(r: Row, kind: string): Driver {
     let pick = view?.suggestions[0]?.command ?? null;
     if (kind === 'v4') {
       const t1 = performance.now();
-      const s = searchDecision(ctx.engine as unknown as Forkable, ctx.state, ctx.decision, view, ctx.advisorOptions, CONFIG, ctx.chain ?? null);
+      const s = searchDecision(ctx.engine as unknown as Forkable, ctx.state, ctx.decision, view, ctx.advisorOptions, CONFIG, chainOf(ctx));
       r.searchMs.push(performance.now() - t1);
       r.simDecisions += s.simDecisions;
       if (s.searched) r.searched += 1;
