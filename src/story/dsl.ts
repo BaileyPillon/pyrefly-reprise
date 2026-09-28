@@ -314,6 +314,19 @@ export interface HideActorStep {
   ms?: number;
 }
 
+/**
+ * Swap the cutscene screen's painted backdrop for `public/art/backdrops/<key>.png`, crossfading over `ms`.
+ * Additive (2026-09-27, Chapter XVI's fall into the Abyss and the wake in the Bevelle Underground; both games
+ * may use it). Only the cutscene screen draws it; a port that does not implement it ignores the step.
+ */
+export interface BackdropStep {
+  type: 'backdrop';
+  /** A plate key under `public/art/backdrops/`, no extension. */
+  key: string;
+  /** Crossfade in milliseconds, 0–4 000. 0 cuts. */
+  ms: number;
+}
+
 /** Put an actor into a named sprite state. */
 export interface SetPoseStep {
   type: 'setPose';
@@ -396,6 +409,7 @@ export type Step =
   | SfxStep
   | ShowActorStep
   | HideActorStep
+  | BackdropStep
   | SetPoseStep
   | ParallelStep
   | LabelStep
@@ -538,6 +552,11 @@ export function hideActor(actor: string, ms?: number): HideActorStep {
 }
 
 /** Set an actor's sprite state. */
+/** Swap the cutscene's painted backdrop (`public/art/backdrops/<key>.png`). `backdrop('bevelle-underground', 1200)` */
+export function backdrop(key: string, ms = 900): BackdropStep {
+  return { type: 'backdrop', key, ms };
+}
+
 export function setPose(actor: string, state: PoseState): SetPoseStep {
   return { type: 'setPose', actor, state };
 }

@@ -32,6 +32,8 @@ import { tremaArenaScript, tremaScript } from './trema.ts';
 import { paragonOversoulScript } from './paragon-oversoul.ts';
 // Chapter XV, the shades of the Den of Woe (registered, unlisted).
 import { denOfWoeScripts } from './den-of-woe.ts';
+// Ixion at Djose (FFX-2 Chapter 3 finale; registered, unlisted behind a switch).
+import { x2IxionScript } from './ixion.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -68,6 +70,7 @@ const SCRIPTS: readonly AiScript[] = [
   paragonOversoulScript,
   tremaArenaScript,
   ...denOfWoeScripts,
+  x2IxionScript,
   idleScript,
   basicAttackScript,
 ];

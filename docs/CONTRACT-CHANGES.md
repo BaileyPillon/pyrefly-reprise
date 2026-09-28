@@ -6,6 +6,35 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-27 — `encounters.ts` lists Chapter XVI, Ixion at Djose; `dsl.ts` gains the `backdrop()` step
+
+**FFX-2 only** for the chapter [AGENTS.md hard rule 14]; the listing and the new step are shared plumbing, "both".
+Branch `chapter-ixion`. Bailey, 2026-09-27 ~18:30 EDT: "ixion needs to be in the next build as well".
+
+- `encounters.ts`: `FFX2_IXION_DJOSE` moves from `UNLISTED_CHAPTERS` into `CHAPTERS` / `CHAPTER_IDS`, after Chapter XV,
+  with `number: 16` (was 17 while unlisted: Sin, still unlisted on `chapter-sin` as 16, takes the numbers after it;
+  a merge of that branch renumbers Sin, not Ixion). `UNLISTED_CHAPTERS` keeps only the hidden FF7 experiment. The
+  `ChapterId` union and `Chapter.number` range are unchanged. `CHAPTER_META` gains `IXION_DJOSE_META` (numeral `XVI`,
+  so `ChapterMeta.numeral` widens by `'XVI'`); the story registry, guides, tactics and `CHAPTER_GAME` gain a row each.
+- `dsl.ts`: a new step, `BackdropStep` (`{ type: 'backdrop'; key; ms }`, builder `backdrop(key, ms = 900)`), joins the
+  `Step` union: swap the cutscene screen's painted plate for `public/art/backdrops/<key>.png`, crossfading over `ms`.
+  `CutsceneRunner` forwards it to a new optional port, `CutscenePorts.backdrop?(key, ms)`; a port set without it
+  ignores the step (every existing fake and the battle's mid-beat ports compile and behave unchanged). The cutscene
+  screen implements it (`src/app/screens/cutscenePlate.ts`); under a skip it cuts at once, so the scene still ends on
+  the right plate. First user: Chapter XVI's post scene (the Abyss, then the Bevelle Underground).
+- No existing field, type or export changes shape; every importer compiles unchanged.
+
+## 2026-09-27 — `encounters.ts`: `ChapterId` gains `ffx2-ixion-djose`; `Chapter.number` widens to 17 (Ixion at Djose, unlisted)
+
+**FFX-2 only** [AGENTS.md hard rule 14]; the widening itself is shared plumbing, "both". Branch `chapter-ixion`.
+
+- `ChapterId` adds `'ffx2-ixion-djose'` (so `ListedChapterId` does too, which is why `learn/atlas/cites.ts`
+  and `learn-atlas-data.test.ts` gain a row, as every unlisted chapter before it did).
+- `Chapter.number` adds `16 | 17`: the record is Chapter XVII, registered in `UNLISTED_CHAPTERS`
+  (`src/data/chapter-ffx2-ixion-djose.ts`); listing it is the switch. Chapter XVI (Sin, branch `chapter-sin`)
+  widens the same line to 16; a merge of the two keeps `| 16 | 17` and both ids.
+- No other field, type or export changes; every importer compiles unchanged.
+
 ## 2026-09-27 — minigame protocol: FFX picker params and backing out (hotfix 24)
 
 **FFX only** [AGENTS.md hard rule 14]. No contract file changes: `types.ts`, `FFXBattleEngine` and

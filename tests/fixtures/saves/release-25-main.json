@@ -1,0 +1,28 @@
+{
+  "_note": "Chapter XVI save-compatibility fixture. Written by the LIVE release-25 build itself (main 79adc4ff, bundle index-ykS1QEe6.js, 15 listed chapters, no Chapter XVI) on 2026-09-27: a fresh headless profile on https://baileypillon.github.io/pyrefly-reprise/, then that build's own SaveStore methods (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save), then localStorage read back verbatim. Non-default values on purpose. Script: the branch's scratch .ixion-save-export-tmp.mjs (uncommitted).",
+  "release": 25,
+  "mainSha": "79adc4ff",
+  "bundle": "index-ykS1QEe6.js",
+  "expect": {
+    "cleared": [
+      "ffx2-den-of-woe",
+      "seymour-natus"
+    ],
+    "notCleared": [
+      "ffx2-fallen-aeons"
+    ],
+    "bestTimeMs": {
+      "ffx2-den-of-woe": 611230,
+      "seymour-natus": 402880
+    },
+    "settings": {
+      "masterVolume": 0.45,
+      "musicVolume": 0.3,
+      "textSpeed": 1.25,
+      "ffx2Atb": "active"
+    }
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790555830189,\"chapters\":{\"ffx2-den-of-woe\":{\"id\":\"ffx2-den-of-woe\",\"cleared\":true,\"bestTimeMs\":611230,\"bestTurns\":44,\"attempts\":2,\"playTimeMs\":0},\"seymour-natus\":{\"id\":\"seymour-natus\",\"cleared\":true,\"bestTimeMs\":402880,\"bestTurns\":27,\"attempts\":1,\"playTimeMs\":0},\"ffx2-fallen-aeons\":{\"id\":\"ffx2-fallen-aeons\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":1000}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.45,\"musicVolume\":0.3,\"sfxVolume\":0.9,\"textSpeed\":1.25,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"guideVisible\":true,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"active\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":false},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

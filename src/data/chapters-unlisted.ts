@@ -29,5 +29,9 @@ import { FF7_GUARD_SCORPION } from './chapter-ff7-guard-scorpion.ts';
  *
  * The hidden FF7 experiment, Guard Scorpion, was registered here on 2026-09-27 (FF7 only; never listed:
  * `experimental`, `number: 0`, reached by the secret door, `./chapter-ff7-guard-scorpion.ts`).
+ *
+ * Ixion at Djose was registered here on 2026-09-27 (FFX-2 only; concept A, unlisted behind a switch) and
+ * listed the same day as Chapter XVI (now in `CHAPTERS`, after Chapter XV; Bailey: "ixion needs to be in the
+ * next build as well").
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION] as const;
