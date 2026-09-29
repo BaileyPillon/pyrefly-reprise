@@ -74,3 +74,47 @@ enough.
 (unchanged). The e2e spec edit was not run (Playwright spec suite not run in this batch).
 `src/audio/AudioManager.ts` (was 638 lines) and `src/app/SaveData.ts` (was 559) were already over the
 400-line cap and grew by a few lines each; splitting them is out of scope for a defect batch.
+
+## CHECK (independent, 2026-09-28 ~22:25 EDT; checker did not build it)
+
+Verdict: **all three claimed fixes hold; no blocker.** Game case: both (shared audio plumbing and the shared
+save default; CHK-020). Scratch and raw JSON: `D:/Tools/pyrefly-scratch/r29/audio-check/` (`check.mjs`,
+`pad2.mjs`, `check-*.json`). Production build of this branch (`vite build`) served by `vite preview` on 8050
+(stopped by PID afterwards); live = https://baileypillon.github.io/pyrefly-reprise/ (6ea8528f). Headless
+Chromium, `PYREFLY_BROWSER=gpu`, one fresh browser per run.
+
+- **PR-0226, before (live):** Shift as first gesture, `pause.mp3` delayed 1.5 s, real Esc then Esc 60 ms later:
+  Chapter IV and Chapter XII both stuck on `pause` at +3 s, after 10 fast Esc toggles, and after a later slow
+  pause/resume (screen `battle`). Defect reproduced.
+- **PR-0226, after (branch):** the same with gaps 60/200 ms (IV) and 60/150 ms (XII), first pause cold, 4 of 4:
+  the boss cue (`boss-ffx2-aeon`, `boss-seymour`) at +3 s and after 10 fast toggles; a slow pause plays `pause`
+  and resume brings the boss cue back; no console error.
+- **Tests fail without the fix (checked by temporarily undoing each half, then restoring the file byte for
+  byte):** moving the early return back above the request-id bump fails 3 of 5 tests in
+  `audio-pause-race.test.ts`; reverting `setPauseMusic` to `currentMusic` fails the other 2 (pause during the
+  battle cue's decode; pause before the first gesture). Every test is load-bearing.
+- **PR-0220 (Chromium, emulated pad; real input for this issue):** branch: pad A only, no key or click:
+  `ready=false` before, `ready=true` and `title` playing after the press; with no press the context stays
+  locked (no unlock without input). Live: `ready=false` and no music after three presses. Pad navigation is
+  unchanged (title -> chapter-select -> party-prep on the same presses on branch and live). A real controller,
+  Firefox and Safari remain unverified, as the builder said; `unlock()` from a pad in a browser that grants no
+  activation creates a suspended context, and the existing keydown/pointerdown listener still resumes it
+  (read in `AudioManager.unlock`), so no regression there.
+- **PR-0203 / D-210:** fresh profile sfx 0.35 (live 0.9); stored 0.6 stays 0.6; stored 0.9 stays 0.9; a settings
+  object with no `sfxVolume` gets 0.9; a blob with no settings object gets 0.35 (every save ever written
+  carries a settings object with `sfxVolume` since the first SaveData commit 15289577, so this is theoretical).
+  0.35 is round 13's own figure (`critic/rounds/round-13.md:1135`, "about 0.35"). Nothing beyond D-210 built.
+- **Regressions:** none found. The early-return change makes a request for the cue already playing cancel a
+  pending different cue; all 16 `playMusic` callers are screen transitions where newest-wins is the intent.
+- **Rules:** 1 (no DOM/three in battle), 6, 8, 9, 10 (no new UI; the chip is a proposal) respected; 14 written
+  in every commit. Rule 7: `AudioManager.ts` 638 -> 655 and `SaveData.ts` 559 -> 562 lines, both already over
+  the 400 cap before this batch (minor, pre-existing). New files are under 400.
+- **Gates:** `npx tsc --noEmit` clean; the 3 new test files 11/11; full `npx vitest run` 614 files passed,
+  5 skipped (9629 tests); `node tools/orphans.mjs` 24 (unchanged, `padUnlock.ts` reachable);
+  `git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main` no conflict (origin/main c9c1c295).
+  `critic-plan`: DEEP before deploy (save-data class). `tests/e2e/save-upgrade.spec.ts` not run (its 0.35 matches
+  the fresh-profile value measured above).
+- **Side observation (not this batch, pre-existing):** on live, with a mouse click at (5,5) as the first gesture
+  and then `__pyrefly.gotoChapter`, the first Esc in battle went to chapter-select instead of pause (4 of 4
+  fresh browsers, also at 8 s settle); with Shift it paused. The branch preview did not show it. Likely a
+  harness/debug-path artefact; not investigated.
