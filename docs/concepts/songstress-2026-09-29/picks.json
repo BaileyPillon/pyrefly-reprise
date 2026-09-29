@@ -1,0 +1,21 @@
+{
+ "note": "The driver's pick per slot (D-281, delegated by Bailey; never Bailey's own approval). Every file is the candidate byte for byte. scale = head match against the new idle, read by eye beside the idle on one baseline at 1.0 / 1.15 / 1.3 (evidence: scale-check-*.jpg here) with the feet-to-eye-line stature ratio from measure.py as a check. Slots not listed stay EMPTY and fall back to the standing painting (D-179): paine attack (try a: a bob instead of her swept crest; try b: the hair turned into flame spikes, and cand-11 lunges away from the enemy) and paine hurt (both tries: loose baggy trousers where the text says long tight white pants, and a weak recoil).",
+ "rikku-songstress": {
+  "idle": { "from": "options/rikku-A/cand-4.png", "facing": "front", "look": "Option A, Showtime stance: every written costume item, her Thief idle's stance, green microphone low." },
+  "cast": { "from": "poses/rikku-songstress/cast/cand-2.png", "scale": 1.15, "facing": "right", "look": "PASS: microphone raised, hand on hip, singing; feathered boots and gloves." },
+  "item": { "from": "poses/rikku-songstress/item/cand-4.png", "scale": 1.15, "facing": "right", "look": "PASS: bottle held out, hand on hip, grin; no feather tail." },
+  "attack": { "from": "poses/rikku-songstress/attack/cand-5.png", "scale": 1.15, "facing": "right", "look": "PASS: lunge with the microphone thrust toward the enemy (Mug/Berserk only; Songstress has no Attack)." },
+  "hurt": { "from": "poses/rikku-songstress/hurt/cand-3.png", "scale": 1.25, "facing": "right", "look": "PASS, weak: one eye shut, hands to her chest, a small lean." },
+  "ko": { "from": "poses/rikku-songstress/ko/cand-7.png", "scale": 1.1, "facing": "right", "look": "PASS on the second try: on her side, head right, eyes shut, arms limp, microphone by her hand; try a pillowed her cheek on her arm (asleep)." },
+  "victory": { "from": "poses/rikku-songstress/victory/cand-6.png", "scale": 1.05, "facing": "front", "look": "PASS: laughing, eyes shut, hand at her chest, microphone low: her written victory's end. A long orange sash at the hip is not in the text." },
+  "dance": { "from": "poses/rikku-songstress/dance/cand-5.png", "scale": 1.0, "facing": "front", "look": "PASS: one leg kicked back, arm out, microphone at her mouth. No engine slot reads dance today (parity with yuna-songstress/dance.png)." }
+ },
+ "paine-songstress": {
+  "idle": { "from": "options/paine-A/cand-2.png", "facing": "left", "look": "Option A, Cool stance: three-quarter, microphone low like her sword, hand in pocket; painted facing left, the engine mirrors it." },
+  "cast": { "from": "poses/paine-songstress/cast/cand-14.png", "scale": 1.1, "facing": "right", "look": "PASS on the second try (spiked hair words): microphone raised, hand on hip, singing; try a gave her a bob." },
+  "item": { "from": "poses/paine-songstress/item/cand-11.png", "scale": 1.05, "facing": "right", "look": "PASS on the second try: bottle held out, hand on hip, tight white pants, brown heels." },
+  "ko": { "from": "poses/paine-songstress/ko/cand-13.png", "scale": 1.0, "facing": "right", "look": "PASS on the second try: on her side, head right, eyes shut, microphone in her loose hand." },
+  "victory": { "from": "poses/paine-songstress/victory/cand-14.png", "scale": 1.05, "facing": "front", "look": "PASS on the second try: the microphone lifted over her head, hand on hip, smirk: her written victory pose." },
+  "dance": { "from": "poses/paine-songstress/dance/cand-11.png", "scale": 1.0, "facing": "front", "look": "PASS on the second try: knee up, arm raised, microphone out. No engine slot reads dance today." }
+ }
+}

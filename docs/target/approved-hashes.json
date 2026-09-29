@@ -1264,6 +1264,81 @@
     "mtime": "2026-09-28T02:03:32.620Z",
     "approved": "2026-09-28"
    }
+  },
+  "driver:2026-09-29-songstress (D-281, delegated by Bailey)": {
+   "words": "Your pick (Recommended)",
+   "decision": "D-281",
+   "note": "DRIVER PICK, delegated by Bailey; not Bailey's own approval. Bailey, 2026-09-28 ~22:45 EDT, chose \"Your pick (Recommended)\" for the driver's question \"Rikku's and Paine's Songstress paintings (they show as grey mannequins right now): may I go with my pick tonight?\" (D-281, amending D-275). Installed 2026-09-29: rikku-songstress (option A Showtime stance + cast, item, attack, hurt, ko, victory, dance) and paine-songstress (option A Cool stance + cast, item, ko, victory, dance; attack and hurt stopped after two tries and stay on the idle). Byte for byte from D:/Tools/pyrefly-art-backup/candidates/2026-09-29-songstress/ (docs/concepts/songstress-2026-09-29/picks.json). New folders only; nothing replaced. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-29-songstress/. Options kept for a swap: docs/concepts/songstress-2026-09-29/options.html. Game: FFX-2 only.",
+   "public/art/characters/rikku-songstress/attack.png": {
+    "sha256": "438e878339243ea9b3544ab3fe66d97fe36e09fa0b2e4abc870e01ac0c8710b6",
+    "mtime": "2026-09-29T12:25:24.510Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/rikku-songstress/cast.png": {
+    "sha256": "55f6ebf891c265f170819d887a580fc631589ecdc2c94125a02686fed6bb9283",
+    "mtime": "2026-09-29T12:25:24.512Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/rikku-songstress/dance.png": {
+    "sha256": "f18c8a000140425ed50e86a9f762789309c010ace7b445248681bcf3fdd85fbb",
+    "mtime": "2026-09-29T12:25:24.512Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/rikku-songstress/hurt.png": {
+    "sha256": "e9e10d9bf37ab3c23720db0e39c8f57538096d50aa59972c9d6c8f7fb264404f",
+    "mtime": "2026-09-29T12:25:24.512Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/rikku-songstress/idle.png": {
+    "sha256": "c64931aef02719a4242cd850fa36a2b40e43cc2cd3c2291cfbe3c11ae66e576b",
+    "mtime": "2026-09-29T12:25:24.513Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/rikku-songstress/item.png": {
+    "sha256": "ff26db1f9257cb70429a8f14d53694e61d54a4f1db28a2ea3021b6c4ea76e5ce",
+    "mtime": "2026-09-29T12:25:24.513Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/rikku-songstress/ko.png": {
+    "sha256": "4c23936f79d98cb5f379684d4be3d132653ed1605ba3c60381d39c7018945198",
+    "mtime": "2026-09-29T12:25:24.513Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/rikku-songstress/victory.png": {
+    "sha256": "d508bef7dc3fa7f1e90dd527eba4f2f95f8e56d2db8bff0e7fb95b2525bafd1f",
+    "mtime": "2026-09-29T12:25:24.514Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/paine-songstress/cast.png": {
+    "sha256": "a7660c3602818168c6abe899f3745f72345cd32d38d1ca7d821af832e74652e6",
+    "mtime": "2026-09-29T12:25:24.514Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/paine-songstress/dance.png": {
+    "sha256": "e4b1b955ac11c5ad643642d395ef5e63681eed70c0a46f820a6f0b87800d0cba",
+    "mtime": "2026-09-29T12:25:24.514Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/paine-songstress/idle.png": {
+    "sha256": "c163b7191230cc80c446475e6ce721ca53363d08f2e1804a464d58a450c6d406",
+    "mtime": "2026-09-29T12:25:24.515Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/paine-songstress/item.png": {
+    "sha256": "ce42cfeba40c7b8aaef4b288f708c42589389e40c2266a37416cf80fccd2b08c",
+    "mtime": "2026-09-29T12:25:24.515Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/paine-songstress/ko.png": {
+    "sha256": "ef94d717b09a52489bd20aba78a8edff4dad57ff02aaf732f90c8191afe5cec6",
+    "mtime": "2026-09-29T12:25:24.515Z",
+    "approved": "2026-09-29"
+   },
+   "public/art/characters/paine-songstress/victory.png": {
+    "sha256": "94feef4e1d67bd05cf703c6c1c7d6b07029601836e2e4d29c49c46895481bd26",
+    "mtime": "2026-09-29T12:25:24.515Z",
+    "approved": "2026-09-29"
+   }
   }
  }
 }

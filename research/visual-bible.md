@@ -1082,6 +1082,45 @@ The writing bible's E5 script has all three speaking **over comms from the Celsi
 
 ---
 
+### 1.24 FFX-2 Rikku and Paine — Songstress dressphere (added 2026-09-29, PR-0228)
+
+**FFX-2 only** (dresspheres are an FFX-2 mechanic). Written sources only; no image was used as a source or as a render input. Read as wikitext through the MediaWiki API (`api.php?action=parse&prop=wikitext`) on 2026-09-29:
+
+- FF Wiki *Songstress*, **revid 3972937**, section "Profile" (the costume sentences for all three girls, the microphone colours, and the victory poses).
+- FF Wiki *Final Fantasy X-2 victory poses*, **revid 3955034**, "Songstress" bullets (the same three victory poses).
+- FF Wiki *Paine*, **revid 4020614**, design notes (why her Songstress is unlike the other two). *Rikku* (revid 4047547), *Rikku (Final Fantasy X-2 party member)* (revid 3593451) and *Paine (Final Fantasy X-2 party member)* (revid 3962272) were read too: their Songstress entries are image captions only, with no written costume detail.
+- *Dance (Final Fantasy X-2)* (revid 3912999) and *Sing (Final Fantasy X-2)* (revid 3915501): musical notes, light waves and swirls appear around the girl while she dances or sings. Those are **effects**, which belong to the engine, never to the painting (ART-PIPELINE section 2 rule 4).
+
+**Shared (verified, `[single source]`):** the Songstress wears light dancing clothes and carries a **microphone** as her weapon. The dressphere has **no Attack command** (it attacks with the microphone only under Berserk or through Mug).
+
+**Rikku (verified, `[single source]`, *Songstress* rev 3972937):**
+- an **orange sleeveless top**, extended **at the back with white ruffles**, with a **purple tie**;
+- a **short purple skirt** with a **white belt**;
+- **orange knee-high boots with purple feathers**;
+- **black ribbons tied around her upper arms and thighs**;
+- **orange elbow-length gloves with purple feathers**;
+- a **purple headband** (the Songstress replaces her Thief's blue bandana; nothing in the text says the bandana stays);
+- a **green microphone**.
+- Hair, eyes and skin are not in the Songstress text: they are the FFX-2 Rikku of section 1.15 (blonde hair braided and tied on top with beads, green eyes, tan skin), taken from the shipped `rikku-thief` idle.
+- **Victory pose:** she performs a dance, ending with her **fist lowered to her chest**.
+
+**Paine (verified, `[single source]`, *Songstress* rev 3972937):**
+- a **long-sleeved, high-collared white jacket** with **turquoise lining and rim**;
+- **turquoise glovelets** on the sleeves, held on with **black studded straps**;
+- a **black bikini top** under the jacket;
+- **long, tight white pants** with **silver chains around her thighs**;
+- **brown high-heeled boots with turquoise ruffles**;
+- a **teal microphone**.
+- Hair, eyes and skin are the FFX-2 Paine of section 1.16 (short layered silver hair, red eyes, pale skin), taken from the shipped `paine-warrior` idle.
+- **Victory pose:** she **turns around and lifts her arm above her head**.
+- **Design note** (*Paine* rev 4020614, `[citation needed]` on the wiki): her Songstress differs from the other two because the team could not decide between "rock 'n' roll" and "Top 40", so the costume designer split the difference. This is the only written licence for her cooler, less idol-like read.
+
+**What the sources leave open (our estimate, labelled as such in every option):** the exact shade of orange and purple; the length of Rikku's back ruffle; whether Paine's jacket is worn open or closed (the bikini top "under the jacket" implies open at the front); the microphone's shape (corded or not). Colour ramps are `[estimate]`: Rikku orange `#E0621E` / `#F58A3A`, purple `#6A3FA0` / `#9A6AD0`, white `#F4F1E8`, black ribbons `#18161E`, green mic `#3FA85A`; Paine white `#F2F2EE`, turquoise `#2FB8B0` / `#6ADAD2`, black `#15131C`, silver `#C9CFD6`, brown boots `#6E4424` / `#9A6A3A`, teal mic `#2E9E9A`.
+
+> **Silhouette.** Rikku Songstress: bright orange, all limbs, a short flared purple skirt, feathered cuffs at the elbows and knees, and her tall tied-up hair under a purple band; a small green microphone. Paine Songstress: the only fully covered legs in the trio (long white pants and heels) under a white high-collared jacket, a dark band of bikini top at the chest; a small teal microphone. Squint read: orange-and-purple spark versus white column with a turquoise edge.
+
+---
+
 ## 2. Location design sheets
 
 ### 2.0 Shared battle-camera convention (all five scenes)
