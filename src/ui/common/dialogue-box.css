@@ -153,6 +153,12 @@
 .dbox--no-portrait .dbox__portrait {
   display: none;
 }
+/* A Farplane voice (FFX-2 Chapter V, PR-0161): the painting stays, faded, so it reads as a memory and not a
+   person standing in the room. The plate says FARPLANE. */
+.dbox--voice .dbox__portrait img {
+  opacity: 0.5;
+  filter: grayscale(0.55) saturate(0.7);
+}
 
 /* -------------------------------------------------------------------- body */
 

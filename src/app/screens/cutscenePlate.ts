@@ -15,10 +15,16 @@ import { artUrl } from '../../engine/PaintedArt.ts';
  * The chapter eyebrow ("CHAPTER XVI · DJOSE TEMPLE ...") names the chapter's own place, so it steps out once the
  * scene has moved somewhere else.
  */
-export function swapCutscenePlate(root: HTMLElement, key: string, ms: number, sleep: (ms: number) => Promise<void>): Promise<void> {
+export function swapCutscenePlate(
+  root: HTMLElement,
+  key: string,
+  ms: number,
+  sleep: (ms: number) => Promise<void>,
+  place?: string,
+): Promise<void> {
   const url = `url(${artUrl(`art/backdrops/${key}.png`)})`;
   root.dataset['plate'] = key;
-  root.querySelector<HTMLElement>('.cutscene__eyebrow')?.setAttribute('hidden', '');
+  nameEyebrowPlace(root, place);
   if (ms <= 0) {
     root.style.backgroundImage = url;
     return Promise.resolve();
@@ -38,4 +44,22 @@ export function swapCutscenePlate(root: HTMLElement, key: string, ms: number, sl
     root.style.backgroundImage = url;
     layer.remove();
   });
+}
+
+/**
+ * The eyebrow after a plate swap. With a `place` it keeps "CHAPTER V ·" and names the new place (PR-0230: the
+ * Farplane Glen coda must not read as Vegnagun's chamber); without one the chapter's own place no longer
+ * applies and the eyebrow steps out.
+ */
+function nameEyebrowPlace(root: HTMLElement, place: string | undefined): void {
+  const eyebrow = root.querySelector<HTMLElement>('.cutscene__eyebrow');
+  if (!eyebrow) return;
+  const label = eyebrow.querySelector<HTMLElement>('.cutscene__eyebrow-label');
+  const cut = label?.textContent?.indexOf('·') ?? -1;
+  if (place && label && cut >= 0) {
+    label.textContent = `${label.textContent!.slice(0, cut + 1)} ${place.toUpperCase()}`;
+    eyebrow.removeAttribute('hidden');
+    return;
+  }
+  eyebrow.setAttribute('hidden', '');
 }

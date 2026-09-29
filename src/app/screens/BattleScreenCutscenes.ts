@@ -170,6 +170,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
   const realWait = opts.sleep ?? sleepMs;
   const box = new DialogueBox({
     root: opts.root,
+    ...(opts.game ? { game: opts.game } : {}),
     ...(opts.textSpeed !== undefined ? { textSpeed: opts.textSpeed } : {}),
   });
   box.mount();

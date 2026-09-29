@@ -50,7 +50,7 @@ import { GUIDES, rulesOnClock } from '../../data/guides/index.ts';
 import { intendedStrategy } from '../BattlePresenterStrategies.ts';
 import { targetDisplayName, targetLabel } from './targetLabel.ts';
 import { chapterOnBoard, guideTitle } from './lookup.ts';
-import { chosenAlready, type QueuedCommand } from './guide-inflight.ts';
+import { chosenAlready, healInbound, type QueuedCommand } from './guide-inflight.ts';
 
 /** Thrown when a tactic asks the guide's read-only engine view to do something. */
 export class GuideEngineMisuseError extends Error {
@@ -371,6 +371,8 @@ function nextFor(
   }
   // Advisor v3 (FFX-2 only): not while the same support move already charges or is held (./guide-inflight.ts).
   if (!command || chosenAlready(state, decision.actorId, command, decision.held ?? [])) return null;
+  // PR-0239: nor a heal for HP a charging heal is about to give (the card reads the projected board).
+  if (healInbound(state, decision.actorId, command, decision.held ?? [])) return null;
   const row = rowFor(decision.commands, command);
   const label = row?.label ?? fallbackLabel(command);
   const targetId = command.targets[0] ?? null;

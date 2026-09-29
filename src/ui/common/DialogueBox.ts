@@ -3,7 +3,7 @@ import type { InputSnapshot } from '../../app/Input.ts';
 import type { ChoiceStep, NarrateStep, SayStep, SpeakerId } from '../../story/dsl.ts';
 import type { DialoguePort } from '../../story/runner/CutsceneRunner.ts';
 import { dialogueObjectPosition, portraitImgHtml } from './portrait.ts';
-import { speakerRole } from './speaker-roles.ts';
+import { FARPLANE_VOICE_ROLE, isFarplaneVoice, speakerRole } from './speaker-roles.ts';
 import { escapeHtml } from './html.ts';
 import { autoAdvanceHoldMs, computeRevealCount, isFullyRevealed, typingDurationMs } from './typewriter.ts';
 
@@ -33,6 +33,11 @@ export interface DialogueBoxOptions {
    * {@link speakerRole}; return `undefined` for a bare name.
    */
   roleFor?: (who: SpeakerId) => string | undefined;
+  /**
+   * Which game's box this is. Only read to tell a Farplane voice from a present speaker (PR-0161): read from
+   * the mounted FFX-2 HUD when absent (the mid-battle box is built before anyone says it).
+   */
+  game?: 'ffx' | 'ffx2';
   /** `SaveData.settings.textSpeed` multiplier; 1 = normal. */
   textSpeed?: number;
   /** Start in "auto mode" (advances without input once each line finishes typing). */
@@ -299,7 +304,10 @@ export class DialogueBox implements DialoguePort {
 
     this.nameEl.textContent = opts.narrate ? '' : (this.opts.nameFor?.(opts.who) ?? defaultName(opts.who));
     (this.nameEl.parentElement as HTMLElement).hidden = !this.nameEl.textContent;
-    const role = opts.narrate ? undefined : (this.opts.roleFor ?? speakerRole)(opts.who);
+    const game = this.opts.game ?? (this.opts.root.querySelector('.ffx2hud') ? 'ffx2' : undefined);
+    const voice = !opts.narrate && isFarplaneVoice(game, opts.who);
+    this.el.classList.toggle('dbox--voice', voice);
+    const role = opts.narrate ? undefined : voice ? FARPLANE_VOICE_ROLE : (this.opts.roleFor ?? speakerRole)(opts.who);
     this.roleEl.textContent = role ?? '';
     this.roleEl.hidden = !role;
 

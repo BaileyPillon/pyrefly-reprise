@@ -574,9 +574,11 @@ function statsHtml(s: MoveSuggestion, lead = '', trim = false): string {
   }
   if (!trim) {
     chips.push(`<span class="mad__stat">${s.mpCost > 0 ? `${s.mpCost} MP` : 'no MP'}</span>`);
-    chips.push(
-      `<span class="mad__stat">${s.hitChance === null ? 'always hits' : `${s.hitChance}% to hit`}</span>`,
-    );
+    // A hit chip belongs to a move that can miss or that deals damage. "Always
+    // hits" on Talk, Pull back, a Grand Summon or a heal says nothing true
+    // that matters and reads as a claim about the fight (PR-0234; both games).
+    if (s.hitChance !== null) chips.push(`<span class="mad__stat">${s.hitChance}% to hit</span>`);
+    else if (e && e.kind === 'damage') chips.push('<span class="mad__stat">always hits</span>');
     // Crit is deliberately outside the range — see `simulate.ts`'s roll policy.
     if (s.critChance > 0) chips.push(`<span class="mad__stat">${s.critChance}% crit</span>`);
   } else if (s.mpCost > 0) {

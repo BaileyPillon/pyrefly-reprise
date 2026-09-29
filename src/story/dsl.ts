@@ -325,6 +325,11 @@ export interface BackdropStep {
   key: string;
   /** Crossfade in milliseconds, 0–4 000. 0 cuts. */
   ms: number;
+  /**
+   * The place the eyebrow names once the plate is up ("The Farplane Glen"), replacing the chapter's own
+   * location; without it the eyebrow steps out. Additive (2026-09-28, PR-0230: Chapter V's coda).
+   */
+  place?: string;
 }
 
 /** Put an actor into a named sprite state. */
@@ -552,8 +557,8 @@ export function hideActor(actor: string, ms?: number): HideActorStep {
 }
 
 /** Swap the cutscene's painted backdrop (`public/art/backdrops/<key>.png`). `backdrop('bevelle-underground', 1200)` */
-export function backdrop(key: string, ms = 900): BackdropStep {
-  return { type: 'backdrop', key, ms };
+export function backdrop(key: string, ms = 900, place?: string): BackdropStep {
+  return place === undefined ? { type: 'backdrop', key, ms } : { type: 'backdrop', key, ms, place };
 }
 
 /** Set an actor's sprite state. */
