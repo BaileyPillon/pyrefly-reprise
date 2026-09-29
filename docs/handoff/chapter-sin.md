@@ -119,6 +119,103 @@ equipment drops are not modelled, S-7) and the FFX prep screen cannot change equ
 **Where it lives:** branch `chapter-sin`, worktree `D:/pyrefly-ch-sin` (sparse, no
 `docs/screenshots` except `sin/`).
 
+## Packages F, G, P and H, merged into `chapter-sin` (2026-09-29 ~01:20 EDT; FFX only)
+
+Merged in the plan's order with `git merge --no-ff`, no conflicts (the four own disjoint files):
+F `b5f393c2` → `8d6edae3`, G `6ba35582` → `b29419f8`, P `cd0a6c0b` → `401d6126`, H `d8958e15` →
+`b9abbd96`. Nothing is listed yet (plan §6, package L).
+
+**F, the Fins and Cid** (`src/battle/ffx/ai/sin-fins.ts`, `sin-fins-rules.ts`, `sin-negation.ts`;
+`tests/unit/chapters/sin-fins-engine.test.ts`, 19 tests):
+
+- **Left Fin** (research §5.1.4, step for step). At NEAR it attacks 33, 67 or 100 % of the time after 0,
+  1 or 2+ hits (Ram, strong Delay); at FAR only from 7 hits (Smack); otherwise "Sin remains motionless.".
+  At NEAR it takes three regular turns, then "Core gathers energy." (`sin.fin.charged`), then Gravija (75 %
+  of current HP, floored, so it cannot kill). A charge that resolves at FAR is the no-damage row: the dodge.
+- **Right Fin** (§5.2): attacks from 4 hits at NEAR, 5 at FAR. Below 16,250 HP it latches for good: always
+  at NEAR, from 3 at FAR.
+- **The hit counter:** each party action naming the Fin counts 1, an aeon's 2 (S-27, labelled); NEAR and
+  FAR share it; it resets when the Fin attacks.
+- **Negation** (S-12): the wiki's single-source formula behind named `NEGATION_*` tunables, a bench
+  switch (`sin.negation.off`), and `sin.negation.lastTaken` as a JSON string (flags hold scalars).
+- **Cid** (S-19) flies a queued order with Evrae's telegraph line and fires no missiles; the Fins open FAR
+  (S-8). `SIN_FINS_ASSUMPTIONS` names S-8, S-12, the Negation slots, S-19, S-20, S-25, S-27, the latch,
+  aeon reach at FAR (REVIEW 13), C-7 and S's `seam-lineup`.
+
+**G, Genais and the Core** (`sin-genais-core.ts`, `sin-genais-core-rules.ts`;
+`tests/unit/chapters/sin-core-engine.test.ts`, 21 tests):
+
+- **Genais:** Venom, Venom, Thrashing; on its turn at 10,000 HP or less it shells (Armored,
+  percentage-immune) and uses Sigh; it leaves on its turn at 12,000 or more (S-2: the wiki and the in-game
+  Scan text).
+- **Waterga** answers magic aimed at Genais and lands on the caster, aeons included (REVIEW 1). **Cura**
+  answers each action that damages shelled Genais, once per action (labelled).
+- **The Core:** inactive while Genais is out, gathers and casts Gravija while it is shelled, a free cycle
+  once Genais dies. While Genais lives it is out of melee reach and magic-immune ("Magic absorbed.").
+  Counters when targeted: Negation on the S-12 chance, else Fire, Blizzard, Thunder, Water in turn. The
+  pre-death counter chance and "an absorbed spell draws a counter" are their own labelled tunables
+  (REVIEW 8), in `SIN_CORE_ASSUMPTIONS`.
+- **The liveness hook** (REVIEW 2) recomputes the Core's marks, `sin.core.down` and Genais's
+  non-combatant mark from `isAlive` on every action: the Core falling wins with Genais standing, and Doom or
+  Zombie plus Cura free the Core.
+
+**P, the story and ship layer:**
+
+- **Story:** `src/story/scripts/sin-fins-core.ts` (§9.2 beats 1 to 8, with mid beats for the Fin's charge,
+  Tidus's and Rikku's order asks with Cid's "wait", both chain seams, and Genais) and `sin-face.ts` (beats 9
+  to 11). Every line original; the "ball" line is our paraphrase; "Brother" has a name plate only. XVIII has
+  one callout, on the first "Drawn to Sin."; a stage-3 callout would need a trigger from
+  `overdrive-sin.ts` (named in the file header, not built).
+- **Meta, guides, tactics:** `src/data/chapter-meta-sin.ts` in `UNLISTED_CHAPTER_META` (REVIEW 12, so no new
+  orphan; `chapter-meta.ts` stays at 399 lines, its numeral union gains XVII and XVIII);
+  `src/data/guides/sin-fins-core.ts` and `sin-face.ts` in `GUIDES`; `src/engine/tactics/sin-common.ts`,
+  `sin-fins-core.ts`, `sin-face.ts`, `sin-tactics.ts`, registered by one line in `tactics/index.ts`, with
+  `CHAPTER_GAME` rows in `lookup.ts`. R9 lives in the tactic: pull back when charged unless Cid's forecast
+  turn comes after the Fin's.
+- **Ship layer:** the range director in `BattleScreenAirship.ts` binds Evrae or a Fin only, never Overdrive
+  Sin (REVIEW 3; Chapter VIII and link-4 staging pinned in `sin-ship-layer.test.ts`). The order widget
+  (`AirshipOrders.ts`, `AirshipOrderWidget.ts`) shows no pip strip without a missile flag (REVIEW 4; Evrae
+  unchanged). `phaseCanon.ts`'s `evrae-far` grade is labelled a placeholder for Sin's FAR.
+- **THEMES.md:** the two owed cues (assault, countdown), outside the audited map until listing.
+
+**H, the HUD** (package M's recommended frames, the driver's picks under D-279, not Bailey's words):
+
+- **The link 4 clock (M1-A, the mouth ring):** `sin.turn`, `sin.turnsLeft`, `sin.gigaGravitonTurn`,
+  `sin.mouthStage`; 3 pull segments, the melee window, 1 last; the numeral red at 1 or 0; the stage chip,
+  the S-1 estimate line and the Gaze pill.
+- **The Fins' plate (M4-B):** `airship.range` and `sin.fin.charged`; NEAR and charged gives the red bar,
+  FAR the quiet line, NEAR uncharged neither.
+- `src/ui/ffx/sinHudModel.ts` (pure), `SinHud.ts`, `sin-hud.css`, wired in `BattleScreenWiring.createHud`
+  on the FFX HUD only; the node is not appended outside Sin's flags. `SIN_HUD_SELECTORS` join the advisor's
+  and the chapter panel's avoid lists. Measured deviations from the frames (desk clock at x 500; phone
+  Gaze pill at 352, Fin plate at 100) are in the H commit.
+
+**The one integration fix** (`tests/unit/chapters/sin-tactic.test.ts`): P's "once Genais is gone the Core
+is Broken first" killed Genais by hand against G's stub and reused the rows offered before. With G merged
+the Core is out of reach until the liveness hook runs after an action, so the test now kills Genais with a
+real Attack (HP set to 1) and reads Auron's next rows. No source changed.
+
+**Gates after the merges (2026-09-29):**
+
+- `npx tsc --noEmit`: clean (only the untracked `tests/unit/zz-scratch/` probes error).
+- Every `tests/unit/chapters/sin-*.test.ts`, `evrae-engine.test.ts`, `guide-link-title`, `strategy-guide`,
+  `tactics-lookup`: 14 files, 260 pass, 1 skipped (the `PYREFLY_SIN_MEASURE` measurement).
+- **FFX golden hashes** against S's base (`56026029`, 6 seeds, `FFX_HASH_SKIP=sin,sin-face,sin-fins-core`):
+  408/408 identical. Every other FFX chapter is unchanged.
+- `node tools/orphans.mjs`: 24, none of them a Sin module (no growth).
+- Full suite once (`npx vitest run --testTimeout=60000`): 628 files pass, 5 skipped; 9,791 tests pass,
+  38 skipped, 1 todo. No failure.
+- **An engine probe of the whole XVII chain** (the intended line, `setupForChapter` then
+  `setupForNextLink`, seeds 1 to 8; untracked `tests/unit/zz-scratch/zz-merge-sin-probe.test.ts`): links 1
+  and 2 won on 8/8 and 7/8 seeds (about 120 to 160 and 60 to 125 inputs); the Fins' plate showed the
+  charged state 32 to 96 times per link and nothing in link 3; the clock never showed in XVII. **Link 3 was
+  won on no seed:** 3 defeats and 4 stalemates (`escape`, the engine's no-progress watch) with Genais dead
+  and the Core at 16,000 to 26,000 HP. Seed 2, read turn by turn: once Genais falls every swing at the
+  Core draws its elemental counter on the whole front row (about 400 to 600 each), the revives stop
+  (Phoenix Downs spent, by the look of the rows), Tidus and Auron stay down, and Yuna casts Pray alone
+  until the watch ends it. No summon shows in the part of the log read. That is bench B's to measure and explain (REVIEW 13), with the Core's after-death counter
+  chance (S-13, Gestahl: every time) as the first suspect; nothing was tuned.
+
 **Bailey, 2026-09-27 ~13:40 EDT: "all your recommendations"**, answering the driver's list "Sin A
 through B, the Garden of Pain party, and Ixion A". For Sin:
 

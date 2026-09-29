@@ -4,7 +4,7 @@
  * Fins' charge rule the move advisor's core does not know: **Pull back when `sin.fin.charged`, unless Cid's
  * forecast turn comes after the Fin's** (plan §3.4, research/ffx-sin.md §5.1.2, §8 row 2).
  *
- * The Fins' own AI is package F's (a stub on this branch), so the flags F will publish are set by hand here,
+ * The Fins' own AI is package F's (merged since; this file was written against its stub), so its flags are set by hand here,
  * the way `sinUnits.ts` sets `sin.gigaGravitonTurn`: this proves the tactic's reading, not the Fins' behaviour.
  */
 
@@ -138,9 +138,22 @@ describe('Chapter XVII, Genais and the Core', () => {
   });
 
   it('once Genais is gone the Core is Broken first', () => {
-    const { engine, d } = at('sin-genais-core', 'auron');
-    (engine.state().combatants['sinspawn-genais'] as { alive: boolean; hp: number }).alive = false;
-    (engine.state().combatants['sinspawn-genais'] as { alive: boolean; hp: number }).hp = 0;
+    // Genais falls to a real action, so package G's liveness hook (reactions.ts, every afterAction) brings the
+    // Core into reach and lifts its magic immunity before the next rows are offered (plan REVIEW must-change 2).
+    const first = at('sin-genais-core', 'auron');
+    const engine = first.engine;
+    (engine.state().combatants['sinspawn-genais'] as { hp: number }).hp = 1;
+    engine.submit({ kind: 'attack', targets: ['sinspawn-genais'] });
+    expect(engine.state().combatants['sinspawn-genais']?.alive).toBe(false);
+    let d: Input | null = null;
+    for (let i = 0; i < 400 && !d; i++) {
+      const next = engine.nextDecision();
+      if (next.kind === 'battle-over') break;
+      if (next.kind !== 'player-input') continue;
+      if (next.actorId === 'auron') d = next;
+      else engine.submit({ kind: 'defend', targets: [] });
+    }
+    if (!d) throw new Error('Auron never got a second turn');
     const cmd = sinFinsCore('auron', d.commands, engine);
     expect(label(d.commands, cmd)).toBe('Armor Break');
     expect(cmd?.targets).toEqual(['sin-core']);
