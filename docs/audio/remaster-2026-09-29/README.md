@@ -166,3 +166,69 @@ onsets; part of every onset difference is the original's own mono cancellation g
 | `docs/audio/remaster-2026-09-29/measurements.json` | the table above, with per-band correlations |
 | `docs/audio/remaster-2026-09-29/spectro/*.jpg` | 20 spectrograms (5 originals, 15 variants) |
 | `docs/audio/remaster-2026-09-29/audition-section.jpg` | the new audition section at 1000 px (headless check: all 135 players on the page resolve, the 20 in this section decode at their full lengths, no console error, no horizontal scroll at 1000 or 375 px, the Collect button fills its box) |
+
+## CHECK (independent, 2026-09-29)
+
+A second agent that did not build this re-measured everything with its own scripts (written
+from scratch, not from `remaster-measure.py`; scratch in
+`D:/Tools/pyrefly-scratch/overnight-0929/audio/check/`). Measurement only: no agent can hear
+(hard rule 13). **Verdict: GO as options.** Game case: both (shared audio plumbing).
+
+**Numbers confirmed.** All 20 files (5 originals, 15 variants), decoded by ffmpeg to 44.1 kHz
+float, Hann-windowed 8192-point averaged spectrum of the mid:
+
+- Band shares agree with the table above within 0.6 dB in every band (largest gaps in 20-80 Hz,
+  from the different spectral method), and with the driver's figures within 0.3 dB.
+- L/R correlation originals 0.008-0.081, variants 0.730-0.785; side/mid originals -0.1 to -0.7
+  dB, variants -7.3 to -8.7 dB; mono-sum loss originals -2.69 to -2.98 dB, variants -0.55 to
+  -0.74 dB. The builder's short form holds.
+- Loudness: every variant -16.0 LUFS; true peak -1.4 to -3.3 dBTP; sample peak at most -1.44
+  dBFS; zero samples at or above 0.999 full scale: nothing clips. The originals are already
+  -15.7 to -16.1 LUFS, so the comparison is level-matched and loudness is not part of the cause
+  (the "RMS -22 dBFS" reading is mid-channel RMS, not integrated loudness).
+- Length: every variant decodes to exactly its original's sample count (2866500, 2822400,
+  2866500, 5508300, 4689300) and plays at the original's duration in Chromium.
+- Alignment: cross-correlation against the lossless master peaks at lag 0 for all 15.
+- Loops: `boss-seymour-macalania` (336000 to 5376000) and `scene-gagazet` (1764000 to 4557000):
+  in every variant the run-on after loopEnd matches the loop head (correlation 0.99996-0.99999
+  after MP3 decode, as the candidate's own 0.998-1.0), and the sample step across the wrap
+  (0.0001-0.024) sits inside the music's own 99th-percentile step (0.007-0.074).
+- Determinism: re-running `macalania-a` / hall from the lossless master produced a
+  byte-identical MP3.
+
+**Cause reproduced at the source.** Render -> raw ACE-Step FLAC -> master: `battle-ffx` 0.601 ->
+0.064; `boss-seymour-macalania` 0.237 -> 0.039; `scene-gagazet` 0.103 -> 0.029 (seed 101; the
+table's 0.01 is another seed or the master). Raw takes: per-band waveform correlation 0.01-0.16
+in every band while the per-band magnitude correlation reaches 0.54-0.77 from 800 Hz up; best
+correlation within +-5 ms is 0.02-0.08 (no delay, no polarity flip). The decoder-phase
+explanation holds. Two small corrections: (1) the magnitude correlation is lower in the lows
+(0.2-0.5 at 20-250 Hz, near 0 for gagazet), so "0.4 to 0.75" holds from about 250 Hz up;
+(2) the three sketch renders fed to the model (`docs/audio/sketches/2026-09-24/*.mp3`) measure
+0.09 / 0.10 / 0.15 (A / B / C), not 0.05-0.09; they were still largely decorrelated before the
+model (mono loss -2.4 to -2.6 dB), so the conclusion stands. Tinny: the render piles energy into
+250 Hz-2.5 kHz and the model removes about 3.5 dB more at 2.5-12 kHz (A: 2.5-6 kHz -13.4 ->
+-17.1), confirmed; the lossless master and the MP3 Bailey heard agree below 12 kHz.
+
+**Worth knowing, not defects.** The 16-22 kHz share rises from about -80 to -87 dB to about -56
+to -59 dB in R1 and R2: that is the model's own top octave (the raw FLAC has it at -56 dB), which
+the 125 kbps originals cut and the 320 kbps variants keep, not an EQ lift. The one-shots' last
+second sits 58 to 66 dB under the file's average, so the added 1 s fade takes nothing audible.
+The `excite()` docstring still says "3-5 kHz" where the code (and this README) use 2.2-6 kHz.
+
+**Rules.** Rule 8: the impulse response is synthesized in `remaster.py` (`synth_ir`, seed 29); no
+file is read for it, the script makes no network call, and no retail audio was used as a
+reference; nothing new needs a credit and nothing was downloaded (no downloads log needed).
+Scope: `git diff --name-only origin/main...HEAD` lists only `docs/audio/**`, `tools/audio/**`
+and `docs/target/targets.json` (valid JSON); nothing under `src/`, `public/audio/music/` or the
+manifest changed, and the branch merges cleanly onto `origin/main` d27c02d8. Audition page
+(headless Chromium from a node script, in-process server stopped): all 135 players resolve
+(HTTP 200), the 20 in the new section load metadata at their full durations, no console error,
+no horizontal scroll at 1000 or 375 px. Note for whoever merges: the worktree
+`D:/pyrefly-r29-remaster` has `src/` and `public/` absent from disk (tracked, not checked out)
+and a `node_modules` junction, so a working-tree `git diff origin/main --stat` shows thousands of
+deletions that are not in the commit; stage by path only, and unlink the junction before any
+worktree removal.
+
+**Still for an ear.** Whether the phase repair smears attacks or swirls, whether R2's hall is too
+much on top of the render's own hall, whether R3 reads as air or fizz, and which preset (or none)
+answers "tinny and hollow".
