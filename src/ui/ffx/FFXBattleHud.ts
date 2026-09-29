@@ -45,6 +45,7 @@ import { showOverdrivePlate } from './overdrivePlate.ts';
 import { INTENT_AVOID_SELECTORS, ADVISOR_PANEL_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
+import { zombieTargetNote } from './zombieTargetNote.ts';
 import { enemyObstacleRect } from './enemyObstacleRect.ts';
 import type { CursorSelection } from './TargetCursor.ts';
 import {
@@ -579,7 +580,8 @@ export class FFXBattleHud implements HudPort {
         // what is being aimed at.
         onSelection: (sel) => this.applySelection(sel),
         letterTagOf: (id) => this.letterTagOf(id),
-        targetNoteOf: (id, cmd) => this.targetNoteOf(id, cmd),
+        // fb-0929: a Zombie ally says so, and what a restorative will do to it (`zombieTargetNote.ts`).
+        targetNoteOf: (id, cmd) => zombieTargetNote(this.lastState, actorId, id, cmd) ?? this.targetNoteOf(id, cmd),
       }));
     } finally {
       this.guide.clearDecision();

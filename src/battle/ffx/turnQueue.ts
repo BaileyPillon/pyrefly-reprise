@@ -211,8 +211,11 @@ export function seedInitialCtb(ctx: Ctx, condition: 'normal' | 'preemptive' | 'a
 // Turn forecast [ffx-combat-core §1.6, visual-bible §3.2]
 // ---------------------------------------------------------------------------
 
-/** Statuses worth a pip in the CTB list, most alarming first. */
-const ICON_PRIORITY: readonly StatusId[] = [
+/**
+ * Statuses worth a pip in the CTB list, most alarming first. Exported (fb-0929) so the party plate
+ * (`ui/ffx/statusPips.ts`) draws its pips in the same order and never drops a Zombie off the end.
+ */
+export const ICON_PRIORITY: readonly StatusId[] = [
   'ko',
   'petrify',
   'zombie',

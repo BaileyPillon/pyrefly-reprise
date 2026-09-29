@@ -1,5 +1,6 @@
-import type { AnyCombatant, CombatantId, StatusId, TurnPreview } from '../../battle/common/types.ts';
+import type { AnyCombatant, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import { aeonChipHtml, portraitChipHtml, resolvePortraitKey, tintFor, wirePortraitFallbacks } from './portraits.ts';
+import { STATUS_DOT_COLOR } from './statusPips.ts';
 
 /** Ink & Gold spec: "CTB queue ... Six rows visible" (presentation-ink-and-gold.md "Components"). */
 const VISIBLE_ROWS = 6;
@@ -30,25 +31,6 @@ const NAME_LINE_HEIGHT = 1.16;
  * kept as small functional state dots so Overdrive-ready and a boss's charge
  * stage stay legible, using the same amber/red pair the FFX visual-bible used. */
 const CHARGE_DOT: Record<1 | 2, string> = { 1: '#f2a33a', 2: '#e8412e' };
-
-const STATUS_DOT_COLOR: Partial<Record<StatusId, string>> = {
-  haste: '#7ee8b0',
-  slow: '#b48fe0',
-  protect: '#9fc4e8',
-  shell: '#c8a0f0',
-  reflect: '#ffe08a',
-  regen: '#8be8b0',
-  poison: '#a8d84a',
-  silence: '#c8c8c8',
-  darkness: '#8e8e9e',
-  sleep: '#9fc4e8',
-  zombie: '#a8c48a',
-  berserk: '#f28a6a',
-  petrify: '#b4ae9e',
-  curse: '#c04ac0',
-  'auto-life': '#fff0a8',
-  doom: '#c7343c',
-};
 
 /**
  * The CTB / Act List, restyled onto Ink & Gold's `.ig-ctb` component
