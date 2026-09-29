@@ -111,3 +111,37 @@ change needs the **deep review before deploy** (AGENTS.md "Release"; CHK-024).
 
 Probe scripts `.r31-*-tmp.mjs` in the worktree root were moved to
 `F:/pyrefly-parked/2026-09-29/r31-access/` (see `MOVED.txt` there).
+
+## CHECK (independent checker, 2026-09-29 ~13:00 EDT)
+
+Checked commit `3077d5bf` on `r31-access` without building any of it. **Verdict: no blockers.** Two majors are disclosed (below). This is a save-data change, so the deep review before deploy is still owed.
+
+**Re-run here:**
+- `npx tsc --noEmit` and `tsc -p tsconfig.e2e.json`: clean.
+- The four touched unit files pass, 94 of 94: `save-comfort-migration`, `pause-comfort-rows`, `comfort-presenters` and `pause-remake`.
+- Wider run of every `pause-*`, `save-*`, `comfort*` and advisor test: 891 passed, 2 failed. Neither failure comes from this change:
+  - `ui-portrait-face-crop` fails because head rows are missing in the shared art. main `1475ff6b` measures the Rikku and Paine head rows.
+  - `strategy-ffx2-bahamut` heal-only fails even alone here, but only on the 15 s vitest timeout on this CPU-capped PC. The branch changes nothing under `src/battle` or `src/data`.
+- `node tools/orphans.mjs`: 24 orphans, none of them new.
+- Fresh `vite build` of this commit, then Playwright headless with the GPU on port 8910: `accessibility-a2` 5/5, `pause` 5/5 and `save-upgrade` 2/2. That is 12 of 12.
+
+**Own probe on the same production build** (port 8911; script parked at `F:/pyrefly-parked/2026-09-29/r31-access-check/`):
+- **Release-29 save:** the save from `tests/fixtures/saves/release-29.json` was put into localStorage before boot. `<html>` came up with `data-text-size="100"`, `data-reduce-motion` and `data-low-effects` before any pause.
+- **Real keys:** Esc, E to OPTIONS, then Down to TEXT SIZE.
+  - The rows read TEXT SPEED 1.5x, TEXT SIZE 100%, REDUCE MOTION ON, LOW EFFECTS ON, STRATEGY GUIDE OFF, BATTLE HELP ON. This matches the mock's order.
+  - Right three times stops at 130 %.
+- **Saved after that write:** every release-29 setting is unchanged, including volumes 0.55/0.4/0.6, textSpeed 1.5, ffx2Atb active/fast, guideVisible false, and both comfort flags. The save gained only `textSize: 1.3`. Chapters, best times, turns and coach ids are intact. Attempts and play time rose only because the probe entered Chapter I.
+- **REDUCE MOTION:** the camera drifted 0.0000 world units over 150 frames at the Chapter I command menu with it on. The control (row off, no OS preference) drifted 0.0396.
+- **Evrae airship range shift** (`evrae-airship-director.ts` calls `moveTo` on the raw `BattleCamera`, outside `StillCamera`): measured with REDUCE MOTION on, the camera position did not move at all over 120 frames. There is no glide to report.
+
+**Target against build:**
+- `desk-options-keys-115.jpg` has the same rows, words and values as `r29-options/shots/desk-A2.jpg`. The layout is mirrored, as the pause does for Kimahri's portrait.
+- `desk-hud-130.jpg` matches `accessibility-2026-09-26/desk-hud-130.jpg` for the guide, enemy card, turn queue, party card and command list, **except the move advisor**. See major 1.
+
+**Merge:** `git merge-tree` against `origin/main` (8dce5e75) and against local `main` (1475ff6b): no conflicts.
+
+**Findings:**
+1. **MAJOR, disclosed.** At 130 % the move advisor card folds in Chapters I, IX and XII. The target frame shows it. Bailey chooses (a), (b) or (c) from "Not done" item 1. It is a defect in a brand-new setting, off by default, and not a regression at 100 %.
+2. **MAJOR, disclosed.** A2 says TEXT SIZE "grows the battle HUD, dialogue and menus". This build leaves the FFX-2 battle HUD and the pause at 100 % (`TEXT_SIZE_WIDE_SCOPE = false`) until D-220 Q4 is answered. This follows the D-220 record, which says Q4 needs pictures first; the three `q4-*-not-shipped.jpg` frames are ready for Bailey. Until then an FFX-2 player at 130 % gets larger dialogue only.
+3. **Minor.** Rule 7: eight files that were already over 400 lines grew by 1 to 11 lines. `SaveData.ts` went from 562 to 573. `PauseScreen.ts` was and stays at exactly 400. Every new file is under the cap.
+4. **Minor.** The phone TIP line wraps at 130 % (disclosed, not clipped).
