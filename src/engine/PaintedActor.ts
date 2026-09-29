@@ -1540,8 +1540,11 @@ export class PaintedActor extends Group {
     });
   }
 
+  /** REDUCE MOTION (D-285): no hit jitter while this answers true; set by `PaintedStage`. */
+  still?: () => boolean;
   /** Damped jitter, in world units. */
   shake(amount = 0.08, ms = 300): void {
+    if (this.still?.()) return;
     this.shakeAmp = amount;
     this.shakeLeftMs = ms;
     this.shakeTotalMs = Math.max(1, ms);

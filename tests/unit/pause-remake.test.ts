@@ -565,22 +565,26 @@ describe('every function of the old pause screen is still reachable', () => {
     try {
       const h = mount('ffx2-bahamut');
       h.screen.trigger('pause:tab:options');
-      expect(rowIds(h).slice(0, 7)).toEqual([
+      // D-285 (A2): TEXT SIZE, REDUCE MOTION and LOW EFFECTS sit under TEXT SPEED.
+      expect(rowIds(h).slice(0, 10)).toEqual([
         'masterVolume',
         'musicVolume',
         'sfxVolume',
         'textSpeed',
+        'textSize',
+        'reduceMotion',
+        'lowEffects',
         'ffx2Atb',
         'ffx2AtbSpeed',
         'guideVisible',
       ]);
       calls.length = 0;
       h.screen.handleInput(snapshot(['down'])); // tabs -> body, row 1
-      for (let i = 0; i < 5; i++) h.screen.handleInput(snapshot(['down'])); // rows 2..6: ffx2AtbSpeed
-      expect(calls.at(-1)?.row, 'the 6th row, clipped by the five-row rule').toBe('ffx2AtbSpeed');
+      for (let i = 0; i < 5; i++) h.screen.handleInput(snapshot(['down'])); // rows 2..6: reduceMotion
+      expect(calls.at(-1)?.row, 'the 6th row, clipped by the five-row rule').toBe('reduceMotion');
       expect(calls.at(-1)?.opts).toMatchObject({ block: 'nearest', behavior: 'smooth' });
-      h.screen.handleInput(snapshot(['down'])); // row 7: guideVisible
-      expect(calls.at(-1)?.row).toBe('guideVisible');
+      h.screen.handleInput(snapshot(['down'])); // row 7: lowEffects
+      expect(calls.at(-1)?.row).toBe('lowEffects');
     } finally {
       Element.prototype.scrollIntoView = original;
     }

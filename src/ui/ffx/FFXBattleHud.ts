@@ -1,4 +1,5 @@
 import './ffx-hud.css';
+import { grownFromTopLeft } from '../common/hudTextSize.ts';
 import type {
   AtbSnapshot, AvailableCommand,
   BattleEvent,
@@ -1324,7 +1325,7 @@ export class FFXBattleHud implements HudPort {
       // it is up on every decision, it is 29 grid px at its tallest, and a box
       // solved while it happened to be empty would be taken away on the next
       // keystroke. See `CMD_INFO_TOP`.
-      cmdInfo: { ...CMD_INFO_SLOT },
+      cmdInfo: grownFromTopLeft(CMD_INFO_SLOT), // at TEXT SIZE 115 / 130 % the slab is that much bigger (D-285)
       partyStatus:
         growToGrid(this.stageRect(this.partyStatus.el), 1) ?? { left: 403, top: 258, right: 617, bottom: 348 },
       guide: growToGrid(this.stageRect(this.el.querySelector<HTMLElement>('.sgd__panel')), 1),

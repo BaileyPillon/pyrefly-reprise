@@ -1,3 +1,4 @@
+import { commandRowsCap } from '../common/hudTextSize.ts';
 import type { AnyCombatant, AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import {
   buildTopRows,
@@ -656,12 +657,12 @@ export class CommandMenu {
         this.renderRows(
           group.items.map((cmd) => subRowVM(cmd, group, combatants)),
           this.subIndex,
-          MAX_VISIBLE_ROWS,
+          commandRowsCap(MAX_VISIBLE_ROWS),
         );
         return;
       }
     }
-    this.renderRows(this.rows.map(topRowVM), this.topIndex, MAX_VISIBLE_ROWS);
+    this.renderRows(this.rows.map(topRowVM), this.topIndex, commandRowsCap(MAX_VISIBLE_ROWS)); // TEXT SIZE (D-285)
   }
 
   private renderRows(vms: RowVM[], selectedIndex: number, maxVisible: number): void {

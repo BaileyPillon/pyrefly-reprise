@@ -15,6 +15,7 @@
 
 import { audio } from '../../../audio/index.ts';
 import type { SaveStore } from '../../SaveData.ts';
+import { stepTextSize, wrapTextSize } from '../../saveComfort.ts';
 import { TEXT_SPEEDS, VOLUME_STEP } from '../PauseScreenPanels.ts';
 
 /** FFX-2's Config ATB speeds, slowest first (`research/ffx2-combat-core.md` §1.2). */
@@ -23,7 +24,7 @@ export const ATB_SPEEDS = ['slow', 'normal', 'fast'] as const;
 const clamp01 =(v: number): number => Math.round(Math.min(1, Math.max(0, v)) * 100) / 100;
 
 /** True when the id named a setting and it was written. */
-export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1): boolean {
+export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = false): boolean {
   const settings = save.settings;
   switch (id) {
     case 'masterVolume': {
@@ -50,6 +51,17 @@ export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1): boolean
       save.setSettings({ textSpeed: next ?? 1 });
       return true;
     }
+    case 'textSize':
+      // D-285 (A2): Left / Right step and clamp at 100 and 130 %, as TEXT SPEED does. Confirm and a
+      // tap step up and wrap back to 100 %, so a touch-only phone is never stuck at the top size.
+      save.setSettings({ textSize: press ? wrapTextSize(settings.textSize) : stepTextSize(settings.textSize, dir) });
+      return true;
+    case 'reduceMotion':
+      save.setSettings({ reduceMotion: !settings.reduceMotion });
+      return true;
+    case 'lowEffects':
+      save.setSettings({ lowEffects: !settings.lowEffects });
+      return true;
     case 'ffx2Atb':
       save.setSettings({ ffx2Atb: settings.ffx2Atb === 'active' ? 'wait' : 'active' });
       return true;

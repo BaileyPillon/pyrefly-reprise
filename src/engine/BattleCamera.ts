@@ -101,6 +101,8 @@ export class BattleCamera {
    * camera"); {@link roll} tweens there and back, {@link setRoll} holds it.
    */
   private rollRad = 0;
+  /** REDUCE MOTION stops the idle sway (D-285, `ComfortCamera.ts`); set by `PaintedStage`. */
+  swayOff: () => boolean = () => false;
 
   constructor(camera: PerspectiveCamera, opts: BattleCameraOptions = {}) {
     this.camera = camera;
@@ -359,7 +361,7 @@ export class BattleCamera {
   }
 
   private apply(clock: number): void {
-    const a = this.swayAmplitude * this.swayScale;
+    const a = this.swayOff() ? 0 : this.swayAmplitude * this.swayScale;
     const s = this.swaySpeed;
     let ox = Math.sin(clock * s) * a + Math.sin(clock * s * 0.37 + 1.1) * a * 0.4;
     let oy = Math.sin(clock * s * 0.73 + 2.2) * a * 0.55;

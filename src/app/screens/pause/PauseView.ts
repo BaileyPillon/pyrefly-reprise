@@ -137,6 +137,7 @@ export class PauseView {
 
     const memberId = memberIdOf(tabId);
     if (memberId) this.plateMemberId = memberId;
+    this.portrait.setReduceMotion(this.deps.save.settings.reduceMotion); // the REDUCE MOTION row, live (D-285)
 
     const tabsEl = this.q('tabs');
     if (tabsEl) tabsEl.innerHTML = tabsHtml(this.tabs, tabId);

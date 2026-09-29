@@ -1,0 +1,81 @@
+/*
+ * TEXT SIZE for the pause and the FFX-2 HUD (OPTIONS accessibility A2, D-285),
+ * built and measured but **off** until Bailey has seen their 130 % frames
+ * (D-220 Q4: "Until then TEXT SIZE leaves the FFX-2 HUD and the pause at
+ * 100 %, disclosed"). Keyed on `data-text-size-wide`, which `app/applyComfort.ts`
+ * sets only while `TEXT_SIZE_WIDE_SCOPE` is on or the page was opened with
+ * `?textsize=wide` (the capture that makes those frames).
+ *
+ * - Pause (both games): every `--pu-*` type size and the rows and key columns
+ *   that hold them grow by the step; the phone keeps its own floor and grows
+ *   from it.
+ * - FFX-2 HUD (FFX-2 only): each panel of the 640x360 board grows from the
+ *   corner it is pinned to, as FFX's does (`text-size.css`).
+ */
+
+/* ------------------------------------------------------------------ pause */
+
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause {
+  --pu-fs: calc(clamp(14px, 0.875vw, 17px) * var(--pyr-ts));
+  --pu-fs-v: calc(clamp(15px, 0.9375vw, 18px) * var(--pyr-ts));
+  --pu-fs-on: calc(clamp(18px, 1.25vw, 24px) * var(--pyr-ts));
+  --pu-fs-line: calc(clamp(26px, 2.4375vw, 46px) * var(--pyr-ts));
+  --pu-row: calc(clamp(24px, 3vh, 34px) * var(--pyr-ts));
+  --pu-key: calc(clamp(96px, 6.25vw, 122px) * var(--pyr-ts));
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__col--wide .pause__k {
+  width: calc(clamp(118px, 9.5vw, 190px) * var(--pyr-ts));
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__col--wide[data-col='settings'] .pause__k {
+  width: calc(clamp(150px, 9.5vw, 190px) * var(--pyr-ts));
+}
+
+/* The command rows (RESTART ENCOUNTER and the rest) take the width their words need. */
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__col[data-col='encounter'] {
+  min-width: calc(clamp(190px, 16vw, 310px) * var(--pyr-ts));
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']) .pause .pause__row--cmd .pause__k {
+  width: auto;
+  flex: 1 1 auto;
+}
+
+@media (max-width: 620px) {
+  html[data-text-size-wide]:not([data-text-size-wide='100']) .pause {
+    --pu-fs: calc(12px * var(--pyr-ts));
+    --pu-fs-v: calc(13px * var(--pyr-ts));
+    --pu-fs-on: calc(17px * var(--pyr-ts));
+    --pu-fs-line: calc(20px * var(--pyr-ts));
+    --pu-row: calc(20px * var(--pyr-ts));
+    --pu-key: calc(92px * var(--pyr-ts));
+    --pu-bar: calc(110px / var(--pyr-ts));
+    /* The objective wraps to more lines: it starts higher (`phoneFit.ts` lifts the body clear of it). */
+    --pu-top-obj: calc(82vh - (var(--pyr-ts) - 1) * 30vh);
+  }
+}
+
+/* ---------------------------------------------------------- FFX-2 desktop HUD */
+
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__enemies,
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .sgd > .sgd__stack {
+  scale: var(--pyr-ts);
+  transform-origin: left top;
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .sgd > .sgd__toggle {
+  scale: var(--pyr-ts);
+  transform-origin: left bottom;
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__party,
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__command {
+  scale: var(--pyr-ts);
+  transform-origin: right bottom;
+}
+/* The guide steps down by what the boss gauge grew; the command list steps up by what
+   the party list grew (grid px, 640x360). */
+html[data-text-size-wide='115']:not([data-phone-battle]) .ffx2hud__stage > .sgd > * { translate: 0 5px; }
+html[data-text-size-wide='130']:not([data-phone-battle]) .ffx2hud__stage > .sgd > * { translate: 0 10px; }
+html[data-text-size-wide='115']:not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__command { translate: 0 -15px; }
+html[data-text-size-wide='130']:not([data-phone-battle]) .ffx2hud__stage > .ffx2hud__command { translate: 0 -30px; }
+/* The advisor keeps the lane `advisorLane.ts` solves; its type grows inside it. */
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud .mad {
+  --mad-fs-floor: calc(14.2px * var(--pyr-ts) / var(--lb-scale, 1));
+}

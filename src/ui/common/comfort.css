@@ -1,0 +1,61 @@
+/*
+ * REDUCE MOTION's CSS half (OPTIONS accessibility A2, D-285). Every
+ * `@media (prefers-reduced-motion: reduce)` block the battle, the dialogue card
+ * and the transitions already carry, mirrored under `html[data-reduce-motion]`,
+ * which `app/applyComfort.ts` sets while the pause row (or the OS preference,
+ * the row's default) is on. The OS query keeps working on its own; this only
+ * lets the row reach the same rules. Nothing here applies with the row off.
+ *
+ * Kept in one file so the owning stylesheets are not edited for the switch
+ * (`docs/plans/accessibility-review.md` §4.1). Game case: both (FFX-only and
+ * FFX-2-only selectors only ever match their own game's HUD).
+ */
+
+/* ffx-hud.css */
+html[data-reduce-motion] .ffx-stat__od--ready,
+html[data-reduce-motion] .ffx-stat__od--filled,
+html[data-reduce-motion] .ffx-target__hand,
+html[data-reduce-motion] .ffx-target__flower,
+html[data-reduce-motion] .ffx-target--group .ffx-target__c { animation: none; }
+
+/* ffx2-hud.css */
+html[data-reduce-motion] .ffx2-chain-chip.ffx2chain--pop .ffx2chain__body,
+html[data-reduce-motion] .ffx2-chain-chip.ffx2chain--pop .ffx2chain__n,
+html[data-reduce-motion] .ffx2-chain-chip.ffx2chain--pop .ffx2chain__motes i { animation-duration: 1ms; }
+html[data-reduce-motion] .ffx2-chain-chip.ffx2chain--flash::after { display: none; }
+html[data-reduce-motion] .ffx2-atbmode::before { animation: none; }
+html[data-reduce-motion] .ffx2-nodemark--on .ffx2-nodemark__arrow { animation: none; }
+
+/* battle-start-banner.css */
+html[data-reduce-motion] .bstart__wedge,
+html[data-reduce-motion] .bstart__stripe,
+html[data-reduce-motion] .bstart__strip,
+html[data-reduce-motion] .bstart__panel,
+html[data-reduce-motion] .bstart__art { animation: none; }
+html[data-reduce-motion] .bstart { transition: none; }
+html[data-reduce-motion] .bstart__load::before { animation: none; left: 0; width: 100%; opacity: 0.6; }
+
+/* dialogue-box.css, enemy-intent.css, strategy-guide.css, doom-counter.css */
+html[data-reduce-motion] .dbox--waiting .dbox__advance,
+html[data-reduce-motion] .eint__charge--s2,
+html[data-reduce-motion] .sgd__charge--s2,
+html[data-reduce-motion] .ffx-doom--tick { animation: none; }
+
+/* zanmato-gauge.css */
+html[data-reduce-motion] .ffx-zg__banner,
+html[data-reduce-motion] .ffx-zg__seg b { transition: none; }
+html[data-reduce-motion] .ffx-zg__banner,
+html[data-reduce-motion] .ffx-zg__banner--on { transform: translateX(-50%); }
+html[data-reduce-motion] .ffx-zg--phone .ffx-zg__banner,
+html[data-reduce-motion] .ffx-zg--phone .ffx-zg__banner--on { transform: none; }
+
+/* transitions.css */
+html[data-reduce-motion] .pf-swirl__blade,
+html[data-reduce-motion] .pf-swirl__ring { animation-duration: 1ms; }
+html[data-reduce-motion] .pf-mom__bar { transition-duration: 1ms; }
+html[data-reduce-motion] .pf-mom__slab { transition-duration: 1ms; }
+html[data-reduce-motion] .pf-mom__vig[data-on='1'] { animation: none; opacity: 0.8; }
+html[data-reduce-motion] .pf-beat { animation: none; opacity: 1; }
+
+/* pause-screen.css */
+html[data-reduce-motion] .pause__plate { animation: none; transform: none; transition: none; }

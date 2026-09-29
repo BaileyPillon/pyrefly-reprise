@@ -67,6 +67,8 @@ export function resolveWipeOptions(opts: WipeOptions = {}): ResolvedWipeOptions 
  * can assert the branch without a real browser `window.matchMedia`.
  */
 export function prefersReducedMotion(host?: MatchMediaHost): boolean {
+  // The REDUCE MOTION row too (D-285): `app/applyComfort.ts` marks `<html>` while it is on.
+  if (!host && typeof document !== 'undefined' && document.documentElement?.hasAttribute('data-reduce-motion')) return true;
   const win = host ?? (typeof window !== 'undefined' ? window : undefined);
   if (!win?.matchMedia) return false;
   return win.matchMedia('(prefers-reduced-motion: reduce)').matches;

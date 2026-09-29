@@ -51,6 +51,7 @@ import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleScreenStageHook.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
+import { battleComfort } from './battleComfort.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
 import { presenterGameDeps } from './BattleScreenGameDeps.ts';
@@ -219,6 +220,7 @@ export class BattleScreen extends Screen {
       spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed, () => this.stage ?? null), // FF7: its hit flash and shake
       sceneKey: this.scene.key,
       grade: this.app.renderer,
+      comfort: battleComfort, // REDUCE MOTION and LOW EFFECTS (D-285)
     });
 
     // --- engine ------------------------------------------------------------
