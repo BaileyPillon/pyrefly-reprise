@@ -18,6 +18,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { currentChromiumArgs, resolveBrowserMode } from '../../../tools/browser-mode.mjs';
+import { dboxStep } from './route-pure.mjs';
 import { ensure, makeIndexer } from './lib.mjs';
 
 export const MODE = resolveBrowserMode();
@@ -47,37 +48,39 @@ function gamepadShim() {
   });
 }
 
-/** Init script: record every dialogue line the player is shown, with its speaker and screen. */
-function dboxRecorder() {
-  const lines = [];
-  window.__routeDbox = lines;
-  setInterval(() => {
-    const box = document.querySelector('.dbox.dbox--visible') ?? document.querySelector('.dbox');
+/**
+ * Init script: record every dialogue line the player is shown, with its speaker and screen.
+ * PR-0225 (round 15): only a box that is really showing counts (`.dbox.dbox--visible`; the
+ * old fallback read the hidden `.dbox` and timed a box nobody saw), and every show is its
+ * own entry: the merge rule is `dboxStep` (route-pure.mjs, injected here by source), so a
+ * line that repeats, or one that starts with the previous line's words, is a new entry and
+ * the typewriter growing is not. A MutationObserver reads the box on every change besides
+ * the 100 ms poll, so the empty frame between two lines is never missed.
+ */
+function dboxRecorder(dboxStep) {
+  const mem = { lines: [], seen: null };
+  window.__routeDbox = mem.lines;
+  const read = () => {
+    const box = document.querySelector('.dbox.dbox--visible');
     const win = box?.querySelector('.dbox__win');
-    if (!box || box.closest('[hidden]') || Math.max(box.getBoundingClientRect().height, win?.getBoundingClientRect().height ?? 0) < 2) return;
-    const speaker = (box.querySelector('.dbox__speaker')?.textContent ?? '').trim();
-    const role = (box.querySelector('.dbox__role')?.textContent ?? '').trim();
-    const text = ((box.querySelector('.dbox__text') ?? box.querySelector('.dbox__body'))?.textContent ?? '').replace(/\s+/g, ' ').trim();
-    if (!text) return;
+    if (!box || box.closest('[hidden]') || Math.max(box.getBoundingClientRect().height, win?.getBoundingClientRect().height ?? 0) < 2) return null;
     const img = box.querySelector('.dbox__portrait img');
-    const last = lines[lines.length - 1];
-    if (last && last.speaker === speaker && (text.startsWith(last.text.slice(0, 24)) || last.text.startsWith(text.slice(0, 24)))) {
-      if (text.length > last.text.length) last.text = text;
-      last.lastMs = Math.round(performance.now());
-      return;
-    }
-    let screen = null;
-    try {
-      screen = window.__pyrefly?.screen?.() ?? null;
-    } catch {
-      screen = null;
-    }
-    lines.push({
-      ms: Math.round(performance.now()), lastMs: Math.round(performance.now()), screen, speaker, role, text,
+    return {
+      speaker: (box.querySelector('.dbox__speaker')?.textContent ?? '').trim(),
+      role: (box.querySelector('.dbox__role')?.textContent ?? '').trim(),
+      text: ((box.querySelector('.dbox__text') ?? box.querySelector('.dbox__body'))?.textContent ?? '').replace(/\s+/g, ' ').trim(),
       portrait: img ? (img.currentSrc || img.src || '').split('/').slice(-1)[0] : null,
       narrate: box.classList.contains('dbox--narrate'),
-    });
-  }, 100);
+    };
+  };
+  const sample = () => {
+    let screen = null;
+    try { screen = window.__pyrefly?.screen?.() ?? null; } catch { screen = null; }
+    dboxStep(mem, read(), Math.round(performance.now()), screen);
+  };
+  setInterval(sample, 100);
+  const start = () => new MutationObserver(sample).observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class', 'hidden'] });
+  if (document.documentElement) start(); else document.addEventListener('DOMContentLoaded', start, { once: true });
 }
 
 /**
@@ -92,7 +95,7 @@ export async function openRoute({ base, width, height, touch = false, gamepad = 
     reducedMotion: reduceMotion ? 'reduce' : 'no-preference',
   });
   if (gamepad) await ctx.addInitScript(gamepadShim);
-  await ctx.addInitScript(dboxRecorder);
+  await ctx.addInitScript({ content: `(${dboxRecorder})(${dboxStep});` });
   const page = await ctx.newPage();
   if (reduceMotion) await page.emulateMedia({ reducedMotion: 'reduce' });
   const consoleErrors = [];
