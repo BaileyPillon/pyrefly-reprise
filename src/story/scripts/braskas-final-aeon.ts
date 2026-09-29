@@ -230,7 +230,7 @@ export const braskasFinalAeonScripts: ChapterScripts = {
       fx('bfa-draws-sword', 'braskas-final-aeon'),
       shake(10, 700),
       say('jecht', "Ha! Now we're playin'.", { auto: 1000 }),
-      say('auron', 'Spread out. One swing takes us all.', { auto: 1200 }),
+      say('auron', 'It hits all of us. Keep everyone up.', { auto: 1200 }),
       camera('idle', 400),
     ],
     'bfa-low': [

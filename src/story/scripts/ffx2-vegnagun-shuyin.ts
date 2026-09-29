@@ -56,6 +56,7 @@
 
 import type { ChapterScripts } from '../dsl.ts';
 import {
+  backdrop,
   battleStart,
   beat,
   camera,
@@ -174,6 +175,9 @@ export const ffx2VegnagunShuyinScripts: ChapterScripts = {
     // §3 E5-CODA rule 2]. The source's press-X window is modelled as a choice
     // so the runner can telegraph it; both answers are dignified.
     fade('black', 1400),
+    // The eyebrow named Vegnagun's chamber over the glen (PR-0230): name the place under black. The plate is
+    // the same painted Farplane plate; only the caption moves [writing-bible E5-CODA rule 5].
+    backdrop('farplane', 0, 'The Farplane Glen'),
     music('ending-ffx2', 1800),
     fade('clear', 1800),
     camera('idle', 0),

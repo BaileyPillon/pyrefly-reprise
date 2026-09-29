@@ -183,6 +183,7 @@ export class CutsceneScreen extends Screen {
 
     this.dialogueBox = new DialogueBox({
       root: this.stage.shakeEl,
+      ...(chapter?.game === 'ffx' || chapter?.game === 'ffx2' ? { game: chapter.game } : {}),
       ...(this.opts.nameFor ? { nameFor: this.opts.nameFor } : {}),
       ...(this.opts.portraitFor ? { portraitFor: this.opts.portraitFor } : {}),
       ...(this.opts.roleFor ? { roleFor: this.opts.roleFor } : {}),
@@ -419,7 +420,7 @@ export class CutsceneScreen extends Screen {
         }
       },
       flash: (color, ms) => stage.flash(color, ms),
-      backdrop: (key, ms) => swapCutscenePlate(this.root, key, this.runner?.skipped ? 0 : ms, (m) => this.waitGate(m)), // DSL `backdrop()` (2026-09-27)
+      backdrop: (key, ms, place) => swapCutscenePlate(this.root, key, this.runner?.skipped ? 0 : ms, (m) => this.waitGate(m), place), // DSL `backdrop()` (2026-09-27)
       shake: (px, ms) => stage.shake(px, ms),
       fadeScreen: (to, ms) => (to === 'clear' ? Promise.all([this.app.fade('clear', ms), stage.veil(false, ms)]).then(() => {}) : stage.veil(true, ms)),
     });

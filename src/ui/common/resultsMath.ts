@@ -173,6 +173,14 @@ export interface ResultsMemberRow {
    * is already the right answer there.
    */
   dressphere?: string;
+  /**
+   * FFX only (PR-0241): why a listed member got no AP, when the engine's rule excluded
+   * them — `long` for the desktop detail line, `short` for the phone chip. Absent when
+   * the member earned AP, in FFX-2 (whose rows carry EXP for the party), and on a defeat.
+   * The rule is ffx-combat-core §10.1 [verified: 2 sources]: a member who was switched
+   * out during their first turn, KO'd, or petrified at the end earns nothing.
+   */
+  noAward?: { long: string; short: string };
 }
 
 /** `Cura 60/80 AP`-style progress toward the next unlearned ability. */
@@ -262,6 +270,14 @@ export function buildMemberRows(
       const sLv = member?.sphereGrid.sLv ?? 0;
       const levelDelta = eligible ? (result.sphereLevelsGained[id] ?? 0) : 0;
       const banked = (member?.sphereGrid.ap ?? 0) + (eligible ? result.ap : 0);
+      // Not eligible: a member who took a full turn was out (KO'd or petrified) at the end;
+      // one who never finished a turn was switched out on their first, or never acted.
+      const noAward =
+        !eligible && result.outcome === 'victory'
+          ? (result.turnsTaken?.[id] ?? 0) > 0
+            ? { long: 'KO’d or petrified at the end · no AP', short: 'OUT · NO AP' }
+            : { long: 'no full turn taken · no AP', short: 'NO TURN · NO AP' }
+          : undefined;
       return {
         id,
         name: member?.name ?? id,
@@ -271,6 +287,7 @@ export function buildMemberRows(
         levelUnit: 'S.Lv' as const,
         detail: sphereGridDetail(sLv, banked, levelDelta),
         standing: `S.LV ${sLv + levelDelta}`,
+        ...(noAward ? { noAward } : {}),
       };
     });
   }

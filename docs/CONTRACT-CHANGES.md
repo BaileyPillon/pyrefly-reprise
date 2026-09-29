@@ -6,6 +6,18 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-28 — `dsl.ts`: `BackdropStep` gains an optional `place` (PR-0230)
+
+**FFX-2 only** in use (Chapter V's Farplane Glen coda, writing-bible E5-CODA rule 5); the field is shared plumbing, "both".
+Branch `r29-text`.
+
+- `BackdropStep` gains `place?: string`; the builder is `backdrop(key, ms = 900, place?)`. With a `place` the cutscene
+  screen keeps "CHAPTER V ·" and names the place ("THE FARPLANE GLEN") instead of hiding the eyebrow, which is what a
+  `backdrop` without one still does (Ixion's plates). `CutscenePorts.backdrop?(key, ms, place?)` gains the third
+  argument; every port that took two arguments compiles and behaves unchanged. A step without `place` is byte-identical
+  to before (`backdrop('a', 300)` still equals `{ type: 'backdrop', key: 'a', ms: 300 }`).
+- First user: `ffx2-vegnagun-shuyin`'s post script, under black before the glen fades up.
+
 ## 2026-09-28 — `dsl.ts`: doc comments only (IXS-4)
 
 **Both** (shared plumbing). Branch `fixes-r28`. `setPose` gets its doc comment back ("Set an actor's sprite state"),

@@ -147,8 +147,11 @@ function chipsHtml(m: ResultsPageModel): string {
         row.levelDelta > 0 && p >= 1
           ? `<span class="rresp__up">+${row.levelDelta} ${escapeHtml(row.levelUnit.toUpperCase())}</span>`
           : '';
+      const why = row.noAward
+        ? `<div class="rresp__lv" title="${escapeHtml(row.noAward.long)}">${escapeHtml(row.noAward.short)}</div>`
+        : '';
       const lines = m.victory
-        ? `<div class="rresp__gains"><span class="rresp__gain">+${formatNumber(Math.round(row.award * p))} <small>${row.awardUnit}</small></span>${up}</div>`
+        ? `<div class="rresp__gains"><span class="rresp__gain">+${formatNumber(Math.round(row.award * p))} <small>${row.awardUnit}</small></span>${up}</div>${why}`
         : `<div class="rresp__lv">${escapeHtml(row.standing)}</div>`;
       return `<div class="rresp__chip-member">
           <div class="rresp__face">${memberFaceHtml(row)}</div>
