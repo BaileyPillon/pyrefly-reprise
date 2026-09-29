@@ -17,7 +17,34 @@ one of `../src/compose.py`'s light states over one painting. **No GPU render was
 
 ## Install state
 
-<!-- INSTALL-STATE -->
+**NOT INSTALLED YET (2026-09-29 04:26 EDT).** Everything is produced, checked and staged, but nothing has been written
+under `public/art/`: the release-29 gate file `D:/Tools/pyrefly-scratch/overnight-0929/rel29-deployed.done` did not
+appear in the three hours the brief allowed (polled every 5 minutes or less from 01:27 to 04:26). `approved-hashes.json`
+is therefore not locked either (a locked set of files that are not there would fail `verify-approved` as missing).
+
+- **Staged:** 62 files, 34.4 MB, in `D:/Tools/pyrefly-scratch/overnight-0929/sin-install/stage/` (a mirror of
+  `public/art/`: 32 images and 30 sidecars). None of the 62 target paths exists in `public/art/` today.
+- **Checked on the stage:** `check.mjs`, headless Chromium (`PYREFLY_BROWSER=gpu`): 32 of 32 images decode and match
+  their sidecars (`sin-install/check-staged.json`).
+
+**The exact install steps, once the gate file exists** (run from `D:/pyrefly-ch-sin`; each step stops on failure):
+
+1. `Test-Path D:/Tools/pyrefly-scratch/overnight-0929/rel29-deployed.done` is `True`, and `Get-PSDrive D` shows
+   more than 3 GB free.
+2. `python docs/concepts/chapters/sin-2026-09-29/install/install.py install`: copies the 62 staged files into
+   `D:/Final Fantasy/public/art/` (it refuses the whole install if any target already exists: new files only) and into
+   `D:/Tools/pyrefly-art-backup/approved/2026-09-29-sin/`, re-hashes every copy, and writes
+   `sin-install/installed.json`.
+3. `node tools/gen/manifest.mjs --root="D:/Final Fantasy/public/art"`: regenerates `public/art/manifest.json` (the
+   five new subjects, the three backdrops, the two pause plates with their 2x masters, the five portraits).
+4. `$env:PYREFLY_BROWSER='gpu'; node docs/concepts/chapters/sin-2026-09-29/install/check.mjs "D:/Final Fantasy/public/art" D:/Tools/pyrefly-scratch/overnight-0929/sin-install/installed.json`:
+   expect `checked 32, failed 0`.
+5. `node docs/concepts/chapters/sin-2026-09-29/install/lock.mjs D:/Tools/pyrefly-scratch/overnight-0929/sin-install/installed.json docs/target/approved-hashes.json`:
+   adds the set `driver:2026-09-29-sin (D-279, delegated by Bailey)` (32 images).
+6. `node D:/Tools/pyrefly-lora/tools/verify-approved.mjs` with `$env:ROOT='D:/pyrefly-ch-sin'`: expect
+   `mismatched: 0`, `missing: 0`. Then without `ROOT` (main's list): the same.
+7. Replace this section with the install record, and commit `docs/target/approved-hashes.json` and this file on
+   `chapter-sin` only: `git commit -m "..." -- docs/target/approved-hashes.json docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md`.
 
 ## The picks (D-279), and where each one came from
 
