@@ -175,7 +175,9 @@ change needs) -> review the production candidate (focused; deep BEFORE the
 deploy when a shared system changed, and the deploy refuses without it) ->
 deploy -> live verification of the exact artifact -> announce -> any deep
 review still owed. The deploy publishes `artifact-manifest.json` (sha256 of
-every shipped file, media decode-checked), compares the live bytes with it,
+every shipped file, media decode-checked; its `artifactHash` leaves out only the
+deploy-only `.nojekyll`, so the reviewed candidate and the deployed build hash
+the same), compares the live bytes with it,
 keeps a copy in `critic/artifacts/<sha>.json`, and leaves
 `critic/pending/<sha>.json` listing that build's separate obligations (`live`,
 `focused`, `deep`, `milestone`). Reviewers never delete a marker: they write a

@@ -15,6 +15,12 @@
  *   node tools/artifact-manifest.mjs diff <previous.json> <next.json>
  *   node tools/artifact-manifest.mjs verify-live --manifest <file> --url <base url>
  *        [--changed-from <previous.json>] [--sample 40] [--full] [--out <report.json>]
+ *   node tools/artifact-manifest.mjs rehash <stored manifest.json>
+ *
+ * `artifactHash` leaves out the manifest itself and the deploy-only markers
+ * (DEPLOY_ONLY_FILES: exactly `.nojekyll` at the root), which the deploy adds
+ * for GitHub Pages; every real file counts, and verification still compares
+ * every listed file, the marker included.
  *
  * Results are PASS, FAIL or UNVERIFIED. Anything that could not be checked is
  * UNVERIFIED, never PASS: a live site with no manifest, a file that would not
@@ -49,10 +55,37 @@ function walk(dir, root = dir, out = []) {
   return out;
 }
 
-/** One hash over the sorted `path<TAB>sha256` lines; the manifest file itself is left out. */
+/**
+ * Deploy-only markers: files the deploy adds for the host, not part of the
+ * build. `.nojekyll` (empty, site root only) tells GitHub Pages to serve every
+ * path as is. They stay in the manifest's `files` and live verification still
+ * downloads and compares them, but `artifactHash` leaves them out, so a
+ * candidate reviewed from `dist-gate/` and the same build deployed hash the
+ * same (2026-09-29). Exactly these root paths, nothing else.
+ */
+export const DEPLOY_ONLY_FILES = Object.freeze(['.nojekyll']);
+
+const hashLines = (files, keep) => sha256(Object.keys(files).filter(keep).sort().map((p) => `${p}\t${files[p].sha256}\n`).join(''));
+
+/** One hash over the sorted `path<TAB>sha256` lines; the manifest file itself and the deploy-only markers are left out. */
 export function artifactHashOf(files) {
-  const lines = Object.keys(files).filter((p) => p !== MANIFEST_NAME).sort().map((p) => `${p}\t${files[p].sha256}\n`);
-  return sha256(lines.join(''));
+  return hashLines(files, (p) => p !== MANIFEST_NAME && !DEPLOY_ONLY_FILES.includes(p));
+}
+
+/** The rule before 2026-09-29, which counted `.nojekyll`: kept only to recognise hashes that older deploys recorded. */
+export function legacyArtifactHashOf(files) {
+  return hashLines(files, (p) => p !== MANIFEST_NAME);
+}
+
+/**
+ * Every hash that names this manifest's file set: the current rule first, then
+ * the legacy one when it differs. They differ only by the deploy-only markers,
+ * so a report or a marker recorded under either rule names the same build.
+ */
+export function artifactHashAliases(manifest) {
+  const files = manifest?.files;
+  if (!files || typeof files !== 'object') return [];
+  return [...new Set([artifactHashOf(files), legacyArtifactHashOf(files)])];
 }
 
 /** Does this media file decode, and is it something other than a blank frame? */
@@ -147,7 +180,9 @@ export async function verifyLive(manifest, baseUrl, { changed = [], sample = 40,
     const res = await fetchImpl(`${base}${MANIFEST_NAME}?v=${bust}`);
     if (res.status === 200) {
       const live = JSON.parse(await res.text());
-      out.liveManifest = live.artifactHash === manifest.artifactHash ? 'match' : 'mismatch';
+      // A live manifest written under the legacy rule (which counted .nojekyll) still names this build.
+      const own = manifest.files ? artifactHashAliases(manifest) : [manifest.artifactHash];
+      out.liveManifest = own.includes(live.artifactHash) ? 'match' : 'mismatch';
     } else out.notes.push(`${MANIFEST_NAME} returned ${res.status}`);
   } catch (err) {
     out.errors.push(`${MANIFEST_NAME}: ${err.message}`);
@@ -198,8 +233,16 @@ async function main(argv) {
     if (opt('--out')) writeFileSync(resolve(opt('--out')), `${JSON.stringify(report, null, 1)}\n`);
     console.log(JSON.stringify(report, null, 1));
     process.exitCode = report.result === 'PASS' ? 0 : report.result === 'FAIL' ? 1 : 2;
+  } else if (command === 'rehash') {
+    // Recompute a stored manifest's artifactHash by the current rule; the file list is not touched.
+    const file = resolve(rest[0] ?? '');
+    const manifest = read(file);
+    const next = artifactHashOf(manifest.files);
+    if (next === manifest.artifactHash) { console.log(`${rest[0]}: artifact ${next} already follows the current rule`); return; }
+    writeFileSync(file, `${JSON.stringify({ ...manifest, artifactHash: next })}\n`);
+    console.log(`${rest[0]}: artifactHash ${manifest.artifactHash} -> ${next}`);
   } else {
-    console.log('usage: artifact-manifest.mjs build|diff|verify-live (see the header of this file)');
+    console.log('usage: artifact-manifest.mjs build|diff|verify-live|rehash (see the header of this file)');
     process.exitCode = 64;
   }
 }

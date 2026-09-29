@@ -19,7 +19,10 @@ import sharp from 'sharp';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   MANIFEST_NAME,
+  artifactHashAliases,
+  artifactHashOf,
   buildManifest,
+  legacyArtifactHashOf,
   diffManifests,
   selectForVerification,
   shippedToRepoPaths,
@@ -73,6 +76,32 @@ describe('buildManifest', () => {
     expect(b.artifactHash).not.toBe(a.artifactHash);
     expect(b.files['assets/index-Abc123.js']?.sha256).toBe(a.files['assets/index-Abc123.js']?.sha256);
     expect(diffManifests(a, b)).toEqual({ added: [], changed: ['art/tidus.png'], removed: [] });
+  });
+
+  it('the deploy-only .nojekyll marker is listed but does not change the artifact hash; any other extra file does', async () => {
+    const candidate = await buildManifest(dir);
+    writeFileSync(join(dir, '.nojekyll'), '');
+    const deployed = await buildManifest(dir);
+    expect(Object.keys(deployed.files)).toContain('.nojekyll');
+    expect(deployed.problems).toEqual([]);
+    expect(deployed.artifactHash).toBe(candidate.artifactHash);
+    expect(artifactHashOf(deployed.files)).toBe(artifactHashOf(candidate.files));
+    // Only the root marker is exempt: the same name deeper down, or any other extra file, is part of the build.
+    writeFileSync(join(dir, 'art', '.nojekyll'), '');
+    expect((await buildManifest(dir)).artifactHash).not.toBe(candidate.artifactHash);
+    rmSync(join(dir, 'art', '.nojekyll'));
+    writeFileSync(join(dir, 'extra.txt'), 'x');
+    expect((await buildManifest(dir)).artifactHash).not.toBe(candidate.artifactHash);
+  });
+
+  it('recognises a hash recorded under the legacy rule (which counted .nojekyll) as the same build', async () => {
+    writeFileSync(join(dir, '.nojekyll'), '');
+    const m = await buildManifest(dir);
+    const legacy = legacyArtifactHashOf(m.files);
+    expect(legacy).not.toBe(m.artifactHash);
+    expect(artifactHashAliases(m)).toEqual([m.artifactHash, legacy]);
+    const { '.nojekyll': _marker, ...withoutMarker } = m.files;
+    expect(artifactHashAliases({ files: withoutMarker })).toEqual([m.artifactHash]);
   });
 
   it('a file that does not decode, or decodes to one flat colour, is a problem, never a pass', async () => {
@@ -138,6 +167,18 @@ describe('verifyLive', () => {
     const manifest = await buildManifest(dir);
     writeFileSync(join(dir, MANIFEST_NAME), JSON.stringify({ ...manifest, artifactHash: '0'.repeat(64) }));
     expect((await verifyLive(manifest, await serve(), { full: true })).result).toBe('FAIL');
+  });
+
+  it('PASS with .nojekyll deployed: it is still downloaded and compared, and a live manifest under the legacy rule still matches', async () => {
+    writeFileSync(join(dir, '.nojekyll'), '');
+    const manifest = await buildManifest(dir);
+    writeFileSync(join(dir, MANIFEST_NAME), JSON.stringify({ ...manifest, artifactHash: legacyArtifactHashOf(manifest.files) }));
+    const r = await verifyLive(manifest, await serve(), { full: true });
+    expect(r).toMatchObject({ result: 'PASS', liveManifest: 'match', checked: 4 });
+    rmSync(join(dir, '.nojekyll'));
+    const gone = await verifyLive(manifest, await serve(), { full: true });
+    expect(gone.result).toBe('FAIL');
+    expect(gone.missing[0]).toMatch(/\.nojekyll/);
   });
 
   it('UNVERIFIED when nothing can be downloaded', async () => {

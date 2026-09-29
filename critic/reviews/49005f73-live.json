@@ -1,0 +1,61 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-29T12:32:00.000Z",
+  "build": {
+    "mainSha": "49005f73",
+    "bundle": "C73AJ1Ds",
+    "artifactHash": "e9038fc460bd119c0a24ddbe3db1bf3073aea475db8ae913180ee21134900515"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/49005f73.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/6ea8528f.json --full: run 3 and run 4 both PASS, liveManifest match, checked 914, mismatched 0, missing 0, wrongType 0, errors 0, artifactHash e9038fc4...0515. Runs 1 and 2 (same command) returned FAIL with exactly one file each missing as HTTP 503 (art/portraits/rikku.png, then art/characters/lulu/victory.json), a different file each time; a direct curl of rikku.png returned 200 image/png 1364290 bytes three times and its sha256 equals the manifest's. Treated as transient GitHub Pages throttling under a 914-request burst, disclosed here, not as a differing file."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu, no black-canvas fallback needed), fresh contexts, cache-busting query, real key presses only. Before each step the screen was asserted via window.__pyrefly.screen() and the chapter by the chapter-select heading text. Desktop 1600x900: title, chapter-select, Chapter VII 'Seymour and Anima' (3 ArrowRights from I; heading read back), Enter to party-prep, X cancel back to chapter-select (cancel path), Enter, Enter to the Macalania Temple antechamber cutscene (dialogue lines rendered), held Enter to skip, battle, player command menu (Tidus/Rikku party vs Guado Guardians), command Attack accepted and battle log grew 1 to 8 with frameCount advancing, P pause (screen 'pause'), H hid then restored the panels, Escape resumed to 'battle'. Network showed audio/music/scene-macalania-temple.mp3 (the new scene cue) then boss-seymour-macalania.mp3 and pause.mp3; AudioManager.debug playing=boss-seymour-macalania, prerendered.manifest true, cues 26, sprite decoded, source 'prerendered' (not procedural), the same theme before and after pause. Phone 390x844 hasTouch, real keys: same route (cancel path included), Escape paused and Escape resumed, theme kept. FFX Chapter I Seymour Flux: player turn, Attack accepted, ticks advanced (log 7 to 18), pause by P and by Escape each resume to battle with boss-seymour kept. FFX-2 Chapter IV Bahamut: player turn, ticks (log 9 to 17), P and Escape pause/resume, boss-ffx2-aeon kept. FF7 door: on chapter-select typed L I M I T; after the swirl the battle screen held game 'ff7' with combatants cloud, barret, guard-scorpion; a command was accepted and frameCount advanced. Console errors 0 and 404/4xx responses 0 in every context; 0 html-served-as-image responses.",
+      "reason": "Two harness/behaviour observations, not failures: (1) in every FFX/Chapter VII battle the first Enter pair after the menu appeared was ignored and the second pair was accepted ('actionAttempts 2'); FFX-2 needed 0. Possibly an input lockout right after the held-Enter cutscene skip; not investigated. (2) The FF7 fight's audio.playing read 'chapter-select' (the board theme), no FF7-specific track was fetched; consistent with the recorded 'FF7 music silent' note but not verified against a target."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke on the FFX-2 Chapter IV context: settings.masterVolume changed 0.8 to 0.42 in the save key pyrefly-reprise:save:v1; progress made by real play (chapters.ffx2-bahamut attempts 1, playTimeMs 15632.8, seenCoach [briefing, ffx2-gauge]); page.reload(); after reload masterVolume 0.42, the Bahamut record and seenCoach identical, AudioManager volumes master 0.42. Save shape keys unchanged: version, updatedAt, chapters, unlocked, settings, seenCoach, flags; settings include ffx2Atb 'wait' with ffx2AtbMigrated true.",
+      "reason": "The setting was written by editing localStorage, not through the options UI; the full upgrade matrix (old save through this build's SaveData sfx default + migration) was NOT run."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Exact-artifact manifest verify-live --full against the live URL (914 files, run twice to PASS)",
+      "Chapter VII (Seymour and Anima, Macalania) from the board by real keys to a player turn, desktop 1600x900 and phone 390x844: scene cue scene-macalania-temple.mp3 fetched, antechamber cutscene, skip, battle, command accepted",
+      "Cancel path (X from party-prep back to chapter-select) on Chapter VII, both viewports",
+      "Pause by P and by Escape, resume, H hide/restore, prerendered theme kept, FFX Chapter I, FFX-2 Chapter IV and Chapter VII",
+      "Prerendered music confirmed by network log and AudioManager.debug (source 'prerendered')",
+      "FF7 secret door by LIMIT to the Guard Scorpion fight, command accepted, ticks advancing",
+      "Reload keeps a changed setting and real progress (FFX-2 Chapter IV)",
+      "Console errors and 4xx responses counted for every context: 0 and 0"
+    ],
+    "reused": [],
+    "notTested": [
+      "Full CHK-024 upgrade matrix (old save/settings through the SaveData sfx default and migration)",
+      "Settings changed through the options UI (localStorage edit used)",
+      "Chapters II/III aeon rows, Chapter XII phone taps, FFX-2 gamepad menu, cold-load order and art warm-up timing, text fixes, Chapter IV pause plate visual match (no target comparison), FF7 swirl hold visual, FF7 pause and results",
+      "Physical device, Safari, real controller",
+      "Winning or finishing any chapter; results, retry and return flows",
+      "Changed-area acceptance and milestone quality (deep review round 16 covers the changed area)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 50
+}

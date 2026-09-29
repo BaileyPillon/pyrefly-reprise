@@ -11,3 +11,5 @@ export interface ClearResult {
 
 export declare function clearWithReport(root: string, reportPath: string): ClearResult;
 export declare function applyStoredReports(root: string, mainSha: string): (ClearResult & { report: string })[];
+/** Current-rule and legacy hashes of the manifest stored at critic/artifacts/<sha>.json; `[]` if there is none. */
+export declare function storedArtifactAliases(root: string, mainSha: string): string[];

@@ -19,6 +19,7 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, write
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { artifactHashOf, legacyArtifactHashOf } from '../../tools/artifact-manifest.mjs';
 import { clearWithReport } from '../../tools/critic-clear.mjs';
 import {
   applyReport,
@@ -357,6 +358,36 @@ describe('critic-clear end to end, in a temp project', () => {
     const ledger = JSON.parse(readFileSync(join(root, 'critic', 'ledger.json'), 'utf8'));
     expect(ledger.lastDeep.sha).toBe('abc1234');
     expect(ledger.deploysSinceDeep).toEqual([]);
+  });
+
+  it('a candidate reviewed without .nojekyll settles the deployed build that has it; any other difference is still refused', () => {
+    const f = (c: string) => ({ sha256: c.repeat(64), bytes: 1 });
+    const files = { '.nojekyll': { sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', bytes: 0 }, 'index.html': f('1'), 'assets/index-Bund1e.js': f('2') };
+    const legacy = legacyArtifactHashOf(files);
+    const current = artifactHashOf(files);
+    expect(current).not.toBe(legacy);
+    // The marker recorded the legacy hash (with .nojekyll), as release 29's deploy did.
+    writePendingMarker(join(root, 'critic', 'pending'), { ...marker(), artifactHash: legacy });
+    mkdirSync(join(root, 'critic', 'artifacts'), { recursive: true });
+    writeFileSync(join(root, 'critic', 'artifacts', 'abc1234.json'), JSON.stringify({ artifactHash: current, files }));
+
+    const other = clearWithReport(root, save('abc1234-other.json', report({ review: 'deep', build: { ...BUILD, artifactHash: 'e'.repeat(64) }, coverage: { requiredNotTested: [] } })));
+    expect(other.settled).toEqual([]);
+    expect(other.refused[0]?.why).toMatch(/not the deployed artifact/);
+
+    const live = clearWithReport(root, save('abc1234-live.json', { ...LIVE_OK, build: { ...BUILD, artifactHash: legacy } }));
+    expect(live.settled.map((s) => s.kind)).toEqual(['live']);
+    const deep = clearWithReport(root, save('abc1234-deep.json', report({ review: 'deep', build: { ...BUILD, artifactHash: current }, coverage: { requiredNotTested: [] } })));
+    expect(deep.settled.map((s) => s.kind)).toEqual(['focused', 'deep']);
+    expect(deep.archived).toBe(true);
+  });
+
+  it('without the stored manifest the hashes must match exactly', () => {
+    const { settled, refused } = applyReport(marker(), report({ build: { ...BUILD, artifactHash: 'e'.repeat(64) } }), null, { artifactAliases: [] });
+    expect(settled).toEqual([]);
+    expect(refused[0]?.why).toMatch(/not the deployed artifact/);
+    const aliased = applyReport(marker(), report({ build: { ...BUILD, artifactHash: 'e'.repeat(64) } }), null, { artifactAliases: ['f'.repeat(64), 'e'.repeat(64)] });
+    expect(aliased.settled.map((s) => s.kind)).toEqual(['focused']);
   });
 
   it('a candidate review made before the deploy is kept, not applied to some other build', () => {

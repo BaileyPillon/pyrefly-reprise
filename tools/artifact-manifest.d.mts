@@ -12,7 +12,13 @@ export interface LiveVerification {
 
 export declare const MANIFEST_NAME: string;
 export declare function sha256(buf: Uint8Array | string): string;
+/** Deploy-only markers left out of `artifactHash` (exactly `.nojekyll` at the site root). */
+export declare const DEPLOY_ONLY_FILES: readonly string[];
 export declare function artifactHashOf(files: Record<string, { sha256: string }>): string;
+/** The pre-2026-09-29 rule, which counted `.nojekyll`; only for recognising hashes older deploys recorded. */
+export declare function legacyArtifactHashOf(files: Record<string, { sha256: string }>): string;
+/** Current-rule hash first, then the legacy one when it differs; `[]` without a file list. */
+export declare function artifactHashAliases(manifest: { files?: Record<string, { sha256: string }> } | null | undefined): string[];
 export declare function buildManifest(dir: string, options?: { decode?: boolean }): Promise<ArtifactManifest>;
 export declare function diffManifests(
   previous: { files: Record<string, { sha256: string }> } | null | undefined,
