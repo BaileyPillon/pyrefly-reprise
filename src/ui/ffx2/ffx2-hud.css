@@ -634,7 +634,12 @@
  * `position: sticky` and not a pseudo-element: `.ffx2hud__command` is the
  * scroller, so a `::after` on it would scroll away with the last row. Ink pill,
  * paper glyph, right-aligned under the cascade — the same ink/paper pair the
- * rows use, so it reads as part of the stack and not as a control.
+ * rows use.
+ *
+ * Feedback 2026-09-29: the marks were inert (`pointer-events: none`), so a click on
+ * one fell through and confirmed the row under it. They are controls now: a click
+ * pages the list one way (`CommandMenuScroll.pageFold`). The look is unchanged; the
+ * hit area is larger than the pill (the `::before`) so a finger can find it.
  * `CommandMenu.markFold()` adds each mark only when there is really something
  * past that edge, and scrolls the cursor into view so the selection can never
  * be one of the rows it is warning about.
@@ -650,7 +655,13 @@
   font-size: 7px;
   line-height: 1.1;
   text-align: right;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.ffx2cmd__fold::before {
+  content: '';
+  position: absolute;
+  inset: -4px -12px;
 }
 .ffx2cmd__fold--up {
   top: 0;
