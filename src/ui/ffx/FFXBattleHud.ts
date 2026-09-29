@@ -322,7 +322,7 @@ export class FFXBattleHud implements HudPort {
     this.infoEl.className = 'ig-cutin__info ffx-cmd-info';
     this.infoEl.hidden = true;
     this.infoEl.innerHTML = `<div class="ig-cutin__info-desc" data-role="text"></div>`;
-    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl, this.airship.el);
+    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl, this.commandMenu.pagerEl, this.airship.el);
 
     this.stage.append(
       this.bannerEl,

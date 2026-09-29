@@ -21,6 +21,7 @@ import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
 import { TargetCursor, type TargetEntry } from './TargetCursor.ts';
+import { canPage, pageStartFor, pagerHtml, pagerNeedsStack, selectionAfterPage } from './CommandMenuPaging.ts';
 import { badgeHtml, CURSOR_SVG, escapeHtml, groupHelp, subRowVM, topRowVM, type RowVM } from './commandMenuRows.ts';
 
 export { buildTopRows, computeMenuWindow, resolveTargetMode, switchTargetId } from './CommandMenuLogic.ts';
@@ -106,6 +107,8 @@ export interface CommandMenuOpenOptions {
 export class CommandMenu {
   readonly stackEl: HTMLElement;
   readonly breadcrumbEl: HTMLElement;
+  /** The phone's page buttons (R31, D-286); shown by CSS on a phone only. */
+  readonly pagerEl: HTMLElement;
   readonly targetCursor = new TargetCursor();
 
   private stateValue: 'top' | 'sub' | 'target' = 'top';
@@ -130,6 +133,8 @@ export class CommandMenu {
   }
 
   private set state(value: 'top' | 'sub' | 'target') {
+    // A tapped page survives a look at the targets and back (Esc), nothing else.
+    if (value !== 'target' && this.stateValue !== 'target') this.pageStart = null;
     this.stateValue = value;
     if (value !== 'top') claimCancel();
     else if (this.handlingCancel) releaseCancelAfterPress();
@@ -143,6 +148,10 @@ export class CommandMenu {
   private rows: TopRow[] = [];
   private topIndex = 0;
   private subIndex = 0;
+  /** A page the player tapped to; `null` = the window follows the selection. */
+  private pageStart: number | null = null;
+  /** The window `renderRows` last drew, so a page tap knows where it stands. */
+  private lastWindow = { start: 0, end: 0, total: 0 };
   private preTargetState: 'top' | 'sub' = 'top';
   /**
    * The open second step of a wrapper row (FFX's Doublecast, PR-0125): the
@@ -163,6 +172,10 @@ export class CommandMenu {
     this.breadcrumbEl = document.createElement('div');
     this.breadcrumbEl.className = 'ffx-cmd-breadcrumb';
     this.breadcrumbEl.hidden = true;
+    this.pagerEl = document.createElement('div');
+    this.pagerEl.className = 'ffx-cmd-pager';
+    this.pagerEl.hidden = true;
+    this.pagerEl.addEventListener('click', (e) => this.onPagerClick(e));
     // Clicking a reticle (any candidate, not only the keyboard-highlighted
     // one) selects it and confirms through the exact same path Enter does —
     // mouse and keyboard can never resolve a different Command this way.
@@ -229,6 +242,7 @@ export class CommandMenu {
     this.rows = buildTopRows(opts.commands);
     this.topIndex = firstEnabledIndex(this.rows);
     this.subIndex = 0;
+    this.pageStart = null;
     this.state = 'top';
     this.stackEl.hidden = false;
     this.watcher.attach();
@@ -255,6 +269,7 @@ export class CommandMenu {
     this.endSelection();
     this.stackEl.hidden = true;
     this.breadcrumbEl.hidden = true;
+    this.pagerEl.hidden = true;
     // The decision is over: the stack, its breadcrumb *and* its help line all
     // go with it. Leaving the help line up was how "Open the White Magic
     // menu." stayed on screen through the boss's answering attack
@@ -284,6 +299,7 @@ export class CommandMenu {
     this.state = 'top';
     this.stackEl.hidden = true;
     this.breadcrumbEl.hidden = true;
+    this.pagerEl.hidden = true;
     this.opts?.setHelp('');
     this.resolve = null;
   }
@@ -330,6 +346,7 @@ export class CommandMenu {
     this.suspended = true;
     this.stackEl.hidden = true;
     this.breadcrumbEl.hidden = true;
+    this.pagerEl.hidden = true;
     this.opts?.setHelp('');
   }
 
@@ -423,6 +440,7 @@ export class CommandMenu {
       if (rowEnabled(this.rows[i]!)) break;
     }
     this.topIndex = i;
+    this.pageStart = null;
     this.renderStack();
     this.updateHelpAndPreview();
   }
@@ -491,6 +509,7 @@ export class CommandMenu {
       if (group.items[i]!.enabled) break;
     }
     this.subIndex = i;
+    this.pageStart = null;
     this.renderStack();
     this.updateHelpAndPreview();
   }
@@ -666,7 +685,14 @@ export class CommandMenu {
   }
 
   private renderRows(vms: RowVM[], selectedIndex: number, maxVisible: number): void {
-    const { start, end } = computeMenuWindow(vms.length, selectedIndex, maxVisible);
+    // A page the player tapped to (phone, R31) wins over the centred window until
+    // the next key or a change of list; the keyboard window is otherwise untouched.
+    const total = vms.length;
+    const paged = this.pageStart !== null && total > maxVisible;
+    const { start, end } = paged
+      ? { start: Math.min(this.pageStart!, total - maxVisible), end: Math.min(this.pageStart!, total - maxVisible) + maxVisible }
+      : computeMenuWindow(total, selectedIndex, maxVisible);
+    this.lastWindow = { start, end, total };
     const rows = vms
       .slice(start, end)
       .map((vm, localI) => {
@@ -695,7 +721,47 @@ export class CommandMenu {
     const moreAbove = start > 0 ? '<div class="ffx-cmd-more ffx-cmd-more--up">▲</div>' : '';
     const moreBelow = end < vms.length ? '<div class="ffx-cmd-more ffx-cmd-more--down">▼</div>' : '';
     this.stackEl.innerHTML = moreAbove + rows + moreBelow;
+    this.renderPager({ start, end }, total);
     wirePortraitFallbacks(this.stackEl);
+  }
+
+  /** The list header's page buttons: only while a list is longer than its window. */
+  private renderPager(win: { start: number; end: number }, total: number): void {
+    const long = total > MAX_VISIBLE_ROWS && this.state === 'sub';
+    this.pagerEl.hidden = !long;
+    if (!long) {
+      this.pagerEl.textContent = '';
+      return;
+    }
+    const label = this.breadcrumbEl.textContent ?? '';
+    // Lay out with the widest counter this list can show, decide once whether
+    // the name and the counter fit on one line, then write the real counter.
+    this.pagerEl.removeAttribute('data-stack');
+    this.pagerEl.innerHTML = pagerHtml({ start: total - MAX_VISIBLE_ROWS, end: total }, total, label);
+    const stack = pagerNeedsStack(this.breadcrumbEl, this.pagerEl);
+    if (stack) this.pagerEl.setAttribute('data-stack', '');
+    this.pagerEl.innerHTML = pagerHtml(win, total, label);
+  }
+
+  /**
+   * A tap on a page button (R31, D-286): move the window one page and carry the
+   * selection along so the help slab follows. **Nothing is confirmed** and no
+   * row is chosen here; this never reaches `chooseSub` / `chooseTop`.
+   */
+  private onPagerClick(e: Event): void {
+    const btn = (e.target as HTMLElement | null)?.closest<HTMLButtonElement>('button[data-page]');
+    if (!btn || btn.disabled || !this.resolve || this.state === 'target') return;
+    const dir = btn.dataset['page'] === '-1' ? -1 : 1;
+    const from = { start: this.lastWindow.start, end: this.lastWindow.end };
+    const total = this.lastWindow.total;
+    if (!canPage(from, total, dir)) return;
+    const start = pageStartFor(total, from.start, MAX_VISIBLE_ROWS, dir);
+    const to = { start, end: start + MAX_VISIBLE_ROWS };
+    this.pageStart = start;
+    if (this.state === 'sub') this.subIndex = selectionAfterPage(this.subIndex, from, to);
+    else this.topIndex = selectionAfterPage(this.topIndex, from, to);
+    this.renderStack();
+    this.updateHelpAndPreview();
   }
 
   /**
