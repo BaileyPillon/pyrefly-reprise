@@ -190,6 +190,9 @@ const FFX_CARRY_EXCLUDED: readonly StatusId[] = ['ko', 'critical', 'eject', 'def
  *   (`statuses.ts#applyPoolDoubler`): the carried ceiling is the live, doubled one, so the status and its effect
  *   travel together, and when it comes off in the next link the engine halves back to the base (it used to sit on
  *   the undoubled base, clamp away the HP above it, and then halve the base: 2026-09-29, the card's seed 23).
+ *   Without the status the ceiling is the live one too, never the previous link's build: after a seam that build
+ *   holds the doubled ceiling, and a Tonic lost in link 2 (a KO; the engine has already halved the live pool) used
+ *   to open link 3 doubled with no status (CHECK 3, C3-1: Auron 12,984 against 6,492).
  * - **SOS (`critical`)** is derived from the carried HP, like KO: under half of the ceiling and above 0. The setup
  *   then has nothing to correct, so a fresh engine (a checkpoint retry builds one) opens on any carried state.
  */
@@ -200,8 +203,8 @@ function carriedFfxState(
   const statuses = carriedFfxStatuses(live);
   const pools = {
     ...stats,
-    maxHp: statuses['max-hp-x2'] ? Math.max(stats.maxHp, live.stats.maxHp) : stats.maxHp,
-    maxMp: statuses['max-mp-x2'] ? Math.max(stats.maxMp, live.stats.maxMp) : stats.maxMp,
+    maxHp: statuses['max-hp-x2'] ? Math.max(stats.maxHp, live.stats.maxHp) : live.stats.maxHp,
+    maxMp: statuses['max-mp-x2'] ? Math.max(stats.maxMp, live.stats.maxMp) : live.stats.maxMp,
   };
   const hp = clamp(live.hp, 0, pools.maxHp);
   if (hp > 0 && hp * 2 < pools.maxHp) statuses.critical = { id: 'critical', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };

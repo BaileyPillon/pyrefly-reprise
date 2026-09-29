@@ -3,14 +3,18 @@
  * "I'll go with your recommendations for all"; `docs/target/decisions.json`
  * D-100).
  *
- * **Game case: FFX-2 only in effect** [AGENTS.md rule 14]. The only formations
- * that carry `EnemyGroupDef.restoresPartyOnEntry` are Chapter XI's Sisters and
- * Anima links (the Save Sphere between the platforms of the Road to the
- * Farplane, FA2 = b, a sourced `[conflict]`: GamerGuides (HD) has the spheres,
- * FFExodus (PS2) has none). The code is shared plumbing, but with the flag
- * absent everywhere else no FFX chapter, and no other FFX-2 chapter, ever
- * produces a checkpoint, so every other retry is unchanged: it starts the
- * chapter over from its first formation, as before.
+ * **Game case: FFX-2 in effect, and FFX only behind an OFF switch** [AGENTS.md
+ * rule 14]. The only formations that carry `EnemyGroupDef.restoresPartyOnEntry`
+ * are Chapter XI's Sisters and Anima links (the Save Sphere between the
+ * platforms of the Road to the Farplane, FA2 = b, a sourced `[conflict]`:
+ * GamerGuides (HD) has the spheres, FFExodus (PS2) has none). `checkpointOnEntry`
+ * (no Save Sphere) is set by FFX-2's Trema (TR5 = b) and Shuyin (D-217), and on
+ * FFX's side by Sin's link 3 (`sinGenaisCoreGroup`) **only while
+ * `SIN_LINK3_CHECKPOINT` is on** (`src/data/ffx/enemies/sin-genais-core.ts`;
+ * shipped `false`, an adaptation offered to Bailey, not a sourced rule). With
+ * that switch off no FFX chapter ever produces a checkpoint. The code is shared
+ * plumbing; with both flags absent everywhere else every other retry is
+ * unchanged: it starts the chapter over from its first formation, as before.
  *
  * A checkpoint is the link the party entered through a Save Sphere, with the
  * exact setup it entered on (the party as carried out of the link before,

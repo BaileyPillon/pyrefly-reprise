@@ -805,3 +805,49 @@ Sensible rested link 3 at 37/40 is +1.9 sd from 81 %. That is high but plausible
    is fine while it stays off, but the gap is owed before Bailey turns it on.
 4. **Note (not a defect).** Refilling every item scores below refilling the X-Potions alone (55.5 % against 62.5 % at
    200 seeds; 3 against 5 of 10 here). It is a line effect that is worth one look if the attrition table goes to Bailey.
+
+## CHECK 3 fixes (2026-09-29, after `dafe7fa2`): C3-1, C3-2, C3-3
+
+Game case: **FFX only**. The carry is shared FFX plumbing, and only Sin's `carriesPartyState` links reach it.
+
+**C3-1 (major), fixed in `BattleScreenSetup.carriedFfxState`.** A member or aeon with no `max-hp-x2` now takes the
+**live** ceiling (`live.stats.maxHp`), and one with no `max-mp-x2` takes `live.stats.maxMp`. When the status comes off,
+the engine has already halved that ceiling back to the base. The previous link's build (`m.stats`) is no longer used:
+after a seam that build already holds the doubled pool. A Tonic that is still on keeps the doubled ceiling, as before.
+- Tests were written first, in `tests/unit/chapters/sin-carry-ceiling.test.ts`. The Tonic is drunk by a real command
+  in link 1 and crosses both seams on the real engine.
+- Four cases: a Stamina Tonic kept across both seams, and one lost in link 2; a Mana Tonic kept, and one lost.
+- The KO in link 2 goes through the engine's own `clearStatusesOnKo`. A real hit was not practical: under Defend the
+  Right Fin never reaches Auron in 400 turns, and nothing his allies have targets him for damage.
+- Before the fix, the lost cases failed with 12,984 against 6,492 (HP) and 200 against 100 (MP).
+
+**The 40-seed slice, re-run** (seeds 1 to 40; CHECK 3's own probe, copied to the untracked `tests/unit/zz-c31/`;
+output in `D:/Tools/pyrefly-scratch/overnight-0929/c31/slice.txt`):
+- On the card line, link-3 entries with a doubled ceiling and no status went from **9 to 0**. Entries that still
+  carry the status stayed at 46.
+- Every chain, S-12 off, S-8 NEAR and rested row is **unchanged**, for the sensible line (10 / 18 / 9; 40 / 40 / 37)
+  and for the card line (1 / 19 / 1; 38 / 39 / 35). Naive stays at 0/40.
+- The sensible line's retry rows are unchanged, with the checkpoint off and on.
+- The card line's retries with the checkpoint off moved: within 5 attempts went from 6 to **5**/40, and turns to a
+  win from 1,255 to **1,181**. Within 1 and within 3 are unchanged (1 and 4).
+- The card line's retries with the checkpoint on are unchanged (1 / 4 / 5, 819 turns, link 3 won on 2 of 96 retries).
+- So the leak flattered the card line by about one chain in 40, and only across repeated attempts. The 200-seed card
+  figures in the bench plan were not re-run here.
+
+**C3-2 (minor).** The header of `src/app/screens/BattleChainCheckpoint.ts` now names the case: FFX-2 in effect, and
+FFX only through Sin's link 3 while `SIN_LINK3_CHECKPOINT` is on (it ships `false`).
+
+**C3-3 (minor).** `tests/unit/chapters/sin-checkpoint-flow.test.ts` covers the real flow with the switch ON.
+- The real `GameFlow` runs Chapter XVII. Its battle stand-in makes the calls `BattleScreen` makes: `createEngine`,
+  `runEncounterChain` over the real seams, and on RETRY `resumeSetup`, `resumeAt.group`, `startLink` and `priorWon`.
+- A loss at link 3 retries at link 3: link 3 only, reseeded to 1001, no prep, on the carried HP it was entered on.
+  It also carries the two Fins' results.
+- A loss at a Fin starts over through prep.
+- With the switch OFF, the same link-3 loss starts over at the Left Fin.
+
+**Gates.**
+- `npx tsc --noEmit` is clean, apart from the untracked `zz-*` scratch.
+- The Sin tests, the carry tests (Den of Woe, Seymour Flux) and the chain, checkpoint, flow and restart tests all
+  pass: 21 files, 329 tests, 3 skipped.
+- `orphans.mjs` reports 24, unchanged.
+- The FFX golden hashes (6 seeds, Sin chapters skipped) are **408 of 408 identical** to `sin-S/base.json`.
