@@ -904,7 +904,7 @@
           "build": "The chapter 4 pause painting, full-bleed.",
           "hashes": "pause:plates",
           "delivery": "implemented",
-          "deliveryNote": "Built, and failing its target in critic/rounds/round-04.json @ bc2571c."
+          "deliveryNote": "Was built as a different painting (round 04 PR-0242: the plate was the 'ch4-b v2' render, not this tile). Restored 2026-09-29 (r29-plate, D-257, FFX-2 only): public/art/pause/ch4-ffx2-bahamut.png is now the tile's own painting, byte-identical to D:/Tools/pyrefly-art-backup/20260918-1455/pause/ch4-bahamut.png and pixel-identical to this tile (mean abs diff 0.0); the 2x master is a lanczos resample of it (served-plate diff vs tile 1.39 of 255, webp and resample only). Proven on a production build with a real Esc in Chapter IV at 1600x900 and 390x844: docs/screenshots/r29-plate/. Not yet matched by a review."
         },
         {
           "label": "All hero plates",

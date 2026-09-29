@@ -299,12 +299,16 @@
     "mtime": "2026-09-18T23:10:23.533Z"
    },
    "public/art/pause/ch4-ffx2-bahamut.2x.webp": {
-    "sha256": "ece2de6d0c58e6686ea65d6fc20ab299b589909ae8d25ba02a7e6fa0d21211f7",
-    "mtime": "2026-09-18T23:10:31.604Z"
+    "sha256": "1850e6deda694a9b73b8361e400132ae18d12f252ee8e8588919998217ec44c3",
+    "mtime": "2026-09-29T03:48:55.112Z",
+    "previousSha256": "ece2de6d0c58e6686ea65d6fc20ab299b589909ae8d25ba02a7e6fa0d21211f7",
+    "restoredBy": "r29-plate 2026-09-29, D-257: the painting on the approved tile docs/screenshots/concept/pause-ch4.png (byte-identical to D:/Tools/pyrefly-art-backup/20260918-1455/pause/ch4-bahamut.png for the 1x; the 2x is a lanczos resample of it)"
    },
    "public/art/pause/ch4-ffx2-bahamut.png": {
-    "sha256": "4f5b14994f6ebb42eadec4c2f2c5f7f21d60b5db0a36d23bd3834d22c2b61494",
-    "mtime": "2026-09-18T23:10:31.609Z"
+    "sha256": "79047d2f7c0294d9ec1bd21733b4d07d97378811c8d9fc4c6be8c6d2ed6e072e",
+    "mtime": "2026-09-29T03:48:55.105Z",
+    "previousSha256": "4f5b14994f6ebb42eadec4c2f2c5f7f21d60b5db0a36d23bd3834d22c2b61494",
+    "restoredBy": "r29-plate 2026-09-29, D-257: the painting on the approved tile docs/screenshots/concept/pause-ch4.png (byte-identical to D:/Tools/pyrefly-art-backup/20260918-1455/pause/ch4-bahamut.png for the 1x; the 2x is a lanczos resample of it)"
    },
    "public/art/pause/ch5-ffx2-vegnagun-shuyin.2x.webp": {
     "sha256": "5680f3a388fc05c4de532a3594bd8e19faf245b84f3fdc9ce463273c0e49205e",
