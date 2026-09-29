@@ -334,6 +334,8 @@
 }
 .ffx-cmd-more--up { bottom: calc(100% + 3.56px); }
 .ffx-cmd-more--down { top: calc(100% + 3.56px); }
+/* R31 (FFX only): the phone page buttons (phone-hud.css) never show on a desktop. */
+.ffx-cmd-pager { display: none; }
 .ffxhud .ig-cmd-stack--shake,
 .ffx-cmd-stack--shake { animation: ffx-shake 0.2s linear; }
 @keyframes ffx-shake {

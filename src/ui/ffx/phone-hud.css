@@ -299,3 +299,69 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-info {
 html[data-phone-battle='ffx'] .ffxhud[data-phone-step='target'] .ffx-cmd-area {
   visibility: hidden;
 }
+/* R31 (D-286, PR-0218; option B1 of docs/concepts/r29-options): a long list's
+   ▲ / ▼ are two real 44 px page buttons in the list header, with an "N-M OF T"
+   counter. They sit on the breadcrumb's line, between the list name and GUIDE.
+   FFX only. Off a phone the inert marks stay and the pager is not shown. */
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager:not([hidden]) {
+  position: absolute;
+  right: 89px;
+  bottom: calc(100% + 8px);
+  height: 44px;
+  z-index: 21;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  pointer-events: auto;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-area:has(.ffx-cmd-pager:not([hidden])) .ffx-cmd-more {
+  display: none;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager__count {
+  margin-right: 10px;
+  font: 700 14px/1 var(--ig-font-display);
+  letter-spacing: 0.06em;
+  color: #f4f1e8;
+  white-space: nowrap;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager__btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--ig-gold, #e3b94a);
+  background: #0b0a12;
+  border: 2px solid var(--ig-gold, #e3b94a);
+  border-radius: 0;
+  touch-action: manipulation;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager__btn:disabled {
+  color: #4a4658;
+  border-color: #4a4658;
+}
+/* The name is too long to sit beside the counter ("BLACK MAGIC"): the counter
+   drops to a second line under it, and the buttons stay where they are. */
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager[data-stack]:not([hidden]) {
+  left: 0;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager[data-stack] {
+  pointer-events: none;
+  justify-content: flex-end;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager[data-stack] .ffx-cmd-pager__btn {
+  pointer-events: auto;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager[data-stack] .ffx-cmd-pager__count {
+  position: absolute;
+  left: 15px;
+  bottom: 4px;
+  margin: 0;
+  font-size: 14px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-area:has(.ffx-cmd-pager[data-stack]:not([hidden])) .ffx-cmd-breadcrumb {
+  align-items: flex-start;
+  padding-top: 6px;
+}
