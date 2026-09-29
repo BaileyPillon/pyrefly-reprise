@@ -43,6 +43,7 @@ import { pauseKeyIntent } from './pause/keys.ts';
 import type { PauseScreenOptions } from './pause/options.ts';
 export type { PauseScreenOptions } from './pause/options.ts';
 import '../../ui/common/pause-screen.css';
+import '../../ui/common/pause-chip.css'; // PR-0238: the battle's PAUSE chip
 
 /** How far the pause menu ducks the music under itself. */
 const PAUSE_DUCK = 0.35;
