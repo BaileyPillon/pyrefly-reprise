@@ -82,7 +82,8 @@ export class AirshipOrderWidget {
   private index = 0;
   private rows: AirshipOrderRow[] = [];
   private commands: AvailableCommand[] = [];
-  private volleysLeft = 0;
+  /** `null` in a fight where Cid fires nothing (the Sin Fins, S-19): no pip strip and no volley in the cost. */
+  private volleysLeft: number | null = 0;
   private resolve: ((c: Command) => void) | null = null;
   private onCancel: (() => void) | null = null;
   private readonly watcher = new RawInputWatcher((b) => this.onButton(b));
@@ -108,12 +109,15 @@ export class AirshipOrderWidget {
    * (`kind: 'trigger'`, `id: 'pull-back' | 'close-in'`) — this widget never
    * invents a command, only presents the two legal ones with the copy and
    * cost preview the raw menu row does not carry. `volleysLeft` drives the
-   * three-pip readout (`state.flags['airship.missilesLeft']`).
+   * three-pip readout (`state.flags['airship.missilesLeft']`); `null` draws no
+   * pip strip and leaves the volley out of the cost, for a fight in which Cid
+   * fires nothing (the Sin Fins, research/ffx-sin.md §2.5 S-19; plan REVIEW
+   * must-change 4). Evrae always passes a number, so its widget is unchanged.
    */
   open(
     commands: AvailableCommand[],
     range: 'near' | 'far',
-    volleysLeft: number,
+    volleysLeft: number | null,
     opts: AirshipOrderOpenOptions = {},
   ): Promise<Command> {
     this.commands = commands.filter((c) => c.command.kind === 'trigger');
@@ -213,9 +217,10 @@ export class AirshipOrderWidget {
    * rack (`evrae-rules.ts#applyQueuedOrder`), so the pips count the rack.
    */
   private render(): void {
-    const pips = Array.from(
+    const volleys = this.volleysLeft;
+    const pips = volleys === null ? '' : Array.from(
       { length: 3 },
-      (_, i) => `<i class="${i < this.volleysLeft ? 'ffx-airship-order__pip--live' : 'ffx-airship-order__pip--spent'}"></i>`,
+      (_, i) => `<i class="${i < volleys ? 'ffx-airship-order__pip--live' : 'ffx-airship-order__pip--spent'}"></i>`,
     ).join('');
     const rows = this.rows
       .map((r, i) => {
@@ -230,11 +235,13 @@ export class AirshipOrderWidget {
       })
       .join('');
     const live = this.rows[this.index];
+    // No rack (the Sin Fins, S-19): the cost is the two turns, and nothing is left to count.
+    const cost = volleys === null ? "Turn now &middot; Cid's next turn" : "Turn now &middot; Cid's next turn &middot; 1 volley";
+    const left = volleys === null ? '' : `<span class="ffx-airship-order__left"><span class="ffx-airship-order__pips">${pips}</span>Volleys left ${volleys}</span>`;
     const slab =
       live && !live.disabled
         ? `<div class="ffx-airship-order__slab"><span class="ffx-airship-order__slab-title">This order costs</span>` +
-          `<span class="ffx-airship-order__cost">Turn now &middot; Cid's next turn &middot; 1 volley</span>` +
-          `<span class="ffx-airship-order__left"><span class="ffx-airship-order__pips">${pips}</span>Volleys left ${this.volleysLeft}</span></div>`
+          `<span class="ffx-airship-order__cost">${cost}</span>${left}</div>`
         : '';
     this.el.innerHTML = rows + slab;
   }
