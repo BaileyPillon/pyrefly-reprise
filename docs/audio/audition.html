@@ -77,6 +77,102 @@
 <h1>Pyrefly Reprise — the score</h1>
 <p class="sub">Twenty-five cues and 134 effects, rendered from sampled instruments and mixed in one hall. Nothing here quotes anything.</p>
 
+<!-- remaster-2026-09-29:begin — see docs/audio/remaster-2026-09-29/README.md (tools/audio/remaster.py). -->
+<h2 style="margin-top:0">Tinny and hollow: the fix (2026-09-29)</h2>
+<p class="group-note">
+  <strong>You said</strong> the three Chapter VII sketches sound &ldquo;kind of tinny and hollow&rdquo; and &ldquo;close to good&rdquo;. <strong>Why, measured:</strong>
+  <em>hollow</em> &mdash; the AI restyle rebuilds the left and right channels&rsquo; phase separately, so the two sides carry the same notes but
+  do not line up (left/right correlation about 0.05; a well-mixed recording sits around 0.4 to 0.8). On a phone, a laptop or anywhere off centre the
+  two sides partly cancel, and what is left swirls. For these three sketches the recording fed to the AI was already that way.
+  <em>tinny</em> &mdash; most of the energy sits between 250 Hz and 2.5 kHz, with a thin floor and almost nothing above 6 kHz: a small-box, telephone shape.
+  It is not the MP3 (the lossless files measure the same).
+  <strong>The fix</strong> is a remaster chain applied after the AI, in three strengths. Each clip below plays the original you heard, then R1, R2, R3.
+  All four are at the same loudness (&minus;16 LUFS). <strong>Nothing in the game has changed.</strong> <strong>I cannot hear any of this</strong>; every number is a measurement.
+</p>
+<p class="group-note">
+  <strong>R1 &ldquo;focus&rdquo;</strong>: the two channels lined up (coherent), the bass centred, the low end restored, the boxy midrange eased.
+  <strong>R2 &ldquo;hall&rdquo;</strong>: R1 in a concert hall (a reverb built from scratch here, 2.4 s, 12 dB under the music).
+  <strong>R3 &ldquo;air&rdquo;</strong>: R2 with the top end rebuilt above 6 kHz (a harmonic exciter), so it is less dull.
+</p>
+<article class="cue">
+  <h4>Chapter VII sketch A, &quot;The Frozen Temple&quot;</h4>
+  <p class="blurb">FFX. One-shot sketch, 1:05.</p>
+  <p class="blurb" style="margin:8px 0 2px">Original (what you heard): left/right correlation 0.08, the side 0.7 dB under the centre, a mono speaker loses 2.7 dB.</p>
+  <audio controls preload="none" src="../../public/audio/candidates/direction-b-sketches-2026-09-27/macalania-scene-a-frozen-temple-B.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R1 focus: channels lined up (correlation 0.74, side 8.3 dB under, mono loses 0.6 dB); 20&ndash;80 Hz +2.7 dB, 80&ndash;250 Hz +2.8 dB, 250&ndash;800 Hz +0.0 dB, 800 Hz&ndash;2.5 kHz &minus;2.2 dB.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-a-R1-focus.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R2 hall: R1 plus the hall, 12 dB under the music; same balance and width as R1 (correlation 0.74).</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-a-R2-hall.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R3 air: R2 plus air: 6&ndash;12 kHz +9.8 dB and 12&ndash;16 kHz +16.7 dB against the original.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-a-R3-air.mp3"></audio>
+</article>
+<article class="cue">
+  <h4>Chapter VII sketch B, &quot;The Wedding Proposal&quot;</h4>
+  <p class="blurb">FFX. One-shot sketch, 1:04.</p>
+  <p class="blurb" style="margin:8px 0 2px">Original (what you heard): left/right correlation 0.07, the side 0.6 dB under the centre, a mono speaker loses 2.7 dB.</p>
+  <audio controls preload="none" src="../../public/audio/candidates/direction-b-sketches-2026-09-27/macalania-scene-b-wedding-proposal-B.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R1 focus: channels lined up (correlation 0.78, side 8.7 dB under, mono loses 0.6 dB); 20&ndash;80 Hz +2.8 dB, 80&ndash;250 Hz +4.6 dB, 250&ndash;800 Hz &minus;1.1 dB, 800 Hz&ndash;2.5 kHz &minus;1.2 dB.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-b-R1-focus.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R2 hall: R1 plus the hall, 12 dB under the music; same balance and width as R1 (correlation 0.79).</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-b-R2-hall.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R3 air: R2 plus air: 6&ndash;12 kHz +10.8 dB and 12&ndash;16 kHz +12.2 dB against the original.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-b-R3-air.mp3"></audio>
+</article>
+<article class="cue">
+  <h4>Chapter VII sketch C, &quot;Crystal and Pyreflies&quot;</h4>
+  <p class="blurb">FFX. One-shot sketch, 1:05.</p>
+  <p class="blurb" style="margin:8px 0 2px">Original (what you heard): left/right correlation 0.05, the side 0.4 dB under the centre, a mono speaker loses 2.8 dB.</p>
+  <audio controls preload="none" src="../../public/audio/candidates/direction-b-sketches-2026-09-27/macalania-scene-c-crystal-and-pyreflies-B.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R1 focus: channels lined up (correlation 0.75, side 8.1 dB under, mono loses 0.6 dB); 20&ndash;80 Hz +6.6 dB, 80&ndash;250 Hz +5.4 dB, 250&ndash;800 Hz &minus;0.8 dB, 800 Hz&ndash;2.5 kHz &minus;1.3 dB.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-c-R1-focus.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R2 hall: R1 plus the hall, 12 dB under the music; same balance and width as R1 (correlation 0.75).</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-c-R2-hall.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R3 air: R2 plus air: 6&ndash;12 kHz +13.5 dB and 12&ndash;16 kHz +19.4 dB against the original.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/macalania-c-R3-air.mp3"></audio>
+</article>
+<article class="cue">
+  <h4>boss-seymour-macalania (Direction B)</h4>
+  <p class="blurb">FFX. The Chapter VII battle cue (also X). Loops 0:07.6 to 2:01.9, same points as the candidate.</p>
+  <p class="blurb" style="margin:8px 0 2px">Original (what you heard): left/right correlation 0.04, the side 0.3 dB under the centre, a mono speaker loses 2.9 dB.</p>
+  <audio controls preload="none" src="../../public/audio/candidates/direction-b-2026-09-27/boss-seymour-macalania.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R1 focus: channels lined up (correlation 0.78, side 8.2 dB under, mono loses 0.6 dB); 20&ndash;80 Hz &minus;0.5 dB, 80&ndash;250 Hz +1.2 dB, 250&ndash;800 Hz &minus;0.5 dB, 800 Hz&ndash;2.5 kHz &minus;0.3 dB.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/boss-seymour-macalania-R1-focus.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R2 hall: R1 plus the hall, 12 dB under the music; same balance and width as R1 (correlation 0.79).</p>
+  <audio controls preload="none" src="remaster-2026-09-29/boss-seymour-macalania-R2-hall.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R3 air: R2 plus air: 6&ndash;12 kHz +6.0 dB and 12&ndash;16 kHz +10.0 dB against the original.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/boss-seymour-macalania-R3-air.mp3"></audio>
+</article>
+<article class="cue">
+  <h4>scene-gagazet (Direction B)</h4>
+  <p class="blurb">FFX. Scene cue for chapters I, VII, IX, X and XIV. Loops 0:40.0 to 1:43.3, same points as the candidate.</p>
+  <p class="blurb" style="margin:8px 0 2px">Original (what you heard): left/right correlation 0.01, the side 0.1 dB under the centre, a mono speaker loses 3.0 dB.</p>
+  <audio controls preload="none" src="../../public/audio/candidates/direction-b-2026-09-27/scene-gagazet.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R1 focus: channels lined up (correlation 0.73, side 7.3 dB under, mono loses 0.7 dB); 20&ndash;80 Hz &minus;1.7 dB, 80&ndash;250 Hz &minus;0.2 dB, 250&ndash;800 Hz +1.0 dB, 800 Hz&ndash;2.5 kHz +2.7 dB.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/scene-gagazet-R1-focus.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R2 hall: R1 plus the hall, 12 dB under the music; same balance and width as R1 (correlation 0.74).</p>
+  <audio controls preload="none" src="remaster-2026-09-29/scene-gagazet-R2-hall.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">R3 air: R2 plus air: 6&ndash;12 kHz +7.5 dB and 12&ndash;16 kHz +8.5 dB against the original.</p>
+  <audio controls preload="none" src="remaster-2026-09-29/scene-gagazet-R3-air.mp3"></audio>
+</article>
+<div class="check">
+  <p style="margin:0 0 6px"><strong>Two questions.</strong> (For Chapter VII you said on 28 September you would go with the driver&rsquo;s pick once these exist; your ear overrides it any time.)</p>
+  <p class="score"><label>1. Which letter for Chapter VII: A, B or C <input type="text" size="4" data-remaster="Chapter VII letter"></label></p>
+  <p class="score"><label>2. Which remaster for the whole pack: R1, R2, R3 or none <input type="text" size="6" data-remaster="Remaster for the pack"></label></p>
+  <p class="score"><label>Anything still tinny or hollow? <input type="text" size="30" style="width:16em" data-remaster="Still tinny or hollow"></label></p>
+  <p><button type="button" id="remaster-collect" style="font:inherit;padding:8px 16px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Collect my answers</button></p>
+  <textarea id="remaster-out" rows="4" style="width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:10px" readonly placeholder="Your answers appear here."></textarea>
+</div>
+<script>
+  document.getElementById('remaster-collect').addEventListener('click', function () {
+    var lines = ['Tinny and hollow: the fix (2026-09-29)'];
+    document.querySelectorAll('input[data-remaster]').forEach(function (input) {
+      lines.push(input.getAttribute('data-remaster') + ': ' + (input.value.trim() || '(blank)'));
+    });
+    document.getElementById('remaster-out').value = lines.join(String.fromCharCode(10));
+  });
+</script>
+<!-- remaster-2026-09-29:end -->
+
 <!-- direction-b:begin — generated by tools/audio/modern/audition-b-score.mjs from docs/audio/direction-b-2026-09-27.json. Re-run it instead of editing by hand. -->
 <h2 style="margin-top:0">Direction B, the whole score (new, 27 September)</h2>
 <p class="group-note">

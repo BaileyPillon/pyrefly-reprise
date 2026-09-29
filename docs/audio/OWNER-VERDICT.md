@@ -16,6 +16,35 @@ row.
 
 ---
 
+## 2026-09-28 ~22:30 EDT — the three Chapter VII scene sketches in Direction B: "tinny and hollow", "close to good"
+
+Bailey, in chat, after hearing the three Macalania scene sketches restyled in Direction B
+(`public/audio/candidates/direction-b-sketches-2026-09-27/macalania-scene-{a-frozen-temple,b-wedding-proposal,c-crystal-and-pyreflies}-B.mp3`),
+verbatim:
+
+> I'm not sure, they all sound pretty good and less snes music BUT they sound kind of tinny and hollow? Why? It almost sounds good. It's close to good. That goes for all 3 samples, a, b, and c.
+
+**This is an ear verdict** on all three sketches, with no letter picked.
+
+- **Liked:** all three "sound pretty good"; "less snes music"; "close to good" / "almost sounds good".
+- **Disliked:** "tinny and hollow", for all three (a, b and c).
+- **Must remain:** nothing named.
+- **Inferred (the agent's guess, not Bailey's words; ask before building on it):** keep the Direction B sound that reads as less SNES.
+- **Must change:** the tinny, hollow sound.
+- **Undecided:** which letter (A, B or C) for Chapter VII; whether a remaster (R1, R2, R3 or none) applies to the whole pack.
+
+Answered with measurement, not by ear (`docs/audio/remaster-2026-09-29/README.md`): hollow = the
+AI decode leaves left and right with unrelated phase (L/R correlation 0.04 to 0.08, the side as
+loud as the centre; a mono sum loses about 3 dB and swirls), and the sketches' render was already
+that way before the model; tinny = energy piled into 250 Hz to 2.5 kHz with a thin floor and
+almost nothing above 6 kHz, inherited from the render and tilted further by the model. Three
+remaster options R1 "focus", R2 "hall", R3 "air" (`tools/audio/remaster.py`) are in
+`docs/audio/audition.html`, section "Tinny and hollow: the fix (2026-09-29)", for the three
+sketches plus `boss-seymour-macalania` and `scene-gagazet`. Nothing shipped changed. Later the
+same evening (~22:45 EDT) Bailey delegated the Chapter VII letter and remaster pick to the driver
+(D-278 in `docs/target/decisions.json`); that pick, whatever it is, is the driver's and not an ear
+verdict.
+
 ## 2026-09-27 ~00:50 EDT — the direction pack (D:/Tools/pyrefly-scratch/audio-pack-0926/): Direction B is the only one that sounds good
 
 Bailey, in chat, answering the driver's question about tracks 5 to 8 of the

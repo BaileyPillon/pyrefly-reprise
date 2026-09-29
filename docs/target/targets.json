@@ -1246,7 +1246,32 @@
           "state": "approved",
           "empty": "Listen, don't look",
           "note": "Approved as the direction: the themes and the sampled-orchestra palette stay. Bailey’s verdict by ear on 19 Sep 2026 was “Right direction, keep refining” (docs/audio/OWNER-VERDICT.md), so refinement continues. No score out of 10 is on record, so the critic’s audio category stays unverified for listening quality. Listen at docs/audio/audition.html.",
-          "approved": "Bailey, 19 Sep 2026"
+          "approved": "Bailey, 19 Sep 2026",
+          "reaction": {
+            "date": "2026-09-28",
+            "words": "I'm not sure, they all sound pretty good and less snes music BUT they sound kind of tinny and hollow? Why? It almost sounds good. It's close to good. That goes for all 3 samples, a, b, and c.",
+            "how": "Bailey, ~22:30 EDT, by ear, after the three Chapter VII (Macalania) scene sketches in Direction B (public/audio/candidates/direction-b-sketches-2026-09-27/macalania-scene-{a,b,c}-*-B.mp3). Recorded verbatim in docs/audio/OWNER-VERDICT.md. Answered by measurement and three remaster options (R1 focus, R2 hall, R3 air) in docs/audio/remaster-2026-09-29/README.md and docs/audio/audition.html section 'Tinny and hollow: the fix (2026-09-29)'; nothing shipped changed. At ~22:45 EDT Bailey delegated the Chapter VII letter and remaster pick to the driver (D-278).",
+            "liked": [
+              "all three sketches 'sound pretty good'",
+              "'less snes music'",
+              "'close to good' / 'almost sounds good'"
+            ],
+            "disliked": [
+              "'tinny and hollow', all three samples a, b and c"
+            ],
+            "mustRemain": [],
+            "mustChange": [
+              "the tinny, hollow sound"
+            ],
+            "undecided": [
+              "which letter (A, B or C) for Chapter VII (delegated to the driver under D-278; the driver's pick is not an ear verdict)",
+              "which remaster (R1, R2, R3 or none) for the whole Direction B pack"
+            ],
+            "inferred": [
+              "keep the Direction B sound that reads as less SNES (the agent's reading of 'less snes music', not a requirement Bailey named)",
+              "the measured causes (L/R phase decorrelation from the AI decode and the render's hall; a midrange-heavy spectrum with a thin floor and little above 6 kHz) are what Bailey hears as tinny and hollow: a measurement-based hypothesis only, agents cannot hear (rule 13)"
+            ]
+          }
         }
       ]
     },
