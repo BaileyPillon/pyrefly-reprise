@@ -1014,3 +1014,123 @@ FFX only through Sin's link 3 while `SIN_LINK3_CHECKPOINT` is on (it ships `fals
   pass: 21 files, 329 tests, 3 skipped.
 - `orphans.mjs` reports 24, unchanged.
 - The FFX golden hashes (6 seeds, Sin chapters skipped) are **408 of 408 identical** to `sin-S/base.json`.
+
+## CHECK 4 (independent, 2026-09-29 ~09:15 to 10:45 EDT; did not build any of it)
+
+Checked `chapter-sin` at `cc069e50` (D:/pyrefly-ch-sin) and `songstress-0929` at `87d83c45` (D:/pyrefly-aeon-hp; its
+own CHECK section is in `docs/concepts/songstress-2026-09-29/README.md`), against `origin/main` `8dce5e75`. Game case:
+**FFX only** for Sin. Scratch, outputs and frames are in `D:/Tools/pyrefly-scratch/overnight-0929/check4/`
+(not committed). Its `base`, `main`, `merged`, `prefix`, `basebuild`, `mainbuild`, `mergedbuild` and `e2e-sin` folders
+each hold a `node_modules` junction, and the three `*build` folders also hold a `public/art` junction. **Unlink every
+junction before deleting anything there.** Servers ran on 8640 to 8644 and were stopped by PID.
+
+**Verdict: no blockers.** Both chapters are listed and playable by real keys at both sizes. The picked art loads and
+shows as INSTALL.md says. The countdown HUD appears only in Sin. Loss and RETRY work in both chapters. Old saves keep
+their progress. The C3-1 fix holds. No other chapter changed. One major finding: on the phone at NEAR, the Fin is out
+of frame. Five minor findings.
+
+**Gates (chapter-sin).**
+- `tsc --noEmit`: clean apart from the untracked `tests/unit/zz-*`.
+- `tsc -p tsconfig.e2e.json`: clean.
+- 32 vitest files pass, 555 tests, 3 skipped. They cover every `tests/unit/chapters/sin-*`, den-of-woe-carry, the
+  release-28 / Ixion / upgrade save fixtures, chapter-meta*, the FFX-2 ATB golden, the FF7 golden, the checkpoint /
+  flow / restart suites, approved-hashes, the three board suites and evrae-telegraph.
+- `orphans.mjs`: 24, none of them Sin.
+
+**Other chapters, by the engine** (`tests/unit/tools/ffx-chapter-hashes.test.ts`, 6 seeds, Sin skipped, 408 keys):
+- The branch against its merge base `c9c1c295` (my own run of both): **408/408 identical**.
+- `origin/main` against main + chapter-sin (the `git merge-tree` result `02a4dc61`, conflicts only in docs and tests):
+  **408/408 identical**.
+- The tool is sensitive: base against main differs on 191 keys (main's own D-274 aeon HP).
+- The FFX-2 ATB golden passes on the branch and on the merged tree.
+
+**Other chapters, by the browser.** Chapter VIII (Evrae) staging was measured by `targeting().rects` at 8 menus by
+Enter only, seed 5, at 1600x900 and 390x844. It is identical within 2 px on the merge-base build, the branch build and
+the merged build.
+- `sin-fins-core` stages identically on the branch and merged builds.
+- Note, not a branch issue: the live page (the same bundle `C73AJ1Ds` as a local build of main) frames Evrae about
+  217 px further right at 1600, with a different turn order and a styled PAUSE chip. The local 127.0.0.1 preview and
+  the live site differ in some way that was not traced.
+
+**The C3-1 carry fix, independently** (`tests/unit/zz-check4/c4-carry-invariant.test.ts`, untracked):
+- Chapter XVII was played under a random policy biased to Tonics, Phoenix Downs and Potions (3 of each Tonic added to
+  the bag), with both seams through `setupForNextLink`, 120 seeds.
+- At every seam, every member's build and live ceiling must equal the base, or 2x the base while it carries
+  `max-hp-x2` / `max-mp-x2`.
+- **HEAD: 2,880 checks, 661 with a Tonic status, 0 violations.**
+- 39 natural cases of a Tonic on at the end of link 1 and off at the end of link 2: 33 by a real KO, 6 while alive.
+- **The same probe on `41c003fd` (before the fix): 20 violations.** For example, seed 116 Auron opens link 3 at
+  12,984 / 200 with no status, against 6,492 / 100.
+
+**Production build by real keys** (`vite build` of the branch, `vite preview` on 8640, headless GPU Chromium):
+- **The builder's `ffx-sin.spec.ts`**, re-run from a scratch copy so no tracked frame was overwritten: **4/4** in
+  5.4 min.
+- **My own tour** (`e2e-sin/c4-tour.mjs`), at 1600x900 and at 390x844, keys only from the title. The board has 18
+  cards and reads "0 of 17", and XVII and XVIII come after XVI. From each card: prep, the scene skipped (XVII) or
+  pressed through (XVIII), then the first command by Enter.
+- **XVII:** 38 menus by keys (30 at 1600, 8 at 390). At every open menu the Fin plate's range matched
+  `airship.range`.
+- The debug `intended` line then watched links I to III. Each Fin appeared at FAR, NEAR, NEAR-charged and
+  FAR-charged. In link III, Genais showed in and out of its shell and the Core at inactive, charging and ready.
+- Every Sin painting, sidecar, plate, pause plate and chip answered **200**. There were no responses of 400 or above,
+  no console errors and no page errors in any run.
+- The run fell in link III ("FELL"). RETRY by Enter went back to the Left Fin at 65,000 HP, at FAR, with no Right Fin,
+  and the HUD was back.
+- **XVIII, lost by keys alone** (28 player turns at each size, seed 1). The clock read 13 at the first menu. Every one
+  of the 28 open menus showed `.ffx-sinclock__num` equal to `sin.turnsLeft` (13 down to 1), and the mouth went
+  through stages 0 to 4 (all five `stage-<n>` paintings answered 200).
+- Giga-Graviton's loss came at turn 42, and RETRY by Enter went back to 13 turns with the mouth shut.
+- **The countdown and fin HUD elsewhere:** no `.ffx-sinhud`, `.ffx-sinclock` or `.ffx-sinfin` element, visible or not,
+  in Evrae (VIII), Seymour Flux, Yojimbo or LeBlanc (FFX-2 VI).
+- **Old saves:**
+  - The release-28 fixture (`tests/fixtures/saves/release-28-main.json`) and a save I made myself on a local build of
+    main at release 29 (bundle `C73AJ1Ds`), with Seymour Flux and Evrae cleared by keys.
+  - Each was loaded into a fresh profile on the branch build and on the merged build.
+  - Progress kept. The r28 save shows 3 cleared, "3 of 17" on the branch and "3 of 18" merged. The r29 save shows 2
+    cleared. The Sin chapters are unplayed.
+  - The stored save is byte-for-byte unchanged after loading (0 differences).
+- **verify-approved:**
+  - Main: 0 mismatched, 0 missing.
+  - Each merged tree's `approved-hashes.json` against the installed art: 0 / 0. That is 276 files with the Sin set
+    and 258 with the Songstress set.
+
+### Findings
+
+1. **Major (a new feature, desktop fine; FFX Sin only): on the phone (390x844) the Fin is out of frame at NEAR.**
+   - At NEAR the Left Fin's projected rect is x 254 to 670 in a 390 px frame. The painted arm is on its right side, so
+     the screen shows sky and at most a claw tip at the top right. The Right Fin at NEAR shows as a sliver at the right
+     edge.
+   - The tip meanwhile reads "Attack → Left Fin". Frames: `check4/stage-merged/stage-390x844-stage-sin-fins-core-3.jpg`
+     and `check4/tour/xvii-390x844-04-L1-near.jpg`.
+   - NEAR is most of links I and II. The handoff disclosed only the FAR body at 390 (FAR does read, about 94 % in
+     frame).
+   - Not graded a blocker: the painting is the right one and it loads, and the plate, the chip and the tip name the
+     foe. But on a phone the foe is not on screen. A per-range phone framing of the Fin is owed before Bailey judges it.
+2. **Minor (UX): the Orders row can open onto two disabled rows.** At FAR with "Close in" already ordered, Tidus's
+   ORDERS opens "Pull back: Already far" (lit) and "Close in: Ordered". Enter does nothing there; Escape backs out
+   (tested, no soft-lock). It is shared airship plumbing, so it may affect Evrae as well; Evrae was not checked.
+3. **Minor (a reporting error, harmless after the merge): verify-approved in the worktrees.**
+   - `ROOT=D:/pyrefly-ch-sin` (and `D:/pyrefly-aeon-hp`) now reports **2 mismatched**: `pause/ch4-ffx2-bahamut.png`
+     and `.2x.webp`.
+   - Main restored that plate at 23:48 on 09-28 (`f3e9fa61`), which neither branch has. Both install notes said
+     0 / 0 for the worktree. Main's hash wins in both merges (0 / 0 above).
+4. **Minor (the merge; known as handoff item 2).**
+   - `git merge-tree origin/main chapter-sin` conflicts in 7 files: `docs/CONTRACT-CHANGES.md`,
+     `docs/target/decisions.json` (the D-274 line, and D-279 to D-281 plus this branch's D-282),
+     `tests/e2e/ffx2-ixion.spec.ts`, `tests/unit/chapter-select-c.test.ts`, `frontend-chapter-grid.test.ts`,
+     `frontend-chapter-select-screen.test.ts` and `save-ixion-listed-fixture.test.ts`.
+   - `songstress-0929` merges into main cleanly. Once it is in, chapter-sin also conflicts in
+     `docs/target/approved-hashes.json` (both append a set) and `decisions.json` (D-281).
+   - On the merged tree, `save-sin-listed-fixture.test.ts` fails with `[3, 18]` against `[3, 17]`: Chapter VII is
+     playable on main, so the board reads "N of 18". `ffx-sin.spec.ts`'s `[0, 17]` and "1 of 17" need the same
+     change. The other 24 Sin and board files pass on the merged tree.
+5. **Minor (confirmed, already disclosed): on the phone in XVIII the countdown panel sits across the stage and hides
+   the party** (`check4/tour/xviii-390x844-k13-left9-mouth1.jpg`).
+6. **Minor (rule 7): the new `tests/unit/chapters/sin-fins-engine.test.ts` has 483 lines.** The source files over 400
+   lines that the branch touches (types.ts, engine.ts, setup.ts, simulate.ts, FFXBattleHud.ts) are no longer than at
+   the merge base.
+
+Note, not a defect: under autoplay at fast speed the Fin plate can trail the engine's flags by one presentation step,
+for example charged in the engine but the plate still reading "NEAR" while the dialogue plays. At every open menu, 94
+checks across both chapters and both sizes, the plate and the clock matched the engine. The "13 while the flag says
+12" frame in the art-install notes is the same effect.
