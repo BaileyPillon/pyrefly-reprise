@@ -317,7 +317,8 @@ export class ResultsScreen extends Screen {
     const figure = wedgeFigureId(this.victory, this.quip, leaderId(chapter));
     if (!figure) return '';
     if (this.victory) return victoryHeroHtml(wedgePortraitId(figure, chapter));
-    const [hurt, ko] = wedgeFallenArt(chapter, figure).map((p) => artUrl(p));
+    const [hurt, ko] = wedgeFallenArt(chapter, figure).map((p) => (p ? artUrl(p) : '')); // r29 PR-0224: manifest-filtered
+    if (!hurt) return '';
     return `<img class="rres__hero rres__hero--fallen" src="${hurt}" data-fallback="${ko}" alt=""
       draggable="false" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.remove();}" />`;
   }
