@@ -740,3 +740,141 @@ Bailey's preferred source where sources conflict and nothing in-game settles it)
 | Q13 | Titles "Sin: the Fins and the Core" and "Sin: the Face" | Keep D-270's working titles. Bailey confirms at listing |
 | Q14 | The Right Fin painted as a mirror of the Left? | **No, its own painting** (a mirror needs Bailey's yes) |
 | Q15 | Music | Stand-ins labelled. Two owed cues, sketched and judged by Bailey's ear (D-209; Chapter VII's D-190 is separate and still waits) |
+
+---
+
+## REVIEW (adversarial, 2026-09-29, independent reviewer; FFX only)
+
+**Verdict: GO-WITH-CHANGES.** The architecture holds, checked against the code on `c64814f7`:
+
+- The four swap lines exist exactly as quoted (`setup.ts:400`, `reactions.ts:154`, `simulate.ts:321`,
+  `ai/index.ts:40`), and `def` and `damagedEnemyIds` are in scope at the reactions line.
+- `immunityFlags` and `flags` are per-battle copies (the enemy build in `setup.ts`), so toggling them
+  cannot leak into the data or across bench seeds.
+- `checkEnd` already skips `nonCombatant` foes, and `results.ts` pays defeated enemies only.
+- `'all'` targeting, `outOfMeleeReach` and the data-driven `removesStatuses` all exist, and
+  `removesStatuses` already spares `permanent` statuses.
+- No FFX group sets `carriesPartyState` today.
+- `critic/bench/advisor-v3/drive.ts#runChapter` takes a `Chapter` record, so an unlisted chapter can
+  be driven.
+
+The numbers in 2.2 match `research/ffx-sin.md` §2.1 to §3.3, except items 7 and 11 below. Each
+change below lands before, or inside, the package it names. None of them reopens the split or the
+package order.
+
+**Must change**
+
+1. **Waterga cannot reach the caster through the swapped line (package S, then G).**
+   - The body under the reactions line pushes `command: { kind: 'ability', id, targets: [] }`.
+     `targeting.ts#resolveTargets` turns an empty aim on a `single-enemy` row into a random party
+     member.
+   - §3.2 says Waterga targets "the caster" `[verified: 4 sources]`.
+   - The aggregator must return the target (or the whole `Command`), and the push line must use it
+     (`targets: c.targets ?? []`). That edit keeps `reactions.ts` at the same line count.
+   - Test: Waterga lands on the caster on every seed, including when the caster is an aeon.
+2. **The link-3 state changes cannot hang off the player-side collector alone (S and G).**
+   `collectBossCounters` runs only for a command with an ability def (attack, ability, overdrive or
+   item), and it returns early for enemy-side actions and for counters. Three cases slip through:
+   - the Core dies to some other command kind;
+   - Genais dies to Doom at the start of its own turn (the count is 30 and Doom lands, §2.1);
+   - Genais kills itself with its own Cura counter while Zombied (Zombie resistance 80, so Zombie
+     Attack lands 20 % of the time, §2.3).
+
+   In each case the Core stays out of melee reach and magic-immune, or the victory waits for a later
+   action while Genais takes a turn.
+   - **The fix:** recompute the marks that depend on Genais and the Core from `isAlive`, in a hook
+     that runs for every action. `reactions.ts#runMortibsorptionIfDown` is already called at the top
+     of every `afterAction`, so one added line there keeps `engine.ts` unchanged.
+   - **Not the fix:** marking Genais `nonCombatant` at setup. The stalemate watch would then stop
+     counting Genais's HP as progress.
+   - **Tests:** Doom on Genais, Zombie plus Cura, and the Core killed by each command kind.
+3. **The director rebind would also move link 4 (package P).**
+   - `applyOverdriveSinSetup` already publishes `airship.countsTargetings = 'overdrive-sin'` on the
+     same deck scene.
+   - Binding "the formation's counted foe" would therefore hand the head's actor to Evrae's NEAR/FAR
+     director. That changes the staging of a link that is already benched, and nobody has seen the
+     change (rule 9).
+   - Scope the bind to the two Fin ids, or to a flag of their own. Pin the Chapter VIII and link-4
+     staging unchanged in a test.
+4. **The Trigger Command widget would show Evrae's missile pips in the Fin fights (packages P and
+   M).**
+   - `AirshipOrders.ts#openWidget` reads a missing `airship.missiles` as `MISSILE_COUNT`, so the
+     widget shows three full pips. That contradicts S-19: Cid fires no missiles here.
+   - P owns `src/ui/ffx/AirshipOrders.ts` and `AirshipOrderWidget.ts`, and shows no pip strip when
+     the flag is absent. Evrae always sets the flag, so its widget does not change.
+   - M adds "the widget without pips" to its sheet, because it changes a surface Bailey approved.
+   - P also lists every other Evrae-only reader that runs once `airship.range` is set, and decides
+     each one: `engine/phaseCanon.ts#phaseForFlags` (the `evrae-far` grade and its "Ch VIII" canon
+     beat), and the director's readers for the breath and the missiles. Each is either labelled a
+     placeholder or scoped to Evrae.
+5. **`sin-carry.test.ts` pins a chain that does not exist.** Chapter II (Yunalesca) has no
+   `nextGroupId`. The only FFX chains are:
+   - Chapter III: Braska's Final Aeon, then the possessed aeons, then Yu Yevon;
+   - Chapter XIV: Isaaru.
+
+   Pin both of these as carrying no statuses.
+6. **The line-up at a seam is undecided.**
+   - `carryFfx` keeps the build's `activeIds`. Links 2 and 3 therefore reopen with Tidus, Yuna and
+     Auron in front, whoever ended the last link there.
+   - That decides three things: who stands in front at FAR, which members Negation's leftmost and
+     rightmost Protect weights read, and who is in front to give Cid orders.
+   - Research §1.2 is silent on it. Name it as a labelled estimate in `SIN_FINS_ASSUMPTIONS` and the
+     Q list, and have bench B measure both readings.
+7. **Negation's list, not a count.**
+   - 2.2 says Negation removes "25 statuses", but §3.1's list has **24**. The data copies the list,
+     and the test compares against the list.
+   - State that `permanent` auto-statuses survive (the engine's `'dispelled'` path already spares
+     them), and test it.
+8. **S-13 is wider than its source (package G).**
+   - Gestahl's "counters 100 % of the time" is about the Core **after Genais dies**. Before that, the
+     counter chance is `[unsourced]`; the wiki says it grows as the Core's HP falls.
+   - Give the pre-death chance a tunable of its own, labelled our extrapolation.
+   - Also say whether a spell that is absorbed ("Magic absorbed.") still draws the Core's counter.
+     That is unsourced too: label it, and have the bench measure it.
+9. **D-270's re-equip is a deviation, not a default.**
+   - Adopted D-270 says Chapter XVIII opens with "a re-equip (the Right Fin's Stoneproof drop ... can
+     change hands here)".
+   - Q10 does not build it, and the FFX prep screen (`src/app/screens/party-prep/`) cannot change
+     equipment at all.
+   - Record it in the handoff and in `decisions.json` as a deviation from D-270 that waits for
+     Bailey, so that Q10's default does not quietly settle it.
+10. **The golden hashes are a two-tree procedure.** `ffx-chapter-hashes.test.ts` only writes JSON: it
+    is skipped unless `FFX_HASH_OUT` is set. It also walks the unlisted chapters.
+    - S writes the base once, from `56026029`, extracted with `git archive` into
+      `D:/Tools/pyrefly-scratch/overnight-0929/<label>/`. No worktree. Check free space first: D: had
+      6.1 GB free at review time.
+    - F, G and P diff against that base, with `FFX_HASH_SKIP=sin,sin-face,sin-fins-core` on both
+      sides.
+11. **Venom can crit.** §3.2 gives it as "Physical, can crit", so the row needs `crit-eligible`. The
+    stat-table test also covers Reflect 255 on Genais and the Core, and Delay immunity on all four.
+12. **New orphans.** `chapter-meta-sin.ts` and `guides/sin-*.ts` have no importer until listing, and
+    the plan's own check says "no new orphan". Pick one:
+    - wire them now through the unlisted records;
+    - move them to package L;
+    - or name them in the handoff as expected orphans.
+13. **Bench cost and loss causes (package B).**
+    - `sin-bench.test.ts` has no environment-variable gate, so its 200 seeds run in every `npm test`.
+      Put the XVII chain runs (× 3 lines × the S-8 and S-12 variants) behind an environment variable,
+      and keep a small smoke test in the suite.
+    - Report the 400-turn stalemate (`'escape'`) as its own loss cause.
+    - Add **aeon reach at FAR** to the Q list, and have the bench report it:
+      - Evrae's fight had no Yuna, so it never had to decide this;
+      - `reachesFoesAtRange` refuses an aeon's physical attack at FAR, while `REACHES_OUT_OF_MELEE`
+        lets Valefor reach the Core;
+      - the sources say nothing about aeons reaching the Fins, yet §7.2 has the guides summoning
+        Bahamut on them.
+
+**Should change**
+
+- **Re-run `critic-plan --paths` with the final file list.** Include `simulate.ts`, the three
+  aggregators, `chapter-sin-face.ts`, `BattleScreenAirship.ts` and `AirshipOrders.ts`. The class
+  stays DEEP, but the checks it lists should be the real ones.
+- **Genais's Cura counter answers once per action, not "every hit".** The engine collects counters
+  once per action. Write "per action" and label it; Attack Reels is where the two readings differ.
+- **Fix the dangling cite and pin the Reflect bounce.**
+  - `sin-two-chapters-review.md` row 5 cites "§5.2.3", which the research does not have. The Reflect
+    note in §2.3 carries the same dangling cite.
+  - Say where a Reflect bounce lands in link 3. The engine picks a random foe, which can be Genais,
+    who is weak to Fire. Pin it with a test.
+- **Keep Tidus's "ball" line a paraphrase.** Chapter XVII's pre scene uses it. It stays a paraphrase
+  in our own words: §9.2 says "all dialogue is paraphrased on purpose".
