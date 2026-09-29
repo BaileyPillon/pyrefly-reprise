@@ -87,6 +87,48 @@ describe('Sin, links 1 -> 2 -> 3: statuses carry (§1.2 [verified: 3 sources])',
     const template = (chapter.buildRef as FFXPartyBuild).members.find((m) => m.id === 'auron')!;
     expect(template.statuses?.['protect']).toBeUndefined();
   });
+
+  it("a Stamina Tonic's Max HP x2 carries with its ceiling: the doubled max HP and the HP above the base survive the seam", () => {
+    // 2026-09-29: the carry copied `max-hp-x2` but not the ceiling it had raised, so a carried Tonic sat on the base
+    // max HP (the HP above it clamped away), and when the status came off the engine halved the base (card, seed 23).
+    const chapter = getChapter('sin-fins-core')!;
+    const first = setupForChapter(chapter, 1);
+    const e1 = engineOn(first);
+    const base = live(e1, 'auron').stats.maxHp;
+    for (let i = 0; i < 400 && live(e1, 'auron').statuses['max-hp-x2'] === undefined; i++) {
+      const d = e1.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      const tonic = d.commands.find((c) => c.enabled && c.command.kind === 'item' && 'id' in c.command && c.command.id === 'stamina-tonic');
+      e1.submit(tonic && tonic.validTargets.includes('auron') ? ({ ...tonic.command, targets: ['auron'] } as Command) : { kind: 'defend', targets: [] });
+    }
+    expect(live(e1, 'auron').stats.maxHp).toBe(base * 2);
+    const state = structuredClone(e1.state()) as BattleState;
+    (state.combatants['auron'] as FFXCombatant).hp = base + 500; // above the base ceiling, under the doubled one
+    const next = setupForNextLink(first, ENEMY_GROUPS_BY_ID['sin-right-fin']!, state, 2);
+    const e2 = engineOn(next);
+    expect(live(e2, 'auron').statuses['max-hp-x2']).toBeDefined();
+    expect(live(e2, 'auron').stats.maxHp).toBe(base * 2);
+    expect(live(e2, 'auron').hp).toBe(base + 500);
+  });
+
+  it('the SOS status (`critical`) is derived from the carried HP, like KO: a fresh engine opens on any carried state', () => {
+    // A checkpoint retry builds a fresh engine on the carried setup; a stale `critical` made its init emit before the
+    // engine had a log, and it threw.
+    const chapter = getChapter('sin-fins-core')!;
+    const first = setupForChapter(chapter, 1);
+    const state = structuredClone(engineOn(first).state()) as BattleState;
+    const tidus = state.combatants['tidus'] as FFXCombatant;
+    const yuna = state.combatants['yuna'] as FFXCombatant;
+    tidus.hp = Math.floor(tidus.stats.maxHp / 4); // under half, but no `critical` on him
+    delete tidus.statuses['critical'];
+    yuna.statuses['critical'] = { ...HASTE, id: 'critical', turnsRemaining: null }; // full HP, yet `critical`
+    const next = setupForNextLink(first, ENEMY_GROUPS_BY_ID['sin-right-fin']!, state, 2);
+    const members = (next.party as FFXPartyBuild).members;
+    expect(members.find((m) => m.id === 'tidus')!.statuses?.['critical']).toBeDefined();
+    expect(members.find((m) => m.id === 'yuna')!.statuses?.['critical']).toBeUndefined();
+    expect(() => engineOn(next)).not.toThrow();
+  });
 });
 
 describe('every other FFX chain carries no statuses, exactly as before (REVIEW must-change 5)', () => {

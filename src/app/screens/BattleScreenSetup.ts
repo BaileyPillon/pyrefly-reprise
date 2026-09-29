@@ -145,24 +145,24 @@ function carryFfx(build: FFXPartyBuild, state: BattleState, withStatuses = false
   const members = build.members.map((m) => {
     const live = state.combatants[m.id] as FFXCombatant | undefined;
     if (!live) return m;
+    if (withStatuses) return { ...m, ...carriedFfxState(m.stats, live), overdrive: { ...m.overdrive, gauge: clamp(live.overdrive?.gauge ?? m.overdrive.gauge, 0, 100) } };
     return {
       ...m,
       hp: clamp(live.hp, 0, m.stats.maxHp),
       mp: clamp(live.mp, 0, m.stats.maxMp),
       overdrive: { ...m.overdrive, gauge: clamp(live.overdrive?.gauge ?? m.overdrive.gauge, 0, 100) },
-      ...(withStatuses ? { statuses: carriedFfxStatuses(live) } : {}),
     };
   });
 
   const aeons = build.aeons.map((a) => {
     const live = state.combatants[a.id] as FFXCombatant | undefined;
     if (!live) return a;
+    if (withStatuses) return { ...a, ...carriedFfxState(a.stats, live), overdriveGauge: clamp(live.overdrive?.gauge ?? a.overdriveGauge, 0, 100) };
     return {
       ...a,
       hp: clamp(live.hp, 0, a.stats.maxHp),
       mp: clamp(live.mp, 0, a.stats.maxMp),
       overdriveGauge: clamp(live.overdrive?.gauge ?? a.overdriveGauge, 0, 100),
-      ...(withStatuses ? { statuses: carriedFfxStatuses(live) } : {}),
     };
   });
 
@@ -176,11 +176,37 @@ function carryFfx(build: FFXPartyBuild, state: BattleState, withStatuses = false
 
 /**
  * Statuses left out of the FFX status carry, each re-derived or not a status the next link opens
- * under: `ko` (the setup marks a 0 HP member KO from the carried HP), `eject` (the member left that
+ * under: `ko` (the setup marks a 0 HP member KO from the carried HP), `critical` (SOS, re-derived from the
+ * carried HP by {@link carriedFfxState}), `eject` (the member left that
  * battle, not the party), and the three command stances `defend`, `guard`, `sentinel` (they last
  * until the actor's next turn). Our estimate: research §1.2 says only that statuses carry.
  */
-const FFX_CARRY_EXCLUDED: readonly StatusId[] = ['ko', 'eject', 'defend', 'guard', 'sentinel'];
+const FFX_CARRY_EXCLUDED: readonly StatusId[] = ['ko', 'critical', 'eject', 'defend', 'guard', 'sentinel'];
+
+/**
+ * The FFX status carry's half of a member or aeon: HP, MP, the statuses, and the pool ceilings they imply.
+ *
+ * - **Max HP x2 / Max MP x2** (a Stamina or Mana Tonic, a Mix) are a pool change while they are on
+ *   (`statuses.ts#applyPoolDoubler`): the carried ceiling is the live, doubled one, so the status and its effect
+ *   travel together, and when it comes off in the next link the engine halves back to the base (it used to sit on
+ *   the undoubled base, clamp away the HP above it, and then halve the base: 2026-09-29, the card's seed 23).
+ * - **SOS (`critical`)** is derived from the carried HP, like KO: under half of the ceiling and above 0. The setup
+ *   then has nothing to correct, so a fresh engine (a checkpoint retry builds one) opens on any carried state.
+ */
+function carriedFfxState(
+  stats: FFXCombatant['stats'],
+  live: FFXCombatant,
+): { stats: FFXCombatant['stats']; hp: number; mp: number; statuses: Partial<Record<StatusId, StatusInstance>> } {
+  const statuses = carriedFfxStatuses(live);
+  const pools = {
+    ...stats,
+    maxHp: statuses['max-hp-x2'] ? Math.max(stats.maxHp, live.stats.maxHp) : stats.maxHp,
+    maxMp: statuses['max-mp-x2'] ? Math.max(stats.maxMp, live.stats.maxMp) : stats.maxMp,
+  };
+  const hp = clamp(live.hp, 0, pools.maxHp);
+  if (hp > 0 && hp * 2 < pools.maxHp) statuses.critical = { id: 'critical', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+  return { stats: pools, hp, mp: clamp(live.mp, 0, pools.maxMp), statuses };
+}
 
 /**
  * **FFX, `carriesPartyState` (Sin links 2 and 3):** "the next fight will start off with your
