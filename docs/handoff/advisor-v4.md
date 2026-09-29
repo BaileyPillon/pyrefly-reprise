@@ -402,3 +402,54 @@ leaves v3's card. Seed 35 on Chapter III at lean remains the known case if lean 
 **Not done (each needs the driver or Bailey):** no deploy, not merged, not pushed. A release needs the
 critic plan (`node tools/critic-plan.mjs`) and the deep review the release rules ask for; the change
 touches the advisor card in every FFX chapter.
+
+## CHECK of the switch-on (2026-09-29; an independent agent, not the builder of f5984206)
+
+**Verdict: no blocker.** Game case: FFX only (FFX-2 confirmed still on v3). Nothing pushed, merged or deployed.
+
+**Static.** `tsc --noEmit` and `tsconfig.e2e.json` clean. Advisor unit files (`tests/unit/advisor*`,
+`ffx2-advisor*`, `guide-advisor*`, `tactics-lookup`, `ui-move-advisor`): 39 files passed, 1 skipped,
+380 tests. `switch.ts` reads `ADVISOR_V4_FFX = true`, `ADVISOR_V4_FFX2 = false`; `wiring.ts` passes
+`GAME_BUDGET = 'mini'` with no device probe.
+
+**Bench reproduction (mini, worker path, v3 and v4).** The recorded 40-seed files reproduce seed by
+seed. Slices were picked to contain losses, so they can tell the two drivers apart:
+
+| Slice | v3 win seeds now = recorded | v4 win seeds now = recorded | Other |
+|---|---|---|---|
+| II, seeds 1-10 and 21-30 | yes (lost 26, 30) | yes (lost 26, 29) | |
+| III, seeds 1-10 and 11-20 | yes (lost 17; its 1 lethal flag reproduces) | yes (10/10, 0 lethal flags) | |
+| VIII, all 40 seeds | yes, 40/40, decisions 2708 = 2708 | yes, 40/40, decisions 2718 = 2718 | revive misses 1/1 and 0/0 |
+
+Files: `critic/bench/advisor-v4/results/zz-chk2-mini-*.json` (untracked scratch).
+
+**Browser, fresh production build of f5984206** (`vite build` to
+`D:/Tools/pyrefly-scratch/overnight-0929/v4chk2/dist`, `vite preview` on 8501, stopped by PID),
+headless Chromium, PYREFLY_BROWSER=gpu, real Enter keys, 1.6 s dwell per menu. Every seed was played twice:
+with no override (the shipped switch decides) and with `__pyreflyAdvisorV4Force = false` (v3).
+My own script (`.v4chk2-browser-tmp.mjs`, untracked) counts, for each menu, the host's `ready` change
+inside `showDecision`, polls the card's rows and text every frame while the menu is open, and taps
+the advisor worker's messages.
+
+| | Runs (seeds x on/off) | Menus | v4 attached, budget | Ready at open | Rows changed while open | Log hash + nextSeq on = off | Open ms p50 / p95 / max, v4 on | same, v3 (off) | Errors |
+|---|---|---:|---|---:|---:|---|---|---|---:|
+| 1600x900, I, III, IX, XII | 4 x 3 x 2 | 122 | yes, mini, 1 worker | **122/122** | **0** | **12/12** | 0.9 / 3.4 / 4.4 | 4.9 / 17.0 / 18.2 | 0 |
+| 390x844, 4x CPU, I | 1 x 3 x 2 | 10 | yes, mini | **10/10** | **0** | **3/3** | 5.6 / 51.5 / 51.5 | 39.5 / 94.9 / 94.9 | 0 |
+| FFX-2 Bahamut (default switch) | 1 | 5 | **no host, no v4 worker spawned** (v3) | - | 0 | - | 5.4 / 6.8 | - | 0 |
+
+No worker answer was delivered while a menu was open (0 of 132). v4's pick differed from v3's at 5 of
+132 opens, and it was already there when the menu opened.
+
+**Card text while a menu is open (not a flip, and v3 does it too).** The rows never change. The text
+changes the same way with v4 on and off. 118 of 132 opens have the same pattern both ways. The 14 that
+differ are the fit pass trimming lines in the first 5 to 61 ms (for example, dropping an item's flavour
+line, or the "Next best move" heading), and the dwell fold at about 1.6 s. The trim fires in one run and
+not the other on the same row, so it depends on timing, not on v4. On the phone the text never changed
+(0/10 both ways).
+
+**Merge.** `git merge-tree --write-tree HEAD origin/main` (49005f73) is clean. There are no textual
+conflicts, but main changed the advisor's inputs after this branch's base (1a81a8ed): 578e7f22 gives
+Chapters II and III research §6.4.3's aeon rows (`braskas-final-aeon.ts`, `yunalesca.ts`), and 63f4472a
+changes `advisor.ts`, `guide-inflight.ts`, `guide.ts` and `MoveAdvisor.ts`. So the v3-versus-v4 numbers
+above, and the whole gate, were measured on the pre-merge base. The merged tree should re-run the
+worker-path bench on II and III, plus the III lethal fork at mini, before a release.
