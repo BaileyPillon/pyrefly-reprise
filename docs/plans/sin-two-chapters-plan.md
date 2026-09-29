@@ -740,6 +740,9 @@ Bailey's preferred source where sources conflict and nothing in-game settles it)
 | Q13 | Titles "Sin: the Fins and the Core" and "Sin: the Face" | Keep D-270's working titles. Bailey confirms at listing |
 | Q14 | The Right Fin painted as a mirror of the Left? | **No, its own painting** (a mirror needs Bailey's yes) |
 | Q15 | Music | Stand-ins labelled. Two owed cues, sketched and judged by Bailey's ear (D-209; Chapter VII's D-190 is separate and still waits) |
+| Q16 | The seam line-up (REVIEW 6): do links 2 and 3 reopen with the build's front row (Tidus, Yuna, Auron) or with whoever ended the last link in front? | **The build's front row**, our estimate (`seam-lineup` in `SIN_FINS_ASSUMPTIONS`). Bench B measured both: within noise for the sensible line (8 % against 6.5 %). Added 2026-09-29 (CHECK 2 finding 5) |
+| Q17 | Link 3's reveal plate: `sin-genais-core` has no `headline`, so the plate names its first enemy, Sinspawn Genais; the Core's in-game name is "Sin" (`m138`) | **As built** (Genais on the plate, the Core named "Sin" on its record) until the listing pass (package P or L) picks the plate. Added 2026-09-29 (CHECK 2 finding 5) |
+| Q18 | Aeon reach at FAR (REVIEW 13): bench B found no aeon row (Attack, ability or Overdrive, all five aeons, gauge full) reaches either Fin at FAR; at NEAR every row reaches. §7.2's guides summon Bahamut on the Fins | **As built** (Evrae's FAR rule: only Wakka, Blk and Wht Magic, Lancet and long-range rows reach), so summoning on the Fins means NEAR. Unreconciled with the guides; the Steam check (D-266) could settle it. Added 2026-09-29 (CHECK 2 finding 5) |
 
 ---
 

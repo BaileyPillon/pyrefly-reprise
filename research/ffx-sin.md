@@ -123,7 +123,7 @@ Every link: "The party cannot escape." `[single source: wiki infobox info lines 
 | **Armor Break / Mental Break** | **0** | **255** | **0** | **0** | the key status of the chapter, `[verified: 4 sources]` |
 | Slow / Haste | 255 / 255 | **0 / 0** | 255 / 255 | 255 / 255 | Genais can be Slowed (bover_87 agrees) |
 | Doom | 255 | **0** | 255 | 255 | useless in practice: count 30 |
-| Reflect | 0 | 255 | **255** | 0 | Core's own counter spells bounce off a Reflected party back to it (§5.2.3) |
+| Reflect | 0 | 255 | **255** | 0 | Core's own counter spells bounce off a Reflected party back to it (§5.3.2 item 4, §8 row 7) |
 | **Threaten** | byte **0** | byte 0 | byte 0 | byte 0 | **wiki, Gestahl and SinirothX all say Immune.** Same shape as Evrae C-4. **Conflict S-6: default immune** |
 | Shell, Protect, Nul×4, Regen, Distillers, Scan | 0 | 0 | 0 | 0 | landable; pointless |
 
