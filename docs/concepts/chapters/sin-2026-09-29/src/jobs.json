@@ -1,0 +1,204 @@
+[
+ {
+  "out": "frames/fin-a-l-near.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-a-l-near.jpg",
+   "side": "l",
+   "range": "near",
+   "charge": "0",
+   "opt": "A",
+   "icx": 0.84,
+   "icy": 0.35
+  }
+ },
+ {
+  "out": "frames/fin-a-l-near-charge.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-a-l-near-charge.jpg",
+   "side": "l",
+   "range": "near",
+   "charge": "1",
+   "opt": "A",
+   "icx": 0.84,
+   "icy": 0.35
+  }
+ },
+ {
+  "out": "frames/fin-a-l-far.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-a-l-far.jpg",
+   "side": "l",
+   "range": "far",
+   "charge": "0",
+   "opt": "A",
+   "icx": 0.78,
+   "icy": 0.33
+  }
+ },
+ {
+  "out": "frames/fin-a-r-near.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-a-r-near.jpg",
+   "side": "r",
+   "range": "near",
+   "charge": "0",
+   "opt": "A",
+   "icx": 0.8,
+   "icy": 0.3
+  }
+ },
+ {
+  "out": "frames/fin-a-r-far.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-a-r-far.jpg",
+   "side": "r",
+   "range": "far",
+   "charge": "0",
+   "opt": "A",
+   "icx": 0.74,
+   "icy": 0.28
+  }
+ },
+ {
+  "out": "frames/fin-b-l-near.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-b-l-near.jpg",
+   "side": "l",
+   "range": "near",
+   "charge": "0",
+   "opt": "B",
+   "icx": 0.82,
+   "icy": 0.4
+  }
+ },
+ {
+  "out": "frames/fin-b-l-near-charge.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-b-l-near-charge.jpg",
+   "side": "l",
+   "range": "near",
+   "charge": "1",
+   "opt": "B",
+   "icx": 0.82,
+   "icy": 0.4
+  }
+ },
+ {
+  "out": "frames/fin-b-l-far.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-b-l-far.jpg",
+   "side": "l",
+   "range": "far",
+   "charge": "0",
+   "opt": "B",
+   "icx": 0.78,
+   "icy": 0.33
+  }
+ },
+ {
+  "out": "frames/fin-b-r-near.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-b-r-near.jpg",
+   "side": "r",
+   "range": "near",
+   "charge": "0",
+   "opt": "B",
+   "icx": 0.8,
+   "icy": 0.35
+  }
+ },
+ {
+  "out": "frames/fin-b-r-far.jpg",
+  "q": {
+   "kind": "fin",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/fin-b-r-far.jpg",
+   "side": "r",
+   "range": "far",
+   "charge": "0",
+   "opt": "B",
+   "icx": 0.74,
+   "icy": 0.28
+  }
+ },
+ {
+  "out": "frames/genais-a.jpg",
+  "q": {
+   "kind": "link3",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/genais-a.jpg",
+   "shell": "0",
+   "charge": "0",
+   "opt": "A",
+   "icx": 0.61,
+   "icy": 0.55,
+   "icx2": 0.78,
+   "icy2": 0.25
+  }
+ },
+ {
+  "out": "frames/genais-a-shell.jpg",
+  "q": {
+   "kind": "link3",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/genais-a-shell.jpg",
+   "shell": "1",
+   "charge": "1",
+   "opt": "A",
+   "icx": 0.61,
+   "icy": 0.55,
+   "icx2": 0.78,
+   "icy2": 0.25
+  }
+ },
+ {
+  "out": "frames/genais-b.jpg",
+  "q": {
+   "kind": "link3",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/genais-b.jpg",
+   "shell": "0",
+   "charge": "0",
+   "opt": "B",
+   "icx": 0.64,
+   "icy": 0.5,
+   "icx2": 0.83,
+   "icy2": 0.15
+  }
+ },
+ {
+  "out": "frames/genais-b-shell.jpg",
+  "q": {
+   "kind": "link3",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/genais-b-shell.jpg",
+   "shell": "1",
+   "charge": "1",
+   "opt": "B",
+   "icx": 0.64,
+   "icy": 0.5,
+   "icx2": 0.83,
+   "icy2": 0.15
+  }
+ },
+ {
+  "out": "frames/bk-a.jpg",
+  "q": {
+   "kind": "bk",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/bk-a.jpg",
+   "opt": "A"
+  }
+ },
+ {
+  "out": "frames/bk-b.jpg",
+  "q": {
+   "kind": "bk",
+   "img": "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/frames-bg/bk-b.jpg",
+   "opt": "B"
+  }
+ }
+]

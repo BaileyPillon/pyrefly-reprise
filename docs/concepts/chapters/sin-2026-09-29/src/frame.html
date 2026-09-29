@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sin links frames</title>
+<!-- Rough battle frames for the Sin chapters' links 1 to 3 and the link-4 backdrop (FFX only, 2026-09-29). Our own
+     candidate paintings, our own party sprites and portraits, and a rough stand-in for the FFX HUD in the game's own
+     fonts (the layout of round 3's head frames and of Chapter VIII's range order). Not the HUD build.
+     Query: kind=fin|link3|bk, img=<painting url>, and for fin: side=l|r, range=near|far, charge=0|1, opt=<label>;
+     for link3: shell=0|1, charge=0|1, opt=<label>; for bk: opt=<label>. -->
+<style>
+@font-face { font-family: Chakra; src: url(../../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2); font-weight: 700; }
+@font-face { font-family: Chakra; src: url(../../../../../public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2); font-weight: 500; }
+@font-face { font-family: Corm; src: url(../../../../../public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2); font-weight: 300 700; }
+@font-face { font-family: Raj; src: url(../../../../../public/fonts/rajdhani/Rajdhani-Bold-700.woff2); font-weight: 700; }
+:root { --ink: #0b0a12; --paper: #f4f1e8; --gold: #e3b94a; --blood: #b02a2a; --sky: #7fc6e8; --vio: #b56cff; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #111; }
+#f { position: relative; overflow: hidden; background: #111; font-family: Chakra, sans-serif; color: #fff; width: 1600px; height: 900px; }
+#f > * { position: absolute; }
+.bg { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rough { left: 0; top: 0; background: var(--paper); color: var(--ink); font: 700 14px Chakra; letter-spacing: .12em; padding: 5px 12px; text-transform: uppercase; z-index: 5; }
+.rough b { color: var(--blood); }
+.tag { background: rgba(11,10,18,.86); font: 700 15px Chakra; letter-spacing: .1em; padding: 5px 10px; text-transform: uppercase; }
+.sprite { filter: drop-shadow(0 6px 6px rgba(0,0,0,.5)); }
+.cmd { left: 40px; width: 300px; height: 40px; transform: skewX(-12deg); background: rgba(11,10,18,.84); display: flex; align-items: center; padding-left: 22px; border-left: 4px solid #555; }
+.cmd span { transform: skewX(12deg); font: 700 19px Chakra; letter-spacing: .1em; }
+.cmd small { font: 500 13px Chakra; color: #cfc6a8; margin-left: 12px; letter-spacing: .02em; }
+.cmd.on { background: var(--gold); color: var(--ink); border-left-color: #fff; }
+.cmd.on small { color: #3a2e0c; }
+.cmd.od { border: 2px solid var(--gold); color: var(--gold); }
+.ord { left: 40px; width: 330px; height: 54px; transform: skewX(-12deg); display: flex; align-items: center; padding-left: 26px; gap: 16px; }
+.ord > * { transform: skewX(12deg); }
+.ord b { font: 700 22px Chakra; letter-spacing: .12em; }
+.ord small { font: 700 12px Chakra; letter-spacing: .06em; line-height: 1.25; }
+.ord.go { background: var(--gold); color: var(--ink); }
+.ord.no { background: rgba(200,200,210,.55); color: #333; }
+.ctb { right: 26px; display: flex; align-items: center; gap: 8px; }
+.ctb .lbl { background: rgba(11,10,18,.86); font: 700 14px Chakra; letter-spacing: .06em; padding: 4px 8px; }
+.ctb .pic { width: 50px; height: 50px; object-fit: cover; object-position: 50% 18%; border: 2px solid #ddd; }
+.ctb.now .pic { width: 62px; height: 62px; border-color: var(--gold); }
+.ctb .foe { width: 50px; height: 50px; border: 3px solid var(--blood); overflow: hidden; position: relative; }
+.ctb .foe img { position: absolute; }
+.ctb .clk { background: var(--gold); color: var(--ink); font: 700 13px Chakra; padding: 3px 7px; }
+.pp { right: 40px; width: 470px; height: 58px; background: rgba(11,10,18,.86); transform: skewX(-10deg); display: flex; align-items: center; padding-left: 10px; border-left: 4px solid #555; }
+.pp > * { transform: skewX(10deg); }
+.pp img { width: 44px; height: 44px; object-fit: cover; object-position: 50% 18%; margin-right: 12px; }
+.pp .n { font: italic 600 28px Corm; width: 92px; color: #f3ecd7; }
+.pp .hp { font: 700 27px Raj; width: 132px; }
+.pp .hp small { font-size: 15px; color: #aaa; }
+.pp .mp { font: 700 24px Raj; color: var(--sky); width: 58px; }
+.pp .od { width: 90px; height: 7px; background: #333; position: relative; }
+.pp .od i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--gold); }
+.pp.now { border-left-color: var(--gold); }
+.strip { left: 222px; top: 58px; display: flex; gap: 4px; align-items: stretch; }
+.strip span { background: rgba(11,10,18,.8); font: 700 13px Chakra; letter-spacing: .08em; padding: 6px 10px; color: #aaa; }
+.strip span.on { background: var(--gold); color: var(--ink); }
+.strip span.done { color: #666; text-decoration: line-through; }
+.carry { left: 222px; top: 94px; font: 500 12px Chakra; color: #ddd; background: rgba(11,10,18,.7); padding: 3px 9px; }
+.tel { left: 222px; top: 130px; background: rgba(11,10,18,.9); border-left: 4px solid var(--blood); padding: 7px 12px; font: 700 16px Chakra; letter-spacing: .05em; }
+.tel b { color: #ff7b7b; }
+.tel.vio { border-left-color: var(--vio); } .tel.vio b { color: #d9b0ff; }
+.rng { left: 40px; top: 58px; width: 160px; height: 160px; border-radius: 50%; background: rgba(11,10,18,.8); border: 3px solid #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.rng b { font: 700 40px Raj; letter-spacing: .06em; }
+.rng small { font: 700 11px Chakra; letter-spacing: .12em; color: #ccc; text-align: center; line-height: 1.3; }
+.note { left: 40px; bottom: 16px; font: 500 12px Chakra; color: #ddd; background: rgba(11,10,18,.7); padding: 3px 8px; max-width: 980px; }
+</style>
+</head>
+<body>
+<script>
+const Q = new URLSearchParams(location.search);
+const KIND = Q.get('kind') || 'fin', IMG = Q.get('img'), OPT = Q.get('opt') || '';
+const SIDE = Q.get('side') || 'l', RANGE = Q.get('range') || 'far', CHARGE = Q.get('charge') === '1', SHELL = Q.get('shell') === '1';
+const ICX = +(Q.get('icx') || 0.8), ICY = +(Q.get('icy') || 0.35);
+const ART = '../../../../../public/art/';
+const f = document.createElement('div'); f.id = 'f'; document.body.appendChild(f);
+const add = (css, html, cls) => { const e = document.createElement('div'); if (cls) e.className = cls; e.style.cssText = css; e.innerHTML = html; f.appendChild(e); return e; };
+const im = (src, css, cls) => { const e = document.createElement('img'); e.src = src; e.style.cssText = css; if (cls) e.className = cls; f.appendChild(e); return e; };
+// a turn-order icon for a painted foe: a window on the painting around (ICX, ICY)
+const icon = (size, fx = ICX, fy = ICY, z = 3.2) => { const w = size * z, h = w * 9 / 16;
+  return `<img src="${IMG}" style="width:${w}px;height:${h}px;left:${size / 2 - fx * w}px;top:${size / 2 - fy * h}px">`; };
+// the Garden of Pain party with Yuna's Tetra Ring back (D-264; maxima from src/data/ffx/builds/dreams-end.ts, every stat
+// cell there [estimate]); the current values are illustrative, as links 1-3 carry HP between them (research 1.2)
+const PARTY = [['Tidus', 'tidus', 5120, 6492, 128], ['Yuna', 'yuna', 4410, 5130, 296], ['Auron', 'auron', 6012, 6492, 100]];
+im(IMG, '', 'bg');
+add('left:0;right:0;bottom:0;height:200px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.35))', '');
+[['yuna', 470, 800, 280], ['tidus', 590, 836, 300], ['auron', 350, 866, 318]].forEach(([n, x, feet, h]) =>
+  im(`${ART}characters/${n}/idle.png`, `left:${x}px;top:${feet - h}px;height:${h}px`, 'sprite'));
+const LINKS = ['I · LEFT FIN', 'II · RIGHT FIN', 'III · GENAIS + CORE'];
+const link = KIND === 'fin' ? (SIDE === 'l' ? 0 : 1) : KIND === 'link3' ? 2 : 3;
+function rows(list) {
+  list.forEach(([l, k, b], i) => add(`top:${170 + i * 62}px`, (b ? `<span class="clk">${b}</span>` : '') + `<span class="lbl">${l}</span>` +
+    (k === 'foe' ? `<div class="foe">${icon(50)}</div>` : k === 'foe2' ? `<div class="foe">${icon(50, +(Q.get('icx2') || .8), +(Q.get('icy2') || .3))}</div>` : `<img class="pic" src="${ART}portraits/${k}.png">`), 'ctb' + (i === 0 ? ' now' : '')));
+}
+const CMD_TOP = KIND === 'fin' ? 300 : 430;          // the fins leave room below for Cid's order
+function cmds(skill, od) {
+  [['ATTACK', '', ''], ['SKILL', skill, 'on'], ['SPECIAL', '', ''], ['ITEMS', '×27', ''], ['OVERDRIVE', od, 'od']].forEach(([t, s, c], i) =>
+    add(`top:${CMD_TOP + i * 48}px;left:${40 + i * 6}px`, `<span>${t}<small>${s}</small></span>`, 'cmd' + (c ? ' ' + c : '')));
+}
+function party(now) {
+  PARTY.forEach(([n, k, hp, mx, mp], i) => add(`top:${692 + i * 64}px;right:${40 + i * 10}px`,
+    `<img src="${ART}portraits/${k}.png"><span class="n">${n}</span><span class="hp">${hp}<small>/${mx}</small></span><span class="mp">${mp}</span><span class="od"><i style="width:${[55, 30, 80][i]}%"></i></span>`, 'pp' + (k === now ? ' now' : '')));
+}
+if (KIND !== 'bk') {
+  add('', LINKS.map((t, i) => `<span class="${i === link ? 'on' : i < link ? 'done' : ''}">${t}</span>`).join('') + '<span>IV · THE FACE (next chapter)</span>', 'strip');
+  add('', 'HP, MP, statuses and Overdrive carry from link to link: no rest until the Core falls (research 1.2, 3 sources)', 'carry');
+}
+if (KIND === 'fin') {
+  const near = RANGE === 'near';
+  add('', `Rough composite · Sin's ${SIDE === 'l' ? 'Left' : 'Right'} Fin · ${near ? 'NEAR' : 'FAR'}${CHARGE ? ' · core charging' : ''} · option ${OPT} · <b>candidate painting, not approved · nothing built</b>`, 'rough');
+  add('', `<b>${near ? 'NEAR' : 'FAR'}</b><small>${near ? 'ARMOR BREAK REACHES<br>RAM DELAYS YOU' : 'ONLY WAKKA · MAGIC<br>GRAVIJA WHIFFS'}</small>`, 'rng');
+  if (CHARGE) add('', '<b>Core gathers energy.</b> Gravija on its next turn: 75 % of current HP, NEAR only', 'tel vio');
+  else if (!near) add('', '<b>Sin remains motionless.</b> Far away it attacks only after 7 hits' + (SIDE === 'r' ? ' (Right Fin: 5)' : ''), 'tel');
+  else add('', '<b>SIN ACTS 3RD</b> · Ram (Delay) or motionless · Negation when targeted', 'tel');
+  rows([['Tidus', 'tidus'], ['Sin', 'foe', CHARGE ? 'GRAVIJA' : ''], ['Cid', 'cid', near ? 'PULL BACK' : 'CLOSE IN'], ['Yuna', 'yuna'], ['Auron', 'auron'], ['Sin', 'foe']]);
+  // Cid's order (the Trigger Command, as Chapter VIII's order widget): the one that changes the range is lit
+  add(`top:${near ? 566 : 628}px`, `<b>${near ? 'PULL BACK' : 'CLOSE IN'}</b><small>ORDER CID · HE MOVES<br>ON HIS NEXT TURN</small>`, 'ord go');
+  add(`top:${near ? 628 : 566}px`, `<b>${near ? 'CLOSE IN' : 'PULL BACK'}</b><small>ALREADY ${near ? 'NEAR' : 'FAR'}</small>`, 'ord no');
+  cmds(near ? 'Armor Break' : '—', 'save it');
+  add(`left:40px;top:${CMD_TOP - 26}px;font:500 13px Chakra;color:#eee;background:rgba(11,10,18,.7);padding:2px 8px`, near ? 'TIDUS · the Fin is Armored (Defense 100): Armor Break first' : 'TIDUS · at FAR only Wakka, magic and long-range rows reach');
+  party('tidus');
+} else if (KIND === 'link3') {
+  add('', `Rough composite · on Sin's back · Genais ${SHELL ? 'in its shell' : 'out of its shell'}${CHARGE ? ' · the Core charging' : ''} · option ${OPT} · <b>candidate painting, not approved · nothing built</b>`, 'rough');
+  if (SHELL && CHARGE) add('', '<b>Core gathers energy.</b> Gravija next turn · Genais <b>Enters shell.</b> and heals with Cura when hit', 'tel vio');
+  else add('', '<b>Core is inactive.</b> While Genais is out, magic at the Core is <b>Magic absorbed.</b> and the Core is out of reach', 'tel');
+  rows([['Auron', 'auron'], ['Genais', 'foe', SHELL ? 'SIGH' : 'VENOM'], ['Yuna', 'yuna'], ['Core', 'foe2', SHELL ? 'GRAVIJA' : 'INACTIVE'], ['Tidus', 'tidus'], ['Genais', 'foe']]);
+  cmds(SHELL ? 'Armor Break → Core' : '', 'save it');   // Genais is Break-immune; the Core is Armored (research 2.1)
+  add('left:40px;top:404px;font:500 13px Chakra;color:#eee;background:rgba(11,10,18,.7);padding:2px 8px', SHELL ? 'AURON · the fight ends when the Core dies, even with Genais standing' : 'AURON · Genais first: it is weak to Fire and soaks magic aimed at the Core');
+  party('auron');
+} else {
+  add('', `Rough composite · link IV backdrop · the Fahrenheit's deck over Bevelle at dusk · option ${OPT} · <b>candidate painting, not approved · nothing built</b>`, 'rough');
+  add('left:40px;top:58px', 'Sin (the face) is a separate rig of layers painted over this plate: see the head section', 'tag');
+  add('left:40px;top:100px;background:rgba(11,10,18,.8);color:#ddd;font:500 13px Chakra;padding:4px 10px', 'Sin\'s turns 1–3: "Drawn to Sin." (5 sources) · Giga-Graviton on turn 13 (our default; S-1: 12 or 13)');
+  rows([['Tidus', 'tidus'], ['Yuna', 'yuna'], ['Auron', 'auron'], ['Tidus', 'tidus'], ['Yuna', 'yuna'], ['Auron', 'auron']]);
+  cmds('Cheer', 'save it for the end');
+  party('tidus');
+}
+add('', Q.get('note') || 'Party: the Garden of Pain preset with Yuna\'s Tetra Ring back (D-264, S-29, our estimate); maxima from dreams-end.ts, current values illustrative. Rules and messages: research/ffx-sin.md §3–§5.', 'note');
+</script>
+</body>
+</html>

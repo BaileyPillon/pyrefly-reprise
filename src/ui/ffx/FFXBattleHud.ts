@@ -41,7 +41,7 @@ import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
-import { INTENT_AVOID_SELECTORS, OMNIS_READOUT_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
+import { INTENT_AVOID_SELECTORS, ADVISOR_PANEL_SELECTORS, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
 import { enemyObstacleRect } from './enemyObstacleRect.ts';
@@ -1342,7 +1342,7 @@ export class FFXBattleHud implements HudPort {
       // Braska's Final Aeon: the only fighters the solver had ever been told
       // about were the party's.
       // Plus Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only) and Omnis's disc strip and intent line (Chapter XII only): ink, as solid as a boss.
-      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...[...this.zanmato.obstacleEls(), ...this.el.querySelectorAll<HTMLElement>(OMNIS_READOUT_SELECTORS.join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? [])],
+      enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...[...this.zanmato.obstacleEls(), ...this.el.querySelectorAll<HTMLElement>(ADVISOR_PANEL_SELECTORS.join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? [])],
     };
     const key = [
       this.advisorDecisionSeq,

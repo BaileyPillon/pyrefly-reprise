@@ -136,3 +136,18 @@ export function buildBattleResult(
   if (outcome === 'victory' && nextGroupId !== undefined) result.nextGroupId = nextGroupId;
   return result;
 }
+
+/**
+ * **A scripted Game Over** (`state.flags`), raised by an AI script whose action
+ * ends the battle as a loss whatever the field looks like afterwards. Overdrive
+ * Sin's Giga-Graviton is the only user: "even using an Aeon to shield it won't
+ * save you", and Auto-Life does not either (`research/ffx-sin.md` §3.4,
+ * `[verified: 4 sources]`). `engine.ts#checkEnd` reads it; unset in every other
+ * battle. FFX only.
+ */
+export const SCRIPTED_GAME_OVER_FLAG = 'battle.scriptedGameOver';
+
+/** True once a script has declared this battle lost. */
+export function scriptedGameOver(ctx: Ctx): boolean {
+  return ctx.state.flags[SCRIPTED_GAME_OVER_FLAG] === true;
+}

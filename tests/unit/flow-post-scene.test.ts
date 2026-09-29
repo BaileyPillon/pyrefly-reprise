@@ -250,7 +250,8 @@ afterEach(() => {
 });
 
 /** Chapters whose post script authors every line before results(). */
-const ENDS_ON_RESULTS: ReadonlySet<string> = new Set(['yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'isaaru-via-purifico']);
+// Sin's two (XVII, XVIII): Sinfall and Breaking Through close before the tally (docs/plans/sin-two-chapters-plan.md §3.3).
+const ENDS_ON_RESULTS: ReadonlySet<string> = new Set(['yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'isaaru-via-purifico', 'sin-fins-core', 'sin-face']);
 
 describe('the post-battle scenes play — critic round 02 #04', () => {
   it.each(CHAPTERS.map((c) => [c.id, c] as const))(
@@ -376,9 +377,10 @@ describe('the end of an arc — critic round 02 #32', () => {
       // Chapter 11 (Fallen Aeons): the Road comes right before the Heart of the Farplane (ffx2-fallen-aeons.md §1.2 item 5).
       // Chapter 15 (Den of Woe): optional Chapter 5 content before the finale (ffx2-gippal-den-of-woe.md §2 and §8).
       // Chapter 16 (Ixion at Djose): the end of FFX-2's Chapter 3 (ffx2-ixion-djose.md §1.1 [verified: 3 sources]).
+      // Chapters 17 and 18 (Sin): the assault from the Fahrenheit, before the Garden of Pain (ffx-sin.md §9.2 beat 11).
       const storyEarlierThanFinale = new Set([
         'ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'seymour-natus', 'seymour-omnis',
-        'ffx2-trema', 'isaaru-via-purifico', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-ixion-djose',
+        'ffx2-trema', 'isaaru-via-purifico', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'sin-fins-core', 'sin-face',
       ]);
       const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id));
       const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;

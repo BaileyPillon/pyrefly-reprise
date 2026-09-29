@@ -9,8 +9,8 @@ import './support/pyrefly-window.ts';
  * from the first), party prep, the opening scene, the fight played to a win with a sensible line (the in-battle
  * strategy guide's own NEXT pick, which is the chapter tactic: Darkness on the Dark Knights, Shell, Protect and
  * heals on Yuna, and Shell plus heals the moment the "Recharge" banner shows), the results, the fall, the Abyss,
- * the four whistles, the Bevelle Underground, and back on the board with the clear shown ("1 of 16 beaten" since
- * Chapter VII's unlock on 2026-09-29; "1 of 15" before).
+ * the four whistles, the Bevelle Underground, and back on the board with the clear shown ("1 of 18 beaten" since
+ * Chapter VII's unlock and the two Sin chapters' listing on 2026-09-29; "1 of 15" before).
  *
  * The debug API only reads (the state, the guide's DOM, the targeting snapshot) and pins the seed; it never
  * submits a command, skips a scene or sets a number. Frames: `docs/screenshots/chapter-ixion/listed/<w>x<h>-*.jpg`.
@@ -320,8 +320,8 @@ test.describe('Chapter XVI, Ixion at Djose: listed and playable (FFX-2 only)', (
         const thrown = await boot(page);
         await toBoard(page, input);
         const before = await board(page);
-        expect(before.tiles).toBe(16);
-        expect([before.beaten, before.total]).toEqual([0, 16]); // 16 since Chapter VII's unlock (2026-09-29)
+        expect(before.tiles).toBe(18);
+        expect([before.beaten, before.total]).toEqual([0, 18]); // 18 since Chapter VII's unlock and Sin's two chapters (2026-09-29)
 
         // The Ixion card: the last playable card, one Left (or a tap on it).
         if (input === 'keys') await page.keyboard.press('ArrowLeft');
@@ -386,7 +386,7 @@ test.describe('Chapter XVI, Ixion at Djose: listed and playable (FFX-2 only)', (
         await page.waitForTimeout(2000);
         const after = await board(page);
         expect(after.cleared).toContain(ID);
-        expect([after.beaten, after.total]).toEqual([1, 16]);
+        expect([after.beaten, after.total]).toEqual([1, 18]);
         await shoot(page, '15-board-cleared');
         expect(thrown, 'no uncaught page error').toEqual([]);
       });

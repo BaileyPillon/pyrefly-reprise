@@ -290,6 +290,6 @@ describe('registration (unlisted, TR18)', () => {
     // Bailey's pick (2026-09-25, "Trema: 1 and 3 at 3 s"): Oversoul Paragon is link 1.
     expect(ch?.enemyGroupRef.id).toBe(CLOISTER_PARAGON_OVERSOUL);
     expect(ch?.enemyGroupRef.nextGroupId).toBe(CLOISTER_TREMA);
-    expect(CHAPTER_IDS.slice(-8)).toEqual(['yojimbo-cavern', 'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico', 'ffx2-den-of-woe', 'ffx2-ixion-djose']); // X, XII and XIV the same day, XI and XV 2026-09-26, XVI 2026-09-27
+    expect(CHAPTER_IDS.slice(-10)).toEqual(['yojimbo-cavern', 'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'sin-fins-core', 'sin-face']); // X, XII and XIV the same day, XI and XV 2026-09-26, XVI 2026-09-27, XVII and XVIII 2026-09-29
   });
 });

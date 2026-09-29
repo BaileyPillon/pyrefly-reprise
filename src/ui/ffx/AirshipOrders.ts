@@ -100,8 +100,10 @@ export class AirshipOrders {
     range: 'near' | 'far',
     state: BattleState | null,
   ): Promise<Command | null> {
+    // Evrae always publishes the rack; a fight without it (the Sin Fins: Cid fires no missiles, research/ffx-sin.md
+    // §2.5 S-19) shows no pip strip rather than three full pips (plan REVIEW must-change 4).
     const volleys = state?.flags[AIRSHIP_MISSILES];
-    const left = typeof volleys === 'number' ? Math.max(0, Math.min(MISSILE_COUNT, volleys)) : MISSILE_COUNT;
+    const left = typeof volleys === 'number' ? Math.max(0, Math.min(MISSILE_COUNT, volleys)) : null;
     const standing = state?.flags[AIRSHIP_ORDER];
     return new Promise<Command | null>((resolve) => {
       void this.widget

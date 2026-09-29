@@ -128,6 +128,14 @@ import { gardenOfPainBuild } from './builds/garden-of-pain.ts';
 import { ISAARU_ABILITIES } from './enemies/isaaru-abilities.ts';
 import { ISAARU_GROUPS } from './enemies/isaaru.ts';
 import { viaPurificoBuild } from './builds/via-purifico.ts';
+// Chapters XVII and XVIII, Sin (FFX only; D-270) — listed 2026-09-29 (D-279): the Fins and the Core, the Face.
+import { OVERDRIVE_SIN_ABILITIES } from './enemies/overdrive-sin-abilities.ts';
+import { overdriveSinGroup } from './enemies/overdrive-sin.ts';
+import { SIN_FINS_ABILITIES } from './enemies/sin-fins-abilities.ts';
+import { SIN_GENAIS_CORE_ABILITIES } from './enemies/sin-genais-core-abilities.ts';
+import { sinLeftFinGroup, sinRightFinGroup } from './enemies/sin-fins.ts';
+import { sinGenaisCoreGroup } from './enemies/sin-genais-core.ts';
+import { sinFahrenheitBuild } from './builds/sin-fahrenheit.ts';
 import { seymourFluxGroup } from './enemies/seymour-flux.ts';
 import { yunalescaGroup } from './enemies/yunalesca.ts';
 import { seymourAnimaMacalaniaGroup } from './enemies/seymour-anima-macalania.ts';
@@ -253,6 +261,9 @@ const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...Object.values(SEYMOUR_NATUS_ABILITIES),
   ...Object.values(SEYMOUR_OMNIS_ABILITIES),
   ...Object.values(ISAARU_ABILITIES),
+  ...Object.values(OVERDRIVE_SIN_ABILITIES),
+  ...Object.values(SIN_FINS_ABILITIES),
+  ...Object.values(SIN_GENAIS_CORE_ABILITIES),
 ];
 
 // Fold item-effect and boss abilities into the merged ABILITIES record.
@@ -320,6 +331,10 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   // Chapter XIV (`isaaru-via-purifico`, src/data/chapter-isaaru.ts), registered by id
   // but UNLISTED: three links, Grothia -> Pterya -> Spathi [docs/plans/chapter-isaaru-review.md].
   ...Object.fromEntries(ISAARU_GROUPS.map((g) => [g.id, g])),
+  // Chapter XVIII (`sin-face`, src/data/chapter-sin-face.ts), listed 2026-09-29: link 4, Overdrive Sin.
+  // Chapter XVII (`sin-fins-core`, src/data/chapter-sin-fins-core.ts), listed 2026-09-29: Left Fin -> Right Fin -> Genais + Core.
+  [overdriveSinGroup.id]: overdriveSinGroup,
+  ...Object.fromEntries([sinLeftFinGroup, sinRightFinGroup, sinGenaisCoreGroup].map((g) => [g.id, g])),
 };
 
 /** Convenience alias for the first group of the possessed-aeon gauntlet. */
@@ -350,6 +365,7 @@ export {
   highbridgeBuild,
   gardenOfPainBuild,
   viaPurificoBuild,
+  sinFahrenheitBuild,
 };
 
 export type { AeonCatalogDef, OverdriveModeDef, FFXStatusDef, FFXCharacterDef };

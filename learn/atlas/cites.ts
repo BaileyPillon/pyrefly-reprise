@@ -48,6 +48,9 @@ import { YOJIMBO_ABILITIES } from '../../src/data/ffx/enemies/yojimbo-abilities.
 import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natus-abilities.ts';
 import { SEYMOUR_OMNIS_ABILITIES } from '../../src/data/ffx/enemies/seymour-omnis-abilities.ts';
 import { ISAARU_ABILITIES } from '../../src/data/ffx/enemies/isaaru-abilities.ts';
+import { OVERDRIVE_SIN_ABILITIES } from '../../src/data/ffx/enemies/overdrive-sin-abilities.ts';
+import { SIN_FINS_ABILITIES } from '../../src/data/ffx/enemies/sin-fins-abilities.ts';
+import { SIN_GENAIS_CORE_ABILITIES } from '../../src/data/ffx/enemies/sin-genais-core-abilities.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/fallen-aeons-abilities.ts';
 import { magusSistersAbilities } from '../../src/data/ffx2/enemies/magus-sisters-abilities.ts';
 import { paragonAbilities } from '../../src/data/ffx2/enemies/paragon-abilities.ts';
@@ -167,9 +170,21 @@ const COMBATANT_CITES: Record<ListedChapterId, Record<string, string>> = {
     'shade-gippal': 'research/ffx2-gippal-den-of-woe.md §3.1 (src/data/ffx2/enemies/den-of-woe.ts)',
     'shade-nooj': 'research/ffx2-gippal-den-of-woe.md §3.2 (src/data/ffx2/enemies/den-of-woe.ts)',
   },
-  // Chapter XVII (FFX-2), registered but unlisted: Ixion at Djose.
+  // Chapter XVI (FFX-2), listed 2026-09-27: Ixion at Djose.
   'ffx2-ixion-djose': {
     'x2-ixion': 'research/ffx2-ixion-djose.md §3.1 (src/data/ffx2/enemies/ixion-djose.ts)',
+  },
+  // Chapter XVII (FFX), registered but unlisted: Sin, the Fins and the Core (links 1-3).
+  'sin-fins-core': {
+    'left-fin': 'research/ffx-sin.md §2 (src/data/ffx/enemies/sin-fins.ts)',
+    'right-fin': 'research/ffx-sin.md §2 (src/data/ffx/enemies/sin-fins.ts)',
+    cid: 'research/ffx-sin.md §2.5 (src/data/ffx/enemies/sin-fins.ts, reusing the Evrae record)',
+    'sinspawn-genais': 'research/ffx-sin.md §2 (src/data/ffx/enemies/sin-genais-core.ts)',
+    'sin-core': 'research/ffx-sin.md §2 (src/data/ffx/enemies/sin-genais-core.ts)',
+  },
+  // Chapter XVIII (FFX), registered but unlisted: Sin, the Face (link 4, Overdrive Sin).
+  'sin-face': {
+    'overdrive-sin': 'research/ffx-sin.md §2 (src/data/ffx/enemies/overdrive-sin.ts)',
   },
 };
 
@@ -260,6 +275,13 @@ const ABILITY_FILE_CITES: Record<ListedChapterId, readonly AbilityFileCite[]> = 
   'ffx2-ixion-djose': [
     fileCite(x2IxionAbilities, 'research/ffx2-ixion-djose.md §4.1 (src/data/ffx2/enemies/ixion-djose-abilities.ts)'),
   ],
+  'sin-fins-core': [
+    fileCite(SIN_FINS_ABILITIES, 'research/ffx-sin.md §3.1 (src/data/ffx/enemies/sin-fins-abilities.ts)'),
+    fileCite(SIN_GENAIS_CORE_ABILITIES, 'research/ffx-sin.md §3.2, §3.3 (src/data/ffx/enemies/sin-genais-core-abilities.ts)'),
+  ],
+  'sin-face': [
+    fileCite(OVERDRIVE_SIN_ABILITIES, 'research/ffx-sin.md §3.4 (src/data/ffx/enemies/overdrive-sin-abilities.ts)'),
+  ],
 };
 
 /**
@@ -316,8 +338,12 @@ const ABILITY_OVERRIDE_CITES: Record<ListedChapterId, Record<string, string>> = 
   'ffx2-trema': {},
   // Every Chapter XV ability id is `x2-den-`-prefixed and defined in the chapter's own ability file.
   'ffx2-den-of-woe': {},
-  // Every Chapter XVII ability id is `x2-ixion-`-prefixed and defined in the chapter's own ability file.
+  // Every Chapter XVI ability id is `x2-ixion-`-prefixed and defined in the chapter's own ability file.
   'ffx2-ixion-djose': {},
+  // Every Chapter XVII (Sin: the Fins and the Core) ability id is `sin-`-prefixed and defined in the chapter's own two ability files.
+  'sin-fins-core': {},
+  // Every Chapter XVIII (Sin: the Face) ability id is `overdrive-sin-`-prefixed and defined in the chapter's own ability file.
+  'sin-face': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

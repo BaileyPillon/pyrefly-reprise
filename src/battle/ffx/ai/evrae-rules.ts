@@ -304,6 +304,10 @@ export function markEvraeRuntime(
   if (flags[AIRSHIP_RANGE] === undefined) return;
   const evrae = actors.get(EVRAE_ID);
   if (evrae) evrae.countsPartyTargetings = true;
+  // Overdrive Sin reuses the gap and names its own counted foe (`overdrive-sin-rules.ts`, FFX only).
+  const counted = flags['airship.countsTargetings'];
+  const other = typeof counted === 'string' ? actors.get(counted) : undefined;
+  if (other) other.countsPartyTargetings = true;
   const cid = actors.get(CID_ID);
   if (cid) cid.nonCombatant = true;
   for (const id of RANGED_WEAPON_ACTORS) {
@@ -319,6 +323,9 @@ export function markEvraeRuntime(
 /** True when submitting this order id right now would be accepted. */
 export function airshipOrderAvailable(ctx: Ctx, talkerId: CombatantId): boolean {
   if (!isEvraeBattle(ctx)) return false;
+  // No pilot, no order: Overdrive Sin shares the gap but has no Trigger Command
+  // (ffx-sin §3.5, verified: 3 sources) and no Cid in its formation.
+  if (!tryActor(ctx, CID_ID)) return false;
   // §4.2 [verified: 3 sources] — Tidus and Rikku, and only them. A redundant
   // order stays legal on purpose: it is the cost that makes it a decision
   // [REDUNDANT_ORDER_BURNS_TURN].

@@ -116,7 +116,12 @@ export function phaseForFormation(enemyIds: readonly CombatantId[]): PhaseId | n
   return null;
 }
 
-/** Evrae's range, from the one flag only that encounter sets (`AIRSHIP_RANGE`). */
+/**
+ * The *Fahrenheit*'s range, from `AIRSHIP_RANGE`. Evrae set it first (Ch VIII); Sin's Fins (Ch XVII, links 1-2)
+ * and Overdrive Sin's pull (Ch XVIII) set it on the same deck, so their FAR takes the same colder grade: the
+ * beat is the same ship pulling back (research/ffx-sin.md §4, §5.4), a **placeholder** until Sin's own looks
+ * are picked (FFX only; plan REVIEW must-change 4). The id stays `evrae-far`: link 4's staging is unchanged.
+ */
 export function phaseForFlags(flags: Readonly<Record<string, unknown>> | undefined): PhaseId | null {
   const range = flags?.['airship.range'];
   if (range === 'far') return 'evrae-far';

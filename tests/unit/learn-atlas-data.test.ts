@@ -49,7 +49,9 @@ describe('buildChapterSpecimen', () => {
       'isaaru-via-purifico': 'gold', // Chapter XIV, FFX, unlisted
       'ffx2-trema': 'pink', // Chapter XIII, FFX-2, unlisted
       'ffx2-den-of-woe': 'pink', // Chapter XV, FFX-2, unlisted
-      'ffx2-ixion-djose': 'pink', // Chapter XVII, FFX-2, unlisted
+      'ffx2-ixion-djose': 'pink', // Chapter XVI, FFX-2, listed 2026-09-27
+      'sin-fins-core': 'gold', // Chapter XVII, FFX, unlisted
+      'sin-face': 'gold', // Chapter XVIII, FFX, unlisted
     };
     for (const id of CHAPTER_IDS) {
       const specimen = buildChapterSpecimen(id);

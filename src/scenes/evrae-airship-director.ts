@@ -36,15 +36,20 @@ import {
   EVRAE_BASELINE_PX,
   EVRAE_WORLD_HEIGHT,
   RANGE_SHIFT_MS,
-  farWorldWidth,
   RANGE_STAGING,
   airshipRangeOf,
-  breathChargedOf,
   farActorScale,
   rangeShiftAt,
   type AirshipFlags,
   type AirshipRange,
 } from './evrae-airship-range.ts';
+import { evraeSubject, phoneRig, rangeSubjectFor, stagingOf, type PhoneRigStaging, type RangeSubject } from './evrae-airship-subjects.ts';
+import { PHONE_BATTLE_QUERY } from '../ui/common/phoneBattle.ts';
+
+/** True when the phone battle HUD takes this window (read at each bind); false with no window (a test). */
+function onPhone(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia?.(PHONE_BATTLE_QUERY).matches === true;
+}
 
 const KEY = 'pyrefly:airship-range';
 
@@ -55,6 +60,18 @@ const KEY = 'pyrefly:airship-range';
  */
 function rimOf(actor: PaintedActor): { value: number } | null {
   return (actor as unknown as { u?: { rimStrength?: { value: number } } }).u?.rimStrength ?? null;
+}
+
+/**
+ * A Fin's wide FAR painting is Sin in flight, not a body on the floor: never lay it to rest (`PaintedRest`) as a
+ * prone pose. `PaintedActor` keeps its sizing extents private and has no setter; this chapter-local write, like
+ * {@link rimOf}'s read, avoids growing that shared file for one boss (rule 7). It only widens the prone threshold
+ * of the Sin actors it is handed (the bound Fin here; Genais, the Core and the head in
+ * `app/screens/BattleScreenSinPoses.ts`), whose poses are all upright paintings; the next re-layout applies it.
+ */
+export function keepUpright(actor: PaintedActor): void {
+  const extents = (actor as unknown as { extents?: { proneAspect: number } }).extents;
+  if (extents) extents.proneAspect = Number.POSITIVE_INFINITY;
 }
 
 /** The rigs a range owns, under the scene's generic names. */
@@ -69,11 +86,15 @@ export class AirshipRangeDirector {
   private shiftMs = -1;
   private camera: BattleCamera | null = null;
   private evrae: PaintedActor | null = null;
-  private artId = 'evrae';
-  private worldHeight = EVRAE_WORLD_HEIGHT;
+  /** Who is bound, and how it is staged (`evrae-airship-subjects.ts`): Evrae, or one of Sin's Fins. */
+  private subject: RangeSubject = evraeSubject();
+  /** An upright phone at the last bind: a Fin then takes its phone staging (`PhoneStaging`, C4-1). */
+  private phone = false;
+  /** Chapter XVIII's phone rigs while no foe is bound (`SIN_FACE_PHONE`, C4-5); null elsewhere. */
+  private face: Partial<Record<AirshipRange, PhoneRigStaging>> | null = null;
   private nearPoses: Record<string, string> | null = null;
-  /** The breath-charge painting's URL when the subject has one; see {@link sync}. */
-  private chargeUrl: string | null = null;
+  /** The telegraph painting's URL per range, when the subject has one there; see {@link sync}. */
+  private chargeUrls: Partial<Record<AirshipRange, string>> = {};
   private charged = false;
   /** Evrae's rim strength as the stage set it; `null` until bound. See {@link quietRimOnKo}. */
   private rimBase: number | null = null;
@@ -110,19 +131,47 @@ export class AirshipRangeDirector {
   }
 
   /**
-   * Hand over Evrae's actor. It is placed on the current range's spot at once;
-   * `artId` is the subject folder its paintings come from.
+   * Hand over the range foe's actor. It is placed on the current range's spot at once. `id` is Evrae's art
+   * folder (Chapter VIII, the default) or a Fin's combatant id (`left-fin`, `right-fin`: Chapter XVII), which
+   * picks that Fin's paintings and sizes ({@link rangeSubjectFor}).
    */
-  async bindEvrae(actor: PaintedActor | null, artId = 'evrae', worldHeight = EVRAE_WORLD_HEIGHT): Promise<void> {
+  async bindEvrae(actor: PaintedActor | null, id = 'evrae', worldHeight = EVRAE_WORLD_HEIGHT): Promise<void> {
     this.evrae = actor;
-    this.artId = artId;
-    this.worldHeight = worldHeight;
+    const subject = rangeSubjectFor(id, id, worldHeight);
+    const hadPhoneRigs = this.phone && (this.subject.phone !== undefined || this.face !== null);
+    this.face = null;
+    this.phone = onPhone();
+    this.subject = subject;
     this.rimBase = actor ? (rimOf(actor)?.value ?? null) : null;
+    // A Fin on the phone takes its own rigs; leaving one (the next link, link 3) puts the range's own back.
+    if (hadPhoneRigs || (this.phone && subject.phone)) this.installRigs(this.range, true);
     if (!actor) return;
-    this.nearPoses = await resolvePoseMap(artId, 'enemy');
-    const states = await artStatesFor(artId);
-    this.chargeUrl = states === null || states.includes('breath-charge') ? characterUrl(artId, 'breath-charge') : null;
+    this.nearPoses = await resolvePoseMap(subject.artId, 'enemy');
+    const states = await artStatesFor(subject.artId);
+    const has = (state: string): boolean => (states === null ? !subject.strict : states.includes(state));
+    // A Fin whose paintings are not installed keeps Evrae's sizes, so its silhouette stands where it always did.
+    if (subject.strict && !has('idle-near')) {
+      this.subject = { ...evraeSubject(subject.artId), chargedOf: subject.chargedOf, charge: {} };
+      if (this.phone && subject.phone) this.installRigs(this.range, true);
+    }
+    if (this.subject.upright) keepUpright(actor);
+    this.chargeUrls = {};
+    for (const range of ['near', 'far'] as const) {
+      const pose = this.subject.charge[range];
+      if (pose && has(pose)) this.chargeUrls[range] = characterUrl(subject.artId, pose);
+    }
     await this.placeEvrae(this.range);
+  }
+
+  /**
+   * Chapter XVIII (link 4, no foe bound): on an upright phone, take `staging`'s rigs so the party stands clear of
+   * the Sin clock's slab (C4-5); `null` puts the range's own back. Inert on the desktop.
+   */
+  stageFace(staging: Partial<Record<AirshipRange, PhoneRigStaging>> | null): void {
+    if (staging === this.face) return;
+    this.face = staging;
+    this.phone = onPhone();
+    if (this.phone) this.installRigs(this.range, true);
   }
 
   /** Follow the engine: call after every event with the state it left. */
@@ -133,11 +182,12 @@ export class AirshipRangeDirector {
     // **Inhale's telegraph** [research §3.3 note 4, §12.2]: while the breath is
     // charged at NEAR, Evrae rests on the breath-charge painting (the idle
     // slot, so the presenter's own attack/hurt beats still play over it). At
-    // FAR the breath whiffs, and the far streak stays.
-    const charged = breathChargedOf(state);
+    // FAR the breath whiffs, and the far streak stays. A Fin's core glows at
+    // either range while `sin.fin.charged` holds (research §9.3).
+    const charged = this.subject.chargedOf(state);
     if (charged === this.charged) return;
     this.charged = charged;
-    if (this.range === 'near' && this.shiftMs < 0) void this.placeEvrae('near');
+    if (this.chargeUrls[this.range] && this.shiftMs < 0) void this.placeEvrae(this.range);
   }
 
   /**
@@ -174,7 +224,7 @@ export class AirshipRangeDirector {
 
   /** @param dt seconds */
   update(dt: number): void {
-    this.veil.update(dt, this.evrae, RANGE_STAGING[this.range].evrae, this.shiftMs >= 0);
+    this.veil.update(dt, this.evrae, [...stagingOf(this.subject, this.range, this.phone).spot], this.shiftMs >= 0);
     if (this.shiftMs < 0) return;
     this.shiftMs += dt * 1000;
     const s = rangeShiftAt(this.shiftMs);
@@ -211,7 +261,8 @@ export class AirshipRangeDirector {
     const cam = this.camera;
     if (!cam) return;
     const rigs = RANGE_STAGING[range].rigs;
-    for (const name of RANGE_RIGS) cam.addRig(name, rigs[name]);
+    const staging = this.phone ? (this.subject.phone?.[range] ?? this.face?.[range]) : undefined;
+    for (const name of RANGE_RIGS) cam.addRig(name, phoneRig(rigs[name], staging));
     const current = cam.rigName;
     if (!(RANGE_RIGS as readonly string[]).includes(current)) return;
     if (snap) cam.snapTo(current);
@@ -223,27 +274,29 @@ export class AirshipRangeDirector {
     const actor = this.evrae;
     if (!actor) return;
     if (actor.lifeState === 'down') return;
-    const spot = RANGE_STAGING[range].evrae;
+    const subject = this.subject;
+    const { spot, nearScale } = stagingOf(subject, range, this.phone);
+    const charge = this.charged ? this.chargeUrls[range] : undefined;
     if (range === 'far') {
-      const far = characterUrl(this.artId, 'idle-far');
+      const far = characterUrl(subject.artId, 'idle-far');
       const map: Record<string, string> = {};
       for (const p of FAR_POSES) map[p] = far;
+      if (charge) map['idle'] = charge; // a Fin's lit core; same crop as idle-far, so the size holds
       await actor.loadPoses(map, 'idle');
       // While FAR is the reference pose the actor sizes it to the boss height
       // (and clamps its long side), so measure what it did and correct to the
-      // head-ratio width: NEAR's pixel scale times EVRAE_FAR_HEAD_RATIO.
+      // subject's FAR width (Evrae: NEAR's pixel scale times EVRAE_FAR_HEAD_RATIO).
       actor.scale.setScalar(1);
       const drawnWidth = actor.poseSize[0];
-      const wanted = farWorldWidth(this.worldHeight);
-      actor.scale.setScalar(drawnWidth > 0 ? wanted / drawnWidth : farActorScale(EVRAE_BASELINE_PX.near, EVRAE_BASELINE_PX.far));
+      actor.scale.setScalar(drawnWidth > 0 ? subject.farWidth / drawnWidth : farActorScale(EVRAE_BASELINE_PX.near, EVRAE_BASELINE_PX.far));
     } else {
-      const near = this.nearPoses ?? (await resolvePoseMap(this.artId, 'enemy'));
+      const near = this.nearPoses ?? (await resolvePoseMap(subject.artId, 'enemy'));
       this.nearPoses = near;
       const map: Record<string, string> = {};
       for (const p of FAR_POSES) if (near[p]) map[p] = near[p]!;
-      if (this.charged && this.chargeUrl) map['idle'] = this.chargeUrl;
+      if (charge) map['idle'] = charge;
       await actor.loadPoses(map, 'idle');
-      actor.scale.setScalar(1);
+      actor.scale.setScalar(nearScale);
     }
     actor.position.set(spot[0], spot[1], spot[2]);
   }

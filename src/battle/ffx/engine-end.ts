@@ -17,7 +17,7 @@ import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
 import { counterInputs } from './counter-inputs.ts';
 import { aeonDuelLost, dismissAeon } from './aeons.ts';
-import { buildBattleResult } from './results.ts';
+import { buildBattleResult, scriptedGameOver } from './results.ts';
 
 /** What the end-of-turn helpers need from the facade. */
 export interface EndHooks {
@@ -148,8 +148,8 @@ export function checkEnd(h: EndHooks): boolean {
     return true;
   }
 
-  // A lost aeon duel, before the stalemate watch could call it an escape (Chapter XIV only, I-G3 / B11).
-  if (aeonDuelLost(ctx)) { finish(h, 'defeat'); return true; }
+  // A lost aeon duel (Chapter XIV, I-G3 / B11) or a scripted Game Over (Overdrive Sin, ffx-sin §3.4), before the stalemate watch.
+  if (aeonDuelLost(ctx) || scriptedGameOver(ctx)) { finish(h, 'defeat'); return true; }
 
   // **Stalemate.** A battle that can be neither won nor lost has to end, or the only way out is the
   // pause menu [critic round 02 #17].

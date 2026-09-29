@@ -31,17 +31,18 @@ describe('the board', () => {
     save = freshStore();
   });
 
-  it('holds sixteen cards, every one a playable chapter (Macalania unlocked 2026-09-29), none still coming', () => {
+  it('holds eighteen cards, every one a playable chapter (Macalania unlocked and the two Sin chapters listed 2026-09-29), none still coming', () => {
     const tiles = buildChapterTiles(save);
     // Leblanc's, Evrae's and Macalania's own COMING_CHAPTERS rows are filtered
     // out by id now that their real chapters are registered and unlocked, so
     // no COMING card is left on the board. Chapter IX (Yojimbo) was listed
     // 2026-09-24 and Chapters X (Natus), XII (Omnis), XIII (Trema) and XIV
     // (Isaaru) on 2026-09-25, XI (Fallen Aeons) and XV (Den of Woe) on
-    // 2026-09-26, XVI (Ixion) on 2026-09-27, none with a COMING row of its own;
-    // Chapter VII (Macalania) left its lock on 2026-09-29 (D-278).
+    // 2026-09-26, XVI (Ixion) on 2026-09-27, XVII and XVIII (Sin) on 2026-09-29,
+    // none with a COMING row of its own; Chapter VII (Macalania) left its lock
+    // on 2026-09-29 (D-278).
     expect(LOCKED_CHAPTER_IDS.size).toBe(0);
-    expect(tiles).toHaveLength(16);
+    expect(tiles).toHaveLength(18);
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
     expect(tiles.filter((t) => t.kind === 'coming')).toEqual([]);
   });
@@ -51,12 +52,12 @@ describe('the board', () => {
     expect(groups.map((g) => g.game)).toEqual(['ffx', 'ffx2']);
     expect(groups[0]!.label).toBe('Final Fantasy X');
     expect(groups[1]!.label).toBe('Final Fantasy X-2');
-    // Nine FFX cards, all built (Macalania unlocked 2026-09-29), seven FFX-2 (IV, V, VI, XI,
-    // XIII, XV and XVI, Leblanc's coming row dropped).
-    expect(groups[0]!.tiles).toHaveLength(9);
+    // Eleven FFX cards, all built (Macalania unlocked and Sin's two listed 2026-09-29), seven
+    // FFX-2 (IV, V, VI, XI, XIII, XV and XVI, Leblanc's coming row dropped).
+    expect(groups[0]!.tiles).toHaveLength(11);
     // D-183 (Bailey, 2026-09-25, "All recommendations"): Chapter VII sits at its
     // number's place, between III and VIII, and is now playable there.
-    expect(groups[0]!.tiles.map((t) => t.numeral)).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV']);
+    expect(groups[0]!.tiles.map((t) => t.numeral)).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII']);
     expect(groups[0]!.tiles[3]!.id).toBe('seymour-anima-macalania');
     expect(groups[0]!.tiles[3]!.playable).toBe(true);
     expect(groups[0]!.tiles.every((t) => t.playable)).toBe(true);
@@ -205,8 +206,9 @@ describe('the cursor', () => {
     const tiles = buildChapterTiles(save, { locked: new Set(['seymour-anima-macalania']) });
     const fromIII = tiles.findIndex((t) => t.id === 'braskas-final-aeon');
     expect(tiles[stepSelection(tiles, fromIII, 1)]!.id).toBe('evrae-airship');
-    // Isaaru (Chapter 14) is the last built FFX chapter since 2026-09-25.
-    const fromLastFfx = tiles.findIndex((t) => t.id === 'isaaru-via-purifico');
+    // Sin: the Face (Chapter XVIII) is the last built FFX chapter since 2026-09-29;
+    // +1 crosses into the FFX-2 group.
+    const fromLastFfx = tiles.findIndex((t) => t.id === 'sin-face');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
     // Wrapping backwards from the first card lands on the last *playable* one
     // — Ixion at Djose now, listed 2026-09-27 after Chapter XV in the FFX-2 group.

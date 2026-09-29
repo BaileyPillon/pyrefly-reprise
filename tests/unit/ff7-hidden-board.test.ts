@@ -52,10 +52,10 @@ describe('registration', () => {
     expect(chapter.music.victory).toBeUndefined();
   });
 
-  it('is in no list: CHAPTERS keeps sixteen, CHAPTER_IDS never names it', () => {
-    expect(CHAPTERS).toHaveLength(16);
+  it('is in no list: CHAPTERS keeps eighteen, CHAPTER_IDS never names it', () => {
+    expect(CHAPTERS).toHaveLength(18);
     expect(CHAPTERS.some((c) => c.game === 'ff7' || c.experimental)).toBe(false);
-    expect(CHAPTER_IDS).toHaveLength(16);
+    expect(CHAPTER_IDS).toHaveLength(18);
     expect(CHAPTER_IDS as readonly string[]).not.toContain(ID);
   });
 
@@ -68,10 +68,10 @@ describe('registration', () => {
 describe('the board (invariant I2)', () => {
   beforeEach(() => localStorage.clear());
 
-  it('has sixteen tiles in two groups, none of them FF7, even with a record in the experiments store', () => {
+  it('has eighteen tiles in two groups, none of them FF7, even with a record in the experiments store', () => {
     localStorage.setItem(EXPERIMENTS_KEY, JSON.stringify({ [ID]: { attempts: 3, clears: 2 } }));
     const tiles = buildChapterTiles(new SaveStore());
-    expect(tiles).toHaveLength(16);
+    expect(tiles).toHaveLength(18);
     expect(tiles.some((t) => t.id === ID || (t.game as string) === 'ff7')).toBe(false);
     expect(groupChapterTiles(tiles).map((g) => g.game)).toEqual(['ffx', 'ffx2']);
     expect(boardProgress(tiles, 0).beaten).toBe(0);

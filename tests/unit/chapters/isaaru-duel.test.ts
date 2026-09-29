@@ -204,8 +204,8 @@ describe('registration: Chapter XIV, listed 2026-09-25', () => {
     expect(ch?.enemyGroupRef.id).toBe('isaaru-grothia');
     expect(ch?.buildRef).toBe(viaPurificoBuild);
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('isaaru-via-purifico');
-    expect(CHAPTERS.map((c) => c.id).at(-3)).toBe('isaaru-via-purifico'); // Chapter XV follows (listed 2026-09-26), then XVI (2026-09-27)
-    expect(CHAPTER_IDS.at(-3)).toBe('isaaru-via-purifico');
+    expect(CHAPTERS.map((c) => c.id).at(-5)).toBe('isaaru-via-purifico'); // XV follows (listed 2026-09-26), XVI (2026-09-27), XVII and XVIII (2026-09-29)
+    expect(CHAPTER_IDS.at(-5)).toBe('isaaru-via-purifico');
     expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' });
   });
 });

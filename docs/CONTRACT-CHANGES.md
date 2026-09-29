@@ -6,6 +6,51 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-29 — Sin listed: `CHAPTERS` and `CHAPTER_IDS` gain `'sin-fins-core'` and `'sin-face'` (FFX only; the listing is shared plumbing)
+
+**FFX only** for the chapters [AGENTS.md hard rule 14; research/ffx-sin.md §0.3]; the listing itself is shared
+plumbing, case "both" (CHK-020). Branch `chapter-sin`, package L (D-279: the driver's picks, which Bailey delegated).
+Additive: no id, number or type is renamed or removed, and no other chapter's record moves.
+
+- `encounters.ts`: `SIN_FINS_CORE` and `SIN_FACE` move from `UNLISTED_CHAPTERS` (`chapters-unlisted.ts`, which keeps
+  only the FF7 experiment) into `CHAPTERS`, and `'sin-fins-core'`, `'sin-face'` into `CHAPTER_IDS`, after Chapter
+  XVI, as numbers 17 and 18 (the ids and `| 18` were added by package S, below). The board now shows eighteen cards
+  and counts seventeen ("0 of 17"; Chapter VII is still a locked COMING card on this branch). Three list lines were
+  folded to keep the file at 399 lines.
+- `chapter-meta.ts` (not a contract file, recorded for its readers): `CHAPTER_META` spreads `SIN_CHAPTER_META` after
+  Chapter XVI; `UNLISTED_CHAPTER_META` is now empty. `story/registry.ts`: `ChapterKey` gains both ids.
+- Saves: none moves. A live release-28 save (main `6ea8528f`, exported from that build's own SaveStore) loads
+  unchanged and gains both chapters unplayed (`tests/unit/save-sin-listed-fixture.test.ts`,
+  `tests/fixtures/saves/release-28-main.json`). `src/app/SaveData.ts` is untouched.
+- Presentation seams, FFX only and inert elsewhere (not contract files): `scenes/evrae-airship-deck.ts` exports
+  `makeAirshipDeckScene({ key, roll })` (Chapter VIII's factory is that call on its own plate, unchanged); the range
+  director stages a subject from `scenes/evrae-airship-subjects.ts` (Evrae's numbers unchanged, the two Fins');
+  `app/screens/BattleScreenSinPoses.ts` follows Genais's shell, the Core's charge and the head's mouth stage.
+
+## 2026-09-29 — `types.ts` `checkpointOnEntry` doc: FFX's Sin link 3, behind an OFF switch (FFX only)
+
+**FFX only** [AGENTS.md hard rule 14]. Branch `chapter-sin`. `EnemyGroupDef.checkpointOnEntry`'s doc comment, which said
+"FFX-2" (Trema; Shuyin, D-217, used it too), now names both games: FFX-2's Trema and Shuyin, and FFX's Sin link 3
+only behind the switch `SIN_LINK3_CHECKPOINT` in `src/data/ffx/enemies/sin-genais-core.ts`, which ships **false**. The
+shape does not change and no formation's value changes; the checkpoint seam (`BattleChainCheckpoint.ts`) was always
+game-agnostic. An adaptation for Bailey to weigh, measured in `docs/plans/sin-fins-core-bench.md`.
+
+## 2026-09-29 — Sin as two chapters: `encounters.ts` ids and `| 18`, `types.ts` `carriesPartyState` doc (FFX only)
+
+**FFX only** [AGENTS.md hard rule 14; research/ffx-sin.md §0.3]. Branch `chapter-sin` (package S of
+`docs/plans/sin-two-chapters-plan.md`, D-270). Nothing in any FFX-2 or FF7 chapter changes.
+
+- `encounters.ts` `ChapterId`: loses `'sin'` and gains `'sin-fins-core' | 'sin-face'`. **A rename, not a removal:**
+  `'sin'` only ever existed on this branch (never on main, never listed, never in a save), so no save key or
+  shipped id moves. `Chapter.number` widens by `| 18` (Chapter XVIII, "Sin: the Face"; Chapter XVII is "Sin: the
+  Fins and the Core"). Both edits are on existing lines; the file stays at 399 lines.
+- `types.ts` `EnemyGroupDef.carriesPartyState`: the doc comment gains "FFX too, statuses only (Sin links 2 and 3)".
+  The shape does not change. The FFX carry (`BattleScreenSetup.carryFfx`) now copies the live statuses (less KO,
+  Eject and the Defend/Guard/Sentinel stances) into `FFXMemberBuild.statuses` / `FFXAeonBuild.statuses`, fields
+  already in the contract, when the next link sets the flag. Only `sin-right-fin` and `sin-genais-core` set it, so
+  Chapters III and XIV carry as before (`tests/unit/chapters/sin-carry.test.ts`), and the FFX golden hashes are
+  identical before and after (408/408, 6 seeds x 4 policies, base `56026029`).
+
 ## 2026-09-29 — `types.ts`: `EnemyGroupDef` gains an optional `bossId` (PR-0243)
 
 **Both games** (shared plumbing); only Chapter VII (FFX) sets it. Branch `r30-ch7`. Additive:
@@ -156,6 +201,35 @@ Branch `chapter-ixion`. Bailey, 2026-09-27 ~18:30 EDT: "ixion needs to be in the
   (`src/data/chapter-ffx2-ixion-djose.ts`); listing it is the switch. Chapter XVI (Sin, branch `chapter-sin`)
   widens the same line to 16; a merge of the two keeps `| 16 | 17` and both ids.
 - No other field, type or export changes; every importer compiles unchanged.
+
+## 2026-09-27 — `encounters.ts`: `ChapterId += 'sin'`, `Chapter.number` widens to 16 (Chapter XVI, unlisted; XVII since the 2026-09-28 merge)
+
+**Merge of 2026-09-28** (branch `chapter-sin` takes `origin/main`): main listed Ixion at Djose as
+Chapter XVI and widened `Chapter.number` to 17 first, so Sin keeps its id and takes the next number,
+**17** (Chapter XVII, still unlisted). `ChapterId` holds both `'ffx2-ixion-djose'` and `'sin'`; no
+other shape changes. The two-chapter plan (`docs/plans/sin-two-chapters-plan.md`) renumbers again when
+the Fins and the Core are built.
+
+**FFX only** [AGENTS.md hard rule 14]: Sin, the assault from the *Fahrenheit* (`research/ffx-sin.md`
+§0.3). Bailey, 2026-09-27 ~13:40 EDT, "all your recommendations" (Sin: concept A reached through B;
+link 4, Overdrive Sin, first, shipped unlisted behind a switch). Branch `chapter-sin`.
+
+**Additive** in `src/data/encounters.ts` (the file does not grow: both edits are on existing lines):
+- `ChapterId` gains `'sin'` (so `ListedChapterId` does too, as every unlisted chapter's id did
+  before it was listed; the three `learn/atlas/cites.ts` records gain an entry).
+- `Chapter.number` gains `16` (the concept sheet's slot XVI).
+
+The record (`src/data/chapter-sin.ts`) sits in `UNLISTED_CHAPTERS`: `getChapter('sin')` and
+`window.__pyrefly.gotoChapter('sin')` reach it; `CHAPTERS` and `CHAPTER_IDS` do not change.
+
+Shared signatures outside the contract files (FFX only, each inert in every other battle; the FFX
+chapters' event logs and menus are byte-identical before and after, measured):
+- `src/battle/ffx/results.ts`: `SCRIPTED_GAME_OVER_FLAG` (`state.flags['battle.scriptedGameOver']`)
+  and `scriptedGameOver(ctx)`; `engine.ts#checkEnd` ends the battle as a defeat when it is set
+  (Overdrive Sin's Giga-Graviton, research §3.4, verified: 4 sources).
+- `src/battle/ffx/ai/evrae-rules.ts`: `airshipOrderAvailable` refuses when Cid is not on the field
+  (Overdrive Sin shares the `airship.range` gap but has no Trigger Command, §3.5);
+  `markEvraeRuntime` also marks the enemy named by `state.flags['airship.countsTargetings']`.
 
 ## 2026-09-27 — minigame protocol: FFX picker params and backing out (hotfix 24)
 

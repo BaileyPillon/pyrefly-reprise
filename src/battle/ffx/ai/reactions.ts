@@ -18,6 +18,7 @@ import { aiContextFor } from './types.ts';
 import { seymourDelayCounter, seymourThresholdCounters, stepFluxPhase } from './seymour-flux.ts';
 import { GUADO_GUARDIAN_SCRIPT, macalaniaGuardianCounter } from './seymour-anima-macalania.ts';
 import { collectEvraeCounters } from './evrae-counters.ts';
+import { collectSinCounters, runSinLivenessHooks } from './sin-counters.ts';
 import { yunalescaCounter } from './yunalesca.ts';
 import { yuYevonCounter } from './yu-yevon.ts';
 import { MORTIBODY_ID, NATUS_ID, natusActionCounters, stepNatusPhase } from './seymour-natus-rules.ts';
@@ -146,6 +147,14 @@ export function collectBossCounters(
     if (!evrae || !canCounter(ctx, c.actorId)) continue;
     out.push({ actorId: c.actorId, command: { kind: 'ability', id: c.abilityId, targets: [] }, cause: c.cause });
   }
+
+  // **Sin** (FFX only): Overdrive Sin's Gaze [ffx-sin §5.4], the Fins' counters [§5.1] and link 3's [§5.3], once
+  // per action as Evrae's are (`sin-counters.ts`). A counter may name its aim: Waterga goes to the caster [§3.2,
+  // verified: 4 sources]; unset, the engine resolves it as before. A no-op in every other battle.
+  for (const c of collectSinCounters(ctx, attacker, def, damagedEnemyIds)) {
+    if (!canCounter(ctx, c.actorId)) continue;
+    out.push({ actorId: c.actorId, command: { kind: 'ability', id: c.abilityId, targets: c.targets ?? [] }, cause: c.cause });
+  }
   return out;
 }
 
@@ -157,6 +166,7 @@ export function collectBossCounters(
  * drain is lethal to Seymour.
  */
 export function runMortibsorptionIfDown(ctx: Ctx): boolean {
+  runSinLivenessHooks(ctx); // Sin link 3 (FFX): the Genais/Core marks follow isAlive, every action (sin-counters.ts)
   if (runNatusMortibsorption(ctx)) return true;
   const mount = tryActor(ctx, 'mortiorchis');
   const host = tryActor(ctx, 'seymour-flux');

@@ -33,5 +33,15 @@ import { FF7_GUARD_SCORPION } from './chapter-ff7-guard-scorpion.ts';
  * Ixion at Djose was registered here on 2026-09-27 (FFX-2 only; concept A, unlisted behind a switch) and
  * listed the same day as Chapter XVI (now in `CHAPTERS`, after Chapter XV; Bailey: "ixion needs to be in the
  * next build as well").
+ * Chapter XVII, Sin (link 4, Overdrive Sin, first), was registered here on 2026-09-27 as XVI (FFX only;
+ * Bailey's "all your recommendations": concept A reached through B, link 4 shipped unlisted behind
+ * a switch; `./chapter-sin.ts`, since renamed), and took the next number, XVII, when Ixion was listed as XVI (merge of
+ * 2026-09-28). Listing it is the switch.
+ * On 2026-09-29 Sin became two chapters, split where the game saves (D-270, FFX only): Chapter XVII,
+ * "Sin: the Fins and the Core" (`sin-fins-core`, links I to III, `./chapter-sin-fins-core.ts`), and Chapter
+ * XVIII, "Sin: the Face" (`sin-face`, link IV; the branch-only `sin` renamed and renumbered,
+ * `./chapter-sin-face.ts`). Both were listed on 2026-09-29 (now in `CHAPTERS`, after Chapter XVI), on the
+ * driver's picks of the art, the countdown display and the stand-in cues, which Bailey delegated (D-279:
+ * "Your picks (Recommended)"; he can swap any pick later).
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION] as const;

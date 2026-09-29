@@ -107,4 +107,16 @@ export const PHYSICAL_BY_CHAPTER: Record<string, string[]> = {
   ],
   // Chapter XVI (FFX-2, listed 2026-09-27): only his Normal Attack is physical (research ffx2-ixion-djose.md §4.1).
   'ffx2-ixion-djose': ['x2-ixion:x2-ixion-attack'],
+  // Chapter XVII (FFX, listed 2026-09-29): the Fins' Ram and Smack (Strength rows, research ffx-sin.md §3.1) and
+  // Genais's Venom and Thrashing (§3.2); Gravija, Negation, the Core's spells and Genais's Waterga and Cura are not.
+  'sin-fins-core': [
+    'left-fin:sin-fin-ram',
+    'left-fin:sin-fin-smack',
+    'right-fin:sin-fin-ram',
+    'right-fin:sin-fin-smack',
+    'sinspawn-genais:sin-genais-venom',
+    'sinspawn-genais:sin-genais-thrashing',
+  ],
+  // Chapter XVIII (FFX, listed 2026-09-29): Overdrive Sin has no physical row (the pull, Gravija, Gaze, the Graviton).
+  'sin-face': [],
 };

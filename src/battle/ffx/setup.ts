@@ -30,6 +30,7 @@ import { refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
+import { applySinSetups } from './ai/sin-setup.ts';
 import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
@@ -389,14 +390,13 @@ export function buildBattle(
   }
 
   seedInitialCtb(ctx, setup.condition ?? 'normal');
-
-  // Per-encounter scripted setup, each a no-op in every battle but its own. Macalania's opening
-  // is "a scripted pre-turn sequence" [ffx-seymour-anima-macalania §5.2]: Protect and Shell here.
+  // Per-encounter scripted setup, each a no-op in every battle but its own. Macalania's opening is "a scripted pre-turn sequence" [ffx-seymour-anima-macalania §5.2]: Protect and Shell here.
   applyMacalaniaSetup(ctx);
   applyEvraeSetup(ctx); // NEAR opening, Cid a non-combatant, Wakka's ranged blitzball [ffx-evrae-airship §4.1, §2.1, §4.3]
   applyYojimboSetup(ctx); // Yojimbo's gauge; Ginnem and Daigoro take no turns [ffx-yojimbo §2.5, §4.1]
   applyOmnisSetup(ctx); // Chapter XII: four Fire discs, his affinity, discs without turns [ffx-seymour-omnis §4.1]
   applyAeonDuelSetup(ctx, group); // Chapter XIV's mirror lock, "only aeons", the loss and the AP [aeon-duel.ts]
   applyIsaaruSetup(ctx); // Grothia's and Pterya's gauges, Spathi's count, Isaaru's no-turn [ffx-isaaru-bevelle §4]
+  applySinSetups(ctx); // Sin: link 4's clock and pulls, then links 1-3 (the Fins, Genais and the Core) [ffx-sin §5]
   return ctx;
 }

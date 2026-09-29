@@ -194,15 +194,34 @@ export const EVRAE_AIRSHIP_DECK_PALETTE: ScenePalette = {
   tiltMaxBlur: 2.6,
 };
 
-/** **The Fahrenheit's foredeck**, as a {@link SceneFactory}. Owns no actors (`docs/ENGINE-API.md#scene-builder-contract`). */
-export const buildEvraeAirshipDeckScene: SceneFactory = async (
-  opts: SceneBuildOptions = {},
-): Promise<SceneBuild> => {
+/** Chapter VIII's plate, and the one every other plate on this deck falls back to when its file is missing. */
+export const EVRAE_DECK_PLATE = 'evrae-airship-deck';
+
+/**
+ * A painting the deck can be built over (FFX only): its `public/art/backdrops/<key>.png` and the roll that
+ * levels its painted rail (radians, default Evrae's). Sin's chapters (XVII, XVIII) reuse this deck, its range
+ * director and its rigs over their own plates (`./evrae-airship-sin.ts`).
+ */
+export interface DeckPlate {
+  readonly key: string;
+  readonly roll?: number;
+}
+
+/**
+ * **The Fahrenheit's foredeck** over `plate`, as a {@link SceneFactory}. Owns no actors
+ * (`docs/ENGINE-API.md#scene-builder-contract`). A plate whose file is missing falls back to Evrae's painting
+ * and roll, so a chapter whose art is not installed yet still stands on the deck it always had.
+ */
+export function makeAirshipDeckScene(plate: DeckPlate): SceneFactory {
+  return (opts: SceneBuildOptions = {}): Promise<SceneBuild> => buildDeck(plate, opts);
+}
+
+async function buildDeck(plate: DeckPlate, opts: SceneBuildOptions): Promise<SceneBuild> {
   const group = new Group();
-  group.name = 'scene:evrae-airship-deck';
+  group.name = `scene:${plate.key}`;
   const low = opts.quality === 'low';
   const cameraRef = opts.cameraRef ?? [...CAMERA_REF];
-  const url = artUrl('art/backdrops/evrae-airship-deck.png');
+  let url = artUrl(`art/backdrops/${plate.key}.png`);
 
   const backdropOptions = {
     url,
@@ -234,13 +253,21 @@ export const buildEvraeAirshipDeckScene: SceneFactory = async (
   const skyPivot = new Group();
   skyPivot.name = 'sky-roll';
   skyPivot.position.set(0, BACKDROP.centreY, BACKDROP.distance);
-  skyPivot.rotation.z = BACKDROP.roll;
+  skyPivot.rotation.z = plate.roll ?? BACKDROP.roll;
   const skyInner = new Group();
   skyInner.position.set(0, -BACKDROP.centreY, -BACKDROP.distance);
   skyPivot.add(skyInner);
   group.add(skyPivot);
 
   let backdrop = await Backdrop.create(backdropOptions);
+  if (backdrop.placeholder && plate.key !== EVRAE_DECK_PLATE) {
+    // The plate is not installed: stand on Chapter VIII's painting, at its own roll.
+    backdrop.dispose();
+    url = artUrl(`art/backdrops/${EVRAE_DECK_PLATE}.png`);
+    backdropOptions.url = url;
+    skyPivot.rotation.z = BACKDROP.roll;
+    backdrop = await Backdrop.create(backdropOptions);
+  }
   backdrop.applyTo(skyInner);
   // B's own pixels, not a dusk grade of them (`evrae-airship-daylight.ts`).
   showPlateAsPainted(skyInner);
@@ -345,7 +372,10 @@ export const buildEvraeAirshipDeckScene: SceneFactory = async (
       group.clear();
     },
   };
-};
+}
+
+/** Chapter VIII's deck, over its own plate. */
+export const buildEvraeAirshipDeckScene: SceneFactory = makeAirshipDeckScene({ key: EVRAE_DECK_PLATE });
 
 /** The deck's far edge, for the test that keeps the painted rail behind it. */
 export const EVRAE_AIRSHIP_DECK_EDGE = DECK;
