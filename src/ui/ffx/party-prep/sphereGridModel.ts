@@ -38,6 +38,7 @@
  */
 
 import type { AbilityId, FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
+import { effectivePool } from '../../../battle/ffx/effectiveStats.ts';
 import { ALL_ABILITIES } from '../../../data/ffx/index.ts';
 import {
   NODE_BY_ID,
@@ -45,6 +46,7 @@ import {
   routeFor,
   sphereItemId,
   statField,
+  statTag,
   type GridNode,
 } from './sphereGridData.ts';
 
@@ -74,6 +76,25 @@ const STARTER_POUCH: Readonly<Record<string, number>> = {
   'lv-3-key-sphere': 1,
   'lv-4-key-sphere': 1,
 };
+
+/**
+ * What the grid knows that the build has no field for (opened locks, the
+ * ground each character has walked, the travelled steps already paid for, and
+ * whether the pouch is the starter estimate), kept per build for the life of
+ * the page. Leaving party prep and coming back mounts a new panel and a new
+ * model on the same build object; before this, every lock the player had
+ * opened closed again while its key sphere stayed spent, and an emptied pouch
+ * was refilled (fb-0929). Keyed weakly, so a structured clone starts clean.
+ */
+interface GridSession {
+  unlocked: Set<number>;
+  walked: Map<string, { visited: Set<number>; quarterSteps: number }>;
+  pouchIsEstimated: boolean;
+}
+const SESSIONS = new WeakMap<FFXPartyBuild, GridSession>();
+
+/** Every stat but the two pools stops at 255 [ffx-combat-core §10.1 "Caps"]. */
+const STAT_CAP = 255;
 
 /** Per-character working state, kept alongside the build it writes through to. */
 export interface MemberGrid {
@@ -127,17 +148,31 @@ function asNodeId(raw: string): number | null {
 export class SphereGridModel {
   readonly build: FFXPartyBuild;
   /** Lock nodes opened by anyone — lock removal is global in FFX. */
-  readonly unlocked = new Set<number>();
+  readonly unlocked: Set<number>;
   private readonly grids = new Map<string, MemberGrid>();
   /** Set when {@link STARTER_POUCH} was seeded, so the UI can say so. */
   readonly pouchIsEstimated: boolean;
+  private readonly session: GridSession;
 
   constructor(build: FFXPartyBuild) {
     this.build = build;
+    const earlier = SESSIONS.get(build);
+    if (earlier) {
+      // A later visit to party prep: the pouch is whatever the earlier visit
+      // left, even empty, and is never topped up by the starter estimate again.
+      this.session = earlier;
+      this.unlocked = earlier.unlocked;
+      this.pouchIsEstimated = earlier.pouchIsEstimated;
+      for (const member of build.members) this.grids.set(member.id, this.hydrate(member));
+      return;
+    }
 
     const partyHas = Object.values(build.sphereInventory).some((n) => n > 0);
     const membersHave = build.members.some((m) => Object.values(m.sphereGrid.spheres).some((n) => n > 0));
     this.pouchIsEstimated = !partyHas && !membersHave;
+    this.unlocked = new Set<number>();
+    this.session = { unlocked: this.unlocked, walked: new Map(), pouchIsEstimated: this.pouchIsEstimated };
+    SESSIONS.set(build, this.session);
     if (this.pouchIsEstimated) Object.assign(build.sphereInventory, STARTER_POUCH);
     else if (!partyHas) {
       // A chapter that put the spheres on the members instead: fold them into
@@ -168,8 +203,11 @@ export class SphereGridModel {
     // Travelled ground is cheap to re-cross, so the walk that got the
     // character here counts even on a second visit to the screen, when the
     // build's own `activatedNodeIds` is the more recent record.
-    const visited = new Set([...activated, ...(route?.visited ?? [])]);
-    visited.add(position);
+    // The session keeps one set per character across visits, so ground walked
+    // on an earlier visit stays cheap to re-cross.
+    const walked = this.session.walked.get(member.id) ?? { visited: new Set<number>(), quarterSteps: 0 };
+    this.session.walked.set(member.id, walked);
+    for (const id of [...activated, ...(route?.visited ?? []), position]) walked.visited.add(id);
     for (const id of route?.unlocked ?? []) this.unlocked.add(id);
 
     // Write the resolved ids back so the placeholder strings stop travelling
@@ -182,8 +220,8 @@ export class SphereGridModel {
       name: member.name,
       position,
       activated,
-      visited,
-      quarterSteps: 0,
+      visited: walked.visited,
+      quarterSteps: walked.quarterSteps,
       tint: characterTint(member.id),
     };
   }
@@ -224,10 +262,21 @@ export class SphereGridModel {
     });
   }
 
-  /** S.Lv a step onto `nodeId` costs, as a fraction: 1, or 0.25 on travelled ground. */
+  /**
+   * S.Lv a step onto `nodeId` spends **now**: 1 onto new ground; on travelled
+   * ground 1 for the first of four steps and 0 for the three it paid for.
+   * It used to answer 0.25 for every travelled step, so the caption promised
+   * "1/4 S.Lv" and the step then took a whole one (fb-0929).
+   */
   moveCost(memberId: string, nodeId: number): number {
     const grid = this.grids.get(memberId);
-    return grid?.visited.has(nodeId) === true ? 0.25 : 1;
+    if (!grid?.visited.has(nodeId)) return 1;
+    return grid.quarterSteps > 0 ? 0 : 1;
+  }
+
+  /** Travelled steps the last S.Lv spent on travelled ground still covers, 0–3. */
+  paidSteps(memberId: string): number {
+    return this.grids.get(memberId)?.quarterSteps ?? 0;
   }
 
   moveTo(memberId: string, nodeId: number): GridActionResult {
@@ -254,10 +303,12 @@ export class SphereGridModel {
 
     grid.position = nodeId;
     grid.visited.add(nodeId);
+    const walked = this.session.walked.get(memberId);
+    if (walked) walked.quarterSteps = grid.quarterSteps;
     member.sphereGrid.position = String(nodeId);
     return {
       ok: true,
-      message: `${grid.name} moves to ${node.name}. S.Lv ${member.sphereGrid.sLv}${travelled ? ' (travelled path)' : ''}.`,
+      message: `${grid.name} moves to ${node.kind === 'lock' ? `the opened ${node.name}` : node.name}. S.Lv ${member.sphereGrid.sLv}${travelled ? ' (travelled path)' : ''}.`,
     };
   }
 
@@ -308,12 +359,22 @@ export class SphereGridModel {
 
     const field = statField(node.stat);
     if (node.kind === 'stat' && field) {
-      member.stats[field] += node.value;
-      // Keep the current pool with its maximum, so the shell's field card and
-      // the battle both start the character whole rather than capped below it.
-      if (field === 'maxHp') member.hp += node.value;
-      if (field === 'maxMp') member.mp += node.value;
-      return { ok: true, message: `${node.name} activated — ${member.name}'s ${field.replace('max', '')} is now ${member.stats[field]}.` };
+      if (field === 'maxHp' || field === 'maxMp') {
+        // A pool node raises the *base* pool and the maximum follows §9's
+        // `baseHP * (100 + HP%) // 100`, like every other reader of it
+        // (effectiveStats.ts). Adding the node to the maximum alone left the
+        // STATS tab's base unmoved and gave Tidus 2620 for 2640 (fb-0929).
+        const pool = field === 'maxHp' ? 'hp' : 'mp';
+        const before = member.stats[field];
+        member.stats[pool] += node.value;
+        member.stats[field] = effectivePool(member, pool);
+        // Keep the current pool with its maximum, so the shell's field card and
+        // the battle both start the character whole rather than capped below it.
+        member[pool] += member.stats[field] - before;
+        return { ok: true, message: `${node.name} activated — ${member.name}'s max ${pool.toUpperCase()} is now ${member.stats[field]}.` };
+      }
+      member.stats[field] = Math.min(STAT_CAP, member.stats[field] + node.value);
+      return { ok: true, message: `${node.name} activated — ${member.name}'s ${statTag(node.stat)} is now ${member.stats[field]}.` };
     }
 
     if (node.kind === 'ability') {

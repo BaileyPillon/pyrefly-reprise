@@ -1,0 +1,38 @@
+/* Shared chrome for the fb-0929 Sphere Grid option mockups. Served by the dev
+   server from the repo root, so the game's own tokens and self-hosted fonts load. */
+@import url('/src/ui/common/fonts.css?direct');
+@import url('/src/ui/inkgold/tokens.css?direct');
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #0b0a12; }
+.frame { position: relative; width: 1600px; height: 900px; overflow: hidden; background: #0b0a12 center/cover no-repeat; }
+.frame--phone { width: 390px; height: 844px; }
+.abs { position: absolute; }
+
+/* Ink & Gold ivory slab, skewed like every prep slab. */
+.slab {
+  position: absolute; background: var(--ig-paper); color: var(--ig-ink);
+  transform: skewX(var(--ig-skew)); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  border-left: 6px solid var(--ig-gold);
+}
+.slab > .in { transform: skewX(var(--ig-skew-inverse)); }
+.ink-slab { position: absolute; background: var(--ig-ink-panel); color: var(--ig-paper); transform: skewX(var(--ig-skew)); border-left: 5px solid var(--ig-gold); }
+.ink-slab > .in { transform: skewX(var(--ig-skew-inverse)); }
+
+.kicker { font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.32em; font-size: 15px; color: var(--ig-gold-on-paper); text-transform: uppercase; }
+.title { font-family: var(--ig-font-serif); font-style: italic; font-weight: 600; font-size: 40px; line-height: 1.05; }
+.body { font-family: var(--ig-font-text); font-size: 18px; line-height: 1.45; }
+.num { font-family: var(--ig-font-numeral); font-weight: 700; }
+.btn {
+  display: inline-block; font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.22em; font-size: 16px;
+  padding: 10px 22px; border: 2px solid var(--ig-ink); color: var(--ig-ink); background: transparent; text-transform: uppercase;
+}
+.btn--gold { background: var(--ig-gold); border-color: var(--ig-gold); color: var(--ig-ink); }
+.btn--dark { background: var(--ig-ink); color: var(--ig-gold); border-color: var(--ig-ink); }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.08em; }
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.tag { position: absolute; font-family: var(--ig-font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.18em; color: #f2c21e; background: rgba(8, 16, 30, 0.9); padding: 3px 8px; border: 1px solid rgba(242, 194, 30, 0.6); }
+.option-label {
+  position: absolute; left: 24px; bottom: 18px; font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.3em;
+  font-size: 14px; color: rgba(244, 241, 232, 0.55);
+}

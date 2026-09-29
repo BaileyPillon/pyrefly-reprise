@@ -34,6 +34,7 @@ import type { InputSnapshot } from '../../../app/Input.ts';
 import { audio } from '../../../audio/index.ts';
 import { SphereGridView } from './SphereGridView.ts';
 import { SphereGridModel } from './sphereGridModel.ts';
+import { actionLine } from './sphereGridCaption.ts';
 import {
   NODE_BY_ID,
   SPHERE_FAMILIES,
@@ -134,7 +135,6 @@ export function makeSphereGridPanel(): PrepPanel {
       el.textContent = 'Hover or walk to a node to read what it grants.';
       return;
     }
-    const check = model.canActivate(memberId, node.id);
     const grid = model.gridFor(memberId);
     // The cost only matters while the node is still worth spending on; once it
     // is activated the caption needs the room for what Enter does instead.
@@ -144,16 +144,9 @@ export function makeSphereGridPanel(): PrepPanel {
     // node the pointer is merely passing over says what a click would do
     // instead of promising a key that would act somewhere else.
     const atCursor = node.id === (view?.cursorNode?.id ?? -1);
-    const verb = atCursor ? 'Enter' : 'Click';
-    const action = check.ok
-      ? node.kind === 'lock'
-        ? `${verb} opens it`
-        : `${verb} activates it`
-      : grid && grid.position !== node.id && model.reachable(memberId).includes(node.id)
-        ? `${verb} moves here (${model.moveCost(memberId, node.id) === 1 ? '1 S.Lv' : '1/4 S.Lv'})`
-        : check.reason;
+    const action = actionLine(model, memberId, node, atCursor);
     el.innerHTML =
-      `<b>${escapeHtml(nodeEffect(node))}</b>` +
+      `<b>${escapeHtml(nodeEffect(node, node.kind === 'lock' && model.unlocked.has(node.id)))}</b>` +
       (cost ? ` <span class="ffxprep-sg__cost">${escapeHtml(cost)}</span>` : '') +
       ` <span class="ffxprep-sg__act">${escapeHtml(action)}</span>`;
   };

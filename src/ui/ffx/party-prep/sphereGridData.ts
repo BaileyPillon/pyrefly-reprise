@@ -305,23 +305,31 @@ export function statTag(stat: string | null): string {
   return stat ? (STAT_TAG[stat] ?? stat.toUpperCase()) : '';
 }
 
-/** The short caption drawn beside a node on the canvas. */
-export function nodeLabel(node: GridNode): string {
+/**
+ * The short caption drawn beside a node on the canvas. `opened` is true for a
+ * lock someone has opened: "a removed lock becomes an empty node"
+ * [ffx-combat-core §10.1], so it loses its `Lv.N` label (fb-0929).
+ */
+export function nodeLabel(node: GridNode, opened = false): string {
   if (node.kind === 'stat' && node.stat) return `${STAT_TAG[node.stat] ?? node.stat}+${node.value}`;
   if (node.kind === 'ability') return node.name;
-  if (node.kind === 'lock') return `Lv.${node.lockLevel ?? '?'}`;
+  if (node.kind === 'lock') return opened ? '' : `Lv.${node.lockLevel ?? '?'}`;
   return '';
 }
 
-/** The sentence the tooltip and the caption line print. */
-export function nodeEffect(node: GridNode): string {
+/** The sentence the tooltip and the caption line print; `opened` as for {@link nodeLabel}. */
+export function nodeEffect(node: GridNode, opened = false): string {
   if (node.kind === 'stat' && node.stat) return `${node.name} — permanent +${node.value} ${STAT_TAG[node.stat] ?? node.stat}`;
   if (node.kind === 'ability') return `${node.name} — learns the ability`;
-  if (node.kind === 'lock') return `Lv.${node.lockLevel ?? '?'} Lock — blocks the path until opened`;
+  if (node.kind === 'lock') {
+    return opened
+      ? `Opened Lv.${node.lockLevel ?? '?'} Lock — now an empty node; it only carries the path`
+      : `Lv.${node.lockLevel ?? '?'} Lock — blocks the path until opened`;
+  }
   return 'Empty Node — nothing to activate; it only carries the path';
 }
 
-/** `"Power Sphere"`, or `null` for an empty node. */
-export function nodeCostLabel(node: GridNode): string | null {
-  return node.sphere ? sphereLabel(node.sphere) : null;
+/** `"Power Sphere"`, or `null` for an empty node or an opened lock. */
+export function nodeCostLabel(node: GridNode, opened = false): string | null {
+  return node.sphere && !(node.kind === 'lock' && opened) ? sphereLabel(node.sphere) : null;
 }

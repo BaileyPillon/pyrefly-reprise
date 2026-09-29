@@ -1,0 +1,28 @@
+
+ RUN  v5.0.1 D:/pyrefly-r29-options
+
+ ❯ tests/unit/sphere-grid-fb0929.test.ts (12 tests | 12 failed) 16ms
+   ❯ 1. the price of a travelled step is what it actually costs (2)
+     × moveCost equals the S.Lv each travelled step really spends 5ms
+     × the caption prices a first travelled step at a whole S.Lv, and the next three as already paid 1ms
+   ❯ 2. an opened lock reads as an empty node (2)
+     × label, effect and tooltip stop calling it a barrier once it is open 1ms
+     × an activated node says so in the tooltip instead of pricing a sphere again 1ms
+   ❯ 3. the grid remembers what it did when party prep is left and re-entered (3)
+     × an opened lock stays open and its key is not spent twice 1ms
+     × an emptied pouch is not refilled by the starter estimate 1ms
+     × ground walked in an earlier visit is still travelled ground 1ms
+   ❯ 4. HP and MP nodes follow the same max-HP rule as the rest of the game (3)
+     × an HP node raises base HP, and max HP stays baseHP * (100 + HP%) // 100 1ms
+     × an MP node raises base MP the same way 1ms
+     × other stats stop at 255 [ffx-combat-core §10.1 caps] 1ms
+   ❯ 5. walk mode keeps the cursor within the character’s reach (1)
+     × arrows only land on the character’s node or a node linked to it 3ms
+   ❯ 6. the caption tells a mouse player a second click does it too (1)
+     × names both Enter and a click for the node under the cursor 0ms
+
+ Test Files  1 failed (1)
+      Tests  12 failed (12)
+   Start at  19:23:03
+   Duration  1.64s (environment 54%, transform 34%, import 10%, tests 1%)
+

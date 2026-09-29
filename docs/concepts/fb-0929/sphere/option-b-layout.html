@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sphere Grid option B</title>
+<link rel="stylesheet" href="./mock.css" />
+<style>
+  .frame { background: radial-gradient(ellipse at 60% 40%, #1b2236 0%, #0b0a12 70%); }
+  .kick { left: 70px; top: 46px; font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.4em; color: var(--ig-gold); font-size: 20px; }
+  .kick::before { content: ''; display: inline-block; width: 60px; height: 4px; background: var(--ig-gold); vertical-align: middle; margin-right: 26px; }
+  .where { right: 72px; top: 50px; font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.3em; color: #d8d4c8; font-size: 15px; }
+  .tabs { left: 190px; top: 108px; display: flex; gap: 44px; font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.3em; font-size: 17px; color: #8c8a93; }
+  .tabs .on { color: #f4f1e8; border-bottom: 3px solid var(--ig-gold); padding-bottom: 8px; }
+  .rail { left: 44px; top: 170px; display: flex; flex-direction: column; gap: 10px; }
+  .face { width: 108px; height: 70px; position: relative; background: #141222; border-left: 4px solid transparent; transform: skewX(-12deg); overflow: hidden; }
+  .face img { position: absolute; left: -6px; top: -4px; width: 70px; height: 78px; object-fit: cover; object-position: 50% 8%; transform: skewX(12deg); }
+  .face span { position: absolute; right: 8px; bottom: 6px; transform: skewX(12deg); font-family: var(--ig-font-numeral); font-weight: 700; font-size: 17px; color: var(--ig-gold); }
+  .face.sel { background: var(--ig-paper); border-left-color: var(--ig-gold); }
+  .face.sel span { color: var(--ig-gold-on-paper); }
+  .gridbox { left: 180px; top: 214px; width: 1040px; height: 569px; background: url('./assets/grid-wide.jpg') 0 0 / 1040px 569px no-repeat; outline: 2px solid rgba(227, 185, 74, 0.55); }
+  .gridbar { left: 180px; top: 164px; width: 1040px; height: 44px; display: flex; align-items: center; gap: 14px; }
+  .gridbar .who { font-family: var(--ig-font-serif); font-style: italic; font-size: 34px; color: #f4f1e8; }
+  .gridbar .slv { font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.16em; color: var(--ig-gold); font-size: 16px; }
+  .gridbar .slv b { font-family: var(--ig-font-numeral); font-size: 28px; color: #f4f1e8; margin-left: 6px; }
+  .gridbar .slv i { font-style: normal; color: #f2c21e; font-family: var(--ig-font-numeral); font-size: 28px; }
+  .gridbar .sp { flex: 1; }
+  .gbtn { font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.18em; font-size: 15px; color: #f4f1e8; border: 2px solid rgba(244, 241, 232, 0.7); padding: 8px 16px; min-width: 44px; text-align: center; }
+  svg.over { position: absolute; left: 180px; top: 214px; width: 1040px; height: 569px; }
+  .card { left: 1262px; top: 164px; width: 300px; height: 404px; padding: 22px 22px 18px 30px; }
+  .card .big { font-family: var(--ig-font-numeral); font-weight: 700; font-size: 46px; line-height: 1; margin: 8px 0 12px; }
+  .card .big em { font-style: normal; color: var(--ig-gold-on-paper); }
+  .row { display: flex; justify-content: space-between; font-family: var(--ig-font-text); font-size: 15.5px; padding: 7px 0; border-top: 1px solid rgba(11, 10, 18, 0.14); }
+  .row b { font-family: var(--ig-font-numeral); font-size: 18px; }
+  .legend { left: 1262px; top: 590px; width: 300px; height: 193px; padding: 16px 16px 12px 26px; }
+  .legend .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 12px; margin-top: 8px; }
+  .legend .chip { color: #f4f1e8; font-size: 13.5px; letter-spacing: 0.04em; }
+  .pouch { left: 180px; top: 800px; width: 1040px; height: 58px; display: flex; align-items: center; gap: 22px; padding: 0 22px; }
+  .pouch .chip { color: #f4f1e8; font-size: 15px; }
+  .pouch .chip b { font-family: var(--ig-font-numeral); font-size: 20px; color: var(--ig-gold); }
+  .pouch .chip.want { border-bottom: 3px solid var(--ig-gold); padding-bottom: 2px; }
+  .start { right: 36px; top: 800px; width: 330px; height: 58px; background: var(--ig-gold); transform: skewX(-12deg); font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.34em; font-size: 22px; color: var(--ig-ink); display: flex; align-items: center; justify-content: center; }
+  .start > span { transform: skewX(12deg); }
+</style>
+</head>
+<body>
+<div class="ig frame">
+  <div class="abs kick">PARTY PREP</div>
+  <div class="abs where">I &middot; SEYMOUR FLUX &mdash; MT. GAGAZET</div>
+  <div class="abs tabs"><span>CHAPTER</span><span>STATS</span><span class="on">SPHERE GRID</span><span>EQUIPMENT</span><span>ITEMS</span><span>OVERDRIVE</span></div>
+
+  <div class="abs rail">
+    <div class="face sel"><img src="/art/portraits/tidus.png" alt="" /><span>30</span></div>
+    <div class="face"><img src="/art/portraits/yuna.png" alt="" /><span>32</span></div>
+    <div class="face"><img src="/art/portraits/kimahri.png" alt="" /><span>25</span></div>
+    <div class="face"><img src="/art/portraits/auron.png" alt="" /><span>35</span></div>
+    <div class="face"><img src="/art/portraits/wakka.png" alt="" /><span>30</span></div>
+    <div class="face"><img src="/art/portraits/lulu.png" alt="" /><span>30</span></div>
+    <div class="face"><img src="/art/portraits/rikku.png" alt="" /><span>42</span></div>
+  </div>
+
+  <div class="abs gridbar">
+    <span class="who">Tidus</span>
+    <span class="slv">S.LV <b>30</b> &rarr; <i>28</i></span>
+    <span class="sp"></span>
+    <span class="gbtn">WALK</span><span class="gbtn">&minus;</span><span class="gbtn">+</span><span class="gbtn">CENTRE</span><span class="gbtn">?</span>
+  </div>
+  <div class="abs gridbox"></div>
+  <svg class="over" viewBox="0 0 1040 569">
+    <polyline points="285,270 285,344 172,390" fill="none" stroke="#fff0a8" stroke-width="4" stroke-dasharray="9 7" />
+    <circle cx="172" cy="390" r="30" fill="none" stroke="#f2c21e" stroke-width="4" />
+    <circle cx="172" cy="390" r="40" fill="none" stroke="#f2c21e" stroke-width="2" opacity="0.5" />
+    <g font-family="Chakra Petch, sans-serif" font-weight="700" font-size="15">
+      <rect x="302" y="292" width="148" height="26" fill="#08101e" stroke="#f2c21e" />
+      <text x="310" y="310" fill="#fff0a8">1 &middot; 1 S.LV (PAYS 4)</text>
+      <rect x="40" y="428" width="132" height="26" fill="#08101e" stroke="#f2c21e" />
+      <text x="48" y="446" fill="#fff0a8">2 &middot; 1 S.LV (NEW)</text>
+      <rect x="120" y="318" width="84" height="26" fill="#f2c21e" />
+      <text x="130" y="336" fill="#0b0a12">+2 STR</text>
+    </g>
+  </svg>
+
+  <div class="slab card"><div class="in">
+    <div class="kicker">Selected node</div>
+    <div class="title" style="font-size:34px;margin-top:6px">Strength +2</div>
+    <div class="big">STR 31 <em>&rarr; 33</em></div>
+    <div class="row"><span>Sphere</span><b>Power &middot; 12 &rarr; 11</b></div>
+    <div class="row"><span>Path</span><b>2 steps &middot; 2 S.Lv</b></div>
+    <div class="row"><span>Tidus after</span><b>S.Lv 28</b></div>
+    <div style="margin-top:14px"><span class="btn btn--dark" style="font-size:14px;padding:10px 14px">Walk and activate</span></div>
+    <div style="font-family:var(--ig-font-text);font-size:13.5px;color:#5a5566;margin-top:10px">Enter or click again does the same.</div>
+  </div></div>
+
+  <div class="ink-slab legend"><div class="in">
+    <div class="kicker" style="color:var(--ig-gold);font-size:13px">What the colours mean</div>
+    <div class="grid2">
+      <span class="chip"><i class="dot" style="background:#7ee8b0"></i>HP</span><span class="chip"><i class="dot" style="background:#8fd0f0"></i>MP</span>
+      <span class="chip"><i class="dot" style="background:#f28a6a"></i>Strength</span><span class="chip"><i class="dot" style="background:#c8d4e4"></i>Defense</span>
+      <span class="chip"><i class="dot" style="background:#b48fe0"></i>Magic</span><span class="chip"><i class="dot" style="background:#8fa4bc"></i>Magic Def</span>
+      <span class="chip"><i class="dot" style="background:#f2d24a"></i>Agility</span><span class="chip"><i class="dot" style="background:#f2c21e"></i>Ability</span>
+      <span class="chip"><i class="dot" style="background:#c7343c"></i>Lock (key)</span><span class="chip"><i class="dot" style="background:#141a28;border:2px solid #f28a6a"></i>Not yet taken</span>
+    </div>
+    <div class="chip" style="color:#fff0a8;font-size:13px;margin-top:8px">Gold line: walked ground, 1 S.Lv per 4 steps</div>
+  </div></div>
+
+  <div class="ink-slab pouch"><div class="in" style="display:flex;gap:22px;align-items:center">
+    <span class="chip want"><i class="dot" style="background:#f28a6a"></i>Power <b>12</b></span>
+    <span class="chip"><i class="dot" style="background:#f2d24a"></i>Speed <b>8</b></span>
+    <span class="chip"><i class="dot" style="background:#b48fe0"></i>Mana <b>8</b></span>
+    <span class="chip"><i class="dot" style="background:#f2c21e"></i>Ability <b>4</b></span>
+    <span class="chip"><i class="dot" style="background:#fff0a8"></i>Fortune <b>1</b></span>
+    <span class="chip"><i class="dot" style="background:#e0585e"></i>Keys <b>4&middot;2&middot;1&middot;1</b></span>
+  </div></div>
+  <div class="abs start"><span>&#9654; START BATTLE</span></div>
+  <div class="option-label">OPTION B &middot; BIGGER GRID, LEGEND IN WORDS, NODE PREVIEW AND PATH &middot; 1600&times;900</div>
+</div>
+</body>
+</html>

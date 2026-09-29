@@ -36,10 +36,10 @@ import {
   neighboursOf,
   nodeColor,
   nodeLabel,
-  statTag,
   type GridNode,
 } from './sphereGridData.ts';
 import type { SphereGridModel } from './sphereGridModel.ts';
+import { tooltipLines } from './sphereGridCaption.ts';
 
 /** Zoom at which a node's label is worth drawing at all. */
 const LABEL_ZOOM = 0.28;
@@ -296,9 +296,14 @@ export class SphereGridView {
   moveCursor(dx: number, dy: number): boolean {
     const from = this.cursorNode;
     if (!from) return false;
+    // Only the character's own node and the nodes linked to it: those are the
+    // ones Enter can act on. Stepping on from the *cursor* let it wander two
+    // links out, where Enter answered "Not linked to this node" (fb-0929).
+    const home = this.model?.gridFor(this.memberId)?.position ?? from.id;
+    const candidates = [home, ...neighboursOf(home)].filter((id) => id !== from.id);
     let best: GridNode | null = null;
     let bestScore = -Infinity;
-    for (const id of neighboursOf(from.id)) {
+    for (const id of candidates) {
       const node = NODE_BY_ID.get(id);
       if (!node) continue;
       const vx = node.x - from.x;
@@ -541,14 +546,16 @@ export class SphereGridView {
       if (node.kind === 'lock' && !open) this.drawLockPlate(ctx, x, y, r, color);
       else {
         ctx.beginPath();
-        ctx.arc(x, y, node.kind === 'empty' ? r * 0.55 : r, 0, Math.PI * 2);
+        // An opened lock is an empty node now [ffx-combat-core §10.1], and is drawn as one.
+        const bare = node.kind === 'empty' || open;
+        ctx.arc(x, y, bare ? r * 0.55 : r, 0, Math.PI * 2);
         ctx.fillStyle = lit ? color : GRID_INK.dormantFill;
         ctx.fill();
         // Dormant nodes keep a ring in their own colour: the grid has to be
         // readable before it is walked, not only after.
         ctx.lineWidth = Math.max(0.5, r * 0.18);
-        ctx.strokeStyle = lit ? (grid?.tint ?? GRID_INK.paper) : node.kind === 'empty' ? GRID_INK.dormantRing : color;
-        ctx.globalAlpha = lit ? 1 : node.kind === 'empty' ? 0.7 : 0.62;
+        ctx.strokeStyle = lit ? (grid?.tint ?? GRID_INK.paper) : bare ? GRID_INK.dormantRing : color;
+        ctx.globalAlpha = lit ? 1 : bare ? 0.7 : 0.62;
         ctx.stroke();
         ctx.globalAlpha = 1;
         if (lit && r > 3.2) {
@@ -574,7 +581,7 @@ export class SphereGridView {
         // The character's own token sits on their node and would cover its
         // label; the tooltip and the ivory caption both name it instead.
         if (grid && node.id === grid.position) continue;
-        const label = nodeLabel(node);
+        const label = nodeLabel(node, open);
         if (!label) continue;
         ctx.font = `700 ${fontPx.toFixed(2)}px "Chakra Petch", "Bahnschrift", sans-serif`;
         const tw = ctx.measureText(label).width;
@@ -722,18 +729,7 @@ export class SphereGridView {
     if (!node) return;
     const anchor = this.hoverId !== null && this.pointer ? this.pointer : { x: this.pan.x + node.x * this.zoom, y: this.pan.y + node.y * this.zoom };
 
-    const title = node.name;
-    const cost = node.sphere ? `${node.sphere.startsWith('key') ? `Lv.${node.sphere.slice(3)} Key` : node.sphere.replace(/^\w/, (c) => c.toUpperCase())} Sphere` : 'No sphere';
-    const held = model.spheresHeld(node.sphere);
-    const sub =
-      node.kind === 'empty'
-        ? 'Path only'
-        : node.kind === 'stat'
-          ? `+${node.value} ${statTag(node.stat)}`
-          : node.kind === 'lock'
-            ? 'Blocks the path'
-            : 'Learns an ability';
-    const costLine = node.sphere ? `${cost} — ${held} held` : cost;
+    const { title, sub, cost: costLine, short } = tooltipLines(model, this.memberId, node);
 
     const titleFont = '700 5px "Chakra Petch", sans-serif';
     const bodyFont = '600 4.2px "Chakra Petch", sans-serif';
@@ -764,7 +760,7 @@ export class SphereGridView {
     ctx.font = bodyFont;
     ctx.fillStyle = 'rgba(244,241,232,0.72)';
     ctx.fillText(sub, bx + padX, by + 11.8);
-    ctx.fillStyle = held > 0 || !node.sphere ? GRID_INK.reachableB : '#e0585e';
+    ctx.fillStyle = short ? '#e0585e' : GRID_INK.reachableB;
     ctx.fillText(costLine, bx + padX, by + 16.6);
   }
 
