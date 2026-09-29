@@ -1,0 +1,52 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-29T19:20:00.000Z",
+  "build": { "mainSha": "52a431d0", "bundle": "C_4T6wOX", "artifactHash": "e1d3b9da5c44dd4c317c1b2039fd9e75ed5e4bfbb168ada097a3ae7b91704c7c" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    {
+      "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/52a431d0.json --changed-from critic/artifacts/1475ff6b.json --full: result PASS, liveManifest match, checked 1006, mismatched 0, missing 0, wrongType 0. The first run (1005 checked) reported one file missing with HTTP 503 (art/characters/rikku-alchemist/attack.png); three direct fetches returned 200 and its sha256 equals the manifest and the local file, and the full rerun was clean, so the 503 was a transient Pages error. Also 26 of 26 music files in audio/manifest.json return 200 with audio content types and non-zero bytes, and every scene, battle, phase-2 and victory cue of all 19 chapters resolves to one of them. 0 console errors and 0 HTTP 4xx/5xx across every smoke run.",
+      "game": "both",
+      "environment": "live URL, headless Playwright PYREFLY_BROWSER=gpu, fresh contexts, cache-busting query",
+      "automated": true
+    },
+    {
+      "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Every run asserted screen and chapter before any claim: title, chapter-select, party-prep, cutscene, battle by real key presses (desktop 1600x900, FFX seymour-flux; FFX-2 ffx2-bahamut with the AudioContext started 3.5 s late) and real taps (390x844, FFX isaaru-via-purifico Chapter IX; FFX-2 ffx2-bahamut), each stopping at a player command menu (awaitingMenu) with snapshotState chapter and game matching. Music probe: 100 ms sampler of AudioManager.debug() from title to the battle including pause and resume. Prerendered source confirmed for boss-seymour, boss-ffx2-aeon, boss-yojimbo (never synth). Sustained two-track overlap: 0 in all 5 runs. Strict per-sample count of two audible tracks: 0 in desk-ffx and in the desk-ffx2 rerun; 1 to 2 single 100 ms samples in the other three runs, each at the first tick of a crossfade where the fading slot GainNode.value still read its start value 1; the full log of every fading sample in the rerun shows each crossfade ramping down over about 1 s while the incoming track ramps up. Reported as a probe artefact, not an audible overlap. Pause: Escape pauses and the pause theme crossfades in, H hides then restores the pause panels, P (or Escape on FFX phone) resumes and the battle theme returns. FFX phone Items pager by taps: Chapter IX Items shows 1-6 OF 11 with previous disabled, next gives 6-11 OF 11, paging confirms no command (battle log length unchanged), Escape cancel leaves the battle intact. FF7 door: typing LIMIT with no other key on chapter select opens ff7-guard-scorpion (game ff7) into a battle.",
+      "game": "both (pager FFX only; music both)",
+      "environment": "live URL, headless Playwright PYREFLY_BROWSER=gpu",
+      "automated": true
+    },
+    {
+      "id": "CHK-024", "result": "PASS", "mandatory": false,
+      "evidence": "Lightweight reload smoke on the live URL: from a real-key entry into Chapter I (seymour-flux attempts 0 to 1 in the save), paused with Escape, reached the OPTIONS tab with ArrowRight, changed master volume with ArrowDown then ArrowLeft x2 (0.8 to 0.6), then reloaded the page. The localStorage save after reload equals the save before: settings identical (masterVolume 0.6) and chapters identical (attempts 1); AudioManager volumes at boot match the saved values (master 0.6, music 0.7, sfx 0.35).",
+      "game": "both",
+      "environment": "live URL, headless Playwright PYREFLY_BROWSER=gpu, fresh profile",
+      "automated": true
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "verify-live of the exact artifact (full, 1006 files) plus 26 music cues and 19 chapters' cue references HTTP 200",
+      "music probe title to battle by real keys, FFX Chapter I and FFX-2 Chapter IV (late AudioContext), 1600x900",
+      "music probe title to battle by real taps, FFX Chapter IX and FFX-2 Chapter IV, 390x844",
+      "pause, H hide and restore, resume keeps the battle theme (4 runs)",
+      "FFX phone Items pager by taps, positive path and Escape cancel path",
+      "FF7 LIMIT door to a Guard Scorpion battle",
+      "reload keeps a changed setting and progress; saved volumes applied at boot"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full CHK-024 upgrade matrix (save migrated from the previous live build, truncated or invalid storage, reload during every state, reset flow); r31-access, which changes save data, is not in this build",
+      "the other chapters played to an outcome; only battle-cue availability (HTTP 200) was checked for them",
+      "how the R1 remaster sounds (agents cannot hear; Bailey auditions)",
+      "victory, results and ending themes in play",
+      "either used chapter played to a win"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 45
+}
