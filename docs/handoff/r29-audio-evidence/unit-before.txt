@@ -1,0 +1,13 @@
+     × AudioManager: a no-op request for the cue already playing still cancels a pending different cue 5ms
+     × Esc, Esc within the decode on a cold first pause: the battle cue stays, and the next pause still works 1ms
+     × a pause while the battle cue is still decoding comes back to the battle cue, not the scene before it 1ms
+     × a second pause press while the pause cue is still decoding does not remember `pause` as the cue to return to 0ms
+     × before the first gesture the queued cue is what a pause returns to 0ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  5 failed (5)
+     × fresh defaults put the SFX bus about 6 dB under the music peak (0.35) 4ms
+     ✓ an existing save keeps its stored effects level, the old 0.9 default included 0ms
+     ✓ a save from before the setting existed keeps the level it was playing at (0.9) 0ms
+     ✓ the stored release-25 fixture keeps its volumes through the upgrade (CHK-024) 1ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 3 passed (4)
