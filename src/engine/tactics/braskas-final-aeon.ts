@@ -1447,7 +1447,7 @@ function supportTurn(
  *
  * **Everything swings at the aeon, and nothing at the pillars.** A possessed
  * aeon is a live copy of the player's own (§2.2), so on the `dreams-end`
- * roster it has between 1,465 and 2,840 HP — one or two Auron swings — against
+ * roster it has 1,886 to 3,657 HP (§6.4.3's inside-Sin rows since 2026-09-28; 1,465 to 2,840 before) against
  * a Yu Pagoda's 5,000. Killing the pillars first is spending five turns to
  * save a fight that is over in three, and now that they come back every 72
  * ticks (§1.4) it is spending five turns again and again. The `#210` Power

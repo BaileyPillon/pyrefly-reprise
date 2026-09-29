@@ -29,7 +29,9 @@ export type AeonArm = 'shipped' | 'a' | 'b' | 'c';
  */
 export const GAGAZET_AEON_ARM: AeonArm = 'a';
 
-type Row = Pick<AeonBuild['stats'], 'hp' | 'mp' | 'str' | 'def' | 'mag' | 'mdef' | 'agi' | 'eva' | 'acc' | 'luck'>;
+/** One §6.4.3 row: HP MP STR DEF MAG MDEF AGI EVA ACC LUCK (also read by `late-aeon-rows.ts`). */
+export type AeonStatRow = Pick<AeonBuild['stats'], 'hp' | 'mp' | 'str' | 'def' | 'mag' | 'mdef' | 'agi' | 'eva' | 'acc' | 'luck'>;
+type Row = AeonStatRow;
 
 /** §6.4.3, Seymour Flux, Mt. Gagazet, N = 250 (tier 7): HP MP STR DEF MAG MDEF AGI EVA ACC LUCK. */
 export const GAGAZET_SOURCED_ROWS: Readonly<Record<string, Row>> = {
@@ -45,7 +47,8 @@ export const ISAARU_P3_FLOOR_HP: Readonly<Record<string, number>> = {
   valefor: 1127, ifrit: 1512, ixion: 1503, shiva: 1342, bahamut: 2139,
 };
 
-function withRow(a: AeonBuild, row: Row): AeonBuild {
+/** The aeon with every stat of `row` (HP and MP full). Only the stat row moves. */
+export function withRow(a: AeonBuild, row: Row): AeonBuild {
   return {
     ...a,
     stats: { ...a.stats, ...row, maxHp: row.hp, maxMp: row.mp },

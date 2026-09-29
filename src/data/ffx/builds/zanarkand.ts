@@ -3,8 +3,8 @@
  *
  * Build point: after the Chamber of the Fayth, immediately following the
  * Spectral Keeper. Source: `research/ffx-yunalesca.md` §11 (party preset)
- * and §12 (aeon stats, Ultimania N=270-299 battle-count band — a normal
- * first playthrough reaches this fight at roughly that many battles).
+ * (aeon stats: `research/ffx-combat-core.md` §6.4.3's Zanarkand Dome block, N = 300, since
+ * 2026-09-28; §12's N=270-299 floor band until then — see `./late-aeon-rows.ts`).
  * Equipment is loadout **B** from `research/ffx-seymour-flux.md` §7.7.2,
  * which is defined as a diff against the Gagazet loadout — see
  * `./gagazet.ts` for the base — with **one armour slot per
@@ -35,7 +35,8 @@
  * rate against Hellbiter — Holy Water must be *available*, not automatic.
  */
 
-import type { AeonBuild, FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
+import type { FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
+import { LATE_AEON_ROWS, ZANARKAND_SOURCED_ROWS, armLateAeons, zanarkandFloorAeons } from './late-aeon-rows.ts';
 
 const BASE_WEAPON_BONUS_CRIT = 3;
 
@@ -201,52 +202,16 @@ function kimahri(): FFXMemberBuild {
   };
 }
 
-/** §12 [verified: 2 sources — Ultimania N=270-299 battle-count table]. */
-function aeon(
-  id: AeonBuild['id'],
-  name: string,
-  hp: number,
-  mp: number,
-  str: number,
-  def: number,
-  mag: number,
-  mdef: number,
-  agi: number,
-  eva: number,
-  acc: number,
-  abilityIds: string[],
-  overdriveIds: string[],
-  overdriveGauge: number,
-): AeonBuild {
-  return {
-    id,
-    name,
-    spriteKey: id,
-    stats: { hp, mp, str, def, mag, mdef, agi, luck: 5, eva, acc, maxHp: hp, maxMp: mp }, // luck [estimate] — not published
-    hp,
-    mp,
-    overdriveGauge,
-    abilityIds: [...abilityIds, 'shield', 'boost'],
-    overdriveIds,
-  };
-}
-
 export const zanarkandBuild: FFXPartyBuild = {
   game: 'ffx',
   members: [tidus(), yuna(), auron(), wakka(), lulu(), rikku(), kimahri()],
   activeSlots: ['tidus', 'yuna', 'auron'],
   reserve: ['wakka', 'lulu', 'kimahri', 'rikku'],
-  // §12, §17 [Addendum note appended to §7.9.2 in ffx-bfa-yu-yevon.md,
-  // recommending the exact per-aeon gauge values used here] — the party has
-  // just spent aeons on the Spectral Keeper and the Dome fiends, so uptime
-  // is lower than the Gagazet preset's.
-  aeons: [
-    aeon('valefor', 'Valefor', 1341, 43, 28, 39, 42, 42, 19, 27, 15, ['sonic-wings'], ['energy-ray'], 60),
-    aeon('ifrit', 'Ifrit', 1797, 41, 29, 47, 41, 37, 17, 14, 15, ['meteor-strike'], ['hellfire'], 40),
-    aeon('ixion', 'Ixion', 1787, 45, 30, 43, 40, 52, 15, 15, 16, ['aerospark'], ['thors-hammer'], 40),
-    aeon('shiva', 'Shiva', 1596, 48, 28, 27, 46, 43, 27, 44, 15, ['heavenly-strike'], ['diamond-dust'], 55),
-    aeon('bahamut', 'Bahamut', 2542, 63, 33, 44, 36, 51, 19, 29, 15, ['impulse'], ['mega-flare'], 30),
-  ],
+  // Bailey 2026-09-28: `research/ffx-combat-core.md` §6.4.3's Zanarkand Dome block (N = 300), the
+  // model Chapter I's Gagazet rows come from (`./late-aeon-rows.ts`); the gauges are §17's [Addendum
+  // note appended to §7.9.2 in ffx-bfa-yu-yevon.md] — the party has just spent aeons on the Spectral
+  // Keeper and the Dome fiends, so uptime is lower than the Gagazet preset's.
+  aeons: armLateAeons(zanarkandFloorAeons(), ZANARKAND_SOURCED_ROWS, LATE_AEON_ROWS),
   // §11.4 [estimate].
   inventory: [
     { itemId: 'holy-water', count: 4 },
