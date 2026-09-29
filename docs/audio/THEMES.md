@@ -577,6 +577,37 @@ actually matters — **the one thing the cue must leave behind**.
 | 25 | **`boss-yojimbo`** (new) | **No shared theme cell: its own line**, the sketch Bailey picked (O-6 A, 2026-09-24): a rising fifth that leans on the flat sixth and falls back, on **solo cello** over felt piano with no pulse; when a bowed-eighths pulse and taiko join, the violin takes it an octave up and the cello answers in roots and thirds; the line moved two steps up the mode on **one horn** ("the duty", this pass's guess); violin and cello in octaves (also a guess); the strain climbs in steps with horns; **the crack**: one tutti `Abmaj7` with the violin on Ab5, pulse and drums cut, then two beats of piano alone; control returns quieter and closes on `AMEN`, iv to i. In the game this fight plays Lulu's own theme: nothing here quotes or imitates it. **No dominant and no leading tone anywhere**; Aeolian, never Dorian | C minor | 132 | grief (cello) · pulse (violin) · the duty (horn) · octaves · strain · the crack · control, amen | Grief under control, and it cracks once |
 | 26 | **`scene-macalania-temple`** (new) | **No shared cell but `HYMN_HEAD`**, once, at 1.5x on one distant voice as the door of the Chamber of the Fayth glows (sketch A "The Frozen Temple", 2026-09-24; D-278: the driver's pick in remaster R1, not by ear). Quartal ice in high strings held a bar at a time, irregular glockenspiel drips (no two gaps the same), an alto flute that walks through the room without a pulse and never lands on the tonic, harp open fifths on `bVI - bVII - i`; at the door the ice warms once to Dmaj7 (the flat sixth) and Bm(add9), a struck chime on D. F# is the iv of the fight's C# minor, so the chapter moves scene to fight as a plagal step. No dominant, no organ, no chanted choir; it quotes no retail cue | F# minor | 56 | the empty room (intro) · the walk · the door · the ice again · loop to the walk | Ice pretending to be masonry, and something behind the door |
 
+**How each cue ships (2026-09-29, D-283).** Bailey: "all your recommendations, full speed ahead." The score above is unchanged; what plays is the sampled render of it restyled by Direction B (`docs/audio/direction-b-2026-09-27.md`) and then put through remaster R1 "focus" (`docs/audio/remaster-2026-09-29/README.md`, `tools/audio/remaster-score.mjs`). Every figure is a measurement of the shipped MP3 (`docs/audio/soundtrack-r1-2026-09-29.json`); nobody here heard it (rule 13). A cue that failed a gate keeps today's file. Re-rendering a cue with `tools/audio/render.mjs` would replace its R1 file with a plain sampled render: re-run `tools/audio/remaster-score.mjs` for it instead.
+
+| Cue | Game | Ships as | L/R corr | side/mid dB | mono-sum loss dB |
+|---|---|---|---|---|---|
+| `battle-ffx` | FFX | Direction B + R1 | 0.737 | -7.8 | -0.7 |
+| `boss-dread` | FFX | Direction B + R1 | 0.782 | -8.3 | -0.6 |
+| `boss-evrae` | FFX | Direction B + R1 | 0.733 | -7.5 | -0.7 |
+| `boss-ffx2-aeon` | FFX-2 | Direction B + R1 | 0.699 | -6.9 | -0.8 |
+| `boss-jecht` | FFX | Direction B + R1 | 0.823 | -7.6 | -0.7 |
+| `boss-seymour-macalania` | FFX | Direction B + R1 | 0.779 | -8.2 | -0.6 |
+| `boss-seymour` | FFX | Direction B + R1 | 0.773 | -8.3 | -0.6 |
+| `boss-shuyin` | FFX-2 | Direction B + R1 | 0.72 | -7.4 | -0.7 |
+| `boss-vegnagun` | FFX-2 | **today's sampled render, kept**: its R1 take measured L/R 0.553, side -5.3 dB, mono-sum loss -1.1 dB (gates 0.6-0.85, -10..-6, under 1 dB) | 0.83 | -10.3 | -0.4 |
+| `boss-yojimbo` | FFX | Direction B + R1 | 0.807 | -8.5 | -0.6 |
+| `boss-yu-yevon` | FFX | Direction B + R1 | 0.836 | -9.3 | -0.5 |
+| `boss-yunalesca` | FFX | Direction B + R1 | 0.766 | -8.5 | -0.6 |
+| `chapter-select` | both | Direction B + R1 | 0.741 | -8.2 | -0.6 |
+| `ending-ffx2` | FFX-2 | Direction B + R1 | 0.771 | -8.2 | -0.6 |
+| `ending-ffx` | FFX | Direction B + R1 | 0.77 | -8.5 | -0.6 |
+| `pause` | both | Direction B + R1 | 0.753 | -8.2 | -0.6 |
+| `scene-bevelle-underground` | FFX-2 | **today's sampled render, kept**: its R1 take measured L/R 0.548, side -5.0 dB, mono-sum loss -1.2 dB | 0.835 | -10.5 | -0.4 |
+| `scene-dreams-end` | FFX | Direction B + R1 | 0.797 | -8.5 | -0.6 |
+| `scene-fahrenheit` | FFX | Direction B + R1 | 0.788 | -8.7 | -0.5 |
+| `scene-farplane` | FFX-2 | Direction B + R1 | 0.82 | -8.6 | -0.6 |
+| `scene-gagazet` | FFX | Direction B + R1 | 0.728 | -7.3 | -0.7 |
+| `scene-macalania-temple` | FFX | Direction B + R1 (shipped 2026-09-29 under D-278, unchanged here) | 0.74 | -8.2 | -0.6 |
+| `scene-zanarkand-dome` | FFX | Direction B + R1 | 0.757 | -8.4 | -0.6 |
+| `title` | both | Direction B + R1 | 0.788 | -8.6 | -0.6 |
+| `victory-ffx2` | FFX-2 | Direction B + R1 | 0.654 | -6.4 | -0.9 |
+| `victory-ffx` | FFX | Direction B + R1 | 0.815 | -9 | -0.5 |
+
 **Anti-fatigue rule.** `chapter-select` and `pause` are the two cues a player
 hears most, and neither is allowed the theme's heart: chapter-select loops bars
 1-8 of the waltz and pause loops bars 1-8 of the hymn. Bars 9-12 of FAREWELL —

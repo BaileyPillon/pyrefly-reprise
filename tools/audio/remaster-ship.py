@@ -51,6 +51,9 @@ def main():
     ap.add_argument('--loop', nargs=2, type=float, required=True)
     ap.add_argument('--xfade', type=float, default=0.5)
     ap.add_argument('--json')
+    ap.add_argument('--tp-max', type=float, default=remaster.TP_MAX,
+                    help='true-peak ceiling in dBTP for ebur128 on the MP3 (default -1); lower it when '
+                         'tools/audio/qa.mjs, whose meter reads a little hotter, lands a hair over -1')
     a = ap.parse_args()
 
     sr = remaster.SR
@@ -58,6 +61,7 @@ def main():
     keep = loop_end + int(round(RUN_ON_S * sr))
     fd, cut = tempfile.mkstemp(suffix='.wav', dir=os.path.dirname(os.path.abspath(a.out)))
     os.close(fd)
+    tp_default, remaster.TP_MAX = remaster.TP_MAX, a.tp_max
     try:
         subprocess.run([remaster.FF, '-v', 'error', '-y', '-i', a.src, '-af', f'atrim=end_sample={keep}',
                         '-ar', str(sr), '-ac', '2', '-c:a', 'pcm_f32le', cut], check=True)
@@ -65,9 +69,11 @@ def main():
         rep = remaster.process(cut, a.out, a.preset, a.loop, a.xfade)
     finally:
         remaster.ff_pipe = _ff_pipe
+        remaster.TP_MAX = tp_default
         os.remove(cut)
     rep['in'] = os.path.basename(a.src)
     rep['encode'] = 'libmp3lame -q:a 5, 44.1 kHz stereo'
+    rep['tpMax'] = a.tp_max
     entry = {
         'file': 'music/' + os.path.basename(a.out),
         'loopStart': round(a.loop[0], 6),
