@@ -109,3 +109,20 @@ it served are byte-identical to the ones now in `D:/Final Fantasy/public/art/pau
 - The tile is "implemented", not "verified": a review still has to match it.
 - Not touched: FFX Chapter III's plate, the other 28 pause plates, the FFX-2 sidecar
   `ch4-bahamut.json`.
+
+## CHECK (independent, 2026-09-29, not the builder; FFX-2 only for the change, shared code untouched)
+
+Verdict: GO. Fresh production build of f3e9fa61 (vite build to `C:/pyrefly-r29-check/dist`, not the shared
+`dist/`; the branch differs from 1bab936e only in docs, tests and the registry, and the worktree's `public/art`
+is the same art as main's). Headless Playwright, real Esc, real E keys to the CHAPTER tab, own ports 8110 to 8113.
+
+- Chapter IV at 1600x900 and 390x844: the plate served is `ch4-ffx2-bahamut.2x.webp` (sha 1850e6de, matches the registry)
+  and its 1x sibling is byte-identical to the approved painting (sha 79047d2f). Pixel diff against the tile
+  `docs/screenshots/concept/pause-ch4.png`: 1x PNG 0.0, 2x webp 1.48 of 255 (Lanczos resample and webp; the old render
+  `ch4-bahamut.png` measures 98.75). 0 console errors, 0 4xx/5xx. The 2x is still a stand-in until a RealESRGAN master exists.
+- Neighbours unchanged: Chapter III (FFX, `ch3-braskas-final-aeon`) and Chapter V (FFX-2, `ch5-ffx2-vegnagun-shuyin`) served
+  hashes equal the registry and the disk files, 0 errors. The registry diff touches only the two ch4-ffx2-bahamut entries.
+- `npx tsc --noEmit` clean; 61 pause/target/decision-related test files, 631 tests, all pass, including the new guard.
+- `git merge-tree --write-tree origin/main r29-plate` is clean (no conflicts).
+- Notes: the branch is on local main (1bab936e), which origin/main does not contain yet, so push main before or with it.
+  The stray branch `r29-plate-wt` is harmless. Servers stopped by PID. Scratch: `D:/Tools/pyrefly-scratch/overnight-0929/r29-plate-check/`.
