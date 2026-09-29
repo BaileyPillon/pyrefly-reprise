@@ -1,0 +1,129 @@
+/*
+ * TEXT SIZE 100 / 115 / 130 % (OPTIONS accessibility A2, D-285; PR-0032).
+ * Targets: docs/concepts/accessibility-2026-09-26/desk-hud-130.jpg,
+ * desk-dbox-130.jpg, phone-hud-130.jpg, phone-dbox-130.jpg.
+ *
+ * `app/applyComfort.ts` puts `data-text-size` ("100" | "115" | "130") and
+ * `--pyr-ts` (1 | 1.15 | 1.3) on <html>. Nothing here matches at 100 %.
+ *
+ * Scope (D-220 Q3): the battle HUD, the dialogue card and the pause. The FFX-2
+ * HUD and the pause key on `data-text-size-wide` instead, which ships off until
+ * their 130 % frames are approved (D-220 Q4): `text-size-wide.css`.
+ *
+ * - FFX desktop HUD (a fixed 640x360 grid): each panel grows as a unit from the
+ *   corner it is pinned to (the individual `scale` property, so the panel's own
+ *   transform and skew are kept), so nothing inside a panel re-wraps. The layout
+ *   moves of the target frame: the command list shows fewer rows and scrolls
+ *   (`ui/common/hudTextSize.ts`), the turn queue shows five portraits, the enemy
+ *   card steps up and left.
+ * - Phone HUD (flow layout): the type grows and reflows; the fixed-width party
+ *   card caps its name and numbers at 115 %.
+ * - Dialogue card: the line, the name, the role tag, the chapter eyebrow and the
+ *   key strip grow; the card keeps its size.
+ *
+ * Game case: both for the plumbing; the HUD rules below are FFX only (FFX-2's
+ * pass is in `text-size-wide.css`).
+ */
+
+/* ------------------------------------------------------ FFX desktop HUD */
+
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .ffx-cmd-area {
+  scale: var(--pyr-ts);
+  transform-origin: left bottom;
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .ffx-cmd-info {
+  scale: var(--pyr-ts);
+  transform-origin: left top;
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .ig-ctb {
+  scale: var(--pyr-ts);
+  transform-origin: right top;
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .ig-stat-list {
+  scale: var(--pyr-ts);
+  transform-origin: right bottom;
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .ffx-sensor {
+  scale: var(--pyr-ts);
+  transform-origin: right bottom;
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .ffx-telegraph {
+  scale: var(--pyr-ts);
+  transform-origin: center top;
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .sgd > * {
+  scale: var(--pyr-ts);
+  transform-origin: left top;
+}
+/* The G chip sits on top of its panel: it grows upwards, off the panel. */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud__stage > .sgd > .sgd__toggle {
+  transform-origin: left bottom;
+}
+
+/* 130 %: the turn queue shows five portraits; the enemy card steps up and left. */
+html[data-text-size='130']:not([data-phone-battle]) .ffxhud__stage > .ig-ctb > .ig-ctb__row:nth-child(n + 6) {
+  display: none;
+}
+html[data-text-size='130']:not([data-phone-battle]) .ffxhud__stage > .ffx-sensor {
+  translate: -34px -56px;
+}
+html[data-text-size='115']:not([data-phone-battle]) .ffxhud__stage > .ffx-sensor {
+  translate: -15px -26px;
+}
+
+/* ------------------------------------------------------- dialogue card */
+
+html[data-text-size]:not([data-text-size='100']) .dbox__speaker { font-size: calc(max(18px, 2.36vw) * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .dbox__role { font-size: calc(max(8px, 0.76vw) * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .dbox__text { font-size: calc(max(13px, 1.67vw) * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .dbox--narrate .dbox__text { font-size: calc(max(16px, 2.15vw) * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .dbox__auto { font-size: calc(max(8px, 0.62vw) * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .dbox__choice-prompt { font-size: calc(max(12px, 1.39vw) * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .dbox__choice-row { font-size: calc(max(11px, 1.25vw) * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .cutscene__eyebrow-label { font-size: calc(max(9px, 1.04vw) * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .cutscene .chint,
+html[data-text-size]:not([data-text-size='100']) .chint--cutscene { font-size: calc(12px * var(--pyr-ts)); }
+
+@media (max-width: 560px) {
+  html[data-text-size]:not([data-text-size='100']) .dbox__speaker { font-size: calc(15px * var(--pyr-ts)); }
+  html[data-text-size]:not([data-text-size='100']) .dbox__role { font-size: calc(8px * var(--pyr-ts)); }
+  html[data-text-size]:not([data-text-size='100']) .dbox__text { font-size: calc(12px * var(--pyr-ts)); }
+  html[data-text-size]:not([data-text-size='100']) .cutscene .chint,
+  html[data-text-size]:not([data-text-size='100']) .chint--cutscene { font-size: calc(9px * var(--pyr-ts)); }
+}
+
+/* The move advisor keeps the box `hudSafeZones.advisorZone` solves for it (clear of
+   every panel and fighter, CHK-008); its type grows inside that box, and the card's
+   own density ladder (`MoveAdvisor.fitCard`) fits the content to it. */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud .mad {
+  --mad-fs-floor: calc(14.2px * var(--pyr-ts) / var(--lb-scale, 1));
+}
+
+/* Chapter IX's Zanmato gauge and Chapter XII's disc strip and intent line (FFX
+   only): authored on a 1600x900 frame. They grow from the edge they hang from; the
+   intent line steps up clear of the grown party list first. */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud .ffx-zg__panel,
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud .ffx-omr__strip {
+  scale: var(--pyr-ts);
+  transform-origin: center top;
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud .ffx-omr__intent {
+  scale: var(--pyr-ts);
+  transform-origin: right bottom;
+}
+html[data-text-size='115']:not([data-phone-battle]) .ffxhud .ffx-omr__intent { bottom: 296px; }
+html[data-text-size='130']:not([data-phone-battle]) .ffxhud .ffx-omr__intent { bottom: 334px; }
+
+/* ------------------------------------------------ FFX phone HUD (flow layout) */
+/* The type grows and reflows; the panels keep their size, and the enemy-move card at
+   the top keeps its type, as the target frame (`phone-hud-130.jpg`) draws them. The
+   px are the phone HUD's own sizes (`phone-hud*.css`, `phone-battle*.css`). */
+html[data-phone-battle='ffx'][data-text-size]:not([data-text-size='100']) .ffxhud .ffx-cmd__label { font-size: calc(16px * var(--pyr-ts)); }
+html[data-phone-battle='ffx'][data-text-size]:not([data-text-size='100']) .ffxhud .ffx-cmd__badge { font-size: calc(14px * var(--pyr-ts)); }
+html[data-phone-battle='ffx'][data-text-size]:not([data-text-size='100']) .ffxhud :is(.mad__label, .mad__arrow, .mad__target, .mad__where) { font-size: calc(15px * var(--pyr-ts)); }
+html[data-phone-battle='ffx'][data-text-size]:not([data-text-size='100']) :is(.phud-foot__who, .phud-foot__help, .phud-guide) { font-size: calc(14px * var(--pyr-ts)); }
+/* The fixed-width party card caps its name and numbers at 115 % (otherwise
+   "Kimahri" is cut to "Kima..." and HP runs into MP), with a gap before MP. */
+html[data-phone-battle='ffx'][data-text-size]:not([data-text-size='100']) .ffxhud .ig-stat__name { font-size: calc(17px * 1.15); white-space: nowrap; }
+html[data-phone-battle='ffx'][data-text-size]:not([data-text-size='100']) .ffxhud .ig-stat__value { font-size: calc(16px * 1.15); white-space: nowrap; }
+html[data-phone-battle='ffx'][data-text-size]:not([data-text-size='100']) .ffxhud .ig-stat .ig-stat__value--mp { font-size: calc(14px * 1.15); margin-left: 0.35em; }

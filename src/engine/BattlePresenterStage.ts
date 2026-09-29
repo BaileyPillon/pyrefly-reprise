@@ -19,6 +19,7 @@ import { PaintedActor } from './PaintedActor.ts';
 import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
+import { LOW_EFFECTS_SPARK_SHARE, StillCamera, type ComfortFlags } from './ComfortCamera.ts';
 import type { SceneSlots } from '../scenes/index.ts';
 import { solveFormation, type FormationMember } from './Formation.ts';
 import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './ScreenRects.ts';
@@ -62,6 +63,8 @@ export interface PaintedStageOptions {
   grade?: GradeTarget | null;
   /** REDUCE FLASHES: phase lighting lands without its tween. The accessibility batch wires it; default off. */
   reduceFlashes?: () => boolean;
+  /** REDUCE MOTION and LOW EFFECTS (D-285, `ComfortCamera.ts`), read live. Absent = both off. */
+  comfort?: () => ComfortFlags;
 }
 
 interface StagedActor {
@@ -151,7 +154,9 @@ export class PaintedStage implements BattleStage {
       actor: (id) => this.actor(id),
       staged: () => this.staged(),
     });
-    this.camera = stageCamera(opts.battleCamera, opts.slots.fixedCamera); // FF7's fixed angle when the scene asks (StageFacing.ts)
+    const still = (): boolean => opts.comfort?.().reduceMotion === true;
+    opts.battleCamera.swayOff = still;
+    this.camera = stageCamera(new StillCamera(opts.battleCamera, still), opts.slots.fixedCamera); // FF7's fixed angle when the scene asks (StageFacing.ts)
     this.hits = new HitEffects(
       { size: 4.2, coreColor: 0xffffff, edgeColor: 0x9fd8ff, arc: 2.45, thickness: 0.075 },
       { count: 110, speed: 6.4, life: 0.5, size: 10, bias: [0.4, 0.45, 0.2], focus: 0.5 },
@@ -291,6 +296,7 @@ export class PaintedStage implements BattleStage {
     }
 
     this.opts.scene.add(actor);
+    actor.still = () => this.opts.comfort?.().reduceMotion === true;
     if (!anchor) this.pyreflies.stage(c.id, c.side, actor);
     // A-8: a tight dark ellipse under the feet; a hovering figure keeps none.
     if (!anchor && !actor.levitates) attachFootOcclusion(actor.shadow, contactShadowStyle(this.groundLuma));
@@ -638,7 +644,7 @@ export class PaintedStage implements BattleStage {
       // so a heal reads as a green glow rather than a white hole in the figure.
       const bloom = bloomScale(staged.actor.height) * (crit ? 1.3 : 1);
       this.hits.flash.play(point, crit ? 320 : 260, bloom, colour);
-      this.hits.sparks.emit(point, crit ? 1.35 : 1);
+      this.hits.sparks.emit(point, crit ? 1.35 : 1, this.opts.comfort?.().lowEffects ? LOW_EFFECTS_SPARK_SHARE : 1);
       if (key === 'slash' || key === 'impact') {
         await this.hits.slash.play(point, 300, -0.62);
       }

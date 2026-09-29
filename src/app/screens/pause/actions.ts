@@ -26,10 +26,10 @@ export interface PauseActionHost {
   extraRows?: ReadonlyArray<{ id: string; run: () => void }> | undefined;
 }
 
-/** @param dir which way Left / Right pushed; Confirm passes 1. */
-export function activateRow(host: PauseActionHost, id: string | null, dir: 1 | -1): void {
+/** @param dir which way Left / Right pushed; Confirm passes 1. @param press Confirm or a tap, not an arrow. */
+export function activateRow(host: PauseActionHost, id: string | null, dir: 1 | -1, press = false): void {
   if (id === null) return;
-  if (adjustSetting(host.save, id, dir)) {
+  if (adjustSetting(host.save, id, dir, press)) {
     audio.playSfx('cursor-move');
     host.refresh();
     return;

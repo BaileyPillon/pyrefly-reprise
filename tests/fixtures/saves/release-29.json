@@ -1,0 +1,33 @@
+{
+  "_note": "OPTIONS accessibility A2 (D-285) save-compatibility fixture. Written by the LIVE release-29 build itself (main 49005f73, bundle index-C73AJ1Ds.js) on 2026-09-29: a fresh headless profile on https://baileypillon.github.io/pyrefly-reprise/?coach=off, then that build's own SaveStore methods (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save), then localStorage read back verbatim. Non-default values on purpose, including the two comfort flags release 29 already stored (reduceMotion, lowEffects). It has no textSize: release 29 never wrote one.",
+  "release": 29,
+  "mainSha": "49005f73",
+  "bundle": "index-C73AJ1Ds.js",
+  "expect": {
+    "cleared": [
+      "seymour-flux",
+      "ffx2-bahamut"
+    ],
+    "notCleared": [
+      "yojimbo-cavern"
+    ],
+    "bestTimeMs": {
+      "seymour-flux": 512340,
+      "ffx2-bahamut": 733120
+    },
+    "settings": {
+      "masterVolume": 0.55,
+      "musicVolume": 0.4,
+      "sfxVolume": 0.6,
+      "textSpeed": 1.5,
+      "ffx2Atb": "active",
+      "ffx2AtbSpeed": "fast",
+      "guideVisible": false,
+      "reduceMotion": true,
+      "lowEffects": true
+    }
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790697850255,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":true,\"bestTimeMs\":512340,\"bestTurns\":31,\"attempts\":2,\"playTimeMs\":0},\"ffx2-bahamut\":{\"id\":\"ffx2-bahamut\",\"cleared\":true,\"bestTimeMs\":733120,\"bestTurns\":52,\"attempts\":1,\"playTimeMs\":0},\"yojimbo-cavern\":{\"id\":\"yojimbo-cavern\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":1000}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.55,\"musicVolume\":0.4,\"sfxVolume\":0.6,\"textSpeed\":1.5,\"skipSeenCutscenes\":false,\"lowEffects\":true,\"guideVisible\":false,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"active\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":true,\"ffx2AtbSpeed\":\"fast\"},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

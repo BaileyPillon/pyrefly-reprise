@@ -42,6 +42,8 @@ function spread(i: number, salt: number): number {
 
 function prefersReducedMotion(): boolean {
   try {
+    // The REDUCE MOTION row too (D-285): `app/applyComfort.ts` marks `<html>` while it is on.
+    if (document.documentElement.hasAttribute('data-reduce-motion')) return true;
     return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   } catch {
     return false;

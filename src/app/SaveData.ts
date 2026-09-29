@@ -9,6 +9,8 @@
 import { audio } from '../audio/index.ts';
 import { ALL_COACH_IDS } from '../ui/coach/coachCopy.ts';
 import { migrateFfx2Atb } from './saveFfx2Atb.ts';
+import { migrateComfort, type TextSize } from './saveComfort.ts';
+import { applyComfort } from './applyComfort.ts';
 import { writeMerged } from './saveMerge.ts';
 
 export const SAVE_VERSION = 1;
@@ -64,6 +66,8 @@ export interface Settings {
   /** Reduce bloom/particles for weaker machines. */
   lowEffects: boolean;
   reduceMotion: boolean;
+  /** TEXT SIZE 100 / 115 / 130 % (D-285, A2). Absent before release 31: reads 100 % (`saveComfort.ts`). */
+  textSize: TextSize;
   /**
    * Show the in-battle strategy guide (`src/ui/common/StrategyGuide.ts`).
    *
@@ -187,6 +191,7 @@ export function defaultSettings(): Settings {
     textSpeed: 1,
     skipSeenCutscenes: false,
     lowEffects: false,
+    textSize: 1,
     guideVisible: true,
     advisorVisible: true,
     intentVisible: true,
@@ -267,6 +272,7 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
   const settings: Settings = { ...base.settings, ...(raw.settings ?? {}) };
   if (!hadCoach && veteran) settings.battleHelp = false;
   if (typeof settings.battleHelp !== 'boolean') settings.battleHelp = base.settings.battleHelp;
+  migrateComfort(settings, base.settings);
   migrateFfx2Atb(settings, raw.settings);
   // D-210 lowers the default for new profiles only: a save that never stored a level was playing at 0.9.
   if (raw.settings && !Number.isFinite(raw.settings.sfxVolume)) settings.sfxVolume = 0.9;
@@ -331,6 +337,7 @@ export class SaveStore {
     // always returns settings merged onto `defaultSettings()` (see
     // `migrate`), so this is never NaN even for a pre-audio-settings save.
     audio.applySettings(this.data.settings);
+    applyComfort(this.data.settings); // text size and the comfort flags on the first frame too
   }
 
   /** Current in-memory save. Mutate through the helpers, not directly. */
@@ -361,7 +368,10 @@ export class SaveStore {
     // Folds in another open tab's newer write first (CHK-024-LIVE-1, `saveMerge.ts`).
     const out = writeMerged(this.storage, this.key, this.lastRaw, this.data, migrate);
     if (!out) return false;
-    if (out.data !== this.data) audio.applySettings((this.data = out.data).settings);
+    if (out.data !== this.data) {
+      audio.applySettings((this.data = out.data).settings);
+      applyComfort(this.data.settings);
+    }
     this.lastRaw = out.json;
     return true;
   }
@@ -475,6 +485,7 @@ export class SaveStore {
     // to also call `audio.setMasterVolume`/`setMusicVolume`/`setSfxVolume`
     // itself the way `PauseScreen` still does today.
     audio.applySettings(this.data.settings);
+    applyComfort(this.data.settings);
     this.save();
   }
 

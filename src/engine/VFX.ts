@@ -306,10 +306,11 @@ export class SparkBurst extends Points {
     this.name = 'spark-burst';
   }
 
-  /** Fire the burst from a world position. */
-  emit(origin: Vector3 | { x: number; y: number; z: number }, speedScale = 1): void {
+  /** Fire the burst from a world position; `share` < 1 draws that fraction of the sparks (LOW EFFECTS). */
+  emit(origin: Vector3 | { x: number; y: number; z: number }, speedScale = 1, share = 1): void {
     (this.uniforms['uOrigin']!.value as Vector3).set(origin.x, origin.y, origin.z);
     const count = this.vel.length / 3;
+    this.geometry.setDrawRange(0, Math.max(1, Math.round(count * Math.min(1, Math.max(0, share)))));
     for (let i = 0; i < count; i++) {
       // Random point on a sphere, pulled toward the bias direction.
       const u = Math.random() * 2 - 1;

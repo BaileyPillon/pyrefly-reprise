@@ -12,6 +12,7 @@
  */
 
 import type { Settings } from '../SaveData.ts';
+import { TEXT_SIZES, textSizeLabel } from '../saveComfort.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 
 // ------------------------------------------------------------------ options
@@ -44,11 +45,11 @@ export const TEXT_SPEED_MAX: (typeof TEXT_SPEEDS)[5] = 2;
 /**
  * The OPTIONS rows, read out of the live {@link Settings}.
  *
- * Exactly the four groups the brief asks for — volume, text speed, the FFX-2
- * Active/Wait toggle, and whether the strategy guide starts visible — and
- * nothing else. `SaveData.Settings` carries more than this (`lowEffects`,
- * `reduceMotion`, `skipSeenCutscenes`); those belong to a settings screen, not
- * to a menu the player opened mid-fight.
+ * Volume, text speed, the three comfort rows of accessibility A2 (TEXT SIZE,
+ * REDUCE MOTION, LOW EFFECTS; D-285, `docs/concepts/r29-options/options.html`
+ * frame A2: under TEXT SPEED, TEXT SIZE nudged with Left / Right like it), the
+ * FFX-2 Active/Wait toggle, and whether the strategy guide starts visible.
+ * `skipSeenCutscenes` stays off the menu.
  */
 export function optionRows(settings: Readonly<Settings>): OptionRow[] {
   const pct = (v: number): string => `${Math.round(v * 100)}`;
@@ -62,6 +63,14 @@ export function optionRows(settings: Readonly<Settings>): OptionRow[] {
       value: `${settings.textSpeed}x`,
       ratio: (settings.textSpeed - TEXT_SPEED_MIN) / (TEXT_SPEED_MAX - TEXT_SPEED_MIN),
     },
+    {
+      id: 'textSize',
+      label: 'TEXT SIZE',
+      value: textSizeLabel(settings.textSize),
+      ratio: Math.max(0, TEXT_SIZES.indexOf(settings.textSize)) / (TEXT_SIZES.length - 1),
+    },
+    { id: 'reduceMotion', label: 'REDUCE MOTION', value: settings.reduceMotion ? 'ON' : 'OFF', ratio: null },
+    { id: 'lowEffects', label: 'LOW EFFECTS', value: settings.lowEffects ? 'ON' : 'OFF', ratio: null },
     { id: 'ffx2Atb', label: 'X-2 BATTLE', value: settings.ffx2Atb === 'wait' ? 'WAIT' : 'ACTIVE', ratio: null },
     { id: 'guideVisible', label: 'STRATEGY GUIDE', value: settings.guideVisible ? 'ON' : 'OFF', ratio: null },
   ];

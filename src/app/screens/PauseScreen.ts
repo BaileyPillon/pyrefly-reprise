@@ -205,7 +205,7 @@ export class PauseScreen extends Screen {
     if (input.justPressed('up')) this.moveRow(rows, at, -1);
     if (input.justPressed('right')) this.activate(this.at.rowId, 1);
     if (input.justPressed('left')) this.activate(this.at.rowId, -1);
-    if (input.justPressed('confirm')) this.activate(this.at.rowId, 1);
+    if (input.justPressed('confirm')) this.activate(this.at.rowId, 1, true);
   }
 
   private rows(): PanelRow[] {
@@ -270,11 +270,11 @@ export class PauseScreen extends Screen {
       const id = action.slice('pause:row:'.length);
       if (!this.rows().some((r) => r.id === id)) return;
       this.at = { ...this.at, focus: 'body', rowId: id };
-      this.activate(id, 1);
+      this.activate(id, 1, true);
     }
   }
 
-  private activate(id: string | null, dir: 1 | -1): void {
+  private activate(id: string | null, dir: 1 | -1, press = false): void {
     activateRow(
       {
         save: this.app.save,
@@ -286,7 +286,7 @@ export class PauseScreen extends Screen {
         extraRows: this.opts.extraRows,
       },
       id,
-      dir,
+      dir, press,
     );
   }
 
