@@ -24,6 +24,10 @@ blocking gap is one run in forty, and the other budget scores the same chapter t
 mini 38, VIII mini 40, X lean 39). They read as noise at 40 seeds. The rule is literal, though, so
 the switch stays off until Bailey or the driver decides (Open, 1).
 
+**Update 2026-09-29 (see DECISION at the end):** seeds 41 to 80 clear every win gate at both
+budgets, but the fork-tested Chapter III reading fails at lean (2 real lethal-save deaths against
+v3's 0, all on seed 35). The switch stays OFF.
+
 **Game case (rule 14): FFX only.** CTB fixes the next menu's board at the press, and the search
 runs while the turns animate [research/ffx-combat-core.md §1.1]. FFX-2 stays on v3
 (`ADVISOR_V4_FFX2 = false`): its window, a girl's time on the top list, is unmeasured (method check
@@ -282,3 +286,54 @@ Scratch (untracked, not committed): `.v4chk-browser-tmp.mjs` (the tapped-worker,
 poller), `critic/bench/advisor-v4/zz-chk.tmp.test.ts` (purity, card identity, rails, split),
 `critic/bench/advisor-v4/results/chk-wp-{lean,mini}.json`. Raw browser readings are in
 `D:/Tools/pyrefly-scratch/v4chk/`.
+
+## DECISION (2026-09-29): the switch stays OFF, on Chapter III's fork-tested lethal saves at lean
+
+**Rule (the driver's brief).** Switch `ADVISOR_V4_FFX` on only if, at both lean and mini, every
+FFX chapter's pooled wins are at least v3's (80 seeds for II, VIII and X; the 40-seed rows
+elsewhere), **and** the fork-tested Chapter III lethal-save deaths are not more than v3's.
+
+**Wins: the gate passes at both budgets.** Seeds 41 to 80 on II, VIII and X
+(`results/wp41-lean-<id>.json`, v3 and v4; `results/wp41-mini-<id>.json`, v4; v3 has no budget, so
+its lean row is its only row), pooled with seeds 1 to 40:
+
+| Ch. | v3 1-40 + 41-80 | v4 lean | v4 mini | |
+|---|---:|---:|---:|---|
+| II Yunalesca | 37 + 33 = **70/80** | 36 + 36 = **72/80** | 38 + 33 = **71/80** | pass |
+| VIII Evrae | 40 + 38 = **78/80** | 39 + 40 = **79/80** | 40 + 40 = **80/80** | pass |
+| X Seymour Natus | 38 + 36 = **74/80** | 39 + 38 = **77/80** | 37 + 37 = **74/80** | pass (mini equal) |
+| I, III, VII, IX, XII, XIV (40 seeds) | as §1 | every row >= v3 | every row >= v3 | pass |
+
+Seeds 41 to 80 also showed v4 lean's arithmetic lethal-save misses 0 → 2 on X (v3 0) and none
+elsewhere; missed revives at lean fell on II (8 → 4) and X (7 → 0), VIII 0 → 0. The one-seed deficits of §1 were noise.
+
+**Chapter III lethal saves, fork-tested: the gate fails at lean.**
+`critic/bench/advisor-v4/lethal-fork.test.ts` (v3 method check §6b ported to CTB: at every decision
+the arithmetic flags, fork the live engine and press the pick and every saving row on v3's 4
+`provedSave` seeds and on the real RNG stream, to the end of the first enemy action). Seeds 1 to 40;
+the runs reproduce the worker path exactly (wins 39 / 39 / 40 and 1 / 9 / 0 flags).
+Files: `results/fork-lean-iii.json` (v3 and v4 lean), `results/fork-mini-iii.json` (v4 mini).
+
+| III | Wins | Flagged (arithmetic) | Fork-tested misses | Real deaths with the pick | ...that a saving row avoids | Seed deaths pick / best save |
+|---|---:|---:|---:|---:|---:|---|
+| v3 | 39/40 (lost 17) | 1 | 0 | **0** | 0 | 0 / 0 |
+| v4 lean | 39/40 (lost 35) | 9 | 3 | **2** | 1 | 11 / 3 |
+| v4 mini | 40/40 | 0 | 0 | 0 | 0 | 0 / 0 |
+
+All nine v4 lean flags are one run: seed 35, decisions 301 to 320, Yuna threatened, and the
+seed v4 loses. At decision 302 Auron's pick is Attack on the Aeon; on the real stream Yuna dies,
+and Hi-Potion on Yuna (an enabled row of that menu) keeps her alive on that same stream and on all 4 seeds
+(pick 2 deaths of 4). At 311 and 314 (Lulu's Doublecast, then Hi-Potion on Lulu) the seeds kill
+her 2 and 3 times of 4 against 0 for Hi-Potion on Yuna. At 318 she dies on the real stream
+whichever row is pressed. So the arithmetic over-counted (9 flags, 3 fork-tested misses), but
+the misses are real: v4 lean lets a savable girl die where v3 lets none die. Mini has none.
+
+**Outcome: OFF** (`ADVISOR_V4_FFX = false`, unchanged). Failing chapter and number: **III at
+lean, fork-tested real deaths 2 against v3's 0** (fork-tested misses 3 against 0). Every win
+gate passes. Game case: FFX only.
+
+What would clear it (not built; each needs the driver's yes): a v4 rail that never lifts a row
+over a v3 row carrying `saves-from-lethal` when the forecast names a girl, at the whole-card
+level, not only when v3's top row itself carries the proof (not yet checked: whether v3's top row
+on seed 35's flagged boards was a save); or ship mini's settings on desktop too (mini passes every gate here).
+Re-run: `V4F_BUDGET=lean V4F_TAG=fork-lean-iii node node_modules/vitest/vitest.mjs run --config critic/bench/advisor-v4/vitest.config.ts critic/bench/advisor-v4/lethal-fork.test.ts`.
