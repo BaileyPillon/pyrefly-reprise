@@ -26,8 +26,22 @@ export const ZANMATO_GAUGE_SELECTORS = ['.ffx-zg__panel', '.ffx-zg__banner'] as 
  */
 export const OMNIS_READOUT_SELECTORS = ['.ffx-omr__strip', '.ffx-omr__note', '.ffx-omr__intent'] as const;
 
-/** Every one-chapter panel the floating FFX panels dodge (Chapter IX's gauge, Chapter XII's read-out). */
-export const CHAPTER_PANEL_SELECTORS = [...ZANMATO_GAUGE_SELECTORS, ...OMNIS_READOUT_SELECTORS] as const;
+/**
+ * The Sin HUD (FFX, Chapters XVII and XVIII only; `SinHud.ts`): the link 4 clock,
+ * the Gaze pill and the Fins' plate. Each is a solid child of the `inset: 0`
+ * wrapper `.ffx-sinhud`, which is never listed.
+ */
+export const SIN_HUD_SELECTORS = ['.ffx-sinclock', '.ffx-sinhud__gaze', '.ffx-sinfin'] as const;
+
+/**
+ * The one-chapter panels the move advisor's card treats as obstacles by
+ * selector (`FFXBattleHud` asks the Zanmato gauge for its own boxes). Hidden
+ * or zero-size boxes are skipped, so every other chapter is unchanged.
+ */
+export const ADVISOR_PANEL_SELECTORS = [...OMNIS_READOUT_SELECTORS, ...SIN_HUD_SELECTORS] as const;
+
+/** Every one-chapter panel the floating FFX panels dodge (Chapter IX's gauge, Chapter XII's read-out, Sin's clock and Fin plate). */
+export const CHAPTER_PANEL_SELECTORS = [...ZANMATO_GAUGE_SELECTORS, ...OMNIS_READOUT_SELECTORS, ...SIN_HUD_SELECTORS] as const;
 
 /**
  * The HUD panels the intent slab may not cover.
