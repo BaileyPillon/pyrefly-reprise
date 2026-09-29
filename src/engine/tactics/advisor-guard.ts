@@ -208,3 +208,44 @@ export function harmsAZombie(state: Readonly<BattleState>, outcome: SimOutcome |
   if (outcome.kills.some(zombieAlly)) return true;
   return Object.entries(outcome.hpDelta).some(([id, delta]) => delta > 0 && zombieAlly(id));
 }
+
+/**
+ * **A revive aimed where it raises no ally** (PR-0245, critic round 16).
+ *
+ * Chapter VII leaves a KO'd Guado Guardian on the field (it is not removed), and the engine lists
+ * it among Phoenix Down's legal targets. The card priced "stands Guado Guardian A back up" like an
+ * ally's raise and put it on top for 16 turns in a row; the phone's reticle could not reach the
+ * foe, so Enter spent the Down on a full-HP ally. The rule, for every chapter: a revive
+ * (`misses-if-target-alive`) is advice only when it stands a KO'd ally up. It is never offered on
+ * a KO'd foe (it would raise the enemy), nor on a living target (it whiffs; on a living Zombie
+ * ally it kills). The one kept exception is a living Zombie **foe**, where FFX's raise is a kill
+ * (`battle/ffx/abilities.ts`), which is a real play and not a revive.
+ *
+ * Read off the aimed targets and, when there is one, the simulated outcome (a raise the preview
+ * reports on an enemy is caught even when a tactic aimed it). A command with no aimed target is
+ * judged by its outcome alone.
+ *
+ * Game case: **both** (shared advisor plumbing); FFX-2 defines no Zombie, so there the exception
+ * never applies.
+ */
+export function wastedRevive(
+  state: Readonly<BattleState>,
+  command: Command,
+  revives: boolean,
+  outcome: SimOutcome | null = null,
+): boolean {
+  if (outcome?.revives.some((id) => state.combatants[id]?.side === 'enemy')) return true;
+  if (!revives) return false;
+  const targets = (command.targets ?? []) as readonly CombatantId[];
+  if (targets.length === 0) return false;
+  if (targets.some((id) => { const c = state.combatants[id]; return !!c && c.side === 'enemy' && !c.alive; })) return true;
+  return !targets.some((id) => reviveAimOk(state, id));
+}
+
+/** A target a revive may be aimed at: a KO'd ally, or a living Zombie foe (the raise kills it). */
+export function reviveAimOk(state: Readonly<BattleState>, id: CombatantId): boolean {
+  const c = state.combatants[id];
+  if (!c) return false;
+  if (c.side === 'enemy') return c.alive && c.statuses['zombie'] !== undefined;
+  return !c.alive;
+}
