@@ -87,7 +87,8 @@ export function phoneHeroFigure(chapter: Chapter | undefined, victory: boolean, 
   if (!figure) return null;
   if (victory) return { victory: true, portraitId: wedgePortraitId(figure, chapter) };
   const [hurt, ko] = wedgeFallenArt(chapter, figure);
-  return { victory: false, hurtUrl: artUrl(hurt), koUrl: artUrl(ko) };
+  if (!hurt) return null; // r29 PR-0224: nothing on disk, nothing requested
+  return { victory: false, hurtUrl: artUrl(hurt), koUrl: ko ? artUrl(ko) : '' };
 }
 
 /**

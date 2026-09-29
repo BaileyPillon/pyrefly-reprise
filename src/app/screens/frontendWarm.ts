@@ -59,7 +59,7 @@ async function boardGate(app: Pick<App, 'save'>, end: number): Promise<void> {
   await within(loadArtManifest(), Math.max(0, end - performance.now()));
   const board = boardArtUrls(app.save);
   const ready = untilWarm(board.first, Math.max(0, end - performance.now()));
-  void warmImages(board.rest);
+  void warmImages(board.rest, 'idle'); // r29: the rest waits for anything a screen needs now
   await ready;
 }
 
@@ -71,7 +71,7 @@ export function briefingArtUrls(): string[] {
 /** Every `src="..."` in a piece of markup, in order. */
 function srcsIn(html: string): string[] {
   const out: string[] = [];
-  for (const m of html.matchAll(/\bsrc="([^"]+)"/g)) out.push(m[1]!.replace(/&amp;/g, '&'));
+  for (const m of html.matchAll(/\b(?:data-lazy-)?src="([^"]+)"/g)) out.push(m[1]!.replace(/&amp;/g, '&'));
   return out;
 }
 
@@ -140,7 +140,8 @@ export function warmFrontEnd(app: Pick<App, 'save'>, briefingDue: boolean): void
   void loadArtManifest().then(() => {
     try {
       const board = boardArtUrls(app.save);
-      void warmImages([...board.first, ...board.rest]);
+      void warmImages(board.first);
+      void warmImages(board.rest, 'idle'); // r29 PR-0221: behind anything a screen needs now
     } catch {
       /* a harness without chapters: the screens load their own art */
     }
