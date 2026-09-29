@@ -1,4 +1,4 @@
-"""Sin art options, 2026-09-29 (FFX only): the words for every render.
+"""Sin's head options, 2026-09-29 (FFX only): the words for every head render (and the one backdrop test, bg1-a).
 
 Written sources only (rule 8: no retail image anywhere, and no character, game or franchise name for any creature):
 - research/ffx-sin.md 9.1 (where and when), 9.3 (appearance in words), 1.1 (the four links), 5.1 to 5.4.
@@ -32,7 +32,7 @@ HIDE = ('Its hide is rough and craggy like an ancient weathered cliff: overlappi
         'cracked stone, matte and natural. It is entirely a living animal made of rock and scale: no metal, no gold, '
         'no machine parts, no pipes, no bolts, no buildings on it. ')
 
-# --- (3) the backdrop: the Fahrenheit's deck over Bevelle at dusk ----------------------------------------------------
+# --- the backdrop test bg1-a (made before the work was split; the backdrop section is the other agent's) ---------
 # BG-1: the approved Evrae deck plate (backdrop B, "looking up at the hull from the rail"), repainted at dusk with
 # Bevelle below: img2img from our own installed painting, so the hull and the layout are the ship Bailey approved.
 BG1_TAGS = ('no humans, scenery, the underside of a huge ancient airship hull overhead, looking up from the rail, '
@@ -89,65 +89,6 @@ HEAD_A = (PAINT + DUSK +
           'solid dark grey feathers with vivid purple tips. A huge scaly arm reaches down on the right and its hooked '
           'black claws clamp over the round top of the white tower. ' + HIDE + 'No people.')
 
-# --- (2) links 1 to 3 ------------------------------------------------------------------------------------------------
-def fin(side, rng, design):
-    """The Left or Right Fin ("Sin's Left/Right Arm") seen from the deck, at FAR or NEAR, in one of two readings."""
-    s = 'left' if side == 'L' else 'right'
-    near = rng == 'NEAR'
-    where = ('Very close beside the viewer, filling the right half of the sky and rising far above, is the side of a '
-             'colossal flying whale-like monster, too big to see whole, and on its side, ' if near else
-             'Far away across the open sky, level with the viewer, the whole flank of a colossal flying whale-like '
-             'monster fills the right of the picture, its long scaly body trailing into haze; on its side, ')
-    if design == 'F1':   # the clawed flipper: an arm shaped like a whale's pectoral fin, the core at its base
-        what = (f'its huge {s} arm: a broad flat flipper like a whale\'s pectoral fin, long and tapering, ending in three '
-                'hooked black claws, covered in overlapping dark slate-grey scales. At the base of the arm, where it '
-                'joins the body, a round pale-blue glowing core the size of a house is set in a socket of rock, '
-                'shining softly. ')
-    else:                # the sail arm: a jointed arm carrying a tall ribbed fin like a fish's, the core in its root
-        what = (f'its huge {s} arm: a long jointed scaly arm that carries a tall ribbed fin like a fish fin, the ribs '
-                'long spines of dark stone with a thin dark grey webbed membrane stretched between them, the fin\'s '
-                'edge ragged. In the root of the fin, where it meets the arm, a cluster of pale-blue glowing crystal '
-                'forms the core, shining softly. ')
-    return PAINT + AFTERNOON + where + what + HIDE + 'No airship, no deck, no people.'
-
-
-# link 3, on Sin's back: Sinspawn Genais (a shelled, plant-like marine creature with large tentacles) and Sin's Core
-BACK = ('The ground is the back of a colossal flying monster: a wide rolling plain of overlapping dark slate-grey rock '
-        'scales and cracked stone ridges, curving away to the horizon, open sky all around and clouds below. ')
-
-GENAIS = {
-    'G1': ('In the middle distance on the left stands a huge shelled creature twice as tall as a man: a heavy spiral shell '
-           'like a conch, ribbed and knobbly, dark teal and bone white, and out of its wide mouth pours a thick body '
-           'like a plant, many large green-grey tentacles and leafy fronds curling and reaching forward, like a '
-           'giant sea anemone. '),
-    'G2': ('In the middle distance on the left stands a huge shelled creature twice as tall as a man: a broad low domed '
-           'shell like a giant limpet or clam, ridged and barnacled, dark teal and bone white, lifted open at the front, '
-           'and from under its rim a crown of many long thick tentacles like a giant sea anemone spreads out and '
-           'reaches forward, grey-green with pale tips. '),
-}
-GENAIS_SHUT = {
-    'G1': ('In the middle distance on the left sits a huge spiral shell like a conch, ribbed and knobbly, dark teal and '
-           'bone white, closed tight: its creature has pulled back inside, only the dark shut mouth of the shell shows, '
-           'no tentacles. '),
-    'G2': ('In the middle distance on the left sits a huge broad low domed shell like a giant limpet or clam, ridged and '
-           'barnacled, dark teal and bone white, clamped shut flat on the ground: its creature has pulled back inside, '
-           'no tentacles show. '),
-}
-CORE = {
-    'K1': ('Further back, out of reach, on a ridge of the monster\'s back, rises its core: a colossal round glowing orb '
-           'the size of a building, pale blue-white, set deep in a cradle of great curved ribs of dark rock that grow '
-           'up around it like fingers. '),
-    'K2': ('Further back, out of reach, on a ridge of the monster\'s back, rises its core: a tall cluster of huge '
-           'pale blue-white glowing crystals like a heart of ice, growing out of the dark scales, with glowing veins '
-           'running from it into the rock. '),
-}
-
-
-def link3(g, k, shut=False):
-    return (PAINT + AFTERNOON + BACK + (GENAIS_SHUT if shut else GENAIS)[g] + CORE[k] + HIDE.replace('Its hide', 'The '
-            'ground') + 'No people, no airship.')
-
-
 PROMPTS = {
     'bg1': {'size': (1344, 768), 'pos': BG1_TAGS, 'neg': BG1_NEG},
     'bg2': {'size': (1344, 768), 'pos': BG2, 'neg': ''},
@@ -156,10 +97,3 @@ PROMPTS = {
     'head-a': {'size': (1344, 768), 'pos': HEAD_A, 'neg': ''},
     'head-a2': {'size': (1344, 768), 'pos': HEAD_A2, 'neg': ''},
 }
-for _d in ('F1', 'F2'):
-    for _s in ('L', 'R'):
-        for _r in ('NEAR', 'FAR'):
-            PROMPTS[f'fin-{_d}-{_s}-{_r}'] = {'size': (1344, 768), 'pos': fin(_s, _r, _d), 'neg': ''}
-for _g, _k in (('G1', 'K1'), ('G2', 'K2')):
-    PROMPTS[f'link3-{_g}{_k}'] = {'size': (1344, 768), 'pos': link3(_g, _k), 'neg': ''}
-    PROMPTS[f'link3-{_g}{_k}-shut'] = {'size': (1344, 768), 'pos': link3(_g, _k, True), 'neg': ''}

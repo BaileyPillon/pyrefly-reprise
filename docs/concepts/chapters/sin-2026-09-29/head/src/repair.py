@@ -5,19 +5,16 @@ the ship, golden hour over Bevelle) with the wings the sources describe (feather
 tower under the claw. Its one painting is cut into layers and only the lower jaw turns, so the five mouth stages are one
 creature. This pass mends what its README and round 1 left open, each fix made ONCE, so it holds in every stage:
 
-  1 the stage-4 tusk      a pair of oversized curved fangs and a dark ring at the chin: one masked repaint of a small
-                          crop of the master (gen.py patch), pasted back feathered (tusk-prep, tusk-paste)
-  2 the back of the mouth a strip of mouth interior was painted below the upper lip, in the static top layer, so at
-  3 the teeth fringe      stage 0 a violet seam ran from the snout to the hinge and the lower teeth showed under the top
-                          row. The turned jaw is now clipped under the skull's edge (rig), and stage 0 gets a SHUT-LIP
-                          patch: one masked repaint of the seam band on the stage-0 composite (gen.py patch; lip-prep,
-                          lip-paste), a static layer shown only while the mouth is shut. Stages 1 to 4 are untouched.
-                          (A first try moved the strip's pixels to the throat by colour; it took hide as well and
-                          opened holes of sky at stages 1 and 4, so it was dropped.)
+  1 the stage-4 tusk      a pair of oversized curved fangs and a dark ring at the chin: our paint-over of a small crop,
+                          blended by a masked pass (gen.py patch), pasted back and smoothed (tusk-*)
+  2 the back of the mouth a violet strip of mouth interior sat under the painted upper lip in the static top layer,
+  3 the teeth fringe      and the lower teeth showed under the top row at stage 0. The turned jaw is clipped under the
+                          skull's edge (rig), and stage 0 darkens the strip to a shut seam (lip-seam). Dropped routes:
+                          moving the strip to the throat by colour (it took hide), and a GPU lip patch (it painted an
+                          open slit); see ../README.md.
   4 the chin sliver       a faint outline of the open jaw's underside sat in the static top layer, and the jaw's edge
                           carried sky-coloured pixels that ride along with it: both cleared (rig)
-  + the white glints      small white specks sprinkled over the head (round 3's own fault list): each replaced by its
-                          surroundings (glints)
+  + the white glints      small white specks over the head (round 3's list): replaced by their surroundings (glints)
 
   python repair.py tusk-prep  <master.png> <out_dir> <plate.png>
   python repair.py tusk-sketch <out_dir>
@@ -252,9 +249,7 @@ def rig(plate_p, master_p, rig_p, out, dressed_p, region_p, shut_deg=26.0, jaw_g
     xs_ = [p[0] for p in und]
     below = poly(size, und + [(max(xs_), size[1]), (min(xs_) - 60, size[1]), (min(xs_) - 60, und[-1][1])], 0, 2.0)
     top_a = top_a * (1 - below * (1 - jaw_g))
-    r_, g_, b_ = master[..., 0], master[..., 1], master[..., 2]
     lum = master.mean(axis=2)
-    interior = np.zeros(lum.shape, bool)
     # 4b: the ghost of the open jaw's underside in the top layer: in front of the hinge, nothing static may sit more
     # than a fang's length below the upper lip
     ghost = (yy > np.interp(xx, [p[0] for p in ul], [p[1] for p in ul]) + 48) & (xx < hg[0] - 20)
@@ -270,7 +265,7 @@ def rig(plate_p, master_p, rig_p, out, dressed_p, region_p, shut_deg=26.0, jaw_g
     turns = [shut_deg, 19.5, 13.0, 6.5, 0.0]
     # 3: the jaw's clip. Nothing of the turned jaw may show above the painted upper lip: the skull's lower edge, found
     # per column as the lowest opaque skull pixel in front of the hinge (the sketch line where the skull is thin)
-    top_solid = (top_a > 0.5) & ~interior & (lum > 0)
+    top_solid = (top_a > 0.5) & (lum > 0)
     fangs = (lum > 150) & below_lip
     skull_edge = np.full(size[0], -1.0)
     for x in range(int(ul[0][0]) - 40, int(hg[0]) + 1):
@@ -320,8 +315,7 @@ LIPCROP = (960, 250, 1660, 650)       # full-size pixels, aspect 1344:768
 
 
 def lip_band(size, R):
-    """The seam band at stage 0: from 26 px above the sketch's upper lip (the painted lip sits 15-20 px above it) to
-    22 px below it, from just in front of the snout to the hinge."""
+    """The seam band at stage 0: 26 px above the sketch's upper lip to 22 px below it, snout to hinge."""
     ul = [tuple(p) for p in R['upperLip']]
     top = [(ul[0][0] - 14, ul[0][1] - 30)] + [(x, y - 26) for x, y in ul]
     bot = [(x, y + 22) for x, y in ul[::-1]] + [(ul[0][0] - 14, ul[0][1] + 26)]
@@ -329,6 +323,7 @@ def lip_band(size, R):
 
 
 def lip_prep(rig_dir, rig_p):
+    """(Dropped route, kept for the record: run4.sh's lip-1/lip-2 painted an open slit) the crop and band mask."""
     R = json.load(open(rig_p))
     im = Image.open(f'{rig_dir}/stage-0.png').convert('RGB')
     x0, y0, x1, y1 = LIPCROP
@@ -367,8 +362,7 @@ def lip_seam(rig_dir, rig_p):
 
 
 def lip_paste(rig_dir, patch):
-    """The patch becomes L2s-shut-lip.png (the band only, RGBA), laid over the stage-0 composite under nothing else:
-    the band holds the upper fangs and the seam as painted."""
+    """(Dropped route, kept for the record) the patch as L2s-shut-lip.png (the band only), over the stage-0 composite."""
     im = Image.open(f'{rig_dir}/stage-0.png').convert('RGB')
     x0, y0, x1, y1 = LIPCROP
     p = Image.open(patch).convert('RGB').resize((x1 - x0, y1 - y0), Image.LANCZOS)
