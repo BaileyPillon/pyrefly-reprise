@@ -89,7 +89,7 @@ describe('which chapters the stage changes (measured, pinned)', () => {
       '5 ffx2-vegnagun-shuyin post': ['show shuyin', 'fx pyreflies-rising', 'hide shuyin'],
       // Chapter VII (FFX only, PR-0244): Seymour stands on the plate from the first frame, over the tally and
       // the captioned kneel and fall, until the Guado take the body (research §9.7 beats 9-10).
-      '7 seymour-anima-macalania post': ['show seymour-macalania', 'fx sending-dance @yuna', 'hide seymour-macalania'],
+      '7 seymour-anima-macalania post': ['show seymour-macalania', 'show seymour-macalania', 'fx sending-dance @yuna', 'hide seymour-macalania'],
       // Chapter XI (FFX-2 only, PR-0133, D-211): Leblanc, Ormi and Logos each stand on the plate for their
       // epilogue line, one at a time in the one spot right of the box, as XII and XIV stand theirs.
       '11 ffx2-fallen-aeons post': ['show leblanc', 'hide leblanc', 'show ormi', 'hide ormi', 'show logos', 'hide logos'],

@@ -376,7 +376,13 @@ describe('macalania story — canon beats in order', () => {
     const show = chapter.post.findIndex((s) => s.type === 'showActor' && s.actor === 'seymour-macalania');
     const hide = chapter.post.findIndex((s) => s.type === 'hideActor' && s.actor === 'seymour-macalania');
     expect(show).toBe(0);
-    expect(hide).toBeGreaterThan(chapter.post.findIndex((s) => s.type === 'results'));
+    const results = chapter.post.findIndex((s) => s.type === 'results');
+    expect(hide).toBeGreaterThan(results);
+    // The post resumes after the tally on a fresh stage, so he is shown again before the first caption.
+    const again = chapter.post.findIndex((s, i) => i > results && s.type === 'showActor' && s.actor === 'seymour-macalania');
+    const firstCaption = chapter.post.findIndex((s) => s.type === 'narrate' && s.auto !== undefined);
+    expect(again).toBeGreaterThan(results);
+    expect(again).toBeLessThan(firstCaption);
   });
 
   it('ends on the chapter thesis: won cleanly, lost completely [§9.7]', () => {

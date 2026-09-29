@@ -215,6 +215,9 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     // Chapter VIII's beat 9 (fixed in 80672bf) and Chapter 2's aftermath. Cut
     // it again here, right as the scene resumes past the tally.
     music(null, 300),
+    // The scene resumes past the tally on a fresh stage (`BattleScreenFlow` replays the post from
+    // the step after `results()`), so he is stood up again before the kneel (PR-0244).
+    showActor(SEYMOUR, { at: { slot: 1, side: 'enemy' }, ms: 400, facing: -1 }),
 
     // §9.7 beat 9 — he is properly dead. Flat, anticlimactic, no speech, no
     // pyreflies. Flux dissolves; this one just stops.
