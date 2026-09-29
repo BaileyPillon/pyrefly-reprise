@@ -1,0 +1,421 @@
+{
+ "short": "Sin art options",
+ "title": "Sin: art options for the two Sin chapters (FFX only), 2026-09-29",
+ "overview": {
+  "intro": [
+   "These are options for Bailey's morning pick. Nothing is installed in public/art/, nothing is wired, and nothing is listed or put on the end-state board (rule 9). Bailey let the driver pick tonight (D-279), so every section marks one recommended pick with its reasons. Each pick is an agent's look, and Bailey can overrule it.",
+   "Game case: FFX only (rule 14). Links I to IV are fought from the Fahrenheit and on Sin's back. They use CTB turn order, Cid's Trigger Command, the airship range and aeons, none of which exists in FFX-2 (research/ffx-sin.md §0.3). Chapter one, 'the Fins and the Core', covers links I to III. Chapter two, 'the Face', is link IV (D-270).",
+   "Every frame is a rough composite at battle size, 1600 × 900: our candidate painting, the Garden of Pain party as our own idle sprites, and a stand-in for the FFX HUD in the game's fonts. The rules and messages in the HUD come from research/ffx-sin.md with its tags. It is not the HUD build."
+  ],
+  "table": [
+   [
+    "Sin's head (link IV, 'the Face')",
+    "C repaired (round 3's rig with the repair list done) · A head-on with wings",
+    "C repaired: the head agent's section, below"
+   ],
+   [
+    "The Left Fin and the Right Fin (links I and II), FAR and NEAR",
+    "A: a clawed arm with a ribbed fin · B: a whale's pectoral fin with claws",
+    "A: it reads as an arm (\"Sin's Left Arm\") at both ranges, and its B rival turns into a second head at NEAR"
+   ],
+   [
+    "Sinspawn Genais (link III)",
+    "A: a fiend under a craggy dome shell · B: a tentacled fiend in a conch shell",
+    "A: its shell state reads at a glance, and it is made of Sin's own rock"
+   ],
+   [
+    "Sin's Core (link III)",
+    "A: a great dark pearl set in a hump of scales · B: a lantern bulb on a tall stalk",
+    "A: large enough to read its charge from across the frame; B's stalk says 'out of reach' but the bulb is small"
+   ],
+   [
+    "Link IV backdrop: the Fahrenheit over Bevelle at dusk",
+    "A: golden dusk · B: violet evenfall with the city's lamps lit",
+    "A: its light matches the head rigs' golden-hour plate, and its city is now small and far (method check v4)"
+   ]
+  ],
+  "notes": [
+   "Two plates were made for the frames. They were not asked for as subjects, so each has one version: links I and II in late afternoon over the cloud sea on the way to Bevelle, and link III on Sin's back at sunset. The sources place Sinfall into Bevelle 'at sunset' right after link III (research §9.1). The exact time of the Fins is our estimate.",
+   "The phone sheets part-*.jpg show the same page one section at a time. README.md lists every file."
+  ]
+ },
+ "sections": [
+  {
+   "id": "head",
+   "title": "Sin's head (link IV): the head agent's section",
+   "embed": "head/section.html"
+  },
+  {
+   "id": "fins-left",
+   "title": "The Left Fin (link I): FAR, NEAR and the core charging",
+   "lede": "Research §9.3: the Fins are 'Sin's Left Arm' and 'Sin's Right Arm' in Japanese, and the weak spot Cid sees is a shine at the base of the arm. The core on the fin charges visibly before Gravija, and that is this chapter's telegraph. The FF Wiki's Appearance text describes a whale-like body moved by a pair of clawed arms. The range must read without the HUD (ffx-evrae-airship.md §12.3). At NEAR the arm fills the upper right over the rail and the deck is shaded. At FAR the whole body is seen across open sky and the deck is lit. The fight opens at FAR (research §4, S-8).",
+   "why": "A. At NEAR its hand of talons and ribbed fin read as an arm, which is what the Japanese name says. At FAR the same arm hangs from the whale-like body, so the two ranges read as one creature. B's blade tip reads as a second head at NEAR. The core is painted at rest and brightened as a light state for 'Core gathers energy.', so both options show the charge on the same painting.",
+   "options": [
+    {
+     "label": "A",
+     "name": "the clawed arm with a ribbed fin",
+     "pick": true,
+     "frames": [
+      "frames/fin-a-l-far.jpg",
+      "frames/fin-a-l-near.jpg",
+      "frames/fin-a-l-near-charge.jpg"
+     ],
+     "captions": [
+      "FAR: the whole body side-on, the arm reaching towards the ship, Cid's CLOSE IN order lit",
+      "NEAR: the arm over the rail, the core at rest (dimmed), the deck shaded",
+      "NEAR, 'Core gathers energy.': the same painting with the core lit (Gravija next turn)"
+     ],
+     "good": "Reads as a limb at both ranges: talons at the top, a ribbed fin behind, the core where the arm meets the flank. At FAR the face has round 3's fangs, amber eye and dark rock.",
+     "bad": "At NEAR the top of the arm can still be read as a beaked head, and the painted core is bright even at rest, so the at-rest state is our darkening of it. At FAR Sin is bigger than 'small against clean sky', which the range director could scale."
+    },
+    {
+     "label": "B",
+     "name": "the whale's pectoral fin with claws",
+     "pick": false,
+     "frames": [
+      "frames/fin-b-l-far.jpg",
+      "frames/fin-b-l-near.jpg",
+      "frames/fin-b-l-near-charge.jpg"
+     ],
+     "captions": [
+      "FAR: the pectoral fin with a row of claws, under the same head",
+      "NEAR: the fin's blade over the rail, the core at rest",
+      "NEAR, the core charging"
+     ],
+     "good": "The most whale-like reading of 'fin'. At FAR it is the cleanest silhouette: a flipper with claws along its edge.",
+     "bad": "At NEAR the blade with claws along its edge reads as a jaw with teeth, a second head. Three renders failed to shake this (b-l-near-1 to 3; the best is kept). The Japanese name is 'arm', and a flipper reads less like one."
+    }
+   ],
+   "sources": "Sources: research/ffx-sin.md §1.1, §4, §5.1, §9.1, §9.3; research/ffx-evrae-airship.md §12.2 and §12.3; FF Wiki 'Left Fin' (revid 3981190) and 'Sin (Final Fantasy X)' Appearance, read as text through the MediaWiki API on 2026-09-28. The HUD's rules are sourced: at FAR it attacks only after 7 hits ([verified: 2 sources]), Gravija takes 75 % of current HP and only NEAR, and Negation fires when targeted. The painted look of the Fin and its core is not in any source (our estimate, shown for a pick)."
+  },
+  {
+   "id": "fins-right",
+   "title": "The Right Fin (link II): FAR and NEAR, from the other side",
+   "lede": "The Right Fin is 'almost identical' to the Left (FF Wiki) and is fought from the ship's other side. It is painted again, never mirrored: Sin flies higher on this side, so its flank is overhead at NEAR and the arm reaches down to the deck. At FAR the head points the other way.",
+   "why": "A, the same reasons as the Left Fin. It is also the clearest arm of the four NEAR paintings: a clawed hand reaching down past the rail, with the core at the shoulder.",
+   "options": [
+    {
+     "label": "A",
+     "name": "the clawed arm with a ribbed fin",
+     "pick": true,
+     "frames": [
+      "frames/fin-a-r-far.jpg",
+      "frames/fin-a-r-near.jpg"
+     ],
+     "captions": [
+      "FAR: the head to the left this time, the arm and fin below",
+      "NEAR: the arm reaching down from the flank overhead, the core at rest"
+     ],
+     "good": "An unmistakable arm and hand reaching down at the party, with the flank as a ceiling. It pairs with the Left Fin A as one creature.",
+     "bad": "The shoulder grew a few machine-like rings and a lens next to the core, and the words asked for none (a local repaint would fix it). The FAR body is again large."
+    },
+    {
+     "label": "B",
+     "name": "the whale's pectoral fin with claws",
+     "pick": false,
+     "frames": [
+      "frames/fin-b-r-far.jpg",
+      "frames/fin-b-r-near.jpg"
+     ],
+     "captions": [
+      "FAR: the flipper under the head",
+      "NEAR (v2 words, 'a limb, not a head'): the fin reaching down, the core at rest"
+     ],
+     "good": "With the limb words it reads as a fin reaching down, and it is the best B painting at NEAR.",
+     "bad": "The first render (b-r-near-1) became a crocodile's head. This one holds only because the words forbid eyes and teeth, and at a glance its scalloped edge still looks like a mouth."
+    }
+   ],
+   "sources": "Sources: research/ffx-sin.md §5.2 (at FAR it attacks after 5 hits, below 16,250 HP it always attacks at NEAR, and Negation /12), §9.1; FF Wiki 'Right Fin' (revid 4031682). The cannons that blast off each Fin between the links (FF Wiki, 'Fahrenheit') are not painted here."
+  },
+  {
+   "id": "link3",
+   "title": "Link III on Sin's back: Sinspawn Genais and Sin's Core",
+   "lede": "Research §9.3: Genais has the shape of Sinspawn Geneaux, a shelled Sinspawn and 'the absolute strongest Sinspawn', and its shell state must read at a glance. The Core sits on Sin's back ('Main Core located on its back'). It is inactive until Genais shells, then it charges. While Genais lives, the Core is out of melee reach and magic aimed at it is 'Magic absorbed.' (§5.3). Each option below pairs a Genais with a Core, and the two mix freely. The shelled picture is a repaint of only the body region ON the out-of-shell painting, so the shell, the Core and the back keep their pixels. The Core's charge is a light state.",
+   "why": "Genais A with Core A. Genais A reads as a shelled fiend in both states: red-eyed and fanged when out, a closed stone dome when shelled. Its shell is made of Sin's own rock. Core A is big enough that its charge reads across the frame, and it sits up the back behind Genais, out of reach, as the rules say. Core B's stalk explains 'out of reach' more literally, but its bulb is small at battle size.",
+   "options": [
+    {
+     "label": "A",
+     "name": "Genais under a craggy dome shell; the Core, a dark pearl in a hump of scales",
+     "pick": true,
+     "frames": [
+      "frames/genais-a.jpg",
+      "frames/genais-a-shell.jpg"
+     ],
+     "captions": [
+      "Genais out of its shell (Venom, Venom, Thrashing), the Core at rest: 'Core is inactive.'",
+      "Genais in its shell (Sigh; Cura when hit), the Core charging: 'Core gathers energy.'"
+     ],
+     "good": "Genais: a menacing hunched fiend, and the shell closing reads at once. Core: a big violet pearl in cracked plates whose charge is unmistakable, and it can be read as part of Sin's body.",
+     "bad": "Genais's face is still a little toad-like, and the shelled repaint changed the front of the shell's colour slightly. The Core sits close behind Genais, so 'out of reach' is told by the HUD more than by distance."
+    },
+    {
+     "label": "B",
+     "name": "Genais in a conch shell with tentacles; the Core, a lantern bulb on a tall stalk",
+     "pick": false,
+     "frames": [
+      "frames/genais-b.jpg",
+      "frames/genais-b-shell.jpg"
+     ],
+     "captions": [
+      "Genais out of its shell, a fanged maw and tentacles; the Core at rest on its stalk",
+      "Genais sealed in its conch; the bulb charging"
+     ],
+     "good": "Genais: the most alien silhouette, and the conch shell is a clear 'shelled Sinspawn'. Core: the tall stalk makes 'out of reach' visible without the HUD.",
+     "bad": "Genais sits in a burst of white puffs that no source asks for, and when shelled it shrinks to a snail. Core: the bulb is small at 1600 × 900, so its charge reads weakly, and the stalk looks built rather than grown."
+    }
+   ],
+   "extra": [
+    [
+     "frames/cores.jpg",
+     "The two Cores up close, at rest and charging: one painting each, with the charge as a light state"
+    ]
+   ],
+   "sources": "Sources: research/ffx-sin.md §2.1 (Genais is not Armored outside its shell and is weak to Fire; the Core is Armored), §5.3, §9.1, §9.3; FF Wiki 'Sinspawn Genais' (revid 4016986), 'Sinspawn Geneaux' (revid 4016978, a shell that deflects physical attacks and opens), 'Sin (core)' (revid 4015250). Neither the look of Genais nor the look of the Core is described in words anywhere we have (our estimate)."
+  },
+  {
+   "id": "backdrop",
+   "title": "The link IV backdrop: the Fahrenheit's deck over Bevelle at dusk",
+   "lede": "Research §9.1: after Sinfall at sunset, Sin rises with wings and props itself on a tower in Bevelle, and the ship closes nose to nose with it, 'above Bevelle'. To keep the ship reading the same as in Chapter VIII, both options are our own approved Evrae plate (backdrop B, D-020), relit to dusk at a low denoise so the hull and rail keep their places. Bevelle was then painted into the cloud at the lower left: in A, after a written method check, as a small far city just above the rail (bk_city.py v4). In the engine the deck and rail are geometry in front of a rolled painting (src/scenes/evrae-airship-deck.ts). Here they are a flat stand-in drawn in code. The head (the Face) is its own rig of layers over this, in the head section.",
+   "why": "A. Its golden dusk matches the light of the head rigs' plate (round 3's p6), so the Face would not need relighting. It also keeps the day in order: afternoon for the Fins, sunset on Sin's back, dusk for the Face. A also got the city fix (small and far), and B did not. B is the more dramatic sky, and its gold-topped tower is the better tower. If Bailey prefers it, the head would take a twilight light state.",
+   "options": [
+    {
+     "label": "A",
+     "name": "golden dusk",
+     "pick": true,
+     "frames": [
+      "frames/bk-a.jpg"
+     ],
+     "captions": [
+      "Link IV, Sin's turn 1 ('Drawn to Sin.'), with the head rig not shown: the plate the Face would sit over"
+     ],
+     "good": "The Evrae hull and rail are in their places, so it is the same ship. The sunset light is warm and matches the head's plate. After a written method check (bk_city.py) Bevelle is a small far city just above the rail: a row of blue domes and one banded tower.",
+     "bad": "The tower wears an odd small crown, and a dark haze bank sits behind the city. The domes read more like a palace than tiered Bevelle."
+    },
+    {
+     "label": "B",
+     "name": "violet evenfall, the city's lamps lit",
+     "pick": false,
+     "frames": [
+      "frames/bk-b.jpg"
+     ],
+     "captions": [
+      "The same, after sunset"
+     ],
+     "good": "The most atmospheric: violet and deep blue with pink cloud rims, lit windows, and a slender tower with a gold top, the best tower of the round.",
+     "bad": "Its light differs from the head rigs' golden hour, so the Face would need a light state. The city is still painted too near and too big. The method check's v4 fix held for A but failed for B (bk-b-8: one big near dome), so this is v1."
+    }
+   ],
+   "extra": [
+    [
+     "frames/bk-plates.jpg",
+     "The two plates whole, as painted (the frames above crop them as the engine's rolled plane would)"
+    ],
+    [
+     "frames/plates.jpg",
+     "The two plates made for the other frames: links I-II and link III (one version each)"
+    ]
+   ],
+   "sources": "Sources: research/ffx-sin.md §9.1 and §9.2 (beats 8 to 10); research/ffx-evrae-airship.md §12.1 and §12.3; public/art/backdrops/evrae-airship-deck.png (our own painting, the only image input besides our sketches). The HUD's 'Drawn to Sin.' is [verified: 5 sources]; Giga-Graviton on turn 13 is our default (S-1 open, D-266)."
+  }
+ ],
+ "method": {
+  "title": "How it was made, and every render with its verdict",
+  "text": [
+   "Original art only (rule 8). The inputs were our own code-drawn sketches (src/sketch.py, src/sketch_link3.py, src/bk_init.py), our own earlier paintings (round 3's plate p6 and its dressed deck layer, and the approved Evrae plate), and written sources. No retail image was used as input, reference or IP-Adapter. No prompt names Sin, Genais, the Core, the game or the franchise.",
+   "Engines. The creatures and plates used z_image_turbo, the engine of round 3's head. The creatures were masked repaints painted INTO their plate (src/gen.py 'mouth' mode), so every pixel outside the creature stays the plate's. The link-IV relights used animagine-xl-4.0-opt, the checkpoint of the Evrae plate, as img2img at 0.40. Every render then got a RealESRGAN x4 detail pass at 2352 × 1344.",
+   "Light states, not new paintings. NEAR shades the deck, FAR leaves it lit, and the cores are dimmed at rest and glow when charging. Round 3's dressed deck layer (SALVAGE DREAM, CID, the dial ring, in our own type) is laid back over every Fin frame, so every Sin frame stands on the same deck (src/compose.py).",
+   "GPU. We submitted only while fewer than 3 prompts were queued in ComfyUI in total (shared with the head agent), one of ours at a time, with batch size 1. ComfyUI was down after the evening reboot and was started once through the PyreflyComfyUI task; it was never restarted. 47 jobs, none black. Passes 9 and 10 (the city's method check, bk-*-6 to 8) were run by the head agent's copy in this folder. (The head agent's backdrop test bg1-a is not used here.)",
+   "Candidates in full, with a .prov.json each: D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/ (plates, fins, link3, backdrop, sketches, frames-bg)."
+  ],
+  "renders": [
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/plates/flight-1.base.png",
+    "flight-1: KEPT, the links I-II plate"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/plates/flight-2.base.png",
+    "flight-2: dropped, a spire right in front of the bow"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/plates/back-1.base.png",
+    "back-1: KEPT, the link III plate"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/plates/back-2.base.png",
+    "back-2: dropped, a flat roof, not a creature's back"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-l-near-1.base.png",
+    "fin-a-l-near-1: dropped, a neck and a beak"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-l-near-2.base.png",
+    "fin-a-l-near-2: dropped for -3"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-l-near-3.base.png",
+    "fin-a-l-near-3: KEPT, A left NEAR (a spread hand)"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-r-near-1.base.png",
+    "fin-a-r-near-1: KEPT, A right NEAR"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-l-far-1.base.png",
+    "fin-a-l-far-1: dropped, a gentle humpback's face"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-l-far-2.base.png",
+    "fin-a-l-far-2: KEPT, round 3's head in words"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-r-far-1.base.png",
+    "fin-a-r-far-1: dropped, a gentle face"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-a-r-far-2.base.png",
+    "fin-a-r-far-2: KEPT"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-l-near-1.base.png",
+    "fin-b-l-near-1: KEPT (best of three), B left NEAR; its tip reads as a jaw"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-l-near-2.base.png",
+    "fin-b-l-near-2: dropped, a head"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-l-near-3.base.png",
+    "fin-b-l-near-3: dropped, a whale's head with eyes"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-r-near-1.base.png",
+    "fin-b-r-near-1: dropped, a crocodile's head"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-r-near-2.base.png",
+    "fin-b-r-near-2: KEPT, the limb words"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-l-far-1.base.png",
+    "fin-b-l-far-1: dropped, a gentle face"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-l-far-2.base.png",
+    "fin-b-l-far-2: KEPT"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-r-far-1.base.png",
+    "fin-b-r-far-1: dropped, a gentle face"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/fins/fin-b-r-far-2.base.png",
+    "fin-b-r-far-2: KEPT"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-a-1.base.png",
+    "genais-a-1: dropped, a cute purple frog"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-a-2.base.png",
+    "genais-a-2: dropped, a cute turtle"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-a-3.base.png",
+    "genais-a-3: dropped for -4"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-a-4.base.png",
+    "genais-a-4: KEPT, Genais A and Core A"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-a-4-shell-1.base.png",
+    "genais-a-4-shell-1: KEPT, A shelled"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-b-1.base.png",
+    "genais-b-1: dropped, a pale snail"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-b-2.base.png",
+    "genais-b-2: dropped, a cute shell"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-b-3.base.png",
+    "genais-b-3: dropped, the Core's stalk barely shows"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-b-4.base.png",
+    "genais-b-4: KEPT, Genais B and Core B"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/link3/genais-b-4-shell-1.base.png",
+    "genais-b-4-shell-1: KEPT, B shelled"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-1.base.png",
+    "bk-a-1 (SDXL 0.55): dropped, another ship, the city gone"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-b-1.base.png",
+    "bk-b-1 (0.55): dropped, the same"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-2.base.png",
+    "bk-a-2 (0.62): dropped"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-b-2.base.png",
+    "bk-b-2 (0.62): dropped"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-3.base.png",
+    "bk-a-3 (0.40): kept as step 1, the hull holds"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-b-3.base.png",
+    "bk-b-3 (0.40): kept as step 1"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-b-4.base.png",
+    "bk-b-4 (city v1): KEPT, backdrop B; its city is too near"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-5.base.png",
+    "bk-a-5 (smaller city): dropped, a plain white monolith"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-b-5.base.png",
+    "bk-b-5: dropped, a beam of light for a tower"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-4.base.png",
+    "bk-a-4 (city v1): dropped for bk-a-8, the city palace-sized beside the hull"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-6.base.png",
+    "bk-a-6 (city v3, 0.50): dropped, the city falls outside the game frame"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-b-6.base.png",
+    "bk-b-6 (v3): dropped, the same"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-7.base.png",
+    "bk-a-7 (v3, 0.62): dropped, the same"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-b-7.base.png",
+    "bk-b-7 (v3, 0.62): dropped, the same"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-a-8.base.png",
+    "bk-a-8 (city v4, in frame coordinates): KEPT, backdrop A"
+   ],
+   [
+    "D:/Tools/pyrefly-art-backup/candidates/2026-09-29-sin/backdrop/bk-b-8.base.png",
+    "bk-b-8 (v4): dropped, one big near dome and a stubby tower"
+   ]
+  ]
+ }
+}
