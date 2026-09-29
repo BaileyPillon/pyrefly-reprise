@@ -47,6 +47,7 @@ import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
 import { ISAARU_CHAPTER_BOSS_IDS, isaaruViaPurifico } from './ffx-isaaru.ts';
+import { SIN_TACTIC_ENTRIES } from './sin-tactics.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -82,6 +83,7 @@ export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
 export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymour-natus.ts';
 export { isaaruViaPurifico, ISAARU_CHAPTER_BOSS_IDS } from './ffx-isaaru.ts';
+export { sinFinsCore, sinFace, SIN_FINS_CORE_BOSS_IDS, SIN_FACE_BOSS_IDS } from './sin-tactics.ts'; // XVII and XVIII (FFX), unlisted
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -144,6 +146,7 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
   // Chapter XIV (FFX only, listed 2026-09-25): his three aeons, one a link; Isaaru is an untargetable bystander.
   ...ISAARU_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'isaaru-via-purifico', bossId, tactic: isaaruViaPurifico })),
+  ...SIN_TACTIC_ENTRIES, // Chapters XVII and XVIII (FFX only, unlisted): the Fins and the Core under four ids, the Face under one
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

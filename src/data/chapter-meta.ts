@@ -30,6 +30,7 @@ import { DEN_OF_WOE_META } from './chapter-meta-den-of-woe.ts';
 import { IXION_DJOSE_META } from './chapter-meta-ixion-djose.ts';
 import { NATUS_META } from './chapter-meta-natus.ts';
 import { ISAARU_META } from './chapter-meta-isaaru.ts';
+import { SIN_CHAPTER_META } from './chapter-meta-sin.ts';
 
 /**
  * The pause screen's objective rule vocabulary. Each rule is a pure
@@ -92,7 +93,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI' | 'XVII' | 'XVIII';
   title: string;
   subtitle: string;
   location: string;
@@ -370,8 +371,7 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
 /** All sixteen listed chapters' pause-screen metadata, in play order. */
 export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_FLUX_META, YUNALESCA_META, BRASKAS_FINAL_AEON_META,
-  FFX2_BAHAMUT_META,
-  FFX2_VEGNAGUN_SHUYIN_META,
+  FFX2_BAHAMUT_META, FFX2_VEGNAGUN_SHUYIN_META,
   FFX2_LEBLANC_META,
   SEYMOUR_ANIMA_MACALANIA_META,
   EVRAE_META,
@@ -391,7 +391,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
  * id, and `CHAPTER_META` stays one-to-one with the listed chapters. Listing a
  * chapter moves its record from here into `CHAPTER_META`.
  */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [] as const;
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [...SIN_CHAPTER_META] as const; // XVII, XVIII (FFX), unlisted
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

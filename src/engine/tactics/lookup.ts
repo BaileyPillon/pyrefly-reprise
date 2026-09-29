@@ -39,6 +39,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'ffx2-fallen-aeons': 'ffx2',
   'seymour-omnis': 'ffx',
   'isaaru-via-purifico': 'ffx',
+  'sin-fins-core': 'ffx', 'sin-face': 'ffx', // Chapters XVII and XVIII (FFX only), unlisted: the tactic and guide ride the records
 };
 
 /**
