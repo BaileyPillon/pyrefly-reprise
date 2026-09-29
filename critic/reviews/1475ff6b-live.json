@@ -1,0 +1,67 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-09-29T17:55:00Z",
+ "build": {
+  "mainSha": "1475ff6b",
+  "bundle": "B0cfXTil",
+  "artifactHash": "d26db6673e3d869c5de873f7391263df0992c3f82d16b5675bc0bc544dda26cb"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/1475ff6b.json --url https://baileypillon.github.io/pyrefly-reprise/ --changed-from critic/artifacts/49005f73.json --full -> {result: PASS, artifactHash: d26db6673e3d869c5de873f7391263df0992c3f82d16b5675bc0bc544dda26cb, liveManifest: match, checked: 1006, mismatched: [], missing: [], wrongType: [], errors: []}"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), 1600x900 and 390x844 touch, fresh context each, cache-busted URL; screen and selectedId asserted (assertScreen/waitBattleMenu throw on timeout) before every capture. Chapter XVII desktop and phone: Left Fin FAR, Attack disabled, Orders Close in queued as ORDER Cid (log 1->5), cancel path returns to the command list. Chapter XVIII: 13 TURNS LEFT ring, Gaze in 6, Special opened, cancelled, reopened, submitted (log 1->7). Chapter XIII ffx2-trema: Paine Change -> Songstress (SG, log 23->30, painted figure). Seymour Flux advisor card identical over 8 samples with the menu open. P/Escape pause and resume, H hide and restore; battle theme boss-seymour back after resume. FF7 door by LIMIT to a real turn (log 0->4). Prerendered mp3 music fetched (title, chapter-select, scene-fahrenheit, boss-evrae, pause). 0 console errors, 0 responses >= 400 in every context."
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "Lightweight reload smoke: after starting Seymour Flux (attempts 1) and pausing then H (pausePanelsHidden true) the save was identical after a page reload and snapshotState().save.settings.pausePanelsHidden was true.",
+   "reason": "Full upgrade matrix (fresh, returning, previous-build fixture, invalid storage, reset) not tested in this pass; lightweight live check only, per RUBRIC section 5."
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "exact artifact, 1006 files with --full, diffed from 49005f73",
+   "Chapter XVII by real keys to a player turn (desktop) with Close in order and cancel path",
+   "Chapter XVII by taps on a 390x844 touch phone through to an Orders Close in",
+   "Chapter XVIII by real keys to a player turn: countdown ring, Special open/cancel/submit",
+   "Chapter XIII ffx2-trema: real-key spherechange to Songstress for Paine, cancel path first",
+   "FFX advisor v4 card stable with menu open (Seymour Flux, 8 samples)",
+   "P and Escape pause and resume, H hide and restore, battle theme survives pause",
+   "FF7 door by L-I-M-I-T to a real turn",
+   "reload keeps the save (attempts, pausePanelsHidden)",
+   "prerendered music fetched, not the synth fallback",
+   "0 console errors and 0 404s across all contexts"
+  ],
+  "reused": [],
+  "notTested": [
+   "Right Fin on the phone: the Right Fin joins at link 2, at link 1 the combatants are the Left Fin and Cid",
+   "Rikku's Songstress painting (only Paine was changed)",
+   "win or loss of either Sin chapter and Giga-Graviton on turn 13",
+   "advisor v4 in a second FFX chapter; FFX-2 stays v3",
+   "Chapter VII fixes (Seymour headline, aftermath, no Phoenix Down on a KO'd foe)",
+   "full upgrade matrix (CHK-024 full)"
+  ]
+ },
+ "issues": [
+  {"id": "LV30-1", "severity": "minor", "summary": "Phone first-time coach card reads ENTER CONTINUE; a tap on the card dismisses it, so nothing is blocked"},
+  {"id": "LV30-2", "severity": "informational", "summary": "Both Fins cannot be on screen at the first turn by design; the Right Fin joins at link 2"}
+ ],
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 48
+}
