@@ -95,3 +95,18 @@ Findings (none blocks):
   the first tap on a command row until it is dismissed; seen while testing, not caused by the pager.
 - Rule 9: the two deviations from the mock (no "TAP TO PAGE" line, counter under a long name) are
   disclosed above and are for Bailey to accept.
+
+### Re-check (second independent run, 2026-09-29 afternoon)
+
+A second checker ran this again on its own fresh production build (`vite build` of 22ec8546 into
+a scratch outDir, `vite preview` on 8923, stopped by PID). It used its own headless GPU Playwright
+script and real taps. **Everything above still holds. No blockers.**
+- `tsc --noEmit` clean; `ffx-command-menu-paging` 13/13.
+- 390x844, Chapter IX Items: 1-6, 7-12, 13-18, 19-24, 22-27 going down, with up dimmed on 1-6 and
+  down on 22-27. A forced tap on the dimmed down button changed nothing. Going up from 22-27 gives 16-21,
+  and more up taps give 10-15. The buttons are 44x44 at x 203-293, y 558, with no horizontal scroll. On the
+  top level the pager is hidden. Esc closes it, and reopening Items starts at 1-6. On 19-24, a tap on
+  Fire Gem used it and the next actor's menu came up, with the pager hidden. No page errors.
+- 1600x900: pager `display: none`, the inert marks show, 10 downs give 8-13 (Eye Drops).
+- FFX-2 on a phone (Bahamut): no pager element at all, as expected (FFX only).
+- `git merge-tree --write-tree` against `origin/main` 8dce5e75 and local `main` 1475ff6b: clean.
