@@ -16,16 +16,21 @@
  * Without the variable only a small smoke set runs, so `npm test` stays fast.
  */
 
+import { appendFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { BattleEngine, Command } from '../../../src/battle/common/types.ts';
 import { getChapter } from '../../../src/data/encounters.ts';
 import { buildAdvisorView } from '../../../src/engine/tactics/advisor.ts';
 import { registerBattleContent } from '../../../src/app/screens/BattleScreenContent.ts';
 import { liveAdvisorOptions, runChapter } from '../../../critic/bench/advisor-v3/drive.ts';
-import { type ChainReading, type Input, type Line, type LinkNo, type RunOpts, addLink, aggLink, chainRow, emptyAgg, fmtCauses, per, pct, runChain, sweep } from '../helpers/sinFinsBench.ts';
+import type { BattleSetup, FFXPartyBuild } from '../../../src/battle/common/types.ts';
+import { type ChainReading, type Input, type Line, type LinkNo, type RunOpts, addLink, aggLink, chainRow, emptyAgg, fmtCauses, per, pct, runChain, runWithRetries, sweep } from '../helpers/sinFinsBench.ts';
 import { makeNaive, makeSensible } from '../helpers/sinFinsPolicies.ts';
 
 const FULL = process.env['PYREFLY_SIN_BENCH'] === '1';
+/** `PYREFLY_SIN_BENCH_OUT=<file>` appends every table row there as it is measured (vitest holds console output until a test ends). */
+const OUT_FILE = process.env['PYREFLY_SIN_BENCH_OUT'];
+const tee = (s: string): void => { if (OUT_FILE) appendFileSync(OUT_FILE, `${s}\n`); };
 const SEEDS = FULL ? 200 : 4;
 const SMOKE = 4;
 const KNOWN = ['victory', 'defeat', 'escape'];
@@ -92,6 +97,33 @@ describe(`Chapter XVII bench smoke (${SMOKE} seeds; the full tables are behind P
     }
   });
 
+  it('the sensible line never leaves a dry Auron Defending: short of the 12 MP a Break costs he drinks an Ether (the carried seam)', () => {
+    // The link-3 cause (2026-09-29): links 1 and 2 leave Auron at 4 to 16 MP of 100 with Turbo Ethers in the bag;
+    // the line used to Defend him for the rest of link 3, so the Core went unbroken, or Auron idle, on a carried party.
+    let total = 0;
+    for (const seed of [1, 2, 3, 4]) {
+      const base = makeSensible();
+      let dryDefends = 0;
+      let drinks = 0;
+      runChain((e, d, link) => {
+        const cmd = base(e, d, link);
+        const st = e.state();
+        const me = st.combatants[d.actorId] as { mp: number } | undefined;
+        const core = st.combatants['sin-core'] as { hp: number; statuses: Record<string, unknown> } | undefined;
+        const genais = st.combatants['sinspawn-genais'] as { hp: number } | undefined;
+        const bag = d.commands.some((c) => c.enabled && c.command.kind === 'item' && 'id' in c.command && ['ether', 'turbo-ether', 'elixir'].includes(c.command.id));
+        if (link === 3 && d.actorId === 'auron' && me && me.mp < 12 && bag && core && core.hp > 0 && (genais?.hp ?? 0) <= 0 && (core.statuses['armor-break'] === undefined || core.statuses['mental-break'] === undefined)) {
+          if (cmd?.kind === 'defend') dryDefends++;
+          if (cmd?.kind === 'item') drinks++;
+        }
+        return cmd;
+      }, { seed });
+      expect(dryDefends, `seed ${seed}`).toBe(0);
+      total += drinks;
+    }
+    expect(total).toBeGreaterThan(0);
+  });
+
   it('the advisor line agrees with critic/bench/advisor-v3/drive.ts (same decisions and links cleared)', async () => {
     for (const seed of [1, 2]) {
       const mine = runChain(makeCard(), { seed });
@@ -153,7 +185,7 @@ function runs(name: string, make: () => Line, o: Omit<RunOpts, 'seed'> = {}, see
 describe('Chapter XVII bench (200 seeds per line; measured, not tuned)', () => {
   it.skipIf(!FULL)('prints the tables', () => {
     const out: string[] = [];
-    const push = (s = ''): void => { out.push(s); };
+    const push = (s = ''): void => { out.push(s); tee(s); };
     const seeded = LINES.filter(([n]) => n !== 'naive');
 
     // ---- 1. Per link, a rested start on each ----
@@ -236,6 +268,76 @@ describe('Chapter XVII bench (200 seeds per line; measured, not tuned)', () => {
 
     // eslint-disable-next-line no-console
     console.log(`\n${out.join('\n')}\n`);
+    expect(out.length).toBeGreaterThan(10);
+  }, 3_600_000);
+});
+
+/** One factor of the link-3 entry state set back to the rested build's, the rest left as carried. */
+type Refill = (carried: FFXPartyBuild, rested: FFXPartyBuild) => FFXPartyBuild;
+const byId = <T extends { id: string }>(xs: readonly T[], id: string): T => xs.find((x) => x.id === id)!;
+const bag = (ids: string[]): Refill => (p, r) => ({ ...p, inventory: p.inventory.map((e) => (ids.includes(e.itemId) ? { ...byId(r.inventory.map((x) => ({ ...x, id: x.itemId })), e.itemId) } : e)) });
+const REFILLS: Array<[string, Refill]> = [
+  ['carried as is', (p) => p],
+  ['HP refilled', (p, r) => ({ ...p, members: p.members.map((m) => ({ ...m, hp: byId(r.members, m.id).hp })) })],
+  ['MP refilled', (p, r) => ({ ...p, members: p.members.map((m) => ({ ...m, mp: byId(r.members, m.id).mp })) })],
+  ['statuses as rested', (p, r) => ({ ...p, members: p.members.map((m) => { const { statuses: _s, ...rest } = m; const was = byId(r.members, m.id).statuses; return was ? { ...rest, statuses: structuredClone(was) } : rest; }) })],
+  ['Overdrive gauges as rested', (p, r) => ({ ...p, members: p.members.map((m) => ({ ...m, overdrive: { ...m.overdrive, gauge: byId(r.members, m.id).overdrive.gauge } })) })],
+  ['aeons as rested', (p, r) => ({ ...p, aeons: r.aeons.map((a) => structuredClone(a)) })],
+  ['items refilled', (p, r) => ({ ...p, inventory: r.inventory.map((e) => ({ ...e })) })],
+  ['X-Potions refilled', bag(['x-potion'])],
+  ['Ethers refilled', bag(['ether', 'turbo-ether'])],
+  ['items and MP refilled', (p, r) => ({ ...p, inventory: r.inventory.map((e) => ({ ...e })), members: p.members.map((m) => ({ ...m, mp: byId(r.members, m.id).mp })) })],
+  ['the rested build (all of it)', (_p, r) => r],
+];
+
+/**
+ * Keep the dynamic SOS status (`critical`, HP under half) in step with a refilled HP, as a real carry always is: the
+ * engine re-derives it in `buildBattle`, and that re-derivation emits an event a fresh engine has no log for yet.
+ */
+function sosConsistent(p: FFXPartyBuild): FFXPartyBuild {
+  return { ...p, members: p.members.map((m) => {
+    const statuses = { ...(m.statuses ?? {}) };
+    if (m.hp > 0 && m.hp * 2 < m.stats.maxHp) statuses.critical ??= { id: 'critical', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    else delete statuses.critical;
+    return { ...m, statuses };
+  }) };
+}
+
+describe('Chapter XVII bench: the link-3 seam and retries (measured, not tuned)', () => {
+  it.skipIf(!FULL)('prints the seam A/B and the retry tables', () => {
+    const out: string[] = [];
+    const push = (s = ''): void => { out.push(s); tee(s); };
+    const rested = getChapter('sin-fins-core')!.buildRef as FFXPartyBuild;
+
+    // ---- 6. The link-3 seam, one factor at a time (sensible line) ----
+    push('## 6. Link 3, rested against carried: one factor of the entry state at a time (sensible line)');
+    push('Each row replays link 3 on the setup the chain entered it on (same seed, `seed + 2`), with one factor set back to the rested build.');
+    push('| Link-3 entry | Link 3 wins | Losses by cause |');
+    push('|---|---:|---|');
+    const entries: BattleSetup[] = [];
+    for (let seed = 1; seed <= SEEDS; seed++) { const at = runChain(makeSensible(), { seed }).link3Entry; if (at) entries.push(at); }
+    for (const [what, refill] of REFILLS) {
+      const agg = emptyAgg();
+      for (const entry of entries) {
+        const party = sosConsistent(refill(structuredClone(entry.party as FFXPartyBuild), rested));
+        addLink(agg, runChain(makeSensible(), { seed: entry.seed, startLink: 3, entry: { ...entry, party } }).links[0]!);
+      }
+      push(`| ${what} | ${pct(agg.wins, agg.n)} | ${fmtCauses(agg.causes)} |`);
+    }
+
+    // ---- 7. Retries, the link-3 checkpoint OFF (as shipped) and ON (SIN_LINK3_CHECKPOINT, an adaptation) ----
+    push('\n## 7. Retries: wins within 1, 3 and 5 attempts, the link-3 checkpoint off (as shipped) and on');
+    push('| Line | Checkpoint | Within 1 | Within 3 | Within 5 | Mean engine turns to a win (winners) | Link 3 retries that won / tried |');
+    push('|---|---|---:|---:|---:|---:|---:|');
+    for (const [name, make] of LINES.filter(([n]) => n !== 'naive')) {
+      for (const on of [false, true]) {
+        const rs = Array.from({ length: SEEDS }, (_, i) => runWithRetries(make, {}, i + 1, 5, on));
+        const within = (k: number): string => pct(rs.filter((r) => r.wonOn !== null && r.wonOn <= k).length, rs.length);
+        const winners = rs.filter((r) => r.wonOn !== null);
+        const l3 = rs.flatMap((r) => r.attempts.filter((a) => a.from === 3));
+        push(`| ${name} | ${on ? 'ON' : 'off'} | ${within(1)} | ${within(3)} | ${within(5)} | ${per(winners.reduce((t, r) => t + r.turns, 0), winners.length, 0)} | ${on ? `${l3.filter((a) => a.outcome === 'victory').length} / ${l3.length}` : '-'} |`);
+      }
+    }
     expect(out.length).toBeGreaterThan(10);
   }, 3_600_000);
 });

@@ -274,6 +274,9 @@ through B, the Garden of Pain party, and Ixion A". For Sin:
 
 ## Package B, the Chapter XVII bench (2026-09-29; FFX only; full tables in `docs/plans/sin-fins-core-bench.md`)
 
+**Superseded numbers:** the tables below are the first run. After the link-3 cause was found (a bench-line defect and a
+carry defect, both fixed) the sensible chain is 25.5 % and the card's 3 %; see "The link-3 cause" at the end of this file.
+
 Measured on `chapter-sin` after F, G, P and H merged. Nothing was tuned (no boss number, data row or engine file
 changed; only tests, helpers and the note). 200 seeds per line, first try, the sensible line (research §8 rows 1 to
 4, 6, 9), the naive line, and the advisor card's top row (`critic/bench/advisor-v3/drive.ts` primitives).
@@ -648,3 +651,61 @@ PR-0236 also touched.
 
 Disclosed rather than a defect: XVII does not clear the 90 % bar on either reading of the intended line (bench B). That
 is Bailey's call before listing (plan Q3, S-12).
+
+## The link-3 cause, two fixes, the checkpoint option and CHECK 2's minors (2026-09-29 ~04:30 to 07:30 EDT; FFX only)
+
+**The puzzle:** the sensible line won link 3 78.5 % rested and about 7 % carried, with 7/7 alive at a mean 75 % HP.
+Full write-up: `docs/plans/sin-fins-core-bench.md` "Link 3, rested against carried" and §6, §7. Every figure is the
+engine's (rule 3); scratch probes `tests/unit/zz-scratch/zz-l3-*.test.ts` (untracked), data in
+`D:/Tools/pyrefly-scratch/overnight-0929/sin-l3/` (`dump.json`, `rows-final.txt`).
+
+- **Nothing leaks across the seam.** On 20 seeds the link-3 entry's flags (every `sin.*`, no `airship.*` or `sin.fin.*`
+  left over), Genais and the Core, the aeons and the front row are identical carried and rested; a fresh engine and the
+  chain's reused engine give the same results. The carry differs only in HP, statuses (SOS, Haste, Protect), gauges,
+  MP (Auron 8/100, Lulu 117/300, Yuna 227/320 on average) and items (X-Potions 0.1 of 10, Ethers 1 of 3).
+- **Cause 1, a bench-line defect (fixed, tests first):** the line Defended a dry Auron (12 MP per Break, 4 to 16 left
+  after links 1 and 2) for the rest of link 3 with Turbo Ethers in the bag. `sinFinsPolicies.ts#breakRow` drinks, or
+  swings when there is nothing to drink. **Sensible chain 13/200 → 51/200 (25.5 %); rested link 3 78.5 → 81 %.**
+- **Cause 2, what remains, is FAITHFUL attrition** (§1.2: HP, MP, statuses, gauges carry; spent items stay spent). One
+  factor at a time, 200 seeds: carried 25.5 %; HP, statuses, gauges, aeons or Ethers back: 20.5 to 31 %; MP back 39 %;
+  items back 55.5 %; **X-Potions alone back 62.5 %**; items and MP 76 %; rested 81 %. Nothing tuned.
+- **A carry defect found on the way (fixed, tests first):** the FFX status carry copied Max HP x2 (Stamina Tonic)
+  without its doubled ceiling, clamped the HP above the base, and a later KO halved the *base* max HP (card, seed 23:
+  Tidus 1,623 of 3,246). `BattleScreenSetup.carriedFfxState` now carries the live ceiling with a pool doubler and derives
+  SOS from the carried HP like KO (a stale SOS made a fresh engine's init throw, which a checkpoint retry would hit).
+  Only Sin links 2 and 3 carry statuses. **Card chain 1/200 → 6/200; card with S-12 off 29 → 93/200.** Sensible unchanged.
+- **Not changed, open for the driver:** `FFXEngine.init` builds before it keeps the new context, so setup-time events go
+  to the previous link's log on a reused engine and throw on a fresh one (shared FFX plumbing, pre-existing). With the
+  carry consistent, no measured carried state emits (200 sensible and 18 card link-3 entries on a fresh engine).
+
+**The option for Bailey: a link-3 checkpoint, built OFF** (`SIN_LINK3_CHECKPOINT = false` and `sinLink3Checkpoint(on)`
+in `src/data/ffx/enemies/sin-genais-core.ts`; the D-217 seam, `checkpointOnEntry`, labelled an adaptation; `types.ts`
+doc comment + `CONTRACT-CHANGES.md`). On, RETRY after a link-3 loss reopens link 3 on the state captured on entering
+it. Measured, 200 seeds, up to 5 attempts:
+
+| Line | Checkpoint | Within 1 | Within 3 | Within 5 | Engine turns to a win |
+|---|---|---:|---:|---:|---:|
+| sensible | off | 25.5 % | 55.5 % | 76 % | 948 |
+| sensible | ON | 25.5 % | 57 % | 74.5 % | 531 |
+| advisor card | off | 3 % | 7.5 % | 11.5 % | 1,291 |
+| advisor card | ON | 3 % | 8 % | 13.5 % | 1,010 |
+
+It saves time, not odds, for the sensible line (a retry replays the same spent party: link-3 retries win 24 %). Q3's
+default (back to the Left Fin) stands until Bailey chooses. Tests: `tests/unit/chapters/sin-checkpoint.test.ts` (3).
+
+**The new bench tables** (all three lines, `PYREFLY_SIN_BENCH=1`, ~27 minutes with §6 and §7; `PYREFLY_SIN_BENCH_OUT=<file>`
+tees rows as they are measured): sensible chain 25.5 %, card 3 %, naive 0; S-12 off 44 % and 46.5 %; S-8 NEAR 27.5 % and
+6.5 %; front-row seam 26 % and 0 %; rested per link sensible 100 / 100 / 81 %, card 95 / 98 / 83 %. XVII still does not
+clear 90 %. Link 4 was not re-run (untouched; its smoke passes).
+
+**CHECK 2's minors:**
+- Finding 3: `chapter-sin-m` (`367741dc`, package M's sheet, the order widget without pips) merged `--no-ff` (`2627deed`).
+- Finding 2 (liveness lag): fixed (`0ec2c725`); `ticks.ts#onTurnEnd` runs `runSinLivenessHooks` after the counters,
+  as it runs Omnis's turn-end hook; the Zombie + Cura test asserts the Core is freed by the same action.
+- Findings 4 and 5: `aa349c51`; research §2.3's cite is §5.3.2 item 4 and §8 row 7; review row 5 now says the engine
+  never bounces a party-wide spell (`reflect-bounce`, open); Q16, Q17 and Q18 (aeon reach at FAR) are on the plan's Q list.
+- Findings 1, 6 and 7 are the merge's and the driver's (not touched here).
+
+**Gates:** `npx tsc --noEmit` clean (only the untracked `zz-scratch` probes error); 21 Sin, Evrae, checkpoint, guide and
+tactics files pass (349 tests), and the 41 files that touch the carry or `onTurnEnd` pass (557); **FFX golden hashes
+408/408 identical** to `sin-S/base.json` (6 seeds, `FFX_HASH_SKIP=sin,sin-face,sin-fins-core`); `orphans.mjs` 24, none Sin.

@@ -49,6 +49,8 @@ export interface RunOpts {
   seam?: 'build' | 'front';
   /** Any other bench switch, set on every link's flags after init (the Core's S-13 tunables, REVIEW 8). */
   flags?: Record<string, unknown>;
+  /** Open `startLink` on this setup instead of a rested one (a checkpoint retry replays the link-3 entry). */
+  entry?: BattleSetup;
 }
 
 export interface LinkReading {
@@ -86,6 +88,8 @@ export interface ChainReading {
   cleared: number;
   /** 'victory' if every link played was won, else the losing link's outcome. */
   outcome: string;
+  /** The setup link 3 was entered on (the carried party state), when the run reached link 3. */
+  link3Entry?: BattleSetup;
 }
 
 const alive = (c: FFXCombatant | undefined): boolean => !!c && c.hp > 0 && c.statuses?.['ko'] === undefined;
@@ -175,10 +179,11 @@ export function runChain(line: Line, o: RunOpts): ChainReading {
   const last = o.stopAfter ?? 3;
   const build = chapter.buildRef as FFXPartyBuild;
   const members = build.members.map((m) => m.id);
-  let setup: BattleSetup = first === 1 ? setupForChapter(chapter, o.seed) : linkSetup(build, first, o.seed, chapter.scriptsRef?.mid ?? []);
+  let setup: BattleSetup = o.entry ?? (first === 1 ? setupForChapter(chapter, o.seed) : linkSetup(build, first, o.seed, chapter.scriptsRef?.mid ?? []));
   const engine = createFFXEngine({ content, autoResolveMinigames: true });
   const out: ChainReading = { seed: o.seed, links: [], cleared: 0, outcome: 'victory' };
   for (let link = first; link <= last; link++) {
+    if (link === 3) out.link3Entry = setup;
     engine.init(setup);
     applySwitches(engine, o);
     const x = { actions: 0, aeonFarDecisions: 0, aeonFarReach: 0, summonsAtFar: 0, summons: 0 };
@@ -284,4 +289,41 @@ export function chainRow(runs: readonly ChainReading[]): string {
     `${pct(won.length, runs.length)} | ${byLink.map((a) => pct(a.wins, a.n)).join(' → ')} | ${fmtCauses(causes)} | ` +
     `${per(all, runs.length, 0)} (${won.length ? Math.round(wonTurns) : '-'} on a full clear) | ${alive.toFixed(1)} of 7 alive, mean ${Math.round(hp * 100)} % HP (n ${intoThree.length})`
   );
+}
+
+// ---------------------------------------------------------------------------
+// Retries, with and without the link-3 checkpoint (SIN_LINK3_CHECKPOINT, an OFF switch)
+// ---------------------------------------------------------------------------
+
+export interface RetryReading {
+  seed: number;
+  /** 1-based attempt that won the chapter, or null within the attempts allowed. */
+  wonOn: number | null;
+  /** Engine turns spent over every attempt up to the win (or all of them). */
+  turns: number;
+  /** Per attempt: the link it opened on and the link it ended on. */
+  attempts: Array<{ from: LinkNo; endedOn: LinkNo; outcome: string }>;
+}
+
+/**
+ * Play the chapter up to `attempts` times. Attempt _k_ (0-based) reseeds its base seed as `seed + 10000 * k` (the
+ * flow reseeds a retry). Without the checkpoint every retry starts at link 1 on the build. With it, once an attempt
+ * has entered link 3, every later retry opens link 3 on the setup captured on entering it (the D-217 shape:
+ * `BattleChainCheckpoint.resumeSetup`, the seed `base + link - 1`), items as they were then.
+ */
+export function runWithRetries(make: () => Line, o: Omit<RunOpts, 'seed' | 'startLink' | 'entry'>, seed: number, attempts: number, checkpoint: boolean): RetryReading {
+  const out: RetryReading = { seed, wonOn: null, turns: 0, attempts: [] };
+  let resume: BattleSetup | undefined;
+  for (let k = 0; k < attempts; k++) {
+    const base = seed + 10_000 * k;
+    const r = resume
+      ? runChain(make(), { ...o, seed: base, startLink: 3, entry: { ...resume, seed: base + 2 } })
+      : runChain(make(), { ...o, seed: base });
+    if (checkpoint && !resume && r.link3Entry) resume = r.link3Entry;
+    out.turns += r.links.reduce((t, l) => t + l.turns, 0);
+    const endedOn = r.links[r.links.length - 1]!.link;
+    out.attempts.push({ from: r.links[0]!.link, endedOn, outcome: r.outcome });
+    if (r.outcome === 'victory') { out.wonOn = k + 1; break; }
+  }
+  return out;
 }

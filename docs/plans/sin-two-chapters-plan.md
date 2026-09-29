@@ -727,7 +727,7 @@ Bailey's preferred source where sources conflict and nothing in-game settles it)
 |---|---|---|
 | Q1 | **S-1:** is Giga-Graviton on the 12th or the 13th turn? | **13th, labelled our estimate.** This is bover_87's reading (GameFAQs, the Remaster-era guide). Gestahl, also on GameFAQs, says 12, so GameFAQs does not settle it. The Steam HD Remaster check (D-266) does, and only Bailey schedules it |
 | Q2 | Ids: rename `sin` to `sin-face`? | **Yes** (it was only ever on the branch; 1.4) |
-| Q3 | Chapter XVII's retry: back to the Left Fin, or a checkpoint at link 3? | **Back to the Left Fin** (the game has no save there, §1.2). Revisit with bench B's length |
+| Q3 | Chapter XVII's retry: back to the Left Fin, or a checkpoint at link 3? | **Back to the Left Fin** (the game has no save there, §1.2). The checkpoint is built OFF (`SIN_LINK3_CHECKPOINT`, an adaptation in D-217's shape) and measured (`sin-fins-core-bench.md` §7, 2026-09-29): sensible line 74.5 % against 76 % within five attempts, 531 engine turns to a win against 948; card 13.5 % against 11.5 %. Bailey's call |
 | Q4 | S-8: do the Fins open FAR or NEAR? | **FAR** (Gestahl explicitly; bover_87 consistent; both GameFAQs) |
 | Q5 | S-12: which Negation chance? | **The wiki formulas as named tunables**, labelled `[single source]`. The GameFAQs guides give only the direction (bover_87) or "random" (Gestahl) |
 | Q6 | Link 3's scene: a per-link scene swap (a new seam) or the deck? | **The deck placeholder** until the Sin's-back backdrop is picked. Then build the swap |

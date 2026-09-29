@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-29 — `types.ts` `checkpointOnEntry` doc: FFX's Sin link 3, behind an OFF switch (FFX only)
+
+**FFX only** [AGENTS.md hard rule 14]. Branch `chapter-sin`. `EnemyGroupDef.checkpointOnEntry`'s doc comment, which said
+"FFX-2" (Trema; Shuyin, D-217, used it too), now names both games: FFX-2's Trema and Shuyin, and FFX's Sin link 3
+only behind the switch `SIN_LINK3_CHECKPOINT` in `src/data/ffx/enemies/sin-genais-core.ts`, which ships **false**. The
+shape does not change and no formation's value changes; the checkpoint seam (`BattleChainCheckpoint.ts`) was always
+game-agnostic. An adaptation for Bailey to weigh, measured in `docs/plans/sin-fins-core-bench.md`.
+
 ## 2026-09-29 — Sin as two chapters: `encounters.ts` ids and `| 18`, `types.ts` `carriesPartyState` doc (FFX only)
 
 **FFX only** [AGENTS.md hard rule 14; research/ffx-sin.md §0.3]. Branch `chapter-sin` (package S of

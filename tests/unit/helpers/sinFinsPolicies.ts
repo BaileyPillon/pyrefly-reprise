@@ -108,6 +108,8 @@ const MAX_TRIPS = 2;
 const MENTAL_TRIES = 2;
 const ORDER_OWNERS = ['tidus', 'rikku'];
 const REACH = ['wakka', 'lulu'];
+/** Armor Break's and Mental Break's cost (`src/data/ffx/abilities/skill-breaks-misc.ts`). */
+const BREAK_MP = 12;
 
 export function makeSensible(opts: SensibleOpts = {}): Line {
   let finId = '';
@@ -209,8 +211,13 @@ export function makeSensible(opts: SensibleOpts = {}): Line {
 
     if (range === 'near') {
       if (me === 'auron') {
-        if (!armored) return spell(d, 'armor-break', fin.id) ?? defend();
-        if (!has(fin, 'mental-break') && mentalTries < MENTAL_TRIES) { mentalTries++; return spell(d, 'mental-break', fin.id) ?? defend(); }
+        if (!armored) return breakRow(e, d, 'armor-break', fin.id) ?? defend();
+        if (!has(fin, 'mental-break') && mentalTries < MENTAL_TRIES) {
+          const r = breakRow(e, d, 'mental-break', fin.id);
+          if (r?.kind === 'item') return r; // a drink is not a try
+          mentalTries++;
+          return r ?? defend();
+        }
       }
       return overdriveAt(d, fin.id) ?? spellAt(e, d, fin.id) ?? reaching(d, 'attack', fin.id) ?? defend();
     }
@@ -253,11 +260,26 @@ export function makeSensible(opts: SensibleOpts = {}): Line {
       return reaching(d, 'attack', 'sinspawn-genais') ?? buffOrDefend(e, d);
     }
     if (core && isUp(core)) {
-      if (me === 'auron' && !has(core, 'armor-break')) return spell(d, 'armor-break', core.id) ?? defend();
-      if (me === 'auron' && !has(core, 'mental-break')) return spell(d, 'mental-break', core.id) ?? defend();
+      // A dry Auron drinks for his Break, and with nothing left to drink he swings (he used to Defend out the fight).
+      if (me === 'auron' && !has(core, 'armor-break')) { const r = breakRow(e, d, 'armor-break', core.id); if (r) return r; }
+      if (me === 'auron' && !has(core, 'mental-break')) { const r = breakRow(e, d, 'mental-break', core.id); if (r) return r; }
       return overdriveAt(d, core.id) ?? reaching(d, 'attack', core.id) ?? buffOrDefend(e, d);
     }
     return defend();
+  }
+
+  /**
+   * Auron's Break (12 MP), or, when he cannot afford it, an Ether, Turbo Ether or Elixir on himself. `null` when he
+   * has the MP and the row still does not reach, or nothing is left to drink. The cause of link 3's carried gap
+   * (2026-09-29, `docs/plans/sin-fins-core-bench.md` "Link 3, rested against carried"): links 1 and 2 leave him at
+   * 4 to 16 MP, and the line used to Defend him out the rest of the fight with Turbo Ethers in the bag.
+   */
+  function breakRow(e: BattleEngine, d: Input, id: 'armor-break' | 'mental-break', target: string): Command | null {
+    const cast = spell(d, id, target);
+    if (cast) return cast;
+    const me = combatant(e, d.actorId);
+    if (!me || me.mp >= BREAK_MP) return null;
+    return item(d, 'ether', me.id) ?? item(d, 'turbo-ether', me.id) ?? item(d, 'elixir', me.id);
   }
 
   function mpFix(e: BattleEngine, d: Input): Command | null {

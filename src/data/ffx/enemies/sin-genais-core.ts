@@ -187,6 +187,21 @@ const core: EnemyDef = {
   threatenChance: 0, // §2.3 / S-6
 };
 
+/**
+ * **A link-3 checkpoint, OFF** (an option for Bailey, 2026-09-29; `docs/plans/sin-fins-core-bench.md`
+ * "Link 3, rested against carried"). On, a loss at link 3 retries **at link 3**, on the party state captured
+ * on entering it (HP, MP, statuses, gauges, and the items it had then), through the checkpoint seam Chapter V's
+ * Shuyin uses (D-217, `src/app/screens/BattleChainCheckpoint.ts`). **An adaptation, not a sourced rule**
+ * (rule 6): research §1.2 has no break between links 1 and 3, and no save before the Core. Kept in memory
+ * for the run only, never saved. FFX only. Nothing about the fight changes; only where RETRY lands.
+ */
+export const SIN_LINK3_CHECKPOINT = false;
+
+/** The formation's checkpoint field for the switch position `on` (the bench measures both). */
+export function sinLink3Checkpoint(on: boolean): Pick<EnemyGroupDef, 'checkpointOnEntry'> {
+  return on ? { checkpointOnEntry: true } : {};
+}
+
 export const sinGenaisCoreGroup: EnemyGroupDef = {
   id: SIN_GENAIS_CORE_GROUP_ID,
   game: 'ffx',
@@ -195,4 +210,5 @@ export const sinGenaisCoreGroup: EnemyGroupDef = {
   // §1.2 [verified: 3 sources]: link 3 opens on link 2's party, statuses included. The chain ends here:
   // the Core's fall is Sinfall and the game's own save (D-270), so no `nextGroupId`.
   carriesPartyState: true,
+  ...sinLink3Checkpoint(SIN_LINK3_CHECKPOINT),
 };
