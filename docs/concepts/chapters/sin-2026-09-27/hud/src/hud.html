@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sin HUD mockups</title>
+<!-- Sin HUD mockups (FFX only, package M of docs/plans/sin-two-chapters-plan.md). One frame per URL:
+       hud.html?id=<scene>&mode=desk|phone     (scene ids: SCENES in hud.js; render.mjs loops all of them)
+     The game's own stylesheets are linked below by relative path, so the real slabs, CTB list, party rows,
+     command cascade, telegraph banner and the Trigger order widget are the shipped ones. Nothing here is wired
+     into the game. Run from file://: no dev server. -->
+<link rel="stylesheet" href="../../../../../../src/ui/inkgold/tokens.css">
+<link rel="stylesheet" href="../../../../../../src/ui/inkgold/slabs.css">
+<link rel="stylesheet" href="../../../../../../src/ui/ffx/ffx-hud.css">
+<link rel="stylesheet" href="../../../../../../src/ui/common/phone-battle.css">
+<link rel="stylesheet" href="../../../../../../src/ui/ffx/phone-hud.css">
+<link rel="stylesheet" href="../../../../../../src/ui/ffx/phone-hud-parts.css">
+<link rel="stylesheet" href="mk.css">
+<script>
+  if (new URLSearchParams(location.search).get('mode') === 'phone') document.documentElement.setAttribute('data-phone-battle', 'ffx');
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script src="hud.js"></script>
+</body>
+</html>
