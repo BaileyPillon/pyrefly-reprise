@@ -319,10 +319,9 @@ export class ChapterSelectScreen extends Screen {
     if (this.confirming || !ff7ExperimentReady()) return;
     this.confirming = true;
     (this.opts.onSelect ?? defaultOnSelect)(SECRET_CHAPTER);
+    // No reset: the FF7 swirl now holds this frozen board while the fight loads (r29 PR-0222), and a key
+    // pressed then must not move the cursor or start a card's preload under it. The flow replaces the board.
     this.settle(SECRET_CHAPTER);
-    window.setTimeout(() => {
-      this.confirming = false;
-    }, 250);
   }
 
   private settle(id: ChapterId | null): void {
