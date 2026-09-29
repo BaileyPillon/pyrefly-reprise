@@ -6,6 +6,22 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-29 — Music key `scene-macalania-temple` (Chapter VII); four more runtime instrument stand-ins
+
+**The key: FFX only** [AGENTS.md hard rule 14]: Chapter VII's scene cue, the Macalania Temple
+antechamber (research/ffx-seymour-anima-macalania.md §9.1, §9.6). Additive: `MUSIC_KEYS` in
+`src/audio/tracks/index.ts` (§8's list) gains the key the Chapter VII preflight reserved
+(`docs/plans/chapter-macalania-review.md` §6.3), composed in `scene-macalania-temple.ts` ("The
+Frozen Temple", sketch A; D-278: the driver's pick in remaster R1, made without hearing),
+registered in `COMPOSED` and `TRACK_NOTES`, and shipped in `public/audio/manifest.json` (loop
+beat 12 to 56, sample-exact). `MusicKey` stays a plain `string`. `MACALANIA_SCENE_CUE` now names it,
+so the chapter's `music.scene`, the pre-battle `music()` step and the meta's `musicKeys` move off
+Chapter I's `scene-gagazet` together; Chapter VII's lock line in `LOCKED_CHAPTER_IDS` is deleted.
+**The stand-ins: both games** (shared plumbing): `INSTRUMENTS` gains `glockenspiel` (celesta),
+`chimes` (bell), `alto-flute` (flute) and `soprano-distant` (choir), answering only when the
+browser falls back to synthesis; the first two are the voices `RUNTIME_STAND_INS` already uses,
+so no sound effect's fallback changes.
+
 ## 2026-09-28 — `dsl.ts`: `BackdropStep` gains an optional `place` (PR-0230)
 
 **FFX-2 only** in use (Chapter V's Farplane Glen coda, writing-bible E5-CODA rule 5); the field is shared plumbing, "both".

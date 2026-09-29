@@ -8,8 +8,10 @@
  * showpiece board (`docs/concepts/polish/showpiece-frontend/after.png`) shows
  * the chapter grid as the board of *the whole game*, so the front end has to
  * hold eight cards today and light three of them up the day their data
- * lands, or Bailey unlocks them (`LOCKED_CHAPTER_IDS` below). Leblanc and
- * Evrae have both landed and unlocked; only Macalania is still locked.
+ * lands, or Bailey unlocks them (`LOCKED_CHAPTER_IDS` below). Leblanc, Evrae
+ * and Macalania have all landed and unlocked (Macalania on 2026-09-29), so
+ * no row here is drawn any more; the rows stay in case a registration is
+ * ever reverted.
  *
  * **These are not chapters.** Nothing here is a `Chapter`, nothing here is
  * importable from `src/data`, and nothing here carries a stat, a party, a
@@ -67,8 +69,8 @@ export interface ComingChapter {
  */
 export const COMING_CHAPTERS: readonly ComingChapter[] = [
   {
-    // Matches the real, registered Chapter 7 id. The row stays on the board
-    // while that id is in `LOCKED_CHAPTER_IDS` below.
+    // Matches the real, registered Chapter 7 id, so the row is dropped now
+    // that the chapter is unlocked (2026-09-29, D-278).
     id: 'seymour-anima-macalania',
     game: 'ffx',
     title: 'Seymour and Anima',
@@ -120,12 +122,9 @@ export const COMING_CHAPTERS: readonly ComingChapter[] = [
  * id matches the real chapter) and the playable card takes its place.
  */
 export const LOCKED_CHAPTER_IDS: ReadonlySet<string> = new Set<string>([
-  // Chapter 7, Macalania (FFX only): art approved (D-141), the pause-plate
-  // redo A2 and the party layout B picked (Bailey, 2026-09-25). Stays locked
-  // until Bailey picks the scene cue by ear (src/data/chapter-macalania-ship.ts).
-  // Once it has landed, deleting this line is the whole unlock, rehearsed with
-  // real keys (docs/handoff/chapter-macalania.md).
-  'seymour-anima-macalania',
+  // Chapter 7, Macalania (FFX only): UNLOCKED 2026-09-29 once its scene cue
+  // landed (D-278: Bailey delegated the pick to the driver, "i'll go with your
+  // pick for chapter VII"). src/data/chapter-macalania-ship.ts.
   // Chapter 8, Evrae (FFX only): UNLOCKED on Bailey's word, 2026-09-23
   // ("I'll go with your recommendations let's get to work" — accepting the
   // title, art and music recommendations). docs/handoff/chapter-evrae.md.

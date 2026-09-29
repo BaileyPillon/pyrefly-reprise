@@ -142,16 +142,15 @@ describe('the fixed list', () => {
     }
   });
 
-  it('puts the COMING Chapter VII in number order, between III and VIII, and it stays unplayable', () => {
+  it('puts Chapter VII in number order, between III and VIII, and it is playable since its unlock (D-278)', () => {
     const rig = mount();
     const numerals = cards(rig).map((c) => c.querySelector('.fe-card__num')?.textContent);
     expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI']);
     const vii = card(rig, 'seymour-anima-macalania');
-    expect(vii.classList.contains('fe-card--coming')).toBe(true);
-    expect(vii.getAttribute('data-action')).toBeNull();
+    expect(vii.classList.contains('fe-card--coming')).toBe(false);
+    expect(vii.getAttribute('data-action')).toBeTruthy();
     rig.click(vii);
-    expect(selectedId(rig)).toBe('seymour-flux');
-    expect(rig.picked).toEqual([]);
+    expect(selectedId(rig)).toBe('seymour-anima-macalania');
   });
 
   it('gives every card its numeral and its name as two separate elements', () => {
@@ -187,18 +186,18 @@ describe('numerals never overlap names (the sheet)', () => {
 });
 
 describe('the progress strip', () => {
-  it('reads 0 of 15 on a new save (Chapters X, XII and XIV listed 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27): listed, playable chapters only, the coming card hatched', () => {
+  it('reads 0 of 16 on a new save (Chapters X, XII and XIV listed 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, VII unlocked 2026-09-29): listed, playable chapters only, no coming card left', () => {
     const rig = mount();
     expect(rig.screen.snapshot()['beaten']).toBe(0);
-    expect(rig.screen.snapshot()['total']).toBe(15);
+    expect(rig.screen.snapshot()['total']).toBe(16);
     expect(rig.root.querySelector('.cs-strip__count b')?.textContent).toBe('0');
-    expect(rig.root.querySelector('.cs-strip__of')?.textContent).toBe('of 15 beaten');
+    expect(rig.root.querySelector('.cs-strip__of')?.textContent).toBe('of 16 beaten');
     expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(16);
     expect(rig.root.querySelectorAll('.cs-pip.is-lit')).toHaveLength(0);
-    expect([...rig.root.querySelectorAll('.cs-pip.is-coming')].map((p) => p.textContent)).toEqual(['VII']);
+    expect(rig.root.querySelectorAll('.cs-pip.is-coming')).toHaveLength(0);
   });
 
-  it('counts only listed chapters: clears of an unlisted or a locked chapter never move it', () => {
+  it('counts only listed chapters: a clear of an unlisted chapter never moves it, Chapter VII\'s does since its unlock', () => {
     // Every registered chapter is listed since 2026-09-26 (XI): a stale id stands in for an unlisted one.
     const unlisted = UNLISTED_CHAPTERS[0]?.id ?? 'unlisted-probe';
     const rig = mount([
@@ -207,11 +206,12 @@ describe('the progress strip', () => {
       [unlisted, 100_000],
       ['seymour-anima-macalania', 100_000],
     ]);
-    expect(rig.screen.snapshot()['beaten']).toBe(2);
-    expect(rig.screen.snapshot()['total']).toBe(15);
-    expect(rig.root.querySelector('.cs-strip')?.getAttribute('aria-label')).toBe('2 of 15 chapters beaten');
+    expect(rig.screen.snapshot()['beaten']).toBe(3);
+    expect(rig.screen.snapshot()['total']).toBe(16);
+    expect(rig.root.querySelector('.cs-strip')?.getAttribute('aria-label')).toBe('3 of 16 chapters beaten');
     const lit = [...rig.root.querySelectorAll('.cs-pip.is-lit')].map((p) => [p.textContent, p.classList.contains('is-x2')]);
     expect(lit).toEqual([
+      ['VII', false],
       ['VIII', false],
       ['VI', true],
     ]);
@@ -223,7 +223,7 @@ describe('the progress strip', () => {
     save.recordClear('yunalesca', 1000, 1);
     const tiles = buildChapterTiles(save);
     const p = boardProgress(tiles, 0);
-    expect(p.total).toBe(CHAPTERS.length - 1); // the one locked chapter is COMING
+    expect(p.total).toBe(CHAPTERS.length); // no chapter is locked since 2026-09-29
     expect(p.beaten).toBe(1);
     expect(p.pips.filter((x) => x.selected)).toHaveLength(1);
   });

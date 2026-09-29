@@ -3,12 +3,12 @@
  *
  * **Game case: FFX only** [AGENTS.md rule 14].
  *
- * Pins what the unlock depends on so the driver's one-line flip cannot land on a half-switched
- * chapter: the scene cue is one constant that the record, the pre-battle scene and the meta all
- * read, it always names a registered track, and registering the planned cue without switching
- * the constant fails here; every open pick's candidates exist in the repo; Anima's approved folder
- * and the picked pause plate (A2) are locked; the party stands on the picked layout B; and the
- * chapter is still behind its lock line (the scene cue is open).
+ * Pins what the unlock depended on, so the chapter cannot stand unlocked on a half-switched
+ * state: the scene cue is one constant that the record, the pre-battle scene and the meta all
+ * read, it always names a registered track, and it is the chapter's own `scene-macalania-temple`
+ * (D-278: sketch A in remaster R1), shipped with a sample-exact loop; no pick is left open;
+ * Anima's approved folder and the picked pause plate (A2) are locked; the party stands on the
+ * picked layout B; and the lock line is gone (unlocked 2026-09-29).
  */
 
 import { createHash } from 'node:crypto';
@@ -17,7 +17,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-import { hasTrack } from '../../../src/audio/tracks/index.ts';
+import { getTrack, hasTrack } from '../../../src/audio/tracks/index.ts';
 import {
   MACALANIA_OPEN_PICKS,
   MACALANIA_SCENE_CUE,
@@ -48,13 +48,30 @@ describe('Chapter VII ship layer', () => {
     else expect(MACALANIA_SCENE_CUE).toBe(MACALANIA_SCENE_CUE_STAND_IN);
   });
 
-  it("every open pick's candidates are in the repo", () => {
-    // The pause plate (A2) and the party layout (B) were picked on 2026-09-25; the scene cue is open.
-    expect(MACALANIA_OPEN_PICKS.map((p) => p.id)).toEqual(['scene-cue']);
-    for (const pick of MACALANIA_OPEN_PICKS) {
-      const path = pick.candidates.split(' ')[0]!;
-      expect(existsSync(join(REPO, path)), path).toBe(true);
-    }
+  it('plays its own scene cue now, not the stand-in (D-278)', () => {
+    expect(MACALANIA_SCENE_CUE).toBe(MACALANIA_SCENE_CUE_PLANNED);
+    expect(MACALANIA_SCENE_CUE).not.toBe(MACALANIA_SCENE_CUE_STAND_IN);
+    expect(getTrack(MACALANIA_SCENE_CUE).bpm).toBe(56);
+  });
+
+  it('ships the cue as a loop the game can wrap sample-exactly, at the game loudness', () => {
+    const manifest = JSON.parse(readFileSync(join(REPO, 'public/audio/manifest.json'), 'utf8')) as {
+      music: Record<string, { file: string; loopStart: number; loopEnd: number; duration: number; lufs: number; truePeakDb: number }>;
+    };
+    const entry = manifest.music[MACALANIA_SCENE_CUE_PLANNED]!;
+    expect(entry.file).toBe('music/scene-macalania-temple.mp3');
+    expect(existsSync(join(REPO, 'public/audio', entry.file))).toBe(true);
+    // Beat 12 (the walk) to beat 56 at 56 bpm, and the 3 s run-on of the shipped layout.
+    expect(Math.round(entry.loopStart * 44100)).toBe(567000);
+    expect(Math.round(entry.loopEnd * 44100)).toBe(2646000);
+    expect(entry.duration).toBe(entry.loopEnd + 3);
+    expect(Math.abs(entry.lufs + 16)).toBeLessThanOrEqual(0.2);
+    expect(entry.truePeakDb).toBeLessThanOrEqual(-1);
+  });
+
+  it('no pick is left open, and the sketches the cue came from stay in the repo', () => {
+    // The pause plate (A2) and the party layout (B) were picked on 2026-09-25, the scene cue on 2026-09-29.
+    expect(MACALANIA_OPEN_PICKS).toEqual([]);
     const audition = readFileSync(join(REPO, 'docs/audio/audition.html'), 'utf8');
     for (const f of ['macalania-scene-a-frozen-temple', 'macalania-scene-b-wedding-proposal', 'macalania-scene-c-crystal-and-pyreflies']) {
       expect(audition).toContain(`sketches/2026-09-24/${f}.mp3`);
@@ -108,7 +125,7 @@ describe('Chapter VII ship layer', () => {
     expect(MACALANIA_PARTY_LAYOUT).toBe('b');
   });
 
-  it('is still behind its one lock line until the driver flips it', () => {
-    expect(LOCKED_CHAPTER_IDS.has('seymour-anima-macalania')).toBe(true);
+  it('is unlocked: its lock line is gone', () => {
+    expect(LOCKED_CHAPTER_IDS.has('seymour-anima-macalania')).toBe(false);
   });
 });

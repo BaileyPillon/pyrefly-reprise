@@ -1,0 +1,131 @@
+{
+ "viewport": "1600x900",
+ "checks": {
+  "reached chapter select by keys": {
+   "ok": true
+  },
+  "Chapter VII is a playable card (not COMING)": {
+   "ok": true,
+   "detail": "{\"id\":\"seymour-anima-macalania\",\"num\":\"VII\",\"coming\":false,\"action\":\"fe-card-3\",\"disabled\":false}"
+  },
+  "no COMING card left on the board": {
+   "ok": true,
+   "detail": "16 cards"
+  },
+  "progress strip counts sixteen": {
+   "ok": true,
+   "detail": "of 16 beaten"
+  },
+  "arrows land on Chapter VII (III -> VII)": {
+   "ok": true,
+   "detail": "seymour-flux > yunalesca > braskas-final-aeon > seymour-anima-macalania"
+  },
+  "Enter on VII opens party prep": {
+   "ok": true
+  },
+  "prep keeps chapter-select playing and fetches no stand-in": {
+   "ok": true,
+   "detail": "chapter-select; prep requests: none"
+  },
+  "Escape from prep goes back to chapter select": {
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  "the board keeps Chapter VII selected after back": {
+   "ok": true,
+   "detail": "seymour-anima-macalania"
+  },
+  "Enter again opens party prep": {
+   "ok": true
+  },
+  "the scene cue is fetched as the pre-battle scene starts, never before": {
+   "ok": true,
+   "detail": "[title] 200 /pyrefly-reprise/audio/music/title.mp3, [title] 200 /pyrefly-reprise/audio/music/chapter-select.mp3, [prep-start] 200 /pyrefly-reprise/audio/music/scene-macalania-temple.mp3"
+  },
+  "prep starts the pre-battle scene": {
+   "ok": true,
+   "detail": "cutscene"
+  },
+  "pre-battle scene opens on scene-macalania-temple": {
+   "ok": true,
+   "detail": "scene-macalania-temple"
+  },
+  "the battle starts": {
+   "ok": true
+  },
+  "the fight reaches a player turn (command menu)": {
+   "ok": true,
+   "detail": "command:rikku"
+  },
+  "P opens the pause menu over the fight": {
+   "ok": true,
+   "detail": "Rikku Tidus Seymour Yuna Guado Guardian A Guado Guardian B ATTACK SPECIAL ▸ ×1 ITEMS ▸ ×15 FLEE SWITCH ▸ ×4 Physical damage Tidus 1265 /1265"
+  },
+  "Escape closes the pause menu and the same turn is waiting": {
+   "ok": true,
+   "detail": "command:rikku, pause still up: false"
+  },
+  "after back, a real-key command is taken and the fight moves on": {
+   "ok": true,
+   "detail": "turn 1 -> 1"
+  },
+  "network: scene-macalania-temple.mp3 requested": {
+   "ok": true,
+   "detail": [
+    "[prep-start] 200 /pyrefly-reprise/audio/music/scene-macalania-temple.mp3"
+   ]
+  },
+  "network: stand-in scene-gagazet.mp3 never requested": {
+   "ok": true,
+   "detail": []
+  },
+  "0 console errors": {
+   "ok": true,
+   "detail": []
+  },
+  "0 HTTP errors": {
+   "ok": true,
+   "detail": []
+  }
+ },
+ "music": [
+  [
+   "chapter-select",
+   "chapter-select"
+  ],
+  [
+   "prep",
+   "chapter-select"
+  ],
+  [
+   "pre-scene",
+   "scene-macalania-temple"
+  ],
+  [
+   "battle",
+   "boss-seymour-macalania"
+  ]
+ ],
+ "musicReqs": [
+  "[title] 200 /pyrefly-reprise/audio/music/title.mp3",
+  "[title] 200 /pyrefly-reprise/audio/music/chapter-select.mp3",
+  "[prep-start] 200 /pyrefly-reprise/audio/music/scene-macalania-temple.mp3",
+  "[pre-scene] 200 /pyrefly-reprise/audio/music/boss-seymour-macalania.mp3",
+  "[pause] 200 /pyrefly-reprise/audio/music/pause.mp3",
+  "[pause] 200 /pyrefly-reprise/audio/music/boss-seymour-macalania.mp3"
+ ],
+ "errors": [],
+ "bad": [],
+ "shots": [
+  "docs/screenshots/ch7-unlock/1600x900-01-chapter-select.jpg",
+  "docs/screenshots/ch7-unlock/1600x900-02-chapter-vii-selected.jpg",
+  "docs/screenshots/ch7-unlock/1600x900-03-prep.jpg",
+  "docs/screenshots/ch7-unlock/1600x900-04-back-to-select.jpg",
+  "docs/screenshots/ch7-unlock/1600x900-05-prescene.jpg",
+  "docs/screenshots/ch7-unlock/1600x900-06-first-player-turn.jpg",
+  "docs/screenshots/ch7-unlock/1600x900-07-pause.jpg",
+  "docs/screenshots/ch7-unlock/1600x900-08-after-turn.jpg"
+ ],
+ "heroOnVii": "Chapter VII Seymour and Anima",
+ "sceneAdvances": 51
+}

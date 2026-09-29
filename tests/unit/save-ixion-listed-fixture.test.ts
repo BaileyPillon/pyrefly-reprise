@@ -59,7 +59,8 @@ describe('a main-built save (release 25) on the build that lists Chapter XVI', (
     expect(store.value.seenCoach).toEqual(raw.seenCoach); // the veteran rule fired once, on the old build, and never again
   });
 
-  it('gains Chapter XVI as unplayed: no clear, no attempts, and a board of "N of 15" that counts it', () => {
+  it('gains Chapter XVI as unplayed: no clear, no attempts, and a board of "N of 16" that counts it', () => {
+    // 15 when Chapter XVI was listed; 16 since Chapter VII's unlock on 2026-09-29 (D-278).
     const store = new SaveStore(SAVE_KEY, slot());
     expect(store.isCleared('ffx2-ixion-djose')).toBe(false);
     expect(store.chapter('ffx2-ixion-djose')).toMatchObject({ cleared: false, attempts: 0, bestTimeMs: null });
@@ -67,12 +68,12 @@ describe('a main-built save (release 25) on the build that lists Chapter XVI', (
     const ixion = tiles.find((t) => t.id === 'ffx2-ixion-djose')!;
     expect([ixion.playable, ixion.cleared, ixion.numeral]).toEqual([true, false, 'XVI']);
     const before = boardProgress(tiles, 0);
-    expect([before.beaten, before.total]).toEqual([fixture.expect.cleared.length, 15]);
+    expect([before.beaten, before.total]).toEqual([fixture.expect.cleared.length, 16]);
 
     store.recordAttempt('ffx2-ixion-djose');
     store.recordClear('ffx2-ixion-djose', 293_000, 38);
     const after = boardProgress(buildChapterTiles(store), 0);
-    expect([after.beaten, after.total]).toEqual([fixture.expect.cleared.length + 1, 15]);
+    expect([after.beaten, after.total]).toEqual([fixture.expect.cleared.length + 1, 16]);
   });
 
   it('survives a save and a reload with the new clear and the old records side by side', () => {
