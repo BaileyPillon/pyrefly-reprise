@@ -1,0 +1,247 @@
+{
+  "chapter": "yunalesca",
+  "v4": true,
+  "viewport": "390x844",
+  "phone": true,
+  "throttle": 4,
+  "throttled": {
+    "page": true,
+    "workers": 2
+  },
+  "seed": 1,
+  "decisions": 22,
+  "budget": "mini",
+  "opened": 22,
+  "ready": 22,
+  "shownSwitched": 1,
+  "readyRate": 1,
+  "none": {
+    "battle-over": 1
+  },
+  "killed": 0,
+  "jobs": 23,
+  "results": 22,
+  "showDecisionMs": {
+    "p50": 3.7,
+    "p95": 6.9,
+    "max": 48.9,
+    "n": 22
+  },
+  "cardForMs": {
+    "p50": 0.2,
+    "p95": 0.5,
+    "max": 0.8
+  },
+  "postMs": {
+    "p50": 1.2,
+    "p95": 1.6,
+    "max": 1.9
+  },
+  "answerMs": {
+    "p50": 74.2,
+    "p95": 164.2,
+    "max": 759.5
+  },
+  "leadMs": {
+    "p50": 1980.1,
+    "min": 885
+  },
+  "lagMs": {
+    "p50": null,
+    "max": null,
+    "n": 0
+  },
+  "workerTotalMs": {
+    "p50": 73.9,
+    "p95": 131.1,
+    "max": 147.4
+  },
+  "workerSearchMs": {
+    "p50": 69.7,
+    "p95": 126.7
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.4,
+    "max": 716.7,
+    "n": 3608,
+    "over34": 30,
+    "over50": 16
+  },
+  "frameMsSearching": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 66.7,
+    "max": 150,
+    "n": 97,
+    "over34": 4,
+    "over50": 2
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.4,
+    "max": 716.7,
+    "n": 3705,
+    "over34": 34,
+    "over50": 18
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": 1,
+      "switched": 0,
+      "ms": 48.90000003576279
+    },
+    {
+      "actor": "yuna",
+      "top": "Reflect -> Tidus",
+      "ready": 2,
+      "switched": 0,
+      "ms": 5.300000011920929
+    },
+    {
+      "actor": "auron",
+      "top": "Attack -> Yunalesca",
+      "ready": 3,
+      "switched": 0,
+      "ms": 4.800000011920929
+    },
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": 4,
+      "switched": 0,
+      "ms": 3.800000011920929
+    },
+    {
+      "actor": "yuna",
+      "top": "Reflect -> Tidus",
+      "ready": 5,
+      "switched": 0,
+      "ms": 3.5
+    },
+    {
+      "actor": "auron",
+      "top": "Eye Drops -> Auron",
+      "ready": 6,
+      "switched": 0,
+      "ms": 6.899999976158142
+    },
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": 7,
+      "switched": 0,
+      "ms": 3.600000023841858
+    },
+    {
+      "actor": "yuna",
+      "top": "Reflect -> Tidus",
+      "ready": 8,
+      "switched": 0,
+      "ms": 3
+    },
+    {
+      "actor": "auron",
+      "top": "Eye Drops -> Auron",
+      "ready": 9,
+      "switched": 0,
+      "ms": 3.599999964237213
+    },
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": 10,
+      "switched": 0,
+      "ms": 3.899999976158142
+    },
+    {
+      "actor": "yuna",
+      "top": "Curaga -> Tidus",
+      "ready": 11,
+      "switched": 0,
+      "ms": 4.400000035762787
+    },
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": 12,
+      "switched": 0,
+      "ms": 3.300000011920929
+    },
+    {
+      "actor": "auron",
+      "top": "Attack -> Yunalesca",
+      "ready": 13,
+      "switched": 0,
+      "ms": 3.600000023841858
+    },
+    {
+      "actor": "yuna",
+      "top": "Curaga -> Tidus",
+      "ready": 14,
+      "switched": 0,
+      "ms": 3
+    },
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": 15,
+      "switched": 0,
+      "ms": 2.600000023841858
+    },
+    {
+      "actor": "auron",
+      "top": "Mega-Potion -> the party",
+      "ready": 16,
+      "switched": 1,
+      "ms": 5.100000023841858
+    },
+    {
+      "actor": "yuna",
+      "top": "Curaga -> Tidus",
+      "ready": 17,
+      "switched": 1,
+      "ms": 2.899999976158142
+    },
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": 18,
+      "switched": 1,
+      "ms": 3.400000035762787
+    },
+    {
+      "actor": "tidus",
+      "top": "Mega Phoenix -> the party",
+      "ready": 19,
+      "switched": 1,
+      "ms": 4.300000011920929
+    },
+    {
+      "actor": "yuna",
+      "top": "Phoenix Down -> Auron",
+      "ready": 20,
+      "switched": 1,
+      "ms": 4.100000023841858
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": 21,
+      "switched": 1,
+      "ms": 3.600000023841858
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": 22,
+      "switched": 1,
+      "ms": 3.699999988079071
+    }
+  ],
+  "errors": []
+}

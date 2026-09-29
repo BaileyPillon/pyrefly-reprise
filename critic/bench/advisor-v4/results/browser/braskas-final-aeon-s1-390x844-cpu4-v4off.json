@@ -1,0 +1,142 @@
+{
+  "chapter": "braskas-final-aeon",
+  "v4": false,
+  "viewport": "390x844",
+  "phone": true,
+  "throttle": 4,
+  "throttled": {
+    "page": true,
+    "workers": 1
+  },
+  "seed": 1,
+  "decisions": 10,
+  "budget": null,
+  "opened": null,
+  "ready": null,
+  "shownSwitched": null,
+  "readyRate": null,
+  "none": null,
+  "killed": null,
+  "jobs": null,
+  "results": null,
+  "showDecisionMs": {
+    "p50": 42.8,
+    "p95": 128.7,
+    "max": 128.7,
+    "n": 10
+  },
+  "cardForMs": null,
+  "postMs": null,
+  "answerMs": null,
+  "leadMs": null,
+  "lagMs": null,
+  "workerTotalMs": {
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "workerSearchMs": {
+    "p50": null,
+    "p95": null
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.4,
+    "max": 799.9,
+    "n": 3769,
+    "over34": 37,
+    "over50": 22
+  },
+  "frameMsSearching": {
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "n": 0,
+    "over34": 0,
+    "over50": 0
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.4,
+    "max": 799.9,
+    "n": 3769,
+    "over34": 37,
+    "over50": 22
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Stamina Tonic -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 128.69999998807907
+    },
+    {
+      "actor": "auron",
+      "top": "Stamina Tonic -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 37.89999997615814
+    },
+    {
+      "actor": "yuna",
+      "top": "Protect -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 46.10000002384186
+    },
+    {
+      "actor": "tidus",
+      "top": "Hi-Potion -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 35.09999996423721
+    },
+    {
+      "actor": "auron",
+      "top": "Hi-Potion -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 34.89999997615814
+    },
+    {
+      "actor": "tidus",
+      "top": "Hi-Potion -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 34.09999996423721
+    },
+    {
+      "actor": "auron",
+      "top": "Remedy -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 43.60000002384186
+    },
+    {
+      "actor": "tidus",
+      "top": "Al Bhed Potion -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 37.30000001192093
+    },
+    {
+      "actor": "auron",
+      "top": "Phoenix Down -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 42.80000001192093
+    },
+    {
+      "actor": "auron",
+      "top": "Phoenix Down -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 49.700000047683716
+    }
+  ],
+  "errors": []
+}

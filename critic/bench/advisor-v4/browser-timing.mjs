@@ -32,6 +32,11 @@ const SEED = Number(arg('seed', '1'));
 const OUT = arg('out', '');
 const SHOTS = arg('shots', '');
 
+// Long frames: over 2 and over 3 vsyncs at 60 Hz (a dropped frame is felt; two in a row is a hitch).
+const frameSummary = (xs) => ({
+  p50: pct(xs, 50), p95: pct(xs, 95), p99: pct(xs, 99), max: pct(xs, 100), n: xs.length,
+  over34: xs.filter((x) => x > 34).length, over50: xs.filter((x) => x > 50).length,
+});
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const pct = (xs, p) => {
   if (!xs.length) return null;
@@ -146,8 +151,10 @@ const summary = {
   lagMs: res.stats ? { p50: pct(res.stats.lagMs, 50), max: pct(res.stats.lagMs, 100), n: res.stats.lagMs.length } : null,
   workerTotalMs: { p50: pct(w.map((s) => s.totalMs), 50), p95: pct(w.map((s) => s.totalMs), 95), max: pct(w.map((s) => s.totalMs), 100) },
   workerSearchMs: { p50: pct(w.map((s) => s.searchMs), 50), p95: pct(w.map((s) => s.searchMs), 95) },
-  frameMs: { p50: pct(res.m.frames, 50), p95: pct(res.m.frames, 95), p99: pct(res.m.frames, 99), n: res.m.frames.length },
-  frameMsSearching: { p50: pct(res.m.framesSearching, 50), p95: pct(res.m.framesSearching, 95), p99: pct(res.m.framesSearching, 99), n: res.m.framesSearching.length },
+  frameMs: frameSummary(res.m.frames),
+  frameMsSearching: frameSummary(res.m.framesSearching),
+  // Every frame of the battle, searching or not: what the player sees, on against off.
+  frameMsAll: frameSummary([...res.m.frames, ...res.m.framesSearching]),
   cards: res.m.cards,
   errors,
 };

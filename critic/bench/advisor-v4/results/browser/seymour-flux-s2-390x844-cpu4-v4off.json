@@ -1,0 +1,93 @@
+{
+  "chapter": "seymour-flux",
+  "v4": false,
+  "viewport": "390x844",
+  "phone": true,
+  "throttle": 4,
+  "throttled": {
+    "page": true,
+    "workers": 1
+  },
+  "seed": 2,
+  "decisions": 3,
+  "budget": null,
+  "opened": null,
+  "ready": null,
+  "shownSwitched": null,
+  "readyRate": null,
+  "none": null,
+  "killed": null,
+  "jobs": null,
+  "results": null,
+  "showDecisionMs": {
+    "p50": 54.4,
+    "p95": 128,
+    "max": 128,
+    "n": 3
+  },
+  "cardForMs": null,
+  "postMs": null,
+  "answerMs": null,
+  "leadMs": null,
+  "lagMs": null,
+  "workerTotalMs": {
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "workerSearchMs": {
+    "p50": null,
+    "p95": null
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 50,
+    "max": 700,
+    "n": 1401,
+    "over34": 21,
+    "over50": 14
+  },
+  "frameMsSearching": {
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "n": 0,
+    "over34": 0,
+    "over50": 0
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 50,
+    "max": 700,
+    "n": 1401,
+    "over34": 21,
+    "over50": 14
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 128
+    },
+    {
+      "actor": "yuna",
+      "top": "Poison Fang -> Seymour Flux",
+      "ready": null,
+      "switched": null,
+      "ms": 54.39999997615814
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 33.19999998807907
+    }
+  ],
+  "errors": []
+}

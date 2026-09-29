@@ -1,0 +1,93 @@
+{
+  "chapter": "seymour-flux",
+  "v4": false,
+  "viewport": "1600x900",
+  "phone": false,
+  "throttle": 1,
+  "throttled": {
+    "page": false,
+    "workers": 0
+  },
+  "seed": 1,
+  "decisions": 3,
+  "budget": null,
+  "opened": null,
+  "ready": null,
+  "shownSwitched": null,
+  "readyRate": null,
+  "none": null,
+  "killed": null,
+  "jobs": null,
+  "results": null,
+  "showDecisionMs": {
+    "p50": 9.5,
+    "p95": 21,
+    "max": 21,
+    "n": 3
+  },
+  "cardForMs": null,
+  "postMs": null,
+  "answerMs": null,
+  "leadMs": null,
+  "lagMs": null,
+  "workerTotalMs": {
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "workerSearchMs": {
+    "p50": null,
+    "p95": null
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "max": 283.3,
+    "n": 1700,
+    "over34": 5,
+    "over50": 3
+  },
+  "frameMsSearching": {
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "n": 0,
+    "over34": 0,
+    "over50": 0
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "max": 283.3,
+    "n": 1700,
+    "over34": 5,
+    "over50": 3
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 21
+    },
+    {
+      "actor": "kimahri",
+      "top": "Mighty Guard -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 9.5
+    },
+    {
+      "actor": "kimahri",
+      "top": "Phoenix Down -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 5.5
+    }
+  ],
+  "errors": []
+}

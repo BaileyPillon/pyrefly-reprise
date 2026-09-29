@@ -1,0 +1,100 @@
+{
+  "chapter": "seymour-flux",
+  "v4": false,
+  "viewport": "1600x900",
+  "phone": false,
+  "throttle": 1,
+  "throttled": {
+    "page": false,
+    "workers": 0
+  },
+  "seed": 3,
+  "decisions": 4,
+  "budget": null,
+  "opened": null,
+  "ready": null,
+  "shownSwitched": null,
+  "readyRate": null,
+  "none": null,
+  "killed": null,
+  "jobs": null,
+  "results": null,
+  "showDecisionMs": {
+    "p50": 11.2,
+    "p95": 22,
+    "max": 22,
+    "n": 4
+  },
+  "cardForMs": null,
+  "postMs": null,
+  "answerMs": null,
+  "leadMs": null,
+  "lagMs": null,
+  "workerTotalMs": {
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "workerSearchMs": {
+    "p50": null,
+    "p95": null
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "max": 316.7,
+    "n": 1644,
+    "over34": 4,
+    "over50": 3
+  },
+  "frameMsSearching": {
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "n": 0,
+    "over34": 0,
+    "over50": 0
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "max": 316.7,
+    "n": 1644,
+    "over34": 4,
+    "over50": 3
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Holy Water -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 22
+    },
+    {
+      "actor": "kimahri",
+      "top": "Mighty Guard -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 11.199999988079071
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 6.899999976158142
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 5.5
+    }
+  ],
+  "errors": []
+}

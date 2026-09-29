@@ -1,0 +1,114 @@
+{
+  "chapter": "seymour-flux",
+  "v4": true,
+  "viewport": "1600x900",
+  "phone": false,
+  "throttle": 1,
+  "throttled": {
+    "page": false,
+    "workers": 0
+  },
+  "seed": 1,
+  "decisions": 3,
+  "budget": "lean",
+  "opened": 3,
+  "ready": 3,
+  "shownSwitched": 1,
+  "readyRate": 1,
+  "none": {
+    "battle-over": 1
+  },
+  "killed": 0,
+  "jobs": 4,
+  "results": 3,
+  "showDecisionMs": {
+    "p50": 2.3,
+    "p95": 3.7,
+    "max": 3.7,
+    "n": 3
+  },
+  "cardForMs": {
+    "p50": 0.1,
+    "p95": 0.3,
+    "max": 0.3
+  },
+  "postMs": {
+    "p50": 0.2,
+    "p95": 0.3,
+    "max": 0.3
+  },
+  "answerMs": {
+    "p50": 49.5,
+    "p95": 363.3,
+    "max": 363.3
+  },
+  "leadMs": {
+    "p50": 8573.8,
+    "min": 6121.9
+  },
+  "lagMs": {
+    "p50": null,
+    "max": null,
+    "n": 0
+  },
+  "workerTotalMs": {
+    "p50": 30.1,
+    "p95": 122.2,
+    "max": 122.2
+  },
+  "workerSearchMs": {
+    "p50": 23,
+    "p95": 97.8
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "max": 300.1,
+    "n": 1698,
+    "over34": 4,
+    "over50": 4
+  },
+  "frameMsSearching": {
+    "p50": 16.7,
+    "p95": 50,
+    "p99": 50,
+    "max": 50,
+    "n": 8,
+    "over34": 1,
+    "over50": 0
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "max": 300.1,
+    "n": 1706,
+    "over34": 5,
+    "over50": 4
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Slow -> Seymour Flux",
+      "ready": 1,
+      "switched": 1,
+      "ms": 3.699999988079071
+    },
+    {
+      "actor": "kimahri",
+      "top": "Mighty Guard -> the party",
+      "ready": 2,
+      "switched": 1,
+      "ms": 2.299999952316284
+    },
+    {
+      "actor": "kimahri",
+      "top": "Phoenix Down -> Tidus",
+      "ready": 3,
+      "switched": 1,
+      "ms": 1.4000000357627869
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,128 @@
+{
+  "chapter": "seymour-flux",
+  "v4": true,
+  "viewport": "1600x900",
+  "phone": false,
+  "throttle": 1,
+  "throttled": {
+    "page": false,
+    "workers": 0
+  },
+  "seed": 4,
+  "decisions": 5,
+  "budget": "lean",
+  "opened": 5,
+  "ready": 5,
+  "shownSwitched": 1,
+  "readyRate": 1,
+  "none": {
+    "battle-over": 1
+  },
+  "killed": 0,
+  "jobs": 6,
+  "results": 5,
+  "showDecisionMs": {
+    "p50": 1,
+    "p95": 3.7,
+    "max": 3.7,
+    "n": 5
+  },
+  "cardForMs": {
+    "p50": 0.1,
+    "p95": 0.3,
+    "max": 0.3
+  },
+  "postMs": {
+    "p50": 0.3,
+    "p95": 0.3,
+    "max": 0.3
+  },
+  "answerMs": {
+    "p50": 83.2,
+    "p95": 393,
+    "max": 393
+  },
+  "leadMs": {
+    "p50": 3705.5,
+    "min": 819.4
+  },
+  "lagMs": {
+    "p50": null,
+    "max": null,
+    "n": 0
+  },
+  "workerTotalMs": {
+    "p50": 32.9,
+    "p95": 120,
+    "max": 120
+  },
+  "workerSearchMs": {
+    "p50": 26.8,
+    "p95": 107.9
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "max": 216.6,
+    "n": 1738,
+    "over34": 3,
+    "over50": 3
+  },
+  "frameMsSearching": {
+    "p50": 16.7,
+    "p95": 33.3,
+    "p99": 133.4,
+    "max": 133.4,
+    "n": 19,
+    "over34": 1,
+    "over50": 1
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "max": 216.6,
+    "n": 1757,
+    "over34": 4,
+    "over50": 4
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Hi-Potion -> Yuna",
+      "ready": 1,
+      "switched": 0,
+      "ms": 3.699999988079071
+    },
+    {
+      "actor": "kimahri",
+      "top": "Mighty Guard -> the party",
+      "ready": 2,
+      "switched": 0,
+      "ms": 1.899999976158142
+    },
+    {
+      "actor": "yuna",
+      "top": "Poison Fang -> Seymour Flux",
+      "ready": 3,
+      "switched": 0,
+      "ms": 0.5999999642372131
+    },
+    {
+      "actor": "tidus",
+      "top": "Slow -> Seymour Flux",
+      "ready": 4,
+      "switched": 1,
+      "ms": 1
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": 5,
+      "switched": 1,
+      "ms": 1
+    }
+  ],
+  "errors": []
+}

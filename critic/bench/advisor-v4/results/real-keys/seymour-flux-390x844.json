@@ -1,0 +1,62 @@
+{
+  "chapter": "seymour-flux",
+  "viewport": "390x844",
+  "throttle": 4,
+  "force": "on",
+  "seed": 1,
+  "menus": [
+    {
+      "n": 1,
+      "open": {
+        "rows": [
+          "Hastega -> the party"
+        ],
+        "text": "Next best moveTidusHastega→the partyWhite MagicGuide’s pickin White Magic30 MPalways hits+ HasteSpeeds the party’s turns upIt puts Haste on the party; next, Lance of Atrophy hits for about 760.",
+        "host": {
+          "opened": 1,
+          "ready": 1,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-flux-390x844-cpu4x-menu1.png"
+    },
+    {
+      "n": 2,
+      "open": {
+        "rows": [
+          "Mighty Guard -> the party"
+        ],
+        "text": "Next best moveKimahriLeave Yuna down for now — a raise brings Yuna back still a Zombie, and Full-Life kills a Zombie outright.Mighty Guard→the partyOverdriveGuide’s pickin Overdriveno MPalways hits+ Protect, Shell, Nulblaze, Nulfrost, Nulshock, NultideTimed input · inflicts Shell, Nulblaze, Nulfrost, Nulshock, NultideIt puts Protect on the party; next, Lance of Atrophy hits for about 750.",
+        "host": {
+          "opened": 2,
+          "ready": 2,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-flux-390x844-cpu4x-menu2.png"
+    },
+    {
+      "n": 3,
+      "open": {
+        "rows": [
+          "Phoenix Down -> Tidus"
+        ],
+        "text": "Next best moveKimahriPhoenix Down→TidusItemsGuide’s pickin Items+1,210no MPalways hitscures KoRevives a fallen ally with a little HP.Only Tidus can cast Haste — stand Tidus up.Tidus is still a Zombie — the next Full-Life would kill Tidus again, so cure the Zombie first.",
+        "host": {
+          "opened": 3,
+          "ready": 3,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-flux-390x844-cpu4x-menu3.png"
+    }
+  ],
+  "allStable": true,
+  "errors": []
+}

@@ -1,0 +1,121 @@
+{
+  "chapter": "seymour-flux",
+  "v4": true,
+  "viewport": "390x844",
+  "phone": true,
+  "throttle": 4,
+  "throttled": {
+    "page": true,
+    "workers": 2
+  },
+  "seed": 3,
+  "decisions": 4,
+  "budget": "mini",
+  "opened": 4,
+  "ready": 4,
+  "shownSwitched": 1,
+  "readyRate": 1,
+  "none": {
+    "battle-over": 1
+  },
+  "killed": 0,
+  "jobs": 5,
+  "results": 4,
+  "showDecisionMs": {
+    "p50": 9.1,
+    "p95": 55.7,
+    "max": 55.7,
+    "n": 4
+  },
+  "cardForMs": {
+    "p50": 0.3,
+    "p95": 1,
+    "max": 1
+  },
+  "postMs": {
+    "p50": 1.1,
+    "p95": 1.3,
+    "max": 1.3
+  },
+  "answerMs": {
+    "p50": 26.4,
+    "p95": 811.2,
+    "max": 811.2
+  },
+  "leadMs": {
+    "p50": 6170.5,
+    "min": 3137.9
+  },
+  "lagMs": {
+    "p50": null,
+    "max": null,
+    "n": 0
+  },
+  "workerTotalMs": {
+    "p50": 17.6,
+    "p95": 101.6,
+    "max": 101.6
+  },
+  "workerSearchMs": {
+    "p50": 10.5,
+    "p95": 75.9
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 50,
+    "max": 750,
+    "n": 1610,
+    "over34": 26,
+    "over50": 16
+  },
+  "frameMsSearching": {
+    "p50": 16.7,
+    "p95": 149.9,
+    "p99": 149.9,
+    "max": 149.9,
+    "n": 10,
+    "over34": 2,
+    "over50": 2
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 50.1,
+    "max": 750,
+    "n": 1620,
+    "over34": 28,
+    "over50": 18
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Slow -> Seymour Flux",
+      "ready": 1,
+      "switched": 1,
+      "ms": 55.69999998807907
+    },
+    {
+      "actor": "kimahri",
+      "top": "Mighty Guard -> the party",
+      "ready": 2,
+      "switched": 1,
+      "ms": 9.099999964237213
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": 3,
+      "switched": 1,
+      "ms": 5.5
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": 4,
+      "switched": 1,
+      "ms": 4.199999988079071
+    }
+  ],
+  "errors": []
+}

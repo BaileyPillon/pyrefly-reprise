@@ -1,0 +1,107 @@
+{
+  "chapter": "seymour-flux",
+  "v4": false,
+  "viewport": "390x844",
+  "phone": true,
+  "throttle": 4,
+  "throttled": {
+    "page": true,
+    "workers": 1
+  },
+  "seed": 4,
+  "decisions": 5,
+  "budget": null,
+  "opened": null,
+  "ready": null,
+  "shownSwitched": null,
+  "readyRate": null,
+  "none": null,
+  "killed": null,
+  "jobs": null,
+  "results": null,
+  "showDecisionMs": {
+    "p50": 47.9,
+    "p95": 110.5,
+    "max": 110.5,
+    "n": 5
+  },
+  "cardForMs": null,
+  "postMs": null,
+  "answerMs": null,
+  "leadMs": null,
+  "lagMs": null,
+  "workerTotalMs": {
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "workerSearchMs": {
+    "p50": null,
+    "p95": null
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 50,
+    "max": 716.6,
+    "n": 1755,
+    "over34": 22,
+    "over50": 15
+  },
+  "frameMsSearching": {
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "n": 0,
+    "over34": 0,
+    "over50": 0
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 50,
+    "max": 716.6,
+    "n": 1755,
+    "over34": 22,
+    "over50": 15
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Hi-Potion -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 110.5
+    },
+    {
+      "actor": "kimahri",
+      "top": "Mighty Guard -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 59
+    },
+    {
+      "actor": "yuna",
+      "top": "Poison Fang -> Seymour Flux",
+      "ready": null,
+      "switched": null,
+      "ms": 43.5
+    },
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": null,
+      "switched": null,
+      "ms": 41.19999998807907
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": null,
+      "switched": null,
+      "ms": 47.90000003576279
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,114 @@
+{
+  "chapter": "seymour-flux",
+  "v4": true,
+  "viewport": "390x844",
+  "phone": true,
+  "throttle": 4,
+  "throttled": {
+    "page": true,
+    "workers": 2
+  },
+  "seed": 1,
+  "decisions": 3,
+  "budget": "mini",
+  "opened": 3,
+  "ready": 3,
+  "shownSwitched": 0,
+  "readyRate": 1,
+  "none": {
+    "battle-over": 1
+  },
+  "killed": 0,
+  "jobs": 4,
+  "results": 3,
+  "showDecisionMs": {
+    "p50": 7.6,
+    "p95": 53,
+    "max": 53,
+    "n": 3
+  },
+  "cardForMs": {
+    "p50": 0.4,
+    "p95": 1.1,
+    "max": 1.1
+  },
+  "postMs": {
+    "p50": 1.1,
+    "p95": 1.3,
+    "max": 1.3
+  },
+  "answerMs": {
+    "p50": 160.5,
+    "p95": 795.9,
+    "max": 795.9
+  },
+  "leadMs": {
+    "p50": 8517,
+    "min": 6256.2
+  },
+  "lagMs": {
+    "p50": null,
+    "max": null,
+    "n": 0
+  },
+  "workerTotalMs": {
+    "p50": 20.1,
+    "p95": 75.7,
+    "max": 75.7
+  },
+  "workerSearchMs": {
+    "p50": 12.4,
+    "p95": 56.3
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 49.9,
+    "max": 733.3,
+    "n": 1646,
+    "over34": 17,
+    "over50": 7
+  },
+  "frameMsSearching": {
+    "p50": 16.7,
+    "p95": 166.6,
+    "p99": 166.6,
+    "max": 166.6,
+    "n": 9,
+    "over34": 3,
+    "over50": 3
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 49.9,
+    "max": 733.3,
+    "n": 1655,
+    "over34": 20,
+    "over50": 10
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Hastega -> the party",
+      "ready": 1,
+      "switched": 0,
+      "ms": 53
+    },
+    {
+      "actor": "kimahri",
+      "top": "Mighty Guard -> the party",
+      "ready": 2,
+      "switched": 0,
+      "ms": 7.599999964237213
+    },
+    {
+      "actor": "kimahri",
+      "top": "Phoenix Down -> Tidus",
+      "ready": 3,
+      "switched": 0,
+      "ms": 5.199999988079071
+    }
+  ],
+  "errors": []
+}

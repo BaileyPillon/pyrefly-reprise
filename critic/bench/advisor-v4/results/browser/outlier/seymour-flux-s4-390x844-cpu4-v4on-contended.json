@@ -1,0 +1,128 @@
+{
+  "chapter": "seymour-flux",
+  "v4": true,
+  "viewport": "390x844",
+  "phone": true,
+  "throttle": 4,
+  "throttled": {
+    "page": true,
+    "workers": 2
+  },
+  "seed": 4,
+  "decisions": 5,
+  "budget": "mini",
+  "opened": 5,
+  "ready": 5,
+  "shownSwitched": 1,
+  "readyRate": 1,
+  "none": {
+    "battle-over": 1
+  },
+  "killed": 0,
+  "jobs": 6,
+  "results": 5,
+  "showDecisionMs": {
+    "p50": 72.4,
+    "p95": 94.6,
+    "max": 94.6,
+    "n": 5
+  },
+  "cardForMs": {
+    "p50": 5.3,
+    "p95": 8.1,
+    "max": 8.1
+  },
+  "postMs": {
+    "p50": 2.2,
+    "p95": 9.4,
+    "max": 9.4
+  },
+  "answerMs": {
+    "p50": 270,
+    "p95": 930.3,
+    "max": 930.3
+  },
+  "leadMs": {
+    "p50": 7280.5,
+    "min": 1815.3
+  },
+  "lagMs": {
+    "p50": null,
+    "max": null,
+    "n": 0
+  },
+  "workerTotalMs": {
+    "p50": 28.5,
+    "p95": 88.9,
+    "max": 88.9
+  },
+  "workerSearchMs": {
+    "p50": 20.6,
+    "p95": 75.8
+  },
+  "frameMs": {
+    "p50": 33.3,
+    "p95": 216.7,
+    "p99": 466.5,
+    "max": 1683.3,
+    "n": 788,
+    "over34": 301,
+    "over50": 255
+  },
+  "frameMsSearching": {
+    "p50": 66.6,
+    "p95": 233.4,
+    "p99": 366.5,
+    "max": 366.5,
+    "n": 14,
+    "over34": 11,
+    "over50": 9
+  },
+  "frameMsAll": {
+    "p50": 33.3,
+    "p95": 216.7,
+    "p99": 466.5,
+    "max": 1683.3,
+    "n": 802,
+    "over34": 312,
+    "over50": 264
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Hi-Potion -> Yuna",
+      "ready": 1,
+      "switched": 0,
+      "ms": 72.40000003576279
+    },
+    {
+      "actor": "kimahri",
+      "top": "Mighty Guard -> the party",
+      "ready": 2,
+      "switched": 0,
+      "ms": 37.69999998807907
+    },
+    {
+      "actor": "yuna",
+      "top": "Poison Fang -> Seymour Flux",
+      "ready": 3,
+      "switched": 0,
+      "ms": 23
+    },
+    {
+      "actor": "tidus",
+      "top": "Slow -> Seymour Flux",
+      "ready": 4,
+      "switched": 1,
+      "ms": 94.60000002384186
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": 5,
+      "switched": 1,
+      "ms": 72.60000002384186
+    }
+  ],
+  "errors": []
+}

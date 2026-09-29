@@ -212,6 +212,8 @@ class CoachedHud implements HudPort {
   }
   // B2's acting signal (PR-0157 FFX, A-15 FFX-2), the same hole a fourth time: `coached-hud-acting.test.ts`.
   setActing(signal: ActingSignal): void { this.inner.setActing?.(signal); }
+  // Advisor v4's duck-typed card probe (`app/advisorV4/wiring.ts`), the same hole a fifth time: `advisor-v4-coach-wrapper.test.ts`.
+  get moveAdvisor(): unknown { return (this.inner as { moveAdvisor?: unknown }).moveAdvisor; }
 
   // PR-0090: forwards `attachEnemyIntent`'s duck-typed wiring to the real HUD. Always present (not
   // `?.`-guarded on this side) so a HUD mock that lacks it still gets `undefined` from the inner call,
