@@ -272,6 +272,41 @@ through B, the Garden of Pain party, and Ixion A". For Sin:
 - **Story:** silent. A pre scene opens the battle, and a post scene shows results.
 - **Card copy:** our own summaries, `title: 'Sin'`. It is not shown, since there is no card.
 
+## Package B, the Chapter XVII bench (2026-09-29; FFX only; full tables in `docs/plans/sin-fins-core-bench.md`)
+
+Measured on `chapter-sin` after F, G, P and H merged. Nothing was tuned (no boss number, data row or engine file
+changed; only tests, helpers and the note). 200 seeds per line, first try, the sensible line (research §8 rows 1 to
+4, 6, 9), the naive line, and the advisor card's top row (`critic/bench/advisor-v3/drive.ts` primitives).
+
+**Does XVII clear the 90 % intended-line bar? No.**
+
+| | Chain (links 1 to 3, carried) | Link 1 | Link 2 | Link 3 |
+|---|---:|---:|---:|---:|
+| Sensible, chain | 13/200 (6.5 %) | 100 % | 100 % | 13/200 |
+| Sensible, each link rested | - | 100 % | 100 % | 78.5 % |
+| Advisor card, chain | 1/200 (0.5 %) | 95 % | 43.7 % | 1/83 |
+| Advisor card, each link rested | - | 95 % | 98 % | 82.5 % |
+| Naive | 0/200 | 0 % | 0 % | 0 % |
+
+- **The cap is carry into link 3** (rested 78.5 %, carried 6.5 %), and the Core's four elemental counters end the
+  sensible line's losses. A chain attempt is **413 engine turns** (a full clear 380 to 490), about twice Chapter III's
+  first link (about 195) and 2.2 to 2.9 times the plan's estimate (140 to 190).
+- **S-12 (Negation) is the biggest lever and the least sourced:** off, the sensible chain is 91/200 (45.5 %) and the
+  card's 29/200 (14.5 %). **S-8** NEAR barely moves the sensible line (9 % against 6.5 %; the card's rested link 2 is 88 %
+  against 98 %). **The seam line-up (Q16)**, both readings: within noise for the sensible line (8 % against 6.5 %).
+- **Aeons reach nothing at FAR** (REVIEW 13): every attack, ability and Overdrive row is off for all five aeons on both
+  Fins, even with a full gauge; at NEAR every row reaches. §7.2's guides summoning Bahamut on the Fins would have to be
+  NEAR; unreconciled, a question for the plan's Q list.
+- **`escape` (the 400-turn stalemate) is its own cause:** naive loses every Fin fight that way; 10 of the 200 sensible
+  chains end in it at link 3. **No line wins with Genais standing;** the Core-first variant (row 6) is 0/200.
+- **Options for Bailey (none built):** a checkpoint at link 3 (Q3: 78.5 % rested), confirming S-12 against the game,
+  an aeon line for link 3, or listing XVII with its difficulty disclosed.
+- **Tests:** `tests/unit/chapters/sin-fins-core-bench.test.ts` (a smoke set in the suite; the tables behind
+  `PYREFLY_SIN_BENCH=1`, about 17 minutes), `tests/unit/helpers/sinFinsBench.ts` and `sinFinsPolicies.ts`.
+  `sin-bench.test.ts` gained the advisor line and the same gate (6 seeds in the suite; `PYREFLY_SIN_BENCH=1` for the
+  200). Link 4 with the card: **44/200 (22 %)** on the 13th turn, **4/200 (2 %)** on the 12th; the other two lines are
+  unchanged (62/200 and 7/200; 0 and 0).
+
 ## The bench (summary; full tables in `docs/plans/sin-link4-bench.md`)
 
 Settings: 200 seeds, first try, human pace equal to bench speed (CTB). Nothing was tuned.
