@@ -983,6 +983,11 @@
   letter-spacing: 0.06em; text-transform: none; color: rgba(11, 10, 18, 0.72);
 }
 .ffx-airship-order__already { font-style: italic; }
+/* PR-0236: a greyed order row is the flat #2a2a30 slab above (PR-0018), and its
+   reason kept the ivory-row ink (0.72 alpha on near-black: illegible). It takes
+   the disabled label's own colour, #d8d8de, about 10:1 on that slab. */
+.ffxhud .ig-cmd--disabled .ffx-airship-order__already,
+.ffxhud .ig-cmd--disabled .ffx-cmd--trigger__label { color: #d8d8de; }
 /* The ivory cost slab under the rows (option A, step 3). */
 .ffx-airship-order__slab {
   display: flex; flex-direction: column; gap: 1.8px; width: 176px; margin-top: 2.7px;
