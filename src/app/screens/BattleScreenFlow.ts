@@ -31,6 +31,7 @@ import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts';
 import { preloadBattle } from './battlePreload.ts';
+import { holdIdleLane } from '../imageWarm.ts';
 import { entryCardWait } from './entryCard.ts';
 import { entrySituationFor } from './entrySituation.ts';
 import { playBattleEntry } from '../../ui/common/transitions/entry.ts';
@@ -300,6 +301,11 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
+    const release = holdIdleLane(); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board
+    return this.playChapter(id, opts).finally(release);
+  }
+
+  private async playChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
     const chapter = getChapter(id);
     if (!chapter) return null;
     if (chapter.experimental) {

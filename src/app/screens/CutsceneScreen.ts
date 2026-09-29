@@ -3,7 +3,6 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
-import { artUrl } from '../../engine/PaintedArt.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { battleStart, beat, camera, fx, music, narrate, say, type SpeakerId, type StoryScript } from '../../story/dsl.ts';
 import {
@@ -22,6 +21,7 @@ import { PauseScreen } from './PauseScreen.ts';
 import { createPauseKeyLatch, type PauseKeyLatch } from './pause/keys.ts';
 import { CutsceneStage } from './CutsceneStage.ts';
 import { swapCutscenePlate } from './cutscenePlate.ts';
+import { stageScene } from './sceneArt.ts';
 
 /**
  * One row, and it says what the keys actually do.
@@ -135,6 +135,7 @@ export class CutsceneScreen extends Screen {
   private eyebrowEl: HTMLElement | null = null;
   private stage: CutsceneStage | null = null;
   private finished = false;
+  private gone = false; // set on exit: a late decode or a late opening does nothing
   private lastResult: CutsceneRunResult | null = null;
   /** The pause overlay while it is up. */
   private pauseScreen: PauseScreen | null = null;
@@ -160,7 +161,8 @@ export class CutsceneScreen extends Screen {
     this.root.className = 'screen cutscene ig';
     const chapter = this.opts.chapterId ? getChapter(this.opts.chapterId) : undefined;
     const sceneKey = this.opts.backdropKey ?? chapter?.sceneKey;
-    if (sceneKey) this.root.style.backgroundImage = `url(${artUrl(`art/backdrops/${sceneKey}.png`)})`;
+    // r29 PR-0221: the backdrop goes up decoded, and the first line waits (bounded) for its art (`sceneArt.ts`).
+    const opening = stageScene(this.root, this.opts.script ?? DEMO_CUTSCENE_SCRIPT, sceneKey, this.opts.startSkipped === true, () => this.gone);
     if (chapter?.game === 'ffx2') this.root.classList.add('ig--ffx2');
 
     // Chapter eyebrow, top-left: gold rule + `CHAPTER I  MT. GAGAZET - THE
@@ -193,11 +195,17 @@ export class CutsceneScreen extends Screen {
 
     this.runner = new CutsceneRunner(this.buildPorts());
     if (this.opts.startSkipped) this.runner.skip();
+    if (opening) void opening.then(() => this.gone || this.open());
+    else this.open();
+  }
+
+  private open(): void {
     void this.app.fade('clear', 500);
     void this.playScript();
   }
 
   override exit(): void {
+    this.gone = true;
     // Anything parked on the gate must be released, or a script that was
     // paused when the screen went away would never finish its `run()`.
     this.setScriptPaused(false);

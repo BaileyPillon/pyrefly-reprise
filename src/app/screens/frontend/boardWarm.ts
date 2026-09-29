@@ -24,7 +24,8 @@ export class BoardWarmer {
   private readonly started = new Set<string>();
 
   constructor(
-    private readonly warm: (chapter: Chapter) => unknown = (c) => preloadBattle(c),
+    // r29: a dwell loads the scene and the battle's opening frame, then waits to be chosen.
+    private readonly warm: (chapter: Chapter) => unknown = (c) => preloadBattle(c, 1, { dwell: true }),
     private readonly dwellMs: number = DWELL_MS,
   ) {}
 
