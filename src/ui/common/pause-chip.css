@@ -1,0 +1,43 @@
+/*
+ * The mouse's way into the pause menu, top-left of the battle frame (both games;
+ * FF7 hides it in ff7-screen.css, and phones restyle it as a rail button in
+ * phone-battle.css).
+ *
+ * PR-0238: this rule lived in pause-screen.css until the pause remake
+ * (8cf17246f, 2026-09-21) replaced that file and dropped it, so every battle
+ * since showed a bare browser <button>: grey, system font, about 13 px. It is
+ * restored here from that commit as it was (the Ink & Gold chip tokens the
+ * guide's and the advisor's chips wear: `--ig-ink-chip`, the accent edge,
+ * `--ig-font-display`, the skew), with two legibility changes only: 14 px type
+ * (the house floor) and full paper ink, no longer faded to 0.55.
+ *
+ * Mounted by `BattleScreen` into its screen root, outside the HUD's letterboxed
+ * stage, so it is authored in device px. z-index clears the HUD's own layers
+ * (up to 40) and stays under the pause overlay's 60. `left`/`top` are the
+ * values `ffx2/commandHelpBand.ts` measures around.
+ */
+.battle-pause-chip {
+  position: absolute;
+  left: 22px;
+  top: 18px;
+  z-index: 45;
+  margin: 0;
+  padding: 5px 12px;
+  border: 0;
+  border-left: 3px solid var(--ig-accent, #e3b94a);
+  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
+  color: var(--ig-paper, #f4f1e8);
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: skewX(-12deg);
+  transition: background 140ms ease;
+}
+.battle-pause-chip:hover,
+.battle-pause-chip:focus-visible {
+  background: var(--ig-ink-acting, rgba(11, 10, 18, 0.86));
+}
