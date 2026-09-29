@@ -113,3 +113,49 @@ auto-learn with undo. Bailey picks (rules 9 and 10).
 - **Nothing is saved.** Every party-prep change (grid, gear, items) is gone after a reload,
   by design today; saving it would be the save-data class (deep review before deploy).
 - `SphereGridView.ts` is still over the 400-line house rule (811; it was 815 before).
+
+## CHECK (independent, 2026-09-29, did not build it)
+
+Verdict: **all six claimed fixes hold. No blockers.** Game case confirmed as FFX only
+(research/ffx-combat-core.md §10.1: travelled steps "one S.Lv per four nodes", "a removed
+lock becomes an empty node", other stats capped at 255; `src/ui/ffx2` untouched).
+
+How: live https://baileypillon.github.io/pyrefly-reprise/ (release 31a) against a fresh
+production build of 03160acc (`vite build`, served by `vite preview` on 8181, stopped
+afterwards). I wrote my own probe (reusing only the canvas-coordinate helper in `probes/lib.mjs`)
+and ran the same input on both builds: Chapter I, SPHERE GRID, mouse at 1600x900 and taps at
+390x844. Logs and JPEGs are in `D:/Tools/pyrefly-scratch/fb-0929/sphere-check/`.
+
+| # | Live (before) | Branch (after), same input |
+|---|---|---|
+| 1 | caption "moves here (1/4 S.Lv)", step took S.Lv 30 -> 29; the 2nd step was still priced 1/4 and took 0 | "1 S.Lv, covers 4 travelled steps", 30 -> 29; then "no S.Lv: 3 travelled steps already paid", 29 -> 29 (mouse and taps) |
+| 2 | opened Lv.2 lock hovered: "blocks the path until opened" | "Opened Lv.2 Lock — now an empty node"; drawn as an empty node |
+| 3 | after BACK and re-entry the lock was closed again, reopening cost a 2nd key (Lv.2 keys 2 -> 1 -> 0) | lock still open after re-entry, keys stay 1, the second press moves Tidus onto it (mouse and taps) |
+| 4 | HP +200: base 2200, max 2620; battle Tidus 2620/2620 | base 2400, max 2640 = 2400 x 110 // 100; the battle's `battleState()` Tidus 2640/2640 |
+| 5 | Shift + arrows: 9 of 9 cursor positions "Move onto the node first", Enter "Not linked to this node." | 0 of 9 out of reach; Enter "Tidus moves to HP +200. S.Lv 16." |
+| 6 | "Enter moves here" | "Enter or click moves here" |
+
+- Tests fail without the fix: the new test file run against the origin/main sources (with the new
+  caption module copied in so it imports) gave 11 failed and 1 passed. The one that passed is the
+  tooltip test of the new module itself. The failures are real assertions (quoted 0.25 vs 1,
+  'Lv.2' vs '', 2200 vs 2400, 256 vs 255, the cursor on node 119...).
+- `tsc --noEmit` is clean. Full suite, run once: 661 files passed; 2 engine benches timed out under
+  load (strategy-ffx2-bahamut, sin-fins-core-bench). Neither touches this code, and both pass
+  when re-run alone.
+- `git merge-tree` of merge-base, HEAD and origin/main: no conflicts (origin/main == merge-base 1c313c17).
+- Scope: only `src/ui/ffx/party-prep/*` changed, plus docs, tests and mockups. No option was
+  built into the game. The visible changes (the opened-lock drawing, the caption wording, the
+  walk cursor bound to the character's reach, the 255 stat cap) restore sourced or documented
+  intent. None is a pacing or feel change.
+
+Findings (none blocking):
+- minor: the Tidus field card under the grid stays at "HP 2420/2420" after the HP node until
+  the screen is re-entered, on live and on the branch alike. The battle and the STATS tab are
+  right. It is an old number that does not update, and this track did not fix it.
+- minor: on the phone the caption says "Enter or click" to a player who taps.
+- minor: standing on an opened lock, the caption says "Already open." rather than an
+  empty-node line.
+- minor: the model gained a 255 cap on non-pool stats. It is sourced (§10.1) and noted under
+  fix 4, but it is not one of the six defects listed.
+- disclosed, carried: on the phone the grid tab is still the desktop layout, letterboxed
+  (option B, waiting for Bailey).
