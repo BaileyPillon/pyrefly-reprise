@@ -1,0 +1,119 @@
+{
+  "mainSha": "52a431d0",
+  "bundle": "C_4T6wOX",
+  "deployedAt": "2026-09-29T18:32:37.226Z",
+  "liveUrl": "https://baileypillon.github.io/pyrefly-reprise/",
+  "artFiles": 700,
+  "policyVersion": 2,
+  "artifactHash": "e1d3b9da5c44dd4c317c1b2039fd9e75ed5e4bfbb168ada097a3ae7b91704c7c",
+  "review": "deep",
+  "reasons": [
+    "public/audio/manifest.json: asset loader and manifests is a shared system",
+    "src/audio/AudioManager.ts: audio routing is a shared system"
+  ],
+  "systems": [
+    "FFX HUD",
+    "asset loader and manifests",
+    "audio routing",
+    "music and sound files"
+  ],
+  "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin",
+    "ffx2-leblanc",
+    "seymour-anima-macalania",
+    "evrae-airship",
+    "yojimbo-cavern",
+    "seymour-natus",
+    "ffx2-fallen-aeons",
+    "seymour-omnis",
+    "ffx2-trema",
+    "isaaru-via-purifico",
+    "ffx2-den-of-woe",
+    "ffx2-ixion-djose",
+    "sin-fins-core",
+    "sin-face"
+  ],
+  "checks": [
+    "CHK-001",
+    "CHK-003",
+    "CHK-004",
+    "CHK-006",
+    "CHK-007",
+    "CHK-008",
+    "CHK-009",
+    "CHK-010",
+    "CHK-012",
+    "CHK-015",
+    "CHK-016",
+    "CHK-017",
+    "CHK-018",
+    "CHK-019",
+    "CHK-020",
+    "CHK-021",
+    "CHK-023",
+    "CHK-B1"
+  ],
+  "liveArtifact": {
+    "result": "PASS",
+    "checked": 73,
+    "at": "2026-09-29T18:32:37.226Z"
+  },
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "pending",
+      "requires": "exact-artifact verification and real-input smoke on the live URL"
+    },
+    {
+      "kind": "focused",
+      "status": "pending",
+      "requires": "acceptance of the changed area"
+    },
+    {
+      "kind": "deep",
+      "status": "pending",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "fd0ae96",
+        "8f48237",
+        "1b33971",
+        "5ddfde3",
+        "5348c2e3",
+        "d9decadb",
+        "76f587c3",
+        "bcbdb483",
+        "dc2669ac",
+        "e3b8c2a3",
+        "a999d133",
+        "1c22066e",
+        "5be4babe",
+        "fc7f1a20",
+        "e45ed3c1",
+        "1a680e41",
+        "b975397b",
+        "43dca986",
+        "ce05b02c",
+        "d8837334",
+        "a44297ca",
+        "ff3884fb",
+        "bc4e70ee",
+        "79adc4ff",
+        "d89541b6",
+        "be1e964a",
+        "6ea8528f",
+        "49005f73",
+        "1475ff6b"
+      ]
+    }
+  ],
+  "ownerOverride": {
+    "words": "all your recommendations, full speed ahead. i still have full weekly usage on my other account so do not delay please.",
+    "date": "2026-09-29T18:32:37.226Z",
+    "report": "critic/reviews/52a431d0-focused.json",
+    "changedArea": null
+  }
+}

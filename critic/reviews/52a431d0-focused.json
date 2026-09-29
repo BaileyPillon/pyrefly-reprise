@@ -1,0 +1,381 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-29T18:29:27.015Z",
+ "build": {
+  "mainSha": "52a431d0",
+  "bundle": "index-C_4T6wOX.js"
+ },
+ "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: title -> chapter select -> prep -> scene -> battle -> pause/resume -> results -> board runs to completion in FFX I and FFX-2 IV by keys at 1600x900 and by taps at 390x844, and every one of the 18 chapters reaches its battle with its cue playing; 0 page errors, 0 console errors, 0 failed audio requests.",
+  "Bailey's bug is fixed on the candidate: exactly one music track audible at any sample (0 overlap samples in 6,054; max 1 audible) with a running context and with the AudioContext held suspended until the scene (keys and taps, both games); superseded cues are stopped with when:0 at the frozen clock and end the moment the context runs, where live release 30 still schedules a fade from the frozen clock (when:0.65).",
+  "No regression against live release 30: the same cue plays at each step as live (chapter-select, scene, boss theme, pause, boss theme back 3 s after resume, victory), a release-30 save written by the live build loads unchanged (chapters and settings kept), the board still shows 18 cards, and the desktop FFX command list is unchanged.",
+  "Each item lands only where it is true (CHK-021): hotfix and R1 score both games; the pager FFX only, present at 390x844 and absent in FFX-2 and on desktop. One polish item inside the new pager; nothing to disclose at major."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "PASS",
+   "reason": "Technical half: tools/audio/qa.mjs --strict exits 0 on all 26 shipped cues (0 failing: LUFS -15.9 to -16.2, true peak -1.1 to -1.7 dBTP, seam step and flux OK, no clipping, manifest problems []); themes-audit 0 chapters depart from the cue map; every MP3 in dist-gate is byte-identical to public/audio and starts with an ID3 header; loop points and keys identical to live for all 26 cues (23 re-rendered, boss-vegnagun, scene-bevelle-underground and scene-macalania-temple identical); every cue the game asked for in every run returned HTTP 200 and decoded as prerendered (never synth). The human half is D-283, adopted by Bailey's words; the numeric listening score is CHK-B1 (UNVERIFIED below).",
+   "where": "both games; all 18 chapters; audio",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/qa-strict.json",
+    "critic/reviews/52a431d0-focused/themes-audit.out",
+    "critic/reviews/52a431d0-focused/chapters.json",
+    "critic/reviews/52a431d0-focused/livecmp/manifest-live.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Phone pager counter \"19–24 OF 27\" is 14 px (at the floor, not under), ▲/▼ glyphs in 44x44 buttons, row labels in full at 390x844; desktop 1600x900 and 2000x1012 Items list unchanged (pager display:none, inert ▼ mark shown).",
+   "where": "FFX IX Yojimbo; Items list; 390x844, 1600x900, 2000x1012",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/shots/paging-phone-ffx-02-page-with-fire-gem.jpg",
+    "critic/reviews/52a431d0-focused/shots/paging-desk-1600-01-items.jpg",
+    "critic/reviews/52a431d0-focused/shots/paging-desk-2000-01-items.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "NOT APPLICABLE",
+   "reason": "The advisor is not changed by this candidate (no src/engine/tactics diff); the Next Best Move card still names \"Fire Gem, in Items\" at 1600x900 and that row is reachable by the new pager on a phone (used by a real tap).",
+   "where": "FFX IX",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/shots/paging-desk-1600-01-items.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The pager is hidden on the top command menu (hidden:true, display:none) before Items opens and again after the Fire Gem turn resolves and the next menu opens; it is present only while a list longer than its window is shown.",
+   "where": "FFX IX; top menu -> Items -> next turn",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/paging-phone-ffx.json",
+    "critic/reviews/52a431d0-focused/shots/paging-phone-ffx-00-top.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "New copy is \"N–M OF T\" plus aria-labels \"Previous page of Items\" / \"Next page of Items\"; no developer vocabulary.",
+   "where": "FFX IX phone Items",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/shots/paging-phone-ffx-02-page-with-fire-gem.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "The pager lives in the command-list header between the list name and GUIDE, below the party rows; it covers no painted actor at 390x844.",
+   "where": "FFX IX phone",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/shots/paging-phone-ffx-02-page-with-fire-gem.jpg",
+    "critic/reviews/52a431d0-focused/D-286-B1.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Every row on every page is shown in full (Lightning Gem, Light Curtain, Healing Water, Mega Phoenix), and \"ITEMS\" and the counter sit on one line.",
+   "where": "FFX IX phone Items pages 1-5",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/paging-phone-ffx.json",
+    "critic/reviews/52a431d0-focused/shots/paging-phone-ffx-06-last-page.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "After each page tap the gold highlight moves to the same place on the new page (Potion -> Holy Water -> Ether -> Fire Gem) and the help slab follows (\"Deals fire damage to five random enemies\").",
+   "where": "FFX IX phone Items",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/paging-phone-ffx.json",
+    "critic/reviews/52a431d0-focused/shots/paging-phone-ffx-02-page-with-fire-gem.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "reason": "Every chapter's battle cue plays from the prerendered MP3 (audioDebug tracks[].source = \"prerendered\" for all 18 chapters); no synth fallback reached a player.",
+   "where": "both games; all 18 chapters; battle",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/chapters.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Changed flows driven by the player's own input: Enter/arrow keys at 1600x900 and taps at 390x844 from title to chapter select, prep, scene, battle, pause (P / pause chip tap) and resume, results, board; pager by real taps (three downs, one up, Fire Gem row tap used it for 571/567/618... fire damage on Yojimbo; page taps added 0 battle-log entries). The debug API only entered the chapter for the pager and 18-chapter runs, and only ran autobattle to results.",
+   "where": "FFX I, IX; FFX-2 IV",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/cand-keys-1600.json",
+    "critic/reviews/52a431d0-focused/cand-tap-390.json",
+    "critic/reviews/52a431d0-focused/cand-tap-390-ch1.json",
+    "critic/reviews/52a431d0-focused/cand-keys-susp-scene.json",
+    "critic/reviews/52a431d0-focused/cand-tap-susp-scene.json",
+    "critic/reviews/52a431d0-focused/paging-phone-ffx.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture is named by the screen the harness read (window.__pyrefly.app.current.name) at that moment; each battle capture waited for screen === \"battle\" and the command menu; one harness step that did not land (the Chapter I card double-tap when the card is already selected) was re-run with a fixed harness rather than captured.",
+   "where": "all runs",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/shots/cand-keys-1600-07-battle-battle_true.jpg",
+    "critic/reviews/52a431d0-focused/shots/cand-tap-390-ch1-08-battle-pause.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused pre-deploy review of the production candidate; the live check of this exact artifact is the separate \"live\" obligation after npm run deploy. The live site was opened only as the comparison (release 30, index-B0cfXTil.js).",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "Every audio path the game requested came from the manifest and returned 200 on the candidate (0 non-200 audio responses across 7 runs; manifest cue set identical to live, 26 cues).",
+   "where": "both games",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/chapters.json",
+    "critic/reviews/52a431d0-focused/cand-keys-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "Shipped audio proven to be audio: 26/26 music files start with an ID3 header, qa.mjs decoded every one (no silence, no clipping), and each played cue decoded in Chromium (music sources named by file with RMS -16 to -36 dBFS).",
+   "where": "audio files",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/qa-strict.json",
+    "critic/reviews/52a431d0-focused/cand-keys-1600.out"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The audio hotfix and R1 score are shared (\"both\"): verified in FFX (I, plus all 11 FFX battles) and FFX-2 (IV Bahamut, plus all 7 FFX-2 battles) with keys, taps and a held AudioContext: 0 overlap samples in 6,054 samples, at most one music track audible at once in every run.",
+   "where": "FFX I, FFX-2 IV",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/cand-keys-1600.json",
+    "critic/reviews/52a431d0-focused/cand-tap-390.json",
+    "critic/reviews/52a431d0-focused/cand-tap-390-ch1.json",
+    "critic/reviews/52a431d0-focused/cand-keys-susp-scene.json",
+    "critic/reviews/52a431d0-focused/cand-tap-susp-scene.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case per item from the sources: hotfix = both (one AudioManager slot for every screen; docs/handoff/hotfix-music-overlap.md); R1 soundtrack = both (D-283, shared pipeline); pager = FFX only (D-286; FFX-2 uses ui/ffx2/CommandMenu.ts, a different widget). Presence in FFX at 390x844 (pager, 44 px, counter) and absence in FFX-2 at 390x844 (0 .ffx-cmd-pager elements with the ITEM list open) and on FFX desktop (display:none, inert mark kept).",
+   "where": "FFX IX, FFX-2 IV",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/paging-phone-ffx.json",
+    "critic/reviews/52a431d0-focused/paging-phone-ffx2.json",
+    "critic/reviews/52a431d0-focused/shots/paging-phone-ffx2-01-items.jpg",
+    "critic/reviews/52a431d0-focused/paging-desk-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "The music slot was exercised through the real screens (title, chapter-select, party-prep, cutscene, battle, pause, results) rather than AudioManager unit calls; the pager through the real FFX battle HUD.",
+   "where": "FFX I, IX; FFX-2 IV",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/cand-keys-1600.json",
+    "critic/reviews/52a431d0-focused/cand-tap-390.json",
+    "critic/reviews/52a431d0-focused/cand-tap-390-ch1.json",
+    "critic/reviews/52a431d0-focused/cand-keys-susp-scene.json",
+    "critic/reviews/52a431d0-focused/cand-tap-susp-scene.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Agents cannot hear (rule 13): the listening score for the 23 re-rendered R1 cues is Bailey's, at docs/audio/audition.html. Owed, not a defect; D-283 was adopted by Bailey's words before the renders were heard in full.",
+   "where": "both games; score",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "52a431d0 / D:/pyrefly-rel28/dist-gate (index-C_4T6wOX.js, index-C3o-ua0R.css; built 14:08 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 52a431d0 (branch release-31a); vite preview 127.0.0.1:5731 (PID 66540, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 30, 1475ff6b, index-B0cfXTil.js)"
+  }
+ ],
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 1,
+  "waiting": 0,
+  "notes": "D-286 B1 (phone-B1-a.jpg) matched by composite D-286-B1.jpg except the TAP TO PAGE hint (FOC31-P01, polish). The audio tile \"Score and sound effects\" is judged by ear (CHK-B1, unverified). No other approved tile in the plan's groups changes: desktop layouts are untouched."
+ },
+ "issues": [
+  {
+   "id": "FOC31-P01",
+   "severity": "polish",
+   "title": "Phone pager: the \"TAP TO PAGE\" hint under the counter in the approved B1 mockup is not built",
+   "game": "FFX",
+   "chapter": "IX (yojimbo-cavern), any long FFX list",
+   "expected": "B1 target (docs/concepts/r29-options/shots/phone-B1-a.jpg): \"1–6 OF 27\" with \"TAP TO PAGE\" beneath it",
+   "observed": "Counter only (\"19–24 OF 27\"); buttons, 44 px size, dimming and placement match the target",
+   "repro": "Chapter IX at 390x844, tap Items",
+   "evidence": [
+    "critic/reviews/52a431d0-focused/D-286-B1.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "D-286 (rule 9, built as mocked)",
+   "where": "src/ui/ffx/CommandMenuPaging.ts pagerHtml (traced: no hint line)",
+   "fix": "Add the hint line under the counter on the first open of a paged list, or ask Bailey whether the hint was one of the properties he named",
+   "acceptanceCheck": "Composite target vs build at 390x844 shows the hint, or the tile reaction records that it was dropped",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "music overlap probe, keys 1600x900, running context, FFX I + FFX-2 IV full flow (title to board)",
+   "music overlap probe, taps 390x844, running context, FFX I + FFX-2 IV full flow",
+   "music overlap probe, AudioContext held suspended until the scene, keys 1600x900 and taps 390x844, FFX I + FFX-2 IV",
+   "live release 30 baseline, held context, keys, FFX I",
+   "all 18 chapters: battle cue HTTP 200, prerendered, single slot, no fading",
+   "audio qa --strict, themes-audit, manifest diff vs live (loops, keys, loudness)",
+   "phone pager by taps in FFX IX Items (5 pages, dimmed ends, row tap uses the item, page taps confirm nothing); absence in FFX-2 IV phone and FFX desktop 1600x900 / 2000x1012",
+   "release-30 save written by the live build loaded into the candidate (board, 18 cards)"
+  ],
+  "reused": [
+   {
+    "what": "pad input and the P,P pause-race routes of the music slot",
+    "from": "docs/handoff/hotfix-music-overlap.md CHECK (b7216d45, 2026-09-29)",
+    "why": "musicSlot.ts and AudioManager.ts in 52a431d0 are the b7216d45 files merged unchanged (git diff 1475ff6b..52a431d0 -- src/audio touches only those two files)"
+   },
+   {
+    "what": "Black Magic long-label stacking and Poison Fang target-bar flow on the pager",
+    "from": "docs/handoff/r31-paging.md checks (22ec8546, a48415fe)",
+    "why": "CommandMenuPaging.ts identical in the merge; this review re-proved the Items pager by taps"
+   }
+  ],
+  "notTested": [
+   "iOS Safari / Firefox real devices (the held-context probe stands in)",
+   "listening quality of the R1 renders (CHK-B1, Bailey)",
+   "every FFX long list other than Items (Black Magic reused from the builder check)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "live check of the deployed artifact (live obligation), then the deep review owed on the live build (carried from 1475ff6b); CHK-B1 listening score from Bailey at docs/audio/audition.html",
+ "elapsedMinutes": 27
+}
