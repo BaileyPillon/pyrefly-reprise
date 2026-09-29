@@ -709,3 +709,99 @@ clear 90 %. Link 4 was not re-run (untouched; its smoke passes).
 **Gates:** `npx tsc --noEmit` clean (only the untracked `zz-scratch` probes error); 21 Sin, Evrae, checkpoint, guide and
 tactics files pass (349 tests), and the 41 files that touch the carry or `onTurnEnd` pass (557); **FFX golden hashes
 408/408 identical** to `sin-S/base.json` (6 seeds, `FFX_HASH_SKIP=sin,sin-face,sin-fins-core`); `orphans.mjs` 24, none Sin.
+
+## CHECK 3 (independent, 2026-09-29 ~06:05 to 06:30 EDT; did not build any of it)
+
+Checked at `41c003fd` on `chapter-sin` in `D:/pyrefly-ch-sin`, by running the engine. The scratch probes are in
+`tests/unit/zz-check3/` (untracked, not committed); their output is in `D:/Tools/pyrefly-scratch/check3-sin/`
+(`ab.txt`, `slice.txt`, `tonic.txt`, `hash.txt`). The pre-fix baseline is `git archive 8e946e78` (CHECK 2's commit),
+unpacked at `D:/Tools/pyrefly-scratch/check3-sin/base`. **Verdict: the cause is confirmed, nothing sourced was tuned,
+every number reproduces, and no other chapter changed. No blockers. One major finding: the carry fix leaks a doubled
+max-HP ceiling into link 3.** Game case: FFX only.
+
+**The cause, reproduced on seeds 1 to 10 (HEAD engine; the old line is `8e946e78`'s `sinFinsPolicies.ts` unchanged).**
+- **The seam dump.** Carried and rested give the same `state.flags` on 10 of 10 seeds (0 diffs). Genais and the Core
+  are identical, and so are the five aeons (HP, MP, statuses). The chain's reused engine and a fresh engine on the same
+  carried entry win the same count (1/10 each). What differs is Auron's MP (4 to 88; the new line now drinks at the
+  Fins too), X-Potions (0 on every seed) and the carried statuses (`critical`, Haste, one Protect).
+- **The A/B that flips.** In link 3, with Genais down and Auron under 12 MP, the old line pressed Defend **623 times**
+  over 10 seeds; seed 4 pressed it 275 times and seed 5 270 times. The new line presses it **0** times, and its chain
+  wins go from 0/10 to 1/10. The mechanism is exactly the one the report describes. It is a bench-line defect, not an
+  engine one: the only helper change is `breakRow`, a diff of 30 lines.
+- **The attrition.** Factors put back one at a time on the new line's 10 entries: carried 1, MP 2, X-Potions alone 5,
+  every item 3, items and MP 6, rested 7 (of 10). This is the same ordering as the 200-seed §6 table. On the old line
+  the counts are 0 / 2 / 3 / 0 / 6 / 7. Refilling all items scoring below refilling the X-Potions alone shows up at
+  200 seeds (55.5 % against 62.5 %) and here as well, so it is real rather than noise. It is a line question and was
+  not investigated further.
+
+**Nothing sourced was tuned.** `git diff 8e946e78 HEAD -- src research` touches six places:
+- `BattleScreenSetup.ts`, the carry;
+- `ticks.ts`, the liveness hook;
+- `sin-genais-core.ts`, the OFF switch only (no stat, AI or chance);
+- the doc comments in `sin-genais-core-rules.ts` and `types.ts`;
+- the research cite in `research/ffx-sin.md`.
+
+**The 40-seed slice** (seeds 1 to 40, the bench's own `sweep` and `runWithRetries`) is inside sampling of every
+200-seed figure:
+
+| Reading | 40-seed slice | Reported (200) |
+|---|---:|---:|
+| sensible chain / S-12 off / S-8 NEAR | 10 / 18 / 9 of 40 (25 / 45 / 22.5 %) | 25.5 / 44 / 27.5 % |
+| sensible rested links 1 / 2 / 3 | 40 / 40 / 37 | 100 / 100 / 81 % |
+| card chain / S-12 off / S-8 NEAR | 1 / 19 / 1 of 40 (2.5 / 47.5 / 2.5 %) | 3 / 46.5 / 6.5 % |
+| card rested links 1 / 2 / 3 | 38 / 39 / 35 | 95 / 98 / 83 % |
+| naive chain | 0/40 | 0 % |
+| sensible retries off, within 1 / 3 / 5 (turns to a win) | 10 / 21 / 30 (991) | 25.5 / 55.5 / 76 % (948) |
+| sensible retries ON (link-3 retries won) | 10 / 23 / 30 (521; 20/81 = 24.7 %) | 25.5 / 57 / 74.5 % (531; 24 %) |
+| card retries off | 1 / 4 / 6 (1,255) | 3 / 7.5 / 11.5 % (1,291) |
+| card retries ON | 1 / 4 / 5 (819; 2/96) | 3 / 8 / 13.5 % (1,010) |
+
+Sensible rested link 3 at 37/40 is +1.9 sd from 81 %. That is high but plausible, and the other rows sit close.
+
+**The checkpoint option.**
+- It is OFF by default: `SIN_LINK3_CHECKPOINT = false`, `sinGenaisCoreGroup.checkpointOnEntry` is unset, and
+  `sin-checkpoint.test.ts` pins both.
+- It is labelled an adaptation in the switch's doc comment, `types.ts` and `CONTRACT-CHANGES.md`.
+- Its numbers reproduce (above). The report's reading holds: it saves time, not odds. For the card line, ON is not
+  even better on odds in the slice (5 against 6 within 5 attempts).
+
+**Other chapters: no change.**
+- Every FFX chapter's full chain was hashed, with every link carried through the screen's own `setupForNextLink`
+  (6 seeds, 902 decisions). All 9 hashes are identical between HEAD and `8e946e78`. The drive is attack-first, so the
+  coverage is shallow, but it does cross the new `onTurnEnd` hook on every turn.
+- `tests/unit/chapters` and `tests/unit/battle`: 113 files, 1,314 tests pass.
+
+**The minors are confirmed.**
+- `2627deed` is a true two-parent merge of `367741dc` (`--no-ff`).
+- The liveness hook runs in `ticks.ts#onTurnEnd` after the counters and the Poison tick.
+- `sin-core-engine.test.ts` asserts the same-action free and passes.
+
+**Gates.**
+- `npx tsc --noEmit`: clean for every tracked file. The only 4 errors are in the untracked `tests/unit/zz-scratch/`.
+- The 13 Sin files and `seymour-flux-poison-crossing`: 14 files, 163 tests pass, 3 skipped (the bench tables behind
+  the env).
+
+### Findings
+
+1. **Major (a defect in the new carry fix, in the player's favour; FFX Sin only).** `carriedFfxState` takes the
+   no-status ceiling from the previous link's build (`m.stats`). After seam 1→2 that build already holds the doubled
+   Max HP. So a Stamina Tonic drunk in link 1 whose status comes off in link 2 (a KO; the engine halves the live
+   ceiling back to the base) opens link 3 at the doubled ceiling with **no** `max-hp-x2`: a free, permanent Max HP x2.
+   - Reproduced (`tonic.txt`): Auron's base is 6,492 and link 1's Tonic doubles it to 12,984. The status comes off in
+     link 2, putting the live ceiling back at 6,492, yet link 3 opens at 12,984 with no status.
+   - In the bench (`slice.txt`): the card line's 40 chains show **9 member-entries into link 3** with a doubled ceiling
+     and no status. These are seeds 2, 9 (three members), 11, 13, 15 and 29 (two members), on Tidus, Yuna and Auron.
+     The sensible line never drinks a Tonic and has 0.
+   - Consequence: the card-line figures measured after `374df179` (chain 6/200, S-12 off 93/200) are flattered by some
+     unknown amount.
+   - Root fix: when the member has no `max-hp-x2` (or `max-mp-x2`), the ceiling is `live.stats.maxHp` (the engine has
+     already halved it), or the template's base, never `m.stats`. Add a test that loses the Tonic in link 2 and checks
+     link 3's ceiling. Then re-measure the card rows.
+2. **Minor (stale doc).** The header of `src/app/screens/BattleChainCheckpoint.ts` still says "FFX-2 only in effect ...
+   no FFX chapter ... ever produces a checkpoint". With `SIN_LINK3_CHECKPOINT` that is true only while the switch is
+   off, so the header should name the switch.
+3. **Minor (coverage).** The checkpoint tests call `checkpointAt` and `resumeSetup` and the bench's own retry loop. No
+   test drives the real flow (`BattleEncounterChain` into `BattleScreen`) with the switch on for an FFX chapter. That
+   is fine while it stays off, but the gap is owed before Bailey turns it on.
+4. **Note (not a defect).** Refilling every item scores below refilling the X-Potions alone (55.5 % against 62.5 % at
+   200 seeds; 3 against 5 of 10 here). It is a line effect that is worth one look if the attrition table goes to Bailey.
