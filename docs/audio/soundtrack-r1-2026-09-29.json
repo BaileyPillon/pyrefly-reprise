@@ -1,0 +1,2762 @@
+{
+ "what": "D-283: every Direction B cue through remaster R1 \"focus\" (tools/audio/remaster.py via remaster-ship.py), measured before shipping. Measurement only: no agent can hear (AGENTS.md rule 13).",
+ "game": "both",
+ "command": "node tools/audio/remaster-score.mjs render && node tools/audio/remaster-score.mjs measure && node tools/audio/remaster-score.mjs ship",
+ "gates": {
+  "lufs": [
+   -16.5,
+   -15.5
+  ],
+  "truePeakMax": -1,
+  "corr": [
+   0.6,
+   0.85
+  ],
+  "sideMid": [
+   -10,
+   -6
+  ],
+  "monoLossMin": -1,
+  "qa": "every tools/audio/qa.mjs per-cue gate (seam step, seam flux <= 2x the first entry into the loop, clipping, spectrum tilt, silence, manifest agreement)"
+ },
+ "measuredWith": "after/before: tools/audio/remaster-measure.py (corr = L/R Pearson, sideMid = side over mid dB, monoLoss = mono-sum power over mean channel power dB, bands = mid share per band 20-80/80-250/250-800/800-2.5k/2.5-6k/6-12k/12-16k/16k+ Hz); qa: tools/audio/qa.mjs",
+ "notShipped": [
+  {
+   "cue": "boss-vegnagun",
+   "reasons": [
+    "L/R correlation 0.553 outside 0.6-0.85",
+    "side -5.3 dB against the mid, outside -10..-6",
+    "mono-sum loss -1.1 dB, 1 dB or more"
+   ]
+  },
+  {
+   "cue": "scene-bevelle-underground",
+   "reasons": [
+    "L/R correlation 0.548 outside 0.6-0.85",
+    "side -5 dB against the mid, outside -10..-6",
+    "mono-sum loss -1.2 dB, 1 dB or more"
+   ]
+  }
+ ],
+ "cues": [
+  {
+   "cue": "battle-ffx",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/battle-ffx.wav",
+   "loop": {
+    "start": 6.4,
+    "end": 76.8,
+    "startSample": 282240,
+    "endSample": 3386880
+   },
+   "bpm": 150,
+   "xfadeSec": 0.4,
+   "samples": 3519180,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6518,
+    "samples": [
+     3519180,
+     3519180
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -8.2,
+    "sideGain": 0.486,
+    "eqDb": [
+     -1.5,
+     -0.4,
+     -0.7,
+     0.9,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0.2,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.28,
+     "fluxWrapVsMedian": 4.12,
+     "stepAtWrap": 0.0076
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.737,
+    "sideMidDb": -7.8,
+    "monoLossDb": -0.7,
+    "bands": [
+     -9.2,
+     -4.9,
+     -4.5,
+     -7.6,
+     -15.6,
+     -30.6,
+     -43.9,
+     -74.8
+    ],
+    "lra": 6.5
+   },
+   "before": {
+    "file": "music/battle-ffx.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.8,
+    "corr": 0.601,
+    "sideMidDb": -6,
+    "monoLossDb": -1,
+    "bands": [
+     -9,
+     -2.8,
+     -5.7,
+     -11.7,
+     -18.4,
+     -33.5,
+     -48,
+     -75.8
+    ],
+    "lra": 4.6
+   },
+   "qa": {
+    "lufs": -16.18,
+    "truePeakDb": -1.27,
+    "clipped": 0,
+    "seamStep": 0.00755,
+    "seamAllowed": 0.02287,
+    "seamOk": true,
+    "seamFluxRatio": 0.25,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/battle-ffx.mp3",
+    "loopStart": 6.4,
+    "loopEnd": 76.8,
+    "duration": 79.8,
+    "bytes": 1290870,
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "score": "0cf1d83fd2bd62cc"
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-dread",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-dread.wav",
+   "loop": {
+    "start": 10.666667,
+    "end": 85.333333,
+    "startSample": 470400,
+    "endSample": 3763200
+   },
+   "bpm": 90,
+   "xfadeSec": 0.6667,
+   "samples": 3895500,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6188,
+    "samples": [
+     3895500,
+     3895500
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -7.4,
+    "sideGain": 0.439,
+    "eqDb": [
+     -0.1,
+     2.3,
+     -2.7,
+     1.2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0.7,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1.57,
+     "fluxWrapVsMedian": 4.45,
+     "stepAtWrap": 0.0016
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.2,
+    "corr": 0.782,
+    "sideMidDb": -8.3,
+    "monoLossDb": -0.6,
+    "bands": [
+     -9,
+     -5.5,
+     -3.6,
+     -8.4,
+     -19.7,
+     -36.5,
+     -53.9,
+     -85.6
+    ],
+    "lra": 6.4
+   },
+   "before": {
+    "file": "music/boss-dread.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "corr": 0.085,
+    "sideMidDb": -0.7,
+    "monoLossDb": -2.7,
+    "bands": [
+     -12.5,
+     -4.2,
+     -3.6,
+     -9.2,
+     -22.6,
+     -41.1,
+     -59.6,
+     -93.1
+    ],
+    "lra": 7.5
+   },
+   "qa": {
+    "lufs": -16.16,
+    "truePeakDb": -1.17,
+    "clipped": 0,
+    "seamStep": 0.00163,
+    "seamAllowed": 0.00738,
+    "seamOk": true,
+    "seamFluxRatio": 0.35,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-dread.mp3",
+    "loopStart": 10.666667,
+    "loopEnd": 85.333333,
+    "duration": 88.3333,
+    "bytes": 1347754,
+    "lufs": -16,
+    "truePeakDb": -1.2
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-evrae",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-evrae.wav",
+   "loop": {
+    "start": 6.666667,
+    "end": 80,
+    "startSample": 294000,
+    "endSample": 3528000
+   },
+   "bpm": 144,
+   "xfadeSec": 0.4167,
+   "samples": 3660300,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6364,
+    "samples": [
+     3660300,
+     3660300
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -9.9,
+    "sideGain": 0.514,
+    "eqDb": [
+     -2,
+     -1.4,
+     0.5,
+     2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": -0.2,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.08,
+     "fluxWrapVsMedian": 5.41,
+     "stepAtWrap": 0.0047
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.733,
+    "sideMidDb": -7.5,
+    "monoLossDb": -0.7,
+    "bands": [
+     -9.2,
+     -4.5,
+     -4.8,
+     -7.8,
+     -15.9,
+     -31.9,
+     -48.5,
+     -79.1
+    ],
+    "lra": 10.4
+   },
+   "before": {
+    "file": "music/boss-evrae.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "corr": 0.671,
+    "sideMidDb": -7.1,
+    "monoLossDb": -0.8,
+    "bands": [
+     -12.6,
+     -3.8,
+     -3.5,
+     -12,
+     -18.5,
+     -34.1,
+     -49.3,
+     -76.7
+    ],
+    "lra": 8.4
+   },
+   "qa": {
+    "lufs": -16.18,
+    "truePeakDb": -1.29,
+    "clipped": 0,
+    "seamStep": 0.00467,
+    "seamAllowed": 0.02168,
+    "seamOk": true,
+    "seamFluxRatio": 0.67,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-evrae.mp3",
+    "loopStart": 6.666667,
+    "loopEnd": 80,
+    "duration": 83,
+    "bytes": 1310350,
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "score": "a660934bb598f632"
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-ffx2-aeon",
+   "game": "ffx2",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-ffx2-aeon.wav",
+   "loop": {
+    "start": 12,
+    "end": 114,
+    "startSample": 529200,
+    "endSample": 5027400
+   },
+   "bpm": 160,
+   "xfadeSec": 0.375,
+   "samples": 5159700,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.686,
+    "samples": [
+     5159700,
+     5159700
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -8.3,
+    "sideGain": 0.543,
+    "eqDb": [
+     -2,
+     -1.8,
+     2,
+     2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.02,
+     "fluxWrapVsMedian": 3.72,
+     "stepAtWrap": 0.0017
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.5,
+    "corr": 0.699,
+    "sideMidDb": -6.9,
+    "monoLossDb": -0.8,
+    "bands": [
+     -7,
+     -4.2,
+     -5.9,
+     -8.3,
+     -20.1,
+     -32.2,
+     -50.7,
+     -85
+    ],
+    "lra": 5.2
+   },
+   "before": {
+    "file": "music/boss-ffx2-aeon.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "corr": 0.578,
+    "sideMidDb": -5.7,
+    "monoLossDb": -1,
+    "bands": [
+     -6.6,
+     -2.4,
+     -9,
+     -11.6,
+     -20.1,
+     -32.6,
+     -47,
+     -77.3
+    ],
+    "lra": 4.2
+   },
+   "qa": {
+    "lufs": -16.14,
+    "truePeakDb": -1.48,
+    "clipped": 0,
+    "seamStep": 0.00174,
+    "seamAllowed": 0.04422,
+    "seamOk": true,
+    "seamFluxRatio": 1,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-ffx2-aeon.mp3",
+    "loopStart": 12,
+    "loopEnd": 114,
+    "duration": 117,
+    "bytes": 1837612,
+    "lufs": -16,
+    "truePeakDb": -1.5
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-jecht",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-jecht.wav",
+   "loop": {
+    "start": 6.666667,
+    "end": 107.121678,
+    "startSample": 294000,
+    "endSample": 4724066
+   },
+   "bpm": 144,
+   "xfadeSec": 0.4167,
+   "samples": 4856366,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.8196,
+    "samples": [
+     4856366,
+     4856366
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -8.4,
+    "sideGain": 0.452,
+    "eqDb": [
+     -0.7,
+     -1.2,
+     1.7,
+     -0.9,
+     -1.6,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0.3,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 3.52,
+     "fluxWrapVsMedian": 4.95,
+     "stepAtWrap": 0.0403
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.823,
+    "sideMidDb": -7.6,
+    "monoLossDb": -0.7,
+    "bands": [
+     -9.8,
+     -4.3,
+     -5.3,
+     -7.4,
+     -13.6,
+     -30.1,
+     -52.6,
+     -85.8
+    ],
+    "lra": 5.4
+   },
+   "before": {
+    "file": "music/boss-jecht.mp3",
+    "lufs": -15.8,
+    "truePeakDb": -2.9,
+    "corr": 0.75,
+    "sideMidDb": -7.1,
+    "monoLossDb": -0.8,
+    "bands": [
+     -10.2,
+     -5.1,
+     -6.9,
+     -7.2,
+     -7.1,
+     -31.4,
+     -51.8,
+     -85.1
+    ],
+    "lra": 5.9
+   },
+   "qa": {
+    "lufs": -16.13,
+    "truePeakDb": -1.28,
+    "clipped": 0,
+    "seamStep": 0.04029,
+    "seamAllowed": 0.07776,
+    "seamOk": true,
+    "seamFluxRatio": 0.32,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-jecht.mp3",
+    "loopStart": 6.666667,
+    "loopEnd": 107.121678,
+    "duration": 110.1217,
+    "bytes": 1785215,
+    "lufs": -16,
+    "truePeakDb": -1.3
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-seymour",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-seymour.wav",
+   "loop": {
+    "start": 7.272721,
+    "end": 98.661791,
+    "startSample": 320727,
+    "endSample": 4350985
+   },
+   "bpm": 132,
+   "xfadeSec": 0.4545,
+   "samples": 4483285,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6476,
+    "samples": [
+     4483285,
+     4483285
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -9.8,
+    "sideGain": 0.495,
+    "eqDb": [
+     0.9,
+     0.8,
+     -1.6,
+     -0.8,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0.6,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 3.55,
+     "fluxWrapVsMedian": 4.01,
+     "stepAtWrap": 0.0166
+    }
+   },
+   "after": {
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "corr": 0.773,
+    "sideMidDb": -8.3,
+    "monoLossDb": -0.6,
+    "bands": [
+     -9.3,
+     -5,
+     -4.3,
+     -7.5,
+     -17.6,
+     -34.9,
+     -50.4,
+     -81.7
+    ],
+    "lra": 7.3
+   },
+   "before": {
+    "file": "music/boss-seymour.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.6,
+    "corr": 0.624,
+    "sideMidDb": -6.3,
+    "monoLossDb": -0.9,
+    "bands": [
+     -9.1,
+     -3.1,
+     -6.3,
+     -8.9,
+     -16.7,
+     -35.9,
+     -50.4,
+     -74
+    ],
+    "lra": 5.3
+   },
+   "qa": {
+    "lufs": -16.07,
+    "truePeakDb": -1.42,
+    "clipped": 0,
+    "seamStep": 0.01663,
+    "seamAllowed": 0.05418,
+    "seamOk": true,
+    "seamFluxRatio": 0.86,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-seymour.mp3",
+    "loopStart": 7.272721,
+    "loopEnd": 98.661791,
+    "duration": 101.6618,
+    "bytes": 1584132,
+    "lufs": -15.9,
+    "truePeakDb": -1.4
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-seymour-macalania",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-seymour-macalania.wav",
+   "loop": {
+    "start": 7.619048,
+    "end": 121.904762,
+    "startSample": 336000,
+    "endSample": 5376000
+   },
+   "bpm": 126,
+   "xfadeSec": 0.4762,
+   "samples": 5508300,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6358,
+    "samples": [
+     5508300,
+     5508300
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -7.5,
+    "sideGain": 0.442,
+    "eqDb": [
+     -0.3,
+     1.5,
+     -1.4,
+     -1.3,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0.6,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 0.99,
+     "fluxWrapVsMedian": 2.68,
+     "stepAtWrap": 0.0281
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.2,
+    "corr": 0.779,
+    "sideMidDb": -8.2,
+    "monoLossDb": -0.6,
+    "bands": [
+     -9.1,
+     -5.2,
+     -4.4,
+     -7.3,
+     -15.5,
+     -27.6,
+     -42.9,
+     -75.1
+    ],
+    "lra": 7.4
+   },
+   "before": {
+    "file": "music/boss-seymour-macalania.mp3",
+    "lufs": -15.8,
+    "truePeakDb": -1.8,
+    "corr": 0.237,
+    "sideMidDb": -2.1,
+    "monoLossDb": -2.1,
+    "bands": [
+     -13,
+     -7.5,
+     -4,
+     -5,
+     -12.5,
+     -21.8,
+     -37.4,
+     -64.5
+    ],
+    "lra": 5.9
+   },
+   "qa": {
+    "lufs": -16.13,
+    "truePeakDb": -1.19,
+    "clipped": 0,
+    "seamStep": 0.02813,
+    "seamAllowed": 0.07575,
+    "seamOk": true,
+    "seamFluxRatio": 0.44,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-seymour-macalania.mp3",
+    "loopStart": 7.619048,
+    "loopEnd": 121.904762,
+    "duration": 124.9048,
+    "bytes": 2039515,
+    "lufs": -16,
+    "truePeakDb": -1.2,
+    "score": "90c06f737af9686a"
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-shuyin",
+   "game": "ffx2",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-shuyin.wav",
+   "loop": {
+    "start": 12.551406,
+    "end": 102.796009,
+    "startSample": 553517,
+    "endSample": 4533304
+   },
+   "bpm": 154,
+   "xfadeSec": 0.3896,
+   "samples": 4665647,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6446,
+    "samples": [
+     4665647,
+     4665647
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -6,
+    "sideGain": 0.445,
+    "eqDb": [
+     -2,
+     2.4,
+     -0.5,
+     2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": -0.1,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.84,
+     "fluxWrapVsMedian": 4.54,
+     "stepAtWrap": 0.0075
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.72,
+    "sideMidDb": -7.4,
+    "monoLossDb": -0.7,
+    "bands": [
+     -5.6,
+     -5.9,
+     -4.4,
+     -10.1,
+     -19.9,
+     -40.1,
+     -55.1,
+     -87.1
+    ],
+    "lra": 7.5
+   },
+   "before": {
+    "file": "music/boss-shuyin.mp3",
+    "lufs": -16,
+    "truePeakDb": -1.2,
+    "corr": 0.067,
+    "sideMidDb": -0.6,
+    "monoLossDb": -2.7,
+    "bands": [
+     -13,
+     -5.6,
+     -3.2,
+     -7.4,
+     -19.3,
+     -40.3,
+     -58.7,
+     -90.8
+    ],
+    "lra": 8.6
+   },
+   "qa": {
+    "lufs": -16.13,
+    "truePeakDb": -1.3,
+    "clipped": 0,
+    "seamStep": 0.00746,
+    "seamAllowed": 0.02279,
+    "seamOk": true,
+    "seamFluxRatio": 0.35,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-shuyin.mp3",
+    "loopStart": 12.551406,
+    "loopEnd": 102.796009,
+    "duration": 105.797,
+    "bytes": 1550987,
+    "lufs": -16,
+    "truePeakDb": -1.3
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-vegnagun",
+   "game": "ffx2",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-vegnagun.wav",
+   "loop": {
+    "start": 11.428571,
+    "end": 91.428571,
+    "startSample": 504000,
+    "endSample": 4032000
+   },
+   "bpm": 168,
+   "xfadeSec": 0.3571,
+   "samples": 4164300,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.8013,
+    "samples": [
+     4164300,
+     4164300
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -12.4,
+    "sideGain": 1.492,
+    "eqDb": [
+     -2,
+     3.1,
+     2,
+     2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": -2.1,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 0.98,
+     "fluxWrapVsMedian": 3.22,
+     "stepAtWrap": 0.0116
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.553,
+    "sideMidDb": -5.3,
+    "monoLossDb": -1.1,
+    "bands": [
+     -1.9,
+     -5.9,
+     -11.6,
+     -14.6,
+     -30,
+     -44.5,
+     -52.6,
+     -78.7
+    ],
+    "lra": 5.2
+   },
+   "before": {
+    "file": "music/boss-vegnagun.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.2,
+    "corr": 0.83,
+    "sideMidDb": -10.3,
+    "monoLossDb": -0.4,
+    "bands": [
+     -1.8,
+     -6.9,
+     -10.1,
+     -14.8,
+     -27.5,
+     -43.3,
+     -53.8,
+     -72.3
+    ],
+    "lra": 5.5
+   },
+   "qa": {
+    "lufs": -16.11,
+    "truePeakDb": -1.32,
+    "clipped": 0,
+    "seamStep": 0.01159,
+    "seamAllowed": 0.07852,
+    "seamOk": true,
+    "seamFluxRatio": 1,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-vegnagun.mp3",
+    "loopStart": 11.428571,
+    "loopEnd": 91.428571,
+    "duration": 94.4286,
+    "bytes": 1513140,
+    "lufs": -16,
+    "truePeakDb": -1.3
+   },
+   "pass": false,
+   "failures": [
+    "L/R correlation 0.553 outside 0.6-0.85",
+    "side -5.3 dB against the mid, outside -10..-6",
+    "mono-sum loss -1.1 dB, 1 dB or more"
+   ]
+  },
+  {
+   "cue": "boss-yojimbo",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-yojimbo.wav",
+   "loop": {
+    "start": 14.545465,
+    "end": 87.272721,
+    "startSample": 641455,
+    "endSample": 3848727
+   },
+   "bpm": 132,
+   "xfadeSec": 0.4545,
+   "samples": 3981027,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.7248,
+    "samples": [
+     3981027,
+     3981027
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -7.7,
+    "sideGain": 0.406,
+    "eqDb": [
+     2.7,
+     0.5,
+     -1.8,
+     -0.5,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0.7,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.58,
+     "fluxWrapVsMedian": 5.32,
+     "stepAtWrap": 0.007
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.4,
+    "corr": 0.807,
+    "sideMidDb": -8.5,
+    "monoLossDb": -0.6,
+    "bands": [
+     -9.7,
+     -4.8,
+     -4.1,
+     -7.7,
+     -19.2,
+     -36.1,
+     -51.4,
+     -84.3
+    ],
+    "lra": 6
+   },
+   "before": {
+    "file": "music/boss-yojimbo.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.1,
+    "corr": 0.067,
+    "sideMidDb": -0.6,
+    "monoLossDb": -2.7,
+    "bands": [
+     -11.8,
+     -6,
+     -3.7,
+     -6.7,
+     -14.6,
+     -34.4,
+     -51.4,
+     -88
+    ],
+    "lra": 7.3
+   },
+   "qa": {
+    "lufs": -16.16,
+    "truePeakDb": -1.37,
+    "clipped": 0,
+    "seamStep": 0.00702,
+    "seamAllowed": 0.02765,
+    "seamOk": true,
+    "seamFluxRatio": 0.36,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-yojimbo.mp3",
+    "loopStart": 14.545465,
+    "loopEnd": 87.272721,
+    "duration": 90.2727,
+    "bytes": 1357559,
+    "lufs": -16,
+    "truePeakDb": -1.4,
+    "score": "76abbdea8b282bdc"
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-yu-yevon",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-yu-yevon.wav",
+   "loop": {
+    "start": 6,
+    "end": 215.6,
+    "startSample": 264600,
+    "endSample": 9507960
+   },
+   "bpm": 40,
+   "xfadeSec": 1,
+   "samples": 9640260,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.7244,
+    "samples": [
+     9640260,
+     9640260
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -6.2,
+    "sideGain": 0.353,
+    "eqDb": [
+     2.1,
+     5.6,
+     -2,
+     -3.3,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.6,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1.46,
+     "fluxWrapVsMedian": 4.65,
+     "stepAtWrap": 0.0014
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.4,
+    "corr": 0.836,
+    "sideMidDb": -9.3,
+    "monoLossDb": -0.5,
+    "bands": [
+     -8.3,
+     -5.8,
+     -4.2,
+     -6.9,
+     -20.2,
+     -36,
+     -54.5,
+     -86.5
+    ],
+    "lra": 7.6
+   },
+   "before": {
+    "file": "music/boss-yu-yevon.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.2,
+    "corr": 0.131,
+    "sideMidDb": -1.1,
+    "monoLossDb": -2.5,
+    "bands": [
+     -13.9,
+     -9,
+     -2.5,
+     -5.8,
+     -21.5,
+     -40.2,
+     -59.9,
+     -99.3
+    ],
+    "lra": 10
+   },
+   "qa": {
+    "lufs": -16.14,
+    "truePeakDb": -1.4,
+    "clipped": 0,
+    "seamStep": 0.00143,
+    "seamAllowed": 0.02688,
+    "seamOk": true,
+    "seamFluxRatio": 0.57,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-yu-yevon.mp3",
+    "loopStart": 6,
+    "loopEnd": 215.6,
+    "duration": 218.6,
+    "bytes": 3231947,
+    "lufs": -16,
+    "truePeakDb": -1.4
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "boss-yunalesca",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-yunalesca.wav",
+   "loop": {
+    "start": 10.909093,
+    "end": 100.909093,
+    "startSample": 481091,
+    "endSample": 4450091
+   },
+   "bpm": 132,
+   "xfadeSec": 0.4545,
+   "samples": 4582391,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.5247,
+    "samples": [
+     4582391,
+     4582391
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -6.5,
+    "sideGain": 0.424,
+    "eqDb": [
+     3.8,
+     -0.3,
+     -1.9,
+     0.9,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.2,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1.48,
+     "fluxWrapVsMedian": 2.74,
+     "stepAtWrap": 0.015
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.766,
+    "sideMidDb": -8.5,
+    "monoLossDb": -0.6,
+    "bands": [
+     -10,
+     -4.6,
+     -4.1,
+     -8.1,
+     -20.1,
+     -36.5,
+     -50.3,
+     -82
+    ],
+    "lra": 8.3
+   },
+   "before": {
+    "file": "music/boss-yunalesca.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.9,
+    "corr": 0.036,
+    "sideMidDb": -0.3,
+    "monoLossDb": -2.9,
+    "bands": [
+     -17.6,
+     -3.1,
+     -3.8,
+     -11.3,
+     -22.2,
+     -40.1,
+     -58,
+     -92.2
+    ],
+    "lra": 6.8
+   },
+   "qa": {
+    "lufs": -16.08,
+    "truePeakDb": -1.31,
+    "clipped": 0,
+    "seamStep": 0.01498,
+    "seamAllowed": 0.06064,
+    "seamOk": true,
+    "seamFluxRatio": 0.38,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/boss-yunalesca.mp3",
+    "loopStart": 10.909093,
+    "loopEnd": 100.909093,
+    "duration": 103.9091,
+    "bytes": 1561799,
+    "lufs": -16,
+    "truePeakDb": -1.3
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "chapter-select",
+   "game": "both",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/chapter-select.wav",
+   "loop": {
+    "start": 4.285714,
+    "end": 74.77263,
+    "startSample": 189000,
+    "endSample": 3297473
+   },
+   "bpm": 84,
+   "xfadeSec": 0.7143,
+   "samples": 3429773,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.5542,
+    "samples": [
+     3429773,
+     3429773
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -5.1,
+    "sideGain": 0.369,
+    "eqDb": [
+     6,
+     3.2,
+     -2.9,
+     -1.5,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.9,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.2,
+     "fluxWrapVsMedian": 7.02,
+     "stepAtWrap": 0.0012
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.1,
+    "corr": 0.741,
+    "sideMidDb": -8.2,
+    "monoLossDb": -0.6,
+    "bands": [
+     -23.7,
+     -5.4,
+     -3.1,
+     -6.9,
+     -18.3,
+     -36.9,
+     -50.1,
+     -81.5
+    ],
+    "lra": 10.3
+   },
+   "before": {
+    "file": "music/chapter-select.mp3",
+    "lufs": -16,
+    "truePeakDb": -1.1,
+    "corr": 0.08,
+    "sideMidDb": -0.6,
+    "monoLossDb": -2.7,
+    "bands": [
+     -27.8,
+     -9.4,
+     -1.6,
+     -7.3,
+     -19.8,
+     -32.5,
+     -43.5,
+     -66
+    ],
+    "lra": 9.7
+   },
+   "qa": {
+    "lufs": -16.12,
+    "truePeakDb": -1.13,
+    "clipped": 0,
+    "seamStep": 0.00122,
+    "seamAllowed": 0.00347,
+    "seamOk": true,
+    "seamFluxRatio": 0.02,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/chapter-select.mp3",
+    "loopStart": 4.285714,
+    "loopEnd": 74.77263,
+    "duration": 77.7726,
+    "bytes": 1149713,
+    "lufs": -16,
+    "truePeakDb": -1.1
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "ending-ffx",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/ending-ffx.wav",
+   "loop": {
+    "start": 33.642358,
+    "end": 122.653741,
+    "startSample": 1483628,
+    "endSample": 5409030
+   },
+   "bpm": 58,
+   "xfadeSec": 1,
+   "samples": 5541330,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.5772,
+    "samples": [
+     5541330,
+     5541330
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -5.9,
+    "sideGain": 0.385,
+    "eqDb": [
+     6,
+     4.5,
+     -2.9,
+     -2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.4,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1.6,
+     "fluxWrapVsMedian": 6.53,
+     "stepAtWrap": 0.0236
+    }
+   },
+   "after": {
+    "lufs": -15.9,
+    "truePeakDb": -1.6,
+    "corr": 0.77,
+    "sideMidDb": -8.5,
+    "monoLossDb": -0.6,
+    "bands": [
+     -13.9,
+     -5.6,
+     -3.4,
+     -7.1,
+     -15.4,
+     -33.9,
+     -53,
+     -85.1
+    ],
+    "lra": 10.7
+   },
+   "before": {
+    "file": "music/ending-ffx.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "corr": 0.128,
+    "sideMidDb": -1.1,
+    "monoLossDb": -2.5,
+    "bands": [
+     -23.6,
+     -7.9,
+     -2.6,
+     -5.8,
+     -16.5,
+     -38.5,
+     -58.9,
+     -98.4
+    ],
+    "lra": 10.9
+   },
+   "qa": {
+    "lufs": -16.09,
+    "truePeakDb": -1.58,
+    "clipped": 0,
+    "seamStep": 0.02355,
+    "seamAllowed": 0.05504,
+    "seamOk": true,
+    "seamFluxRatio": 0.83,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/ending-ffx.mp3",
+    "loopStart": 33.642358,
+    "loopEnd": 122.653741,
+    "duration": 125.6537,
+    "bytes": 1879621,
+    "lufs": -15.9,
+    "truePeakDb": -1.6
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "ending-ffx2",
+   "game": "ffx2",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/ending-ffx2.wav",
+   "loop": {
+    "start": 12.082494,
+    "end": 116.331655,
+    "startSample": 532838,
+    "endSample": 5130226
+   },
+   "bpm": 84,
+   "xfadeSec": 0.7143,
+   "samples": 5262526,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.685,
+    "samples": [
+     5262526,
+     5262526
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -7.8,
+    "sideGain": 0.445,
+    "eqDb": [
+     0.6,
+     0,
+     -1,
+     -0.7,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0.5,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.49,
+     "fluxWrapVsMedian": 8.87,
+     "stepAtWrap": 0.0067
+    }
+   },
+   "after": {
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "corr": 0.771,
+    "sideMidDb": -8.2,
+    "monoLossDb": -0.6,
+    "bands": [
+     -9.7,
+     -4.7,
+     -4.6,
+     -7.4,
+     -16.1,
+     -34.1,
+     -49.1,
+     -80.9
+    ],
+    "lra": 9.7
+   },
+   "before": {
+    "file": "music/ending-ffx2.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.4,
+    "corr": 0.383,
+    "sideMidDb": -3.5,
+    "monoLossDb": -1.6,
+    "bands": [
+     -8.2,
+     -4.4,
+     -5.8,
+     -7.7,
+     -13.2,
+     -32.2,
+     -47.1,
+     -79
+    ],
+    "lra": 9.7
+   },
+   "qa": {
+    "lufs": -16.11,
+    "truePeakDb": -1.4,
+    "clipped": 0,
+    "seamStep": 0.00665,
+    "seamAllowed": 0.01946,
+    "seamOk": true,
+    "seamFluxRatio": 0.34,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/ending-ffx2.mp3",
+    "loopStart": 12.082494,
+    "loopEnd": 116.331655,
+    "duration": 119.3317,
+    "bytes": 1784233,
+    "lufs": -15.9,
+    "truePeakDb": -1.4
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "pause",
+   "game": "both",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/pause.wav",
+   "loop": {
+    "start": 5.217392,
+    "end": 46.956531,
+    "startSample": 230087,
+    "endSample": 2070783
+   },
+   "bpm": 46,
+   "xfadeSec": 1,
+   "samples": 2203083,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6057,
+    "samples": [
+     2203083,
+     2203083
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -3.5,
+    "sideGain": 0.302,
+    "eqDb": [
+     6,
+     6,
+     -3.6,
+     -1.5,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 3.1,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.01,
+     "fluxWrapVsMedian": 6.63,
+     "stepAtWrap": 0.0065
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.7,
+    "corr": 0.753,
+    "sideMidDb": -8.2,
+    "monoLossDb": -0.6,
+    "bands": [
+     -34.6,
+     -8.8,
+     -2.1,
+     -6.3,
+     -16.8,
+     -31.5,
+     -50.2,
+     -83.3
+    ],
+    "lra": 8.1
+   },
+   "before": {
+    "file": "music/pause.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -2.7,
+    "corr": 0.041,
+    "sideMidDb": -0.3,
+    "monoLossDb": -2.8,
+    "bands": [
+     -46.9,
+     -14,
+     -2.6,
+     -4,
+     -20,
+     -37.7,
+     -56.2,
+     -86
+    ],
+    "lra": 7.6
+   },
+   "qa": {
+    "lufs": -16.15,
+    "truePeakDb": -1.66,
+    "clipped": 0,
+    "seamStep": 0.00649,
+    "seamAllowed": 0.0169,
+    "seamOk": true,
+    "seamFluxRatio": 0.23,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/pause.mp3",
+    "loopStart": 5.217392,
+    "loopEnd": 46.956531,
+    "duration": 49.9565,
+    "bytes": 766112,
+    "lufs": -16,
+    "truePeakDb": -1.7
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "scene-bevelle-underground",
+   "game": "ffx2",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-bevelle-underground.wav",
+   "loop": {
+    "start": 19.2,
+    "end": 105.6,
+    "startSample": 846720,
+    "endSample": 4656960
+   },
+   "bpm": 100,
+   "xfadeSec": 0.6,
+   "samples": 4789260,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6751,
+    "samples": [
+     4789260,
+     4789260
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -9.8,
+    "sideGain": 1.031,
+    "eqDb": [
+     -2,
+     4.9,
+     2,
+     2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": -2.4,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1,
+     "fluxWrapVsMedian": 6.3,
+     "stepAtWrap": 0.0057
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.548,
+    "sideMidDb": -5,
+    "monoLossDb": -1.2,
+    "bands": [
+     -2.3,
+     -6.5,
+     -8.1,
+     -15.6,
+     -29.6,
+     -48.8,
+     -55.7,
+     -81
+    ],
+    "lra": 8.1
+   },
+   "before": {
+    "file": "music/scene-bevelle-underground.mp3",
+    "lufs": -16.1,
+    "truePeakDb": -1.2,
+    "corr": 0.835,
+    "sideMidDb": -10.5,
+    "monoLossDb": -0.4,
+    "bands": [
+     -2.2,
+     -5.6,
+     -10.2,
+     -15.7,
+     -28.8,
+     -47.1,
+     -55.9,
+     -82.7
+    ],
+    "lra": 6.5
+   },
+   "qa": {
+    "lufs": -16.11,
+    "truePeakDb": -1.34,
+    "clipped": 0,
+    "seamStep": 0.0057,
+    "seamAllowed": 0.04963,
+    "seamOk": true,
+    "seamFluxRatio": 1,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/scene-bevelle-underground.mp3",
+    "loopStart": 19.2,
+    "loopEnd": 105.6,
+    "duration": 108.6,
+    "bytes": 1626221,
+    "lufs": -16,
+    "truePeakDb": -1.3
+   },
+   "pass": false,
+   "failures": [
+    "L/R correlation 0.548 outside 0.6-0.85",
+    "side -5 dB against the mid, outside -10..-6",
+    "mono-sum loss -1.2 dB, 1 dB or more"
+   ]
+  },
+  {
+   "cue": "scene-dreams-end",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-dreams-end.wav",
+   "loop": {
+    "start": 12.63161,
+    "end": 101.052653,
+    "startSample": 557054,
+    "endSample": 4456422
+   },
+   "bpm": 76,
+   "xfadeSec": 0.7895,
+   "samples": 4588721,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6147,
+    "samples": [
+     4588721,
+     4588721
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -8.2,
+    "sideGain": 0.409,
+    "eqDb": [
+     6,
+     5.9,
+     -2.4,
+     -3.4,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.3,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 3.54,
+     "fluxWrapVsMedian": 8.1,
+     "stepAtWrap": 0.0097
+    }
+   },
+   "after": {
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "corr": 0.797,
+    "sideMidDb": -8.5,
+    "monoLossDb": -0.6,
+    "bands": [
+     -12.7,
+     -5.8,
+     -3.6,
+     -6.6,
+     -15.9,
+     -35.2,
+     -51.5,
+     -84.2
+    ],
+    "lra": 17.1
+   },
+   "before": {
+    "file": "music/scene-dreams-end.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.1,
+    "corr": 0.094,
+    "sideMidDb": -0.8,
+    "monoLossDb": -2.6,
+    "bands": [
+     -19.1,
+     -10.8,
+     -3,
+     -4.1,
+     -17.8,
+     -37.2,
+     -51.6,
+     -95.8
+    ],
+    "lra": 16.2
+   },
+   "qa": {
+    "lufs": -16.09,
+    "truePeakDb": -1.33,
+    "clipped": 0,
+    "seamStep": 0.00965,
+    "seamAllowed": 0.01793,
+    "seamOk": true,
+    "seamFluxRatio": 0.17,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/scene-dreams-end.mp3",
+    "loopStart": 12.63161,
+    "loopEnd": 101.052653,
+    "duration": 104.0526,
+    "bytes": 1556596,
+    "lufs": -15.9,
+    "truePeakDb": -1.3
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "scene-fahrenheit",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-fahrenheit.wav",
+   "loop": {
+    "start": 9.230771,
+    "end": 73.846145,
+    "startSample": 407077,
+    "endSample": 3256615
+   },
+   "bpm": 104,
+   "xfadeSec": 0.5769,
+   "samples": 3388915,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.5939,
+    "samples": [
+     3388915,
+     3388915
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -6.9,
+    "sideGain": 0.423,
+    "eqDb": [
+     2.1,
+     3.7,
+     -1.5,
+     -3.2,
+     2.2,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.3,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1.95,
+     "fluxWrapVsMedian": 6.59,
+     "stepAtWrap": 0.007
+    }
+   },
+   "after": {
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "corr": 0.788,
+    "sideMidDb": -8.7,
+    "monoLossDb": -0.5,
+    "bands": [
+     -8.9,
+     -5.4,
+     -4.7,
+     -6.8,
+     -14.7,
+     -32.4,
+     -46.8,
+     -78.2
+    ],
+    "lra": 14.4
+   },
+   "before": {
+    "file": "music/scene-fahrenheit.mp3",
+    "lufs": -16,
+    "truePeakDb": -1.2,
+    "corr": 0.122,
+    "sideMidDb": -1.1,
+    "monoLossDb": -2.5,
+    "bands": [
+     -13,
+     -6.5,
+     -4.1,
+     -5.7,
+     -11.5,
+     -29.5,
+     -46.8,
+     -82.3
+    ],
+    "lra": 12.4
+   },
+   "qa": {
+    "lufs": -16.13,
+    "truePeakDb": -1.28,
+    "clipped": 0,
+    "seamStep": 0.00698,
+    "seamAllowed": 0.01011,
+    "seamOk": true,
+    "seamFluxRatio": 0.43,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/scene-fahrenheit.mp3",
+    "loopStart": 9.230771,
+    "loopEnd": 73.846145,
+    "duration": 76.8461,
+    "bytes": 1193323,
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "score": "6f81c0f19ff8fa2c"
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "scene-farplane",
+   "game": "ffx2",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-farplane.wav",
+   "loop": {
+    "start": 20.869569,
+    "end": 104.347823,
+    "startSample": 920348,
+    "endSample": 4601739
+   },
+   "bpm": 92,
+   "xfadeSec": 0.6522,
+   "samples": 4734039,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.658,
+    "samples": [
+     4734039,
+     4734039
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -6.8,
+    "sideGain": 0.392,
+    "eqDb": [
+     1.3,
+     2.3,
+     -2.9,
+     1.4,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 0.7,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 2.38,
+     "fluxWrapVsMedian": 4.87,
+     "stepAtWrap": 0.0141
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.7,
+    "corr": 0.82,
+    "sideMidDb": -8.6,
+    "monoLossDb": -0.6,
+    "bands": [
+     -9.2,
+     -5.7,
+     -3.5,
+     -8.3,
+     -17.6,
+     -40.5,
+     -55.1,
+     -85.2
+    ],
+    "lra": 3.2
+   },
+   "before": {
+    "file": "music/scene-farplane.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -2.1,
+    "corr": 0.145,
+    "sideMidDb": -1.3,
+    "monoLossDb": -2.4,
+    "bands": [
+     -15.5,
+     -7,
+     -2.5,
+     -6.9,
+     -20.5,
+     -40.9,
+     -52.8,
+     -86.8
+    ],
+    "lra": 2.8
+   },
+   "qa": {
+    "lufs": -16.13,
+    "truePeakDb": -1.73,
+    "clipped": 0,
+    "seamStep": 0.01406,
+    "seamAllowed": 0.04328,
+    "seamOk": true,
+    "seamFluxRatio": 0.66,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/scene-farplane.mp3",
+    "loopStart": 20.869569,
+    "loopEnd": 104.347823,
+    "duration": 107.3478,
+    "bytes": 1658760,
+    "lufs": -16,
+    "truePeakDb": -1.7
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "scene-gagazet",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-gagazet.wav",
+   "loop": {
+    "start": 40,
+    "end": 103.333333,
+    "startSample": 1764000,
+    "endSample": 4557000
+   },
+   "bpm": 72,
+   "xfadeSec": 0.8333,
+   "samples": 4689300,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.5992,
+    "samples": [
+     4689300,
+     4689300
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -5.1,
+    "sideGain": 0.465,
+    "eqDb": [
+     -2,
+     -1.2,
+     0.4,
+     2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.1,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1,
+     "fluxWrapVsMedian": 5.33,
+     "stepAtWrap": 0.001
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.1,
+    "corr": 0.728,
+    "sideMidDb": -7.3,
+    "monoLossDb": -0.7,
+    "bands": [
+     -7.1,
+     -4.3,
+     -4.5,
+     -11.3,
+     -23.2,
+     -38.6,
+     -51,
+     -82.8
+    ],
+    "lra": 11.1
+   },
+   "before": {
+    "file": "music/scene-gagazet.mp3",
+    "lufs": -16.1,
+    "truePeakDb": -1.2,
+    "corr": 0.103,
+    "sideMidDb": -0.9,
+    "monoLossDb": -2.6,
+    "bands": [
+     -10,
+     -3.5,
+     -4.1,
+     -11.7,
+     -23,
+     -40.6,
+     -56.1,
+     -93.7
+    ],
+    "lra": 11.8
+   },
+   "qa": {
+    "lufs": -16.12,
+    "truePeakDb": -1.1,
+    "clipped": 0,
+    "seamStep": 0.00095,
+    "seamAllowed": 0.01337,
+    "seamOk": true,
+    "seamFluxRatio": 0.14,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/scene-gagazet.mp3",
+    "loopStart": 40,
+    "loopEnd": 103.333333,
+    "duration": 106.3333,
+    "bytes": 1542704,
+    "lufs": -16,
+    "truePeakDb": -1.1
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "scene-zanarkand-dome",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-zanarkand-dome.wav",
+   "loop": {
+    "start": 10,
+    "end": 126.165193,
+    "startSample": 441000,
+    "endSample": 5563885
+   },
+   "bpm": 48,
+   "xfadeSec": 1,
+   "samples": 5696185,
+   "tpMax": -1.3,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.5105,
+    "samples": [
+     5696185,
+     5696185
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -5.9,
+    "sideGain": 0.386,
+    "eqDb": [
+     6,
+     4.2,
+     -2.9,
+     -1.8,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.8,
+    "ceilDb": -1.8,
+    "seam": {
+     "fluxWrapVsEntry": 1.16,
+     "fluxWrapVsMedian": 3.26,
+     "stepAtWrap": 0.0119
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.4,
+    "corr": 0.757,
+    "sideMidDb": -8.4,
+    "monoLossDb": -0.6,
+    "bands": [
+     -12.2,
+     -5.7,
+     -3.4,
+     -7.1,
+     -17.7,
+     -36.4,
+     -53.4,
+     -84.6
+    ],
+    "lra": 16.6
+   },
+   "before": {
+    "file": "music/scene-zanarkand-dome.mp3",
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "corr": 0.101,
+    "sideMidDb": -0.9,
+    "monoLossDb": -2.6,
+    "bands": [
+     -20.3,
+     -6.3,
+     -2.6,
+     -7.1,
+     -18.6,
+     -41.5,
+     -64.1,
+     -96.2
+    ],
+    "lra": 15.1
+   },
+   "qa": {
+    "lufs": -16.15,
+    "truePeakDb": -1.42,
+    "clipped": 0,
+    "seamStep": 0.01193,
+    "seamAllowed": 0.02666,
+    "seamOk": true,
+    "seamFluxRatio": 0.53,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/scene-zanarkand-dome.mp3",
+    "loopStart": 10,
+    "loopEnd": 126.165193,
+    "duration": 129.1652,
+    "bytes": 1813040,
+    "lufs": -16,
+    "truePeakDb": -1.4
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "title",
+   "game": "both",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/title.wav",
+   "loop": {
+    "start": 8.275873,
+    "end": 94.826893,
+    "startSample": 364966,
+    "endSample": 4181866
+   },
+   "bpm": 58,
+   "xfadeSec": 1,
+   "samples": 4314166,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6316,
+    "samples": [
+     4314166,
+     4314166
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -6.1,
+    "sideGain": 0.367,
+    "eqDb": [
+     6,
+     5.1,
+     -3.2,
+     -1.8,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.4,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1.42,
+     "fluxWrapVsMedian": 6.25,
+     "stepAtWrap": 0.0313
+    }
+   },
+   "after": {
+    "lufs": -15.9,
+    "truePeakDb": -1.3,
+    "corr": 0.788,
+    "sideMidDb": -8.6,
+    "monoLossDb": -0.6,
+    "bands": [
+     -19.5,
+     -5.4,
+     -3,
+     -7.2,
+     -18.8,
+     -35.5,
+     -51.3,
+     -81.1
+    ],
+    "lra": 14.8
+   },
+   "before": {
+    "file": "music/title.mp3",
+    "lufs": -16.1,
+    "truePeakDb": -1.3,
+    "corr": 0.135,
+    "sideMidDb": -1.1,
+    "monoLossDb": -2.5,
+    "bands": [
+     -25.3,
+     -8.9,
+     -2,
+     -6.4,
+     -19.1,
+     -29.9,
+     -41.7,
+     -60.5
+    ],
+    "lra": 14
+   },
+   "qa": {
+    "lufs": -16.07,
+    "truePeakDb": -1.34,
+    "clipped": 0,
+    "seamStep": 0.03132,
+    "seamAllowed": 0.06171,
+    "seamOk": true,
+    "seamFluxRatio": 0.92,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/title.mp3",
+    "loopStart": 8.275873,
+    "loopEnd": 94.826893,
+    "duration": 97.8269,
+    "bytes": 1355196,
+    "lufs": -15.9,
+    "truePeakDb": -1.3
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "victory-ffx",
+   "game": "ffx",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/victory-ffx.wav",
+   "loop": {
+    "start": 8.146508,
+    "end": 72.146508,
+    "startSample": 359261,
+    "endSample": 3181661
+   },
+   "bpm": 120,
+   "xfadeSec": 0.5,
+   "samples": 3313961,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.6654,
+    "samples": [
+     3313961,
+     3313961
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -6.3,
+    "sideGain": 0.369,
+    "eqDb": [
+     3.1,
+     6,
+     -2.4,
+     -3,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": 1.6,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 1.01,
+     "fluxWrapVsMedian": 3.01,
+     "stepAtWrap": 0.0037
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.815,
+    "sideMidDb": -9,
+    "monoLossDb": -0.5,
+    "bands": [
+     -8.4,
+     -6.9,
+     -3.9,
+     -6.8,
+     -14.8,
+     -33.3,
+     -49,
+     -80.9
+    ],
+    "lra": 9.4
+   },
+   "before": {
+    "file": "music/victory-ffx.mp3",
+    "lufs": -16,
+    "truePeakDb": -1.2,
+    "corr": 0.154,
+    "sideMidDb": -1.3,
+    "monoLossDb": -2.4,
+    "bands": [
+     -13.3,
+     -10.9,
+     -2.3,
+     -6.2,
+     -13.4,
+     -31.3,
+     -48.4,
+     -68.8
+    ],
+    "lra": 10.1
+   },
+   "qa": {
+    "lufs": -16.19,
+    "truePeakDb": -1.32,
+    "clipped": 0,
+    "seamStep": 0.00367,
+    "seamAllowed": 0.04937,
+    "seamOk": true,
+    "seamFluxRatio": 0.89,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/victory-ffx.mp3",
+    "loopStart": 8.146508,
+    "loopEnd": 72.146508,
+    "duration": 75.1465,
+    "bytes": 1133666,
+    "lufs": -16,
+    "truePeakDb": -1.3
+   },
+   "pass": true,
+   "failures": []
+  },
+  {
+   "cue": "victory-ffx2",
+   "game": "ffx2",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/victory-ffx2.wav",
+   "loop": {
+    "start": 7.5,
+    "end": 67.5,
+    "startSample": 330750,
+    "endSample": 2976750
+   },
+   "bpm": 128,
+   "xfadeSec": 0.4688,
+   "samples": 3109050,
+   "alignment": {
+    "lag": 0,
+    "corr": 0.7011,
+    "samples": [
+     3109050,
+     3109050
+    ]
+   },
+   "chain": {
+    "repairedSideMidDb": -10,
+    "sideGain": 0.699,
+    "eqDb": [
+     -2,
+     0.3,
+     2,
+     2,
+     3,
+     0,
+     0,
+     0
+    ],
+    "gainDb": -0.9,
+    "ceilDb": -1.5,
+    "seam": {
+     "fluxWrapVsEntry": 0.96,
+     "fluxWrapVsMedian": 1.92,
+     "stepAtWrap": 0.0199
+    }
+   },
+   "after": {
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.654,
+    "sideMidDb": -6.4,
+    "monoLossDb": -0.9,
+    "bands": [
+     -5,
+     -5,
+     -5.5,
+     -11.2,
+     -22.4,
+     -30.3,
+     -39.5,
+     -60.9
+    ],
+    "lra": 4.5
+   },
+   "before": {
+    "file": "music/victory-ffx2.mp3",
+    "lufs": -16,
+    "truePeakDb": -1.3,
+    "corr": 0.616,
+    "sideMidDb": -6.2,
+    "monoLossDb": -0.9,
+    "bands": [
+     -6.7,
+     -2.9,
+     -6.8,
+     -12.2,
+     -21.8,
+     -23.7,
+     -37.8,
+     -56.5
+    ],
+    "lra": 3.5
+   },
+   "qa": {
+    "lufs": -16.05,
+    "truePeakDb": -1.26,
+    "clipped": 0,
+    "seamStep": 0.01993,
+    "seamAllowed": 0.08385,
+    "seamOk": true,
+    "seamFluxRatio": 0.3,
+    "seamFluxOk": true,
+    "balanceOk": true,
+    "failures": []
+   },
+   "manifestEntry": {
+    "file": "music/victory-ffx2.mp3",
+    "loopStart": 7.5,
+    "loopEnd": 67.5,
+    "duration": 70.5,
+    "bytes": 1148586,
+    "lufs": -16,
+    "truePeakDb": -1.3
+   },
+   "pass": true,
+   "failures": []
+  }
+ ],
+ "seamSecondary": {
+  "note": "Not a gate. tools/audio/remaster.py seam() (log-magnitude flux over 2048-sample frames across the wrap, against the first entry into the loop; the figure remaster.py prints) on three files per cue: R1 as shipped, the Direction B candidate Bailey heard (public/audio/candidates/direction-b-2026-09-27), and today's sampled render. The gate is qa.mjs's seam flux (1024-sample frames, reference = max of the entry, the cue median and its 90th percentile), which every R1 cue passes at 1.0x or under. Values over 2 are where an ear should listen to the wrap first; most of them were already over 2 in the Direction B candidate.",
+  "cues": {
+   "battle-ffx": {
+    "r1": 2.28,
+    "candidateB": 2.4,
+    "today": 0.3
+   },
+   "boss-dread": {
+    "r1": 1.57,
+    "candidateB": 1.15,
+    "today": 0.84
+   },
+   "boss-evrae": {
+    "r1": 2.08,
+    "candidateB": 0.93,
+    "today": 0.3
+   },
+   "boss-ffx2-aeon": {
+    "r1": 2.02,
+    "candidateB": 2.07,
+    "today": 0.97
+   },
+   "boss-jecht": {
+    "r1": 3.52,
+    "candidateB": 2.98,
+    "today": 0.83
+   },
+   "boss-seymour": {
+    "r1": 3.55,
+    "candidateB": 2.61,
+    "today": 0.38
+   },
+   "boss-seymour-macalania": {
+    "r1": 0.99,
+    "candidateB": 1.25,
+    "today": 1.6
+   },
+   "boss-shuyin": {
+    "r1": 2.84,
+    "candidateB": 2.37,
+    "today": 0.74
+   },
+   "boss-vegnagun": {
+    "r1": 0.98,
+    "candidateB": 1.05,
+    "today": 1.08
+   },
+   "boss-yojimbo": {
+    "r1": 2.58,
+    "candidateB": 1.74,
+    "today": 1.31
+   },
+   "boss-yu-yevon": {
+    "r1": 1.46,
+    "candidateB": 2.03,
+    "today": 1.62
+   },
+   "boss-yunalesca": {
+    "r1": 1.48,
+    "candidateB": 2.72,
+    "today": 2.12
+   },
+   "chapter-select": {
+    "r1": 2.2,
+    "candidateB": 1.96,
+    "today": 0.64
+   },
+   "ending-ffx": {
+    "r1": 1.6,
+    "candidateB": 0.93,
+    "today": 0.48
+   },
+   "ending-ffx2": {
+    "r1": 2.49,
+    "candidateB": 2.58,
+    "today": 0.98
+   },
+   "pause": {
+    "r1": 2.01,
+    "candidateB": 1.81,
+    "today": 0.6
+   },
+   "scene-bevelle-underground": {
+    "r1": 1,
+    "candidateB": 1.18,
+    "today": 1.09
+   },
+   "scene-dreams-end": {
+    "r1": 3.54,
+    "candidateB": 3.48,
+    "today": 0.54
+   },
+   "scene-fahrenheit": {
+    "r1": 1.95,
+    "candidateB": 2.51,
+    "today": 1.22
+   },
+   "scene-farplane": {
+    "r1": 2.38,
+    "candidateB": 1.4,
+    "today": 1.47
+   },
+   "scene-gagazet": {
+    "r1": 1,
+    "candidateB": 1,
+    "today": 1.1
+   },
+   "scene-zanarkand-dome": {
+    "r1": 1.16,
+    "candidateB": 2.41,
+    "today": 0.49
+   },
+   "title": {
+    "r1": 1.42,
+    "candidateB": 0.86,
+    "today": 0.7
+   },
+   "victory-ffx": {
+    "r1": 1.01,
+    "candidateB": 1.07,
+    "today": 2.86
+   },
+   "victory-ffx2": {
+    "r1": 0.96,
+    "candidateB": 2.02,
+    "today": 3.07
+   }
+  }
+ }
+}

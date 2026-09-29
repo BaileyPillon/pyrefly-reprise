@@ -111,6 +111,33 @@ a credit:
 D-278: the driver picked sketch A in R1 from measurements, not by ear (rule 13); Bailey can swap
 it. Nothing here changes the credits below.
 
+### The whole score in R1 (both games, 2026-09-29, D-283)
+
+Bailey, 2026-09-29: "all your recommendations, full speed ahead." Twenty-three more cues now
+ship the same three steps as `scene-macalania-temple` above (every cue in
+`docs/audio/soundtrack-r1-2026-09-29.json` with `"pass": true`): the cue's own score rendered
+with the libraries on this page, the Direction B restyle of that render
+(`docs/audio/direction-b-2026-09-27.md`; lossless masters in
+`D:/Tools/pyrefly-scratch/direction-b-0927-work/master/`), and remaster R1 "focus"
+(`tools/audio/remaster-score.mjs` over `remaster-ship.py` and `remaster.py`: numpy and the
+ffmpeg on this machine, no impulse-response file, no network call, no download).
+`boss-vegnagun` and `scene-bevelle-underground` failed a stereo gate in R1 and still ship their
+plain sampled render.
+
+**The ACE-Step model's licence: Apache-2.0.** Read on 2026-09-29 from the Hugging Face API:
+`ACE-Step/ACE-Step-v1-3.5B` (sha 82cd0d7b, card and tags `license:apache-2.0`) and the ComfyUI
+repackage `Comfy-Org/ACE-Step_ComfyUI_repackaged` (sha e39503e8, `license:apache-2.0`, which
+lists `all_in_one/ace_step_v1_3.5b.safetensors`, the file name on this disk). Apache-2.0 puts
+its notice conditions on redistributing the model, which this project does not do; it claims
+nothing over the model's output. A courtesy line for the credits screen, not an obligation:
+
+```
+Music restyled with ACE-Step v1 3.5B (ACE Studio and StepFun) — Apache-2.0
+```
+
+Open: the on-disk checkpoint's hash was not compared with the repackage's published file, so
+"the file on disk is that upload" rests on the file name and `docs/audio/downloads-2026-09-27.md`.
+
 ## What must appear in the game credits
 
 Two entries, verbatim:
