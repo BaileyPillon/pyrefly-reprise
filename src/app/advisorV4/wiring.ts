@@ -10,8 +10,10 @@
  *    re-submit with the result starts the search);
  *  - `backOutOfMinigame` that returned the turn to the menu.
  *
- * The budget follows the device: `mini` on a phone (the upright phone layout or a coarse pointer),
- * `lean` on a desktop. The worker is terminated when the HUD unmounts.
+ * The budget is `mini` on every device (the driver's decision, 2026-09-29: mini passes every gate,
+ * lean fails Chapter III's fork-tested lethal saves on seed 35; docs/handoff/advisor-v4.md,
+ * "SWITCHED ON"). `lean` stays selectable in code for benches (pass `{ budget: 'lean' }`).
+ * The worker is terminated when the HUD unmounts.
  *
  * Off (returns `null`) for FFX-2 and FF7, when `ADVISOR_V4_FFX` is off, with no HUD card, or where
  * there is no `Worker` (tests, old browsers): the card is then v3's, exactly as before.
@@ -23,7 +25,6 @@ import type { BattleEngine, BattleEvent, BattleSetup, Command, GameId } from '..
 import { FFXEngine } from '../../battle/ffx/index.ts';
 import { advisorV4On } from '../../engine/tactics/advisor-v4/switch.ts';
 import type { MoveAdvisorLookAhead } from '../../ui/common/MoveAdvisor.ts';
-import { PHONE_BATTLE_QUERY } from '../../ui/common/phoneBattle.ts';
 import { AdvisorV4Host, type HostOptions, type WorkerLike } from './host.ts';
 
 /** The search's time cap, in ms (the worker stops there; the host kills a silent one a second later). */
@@ -34,13 +35,8 @@ interface CardOwner {
   unmount?: () => void;
 }
 
-function onPhone(): boolean {
-  try {
-    return window.matchMedia(PHONE_BATTLE_QUERY).matches || window.matchMedia('(pointer: coarse)').matches;
-  } catch {
-    return false;
-  }
-}
+/** The budget the game uses on every device. Benches pass `{ budget: 'lean' }` to measure the other. */
+export const GAME_BUDGET: 'mini' | 'lean' = 'mini';
 
 function spawnWorker(): WorkerLike | null {
   if (typeof Worker === 'undefined') return null;
@@ -63,7 +59,7 @@ export function attachAdvisorV4(
   const owner = hud as CardOwner | null;
   const card = owner?.moveAdvisor;
   if (!engine || !(engine instanceof FFXEngine) || !card?.setLookAhead || !advisorV4On(game)) return null;
-  const host = new AdvisorV4Host({ spawn: spawnWorker, budget: onPhone() ? 'mini' : 'lean', capMs: V4_CAP_MS, ...options });
+  const host = new AdvisorV4Host({ spawn: spawnWorker, budget: GAME_BUDGET, capMs: V4_CAP_MS, ...options });
   host.bind(engine);
 
   const submit = engine.submit.bind(engine);

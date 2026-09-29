@@ -8,7 +8,7 @@ Method check and prototype numbers: [docs/plans/advisor-v4-method-check.md](../p
 
 ## Where it stands
 
-**Built, measured, left OFF** (`ADVISOR_V4_FFX = false`, `src/engine/tactics/advisor-v4/switch.ts`).
+**SWITCHED ON for FFX at the mini budget on every device, 2026-09-29** (`ADVISOR_V4_FFX = true`; see "SWITCHED ON" at the end). The paragraph below is the earlier state (built, measured, left OFF), kept for history.
 Gate: every FFX chapter equal or better than v3 through the worker path, and the menu-open latency
 does not grow. The latency passes, and falls. The scorecard fails by one seed in three chapters, at the budget
 that runs them:
@@ -337,3 +337,68 @@ over a v3 row carrying `saves-from-lethal` when the forecast names a girl, at th
 level, not only when v3's top row itself carries the proof (not yet checked: whether v3's top row
 on seed 35's flagged boards was a save); or ship mini's settings on desktop too (mini passes every gate here).
 Re-run: `V4F_BUDGET=lean V4F_TAG=fork-lean-iii node node_modules/vitest/vitest.mjs run --config critic/bench/advisor-v4/vitest.config.ts critic/bench/advisor-v4/lethal-fork.test.ts`.
+
+## SWITCHED ON (2026-09-29): `ADVISOR_V4_FFX = true`, mini budget on every device
+
+**Game case: FFX only.** FFX-2 stays on v3 (`ADVISOR_V4_FFX2` off; its window is unmeasured). The
+wiring change (budget) is shared plumbing but only FFX battles reach it. FF7 never attaches.
+
+**The rule and the decision (the driver, from the DECISION above).** Lean failed the rule on one
+number: Chapter III seed 35, fork-tested savable deaths 2 against v3's 0. Mini passed every gate:
+pooled wins II 71 vs v3 70, VIII 80 vs 78, X 74 vs 74, every other chapter >= v3 at 40 seeds
+(total 338 vs v3's 310), Chapter III fork-tested 0 flagged, 0 deaths. Lean's total is only one win
+higher (339), so lean's extra reach buys almost nothing and costs the one failed gate. Hence mini on
+desktop and phone alike.
+
+**What changed.**
+- `src/engine/tactics/advisor-v4/switch.ts`: `ADVISOR_V4_FFX = true`.
+- `src/app/advisorV4/wiring.ts`: the budget is the constant `GAME_BUDGET = 'mini'`, not
+  phone-versus-desktop (the `onPhone()` probe and its import are gone). A bench still passes
+  `{ budget: 'lean' }` in the options (`options` is spread after the default) and labels the run lean.
+- Tests: new `tests/unit/advisor-v4-switch.test.ts` pins FFX on, FFX-2 and FF7 off, a bench override
+  cannot turn FFX-2 on, and the budget is `mini` on a desktop, a phone layout and a coarse pointer,
+  with `lean` still selectable. `advisor-v4-coach-wrapper.test.ts`: the old "off stays off, no force"
+  test pinned the switch's old value, so it now pins the override (`false` leaves v3's card) and a new
+  test pins that no override attaches v4 through the wrapper. The card and purity tests already passed an explicit budget.
+
+**Proof on a headless production build** (`vite build` to `D:/Tools/pyrefly-scratch/overnight-0929/v4on/dist`,
+`vite preview` on port 8500, PYREFLY_BROWSER=gpu, real Enter keys, 2 s dwell per menu, no override
+set so the shipped switch decides; raw JSON in `D:/Tools/pyrefly-scratch/overnight-0929/v4on/runs/`, scratch
+scripts `.v4on-browser-tmp.mjs` and `.v4on-agg-tmp.mjs`, untracked). Blind Enter loses these fights
+fast, so menus are pooled over seeds 1 to 6 per chapter; every seed was played with v4 on (default) and
+forced off.
+
+| 1600x900 | Menus | v4 attached (coach wrapper, budget) | Ready at menu open | Log hash on = off | Rows changed after open |
+|---|---:|---|---:|---|---:|
+| I (seymour-flux) | 27 | yes, mini | 27/27 | 6/6 seeds | 0 |
+| III (braskas-final-aeon) | 75 | yes, mini | 75/75 | 6/6 seeds | 0 |
+| XII (seymour-omnis) | 93 | yes, mini | 93/93 | 6/6 seeds | 0 |
+| **all** | **195** | | **195/195 (100 %)** | **18/18** | **0** |
+
+- Menu-open latency (`showDecision` wall time): v4 on p50 / p95 / max **0.8 / 3.4 / 5.1 ms**; v3
+  (forced off) 4.9 / 17.1 / 23.9 ms. Not above v3's at p95: about a fifth of it.
+- The card after open: the rows never changed on any of the 195 menus (0 flips), and no v4 answer
+  arrived after a menu opened. The card's text does change once at every menu, when the detail lines
+  fold away after the dwell; that is v3's own behaviour: 153 of 195 opens with v4, 151 of 195 with v4
+  off. Nothing depends on the search.
+- Battle log hash (FNV over the whole log) and `nextSeq` identical on/off on 18 of 18 seed runs (3 chapters x 6 seeds).
+- 0 console or page errors in any run.
+
+| 390x844, 4x CPU (page and worker throttled) | Menus | Ready at open | Log hash on = off | Rows changed | Open ms p50 / p95 |
+|---|---:|---:|---|---:|---|
+| I (seeds 1 to 6) | 27 | 27/27 | 6/6 | 0 | on 5.1 / 51.2; off 36.5 / 98.5 |
+
+Budget mini, card text unchanged after open on all 27 menus, 0 errors.
+
+**Checks.** `tsc --noEmit` and `typecheck:e2e` clean; the advisor v3, v4 and card unit files pass (38
+files); `tools/orphans.mjs` lists 24 modules, none in the advisor; the full suite passes except one
+timeout in `strategy-ffx2-bahamut.test.ts` (an FFX-2 simulation, 15 s limit, run while the machine was
+loaded by other agents), which passes alone (19/19).
+
+**Still true.** The advisor never touches the battle's state or RNG (the purity tests and the hash
+rows above); the card never flips while a menu is open (0 flips); a search that is late or absent
+leaves v3's card. Seed 35 on Chapter III at lean remains the known case if lean is ever wanted.
+
+**Not done (each needs the driver or Bailey):** no deploy, not merged, not pushed. A release needs the
+critic plan (`node tools/critic-plan.mjs`) and the deep review the release rules ask for; the change
+touches the advisor card in every FFX chapter.

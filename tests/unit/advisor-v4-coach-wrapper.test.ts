@@ -61,7 +61,15 @@ describe('advisor v4 through the coach wrapper (FFX)', () => {
     expect(typeof hud.moveAdvisor?.setLookAhead).toBe('function');
   });
 
-  it('off stays off: no force and the switch off leaves v3\'s card', async () => {
+  it('with the switch on (2026-09-29), no override attaches v4 through the wrapper', async () => {
+    const card = { setLookAhead: (_: MoveAdvisorLookAhead | null) => undefined };
+    const hud = withCoach('ffx', { moveAdvisor: card } as unknown as HudPort);
+    const host = attachAdvisorV4(hud, await engine(), 'ffx', { spawn: () => new InProcWorker() });
+    expect(host).not.toBeNull();
+    host?.dispose();
+  });
+
+  it('a bench override of false leaves v3\'s card (this test pinned "off" while the switch was off; it now pins the override)', async () => {
     const card = { setLookAhead: (_: MoveAdvisorLookAhead | null) => undefined };
     const hud = withCoach('ffx', { moveAdvisor: card } as unknown as HudPort);
     G.__pyreflyAdvisorV4Force = false;
