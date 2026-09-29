@@ -177,3 +177,108 @@ node critic/bench/advisor-v4/wp-table.mjs lean
 node critic/bench/advisor-v4/browser-timing.mjs --url=http://127.0.0.1:7900/pyrefly-reprise/ --chapter=seymour-flux --v4=on --viewport=390x844 --throttle=4 --decisions=24 --seed=1 --out=<json>
 node critic/bench/advisor-v4/real-keys.mjs --url=http://127.0.0.1:7900/pyrefly-reprise/ --chapter=seymour-omnis --viewport=1600x900 --menus=4 --force=on --shots=docs/screenshots/advisor-v4
 ```
+
+## CHECK (adversarial, 2026-09-29; a different agent, not the builder)
+
+Checked on 007ea041, switch as committed (`ADVISOR_V4_FFX = false`). Production build of this
+worktree, `vite preview` on port 7910, headless Chromium (`PYREFLY_BROWSER=gpu`), real Enter keys.
+Round 15's bench and one browser ran side by side, so absolute timings carry contention; every
+on/off comparison below was rerun where it looked odd. **Verdict: no blocker.** The switch stays off
+for the reason the builder gives (II and VIII at lean, X at mini, each one seed below v3).
+
+**Scorecard reproduces exactly.** Both budgets, every FFX chapter, 40 seeds, v3 and v4 through the
+worker path (`V4W_TAG=chk-wp-lean|mini`): every field of every row (wins, win seeds, links,
+decisions, v4 shown, switched, not ready, lethal-save misses, savable, missed revives, off-menu, bad
+aim, refused) is identical to the builder's `wp-<budget>-<chapter>.json`. Lean 339/360, mini
+338/360, v3 310/360. The gate still fails on II lean (36 vs 37), VIII lean (39 vs 40), X mini (37 vs 38).
+
+**The battle is untouched (rule 1).**
+- Node, 10 runs (all nine FFX chapters on seed 1, Evrae on seed 19, plus XII on seed 2; X and the
+  XII seed-2 run at mini, the rest at lean),
+  pressed by v3's top row with v4 attached through the in-process worker and without: the event log
+  per link and the final RNG position are identical, and the live state, runtime and RNG hash taken
+  before and after each menu-open read changed at 0 of 848 menus.
+- Browser: 12 chapter/size groups (nine FFX chapters at 1600x900; I, II and XII at 390x844 with 4x
+  CPU), each played with v4 off, on, and late (see below) by the same keys: the battle log hash and
+  `nextSeq` are identical across all three in every group. The cancel runs below also end on the
+  off run's log.
+- The facade split: the pre-split `engine.ts` from cf3306eb, run beside the split one on the nine
+  FFX chapters x seeds 1 to 5 by the chapter's line, gives identical logs and RNG at every link
+  (45/45), and so does the split engine hopped onto `restore(structuredClone(transferable()))`
+  every third menu.
+
+**The card never flips while a menu is open (rule 9).** The card's rows and text were read every
+animation frame while each menu was open: 45 browser runs, 441 menus, 0 row changes. 93 of those
+menus had a worker answer land while they were open (the late runs hold menus 7 s and delay answers
+9 s): none changed the card. The text changes the poller saw are the card's own density fitting and
+guide badge. They are the same with v4 off.
+
+**The menu never waits, and the fallback is exact.**
+- Late runs (the worker's answers delayed 9 s, a slow phone): ready fell to between 0 and 4 menus per run,
+  and on the 99 menus where the answer was not ready, the card's rows equal the v4-off run's rows
+  on the same board, 99/99.
+- Node: every card v4 handed over without a switch equals v3's card built on the live board
+  (JSON-equal), 805/805.
+- Menu open (`showDecision` wall ms, p50 / p95, my runs): desktop off 7.2 / 24.6, on 1.2 / 4.5, late
+  6.7 / 14.4; phone off 55.2 / 146, on 5.8 / 127.6. Phone late read 34.7 / 309.5 in one contended
+  burst. Rerun, it read 31.6 / 54.8 and 48.4 / 97.5 against off 42.2 / 64.4. The host's own
+  `cardFor` is at most 7.8 ms, and 1.5 ms or less on all but one menu. So a late answer costs the
+  menu nothing measurable, and a ready one makes it faster.
+- The builder's `browser-timing.mjs` (II and XII, seed 1, both sizes, on and off): desktop menu p95
+  7.0 to 1.5 ms (II) and 15.5 to 2.0 ms (XII); long frames (> 34 ms) 4 vs 5 and 10 vs 5. Phone
+  menu p95 63.5 to 6.9 ms and 60.3 to 18.5 ms. Phone long frames: 98 off vs 82 on (II). XII's
+  first on run read 272 against 60 off, with the worker's p95 at 444 ms, a contended run. Two
+  interleaved reruns read 21 and 22 on against 30 and 42 off.
+
+**Cancelled when the menu closes.** Every close with a job running posts `cancel` (24 in the late
+runs). With the job's start delayed 2.5 to 4 s and the menus pressed at once (III twice, II once),
+22 jobs were cancelled. The worker answered `cancelled` 21 to 160 ms after the cancel when it came
+mid-search, and 0.4 to 3.9 s after when it came before the delayed job arrived. Nothing from a
+cancelled job reached a card, one worker served each whole run, and the log equals the off run.
+
+**Rails.** Across the node runs, 43 switched cards were checked. Each top row is an enabled row of
+that menu aimed at a target it offers (43/43). None replaced a v3 top row carrying
+`saves-from-lethal` (0), none replaced a v3 revive (0), and none lifted a revive that
+`reviveRisk` (Bailey's refusal rule) refuses (0). FFX has nothing in flight, so that rail cannot
+fire. FFX-2 and FF7: `attachAdvisorV4` returns null even with the force flag set (Bahamut,
+LeBlanc, Ixion), as it does for an FFX engine labelled `ffx2`. The `lift` path in
+`buildAdvisorView` is gated on `given.lift`, which only the worker passes. With the committed
+switch and no force, a real Chapter I battle has no host, and v3's card shows (Hastega).
+
+**Also run.** `tsc --noEmit` clean. The v4 unit files, the coach wrapper, purity, golden, fork and
+`results-withdrew` tests pass (41/41), and so do all 16 coach and move-advisor files (142/142).
+`strategy-ffx2-bahamut` passes alone (19/19). `orphans`: 24, none in v4's folders. The full suite
+was not run: the one change here is this section.
+
+### Findings (none blocks; the switch decision is unchanged)
+
+1. **The 4x throttle never reaches the worker (confirmed).** The same II phone run's worker read p50
+   58 / p95 96 ms at throttle 1 and 60 / 121 ms at throttle 4, while the page slowed about 5x. The
+   "62/62 ready on the phone" figure is an unthrottled worker. On a real slow phone, readiness is
+   unmeasured. The late runs show what happens when an answer is late: v3's card exactly, with no
+   flip and no slower menu. A real phone also runs the worker on a CPU the page shares, which no
+   run here reproduces.
+2. **A cancelled or superseded job still pays its whole prelude.** `V4Core.run` checks `stop()`
+   only inside the search loop, so a job the host has already cancelled still restores, plays on
+   to the menu, builds v3's card and its candidates before it notices. Replies came 0.4 to 0.85 s
+   after some cancels. It is worker time only and never reaches a card, but on a phone it delays
+   the next job. A `stop()` check before the restore and after the advance would end it.
+3. **The same board can show a different card at a second opening.** If the first opening misses
+   (v3's card) and the menu reopens after the search lands (for example, backing out of an
+   Overdrive picker), the second opening shows v4's card. The host documents this. It is not a
+   flip while open, but rule 9's spirit may want the first answer kept for that board.
+4. **The lifted row is never one of v3's shown rows.** It was off v3's shown list at all 43 switches
+   (for example Hi-Potion to Dragon Fang, Curaga on another target, NulTide to NulBlaze). It is
+   always a row v3 priced and a real menu row, so this is on-rail. Still, the card then
+   recommends a move the v3 card never showed, which a reviewer of the card's wording should know.
+5. **Small leaks.** `V4Core.cancelled` keeps every cancelled job id (it is cleared only on
+   success). `globalThis.__pyreflyAdvisorV4` keeps the last host, and its engine, after the HUD
+   unmounts.
+6. **The press costs main-thread time.** Each press clones the whole battle, log included, into
+   the worker. It took 0.2 / 0.4 ms (p50 / p95) on desktop and 1.7 / 5.3 ms, at most 13.5 ms, on
+   the 4x phone. That cost is small but grows with the fight's log.
+
+Scratch (untracked, not committed): `.v4chk-browser-tmp.mjs` (the tapped-worker, per-frame
+poller), `critic/bench/advisor-v4/zz-chk.tmp.test.ts` (purity, card identity, rails, split),
+`critic/bench/advisor-v4/results/chk-wp-{lean,mini}.json`. Raw browser readings are in
+`D:/Tools/pyrefly-scratch/v4chk/`.
