@@ -26,9 +26,14 @@ describe('chapter card BOSS row', () => {
     expect(bossNames(getChapter('ffx2-den-of-woe')!)).toBe('Baralai, Gippal and Nooj');
   });
 
+  it('Chapter XVII (FFX) names Sin, not its first formation (the Left Fin and Cid)', () => {
+    // The meta's `bossLine` (src/data/chapter-meta-sin.ts): the chapter is about Sin; the Left Fin is only its first link.
+    expect(bossNames(getChapter('sin-fins-core')!)).toBe('Sin');
+  });
+
   it('every other chapter still lists its first formation', () => {
     for (const c of CHAPTERS) {
-      if (c.id === 'ffx2-leblanc' || c.id === 'ffx2-den-of-woe') continue;
+      if (c.id === 'ffx2-leblanc' || c.id === 'ffx2-den-of-woe' || c.id === 'sin-fins-core') continue;
       expect(bossNames(c), c.id).toBe(c.enemyGroupRef.enemies.map((e) => e.name).join(' + '));
     }
   });

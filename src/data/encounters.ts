@@ -51,10 +51,12 @@ import { FFX2_TREMA_SHIPPED } from './chapter-trema-ship.ts';
 import { ISAARU_VIA_PURIFICO_SHIPPED } from './chapter-isaaru-ship.ts';
 import { FFX2_DEN_OF_WOE_SHIPPED } from './chapter-den-of-woe-ship.ts';
 import { FFX2_IXION_DJOSE } from './chapter-ffx2-ixion-djose.ts';
+import { SIN_FINS_CORE } from './chapter-sin-fins-core.ts';
+import { SIN_FACE } from './chapter-sin-face.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 
 /**
- * Every registered chapter id (sixteen listed since 2026-09-27, plus the hidden FF7 experiment
+ * Every registered chapter id (eighteen listed since 2026-09-29, plus the hidden FF7 experiment
  * `'ff7-guard-scorpion'`, 2026-09-27, which never writes `SaveData.chapters`: `app/experiments/`).
  * Also the keys used in `SaveData.chapters`.
  */
@@ -107,7 +109,7 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on chapter select, 1–18 (XVI Ixion, listed 2026-09-27; an unlisted chapter keeps its number: XVII and XVIII, Sin); 0 = no place on the board (FF7 experiment). */
+  /** Display order on chapter select, 1–18 (XVI Ixion, listed 2026-09-27; XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment). */
   number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18;
   /** A hidden experiment (FF7's Guard Scorpion): no card, no count, no save record; the flow hands it to `BattleScreenExperiment`. */
   experimental?: true;
@@ -356,11 +358,9 @@ export const FFX2_LEBLANC: Chapter = {
 
 export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN, UNLISTED_CHAPTERS }; // the last: registered, not listed (`./chapters-unlisted.ts`)
 
-/** All sixteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
+/** All eighteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, XVII and XVIII 2026-09-29); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
 export const CHAPTERS: readonly Chapter[] = [
-  SEYMOUR_FLUX,
-  YUNALESCA,
-  BRASKAS_FINAL_AEON,
+  SEYMOUR_FLUX, YUNALESCA, BRASKAS_FINAL_AEON,
   FFX2_BAHAMUT,
   FFX2_VEGNAGUN_SHUYIN,
   FFX2_LEBLANC,
@@ -374,14 +374,13 @@ export const CHAPTERS: readonly Chapter[] = [
   ISAARU_VIA_PURIFICO_SHIPPED,
   FFX2_DEN_OF_WOE_SHIPPED,
   FFX2_IXION_DJOSE,
+  SIN_FINS_CORE, SIN_FACE, // Chapters XVII and XVIII (FFX), listed 2026-09-29 (D-279: the driver's picks, delegated by Bailey)
 ] as const;
 
 /** Chapter ids, in play order. */
 export const CHAPTER_IDS: readonly ListedChapterId[] = [
   'seymour-flux', 'yunalesca', 'braskas-final-aeon',
-  'ffx2-bahamut',
-  'ffx2-vegnagun-shuyin',
-  'ffx2-leblanc',
+  'ffx2-bahamut', 'ffx2-vegnagun-shuyin', 'ffx2-leblanc',
   'seymour-anima-macalania',
   'evrae-airship',
   'yojimbo-cavern',
@@ -391,6 +390,7 @@ export const CHAPTER_IDS: readonly ListedChapterId[] = [
   'ffx2-trema',
   'isaaru-via-purifico',
   'ffx2-den-of-woe', 'ffx2-ixion-djose',
+  'sin-fins-core', 'sin-face',
 ] as const;
 
 /** Look a chapter up by id, listed or not. Returns `undefined` for an unknown id. */

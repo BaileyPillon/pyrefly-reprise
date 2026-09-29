@@ -100,6 +100,9 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
     treatment: 'As Gagazet',
   },
   'evrae-airship-deck': { game: 'ffx', verdict: 'absent', cite: `${PRES}, The airship deck [verified: 2 sources]: "Open sky"` },
+  // Sin's chapters (XVII, XVIII; FFX only): the same deck over Sin's plates (`scenes/evrae-airship-sin.ts`), so the deck's row.
+  'sin-fahrenheit-flight': { game: 'ffx', verdict: 'absent', cite: `${PRES}, The airship deck [verified: 2 sources]: "Open sky"` },
+  'sin-fahrenheit-bevelle': { game: 'ffx', verdict: 'absent', cite: `${PRES}, The airship deck [verified: 2 sources]: "Open sky"` },
   'bevelle-underground': { game: 'ffx2', verdict: 'absent', cite: `${PRES}, Bevelle Underground [single source]: "Machina, not spirits"` },
   'cavern-stolen-fayth': {
     game: 'ffx',

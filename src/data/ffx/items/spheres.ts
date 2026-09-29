@@ -37,6 +37,13 @@
  *
  * Rows land one at a time (one commit per item, per the task brief); the
  * proving test lives in `tests/unit/data-reward-items-resolve.test.ts`.
+ *
+ * **Three more, for Sin's links I to III** (Chapter XVII, listed 2026-09-29; FFX only): HP Sphere (the Left
+ * Fin's drop), Return Sphere (Genais's) and MP Sphere (the Core's), named in `research/ffx-sin.md` §2.4's reward
+ * table `[decompiled]`, so the Results screen shows their names instead of the raw ids. They are Sphere Grid
+ * items like the five above (the same class, the same no-op effect, not battle- or menu-usable). **Their in-game
+ * help text is not in our sources and is not transcribed**: each `description` states only the class, which the
+ * item menu never shows for a row that is not usable in battle (`ui/ffx/commandHelp.ts` reads it for battle items).
  */
 
 import type { AbilityDef, ItemDef } from '../../../battle/common/types.ts';
@@ -67,8 +74,28 @@ function sphereGridEffect(id: string, name: string): AbilityDef {
   };
 }
 
-/** Ability Sphere, Blk Magic Sphere, Special Sphere, Lv. 3/4 Key Sphere, keyed by id. */
+/** A Sphere Grid item whose help text is unsourced: the name and the class only (see the header). */
+function gridItem(id: string, name: string): ItemDef {
+  return {
+    id,
+    name,
+    game: 'ffx',
+    effect: sphereGridEffect(id, name),
+    targeting: 'self',
+    usableInBattle: false,
+    usableInMenu: false,
+    price: 0, // no source lists a shop price for any Sphere Grid item
+    iconKey: `icon-${id}`,
+    description: 'Sphere Grid item.',
+  };
+}
+
+/** Ability Sphere, Blk Magic Sphere, Special Sphere, Lv. 3/4 Key Sphere, and Sin's three, keyed by id. */
 export const ITEMS: Record<string, ItemDef> = {
+  // research/ffx-sin.md §2.4 [decompiled]: the Left Fin, Genais and the Core drop these (Chapter XVII).
+  'hp-sphere': gridItem('hp-sphere', 'HP Sphere'),
+  'return-sphere': gridItem('return-sphere', 'Return Sphere'),
+  'mp-sphere': gridItem('mp-sphere', 'MP Sphere'),
   'ability-sphere': {
     id: 'ability-sphere',
     name: 'Ability Sphere',

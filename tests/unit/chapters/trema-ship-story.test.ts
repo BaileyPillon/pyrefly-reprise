@@ -128,7 +128,7 @@ describe('the registered record: LISTED (2026-09-25), with the ship layer on', (
     expect(ch?.scriptsRef.mid.some((t) => t.id === TREMA_LINK_SEAM)).toBe(true);
     expect(ch?.music).toEqual(FFX2_TREMA.music);
     expect(CHAPTER_IDS).toContain('ffx2-trema');
-    expect(CHAPTERS.at(-4)).toBe(FFX2_TREMA_SHIPPED); // Chapter XIV follows (listed the same day), then XV (2026-09-26) and XVI (2026-09-27)
+    expect(CHAPTERS.at(-6)).toBe(FFX2_TREMA_SHIPPED); // Chapter XIV follows (listed the same day), then XV (2026-09-26), XVI (2026-09-27), XVII and XVIII (2026-09-29)
   });
 
   it('with Trema alone the stand-in cue scores the only link, and the story takes the alone shape', () => {

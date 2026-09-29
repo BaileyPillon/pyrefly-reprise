@@ -69,6 +69,8 @@ describe('which scenes narrate under a fade (measured, pinned)', () => {
       '10 seymour-natus pre': 9,
       '10 seymour-natus post': 5,
       '14 isaaru-via-purifico post': 2,
+      // Chapter XVIII (FFX only), listed 2026-09-29: Breaking Through, Tidus narrating the passage in the dark.
+      '18 sin-face post': 4,
     });
   });
 });

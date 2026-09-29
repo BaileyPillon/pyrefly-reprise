@@ -88,7 +88,7 @@ export const GUIDES: readonly ChapterGuide[] = [
   SEYMOUR_NATUS_GUIDE,
   // Chapter XIV (FFX only), listed 2026-09-25 as is (125/200 on the bench).
   ISAARU_GUIDE,
-  // Chapters XVII and XVIII (FFX only), registered and unlisted like their chapters: the Fins and the Core, the Face.
+  // Chapters XVII and XVIII (FFX only), listed 2026-09-29 with their chapters: the Fins and the Core, the Face.
   SIN_FINS_CORE_GUIDE,
   SIN_FACE_GUIDE,
 ];

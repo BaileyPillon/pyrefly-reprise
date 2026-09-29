@@ -285,12 +285,12 @@ describe('resolution in the FFX-2 engine', () => {
 });
 
 describe('registration: listed as Chapter XVI (2026-09-27)', () => {
-  it('getChapter finds it; chapter select, CHAPTERS and CHAPTER_IDS list it last, number 16', () => {
+  it('getChapter finds it; chapter select, CHAPTERS and CHAPTER_IDS list it after Chapter XV, number 16 (the two Sin chapters, XVII and XVIII, follow since 2026-09-29)', () => {
     const ch = getChapter('ffx2-ixion-djose');
     expect(ch).toBe(FFX2_IXION_DJOSE);
     expect([ch?.game, ch?.number, ch?.buildRef, ch?.enemyGroupRef]).toEqual(['ffx2', 16, djoseBuild, djoseIxionGroup]);
-    expect(CHAPTERS.at(-1)).toBe(FFX2_IXION_DJOSE);
-    expect(CHAPTER_IDS.at(-1)).toBe('ffx2-ixion-djose');
+    expect(CHAPTERS.at(-3)).toBe(FFX2_IXION_DJOSE);
+    expect(CHAPTER_IDS.at(-3)).toBe('ffx2-ixion-djose');
   });
 
   it('the scene is the Chamber on its stand-in plate (swappable in one line); the painting is look B, its own FFX-2 subject (D-268)', () => {

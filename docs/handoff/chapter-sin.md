@@ -1,4 +1,4 @@
-# Sin as two chapters, UNLISTED behind the switch: XVII "the Fins and the Core", XVIII "the Face"
+# Sin as two chapters, LISTED (2026-09-29, D-279): XVII "the Fins and the Core", XVIII "the Face"
 
 **Game case: FFX only** (AGENTS.md rule 14): CTB, the airship range, aeons, and a boss whose turn
 clock ends in a scripted Game Over. None of it exists in FFX-2 (`research/ffx-sin.md` §0.3).
@@ -12,6 +12,124 @@ clock ends in a scripted Game Over. None of it exists in FFX-2 (`research/ffx-si
 
 Everything below the "Package S" section is the link-4 record of 2026-09-27; read `sin` there as
 `sin-face`, and "Chapter XVI" as Chapter XVIII.
+
+## Package L, the listing (2026-09-29 ~06:30 to 08:30 EDT; FFX only, the listing itself shared plumbing)
+
+**What decided it:** D-279 (Bailey, 2026-09-28 ~22:45 EDT, "Your picks (Recommended)"): the driver picks Sin's
+paintings, the countdown display and the music, and both chapters are listed by morning; D-280 (Giga-Graviton on
+the 13th turn, our estimate). Every pick below is **the driver's, not Bailey's**, recorded as such (rule 9; D-279's
+delivery, `docs/target/targets.json` tiles "Sin: ..., Chapter XVII/XVIII" with `reaction.inferred`). Plan §6, the
+Ixion listing `925ec32a` as the template. Branch `chapter-sin` only: not merged into main, not pushed, not deployed.
+
+**Listed.** `SIN_FINS_CORE` and `SIN_FACE` moved from `UNLISTED_CHAPTERS` into `CHAPTERS` (after XVI) and both
+ids into `CHAPTER_IDS`; `SIN_CHAPTER_META` into `CHAPTER_META` (`UNLISTED_CHAPTER_META` is empty); both scripts in
+the story registry (`ChapterKey`, `STORY_CHAPTERS`, the two fin seams in `CHAIN_SEAMS`, no AI-emitted names; 398
+lines, nothing had to move out); the guides and tactic lookup were already wired (comments updated); two
+`PLATE_COMPOSITIONS` entries (INSTALL.md item 7's numbers); the pause CHAPTER dossier and the jukebox read the meta
+(the pause taglines had to be 2 to 4 words: "No Rest Between Links", "Before the Mouth Opens"; one snapshot caption
+shortened). The board: 18 cards, "0 of 17" (Chapter VII is still locked COMING on this branch).
+`docs/CONTRACT-CHANGES.md` has the entry.
+
+**The picked art, wired by its keys** (`docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md`):
+
+| Pick | Where it is wired | Falls back to, until installed |
+|---|---|---|
+| Plate flight-1 (links I and II) | `sceneKey: 'sin-fahrenheit-flight'`: `src/scenes/evrae-airship-sin.ts`, Chapter VIII's deck over the plate, drawn level (roll 0: its horizon is painted level) | Evrae's deck painting at its own roll (`makeAirshipDeckScene`) |
+| Plate bk-a-8 (link IV) | `sceneKey: 'sin-fahrenheit-bevelle'`, the deck rolls it as it rolls Evrae's | the same |
+| Link III, Sin's back | **not wired**: link III stays on the flight plate, labelled (plan Q6: a per-link scene swap is a new seam, `EnemyGroupDef` has no scene key; not small, so not built). The `sin-back` painting is staged for it | - |
+| Fin A, both arms | the range director binds each Fin to its own subject (`src/scenes/evrae-airship-subjects.ts`): NEAR and FAR at the spot and size its picked painting has (the sidecar's `frameFraction` and `baselineY` cast from the range's `idle` rig; derived, then looked at), upright (its wide FAR painting is never laid to rest as a prone body: `keepUpright`), `charge-near` / `charge-far` in the idle slot while `sin.fin.charged` holds | Evrae's spots and sizes and the stage's silhouette; no charge painting is asked for |
+| Genais A, Core A | `src/app/screens/BattleScreenSinPoses.ts` on the airship hook's per-frame sync: Genais `shell` while `sin.genais.shelled`, the Core `charge` while `sin.core.state` is `charging` or `ready`, both upright | the silhouette (a state the manifest does not list is never loaded) |
+| Head C repaired | the same follower: `stage-<n>` for `sin.mouthStage`, placed per range at its painted framing (`OVERDRIVE_SIN_PLACEMENT`) | the silhouette at the stage's spot |
+| Turn-order icons | by enemy id (`portraits/<id>.png`), no code | the generic chip |
+| Pause plates | `heroArt: 'pause/ch17-sin-fins-core'`, `'pause/ch18-sin-face'` | `heroArtFallback` (Tidus, Yuna portraits) |
+| Cards | `PLATE_COMPOSITIONS['sin-fins-core' / 'sin-face']` (the Left Fin, the head over each plate) | the image removes itself |
+| Countdown display | HUD package H's mouth ring (built on this branch before L), "13th turn: our estimate (12 or 13)" | - |
+| Music | the stand-ins `scene-fahrenheit`, `boss-evrae`, `victory-ffx`, labelled (THEMES.md rows XVII and XVIII: owed) | - |
+
+The "PLACEHOLDER — no painting" notes in `sin-fins.ts`, `sin-genais-core.ts` and `overdrive-sin.ts` now name the
+picks. Evrae (Chapter VIII) is staged exactly as before (`evraeSubject`; `evrae-telegraph.test.ts` passes).
+
+**The art is NOT installed.** `public/art/` was not touched (the release-29 gate file does not exist; brief). The 62
+staged files are in `D:/Tools/pyrefly-scratch/overnight-0929/sin-install/stage/`; INSTALL.md "The exact install
+steps" installs them. **Until then two tests stay red**: `chapter-meta.test.ts` "sin-fins-core / sin-face:
+heroArt resolves to an installed public/art/pause plate in manifest.json" (the guard is right; the plates are not
+there yet). Everything else falls back as the table says.
+
+**Looked at in the browser, with the staged art served over `public/art`** (a scratch dev server on 8611,
+`.sinL-vite-tmp.config.mjs`, uncommitted: it answers `/art/<path>` from the stage and merges the stage into the
+manifest; nothing written anywhere): the Fins read at NEAR (the arm over the rail, its cut edge off frame right,
+the lit core) and at FAR (Sin's whole body level in the sky, colossal as painted); the head reads at both ranges
+with the mouth opening stage by stage; the flight plate and bk-a-8 stand behind the deck. Frames of the whole
+listing in `docs/screenshots/sin/listed/` (`<w>x<h>-01` to `-13`, 1600x900 keys and 390x844 taps), all with the
+staged art.
+
+**Tests.**
+
+- New: `tests/unit/chapters/sin-listed.test.ts` (14: the listing, the registry, the guide, the plates, the
+  scenes and canon rows, the Fins' staging with and without the art, `keepUpright`, Genais/Core/head following the
+  flags, placing the head per range, nothing loaded before the install, nothing touched in other battles);
+  `tests/unit/save-sin-listed-fixture.test.ts` with `tests/fixtures/saves/release-28-main.json` (written by the
+  **live release-28 build's own SaveStore**, main `6ea8528f`, bundle `index-DecUADzw.js`, in a fresh headless
+  profile: loads unchanged, progress stays, both chapters unplayed, "N of 17"); `tests/e2e/ffx-sin.spec.ts` (4
+  tests: XVII and XVIII at 1600x900 by keys and 390x844 by taps).
+- Updated for eighteen cards / "N of 17" and the new order: `chapter-select-c`, `frontend-chapter-grid`,
+  `frontend-chapter-select-screen`, `ff7-hidden-board`, `save-ixion-listed-fixture`, `chapter-meta` (numerals),
+  `flow-post-scene` (both post scenes end on `results()`; both are story-earlier than the FFX finale),
+  `cutscene-veil` (Breaking Through narrates 4 lines under the fade, pinned), `isaaru-duel`, `isaaru-ship`,
+  `ixion-engine`, `trema-engine`, `trema-ship-content`, `trema-ship-story`, `yojimbo-engine`, `sin-data`,
+  `sin-engine`; e2e `ffx2-ixion.spec.ts` and `ff7-guard-scorpion.spec.ts` (counts only).
+- e2e, all against the 8611 dev server with the staged art (a scratch Playwright config
+  `.sinL-pw-tmp.config.ts`, uncommitted, `PYREFLY_BROWSER=gpu`): `ffx-sin.spec.ts` **4/4 pass** (XVII: board,
+  card, prep, the scene skipped by holding Enter or by the phone's menu > OPTIONS > SKIP SCENE, the fight opening at
+  FAR with the Left Fin at 65,000, ORDERS > Close in by real input, a loss by the debug `defend` line, RETRY by real
+  input back to the Left Fin at 65,000 and FAR with no Right Fin, then CHAPTER SELECT from the defeat panel, "0 of
+  17"; XVIII: board, card, prep, the scene by confirm presses or taps, the fight to a **win on the clock** by the
+  debug `intended` line on seed 3, results and Breaking Through by real input, the clear on the board, "1 of 17");
+  `ff7-guard-scorpion.spec.ts` 5/5 pass with the new counts. `ffx2-ixion.spec.ts` was not re-run (its change is
+  the two counts only).
+- Seeds for XVIII's `intended` line (skip speed, 1 to 12): wins on 3, 7, 10 and 12. On XVII it wins no seed of 1
+  to 8: 4 defeats and 4 engine stalemates (`escape`, 400 turns without progress), each with Genais down and the
+  Core standing (seed 2: the Core at 26,384 HP on turn 466). That is the debug strategy, not the bench's sensible
+  line (25.5 % chain); the merge probe above found the same. Recorded on D-282.
+
+**Gates (2026-09-29, this package):** `npx tsc --noEmit` clean (only the untracked `tests/unit/zz-*` probes);
+`npm run typecheck:e2e` clean; FFX golden hashes 408/408 identical to S's base (`56026029`, 6 seeds,
+`FFX_HASH_SKIP=sin,sin-face,sin-fins-core`); `node tools/orphans.mjs` 24, the same as main, **no Sin module
+orphaned**; the full suite once (`npx vitest run --testTimeout=60000`, the `zz-*` probes excluded): 632
+files, 9,882 tests pass, 40 skipped, 11 failed. Nine were the listing turning generic suites onto Sin and are
+fixed (re-run by file): the card's BOSS row names "Sin" for XVII (its meta `bossLine`), both post scenes end on
+`results()`, the physical-row table gains Sin's six rows, the THEMES cue map gains rows XVII and XVIII (moved out
+of "Owed cues for chapters not yet listed"), a bench-only speaker (two Wakka lines in the fin seams got fielded
+fallbacks, Tidus and Auron), and **three reward items had no ItemDef row** (the Left Fin's HP Sphere, Genais's
+Return Sphere, the Core's MP Sphere: added to `src/data/ffx/items/spheres.ts` with their sourced names,
+research §2.4; their in-game help text is not in our sources and is not transcribed, see that file's header).
+The other two are the pause-plate install guards above.
+
+**Recorded:** `docs/target/decisions.json` D-275 to D-281 copied from main verbatim so the ids resolve here (they
+merge as identical lines), D-279 `delivery: implemented` with the picks named, **D-282** (proposed) the difficulty
+disclosure: XVII chain 25.5 % sensible / 3 % card first try, XVIII 31 % on turn 13 (3.5 % on the 12th), the link-3
+checkpoint built OFF and Bailey's call. `docs/target/targets.json`: two tiles in "chapters" (state approved under
+D-279's delegation, `delivery: implemented`, `reaction.named` empty, the picks under `inferred`).
+
+**Open, for the driver and Bailey:**
+
+1. **Install the art** (INSTALL.md steps 1 to 7) once the gate file exists; then the two `chapter-meta` pause-plate
+   tests turn green and the picks show without the scratch server. Re-run `ffx-sin.spec.ts` against a real build.
+2. **Merge main into `chapter-sin` before merging back**: this branch is 50 commits behind `origin/main`
+   (Chapter VII unlocked there, D-278). After that merge the board counts in the tests above change again (Chapter
+   VII becomes playable: 18 cards, "N of 18"), and `decisions.json` D-279 conflicts once (main's D-279 is
+   `in-progress`; keep this branch's).
+3. **Link III on Sin's back** (plan Q6): a per-link scene key is a new presentation seam; not built.
+4. **Staging a human should look at** (the driver's picks, measured from the paintings, not tuned by eye): the
+   Fins at FAR are Sin's whole body, colossal (as painted; INSTALL.md said the director may scale them down); at
+   390x844 the FAR body is mostly off the top right; link III stands Genais and the Core side by side behind the
+   rail, dark against the sun, the Core beside Genais rather than behind it; the head's claw grips the hull's top
+   (INSTALL.md "Faults left"); on the XVIII pause CHAPTER tab at 1600x900 the dossier sits over the head's eye
+   (`CHAPTER_SLIDE_FACES` has no row for `ch18-sin-face`: INSTALL.md's proposed crop boxes were not added, since
+   the rule only applies a box a slide can clear and the boxes were read by eye). On the phone the "4TH IN QUEUE"
+   banner and the Fin's range tag share the top band (the HUD package's, seen in `390x844-04`).
+5. The pause **taglines** ("No Rest Between Links", "Before the Mouth Opens") and the **titles** are ours (Q13).
+6. The **music** is stand-ins; the assault and countdown cues are owed and judged by ear (rule 13).
 
 ## Package S, the spine (2026-09-29; `docs/plans/sin-two-chapters-plan.md` §2.1, §2.2, REVIEW)
 

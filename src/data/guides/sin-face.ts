@@ -10,7 +10,7 @@
  * **The clock's length is our estimate, labelled on the page** (S-1, D-266/D-280): the sources say the 12th
  * or the 13th turn, and the chapter uses the 13th until the Steam check settles it.
  *
- * Registered and unlisted like its chapter (`src/data/chapters-unlisted.ts`), through `./index.ts`'s `GUIDES`.
+ * Listed with its chapter on 2026-09-29 (D-279), through `./index.ts`'s `GUIDES`.
  */
 
 import type { ChapterGuide } from './types.ts';

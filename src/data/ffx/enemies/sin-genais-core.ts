@@ -17,11 +17,12 @@
  * flags are toggled on the per-battle combatant (`setup.ts` copies the record),
  * so this data states the fight's opening, out-of-shell values only.
  *
- * ## Placeholder art, said out loud
+ * ## The art: the driver's picks (D-279)
  *
- * `spriteKey: 'sinspawn-genais'` and `'sin-core'` have **no painting**: the stage
- * draws its grey boss silhouette. Nothing is painted or installed until Bailey
- * picks (AGENTS.md rules 8 and 9).
+ * `spriteKey: 'sinspawn-genais'` and `'sin-core'` name the painted folders the driver picked and staged
+ * (D-279, delegated by Bailey; `docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md`): Genais A out of and in its shell, Core A at rest and gathering.
+ * Until the files are installed under `public/art/characters/`, the stage draws its grey boss silhouette for
+ * a missing key, as before.
  *
  * ## Conflicts recorded rather than merged (research §10)
  *
@@ -49,7 +50,7 @@ export const SIN_CORE_SCRIPT = 'sin-core';
 const genais: EnemyDef = {
   id: SIN_GENAIS_ID,
   name: 'Sinspawn Genais',
-  spriteKey: 'sinspawn-genais', // PLACEHOLDER — no painting (see the header)
+  spriteKey: 'sinspawn-genais', // D-279: Genais A (see the header)
   slot: 0,
   stats: {
     hp: 20_000, // §2.1 [verified: 5 sources] (S-23)
@@ -133,7 +134,7 @@ const genais: EnemyDef = {
 const core: EnemyDef = {
   id: SIN_CORE_ID,
   name: 'Sin', // §2.1: the table's name for m138; the plan calls it "Sin's Core"
-  spriteKey: 'sin-core', // PLACEHOLDER — no painting (see the header)
+  spriteKey: 'sin-core', // D-279: Core A (see the header)
   slot: 1,
   stats: {
     hp: 36_000, // §2.1 [verified: 5 sources]

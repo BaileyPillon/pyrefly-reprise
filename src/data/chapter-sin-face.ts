@@ -22,28 +22,20 @@
  * and renumbered **18** (`docs/plans/sin-two-chapters-plan.md` §1.4;
  * `docs/CONTRACT-CHANGES.md`).
  *
- * ## Registered, reachable, NOT listed (the switch)
+ * ## Listed (2026-09-29), on the driver's picks
  *
- * The record sits in `UNLISTED_CHAPTERS`: `getChapter`, the battle flow and
- * `window.__pyrefly.gotoChapter('sin-face')` reach it by id; chapter select shows
- * **no card** and nothing counts it. Listing it is the switch (plan §6), once its
- * paintings, story and cues are Bailey's picks.
+ * Listed as Chapter XVIII, after Chapter XVII, on **D-279** (Bailey delegated the picks to the driver and can
+ * swap any of them later) and **D-280** (Giga-Graviton on Sin's 13th turn, our estimate, until a Steam check).
  *
- * Every field a player would see or hear is a **placeholder**, and says so:
- *
- * - `title` — D-270's working title; Bailey confirms it at listing (Q13).
- *   `subtitle`, `location`, `blurb` — our own summaries of research §1.1 and
- *   §9.1-§9.2 (no line is quoted).
- * - `sceneKey: 'evrae-airship-deck'` — **placeholder**. Link 4 is fought on the
- *   *Fahrenheit*'s deck, above Bevelle at dusk (§9.1, `[verified: 2 sources]`);
- *   that backdrop is not painted, so Chapter VIII's deck (the same ship) stands
- *   in. Its range director follows the same `airship.range` flag this fight
- *   sets, FAR for the pulls.
- * - The enemy's art — **placeholder**: the stage's grey boss silhouette.
- * - `music` — **placeholder** FFX cues (`scene-fahrenheit`, `boss-evrae`) until
- *   the countdown cue is written and picked by ear (rules 8 and 13; S-21).
- * - `scriptsRef` — **placeholder** (`src/story/scripts/sin-face.ts`, a stub
- *   package P fills).
+ * - `title` — D-270's working title (Q13). `subtitle`, `location`, `blurb` — our own summaries of research
+ *   §1.1 and §9.1-§9.2 (no line is quoted).
+ * - `sceneKey: 'sin-fahrenheit-bevelle'` — the driver's plate A (golden dusk over Bevelle, `bk-a-8`;
+ *   `src/scenes/evrae-airship-sin.ts`), on Chapter VIII's deck and its range director. A missing plate falls back
+ *   to Evrae's deck painting.
+ * - The enemy's art — head C repaired (the driver's pick): five mouth stages, shown by `sin.mouthStage`; the grey
+ *   boss silhouette shows until the files are installed.
+ * - `music` — **stand-in** FFX cues (`scene-fahrenheit`, `boss-evrae`), labelled, until the countdown cue is
+ *   written and judged by Bailey's ear (rules 8 and 13; S-21).
  */
 
 import type { Chapter } from './encounters.ts';
@@ -51,7 +43,7 @@ import { sinFaceScripts } from '../story/scripts/sin-face.ts';
 import { sinFahrenheitBuild } from './ffx/builds/sin-fahrenheit.ts';
 import { overdriveSinGroup } from './ffx/enemies/overdrive-sin.ts';
 
-/** Chapter 18 (unlisted: `./chapters-unlisted.ts`). */
+/** Chapter XVIII, listed 2026-09-29 (`./encounters.ts` `CHAPTERS`). */
 export const SIN_FACE: Chapter = {
   id: 'sin-face',
   game: 'ffx',
@@ -65,13 +57,13 @@ export const SIN_FACE: Chapter = {
   blurb:
     'Sin fell into Bevelle and rose again with wings. The main gun is still broken, ' +
     'so Cid flies the ship straight at its face, and the mouth begins to open.',
-  sceneKey: 'evrae-airship-deck', // PLACEHOLDER — see the file header
+  sceneKey: 'sin-fahrenheit-bevelle', // D-279 (the driver's pick), see the file header
   thumbnailKey: 'chapter-sin-face',
   buildRef: sinFahrenheitBuild, // D-264; rested after the save (§1.2)
   enemyGroupRef: overdriveSinGroup,
-  scriptsRef: sinFaceScripts, // PLACEHOLDER — see the file header
+  scriptsRef: sinFaceScripts,
   music: {
-    // PLACEHOLDER FFX cues (THEMES.md never crosses the scores); S-21.
+    // STAND-IN FFX cues, labelled (THEMES.md never crosses the scores); S-21; D-279.
     scene: 'scene-fahrenheit',
     battle: 'boss-evrae',
     victory: 'victory-ffx',

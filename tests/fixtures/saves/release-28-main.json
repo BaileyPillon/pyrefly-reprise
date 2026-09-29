@@ -1,0 +1,49 @@
+{
+  "_note": "Sin listing save-compatibility fixture (Chapters XVII and XVIII, 2026-09-29). Written by the LIVE release-28 build itself (main 6ea8528f, bundle index-DecUADzw.js, 16 listed chapters, no Sin chapter) on 2026-09-29: a fresh headless profile on https://baileypillon.github.io/pyrefly-reprise/, then that build's own SaveStore methods (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save) through window.__pyrefly.app.save, then localStorage read back verbatim. Non-default values on purpose. Script: the branch's scratch tools/zz-sinL-save-export.tmp.mjs (uncommitted).",
+  "release": 28,
+  "mainSha": "6ea8528f",
+  "bundle": "index-DecUADzw.js",
+  "listedThen": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "ffx2-bahamut",
+    "ffx2-vegnagun-shuyin",
+    "ffx2-leblanc",
+    "seymour-anima-macalania",
+    "evrae-airship",
+    "yojimbo-cavern",
+    "seymour-natus",
+    "ffx2-fallen-aeons",
+    "seymour-omnis",
+    "ffx2-trema",
+    "isaaru-via-purifico",
+    "ffx2-den-of-woe",
+    "ffx2-ixion-djose"
+  ],
+  "expect": {
+    "cleared": [
+      "evrae-airship",
+      "ffx2-ixion-djose",
+      "seymour-omnis"
+    ],
+    "notCleared": [
+      "isaaru-via-purifico"
+    ],
+    "bestTimeMs": {
+      "evrae-airship": 512340,
+      "seymour-omnis": 733120,
+      "ffx2-ixion-djose": 298450
+    },
+    "settings": {
+      "masterVolume": 0.55,
+      "musicVolume": 0.35,
+      "textSpeed": 0.9,
+      "advisorVisible": false,
+      "ffx2Atb": "wait"
+    }
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790680363326,\"chapters\":{\"evrae-airship\":{\"id\":\"evrae-airship\",\"cleared\":true,\"bestTimeMs\":512340,\"bestTurns\":61,\"attempts\":2,\"playTimeMs\":0},\"seymour-omnis\":{\"id\":\"seymour-omnis\",\"cleared\":true,\"bestTimeMs\":733120,\"bestTurns\":58,\"attempts\":1,\"playTimeMs\":0},\"ffx2-ixion-djose\":{\"id\":\"ffx2-ixion-djose\",\"cleared\":true,\"bestTimeMs\":298450,\"bestTurns\":40,\"attempts\":1,\"playTimeMs\":0},\"isaaru-via-purifico\":{\"id\":\"isaaru-via-purifico\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":1000}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.55,\"musicVolume\":0.35,\"sfxVolume\":0.9,\"textSpeed\":0.9,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"guideVisible\":true,\"advisorVisible\":false,\"intentVisible\":true,\"ffx2Atb\":\"wait\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":false},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

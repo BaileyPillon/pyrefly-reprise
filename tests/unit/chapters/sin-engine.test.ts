@@ -93,17 +93,18 @@ describe('the party: Garden of Pain with Yuna\'s Tetra Ring back (S-29, our esti
   });
 });
 
-describe('registration: unlisted, reachable by id', () => {
-  it('getChapter finds it; chapter select and CHAPTER_IDS do not', () => {
+describe('registration: listed 2026-09-29 (D-279), reachable by id', () => {
+  it('getChapter finds it; chapter select and CHAPTER_IDS list it last, as Chapter XVIII', () => {
     const ch = getChapter('sin-face');
     expect(ch?.game).toBe('ffx');
     expect(ch?.number).toBe(18);
     expect(ch?.title).toBe('Sin: the Face');
     expect(ch?.enemyGroupRef.id).toBe('overdrive-sin');
     expect(getChapter('sin')).toBeUndefined();
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('sin-face');
-    expect(CHAPTERS.map((c) => c.id)).not.toContain('sin-face');
-    expect(CHAPTER_IDS as readonly string[]).not.toContain('sin-face');
+    // Listed 2026-09-29 (D-279), after Chapter XVII.
+    expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('sin-face');
+    expect(CHAPTERS.map((c) => c.id).at(-1)).toBe('sin-face');
+    expect(CHAPTER_IDS.at(-1)).toBe('sin-face');
     expect(ENEMY_GROUPS_BY_ID['overdrive-sin']).toBe(overdriveSinGroup);
   });
 });

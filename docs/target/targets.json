@@ -1837,6 +1837,66 @@
             ],
             "inferred": []
           }
+        },
+        {
+          "label": "Sin: the Fins and the Core, Chapter XVII (FFX)",
+          "src": "docs/screenshots/sin/listed/1600x900-04-xvii-first-menu.jpg",
+          "state": "approved",
+          "delivery": "implemented",
+          "game": "ffx",
+          "gameNote": "FFX only: CTB, Cid's Trigger Command, the airship range, aeons, Armor and Mental Break (research/ffx-sin.md §0.3). The listing (encounters.ts, CHAPTER_META, the story registry, the board counts) is shared plumbing, case 'both' (CHK-020).",
+          "note": "Listed 2026-09-29 on branch chapter-sin (package L; not merged, not deployed). Links I to III on one party state (D-270), the Garden of Pain preset with the Tetra Ring (D-264). The art is staged, not installed: until the release-29 gate opens every picked key falls back (Evrae's deck painting, the grey silhouette). Frames: docs/screenshots/sin/listed/.",
+          "reaction": {
+            "date": "2026-09-28",
+            "words": "Your picks (Recommended)",
+            "how": "Bailey, 2026-09-28 ~22:45 EDT, delegating Sin's paintings, the countdown display and the music to the driver so both chapters could be listed by morning (D-279); Giga-Graviton on turn 13 for now (D-280, \"Turn 13 for now (Recommended)\")",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [
+              "the titles \"Sin: the Fins and the Core\" and \"Sin: the Face\" stay D-270's working titles until Bailey confirms them (plan Q13)",
+              "whether link III gets its own Sin's-back scene (the per-link seam, plan Q6)"
+            ],
+            "inferred": [
+              "every pick on this tile is the driver's, under D-279's delegation (\"Your picks (Recommended)\"), not a property Bailey named; he can swap any of them",
+              "Fin A for both arms, each painted on its own (never mirrored, plan Q14): NEAR fin-a-l-near-3 and fin-a-r-near-1, FAR fin-a-l-far-2 and fin-a-r-far-2, placed at their painted framing, the lit core while sin.fin.charged holds",
+              "Genais A (the craggy dome shell, out and in) and Core A (the dark pearl, at rest and gathering), cut from one painting",
+              "the flight plate (flight-1, late afternoon over the cloud sea) for links I and II, and for link III until the per-link seam exists",
+              "the pause plate ch17-sin-fins-core (the Left Fin over the rail at NEAR, core gathering) and the card: the Left Fin over the flight plate",
+              "music: the stand-ins scene-fahrenheit, boss-evrae and victory-ffx, labelled; the owed assault cue is Bailey's by ear"
+            ]
+          }
+        },
+        {
+          "label": "Sin: the Face, Chapter XVIII (FFX)",
+          "src": "docs/screenshots/sin/listed/1600x900-09-xviii-mouth-open.jpg",
+          "state": "approved",
+          "delivery": "implemented",
+          "game": "ffx",
+          "gameNote": "FFX only: CTB, the airship range, aeons, and a boss whose turn clock ends in a scripted Game Over (research/ffx-sin.md §0.3). The listing is shared plumbing, case 'both' (CHK-020).",
+          "note": "Listed 2026-09-29 on branch chapter-sin (package L; not merged, not deployed). Link IV, Overdrive Sin; Giga-Graviton on turn 13, our estimate (D-280, the Steam check D-266 still open). The art is staged, not installed (see Chapter XVII's tile). Frames: docs/screenshots/sin/listed/.",
+          "reaction": {
+            "date": "2026-09-28",
+            "words": "Your picks (Recommended)",
+            "how": "Bailey, 2026-09-28 ~22:45 EDT, delegating Sin's paintings, the countdown display and the music to the driver so both chapters could be listed by morning (D-279); Giga-Graviton on turn 13 for now (D-280, \"Turn 13 for now (Recommended)\")",
+            "liked": [],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [
+              "the titles \"Sin: the Fins and the Core\" and \"Sin: the Face\" stay D-270's working titles until Bailey confirms them (plan Q13)",
+              "whether link III gets its own Sin's-back scene (the per-link seam, plan Q6)"
+            ],
+            "inferred": [
+              "every pick on this tile is the driver's, under D-279's delegation (\"Your picks (Recommended)\"), not a property Bailey named; he can swap any of them",
+              "head C repaired: round 3's layered jaw rig, five mouth stages shown by sin.mouthStage, placed at its painted framing per range",
+              "backdrop A, bk-a-8 (golden dusk over Bevelle), on Chapter VIII's deck and range director",
+              "the countdown display: HUD package H's mouth ring, with \"13th turn: our estimate (12 or 13)\" on it (D-280)",
+              "the pause plate ch18-sin-face (head C at stage 3 on its own plate) and the card: the head over the Bevelle plate",
+              "music: the stand-ins scene-fahrenheit, boss-evrae and victory-ffx, labelled; the owed countdown cue is Bailey's by ear (S-21)"
+            ]
+          }
         }
       ]
     },

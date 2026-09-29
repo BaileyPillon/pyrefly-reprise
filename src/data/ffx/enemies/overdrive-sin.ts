@@ -13,12 +13,12 @@
  * reached through B). This is link 4 alone, first, as the recommendation asks;
  * links 1 to 3 (Left Fin, Right Fin, Genais with the Core) come in front later.
  *
- * ## Placeholder art, said out loud
+ * ## The art: the driver's picks (D-279)
  *
- * `spriteKey: 'overdrive-sin'` has **no painting**: the stage draws its grey
- * boss silhouette for a missing key (`BattlePresenterStage.add`,
- * `paintBossSilhouette`). Nothing is painted or installed until Bailey picks
- * from the painting pilot (AGENTS.md rules 8 and 9).
+ * `spriteKey: 'overdrive-sin'` name the painted folders the driver picked and staged
+ * (D-279, delegated by Bailey; `docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md`): head C repaired, round 3's jaw rig in five mouth stages.
+ * Until the files are installed under `public/art/characters/`, the stage draws its grey boss silhouette for
+ * a missing key, as before.
  *
  * ## Conflicts recorded rather than merged (research §10)
  *
@@ -48,7 +48,7 @@ export const OVERDRIVE_SIN_SCRIPT = 'overdrive-sin';
 const overdriveSin: EnemyDef = {
   id: OVERDRIVE_SIN_ID,
   name: 'Sin',
-  spriteKey: 'overdrive-sin', // PLACEHOLDER — no painting; the stage's boss silhouette (see the header)
+  spriteKey: 'overdrive-sin', // D-279: head C (see the header)
   slot: 0,
   stats: {
     hp: 140_000, // §2.1 [verified: 5 sources]

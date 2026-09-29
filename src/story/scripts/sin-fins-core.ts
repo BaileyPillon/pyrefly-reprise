@@ -184,7 +184,13 @@ export const sinFinsCoreScripts: ChapterScripts = {
       shake(12, 800),
       say('none', "The Fahrenheit's cannon tears the fin away.", { auto: 1800 }),
       say('cid', 'One arm down! Now the other side!', { auto: 1500 }),
-      say('wakka', 'Other side? It has two of those?!', { auto: 1400, fallback: [{ who: 'rikku', text: 'Other side?! It has two of those?!' }] }),
+      say('wakka', 'Other side? It has two of those?!', {
+        auto: 1400,
+        fallback: [
+          { who: 'rikku', text: 'Other side?! It has two of those?!' },
+          { who: 'tidus', text: 'The other side? It has two of those?!' },
+        ],
+      }),
     ],
     'right-fin-down': [
       sfx('explosion'),
@@ -196,7 +202,7 @@ export const sinFinsCoreScripts: ChapterScripts = {
       say('tidus', "No. We've got the ball now.", { auto: 1400 }),
       say('tidus', 'Nobody hands it back at a time like this.', { auto: 1600 }),
       beat(1200),
-      say('wakka', 'Ya. I was hoping you would say that.', { auto: 1500 }),
+      say('wakka', 'Ya. I was hoping you would say that.', { auto: 1500, fallback: [{ who: 'auron', text: 'I was hoping you would say that.' }] }),
       say('none', 'Wakka jumps onto Sin. One by one, the rest follow.', { auto: 1900 }),
       setPose('tidus', 'ready'),
     ],

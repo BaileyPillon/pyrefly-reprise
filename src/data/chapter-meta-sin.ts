@@ -3,17 +3,18 @@
  * research/ffx-sin.md §0.3]: Chapter XVII, "Sin: the Fins and the Core", and Chapter XVIII, "Sin: the Face"
  * (D-270's working titles; Bailey confirms them at listing).
  *
- * **Registered, not listed.** `./chapter-meta.ts` spreads {@link SIN_CHAPTER_META} into
- * `UNLISTED_CHAPTER_META`, so the pause screen and the prep panel find both by id while chapter select shows
- * no card (plan REVIEW must-change 12: wired now, so nothing is orphaned). The listing step moves them into
- * `CHAPTER_META` (plan §6).
+ * **Listed 2026-09-29** (D-279: the driver's picks, which Bailey delegated; he can swap any of them).
+ * `./chapter-meta.ts` spreads {@link SIN_CHAPTER_META} into `CHAPTER_META`, after Chapter XVI (plan §6).
  *
- * **Placeholders, and they say so:**
- * - `heroArt` names each chapter's pause plate, which is not painted (it is on the art list, plan §4), so
- *   the screen shows `heroArtFallback`, an existing portrait.
- * - `snapshots` are existing, shipped stills only (the rule `ChapterSnapshot` states): the *Fahrenheit*'s deck
- *   (the chapters' placeholder scene), Bevelle, and portraits. No Sin painting exists yet.
- * - `musicKeys` are the stand-in cues the records play (plan §3.6; THEMES.md "Owed cues").
+ * **The picks, and what is still a stand-in:**
+ * - `heroArt` names each chapter's pause plate, the driver's pick (D-279;
+ *   `docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md` "Pause hero plates"): XVII is the Left Fin over
+ *   the rail at NEAR with its core gathering, XVIII is head C at stage 3 on its own plate. Until the files are
+ *   installed under `public/art/pause/`, the screen shows `heroArtFallback`, an existing portrait.
+ * - `snapshots` are existing, shipped stills only (the rule `ChapterSnapshot` states): the *Fahrenheit*'s deck,
+ *   Bevelle, and portraits.
+ * - `musicKeys` are the stand-in cues the records play (plan §3.6; THEMES.md "Owed cues"), labelled: agents
+ *   cannot hear (rule 13), so the cues are the driver's stand-ins until Bailey judges the owed ones by ear.
  *
  * The teach lines are the concept sheet's "What it teaches" (plan §3.4): range buys safety, not damage;
  * Armor Break opens every link; kill order is yours; a burst against a clock; Wards against Gaze. Quotes are
@@ -30,12 +31,12 @@ export const SIN_FINS_CORE_META: ChapterMeta = {
   gameLabel: 'FFX',
   numeral: 'XVII',
   title: 'Sin: the Fins and the Core',
-  subtitle: 'Two arms, a shield and a core, with no rest between them',
+  subtitle: 'No Rest Between Links', // the pause card's 2-4 word tagline: ours (research §1.2, summarised)
   location: "Deck of the Fahrenheit, then Sin's back — in flight",
   blurb:
     'All of Spira sings the Hymn so Sin will hold still, and the Fahrenheit flies straight at it. One fin, ' +
     'then the other, then the party jumps onto its back, and nothing heals in between.',
-  heroArt: 'pause/chapter-sin-fins-core', // PLACEHOLDER: not painted (plan §4); the fallback shows
+  heroArt: 'pause/ch17-sin-fins-core', // D-279, the driver's pick; the fallback shows until it is installed
   heroArtFallback: 'portraits/tidus.png',
   quote: { text: "We've got the ball. Nobody hands it back now.", speaker: 'Tidus' },
   handwritten: 'distance is safety, not damage',
@@ -46,7 +47,7 @@ export const SIN_FINS_CORE_META: ChapterMeta = {
   ],
   tip: 'Close in, Armor Break, pull back. When the core on the fin glows, get the ship out before Gravija lands, if Cid acts first.',
   snapshots: [
-    { image: 'backdrops/evrae-airship-deck.png', caption: 'the same deck, a bigger enemy' },
+    { image: 'backdrops/evrae-airship-deck.png', caption: 'same deck, bigger enemy' },
     { image: 'portraits/cid.png', caption: 'no missiles this time' },
     { image: 'portraits/lulu.png', caption: 'her plan: the Hymn' },
   ],
@@ -63,12 +64,12 @@ export const SIN_FACE_META: ChapterMeta = {
   gameLabel: 'FFX',
   numeral: 'XVIII',
   title: 'Sin: the Face',
-  subtitle: 'Before the mouth is fully open',
+  subtitle: 'Before the Mouth Opens', // the pause card's 2-4 word tagline: ours (research §5.4, summarised)
   location: 'Deck of the Fahrenheit — above Bevelle',
   blurb:
     'Sin fell into Bevelle and rose again with wings. The main gun is still broken, so Cid flies the ship ' +
     'straight at its face, and the mouth begins to open.',
-  heroArt: 'pause/chapter-sin-face', // PLACEHOLDER: not painted (plan §4); the fallback shows
+  heroArt: 'pause/ch18-sin-face', // D-279, the driver's pick; the fallback shows until it is installed
   heroArtFallback: 'portraits/yuna.png',
   quote: { text: 'He is waiting for you.', speaker: 'Auron' },
   handwritten: 'the mouth is the clock',
@@ -87,5 +88,5 @@ export const SIN_FACE_META: ChapterMeta = {
   musicKeys: ['scene-fahrenheit', 'boss-evrae', 'victory-ffx'], // stand-ins (THEMES.md, owed: the countdown cue, S-21)
 };
 
-/** Both, in chapter order, for `./chapter-meta.ts#UNLISTED_CHAPTER_META`. */
+/** Both, in chapter order, for `./chapter-meta.ts#CHAPTER_META`. */
 export const SIN_CHAPTER_META: readonly ChapterMeta[] = [SIN_FINS_CORE_META, SIN_FACE_META];

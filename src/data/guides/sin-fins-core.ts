@@ -11,7 +11,7 @@
  * formula built as named settings (S-12), and how Genais leaves its shell is our reading of the in-game Scan
  * text (S-2). The Fins opening far away is Gestahl's (S-8), the default.
  *
- * Registered and unlisted like its chapter (`src/data/chapters-unlisted.ts`): the panel finds it by the four
+ * Listed with its chapter on 2026-09-29 (D-279): the panel finds it by the four
  * boss ids once the chapter runs, through `./index.ts`'s `GUIDES`.
  */
 

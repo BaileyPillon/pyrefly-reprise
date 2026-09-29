@@ -219,6 +219,19 @@ export const PLATE_COMPOSITIONS: Readonly<Record<string, PlateComposition>> = {
     glow: 'rgba(190, 160, 255, 0.36)',
     layers: [{ key: 'x2-ixion', focus: [0.27, 0.39], hero: P(56, 40, 88), card: card(300) }],
   },
+  // XVII (FFX): the Left Fin over the rail, the arm rising out of the right edge; the card crops to the claw.
+  // D-279 (the driver's pick). Values from docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md item 7.
+  'sin-fins-core': {
+    scene: { hero: '50% 50%', card: '50% 35%' },
+    glow: 'rgba(190, 150, 255, 0.36)',
+    layers: [{ key: 'sin-left-fin', focus: [0.155, 0.13], hero: P(63, 16, 84), card: cardClear(198, [0.155, 0.13]) }],
+  },
+  // XVIII (FFX): head C at golden dusk, the amber eye on the focus (D-279; INSTALL.md item 7).
+  'sin-face': {
+    scene: { hero: '50% 55%', card: '50% 30%' },
+    glow: 'rgba(255, 170, 110, 0.36)',
+    layers: [{ key: 'overdrive-sin', focus: [0.324, 0.506], hero: P(60, 28, 60), card: cardClear(143, [0.324, 0.506]) }],
+  },
 };
 
 /** The placement a chapter without an entry gets: its boss, big, right of the title. */

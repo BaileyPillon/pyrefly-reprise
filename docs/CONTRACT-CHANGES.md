@@ -6,6 +6,27 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-29 — Sin listed: `CHAPTERS` and `CHAPTER_IDS` gain `'sin-fins-core'` and `'sin-face'` (FFX only; the listing is shared plumbing)
+
+**FFX only** for the chapters [AGENTS.md hard rule 14; research/ffx-sin.md §0.3]; the listing itself is shared
+plumbing, case "both" (CHK-020). Branch `chapter-sin`, package L (D-279: the driver's picks, which Bailey delegated).
+Additive: no id, number or type is renamed or removed, and no other chapter's record moves.
+
+- `encounters.ts`: `SIN_FINS_CORE` and `SIN_FACE` move from `UNLISTED_CHAPTERS` (`chapters-unlisted.ts`, which keeps
+  only the FF7 experiment) into `CHAPTERS`, and `'sin-fins-core'`, `'sin-face'` into `CHAPTER_IDS`, after Chapter
+  XVI, as numbers 17 and 18 (the ids and `| 18` were added by package S, below). The board now shows eighteen cards
+  and counts seventeen ("0 of 17"; Chapter VII is still a locked COMING card on this branch). Three list lines were
+  folded to keep the file at 399 lines.
+- `chapter-meta.ts` (not a contract file, recorded for its readers): `CHAPTER_META` spreads `SIN_CHAPTER_META` after
+  Chapter XVI; `UNLISTED_CHAPTER_META` is now empty. `story/registry.ts`: `ChapterKey` gains both ids.
+- Saves: none moves. A live release-28 save (main `6ea8528f`, exported from that build's own SaveStore) loads
+  unchanged and gains both chapters unplayed (`tests/unit/save-sin-listed-fixture.test.ts`,
+  `tests/fixtures/saves/release-28-main.json`). `src/app/SaveData.ts` is untouched.
+- Presentation seams, FFX only and inert elsewhere (not contract files): `scenes/evrae-airship-deck.ts` exports
+  `makeAirshipDeckScene({ key, roll })` (Chapter VIII's factory is that call on its own plate, unchanged); the range
+  director stages a subject from `scenes/evrae-airship-subjects.ts` (Evrae's numbers unchanged, the two Fins');
+  `app/screens/BattleScreenSinPoses.ts` follows Genais's shell, the Core's charge and the head's mouth stage.
+
 ## 2026-09-29 — `types.ts` `checkpointOnEntry` doc: FFX's Sin link 3, behind an OFF switch (FFX only)
 
 **FFX only** [AGENTS.md hard rule 14]. Branch `chapter-sin`. `EnemyGroupDef.checkpointOnEntry`'s doc comment, which said

@@ -17,11 +17,12 @@
  * later links set `carriesPartyState`, so the party's statuses carry as well as
  * HP, MP, gauges and items (§1.2 `[verified: 3 sources]`; `BattleScreenSetup.carryFfx`).
  *
- * ## Placeholder art, said out loud
+ * ## The art: the driver's picks (D-279)
  *
- * `spriteKey: 'sin-left-fin'` and `'sin-right-fin'` have **no painting**: the
- * stage draws its grey boss silhouette for a missing key. Nothing is painted or
- * installed until Bailey picks (AGENTS.md rules 8 and 9).
+ * `spriteKey: 'sin-left-fin'` and `'sin-right-fin'` name the painted folders the driver picked and staged
+ * (D-279, delegated by Bailey; `docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md`): Fin A, each arm painted on its own, NEAR and FAR, at rest and gathering.
+ * Until the files are installed under `public/art/characters/`, the stage draws its grey boss silhouette for
+ * a missing key, as before.
  *
  * ## Conflicts recorded rather than merged (research §10)
  *
@@ -82,7 +83,7 @@ function fin(id: string, name: string, script: string, rewards: EnemyDef['reward
   return {
     id,
     name,
-    spriteKey: `sin-${id}`, // PLACEHOLDER — no painting; the stage's boss silhouette (see the header)
+    spriteKey: `sin-${id}`, // D-279: Fin A (see the header)
     slot: 0,
     stats: {
       hp: 65_000, // §2.1 [verified: 5 sources]

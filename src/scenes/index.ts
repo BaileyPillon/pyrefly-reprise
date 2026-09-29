@@ -26,6 +26,7 @@ import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farp
 import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
+import { SIN_SCENE_ENTRIES, SIN_SCENE_FACTORIES } from './evrae-airship-sin.ts';
 import { buildCavernStolenFaythScene, CAVERN_STOLEN_FAYTH_SLOTS } from './cavern-stolen-fayth.ts';
 import { buildCloister100Scene, CLOISTER_100_SLOTS } from './cloister-100.ts';
 import { buildRoadToTheFarplaneScene, ROAD_TO_THE_FARPLANE_SLOTS } from './road-to-the-farplane.ts';
@@ -190,14 +191,13 @@ SCENES.set('leblanc-last-room', { key: 'leblanc-last-room', title: 'Chateau Lebl
 SCENES.set('macalania-temple', { key: 'macalania-temple', title: 'Macalania Temple — the antechamber',
   build: buildDemoScene, slots: MACALANIA_TEMPLE_SLOTS, placeholder: false });
 /**
- * The deck of the Fahrenheit (Chapter 8, FFX only) — real
- * (`buildEvraeAirshipDeckScene` in {@link SCENE_FACTORIES}, which also
- * publishes the NEAR/FAR range director on the scene's `userData`); `build`
- * is the unreachable demo diorama, as for Leblanc above
- * [docs/handoff/chapter-evrae-scene.md §6].
+ * The deck of the Fahrenheit (Chapter 8, FFX only) — real (`buildEvraeAirshipDeckScene`, which publishes the
+ * NEAR/FAR range director on the scene's `userData`); `build` unreachable [docs/handoff/chapter-evrae-scene.md §6].
+ * Sin's two chapters (XVII, XVIII; FFX only) stand on the same deck over their own plates (`./evrae-airship-sin.ts`).
  */
 SCENES.set('evrae-airship-deck', { key: 'evrae-airship-deck', title: 'The deck of the Fahrenheit',
   build: buildDemoScene, slots: EVRAE_AIRSHIP_DECK_SLOTS, placeholder: false });
+for (const entry of SIN_SCENE_ENTRIES) SCENES.set(entry.key, entry);
 /** The Cavern of the Stolen Fayth (Chapter IX, FFX only): real, `build` unreachable as for Leblanc [cavern-stolen-fayth.ts]. */
 SCENES.set('cavern-stolen-fayth', { key: 'cavern-stolen-fayth', title: 'Cavern of the Stolen Fayth — the last chamber',
   build: buildDemoScene, slots: CAVERN_STOLEN_FAYTH_SLOTS, placeholder: false });
@@ -262,6 +262,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'leblanc-last-room': buildLeblancLastRoomScene,
   'macalania-temple': buildMacalaniaTempleScene,
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
+  ...SIN_SCENE_FACTORIES, // Chapters XVII and XVIII (FFX only): the deck over Sin's plates
   'cavern-stolen-fayth': buildCavernStolenFaythScene,
   'via-infinito': buildCloister100Scene,
   'road-to-the-farplane': buildRoadToTheFarplaneScene,

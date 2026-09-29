@@ -17,8 +17,6 @@
 
 import type { Chapter } from './encounters.ts';
 import { FF7_GUARD_SCORPION } from './chapter-ff7-guard-scorpion.ts';
-import { SIN_FINS_CORE } from './chapter-sin-fins-core.ts';
-import { SIN_FACE } from './chapter-sin-face.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
@@ -42,6 +40,8 @@ import { SIN_FACE } from './chapter-sin-face.ts';
  * On 2026-09-29 Sin became two chapters, split where the game saves (D-270, FFX only): Chapter XVII,
  * "Sin: the Fins and the Core" (`sin-fins-core`, links I to III, `./chapter-sin-fins-core.ts`), and Chapter
  * XVIII, "Sin: the Face" (`sin-face`, link IV; the branch-only `sin` renamed and renumbered,
- * `./chapter-sin-face.ts`). Both stay unlisted until Bailey's picks.
+ * `./chapter-sin-face.ts`). Both were listed on 2026-09-29 (now in `CHAPTERS`, after Chapter XVI), on the
+ * driver's picks of the art, the countdown display and the stand-in cues, which Bailey delegated (D-279:
+ * "Your picks (Recommended)"; he can swap any pick later).
  */
-export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION, SIN_FINS_CORE, SIN_FACE] as const;
+export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION] as const;

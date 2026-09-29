@@ -21,27 +21,22 @@
  * `sinFinsCoreBuild`: the same preset with Tidus's and Rikku's Trigger Command
  * back (the Fins' range fight is Evrae's, §4 `[verified: 4 sources]`).
  *
- * ## Registered, reachable, NOT listed (the switch)
+ * ## Listed (2026-09-29), on the driver's picks
  *
- * The record sits in `UNLISTED_CHAPTERS`: `getChapter` and
- * `window.__pyrefly.gotoChapter('sin-fins-core')` reach it by id; chapter select
- * shows **no card** and nothing counts it. Listing it is the switch
- * (`docs/plans/sin-two-chapters-plan.md` §6).
+ * Listed as Chapter XVII, after Chapter XVI, on **D-279**: Bailey delegated Sin's paintings, the countdown
+ * display and the music to the driver ("Your picks (Recommended)"), and can swap any of them later. What each
+ * field is:
  *
- * Every field a player would see or hear is a **placeholder**, and says so:
- *
- * - `title` — D-270's working title; Bailey confirms it at listing (Q13).
- *   `subtitle`, `location`, `blurb` — our own summaries of research §1.1, §1.2,
- *   §9.1 and §9.2 beats 1 to 7 (no line is quoted).
- * - `sceneKey: 'evrae-airship-deck'` — **placeholder** (the same *Fahrenheit*
- *   deck; links 1 and 2 are on the outer deck in flight, §9.1). Link 3 is on
- *   Sin's back (`[single source]`), and it stays on the deck, labelled, until
- *   that backdrop is painted and picked (plan §3.1, Q6).
- * - The enemies' art — **placeholder**: the stage's grey boss silhouettes.
- * - `music` — **placeholder** FFX cues until the assault cue is written and
- *   picked by ear (rules 8 and 13; plan §3.6).
- * - `scriptsRef` — **placeholder** (`src/story/scripts/sin-fins-core.ts`, a stub
- *   package P fills).
+ * - `title` — D-270's working title (Q13). `subtitle`, `location`, `blurb` — our own summaries of research
+ *   §1.1, §1.2, §9.1 and §9.2 beats 1 to 7 (no line is quoted).
+ * - `sceneKey: 'sin-fahrenheit-flight'` — the driver's plate (late afternoon over the cloud sea;
+ *   `src/scenes/evrae-airship-sin.ts`), on Chapter VIII's deck. **Link III (Sin's back, `[single source]`) stays on
+ *   it**, labelled: a per-link scene swap is a new seam (`EnemyGroupDef` has no scene key; plan Q6), and the
+ *   `sin-back` painting waits for it. A missing plate falls back to Evrae's deck painting.
+ * - The enemies' art — the driver's picks (Fin A both arms, Genais A, Core A), by `spriteKey`; the grey boss
+ *   silhouette shows until the files are installed.
+ * - `music` — **stand-in** FFX cues, labelled (agents cannot hear, rule 13): the owed assault cue is Bailey's
+ *   to judge by ear (plan §3.6, D-209).
  */
 
 import type { Chapter } from './encounters.ts';
@@ -49,7 +44,7 @@ import { sinFinsCoreScripts } from '../story/scripts/sin-fins-core.ts';
 import { sinFinsCoreBuild } from './ffx/builds/sin-fahrenheit.ts';
 import { sinLeftFinGroup } from './ffx/enemies/sin-fins.ts';
 
-/** Chapter 17 (unlisted: `./chapters-unlisted.ts`). */
+/** Chapter XVII, listed 2026-09-29 (`./encounters.ts` `CHAPTERS`). */
 export const SIN_FINS_CORE: Chapter = {
   id: 'sin-fins-core',
   game: 'ffx',
@@ -63,13 +58,13 @@ export const SIN_FINS_CORE: Chapter = {
   blurb:
     'Spira sings the Hymn to hold Sin still while the Fahrenheit flies at it. ' +
     'It fights one fin, then the other, and then the party leaps onto Sin itself.',
-  sceneKey: 'evrae-airship-deck', // PLACEHOLDER — see the file header
+  sceneKey: 'sin-fahrenheit-flight', // D-279 (the driver's pick); link III stays on it, see the file header
   thumbnailKey: 'chapter-sin-fins-core',
   buildRef: sinFinsCoreBuild, // D-264, plus Tidus's and Rikku's orders to Cid (§4 [verified: 4 sources])
   enemyGroupRef: sinLeftFinGroup,
-  scriptsRef: sinFinsCoreScripts, // PLACEHOLDER — see the file header
+  scriptsRef: sinFinsCoreScripts,
   music: {
-    // PLACEHOLDER FFX cues until the owed assault cue (plan §3.6).
+    // STAND-IN FFX cues, labelled, until the owed assault cue (plan §3.6; D-279: the driver's stand-ins).
     scene: 'scene-fahrenheit',
     battle: 'boss-evrae',
     victory: 'victory-ffx',

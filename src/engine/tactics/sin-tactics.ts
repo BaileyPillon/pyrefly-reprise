@@ -3,8 +3,8 @@
  * [AGENTS.md rule 14].
  *
  * Chapter XVII chains three formations with four boss ids, so its one tactic is registered under every id,
- * the way Chapters III and V are. Chapter XVIII fields Overdrive Sin alone. Both chapters are unlisted
- * (`src/data/chapters-unlisted.ts`); `./lookup.ts#CHAPTER_GAME` names both, so the lookup finds them by game.
+ * the way Chapters III and V are. Chapter XVIII fields Overdrive Sin alone. Both chapters were listed on
+ * 2026-09-29 (D-279); `./lookup.ts#CHAPTER_GAME` names both, so the lookup finds them by game.
  */
 
 import type { Tactic } from './common.ts';

@@ -72,12 +72,13 @@ describe('the two records (D-270) and the rename (plan §1.4)', () => {
     expect(getChapter('sin')).toBeUndefined();
   });
 
-  it('neither is listed: in UNLISTED_CHAPTERS, not in CHAPTERS or CHAPTER_IDS', () => {
+  it('both are listed (2026-09-29, D-279): in CHAPTERS and CHAPTER_IDS after Chapter XVI, not in UNLISTED_CHAPTERS', () => {
     for (const id of ['sin-fins-core', 'sin-face']) {
-      expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain(id);
-      expect(CHAPTERS.map((c) => c.id)).not.toContain(id);
-      expect(CHAPTER_IDS as readonly string[]).not.toContain(id);
+      expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain(id);
+      expect(CHAPTERS.map((c) => c.id)).toContain(id);
+      expect(CHAPTER_IDS as readonly string[]).toContain(id);
     }
+    expect(CHAPTER_IDS.slice(-3)).toEqual(['ffx2-ixion-djose', 'sin-fins-core', 'sin-face']);
   });
 
   it('links 2 and 3 carry the party state; no other FFX formation sets the flag (R7)', () => {

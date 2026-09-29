@@ -66,13 +66,16 @@ import { ISAARU_SEAMS, isaaruScripts } from './scripts/ffx-isaaru.ts';
 import { FALLEN_AEONS_AI_TRIGGERS, FALLEN_AEONS_SEAM, ffx2FallenAeonsScripts } from './scripts/ffx2-fallen-aeons.ts';
 import { DEN_OF_WOE_AI_TRIGGERS, ffx2DenOfWoeScripts } from './scripts/ffx2-den-of-woe.ts';
 import { IXION_AI_TRIGGERS, ffx2IxionDjoseScripts } from './scripts/ffx2-ixion-djose.ts';
+import { SIN_FINS_CORE_SEAMS, sinFinsCoreScripts } from './scripts/sin-fins-core.ts';
+import { sinFaceScripts } from './scripts/sin-face.ts';
 
 /** Chapter ids, matching `data/encounters.ts`. */
 export type ChapterKey =
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
-  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose';
+  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose'
+  | 'sin-fins-core' | 'sin-face';
 
 /** Every chapter's story layer, in play order. */
 export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
@@ -91,6 +94,7 @@ export const STORY_CHAPTERS: Readonly<Record<ChapterKey, ChapterScripts>> = {
   'isaaru-via-purifico': isaaruScripts, // Chapter XIV as listed 2026-09-25: the Via Purifico
   'ffx2-den-of-woe': ffx2DenOfWoeScripts, // Chapter XV as listed 2026-09-26: the Den of Woe
   'ffx2-ixion-djose': ffx2IxionDjoseScripts, // Chapter XVI as listed 2026-09-27: Ixion at Djose
+  'sin-fins-core': sinFinsCoreScripts, 'sin-face': sinFaceScripts, // Chapters XVII and XVIII (FFX), listed 2026-09-29
 };
 
 export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
@@ -136,6 +140,7 @@ export const AI_EMITTED_TRIGGERS: Readonly<Record<ChapterKey, readonly string[]>
   'ffx2-fallen-aeons': FALLEN_AEONS_AI_TRIGGERS, // the first sister down, Anima's third Pain (`battle/ffx2/ai/{magus-sisters,fallen-aeons}.ts`)
   'ffx2-den-of-woe': DEN_OF_WOE_AI_TRIGGERS, // Baralai's count at seven (`battle/ffx2/ai/den-of-woe.ts`)
   'ffx2-ixion-djose': IXION_AI_TRIGGERS, // Ixion picks Recharge (`battle/ffx2/ai/ixion.ts`); the banner is the tell, the script is silent
+  'sin-fins-core': [], 'sin-face': [], // No Sin AI emits one: every beat goes through `mid` (the mouth lines are AI `message`s)
   'ffx2-vegnagun-shuyin': [
     'farplane-voice', 'farplane-voice-braska', 'vegnagun-tail-quarter', 'auron-halfway', 'jecht-no-overtime',
     'shuyin-line-1', 'shuyin-line-2', 'shuyin-line-3', 'shuyin-line-4', 'shuyin-line-5', 'shuyin-line-6', 'shuyin-line-7',
@@ -178,6 +183,7 @@ export const CHAIN_SEAMS: Readonly<Record<ChapterKey, readonly string[]>> = {
   'yojimbo-cavern': [], 'seymour-natus': [], 'seymour-omnis': [],
   'ffx2-den-of-woe': [], // The three shades rise back to back, no break (GP3 a): every entrance is an 8 s interrupt.
   'ffx2-ixion-djose': [], // One link, no seam: the fall is the post scene.
+  'sin-fins-core': [...SIN_FINS_CORE_SEAMS], 'sin-face': [], // A fin torn away between links; the Face is one link.
   // The Paragon-to-Trema link: the seam fires off Paragon's KO, between the two formations.
   'ffx2-trema': [TREMA_LINK_SEAM],
   // Isaaru calls his next aeon off the last one's KO, between two formations: his cry, then her lock line.

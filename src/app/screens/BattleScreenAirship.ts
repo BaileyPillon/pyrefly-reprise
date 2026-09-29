@@ -28,8 +28,8 @@
  * ## Sin's Fins (Chapter XVII, FFX only), and why the bind is scoped
  *
  * The Fins' fights are Evrae's range game on the same deck (research/ffx-sin.md §4), so the director stages the
- * **Fin** at the NEAR and FAR spots as it stages Evrae: until the Fins are painted it is the stage's grey boss
- * silhouette, a **placeholder** (plan §3.1). The bound foe is chosen from {@link RANGE_FOE_IDS} only, Evrae or
+ * **Fin** at the NEAR and FAR spots as it stages Evrae, with the driver's picked paintings and sizes (D-279;
+ * `scenes/evrae-airship-subjects.ts`; the stage's silhouette until the files are installed). The bound foe is chosen from {@link RANGE_FOE_IDS} only, Evrae or
  * one of the two Fin ids, and never "the formation's counted foe": Chapter XVIII's Overdrive Sin publishes the
  * same `airship.range` and `airship.countsTargetings` on the same deck, and binding it would hand the head to
  * Evrae's NEAR/FAR director, a staging change nobody has seen (plan REVIEW must-change 3; rule 9). Link 4 binds
@@ -43,7 +43,10 @@
  * The director's other Evrae-only readers stay inert in these fights, each by its own flag: the Inhale
  * painting reads `airship.breathCharged`, which only Evrae sets; the missile rack is read by the order widget
  * only (`ui/ffx/AirshipOrders.ts`: no rack, no pips); the defeat veil (D-031, `evrae-airship-fall.ts`) follows
- * whichever foe is bound, so a torn-away Fin sinks through it: a **placeholder** until the Fin plates exist.
+ * whichever foe is bound, so a torn-away Fin sinks through it (no torn-away painting was picked).
+ *
+ * Genais's shell, the Core's charge and the head's mouth stages follow the engine's flags through
+ * `./BattleScreenSinPoses.ts`, on the same per-frame sync.
  */
 
 import type { Object3D } from 'three';
@@ -54,6 +57,7 @@ import type { BattleCamera } from '../../engine/BattleCamera.ts';
 import type { PaintedStage } from '../../engine/BattlePresenterStage.ts';
 import { airshipRangeDirectorOf, type AirshipRangeDirector } from '../../scenes/evrae-airship-director.ts';
 import { airshipRangeOf } from '../../scenes/evrae-airship-range.ts';
+import { followSinPoses } from './BattleScreenSinPoses.ts';
 
 /** The foes the range director may stage at NEAR and FAR: Evrae (Chapter VIII) and Sin's two Fins (Chapter XVII). */
 export const RANGE_FOE_IDS: readonly CombatantId[] = [EVRAE_ID, ...SIN_FIN_IDS];
@@ -67,7 +71,7 @@ export function rangeFoeOf(state: BattleState | null | undefined): CombatantId |
   return null;
 }
 
-/** The two Stage calls this hook makes (`PaintedStage` satisfies it). */
+/** The Stage calls this hook makes (`PaintedStage` satisfies it). */
 type AirshipStage = Pick<PaintedStage, 'actor' | 'removeCombatant'>;
 
 /** Cid keeps his CTB tile and is never drawn (scene handoff §7 F-1). Idempotent. */
@@ -107,7 +111,7 @@ export async function attachAirshipBattle(
   director.bindCamera(loaded.battleCamera);
   const foeId = rangeFoeOf(state);
   let bound = foeId ? (stage.actor(foeId) ?? null) : null;
-  // Evrae binds exactly as it always has (its own art id); a Fin binds under its id (no paintings yet: the silhouette).
+  // Evrae binds exactly as it always has (its own art id); a Fin binds under its id, which picks its paintings.
   if (foeId === null || foeId === EVRAE_ID) await director.bindEvrae(bound);
   else await director.bindEvrae(bound, foeId);
   director.sync(state);
@@ -128,10 +132,14 @@ export async function attachAirshipBattle(
     if (id === null && airshipRangeOf(live) === null && director.current !== 'near') director.setRange('near');
   };
 
+  // Sin's painted states (Genais's shell, the Core's charge, the head's mouth; FFX only): inert elsewhere.
+  const sinPoses = followSinPoses(stage);
+
   return {
     sync: (state) => {
       followSinChain(state);
       director.sync(state);
+      sinPoses.sync(state);
     },
     dispose: () => {
       director.bindCamera(null);
