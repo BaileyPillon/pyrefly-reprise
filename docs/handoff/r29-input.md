@@ -136,3 +136,60 @@ submenu, not a target), which is the probe's step, not the fight. run.json kept 
 
 `npx tsc --noEmit` clean; full `npx vitest run` 618 files passed, 5 skipped;
 `node tools/orphans.mjs` 24 (unchanged). Not pushed, not deployed.
+
+## CHECK (independent checker, 2026-09-28; did not build it)
+
+Branch at f27778ae on origin/main c9c1c295. Headless Playwright from node
+(PYREFLY_BROWSER=gpu) against a dev server of this worktree on port 8060 (stopped by
+PID). Scratch and JPEGs: `D:/Tools/pyrefly-scratch/r29/input-check/`.
+
+**Gates:** tsc clean; the seven new test files pass (23 tests); full suite once:
+618 files passed, 5 skipped (9643 tests); orphans 24 (none of the new modules);
+`git merge-tree` against origin/main: no conflict. `critic-plan --paths` classes the
+change DEEP (CoachLayer is a shared system; both games): focused before deploy, deep
+review owed after.
+
+**Per issue, re-run by me:**
+- PR-0219 (FFX-2 only) HOLDS. `route.mjs ffx2-bahamut win --gamepad --seed=1`:
+  victory, 21 turns, 0 fails, 0 console errors, 198 pad presses, 19 of 20 picks
+  reached an engine action; keyboard fallbacks only N/E/G (panel toggles). Round 15:
+  80 presses, 0 actions.
+- PR-0232 (both; FFX Ch XII) HOLDS. 390x844 hasTouch, coordinate taps at Yuna's
+  bracket centre on party-aimed heals: seed 1 5/5 and seed 1001 5/5 -> Yuna (Tidus,
+  Auron and Yuna turns, once with the coach line up). Auron's and Tidus's own centres
+  still resolve to them (3/3 each). Note: `elementFromPoint` at Yuna's centre still
+  returns Auron's bracket (the click is resolved in `TargetCursor.idAt`), so the
+  critic's literal acceptance line ("elementFromPoint returns Yuna") does not hold
+  while the tap outcome does; a harness using `locator.tap()` will still report
+  "intercepted". The round's dimmed-Mortiphasm overlap did not recur on these seeds.
+- PR-0236 (FFX only, Ch VIII) HOLDS. Real clicks: Pull back ordered; next turn
+  Orders is disabled, a click does not open the widget, help reads "Ordered";
+  greyed reason colour rgb(216,216,222) on rgb(42,42,48).
+- PR-0233 (FFX only) HOLDS. Ch I, plate open: no plate/name intersection and no
+  clipped name at 1600x900, 2000x1012, 2560x1080. The plate now sits partly over
+  Seymour's lower leg at 2000x1012 (not the face).
+- PR-0237 (both) HOLDS on desktop where a line appears: FFX Ch I 2000x1012 and
+  FFX-2 Ch IV 2560x1080 cover 0 px of any fighter box. The critic's own FFX-2 case
+  (Ch XI, Item targeting, 1600x900) could not be reproduced: no coach line appears
+  there via `gotoChapter` (same as the builder). Measurement uses the fix's own box
+  model (`TargetingPort.rect`), confirmed by eye on the 2000x1012 frame.
+- PR-0238 (both) HOLDS. Rule matches 8cf17246f^ except 14 px, full paper ink and a
+  background hover in place of the opacity hover; phone rail rule still wins.
+- FOC28-P02 (FFX only) HOLDS. 390x844: subtitle 14 px, scrollWidth = clientWidth,
+  box right 342 inside panel 366; selected x2 is ink on gold.
+
+**Findings (none blocking):**
+1. minor, introduced for FFX-2 by PR-0219: on a fresh profile one pad A press both
+   dismisses the coach line and acts on the menu (FFX-2 Ch IV: the White Magic
+   submenu opens). The keyboard path is guarded against exactly this (FOC-01,
+   `CoachMark.onConfirmCapture`) but the pad path is not. FFX has the same
+   behaviour already on main (Ch I: A dismisses Auron's line and opens Attack
+   targeting). Nothing is submitted; B backs out. Suggest a shared guard in a later
+   batch (both games).
+2. minor, rule 7: `src/app/screens/PauseScreen.ts` went 399 -> 400 lines (not under
+   400); already-oversized `ffx2/CommandMenu.ts` (631 -> 639) and
+   `ffx/TargetCursor.ts` (510 -> 531) grew.
+3. minor, rule 15: the paper preflight was written after the first two fixes were
+   built (the builder says so).
+4. minor: on the phone the Grand Summon rows and the x2 chip still render about 11 px
+   (10 px x 1.13); outside FOC28-P02's subtitle, not a regression.
