@@ -22,6 +22,8 @@ import type {
   FFXPartyBuild,
   InventoryEntry,
   MidBattleTrigger,
+  StatusId,
+  StatusInstance,
 } from '../../battle/common/types.ts';
 import { Ff7NotHandledError } from '../../battle/common/game.ts';
 import { cloneData } from '../../battle/common/clone.ts';
@@ -119,11 +121,13 @@ export function setupForNextLink(
  * engine needs); live state supplies the mutable half.
  *
  * `wholeState` (FFX-2, `carriesPartyState`, Chapter XIII) carries statuses and the worn
- * dressphere with the gates reset (`carryWholeState`). `full` (FFX-2 only,
+ * dressphere with the gates reset (`carryWholeState`). In **FFX** the same flag carries the
+ * statuses only (Sin links 2 and 3, research/ffx-sin.md §1.2; {@link carriedFfxStatuses}); no
+ * other FFX formation sets it, so every other FFX chain carries as before. `full` (FFX-2 only,
  * `EnemyGroupDef.carriesFullPartyState`, Chapter XV's GP3 = a)
  * also carries each girl's statuses, worn dressphere and grid progress
  * (`./BattleScreenCarry.ts`). Without it the FFX-2 carry is HP, MP and items, as
- * every shipped chain has it; the FFX carry ignores the flag.
+ * every shipped chain has it; the FFX carry ignores `full`.
  */
 export function carryPartyForward(
   build: BattleSetup['party'],
@@ -132,12 +136,12 @@ export function carryPartyForward(
   full = false,
 ): FFXPartyBuild | FFX2PartyBuild {
   if (build.game === 'ff7') throw new Ff7NotHandledError('carryPartyForward (FF7 has no chained link)');
-  if (build.game === 'ffx') return carryFfx(build, state);
+  if (build.game === 'ffx') return carryFfx(build, state, wholeState);
   const carried = carryFfx2(build, state, wholeState);
   return full ? carryFfx2Full(carried, state) : carried;
 }
 
-function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {
+function carryFfx(build: FFXPartyBuild, state: BattleState, withStatuses = false): FFXPartyBuild {
   const members = build.members.map((m) => {
     const live = state.combatants[m.id] as FFXCombatant | undefined;
     if (!live) return m;
@@ -146,6 +150,7 @@ function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {
       hp: clamp(live.hp, 0, m.stats.maxHp),
       mp: clamp(live.mp, 0, m.stats.maxMp),
       overdrive: { ...m.overdrive, gauge: clamp(live.overdrive?.gauge ?? m.overdrive.gauge, 0, 100) },
+      ...(withStatuses ? { statuses: carriedFfxStatuses(live) } : {}),
     };
   });
 
@@ -157,6 +162,7 @@ function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {
       hp: clamp(live.hp, 0, a.stats.maxHp),
       mp: clamp(live.mp, 0, a.stats.maxMp),
       overdriveGauge: clamp(live.overdrive?.gauge ?? a.overdriveGauge, 0, 100),
+      ...(withStatuses ? { statuses: carriedFfxStatuses(live) } : {}),
     };
   });
 
@@ -166,6 +172,29 @@ function carryFfx(build: FFXPartyBuild, state: BattleState): FFXPartyBuild {
     aeons,
     inventory: carryInventory(build.inventory, state),
   };
+}
+
+/**
+ * Statuses left out of the FFX status carry, each re-derived or not a status the next link opens
+ * under: `ko` (the setup marks a 0 HP member KO from the carried HP), `eject` (the member left that
+ * battle, not the party), and the three command stances `defend`, `guard`, `sentinel` (they last
+ * until the actor's next turn). Our estimate: research §1.2 says only that statuses carry.
+ */
+const FFX_CARRY_EXCLUDED: readonly StatusId[] = ['ko', 'eject', 'defend', 'guard', 'sentinel'];
+
+/**
+ * **FFX, `carriesPartyState` (Sin links 2 and 3):** "the next fight will start off with your
+ * characters in the same stats" [research/ffx-sin.md §1.2, verified: 3 sources], buffs included
+ * [derived]. A copy of every live status but {@link FFX_CARRY_EXCLUDED}; a permanent (equipment)
+ * status carries as it stands, and the setup does not re-grant one already present. A copy, so the
+ * setup a retry replays never changes.
+ */
+function carriedFfxStatuses(live: FFXCombatant): Partial<Record<StatusId, StatusInstance>> {
+  const out: Partial<Record<StatusId, StatusInstance>> = {};
+  for (const [id, inst] of Object.entries(live.statuses) as Array<[StatusId, StatusInstance | undefined]>) {
+    if (inst && !FFX_CARRY_EXCLUDED.includes(id)) out[id] = cloneData(inst);
+  }
+  return out;
 }
 
 function carryFfx2(build: FFX2PartyBuild, state: BattleState, wholeState: boolean): FFX2PartyBuild {

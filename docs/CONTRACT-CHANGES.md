@@ -6,6 +6,22 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-29 — Sin as two chapters: `encounters.ts` ids and `| 18`, `types.ts` `carriesPartyState` doc (FFX only)
+
+**FFX only** [AGENTS.md hard rule 14; research/ffx-sin.md §0.3]. Branch `chapter-sin` (package S of
+`docs/plans/sin-two-chapters-plan.md`, D-270). Nothing in any FFX-2 or FF7 chapter changes.
+
+- `encounters.ts` `ChapterId`: loses `'sin'` and gains `'sin-fins-core' | 'sin-face'`. **A rename, not a removal:**
+  `'sin'` only ever existed on this branch (never on main, never listed, never in a save), so no save key or
+  shipped id moves. `Chapter.number` widens by `| 18` (Chapter XVIII, "Sin: the Face"; Chapter XVII is "Sin: the
+  Fins and the Core"). Both edits are on existing lines; the file stays at 399 lines.
+- `types.ts` `EnemyGroupDef.carriesPartyState`: the doc comment gains "FFX too, statuses only (Sin links 2 and 3)".
+  The shape does not change. The FFX carry (`BattleScreenSetup.carryFfx`) now copies the live statuses (less KO,
+  Eject and the Defend/Guard/Sentinel stances) into `FFXMemberBuild.statuses` / `FFXAeonBuild.statuses`, fields
+  already in the contract, when the next link sets the flag. Only `sin-right-fin` and `sin-genais-core` set it, so
+  Chapters III and XIV carry as before (`tests/unit/chapters/sin-carry.test.ts`), and the FFX golden hashes are
+  identical before and after (408/408, 6 seeds x 4 policies, base `56026029`).
+
 ## 2026-09-28 — `dsl.ts`: doc comments only (IXS-4)
 
 **Both** (shared plumbing). Branch `fixes-r28`. `setPose` gets its doc comment back ("Set an actor's sprite state"),

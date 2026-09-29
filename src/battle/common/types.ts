@@ -2655,7 +2655,7 @@ export interface EnemyGroupDef {
   victoryBonusAp?: number;
   /** FFX-2: a chained link that is a retry checkpoint with no Save Sphere (Chapter XIII's Trema, TR5 b; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
-  /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema; CONTRACT-CHANGES). */
+  /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema); FFX too, statuses only (Sin links 2 and 3; CONTRACT-CHANGES). */
   carriesPartyState?: boolean;
   timedAilmentDefaults?: boolean; // FFX-2: a duration-0 ailment row lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES)
   actionTimeSeconds?: number; // FFX-2: seconds an action takes before its actor's gauge refills, an [estimate] (E4, `battle/ffx2/action-time.ts`; CONTRACT-CHANGES)

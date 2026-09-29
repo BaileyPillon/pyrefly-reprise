@@ -1,5 +1,5 @@
 /**
- * **Chapter XVI, Sin — link 4 bench** (Overdrive Sin, FFX only). 200 seeds per
+ * **Chapter XVIII, Sin: the Face — link 4 bench** (Overdrive Sin, FFX only). 200 seeds per
  * line, on the real engine, the real data and the chapter's party
  * (`sin-fahrenheit.ts`: Garden of Pain with Yuna's Tetra Ring back, S-29).
  *
@@ -55,7 +55,7 @@ const pct = (n: number) => `${n}/${SEEDS} (${Math.round((n * 1000) / SEEDS) / 10
 const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
 const median = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)]! : 0; };
 
-describe(`Chapter XVI link 4 bench (${SEEDS} seeds; measured, not tuned)`, () => {
+describe(`Chapter XVIII (sin-face) link 4 bench (${SEEDS} seeds; measured, not tuned)`, () => {
   it('both lines, S-1 both ways', () => {
     const rows = [
       '| Line | Giga-Graviton turn | Wins | Ended by Giga-Graviton | Mean turns (all actors) | Mean Sin turns | Sin HP left on a loss (mean / median) | Gazes per fight | FAR damage (3 pulls) | Overdrives per fight | Damage per Overdrive |',

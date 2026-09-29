@@ -37,7 +37,7 @@ import './yojimbo.ts';
 import './seymour-natus.ts';
 import './seymour-omnis.ts';
 import './isaaru.ts';
-import './overdrive-sin.ts';
+import './sin-scripts.ts';
 
 export * from './types.ts';
 export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';

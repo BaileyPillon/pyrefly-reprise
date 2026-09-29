@@ -17,7 +17,8 @@
 
 import type { Chapter } from './encounters.ts';
 import { FF7_GUARD_SCORPION } from './chapter-ff7-guard-scorpion.ts';
-import { SIN } from './chapter-sin.ts';
+import { SIN_FINS_CORE } from './chapter-sin-fins-core.ts';
+import { SIN_FACE } from './chapter-sin-face.ts';
 
 /**
  * Chapter IX, Yojimbo, was listed on 2026-09-24 (now in `CHAPTERS`).
@@ -36,7 +37,11 @@ import { SIN } from './chapter-sin.ts';
  * next build as well").
  * Chapter XVII, Sin (link 4, Overdrive Sin, first), was registered here on 2026-09-27 as XVI (FFX only;
  * Bailey's "all your recommendations": concept A reached through B, link 4 shipped unlisted behind
- * a switch; `./chapter-sin.ts`), and took the next number, XVII, when Ixion was listed as XVI (merge of
+ * a switch; `./chapter-sin.ts`, since renamed), and took the next number, XVII, when Ixion was listed as XVI (merge of
  * 2026-09-28). Listing it is the switch.
+ * On 2026-09-29 Sin became two chapters, split where the game saves (D-270, FFX only): Chapter XVII,
+ * "Sin: the Fins and the Core" (`sin-fins-core`, links I to III, `./chapter-sin-fins-core.ts`), and Chapter
+ * XVIII, "Sin: the Face" (`sin-face`, link IV; the branch-only `sin` renamed and renumbered,
+ * `./chapter-sin-face.ts`). Both stay unlisted until Bailey's picks.
  */
-export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION, SIN] as const;
+export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION, SIN_FINS_CORE, SIN_FACE] as const;

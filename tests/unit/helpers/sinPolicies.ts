@@ -1,5 +1,5 @@
 /**
- * The two bench policies for Chapter XVI link 4 (Overdrive Sin), and what the
+ * The two bench policies for Chapter XVIII (`sin-face`) link 4 (Overdrive Sin), and what the
  * bench reads off a finished battle. **FFX only.** Test-only.
  *
  * - **sensible** — research §8 row 8 `[verified: 4 sources]`: "Hastega and

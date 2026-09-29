@@ -1,5 +1,6 @@
 /**
- * **Chapter XVI, Sin — link 4, Overdrive Sin** (FFX only): the data against
+ * **Chapter XVIII, Sin: the Face — link 4, Overdrive Sin** (FFX only; the
+ * branch-only `sin` renamed `sin-face`, D-270): the data against
  * `research/ffx-sin.md` with its cites, the clock (three pulls, the melee
  * window, Giga-Graviton on the 13th turn by default, S-1), the scripted Game
  * Over that Auto-Life and an aeon cannot stop, Gaze (six targetings, an aeon's
@@ -94,13 +95,15 @@ describe('the party: Garden of Pain with Yuna\'s Tetra Ring back (S-29, our esti
 
 describe('registration: unlisted, reachable by id', () => {
   it('getChapter finds it; chapter select and CHAPTER_IDS do not', () => {
-    const ch = getChapter('sin');
+    const ch = getChapter('sin-face');
     expect(ch?.game).toBe('ffx');
-    expect(ch?.number).toBe(17);
+    expect(ch?.number).toBe(18);
+    expect(ch?.title).toBe('Sin: the Face');
     expect(ch?.enemyGroupRef.id).toBe('overdrive-sin');
-    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('sin');
-    expect(CHAPTERS.map((c) => c.id)).not.toContain('sin');
-    expect(CHAPTER_IDS as readonly string[]).not.toContain('sin');
+    expect(getChapter('sin')).toBeUndefined();
+    expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('sin-face');
+    expect(CHAPTERS.map((c) => c.id)).not.toContain('sin-face');
+    expect(CHAPTER_IDS as readonly string[]).not.toContain('sin-face');
     expect(ENEMY_GROUPS_BY_ID['overdrive-sin']).toBe(overdriveSinGroup);
   });
 });

@@ -64,4 +64,34 @@ export const sinFahrenheitBuild: FFXPartyBuild = {
   sphereInventory: {},
 };
 
+/**
+ * **Chapter XVII's copy** ("Sin: the Fins and the Core", links 1 to 3): the same
+ * preset (D-264), with **Tidus's and Rikku's orders to Cid** added back. In the
+ * Fin fights the Trigger Command is Evrae's: "Tidus and Rikku, Trigger Command,
+ * **same**" (research/ffx-sin.md §4 `[verified: 4 sources]`), which is the pair
+ * of menu markers `pull-back` / `close-in` Chapter VIII's `fahrenheit.ts` gives
+ * them and `highbridge.ts` strips for every later chapter. Nothing else changes;
+ * link 4 (`sinFahrenheitBuild` above) has no order (§3.5).
+ *
+ * The markers ride the chain into link 3, where Cid is not in the formation, so
+ * `airshipOrderAvailable` refuses them there (a greyed row, §3.5: no Trigger
+ * Command in links 3 and 4). How that row reads is package F's and P's.
+ */
+export const SIN_FINS_ORDER_OWNERS: readonly string[] = ['tidus', 'rikku'];
+const ORDERS: readonly string[] = ['pull-back', 'close-in'];
+
+export const sinFinsCoreBuild: FFXPartyBuild = {
+  ...sinFahrenheitBuild,
+  members: sinFahrenheitBuild.members.map((m) => {
+    const out = structuredClone(m);
+    if (SIN_FINS_ORDER_OWNERS.includes(out.id)) {
+      out.learnedAbilityIds = [...out.learnedAbilityIds.filter((id) => !ORDERS.includes(id)), ...ORDERS];
+    }
+    return out;
+  }),
+  reserve: [...sinFahrenheitBuild.reserve],
+  aeons: sinFahrenheitBuild.aeons.map((a) => structuredClone(a)),
+  inventory: sinFahrenheitBuild.inventory.map((e) => ({ ...e })),
+};
+
 export default sinFahrenheitBuild;

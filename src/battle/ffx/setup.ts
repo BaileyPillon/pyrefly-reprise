@@ -30,7 +30,7 @@ import { refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
-import { applyOverdriveSinSetup } from './ai/overdrive-sin-rules.ts';
+import { applySinSetups } from './ai/sin-setup.ts';
 import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
@@ -397,6 +397,6 @@ export function buildBattle(
   applyOmnisSetup(ctx); // Chapter XII: four Fire discs, his affinity, discs without turns [ffx-seymour-omnis §4.1]
   applyAeonDuelSetup(ctx, group); // Chapter XIV's mirror lock, "only aeons", the loss and the AP [aeon-duel.ts]
   applyIsaaruSetup(ctx); // Grothia's and Pterya's gauges, Spathi's count, Isaaru's no-turn [ffx-isaaru-bevelle §4]
-  applyOverdriveSinSetup(ctx); // the ship FAR for the pulls, the clock, Gaze's count [ffx-sin §5.4]
+  applySinSetups(ctx); // Sin: link 4's clock and pulls, then links 1-3 (the Fins, Genais and the Core) [ffx-sin §5]
   return ctx;
 }

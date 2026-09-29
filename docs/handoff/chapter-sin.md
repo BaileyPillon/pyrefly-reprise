@@ -1,7 +1,113 @@
-# Chapter XVI, Sin: link 4 (Overdrive Sin) first, UNLISTED behind the switch
+# Sin as two chapters, UNLISTED behind the switch: XVII "the Fins and the Core", XVIII "the Face"
 
 **Game case: FFX only** (AGENTS.md rule 14): CTB, the airship range, aeons, and a boss whose turn
 clock ends in a scripted Game Over. None of it exists in FFX-2 (`research/ffx-sin.md` §0.3).
+
+**Since 2026-09-29 (D-270, package S):** Sin is two chapters, split where the game saves.
+
+- **Chapter XVII, `sin-fins-core`**, "Sin: the Fins and the Core" (working title): links I to III
+  (`sin-left-fin` → `sin-right-fin` → `sin-genais-core`) on one party state, `src/data/chapter-sin-fins-core.ts`.
+- **Chapter XVIII, `sin-face`**, "Sin: the Face" (working title): link IV, Overdrive Sin, as built
+  below. It is the branch-only `sin` renamed and renumbered (`git mv` to `src/data/chapter-sin-face.ts`).
+
+Everything below the "Package S" section is the link-4 record of 2026-09-27; read `sin` there as
+`sin-face`, and "Chapter XVI" as Chapter XVIII.
+
+## Package S, the spine (2026-09-29; `docs/plans/sin-two-chapters-plan.md` §2.1, §2.2, REVIEW)
+
+**What F, G, P and H can rely on.** Every name the packages share is in
+`src/battle/ffx/ai/sin-ids.ts` (constants and the `SinCounter` type only):
+
+- **Enemy ids:** `left-fin`, `right-fin`, `sinspawn-genais`, `sin-core`, and `cid` in both Fin formations.
+- **Formation ids:** `sin-left-fin`, `sin-right-fin`, `sin-genais-core` (chained by `nextGroupId`).
+- **Script ids:** `sin-left-fin`, `sin-right-fin`, `cid-fahrenheit-sin` (Cid, no missiles, S-19),
+  `sinspawn-genais`, `sin-core`.
+- **Row ids** (`src/data/ffx/enemies/sin-fins-abilities.ts`, `sin-genais-core-abilities.ts`): `sin-fin-ram`,
+  `-smack`, `-gravija`, `-gravija-far`, `-negation`, `-negation-far`, `-gathers`, `sin-motionless`;
+  `sin-genais-venom`, `-thrashing`, `-sigh`, `-waterga`, `-cura`, `-shell-in`, `-shell-out`,
+  `sin-magic-absorbed`; `sin-core-inactive`, `-gathers`, `-gravija`, `-negation`, `-fire`, `-blizzard`,
+  `-thunder`, `-water` (`SIN_CORE_ELEMENT_CYCLE` is the F, B, T, W order). Every row is `canMiss: false`
+  and rank 3 (§3 `[decompiled]`). Counter rows carry `is-counter`; silenceable rows (Waterga, Cura, the
+  Core's four) carry the Blk/Wht Magic category (the `flare-self` precedent), so an AI can ask
+  `blockedBySilence`.
+- **Flag keys** (`state.flags`): `sin.fin.hits`, `sin.fin.regularActs`, `sin.fin.charged`,
+  `sin.fin.latched` (F); `sin.genais.shelled`, `sin.core.state` (`inactive | charging | ready | free`),
+  `sin.core.counterStep`, `sin.core.down` (G); `sin.negation.lastTaken` (both:
+  `Record<CombatantId, StatusId[]>`). None collides with link 4's `sin.turn` family.
+
+**The stubs, with their final signatures** (each a no-op or `null` today, each file F's or G's to fill):
+
+| File | Owner | Exports (signature) |
+|---|---|---|
+| `src/battle/ffx/ai/sin-fins-rules.ts` | F | `applySinFinsSetup(ctx: Ctx): void`; `markSinFinsRuntime(flags, actors): void`; `collectSinFinsCounters(ctx, attacker, def, damagedEnemyIds): SinCounter[]`; `SIN_FINS_ASSUMPTIONS` (holds S's `seam-lineup`); re-exports `sin-negation.ts` |
+| `src/battle/ffx/ai/sin-fins.ts` | F | `leftFinAi`, `rightFinAi`, `cidSinAi` (`(ai: AiContext) => Command \| null`), registered under the three script ids |
+| `src/battle/ffx/ai/sin-negation.ts` | F (G reads) | `NEGATION_REMOVES` (the 24 of §3.1, sourced, S's), `NEGATION_SPARES`, `NEGATION_MERCY`; `finNegationChance(ctx, finId): number` (stub, 0) |
+| `src/battle/ffx/ai/sin-genais-core-rules.ts` | G | `applySinGenaisCoreSetup(ctx)`; `markSinGenaisCoreRuntime(flags, actors)`; `syncGenaisCoreLiveness(ctx)` (the must-change 2 hook); `collectSinGenaisCoreCounters(ctx, attacker, def, damagedEnemyIds): SinCounter[]`; `SIN_CORE_ASSUMPTIONS` |
+| `src/battle/ffx/ai/sin-genais-core.ts` | G | `genaisAi`, `sinCoreAi`, registered |
+
+**The aggregators and the swapped lines** (none of the four shared files grew, but `reactions.ts` by the
+one line the review asked for):
+
+- `setup.ts`: `applySinSetups(ctx)` (`sin-setup.ts`: link 4's setup first, unchanged, then the Fins,
+  then Genais and the Core).
+- `simulate.ts`: `markAirshipRuntime(flags, actors)` (`sin-setup.ts`: `markEvraeRuntime`, then
+  `markSinRuntime` = the Fins' and Genais/Core marks). A preview gets every mark.
+- `reactions.ts`: `collectSinCounters(ctx, attacker, def, damagedEnemyIds)` (`sin-counters.ts`: link 4's
+  Gaze first, then the Fins', then link 3's), pushed with `targets: c.targets ?? []` (must-change 1:
+  **G returns the caster in `targets` for Waterga**). And one added line at the top of
+  `runMortibsorptionIfDown`: `runSinLivenessHooks(ctx)` → `syncGenaisCoreLiveness(ctx)`, which runs at the
+  start of every `afterAction`, for every command kind and a Doom KO alike (must-change 2).
+- `ai/index.ts`: `import './sin-scripts.ts'` (it imports `overdrive-sin.ts`, `sin-fins.ts`,
+  `sin-genais-core.ts`).
+
+**The status carry** (`src/app/screens/BattleScreenSetup.ts#carryFfx`): when the next link sets
+`carriesPartyState` (only `sin-right-fin` and `sin-genais-core` do), each member's and aeon's live statuses
+are copied into the build, less `ko` (re-derived from HP), `eject` and the Defend/Guard/Sentinel stances
+(our estimate: §1.2 says only that statuses carry). Chapters III and XIV carry no statuses, as before
+(`tests/unit/chapters/sin-carry.test.ts`).
+
+**Chapter XVII's party** is `sinFinsCoreBuild` (`src/data/ffx/builds/sin-fahrenheit.ts`): D-264's preset
+with **Tidus's and Rikku's orders to Cid** (`pull-back`, `close-in`) back, because the Fins' range fight is
+Evrae's (§4 `[verified: 4 sources]`) and `highbridge.ts` strips them for every later chapter. The markers
+ride the chain into link 3, where no Cid stands, so the rows grey out there ("Not your call", Evrae's
+reason): **F or P decides how that row reads in link 3** (§3.5: no Trigger Command in links 3 and 4).
+
+**What is still F's (the stubs do nothing yet):** Cid is not a non-combatant in the Fin fights until F's
+setup publishes `airship.range` (then `markEvraeRuntime` marks him), so **a Fin link cannot be won
+before F lands**; the carry test drives the seam directly. The same for G: the Core's reach, magic
+absorption and "victory when the Core dies" are G's.
+
+**The golden-hash base (must-change 10), for F, G and P:**
+
+- Base tree: `D:/Tools/pyrefly-scratch/overnight-0929/sin-S/base` (`git archive 56026029` of `src`,
+  `tests/unit/tools`, `tests/unit/helpers` and the configs). Its `node_modules` is a **junction** to
+  `D:/Final Fantasy/node_modules`: unlink it with `cmd /c rmdir` before anyone deletes the folder.
+- Base hashes: `D:/Tools/pyrefly-scratch/overnight-0929/sin-S/base.json` (6 seeds, 408 runs, written with
+  `FFX_HASH_SKIP=sin,sin-face,sin-fins-core`). Also `base-link4.json` (skip `sin-face,sin-fins-core`, so it
+  holds link 4 under its old id `sin`).
+- To diff: from `D:/pyrefly-ch-sin`, `FFX_HASH_OUT=<your file> FFX_HASH_SEEDS=6
+  FFX_HASH_SKIP=sin,sin-face,sin-fins-core npx vitest run tests/unit/tools/ffx-chapter-hashes.test.ts`,
+  then compare with `base.json` key for key.
+- **Package S's result:** 408/408 identical; link 4 (`sin` → `sin-face`) 24/24 identical; the link-4
+  bench prints the same tables (62/200 on the 13th turn, 7/200 on the 12th).
+
+**D-270's re-equip is a deviation, not a default** (must-change 9): Chapter XVIII does not open with a
+re-equip. The Right Fin's Stoneproof drop is not built (which part drops is `[unsourced]`, §2.4;
+equipment drops are not modelled, S-7) and the FFX prep screen cannot change equipment (Q10). Recorded in
+`docs/target/decisions.json` on D-270 (`deviation`, this branch's copy) for Bailey.
+
+**New open questions** (they belong on the plan's Q list; recorded here):
+
+- **Q16, the seam line-up** (must-change 6): links 2 and 3 reopen with the build's front row (Tidus,
+  Yuna, Auron), whoever ended the previous link in front. Our estimate, in `SIN_FINS_ASSUMPTIONS`
+  (`seam-lineup`); bench B measures both readings.
+- **Q17, link 3's reveal plate:** `sin-genais-core` has no `headline`, so the plate names its first
+  enemy, Sinspawn Genais. The Core's in-game name is "Sin" (`m138`), kept as the record's name. P or L
+  decides the plate.
+
+**Tests:** `tests/unit/chapters/sin-data.test.ts` (28: the records, the chain, the table, every row, the
+24-status list and the permanent-status rule on the real engine, the ids, the stubs registered) and
+`sin-carry.test.ts` (4). `sin-engine.test.ts` and `sin-bench.test.ts` renamed to `sin-face`.
 
 - **The shared engine seams** are FFX plumbing, and each one is inert outside this battle:
   - the scripted Game Over flag;
@@ -116,24 +222,27 @@ Settings: 200 seeds, first try, human pace equal to bench speed (CTB). Nothing w
 ## Open (Bailey's, or the next track's)
 
 1. **S-1.** Giga-Graviton on the 12th or the 13th turn is worth 31 % against 3.5 %. It needs the
-   Steam HD Remaster check, which only Bailey can schedule. Do it before listing.
-2. **A or C for one sitting.** The bench says C (split at the save), unless A gets a checkpoint at
-   the save. Bailey's pick.
+   Steam HD Remaster check, which only Bailey can schedule. Do it before listing. (D-280: the 13th
+   for now, labelled our estimate.)
+2. **A or C for one sitting: settled.** Bailey picked C (D-270): XVII "the Fins and the Core" and
+   XVIII "the Face", split at the save. Still open inside XVII: the retry starts at the Left Fin (the
+   default) or at a link-3 checkpoint (plan Q3), once bench B has the length.
 3. **The painting pilot of Sin's head** at colossal scale: 9 states in the concept sheet. Options
    first, and nothing is installed until Bailey picks (rules 8 and 9). This agent did not queue
    renders.
 4. **The HUD clock (mouth as clock, concept B's frame)** needs a mockup and Bailey's approval before
    it is built. The flags it would read are already published.
-5. **Links 1 to 3:** the Fins' range fight and the Genais and Core link (§5.1 to §5.3). These are
-   research §11 items 1 to 8, with S-12's Negation formulas behind named tunables. After that, a
-   real bench of links 1 to 3 to replace the estimate above.
+5. **Links 1 to 3 (Chapter XVII):** the spine is in (package S, above). Packages F (the Fins and Cid),
+   G (Genais and the Core) and P (story, meta, guides, tactics, the director bind, the widget) fill the
+   stubs; then bench B measures the chain to replace the estimate above.
 6. **Music:** the countdown cue and the assault cue, sketched and judged by ear (rules 8 and 13).
-7. **Listing is the switch.** Move `SIN` from `UNLISTED_CHAPTERS` into `CHAPTERS`, with a card,
-   meta, story, guide and tactic, once the picks above are made.
+7. **Listing is the switch.** Move `SIN_FINS_CORE` and `SIN_FACE` from `UNLISTED_CHAPTERS` into
+   `CHAPTERS` (and both ids into `CHAPTER_IDS`), with cards, meta, story, guides and tactics, once the
+   picks are made (plan §6; D-279 has the driver make the picks tonight).
 8. **Not built on purpose:**
    - S-28 (Use reaching after the 2nd pull, single source).
    - Aeon Overdrive lines in the bench (the preset's aeon gauges are not full).
-   - The equipment drops (S-7).
+   - The equipment drops (S-7), and so D-270's re-equip at the top of XVIII (a recorded deviation, above).
 
 ## CHECK (independent, 2026-09-27 ~16:15 EDT; did not build it)
 

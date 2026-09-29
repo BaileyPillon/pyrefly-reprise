@@ -1,5 +1,5 @@
 /**
- * Shared fixtures for the Chapter XVI tests (Sin, link 4: Overdrive Sin over
+ * Shared fixtures for the Chapter XVIII tests (`sin-face`, Sin: the Face, link 4: Overdrive Sin over
  * Bevelle): an engine on the formation with the chapter's party, the drive and
  * read helpers, and the two bench policies. **FFX only.** Test-only.
  *

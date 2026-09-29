@@ -63,7 +63,7 @@ export type ChapterId =
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
-  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin';
+  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face';
 
 /** Every id that can hold a place on the board: all but the hidden experiments. */
 export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion'>;
@@ -107,8 +107,8 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on chapter select, 1–17 (XVI Ixion, listed 2026-09-27; an unlisted chapter keeps its number: XVII, Sin); 0 = no place on the board (FF7 experiment). */
-  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17;
+  /** Display order on chapter select, 1–18 (XVI Ixion, listed 2026-09-27; an unlisted chapter keeps its number: XVII and XVIII, Sin); 0 = no place on the board (FF7 experiment). */
+  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18;
   /** A hidden experiment (FF7's Guard Scorpion): no card, no count, no save record; the flow hands it to `BattleScreenExperiment`. */
   experimental?: true;
   /** Card title. The encounter's name. */
