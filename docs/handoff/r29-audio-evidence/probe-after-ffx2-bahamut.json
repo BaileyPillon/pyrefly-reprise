@@ -1,0 +1,241 @@
+{
+ "label": "after",
+ "base": "http://127.0.0.1:7950/pyrefly-reprise/",
+ "chapter": "ffx2-bahamut",
+ "padBeforePress": {
+  "ready": false,
+  "current": null,
+  "gain": null,
+  "fading": [],
+  "volumes": {
+   "master": 0.8,
+   "music": 0.7,
+   "sfx": 0.35
+  }
+ },
+ "padAfterPress": {
+  "ready": true,
+  "current": "title",
+  "gain": 1,
+  "fading": [],
+  "volumes": {
+   "master": 0.8,
+   "music": 0.7,
+   "sfx": 0.35
+  }
+ },
+ "freshVolumes": {
+  "master": 0.8,
+  "music": 0.7,
+  "sfx": 0.35
+ },
+ "pauseRuns": [
+  {
+   "beforePause": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "during": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "plus3": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "plus6": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "slowPause": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "slowResume": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "screen": "battle"
+  },
+  {
+   "beforePause": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "during": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "plus3": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "plus6": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "slowPause": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "slowResume": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "screen": "battle"
+  },
+  {
+   "beforePause": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "during": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "plus3": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "plus6": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "slowPause": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "slowResume": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.35
+    }
+   },
+   "screen": "battle"
+  }
+ ]
+}
