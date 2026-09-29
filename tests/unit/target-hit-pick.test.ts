@@ -56,3 +56,12 @@ describe('TargetCursor draws the aimed-at side last', () => {
     expect(order[order.length - 1]).toBe(cursor.targetIds[0]);
   });
 });
+
+describe('a coach line lets a tap reach any reticle (PR-0232)', () => {
+  it('not only enemy reticles: a party member aimed at on a fresh profile too', async () => {
+    const { readFileSync } = await import('node:fs');
+    const css = readFileSync(new URL('../../src/ui/coach/coach-taps.css', import.meta.url), 'utf8');
+    expect(css).toMatch(/\.ffxhud:has\(\.ffx-targeting \[data-target-id\]\) ~ \.coach-layer \.coach-mark/);
+    expect(css).toMatch(/\.ffx2hud:has\(\.ffx-targeting \[data-target-id\]\) ~ \.coach-layer \.coach-mark/);
+  });
+});

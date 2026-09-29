@@ -13,3 +13,12 @@
 .ffx2hud--targeting-enemy ~ .coach-layer .coach-mark {
   pointer-events: none;
 }
+
+/* PR-0232 (both games): the same for a party member. On a fresh profile on a
+   phone, Auron's first line spans the band the party stands in, so while a
+   cure or an item was aimed at Yuna every tap on her landed on the line. Any
+   single-target reticle up (a bracket carries `data-target-id`) lets taps through. */
+.ffxhud:has(.ffx-targeting [data-target-id]) ~ .coach-layer .coach-mark,
+.ffx2hud:has(.ffx-targeting [data-target-id]) ~ .coach-layer .coach-mark {
+  pointer-events: none;
+}
