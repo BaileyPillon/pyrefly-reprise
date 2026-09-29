@@ -420,7 +420,8 @@ export const SFX_FALLBACKS: Readonly<Record<string, string>> = {
   damage: 'hit-1',
   'damage-crit': 'critical',
   heal: 'cure',
-  miss: 'cancel',
+  // fb-0929-sfx: a missed swing is a whiff (AUDIO-GUIDE), not the menu's cancel tone.
+  miss: 'whiff',
   attack: 'sword-slash-1',
   cast: 'magic-charge',
   ko: 'ko-fall',
