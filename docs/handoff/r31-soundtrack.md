@@ -107,3 +107,44 @@ A courtesy credit line is in CREDITS.md.
    `delivery: implemented` when this merges; not edited here.
 7. `docs/audio/remaster-2026-09-29/README.md` and `direction-b-2026-09-27.md` still describe
    themselves as options; this handoff and THEMES.md say what shipped.
+
+## CHECK (independent, 2026-09-29, not the builder)
+
+Checked commit 00726858 on `r31-soundtrack`, measurement only (nobody heard it, rule 13).
+**Verdict: no blockers.** Every claim re-taken holds.
+
+- **Own meter** (numpy L/R Pearson, side/mid power, mono-sum power vs mean channel power;
+  ffmpeg ebur128 for LUFS and true peak), all 26 manifest cues: the 23 R1 cues measure
+  correlation 0.654-0.836, side -6.44 to -9.27 dB under the mid, mono-sum -0.49 to -0.89 dB,
+  -15.9 to -16.0 LUFS, -1.1 to -1.7 dBTP; every one inside every gate. File bytes equal the
+  manifest; length = loopEnd + 3 s on every cue. The 23 replaced files (at 8dce5e75) measure
+  0.036-0.75 correlation, as claimed.
+- **Manifest**: same 26 keys; every loopStart, loopEnd and score fingerprint equals 8dce5e75;
+  only bytes/LUFS/true peak changed, plus boss-shuyin duration 105.796 -> 105.797 (1 ms, the
+  file's real length). boss-vegnagun, scene-bevelle-underground and scene-macalania-temple are
+  byte-identical to 8dce5e75.
+- **Alignment with the lossless masters** (own FFT cross-correlation, first 40 s, +/-0.1 s): all
+  23 at lag 0 (normalised corr 0.43-0.80); the two kept cues show no relation (0.03), as
+  expected for today's sampled render.
+- `node tools/audio/qa.mjs --strict`: 0 cues with findings, 0 sfx findings; 42.95 MB of 60 MB.
+- `tsc --noEmit` clean. vitest `audio*`, `load-time-*`, `dist-filter`, `artifact-manifest`:
+  27 files, 527 tests pass.
+- **Fresh production build, headless Chromium** (own script, PYREFLY_BROWSER=gpu, vite preview
+  :8903, stopped by PID, no listener left): every `dist/audio/music` file is byte-identical to
+  `public/audio/music`; after a real Enter key, `audioDebug` reports `title` prerendered. Each
+  chapter entered by `gotoChapter(..., {skipCutscenes})`: 15 of 16 reached their battle cue with
+  source `prerendered`, fading in to gain 1, the game's own request for the file HTTP 200
+  (I, III-XVI, both games; V and XIII play the two kept cues). Chapter II (Yunalesca) is locked
+  on a fresh save, so `gotoChapter` stayed on chapter select; `boss-yunalesca` was still fetched
+  by the game (200) and listed `prerendered`. All 17 chapter scene and battle cues fetch 200.
+  0 console errors.
+- ACE-Step licence: the Hugging Face API returns sha 82cd0d7b, license apache-2.0, as recorded.
+- **Merge**: `git merge-tree` against origin/main (8dce5e75) and against local main (bcc0c5e4):
+  clean, no conflicts. No src/ or tests/ file changed; new tools under 400 lines.
+
+Minor (not blocking):
+1. The two kept cues (today's files, unchanged) read side 10.3 / 10.5 dB under the mid, just
+   outside the 6-10 dB gate; that is today's state, not introduced here (the post-EQ side trim
+   in "Not done" 1 is the fix, needs a yes).
+2. Chapter II's battle cue was not observed playing in-game in this check (chapter locked on a
+   fresh save); its file loads 200 and the other 15 chapters play from file.
