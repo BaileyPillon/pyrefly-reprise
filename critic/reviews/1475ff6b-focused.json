@@ -1,0 +1,466 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-29T16:59:51.781Z",
+ "build": {
+  "mainSha": "1475ff6b",
+  "bundle": "index-B0cfXTil.js"
+ },
+ "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: both Sin chapters run from the title by real keys and taps through board, prep, scene, a fight, a loss, RETRY and CHAPTER SELECT (e2e 4/4), XVIII to a win, results and Breaking Through; 0 page errors, 0 console errors, 0 failed requests in every run.",
+  "No regression against live release 29: the board goes from 16 to 18 cards with an old release-28 save loading unchanged (3 clears, settings kept); Chapter VII's advisor card reads the same as live and stays put for 7 s with the menu open; FFX-2 Chapter XIII plays by keys as before.",
+  "Each item meets its acceptance in the intended game only (CHK-021): Sin FFX only, Songstress FFX-2 only (reached by a real-key Change in XIII), advisor v4 worker FFX only; the XVIII clock and its ring count 13 to 1 in step every Sin turn and Giga-Graviton ends the fight on Sin's 13th turn (D-280).",
+  "No critical or major issue; three polish items and one suggestion, all inside the new Sin chapters."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Escape opens the full-window pause from both Sin chapters (the CHAPTER dossier fills the window at 1600x900; e2e frames 13-pause-*).",
+   "where": "FFX XVII, XVIII; pause",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/e2e-shots/1600x900-13-pause-sin-face.jpg",
+    "critic/reviews/1475ff6b-focused/e2e-shots/1600x900-13-pause-sin-fins-core.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Sin HUD text reads at 1600x900, 2000x1012 and 390x844: countdown ring numeral, \"GIGA-GRAVITON IN 13\", \"our estimate (12 or 13)\", the Fin plate \"Left Fin FAR / The core does not charge at range\". The phone queue banner tail is overlapped by the Fin plate (FOC30-P01, polish).",
+   "where": "FFX XVII, XVIII; first menu",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-face-390x844-first-menu.jpg",
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-fins-core-2000x1012-first-menu.jpg",
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-fins-core-390x844-second-menu.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "The advisor names a row that exists and says where: XVII \"Close in, in Orders\" with the cursor on ORDERS and the ORDERS > CLOSE IN row pressed by real input in the e2e spec; Chapter VII \"Steal -> Guado Guardian A, in Special\" (Special is a row of Rikku's menu).",
+   "where": "FFX XVII, VII; advisor card",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-fins-core-390x844-first-menu.jpg",
+    "critic/reviews/1475ff6b-focused/supp-cand/seymour-anima-macalania-1600x900-first-menu.jpg",
+    "critic/reviews/1475ff6b-focused/e2e-shots/1600x900-05-xvii-close-in.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-005",
+   "result": "PASS",
+   "reason": "Revive on a foe (PR-0245): tests/unit/advisor-revive-foe.test.ts 23/23 on the candidate (Chapter VII with a KO'd Guado Guardian over 40 seeds with v3 on and off, and every chapter following the card, both Sin chapters included); the r30-ch7 independent CHECK staged the broken board in the browser (reused).",
+   "where": "FFX VII (and every chapter); advisor",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "After the loss the fight overlays are gone on the results panel, and RETRY rebuilds a clean fight: XVIII back to a whole Sin (140,000 HP, 13 turns, FAR, mouth 0); XVII back to the Left Fin at 65,000, FAR, no Right Fin (e2e).",
+   "where": "FFX XVII, XVIII; defeat -> retry",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/probe2-cand/defeat.jpg",
+    "critic/reviews/1475ff6b-focused/probe2-cand/retry.jpg",
+    "critic/reviews/1475ff6b-focused/e2e-shots/1600x900-07-xvii-retry.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No developer vocabulary in the Sin HUD, cards, prep, pause dossier or results text read in this pass (\"our estimate (12 or 13)\" is the sourced disclosure, player-facing by design).",
+   "where": "FFX XVII, XVIII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/probe2-cand/report.json",
+    "critic/reviews/1475ff6b-focused/e2e-shots/1600x900-13-pause-sin-face.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Panels against the painted actors: at 1600x900 and 2000x1012 the Fin, the queue, the guide and the party rows do not cover the party; on the phone XVIII's countdown panel sits over the lower stage and the first-time coach card covers the party until dismissed (FOC30-P02, polish, known in the handoff).",
+   "where": "FFX XVII, XVIII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-fins-core-2000x1012-first-menu.jpg",
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-face-390x844-first-menu.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Full names: board cards \"Sin: the Fins and the Core\" and \"Sin: the Face\" in full at all three sizes; turn-queue names Left Fin, Cid, Sin in full.",
+   "where": "board; FFX XVII, XVIII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/board-390x844-sin-face.jpg",
+    "critic/reviews/1475ff6b-focused/supp-cand/board-2000x1012-sin-fins-core.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "The selected card and the selected command row are obvious (gold slab); the board cursor reached both Sin cards by arrows at every size.",
+   "where": "board; battle menus",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/board-390x844-sin-face.jpg",
+    "critic/reviews/1475ff6b-focused/supp-cand/board-1600x900-oldsave-sin-fins-core.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Every targetable enemy is on screen: the Left Fin projects to 1213x492 inside 2000x1012, and at 390x844 390x258 px of it is on screen (x -45..545, y 108..366); Sin's head at 974x530 at 1600x900 (top off frame by design, FAR framing).",
+   "where": "FFX XVII, XVIII; first menu",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-fins-core-390x844-second-menu.jpg",
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-fins-core-2000x1012-first-menu.jpg",
+    "critic/reviews/1475ff6b-focused/supp-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "In-game look at the driver's picks (D-279) against the tiles' frames: XVII and XVIII composites match the tile frames; Songstress Rikku (idle, cast, item) and Paine (idle) paintings render in Chapter XIII after a real-key Change. Picks are the driver's, not Bailey's (reaction.inferred): no taste verdict here.",
+   "where": "FFX XVII, XVIII; FFX-2 XIII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/tile-sin-xvii.jpg",
+    "critic/reviews/1475ff6b-focused/tile-sin-xviii.jpg",
+    "critic/reviews/1475ff6b-focused/songstress/XIII-1600x900-rikku-songstress-cast.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real input: tests/e2e/ffx-sin.spec.ts 4/4 on this build (keys at 1600x900, taps at 390x844: board, card, prep, scene skip, ORDERS > Close in, loss, RETRY, CHAPTER SELECT; XVIII to results, Breaking Through and the clear); plus this critic's own key runs (board to both Sin chapters at 1600x900, 2000x1012, 390x844; XVIII RETRY by Enter; Chapter VII Attack by keys; Chapter XIII Change to Songstress by keys). The losses and the XVIII win were driven by the debug autoBattle line (labelled).",
+   "where": "FFX XVII, XVIII, VII; FFX-2 XIII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/e2e.log",
+    "critic/reviews/1475ff6b-focused/supp-cand/report.json",
+    "critic/reviews/1475ff6b-focused/probe2-cand/report.json",
+    "critic/reviews/1475ff6b-focused/songstress/XIII-1600x900.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture was preceded by an assertion of screen name, chapter/board selection and battle phase (command:<actor>), and results/retry state; failed harness waits were recorded as FAIL in the step log, never shot as evidence (the Enter,Enter action detector missed FFX actions whose first row opens a submenu; re-proved by the battle log in probe2).",
+   "where": "all runs",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/report.json",
+    "critic/reviews/1475ff6b-focused/probe2-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Pre-deploy focused review of the candidate build; the live check of this artifact follows the deploy.",
+   "where": "n/a",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "Every shipped path used resolved: 0 HTTP >= 400 across all runs (board, both Sin chapters, Chapter VII, Chapter XIII incl. the Songstress folders), 0 page errors, 0 console errors; board cards load sin-fahrenheit-flight.png / -bevelle.png (natural width 2688).",
+   "where": "all runs",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/report.json",
+    "critic/reviews/1475ff6b-focused/probe2-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared plumbing (listing, board, story registry, headline enemy, advisor card) exercised in both games: board lists 11 FFX and 7 FFX-2 cards; Chapter VII (FFX) and XIII (FFX-2) enter, act and return to the menu by keys.",
+   "where": "board; FFX VII; FFX-2 XIII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Game-aware: Sin chapters FFX only (research/ffx-sin.md §0.3) - listed under FINAL FANTASY X only; Songstress FFX-2 only (dresspheres, research/ffx2-combat-core.md) - requested only in XIII, none in any FFX run; advisor v4 FFX only - the extra look-ahead worker (worker-cQ_v2OjW.js) spawns in FFX VII, XVII and XVIII and not in FFX-2 XIII (only the shared worker); live Chapter VII has one worker.",
+   "where": "FFX VII, XVII, XVIII; FFX-2 XIII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/report.json",
+    "critic/reviews/1475ff6b-focused/supp-live/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Win, loss and scene transitions reach their destinations: XVII loss -> defeat panel -> RETRY -> Left Fin; -> CHAPTER SELECT (board counts nothing); XVIII loss by Giga-Graviton on Sin's 13th turn -> results \"Defeat\" -> RETRY by Enter -> whole Sin; XVIII win -> results -> Breaking Through -> board \"1 of ...\" (e2e).",
+   "where": "FFX XVII, XVIII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/probe2-cand/defeat.jpg",
+    "critic/reviews/1475ff6b-focused/probe2-cand/retry.jpg",
+    "critic/reviews/1475ff6b-focused/e2e-shots/1600x900-11-xviii-breaking-through.jpg",
+    "critic/reviews/1475ff6b-focused/e2e-shots/1600x900-12-board-cleared.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "The advisor, the Sin HUD and the chain run through the real presentation path from the title (no gotoChapter in the critic's runs; the debug API only read state and drove autoBattle for the losses).",
+   "where": "FFX XVII, XVIII, VII",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/report.json",
+    "critic/reviews/1475ff6b-focused/probe2-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "1475ff6b / D:/pyrefly-rel28/dist-gate (index-B0cfXTil.js, index-DErDbj5h.css; built 12:07 on 2026-09-29 by this critic with npx vite build --outDir dist-gate)",
+   "targetVersion": "3ceb8b5520598595f42a09ab800e8adc0f99092afaf9a847629a8040e18c9512",
+   "environment": "candidate D:/pyrefly-rel28 at 1475ff6b; vite preview 127.0.0.1:5720 (PID 20524, stopped by PID, port confirmed closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison https://baileypillon.github.io/pyrefly-reprise/ (release 29, 49005f73)"
+  }
+ ],
+ "targets": {
+  "required": 2,
+  "matched": 2,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "note": "Tiles touched: \"Sin: the Fins and the Core, Chapter XVII (FFX)\" and \"Sin: the Face, Chapter XVIII (FFX)\" (chapters; approved under D-279 delegation, picks inferred). Composites tile-sin-xvii.jpg and tile-sin-xviii.jpg: layout, HUD, plates and paintings match the tile frames. The \"Move advisor card\" tile (fight) is a gap, not an approved target. No approved Songstress tile."
+ },
+ "issues": [
+  {
+   "id": "FOC30-P01",
+   "severity": "polish",
+   "title": "Phone, Chapter XVII: the turn-queue banner (\"LEFT FIN 4TH IN QUEUE · Sin remains motionless SCRIPTED\") runs under the Left Fin range plate; its second line is covered",
+   "game": "FFX",
+   "chapter": "XVII (sin-fins-core)",
+   "expected": "The queue banner and the Fin plate each fully readable",
+   "observed": "At 390x844 the plate overlaps the banner's second line (\"motionless\", \"SCRIPTED\" half hidden)",
+   "repro": "Chapter XVII at 390x844, first command menu",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-fins-core-390x844-second-menu.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-003 / CHK-008",
+   "where": "phone top band (queue banner + Sin range plate); not traced",
+   "fix": "Stack the Fin plate below the banner on narrow viewports",
+   "acceptanceCheck": "Both fully readable at 390x844 in XVII and XVIII",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC30-P02",
+   "severity": "polish",
+   "title": "Phone, Chapter XVIII: the countdown panel sits across the lower stage, and with the first-time Auron coach card the party is barely visible",
+   "game": "FFX",
+   "chapter": "XVIII (sin-face)",
+   "expected": "Party figures readable on the phone at the first menu",
+   "observed": "Countdown panel y ~385-470 over the deck; coach card above it; only feet/weapons of the party show (known in docs/handoff/chapter-sin.md)",
+   "repro": "Chapter XVIII at 390x844, first command menu, first play",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-face-390x844-first-menu.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-008",
+   "where": "Sin HUD phone layout; not traced",
+   "fix": "Dock the countdown into the top band or beside the party rows on narrow viewports",
+   "acceptanceCheck": "Party figures unobstructed at 390x844 after the coach card",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC30-P03",
+   "severity": "polish",
+   "title": "Pause CHAPTER tab, Chapter XVIII: the dossier columns sit over Sin's head (eye and teeth) at 1600x900",
+   "game": "FFX",
+   "chapter": "XVIII (sin-face)",
+   "expected": "Dossier clear of the painted face (the CHAPTER_SLIDE_FACES rule)",
+   "observed": "\"DECK OF THE FAHRENHEIT\" heading crosses the eye; party columns over the jaw; text still readable",
+   "repro": "XVIII, Escape, CHAPTER tab at 1600x900",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/e2e-shots/1600x900-13-pause-sin-face.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-013 (pause)",
+   "where": "no CHAPTER_SLIDE_FACES row for ch18-sin-face (per handoff)",
+   "fix": "Add the measured face box for the plate",
+   "acceptanceCheck": "Dossier clears the eye at 1600x900 and 2000x1012",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC30-S01",
+   "severity": "suggestion",
+   "title": "Chapter XVIII opens with Tidus's cursor on SPECIAL while the advisor's pick is Hastega in White Magic",
+   "game": "FFX",
+   "chapter": "XVIII (sin-face)",
+   "expected": "Question for the driver: should the opening cursor sit on Attack (as in Chapter VII) or on the guide's pick (as in XVII, ORDERS)?",
+   "observed": "Cursor on SPECIAL, card \"Hastega -> the party, in White Magic\" at 1600x900 and 390x844",
+   "repro": "XVIII first command menu",
+   "evidence": [
+    "critic/reviews/1475ff6b-focused/supp-cand/sin-face-390x844-first-menu.jpg"
+   ],
+   "confidence": "medium (intent unknown)",
+   "requirement": "CHK-004 (question, not a failure)",
+   "where": "not traced",
+   "fix": "Decide the rule and apply it to every chapter",
+   "acceptanceCheck": "Opening cursor follows the stated rule",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Plan: critic-plan --json in D:/pyrefly-rel28: depth deep, deepBeforeDeploy false, focusedBeforeDeploy true, deepAfterDeploy true, dataAudit true, approvedArtCheck false",
+   "Production build dist-gate (index-B0cfXTil.js) served by vite preview; tsc --noEmit clean; targeted vitest 15 files pass (advisor-v4 card/worker/switch/purity, save-sin-listed-fixture, save-upgrade-fixture, ch7-hud-fixes, ch7-presentation-fixes, sin-listed, chapter-select-c, advisor-revive-foe 23, headline-enemy-boss-id 19, sin-data, sin-engine, data-reward-items-resolve)",
+   "tests/e2e/ffx-sin.spec.ts 4/4 against this build (6.2 min)",
+   "Critic key runs: board at 1600x900 (with the release-28 save), 2000x1012, 390x844; XVIII 1600x900 and 390x844; XVII 390x844 and 2000x1012; Chapter VII 1600x900 (advisor card stability, action by keys); Chapter XIII 1600x900 and 390x844 (FFX-2 absence of v4, action by keys)",
+   "XVIII clock read every Sin turn (flag vs ring text equal from 13 to 1; on the 13th turn the flag reads 0 while the ring still shows 1 as Giga-Graviton fires; mouth stages 0-4 advance), Giga-Graviton action-start in the log, defeat, RETRY by Enter to a whole Sin",
+   "Songstress: real-key Change to Songstress for Rikku and Paine in XIII; Rikku idle/cast/item and Paine idle painted (docs/concepts/songstress-2026-09-29/proof.mjs, PLAN=xiii-main)",
+   "Data audit: Sin HP/MP/Str/Def/Mag/MDef/Agi/Luck/AP/Gil/Overkill of all five parts against research/ffx-sin.md §2.1/§2.4 (match); Giga-Graviton turn 13 = D-280 estimate (S-1 open, labelled in game); Chapter VII bossId (PR-0243) and three reward sphere names (§2.4) match",
+   "Live comparison (release 29): board 16 cards with the same old save, Chapter VII advisor card and worker count",
+   "Resumed pass (2026-09-29 12:53-13:02 EDT; the first pass stopped after writing this JSON, before the prose report and critic-clear): dist-gate rebuilt from D:/pyrefly-rel28 at 1475ff6b gives the same bundle index-B0cfXTil.js; served by vite preview on 5437 (GPU headless, PYREFLY_BROWSER=gpu); supp.mjs re-run as supp-recheck (board 1600x900 with the release-28 save: 18 cards, 3 clears kept, both Sin cards reached by arrows; XVIII 1600x900 by keys to a loss and the RETRY slab; Chapter VII advisor card unchanged over 7 s with the menu open; Chapter XIII FFX-2 by keys, one worker only) - every step result identical to supp-cand; advisor-revive-foe + save-sin-listed-fixture vitest 27/27 again"
+  ],
+  "reused": [
+   {
+    "what": "PR-0244 aftermath figure and PR-0253 Boost line in Chapter VII",
+    "from": "docs/handoff/r30-ch7.md independent CHECK (2026-09-29, branch head a6ecd909)",
+    "why": "merged unchanged into 1475ff6b (merge-tree clean); only card and advisor re-checked here"
+   },
+   {
+    "what": "XVII chain difficulty (25.5 % sensible first try, XVIII 31 %)",
+    "from": "D-282 bench (docs/handoff/chapter-sin.md)",
+    "why": "engine numbers, not a presentation check; disclosed as D-282"
+   },
+   {
+    "what": "tests/e2e/ffx-sin.spec.ts 4/4 (desktop keys, phone touch), probe2 XVIII clock and Giga-Graviton, Songstress XIII runs, tile composites",
+    "from": "first pass of this same review, 2026-09-29 12:14-12:37, critic/reviews/1475ff6b-focused/",
+    "why": "same commit 1475ff6b, same bundle hash index-B0cfXTil.js, same targets.json sha256; the recheck reproduced every supp step result exactly"
+   }
+  ],
+  "notTested": [
+   "Links II and III of XVII by real input (Right Fin, Genais + Core) and the carry of statuses across links: covered by unit tests only in this pass",
+   "Songstress in Chapter VI; Paine cast/item in XIII (Paragon's scripted Big Bang wiped the party first)",
+   "Advisor v4 under a long fight (only the first menus and one action)",
+   "Audio (stand-in music), real phones, Safari, gamepad, 4:3 / 21:9 / 4K"
+  ],
+  "notes": "Harness notes: the supp \"Enter,Enter leaves the menu\" detector also fails on live release 29 (harness, not product); the supp XVIII \"RETRY by Enter\" step waits for a command menu, but RETRY returns through party prep by design (ResultsScreen retry-from-prep, same as live), which the e2e spec and probe2 walk through to a whole Sin / Left Fin; the FFX-2 Trema \"distinct values\" step fails because the ATB phase moves on within 7 s (card text itself stayed one value)."
+ },
+ "regressions": [],
+ "nextReview": "Live verification of this exact artifact after the deploy; then the owed deep review (FFX CTB engine, shared combat core, presenter, chapter registry, two new chapters, advisor v4) on the live build.",
+ "elapsedMinutes": 49
+}
