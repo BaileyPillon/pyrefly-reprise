@@ -132,3 +132,43 @@ FFX only (rule 14). Checked on a6878731 (branch 1 ahead of origin, not pushed). 
 - Minor: `src/engine/tactics/yunalesca.ts` ~L561 keeps the old 1,341 to 2,542 HP arithmetic, labelled
   as the pre-2026-09-28 rows; historical, harmless.
 - Push not done by this check: pushing the public repo waits for the driver or Bailey.
+
+## CHECK 2 (independent, 2026-09-29, did not build it)
+
+FFX only (rule 14). Checked on `40dffc82` (= `origin/aeon-hp-2-3`; the branch is already inside
+`origin/main` at `49005f73`, 0 commits of its own). `D:/pyrefly-aeon-hp` now holds another agent's
+`songstress-0929` branch, so this check ran in a fresh sparse worktree, `D:/pyrefly-aeonhp-check`
+(junctions for `node_modules` and `public/art`: unlink them before removing that worktree). Verdict:
+**0 blockers**.
+
+- **Rows vs research, parsed from the file:** a script read `research/ffx-combat-core.md` §6.4.3's
+  Gagazet, Zanarkand Dome and inside-Sin tables and compared all 150 cells (5 aeons x 10 stats x 3
+  blocks) with `GAGAZET_SOURCED_ROWS`, `ZANARKAND_SOURCED_ROWS` and `INSIDE_SIN_SOURCED_ROWS`: 0
+  mismatches. The shipped `gagazetBuild`, `zanarkandBuild` and `dreamsEndBuild` carry the same values,
+  HP and MP full. Tag `[estimate]` in §6.4.3's own sense, as Chapter I's rows. `zanarkandFloorAeons` /
+  `dreamsEndFloorAeons` reproduce the removed rows.
+- **No drop later in the story:** every stat of every aeon is non-decreasing Gagazet -> Zanarkand ->
+  inside Sin (0 drops). HP: Valefor 1,530 / 1,674 / 1,886; Ifrit 2,075 / 2,275 / 2,585; Ixion 2,055 /
+  2,251 / 2,551; Shiva 1,830 / 2,004 / 2,266; Bahamut 2,935 / 3,218 / 3,657. The earlier Via Purifico
+  and Highbridge rosters (Valefor 1,146 ... Bahamut 2,935) sit at or below Gagazet.
+  `data-ffx-builds` fails its two row checks under `LATE_AEON_ROWS=floor` (the switch reaches the builds).
+- **Possessed aeons (III) and Chapter XII, by running the engine:** each `possessed-<aeon>` group
+  initialised with `dreamsEndBuild` gives the inside-Sin HP (possessed Valefor ... Bahamut 1,886 /
+  2,585 / 2,551 / 2,266 / 3,657, Luck 1 per `ffx-bfa-yu-yevon.md` §2.2); the Yu Pagodas stay 5,000 HP.
+  `gardenOfPainBuild.aeons` equals Chapter III's. No boss number touched.
+- **Benches reproduce exactly:** 200-seed `aeon-hp-2-3-bench`: every line equal to the table above
+  (II intended 195 -> 200, card 165 -> 183, 5/0 and 25/7 flips; III intended 193 -> 194, card 193 ->
+  194, 7/6 and 6/6; turns 214.9 -> 183.4, 243.4 -> 219.1, 331.2 -> 452.2, 330.6 -> 447.8; per-link
+  turns equal). `omnis-bench` under `floor` and `sourced`: the two tables are byte-identical
+  (intended 127, break-brute 1, weakness 142, wrong 0, no ring 0).
+- **Goldens:** the branch's test diff is the new bench, the new row test, the two helper files and
+  `data-ffx-builds`; no golden or pinned-seed file moved.
+- **Real keys:** screenshots read (not re-driven): Chapter II Bahamut 3218/3218, 81/81; Chapter III
+  Ifrit 2585/2585, 59/59; both match §6.4.3.
+- **tsc** clean; **orphans** 24 (as main). **Full suite once:** 9,623 passed, 1 failed =
+  `strategy-ffx2-bahamut` "heal-only route" 15 s timeout under load (FFX-2; the branch touches no
+  FFX-2 file); alone 19/19 in 8.9 s.
+- **git merge-tree** against `origin/main`: clean (the branch is already contained in main).
+- Minor, disclose only: Chapter III's possessed-aeon gauntlet is about 37 percent longer in engine
+  turns (a length cost the research implies, not a difficulty cost); `yunalesca.ts` ~L560 keeps the
+  old 1,341 to 2,542 arithmetic, labelled as the pre-2026-09-28 rows.
