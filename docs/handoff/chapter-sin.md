@@ -495,3 +495,156 @@ The same seed gives the same log.
    `'ffx2-den-of-woe': {},` line.
 4. **The worktree's scratch probes break `tsc` in this worktree.** They sit untracked under
    `tests/unit/`, so the type check here is not clean. No tracked file is affected.
+
+## CHECK 2 (independent, 2026-09-29 ~02:45 to 04:30 EDT; did not build any of it)
+
+This check covers branch `chapter-sin` at `e76c7d0e` (S, F, G, P, H merged, then the staged art and bench B), in worktree
+`D:/pyrefly-ch-sin`. **FFX only** throughout. Every claim below comes from running the engine or the app (rule 3).
+
+The probes are untracked scratch:
+- `tests/unit/zz-scratch/zz-check2-sin-xvii.test.ts`, `zz-check2-sin-bench-slice.test.ts` and `zz-check2-dump-link4.test.ts`;
+- the browser and hash files in `D:/Tools/pyrefly-scratch/overnight-0929/sin-check/`.
+
+**Verdict: PASS. No blockers.** There are seven minor findings, listed at the end.
+
+**The four new enemies against `research/ffx-sin.md`.** Every number was typed from the research by the checker
+and compared with the live combatants the engine builds. Nothing was mismatched.
+- **§2.1 stats:** HP, MP, Overkill, STR, DEF, MAG, MDEF, AGI, Luck, Eva and Acc.
+- **§2.1 flags:** Armored and percentage-immune on the Fins and the Core, but not on Genais. Delay-immune on all four.
+  Doom 30 and Zanmato 4.
+- **§2.2 elements:** Genais is weak to Fire and absorbs Water. The other three have none.
+- **§2.3 statuses:** every 255 row is 255. Genais has Zombie 80 and Silence 100, and takes Power Break, Magic Break,
+  Slow, Haste and Doom. Armor Break and Mental Break land on the Fins and the Core, and Genais is immune to both.
+  Reflect is 255 on Genais and the Core. Threaten is immune (S-6).
+- **§2.4 rewards:** gil, AP and Overkill AP (the Right Fin's is 17,000 / 25,500), steals, drops, and Bribe immune.
+- **All 17 action rows (§3.1 to §3.3):** power, formula, target and type match on every row, with `canMiss: false` and
+  rank 3 throughout.
+  - Venom carries Poison 100 only (S-3) and is `crit-eligible`.
+  - Sigh inflicts Darkness at 100 for 3 turns.
+  - Waterga is Water with shatter 10.
+  - The Core's counters run Fire, Ice, Lightning, Water.
+- **Negation** removes 24 statuses, and never Death, Doom, Curse, Auto-Life or Eject.
+
+**The 13 must-changes.** Each one was checked by a probe or a test run here.
+
+| # | Done | Evidence |
+|---|---|---|
+| 1 | yes | Waterga landed on the caster (Lulu) on 30 of 30 seeds (101 to 130, Fire and Blizzard). G's aeon-caster test passes |
+| 2 | yes, with a lag (finding 2) | G's tests pass for the Core killed by Attack, ability, item and Overdrive, for Doom, and for Zombie plus Cura |
+| 3 | yes | `sin-ship-layer.test.ts` pins Chapter VIII (one Evrae bind, unchanged), link 4 (never bound) and the Fin re-binds |
+| 4 | code yes; the M sheet is not merged (finding 3) | Fins: no pip strip. Evrae keeps 3 pips. `phaseCanon` is a comment-only change |
+| 5 | yes | `sin-carry.test.ts` pins Chapters III and XIV as carrying no statuses |
+| 6 | yes | `seam-lineup` is in `SIN_FINS_ASSUMPTIONS`. The bench measures both readings |
+| 7 | yes | A probe on the Core's Negation stripped Haste and NulBlaze. It spared a permanent Protect, Auto-Life and Doom |
+| 8 | yes | Its own flag (`sin.core.counterChanceBefore` = 0 gives no counter) and the absorbed-spell flag (off gives no counter, the "Magic absorbed." line stays). The bench's §4b measures both |
+| 9 | yes | `decisions.json` D-270 carries `deviation` |
+| 10 | yes | See the golden hashes below |
+| 11 | yes | Venom is `crit-eligible`. The stat test covers Reflect 255 and Delay |
+| 12 | yes | `orphans.mjs` finds 24 orphans, none of them a Sin module |
+| 13 | yes, except the Q-list line (finding 5) | `PYREFLY_SIN_BENCH` gate. `escape` is its own cause. Aeon reach at FAR is measured |
+
+**Other chapters are unchanged.**
+- **FFX golden hashes** (6 seeds x 4 policies, `FFX_HASH_SKIP=sin,sin-face,sin-fins-core`): HEAD against a base
+  regenerated here from S's `git archive` of `56026029` is **408/408 identical**. S's recorded `base.json` is also
+  byte-identical to the regenerated base.
+  - The run covers nine chapters: Seymour Flux, Yunalesca, Braska's Final Aeon, Seymour at Macalania, Evrae,
+    Yojimbo, Natus, Omnis and Isaaru.
+- **Chapter XVIII (link 4) against S's link-4 base:** 24 of 24 hashes differ. I checked this event by event on seed 1
+  against a `git archive` of `a725473d`.
+  - The only change is one `script-trigger` event (`sin-first-pull`, P's story callout), which shifts the `seq`
+    numbers.
+  - Every combat event and every menu is identical. That is a deliberate Sin change, not a regression.
+- **Chapter VIII:** the director diff binds Evrae exactly as before, and the widget passes a number, so Evrae keeps its
+  3 pips. The Evrae suites pass, including `evrae-engine`.
+- **FFX-2:** `ffx2-atb-golden` passes 6/6. `ff7-golden` passes 3/3.
+
+**The bench reproduces.** I re-ran seeds 1 to 40 of each line. Every figure sits within noise of B's 200-seed table
+(in brackets).
+
+| Line | Chain | Link 1 | Link 2 | Link 3 | Rested links 1 / 2 / 3 |
+|---|---:|---:|---:|---:|---|
+| Sensible | 3/40, 7.5 % (6.5 %) | 40/40 | 40/40 | 3/40 | 100 / 100 / 87.5 % (100 / 100 / 78.5 %) |
+| Naive | 0/40 | 0/40, all `escape` | - | - | - |
+| Advisor card | 0/40 (0.5 %) | 38/40 | 17/38, 44.7 % (43.7 %) | 0/17 | 95 / 97.5 / 87.5 % (95 / 98 / 82.5 %) |
+
+- **The sensible line's link-3 losses:** the Core's counters, plus 4 `escape`.
+- **The card's link-3 losses:** Genais's Sigh.
+- **Determinism:** the same 8 seeds run twice give identical readings.
+
+**The rules.**
+- **Layering (rule 1):** no `three`, DOM, `app`, `ui` or `engine` import under `src/battle` or `src/data`. The only
+  matches are in comments.
+- **File size:**
+  - `setup.ts`, `simulate.ts`, `types.ts` and `FFXBattleHud.ts` are the same length as before.
+  - `reactions.ts` grew by the one line the review allowed, and stays under 400.
+  - Two test files are over 400 lines (finding 6).
+- **Contracts:** `docs/CONTRACT-CHANGES.md` has the entry for the `encounters.ts` ids and `| 18` and the
+  `carriesPartyState` doc.
+- **Checks:** `npx tsc --noEmit` is clean; only the untracked `tests/unit/zz-scratch/**` has errors. `critic-plan`
+  classes the change DEEP.
+- **Full suite, run once** (`npx vitest run --testTimeout=60000`): 633 files pass and 15 are skipped. 9,804 tests
+  pass, 49 are skipped and 1 is a todo. No failure.
+
+**In the app.** Headless GPU Chromium ran against a dev server on port 8261 with file watching off. The server was
+stopped by its PID afterwards. There were 0 page errors in every run.
+
+- **Chapter XVIII:**
+  - `gotoChapter('sin-face')` opens FAR with 13 turns left.
+  - 93 real key presses played it to the **Defeat** results screen after 53 turns.
+  - The clock showed, and the Fin plate did not.
+  - Screenshots: `D:/Tools/pyrefly-scratch/overnight-0929/sin-check/sin-face-end.jpg` and `sin-face-results.jpg`.
+- **Chapter XVII:**
+  - `gotoChapter('sin-fins-core')` opens the Left Fin at FAR, with Cid present and hidden.
+  - 910 real key presses played it to a **Defeat** results screen ("Withdrew ... The battle cannot be won from here",
+    516 turns): the 400-turn stalemate in link 1, which is the bench's naive result.
+  - The Fin plate showed, and the clock never did.
+  - `auto: 'intended'` on seeds 8 and 12 walked the whole chain in the app: Left Fin, then Right Fin, then Genais
+    and the Core. The plate showed in links 1 and 2 and not in link 3. Link 3 ended in `escape` and in defeat, as the
+    bench predicts.
+- **Chapter VIII:** the Sin HUD node is not in the DOM.
+- **Unlisted:** neither Sin id is in `chapters()`.
+
+**Merge with `origin/main` (`49005f73`):** `git merge-tree` finds **one textual conflict**, in
+`docs/CONTRACT-CHANGES.md` (finding 1). Everything else merges on its own, including `AirshipOrders.ts`, which main's
+PR-0236 also touched.
+- I extracted the merged tree to scratch and ran `tsc` on it: clean, apart from tests that import `docs/`, which I did
+  not extract.
+- On the merged tree, 20 files of tests for Sin, the airship, Evrae's orders, guides, tactics and the atlas pass (290
+  tests).
+
+**Findings (all minor):**
+
+1. **`merge-tree` is not clean.** Both sides added their newest entry at the top of `docs/CONTRACT-CHANGES.md`. Keep
+   both entries. Docs only.
+2. **Must-change 2 leaves a one-action lag in one case.**
+   - When Genais dies to its own Cura while Zombied, the death happens inside the counter phase, after that action's
+     liveness hook has already run.
+   - The **next menu** therefore still sees the Core out of reach and magic-immune. Seed 16: Auron's Attack row had no
+     reachable target.
+   - The action after that clears it.
+   - It is labelled `liveness-lag` in `SIN_CORE_ASSUMPTIONS` and is rare (Zombie lands 20 %). A spell cast in that
+     window would deal 0 with no "Magic absorbed." line.
+   - A fix: run `syncGenaisCoreLiveness` again after the counters, or when the menu is built.
+3. **Must-change 4's mockup sheet** (M: "the widget without pips") is commit `367741dc` on branch `chapter-sin-m`. It is
+   not merged into `chapter-sin`. On this branch there is only P's screenshot
+   `docs/screenshots/sin/p-fin-orders-no-pips.jpg`.
+4. **The should-change "fix the dangling cite" is not done.**
+   - Research §2.3 and `sin-two-chapters-review.md` row 5 still cite a "§5.2.3" that does not exist.
+   - Row 5 also says the Core's counters bounce off a Reflected party, "tested". The engine never bounces party-wide
+     counters (`reflect-bounce` in `SIN_CORE_ASSUMPTIONS`, labelled open).
+   - Only Waterga's single-target bounce is pinned by a test, and it lands on Genais or the Core.
+5. **The plan's Q list was not updated.** Must-change 13's "aeon reach at FAR" and S's Q16 and Q17 live only in
+   `SIN_FINS_ASSUMPTIONS` and this handoff. The plan file has not changed since the review.
+6. **House size rule, if it covers tests:**
+   - `tests/unit/chapters/sin-fins-engine.test.ts` is new at 483 lines.
+   - `tests/unit/strategy-guide.test.ts` grew from 401 to 403 lines.
+   - 40 test files in the repo are already over 400.
+7. **For the driver: the both-greyed Orders submenu, on this branch's base.**
+   - With an order queued at FAR, Tidus's Orders row opens a widget in which both rows are greyed. Enter does nothing
+     there, and Escape backs out.
+   - Evrae has the same behaviour here. It is main's PR-0236 fix and arrives with the merge; the airship tests pass on
+     the merged tree.
+   - It is not a Sin defect, but XVII meets it at once, so check the Fins in the app after the merge.
+
+Disclosed rather than a defect: XVII does not clear the 90 % bar on either reading of the intended line (bench B). That
+is Bailey's call before listing (plan Q3, S-12).
