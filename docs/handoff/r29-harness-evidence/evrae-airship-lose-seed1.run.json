@@ -1,0 +1,1263 @@
+{
+ "chapter": "evrae-airship",
+ "game": "ffx",
+ "goal": "lose",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:7970/pyrefly-reprise/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "retry after attempt 1",
+   "engineSeed": 1001,
+   "links": 1,
+   "firstEnemyAction": null
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 9,
+  "actor": "evrae",
+  "ability": "Attack",
+  "targets": []
+ },
+ "steps": [
+  {
+   "ms": 8093,
+   "k": "prepEscGoesTo",
+   "v": "chapter-select"
+  },
+  {
+   "ms": 30502,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 63221,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 9,
+    "actor": "evrae",
+    "ability": "Attack",
+    "targets": []
+   }
+  },
+  {
+   "ms": 146632,
+   "k": "fight",
+   "v": {
+    "outcome": "defeat",
+    "turns": 9,
+    "ms": 103538,
+    "seams": 0,
+    "orders": 5
+   }
+  },
+  {
+   "ms": 153782,
+   "k": "retryReachedBattle",
+   "v": true
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 7,
+   "actor": "command:tidus",
+   "want": null,
+   "took": "Pull back",
+   "viaMenu": "Orders",
+   "engineHp": [
+    "tidus:1265/1265",
+    "wakka:1430/1430",
+    "rikku:880/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:32000/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 1,
+     "actor": "tidus",
+     "did": "Pull back",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 9799,
+   "actor": "command:rikku",
+   "want": null,
+   "took": "Attack",
+   "viaMenu": "Orders",
+   "engineHp": [
+    "tidus:1265/1265",
+    "wakka:1430/1430",
+    "rikku:880/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:32000/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 5,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "evrae"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 2,
+   "ms": 20138,
+   "actor": "command:wakka",
+   "want": null,
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1265/1265",
+    "wakka:1430/1430",
+    "rikku:0/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:31832/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 14,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "evrae"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 3,
+   "ms": 29935,
+   "actor": "command:tidus",
+   "want": null,
+   "took": "Close in",
+   "viaMenu": "Orders",
+   "engineHp": [
+    "tidus:1265/1265",
+    "wakka:1430/1430",
+    "rikku:0/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:31375/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 21,
+     "actor": "tidus",
+     "did": "Close in",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 4,
+   "ms": 40318,
+   "actor": "command:wakka",
+   "want": null,
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:750/1265",
+    "wakka:1121/1430",
+    "rikku:0/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:31375/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 46,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "evrae"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 5,
+   "ms": 48107,
+   "actor": "command:tidus",
+   "want": null,
+   "took": "Pull back",
+   "viaMenu": "Orders",
+   "engineHp": [
+    "tidus:750/1265",
+    "wakka:1121/1430",
+    "rikku:0/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:30867/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 51,
+     "actor": "tidus",
+     "did": "Pull back",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 6,
+   "ms": 60233,
+   "actor": "command:tidus",
+   "want": null,
+   "took": "Close in",
+   "viaMenu": "Orders",
+   "engineHp": [
+    "tidus:750/1265",
+    "wakka:1121/1430",
+    "rikku:0/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:30867/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 62,
+     "actor": "tidus",
+     "did": "Close in",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 70788,
+   "actor": "command:tidus",
+   "want": null,
+   "took": "Special > Cheer",
+   "viaMenu": "Orders",
+   "engineHp": [
+    "tidus:345/1265",
+    "wakka:702/1430",
+    "rikku:0/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:30867/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 87,
+     "actor": "tidus",
+     "did": "Cheer",
+     "targets": [
+      "tidus",
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 89482,
+   "actor": "command:tidus",
+   "want": null,
+   "took": "Pull back",
+   "viaMenu": "Orders",
+   "engineHp": [
+    "tidus:345/1265",
+    "wakka:702/1430",
+    "rikku:0/880",
+    "lulu:700/700",
+    "auron:2000/2000",
+    "kimahri:1250/1250",
+    "evrae:30867/32000",
+    "cid:410/410"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  }
+ ],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "briefingText": "AURON “Fifteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 16,
+  "coming": [
+   "seymour-anima-macalania"
+  ],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 15
+ },
+ "boardWalk": [
+  "seymour-flux",
+  "yunalesca",
+  "braskas-final-aeon",
+  "evrae-airship"
+ ],
+ "dossier": "CHAPTER SELECT CHAPTER VIII Evrae 0 OF 15 BEATEN X I II III VII VIII IX X XII XIV X-2 IV V VI XI XIII XV XVI The wyrm posted at the door of Bevelle Home is gone and Yuna is being married in Bevelle within the hour, so Cid points a thousand-year-old ship at the city. Something was already waiting over the cloud line, and the only thing between it and the deck is how far away Cid can keep it. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima COMING VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Deck of the Fahrenheit — the approach to Bevelle BOSS Evrae + Cid PARTY T TIDUS W WAKKA R RIKKU BEST Not cleared LEFT/RIGHT CHOOSE · UP/DOWN GAME · ENTER BEGIN · ESC BACK",
+ "prepText": "PARTY PREP VIII · EVRAE — DECK OF THE FAHRENHEIT — THE APPROACH TO BEVELLE T Tidus S.LV 24 W Wakka S.LV 24 R Rikku S.LV 41 L Lulu S.LV 24 A Auron S.LV 26 K Kimahri S.LV 22 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · VIII Evrae Bevelle's Doormat Home is gone, Yuna is being married inside the hour, and Cid puts the ship on course before anyone finishes asking. Bevelle posted a guard for exactly this approach, and it was already waiting. the foredeck, open sky a streak across clean sky the throat, charging OBJECTIVES Survive Poison Breath Cure a petrified ally Defeat Evrae TIP Pull back the moment the fight opens. Cid's missiles do more from FAR, for no party turn at all, than a full turn of swinging ever does. ▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL START BATTLE T Tidus HP 1265/1265 · MP 60/60 WARRIOR W Wakka HP 1430/1430 · MP 40/40 RANGER R Rikku HP 880/880 · MP 130/130 THIEF",
+ "prepEsc": "chapter-select",
+ "cardAfterBack": "evrae-airship",
+ "preScene": {
+  "lines": [
+   "CHAPTER VIII · DECK OF THE FAHRENHEIT — THE APPROACH TO BEVELLE Wakka GUARDIAN Thousand years under the sea, and she still flies, ya? AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER VIII · DECK OF THE FAHRENHEIT — THE APPROACH TO BEVELLE Rikku GUARDIAN She flies 'cause we fixed her. You're welcome! AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER VIII · DECK OF THE FAHRENHEIT — THE APPROACH TO BEVELLE Lulu GUARDIAN Everythi AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER VIII · DECK OF THE FAHRENHEIT — THE APPROACH TO BEVELLE Lulu GUARDIAN Everything they owned is behind us. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "evrae-airship",
+  "game": "ffx",
+  "scene": "evrae-airship-deck",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 6399.700000000001,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "wakka",
+    "side": "party",
+    "art": "wakka",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "rikku",
+    "side": "party",
+    "art": "rikku",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "evrae",
+    "side": "enemy",
+    "art": "evrae",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:tidus",
+   "awaitingMenu": true,
+   "played": 1,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "turn-start",
+     "ms": 97
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 0,
+   "events": 1,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 1265,
+     "maxHp": 1265,
+     "mp": 60,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "wakka",
+     "hp": 1430,
+     "maxHp": 1430,
+     "mp": 40,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 880,
+     "maxHp": 880,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "lulu",
+     "hp": 700,
+     "maxHp": 700,
+     "mp": 200,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "auron",
+     "hp": 2000,
+     "maxHp": 2000,
+     "mp": 60,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "kimahri",
+     "hp": 1250,
+     "maxHp": 1250,
+     "mp": 100,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "evrae",
+     "hp": 32000,
+     "maxHp": 32000,
+     "mp": 500,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    },
+    {
+     "id": "cid",
+     "hp": 410,
+     "maxHp": 410,
+     "mp": 1,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 0
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 410,
+   "y": 135,
+   "w": 593,
+   "h": 130
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "NEXT BEST MOVE Tidus Pull back GUIDE’S PICK IN ORDERS NO MP ALWAYS HITS The best of what is offered."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 410,
+    "y": 135,
+    "w": 593,
+    "h": 130
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Pull back",
+    "eff": 21
+   },
+   {
+    "t": "Guide’s pick",
+    "eff": 14.2
+   },
+   {
+    "t": "in Orders",
+    "eff": 14.2
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "always hits",
+    "eff": 14.2
+   },
+   {
+    "t": "The best of what is offered.",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 410,
+    "y": 135,
+    "w": 593,
+    "h": 130
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Pull back",
+    "eff": 21
+   },
+   {
+    "t": "Guide’s pick",
+    "eff": 14.2
+   },
+   {
+    "t": "in Orders",
+    "eff": 14.2
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "always hits",
+    "eff": 14.2
+   },
+   {
+    "t": "The best of what is offered.",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "NEXT BEST MOVE Tidus Pull back GUIDE’S PICK IN ORDERS NO MP ALWAYS HITS The best of what is offered.",
+ "advisorHiddenByN": true,
+ "intentText": " | EVRAE 3RD IN QUEUE Attack SCRIPTED Physical non-elemental damage to a random character. DAMAGE · RANDOM TARGET TIDUS 1,262–1,265 KO 99% to hit WAKKA 1,262–1,425 94% HP RIKKU 880 KO Lands on one of these, picked when it acts.",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Tidus Rikku Evrae Wakka Cid Tidus ORDERS ATTACK SPECIAL ▸ ×3 WHITE MAGIC ▸ ×2 ITEMS ▸ ×11 FLEE ▼ A one-off action this encounter offers Tidus 1265 /1265 60 /60 OD Wakka 1430 /1430 40 /40 OD Rikku 880 /880 130 /130 OD Evrae NEXT TIDUS Pull back G HIDE GUIDE NEXT BEST MOVE Tidus Pull back GUIDE’S PICK IN ORDERS N HIDE MOVES Evrae PAUSE PYREFLY REPRISE · FINAL FANTASY X Q L1 TIDUS WAKKA RIKKU CHAPTER GUIDE OPTIONS CONTROLS MUSIC R1 E BATTLE STATS HP 1265/1265 MP 60/60 STRENGTH 22 MAGIC 11 DEFENCE 14 MAGIC DEF 12 AGILITY 22 IN THIS FIGHT OVERDRIVE 45% MODE WARRIOR TURN ORDER 1ST OF 5 CHAPTER VIII · THE DECK OF THE FAHRENHEIT — BEVELLE'S DOORMAT SURVIVE POISON BREATH ESC RESUME H PAINTING ONLY"
+  },
+  "optionsText": "Tidus Rikku Evrae Wakka Cid Tidus ORDERS ATTACK SPECIAL ▸ ×3 WHITE MAGIC ▸ ×2 ITEMS ▸ ×11 FLEE ▼ A one-off action this encounter offers Tidus 1265 /1265 60 /60 OD Wakka 1430 /1430 40 /40 OD Rikku 880 /880 130 /130 OD Evrae NEXT TIDUS Pull back G HIDE GUIDE NEXT BEST MOVE Tidus Pull back GUIDE’S PICK IN ORDERS N HIDE MOVES Evrae PAUSE PYREFLY REPRISE · FINAL FANTASY X Q L1 TIDUS WAKKA RIKKU CHAPTER GUIDE OPTIONS CONTROLS MUSIC R1 E SETTINGS MASTER VOLUME 80 MUSIC 70 SOUND EFFECTS 90 TEXT SPEED 1x STRATEGY GUIDE ON BATTLE HELP ON THIS ENCOUNTER REPLAY BRIEFING ▸ RESTART ENCOUNTER ▸ CHAPTER SELECT ▸ QUIT TO TITLE ▸ CHAPTER VIII · THE DECK OF THE FAHRENHEIT — BEVELLE'S DOORMAT SURVIVE POISON BREATH ESC RESUME H PAINTING ONLY",
+  "tabs": [
+   "Tidus",
+   "Wakka",
+   "Rikku",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Orders",
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items",
+  "Flee"
+ ],
+ "targetsShown": [
+  "evrae"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 6
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "defeat",
+   "seed": 1,
+   "turns": 9,
+   "firstEnemyAction": {
+    "seq": 9,
+    "actor": "evrae",
+    "ability": "Attack",
+    "targets": []
+   },
+   "final": true
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [
+  {
+   "turn": 0,
+   "order": "Pull back",
+   "why": "lose route"
+  },
+  {
+   "turn": 3,
+   "order": "Close in",
+   "why": "lose route"
+  },
+  {
+   "turn": 5,
+   "order": "Pull back",
+   "why": "lose route"
+  },
+  {
+   "turn": 6,
+   "order": "Close in",
+   "why": "lose route"
+  },
+  {
+   "turn": 8,
+   "order": "Pull back",
+   "why": "lose route"
+  }
+ ],
+ "escapes": [
+  {
+   "turn": 1,
+   "ms": 15749,
+   "why": "Orders: every order disabled (one standing, or already there)",
+   "rows": [
+    "Pull back (disabled)",
+    "Close in (disabled)"
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 76164,
+   "why": "Orders: every order disabled (one standing, or already there)",
+   "rows": [
+    "Pull back (disabled)",
+    "Close in (disabled)"
+   ]
+  }
+ ],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "mgSince": null,
+ "ordersShot": true,
+ "emptyPicks": 0,
+ "lastPartySeq": 87,
+ "turns": 9,
+ "fightMs": 103538,
+ "afterFight": "results",
+ "outcome": "defeat",
+ "logKinds": {
+  "turn-start": 19,
+  "action-start": 15,
+  "message": 9,
+  "action-end": 15,
+  "damage": 22,
+  "ko": 3,
+  "overdrive-gauge": 20,
+  "status-add": 8,
+  "script-trigger": 1,
+  "status-remove": 6,
+  "defeat": 1
+ },
+ "post": {
+  "screen": "results",
+  "lines": []
+ },
+ "resultsScreen": "results",
+ "resultsText": "DECK OF THE FAHRENHEIT — THE APPROACH TO BEVELLE · FELL RESULTS · 2:03 Defeat TURNS 19 ATTEMPTS 1 BEST — NEVER CLEARED T Tidus S.LV 24 · 0/401 AP W Wakka S.LV 24 · 0/401 AP R Rikku S.LV 41 · 0/1,588 AP RETRY CHAPTER SELECT",
+ "outcomeFrom": "results screen text",
+ "afterRetry": "party-prep",
+ "retryReachedBattle": true,
+ "retrySeed": 1001,
+ "dboxTimeline": [
+  {
+   "ms": 12192,
+   "lastMs": 15508,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Thousand years under the sea, and she still flies, ya?",
+   "portrait": "wakka.png",
+   "narrate": false,
+   "show": 1
+  },
+  {
+   "ms": 15542,
+   "lastMs": 18225,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "She flies 'cause we fixed her. You're welcome!",
+   "portrait": "rikku.png",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 18342,
+   "lastMs": 21524,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Everything they owned is behind us.",
+   "portrait": "lulu.png",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 21575,
+   "lastMs": 22074,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "...Yeah. Behind us.",
+   "portrait": "rikku.png",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 22092,
+   "lastMs": 22092,
+   "screen": "cutscene",
+   "speaker": "Brother",
+   "role": "",
+   "text": "YUNA! Bevelle! They are marrying her to that man!",
+   "portrait": null,
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 22108,
+   "lastMs": 22108,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "It's in Bevelle. And it's within the hour!",
+   "portrait": "rikku.png",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 22125,
+   "lastMs": 22125,
+   "screen": "cutscene",
+   "speaker": "Cid",
+   "role": "",
+   "text": "Bevelle. Fine. Everybody hold on to something",
+   "portrait": "cid.png",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 22143,
+   "lastMs": 22158,
+   "screen": "cutscene",
+   "speaker": "Cid",
+   "role": "",
+   "text": "Nobody asked me twice. Nobody is going to have to.",
+   "portrait": "cid.png",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 22175,
+   "lastMs": 22192,
+   "screen": "cutscene",
+   "speaker": "Brother",
+   "role": "",
+   "text": "She is in there alone.",
+   "portrait": null,
+   "narrate": false,
+   "show": 9
+  },
+  {
+   "ms": 22208,
+   "lastMs": 22208,
+   "screen": "cutscene",
+   "speaker": "Brother",
+   "role": "",
+   "text": "I am flying! Be quiet and be impressed!",
+   "portrait": null,
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 22224,
+   "lastMs": 22224,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Okay. Weapons, plan, go. What've we got?",
+   "portrait": "tidus.png",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 22241,
+   "lastMs": 22258,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Six of us. No summoner",
+   "portrait": "lulu.png",
+   "narrate": false,
+   "show": 12
+  },
+  {
+   "ms": 22275,
+   "lastMs": 22275,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Nobody on this deck can heal anything.",
+   "portrait": "lulu.png",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 22292,
+   "lastMs": 22292,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "I've got potions! Lots of potions. That's... kinda it.",
+   "portrait": "rikku.png",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 22308,
+   "lastMs": 22325,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Then ration them.",
+   "portrait": "auron.png",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 22342,
+   "lastMs": 22358,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Whoa. Somebody built that on purpose, ya?",
+   "portrait": "wakka.png",
+   "narrate": false,
+   "show": 16
+  },
+  {
+   "ms": 22375,
+   "lastMs": 22392,
+   "screen": "cutscene",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Too white. Nothing lives there",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 17
+  },
+  {
+   "ms": 22409,
+   "lastMs": 22409,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Hey! Something just came off the city!",
+   "portrait": "tidus.png",
+   "narrate": false,
+   "show": 18
+  },
+  {
+   "ms": 22425,
+   "lastMs": 22441,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "It isn't scrambling.",
+   "portrait": "lulu.png",
+   "narrate": false,
+   "show": 19
+  },
+  {
+   "ms": 22459,
+   "lastMs": 22459,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "It was already up here. Waiting for us.",
+   "portrait": "lulu.png",
+   "narrate": false,
+   "show": 20
+  },
+  {
+   "ms": 22474,
+   "lastMs": 22474,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Bevelle keeps a dog on the step.",
+   "portrait": "auron.png",
+   "narrate": false,
+   "show": 21
+  },
+  {
+   "ms": 22491,
+   "lastMs": 22509,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Hmph. Mind the teeth.",
+   "portrait": "auron.png",
+   "narrate": false,
+   "show": 22
+  },
+  {
+   "ms": 22525,
+   "lastMs": 22525,
+   "screen": "cutscene",
+   "speaker": "Cid",
+   "role": "",
+   "text": "Listen up! I can move this ship, or I can shoot!",
+   "portrait": "cid.png",
+   "narrate": false,
+   "show": 23
+  },
+  {
+   "ms": 22544,
+   "lastMs": 22544,
+   "screen": "cutscene",
+   "speaker": "Cid",
+   "role": "",
+   "text": "Not both. You pick, and you pick fast!",
+   "portrait": "cid.png",
+   "narrate": false,
+   "show": 24
+  },
+  {
+   "ms": 22559,
+   "lastMs": 22617,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Pops! Just keep us in the air!",
+   "portrait": "rikku.png",
+   "narrate": false,
+   "show": 25,
+   "endMs": 22618
+  },
+  {
+   "ms": 127771,
+   "lastMs": 129755,
+   "screen": "battle",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Its throat! Watch its throat, ya?",
+   "portrait": "wakka.png",
+   "narrate": false,
+   "show": 26
+  },
+  {
+   "ms": 129788,
+   "lastMs": 131888,
+   "screen": "battle",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Get out of its reach! Now!",
+   "portrait": "tidus.png",
+   "narrate": false,
+   "show": 27,
+   "endMs": 131888
+  }
+ ],
+ "audioDebugFile": {
+  "file": "evrae-airship-lose-a2/audio-debug.jsonl",
+  "samples": 4,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 2.66,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/keyart.2x.webp",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.png",
+  "art/backdrops/gagazet.png",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.png",
+  "art/portraits/yuna.png",
+  "art/portraits/kimahri.png",
+  "art/portraits/auron.png",
+  "art/portraits/wakka.png",
+  "art/portraits/rikku.png",
+  "art/portraits/lulu.png",
+  "art/portraits/yuna-x2.png",
+  "art/portraits/rikku-x2.png",
+  "art/portraits/paine.png",
+  "art/characters/yuna-white-mage/idle.png",
+  "art/characters/rikku-dark-knight/idle.png",
+  "art/characters/paine-warrior/idle.png",
+  "art/characters/paine-dark-knight/idle.png",
+  "art/characters/yuna-gunner/idle.png",
+  "art/characters/rikku-thief/idle.png",
+  "art/characters/yuna-dark-knight/idle.png",
+  "art/characters/rikku-alchemist/idle.png",
+  "art/backdrops/zanarkand-dome.png",
+  "art/characters/yunalesca-1/idle.png",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "art/backdrops/macalania-temple.png",
+  "art/characters/anima/idle.png",
+  "art/backdrops/evrae-airship-deck.png",
+  "art/characters/evrae/idle.png",
+  "art/backdrops/cavern-stolen-fayth.png",
+  "art/characters/yojimbo-cavern/idle.png",
+  "art/backdrops/bevelle-highbridge.png",
+  "art/characters/seymour-natus/idle.png",
+  "art/backdrops/garden-of-pain.png",
+  "art/characters/seymour-omnis/idle.png",
+  "art/backdrops/via-purifico.png",
+  "art/characters/isaaru/idle.png",
+  "art/backdrops/bevelle-underground.png",
+  "art/characters/ffx2-bahamut/idle.png",
+  "art/backdrops/farplane.png",
+  "art/characters/vegnagun-body/idle.png",
+  "art/backdrops/leblanc-last-room.png",
+  "art/characters/leblanc/idle.png",
+  "art/backdrops/road-to-the-farplane.png",
+  "art/characters/x2-shiva/idle.png",
+  "art/backdrops/via-infinito.png",
+  "art/characters/trema/idle.png",
+  "art/backdrops/den-of-woe.png",
+  "art/characters/baralai-shade/idle.png",
+  "art/backdrops/djose-chamber-provisional.png",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/x2-anima/idle.png",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/music/chapter-select.mp3",
+  "art/characters/kimahri/idle.png",
+  "art/characters/seymour-flux-body/attack.png",
+  "art/characters/seymour-flux-body/cast.png",
+  "art/characters/seymour-flux-body/hurt.png",
+  "art/characters/seymour-flux-body/ko.png",
+  "art/characters/mortiorchis/attack.png",
+  "art/characters/mortiorchis/cast.png",
+  "art/characters/mortiorchis/hurt.png",
+  "art/characters/mortiorchis/ko.png",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/yuna/attack.png",
+  "art/characters/yuna/cast.png",
+  "art/characters/yuna/item.png",
+  "art/characters/yuna/hurt.png",
+  "art/characters/yuna/ko.png",
+  "art/characters/yuna/victory.png",
+  "art/characters/kimahri/attack.png",
+  "art/characters/kimahri/cast.png",
+  "art/characters/kimahri/item.png",
+  "art/characters/kimahri/hurt.png",
+  "art/characters/kimahri/ko.png",
+  "art/characters/kimahri/victory.png",
+  "art/pause/evrae-chapter-card.png",
+  "art/characters/evrae/idle-far.png",
+  "art/characters/evrae/breath-charge.png",
+  "art/characters/wakka/idle.png",
+  "art/characters/rikku/idle.png",
+  "art/characters/evrae/hurt.png",
+  "art/characters/evrae/ko.png",
+  "art/characters/wakka/attack.png",
+  "art/characters/wakka/cast.png",
+  "art/characters/wakka/item.png",
+  "art/characters/wakka/hurt.png",
+  "art/characters/wakka/ko.png",
+  "art/characters/wakka/victory.png",
+  "art/characters/rikku/attack.png",
+  "art/characters/rikku/cast.png",
+  "art/characters/rikku/item.png",
+  "art/characters/rikku/hurt.png",
+  "art/characters/rikku/ko.png",
+  "art/characters/rikku/victory.png",
+  "audio/music/scene-fahrenheit.mp3",
+  "audio/music/pause.mp3",
+  "art/pause/evrae-chapter-card.2x.webp",
+  "art/portraits/cid.png",
+  "audio/music/boss-evrae.mp3",
+  "art/pause/tidus.png",
+  "art/pause/tidus.2x.webp",
+  "art/pause/wakka.png",
+  "art/pause/wakka.2x.webp",
+  "art/pause/rikku.png",
+  "art/pause/rikku.2x.webp"
+ ]
+}
