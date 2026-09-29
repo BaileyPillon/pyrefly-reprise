@@ -1,0 +1,76 @@
+{
+ "note": "Body-only pose tags (no effect words). attack/cast/item/hurt/ko are art5's `mic` set (docs/concepts/art5/poses.json), the set Yuna's installed Songstress poses came from. victory follows each girl's written victory pose (research/visual-bible.md 1.24) without a skeleton; dance has no engine slot today (PARTY_POSES) and is rendered only for parity with yuna-songstress/dance.png.",
+ "slots": {
+  "attack": {
+   "tags": "(throwing:1.1), arm extended forward, holding microphone, leaning forward, legs apart, singing, open mouth",
+   "neg": "weapon, standing straight"
+  },
+  "cast": {
+   "tags": "standing, (arm up:1.2), holding microphone, hand on own hip, singing, open mouth, looking up",
+   "neg": "weapon, closed mouth"
+  },
+  "item": {
+   "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, hand on own hip, looking at viewer",
+   "neg": "drinking, arm up, weapon"
+  },
+  "hurt": {
+   "tags": "standing, (feet on ground:1.2), (leaning back:1.2), head back, (wincing:1.2), one eye closed, clenched teeth, v-shaped eyebrows, hands on own chest",
+   "neg": "smile, smirk, grin, happy, laughing, close-up, upper body, cowboy shot, jumping, midair, legs up, leg lift, upside-down, kicking, flip, knee up"
+  },
+  "ko": {
+   "tags": "lying, on side, on ground, full body, from side, head to the right, feet to the left, (closed eyes:1.3), unconscious, expressionless, closed mouth",
+   "neg": "sitting, standing, open eyes, looking at viewer, lying on back, smile, wink, sleeping, pillow"
+  },
+  "victory": {
+   "tags": "standing, {face}",
+   "neg": "jumping, midair, weapon",
+   "skeleton": false
+  },
+  "dance": {
+   "tags": "(dancing:1.2), standing, one leg raised, arms spread, holding microphone, {face}, open mouth",
+   "neg": "jumping, midair, lying, weapon",
+   "skeleton": false
+  }
+ },
+ "girls": {
+  "rikku": {
+   "pick": "options/rikku-A/cand-4.png",
+   "face": "grin",
+   "slots": {
+    "item": {
+     "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, hand on own hip, grin, looking at viewer",
+     "neg": "drinking, arm up, weapon"
+    },
+    "victory": {
+     "tags": "standing, (clenched hand on own chest:1.2), holding microphone at side, happy, open mouth, closed eyes, legs together",
+     "neg": "jumping, midair, weapon, arms up",
+     "skeleton": false
+    },
+    "ko": {
+     "tags": "lying, on side, on ground, full body, from side, head to the right, feet to the left, (closed eyes:1.3), unconscious, expressionless, closed mouth, (arms at sides:1.1), limp",
+     "neg": "sitting, standing, open eyes, looking at viewer, lying on back, smile, wink, (sleeping:1.2), pillow, (head on arm:1.3), arm under head, hand under cheek, curled up",
+     "note": "try b (cand 7-10): try a's best (cand-4) pillows her cheek on her forearm, which the art5 judge read as asleep (rikku-alchemist/ko 6.81)"
+    }
+   },
+   "neg": "wings, feathered wings, (tail:1.2), feather tail, cape, cloth",
+   "negNote": "pilot item cand-1/2 grew the purple feathers into a tail of wing feathers; production cands add these negatives"
+  },
+  "paine": {
+   "pick": "options/paine-A/cand-2.png",
+   "face": "smirk",
+   "slots": {
+    "item": {
+     "tags": "standing, (holding potion bottle:1.2), small bottle, arm extended forward, hand on own hip, serious, looking at viewer",
+     "neg": "drinking, arm up, weapon, smile"
+    },
+    "victory": {
+     "tags": "standing, (arm up:1.3), holding microphone up, hand raised above head, other hand on own hip, smirk, looking at viewer, legs apart",
+     "neg": "both arms up, jumping, closed eyes, weapon",
+     "skeleton": false
+    }
+   },
+   "neg": "(from behind:1.2), looking back, ass, back",
+   "negNote": "pilot item cand-1 showed her back; production cands add these negatives"
+  }
+ }
+}

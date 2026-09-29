@@ -1,0 +1,65 @@
+{
+ "note": "Songstress for Rikku and Paine (FFX-2 only; PR-0228, D-275, D-281). Costume words come ONLY from the written sources recorded in research/visual-bible.md section 1.24 (FF Wiki 'Songstress' revid 3972937; victory poses from 'Final Fantasy X-2 victory poses' revid 3955034). Hair, eyes and skin come from each girl's shipped FFX-2 idle sidecar (public/art/characters/rikku-thief/idle.json, paine-warrior/idle.json). No retail image is an input: the IP-Adapter sees only our own shipped idle's head crop. Pose tags describe the body only.",
+ "girls": {
+  "rikku": {
+   "identity": "rikku \\(ff10-2\\), final fantasy x-2, blonde hair, long hair, braid, hair bun, many braids, hair beads, green eyes, tan skin",
+   "costume": "songstress, (purple headband:1.2), (orange sleeveless top:1.2), white ruffles, purple necktie, (purple miniskirt:1.2), white belt, (orange elbow gloves:1.2), purple feathers, black ribbon on upper arm, black thigh ribbon, (orange knee boots:1.35), purple feather trim, (green microphone:1.1)",
+   "neg": "(blue bandana:1.2), bandana, (scarf:1.2), red scarf, bikini, yellow bikini top, green skirt, olive skirt, pouch, dagger, weapon, sword, gun, brown hair, short hair, silver hair, blue microphone, two microphones, black boots, blue boots, ankle boots",
+   "headRef": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/refs/rikku-thief-head.png",
+   "idle": "public/art/characters/rikku-thief/idle.png"
+  },
+  "paine": {
+   "identity": "paine \\(ff10-2\\), final fantasy x-2, silver hair, white hair, short hair, layered hair, red eyes, pale skin, feminine",
+   "costume": "songstress, (white jacket:1.2), long sleeves, (high collar:1.1), turquoise lining, turquoise trim, turquoise glovelets, black studded straps, open jacket, (black bikini top:1.1), (white pants:1.3), tight pants, silver chains on thighs, (brown high heel boots:1.35), turquoise ruffles on boots, (teal microphone:1.1)",
+   "neg": "black jacket, leather jacket, (shorts:1.2), thighhighs, black pants, skirt, sword, weapon, skull, red belt, suspenders, blonde hair, brown hair, long hair, two microphones, black boots, blue boots, coattails, cape, long coat, masculine",
+   "headRef": "D:/Tools/pyrefly-art-backup/candidates/2026-09-25-gpu5/refs/paine-warrior-head.png",
+   "idle": "public/art/characters/paine-warrior/idle.png",
+   "identityB": "paine \\(ff10-2\\), final fantasy x-2, silver hair, white hair, short hair, (spiked hair:1.2), (hair slicked back:1.1), layered hair, red eyes, pale skin, feminine"
+  }
+ },
+ "options": {
+  "rikku-A": {
+   "girl": "rikku",
+   "seed0": 29100,
+   "title": "Showtime stance",
+   "pose": "standing, leaning forward, hand on own hip, holding microphone at side, (grin:1.1), looking at viewer, straight-on, full body, feet visible",
+   "negPose": "singing, closed eyes, arm up, jumping"
+  },
+  "rikku-B": {
+   "girl": "rikku",
+   "seed0": 29200,
+   "title": "Singing",
+   "pose": "standing, (singing:1.2), holding microphone to mouth, (arm outstretched:1.1), open hand, open mouth, legs apart, (feet on ground:1.1), three-quarter view, looking at viewer, full body, feet visible",
+   "negPose": "closed mouth, jumping, midair, (kneeling:1.3), squatting, crouching, on one knee, sitting",
+   "note": "cand 2-4 used \"one knee bent\" and knelt or crouched; cand 5+ stand (legs apart, feet on ground, kneeling negated)"
+  },
+  "rikku-C": {
+   "girl": "rikku",
+   "seed0": 29300,
+   "title": "Dance finish",
+   "pose": "standing, (clenched hand on own chest:1.2), holding microphone at side, (dancing:1.1), weight on one leg, knee up, happy, open mouth, looking at viewer, full body, feet visible",
+   "negPose": "jumping, midair, lying, upside-down"
+  },
+  "paine-A": {
+   "girl": "paine",
+   "seed0": 29400,
+   "title": "Cool stance",
+   "pose": "standing, (from side:1.2), three-quarter view, body facing right, (looking at viewer:1.2), holding microphone at side, arm at side, hand in pocket, expressionless, serious, full body, feet visible",
+   "negPose": "smile, singing, arm up, facing viewer, straight-on"
+  },
+  "paine-B": {
+   "girl": "paine",
+   "seed0": 29500,
+   "title": "Singing",
+   "pose": "standing, (singing:1.2), holding microphone to mouth, head tilt, closed eyes, open mouth, hand on own hip, legs apart, three-quarter view, full body, feet visible",
+   "negPose": "smile, arm up, jumping"
+  },
+  "paine-C": {
+   "girl": "paine",
+   "seed0": 29600,
+   "title": "Arm raised",
+   "pose": "standing, (arm up:1.2), holding microphone up, other hand on own hip, smirk, looking at viewer, legs apart, three-quarter view, full body, feet visible",
+   "negPose": "both arms up, jumping, closed eyes"
+  }
+ }
+}
