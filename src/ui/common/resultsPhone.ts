@@ -87,7 +87,8 @@ export function phoneHeroFigure(chapter: Chapter | undefined, victory: boolean, 
   if (!figure) return null;
   if (victory) return { victory: true, portraitId: wedgePortraitId(figure, chapter) };
   const [hurt, ko] = wedgeFallenArt(chapter, figure);
-  return { victory: false, hurtUrl: artUrl(hurt), koUrl: artUrl(ko) };
+  if (!hurt) return null; // r29 PR-0224: nothing on disk, nothing requested
+  return { victory: false, hurtUrl: artUrl(hurt), koUrl: ko ? artUrl(ko) : '' };
 }
 
 /**
@@ -146,8 +147,11 @@ function chipsHtml(m: ResultsPageModel): string {
         row.levelDelta > 0 && p >= 1
           ? `<span class="rresp__up">+${row.levelDelta} ${escapeHtml(row.levelUnit.toUpperCase())}</span>`
           : '';
+      const why = row.noAward
+        ? `<div class="rresp__lv" title="${escapeHtml(row.noAward.long)}">${escapeHtml(row.noAward.short)}</div>`
+        : '';
       const lines = m.victory
-        ? `<div class="rresp__gains"><span class="rresp__gain">+${formatNumber(Math.round(row.award * p))} <small>${row.awardUnit}</small></span>${up}</div>`
+        ? `<div class="rresp__gains"><span class="rresp__gain">+${formatNumber(Math.round(row.award * p))} <small>${row.awardUnit}</small></span>${up}</div>${why}`
         : `<div class="rresp__lv">${escapeHtml(row.standing)}</div>`;
       return `<div class="rresp__chip-member">
           <div class="rresp__face">${memberFaceHtml(row)}</div>

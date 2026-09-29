@@ -74,7 +74,7 @@ export interface CutscenePorts {
   hideActor?(step: HideActorStep): void | Promise<void>;
   setPose?(step: SetPoseStep): void;
   /** The cutscene's painted backdrop (`BackdropStep`, additive 2026-09-27). Absent = the step is ignored. */
-  backdrop?(key: string, ms: number): void | Promise<void>;
+  backdrop?(key: string, ms: number, place?: string): void | Promise<void>;
 }
 
 /** A `DialoguePort` that resolves every line immediately. Useful for fakes and skip-all defaults. */
@@ -329,7 +329,7 @@ export class CutsceneRunner {
         return undefined;
 
       case 'backdrop':
-        await this.race(this.ports.backdrop?.(step.key, step.ms));
+        await this.race(this.ports.backdrop?.(step.key, step.ms, step.place));
         return undefined;
 
       case 'parallel': {

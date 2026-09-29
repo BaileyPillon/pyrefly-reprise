@@ -31,35 +31,36 @@ describe('the board', () => {
     save = freshStore();
   });
 
-  it('holds eighteen cards: seventeen playable chapters (Leblanc, Evrae, Yojimbo, Natus, Fallen Aeons, Omnis, Trema, Isaaru, the Den of Woe, Ixion and the two Sin chapters now landed) and one still coming', () => {
+  it('holds eighteen cards, every one a playable chapter (Macalania unlocked and the two Sin chapters listed 2026-09-29), none still coming', () => {
     const tiles = buildChapterTiles(save);
-    // Leblanc's and Evrae's own COMING_CHAPTERS rows are filtered out by id
-    // now that their real chapters are registered and unlocked, so the raw
-    // `COMING_CHAPTERS.length` (3) overcounts by two — this asserts what the
-    // board actually shows. Macalania (Chapter 7) is registered but still
-    // LOCKED, so its real tile is withheld and its COMING row stays.
-    // Chapter IX (Yojimbo) was listed 2026-09-24 and Chapters X (Natus), XII (Omnis)
-    // XIII (Trema) and XIV (Isaaru) on 2026-09-25, XI (Fallen Aeons) and XV (Den of Woe) on 2026-09-26, XVI (Ixion) on 2026-09-27, XVII and XVIII (Sin) on 2026-09-29, none with a COMING row of its own.
+    // Leblanc's, Evrae's and Macalania's own COMING_CHAPTERS rows are filtered
+    // out by id now that their real chapters are registered and unlocked, so
+    // no COMING card is left on the board. Chapter IX (Yojimbo) was listed
+    // 2026-09-24 and Chapters X (Natus), XII (Omnis), XIII (Trema) and XIV
+    // (Isaaru) on 2026-09-25, XI (Fallen Aeons) and XV (Den of Woe) on
+    // 2026-09-26, XVI (Ixion) on 2026-09-27, XVII and XVIII (Sin) on 2026-09-29,
+    // none with a COMING row of its own; Chapter VII (Macalania) left its lock
+    // on 2026-09-29 (D-278).
+    expect(LOCKED_CHAPTER_IDS.size).toBe(0);
     expect(tiles).toHaveLength(18);
-    expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length - LOCKED_CHAPTER_IDS.size);
-    expect(tiles.filter((t) => t.kind === 'coming').map((t) => t.title)).toEqual([
-      'Seymour and Anima',
-    ]);
+    expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
+    expect(tiles.filter((t) => t.kind === 'coming')).toEqual([]);
   });
 
-  it('splits them into two game groups, FFX first, each in chapter-number order with the coming card in its place', () => {
+  it('splits them into two game groups, FFX first, each in chapter-number order', () => {
     const groups = groupChapterTiles(buildChapterTiles(save));
     expect(groups.map((g) => g.game)).toEqual(['ffx', 'ffx2']);
     expect(groups[0]!.label).toBe('Final Fantasy X');
     expect(groups[1]!.label).toBe('Final Fantasy X-2');
-    // Eleven FFX cards (10 built — Evrae, Yojimbo, Natus, Omnis, Isaaru and Sin's two now landed — + 1 still
-    // coming, Macalania), seven FFX-2 (IV, V, VI, XI, XIII, XV and XVI, Leblanc's coming row dropped).
+    // Eleven FFX cards, all built (Macalania unlocked and Sin's two listed 2026-09-29), seven
+    // FFX-2 (IV, V, VI, XI, XIII, XV and XVI, Leblanc's coming row dropped).
     expect(groups[0]!.tiles).toHaveLength(11);
-    // D-183 (Bailey, 2026-09-25, "All recommendations"): the COMING Chapter
-    // VII sits at its number's place, between III and VIII, not at the end.
+    // D-183 (Bailey, 2026-09-25, "All recommendations"): Chapter VII sits at its
+    // number's place, between III and VIII, and is now playable there.
     expect(groups[0]!.tiles.map((t) => t.numeral)).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII']);
-    expect(groups[0]!.tiles[3]!.playable).toBe(false);
-    expect(groups[0]!.tiles.filter((t) => t.playable).map((t) => t.numeral)).toEqual(['I', 'II', 'III', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII']);
+    expect(groups[0]!.tiles[3]!.id).toBe('seymour-anima-macalania');
+    expect(groups[0]!.tiles[3]!.playable).toBe(true);
+    expect(groups[0]!.tiles.every((t) => t.playable)).toBe(true);
     expect(groups[1]!.tiles.map((t) => t.numeral)).toEqual(['IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI']);
     for (const group of groups) {
       const numbers = group.tiles.map((t) => t.number ?? Number.MAX_SAFE_INTEGER);
@@ -73,10 +74,9 @@ describe('the board', () => {
     // now match real, landed (and, for Evrae, unlocked) chapters on purpose,
     // which is what drops each off the board automatically (see
     // `comingChapters.ts`'s own comment on those rows). Macalania is the
-    // other: registered as Chapter 7, but its row stays on the board while
-    // `LOCKED_CHAPTER_IDS` holds it.
+    // third: registered as Chapter 7 and unlocked on 2026-09-29.
     for (const row of COMING_CHAPTERS) {
-      if (row.id === 'ffx2-leblanc' || row.id === 'evrae-airship' || LOCKED_CHAPTER_IDS.has(row.id)) {
+      if (row.id === 'ffx2-leblanc' || row.id === 'evrae-airship' || row.id === 'seymour-anima-macalania') {
         expect(live.has(row.id)).toBe(true);
       } else {
         expect(live.has(row.id)).toBe(false);
@@ -109,17 +109,18 @@ describe('the board', () => {
   it('keeps a registered but LOCKED chapter as its COMING card, and unlocks it with its one line', () => {
     const macalania = CHAPTERS.find((c) => c.id === 'seymour-anima-macalania');
     expect(macalania, 'Chapter 7 is registered').toBeDefined();
-    expect(LOCKED_CHAPTER_IDS.has('seymour-anima-macalania')).toBe(true);
+    // Unlocked on 2026-09-29 (D-278); the lock line is put back here, in the test only.
+    expect(LOCKED_CHAPTER_IDS.has('seymour-anima-macalania')).toBe(false);
 
-    const locked = buildChapterTiles(save);
+    const locked = buildChapterTiles(save, { locked: new Set(['seymour-anima-macalania']) });
     const card = locked.filter((t) => t.id === 'seymour-anima-macalania');
     expect(card).toHaveLength(1);
     expect(card[0]!.kind).toBe('coming');
     expect(card[0]!.playable).toBe(false);
     expect(card[0]!.chapter).toBeNull();
 
-    // The unlock: the same real registries with the lock line removed.
-    const unlocked = buildChapterTiles(save, { locked: new Set() });
+    // The unlock: the real registries as they ship, with the lock line removed.
+    const unlocked = buildChapterTiles(save);
     const live = unlocked.filter((t) => t.id === 'seymour-anima-macalania');
     expect(live).toHaveLength(1);
     expect(live[0]!.kind).toBe('chapter');
@@ -129,10 +130,10 @@ describe('the board', () => {
     expect(unlocked.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
   });
 
-  it('Chapter 8 (Evrae) is UNLOCKED by Bailey\'s word and shows as a playable card; Chapter 7 (Macalania) stays LOCKED', () => {
+  it('Chapter 8 (Evrae) is UNLOCKED by Bailey\'s word and shows as a playable card; so is Chapter 7 (Macalania, D-278)', () => {
     expect(CHAPTERS.find((c) => c.id === 'evrae-airship'), 'Chapter 8 is registered').toBeDefined();
     expect(LOCKED_CHAPTER_IDS.has('evrae-airship')).toBe(false);
-    expect(LOCKED_CHAPTER_IDS.has('seymour-anima-macalania')).toBe(true);
+    expect(LOCKED_CHAPTER_IDS.has('seymour-anima-macalania')).toBe(false);
 
     const live = buildChapterTiles(save).filter((t) => t.id === 'evrae-airship');
     expect(live).toHaveLength(1);
@@ -142,7 +143,7 @@ describe('the board', () => {
     expect(live[0]!.silhouetteKeys).toEqual(['evrae']);
 
     // Re-locking it (the state before Bailey's word) still works — the
-    // COMING row it leaves behind is the one this file pins for Macalania.
+    // COMING row it leaves behind is its own.
     const relocked = new Set([...LOCKED_CHAPTER_IDS, 'evrae-airship']);
     const card = buildChapterTiles(save, { locked: relocked }).filter((t) => t.id === 'evrae-airship');
     expect(card).toHaveLength(1);
@@ -163,12 +164,12 @@ describe('the board', () => {
   });
 
   it('passing the real registries through explicitly matches the default board', () => {
-    // Leblanc and Evrae have both really landed (and Evrae is unlocked) now,
-    // so their own coming rows are still dropped here too — this pins that
-    // passing the real registries explicitly behaves exactly like the
-    // defaults, not that nothing has landed.
+    // Leblanc, Evrae and Macalania have all really landed and unlocked now,
+    // so all three coming rows are dropped here too — this pins that passing
+    // the real registries explicitly behaves exactly like the defaults, not
+    // that nothing has landed.
     const tiles = buildChapterTiles(save, { chapters: CHAPTERS, coming: COMING_CHAPTERS, locked: LOCKED_CHAPTER_IDS });
-    expect(tiles.filter((t) => t.kind === 'coming')).toHaveLength(COMING_CHAPTERS.length - 2);
+    expect(tiles.filter((t) => t.kind === 'coming')).toHaveLength(COMING_CHAPTERS.length - 3);
     expect(tiles).toEqual(buildChapterTiles(save));
   });
 
@@ -200,9 +201,13 @@ describe('the cursor', () => {
   });
 
   it('skips the COMING cards rather than landing on one', () => {
-    const tiles = buildChapterTiles(save);
+    // No card is COMING on the shipped board since 2026-09-29, so Macalania is locked here, in the
+    // test only, to keep the skip covered: +1 from III must jump its card to VIII.
+    const tiles = buildChapterTiles(save, { locked: new Set(['seymour-anima-macalania']) });
+    const fromIII = tiles.findIndex((t) => t.id === 'braskas-final-aeon');
+    expect(tiles[stepSelection(tiles, fromIII, 1)]!.id).toBe('evrae-airship');
     // Sin: the Face (Chapter XVIII) is the last built FFX chapter since 2026-09-29;
-    // +1 crosses into the FFX-2 group (Macalania, still coming, sits between III and VIII).
+    // +1 crosses into the FFX-2 group.
     const fromLastFfx = tiles.findIndex((t) => t.id === 'sin-face');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
     // Wrapping backwards from the first card lands on the last *playable* one

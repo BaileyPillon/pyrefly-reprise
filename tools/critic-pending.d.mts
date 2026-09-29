@@ -111,6 +111,7 @@ export declare function applyReport(
   marker: PendingMarker,
   report: CriticReport,
   reportFile?: string | null,
+  options?: { artifactAliases?: string[] },
 ): { marker: PendingMarker; settled: { kind: ObligationKind; result: string }[]; refused: { kind: ObligationKind; why: string }[] };
 
 export declare function allSettled(marker: { obligations?: Obligation[]; [key: string]: unknown }): boolean;

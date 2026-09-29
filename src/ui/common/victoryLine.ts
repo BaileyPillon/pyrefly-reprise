@@ -13,6 +13,7 @@
 
 import type { Chapter } from '../../data/encounters.ts';
 import { measuredPortraitIds } from './portrait.ts';
+import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 
 /** One served victory line and the party member who says it. */
 export interface VictoryLine {
@@ -94,11 +95,20 @@ export function wedgePortraitId(id: string, chapter: Chapter | undefined): strin
  * The fallen pose on a loss, as `[hurt, ko]` art paths (FOC17-01). FFX: the
  * guardian's own folder. FFX-2: the folder of the dressphere she wears in this
  * chapter's build (`characters/yuna-gunner/hurt.png`), never her FFX folder;
- * a dressphere with neither pose painted shows no figure, as before.
+ * a dressphere with neither pose painted stands in that dressphere's own idle
+ * painting (r29 PR-0224, FOC17b-01: FFX-2 art she has, dimmed by the fallen
+ * style), and with nothing on disk there is no figure.
+ *
+ * Filtered through the art manifest (CHK-017): a pose it says is absent is never
+ * asked for (Trema's Dark Knight Yuna asked for hurt.png and ko.png, two 404s per
+ * loss). An empty string is "no image"; with no manifest yet, the old pair stands.
  */
 export function wedgeFallenArt(chapter: Chapter | undefined, id: string): [string, string] {
   const build = chapter?.buildRef;
   const dress = build?.game === 'ffx2' ? build.members.find((m) => m.id === id)?.currentDressphere : undefined;
   const dir = dress ? `${id}-${dress}` : id;
-  return [`art/characters/${dir}/hurt.png`, `art/characters/${dir}/ko.png`];
+  const poses = ['hurt', 'ko', 'idle'].map((p) => `art/characters/${dir}/${p}.png`);
+  if (manifestKnowsAssetNow(poses[0]!) === null) return [poses[0]!, poses[1]!];
+  const onDisk = poses.filter((u) => manifestKnowsAssetNow(u) !== false);
+  return [onDisk[0] ?? '', onDisk[1] ?? ''];
 }

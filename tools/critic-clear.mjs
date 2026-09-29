@@ -24,11 +24,24 @@ import { dirname, join, relative, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import { artifactHashAliases } from './artifact-manifest.mjs';
 import { allSettled, applyReport, archiveMarker, pendingMarkerPath, writePendingMarker } from './critic-pending.mjs';
 import { readLedger, writeLedger } from './critic-plan.mjs';
 import { loadPolicy, validateReport } from './critic-policy.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+
+/**
+ * The hashes that name a deployed build, recomputed from the manifest the
+ * deploy stored at critic/artifacts/<sha>.json: the current rule (which
+ * leaves out the deploy-only `.nojekyll`) and the legacy one. `[]` when there
+ * is no stored manifest, and then the hashes must match exactly.
+ */
+export function storedArtifactAliases(root, mainSha) {
+  const file = join(root, 'critic', 'artifacts', `${mainSha}.json`);
+  if (!mainSha || !existsSync(file)) return [];
+  try { return artifactHashAliases(JSON.parse(readFileSync(file, 'utf8'))); } catch { return []; }
+}
 
 /** Validate one report and apply it to its build's marker, if that build has one. */
 export function clearWithReport(root, reportPath) {
@@ -46,7 +59,7 @@ export function clearWithReport(root, reportPath) {
     : null;
   if (!file) return { ok: true, errors: [], settled: [], refused: [], note: `no pending marker for build ${report.build.mainSha}: kept as candidate evidence` };
   const marker = JSON.parse(readFileSync(join(pendingDir, file), 'utf8'));
-  const { marker: next, settled, refused } = applyReport(marker, report, name);
+  const { marker: next, settled, refused } = applyReport(marker, report, name, { artifactAliases: storedArtifactAliases(root, marker.mainSha) });
   if (settled.length) {
     writePendingMarker(pendingDir, next);
     if (settled.some((s) => s.kind === 'deep' || s.kind === 'milestone')) {

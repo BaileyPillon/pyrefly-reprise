@@ -86,15 +86,13 @@ describe('the board on screen', () => {
     expect(groups).toEqual(['Final Fantasy X', 'Final Fantasy X-2']);
   });
 
-  it('labels the one remaining approved-but-unbuilt chapter COMING and makes it inert', () => {
+  it('shows no COMING card: the last one, Macalania, was unlocked on 2026-09-29 (D-278)', () => {
     const { root } = mount();
-    const coming = [...root.querySelectorAll('.fe-card--coming')];
-    expect(coming).toHaveLength(1);
-    for (const card of coming) {
-      expect(card.querySelector('.fe-card__coming')?.textContent).toBe('Coming');
-      expect(card.getAttribute('data-action')).toBeNull();
-      expect(card.getAttribute('aria-disabled')).toBe('true');
-    }
+    expect(root.querySelectorAll('.fe-card--coming')).toHaveLength(0);
+    const vii = root.querySelector('.fe-card[data-card="seymour-anima-macalania"]');
+    expect(vii, 'Chapter VII is a playable card').not.toBeNull();
+    expect(vii!.getAttribute('aria-disabled')).not.toBe('true');
+    expect(vii!.querySelector('.fe-card__coming')).toBeNull();
   });
 
   it('shows an unbeaten boss painted on its scene, with its name and no spoiler text (no silhouettes)', () => {
@@ -125,13 +123,16 @@ describe('the board on screen', () => {
 });
 
 describe('the keyboard', () => {
-  it('walks right through the built chapters and skips the COMING cards', () => {
+  it('walks right through every chapter, Macalania (VII) included between III and VIII', () => {
     const rig = mount();
     expect(selectedId(rig)).toBe('seymour-flux');
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('yunalesca');
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('braskas-final-aeon');
+    // Macalania (VII) was unlocked 2026-09-29 (D-278): the arrows land on it now.
+    rig.key('ArrowRight');
+    expect(selectedId(rig)).toBe('seymour-anima-macalania');
     // Evrae is unlocked now and playable, so it is not skipped.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('evrae-airship');
@@ -152,7 +153,6 @@ describe('the keyboard', () => {
     expect(selectedId(rig)).toBe('sin-fins-core');
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('sin-face');
-    // Macalania (VII) sits between III and VIII and was stepped over above.
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('ffx2-bahamut');
   });
@@ -191,11 +191,18 @@ describe('the keyboard', () => {
 });
 
 describe('what a card can and cannot start', () => {
-  it('never resolves a COMING chapter, even if its action is forged', () => {
+  it('never resolves an id that is not a playable card, even if its action is forged', () => {
     const picked: string[] = [];
     const rig = mount({ onSelect: (id) => picked.push(id) });
-    expect(rig.screen.trigger('select:seymour-anima-macalania')).toBe(false);
+    expect(rig.screen.trigger('select:not-a-chapter')).toBe(false);
     expect(picked).toEqual([]);
+  });
+
+  it('Macalania now resolves, unlocked on 2026-09-29 (D-278)', () => {
+    const picked: string[] = [];
+    const rig = mount({ onSelect: (id) => picked.push(id) });
+    expect(rig.screen.trigger('select:seymour-anima-macalania')).toBe(true);
+    expect(picked).toEqual(['seymour-anima-macalania']);
   });
 
   it('Evrae now resolves too, having landed and unlocked on Bailey\'s word', () => {
@@ -262,14 +269,12 @@ describe('the mouse', () => {
     expect(selectedId(rig)).toBe('ffx2-bahamut');
   });
 
-  it('a COMING card is not a click target at all', () => {
-    const picked: string[] = [];
-    const rig = mount({ onSelect: (id) => picked.push(id) });
-    const coming = rig.root.querySelector('.fe-card--coming')!;
-    expect(coming.getAttribute('data-action')).toBeNull();
-    click(rig, coming);
-    expect(selectedId(rig)).toBe('seymour-flux');
-    expect(picked).toEqual([]);
+  it('the unlocked Chapter VII card is a click target like any other', () => {
+    const rig = mount();
+    expect(rig.root.querySelector('.fe-card--coming')).toBeNull();
+    const vii = rig.root.querySelector('.fe-card[data-card="seymour-anima-macalania"]')!;
+    click(rig, vii);
+    expect(selectedId(rig)).toBe('seymour-anima-macalania');
   });
 
   it('says so in the hint bar the moment the player uses a mouse', () => {

@@ -67,6 +67,45 @@ The pause plate and the scene cue do not block the unlock technically: the stand
   168/200 -> 189/200, advisor 161 -> 192 (`docs/plans/macalania-bench.md`). Player side only.
 - The 200-seed bench (`tests/unit/chapters/macalania-bench.test.ts`) and its write-up.
 
+### Unlocked, 2026-09-29 (branch `ch7-unlock`, FFX only)
+
+**The last pick.** D-278 (Bailey, 2026-09-28 ~22:45 EDT: "ok well when you come back with r1, r2,
+and r3, i'll go with your pick for chapter VII, godspeed."): the driver picked sketch A "The Frozen
+Temple" in remaster R1 "focus", from measurements and the sketch briefs, **not by ear** (rule 13);
+Bailey can swap it. D-190 is superseded.
+
+**What changed.** `public/audio/music/scene-macalania-temple.mp3` (the lossless Direction B master
+of sketch A through `tools/audio/remaster-ship.py`, which runs `tools/audio/remaster.py` unchanged
+and encodes at the game's `-q:a 5`), its manifest entry (loop beat 12 to 56 = samples 567000 to
+2646000, a 3 s run-on copied from the loop head), the track `src/audio/tracks/scene-macalania-temple.ts`
+(the sketch's score, loop moved from 0 to beat 12 so the empty room is the intro), `MUSIC_KEYS` /
+`COMPOSED` / `TRACK_NOTES`, four runtime instrument stand-ins, THEMES.md (cue map row 26, chapter
+cue map row VII), CREDITS.md, CONTRACT-CHANGES.md, `MACALANIA_SCENE_CUE` =
+`MACALANIA_SCENE_CUE_PLANNED`, `MACALANIA_OPEN_PICKS` empty, and the lock line deleted.
+Measurements: `docs/audio/scene-macalania-temple-2026-09-29.json` (-15.9 LUFS, -1.4 dBTP, L/R
+correlation 0.74 against the original's 0.08, mono-sum loss -0.6 dB against -2.7; the wrap's
+last 0.2 s correlate 0.996 with the audio before loopStart, the run-on 0.998 with the loop head;
+`qa.mjs`: seam ok, flux 1.0x).
+
+**Checks after the unlock** (production build, `vite preview` on :8300, headless Chromium
+`PYREFLY_BROWSER=gpu`, real keys from the title; harness `.ch7-unlock-proof-tmp.mjs`, not
+committed; server stopped by PID). Same result at 1600x900 and 390x844, 0 console errors, 0 HTTP
+errors; results in `docs/screenshots/ch7-unlock/proof-*.json`:
+
+| Check | Result |
+|---|---|
+| Chapter select: VII is a playable card, no COMING card, strip reads "of 16" | pass |
+| Arrows: I > II > III > **VII** | pass |
+| Enter on VII opens prep; Esc goes back to chapter select with VII still selected; Enter opens prep again | pass |
+| Prep keeps `chapter-select` playing (the shared flow: the scene cue starts with the scene) and fetches no stand-in | pass |
+| Network: `scene-macalania-temple.mp3` fetched (200) as the pre-battle scene starts; `scene-gagazet.mp3` never requested | pass |
+| The pre-battle scene plays `scene-macalania-temple`; the battle `boss-seymour-macalania` | pass |
+| The fight reaches a player turn (Rikku's menu first) | pass |
+| P opens the pause menu (CHAPTER VII line, ESC RESUME); Esc closes it on the same turn; a real-key Attack then moves the fight on | pass |
+
+Not re-run here: the full win to the board with VII cleared (the rehearsal's `win` run did that
+with the lock removed in the page); the rehearsal's four phone findings below are unchanged.
+
 ### Unlock rehearsal (real keys, the lock removed in the page only)
 
 `docs/concepts/chapters/macalania/unlock/rehearsal/rehearse.mjs` answers the dev server's
@@ -434,3 +473,14 @@ did is make the pick land as one line, proved:
 **To land Bailey's pick:** `MACALANIA_PARTY_LAYOUT = '<id>'`, drop the 'party-layout' row from
 `MACALANIA_OPEN_PICKS` and from the ship test's id list, record the decision; the party-layout test
 then allows the lock line to go.
+
+### CHECK: independent verification of the unlock (2026-09-29, branch `ch7-unlock` at 3d7c0279, FFX only)
+
+Done by a second agent that did not build it. Nothing was heard (rule 13): these are measurements and real-key runs only.
+
+- **Build and real keys.** A fresh `vite build` to a scratch outDir (the shipped mp3 is byte-identical to `public/`), `vite preview` on :8310, headless Chromium `PYREFLY_BROWSER=gpu`, real keys from the title, at 1600x900 and 390x844. Every check passed at both sizes, 0 console errors, 0 HTTP errors: VII is a playable card and no COMING card is left (16 cards, "of 16"); arrows go III > VII; prep opens, Esc returns with VII still selected, prep opens again; prep requests no music; `scene-macalania-temple.mp3` is fetched (200) only as the pre-battle scene starts and the scene plays it; `scene-gagazet` is never requested; the battle plays `boss-seymour-macalania`; the fight reaches Rikku's command turn; P opens pause, Esc closes it on the same turn, and a real-key command moves the fight on. The other fifteen cards were not changed by the diff (only the Macalania row and lock line in `comingChapters.ts`).
+- **Audio, measured on the decoded shipped file.** -15.9 LUFS, -1.4 dBTP (ffmpeg ebur128; `qa.mjs` -16.11 / -1.39), 0 clipped samples, peak 0.85. L/R correlation 0.740, side/mid -8.2 dB, mono-sum loss -0.61 dB. Against the r29-remaster `macalania-a-R1-focus.mp3` audition (decoded), correlation over 0 to 58 s is 0.9991 at lag 0 (0.9985 to 0.9993 in every 5 to 10 s slice, RMS within 0.01 dB), so it is the R1 render of sketch A. (Whole-file correlation is 0.963 only because the last 5 s differ by design: the loop crossfade and the run-on.)
+- **Loop.** Manifest 12.857143 s to 60 s = samples 567000 to 2646000, 63.0 s file. The 3 s run-on correlates 0.9988 with the loop head, the last 0.2 s before loopEnd 0.9970 with the audio before loopStart, the step at the wrap is 0.0047 (p99 step elsewhere 0.048); `qa.mjs` seam ok, flux 1.0x; `seam-probe.mjs` "rounding".
+- **Score port.** `scene-macalania-temple.ts` matches the sketch note for note (ice, floor, drips, walk, fifths, chime, celesta, warm chord, voice; `arch` matches the sketch kit's); only the loop start (0 to 12) differs, on purpose. `orphans.mjs`: the new module is reachable.
+- **Code.** `tsc --noEmit` clean; 104 test files, 1257 passed, 11 skipped (audio-registry, chapters/, chapter-select, frontend grid and select screen, themes cue map, critic-release-rules, ixion listed fixture, chapter meta). `git merge-tree --write-tree origin/main HEAD` clean (origin/main is the merge base).
+- **Minor, not fixed:** the header comment of `src/data/chapter-meta-seymour-anima-macalania.ts` (line ~25) still says the scene cue is "today Chapter 1's `scene-gagazet` as a recorded stopgap". Not covered: the win to the board and the post-battle scenes with VII unlocked.

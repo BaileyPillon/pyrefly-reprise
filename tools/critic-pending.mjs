@@ -176,7 +176,7 @@ const sameBundle = (a, b) => normalizeBundle(a) === normalizeBundle(b);
  *   - a deep or milestone review with required coverage left untested settles
  *     nothing of that kind.
  */
-export function applyReport(marker, report, reportFile = null) {
+export function applyReport(marker, report, reportFile = null, { artifactAliases = [] } = {}) {
   const obligations = markerObligations(marker).map((o) => ({ ...o }));
   const settled = [], refused = [];
   const refuseAll = (why) => ({
@@ -186,7 +186,11 @@ export function applyReport(marker, report, reportFile = null) {
   const b = report.build ?? {};
   if (!sameSha(b.mainSha, marker.mainSha)) return refuseAll(`report is for build ${b.mainSha ?? '(none)'}, this marker is ${marker.mainSha}`);
   if (b.bundle && marker.bundle && !sameBundle(b.bundle, marker.bundle)) return refuseAll(`report bundle ${b.bundle} is not the deployed bundle ${marker.bundle}`);
-  if (marker.artifactHash && b.artifactHash && b.artifactHash !== marker.artifactHash) return refuseAll('report artifact hash is not the deployed artifact');
+  // `artifactAliases`: every hash of the deployed build's stored manifest, under the current rule
+  // and the legacy one that counted .nojekyll; two hashes name the same build when both are in it.
+  const sameArtifact = b.artifactHash === marker.artifactHash
+    || (artifactAliases.includes(b.artifactHash) && artifactAliases.includes(marker.artifactHash));
+  if (marker.artifactHash && b.artifactHash && !sameArtifact) return refuseAll('report artifact hash is not the deployed artifact');
 
   const rank = { live: 0, focused: 1, deep: 2, milestone: 3 };
   const v = report.verdicts ?? {};

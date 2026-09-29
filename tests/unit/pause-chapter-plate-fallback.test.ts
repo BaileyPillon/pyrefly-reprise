@@ -111,8 +111,21 @@ describe('the pause CHAPTER plate falls back to heroArtFallback (both games)', (
     expect(img.dataset['art']).toBe('fallback');
   });
 
-  it('with no fallbackArt the chain is unchanged: plate, then portraits/<fallbackId ?? plate>', () => {
+  it('r29 PR-0223: a plate and a fallback the manifest says are absent are never requested (FF7 Cloud)', () => {
     setArtManifest(MANIFEST);
+    const s = stage();
+    s.show('cloud');
+    const img = s.plate!;
+    expect(img.getAttribute('src')).toBeNull();
+    expect(img.dataset['art']).toBe('missing');
+    // A member whose plate is absent but whose portrait ships goes straight to the portrait.
+    s.show('yuna-x2');
+    expect(s.plate!.getAttribute('src')).toMatch(/art\/portraits\/yuna-x2\.png$/);
+    expect(s.plate!.dataset['art']).toBe('fallback');
+  });
+
+  it('with no manifest and no fallbackArt the chain is unchanged: plate, then portraits/<fallbackId ?? plate>', () => {
+    setArtManifest(null);
     const s = stage();
     s.show('ch13-trema');
     const img = s.plate!;

@@ -10,8 +10,15 @@
 //     its "Trigger" tag;
 //   - a target is only steered and confirmed when a target cursor is really up,
 //     so a command that needs none (an order, Defend) never gets a stray Enter
-//     that lands in the next character's menu.
+//     that lands in the next character's menu;
+//   - PR-0225 (round 15): a lettered name ("Yu Pagoda A") is mapped to its
+//     data-target-id through the letter rule (route-pure.mjs, the copy of
+//     letterTagsOf), and the highlighted id is read back and compared before
+//     Enter, so a wrong target is a recorded mismatch, never a silent confirm.
 // Both games: shared critic plumbing.
+import { isAllDisabledOverlay, resolveTargetId, slugOf } from './route-pure.mjs';
+
+export { isAllDisabledOverlay };
 
 /** Command rows of the stack the player is working in (visible rows only; an overlay stack first). */
 export function readRows(page) {
@@ -55,7 +62,19 @@ export function targetsUp(page) {
   }));
 }
 
-export const slugOf = (name) => String(name ?? '').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+export { slugOf };
+
+/** The live formation as the resolver needs it: enemy ids in roster order and each one's display name. */
+function readRoster(page) {
+  return page.evaluate(() => {
+    const st = window.__pyrefly?.battleState?.();
+    const names = {};
+    for (const [id, c] of Object.entries(st?.combatants ?? {})) names[id] = c.name;
+    return { enemyIds: st?.enemyIds ?? [], names };
+  });
+}
+
+const activeTargetId = (page) => page.evaluate(() => [...document.querySelectorAll('[data-target-id]')].find((e) => !e.classList.contains('ffx-target--dim'))?.dataset?.targetId ?? null);
 
 /**
  * Chooser for one page and input. Keyboard and gamepad arrow to a row and
@@ -107,32 +126,57 @@ export function makeChooser(page, input, contexts) {
     return cur.label;
   }
 
-  /** With a target cursor up, move it to `name` and confirm; without one, do nothing. */
+  /**
+   * With a target cursor up, move it to `name` and confirm; without one, do nothing.
+   * The result names what was wanted, what was highlighted at Enter and whether they agree
+   * (`mismatch`), so a wrong confirm shows in run.json instead of passing as a pick.
+   */
   async function confirmTarget(name) {
     const t = await targetsUp(page);
     if (!t.n && !t.selecting) return { confirmed: false, reason: 'no target cursor' };
     const slug = slugOf(name);
+    const ids = await page.evaluate(() => [...document.querySelectorAll('[data-target-id]')].map((e) => ({ id: e.dataset.targetId, dim: e.classList.contains('ffx-target--dim') })));
+    const domIds = ids.map((x) => x.id);
+    const group = !slug || /^(all|party)/.test(slug);
+    const wanted = group ? null : resolveTargetId(name, await readRoster(page), domIds);
     if (touch) {
-      const ids = await page.evaluate(() => [...document.querySelectorAll('[data-target-id]')].map((e) => ({ id: e.dataset.targetId, dim: e.classList.contains('ffx-target--dim') })));
-      const pick = (slug && ids.find((x) => x.id.startsWith(slug) || slug.startsWith(x.id))) || ids.find((x) => !x.dim) || ids[0];
+      const pick = (wanted && ids.find((x) => x.id === wanted)) || ids.find((x) => !x.dim) || ids[0];
       if (pick) {
-        if (await input.tap(page.locator(`[data-target-id="${pick.id}"]`).first(), `target:${pick.id}`)) return { confirmed: true, target: pick.id };
+        const mismatch = Boolean(wanted) && pick.id !== wanted;
+        if (await input.tap(page.locator(`[data-target-id="${pick.id}"]`).first(), `target:${pick.id}`)) return { confirmed: true, target: pick.id, wanted, mismatch, ...(!wanted && !group && ids.length >= 2 ? { unresolved: name ?? null } : {}) };
         await input.press('Enter');
-        return { confirmed: true, target: 'key fallback (tap blocked)' };
+        return { confirmed: true, target: 'key fallback (tap blocked)', wanted };
       }
       await input.press('Enter'); // a group cast has no reticle to tap
       return { confirmed: true, target: 'group' };
     }
-    if (slug && t.n >= 2 && !/^(all|party)/.test(slug)) {
-      for (let k = 0; k < 8; k++) {
-        const active = await page.evaluate(() => [...document.querySelectorAll('[data-target-id]')].find((e) => !e.classList.contains('ffx-target--dim'))?.dataset?.targetId ?? null);
-        if (!active || active.startsWith(slug) || slug.startsWith(active)) break;
-        await input.press('ArrowRight');
-        await page.waitForTimeout(150);
-      }
+    if (group || t.n < 2) {
+      await input.press('Enter');
+      return { confirmed: true };
     }
+    // Steer to the wanted id: right until it shows or the highlight stops moving, then left.
+    let active = await activeTargetId(page);
+    const trail = [active];
+    if (wanted) {
+      for (const key of ['ArrowRight', 'ArrowLeft']) {
+        for (let k = 0; k < 10 && active !== wanted; k++) {
+          await input.press(key);
+          await page.waitForTimeout(150);
+          const next = await activeTargetId(page);
+          if (next === active) break; // the end of the row of reticles
+          active = next;
+          trail.push(active);
+        }
+        if (active === wanted) break;
+      }
+    } else {
+      // The name cannot be told from the reticles (an FFX-2 row name, a group label): confirm what is lit, and say so.
+      await input.press('Enter');
+      return { confirmed: true, wanted: null, target: active, unresolved: name ?? null, mismatch: false };
+    }
+    const mismatch = active !== wanted;
     await input.press('Enter');
-    return { confirmed: true };
+    return { confirmed: true, target: active, wanted, mismatch, ...(mismatch ? { trail } : {}) };
   }
 
   return { highlight, choose, confirmTarget };

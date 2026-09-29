@@ -8,8 +8,9 @@ import type { SpeakerId } from '../../story/dsl.ts';
  *
  * Presentation copy, not battle data: it says who a speaker is *to Spira* at
  * the moment they speak, so the player can place a face they have not met in
- * ten years. Anyone the player already knows by name alone (the airship crew,
- * the Gullwings' rivals) deliberately has no tag — an empty chip is noise.
+ * ten years. Anyone the player already knows by name alone (FFX's airship crew,
+ * the Gullwings' rivals) deliberately has no tag — an empty chip is noise. The FFX-2
+ * Gullwings crew carry one shared plate since r29 (PR-0058).
  * A screen with better context (a chapter that knows Yuna is a sphere hunter,
  * not a summoner) passes its own `roleFor` to `DialogueBox` instead.
  */
@@ -51,7 +52,26 @@ export const SPEAKER_ROLES: Partial<Record<SpeakerId, string>> = {
   nooj: 'Youth League',
   baralai: 'New Yevon',
   gippal: 'Machine Faction',
+  // The Gullwings crew on the comm (PR-0058; FFX-2 only: FFX's Brother is the bare id `brother`,
+  // which stays untagged). Shinra has no painting, so his line has the plate and the name only.
+  'brother-x2': 'Gullwings',
+  buddy: 'Gullwings',
+  shinra: 'Gullwings',
 };
+
+/**
+ * The FFX dead who speak from the Farplane inside FFX-2's Chapter V [writing-bible E7, "Farplane voice
+ * system"; FFX-2 only]. In an FFX-2 box an FFX id is never a present speaker (its party ids carry `-x2`;
+ * `fieldedSpeakers.ts` says the same), so they read as voices: one plate, "Farplane", not the FFX role
+ * ("Final Aeon", "High Summoner") they had in FFX (PR-0161).
+ */
+const FARPLANE_VOICES: ReadonlySet<SpeakerId> = new Set<SpeakerId>(['jecht', 'braska', 'auron']);
+export const FARPLANE_VOICE_ROLE = 'Farplane';
+
+/** True when `who` is a Farplane voice in `game`'s box (always false in FFX, where they stand on stage). */
+export function isFarplaneVoice(game: 'ffx' | 'ffx2' | undefined, who: SpeakerId): boolean {
+  return game === 'ffx2' && FARPLANE_VOICES.has(who);
+}
 
 /** The tag for a speaker, or `undefined` when they should show a bare name. */
 export function speakerRole(who: SpeakerId): string | undefined {

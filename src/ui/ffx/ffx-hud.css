@@ -545,7 +545,7 @@
    read-out stops opening across the very fiend it describes. Zero — the resting place — whenever no cursor is up.
    `--ffx-sensor-dy`: Chapter XII's lift clear of the intent line (FFX only, `OmnisReadout.ts`); zero elsewhere. */
 .ffx-sensor {
-  position: absolute; left: calc(436px + var(--ffx-sensor-dx, 0px)); top: calc(166px + var(--ffx-sensor-dy, 0px)); width: 100px;
+  position: absolute; left: calc(436px + var(--ffx-sensor-dx, 0px) + var(--ffx-sensor-cdx, 0px)); top: calc(166px + var(--ffx-sensor-dy, 0px)); width: 100px;
   padding: 6px 8px; background: var(--ig-ink-panel);
   transform: skewX(var(--ig-skew));
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -983,6 +983,11 @@
   letter-spacing: 0.06em; text-transform: none; color: rgba(11, 10, 18, 0.72);
 }
 .ffx-airship-order__already { font-style: italic; }
+/* PR-0236: a greyed order row is the flat #2a2a30 slab above (PR-0018), and its
+   reason kept the ivory-row ink (0.72 alpha on near-black: illegible). It takes
+   the disabled label's own colour, #d8d8de, about 10:1 on that slab. */
+.ffxhud .ig-cmd--disabled .ffx-airship-order__already,
+.ffxhud .ig-cmd--disabled .ffx-cmd--trigger__label { color: #d8d8de; }
 /* The ivory cost slab under the rows (option A, step 3). */
 .ffx-airship-order__slab {
   display: flex; flex-direction: column; gap: 1.8px; width: 176px; margin-top: 2.7px;

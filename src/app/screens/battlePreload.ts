@@ -1,40 +1,74 @@
 /**
- * Load a chapter's battle while the player is still on its prep menu and
- * pre-battle scene (PR-0061).
+ * Load a chapter's art while the player is still on its card, its prep menu
+ * and its pre-battle scene (PR-0061, A-3), in the order the screens need it
+ * (r29: PR-0221, PR-0240).
  *
  * Measured on a production build (real keys, seed 1, 1600x900, GPU), the
- * battle screen spent 2.2 s of Chapter 1's entry behind the swirl before the
- * battle-start card could go up, and 0.9 s of that was per-painting work on
- * the main thread: decoding about 30 PNGs, the matte check and the alpha
- * measurement, all of it the same answer every time. `PaintedArtCache.ts`
- * keeps that answer; this module fills it early, one painting at a time with
- * a yield in between, so the prep menu and the scene keep their frame rate
- * and the battle finds everything ready.
+ * battle screen spent 2.2 s of Chapter 1's entry behind the swirl, 0.9 s of it
+ * per-painting work (decode, matte check, alpha measurement): `PaintedArtCache.ts`
+ * keeps that answer and this fills it early, one painting at a time with a
+ * yield in between, so the menus keep their frame rate.
+ *
+ * r29 measured the cold load over a 25 Mbit/s link (`docs/handoff/r29-load.md`):
+ * 25 to 33 s from the scene to the battle, almost all of it waiting on bytes,
+ * because the board's rail strips and every card the cursor had rested on were
+ * downloading alongside, and the scene's own speaker portraits were queued
+ * behind them. So this now runs in phases, most urgent first, each waiting for
+ * the one before so it has the pipe to itself:
+ *
+ * 1. the scene's opening frame: its backdrop and first speaker (`sceneArt.ts`);
+ * 2. the scene's other speakers and plates;
+ * 3. the battle's opening frame: the backdrop as `Backdrop` loads it, then the
+ *    boss's idle, the party's idles and the faces the battle-start card and
+ *    the HUD show;
+ * 4. every other pose (downloads a few at a time, decode one at a time);
+ * 5. the party's pause close-ups, the file the pause's `srcset` will choose.
+ *
+ * A board dwell (`boardWarm.ts`) runs phases 1 to 3 in the normal lane and then
+ * waits: only a chosen chapter (`runChapter`) goes on to 4 and 5, and choosing
+ * it promotes everything already asked for to the urgent lane. A newer preload
+ * stops an older one at its next step and cancels its downloads, so a card the
+ * cursor only passed does not keep downloading under the chosen one.
  *
  * It asks for exactly what `BattlePresenterStage` will stage: the engine's
- * own opening state (party slots, enemies and visible parts), each figure's
- * art id through the same `resolveArt`, every pose that figure has, with the
- * stage's matte and fit options; the scene's backdrop as `Backdrop` loads it;
- * and the portraits the battle-start card and the HUD show. Anything it misses
- * is simply loaded by the battle as before.
+ * own opening state, each figure's art id through the same `resolveArt`, every
+ * pose that figure has, with the stage's matte and fit options. Anything it
+ * misses is simply loaded by the battle as before. Only files the art manifest
+ * lists are requested.
  *
  * Game case: both. Shared loading, no game rule involved.
  */
 
 import type { Chapter } from '../../data/encounters.ts';
 import { artIdFor, backdropUrl, portraitUrl, resolveArt } from '../../engine/BattlePresenterArt.ts';
-import { manifestKnowsAsset } from '../../engine/ArtManifest.ts';
-import { prewarmPainted } from '../../engine/PaintedArt.ts';
-import { warmImage } from '../imageWarm.ts';
+import { manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
+import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
+import { pickHeroBackgroundUrl } from '../../ui/common/chapterPanel.ts';
+import { demoteWarm, warmImages, type WarmLane } from '../imageWarm.ts';
+import { plateIdFor } from './pause/plates.ts';
+import { sceneArtUrls } from './sceneArt.ts';
+import { SECTOR1_PLATE } from '../../scenes/sector1-reactor-staging.ts';
 import { setupForChapter } from './BattleScreenSetup.ts';
 import { createEngine } from './BattleScreenWiring.ts';
 
 /** The options `BattlePresenterStage.add` gives every figure. */
 const STAGE_MATTE = { mode: 'auto' } as const;
 const STAGE_FIT = {};
+/** Downloads in flight at once for the poses (decode stays one at a time). */
+const FETCH_WINDOW = 3;
+
+interface Run {
+  report: Promise<PreloadReport>;
+  /** True once a chapter was chosen, not just rested on. */
+  chosen: boolean;
+  choose: () => void;
+  stop: AbortController;
+  /** Every image URL warmed so far, promoted when the chapter is chosen. */
+  asked: string[];
+}
 
 /** One run per chapter at a time; a second call joins the first. */
-const running = new Map<string, Promise<PreloadReport>>();
+const running = new Map<string, Run>();
 
 /**
  * Who the battle-start card names, read from the same opening state the
@@ -53,6 +87,12 @@ export function battleCardInfo(chapterId: string): BattleCardInfo | undefined {
   return cardInfo.get(chapterId);
 }
 
+/** True when a running preload has asked for this image (the board keeps it urgent when it leaves). */
+export function preloadAsked(url: string): boolean {
+  for (const run of running.values()) if (run.asked.includes(url)) return true;
+  return false;
+}
+
 /** What a preload did, for the probe and the tests. */
 export interface PreloadReport {
   chapterId: string;
@@ -61,9 +101,15 @@ export interface PreloadReport {
   ms: number;
 }
 
+/** How a preload was asked for. */
+export interface PreloadOptions {
+  /** A card the cursor rests on: phases 1 to 3 in the normal lane, then wait to be chosen. */
+  dwell?: boolean;
+}
+
 /** Pull a file into the HTTP cache without holding on to it. */
-function prefetch(url: string): Promise<void> {
-  return fetch(url)
+function prefetch(url: string, signal: AbortSignal): Promise<void> {
+  return fetch(url, { signal })
     .then((res) => (res.ok ? res.blob() : null))
     .then(
       () => undefined,
@@ -94,91 +140,163 @@ function rank(c: { side: string; flags: { isPart?: boolean } }): number {
   return c.flags.isPart ? 1 : 0;
 }
 
+/** Scenes whose painting is not `backdrops/<sceneKey>.png`: the scene module names its own file. */
+const SCENE_PLATES: Readonly<Record<string, string>> = { 'sector1-reactor': SECTOR1_PLATE.url }; // FF7 (r29 PR-0222)
+
+/** The battle backdrop's URL as the scene loads it. */
+export function plateUrlFor(sceneKey: string): string {
+  const own = SCENE_PLATES[sceneKey];
+  return own ? artUrl(own) : backdropUrl(sceneKey);
+}
+
+/** The pause close-up the pause's `srcset` will pick for this window (`PortraitStage.mountPlate`). */
+export function pausePlateUrl(memberId: string, game: Chapter['game']): string {
+  const url1x = artUrl(`art/pause/${plateIdFor(memberId, game)}.png`);
+  if (typeof window === 'undefined') return url1x;
+  return pickHeroBackgroundUrl(url1x, pause2xUrlFor(url1x), window.innerWidth, window.innerHeight, window.devicePixelRatio);
+}
+
 /**
- * Warm the chapter's battle art. Never rejects; resolves with what it did.
+ * Warm the chapter's art. Never rejects; resolves with what it did.
  * `seed` only picks the engine's opening state, which never depends on it for
  * who is on the field.
  */
-export function preloadBattle(chapter: Chapter, seed = 1): Promise<PreloadReport> {
+export function preloadBattle(chapter: Chapter, seed = 1, opts: PreloadOptions = {}): Promise<PreloadReport> {
+  // The newest preload wins the pipe: every other run stops at its next step.
+  for (const [id, run] of running) {
+    if (id !== chapter.id) {
+      run.stop.abort();
+      demoteWarm(run.asked); // its images queue behind everything else now
+      running.delete(id);
+    }
+  }
   const known = running.get(chapter.id);
-  if (known) return known;
+  if (known) {
+    if (!opts.dwell) known.choose();
+    return known.report;
+  }
   // No image pipeline (jsdom, a unit test): nothing can be warmed.
   if (typeof Image === 'undefined' || typeof Image.prototype.decode !== 'function') {
     return Promise.resolve({ chapterId: chapter.id, paintings: 0, portraits: 0, ms: 0 });
   }
-  const run = (async (): Promise<PreloadReport> => {
-    const t0 = performance.now();
-    let paintings = 0;
-    let portraits = 0;
-    try {
-      // The opening state first (A-3: the card over the ink names its boss and
-      // party from it), then the backdrop: the largest file, and the first
-      // thing the scene loads.
-      const engine = await createEngine(chapter.game, setupForChapter(chapter, seed), { automated: true });
-      const state = engine.state();
-      const figures = stagedIds(state)
-        .map((id) => state.combatants[id])
-        .filter((c): c is NonNullable<typeof c> => c !== undefined && !c.flags.hidden && !c.removed);
-      const boss = figures.find((c) => c.side === 'enemy' && !c.flags.isPart);
-      if (boss) {
-        cardInfo.set(chapter.id, {
-          bossName: boss.name,
-          artKey: boss.spriteKey || boss.id,
-          party: state.activeIds
-            .map((id) => state.combatants[id])
-            .filter((c): c is NonNullable<typeof c> => Boolean(c))
-            .map((c) => ({ id: c.id, artId: c.spriteKey || c.id, name: c.name })),
-        });
+  let chose: () => void = () => undefined;
+  const chosenYet = new Promise<void>((resolve) => (chose = resolve));
+  const run: Run = {
+    report: Promise.resolve(null as never),
+    chosen: !opts.dwell,
+    stop: new AbortController(),
+    asked: [],
+    choose: () => {
+      if (run.chosen) return;
+      run.chosen = true;
+      // Promote what the dwell asked for in the normal lane.
+      void warmImages(run.asked, 'urgent');
+      chose();
+    },
+  };
+  if (run.chosen) chose();
+  run.report = runPreload(chapter, seed, run, chosenYet);
+  running.set(chapter.id, run);
+  return run.report;
+}
+
+async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: Promise<void>): Promise<PreloadReport> {
+  const t0 = performance.now();
+  const signal = run.stop.signal;
+  const stopped = (): boolean => signal.aborted;
+  const lane = (): WarmLane => (run.chosen ? 'urgent' : 'normal');
+  const warm = (urls: string[]): Promise<boolean[]> => {
+    run.asked.push(...urls);
+    return warmImages(urls, lane());
+  };
+  let paintings = 0;
+  let portraits = 0;
+  try {
+    // The opening state first (A-3: the card over the ink names its boss and party from it).
+    const engine = await createEngine(chapter.game, setupForChapter(chapter, seed), { automated: true });
+    const state = engine.state();
+    const figures = stagedIds(state)
+      .map((id) => state.combatants[id])
+      .filter((c): c is NonNullable<typeof c> => c !== undefined && !c.flags.hidden && !c.removed);
+    const boss = figures.find((c) => c.side === 'enemy' && !c.flags.isPart);
+    const party = state.activeIds
+      .map((id) => state.combatants[id])
+      .filter((c): c is NonNullable<typeof c> => Boolean(c));
+    if (boss) {
+      cardInfo.set(chapter.id, {
+        bossName: boss.name,
+        artKey: boss.spriteKey || boss.id,
+        party: party.map((c) => ({ id: c.id, artId: c.spriteKey || c.id, name: c.name })),
+      });
+    }
+    // Phases 1 and 2: the pre-battle scene, its opening frame first.
+    const scene = sceneArtUrls(chapter.scriptsRef?.pre, chapter.sceneKey);
+    await warm(scene.first);
+    if (stopped()) return report();
+    await warm(scene.rest);
+    if (stopped()) return report();
+
+    // Phase 3: the battle's opening frame. The backdrop as `Backdrop` loads it (no matte, no fit).
+    if (await prewarmPainted(plateUrlFor(chapter.sceneKey))) paintings++;
+    figures.sort((a, b) => rank(a) - rank(b));
+    // The card's chips: each face, and an FFX-2 girl's dressphere body under it
+    // (`BattleStartBanner.memberFaceHtml`), decoded so no chip shows its letter (PR-0176).
+    const faces = [
+      ...[...new Set(party.flatMap((c) => [c.id, c.spriteKey || c.id]))].map((id) => portraitUrl(id)),
+      ...party.filter((c) => c.spriteKey && c.spriteKey !== c.id).map((c) => artUrl(`art/characters/${c.spriteKey}/idle.png`)),
+    ];
+    const facesWarm = warm(faces);
+    const later: string[] = [];
+    for (const c of figures) {
+      if (stopped()) return report();
+      const kind = c.side === 'enemy' ? 'enemy' : 'party';
+      const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
+      // Only what the manifest says is on disk: a figure with no painting
+      // (Cid on the airship, an FFX-2 dressphere with no portrait) is drawn by
+      // its stand-in, and asking for its files was a 404 each (round 11).
+      const idle = art.poses['idle'];
+      for (const u of new Set(Object.values(art.poses))) {
+        if ((await manifestKnowsAsset(u)) === false) continue;
+        if (u !== idle) later.push(u);
       }
-      if (await prewarmPainted(backdropUrl(chapter.sceneKey))) paintings++;
-      // A-3: the boss's idle first (it is what the card and the opening frame
-      // show), then the party's idles and faces, then every other pose.
-      figures.sort((a, b) => rank(a) - rank(b));
-      const later: string[] = [];
-      for (const c of figures) {
-        const kind = c.side === 'enemy' ? 'enemy' : 'party';
-        if (kind === 'party') {
-          for (const id of new Set([c.id, c.spriteKey || c.id])) {
-            if (await warmImage(portraitUrl(id))) portraits++;
-          }
-        }
-        const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
-        // Idle now; the other poses wait for every figure's idle (`later`).
-        const poses = Object.entries(art.poses).sort(([a], [b]) => Number(b === 'idle') - Number(a === 'idle'));
-        // Only what the manifest says is on disk: a figure with no painting
-        // (Cid on the airship, an FFX-2 dressphere with no portrait) is drawn
-        // by its stand-in, and asking for its files was a 404 each (round 11).
-        const urls: string[] = [];
-        for (const u of new Set(poses.map(([, p]) => p))) {
-          if ((await manifestKnowsAsset(u)) !== false) urls.push(u);
-        }
-        // The downloads run ahead in parallel (into the HTTP cache only; the
-        // cache below keeps the one image it needs); the decode-and-measure
-        // stays one painting at a time.
-        const idle = art.poses['idle'];
-        const first = urls.filter((u) => u === idle);
-        later.push(...urls.filter((u) => u !== idle));
-        for (const url of first) {
-          void prefetch(url);
-          if (await prewarmPainted(url, STAGE_MATTE, STAGE_FIT)) paintings++;
-          await yieldFrame();
-        }
-      }
-      // The downloads run ahead in parallel (into the HTTP cache only; the
-      // cache keeps the one image it needs); the decode-and-measure stays one
-      // painting at a time.
-      for (const url of later) void prefetch(url);
-      for (const url of later) {
-        if (await prewarmPainted(url, STAGE_MATTE, STAGE_FIT)) paintings++;
+      if (idle && (await manifestKnowsAsset(idle)) !== false) {
+        if (await prewarmPainted(idle, STAGE_MATTE, STAGE_FIT)) paintings++;
         await yieldFrame();
       }
-    } catch (e) {
-      console.warn(`[preload] ${chapter.id}: stopped early`, e);
-    } finally {
-      running.delete(chapter.id);
     }
+    portraits += (await facesWarm).filter(Boolean).length;
+    if (stopped()) return report();
+
+    // A card only rested on stops here until it is chosen (or another card wins).
+    if (!run.chosen) {
+      await Promise.race([chosenYet, new Promise((resolve) => signal.addEventListener('abort', resolve, { once: true }))]);
+      if (stopped()) return report();
+    }
+
+    // Phase 4: every other pose, a few downloads ahead of the one-at-a-time decode.
+    let next = 0;
+    let done = 0;
+    const ahead = (): void => {
+      while (next < later.length && next < done + FETCH_WINDOW) void prefetch(later[next++]!, signal);
+    };
+    for (const url of later) {
+      ahead();
+      if (stopped()) return report();
+      if (await prewarmPainted(url, STAGE_MATTE, STAGE_FIT)) paintings++;
+      done++;
+      await yieldFrame();
+    }
+
+    // Phase 5: the party's pause close-ups (first Esc, then tab-next).
+    await warm(party.map((c) => pausePlateUrl(c.id, chapter.game)));
+  } catch (e) {
+    console.warn(`[preload] ${chapter.id}: stopped early`, e);
+  } finally {
+    if (running.get(chapter.id) === run) running.delete(chapter.id);
+  }
+  return report();
+
+  function report(): PreloadReport {
     return { chapterId: chapter.id, paintings, portraits, ms: Math.round(performance.now() - t0) };
-  })();
-  running.set(chapter.id, run);
-  return run;
+  }
 }

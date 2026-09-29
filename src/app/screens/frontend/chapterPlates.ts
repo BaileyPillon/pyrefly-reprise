@@ -270,16 +270,19 @@ export function plateArtHtml(
   where: 'hero' | 'card',
 ): string {
   const comp = compositionFor(tile);
+  // Deferred and put up decoded (`lazyPlates.ts`, r29 PR-0221): a rail card in the idle lane,
+  // the hero at urgent, demoted when the cursor moves on.
+  const src = 'data-lazy-src';
   const scene = tile.sceneKey
-    ? `<img class="cs-art__scene" src="${artUrl(`art/backdrops/${tile.sceneKey}.png`)}" alt="" ` +
+    ? `<img class="cs-art__scene" ${src}="${artUrl(`art/backdrops/${tile.sceneKey}.png`)}" alt="" ` +
       `style="object-position:${comp.scene[where]}" draggable="false" onerror="this.remove()">`
     : '';
   const bosses = comp.layers
     .map((layer) => {
       const at = where === 'hero' ? layer.hero : layer.card;
       if (!at) return '';
-      const src = artUrl(`art/characters/${layer.key}/idle.png`);
-      return `<img class="cs-art__boss" src="${src}" alt="" style="${placed(at, layer.focus)}" draggable="false" onerror="this.remove()">`;
+      const url = artUrl(`art/characters/${layer.key}/idle.png`);
+      return `<img class="cs-art__boss" ${src}="${url}" alt="" style="${placed(at, layer.focus)}" draggable="false" onerror="this.remove()">`;
     })
     .join('');
   return `<div class="cs-art cs-art--${where}" style="--glow:${comp.glow}">${scene}${bosses}</div>`;

@@ -196,6 +196,16 @@
       "lufs": -16.15,
       "truePeakDb": -1.38
     },
+    "scene-macalania-temple": {
+      "file": "music/scene-macalania-temple.mp3",
+      "loopStart": 12.857143,
+      "loopEnd": 60,
+      "duration": 63,
+      "bytes": 1027316,
+      "lufs": -15.9,
+      "truePeakDb": -1.4,
+      "score": "b78867e82b34697f"
+    },
     "scene-zanarkand-dome": {
       "file": "music/scene-zanarkand-dome.mp3",
       "loopStart": 10,

@@ -1,0 +1,18 @@
+{
+  "currentSrc": "http://127.0.0.1:8100/pyrefly-reprise/art/pause/ch4-ffx2-bahamut.2x.webp",
+  "srcset": "/pyrefly-reprise/art/pause/ch4-ffx2-bahamut.png 1344w, /pyrefly-reprise/art/pause/ch4-ffx2-bahamut.2x.webp 2688w",
+  "dataArt": "plate",
+  "natural": [
+    1477,
+    844
+  ],
+  "sha256": "1850e6deda694a9b73b8361e400132ae18d12f252ee8e8588919998217ec44c3",
+  "bytes": 293874,
+  "activeTab": "chapter",
+  "errors": [],
+  "failed": [],
+  "stack": [
+    "battle",
+    "pause"
+  ]
+}

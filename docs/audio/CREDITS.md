@@ -91,6 +91,26 @@ with them is published. Used so far by `tools/audio/modern/render-evrae.mjs`
 `public/audio/candidates/modern-*.mp3`; **no shipped cue uses it yet**. If one
 does, credit "Impulse responses: Voxengo (Aleksey Vaneev)".
 
+### Per cue: `scene-macalania-temple` (Chapter VII, FFX only, 2026-09-29)
+
+"The Frozen Temple", original (rule 8): the score is
+`src/audio/tracks/scene-macalania-temple.ts`, ported note for note from sketch A
+(`tools/audio/scores/2026-09-24/macalania-scene-a-frozen-temple.mjs`); its only borrowed
+material is this project's own `HYMN_HEAD`. The shipped MP3 is three steps, none of which adds
+a credit:
+
+1. the sketch rendered offline with the libraries above (Sonatina strings, harp and choir,
+   FluidR3 glockenspiel, celesta and chimes);
+2. the Direction B restyle of that render (ACE-Step v1 3.5B through ComfyUI, the model already
+   on disk: `docs/audio/downloads-2026-09-27.md`; lossless master
+   `D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-a.wav`);
+3. the R1 "focus" remaster (`tools/audio/remaster.py` through `tools/audio/remaster-ship.py`):
+   numpy and the ffmpeg already on this machine; no impulse response file, no network call, no
+   download.
+
+D-278: the driver picked sketch A in R1 from measurements, not by ear (rule 13); Bailey can swap
+it. Nothing here changes the credits below.
+
 ## What must appear in the game credits
 
 Two entries, verbatim:

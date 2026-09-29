@@ -362,10 +362,12 @@ describe('the plan owes every listed chapter of the game a change touches', () =
     expect(p.chapters.some((c: string) => !c.startsWith('ffx2-'))).toBe(false);
   });
 
-  it('a chapter still shown as COMING is not owed, and an all-chapters change lists both games', () => {
+  it('a chapter is owed once it is unlocked (Macalania, 2026-09-29), and an all-chapters change lists both games', () => {
+    // Macalania was the COMING chapter this used to show as not owed; with its lock line gone
+    // (D-278) nothing is COMING, and the registry lists it like any other chapter.
     const chapters = registryChapters(REPO);
     expect(chapters).not.toBeNull();
-    expect(Object.keys(chapters ?? {})).not.toContain('seymour-anima-macalania');
+    expect(Object.keys(chapters ?? {})).toContain('seymour-anima-macalania');
     const p = planForRepo({ root: REPO, paths: ['src/battle/common/types.ts'], since: 'HEAD' });
     for (const id of [...LISTED_FFX2, 'seymour-flux', 'seymour-omnis', 'isaaru-via-purifico']) expect(p.chapters).toContain(id);
   });

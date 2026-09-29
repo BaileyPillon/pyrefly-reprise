@@ -3,7 +3,7 @@
  * a save written by the LIVE build before them (release 28, main 6ea8528f; `tests/fixtures/saves/release-28-main.json`,
  * exported from that build's own SaveStore in a fresh headless profile, see the fixture's `_note`): the save loads
  * unchanged, its progress stays (clears, best times, attempts, settings, coach marks), both new chapters arrive
- * unplayed, and the board counts them ("N of 17"). Shared plumbing, both games (`src/app/SaveData.ts` is untouched
+ * unplayed, and the board counts them ("N of 18"). Shared plumbing, both games (`src/app/SaveData.ts` is untouched
  * by this branch); the chapters themselves are FFX only.
  */
 import { readFileSync } from 'node:fs';
@@ -66,7 +66,7 @@ describe('a live release-28 save on the build that lists Sin (XVII and XVIII)', 
     expect(store.value.seenCoach).toEqual(raw.seenCoach);
   });
 
-  it('gains both Sin chapters unplayed, as XVII and XVIII on the FFX side, and a board of "N of 17" that counts them', () => {
+  it('gains both Sin chapters unplayed, as XVII and XVIII on the FFX side, and a board of "N of 18" that counts them', () => {
     const store = new SaveStore(SAVE_KEY, slot());
     const tiles = buildChapterTiles(store);
     for (const [id, numeral] of [['sin-fins-core', 'XVII'], ['sin-face', 'XVIII']] as const) {
@@ -76,12 +76,12 @@ describe('a live release-28 save on the build that lists Sin (XVII and XVIII)', 
       expect([tile.playable, tile.cleared, tile.numeral, tile.game]).toEqual([true, false, numeral, 'ffx']);
     }
     const before = boardProgress(tiles, 0);
-    expect([before.beaten, before.total]).toEqual([fixture.expect.cleared.length, 17]);
+    expect([before.beaten, before.total]).toEqual([fixture.expect.cleared.length, 18]);
 
     store.recordAttempt('sin-fins-core');
     store.recordClear('sin-fins-core', 1_402_000, 190);
     const after = boardProgress(buildChapterTiles(store), 0);
-    expect([after.beaten, after.total]).toEqual([fixture.expect.cleared.length + 1, 17]);
+    expect([after.beaten, after.total]).toEqual([fixture.expect.cleared.length + 1, 18]);
   });
 
   it('survives a save and a reload with the new clears and the old records side by side', () => {

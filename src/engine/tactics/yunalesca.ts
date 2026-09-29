@@ -557,7 +557,7 @@ function bestOverdrive(commands: AvailableCommand[], bossId: CombatantId): Comma
  *   * What an aeon is *worth* is its Overdrive minus the HP Yunalesca takes
  *     back off it. She kills an aeon with two Absorbs of half its max HP and
  *     heals herself the same (§4.5, §10.6), so each aeon refunds her exactly
- *     its own max HP — measured, 9,060 across the five, to the point. Net:
+ *     its own max HP — measured, 9,060 across the five, to the point. Net (on the §12 rows shipped until 2026-09-28; now §6.4.3's, 1,674 to 3,218 HP):
  *     Shiva 9,999 − 1,596, Valefor 7,745 − 1,341, Ifrit 7,943 − 1,797,
  *     Ixion 7,641 − 1,787, Bahamut 7,009 − 2,542. Bahamut is the *worst* of
  *     the five here, not the best: the biggest body on the smallest Overdrive.

@@ -22,7 +22,8 @@
  * Behind `ADVISOR_V3`, like the rest of v3.
  */
 
-import type { BattleState, CombatantId, Command } from '../../battle/common/types.ts';
+import type { AbilityDef, BattleState, CombatantId, Command, GameId, ItemDef } from '../../battle/common/types.ts';
+import { ABILITIES as FFX2_ABILITIES, ITEMS as FFX2_ITEMS } from '../../data/ffx2/index.ts';
 import type { QueuedCommand } from './advisor-committed.ts';
 export type { QueuedCommand };
 import { inFlight } from './advisor-inflight.ts';
@@ -50,5 +51,42 @@ export function chosenAlready(
   return inFlight(state, actorId, held).some(
     (p) => p.command.kind === command.kind && idOf(p.command) === id &&
       (targeting === 'all-allies' || aimOf(p.command) === aimOf(command)),
+  );
+}
+
+/** True for a move that puts HP back (Cura, Pray, a Potion): the `heals` flag on a formula that yields HP, not CTB/Haste. */
+function restoresHp(game: GameId, command: Command): boolean {
+  if (game !== 'ffx2' || (command.kind !== 'item' && command.kind !== 'ability')) return false;
+  const abilities: Record<string, AbilityDef> = FFX2_ABILITIES;
+  const items: Record<string, ItemDef> = FFX2_ITEMS;
+  let def: AbilityDef | undefined;
+  if (command.kind === 'ability') def = abilities[command.id];
+  else {
+    const effect = items[command.id]?.effect;
+    def = typeof effect === 'string' ? abilities[effect] : effect;
+  }
+  return !!def && def.flags.includes('heals') && def.formula !== 'ctb' && def.formula !== 'none' && def.formula !== 'multiple';
+}
+
+/**
+ * PR-0239 (FFX-2 only, the rail is shared with the card): the line's pick is a heal while another
+ * girl already has a heal on her charge bar (or held) that covers the party or the same ally. The
+ * card ranks on the board after that heal lands (`./advisor-inflight.ts#projectBoard`), so it may
+ * say something else (Pray while Mega-Potion charges); the rail reads the board as it stands and
+ * would name a Cura for HP the charging Mega-Potion is about to give. Like {@link chosenAlready}
+ * the rail defers (no NEXT) rather than print a line the card contradicts; the reason is FFX-2's
+ * ATB opening a menu while a command charges [research/ffx2-combat-core.md 1.1].
+ */
+export function healInbound(
+  state: Readonly<BattleState>,
+  actorId: CombatantId,
+  command: Command,
+  held: readonly QueuedCommand[] = [],
+  enabled: boolean = ADVISOR_V3,
+): boolean {
+  if (!enabled || state.game !== 'ffx2' || !restoresHp(state.game, command)) return false;
+  return inFlight(state, actorId, held).some(
+    (p) => restoresHp(state.game, p.command) &&
+      (targetingFor(state.game, p.command) === 'all-allies' || aimOf(p.command) === aimOf(command)),
   );
 }

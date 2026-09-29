@@ -7,7 +7,7 @@ import './support/pyrefly-window.ts';
  * which Bailey delegated).
  *
  * - **Chapter XVII, "Sin: the Fins and the Core"**: from the title by real keys (or taps on a phone), the board
- *   (eighteen cards, "0 of 17"), the XVII card, party prep, the opening scene skipped (Enter held; a phone taps the
+ *   (eighteen cards, "0 of 18"), the XVII card, party prep, the opening scene skipped (Enter held; a phone taps the
  *   pause chip's SKIP SCENE), the fight opening at FAR on the flight plate, the first command by real input (Tidus's
  *   ORDERS, "Close in": the Trigger Command), then a loss (the debug API's `defend` line at skip speed: the chain's
  *   length, 25.5 % first try on the sensible line, is the bench's to measure, not this spec's), RETRY by real input
@@ -16,7 +16,7 @@ import './support/pyrefly-window.ts';
  * - **Chapter XVIII, "Sin: the Face"**: the board, the XVIII card, prep, the opening scene by confirm presses
  *   (keys) or taps (phone), the fight to a **win on the clock** played by the debug API's `intended` line (seed 3,
  *   where that line beats the 13-turn clock, D-280; `docs/handoff/chapter-sin.md` lists the scan), the results and
- *   Breaking Through by real input, and the clear on the board ("1 of 17").
+ *   Breaking Through by real input, and the clear on the board ("1 of 18").
  *
  * The debug API reads the state, pins the seed and plays the fight lines named above; it never skips a scene, sets
  * a number or submits a menu command. Frames: `docs/screenshots/sin/listed/<w>x<h>-*.jpg`. Runs against the shared
@@ -220,7 +220,7 @@ test.describe('Sin (FFX only): listed and playable, 2026-09-29', () => {
         const thrown = await boot(page, 1);
         const first = await toPrep(page, input, XVII);
         expect(first.tiles).toBe(18);
-        expect([first.beaten, first.total]).toEqual([0, 17]);
+        expect([first.beaten, first.total]).toEqual([0, 18]);
         await skipScene(page, input);
         const opening = await page.evaluate(() => {
           const s = window.__pyrefly!.battleState()!;
@@ -296,7 +296,7 @@ test.describe('Sin (FFX only): listed and playable, 2026-09-29', () => {
         await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'chapter-select', null, { timeout: 60_000 });
         await page.waitForTimeout(1500);
         const after = await board(page);
-        expect([after.beaten, after.total, after.tiles]).toEqual([0, 17, 18]);
+        expect([after.beaten, after.total, after.tiles]).toEqual([0, 18, 18]);
         expect(await outcomeOf(page)).toBe(null);
         expect(thrown, 'no uncaught page error').toEqual([]);
       });
@@ -360,7 +360,7 @@ test.describe('Sin (FFX only): listed and playable, 2026-09-29', () => {
         await page.waitForTimeout(2000);
         const after = await board(page);
         expect(after.cleared).toContain(XVIII);
-        expect([after.beaten, after.total]).toEqual([1, 17]);
+        expect([after.beaten, after.total]).toEqual([1, 18]);
         await shoot(page, '12-board-cleared');
         expect(thrown, 'no uncaught page error').toEqual([]);
       });
