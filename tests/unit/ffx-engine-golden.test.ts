@@ -64,14 +64,19 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
   return parts.join(' ');
 }
 
-/** Recorded on advisor-v4 at cf3306eb (main 1a81a8ed merged), before the split. */
+/**
+ * Recorded on advisor-v4 at cf3306eb (main 1a81a8ed merged), before the split. Chapters II
+ * (Yunalesca) and III (Braska's Final Aeon) re-pinned 2026-09-29 in main's merge of advisor-v4: D-274
+ * (578e7f22, research §6.4.3's aeon rows for II and III) moves exactly these four digests, proved by
+ * running this file on 578e7f22^ (18/18) and 578e7f22 (these four values, the other 14 unchanged).
+ */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd5fd8bf4:defeat',
   'seymour-flux#7': '420e8126:victory',
-  'yunalesca#1': '608f8886:victory',
-  'yunalesca#7': '9ffe2cf3:victory',
-  'braskas-final-aeon#1': '8ffd48c5:victory 54f87220:victory d9c17d4d:victory a8670d62:victory d8887cc:victory 60866a38:victory 828a017a:victory',
-  'braskas-final-aeon#7': '9f7b472a:victory be7e9819:victory dff628e3:victory e18e6c63:victory abbb1906:victory 3344d8b8:victory 6cc3ec46:victory',
+  'yunalesca#1': '6d7a9a3f:victory',
+  'yunalesca#7': 'efc5c8cc:victory',
+  'braskas-final-aeon#1': 'ca3f7569:victory cc1d312c:victory 128fa095:victory d57abcc1:victory 4c3a1fd4:victory f57359fd:victory 2e29d25c:victory',
+  'braskas-final-aeon#7': '922d7f55:victory 6583a70a:victory 918adb39:victory ad58d940:victory abbc417b:victory d9694c6d:victory aed1b2d2:victory',
   'seymour-anima-macalania#1': 'ca4a9a51:victory',
   'seymour-anima-macalania#7': 'd14d5e8a:victory',
   'evrae-airship#1': 'ebf9b7c4:victory',
