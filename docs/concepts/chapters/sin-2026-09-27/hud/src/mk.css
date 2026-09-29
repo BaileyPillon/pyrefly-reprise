@@ -1,0 +1,165 @@
+/* Sin HUD mockups (FFX only). The game's own stylesheets are linked by hud.html (tokens.css, slabs.css,
+   ffx-hud.css and the three phone-hud files); this file holds only the fonts (the game loads them from /fonts/,
+   which a file:// page cannot) and the mock-only pieces. New pieces are drawn in REAL pixels in the unscaled
+   overlay (.mk-over), on the 14 px type floor the HUD keeps (CHK-003); the real HUD pieces stay on the 640x360 grid. */
+@font-face { font-family: 'Cormorant Garamond'; src: url('../../../../../../public/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2') format('woff2'); font-weight: 300 700; font-style: normal; }
+@font-face { font-family: 'Cormorant Garamond'; src: url('../../../../../../public/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2') format('woff2'); font-weight: 300 700; font-style: italic; }
+@font-face { font-family: 'Chakra Petch'; src: url('../../../../../../public/fonts/chakra-petch/ChakraPetch-Bold-700.woff2') format('woff2'); font-weight: 700; }
+@font-face { font-family: 'Chakra Petch'; src: url('../../../../../../public/fonts/chakra-petch/ChakraPetch-Medium-500.woff2') format('woff2'); font-weight: 500; }
+@font-face { font-family: 'Chakra Petch'; src: url('../../../../../../public/fonts/chakra-petch/ChakraPetch-Regular-400.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Rajdhani'; src: url('../../../../../../public/fonts/rajdhani/Rajdhani-Bold-700.woff2') format('woff2'); font-weight: 700; }
+@font-face { font-family: 'Rajdhani'; src: url('../../../../../../public/fonts/rajdhani/Rajdhani-SemiBold-600.woff2') format('woff2'); font-weight: 600; }
+@font-face { font-family: 'Exo 2'; src: url('../../../../../../public/fonts/exo2/Exo2-Variable-wght.woff2') format('woff2'); font-weight: 100 900; }
+
+html, body { margin: 0; padding: 0; background: #0b0a12; }
+#root { position: absolute; left: 0; top: 0; overflow: hidden; background: #0b0a12; font-family: var(--ig-font-text); }
+#root.desk { width: 1600px; height: 900px; }
+#root.phone { width: 390px; height: 844px; }
+.mk-world { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; }
+.mk-world > * { position: absolute; }
+.mk-plate { left: 0; top: 0; width: 1600px; height: 900px; object-fit: cover; }
+.mk-sprite { filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.55)); }
+.mk-deckfloor { left: 0; right: 0; bottom: 0; height: 250px; pointer-events: none;
+  background: repeating-linear-gradient(97deg, rgba(255,255,255,0.045) 0 2px, rgba(0,0,0,0) 2px 46px),
+              linear-gradient(to bottom, rgba(7,6,12,0) 0%, rgba(9,8,14,0.72) 42%, rgba(6,5,10,0.95) 100%); }
+.mk-rail { left: -40px; right: -40px; height: 60px; pointer-events: none; }
+.mk-rail i { position: absolute; left: 0; right: 0; height: 5px; top: 0; transform: rotate(-1.4deg);
+  background: linear-gradient(to right, rgba(120,110,95,0.25), rgba(206,186,140,0.62), rgba(120,110,95,0.25)); box-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+.mk-rail i + i { top: 34px; height: 3px; opacity: 0.6; }
+.mk-fin { pointer-events: none; }
+.mk-fin__label { font: 700 14px 'Chakra Petch'; letter-spacing: .16em; text-transform: uppercase; color: rgba(244,241,232,.72); }
+
+/* the frame label: top-left on the desk, the foot on the phone */
+.mk-tag { position: absolute; left: 0; top: 0; z-index: 60; display: flex; align-items: stretch; font-family: 'Chakra Petch'; font-weight: 700; text-transform: uppercase; }
+.mk-tag b { padding: 8px 14px 9px; background: var(--ig-gold); color: #0b0a12; font-size: 15px; letter-spacing: .2em; }
+.mk-tag span { padding: 8px 16px 9px; background: rgba(11,10,18,.86); color: rgba(244,241,232,.92); font-size: 13px; letter-spacing: .16em; }
+.mk-tag em { padding: 8px 14px 9px; background: rgba(11,10,18,.86); color: #ff8a7a; font-style: normal; font-size: 13px; letter-spacing: .16em; }
+#root.phone .mk-tag { position: absolute; left: 0; right: 0; top: auto; bottom: 0; }
+#root.phone .mk-tag b { padding: 4px 9px 5px; font-size: 14px; }
+#root.phone .mk-tag span { padding: 4px 8px 5px; font-size: 14px; letter-spacing: .1em; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#root.phone .mk-tag em { display: none; }
+
+.mk-over { position: absolute; inset: 0; pointer-events: none; z-index: 30; }
+.mk-over > * { position: absolute; }
+
+/* ----------------------------------------------------- shared small parts */
+.mk-slab { background: rgba(11,10,18,.86); color: var(--ig-paper); box-shadow: 0 8px 20px rgba(0,0,0,.45); }
+.mk-chip { display: inline-block; padding: 4px 11px 5px; font: 700 14px 'Chakra Petch'; letter-spacing: .16em; text-transform: uppercase; transform: skewX(-12deg); }
+.mk-chip > * { display: inline-block; transform: skewX(12deg); }
+.mk-chip--gold { background: var(--ig-gold); color: var(--ig-ink); }
+.mk-chip--ink { background: rgba(11,10,18,.9); color: var(--ig-paper); }
+.mk-chip--red { background: #e8412e; color: #fff; }
+.mk-note { font: 500 14px/1.3 'Exo 2'; color: rgba(244,241,232,.86); }
+.mk-note b { color: var(--ig-gold); font-weight: 700; }
+.mk-est { font: 500 14px/1.25 'Exo 2'; color: #f2c26b; }
+.mk-gaze { display: flex; align-items: center; gap: 7px; padding: 5px 10px; }
+.mk-gaze b { font: 700 14px 'Chakra Petch'; letter-spacing: .14em; text-transform: uppercase; }
+.mk-gaze i { width: 15px; height: 15px; display: block; transform: rotate(45deg); background: #b02a2a; border: 2px solid var(--ig-paper); }
+.mk-gaze i.off { background: rgba(244,241,232,.22); }
+
+/* M1: the ring, the pip strip, the turn-order tags */
+.mk-ring text { font-family: Rajdhani; font-weight: 700; fill: #fff; }
+.mk-ring .cap { font: 700 14px 'Chakra Petch'; letter-spacing: .05em; fill: rgba(244,241,232,.85); }
+.mk-ring .alarm { animation: mk-pulse .5s ease-in-out infinite alternate; }
+@keyframes mk-pulse { from { opacity: .55; } to { opacity: 1; } }
+.mk-pips { display: flex; align-items: center; gap: 4px; }
+.mk-pips i { display: block; width: 34px; height: 20px; transform: skewX(-12deg); background: rgba(244,241,232,.2); }
+.mk-pips i.gap { background: none; width: 8px; }
+.mk-pips i.p3.on { background: #f4f1e8; } .mk-pips i.p9.on { background: var(--ig-gold); } .mk-pips i.p1 { background: rgba(232,65,46,.4); }
+.mk-pips i.p1.on { background: #e8412e; box-shadow: 0 0 10px #e8412e; }
+.mk-pips i.now { outline: 2px solid #fff; outline-offset: 1px; }
+.mk-jaw { font: italic 700 40px/1 'Cormorant Garamond'; color: var(--ig-paper); }
+.ig-ctb__tag.mk-turn { font: 700 14px/1 'Rajdhani'; background: var(--ig-gold); color: var(--ig-ink); text-shadow: none; padding: 1px 3px; right: 0; bottom: 0; }
+.ig-ctb__tag.mk-turn--gg { background: #e8412e; color: #fff; }
+.mk-gg-row .ig-ctb__name { background: #e8412e; color: #fff; text-shadow: none; }
+.mk-gg-row .ig-ctb__tile { border-color: #e8412e; box-shadow: 0 0 12px rgba(232,65,46,.8); }
+.mk-foe { position: absolute; inset: 0; background-repeat: no-repeat; }
+
+/* M2: what Negation took */
+.mk-neg { padding: 10px 16px 12px 18px; border-left: 5px solid var(--ig-gold); transform: skewX(-12deg); background: rgba(11,10,18,.92); box-shadow: 0 8px 20px rgba(0,0,0,.5); }
+.mk-neg > * { transform: skewX(12deg); }
+.mk-neg__head { font: 700 14px 'Chakra Petch'; letter-spacing: .26em; color: var(--ig-gold); text-transform: uppercase; }
+.mk-neg__line { margin-top: 6px; font: 500 18px/1.35 'Exo 2'; color: var(--ig-paper); }
+.mk-neg__line + .mk-neg__line { margin-top: 3px; }
+.mk-neg__line em { font-style: normal; font: 700 14px 'Chakra Petch'; letter-spacing: .16em; text-transform: uppercase; margin-right: 8px; padding: 2px 7px 3px; }
+.mk-neg__line em.lost { background: #e8412e; color: #fff; }
+.mk-neg__line em.fin { background: rgba(244,241,232,.9); color: var(--ig-ink); }
+.mk-neg__line em.cured { background: var(--ig-spira-sky); color: var(--ig-ink); }
+.mk-ghost { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.mk-ghost span { display: block; padding: 3px 9px 4px; font: 700 14px 'Chakra Petch'; letter-spacing: .1em; text-transform: uppercase; background: rgba(11,10,18,.8); color: rgba(244,241,232,.9); border-right: 3px solid #e8412e; text-decoration: line-through; text-decoration-color: #e8412e; text-decoration-thickness: 2px; }
+.mk-ghost span.cure { border-right-color: var(--ig-spira-sky); text-decoration: none; color: var(--ig-spira-sky); }
+.mk-ghost span.cure::before { content: '+ '; }
+.mk-ghost span.faded { opacity: .55; }
+
+/* M3: the link strip */
+.mk-strip { display: flex; gap: 8px; align-items: center; }
+.mk-strip .step { padding: 6px 14px 7px; font: 700 15px 'Chakra Petch'; letter-spacing: .12em; text-transform: uppercase; transform: skewX(-12deg); background: rgba(11,10,18,.86); color: rgba(244,241,232,.75); border-bottom: 3px solid transparent; }
+.mk-strip .step > * { display: inline-block; transform: skewX(12deg); }
+.mk-strip .step.done { color: rgba(244,241,232,.5); border-bottom-color: rgba(244,241,232,.35); }
+.mk-strip .step.on { background: var(--ig-gold); color: var(--ig-ink); border-bottom-color: #fff; }
+.mk-bracket { height: 12px; border: 3px solid var(--ig-gold); border-top: 0; }
+.mk-bracket-cap { display: inline-block; font: 700 14px 'Chakra Petch'; letter-spacing: .16em; text-transform: uppercase; color: var(--ig-gold); margin-top: 6px; padding: 4px 10px 5px; background: rgba(11,10,18,.86); }
+.mk-plate-name { padding: 10px 26px 12px 20px; background: var(--ig-paper); border-bottom: 4px solid var(--ig-gold); transform: skewX(-12deg); box-shadow: 0 10px 26px rgba(0,0,0,.5); }
+.mk-plate-name > * { display: block; transform: skewX(12deg); }
+.mk-plate-name b { font: italic 700 44px/1 'Cormorant Garamond'; color: var(--ig-ink); }
+.mk-plate-name small { font: 700 14px 'Chakra Petch'; letter-spacing: .24em; color: var(--ig-gold-on-paper); text-transform: uppercase; margin-bottom: 4px; }
+
+/* M4: the Fin's plate */
+.mk-fplate { padding: 10px 18px 12px 18px; border-left: 5px solid var(--ig-blood); background: rgba(11,10,18,.9); transform: skewX(-12deg); box-shadow: 0 8px 20px rgba(0,0,0,.5); }
+.mk-fplate > * { transform: skewX(12deg); }
+.mk-fplate__top { display: flex; align-items: center; gap: 12px; }
+.mk-fplate__name { font: italic 700 30px/1 'Cormorant Garamond'; color: var(--ig-paper); }
+.mk-range { padding: 3px 10px 4px; font: 700 15px 'Chakra Petch'; letter-spacing: .2em; }
+.mk-range--near { background: var(--ig-gold); color: var(--ig-ink); }
+.mk-range--far { background: var(--ig-spira-sky); color: var(--ig-ink); }
+.mk-charge { margin-top: 8px; display: flex; align-items: center; gap: 10px; padding: 6px 10px 7px; background: #e8412e; color: #fff; font: 700 15px 'Chakra Petch'; letter-spacing: .14em; text-transform: uppercase; animation: mk-pulse .5s ease-in-out infinite alternate; }
+.mk-charge i { display: block; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); flex: none; }
+.mk-calm { margin-top: 8px; font: 500 14px 'Exo 2'; color: rgba(244,241,232,.6); letter-spacing: .04em; }
+.mk-counts { margin-top: 8px; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: center; font: 700 14px 'Chakra Petch'; letter-spacing: .12em; text-transform: uppercase; color: rgba(244,241,232,.85); }
+.mk-counts .meter { display: flex; gap: 4px; }
+.mk-counts .meter i { display: block; width: 22px; height: 10px; background: rgba(244,241,232,.2); transform: skewX(-12deg); }
+.mk-counts .meter i.on { background: var(--ig-gold); }
+.mk-counts .meter i.hot { background: #e8412e; }
+.mk-edge { position: absolute; inset: 0; z-index: 0; box-shadow: inset 0 0 0 4px rgba(232,65,46,.0), inset 0 0 90px 10px rgba(232,65,46,.38); pointer-events: none; }
+
+/* M5: the order widget's race line */
+.mk-race { grid-column: 1 / -1; }
+.ffx-airship-order__race { font-family: var(--ig-font-text); font-size: 6.4px; letter-spacing: 0.02em; color: rgba(11,10,18,.85); white-space: nowrap; }
+.ffx-airship-order__race b { color: #1f6b34; }
+.ffx-airship-order__race--late b { color: #a3241a; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-airship-order__race { font-size: 14px; white-space: normal; }
+
+/* phone frame extras the real phone CSS expects around the HUD */
+#root.phone #game { position: absolute; left: 0; top: 0; right: 0; overflow: hidden; }
+#root.phone .mk-tip { position: absolute; left: 8px; right: 8px; top: calc(100% - 286px); height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 12px; background: rgba(11,10,18,.92); border-left: 3px solid var(--ig-gold); font: 500 14px 'Exo 2'; color: var(--ig-paper); z-index: 5; }
+#root.phone .mk-tip b { font: 700 14px 'Chakra Petch'; letter-spacing: .14em; color: var(--ig-gold); text-transform: uppercase; }
+#root.desk .mk-tip { display: none; }
+
+.mk-charge .sm { display: none; }
+#root.phone .mk-charge .lg { display: none; }
+#root.phone .mk-charge .sm { display: inline; }
+#root.phone .mk-fplate { padding: 6px 12px 8px 12px; }
+#root.phone .mk-fplate__name { font-size: 24px; }
+#root.phone .mk-charge { margin-top: 5px; padding: 4px 8px 5px; font-size: 14px; letter-spacing: .08em; }
+#root.phone .mk-counts { margin-top: 5px; gap: 3px 10px; }
+
+.mk-ghost--h { flex-direction: row; gap: 6px; align-items: center; justify-content: flex-end; width: 420px; }
+.mk-ghost--v { flex-direction: column; align-items: flex-start; }
+.mk-ghost--v span { border-right: 0; border-left: 3px solid #e8412e; }
+.mk-ghost--v span.cure { border-left-color: var(--ig-spira-sky); }
+
+.mk-pips i.p1.alarm { background: #e8412e; box-shadow: 0 0 12px #e8412e; animation: mk-pulse .5s ease-in-out infinite alternate; }
+#root.phone .mk-pips { gap: 3px; }
+#root.phone .mk-pips i { width: 20px; height: 18px; }
+#root.phone .mk-pips i.gap { width: 6px; }
+
+/* the shipped strategy-guide rail, drawn as a stand-in so the new slabs are placed beside it, not on it (desk only) */
+.mk-guide { left: 50px; top: 85px; width: 330px; }
+.mk-guide__tog { display: inline-block; padding: 4px 12px; background: rgba(11,10,18,.86); font: 700 14px 'Chakra Petch'; letter-spacing: .24em; color: rgba(244,241,232,.85); transform: skewX(-12deg); }
+.mk-guide__tog b { color: var(--ig-gold); margin-right: 6px; }
+.mk-guide__card { margin-top: 4px; padding: 12px 16px 12px 18px; height: 160px; background: rgba(11,10,18,.78); border-left: 3px solid var(--ig-gold); color: var(--ig-paper); display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.mk-guide__card i { font: italic 700 20px 'Cormorant Garamond'; }
+.mk-guide__card small { font: 500 14px 'Exo 2'; letter-spacing: .18em; color: rgba(244,241,232,.8); }
+.mk-guide__card b { font: 700 22px 'Exo 2'; color: var(--ig-gold); }
+.mk-guide__card em { font: 700 14px 'Chakra Petch'; font-style: normal; letter-spacing: .2em; color: var(--ig-gold); margin-top: auto; align-self: center; }
+.mk-guide__lab { margin-top: 3px; font: 500 12px 'Exo 2'; color: rgba(244,241,232,.55); }
