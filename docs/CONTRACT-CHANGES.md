@@ -6,6 +6,17 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-29 — `types.ts`: `EnemyGroupDef` gains an optional `bossId` (PR-0243)
+
+**Both games** (shared plumbing); only Chapter VII (FFX) sets it. Branch `r30-ch7`. Additive:
+`EnemyGroupDef.bossId?: string` names the enemy the opening beats show and name (the Ink & Gold
+battle-start card, the intro dolly's caption, the preload's card info) when the formation's first
+enemy is not the boss. `src/battle/common/headlineEnemy.ts` reads it and falls back to the old rule
+(the first visible non-part enemy in `enemyIds`) when it is absent or that enemy is not on the field;
+`BattlePresenter.run`'s link argument gains the matching optional `bossId`, passed by
+`BattleEncounterChain`. The Macalania formation sets `bossId: 'seymour-macalania'`, because Guado
+Guardian A stands in slot 0. No engine rule reads it, so turn order and targeting are unchanged.
+
 ## 2026-09-29 — Music key `scene-macalania-temple` (Chapter VII); four more runtime instrument stand-ins
 
 **The key: FFX only** [AGENTS.md hard rule 14]: Chapter VII's scene cue, the Macalania Temple

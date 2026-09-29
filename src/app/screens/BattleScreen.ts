@@ -56,6 +56,7 @@ import { warmShaders } from './BattleScreenWarmup.ts';
 import { presenterGameDeps } from './BattleScreenGameDeps.ts';
 import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
+import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 
 /**
  * How long a decided battle may go without playing a single event before the
@@ -371,9 +372,7 @@ export class BattleScreen extends Screen {
     if (this.opts.speed === 'skip' || this.preview || chapter.game === 'ff7') return this.opts.speed === 'skip' || this.preview ? undefined : this.airship?.opening?.(); // FF7: its opening camera (F1)
     const state = this.engine?.state();
     if (!state) return;
-    const boss = state.enemyIds
-      .map((id) => state.combatants[id])
-      .find((c) => c && !c.removed && !c.flags.hidden && !c.flags.isPart);
+    const boss = headlineEnemy(state, chapter.enemyGroupRef.bossId); // PR-0243
     if (!boss) return;
     const party = state.activeIds
       .map((id) => state.combatants[id])

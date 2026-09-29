@@ -396,6 +396,8 @@ export const seymourAnimaMacalaniaGroup: EnemyGroupDef = {
   canEscape: false, // §3.2 "the party cannot escape"
   enemies: [guardian(GUADO_GUARDIAN_A_ID, 0, 'A'), seymour, guardian(GUADO_GUARDIAN_B_ID, 2, 'B')],
   parts: [anima],
+  // PR-0243: the card and the dolly name Seymour, not the retainer in slot 0. FFX only.
+  bossId: SEYMOUR_MACALANIA_ID,
   musicCues: [
     // The fight's own cue, §9.8 ("The Courtesy", Bailey's pick of sketch A,
     // 2026-09-24), NOT the Flux chapter's `boss-seymour`. A CANDIDATE until

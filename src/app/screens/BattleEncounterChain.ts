@@ -196,7 +196,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
     if (made) checkpoint = { ...made, won: [...won] };
     opts.onLink?.({ links, group, setup, checkpoint: made ? checkpoint : null });
     presenter.syncHud(engine);
-    outcome = await presenter.run(engine, { headline: group.headline }); // PR-0205
+    outcome = await presenter.run(engine, { headline: group.headline, bossId: group.bossId }); // PR-0205, PR-0243
 
     if (outcome.kind !== 'victory') break;
 
