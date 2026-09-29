@@ -146,3 +146,61 @@ disarms the unlock). All 6 pass on the fix.
   `node_modules` **junction** to `D:/Final Fantasy/node_modules`. Unlink it with
   `cmd /c rmdir` before anyone removes that folder. `dist-fix`, `dist-fix2` and `r28/dist` each
   hold a copy of the art (about 450 MB each).
+
+## CHECK (independent, 2026-09-29 ~13:40 EDT)
+
+An independent check by an agent that did not build the fix. It covers commit `b7216d45`. Nothing
+was pushed, merged or deployed. Game case: both. The probe is this branch's
+`tools/audio/music-overlap-probe.mjs`, copied to scratch with two changes: a `--vw/--vh` viewport
+(keys and pad ran at 1600x900, taps at 390x844 touch) and a `--pauserace` step. A new
+`analyze.mjs` reports, for each flow step, the slot's current cue 3 s later, the most tracks
+audible at once, and the audible timeline. Raw logs are in
+`D:/Tools/pyrefly-scratch/hotfix-music-check/`. The fresh production build is
+`dist/index-CwA0gRWR.js`; I grepped the bundle to confirm it contains the new six-gesture unlock.
+It was served by `vite preview` on port 8860, and that server is stopped.
+
+| Build | Input | Context | Chapters (flow) | Samples | Overlap | Max audible |
+|---|---|---|---|---|---|---|
+| live r29 `C73AJ1Ds` | keys 1600x900 | held, released at the scene | I (to battle) | 619 | **2: title -35.7 + chapter-select -39.2 dBFS, cutscene** | 2 |
+| live r29 | keys 1600x900 | running | I, FFX-2 Bahamut, II Yunalesca (full) | 2562 | 0 | 1 |
+| live r29 | pad | held, released at the scene | I | 603 | 0 (title never started; one cue queued) | 1 |
+| fix | keys 1600x900 | held, released at the scene | I | 592 | 0 | 1 |
+| fix | keys 1600x900 | running | I, Bahamut, Yunalesca (full) | 2440 | 0 | 1 |
+| fix | taps 390x844 | running | Bahamut, Yunalesca (full); I failed to start, see below | 1908 | 0 | 1 |
+| fix | taps 390x844 | running | Bahamut, I (full) | 1594 | 0 | 1 |
+| fix | taps 390x844 | held, released at the scene | Bahamut | 464 | 0 | 1 |
+| fix | keys 1600x900 | held, released at the pick | Yunalesca | 645 | 0 | 1 |
+| fix | pad 1600x900 | running (a pad press creates it, PR-0220) | Bahamut, I (full) | 1594 | 0 | 1 |
+| fix | pad | held, released at the scene | I | 594 | 0 | 1 |
+| fix | keys + P,P within 100 ms before the first pause | running | Bahamut, I (full) | 1681 | 0 | 1 |
+
+"Full" means title, chapter select, party prep, scene, battle, pause and resume, autobattle to
+the results, then back to the board. On the fix, both held-context runs stop the backlog with
+`when: 0` at the frozen clock. Title and chapter-select end the moment the context runs.
+
+- **Per-step cues match live.** Each step plays the same cue on the fix as on live: chapter-select
+  on the board and prep, the scene cue, the boss theme, `pause` while paused, the boss theme again
+  3 s after resume (every chapter, every input), then victory and chapter-select. So PR-0226
+  holds in the browser. The P,P race did not reach the decode window, because `pause.mp3` is
+  already decoded by then and no pause cue started. The battle theme stayed in the slot.
+  `audio-pause-race.test.ts` covers the decode race itself.
+- **PR-0220 holds.** A pad-only session unlocks audio and runs every flow, including Chapter I.
+- **Unit tests.** `tsc --noEmit` is clean. 60 audio, music and pause unit files pass (905 tests),
+  including `audio-music-slot`, `audio-pause-race`, `audio-pad-unlock` and `pause-music-silence`.
+- **Merge.** `git merge-tree --write-tree` of `b7216d45` against the current `origin/main`
+  (`1475ff6b`, 66 commits past this branch's base) is clean.
+- **Code read.** `retireSlot` computes the level from the slot's own ramp and never reads
+  `gain.value`. A second `stop()` on an already-fading source is wrapped in try/catch, and
+  `cutFading` does not push a slot into `fading` twice. Nothing in `src/` suspends the context
+  itself, so a slot retired while the context is suspended is always one never heard.
+
+Verdict: **no blocker.** No sample on the fix had two music tracks audible. PR-0226 and PR-0220
+did not regress, and no test is red. Minor notes (none blocks):
+1. Probe flake: in the first taps run, the Chapter I card tap timed out (`fe-card-0`, 8 s). The
+   same pick passed when run second. This is a harness issue, not the game.
+2. On the Bahamut (FFX-2) results screen no music track sounds, on live and on the fix alike.
+   It is not a regression and this check does not settle whether it is intended.
+3. `audioDebug().music.fading[].gain` still reads `gain.value`, which is 1.0 on an unrendered
+   node. The debug surface can therefore overstate a fading slot's level. Only the probe's
+   analyser RMS is ground truth.
+4. Bailey's exact device and route are still unreproduced. See "Open" above.
