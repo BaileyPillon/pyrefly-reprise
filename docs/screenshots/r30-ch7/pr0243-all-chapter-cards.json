@@ -1,0 +1,263 @@
+{
+ "note": "r30-ch7 PR-0243: every listed chapter reached by real keys on the production build (fresh profile, setSeed(1)); card = .bstart__name text, cardArt = the card painting, plate = the intro dolly name plate",
+ "1600x900": [
+  {
+   "id": "seymour-flux",
+   "size": "1600x900",
+   "touch": false,
+   "card": "SeymourFlux",
+   "cardArt": "seymour-flux-body/idle.png\")",
+   "plate": "Seymour Flux"
+  },
+  {
+   "id": "yunalesca",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Yunalesca",
+   "cardArt": "yunalesca-1/idle.png\")",
+   "plate": "Yunalesca"
+  },
+  {
+   "id": "braskas-final-aeon",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Braska's FinalAeon",
+   "cardArt": "braskas-final-aeon-1/idle.png\")",
+   "plate": "Braska's Final Aeon"
+  },
+  {
+   "id": "ffx2-bahamut",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Bahamut",
+   "cardArt": "ffx2-bahamut/idle.png\")",
+   "plate": "Bahamut"
+  },
+  {
+   "id": "ffx2-vegnagun-shuyin",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Vegnagun",
+   "cardArt": "vegnagun-tail/idle.png\")",
+   "plate": "Vegnagun"
+  },
+  {
+   "id": "ffx2-leblanc",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Ormi",
+   "cardArt": "ormi/idle.png\")",
+   "plate": "Ormi"
+  },
+  {
+   "id": "seymour-anima-macalania",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Seymour",
+   "cardArt": "seymour-macalania/idle.png\")",
+   "plate": "Seymour"
+  },
+  {
+   "id": "evrae-airship",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Evrae",
+   "cardArt": "evrae/idle.png\")",
+   "plate": "Evrae"
+  },
+  {
+   "id": "yojimbo-cavern",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Yojimbo",
+   "cardArt": "yojimbo-cavern/idle.png\")",
+   "plate": "Yojimbo"
+  },
+  {
+   "id": "seymour-natus",
+   "size": "1600x900",
+   "touch": false,
+   "card": "SeymourNatus",
+   "cardArt": "seymour-natus/idle.png\")",
+   "plate": "Seymour Natus"
+  },
+  {
+   "id": "ffx2-fallen-aeons",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Shiva",
+   "cardArt": "x2-shiva/idle.png\")",
+   "plate": "Shiva"
+  },
+  {
+   "id": "seymour-omnis",
+   "size": "1600x900",
+   "touch": false,
+   "card": "SeymourOmnis",
+   "cardArt": "seymour-omnis/idle.png\")",
+   "plate": "Seymour Omnis"
+  },
+  {
+   "id": "ffx2-trema",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Paragon",
+   "cardArt": "paragon/idle.png\")",
+   "plate": "Paragon"
+  },
+  {
+   "id": "isaaru-via-purifico",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Isaaru",
+   "cardArt": "isaaru/idle.png\")",
+   "plate": "Isaaru"
+  },
+  {
+   "id": "ffx2-den-of-woe",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Baralai",
+   "cardArt": "baralai-shade/idle.png\")",
+   "plate": "Baralai"
+  },
+  {
+   "id": "ffx2-ixion-djose",
+   "size": "1600x900",
+   "touch": false,
+   "card": "Ixion",
+   "cardArt": "x2-ixion/idle.png\")",
+   "plate": "Ixion"
+  }
+ ],
+ "390x844-touch": [
+  {
+   "id": "seymour-flux",
+   "size": "390x844",
+   "touch": true,
+   "card": "SeymourFlux",
+   "cardArt": "seymour-flux-body/idle.png\")",
+   "plate": "Seymour Flux"
+  },
+  {
+   "id": "yunalesca",
+   "size": "390x844",
+   "touch": true,
+   "card": "Yunalesca",
+   "cardArt": "yunalesca-1/idle.png\")",
+   "plate": "Yunalesca"
+  },
+  {
+   "id": "braskas-final-aeon",
+   "size": "390x844",
+   "touch": true,
+   "card": "Braska's FinalAeon",
+   "cardArt": "braskas-final-aeon-1/idle.png\")",
+   "plate": "Braska's Final Aeon"
+  },
+  {
+   "id": "ffx2-bahamut",
+   "size": "390x844",
+   "touch": true,
+   "card": "Bahamut",
+   "cardArt": "ffx2-bahamut/idle.png\")",
+   "plate": "Bahamut"
+  },
+  {
+   "id": "ffx2-vegnagun-shuyin",
+   "size": "390x844",
+   "touch": true,
+   "card": "Vegnagun",
+   "cardArt": "vegnagun-tail/idle.png\")",
+   "plate": "Vegnagun"
+  },
+  {
+   "id": "ffx2-leblanc",
+   "size": "390x844",
+   "touch": true,
+   "card": "Ormi",
+   "cardArt": "ormi/idle.png\")",
+   "plate": "Ormi"
+  },
+  {
+   "id": "seymour-anima-macalania",
+   "size": "390x844",
+   "touch": true,
+   "card": "Seymour",
+   "cardArt": "seymour-macalania/idle.png\")",
+   "plate": "Seymour"
+  },
+  {
+   "id": "evrae-airship",
+   "size": "390x844",
+   "touch": true,
+   "card": "Evrae",
+   "cardArt": "evrae/idle.png\")",
+   "plate": "Evrae"
+  },
+  {
+   "id": "yojimbo-cavern",
+   "size": "390x844",
+   "touch": true,
+   "card": "Yojimbo",
+   "cardArt": "yojimbo-cavern/idle.png\")",
+   "plate": "Yojimbo"
+  },
+  {
+   "id": "seymour-natus",
+   "size": "390x844",
+   "touch": true,
+   "card": "SeymourNatus",
+   "cardArt": "seymour-natus/idle.png\")",
+   "plate": "Seymour Natus"
+  },
+  {
+   "id": "ffx2-fallen-aeons",
+   "size": "390x844",
+   "touch": true,
+   "card": "Shiva",
+   "cardArt": "x2-shiva/idle.png\")",
+   "plate": "Shiva"
+  },
+  {
+   "id": "seymour-omnis",
+   "size": "390x844",
+   "touch": true,
+   "card": "SeymourOmnis",
+   "cardArt": "seymour-omnis/idle.png\")",
+   "plate": "Seymour Omnis"
+  },
+  {
+   "id": "ffx2-trema",
+   "size": "390x844",
+   "touch": true,
+   "card": "Paragon",
+   "cardArt": "paragon/idle.png\")",
+   "plate": "Paragon"
+  },
+  {
+   "id": "isaaru-via-purifico",
+   "size": "390x844",
+   "touch": true,
+   "card": "Isaaru",
+   "cardArt": "isaaru/idle.png\")",
+   "plate": "Isaaru"
+  },
+  {
+   "id": "ffx2-den-of-woe",
+   "size": "390x844",
+   "touch": true,
+   "card": "Baralai",
+   "cardArt": "baralai-shade/idle.png\")",
+   "plate": "Baralai"
+  },
+  {
+   "id": "ffx2-ixion-djose",
+   "size": "390x844",
+   "touch": true,
+   "card": "Ixion",
+   "cardArt": "x2-ixion/idle.png\")",
+   "plate": "Ixion"
+  }
+ ]
+}
