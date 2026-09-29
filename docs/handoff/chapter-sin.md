@@ -1189,3 +1189,36 @@ real keys, plus a tap on the phone. Frames are in `docs/screenshots/sin/r30-fix/
     the phone would show that edge.
   - The Gaze pill sits right, not left as in the frame.
   - Both placements are the driver's to confirm with Bailey.
+
+## CHECK 5 (independent, 2026-09-29 ~11:15 to 12:05 EDT; did not build any of it)
+
+Checked `chapter-sin` at `ab52f268` (D:/pyrefly-ch-sin; merge `d4d8f830` of origin/main `8dce5e75`). Game case: **FFX only**
+for the Sin fixes. Build: `vite build` to `D:/Tools/pyrefly-scratch/overnight-0929/check5/dist`, `vite preview` on 8710
+(stopped by PID), headless GPU Chromium, real keys (a tap on the phone in the r30 tour). Frames and JSON are in
+`D:/Tools/pyrefly-scratch/overnight-0929/check5/` (not committed).
+
+**Verdict: no blockers; C4-1, C4-5, C4-2 and the HUD lag are fixed as stated.** One new minor finding.
+
+- **Gates.** `tsc --noEmit` and `tsc -p tsconfig.e2e.json` clean apart from untracked `tests/unit/zz-*`. 118 test files
+  pass (1,357 tests): every `tests/unit/chapters/*`, the three board suites, the Sin listed-save fixture, and the
+  FFX chapter hashes. The merge contains origin/main 8dce5e75; the board reads 18 tiles, "0 of 18".
+- **C4-1, both Fins on the phone (390x844).** By keys, Left Fin and Right Fin at FAR, NEAR and NEAR-charged (six
+  frames, `tour/sheet390.jpg`): the arm, the claw and the core are on screen, the charged core shows, the party is
+  whole, no painting edge is visible. The plate reads "CORE CHARGED · GRAVIJA NEXT" for both Fins.
+- **C4-5, the XVIII clock.** 42 menus at each size: 0 px² overlap of the clock slab or the Gaze pill with any party
+  sprite, the command grid, or each other. The ring number equals `sin.turnsLeft` at the three shot menus (13, 10, 7)
+  and counts 13 down to 1 across the 39 menus at both sizes. On the phone the slab sits between the party's feet and
+  the party chips; Sin's face is clear.
+- **The HUD lag.** The 40 ms in-page sampler (about 4,000 to 8,800 samples per run, four XVII and two XVIII runs at both
+  sizes) found 0 ms of clock mismatch and 0 ms of plate mismatch; charged states were seen.
+- **C4-2.** Orders tours at both sizes (12 menus each with an Orders row): the folded row is greyed while an order
+  stands, and pressing Enter on it opens nothing disabled (the cursor skips it). Of 10 opened submenus at each size,
+  0 had two disabled rows.
+- **Chapter VIII unchanged.** Enter-only stage measurement (seed 5, 8 menus, CHECK 4's method), against CHECK 4's merged
+  build: same turns and ranges, largest difference 1 px at 1600x900 and 2 px at 390x844.
+- **Console.** 0 responses of 400 or above, 0 console errors, 0 page errors in every run.
+
+**New minor finding (phone, XVII, at NEAR and Right Fin FAR):** the Fin plate sits over the second line of the
+enemy-move banner, so its wording ("motionless...", "MOST LIKELY 67%", the SCRIPTED chip) is cut off behind the plate
+(`tour/sheet390.jpg`, frames 1, 2, 4, 5). The first line still reads. Not a blocker; the driver may raise it with Bailey
+along with the two open placements above (the Right Fin's top edge under the plate, the Gaze pill on the right).
