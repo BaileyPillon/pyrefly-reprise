@@ -1,0 +1,68 @@
+{
+  "tag": "try-confirm-yuna",
+  "config": {
+    "samples": 8,
+    "horizon": 400,
+    "extra": 4,
+    "margin": 0.04,
+    "confirm": 16,
+    "confirmGap": 2
+  },
+  "seeds": 15,
+  "first": 1,
+  "when": "2026-09-28T07:15:57.813Z",
+  "rows": [
+    {
+      "chapterId": "yunalesca",
+      "game": "ffx",
+      "driver": "v4",
+      "config": "ceiling",
+      "seeds": 15,
+      "wins": 15,
+      "winSeeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "linksCleared": 15,
+      "decisions": 2651,
+      "searched": 2467,
+      "switched": 232,
+      "switchOrigins": {
+        "ranked": 232
+      },
+      "skipped": {
+        "raise": 183,
+        "lethal-save": 1
+      },
+      "simDecisions": 12749954,
+      "missedRevive": 5,
+      "dupStrict": 0,
+      "dupSame": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 397,
+      "savable": 1,
+      "lethalMiss": 0,
+      "closed": 0,
+      "msP50": 575.5192000000097,
+      "msP95": 1096.5895000000019,
+      "msP99": 1492.6310999999987,
+      "msMax": 1699.519100000034,
+      "searchP50": 572.9555999999866,
+      "searchP95": 1093.7096000000602
+    }
+  ]
+}

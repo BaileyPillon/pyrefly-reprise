@@ -49,6 +49,11 @@ export default defineConfig(({ command, isPreview }) => {
       sourcemap: true,
       chunkSizeWarningLimit: 1200,
     },
+    // Advisor v4's search runs in a module worker (`src/app/advisorV4/worker.ts`, `type: 'module'`);
+    // ES output lets its import graph split like the page's.
+    worker: {
+      format: 'es',
+    },
     server: {
       port: 5173,
       host: '127.0.0.1',

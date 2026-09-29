@@ -48,6 +48,11 @@ function importsOf(file) {
       .replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*\*/g, '.*').replace(/(?<!\.)\*/g, '[^/]*') + '$');
     for (const f of files) if (rx.test(f.replace(/\\/g, '/'))) out.add(f);
   }
+  // new Worker(new URL('./worker.ts', import.meta.url)) — Vite's worker entry, a real edge (advisor v4).
+  for (const m of src.matchAll(/new\s+URL\(\s*['"](\.[^'"]+\.ts)['"]\s*,\s*import\.meta\.url\s*\)/g)) {
+    const abs = resolve(dirname(file), m[1]);
+    if (files.includes(abs)) out.add(abs);
+  }
   return [...out];
 }
 

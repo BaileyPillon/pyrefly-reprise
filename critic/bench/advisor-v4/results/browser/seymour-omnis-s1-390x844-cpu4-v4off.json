@@ -1,0 +1,177 @@
+{
+  "chapter": "seymour-omnis",
+  "v4": false,
+  "viewport": "390x844",
+  "phone": true,
+  "throttle": 4,
+  "throttled": {
+    "page": true,
+    "workers": 1
+  },
+  "seed": 1,
+  "decisions": 15,
+  "budget": null,
+  "opened": null,
+  "ready": null,
+  "shownSwitched": null,
+  "readyRate": null,
+  "none": null,
+  "killed": null,
+  "jobs": null,
+  "results": null,
+  "showDecisionMs": {
+    "p50": 36.3,
+    "p95": 50.9,
+    "max": 113.3,
+    "n": 15
+  },
+  "cardForMs": null,
+  "postMs": null,
+  "answerMs": null,
+  "leadMs": null,
+  "lagMs": null,
+  "workerTotalMs": {
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "workerSearchMs": {
+    "p50": null,
+    "p95": null
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.3,
+    "max": 650,
+    "n": 5704,
+    "over34": 37,
+    "over50": 24
+  },
+  "frameMsSearching": {
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "n": 0,
+    "over34": 0,
+    "over50": 0
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.3,
+    "max": 650,
+    "n": 5704,
+    "over34": 37,
+    "over50": 24
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Wakka -> -",
+      "ready": null,
+      "switched": null,
+      "ms": 113.30000001192093
+    },
+    {
+      "actor": "auron",
+      "top": "Armor Break -> Seymour Omnis",
+      "ready": null,
+      "switched": null,
+      "ms": 49.30000001192093
+    },
+    {
+      "actor": "yuna",
+      "top": "Curaga -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 48.80000001192093
+    },
+    {
+      "actor": "tidus",
+      "top": "X-Potion -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 32.09999996423721
+    },
+    {
+      "actor": "yuna",
+      "top": "X-Potion -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 50.89999997615814
+    },
+    {
+      "actor": "tidus",
+      "top": "X-Potion -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 33
+    },
+    {
+      "actor": "yuna",
+      "top": "X-Potion -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 42.80000001192093
+    },
+    {
+      "actor": "tidus",
+      "top": "X-Potion -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 28
+    },
+    {
+      "actor": "yuna",
+      "top": "Life -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 45.09999996423721
+    },
+    {
+      "actor": "yuna",
+      "top": "Life -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 36.30000001192093
+    },
+    {
+      "actor": "yuna",
+      "top": "Life -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 32.5
+    },
+    {
+      "actor": "yuna",
+      "top": "Life -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 30.099999964237213
+    },
+    {
+      "actor": "yuna",
+      "top": "Life -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 34.10000002384186
+    },
+    {
+      "actor": "yuna",
+      "top": "Life -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 31.5
+    },
+    {
+      "actor": "yuna",
+      "top": "Life -> Tidus",
+      "ready": null,
+      "switched": null,
+      "ms": 43
+    }
+  ],
+  "errors": []
+}

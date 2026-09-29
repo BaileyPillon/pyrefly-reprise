@@ -1,0 +1,114 @@
+{
+  "chapter": "seymour-flux",
+  "v4": true,
+  "viewport": "1600x900",
+  "phone": false,
+  "throttle": 1,
+  "throttled": {
+    "page": false,
+    "workers": 0
+  },
+  "seed": 2,
+  "decisions": 3,
+  "budget": "lean",
+  "opened": 3,
+  "ready": 3,
+  "shownSwitched": 1,
+  "readyRate": 1,
+  "none": {
+    "battle-over": 1
+  },
+  "killed": 0,
+  "jobs": 4,
+  "results": 3,
+  "showDecisionMs": {
+    "p50": 2.4,
+    "p95": 2.9,
+    "max": 2.9,
+    "n": 3
+  },
+  "cardForMs": {
+    "p50": 0,
+    "p95": 0.2,
+    "max": 0.2
+  },
+  "postMs": {
+    "p50": 0.3,
+    "p95": 0.4,
+    "max": 0.4
+  },
+  "answerMs": {
+    "p50": 50.4,
+    "p95": 392.6,
+    "max": 392.6
+  },
+  "leadMs": {
+    "p50": 6322.8,
+    "min": 6107.4
+  },
+  "lagMs": {
+    "p50": null,
+    "max": null,
+    "n": 0
+  },
+  "workerTotalMs": {
+    "p50": 49.8,
+    "p95": 136.8,
+    "max": 136.8
+  },
+  "workerSearchMs": {
+    "p50": 42.5,
+    "p95": 110.6
+  },
+  "frameMs": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "max": 200,
+    "n": 1431,
+    "over34": 3,
+    "over50": 3
+  },
+  "frameMsSearching": {
+    "p50": 16.7,
+    "p95": 150,
+    "p99": 150,
+    "max": 150,
+    "n": 9,
+    "over34": 1,
+    "over50": 1
+  },
+  "frameMsAll": {
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "max": 200,
+    "n": 1440,
+    "over34": 4,
+    "over50": 4
+  },
+  "cards": [
+    {
+      "actor": "tidus",
+      "top": "Slow -> Seymour Flux",
+      "ready": 1,
+      "switched": 1,
+      "ms": 2.900000035762787
+    },
+    {
+      "actor": "yuna",
+      "top": "Poison Fang -> Seymour Flux",
+      "ready": 2,
+      "switched": 1,
+      "ms": 2.399999976158142
+    },
+    {
+      "actor": "tidus",
+      "top": "Phoenix Down -> Yuna",
+      "ready": 3,
+      "switched": 1,
+      "ms": 1
+    }
+  ],
+  "errors": []
+}

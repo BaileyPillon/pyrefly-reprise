@@ -1,0 +1,80 @@
+{
+  "chapter": "seymour-omnis",
+  "viewport": "1600x900",
+  "throttle": 1,
+  "force": "on",
+  "seed": 1,
+  "menus": [
+    {
+      "n": 1,
+      "open": {
+        "rows": [
+          "Wakka -> -",
+          "Cheer -> the party"
+        ],
+        "text": "Tidus1WakkaSwitchin Switch2Cheer→the partySpecialin Special",
+        "host": {
+          "opened": 1,
+          "ready": 1,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-omnis-1600x900-menu1.png"
+    },
+    {
+      "n": 2,
+      "open": {
+        "rows": [
+          "Armor Break -> Seymour Omnis"
+        ],
+        "text": "AuronArmor Break→Seymour OmnisSpecialin Special",
+        "host": {
+          "opened": 2,
+          "ready": 2,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-omnis-1600x900-menu2.png"
+    },
+    {
+      "n": 3,
+      "open": {
+        "rows": [
+          "Curaga -> Tidus"
+        ],
+        "text": "Next best moveYunaCuraga→TidusWhite MagicGuide’s pickin White Magic+4,26920 MPalways hitsPuts 4269 HP back.",
+        "host": {
+          "opened": 3,
+          "ready": 3,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-omnis-1600x900-menu3.png"
+    },
+    {
+      "n": 4,
+      "open": {
+        "rows": [
+          "X-Potion -> Tidus"
+        ],
+        "text": "Next best moveTidusX-Potion→TidusItemsGuide’s pickin Items+4,269",
+        "host": {
+          "opened": 4,
+          "ready": 4,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-omnis-1600x900-menu4.png"
+    }
+  ],
+  "allStable": true,
+  "errors": []
+}

@@ -17,7 +17,7 @@
  */
 
 export { FFXEngine, createFFXEngine, apForLevel } from './engine.ts';
-export type { FFXEngineOptions } from './engine.ts';
+export type { FFXEngineOptions, FFXEngineSnapshot } from './engine.ts';
 
 export {
   FFXContentRegistry,

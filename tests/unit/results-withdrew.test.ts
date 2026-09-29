@@ -51,7 +51,8 @@ describe('the withdrawal card (PR-0215, option B)', () => {
   });
 
   it('the line is the FFX engine own words, character for character', () => {
-    const engine = readFileSync('src/battle/ffx/engine.ts', 'utf8');
+    // The stalemate check moved with checkEnd into engine-end.ts when advisor v4 split the facade (514b7e0b).
+    const engine = readFileSync('src/battle/ffx/engine-end.ts', 'utf8');
     expect(engine).toContain(`text: '${STALEMATE_LINE}'`);
   });
 });

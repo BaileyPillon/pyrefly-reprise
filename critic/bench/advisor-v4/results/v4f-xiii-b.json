@@ -1,0 +1,57 @@
+{
+  "tag": "v4f-xiii-b",
+  "config": {
+    "samples": 8,
+    "horizon": 400,
+    "extra": 4,
+    "margin": 0.04,
+    "confirm": 16,
+    "confirmGap": 2
+  },
+  "seeds": 10,
+  "first": 11,
+  "when": "2026-09-28T09:06:01.849Z",
+  "rows": [
+    {
+      "chapterId": "ffx2-trema",
+      "game": "ffx2",
+      "driver": "v4",
+      "config": "ceiling",
+      "seeds": 10,
+      "wins": 3,
+      "winSeeds": [
+        13,
+        14,
+        15
+      ],
+      "linksCleared": 6,
+      "decisions": 1657,
+      "searched": 1491,
+      "switched": 240,
+      "switchOrigins": {
+        "ranked": 240
+      },
+      "skipped": {
+        "one-candidate": 144,
+        "raise": 16,
+        "lethal-save": 6
+      },
+      "simDecisions": 9416850,
+      "missedRevive": 0,
+      "dupStrict": 0,
+      "dupSame": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 6,
+      "savable": 5,
+      "lethalMiss": 1,
+      "closed": 1,
+      "msP50": 772.3868999999249,
+      "msP95": 2934.818499999994,
+      "msP99": 3470.2330000000075,
+      "msMax": 3777.692100000102,
+      "searchP50": 766.8348999998998,
+      "searchP95": 2930.9919999999693
+    }
+  ]
+}

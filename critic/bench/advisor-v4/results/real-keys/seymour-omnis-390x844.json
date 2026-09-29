@@ -1,0 +1,80 @@
+{
+  "chapter": "seymour-omnis",
+  "viewport": "390x844",
+  "throttle": 4,
+  "force": "on",
+  "seed": 1,
+  "menus": [
+    {
+      "n": 1,
+      "open": {
+        "rows": [
+          "Wakka -> -",
+          "Cheer -> the party"
+        ],
+        "text": "Next best moveTidus1WakkaSwitchGuide’s pickin Switchno MPalways hitsSwaps a bench member into the slot; they take this turnThe chapter's line hands this free turn to Wakka.2Cheer→the partySpecialin Specialno MPalways hits+ CheerIt puts Cheer on the party; next, Mortiphasm Spells hits for about 4,400 in all.",
+        "host": {
+          "opened": 1,
+          "ready": 1,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-omnis-390x844-cpu4x-menu1.png"
+    },
+    {
+      "n": 2,
+      "open": {
+        "rows": [
+          "Armor Break -> Seymour Omnis"
+        ],
+        "text": "Next best moveAuronArmor Break→Seymour OmnisSpecialGuide’s pickin Special353–39912 MP98% to hit1% crit+ Armor BreakPhysical damageIt puts Armor Break on Seymour Omnis, and it deals 377 damage.",
+        "host": {
+          "opened": 2,
+          "ready": 2,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-omnis-390x844-cpu4x-menu2.png"
+    },
+    {
+      "n": 3,
+      "open": {
+        "rows": [
+          "Curaga -> Tidus"
+        ],
+        "text": "Next best moveYunaCuraga→TidusWhite MagicGuide’s pickin White Magic+4,26920 MPalways hitsRestores HPPuts 4269 HP back.",
+        "host": {
+          "opened": 3,
+          "ready": 3,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-omnis-390x844-cpu4x-menu3.png"
+    },
+    {
+      "n": 4,
+      "open": {
+        "rows": [
+          "X-Potion -> Tidus"
+        ],
+        "text": "Next best moveTidusX-Potion→TidusItemsGuide’s pickin Items+4,269no MPalways hitsFully restores HP to one ally.Puts 4269 HP back.",
+        "host": {
+          "opened": 4,
+          "ready": 4,
+          "switched": 0
+        }
+      },
+      "stable": true,
+      "v4Ready": true,
+      "shot": "docs\\screenshots\\advisor-v4\\seymour-omnis-390x844-cpu4x-menu4.png"
+    }
+  ],
+  "allStable": true,
+  "errors": []
+}

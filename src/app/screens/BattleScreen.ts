@@ -46,6 +46,7 @@ import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transit
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
+import { attachAdvisorV4 } from '../advisorV4/wiring.ts';
 import { PauseScreen } from './PauseScreen.ts';
 import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleScreenStageHook.ts';
@@ -261,6 +262,8 @@ export class BattleScreen extends Screen {
       // lives in engine runtime that `BattleState` does not carry. Both sides
       // are probed rather than typed — see `attachEnemyIntent`.
       attachEnemyIntent(this.hud, this.engine);
+      // Advisor v4 (FFX only, behind `ADVISOR_V4_FFX`): the look-ahead searches in a worker while turns animate.
+      attachAdvisorV4(this.hud, this.engine, chapter.game);
     }
 
     // A real HUD draws its own numerals and banner (`onEvent`), so the presenter drives these only

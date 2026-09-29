@@ -1,0 +1,62 @@
+{
+  "tag": "naive-v",
+  "config": {
+    "samples": 2,
+    "horizon": 6,
+    "extra": 7,
+    "margin": 0,
+    "primary": true,
+    "fixedSeeds": true,
+    "linkOnly": true,
+    "rails": {
+      "keepRaise": false
+    }
+  },
+  "seeds": 10,
+  "first": 1,
+  "when": "2026-09-28T07:27:25.096Z",
+  "rows": [
+    {
+      "chapterId": "ffx2-vegnagun-shuyin",
+      "game": "ffx2",
+      "driver": "v4",
+      "config": "naive",
+      "seeds": 10,
+      "wins": 5,
+      "winSeeds": [
+        3,
+        5,
+        7,
+        8,
+        10
+      ],
+      "linksCleared": 35,
+      "decisions": 1518,
+      "searched": 1424,
+      "switched": 825,
+      "switchOrigins": {
+        "ranked": 815,
+        "line": 10
+      },
+      "skipped": {
+        "lethal-save": 94
+      },
+      "simDecisions": 182690,
+      "missedRevive": 149,
+      "dupStrict": 18,
+      "dupSame": 4,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 123,
+      "savable": 121,
+      "lethalMiss": 26,
+      "closed": 23,
+      "msP50": 41.27119999999559,
+      "msP95": 62.75109999999404,
+      "msP99": 75.13900000000285,
+      "msMax": 90.02129999999988,
+      "searchP50": 33.955299999999625,
+      "searchP95": 49.2271000000037
+    }
+  ]
+}

@@ -67,6 +67,11 @@ export interface DecisionContext {
   decision: Input;
   /** What the live HUD hands the advisor for this game. */
   advisorOptions: AdvisorOptions;
+  /**
+   * The chain from here (advisor v4's look-ahead plays through it): this link's setup and every
+   * later link's group, in order. Read only.
+   */
+  chain?: { setup: BattleSetup; next: readonly EnemyGroupDef[] };
 }
 
 /** Picks a command for one decision (or `null` for the fallback). */
@@ -155,6 +160,12 @@ export async function runChapter(chapter: Chapter, seed: number, driver: Driver)
     chapterId: chapter.id, seed, outcome: 'unresolved', linksCleared: 0, decisions: 0, closed: 0,
     refused: 0, fallbacks: 0, minutes: 0, finalLogLength: 0, finalLogDigest: '',
   };
+  // The whole chain, resolved once, so a look-ahead can play past the end of this link.
+  const groups: EnemyGroupDef[] = [];
+  for (let g: EnemyGroupDef | null = group; g?.nextGroupId && groups.length < MAX_LINKS; ) {
+    g = (await findEnemyGroup(g.nextGroupId)) ?? null;
+    if (g) groups.push(g);
+  }
   let link = 1;
   let streakActor = '';
   let streak = 0;
@@ -185,6 +196,7 @@ export async function runChapter(chapter: Chapter, seed: number, driver: Driver)
     out.decisions += 1;
     const ctx: DecisionContext = {
       chapterId: chapter.id, game, seed, link, index: out.decisions, engine, state: engine.state(), decision: d, advisorOptions,
+      chain: { setup, next: groups.slice(link - 1) },
     };
     // The card is read as the menu opens, like the live HUD.
     let picked = streak >= REFUSAL_STREAK && d.actorId === streakActor ? null : driver(ctx);
