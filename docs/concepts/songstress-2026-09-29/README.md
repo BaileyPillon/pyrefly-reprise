@@ -70,6 +70,55 @@ baseline at 1.0 / 1.15 / 1.3 ([scale-check-rikku.jpg](scale-check-rikku.jpg),
 `measure.py`. The poses were painted on skeletons at 0.8 of an idle, so their bodies stay about 0.85
 to 0.9 of the idle's height at head match; that is the same trade the D-179 and D-194 installs made.
 
+## Install: NOT DONE (the public/art gate never opened)
+
+`public/art` is shared by every worktree through junctions and release 29 was being built from it,
+so nothing may be written there until `D:/Tools/pyrefly-scratch/overnight-0929/rel29-deployed.done`
+exists. It was checked every 5 minutes from 02:25 to 05:26 EDT on 2026-09-29 and never appeared.
+The 14 files are staged (byte-identical PNGs + finished sidecars) in
+`D:/Tools/pyrefly-scratch/overnight-0929/songstress/install-stage/characters/`, and a rehearsal
+with those files served as an override over a production build (nothing in public/art) already
+showed every slot in Chapters XIII and VI with no mannequin and no 404 of ours (below).
+
+**Exact steps, once the gate file exists** (from `D:/pyrefly-aeon-hp`, branch `songstress-0929`):
+
+1. `(Get-PSDrive D).Free` above 3 GB; `Test-Path D:/Tools/pyrefly-scratch/overnight-0929/rel29-deployed.done` is True.
+2. `node docs/concepts/songstress-2026-09-29/install.mjs apply`: refuses if the gate is closed or
+   any target exists; copies the 14 PNGs and 14 sidecars into NEW folders
+   `public/art/characters/rikku-songstress/` and `paine-songstress/`, and backs every file up to
+   `D:/Tools/pyrefly-art-backup/approved/2026-09-29-songstress/installed/` (+ `replaced/NOTE.txt`,
+   `hashes.json`). Never overwrites, never deletes.
+3. `node tools/gen/manifest.mjs` (the `art:manifest` script; writes `public/art/manifest.json`).
+4. `node docs/concepts/songstress-2026-09-29/install.mjs lock`: adds the set
+   `driver:2026-09-29-songstress (D-281, delegated by Bailey)` to `docs/target/approved-hashes.json`
+   (words "Your pick (Recommended)", the file's own one-space format and line endings).
+5. `node D:/Tools/pyrefly-lora/tools/verify-approved.mjs` with `ROOT=D:/pyrefly-aeon-hp`: 0 mismatched, 0 missing.
+6. Copy `docs/concepts/songstress-2026-09-29/pose-install-songstress-0929.test.ts`
+   to `tests/unit/engine/` (it pins the lock, the slots and the sidecars; it is parked here because
+   it fails until step 4), then `npx tsc --noEmit` and
+   `npx vitest run tests/unit/engine/pose-install-songstress-0929.test.ts tests/unit/engine/dressphere-pose-fallbacks.test.ts tests/unit/engine/pose-install-0926.test.ts tests/unit/art-manifest-loader.test.ts`.
+7. Proof on a production build by real keys: `npx vite build --outDir D:/Tools/pyrefly-scratch/overnight-0929/songstress/dist --emptyOutDir`;
+   serve it with `node D:/Tools/pyrefly-scratch/overnight-0929/songstress/serve.mjs 8407 D:/Tools/pyrefly-scratch/overnight-0929/songstress/dist`
+   (no override folder); then, each at 1600 900 and at 390 844, with `PYREFLY_BROWSER=gpu HEAL=1 HEAL_AT=0.9`:
+   `PLAN=xiii-main ... proof.mjs http://127.0.0.1:8407/pyrefly-reprise/ ffx2-trema <W> <H>`,
+   `PLAN=xiii-rikku-ko`, `PLAN=xiii-paine-ko` (both ffx2-trema), and `PLAN=vi-main` on ffx2-leblanc.
+   Frames land in `docs/screenshots/songstress-0929/` (`git add --sparse`). Stop the server by PID.
+8. Update D-281's `delivery` to `implemented` in `docs/target/decisions.json`, commit only those
+   paths on `songstress-0929` ("FFX-2 only"), and never push (the driver pushes).
+
+## Rehearsal (override server, nothing in public/art)
+
+`proof.mjs` against the staged files served over the options build, 1600x900, real keys from the
+title: **XIII** (`xiii-main`): both girls spherechanged to Songstress by the Change menu; Paine's
+Item (Mega-Potion) and Rikku's Dance (cast) and Item showed their own paintings at the sidecar
+scale; Rikku's attack and both victories were STAGED (`actor.setPose`, labelled: Songstress has no
+Attack command, and Paragon's scripted Big Bang wipes the party at about two minutes, before any
+victory). Paine's Dance landed in an earlier run (ratio 1.1 = sidecar). **VI** (`vi-main`,
+EARLY_VICTORY, enemy HP set to 1, labelled): Paine by the Change menu, Rikku re-dressed with
+`stage.setArt` (labelled: her Bum Rush grid has no Songstress node in VI), and the real victory
+moment showed both girls' victory paintings. The only 404s were `yuna-dark-knight/hurt.png` and
+`ko.png`, which predate this work. Frames: `D:/Tools/pyrefly-scratch/overnight-0929/songstress/pre-proof*/`.
+
 ## Files
 
 - Candidates, each with a `.prov.json`: `D:/Tools/pyrefly-art-backup/candidates/2026-09-29-songstress/`

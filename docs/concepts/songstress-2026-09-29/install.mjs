@@ -4,6 +4,7 @@
  *
  *   node docs/concepts/songstress-2026-09-29/install.mjs stage <dir>   # build <dir>/characters/<id>/<slot>.png|.json
  *   node docs/concepts/songstress-2026-09-29/install.mjs apply          # install into public/art (NEW folders only)
+ *   node docs/concepts/songstress-2026-09-29/install.mjs lock           # add the set to docs/target/approved-hashes.json
  *
  * stage: copies each pick byte for byte from the candidates folder and writes its sidecar (size and
  * baselineY from the cut-out, the scale and facing from picks.json, the generation record from the
@@ -79,7 +80,31 @@ function apply(dir) {
   console.log(JSON.stringify(set, null, 1));
 }
 
+/** Add the installed files' hashes to docs/target/approved-hashes.json as the driver's delegated set. */
+function lock() {
+  const file = join(HERE, '..', '..', 'target', 'approved-hashes.json');
+  const raw = JSON.parse(readFileSync(file, 'utf8'));
+  const name = 'driver:2026-09-29-songstress (D-281, delegated by Bailey)';
+  if (raw.sets[name]) throw new Error(`${name} is already locked`);
+  const set = {
+    words: 'Your pick (Recommended)',
+    decision: 'D-281',
+    note: `DRIVER PICK, delegated by Bailey; not Bailey's own approval. Bailey, 2026-09-28 ~22:45 EDT, chose "Your pick (Recommended)" for the driver's question "Rikku's and Paine's Songstress paintings (they show as grey mannequins right now): may I go with my pick tonight?" (D-281, amending D-275). Installed 2026-09-29: rikku-songstress (option A Showtime stance + cast, item, attack, hurt, ko, victory, dance) and paine-songstress (option A Cool stance + cast, item, ko, victory, dance; attack and hurt stopped after two tries and stay on the idle). Byte for byte from D:/Tools/pyrefly-art-backup/candidates/2026-09-29-songstress/ (docs/concepts/songstress-2026-09-29/picks.json). New folders only; nothing replaced. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-29-songstress/. Options kept for a swap: docs/concepts/songstress-2026-09-29/options.html. Game: FFX-2 only.`,
+  };
+  for (const id of ['rikku-songstress', 'paine-songstress']) {
+    for (const f of readdirSync(join(ART, id)).filter((x) => x.endsWith('.png')).sort()) {
+      set[`public/art/characters/${id}/${f}`] = { sha256: sha(join(ART, id, f)), mtime: new Date().toISOString(), approved: '2026-09-29' };
+    }
+  }
+  raw.sets[name] = set;
+  // the file's own format: one-space indent, and the checkout's line endings
+  const eol = readFileSync(file, 'utf8').includes('\r\n') ? '\r\n' : '\n';
+  writeFileSync(file, (JSON.stringify(raw, null, 1) + '\n').replace(/\n/g, eol));
+  console.log('locked', Object.keys(set).filter((k) => k.startsWith('public/')).length, 'files in', name);
+}
+
 const [cmd, arg] = process.argv.slice(2);
 if (cmd === 'stage') stage(arg || STAGE_DEFAULT);
 else if (cmd === 'apply') apply(arg || STAGE_DEFAULT);
-else console.log('usage: stage [dir] | apply [dir]');
+else if (cmd === 'lock') lock();
+else console.log('usage: stage [dir] | apply [dir] | lock');
