@@ -13,6 +13,51 @@ clock ends in a scripted Game Over. None of it exists in FFX-2 (`research/ffx-si
 Everything below the "Package S" section is the link-4 record of 2026-09-27; read `sin` there as
 `sin-face`, and "Chapter XVI" as Chapter XVIII.
 
+## Art installed and proved on a production build (2026-09-29 ~07:45 to 08:50 EDT; FFX only)
+
+**What decided it:** D-279 (the driver picks Sin's paintings under Bailey's delegation). Every file is **the
+driver's pick, not Bailey's approval**, locked as `driver:2026-09-29-sin (D-279, delegated by Bailey)`; Bailey can
+swap any of them. **Game case: FFX only** (rule 14): nothing installed is read by an FFX-2 chapter.
+
+**Installed** after the release-29 gate file (07:42 EDT), by `docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md`
+exactly: 62 files (32 images, 30 sidecars) into `D:/Final Fantasy/public/art/` (gitignored, never in git) and the
+backup `D:/Tools/pyrefly-art-backup/approved/2026-09-29-sin/`; manifest regenerated; `check.mjs` 32/32; 32 hashes
+locked in `docs/target/approved-hashes.json`; `verify-approved` 0 mismatched / 0 missing against this worktree and
+against main. `chapter-meta.test.ts` now passes (the 2 by-design failures of package L were the missing pause plates).
+
+**Proved on a production build** (`vite build` to `D:/Tools/pyrefly-scratch/overnight-0929/sin-list/dist`, `vite
+preview` on 8620, headless Chromium, `PYREFLY_BROWSER=gpu`; server stopped by PID afterwards):
+
+- `tests/e2e/ffx-sin.spec.ts` (scratch config `.sinI-pw-tmp.config.ts`): **4/4**, 5.5 min. Keys at 1600x900 and taps
+  at 390x844: the board's XVII and XVIII cards with their plates, prep, the scene, the Trigger Command by real input,
+  a loss and RETRY back to the Left Fin, CHAPTER SELECT; XVIII won on the clock (seed 3), results, Breaking Through,
+  "1 of 17". Frames `01`..`13` in `docs/screenshots/sin/listed/` re-shot on the production build.
+- The tour `tools/zz-sinI-tour.tmp.mjs` (agent scratch): **real keys from the title** at 1600x900 and 390x844
+  (Enter to the board, ArrowRight to the card, Enter to prep and start, Enter held through the scene), then the debug
+  API's line watched at fast speed and slowed for each painted state. XVII seed 8 `intended`: the Left Fin at FAR,
+  NEAR and NEAR charged; the Right Fin at FAR, NEAR and NEAR charged; Genais out, in its shell with the Core
+  charging, and the Core alone charging and at rest; the run ends in the engine's no-progress `escape` (known: the
+  `intended` line wins no seed of XVII). XVIII seed 1 `defend`: the head at FAR and NEAR with the mouth at stages 0,
+  1, 2, 3 and 4 as the clock runs 13 to 1, the countdown ring and "our estimate" line, Giga-Graviton's loss, and
+  RETRY by Enter back to a whole Sin at 13 turns. Frames `<w>x<h>-20-*` (XVII) and `-30-*` (XVIII).
+- **Every Sin file answered 200** (all five subjects' states and sidecars, `sin-fahrenheit-flight` and
+  `sin-fahrenheit-bevelle`, both pause plates, the five chips); **no HTTP status >= 400, 0 console errors, 0 page
+  errors** in all four tours.
+
+**Seen in the frames (an agent's look; not fixed here, for the next pass):**
+
+- **Link III has no plate of its own**: Genais and the Core float over the flight plate's cloud sea behind the deck
+  rail (plan Q6's per-link seam is not built; `sin-back.png` is installed but nothing reads it yet). Both sprites
+  read very dark against the sunset (Genais out of its shell is almost a silhouette; the Core at rest likewise).
+- **Phone (390x844), XVIII**: the countdown panel sits across the middle of the stage and covers the party.
+- XVIII's first frame after Sin's first turn still shows "13 turns left" while the flag already says 12 (the ring
+  catches up on the next update).
+- At the Left Fin's NEAR charge the plate shows only "NEAR" while the Right Fin's shows "Core charged · Gravija on
+  its next turn"; it may be a frame of timing, not checked.
+- The spec's `01-title` frames are taken during the title's fade-in (dark); timing of the spec, not the build.
+- `docs/concepts/.../INSTALL.md` "Faults left" still hold (the Fins at FAR larger than Evrae's streak, the head's claw
+  gripping air over `bk-a-8`, Genais's rock crumbs).
+
 ## Package L, the listing (2026-09-29 ~06:30 to 08:30 EDT; FFX only, the listing itself shared plumbing)
 
 **What decided it:** D-279 (Bailey, 2026-09-28 ~22:45 EDT, "Your picks (Recommended)"): the driver picks Sin's

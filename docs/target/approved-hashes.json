@@ -1260,6 +1260,202 @@
     "mtime": "2026-09-28T02:03:32.620Z",
     "approved": "2026-09-28"
    }
+  },
+  "driver:2026-09-29-sin (D-279, delegated by Bailey)": {
+   "words": "Your picks (Recommended)",
+   "note": "Bailey, 2026-09-29 (asleep; the driver's options round): \"Your picks (Recommended)\" to the Sin paintings, countdown display and music (D-279: the driver picks tonight; both Sin chapters listed by morning), with \"full speed ahead, godspeed. ... I will go with all your recommendations.\" These are the DRIVER'S picks under that delegation, NOT Bailey's approval of these exact files: head C repaired (five mouth stages), Fin A left and right (NEAR, FAR, charged), Genais A (out, shell), Core A (rest, gathering), the links I-II, link III and link IV (bk-a-8) plates, the two pause hero plates and the five turn-order portraits. Locked so no agent replaces them silently; Bailey's own verdict on each still decides (rule 9). FFX only. docs/concepts/chapters/sin-2026-09-29/install/INSTALL.md",
+   "public/art/backdrops/sin-back.png": {
+    "sha256": "1a5eee77f0c654d15e23ace675e2d7f5f532091e5d5a691b8946eeb4ea40cd4d",
+    "mtime": "2026-09-29T05:24:44.471522+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/backdrops/sin-fahrenheit-bevelle.png": {
+    "sha256": "f995959a3be58b4fe994f87968a6adefbfb4e9de41ef9179d8bd0e6cf4081a10",
+    "mtime": "2026-09-29T05:24:48.101766+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/backdrops/sin-fahrenheit-flight.png": {
+    "sha256": "f6d202253df2c5f52a4ef7baadb2cdb19cf303c6ce9ae2ec3d59d907f8cc4b15",
+    "mtime": "2026-09-29T05:24:41.143003+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/overdrive-sin/idle.png": {
+    "sha256": "703748d558232839bc680e4ce3b2ff30c4ee42903c9e3dae16a26ca9be40ec92",
+    "mtime": "2026-09-29T05:28:15.630843+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/overdrive-sin/stage-0.png": {
+    "sha256": "703748d558232839bc680e4ce3b2ff30c4ee42903c9e3dae16a26ca9be40ec92",
+    "mtime": "2026-09-29T05:28:13.237463+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/overdrive-sin/stage-1.png": {
+    "sha256": "ea9c8f84e691791b3aaa04be01e471837a49c7dca8d8b7de2221e588b5af819e",
+    "mtime": "2026-09-29T05:28:13.699694+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/overdrive-sin/stage-2.png": {
+    "sha256": "e6fc458de2e503b668e1275b40d69dfb99f5b89379fe813aaaf4e68bb740e11a",
+    "mtime": "2026-09-29T05:28:14.180795+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/overdrive-sin/stage-3.png": {
+    "sha256": "6b96b323b1118fbb47177938416ce09454da0b51d8b45b08d41e5c7648c9f1a3",
+    "mtime": "2026-09-29T05:28:14.672580+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/overdrive-sin/stage-4.png": {
+    "sha256": "757b98ff68d281c4fa7ab4741f511ead37024a93f1a023d01f7ac5206528b96a",
+    "mtime": "2026-09-29T05:28:15.189775+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-core/charge.png": {
+    "sha256": "cf392aa9c1660c250f7953bb3b75c5033cd8e528fa33f93f127a8a06f2d5fa06",
+    "mtime": "2026-09-29T05:28:07.138080+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-core/idle.png": {
+    "sha256": "d30203ab4225bdf4ecf21915ee5b0803b4853109066591de1a2f4e9281c98685",
+    "mtime": "2026-09-29T05:28:06.997491+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-left-fin/charge-far.png": {
+    "sha256": "f8e95137fbc939b00358a026d66114456eefddc8e3a59538a5d8260b425a672c",
+    "mtime": "2026-09-29T05:28:00.101399+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-left-fin/charge-near.png": {
+    "sha256": "218dabfb5a27c335c0b3e269d113bea6549204a922264489d1d6493a00a4a118",
+    "mtime": "2026-09-29T05:27:57.653858+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-left-fin/idle-far.png": {
+    "sha256": "85f3ad761cb2a96060bb3af8d8fbb7c9ffe17449e093f3c6144963130c35fc1b",
+    "mtime": "2026-09-29T05:27:59.776172+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-left-fin/idle-near.png": {
+    "sha256": "80a032b030279640264b1ca8bbf8f694522fe0e9d632fb2555b30addddb9c321",
+    "mtime": "2026-09-29T05:27:57.182364+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-left-fin/idle.png": {
+    "sha256": "80a032b030279640264b1ca8bbf8f694522fe0e9d632fb2555b30addddb9c321",
+    "mtime": "2026-09-29T05:27:58.694391+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-right-fin/charge-far.png": {
+    "sha256": "249cba38feed26c543baa584f385dbcc0af8e74eb2f0a384a437cad99fb3f144",
+    "mtime": "2026-09-29T05:28:04.979972+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-right-fin/charge-near.png": {
+    "sha256": "59bd97b69dccf86e381f9df8653da4010cb3158b82ddd77284196d5096faaaa1",
+    "mtime": "2026-09-29T05:28:03.114925+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-right-fin/idle-far.png": {
+    "sha256": "a84fa809d25329882ff5225cac50cc7ba4b9b0249762a5e8a8b1cedb41dd132a",
+    "mtime": "2026-09-29T05:28:04.723017+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-right-fin/idle-near.png": {
+    "sha256": "09d3cfe309c7ca8304724b259161d8ec7801f374e3619d0830cf8c692f01ba89",
+    "mtime": "2026-09-29T05:28:02.723528+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sin-right-fin/idle.png": {
+    "sha256": "09d3cfe309c7ca8304724b259161d8ec7801f374e3619d0830cf8c692f01ba89",
+    "mtime": "2026-09-29T05:28:04.032431+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sinspawn-genais/idle.png": {
+    "sha256": "addcbd7da2e498a562c92c518b7a61f822c57df93e3524e1cda8be15a8425512",
+    "mtime": "2026-09-29T05:28:05.528678+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/characters/sinspawn-genais/shell.png": {
+    "sha256": "d498ba5139875939c3af49270bb48fefa41c1a6bf6ebce1f7dfaa58c8e20e2c2",
+    "mtime": "2026-09-29T05:28:05.891869+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/pause/ch17-sin-fins-core.2x.webp": {
+    "sha256": "fb2d3657fcd3e2b5fb7720611b24bd483ff92944637069d21a7e9220e139216b",
+    "mtime": "2026-09-29T05:24:50.175881+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/pause/ch17-sin-fins-core.png": {
+    "sha256": "f1b45b054d3cbdeb717d149601a91a7d37c26638862183daebfdd70f71f9f160",
+    "mtime": "2026-09-29T05:24:49.472448+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/pause/ch18-sin-face.2x.webp": {
+    "sha256": "4a14fcd4c54d6cb5470290a87b555f7b843acc7563c98b9f4b6187b2e698f491",
+    "mtime": "2026-09-29T05:24:51.645176+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/pause/ch18-sin-face.png": {
+    "sha256": "abad0bf82d1076424dacfde1c54fe781169da821216de3cb894cbea70c720216",
+    "mtime": "2026-09-29T05:24:50.766216+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/portraits/left-fin.png": {
+    "sha256": "0b25940f02a4f1f030f8727aa95cff6cec39886c6c1f0d2dd1f2a85122aab288",
+    "mtime": "2026-09-29T05:28:16.720737+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/portraits/overdrive-sin.png": {
+    "sha256": "3d96764726121b8a3a3a2ea90d4ff8d44ca236dc944af23e778f890a6e490e16",
+    "mtime": "2026-09-29T05:28:18.972335+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/portraits/right-fin.png": {
+    "sha256": "6baa501b51a9c4dc3136d3a134f883ddb5c3ad740c08753c2c7a499b048528a4",
+    "mtime": "2026-09-29T05:28:17.464593+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/portraits/sin-core.png": {
+    "sha256": "375429ddd91bfd049666fcaa650166e2d9233de460ebcbae46903be5e05a0c79",
+    "mtime": "2026-09-29T05:28:18.387987+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   },
+   "public/art/portraits/sinspawn-genais.png": {
+    "sha256": "fc52cadaf776967ae02aac54b53bf94cfb55c5b793d5ed537afc6d01849293ed",
+    "mtime": "2026-09-29T05:28:17.966636+00:00",
+    "approved": "2026-09-29",
+    "by": "driver (D-279, delegated)"
+   }
   }
  }
 }
