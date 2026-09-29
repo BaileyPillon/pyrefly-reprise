@@ -103,6 +103,14 @@ export const INSTRUMENTS: Record<string, Voice> = {
   'piano-felt': piano,
   horn: brass,
   'cymbal-swell': crash,
+  // Added 2026-09-29 for Chapter VII's `scene-macalania-temple` (FFX only as a cue;
+  // both games as plumbing). `glockenspiel` and `chimes` take the voice
+  // RUNTIME_STAND_INS already uses for them; `alto-flute` and `soprano-distant`
+  // are not in that list and fall back to the flute and the choir.
+  glockenspiel: celesta,
+  chimes: bell,
+  'alto-flute': flute,
+  'soprano-distant': choir,
 };
 
 export const INSTRUMENT_NOTES: Record<string, string> = {
@@ -155,6 +163,10 @@ export const INSTRUMENT_NOTES: Record<string, string> = {
   'piano-felt': 'Runtime stand-in: the piano voice (the sampled felt piano plays offline).',
   horn: 'Runtime stand-in: the brass section (the sampled horn plays offline).',
   'cymbal-swell': 'Runtime stand-in: the crash swell (the sampled suspended cymbal plays offline).',
+  glockenspiel: 'Runtime stand-in: the celesta voice (the sampled glockenspiel plays offline).',
+  chimes: 'Runtime stand-in: the tubular bell (the sampled chimes play offline).',
+  'alto-flute': 'Runtime stand-in: the flute voice (the sampled alto flute plays offline).',
+  'soprano-distant': 'Runtime stand-in: the choir voice (the sampled distant soprano plays offline).',
 };
 
 export function instrumentNames(): string[] {

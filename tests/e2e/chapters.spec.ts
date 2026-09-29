@@ -20,7 +20,7 @@ const CHAPTERS: Array<{ id: ChapterId; title: string }> = [
   { id: 'ffx2-bahamut', title: 'Bahamut' },
   { id: 'ffx2-vegnagun-shuyin', title: 'Vegnagun' },
   { id: 'ffx2-leblanc', title: 'Leblanc' },
-  // Registered but LOCKED on chapter select; `gotoChapter` reaches them anyway.
+  // Both listed on chapter select (Macalania unlocked 2026-09-29, D-278); `gotoChapter` reaches both.
   { id: 'seymour-anima-macalania', title: 'Seymour and Anima' },
   { id: 'evrae-airship', title: 'Evrae' },
 ];

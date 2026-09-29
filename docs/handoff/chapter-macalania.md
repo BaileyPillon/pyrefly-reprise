@@ -67,6 +67,45 @@ The pause plate and the scene cue do not block the unlock technically: the stand
   168/200 -> 189/200, advisor 161 -> 192 (`docs/plans/macalania-bench.md`). Player side only.
 - The 200-seed bench (`tests/unit/chapters/macalania-bench.test.ts`) and its write-up.
 
+### Unlocked, 2026-09-29 (branch `ch7-unlock`, FFX only)
+
+**The last pick.** D-278 (Bailey, 2026-09-28 ~22:45 EDT: "ok well when you come back with r1, r2,
+and r3, i'll go with your pick for chapter VII, godspeed."): the driver picked sketch A "The Frozen
+Temple" in remaster R1 "focus", from measurements and the sketch briefs, **not by ear** (rule 13);
+Bailey can swap it. D-190 is superseded.
+
+**What changed.** `public/audio/music/scene-macalania-temple.mp3` (the lossless Direction B master
+of sketch A through `tools/audio/remaster-ship.py`, which runs `tools/audio/remaster.py` unchanged
+and encodes at the game's `-q:a 5`), its manifest entry (loop beat 12 to 56 = samples 567000 to
+2646000, a 3 s run-on copied from the loop head), the track `src/audio/tracks/scene-macalania-temple.ts`
+(the sketch's score, loop moved from 0 to beat 12 so the empty room is the intro), `MUSIC_KEYS` /
+`COMPOSED` / `TRACK_NOTES`, four runtime instrument stand-ins, THEMES.md (cue map row 26, chapter
+cue map row VII), CREDITS.md, CONTRACT-CHANGES.md, `MACALANIA_SCENE_CUE` =
+`MACALANIA_SCENE_CUE_PLANNED`, `MACALANIA_OPEN_PICKS` empty, and the lock line deleted.
+Measurements: `docs/audio/scene-macalania-temple-2026-09-29.json` (-15.9 LUFS, -1.4 dBTP, L/R
+correlation 0.74 against the original's 0.08, mono-sum loss -0.6 dB against -2.7; the wrap's
+last 0.2 s correlate 0.996 with the audio before loopStart, the run-on 0.998 with the loop head;
+`qa.mjs`: seam ok, flux 1.0x).
+
+**Checks after the unlock** (production build, `vite preview` on :8300, headless Chromium
+`PYREFLY_BROWSER=gpu`, real keys from the title; harness `.ch7-unlock-proof-tmp.mjs`, not
+committed; server stopped by PID). Same result at 1600x900 and 390x844, 0 console errors, 0 HTTP
+errors; results in `docs/screenshots/ch7-unlock/proof-*.json`:
+
+| Check | Result |
+|---|---|
+| Chapter select: VII is a playable card, no COMING card, strip reads "of 16" | pass |
+| Arrows: I > II > III > **VII** | pass |
+| Enter on VII opens prep; Esc goes back to chapter select with VII still selected; Enter opens prep again | pass |
+| Prep keeps `chapter-select` playing (the shared flow: the scene cue starts with the scene) and fetches no stand-in | pass |
+| Network: `scene-macalania-temple.mp3` fetched (200) as the pre-battle scene starts; `scene-gagazet.mp3` never requested | pass |
+| The pre-battle scene plays `scene-macalania-temple`; the battle `boss-seymour-macalania` | pass |
+| The fight reaches a player turn (Rikku's menu first) | pass |
+| P opens the pause menu (CHAPTER VII line, ESC RESUME); Esc closes it on the same turn; a real-key Attack then moves the fight on | pass |
+
+Not re-run here: the full win to the board with VII cleared (the rehearsal's `win` run did that
+with the lock removed in the page); the rehearsal's four phone findings below are unchanged.
+
 ### Unlock rehearsal (real keys, the lock removed in the page only)
 
 `docs/concepts/chapters/macalania/unlock/rehearsal/rehearse.mjs` answers the dev server's
