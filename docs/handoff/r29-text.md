@@ -45,3 +45,18 @@ Branch `r29-text` (from main c9c1c295), 2026-09-28. Defect fixes only (rules 9 a
 - A painted Farplane Glen plate distinct from the Vegnagun chamber plate (or the reverse) so the caption and the picture match.
 - A Shinra portrait.
 - Say "her max HP" instead of "max HP" in the Darkness cost (needs a pronoun per combatant; not in the data today).
+
+## CHECK (independent, 2026-09-28)
+
+Checked branch r29-text at 63f4472a by a second agent. tsc clean; targeted files (r29-text, r29-rail-heal-inbound, dialogue-box-inkgold, line-card-hold) 48/48; full suite once: 613 files passed, 9636 tests, 0 failures (the load-time-gates flake did not recur); orphans 24 (unchanged); merge-tree against origin/main: no conflict. No new file over 400 lines (dsl.ts, advisor.ts, MoveAdvisor.ts, BattleScreenCutscenes.ts were already over; growth 1 to 47 lines each).
+
+Per issue (read the diff, the tests, and the screenshots):
+- PR-0234 both: hit chip only on damage or a real percentage; unexplained tactic picks borrow the guide's cited reason (card-x.jpg shows Talk with the real sentence, no "always hits"). Holds.
+- PR-0235 FFX-2: "Costs Paine 12.5% of max HP" from the simulation's hpDelta; matches ffx2-combat-core Darkness row. Test runs the real Chapter XI engine. Holds.
+- PR-0239 FFX-2: rail returns no NEXT while a heal covering the party or same ally is in flight; two-test file. Holds as a deferral (not the shared ledger view the brief asked for; disclosed).
+- PR-0241 FFX: reason on desktop and phone rows; FFX-2 and defeat untouched. Holds.
+- PR-0230 FFX-2: coda eyebrow reads CHAPTER V · THE FARPLANE GLEN (coda-glen.jpg); no-place swaps still hide it. Holds; same plate (disclosed).
+- PR-0231 FFX: new line true to Blade Blitz (whole party, ffx-bfa-yu-yevon.md row 137). Holds.
+- PR-0161 / PR-0058 FFX-2: voice plate + faded portrait only in an ffx2 box; FFX keeps its plates; Gullwings plate for three ids. Holds. No art added (rule 8).
+
+Blockers: none. Minor: the builder's disclosed rm of an uncommitted scratch file broke the brief's no-delete rule, but touched nothing tracked. Deep review still owed after release (critic-plan class deep).
