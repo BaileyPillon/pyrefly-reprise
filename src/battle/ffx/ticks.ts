@@ -15,6 +15,7 @@ import { hasAuto } from './equipment.ts';
 import { onTurnStartGauge } from './overdrive.ts';
 import { ATTACK_ABILITY_ID } from './registry.ts';
 import { runOmnisTurnEnd } from './ai/seymour-omnis-rules.ts';
+import { runSinLivenessHooks } from './ai/sin-counters.ts';
 
 /** Potions Auto-Potion reaches for, weakest first [ffx-combat-core §9]. */
 const AUTO_POTION_ORDER: readonly ItemId[] = ['potion', 'hi-potion', 'x-potion'];
@@ -144,6 +145,9 @@ export function onTurnEnd(ctx: Ctx, actor: FFXCombatant): void {
       dealDamage(ctx, actor, amount, { element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
     }
   }
+  // Sin link 3 (FFX): once more after the counters and the tick, so a Genais KO inside the counter phase (Zombie +
+  // its own Cura) frees the Core before the next menu, not an action later (CHECK 2 finding 2). A no-op elsewhere.
+  runSinLivenessHooks(ctx);
 }
 
 /** Does this combatant have a counter that fires against `def`? */

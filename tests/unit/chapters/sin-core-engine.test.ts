@@ -368,7 +368,7 @@ describe('Genais dies off the player-side path: the liveness hook (REVIEW must-c
     expect(e.state().result ?? null).toBeNull();
   });
 
-  it('Zombie + its own Cura kills Genais; the Core is freed by the next action and the Core then runs free', () => {
+  it('Zombie + its own Cura kills Genais; the Core is freed by that same action (no lag) and then runs free', () => {
     const e = engine(16, ['tidus', 'wakka', 'auron']);
     shell(e);
     live(e, G).statuses['zombie'] = status('zombie');
@@ -376,9 +376,9 @@ describe('Genais dies off the player-side path: the liveness hook (REVIEW must-c
     const at = act(e, turnOf(e, 'tidus')!, 'item', 'grenade', G);
     expect(counters(since(e, at), G)).toContain('sin-genais-cura');
     expect(live(e, G).alive).toBe(false);
-    enemyTurns(e, C, 1);
-    expect(live(e, C).flags.outOfMeleeReach).not.toBe(true);
+    expect(live(e, C).flags.outOfMeleeReach).not.toBe(true); // CHECK 2 finding 2: before the next menu, not after it
     expect(live(e, C).immunityFlags).not.toContain('immune-to-magical-damage');
+    enemyTurns(e, C, 1);
     expect(['free', 'ready']).toContain(flags(e)['sin.core.state']);
     expect(e.state().result ?? null).toBeNull();
   });

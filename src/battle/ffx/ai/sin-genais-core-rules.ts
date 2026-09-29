@@ -122,7 +122,7 @@ export const SIN_CORE_ASSUMPTIONS: ReadonlyArray<{ id: string; claim: string; va
   { id: 'counter-step', claim: 'The Fire, Blizzard, Thunder, Water cycle moves only when an element fires; a Negation does not advance it', value: true },
   { id: 'negation-party', claim: 'Negation\'s party is the front line on the field (the aeon alone while summoned); leftmost is the first slot, rightmost the last', value: 'front-line' },
   { id: 'reflect-bounce', claim: 'The Core\'s party-wide counters never bounce (engine rule, statuses.ts#bouncesOffReflect; research §2.3 says they do: open). A single-target spell bounced onto Genais or the Core is not "aimed at" it, so it draws no counter', value: 'engine' },
-  { id: 'liveness-lag', claim: "A Genais KO inside the counter phase (Zombie + Cura) is picked up at the next action's hook or at either script's turn, not before the next menu", value: 'next-action' },
+  { id: 'liveness-lag', claim: "A Genais KO inside the counter phase (Zombie + Cura) is picked up at the end of that same action (`ticks.ts#onTurnEnd` runs the hook again after the counters), before the next menu", value: 'same-action' },
 ];
 
 // ---------------------------------------------------------------------------
