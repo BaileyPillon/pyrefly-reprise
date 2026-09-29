@@ -2591,6 +2591,13 @@ export interface EnemyGroupDef {
   /** Reveal-plate name when the first enemy would misname the formation (Ch XI link 2, PR-0205); no engine reads it. */
   headline?: string;
   /**
+   * The enemy the opening beats (battle-start card, intro dolly caption) name and show, when the
+   * first enemy in {@link enemies} is not the boss (Ch VII Macalania stages Guado Guardian A in
+   * slot 0, PR-0243). Read by `battle/common/headlineEnemy.ts`; absent = the first visible
+   * non-part enemy, as before. No engine rule reads it.
+   */
+  bossId?: string;
+  /**
    * The party fights this formation under a **permanent, non-consumable
    * Auto-Life granted by the fayth**, so a KO'd member revives immediately and
    * the battle cannot be lost [ffx-bfa-yu-yevon §2.3, verified: 3 sources].

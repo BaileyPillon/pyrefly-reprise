@@ -137,6 +137,25 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     portrait: { x: 0.5, feet: 0.74, height: 0.44 },
   },
   /**
+   * Seymour, living (FFX only: Chapter VII, PR-0244). His battle idle, the approved painting
+   * (`public/art/characters/seymour-macalania/idle.png`, 804 x 1191, feet at y 1175; locked as
+   * `chapter:macalania:2026-09-25`, used as installed). He stands on the plate from the post
+   * scene's first frame, so the tally and the silent kill are not an empty temple; the kneel and the
+   * fall have no painting, so the script captions them, and he goes when the Guado take the body
+   * (research ffx-seymour-anima-macalania.md §9.7 beats 9-10). The pre scene never stands him.
+   *
+   * Landscape: right of the dialogue box, facing left toward the party. Portrait: centred, feet
+   * above the box. Not unsent: no drift, no pyrefly glow (he is not sent, §9.7 beat 11).
+   */
+  'seymour-macalania': {
+    art: 'art/characters/seymour-macalania/idle.png',
+    aspect: 804 / 1191,
+    baseline: 1175 / 1191,
+    artFacing: -1,
+    landscape: { x: 0.8, feet: 0.9, height: 0.62 },
+    portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+  },
+  /**
    * Shuyin, unsent (FFX-2 only: Chapter V, PR-0133). His battle idle, the installed painting
    * (`public/art/characters/shuyin/idle.png`, 694 x 1136, feet at y 1120; used as installed). The
    * post scene already posed him (`setPose('shuyin', 'kneel')`) and took him off with Lenne

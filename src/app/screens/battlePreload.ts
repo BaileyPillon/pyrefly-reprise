@@ -50,6 +50,7 @@ import { sceneArtUrls } from './sceneArt.ts';
 import { SECTOR1_PLATE } from '../../scenes/sector1-reactor-staging.ts';
 import { setupForChapter } from './BattleScreenSetup.ts';
 import { createEngine } from './BattleScreenWiring.ts';
+import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 
 /** The options `BattlePresenterStage.add` gives every figure. */
 const STAGE_MATTE = { mode: 'auto' } as const;
@@ -218,7 +219,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     const figures = stagedIds(state)
       .map((id) => state.combatants[id])
       .filter((c): c is NonNullable<typeof c> => c !== undefined && !c.flags.hidden && !c.removed);
-    const boss = figures.find((c) => c.side === 'enemy' && !c.flags.isPart);
+    const boss = headlineEnemy(state, chapter.enemyGroupRef.bossId); // PR-0243: the declared boss, else the first enemy
     const party = state.activeIds
       .map((id) => state.combatants[id])
       .filter((c): c is NonNullable<typeof c> => Boolean(c));
@@ -238,7 +239,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
 
     // Phase 3: the battle's opening frame. The backdrop as `Backdrop` loads it (no matte, no fit).
     if (await prewarmPainted(plateUrlFor(chapter.sceneKey))) paintings++;
-    figures.sort((a, b) => rank(a) - rank(b));
+    figures.sort((a, b) => rank(a) - rank(b) || Number(b === boss) - Number(a === boss)); // the card's subject first
     // The card's chips: each face, and an FFX-2 girl's dressphere body under it
     // (`BattleStartBanner.memberFaceHtml`), decoded so no chip shows its letter (PR-0176).
     const faces = [

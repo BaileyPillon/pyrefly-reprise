@@ -56,6 +56,7 @@ import {
   SPEED_SCALE,
   syncHud,
 } from './BattlePresenterUtil.ts';
+import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
@@ -308,7 +309,7 @@ export class BattlePresenter {
    * The CONTRACTS.md loop, start to finish. Returns how the battle ended; the
    * screen owns what happens next (chain, results, retry).
    */
-  async run(engine: BattleEngine, link: { headline?: string } = {}): Promise<BattleOutcome> {
+  async run(engine: BattleEngine, link: { headline?: string; bossId?: string } = {}): Promise<BattleOutcome> {
     // Ground the mid-burst row projection before a single event is played. The
     // first burst of a fight (and of every later link of a chain, which re-runs
     // on a fresh engine) happens before any `syncHud` in the loop below.
@@ -320,7 +321,7 @@ export class BattlePresenter {
     // headline enemy gets its slow push and name plate. A chained formation
     // (Yunalesca's forms, the Vegnagun chain) re-enters `run` on the same
     // presenter and gets the reveal for its *new* boss only.
-    await this.openOn(engine, link.headline);
+    await this.openOn(engine, link.headline, link.bossId);
 
     /** Consecutive decisions that left `state().log` exactly as it was. */
     let idleSpins = 0;
@@ -425,12 +426,10 @@ export class BattlePresenter {
    * gets the party slide. A link's own `headline` (`EnemyGroupDef.headline`,
    * PR-0205) names the plate when the first enemy would misname the formation.
    */
-  private async openOn(engine: BattleEngine, headline?: string): Promise<void> {
+  private async openOn(engine: BattleEngine, headline?: string, bossId?: string): Promise<void> {
     if (this.aborted) return;
     const state = engine.state();
-    const boss = state.enemyIds
-      .map((id) => state.combatants[id])
-      .find((c) => c && !c.removed && !c.flags.hidden && !c.flags.isPart);
+    const boss = headlineEnemy(state, bossId); // PR-0243: a formation's declared boss first
     this.phase = 'moment:battle-start';
     const opening = { partyIds: state.activeIds, bossId: boss?.id ?? null, bossName: (boss && headline) || boss?.name || null }; // PR-0205
     await playOpening(this.ctx, () => this.ctx.moments.battleStart(opening)); // a Confirm press ends it (PR-0061)

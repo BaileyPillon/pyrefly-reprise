@@ -111,7 +111,7 @@ import {
 } from './advisor-revive.ts';
 import { forecastFromState } from './advisor-forecast.ts';
 import { floorNote } from './advisor-floor.ts';
-import { changesNothing, harmsAZombie } from './advisor-guard.ts';
+import { changesNothing, harmsAZombie, reviveAimOk, wastedRevive } from './advisor-guard.ts';
 import {
   type StatusChance,
   bestChance,
@@ -703,6 +703,12 @@ function aimCandidates(
   def: AbilityDef | null,
 ): Array<CombatantId | null> {
   if (row.validTargets.length === 0) return [null];
+  // PR-0245: a revive is aimed only where it stands an ally up (or kills a Zombie foe), never at a
+  // KO'd enemy the engine still lists, nor at a living ally it would whiff on ({@link wastedRevive}).
+  const revive = def?.flags.includes('misses-if-target-alive') === true;
+  const legal = revive ? row.validTargets.filter((id) => reviveAimOk(state, id)) : row.validTargets;
+  if (legal.length === 0) return [];
+  row = { ...row, validTargets: legal };
   const valid = new Set(row.validTargets);
   const out: CombatantId[] = [];
   const add = (id: CombatantId | undefined): void => {
@@ -822,10 +828,13 @@ export function scoreOutcome(
   // negative one — measured rather than assumed, which is what tells a Phoenix
   // Down's sliver apart from a Mega Phoenix's full bar when the question is
   // whether the next hit puts them straight back down.
-  for (const id of outcome.revives) {
+  // PR-0245: standing a foe back up is never the move (Chapter VII's KO'd Guardian stays listed).
+  const raisedAllies = outcome.revives.filter((id) => !isEnemy(state.combatants[id]));
+  score -= (outcome.revives.length - raisedAllies.length) * BOSS_KILL_VALUE;
+  for (const id of raisedAllies) {
     score += reviveValue(state, id, ctx.intent ?? null, restoredHp(outcome, id));
   }
-  const raised = outcome.revives[0];
+  const raised = raisedAllies[0];
   const risk = raised ? reviveRisk(state, raised, ctx.intent ?? null, restoredHp(outcome, raised)) : null;
   const caution = raised && !risk ? reviveCaution(state, raised, ctx.intent ?? null, restoredHp(outcome, raised)) : '';
 
@@ -1416,7 +1425,9 @@ export function buildAdvisorView(
       (c.suggestion.source === 'tactic'
         ? tacticRow(decision.commands, decision.actorId, c.suggestion.command)
         : ownedRow(decision.commands, c.suggestion.command)) !== null &&
-      pressable(state, c.suggestion.command),
+      pressable(state, c.suggestion.command) &&
+      // PR-0245: never a revive on a foe or on a living ally, whichever source aimed it.
+      !wastedRevive(state, c.suggestion.command, defFor(state, c.suggestion.command, options)?.flags.includes('misses-if-target-alive') === true, c.outcome),
   );
   if (pressed.length === 0) return null;
   // **Already on its way** (PR-0088). A cure or raise an ally's charging

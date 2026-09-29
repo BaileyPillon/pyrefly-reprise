@@ -199,6 +199,9 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
 
   post: [
     // The tally first. Then the chapter takes it all back.
+    // PR-0244: he stands on the plate from the first frame (his approved idle painting,
+    // `app/screens/cutsceneFigures.ts`), so the tally and the kill are not an empty temple.
+    showActor(SEYMOUR, { at: { slot: 1, side: 'enemy' }, ms: 600, facing: -1 }),
     music(null, 900),
     camera('victory', 800),
     beat(1400),
@@ -212,20 +215,26 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     // Chapter VIII's beat 9 (fixed in 80672bf) and Chapter 2's aftermath. Cut
     // it again here, right as the scene resumes past the tally.
     music(null, 300),
+    // The scene resumes past the tally on a fresh stage (`BattleScreenFlow` replays the post from
+    // the step after `results()`), so he is stood up again before the kneel (PR-0244).
+    showActor(SEYMOUR, { at: { slot: 1, side: 'enemy' }, ms: 400, facing: -1 }),
 
     // §9.7 beat 9 — he is properly dead. Flat, anticlimactic, no speech, no
     // pyreflies. Flux dissolves; this one just stops.
+    // PR-0244: no painting kneels or falls, so Tidus's narration carries the two silent
+    // beats (writing-bible §1.2: past tense, plain, one concrete detail), each held as long
+    // as the beat it replaces.
     setPose(SEYMOUR, 'kneel'),
     camera('idle', 1000),
-    beat(1600),
+    narrate('He went down on one knee. The hall was very quiet.', 1600),
     setPose(SEYMOUR, 'ko'),
-    beat(1800),
+    narrate('Then he fell, and he just stopped.', 1800),
     say('tidus', "...That's it?"),
     say('auron', 'That is what it looks like.'),
 
     // §9.7 beat 10 — she kneels to send him, and gets three steps in.
     setPose('yuna', 'kneel'),
-    beat(1400),
+    narrate('Yuna knelt beside him and began the sending.', 1400), // PR-0244: Yuna never stands in a cutscene
     setPose('yuna', 'cast'),
     fx('sending-dance', 'yuna'),
     beat(1600),
@@ -323,10 +332,13 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     'mac-first-boost': [
       // §1.15's guardrail: let Rikku be right on a technical point. One line,
       // not a tutorial; Lulu supplies the consequence, not the instruction.
+      // PR-0253: Boost makes Anima TAKE x1.5 damage until her next turn
+      // (research §3.4, §5.3 "the damage window"), so the line names her as
+      // the one exposed and says "half again", never "twice".
       say('rikku', "She's winding up! That wasn't a spell!", { auto: 1300 }),
-      say('lulu', 'Whatever lands next lands twice as hard.', {
+      say('lulu', "She's open. The next hit hurts her half again as much.", {
         auto: 1400,
-        fallback: [{ who: 'tidus', text: 'Whatever hits next hits twice as hard!' }],
+        fallback: [{ who: 'tidus', text: "She's open! Hit her now, it'll hurt her more!" }],
       }),
     ],
     'mac-seymour-restored': [
