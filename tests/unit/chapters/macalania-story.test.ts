@@ -356,12 +356,27 @@ describe('macalania story — canon beats in order', () => {
   });
 
   it('places the narration interlude last, past tense, 2-5 lines [§1.2]', () => {
-    const narr = chapter.post.filter((s) => s.type === 'narrate');
-    expect(narr.length).toBeGreaterThanOrEqual(2);
-    expect(narr.length).toBeLessThanOrEqual(5);
-    const firstNarr = chapter.post.findIndex((s) => s.type === 'narrate');
+    // PR-0244: the silent kneel, fall and sending have no painting, so each carries a short
+    // timed caption (`narrate(text, auto)`) in Tidus's past tense. Those are captions of a beat,
+    // not the interlude: the interlude is the closing, un-timed narration, and it stays last.
+    const interlude = chapter.post.filter((s) => s.type === 'narrate' && s.auto === undefined);
+    expect(interlude.length).toBeGreaterThanOrEqual(2);
+    expect(interlude.length).toBeLessThanOrEqual(5);
+    const firstNarr = chapter.post.findIndex((s) => s.type === 'narrate' && s.auto === undefined);
     const lastSay = chapter.post.map((s) => s.type).lastIndexOf('say');
     expect(firstNarr).toBeGreaterThan(lastSay);
+  });
+
+  it('PR-0244: captions the kneel, the fall and the sending, each held as long as its beat, in the past tense', () => {
+    const captions = chapter.post.filter((s): s is Extract<Step, { type: 'narrate' }> => s.type === 'narrate' && s.auto !== undefined);
+    expect(captions.map((c) => c.auto)).toEqual([1600, 1800, 1400]);
+    expect(captions.map((c) => c.text).join(' ')).toMatch(/knee[\s\S]*fell[\s\S]*knelt/);
+    for (const c of captions) expect(c.text).not.toMatch(/\b(is|are|kneels|falls|begins)\b/);
+    // Seymour stands on the plate from the first frame until the Guado take the body.
+    const show = chapter.post.findIndex((s) => s.type === 'showActor' && s.actor === 'seymour-macalania');
+    const hide = chapter.post.findIndex((s) => s.type === 'hideActor' && s.actor === 'seymour-macalania');
+    expect(show).toBe(0);
+    expect(hide).toBeGreaterThan(chapter.post.findIndex((s) => s.type === 'results'));
   });
 
   it('ends on the chapter thesis: won cleanly, lost completely [§9.7]', () => {
