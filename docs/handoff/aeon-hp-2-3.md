@@ -103,3 +103,32 @@ Both match §6.4.3 (Zanarkand Bahamut 3,218; inside-Sin Ifrit 2,585). Screenshot
 - Chapter III's possessed-aeon gauntlet is about 37 percent longer in engine turns (above). Disclose
   to Bailey with the merge; no number moves without Bailey's word.
 - Merge into main, release and review belong to the driver.
+
+## CHECK (independent, 2026-09-28, did not build it)
+
+FFX only (rule 14). Checked on a6878731 (branch 1 ahead of origin, not pushed). Verdict: **0 blockers**.
+
+- **Rows vs research:** all 50 cells of `ZANARKAND_SOURCED_ROWS` and `INSIDE_SIN_SOURCED_ROWS` match
+  `research/ffx-combat-core.md` §6.4.3 (Yunalesca N = 300; inside Sin N = 360), Luck 17 per §6.4.3's
+  column; the tag is `[estimate]` in §6.4.3's own sense, as Chapter I's Gagazet rows. The floor
+  functions reproduce the removed `zanarkand.ts` / `dreams-end.ts` rows value for value.
+- **No drop later in the story:** every stat of every aeon is non-decreasing Gagazet -> Zanarkand ->
+  inside Sin (checked cell by cell); `data-ffx-builds` pins it and fails its two checks under
+  `LATE_AEON_ROWS=floor`, as it should (reproduced).
+- **Possessed aeons / Chapter XII:** Chapter III's possessed aeons mirror the roster (§6.4.3 says the
+  inside-Sin block is their stats; `ffx-bfa-yu-yevon.md` §2.2), and `garden-of-pain.ts` clones
+  `dreamsEndBuild.aeons`, so both follow the research. No boss number touched.
+- **Benches reproduce exactly:** 200-seed `aeon-hp-2-3-bench` intended and card rows are identical to
+  the table above (wins, turns, lost->won / won->lost, per-link turns). `omnis-bench` under
+  `floor` and `sourced` gives identical tables (intended 127, break-brute 1, weakness 142, no ring 0).
+- **Goldens:** no golden or pinned-seed file changed on the branch (test diff = the new bench, the
+  new row test, the two helper files, `data-ffx-builds`).
+- **Real keys:** screenshots read: Chapter II Bahamut 3218/3218 HP, 81/81 MP; Chapter III Ifrit
+  2585/2585, 59/59 (match §6.4.3). Not re-driven in a browser.
+- **tsc** clean; **orphans** 24 (as main); targeted files 3/3 (24 tests); **full suite once:** 9,623
+  passed, 1 failed = `strategy-ffx2-bahamut` "heal-only route" 15 s timeout under load (FFX-2, no
+  FFX-2 file on the branch), 19/19 alone in 9.3 s.
+- **git merge-tree** against origin/main: clean.
+- Minor: `src/engine/tactics/yunalesca.ts` ~L561 keeps the old 1,341 to 2,542 HP arithmetic, labelled
+  as the pre-2026-09-28 rows; historical, harmless.
+- Push not done by this check: pushing the public repo waits for the driver or Bailey.
