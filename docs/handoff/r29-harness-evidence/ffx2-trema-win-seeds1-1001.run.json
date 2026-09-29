@@ -1,0 +1,3826 @@
+{
+ "chapter": "ffx2-trema",
+ "game": "ffx2",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:7970/pyrefly-reprise/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1001,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "retry after attempt 1",
+   "engineSeed": 1001,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "link 2",
+   "engineSeed": 1002,
+   "links": 2,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "trema",
+    "ability": "Dying Star",
+    "targets": [
+     "rikku"
+    ]
+   }
+  },
+  {
+   "at": "retry after attempt 2",
+   "engineSeed": 2002,
+   "links": 2,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "trema",
+    "ability": "Dying Star",
+    "targets": [
+     "rikku"
+    ]
+   }
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 26,
+  "actor": "paragon",
+  "ability": "Attack",
+  "targets": [
+   "yuna"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 10268,
+   "k": "prepEscGoesTo",
+   "v": "chapter-select"
+  },
+  {
+   "ms": 34508,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 49267,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 38,
+    "actor": "paragon",
+    "ability": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "ms": 344355,
+   "k": "fight",
+   "v": {
+    "outcome": "defeat",
+    "turns": 82,
+    "ms": 297928,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 351489,
+   "k": "retryReachedBattle",
+   "v": true
+  },
+  {
+   "ms": 362082,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 26,
+    "actor": "paragon",
+    "ability": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "ms": 855759,
+   "k": "fight",
+   "v": {
+    "outcome": "victory",
+    "turns": 107,
+    "ms": 496663,
+    "seams": 1,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 861407,
+   "k": "retryReachedBattle",
+   "v": true
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 24,
+   "actor": "idle",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:5355/5355",
+    "rikku:5106/5106",
+    "paine:5355/5355",
+    "paragon:210000/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 1,
+   "ms": 3000,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:5355/5355",
+    "rikku:5106/5106",
+    "paine:5355/5355",
+    "paragon:206366/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 3,
+   "ms": 10492,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Stamina Tonic",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Stamina Tonic",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:5355/5355",
+    "rikku:4880/4880",
+    "paine:3820/5355",
+    "paragon:201291/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 4,
+   "ms": 13226,
+   "actor": "play:turn-start",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:5355/5355",
+    "rikku:4880/4880",
+    "paine:3820/5355",
+    "paragon:201291/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 5,
+   "ms": 18168,
+   "actor": "play:turn-start",
+   "want": {
+    "label": "Warrior",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Warrior",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:5355/5355",
+    "rikku:4880/4880",
+    "paine:3820/5355",
+    "paragon:197858/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 6,
+   "ms": 21445,
+   "actor": "command:paine",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:5355/9999",
+    "rikku:4880/9760",
+    "paine:2940/8244",
+    "paragon:197858/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 7,
+   "ms": 23574,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:5355/9999",
+    "rikku:4880/9760",
+    "paine:3566/9999",
+    "paragon:197858/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 8,
+   "ms": 26943,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Megalixir",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Megalixir",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:5355/9999",
+    "rikku:4880/9760",
+    "paine:3566/9999",
+    "paragon:194224/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 9,
+   "ms": 29120,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:5355/9999",
+    "rikku:4880/9760",
+    "paine:3566/9999",
+    "paragon:194224/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 10,
+   "ms": 34912,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:190898/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 11,
+   "ms": 38690,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:187465/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 12,
+   "ms": 41908,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Soul Spring",
+    "target": "Paragon",
+    "menu": "Item"
+   },
+   "took": "Soul Spring",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:183911/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 13,
+   "ms": 47145,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:182923/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 14,
+   "ms": 51026,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8432/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:172966/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 15,
+   "ms": 55414,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Remedy",
+    "target": "Yuna",
+    "menu": "Item"
+   },
+   "took": "Remedy",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:8432/9999",
+    "rikku:9760/9760",
+    "paine:8734/9999",
+    "paragon:169466/210000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 16,
+   "ms": 58609,
+   "actor": "command:yuna",
+   "want": {
+    "label": "White Mage",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "White Mage",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:8432/9999",
+    "rikku:9760/9760",
+    "paine:8734/9999",
+    "paragon:169466/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 17,
+   "ms": 61127,
+   "actor": "command:paine",
+   "want": {
+    "label": "Warrior",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Warrior",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:3869/4588",
+    "rikku:9760/9760",
+    "paine:8734/9999",
+    "paragon:169466/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 18,
+   "ms": 62794,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:3869/4588",
+    "rikku:9760/9760",
+    "paine:7201/8244",
+    "paragon:169466/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 19,
+   "ms": 65176,
+   "actor": "command:paine",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:8432/9999",
+    "rikku:9760/9760",
+    "paine:7201/8244",
+    "paragon:169466/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 20,
+   "ms": 67131,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8432/9999",
+    "rikku:9760/9760",
+    "paine:8734/9999",
+    "paragon:169466/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 21,
+   "ms": 70214,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Megalixir",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Megalixir",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:8432/9999",
+    "rikku:9760/9760",
+    "paine:8734/9999",
+    "paragon:165979/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 22,
+   "ms": 74037,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:165979/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 23,
+   "ms": 78008,
+   "actor": "play:turn-start",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:162600/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 24,
+   "ms": 82196,
+   "actor": "idle",
+   "want": {
+    "label": "Remedy",
+    "target": "Yuna",
+    "menu": "Item"
+   },
+   "took": "Remedy",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:8754/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:159006/210000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 25,
+   "ms": 85685,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8754/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:159006/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 26,
+   "ms": 90439,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8754/9999",
+    "rikku:9760/9760",
+    "paine:8769/9999",
+    "paragon:155600/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 27,
+   "ms": 94295,
+   "actor": "play:turn-start",
+   "want": {
+    "label": "Warrior",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Warrior",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:7478/9999",
+    "rikku:9760/9760",
+    "paine:8769/9999",
+    "paragon:148921/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 28,
+   "ms": 96190,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Remedy",
+    "target": "Yuna",
+    "menu": "Item"
+   },
+   "took": "Remedy",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:7478/9999",
+    "rikku:9760/9760",
+    "paine:7230/8244",
+    "paragon:148921/210000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 29,
+   "ms": 99643,
+   "actor": "command:paine",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:7478/9999",
+    "rikku:9760/9760",
+    "paine:7230/8244",
+    "paragon:148921/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 30,
+   "ms": 101510,
+   "actor": "play:status-remove",
+   "want": {
+    "label": "White Mage",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "White Mage",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:7478/9999",
+    "rikku:9760/9760",
+    "paine:8769/9999",
+    "paragon:148921/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 31,
+   "ms": 104105,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:3431/4588",
+    "rikku:9760/9760",
+    "paine:8769/9999",
+    "paragon:148921/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 32,
+   "ms": 105827,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7477/9999",
+    "rikku:9760/9760",
+    "paine:8769/9999",
+    "paragon:148921/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 33,
+   "ms": 109542,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Mega-Potion",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Mega-Potion",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:7477/9999",
+    "rikku:9760/9760",
+    "paine:7423/9999",
+    "paragon:142269/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 34,
+   "ms": 111888,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7477/9999",
+    "rikku:9760/9760",
+    "paine:7423/9999",
+    "paragon:142269/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 35,
+   "ms": 117195,
+   "actor": "command:paine",
+   "want": {
+    "label": "Warrior",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Warrior",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:8167/9999",
+    "rikku:9760/9760",
+    "paine:9501/9999",
+    "paragon:138675/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 36,
+   "ms": 120102,
+   "actor": "command:paine",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:8167/9999",
+    "rikku:9760/9760",
+    "paine:7833/8244",
+    "paragon:138675/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 37,
+   "ms": 121965,
+   "actor": "idle",
+   "want": {
+    "label": "White Mage",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "White Mage",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:8167/9999",
+    "rikku:9760/9760",
+    "paine:9501/9999",
+    "paragon:138675/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 38,
+   "ms": 123556,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Megalixir",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Megalixir",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:3747/4588",
+    "rikku:9760/9760",
+    "paine:9501/9999",
+    "paragon:138675/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 39,
+   "ms": 127792,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:4588/4588",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:138675/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 40,
+   "ms": 129589,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:138675/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 41,
+   "ms": 133918,
+   "actor": "play:turn-start",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:135443/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 42,
+   "ms": 137350,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Soul Spring",
+    "target": "Paragon",
+    "menu": "Item"
+   },
+   "took": "Soul Spring",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:132171/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 43,
+   "ms": 139964,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:132171/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 44,
+   "ms": 145907,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:127365/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 45,
+   "ms": 149977,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8784/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:124066/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 46,
+   "ms": 153313,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Remedy",
+    "target": "Yuna",
+    "menu": "Item"
+   },
+   "took": "Remedy",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:8784/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:120687/210000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 47,
+   "ms": 157029,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8784/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:120687/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 48,
+   "ms": 160787,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7544/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:114008/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 49,
+   "ms": 164933,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Remedy",
+    "target": "Yuna",
+    "menu": "Item"
+   },
+   "took": "Remedy",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:7544/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:110763/210000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 50,
+   "ms": 168314,
+   "actor": "command:yuna",
+   "want": {
+    "label": "White Mage",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "White Mage",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:7544/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:110763/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 51,
+   "ms": 170724,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:3462/4588",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:110763/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 52,
+   "ms": 178377,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:3462/4588",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:104326/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 53,
+   "ms": 181573,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Megalixir",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Megalixir",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:7545/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:104326/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 54,
+   "ms": 184953,
+   "actor": "play:action-end",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7545/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:104326/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 55,
+   "ms": 188348,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7545/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:100933/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 56,
+   "ms": 195370,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:9999/9999",
+    "paragon:95663/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 57,
+   "ms": 199007,
+   "actor": "command:yuna",
+   "want": {
+    "label": "White Mage",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "White Mage",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:8749/9999",
+    "paragon:92284/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 58,
+   "ms": 200952,
+   "actor": "play:action-end",
+   "want": {
+    "label": "Remedy",
+    "target": "Paine",
+    "menu": "Item"
+   },
+   "took": "Remedy",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:4588/4588",
+    "rikku:9760/9760",
+    "paine:8749/9999",
+    "paragon:92284/210000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "paine",
+    "wanted": "paine",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 59,
+   "ms": 206254,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:4588/4588",
+    "rikku:9760/9760",
+    "paine:8749/9999",
+    "paragon:92284/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 60,
+   "ms": 208705,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:8749/9999",
+    "paragon:92284/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 61,
+   "ms": 212473,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9760/9760",
+    "paine:7413/9999",
+    "paragon:88784/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 62,
+   "ms": 217098,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Remedy",
+    "target": "Paine",
+    "menu": "Item"
+   },
+   "took": "Remedy",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:9130/9999",
+    "rikku:9413/9760",
+    "paine:6541/9999",
+    "paragon:81703/210000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "paine",
+    "wanted": "paine",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 63,
+   "ms": 222347,
+   "actor": "play:action-end",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9130/9999",
+    "rikku:9413/9760",
+    "paine:6541/9999",
+    "paragon:81703/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 64,
+   "ms": 226442,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9130/9999",
+    "rikku:7669/9760",
+    "paine:6541/9999",
+    "paragon:78364/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 65,
+   "ms": 232001,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Warrior",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Warrior",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:8214/9999",
+    "rikku:7327/9760",
+    "paine:5720/9999",
+    "paragon:74918/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 66,
+   "ms": 233923,
+   "actor": "idle",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8214/9999",
+    "rikku:7506/9999",
+    "paine:5720/9999",
+    "paragon:74918/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 67,
+   "ms": 237690,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8214/9999",
+    "rikku:7506/9999",
+    "paine:4394/9999",
+    "paragon:71606/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 68,
+   "ms": 243588,
+   "actor": "command:paine",
+   "want": {
+    "label": "Warrior",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Warrior",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:7369/9999",
+    "rikku:6923/9999",
+    "paine:3525/9999",
+    "paragon:68200/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 69,
+   "ms": 245389,
+   "actor": "play:turn-start",
+   "want": {
+    "label": "Mega-Potion",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Mega-Potion",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:7369/9999",
+    "rikku:6923/9999",
+    "paine:2906/8244",
+    "paragon:68200/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 70,
+   "ms": 248762,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7369/9999",
+    "rikku:6923/9999",
+    "paine:2906/8244",
+    "paragon:68200/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 71,
+   "ms": 252886,
+   "actor": "play:turn-start",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:6558/9999",
+    "rikku:6331/9999",
+    "paine:1546/8244",
+    "paragon:64807/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 72,
+   "ms": 264924,
+   "actor": "idle",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8495/9999",
+    "rikku:8284/9999",
+    "paine:3828/9999",
+    "paragon:64807/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 73,
+   "ms": 270721,
+   "actor": "idle",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7613/9999",
+    "rikku:7705/9999",
+    "paine:2949/9999",
+    "paragon:61226/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 74,
+   "ms": 276211,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Thief",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Thief",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:7613/9999",
+    "rikku:7736/9999",
+    "paine:2949/9999",
+    "paragon:57739/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 75,
+   "ms": 280135,
+   "actor": "idle",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7613/9999",
+    "rikku:7736/9999",
+    "paine:2949/9999",
+    "paragon:57739/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 76,
+   "ms": 284603,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7613/9999",
+    "rikku:7736/9999",
+    "paine:1673/9999",
+    "paragon:54145/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 77,
+   "ms": 289617,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Mega-Potion",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Mega-Potion",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:6741/9999",
+    "rikku:7886/9999",
+    "paine:359/9999",
+    "paragon:48875/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 78,
+   "ms": 297706,
+   "actor": "command:paine",
+   "want": {
+    "label": "Warrior",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Warrior",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:8623/9999",
+    "rikku:9999/9999",
+    "paine:2468/9999",
+    "paragon:48875/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 79,
+   "ms": 301044,
+   "actor": "idle",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8623/9999",
+    "rikku:9999/9999",
+    "paine:2035/8244",
+    "paragon:48875/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 80,
+   "ms": 305219,
+   "actor": "play:action-end",
+   "want": {
+    "label": "Dark Knight",
+    "target": null,
+    "menu": "Change"
+   },
+   "took": "Dark Knight",
+   "viaMenu": "Change",
+   "engineHp": [
+    "yuna:8623/9999",
+    "rikku:9999/9999",
+    "paine:2035/8244",
+    "paragon:45335/210000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 81,
+   "ms": 312075,
+   "actor": "play:turn-start",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8623/9999",
+    "rikku:9999/9999",
+    "paine:2468/9999",
+    "paragon:45335/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1333,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 82,
+   "ms": 321887,
+   "actor": "idle",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8623/9999",
+    "rikku:9999/9999",
+    "paine:2468/9999",
+    "paragon:42998/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1346,
+     "actor": "yuna",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 83,
+   "ms": 326665,
+   "actor": "command:paine",
+   "want": {
+    "label": "Megalixir",
+    "target": "the party",
+    "menu": "Item"
+   },
+   "took": "Megalixir",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:7778/9999",
+    "rikku:9999/9999",
+    "paine:1586/9999",
+    "paragon:37961/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1367,
+     "actor": "paine",
+     "did": "Megalixir",
+     "targets": [
+      "yuna",
+      "rikku",
+      "paine"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 84,
+   "ms": 332894,
+   "actor": "idle",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9999/9999",
+    "rikku:9999/9999",
+    "paine:9999/9999",
+    "paragon:37961/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1389,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 85,
+   "ms": 337499,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:9167/9999",
+    "rikku:9999/9999",
+    "paine:9174/9999",
+    "paragon:35533/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1408,
+     "actor": "yuna",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 86,
+   "ms": 343607,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8329/9999",
+    "rikku:9999/9999",
+    "paine:8265/9999",
+    "paragon:32207/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1436,
+     "actor": "paine",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 87,
+   "ms": 347776,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Remedy",
+    "target": "Paine",
+    "menu": "Item"
+   },
+   "took": "Remedy",
+   "viaMenu": "Item",
+   "engineHp": [
+    "yuna:8329/9999",
+    "rikku:9999/9999",
+    "paine:7020/9999",
+    "paragon:28573/210000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "paine",
+    "wanted": "paine",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1452,
+     "actor": "rikku",
+     "did": "Remedy",
+     "targets": [
+      "paine"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 88,
+   "ms": 354382,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:8329/9999",
+    "rikku:9999/9999",
+    "paine:7020/9999",
+    "paragon:28573/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1459,
+     "actor": "yuna",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 89,
+   "ms": 360013,
+   "actor": "command:paine",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7437/9999",
+    "rikku:9999/9999",
+    "paine:6121/9999",
+    "paragon:25194/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1491,
+     "actor": "paine",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 90,
+   "ms": 364082,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:7437/9999",
+    "rikku:9999/9999",
+    "paine:6121/9999",
+    "paragon:21949/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1509,
+     "actor": "yuna",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 91,
+   "ms": 374782,
+   "actor": "play:action-end",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:985/9999",
+    "paine:0/9999",
+    "paragon:18516/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1568,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 92,
+   "ms": 381146,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:1614/9999",
+    "paine:0/9999",
+    "paragon:16333/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1604,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 93,
+   "ms": 387450,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:2248/9999",
+    "paine:0/9999",
+    "paragon:13950/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1637,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 94,
+   "ms": 393654,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:9999/9999",
+    "paine:0/9999",
+    "paragon:11685/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1670,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 95,
+   "ms": 399592,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:9999/9999",
+    "paine:0/9999",
+    "paragon:6810/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1700,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 96,
+   "ms": 406099,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:9999/9999",
+    "paine:0/9999",
+    "paragon:4545/210000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1736,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "paragon"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 97,
+   "ms": 412219,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Paragon",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:9999/9999",
+    "paine:0/9999",
+    "paragon:2108/210000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 98,
+   "ms": 450285,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:9281/9999",
+    "paine:0/9999",
+    "trema:999999/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 99,
+   "ms": 455570,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:8073/9999",
+    "paine:0/9999",
+    "trema:999818/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 100,
+   "ms": 460644,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:7114/9999",
+    "paine:0/9999",
+    "trema:999628/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 101,
+   "ms": 465795,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:6146/9999",
+    "paine:0/9999",
+    "trema:999447/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 102,
+   "ms": 469163,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:5406/9999",
+    "paine:0/9999",
+    "trema:999268/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 103,
+   "ms": 474240,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:4185/9999",
+    "paine:0/9999",
+    "trema:999089/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 104,
+   "ms": 478956,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:3634/9999",
+    "paine:0/9999",
+    "trema:998897/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 105,
+   "ms": 484222,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:2637/9999",
+    "paine:0/9999",
+    "trema:998508/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 106,
+   "ms": 489377,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Trema",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "yuna:0/9999",
+    "rikku:948/9999",
+    "paine:0/9999",
+    "trema:998329/999999"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  }
+ ],
+ "seams": [
+  {
+   "from": 1,
+   "to": 2,
+   "ms": 440924,
+   "phase": "moment:battle-start"
+  }
+ ],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "briefingText": "AURON “Fifteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 16,
+  "coming": [
+   "seymour-anima-macalania"
+  ],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 15
+ },
+ "boardWalk": [
+  "seymour-flux",
+  "yunalesca",
+  "braskas-final-aeon",
+  "evrae-airship",
+  "yojimbo-cavern",
+  "seymour-natus",
+  "seymour-omnis",
+  "isaaru-via-purifico",
+  "ffx2-bahamut",
+  "ffx2-vegnagun-shuyin",
+  "ffx2-leblanc",
+  "ffx2-fallen-aeons",
+  "ffx2-trema"
+ ],
+ "dossier": "CHAPTER SELECT CHAPTER XIII Trema 0 OF 15 BEATEN X I II III VII VIII IX X XII XIV X-2 IV V VI XI XIII XV XVI A hundred floors down, a man who wanted the past gone At the bottom of the dungeon under Bevelle, something that was once a lord of Yevon guards the last floor. Beat it, and the man who founded New Yevon steps out to finish it himself. ATB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima COMING VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Via Infinito — Cloister 100 BOSS Paragon PARTY Y YUNA R RIKKU P PAINE BEST Not cleared LEFT/RIGHT CHOOSE · UP/DOWN GAME · ENTER BEGIN · ESC BACK",
+ "prepText": "PARTY PREP XIII · TREMA — VIA INFINITO — CLOISTER 100 Y Yuna LV 99 R Rikku LV 99 P Paine LV 99 CHAPTER DRESSPHERES STATS ACCESSORIES ITEMS FFX-2 · XIII Trema A Hundred Floors Down A hundred floors under Bevelle, something that was once a lord of Yevon guards the last room. Beat it, and the man who founded New Yevon steps out to finish it himself, then asks what your memories are worth. the hundredth floor what guards the last room the founder, robe torn OBJECTIVES Get past Paragon Survive Meteor Defeat Trema TIP Nothing sticks to Trema: no status, no stat change, no Gravity. When his HP falls below a half, and again below a quarter, Meteor comes down on the party, so be healed before you cross those lines. ▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL START BATTLE Y Yuna LV 99 · 15 DRESSPHERES DARK KNIGHT R Rikku LV 99 · 15 DRESSPHERES ALCHEMIST P Paine LV 99 · 15 DRESSPHERES DARK KNIGHT",
+ "prepEsc": "chapter-select",
+ "cardAfterBack": "ffx2-trema",
+ "preScene": {
+  "lines": [
+   "CHAPTER XIII · VIA INFINITO — CLOISTER 100 Under Bevelle, a dungeon goes down a hundred floors. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER XIII · VIA INFINITO — CLOISTER 100 At the top, a stranger told the kids a story. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER XIII · VIA INFINITO — CLOISTER 100 A man walked down there a year ago. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER XIII · VIA INFINITO — CLOISTER 100 He never came back up. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "ffx2-trema",
+  "game": "ffx2",
+  "scene": "via-infinito",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 2,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 8166.200000000001,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna-dark-knight",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "rikku",
+    "side": "party",
+    "art": "rikku-alchemist",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "paine",
+    "side": "party",
+    "art": "paine-dark-knight",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "paragon",
+    "side": "enemy",
+    "art": "paragon",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:yuna",
+   "awaitingMenu": true,
+   "played": 15,
+   "lastEvents": [
+    {
+     "seq": 4,
+     "type": "action-end",
+     "ms": 207
+    },
+    {
+     "seq": 5,
+     "type": "script-trigger",
+     "ms": 0
+    },
+    {
+     "seq": 6,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 7,
+     "type": "turn-start",
+     "ms": 90
+    },
+    {
+     "seq": 8,
+     "type": "action-end",
+     "ms": 211
+    },
+    {
+     "seq": 9,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 10,
+     "type": "turn-start",
+     "ms": 96
+    },
+    {
+     "seq": 11,
+     "type": "action-end",
+     "ms": 208
+    },
+    {
+     "seq": 12,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 13,
+     "type": "turn-start",
+     "ms": 99
+    },
+    {
+     "seq": 14,
+     "type": "action-end",
+     "ms": 203
+    },
+    {
+     "seq": 15,
+     "type": "atb",
+     "ms": 0
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 4,
+   "ticks": 10246,
+   "events": 16,
+   "result": null,
+   "combatants": [
+    {
+     "id": "yuna",
+     "hp": 5355,
+     "maxHp": 5355,
+     "mp": 338,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "id": "rikku",
+     "hp": 5106,
+     "maxHp": 5106,
+     "mp": 107,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "id": "paine",
+     "hp": 5355,
+     "maxHp": 5355,
+     "mp": 338,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "id": "paragon",
+     "hp": 210000,
+     "maxHp": 210000,
+     "mp": 9999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 0,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.3799987714233061,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0,
+       "required": 24137,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.3199827999262854,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paragon",
+       "fill": 0.5897794889744488,
+       "required": 2857,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 0
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 390.6666666666667,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.45199336568585297,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.048556158594688655,
+       "required": 24137,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.39197739418883226,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paragon",
+       "fill": 1,
+       "required": 2857,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 1
+   },
+   {
+    "type": "turn-start",
+    "actorId": "paragon",
+    "turn": 1,
+    "elapsedTicks": 1172,
+    "seq": 2
+   },
+   {
+    "type": "message",
+    "text": "Paragon oversouls!",
+    "kind": "system",
+    "seq": 3
+   },
+   {
+    "type": "action-end",
+    "actorId": "paragon",
+    "seq": 4
+   },
+   {
+    "type": "script-trigger",
+    "name": "paragon-mourned",
+    "payload": {
+     "script": "paragon-mourned"
+    },
+    "seq": 5
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 1343,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.6274955464094846,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.1669221527116046,
+       "required": 24137,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.5674795749124639,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paragon",
+       "fill": 1,
+       "required": 2857,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 6
+   },
+   {
+    "type": "turn-start",
+    "actorId": "paragon",
+    "turn": 2,
+    "elapsedTicks": 4029,
+    "seq": 7
+   },
+   {
+    "type": "action-end",
+    "actorId": "paragon",
+    "seq": 8
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 2295.3333333333335,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.8029977271331162,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.28528814682852055,
+       "required": 24137,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.7429817556360956,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paragon",
+       "fill": 1,
+       "required": 2857,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 9
+   },
+   {
+    "type": "turn-start",
+    "actorId": "paragon",
+    "turn": 3,
+    "elapsedTicks": 6886,
+    "seq": 10
+   },
+   {
+    "type": "action-end",
+    "actorId": "paragon",
+    "seq": 11
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 3247.666666666667,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.978499907856748,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.40365414094543645,
+       "required": 24137,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.9184839363597272,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paragon",
+       "fill": 1,
+       "required": 2857,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 12
+   },
+   {
+    "type": "turn-start",
+    "actorId": "paragon",
+    "turn": 4,
+    "elapsedTicks": 9743,
+    "seq": 13
+   },
+   {
+    "type": "action-end",
+    "actorId": "paragon",
+    "seq": 14
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 3364.3333333333335,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1,
+       "required": 16279,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.41815470025272405,
+       "required": 24137,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.9399840285029794,
+       "required": 16279,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paragon",
+       "fill": 0.12250612530626531,
+       "required": 2857,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 15
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 654,
+   "y": 681,
+   "w": 483,
+   "h": 154
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "NEXT BEST MOVE Yuna Attack → Paragon GUIDE’S PICK 3,218–3,634 NO MP 100% TO HIT 23% CRIT Physical damage Most damage on the board — 3420 to Paragon."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 654,
+    "y": 681,
+    "w": 483,
+    "h": 154
+   }
+  ],
+  "cmd": [
+   {
+    "x": 1246,
+    "y": 351,
+    "w": 324,
+    "h": 258
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Yuna",
+    "eff": 17.5
+   },
+   {
+    "t": "Attack",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Paragon",
+    "eff": 21
+   },
+   {
+    "t": "Guide’s pick",
+    "eff": 14.2
+   },
+   {
+    "t": "3,218–3,634",
+    "eff": 14.2
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "100% to hit",
+    "eff": 14.2
+   },
+   {
+    "t": "23% crit",
+    "eff": 14.2
+   },
+   {
+    "t": "Physical damage",
+    "eff": 14.2
+   },
+   {
+    "t": "Most damage on the board — 3420 to Parag",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 654,
+    "y": 681,
+    "w": 483,
+    "h": 154
+   }
+  ],
+  "cmd": [
+   {
+    "x": 1246,
+    "y": 351,
+    "w": 324,
+    "h": 258
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Yuna",
+    "eff": 17.5
+   },
+   {
+    "t": "Attack",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Paragon",
+    "eff": 21
+   },
+   {
+    "t": "Guide’s pick",
+    "eff": 14.2
+   },
+   {
+    "t": "3,218–3,634",
+    "eff": 14.2
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "100% to hit",
+    "eff": 14.2
+   },
+   {
+    "t": "23% crit",
+    "eff": 14.2
+   },
+   {
+    "t": "Physical damage",
+    "eff": 14.2
+   },
+   {
+    "t": "Most damage on the board — 3420 to Parag",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "NEXT BEST MOVE Yuna Attack → Paragon GUIDE’S PICK 3,218–3,634 NO MP 100% TO HIT 23% CRIT Physical damage Most damage on the board — 3420 to Paragon.",
+ "advisorHiddenByN": true,
+ "intentText": "Paragonacts nextNo actionScriptedSpends the turn and does nothing.",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Paragon SCAN DK DK Yuna 5355 /5355 338 /338 PRO SHL AL AL Rikku 5106 /5106 107 /107 PRO SHL DK DK Paine 5355 /5355 338 /338 PRO SHL ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ ATTACK Physical damage Paragon NEXT YUNA Attack → Paragon A plain Attack: it only answers with its own Attack, which often misses. G HIDE GUIDE NEXT BEST MOVE Yuna Attack → Paragon GUIDE’S PICK 3,218–3,634 NO MP 100% TO HIT 23% CRIT Physical damage Most damage on the board — 3420 to Paragon. N HIDE MOVES Paragon PAUSE PYREFLY REPRISE · FINAL FANTASY X-2 Q L1 YUNA RIKKU PAINE CHAPTER GUIDE OPTIONS CONTROLS MUSIC R1 E BATTLE STATS HP 5355/5355 MP 338/338 STRENGTH 175 MAGIC 109 DEFENCE 171 MAGIC DEF 125 AGILITY 42 IN THIS FIGHT ATB 100% MODE WAIT CHAIN ×0 DRESSPHERE DARK KNIGHT GARMENT GRID VALIANT LUSTRE GATES 0 OF 4 PASSED CHAPTER XIII · VIA INFINITO — CLOISTER 100 — A HUNDRED FLOORS DOWN · BATTLE 1 OF 2 GET PAST PARAGON ESC RES"
+  },
+  "optionsText": "Paragon SCAN DK DK Yuna 5355 /5355 338 /338 PRO SHL AL AL Rikku 5106 /5106 107 /107 PRO SHL DK DK Paine 5355 /5355 338 /338 PRO SHL ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ ATTACK Physical damage Paragon NEXT YUNA Attack → Paragon A plain Attack: it only answers with its own Attack, which often misses. G HIDE GUIDE NEXT BEST MOVE Yuna Attack → Paragon GUIDE’S PICK 3,218–3,634 NO MP 100% TO HIT 23% CRIT Physical damage Most damage on the board — 3420 to Paragon. N HIDE MOVES Paragon PAUSE PYREFLY REPRISE · FINAL FANTASY X-2 Q L1 YUNA RIKKU PAINE CHAPTER GUIDE OPTIONS CONTROLS MUSIC R1 E SETTINGS MASTER VOLUME 80 MUSIC 70 SOUND EFFECTS 90 TEXT SPEED 1x X-2 BATTLE WAIT ATB SPEED NORMAL STRATEGY GUIDE ON BATTLE HELP ON THIS ENCOUNTER REPLAY BRIEFING ▸ RESTART ENCOUNTER ▸ CHAPTER SELECT ▸ QUIT TO TITLE ▸ CHAPTER XIII · VIA INFINITO — CLOISTER 100 — A HUNDRED FLOORS DOWN · BATTLE 1 OF 2 GET PAST PARAGON ESC RESUME H PAINTING ONLY",
+  "tabs": [
+   "Yuna",
+   "Rikku",
+   "Paine",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Attack",
+  "Skill",
+  "Change",
+  "Item"
+ ],
+ "targetsShown": [
+  "paragon"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 4
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "defeat",
+   "seed": 1,
+   "turns": 82,
+   "firstEnemyAction": {
+    "seq": 38,
+    "actor": "paragon",
+    "ability": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "attempt": 2,
+   "outcome": "defeat",
+   "seed": 1001,
+   "turns": 107,
+   "firstEnemyAction": {
+    "seq": 26,
+    "actor": "paragon",
+    "ability": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   },
+   "final": true
+  }
+ ],
+ "seamCard": [
+  {
+   "link": 2,
+   "actor": "command:rikku",
+   "viewport": "1600x900",
+   "card": {
+    "x": 657,
+    "y": 639,
+    "w": 482,
+    "h": 196
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Rikku Nothing Rikku can press stands Yuna up — that raise has to come from somebody else. Attack → Trema GUIDE’S PICK 179–203 NO MP 100% TO HIT 26% CRIT Physical damage Most damage on t"
+  }
+ ],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 1736,
+ "changeText": "Paragon SCAN DK DK Yuna 5355 /5355 338 /338 PRO SHL AL AL Rikku 5106 /5106 107 /107 PRO SHL DK DK Paine 3820 /5355 338 /338 PRO SHL ITC CHANGE GUNNER GRANTS: YELLOW SONGSTRESS GUNNER Changes into another dressphere; the destination spends the turn Paragon NEXT RIKKU Stamina Tonic → the party A Stamina Tonic doubles everyone's max HP for the battle; a Megalixir then fills it. G HIDE GUIDE NEXT BEST MOVE Rikku Stamina Tonic → the party GUIDE’S PICK IN ITEM N HIDE MOVES PARAGON ACTS NEXT No action SCRIPTED Spends the turn and does nothing. E HIDE Paragon PAUSE",
+ "changeResult": [
+  {
+   "type": "spherechange",
+   "who": "rikku",
+   "from": "alchemist",
+   "to": "songstress",
+   "gatesCrossed": [],
+   "seq": 48
+  }
+ ],
+ "turns": 107,
+ "fightMs": 496663,
+ "afterFight": "results",
+ "outcome": "defeat",
+ "logKinds": {
+  "atb": 474,
+  "turn-start": 338,
+  "message": 1,
+  "action-end": 393,
+  "script-trigger": 2,
+  "action-start": 128,
+  "chain": 135,
+  "damage": 148,
+  "miss": 20,
+  "counter": 55,
+  "status-add": 21,
+  "spherechange": 25,
+  "status-remove": 18,
+  "mp-damage": 16,
+  "ko": 3,
+  "victory": 1
+ },
+ "post": {
+  "screen": "results",
+  "lines": []
+ },
+ "resultsScreen": "results",
+ "resultsText": "VIA INFINITO — CLOISTER 100 · FELL RESULTS · 8:25 Defeat TURNS 27 ATTEMPTS 2 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · MASTERED R Rikku ALCHEMIST · MASTERED P Paine DARK KNIGHT · MASTERED RETRY CHAPTER SELECT",
+ "outcomeFrom": "results screen text",
+ "afterRetry": "battle",
+ "retryReachedBattle": true,
+ "retrySeed": 2002,
+ "dboxTimeline": [
+  {
+   "ms": 13021,
+   "lastMs": 17604,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Under Bevelle, a dungeon goes down a hundred floors.",
+   "portrait": null,
+   "narrate": true,
+   "show": 1
+  },
+  {
+   "ms": 17638,
+   "lastMs": 19103,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "At the top, a stranger told the kids a story.",
+   "portrait": null,
+   "narrate": true,
+   "show": 2
+  },
+  {
+   "ms": 19137,
+   "lastMs": 20620,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "A man walked down there a year ago.",
+   "portrait": null,
+   "narrate": true,
+   "show": 3
+  },
+  {
+   "ms": 20655,
+   "lastMs": 23250,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "He never came back up.",
+   "portrait": null,
+   "narrate": true,
+   "show": 4
+  },
+  {
+   "ms": 23354,
+   "lastMs": 24172,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "Floor one hundred! Rikku, still alive, reporting!",
+   "portrait": "rikku-x2.png",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 24188,
+   "lastMs": 24188,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "Um... is that a good sign or a bad one?",
+   "portrait": "yuna-x2.png",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 24206,
+   "lastMs": 24312,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "Ask me after. Something's waiting.",
+   "portrait": "paine.png",
+   "narrate": false,
+   "show": 7,
+   "endMs": 24312
+  },
+  {
+   "ms": 32988,
+   "lastMs": 35654,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "That thing... it used to be somebody.",
+   "portrait": "yuna-x2.png",
+   "narrate": false,
+   "show": 8,
+   "endMs": 35654
+  },
+  {
+   "ms": 357259,
+   "lastMs": 358527,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "That thing... it used to be somebody.",
+   "portrait": "yuna-x2.png",
+   "narrate": false,
+   "show": 9,
+   "endMs": 358527
+  },
+  {
+   "ms": 773576,
+   "lastMs": 777149,
+   "screen": "battle",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "It's down! We did it! We... huh?",
+   "portrait": "rikku-x2.png",
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 777225,
+   "lastMs": 779969,
+   "screen": "battle",
+   "speaker": "Trema",
+   "role": "",
+   "text": "Forgive the interruption. It had served its purpose.",
+   "portrait": "trema.png",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 779973,
+   "lastMs": 781977,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "You're the one from the top floor.",
+   "portrait": "yuna-x2.png",
+   "narrate": false,
+   "show": 12
+  },
+  {
+   "ms": 782008,
+   "lastMs": 784291,
+   "screen": "battle",
+   "speaker": "Trema",
+   "role": "",
+   "text": "I founded New Yevon. You may call me Trema.",
+   "portrait": "trema.png",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 784324,
+   "lastMs": 786208,
+   "screen": "battle",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "The man who never came back.",
+   "portrait": "paine.png",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 786240,
+   "lastMs": 788440,
+   "screen": "battle",
+   "speaker": "Trema",
+   "role": "",
+   "text": "I came down with every sphere we gathered.",
+   "portrait": "trema.png",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 788473,
+   "lastMs": 790325,
+   "screen": "battle",
+   "speaker": "Trema",
+   "role": "",
+   "text": "And I broke them. Every one.",
+   "portrait": "trema.png",
+   "narrate": false,
+   "show": 16
+  },
+  {
+   "ms": 790358,
+   "lastMs": 792340,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "Why? They were people's memories.",
+   "portrait": "yuna-x2.png",
+   "narrate": false,
+   "show": 17
+  },
+  {
+   "ms": 792374,
+   "lastMs": 794757,
+   "screen": "battle",
+   "speaker": "Trema",
+   "role": "",
+   "text": "Memories are weights. Put them down, and you rise.",
+   "portrait": "trema.png",
+   "narrate": false,
+   "show": 18
+  },
+  {
+   "ms": 794843,
+   "lastMs": 798174,
+   "screen": "battle",
+   "speaker": "Trema",
+   "role": "",
+   "text": "You carried yours a hundred floors. Show me what they bought.",
+   "portrait": "trema.png",
+   "narrate": false,
+   "show": 19,
+   "endMs": 798175
+  },
+  {
+   "ms": 805240,
+   "lastMs": 807641,
+   "screen": "battle",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "Okay, new plan. Don't die.",
+   "portrait": "rikku-x2.png",
+   "narrate": false,
+   "show": 20,
+   "endMs": 807641
+  }
+ ],
+ "audioDebugFile": {
+  "file": "ffx2-trema-win-a2/audio-debug.jsonl",
+  "samples": 9,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 14.45,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [
+  {
+   "url": "http://127.0.0.1:7970/pyrefly-reprise/art/characters/yuna-dark-knight/hurt.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:7970/pyrefly-reprise/art/characters/yuna-dark-knight/ko.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:7970/pyrefly-reprise/art/characters/yuna-dark-knight/hurt.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:7970/pyrefly-reprise/art/characters/yuna-dark-knight/ko.png",
+   "ct": "text/html"
+  }
+ ],
+ "media": [
+  "art/title/keyart.2x.webp",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.png",
+  "art/backdrops/gagazet.png",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.png",
+  "art/portraits/yuna.png",
+  "art/portraits/kimahri.png",
+  "art/portraits/auron.png",
+  "art/portraits/wakka.png",
+  "art/portraits/rikku.png",
+  "art/portraits/lulu.png",
+  "art/portraits/yuna-x2.png",
+  "art/portraits/rikku-x2.png",
+  "art/portraits/paine.png",
+  "art/characters/yuna-white-mage/idle.png",
+  "art/characters/rikku-dark-knight/idle.png",
+  "art/characters/paine-warrior/idle.png",
+  "art/characters/paine-dark-knight/idle.png",
+  "art/characters/yuna-gunner/idle.png",
+  "art/characters/rikku-thief/idle.png",
+  "art/characters/yuna-dark-knight/idle.png",
+  "art/characters/rikku-alchemist/idle.png",
+  "art/backdrops/zanarkand-dome.png",
+  "art/characters/yunalesca-1/idle.png",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "art/backdrops/macalania-temple.png",
+  "art/characters/anima/idle.png",
+  "art/backdrops/evrae-airship-deck.png",
+  "art/characters/evrae/idle.png",
+  "art/backdrops/cavern-stolen-fayth.png",
+  "art/characters/yojimbo-cavern/idle.png",
+  "art/backdrops/bevelle-highbridge.png",
+  "art/characters/seymour-natus/idle.png",
+  "art/backdrops/garden-of-pain.png",
+  "art/characters/seymour-omnis/idle.png",
+  "art/backdrops/via-purifico.png",
+  "art/characters/isaaru/idle.png",
+  "art/backdrops/bevelle-underground.png",
+  "art/characters/ffx2-bahamut/idle.png",
+  "art/backdrops/farplane.png",
+  "art/characters/vegnagun-body/idle.png",
+  "art/backdrops/leblanc-last-room.png",
+  "art/characters/leblanc/idle.png",
+  "art/backdrops/road-to-the-farplane.png",
+  "art/characters/x2-shiva/idle.png",
+  "art/backdrops/via-infinito.png",
+  "art/characters/trema/idle.png",
+  "art/backdrops/den-of-woe.png",
+  "art/characters/baralai-shade/idle.png",
+  "art/backdrops/djose-chamber-provisional.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/x2-anima/idle.png",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "audio/music/chapter-select.mp3",
+  "art/characters/kimahri/idle.png",
+  "art/characters/seymour-flux-body/attack.png",
+  "art/characters/seymour-flux-body/cast.png",
+  "art/characters/seymour-flux-body/hurt.png",
+  "art/characters/seymour-flux-body/ko.png",
+  "art/characters/mortiorchis/attack.png",
+  "art/characters/mortiorchis/cast.png",
+  "art/characters/mortiorchis/hurt.png",
+  "art/characters/mortiorchis/ko.png",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/yuna/attack.png",
+  "art/characters/yuna/cast.png",
+  "art/characters/yuna/item.png",
+  "art/characters/yuna/hurt.png",
+  "art/characters/yuna/ko.png",
+  "art/characters/yuna/victory.png",
+  "art/characters/kimahri/attack.png",
+  "art/characters/kimahri/cast.png",
+  "art/characters/kimahri/item.png",
+  "art/characters/kimahri/hurt.png",
+  "art/characters/kimahri/ko.png",
+  "art/characters/kimahri/victory.png",
+  "art/pause/ch13-trema.png",
+  "art/characters/paragon/idle.png",
+  "art/characters/paragon/cast.png",
+  "art/characters/yuna-dark-knight/attack.png",
+  "art/characters/rikku-alchemist/attack.png",
+  "art/characters/rikku-alchemist/cast.png",
+  "art/characters/rikku-alchemist/item.png",
+  "art/characters/rikku-alchemist/hurt.png",
+  "art/characters/rikku-alchemist/victory.png",
+  "art/characters/paine-dark-knight/attack.png",
+  "art/characters/paine-dark-knight/cast.png",
+  "art/characters/paine-dark-knight/item.png",
+  "art/characters/paine-dark-knight/ko.png",
+  "audio/music/scene-bevelle-underground.mp3",
+  "audio/music/pause.mp3",
+  "art/pause/ch13-trema.2x.webp",
+  "art/characters/trema/cast.png",
+  "art/pause/yuna-ffx2.png",
+  "art/pause/yuna-ffx2.2x.webp",
+  "art/pause/rikku-ffx2.png",
+  "art/pause/rikku-ffx2.2x.webp",
+  "art/pause/paine.png",
+  "art/pause/paine.2x.webp",
+  "art/characters/yuna-white-mage/attack.png",
+  "art/characters/yuna-white-mage/cast.png",
+  "art/characters/yuna-white-mage/item.png",
+  "art/characters/yuna-white-mage/hurt.png",
+  "art/characters/yuna-white-mage/ko.png",
+  "art/characters/yuna-white-mage/victory.png",
+  "art/characters/paine-warrior/attack.png",
+  "art/characters/paine-warrior/cast.png",
+  "art/characters/paine-warrior/victory.png",
+  "art/characters/rikku-thief/item.png",
+  "art/characters/rikku-thief/hurt.png",
+  "art/characters/rikku-thief/ko.png",
+  "art/characters/rikku-thief/victory.png",
+  "art/characters/rikku-gunner/idle.png",
+  "art/characters/rikku-gunner/attack.png",
+  "art/characters/rikku-gunner/cast.png",
+  "art/characters/rikku-gunner/item.png",
+  "art/characters/rikku-gunner/ko.png",
+  "art/characters/rikku-gunner/victory.png",
+  "art/characters/yuna-dark-knight/hurt.png",
+  "art/characters/yuna-dark-knight/ko.png",
+  "art/portraits/trema.png",
+  "art/characters/trema/hurt.png",
+  "audio/music/boss-ffx2-aeon.mp3"
+ ]
+}
