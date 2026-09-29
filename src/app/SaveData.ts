@@ -182,7 +182,8 @@ export function defaultSettings(): Settings {
   return {
     masterVolume: 0.8,
     musicVolume: 0.7,
-    sfxVolume: 0.9,
+    // D-210 (PR-0203): new profiles only; effects ~6 dB under the music (round 13's arithmetic).
+    sfxVolume: 0.35,
     textSpeed: 1,
     skipSeenCutscenes: false,
     lowEffects: false,
@@ -267,6 +268,8 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
   if (!hadCoach && veteran) settings.battleHelp = false;
   if (typeof settings.battleHelp !== 'boolean') settings.battleHelp = base.settings.battleHelp;
   migrateFfx2Atb(settings, raw.settings);
+  // D-210 lowers the default for new profiles only: a save that never stored a level was playing at 0.9.
+  if (raw.settings && !Number.isFinite(raw.settings.sfxVolume)) settings.sfxVolume = 0.9;
   const out: SaveData = {
     ...base,
     ...raw,
