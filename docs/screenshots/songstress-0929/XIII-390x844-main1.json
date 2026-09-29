@@ -1,0 +1,26 @@
+{
+ "healTopUps": 0,
+ "chapter": "ffx2-trema",
+ "numeral": "XIII",
+ "viewport": "390x844",
+ "browser": "gpu",
+ "results": [],
+ "missing": [
+  "rikku-songstress/idle",
+  "rikku-songstress/cast",
+  "rikku-songstress/item",
+  "rikku-songstress/attack",
+  "rikku-songstress/victory",
+  "paine-songstress/idle",
+  "paine-songstress/cast",
+  "paine-songstress/item",
+  "paine-songstress/victory"
+ ],
+ "debugNotes": [
+  "DEBUG (labelled): FILLER=item, every turn that is not a proof step uses an item, so no filler Attack or Darkness draws the Paragon Big Bang counter early (research/ffx2-trema.md 4.1)"
+ ],
+ "errors": [
+  "Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "healTopUps": 0,
+ "chapter": "ffx2-trema",
+ "numeral": "XIII",
+ "viewport": "390x844",
+ "browser": "gpu",
+ "results": [
+  {
+   "key": "paine-songstress/idle",
+   "id": "paine",
+   "art": "paine-songstress",
+   "pose": "idle",
+   "slotName": "idle",
+   "requested": "idle",
+   "staged": false,
+   "url": "/pyrefly-reprise/art/characters/paine-songstress/idle.png",
+   "placeholder": false,
+   "fade": 1,
+   "actionKind": "ability",
+   "ability": "Darkness Dance",
+   "lastEvent": "atb",
+   "upp": 0.0014855687606112054,
+   "clamped": false,
+   "idleUpp": 0.0014855687606112054,
+   "sidecarScale": null,
+   "refScale": null,
+   "hp": 0,
+   "frame": null,
+   "ratio": 1,
+   "file": "D:/pyrefly-aeon-hp/docs/screenshots/songstress-0929/XIII-390x844-paine-songstress-idle.jpg"
+  },
+  {
+   "key": "paine-songstress/ko",
+   "id": "paine",
+   "art": "paine-songstress",
+   "pose": "ko",
+   "slotName": "ko",
+   "requested": "ko",
+   "staged": false,
+   "url": "/pyrefly-reprise/art/characters/paine-songstress/ko.png",
+   "placeholder": false,
+   "fade": 1,
+   "actionKind": "ability",
+   "ability": "Darkness Dance",
+   "lastEvent": "chain",
+   "upp": 0.0014855687606112054,
+   "clamped": false,
+   "idleUpp": 0.0014855687606112054,
+   "sidecarScale": 1,
+   "refScale": null,
+   "hp": 0,
+   "frame": null,
+   "ratio": 1,
+   "file": "D:/pyrefly-aeon-hp/docs/screenshots/songstress-0929/XIII-390x844-paine-songstress-ko.jpg"
+  }
+ ],
+ "missing": [],
+ "debugNotes": [
+  "DEBUG STATE SETUP (labelled): paine HP set to 1 so the next enemy hit KOs her (the ko moment)"
+ ],
+ "errors": []
+}

@@ -1,0 +1,62 @@
+{
+ "healTopUps": 0,
+ "chapter": "ffx2-trema",
+ "numeral": "XIII",
+ "viewport": "1600x900",
+ "browser": "gpu",
+ "results": [
+  {
+   "key": "rikku-songstress/idle",
+   "id": "rikku",
+   "art": "rikku-songstress",
+   "pose": "idle",
+   "slotName": "idle",
+   "requested": "idle",
+   "staged": false,
+   "url": "/pyrefly-reprise/art/characters/rikku-songstress/idle.png",
+   "placeholder": false,
+   "fade": 1,
+   "actionKind": null,
+   "ability": null,
+   "lastEvent": "atb",
+   "upp": 0.0015047291487532244,
+   "clamped": false,
+   "idleUpp": 0.0015047291487532244,
+   "sidecarScale": null,
+   "refScale": null,
+   "hp": 4880,
+   "frame": null,
+   "ratio": 1,
+   "file": "D:/pyrefly-aeon-hp/docs/screenshots/songstress-0929/XIII-1600x900-rikku-songstress-idle.jpg"
+  },
+  {
+   "key": "rikku-songstress/ko",
+   "id": "rikku",
+   "art": "rikku-songstress",
+   "pose": "ko",
+   "slotName": "ko",
+   "requested": "ko",
+   "staged": false,
+   "url": "/pyrefly-reprise/art/characters/rikku-songstress/ko.png",
+   "placeholder": false,
+   "fade": 1,
+   "actionKind": "ability",
+   "ability": "Darkness Dance",
+   "lastEvent": "chain",
+   "upp": 0.001655202063628547,
+   "clamped": false,
+   "idleUpp": 0.0015047291487532244,
+   "sidecarScale": 1.1,
+   "refScale": null,
+   "hp": 0,
+   "frame": null,
+   "ratio": 1.1,
+   "file": "D:/pyrefly-aeon-hp/docs/screenshots/songstress-0929/XIII-1600x900-rikku-songstress-ko.jpg"
+  }
+ ],
+ "missing": [],
+ "debugNotes": [
+  "DEBUG STATE SETUP (labelled): rikku HP set to 1 so the next enemy hit KOs her (the ko moment)"
+ ],
+ "errors": []
+}

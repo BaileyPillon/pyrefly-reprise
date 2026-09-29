@@ -35,6 +35,7 @@ const PLANS = {
 const plan = PLANS[process.env.PLAN];
 if (!plan || plan.ch !== CH) throw new Error(`PLAN ${process.env.PLAN} does not match chapter ${CH}`);
 if (process.env.STEPS) { plan.steps = JSON.parse(process.env.STEPS); plan.staged = []; }
+if (process.env.STAGED) plan.staged = process.env.STAGED.split(',');
 if (process.env.WANTS) plan.wants = process.env.WANTS.split(',');
 const TAG = process.env.TAG ? `-${process.env.TAG}` : '';
 const LABEL = { 'black-mage': 'Black Mage', 'white-mage': 'White Mage', gunner: 'Gunner', warrior: 'Warrior', thief: 'Thief', songstress: 'Songstress', alchemist: 'Alchemist', 'dark-knight': 'Dark Knight' };
@@ -277,6 +278,7 @@ while (Date.now() - tStart < CAP) {
     const r = await page.evaluate(() => { const out = []; for (const x of Object.values(window.__pyrefly.battleState().combatants)) if (x.side === 'enemy' && !x.removed && x.alive !== false && x.hp > 1) { x.hp = 1; out.push(x.id); } return out; });
     if (r.length) { debugNotes.push(`DEBUG STATE SETUP (labelled): enemy HP set to 1 for ${r.join(',')} (the victory moment)`); log(debugNotes.at(-1)); }
   }
+  if (step === 'filler' && process.env.FILLER === 'item' && m.rows.some((r) => /^items?$/i.test(r.label))) { step = 'item'; if (!debugNotes.some((n) => n.includes('FILLER=item'))) { debugNotes.push('DEBUG (labelled): FILLER=item, every turn that is not a proof step uses an item, so no filler Attack or Darkness draws the Paragon Big Bang counter early (research/ffx2-trema.md 4.1)'); log(debugNotes.at(-1)); } }
   if (step === 'filler') step = m.rows.some((r) => /^attack$/i.test(r.label) && !r.dis) ? 'attack' : 'cast';
   log('menu for', girl, 'wearing', wearing, 'step', step, 'rows', m.rows.map((r) => r.label + (r.dis ? '(x)' : '')).join('|'));
   const ok = await doStep(step, m.tok, m);
