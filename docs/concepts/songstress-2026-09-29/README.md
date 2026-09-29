@@ -139,3 +139,44 @@ moment showed both girls' victory paintings. The only 404s were `yuna-dark-knigh
   `render-poses.mjs`, `capture-options.mjs`, `make-options.py`, `measure.py`, `install.mjs`
   (`stage`, then `apply` once the public/art gate is open; new folders only, never overwrites),
   `proof.mjs` (real keys; adapted from the 2026-09-25 poses verifier).
+
+## CHECK (independent, 2026-09-29 ~10:20 to 10:45 EDT; did not build any of it)
+
+Checked `songstress-0929` at `87d83c45` against `origin/main` `8dce5e75`. Game case: **FFX-2 only**. Scratch and frames
+are in `D:/Tools/pyrefly-scratch/overnight-0929/check4/song/`; the script is `check4/e2e-sin/c4-song.mjs`. Both are
+agent scratch and are not committed.
+
+**Verdict: PASS, no blockers.** The branch changes no `src/` file: only docs, `approved-hashes.json`,
+`decisions.json`, `research/visual-bible.md` and the moved pose-install test. The paintings reach the game through
+the shared `public/art` and its regenerated manifest. So any build made from this disk now shows them, main's next
+deploy included.
+
+- **Gates:**
+  - `tsc --noEmit` is clean and `tsc -p tsconfig.e2e.json` is clean.
+  - Six vitest files pass, 66 tests: the four `tests/unit/engine/pose-install-*`, including
+    `pose-install-songstress-0929`, the FFX-2 ATB golden, and approved-hashes.
+- **Real keys on a production build of the branch** (`vite build`, `vite preview` on 8644, headless GPU Chromium,
+  seed 2), at 1600x900 and 390x844:
+  - The title, the board, the Chapter XIII card, prep and the scenes, all by Enter.
+  - In battle, only the Change menu, by keys. Paine went Dark Knight → Songstress and Rikku went Alchemist →
+    Songstress, both offered directly.
+  - Each then used a Songstress command (the Dance/Sing list of 14).
+- **What the stage showed:**
+  - The idle slots show `/art/characters/rikku-songstress/idle.png` and `/art/characters/paine-songstress/idle.png`.
+    The placeholder flag is false and the fade is 1.
+  - Frames: `song/ffx2-trema-<size>-both-songstress.jpg`. Both girls are painted, with no mannequin.
+  - Every Songstress file the fight asked for answered **200**: Rikku's attack, cast, hurt, idle, item, ko and victory,
+    and Paine's cast, idle, item, ko and victory, each with its sidecar.
+  - **No response of 400 or above** (so no 404), no console errors and no page errors, at either size.
+- **The lock:**
+  - verify-approved on main: 0 / 0.
+  - This branch's `approved-hashes.json` merged onto `origin/main` (`git merge-tree`, clean), against the installed
+    art: 258 files, **0 mismatched, 0 missing**, including the set `driver:2026-09-29-songstress`.
+  - `ROOT=D:/pyrefly-aeon-hp` alone reports 2 mismatched, `pause/ch4-ffx2-bahamut.png` and `.2x.webp`. Main restored
+    that plate at 23:48 on 09-28 (`f3e9fa61`), which this branch does not have; the merge takes main's hash. Step 5
+    above ("0 mismatched" for this worktree) is therefore not exact.
+- **The merge:** `git merge-tree origin/main songstress-0929` is **clean**. If `chapter-sin` merges after it, the two
+  branches conflict in `docs/target/approved-hashes.json` (both append a set at the same place) and in
+  `docs/target/decisions.json` (D-281). Keep both sets, and keep this branch's D-281 `delivery: implemented`.
+- **Seen, not a defect:** Yuna wore `yuna-dark-knight` all fight with no 404 this time. The earlier `hurt` / `ko`
+  404s need those poses to play, and neither did here.
