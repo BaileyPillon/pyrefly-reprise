@@ -148,3 +148,13 @@ Minor (not blocking):
    in "Not done" 1 is the fix, needs a yes).
 2. Chapter II's battle cue was not observed playing in-game in this check (chapter locked on a
    fresh save); its file loads 200 and the other 15 chapters play from file.
+
+### CHECK re-run (2026-09-29 ~12:45, second independent pass, same commit 00726858)
+
+The branch had not moved since the CHECK above, so this pass re-took the cheap measurements
+and did not rebuild: own numpy/ebur128 meter on all 26 cues gives the same numbers (23 R1 cues
+pass every gate; the two kept cues read side -10.27 / -10.47 dB, today's files, byte-identical
+to origin/main, as does scene-macalania-temple); manifest keys, loop points and fingerprints
+equal origin/main; no src/ or tests/ file changed; `qa.mjs --strict` 0 findings; tsc clean;
+`tests/unit/audio*` 22 files, 476 tests pass; `git merge-tree` clean against origin/main
+(8dce5e75) and local main (1475ff6b, which has moved since the first check). No blockers.
