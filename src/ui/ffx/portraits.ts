@@ -74,6 +74,16 @@ export function resolvePortraitKey(id: string): string | undefined {
   return PORTRAIT_ALIAS[id] ?? id;
 }
 
+/**
+ * An aeon's chip (PR-0176, FFX only): its own `portraits/<aeon>.png` over a crop of its idle painting, both through
+ * {@link resolvePortraitKey} so the unapproved navy Yojimbo stays out (D-054), whose idle crop is skipped for the same
+ * reason. One rule for the turn list and the aeon's status row (FOC24-02: the row showed only its letter).
+ */
+export function aeonChipHtml(spriteKey: string, name: string, portraitKey?: string): string {
+  const face = resolvePortraitKey(spriteKey);
+  return portraitChipHtml(portraitKey ?? face, name, tintFor('aeon'), face === undefined ? undefined : spriteKey);
+}
+
 /** First glyph to show in a fallback chip: the name's first letter, upper-cased. */
 export function initialFor(name: string): string {
   const ch = name.trim().charAt(0);

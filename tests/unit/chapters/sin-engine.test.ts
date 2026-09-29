@@ -96,7 +96,7 @@ describe('registration: unlisted, reachable by id', () => {
   it('getChapter finds it; chapter select and CHAPTER_IDS do not', () => {
     const ch = getChapter('sin');
     expect(ch?.game).toBe('ffx');
-    expect(ch?.number).toBe(16);
+    expect(ch?.number).toBe(17);
     expect(ch?.enemyGroupRef.id).toBe('overdrive-sin');
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).toContain('sin');
     expect(CHAPTERS.map((c) => c.id)).not.toContain('sin');

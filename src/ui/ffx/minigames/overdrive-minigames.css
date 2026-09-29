@@ -116,3 +116,10 @@
   text-align: center; margin-top: 6px; font-family: var(--ig-font-serif); font-style: italic; font-weight: 700;
   font-size: 13px; color: var(--ig-ink);
 }
+
+/* FOC24-01 (FFX only): on the upright phone the Overdrive overlay opens where Chapter IX's Zanmato gauge panel
+   (z 10 in the HUD root, `zanmato-gauge.css`) and the enemy-intent panel sit, and the gauge covered the Grand
+   Summon list below its second row. An open overlay goes above both, and a list shows five rows before it
+   scrolls (Grand Summon's five aeons all at once). Desktop is unchanged. */
+html[data-phone-battle='ffx'] .ig-minigame.ffx-mg { z-index: 13; }
+html[data-phone-battle='ffx'] .ffx-mg-list { max-height: 112px; }

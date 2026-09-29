@@ -618,6 +618,7 @@ own (a post-scene bed, an ending) are the script's, not this table's.
 | XIII | `ffx2-trema` Trema | FFX-2 | `scene-bevelle-underground` | `scene-bevelle-underground`, `boss-ffx2-aeon` | `victory-ffx2` | **stand-in**: Paragon's link on the scene bed, Trema's phase on Chapter IV's `boss-ffx2-aeon` | `boss-trema`, HYMN turned against itself, as phase 2 (D-146, TR16); D-209 |
 | XIV | `isaaru-via-purifico` Isaaru | FFX | `scene-gagazet` | `boss-yojimbo` | `victory-ffx` | **stand-in**: Chapter I's scene cue and Chapter IX's battle cue (D-186: shipped as is) | a new 'Still Water' cue from the HYMN family (D-147, B21); D-209 |
 | XV | `ffx2-den-of-woe` The Den of Woe | FFX-2 | `scene-bevelle-underground` | `boss-shuyin` | `victory-ffx2` | **stand-in**: Chapter V's `boss-shuyin`, Chapter IV's scene bed | `boss-den-of-woe` from the Shuyin / `SONGSTRESS_DARK` family (D-148, GP16); D-209 |
+| XVI | `ffx2-ixion-djose` Ixion | FFX-2 | `scene-bevelle-underground` | `boss-ffx2-aeon` | `victory-ffx2` | **choice by sourced mood**: `boss-ffx2-aeon` is the game's one cue for an aeon fight ("Aeons", `research/ffx2-ixion-djose.md` §6.3, as Chapter XI, D-112); **stand-in** field bed: Chapter IV's `scene-bevelle-underground` (the game's "The Machina Faction" has no cue of ours). The story's Abyss plays `scene-farplane` ("The Farplane Abyss", §6.3) and the wake `scene-bevelle-underground` (the place) | Djose field bed and an Abyss cue by ear (D-265 concept A; rule 13); D-209 |
 
 ---
 

@@ -30,9 +30,8 @@
  *
  * ## Where the words come from
  *
- * `src/data/guides/*.ts` — one cited file per chapter. This module matches the
- * tactic's chosen command against that chapter's hints and never writes prose
- * of its own.
+ * `src/data/guides/*.ts`, one cited file per chapter: the tactic's chosen command is matched
+ * against that chapter's hints, and this module never writes prose of its own.
  */
 
 import type {
@@ -51,6 +50,7 @@ import { GUIDES, rulesOnClock } from '../../data/guides/index.ts';
 import { intendedStrategy } from '../BattlePresenterStrategies.ts';
 import { targetDisplayName, targetLabel } from './targetLabel.ts';
 import { chapterOnBoard, guideTitle } from './lookup.ts';
+import { chosenAlready, type QueuedCommand } from './guide-inflight.ts';
 
 /** Thrown when a tactic asks the guide's read-only engine view to do something. */
 export class GuideEngineMisuseError extends Error {
@@ -88,7 +88,6 @@ export function stateOnlyEngine(state: Readonly<BattleState>): BattleEngine {
 }
 
 // ---------------------------------------------------------------- the view
-
 /** The recommended command, ready to print. */
 export interface GuideNext {
   /** What the shipped strategy chose. */
@@ -137,6 +136,7 @@ export interface GuideView {
 export interface GuideDecision {
   actorId: CombatantId;
   commands: AvailableCommand[];
+  held?: readonly QueuedCommand[]; // FFX-2: the engine's held (chain-locked) command, as the card gets it
 }
 
 // -------------------------- lookup: the battle's game, then an enemy-side boss id (`./lookup.ts`)
@@ -369,8 +369,8 @@ function nextFor(
     console.warn('[strategy-guide] the chapter tactic could not be previewed', err);
     return null;
   }
-  if (!command) return null;
-
+  // Advisor v3 (FFX-2 only): not while the same support move already charges or is held (./guide-inflight.ts).
+  if (!command || chosenAlready(state, decision.actorId, command, decision.held ?? [])) return null;
   const row = rowFor(decision.commands, command);
   const label = row?.label ?? fallbackLabel(command);
   const targetId = command.targets[0] ?? null;

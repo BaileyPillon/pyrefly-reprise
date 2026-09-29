@@ -1,0 +1,320 @@
+{
+  "chapter": "ffx2-fallen-aeons",
+  "seed": 1,
+  "steps": [
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next card while it charges",
+      "next": "paine",
+      "inFlight": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "card": "Next best movePaineDarkness→all enemiesSkillin Skill1,808–2,0422 hitsCosts the party HP.",
+      "computed": {
+        "actor": "paine",
+        "v2": "Darkness -> all enemies",
+        "v3": "Darkness -> all enemies",
+        "v3ms": 5.5999999940395355,
+        "v3reason": "Most damage on the board — 1921 to the target",
+        "hudCard": "Darkness -> all enemies",
+        "hudPassesEngine": true,
+        "projection": {
+          "enemyMovedFirst": false,
+          "now": "yuna 746/2488, rikku 1696/5652, paine 1759/5862",
+          "projected": "yuna 2488/2488, rikku 3750/5652, paine 3805/5862"
+        }
+      }
+    },
+    {
+      "name": "v2 would not have repeated it here; next attempt"
+    },
+    {
+      "name": "pressed",
+      "by": "rikku",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "yuna"
+    },
+    {
+      "name": "pressed",
+      "by": "paine",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "rikku"
+    },
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "paine"
+    },
+    {
+      "name": "pressed",
+      "by": "rikku",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "yuna"
+    },
+    {
+      "name": "pressed",
+      "by": "paine",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "yuna"
+    },
+    {
+      "name": "pressed",
+      "by": "rikku",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "yuna"
+    },
+    {
+      "name": "pressed",
+      "by": "paine",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "rikku"
+    },
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "paine"
+    },
+    {
+      "name": "pressed",
+      "by": "rikku",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "yuna"
+    },
+    {
+      "name": "pressed",
+      "by": "paine",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "rikku"
+    },
+    {
+      "name": "pressed",
+      "by": "yuna",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next menu opened after it landed; next attempt",
+      "owner": "paine"
+    },
+    {
+      "name": "pressed",
+      "by": "rikku",
+      "pressed": "Mega-Potion",
+      "charging": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "held": null
+    },
+    {
+      "name": "next card while it charges",
+      "next": "yuna",
+      "inFlight": {
+        "kind": "item",
+        "id": "x2-mega-potion",
+        "targets": [
+          "yuna",
+          "rikku",
+          "paine"
+        ]
+      },
+      "card": "Next best moveYunaTurbo Ether→YunaItemin Itemno MP100% to hitRecovers 500 MP.The best of what is offered.",
+      "computed": {
+        "actor": "yuna",
+        "v2": "Mega-Potion -> the party",
+        "v3": "Turbo Ether -> Yuna",
+        "v3ms": 4.0999999940395355,
+        "v3reason": "The best of what is offered",
+        "hudCard": "Turbo Ether -> Yuna",
+        "hudPassesEngine": true,
+        "projection": {
+          "enemyMovedFirst": false,
+          "now": "yuna 746/2488, rikku 1696/5652, paine 1759/5862",
+          "projected": "yuna 2488/2488, rikku 3750/5652, paine 3805/5862"
+        }
+      }
+    },
+    {
+      "name": "card element 1.5 s later",
+      "fade": {
+        "opacity": "1",
+        "vis": "visible",
+        "hidden": false,
+        "rect": [
+          584,
+          681,
+          553,
+          154
+        ],
+        "text": "Next best moveYunaTurbo Ether→YunaItemin Itemno MP100% to hitRecovers 500 MP.The best of what is offered."
+      }
+    }
+  ],
+  "failures": []
+}

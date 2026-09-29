@@ -20,7 +20,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { installPhoneBattle, readGroup, targetHint, withPhoneLayout, type PhoneBattleText } from '../../src/ui/common/phoneBattle.ts';
-import { bestLeft, createPhoneField, frameScore, framedIds, FRAME_WEIGHTS } from '../../src/ui/common/phoneFraming.ts';
+import { bestLeft, createPhoneField, frameScore, framedIds, FRAME_COMFORT, FRAME_WEIGHTS } from '../../src/ui/common/phoneFraming.ts';
 import { readFfxPhone } from '../../src/ui/ffx/phoneHud.ts';
 import { readFfx2Phone } from '../../src/ui/ffx2/phoneHud.ts';
 import type { HudPort } from '../../src/engine/HudPort.ts';
@@ -144,6 +144,20 @@ describe('the field slide', () => {
     expect(bestLeft(fits)).toBe(-225);
     const edge = { view: 360, canvas: 811, home: -225, figures: [{ x: 5, w: 40, weight: 10 }] };
     expect(bestLeft(edge)).toBe(0);
+  });
+
+  it('P-02 (FFX): keeps the roomier margin when the whole fight fits with it, else the old slide', () => {
+    // Chapter I at 390x844, canvas 924 (measured): Tidus 317..408 and Seymour Flux 551..662 in canvas px.
+    const ch1 = { view: 390, canvas: 924, home: -267, figures: [{ x: 317, w: 91, weight: FRAME_WEIGHTS.actor }, { x: 551, w: 111, weight: FRAME_WEIGHTS.boss }] };
+    const tight = bestLeft(ch1);
+    expect(390 - (662 + tight)).toBeLessThan(FRAME_COMFORT.ffx); // his hair tips 8 to 10 px from the edge
+    const roomy = bestLeft({ ...ch1, comfort: FRAME_COMFORT.ffx });
+    expect(390 - (662 + roomy)).toBeGreaterThanOrEqual(FRAME_COMFORT.ffx);
+    expect(317 + roomy).toBeGreaterThanOrEqual(FRAME_COMFORT.ffx);
+    // Too wide for the roomy margin: exactly the old answer.
+    const wide = { ...ch1, figures: [{ x: 290, w: 91, weight: FRAME_WEIGHTS.actor }, { x: 551, w: 111, weight: FRAME_WEIGHTS.boss }] };
+    expect(bestLeft({ ...wide, comfort: FRAME_COMFORT.ffx })).toBe(bestLeft(wide));
+    expect(FRAME_COMFORT.ffx2).toBe(0); // FFX-2 slides unchanged
   });
 
   it('while aiming, the aimed figure comes first', () => {

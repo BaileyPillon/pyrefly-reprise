@@ -30,7 +30,7 @@ import { TelegraphBanner } from './TelegraphBanner.ts';
 import { ActionHelpBar } from './actionBanner.ts';
 import { ActingFade } from './actingFade.ts';
 import { IntentOpeningHold } from '../ffx2/intentOpeningHold.ts';
-import { AIM_FOLD_FLOOR_TOP, chipLiftDy, foldWhileAiming } from './sensorAimFold.ts';
+import { AIM_FOLD_CLEAR, AIM_FOLD_FLOOR_TOP, chipLiftDy, foldWhileAiming } from './sensorAimFold.ts';
 import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
 import { clipOffStack } from './bracketClip.ts';
@@ -912,7 +912,9 @@ export class FFXBattleHud implements HudPort {
       const r = this.targeting?.rect(id);
       return r && scale ? [{ left: (r.x - ox) / scale, right: (r.x + r.w - ox) / scale, top: (r.y - oy) / scale, bottom: (r.y + r.h - oy) / scale }] : [];
     });
-    const dy = chip ? chipLiftDy(chip, enemies, AIM_FOLD_FLOOR_TOP) : null;
+    // P-01: clear of every bracket and of the aimed target's name plate, with room to spare.
+    const plate = on ? this.stageRect(this.el.querySelector<HTMLElement>('.ffx-target__plate')) : null;
+    const dy = chip ? chipLiftDy(chip, plate ? [...enemies, plate] : enemies, AIM_FOLD_FLOOR_TOP, 2, AIM_FOLD_CLEAR) : null;
     if (dy === null) el.style.removeProperty('--ffx-sensor-dy');
     else el.style.setProperty('--ffx-sensor-dy', `${Math.round(dy * 10) / 10}px`);
   }

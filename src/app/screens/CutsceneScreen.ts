@@ -21,6 +21,7 @@ import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { PauseScreen } from './PauseScreen.ts';
 import { createPauseKeyLatch, type PauseKeyLatch } from './pause/keys.ts';
 import { CutsceneStage } from './CutsceneStage.ts';
+import { swapCutscenePlate } from './cutscenePlate.ts';
 
 /**
  * One row, and it says what the keys actually do.
@@ -410,6 +411,7 @@ export class CutsceneScreen extends Screen {
         }
       },
       flash: (color, ms) => stage.flash(color, ms),
+      backdrop: (key, ms) => swapCutscenePlate(this.root, key, this.runner?.skipped ? 0 : ms, (m) => this.waitGate(m)), // DSL `backdrop()` (2026-09-27)
       shake: (px, ms) => stage.shake(px, ms),
       fadeScreen: (to, ms) => (to === 'clear' ? Promise.all([this.app.fade('clear', ms), stage.veil(false, ms)]).then(() => {}) : stage.veil(true, ms)),
     });

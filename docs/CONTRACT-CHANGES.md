@@ -6,7 +6,125 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
-## 2026-09-27 — `encounters.ts`: `ChapterId += 'sin'`, `Chapter.number` widens to 16 (Chapter XVI, unlisted)
+## 2026-09-28 — `dsl.ts`: doc comments only (IXS-4)
+
+**Both** (shared plumbing). Branch `fixes-r28`. `setPose` gets its doc comment back ("Set an actor's sprite state"),
+which the 2026-09-27 `backdrop()` insertion had left above `backdrop()`. No code, type or export changes.
+
+## 2026-09-28 — FF7 release prep: the flash floor and the rest placement become optional per call and per scene
+
+**FF7 only**, through shared plumbing (both + FF7) [AGENTS.md hard rule 14]: every addition is optional and unset for
+FFX and FFX-2, so their frames do not change. Branch `ff7-phase3`.
+
+- `PaintedShader`: a new uniform `flashFloorCut` (0..1) scales the flash's dark-texel floor, `FLASH_FLOOR = 0.34 * (1 -
+  flashFloorCut)`. Unset (every material that never sets it, and every FFX / FFX-2 flash) is 0: the floor as before.
+- `PaintedActor.flash(colour, ms, peak, floorCut = 0)` and the port `ActorHandle.flash(..., floorCut?)`: a fourth,
+  optional argument. Only FF7's director passes it: 1 for the cast light (on the target and each fighter nearby),
+  `FF7_HIT_FLOOR_CUT` 0.5 for B1's white hit flash. Why: the target's cast (0.75 for 680 ms) lifted the boss's dark
+  belly and legs to a flat pale that matched the grating behind them, so the lower body read as see-through for
+  about half a second after every hit (the phase-3 judge's item 2). The planes were opaque throughout.
+- `SceneStaging.restPoses?: false` (copied by `stagingOf`) and `StageFacing.poseScalingOf(slots)`: the stage turns
+  `figureExtent` and `restPoses: false` into the actor's `poseScaling` (`maxExtent`, `proneAspect: Infinity`). With
+  the switch no pose is laid to rest by its aspect. FF7's staging sets it: Barret's aim (1302x1130, over the 1.15
+  prone aspect) was rolled 0.30 rad and slid by ProneLay about 90 px off his stance (the P3 check's P3C-2); Cloud's
+  strike and the boss's idle and recoil were rolled too. Every other scene leaves it unset, so FFX and FFX-2 KO
+  paintings still come to rest. No line was added to `PaintedActor.ts`, `BattlePresenterStage.ts` or
+  `BattlePresenterPorts.ts` (P3C-3).
+
+## 2026-09-27 — FF7 phase 3 repair pass: more optional FF7 hooks (the judge's items 1 to 12)
+
+**FF7 only**, through shared plumbing (both + FF7) [AGENTS.md hard rule 14]: every addition is optional
+or keyed to FF7's own ids and switches; no FFX or FFX-2 chapter sets or supplies any of them, so they see
+exactly what they saw before. Branch `ff7-phase3`.
+
+- `SceneStaging` (`src/scenes/types.ts`) gains `poseCut?` (a hard cut between poses: the actor's
+  `crossfadeMs` 0), `poseShiftPx?` (per art id, a horizontal shift per pose in the painting's pixels) and
+  `figureLight?` (rim, bounce, silhouette erosion in place of the house rim); `stagingOf` copies them and
+  `BattlePresenterStage.add` passes them on (`StageFacing.figureLightOf`). Only the FF7 reactor sets them.
+- `PaintedActor` gains the options `poseShiftPx?` and `erode?` (a shader uniform, 0 = off), and
+  `lieDown(ms, tilt?)` (the tip back; default flat, as before); a revive (`rise`) now also undoes a
+  `lieDown` (only FF7 revives a laid-down body). `ActorHandle.lieDown?` takes the same optional `tilt`.
+- `ActionMotionPort` gains optional `sendOff(id, ctx)` (an enemy's KO in place of the house dissolve),
+  `ko(id, ctx)` (after a party member's `ko` pose) and `opaqueForms` (a form change without the
+  see-through fade). `BattlePresenterBeats` calls each only when the port has it.
+- `VfxPort.pendingLand?(at, action)`; `SpellFxLayer` reports an FF7 landing (`onLand`) when the effect's
+  own clock passes the mark, answers `pendingLand`, and takes `clip?()` (a scissor rectangle; FF7: below
+  its message window); `StageSpellFxOptions.clip?`. `awaitSpellLanding` polls `pendingLand` after its
+  sleep only when the port has it. `FF7_FX_IDS` adds `'ff7-down'` (the boss's death).
+- `HudPort.numeralLanded?(targetId)`, called by the presenter's `numeral` beat; the FF7 HUD holds its
+  numerals and HP rows from the event until then.
+- `BattlePresenter.submit`: for an engine whose state says `game === 'ff7'`, a command waits for the burst
+  already playing (the ATB pump's enemy turn) to finish first (research/ff7-battle-core.md §2.6).
+- `BattleScreenResult.standing?` (`BattleScreen.ts`): FF7's party on their feet at the end
+  (`ff7Standing.ts`), for C1's 0 EXP to a KO'd member.
+
+## 2026-09-27 — FF7 phase 3: the presenter and spell-FX ports gain FF7's hooks (all optional)
+
+**FF7 only**, through shared plumbing (both + FF7) [AGENTS.md hard rule 14]: every addition is
+optional or keyed to FF7's own ids and switches, so an FFX or FFX-2 chapter sees exactly what it saw
+before. Branch `ff7-phase3` (the high-fidelity fight; Bailey 2026-09-27, "I'll go with all of your
+recommendations": D-244, D-259 to D-262).
+
+- `ActionMotionPort` (`src/engine/BattlePresenterMotion.ts`) gains optional `ownsWindUp(event)`
+  (the game's painted keys replace the house lunge and squash), `victory(ctx)` and `defeat(ctx)`
+  (a game's own win and wipe-out moments), and `MOMENT_GUARD_MS`. `BattlePresenterBeats.ts` calls
+  them only when a port supplies them; FFX and FFX-2 supply no port.
+- `FixedCamera` (`src/engine/StageFacing.ts`, FF7's alone) gains `unheld()`: the free camera for
+  FF7's scripted Game Over pan.
+- `SceneStaging.figureExtent?` (`src/scenes/types.ts`): the longest side a painting may reach, as the
+  actor's `poseScaling.maxExtent`; `stagingOf` copies it and `BattlePresenterStage` passes it on
+  (same line count). Only the FF7 reactor sets it (3.2).
+- Spell FX: `FxGame` adds `'ff7'` and `SpellFxId` adds FF7's eleven ids (`spellfx/ff7/ff7FxSpecs.ts`,
+  spread into `FX_SPECS`); `SPECIAL_FX.ff7` is empty; `resolveAbilityFx` takes an optional
+  `sourceId` and answers `'ff7'` from FF7's own table only; `SpellFxLayerOptions.onLand?` and
+  `StageSpellFxOptions.onLand?` report a blow's landing; `FxTarget.members?` carries a group
+  effect's target rectangles (`groupTarget`). FFX and FFX-2 ids, looks and marks are unchanged
+  (`spellfx-effects.test.ts` now sweeps only the non-FF7 ids; `ff7-fx.test.ts` sweeps FF7's).
+- `AirshipBattleHook.opening?()` (`BattleScreenAirship.ts`): FF7's opening camera, awaited by
+  `BattleScreen.showBattleStart` for game `'ff7'` only (same line count).
+- `BattlePresenterArt.resolvePoseMap`: an `ff7-` art id loads exactly the poses its manifest lists
+  (with the extra key poses: wind-up, follow-through, the victory keys); a pose it lacks resolves by
+  name on the actor. No other art id takes the branch. (Found on the way, not changed: for any
+  subject whose `idle.json` carries a `scale`, a pose that falls back to `idle.png` loads a second
+  copy whose sidecar scale is applied on top of the reference's, so it draws that much larger;
+  FFX-2's shades and aeons carry such scales. Worth its own check; FF7 now avoids it.)
+
+## 2026-09-27 — `encounters.ts` lists Chapter XVI, Ixion at Djose; `dsl.ts` gains the `backdrop()` step
+
+**FFX-2 only** for the chapter [AGENTS.md hard rule 14]; the listing and the new step are shared plumbing, "both".
+Branch `chapter-ixion`. Bailey, 2026-09-27 ~18:30 EDT: "ixion needs to be in the next build as well".
+
+- `encounters.ts`: `FFX2_IXION_DJOSE` moves from `UNLISTED_CHAPTERS` into `CHAPTERS` / `CHAPTER_IDS`, after Chapter XV,
+  with `number: 16` (was 17 while unlisted: Sin, still unlisted on `chapter-sin` as 16, takes the numbers after it;
+  a merge of that branch renumbers Sin, not Ixion). `UNLISTED_CHAPTERS` keeps only the hidden FF7 experiment. The
+  `ChapterId` union and `Chapter.number` range are unchanged. `CHAPTER_META` gains `IXION_DJOSE_META` (numeral `XVI`,
+  so `ChapterMeta.numeral` widens by `'XVI'`); the story registry, guides, tactics and `CHAPTER_GAME` gain a row each.
+- `dsl.ts`: a new step, `BackdropStep` (`{ type: 'backdrop'; key; ms }`, builder `backdrop(key, ms = 900)`), joins the
+  `Step` union: swap the cutscene screen's painted plate for `public/art/backdrops/<key>.png`, crossfading over `ms`.
+  `CutsceneRunner` forwards it to a new optional port, `CutscenePorts.backdrop?(key, ms)`; a port set without it
+  ignores the step (every existing fake and the battle's mid-beat ports compile and behave unchanged). The cutscene
+  screen implements it (`src/app/screens/cutscenePlate.ts`); under a skip it cuts at once, so the scene still ends on
+  the right plate. First user: Chapter XVI's post scene (the Abyss, then the Bevelle Underground).
+- No existing field, type or export changes shape; every importer compiles unchanged.
+
+## 2026-09-27 — `encounters.ts`: `ChapterId` gains `ffx2-ixion-djose`; `Chapter.number` widens to 17 (Ixion at Djose, unlisted)
+
+**FFX-2 only** [AGENTS.md hard rule 14]; the widening itself is shared plumbing, "both". Branch `chapter-ixion`.
+
+- `ChapterId` adds `'ffx2-ixion-djose'` (so `ListedChapterId` does too, which is why `learn/atlas/cites.ts`
+  and `learn-atlas-data.test.ts` gain a row, as every unlisted chapter before it did).
+- `Chapter.number` adds `16 | 17`: the record is Chapter XVII, registered in `UNLISTED_CHAPTERS`
+  (`src/data/chapter-ffx2-ixion-djose.ts`); listing it is the switch. Chapter XVI (Sin, branch `chapter-sin`)
+  widens the same line to 16; a merge of the two keeps `| 16 | 17` and both ids.
+- No other field, type or export changes; every importer compiles unchanged.
+
+## 2026-09-27 — `encounters.ts`: `ChapterId += 'sin'`, `Chapter.number` widens to 16 (Chapter XVI, unlisted; XVII since the 2026-09-28 merge)
+
+**Merge of 2026-09-28** (branch `chapter-sin` takes `origin/main`): main listed Ixion at Djose as
+Chapter XVI and widened `Chapter.number` to 17 first, so Sin keeps its id and takes the next number,
+**17** (Chapter XVII, still unlisted). `ChapterId` holds both `'ffx2-ixion-djose'` and `'sin'`; no
+other shape changes. The two-chapter plan (`docs/plans/sin-two-chapters-plan.md`) renumbers again when
+the Fins and the Core are built.
 
 **FFX only** [AGENTS.md hard rule 14]: Sin, the assault from the *Fahrenheit* (`research/ffx-sin.md`
 §0.3). Bailey, 2026-09-27 ~13:40 EDT, "all your recommendations" (Sin: concept A reached through B;

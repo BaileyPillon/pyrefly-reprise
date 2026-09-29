@@ -1,0 +1,81 @@
+{
+  "tag": "ixion-v3",
+  "seeds": 40,
+  "when": "2026-09-28T03:22:27.134Z",
+  "rows": [
+    {
+      "chapterId": "ffx2-ixion-djose",
+      "game": "ffx2",
+      "driver": "card",
+      "seeds": 40,
+      "wins": 40,
+      "linksCleared": 40,
+      "outcomes": {
+        "victory": 40
+      },
+      "decisions": 1474,
+      "closed": 7,
+      "refused": 0,
+      "fallbacks": 0,
+      "minutes": 90.25713333333333,
+      "pendingDecisions": 677,
+      "dupStrict": 2,
+      "dupSame": 2,
+      "dupCensus": {
+        "x2-hi-potion -> x2-hi-potion": 2,
+        "x2-mega-potion -> x2-hi-potion": 2
+      },
+      "downDecisions": 6,
+      "raiseOnMenu": 6,
+      "topRaises": 5,
+      "runnerUpRaises": 1,
+      "noteOnMiss": 0,
+      "missedRevive": 1,
+      "missedWhileLosing": 0,
+      "lostRunsWithMissedRevive": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 13,
+      "savable": 13,
+      "lethalMiss": 2,
+      "latencyP50": 3.934800000000905,
+      "latencyP95": 6.917699999999968
+    },
+    {
+      "chapterId": "ffx2-ixion-djose",
+      "game": "ffx2",
+      "driver": "intended",
+      "seeds": 40,
+      "wins": 37,
+      "linksCleared": 37,
+      "outcomes": {
+        "victory": 37,
+        "defeat": 3
+      },
+      "decisions": 1493,
+      "closed": 6,
+      "refused": 0,
+      "fallbacks": 0,
+      "minutes": 94.95462777777779,
+      "pendingDecisions": 0,
+      "dupStrict": 0,
+      "dupSame": 0,
+      "dupCensus": {},
+      "downDecisions": 0,
+      "raiseOnMenu": 0,
+      "topRaises": 0,
+      "runnerUpRaises": 0,
+      "noteOnMiss": 0,
+      "missedRevive": 0,
+      "missedWhileLosing": 0,
+      "lostRunsWithMissedRevive": 0,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "lethalThreat": 0,
+      "savable": 0,
+      "lethalMiss": 0,
+      "latencyP50": 0,
+      "latencyP95": 0
+    }
+  ]
+}

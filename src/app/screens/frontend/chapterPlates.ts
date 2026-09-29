@@ -212,6 +212,13 @@ export const PLATE_COMPOSITIONS: Readonly<Record<string, PlateComposition>> = {
       { key: 'baralai-shade', focus: [0.335, 0.17], hero: P(64, 30, 150), card: cardClear(400, [0.335, 0.17]) },
     ],
   },
+  // XVI (FFX-2): Ixion, look B, whole, in the Chamber (the stand-in plate); the card crops to his head and horn.
+  // Face read off a 10 percent grid on `x2-ixion/idle.png`: 0.24-0.30 x 0.33-0.45. The title is short.
+  'ffx2-ixion-djose': {
+    scene: { hero: '50% 55%', card: '50% 45%' },
+    glow: 'rgba(190, 160, 255, 0.36)',
+    layers: [{ key: 'x2-ixion', focus: [0.27, 0.39], hero: P(56, 40, 88), card: card(300) }],
+  },
 };
 
 /** The placement a chapter without an entry gets: its boss, big, right of the title. */

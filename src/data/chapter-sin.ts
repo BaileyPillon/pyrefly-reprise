@@ -1,5 +1,5 @@
 /**
- * Chapter XVI — **Sin**, the assault from the *Fahrenheit* (FFX). Link 4,
+ * Chapter XVII — **Sin**, the assault from the *Fahrenheit* (FFX). Link 4,
  * Overdrive Sin, first.
  *
  * **Game case: FFX only** [AGENTS.md rule 14; `research/ffx-sin.md` §0.3]: CTB,
@@ -24,8 +24,8 @@
  * Every field a player would see or hear is a **placeholder**, and says so:
  *
  * - `title`, `subtitle`, `location`, `blurb` — our own summaries of research
- *   §1.1 and §9.1-§9.2 (no line is quoted). `number: 16`: the slot the concept
- *   sheet reserves (XVI).
+ *   §1.1 and §9.1-§9.2 (no line is quoted). `number: 17`: the concept sheet
+ *   reserved XVI, which Ixion at Djose took when it was listed first (merge of 2026-09-28).
  * - `sceneKey: 'evrae-airship-deck'` — **placeholder**. Link 4 is fought on the
  *   *Fahrenheit*'s deck, above Bevelle at dusk (§9.1, `[verified: 2 sources]`);
  *   that backdrop is not painted, so Chapter VIII's deck (the same ship, and the
@@ -56,11 +56,11 @@ export const SIN_PLACEHOLDER_SCRIPTS: ChapterScripts = {
   midScripts: {},
 };
 
-/** Chapter 16 (unlisted: `./chapters-unlisted.ts`). */
+/** Chapter 17 (unlisted: `./chapters-unlisted.ts`). */
 export const SIN: Chapter = {
   id: 'sin',
   game: 'ffx',
-  number: 16, // the concept sheet's slot XVI
+  number: 17, // the next free slot: XVI went to Ixion at Djose (listed 2026-09-27)
   title: 'Sin', // PLACEHOLDER — the concept sheet's working name
   // research §5.4, summarised: the fight is a race against the mouth.
   subtitle: 'Before the mouth is fully open',

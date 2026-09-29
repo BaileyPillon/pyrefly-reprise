@@ -46,6 +46,11 @@ function cursor(g: Ff7Geometry, o: Origin, textX: number, yc: number): string {
   return `<div class="ff7-cur" style="left:${textX - c.tip - c.w - o.x}px;top:${yc - c.h / 2 - o.y}px">${gloveSvg(c.w, c.h)}</div>`;
 }
 
+/** The lit active row (D-261's punchier look, `ff7-hud-look.css`): a glow under the row the finger is on. */
+function rowGlow(g: Ff7Geometry, o: Origin, x: number, w: number, yc: number): string {
+  return box(o, x, yc - g.cap * 0.95, w, g.cap * 1.9, 'ff7-rowglow');
+}
+
 function hit(g: Ff7Geometry, o: Origin, r: { x: number; w: number }, yc: number, attr: string): string {
   const pitch = g.mode === 'phone' ? 44 : 12 * g.s;
   return `<div class="ff7-hit" ${attr} style="left:${r.x - o.x}px;top:${yc - pitch / 2 - o.y}px;width:${r.w}px;height:${pitch}px"></div>`;
@@ -59,7 +64,9 @@ function commandWindow(g: Ff7Geometry, st: Ff7MenuState, ctx: MenuContext, withC
       if (!slot || yc === undefined) return ''; // a missing command leaves its slot blank
       const x = c.cols[0] as number;
       const color = !slot.enabled ? TEXT.off : slot.label === 'Limit' ? limitLetterColours(ctx.limitPhase) : TEXT.command;
-      return text(o, x, yc + g.cap / 2, g.cap, slot.label, { shadow: g.shadow, color, cls: 'ff7-slot', data: { slot: String(i) } }) +
+      const lit = withCursor && st.view === 'top' && st.topIdx === i;
+      return (lit ? rowGlow(g, o, c.r.x + 5 * g.s, c.r.w - 10 * g.s, yc) : '') +
+        text(o, x, yc + g.cap / 2, g.cap, slot.label, { shadow: g.shadow, color, cls: 'ff7-slot', data: { slot: String(i) } }) +
         (withCursor && st.view === 'top' && st.topIdx === i ? cursor(g, o, x, yc) : '') +
         hit(g, o, c.r, yc, `data-slot="${i}"`);
     }).join(''));
@@ -119,7 +126,8 @@ function listWindow(g: Ff7Geometry, st: Ff7MenuState, ctx: MenuContext, rows: Av
       const count = st.sub === 'item' && row.command.kind === 'item' ? ctx.itemCount?.(row.command.id) : undefined;
       const colW = cols === 1 ? L.r.w : L.r.w / cols;
       const label = count !== undefined ? row.label.replace(/ x\d+$/, '') : row.label; // the engine's "Potion x3": the count has its own column
-      return text(o, x, yc + g.cap / 2, g.cap, label, { shadow: g.shadow, color, cls: 'ff7-row-label', data: { row: String(i) } }) +
+      return (withCursor && st.subIdx === i ? rowGlow(g, o, x - g.cursor.w * 0.4, colW - 6 * g.s, yc) : '') +
+        text(o, x, yc + g.cap / 2, g.cap, label, { shadow: g.shadow, color, cls: 'ff7-row-label', data: { row: String(i) } }) +
         (count !== undefined ? text(o, countX, yc + g.cap / 2, g.cap, String(count), { shadow: g.shadow, color, align: 'r' }) : '') +
         (withCursor && st.subIdx === i ? cursor(g, o, x, yc) : '') +
         hit(g, o, { x: x - g.cursor.w - g.cursor.tip, w: colW }, yc, `data-row="${i}"`);
@@ -165,7 +173,18 @@ export function targetCursorsHtml(g: Ff7Geometry, points: ReadonlyArray<{ id: st
     `<div class="ff7-cur ff7-cur--target" data-target="${p.id}" style="left:${p.x - c.w}px;top:${p.y - c.h / 2}px">${gloveSvg(c.w, c.h)}</div>`).join('');
 }
 
-/** Tap areas over each valid target while aiming (a tap moves the finger, a second tap confirms). */
-export function targetHitsHtml(rects: ReadonlyArray<{ id: string; x: number; y: number; w: number; h: number }>): string {
-  return rects.map((r) => box({ x: 0, y: 0 }, r.x, r.y, r.w, r.h, 'ff7-hit ff7-hit--target', '').replace('<div ', `<div data-target="${r.id}" `)).join('');
+/**
+ * Tap areas over each valid target while aiming (a tap moves the finger, a second tap confirms), clamped to the
+ * frame `view` (W x H) so a long machine's box never reaches past the screen's edge (repair item 11: on a phone
+ * the boss's box ran to x 493 of 390, and a scroll-into-view slid the HUD sideways).
+ */
+export function targetHitsHtml(rects: ReadonlyArray<{ id: string; x: number; y: number; w: number; h: number }>, view?: { W: number; H: number }): string {
+  return rects.flatMap((r) => {
+    const x0 = view ? Math.max(0, r.x) : r.x;
+    const y0 = view ? Math.max(0, r.y) : r.y;
+    const x1 = view ? Math.min(view.W, r.x + r.w) : r.x + r.w;
+    const y1 = view ? Math.min(view.H, r.y + r.h) : r.y + r.h;
+    if (x1 - x0 < 1 || y1 - y0 < 1) return [];
+    return [box({ x: 0, y: 0 }, x0, y0, x1 - x0, y1 - y0, 'ff7-hit ff7-hit--target', '').replace('<div ', `<div data-target="${r.id}" `)];
+  }).join('');
 }

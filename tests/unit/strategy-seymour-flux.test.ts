@@ -88,7 +88,11 @@ import { MAX_DECISIONS, SEEDS, WINDOWS, attack, newEngine, runIntended } from '.
  */
 // 2026-09-25, PR-0155 (FFX only): aeons lost the party's Items (ffx-combat-core §6.2), so seed 7
 // now loses (37,578 left) and seed 42 wins; the forty-seed window moved 23 -> 17.
-const KNOWN_LOSSES: readonly number[] = [1, 7, 20260916];
+// 2026-09-27, PR-0179 arm a (D-243, FFX only; Bailey: "I'll go with all of your recommendations"):
+// the aeons carry research/ffx-combat-core.md §6.4.3's Gagazet rows (Bahamut 1,398 -> 2,935 HP), so
+// seeds 7 and 20260916 now win (each measured under 'shipped' and under a, nothing else changed) and
+// leave the list; seed 1 still loses (43,187 left at turn 38). Nothing on the boss was touched.
+const KNOWN_LOSSES: readonly number[] = [1];
 
 /**
  * ### 2026-09-19, the release-prep pass — read this before trusting the list above
@@ -198,7 +202,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * Gems on their one turn: 23 -> 17 of these forty, measured with nothing else changed (26 -> 17
    * against live a999d133, both fixes together). 17/40 is under half: this is a floor, not a promise.
    */
-  it('keeps at least fifteen wins in forty contiguous seeds (measured 17)', () => {
+  it('keeps at least fifteen wins in forty contiguous seeds (measured 18)', () => {
     const results = Array.from({ length: 40 }, (_, i) => runIntended(i + 1));
     const wins = results.filter((r) => r.outcome === 'victory').length;
     const lost = results
@@ -207,7 +211,8 @@ describe('the shipped intended strategy beats Chapter 1', () => {
       .map((x) => `${x.seed}: ${x.r.outcome} with ${x.r.bossHp} left at turn ${x.r.turns}`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(', ') || 'none'}`);
 
-    expect(wins, 'Chapter 1 fell below its 15/40 floor (17/40 measured 2026-09-25, PR-0155)').toBeGreaterThanOrEqual(15);
+    // 17/40 on 2026-09-25 (PR-0155); 18/40 under PR-0179 arm a (D-243, 2026-09-27). The floor stays.
+    expect(wins, 'Chapter 1 fell below its 15/40 floor (18/40 measured 2026-09-27, arm a)').toBeGreaterThanOrEqual(15);
   }, 120_000);
 
   /**
@@ -218,7 +223,7 @@ describe('the shipped intended strategy beats Chapter 1', () => {
    * the floor sits five wins below it. At most two losses before battle turn 10 (measured 1: seed 20
    * at turn 8), and a battle turn is the engine's, not a player's. Nothing on the boss was tuned.
    */
-  it('keeps at least 73 wins over the four standard windows (measured 78 of 160)', () => {
+  it('keeps at least 73 wins over the four standard windows (measured 79 of 160)', () => {
     const perWindow: number[] = [];
     let early = 0;
     for (const [a, b] of WINDOWS) {
@@ -233,7 +238,9 @@ describe('the shipped intended strategy beats Chapter 1', () => {
     const total = perWindow.reduce((s, w) => s + w, 0);
     console.log(`four windows: ${perWindow.join(' / ')} = ${total} of 160; losses before battle turn 10: ${early}`);
 
-    expect(total, 'Chapter 1 fell below its 73/160 floor (78/160 measured 2026-09-25, PR-0008)').toBeGreaterThanOrEqual(73);
+    // 17 / 17 / 19 / 25 = 78 on 2026-09-25 (PR-0008); 18 / 19 / 21 / 21 = 79 under PR-0179 arm a
+    // (D-243, 2026-09-27; one loss before turn 10 either way). The floor stays.
+    expect(total, 'Chapter 1 fell below its 73/160 floor (79/160 measured 2026-09-27, arm a)').toBeGreaterThanOrEqual(73);
     expect(early, 'a loss before battle turn 10 is a wipe, not a fight').toBeLessThanOrEqual(2);
   }, 240_000);
 

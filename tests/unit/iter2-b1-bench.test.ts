@@ -78,7 +78,10 @@ const ARMS = (process.env['B1_ARMS'] ?? 'off,ic1,carry,leblanc,all').split(',');
 
 interface Arm { engine: Partial<Ffx2EngineOptions>; carry: boolean }
 const ARM_OPTIONS: Record<string, Arm> = {
+  /** Every constant at its default: since D-242 (2026-09-27) that is IC-1 and PR-0106 on. */
   off: { engine: {}, carry: false },
+  /** The engine before D-242: IC-1 and PR-0106 forced off (`docs/handoff/combat-switches.md`). */
+  pre: { engine: { immuneHitsSkipChain: false, leblancScriptSinirothX: false }, carry: false },
   ic1: { engine: { immuneHitsSkipChain: true }, carry: false },
   carry: { engine: {}, carry: true },
   leblanc: { engine: { leblancScriptSinirothX: true }, carry: false },

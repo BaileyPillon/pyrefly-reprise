@@ -1,0 +1,418 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-09-28T06:50:11.457Z",
+ "build": {
+  "mainSha": "be1e964a",
+  "bundle": "index-9QdEMZik.js"
+ },
+ "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: the FF7 fight opens by all three doors, is won by keys and by taps, lost by keys, retried and left to the board, with 0 uncaught page errors (5/5 spec runs plus 3 of my own).",
+  "No regression against live release 26: FFX I, FFX-2 IV and XVI stage and face every fighter as live does and show the same HUD; the board, the main save and every shipped art and audio file are unchanged.",
+  "The changed area meets its adopted decisions D-259 to D-262 in the running game (Film art, party left facing right, Spectacle effects, punchier HUD) and the phase-3 moments C1, G1, D1, E1, F1.",
+  "No critical or major issue; three polish items, one of them carried from live."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "FF7 results (C1 steps 1 and 2), GAME OVER (G1) and the pause own the whole window at 1600x900 and 390x844; nothing stage-sized.",
+   "where": "FF7; Guard Scorpion; results, game over, pause",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-1600x900-gameover.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-390x844-results-1.jpg",
+    "critic/reviews/be1e964a-focused/ff7exit-cand/after-escape.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "The punchier FF7 HUD (D-261) reads at 1600, 2000 and 390: names, HP/MP digits, command rows and the results rows are large and unclipped; the aimed boxes stay inside the frame and the HUD never scrolls (spec assertion).",
+   "where": "FF7; Guard Scorpion; first turn, results",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/supp-cand/ff7-2000x1012-first-turn.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-390x844-first-turn.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-390x844-results-1.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The three warnings arrive as one block and leave; after a loss and CHAPTER SELECT the swirl flag is cleared, #app has no transform or filter, and no .ff7hud/.ff7res node is left on the board.",
+   "where": "FF7; Guard Scorpion; hints, swirl, return to board",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/ff7exit-cand/report.json",
+    "critic/reviews/be1e964a-focused/ff7exit-cand/board-after.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-1600x900-hint-3.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "At 1600 and 2000 the FF7 windows sit under the floor line and cover no fighter; the party stands left, the boss right. At 390 the E1 framing holds (Cloud >= 110 px, windows inside the frame, spec assertion); the boss tail runs off the right edge and its barrels touch Cloud's blade tip, logged as polish P-02.",
+   "where": "FF7; Guard Scorpion; first turn",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/supp-cand/ff7-2000x1012-first-turn.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-390x844-first-turn.jpg",
+    "critic/reviews/be1e964a-focused/supp-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Cloud, Barret, Guard Scorpion, Assault Gun, Search Scope, Tail Laser and the results lines show in full at 1600 and 390.",
+   "where": "FF7; Guard Scorpion; battle messages, results",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/e2e/e2e.log",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-1600x900-results-2.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "reason": "The Film paintings (38 ff7-film-* files, every pose the data names) ship, decode and draw; no placeholder figure; the results portraits are paintings.",
+   "where": "FF7; Guard Scorpion; all poses",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/artifact-manifest.json",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-1600x900-win-poses.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-390x844-results-1.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "Judged in the running game at 1600/2000/390 against the named properties of D-259/D-262: Film art, party on the left facing right (Barret's gun arm near, not mirrored), boss on the right facing left, the boss opaque through the slash, Bolt and Laser frames, no matte fringe seen; the melee strike stands on the stance. Taste of the Film art is Bailey's (CHK-B3), not re-judged here.",
+   "where": "FF7; Guard Scorpion; first turn, fx frames, D1",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/supp-cand/ff7-2000x1012-fx-ff7-slash.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-1600x900-fx-ff7-laser.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-1600x900-win-hold.jpg",
+    "critic/reviews/be1e964a-focused/ff7-live-vs-cand-2000.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real input only for every game action: LIMIT by keys (1600, 2000, fresh profile from the title), seven taps (390), L1 R1 L1 R1 Select on a stand-in pad (emulated, not a real controller); two wins (keys, taps), two losses plus RETRY (keys), one loss by keys to CHAPTER SELECT, Escape pause and resume; a near-miss LIMIQ does nothing. The debug API only read state and (in the spec) pinned the seed / booted to the board.",
+   "where": "FF7; Guard Scorpion; door, fight, win, loss, retry, exit",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/e2e/e2e.log",
+    "critic/reviews/be1e964a-focused/door-cand-nearmiss/door.json",
+    "critic/reviews/be1e964a-focused/ff7exit-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture is taken after asserting the screen (battle / results / chapter-select / pause), the chapter and the HUD state (ready actor, menu view, effect id and time); failed waits were recorded as FAIL steps, never captured as evidence (the first FFX-2 Attack probe hit CHANGE, the top FFX-2 row, and was recorded as a harness miss).",
+   "where": "FF7, FFX, FFX-2",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/supp-cand/report.json",
+    "critic/reviews/be1e964a-focused/e2e/e2e.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused review of the production candidate before the deploy; the exact-artifact live check is the separate live obligation after the deploy.",
+   "where": "both + FF7",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "The changed sprite keys (ff7-film-cloud, ff7-film-barret, ff7-film-guard-scorpion[-tail-up]) resolve to shipped folders in the manifest; no uncaught page error in any run; the spec and supp runs loaded every pose.",
+   "where": "FF7",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/artifact-manifest.json",
+    "critic/reviews/be1e964a-focused/supp-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "tools/artifact-manifest.mjs build over dist-gate: 912 files, decode-checked, 0 problems; every art and audio file is byte-identical to release 26 (only index.html and the bundle, css and map differ).",
+   "where": "both + FF7",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/artifact-manifest.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The shared plumbing (PaintedActor poseShiftPx / erode / flashFloorCut, FixedCamera.unheld, figureLightOf) is opt-in and defaults to the old behaviour; FFX I and FFX-2 IV and XVI stage every fighter at the live positions and facings (within idle sway) and show the same HUD.",
+   "where": "FFX I; FFX-2 IV, XVI; first menu",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/supp-cand/report.json",
+    "critic/reviews/be1e964a-focused/supp-live/report.json",
+    "critic/reviews/be1e964a-focused/ch1-live-vs-cand.jpg",
+    "critic/reviews/be1e964a-focused/ch16-live-vs-cand.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case: FF7 only (D-259, D-260, D-261, D-262 each say so; research/ff7-guard-scorpion.md and research/ff7-battle-staging.md govern the fight). Presence: Film art, switched sides, Spectacle effects, punchier HUD, C1/G1/D1/E1/F1 all seen in the FF7 fight. Absence: FFX and FFX-2 staging, facing and HUD match live; ffx2-atb-golden and ff7-golden unit goldens pass; no FF7 art or words on the board.",
+   "where": "FF7 present; FFX and FFX-2 absent",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/supp-cand/report.json",
+    "critic/reviews/be1e964a-focused/supp-live/report.json",
+    "critic/reviews/be1e964a-focused/vitest.log",
+    "critic/reviews/be1e964a-focused/Battle-HUD-FFX.jpg",
+    "critic/reviews/be1e964a-focused/Battle-HUD-FFX2.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Win -> D1 poses and hold -> C1 two windows -> board (keys and taps); loss -> G1 pan -> GAME OVER -> RETRY back into the fight with seed+1000 -> loss -> CHAPTER SELECT -> board.",
+   "where": "FF7; Guard Scorpion; outcomes",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/e2e/e2e.log",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-1600x900-results-1.jpg",
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-1600x900-retry.jpg",
+    "critic/reviews/be1e964a-focused/ff7exit-cand/board-after.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Spectacle effects (ff7-bolt, -laser, -slash, -shot, -scope, -rifle, -tail, -braver) and the Film pose keys run only through commands chosen by real input, through BattleScreen -> presenter -> stage.",
+   "where": "FF7; Guard Scorpion",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/e2e/e2e.log",
+    "critic/reviews/be1e964a-focused/supp-cand/report.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  },
+  {
+   "id": "CHK-025",
+   "result": "PASS",
+   "reason": "Board: 16 tiles in both groups, same snapshot and words before and after every FF7 run, no FF7 word; the main save key byte-identical after win, loss, retry and exit; only pyrefly-reprise:experiments:v1 is written (attempts/clears); near-miss LIMIQ changes nothing; the door-off state, CHAPTER_IDS and the game-branch audit are covered by ff7-hidden-board, ff7-secret-door, ff7-game-branch and ff7-experiment-records unit tests (pass).",
+   "where": "FF7 + shared board and save",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/e2e/e2e.log",
+    "critic/reviews/be1e964a-focused/ff7exit-cand/report.json",
+    "critic/reviews/be1e964a-focused/door-cand-nearmiss/door.json",
+    "critic/reviews/be1e964a-focused/vitest.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "be1e964a / D:/pyrefly-rel27/dist-gate index-9QdEMZik.js (912 files, candidate artifact b2f7618ec78ea459, 0 decode problems)",
+   "targetVersion": "695d60d11ab5ec1911d00ff0e943ed17b5e77668113deedecf638a5bc2859a55",
+   "environment": "candidate D:/pyrefly-rel27 at be1e964a (clean apart from dist-gate and docs/deploys.log), dist-gate built 02:15 after the commit; vite preview 127.0.0.1:5470 (PID 58924, stopped by PID, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu, no black canvas, no fallback; one browser at a time; live comparison runs against https://baileypillon.github.io/pyrefly-reprise/ (release 26, d89541b6)"
+  }
+ ],
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "note": "No approved tile in docs/target/targets.json covers the FF7 experiment (its choices are decisions D-259 to D-262 in decisions.json, checked by their named properties under CHK-013/CHK-021). Two FFX/FFX-2 tiles were sampled as regression sentinels (Battle HUD FFX, Battle HUD FFX-2): unchanged against live; their standing distance from the mockups is not this change."
+ },
+ "issues": [
+  {
+   "id": "FOC27-P01",
+   "severity": "polish",
+   "title": "The FF7 pause is a bare frame: no painting, an empty IN THIS FIGHT column, the boss name twice, and \"H PAINTING ONLY\" with no painting",
+   "game": "FF7",
+   "chapter": "Guard Scorpion (hidden)",
+   "expected": "A pause that fills its own frame (a painting or none of the painting controls), with the fight section filled or absent",
+   "observed": "Black background, empty IN THIS FIGHT, eyebrow and title both GUARD SCORPION, H PAINTING ONLY offered; identical on live release 26",
+   "repro": "Board -> type LIMIT -> at the first command window press Escape",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/ff7exit-cand/after-escape.jpg",
+    "critic/reviews/be1e964a-focused/ff7exit-live/after-escape.jpg"
+   ],
+   "confidence": "high (seen on candidate and live)",
+   "requirement": "RUBRIC section 2 pause standard; CHK-020 (the same screen gets the same work, game-specific)",
+   "where": "not traced",
+   "fix": "Give the FF7 pause its own hero plate or drop the painting-only control and the empty section for FF7",
+   "acceptanceCheck": "Escape in the FF7 fight at 1600x900 shows no empty section and no control that does nothing",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC27-P02",
+   "severity": "polish",
+   "title": "At 390x844 the boss tail leaves the frame and its barrels touch Cloud's blade; a blank window sits left of the command window",
+   "game": "FF7",
+   "chapter": "Guard Scorpion (hidden)",
+   "expected": "E1 phone framing with the whole boss inside the frame and a gap between the fighters",
+   "observed": "The tail tip is cut at the right edge; barrels overlap the sword tip; an empty blue window left of the command window (phone B)",
+   "repro": "390x844, seven taps on \"Chapter select\", first command window",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/e2e/docs/screenshots/ff7-phase3/game-390x844-first-turn.jpg"
+   ],
+   "confidence": "medium (one seed)",
+   "requirement": "CHK-008",
+   "where": "not traced",
+   "fix": "Pull the E1 phone formation in a little or widen the phone camera; hide the empty window on phone B",
+   "acceptanceCheck": "Phone first turn: boss bounding box inside the frame, no overlap with Cloud",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC27-P03",
+   "severity": "polish",
+   "title": "Unit test strategy-ffx2-bahamut \"heal-only route\" times out at 15 s under the full suite (11.5 s alone)",
+   "game": "FFX-2",
+   "chapter": "IV Bahamut",
+   "expected": "The full suite passes on a loaded machine",
+   "observed": "1 failed / 9612 passed in the full run; passes alone in 11.5 s",
+   "repro": "npx vitest run in D:/pyrefly-rel27",
+   "evidence": [
+    "critic/reviews/be1e964a-focused/vitest.log"
+   ],
+   "confidence": "high",
+   "requirement": "Done means: full npm test before a push",
+   "where": "tests/unit/strategy-ffx2-bahamut.test.ts:631",
+   "fix": "Give the 30-seed route a longer per-test timeout",
+   "acceptanceCheck": "Full suite green twice in a row",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "tsc --noEmit clean; full vitest in the candidate: 610 files passed, 1 timeout (FOC27-P03, passes alone)",
+   "The candidate's own tests/e2e/ff7-guard-scorpion.spec.ts (5 tests) against the dist-gate preview: win by keys 1600, win by taps 390, two losses and RETRY then CHAPTER SELECT 1600, pad door, phone A layout",
+   "Fresh-profile door from the title by Enter at 2000x1012, near-miss LIMIQ",
+   "FF7 at 2000x1012: first turn framing, six real-key turns, five effect frames, save untouched",
+   "FF7 Escape pause and resume; loss by keys to CHAPTER SELECT; board clean (swirl, transform, nodes, words, snapshot, save)",
+   "FFX I (1600), FFX-2 IV (2000) and XVI (1600) from the board to the first menu, one command, the next menu and pause, on candidate AND live, stage positions compared",
+   "Artifact manifest build and decode over dist-gate, compared file by file with release 26",
+   "Data audit: the only changed src/data values are sprite keys and our own pose-shift measurements (no game numbers)"
+  ],
+  "reused": [
+   {
+    "what": "FF7 boss AI, formulas, ATB rates, limit fill",
+    "from": "unit tests ff7-* in this candidate's suite run",
+    "why": "engine files under src/battle are unchanged by this candidate; the tests were re-run, not carried"
+   },
+   {
+    "what": "Film art identity",
+    "from": "release 26 artifact critic/artifacts/d89541b6.json",
+    "why": "every art file is byte-identical to live; only the wiring changed"
+   }
+  ],
+  "notTested": [
+   "Audio listening (no agent can hear; FF7 cues unchanged in bytes)",
+   "A real gamepad and a real phone (pad and touch were emulated)",
+   "Performance and frame-time measurement of the Spectacle effects",
+   "Safari and Firefox",
+   "FFX II, III and the remaining FFX-2 chapters (shared plumbing is opt-in; sampled I, IV, XVI)",
+   "approved-hash verification (plan approvedArtCheck false; art bytes identical to live)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy (CHK-017), then the deep review owed on the live build (plan depth deep, deepAfterDeploy true, carriedDeep d89541b6).",
+ "elapsedMinutes": 40
+}

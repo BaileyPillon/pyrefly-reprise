@@ -30,6 +30,9 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
+  /* `clip`, not only `hidden`: a hidden box can still be scrolled by script (a scroll-into-view slid the
+     whole HUD 110 px left on a phone, repair item 11); a clipped one never scrolls. */
+  overflow: clip;
   pointer-events: none;
   z-index: 20;
   font-family: 'M PLUS Rounded 1c', 'Nunito', sans-serif;
@@ -40,7 +43,7 @@
 }
 .ff7hud[hidden] { display: none; }
 .ff7hud div { position: absolute; box-sizing: border-box; }
-.ff7hud .ff7-layer { inset: 0; }
+.ff7hud .ff7-layer { inset: 0; overflow: clip; }
 
 /* Windows: the four-corner bilinear gradient, then the bevel, then the content [spec §5.3]. */
 .ff7hud .ff7-win { pointer-events: auto; }

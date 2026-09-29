@@ -41,6 +41,7 @@ import { playSpherechangeFlourish } from './SpherechangeFlourish.ts';
 import { ChainCounter } from './ChainCounter.ts';
 import { ffx2EngineOptions } from '../../app/screens/BattleScreenContent.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
+import type { InFlightSource } from '../../engine/tactics/advisor-inflight.ts';
 import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
@@ -217,6 +218,11 @@ export class FFX2BattleHud implements HudPort {
       top: 44,
       bottom: 104,
     },
+    // Advisor v3: the engine's held command, as the card gets it (never driven).
+    held: () => {
+      const h = this.inFlight?.heldCommand() ?? null;
+      return h ? [h] : [];
+    },
   });
   /**
    * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).
@@ -282,9 +288,18 @@ export class FFX2BattleHud implements HudPort {
           ...(options.abilities ? { abilities: options.abilities } : {}),
           ...(options.items ? { items: options.items } : {}),
         },
+        // Advisor v3 (FFX-2 only): the engine is read and forked for the commands still in
+        // flight, never driven (`engine/tactics/advisor-inflight.ts`).
+        ...(this.inFlight ? { engine: () => this.inFlight } : {}),
       };
     },
   });
+  /** The live engine for the advisor's projected board; `null` on a mock screen. */
+  private readonly inFlight: InFlightSource | null;
+
+  constructor(opts: { engine?: InFlightSource | null } = {}) {
+    this.inFlight = opts.engine ?? null;
+  }
   /** §4.6's chain counter, drawn on the overlay (`ChainCounter.ts`). */
   private readonly chain = new ChainCounter({
     overlay: () => this.overlay,

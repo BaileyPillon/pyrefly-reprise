@@ -1,6 +1,6 @@
 /**
- * PR-0179 (FFX only): the Gagazet aeon arms. Each arm equals its sourced rows, and the default
- * ('shipped') is today's rows byte for byte. The benches per arm run the four chapters' own bench
+ * PR-0179 (FFX only): the Gagazet aeon arms. Each arm equals its sourced rows; the default is arm a
+ * since D-243 (2026-09-27), and 'shipped' still gives the old rows byte for byte. The benches per arm run the four chapters' own bench
  * files under `tests/unit/helpers/aeon-arm-setup.ts` (numbers in `docs/handoff/iter2-b1.md`).
  */
 
@@ -16,12 +16,17 @@ import { viaPurificoBuild } from '../../src/data/ffx/builds/via-purifico.ts';
 const hp = (aeons: Array<{ id: string; stats: { maxHp: number } }>) => Object.fromEntries(aeons.map((a) => [a.id, a.stats.maxHp]));
 
 describe('PR-0179: the Gagazet aeon arms (FFX only)', () => {
-  it('ships OFF: the shipped rows everywhere (738 / 988 / 983 / 878 / 1,398)', () => {
-    expect(GAGAZET_AEON_ARM).toBe('shipped');
-    expect(hp(gagazetBuild.aeons)).toEqual({ valefor: 738, ifrit: 988, ixion: 983, shiva: 878, bahamut: 1398 });
-    expect(gagazetBuild.aeons).toEqual(GAGAZET_SHIPPED_AEONS);
-    expect(highbridgeBuild.aeons.find((a) => a.id === 'bahamut')?.stats.maxHp).toBe(1398);
-    expect(viaPurificoBuild.aeons.find((a) => a.id === 'bahamut')?.stats.maxHp).toBe(1398);
+  it('ships arm a since D-243 (2026-09-27): the sourced rows in I and IX, and X and XIV inherit Bahamut\'s', () => {
+    expect(GAGAZET_AEON_ARM).toBe('a');
+    expect(hp(gagazetBuild.aeons)).toEqual({ valefor: 1530, ifrit: 2075, ixion: 2055, shiva: 1830, bahamut: 2935 });
+    expect(gagazetBuild.aeons).toEqual(armGagazetAeons(GAGAZET_SHIPPED_AEONS, 'a'));
+    expect(highbridgeBuild.aeons.find((a) => a.id === 'bahamut')?.stats.maxHp).toBe(2935);
+    expect(viaPurificoBuild.aeons.find((a) => a.id === 'bahamut')?.stats.maxHp).toBe(2935);
+  });
+
+  it('the old \'shipped\' arm (the default before D-243) is still the old rows byte for byte (738 / 988 / 983 / 878 / 1,398)', () => {
+    expect(hp(armGagazetAeons(GAGAZET_SHIPPED_AEONS, 'shipped'))).toEqual({ valefor: 738, ifrit: 988, ixion: 983, shiva: 878, bahamut: 1398 });
+    expect(armGagazetAeons(GAGAZET_SHIPPED_AEONS, 'shipped')).toEqual(GAGAZET_SHIPPED_AEONS);
   });
 
   for (const arm of ['a', 'b', 'c'] as const) {

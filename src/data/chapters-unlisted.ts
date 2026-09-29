@@ -31,8 +31,12 @@ import { SIN } from './chapter-sin.ts';
  * The hidden FF7 experiment, Guard Scorpion, was registered here on 2026-09-27 (FF7 only; never listed:
  * `experimental`, `number: 0`, reached by the secret door, `./chapter-ff7-guard-scorpion.ts`).
  *
- * Chapter XVI, Sin (link 4, Overdrive Sin, first), was registered here on 2026-09-27 (FFX only;
+ * Ixion at Djose was registered here on 2026-09-27 (FFX-2 only; concept A, unlisted behind a switch) and
+ * listed the same day as Chapter XVI (now in `CHAPTERS`, after Chapter XV; Bailey: "ixion needs to be in the
+ * next build as well").
+ * Chapter XVII, Sin (link 4, Overdrive Sin, first), was registered here on 2026-09-27 as XVI (FFX only;
  * Bailey's "all your recommendations": concept A reached through B, link 4 shipped unlisted behind
- * a switch; `./chapter-sin.ts`). Listing it is the switch.
+ * a switch; `./chapter-sin.ts`), and took the next number, XVII, when Ixion was listed as XVI (merge of
+ * 2026-09-28). Listing it is the switch.
  */
 export const UNLISTED_CHAPTERS: readonly Chapter[] = [FF7_GUARD_SCORPION, SIN] as const;

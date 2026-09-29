@@ -67,7 +67,7 @@ export function scopeWord(targeting: Targeting | undefined): string | null {
 }
 
 /** The `Targeting` a command resolves to, read straight off the data tables. */
-function targetingFor(game: GameId, command: Command): Targeting | undefined {
+export function targetingFor(game: GameId, command: Command): Targeting | undefined {
   const abilities: Record<string, AbilityDef> = game === 'ffx2' ? FFX2_ABILITIES : FFX_ABILITIES;
   const items: Record<string, ItemDef> = game === 'ffx2' ? FFX2_ITEMS : FFX_ITEMS;
   switch (command.kind) {

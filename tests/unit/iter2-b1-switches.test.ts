@@ -1,6 +1,7 @@
 /**
  * Iteration 2 batch B1: the FFX-2 sourced switches, built **OFF** for Bailey (plan §8 Q4) and
- * measured in `tests/unit/iter2-b1-bench.test.ts`. **FFX-2 only** (AGENTS.md rule 14): chains,
+ * measured in `tests/unit/iter2-b1-bench.test.ts`. Since D-242 (2026-09-27) IC-1 and PR-0106 ship
+ * ON; PR-0124 and PR-0107 stay OFF (`docs/handoff/combat-switches.md`). **FFX-2 only** (AGENTS.md rule 14): chains,
  * dresspheres and the Leblanc Syndicate exist only in FFX-2's battle system.
  *
  * - PR-0106: Leblanc's failsafe fires **once**, on her turn 25 + No Love Lost uses, and turn 5 of
@@ -47,8 +48,8 @@ function leblancTurns(count: number, sinirothX: boolean, withHenchmen = true): A
 const GUARD = 'x2-leblanc-not-so-mighty-guard';
 
 describe('PR-0106: the Leblanc script switch (FFX-2, Chapter VI)', () => {
-  it('ships OFF (Bailey decides with the measurement, plan §8 Q4)', () => {
-    expect(LEBLANC_SCRIPT_SINIROTHX).toBe(false);
+  it('ships ON since Bailey\'s word of 2026-09-27 (D-242, plan §8 Q4; built OFF by B1)', () => {
+    expect(LEBLANC_SCRIPT_SINIROTHX).toBe(true);
   });
 
   it('OFF keeps the AUTHORED reading exactly: guard on turn 5, and every turn past 25 + uses', () => {
@@ -81,9 +82,9 @@ describe('PR-0106: the Leblanc script switch (FFX-2, Chapter VI)', () => {
   });
 });
 
-describe('IC-1: the immune-hit chain switch stays OFF (FFX-2)', () => {
-  it('ships OFF; its reading is labelled GameFAQs (Split_Infinity G1032), our estimate', () => {
-    expect(IMMUNE_HITS_SKIP_CHAIN).toBe(false);
+describe('IC-1: the immune-hit chain switch (FFX-2)', () => {
+  it('ships ON since D-242 (2026-09-27); its reading is labelled GameFAQs (Split_Infinity G1032), our estimate', () => {
+    expect(IMMUNE_HITS_SKIP_CHAIN).toBe(true);
   });
 });
 

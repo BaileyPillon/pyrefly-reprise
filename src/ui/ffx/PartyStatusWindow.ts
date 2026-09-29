@@ -1,5 +1,5 @@
 import type { AnyCombatant, CombatantId, FFXCombatant, StatusId } from '../../battle/common/types.ts';
-import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
+import { aeonChipHtml, portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 
 /**
  * Party status, restyled onto Ink & Gold's `.ig-stat-list`/`.ig-stat`
@@ -69,8 +69,10 @@ export class PartyStatusWindow {
     const statuses = activeStatusIds(c).slice(0, 6);
     const statusHtml = statuses.length ? `<span class="ffx-stat__statuses">${statuses.map((s) => `<i title="${s}"></i>`).join('')}</span>` : '';
 
+    // The aeon's row while it is out (PR-0181) wears the turn list's aeon chip, not a letter (FOC24-02, CHK-012).
+    const face = c.side === 'aeon' ? aeonChipHtml(c.spriteKey ?? id, c.name, c.portraitKey) : portraitChipHtml(c.portraitKey, c.name, tintFor('party'));
     return `<div class="${rowCls}" style="margin-right:calc(var(--ig-stat-step) * ${i})" data-actor="${id}">
-      <span class="ig-stat__face">${portraitChipHtml(c.portraitKey, c.name, tintFor('party'))}</span>
+      <span class="ig-stat__face">${face}</span>
       <span class="ig-stat__name">${escapeHtml(c.name)}</span>
       <span class="${hpValueCls}">${c.hp}<small>/${maxHp}</small></span>
       <span class="ig-stat__value ig-stat__value--mp">${c.mp}<small>/${maxMp}</small></span>

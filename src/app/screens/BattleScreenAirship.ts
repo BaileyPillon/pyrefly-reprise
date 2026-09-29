@@ -37,6 +37,8 @@ export interface AirshipBattleHook {
   /** Follow the engine. Cheap; call every frame with the live state. */
   sync(state: BattleState | null | undefined): void;
   dispose(): void;
+  /** FF7 only: the opening camera before the first turn (F1); FFX / FFX-2 hooks leave it out. */
+  opening?(): Promise<void>;
 }
 
 /** The loaded scene's two handles this hook reads (`LoadedScene` satisfies it). */

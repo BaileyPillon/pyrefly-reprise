@@ -18,6 +18,7 @@ import { SPECIAL_HOLD_CAP_MS, SPECIAL_REPEAT_START_S, SPELL_HOLD_CAP_MS } from '
 import type { FxTarget } from './effects-shared.ts';
 import type { FxDrawList } from './FxDrawList.ts';
 import type { FxGame, SpellFxId } from './SpellFxRegistry.ts';
+import { FF7_FX_SPECS } from './ff7/ff7FxSpecs.ts';
 
 export type { FxTarget } from './effects-shared.ts';
 
@@ -64,6 +65,7 @@ export const FX_SPECS: Readonly<Record<DrawnFxId, FxSpec>> = Object.freeze({
     holdCapMs: SPECIAL_HOLD_CAP_MS,
     repeatStartAt: SPECIAL_REPEAT_START_S,
   },
+  ...FF7_FX_SPECS, // FF7 only: the Guard Scorpion fight's own effects (D-260)
 });
 
 /** Draw one effect at local time t into the list. */
