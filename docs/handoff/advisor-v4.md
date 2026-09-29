@@ -453,3 +453,46 @@ Chapters II and III research §6.4.3's aeon rows (`braskas-final-aeon.ts`, `yuna
 changes `advisor.ts`, `guide-inflight.ts`, `guide.ts` and `MoveAdvisor.ts`. So the v3-versus-v4 numbers
 above, and the whole gate, were measured on the pre-merge base. The merged tree should re-run the
 worker-path bench on II and III, plus the III lethal fork at mini, before a release.
+
+## MERGED RE-CHECK (2026-09-29): the switch stays ON (mini) on the merged tree
+
+**Game case: FFX only** (FFX-2 stays on v3; nothing in the switch or wiring changed).
+
+**Why.** The switch-on check (CHK2-1) found the gate had been measured on the pre-merge base, while
+main (49005f73) had since changed Chapter II/III's aeon rows (578e7f22) and `advisor.ts`,
+`guide-inflight.ts`, `guide.ts`, `MoveAdvisor.ts` (63f4472a). This re-runs the gate on the merge.
+
+**Merge.** `git merge --no-ff origin/main` (49005f73) into `advisor-v4`: no conflicts. On the merged
+tree `tsc --noEmit` and `typecheck:e2e` are clean; the advisor v3/v4 and card unit files
+(`tests/unit/advisor*`, `ffx2-advisor*`, `guide-advisor*`, `tactics-lookup`, `ui-move-advisor`) pass:
+39 files, 1 skipped, 380 tests.
+
+**Worker path, mini, v3 and v4, merged tree** (`results/merged-mini-*.json`; pre-merge from `wp-mini-<id>.json`):
+
+| Chapter | Seeds | v3 wins | v4 wins | Lost (v3 / v4) | Lethal-save miss v3 → v4 | Missed revive v3 → v4 | Top row switched | Pre-merge v3 / v4 |
+|---|---:|---:|---:|---|---|---|---|---|
+| II (yunalesca) | 40 | 37 | **39** | 26, 35, 39 / 26 | 0 → 0 | 7 → 0 | 8 / 5744 | 37 / 38 |
+| III (braskas-final-aeon) | 40 | 39 | **40** | 38 / none | 0 → 0 | 1 → 0 | 18 / 9934 | 39 / 40 |
+| I (seymour-flux), smoke | 20 | 10 | **17** | 10 seeds / 16, 19, 20 | 0 → 0 | 188 → 227 | 21 / 940 | 10 / 17 |
+| XII (seymour-omnis), smoke | 20 | 13 | **18** | 7 seeds / 1, 7 | 6 → 3 | 99 → 119 | 114 / 2397 | 13 / 13 |
+
+**Chapter III lethal saves, fork-tested, mini, merged** (`results/fork-mini-iii-merged.json`):
+
+| Driver | Wins | Flagged | Fork miss | Real deaths (pick) | Avoidable |
+|---|---:|---:|---:|---:|---:|
+| v3 | 39/40 | 0 | 0 | 0 | 0 |
+| v4 mini | 40/40 | 0 | 0 | 0 | 0 |
+
+**Rule and outcome.** v4 >= v3 on II (39 vs 37) and III (40 vs 39) at 40 seeds; the III fork-tested
+lethal deaths at mini are 0 against v3's 0; I (17 vs 10) and XII (18 vs 13) are not below v3 on the
+20-seed smoke. Every number passes, so `ADVISOR_V4_FFX` stays **true** at the mini budget; `switch.ts`
+and its pinning test are unchanged.
+
+**Notes.** The merged aeon rows moved v3 on III from a seed-17 loss with one arithmetic lethal flag to
+a seed-38 loss with none. XII's v4 improved from 13 to 18 on seeds 1-20 after the merge (v3 unchanged),
+which is 63f4472a's advisor inputs reaching v4's candidates; it was not the question asked here and was
+not dissected. Missed-revive counts on I and XII rise with v4; they are counted per decision and v4 plays more
+decisions there (940 vs 689, 2397 vs 2142) because it survives longer. Not a gate.
+
+**Not done:** no deploy, not pushed, not merged into main. A release still needs `critic-plan` and the
+reviews it names.
