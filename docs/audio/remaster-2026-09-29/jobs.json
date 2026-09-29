@@ -1,0 +1,107 @@
+[
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-a.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-a-R1-focus.mp3",
+  "preset": "focus"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-a.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-a-R2-hall.mp3",
+  "preset": "hall"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-a.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-a-R3-air.mp3",
+  "preset": "air"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-b.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-b-R1-focus.mp3",
+  "preset": "focus"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-b.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-b-R2-hall.mp3",
+  "preset": "hall"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-b.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-b-R3-air.mp3",
+  "preset": "air"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-c.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-c-R1-focus.mp3",
+  "preset": "focus"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-c.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-c-R2-hall.mp3",
+  "preset": "hall"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/macalania-c.wav",
+  "out": "docs/audio/remaster-2026-09-29/macalania-c-R3-air.mp3",
+  "preset": "air"
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-seymour-macalania.wav",
+  "out": "docs/audio/remaster-2026-09-29/boss-seymour-macalania-R1-focus.mp3",
+  "preset": "focus",
+  "loop": [
+   7.619048,
+   121.904762
+  ],
+  "xfade": 0.476
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-seymour-macalania.wav",
+  "out": "docs/audio/remaster-2026-09-29/boss-seymour-macalania-R2-hall.mp3",
+  "preset": "hall",
+  "loop": [
+   7.619048,
+   121.904762
+  ],
+  "xfade": 0.476
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-seymour-macalania.wav",
+  "out": "docs/audio/remaster-2026-09-29/boss-seymour-macalania-R3-air.mp3",
+  "preset": "air",
+  "loop": [
+   7.619048,
+   121.904762
+  ],
+  "xfade": 0.476
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-gagazet.wav",
+  "out": "docs/audio/remaster-2026-09-29/scene-gagazet-R1-focus.mp3",
+  "preset": "focus",
+  "loop": [
+   40,
+   103.333333
+  ],
+  "xfade": 0.833
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-gagazet.wav",
+  "out": "docs/audio/remaster-2026-09-29/scene-gagazet-R2-hall.mp3",
+  "preset": "hall",
+  "loop": [
+   40,
+   103.333333
+  ],
+  "xfade": 0.833
+ },
+ {
+  "in": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/scene-gagazet.wav",
+  "out": "docs/audio/remaster-2026-09-29/scene-gagazet-R3-air.mp3",
+  "preset": "air",
+  "loop": [
+   40,
+   103.333333
+  ],
+  "xfade": 0.833
+ }
+]

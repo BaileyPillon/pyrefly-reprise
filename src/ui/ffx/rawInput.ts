@@ -115,6 +115,13 @@ export interface RawInputWatcherOptions {
    * the pause screen behind it is deaf while the briefing owns input.
    */
   ignoreSuspend?: boolean;
+  /**
+   * Listen to the keyboard as well as the pad (default true). `false` is for a
+   * menu that already owns its keys with its own `keydown` map and only needs
+   * the pad fed to the same handler: FFX-2's command menu (PR-0219), whose key
+   * set differs from {@link KEY_MAP} (no WASD) and must not change.
+   */
+  keyboard?: boolean;
 }
 
 export class RawInputWatcher {
@@ -123,12 +130,14 @@ export class RawInputWatcher {
   private readonly padHeld = new Set<UiButton>();
   private readonly repeatAt = new Map<UiButton, number>();
   private readonly ignoreSuspend: boolean;
+  private readonly keyboard: boolean;
 
   constructor(
     private readonly onButton: (button: UiButton) => void,
     opts: RawInputWatcherOptions = {},
   ) {
     this.ignoreSuspend = opts.ignoreSuspend === true;
+    this.keyboard = opts.keyboard !== false;
   }
 
   /** Is this watcher muted right now? */
@@ -139,7 +148,7 @@ export class RawInputWatcher {
   attach(): void {
     if (this.attached) return;
     this.attached = true;
-    window.addEventListener('keydown', this.onKeyDown);
+    if (this.keyboard) window.addEventListener('keydown', this.onKeyDown);
     this.rafId = requestAnimationFrame(this.pollGamepad);
   }
 

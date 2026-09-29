@@ -32,7 +32,6 @@ describe('the chapter cue map in THEMES.md', () => {
     const rows = parseChapterCueMap(THEMES);
     for (const [id, decision] of [
       ['ffx2-leblanc', 'D-018'],
-      ['seymour-anima-macalania', 'D-190'],
       ['seymour-natus', 'D-091'],
       ['ffx2-fallen-aeons', 'D-112'],
       ['seymour-omnis', 'D-145'],
@@ -45,6 +44,11 @@ describe('the chapter cue map in THEMES.md', () => {
       expect(`${row!.status} ${row!.owed}`, id).toContain(decision);
       expect(row!.owed, id).toContain('D-209');
     }
+    // Macalania's scene cue landed on 2026-09-29 (D-278, superseding D-190): its own cues, nothing owed.
+    const vii = rows.find((r) => r.id === 'seymour-anima-macalania');
+    expect(vii?.scene).toEqual(['scene-macalania-temple']);
+    expect(vii?.status).toContain('D-278');
+    expect(vii?.owed).toBe('none');
   });
 
   it('fails a chapter with no row', () => {

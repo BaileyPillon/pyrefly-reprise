@@ -1,6 +1,7 @@
 import type { CombatantId } from '../../battle/common/types.ts';
 import { anchorChipToRow, clearChipOfSlab } from './targetChipClear.ts';
 import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, px, type PlateDock } from './targetCursorParts.ts';
+import { pickTargetAt, sameSide } from './targetHitPick.ts';
 
 export type { PlateDock } from './targetCursorParts.ts';
 
@@ -136,10 +137,24 @@ export class TargetCursor {
     // the container, kept for the cursor's whole lifetime, survives that.
     this.onClick = (e: MouseEvent): void => {
       const el = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-target-id]');
-      const id = el?.dataset['targetId'];
+      // PR-0232: overlapping brackets resolve by the point, not by stacking (`targetHitPick.ts`).
+      const id = this.idAt(e.clientX, e.clientY) ?? el?.dataset['targetId'];
       if (id) this.clickHandler?.(id);
     };
     this.el.addEventListener('click', this.onClick);
+  }
+
+  /** PR-0232: the candidate a point on the field means, from the brackets' own boxes; `null` when none holds it. */
+  private idAt(x: number, y: number): string | null {
+    if (this.mode === 'group') return null;
+    const aim = this.entries[this.activeIndex]?.kind ?? 'enemy';
+    const kinds = new Map(this.entries.map((e) => [e.id, e.kind]));
+    const cands = [...this.el.querySelectorAll<HTMLElement>('[data-target-id]')].map((b) => {
+      const r = b.getBoundingClientRect();
+      const id = b.dataset['targetId'] ?? '';
+      return { id, left: r.left, top: r.top, right: r.right, bottom: r.bottom, inSet: sameSide(kinds.get(id) ?? 'enemy', aim) };
+    });
+    return pickTargetAt(cands, x, y);
   }
 
   /** `CommandMenu` wires this once, to its own `confirmTarget()` path — the exact route Enter uses. */
@@ -343,10 +358,15 @@ export class TargetCursor {
     const scale = typeof window === 'undefined' ? 1 : window.innerWidth / 1920;
     const handGap = Math.max(10, HAND_GAP_AT_1920 * scale);
 
-    const parts: string[] = [];
+    // PR-0232: the side being aimed at is drawn last, the active target last of all,
+    // so where brackets overlap the in-set one is on top for a tap.
+    const aimKind = this.entries[this.activeIndex]?.kind ?? 'enemy';
+    const chunks: Array<{ rank: number; html: string[] }> = [];
     this.entries.forEach((entry, i) => {
       const rect = this.rectFor(entry.id, i);
       if (!rect) return;
+      const parts: string[] = [];
+      chunks.push({ rank: group ? 0 : i === this.activeIndex ? 2 : sameSide(entry.kind, aimKind) ? 1 : 0, html: parts });
       const active = group || i === this.activeIndex;
       // In GROUP mode every listed figure **is** a target: not one of them is
       // subordinate, so not one of them is dimmed. The old rule here read
@@ -414,6 +434,7 @@ export class TargetCursor {
       parts.push(this.plateHtml(entry, rect));
     });
 
+    const parts = chunks.sort((a, b) => a.rank - b.rank).flatMap((c) => c.html);
     if (group) parts.push(this.groupLabelHtml());
     this.el.innerHTML = parts.join('');
     if (group) {

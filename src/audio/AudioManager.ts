@@ -109,6 +109,8 @@ export class AudioManager {
   private warmed = false;
   private queuedMusic: { name: string; options: PlayMusicOptions } | null = null;
   private musicRequestId = 0;
+  /** The cue the newest still-loading request is for (PR-0226). */
+  private pendingMusic: string | null = null;
   private baseUrl: string;
   private synthOnly: boolean;
   private manifest: AudioManifest | null = null;
@@ -119,7 +121,8 @@ export class AudioManager {
   constructor(options: AudioManagerOptions = {}) {
     this.masterVolume = options.masterVolume ?? 0.9;
     this.musicVolume = options.musicVolume ?? 0.7;
-    this.sfxVolume = options.sfxVolume ?? 0.9;
+    // Matches the save's new-profile default (D-210); the save pushes its own level at boot.
+    this.sfxVolume = options.sfxVolume ?? 0.35;
     this.baseUrl =
       options.baseUrl ??
       ((typeof import.meta.env !== 'undefined' && import.meta.env.BASE_URL) || '/');
@@ -137,6 +140,12 @@ export class AudioManager {
 
   get currentMusic(): string | null {
     return this.current?.name ?? null;
+  }
+
+  /** The cue the mixer is heading for: a request still decoding, else the one queued before unlock, else the one playing. */
+  get requestedMusic(): string | null {
+    if (!this.ctx) return this.queuedMusic?.name ?? null;
+    return this.pendingMusic ?? this.currentMusic;
   }
 
   /**
@@ -302,15 +311,22 @@ export class AudioManager {
       this.queuedMusic = { name, options };
       return;
     }
-    if (this.current?.name === name && !options.restart) return;
     // Rendering can take a second; if another screen asks for different music
-    // while we wait, that newer request wins and this one is dropped.
+    // while we wait, that newer request wins and this one is dropped. That
+    // holds for a request for the cue already playing too: it returns early,
+    // but only after cancelling any other cue still decoding (PR-0226: a
+    // pause cue that landed after resume took the battle theme's slot).
     const request = ++this.musicRequestId;
+    this.pendingMusic = null;
+    if (this.current?.name === name && !options.restart) return;
+    this.pendingMusic = name;
     // Wait for the manifest before choosing a route, or the very first cue of
     // the session would always synthesise while the file sat there unread.
     await this.loadManifest();
     if (request !== this.musicRequestId) return;
-    const looped = await this.loader.load(this.ctx, name);
+    const looped = await this.loader.load(this.ctx, name).finally(() => {
+      if (request === this.musicRequestId) this.pendingMusic = null;
+    });
     const ctx = this.ctx;
     if (!ctx || !this.musicBus || request !== this.musicRequestId) return;
     const fade = Math.max(0.01, options.fade ?? 1.2);
@@ -335,6 +351,7 @@ export class AudioManager {
 
   stopMusic(fade = 0.8): void {
     this.musicRequestId++;
+    this.pendingMusic = null;
     if (this.current) this.fadeOutSlot(this.current, fade);
     this.current = null;
     this.queuedMusic = null;

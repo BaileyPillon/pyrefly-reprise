@@ -25,6 +25,7 @@ import { StrategyGuide } from '../common/StrategyGuide.ts';
 import { EnemyIntentPanel, type IntentSource } from '../common/EnemyIntent.ts';
 import { solidPanelRects } from '../common/panel-rects.ts';
 import { sensorSteerDx } from './sensorSteer.ts';
+import { keepSensorOffCtb } from './sensorCtbClear.ts';
 import { partyFaceRects } from './plateFaces.ts';
 import { TelegraphBanner } from './TelegraphBanner.ts';
 import { ActionHelpBar } from './actionBanner.ts';
@@ -681,6 +682,7 @@ export class FFXBattleHud implements HudPort {
     // Before the advisor, because folding the enemy plate gives the shelf its
     // height back and `placeAdvisor` should see that on the same frame.
     this.sensorPanel.update(dt);
+    keepSensorOffCtb(this.sensorPanel.el, this.ctbList.el, this.hudScale()); // PR-0233: off the turn list's names
     this.guide.update(dt);
     this.advisor.update(dt);
     // After the advisor's own `layout()`, never before: `MoveAdvisor` measures

@@ -26,6 +26,7 @@ import { sceneFahrenheitTrack } from './scene-fahrenheit.ts';
 import { bossEvraeTrack } from './boss-evrae.ts';
 import { bossSeymourMacalaniaTrack } from './boss-seymour-macalania.ts';
 import { bossYojimboTrack } from './boss-yojimbo.ts';
+import { sceneMacalaniaTempleTrack } from './scene-macalania-temple.ts';
 
 /** The final music keys (CONTRACT-CHANGES §8). `playMusic` resolves every one. */
 export const MUSIC_KEYS = [
@@ -54,6 +55,8 @@ export const MUSIC_KEYS = [
   'boss-seymour-macalania',
   // Chapter IX, Yojimbo in the Cavern of the Stolen Fayth (FFX only): CONTRACT-CHANGES 2026-09-24.
   'boss-yojimbo',
+  // Chapter VII's scene cue, Macalania Temple (FFX only): CONTRACT-CHANGES 2026-09-29 (D-278).
+  'scene-macalania-temple',
 ] as const;
 
 export type FinalMusicKey = (typeof MUSIC_KEYS)[number];
@@ -85,6 +88,7 @@ const COMPOSED: Record<string, Track> = {
   'boss-evrae': bossEvraeTrack,
   'boss-seymour-macalania': bossSeymourMacalaniaTrack,
   'boss-yojimbo': bossYojimboTrack,
+  'scene-macalania-temple': sceneMacalaniaTempleTrack,
 };
 
 /**
@@ -292,6 +296,13 @@ export const TRACK_NOTES: Record<string, TrackNote> = {
     themes:
       'its own line (a rising fifth that leans on the flat sixth) on solo cello, then violin once a bowed pulse and taiko join; the line up the mode on a horn; one crack on the flat sixth, then control and the amen. No dominant anywhere',
     intent: 'grief under control, and it cracks once',
+  },
+  'scene-macalania-temple': {
+    title: 'The Frozen Temple',
+    key: 'F# minor',
+    themes:
+      'no shared cell but HYMN_HEAD, once, at 1.5x on one distant voice as the door glows; quartal ice in high strings, irregular glockenspiel drips, an alto flute that walks through without a pulse and never lands on the tonic; harp open fifths on bVI - bVII - i. No dominant, no organ, no chanted choir',
+    intent: 'ice pretending to be masonry, and something behind the door',
   },
 };
 

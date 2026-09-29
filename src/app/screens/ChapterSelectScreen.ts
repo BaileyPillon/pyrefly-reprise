@@ -18,6 +18,7 @@ import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCard
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
 import { BoardWarmer } from './frontend/boardWarm.ts';
+import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
 import { SecretDoor } from './frontend/secretDoor.ts';
 import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
 
@@ -108,6 +109,8 @@ export class ChapterSelectScreen extends Screen {
   private eyebrow: HTMLElement | null = null;
   /** A-3: the focused chapter's battle starts loading while its card is read. */
   private readonly warmer = new BoardWarmer();
+  /** r29: the selected card's plate and wash, put up decoded (`lazyPlates.ts`). */
+  private readonly showHero = heroPlates();
 
   constructor(private readonly opts: ChapterSelectScreenOptions = {}) {
     super();
@@ -142,6 +145,7 @@ export class ChapterSelectScreen extends Screen {
     const rail = this.root.querySelector('.fe-rail');
     if (rail instanceof HTMLElement) {
       rail.innerHTML = railHtml(groupChapterTiles(this.tiles), this.tiles, this.selected, (id) => this.bestTime(id));
+      mountLazyPlates(rail, this.selected); // r29: the strips in the idle lane, nearest first, up once decoded
     }
     this.refresh();
     void this.app.fade('clear', 500);
@@ -150,6 +154,7 @@ export class ChapterSelectScreen extends Screen {
   override exit(): void {
     this.disarmDoor();
     this.warmer.cancel();
+    this.showHero([], null, null); // r29: the board's plates and faces stop competing with the chosen chapter
     this.hint?.unmount();
     this.root.innerHTML = '';
     this.settle(null);
@@ -314,10 +319,9 @@ export class ChapterSelectScreen extends Screen {
     if (this.confirming || !ff7ExperimentReady()) return;
     this.confirming = true;
     (this.opts.onSelect ?? defaultOnSelect)(SECRET_CHAPTER);
+    // No reset: the FF7 swirl now holds this frozen board while the fight loads (r29 PR-0222), and a key
+    // pressed then must not move the cursor or start a card's preload under it. The flow replaces the board.
     this.settle(SECRET_CHAPTER);
-    window.setTimeout(() => {
-      this.confirming = false;
-    }, 250);
   }
 
   private settle(id: ChapterId | null): void {
@@ -344,11 +348,7 @@ export class ChapterSelectScreen extends Screen {
     this.root.classList.toggle('ig--ffx2', tile.game === 'ffx2');
 
     const wash = this.root.querySelector('.fe-cselect__wash');
-    if (wash instanceof HTMLElement) {
-      wash.style.backgroundImage = tile.sceneKey
-        ? `url(${artUrl(`art/backdrops/${tile.sceneKey}.png`)})`
-        : 'none';
-    }
+    const washUrl = tile.sceneKey ? artUrl(`art/backdrops/${tile.sceneKey}.png`) : null;
 
     const best = this.bestTime(tile.id);
     const board = this.root.querySelector('.fe-cselect__board');
@@ -369,8 +369,11 @@ export class ChapterSelectScreen extends Screen {
 
     const aside = this.root.querySelector('.fe-aside');
     if (aside instanceof HTMLElement) {
-      aside.innerHTML = asideHtml(tile, best);
+      aside.innerHTML = deferSrcs(asideHtml(tile, best));
     }
+    // r29 PR-0221: the plate, the faces and the wash at urgent, up decoded; the card left behind is demoted.
+    const parts = [board, aside].filter((e): e is HTMLElement => e instanceof HTMLElement);
+    this.showHero(parts, wash instanceof HTMLElement ? wash : null, washUrl);
   }
 }
 

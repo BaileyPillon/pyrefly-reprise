@@ -33,6 +33,7 @@
  */
 import type { AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from '../ffx/cancelClaim.ts';
+import { RawInputWatcher, type UiButton } from '../ffx/rawInput.ts';
 // The target cursor is shared with FFX and wears its chrome: bracket, plate and ALL label are both games,
 // only the mark differs; `setChrome('ffx2')` keeps FFX's hand out of an X-2 fight (AGENTS.md rule 14).
 import { TargetCursor, type CursorSelection, type TargetEntry, type TargetRect } from '../ffx/TargetCursor.ts';
@@ -244,6 +245,7 @@ function groupLabel(group: string): string {
 
 const KEY_CONFIRM = new Set(['Enter', 'Space', 'NumpadEnter', 'KeyZ']);
 const KEY_CANCEL = new Set(['Escape', 'KeyX', 'Backspace']);
+const KEY_ARROWS: Record<string, UiButton> = { ArrowUp: 'up', ArrowLeft: 'left', ArrowDown: 'down', ArrowRight: 'right' };
 
 /** The ink cursor triangle, FFX-2's mirror (points left, trails the label — see the module comment). */
 const CURSOR_SVG =
@@ -309,6 +311,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       // The menu is gone; Esc belongs to nobody until the next one opens.
       releaseCancel();
       window.removeEventListener('keydown', onKey);
+      pad.detach();
       deps.container.removeEventListener('click', onClick);
       deps.container.classList.remove('ffx2cmd--more-above', 'ffx2cmd--more-below');
       deps.container.innerHTML = '';
@@ -579,12 +582,12 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       }
     };
 
-    const onKey = (e: KeyboardEvent): void => {
-      if (KEY_CONFIRM.has(e.code)) {
-        e.preventDefault();
+    /** One abstract press, from the keyboard or the pad (PR-0219); true when the menu used it. */
+    const press = (button: UiButton): boolean => {
+      if (button === 'confirm') {
         if (view === 'top') {
           const row = topRows[topIdx];
-          if (!row) return;
+          if (!row) return true;
           if ('leaf' in row) chooseLeaf(row.leaf);
           else openGroup(row.items, groupLabel(row.group));
         } else if (view === 'sub') {
@@ -596,33 +599,38 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
           const chosen = groupMode ? targetIds : cursor.targetIds;
           if (pending && chosen.length) finish(pending, chosen);
         }
-        return;
+        return true;
       }
-      if (KEY_CANCEL.has(e.code)) {
-        e.preventDefault();
+      if (button === 'cancel') {
         if (view === 'target') cancelTargets();
         else if (view === 'sub') renderTop(true);
-        return;
+        return true;
       }
+      const step = button === 'up' || button === 'left' ? -1 : button === 'down' || button === 'right' ? 1 : 0;
       const list = view === 'top' ? topRows.length : view === 'sub' ? subItems.length : targetIds.length;
-      if (!list) return;
-      if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
-        e.preventDefault();
-        if (view === 'top') { topIdx = (topIdx - 1 + list) % list; renderTop(); }
-        else if (view === 'sub') { subIdx = (subIdx - 1 + list) % list; renderSub(subCategory); }
-        // The cursor steps through the ON-SCREEN order, left to right, so
-        // "left" means left however the engine happened to list the fiends.
-        else if (!groupMode) cursor.step(-1);
-      } else if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
-        e.preventDefault();
-        if (view === 'top') { topIdx = (topIdx + 1) % list; renderTop(); }
-        else if (view === 'sub') { subIdx = (subIdx + 1) % list; renderSub(subCategory); }
-        else if (!groupMode) cursor.step(1);
-      }
+      if (!step || !list) return false;
+      if (view === 'top') { topIdx = (topIdx + step + list) % list; renderTop(); }
+      else if (view === 'sub') { subIdx = (subIdx + step + list) % list; renderSub(subCategory); }
+      // The cursor steps through the ON-SCREEN order, left to right, so
+      // "left" means left however the engine happened to list the fiends.
+      else if (!groupMode) cursor.step(step);
+      return true;
     };
+
+    const onKey = (e: KeyboardEvent): void => {
+      const button = KEY_CONFIRM.has(e.code) ? 'confirm' : KEY_CANCEL.has(e.code) ? 'cancel' : KEY_ARROWS[e.code];
+      if (button && press(button)) e.preventDefault();
+    };
+    /**
+     * PR-0219: the pad reaches the same `press` through FFX's watcher, pad
+     * only (`keyboard: false`: the keys above stay exactly as they were). It
+     * also honours the pause mute (`setRawInputSuspended`), like FFX's menu.
+     */
+    const pad = new RawInputWatcher((b) => { if (live) press(b); }, { keyboard: false });
 
     deps.container.addEventListener('click', onClick);
     window.addEventListener('keydown', onKey);
+    pad.attach();
     renderTop();
     // Active ATB: hand the caller the teardown. The promise stays unresolved
     // on purpose — an invalidated menu produced no command.

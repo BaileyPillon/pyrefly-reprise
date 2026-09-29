@@ -1,0 +1,241 @@
+{
+ "label": "before-live",
+ "base": "https://baileypillon.github.io/pyrefly-reprise/",
+ "chapter": "ffx2-bahamut",
+ "padBeforePress": {
+  "ready": false,
+  "current": null,
+  "gain": null,
+  "fading": [],
+  "volumes": {
+   "master": 0.8,
+   "music": 0.7,
+   "sfx": 0.9
+  }
+ },
+ "padAfterPress": {
+  "ready": false,
+  "current": null,
+  "gain": null,
+  "fading": [],
+  "volumes": {
+   "master": 0.8,
+   "music": 0.7,
+   "sfx": 0.9
+  }
+ },
+ "freshVolumes": {
+  "master": 0.8,
+  "music": 0.7,
+  "sfx": 0.9
+ },
+ "pauseRuns": [
+  {
+   "beforePause": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "during": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "plus3": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "plus6": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "slowPause": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "slowResume": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "screen": "battle"
+  },
+  {
+   "beforePause": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "during": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "plus3": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "plus6": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "slowPause": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "slowResume": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "screen": "battle"
+  },
+  {
+   "beforePause": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "during": {
+    "ready": true,
+    "current": "boss-ffx2-aeon",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "plus3": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "plus6": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "slowPause": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "slowResume": {
+    "ready": true,
+    "current": "pause",
+    "gain": 1,
+    "fading": [],
+    "volumes": {
+     "master": 0.8,
+     "music": 0.7,
+     "sfx": 0.9
+    }
+   },
+   "screen": "battle"
+  }
+ ]
+}

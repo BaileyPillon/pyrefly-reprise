@@ -61,11 +61,11 @@ describe('dialogue role chip', () => {
     expect(box.el.querySelector('.dbox__speaker')?.textContent).toBe('Rikku');
   });
 
-  it("names FFX-2 Brother 'Brother' (his X-2 portrait id is brother-x2), with no role chip", () => {
+  it("names FFX-2 Brother 'Brother' (his X-2 portrait id is brother-x2), on the Gullwings plate (PR-0058, r29)", () => {
     const { box } = mount();
     void box.say(say('brother-x2', 'I CANNOT HEAR YOU! SPEAK UP!'));
     expect(box.el.querySelector('.dbox__speaker')?.textContent).toBe('Brother');
-    expect((box.el.querySelector('.dbox__role') as HTMLElement).hidden).toBe(true);
+    expect(box.el.querySelector('.dbox__role')?.textContent).toBe('Gullwings');
   });
 
   it("names Chapter VII's Seymour 'Seymour' (his portrait id is seymour-macalania), still a Maester", () => {
@@ -112,10 +112,14 @@ describe('dialogue role chip', () => {
     expect(speakerRole('yuna-x2')).toBe('Sphere Hunter');
   });
 
-  it('gives no role to the airship crew, who need no introduction', () => {
-    for (const who of ['brother', 'brother-x2', 'buddy', 'shinra'] as const) {
-      expect(SPEAKER_ROLES[who]).toBeUndefined();
+  // r29 (PR-0058, critic round 15): the FFX-2 crew were untagged, and the critic held that every named
+  // Gullwings line carries a plate like the YRP's. FFX's Brother (the Evrae chapter, id `brother`) is a
+  // different speaker and stays bare.
+  it('puts the FFX-2 Gullwings crew on one plate and leaves FFX Brother bare', () => {
+    for (const who of ['brother-x2', 'buddy', 'shinra'] as const) {
+      expect(SPEAKER_ROLES[who]).toBe('Gullwings');
     }
+    expect(SPEAKER_ROLES['brother']).toBeUndefined();
   });
 });
 

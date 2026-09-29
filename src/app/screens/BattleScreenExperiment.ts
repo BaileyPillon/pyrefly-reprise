@@ -31,6 +31,7 @@ import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
 import type { Ff7PartyBuild } from '../../battle/common/types-ff7.ts';
 import { playBattleSwirl } from '../../ui/common/transitions/index.ts';
 import { playFf7Swirl } from '../../ui/ff7/ff7Swirl.ts';
+import { preloadBattle } from './battlePreload.ts';
 import { Ff7ResultsScreen } from './Ff7ResultsScreen.ts';
 import { recordExperimentAttempt, recordExperimentClear } from '../experiments/experimentRecords.ts';
 
@@ -101,7 +102,8 @@ export async function runExperiment(
 export async function experimentPlayIn(root: HTMLElement, chapter: Chapter, swap: () => Promise<boolean>, opts: RunChapterOptions): Promise<boolean> {
   let up: Promise<boolean> = Promise.resolve(true);
   const onCover = (): Promise<void> => (up = swap()).then(() => undefined);
-  if (chapter.game === 'ff7') await playFf7Swirl(root, { instant: opts.speed === 'skip', onCover });
+  // r29 PR-0222: the FF7 art loads while the twisted board holds (bounded), not under 20-30 s of black.
+  if (chapter.game === 'ff7') await playFf7Swirl(root, { instant: opts.speed === 'skip', onCover, hold: preloadBattle(chapter, opts.seed ?? 1) });
   else await playBattleSwirl(root, { instant: opts.speed === 'skip', onCover });
   return up;
 }

@@ -15,6 +15,7 @@ import type { AeonBuild, FFXMemberBuild, FFXPartyBuild } from '../../src/battle/
 import { gagazetBuild } from '../../src/data/ffx/builds/gagazet.ts';
 import { zanarkandBuild } from '../../src/data/ffx/builds/zanarkand.ts';
 import { dreamsEndBuild } from '../../src/data/ffx/builds/dreams-end.ts';
+import { gardenOfPainBuild } from '../../src/data/ffx/builds/garden-of-pain.ts';
 
 const BUILDS: Record<string, FFXPartyBuild> = {
   gagazet: gagazetBuild,
@@ -148,14 +149,16 @@ describe('FFX party builds — aeons', () => {
     const BOUNDS: Record<keyof AeonBuild['stats'], [number, number]> = {
       hp: [500, 4000],
       mp: [20, 100],
-      str: [10, 60],
-      def: [10, 70],
+      // STR 60 -> 70, DEF 70 -> 80, ACC 40 -> 50 on 2026-09-28: §6.4.3's inside-Sin Bahamut STR 63,
+      // Ifrit DEF 77, Ixion ACC 44 (Chapter III, research/ffx-combat-core.md).
+      str: [10, 70],
+      def: [10, 80],
       mag: [20, 70],
       mdef: [10, 70],
       agi: [5, 50],
       luck: [0, 30],
       eva: [0, 60],
-      acc: [0, 40],
+      acc: [0, 50],
       maxHp: [500, 4000],
       maxMp: [20, 100],
     };
@@ -182,28 +185,41 @@ describe('FFX party builds — aeons', () => {
   });
 
   /**
-   * **2026-09-27, PR-0179 arm a (D-243, FFX only).** Gagazet now carries research/ffx-combat-core.md
-   * §6.4.3's rows (the formula run on the §6.4.2 Yuna profile, Valefor 1,530 ... Bahamut 2,935), while
-   * Zanarkand and Dream's End still carry ffx-yunalesca.md §12's rows, the battle-count floor alone
-   * (the `x` branch, Valefor 1,341 / 1,465 ... Bahamut 2,542 / 2,840; ffx-combat-core.md line 1144).
-   * Two sourced models side by side, so the step from Gagazet to Zanarkand now goes **down** for all
-   * five aeons. The step from Zanarkand to Dream's End (one model) is still pinned; the Gagazet step is
-   * pinned as the known gap it is, open for Bailey (`docs/handoff/combat-switches.md`: §6.4.3 also
-   * prints Zanarkand and inside-Sin rows that would make the three chapters one model again).
+   * **The "no superboss grinding" rule, restored 2026-09-28 (Bailey: "so the aeons don't get weaker
+   * later in the story"; FFX only).** Every chapter from Mt. Gagazet on now carries one model,
+   * research/ffx-combat-core.md §6.4.3: Gagazet N = 250 (D-243 arm a), Zanarkand Dome N = 300, inside
+   * Sin N = 360 (`late-aeon-rows.ts`). Chapter XII (Garden of Pain, inside Sin one save sphere before
+   * Dream's End) clones Chapter III's set. In story order no stat of any aeon goes down, and HP goes up
+   * at every step. From 2026-09-27 to 09-28 the Gagazet -> Zanarkand step was pinned as a known gap
+   * (Zanarkand and Dream's End still carried ffx-yunalesca.md §12's floor rows).
    */
-  it('the "no superboss grinding" rule: aeon stats step up from Zanarkand to Dream\'s End', () => {
+  it("the \"no superboss grinding\" rule: aeon stats never drop from Gagazet to Zanarkand to the Garden of Pain to Dream's End", () => {
+    const story: [string, FFXPartyBuild][] = [
+      ['gagazet', gagazetBuild], ['zanarkand', zanarkandBuild], ['garden-of-pain', gardenOfPainBuild], ['dreams-end', dreamsEndBuild],
+    ];
+    const statKeys = ['hp', 'mp', 'str', 'def', 'mag', 'mdef', 'agi', 'luck', 'eva', 'acc', 'maxHp', 'maxMp'] as const;
     for (const aeonId of ['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut'] as const) {
-      const hpByChapter = ['gagazet', 'zanarkand', 'dreams-end'].map(
-        (name) => BUILDS[name]!.aeons.find((a) => a.id === aeonId)!.stats.hp,
-      );
-      expect(hpByChapter[2], `${aeonId} hp dreams-end >= zanarkand`).toBeGreaterThanOrEqual(hpByChapter[1]!);
+      for (let k = 1; k < story.length; k++) {
+        const [prevName, prev] = story[k - 1]!;
+        const [name, build] = story[k]!;
+        const a = build.aeons.find((x) => x.id === aeonId)!.stats;
+        const b = prev.aeons.find((x) => x.id === aeonId)!.stats;
+        for (const stat of statKeys) {
+          expect(a[stat], `${aeonId}.${stat} ${name} >= ${prevName}`).toBeGreaterThanOrEqual(b[stat]);
+        }
+      }
+      const hp = story.map(([, build]) => build.aeons.find((x) => x.id === aeonId)!.stats.hp);
+      expect(hp[1], `${aeonId} hp zanarkand > gagazet`).toBeGreaterThan(hp[0]!);
+      expect(hp[3], `${aeonId} hp dreams-end > zanarkand`).toBeGreaterThan(hp[1]!);
     }
   });
 
-  it('known gap since PR-0179 arm a: Gagazet\'s §6.4.3 rows sit above Zanarkand\'s §12 floor rows (open for Bailey)', () => {
-    const hp = (name: string) => Object.fromEntries(BUILDS[name]!.aeons.map((a) => [a.id, a.stats.hp]));
-    expect(hp('gagazet')).toMatchObject({ valefor: 1530, ifrit: 2075, ixion: 2055, shiva: 1830, bahamut: 2935 });
-    expect(hp('zanarkand')).toMatchObject({ valefor: 1341, ifrit: 1797, ixion: 1787, shiva: 1596, bahamut: 2542 });
+  it("Chapters II and III carry §6.4.3's Zanarkand and inside-Sin HP (Valefor 1,674 / 1,886 ... Bahamut 3,218 / 3,657)", () => {
+    const hp = (build: FFXPartyBuild) => Object.fromEntries(build.aeons.map((a) => [a.id, a.stats.hp]));
+    expect(hp(gagazetBuild)).toEqual({ valefor: 1530, ifrit: 2075, ixion: 2055, shiva: 1830, bahamut: 2935 });
+    expect(hp(zanarkandBuild)).toEqual({ valefor: 1674, ifrit: 2275, ixion: 2251, shiva: 2004, bahamut: 3218 });
+    expect(hp(dreamsEndBuild)).toEqual({ valefor: 1886, ifrit: 2585, ixion: 2551, shiva: 2266, bahamut: 3657 });
+    expect(hp(gardenOfPainBuild)).toEqual(hp(dreamsEndBuild));
   });
 });
 

@@ -77,7 +77,15 @@ export interface Ff7SwirlOptions {
   instant?: boolean;
   /** Swap the battle in, under the black; the fade up waits for it. */
   onCover: () => Promise<unknown>;
+  /**
+   * r29 PR-0222: the battle's art loading (`battlePreload`). The twisted board holds on screen
+   * until it settles, at most {@link FF7_HOLD_MAX_MS}, so a cold load is not 20-30 s of pure black.
+   */
+  hold?: Promise<unknown>;
 }
+
+/** Longest the twisted board holds for the art before the cut to black (then the swap waits as before). */
+export const FF7_HOLD_MAX_MS = 30000;
 
 /** Twist the frozen board away, cut to black, swap, fade up. Resolves once the field is visible. */
 export async function playFf7Swirl(root: HTMLElement, opts: Ff7SwirlOptions): Promise<void> {
@@ -103,6 +111,12 @@ export async function playFf7Swirl(root: HTMLElement, opts: Ff7SwirlOptions): Pr
     target.style.transform = `rotate(${(220 * e * e).toFixed(2)}deg) scale(${(1 + 0.9 * e).toFixed(3)})`;
     if (u >= 1) break;
     await frame();
+  }
+  if (opts.hold) {
+    document.documentElement.dataset['ff7Swirl'] = 'hold';
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    await Promise.race([opts.hold.catch(() => undefined), new Promise((r) => (timer = setTimeout(r, FF7_HOLD_MAX_MS)))]);
+    clearTimeout(timer);
   }
   black.style.opacity = '1';
   document.documentElement.dataset['ff7Swirl'] = 'black';

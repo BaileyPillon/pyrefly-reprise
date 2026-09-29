@@ -6,12 +6,9 @@
  * `research/ffx-bfa-yu-yevon.md` §4 (party preset, an authored estimate —
  * "no published statistical average... exists for this point") and
  * `research/ffx-seymour-flux.md` §7.7.2 loadout **C**, a diff against
- * loadout B in `./zanarkand.ts`. Aeon stats have no dedicated table in the
- * BFA/Yu Yevon research; this file steps one Ultimania battle-count bracket
- * up from `./zanarkand.ts`'s N=270-299 band to N=300-329
- * (`research/ffx-yunalesca.md` §12), which is `[verified: 2 sources]` for
- * the numbers themselves and `[estimate]` only in being the right bracket
- * for this later story point.
+ * loadout B in `./zanarkand.ts`. Aeon stats (since 2026-09-28):
+ * `research/ffx-combat-core.md` §6.4.3's inside-Sin block, N = 360 (see
+ * `./late-aeon-rows.ts`; §12's N=300-329 floor band until then).
  *
  * The party at battle start is **forced to Tidus / Yuna / Auron**; reserve
  * swapping still works normally [§1]. The `aeons` array below is
@@ -30,7 +27,8 @@
  * into this build.
  */
 
-import type { AeonBuild, FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
+import type { FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
+import { INSIDE_SIN_SOURCED_ROWS, LATE_AEON_ROWS, armLateAeons, dreamsEndFloorAeons } from './late-aeon-rows.ts';
 
 const BASE_WEAPON_BONUS_CRIT = 3;
 
@@ -69,7 +67,7 @@ const BASE_WEAPON_BONUS_CRIT = 3;
  *     the typical build, and reading a recommended floor as a published typical
  *     is how a preset drifts upward one citation at a time.
  *   * It would not even buy what it was cited for: this build's aeons carry
- *     their **own** stat block ({@link dreamsEndAeons}), so nothing in the
+ *     their **own** stat block (`./late-aeon-rows.ts`), so nothing in the
  *     engine scales an aeon off Yuna at all. The stat's only effect here is on
  *     the ~490 of damage her idle swing does against a 180,000-HP chapter.
  *
@@ -361,57 +359,14 @@ function kimahri(): FFXMemberBuild {
   };
 }
 
-/**
- * `research/ffx-yunalesca.md` §12, N=300-329 battle-count band
- * [verified: 2 sources] — one bracket up from `./zanarkand.ts`'s N=270-299,
- * appropriate for this later story point [estimate: which bracket applies].
- * This same array is the template the engine mirrors into each
- * possessed-aeon fight — see `./braskas-final-aeon.ts`.
- */
-function aeon(
-  id: AeonBuild['id'],
-  name: string,
-  hp: number,
-  mp: number,
-  str: number,
-  def: number,
-  mag: number,
-  mdef: number,
-  agi: number,
-  eva: number,
-  acc: number,
-  abilityIds: string[],
-  overdriveIds: string[],
-  overdriveGauge: number,
-): AeonBuild {
-  return {
-    id,
-    name,
-    spriteKey: id,
-    stats: { hp, mp, str, def, mag, mdef, agi, luck: 5, eva, acc, maxHp: hp, maxMp: mp }, // luck [estimate] — not published
-    hp,
-    mp,
-    overdriveGauge,
-    abilityIds: [...abilityIds, 'shield', 'boost'],
-    overdriveIds,
-  };
-}
-
 export const dreamsEndBuild: FFXPartyBuild = {
   game: 'ffx',
   members: [tidus(), yuna(), auron(), wakka(), lulu(), rikku(), kimahri()],
   activeSlots: ['tidus', 'yuna', 'auron'], // §1 [verified: 2 sources] — forced at battle start; reserve swapping still works
   reserve: ['wakka', 'lulu', 'kimahri', 'rikku'],
-  // §4.4 [verified: 2 sources] — all five mandatory aeons; Anima/Yojimbo/
-  // Magus Sisters assumed absent for the default, non-grinding preset (their
-  // possessed-aeon data still ships in braskas-final-aeon-abilities.ts).
-  aeons: [
-    aeon('valefor', 'Valefor', 1465, 46, 30, 44, 42, 46, 21, 28, 15, ['sonic-wings'], ['energy-ray'], 60),
-    aeon('ifrit', 'Ifrit', 2007, 44, 31, 57, 41, 41, 18, 14, 15, ['meteor-strike'], ['hellfire'], 55),
-    aeon('ixion', 'Ixion', 1981, 48, 32, 50, 41, 58, 16, 16, 16, ['aerospark'], ['thors-hammer'], 50),
-    aeon('shiva', 'Shiva', 1760, 51, 30, 31, 46, 47, 32, 44, 15, ['heavenly-strike'], ['diamond-dust'], 55),
-    aeon('bahamut', 'Bahamut', 2840, 67, 35, 54, 36, 56, 21, 29, 15, ['impulse'], ['mega-flare'], 70),
-  ],
+  // §4.4 [verified: 2 sources] — all five mandatory aeons, no Anima/Yojimbo/Magus Sisters. Stats:
+  // `ffx-combat-core.md` §6.4.3's inside-Sin block (`./late-aeon-rows.ts`), mirrored by each possessed aeon.
+  aeons: armLateAeons(dreamsEndFloorAeons(), INSIDE_SIN_SOURCED_ROWS, LATE_AEON_ROWS),
   // §4.4 [estimate] — includes the Candle of Life doom-kill route on Yu Yevon.
   inventory: [
     { itemId: 'hi-potion', count: 20 },

@@ -8,12 +8,17 @@
 //     link seam, and the first enemy action of the attempt is kept, so two
 //     routes on one pinned seed can be compared;
 //   - PR-0213: the mid-fight capture resumes from the pause first and asserts
-//     screen=battle; it is retried on later turns rather than shot in pause.
+//     screen=battle; it is retried on later turns rather than shot in pause;
+//   - PR-0225 (round 15, promoted from critic/rounds/round-15/cap/lib): a menu row
+//     that opens an Overdrive/Grand Summon picker is played with arrows + Enter on
+//     the row the advisor names (it was cancelled and replaced by Attack); an open
+//     overlay with nothing choosable is escaped and recorded (rec.escapes) instead
+//     of polled forever; a wrong-target confirm is recorded (rec.targetMismatches).
 // Both games: shared critic plumbing.
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { battleSeedRead, measureCardVsRows, readAdvice, readRows, targetsUp } from './route-ui.mjs';
+import { battleSeedRead, isAllDisabledOverlay, measureCardVsRows, readAdvice, readRows, targetsUp } from './route-ui.mjs';
 
 /**
  * Plays one attempt until the battle screen is left or the budget runs out.
@@ -31,7 +36,15 @@ export async function playFight(r) {
   let turns = 0; let lastLinks = rec.firstState?.links ?? 1; let enemySeq = false; let attackSeq = false; let allTargetShot = false;
   let changed = false; let lastHpSig = ''; let idleSince = Date.now(); let bestLog = []; let lastLogPull = 0; let pendingSeam = null;
   let midfightDone = false; let firstEnemy = null;
-  rec.seamCard = []; rec.pauseRecoveries = 0; rec.misses = []; rec.orders = [];
+  rec.seamCard = []; rec.pauseRecoveries = 0; rec.misses = []; rec.orders = []; rec.escapes = []; rec.targetMismatches = []; rec.pickerPlays = [];
+  /** Records a target confirm; a confirm on something other than the wanted target is kept in rec.targetMismatches. */
+  const noteTarget = (c, adv) => { if (c?.mismatch || c?.unresolved) rec.targetMismatches.push({ turn: turns, want: adv?.target ?? null, ...c }); return c; };
+  /** Backs out of an open menu with nothing choosable in it, and records that it did (PR-0225 issue 2). */
+  const escapeDeadMenu = async (why, rowsNow) => {
+    rec.escapes.push({ turn: turns, ms: Date.now() - tb, why, rows: rowsNow.map((x) => `${x.label}${x.disabled ? ' (disabled)' : ''}`) });
+    if (rec.escapes.length === 1) await snap(`${r.pref ?? ''}27-dead-menu-escaped.png`, `an open menu with nothing choosable, before Escape (${why})`, { screen: 'battle' });
+    await input.press('Escape'); await page.waitForTimeout(400);
+  };
 
   while (['battle', 'pause'].includes(await scr()) && Date.now() - tb < budget) {
     if ((await scr()) === 'pause') { rec.pauseRecoveries++; await input.press('Escape'); await page.waitForTimeout(700); continue; }
@@ -126,7 +139,7 @@ export async function playFight(r) {
           const sp = spell ? await chooser.choose((l) => l.toLowerCase().includes(spell)) : null;
           dc.steps.push({ k, spell: sp });
           if (!sp) break;
-          await chooser.confirmTarget(adv.target); await page.waitForTimeout(700);
+          noteTarget(await chooser.confirmTarget(adv.target), adv); await page.waitForTimeout(700);
           if (!(await pbk())?.awaitingMenu) break;
         }
       }
@@ -137,6 +150,7 @@ export async function playFight(r) {
       if (!dc.steps.some((x) => x.spell)) { rec.dcFail = (rec.dcFail ?? 0) + 1; for (let i = 0; i < 3 && (await pbk())?.awaitingMenu; i++) { await input.press('Escape'); await page.waitForTimeout(400); } }
       turns++; continue;
     }
+    const deadRows = new Set(); // command rows whose list proved to have nothing choosable this turn (PR-0225)
     if (goal === 'lose') {
       // Lose route: Defend (top level, else FFX's Special > Defend); then a standing order in Chapter VIII; then Attack below.
       took = await chooser.choose((l) => /^defend$/i.test(l));
@@ -148,7 +162,7 @@ export async function playFight(r) {
         }
       }
       if (!took && rows.some((r) => /^orders$/i.test(r.label) && !r.disabled)) {
-        if (await chooser.choose((l) => /^orders$/i.test(l))) { pick.viaMenu = 'Orders'; if (!rec.ordersShot) rec.ordersShot = await snap('26-orders-widget.png', 'Chapter VIII Orders widget open by real input (lose route)', { screen: 'battle', awaitingMenu: true }); took = await chooser.choose(() => true); if (!took) { await input.press('Escape'); await page.waitForTimeout(350); } else rec.orders.push({ turn: turns, order: took, why: 'lose route' }); }
+        if (await chooser.choose((l) => /^orders$/i.test(l))) { pick.viaMenu = 'Orders'; if (!rec.ordersShot) rec.ordersShot = await snap('26-orders-widget.png', 'Chapter VIII Orders widget open by real input (lose route)', { screen: 'battle', awaitingMenu: true }); took = await chooser.choose(() => true); if (!took) { deadRows.add('Orders'); await escapeDeadMenu('Orders: every order disabled (one standing, or already there)', await readRows(page)); } else rec.orders.push({ turn: turns, order: took, why: 'lose route' }); }
       }
     } else if (adv) {
       const before = JSON.stringify(rows.map((x) => x.label));
@@ -161,8 +175,35 @@ export async function playFight(r) {
         if (JSON.stringify(rr.map((x) => x.label)) === before || (await targetsUp(page)).n > 0) direct = true; // a one-item group resolves straight from the top row
       }
       pick.viaMenu = opened;
+      // PR-0225 (round 15 patch, promoted): a menu row that opens an Overdrive picker or minigame overlay
+      // directly (Yuna's Grand Summon list, an aeon's Overdrive, Wakka's reels) leaves no command rows.
+      // The promoted harness then pressed Escape (cancelling the picker) and fell back to Attack: in
+      // round 15's first Chapter II run, 14 of 14 Grand Summons were thrown away that way. Play the
+      // picker as a player would: arrow to the aeon the card names if the list shows it, then Enter.
+      if (opened && !direct) {
+        const mg = await page.evaluate(() => {
+          const rows = [...document.querySelectorAll('.ffx-mg-list__row')].map((r) => ({ t: r.textContent.trim(), sel: r.classList.contains('ffx-mg-list__row--selected') }));
+          const up = !!document.querySelector('.ffx-mg-list, [class*="ffx-mg"], [class*="od-overlay"], [class*="overdrive-overlay"]') || window.__pyrefly.snapshotState()?.screenState?.playback?.phase === 'hud:minigame-request';
+          return { up, rows, card: (document.querySelector('.mad__card')?.innerText ?? '').replace(/\s+/g, ' ') };
+        });
+        if (mg.up && !(await readRows(page)).length) {
+          let chosen = null;
+          if (mg.rows.length) {
+            const hay = `${adv.label ?? ''} ${adv.target ?? ''} ${mg.card}`.toLowerCase();
+            const want = mg.rows.findIndex((r) => hay.includes(r.t.replace(/×2$/, '').trim().toLowerCase()));
+            const cur = Math.max(0, mg.rows.findIndex((r) => r.sel));
+            const idx = want >= 0 ? want : cur;
+            for (let k = 0; k < Math.abs(idx - cur); k++) { await input.press(idx > cur ? 'ArrowDown' : 'ArrowUp'); await page.waitForTimeout(150); }
+            chosen = mg.rows[idx]?.t ?? null;
+            await input.press('Enter'); await page.waitForTimeout(700);
+          }
+          rec.pickerPlays.push({ turn: turns, want: adv, list: mg.rows.map((r) => r.t), chosen, why: mg.rows.length ? 'list picker: row chosen by arrows + Enter' : 'non-list overlay: left to the minigame handler' });
+          rec.picks.push({ ...pick, took: `${adv.label} (picker opened${chosen ? `: ${chosen}` : ''})`, target: { confirmed: Boolean(chosen), picker: true } });
+          turns++; continue;
+        }
+      }
       if (direct) {
-        const c = await chooser.confirmTarget(adv.target);
+        const c = noteTarget(await chooser.confirmTarget(adv.target), adv);
         rec.picks.push({ ...pick, took: `${adv.label} (one-item group, direct)`, target: c });
         await page.waitForTimeout(700); turns++; continue;
       }
@@ -177,15 +218,32 @@ export async function playFight(r) {
       }
     }
     if (!took) took = await chooser.choose((l) => /^attack$/i.test(l));
-    if (!took && goal === 'lose') { // nothing harmless is enabled (VIII at range with an order standing): the first enabled row and entry
-      took = await chooser.choose(() => true);
-      if (took && (await readRows(page)).length && !(await targetsUp(page)).n) took = `${took} > ${(await chooser.choose(() => true)) ?? 'none'}`;
+    if (!took && goal === 'lose') { // nothing harmless is enabled (VIII at range with an order standing): the first enabled row that has something in it
+      for (let k = 0; k < rows.length && !took; k++) {
+        const first = await chooser.choose((l) => !deadRows.has(l));
+        if (!first) break;
+        const inner = await readRows(page);
+        if (isAllDisabledOverlay(inner)) { deadRows.add(first); await escapeDeadMenu(`${first} opened a list with every row disabled`, inner); continue; }
+        took = inner.length && !(await targetsUp(page)).n ? `${first} > ${(await chooser.choose(() => true)) ?? 'none'}` : first;
+      }
     }
+    // PR-0225 (round 15 patch, promoted): a menu where nothing could be chosen, again and again (Chapter VIII lose route,
+    // round 15: 393 empty picks, engine frozen at turn 15). Capture it once and stop after 25.
+    if (!took) {
+      rec.emptyPicks = (rec.emptyPicks ?? 0) + 1;
+      if (rows.some((x) => x.overlay) && isAllDisabledOverlay(rows)) await escapeDeadMenu('every row disabled, nothing chosen', rows);
+      if (rec.emptyPicks === 3) {
+        rec.stuckRows = await page.evaluate(() => [...document.querySelectorAll('.ig-cmd-stack')].map((s) => ({ cls: s.className, vis: s.getBoundingClientRect().width > 0 && getComputedStyle(s).display !== 'none', rows: [...s.querySelectorAll('.ig-cmd')].map((r) => `${r.className} :: ${r.textContent.replace(/\s+/g, ' ').trim()}`) })));
+        rec.stuckState = await page.evaluate(() => { const s = window.__pyrefly.snapshotState(); return { screen: s?.screen, playback: s?.screenState?.playback ? { phase: s.screenState.playback.phase, awaitingMenu: s.screenState.playback.awaitingMenu } : null }; });
+        await snap(`${r.pref ?? ''}27-no-choosable-row.png`, 'a command menu where the lose route found no row it could choose', { screen: 'battle' });
+      }
+      if (rec.emptyPicks >= 25) { rec.stuckStop = true; break; }
+    } else rec.emptyPicks = 0;
     pick.took = took;
     pick.engineHp = Object.values(s?.battle?.combatants ?? {}).map((c) => `${c.id}:${c.hp}/${c.maxHp}`);
     const tg = await targetsUp(page);
     if (!allTargetShot && tg.n >= 2 && tg.lit >= 2) { allTargetShot = true; await snap('22-target-all.png', `multi-target selection (${adv?.label} -> ${adv?.target})`, { screen: 'battle', targeting: true }, { lit: `${tg.lit}/${tg.n}` }); }
-    pick.target = await chooser.confirmTarget(adv?.target ?? null);
+    pick.target = noteTarget(await chooser.confirmTarget(adv?.target ?? null), adv);
     rec.picks.push(pick);
     if (!attackSeq) { attackSeq = true; await seq('seq-party-action', 10, 180, `a party command resolving (${took})`); } else await page.waitForTimeout(600);
     turns++;

@@ -166,6 +166,26 @@ node critic/runner/lib/route.mjs <chapterId> <win|lose> --base=<url> --evidence=
   cut) and `run.json.dboxTimeline` (every dialogue line shown, speaker,
   portrait, screen and timing, from an init-script recorder).
 
+- **Pickers, dead menus, lettered targets, dialogue (PR-0225, round 15).**
+  `route-pure.mjs` holds the decisions as pure functions, with
+  `tests/unit/critic-route-harness.test.ts` (game case: both; the letter rule
+  is FFX only). (1) A menu row that opens an Overdrive or Grand Summon picker
+  (`.ffx-mg-list`) is played with arrows and Enter on the row the advisor card
+  names, and listed in `run.json.pickerPlays`; it used to be cancelled with
+  Escape and replaced by Attack. (2) An open overlay whose rows are all
+  disabled is backed out of with Escape, in `run.json.escapes` (with a
+  `27-dead-menu-escaped` capture), and a menu that cannot be chosen from is
+  counted and stopped after 25 (`emptyPicks`, `stuckRows`). (3) `confirmTarget`
+  resolves a name to a `data-target-id` (display name, then trailing letter
+  through `letterTagMap`, a copy of `letterTagsOf` that the test holds equal to
+  it, then the old id-slug match), steers until that id is highlighted, and
+  returns `wanted`, `target` and `mismatch`; every mismatch or unresolved name
+  is in `run.json.targetMismatches`, so a wrong confirm is never a silent pick.
+  (4) The dialogue recorder reads only `.dbox.dbox--visible` and makes one entry
+  per show (`dboxStep`): a typewriter growing is one entry, a repeat or a line
+  that opens with the previous line's words is a new one, and `endMs` is when
+  the box went away.
+
 ### `cli.mjs` — small arg helper
 
 `parseArgs`, `requireBase`, `requireEvidence`. `requireBase` /

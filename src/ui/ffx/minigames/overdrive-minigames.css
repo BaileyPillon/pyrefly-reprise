@@ -123,3 +123,15 @@
    scrolls (Grand Summon's five aeons all at once). Desktop is unchanged. */
 html[data-phone-battle='ffx'] .ig-minigame.ffx-mg { z-index: 13; }
 html[data-phone-battle='ffx'] .ffx-mg-list { max-height: 112px; }
+
+/* FOC28-P02 (FFX only; carried from FOC24-03): on the upright phone the head's one-line subtitle
+   ("GRAND SUMMON · AEON ARRIVES WITH A FULL OVERDRIVE") ran 11 px past the panel's right edge at
+   390x844 and printed at 5.33 px (about 6 px on screen). On the phone it takes its own line under
+   the title, wraps inside the panel, and reads at the 14 px floor. Desktop is unchanged. */
+html[data-phone-battle='ffx'] .ffx-mg .ig-minigame__head { flex-wrap: wrap; row-gap: 4px; }
+html[data-phone-battle='ffx'] .ffx-mg .ig-minigame__subtitle {
+  order: 3; flex: 1 1 100%; min-width: 0;
+  white-space: normal; font-size: 14px; line-height: 1.25; letter-spacing: 0.08em;
+}
+/* The selected row is the gold accent, and the ×2 chip was gold-on-paper on it (1.6:1): ink there. */
+.ffx-mg-list__row--selected .ffx-mg-list__qty { color: var(--ig-ink); }

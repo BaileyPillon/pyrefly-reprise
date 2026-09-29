@@ -64,7 +64,7 @@ import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
 import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
 import { BeatHold, beatUp } from './coachHold.ts';
-import { keepMarkOffIntent } from './coachIntentAvoid.ts';
+import { ActorRects, keepMarkClear } from './coachActorAvoid.ts';
 import { ffx2CoachClock, markSeen, shouldShow } from './coachState.ts';
 import type { IntentSource } from '../common/EnemyIntent.ts';
 
@@ -155,6 +155,7 @@ class CoachedHud implements HudPort {
   private liveOwner: CombatantId | null = null;
   /** PR-0119: a mark waits while a mid-battle beat's card is up (`coachHold.ts`). */
   private readonly hold = new BeatHold(() => beatUp(this.layer));
+  private readonly actors = new ActorRects(); // PR-0237: the fighters a line keeps off
 
   constructor(
     private readonly game: GameId,
@@ -181,7 +182,7 @@ class CoachedHud implements HudPort {
   }
 
   sync(state: BattleState, preview: TurnPreview[] | AtbSnapshot): void {
-    this.inner.sync(state, preview);
+    this.inner.sync(state, preview); this.actors.track(state);
   }
 
   syncVitals(state: BattleState): void {
@@ -252,7 +253,7 @@ class CoachedHud implements HudPort {
   }
 
   setTargetingPort(port: TargetingPort): void {
-    this.inner.setTargetingPort?.(port);
+    this.inner.setTargetingPort?.(port); this.actors.port = port;
   }
 
   update(dt: number): void {
@@ -264,7 +265,7 @@ class CoachedHud implements HudPort {
     // FOC-05: `.mad__card` is re-solved by `MoveAdvisor.layout()` on its own schedule
     // (`CoachMark.recheckPosition`), so an FFX line keeps checking, not only once.
     this.live?.recheckPosition();
-    if (this.game === 'ffx' && this.live && !this.live.finished && this.layer?.parentElement) keepMarkOffIntent(this.live.el, this.layer.parentElement); // t1-b3a: off the intent slab
+    if (this.live && !this.live.finished && this.layer?.parentElement) keepMarkClear(this.game, this.live.el, this.layer.parentElement, this.actors); // t1-b3a slab (FFX), PR-0237 fighters
   }
 
   // ----------------------------------------------------------- the teaching

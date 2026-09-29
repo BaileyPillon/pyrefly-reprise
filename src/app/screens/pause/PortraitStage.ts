@@ -356,9 +356,10 @@ export class PortraitStage {
     // so the global portrait face-crop (`ui/common/portrait.ts`) must not adopt it
     // and blow a 40px-tile crop up to the full frame.
     if (fallbackArt) img.setAttribute('data-face-crop-manual', '');
-    // A chapter plate not painted yet (Chapter XIII until Bailey picks one):
-    // the manifest already knows, so ask for the fallback alone.
-    if (fallbackArt && manifestKnowsAssetNow(url) === false) {
+    // Plate and fallback both absent by the manifest (FF7 Cloud, r29 PR-0223: three 404s): ask for nothing.
+    if (manifestKnowsAssetNow(url) === false && manifestKnowsAssetNow(fallback) === false) return void (img.dataset['art'] = 'missing');
+    // A plate not painted yet (Chapter XIII until Bailey picks one): the manifest knows, so ask for the fallback alone.
+    if (manifestKnowsAssetNow(url) === false) {
       img.dataset['art'] = 'fallback';
       img.src = fallback;
       return;

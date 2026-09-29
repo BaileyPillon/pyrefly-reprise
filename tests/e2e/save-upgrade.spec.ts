@@ -142,7 +142,7 @@ test.describe('CHK-024: a release-20 save survives the upgrade', () => {
     expect((await boardState(page)).cleared).toEqual([]);
     expect(await page.locator('.fe-card__ribbon').count()).toBe(0);
     const volumes = await page.evaluate(() => window.__pyrefly!.audioDebug().volumes);
-    expect(volumes).toEqual({ master: 0.8, music: 0.7, sfx: 0.9 });
+    expect(volumes).toEqual({ master: 0.8, music: 0.7, sfx: 0.35 }); // a fresh profile: D-210
     await page.screenshot({ path: 'docs/screenshots/t1-b5/chk024-truncated-board.jpg', type: 'jpeg', quality: 80 });
     expect(errors).toEqual([]);
   });

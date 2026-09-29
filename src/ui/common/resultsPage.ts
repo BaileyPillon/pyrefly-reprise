@@ -138,7 +138,7 @@ function membersHtml(m: ResultsPageModel): string {
                 <span class="rres__member-name">${escapeHtml(row.name)}</span>
                 ${levelHtml}
               </div>
-              <div class="rres__member-detail">${escapeHtml(row.detail)}</div>
+              <div class="rres__member-detail">${escapeHtml(row.detail)}${row.noAward ? ` · ${escapeHtml(row.noAward.long)}` : ''}</div>
             </div>
             ${award}
           </div>

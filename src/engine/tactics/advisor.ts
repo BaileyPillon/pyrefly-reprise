@@ -739,6 +739,28 @@ function aimCandidates(
 // ------------------------------------------------------------------- scoring
 
 /**
+ * Who pays when an action harms its own side, from the simulation's own report
+ * (PR-0235). Darkness costs its user 12.5% of her max HP and nobody else
+ * anything [research/ffx2-combat-core.md, Darkness row, verified: 2 sources];
+ * "the party" is only said when more than the user pays.
+ */
+function harmWarning(state: Readonly<BattleState>, outcome: SimOutcome, actorId: CombatantId | undefined): string {
+  const payers = Object.entries(outcome.hpDelta).filter(
+    ([id, d]) => d > 0 && state.combatants[id] && !isEnemy(state.combatants[id]!),
+  );
+  const only = payers.length === 1 ? payers[0]! : null;
+  const c = only ? state.combatants[only[0]] : undefined;
+  if (only && c && only[0] === actorId && c.stats.maxHp > 0) {
+    const pct = Math.round((only[1] / c.stats.maxHp) * 1000) / 10;
+    return `Costs ${c.name} ${pct}% of max HP`;
+  }
+  if (payers.length > 0 && payers.length <= 2) {
+    return `Costs ${payers.map(([id]) => state.combatants[id]!.name).join(' and ')} HP`;
+  }
+  return 'Costs the party HP';
+}
+
+/**
  * One number for one previewed outcome. Higher is better.
  *
  * Reads only the simulation's report, never the ability record, so a move that
@@ -751,6 +773,8 @@ export function scoreOutcome(
   ctx: {
     command: Command;
     def: AbilityDef | null;
+    /** Who is acting, so a self-inflicted cost can be named (PR-0235). */
+    actorId?: CombatantId;
     intent?: AdvisorIntent | null;
     /**
      * The odds each status this action aims actually lands, from the engine's
@@ -827,7 +851,7 @@ export function scoreOutcome(
     );
     if (zombie && ctx.def?.flags.includes('heals')) {
       warning = `Healing a Zombie is damage — ${state.combatants[zombie]?.name ?? zombie} takes it`;
-    } else if (!warning) warning = 'Costs the party HP';
+    } else if (!warning) warning = harmWarning(state, outcome, ctx.actorId);
   }
 
   // **The coin flip, priced as one.** A status the median branch missed is not
@@ -970,8 +994,15 @@ function reasonFor(
     const on = targetDisplayName(state, gamble.targetId) ?? name;
     return `${statusLabel(gamble.status)} on ${on} — about ${Math.round(gamble.percent)} in 100, and it is the line`;
   }
-  return 'The best of what is offered';
+  return FALLBACK_REASON;
 }
+
+/**
+ * What `reasonFor` says when nothing on the board explains the row. A tactic's
+ * pick swaps it for the chapter guide's own hint (PR-0234), so the card and the
+ * strategy panel give the same why; it is exported for the test that proves it.
+ */
+export const FALLBACK_REASON = 'The best of what is offered';
 
 /** The likeliest application this action still has a roll coming for. */
 function bestTry(chances: readonly StatusChance[]): StatusChance | null {
@@ -1079,6 +1110,7 @@ function candidateFor(
   const scored = scoreOutcome(state, mid, {
     command,
     def,
+    actorId,
     intent,
     ...(planner ? { chances } : {}),
   });
@@ -1847,12 +1879,20 @@ function tacticSuggestion(
   if (!candidate) return null;
 
   let cite = '';
+  let guideReason = '';
   try {
     const view = buildGuideView(state, decision);
-    if (view?.next && sameCommand(view.next.command, candidate.suggestion.command)) cite = view.next.cite;
+    if (view?.next && sameCommand(view.next.command, candidate.suggestion.command)) {
+      cite = view.next.cite;
+      guideReason = view.next.reason;
+    }
   } catch {
     cite = '';
   }
+  // PR-0234: a pick the simulation cannot explain (Talk, Pull back, a Grand
+  // Summon) borrows the guide's sentence, which is written and cited for it;
+  // with no hint either, it says whose line it is rather than nothing.
+  const unexplained = candidate.suggestion.reason === FALLBACK_REASON;
 
   return {
     outcome: candidate.outcome,
@@ -1864,6 +1904,7 @@ function tacticSuggestion(
       ...(wrapped ? { label: wrapped } : {}),
       cite,
       source: 'tactic',
+      ...(unexplained ? { reason: guideReason || 'The chapter’s own line for this turn' } : {}),
       // A switch the chapter's own line chose is not the "rarely worth it"
       // swap `switchCandidate` prices; it is the tactic re-aiming the turn at
       // whichever of the seven carries the tool this board needs

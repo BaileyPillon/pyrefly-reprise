@@ -1,4 +1,5 @@
 import type { AvailableCommand, BattleState, Command } from '../../battle/common/types.ts';
+import { airshipOrderRefusal } from '../../engine/tactics/airship-orders.ts';
 import {
   AIRSHIP_MISSILES,
   AIRSHIP_ORDER,
@@ -137,7 +138,7 @@ export function airshipMenuRows(
 ): AvailableCommand[] {
   const orders = commands.filter(isOrderRow);
   if (!AirshipOrderWidget.applies(flags?.[AIRSHIP_RANGE]) || orders.length === 0) return commands;
-  return foldOrders(commands, orders);
+  return foldOrders(commands, orders, flags ?? {});
 }
 
 function isOrderRow(c: AvailableCommand): boolean {
@@ -154,12 +155,26 @@ function isOrderCommand(c: Command): boolean {
  * relabelled (both orders share a rank, so the CTB preview the menu draws while
  * it is highlighted is the true one). No enabled order, no row.
  */
-function foldOrders(commands: AvailableCommand[], orders: AvailableCommand[]): AvailableCommand[] {
+function foldOrders(
+  commands: AvailableCommand[],
+  orders: AvailableCommand[],
+  flags: Readonly<Record<string, unknown>>,
+): AvailableCommand[] {
   const first = orders.find((o) => o.enabled);
   // Option A, step 1: "on anyone else's turn they are not there" — the engine
   // offers the rows greyed ("Not your call") to the four who cannot give an
   // order; the cascade drops them instead.
-  const row: AvailableCommand | null = first ? { ...first, label: 'Orders' } : null;
+  // PR-0236: when the widget would grey BOTH rows (the ship is far and Close in
+  // is already ordered, or the mirror), the row says so here instead of opening
+  // a submenu with nothing to choose: disabled, with the widget's own reason.
+  const refusals = orders.map((o) => (o.command.kind === 'trigger' ? airshipOrderRefusal(flags, o.command.id) : null));
+  const none = refusals.length > 0 && refusals.every((r) => r !== null);
+  const reason = refusals.find((r) => r === 'Ordered') ?? refusals[0] ?? undefined;
+  const row: AvailableCommand | null = first
+    ? none
+      ? { ...first, label: 'Orders', enabled: false, ...(reason ? { disabledReason: reason } : {}) }
+      : { ...first, label: 'Orders' }
+    : null;
   const out: AvailableCommand[] = [];
   let placed = false;
   for (const c of commands) {
