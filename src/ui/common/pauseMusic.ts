@@ -19,6 +19,12 @@
 /** The slice of `AudioManager` this needs. Structural, so a test can fake it. */
 export interface PauseMusicPort {
   readonly currentMusic: string | null;
+  /**
+   * The cue the mixer is heading for, a still-decoding request included
+   * (`AudioManager.requestedMusic`). Optional so a bare fake still works;
+   * without it the pause falls back to `currentMusic` (PR-0226).
+   */
+  readonly requestedMusic?: string | null;
   playMusic(name: string, options?: { fade?: number }): Promise<void> | unknown;
   /** Fades the music out; how a silent scene gets its silence back (PR-0214). */
   stopMusic?(fade?: number): void;
@@ -51,7 +57,10 @@ const resumeTo = new WeakMap<PauseMusicPort, string | null>();
 export function setPauseMusic(audio: PauseMusicPort, paused: boolean): void {
   try {
     if (paused) {
-      const playing = audio.currentMusic;
+      // What the screen is heading for, not only what is audible yet: a pause
+      // while the battle cue decodes must bring the battle cue back, and a
+      // second press while `pause` decodes is still the same pause (PR-0226).
+      const playing = audio.requestedMusic !== undefined ? audio.requestedMusic : audio.currentMusic;
       if (playing === PAUSE_CUE) return;
       resumeTo.set(audio, playing);
       // Spelt out rather than passed as `PAUSE_CUE` so the cue-reachability

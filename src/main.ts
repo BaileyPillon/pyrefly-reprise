@@ -1,6 +1,7 @@
 import './ui/common/fonts.css';
 import { App } from './app/App.ts';
 import { audio } from './audio/index.ts';
+import { installPadUnlock } from './audio/padUnlock.ts';
 import { DemoScene } from './app/screens/DemoScene.ts';
 import { TitleScreen } from './app/screens/TitleScreen.ts';
 import { BattleScreen } from './app/screens/BattleScreen.ts';
@@ -52,6 +53,8 @@ async function boot(): Promise<void> {
   // first pointerdown/keydown to create it. Anything asked for before then is
   // queued by the AudioManager.
   audio.installUnlockListeners();
+  // A pad press is user activation in Chromium too, but raises no DOM event (PR-0220).
+  installPadUnlock(audio);
 
   app.register('title', () => new TitleScreen());
   app.register('demo', () => new DemoScene());
