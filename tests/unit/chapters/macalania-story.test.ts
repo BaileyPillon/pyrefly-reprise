@@ -370,3 +370,21 @@ describe('macalania story — canon beats in order', () => {
     expect(post).toMatch(/took the body, the sphere and our names/);
   });
 });
+
+describe('PR-0253: the first-Boost callout states the sourced mechanic', () => {
+  // Boost: Anima TAKES x1.5 damage and healing until her next turn (research §3.4, §5.3).
+  it('says no "twice", and names damage she takes, in the line and its fallback', () => {
+    const steps = flatten(chapter.midScripts!['mac-first-boost']!);
+    const texts: string[] = [];
+    for (const step of steps) {
+      if (step.type !== 'say') continue;
+      texts.push(step.text);
+      for (const f of step.fallback ?? []) if (f.text) texts.push(f.text);
+    }
+    const callouts = texts.slice(1); // Rikku's "That wasn't a spell!" is the technical beat, not the consequence
+    expect(callouts.length).toBeGreaterThanOrEqual(2);
+    for (const t of texts) expect(t).not.toMatch(/twice|double|x ?2/i);
+    for (const t of callouts) expect(t).toMatch(/\bher\b/);
+    expect(callouts[0]).toMatch(/half again/);
+  });
+});

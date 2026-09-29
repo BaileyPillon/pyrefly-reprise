@@ -323,10 +323,13 @@ export const seymourAnimaMacalaniaScripts: ChapterScripts = {
     'mac-first-boost': [
       // §1.15's guardrail: let Rikku be right on a technical point. One line,
       // not a tutorial; Lulu supplies the consequence, not the instruction.
+      // PR-0253: Boost makes Anima TAKE x1.5 damage until her next turn
+      // (research §3.4, §5.3 "the damage window"), so the line names her as
+      // the one exposed and says "half again", never "twice".
       say('rikku', "She's winding up! That wasn't a spell!", { auto: 1300 }),
-      say('lulu', 'Whatever lands next lands twice as hard.', {
+      say('lulu', "She's open. The next hit hurts her half again as much.", {
         auto: 1400,
-        fallback: [{ who: 'tidus', text: 'Whatever hits next hits twice as hard!' }],
+        fallback: [{ who: 'tidus', text: "She's open! Hit her now, it'll hurt her more!" }],
       }),
     ],
     'mac-seymour-restored': [
