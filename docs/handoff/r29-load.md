@@ -150,3 +150,47 @@ painting under the fallen style (FOC17b-01's "FFX-2 art she has"); nothing on di
   still be in flight then.
 - The measurement is headless Chromium on this PC over an emulated link, not the live host; the deep
   review should repeat the table on the live build.
+
+## CHECK (independent, 2026-09-28, not the builder)
+
+Branch `r29-load` at `4204eb00`, checked in `D:/pyrefly-r29-load`. Verdict: **every claimed fix holds; no blocker.**
+
+- `npx tsc --noEmit` clean. Full `npx vitest run --testTimeout=60000`: 613 files passed, 5 skipped (9634 tests).
+  Targeted (`r29-load-order`, `r29-preload-phases`, `pause-chapter-plate-fallback`): 22 passed. The new tests
+  import APIs that do not exist on main (lanes, `holdIdleLane`, `sceneArt`, `plateUrlFor`), so they fail there.
+- `node tools/orphans.mjs`: 24 orphaned (unchanged; `lazyPlates.ts` and `sceneArt.ts` are reachable).
+- `git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main`: no conflict (origin/main is still the base `c9c1c295`).
+- Files: every new or grown module under 400 lines except `CutsceneScreen.ts` (428) and `BattleScreenFlow.ts`
+  (525), which were already over on main (+8 and +6 lines). Rules 1, 6, 8, 14: no battle/presenter file,
+  no game number, no art touched; every commit names its game case.
+- Own production build (`.dist-r29-loadchk-tmp`) served by the builder's Pages-like HTTP/2 server on 8041, the
+  builder's main build (no `data-lazy-src` in its bundle) on 8040; headless Chromium from node, GPU, 25 Mbit/s,
+  20 ms, fresh profile. Scripts: `D:/Tools/pyrefly-scratch/r29/load-check/` (`ff7chk.mjs`, `boardchk.mjs`, mine)
+  plus the builder's `measure.mjs` / `trema-loss.mjs` re-run on my ports (runs `CHKB-*`, `CHKA-*`).
+
+| Issue | Before (main) | After (branch) | Holds |
+|---|---|---|---|
+| PR-0240, Ch IV 1600x900 cold | loading card 28.5 s; 123 MB art before entry | card 1.27 s; 58 MB | yes |
+| PR-0240, Ch IV warm | card 0 | card 0 | yes |
+| PR-0240, Ch I 390x844 4x CPU cold / warm | (builder: 17.5 s) | card 0.84 s / 0.61 s | yes |
+| PR-0221, first line Ch IV desktop cold | 0.9 s, `rikku-x2.png` NOT decoded, backdrop not fetched | 4.9 s, portrait decoded, backdrop not yet up (the disclosed residual) | yes, with residual |
+| PR-0221, first line Ch I phone cold | (builder: not decoded) | 6.3 s, portrait decoded, backdrop painted | yes |
+| PR-0221, battle card chips / pause Esc / Tab | ok (cold pause opens late) | ok in every run | yes |
+| PR-0222, FF7 door cold, frames every ~0.2 s | black from 0.8 s past 12 s (sampling cut) | twisted board held 0.4-7.6 s, one black sample at 7.8 s, field at 8.5 s | yes |
+| PR-0222, keys during the hold (real keys) | n/a | two ArrowRights: cursor unchanged; Esc at 3.2 s: inert, no error, no pause queued | yes (the round-15 "deliberately inert with a visible cover") |
+| PR-0223, FF7 pause Esc + Tab | 6 404s (`pause/cloud.json/.png`, `portraits/cloud.png`, and the same three for Barret), 6 console errors | 0 404s, 0 errors, close-up `data-art=missing` | yes |
+| PR-0224, Trema loss results | (round 15 + builder: 2 404s) | 0 404s, 0 errors, wedge = `yuna-dark-knight/idle.png` decoded | yes |
+
+Regression probes: cancelling prep back to the board releases the idle hold (rail strips 3 of 32 whole on
+return, 18 at 25 s, 32 at 50 s, 0 404s, 0 errors); arrowing four cards then resting puts the hero plate and
+faces up decoded within 4 s; FF7 board keys ignored during the hold as designed.
+
+Findings (none blocks):
+- minor: a cold first dialogue line now waits up to 4 s (Ch IV desktop 0.9 s to 4.9 s), and with a fast prep the
+  backdrop may still be absent when it opens (disclosed by the builder; cure is proposal 1).
+- minor: the FF7 pause still offers "H PAINTING ONLY" with no painting behind it (pre-existing; the close-up was
+  empty before too).
+- minor (unmeasured): a cancelled idle load drops its `src`, so a strip half-downloaded when the player arrows or
+  starts a chapter restarts from zero later; wasted bandwidth only, never a wrong frame.
+- minor: the Trema wedge stand-in (her Dark Knight idle under the fallen style) is one of the two looks FOC17b-01
+  names; Bailey's pick is still owed (proposal 3).
