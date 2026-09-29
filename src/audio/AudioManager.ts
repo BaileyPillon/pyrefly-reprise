@@ -19,6 +19,7 @@ import { TRACK_BLURBS, hasTrack, trackNames } from './tracks/index.ts';
 import { SFX, SFX_GROUPS, renderSfx, resolveSfx, sfxNames } from './sfx/index.ts';
 import { orderSfxForWarmup, warmSfxViaWorker } from './SfxWarmer.ts';
 import { renderHallImpulse } from './dsp/hall.ts';
+import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
 import {
   hasPrerenderedSfx,
   parseManifest,
@@ -82,11 +83,6 @@ export interface PlaySfxOptions {
   delay?: number;
 }
 
-interface MusicSlot {
-  name: string;
-  source: AudioBufferSourceNode;
-  gain: GainNode;
-}
 
 export class AudioManager {
   private ctx: AudioContext | null = null;
@@ -154,7 +150,7 @@ export class AudioManager {
    */
   unlock(): boolean {
     if (this.ctx) {
-      if (this.ctx.state === 'suspended') void this.ctx.resume();
+      if (this.ctx.state !== 'running' && this.ctx.state !== 'closed') void this.ctx.resume().catch(() => {});
       return true;
     }
     const Ctor: typeof AudioContext | undefined =
@@ -283,16 +279,18 @@ export class AudioManager {
   /** One-shot listeners that unlock audio on the first real interaction. */
   installUnlockListeners(target: EventTarget | null = typeof window === 'undefined' ? null : window): void {
     if (!target) return;
-    const handler = (): void => {
-      if (this.unlock()) {
-        for (const type of ['pointerdown', 'keydown', 'touchstart']) {
-          target.removeEventListener(type, handler);
-        }
-      }
+    // Armed until the context actually runs, not merely exists: a context created by a gesture
+    // the browser does not count (a first touch on iOS, a pad) stays suspended, and only a later
+    // counted one (`touchend`, `click`, a key) can resume it (hotfix-music-overlap).
+    const types = ['pointerdown', 'pointerup', 'keydown', 'touchstart', 'touchend', 'click'];
+    const disarm = (): void => {
+      for (const type of types) target.removeEventListener(type, handler);
     };
-    for (const type of ['pointerdown', 'keydown', 'touchstart']) {
-      target.addEventListener(type, handler);
-    }
+    const handler = (): void => {
+      if (!this.unlock()) return;
+      if (this.ctx?.state === 'running') disarm();
+    };
+    for (const type of types) target.addEventListener(type, handler);
   }
 
   // ---------------------------------------------------------------- music ---
@@ -332,8 +330,7 @@ export class AudioManager {
     const fade = Math.max(0.01, options.fade ?? 1.2);
     const now = ctx.currentTime;
     const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, options.volume ?? 1), now + fade);
+    const ramp = startSlotRamp(gain, now, fade, options.volume ?? 1);
     const source = ctx.createBufferSource();
     source.buffer = looped.buffer;
     source.loop = true;
@@ -342,8 +339,11 @@ export class AudioManager {
     source.connect(gain);
     gain.connect(this.musicBus);
     source.start(now);
+    // One track in the slot: anything still fading is cleared, the current one crossfades out
+    // (hotfix-music-overlap, `musicSlot.ts`).
+    cutFading(ctx, this.fading);
     if (this.current) this.fadeOutSlot(this.current, fade);
-    this.current = { name, source, gain };
+    this.current = { name, source, gain, ramp };
     // A decoded 90 second cue is ~30 MB of float samples. Keep the one
     // playing and the one most likely next; let the rest go.
     this.loader.evict(name, options.upcoming ?? []);
@@ -352,6 +352,7 @@ export class AudioManager {
   stopMusic(fade = 0.8): void {
     this.musicRequestId++;
     this.pendingMusic = null;
+    if (this.ctx) cutFading(this.ctx, this.fading);
     if (this.current) this.fadeOutSlot(this.current, fade);
     this.current = null;
     this.queuedMusic = null;
@@ -377,11 +378,9 @@ export class AudioManager {
   private fadeOutSlot(slot: MusicSlot, fade: number): void {
     const ctx = this.ctx;
     if (!ctx) return;
-    const now = ctx.currentTime;
-    slot.gain.gain.cancelScheduledValues(now);
-    slot.gain.gain.setValueAtTime(Math.max(0.0001, slot.gain.gain.value), now);
-    slot.gain.gain.exponentialRampToValueAtTime(0.0001, now + fade);
-    slot.source.stop(now + fade + 0.05);
+    // From the level the slot is really at, never `gain.value` (1.0 until rendered); a slot
+    // never heard is stopped outright (hotfix-music-overlap, `musicSlot.ts`).
+    retireSlot(ctx, slot, fade);
     this.fading.push(slot);
     slot.source.onended = () => {
       slot.source.disconnect();
