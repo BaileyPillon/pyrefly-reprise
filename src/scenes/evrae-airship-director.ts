@@ -43,7 +43,13 @@ import {
   type AirshipFlags,
   type AirshipRange,
 } from './evrae-airship-range.ts';
-import { evraeSubject, rangeSubjectFor, type RangeSubject } from './evrae-airship-subjects.ts';
+import { evraeSubject, phoneRig, rangeSubjectFor, stagingOf, type PhoneRigStaging, type RangeSubject } from './evrae-airship-subjects.ts';
+import { PHONE_BATTLE_QUERY } from '../ui/common/phoneBattle.ts';
+
+/** True when the phone battle HUD takes this window (read at each bind); false with no window (a test). */
+function onPhone(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia?.(PHONE_BATTLE_QUERY).matches === true;
+}
 
 const KEY = 'pyrefly:airship-range';
 
@@ -82,6 +88,10 @@ export class AirshipRangeDirector {
   private evrae: PaintedActor | null = null;
   /** Who is bound, and how it is staged (`evrae-airship-subjects.ts`): Evrae, or one of Sin's Fins. */
   private subject: RangeSubject = evraeSubject();
+  /** An upright phone at the last bind: a Fin then takes its phone staging (`PhoneStaging`, C4-1). */
+  private phone = false;
+  /** Chapter XVIII's phone rigs while no foe is bound (`SIN_FACE_PHONE`, C4-5); null elsewhere. */
+  private face: Partial<Record<AirshipRange, PhoneRigStaging>> | null = null;
   private nearPoses: Record<string, string> | null = null;
   /** The telegraph painting's URL per range, when the subject has one there; see {@link sync}. */
   private chargeUrls: Partial<Record<AirshipRange, string>> = {};
@@ -128,14 +138,22 @@ export class AirshipRangeDirector {
   async bindEvrae(actor: PaintedActor | null, id = 'evrae', worldHeight = EVRAE_WORLD_HEIGHT): Promise<void> {
     this.evrae = actor;
     const subject = rangeSubjectFor(id, id, worldHeight);
+    const hadPhoneRigs = this.phone && (this.subject.phone !== undefined || this.face !== null);
+    this.face = null;
+    this.phone = onPhone();
     this.subject = subject;
     this.rimBase = actor ? (rimOf(actor)?.value ?? null) : null;
+    // A Fin on the phone takes its own rigs; leaving one (the next link, link 3) puts the range's own back.
+    if (hadPhoneRigs || (this.phone && subject.phone)) this.installRigs(this.range, true);
     if (!actor) return;
     this.nearPoses = await resolvePoseMap(subject.artId, 'enemy');
     const states = await artStatesFor(subject.artId);
     const has = (state: string): boolean => (states === null ? !subject.strict : states.includes(state));
     // A Fin whose paintings are not installed keeps Evrae's sizes, so its silhouette stands where it always did.
-    if (subject.strict && !has('idle-near')) this.subject = { ...evraeSubject(subject.artId), chargedOf: subject.chargedOf, charge: {} };
+    if (subject.strict && !has('idle-near')) {
+      this.subject = { ...evraeSubject(subject.artId), chargedOf: subject.chargedOf, charge: {} };
+      if (this.phone && subject.phone) this.installRigs(this.range, true);
+    }
     if (this.subject.upright) keepUpright(actor);
     this.chargeUrls = {};
     for (const range of ['near', 'far'] as const) {
@@ -143,6 +161,17 @@ export class AirshipRangeDirector {
       if (pose && has(pose)) this.chargeUrls[range] = characterUrl(subject.artId, pose);
     }
     await this.placeEvrae(this.range);
+  }
+
+  /**
+   * Chapter XVIII (link 4, no foe bound): on an upright phone, take `staging`'s rigs so the party stands clear of
+   * the Sin clock's slab (C4-5); `null` puts the range's own back. Inert on the desktop.
+   */
+  stageFace(staging: Partial<Record<AirshipRange, PhoneRigStaging>> | null): void {
+    if (staging === this.face) return;
+    this.face = staging;
+    this.phone = onPhone();
+    if (this.phone) this.installRigs(this.range, true);
   }
 
   /** Follow the engine: call after every event with the state it left. */
@@ -195,7 +224,7 @@ export class AirshipRangeDirector {
 
   /** @param dt seconds */
   update(dt: number): void {
-    this.veil.update(dt, this.evrae, [...this.subject.spot[this.range]], this.shiftMs >= 0);
+    this.veil.update(dt, this.evrae, [...stagingOf(this.subject, this.range, this.phone).spot], this.shiftMs >= 0);
     if (this.shiftMs < 0) return;
     this.shiftMs += dt * 1000;
     const s = rangeShiftAt(this.shiftMs);
@@ -232,7 +261,8 @@ export class AirshipRangeDirector {
     const cam = this.camera;
     if (!cam) return;
     const rigs = RANGE_STAGING[range].rigs;
-    for (const name of RANGE_RIGS) cam.addRig(name, rigs[name]);
+    const staging = this.phone ? (this.subject.phone?.[range] ?? this.face?.[range]) : undefined;
+    for (const name of RANGE_RIGS) cam.addRig(name, phoneRig(rigs[name], staging));
     const current = cam.rigName;
     if (!(RANGE_RIGS as readonly string[]).includes(current)) return;
     if (snap) cam.snapTo(current);
@@ -245,7 +275,7 @@ export class AirshipRangeDirector {
     if (!actor) return;
     if (actor.lifeState === 'down') return;
     const subject = this.subject;
-    const spot = subject.spot[range];
+    const { spot, nearScale } = stagingOf(subject, range, this.phone);
     const charge = this.charged ? this.chargeUrls[range] : undefined;
     if (range === 'far') {
       const far = characterUrl(subject.artId, 'idle-far');
@@ -266,7 +296,7 @@ export class AirshipRangeDirector {
       for (const p of FAR_POSES) if (near[p]) map[p] = near[p]!;
       if (charge) map['idle'] = charge;
       await actor.loadPoses(map, 'idle');
-      actor.scale.setScalar(subject.nearScale);
+      actor.scale.setScalar(nearScale);
     }
     actor.position.set(spot[0], spot[1], spot[2]);
   }

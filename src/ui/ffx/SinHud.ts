@@ -1,5 +1,5 @@
 import './sin-hud.css';
-import type { AtbSnapshot, BattleState, TurnPreview } from '../../battle/common/types.ts';
+import type { AtbSnapshot, BattleEvent, BattleState, TurnPreview } from '../../battle/common/types.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { escapeHtml } from '../common/html.ts';
 import {
@@ -197,6 +197,19 @@ export class SinHud {
     this.paint();
   }
 
+  /**
+   * Mid-burst: follow the flags as they change, but never take a piece away while its burst plays (the killing
+   * blow's result, a Fin torn away): that waits for the full {@link sync} after the burst, as it always did.
+   */
+  syncLive(state: Readonly<BattleState>): void {
+    const clock = sinClockView(state);
+    const fin = sinFinPlateView(state);
+    if ((this.clock && !clock) || (this.fin && !fin)) return;
+    this.clock = clock;
+    this.fin = fin;
+    this.paint();
+  }
+
   private paint(): void {
     const live = this.clock !== null || this.fin !== null;
     this.el.hidden = !live;
@@ -257,18 +270,31 @@ export function withSinHud<T extends FfxHudShape>(hud: T): T {
   const mount = hud.mount.bind(hud);
   const unmount = hud.unmount.bind(hud);
   const sync = hud.sync.bind(hud);
+  let live: BattleState | null = null;
   hud.mount = (root: HTMLElement): void => {
     mount(root);
     const stage = hud.el.querySelector<HTMLElement>('.ffxhud__stage') ?? hud.el;
     sinHud.mount(stage, hud.el);
   };
   hud.unmount = (): void => {
+    live = null;
     sinHud.dispose();
     unmount();
   };
+  // C4-5 / C4 note: the full `sync` comes after a burst has played, so the ring read "13 turns left" through all of
+  // Sin's first turn while `sin.turnsLeft` already said 12, and a Fin's plate read "NEAR" through the turn its core
+  // charged. The engine's state is one live object (the engines mutate `ctx.state`), so every event of the burst
+  // re-reads the flags from the state the last sync handed over: the clock and the plate change on the turn the
+  // flag does, as that turn starts to play. Cheap (the widget repaints only when its view changes).
   hud.sync = (state: BattleState, preview: TurnPreview[] | AtbSnapshot): void => {
+    live = state;
     sinHud.sync(state);
     sync(state, preview);
+  };
+  const onEvent = hud.onEvent.bind(hud);
+  hud.onEvent = (event: BattleEvent): Promise<void> | void => {
+    if (live) sinHud.syncLive(live);
+    return onEvent(event);
   };
   (hud as T & { sinHud?: SinHud }).sinHud = sinHud;
   return hud;

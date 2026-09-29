@@ -86,8 +86,12 @@
 
 .ffx-sinhud--phone .ffx-sinhud__frame { inset: 0; }
 
+/* C4-5: package M's slab (left/right 10, 96 high) stood at top 250, between the head and the party in the frame; in the
+   running build the jaw and the party's heads are 10 to 60 px apart, so at 250 it hid the party. It sits under the
+   party instead, 6 px above the party chips (H-358), and the phone rigs keep the party's feet above it
+   (`SIN_FACE_PHONE`, `scenes/evrae-airship-subjects.ts`): the face, the party and the command grid all stay clear. */
 .ffx-sinhud--phone .ffx-sinclock {
-  left: 10px; right: 10px; top: 250px; width: auto; height: 96px; box-sizing: border-box; display: flex; align-items: center; gap: 10px;
+  left: 10px; right: 10px; top: auto; bottom: calc(var(--phud-chips, 296px) + 68px); width: auto; height: 96px; box-sizing: border-box; display: flex; align-items: center; gap: 10px;
   padding: 6px 10px; background: rgba(11,10,18,0.86); box-shadow: 0 8px 20px rgba(0,0,0,0.45);
 }
 .ffx-sinhud--phone .ffx-sinclock__ring { flex: none; filter: none; }
@@ -95,8 +99,10 @@
 .ffx-sinclock__in { margin-top: 4px; font: 700 15px var(--ig-font-display); letter-spacing: 0.08em; }
 .ffx-sinhud--phone .ffx-sinclock__est { margin-top: 1px; padding: 0; background: none; box-shadow: none; }
 
-/* The frame's (10, 68) is the phone HUD's enemy-move line in the running game, so the pill sits under the clock slab. */
-.ffx-sinhud--phone .ffx-sinhud__gaze { left: 10px; top: 352px; }
+/* The frame's (10, 68) is the phone HUD's enemy-move line in the running game, so the pill sits under it, at the
+   Fin plate's height in Chapter XVII (C4-5; it was under the clock slab, over the party), and at the right, clear
+   of the enemy-move line's second row when a long line wraps (it starts at the left). */
+.ffx-sinhud--phone .ffx-sinhud__gaze { left: auto; right: 10px; top: 100px; }
 
 /* The frame's top 70 is the phone HUD's enemy-move line (to about 94) in the running game: the plate sits under it. */
 .ffx-sinhud--phone .ffx-sinfin {

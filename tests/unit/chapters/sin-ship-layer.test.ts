@@ -16,6 +16,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { AvailableCommand, BattleState, Command } from '../../../src/battle/common/types.ts';
 import { attachAirshipBattle, rangeFoeOf } from '../../../src/app/screens/BattleScreenAirship.ts';
 import { AirshipRangeDirector, attachAirshipRange } from '../../../src/scenes/evrae-airship-director.ts';
+import { SIN_FACE_PHONE } from '../../../src/scenes/evrae-airship-subjects.ts';
 import { AirshipOrderWidget } from '../../../src/ui/ffx/AirshipOrderWidget.ts';
 import { AirshipOrders } from '../../../src/ui/ffx/AirshipOrders.ts';
 
@@ -24,9 +25,10 @@ import { AirshipOrders } from '../../../src/ui/ffx/AirshipOrders.ts';
 // ---------------------------------------------------------------------------
 
 /** A director with the real class (the hook finds it by `instanceof`) and recording stand-ins for its calls. */
-function fakeDirector(): { director: AirshipRangeDirector; binds: unknown[][]; ranges: string[] } {
+function fakeDirector(): { director: AirshipRangeDirector; binds: unknown[][]; ranges: string[]; faces: unknown[] } {
   const binds: unknown[][] = [];
   const ranges: string[] = [];
+  const faces: unknown[] = [];
   const director = Object.create(AirshipRangeDirector.prototype) as AirshipRangeDirector;
   let range = 'near';
   Object.defineProperty(director, 'current', { get: () => range });
@@ -43,8 +45,11 @@ function fakeDirector(): { director: AirshipRangeDirector; binds: unknown[][]; r
       ranges.push(r);
       range = r;
     }),
+    stageFace: vi.fn((staging: unknown) => {
+      faces.push(staging);
+    }),
   });
-  return { director, binds, ranges };
+  return { director, binds, ranges, faces };
 }
 
 function enemy(id: string, extra: Record<string, unknown> = {}): Record<string, unknown> {
@@ -98,6 +103,7 @@ describe('the range director binds Evrae or a Fin, and nothing else', () => {
     for (const r of ['far', 'near', 'far']) t.hook.sync(board([enemy('evrae'), cid], { 'airship.range': r }));
     expect(t.binds).toHaveLength(1);
     expect(t.ranges).toEqual([]);
+    expect(t.faces).toEqual([]); // no phone rigs for Evrae
   });
 
   it('Chapter XVIII (link 4): the head is never bound, before or after any sync (staging unchanged)', async () => {
@@ -108,6 +114,8 @@ describe('the range director binds Evrae or a Fin, and nothing else', () => {
     expect(t.binds).toEqual([[null]]);
     expect(t.ranges).toEqual([]);
     expect(t.removed).toEqual([]);
+    // C4-5: the phone's link 4 rigs (inert on the desktop, `sin-phone-staging.test.ts`), handed over once.
+    expect(t.faces).toEqual([SIN_FACE_PHONE]);
   });
 
   it('Chapter XVII: binds the Left Fin, re-binds the Right Fin after the re-stage, lets go at link 3', async () => {

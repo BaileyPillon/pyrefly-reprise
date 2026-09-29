@@ -1134,3 +1134,58 @@ Note, not a defect: under autoplay at fast speed the Fin plate can trail the eng
 for example charged in the engine but the plate still reading "NEAR" while the dialogue plays. At every open menu, 94
 checks across both chapters and both sizes, the plate and the clock matched the engine. The "13 while the flag says
 12" frame in the art-install notes is the same effect.
+
+## r30 fix (2026-09-29, CHECK 4 findings C4-1, C4-5, C4-2 and the HUD lag; FFX only)
+
+Branch `chapter-sin`, after merging `origin/main` (8dce5e75: Chapter VII unlocked, PR-0236, D-274) as `d4d8f830`.
+The 7 known conflicts were resolved keeping both sides: the board counts are 18 tiles and 18 playable chapters,
+`decisions.json` keeps every entry (D-274 delivery from main, D-279's longer note from this branch, D-282), and
+CONTRACT-CHANGES keeps both entries. `ffx-sin.spec.ts` and `save-sin-listed-fixture.test.ts` now expect `[0, 18]`
+and "1 of 18". Proof ran on a production build (`vite build`, `vite preview` on 8700, headless GPU Chromium), by
+real keys, plus a tap on the phone. Frames are in `docs/screenshots/sin/r30-fix/`.
+
+- **C4-1, the Fins on the phone.** While a Fin is bound on an upright phone, the range director dollies and pans
+  that range's rigs and stands the Fin at its phone spot (`PhoneStaging` in `scenes/evrae-airship-subjects.ts`).
+  The approach is Chapter XI's option A ("the phone camera pulls back per link"), plus a pan, so the slice the
+  framing picks is the render's right edge. That keeps each painting's cut edge past the render, and the Right
+  Fin's NEAR top edge under the Fin plate.
+  - NEAR: dolly 1.3 and pan -4.6. The Left Fin stands at [3.2, -1.4, -4.7], 5.4 tall; the Right Fin at
+    [2.3, -1.8, -4.7], 5.8 tall.
+  - FAR: the Left Fin stands at [1.4, -3.3, -30]; the Right Fin at [7.34, -0.7, -30] with pan -3.58.
+  - The values were solved by measuring projected boxes and the phone slide in the running build. At 390x844 the
+    arm, the claw and the core are on screen at FAR, NEAR and NEAR-charged for both Fins, and the party is whole.
+  - The desktop and Evrae are untouched. Chapter VIII, measured by Enter only (seed 5, 8 menus, the CHECK 4
+    method), is within 1 px of the CHECK 4 merged build at both sizes.
+- **C4-5, the XVIII clock on the phone.** In the running build the jaw and the party's heads are 10 to 60 px
+  apart, so package M's slab at top 250 could only sit on the party.
+  - The slab now sits 6 px above the party chips (`bottom: calc(var(--phud-chips) + 68px)`).
+  - The Gaze pill sits at top 100, right-aligned, under the enemy-move line.
+  - The link-4 phone rigs keep the party's feet above the slab (`SIN_FACE_PHONE`: FAR aimed 0.5 lower, NEAR
+    dolly 1.3).
+  - Measured by keys over 26 menus at each size: 0 px² of slab or pill over the party. The desktop is unchanged.
+  - This departs from the frame's top 250. The reason is recorded in the CSS and in `SIN_FACE_PHONE`.
+- **The HUD lag ("13" while `sin.turnsLeft` said 12; the Left Fin plate said only "NEAR").**
+  - `withSinHud` now re-reads the live state's flags on every `onEvent`, so the ring and the plate change as the
+    turn that changes them starts to play.
+  - A piece is never removed mid-burst.
+  - A 40 ms in-page sampler over all six tours found 0 ms of mismatch, for the clock and for the plate.
+  - Both Fins' NEAR-charged plates read "Core charged · Gravija …" (the same `sinFinPlateView` rule).
+- **C4-2, the Orders submenu after PR-0236.** Checked two ways:
+  - By keys at 1600x900 (the orders tour), Tidus's folded Orders row is greyed and skipped whenever an order
+    stands: at FAR with Close in (turns 14 and 25), and at NEAR with Pull back (turn 42). The frame is
+    `1600x900-xvii-orders-greyed-far.jpg`.
+  - By the engine, `sin-orders-folded.test.ts` found 638 standing-order menus across both Fins and 12 seeds, and
+    every one was greyed with "Ordered".
+- **Gates.**
+  - `tsc` (both configs) is clean.
+  - 122 targeted test files pass (the chapters, the board, the fixtures, PR-0236).
+  - The FFX golden hashes for the other chapters are 408/408 identical to CHECK 4's main and merged runs.
+  - The full suite has 2 failures, neither in the Sin chapters:
+    - `ui-portrait-face-crop`: songstress heads. It fails the same way on main 8dce5e75, because the art is
+      installed locally.
+    - `strategy-ffx2-bahamut`: it passed 19/19 when run alone.
+- **Open.**
+  - The Right Fin's NEAR top edge relies on the Fin plate to cover it. A moment that hides the HUD at NEAR on
+    the phone would show that edge.
+  - The Gaze pill sits right, not left as in the frame.
+  - Both placements are the driver's to confirm with Bailey.

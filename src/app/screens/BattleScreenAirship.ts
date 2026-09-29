@@ -53,10 +53,12 @@ import type { Object3D } from 'three';
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
 import { CID_ID, EVRAE_ID } from '../../battle/ffx/ai/evrae-rules.ts';
 import { SIN_FIN_IDS } from '../../battle/ffx/ai/sin-ids.ts';
+import { SIN_TURN } from '../../battle/ffx/ai/overdrive-sin-rules.ts';
 import type { BattleCamera } from '../../engine/BattleCamera.ts';
 import type { PaintedStage } from '../../engine/BattlePresenterStage.ts';
 import { airshipRangeDirectorOf, type AirshipRangeDirector } from '../../scenes/evrae-airship-director.ts';
 import { airshipRangeOf } from '../../scenes/evrae-airship-range.ts';
+import { SIN_FACE_PHONE } from '../../scenes/evrae-airship-subjects.ts';
 import { followSinPoses } from './BattleScreenSinPoses.ts';
 
 /** The foes the range director may stage at NEAR and FAR: Evrae (Chapter VIII) and Sin's two Fins (Chapter XVII). */
@@ -69,6 +71,11 @@ export function rangeFoeOf(state: BattleState | null | undefined): CombatantId |
     if (c && c.side === 'enemy' && !c.removed) return id;
   }
   return null;
+}
+
+/** Chapter XVIII's link 4: the state publishes Sin's clock (`sin.turn`, the marker `sinHudModel.ts` reads). */
+export function isSinFaceBattle(state: BattleState | null | undefined): boolean {
+  return typeof state?.flags[SIN_TURN] === 'number';
 }
 
 /** The Stage calls this hook makes (`PaintedStage` satisfies it). */
@@ -114,6 +121,8 @@ export async function attachAirshipBattle(
   // Evrae binds exactly as it always has (its own art id); a Fin binds under its id, which picks its paintings.
   if (foeId === null || foeId === EVRAE_ID) await director.bindEvrae(bound);
   else await director.bindEvrae(bound, foeId);
+  // Chapter XVIII (FFX only): on an upright phone the party stands clear of the Sin clock's slab (C4-5).
+  if (foeId === null && isSinFaceBattle(state)) director.stageFace(SIN_FACE_PHONE);
   director.sync(state);
 
   // Chapter XVII only: once a Fin has been bound, follow the chain's re-stages (see the file header).

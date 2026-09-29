@@ -30,9 +30,49 @@ import {
   RANGE_STAGING,
   type AirshipFlags,
   type AirshipRange,
+  type RigNumbers,
 } from './evrae-airship-range.ts';
 
 type Spot = readonly [number, number, number];
+
+/**
+ * **A Fin on an upright phone, per range (C4-1).** The phone shows a 390 px slice of the 16:9 render
+ * (`ui/common/phoneFraming.ts`), and the slice that keeps the party whole showed only sky and a claw tip of the
+ * NEAR Fin, whose painted arm sits off the right of the frame by design, and cut the FAR cores. So on the phone,
+ * while a Fin is bound, the range's rigs are **dollied back** by `dolly` about their aim (Chapter XI's option A,
+ * PR-0201: "the phone camera pulls back per link so everyone stays whole; smaller fighters; desktop untouched")
+ * and **panned** by `pan` (world x added to the aim), so the party stands at the right of the render and the slice
+ * the framing picks is the render's right edge; and the Fin stands at `spot`, `height` tall (NEAR). Each painting's
+ * cut edge (NEAR bleeds right, the Right Fin's NEAR also top, its FAR right) stays past the render's right edge
+ * (or, the Right Fin's NEAR top, under the Fin plate), while the arm, the claw and the core are on screen at 390x844.
+ * Solved in the running build by measuring the projected boxes (`docs/handoff/chapter-sin.md` "r30 fix"). Staging,
+ * not game data; the desktop never reads it.
+ */
+export interface PhoneRigStaging {
+  /** The rigs' distance from their aim, times this (1 or absent: as authored). */
+  readonly dolly?: number;
+  /** World x added to the rigs' aim (0 or absent: as authored). */
+  readonly pan?: number;
+  /** World y added to the rigs' aim (0 or absent: as authored); negative lifts the field on screen. */
+  readonly tilt?: number;
+}
+
+export interface PhoneStaging extends PhoneRigStaging {
+  readonly spot: Spot;
+  /** NEAR only: the world height, as `FinRange.height`; absent keeps the desktop size. */
+  readonly height?: number;
+}
+
+/**
+ * **Chapter XVIII on an upright phone (C4-5).** Package M's phone slab (the mouth ring, `SinHud.ts`) is 96 px of
+ * ink and must leave Sin's face and the party clear (`docs/concepts/chapters/sin-2026-09-27/hud/README.md`). In the
+ * running build the jaw and the party's heads are 10 to 60 px apart at either range (measured: the head's box ends at
+ * y 242 FAR / 244 NEAR, the party starts at 275 / 250), so no slab fits between them as the frame drew it; the slab
+ * sits under the party instead, above the party chips (486), and these rigs keep the party's feet above it: FAR
+ * aimed 0.5 lower (feet 402 to about 380), NEAR stood 1.3 times as far back (feet 431 to 377, fighters about 72 %, as
+ * Chapter XI's option A). No foe is bound in link 4; the director reads this while `sin.turn` is published.
+ */
+export const SIN_FACE_PHONE: Readonly<Record<AirshipRange, PhoneRigStaging>> = { far: { tilt: -0.5 }, near: { dolly: 1.3 } };
 
 export interface RangeSubject {
   /** The folder under `public/art/characters/`. */
@@ -54,6 +94,8 @@ export interface RangeSubject {
    * loaded on a missing manifest too (its original rule); the Fins are strict.
    */
   readonly strict: boolean;
+  /** The upright phone's staging per range ({@link PhoneStaging}); absent (Evrae): the phone stages as the desktop. */
+  readonly phone?: Partial<Readonly<Record<AirshipRange, PhoneStaging>>>;
 }
 
 /** The Fin's telegraph: "Core gathers energy." until Gravija lands or whiffs (`sin-fins-rules.ts`). */
@@ -70,8 +112,9 @@ interface FinRange {
 }
 
 /** One Fin's numbers, solved from its sidecars (see the header); the FAR width follows from its pixels. */
-function fin(artId: string, near: FinRange, far: FinRange): RangeSubject {
+function fin(artId: string, near: FinRange, far: FinRange, phone: RangeSubject['phone']): RangeSubject {
   return {
+    phone,
     artId,
     nearScale: near.height / EVRAE_WORLD_HEIGHT,
     farWidth: (far.height * far.widthPx) / far.baselinePx,
@@ -88,12 +131,14 @@ export const LEFT_FIN_SUBJECT = fin(
   'sin-left-fin',
   { spot: [5.57, -0.94, -4.7], height: 6.79, widthPx: 1030, baselinePx: 1019 },
   { spot: [6.99, -1.59, -30], height: 12.03, widthPx: 1654, baselinePx: 573 },
+  { near: { spot: [3.2, -1.4, -4.7], height: 5.4, dolly: 1.3, pan: -4.6 }, far: { spot: [1.4, -3.3, -30] } },
 );
 /** The Right Fin (link II): NEAR 982x947 (baseline 930), bleeds top and right; FAR 1166x532 (baseline 515), bleeds right. */
 export const RIGHT_FIN_SUBJECT = fin(
   'sin-right-fin',
   { spot: [5.75, 0.19, -4.7], height: 6.21, widthPx: 982, baselinePx: 930 },
   { spot: [13.64, 1.09, -30], height: 10.83, widthPx: 1166, baselinePx: 515 },
+  { near: { spot: [2.3, -1.8, -4.7], height: 5.8, dolly: 1.3, pan: -4.6 }, far: { spot: [7.34, -0.7, -30], pan: -3.58 } },
 );
 
 /** Evrae, as it has always been staged (Chapter VIII). */
@@ -115,4 +160,27 @@ export function rangeSubjectFor(foeId: string | undefined, artId = 'evrae', worl
   if (foeId === SIN_LEFT_FIN_ID) return LEFT_FIN_SUBJECT;
   if (foeId === SIN_RIGHT_FIN_ID) return RIGHT_FIN_SUBJECT;
   return evraeSubject(artId, worldHeight);
+}
+
+/** A range rig as the phone takes it for a Fin ({@link PhoneStaging}): dollied back about its aim, then panned. */
+export function phoneRig(rig: RigNumbers, staging: PhoneRigStaging | undefined): RigNumbers {
+  if (!staging) return rig;
+  const k = staging.dolly ?? 1;
+  const [px, py, pz] = rig.position;
+  const [lx, ly, lz] = rig.lookAt;
+  const pan = staging.pan ?? 0;
+  return {
+    ...rig,
+    position: [lx + (px - lx) * k, ly + (py - ly) * k, lz + (pz - lz) * k],
+    lookAt: [lx + pan, ly + (staging.tilt ?? 0), lz],
+  };
+}
+
+/** Where `subject` stands at `range`, and its NEAR scale, on the phone (`phone` true) or the desktop. */
+export function stagingOf(subject: RangeSubject, range: AirshipRange, phone: boolean): { spot: Spot; nearScale: number } {
+  const p = phone ? subject.phone?.[range] : undefined;
+  return {
+    spot: p?.spot ?? subject.spot[range],
+    nearScale: p?.height !== undefined ? p.height / EVRAE_WORLD_HEIGHT : subject.nearScale,
+  };
 }
