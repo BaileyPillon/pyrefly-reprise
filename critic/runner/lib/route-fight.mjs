@@ -150,6 +150,7 @@ export async function playFight(r) {
       if (!dc.steps.some((x) => x.spell)) { rec.dcFail = (rec.dcFail ?? 0) + 1; for (let i = 0; i < 3 && (await pbk())?.awaitingMenu; i++) { await input.press('Escape'); await page.waitForTimeout(400); } }
       turns++; continue;
     }
+    const deadRows = new Set(); // command rows whose list proved to have nothing choosable this turn (PR-0225)
     if (goal === 'lose') {
       // Lose route: Defend (top level, else FFX's Special > Defend); then a standing order in Chapter VIII; then Attack below.
       took = await chooser.choose((l) => /^defend$/i.test(l));
@@ -161,7 +162,7 @@ export async function playFight(r) {
         }
       }
       if (!took && rows.some((r) => /^orders$/i.test(r.label) && !r.disabled)) {
-        if (await chooser.choose((l) => /^orders$/i.test(l))) { pick.viaMenu = 'Orders'; if (!rec.ordersShot) rec.ordersShot = await snap('26-orders-widget.png', 'Chapter VIII Orders widget open by real input (lose route)', { screen: 'battle', awaitingMenu: true }); took = await chooser.choose(() => true); if (!took) { await input.press('Escape'); await page.waitForTimeout(350); } else rec.orders.push({ turn: turns, order: took, why: 'lose route' }); }
+        if (await chooser.choose((l) => /^orders$/i.test(l))) { pick.viaMenu = 'Orders'; if (!rec.ordersShot) rec.ordersShot = await snap('26-orders-widget.png', 'Chapter VIII Orders widget open by real input (lose route)', { screen: 'battle', awaitingMenu: true }); took = await chooser.choose(() => true); if (!took) { deadRows.add('Orders'); await escapeDeadMenu('Orders: every order disabled (one standing, or already there)', await readRows(page)); } else rec.orders.push({ turn: turns, order: took, why: 'lose route' }); }
       }
     } else if (adv) {
       const before = JSON.stringify(rows.map((x) => x.label));
@@ -217,11 +218,13 @@ export async function playFight(r) {
       }
     }
     if (!took) took = await chooser.choose((l) => /^attack$/i.test(l));
-    if (!took && goal === 'lose') { // nothing harmless is enabled (VIII at range with an order standing): the first enabled row and entry
-      took = await chooser.choose(() => true);
-      if (took) {
+    if (!took && goal === 'lose') { // nothing harmless is enabled (VIII at range with an order standing): the first enabled row that has something in it
+      for (let k = 0; k < rows.length && !took; k++) {
+        const first = await chooser.choose((l) => !deadRows.has(l));
+        if (!first) break;
         const inner = await readRows(page);
-        if (isAllDisabledOverlay(inner)) { await escapeDeadMenu(`${took} opened a list with every row disabled`, inner); took = null; } else if (inner.length && !(await targetsUp(page)).n) took = `${took} > ${(await chooser.choose(() => true)) ?? 'none'}`;
+        if (isAllDisabledOverlay(inner)) { deadRows.add(first); await escapeDeadMenu(`${first} opened a list with every row disabled`, inner); continue; }
+        took = inner.length && !(await targetsUp(page)).n ? `${first} > ${(await chooser.choose(() => true)) ?? 'none'}` : first;
       }
     }
     // PR-0225 (round 15 patch, promoted): a menu where nothing could be chosen, again and again (Chapter VIII lose route,
