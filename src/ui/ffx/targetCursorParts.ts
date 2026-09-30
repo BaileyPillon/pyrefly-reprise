@@ -124,3 +124,17 @@ export function escapeHtml(s: string): string {
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
   );
 }
+
+/**
+ * The name plate's note. Status display O3 (Bailey's pick, 2026-09-29): a status the player must not
+ * miss while aiming is a red tag on the plate, as in `docs/concepts/status-display-0929/options/
+ * o3-ffx-*.jpg` ("Kimahri [ZOMBIE]"; "DOOM n on the target tag"). The note's own words stay in the
+ * title (`zombieTargetNote.ts` says what the command will do: "Zombie: 1,000 damage"). FFX only in
+ * practice: FFX-2's menu passes no notes.
+ */
+export function noteHtml(note: string | undefined): string {
+  if (!note) return '';
+  const tag = /^Zombie\b/.test(note) ? 'ZOMBIE' : /^Doom \d+$/.test(note) ? note.toUpperCase() : null;
+  if (!tag) return `<span class="ffx-target__note">${escapeHtml(note)}</span>`;
+  return `<span class="ffx-target__note ffx-target__note--harm" title="${escapeHtml(note)}"><span>${tag}</span></span>`;
+}

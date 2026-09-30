@@ -419,32 +419,8 @@
   margin-left: auto;
   overflow: hidden;
 }
-/* Authored glyphs, not `id.slice(0, 2)` — see `statusChips.ts` for why `CU`
-   was the wrong answer. Sized off §4.3's "10x10 px chips ... on pink chips". */
-.ffx2-status-chip {
-  flex: none;
-  font-family: var(--ig-font-display);
-  font-weight: 700;
-  font-size: 5.5px;
-  letter-spacing: 0.08em;
-  line-height: 9px;
-  padding: 0 2.5px;
-  background: var(--x2-link-idle);
-  color: var(--x2-text-hi);
-  border-radius: 1.5px;
-  white-space: nowrap;
-}
-.ffx2-status-chip--good {
-  background: #2a4e3a;
-  color: #b9f0cf;
-}
-/* Stack level for the Up/Down family, riding the chip as a superscript. */
-.ffx2-status-chip i {
-  font-style: normal;
-  font-size: 4.5px;
-  vertical-align: super;
-  opacity: 0.85;
-}
+/* The old text chips (.ffx2-status-chip) are gone: status display O3 draws square tags
+   (`ui/common/statusIcons.ts`, `status-rows.css`). */
 
 /* `.ig-stat__od` ships a fixed 53.33px width and a plain accent fill; the HUD
    overrides the width per row (`required`-proportional runway) and adds the

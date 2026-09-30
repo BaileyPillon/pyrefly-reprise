@@ -15,7 +15,7 @@
 
 import type { AtbSnapshot, CombatantId, FFX2Combatant } from '../../battle/common/types.ts';
 import { dressphereAbbr, dressphereColour, dressphereLabel } from './dressphereIcons.ts';
-import { statusChipsFor, statusChipsHtml } from './statusChips.ts';
+import { captionHtml, ffx2RowTagsHtml } from '../common/statusRows.ts';
 import { faceLayersHtml } from '../common/portrait.ts';
 
 /** `AtbState.ticks`'s own reference: one drawn bar at default speed [types.ts §7]. */
@@ -132,12 +132,14 @@ export function partyRowHtml(
       ? `<div class="ffx2atb__charge" style="width:${clamp(0, 100, bar.charge * 100)}%"></div>`
       : '';
   const acting = c.id === opts.actingId ? ' ig-stat--acting' : '';
-  const statuses = statusChipsHtml(statusChipsFor(c.statuses));
+  // Status display O2/O3 (Bailey's pick, 2026-09-29): square tags in place of the text chips, and
+  // a caption where a status takes the command away ("ASLEEP"). `ui/common/statusRows.ts`.
+  const statuses = ffx2RowTagsHtml(c);
   return `<div class="ig-stat${acting}" data-actor-id="${c.id}" style="margin-right: calc(var(--ig-stat-step) * ${opts.index})">
     ${faceStackHtml(c, dressphere, monogram)}
     <div class="ffx2stat__body">
       <div class="ffx2stat__top">
-        <div class="ig-stat__name">${c.name}</div>
+        <div class="ig-stat__name">${c.name}</div>${captionHtml('ffx2', c)}
         <div class="ig-stat__value ${hpClass(c.hp, c.stats.maxHp)}">${Math.max(0, c.hp)}<small>/${c.stats.maxHp}</small></div>
         <div class="ig-stat__value ig-stat__value--mp">${c.mp}<small>/${c.stats.maxMp}</small></div>
         <div class="ffx2party__status">${statuses}</div>

@@ -360,7 +360,8 @@ describe('absence: every other battle is untouched', () => {
   it('the wiring puts the read-out and the glow on the FFX HUD only', () => {
     const src = readFileSync(join(ROOT, 'src/app/screens/BattleScreenWiring.ts'), 'utf8');
     expect(src).toContain('withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))');
-    expect(src).toMatch(/game === 'ffx2' \? withOversoulLook\(hud, field\) : withOmnisGlow\(withOmnisDiscs\(hud, field\), field\)/);
+    // Status display O3 wraps the HUD first (`looks`); the Oversoul / Omnis split is unchanged.
+    expect(src).toMatch(/game === 'ffx2' \? withOversoulLook\((?:hud|looks), field\) : withOmnisGlow\(withOmnisDiscs\((?:hud|looks), field\), field\)/);
     expect(src).not.toMatch(/withOmnisReadout\(new FFX2BattleHud/);
   });
 });

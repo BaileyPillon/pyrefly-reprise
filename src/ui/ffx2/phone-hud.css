@@ -185,11 +185,6 @@ html[data-phone-battle='ffx2'] .ffx2party__status {
   top: -11px;
   margin: 0;
 }
-html[data-phone-battle='ffx2'] .ffx2-status-chip,
-html[data-phone-battle='ffx2'] .ffx2-status-chip * {
-  font-size: 14px;
-  line-height: 1.1;
-}
 html[data-phone-battle='ffx2'] .ffx2hud--targeting-enemy .ffx2hud__party {
   opacity: 1;
   transform: none;

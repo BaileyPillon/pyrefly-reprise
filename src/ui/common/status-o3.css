@@ -1,0 +1,111 @@
+/* Status display O3 (Bailey's pick, 2026-09-29): the guard rails, built to
+   docs/concepts/status-display-0929/options/o3-*.jpg (sizes from options/src/gen.mjs at 1600x900).
+   Viewport-px pieces scale by --st-scale (1 at 1600x900, set by withStatusLooks.ts); pieces inside a
+   640x360 stage are in the stage's own px (the mockup's px / 2.5). Red = harm, the approved legend. */
+:root { --st-harm: #ff4f64; --st-help: #49d8b4; }
+
+/* ---- the one-line message (viewport px, on the HUD root) ---------------------------------- */
+.stmsg {
+  position: absolute; left: 0; top: 0; z-index: 40; /* over the targeting layer (36) */
+  display: flex; align-items: center; gap: calc(8px * var(--st-scale, 1));
+  padding: calc(5px * var(--st-scale, 1)) calc(22px * var(--st-scale, 1));
+  background: linear-gradient(90deg, rgba(11, 10, 18, 0), rgba(11, 10, 18, 0.9) 12%, rgba(11, 10, 18, 0.9) 88%, rgba(11, 10, 18, 0));
+  color: #fff; font: italic 600 calc(22px * var(--st-scale, 1)) / 1.1 'Cormorant Garamond', serif;
+  white-space: nowrap; pointer-events: none; --sti-size: calc(24px * var(--st-scale, 1));
+}
+.stmsg[hidden] { display: none; }
+
+/* ---- the guide card's cure hint (stage px) --------------------------------------------------- */
+.sthint {
+  position: absolute; left: 21.2px; top: 31.2px; width: 136px; box-sizing: border-box; z-index: 5;
+  padding: 4px 5.6px; background: rgba(11, 10, 18, 0.92); border-left: 1.2px solid var(--ig-spira-gold, #e3b94a);
+  color: #efeae0; font: 500 6px / 1.35 'Exo 2', sans-serif; pointer-events: none;
+}
+.sthint[hidden] { display: none; }
+.sthint--ffx2 { top: 92px; width: 140px; border-left: 0; border-right: 1.2px solid var(--ig-accent, #f7b6d9); }
+.sthint__head {
+  display: flex; gap: 3.2px; align-items: center; margin: 0 0 2.4px;
+  font: 700 4.8px / 1 'Chakra Petch', sans-serif; letter-spacing: 0.22em; color: var(--ig-spira-gold, #e3b94a);
+}
+.sthint--ffx2 .sthint__head { color: var(--ig-accent, #f7b6d9); }
+.sthint__head i { font-style: normal; background: var(--st-harm); color: #fff; padding: 0.8px 2.4px; }
+.sthint b { color: #fff; font-weight: 700; }
+/* With the guide open it rides at the top of the guide's own panel. */
+.sthint--inguide { position: relative; left: auto; top: auto; width: auto; margin: 0 0 3px; border-left: 0; border-right: 0; border-bottom: 0.6px solid rgba(255, 79, 100, 0.55); background: rgba(40, 6, 14, 0.55); }
+/* The phone (viewport px): a card across the screen under the target card. */
+.sthint--phone {
+  position: fixed; left: 8px; right: 8px; top: auto; bottom: 168px; width: auto; z-index: 40;
+  padding: 7px 10px; font-size: 11px; border-left: 3px solid var(--ig-spira-gold, #e3b94a); border-right: 0;
+}
+.sthint--ffx2.sthint--phone { border-left: 0; border-right: 3px solid var(--ig-accent, #f7b6d9); }
+.sthint--phone .sthint__head { font-size: 9px; margin-bottom: 4px; gap: 6px; }
+.sthint--phone .sthint__head i { padding: 1px 5px; }
+
+/* ---- FFX: the Zombie forecast over the figure (viewport px) ------------------------------------ */
+.stfore-layer { position: absolute; inset: 0; pointer-events: none; z-index: 25; }
+.stfore {
+  position: absolute; white-space: nowrap;
+  font: 700 calc(46px * var(--st-scale, 1)) / 1 Rajdhani, sans-serif; color: #ff5a6a;
+  -webkit-text-stroke: calc(1.5px * var(--st-scale, 1)) #2a0008;
+  text-shadow: 0 0 2px #000, 0 2px 0 #000, 0 0 14px rgba(255, 40, 70, 0.55);
+}
+.stfore small {
+  display: block; font: 700 calc(12px * var(--st-scale, 1)) / 1.3 'Chakra Petch', sans-serif; letter-spacing: 0.2em;
+  color: #ffd0d6; -webkit-text-stroke: 0; text-shadow: 0 1px 2px #000;
+}
+.stfore em { font-style: normal; font-size: 0.55em; vertical-align: 0.35em; }
+.stfore--phone { font-size: calc(46px * 0.62); }
+.stfore--phone small { font-size: 8px; }
+
+/* FFX: the help slab turns into a red warning while a forecast is up (stage px). */
+.ffxhud .ffx-cmd-info.stwarn-on { width: 176px; max-height: 42px; background: rgb(40, 6, 14); border-left-color: var(--st-harm); border-left-width: 1.6px; }
+.ffx-cmd-info.stwarn-on [data-role='text'] { display: none; }
+.stwarn { color: #ffe3e6; font: 600 6.8px / 1.25 'Exo 2', sans-serif; font-style: normal; }
+.stwarn b { color: #ff8a98; font-weight: 800; }
+/* The phone's target card carries the same warning (viewport px). */
+.phud-card .stwarn { grid-column: 1 / -1; margin-top: 2px; padding: 6px 10px; background: rgb(40, 6, 14); border-left: 3px solid var(--st-harm); font-size: 13px; }
+
+/* FFX: "✕ HURTS" on the aimed item's row (stage px). */
+.sthurts {
+  /* The command row is already skewed: the pill takes its slant, and its text is set upright. */
+  position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+  display: inline-flex; gap: 1.6px; align-items: center; padding: 0.8px 3.6px;
+  background: var(--st-harm); color: #fff; font: 700 4.8px / 1.2 'Chakra Petch', sans-serif; letter-spacing: 0.14em;
+  box-shadow: 0 0.8px 3px rgba(0, 0, 0, 0.6); pointer-events: none;
+}
+.sthurts i { font-style: normal; margin-right: 1.6px; }
+
+/* ---- red tags: ZOMBIE, DOOM 3 ------------------------------------------------------------------ */
+.sttag, .ffx-target__note--harm {
+  display: inline-flex; align-items: center; padding: 2px 9px; background: var(--st-harm); color: #fff;
+  font: 700 14px / 1.2 'Chakra Petch', sans-serif; letter-spacing: 0.14em; text-transform: uppercase;
+  transform: skewX(-12deg); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); white-space: nowrap;
+}
+.sttag > span, .ffx-target__note--harm > span, .sthurts > span { display: inline-block; transform: skewX(12deg); }
+/* FFX's name plate is already skewed: the tag hangs outside it, to the right (the mockup's gap),
+   takes the plate's skew rather than adding its own, and its text is set upright again. */
+.ffx-target__plate .ffx-target__note.ffx-target__note--harm {
+  position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%);
+  font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-style: normal; color: #fff;
+}
+/* FFX-2's TARGET plate (plates layer, stage px). */
+.stplate { position: absolute; left: calc(100% + 4px); top: 50%; transform: translateY(-50%); display: flex; gap: 2px; }
+.stplate .sttag { font-size: 5.6px; padding: 0.8px 3.6px; transform: skewX(12deg); box-shadow: 0 0.8px 3px rgba(0, 0, 0, 0.6); }
+.stplate .sttag > span { transform: skewX(-12deg); }
+/* FFX-2's help line: "| Bahamut [icons]" (stage px), right after the command's words. */
+.ffx2-cmd-info:has(> .stband) .ffx2-cmd-info__desc { flex: 0 1 auto; }
+.stband { display: inline-flex; align-items: center; gap: 3.2px; margin-left: 6px; --sti-size: 9.6px; vertical-align: middle; }
+.stband::before { content: ''; width: 0.4px; height: 8px; background: rgba(247, 182, 217, 0.6); margin-right: 2.4px; }
+.stband__name { font: italic 600 8px / 1 'Cormorant Garamond', serif; color: #fff; letter-spacing: 0; text-transform: none; }
+/* The phone's target card (viewport px): the tags ride beside the name (the mockup), the warning
+   replaces the help sentence, and the field plate keeps its name only. */
+.phud-card.stwarn-on .phud-card__note { display: none; }
+/* The button is clipped to its slant (clip-path), so the rim is drawn inside it. */
+html[data-phone-battle] .phud-target__go.stwarn-go { box-shadow: inset 0 0 0 3px var(--st-harm), inset 0 0 14px rgba(255, 79, 100, 0.65); }
+html[data-phone-battle] .phud-card__text:has(> .stcard) { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 6px; }
+html[data-phone-battle] .phud-card__text:has(> .stcard) > .phud-card__name { grid-row: 1; grid-column: 1; }
+html[data-phone-battle] .phud-card__text:has(> .stcard) > .stcard { grid-row: 1; grid-column: 2; margin-left: 0; }
+html[data-phone-battle] .phud-card__text:has(> .stcard) > .phud-card__hp { grid-column: 1 / -1; }
+html[data-phone-battle] .ffx-target__note--harm { display: none; }
+.stcard { display: inline-flex; align-items: center; gap: 5px; margin-left: 6px; --sti-size: 20px; vertical-align: middle; }
+.stcard .sttag { font-size: 10px; padding: 1px 6px; }

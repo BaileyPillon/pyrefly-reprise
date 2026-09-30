@@ -1,0 +1,53 @@
+/* Status display O2/O3 (2026-09-29): one status icon (`statusIcons.ts`). The size comes from the
+   context (`--sti-size`, in the HUD's own units: the 640x360 grid on the stages, CSS px elsewhere).
+   Red rim = the status hurts its holder, teal = it helps (the approved O2 legend). */
+.sti {
+  --sti-harm: #ff4f64;
+  --sti-help: #49d8b4;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--sti-size, 10px);
+  height: var(--sti-size, 10px);
+  border: calc(var(--sti-size, 10px) * 0.09) solid var(--sti-help);
+  background: linear-gradient(#0d3a31, #06170f);
+  box-shadow: 0 0 0 calc(var(--sti-size, 10px) * 0.04) rgba(0, 0, 0, 0.6), 0 calc(var(--sti-size, 10px) * 0.08) calc(var(--sti-size, 10px) * 0.25) rgba(0, 0, 0, 0.55);
+  font-style: normal;
+  line-height: 1;
+  pointer-events: auto;
+}
+.sti svg { width: 84%; height: 84%; display: block; overflow: visible; }
+.sti--round { border-radius: 50%; }
+.sti--tag { border-radius: calc(var(--sti-size, 10px) * 0.16); }
+.sti--harm { border-color: var(--sti-harm); background: linear-gradient(#3a0f18, #1a070c); }
+.sti__n {
+  position: absolute;
+  right: -30%;
+  bottom: -30%;
+  min-width: 62%;
+  padding: 0 14%;
+  box-sizing: border-box;
+  border-radius: calc(var(--sti-size, 10px) * 0.12);
+  background: #fff;
+  color: #b0102a;
+  border: calc(var(--sti-size, 10px) * 0.04) solid var(--sti-harm);
+  font: 700 calc(var(--sti-size, 10px) * 0.56) / 1.1 var(--ig-font-display, 'Rajdhani', sans-serif);
+  text-align: center;
+}
+.sti--help .sti__n { color: #0b4a3a; border-color: var(--sti-help); }
+.sti--more {
+  border-color: #c9c3b4;
+  background: rgba(11, 10, 18, 0.9);
+  color: #f4f1e8;
+  font: 700 calc(var(--sti-size, 10px) * 0.5) / 1 var(--ig-font-display, 'Rajdhani', sans-serif);
+  border-radius: calc(var(--sti-size, 10px) * 0.16);
+}
+.sti-row {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--sti-size, 10px) * 0.16);
+  pointer-events: none;
+}

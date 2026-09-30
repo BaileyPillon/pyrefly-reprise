@@ -1,0 +1,165 @@
+/* Status display O1 (2026-09-29): the marks on and over a figure (`statusMarks.ts`). Viewport px;
+   each group sits on the head point and every offset is the mockup's px (gen.mjs, a 261 px tall
+   Kimahri at 1600x900) times --k, the figure's own scale. Our own drawings (rule 8). */
+.stm-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.stm-layer[hidden] { display: none; }
+.stm-fig, .stm-shield { position: absolute; left: 0; top: 0; width: 0; height: 0; --k: 1; will-change: transform; }
+.stm-fig[hidden], .stm-shield[hidden] { display: none; }
+.stm { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.stm i { position: absolute; display: block; font-style: normal; }
+
+/* Zombie (FFX): black smoke around the head. Soft-edged gradients under one blur on the group
+   (the mockup's own gaussian, gen.mjs `smoke()`), so the puffs read as one cloud, not dots. */
+.stm--smoke { filter: blur(calc(3.6px * var(--k))); }
+.stm--smoke i {
+  left: calc((var(--dx) - var(--rx) * 1.35) * var(--k) * 1px);
+  top: calc((var(--dy) - var(--ry) * 1.35) * var(--k) * 1px);
+  width: calc(var(--rx) * 2.7 * var(--k) * 1px);
+  height: calc(var(--ry) * 2.7 * var(--k) * 1px);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #000 0, rgba(3, 3, 5, 0.96) 52%, rgba(40, 52, 38, 0.4) 80%, rgba(40, 52, 38, 0) 100%);
+  animation: stm-smoke 3.2s ease-in-out var(--d) infinite alternate;
+}
+@keyframes stm-smoke {
+  from { transform: translate(0, 0) scale(0.92); opacity: 0.86; }
+  to { transform: translate(calc(3px * var(--k)), calc(-6px * var(--k))) scale(1.08); opacity: 1; }
+}
+
+/* Poison (both): green bubbles rising off the head. */
+.stm--bubbles i {
+  left: calc((var(--dx) - var(--r)) * var(--k) * 1px);
+  top: calc((var(--dy) - var(--r)) * var(--k) * 1px);
+  width: calc(var(--r) * 2 * var(--k) * 1px);
+  height: calc(var(--r) * 2 * var(--k) * 1px);
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: calc(1.2px * var(--k)) solid #1c4d18;
+  background: radial-gradient(circle at 35% 35%, #f5fff2 0 14%, #d9ffc9 15%, #7fe36b 48%, #2f8f2a 100%);
+  animation: stm-bubble 2.4s ease-out var(--d) infinite;
+}
+@keyframes stm-bubble {
+  0% { transform: translateY(calc(14px * var(--k))) scale(0.6); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateY(calc(-14px * var(--k))) scale(1.05); opacity: 0; }
+}
+
+/* Sleep (both): Z's drifting up from the head. */
+.stm--zzz i {
+  left: calc(var(--dx) * var(--k) * 1px);
+  top: calc((var(--dy) - var(--s)) * var(--k) * 1px);
+  font: 700 calc(var(--s) * var(--k) * 1px) / 1 'Chakra Petch', sans-serif;
+  color: #e6efff;
+  -webkit-text-stroke: calc(3.2px * var(--k)) #1a2552;
+  paint-order: stroke fill;
+  transform: rotate(-12deg);
+  animation: stm-z 2.7s ease-in-out var(--d) infinite;
+}
+@keyframes stm-z {
+  0% { opacity: 0; transform: translate(calc(-6px * var(--k)), calc(8px * var(--k))) rotate(-12deg); }
+  25%, 75% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(6px * var(--k)), calc(-8px * var(--k))) rotate(-12deg); }
+}
+
+/* Confuse (both): two stars circling over the head. */
+.stm--stars i {
+  left: calc(-11px * var(--k));
+  top: calc(-44px * var(--k));
+  width: calc(22px * var(--k));
+  height: calc(22px * var(--k));
+  animation: stm-orbit 1.6s linear infinite;
+}
+.stm--stars i + i { animation-delay: -0.8s; }
+.stm--stars svg { width: 100%; height: 100%; display: block; }
+.stm--stars path { fill: #ffe27a; stroke: #6a4a00; stroke-width: 1.2; }
+@keyframes stm-orbit {
+  0% { transform: translate(calc(26px * var(--k)), 0) scale(1); z-index: 1; }
+  25% { transform: translate(0, calc(7px * var(--k))) scale(1.15); }
+  50% { transform: translate(calc(-26px * var(--k)), 0) scale(1); }
+  75% { transform: translate(0, calc(-7px * var(--k))) scale(0.8); opacity: 0.7; }
+  100% { transform: translate(calc(26px * var(--k)), 0) scale(1); }
+}
+
+/* Auto-Life (both): a halo above the head. */
+.stm--halo i {
+  left: calc(-24px * var(--k));
+  top: calc(-34px * var(--k));
+  width: calc(48px * var(--k));
+  height: calc(13px * var(--k));
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: calc(3.4px * var(--k)) solid #ffe79a;
+  box-shadow: 0 0 calc(10px * var(--k)) rgba(255, 231, 154, 0.85), inset 0 0 calc(5px * var(--k)) rgba(255, 244, 200, 0.7);
+  animation: stm-halo 2.2s ease-in-out infinite alternate;
+}
+@keyframes stm-halo { from { transform: translateY(0); } to { transform: translateY(calc(-4px * var(--k))); } }
+
+/* Silence (FFX-2): a speech bubble with an ellipsis. */
+.stm--ellipsis svg {
+  position: absolute;
+  left: calc(14px * var(--k));
+  top: calc(-72px * var(--k));
+  width: calc(54px * var(--k));
+  height: calc(36px * var(--k));
+  overflow: visible;
+}
+.stm--ellipsis path { fill: #f4f1e8; stroke: #0b0a12; stroke-width: 2; }
+.stm--ellipsis circle { fill: #0b0a12; }
+
+/* Darkness (FFX-2): a black cloud on the head. */
+.stm--cloud svg {
+  position: absolute;
+  left: calc(-36px * var(--k));
+  top: calc(-44px * var(--k));
+  width: calc(72px * var(--k));
+  height: calc(50px * var(--k));
+  overflow: visible;
+  /* A pale rim so a black cloud still reads against a night backdrop. */
+  filter: drop-shadow(0 0 calc(3px * var(--k)) rgba(170, 170, 200, 0.6));
+  animation: stm-cloud 3s ease-in-out infinite alternate;
+}
+.stm--cloud path { fill: #121218; stroke: #a4a4bc; stroke-width: 2; stroke-linejoin: round; opacity: 0.95; }
+@keyframes stm-cloud { from { transform: translateX(calc(-3px * var(--k))); } to { transform: translateX(calc(3px * var(--k))); } }
+
+/* NulBlaze / NulFrost / NulShock / NulTide (FFX): an orb circling the body at chest height. */
+.stm--orb i {
+  left: calc(-7px * var(--k));
+  top: calc(60px * var(--k));
+  width: calc(14px * var(--k));
+  height: calc(14px * var(--k));
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0 18%, var(--orb) 50%, var(--orb-edge) 100%);
+  box-shadow: 0 0 calc(8px * var(--k)) var(--orb);
+  animation: stm-orb 2.8s linear infinite;
+}
+.stm--orb-red { --orb: #ff5a3c; --orb-edge: #6a1206; }
+.stm--orb-white { --orb: #f2f6ff; --orb-edge: #6a7a9a; }
+.stm--orb-yellow { --orb: #ffe04a; --orb-edge: #6a5406; }
+.stm--orb-blue { --orb: #4a8cff; --orb-edge: #0a2a66; }
+.stm--orb-white i { animation-delay: -0.7s; }
+.stm--orb-yellow i { animation-delay: -1.4s; }
+.stm--orb-blue i { animation-delay: -2.1s; }
+@keyframes stm-orb {
+  0% { transform: translate(calc(44px * var(--k)), 0) scale(1); }
+  25% { transform: translate(0, calc(12px * var(--k))) scale(1.15); }
+  50% { transform: translate(calc(-44px * var(--k)), 0) scale(1); }
+  75% { transform: translate(0, calc(-12px * var(--k))) scale(0.75); opacity: 0.6; }
+  100% { transform: translate(calc(44px * var(--k)), 0) scale(1); }
+}
+
+/* Protect (both): "a blue magical shield" when a physical hit lands; a 0.6 s flash on the chest. */
+.stm-shield svg {
+  position: absolute;
+  left: calc(-42px * var(--k));
+  top: calc(-46px * var(--k));
+  width: calc(84px * var(--k));
+  height: calc(90px * var(--k));
+  overflow: visible;
+  animation: stm-shield 0.6s ease-out forwards;
+}
+.stm-shield path { fill: rgba(110, 190, 255, 0.28); stroke: #9fdcff; stroke-width: 2.4; filter: drop-shadow(0 0 6px #5ab4ff); }
+@keyframes stm-shield {
+  0% { transform: scale(0.7); opacity: 0; }
+  25% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1.12); opacity: 0; }
+}

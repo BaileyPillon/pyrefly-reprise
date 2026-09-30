@@ -1,0 +1,265 @@
+# Status display O3 "Originals + guard rails" (both games)
+
+Branch `status-o3` (from `origin/main` 1a6fd3cc), worktree `D:/pyrefly-advisor-v3`. Not merged,
+not pushed, not deployed (the driver does that). Bailey picked O3 on 2026-09-29 ("I'll go with
+all of your recommendations please"); target: `docs/concepts/status-display-0929/options/o3-*.jpg`
+and the README's coverage table; sources: `research/status-display.md` (looks) and
+`research/ffx-combat-core.md` §4.2 / `research/ffx2-combat-core.md` §2.8 (rules and cures).
+Paper preflight (rule 15, `critic-plan` says DEEP): `docs/plans/status-o3-review.md`.
+
+## Target vs build
+
+`docs/concepts/status-display-0929/final/`:
+
+| Sheet | Moment |
+|---|---|
+| `o3-vs-build-ffx-desktop.jpg` | FFX Chapter I, Hi-Potion aimed at the Zombie Kimahri (840 HP), 1600x900 |
+| `o3-vs-build-ffx-phone.jpg` | the same, 390x844 |
+| `o3-vs-build-x2-desktop.jpg` | FFX-2 Chapter IV, Bahamut (Doom 3), Rikku Poison + Silence, Yuna Sleep, Paine Haste + Curse, 1600x900 |
+| `o3-vs-build-x2-phone.jpg` | the same, 390x844 |
+| `build-gallery-ffx.jpg`, `build-gallery-x2.jpg` | the other sourced looks the mockups did not stage (not a target; proof they render) |
+
+Top or left is the approved mockup, bottom or right the build. The build frames are the real
+game (dev server, headless real GPU), statuses written into the engine state the same way the
+mockup's capture did, the aim reached with real keys. The message line is held for the picture
+(`statusLooks.message.hold`), as the mockup held it; in play it shows about two seconds.
+Scripts: `final/src/cap.mjs` (capture, `CAP_VARIANT=gallery`, `CAP_PERF=1`, `CAP_CPU=1`),
+`final/src/sheets.py`, `final/src/play.mjs` (a chapter played to its outcome with the layer on).
+Build screenshots also in `docs/screenshots/picks-0929/status-o3/`.
+
+Distance from the target: the same elements in the same places at both sizes. Known small
+differences: the smoke and Z's sit 10 to 15 px off the mockup's hand-placed head points (the
+field's head anchor plus one shared drop, `HEAD_DROP`); icons on a dimmed party row dim with the
+row (the mockup drew them on top); the FFX-2 phone mockup shows Paine's gauge red, the build
+caught it at the moment it read full (timing, not this change).
+
+## What is built (game case per status, rule 14)
+
+Code: `src/ui/common/withStatusLooks.ts` (the HUD tap, wired in `BattleScreenWiring.createHud`),
+`statusLooks.ts` (the two tables), `statusMarks.ts` + `status-marks.css` (marks on the figures),
+`statusFigureTint.ts` (tints, Zombie's glow, Stop's freeze, Pointless's flash), `statusIcons.ts` +
+`statusRows.ts` + `status-icons.css` + `status-rows.css` (O2 icons), `statusWords.ts`,
+`statusMessageLine.ts`, `statusHintCard.ts`, `statusTargetTags.ts`, `status-o3.css` (O3), and
+`src/ui/ffx/statusRailsFfx.ts` (the Zombie forecast).
+
+- **O1 on the figures.** FFX: Zombie green body + held green glow + black smoke; Poison bubbles;
+  Sleep Z's; Confuse two stars; Berserk red hue; Curse brown hue; Auto-Life halo; NulBlaze /
+  NulFrost / NulShock / NulTide red / white / yellow / blue orbs; Protect's blue shield when a
+  physical hit lands; Doom's count now **red** over the head (`ui/ffx/doom-counter.css`).
+  FFX-2: Sleep Z's; Poison bubbles; Silence ellipsis bubble; Darkness black cloud; Confuse
+  stars; Curse darkened body; Stop frozen figure (thawed for any action or hit that names it, so
+  no presenter beat can wait on it); Pointless slow flash; Auto-Life halo; Protect's shield on a
+  physical hit; the targeted unit's icons in the top help line ("ATTACK Physical damage |
+  Bahamut [icons]"). Haste red / Slow gold gauges were already built.
+  **Nothing is drawn** where no source describes a look: FFX Silence, Darkness, Slow, Haste,
+  Shell, Reflect, Regen, Provoke, Guard, Defend, the Breaks; FFX-2 Berserk, Shell, Regen,
+  Invincible, the Up/Down family; FFX-2 Doom over the head (see question 2).
+- **O2 icons.** FFX: round medallions right-aligned under the Overdrive gauge (phone: tabs on
+  the card's top edge), and beside each unit's first turn-list row (phone: on the tile's
+  corner). FFX-2: square tags in place of the old text chips, and a STATUS tab under a boss's
+  bar (phone: the icon inside the boss head, before SCAN). Red rim = harms its holder, teal =
+  helps. Every glyph is fresh SVG (rule 8). The old FFX pips (`ui/ffx/statusPips.ts`) and FFX-2
+  chips (`ui/ffx2/statusChips.ts`) had no importer left and were moved to
+  `F:/pyrefly-parked/2026-09-29/status-o3/` (MOVED.txt there).
+- **O3 guard rails.** FFX: a restorative or revival aimed at a living Zombie ally shows the
+  engine's own preview (`simulateFFXCommand` on a copy, the fb-0929-hipotion path): a red
+  "HI-POTION ON A ZOMBIE −1000 KO" beside the figure, the help slab as a red warning with his HP,
+  "✕ HURTS" on the item row, the plate note as a red ZOMBIE tag (its words kept in the title),
+  on the phone the same in the target card plus a red rim on the confirm button. Both games:
+  DOOM n on the target tag (FFX from the turn countdown; FFX-2 only when the engine carries a
+  count, question 1); the guide card's cure hint from each game's own cure table (FFX Zombie,
+  Sleep, Silence, Curse; FFX-2 Sleep, Silence, Curse), in the guide's slot or at the top of the
+  open guide; a caption where a status **takes the command away** (FFX: ASLEEP, STONE,
+  CONFUSED, BERSERK; FFX-2: ASLEEP, STONE, STOPPED, BERSERK; none on the phone cards, as in
+  the phone mockups); the one-line message when a status lands or wears off ("Kimahri became a
+  Zombie."), merged for several units at once, never on a KO or an overwrite.
+
+## Evidence
+
+- `npx tsc --noEmit` clean (the only errors in this worktree are the untracked advisor-v3
+  scratch tests under `tests/unit/zz-scratch/`, not this track's).
+- `tests/unit/status-o3-mapping.test.ts` (18): each game's table pinned; an undescribed status
+  draws nothing; icon sets, harm/help, captions, words, cure hints per game.
+- `tests/unit/status-o3-hud.test.ts` (10): the rows replace the pips and chips; a **real Chapter
+  I battle** piped through the tap (lines "Yuna became a Zombie.", "Kimahri became a Zombie.",
+  4 Protect shields on seed 1); the forecast on a real zombified-Kimahri board is 1000 and KO at
+  840 HP, Phoenix Down KOs, and the board is unchanged afterwards (rule 1); Stop's freeze and its
+  thaw.
+- `tests/unit/fb0929-zombie-warning.test.ts` updated to the new markup (the Zombie icon leads the
+  row in the harm rim; the note's words read from the tag's title).
+- Real play, headless GPU (`final/src/play.mjs`): Chapter I auto-played to its outcome with the
+  layer on: defeat at turn 38, **identical** to the same seed on main (the tap changes nothing in
+  the fight); 8 distinct lines, marks and tints seen, no page errors. FFX-2 Vegnagun 5 minutes:
+  Slow and Poison lines, bubbles, 74 shield samples, no errors.
+- Performance, 1600x900, the FFX mockup moment (everything up at once): 60 fps held
+  (frame mean 16.67 ms, p95 16.7 ms, same as main). CPU profile: the layer's own script
+  0.19 ms/frame. The HUD update measures 0.9 to 1.2 ms against main's 0.37 ms because the
+  first layout read of the frame lands in it; per-frame reads of the big boxes are cached
+  (0.25 to 0.5 s) and writes only happen on change.
+
+## Decided here (flag to Bailey if wrong)
+
+- Captions only where the command is taken away: the approved FFX-2 frame shows ASLEEP on Yuna
+  and nothing on Rikku's Silence, so Silence and Curse get the guide hint instead.
+- FFX-2 Confuse gets no caption: its source says a confused girl "may use any command she has".
+- The message line rides above the targeting reticle (z 40 over its 36) and is mounted on the
+  battle root, so the Bahamut reticle no longer covers it.
+
+## Not built
+
+- The README's other O3 rows the brief did not list: "a single-target spell will bounce"
+  (Reflect) and "a physical hit shatters" (Petrify). FFX-2 Reflect's shield flash is sourced but
+  the FFX-2 engine never bounces a spell, so there is no event to draw it on.
+- FFX-2 Stop's gauge colour (gray or white: the sources conflict, research §5).
+- The Sensor panel's icon row (README O2 text; neither mockup shows it).
+- The Sleep hunch and the low-HP slouch (not approved paintings).
+- Dead CSS for the old pips and chips is left in `ffx-hud.css`, `ffx2-hud.css` and the phone
+  sheets; a stale comment in `battle/ffx/turnQueue.ts` still names `statusPips.ts` (engine file,
+  left untouched).
+
+## Questions for Bailey
+
+1. FFX-2's engine counts Doom as a clock (duration units of 0.53 s), not turns, so in real play
+   the tag and the STATUS tab read "DOOM" without a number; the mockup's "3" was staged. Show a
+   number derived from the clock, or leave it?
+2. `research/ffx2-combat-core.md` §2.8 says FFX-2 Doom is "a red countdown timer over the
+   target's head" `[verified: 2 sources]`, while `research/status-display.md` §3 says the
+   placement is unsourced. Draw FFX-2's count over the head like FFX's?
+
+## CHECK (independent, 2026-09-30, did not build it)
+
+Checked branch `status-o3` at 3120bff1 in `D:/pyrefly-advisor-v3` (no pull, no branch switch).
+Verdict: **no blocker**; one major to fix or disclose, three minors.
+
+- **Build and real input.** I made a fresh production build of the branch (scratch outDir) and
+  served it on port 8420, then drove it with headless Playwright on the GPU. At 1600x900 in FFX
+  Chapter I, with Zombie, Poison and Protect staged on Kimahri at 840 HP, I used real keys
+  (Items > Hi-Potion > aim Kimahri). The build showed "HI-POTION ON A ZOMBIE -1000 KO", the red
+  help slab, "HURTS" on the item and the ZOMBIE tag. All four cleared when the aim moved to Tidus
+  and when I backed out. At 390x844 I used taps (ITEM, HI-POTION) and a touch swipe to reach
+  Kimahri. That showed the same forecast, warning and tag, and the confirm button had a red inset
+  rim (`stwarn-go`). In FFX-2 Chapter IV I clicked and tapped ATTACK: DOOM 3 on the target tag,
+  STATUS 3 under the boss bar, the Bahamut icon in the top help line, ASLEEP on desktop only,
+  Z's on Yuna, bubbles and the ellipsis bubble on Rikku, and Paine darkened (0x9e9e9e).
+  **0 console errors and 0 page errors** in every run.
+- **Target vs build.** The four sheets in `final/` match the approved O3 frames element for
+  element. My own frames agree. The only differences are the ones listed above (mark offsets,
+  dimmed rows, Paine's gauge timing).
+- **Rule 1.** No file under `src/battle/**` or `BattlePresenter*` changed. A tap that confirmed
+  Hi-Potion on the Zombie Kimahri dealt the engine's 1000 and KO'd him, as the forecast said.
+  `status-o3-hud` pins that a real Chapter I battle is unchanged.
+- **Performance** (on the production build, 1600x900, everything staged): FFX frame mean
+  16.67 ms, p95 16.7 ms, HUD update 0.85 ms. FFX-2 frame mean 16.72 ms, p95 16.8 ms, HUD update
+  0.80 ms. 60 fps held.
+- **Gates.** tsc is clean except the untracked `tests/unit/zz-scratch/advisor-v3-*` files (not
+  this track's). The targeted files pass: status-o3-mapping, status-o3-hud, fb0929-zombie-warning
+  and omnis-readout, 56 tests. I ran the full suite once: 675 files passed and 1 failed. The
+  failure was a timeout under load (`strategy-ffx2-bahamut` "heal-only route", 26.8 s against a
+  15 s limit, while a build and a browser ran). Alone it passes in 11.4 s, and it is an engine
+  test this branch does not touch. Orphans: 24 on the branch against 25 in main's tree, so no
+  growth, and no status module is orphaned. Every new file is under 400 lines. `TargetCursor.ts`
+  (485) shrank by 2. `git merge-tree` is clean against origin/main (1a6fd3cc) and against local
+  main (888a7578).
+- **MAJOR (new feature, not a regression): REDUCE MOTION and LOW EFFECTS do not reach the new
+  marks.** With `prefers-reduced-motion: reduce` plus `html[data-reduce-motion]`, and separately
+  with `html[data-low-effects]`, the looping mark animations kept running: 12 on the FFX Zombie
+  frame, the same count as with both off. These are the smoke drift, rising bubbles, orbiting
+  stars and orbs, the halo pulse and the Z float. `src/ui/common/status-marks.css` has no
+  reduced-motion block, and `src/ui/common/comfort.css` does not mirror it. Release 32's A2
+  switch covers every other battle animation. Fix: hold the marks still, static or at 1 ms, under
+  both the media query and `html[data-reduce-motion]`, and let Pointless's JS pulse read the
+  same flag.
+- **Minor (existing behaviour, not this branch):** on the phone, one tap on a figure selects
+  **and confirms** the target. My tap on Kimahri's figure used the Hi-Potion straight away and
+  KO'd him, so the forecast never showed. The guard rail only protects a player who swipes or
+  uses keys. The fb-0929 switches that would change this are OFF and wait for Bailey.
+- **Minor:** `statusFigureTint` sets the tint to its own colour and resets it to white when it
+  lets go. That overwrites a scene's stand-in tint (farplane and leblanc-last-room, when a
+  subject is a placeholder). This only happens when art is missing.
+- **Minor:** the dead pip and chip CSS and the stale comment in `turnQueue.ts` are already
+  disclosed above.
+- **Not built, each with a written reason** (accepted): FFX-2 Reflect's flash (the engine has no
+  bounce event), FFX-2 Stop's gauge colour (the sources conflict), the Sensor icon row (no
+  mockup shows it), and the paintings (not approved).
+
+Scripts and frames: `D:/Tools/pyrefly-scratch/picks-0929/status-check/` (`check.mjs`, `shots/`, `cap/`).
+
+## REPAIR (2026-09-30): REDUCE MOTION and LOW EFFECTS reach the status marks
+
+Answers the independent check's one major. Game case: **both** (shared plumbing: the marks are
+the same CSS in both games; FFX-only and FFX-2-only marks only ever mount in their own HUD).
+
+**What changed**
+- `src/ui/common/status-marks-calm.css` (new, imported by `statusMarks.ts` after
+  `status-marks.css`).
+  - REDUCE MOTION, under `html[data-reduce-motion]` and, written again, under
+    `@media (prefers-reduced-motion: reduce)` (`comfort.css` lets the OS preference win on its
+    own, so this does too): every mark is a still at the rest pose of its own animation,
+    `animation: none; opacity: 1`. Nothing is hidden to stop it. The two-star and four-orb marks
+    get fixed spots (a still cannot orbit, and several orbs must not stack). The Protect
+    shield flash is shown at full strength for its 0.6 s and then removed as before.
+  - LOW EFFECTS, under `html[data-low-effects]`: the **particle marks** (Zombie smoke, Poison
+    bubbles, Sleep Z's, the Nul orbs) become a lighter still: fewer puffs (4 of 7), bubbles (3 of
+    5) and Z's (2 of 3), no blur, no glow. Stars, halo, cloud and the ellipsis bubble are one
+    small element each and keep their own motion under this flag (REDUCE MOTION stills them).
+- `src/ui/common/statusCalm.ts` (new): `statusMotionStill()`, the row flag or the OS preference,
+  for the one look driven from script. `statusFigureTint.ts`: Pointless's slow flash is held at
+  half its peak under REDUCE MOTION.
+- **A second defect found by running it, fixed here:** Pointless's flash never fell. The guard
+  that lets a hit's own flash win compared the cell with the new `hold`, so once the pulse reached
+  its peak every lower value lost the comparison and the flash stayed at the peak (browser: 1
+  distinct value in 2 s, on the unrepaired build). It now compares with the amount this module
+  last wrote (`Applied.wrote`), so the pulse rises and falls (6 distinct values in 2 s). The test
+  fails on the old comparison.
+- **Dead CSS removed** (grep shows no emitter left; the build and the tests are green):
+  `.ffx2-status-chip`, `--good` and `i` in `ffx2-hud.css` (now 1205 to 1181 lines), its phone
+  override in `ffx2/phone-hud.css`, `.ffx-stat__statuses i` and `.ffx-ctb-statuses i` in
+  `ffx/ffx-hud.css` and `ffx/phone-hud.css`. The parent rules `.ffx-stat__statuses` and
+  `.ffx-ctb-statuses` stay (the new icon rows use them). No file over 400 lines grew.
+
+**Proof, by running it** (`final/src/calm.mjs`; headless real GPU, own dev server, all
+the marks staged on the real HUD; the GPU was busy with ComfyUI, so no timing is claimed; the
+counts below are `document.getAnimations()` inside the mark layer; full table in
+`docs/screenshots/picks-0929/status-o3/calm/results.json`; frames beside it):
+
+| Case (both 1600x900 and 390x844 gave the same counts) | FFX Ch. I Zombie frame, running / infinite loops | FFX-2 Ch. IV staged frame |
+|---|---|---|
+| no flag | 23 / 22 | 13 / 12 |
+| REDUCE MOTION, **before** the fix | 23 / 22 | 13 / 12 |
+| REDUCE MOTION, after | **0 / 0** | **0 / 0** |
+| OS prefers-reduced-motion, before | 23 / 22 | 13 / 12 |
+| OS prefers-reduced-motion, after | **0 / 0** | **0 / 0** |
+| LOW EFFECTS, before | 23 / 22 | 13 / 12 |
+| LOW EFFECTS, after (smoke, bubbles, Z, orbs still; stars, halo, cloud and the shield's 0.6 s remain) | 4 / 3 | 5 / 4 |
+
+Every mark stays visible under the stills (minimum opacity 1; the shield 1). A mark's own drift
+(its offset from its figure, in the figure's own scale) took 1 distinct value in 2 s under
+REDUCE MOTION and OS, against 6 with the flags off. Pointless's flash (script): 6 distinct values
+in 2 s normally, 1 under REDUCE MOTION and under the OS preference. No page errors. ("Before"
+frames remove `status-marks-calm.css` from the same page; the Pointless still is script and stays
+on in those, and its first, wrong, before measure is the 1-value line above.)
+
+**Tests** `tests/unit/status-o3-calm.test.ts` (11): every animated selector in `status-marks.css`
+has a still under the row flag and under the OS query (a new looping mark that forgets one now
+fails), no still hides a mark, orb and star spots, the LOW EFFECTS particle rules, load order,
+no rule left for the removed pips and chips, the Pointless pulse rises and falls, holds still
+under the flag. With status-o3-hud, status-o3-mapping and ffx-hud-css-type-floor: 43 pass.
+`npx tsc --noEmit` clean apart from the untracked `zz-scratch` files. I did not run the full suite
+in this cycle (targeted files only; the full run in the earlier section stands for the rest).
+
+**Open / for Bailey:** LOW EFFECTS leaves stars, halo, cloud and the short shield flash moving on
+purpose (the check asked for the particle marks). If he wants those stilled under LOW EFFECTS too
+it is four selectors in `status-marks-calm.css`. Stale comments naming `statusChips.ts` /
+`statusPips.ts` remain in `PartyRows.ts`, `dressphereIcons.ts`, `resolve-targets.ts`,
+`turnQueue.ts` (comments only, left alone).
+
+## RE-CHECK of the repair (independent, 2026-09-30, did not build it)
+
+Checked `status-o3` at 2540ae13 (no pull, no switch). Verdict: **no blocker; the CHECK major is resolved.**
+
+- **Fresh production build** (`vite build` to a scratch outDir, served by `vite preview` on port 8500, headless Playwright on the GPU, the builder's `calm.mjs` re-run by me) at 1600x900 and 390x844, FFX Chapter I staged Zombie/Poison/Protect and FFX-2 Chapter IV staged. Running / infinite animations inside the mark layer, identical at both sizes: FFX no flag 23/22, REDUCE MOTION 0/0, OS prefers-reduced-motion 0/0, LOW EFFECTS 4/3; FFX-2 no flag 13/12, REDUCE 0/0, OS 0/0, LOW 5/4. Every claim in the builder's table holds. Marks stay at opacity 1 under the stills (I viewed the FFX 1600x900 reduce frame: smoke, bubbles, Z's, halo, stars and orbs all readable). Pointless's flash: 6 distinct values in 2 s normally, 1 under REDUCE/OS. 0 page and console errors in all 16 runs. The GPU was busy with ComfyUI, so no timing is claimed.
+- **Dead CSS:** grep finds no rule left for `.ffx2-status-chip`, `.ffx-stat__statuses i`, `.ffx-ctb-statuses i` (one comment remains); the build and tsc are green.
+- **Gates:** `tsc --noEmit` clean apart from untracked `zz-scratch`. No file over 400 lines grew against origin/main; nothing under `src/battle/**` or `BattlePresenter*` changed. `git merge-tree` against origin/main is clean. Full suite (run once, then by mistake a second time to read the failure name): 676 files passed, 1 failed, the same load-related timeout as before in `strategy-ffx2-bahamut` "heal-only route"; alone it passes (19/19). Engine test this branch does not touch.
+- **Disclosed, not blockers:** LOW EFFECTS leaves stars, halo, cloud and the 0.6 s shield flash moving (deliberate; four selectors to change); stale comments naming `statusChips.ts`/`statusPips.ts`; the phone one-tap-confirms and stand-in-tint minors from CHECK are unchanged and are not this branch's.
+
+Frames and JSON: `D:/Tools/pyrefly-scratch/recheck-o3-calm/`. Server on 8500 stopped by PID; nothing deleted.

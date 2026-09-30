@@ -74,10 +74,6 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-ctb-charge {
   width: 9px;
   height: 9px;
 }
-html[data-phone-battle='ffx'] .ffxhud .ffx-ctb-statuses i {
-  width: 7px;
-  height: 7px;
-}
 
 /* ------------------------------------------------------ the party chips */
 html[data-phone-battle='ffx'] .ffxhud .ig-stat-list {
@@ -164,10 +160,6 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-stat__statuses {
   right: 4px;
   top: 4px;
   bottom: auto;
-}
-html[data-phone-battle='ffx'] .ffxhud .ffx-stat__statuses i {
-  width: 7px;
-  height: 7px;
 }
 
 /* ------------------------------------------------------ the command grid */

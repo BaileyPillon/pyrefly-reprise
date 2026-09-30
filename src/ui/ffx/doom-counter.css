@@ -14,7 +14,9 @@
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
-  color: #ffffff;
+  /* Status display O1 (2026-09-29): red, as the original — "a countdown marked in red over the
+     victim's head" (research/status-display.md §2, Doom [verified: 2 sources]). */
+  color: #ff4a58;
   filter: drop-shadow(0 0 1px #141420) drop-shadow(0 1px 0 #141420) drop-shadow(1px 0 0 #141420)
     drop-shadow(-1px 0 0 #141420) drop-shadow(0 -1px 0 #141420) drop-shadow(0 0 4px rgba(199, 52, 60, 0.9));
 }

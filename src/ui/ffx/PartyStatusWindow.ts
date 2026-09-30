@@ -1,6 +1,6 @@
-import type { AnyCombatant, CombatantId, FFXCombatant, StatusId } from '../../battle/common/types.ts';
+import type { AnyCombatant, CombatantId, FFXCombatant } from '../../battle/common/types.ts';
 import { aeonChipHtml, portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
-import { STATUS_DOT_COLOR, platePipIds, statusLabel } from './statusPips.ts';
+import { captionHtml, ffxPlateIconsHtml } from '../common/statusRows.ts';
 import { zombieWarnOn } from './zombieWarnOptions.ts';
 
 /**
@@ -68,16 +68,12 @@ export class PartyStatusWindow {
       .filter(Boolean)
       .join(' ');
 
-    // Most alarming first, in the documented colours, so a Zombie is never the seventh pip cut off
-    // the end of Mighty Guard's six (fb-0929, `statusPips.ts`).
-    const statuses = platePipIds(c);
-    const pip = (s: StatusId): string => {
-      const color = STATUS_DOT_COLOR[s];
-      return `<i title="${statusLabel(s)}" data-status="${s}"${color ? ` style="background:${color}"` : ''}></i>`;
-    };
-    // Option "word" (off; `zombieWarnOptions.ts`): the status spelled out after the pips.
-    const word = c.alive && statuses.includes('zombie') && zombieWarnOn('word') ? '<em class="ffx-stat__zombie">Zombie</em>' : '';
-    const statusHtml = statuses.length ? `<span class="ffx-stat__statuses">${statuses.map(pip).join('')}${word}</span>` : '';
+    // Status display O2/O3 (Bailey's pick, 2026-09-29): round medallions under the Overdrive gauge,
+    // most alarming first (the old single-colour pips are replaced), and a caption where a status
+    // takes the command away ("ASLEEP"). `ui/common/statusRows.ts`.
+    // Option "word" (off; `zombieWarnOptions.ts`): the status spelled out after the icons.
+    const word = c.alive && c.statuses['zombie'] && zombieWarnOn('word') ? '<em class="ffx-stat__zombie">Zombie</em>' : '';
+    const statusHtml = ffxPlateIconsHtml(c, word) + captionHtml('ffx', c);
 
     // The aeon's row while it is out (PR-0181) wears the turn list's aeon chip, not a letter (FOC24-02, CHK-012).
     const face = c.side === 'aeon' ? aeonChipHtml(c.spriteKey ?? id, c.name, c.portraitKey) : portraitChipHtml(c.portraitKey, c.name, tintFor('party'));

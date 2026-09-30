@@ -1,0 +1,784 @@
+{
+ "ffx-desktop-base": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 23,
+  "infiniteLoops": 22,
+  "names": [
+   "stm-orbit",
+   "stm-orb",
+   "stm-z",
+   "stm-halo",
+   "stm-smoke",
+   "stm-bubble",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.47,
+  "shieldOpacity": "0.742544",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-desktop-before-low": {
+  "flags": {
+   "reduce": false,
+   "low": true,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 23,
+  "infiniteLoops": 22,
+  "names": [
+   "stm-orbit",
+   "stm-orb",
+   "stm-z",
+   "stm-halo",
+   "stm-smoke",
+   "stm-bubble",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.66,
+  "shieldOpacity": "0.623373",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-desktop-before-os": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": true
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 23,
+  "infiniteLoops": 22,
+  "names": [
+   "stm-orbit",
+   "stm-orb",
+   "stm-z",
+   "stm-halo",
+   "stm-smoke",
+   "stm-bubble",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.62,
+  "shieldOpacity": "0.742159",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-desktop-before-reduce": {
+  "flags": {
+   "reduce": true,
+   "low": false,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 23,
+  "infiniteLoops": 22,
+  "names": [
+   "stm-orbit",
+   "stm-orb",
+   "stm-z",
+   "stm-halo",
+   "stm-smoke",
+   "stm-bubble",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.02,
+  "shieldOpacity": "0.843605",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-desktop-low": {
+  "flags": {
+   "reduce": false,
+   "low": true,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 4,
+  "infiniteLoops": 3,
+  "names": [
+   "stm-orbit",
+   "stm-halo",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.75,
+  "shieldOpacity": "0.742571",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-desktop-os": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": true
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 0,
+  "infiniteLoops": 0,
+  "names": [],
+  "minMarkOpacity": 1,
+  "shieldOpacity": "1",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-desktop-reduce": {
+  "flags": {
+   "reduce": true,
+   "low": false,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 0,
+  "infiniteLoops": 0,
+  "names": [],
+  "minMarkOpacity": 1,
+  "shieldOpacity": "1",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-phone-base": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 23,
+  "infiniteLoops": 22,
+  "names": [
+   "stm-orbit",
+   "stm-orb",
+   "stm-z",
+   "stm-halo",
+   "stm-smoke",
+   "stm-bubble",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.66,
+  "shieldOpacity": "0.622908",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-phone-before-low": {
+  "flags": {
+   "reduce": false,
+   "low": true,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 23,
+  "infiniteLoops": 22,
+  "names": [
+   "stm-orbit",
+   "stm-orb",
+   "stm-z",
+   "stm-halo",
+   "stm-smoke",
+   "stm-bubble",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.64,
+  "shieldOpacity": "0.742465",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-phone-before-os": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": true
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 23,
+  "infiniteLoops": 22,
+  "names": [
+   "stm-orbit",
+   "stm-orb",
+   "stm-z",
+   "stm-halo",
+   "stm-smoke",
+   "stm-bubble",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.57,
+  "shieldOpacity": "0.622885",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-phone-before-reduce": {
+  "flags": {
+   "reduce": true,
+   "low": false,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 23,
+  "infiniteLoops": 22,
+  "names": [
+   "stm-orbit",
+   "stm-orb",
+   "stm-z",
+   "stm-halo",
+   "stm-smoke",
+   "stm-bubble",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.66,
+  "shieldOpacity": "0.622839",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-phone-low": {
+  "flags": {
+   "reduce": false,
+   "low": true,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 4,
+  "infiniteLoops": 3,
+  "names": [
+   "stm-orbit",
+   "stm-halo",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.75,
+  "shieldOpacity": "0.62316",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-phone-os": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": true
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 0,
+  "infiniteLoops": 0,
+  "names": [],
+  "minMarkOpacity": 1,
+  "shieldOpacity": "1",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "ffx-phone-reduce": {
+  "flags": {
+   "reduce": true,
+   "low": false,
+   "os": false
+  },
+  "marks": 9,
+  "runningAnimationsInMarkLayer": 0,
+  "infiniteLoops": 0,
+  "names": [],
+  "minMarkOpacity": 1,
+  "shieldOpacity": "1",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "kimahri",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "x2-desktop-base": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 13,
+  "infiniteLoops": 12,
+  "names": [
+   "stm-z",
+   "stm-cloud",
+   "stm-halo",
+   "stm-bubble",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.15,
+  "shieldOpacity": "0.623221",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    6
+   ]
+  ],
+  "errors": []
+ },
+ "x2-desktop-before-low": {
+  "flags": {
+   "reduce": false,
+   "low": true,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 13,
+  "infiniteLoops": 12,
+  "names": [
+   "stm-z",
+   "stm-cloud",
+   "stm-halo",
+   "stm-bubble",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.15,
+  "shieldOpacity": "0.623381",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    5
+   ]
+  ],
+  "errors": []
+ },
+ "x2-desktop-before-os": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": true
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 13,
+  "infiniteLoops": 12,
+  "names": [
+   "stm-z",
+   "stm-cloud",
+   "stm-halo",
+   "stm-bubble",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.62,
+  "shieldOpacity": "0.622495",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "x2-desktop-before-reduce": {
+  "flags": {
+   "reduce": true,
+   "low": false,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 13,
+  "infiniteLoops": 12,
+  "names": [
+   "stm-z",
+   "stm-cloud",
+   "stm-halo",
+   "stm-bubble",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.15,
+  "shieldOpacity": "0.622518",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "x2-desktop-low": {
+  "flags": {
+   "reduce": false,
+   "low": true,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 5,
+  "infiniteLoops": 4,
+  "names": [
+   "stm-cloud",
+   "stm-halo",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.83,
+  "shieldOpacity": "0.623312",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    6
+   ]
+  ],
+  "errors": []
+ },
+ "x2-desktop-os": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": true
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 0,
+  "infiniteLoops": 0,
+  "names": [],
+  "minMarkOpacity": 1,
+  "shieldOpacity": "1",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "x2-desktop-reduce": {
+  "flags": {
+   "reduce": true,
+   "low": false,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 0,
+  "infiniteLoops": 0,
+  "names": [],
+  "minMarkOpacity": 1,
+  "shieldOpacity": "1",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "x2-phone-base": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 13,
+  "infiniteLoops": 12,
+  "names": [
+   "stm-z",
+   "stm-cloud",
+   "stm-halo",
+   "stm-bubble",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.18,
+  "shieldOpacity": "0.623167",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    6
+   ]
+  ],
+  "errors": []
+ },
+ "x2-phone-before-low": {
+  "flags": {
+   "reduce": false,
+   "low": true,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 13,
+  "infiniteLoops": 12,
+  "names": [
+   "stm-z",
+   "stm-cloud",
+   "stm-halo",
+   "stm-bubble",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.15,
+  "shieldOpacity": "0.742371",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    6
+   ]
+  ],
+  "errors": []
+ },
+ "x2-phone-before-os": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": true
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 13,
+  "infiniteLoops": 12,
+  "names": [
+   "stm-z",
+   "stm-cloud",
+   "stm-halo",
+   "stm-bubble",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.62,
+  "shieldOpacity": "0.622526",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "x2-phone-before-reduce": {
+  "flags": {
+   "reduce": true,
+   "low": false,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 13,
+  "infiniteLoops": 12,
+  "names": [
+   "stm-z",
+   "stm-cloud",
+   "stm-halo",
+   "stm-bubble",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.15,
+  "shieldOpacity": "0.741859",
+  "markOffsetPositionsSeenIn2s": 6,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "x2-phone-low": {
+  "flags": {
+   "reduce": false,
+   "low": true,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 5,
+  "infiniteLoops": 4,
+  "names": [
+   "stm-cloud",
+   "stm-halo",
+   "stm-orbit",
+   "stm-shield"
+  ],
+  "minMarkOpacity": 0.82,
+  "shieldOpacity": "0.622816",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    5
+   ]
+  ],
+  "errors": []
+ },
+ "x2-phone-os": {
+  "flags": {
+   "reduce": false,
+   "low": false,
+   "os": true
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 0,
+  "infiniteLoops": 0,
+  "names": [],
+  "minMarkOpacity": 1,
+  "shieldOpacity": "1",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    1
+   ]
+  ],
+  "errors": []
+ },
+ "x2-phone-reduce": {
+  "flags": {
+   "reduce": true,
+   "low": false,
+   "os": false
+  },
+  "marks": 6,
+  "runningAnimationsInMarkLayer": 0,
+  "infiniteLoops": 0,
+  "names": [],
+  "minMarkOpacity": 1,
+  "shieldOpacity": "1",
+  "markOffsetPositionsSeenIn2s": 1,
+  "pointlessOrGlowDistinctFlashValues": [
+   [
+    "paine",
+    1
+   ],
+   [
+    "rikku",
+    1
+   ]
+  ],
+  "errors": []
+ }
+}
