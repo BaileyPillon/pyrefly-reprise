@@ -7,7 +7,7 @@
       "loopStart": 6.4,
       "loopEnd": 76.8,
       "duration": 79.8,
-      "bytes": 2483481,
+      "bytes": 2567311,
       "lufs": -16.0,
       "truePeakDb": -1.5,
       "score": "0cf1d83fd2bd62cc"
@@ -17,7 +17,7 @@
       "loopStart": 10.666667,
       "loopEnd": 85.333333,
       "duration": 88.3333,
-      "bytes": 2565132,
+      "bytes": 2615074,
       "lufs": -16.0,
       "truePeakDb": -1.5
     },
@@ -26,9 +26,9 @@
       "loopStart": 6.666667,
       "loopEnd": 80,
       "duration": 83,
-      "bytes": 2512223,
+      "bytes": 2719357,
       "lufs": -16.0,
-      "truePeakDb": -1.5,
+      "truePeakDb": -1.4,
       "score": "a660934bb598f632"
     },
     "boss-ffx2-aeon": {
@@ -36,16 +36,16 @@
       "loopStart": 12,
       "loopEnd": 114,
       "duration": 117,
-      "bytes": 3468368,
-      "lufs": -16.0,
-      "truePeakDb": -1.5
+      "bytes": 4069829,
+      "lufs": -15.8,
+      "truePeakDb": -1.7
     },
     "boss-jecht": {
       "file": "music/boss-jecht.mp3",
       "loopStart": 6.666667,
       "loopEnd": 107.121678,
       "duration": 110.1217,
-      "bytes": 3312113,
+      "bytes": 3534672,
       "lufs": -16.0,
       "truePeakDb": -1.5
     },
@@ -54,7 +54,7 @@
       "loopStart": 7.272721,
       "loopEnd": 98.661791,
       "duration": 101.6618,
-      "bytes": 2960096,
+      "bytes": 3319277,
       "lufs": -16.0,
       "truePeakDb": -1.5
     },
@@ -63,7 +63,7 @@
       "loopStart": 7.619048,
       "loopEnd": 121.904762,
       "duration": 124.9048,
-      "bytes": 3851212,
+      "bytes": 3774749,
       "lufs": -16.0,
       "truePeakDb": -1.5,
       "score": "90c06f737af9686a"
@@ -73,25 +73,25 @@
       "loopStart": 12.551406,
       "loopEnd": 102.796009,
       "duration": 105.797,
-      "bytes": 3078838,
-      "lufs": -16.0,
-      "truePeakDb": -1.4
+      "bytes": 3324154,
+      "lufs": -15.9,
+      "truePeakDb": -1.3
     },
     "boss-vegnagun": {
       "file": "music/boss-vegnagun.mp3",
       "loopStart": 11.428571,
       "loopEnd": 91.428571,
       "duration": 94.4286,
-      "bytes": 3345784,
+      "bytes": 3065960,
       "lufs": -15.9,
-      "truePeakDb": -1.3
+      "truePeakDb": -1.1
     },
     "boss-yojimbo": {
       "file": "music/boss-yojimbo.mp3",
       "loopStart": 14.545465,
       "loopEnd": 87.272721,
       "duration": 90.2727,
-      "bytes": 2626957,
+      "bytes": 2650013,
       "lufs": -16.0,
       "truePeakDb": -1.4,
       "score": "76abbdea8b282bdc"
@@ -101,7 +101,7 @@
       "loopStart": 6,
       "loopEnd": 215.6,
       "duration": 218.6,
-      "bytes": 6314200,
+      "bytes": 6419190,
       "lufs": -16.0,
       "truePeakDb": -1.5
     },
@@ -110,7 +110,7 @@
       "loopStart": 10.909093,
       "loopEnd": 100.909093,
       "duration": 103.9091,
-      "bytes": 3040951,
+      "bytes": 3055321,
       "lufs": -16.0,
       "truePeakDb": -1.5
     },
@@ -128,18 +128,18 @@
       "loopStart": 33.642358,
       "loopEnd": 122.653741,
       "duration": 125.6537,
-      "bytes": 3704799,
+      "bytes": 3600003,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -1.9
     },
     "ending-ffx2": {
       "file": "music/ending-ffx2.mp3",
       "loopStart": 12.082494,
       "loopEnd": 116.331655,
       "duration": 119.3317,
-      "bytes": 3558668,
-      "lufs": -16.0,
-      "truePeakDb": -1.5
+      "bytes": 3583736,
+      "lufs": -15.9,
+      "truePeakDb": -1.3
     },
     "pause": {
       "file": "music/pause.mp3",
@@ -155,27 +155,27 @@
       "loopStart": 19.2,
       "loopEnd": 105.6,
       "duration": 108.6,
-      "bytes": 2966738,
-      "lufs": -16.1,
-      "truePeakDb": -1.4
+      "bytes": 3211958,
+      "lufs": -15.9,
+      "truePeakDb": -1.3
     },
     "scene-dreams-end": {
       "file": "music/scene-dreams-end.mp3",
       "loopStart": 12.63161,
       "loopEnd": 101.052653,
       "duration": 104.0526,
-      "bytes": 3047441,
+      "bytes": 3162331,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -2.6
     },
     "scene-fahrenheit": {
       "file": "music/scene-fahrenheit.mp3",
       "loopStart": 9.230771,
       "loopEnd": 73.846145,
       "duration": 76.8461,
-      "bytes": 2383354,
+      "bytes": 2408623,
       "lufs": -16.0,
-      "truePeakDb": -1.5,
+      "truePeakDb": -1.4,
       "score": "6f81c0f19ff8fa2c"
     },
     "scene-farplane": {
@@ -183,16 +183,16 @@
       "loopStart": 20.869569,
       "loopEnd": 104.347823,
       "duration": 107.3478,
-      "bytes": 3116618,
-      "lufs": -16.0,
-      "truePeakDb": -1.5
+      "bytes": 3491121,
+      "lufs": -15.9,
+      "truePeakDb": -1.3
     },
     "scene-gagazet": {
       "file": "music/scene-gagazet.mp3",
       "loopStart": 40,
       "loopEnd": 103.333333,
       "duration": 106.3333,
-      "bytes": 3100040,
+      "bytes": 3009651,
       "lufs": -16.0,
       "truePeakDb": -1.4
     },
@@ -201,9 +201,9 @@
       "loopStart": 12.857143,
       "loopEnd": 60,
       "duration": 63,
-      "bytes": 1909460,
-      "lufs": -15.9,
-      "truePeakDb": -1.5,
+      "bytes": 1973838,
+      "lufs": -16.0,
+      "truePeakDb": -3.1,
       "score": "b78867e82b34697f"
     },
     "scene-zanarkand-dome": {
@@ -211,7 +211,7 @@
       "loopStart": 10,
       "loopEnd": 126.165193,
       "duration": 129.1652,
-      "bytes": 3762249,
+      "bytes": 3936592,
       "lufs": -16.0,
       "truePeakDb": -1.5
     },
@@ -229,18 +229,18 @@
       "loopStart": 8.146508,
       "loopEnd": 72.146508,
       "duration": 75.1465,
-      "bytes": 2280936,
-      "lufs": -16.0,
-      "truePeakDb": -1.5
+      "bytes": 2324004,
+      "lufs": -15.9,
+      "truePeakDb": -2.1
     },
     "victory-ffx2": {
       "file": "music/victory-ffx2.mp3",
       "loopStart": 7.5,
       "loopEnd": 67.5,
       "duration": 70.5,
-      "bytes": 2146954,
+      "bytes": 2396379,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -1.1
     }
   },
   "sfx": {

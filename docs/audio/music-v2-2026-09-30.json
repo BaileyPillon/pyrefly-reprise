@@ -1,0 +1,1914 @@
+{
+ "what": "Music v2 (2026-09-30): the 16 FFX cues ship route S, the 7 FFX-2 cues ship route N2 (5) or its route S fallback (2) under the written pick rule. Measurements only; nobody heard any of it (AGENTS.md rule 13).",
+ "decision": "Bailey, 2026-09-30 ~14:25 EDT: \"I'll go with all your recommendations\"",
+ "gameCase": "FFX cues: FFX only (route S). FFX-2 cues: FFX-2 only (route N2). title, pause, chapter-select: both, unchanged.",
+ "base": "770823bce8a04022472485ddab19b37d31b08f1f",
+ "unchanged": [
+  "title",
+  "pause",
+  "chapter-select"
+ ],
+ "encode": "LAME V0 (libmp3lame -q:a 0), 44.1 kHz stereo",
+ "superseded": "copies in F:/pyrefly-parked/2026-09-30/audio-v2/music-v1 (MOVED.txt); also git show <base>:public/audio/music/<cue>.mp3",
+ "totals": {
+  "musicBytesBefore": 78216163,
+  "musicBytesAfter": 80892694,
+  "changedBytesBefore": 71536612,
+  "changedBytesAfter": 74213143,
+  "shippedAudioBytesBefore": 80925940,
+  "shippedAudioBytesAfter": 83602471,
+  "budgetBytes": 85000000.0
+ },
+ "gates": {
+  "qaStrictFindings": 0,
+  "browserProof": "docs/audio/music-v2-2026-09-30-browser.json"
+ },
+ "cues": [
+  {
+   "cue": "battle-ffx",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 10",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.949,
+     "final": 7.611,
+     "delta": -0.338
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 6.4,
+    "loopEnd": 76.8,
+    "duration": 79.8,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2483481,
+    "sha256": "c80729efd24897df52cb87596ccc635015c7d015aa2a2aec7b4142a35c86e2c8",
+    "qa": {
+     "lufs": -16.18,
+     "truePeakDb": -1.48,
+     "seamOk": true,
+     "seamStep": 0.0063,
+     "seamAllowed": 0.0235,
+     "seamFluxRatio": 0.26,
+     "tilt": -8.0,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.739,
+     "sideMid": -7.8,
+     "monoLoss": -0.7,
+     "lra": 6.5,
+     "riseMs": 13.0,
+     "crispDb": 1.5,
+     "hfFlatnessDb": -7.7,
+     "topEdge70": 18885,
+     "cliff": {
+      "db": 10.1,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 2567311,
+    "sha256": "07b6543b2f8a674ba0ab8ecc5ec09efaca7ea5031639016386fdb162f0aa7f40",
+    "decodedSamples": 3519180,
+    "qa": {
+     "lufs": -16.2,
+     "truePeakDb": -1.48,
+     "seamOk": true,
+     "seamStep": 0.0263,
+     "seamAllowed": 0.0434,
+     "seamFluxRatio": 0.65,
+     "tilt": -7.3,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.71,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 7.8,
+     "riseMs": 3.0,
+     "crispDb": 2.1,
+     "hfFlatnessDb": -10.2,
+     "topEdge70": 20882,
+     "cliff": {
+      "db": 4.8,
+      "hz": 20823
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-dread",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 6",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.367,
+     "final": 7.464,
+     "delta": 0.097
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 10.666667,
+    "loopEnd": 85.333333,
+    "duration": 88.3333,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2565132,
+    "sha256": "da8598ddba72fdb788d3dfa92d614c0b74606fed1462f962936dab670304e61e",
+    "qa": {
+     "lufs": -16.17,
+     "truePeakDb": -1.48,
+     "seamOk": true,
+     "seamStep": 0.0018,
+     "seamAllowed": 0.0075,
+     "seamFluxRatio": 0.35,
+     "tilt": -9.5,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.784,
+     "sideMid": -8.4,
+     "monoLoss": -0.6,
+     "lra": 6.4,
+     "riseMs": 13.0,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -7.5,
+     "topEdge70": 16328,
+     "cliff": {
+      "db": 12.6,
+      "hz": 16473
+     }
+    }
+   },
+   "after": {
+    "bytes": 2615074,
+    "sha256": "121e17e949dd0de62fe26f8e36d86bd8d591255746ee736fc5670c47aadfc6ab",
+    "decodedSamples": 3895500,
+    "qa": {
+     "lufs": -16.09,
+     "truePeakDb": -1.46,
+     "seamOk": true,
+     "seamStep": 0.0236,
+     "seamAllowed": 0.0366,
+     "seamFluxRatio": 0.78,
+     "tilt": -9.5,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.698,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 6.6,
+     "riseMs": 9.5,
+     "crispDb": 1.0,
+     "hfFlatnessDb": -6.0,
+     "topEdge70": 16354,
+     "cliff": {
+      "db": 8.5,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-evrae",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 3",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.636,
+     "final": 7.858,
+     "delta": 0.222
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 6.666667,
+    "loopEnd": 80,
+    "duration": 83,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2512223,
+    "sha256": "22ba415fdae0b62036be62a11a895f72ed2853898e66376d4c9bc8557544d3db",
+    "qa": {
+     "lufs": -16.18,
+     "truePeakDb": -1.5,
+     "seamOk": true,
+     "seamStep": 0.0024,
+     "seamAllowed": 0.0217,
+     "seamFluxRatio": 0.67,
+     "tilt": -8.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.734,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 10.4,
+     "riseMs": 15.5,
+     "crispDb": 1.4,
+     "hfFlatnessDb": -10.1,
+     "topEdge70": 16979,
+     "cliff": {
+      "db": 10.1,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 2719357,
+    "sha256": "b2d490ff07e830eaae0b2a732d105c512ca27f368642fc81f4d9940a3648a7b1",
+    "decodedSamples": 3660300,
+    "qa": {
+     "lufs": -16.11,
+     "truePeakDb": -1.41,
+     "seamOk": true,
+     "seamStep": 0.3222,
+     "seamAllowed": 0.4964,
+     "seamFluxRatio": 1.0,
+     "tilt": -7.1,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.704,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 8.0,
+     "riseMs": 3.0,
+     "crispDb": 1.9,
+     "hfFlatnessDb": -10.2,
+     "topEdge70": 19514,
+     "cliff": {
+      "db": 4.4,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-jecht",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 5",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 6.904,
+     "final": 7.473,
+     "delta": 0.569
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 6.666667,
+    "loopEnd": 107.121678,
+    "duration": 110.1217,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3312113,
+    "sha256": "52680170c14a33274baaac152415bab46bd72a521b12a67b07c5388ed835961f",
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.49,
+     "seamOk": true,
+     "seamStep": 0.025,
+     "seamAllowed": 0.0715,
+     "seamFluxRatio": 0.31,
+     "tilt": -8.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.826,
+     "sideMid": -7.6,
+     "monoLoss": -0.7,
+     "lra": 5.4,
+     "riseMs": 15.0,
+     "crispDb": 1.4,
+     "hfFlatnessDb": -10.3,
+     "topEdge70": 15929,
+     "cliff": {
+      "db": 10.6,
+      "hz": 16473
+     }
+    }
+   },
+   "after": {
+    "bytes": 3534672,
+    "sha256": "f54493a12001620c365edb3e954a5542cd29c4a9902ab37d147d922233dd0451",
+    "decodedSamples": 4856366,
+    "qa": {
+     "lufs": -16.21,
+     "truePeakDb": -1.47,
+     "seamOk": true,
+     "seamStep": 0.0124,
+     "seamAllowed": 0.0335,
+     "seamFluxRatio": 0.91,
+     "tilt": -7.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.718,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 7.2,
+     "riseMs": 3.5,
+     "crispDb": 2.9,
+     "hfFlatnessDb": -9.7,
+     "topEdge70": 18244,
+     "cliff": {
+      "db": 5.6,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-seymour",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 3",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.502,
+     "final": 7.616,
+     "delta": 0.114
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 7.272721,
+    "loopEnd": 98.661791,
+    "duration": 101.6618,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2960096,
+    "sha256": "cd10de655aa9e8c886739774480c58ebab504f9553a063d52114987e5aa17bda",
+    "qa": {
+     "lufs": -16.08,
+     "truePeakDb": -1.53,
+     "seamOk": true,
+     "seamStep": 0.0125,
+     "seamAllowed": 0.0545,
+     "seamFluxRatio": 0.84,
+     "tilt": -8.9,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.775,
+     "sideMid": -8.3,
+     "monoLoss": -0.6,
+     "lra": 7.3,
+     "riseMs": 15.0,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -8.1,
+     "topEdge70": 16624,
+     "cliff": {
+      "db": 9.8,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 3319277,
+    "sha256": "d631ed83e058e41848461c4295434175b84c441d4eac09bafd0d2d137f8a6fc4",
+    "decodedSamples": 4483285,
+    "qa": {
+     "lufs": -16.17,
+     "truePeakDb": -1.46,
+     "seamOk": true,
+     "seamStep": 0.0607,
+     "seamAllowed": 0.1107,
+     "seamFluxRatio": 1.0,
+     "tilt": -8.1,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.698,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 7.5,
+     "riseMs": 2.0,
+     "crispDb": 1.7,
+     "hfFlatnessDb": -7.7,
+     "topEdge70": 19541,
+     "cliff": {
+      "db": 5.8,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-seymour-macalania",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 5",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.556,
+     "final": 7.887,
+     "delta": 0.331
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 7.619048,
+    "loopEnd": 121.904762,
+    "duration": 124.9048,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3851212,
+    "sha256": "35c570298cfb08db85b2ecf772e3b368b3a50d305bb0dc6769881568c989342e",
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.45,
+     "seamOk": true,
+     "seamStep": 0.0238,
+     "seamAllowed": 0.0693,
+     "seamFluxRatio": 0.45,
+     "tilt": -6.9,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.781,
+     "sideMid": -8.2,
+     "monoLoss": -0.6,
+     "lra": 7.4,
+     "riseMs": 31.0,
+     "crispDb": 1.4,
+     "hfFlatnessDb": -7.2,
+     "topEdge70": 18766,
+     "cliff": {
+      "db": 9.6,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 3774749,
+    "sha256": "7b48e0b040c9dea82578001d31ee9a102f0d82195e848bc19e89eec5c9bbe447",
+    "decodedSamples": 5508300,
+    "qa": {
+     "lufs": -16.16,
+     "truePeakDb": -1.54,
+     "seamOk": true,
+     "seamStep": 0.0078,
+     "seamAllowed": 0.0146,
+     "seamFluxRatio": 0.65,
+     "tilt": -6.5,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.698,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 5.4,
+     "riseMs": 3.5,
+     "crispDb": 1.6,
+     "hfFlatnessDb": -17.8,
+     "topEdge70": 21296,
+     "cliff": {
+      "db": 12.3,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-yojimbo",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 5",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.136,
+     "final": 7.787,
+     "delta": 0.651
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 14.545465,
+    "loopEnd": 87.272721,
+    "duration": 90.2727,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2626957,
+    "sha256": "be28df009e1c3bbff637fa5d405341f120cb6af74353061c76a94974b8f35f56",
+    "qa": {
+     "lufs": -16.17,
+     "truePeakDb": -1.37,
+     "seamOk": true,
+     "seamStep": 0.0101,
+     "seamAllowed": 0.0295,
+     "seamFluxRatio": 0.39,
+     "tilt": -9.7,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.808,
+     "sideMid": -8.5,
+     "monoLoss": -0.6,
+     "lra": 6.0,
+     "riseMs": 13.0,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -10.6,
+     "topEdge70": 16586,
+     "cliff": {
+      "db": 7.9,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 2650013,
+    "sha256": "e8ee4c4f2bc114add533d08df90c537e6df365b2728475ca5d0642064cf541ce",
+    "decodedSamples": 3981027,
+    "qa": {
+     "lufs": -16.17,
+     "truePeakDb": -1.44,
+     "seamOk": true,
+     "seamStep": 0.0448,
+     "seamAllowed": 0.1092,
+     "seamFluxRatio": 1.0,
+     "tilt": -8.3,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.695,
+     "sideMid": -7.4,
+     "monoLoss": -0.7,
+     "lra": 8.5,
+     "riseMs": 17.0,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -16.1,
+     "topEdge70": 20440,
+     "cliff": {
+      "db": 15.8,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-yu-yevon",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 6",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.004,
+     "final": 7.531,
+     "delta": 0.527
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 6,
+    "loopEnd": 215.6,
+    "duration": 218.6,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 6314200,
+    "sha256": "0b856296ed88f30db4f53655b2e2c647012312c249c46baff3a1d1a7d14c452e",
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.49,
+     "seamOk": true,
+     "seamStep": 0.0067,
+     "seamAllowed": 0.0266,
+     "seamFluxRatio": 0.55,
+     "tilt": -9.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.837,
+     "sideMid": -9.3,
+     "monoLoss": -0.5,
+     "lra": 7.5,
+     "riseMs": 7.5,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -5.5,
+     "topEdge70": 16328,
+     "cliff": {
+      "db": 9.9,
+      "hz": 16462
+     }
+    }
+   },
+   "after": {
+    "bytes": 6419190,
+    "sha256": "2f0fdc9fe13f1fc48ffbb139907a33a5d275f42b81bd1fb964cb640457aa1c05",
+    "decodedSamples": 9640260,
+    "qa": {
+     "lufs": -16.1,
+     "truePeakDb": -1.46,
+     "seamOk": true,
+     "seamStep": 0.0239,
+     "seamAllowed": 0.0424,
+     "seamFluxRatio": 0.93,
+     "tilt": -8.8,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.698,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 7.9,
+     "riseMs": 5.0,
+     "crispDb": 1.1,
+     "hfFlatnessDb": -5.2,
+     "topEdge70": 16220,
+     "cliff": {
+      "db": 15.5,
+      "hz": 16473
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-yunalesca",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 6",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.489,
+     "final": 7.846,
+     "delta": 0.357
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 10.909093,
+    "loopEnd": 100.909093,
+    "duration": 103.9091,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3040951,
+    "sha256": "11186fa6d5bf8053fad82403ea54f64cc1e16dce0f72f7a8be54dbaa549c4f59",
+    "qa": {
+     "lufs": -16.09,
+     "truePeakDb": -1.48,
+     "seamOk": true,
+     "seamStep": 0.0115,
+     "seamAllowed": 0.0546,
+     "seamFluxRatio": 0.37,
+     "tilt": -9.3,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.766,
+     "sideMid": -8.5,
+     "monoLoss": -0.6,
+     "lra": 8.3,
+     "riseMs": 29.5,
+     "crispDb": 1.3,
+     "hfFlatnessDb": -7.3,
+     "topEdge70": 16737,
+     "cliff": {
+      "db": 8.3,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 3055321,
+    "sha256": "6e046e5b0bd217528ec88c2c10740a0a22d9e4efdf54fc60fbdd4d5b9cd5a2c7",
+    "decodedSamples": 4582391,
+    "qa": {
+     "lufs": -16.1,
+     "truePeakDb": -1.45,
+     "seamOk": true,
+     "seamStep": 0.0286,
+     "seamAllowed": 0.0812,
+     "seamFluxRatio": 0.76,
+     "tilt": -10.1,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.728,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 7.6,
+     "riseMs": 13.5,
+     "crispDb": 1.4,
+     "hfFlatnessDb": -15.6,
+     "topEdge70": 16516,
+     "cliff": {
+      "db": 6.8,
+      "hz": 21076
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "ending-ffx",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 6",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.56,
+     "final": 7.89,
+     "delta": 0.33
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 33.642358,
+    "loopEnd": 122.653741,
+    "duration": 125.6537,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3704799,
+    "sha256": "38e768f77f88a9a4194f77fbbe1712c19cef8a5ef02e6fa682c61acaf8f81344",
+    "qa": {
+     "lufs": -16.11,
+     "truePeakDb": -1.5,
+     "seamOk": true,
+     "seamStep": 0.0172,
+     "seamAllowed": 0.056,
+     "seamFluxRatio": 0.83,
+     "tilt": -9.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.772,
+     "sideMid": -8.6,
+     "monoLoss": -0.6,
+     "lra": 10.7,
+     "riseMs": 20.5,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -10.7,
+     "topEdge70": 16451,
+     "cliff": {
+      "db": 9.3,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 3600003,
+    "sha256": "d84d0ef15c4e8af121a25ce3006a5443fe51ab52079c3bdfa7d7b1c99ddee413",
+    "decodedSamples": 5541330,
+    "qa": {
+     "lufs": -16.11,
+     "truePeakDb": -1.91,
+     "seamOk": true,
+     "seamStep": 0.0545,
+     "seamAllowed": 0.0828,
+     "seamFluxRatio": 0.55,
+     "tilt": -9.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.698,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 8.2,
+     "riseMs": 9.0,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -13.0,
+     "topEdge70": 16371,
+     "cliff": {
+      "db": 8.2,
+      "hz": 16468
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "scene-dreams-end",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 6",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.478,
+     "final": 7.869,
+     "delta": 0.391
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 12.63161,
+    "loopEnd": 101.052653,
+    "duration": 104.0526,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3047441,
+    "sha256": "86e7dab6d8446dafa10ee69ee3d2204be8393530ff667c5bb1ac34f92fc7b6ee",
+    "qa": {
+     "lufs": -16.1,
+     "truePeakDb": -1.48,
+     "seamOk": true,
+     "seamStep": 0.0033,
+     "seamAllowed": 0.0188,
+     "seamFluxRatio": 0.17,
+     "tilt": -9.1,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.799,
+     "sideMid": -8.6,
+     "monoLoss": -0.6,
+     "lra": 17.1,
+     "riseMs": 22.5,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -9.2,
+     "topEdge70": 16645,
+     "cliff": {
+      "db": 9.2,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 3162331,
+    "sha256": "0a3f7068117b529f813e5bb7412aab05562eae7e4913a2298fb03e0d1a2bace7",
+    "decodedSamples": 4588721,
+    "qa": {
+     "lufs": -16.17,
+     "truePeakDb": -2.61,
+     "seamOk": true,
+     "seamStep": 0.0058,
+     "seamAllowed": 0.0095,
+     "seamFluxRatio": 0.38,
+     "tilt": -8.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.698,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 14.1,
+     "riseMs": 7.0,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -11.6,
+     "topEdge70": 16543,
+     "cliff": {
+      "db": 12.2,
+      "hz": 11585
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "scene-fahrenheit",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 5",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.715,
+     "final": 7.888,
+     "delta": 0.173
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 9.230771,
+    "loopEnd": 73.846145,
+    "duration": 76.8461,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2383354,
+    "sha256": "1b1945413baaebf72e3b4d17826c0f4a8b116b392c2139b9809e1b3f8b5dd59d",
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.48,
+     "seamOk": true,
+     "seamStep": 0.0041,
+     "seamAllowed": 0.0103,
+     "seamFluxRatio": 0.43,
+     "tilt": -8.3,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.789,
+     "sideMid": -8.7,
+     "monoLoss": -0.5,
+     "lra": 14.4,
+     "riseMs": 18.5,
+     "crispDb": 1.3,
+     "hfFlatnessDb": -12.5,
+     "topEdge70": 18621,
+     "cliff": {
+      "db": 8.8,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 2408623,
+    "sha256": "6de1361f59cd4017fd8b0e5eb1ff43a38cd3a603094bd4c5afbcfa6555566697",
+    "decodedSamples": 3388915,
+    "qa": {
+     "lufs": -16.19,
+     "truePeakDb": -1.45,
+     "seamOk": true,
+     "seamStep": 0.0828,
+     "seamAllowed": 0.1376,
+     "seamFluxRatio": 0.54,
+     "tilt": -8.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.705,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 11.7,
+     "riseMs": 17.0,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -16.4,
+     "topEdge70": 17404,
+     "cliff": {
+      "db": 8.4,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "scene-gagazet",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 6",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 6.534,
+     "final": 7.082,
+     "delta": 0.548
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 40,
+    "loopEnd": 103.333333,
+    "duration": 106.3333,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3100040,
+    "sha256": "74b749c071c27e30bf60e77d070eecd09f6248789c0f3184e2a1c2fc9a24bcfd",
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.37,
+     "seamOk": true,
+     "seamStep": 0.0018,
+     "seamAllowed": 0.0135,
+     "seamFluxRatio": 0.14,
+     "tilt": -10.0,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.73,
+     "sideMid": -7.3,
+     "monoLoss": -0.7,
+     "lra": 11.1,
+     "riseMs": 11.0,
+     "crispDb": 1.3,
+     "hfFlatnessDb": -6.6,
+     "topEdge70": 16441,
+     "cliff": {
+      "db": 8.2,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 3009651,
+    "sha256": "f643e6789b6d5cbbd399828f2e5f56993c8883b7b2b59fe2d3ea11071dccd7c5",
+    "decodedSamples": 4689300,
+    "qa": {
+     "lufs": -16.14,
+     "truePeakDb": -1.38,
+     "seamOk": true,
+     "seamStep": 0.0548,
+     "seamAllowed": 0.0925,
+     "seamFluxRatio": 0.91,
+     "tilt": -10.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.708,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 9.5,
+     "riseMs": 6.0,
+     "crispDb": 1.3,
+     "hfFlatnessDb": -4.8,
+     "topEdge70": 16694,
+     "cliff": {
+      "db": 5.8,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "scene-macalania-temple",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 3",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.252,
+     "final": 7.855,
+     "delta": 0.603
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 12.857143,
+    "loopEnd": 60,
+    "duration": 63,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 1909460,
+    "sha256": "656b29b399de740bc177ed049f1e886bc7305924a6d9859315f0f1c6032c4f9d",
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.52,
+     "seamOk": true,
+     "seamStep": 0.0208,
+     "seamAllowed": 0.0782,
+     "seamFluxRatio": 1.0,
+     "tilt": -8.2,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.741,
+     "sideMid": -8.3,
+     "monoLoss": -0.6,
+     "lra": 7.8,
+     "riseMs": 13.5,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -10.4,
+     "topEdge70": 16478,
+     "cliff": {
+      "db": 9.5,
+      "hz": 16457
+     }
+    }
+   },
+   "after": {
+    "bytes": 1973838,
+    "sha256": "fae686829025b1d1197c8436079cc14ac99c66b0fbe1312ade6195354884c905",
+    "decodedSamples": 2778300,
+    "qa": {
+     "lufs": -16.2,
+     "truePeakDb": -3.06,
+     "seamOk": true,
+     "seamStep": 0.071,
+     "seamAllowed": 0.1589,
+     "seamFluxRatio": 0.87,
+     "tilt": -8.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.716,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 6.1,
+     "riseMs": 12.0,
+     "crispDb": 1.1,
+     "hfFlatnessDb": -15.9,
+     "topEdge70": 19827,
+     "cliff": {
+      "db": 8.0,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "scene-zanarkand-dome",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 7",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.422,
+     "final": 7.883,
+     "delta": 0.461
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 10,
+    "loopEnd": 126.165193,
+    "duration": 129.1652,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3762249,
+    "sha256": "f957600ae58397ab743340119e5abf6f9a9d6aa2dfebd3522e68299eefa13aba",
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.47,
+     "seamOk": true,
+     "seamStep": 0.009,
+     "seamAllowed": 0.0262,
+     "seamFluxRatio": 0.52,
+     "tilt": -9.8,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.758,
+     "sideMid": -8.5,
+     "monoLoss": -0.6,
+     "lra": 16.6,
+     "riseMs": 12.0,
+     "crispDb": 1.3,
+     "hfFlatnessDb": -9.6,
+     "topEdge70": 16624,
+     "cliff": {
+      "db": 7.9,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 3936592,
+    "sha256": "5bba9a27ceadfba7d97d54d9bb2d7081ab444cc5a39ed4b9fafd53f594ce859c",
+    "decodedSamples": 5696185,
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.49,
+     "seamOk": true,
+     "seamStep": 0.0676,
+     "seamAllowed": 0.1026,
+     "seamFluxRatio": 0.99,
+     "tilt": -10.5,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.7,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 12.0,
+     "riseMs": 12.0,
+     "crispDb": 1.1,
+     "hfFlatnessDb": -12.6,
+     "topEdge70": 12764,
+     "cliff": {
+      "db": 9.7,
+      "hz": 16468
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "victory-ffx",
+   "game": "FFX",
+   "route": "S",
+   "source": "our score, free sampled orchestra in the measured Arvedi hall, no AI; iteration 5",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 8.036,
+     "final": 8.029,
+     "delta": -0.007
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx",
+   "loop": {
+    "loopStart": 8.146508,
+    "loopEnd": 72.146508,
+    "duration": 75.1465,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2280936,
+    "sha256": "8b646f1f8d9bc1b7f29a6a3daebc61ce62c937176a2d651e652abe8020e8e9cc",
+    "qa": {
+     "lufs": -16.21,
+     "truePeakDb": -1.47,
+     "seamOk": true,
+     "seamStep": 0.0056,
+     "seamAllowed": 0.0495,
+     "seamFluxRatio": 0.9,
+     "tilt": -8.8,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.816,
+     "sideMid": -9.0,
+     "monoLoss": -0.5,
+     "lra": 9.4,
+     "riseMs": 29.5,
+     "crispDb": 1.4,
+     "hfFlatnessDb": -9.8,
+     "topEdge70": 18842,
+     "cliff": {
+      "db": 7.9,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 2324004,
+    "sha256": "02c9f9024bbd692a10c350c5eea36ad6976857aff687f1f2fc0593955a981ff1",
+    "decodedSamples": 3313961,
+    "qa": {
+     "lufs": -16.08,
+     "truePeakDb": -2.09,
+     "seamOk": true,
+     "seamStep": 0.0631,
+     "seamAllowed": 0.1499,
+     "seamFluxRatio": 0.74,
+     "tilt": -9.5,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.705,
+     "sideMid": -7.5,
+     "monoLoss": -0.7,
+     "lra": 6.9,
+     "riseMs": 13.0,
+     "crispDb": 1.4,
+     "hfFlatnessDb": -13.7,
+     "topEdge70": 18244,
+     "cliff": {
+      "db": 12.4,
+      "hz": 21447
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-ffx2-aeon",
+   "game": "FFX-2",
+   "route": "N2",
+   "source": "ACE-Step 1.5 turbo over our route S band render, denoise 0.3, seed 505, 8 steps, band wording; structure fidelity 0.884",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.431,
+     "S": 7.815,
+     "final": 8.231
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx2",
+   "loop": {
+    "loopStart": 12,
+    "loopEnd": 114,
+    "duration": 117,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3468368,
+    "sha256": "614b2919fcab5f14f3254f0939409ed4d6cb6c0cf2a070bd8755f1ac5711fe91",
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.46,
+     "seamOk": true,
+     "seamStep": 0.003,
+     "seamAllowed": 0.0442,
+     "seamFluxRatio": 1.01,
+     "tilt": -8.1,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.7,
+     "sideMid": -6.9,
+     "monoLoss": -0.8,
+     "lra": 5.2,
+     "riseMs": 14.5,
+     "crispDb": 1.5,
+     "hfFlatnessDb": -7.6,
+     "topEdge70": 16328,
+     "cliff": {
+      "db": 8.7,
+      "hz": 16451
+     }
+    }
+   },
+   "after": {
+    "bytes": 4069829,
+    "sha256": "cd9385ea2f4a9fd046a149525f994339fb0b1d51dae6709ed890db7fb403b89b",
+    "decodedSamples": 5159700,
+    "qa": {
+     "lufs": -16.0,
+     "truePeakDb": -1.73,
+     "seamOk": true,
+     "seamStep": 0.0353,
+     "seamAllowed": 0.0646,
+     "seamFluxRatio": 0.89,
+     "tilt": -6.5,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.643,
+     "sideMid": -6.6,
+     "monoLoss": -0.9,
+     "lra": 4.7,
+     "riseMs": 2.0,
+     "crispDb": 5.1,
+     "hfFlatnessDb": -5.6,
+     "topEdge70": 21173,
+     "cliff": {
+      "db": 38.5,
+      "hz": 21146
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-shuyin",
+   "game": "FFX-2",
+   "route": "N2",
+   "source": "ACE-Step 1.5 xl over our route S band render, denoise 0.25, seed 505, 8 steps, band wording; structure fidelity 0.802",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 6.581,
+     "S": 7.781,
+     "final": 8.036
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx2",
+   "loop": {
+    "loopStart": 12.551406,
+    "loopEnd": 102.796009,
+    "duration": 105.797,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3078838,
+    "sha256": "e2b83f2beffa0541444e4a4ae30dc88c58a3647fe9bc5e29ffb5cdac0bb4c7f6",
+    "qa": {
+     "lufs": -16.13,
+     "truePeakDb": -1.43,
+     "seamOk": true,
+     "seamStep": 0.0035,
+     "seamAllowed": 0.0236,
+     "seamFluxRatio": 0.36,
+     "tilt": -10.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.721,
+     "sideMid": -7.4,
+     "monoLoss": -0.7,
+     "lra": 7.5,
+     "riseMs": 10.0,
+     "crispDb": 1.3,
+     "hfFlatnessDb": -10.6,
+     "topEdge70": 16247,
+     "cliff": {
+      "db": 7.9,
+      "hz": 16451
+     }
+    }
+   },
+   "after": {
+    "bytes": 3324154,
+    "sha256": "d9f3f35144d8219231bdaabd0175b676a0a2e293b9c717e79e7b3406b95264c8",
+    "decodedSamples": 4665648,
+    "qa": {
+     "lufs": -16.01,
+     "truePeakDb": -1.31,
+     "seamOk": true,
+     "seamStep": 0.003,
+     "seamAllowed": 0.0136,
+     "seamFluxRatio": 0.83,
+     "tilt": -9.1,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.65,
+     "sideMid": -6.7,
+     "monoLoss": -0.8,
+     "lra": 7.1,
+     "riseMs": 3.0,
+     "crispDb": 1.6,
+     "hfFlatnessDb": -9.4,
+     "topEdge70": 20160,
+     "cliff": {
+      "db": 40.4,
+      "hz": 20973
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "boss-vegnagun",
+   "game": "FFX-2",
+   "route": "S (N2 fallback)",
+   "source": "our route S band render; no N2 take kept structure fidelity 0.80 (no take of 30 (denoise 0.30, 0.25, 0.20; turbo and XL; seeds 101-505) reached SF 0.80 (best 0.775))",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.112,
+     "S": 6.927,
+     "final": 6.927
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx2",
+   "loop": {
+    "loopStart": 11.428571,
+    "loopEnd": 91.428571,
+    "duration": 94.4286,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3345784,
+    "sha256": "15ed9e486b55518ef8a573d8956186bf7037721bc6578fb6257c27770bb84d64",
+    "qa": {
+     "lufs": -15.98,
+     "truePeakDb": -1.34,
+     "seamOk": true,
+     "seamStep": 0.0583,
+     "seamAllowed": 0.0965,
+     "seamFluxRatio": 1.0,
+     "tilt": -9.0,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.83,
+     "sideMid": -10.3,
+     "monoLoss": -0.4,
+     "lra": 5.5,
+     "riseMs": 5.0,
+     "crispDb": 2.1,
+     "hfFlatnessDb": -8.4,
+     "topEdge70": 22050,
+     "cliff": {
+      "db": 1.0,
+      "hz": 16430
+     }
+    }
+   },
+   "after": {
+    "bytes": 3065960,
+    "sha256": "ebab191afb47184e28e10ef7e6baf01c8307af64ddff62570df89257e47b7e78",
+    "decodedSamples": 4164301,
+    "qa": {
+     "lufs": -16.0,
+     "truePeakDb": -1.3,
+     "seamOk": true,
+     "seamStep": 0.1419,
+     "seamAllowed": 0.2296,
+     "seamFluxRatio": 0.61,
+     "tilt": -6.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.694,
+     "sideMid": -7.4,
+     "monoLoss": -0.7,
+     "lra": 8.3,
+     "riseMs": 14.0,
+     "crispDb": 1.9,
+     "hfFlatnessDb": -15.5,
+     "topEdge70": 22050,
+     "cliff": {
+      "db": 8.8,
+      "hz": 10837
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "ending-ffx2",
+   "game": "FFX-2",
+   "route": "N2",
+   "source": "ACE-Step 1.5 turbo over our route S band render, denoise 0.25, seed 303, 8 steps, band wording; structure fidelity 0.803",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.535,
+     "S": 7.972,
+     "final": 8.052
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx2",
+   "loop": {
+    "loopStart": 12.082494,
+    "loopEnd": 116.331655,
+    "duration": 119.3317,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3558668,
+    "sha256": "b4f54e7d3b9f4110d0f57bc33f3209ac5465b5c1b6aa8c04632f4ac400711491",
+    "qa": {
+     "lufs": -16.12,
+     "truePeakDb": -1.46,
+     "seamOk": true,
+     "seamStep": 0.0014,
+     "seamAllowed": 0.0187,
+     "seamFluxRatio": 0.34,
+     "tilt": -8.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.772,
+     "sideMid": -8.2,
+     "monoLoss": -0.6,
+     "lra": 9.7,
+     "riseMs": 15.5,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -9.1,
+     "topEdge70": 16780,
+     "cliff": {
+      "db": 8.0,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 3583736,
+    "sha256": "c8f6e1b7294495ac591b8bf8009e7477da066858037f25a7d10f7fac25076b37",
+    "decodedSamples": 5262528,
+    "qa": {
+     "lufs": -16.03,
+     "truePeakDb": -1.32,
+     "seamOk": true,
+     "seamStep": 0.0017,
+     "seamAllowed": 0.0057,
+     "seamFluxRatio": 0.97,
+     "tilt": -8.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.646,
+     "sideMid": -6.3,
+     "monoLoss": -0.9,
+     "lra": 11.7,
+     "riseMs": 3.0,
+     "crispDb": 1.3,
+     "hfFlatnessDb": -13.8,
+     "topEdge70": 20160,
+     "cliff": {
+      "db": 33.5,
+      "hz": 21103
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "scene-bevelle-underground",
+   "game": "FFX-2",
+   "route": "N2",
+   "source": "ACE-Step 1.5 turbo over our route S band render, denoise 0.3, seed 505, 8 steps, band wording; structure fidelity 0.823",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.647,
+     "S": 8.058,
+     "final": 8.322
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx2",
+   "loop": {
+    "loopStart": 19.2,
+    "loopEnd": 105.6,
+    "duration": 108.6,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2966738,
+    "sha256": "85c58ee83c83547b2e20a54c48dba5bd0f000226190f9d267bd7c3d06b36750f",
+    "qa": {
+     "lufs": -16.2,
+     "truePeakDb": -1.35,
+     "seamOk": true,
+     "seamStep": 0.0261,
+     "seamAllowed": 0.0414,
+     "seamFluxRatio": 0.97,
+     "tilt": -10.6,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.836,
+     "sideMid": -10.5,
+     "monoLoss": -0.4,
+     "lra": 6.5,
+     "riseMs": 5.0,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -12.4,
+     "topEdge70": 15402,
+     "cliff": {
+      "db": 1.8,
+      "hz": 16629
+     }
+    }
+   },
+   "after": {
+    "bytes": 3211958,
+    "sha256": "b690f11c593630f73c38505c3cfeead44770eb17267f03835e69a1b70e893311",
+    "decodedSamples": 4789260,
+    "qa": {
+     "lufs": -16.0,
+     "truePeakDb": -1.26,
+     "seamOk": true,
+     "seamStep": 0.0025,
+     "seamAllowed": 0.0099,
+     "seamFluxRatio": 1.0,
+     "tilt": -8.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.656,
+     "sideMid": -6.8,
+     "monoLoss": -0.8,
+     "lra": 8.9,
+     "riseMs": 5.0,
+     "crispDb": 1.6,
+     "hfFlatnessDb": -13.7,
+     "topEdge70": 14949,
+     "cliff": {
+      "db": 11.3,
+      "hz": 20844
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "scene-farplane",
+   "game": "FFX-2",
+   "route": "S (N2 fallback)",
+   "source": "our route S band render; no N2 take kept structure fidelity 0.80 (no take of 30 (denoise 0.30, 0.25, 0.20; turbo and XL; seeds 101-505) reached SF 0.80 (best 0.753))",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 6.975,
+     "S": 7.665,
+     "final": 7.665
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx2",
+   "loop": {
+    "loopStart": 20.869569,
+    "loopEnd": 104.347823,
+    "duration": 107.3478,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 3116618,
+    "sha256": "33ea140bec29056b0a5caa4867b81f12243f39105cbd3ed5cea9dd2dfd566d15",
+    "qa": {
+     "lufs": -16.15,
+     "truePeakDb": -1.52,
+     "seamOk": true,
+     "seamStep": 0.0093,
+     "seamAllowed": 0.0456,
+     "seamFluxRatio": 0.65,
+     "tilt": -10.8,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.822,
+     "sideMid": -8.6,
+     "monoLoss": -0.6,
+     "lra": 3.2,
+     "riseMs": 7.5,
+     "crispDb": 1.2,
+     "hfFlatnessDb": -11.8,
+     "topEdge70": 16489,
+     "cliff": {
+      "db": 9.3,
+      "hz": 16473
+     }
+    }
+   },
+   "after": {
+    "bytes": 3491121,
+    "sha256": "898c4d0297db8d383ad21f50f97516dc1ab531f5d79fe79cf83e9f4c0a215b50",
+    "decodedSamples": 4734038,
+    "qa": {
+     "lufs": -16.0,
+     "truePeakDb": -1.3,
+     "seamOk": true,
+     "seamStep": 0.0062,
+     "seamAllowed": 0.0152,
+     "seamFluxRatio": 1.0,
+     "tilt": -12.0,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.648,
+     "sideMid": -6.7,
+     "monoLoss": -0.8,
+     "lra": 2.5,
+     "riseMs": 5.0,
+     "crispDb": 1.1,
+     "hfFlatnessDb": -13.7,
+     "topEdge70": 14341,
+     "cliff": {
+      "db": 12.9,
+      "hz": 16473
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  },
+  {
+   "cue": "victory-ffx2",
+   "game": "FFX-2",
+   "route": "N2",
+   "source": "ACE-Step 1.5 xl over our route S band render, denoise 0.3, seed 404, 8 steps, band wording; structure fidelity 0.942",
+   "ear": {
+    "pairedPQ": {
+     "shipped": 7.937,
+     "S": 8.14,
+     "final": 8.31
+    }
+   },
+   "scratch": "D:/Tools/pyrefly-scratch/audio-v2/ffx2",
+   "loop": {
+    "loopStart": 7.5,
+    "loopEnd": 67.5,
+    "duration": 70.5,
+    "unchanged": true
+   },
+   "before": {
+    "bytes": 2146954,
+    "sha256": "1061d710d80af7ba65078bc2a400661fd9ac0ff18b78a98e1b6ff1d221f34953",
+    "qa": {
+     "lufs": -16.06,
+     "truePeakDb": -1.48,
+     "seamOk": true,
+     "seamStep": 0.031,
+     "seamAllowed": 0.0806,
+     "seamFluxRatio": 0.29,
+     "tilt": -7.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.655,
+     "sideMid": -6.5,
+     "monoLoss": -0.9,
+     "lra": 4.5,
+     "riseMs": 23.5,
+     "crispDb": 1.8,
+     "hfFlatnessDb": -4.7,
+     "topEdge70": 19590,
+     "cliff": {
+      "db": 7.9,
+      "hz": 21447
+     }
+    }
+   },
+   "after": {
+    "bytes": 2396379,
+    "sha256": "199f3ac9b60022e1105b064b09d959ebb006e5b49caf4627d7a0f47363062637",
+    "decodedSamples": 3109050,
+    "qa": {
+     "lufs": -16.08,
+     "truePeakDb": -1.08,
+     "seamOk": true,
+     "seamStep": 0.0227,
+     "seamAllowed": 0.0776,
+     "seamFluxRatio": 0.87,
+     "tilt": -6.4,
+     "failures": []
+    },
+    "measure": {
+     "corr": 0.795,
+     "sideMid": -9.2,
+     "monoLoss": -0.5,
+     "lra": 2.1,
+     "riseMs": 3.0,
+     "crispDb": 4.4,
+     "hfFlatnessDb": -4.1,
+     "topEdge70": 21237,
+     "cliff": {
+      "db": 38.0,
+      "hz": 21146
+     }
+    }
+   },
+   "themesStereoGate": {
+    "corr": true,
+    "sideMid": true,
+    "monoLoss": true
+   }
+  }
+ ]
+}

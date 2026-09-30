@@ -14,7 +14,7 @@ licences require, and what has to appear in the game's credits.
 | | Where | In git? | In the build? |
 |---|---|---|---|
 | Sample libraries (`.sf2`, ~1.9 GB) | `D:/Tools/audio-libs/` | no | no |
-| Rendered cues (`public/audio/**`, ~33 MB) | repo | **yes** | yes |
+| Rendered cues (`public/audio/**`, ~84 MB) | repo | **yes** | yes |
 | Scores, instruments, DSP (`src/audio/`) | repo | yes | yes |
 
 The libraries are an input to the build, in the same way a font or a compiler
@@ -88,8 +88,8 @@ royalty-free use for any purpose, commercial included, and restricts only
 redistributing the IR files themselves, which we never do: only music convolved
 with them is published. Used so far by `tools/audio/modern/render-evrae.mjs`
 (the "Musikvereinsaal" file) for the Chapter VIII modern-sound candidates in
-`public/audio/candidates/modern-*.mp3`; **no shipped cue uses it yet**. If one
-does, credit "Impulse responses: Voxengo (Aleksey Vaneev)".
+`public/audio/candidates/modern-*.mp3`. Since music v2 (2026-09-30) shipped cues use
+its "Direct Cabinet N2" file for the guitar cabinet (below), so the credit "Impulse responses: Voxengo (Aleksey Vaneev)" applies.
 
 ### Per cue: `scene-macalania-temple` (Chapter VII, FFX only, 2026-09-29)
 
@@ -138,25 +138,59 @@ Music restyled with ACE-Step v1 3.5B (ACE Studio and StepFun) — Apache-2.0
 Open: the on-disk checkpoint's hash was not compared with the repackage's published file, so
 "the file on disk is that upload" rests on the file name and `docs/audio/downloads-2026-09-27.md`.
 
+### Music v2: route S and route N2 (2026-09-30)
+
+Bailey, 2026-09-30: "I'll go with all your recommendations". The 16 FFX cues now ship **route S**: the cue's
+own score played offline by the free sample libraries below in a measured concert hall, mixed and mastered,
+with **no AI**. The 7 FFX-2 cues ship **route N2**: the same kind of route S render (a band arrangement of the
+cue's own score), restyled by ACE-Step 1.5 at denoise 0.25-0.30; `boss-vegnagun` and `scene-farplane` ship
+their route S render (no N2 take passed the pick rule). `title`, `pause` and `chapter-select` are unchanged
+(the R1 section above). Records: `docs/audio/music-v2-2026-09-30.json`, `docs/handoff/music-v2.md`; renderers
+and every iteration in `D:/Tools/pyrefly-scratch/audio-v2/ffx` and `ffx2`. Every library lives on this disk
+under `D:/Tools/audio-libs/` (downloads recorded in `D:/Tools/downloads.md`) and none is committed or
+shipped: only our renders are. Nothing ships locally only.
+
+| Library or tool | Used in music v2 for | Licence | Credit |
+|---|---|---|---|
+| VSCO 2 Community Edition (Versilian Studios) | strings, brass, winds, oboe, solo violin, pizzicato, organ, harp, timpani, tubular bells, glockenspiel, marimba | CC0 | thanks (not required) |
+| VCSL, Versilian Community Sample Library (Versilian Studios) | Steinway B piano, Flemish harpsichord, vibraphone, suspended cymbal, bass drum, shaker, anvil | CC0 | thanks |
+| Sonatina Symphonic Orchestra (Mattias Westlund) | choir, alto flute (samples processed) | CC Sampling Plus 1.0 | **required** (already listed) |
+| Salamander Grand Piano V3 (Alexander Holm) | piano in `boss-shuyin` and `ending-ffx2` | CC-BY 3.0 | **required** (already listed) |
+| Karoryfer Black And Blue Basses, Karoryfer Shinyguitar, Karoryfer x bigcat cello (Karoryfer Samples, bigcat instruments) | electric bass, the guitars (`boss-jecht`, the FFX-2 band), solo cello (Gagazet's cello rise) | CC0 | thanks |
+| DRSKit 2.1 (DrumGizmo team: Deva, Lars Muldjord; Jes Eiler of DRSDrums) | the drum kit | CC-BY 4.0 | **required** |
+| Arvedi Auditorium room impulse responses (Miotello et al., Zenodo, doi:10.5281/zenodo.20098848) | the hall (decoded to stereo, direct sound removed) | CC-BY 4.0 | **required** |
+| Voxengo free impulse responses (Aleksey Vaneev), "Direct Cabinet N2" | the guitar speaker cabinet | Voxengo licence: royalty-free for any use, the IR files not redistributed | courtesy |
+| jRhodes3d (Jeff Learman) | the Rhodes part of the FFX-2 band | music made with it: CC0 (the samples are CC BY-NC only if redistributed, which we never do) | thanks |
+| Surge XT 1.3.4 (Surge Synth Team) | synth pads, sub and alarm in the FFX-2 band (factory patches) | GPL-3 for the synth; its audio output is ours | thanks |
+| sfizz 1.2.3 | renders the Karoryfer and jRhodes programs | BSD-2 | none (a tool) |
+| ACE-Step 1.5 turbo (2B) and XL turbo (4B) (ACE Studio and StepFun) | the N2 restyle of five FFX-2 cues, over our own renders only | MIT; its output is ours, no model file ships | courtesy |
+
+No retail audio was used anywhere (rule 8): every input is our own score or our own render of it.
+
 ## What must appear in the game credits
 
-Two entries, verbatim:
+Four entries, verbatim (the last two since music v2, 2026-09-30):
 
 ```
 Salamander Grand Piano by Alexander Holm — CC-BY 3.0
 Sonatina Symphonic Orchestra by Mattias Westlund — CC Sampling Plus 1.0
+Drum kit: DRSKit 2.1 by the DrumGizmo team (Deva, Lars Muldjord) and Jes Eiler of DRSDrums, drumgizmo.org — CC-BY 4.0
+Hall acoustics: "The Sound of the Violin's Home: A Higher-Order Room Impulse Response Dataset of the Arvedi Auditorium in Cremona", F. Miotello, G. Greco, P. Ostan, F. Del Gaudio, L. Comanducci, R. Malvermi, M. Pezzoli, F. Antonacci, Zenodo, doi:10.5281/zenodo.20098848 — CC-BY 4.0 (decoded to stereo, direct sound removed)
 ```
 
 and, as a courtesy rather than an obligation:
 
 ```
 FluidR3 GM soundfont by Frank Wen — MIT
+Impulse responses: Voxengo (Aleksey Vaneev)
+Music restyled with ACE-Step 1.5 (ACE Studio and StepFun) — MIT
+Also used, CC0: VSCO 2 Community Edition and VCSL (Versilian Studios); Black And Blue Basses, Shinyguitar and the Karoryfer x bigcat cello (Karoryfer Samples, bigcat instruments); jRhodes3d (Jeff Learman); Surge XT (Surge Synth Team)
 ```
 
 > **TODO for whoever owns the credits screen.** These are not yet wired into
 > any in-game credits data — at the time of writing there is no credits screen
 > to wire them into. They must be on it before release. This is a licence
-> condition for two of the three libraries, not a nicety.
+> condition for four of the sources above, not a nicety.
 
 The same two entries cover the sound effects as well as the music: since the
 redesign, an effect's bells, glass, harp, choir, tam-tam, timpani and solo
