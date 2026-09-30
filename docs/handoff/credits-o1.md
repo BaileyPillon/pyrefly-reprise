@@ -107,3 +107,35 @@ raises the budget to 90 MB, which is a separate change.
    wraps to two lines (`credits-o1-ffx2-options-390x844.png`, top left).
 5. Scratch harness (not committed): `D:/Tools/pyrefly-scratch/2026-09-30-rel35/credits-check.mjs`, with its JSON
    results beside it.
+
+## Check (independent, 2026-09-30, audio-rel35 at c25796a5)
+
+Re-run by a checker who did not build it. Scratch: `D:/Tools/pyrefly-scratch/2026-09-30-rel35/check/`.
+
+- Gates: `tsc` clean; full vitest 698 files / 10555 tests pass (5 files skipped); `qa.mjs --strict` exit 0,
+  0 findings, 88.49 MB of 90 MB; orphans 24 of 1141 (main: 24 of 1128, none new); vite build to scratch OK,
+  `dist/audio` 88,541,702 bytes (under 90e6). `SaveData.ts` and the settings schema untouched. Files over 400
+  lines did not grow; every commit names its game case; no contract file changed.
+- Credits, headless GPU Chromium, production build on port 5361 (stopped by PID), Chapter I and Chapter IV at
+  1600x900 and 390x844: opened by Enter, click and tap; scrolled by keys, wheel and finger to the end (notice
+  fully visible); closed by Esc and by the ESC BACK prompt with the cursor and DOM focus back on CREDITS; E
+  closes it on a tab change; Esc then resumes the battle. The cursor never lands on ABOUT. No clipped text,
+  gutter 20 px on the phone, no overlap with the tab strip, brand line or prompts; 0 console errors, 0 404s.
+- Licence completeness: every source that `measure.json` records for the 100 shipped sprite-v2 cues, and every
+  library the music renderers read, is on the panel; the three CC BY 4.0 recordings, DRSKit, Arvedi, Salamander
+  and Sonatina are REQUIRED lines. Nothing is missing.
+- **Blocker (licence):** CC BY 4.0 section 3(a)(1) asks for three things the panel does not give: that the work was
+  modified (only the Arvedi line says so; the Thunderclap, Bonfire ignition and Glass breaking recordings are
+  cut, filtered and layered, and the DRSKit samples are mixed into our music); the licence's URI or a link to it
+  (no line gives one); and a link to the source where that is practicable (the three Commons lines say only
+  "Wikimedia Commons"). The fix changes data only, in `creditsData.ts`: add "edited" or "used in original music" to
+  those notes, give the Commons file URLs, and add one line with the licence URLs
+  (creativecommons.org/licenses/by/4.0, by/3.0, sampling+/1.0).
+- **Major, already on live:** the shipped bundle does not carry the three.js MIT notice. Neither this build's
+  `index-*.js` nor the live one contains "Three.js Authors". The panel's "three.js authors MIT" line does not
+  carry the notice text either.
+- Differences from the approved frames: the third "note" lines, most of all the five-line Arvedi note on the
+  phone; looser spacing between entries; at 390 px the author, licence, note and notice lines are 12 px, where the
+  frames use about 13 to 14 px; a fade at the bottom edge of the list, where the frame shows a hard cut; on the
+  desktop, CREDITS sits 19 px higher with a tighter ABOUT gap. The CREDITS row is 20 px tall on the phone and
+  ESC BACK is 22 px, the same as the other pause rows. This was not checked with a gamepad (headless has none).
