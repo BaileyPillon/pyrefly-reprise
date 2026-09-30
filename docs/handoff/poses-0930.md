@@ -1,0 +1,426 @@
+# Handoff: the 2026-09-30 approved poses (Sleep, Low HP, Bahamut splash, Paine Songstress)
+
+Branch `poses-0930` (worktree `D:/pyrefly-fb-onboard`, from main 9299b319). **Not pushed, not merged, not deployed;
+nothing written under `public/art` or to `docs/target/approved-hashes.json`** (release 33's deep review reads main's
+`public/art` through a junction). Release 34 material.
+
+Bailey, 2026-09-30 ~09:40 EDT, verbatim: "all your recommendations, godspeed" (D-298; Kimahri held, D-299).
+Paper preflight (late, disclosed): `docs/plans/poses-0930-review.md`; `critic-plan --paths` says DEEP (focused before
+deploy, deep after).
+
+## Game case (rule 14)
+
+- **Both games, each its own rule**: the Sleep hunch (both sources describe the same look) and the low-HP painting,
+  per character. FFX: the slouch, HP **below 50 %** of max, the same line as the HUD's yellow digits
+  (`FFX_HP_YELLOW_BELOW`, research/ffx-combat-core.md V8 "HP < 50 % of max"). FFX-2: the kneel, HP **below 33 %**,
+  the HUD's gold digits (`hpClass`, research/ffx2-combat-core.md §4.9). Sources: research/status-display.md §2 and §3.
+- **FFX-2 only**: the Bahamut Mega Flare splash (Chapter IV) and Paine's Songstress attack and hurt.
+
+## What is built
+
+**(A) The `sleep` and `critical` pose slots** (`src/ui/common/restPoses.ts`, wired in `withStatusLooks.ts`;
+`BattlePresenterArt.PARTY_POSES` gains the two names with fallbacks to `idle`).
+- A party member **rests** in: KO → the presenter's KO pose (this module stands aside); **Petrify** (both) and
+  **Stop** (FFX-2) → HOLD the painting it had; **Sleep** → `sleep` (over low HP); **low HP** → `critical`; else `idle`.
+  Zombie, Berserk, Curse and Pointless are tints on whatever painting is up, so they combine.
+- Only a request for a resting pose (idle, sleep, critical) is turned into the current rest, through the figure's
+  own `setPose` (wrapped per figure, restored on unmount). Every presenter pose (ready, attack, cast, item, hurt,
+  defend, victory, ko) is untouched, and every "back to idle" (action end, flinch return, revive, spherechange)
+  lands on the right painting. A stale rest request after a hit woke the sleeper lands on the current rest.
+- **Fallback**: a figure without its own painting for the pose (Kimahri, every FFX-2 dressphere except Gunner,
+  Warrior and Thief) keeps today's standing painting (`paints(id, pose)` is asked first; the pose map falls back to
+  idle).
+- **Status marks stay on top, on the painted head**: while a sleep or critical painting is up, the marks (Z's,
+  bubbles, stars, halo) anchor on that painting's own head (`headTop` in its sidecar, fractions of the opaque box,
+  read by eye: `docs/concepts/poses-2026-09-30/heads-top.jpg`); otherwise the field's standing head as before.
+- **REDUCE MOTION**: nothing new moves (the swap is the figure's usual crossfade); with the OS reduced-motion
+  preference the marks' running animations are 0 while the paintings still swap (3 Z animations without it).
+- **Decided here (question 1 below)**: the `ready` pose (the command menu for that member) keeps the standing
+  painting and its turn ring, so a low-HP member stands up while choosing a command and slouches again after.
+
+**(B) Bahamut's Mega Flare splash**: `splashArtFor` returns `characters/ffx2-bahamut/splash.png` for FFX-2
+Bahamut's Special (Mega Flare is his only entry in `SPECIALS`) once the manifest lists it; before the install it
+returns null (slab, lines, name, as today; no 404). FFX's Bahamut and every other splash unchanged.
+
+**(C) Paine Songstress attack and hurt**: art only; the dressphere pose map already reads `attack` and `hurt`
+when the manifest lists them (they fall back to standing today).
+
+**(D) The staged install package**: `D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/`
+- `characters/<id>/<slot>.png | .json | .prov.json` under the exact public/art paths: 21 PNGs (18 sleep/critical, Paine
+  Songstress attack + hurt, `ffx2-bahamut/splash.png`), each sidecar with size, baseline, the measured `scale`, facing,
+  the recipe, `headTop`, `game`, `status`, `candidateOf` + `candidateSha256`, `decision: D-298`.
+- `hashes.json` (the 21 PNG hashes), `install.mjs` (dry run by default), `work/` (every tool and measurement).
+- **Auron critical cand-4: the floor patch was removed cleanly** (pixels made transparent only, no repaint: the
+  floor, its dark shadow strokes and the white backdrop it trapped between the coat and the sword; the sword's gold
+  end cap kept). `work/fix_auron_floor.py` + report; before/after `docs/concepts/poses-2026-09-30/auron-critical-floor-fix.jpg`.
+  cand-45 was not needed. Every other PNG is the candidate byte for byte.
+- **Scales re-measured** against each installed idle (the boss-pose method: gridded head crops, `work/heads.py`,
+  `work/headscale.py`), held inside that install's stature gate (at least 0.60 for a bend, hunch, kneel or lunge);
+  `docs/concepts/poses-2026-09-30/scales.json` + `scale-check.jpg`. The overnight agents' eye scales were often 15
+  to 40 % high; the measured ones:
+
+| Painting | Scale (overnight guess) | Rule |
+|---|---|---|
+| Yuna sleep / critical | 0.80 (1.15) / 1.00 (1.15) | head match |
+| Auron sleep / critical | 1.00 (1.2) / **0.64** (0.8) | critical: head match 0.45 would stand 0.43 of the idle; raised to the 0.60 stature floor (a close-up render, head about twice the idle's share) |
+| Wakka sleep / critical | 1.00 / 1.05 | head match |
+| Lulu sleep / critical | 0.80 / 0.72 | head match |
+| Rikku (FFX) sleep / critical | 0.80 / 0.80 | head match |
+| Tidus sleep / critical | 1.00 (1.15) / 0.95 (1.05) | head match |
+| Yuna Gunner sleep / critical | 1.00 / **0.99** | critical: head match 0.90 would stand 0.55; stature floor |
+| Paine Warrior sleep / critical | 0.90 / 0.90 | head match |
+| Rikku Thief sleep / critical | 1.05 / 1.05 | body height (the Thief rule, her idle's head is 1.4 to 1.7x) |
+| Paine Songstress attack / hurt | 1.05 (1.1) / **0.66** (0.65) | hurt: head match 0.57 would stand 0.52; stature floor |
+
+## THE INSTALL, for the driver, AFTER release 33 is live
+
+```
+cd "D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses"
+node install.mjs --dry-run                       # lists 42 files, the manifest step, the lock; writes nothing
+node install.mjs --apply                         # --repo="D:/Final Fantasy" is the default
+node D:/Tools/pyrefly-lora/tools/verify-approved.mjs   # ROOT = the repo: 0 mismatched, 0 missing expected
+cd "D:/Final Fantasy" && npx vitest run tests/unit/engine/pose-install-0930.test.ts tests/unit/rest-poses.test.ts tests/unit/bahamut-splash.test.ts tests/unit/engine/pose-install-songstress-0929.test.ts
+```
+`--apply` checks the package against `hashes.json`, copies each PNG + sidecar into `public/art/characters/<id>/`
+(refuses before writing anything if any target holds different bytes; a target with the same bytes is skipped),
+runs `node tools/gen/manifest.mjs` and checks every new state is listed, then adds the set
+`bailey:2026-09-30-poses` (Bailey's words, D-298, one entry per PNG) to `docs/target/approved-hashes.json` in the
+file's own format. Run twice: the second run copies nothing and leaves the hash file alone (rehearsed on a scratch
+copy of the repo: 42 copied then 0; the hash-file diff was insertions only). Nothing is deleted. Then commit
+`docs/target/approved-hashes.json` (the art itself is gitignored) and set D-296 and D-298 `delivery: implemented`.
+Merge `poses-0930` (the code) in the same release: before the install, the code alone changes nothing visible
+(every rest pose falls back to standing; the splash stays slab-only).
+
+## Proof (production build of the branch, the staged art by request routing)
+
+`vite build --outDir D:/Tools/pyrefly-scratch/poses-0930-install/dist` (not `npm run build`, whose `prebuild` would
+touch the shared manifest), `vite preview` on 8731 (stopped), headless Chromium on the GPU,
+`docs/concepts/poses-2026-09-30/final/src/proof.mjs` (routes every `art/characters/<id>/<file>` of the package and
+adds the new states to the served manifest, as install.mjs would). Every JSON in `final/shots/` lists what was
+STAGED. Sheets, approved candidate left and build right: `final/*-target-vs-build.jpg`; key frames also in
+`docs/screenshots/poses-0930/`.
+
+| Moment | What the live actors showed (read off the figures) |
+|---|---|
+| Ch I (FFX) desktop + phone | Yuna `sleep` (sleep.png) with the Z's on her bowed head; Auron `critical` (critical.png) while Wakka attacks; after Auron's own Attack **by real keys**: ready (idle.png) → attack → critical within 0.2 to 0.6 s; Auron and Wakka both `critical` |
+| Ch IV (FFX-2) desktop + phone | Yuna Gunner `sleep`; Paine Warrior's Attack by real keys: ready → attack → `critical` (the kneel); **Bahamut's own Mega Flare** reached in the fight (autoBattle "intended") with the new painting in the cut-in: 1656 px natural, drawn 828 px tall at bottom-right, opacity 1 |
+| Ch XIII (FFX-2) desktop + phone | Paine Songstress Attack by real keys: songstress/attack.png; a real enemy hit: songstress/hurt.png, world height 1.057 |
+| REDUCE MOTION (OS preference), Ch I desktop | the paintings swap the same; status-mark animations 0 (3 without) |
+
+STAGED, labelled in each JSON: Sleep and HP written into the engine state before the presenter's own `syncHud` (the
+module reacts by itself; the script never calls `setPose`); reserve members switched in with the engine's Switch
+rows (Ch I); Yuna dressed as Gunner (Ch IV opens in White Mage) and Paine as Songstress (Ch XIII opens in Dark
+Knight) with `stage.setArt`; party HP topped up and Itchy lifted while waiting for events. **0 page errors, 0
+console errors, 0 responses of 400 or more** in every run.
+
+Distance from the target: the same paintings in the same moments. The Paine Warrior kneel and the Yuna sleep read
+smaller than on the overnight composites, which drew them at the agents' guessed scales (1.15); the measured head
+match is 0.90 and 0.80. The Mega Flare title stamps over the dragon's wing (the build's title sits at 30 % for the
+CHARGING slab, fx-d must-fix 6; the approved mock drew it at 7 %); it stays on top and readable.
+
+## Gates
+
+`npx tsc --noEmit` clean. New tests: `tests/unit/rest-poses.test.ts` (14: the source table per game, HUD agreement
+for every HP 1..100, precedence, fallback, action poses untouched, stale rest, hold, KO/revive, dispose, the marks'
+head, the pose map, and a real Chapter I battle through the tap: 378 rest checks, 39 in the critical painting, the
+event transcript identical with and without the tap), `tests/unit/bahamut-splash.test.ts` (3),
+`tests/unit/engine/pose-install-0930.test.ts` (the package now; the installed files and the lock once installed).
+Full suite once: 694 files passed, 1 failed: `strategy-ffx2-bahamut` "heal-only route" timeout (15 s), the known
+load timeout on main, an engine test this branch does not touch. `node tools/orphans.mjs`: 24 (unchanged; the new
+module is reachable). Changed files are all under 400 lines. No CONTRACTS file touched; nothing under `src/battle`.
+
+## Not done / open
+
+- The in-battle proof covers the moments the brief named; Lulu, Rikku (FFX), Tidus and Rikku Thief are proven by the
+  pose-map test and the scale sheet only.
+- Tidus sleep keeps the pilot's disclosed defects (the blade tip cut at the canvas edge, a thin orange stroke by the
+  feet); byte for byte as approved.
+- FFX's second stance under 25 % HP is not painted (one painting stands for both bands).
+- The Seymour kneel / KO candidates (D-299's note) are not part of this branch.
+
+## Questions for Bailey
+
+1. While a low-HP member's command menu is open, should they stay in the slouch or kneel (today: they stand, with
+   the turn ring, and slouch again after acting)? No source says either way.
+2. Three paintings were drawn much larger than their idles (Auron's slouch, Yuna Gunner's kneel, Paine Songstress's
+   hurt), so their heads read about 1.2 to 2x the idle's at the size the body needs. Keep, or re-render those three
+   at the idle's proportions?
+
+## CHECK (independent, 2026-09-30, not the builder)
+
+Verdict: **one blocker in the install package (Auron critical), the code passes.** Branch `poses-0930` at 329eb535,
+production build of the branch to `D:/Tools/pyrefly-scratch/check-poses-0930/dist` (a scratch folder, not the shared
+`dist/`), vite preview on 8881 (stopped by PID), headless Chromium on the GPU. The staged package was served by route
+interception and the manifest was extended in flight. Nothing was written under `D:/Final Fantasy/public/art`: the
+manifest is still Sep 29 08:25, there is no `sleep.png`, `critical.png` or `ffx2-bahamut/splash.png` there, and
+`approved-hashes.json` is unchanged. Scripts, JSON records and shots are in `D:/Tools/pyrefly-scratch/check-poses-0930/`
+(`check.mjs`, `splash.mjs`, `probe.mjs`, `out/`).
+
+Game case: both games for the rest poses, each game with its own threshold. The Songstress and Bahamut paintings are
+FFX-2 only.
+
+**What holds**
+- Picks: all 21 PNGs match hashes.json. Each sidecar's `candidateOf` is the pick Bailey approved (Yuna 56/3, Auron 20/4,
+  Wakka 45/6, Lulu 62/42, Rikku 12/10, Tidus c3/c3, Yuna Gunner 31/6, Paine Warrior 36/16, Rikku Thief c3/c1,
+  Songstress A1-attack-19/H1-hurt-121, Bahamut B10-flare-55-core). Every source's sha matches the candidate, and
+  every PNG is the candidate byte for byte except Auron critical (edited). There is no Kimahri file.
+  `node install.mjs` (a dry run) lists exactly 42 files (21 PNGs and 21 sidecars) and the set `bailey:2026-09-30-poses`,
+  and writes nothing.
+- Rules checked against `research/status-display.md` §2/§3 and the HUDs. FFX: critical below 50 % (`FFX_HP_YELLOW_BELOW`,
+  ffx-combat-core V8). FFX-2: below 0.33 (`hpClass`, §4.9 / §6.1). Sleep takes precedence over low HP. Petrify (both
+  games) and Stop (FFX-2) hold the current painting. Stop in FFX is not a hold (FFX has no Stop status).
+- In the browser, every approved rest painting was shown in its own game: 7 FFX art ids in Chapter I and 6 FFX-2 art
+  ids in Chapter IV, each through 10 moments, 130 checks per device. The moments were: full HP; exactly at the
+  threshold (idle); one HP below (critical); sleep with low HP (sleep); sleep at full HP; petrify set while asleep
+  (hold); low HP; Stop (hold in FFX-2, none in FFX); clean. Desktop 1600x900: 130/130. Phone 390x844: 129/130. The
+  one miss was the FFX-2 at-threshold moment. A probe on the same slot gives 607/1839 = idle and 606 = critical,
+  repeated. The miss came from an enemy ATB hit landing during the staging (the painting follows the HUD sync, the
+  same as the digits), not from the rule. STAGED: statuses and HP were written into the engine state, followed by
+  `presenter.syncHud`; each figure was dressed with `stage.setArt` on one slot. The real switches and real-key
+  attacks are in the builder's proof.
+- Fallbacks: Kimahri, Yuna Songstress, Rikku Gunner and Paine Songstress (for sleep and critical) keep `idle.png` in
+  every moment. A bare run (package not served) keeps today's idle for all 13 art ids, with 0 responses of 400 or
+  more.
+- The Songstress `attack` resolves to `paine-songstress/attack.png` and `hurt` to `hurt.png`. In the bare run both
+  fall back to idle.
+- Mega Flare splash (staged with `fx.actionOpen`): `ffx2-bahamut/splash.png` renders at 1656x1656 at opacity 0.98 on
+  desktop and phone. In the bare run the page makes no request for it and there is no image (slab only).
+- Every run had 0 page errors, 0 console errors and 0 responses of 400 or more.
+- `tsc --noEmit` is clean. The targeted tests pass (rest-poses 14, bahamut-splash 3, pose-install-0930: 2 skips,
+  expected before the install). The full suite ran once: 694 passed, 1 failed. The failure is the
+  `strategy-ffx2-bahamut` "heal-only route" timeout (44 s under load). Run alone, the file passes 19/19 and that test
+  takes 8.3 s. It is an engine test this branch does not touch.
+- Changed files: withStatusLooks 317→324, PartyStatusWindow 93→99, BattlePresenterArt 278→284, battleSpectacle
+  153→159. All are under 400 lines, and none was over 400 before.
+- `git merge-tree main poses-0930` is clean (fast-forward from 9299b319). Nothing under `src/battle` changed.
+
+**Blocker**
+- B1: Auron critical (cand-4) still has a white wedge of the render backdrop, about 7,000 px, between the scabbard and
+  the rear leg at x≈360–470, y≈650–820 of the 832x1116 PNG. It is visible in game as a pale sliver between his legs
+  (`out/zoom2.jpg`, `out/auron-crit-w.jpg`). The trapped-white clear stopped at row 820 (the report says "below row
+  820"), so the claim that the trapped white backdrop was removed holds only below that row. Fix: extend the
+  trapped-white pass upward (the connected near-white region, transparency only, no repaint), then update
+  hashes.json, the sidecar and prov records, and the rehearsal. Run the install only after that.
+
+**Minor**
+- Wakka critical (scale 1.05) stands 1.058 of his idle's height while hunched. In game his head reads about 10–20 %
+  larger than the idle's (`out/wakka-tidus.jpg`). A candidate for Question 2's re-scale list.
+- Lulu sleep (cand-62) has a small detached white object on the floor by her feet. It is byte for byte the approved
+  candidate, so it is recorded here and not changed.
+
+## REPAIR (2026-09-30, blocker B1 of the CHECK: Auron critical backdrop wedge)
+
+Game case: FFX only (Auron critical is an FFX painting; it is also the shared FFX art id, so every FFX chapter that
+seats Auron shows it). Fixed by clearing the wedge; the approved fallback cand-45 was not needed.
+
+**Fix.** `D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/characters/auron/critical.png` = the floor-fixed cand-4
+with the wedge made transparent. Method = the floor fix's: transparency only, no repaint
+(`docs/concepts/poses-2026-09-30/final/src/fix_auron_wedge.py`, copy also in the package `work/fix_auron_wedge.py`;
+report `final/src/auron-critical-c4-wedge.report.json`; diff mask `final/auron-critical-c4-wedge.diffmask.png`;
+before/after `final/auron-critical-wedge-before-after.jpg`). The 4-connected near-white region (min(r,g,b) > 232)
+seeded inside the wedge, plus a 1 px alpha halving on the new edge where an opaque neighbour is pale.
+
+**Measured** (832x1116 PNG, before vs after):
+- Cleared: 7,082 px, bbox x 358-463, y 651-803 (the check's estimate: about 7,000 at x 360-470, y 650-820; the top
+  pass had stopped at row 820 of the old seed window, but the region was a single connected wedge, so no row limit
+  was needed).
+- Diff: 7,183 pixels changed = 7,082 cleared to transparent + 101 edge pixels with alpha halved. Figure pixels whose
+  RGB changed: **0**. The opaque bounding box is identical (33, 0, 810, 1116), so the sidecar's scale (0.64),
+  baselineY, headTop and the 0.609 stature are unchanged.
+- Near-white (min rgb > 232) opaque pixels connected to the canvas edge: 0 before, 0 after. Solid 9x9 near-white
+  windows: 5,505 before (5,138 of them in the wedge), 367 after, none in the leg gap (x 300-560, y 600-900 is clean);
+  what is left is the coat's own white trim, the hood trim, the emblem disc and a 3 px rim on the right cloak edge
+  (a thin outline, part of the painting, present on every edge of the approved candidate).
+- Transparent holes not connected to the canvas edge (trapped between limbs): one, 4,793 px, bbox x 559-670,
+  y 901-1026 (between the scabbard and the cloak hem). It is transparent, so the scene shows through; it was there
+  after the floor fix and is not backdrop.
+- Near-white opaque pixels touching a transparent one: 451 (were 554), all on the figure's white trim edges
+  (around that hole and the cloak's right rim), not a filled area.
+
+**Package.** `hashes.json` auron/critical sha -> `e03472b268104a5b59581a3eb9c886c80aac10c8223bd851cd51f21f5d2b2311`
+(was `0274319f...`); the sidecar `critical.json` `edited` field names both fixes; `install.mjs`'s note and
+`work/make_package.py` say so. The superseded floor-fixed-only PNG, sidecar and hashes.json are kept in the package's
+`superseded/` (nothing deleted). `node install.mjs` (dry run): package OK, 21 PNGs + 21 sidecars, 42 files,
+set `bailey:2026-09-30-poses`, nothing written. Nothing under `D:/Final Fantasy/public/art` was written
+(`git status` clean there, Auron's folder still Sep 18/29) and `approved-hashes.json` is unchanged.
+
+**Proof re-shot** (production build of the branch at its code commit, the check's
+`D:/Tools/pyrefly-scratch/check-poses-0930/dist`, vite preview on 8897 stopped by PID, headless Chromium on the GPU,
+`final/src/proof.mjs ch1 desktop|phone` with SEED=3; the package served by route interception):
+`final/shots/ch1-desktop-*.jpg` at 1600x900 and `ch1-phone-*.jpg` at 390x844 (rest, other-attack, attack,
+after-attack), JSON records beside them, sheets `final/ch1-*-target-vs-build.jpg` regenerated; key frames copied to
+`docs/screenshots/poses-0930/`. Auron reads `critical` (`art/characters/auron/critical.png`, world height 1.093),
+and by real keys ready -> attack -> critical within 0.2 to 0.3 s. No pale sliver between his legs at either size
+(the gap shows the scene). 0 page errors, 0 console errors, 0 responses of 400 or more in both runs. (Seed 1 of this
+script stalled in a Seymour fight where Auron fell and the menu never came back: the script's staging, recorded and
+not a game defect; the seed-2 and seed-3 runs are clean.)
+
+B1 is closed; the remaining CHECK minors (Wakka critical scale, Lulu sleep floor object) are unchanged.
+
+## RE-CHECK of blocker B1 (independent, 2026-09-30; FFX only, Auron critical)
+
+Checked on 9a4a86e8 and the staged package, not the repair's own report.
+- File vs hashes.json: sha256 of characters/auron/critical.png = e03472b2...2311, matches hashes.json; sidecar critical.json width/height/scale 0.64/baselineY/headTop unchanged.
+- Diff vs the floor-fixed-only candidate (superseded/auron-critical-floorfixed-only-0274319f.png): 7,183 px differ = 7,082 to transparent + 101 edge alpha changes; 0 pixels opaque in both changed colour, so no repaint. Opaque bbox (alpha>16) identical.
+- Near-white (min rgb > 232, alpha > 16) pixels: edge-connected 0 before and after; largest solid near-white blob in the wedge region (x 340-480, y 640-820) 7,082 before, 0 after. One transparent hole remains (4,793 px), unchanged, see-through.
+- install.mjs --dry-run: 42 files, 21 locked under set bailey:2026-09-30-poses, nothing written. public/art and approved-hashes.json in D:/Final Fantasy untouched.
+- Proof frames (ch1 rest, desktop 1600x900 and phone 390x844): Auron crouched in the critical painting, no pale sliver between legs; errors and consoleErrors empty in both JSON files.
+Result: B1 cleared. Not checked: pixel-level diff against the original cand-45/raw candidate (only the prior staged step).
+
+## DAY SET (D-301, branch `poses-day`, 2026-09-30)
+
+Bailey, 2026-09-30 ~13:00 EDT, verbatim: "all your recommendations, godspeed", answering the day art page
+https://claude.ai/artifact/JqXgAx8rXaHdLWxES73Fmt. Recorded as **D-301** in `docs/target/decisions.json` (main, commit
+cebdaa33; it answers the D-299 hold on Kimahri). Branch `poses-day` = `poses-0930` + a merge of `r17fix-ch7` (the
+PR-0244 staging for unpainted kneels) + the day-set work. **Not pushed, not merged, not deployed; nothing written under
+`public/art` or to `approved-hashes.json`.** Release 34 material, installed with the same package as D-298.
+
+### Game case (rule 14)
+
+- Seymour at Macalania kneel cand-6 and fall/KO cand-5: **FFX only** (Chapter VII post scene, and his battle KO).
+- Isaaru kneel cand-9: **FFX only** (Chapter XIV post scene).
+- Shuyin kneel cand-7: **FFX-2 only** (Chapter V post scene).
+- Kimahri sleep cand-6 and critical cand-4: **FFX only** (the rest-pose slots, FFX thresholds: below half HP, the
+  yellow digits). The changed method (img2img from a warp of his idle) is accepted.
+- The cutscene stage's pose-painting port and the departure guard are shared plumbing that only these figures use.
+
+### What is built
+
+1. **Story-pose paintings on the cutscene stage** (`CutsceneStage.setPose`, `cutsceneFigures.ts` `poses`). When a post
+   scene calls `setPose(actor, 'kneel' | 'ko')` and the art manifest lists `characters/<id>/<pose>.png`, the figure shows
+   that painting on its own feet line, sized from the sidecar (pixel height x the measured `scale`, over the idle's
+   pixel height: the battle's own rule), and the old painting fades off over it (700 ms). Not listed, or no manifest:
+   Seymour keeps r17fix-ch7's staging (lowered, then laid down), Isaaru and Shuyin stand as before. Any other pose
+   stands the idle up again. The kneel and fall paintings preload once the manifest says they exist.
+   - Seymour on a wide screen: the kneel sits at x 0.89 and the fall at 0.94 (portrait 0.6) instead of his standing
+     0.8. The first 1600x900 proof showed the fall lying almost wholly behind the dialogue box at 0.8
+     (`final-day/shots/ch7-1600x900-run1-at-x0.8-fall-behind-box.jpg`). The fall's robe, cut by its canvas's right edge
+     as rendered, now runs off the screen's edge, with his head near where he stood.
+   - Isaaru's post scene gained `setPose(isaaru, 'kneel')` at its own "Isaaru kneels" beat (the script already said he
+     kneels); Shuyin's `setPose` now comes before his `showActor`, so the kneel is up from the first frame (two lines
+     swapped, the file keeps 481 lines). No dialogue changed.
+2. **Seymour's battle KO uses his fall painting.** The `body` departure no longer rolls the plane onto its back
+   (`lieDown`) when the figure has its own `ko` painting: the prone canvas lies on the floor by itself, as a party
+   member's KO does (`PaintedRest`). The restage path likewise. Without the painting, unchanged (the roll).
+3. **Kimahri**: no code. The rest-pose slots already read any installed `sleep` / `critical` (test added: the pose
+   map and the FFX line for him).
+4. **Staged install** (`D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/`, README.md there): the 6 day PNGs
+   byte for byte, each with its sidecar (measured `scale`, `headTop` for Kimahri's two, `decision: D-301`) and
+   `.prov.json`; `hashes.json` now 27; `install.mjs` one set `bailey:2026-09-30-poses` (decision "D-298, D-301"),
+   idempotent, and it now **extends** a set a D-298-only run had locked. Dry run: 54 files, nothing written.
+   Rehearsed on scratch repo copies (`D:/Tools/pyrefly-scratch/poses-day-rehearsal/`): fresh 54 copied then 0;
+   pre-locked 21 extended to 27 then unchanged. Tools and measurements in the package's `work/day/`.
+
+| Painting | Scale | Rule |
+|---|---|---|
+| Seymour kneel | 1.13 | head match 1.0 would stand 0.53 of the idle; raised to the 0.60 stature floor |
+| Seymour fall (KO) | 0.82 | prone: head match 0.64 would lay him about two thirds of his height; torso match (crown to sash) used |
+| Isaaru kneel | 0.96 | head match 0.90 would stand 0.57; 0.60 floor |
+| Shuyin kneel | 1.04 | head match 0.95 would stand 0.55; 0.60 floor |
+| Kimahri sleep / critical | 1.0 | his idle's own pixel scale (a 1:1 warp of the idle) |
+
+### Proof
+
+Production build of `poses-day` into `D:/Tools/pyrefly-scratch/poses-day/dist` (`vite build --outDir`, no `prebuild`
+manifest step), vite preview on 8913 (stopped by PID), headless Chromium with `PYREFLY_BROWSER=gpu`, the package
+served by request routing. Scripts in `docs/concepts/poses-2026-09-30/final-day/src/`; JSON records and frames in
+`final-day/shots/`; target-vs-build sheets `final-day/*-target-vs-build.jpg`; key frames in `docs/screenshots/poses-day/`.
+
+| Moment | What the live page reported |
+|---|---|
+| Ch VII, 1600x900 and 390x844, **real keys from the title to the kill** (`ch7-day.mjs`, playFight, seed 1) | victory at both sizes (47 turns on desktop). At the kill Seymour's actor is pose `ko`, `seymour-macalania/ko.png`, `lieRoll 0`, `prone true`. The plate before the tally shows `kneel.png`. "He went down on one knee." shows `kneel.png` with `is-painted-pose`. "Then he fell, and he just stopped." shows `ko.png`, clear of the box |
+| Ch XIV (Isaaru), desktop and phone | "No. Please. Keep that for the road ahead." over `isaaru/kneel.png`. Bare run (package not served): `isaaru/idle.png`, and no request for the kneel |
+| Ch V (Shuyin), desktop and phone | `shuyin/kneel.png` from the first post-scene frame (no crossfade), through the lines |
+| Ch I (Kimahri), desktop and phone | STAGED Sleep: `kimahri/sleep.png` with the Z's on his head. STAGED 40 % HP: `kimahri/critical.png` (924/2310, yellow digits). After his own turn by keys, back to `critical` |
+
+STAGED, labelled in each JSON: Ch XIV and Ch V were reached with `gotoChapter(id, { auto: 'intended', speed: 'fast' })`
+(the fight played by the game's strategy, party HP topped up), post lines advanced by Enter; Kimahri's Sleep and HP
+written into the engine state before the presenter's own `syncHud`. **0 page errors, 0 console errors, 0 responses of
+400 or more in every run.**
+
+Distance from the target: the same paintings, byte for byte. Seymour's fall is seen head and shoulders on a wide
+screen (the rest of the body runs off the right edge by design) and whole on a phone; his kneel sits right of where he
+stood. In battle the fall's straight robe cut (the canvas edge) shows as a hard vertical line at the feet end.
+
+### Gates
+
+`npx tsc --noEmit` clean. New and changed tests: `tests/unit/cutscene-story-poses.test.ts` (9: the table against the
+staged sidecars, installed and not installed, no manifest, posed before shown, the three post scenes' step order),
+`presenter-departures.test.ts` (+1: a painted KO is not rolled), `rest-poses.test.ts` (+1: Kimahri),
+`engine/pose-install-0930.test.ts` (27 files, per-file decision). Full suite once: 695 files passed, 1 failed:
+`strategy-ffx2-bahamut` heal-only route timeout (18.6 s under load), the known load timeout; alone it passes 19/19.
+`node tools/orphans.mjs`: 24 (unchanged). Changed source files are under 400 lines, except `ffx2-vegnagun-shuyin.ts`
+(481) and `BattlePresenterStage.ts` (861), whose line counts did not change. No CONTRACTS file touched; nothing under
+`src/battle`. Paper preflight appended (late, disclosed) to `docs/plans/poses-0930-review.md`.
+
+### Open
+
+- Seymour's battle KO shows the fall canvas's straight robe cut at the feet end. Options for Bailey: accept; feather
+  that edge (the edge-feather table is per art id, so his idle would be feathered too); or a wider re-render.
+- The kneel scales sit on the 0.60 stature floor, so Seymour's kneeling head reads about 13 % larger than his standing
+  one (Isaaru about 7 %, Shuyin about 9 %).
+- Shuyin's kneel keeps the blade tip cut by its canvas's right edge (as rendered and approved).
+- Kimahri's own Attack pose was not caught by the 100 ms sampler in the low-HP run (the trail reads ready, then
+  critical); his rest painting is proven, and the action pose is his existing `attack.png`, untouched.
+- The install waits for release 33; run it once for both sets.
+
+### Questions for Bailey
+
+1. Seymour's fall in battle: keep the straight robe cut, feather it, or re-render the fall wider?
+2. On a wide screen Seymour kneels and falls a little right of where he stood, so the dialogue box never covers him.
+   Keep, or would you rather he stays on his spot with part of him behind the box?
+
+## CHECK (DAY SET): independent, 2026-09-30, not the builder
+
+Verdict: **PASS, no blocker.** Branch `poses-day` at 3e02c815. Game case as written: Seymour at Macalania,
+Isaaru and Kimahri FFX only; Shuyin FFX-2 only; the presenter change (a painted KO is not rolled) only reaches
+the one enemy with a `body` departure (FFX Chapter VII).
+
+- **Package.** The 6 day PNGs in `D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/characters/` match the
+  approved candidates byte for byte (sha256): Seymour kneel cand-6 and ko cand-5, Isaaru kneel cand-9, Shuyin
+  kneel cand-7, Kimahri sleep cand-6 and critical cand-4. They also match `hashes.json`. Each has a sidecar
+  (decision D-301, game correct) and a `.prov.json`. The PNG sizes and baselines match the sidecars. The code
+  constants in `cutsceneFigures.ts` (aspect, baseline, `heightOfIdle` from the sidecar scale over the installed
+  idle heights 1191/1188/1136) match both. Ko cand-5 is not one of the double-rendered ko cand-7 to cand-11.
+  `install.mjs --dry-run`: 27 PNGs and 27 sidecars pass the hash check, 54 files would be copied, the set gets
+  locked with "D-298, D-301", and nothing is written. `tools/gen/manifest.mjs` lists any bare state name, so
+  `kneel` will appear in the manifest after the install.
+- **Nothing written to shared files.** Nothing under `D:/Final Fantasy/public/art` is newer than decisions.json,
+  and no `kneel`, `sleep` or `critical` file exists there for these four characters. `approved-hashes.json` is
+  unchanged (git clean).
+- **Production build of the branch** (my own `vite build` into a scratch folder, `vite preview` on port 8891, now
+  stopped). Headless Chromium, GPU mode. The package was served by request routing plus a manifest patch. Every
+  fight was played by the game's own `gotoChapter(auto: 'intended', speed: 'fast')`, so these runs are STAGED, not
+  real keys. In the Isaaru and Shuyin runs the party HP was also topped up. Each run: victory, 0 page errors,
+  0 console errors, 0 responses of 400 or more.
+  - Chapter VII at 1600x900 and 390x844. In the post plate Seymour shows the kneel painting. It stays through
+    "He went down on one knee." Then the ko painting crossfades in (ghost copy removed) and holds from "Then he
+    fell" to the end. In battle, Seymour dead reads pose `ko` from `ko.png`, `paints('ko')` is true, and
+    `lieRoll` is 0 (not rolled). The bare run keeps r17fix-ch7's staging: idle with `is-kneel`, then `is-ko`. In
+    battle the hurt plane is rolled (`lieRoll` 1), and no pose painting is requested.
+  - Chapter XIV at 1600x900. Isaaru shows `kneel.png` by his first line ("Keep that for the road ahead"). The
+    idle crossfades out after `camera`. The bare run shows the idle with no kneel request.
+  - Chapter V at 1600x900. Shuyin shows `kneel.png` from the first post frame with no ghost, until his exit. The
+    idle element from the later coda stays at opacity 0 (prepared, never shown).
+  - Chapter I, desktop and phone, STAGED Sleep and HP. Kimahri shows sleep with the Z's, and critical at 40%. At
+    60% he is back to idle. Bare: idle throughout.
+- **Dialogue and data.** The only script edits are a `setPose` in `ffx-isaaru.ts` and a swap of two steps in
+  `ffx2-vegnagun-shuyin.ts`. No line text or game data changed.
+- **Gates.** `tsc --noEmit` clean. Targeted tests: 7 files, 85 passed, 2 skipped (install-only). Full suite once:
+  696 files passed, 5 skipped, 0 failed. Orphans: 24, unchanged. Over 400 lines: `BattlePresenterStage.ts` (861)
+  and `ffx2-vegnagun-shuyin.ts` (481), both unchanged in line count. `git merge-tree main poses-day`: clean.
+
+Findings (none blocks):
+- **Major, already disclosed, new feature and not a regression.** Seymour's fall canvas cuts off his robe at the
+  right edge and his hair at the left edge (opaque pixels touch both canvas edges). In battle this shows as a hard
+  vertical line mid-field at the moment he dies. This is in the approved painting itself. The fix (feather the
+  edge, re-render wider, or accept it) is Bailey's call (Question 1 above).
+- **Minor.** On a wide screen the post-scene fall is placed at x 0.94, so about 29% of it runs off the right
+  edge. Only the head and shoulders read, small in the corner (Question 2 above).
+- **Minor.** `install.mjs --apply` copies the files (step 2) before it checks for a lock clash (step 4). If the
+  lock clashes, the copied files stay behind. They are the approved bytes, so the risk is low.
+- **Minor.** The PR-0244 comment in `seymour-anima-macalania.ts` ("no painting kneels or falls") now only
+  describes the fallback.
+
+Scratch left untracked (no deletes allowed): `.check-day-post-tmp.mjs`, `.check-day-kimahri-tmp.mjs`,
+`.check-day-dist-tmp/` (about 600 MB, safe to remove).

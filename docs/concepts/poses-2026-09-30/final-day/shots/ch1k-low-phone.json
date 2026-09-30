@@ -1,0 +1,225 @@
+{
+ "otherTrail": [
+  "attack"
+ ],
+ "reduceMotion": false,
+ "plan": "ch1k-low",
+ "device": "phone",
+ "chapter": "seymour-flux",
+ "game": "ffx",
+ "branch": "poses-day",
+ "sha": "e9815c9c",
+ "url": "http://127.0.0.1:8913/pyrefly-reprise/",
+ "viewport": {
+  "width": 390,
+  "height": 844
+ },
+ "shots": {
+  "rest": "docs/concepts/poses-2026-09-30/final-day/shots/ch1k-low-phone-rest.jpg",
+  "other-attack": "docs/concepts/poses-2026-09-30/final-day/shots/ch1k-low-phone-other-attack.jpg",
+  "after-attack": "docs/concepts/poses-2026-09-30/final-day/shots/ch1k-low-phone-after-attack.jpg",
+  "all-rest": "docs/concepts/poses-2026-09-30/final-day/shots/ch1k-low-phone-all-rest.jpg"
+ },
+ "at": {
+  "rest": {
+   "tidus": {
+    "art": "tidus",
+    "pose": "ready",
+    "url": "art/characters/tidus/idle.png",
+    "worldH": 1.844,
+    "hp": "2420/2420",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "yuna": {
+    "art": "yuna",
+    "pose": "idle",
+    "url": "art/characters/yuna/idle.png",
+    "worldH": 1.846,
+    "hp": "1500/1500",
+    "statuses": [
+     "critical",
+     "zombie"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "kimahri": {
+    "art": "kimahri",
+    "pose": "critical",
+    "url": "art/characters/kimahri/critical.png",
+    "worldH": 1.775,
+    "hp": "924/2310",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 7
+  },
+  "other-attack": {
+   "tidus": {
+    "art": "tidus",
+    "pose": "attack",
+    "url": "art/characters/tidus/attack.png",
+    "worldH": 1.849,
+    "hp": "2420/2420",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "yuna": {
+    "art": "yuna",
+    "pose": "idle",
+    "url": "art/characters/yuna/idle.png",
+    "worldH": 1.846,
+    "hp": "1500/1500",
+    "statuses": [
+     "critical",
+     "zombie"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "kimahri": {
+    "art": "kimahri",
+    "pose": "critical",
+    "url": "art/characters/kimahri/critical.png",
+    "worldH": 1.775,
+    "hp": "924/2310",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 7
+  },
+  "after-attack": {
+   "tidus": {
+    "art": "tidus",
+    "pose": "idle",
+    "url": "art/characters/tidus/idle.png",
+    "worldH": 1.844,
+    "hp": "2420/2420",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "yuna": {
+    "art": "yuna",
+    "pose": "ko",
+    "url": "art/characters/yuna/ko.png",
+    "worldH": 1.401,
+    "hp": "0/1500",
+    "statuses": [
+     "zombie",
+     "ko"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "kimahri": {
+    "art": "kimahri",
+    "pose": "critical",
+    "url": "art/characters/kimahri/critical.png",
+    "worldH": 1.775,
+    "hp": "197/2310",
+    "statuses": [
+     "critical",
+     "zombie"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 0
+  },
+  "all-rest": {
+   "tidus": {
+    "art": "tidus",
+    "pose": "idle",
+    "url": "art/characters/tidus/idle.png",
+    "worldH": 1.844,
+    "hp": "2420/2420",
+    "statuses": [],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "yuna": {
+    "art": "yuna",
+    "pose": "ko",
+    "url": "art/characters/yuna/ko.png",
+    "worldH": 1.401,
+    "hp": "0/1500",
+    "statuses": [
+     "zombie",
+     "ko"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "kimahri": {
+    "art": "kimahri",
+    "pose": "hurt",
+    "url": "art/characters/kimahri/hurt.png",
+    "worldH": 1.806,
+    "hp": "197/2310",
+    "statuses": [
+     "critical",
+     "zombie"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "marksAnimations": 0
+  }
+ },
+ "trail": [
+  {
+   "t": 0,
+   "art": "kimahri",
+   "pose": "ready",
+   "url": "art/characters/kimahri/idle.png",
+   "worldH": 1.845,
+   "hp": "924/2310",
+   "statuses": [
+    "critical"
+   ],
+   "paintsSleep": true,
+   "paintsCritical": true
+  },
+  {
+   "t": 2000,
+   "art": "kimahri",
+   "pose": "critical",
+   "url": "art/characters/kimahri/critical.png",
+   "worldH": 1.775,
+   "hp": "924/2310",
+   "statuses": [
+    "critical"
+   ],
+   "paintsSleep": true,
+   "paintsCritical": true
+  }
+ ],
+ "notes": [
+  "STAGED: {\"kimahri\":{\"hp\":0.4}} written into the engine state, then presenter.syncHud (the rest-pose tap reacts on its own; no setPose was called by this script)",
+  "tidus attacked by keys (Enter x3) to reach kimahri",
+  "kimahri Attack by real keys: Enter x2"
+ ],
+ "served": [
+  "kimahri/critical.json",
+  "kimahri/critical.png",
+  "kimahri/sleep.json",
+  "kimahri/sleep.png",
+  "tidus/critical.json",
+  "tidus/critical.png",
+  "tidus/sleep.json",
+  "tidus/sleep.png",
+  "yuna/critical.json",
+  "yuna/critical.png",
+  "yuna/sleep.json",
+  "yuna/sleep.png"
+ ],
+ "errors": [],
+ "consoleErrors": [],
+ "http4xx": []
+}

@@ -21,19 +21,25 @@ import { SpectacleFx } from '../../engine/fx/c/SpectacleFx.ts';
 import { SpectaclePass } from '../../engine/fx/c/SpectaclePass.ts';
 import type { SpectacleFlags } from '../../engine/fx/c/SpectacleRules.ts';
 import { OverdriveSplashLayer } from '../../ui/common/transitions/OverdriveSplashLayer.ts';
+import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import '../../ui/common/fx-c-foil.css';
 
 const ART = `${import.meta.env.BASE_URL}art/`;
 
 /**
  * The approved painting each splash shows (spec section 2, "Approved art"): a party member's own
- * attack painting; Ixion's Overdrive painting; none for Bahamut (see below). Shown as is.
+ * attack painting; Ixion's Overdrive painting; Bahamut's Mega Flare splash painting (FFX-2). Shown as is.
  */
 export function splashArtFor(art: string, kind: 'overdrive' | 'special', game: 'ffx' | 'ffx2'): string | null {
   if (game === 'ffx2') {
-    // Bahamut: no painting. The approved Chapter IV plate (`pause/ch4-ffx2-bahamut.png`) shows Yuna,
-    // not the boss, and `characters/ffx2-bahamut/*` is not approved: slab, lines and name only.
-    if (art.includes('bahamut')) return null;
+    // Bahamut's Mega Flare (his one entry in SPECIALS, Chapter IV): the approved splash painting B10-flare-55-core
+    // (Bailey 2026-09-30, D-298), shown as painted. Until it is installed the manifest does not list it, and the
+    // splash keeps the slab, lines and name only (no request for a file that is not there).
+    if (art.includes('bahamut')) {
+      if (kind !== 'special') return null;
+      const url = `${ART}characters/ffx2-bahamut/splash.png`;
+      return manifestKnowsAssetNow(url) === false ? null : url;
+    }
     if (art.includes('ixion')) return `${ART}characters/x2-ixion/overdrive.png`;
     return null; // FFX-2 party Specials: the slab, the lines and the name only (no approved splash painting yet)
   }

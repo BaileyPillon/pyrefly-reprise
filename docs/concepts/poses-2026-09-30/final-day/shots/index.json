@@ -1,0 +1,262 @@
+[
+ {
+  "file": "ch7-1600x900/23-midfight.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-09-30T17:22:21.101Z"
+ },
+ {
+  "file": "ch7-1600x900/aftermath-kneel.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"He went down on one knee.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/kneel.png\",\"loaded\":true,\"natural\":\"681x651\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":1100,\"y\":474,\"w\":361,\"h\":345,\"bottom\":818},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:27:02.000Z"
+ },
+ {
+  "file": "ch7-1600x900/aftermath-fall.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"Then he fell, and he just stopped.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/ko.png\",\"loaded\":true,\"natural\":\"1216x457\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":1046,\"y\":641,\"w\":467,\"h\":176,\"bottom\":816},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:27:04.270Z"
+ },
+ {
+  "file": "ch7-1600x900/23-midfight.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-09-30T17:30:28.421Z"
+ },
+ {
+  "file": "ch7-390x844/23-midfight.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "390x844",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "mid-fight after 5 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-09-30T17:30:40.290Z"
+ },
+ {
+  "file": "ch7-390x844/aftermath-kneel.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "390x844",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"He went down on one knee.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/kneel.png\",\"loaded\":true,\"natural\":\"681x651\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":70,\"y\":391,\"w\":251,\"h\":240,\"bottom\":630},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:35:11.140Z"
+ },
+ {
+  "file": "ch7-1600x900/aftermath-kneel.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"He went down on one knee.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/ko.png\",\"loaded\":true,\"natural\":\"1216x457\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":1270,\"y\":641,\"w\":467,\"h\":176,\"bottom\":816},\"opacity\":\"1\",\"ghosts\":1}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:35:11.152Z"
+ },
+ {
+  "file": "ch7-390x844/aftermath-fall.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "390x844",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"Then he fell, and he just stopped.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/ko.png\",\"loaded\":true,\"natural\":\"1216x457\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":71,\"y\":507,\"w\":325,\"h\":122,\"bottom\":629},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:35:13.285Z"
+ },
+ {
+  "file": "ch7-1600x900/aftermath-fall.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"Then he fell, and he just stopped.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/ko.png\",\"loaded\":true,\"natural\":\"1216x457\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":1270,\"y\":641,\"w\":467,\"h\":176,\"bottom\":816},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:35:13.416Z"
+ },
+ {
+  "file": "ch7-1600x900/23-midfight.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-09-30T17:37:46.665Z"
+ },
+ {
+  "file": "ch7-390x844/23-midfight.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "390x844",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "mid-fight after 5 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-09-30T17:37:58.685Z"
+ },
+ {
+  "file": "ch7-390x844/aftermath-kneel.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "390x844",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"He went down on one knee.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/kneel.png\",\"loaded\":true,\"natural\":\"681x651\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":70,\"y\":391,\"w\":251,\"h\":240,\"bottom\":630},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:42:24.671Z"
+ },
+ {
+  "file": "ch7-1600x900/aftermath-kneel.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"He went down on one knee.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/kneel.png\",\"loaded\":true,\"natural\":\"681x651\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":1244,\"y\":474,\"w\":361,\"h\":345,\"bottom\":818},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:42:25.527Z"
+ },
+ {
+  "file": "ch7-390x844/aftermath-fall.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "390x844",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"Then he fell, and he just stopped.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/ko.png\",\"loaded\":true,\"natural\":\"1216x457\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":71,\"y\":507,\"w\":325,\"h\":122,\"bottom\":629},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:42:27.588Z"
+ },
+ {
+  "file": "ch7-1600x900/aftermath-fall.jpg",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "package": "served by request routing",
+  "state": "post scene, \"Then he fell, and he just stopped.\" on screen",
+  "asserted": "{\"art\":\"art/characters/seymour-macalania/ko.png\",\"loaded\":true,\"natural\":\"1216x457\",\"cls\":[\"is-painted-pose\",\"is-on\"],\"box\":{\"x\":1270,\"y\":641,\"w\":467,\"h\":176,\"bottom\":816},\"opacity\":\"1\",\"ghosts\":0}",
+  "verified": true,
+  "mode": "gpu",
+  "ts": "2026-09-30T17:42:28.626Z"
+ }
+]

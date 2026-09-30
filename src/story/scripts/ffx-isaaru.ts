@@ -46,13 +46,13 @@
  *
  * Each of his aeons breaks into pyreflies at its KO (B19, the engine's
  * dissolve). Isaaru never falls: he is a bystander with no turn (B8). The post
- * scene's beat says he kneels, but he has one painting, the O-1 A idle, so the
- * stage shows him standing on his own spot (a kneeling pose is not painted).
+ * scene's beat says he kneels: with his approved kneel painting installed (D-301)
+ * the stage shows it on his own spot; without it he stands there in the O-1 A idle.
  */
 
 import type { MidBattleTrigger } from '../../battle/common/types.ts';
 import type { ChapterScripts, StoryScript } from '../dsl.ts';
-import { battleStart, beat, camera, fade, hideActor, music, narrate, results, say, showActor, wait } from '../dsl.ts';
+import { battleStart, beat, camera, fade, hideActor, music, narrate, results, say, setPose, showActor, wait } from '../dsl.ts';
 
 /**
  * Combatant ids, mirrored from `src/data/ffx/enemies/isaaru.ts` (`src/story`
@@ -142,6 +142,8 @@ const POST: StoryScript = [
   music(null, 1200),
   showActor(ISAARU_STORY_IDS.isaaru, { ms: 0, facing: -1 }),
   camera('victory', 900),
+  // D-301: his approved kneel painting when installed (`cutsceneFigures.ts`); without it he stands, as before.
+  setPose(ISAARU_STORY_IDS.isaaru, 'kneel'),
   beat(1600), // Isaaru kneels. The last pyreflies thin out. Yuna goes to him, hands already glowing.
   say('isaaru', 'No. Please. Keep that for the road ahead.'), // 18
   say('yuna', 'Isaaru...', { emotion: 'sad' }), // 19

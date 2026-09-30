@@ -297,7 +297,7 @@ export class PaintedStage implements BattleStage {
     // Seymour's body (D-046) is the one enemy that stays down on the field.
     if (!c.alive && (c.side === 'party' || departureKindOf(c.id) === 'body')) {
       actor.setPose('ko', { immediate: true });
-      if (c.side === 'enemy') void actor.lieDown(0);
+      if (c.side === 'enemy' && !paintedPoses(artId, poses, characterUrl).has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
     }
 
     this.opts.scene.add(actor);

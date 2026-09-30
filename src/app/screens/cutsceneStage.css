@@ -50,6 +50,28 @@
   transition-timing-function: ease-in;
 }
 
+/*
+ * A staged kneel / fall for a figure with no painting for them (`stagesUnpaintedPoses`, PR-0244):
+ * the standing painting is sunk, bowed and dimmed, then laid on the floor with its feet as the pivot
+ * (head to the left, toward the party, as the battle's KO pose lies). The dialogue box reads over it.
+ */
+.cutscene__figure.is-kneel {
+  filter: brightness(0.55) saturate(0.6);
+  transform-origin: 50% calc(var(--baseline) * 100%);
+  transform: translateX(-50%) translateY(22%) rotate(-10deg);
+}
+@media (orientation: portrait) {
+  /* The figure stands clear of the box here, so a 22% sink still reads as standing: sink and bow further. */
+  .cutscene__figure.is-kneel {
+    transform: translateX(-50%) translateY(34%) rotate(-15deg);
+  }
+}
+.cutscene__figure.is-ko {
+  filter: brightness(0.42) saturate(0.5);
+  transform-origin: 50% calc(var(--baseline) * 100%);
+  transform: translateX(-50%) translateY(-16%) rotate(-90deg);
+}
+
 .cutscene__figure-art {
   display: block;
   width: 100%;

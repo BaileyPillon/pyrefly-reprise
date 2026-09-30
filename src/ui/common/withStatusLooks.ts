@@ -30,6 +30,7 @@ import { StatusHintCard, partyHints } from './statusHintCard.ts';
 import { StatusTargetTags } from './statusTargetTags.ts';
 import { figureLookOf, type StatusGame } from './statusLooks.ts';
 import { FfxStatusRails } from '../ffx/statusRailsFfx.ts';
+import { RestPoses } from './restPoses.ts';
 
 /** What the painted field offers: `PaintedStage` has all of it. */
 export interface StatusField {
@@ -75,6 +76,8 @@ export interface StatusLooksApi {
   readonly message: StatusMessageLine;
   readonly hint: StatusHintCard;
   readonly rails: FfxStatusRails | null;
+  /** The Sleep hunch and the low-HP painting (`restPoses.ts`, D-298). */
+  readonly poses: RestPoses;
   /** The ids the player is aiming at right now (tests, captures). */
   aimed(): readonly CombatantId[];
 }
@@ -82,6 +85,7 @@ export interface StatusLooksApi {
 export function withStatusLooks<T extends HudPort>(hud: T, game: StatusGame, field: () => StatusField | null, physicalOf?: PhysicalOf): T {
   const marks = new StatusMarks(game);
   const tint = new StatusFigureTint(game, field);
+  const poses = new RestPoses(game, field);
   const message = new StatusMessageLine(game);
   const hint = new StatusHintCard(game);
   const tags = new StatusTargetTags(game);
@@ -101,7 +105,8 @@ export function withStatusLooks<T extends HudPort>(hud: T, game: StatusGame, fie
   const rects = new RectCache();
 
   const markField: MarkField = {
-    head: (id) => field()?.project?.(id, 'head') ?? project?.(id, 'head') ?? null,
+    // A figure resting in its Sleep or low-HP painting: the marks sit on that painting's own head (`restPoses.ts`).
+    head: (id) => poses.headOf(id, field()?.projectRect?.(id) ?? null) ?? field()?.project?.(id, 'head') ?? project?.(id, 'head') ?? null,
     chest: (id) => field()?.project?.(id, 'chest') ?? project?.(id, 'chest') ?? null,
     rect: (id) => field()?.projectRect?.(id) ?? null,
     alpha: (id) => {
@@ -116,6 +121,7 @@ export function withStatusLooks<T extends HudPort>(hud: T, game: StatusGame, fie
     state = s;
     marks.sync(s);
     tint.sync(s);
+    poses.sync(s);
   };
 
   const { sync, syncVitals, onEvent, chooseCommand, setProjector, setTargetingPort, setActing, setVisible, update, mount, unmount } = hud;
@@ -203,6 +209,7 @@ export function withStatusLooks<T extends HudPort>(hud: T, game: StatusGame, fie
   hud.unmount = (): void => {
     marks.dispose();
     tint.dispose();
+    poses.dispose();
     message.clear();
     message.el.remove();
     hint.dispose();
@@ -311,7 +318,7 @@ export function withStatusLooks<T extends HudPort>(hud: T, game: StatusGame, fie
     if (message.el.style.top !== t) message.el.style.top = t;
   }
 
-  const api: StatusLooksApi = { marks, tint, message, hint, rails, aimed: () => aimed };
+  const api: StatusLooksApi = { marks, tint, message, hint, rails, poses, aimed: () => aimed };
   (hud as T & { statusLooks?: StatusLooksApi }).statusLooks = api;
   return hud;
 }

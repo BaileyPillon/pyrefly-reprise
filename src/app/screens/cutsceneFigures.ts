@@ -43,6 +43,48 @@ export interface CutsceneFigure {
   portrait: FigurePlacement;
   /** An unsent figure drifts slightly and carries the cool pyrefly glow. */
   unsent?: boolean;
+  /**
+   * No painting kneels or falls, so `setPose(actor, 'kneel' | 'ko')` stages the standing one
+   * instead of leaving it upright over words that say otherwise (PR-0244): `kneel` lowers and
+   * dims it, `ko` lays it down on the floor, dimmer still, as the battle's KO pose does.
+   * Any other pose leaves it standing. Absent: `setPose` does nothing here, as it always did.
+   * A pose with its own painting ({@link poses}, installed and listed in the manifest) wins over this.
+   */
+  stagesUnpaintedPoses?: boolean;
+  /**
+   * Paintings of its own for the story poses (D-301): `setPose(actor, pose)` shows one when the art
+   * manifest lists it, and falls back to the staging above (or to standing) when it does not.
+   */
+  poses?: Partial<Record<StoryPose, PosePainting>>;
+}
+
+/** The story poses a cutscene figure can have a painting for. */
+export type StoryPose = 'kneel' | 'ko';
+
+/**
+ * A figure's own painting for a story pose, from its sidecar (`public/art/characters/<id>/<pose>.json`). It stands
+ * on the figure's own feet line and centre, so a kneel sinks where he stood and a fall lies there.
+ */
+export interface PosePainting {
+  /** Painting under `public/`, via `artUrl`. */
+  art: string;
+  /** Painting width / height. */
+  aspect: number;
+  /** The sidecar's `baselineY / height`: the row that meets the floor. */
+  baseline: number;
+  /**
+   * The painting's height as a multiple of the idle painting's on the same stage: its pixel height times the
+   * sidecar's measured `scale` (head match inside the stature gate), over the idle's pixel height. The battle
+   * sizes every pose at the idle's pixel scale times that `scale` the same way (`PaintedScale.ts`).
+   */
+  heightOfIdle: number;
+  /**
+   * Where its centre goes instead of the figure's `x`, per orientation, when the painting at the figure's own `x`
+   * would lie behind the dialogue box (a kneel or a fall is lower and wider than the standing figure). The feet line
+   * is always the figure's own.
+   */
+  landscapeX?: number;
+  portraitX?: number;
 }
 
 export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
@@ -135,13 +177,16 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     artFacing: -1,
     landscape: { x: 0.78, feet: 0.9, height: 0.56 },
     portrait: { x: 0.5, feet: 0.74, height: 0.44 },
+    // D-301: the approved kneel (cand-9, 715 x 762, floor at 746, scale 0.96). Without it he stands, as before.
+    poses: { kneel: { art: 'art/characters/isaaru/kneel.png', aspect: 715 / 762, baseline: 746 / 762, heightOfIdle: (762 * 0.96) / 1188 } },
   },
   /**
    * Seymour, living (FFX only: Chapter VII, PR-0244). His battle idle, the approved painting
    * (`public/art/characters/seymour-macalania/idle.png`, 804 x 1191, feet at y 1175; locked as
    * `chapter:macalania:2026-09-25`, used as installed). He stands on the plate from the post
    * scene's first frame, so the tally and the silent kill are not an empty temple; the kneel and the
-   * fall have no painting, so the script captions them, and he goes when the Guado take the body
+   * fall have no painting, so the stage lowers, then lays down, the standing one under the captions
+   * (`stagesUnpaintedPoses`), and he goes when the Guado take the body
    * (research ffx-seymour-anima-macalania.md §9.7 beats 9-10). The pre scene never stands him.
    *
    * Landscape: right of the dialogue box, facing left toward the party. Portrait: centred, feet
@@ -154,6 +199,16 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     artFacing: -1,
     landscape: { x: 0.8, feet: 0.9, height: 0.62 },
     portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+    stagesUnpaintedPoses: true,
+    // D-301: the approved kneel (cand-6, 681 x 651, floor at 635, scale 1.13) and fall (cand-5, the prone canvas,
+    // 1216 x 457, floor at 441, scale 0.82). Without them installed, the staging above. On a wide screen both sit
+    // right of his standing spot so the box does not cover them (at 0.8 the fall lay almost wholly behind it, 1600x900
+    // proof); the fall's robe, cut off by its canvas's right edge, runs off the screen's edge instead (both
+    // orientations), with his head near where he stood.
+    poses: {
+      kneel: { art: 'art/characters/seymour-macalania/kneel.png', aspect: 681 / 651, baseline: 635 / 651, heightOfIdle: (651 * 1.13) / 1191, landscapeX: 0.89 },
+      ko: { art: 'art/characters/seymour-macalania/ko.png', aspect: 1216 / 457, baseline: 441 / 457, heightOfIdle: (457 * 0.82) / 1191, landscapeX: 0.94, portraitX: 0.6 },
+    },
   },
   /**
    * Shuyin, unsent (FFX-2 only: Chapter V, PR-0133). His battle idle, the installed painting
@@ -174,6 +229,8 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     landscape: { x: 0.8, feet: 0.9, height: 0.6 },
     portrait: { x: 0.5, feet: 0.74, height: 0.46 },
     unsent: true,
+    // D-301: the approved kneel (cand-7, 724 x 675, floor at 659, scale 1.04). Without it he stands, as before.
+    poses: { kneel: { art: 'art/characters/shuyin/kneel.png', aspect: 724 / 675, baseline: 659 / 675, heightOfIdle: (675 * 1.04) / 1136 } },
   },
   /**
    * Leblanc, Ormi and Logos, living (FFX-2 only: Chapter XI's epilogue, PR-0133, D-211: "stand

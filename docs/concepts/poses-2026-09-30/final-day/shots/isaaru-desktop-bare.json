@@ -1,0 +1,138 @@
+{
+ "chapter": "isaaru-via-purifico",
+ "actor": "isaaru",
+ "game": "ffx",
+ "device": "desktop",
+ "viewport": {
+  "width": 1600,
+  "height": 900
+ },
+ "package": "NOT served (fallback run)",
+ "firstFrame": {
+  "ms": 113028,
+  "art": "art/characters/isaaru/idle.png",
+  "loaded": true,
+  "natural": "744x1188",
+  "cls": [
+   "is-on"
+  ],
+  "box": {
+   "x": 1090,
+   "y": 313,
+   "w": 316,
+   "h": 504,
+   "bottom": 817
+  },
+  "opacity": "1",
+  "ghosts": 0
+ },
+ "kneel": {
+  "line": "No. Please. Keep that for the road ahead.",
+  "figure": {
+   "art": "art/characters/isaaru/idle.png",
+   "loaded": true,
+   "natural": "744x1188",
+   "cls": [
+    "is-on"
+   ],
+   "box": {
+    "x": 1090,
+    "y": 313,
+    "w": 316,
+    "h": 504,
+    "bottom": 817
+   },
+   "opacity": "1",
+   "ghosts": 0
+  }
+ },
+ "lines": [
+  {
+   "line": "No. Plea",
+   "figure": {
+    "art": "art/characters/isaaru/idle.png",
+    "loaded": true,
+    "natural": "744x1188",
+    "cls": [
+     "is-on"
+    ],
+    "box": {
+     "x": 1090,
+     "y": 313,
+     "w": 316,
+     "h": 504,
+     "bottom": 817
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "No. Please. Keep that for the road ahead.",
+   "figure": {
+    "art": "art/characters/isaaru/idle.png",
+    "loaded": true,
+    "natural": "744x1188",
+    "cls": [
+     "is-on"
+    ],
+    "box": {
+     "x": 1090,
+     "y": 313,
+     "w": 316,
+     "h": 504,
+     "bottom": 817
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "Isaaru...",
+   "figure": {
+    "art": "art/characters/isaaru/idle.png",
+    "loaded": true,
+    "natural": "744x1188",
+    "cls": [
+     "is-on"
+    ],
+    "box": {
+     "x": 1090,
+     "y": 313,
+     "w": 316,
+     "h": 504,
+     "bottom": 817
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  },
+  {
+   "line": "Yuna. We have to go.",
+   "figure": {
+    "art": "art/characters/isaaru/idle.png",
+    "loaded": true,
+    "natural": "744x1188",
+    "cls": [
+     "is-on"
+    ],
+    "box": {
+     "x": 1090,
+     "y": 313,
+     "w": 316,
+     "h": 504,
+     "bottom": 817
+    },
+    "opacity": "1",
+    "ghosts": 0
+   }
+  }
+ ],
+ "notes": [
+  "STAGED: gotoChapter('isaaru-via-purifico', { auto: 'intended', speed: 'fast' }), seed 1; the pre scene advanced by Enter; party HP topped up between turns"
+ ],
+ "served": [],
+ "errors": [],
+ "consoleErrors": [],
+ "http4xx": []
+}

@@ -32,6 +32,10 @@ export const PARTY_POSES = [
   'ko',
   'victory',
   'defend',
+  // Status poses (D-296 / D-298, both games): the Sleep hunch and the low-HP slouch (FFX) or kneel (FFX-2).
+  // A figure without its own painting falls back to idle (below), which is today's look. `ui/common/restPoses.ts`.
+  'sleep',
+  'critical',
 ] as const;
 
 /** Poses an enemy is painted in. Bosses rarely need the full party set. */
@@ -127,6 +131,8 @@ const POSE_FALLBACKS: Readonly<Record<string, readonly string[]>> = {
   ko: ['ko', 'hurt', 'idle'],
   defend: ['defend', 'ready', 'idle'],
   victory: ['victory', 'idle'],
+  sleep: ['sleep', 'idle'],
+  critical: ['critical', 'idle'],
 };
 
 /**
