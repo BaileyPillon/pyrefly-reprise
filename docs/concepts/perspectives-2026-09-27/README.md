@@ -23,7 +23,7 @@ not in this round: its staging is sourced and settled separately (`research/ff7-
 - `sheets/05-ots-family.jpg`: the over-the-shoulder family side by side.
 - `motion/M4-ffx-ch1.mp4`, `motion/M4-ffx2-ch4.mp4`: the per-action camera (the judges' favourite).
 - `motion/M2-ffx-ch1-cut.mp4`: the camera per command with a true over-the-shoulder.
-- The gallery page: https://claude.ai/artifact/MEURPqmFE2CdqSZwbe6CN9 (private to Bailey; every frame, clip and score).
+- The gallery page: https://claude.ai/artifact/YSdFH3hWkYL7RKbvYqpRWH (private to Bailey; every frame, clip and score; republished 2026-09-30 under the account the app now uses, the first link belonged to the other account).
 
 ## The short answers
 
@@ -165,9 +165,7 @@ render in `D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/`. 128
   which the engine cannot do yet.
 - Clips in the repo are 1280x720 web encodes; the 1600x900 masters are in
   `D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/motion-masters/`.
-- The mock worktree `D:/pyrefly-mock-persp` (detached at d74b53f7, junctions `node_modules` and
-  `public/art`, listed in `D:/Tools/disk-cleanup/keep.txt`) stays until Bailey picks. Unlink both
-  junctions before anyone removes it.
+- The mock worktree `D:/pyrefly-mock-persp` was removed on 2026-09-30 (D: emergency, Bailey's cleanup rule; junctions unlinked first, the main tree checked before and after). Its unique files, the candidate cut-outs in `public/mock-art/` and the art and REPL scripts, are in `D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/worktree-extras/`. To rebuild it: a sparse worktree at `d74b53f7` (the recipe in memory `pyrefly-worktree-tooling`), the two junctions, and copy `mock-art` back into `public/`.
 
 ## Questions for Bailey
 
