@@ -446,7 +446,7 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
   }
 }
 
-/** The §5.2 timing bonus carried by a minigame outcome, or `null`. */
+/** The §5.2 timing bonus carried by a minigame outcome, or `null`. A failed Bushido never completed, so none (§5.5, PR-0267). */
 export function timingBonusFrom(result: MinigameResult | undefined, def: AbilityDef): TimingBonus | null {
   if (!result) return null;
   const timerMs = timerMsFor(def);
@@ -455,7 +455,7 @@ export function timingBonusFrom(result: MinigameResult | undefined, def: Ability
     return { timeRemainingMs: result.timing.timeRemainingMs, timerMs: result.timing.timerMs || timerMs };
   }
   if (result.kind === 'auron-sequence') {
-    return { timeRemainingMs: result.sequence.timeRemainingMs, timerMs };
+    return { timeRemainingMs: result.sequence.success ? result.sequence.timeRemainingMs : 0, timerMs };
   }
   if (result.kind === 'wakka-reels' || result.kind === 'ladyluck-reels') {
     return { timeRemainingMs: result.reels.timeRemainingMs, timerMs };

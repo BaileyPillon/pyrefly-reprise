@@ -67,7 +67,8 @@ export function resolveAuronSequence(input: {
   const result: SequenceResult = {
     success,
     correctInputs: input.correctInputs,
-    timeRemainingMs: Math.max(0, input.timerMs - input.elapsedMs),
+    // A sequence that never completed earns no §5.2 bonus [ffx-combat-core §5.5; PR-0267].
+    timeRemainingMs: success ? Math.max(0, input.timerMs - input.elapsedMs) : 0,
   };
   if (input.targetImmuneToRider !== undefined) result.targetImmuneToRider = input.targetImmuneToRider;
   return result;
