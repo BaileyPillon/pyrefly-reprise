@@ -1,0 +1,831 @@
+{
+  "game": "Clair Obscur: Expedition 33",
+  "identity": "The battle camera is a director rather than a viewpoint: every stage of a turn (choose, pick a target, act, defend) cuts to its own authored shot, with the menu hung in the scene beside the hero, so a turn-based fight plays like an edited film sequence.",
+  "meta": {
+    "accessDate": "2026-09-30",
+    "researchNote": "research/battle-camera-clair-obscur.md",
+    "gameCase": "Reference for BOTH Pyrefly games (AGENTS.md rule 14). Nothing here is FFX or FFX-2 game data; whether a device fits CTB or ATB is for the plan to decide.",
+    "tagLegend": {
+      "[verified: N sources]": "N independent written sources say it",
+      "[single source]": "one written source",
+      "[observed: CODE m:ss]": "seen by the researcher in a verified frame of an official video or store screenshot (numbers such as heights and distances are eyeballed from frames, not published)",
+      "[not found]": "searched for and not found"
+    },
+    "footage": {
+      "FL": {
+        "title": "Clair Obscur: Expedition 33 | First Look Gameplay",
+        "channel": "Sandfall Interactive",
+        "published": "2024-08-28",
+        "length": "6:49",
+        "url": "https://www.youtube.com/watch?v=55rUagD9sVQ",
+        "build": "Early build (Gamescom 2024), watermarked GAME IN DEVELOPMENT; UI differs slightly from release",
+        "note": "Same footage as the IGN upload 9hKA7KSvC10, which is age-gated for scripted clients, so Sandfall's own upload was used."
+      },
+      "IGN": {
+        "title": "Clair Obscur: Expedition 33 - Official Combat Gameplay Clip",
+        "channel": "IGN",
+        "published": "2025-03-03",
+        "length": "4:43",
+        "url": "https://www.youtube.com/watch?v=GByuD9VPa2I",
+        "build": "March 2025 preview build, one fight against a Nevron called Eveque with two heroes",
+        "note": "IGN channel upload of publisher-supplied footage, not a Sandfall or Kepler upload."
+      },
+      "DD": {
+        "title": "Clair Obscur: Expedition 33 | XBOX Developer_Direct 2025 | Sandfall Interactive",
+        "channel": "Sandfall Interactive",
+        "published": "2025-01-30",
+        "length": "11:39",
+        "url": "https://www.youtube.com/watch?v=LCy6vC00O0c",
+        "build": "January 2025 build",
+        "note": "Chapter 'Combat and Battle Mechanics' runs 6:16 to 8:24; the on-screen caption names the presenter as Michel Nohra, Lead Game Designer. Audio was not analysed (agents cannot hear)."
+      },
+      "STEAM": {
+        "title": "Steam store page, official screenshots (app 1903340)",
+        "channel": "Valve / Sandfall Interactive",
+        "url": "https://store.steampowered.com/app/1903340/Clair_Obscur_Expedition_33/",
+        "build": "Release UI",
+        "note": "Two screenshots show battle HUD states: ss_d3a10809 (command select) and ss_ec16f873 (enemy turn)."
+      }
+    },
+    "caveats": [
+      "No camera parameters (FOV, distance, height) are published. Every height, distance and angle below is eyeballed from frames.",
+      "Where a value was not found the field says 'not found' or 'unknown' rather than a guess.",
+      "No frame was copied into the repo. Frames were viewed only to verify the timestamps, then deleted."
+    ]
+  },
+  "shots": [
+    {
+      "id": "co-battle-start",
+      "phase": "Battle start (field to arena)",
+      "name": "Shock ring, petal burst, wide arena reveal",
+      "camera": {
+        "where": "Field: the player-controlled exploration camera behind the lead hero. On contact the game cuts to authored shots: a tight, low view of the impact point (red shock ring), then a petal-burst wipe, then a wide arena establishing shot from the side (field encounter) or from behind and above the party (boss encounter that follows a cutscene).",
+        "height": "Impact shot near ground level. Arena shot roughly 1.5 to 2.5 m up, level or tipped slightly down (eyeballed).",
+        "distance": "Far: the heroes are small in the lower part of the frame and the enemy stands across the arena.",
+        "lens": "wide",
+        "movement": "About 3 s of slow-motion sparks on a fixed camera, a petal wipe under 1 s, then a near-static wide shot with a slight push while the heroes run into place, then a motion-blur whip into the first command shot."
+      },
+      "frame": "Heroes low in frame, enemy across the arena (side-on) or at the top of frame (boss version). The battle HUD fades in during the reveal: enemy name bar first, party HP tiles a beat later, turn-order strip last. No menu until the first actor is up. A 'First Strike!' banner shows when the player opened the fight.",
+      "timing": "Field first strike: about 3.5 s from impact to the arena wipe, then about 2.5 s of arena before the first menu (FL 1:18 to 1:24.5). Boss fight after a letterboxed cutscene: hard cut to black at 3:57.5, petal burst at 3:57.8, arena lit by 3:59 (about 1.5 s).",
+      "whyItWorks": "The petal burst repeats the game's Gommage motif, so the swap from field camera to arena camera reads as a designed beat and hides the change of shot. The still wide gives the player the formation before menus arrive [inference]. A reviewer singles out the way each hero swishes into battle.",
+      "confidence": "[observed: FL 1:18-1:25; FL 3:57-3:59] [single source: Jimquisition, entrance praised] [verified: 2 sources: Xbox Wire tips and the FL 1:25 banner for the First Strike opener]",
+      "sources": [
+        { "title": "First Look Gameplay (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ", "note": "Frames sampled at 0.25 to 1 s around 1:17-1:25 and 3:56-4:00." },
+        { "title": "The Jimquisition review", "url": "https://www.thejimquisition.com/post/clair-obscur-expedition-33-picture-perfect-review", "note": "Praises how each character swishes into a battle as it begins." },
+        { "title": "Xbox Wire: 8 Tips to Help You Get Started", "url": "https://news.xbox.com/en-us/2025/04/23/tips-to-get-started-clair-obscur-expedition-33/", "note": "Shooting or striking an enemy in the field starts the fight with a First Strike." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=78s",
+          "t": "1:18",
+          "verified": true,
+          "lookFor": "Red shock ring on the ground at 1:18, about 3 s of slow sparks, petals scatter at 1:21.5, wide arena at 1:22 with the heroes running in, motion-blur whip at 1:24 into the first menu (First Strike banner by 1:24.5)."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=237s",
+          "t": "3:57",
+          "verified": true,
+          "lookFor": "Letterboxed cutscene ends, hard cut to black at 3:57.5, petal burst at 3:57.8, arena lit by 3:59 with the boss above a loose row of heroes and the name bar already up."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "side",
+        "partyPositions": "Two or three heroes run into a loose row on the left of frame.",
+        "enemyPosition": "Far side of the arena, right of frame (boss version: top of frame, far end of a wide arena).",
+        "cameraAngleDeg": 75,
+        "heightNote": "About 1.5 to 2.5 m, level to slightly down (eyeballed). The boss version sits behind and above the party at about 20 degrees off the line."
+      }
+    },
+    {
+      "id": "co-command",
+      "phase": "Command select",
+      "name": "Battle Wheel over the shoulder",
+      "camera": {
+        "where": "Behind and slightly to the side of the hero whose turn it is. The hero stands in the left third of the frame with their back turned about 20 to 30 degrees toward the enemy; a second party member is cropped in the right foreground or stands in the right third.",
+        "height": "About the hero's chest to head height, looking level (eyeballed).",
+        "distance": "Close: the hero fills roughly half to two thirds of the frame height, about 2 to 3 m away (eyeballed).",
+        "lens": "normal",
+        "movement": "Near static with ambient drift (the lead programmer says something is always happening on screen, even in menus). Enters by a whip-pan of under about 0.5 s from the previous shot."
+      },
+      "frame": "Hero in the left third, enemy in mid-distance centre or right, ally at right. The Battle Wheel hangs in world space off the hero's side as 4 to 5 angled brush-stroke options (Aim, Gradient Attack once charges exist, Items, Skills, Attack) with button glyphs. HUD: turn-order strip of portraits top-left, enemy name and health top-centre, three party HP tiles bottom-right (active one enlarged), Flee and Skip Turn prompts bottom-left, a character-mechanic panel mid-right.",
+      "timing": "Open-ended hold while the player decides.",
+      "whyItWorks": "The menu sits inside the picture beside the hero instead of on a separate screen, so the waiting moment is itself a composed frame [inference]. Sandfall names Persona's camera and menus as the model, and critics read the menus as Persona-like.",
+      "confidence": "[observed: FL 1:25, 4:12; DD 6:28; IGN 3:11; Steam screenshot ss_d3a10809] [verified: 5 sources: Persona-derived camera and menus (PlayStation Blog 2024, PC Gamer interview, Denfaminicogamer, Vice, Rolling Stone)] [single source: Guillermin, constant motion]",
+      "sources": [
+        { "title": "Steam official screenshot: command select", "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1903340/ss_d3a10809f5cc2a8df7773f41acd1493f4fb900ec.1920x1080.jpg", "note": "Lune's turn: hero left third, enemy centre, wheel fanned to her side, HUD positions as listed." },
+        { "title": "Vice review (Matt Vatankhah, 2025-04-23)", "url": "https://www.vice.com/en/article/clair-obscur-expedition-33-is-the-turn-based-rpg-youve-been-dreaming-about-for-years-review/", "note": "Compares the dynamic menus to Persona." },
+        { "title": "Rolling Stone review (George Yang, 2025-04-23)", "url": "https://www.rollingstone.com/culture/rs-gaming/clair-obscur-expedition-33-review-1235322810/", "note": "Persona 5 shares a similar dynamic gameplay camera and user interface." },
+        { "title": "PC Gamer interview (Robert Jones, 2024-08-28)", "url": "https://www.pcgamer.com/games/rpg/clair-obscur-expedition-33-creative-director-speaks-candidly-about-the-new-rpgs-respect-for-final-fantasy-and-persona-we-are-definitely-not-hiding-that-there-are-influences/", "note": "The writer saw similar camera angles and menu animations; Broche confirms Sandfall studied Persona's camera movements and menus." },
+        { "title": "Unreal Engine developer interview with Tom Guillermin (Internet Archive copy)", "url": "https://web.archive.org/web/20260420221013/https://www.unrealengine.com/developer-interviews/inside-the-development-journey-of-clair-obscur-expedition-33", "note": "Something is always happening on screen, even while navigating menus." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=85s",
+          "t": "1:25",
+          "verified": true,
+          "lookFor": "Gustave at the left, Lune at the right, the wheel (Aim, Items, Skills, Attack) fanning off Gustave, First Strike banner across the middle, Flee and Skip Turn bottom-left."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=252s",
+          "t": "4:12",
+          "verified": true,
+          "lookFor": "Maelle in the left third seen from behind, the giant Goblu striding in the mid-distance, wheel off her side, stance tag mid-right, party tiles bottom-right."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | XBOX Developer_Direct 2025 | Sandfall Interactive (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=LCy6vC00O0c&t=388s",
+          "t": "6:28",
+          "verified": true,
+          "lookFor": "Wheel with five entries: Aim, Gradient Attack, Items, Skills, Attack; wide beach arena with a giant mechanical enemy at the top left; Gradient Charges meter bottom-centre."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "Active hero large in the left third; ally in the right third or cropped in the right foreground; all face the enemy.",
+        "enemyPosition": "Mid-distance, centre to right of frame, roughly 8 to 12 m away (eyeballed).",
+        "cameraAngleDeg": 25,
+        "heightNote": "Chest to head height of a standing hero, looking level (eyeballed)."
+      }
+    },
+    {
+      "id": "co-skill-select",
+      "phase": "Skill select",
+      "name": "Skill cards fan out and the camera pushes in",
+      "camera": {
+        "where": "Same side as the command shot but closer and a little lower; the hero grows to fill the lower left.",
+        "height": "Slightly below the hero's head height (eyeballed).",
+        "distance": "Closer than the command shot: the hero is about two thirds to three quarters of the frame height.",
+        "lens": "normal",
+        "movement": "A whip of about 0.6 s with an ink-and-debris burst as the list opens (FL 4:12.6 to 4:13.2), then a hold while the player browses."
+      },
+      "frame": "One or two columns of three angled skill cards to the right of the hero, each with cost, hit count and stance tags; enemy above and behind; back and skip prompts bottom-left; the rest of the HUD as in the command shot.",
+      "timing": "About 0.6 s to open, then an open-ended hold.",
+      "whyItWorks": "The push-in and burst give a small reward for every menu step and keep the hero as the visual anchor while text appears around them [inference].",
+      "confidence": "[observed: FL 1:26, 4:14, 4:31, 4:53; DD 6:30; IGN 3:12]",
+      "sources": [
+        { "title": "First Look Gameplay (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ", "note": "0.2 s frame sampling 4:12.0 to 4:16.4." },
+        { "title": "Official Combat Gameplay Clip (IGN)", "url": "https://www.youtube.com/watch?v=GByuD9VPa2I", "note": "3:12 shows the same push-in on Lune." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=86s",
+          "t": "1:26",
+          "verified": true,
+          "lookFor": "Gustave large at the left with his skill cards angled to his right, a big slash arc behind, Flee, Skip Turn and Back prompts bottom-left."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=254s",
+          "t": "4:14",
+          "verified": true,
+          "lookFor": "Maelle large in the lower left with a main column of three cards and a second column of two to her right; the ink burst that opens the list is 4:12.6 to 4:13.2, just before this moment."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | XBOX Developer_Direct 2025 | Sandfall Interactive (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=LCy6vC00O0c&t=390s",
+          "t": "6:30",
+          "verified": true,
+          "lookFor": "Two columns of skill cards (Spark, Percee, Swift Stride and Rain of Fire, Mezzo Forte, Sword Ballet) to the right of Maelle, who fills the lower left with her back to the camera."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "Active hero very large at the lower left; ally partly visible at the right edge.",
+        "enemyPosition": "Upper centre or upper left in the distance.",
+        "cameraAngleDeg": 30,
+        "heightNote": "A little below head height, looking level to slightly up (eyeballed)."
+      }
+    },
+    {
+      "id": "co-target-select",
+      "phase": "Target select",
+      "name": "Hard cut to the target's face",
+      "camera": {
+        "where": "A hard cut to a close view of the highlighted enemy, seen from the party's side and slightly low, so the enemy fills most of the frame. With one large enemy the camera goes straight to it.",
+        "height": "About chest to knee height of the party, looking slightly up (eyeballed).",
+        "distance": "Close: a giant fills the frame from roughly 3 to 5 m; a human-sized enemy fills about the left half (eyeballed).",
+        "lens": "normal",
+        "movement": "Cut in under about 0.2 s (FL 4:14.0 to 4:14.2), then a slow drift while the player picks a target."
+      },
+      "frame": "Enemy body fills the left and centre. A translucent card at top-left reads 'Select target' plus the skill text; 'Select Target' and 'Back' prompts bottom-left; enemy name and bar top-centre; party HP tiles bottom-right; the active hero's stance tag at right.",
+      "timing": "Open-ended hold; a caster shot follows within about 0.2 s of confirming.",
+      "whyItWorks": "Shows the thing you are about to hit at heroic scale and pairs it with the skill text in one frame [inference].",
+      "confidence": "[observed: FL 1:27, 4:15, 4:24, 4:33, 4:55; IGN 3:13; DD 8:08] [not found] as a held shot when there are three enemies: only a transitional swing was seen (DD 6:31).",
+      "sources": [
+        { "title": "First Look Gameplay (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ", "note": "Single large enemy (Goblu) target close-ups." },
+        { "title": "Official Combat Gameplay Clip (IGN)", "url": "https://www.youtube.com/watch?v=GByuD9VPa2I", "note": "3:13, target close-up on Eveque's torso." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=87s",
+          "t": "1:27",
+          "verified": true,
+          "lookFor": "Cut to a front-on view of the masked, red-maned enemy with the 'Select target' card at top-left and A Select Target and B Back at the bottom."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=255s",
+          "t": "4:15",
+          "verified": true,
+          "lookFor": "The giant Goblu filling the frame from a low side view with the Spark card at top-left; the cut from the skill list happens at 4:14.0 to 4:14.2."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 - Official Combat Gameplay Clip (IGN)",
+          "url": "https://www.youtube.com/watch?v=GByuD9VPa2I&t=193s",
+          "t": "3:13",
+          "verified": true,
+          "lookFor": "Close view of the enemy's torso and outstretched arms with the Immolation card at top-left, prompts bottom-left."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "Off camera behind the lens; the party is not in frame.",
+        "enemyPosition": "Filling the frame, roughly 3 to 5 m from the lens.",
+        "cameraAngleDeg": 5,
+        "heightNote": "Chest to knee height, looking slightly up (eyeballed). The lens sits on the party side of the enemy."
+      }
+    },
+    {
+      "id": "co-skill-exec",
+      "phase": "Attack and skill execution",
+      "name": "Each skill is a short film",
+      "camera": {
+        "where": "Every skill plays its own authored run of 2 to 5 shots: a medium-full shot of the caster (front or three-quarter, low), a close-up with the timing prompt, a whip or push to the enemy for the impact, then a pull-back wide. Some skills use a canted (tilted) frame.",
+        "height": "Mostly low, from knee to waist height, with some ground-level and overhead shots (eyeballed).",
+        "distance": "Varies from a face close-up to a full-body medium shot.",
+        "lens": "wide",
+        "movement": "Hard cuts, whips with heavy motion blur, camera shake, slow motion on impact and an animated focal length. The menu disappears; the turn-order strip and party tiles stay."
+      },
+      "frame": "The caster fills the frame with a diamond 'A' prompt and a ring that reads PERFECT when timed well; large world-space damage numbers pop at each hit (24 up to 12,437 seen); a 'Status Effects' tag sits top-right during casts.",
+      "timing": "About 2 to 5 s per skill: Maelle's Spark runs about 4 s (FL 4:15.2 to 4:19) and Lune's Ice Lance about 3 s (FL 4:33.5 to 4:36). A shot changes about every 1 to 1.5 s.",
+      "whyItWorks": "Dev intent: each skill is authored in a sequence editor as a small cinematic with camera position, rotation, animated focal length, shakes and time dilation, all for a feeling of intensity. A reviewer credits slow motion and particle flourishes with theatrical drama.",
+      "confidence": "[verified: 3 sources: authored per skill (Unreal interview, PlayStation Blog 2026, MobileSyrup on the MIGS talk)] [observed: FL 1:28-1:32, 1:36-1:38, 4:15-4:19, 4:34-4:36, 4:56-4:59; DD 8:12; Steam stills: ss_0902af72 is low, wide and side-on, ss_49ba857f and ss_8439c07d are canted]",
+      "sources": [
+        { "title": "Unreal Engine developer interview with Tom Guillermin (Internet Archive copy)", "url": "https://web.archive.org/web/20260420221013/https://www.unrealengine.com/developer-interviews/inside-the-development-journey-of-clair-obscur-expedition-33", "note": "All skills are treated as small cinematics in Sequencer, with battle actors bound at runtime." },
+        { "title": "PlayStation Blog, 2026-03-11 (Tom Guillermin, GDC write-up)", "url": "https://blog.playstation.com/2026/03/11/how-the-clair-obscur-expedition-33-dev-process-powered-creative-design-freedom/", "note": "Camera location, rotation and animated focal length, plus shakes and time dilation, are part of each skill." },
+        { "title": "MobileSyrup on Michel Nohra's MIGS talk (2025-11-27)", "url": "https://mobilesyrup.com/2025/11/27/clair-obscur-expedition-33-devs-combat-hard-juicy/", "note": "Time dilation, focal length, camera shakes and camera movement mark important moments." },
+        { "title": "PC Gamer review (Justin Wagner, 2025-04-23)", "url": "https://www.pcgamer.com/games/rpg/clair-obscur-expedition-33-review/", "note": "Emphatic slow motion and particle flourishes around the timing prompts." },
+        { "title": "Steam official screenshots (store page)", "url": "https://store.steampowered.com/app/1903340/Clair_Obscur_Expedition_33/", "note": "Promo stills of skill moments with low, wide, tilted frames." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=88s",
+          "t": "1:28",
+          "verified": true,
+          "lookFor": "Gustave's Lumiere Assault: A prompt in the blur at 1:28, PERFECT ring and 53 at 1:29, 64 with a second A ring at 1:30, 96 and 64 at 1:31, pull-back wide at 1:32."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=96s",
+          "t": "1:36",
+          "verified": true,
+          "lookFor": "Lune's spell: a tilted white-and-gold frame wraps her while the A prompt plays at 1:36, red burst and PERFECT ring at 1:37, then 91 PERFECT in a wider shot at 1:38."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=256s",
+          "t": "4:16",
+          "verified": true,
+          "lookFor": "Maelle's Spark seen from the front and low: two A diamonds, fire and violet bursts, PERFECT ring at 4:16.4; the shot before it (4:15.2) is a full-body low view of her."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | XBOX Developer_Direct 2025 | Sandfall Interactive (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=LCy6vC00O0c&t=492s",
+          "t": "8:12",
+          "verified": true,
+          "lookFor": "Extreme close, low, heavily blurred slash through a giant dark shape with the A prompt; the next second shows the 11,062 hit."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "orbit",
+        "partyPositions": "Caster centre of frame or one side; other heroes usually out of frame.",
+        "enemyPosition": "Behind or beside the caster, or filling the frame on impact shots.",
+        "cameraAngleDeg": 100,
+        "heightNote": "Mostly knee to waist height, some ground-level and overhead shots. The angle swings from about 30 to 170 degrees inside one skill (eyeballed)."
+      }
+    },
+    {
+      "id": "co-free-aim",
+      "phase": "Free Aim (aiming mode)",
+      "name": "Aim entry on the wheel; aiming view not found",
+      "camera": {
+        "where": "Not found in any official footage that could be frame-checked. The only camera remark in print (Can I Play That?) is that activating Free Aim zooms in and the reticle turns into crosshairs, with unlimited time to aim; the mode is drawn from third-person shooters. Outside battle Aim uses the exploration camera.",
+        "height": "Not found.",
+        "distance": "Not found.",
+        "lens": "unknown",
+        "movement": "Not found."
+      },
+      "frame": "On the wheel, Aim is the first entry (left tip). Each shot costs 1 AP and does not end the turn; hitting a weak point deals extra damage; flying enemies are mostly hit this way. Rules [verified: 3 sources: PlayStation Blog 2024, Xbox Wire tips, Fextralife].",
+      "timing": "Not found.",
+      "whyItWorks": "Not found as a camera claim. Stated design intent (Broche): aim ranged weapons at enemies to hit exposed weak points.",
+      "confidence": "[not found] for the aiming camera. Wheel entry [observed: DD 6:28; Steam screenshot ss_d3a10809; FL 1:25]. Rules [verified: 3 sources].",
+      "sources": [
+        { "title": "PlayStation Blog, 2024-07-29 (Broche interview)", "url": "https://blog.playstation.com/2024/07/29/clair-obscur-expedition-33-devs-discuss-classic-turn-based-rpg-inspiration-and-real-time-mechanics/", "note": "Ranged weapons can be aimed at exposed weak points." },
+        { "title": "Xbox Wire: 8 Tips to Help You Get Started", "url": "https://news.xbox.com/en-us/2025/04/23/tips-to-get-started-clair-obscur-expedition-33/", "note": "Free aim costs 1 AP in battle and does not end the turn; drawn from third-person shooters." },
+        { "title": "Fextralife wiki: Combat", "url": "https://expedition33.wiki.fextralife.com/Combat", "note": "Battle Wheel lists Aim, Items, Skills, Attack." },
+        { "title": "Can I Play That? accessibility review (Mike Matlock, 2025-12-04)", "url": "https://caniplaythat.com/2025/12/04/clair-obscur-expedition-33-accessibility-review/", "note": "Free Aim zooms in with a crosshair reticle; unlimited time while aiming." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | XBOX Developer_Direct 2025 | Sandfall Interactive (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=LCy6vC00O0c&t=388s",
+          "t": "6:28",
+          "verified": true,
+          "lookFor": "Aim is the first option on the Battle Wheel (left tip). This clip does not show the aiming view itself."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "free",
+        "partyPositions": "Unknown.",
+        "enemyPosition": "Unknown.",
+        "cameraAngleDeg": null,
+        "heightNote": "Not found. Do not draw this shot from these notes."
+      }
+    },
+    {
+      "id": "co-telegraph",
+      "phase": "Enemy turn: the wind-up",
+      "name": "Wind-up cutaway before a big attack",
+      "camera": {
+        "where": "In the enemy's turn the camera cuts from its wide, low view to an extreme close-up of the enemy charging (IGN clip); for a jump attack it stays low behind the heroes and tilts up to follow the giant out of frame (First Look).",
+        "height": "Close-up at the enemy's chest and hands; the jump shot at the heroes' knee height, tilting up.",
+        "distance": "Extreme close-up, or a long low view.",
+        "lens": "normal",
+        "movement": "Hard cut in, a slow push during the charge, hard cut back to wide when the strike starts. For jumps a smooth tilt up, then a snap down at impact."
+      },
+      "frame": "Enemy body fills the frame with its glowing core; the move caption sits top-centre ('Eveque charges up.' or 'Goblu is about to crush Gustave.'); Parry, Dodge and Jump prompts bottom-left; party HP tiles bottom-right.",
+      "timing": "IGN: close-up from 3:03 to 3:08 (about 5 to 6 s), wide again at 3:09. FL: 'about to crush' caption at 4:45, tilt-up and jump at 4:47, impact at 4:48 (about 3 s of warning).",
+      "whyItWorks": "The telegraph is also the drama [inference]. Sandfall say camera movement, focal length, shakes and time dilation are used to cue how the player should react, and enemy hit animations are emphasised to nudge the parry. With Camera Movement off, the game itself warns that some attacks become harder to read.",
+      "confidence": "[observed: IGN 3:03-3:09; FL 4:45-4:48] [single source: MobileSyrup on Nohra's MIGS talk, camera as a reaction cue] [verified: 3 sources: turning the camera off makes attacks harder to read (game text via Linnet, Can I Play That?, PC Gamer)]",
+      "sources": [
+        { "title": "MobileSyrup on Michel Nohra's MIGS talk (2025-11-27)", "url": "https://mobilesyrup.com/2025/11/27/clair-obscur-expedition-33-devs-combat-hard-juicy/", "note": "Camera work gives players cues on how to react; hit animations in the enemy turn are emphasised." },
+        { "title": "PC Gamer accessibility piece (Kerry Brunskill, 2025-05-08)", "url": "https://www.pcgamer.com/games/rpg/i-couldnt-have-played-clair-obscur-without-its-accessibility-settings-and-now-it-might-be-my-goty/", "note": "With movement off, bosses vanish skyward while the camera stays behind." },
+        { "title": "Official Combat Gameplay Clip (IGN)", "url": "https://www.youtube.com/watch?v=GByuD9VPa2I", "note": "3:03 to 3:09 charge-up cutaway." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 - Official Combat Gameplay Clip (IGN)",
+          "url": "https://www.youtube.com/watch?v=GByuD9VPa2I&t=183s",
+          "t": "3:03",
+          "verified": true,
+          "lookFor": "Cut from the wide, low enemy-turn view to an extreme close-up of Eveque's chest and hands with the 'Eveque charges up.' caption; it holds until 3:08."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=285s",
+          "t": "4:45",
+          "verified": true,
+          "lookFor": "Caption 'Goblu is about to crush Gustave.' with the camera low behind two heroes; at 4:47 the view tilts up as the giant leaps out of frame; the crash is at 4:48."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "Behind or beside the lens (close-up) or two heroes low in frame (jump).",
+        "enemyPosition": "Filling the frame, or far and rising out of frame.",
+        "cameraAngleDeg": 5,
+        "heightNote": "Chest of the enemy for the close-up; knee height of the heroes for the jump shot (eyeballed)."
+      }
+    },
+    {
+      "id": "co-enemy-turn",
+      "phase": "Enemy turn",
+      "name": "Wide, low, behind the party",
+      "camera": {
+        "where": "Behind the party, looking across the arena at the enemy. The heroes stand in a loose row in the lower part of the frame and the enemy fills the upper half. The camera stays here for most of the enemy's sequence and cuts in for individual hits.",
+        "height": "From knee height up to about 2.5 m, looking level to slightly down; it drops lower as a big attack lands (eyeballed).",
+        "distance": "Far: heroes are roughly one fifth to one third of the frame height.",
+        "lens": "wide",
+        "movement": "Mostly held or slowly drifting, with short cutaways on each hit or dodge, a tilt up to follow jumps, and motion-blur whips between hits."
+      },
+      "frame": "Defence prompt stack bottom-left (Gradient, Parry, Dodge, Jump), move caption top-centre, party HP tiles bottom-right, turn-order strip top-left; floating PARRIED or DODGE text and damage numbers mid-frame.",
+      "timing": "A whole enemy sequence lasts about 9 to 13 s (FL 1:40-1:53, 4:01-4:10, 4:37-4:50); individual shots run about 1 to 6 s.",
+      "whyItWorks": "Keeps the incoming attack readable while the heroes stay in frame, and the low wide angle makes enemies feel huge [inference]. Some players find a moving camera hard to follow, which is why the option to calm it exists.",
+      "confidence": "[observed: FL 1:41-1:44, 4:01-4:06, 4:37-4:50; IGN 0:18-0:30; Steam screenshot ss_ec16f873] [single source: PC Gamer (Brunskill) found the moving camera hard to follow]",
+      "sources": [
+        { "title": "Steam official screenshot: enemy turn", "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1903340/ss_ec16f873c7d14fc4a4f17966b25f9712dc486b4a.1920x1080.jpg", "note": "Low camera near the party, giant enemy filling the right, defence prompts bottom-left, party tiles bottom-right." },
+        { "title": "PC Gamer accessibility piece (Kerry Brunskill, 2025-05-08)", "url": "https://www.pcgamer.com/games/rpg/i-couldnt-have-played-clair-obscur-without-its-accessibility-settings-and-now-it-might-be-my-goty/", "note": "Describes the camera as a busy thing zooming and shifting to show the most exciting angles." },
+        { "title": "First Look Gameplay (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ", "note": "Per-second frames across three enemy turns." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=101s",
+          "t": "1:41",
+          "verified": true,
+          "lookFor": "Two heroes left and right, small in a wide low frame, the masked scythe-armed enemy leaping between them; caption 'Luster performs a fast combo.' top-centre; DODGE text at 1:43."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=241s",
+          "t": "4:01",
+          "verified": true,
+          "lookFor": "Three heroes in a row at the bottom, the giant above them; 'Goblu jumps.' caption; Parry, Dodge, Jump prompts bottom-left."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=277s",
+          "t": "4:37",
+          "verified": true,
+          "lookFor": "A higher, farther version of the same shot: three heroes as tiny figures in a flower field seen from behind, 'Goblu burns.' then 'Goblu performs a melee combo.'"
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "Two or three heroes in a loose row across the lower third, seen from behind.",
+        "enemyPosition": "Upper centre, roughly 10 to 20 m away; a group of up to three enemies spreads across the middle.",
+        "cameraAngleDeg": 20,
+        "heightNote": "Knee height up to about 2.5 m; drops as a big hit lands (eyeballed)."
+      }
+    },
+    {
+      "id": "co-parry-counter",
+      "phase": "Enemy turn: parry and counter",
+      "name": "Parry chain, then a counter mini-cinematic",
+      "camera": {
+        "where": "After the last hit of a chain is parried the camera cuts to a fast, low, close sequence around the enemy: it swings and chases the counter with heavy motion blur, then settles back to the wide view.",
+        "height": "Low, near the ground and close to the enemy's body.",
+        "distance": "Close; the enemy's limbs sweep through the frame.",
+        "lens": "wide",
+        "movement": "Whips, spins and shake, with slow-motion beats on the strongest hit."
+      },
+      "frame": "PARRIED text floats low in the centre for each parried hit (three in a row); caption 'Expedition 33 performs a Counter.' top-centre; damage numbers above 100 appear large; the defence prompts fade.",
+      "timing": "Parries at FL 4:04-4:05; counter shots at FL 4:07-4:10 (about 4 s).",
+      "whyItWorks": "Rewards timing skill with the most cinematic shot of the turn [inference]. The lead programmer singles out landing a counter after a run of parries as the feeling the team wanted.",
+      "confidence": "[observed: FL 4:04-4:10, 1:53-1:54, 6:29; DD 0:54-0:55] [single source: Guillermin, payoff of the counter]",
+      "sources": [
+        { "title": "Unreal Engine developer interview with Tom Guillermin (Internet Archive copy)", "url": "https://web.archive.org/web/20260420221013/https://www.unrealengine.com/developer-interviews/inside-the-development-journey-of-clair-obscur-expedition-33", "note": "Landing a counterattack after a series of successful parries feels good." },
+        { "title": "First Look Gameplay (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ", "note": "Per-second frames 4:01-4:12." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=244s",
+          "t": "4:04",
+          "verified": true,
+          "lookFor": "Three PARRIED words in a row under the leaping giant, the wide camera unchanged."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=247s",
+          "t": "4:07",
+          "verified": true,
+          "lookFor": "Caption 'Expedition 33 performs a Counter.', then a low, close, blurred chase of the counter with 112 and 108 damage numbers at 4:09 to 4:10."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "orbit",
+        "partyPositions": "Heroes mostly out of frame or tiny at the edge.",
+        "enemyPosition": "Filling the frame.",
+        "cameraAngleDeg": 60,
+        "heightNote": "Near ground level (eyeballed)."
+      }
+    },
+    {
+      "id": "co-gradient",
+      "phase": "Big set-pieces: Gradient",
+      "name": "Gradient Counter and the Gradient Attack entry",
+      "camera": {
+        "where": "Gradient Counter: the screen darkens and desaturates with white specks, then the wide enemy-turn camera catches a golden brush-ring swirl around the hero as the counter fires. Gradient Attack: an extra 'Gradient Attack' entry appears on the Battle Wheel once charges exist.",
+        "height": "Low, roughly waist height (eyeballed).",
+        "distance": "Medium to far; hero and boss both in frame.",
+        "lens": "wide",
+        "movement": "Slow-motion dip then a swirl; the camera holds while the ring plays."
+      },
+      "frame": "Caption 'Maelle performs a Gradient Counter.' top-centre; golden ring around the hero; Gradient Charges meter bottom-centre; defence prompts bottom-left; party tiles bottom-right.",
+      "timing": "Dark beat at 6:31, counter at 6:32-6:33 (about 2 s).",
+      "whyItWorks": "The darkening and slow beat before the counter makes the window feel special before the payoff [inference]. One reviewer notes Gradient Counters show time-slowing and screen darkening.",
+      "confidence": "[observed: FL 6:31-6:33; DD 6:28] [single source: Can I Play That?, slow-down and darkening] [not found] a frame-checked Gradient Attack cinematic.",
+      "sources": [
+        { "title": "Can I Play That? accessibility review (Mike Matlock, 2025-12-04)", "url": "https://caniplaythat.com/2025/12/04/clair-obscur-expedition-33-accessibility-review/", "note": "Gradient Counters show time-slowing and screen darkening." },
+        { "title": "First Look Gameplay (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ", "note": "Boss montage at the end of the video." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=391s",
+          "t": "6:31",
+          "verified": true,
+          "lookFor": "Dark, desaturated frame with white specks at 6:31, then the 'Maelle performs a Gradient Counter.' caption with a golden ring at 6:32 to 6:33."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | XBOX Developer_Direct 2025 | Sandfall Interactive (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=LCy6vC00O0c&t=388s",
+          "t": "6:28",
+          "verified": true,
+          "lookFor": "'Gradient Attack' listed as a wheel entry and the Gradient Charges meter at the bottom centre."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "Hero mid-left with the ring around them; other heroes at the edges.",
+        "enemyPosition": "Centre or right, tall.",
+        "cameraAngleDeg": 45,
+        "heightNote": "Roughly waist height (eyeballed)."
+      }
+    },
+    {
+      "id": "co-break",
+      "phase": "Big set-pieces: Break",
+      "name": "BROKEN tag on a big hit",
+      "camera": {
+        "where": "No dedicated Break camera was found. On a broken enemy the hit is staged as an extreme low, close, heavily blurred slash with a large damage number and a small BROKEN tag under it.",
+        "height": "Very low, near ground level (eyeballed).",
+        "distance": "Extreme close.",
+        "lens": "wide",
+        "movement": "Whip and heavy motion blur across the hit."
+      },
+      "frame": "A huge number mid-frame (11,062) with BROKEN beneath it; Foretell cards mid-right; enemy bar top-centre.",
+      "timing": "About 1 to 2 s (DD 8:12-8:13).",
+      "whyItWorks": "The oversized number and the tag tell the player the hit is landing harder than normal without a separate cutscene [inference].",
+      "confidence": "[observed: DD 8:12-8:13] [single source: Wikipedia, Break temporarily stuns enemies] [not found] a dedicated Break camera.",
+      "sources": [
+        { "title": "Developer_Direct 2025 segment (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=LCy6vC00O0c", "note": "Frames 8:06-8:20." },
+        { "title": "Wikipedia: Clair Obscur: Expedition 33", "url": "https://en.wikipedia.org/wiki/Clair_Obscur:_Expedition_33", "note": "Gameplay section: Break and Gradient." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | XBOX Developer_Direct 2025 | Sandfall Interactive (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=LCy6vC00O0c&t=492s",
+          "t": "8:12",
+          "verified": true,
+          "lookFor": "The A prompt over a purple-black slash at 8:12, then the 11,062 number with the BROKEN tag at 8:13."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "orbit",
+        "partyPositions": "Hero low at the lower left.",
+        "enemyPosition": "Filling the frame.",
+        "cameraAngleDeg": 90,
+        "heightNote": "Very low (eyeballed)."
+      }
+    },
+    {
+      "id": "co-kill",
+      "phase": "Kill",
+      "name": "Slow, low kill shot",
+      "camera": {
+        "where": "When the last enemy dies the camera drops low and slows down. In one fight it is a wide, side-on view with a crystal shard bloom around the enemy (FL 1:55-1:56); in another it is a close, low view of the giant tumbling in slow motion (FL 5:00-5:01). The IGN clip runs a longer authored finisher of about 14 s and roughly ten cuts (4:21-4:35) before the results.",
+        "height": "Low, knee to waist height (eyeballed).",
+        "distance": "Wide for the crystal kill, close for the fall.",
+        "lens": "wide",
+        "movement": "Slow motion, a slight orbit and a hold on the last pose."
+      },
+      "frame": "HUD stays until the kill lands; nothing new is drawn except the effect and the last damage number.",
+      "timing": "About 2 to 3 s of kill shot before the results plate (FL 4:59 to 5:02). The IGN finisher is much longer and is not labelled in the clip.",
+      "whyItWorks": "The last hit gets its own beat instead of ending on a health bar [inference]. A dev says the victory screen is built around a juicy freeze frame.",
+      "confidence": "[observed: FL 1:55-1:56, 5:00-5:01; IGN 4:21-4:35] [single source: MobileSyrup on Nohra's MIGS talk, freeze frame] [not found] which skill the IGN finisher is.",
+      "sources": [
+        { "title": "First Look Gameplay (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ", "note": "Two kills, both followed by the results plate." },
+        { "title": "Official Combat Gameplay Clip (IGN)", "url": "https://www.youtube.com/watch?v=GByuD9VPa2I", "note": "4:21 to 4:35 finisher." },
+        { "title": "MobileSyrup on Michel Nohra's MIGS talk (2025-11-27)", "url": "https://mobilesyrup.com/2025/11/27/clair-obscur-expedition-33-devs-combat-hard-juicy/", "note": "Victory screen with a juicy freeze frame." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=115s",
+          "t": "1:55",
+          "verified": true,
+          "lookFor": "Wide, low, side-on view: the enemy encased in blue crystal on the right, the heroes small on the left; the HUD has already dropped out, and the VICTORY plate arrives at 1:57."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=300s",
+          "t": "5:00",
+          "verified": true,
+          "lookFor": "Close, low view of the giant falling backwards, near-frozen between 5:00 and 5:01 (slow motion or a hold) with the HUD gone; the VICTORY plate arrives at 5:02."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 - Official Combat Gameplay Clip (IGN)",
+          "url": "https://www.youtube.com/watch?v=GByuD9VPa2I&t=261s",
+          "t": "4:21",
+          "verified": true,
+          "lookFor": "About 14 s of chained shots (low looming enemy, a hero leaping, a close-up, then Gustave and the staggering enemy) with the HUD still on."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "side",
+        "partyPositions": "Heroes small on the left or out of frame.",
+        "enemyPosition": "Right of frame or filling it.",
+        "cameraAngleDeg": 90,
+        "heightNote": "Low (eyeballed)."
+      }
+    },
+    {
+      "id": "co-victory",
+      "phase": "Victory and results",
+      "name": "Results plate over the last frame",
+      "camera": {
+        "where": "The camera holds the final shot, slightly darkened, and the VICTORY plate is laid over it; nothing new is staged.",
+        "height": "As the kill shot.",
+        "distance": "As the kill shot.",
+        "lens": "wide",
+        "movement": "Held; a fade to the field follows after the player continues."
+      },
+      "frame": "VICTORY title in a brush-stroke banner top-left; XP counter at top-right counting up; battle loot list on the left; per-hero panels stacked on the right with level and new skills; stats along the bottom (highest damage, damage dealt and received, time, parries, dodges); a Continue prompt bottom-right.",
+      "timing": "The plate appears about 1 s after the kill; XP counts up over about 1 s (FL 5:02-5:04; IGN 4:36-4:40).",
+      "whyItWorks": "The finished battle stays visible behind the numbers, so the reward reads as part of the scene [inference]. A dev describes it as an epic victory screen with a juicy freeze frame.",
+      "confidence": "[observed: FL 1:57-1:59, 5:02-5:04; IGN 4:36-4:40] [single source: MobileSyrup on Nohra's MIGS talk]",
+      "sources": [
+        { "title": "Interface In Game: result screen", "url": "https://interfaceingame.com/screenshots/clair-obscur-expedition-33-result-screen/", "note": "UI reference still (link only)." },
+        { "title": "MobileSyrup on Michel Nohra's MIGS talk (2025-11-27)", "url": "https://mobilesyrup.com/2025/11/27/clair-obscur-expedition-33-devs-combat-hard-juicy/", "note": "Victory screen with a juicy freeze frame." }
+      ],
+      "watch": [
+        {
+          "title": "Clair Obscur: Expedition 33 | First Look Gameplay (Sandfall Interactive)",
+          "url": "https://www.youtube.com/watch?v=55rUagD9sVQ&t=302s",
+          "t": "5:02",
+          "verified": true,
+          "lookFor": "VICTORY plate top-left, 1,472 XP counting to 1,600, three hero panels on the right, stats bottom, over the frozen last shot."
+        },
+        {
+          "title": "Clair Obscur: Expedition 33 - Official Combat Gameplay Clip (IGN)",
+          "url": "https://www.youtube.com/watch?v=GByuD9VPa2I&t=276s",
+          "t": "4:36",
+          "verified": true,
+          "lookFor": "The results plate rising over the last pose with a Level pop at the left."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "side",
+        "partyPositions": "As the last shot.",
+        "enemyPosition": "As the last shot.",
+        "cameraAngleDeg": 60,
+        "heightNote": "Low (eyeballed)."
+      }
+    },
+    {
+      "id": "co-static-wide",
+      "phase": "Settings: Camera Movement off",
+      "name": "Stationary wide camera",
+      "camera": {
+        "where": "With the Accessibility option Camera Movement switched off the battle camera stops following the action and holds a wider, stationary view behind the party.",
+        "height": "Not found.",
+        "distance": "Wider than the default (sources).",
+        "lens": "wide",
+        "movement": "None: the view stays put."
+      },
+      "frame": "The same HUD; the game warns that this considerably alters the battle and makes some attacks harder to read, for example bosses that jump out of frame while the view stays behind.",
+      "timing": "Always.",
+      "whyItWorks": "A calmer reading of the fight for players who get motion sickness, at the cost of the choreography [sources]. It is also evidence of how much information the default camera carries.",
+      "confidence": "[verified: 3 sources: Can I Play That?, PC Gamer (Brunskill), game text transcribed by Linnet's how-to] [not found] official footage with the option off.",
+      "sources": [
+        { "title": "Can I Play That? accessibility review (Mike Matlock, 2025-12-04)", "url": "https://caniplaythat.com/2025/12/04/clair-obscur-expedition-33-accessibility-review/", "note": "Turning it off widens the perspective and keeps the camera stationary; can obscure QTE choreography." },
+        { "title": "PC Gamer accessibility piece (Kerry Brunskill, 2025-05-08)", "url": "https://www.pcgamer.com/games/rpg/i-couldnt-have-played-clair-obscur-without-its-accessibility-settings-and-now-it-might-be-my-goty/", "note": "Some attacks are harder to read; bosses vanish skyward while the camera stays behind." },
+        { "title": "Linnet's how-to: Camera Movement", "url": "https://linnetshowto.com/how-to-enable-disable-camera-movement-clair-obscur-expedition-33/", "note": "Transcribes the in-game option text." }
+      ],
+      "watch": [],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "Party in a row in the lower part of the frame.",
+        "enemyPosition": "Upper centre.",
+        "cameraAngleDeg": 10,
+        "heightNote": "Not found."
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Camera Movement (Settings, Accessibility tab)",
+      "effect": "Default on. Off keeps a wider, stationary battle camera instead of following the action. The in-game text says it primarily affects battle, considerably alters the battle experience and makes some attacks harder to read, and is meant for players who get motion sickness.",
+      "source": "Can I Play That? (2025-12-04); PC Gamer, Kerry Brunskill (2025-05-08); Linnet's how-to page (game text). [verified: 3 sources]"
+    },
+    {
+      "name": "Camera Shake (Accessibility)",
+      "effect": "Toggles the camera shake effects that add dynamic movement in battle.",
+      "source": "Linnet's how-to page (game text). [single source]"
+    },
+    {
+      "name": "Automatic QTE (Accessibility)",
+      "effect": "Own-attack QTEs succeed automatically; dodge and parry are not affected. Not a camera option, but it changes how long the player just watches the execution shots.",
+      "source": "Linnet's how-to page; RPG Site interview with Meurisse (own-attack QTEs can be disabled); Xbox Wire tips. [verified: 3 sources]"
+    },
+    {
+      "name": "Camera sensitivity and invert (Controls)",
+      "effect": "About 20 steps of sensitivity for the camera stick only, plus inverted axes. Applies to the free camera (exploration and aiming), not the battle camera.",
+      "source": "Capgame accessibility review (2025-05-07); DearGamers (2025-05-15). [verified: 2 sources]"
+    },
+    {
+      "name": "Sprint and aim: hold or toggle",
+      "effect": "Aiming and sprinting can be set to toggle so the trigger need not be held.",
+      "source": "Capgame accessibility review. [single source]"
+    },
+    {
+      "name": "Field of view",
+      "effect": "No in-game field-of-view slider; PCGamingWiki points to mods or ReShade.",
+      "source": "PCGamingWiki. [single source]"
+    },
+    {
+      "name": "Photo Mode (Thank You Update)",
+      "effect": "A free camera with unlimited distance that can pass through collisions and works in cinematics. Separate from the battle camera; whether it works mid-battle was not found.",
+      "source": "expedition33.com dev blog (2026-02-11); PC Gamer, Tyler Wilde (2026-02-11). [verified: 2 sources for what it is; scope in battle not found]"
+    }
+  ],
+  "devStatements": [
+    {
+      "who": "Guillaume Broche, CEO and creative director",
+      "summary": "Calls Persona 5 the best game in the world for battle depiction and UI, and says he was strongly influenced by the way its camera cuts dramatically each time the player acts, so the fight feels like watching a film. Expedition 33 turns that into camerawork suited to its own game and he says the UI is still being refined. Also lists Final Fantasy VI to X among his influences. Direct quote (Automaton West translation): 'making it feel like you're watching a movie'.",
+      "source": "Denfaminicogamer, 2025-05-23 (Japanese original) https://news.denfaminicogamer.jp/interview/2505223a ; English: Automaton West https://automaton-media.com/en/news/clair-obscur-expedition-33-lead-says-persona-5-is-the-best-game-in-the-world-when-it-comes-to-ui-and-combat-visuals/ and PCGamesN https://www.pcgamesn.com/clair-obscur-expedition-33/persona-5-influence [verified: 3 sources]"
+    },
+    {
+      "who": "Guillaume Broche",
+      "summary": "Says the team studied what Persona did with camera movements, menus and dynamic construction, then did its own version because the art style differs. Says Persona is not the biggest influence: the Final Fantasy VIII, IX and X era shaped much of the game's core, not by direct copying.",
+      "source": "PC Gamer, Robert Jones, 2024-08-28 https://www.pcgamer.com/games/rpg/clair-obscur-expedition-33-creative-director-speaks-candidly-about-the-new-rpgs-respect-for-final-fantasy-and-persona-we-are-definitely-not-hiding-that-there-are-influences/ ; summarised by GamesRadar. [single source, restated by a second outlet]"
+    },
+    {
+      "who": "Guillaume Broche",
+      "summary": "The team loves JRPGs including Final Fantasy, Tales, Lost Odyssey and Persona, and singles out Persona for its UI, rhythm and dynamic camera.",
+      "source": "PlayStation Blog, 2024-07-29 https://blog.playstation.com/2024/07/29/clair-obscur-expedition-33-devs-discuss-classic-turn-based-rpg-inspiration-and-real-time-mechanics/ [single source]"
+    },
+    {
+      "who": "Guillaume Broche",
+      "summary": "Says Final Fantasy VIII, IX and X shaped many parts of the game, that the sense of a widening world in FF VII to IX became the world map, and that Sekiro influenced the dodge and parry feel. No camera remark.",
+      "source": "Automaton (Japanese), Daijiro Akiyama, 2025-03-13 https://automaton-media.com/articles/interviewsjp/20250313-331351/ [single source]"
+    },
+    {
+      "who": "Francois Meurisse, co-founder and producer",
+      "summary": "Calls Final Fantasy X a masterpiece and a big inspiration, specifically for the party, pacing and narrative. Calls Persona 5 a big inspiration for the UI and how dynamic the battles are. Says the turn-based core was influenced by Final Fantasy VIII, IX and X, and that Sekiro pushed the team toward reactive dodging and parrying.",
+      "source": "RPG Site, Adam Vitale and James Galizio, 2025-03-21 https://www.rpgsite.net/interview/17041-clair-obscur-expedition-33-interview-celebrating-turn-based-games-classic-rpg-influences-in-making-something-new [single source]"
+    },
+    {
+      "who": "Tom Guillermin, co-founder and lead programmer (CTO)",
+      "summary": "Wanted a high level of polish in animation, camera movement and VFX in battle, so that something is always happening even in menus. All skills are treated as small cinematics in Unreal's Sequencer with battle actors bound at runtime, which gives flexibility to create epic shots. Arenas are controlled environments; level designers can adjust enemy positions case by case, and dynamic moves such as an enemy jumping at a hero from any position are handled by exposing properties to the sequence and keyframing them. Direct quote: 'treating all skills as small cinematics'.",
+      "source": "Unreal Engine developer interview, 2025-03-27 (read via Internet Archive; direct fetch returned 403) https://web.archive.org/web/20260420221013/https://www.unrealengine.com/developer-interviews/inside-the-development-journey-of-clair-obscur-expedition-33 [single source]"
+    },
+    {
+      "who": "Tom Guillermin (with Florian Torres, GDC 2026 talk)",
+      "summary": "A skill is authored end to end in Blueprints: character movement, visual effects and camera movement. You control the camera's location and rotation and its focal length, which can be animated, plus camera shakes, VFX and time dilation, all adding to a feeling of intensity over the course of the skill.",
+      "source": "PlayStation Blog, 2026-03-11 https://blog.playstation.com/2026/03/11/how-the-clair-obscur-expedition-33-dev-process-powered-creative-design-freedom/ [single source, first party]"
+    },
+    {
+      "who": "Michel Nohra, lead game designer (MIGS 2025 talk, reported by MobileSyrup)",
+      "summary": "The animation team uses time dilation, focal length, camera shakes and camera movement to punctuate important moments and to cue how players should react; enemy hit animations are emphasised in the enemy turn to nudge the parry. The victory screen was built around a juicy freeze frame.",
+      "source": "MobileSyrup, Katya Ryabova, 2025-11-27 https://mobilesyrup.com/2025/11/27/clair-obscur-expedition-33-devs-combat-hard-juicy/ [single source, second-hand report of a talk]"
+    },
+    {
+      "who": "Finding: Final Fantasy X and the battle camera",
+      "summary": "No source found in which Sandfall says its battle camera drew on Final Fantasy X. FFX is credited for party, pacing and narrative (Meurisse), and with FF VIII and IX for the turn-based core (Meurisse, Broche). The camera lineage they name is Persona 5. [not found]",
+      "source": "See the Meurisse, Broche and Guillermin entries above."
+    }
+  ],
+  "referenceLinks": [
+    { "label": "Game UI Database: Clair Obscur: Expedition 33 (HUD and menu stills plus raw video; sections include Selection and Targeting, Player Vitals, Quick Time Event, Enemy Health and Damage, Combat Log, Weapon Reticles; tagged Third Person)", "url": "https://www.gameuidatabase.com/gameData.php?id=2060" },
+    { "label": "Interface In Game: game page", "url": "https://interfaceingame.com/games/clair-obscur-expedition-33/" },
+    { "label": "Interface In Game: HUD 3", "url": "https://interfaceingame.com/screenshots/clair-obscur-expedition-33-hud-3/" },
+    { "label": "Interface In Game: HUD 4", "url": "https://interfaceingame.com/screenshots/clair-obscur-expedition-33-hud-4/" },
+    { "label": "Interface In Game: HUD 5", "url": "https://interfaceingame.com/screenshots/clair-obscur-expedition-33-hud-5/" },
+    { "label": "Interface In Game: HUD 6", "url": "https://interfaceingame.com/screenshots/clair-obscur-expedition-33-hud-6/" },
+    { "label": "Interface In Game: result screen", "url": "https://interfaceingame.com/screenshots/clair-obscur-expedition-33-result-screen/" },
+    { "label": "Interface In Game: accessibility screen", "url": "https://interfaceingame.com/screenshots/clair-obscur-expedition-33-accessibility/" },
+    { "label": "Steam store page (official screenshots, app 1903340)", "url": "https://store.steampowered.com/app/1903340/Clair_Obscur_Expedition_33/" },
+    { "label": "Steam official screenshot: command select (direct image link, not stored)", "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1903340/ss_d3a10809f5cc2a8df7773f41acd1493f4fb900ec.1920x1080.jpg" },
+    { "label": "Steam official screenshot: enemy turn (direct image link, not stored)", "url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1903340/ss_ec16f873c7d14fc4a4f17966b25f9712dc486b4a.1920x1080.jpg" },
+    { "label": "Official site: media gallery and news", "url": "https://www.expedition33.com/" },
+    { "label": "Official video: First Look Gameplay (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ" },
+    { "label": "Official video: Official Combat Gameplay Clip (IGN)", "url": "https://www.youtube.com/watch?v=GByuD9VPa2I" },
+    { "label": "Official video: Xbox Developer_Direct 2025 segment (Sandfall Interactive)", "url": "https://www.youtube.com/watch?v=LCy6vC00O0c" }
+  ],
+  "sources": [
+    { "n": 1, "title": "Sandfall Interactive: Clair Obscur: Expedition 33 | First Look Gameplay (YouTube, 2024-08-28)", "url": "https://www.youtube.com/watch?v=55rUagD9sVQ" },
+    { "n": 2, "title": "IGN: Clair Obscur: Expedition 33 - Official Combat Gameplay Clip (YouTube, 2025-03-03)", "url": "https://www.youtube.com/watch?v=GByuD9VPa2I" },
+    { "n": 3, "title": "Sandfall Interactive: Xbox Developer_Direct 2025 segment (YouTube, 2025-01-30)", "url": "https://www.youtube.com/watch?v=LCy6vC00O0c" },
+    { "n": 4, "title": "Steam store page, app 1903340", "url": "https://store.steampowered.com/app/1903340/Clair_Obscur_Expedition_33/" },
+    { "n": 5, "title": "PlayStation Blog, 2024-07-29, Broche interview", "url": "https://blog.playstation.com/2024/07/29/clair-obscur-expedition-33-devs-discuss-classic-turn-based-rpg-inspiration-and-real-time-mechanics/" },
+    { "n": 6, "title": "Unreal Engine developer interview with Tom Guillermin, 2025-03-27 (Internet Archive copy)", "url": "https://web.archive.org/web/20260420221013/https://www.unrealengine.com/developer-interviews/inside-the-development-journey-of-clair-obscur-expedition-33" },
+    { "n": 7, "title": "PlayStation Blog, 2026-03-11, Tom Guillermin GDC write-up", "url": "https://blog.playstation.com/2026/03/11/how-the-clair-obscur-expedition-33-dev-process-powered-creative-design-freedom/" },
+    { "n": 8, "title": "Xbox Wire, 2025-01-23, Jeff Rubenstein, Developer_Direct article", "url": "https://news.xbox.com/en-us/2025/01/23/clair-obscur-expedition-33-developer-direct-2025/" },
+    { "n": 9, "title": "Xbox Wire, 2025-04-23, 8 Tips to Help You Get Started", "url": "https://news.xbox.com/en-us/2025/04/23/tips-to-get-started-clair-obscur-expedition-33/" },
+    { "n": 10, "title": "Expedition 33 Dev Blog: Photo Mode, 2026-02-11", "url": "https://www.expedition33.com/post/expedition-33-dev-blog-photo-mode" },
+    { "n": 11, "title": "PC Gamer, Robert Jones, 2024-08-28, creative director interview", "url": "https://www.pcgamer.com/games/rpg/clair-obscur-expedition-33-creative-director-speaks-candidly-about-the-new-rpgs-respect-for-final-fantasy-and-persona-we-are-definitely-not-hiding-that-there-are-influences/" },
+    { "n": 12, "title": "PCGamesN, Will Nelson, 2025-05-25, Persona 5 praise", "url": "https://www.pcgamesn.com/clair-obscur-expedition-33/persona-5-influence" },
+    { "n": 13, "title": "Automaton West, Amber V, 2025-05-23", "url": "https://automaton-media.com/en/news/clair-obscur-expedition-33-lead-says-persona-5-is-the-best-game-in-the-world-when-it-comes-to-ui-and-combat-visuals/" },
+    { "n": 14, "title": "Denfaminicogamer, 2025-05-23 (Japanese original of the Persona 5 remarks)", "url": "https://news.denfaminicogamer.jp/interview/2505223a" },
+    { "n": 15, "title": "Automaton (Japanese), Daijiro Akiyama, 2025-03-13", "url": "https://automaton-media.com/articles/interviewsjp/20250313-331351/" },
+    { "n": 16, "title": "RPG Site, Adam Vitale and James Galizio, 2025-03-21, Meurisse interview", "url": "https://www.rpgsite.net/interview/17041-clair-obscur-expedition-33-interview-celebrating-turn-based-games-classic-rpg-influences-in-making-something-new" },
+    { "n": 17, "title": "MobileSyrup, Katya Ryabova, 2025-11-27, Nohra MIGS talk", "url": "https://mobilesyrup.com/2025/11/27/clair-obscur-expedition-33-devs-combat-hard-juicy/" },
+    { "n": 18, "title": "Can I Play That?, Mike Matlock, 2025-12-04, accessibility review", "url": "https://caniplaythat.com/2025/12/04/clair-obscur-expedition-33-accessibility-review/" },
+    { "n": 19, "title": "PC Gamer, Kerry Brunskill, 2025-05-08, accessibility piece", "url": "https://www.pcgamer.com/games/rpg/i-couldnt-have-played-clair-obscur-without-its-accessibility-settings-and-now-it-might-be-my-goty/" },
+    { "n": 20, "title": "Linnet's how-to: Camera Movement (in-game option text)", "url": "https://linnetshowto.com/how-to-enable-disable-camera-movement-clair-obscur-expedition-33/" },
+    { "n": 21, "title": "Linnet's how-to: Camera Shake", "url": "https://linnetshowto.com/how-to-enable-disable-camera-shake-clair-obscur-expedition-33/" },
+    { "n": 22, "title": "Linnet's how-to: Automatic QTE", "url": "https://linnetshowto.com/how-to-enable-disable-automatic-qte-clair-obscur-expedition-33/" },
+    { "n": 23, "title": "Capgame accessibility review, Cad, 2025-05-07", "url": "https://www.game-lover.org/en/clair-obscur-expedition-33-accessibility-review/" },
+    { "n": 24, "title": "DearGamers accessibility review, 2025-05-15", "url": "https://www.deargamers.net/reviews/clair-obscur-expedition-33s-biggest-area-to-improve-accessibility" },
+    { "n": 25, "title": "Vice, Matt Vatankhah, 2025-04-23, review", "url": "https://www.vice.com/en/article/clair-obscur-expedition-33-is-the-turn-based-rpg-youve-been-dreaming-about-for-years-review/" },
+    { "n": 26, "title": "Rolling Stone, George Yang, 2025-04-23, review", "url": "https://www.rollingstone.com/culture/rs-gaming/clair-obscur-expedition-33-review-1235322810/" },
+    { "n": 27, "title": "PC Gamer, Justin Wagner, 2025-04-23, review", "url": "https://www.pcgamer.com/games/rpg/clair-obscur-expedition-33-review/" },
+    { "n": 28, "title": "The Jimquisition, James Stephanie Sterling, 2025-05-13, review", "url": "https://www.thejimquisition.com/post/clair-obscur-expedition-33-picture-perfect-review" },
+    { "n": 29, "title": "Wikipedia: Clair Obscur: Expedition 33", "url": "https://en.wikipedia.org/wiki/Clair_Obscur:_Expedition_33" },
+    { "n": 30, "title": "Game UI Database: Clair Obscur: Expedition 33", "url": "https://www.gameuidatabase.com/gameData.php?id=2060" },
+    { "n": 31, "title": "Interface In Game: Clair Obscur: Expedition 33", "url": "https://interfaceingame.com/games/clair-obscur-expedition-33/" },
+    { "n": 32, "title": "PCGamingWiki: Clair Obscur: Expedition 33", "url": "https://www.pcgamingwiki.com/wiki/Clair_Obscur:_Expedition_33" },
+    { "n": 33, "title": "Fextralife wiki: Combat", "url": "https://expedition33.wiki.fextralife.com/Combat" },
+    { "n": 34, "title": "GamesRadar: Broche on Persona and Final Fantasy 8, 9 and 10", "url": "https://www.gamesradar.com/games/rpg/dev-of-french-jrpg-that-stunned-at-the-xbox-showcase-not-hiding-influence-of-persona-and-final-fantasy-8-9-and-10-but-wants-to-find-our-own-direction/" },
+    { "n": 35, "title": "PC Gamer, Tyler Wilde, 2026-02-11, photo mode oddities", "url": "https://www.pcgamer.com/games/rpg/clair-obscur-photo-mode-oddities/" }
+  ]
+}

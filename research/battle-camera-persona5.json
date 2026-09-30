@@ -1,0 +1,1095 @@
+{
+  "game": "Persona 5 / Persona 5 Royal",
+  "researchDate": "2026-09-30",
+  "identity": "A near-static, low, wide, rear-side poster shot of the acting character (left) facing the enemy (right), which hosts the whole menu as a fan of labels pinned to the character, and which every command interrupts with a hard-cut, comic-timed cutaway or a flat 2D graphic set piece, so each turn plays like edited anime and manga panels rather than a tracking camera.",
+  "method": "Text claims come from opened pages (Sources). Camera claims are marked [observed: video m:ss] when I saw the moment in a decoded frame of an official upload (headless Chromium; 1280x720 for most, 640x360 for the Take Over trailer and 854x480 for Change The World; frames deleted afterwards); base-game phases that no official upload shows were observed in two unofficial captures, which are listed as sources but never offered as watch links. Camera height, lens and angle are eyeballed from frames: no source publishes Persona 5 battle-camera parameters.",
+  "corrections": [
+    "The character eyes-strip cut-in is the weakness cut-in that plays when the chosen skill hits a known weakness (PlayStation.Blog Japan/Dengeki; observed on a weakness Persona cast at ATLUS Japan early-story video 3:58.2-3:58.6 and absent on a non-weakness Persona skill at 4:12-4:13.6). It is not the 1 MORE title. 1 MORE is a large white typographic title that follows the knockdown (observed in an unofficial capture at 10:06, no official frame found).",
+    "The Japanese build says Baton Touch (バトンタッチ) where the English build says Baton Pass."
+  ],
+  "cameraGrammar": [
+    "Two camera modes only: a stable hero shot that holds indefinitely while the player thinks, and short authored cutaways (about 0.3 to 5 s) on every commit. [derived from observed frames]",
+    "While a menu is open the camera does not move; the UI animates (ring fans out from the character's hand, list slides, reticle hops). Background shift over 4 to 19 s of command select measured 0 px. [observed: ATLUS Japan early-story video 3:52-3:56; unofficial capture 1:40-1:59]",
+    "Every cut lands under a graphic beat: ink wipe, shard wipe, typographic burst (WEAK, 1 MORE, HOLD UP!, BATON PASS!), comic panel. The graphic hides the cut and adds the sound-effect feel. [derived]",
+    "The camera is always on the action's owner or its victim, never on a neutral master; the party HP cards stay pinned bottom-right through 3D cutaways and disappear only in the 2D sequences and Showtime. [observed]",
+    "The climaxes leave the 3D scene: All-Out Attack becomes a flat red plane of silhouettes, Showtime becomes a purpose-built cutscene stage. [observed]",
+    "Persona 5's director describes the intended feel as turn-based battle built like a cutscene, using the cut-and-paste method of anime and manga; the Clair Obscur creative director describes the same effect as the camera shifting dramatically with each action, like watching a movie. [Persona Central 2023; PCGamesN 2025]"
+  ],
+  "shots": [
+    {
+      "id": "p5-encounter",
+      "phase": "Battle start (ambush and field-to-battle transition)",
+      "name": "Ambush strike, ink wipe, shard reveal",
+      "royal": "changed",
+      "camera": {
+        "where": "Field: third-person behind Joker. On the strike the camera jams in behind his shoulder against the target, cuts to a dark starfield cut-in of Joker mid-leap, then to extreme close-ups of the target. The battle intro is a red-glow shot from just behind Joker's hip looking up at the enemy; a white crack and a black-and-white shard wipe reveal the normal command shot.",
+        "height": "Waist to chest in the field and wipe; ground-skimming in the leap cut-in.",
+        "distance": "Close: the target or Joker coat fills most of the frame until the reveal.",
+        "lens": "wide",
+        "movement": "Hard cuts hidden behind ink shapes and one whip-pan; no dolly, no crane, no fly-in over the arena."
+      },
+      "frame": "Ink-black and red shapes, the enemy silhouette, neon casino signs tumbling past as a montage element. Party HUD hidden (only a small hint bottom-right). In the English build the AMBUSH! title bursts over the impact with a red ink splash.",
+      "timing": "About 9 s from strike to command shot in the ATLUS clip (3:40 to 3:49): close-ups 3:40-3:42, ink wipe 3:42-3:45, red-glow intro 3:45-3:48, shard wipe 3:48. In an English capture the title holds about 1 s (1:03-1:04) and the fight is at the command shot by 1:06.",
+      "whyItWorks": "The transition is graphic design rather than camera motion: ink shapes cover the cut, so the arrival at the stable shot feels earned and the player never watches a load or a fly-in.",
+      "confidence": "[observed: ATLUS Japan early-story video 3:33-3:49] [observed: unofficial English capture 1:03-1:06] Royal entry through the grappling hook (Wire Action, preemptive strike on distant shadows, CHANCE! title at 1:04, ink burst 1:05-1:06, command shot 1:07): [single source: ATLUS Japan Royal Vol.2 caption plus frames]. Intro-shot position is eyeballed.",
+      "sources": [
+        {
+          "title": "Persona 5 early-story introduction video (atlustube, ATLUS Japan), 2016-07-19",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A",
+          "note": "Frames 3:27-3:49 read at 0.2 to 1 s steps: approach, smirk close-up, leap cut-in, ink wipe, shard reveal."
+        },
+        {
+          "title": "P5R Royal features Vol.2, Palace and Battle (atlustube, ATLUS Japan), 2019-06-13",
+          "url": "https://www.youtube.com/watch?v=3z-FuxEcAkY",
+          "note": "Wire Action caption and frames 0:56-1:07 (Royal)."
+        },
+        {
+          "title": "Persona 5 Battle System Explained (Combat Guide), Gameplay Vault, 2017-04-06 (unofficial capture)",
+          "url": "https://www.youtube.com/watch?v=fl3elI7hqRM",
+          "note": "Unofficial English capture, 0:54-1:06, AMBUSH! title. Observation only."
+        }
+      ],
+      "watch": [
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=213s",
+          "t": "3:33",
+          "verified": true,
+          "lookFor": "Joker close-up smirk as the ambush starts, then the dark starfield leap cut-in at 3:36-3:38."
+        },
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=222s",
+          "t": "3:42",
+          "verified": true,
+          "lookFor": "Ink shapes swallow the frame, neon VICTORY sign spins past, red-glow battle intro, white shard wipe at 3:48 into the command shot."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ パレス＆バトル（モルガナ通信Vol.2） / P5R Royal features Vol.2, Palace and Battle (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=3z-FuxEcAkY&t=59s",
+          "t": "0:59",
+          "verified": true,
+          "lookFor": "Royal only: Joker uses the grappling wire, then strikes a shadow before it notices him (the on-screen caption says preemptive strikes work on distant shadows); CHANCE! title at 1:04; ink burst 1:05-1:06; command shot at 1:07."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "Joker at the left edge with his back to camera during the intro; the party arrives in the left third after the wipe",
+        "enemyPosition": "centre-right, large and red-lit",
+        "cameraAngleDeg": 20,
+        "heightNote": "waist height, looking slightly up at the enemy"
+      }
+    },
+    {
+      "id": "p5-command",
+      "phase": "Command select (idle, your turn)",
+      "name": "Rear-side poster shot with the menu ring pinned to the character",
+      "royal": "same",
+      "camera": {
+        "where": "Behind and to the left of the acting character, who stands in the left third in three-quarter rear view; the enemy stands right of centre facing back. About 50 degrees off the line from party to enemy.",
+        "height": "Hip to waist height, tilted slightly up at the enemy.",
+        "distance": "Mid-close: the character is about half the frame height and the enemy is taller.",
+        "lens": "wide",
+        "movement": "None. Background shift between frames 4 s apart (232 s and 236 s) and 19 s apart (unofficial capture) measured 0 px by phase correlation; only idle animation and UI motion move."
+      },
+      "frame": "Character in the left third. A fan of angled black label plates with red slashes (GUN, PERSONA, ITEM, SWORD, GUARD, plus ORDER when the party has more than one member) is anchored at the character's hand and hip and points at the enemy. Red target marker with a heart icon on the enemy. Enemy name-and-level plate top-left; navigator speech bubble with portrait top-right; one to four slanted HP/SP cards bottom-right (a solo fight shows one); five button hints bottom-left (Analyze, Target, turn-order or status check, Rush, Assist) in the same order with the same icons in the base and Royal frames (the wording of the third hint differs between the English base capture and the Japanese Royal frames; localisation or Royal change not established).",
+      "timing": "Holds until input. No auto-orbit and no idle drift.",
+      "whyItWorks": "The composition doubles as the menu: hero left, enemy right, UI in the space between, so the screen reads as a poster and the eye travels from hero to enemy. Because the shot is static, the ring, not the camera, does all the animating.",
+      "confidence": "[verified: 3 sources] observed base (ATLUS Japan early-story 3:52-3:56), observed Royal (ATLUS Japan Vol.3 1:16 and Vol.2 1:07), and a design write-up that puts the character left and the monster right with every button pointing at the acting character [single source: Wen blog]. Angle, height and lens are eyeballed.",
+      "sources": [
+        {
+          "title": "Persona 5 early-story introduction video (atlustube, ATLUS Japan), 2016-07-19",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A",
+          "note": "Frames 3:52-3:56 and 4:19 (command shot, solo party)."
+        },
+        {
+          "title": "P5R Royal features Vol.3 (atlustube, ATLUS Japan), 2019-07-11",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU",
+          "note": "Frame 1:16 (four-member party, Royal, ORDER plate present)."
+        },
+        {
+          "title": "Jiaxin Wen, The UI Design of Persona 5 (design blog), 2017-04-27",
+          "url": "https://jiaxinwen.wordpress.com/2017/04/27/the-ui-design-of-persona-5/",
+          "note": "Design blog: character on the left, monster on the right; triangle buttons all point at the acting character."
+        }
+      ],
+      "watch": [
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=232s",
+          "t": "3:52",
+          "verified": true,
+          "lookFor": "Joker left third, ring of five labels at his hand, boss right of centre, one HP card bottom-right; nothing in the frame moves except the idle animation."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ 新要素を駆使して強敵に挑め！（モルガナ通信Vol.3） / P5R Royal features Vol.3, new battle elements (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU&t=76s",
+          "t": "1:16",
+          "verified": true,
+          "lookFor": "Royal, four-member party: ring with ORDER, enemy plate top-left, navigator bubble top-right, four HP cards bottom-right."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "acting character in the left third; other members further left or offscreen",
+        "enemyPosition": "right of centre, facing the party",
+        "cameraAngleDeg": 50,
+        "heightNote": "hip height, slight upward tilt"
+      }
+    },
+    {
+      "id": "p5-skill-list",
+      "phase": "Persona summon and skill select",
+      "name": "Skill list over a dimmed shot with the Persona as a foreground silhouette",
+      "royal": "same",
+      "camera": {
+        "where": "Choosing PERSONA re-seats the camera behind the hero's Persona, drawn as a huge dark-blue silhouette with chains that fills the lower-left foreground. The enemy stays right of centre, dimmed.",
+        "height": "Low.",
+        "distance": "Persona silhouette at arm's length, enemy at mid distance.",
+        "lens": "wide",
+        "movement": "A cut plus a slide-in of the list panel in under 0.6 s; then the frame holds."
+      },
+      "frame": "PERSONA sticker header with mask icon top-left, Persona name box, list rows with a red highlight bar and SP or HP costs, help text bottom-left, party card bottom-right; the scene is dimmed to roughly a third of its brightness.",
+      "timing": "Holds until input.",
+      "whyItWorks": "The unsummoned Persona is already in the shot as a silhouette, so the menu promises the reveal before it happens.",
+      "confidence": "[observed: ATLUS Japan early-story 3:57; Official ATLUS West Change The World 0:38 (Royal, list over a boss)]. Reading the silhouette as a deliberate promise of the reveal is mine [derived].",
+      "sources": [
+        {
+          "title": "Persona 5 early-story introduction video (atlustube, ATLUS Japan), 2016-07-19",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A",
+          "note": "Frame 3:57.0 (list open, Persona silhouette lower-left)."
+        },
+        {
+          "title": "Persona 5 Royal Change The World Trailer (Official ATLUS West), 2020-03-12",
+          "url": "https://www.youtube.com/watch?v=LFzh6T7bQ_M",
+          "note": "Frames 0:38-0:38.5 (Carmen skill list over the boss)."
+        }
+      ],
+      "watch": [
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=237s",
+          "t": "3:57",
+          "verified": true,
+          "lookFor": "Skill list slides over a dimmed frame; the Persona silhouette fills the lower-left; boss right of centre."
+        },
+        {
+          "title": "Persona 5 Royal – Change The World Trailer (Official ATLUS West)",
+          "url": "https://www.youtube.com/watch?v=LFzh6T7bQ_M&t=38s",
+          "t": "0:38",
+          "verified": true,
+          "lookFor": "Royal: the same list layout over Kamoshida, with the party cards bottom-right."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "hero and Persona silhouette at the lower left, close to camera",
+        "enemyPosition": "right of centre, mid distance, dimmed",
+        "cameraAngleDeg": 35,
+        "heightNote": "low, looking across the Persona"
+      }
+    },
+    {
+      "id": "p5-target",
+      "phase": "Target select and Analyze",
+      "name": "Reticle hops, camera stays, red-ray confirm flash",
+      "royal": "same",
+      "camera": {
+        "where": "The command shot stays. Choosing a skill turns the ring into a sub-ring and a red hex reticle with a heart icon hops between enemies; confirming fires a red-ray burst centred on the target. Analyze (L1) desaturates the frame and cuts to a full-screen enemy page with a white swoosh band, then returns.",
+        "height": "Unchanged from the command shot.",
+        "distance": "Unchanged.",
+        "lens": "wide",
+        "movement": "Confirm flash about 0.2 s; Analyze is a hard cut in and out. A sliding shape is reported to carry the eye from the enemy (top-right) to the character (bottom-left) on the way into the menu [single source]."
+      },
+      "frame": "Reticle with a heart icon on the target and the enemy name plate top-left; the ring re-forms around the character; once a weakness has been discovered the game flags, at command selection, which skills hit it (PlayStation.Blog Japan).",
+      "timing": "Confirm flash about 0.2 s (3:57.4). Analyze page holds until dismissed.",
+      "whyItWorks": "The cursor is a graphic on the enemy, so no camera move is needed to say where the hit will land; the flash is the click.",
+      "confidence": "[observed: ATLUS Japan early-story 3:57.4 flash] [observed: unofficial capture 1:38-2:00 reticle and sub-ring; 7:04-7:20 Analyze page] [single source: Wen blog for the sliding-shape transition]. Royal identity for the Analyze page not observed.",
+      "sources": [
+        {
+          "title": "Persona 5 early-story introduction video (atlustube, ATLUS Japan), 2016-07-19",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A",
+          "note": "Frame 3:57.4 (red rays on the target)."
+        },
+        {
+          "title": "Persona 5 Battle System Explained (Combat Guide), Gameplay Vault, 2017-04-06 (unofficial capture)",
+          "url": "https://www.youtube.com/watch?v=fl3elI7hqRM",
+          "note": "Unofficial capture, reticle, sub-ring and Analyze page. Observation only."
+        },
+        {
+          "title": "Jiaxin Wen, The UI Design of Persona 5 (design blog), 2017-04-27",
+          "url": "https://jiaxinwen.wordpress.com/2017/04/27/the-ui-design-of-persona-5/",
+          "note": "Sliding-shape transition between the two camera angles."
+        }
+      ],
+      "watch": [
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=237s",
+          "t": "3:57",
+          "verified": true,
+          "lookFor": "Watch 3:57.4: red rays converge on the boss for about 0.2 s as the skill is confirmed."
+        }
+      ],
+      "watchNote": "No official upload found that shows the Analyze page or multi-target hopping.",
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "unchanged from the command shot",
+        "enemyPosition": "right of centre; reticle on the chosen enemy",
+        "cameraAngleDeg": 50,
+        "heightNote": "hip height"
+      }
+    },
+    {
+      "id": "p5-gun",
+      "phase": "Gun (aiming mode)",
+      "name": "Gun ring with an ammo counter on the same framing; muzzle-flash cutaway",
+      "royal": "same",
+      "camera": {
+        "where": "Selecting GUN does not move the camera: the ring re-forms into a small gun ring with an AMMO counter while the reticle stays on the enemy. The shot itself cuts to a close side-on view of the character raising the pistol, then a wide with a damage pop over the enemy.",
+        "height": "Hip to chest height at the pistol shot.",
+        "distance": "Close for the shot, then mid.",
+        "lens": "wide",
+        "movement": "Cut, then a short settle; about 1 s."
+      },
+      "frame": "Ammo counter on the ring; on the shot the pistol arm fills the left, the enemy sits centre-right; damage number with a cyan heart tag over the target.",
+      "timing": "Shot about 1 s (0:06.5-0:07.5 in the ATLUS short).",
+      "whyItWorks": "One ring layout serves every command, so a new mode costs no new camera work.",
+      "confidence": "[observed: ATLUS Japan short 0:06-0:08 shot] [observed: unofficial capture 1:59-2:10 ring with AMMO counter]. A dedicated aim camera: [not found].",
+      "sources": [
+        {
+          "title": "Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan), 2016-08-06",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s",
+          "note": "Frames 0:06.5-0:07.5 (pistol raised, muzzle flash)."
+        },
+        {
+          "title": "Persona 5 Battle System Explained (Combat Guide), Gameplay Vault, 2017-04-06 (unofficial capture)",
+          "url": "https://www.youtube.com/watch?v=fl3elI7hqRM",
+          "note": "Unofficial capture, ring with AMMO counter. Observation only."
+        }
+      ],
+      "watch": [
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=6s",
+          "t": "0:06",
+          "verified": true,
+          "lookFor": "Joker raises the pistol in the left third; enemy centre-right; CRITICAL pop at 0:07.5."
+        }
+      ],
+      "watchNote": "The aiming state itself (ring with ammo counter) was seen only in an unofficial capture.",
+      "diagram": {
+        "cameraSide": "side",
+        "partyPositions": "shooter in the left third, arm extended",
+        "enemyPosition": "centre-right",
+        "cameraAngleDeg": 70,
+        "heightNote": "hip height, close"
+      }
+    },
+    {
+      "id": "p5-summon-cast",
+      "phase": "Persona summon and skill execution",
+      "name": "Worm's-eye Persona, skill banner top-left, wide three-quarter impact",
+      "royal": "same",
+      "camera": {
+        "where": "After the confirm flash the camera drops to ground level under the Persona (blue flames, chains), then swings to a wide three-quarter view for the impact with the hero small in the left foreground and the enemy at centre.",
+        "height": "Ground level for the Persona; hip height for the impact shot.",
+        "distance": "Persona fills the frame; impact shot mid-wide.",
+        "lens": "wide",
+        "movement": "Three to five hard cuts inside about 4 s, with a short whip on the impact."
+      },
+      "frame": "Skill-name banner (red-bordered black slant) top-left; damage number with a cyan heart beside it; party card bottom-right; blue flame and red slash effects.",
+      "timing": "Confirm (3:57.4) to first damage (4:02) about 4.6 s; a second action from the extra turn runs 4:03-4:06.",
+      "whyItWorks": "Each cast is a small music video: worm's-eye scale on the Persona, then a readable wide shot that shows the result.",
+      "confidence": "[observed: ATLUS Japan early-story 3:57-4:06 (base); Official ATLUS West Change The World 0:39 (Royal)].",
+      "sources": [
+        {
+          "title": "Persona 5 early-story introduction video (atlustube, ATLUS Japan), 2016-07-19",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A",
+          "note": "Frames 3:58.8-4:06 (Persona reveal, damage, second cast with banner)."
+        },
+        {
+          "title": "Persona 5 Royal Change The World Trailer (Official ATLUS West), 2020-03-12",
+          "url": "https://www.youtube.com/watch?v=LFzh6T7bQ_M",
+          "note": "Frames 0:39-0:40 (Carmen fire cast, WEAK)."
+        }
+      ],
+      "watch": [
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=238s",
+          "t": "3:58",
+          "verified": true,
+          "lookFor": "Eyes strip at 3:58.2-3:58.6, then Arsene rises in blue flames from a ground-level camera; damage number at 4:02."
+        },
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=243s",
+          "t": "4:03",
+          "verified": true,
+          "lookFor": "Wide three-quarter skill execution: Joker left foreground, boss centre, fire column, banner top-left."
+        },
+        {
+          "title": "Persona 5 Royal – Change The World Trailer (Official ATLUS West)",
+          "url": "https://www.youtube.com/watch?v=LFzh6T7bQ_M&t=39s",
+          "t": "0:39",
+          "verified": true,
+          "lookFor": "Royal: Carmen unleashes fire on the boss; WEAK burst at 0:39.5."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "hero small in the left foreground; Persona towering above or beside him",
+        "enemyPosition": "centre, mid distance",
+        "cameraAngleDeg": 25,
+        "heightNote": "ground level for the Persona, hip height for the impact"
+      }
+    },
+    {
+      "id": "p5-melee",
+      "phase": "Attack (melee)",
+      "name": "Low, tight lunge with an ink-splash impact frame",
+      "royal": "same",
+      "camera": {
+        "where": "Low side-on camera close to the floor, slightly behind the attacker; on impact a white-and-black splash graphic covers the enemy for a few frames; the camera then settles wide.",
+        "height": "Floor to knee.",
+        "distance": "Close, the attacker cape and blade fill the frame.",
+        "lens": "wide",
+        "movement": "Two to three cuts, one whip; about 1.5 to 2.5 s."
+      },
+      "frame": "Attack banner top-left, splash graphic at the hit, party cards bottom-right, damage pop with a CRITICAL tag on a critical.",
+      "timing": "About 1.5 s in the ATLUS short (0:05-0:06.5); about 2.5 s in the early-story clip (4:19-4:21.5).",
+      "whyItWorks": "The impact frame is a drawn graphic, so a simple lunge reads as a hit without needing a long animation.",
+      "confidence": "[observed: ATLUS Japan short 0:05-0:06.5; ATLUS Japan early-story 4:19-4:21.5]. Royal identity: Official Steam screenshot 8 shows the same Attack banner and low camera [observed].",
+      "sources": [
+        {
+          "title": "Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan), 2016-08-06",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s",
+          "note": "Frames 0:05-0:06.5."
+        },
+        {
+          "title": "Persona 5 early-story introduction video (atlustube, ATLUS Japan), 2016-07-19",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A",
+          "note": "Frames 4:19-4:21.5."
+        }
+      ],
+      "watch": [
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=5s",
+          "t": "0:05",
+          "verified": true,
+          "lookFor": "Joker leaps, cape flaring, a black-and-white splash at the hit, Attack banner top-left."
+        },
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=260s",
+          "t": "4:20",
+          "verified": true,
+          "lookFor": "Low camera on Joker sliding in behind the boss; black ink splash on the hit."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "side",
+        "partyPositions": "attacker crossing the frame, left to right",
+        "enemyPosition": "centre-right",
+        "cameraAngleDeg": 40,
+        "heightNote": "floor to knee height"
+      }
+    },
+    {
+      "id": "p5-weakness",
+      "phase": "Weakness or critical hit, knockdown, 1 MORE",
+      "name": "Eyes-strip cut-in, WEAK burst, knockdown, 1 MORE title",
+      "royal": "same",
+      "camera": {
+        "where": "Not a camera move but a stack of graphics on the wide shot: (1) when the chosen skill hits a known weakness, a horizontal jagged strip of the caster's eyes plays first; (2) the hit; (3) a WEAK or CRITICAL burst with the damage number and a cyan heart over the target; (4) the target drops and the frame may desaturate for a beat; (5) a large white 1 MORE title; (6) the command ring returns with a BATON PASS tag.",
+        "height": "Unchanged from the wide shot.",
+        "distance": "Unchanged.",
+        "lens": "wide",
+        "movement": "Hard cuts; the eyes strip lasts about 0.5 s."
+      },
+      "frame": "The eyes strip spans the middle third of the screen over blue Persona aura; the WEAK burst is red and white above the enemy; the 1 MORE title is about a fifth of the frame; the navigator comments top-right.",
+      "timing": "Eyes strip 3:58.2-3:58.6 (0.4 to 0.5 s); WEAK burst about 1 s; 1 MORE about 0.5 s; cast to next command about 8 to 10 s.",
+      "whyItWorks": "The reward is stated three ways in under two seconds (face, word, title) and the extra turn is signalled by the returning ring, so the player never wonders whether the weakness worked.",
+      "confidence": "[verified: 2 sources] for the weakness cut-in: PlayStation.Blog Japan/Dengeki says a weakness skill triggers a character cut-in; strip observed on the first Persona cast (ATLUS Japan early-story 3:58.2-3:58.6) and absent on a second Persona skill later in the same fight (4:12-4:13.6); whether that second skill hit a weakness is not established, so the rule rests on the Dengeki text. WEAK burst [observed: ATLUS Japan Vol.3 1:27; Official Steam screenshot 9]. 1 MORE title [observed: unofficial capture 10:06] with no official frame found [not found].",
+      "sources": [
+        {
+          "title": "PlayStation.Blog Japan, Dengeki PlayStation feature on Persona 5 Royal's evolved battle, 2019-10-28",
+          "url": "https://blog.ja.playstation.com/2019/10/28/20191028-persona5r/",
+          "note": "States that using a weakness skill plays a character cut-in and that the downed enemy gives the attacker another action."
+        },
+        {
+          "title": "Persona 5 early-story introduction video (atlustube, ATLUS Japan), 2016-07-19",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A",
+          "note": "Frames 3:58.2-3:58.6 (strip) and 4:12-4:13.6 (no strip)."
+        },
+        {
+          "title": "P5R Royal features Vol.3 (atlustube, ATLUS Japan), 2019-07-11",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU",
+          "note": "Frames 1:25 (strip) and 1:27 (WEAK)."
+        },
+        {
+          "title": "Persona 5 Battle System Explained (Combat Guide), Gameplay Vault, 2017-04-06 (unofficial capture)",
+          "url": "https://www.youtube.com/watch?v=fl3elI7hqRM",
+          "note": "Unofficial capture 10:03-10:07: WEAK, desaturated freeze, 1 MORE title. Observation only."
+        }
+      ],
+      "watch": [
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=238s",
+          "t": "3:58",
+          "verified": true,
+          "lookFor": "Eyes strip of Joker at 3:58.2-3:58.6 on the first Persona cast; compare 4:12-4:13 where a later Persona skill in the same fight has no strip."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ 新要素を駆使して強敵に挑め！（モルガナ通信Vol.3） / P5R Royal features Vol.3, new battle elements (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU&t=85s",
+          "t": "1:25",
+          "verified": true,
+          "lookFor": "Royal: eyes strip at 1:25, WEAK burst over the downed enemy at 1:27."
+        },
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=7s",
+          "t": "0:07",
+          "verified": true,
+          "lookFor": "CRITICAL burst with damage number and cyan heart at 0:07.5 and the enemy going down."
+        }
+      ],
+      "watchNote": "No official upload found that shows the 1 MORE title.",
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "caster in the left third",
+        "enemyPosition": "centre-right, dropping to the floor",
+        "cameraAngleDeg": 45,
+        "heightNote": "unchanged wide shot; graphics do the work"
+      }
+    },
+    {
+      "id": "p5-holdup",
+      "phase": "Hold Up",
+      "name": "HOLD UP! burst, then a ring of thieves around the downed shadows",
+      "royal": "same",
+      "camera": {
+        "where": "When the last enemy drops, a motion-blurred whip-pan lands behind Joker's left shoulder with the pistol raised. The downed shadows lie centre-frame and the other thieves have stepped into a loose ring around them; the camera stays close to the ground, tilted slightly during the burst and level once the menu is up.",
+        "height": "Low, about waist of the standing thieves.",
+        "distance": "Joker large in the left third; the group in mid distance.",
+        "lens": "wide",
+        "movement": "Whip-pan for the burst (about 1 s), then the shot holds."
+      },
+      "frame": "Giant HOLD UP! typography (about a third of the frame); navigator bubble top-right; enemy name plate top-left. Then the three-item menu (All-Out Attack, Talk, Break Formation) at the left, a '!' over the targeted enemy, and its plea in a speech panel bottom-centre. Party HP cards are hidden while the menu is up and return as the All-Out Attack starts.",
+      "timing": "Burst 0:08.5-0:09.5 (1 s); the state then holds until input (0:10-0:11 in the short).",
+      "whyItWorks": "The frozen tableau of thieves surrounding helpless enemies is the shot; the typography plays the role of the sound effect.",
+      "confidence": "[verified: 3 sources] observed base (ATLUS Japan short 0:08-0:11) and Royal (ATLUS Japan Vol.2 1:36-1:38); Hashino says the function was inspired by films in which a villain holds people at gunpoint [single source: 4Gamer via Persona Central 2016].",
+      "sources": [
+        {
+          "title": "Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan), 2016-08-06",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s",
+          "note": "Frames 0:08-0:11."
+        },
+        {
+          "title": "P5R Royal features Vol.2, Palace and Battle (atlustube, ATLUS Japan), 2019-06-13",
+          "url": "https://www.youtube.com/watch?v=3z-FuxEcAkY",
+          "note": "Frames 1:36-1:38.5 (Royal)."
+        },
+        {
+          "title": "Persona Central, Persona 5 Director Katsura Hashino Interview (translation of 4Gamer), 2016-09-08",
+          "url": "https://personacentral.com/persona-5-director-hashino-development-interview/",
+          "note": "Hold Up inspired by films where the antagonist holds targets at gunpoint."
+        }
+      ],
+      "watch": [
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=8s",
+          "t": "0:08",
+          "verified": true,
+          "lookFor": "Whip-pan into HOLD UP! typography over Joker's raised pistol and the downed shadows."
+        },
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=10s",
+          "t": "0:10",
+          "verified": true,
+          "lookFor": "The hold-up tableau: three-item menu at left, exclamation mark over an enemy, its plea in a panel bottom-centre."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ パレス＆バトル（モルガナ通信Vol.2） / P5R Royal features Vol.2, Palace and Battle (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=3z-FuxEcAkY&t=96s",
+          "t": "1:36",
+          "verified": true,
+          "lookFor": "Royal: the same HOLD UP! burst and ring of thieves around two downed shadows."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "orbit",
+        "partyPositions": "Joker left third; others ringed around the enemies",
+        "enemyPosition": "centre, on the floor",
+        "cameraAngleDeg": 30,
+        "heightNote": "low, tilted during the whip-pan burst, level afterwards"
+      }
+    },
+    {
+      "id": "p5-allout",
+      "phase": "All-Out Attack",
+      "name": "Comic-panel face card, silhouette brawl on flat red, character finish card",
+      "royal": "same",
+      "camera": {
+        "where": "The 3D scene is dropped: (1) a full-screen diagonal comic panel of the party's faces for about 1 s; (2) a flat red plane where the enemies are black silhouettes and the thieves dark cut-outs, with fast cuts and yellow and white impact flashes for about 4 s; (3) the leader rises in profile against a red and black split for about 1.5 s; (4) a per-character finish card (Joker: red, white and blue comic art with vertical THE SHOW'S OVER text) for about 1.3 s, which greys out into the results.",
+        "height": "Not applicable: flat 2D plane.",
+        "distance": "Not applicable.",
+        "lens": "normal",
+        "movement": "Hard cuts every 0.3 to 1 s inside the brawl; the finish card holds still."
+      },
+      "frame": "Red field, black silhouettes, white dust clouds, yellow sparks; the navigator line stays top-right for the first two seconds of the brawl; no HUD cards during the brawl.",
+      "timing": "About 7 s of sequence plus the card: 0:11.5 to 0:20 in the ATLUS short.",
+      "whyItWorks": "Leaving 3D for a flat graphic plane makes the payoff feel like a different, more expensive medium, and the silhouettes remove any need for per-enemy animation.",
+      "confidence": "[verified: 4 sources] observed base (ATLUS Japan short) and Royal (ATLUS Japan Vol.2 1:39-1:47; Official ATLUS West Finish 'Em 0:25); RPGFan says finishing splash art is personalised per character; PlayStation.Blog Japan says the last character to down the enemy supplies the cut-in and that Royal lets Futaba randomly do the finish.",
+      "sources": [
+        {
+          "title": "Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan), 2016-08-06",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s",
+          "note": "Frames 0:11.5-0:24: card, brawl, pose, finish card, results."
+        },
+        {
+          "title": "P5R Royal features Vol.2, Palace and Battle (atlustube, ATLUS Japan), 2019-06-13",
+          "url": "https://www.youtube.com/watch?v=3z-FuxEcAkY",
+          "note": "Frames 1:39.5-1:47.5 (Royal): silhouettes, pose, Fox finish card."
+        },
+        {
+          "title": "Persona 5 Royal Finish 'Em Trailer (Official ATLUS West), 2022-10-21",
+          "url": "https://www.youtube.com/watch?v=c1LFJgJZiO4",
+          "note": "Frame 0:25-0:25.5 (Royal All-Out Attack face card)."
+        },
+        {
+          "title": "RPGFan, Persona 5 review (Robert Fenner), 2017-05-09",
+          "url": "https://www.rpgfan.com/review/persona-5/",
+          "note": "All-Out finishing art is personalised (poses, tea, cats with cigars)."
+        },
+        {
+          "title": "PlayStation.Blog Japan, Dengeki PlayStation feature on Persona 5 Royal's evolved battle, 2019-10-28",
+          "url": "https://blog.ja.playstation.com/2019/10/28/20191028-persona5r/",
+          "note": "Last character to down the enemy gets the All-Out cut-in; Futaba may finish in Royal."
+        }
+      ],
+      "watch": [
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=12s",
+          "t": "0:12",
+          "verified": true,
+          "lookFor": "Comic face card, then the red silhouette brawl with yellow sparks (0:13.5-0:17.5) and the leader's pose (0:18)."
+        },
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=19s",
+          "t": "0:19",
+          "verified": true,
+          "lookFor": "Joker finish card with vertical THE SHOW'S OVER text, greying into the results at 0:20.5."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ パレス＆バトル（モルガナ通信Vol.2） / P5R Royal features Vol.2, Palace and Battle (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=3z-FuxEcAkY&t=100s",
+          "t": "1:40",
+          "verified": true,
+          "lookFor": "Royal: the identical silhouette brawl, Yusuke's finish card at 1:46.5."
+        },
+        {
+          "title": "Persona 5 Royal — Finish 'Em Trailer (Official ATLUS West)",
+          "url": "https://www.youtube.com/watch?v=c1LFJgJZiO4&t=25s",
+          "t": "0:25",
+          "verified": true,
+          "lookFor": "Royal, English upload: four-face All-Out Attack card in red at 0:25."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "2d-sequence",
+        "partyPositions": "silhouettes crossing a flat red plane",
+        "enemyPosition": "black silhouettes at the centre of the plane",
+        "cameraAngleDeg": 90,
+        "heightNote": "flat 2D plane, no perspective; angle is nominal"
+      }
+    },
+    {
+      "id": "p5-negotiation",
+      "phase": "Negotiation",
+      "name": "Dimmed hold-up tableau, follow-spot on the shadow, face crop with slanted answer boxes",
+      "royal": "same",
+      "camera": {
+        "where": "No new camera: the Hold Up tableau stays behind, dimmed to roughly a third, with a follow-spot cone on the shadow. The shadow's line sits in a white-outlined black speech panel bottom-centre; the player's answer is a crop of Joker's masked face at the right edge with three slanted white answer boxes stacked in the middle.",
+        "height": "As Hold Up: low.",
+        "distance": "As Hold Up.",
+        "lens": "wide",
+        "movement": "Static; the UI panels slide in."
+      },
+      "frame": "Face crop right, three answer boxes centre, the shadow line bottom-centre, the target marker on the shadow; party HP cards hidden.",
+      "timing": "Each exchange holds until input (about 5 to 10 s per turn). A successful negotiation ends with a PERSONA GET! cut-in (mask rip, blue flames, close-ups of Joker and Arsene) of about 5 s.",
+      "whyItWorks": "Dialogue is staged as a stand-off, not a menu: same tableau, added spotlight, and the answer options are a graphic rather than a list.",
+      "confidence": "[observed: unofficial capture 5:18-5:44 negotiation screens] [observed: official 2015 PV#03 2:28-2:34 PERSONA GET! cut-in, pre-release footage]. An official frame of the negotiation UI: [not found]. Royal identity not observed.",
+      "sources": [
+        {
+          "title": "Persona 5 Battle System Explained (Combat Guide), Gameplay Vault, 2017-04-06 (unofficial capture)",
+          "url": "https://www.youtube.com/watch?v=fl3elI7hqRM",
+          "note": "Unofficial capture 5:18-5:44 (answer boxes, spotlight). Observation only."
+        },
+        {
+          "title": "Persona 5 PV#03 (atlustube, ATLUS Japan), 2015-09-17",
+          "url": "https://www.youtube.com/watch?v=wvpOwQaqRXA",
+          "note": "Frames 2:28-2:36 (PERSONA GET! cut-in)."
+        },
+        {
+          "title": "Persona Central, Persona 5 Director Katsura Hashino Interview (translation of 4Gamer), 2016-09-08",
+          "url": "https://personacentral.com/persona-5-director-hashino-development-interview/",
+          "note": "Negotiation revived; shadows are held at gunpoint to show their true selves."
+        }
+      ],
+      "watch": [
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=10s",
+          "t": "0:10",
+          "verified": true,
+          "lookFor": "The Hold Up menu offers All-Out Attack, Talk and Break Formation; the negotiation screens themselves are not in this clip."
+        },
+        {
+          "title": "ペルソナ５ PV#03 (atlustube, ATLUS Japan official; 2015 pre-release footage)",
+          "url": "https://www.youtube.com/watch?v=wvpOwQaqRXA&t=150s",
+          "t": "2:30",
+          "verified": true,
+          "lookFor": "PERSONA GET! cut-in with a mask rip and close-ups of Joker (2015 pre-release footage)."
+        }
+      ],
+      "watchNote": "No official upload found that shows the answer-box screens.",
+      "diagram": {
+        "cameraSide": "behind-active",
+        "partyPositions": "party dimmed at the left, Joker face crop at the right edge",
+        "enemyPosition": "centre, on the floor, in a follow-spot",
+        "cameraAngleDeg": 30,
+        "heightNote": "low, static"
+      }
+    },
+    {
+      "id": "p5-baton",
+      "phase": "Baton Pass",
+      "name": "Party-facing reverse shot for the choice, black-void two-shot for the pass",
+      "royal": "changed",
+      "camera": {
+        "where": "Target select cuts to a reverse shot: the camera stands in front of the thieves at their eye level looking back at them, a yellow ring on the receiver and a name banner top-left (Royal adds a Baton Touch Rank card bottom-left; the sampled Royal choice view is higher and wider, which may be the arena rather than a change). The pass is a black-void two-shot at hip height: passer and receiver side by side in profile, the BATON PASS! title top-right (BATON TOUCH! in the Japanese build), a raised-hand hand-off, then a radial burst of cyan and white speed lines and the ring returns for the receiver with an Attack and recovery up! banner.",
+        "height": "Eye level of the thieves for the choice view (base capture); hip height for the pass.",
+        "distance": "Close two-shot.",
+        "lens": "normal",
+        "movement": "Hard cut to the reverse shot; the pass is a cut, a burst and a cut."
+      },
+      "frame": "Black background, two characters, title top-right, party HP cards bottom-right, buff banner top-left, navigator line top-right.",
+      "timing": "About 2 to 2.5 s for the pass (Official ATLUS West Take Over 1:27-1:29; ATLUS Japan Vol.3 1:21-1:22.5); the choice view holds until input.",
+      "whyItWorks": "Emptying the world to a black void turns the hand-off into a single graphic beat; the receiver arrives already framed for their own command shot.",
+      "confidence": "[verified: 3 sources] Royal observed in two official uploads and described by PlayStation.Blog Japan, Push Square and TheGamer; the base pass was seen in an unofficial capture only (10:40-10:48) and looks the same [observed]. Rank effects and the zero-cost fourth pass: [verified: 2 sources: PlayStation.Blog Japan, Push Square plus TheGamer for darts].",
+      "sources": [
+        {
+          "title": "Persona 5 Royal Take Over Trailer (Official ATLUS West), 2022-09-14",
+          "url": "https://www.youtube.com/watch?v=qhizIJLN1kg",
+          "note": "Frames 1:27.5 and 1:28.5 (BATON PASS! title; two-shot and buff banner)."
+        },
+        {
+          "title": "P5R Royal features Vol.3 (atlustube, ATLUS Japan), 2019-07-11",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU",
+          "note": "Frames 1:21-1:22.5 (BATON TOUCH!) and 1:30-1:40 (rank card at the choice view)."
+        },
+        {
+          "title": "Persona 5 Royal Change The World Trailer (Official ATLUS West), 2020-03-12",
+          "url": "https://www.youtube.com/watch?v=LFzh6T7bQ_M",
+          "note": "Frames 0:36-0:37 (BATON PASS!, Attack and recovery up!)."
+        },
+        {
+          "title": "PlayStation.Blog Japan, Dengeki PlayStation feature on Persona 5 Royal's evolved battle, 2019-10-28",
+          "url": "https://blog.ja.playstation.com/2019/10/28/20191028-persona5r/",
+          "note": "Rank raises attack and recovery, restores HP and SP; a fourth pass makes the last member skill cost zero."
+        },
+        {
+          "title": "Push Square, Persona 5 Royal: Changes, All Differences Compared to Persona 5 (Robert Ramsey), 2022-10-20",
+          "url": "https://www.pushsquare.com/guides/persona-5-royal-changes-all-differences-compared-to-persona-5",
+          "note": "Baton pass expanded and available to all party members from the beginning."
+        },
+        {
+          "title": "TheGamer, Persona 5 Royal: Guide To Playing Darts And Baton Pass Ranks (Quinton O'Connor), updated 2022-06-14",
+          "url": "https://www.thegamer.com/persona-5-royal-playing-darts-baton-pass-rank-guide/",
+          "note": "Rank is raised by playing darts at Kichijoji."
+        },
+        {
+          "title": "Persona 5 Battle System Explained (Combat Guide), Gameplay Vault, 2017-04-06 (unofficial capture)",
+          "url": "https://www.youtube.com/watch?v=fl3elI7hqRM",
+          "note": "Unofficial capture 10:40-10:48 (base pass, English). Observation only."
+        }
+      ],
+      "watch": [
+        {
+          "title": "Persona 5 Royal — Take Over Trailer (Official ATLUS West)",
+          "url": "https://www.youtube.com/watch?v=qhizIJLN1kg&t=87s",
+          "t": "1:27",
+          "verified": true,
+          "lookFor": "Royal, English: the BATON PASS! title on a black void arrives at 1:27.5, then the radial burst (1:28) and the two-shot with the Attack and recovery up! banner (1:28.5)."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ 新要素を駆使して強敵に挑め！（モルガナ通信Vol.3） / P5R Royal features Vol.3, new battle elements (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU&t=81s",
+          "t": "1:21",
+          "verified": true,
+          "lookFor": "Royal, Japanese: BATON TOUCH! on black with Yusuke and Joker, speed-line burst at 1:21.5."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ 新要素を駆使して強敵に挑め！（モルガナ通信Vol.3） / P5R Royal features Vol.3, new battle elements (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU&t=90s",
+          "t": "1:30",
+          "verified": true,
+          "lookFor": "Royal only: the Baton Touch Rank card (rank 3) at the choice view, high wide framing with Morgana in the foreground."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "front-of-party",
+        "partyPositions": "passer and receiver side by side in profile, or the party facing the camera at the choice view",
+        "enemyPosition": "not shown during the pass",
+        "cameraAngleDeg": 160,
+        "heightNote": "hip height; the choice view is higher and wider"
+      }
+    },
+    {
+      "id": "p5-enemy-turn",
+      "phase": "Enemy turn and incoming attack",
+      "name": "Skill banner, front close-up of the enemy, navigator commentary",
+      "royal": "same",
+      "camera": {
+        "where": "On the enemy turn the party HUD stays, the enemy skill name appears in the same top-left banner used for party skills, and the camera cuts to a front three-quarter close-up of the enemy from the party side while the navigator comments top-right; on a hit a white starburst covers the victim.",
+        "height": "Chest height.",
+        "distance": "Close on the enemy.",
+        "lens": "normal",
+        "movement": "Hard cuts, about 2 s per action."
+      },
+      "frame": "Skill banner top-left, enemy centred, navigator bubble top-right, party cards bottom-right.",
+      "timing": "About 2 s for the sampled action (7:45-7:47 in the unofficial capture).",
+      "whyItWorks": "The enemy gets the same presentation grammar as the party, so incoming skills are readable at a glance.",
+      "confidence": "[observed: unofficial capture 7:45-7:47, an enemy support skill, not a damaging attack] Low confidence. An official frame of a damaging enemy attack: [not found]. Royal not observed.",
+      "sources": [
+        {
+          "title": "Persona 5 Battle System Explained (Combat Guide), Gameplay Vault, 2017-04-06 (unofficial capture)",
+          "url": "https://www.youtube.com/watch?v=fl3elI7hqRM",
+          "note": "Unofficial capture 7:45-7:47 (enemy skill Rebellion, buff pop-up). Observation only."
+        }
+      ],
+      "watch": [],
+      "watchNote": "No official upload found that shows an enemy taking its turn.",
+      "diagram": {
+        "cameraSide": "front-of-party",
+        "partyPositions": "offscreen behind the camera",
+        "enemyPosition": "centred, close",
+        "cameraAngleDeg": 10,
+        "heightNote": "chest height, front three-quarter on the enemy"
+      }
+    },
+    {
+      "id": "p5-victory",
+      "phase": "Victory and results",
+      "name": "Low tilted hero portrait, then result cards over the scene",
+      "royal": "same",
+      "camera": {
+        "where": "After the last kill the camera drops to a low portrait of the leader (gun raised, then turning to camera) with a white rim light against the room. Result cards (RESULT, EXP burst, MONEY, ITEM) then cut in over the scene (in Mementos, over a close-up of Morgana's car); after an All-Out Attack the finish card greys and becomes the results backdrop.",
+        "height": "Very low, dutch-tilted.",
+        "distance": "Close portrait.",
+        "lens": "wide",
+        "movement": "Two cuts, then card animations that pop in over about 1.5 s."
+      },
+      "frame": "Leader in the right third at the pose, casino sign behind; HUD card still bottom-right at 4:22, gone at 4:26. Result cards: greyed art, red zigzag, yellow EXP burst, MONEY tag, ITEM tag.",
+      "timing": "Pose 4:22-4:26 (about 4 s) in the early-story clip; result cards 0:20.5-0:24 in the short, settling after about 1.5 s.",
+      "whyItWorks": "The victory is a portrait, not a tally: the game gives the player a held hero shot first and lets the numbers arrive as graphics.",
+      "confidence": "[observed: ATLUS Japan early-story 4:22-4:26; ATLUS Japan short 0:20-0:24; unofficial capture 0:57-1:06 ordinary Mementos results: party walks off, camera swings to Morgana's car, RESULT, EXP, MONEY and ITEM cards pop over the car for about 4 s]. Royal: the Fox finish card (Vol.2 1:46) uses the same card style; no Royal ordinary-victory frame seen.",
+      "sources": [
+        {
+          "title": "Persona 5 early-story introduction video (atlustube, ATLUS Japan), 2016-07-19",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A",
+          "note": "Frames 4:22 and 4:26."
+        },
+        {
+          "title": "Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan), 2016-08-06",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s",
+          "note": "Frames 0:19-0:24."
+        },
+        {
+          "title": "P5R Royal features Vol.2, Palace and Battle (atlustube, ATLUS Japan), 2019-06-13",
+          "url": "https://www.youtube.com/watch?v=3z-FuxEcAkY",
+          "note": "Frame 1:46.5 (Royal finish card)."
+        },
+        {
+          "title": "ペルソナ5 戦闘演出動画 by Y S, 2017-05-01 (unofficial capture)",
+          "url": "https://www.youtube.com/watch?v=RSQytLOJ_fU",
+          "note": "Unofficial capture 0:57-1:06 ordinary results. Observation only."
+        }
+      ],
+      "watch": [
+        {
+          "title": "ペルソナ５ 物語の序盤紹介映像 / Persona 5 early-story introduction (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=Zae9033XP7A&t=262s",
+          "t": "4:22",
+          "verified": true,
+          "lookFor": "Joker kneels with the pistol raised in a low hero shot; at 4:26 he turns to camera with a rim light."
+        },
+        {
+          "title": "『ペルソナ５』ショートムービー【主人公 総攻撃編】 / Persona 5 short movie, Protagonist All-Out Attack (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=SvYgPEIGy0s&t=21s",
+          "t": "0:21",
+          "verified": true,
+          "lookFor": "Result cards: EXP burst, MONEY tag and ITEM tag animating over the greyed finish card."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ パレス＆バトル（モルガナ通信Vol.2） / P5R Royal features Vol.2, Palace and Battle (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=3z-FuxEcAkY&t=106s",
+          "t": "1:46",
+          "verified": true,
+          "lookFor": "Royal: Yusuke's finish card in ink-wash art after the All-Out Attack."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "front-of-party",
+        "partyPositions": "leader in the right third, facing camera",
+        "enemyPosition": "gone",
+        "cameraAngleDeg": 180,
+        "heightNote": "very low, dutch tilt"
+      }
+    },
+    {
+      "id": "p5r-showtime",
+      "phase": "Showtime (Royal only)",
+      "name": "Bespoke cutscene stage per pair, patterned frames, HUD off, Options to skip",
+      "royal": "new",
+      "camera": {
+        "where": "Not the battle camera: a hard wipe (red wave over a gold-leaf folding screen) into a purpose-built stage for the pair. In the Panther and Fox Showtime the cuts run: a gold-leaf folding-screen set; a close two-shot with a red-and-white parasol; a top-down parasol; a portrait of Panther framed by a moon window with chrysanthemum borders; action cutaways with dutch angles; a wide of the enemy in a tatami room; blade close-ups; then a white cross-flash back to the normal HUD.",
+        "height": "Varies per cut: mostly hip to chest, with a top-down and a dutch tilt.",
+        "distance": "Alternates close two-shots and wide establishing shots.",
+        "lens": "normal",
+        "movement": "Fast cuts with slow push-ins inside them; cut like a music video."
+      },
+      "frame": "HUD off; 2D pattern decoration (Japanese textile flowers, borders) layered over the 3D; a small OPTIONS Skip hint bottom-right; no party cards.",
+      "timing": "About 16 s for Panther and Fox (0:31-0:47 in the ATLUS clip); skippable.",
+      "whyItWorks": "The payoff is a character moment, so each pair gets its own set, palette and pose language, and the camera is free to be cinematic instead of tactical.",
+      "confidence": "[verified: 5 sources] Screen Rant, CBR and TheGamer describe elaborate cutscenes with unique settings per pair; RPG Site says they are cinematic and can be skipped; PlayStation.Blog Japan says the touchpad triggers them; observed staging and the on-screen skip hint in ATLUS Japan Vol.3 0:31-0:47 and Official ATLUS West Finish 'Em 0:29. Boss variant: Screen Rant says the animation varies slightly against bosses [single source]. Split screens and comic panels: not seen in the sampled Showtime; pattern borders and a wipe are.",
+      "sources": [
+        {
+          "title": "P5R Royal features Vol.3 (atlustube, ATLUS Japan), 2019-07-11",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU",
+          "note": "Frames 0:30-0:47 (Panther and Fox) with the OPTIONS Skip hint bottom-right."
+        },
+        {
+          "title": "Persona 5 Royal Finish 'Em Trailer (Official ATLUS West), 2022-10-21",
+          "url": "https://www.youtube.com/watch?v=c1LFJgJZiO4",
+          "note": "Frames 0:29-0:29.5 (Panther and Fox stage, English upload)."
+        },
+        {
+          "title": "Screen Rant, Persona 5 Royal: How To Unlock Showtime Attacks (Kaitlyn Peterson and Jason Nichols), updated 2024-06-10",
+          "url": "https://screenrant.com/persona-5-royal-unlock-showtime-attacks/",
+          "note": "Triggers, large centre button prompt, use-it-or-lose-it, Almighty damage, varies slightly against bosses."
+        },
+        {
+          "title": "TheGamer, Persona 5 Royal: All Showtimes, Ranked (Kevin Connaughton), 2023-08-27",
+          "url": "https://www.thegamer.com/persona-5-royal-best-showtimes-teams/",
+          "note": "Unique backgrounds per pair (Japanese home, wrestling ring, rainy rooftop, ramen shop)."
+        },
+        {
+          "title": "CBR, Persona 5 Royal: Every Showtime Attack, Ranked (Noelle Corbett), 2021-06-07",
+          "url": "https://www.cbr.com/persona-5-royal-showtime-attacks/",
+          "note": "Elaborate over-the-top cutscenes in varied settings."
+        },
+        {
+          "title": "RPG Site, Persona 5 Royal review (Cullen Black), 2020-03-17",
+          "url": "https://www.rpgsite.net/review/9556-persona-5-royal-review",
+          "note": "Cinematic attack, can be skipped, needs only one of the pair in the active party."
+        },
+        {
+          "title": "PlayStation.Blog Japan, Dengeki PlayStation feature on Persona 5 Royal's evolved battle, 2019-10-28",
+          "url": "https://blog.ja.playstation.com/2019/10/28/20191028-persona5r/",
+          "note": "Triggered by pressing the touchpad when available; chance-based, raised by chaining Baton Passes or a party member in trouble."
+        }
+      ],
+      "watch": [
+        {
+          "title": "「P5R」のここがロイヤル！ 新要素を駆使して強敵に挑め！（モルガナ通信Vol.3） / P5R Royal features Vol.3, new battle elements (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU&t=31s",
+          "t": "0:31",
+          "verified": true,
+          "lookFor": "Ann and Yusuke Showtime: gold-leaf wipe, parasol two-shot, top-down parasol, moon-window portrait with flower borders, wide tatami stage, blade close-ups; HUD off; OPTIONS Skip bottom-right; ends 0:47."
+        },
+        {
+          "title": "「P5R」のここがロイヤル！ 新要素を駆使して強敵に挑め！（モルガナ通信Vol.3） / P5R Royal features Vol.3, new battle elements (atlustube, ATLUS Japan official)",
+          "url": "https://www.youtube.com/watch?v=eokDJhLtccU&t=38s",
+          "t": "0:38",
+          "verified": true,
+          "lookFor": "Panther framed by a round moon window with kimono-pattern borders layered over the 3D."
+        },
+        {
+          "title": "Persona 5 Royal — Finish 'Em Trailer (Official ATLUS West)",
+          "url": "https://www.youtube.com/watch?v=c1LFJgJZiO4&t=29s",
+          "t": "0:29",
+          "verified": true,
+          "lookFor": "Same Ann and Yusuke stage in the English trailer (parasol close-up at 0:29.5)."
+        }
+      ],
+      "diagram": {
+        "cameraSide": "cut-in",
+        "partyPositions": "the pair centred on a bespoke stage",
+        "enemyPosition": "wide establishing, mid distance",
+        "cameraAngleDeg": 90,
+        "heightNote": "varies per cut, with a top-down and a dutch tilt"
+      }
+    }
+  ],
+  "royalChanges": [
+    {
+      "what": "Showtime (new cinematic team attack)",
+      "detail": "Chance-triggered pair attacks staged as bespoke cutscenes in their own sets with HUD off; a large prompt appears (touchpad on PS4), the offer expires if unused, they can be skipped, and they vary slightly against bosses. Panther and Fox: about 16 s.",
+      "source": "ATLUS Japan Vol.3 0:31-0:47 (observed); PlayStation.Blog Japan; Screen Rant; RPG Site; TheGamer; CBR"
+    },
+    {
+      "what": "Baton Pass Rank",
+      "detail": "Rank raises attack and recovery, restores HP or SP at the pass, and a fourth pass makes the last member's skill cost zero; the choice view shows a rank card. Passing is available from the start. Pass staging and camera are otherwise the same as the base game in the frames seen.",
+      "source": "PlayStation.Blog Japan; Push Square; TheGamer; ATLUS Japan Vol.3 1:21-1:40 (observed)"
+    },
+    {
+      "what": "All-Out Attack finish variety",
+      "detail": "Futaba can randomly deliver the finishing card in Royal. Staging of the silhouette brawl and the finish card is otherwise the same as the base game.",
+      "source": "PlayStation.Blog Japan; ATLUS Japan Vol.2 1:39-1:47 (observed)"
+    },
+    {
+      "what": "Command shot, ring layout, HUD placement, skill banners, Hold Up, results style",
+      "detail": "IDENTICAL to the base game in side-by-side frames: rear-side low wide shot, five-plate ring plus ORDER, HP cards bottom-right, five button hints bottom-left in the same order, enemy plate top-left, navigator bubble top-right, HOLD UP! burst and ring of thieves, red silhouette All-Out Attack, ink-wash finish cards. No source lists a change to the standard battle camera or HUD.",
+      "source": "ATLUS Japan early-story 3:52 vs Vol.3 1:16 (observed); Vol.2 1:36-1:47 vs ATLUS short 0:08-0:20 (observed); Push Square change list has no camera or HUD entry"
+    },
+    {
+      "what": "Grappling-hook preemptive strike (Wire Action)",
+      "detail": "A new way to start a fight: strike a distant shadow from range, then the same ink burst into the command shot; the ATLUS Japan Royal clip shows a CHANCE! title at 1:04.",
+      "source": "ATLUS Japan Vol.2 0:56-1:07 (observed, single source for the caption)"
+    },
+    {
+      "what": "Guns and shadows (mechanics, not camera)",
+      "detail": "Ammo refills after each battle and guns can be customised; rare Disaster Shadows explode when killed and damage the other enemies; palace bosses were reworked with extra phases or behaviours.",
+      "source": "RPG Site review; PlayStation.Blog Japan; Push Square"
+    },
+    {
+      "what": "Other presentation additions (not battle camera)",
+      "detail": "New opening and menu screen, a new dialogue font in the localised build, new visual effects on some dialogue windows and new character portraits.",
+      "source": "Push Square change list"
+    },
+    {
+      "what": "Platforms",
+      "detail": "The PS5 version's presentation is described as unchanged from PS4, with 60 fps; on Switch the All-Out Attack art is at a noticeably lower resolution than other assets; PC options are slim.",
+      "source": "Push Square; RPG Site (2022)"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Battle camera",
+      "effect": "No battle-camera option found; the battle controls list has no camera input, whereas the dungeon list gives the right stick for rotating the camera.",
+      "source": "Samurai Gamers controls list [single source, absence]"
+    },
+    {
+      "name": "Rush (auto-battle, OPTIONS)",
+      "effect": "Auto-battle in which the party rushes with melee attacks; a reviewer says it speeds up momentum but is not the same thing as a fast-forward. The button hint is on screen in both games.",
+      "source": "Samurai Gamers; ATLUS Japan Vol.3 1:16 (observed hint); TheGamer"
+    },
+    {
+      "name": "Showtime skip (Royal)",
+      "effect": "The Showtime cutscene can be skipped; an OPTIONS Skip hint is drawn bottom-right during it.",
+      "source": "RPG Site review; ATLUS Japan Vol.3 0:33-0:46 (observed)"
+    },
+    {
+      "name": "Fast-forward for standard battle animations",
+      "effect": "Not available in Royal; only auto-battle exists.",
+      "source": "TheGamer (Jurkovich 2020) [single source]"
+    },
+    {
+      "name": "UI or effect intensity",
+      "effect": "No option found to reduce the animated UI or flashing effects; in 2025 Atlus's lead interface designer said a stripped-down mode is being considered, speaking about Metaphor and the studio's UI in general.",
+      "source": "PC Gamer 2025-03-21 [single source, scope is Metaphor and Atlus UI generally]"
+    },
+    {
+      "name": "PC and console video options (Royal)",
+      "effect": "Frame rate cap 30, 60 or 120, resolution and rendering scale, shadow quality, anti-aliasing, depth of field; audio sliders for effects, voices, music and cutscenes; the reviewer called the PC options slim.",
+      "source": "RPG Site 2022-10-17"
+    }
+  ],
+  "devStatements": [
+    {
+      "who": "Katsura Hashino, director (Denfaminicogamer interview 2023-04-25, translated by Persona Central)",
+      "summary": "Turn-based battles stay viable if they fit as part of a cutscene's composition: show the scenes that need showing, and use the cut-and-paste method of anime and manga scenes; the Persona 5 team chose turn-based on that basis and kept attack and Persona summon to a single button press for tempo.",
+      "source": "https://personacentral.com/persona-director-development-interview-turn-based/"
+    },
+    {
+      "who": "Katsura Hashino (Eurogamer interview, 2017)",
+      "summary": "The earliest UI was aggressively animated to the point that it was hard to see what was going on; messages were too diagonal, so the animations were calmed and rotations reduced to balance style and usability.",
+      "source": "https://www.eurogamer.net/lets-talk-about-persona-5s-menus"
+    },
+    {
+      "who": "Katsura Hashino (4Gamer interview, 2016, translated by Persona Central)",
+      "summary": "Hold Up came from films where a villain holds people at gunpoint; the thieves move in a way that shows they know how cool they look.",
+      "source": "https://personacentral.com/persona-5-director-hashino-development-interview/"
+    },
+    {
+      "who": "Atlus UI team (Kazuhisa Wada and Masaki Sudou/Suto, CEDEC+KYUSHU 2017, reported by Siliconera and Famitsu)",
+      "summary": "Persona 5's UI uses red as its one key colour (no sub-colours except on the HP/SP elements), central lines to guide the eye, and a tool that renders a 3D model spinning into a pose as 2D art; separate designers handled the menu and the battle-scene UI, and the battle designer checked every frame with the programmer. The Famitsu report does not discuss the battle camera.",
+      "source": "https://www.siliconera.com/atlus-reveals-design-secrets-behind-persona-5s-distinctive-ui/ ; https://www.famitsu.com/news/201711/13145540.html"
+    },
+    {
+      "who": "Guillaume Broche, Sandfall Interactive (Denfaminicogamer interview, May 2025; reported by PCGamesN and Automaton West)",
+      "summary": "Calls Persona 5 the best game in the world for UI and combat visuals; the camera shifting dramatically with each player action, like watching a movie, left a huge impression. He wanted to bring that quality of camera work and presentation into Clair Obscur: Expedition 33, and says there is more he wants to take from Persona 5, especially in the UI. This is the one source found that ties a later game's battle camera to Persona 5.",
+      "source": "https://www.pcgamesn.com/clair-obscur-expedition-33/persona-5-influence ; https://automaton-media.com/en/news/clair-obscur-expedition-33-lead-says-persona-5-is-the-best-game-in-the-world-when-it-comes-to-ui-and-combat-visuals/"
+    },
+    {
+      "who": "Koji Ise, Atlus lead interface designer (GDC 2025; reported by Noisy Pixel and PC Gamer)",
+      "summary": "For Metaphor: ReFantazio the team explicitly worked to differentiate its visual identity from Persona; the battle screen uses a bird's-eye view because in the story the king watches from above. He also said a stripped-down UI option is something Atlus is considering. No source found says Metaphor's battle camera derives from Persona 5.",
+      "source": "https://gdcvault.com/play/1035332/From-Persona-to-Metaphor-ReFantazio ; https://noisypixel.net/persona-metaphor-ui-design-evolution/ ; https://www.pcgamer.com/games/rpg/persona-and-metaphor-refantazios-ui-designer-is-open-to-accessibility-options-for-players-who-find-the-stylish-menus-overstimulating-that-is-something-we-understand-well-need-to-work-on-and-provide-in-the-future/"
+    },
+    {
+      "who": "Katsura Hashino on Metaphor: ReFantazio (Official Xbox Podcast, October 2024; reported by GamesRadar)",
+      "summary": "Metaphor mixes real-time and command battles to bring in the idea of manga and movie-style combat, and the fast and slow tempo balance was refined from the team's previous games.",
+      "source": "https://www.gamesradar.com/games/jrpg/metaphor-refantazio-combines-real-time-and-turn-based-battles-because-its-director-wanted-to-integrate-the-idea-of-manga-and-movie-style-combat/"
+    }
+  ],
+  "referenceLinks": [
+    {
+      "label": "Game UI Database: Persona 5 Royal (178 screenshots and videos, sections HUD and Overlays, Ingame Menus, Game States)",
+      "url": "https://www.gameuidatabase.com/gameData.php?id=618"
+    },
+    {
+      "label": "Game UI Database: Persona 5 (base game)",
+      "url": "https://www.gameuidatabase.com/gameData.php?id=72"
+    },
+    {
+      "label": "Game UI Database: Enemy Health & Damage screens, Persona series (Royal listed first)",
+      "url": "https://www.gameuidatabase.com/index.php?set=1&sort=2&tag=84&series=36&scrn=143"
+    },
+    {
+      "label": "Game UI Database: Notification: Skill Use screens, Persona series (Royal has 10 hits)",
+      "url": "https://www.gameuidatabase.com/index.php?set=1&sort=2&series=36&scrn=172"
+    },
+    {
+      "label": "Steam store page (official screenshots and trailers; app 1687950, ATLUS/SEGA, listed 20 Oct 2022; age check)",
+      "url": "https://store.steampowered.com/app/1687950/Persona_5_Royal/"
+    },
+    {
+      "label": "Steam official screenshot 6: Persona cast (Riot Gun banner), low camera, four HP cards bottom-right",
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1687950/ss_38d09e40dd56df43a1bb083dc94e27cb1360b526.1920x1080.jpg?t=1783356822"
+    },
+    {
+      "label": "Steam official screenshot 8: melee Attack banner, low camera",
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1687950/ss_cfa96c0c9a983689b48cc679ddc63cfe373c2b9a.1920x1080.jpg?t=1783356822"
+    },
+    {
+      "label": "Steam official screenshot 9: Zio banner, WEAK burst with damage number, navigator line",
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1687950/ss_ed4f15d50417a60b5d4b712c8eb0ea1d8ba876bc.1920x1080.jpg?t=1783356822"
+    }
+  ],
+  "gaps": [
+    "No official upload found for: the negotiation answer screens, the base-game Baton Pass, a damaging enemy attack, the 1 MORE title, the Analyze page, the Gun aiming state, a Showtime prompt frame, or a Showtime against a boss.",
+    "Age-gated official uploads that could not be viewed without signing in: E3 2015 trailer vjSHjAoQty4, E3 2016 trailer Xtw4W0H7SbE, Story trailer AKKXJZii9Pc, Royal release-date trailer -b2SV5fkQrk, PlayStation Royal E3 2019 o9QjlLdYK5I, PlayStation Royal release date dFWXBQH9f5s, Royal Season Reveal VArlzKwFxNY, PlayStation Royal Accolades Lpu7q2G93qs, PSX 2016 story trailer YRFLo3z3M-o, Protagonist trailer 7vUV0vcvI0A; PV#04 qKZtJmt85ns asked for a bot check.",
+    "Megami Tensei Wiki (Cloudflare challenge), Fandom (HTTP 402), GameFAQs, GameSpot, GodisaGeek and Twinfinite returned blocks or challenges and were not read.",
+    "Camera height, angle and lens are eyeballed; no engine data or developer talk on the battle camera itself was found."
+  ]
+}
