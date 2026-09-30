@@ -257,7 +257,7 @@ export class PauseScreen extends Screen {
       this.togglePanels();
       return;
     }
-    if (action === 'cancel' && this.panelsHidden) {
+    if (action === 'cancel') { // PR-0265: a pointer RESUME closes outright, whatever has focus
       this.close();
       return;
     }

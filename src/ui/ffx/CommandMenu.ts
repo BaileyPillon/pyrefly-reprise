@@ -1,4 +1,4 @@
-import { commandRowsCap } from '../common/hudTextSize.ts';
+import { commandRowsCap, withTextSizeWatch } from '../common/hudTextSize.ts';
 import type { AnyCombatant, AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import {
   buildTopRows,
@@ -252,7 +252,7 @@ export class CommandMenu {
     this.state = 'top';
     this.stackEl.hidden = false;
     this.watcher.attach();
-    this.unwireClicks = wireClicks(this.stackEl, (action) => this.onAction(action));
+    this.unwireClicks = withTextSizeWatch(wireClicks(this.stackEl, (action) => this.onAction(action)), () => this.state !== 'target' && this.renderStack()); // PR-0266
     this.renderStack();
     this.updateHelpAndPreview();
     return new Promise<Command>((resolve) => {

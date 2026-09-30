@@ -35,6 +35,24 @@ export function commandRowsCap(base: number, root: HTMLElement | null = rootEl()
   return base;
 }
 
+/**
+ * Runs `rerender` whenever TEXT SIZE changes on `<html>` (`data-text-size`, set by
+ * `app/applyComfort.ts`) for as long as the returned function is not called, and hands
+ * back one function that stops it and then `also`. PR-0266: the command list caps its
+ * rows only when it is drawn, so a size changed in the pause while a turn's menu was
+ * open (or suspended behind the pause) kept the old cap: six rows grown to 130 % ran up
+ * over the help slab and the acting character. The menu passes its own unwire as `also`.
+ */
+export function withTextSizeWatch(also: () => void, rerender: () => void, root: HTMLElement | null = rootEl()): () => void {
+  if (!root || typeof MutationObserver === 'undefined') return also;
+  const observer = new MutationObserver(() => rerender());
+  observer.observe(root, { attributes: true, attributeFilter: ['data-text-size'] });
+  return () => {
+    observer.disconnect();
+    also();
+  };
+}
+
 function rootEl(): HTMLElement | null {
   return typeof document === 'undefined' ? null : document.documentElement;
 }

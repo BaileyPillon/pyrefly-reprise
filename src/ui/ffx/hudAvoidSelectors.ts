@@ -9,6 +9,8 @@
  * field. `ffx/DamageNumbers.ts` explains the same rule for the numerals.
  */
 
+import { currentTextScale } from '../common/hudTextSize.ts';
+
 /**
  * Yojimbo's Zanmato gauge (FFX, Chapter IX only; `ZanmatoGauge.ts`): the panel
  * under his name, and the one-shot banner while it is up. Both are opaque ink,
@@ -102,4 +104,28 @@ export function rectsOf(root: ParentNode, selectors: readonly string[]): Viewpor
     }
   }
   return out;
+}
+
+/** TEXT SIZE is 115 / 130 % on the desktop HUD: the only case the chip rules below apply to (100 % is untouched; the phone lays out in flow). */
+function textSizeGrown(hud: HTMLElement): boolean {
+  const root = hud.ownerDocument.documentElement;
+  return !root.dataset['phoneBattle'] && currentTextScale(root) > 1;
+}
+
+/**
+ * The two key chips the advisor card must keep off (PR-0266; desktop only, the upright
+ * phone lays its chips out in flow): the guide's `G` chip inside the HUD, and the battle
+ * screen's `PAUSE` chip, which lives outside the HUD in the screen root. Neither was in
+ * the solver's input, so at TEXT SIZE 115 / 130 % (chips and card both grown) the card's
+ * `N HIDE MOVES` chip sat on `PAUSE` or on `G`, and at 130 % the card covered `G`.
+ */
+export function chipObstacleEls(hud: HTMLElement): HTMLElement[] {
+  const doc = hud.ownerDocument;
+  if (!textSizeGrown(hud)) return [];
+  return [...hud.querySelectorAll<HTMLElement>('.sgd__toggle'), ...doc.querySelectorAll<HTMLElement>('.battle-pause-chip')];
+}
+
+/** Room the advisor's own chip needs above its card, grid px: its measured height plus the gap; 0 when it is not up, at 100 % or on the phone. */
+export function chipReserveOf(chipRect: { top: number; bottom: number } | null, gap: number, hud: HTMLElement): number {
+  return chipRect && textSizeGrown(hud) ? chipRect.bottom - chipRect.top + gap : 0;
 }

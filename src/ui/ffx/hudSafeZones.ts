@@ -229,12 +229,10 @@ export const MAX_ADVISOR_HEIGHT = 104;
 export const MIN_ADVISOR_HEIGHT = 72;
 
 /**
- * Room kept above the card for its own `N HIDE MOVES` chip, in grid px.
- *
- * The chip is 8 grid px tall and rides `ADVISOR_CHIP_GAP` above the card's top
- * edge, so a box measured against the *card* hands back a card whose chip is
- * already past it. At 1280x720 that chip poked 34 grid px² into the Sensor
- * card, in every state the Sensor was up.
+ * Room kept above the card for its own `N HIDE MOVES` chip, in grid px (the chip rides
+ * `ADVISOR_CHIP_GAP` above the card, so a box measured against the *card* alone hands back
+ * a chip already past it: 34 grid px² into the Sensor card at 1280x720). TEXT SIZE grows
+ * the chip, so `AdvisorZoneInput.chipReserve` (measured) raises this floor (PR-0266).
  */
 export const ADVISOR_CHIP_RESERVE = 11;
 
@@ -282,6 +280,7 @@ export interface AdvisorZoneInput {
    * because nothing in this file had ever been told a boss was there.
    */
   enemies?: readonly Rect[];
+  chipReserve?: number; // measured chip height + gap, grid px (floor: ADVISOR_CHIP_RESERVE)
 }
 
 /** Where the advisor card's box goes. `bottom` is distance from the stage's bottom edge. */
@@ -384,9 +383,10 @@ function anchorOf(input: AdvisorZoneInput): { x: number; y: number } {
  * the height is capped by the box *and* by `(boxWidth - minWidth) / SKEW`.
  */
 function solveCard(obstacles: readonly Rect[], input: AdvisorZoneInput, minWidth: number): AdvisorZone | null {
+  const reserve = Math.max(ADVISOR_CHIP_RESERVE, input.chipReserve ?? 0);
   const box = solveBox(obstacles, {
     minWidth: minWidth + SKEW * MIN_ADVISOR_HEIGHT,
-    minHeight: MIN_ADVISOR_HEIGHT + ADVISOR_CHIP_RESERVE,
+    minHeight: MIN_ADVISOR_HEIGHT + reserve,
     anchor: anchorOf(input),
     minWidthAt: (boxWidth) => {
       // A box only counts if some height in [MIN, MAX] leaves `minWidth` after
@@ -398,7 +398,7 @@ function solveCard(obstacles: readonly Rect[], input: AdvisorZoneInput, minWidth
   const boxWidth = box.right - box.left;
   const height = Math.min(
     MAX_ADVISOR_HEIGHT,
-    box.bottom - box.top - ADVISOR_CHIP_RESERVE,
+    box.bottom - box.top - reserve,
     (boxWidth - minWidth) / SKEW,
   );
   if (height < MIN_ADVISOR_HEIGHT) return null;
