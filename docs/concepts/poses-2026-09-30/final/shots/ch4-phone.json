@@ -1,0 +1,288 @@
+{
+ "otherTrail": [],
+ "reduceMotion": false,
+ "plan": "ch4",
+ "device": "phone",
+ "chapter": "ffx2-bahamut",
+ "game": "ffx2",
+ "branch": "poses-0930",
+ "sha": "9299b319",
+ "url": "http://127.0.0.1:8731/pyrefly-reprise/",
+ "viewport": {
+  "width": 390,
+  "height": 844
+ },
+ "shots": {
+  "rest": "docs/concepts/poses-2026-09-30/final/shots/ch4-phone-rest.jpg",
+  "attack": "docs/concepts/poses-2026-09-30/final/shots/ch4-phone-attack.jpg",
+  "after-attack": "docs/concepts/poses-2026-09-30/final/shots/ch4-phone-after-attack.jpg",
+  "all-rest": "docs/concepts/poses-2026-09-30/final/shots/ch4-phone-all-rest.jpg",
+  "splash": "docs/concepts/poses-2026-09-30/final/shots/ch4-phone-splash.jpg"
+ },
+ "at": {
+  "rest": {
+   "yuna": {
+    "art": "yuna-gunner",
+    "pose": "sleep",
+    "url": "art/characters/yuna-gunner/sleep.png",
+    "worldH": 1.364,
+    "hp": "690/690",
+    "statuses": [
+     "sleep"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "paine": {
+    "art": "paine-warrior",
+    "pose": "ready",
+    "url": "art/characters/paine-warrior/idle.png",
+    "worldH": 1.845,
+    "hp": "341/1706",
+    "statuses": [
+     "curse"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "rikku": {
+    "art": "rikku-dark-knight",
+    "pose": "idle",
+    "url": "art/characters/rikku-dark-knight/idle.png",
+    "worldH": 1.843,
+    "hp": "1839/1839",
+    "statuses": [],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 3
+  },
+  "attack": {
+   "yuna": {
+    "art": "yuna-gunner",
+    "pose": "sleep",
+    "url": "art/characters/yuna-gunner/sleep.png",
+    "worldH": 1.364,
+    "hp": "690/690",
+    "statuses": [
+     "sleep"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "paine": {
+    "art": "paine-warrior",
+    "pose": "critical",
+    "url": "art/characters/paine-warrior/critical.png",
+    "worldH": 1.411,
+    "hp": "341/1706",
+    "statuses": [
+     "curse"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "rikku": {
+    "art": "rikku-dark-knight",
+    "pose": "hurt",
+    "url": "art/characters/rikku-dark-knight/idle.png",
+    "worldH": 1.843,
+    "hp": "1739/1839",
+    "statuses": [],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 3
+  },
+  "after-attack": {
+   "yuna": {
+    "art": "yuna-gunner",
+    "pose": "sleep",
+    "url": "art/characters/yuna-gunner/sleep.png",
+    "worldH": 1.364,
+    "hp": "690/690",
+    "statuses": [
+     "sleep"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "paine": {
+    "art": "paine-warrior",
+    "pose": "critical",
+    "url": "art/characters/paine-warrior/critical.png",
+    "worldH": 1.411,
+    "hp": "212/1706",
+    "statuses": [
+     "curse"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "rikku": {
+    "art": "rikku-dark-knight",
+    "pose": "ready",
+    "url": "art/characters/rikku-dark-knight/idle.png",
+    "worldH": 1.843,
+    "hp": "1739/1839",
+    "statuses": [],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 3
+  },
+  "all-rest": {
+   "yuna": {
+    "art": "yuna-gunner",
+    "pose": "sleep",
+    "url": "art/characters/yuna-gunner/sleep.png",
+    "worldH": 1.364,
+    "hp": "690/690",
+    "statuses": [
+     "sleep"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "paine": {
+    "art": "paine-warrior",
+    "pose": "critical",
+    "url": "art/characters/paine-warrior/critical.png",
+    "worldH": 1.411,
+    "hp": "341/1706",
+    "statuses": [
+     "curse"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "rikku": {
+    "art": "rikku-dark-knight",
+    "pose": "idle",
+    "url": "art/characters/rikku-dark-knight/idle.png",
+    "worldH": 1.843,
+    "hp": "1646/1839",
+    "statuses": [],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 3
+  },
+  "splash": {
+   "yuna": {
+    "art": "yuna-gunner",
+    "pose": "sleep",
+    "url": "art/characters/yuna-gunner/sleep.png",
+    "worldH": 1.364,
+    "hp": "690/690",
+    "statuses": [
+     "sleep"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "paine": {
+    "art": "paine-warrior",
+    "pose": "cast",
+    "url": "art/characters/paine-warrior/cast.png",
+    "worldH": 1.638,
+    "hp": "1706/1706",
+    "statuses": [
+     "curse"
+    ],
+    "paintsSleep": true,
+    "paintsCritical": true
+   },
+   "rikku": {
+    "art": "rikku-dark-knight",
+    "pose": "cast",
+    "url": "art/characters/rikku-dark-knight/idle.png",
+    "worldH": 1.843,
+    "hp": "1839/1839",
+    "statuses": [],
+    "paintsSleep": false,
+    "paintsCritical": false
+   },
+   "marksAnimations": 3
+  },
+  "splashImg": {
+   "src": "/pyrefly-reprise/art/characters/ffx2-bahamut/splash.png",
+   "hidden": false,
+   "natural": [
+    1656,
+    1656
+   ],
+   "box": [
+    -405,
+    34,
+    776,
+    776
+   ],
+   "opacity": "1"
+  }
+ },
+ "trail": [
+  {
+   "t": 0,
+   "art": "paine-warrior",
+   "pose": "ready",
+   "url": "art/characters/paine-warrior/idle.png",
+   "worldH": 1.845,
+   "hp": "341/1706",
+   "statuses": [
+    "curse"
+   ],
+   "paintsSleep": true,
+   "paintsCritical": true
+  },
+  {
+   "t": 100,
+   "art": "paine-warrior",
+   "pose": "attack",
+   "url": "art/characters/paine-warrior/attack.png",
+   "worldH": 1.51,
+   "hp": "341/1706",
+   "statuses": [
+    "curse"
+   ],
+   "paintsSleep": true,
+   "paintsCritical": true
+  },
+  {
+   "t": 200,
+   "art": "paine-warrior",
+   "pose": "critical",
+   "url": "art/characters/paine-warrior/critical.png",
+   "worldH": 1.411,
+   "hp": "341/1706",
+   "statuses": [
+    "curse"
+   ],
+   "paintsSleep": true,
+   "paintsCritical": true
+  }
+ ],
+ "notes": [
+  "STAGED: yuna dressed as yuna-gunner with stage.setArt (the chapter opens in yuna-white-mage)",
+  "paine already wears paine-warrior in this chapter",
+  "STAGED: {\"yuna\":{\"sleep\":true},\"paine\":{\"hp\":0.2}} written into the engine state, then presenter.syncHud (the rest-pose tap reacts on its own; no setPose was called by this script)",
+  "paine Attack by real keys: Enter x3",
+  "all-rest: a member Attack by keys to reach an enemy turn; statuses and HP re-staged first",
+  "all-rest: a member Attack by keys to reach an enemy turn; statuses and HP re-staged first",
+  "splash: real: the fight reached Bahamut's own Mega Flare (autoBattle \"intended\", fast speed; party HP topped up, STAGED); img {\"src\":\"/pyrefly-reprise/art/characters/ffx2-bahamut/splash.png\",\"hidden\":false,\"natural\":[1656,1656],\"box\":[-405,34,776,776],\"opacity\":\"1\"}"
+ ],
+ "served": [
+  "ffx2-bahamut/splash.png",
+  "paine-warrior/critical.json",
+  "paine-warrior/critical.png",
+  "paine-warrior/sleep.json",
+  "paine-warrior/sleep.png",
+  "yuna-gunner/critical.json",
+  "yuna-gunner/critical.png",
+  "yuna-gunner/sleep.json",
+  "yuna-gunner/sleep.png"
+ ],
+ "errors": [],
+ "consoleErrors": [],
+ "http4xx": []
+}
