@@ -1,5 +1,7 @@
 import type { AnyCombatant, CombatantId, FFXCombatant, StatusId } from '../../battle/common/types.ts';
 import { aeonChipHtml, portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
+import { STATUS_DOT_COLOR, platePipIds, statusLabel } from './statusPips.ts';
+import { zombieWarnOn } from './zombieWarnOptions.ts';
 
 /**
  * Party status, restyled onto Ink & Gold's `.ig-stat-list`/`.ig-stat`
@@ -66,8 +68,16 @@ export class PartyStatusWindow {
       .filter(Boolean)
       .join(' ');
 
-    const statuses = activeStatusIds(c).slice(0, 6);
-    const statusHtml = statuses.length ? `<span class="ffx-stat__statuses">${statuses.map((s) => `<i title="${s}"></i>`).join('')}</span>` : '';
+    // Most alarming first, in the documented colours, so a Zombie is never the seventh pip cut off
+    // the end of Mighty Guard's six (fb-0929, `statusPips.ts`).
+    const statuses = platePipIds(c);
+    const pip = (s: StatusId): string => {
+      const color = STATUS_DOT_COLOR[s];
+      return `<i title="${statusLabel(s)}" data-status="${s}"${color ? ` style="background:${color}"` : ''}></i>`;
+    };
+    // Option "word" (off; `zombieWarnOptions.ts`): the status spelled out after the pips.
+    const word = c.alive && statuses.includes('zombie') && zombieWarnOn('word') ? '<em class="ffx-stat__zombie">Zombie</em>' : '';
+    const statusHtml = statuses.length ? `<span class="ffx-stat__statuses">${statuses.map(pip).join('')}${word}</span>` : '';
 
     // The aeon's row while it is out (PR-0181) wears the turn list's aeon chip, not a letter (FOC24-02, CHK-012).
     const face = c.side === 'aeon' ? aeonChipHtml(c.spriteKey ?? id, c.name, c.portraitKey) : portraitChipHtml(c.portraitKey, c.name, tintFor('party'));
@@ -80,10 +90,6 @@ export class PartyStatusWindow {
       ${statusHtml}
     </div>`;
   }
-}
-
-function activeStatusIds(c: AnyCombatant): StatusId[] {
-  return (Object.keys(c.statuses) as StatusId[]).filter((k) => c.statuses[k] !== undefined && k !== 'ko');
 }
 
 function escapeHtml(s: string): string {

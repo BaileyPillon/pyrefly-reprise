@@ -15,6 +15,7 @@ import {
   type TopRow,
 } from './CommandMenuLogic.ts';
 import { ffxTargetMode } from './loneTarget.ts';
+import { noteWarnsZombieHarm, zombieWarnOn } from './zombieWarnOptions.ts';
 import { commandHelpText } from './commandHelp.ts';
 import type { CursorChrome, CursorSelection, RectProjector, TargetRect } from './TargetCursor.ts';
 import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
@@ -661,7 +662,14 @@ export class CommandMenu {
    */
   tryConfirmTargetById(id: CombatantId): boolean {
     if (this.state !== 'target') return false;
+    // Option "guard" (off; `zombieWarnOptions.ts`, fb-0929): a click that would hurt a Zombie ally aims first.
+    const aimFirst = zombieWarnOn('guard') && this.targetCursor.activeTargetId !== id && this.pendingCmd !== null
+      && noteWarnsZombieHarm(this.opts?.targetNoteOf?.(id, this.pendingCmd));
     if (!this.targetCursor.setActiveById(id)) return false;
+    if (aimFirst) {
+      this.syncTargetSurfaces();
+      return true;
+    }
     this.confirmTarget();
     return true;
   }
