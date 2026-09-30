@@ -182,7 +182,8 @@ describe('the shipped audio manifest', () => {
   it('stays inside the shipping budget (85 MB since D-292, music at LAME V0)', () => {
     const total =
       Object.values(manifest!.music).reduce((sum, entry) => sum + (entry.bytes ?? 0), 0) +
-      (manifest!.sfx!.bytes ?? 0);
+      (manifest!.sfx!.bytes ?? 0) +
+      (manifest!.sfxV2?.bytes ?? 0); // D-302: the recorded set's second sprite counts too
     expect(total).toBeLessThan(AUDIO_BUDGET_BYTES);
   });
 });
