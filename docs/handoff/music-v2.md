@@ -102,3 +102,51 @@ no NOW.md edit (the driver owns those).
 - Deploy: `critic-plan` classes the manifest change DEEP: focused review before the deploy, deep review on the
   live build after it. Release 34 comes first; this is the audio release after it (with the SFX set if both
   fit the budget).
+
+## CHECK (independent, 2026-09-30 ~17:05 EDT; a checker that did not build it)
+
+Verdict: **no blocker.** Every claim tested held. Measured on commit 7df18384 in `D:/pyrefly-r29-audio`. Nothing
+was heard (rule 13).
+
+- **Files and manifest, all 23 replaced cues** (ffmpeg 9.0.1, own script): each SHA-256 equals the record and
+  each size equals the manifest. Against 770823bc only `bytes`, `lufs` and `truePeakDb` moved; loop points and
+  durations are identical. ffmpeg ebur128 reads -15.8 to -16.0 LUFS and true peak -1.1 to -3.1 dBTP. The decode
+  at 44.1 kHz equals the record's `decodedSamples` on 23 of 23, and `duration` x 44100 within 2 samples.
+- **Seam, all 23** (own measure, decoded PCM): the wrap step (the sample before loopEnd to the one at loopStart)
+  equals the file's own step at loopEnd within a few percent on every cue. The 0.5 s after loopEnd against the
+  loop head is -29.7 to -95.1 dB, and the 50 ms level jump the wrap adds is at most 0.08 dB. No click, no jump.
+- **`qa.mjs --strict`**: 0 findings, exit 0; 83.60 MB of the 85 MB budget; the budget is unchanged.
+- **Fresh production build** (`vite build`): dist/audio/music is byte-identical to public/audio/music (26 of
+  26), and so is the manifest. The headless proof tool (`PYREFLY_BROWSER=gpu`, port 8871, server gone after)
+  on chapters I, IV, V and VIII: 26 cues give 200 with no length error; wrap error at most 0.55 of local p99;
+  jump at most 0.08 dB; the title and board cues play prerendered, and 4 of 4 chapters play their scene,
+  battle and results cues from the file. 0 console errors, 0 page errors, 0 failed requests.
+- **Ear screen** (`ear.py` from 52b072d0, `--no-clap`, all 46 files): PQ is higher on 20 cues, level on
+  `victory-ffx` and lower on `battle-ffx` (7.949 to 7.611) and `boss-vegnagun` (7.112 to 6.927), exactly as
+  claimed.
+- **Licences and retail audio:** every library in the CREDITS table is on D:, with its licence file or its
+  download record (the new 0930 downloads and ACE-Step 1.5 turbo and XL are in `D:/Tools/downloads.md`). The
+  jRhodes3d LICENSE says the music made with it is CC0. The N2 input is only our own S render
+  (`ffx2/README.md`), the style tags name no retail work, and the ear references are PD or CC recordings used
+  only for scoring. No retail audio was found.
+- **Rule 7:** no changed file over 400 lines grew. THEMES.md stays at 990 lines, audition.html at 1737 and the
+  manifest at 1191.
+- **Rollback:** the parked copies in `F:/pyrefly-parked/2026-09-30/audio-v2/music-v1` match
+  `git show 770823bc` byte for byte (23 of 23). `MOVED.txt` sits one level up, in `.../audio-v2/`.
+- **Other checks:**
+  - `tsc` is clean, and the 34 audio and themes test files pass (646 tests).
+  - The full `npm test` gave 692 passed, 5 skipped and 1 failed. The failure was
+    `strategy-ffx2-bahamut` "heal-only route", which hit its 15 s timeout while the build and the proof ran
+    at the same time. It passed 19 of 19 run alone, and the branch does not touch it.
+  - `git merge-tree` against main (still 770823bc) is clean.
+
+Findings (none blocks):
+- **Major, not a regression.** No in-game screen shows the required attributions. There were already two
+  (Salamander, Sonatina), and this branch adds two more (DRSKit, Arvedi, CC-BY 4.0). CREDITS.md itself calls
+  this a licence condition "before release". Wire the credits, or have Bailey decide that the public repo's
+  CREDITS.md is the attribution.
+- **Minor.** The two outside licences are pre-existing, and none of their files ship. Sonatina is CC Sampling
+  Plus and the Voxengo IR has its own royalty-free licence; the Voxengo credit is courtesy. The VSCO 2 CE,
+  VCSL and Voxengo downloads predate this track and are not in `D:/Tools/downloads.md`.
+- **Minor.** The results cue for Chapters XIII and XVII is still unproven in the flow, as the build disclosed;
+  this check did not run those chapters.
