@@ -10,6 +10,33 @@ chapters the `-x2` twins and FFX-2 weapons, `both` cues in both. FF7, the title 
 the first sprite exactly (THEMES.md assigns the menus to neither game). The victory fanfare, the
 Overdrive minigame ticks and the story ambiences are not in the set and did not change.
 
+## V0 under the 90 MB budget (D-306, release 35 branch `audio-rel35`)
+
+Bailey, 2026-09-30 ~18:30 EDT: "I'll go with all of your recommendations please keep going" (the
+driver's recommendation to raise the shipped-audio budget from 85 MB to 90 MB so this sprite ships at
+V0, the music's quality). Game case: both (shared plumbing; every cue keeps its game).
+
+- **Re-encoded** with the same tool and sources: `tools/audio/sfx-v2-sprite.py --q 0 --install` from
+  `D:/Tools/pyrefly-scratch/audio-0930/sfx/set/flac` (ffmpeg `libmp3lame -q:a 0`, 44.1 kHz stereo, what
+  `tools/audio/music-o1-ship.py` uses for the music). Two runs gave byte-identical files (SHA-256 `90e0a5a6...`).
+  `sprite-v2.mp3` **3,296,589 -> 4,891,552 bytes**; 100 cues, 190.32 s; every offset and duration unchanged.
+  The overshoot trims were re-derived for V0 (`swing-blitzball` -0.09, `hit-1` -0.07 new, `hit-spear` -0.26,
+  `swing-dagger` unchanged); the sprite's peak is -1.12 dBTP.
+- **Budget** `AUDIO_BUDGET_BYTES` 85e6 -> 90e6 (`tools/audio/manifest-io.mjs`, its `.d.mts`, the budget
+  tests). qa's per-sprite gate 3.5 MB -> **5 MB**, the smallest 0.5 MB step that passes V0. The v1 gates
+  (`render.mjs`, `audio-sfx-design.test.ts`) still read 3.5 MB: they measure the first sprite only (2.71 MB).
+- **Total shipped audio 86.90 MB -> 88.49 MB** of 90. `qa.mjs --strict`: 0 findings.
+- **The first sprite still ships by design**, not by leftover. The runs below play the title and board
+  menus, the story cues (`kimahri-roar`, `machina-groan`, `wind-high-altitude`) and FF7 from it.
+- **Headless real input on the dev server** (`tools/audio/sfx-v2-proof.mjs`, GPU, port 5347, stopped):
+  Chapter I seed 3 (the route lost this seed): 59 plays, 55 v2, attack (swing-sword, -katana, -spear,
+  hit-sword, whiff), magic (magic-charge, protect, haste, poison), item (item-use). Chapter IV seed 1,
+  victory: 219 plays, 205 v2, greatsword swings and hits, magic-charge-x2, cure-x2, flare-x2,
+  debuff-generic-x2, item-use-x2 (the real-input Item turn). Every play was matched to its
+  AudioBufferSourceNode.start. v2 plays use the decoded 190.324 s buffer at the manifest's offset and
+  duration, 0 mismatches. There were no cross-game cues apart from the sourced `dissolve-pyreflies` for
+  FFX-2 fiends, and 0 console errors and 0 404s.
+
 ## What shipped on the branch
 
 - **A second sprite**, `public/audio/sfx/sprite-v2.mp3` (100 cues: the set's 98 plus `item-use` /
@@ -93,7 +120,7 @@ cue play its first-bank stand-in; reverting the branch's commit restores the old
 
 - Bailey has not heard it. The set's README reels (`D:/Tools/pyrefly-scratch/audio-0930/sfx/reels`) are
   the way to audition before a release.
-- The encode (q3, not V0): Bailey's call (above).
+- The encode (q3, not V0): Bailey's call (above). Settled by D-306: V0 ships (top of this file).
 - The mapping choices Bailey may veto by ear: FFX humans (Seymour, Yunalesca) roar the set's big-cat
   `boss-roar` in the slot the old roar had; an Overdrive plays the stinger and the swing; Defend / Guard /
   Sentinel play `guard`; FFX-2 human bosses keep the old roar.

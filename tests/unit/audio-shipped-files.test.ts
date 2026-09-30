@@ -179,7 +179,7 @@ describe('the shipped audio manifest', () => {
     }
   });
 
-  it('stays inside the shipping budget (85 MB since D-292, music at LAME V0)', () => {
+  it('stays inside the shipping budget (90 MB since D-306, music and sfx sprite-v2 at LAME V0; 85 MB under D-292)', () => {
     const total =
       Object.values(manifest!.music).reduce((sum, entry) => sum + (entry.bytes ?? 0), 0) +
       (manifest!.sfx!.bytes ?? 0) +

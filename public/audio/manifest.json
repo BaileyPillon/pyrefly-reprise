@@ -1190,9 +1190,9 @@
   },
   "sfxV2": {
     "file": "sfx/sprite-v2.mp3",
-    "bytes": 3296589,
+    "bytes": 4891552,
     "duration": 190.323946,
-    "quality": "libmp3lame -q:a 3",
+    "quality": "libmp3lame -q:a 0",
     "cues": {
       "cancel": {
         "offset": 0.05,
@@ -1367,9 +1367,9 @@
         "duration": 0.426712,
         "category": "weapon",
         "game": "ffx",
-        "lufs": -18.06,
-        "truePeakDb": -1.12,
-        "trimDb": -0.06
+        "lufs": -18.09,
+        "truePeakDb": -1.15,
+        "trimDb": -0.09
       },
       "swing-claw": {
         "offset": 16.257211,
@@ -1473,8 +1473,9 @@
         "duration": 0.834195,
         "category": "impact",
         "game": "both",
-        "lufs": -14.1,
-        "truePeakDb": -1.09
+        "lufs": -14.17,
+        "truePeakDb": -1.16,
+        "trimDb": -0.07
       },
       "hit-2": {
         "offset": 25.044059,
@@ -1553,9 +1554,9 @@
         "duration": 0.884331,
         "category": "impact",
         "game": "ffx",
-        "lufs": -14.35,
-        "truePeakDb": -1.34,
-        "trimDb": -0.25
+        "lufs": -14.36,
+        "truePeakDb": -1.35,
+        "trimDb": -0.26
       },
       "hit-staff": {
         "offset": 34.187029,

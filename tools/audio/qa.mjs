@@ -338,7 +338,7 @@ async function auditSprite(sfx, categoryTargets) {
   }
   if (truePeakDb > -1) failures.push(`sprite true peak ${truePeakDb.toFixed(2)} dBTP over -1`);
   if (clip.count > 0) failures.push(`sprite has ${clip.count} clipped samples`);
-  if (info.size > 3.5e6) failures.push(`sprite is ${(info.size / 1e6).toFixed(2)} MB, over 3.5 MB`);
+  if (info.size > 5e6) failures.push(`sprite is ${(info.size / 1e6).toFixed(2)} MB, over 5 MB`); // D-306: was 3.5; V0 v2 4.89
 
   return { file: sfx.file, bytes: info.size, duration, truePeakDb, cues, failures };
 }

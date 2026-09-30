@@ -65,7 +65,7 @@ describe('music O1: every cue at LAME V0', () => {
     }
   });
 
-  it('fits the raised shipping budget, which is 85 MB and not the old 60', () => {
-    expect(AUDIO_BUDGET_BYTES).toBe(85e6);
+  it('fits the raised shipping budget: 85 MB under D-292, 90 MB since D-306, not the old 60', () => {
+    expect(AUDIO_BUDGET_BYTES).toBe(90e6);
   });
 });
