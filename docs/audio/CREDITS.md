@@ -248,10 +248,13 @@ Music restyled with ACE-Step 1.5 (ACE Studio and StepFun) — MIT
 Also used, CC0: VSCO 2 Community Edition and VCSL (Versilian Studios); Black And Blue Basses, Shinyguitar and the Karoryfer x bigcat cello (Karoryfer Samples, bigcat instruments); jRhodes3d (Jeff Learman); Surge XT (Surge Synth Team)
 ```
 
-> **TODO for whoever owns the credits screen.** These are not yet wired into
-> any in-game credits data — at the time of writing there is no credits screen
-> to wire them into. They must be on it before release. This is a licence
-> condition for four of the sources above, not a nicety.
+> **Wired in (D-305, 2026-09-30).** The credits panel (pause → OPTIONS → ABOUT →
+> CREDITS) prints every line above from `src/app/credits/creditsData.ts`, and
+> `tests/unit/credits-attribution.test.ts` fails when a source this file marks as
+> required (a CC BY or CC Sampling Plus licence cell, "**required**", "Attribution
+> required: yes", or a line of a verbatim block) has no line there. **Adding a
+> source here that owes a credit means adding it to `src/app/credits/audioSources.ts`
+> and `creditsData.ts` too.** This is a licence condition, not a nicety.
 
 The same two entries cover the sound effects as well as the music: since the
 redesign, an effect's bells, glass, harp, choir, tam-tam, timpani and solo
