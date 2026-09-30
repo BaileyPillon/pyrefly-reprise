@@ -161,3 +161,9 @@ the two games' effect loudness.
 - The phone (tap) was not re-measured; fb-0929-sfx measured b on the phone at +8.3 / +1.8 dB.
 - The e2e `save-upgrade.spec.ts` change is typechecked, not run.
 - `decisions.json` D-293 `delivery` stays with the driver.
+- **Merging with `fx-d` (eye candy D)**: `git merge-tree` shows one text conflict,
+  `tests/unit/save-comfort-migration.test.ts` (both branches changed the "only additions" line): the
+  resolved list is `['fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize']`. fx-d's
+  own `tests/unit/save-fx-looks.test.ts` line 89 has the same "only additions" list and will fail after
+  the merge until `'sfxBalanceMigrated'` is added to it (its release-30/31a fixtures store SFX 0.45 and
+  0.2, player-set, so their levels are kept). `music-o1`, `status-o3` and `music-model-test` merge clean.
