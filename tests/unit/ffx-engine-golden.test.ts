@@ -69,14 +69,19 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * (Yunalesca) and III (Braska's Final Aeon) re-pinned 2026-09-29 in main's merge of advisor-v4: D-274
  * (578e7f22, research §6.4.3's aeon rows for II and III) moves exactly these four digests, proved by
  * running this file on 578e7f22^ (18/18) and 578e7f22 (these four values, the other 14 unchanged).
+ * Chapter III re-pinned again 2026-09-30 by r34fix-odfail (FFX only): a failed Swordplay/Bushido now
+ * resolves its sourced Fail row (research §5.3, §5.5). The line's auto-rolled Energy Rain fails once
+ * in link 6 of seed 1 and once in link 6 of seed 7 and now deals 20 DmgCon instead of 26, which moves
+ * exactly those links' digests (and seed 7's link 7, which starts from link 6's end state); every
+ * outcome is still victory, and with the fail wiring stubbed out this file is 18/18 on the old values.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd5fd8bf4:defeat',
   'seymour-flux#7': '420e8126:victory',
   'yunalesca#1': '6d7a9a3f:victory',
   'yunalesca#7': 'efc5c8cc:victory',
-  'braskas-final-aeon#1': 'ca3f7569:victory cc1d312c:victory 128fa095:victory d57abcc1:victory 4c3a1fd4:victory f57359fd:victory 2e29d25c:victory',
-  'braskas-final-aeon#7': '922d7f55:victory 6583a70a:victory 918adb39:victory ad58d940:victory abbc417b:victory d9694c6d:victory aed1b2d2:victory',
+  'braskas-final-aeon#1': 'ca3f7569:victory cc1d312c:victory 128fa095:victory d57abcc1:victory 4c3a1fd4:victory 2ec2be2f:victory 2e29d25c:victory',
+  'braskas-final-aeon#7': '922d7f55:victory 6583a70a:victory 918adb39:victory ad58d940:victory abbc417b:victory 9621c0d7:victory 3bcdda13:victory',
   'seymour-anima-macalania#1': 'ca4a9a51:victory',
   'seymour-anima-macalania#7': 'd14d5e8a:victory',
   'evrae-airship#1': 'ebf9b7c4:victory',
