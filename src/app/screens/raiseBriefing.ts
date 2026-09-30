@@ -14,6 +14,7 @@
 import type { App } from '../App.ts';
 import { Briefing, type BriefingOptions, type BriefingOutcome } from '../../ui/coach/Briefing.ts';
 import { shouldShow } from '../../ui/coach/coachState.ts';
+import { armFirstRunGuide, resumeFirstRunGuide, type FirstRunHost } from '../../ui/coach/firstRunGuide.ts';
 import { briefingWhenWarm } from './frontendWarm.ts';
 
 /**
@@ -68,9 +69,23 @@ export function briefingDue(app: App): boolean {
  * meets is the board, exactly as before.
  */
 export async function runBriefingIfDue(app: App): Promise<BriefingOutcome | null> {
-  if (!briefingDue(app)) return null;
+  if (!briefingDue(app)) {
+    if (canDriveInput(app)) resumeFirstRunGuide(guideHost(app));
+    return null;
+  }
   // Auron and his backdrop decoded before the briefing goes up (PR-0065), with
   // what is left of the ceiling the title already waited on before its wipe.
   await briefingWhenWarm();
-  return await makeBriefing(app).show();
+  const outcome = await makeBriefing(app).show();
+  // fb2-0929 O2, "Guided first run" (Bailey's pick 2026-09-29, D-289): the briefing
+  // ends by turning into Auron's three-step pointer, on a first run only. Both games
+  // (the board and prep); its battle step is FFX only (`firstRunGuide.ts`).
+  armFirstRunGuide(guideHost(app));
+  return outcome;
+}
+
+/** The app half of the guide: its mount point, and a way to take back the Esc that skipped it. */
+function guideHost(app: App): FirstRunHost {
+  // A claim released at once drops every edge pending right now (`Input.absorbEdges`).
+  return { root: app.uiRoot, absorbInput: () => app.input.claimKeyboard(() => undefined, { exclusive: true })() };
 }

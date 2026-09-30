@@ -66,6 +66,7 @@ import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMark
 import { BeatHold, beatUp } from './coachHold.ts';
 import { ActorRects, keepMarkClear } from './coachActorAvoid.ts';
 import { ffx2CoachClock, markSeen, shouldShow } from './coachState.ts';
+import { firstRunBattleBegan, firstRunTurnGuide } from './firstRunGuide.ts'; // O2 (D-289): step 3 wears FFX's first line
 import type { IntentSource } from '../common/EnemyIntent.ts';
 
 /**
@@ -165,6 +166,7 @@ class CoachedHud implements HudPort {
     layer.dataset['role'] = 'coach-layer';
     root.appendChild(layer);
     this.layer = layer;
+    firstRunBattleBegan(this.game);
   }
 
   unmount(): void {
@@ -368,6 +370,7 @@ class CoachedHud implements HudPort {
       mark,
       game: this.game,
       reduceMotion: this.opts.reduceMotion ?? readSetting('reduceMotion'),
+      guide: this.game === 'ffx' && mark.id === 'ffx-turn-order' ? firstRunTurnGuide() : null,
       ...(this.opts.setTimer ? { setTimer: this.opts.setTimer } : {}),
       ...(this.opts.clearTimer ? { clearTimer: this.opts.clearTimer } : {}),
     });

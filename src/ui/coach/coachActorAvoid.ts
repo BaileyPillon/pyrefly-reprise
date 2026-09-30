@@ -122,6 +122,7 @@ export class ActorRects {
  * fighters. Deltas on the computed position, as `CoachMark` moves it.
  */
 export function keepMarkClear(game: GameId, mark: HTMLElement, host: HTMLElement, actors: ActorRects): void {
+  if (mark.dataset['guide']) return; // the first-run guide places its own line (`firstRunGuide.ts`, O2)
   if (game === 'ffx') keepMarkOffIntent(mark, host);
   if (document.documentElement.dataset['phoneBattle']) return;
   const now = mark.getBoundingClientRect();
