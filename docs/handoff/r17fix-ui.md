@@ -93,3 +93,12 @@ known load flake); re-run alone: 19 of 19 pass. `node tools/orphans.mjs`: 24 orp
 File sizes: PauseScreen 400, CommandMenu 865, FFXBattleHud 1668, hudSafeZones 543 (none grew).
 Servers on 8700 / 8701 stopped by PID. Leftovers (`.r17-*` builds and evidence, `tools/zz-r17ui.tmp`) moved to
 `F:/pyrefly-parked/2026-09-30/r17fix-ui/`.
+
+## CHECK (independent, 2026-09-30)
+
+Verdict: no blockers. Both fixes hold on a fresh production build of d4296431 (served on 8750, stopped by PID).
+- PR-0265: round-17 resume-taps.mjs by real taps/clicks: Ch I 390x844 touch, Ch I 1600x900 mouse, Ch IV (ffx2-bahamut) 390x844 touch: RESUME from the tabs and after a row tap ends on screen=battle. New test pause-resume-pointer fails 3 of 5 with the one-line fix reverted.
+- PR-0266: ts-live (real keys) Ch I at 1600x900 and 2000x1012: 115 % = 5 rows, 130 % = 4 rows (same turn, second pause, next menus), TALK present, zero chip/slab HITS at 115 and 130; at 100 % only the disclosed N x G overlap (816 / 114 px2). ffx-advisor-chip-reserve fails 1 of 6 with the chipReserve input removed.
+- Rules: FFX-only scope for 266 and both games for 265 as stated; no game data touched; no file over 400 lines grew (line counts equal to main for the four big files; hudTextSize and hudAvoidSelectors are small). tsc clean; git merge-tree against main clean.
+- Full suite once: 694 files passed, 1 timeout (strategy-ffx2-bahamut heal-only route, known load flake; passes alone).
+- Not checked: Ch IX / XII at 1280x720 (builder's matrix trusted), phone layout of FFX at 115/130 (untouched by design).
