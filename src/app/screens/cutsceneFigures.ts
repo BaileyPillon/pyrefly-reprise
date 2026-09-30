@@ -43,6 +43,13 @@ export interface CutsceneFigure {
   portrait: FigurePlacement;
   /** An unsent figure drifts slightly and carries the cool pyrefly glow. */
   unsent?: boolean;
+  /**
+   * No painting kneels or falls, so `setPose(actor, 'kneel' | 'ko')` stages the standing one
+   * instead of leaving it upright over words that say otherwise (PR-0244): `kneel` lowers and
+   * dims it, `ko` lays it down on the floor, dimmer still, as the battle's KO pose does.
+   * Any other pose leaves it standing. Absent: `setPose` does nothing here, as it always did.
+   */
+  stagesUnpaintedPoses?: boolean;
 }
 
 export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
@@ -141,7 +148,8 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
    * (`public/art/characters/seymour-macalania/idle.png`, 804 x 1191, feet at y 1175; locked as
    * `chapter:macalania:2026-09-25`, used as installed). He stands on the plate from the post
    * scene's first frame, so the tally and the silent kill are not an empty temple; the kneel and the
-   * fall have no painting, so the script captions them, and he goes when the Guado take the body
+   * fall have no painting, so the stage lowers, then lays down, the standing one under the captions
+   * (`stagesUnpaintedPoses`), and he goes when the Guado take the body
    * (research ffx-seymour-anima-macalania.md §9.7 beats 9-10). The pre scene never stands him.
    *
    * Landscape: right of the dialogue box, facing left toward the party. Portrait: centred, feet
@@ -154,6 +162,7 @@ export const CUTSCENE_FIGURES: Readonly<Record<string, CutsceneFigure>> = {
     artFacing: -1,
     landscape: { x: 0.8, feet: 0.9, height: 0.62 },
     portrait: { x: 0.5, feet: 0.74, height: 0.46 },
+    stagesUnpaintedPoses: true,
   },
   /**
    * Shuyin, unsent (FFX-2 only: Chapter V, PR-0133). His battle idle, the installed painting

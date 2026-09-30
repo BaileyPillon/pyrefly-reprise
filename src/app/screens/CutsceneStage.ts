@@ -1,6 +1,6 @@
 import './cutsceneStage.css';
 import { artUrl } from '../../engine/PaintedArt.ts';
-import type { HideActorStep, ShowActorStep, StoryScript } from '../../story/dsl.ts';
+import type { HideActorStep, SetPoseStep, ShowActorStep, StoryScript } from '../../story/dsl.ts';
 import { cutsceneFigure, figureBox, figuresIn, type CutsceneFigure, type FigureBox } from './cutsceneFigures.ts';
 import { isStagedFx, spawnPyreflies, spawnSendingArc } from './cutsceneFx.ts';
 
@@ -27,6 +27,9 @@ import { isStagedFx, spawnPyreflies, spawnSendingArc } from './cutsceneFx.ts';
 
 /** `showActor`/`hideActor` with no `ms`: the battle stage's default fade (`story/registry.ts`). */
 const DEFAULT_ACTOR_FADE_MS = 300;
+
+/** How long a staged kneel / fall takes to settle. */
+const POSE_MS = 700;
 
 /** The flash an `fx()` key with no drawn effect has always made. */
 const FX_FLASH_MS = 90;
@@ -124,6 +127,21 @@ export class CutsceneStage {
     el.classList.remove('is-on');
     el.classList.add('is-leaving');
     return ms > 0 ? this.wait(ms) : Promise.resolve();
+  }
+
+  /**
+   * `setPose` for a figure that has no painting for it (`stagesUnpaintedPoses`, PR-0244): `kneel`
+   * lowers and dims the standing painting, `ko` lays it down. Any other pose stands it up again.
+   * Instant, like the runner's other zero-length steps; the CSS transition carries the move, and
+   * a figure posed before it is shown simply fades in already down. Every other figure: no-op.
+   */
+  setPose(step: SetPoseStep): void {
+    if (!cutsceneFigure(step.actor)?.stagesUnpaintedPoses) return;
+    const el = this.figureEl(step.actor);
+    if (!el) return;
+    el.style.transitionDuration = `${POSE_MS}ms`;
+    el.classList.toggle('is-kneel', step.state === 'kneel');
+    el.classList.toggle('is-ko', step.state === 'ko');
   }
 
   /**

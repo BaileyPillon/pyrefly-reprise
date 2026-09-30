@@ -395,7 +395,7 @@ export class CutsceneScreen extends Screen {
       camera: () => {}, // no 3D scene owned here — the presenter/scene agent overrides via `opts.ports`.
       fx: (key, at) => stage.fx(key, at),
       showActor: (step) => stage.showActor(step),
-      hideActor: (step) => stage.hideActor(step),
+      hideActor: (step) => stage.hideActor(step), setPose: (step) => stage.setPose(step), // PR-0244: a staged figure with no kneel/KO painting
       music: (track, fade) => {
         // `fade` is the DSL's `MusicStep.fade`, authored in milliseconds
         // (`story/dsl.ts`); `AudioManager` wants seconds. PR-0089: this used to
