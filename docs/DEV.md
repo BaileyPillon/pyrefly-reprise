@@ -271,6 +271,7 @@ frames have rendered.
 | `strategies()` | `'intended' \| 'attack' \| 'defend' \| 'random'` |
 | `setBattleSpeed(s)` | `'normal' \| 'fast' \| 'skip'` |
 | `waitBattleEnd()` | resolves when the running battle ends |
+| `cam(name?)` | camera comfort preset, read or set: `'current'` (default) \| `'calm'` \| `'steady'` \| `'originals'` (FFX only); also `?cam=<name>`. Options awaiting Bailey's pick, `docs/concepts/fb2-0929/camera/` |
 
 ### Cutscenes and screenshots
 

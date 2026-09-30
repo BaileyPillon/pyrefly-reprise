@@ -169,9 +169,26 @@ export interface HudPort {
    */
   setTargetingPort?(port: TargetingPort): void;
   /**
+   * fb2-0929 camera comfort (both games): the projections the HUD lays out its
+   * fighter-dodging **panels** against (the move advisor card, the strategy
+   * guide's rail, the coach line): the shot the camera is settling on, not the
+   * frame in flight, so those panels hold still while the camera moves.
+   * World-anchored labels (damage numerals, the target cursor, the intent slab)
+   * keep {@link setProjector}. Optional: without it the HUD uses the live one.
+   */
+  setLayoutProjector?(layout: LayoutProjector): void;
+  /**
    * Optional per-frame tick from the battle screen, in seconds. A HUD that
    * animates anything itself (FFX's damage numerals) uses this so its motion
    * freezes with the rest of the game when the loop is stopped for a capture.
    */
   update?(dt: number): void;
+}
+
+/** See {@link HudPort.setLayoutProjector}: points and silhouettes at the camera's rest pose. */
+export interface LayoutProjector {
+  point(id: CombatantId, anchor?: 'head' | 'chest' | 'feet'): { x: number; y: number } | null;
+  rect(id: CombatantId): { x: number; y: number; w: number; h: number } | null;
+  /** True under a camera comfort preset that also rests the enemy-intent slab (`CameraPreset.ts` `calm`, `steady`; an option). */
+  labelsAtRest?(): boolean;
 }

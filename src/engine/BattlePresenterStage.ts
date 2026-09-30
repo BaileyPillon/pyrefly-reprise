@@ -20,6 +20,7 @@ import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
 import { LOW_EFFECTS_SPARK_SHARE, StillCamera, type ComfortFlags } from './ComfortCamera.ts';
+import { CAMERA_PRESETS, PresetCamera, type CameraPresetSpec } from './CameraPreset.ts';
 import type { SceneSlots } from '../scenes/index.ts';
 import { solveFormation, type FormationMember } from './Formation.ts';
 import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './ScreenRects.ts';
@@ -65,6 +66,8 @@ export interface PaintedStageOptions {
   reduceFlashes?: () => boolean;
   /** REDUCE MOTION and LOW EFFECTS (D-285, `ComfortCamera.ts`), read live. Absent = both off. */
   comfort?: () => ComfortFlags;
+  /** Camera comfort preset (fb2-0929 options, default `current` = untouched; `CameraPreset.ts`). */
+  cameraPreset?: () => CameraPresetSpec;
 }
 
 interface StagedActor {
@@ -156,7 +159,8 @@ export class PaintedStage implements BattleStage {
     });
     const still = (): boolean => opts.comfort?.().reduceMotion === true;
     opts.battleCamera.swayOff = still;
-    this.camera = stageCamera(new StillCamera(opts.battleCamera, still), opts.slots.fixedCamera); // FF7's fixed angle when the scene asks (StageFacing.ts)
+    const preset = new PresetCamera(opts.battleCamera, opts.cameraPreset ?? (() => CAMERA_PRESETS.current));
+    this.camera = stageCamera(new StillCamera(preset, still), opts.slots.fixedCamera); // FF7's fixed angle when the scene asks (StageFacing.ts)
     this.hits = new HitEffects(
       { size: 4.2, coreColor: 0xffffff, edgeColor: 0x9fd8ff, arc: 2.45, thickness: 0.075 },
       { count: 110, speed: 6.4, life: 0.5, size: 10, bias: [0.4, 0.45, 0.2], focus: 0.5 },
@@ -348,7 +352,8 @@ export class PaintedStage implements BattleStage {
     return ids.map(([id]) => id);
   }
 
-  project(id: CombatantId, anchor: 'head' | 'chest' | 'feet' = 'head'): Point2 | null {
+  /** `cam`: the live camera, or the shot it is settling on for a HUD panel's layout (`BattleCamera.restCamera`, fb2-0929). */
+  project(id: CombatantId, anchor: 'head' | 'chest' | 'feet' = 'head', cam: PerspectiveCamera = this.opts.camera): Point2 | null {
     const staged = this.actors.get(id);
     if (!staged) return null;
     const parent = staged.anchor ? this.parentPose(staged) : undefined;
@@ -356,7 +361,7 @@ export class PaintedStage implements BattleStage {
     else if (anchor === 'chest') staged.actor.centerPoint(this.scratch);
     else if (anchor === 'feet') this.scratch.copy(staged.actor.position);
     else staged.actor.headPoint(this.scratch);
-    this.scratch.project(this.opts.camera);
+    this.scratch.project(cam);
     const rect = this.opts.canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return null;
     return {
@@ -378,7 +383,7 @@ export class PaintedStage implements BattleStage {
    *
    * Null for a combatant that is not staged, or while the canvas has no size.
    */
-  projectRect(id: CombatantId): DepthRect | null {
+  projectRect(id: CombatantId, cam: PerspectiveCamera = this.opts.camera): DepthRect | null {
     const staged = this.actors.get(id);
     if (!staged) return null;
     const rect = this.opts.canvas.getBoundingClientRect();
@@ -390,7 +395,7 @@ export class PaintedStage implements BattleStage {
     let maxX = -Infinity;
     let maxY = -Infinity;
     for (const c of corners) {
-      c.project(this.opts.camera);
+      c.project(cam);
       const x = rect.left + (c.x * 0.5 + 0.5) * rect.width;
       const y = rect.top + (-c.y * 0.5 + 0.5) * rect.height;
       if (x < minX) minX = x;
@@ -404,7 +409,7 @@ export class PaintedStage implements BattleStage {
     // yawed 30 degrees differ by most of a unit, and a tie-break on one of them
     // flips which of two neighbours counts as "in front".
     staged.actor.centerPoint(this.scratch);
-    const depth = this.scratch.distanceTo(this.opts.camera.position);
+    const depth = this.scratch.distanceTo(cam.position);
 
     return { x: minX, y: minY, w: maxX - minX, h: maxY - minY, depth };
   }

@@ -11,7 +11,7 @@ import '../inkgold/index.ts';
 import './theme.css';
 import './ffx2-hud.css';
 import { installInkGoldStyles } from '../inkgold/index.ts';
-import type { ActingSignal, HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import type { ActingSignal, HudPort, LayoutProjector, TargetingPort } from '../../engine/HudPort.ts';
 import { ActionFade } from './actionFade.ts';
 import type {
   AtbSnapshot,
@@ -172,6 +172,9 @@ export class FFX2BattleHud implements HudPort {
     id: CombatantId,
     anchor?: 'head' | 'chest' | 'feet',
   ) => { x: number; y: number } | null = () => null;
+  /** fb2-0929: the girls where the camera's shot comes to rest (`HudPort.setLayoutProjector`); null = the live projector. */
+  private layoutProject: ((id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null) | null = null;
+  private labelsAtRest: () => boolean = () => false;
   private lastState: BattleState | null = null;
   private lastSnapshot: AtbSnapshot | null = null;
   /** The actor whose command menu is currently open, if any — drives `.ig-stat--acting`. */
@@ -394,7 +397,7 @@ export class FFX2BattleHud implements HudPort {
     this.intent.mount(this.overlay, {
       host: this.el,
       scale: () => this.stageScale,
-      project: (id, anchor) => this.project(id, anchor),
+      project: (id, anchor) => (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(id, anchor), // fb2-0929 option
       avoid: () => this.intentAvoidRects(),
     });
     this.openingHold.start();
@@ -557,7 +560,7 @@ export class FFX2BattleHud implements HudPort {
     if (!view) return null;
     const layer = this.overlay.getBoundingClientRect();
     if (layer.width <= 0 || layer.height <= 0) return null;
-    const head = this.project(view.enemyId, 'head');
+    const head = (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(view.enemyId, 'head');
     if (!head) return null;
 
     const chip = this.el.querySelector<HTMLElement>('.eint__toggle');
@@ -631,8 +634,8 @@ export class FFX2BattleHud implements HudPort {
     for (const id of state?.activeIds ?? []) {
       const c = state?.combatants[id];
       if (!c || c.hp <= 0) continue;
-      const headPt = this.project(id, 'head');
-      const feetPt = this.project(id, 'feet');
+      const headPt = (this.layoutProject ?? this.project)(id, 'head');
+      const feetPt = (this.layoutProject ?? this.project)(id, 'feet');
       if (!headPt || !feetPt) continue;
       const head = toStage(headPt);
       const feet = toStage(feetPt);
@@ -964,6 +967,12 @@ export class FFX2BattleHud implements HudPort {
   ): void {
     this.project = project;
     this.damage.setProjector(project);
+  }
+
+  /** fb2-0929 camera comfort: the guide rail and the advisor lane are fenced where the girls rest, not mid-move. */
+  setLayoutProjector(layout: LayoutProjector): void {
+    this.layoutProject = (id, anchor) => layout.point(id, anchor);
+    this.labelsAtRest = () => layout.labelsAtRest?.() === true;
   }
 
   /** The painted field's targeting surface. See {@link TargetingPort}. */
