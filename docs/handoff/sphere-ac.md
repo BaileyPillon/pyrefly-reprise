@@ -102,3 +102,48 @@ Dev server on 8460 (stopped), headless Chromium on the GPU, Chapter I.
   GOT IT is at the bottom.
 - The card says "Click" on a phone too (the target's copy).
 - `SphereGridView.ts` is still over 400 lines (753).
+
+## CHECK (independent, 2026-09-30, not the builder)
+
+Fresh production build of `sphere-ac` @ 72995121 (`vite build` into scratch, served by
+`vite preview` on 8480, stopped by PID afterwards), headless GPU Chromium, probes in
+`D:/Tools/pyrefly-scratch/picks-0929/sphere-check/` (`desk.mjs`, `phone.mjs`, `esc.mjs`).
+Game case: FFX only (confirmed: only `src/ui/ffx/party-prep/` changed; no `src/battle`,
+`src/engine`, `src/data`, `src/app` file in the diff).
+
+- **Target vs build.** A: card at 500,150 1019x560, copy word for word with the target,
+  same three panels, buttons and footnote. C: result card 597,452 879x138 with the target's
+  exact figures (4 nodes, STR 31 → 35, AGI 30 → 34, MAX HP 2420 → 2640, 7 S.Lv 30 → 23,
+  3 Power + 1 Speed), NEW tag and "+N MORE" tag, UNDO / KEEP. Differences, all explained:
+  the header carries the extra `?` (option A's reopen button), the AP readout drops with
+  S.Lv (older open question), the grid view differs because the camera recentres on the
+  real result.
+- **Desktop 1600x900, mouse + keys.** Card on first open; a mouse click on the STATS tab
+  through the dim layer does nothing; Up/Down/Q/M/PageUp/PageDown/Tab under the card leave
+  the tab and screen alone; Esc = GOT IT and stays on party prep (E = START also presses
+  the chosen button, as designed). `seenCoach` gains `sphere-grid-card` only. AUTO-LEARN
+  press → result in 12 ms. UNDO: the whole chapter `buildRef` JSON equals the pre-press
+  JSON (stricter than the builder's member check). Switching character settles as KEEP;
+  Esc on a result = KEEP; leaving for STATS = KEEP and hides the dock; Left+Enter on a result
+  = UNDO without starting the battle. Repeated presses on Yuna ran out after 4 presses with
+  the caption message; key spheres unchanged (4/2/1/1), no stat above 255. `?` reopens,
+  SHOW ME closes. With `data-reduce-motion` + `data-low-effects` the card has 0 running
+  animations (the new UI has none). Enter with nothing open still starts the chapter.
+  After a reload the card stays away.
+- **Battle.** `?coach=off` hides the card; after AUTO-LEARN + KEEP the battle's
+  `battleState()` has Tidus 2640/2640, STR 35, AGI 34.
+- **Phone 390x844, taps.** Card 358 wide, no text under 14 px, GOT IT 102x44, SHOW ME
+  264x44; dock AUTO-LEARN 294x44 and `?` 52x44; UNDO / KEEP 154x44; no horizontal page
+  scroll; the tab's own layout unchanged (grid 204x55, WALK 16x7, as fb-0929 measured);
+  tap UNDO restores the full `buildRef`; dock hidden on STATS and CHAPTER.
+- **Console:** 0 errors (one pre-existing art warning about seymour-flux-body).
+- **Checks:** `npx tsc --noEmit` clean; sphere tests 8 files / 95 tests pass; full suite
+  once: 675 passed, 1 failed = `strategy-ffx2-bahamut` timeout under load (FFX-2, not
+  touched), passes alone 19/19; orphans 24 (same as main); `git merge-tree` against
+  origin/main 888a7578 clean; new files under 400 lines, `SphereGridView.ts` shrank
+  811 → 753, the model 392 → 397.
+
+**Verdict: no blocker.** Minor, disclosed: the Tidus field card keeps HP 2420 until
+re-entry (pre-existing); the phone card is ~1030 px tall and scrolls; the card says
+"Click" on a phone; the batch of four per press is our choice (question for Bailey);
+AUTO-LEARN and `?` have no key/pad binding (the target shows none).
