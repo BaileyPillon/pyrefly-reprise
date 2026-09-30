@@ -133,3 +133,38 @@ it feel like a good mobile game.
 - Phone observations in the README (the dense intent bar, 36 taps of story, "B
   BRIEFING" and "TAP HERE BACK" wording, missing board thumbnails) are recorded, not
   acted on.
+
+## CHECK (independent, 2026-09-29, a separate agent that did not build this)
+
+Verdict: **no blockers.** Both claimed fixes hold by real input; the options are
+mockups only.
+
+- **Live repro (release 31a, fresh profile, headless Playwright, PYREFLY_BROWSER=gpu).**
+  Chapter I (FFX) 1600x900 mouse click on ATTACK: targeting opens and the line stays up.
+  390x844 touch tap on ATTACK: the line stays at [25,148 340x160] over the target name
+  [166,137]; its foot reads "Enter continue". Chapter IV (FFX-2) click and tap on WHITE
+  MAGIC: the line stays up.
+- **Branch production build** (vite build of af9c96fc into scratch, preview on 8270, same
+  script, same inputs): after the click or tap the line is gone in all four cases,
+  targeting opens in chapter I at both sizes (target name visible), and the White Magic
+  list opens in chapter IV. The phone foot reads "Tap continue"; desktop still "Enter".
+  Regression probes: Enter with the line up and a click on the line itself still take it
+  down without acting on the menu (same as live). No page errors.
+- **Fail first:** the new test file run against origin/main's CoachMark.ts and
+  coach-taps.css: 4 of 7 fail (the same 4 the builder names); all 7 pass on the branch.
+- **Scope and rules:** code diff is only `src/ui/coach/CoachMark.ts` (370 lines),
+  `src/ui/coach/coach-taps.css` and the new test; nothing in `src/battle`, the presenter
+  or the RNG (rule 1). O1/O2/O3 are static files under `docs/concepts/fb2-0929/onboard/`
+  with no code path, so without Bailey's pick the branch looks and moves like main
+  apart from the two fixes (rules 9, 10). Mockups use our own captures (rule 8). The
+  game case is written in both commits (rule 14).
+- **Gates:** `tsc --noEmit` clean; `git merge-tree` against origin/main 1c313c17 clean;
+  full unit suite: one run showed 1 failed file of 668 (10190 tests passed), a re-run was
+  fully green and wrote no failure for any file of this branch, so the one failure reads
+  as a flaky test outside this change (not identified; the output was cut before its name).
+- **Minor notes (not blockers):** the pointer rule is broader than its keyboard twin:
+  any press outside the line (a stray tap on the stage, the PAUSE button, the advisor's
+  MORE) takes the one-time line down for good, where the keyboard needs a navigated
+  confirm. That is probably what a touch player expects, but it is a judgement worth
+  one line to Bailey when this merges.
+- Preview server on 8270 stopped by PID. Nothing pushed, merged or deployed.
