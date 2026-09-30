@@ -183,3 +183,72 @@ Verdict: **no blocker**; one major to fix or disclose, three minors.
   mockup shows it), and the paintings (not approved).
 
 Scripts and frames: `D:/Tools/pyrefly-scratch/picks-0929/status-check/` (`check.mjs`, `shots/`, `cap/`).
+
+## REPAIR (2026-09-30): REDUCE MOTION and LOW EFFECTS reach the status marks
+
+Answers the independent check's one major. Game case: **both** (shared plumbing: the marks are
+the same CSS in both games; FFX-only and FFX-2-only marks only ever mount in their own HUD).
+
+**What changed**
+- `src/ui/common/status-marks-calm.css` (new, imported by `statusMarks.ts` after
+  `status-marks.css`).
+  - REDUCE MOTION, under `html[data-reduce-motion]` and, written again, under
+    `@media (prefers-reduced-motion: reduce)` (`comfort.css` lets the OS preference win on its
+    own, so this does too): every mark is a still at the rest pose of its own animation,
+    `animation: none; opacity: 1`. Nothing is hidden to stop it. The two-star and four-orb marks
+    get fixed spots (a still cannot orbit, and several orbs must not stack). The Protect
+    shield flash is shown at full strength for its 0.6 s and then removed as before.
+  - LOW EFFECTS, under `html[data-low-effects]`: the **particle marks** (Zombie smoke, Poison
+    bubbles, Sleep Z's, the Nul orbs) become a lighter still: fewer puffs (4 of 7), bubbles (3 of
+    5) and Z's (2 of 3), no blur, no glow. Stars, halo, cloud and the ellipsis bubble are one
+    small element each and keep their own motion under this flag (REDUCE MOTION stills them).
+- `src/ui/common/statusCalm.ts` (new): `statusMotionStill()`, the row flag or the OS preference,
+  for the one look driven from script. `statusFigureTint.ts`: Pointless's slow flash is held at
+  half its peak under REDUCE MOTION.
+- **A second defect found by running it, fixed here:** Pointless's flash never fell. The guard
+  that lets a hit's own flash win compared the cell with the new `hold`, so once the pulse reached
+  its peak every lower value lost the comparison and the flash stayed at the peak (browser: 1
+  distinct value in 2 s, on the unrepaired build). It now compares with the amount this module
+  last wrote (`Applied.wrote`), so the pulse rises and falls (6 distinct values in 2 s). The test
+  fails on the old comparison.
+- **Dead CSS removed** (grep shows no emitter left; the build and the tests are green):
+  `.ffx2-status-chip`, `--good` and `i` in `ffx2-hud.css` (now 1205 to 1181 lines), its phone
+  override in `ffx2/phone-hud.css`, `.ffx-stat__statuses i` and `.ffx-ctb-statuses i` in
+  `ffx/ffx-hud.css` and `ffx/phone-hud.css`. The parent rules `.ffx-stat__statuses` and
+  `.ffx-ctb-statuses` stay (the new icon rows use them). No file over 400 lines grew.
+
+**Proof, by running it** (`final/src/calm.mjs`; headless real GPU, own dev server, all
+the marks staged on the real HUD; the GPU was busy with ComfyUI, so no timing is claimed; the
+counts below are `document.getAnimations()` inside the mark layer; full table in
+`docs/screenshots/picks-0929/status-o3/calm/results.json`; frames beside it):
+
+| Case (both 1600x900 and 390x844 gave the same counts) | FFX Ch. I Zombie frame, running / infinite loops | FFX-2 Ch. IV staged frame |
+|---|---|---|
+| no flag | 23 / 22 | 13 / 12 |
+| REDUCE MOTION, **before** the fix | 23 / 22 | 13 / 12 |
+| REDUCE MOTION, after | **0 / 0** | **0 / 0** |
+| OS prefers-reduced-motion, before | 23 / 22 | 13 / 12 |
+| OS prefers-reduced-motion, after | **0 / 0** | **0 / 0** |
+| LOW EFFECTS, before | 23 / 22 | 13 / 12 |
+| LOW EFFECTS, after (smoke, bubbles, Z, orbs still; stars, halo, cloud and the shield's 0.6 s remain) | 4 / 3 | 5 / 4 |
+
+Every mark stays visible under the stills (minimum opacity 1; the shield 1). A mark's own drift
+(its offset from its figure, in the figure's own scale) took 1 distinct value in 2 s under
+REDUCE MOTION and OS, against 6 with the flags off. Pointless's flash (script): 6 distinct values
+in 2 s normally, 1 under REDUCE MOTION and under the OS preference. No page errors. ("Before"
+frames remove `status-marks-calm.css` from the same page; the Pointless still is script and stays
+on in those, and its first, wrong, before measure is the 1-value line above.)
+
+**Tests** `tests/unit/status-o3-calm.test.ts` (11): every animated selector in `status-marks.css`
+has a still under the row flag and under the OS query (a new looping mark that forgets one now
+fails), no still hides a mark, orb and star spots, the LOW EFFECTS particle rules, load order,
+no rule left for the removed pips and chips, the Pointless pulse rises and falls, holds still
+under the flag. With status-o3-hud, status-o3-mapping and ffx-hud-css-type-floor: 43 pass.
+`npx tsc --noEmit` clean apart from the untracked `zz-scratch` files. I did not run the full suite
+in this cycle (targeted files only; the full run in the earlier section stands for the rest).
+
+**Open / for Bailey:** LOW EFFECTS leaves stars, halo, cloud and the short shield flash moving on
+purpose (the check asked for the particle marks). If he wants those stilled under LOW EFFECTS too
+it is four selectors in `status-marks-calm.css`. Stale comments naming `statusChips.ts` /
+`statusPips.ts` remain in `PartyRows.ts`, `dressphereIcons.ts`, `resolve-targets.ts`,
+`turnQueue.ts` (comments only, left alone).

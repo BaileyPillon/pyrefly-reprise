@@ -14,6 +14,7 @@
  */
 
 import './status-marks.css';
+import './status-marks-calm.css';
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
 import { figureLookOf, type FigureMark, type StatusGame } from './statusLooks.ts';
 

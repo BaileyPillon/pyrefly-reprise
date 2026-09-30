@@ -1,0 +1,65 @@
+/* Status display O3 repair (2026-09-30): REDUCE MOTION and LOW EFFECTS for the marks on the figures
+   (`status-marks.css`, `statusMarks.ts`). Both games (shared plumbing; the marks are the same CSS).
+
+   REDUCE MOTION (the pause row, `html[data-reduce-motion]`; and the OS `prefers-reduced-motion`,
+   which `comfort.css` also lets win on its own): every mark is a STILL. No loop, no drift, no
+   pulse; the mark stays visible and readable at the rest pose of its own animation. The rules are
+   written twice, once per trigger, because CSS cannot share one rule between a media query and an
+   attribute selector.
+
+   LOW EFFECTS (`html[data-low-effects]`): the particle-type marks (smoke, bubbles, Z's, orbs)
+   become a lighter still: fewer puffs, no blur or glow. The other marks (stars, halo, cloud, the
+   ellipsis bubble) are a single small element each, so they keep their own motion under this
+   flag; REDUCE MOTION stills them. Orbs get four fixed spots so several Nul orbs do not stack. */
+
+/* ---- REDUCE MOTION, the row --------------------------------------------------------------- */
+html[data-reduce-motion] .stm--smoke i,
+html[data-reduce-motion] .stm--bubbles i,
+html[data-reduce-motion] .stm--zzz i,
+html[data-reduce-motion] .stm--stars i,
+html[data-reduce-motion] .stm--halo i,
+html[data-reduce-motion] .stm--cloud svg,
+html[data-reduce-motion] .stm--orb i,
+html[data-reduce-motion] .stm-shield svg { animation: none; opacity: 1; }
+html[data-reduce-motion] .stm--stars i:first-child { transform: translate(calc(26px * var(--k)), 0); }
+html[data-reduce-motion] .stm--stars i + i { transform: translate(calc(-26px * var(--k)), 0); }
+html[data-reduce-motion] .stm--orb-red i { transform: translate(calc(44px * var(--k)), 0); }
+html[data-reduce-motion] .stm--orb-white i { transform: translate(0, calc(12px * var(--k))); }
+html[data-reduce-motion] .stm--orb-yellow i { transform: translate(calc(-44px * var(--k)), 0); }
+html[data-reduce-motion] .stm--orb-blue i { transform: translate(0, calc(-12px * var(--k))); }
+html[data-reduce-motion] .stm--zzz i { transform: rotate(-12deg); }
+
+/* ---- REDUCE MOTION, the OS preference ----------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .stm--smoke i,
+  .stm--bubbles i,
+  .stm--zzz i,
+  .stm--stars i,
+  .stm--halo i,
+  .stm--cloud svg,
+  .stm--orb i,
+  .stm-shield svg { animation: none; opacity: 1; }
+  .stm--stars i:first-child { transform: translate(calc(26px * var(--k)), 0); }
+  .stm--stars i + i { transform: translate(calc(-26px * var(--k)), 0); }
+  .stm--orb-red i { transform: translate(calc(44px * var(--k)), 0); }
+  .stm--orb-white i { transform: translate(0, calc(12px * var(--k))); }
+  .stm--orb-yellow i { transform: translate(calc(-44px * var(--k)), 0); }
+  .stm--orb-blue i { transform: translate(0, calc(-12px * var(--k))); }
+  .stm--zzz i { transform: rotate(-12deg); }
+}
+
+/* ---- LOW EFFECTS: the particle marks as a lighter still -------------------------------------- */
+html[data-low-effects] .stm--smoke,
+html[data-low-effects] .stm--orb i { filter: none; box-shadow: none; }
+html[data-low-effects] .stm--smoke i,
+html[data-low-effects] .stm--bubbles i,
+html[data-low-effects] .stm--zzz i,
+html[data-low-effects] .stm--orb i { animation: none; opacity: 1; }
+html[data-low-effects] .stm--smoke i:nth-child(n + 5),
+html[data-low-effects] .stm--bubbles i:nth-child(n + 4),
+html[data-low-effects] .stm--zzz i:nth-child(n + 3) { display: none; }
+html[data-low-effects] .stm--zzz i { transform: rotate(-12deg); }
+html[data-low-effects] .stm--orb-red i { transform: translate(calc(44px * var(--k)), 0); }
+html[data-low-effects] .stm--orb-white i { transform: translate(0, calc(12px * var(--k))); }
+html[data-low-effects] .stm--orb-yellow i { transform: translate(calc(-44px * var(--k)), 0); }
+html[data-low-effects] .stm--orb-blue i { transform: translate(0, calc(-12px * var(--k))); }

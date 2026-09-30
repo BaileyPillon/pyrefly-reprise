@@ -17,6 +17,7 @@
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
 import { figureLookOf, type FigureLook, type StatusGame } from './statusLooks.ts';
 import { wearsLooks } from './statusMarks.ts';
+import { statusMotionStill } from './statusCalm.ts';
 
 type Cell<T> = { value: T };
 type ColourCell = Cell<{ set(c: number): unknown }>;
@@ -96,6 +97,8 @@ interface Applied {
   /** Seconds left in which the freeze is lifted (an action or an event names the figure). */
   heldFor: number;
   phase: number;
+  /** The flash amount this module last wrote (a value above it is a hit's own flash, which wins). */
+  wrote: number;
 }
 
 /** How long any event naming a stopped figure lifts its freeze, s: covers a hit reaction or a KO fall. */
@@ -103,6 +106,8 @@ const THAW_S = 2.5;
 /** Pointless: one slow white flash every this many seconds, to this amount. */
 const PULSE_PERIOD_S = 1.8;
 const PULSE_PEAK = 0.34;
+/** Pointless under REDUCE MOTION: the flash held still at half its peak (no pulsing). */
+const PULSE_STILL = PULSE_PEAK * 0.5;
 
 export class StatusFigureTint {
   private readonly applied = new Map<CombatantId, Applied>();
@@ -139,6 +144,7 @@ export class StatusFigureTint {
 
   update(dt: number): void {
     this.reconcile();
+    const still = statusMotionStill();
     for (const a of this.applied.values()) {
       a.heldFor = Math.max(0, a.heldFor - dt);
       a.phase += dt;
@@ -152,13 +158,15 @@ export class StatusFigureTint {
         colour = a.look.glow.colour;
         cut = a.look.glow.floorCut;
       } else if (a.look.pulse) {
-        hold = PULSE_PEAK * (0.5 - 0.5 * Math.cos((a.phase / PULSE_PERIOD_S) * Math.PI * 2));
+        hold = still ? PULSE_STILL : PULSE_PEAK * (0.5 - 0.5 * Math.cos((a.phase / PULSE_PERIOD_S) * Math.PI * 2));
       }
       // A hit's own flash is brighter and wins; the held look takes back over as it fades.
-      if (hold > 0 && cells.amount.value <= hold + 1e-3) {
+      // (Compared with what this wrote last, not with `hold`: a pulse falling from its peak is ours.)
+      if (hold > 0 && cells.amount.value <= Math.max(hold, a.wrote) + 1e-3) {
         cells.colour.value.set(colour);
         cells.cut.value = cut;
         cells.amount.value = hold;
+        a.wrote = hold;
       }
     }
   }
@@ -190,7 +198,7 @@ export class StatusFigureTint {
       let a = this.applied.get(id);
       if (!a) {
         const own = Object.prototype.hasOwnProperty.call(fig, 'update') ? fig.update : null;
-        a = { fig, look: NONE, key: keyOf(NONE), cells: flashCellsOf(fig), update: fig.update.bind(fig), wrapper: null, own, heldFor: 0, phase: 0 };
+        a = { fig, look: NONE, key: keyOf(NONE), cells: flashCellsOf(fig), update: fig.update.bind(fig), wrapper: null, own, heldFor: 0, phase: 0, wrote: 0 };
         this.applied.set(id, a);
         const entry = a;
         // The freeze: the figure's own clock stands still while Stop holds it, except inside an
