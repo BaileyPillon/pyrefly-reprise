@@ -1,0 +1,10 @@
+
+ RUN  v5.0.1 D:/pyrefly-r29-options
+
+ ✓ tests/unit/sphere-grid-fb0929.test.ts (12 tests) 10ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  19:36:01
+   Duration  1.51s (environment 55%, transform 34%, import 11%, tests 1%)
+
