@@ -170,3 +170,45 @@ code), `r17-before-face200-mini.json` / `r17-after-face200-mini.json`, `r17-afte
   `audio-manifest-io` (EPERM on a temp lock file under load) and `strategy-ffx2-bahamut` (the known 15 s
   timeout of an FFX-2 simulation under load).
 - `node tools/critic-plan.mjs --paths` before any release: the advisor and its v4 search changed (the card).
+
+## CHECK (independent, 2026-09-30; did not build it)
+
+Branch `r17fix-advisor` at b38ef055, worktree `D:/pyrefly-advisor-v4`. Game case: FFX only, confirmed
+(`raceOf` reads `state.game`; the forecast filter drops only a row the data marks `scriptedGameOver`).
+
+**Verdict: the claimed cause fix holds; PR-0269 stays open (acceptance "3 of 4 seeds by real keys" not met,
+as the builder says). No blocker.**
+
+- **Cause, by running it.** route17 (round 17's harness, imports pointed at this worktree) on a fresh
+  production build of the branch (`vite build` to a scratch outDir, preview on :8771, headless, 1600x900,
+  seed 1): defeat by Giga-Graviton, 65 turns, 0 errors, 0 fails. The card's last six picks are all damage
+  (Attack, Fire, Attack, Attack, Shooting Star, Attack), Sin 11,249 -> 2,395 before Wakka's last swing,
+  0 HP-only upkeep. Round 17 on main's code (`critic/rounds/round-17/evidence/sin-face-win/turn-log.json`,
+  turns 61-65): Al Bhed Potion, Al Bhed Potion, Ether at Sin 20,215, lost at 17,757. Same seed, same input:
+  the builder's "883 short" reproduces (it is the same deterministic run).
+- **Bench, re-run by me** (worker path, mini, seeds 1-40): sin-face v3 **14/40**, v4 **13/40**, lethal miss 0;
+  sin-fins-core v3 **1/40**, v4 **5/40**. Identical to the builder's numbers; before (`r17-before-mini.json`)
+  10 / 8 and 1 / 0. So XVIII improves, XVII improves only on v4.
+- **Tests fail without the fix.** With only the wiring switched off (the forecast skip in
+  `advisor-forecast.ts` and the `raceLift` call in `advisor.ts`; files put back byte for byte after), 3 of the
+  6 new tests fail (the last-turn card, the last-turn raise, the heal-to-damage lift). The other 3 call the
+  helpers (`offRaceLine`, `raceHolds`, `lostValue`, `raceOf`) directly, so they pass with the v4 wiring in
+  `candidates.ts`, `search.ts` and `rollout.ts` removed: that wiring is covered only by the bench (minor).
+- **No flip, menu never waits:** `real-keys.mjs --chapter=sin-face --menus=10` on the same build: v4 ready at
+  10/10 menus, card stable at 10/10, 0 errors.
+- **Other FFX chapters:** the builder's before/after scorecards (`r17-before-others-mini.json`,
+  `r17-after-others-mini.json`) are identical in all 18 rows once timings are left out (checked by script);
+  by construction `raceOf` is null there and `lostValue` returns 0 (a test pins three of them).
+- **Rules.** 1: pure, in `src/engine/tactics`, no engine writes. 5, 6: no hit rule, no game data, no boss
+  number touched; the Giga-Graviton reading is research/ffx-sin.md §3.4 via the data's existing mark.
+  7: `advisor.ts` (over 400) went 1928 -> 1925, no other file over 400. 9/10: no new words (the lifted row keeps
+  its own sentence); the visible enemy-intent brief still reads `predictEnemyIntent` directly, so the HUD still
+  shows Giga-Graviton coming. 14: FFX only, stated.
+- `tsc --noEmit` clean. `tests/unit/advisor-race.test.ts` 6/6. Full suite once: 692 files passed, 1 failed
+  (`strategy-ffx2-bahamut`, FFX-2, untouched by this branch; passes alone 19/19, the known timeout under load).
+  `git merge-tree --write-tree main HEAD` against main 96baf33a: clean. Orphans 24, as on main.
+- Findings (none blocking): PR-0269 acceptance still open (major, needs Bailey's line / S-1 decision);
+  XVII on the v3 card unchanged at 1/40; v4 on XVII now ends 12/80 runs in the stalemate withdrawal instead of a
+  defeat (still losses; worth a look before calling XVII fixed); v4 wiring untested by unit tests.
+- Evidence: `D:/Tools/pyrefly-scratch/r17chk/` (route log, turn log, frames, real-keys JSON); bench JSON parked
+  in `F:/pyrefly-parked/2026-09-30/r17fix-advisor-check/`. Preview server on :8771 stopped.
