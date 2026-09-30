@@ -164,13 +164,22 @@ function ctxFromState(state: Readonly<BattleState>, content: FFXContentRegistry)
 }
 
 function ffxForecast(state: Readonly<BattleState>, options: ForecastOptions): AdvisorIntent | null {
-  const ctx = ctxFromState(state, options.ffxContent ?? getFFXRegistry());
+  const content = options.ffxContent ?? getFFXRegistry();
+  const ctx = ctxFromState(state, content);
   const found: AdvisorIntent[] = [];
   for (const id of enemyIds(state)) {
     const intent = predictEnemyIntent(ctx, id, { samples: FORECAST_SAMPLES });
-    if (intent) found.push(fromFFX(intent));
+    // PR-0269: a scripted Game Over (Overdrive Sin's Giga-Graviton, research/ffx-sin.md §3.4
+    // [verified: 4 sources]: it ignores Auto-Life and an aeon) is not a threat any row saves anyone
+    // from, so it is not a lethal hit to heal against: the card's answer to it is damage in time.
+    if (intent && !scriptedGameOver(content, intent.abilityId)) found.push(fromFFX(intent));
   }
   return worst(found);
+}
+
+/** The ability carries the data's `scriptedGameOver` mark (`overdrive-sin-abilities.ts`). */
+export function scriptedGameOver(content: FFXContentRegistry, abilityId: string | null | undefined): boolean {
+  return abilityId ? content.ability(abilityId)?.extra?.['scriptedGameOver'] === true : false;
 }
 
 function fromFFX(intent: FFXEnemyIntent): AdvisorIntent {

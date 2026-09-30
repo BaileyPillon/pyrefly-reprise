@@ -1,0 +1,63 @@
+{
+  "tag": "r17-after-fins41-mini",
+  "budget": "mini",
+  "seeds": 40,
+  "first": 41,
+  "when": "2026-09-30T12:45:58.064Z",
+  "rows": [
+    {
+      "chapterId": "sin-fins-core",
+      "driver": "v3",
+      "budget": "-",
+      "seeds": 40,
+      "wins": 1,
+      "winSeeds": [
+        71
+      ],
+      "linksCleared": 54,
+      "decisions": 11801,
+      "shownV4": 0,
+      "switched": 0,
+      "notReady": 0,
+      "lethalMiss": 5,
+      "savable": 202,
+      "missedRevive": 11,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "refused": 0,
+      "workerP50": 0,
+      "workerP95": 0,
+      "workerMax": 0,
+      "cardP50": 3.0559000000002925,
+      "cardP95": 5.120100000000093
+    },
+    {
+      "chapterId": "sin-fins-core",
+      "driver": "v4",
+      "budget": "mini",
+      "seeds": 40,
+      "wins": 3,
+      "winSeeds": [
+        68,
+        72,
+        77
+      ],
+      "linksCleared": 66,
+      "decisions": 13557,
+      "shownV4": 13557,
+      "switched": 1095,
+      "notReady": 0,
+      "lethalMiss": 0,
+      "savable": 168,
+      "missedRevive": 11,
+      "notOnMenu": 0,
+      "badAim": 0,
+      "refused": 0,
+      "workerP50": 138.30119999998715,
+      "workerP95": 446.17460000002757,
+      "workerMax": 1202.6687000000093,
+      "cardP50": 138.4293999999063,
+      "cardP95": 446.2591999999713
+    }
+  ]
+}

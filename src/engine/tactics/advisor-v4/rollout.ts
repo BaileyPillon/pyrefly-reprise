@@ -25,7 +25,7 @@ import type { AvailableCommand, BattleEngine, BattleSetup, BattleState, Command,
 import type { FFXEngine } from '../../../battle/ffx/index.ts';
 import type { FFX2Engine } from '../../../battle/ffx2/index.ts';
 import { intendedStrategy } from '../../BattlePresenterStrategies.ts';
-import { leafValue, terminalValue, type ValueWeights } from './value.ts';
+import { leafValue, lostValue, terminalValue, type ValueWeights } from './value.ts';
 
 export type Input = Extract<Decision, { kind: 'player-input' }>;
 
@@ -150,7 +150,8 @@ function play(fork: Forkable, root: Readonly<BattleState>, cfg: RolloutConfig, p
         linksAhead -= 1;
         continue;
       }
-      return { value: terminalValue(fork.state(), d.result.outcome, cfg.weights), end: d.result.outcome, decisions: n, pressed };
+      const lost = d.result.outcome === 'victory' ? 0 : lostValue(root, fork.state(), { rootAhead: chain?.next.length ?? 0, leafAhead: linksAhead }, cfg.weights);
+      return { value: lost || terminalValue(fork.state(), d.result.outcome, cfg.weights), end: d.result.outcome, decisions: n, pressed };
     }
     if (n >= cfg.horizon) break;
     n += 1;
