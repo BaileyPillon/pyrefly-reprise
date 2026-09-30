@@ -1,0 +1,19 @@
+import sys, json, math
+from PIL import Image, ImageDraw
+T12=math.tan(math.radians(12))
+FR='D:/Final Fantasy/docs/concepts/perspectives-2026-09-27/frames/'
+def slab(xbl, ytop, w, h, slant=1):
+    o=h*T12
+    if slant>=0: return [(xbl+o,ytop),(xbl+w+o,ytop),(xbl+w,ytop+h),(xbl,ytop+h)]
+    return [(xbl,ytop),(xbl+w,ytop),(xbl+w+o,ytop+h),(xbl+o,ytop+h)]
+def show(frame_rel, polys, crop, out, zoom=2):
+    im=Image.open(FR+frame_rel).convert('RGB') if not frame_rel.startswith('/') and ':' not in frame_rel else Image.open(frame_rel).convert('RGB')
+    d=ImageDraw.Draw(im)
+    for p in polys: d.polygon(p, outline=(255,0,255))
+    im.crop(crop).resize(((crop[2]-crop[0])*zoom,(crop[3]-crop[1])*zoom),Image.NEAREST).save(out)
+if __name__=='__main__':
+    rows={}
+    tops=[535,614,693,773,852,932]; hts=[67,70,69,69,69,69]
+    for i,(t,h) in enumerate(zip(tops,hts)):
+        rows[i]=slab(83+21.2*i, t, 455, h)
+    show('ffx-ch1/P01-today-dressed.jpg', list(rows.values()), (60,520,700,1020), 'z-geo-cmd.png', 1)

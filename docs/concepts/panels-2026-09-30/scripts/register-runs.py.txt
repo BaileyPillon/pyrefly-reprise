@@ -1,0 +1,39 @@
+# register-runs.py - the four registration searches whose results are the *_REG constants in geo.py
+# (scale b, horizontal squash k, top-left) of a shipped painting as the engine drew it in a frame.
+# Results: Tidus (0.36, 1.0, 534.6, 544.6), Rikku DK (0.29, 1.0, 544.885, 517.48), Seymour (0.378, 1.0, 1178.25, 123.29).
+
+# ---- reg2.py (Tidus, Chapter I P01)
+import register as R, numpy as np
+from PIL import Image
+box=(500,500,840,990)
+def valid_ch1(W,H,box):
+    v=np.ones((H,W),bool)
+    ys=np.arange(H)[:,None]+box[1]; xs=np.arange(W)[None,:]+box[0]
+    rows=[(535,603,553),(615,683,575),(693,762,597),(773,842,617),(852,920,641),(933,1001,661)]
+    for y0,y1,xr in rows:
+        v&=~((ys>=y0-2)&(ys<=y1+2)&(xs<=xr+4))
+    return v
+best=R.search('ffx-ch1/P01-today-dressed.jpg',box,'tidus/idle.png',valid_ch1,(0.34,0.44),(0.95,1.25),(690,942),(6,7))
+print('coarse2',best)
+
+# ---- reg3.py (Rikku, Chapter IV P01)
+import register as R, numpy as np
+box=(520,480,820,900)
+def valid(W,H,box):
+    v=np.ones((H,W),bool)
+    ys=np.arange(H)[:,None]+box[1]; xs=np.arange(W)[None,:]+box[0]
+    v&=~((ys>=690)&(ys<=720)&(xs>=585)&(xs<=736))
+    return v
+best=R.search('ffx2-ch4/P01-today-dressed.jpg',box,'rikku-dark-knight/idle.png',valid,(0.25,0.33),(0.85,1.1),(665,858),(7,6))
+print('rikku',best)
+
+# ---- reg4.py (Seymour Flux, Chapter I P01)
+import register as R, numpy as np
+box=(1150,100,1520,600)
+def valid(W,H,box):
+    v=np.ones((H,W),bool)
+    ys=np.arange(H)[:,None]+box[1]; xs=np.arange(W)[None,:]+box[0]
+    v&=~((ys>=490)&(ys<=532)&(xs>=1300)&(xs<=1485))
+    return v
+best=R.search('ffx-ch1/P01-today-dressed.jpg',box,'seymour-flux-body/idle.png',valid,(0.33,0.41),(0.85,1.1),(1290,575),(6,6))
+print('seymour',best)

@@ -1,0 +1,122 @@
+# clean_stage.py - paints the HUD out of today's dressed frame (P01) for each chapter, so the panels can
+# re-lay the real HUD pieces wherever they read. Figures the HUD used to cover (Tidus's blade, Rikku's
+# sword) are repainted from the shipped idle painting, registered to the frame (register.py).
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
+import plib as P
+import geo as G
+
+
+def grown_mask(polys, grow=4, down=0, size=(P.W, P.H), blur=1.5):
+    m = Image.new('L', size, 0)
+    d = ImageDraw.Draw(m)
+    for pts in polys:
+        g = G.grow(pts, grow)
+        d.polygon(g, fill=255)
+        if down:
+            d.polygon([(x, y + down) for x, y in g], fill=255)
+            # join the two copies
+            xs = [p[0] for p in g]; ys = [p[1] for p in g]
+    if blur:
+        m = m.filter(ImageFilter.GaussianBlur(blur)).point(lambda v: 255 if v > 20 else 0)
+    return m
+
+
+def repaint_figure(clean, frame, reg, hole, rim=None, feather=2.0):
+    paint = P.load(P.ART + reg['paint'])
+    b, k = reg['b'], reg['k']
+    p = paint.resize((int(round(paint.size[0] * b * k)), int(round(paint.size[1] * b))), Image.LANCZOS)
+    lay = Image.new('RGBA', (P.W, P.H), (0, 0, 0, 0))
+    P.paste_rgba(lay, p, (int(round(reg['ox'])), int(round(reg['oy']))))
+    A = np.asarray(lay.split()[3]).astype(np.float32) / 255.0
+    Hm = np.asarray(hole).astype(np.float32) / 255.0
+    Fr = np.asarray(frame.convert('RGB')).astype(np.float32) / 255.0
+    Lr = np.asarray(lay.convert('RGB')).astype(np.float32) / 255.0
+    # colour-match the painting to how the engine drew it, on the visible part of the figure
+    er = np.asarray(Image.fromarray((A * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(7))).astype(np.float32) / 255.0
+    V = (er > 0.95) & (Hm < 0.02)
+    out = Lr.copy()
+    for c in range(3):
+        x = Lr[..., c][V]; y = Fr[..., c][V]
+        s, t = np.polyfit(x, y, 1)
+        out[..., c] = np.clip(Lr[..., c] * s + t, 0, 1)
+    matched = P.from_np(out).convert('RGBA')
+    matched.putalpha(lay.split()[3])
+    if rim:
+        matched = P.rim_light(matched, **rim)
+    # only inside the hole, feathered
+    hf = hole.filter(ImageFilter.GaussianBlur(feather))
+    m = ImageChops.multiply(hf, matched.split()[3])
+    base = clean.convert('RGBA')
+    matched.putalpha(m)
+    base.alpha_composite(matched)
+    return base.convert('RGB')
+
+
+def finish_fill(img, hole, seed=3, flecks=90):
+    t = P.texture_like(img, hole, amount=1.0, seed=seed)
+    snow = P.snow(img.size, count=flecks * 8, seed=seed, rmax=2.2, alpha=(40, 170), region=hole)
+    out = t.convert('RGBA')
+    out.alpha_composite(snow)
+    return out.convert('RGB')
+
+
+def ch1():
+    fr = P.frame('ffx-ch1/P01-today-dressed.jpg')
+    rows = list(G.CH1_CMD.values())
+    hole = grown_mask(rows, grow=5, down=14)
+    extra = grown_mask([G.CH1_DESC, G.CH1_GUIDE, G.CH1_BEST, G.CH1_MORT_CHIP, G.CH1_ENEMY_MOVE,
+                        G.CH1_CTB_BLOCK, G.CH1_PAUSE, G.CH1_ARROW] + list(G.CH1_PARTY.values()), grow=6, down=10)
+    ov = Image.new('L', (P.W, P.H), 0)
+    ImageDraw.Draw(ov).rectangle(G.CH1_KIM_OVERHANG, fill=255)
+    hole = ImageChops.lighter(ImageChops.lighter(hole, extra), ov)
+    filled = P.inpaint(fr, hole)
+    filled = finish_fill(filled, hole, seed=5)
+    filled = repaint_figure(filled, fr, G.CH1_TIDUS_REG, hole)
+    # Seymour's robe hem sat under the Mortiorchis intent chip
+    chip = grown_mask([G.CH1_MORT_CHIP], grow=6, down=10)
+    filled = repaint_figure(filled, fr, G.CH1_SEYMOUR_REG, chip,
+                            rim=dict(color=(190, 205, 255), width=3, strength=0.35, direction=(1, 0)))
+    # the left half of Tidus's turn ring was under the ITEMS / FLEE rows: redraw that arc, dim gold like the rest
+    ring = Image.new('RGBA', (P.W, P.H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(ring)
+    cx, cy, ra, rb = 642, 919, 173, 43
+    import math
+    for i in range(0, 110):
+        a0 = math.radians(90 + i); a1 = math.radians(91 + i)
+        fade = max(0.0, 1.0 - max(0, i - 55) / 55.0)   # brightest at the front, fading to the far side
+        col = (150, 110, 100, int(235 * (0.35 + 0.65 * fade)))
+        p0 = (cx + ra * math.cos(a0), cy + rb * math.sin(a0)); p1 = (cx + ra * math.cos(a1), cy + rb * math.sin(a1))
+        d.line([p0, p1], fill=col, width=4)
+    ring = ring.filter(ImageFilter.GaussianBlur(1.3))
+    glow = ring.filter(ImageFilter.GaussianBlur(7))
+    ring_m = ImageChops.multiply(ring.split()[3], hole)
+    glow_m = ImageChops.multiply(glow.split()[3], hole).point(lambda v: int(v * 0.8))
+    base = filled.convert('RGBA')
+    g2 = glow.copy(); g2.putalpha(glow_m); base.alpha_composite(g2)
+    r2 = ring.copy(); r2.putalpha(ring_m); base.alpha_composite(r2)
+    filled = base.convert('RGB')
+    # the repainted Tidus goes back on top of his ring
+    filled = repaint_figure(filled, fr, G.CH1_TIDUS_REG, hole)
+    return fr, filled, hole
+
+
+def ch4():
+    fr = P.frame('ffx2-ch4/P01-today-dressed.jpg')
+    hole = grown_mask([G.CH4_HELP, G.CH4_PLATE, G.CH4_GUIDE, G.CH4_ENEMY_MOVE, G.CH4_PAUSE,
+                       G.CH4_CMD_BLOCK, G.CH4_PARTY_BLOCK], grow=6, down=10)
+    best = grown_mask([G.CH4_BEST], grow=3, down=4)
+    hole = ImageChops.lighter(hole, best)
+    filled = P.inpaint(fr, hole)
+    filled = finish_fill(filled, hole, seed=9, flecks=40)
+    filled = repaint_figure(filled, fr, G.CH4_RIKKU_REG, best,
+                            rim=dict(color=(214, 170, 255), width=4, strength=0.55, direction=(1, 0)))
+    return fr, filled, hole
+
+
+if __name__ == '__main__':
+    for name, fn in (('ch1', ch1), ('ch4', ch4)):
+        fr, clean, hole = fn()
+        clean.save(P.SCR + 'stage-clean-%s.png' % name)
+        hole.save(P.SCR + 'stage-hole-%s.png' % name)
+        print('saved', name)

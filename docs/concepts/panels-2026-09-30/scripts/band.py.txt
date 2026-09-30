@@ -1,0 +1,194 @@
+# band.py - the cut-in band (Persona's grammar, Ink & Gold dress): a long diagonal strip across the frame
+# holding a huge close-up of the actor's eyes, with brush-slash accent edges and ink texture.
+# Built in "band space" (unrotated, L x (h + 2m)), then rotated onto the screen.
+import math, random
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
+import plib as P
+
+T12 = math.tan(math.radians(12))
+
+
+def ease_out(x):
+    x = max(0.0, min(1.0, x))
+    return 1 - (1 - x) ** 3
+
+
+def ease_in(x):
+    x = max(0.0, min(1.0, x))
+    return x ** 2.4
+
+
+def ease_out_back(x, s=1.6):
+    x = max(0.0, min(1.0, x))
+    x -= 1
+    return x * x * ((s + 1) * x + s) + 1
+
+
+class Band:
+    def __init__(self, face_src, face_box, accent, L=2500, h=340, m=70, face_center_x=820, face_scale=None,
+                 eye_y_frac=0.5, seed=4, face_grade=None, key_blue=True, fade_frac=0.2, streak_alpha=(10, 40)):
+        self.L, self.h, self.m = L, h, m
+        self.accent = accent
+        self.seed = seed
+        H = h + 2 * m
+        self.H = H
+        # ---- the face (bigger than the window so it can drift)
+        face = face_src.crop(face_box).convert('RGBA')
+        sc = face_scale or (h * 1.10 / face.size[1])
+        face = face.resize((int(face.size[0] * sc), int(face.size[1] * sc)), Image.LANCZOS)
+        if face_grade:
+            face = P.channel_grade(face, **face_grade)
+        # contrast lift so it pops against the dimmed scene
+        a = P.to_np(face.convert('RGB'))
+        a = np.clip((a - 0.5) * 1.08 + 0.5 + 0.01, 0, 1)
+        f2 = P.from_np(a).convert('RGBA')
+        # horizontal fades at both ends of the crop
+        fw, fh = f2.size
+        ramp = np.ones(fw, np.float32)
+        fade = int(fw * fade_frac)
+        ramp[:fade] = np.linspace(0, 1, fade) ** 1.5
+        ramp[-fade:] = np.linspace(1, 0, fade) ** 1.5
+        al = ramp[None, :] * np.ones((fh, 1), np.float32)
+        if key_blue:
+            # the paintings' own blue backgrounds (sky, bokeh) drop out toward the crop's ends, so the band's
+            # ink shows round the head; the centre (where the blue eyes are) is never keyed
+            rgb = P.to_np(f2.convert('RGB')) * 255
+            blu = rgb[..., 2] - np.maximum(rgb[..., 0], rgb[..., 1])
+            k = 1 - np.clip((blu - 22) / 50.0, 0, 1)
+            xs = np.abs(np.linspace(-1, 1, fw, dtype=np.float32))
+            wgt = np.clip((xs - 0.32) / 0.3, 0, 1)[None, :]
+            k = 1 - (1 - k) * wgt
+            k = P.to_np(P.from_np(k, 'L').filter(ImageFilter.GaussianBlur(2.5)))
+            al = al * k
+        f2.putalpha(Image.fromarray((al * 255).astype(np.uint8), 'L'))
+        self.face_alpha_full = None
+        self.face = f2
+        self.face_x0 = int(face_center_x - fw / 2)
+        self.face_y0 = int(m + h * eye_y_frac - fh * eye_y_frac)
+        # ---- window (the band's interior) with a soft inner shade at top and bottom
+        win = Image.new('L', (L, H), 0)
+        ImageDraw.Draw(win).rectangle([0, m, L, m + h], fill=255)
+        self.win = win
+        shade = np.zeros((H, L), np.float32)
+        ys = np.arange(H, dtype=np.float32)
+        d_top = np.clip((ys - m) / 46.0, 0, 1); d_bot = np.clip((m + h - ys) / 46.0, 0, 1)
+        sh = 1 - np.minimum(d_top, d_bot)
+        shade = (sh[:, None] * np.ones((1, L), np.float32)) * 0.55
+        shade = shade * (P.to_np(win) > 0.5)   # inside the band only
+        sl = np.zeros((H, L, 4), np.float32); sl[..., :3] = np.array(P.INK, np.float32) / 255; sl[..., 3] = shade
+        self.shade = P.from_np(sl, 'RGBA')
+        # ---- ink texture: dry streaks along the band, kept off the face (they read as scan lines on it)
+        face_a = Image.new('L', (L, H), 0)
+        face_a.paste(self.face.split()[3], (self.face_x0, self.face_y0))
+        off_face = ImageChops.multiply(win, ImageChops.invert(face_a.filter(ImageFilter.GaussianBlur(30))))
+        self.streaks = P.dry_brush((L, H), 0, seed=seed, density=0.9, length=(160, 900), width=(1, 4),
+                                   alpha=streak_alpha, region=off_face)
+        # ---- the slash edges: tapered brush strokes in the accent, broken up by noise
+        self.edges = self._edges()
+        self.flecks = self._flecks()
+
+    def _stroke(self, y_center, thick_max, rng, taper_pow=0.7, jitter=2.0):
+        L = self.L
+        top, bot = [], []
+        n = 80
+        for i in range(n + 1):
+            x = L * i / n
+            u = i / n
+            w = thick_max * (math.sin(math.pi * u) ** taper_pow) + 1.5
+            j = rng.uniform(-jitter, jitter)
+            top.append((x, y_center - w / 2 + j))
+            bot.append((x, y_center + w / 2 + j))
+        return top + bot[::-1]
+
+    def _edges(self):
+        L, H, m, h = self.L, self.H, self.m, self.h
+        rng = random.Random(self.seed + 1)
+        lay = Image.new('RGBA', (L, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        acc = tuple(self.accent)
+        # heavy accent slash on the top and bottom edge (straddling the edge)
+        d.polygon(self._stroke(m, 17, rng), fill=acc + (255,))
+        d.polygon(self._stroke(m + h, 17, rng), fill=acc + (255,))
+        # a thin paper line inside each edge
+        d.polygon(self._stroke(m + 22, 3.2, rng, 0.2, 0.6), fill=P.PAPER + (230,))
+        d.polygon(self._stroke(m + h - 22, 3.2, rng, 0.2, 0.6), fill=P.PAPER + (230,))
+        # dry-brush break-up of the accent strokes
+        n = P.value_noise((L, H), 7.0, self.seed + 3, octaves=3)
+        streak = P.value_noise((L, H), 60.0, self.seed + 4, octaves=2)
+        brk = ((n * 0.55 + streak * 0.45) > 0.30).astype(np.float32)
+        a = P.to_np(lay.split()[3]) * brk
+        lay.putalpha(P.from_np(a, 'L').filter(ImageFilter.GaussianBlur(0.5)))
+        return lay
+
+    def _flecks(self):
+        L, H, m, h = self.L, self.H, self.m, self.h
+        lay = Image.new('RGBA', (L, H), (0, 0, 0, 0))
+        acc = tuple(self.accent)
+        for k, (y, sgn) in enumerate(((m, -1), (m + h, 1))):
+            rng = random.Random(self.seed + 10 + k)
+            d = ImageDraw.Draw(lay)
+            for _ in range(140):
+                x = rng.uniform(0, L)
+                off = abs(rng.gauss(0, 12)) + 8
+                yy = y + sgn * off
+                r = max(0.7, rng.random() ** 2.4 * 5.0)
+                col = acc if rng.random() < 0.35 else P.INK
+                d.ellipse([x - r * 1.8, yy - r, x + r * 1.8, yy + r], fill=col + (int(rng.uniform(140, 240)),))
+            # a few long thin ink scratches leaving the edge
+            for _ in range(22):
+                x = rng.uniform(0, L); ln = rng.uniform(40, 260)
+                yy = y + sgn * rng.uniform(4, 16)
+                d.line([(x, yy), (x + ln, yy + sgn * rng.uniform(-3, 3))], fill=P.INK + (int(rng.uniform(90, 200)),),
+                       width=1)
+        return lay.filter(ImageFilter.GaussianBlur(0.4))
+
+    def strip(self, reveal=1.0, drift=0.0, lead=140):
+        """Band-space RGBA at a reveal fraction (0..1, left to right, slanted leading edge)."""
+        L, H, m, h = self.L, self.H, self.m, self.h
+        out = Image.new('RGBA', (L, H), (0, 0, 0, 0))
+        ink = P.solid(P.INK, (L, H)); ink.putalpha(self.win.point(lambda v: v * 248 // 255))
+        out.alpha_composite(ink)
+        face = Image.new('RGBA', (L, H), (0, 0, 0, 0))
+        P.paste_rgba(face, self.face, (int(self.face_x0 + drift), self.face_y0))
+        face.putalpha(ImageChops.multiply(face.split()[3], self.win))
+        out.alpha_composite(face)
+        out.alpha_composite(self.streaks)
+        out.alpha_composite(self.shade)
+        out.alpha_composite(self.flecks)
+        out.alpha_composite(self.edges)
+        if reveal < 1.0:
+            rx = -200 + (L + 400) * reveal
+            fill_mask = self._reveal_mask(rx)
+            edge_mask = self._reveal_mask(rx + lead)
+            body = out.copy(); body.putalpha(ImageChops.multiply(body.split()[3], fill_mask))
+            # the accent strokes run ahead of the fill: the slash
+            e2 = self.edges.copy(); e2.putalpha(ImageChops.multiply(e2.split()[3], edge_mask))
+            body.alpha_composite(e2)
+            out = body
+        return out
+
+    def _reveal_mask(self, rx):
+        L, H = self.L, self.H
+        m = Image.new('L', (L, H), 0)
+        # leading edge slanted like the house slabs (12 degrees off the band's normal)
+        o = H * T12
+        ImageDraw.Draw(m).polygon([(-10, 0), (rx + o / 2, 0), (rx - o / 2, H), (-10, H)], fill=255)
+        return m
+
+
+def place(canvas, strip, angle_deg, center, shift=0.0):
+    """Rotate the band-space strip by angle (degrees, PIL convention: counter-clockwise) and composite it
+    centred at `center`, moved `shift` px along its own axis."""
+    rot = strip.rotate(angle_deg, resample=Image.BICUBIC, expand=True)
+    a = math.radians(angle_deg)
+    cx = center[0] + shift * math.cos(a)
+    cy = center[1] - shift * math.sin(a)
+    x = int(round(cx - rot.size[0] / 2)); y = int(round(cy - rot.size[1] / 2))
+    P.paste_rgba(canvas, rot, (x, y))
+    return canvas
+
+
+def rotated_layer(img, angle_deg, center, shift=0.0, size=(P.W, P.H)):
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    return place(lay, img, angle_deg, center, shift)

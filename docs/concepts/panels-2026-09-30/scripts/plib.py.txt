@@ -1,0 +1,593 @@
+# plib.py - shared helpers for the panels options round (2026-09-30).
+# 2D composites over real-engine frames and the shipped paintings, in the Ink & Gold identity.
+# Nothing here touches src/ or public/art: it only reads them.
+import math, os, json, random
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
+
+ROOT = 'D:/Final Fantasy/'
+FR = ROOT + 'docs/concepts/perspectives-2026-09-27/frames/'
+ART = ROOT + 'public/art/'
+MOCK = 'D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/worktree-extras/mock-art/'
+MASTERS = 'D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/motion-masters/'
+FONTS = ROOT + 'public/fonts/'
+SCR = 'D:/Tools/pyrefly-scratch/panels/'
+OUT = ROOT + 'docs/concepts/panels-2026-09-30/'
+FFMPEG = 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe'
+
+W, H = 1920, 1080
+T12 = math.tan(math.radians(12))
+
+# Ink & Gold tokens (docs/handoff/presentation-ink-and-gold.md)
+INK = (11, 10, 18)
+PAPER = (244, 241, 232)
+GOLD = (227, 185, 74)
+GOLD_ON_PAPER = (184, 134, 42)
+PINK = (247, 182, 217)
+PINK_ON_PAPER = (196, 92, 150)
+BLOOD = (176, 42, 42)
+SKY = (127, 198, 232)
+MUTED = (159, 176, 196)
+
+# per chapter: accent colour and the slab slant. FFX slabs lean '/', FFX-2 slabs lean '\'
+CH = {
+    'ffx-ch1': dict(key='ffx-ch1', game='FFX', accent=GOLD, accent_paper=GOLD_ON_PAPER, slant=1,
+                    label='Chapter I · Seymour Flux (FFX)'),
+    'ffx2-ch4': dict(key='ffx2-ch4', game='FFX-2', accent=PINK, accent_paper=PINK_ON_PAPER, slant=-1,
+                     label='Chapter IV · Bahamut (FFX-2)'),
+}
+
+# ------------------------------------------------------------------ fonts
+_fcache = {}
+
+
+def _font(path, size, axes=None):
+    k = (path, size, tuple(axes) if axes else None)
+    if k not in _fcache:
+        f = ImageFont.truetype(FONTS + path, size)
+        if axes:
+            f.set_variation_by_axes(axes)
+        _fcache[k] = f
+    return _fcache[k]
+
+
+def serif(size, weight=700):  # Cormorant Garamond Bold Italic: names, banners, results, damage
+    return _font('cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2', size, [weight])
+
+
+def serif_upright(size, weight=700):
+    return _font('cormorant-garamond/CormorantGaramond-Variable-wght.woff2', size, [weight])
+
+
+def chakra(size, weight='Bold'):  # commands, labels, chips (tracked, uppercase)
+    return _font({'Bold': 'chakra-petch/ChakraPetch-Bold-700.woff2',
+                  'Medium': 'chakra-petch/ChakraPetch-Medium-500.woff2',
+                  'Regular': 'chakra-petch/ChakraPetch-Regular-400.woff2',
+                  'BoldItalic': 'chakra-petch/ChakraPetch-BoldItalic-700.woff2'}[weight], size)
+
+
+def rajdhani(size, weight='Bold'):  # HP / MP / tallies
+    return _font({'Bold': 'rajdhani/Rajdhani-Bold-700.woff2', 'SemiBold': 'rajdhani/Rajdhani-SemiBold-600.woff2',
+                  'Medium': 'rajdhani/Rajdhani-Medium-500.woff2'}[weight], size)
+
+
+def exo(size, weight=400):  # descriptions
+    return _font('exo2/Exo2-Variable-wght.woff2', size, [weight])
+
+
+# ------------------------------------------------------------------ text
+def text_width(s, font, tracking=0.0):
+    if not s:
+        return 0
+    size = font.size
+    return sum(font.getlength(c) for c in s) + tracking * size * (len(s) - 1)
+
+
+def draw_text(img, xy, s, font, fill, tracking=0.0, anchor='ls', shadow=None, stroke_width=0, stroke_fill=None):
+    """Draw text with letter-spacing (tracking in em). anchor: l/m/r + s (baseline) / t / m."""
+    d = ImageDraw.Draw(img)
+    tw = text_width(s, font, tracking)
+    x, y = xy
+    if anchor[0] == 'm':
+        x -= tw / 2
+    elif anchor[0] == 'r':
+        x -= tw
+    va = anchor[1] if len(anchor) > 1 else 's'
+    if shadow:
+        sc, so = shadow
+        draw_text(img, (xy[0] + so[0], xy[1] + so[1]), s, font, sc, tracking, anchor)
+    for c in s:
+        if stroke_width:
+            d.text((x, y), c, font=font, fill=fill, anchor='l' + va, stroke_width=stroke_width, stroke_fill=stroke_fill)
+        else:
+            d.text((x, y), c, font=font, fill=fill, anchor='l' + va)
+        x += font.getlength(c) + tracking * font.size
+    return tw
+
+
+def text_layer(s, font, fill, tracking=0.0, pad=8):
+    """Render text to a tight RGBA layer (baseline-anchored); returns (layer, baseline_y)."""
+    asc, desc = font.getmetrics()
+    tw = int(math.ceil(text_width(s, font, tracking))) + pad * 2
+    th = asc + desc + pad * 2
+    lay = Image.new('RGBA', (tw, th), (0, 0, 0, 0))
+    draw_text(lay, (pad, pad + asc), s, font, fill, tracking, 'ls')
+    return lay, pad + asc
+
+
+# ------------------------------------------------------------------ geometry and masks
+def slab_pts(x, y, w, h, slant=1):
+    """Parallelogram: x,y = top-left of the *bottom-left-aligned* box; slant +1 leans '/', -1 leans '\\'."""
+    o = h * T12
+    if slant >= 0:
+        return [(x + o, y), (x + w + o, y), (x + w, y + h), (x, y + h)]
+    return [(x, y), (x + w, y), (x + w + o, y + h), (x + o, y + h)]
+
+
+def poly_mask(pts, size=(W, H), ss=4, blur=0.0):
+    m = Image.new('L', (size[0] * ss, size[1] * ss), 0)
+    ImageDraw.Draw(m).polygon([(p[0] * ss, p[1] * ss) for p in pts], fill=255)
+    m = m.resize(size, Image.LANCZOS)
+    if blur:
+        m = m.filter(ImageFilter.GaussianBlur(blur))
+    return m
+
+
+def polys_mask(list_of_pts, size=(W, H), ss=4, blur=0.0):
+    m = Image.new('L', (size[0] * ss, size[1] * ss), 0)
+    d = ImageDraw.Draw(m)
+    for pts in list_of_pts:
+        d.polygon([(p[0] * ss, p[1] * ss) for p in pts], fill=255)
+    m = m.resize(size, Image.LANCZOS)
+    if blur:
+        m = m.filter(ImageFilter.GaussianBlur(blur))
+    return m
+
+
+def line_x(p0, p1, y):
+    (x0, y0), (x1, y1) = p0, p1
+    return x0 + (x1 - x0) * (y - y0) / float(y1 - y0)
+
+
+def gutter_pts(xmid, ymid, y0, y1, half, slant=1):
+    """A slanted strip (a panel gutter) through (xmid, ymid) from y0 to y1, half-width `half`."""
+    dx0 = (ymid - y0) * T12 * slant
+    dx1 = (y1 - ymid) * T12 * slant
+    return [(xmid + dx0 - half, y0), (xmid + dx0 + half, y0), (xmid - dx1 + half, y1), (xmid - dx1 - half, y1)]
+
+
+def edge_x(xmid, ymid, y, slant=1):
+    """x of a slanted edge through (xmid, ymid) at height y."""
+    return xmid + (ymid - y) * T12 * slant
+
+
+# ------------------------------------------------------------------ image placement
+def load(path, mode='RGBA'):
+    return Image.open(path).convert(mode)
+
+
+def frame(rel):
+    return load(FR + rel, 'RGB')
+
+
+def place(img, scale, src_pt, dst_pt, size=(W, H), resample=Image.LANCZOS):
+    """Scale `img` and position it so src_pt (in source px) lands on dst_pt. Returns a full-size RGBA layer."""
+    img = img.convert('RGBA')
+    sw, sh = max(1, int(round(img.size[0] * scale))), max(1, int(round(img.size[1] * scale)))
+    im = img.resize((sw, sh), resample)
+    ox = int(round(dst_pt[0] - src_pt[0] * scale))
+    oy = int(round(dst_pt[1] - src_pt[1] * scale))
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    paste_rgba(lay, im, (ox, oy))
+    return lay
+
+
+def paste_rgba(dst, src, xy):
+    """alpha_composite that tolerates negative offsets and overhang."""
+    x, y = int(xy[0]), int(xy[1])
+    sx0, sy0 = max(0, -x), max(0, -y)
+    dx0, dy0 = max(0, x), max(0, y)
+    w = min(src.size[0] - sx0, dst.size[0] - dx0)
+    h = min(src.size[1] - sy0, dst.size[1] - dy0)
+    if w <= 0 or h <= 0:
+        return dst
+    piece = src.crop((sx0, sy0, sx0 + w, sy0 + h))
+    dst.alpha_composite(piece, (dx0, dy0))
+    return dst
+
+
+def with_mask(layer, mask):
+    """Multiply a layer's alpha by a mask (L)."""
+    a = ImageChops.multiply(layer.split()[3], mask)
+    out = layer.copy()
+    out.putalpha(a)
+    return out
+
+
+def solid(color, size=(W, H), alpha=255):
+    return Image.new('RGBA', size, tuple(color) + (alpha,))
+
+
+def comp(base, layer):
+    base.alpha_composite(layer)
+    return base
+
+
+def fill_poly(canvas, pts, color, alpha=255, blur=0):
+    lay = solid(color, canvas.size, alpha)
+    m = poly_mask(pts, canvas.size, blur=blur)
+    if alpha < 255:
+        m = m.point(lambda v: v * alpha // 255)
+    lay.putalpha(m)
+    canvas.alpha_composite(lay)
+
+
+def shadow_from_mask(mask, offset=(0, 10), blur=14, opacity=0.5, color=(0, 0, 0)):
+    m = ImageChops.offset(mask, int(offset[0]), int(offset[1])).filter(ImageFilter.GaussianBlur(blur))
+    m = m.point(lambda v: int(v * opacity))
+    lay = solid(color, mask.size, 255)
+    lay.putalpha(m)
+    return lay
+
+
+def crop_poly(src, pts, feather=0.6):
+    """RGBA copy of src with alpha = polygon (src coordinates)."""
+    m = poly_mask(pts, src.size, blur=feather)
+    out = src.convert('RGBA').copy()
+    out.putalpha(m)
+    return out
+
+
+def bbox_of(pts, pad=0):
+    xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
+    return (int(math.floor(min(xs))) - pad, int(math.floor(min(ys))) - pad,
+            int(math.ceil(max(xs))) + pad, int(math.ceil(max(ys))) + pad)
+
+
+def piece(src, pts, feather=0.6, pad=2):
+    """A tight RGBA piece of `src` cut along the polygon, plus its top-left in src coords."""
+    full = crop_poly(src, pts, feather)
+    b = bbox_of(pts, pad)
+    return full.crop(b), (b[0], b[1])
+
+
+# ------------------------------------------------------------------ tone
+def to_np(img):
+    return np.asarray(img).astype(np.float32) / 255.0
+
+
+def from_np(a, mode='RGB'):
+    return Image.fromarray(np.clip(a * 255.0 + 0.5, 0, 255).astype(np.uint8), mode)
+
+
+def grade(img, lift=0.0, gain=1.0, gamma=1.0, sat=1.0, tint=None, tint_amt=0.0):
+    """Simple lift/gamma/gain/saturation grade on an RGB(A) image."""
+    alpha = img.split()[3] if img.mode == 'RGBA' else None
+    a = to_np(img.convert('RGB'))
+    a = np.clip(a * gain + lift, 0, 1) ** (1.0 / gamma)
+    if sat != 1.0:
+        l = (a[..., 0] * 0.2126 + a[..., 1] * 0.7152 + a[..., 2] * 0.0722)[..., None]
+        a = np.clip(l + (a - l) * sat, 0, 1)
+    if tint is not None and tint_amt:
+        t = np.array(tint, np.float32) / 255.0
+        a = a * (1 - tint_amt) + (a * t) * tint_amt * 2.0 * 0.5 + t * tint_amt * 0.5 * a
+        a = np.clip(a, 0, 1)
+    out = from_np(a)
+    if alpha is not None:
+        out = out.convert('RGBA'); out.putalpha(alpha)
+    return out
+
+
+def darken(img, amt):
+    return grade(img, gain=1.0 - amt)
+
+
+def blur(img, r):
+    return img.filter(ImageFilter.GaussianBlur(r))
+
+
+def value_noise(size, cells, seed=0, octaves=4, persistence=0.55):
+    rng = np.random.default_rng(seed)
+    w, h = size
+    acc = np.zeros((h, w), np.float32)
+    amp, tot = 1.0, 0.0
+    c = cells
+    for _ in range(octaves):
+        g = rng.random((max(2, int(h / c) + 2), max(2, int(w / c) + 2))).astype(np.float32)
+        gi = Image.fromarray((g * 255).astype(np.uint8), 'L').resize((w + int(c) * 2, h + int(c) * 2), Image.BICUBIC)
+        arr = np.asarray(gi).astype(np.float32)[:h, :w] / 255.0
+        acc += arr * amp
+        tot += amp
+        amp *= persistence
+        c = max(1.0, c / 2.0)
+    return acc / tot
+
+
+def grain(img, amount=0.13, seed=7, scale=1.0):
+    """13 % fractal-noise grain in overlay blend across the frame (Ink & Gold 'Surface')."""
+    rgb = to_np(img.convert('RGB'))
+    rng = np.random.default_rng(seed)
+    n = rng.normal(0.5, 0.18, (img.size[1], img.size[0])).astype(np.float32)
+    n2 = value_noise(img.size, 3.0 * scale, seed + 1, octaves=2)
+    n = np.clip(n * 0.7 + n2 * 0.3, 0, 1)[..., None]
+    over = np.where(rgb < 0.5, 2 * rgb * n, 1 - 2 * (1 - rgb) * (1 - n))
+    out = rgb * (1 - amount) + over * amount
+    res = from_np(out)
+    if img.mode == 'RGBA':
+        res = res.convert('RGBA'); res.putalpha(img.split()[3])
+    return res
+
+
+def vignette(img, strength=0.55, cx=0.55, cy=0.40, inner=0.45, rx=1.2, ry=0.9):
+    """radial-gradient(120% 90% at 55% 40%, transparent 45%, ink .55)"""
+    w, h = img.size
+    ys, xs = np.mgrid[0:h, 0:w].astype(np.float32)
+    dx = (xs / w - cx) / (rx * 0.5)
+    dy = (ys / h - cy) / (ry * 0.5)
+    r = np.sqrt(dx * dx + dy * dy)
+    t = np.clip((r - inner) / (1.0 - inner), 0, 1)
+    a = (t ** 1.4) * strength
+    lay = np.zeros((h, w, 4), np.float32)
+    lay[..., 0:3] = np.array(INK, np.float32) / 255.0
+    lay[..., 3] = a
+    L = from_np(lay, 'RGBA')
+    base = img.convert('RGBA')
+    base.alpha_composite(L)
+    return base
+
+
+def ramp(size, y0, y1, color=INK, a0=0.0, a1=1.0, vertical=True):
+    """Linear alpha ramp layer from y0 (a0) to y1 (a1)."""
+    w, h = size
+    if vertical:
+        t = np.clip((np.arange(h, dtype=np.float32) - y0) / float(y1 - y0), 0, 1)
+        a = (a0 + (a1 - a0) * t)[:, None] * np.ones((1, w), np.float32)
+    else:
+        t = np.clip((np.arange(w, dtype=np.float32) - y0) / float(y1 - y0), 0, 1)
+        a = np.ones((h, 1), np.float32) * (a0 + (a1 - a0) * t)[None, :]
+    lay = np.zeros((h, w, 4), np.float32)
+    lay[..., 0:3] = np.array(color, np.float32) / 255.0
+    lay[..., 3] = a
+    return from_np(lay, 'RGBA')
+
+
+# ------------------------------------------------------------------ ink texture
+def ragged_mask(pts, size=(W, H), rough=6.0, freq=18.0, seed=3, ss=2):
+    """Polygon mask whose edge is broken up like a brush stroke (ink edge)."""
+    base = poly_mask(pts, size, ss=ss)
+    a = to_np(base)
+    b = to_np(base.filter(ImageFilter.GaussianBlur(rough)))
+    n = value_noise(size, freq, seed, octaves=4)
+    edge = np.clip(b + (n - 0.5) * 0.9, 0, 1)
+    m = np.where((b > 0.02) & (b < 0.98), (edge > 0.5).astype(np.float32), a)
+    return from_np(m, 'L').filter(ImageFilter.GaussianBlur(0.6))
+
+
+def dry_brush(size, angle_deg, seed=11, density=0.5, length=(200, 900), width=(1, 5), alpha=(30, 120), color=INK,
+              region=None):
+    """Streaks along a direction, like dry ink brush marks. region: optional L mask limiting where strokes land."""
+    w, h = size
+    rng = random.Random(seed)
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    ang = math.radians(angle_deg)
+    ux, uy = math.cos(ang), math.sin(ang)
+    n = int(density * 400)
+    for _ in range(n):
+        x = rng.uniform(-200, w + 200); y = rng.uniform(-100, h + 100)
+        L = rng.uniform(*length)
+        wd = rng.uniform(*width)
+        a = int(rng.uniform(*alpha))
+        # break each stroke into dashes for a dry look
+        t = 0.0
+        while t < L:
+            seg = rng.uniform(20, 120)
+            if rng.random() < 0.8:
+                x0 = x + ux * t; y0 = y + uy * t
+                x1 = x + ux * (t + seg); y1 = y + uy * (t + seg)
+                d.line([(x0, y0), (x1, y1)], fill=tuple(color) + (a,), width=max(1, int(round(wd))))
+            t += seg + rng.uniform(4, 40)
+    lay = lay.filter(ImageFilter.GaussianBlur(0.5))
+    if region is not None:
+        lay = with_mask(lay, region)
+    return lay
+
+
+def splatter(size, pts_line, count=60, spread=40, seed=5, color=INK, rmax=6, alpha=230):
+    """Ink droplets scattered along a line segment (pts_line = [(x0,y0),(x1,y1)])."""
+    rng = random.Random(seed)
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    (x0, y0), (x1, y1) = pts_line
+    for _ in range(count):
+        t = rng.random()
+        x = x0 + (x1 - x0) * t + rng.gauss(0, spread)
+        y = y0 + (y1 - y0) * t + rng.gauss(0, spread * 0.6)
+        r = max(0.8, rng.random() ** 2.2 * rmax)
+        d.ellipse([x - r, y - r, x + r, y + r], fill=tuple(color) + (alpha,))
+    return lay.filter(ImageFilter.GaussianBlur(0.4))
+
+
+def rim_light(cut, color=(200, 225, 255), width=6, strength=0.9, direction=(1, 0), blur_r=2.0):
+    """Adds a light rim on the edges of an RGBA cut-out that face `direction` (unit x,y)."""
+    a = to_np(cut.split()[3])
+    dx, dy = direction
+    sh = np.roll(np.roll(a, int(round(-dx * width)), axis=1), int(round(-dy * width)), axis=0)
+    rim = np.clip(a - sh, 0, 1)
+    rimI = from_np(rim, 'L').filter(ImageFilter.GaussianBlur(blur_r))
+    r = to_np(rimI) * strength
+    r = np.minimum(r, a)
+    rgb = to_np(cut.convert('RGB'))
+    col = np.array(color, np.float32) / 255.0
+    out = rgb + (1 - rgb) * (col * r[..., None])
+    res = from_np(out).convert('RGBA')
+    res.putalpha(cut.split()[3])
+    return res
+
+
+def glow(mask, color, radius=18, strength=0.9):
+    m = mask.filter(ImageFilter.GaussianBlur(radius)).point(lambda v: min(255, int(v * strength)))
+    lay = solid(color, mask.size)
+    lay.putalpha(m)
+    return lay
+
+
+def snow(size, count=160, seed=21, rmax=2.4, alpha=(60, 200), color=(220, 235, 255), region=None, blur_r=0.6):
+    rng = random.Random(seed)
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for _ in range(count):
+        x = rng.uniform(0, size[0]); y = rng.uniform(0, size[1])
+        r = max(0.6, rng.random() ** 2 * rmax)
+        d.ellipse([x - r, y - r, x + r, y + r], fill=tuple(color) + (int(rng.uniform(*alpha)),))
+    lay = lay.filter(ImageFilter.GaussianBlur(blur_r))
+    if region is not None:
+        lay = with_mask(lay, region)
+    return lay
+
+
+# ------------------------------------------------------------------ inpainting (push-pull)
+def inpaint(img, hole, levels=9):
+    """Fill `hole` (L, 255 = unknown) smoothly from its surroundings (push-pull pyramid)."""
+    a = to_np(img.convert('RGB'))
+    m = 1.0 - to_np(hole)  # 1 = known
+    pyr = [(a * m[..., None], m)]
+    for _ in range(levels):
+        ca, cm = pyr[-1]
+        h, w = cm.shape
+        h2, w2 = (h + 1) // 2, (w + 1) // 2
+        pa = np.zeros((h2 * 2, w2 * 2, 3), np.float32); pm = np.zeros((h2 * 2, w2 * 2), np.float32)
+        pa[:h, :w] = ca; pm[:h, :w] = cm
+        sa = pa.reshape(h2, 2, w2, 2, 3).sum(axis=(1, 3))
+        sm = pm.reshape(h2, 2, w2, 2).sum(axis=(1, 3))
+        pyr.append((sa, sm))
+    # pull back down
+    ca, cm = pyr[-1]
+    col = np.where(cm[..., None] > 0, ca / np.maximum(cm[..., None], 1e-6), 0)
+    for lvl in range(len(pyr) - 2, -1, -1):
+        la, lm = pyr[lvl]
+        h, w = lm.shape
+        up = np.asarray(from_np(np.clip(col, 0, 1)).resize((w, h), Image.BILINEAR)).astype(np.float32) / 255.0
+        known = lm > 0
+        cur = np.where(known[..., None], la / np.maximum(lm[..., None], 1e-6), up)
+        # soften: blend partially-known cells with the coarse estimate
+        wgt = np.clip(lm / (4.0 ** 0), 0, 1)[..., None] if lvl == 0 else np.clip(lm / 4.0, 0, 1)[..., None]
+        col = cur * wgt + up * (1 - wgt) if lvl > 0 else cur
+    return from_np(np.clip(col, 0, 1))
+
+
+def texture_like(img, region, amount=1.0, seed=9):
+    """Adds fine noise inside `region` (L) with the high-frequency energy of the image around it."""
+    a = to_np(img.convert('RGB'))
+    hp = a - to_np(img.convert('RGB').filter(ImageFilter.GaussianBlur(2)))
+    m = to_np(region)
+    known = m < 0.5
+    sd = float(np.std(hp[known])) if known.any() else 0.02
+    rng = np.random.default_rng(seed)
+    n = rng.normal(0, sd * amount, a.shape).astype(np.float32)
+    n = to_np(from_np(np.clip(n + 0.5, 0, 1)).filter(ImageFilter.GaussianBlur(0.7))) - 0.5
+    out = a + n * m[..., None]
+    return from_np(out)
+
+
+# ------------------------------------------------------------------ Ink & Gold chrome, typeset to the shipped look
+def action_banner(name, chip, accent, slant=1, name_size=46, chip_size=15, scale=1.0, enemy=False):
+    """Paper slab, serif name, ink chip with the accent label, 4 px accent bottom border
+    (the shipped .ig-banner, e.g. 'Mortiorchis | USES MORTIBSORPTION')."""
+    s = scale
+    nf = serif(int(name_size * s)); cf = chakra(int(chip_size * s))
+    nw = text_width(name, nf, 0.0)
+    cw = text_width(chip, cf, 0.26)
+    padl, gap, padr = 40 * s, 26 * s, 34 * s
+    chip_w = cw + 30 * s; chip_h = 34 * s
+    w = padl + nw + gap + chip_w + padr
+    h = 76 * s
+    o = h * T12
+    lay = Image.new('RGBA', (int(w + o + 40 * s), int(h + 40 * s)), (0, 0, 0, 0))
+    x0, y0 = 10 * s, 10 * s
+    pts = slab_pts(x0, y0, w, h, slant)
+    m = poly_mask(pts, lay.size)
+    sh = shadow_from_mask(m, (0, 8 * s), 12 * s, 0.45)
+    lay.alpha_composite(sh)
+    fill_poly(lay, pts, PAPER)
+    # bottom border 4px
+    bpts = [(pts[3][0], y0 + h - 4 * s), (pts[2][0], y0 + h - 4 * s), pts[2], pts[3]]
+    if slant >= 0:
+        bpts = [(x0 + 4 * s * T12, y0 + h - 4 * s), (x0 + w + 4 * s * T12, y0 + h - 4 * s), (x0 + w, y0 + h), (x0, y0 + h)]
+    else:
+        bpts = [(x0 + o - 4 * s * T12, y0 + h - 4 * s), (x0 + w + o - 4 * s * T12, y0 + h - 4 * s), (x0 + w + o, y0 + h), (x0 + o, y0 + h)]
+    fill_poly(lay, bpts, BLOOD if enemy else accent)
+    cx = x0 + (o * 0.5 if True else 0)
+    base_y = y0 + h * 0.66
+    draw_text(lay, (cx + padl, base_y), name, nf, INK)
+    chx = cx + padl + nw + gap
+    chy = y0 + (h - chip_h) / 2 - 2 * s
+    ImageDraw.Draw(lay).rectangle([chx, chy, chx + chip_w, chy + chip_h], fill=INK)
+    draw_text(lay, (chx + 15 * s, chy + chip_h * 0.70), chip, cf, BLOOD if False else accent, 0.26)
+    return lay
+
+
+def name_slab(title, subtitle, accent, slant=1, title_size=60, sub_size=15, scale=1.0, width=None, ink_alpha=0.86):
+    """The shipped Overdrive name slab ('OVERDRIVE / Dragon Fang'): ink slab, accent tracked label, paper serif."""
+    s = scale
+    tf = serif(int(title_size * s)); sf = chakra(int(sub_size * s))
+    tw = text_width(title, tf)
+    w = width or (tw + 140 * s)
+    h = 110 * s
+    o = h * T12
+    lay = Image.new('RGBA', (int(w + o + 40 * s), int(h + 40 * s)), (0, 0, 0, 0))
+    pts = slab_pts(0, 10 * s, w, h, slant)
+    fill_poly(lay, pts, INK, int(255 * ink_alpha))
+    draw_text(lay, (40 * s, 10 * s + 36 * s), subtitle, sf, accent, 0.34)
+    draw_text(lay, (38 * s, 10 * s + 92 * s), title, tf, PAPER)
+    return lay
+
+
+def label_chip(text, accent, size=14, pad=(14, 8), bg=INK, bg_alpha=235, tracking=0.26, slant=0, color=None):
+    f = chakra(size)
+    tw = text_width(text, f, tracking)
+    w = tw + pad[0] * 2; h = size + pad[1] * 2
+    o = h * T12 if slant else 0
+    lay = Image.new('RGBA', (int(w + o + 4), int(h + 4)), (0, 0, 0, 0))
+    if slant:
+        fill_poly(lay, slab_pts(2, 2, w, h, slant), bg, bg_alpha)
+    else:
+        ImageDraw.Draw(lay).rectangle([2, 2, 2 + w, 2 + h], fill=tuple(bg) + (bg_alpha,))
+    draw_text(lay, (2 + pad[0] + (o * 0.5), 2 + pad[1] + size * 0.86), text, f, color or accent, tracking)
+    return lay
+
+
+# ------------------------------------------------------------------ output
+def save_jpg(img, path, q=88):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    img.convert('RGB').save(path, quality=q, subsampling=0, optimize=True)
+
+
+def cover_pause_chip(img):
+    """The capture rig's 'PAUSE' debug chip sits at the top-left of every real-engine frame; never show it."""
+    return img
+
+def channel_grade(img, mul=(1.0, 1.0, 1.0), add=(0.0, 0.0, 0.0), sat=1.0, gamma=1.0):
+    """Per-channel multiply/add grade (keeps alpha). Used to set painted portraits into a scene's light."""
+    alpha = img.split()[3] if img.mode == 'RGBA' else None
+    a = to_np(img.convert('RGB'))
+    if sat != 1.0:
+        l = (a[..., 0] * 0.2126 + a[..., 1] * 0.7152 + a[..., 2] * 0.0722)[..., None]
+        a = l + (a - l) * sat
+    a = a * np.array(mul, np.float32) + np.array(add, np.float32)
+    a = np.clip(a, 0, 1) ** (1.0 / gamma)
+    out = from_np(a)
+    if alpha is not None:
+        out = out.convert('RGBA'); out.putalpha(alpha)
+    return out
+
+
+NIGHT_FFX = dict(mul=(0.80, 0.90, 1.08), add=(0.0, 0.0, 0.02), sat=0.92)   # Gagazet moonlight
+NIGHT_FFX2 = dict(mul=(0.92, 0.86, 1.0), add=(0.0, 0.0, 0.01), sat=0.95)  # Bevelle, lamp-lit dark
+
+
+
+def bahamut_clean(pose='idle'):
+    """The shipped ffx2-bahamut painting, unchanged. (A colour key for its pale cut-out debris was tried and
+    removed: it also ate the neck's glowing scales. The debris is disclosed as a weak point instead.)"""
+    return load(ART + 'characters/ffx2-bahamut/%s.png' % pose)

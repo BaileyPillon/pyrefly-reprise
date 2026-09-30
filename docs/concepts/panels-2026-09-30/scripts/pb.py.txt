@@ -1,0 +1,252 @@
+# pb.py - PB "Cut-in": one diagonal band across the frame with a huge close-up of the actor's eyes.
+#   FFX Ch I : Tidus's Overdrive, Spiral Cut (his only unlocked Overdrive in the Gagazet build), over today's
+#              shipped Overdrive moment (push-in + letterbox) on today's stage. Band rises '/', gold.
+#   FFX-2 Ch IV: Paine's hit that takes the chain to 5 (the chain chip's first tier), over the real-engine hit
+#              (M4 master, Paine's slash, 131). Band falls '\\', pink. The number and label are our chain chip's.
+# Output: the hold frame as a still, a 2.5 s clip at 30 fps (1600x900, H.264 CRF 23) and a 5-frame strip.
+import os, sys, math, subprocess, shutil
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
+import plib as P
+import band as B
+
+FPS = 30
+DUR = 2.5
+NF = int(round(FPS * DUR))
+
+
+def clamp(x, a=0.0, b=1.0):
+    return max(a, min(b, x))
+
+
+# ------------------------------------------------------------------ words (typeset from our own UI)
+def word_ffx(accent):
+    """'OVERDRIVE' label + 'Spiral Cut' (the shipped Overdrive name slab's two lines, set large)."""
+    lay = Image.new('RGBA', (1100, 330), (0, 0, 0, 0))
+    lf = P.chakra(34)
+    P.draw_text(lay, (64, 78), 'OVERDRIVE', lf, accent, 0.34, stroke_width=3, stroke_fill=P.INK)
+    tf = P.serif(196)
+    # ink under-stroke then paper
+    P.draw_text(lay, (40, 258), 'Spiral Cut', tf, P.PAPER, -0.01, stroke_width=7, stroke_fill=P.INK)
+    # a short accent rule under the label (the name slab's gold)
+    d = ImageDraw.Draw(lay)
+    d.polygon([(66, 96), (330, 96), (326, 104), (62, 104)], fill=accent + (255,))
+    sh = P.shadow_from_mask(lay.split()[3], (0, 10), 12, 0.6)
+    out = Image.new('RGBA', lay.size, (0, 0, 0, 0)); out.alpha_composite(sh); out.alpha_composite(lay)
+    return out
+
+
+def gradient_text(s, font, top, bot, tracking=0.0, stroke=0, stroke_col=(42, 14, 32)):
+    asc, desc = font.getmetrics()
+    w = int(P.text_width(s, font, tracking)) + 40 + stroke * 2
+    h = asc + desc + 40 + stroke * 2
+    mask = Image.new('L', (w, h), 0)
+    P.draw_text(mask, (20 + stroke, 20 + stroke + asc), s, font, 255, tracking)
+    grad = np.zeros((h, w, 4), np.float32)
+    t = np.linspace(0, 1, h, dtype=np.float32)[:, None]
+    top = np.array(top, np.float32) / 255; bot = np.array(bot, np.float32) / 255
+    grad[..., :3] = top * (1 - t[..., None]) + bot * t[..., None]
+    grad[..., 3] = P.to_np(mask)
+    g = P.from_np(grad, 'RGBA')
+    out = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+    if stroke:
+        sm = Image.new('L', (w, h), 0)
+        P.draw_text(sm, (20 + stroke, 20 + stroke + asc), s, font, 255, tracking, stroke_width=stroke, stroke_fill=255)
+        sl = P.solid(stroke_col, (w, h)); sl.putalpha(sm)
+        out.alpha_composite(sl)
+    out.alpha_composite(g)
+    return out, 20 + stroke + asc
+
+
+def word_ffx2(count=5):
+    """Our chain chip, set large: the numeral (Rajdhani, #ffd9ec -> #b0489e) over 'CHAIN x1.65'."""
+    mult = 1.40 + 0.05 * count   # src/battle/ffx2/chain.ts chainMultiplier
+    num, base = gradient_text(str(count), P.rajdhani(400), (255, 217, 236), (176, 72, 158), stroke=8)
+    lay = Image.new('RGBA', (760, 520), (0, 0, 0, 0))
+    glow = P.glow(num.split()[3], (247, 182, 217), 22, 0.55)
+    gx = 150
+    P.paste_rgba(lay, glow, (gx, -30)); P.paste_rgba(lay, num, (gx, -30))
+    lab = Image.new('RGBA', (760, 120), (0, 0, 0, 0))
+    lf = P.chakra(64); nf = P.rajdhani(76)
+    w1 = P.draw_text(lab, (20, 86), 'CHAIN', lf, P.PINK, 0.12, stroke_width=4, stroke_fill=P.INK)
+    P.draw_text(lab, (20 + w1 + 26, 88), '×%.2f' % mult, nf, P.PAPER, 0.0, stroke_width=4, stroke_fill=P.INK)
+    P.paste_rgba(lay, lab, (60, 372))
+    sh = P.shadow_from_mask(lay.split()[3], (0, 10), 14, 0.65)
+    out = Image.new('RGBA', lay.size, (0, 0, 0, 0)); out.alpha_composite(sh); out.alpha_composite(lay)
+    return out
+
+
+# ------------------------------------------------------------------ base scenes
+class BaseCh1:
+    """Today's stage with the shipped Overdrive rig: a push-in on the actor and a letterbox (260 ms)."""
+
+    def __init__(self):
+        self.clean = P.load(P.SCR + 'stage-clean-ch1.png', 'RGB')
+        self.anchor = (700, 700)
+
+    def at(self, t):
+        push = 1.0 + 0.16 * B.ease_out(t / 0.9) + 0.02 * clamp((t - 0.9) / 1.6)
+        im = P.place(self.clean, push, self.anchor, self.anchor).convert('RGB')
+        bar = int(round(118 * B.ease_out(t / 0.26)))
+        if bar > 0:
+            d = ImageDraw.Draw(im)
+            d.rectangle([0, 0, P.W, bar], fill=(3, 2, 6))
+            d.rectangle([0, P.H - bar, P.W, P.H], fill=(3, 2, 6))
+        return im
+
+
+class BaseCh4:
+    """The real-engine hit (M4 master, frames 54..68 upscaled to 1920x1080), frozen under the band."""
+
+    def __init__(self):
+        self.frames = {}
+        for i in range(54, 75):
+            p = P.SCR + 'm4seq/ch4-%03d.png' % i
+            if os.path.exists(p):
+                im = Image.open(p).convert('RGB')
+                # the capture rig's PAUSE chip, top left: never show it
+                hole = Image.new('L', im.size, 0)
+                ImageDraw.Draw(hole).rectangle([0, 0, 80, 30], fill=255)
+                im = P.inpaint(im, hole)
+                self.frames[i] = im
+
+    def at(self, t, t_band0=0.25, t_band1=2.28):
+        if t < t_band0:
+            i = 54 + int(round(t * FPS))
+        elif t < t_band1:
+            i = 61
+        else:
+            i = 61 + int(round((t - t_band1) * FPS))
+        i = max(54, min(max(self.frames), i))
+        return self.frames[i].copy()
+
+
+# ------------------------------------------------------------------ the cut-in
+CFG = {
+    'ffx-ch1': dict(
+        face=('pause/tidus.2x.webp', (640, 350, 2120, 790)), face_cx=860, eye=0.47, dim=0.45,
+        angle=10.0, center=(960, 505), h=350, word_pos=(1470, 410), seed=4,
+        t_in=0.30, t_out=1.98),
+    'ffx2-ch4': dict(
+        face=('pause/paine.2x.webp', (430, 330, 1600, 790)), face_cx=820, eye=0.47, dim=0.30,
+        angle=-10.0, center=(960, 400), h=350, word_pos=(1440, 548), seed=9,
+        t_in=0.25, t_out=1.98),
+}
+
+
+class CutIn:
+    def __init__(self, ch):
+        self.ch = ch
+        C = P.CH[ch]
+        self.acc = C['accent']
+        cfg = CFG[ch]
+        self.cfg = cfg
+        src = Image.open(P.ART + cfg['face'][0]).convert('RGB')
+        self.band = B.Band(src, cfg['face'][1], self.acc, L=2600, h=cfg['h'], m=80, face_center_x=cfg['face_cx'],
+                           eye_y_frac=cfg['eye'], seed=cfg['seed'])
+        self.word = word_ffx(self.acc) if ch == 'ffx-ch1' else word_ffx2(5)
+        self.base = BaseCh1() if ch == 'ffx-ch1' else BaseCh4()
+
+    def frame(self, t):
+        cfg = self.cfg
+        t_in, t_out = cfg['t_in'], cfg['t_out']
+        d_in, d_out = 0.22, 0.32
+        base = self.base.at(t) if self.ch == 'ffx-ch1' else self.base.at(t, t_in - 0.03, t_out + d_out)
+        reveal = B.ease_out((t - t_in) / d_in)
+        leave = B.ease_in((t - t_out) / d_out)
+        presence = clamp(reveal * 1.0) * (1 - leave)
+        # the scene behind the band: dimmed to .55 and softened 7 px (the approved turn cut-in's backdrop)
+        if presence > 0:
+            dim = P.grade(base.filter(ImageFilter.GaussianBlur(7 * presence)), gain=1 - cfg['dim'] * presence)
+            can = dim.convert('RGBA')
+        else:
+            can = base.convert('RGBA')
+        if t >= t_in - 0.01 and leave < 1.0:
+            drift = -30 * clamp((t - t_in) / (t_out - t_in + d_out))
+            strip = self.band.strip(reveal=reveal, drift=drift)
+            shift = 2900 * leave + 18 * clamp((t - t_in) / 1.8)
+            B.place(can, strip, cfg['angle'], cfg['center'], shift)
+            # the word stamps in as the band lands, rides out with it
+            tw = (t - (t_in + d_in * 0.9)) / 0.14
+            if tw > 0:
+                s = 1.0 + 0.32 * (1 - B.ease_out(tw))
+                a = clamp(tw * 1.6)
+                w = self.word
+                ws = w.resize((int(w.size[0] * s), int(w.size[1] * s)), Image.LANCZOS)
+                if a < 1:
+                    ws.putalpha(ws.split()[3].point(lambda v: int(v * a)))
+                a_rad = math.radians(cfg['angle'])
+                wx = cfg['word_pos'][0] + shift * math.cos(a_rad)
+                wy = cfg['word_pos'][1] - shift * math.sin(a_rad)
+                B.place(can, ws, cfg['angle'], (wx, wy))
+            # one-frame flash when the band lands
+            if abs(t - (t_in + d_in)) < 0.5 / FPS:
+                fl = P.solid((255, 250, 240), alpha=46)
+                can.alpha_composite(fl)
+        out = can.convert('RGB')
+        return P.grain(out, 0.08, seed=int(t * 1000) % 97)
+
+
+def still(ch):
+    c = CutIn(ch)
+    return c.frame(1.05)
+
+
+def clip(ch, out_mp4, strip_path, tmpdir):
+    c = CutIn(ch)
+    os.makedirs(tmpdir, exist_ok=True)
+    frames = []
+    for i in range(NF):
+        t = i / FPS
+        im = c.frame(t)
+        im.resize((1600, 900), Image.LANCZOS).save(os.path.join(tmpdir, 'f%03d.png' % i))
+        frames.append(t)
+    os.makedirs(os.path.dirname(out_mp4), exist_ok=True)
+    cmd = [P.FFMPEG, '-loglevel', 'error', '-y', '-framerate', str(FPS), '-i', os.path.join(tmpdir, 'f%03d.png'),
+           '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '23', '-preset', 'slow', '-movflags', '+faststart',
+           out_mp4]
+    subprocess.run(cmd, check=True)
+    # five-frame strip
+    picks = [(0.10, 'the hit / the push-in'), (0.40, 'the band slashes in'), (1.05, 'hold: eyes + the word'),
+             (2.12, 'slides out along its axis'), (2.45, 'back to the battle')]
+    if ch == 'ffx-ch1':
+        picks[0] = (0.12, 'today\'s Overdrive push-in')
+    else:
+        picks[0] = (0.12, 'the real hit (engine)')
+    make_strip(tmpdir, picks, ch, strip_path)
+
+
+def make_strip(tmpdir, picks, ch, path):
+    tw, th = 624, 351
+    pad = 16
+    head = 96
+    W = pad + (tw + pad) * len(picks)
+    H = head + th + 64
+    s = Image.new('RGB', (W, H), P.INK)
+    d = ImageDraw.Draw(s)
+    title = 'PB · Cut-in · %s' % P.CH[ch]['label']
+    P.draw_text(s, (pad + 4, 50), title, P.chakra(34), P.PAPER, 0.04)
+    sub = ('COMPOSITE over %s · 2.5 s at 30 fps · frames at the times shown' %
+           ('today\'s stage (HUD painted out) with the shipped Overdrive push-in and letterbox'
+            if ch == 'ffx-ch1' else 'the real-engine hit (M4 master, Paine\'s slash)'))
+    P.draw_text(s, (pad + 4, 82), sub, P.exo(20), (170, 170, 185), 0.0)
+    d.rectangle([0, head - 6, W, head - 4], fill=P.CH[ch]['accent'])
+    for k, (t, cap) in enumerate(picks):
+        i = min(NF - 1, int(round(t * FPS)))
+        im = Image.open(os.path.join(tmpdir, 'f%03d.png' % i)).convert('RGB').resize((tw, th), Image.LANCZOS)
+        x = pad + k * (tw + pad)
+        s.paste(im, (x, head + 6))
+        P.draw_text(s, (x + 2, head + th + 40), '%d  %s' % (k + 1, cap), P.chakra(22), P.PAPER, 0.02)
+        P.draw_text(s, (x + tw - 4, head + th + 40), 't=%.2fs' % t, P.rajdhani(22), (170, 170, 185), 0.0, anchor='rs')
+    P.save_jpg(s, path)
+
+
+if __name__ == '__main__':
+    what = sys.argv[1:] or ['still']
+    for ch in ('ffx-ch1', 'ffx2-ch4'):
+        if 'still' in what:
+            P.save_jpg(still(ch), P.OUT + 'frames/%s/PB.jpg' % ch)
+        if 'clip' in what:
+            tmp = P.SCR + 'pb-frames-%s' % ch
+            clip(ch, P.OUT + 'motion/PB-%s.mp4' % ch, P.OUT + 'motion/PB-%s-strip.jpg' % ch, tmp)
+        print('done', ch)

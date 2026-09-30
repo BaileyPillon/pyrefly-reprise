@@ -1,0 +1,209 @@
+# meta.py - the per-frame record of the panels round: writes frames.json and feeds the sheet's captions.
+import json
+import plib as P
+
+PERSP = 'docs/concepts/perspectives-2026-09-27/'
+STAGE1 = PERSP + 'frames/ffx-ch1/P01-today-dressed.jpg'
+STAGE4 = PERSP + 'frames/ffx2-ch4/P01-today-dressed.jpg'
+CLEAN1 = ('the stage = ' + STAGE1 + ' with its HUD painted out (push-pull fill + grain); Tidus\'s blade and turn-ring '
+          'arc and Seymour\'s robe hem, which the HUD covered, repainted from public/art/characters/tidus/idle.png and '
+          'seymour-flux-body/idle.png registered to the frame')
+CLEAN4 = ('the stage = ' + STAGE4 + ' with its HUD painted out; Rikku\'s sword, which a chip covered, repainted from '
+          'public/art/characters/rikku-dark-knight/idle.png registered to the frame')
+
+FRAMES = [
+    # ------------------------------------------------------------------ PA-a
+    dict(id='PA-a', concept='PA', name='Comic page master, three slashes', chapter='ffx-ch1', game='FFX',
+         file='frames/ffx-ch1/PA-a.jpg',
+         sources=[CLEAN1, 'public/art/portraits/tidus.png (actor close)', 'public/art/portraits/seymour.png (boss close)',
+                  'public/art/backdrops/gagazet.png (behind both close-ups, blurred)',
+                  PERSP + 'frames/ffx-ch1/P21-cinematic-shoulder.jpg (its top and bottom HUD bands and its command rows)'],
+         sheet='stage: P01 (HUD painted out) \u00b7 closes: portraits/tidus, portraits/seymour on the Gagazet plate \u00b7 HUD: P21\'s bands + command rows',
+         plays='the resting command screen: every party turn, for as long as the menu is open',
+         duration='holds while the player chooses',
+         weak='Still a triptych at rest: the fight shrinks to the middle 45 % of the width and the two close-ups are '
+              'portraits that never change during the turn.'),
+    dict(id='PA-a', concept='PA', name='Comic page master, three slashes', chapter='ffx2-ch4', game='FFX-2',
+         file='frames/ffx2-ch4/PA-a.jpg',
+         sources=[CLEAN4 + '; scaled 0.9',
+                  'public/art/characters/yuna-white-mage/idle.png (actor close: no White Mage bust portrait exists, so the battle painting enlarged 1.55x)',
+                  'public/art/characters/ffx2-bahamut/idle.png (boss close)',
+                  'public/art/backdrops/bevelle-underground.png (behind both close-ups, blurred)',
+                  PERSP + 'frames/ffx2-ch4/P21-cinematic-shoulder.jpg (its top HUD band and its command block)',
+                  STAGE4 + ' (today\'s three party rows, laid side by side in the bottom band)'],
+         sheet='stage: P01 (HUD painted out) \u00b7 closes: yuna-white-mage/idle 1.55x, ffx2-bahamut/idle \u00b7 HUD: P21 top band + menu, today\'s party rows',
+         plays='the resting command screen, whenever a girl\'s ATB fills and her menu opens',
+         duration='holds while the player chooses (under Active ATB the fight keeps running behind it)',
+         weak='Yuna\'s close-up is her battle painting enlarged 1.55x (soft), and the Bahamut close-up magnifies the '
+              'pale cut-out debris at his neck spines in the shipped painting.'),
+    # ------------------------------------------------------------------ PA-b
+    dict(id='PA-b', concept='PA', name='Comic page master, stage and two insets', chapter='ffx-ch1', game='FFX',
+         file='frames/ffx-ch1/PA-b.jpg',
+         sources=[CLEAN1, 'public/art/portraits/tidus.png (actor inset, lower left)',
+                  'public/art/portraits/seymour.png (boss inset, upper right)', 'public/art/backdrops/gagazet.png',
+                  STAGE1 + ' (today\'s command rows and description slab, scaled 0.78; today\'s party rows in place)',
+                  PERSP + 'frames/ffx-ch1/P21-cinematic-shoulder.jpg (the turn-order strip from its top band)'],
+         sheet='stage: P01 full frame (HUD painted out) \u00b7 insets: portraits/tidus, portraits/seymour \u00b7 HUD: today\'s rows, P21\'s turn-order strip',
+         plays='the resting command screen, every party turn',
+         duration='holds while the player chooses',
+         weak='The insets cover about a quarter of the stage; a longer party line or a bigger boss would collide with '
+              'them, so their corners must be solved per chapter.'),
+    dict(id='PA-b', concept='PA', name='Comic page master, stage and two insets', chapter='ffx2-ch4', game='FFX-2',
+         file='frames/ffx2-ch4/PA-b.jpg',
+         sources=[CLEAN4 + '; pushed in 1.15x about the left edge',
+                  'public/art/characters/yuna-white-mage/idle.png (actor inset)',
+                  'public/art/characters/ffx2-bahamut/idle.png (boss inset)', 'public/art/backdrops/bevelle-underground.png',
+                  STAGE4 + ' (today\'s help band, boss plate, command block and party rows, in place)'],
+         sheet='stage: P01 pushed in 1.15x (HUD painted out) \u00b7 insets: yuna-white-mage/idle, ffx2-bahamut/idle \u00b7 HUD: today\'s, in place',
+         plays='the resting command screen, whenever a girl\'s menu opens',
+         duration='holds while the player chooses',
+         weak='The push-in loses the arena\'s edges, and the inset Bahamut repeats the Bahamut already on stage.'),
+    # ------------------------------------------------------------------ PB
+    dict(id='PB', concept='PB', name='Cut-in (hold frame)', chapter='ffx-ch1', game='FFX', file='frames/ffx-ch1/PB.jpg',
+         sources=[CLEAN1 + '; pushed in and letterboxed like the shipped Overdrive rig (src/engine/BattleMoments.ts overdriveStart)',
+                  'public/art/pause/tidus.2x.webp (the eyes, cropped)',
+                  'words: OVERDRIVE (the shipped name slab\'s label, BattleMoments.ts) + Spiral Cut (src/data/ffx/abilities/overdrive-tidus.ts; '
+                  'his only unlocked Overdrive in src/data/ffx/builds/gagazet.ts)'],
+         sheet='today\'s stage + the shipped Overdrive push-in/letterbox \u00b7 eyes: pause/tidus.2x \u00b7 words: OVERDRIVE / Spiral Cut (src/data)',
+         plays='when Tidus\'s Overdrive fires, in place of today\'s Overdrive name slab (after the Swordplay bar, before the payoff)',
+         duration='2.5 s clip: band in over 0.22 s, holds about 1.5 s, slides out over 0.32 s',
+         weak='The eyes are cropped from the pause-screen painting (a grin, daylight), so they do not match the night '
+              'battle; a real cut-in wants an eyes close-up painted per character in battle light.'),
+    dict(id='PB', concept='PB', name='Cut-in (hold frame)', chapter='ffx2-ch4', game='FFX-2', file='frames/ffx2-ch4/PB.jpg',
+         sources=['the real-engine hit: ' + 'D:/Tools/pyrefly-art-backup/candidates/2026-09-27-perspectives/motion-masters/M4-ffx2-ch4.mp4 '
+                  'frames 54-68 (Paine\'s slash, the engine\'s 131), scaled to 1920x1080',
+                  'public/art/pause/paine.2x.webp (the eyes, cropped)',
+                  'words: the chain chip\'s numeral and label (src/ui/ffx2/ChainCounter.ts), 5 and CHAIN \u00d71.65 = '
+                  'chainMultiplier(5) = 1.40 + 0.05 x 5 (src/battle/ffx2/chain.ts)'],
+         sheet='the real hit from M4 (engine) \u00b7 eyes: pause/paine.2x \u00b7 words: our chain chip, 5 / CHAIN \u00d71.65 (chain.ts)',
+         plays='on the hit that takes a chain to 5 (the chip\'s first tier; again at 10 and 20), never per hit',
+         duration='2.5 s clip, as Chapter I',
+         weak='Under Active ATB a 2.5 s cut-in has to freeze the battle clock (chain windows included), or it costs '
+              'the player the chain it celebrates.'),
+    # ------------------------------------------------------------------ PC
+    dict(id='PC', concept='PC', name='Reaction panels on the big attack', chapter='ffx-ch1', game='FFX', file='frames/ffx-ch1/PC.jpg',
+         sources=['public/art/characters/seymour-flux-body/attack.png (the wind-up, telegraph-red grade)',
+                  'public/art/pause/ch1-seymour-flux.2x.webp (Tidus bracing: the chapter\'s own painting of him)',
+                  CLEAN1 + '; scaled 0.70', 'public/art/backdrops/gagazet.png', STAGE1 + ' (today\'s party rows, scaled 0.60)',
+                  'words: the shipped banner (.ig-banner) typeset with Seymour Flux / USES LANCE OF ATROPHY ON TIDUS '
+                  '(messageTemplate in src/data/ffx/enemies/seymour-flux-abilities.ts)'],
+         sheet='wind-up: seymour-flux-body/attack \u00b7 face: pause/ch1-seymour-flux.2x \u00b7 stage: P01 (HUD out) + today\'s rows \u00b7 banner: Lance of Atrophy (src/data)',
+         plays='when Seymour starts Lance of Atrophy on a member (and on the telegraphed finishers the presenter already stages)',
+         duration='about 1.2 s, then a cut to the hit',
+         weak='Seymour\'s attack painting is off-model next to his idle (wilder hair, torn robe), which a close-up exposes; '
+              'the tearful Tidus painting is too strong to reuse on every hit.'),
+    dict(id='PC', concept='PC', name='Reaction panels on the big attack', chapter='ffx2-ch4', game='FFX-2', file='frames/ffx2-ch4/PC.jpg',
+         sources=['public/art/characters/ffx2-bahamut/idle.png (the wind-up; no attack or cast painting exists for him; the charge at the jaw is drawn)',
+                  'public/art/pause/ch4-ffx2-bahamut.2x.webp (Yuna: the chapter\'s own painting of her with the aeon)',
+                  CLEAN4 + '; scaled 0.72', 'public/art/backdrops/bevelle-underground.png',
+                  STAGE4 + ' (today\'s party rows, scaled 0.60)',
+                  'words: the shipped banner typeset with Bahamut / CASTS MEGA FLARE (messageTemplate in src/data/ffx2/enemies/bahamut-abilities.ts)'],
+         sheet='wind-up: ffx2-bahamut/idle + drawn charge \u00b7 face: pause/ch4-ffx2-bahamut.2x \u00b7 stage: P01 (HUD out) + today\'s rows \u00b7 banner: Mega Flare (src/data)',
+         plays='when Mega Flare starts (turn 12 of Bahamut\'s fixed loop, right after the 5-4-3-2-1 Countdown)',
+         duration='about 1.2 s, then a cut to the blast',
+         weak='Yuna\'s chapter painting is calm (a small smile), not bracing; an honest reaction shot needs a new face, '
+              'and Bahamut needs a painted wind-up pose.'),
+    # ------------------------------------------------------------------ PD
+    dict(id='PD', concept='PD', name='Victory card', chapter='ffx-ch1', game='FFX', file='frames/ffx-ch1/PD.jpg',
+         sources=['public/art/characters/tidus/victory.png, yuna/victory.png, kimahri/victory.png (the painted victory poses)',
+                  'public/art/backdrops/gagazet.png (behind each panel, blurred; pyrefly motes drawn: Seymour Flux dissolves into pyreflies, research/ffx-vs-ffx2-presentation.md 3.2)',
+                  'the shipped results page\'s layout and values (src/app/screens/ResultsScreen.ts, src/ui/common/results.css): '
+                  'AP 10,000 x3 PARTY, GIL 6,000, ITEMS Lv. 4 Key Sphere (src/data/ffx/enemies/seymour-flux.ts, items/spheres.ts); '
+                  'the quip ...Okay. Next one. (src/story/scripts/seymour-flux.ts victoryQuips.tidus[0])'],
+         sheet='poses: tidus/yuna/kimahri victory.png on the Gagazet plate \u00b7 page: the shipped results layout, values from src/data + the chapter\'s quip',
+         plays='after the victory poses, in place of today\'s results page and its single portrait',
+         duration='holds until CONFIRM (count-up as today)',
+         weak='The three poses are separate paintings with different scales and light, so side by side they read as '
+              'three cards more than one moment.'),
+    dict(id='PD', concept='PD', name='Results card, held stance (canon: no pose)', chapter='ffx2-ch4', game='FFX-2', file='frames/ffx2-ch4/PD.jpg',
+         sources=['public/art/characters/yuna-white-mage/idle.png, rikku-dark-knight/idle.png, paine-warrior/idle.png (battle stance, no pose)',
+                  'public/art/backdrops/bevelle-underground.png (behind each panel)',
+                  'the shipped silent results page (ResultsScreen.ts "Silent (chapter 4)"; results.css .rres--silent: '
+                  'grayscale(0.7) brightness(0.62), grey stripe, Results at 140 not Victory at 200, no quip); '
+                  'values EXP 1,300, AP 15 per dressphere, GIL 1,000, Gris-Gris Bag (src/data/ffx2/enemies/bahamut.ts)'],
+         sheet='stance: the three idle paintings, drained like the shipped silent page \u00b7 values from src/data \u00b7 no pose, no quip',
+         plays='after the fight, with no pose and no fanfare (the shipped Chapter IV page, re-laid)',
+         duration='holds until CONFIRM (no count-up, as today\'s silent page)',
+         weak='Even drained, three panels of the girls is more ceremony than today\'s single greyed portrait; the '
+              'quieter answer may be to keep one panel.'),
+    # ------------------------------------------------------------------ PE
+    dict(id='PE', concept='PE', name='Turn panel', chapter='ffx-ch1', game='FFX', file='frames/ffx-ch1/PE.jpg',
+         sources=[STAGE1 + ' with only its command menu painted out (the stage, the turn order and the party rows stay live)',
+                  'public/art/portraits/tidus.png (the panel\'s portrait)',
+                  STAGE1 + ' (today\'s command rows, scaled 0.70, in the panel\'s ink foot)',
+                  'words: YOUR TURN \u00b7 CTB 1 OF 3 (the approved turn cut-in\'s label, src/engine/TurnCutIn.ts)'],
+         sheet='today\'s frame, menu painted out \u00b7 panel: portraits/tidus + today\'s command rows \u00b7 label: the turn cut-in\'s own',
+         plays='when a member\'s turn starts: the approved cut-in slab slides in from the left and stays docked while the menu is open',
+         duration='slides in about 0.18 s (the cut-in\'s slam), holds while choosing, slides out on confirm',
+         weak='The panel covers the left third of the stage for the whole command input; a long list (Special, '
+              'Items) needs the rows to page inside a shorter foot.'),
+    dict(id='PE', concept='PE', name='Turn panel', chapter='ffx2-ch4', game='FFX-2', file='frames/ffx2-ch4/PE.jpg',
+         sources=[STAGE4 + ' with only its command block painted out (help band, boss plate, party rows stay live)',
+                  'public/art/characters/yuna-white-mage/idle.png (the panel\'s portrait: no White Mage bust exists)',
+                  STAGE4 + ' (today\'s command block, scaled 0.80)',
+                  'words: YOUR TURN \u00b7 ATB 1 OF 3 (TurnCutIn.ts builds ATB n OF m in FFX-2)'],
+         sheet='today\'s frame, menu painted out \u00b7 panel from the right: yuna-white-mage/idle + today\'s menu \u00b7 party rows and gauges stay in view',
+         plays='when a girl\'s ATB fills and her menu opens: slides in from the right edge and stops above the party rows',
+         duration='as Chapter I',
+         weak='The portrait is the battle painting (hood and shoulders only), so the panel\'s face is small next to '
+              'the FFX version; each dressphere would want its own bust.'),
+]
+
+STRIPS = [
+    dict(id='PF', concept='PF', name='Overdrive as a comic strip', chapter='ffx-ch1', game='FFX', file='strips/PF-ffx-ch1.jpg',
+         sources=['today\'s stage (' + STAGE1 + ', HUD painted out) dimmed .5 and blurred 7 px behind the page',
+                  'public/art/pause/tidus.2x.webp (1: eyes)', 'public/art/characters/tidus/attack.png (2: the move, with two afterimages)',
+                  'public/art/characters/seymour-flux-body/hurt.png (3: the impact; burst, slash and ink splatter drawn)',
+                  'public/art/backdrops/gagazet.png (panel grounds)',
+                  'words: OVERDRIVE / Spiral Cut (src/data/ffx/abilities/overdrive-tidus.ts)'],
+         sheet='page over today\'s dimmed stage \u00b7 1 pause/tidus.2x eyes \u00b7 2 tidus/attack \u00b7 3 seymour-flux-body/hurt \u00b7 4 name slab',
+         plays='on Tidus\'s Overdrive, between the Swordplay bar and the damage (in place of today\'s name slab)',
+         duration='about 2 s: eyes 0-0.35 s, move 0.35-0.8, impact 0.8-1.2, name 1.2-2.0, then a 19-degree wipe and the damage lands on the live stage',
+         weak='Four stills stand in for a move that the game animates; if the page hides the real payoff, the Overdrive '
+              'loses its own animation, so the page must end before the hit resolves.'),
+    dict(id='PF', concept='PF', name='Special as a comic strip', chapter='ffx2-ch4', game='FFX-2', file='strips/PF-ffx2-ch4.jpg',
+         sources=['today\'s stage (' + STAGE4 + ', HUD painted out) dimmed .5 and blurred 7 px',
+                  'public/art/portraits/rikku-ffx2-a.2.png (1: eyes; a 832x1216 bust enlarged 3.3x, soft)',
+                  'public/art/characters/rikku-dark-knight/attack.1.png (2: the move; dark aura drawn)',
+                  'public/art/characters/ffx2-bahamut/hurt.png (3: the impact; burst and dark well drawn)',
+                  'public/art/backdrops/bevelle-underground.png (panel grounds)',
+                  'words: RIKKU \u00b7 DARK KNIGHT / Darkness (src/data/ffx2/abilities/dark-knight.ts; the Bevelle build\'s key move, src/data/ffx2/builds/bevelle.ts)'],
+         sheet='page over today\'s dimmed stage \u00b7 1 portraits/rikku-ffx2-a.2 eyes \u00b7 2 rikku-dark-knight/attack.1 \u00b7 3 ffx2-bahamut/hurt \u00b7 4 name slab',
+         plays='on a girl\'s signature skill (here Darkness: all enemies, ignores Defense, paid in HP)',
+         duration='about 2 s, as Chapter I; under Active ATB the clock must stop for it',
+         weak='Rikku\'s eyes come from a small bust enlarged 3.3x (soft); FFX-2 fights are fast and a 2 s page on every '
+              'Darkness would drag, so it has to be rationed (first use, or a finisher).'),
+]
+
+MOTION = [
+    dict(id='PB-motion', concept='PB', chapter='ffx-ch1', game='FFX', file='motion/PB-ffx-ch1.mp4', strip='motion/PB-ffx-ch1-strip.jpg',
+         size='1600x900', fps=30, seconds=2.5, codec='H.264 yuv420p CRF 23',
+         beats='0.00 the push-in and letterbox (the shipped Overdrive rig) \u00b7 0.30 the band slashes in (the gold strokes run ahead of the fill) '
+               '\u00b7 0.50 the word stamps \u00b7 hold with a slow drift \u00b7 1.98 slides out along its own axis \u00b7 2.30 back to the battle'),
+    dict(id='PB-motion', concept='PB', chapter='ffx2-ch4', game='FFX-2', file='motion/PB-ffx2-ch4.mp4', strip='motion/PB-ffx2-ch4-strip.jpg',
+         size='1600x900', fps=30, seconds=2.5, codec='H.264 yuv420p CRF 23',
+         beats='0.00 the real hit (engine frames) \u00b7 0.25 the band slashes in \u00b7 0.45 the chain numeral stamps \u00b7 hold '
+               '\u00b7 1.98 slides out \u00b7 2.30 the engine frames resume'),
+]
+
+
+def write(path):
+    doc = {
+        'round': 'panels-2026-09-30',
+        'request': 'Bailey, 2026-09-30: "show me more of P14 panels I\'m interested. Is that like persona style? How does persona do it?"',
+        'provenance': 'COMPOSITE for every image and clip: assembled in 2D (Python + PIL) from real-engine frames already on disk '
+                      'and shipped paintings; no new art, no src/ change, no GPU render. Words come from src/ and the shipped UI.',
+        'size': '1920x1080 JPEG q88 (strips larger; clips 1600x900)',
+        'frames': [dict(f, provenance='COMPOSITE') for f in FRAMES],
+        'strips': [dict(f, provenance='COMPOSITE') for f in STRIPS],
+        'motion': [dict(f, provenance='COMPOSITE') for f in MOTION],
+        'scripts': 'scripts/*.py.txt (rename to .py; they read the repo and D:/Tools paths, write into this folder)',
+    }
+    with open(path, 'w', encoding='utf-8', newline='\n') as fh:
+        json.dump(doc, fh, indent=2, ensure_ascii=False)
+        fh.write('\n')
+
+
+if __name__ == '__main__':
+    write(P.OUT + 'frames.json')
+    print('wrote frames.json')

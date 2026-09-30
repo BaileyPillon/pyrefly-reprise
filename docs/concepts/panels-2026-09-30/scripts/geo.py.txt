@@ -1,0 +1,76 @@
+# HUD geometry measured on the real-engine frames (1920x1080), used to cut HUD pieces with polygon masks
+# and to paint the HUD out of today's frames. Measured by edge scans + overlays (see z-geo-*.png in scratch).
+import math
+T12 = math.tan(math.radians(12))
+
+
+def slab(xbl, ytop, w, h, slant=1):
+    o = h * T12
+    if slant >= 0:
+        return [(xbl + o, ytop), (xbl + w + o, ytop), (xbl + w, ytop + h), (xbl, ytop + h)]
+    return [(xbl, ytop), (xbl + w, ytop), (xbl + w + o, ytop + h), (xbl + o, ytop + h)]
+
+
+def grow(pts, d):
+    """Crude polygon offset: push every vertex away from the centroid by d px (enough for masks)."""
+    cx = sum(p[0] for p in pts) / len(pts); cy = sum(p[1] for p in pts) / len(pts)
+    out = []
+    for x, y in pts:
+        vx, vy = x - cx, y - cy
+        n = math.hypot(vx, vy) or 1
+        out.append((x + vx / n * d * 1.4, y + vy / n * d * 1.4))
+    return out
+
+
+# ---------------------------------------------------------------- Chapter I, P00 / P01 (identical HUD)
+CH1_TOPS = [535, 614, 693, 773, 852, 932]
+CH1_HTS = [67, 70, 69, 69, 69, 69]
+CH1_CMD = {name: slab(83 + 21.2 * i, CH1_TOPS[i], 455, CH1_HTS[i])
+           for i, name in enumerate(['talk', 'attack', 'special', 'wm', 'items', 'flee'])}
+CH1_ARROW = [(358, 1013), (389, 1013), (389, 1038), (358, 1038)]
+CH1_DESC = [(99, 405), (576, 405), (564, 462), (86, 462)]
+CH1_GUIDE = [(66, 99), (180, 99), (173, 131), (59, 131)]
+CH1_BEST = [(48, 323), (192, 323), (186, 349), (42, 349)]
+CH1_MORT_CHIP = [(1313, 497), (1478, 497), (1472, 526), (1307, 526)]
+CH1_ENEMY_MOVE = [(1705, 114), (1858, 114), (1852, 141), (1699, 141)]
+CH1_CTB_BLOCK = [(1586, 143), (1868, 143), (1868, 607), (1586, 607)]
+CH1_PARTY = {
+    'tidus': [(1260.2, 775), (1858.0, 775), (1841.2, 857), (1242.6, 857)],
+    'yuna': [(1239.2, 867), (1838.4, 867), (1821.0, 952), (1221.3, 952)],
+    'kimahri': [(1218.2, 960), (1817.4, 960), (1799.4, 1046), (1201.0, 1046)],
+}
+# Kimahri's full Overdrive label and gauge overhang the slab's right edge
+CH1_KIM_OVERHANG = (1790, 968, 1858, 1012)
+CH1_PAUSE = [(0, 0), (64, 0), (64, 25), (0, 25)]
+
+# the registered paintings (scale b, horizontal squash k, top-left) that the engine drew in P01
+CH1_TIDUS_REG = dict(paint='characters/tidus/idle.png', b=0.36, k=1.0, ox=534.6, oy=544.6)
+CH1_SEYMOUR_REG = dict(paint='characters/seymour-flux-body/idle.png', b=0.378, k=1.0, ox=1178.25, oy=123.29)
+
+# ---------------------------------------------------------------- Chapter IV, P00 / P01
+CH4_PAUSE = CH1_PAUSE
+CH4_HELP = [(70, 0), (1920, 0), (1920, 52), (70, 52)]
+CH4_PLATE = [(58, 121), (768, 121), (782, 182), (72, 182)]
+CH4_GUIDE = [(62, 229), (182, 229), (182, 265), (62, 265)]
+CH4_ENEMY_MOVE = [(985, 130), (1145, 130), (1145, 157), (985, 157)]
+CH4_BEST = [(598, 692), (738, 692), (738, 719), (598, 719)]
+CH4_CMD = {
+    'wm': slab(1494, 502, 382, 67, -1),
+    'change': slab(1494, 582, 382, 68, -1),
+    'item': slab(1494, 660, 382, 68, -1),
+}
+CH4_CMD_BLOCK = [(1486, 496), (1892, 496), (1906, 734), (1500, 734)]
+CH4_PARTY_BLOCK = [(1383, 776), (1904, 776), (1904, 1056), (1370, 1056)]
+# today's three FFX-2 party rows, each with its '\' accent stripe (measured on a 2x grid, z-ch4-party-grid.png)
+CH4_PARTY_ROWS = {
+    'yuna': [(1407, 779), (1882, 779), (1900, 865), (1425, 865)],
+    'rikku': [(1395, 872), (1871, 872), (1888, 958), (1413, 958)],
+    'paine': [(1384, 964), (1858, 964), (1876, 1051), (1402, 1051)],
+}
+CH4_RIKKU_REG = dict(paint='characters/rikku-dark-knight/idle.png', b=0.29, k=1.0, ox=544.885, oy=517.48)
+
+# ---------------------------------------------------------------- P21 (cinematic shoulder: HUD in bands)
+P21_TOP = (0, 1, 1920, 139)      # the top band, as a rectangle
+P21_BOT = (0, 942, 1920, 1079)   # the bottom band
+P21_CH1_CMD = {name: slab(63 + 17.4 * i, 180 + 63.8 * i, 365, 55)
+               for i, name in enumerate(['talk', 'attack', 'special', 'wm', 'items', 'flee'])}

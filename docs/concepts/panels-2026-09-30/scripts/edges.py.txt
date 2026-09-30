@@ -1,0 +1,60 @@
+# Robust slab-edge measurement: scan scanlines from the background side toward the slab and fit a line.
+import json, math
+import numpy as np
+from PIL import Image
+
+FR = 'D:/Final Fantasy/docs/concepts/perspectives-2026-09-27/frames/'
+
+
+def arr(path):
+    return np.asarray(Image.open(path).convert('RGB')).astype(np.int32)
+
+
+def scan(a, y, x0, x1, pred, run=3):
+    step = 1 if x1 > x0 else -1
+    xs = list(range(x0, x1, step))
+    cnt = 0
+    for x in xs:
+        if pred(a[y, x]):
+            cnt += 1
+            if cnt >= run:
+                return x - step * (run - 1)
+        else:
+            cnt = 0
+    return None
+
+
+def vscan(a, x, y0, y1, pred, run=2):
+    step = 1 if y1 > y0 else -1
+    cnt = 0
+    for y in range(y0, y1, step):
+        if pred(a[y, x]):
+            cnt += 1
+            if cnt >= run:
+                return y - step * (run - 1)
+        else:
+            cnt = 0
+    return None
+
+
+def fit_edge(samples):
+    """samples: [(x, y)] -> x = m*y + c"""
+    ys = np.array([s[1] for s in samples], float); xs = np.array([s[0] for s in samples], float)
+    m, c = np.polyfit(ys, xs, 1)
+    return m, c
+
+
+def row_poly(a, top, bot, left_from, left_to, right_from, right_to, lpred, rpred, inset=1.0, n=7):
+    ys = np.linspace(top + 4, bot - 4, n).astype(int)
+    L = [(scan(a, y, left_from, left_to, lpred), y) for y in ys]
+    R = [(scan(a, y, right_from, right_to, rpred), y) for y in ys]
+    L = [p for p in L if p[0] is not None]; R = [p for p in R if p[0] is not None]
+    ml, cl = fit_edge(L); mr, cr = fit_edge(R)
+    lx = lambda y: ml * y + cl + inset
+    rx = lambda y: mr * y + cr - inset
+    poly = [(round(lx(top), 1), top), (round(rx(top), 1), top), (round(rx(bot), 1), bot), (round(lx(bot), 1), bot)]
+    return poly, dict(left_deg=round(math.degrees(math.atan(-ml)), 1), right_deg=round(math.degrees(math.atan(-mr)), 1))
+
+
+def lum(p):
+    return 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2]

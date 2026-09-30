@@ -1,0 +1,278 @@
+# pf.py - PF "Overdrive or special as a comic strip": the move plays as a page that fills panel by panel over the
+# dimmed battle, then its name stamps across the finished page; then the page wipes away and the damage lands on the
+# live stage.  Beats: 1 wind-up eyes, 2 the move, 3 the impact on the boss, 4 the name splash.
+#   FFX Ch I : Tidus, Spiral Cut (his only unlocked Overdrive in the Gagazet build; plays after the Swordplay bar).
+#   FFX-2 Ch IV: Rikku (Dark Knight), Darkness (the Bevelle build's key move: all enemies, ignores Defense).
+# Output: strips/PF-<chapter>.jpg, a 2x2 storyboard of the four beats as the player would see them.
+import math, random
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
+import numpy as np
+import plib as P
+import pa as PA
+
+T = P.T12
+G = 16  # gutter
+
+
+# ------------------------------------------------------------------ page geometry
+def page_polys(slant=1):
+    top = [(40, 40), (1880, 40), (1880, 330), (40, 392)]                       # panel 1: eyes (bottom edge tilts)
+    ym = 700
+    xg = 980  # the 2|3 gutter at mid height, leaning '/'
+    def gx(y):
+        return xg + (ym - y) * T * slant
+    y_top_l = 392 + G; y_top_r = 330 + G
+    # the 1|2,3 boundary is the line from (40, 392) to (1880, 330); offset down by the gutter
+    def split_y(x):
+        return 392 + (330 - 392) * (x - 40) / (1880 - 40) + G
+    p2 = [(40, split_y(40)), (gx(split_y(gx(420))) - G / 2, split_y(gx(420))), (gx(1040) - G / 2, 1040), (40, 1040)]
+    # make panel 2's top-right follow the tilted split exactly
+    x_tr = gx(split_y(900)) - G / 2
+    p2 = [(40, split_y(40)), (x_tr, split_y(x_tr)), (gx(1040) - G / 2, 1040), (40, 1040)]
+    x_tl3 = gx(split_y(1000)) + G / 2
+    p3 = [(x_tl3, split_y(x_tl3)), (1880, split_y(1880)), (1880, 1040), (gx(1040) + G / 2, 1040)]
+    return top, p2, p3
+
+
+def focus_lines(size, center, rx, ry, count=90, seed=3, color=P.INK, alpha=(120, 230), width=(2, 9)):
+    """Manga concentration lines: thin wedges from outside toward an ellipse around `center`."""
+    rng = random.Random(seed)
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    cx, cy = center
+    R = math.hypot(size[0], size[1])
+    for _ in range(count):
+        a = rng.uniform(0, 2 * math.pi)
+        inner = rng.uniform(1.0, 1.35)
+        x0 = cx + math.cos(a) * rx * inner; y0 = cy + math.sin(a) * ry * inner
+        x1 = cx + math.cos(a) * R; y1 = cy + math.sin(a) * R
+        w = rng.uniform(*width) * 0.004
+        xa = cx + math.cos(a - w) * R; ya = cy + math.sin(a - w) * R
+        xb = cx + math.cos(a + w) * R; yb = cy + math.sin(a + w) * R
+        d.polygon([(x0, y0), (xa, ya), (xb, yb)], fill=tuple(color) + (int(rng.uniform(*alpha)),))
+    return lay.filter(ImageFilter.GaussianBlur(0.5))
+
+
+def speed_lines(size, angle_deg, count=70, seed=5, color=(255, 255, 255), alpha=(40, 140), region=None):
+    rng = random.Random(seed)
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    a = math.radians(angle_deg)
+    ux, uy = math.cos(a), math.sin(a)
+    for _ in range(count):
+        x = rng.uniform(-300, size[0] + 300); y = rng.uniform(-300, size[1] + 300)
+        L = rng.uniform(200, 900); w = rng.uniform(1, 5)
+        d.line([(x, y), (x + ux * L, y + uy * L)], fill=tuple(color) + (int(rng.uniform(*alpha)),), width=int(w))
+    lay = lay.filter(ImageFilter.GaussianBlur(0.8))
+    if region is not None:
+        lay = P.with_mask(lay, region)
+    return lay
+
+
+def burst(size, center, r_in, r_out, spikes=18, seed=7, fill=(255, 255, 255), outline=P.INK, ow=6):
+    rng = random.Random(seed)
+    cx, cy = center
+    pts = []
+    for i in range(spikes * 2):
+        a = i * math.pi / spikes + rng.uniform(-0.06, 0.06)
+        r = (r_out * rng.uniform(0.75, 1.15)) if i % 2 == 0 else (r_in * rng.uniform(0.85, 1.1))
+        pts.append((cx + math.cos(a) * r, cy + math.sin(a) * r * 0.8))
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    d.polygon(pts, fill=tuple(fill) + (255,))
+    d.line(pts + [pts[0]], fill=tuple(outline) + (255,), width=ow, joint='curve')
+    return lay
+
+
+def slash_arc(size, center, rx, ry, rot_deg, acc):
+    """A crescent cut mark: a white arc with an accent edge, thick in the middle, tapered at the ends."""
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    cx, cy = center
+    outer, inner = [], []
+    n = 60
+    for i in range(n + 1):
+        u = i / n
+        a = math.radians(200 + 140 * u)
+        w = 26 * math.sin(math.pi * u) ** 0.8 + 1
+        ca, sa = math.cos(a), math.sin(a)
+        outer.append((ca * rx, sa * ry))
+        inner.append((ca * (rx - w), sa * (ry - w * 0.6)))
+    r = math.radians(rot_deg)
+    def tf(p):
+        x, y = p
+        return (cx + x * math.cos(r) - y * math.sin(r), cy + x * math.sin(r) + y * math.cos(r))
+    poly = [tf(p) for p in outer] + [tf(p) for p in inner[::-1]]
+    d = ImageDraw.Draw(lay)
+    glow = Image.new('L', size, 0); ImageDraw.Draw(glow).polygon(poly, fill=255)
+    lay.alpha_composite(P.glow(glow, acc, 16, 0.9))
+    d.polygon(poly, fill=(255, 252, 244, 255))
+    return lay
+
+
+def cover(img, box_w, box_h, focus, zoom=1.0):
+    """Scale an image to cover a box, centred on `focus` (source px)."""
+    s = max(box_w / img.size[0], box_h / img.size[1]) * zoom
+    return s
+
+
+def panel_from(canvas, content, pts, key=None, ink_w=7):
+    m = P.poly_mask(pts)
+    canvas.alpha_composite(P.shadow_from_mask(m, (0, 12), 16, 0.6))
+    c = content.copy(); c.putalpha(ImageChops.multiply(c.split()[3], m))
+    canvas.alpha_composite(c)
+    lay = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
+    ImageDraw.Draw(lay).line(pts + [pts[0]], fill=P.INK + (255,), width=ink_w, joint='curve')
+    if key:
+        inner = [(x, y) for x, y in pts]
+        ImageDraw.Draw(lay).line(inner + [inner[0]], fill=tuple(key) + (255,), width=2)
+    canvas.alpha_composite(lay)
+
+
+# ------------------------------------------------------------------ per chapter content
+def contents(ch):
+    C = P.CH[ch]
+    acc = C['accent']
+    top, p2, p3 = page_polys(C['slant'])
+    if ch == 'ffx-ch1':
+        base = P.load(P.SCR + 'stage-clean-ch1.png', 'RGB')
+        # 1: the eyes (pause painting, 2x master)
+        src = P.load(P.ART + 'pause/tidus.2x.webp', 'RGB')
+        e = P.place(src, 1.34, (1225, 560), (960, 212))
+        e1 = e.copy()
+        e1.alpha_composite(focus_lines(e1.size, (960, 215), 760, 150, count=110, seed=3, color=P.INK))
+        # 2: the move (attack painting) over a streaked Gagazet
+        bg = PA.backdrop('gagazet.png', 0.95, (1300, 700), (520, 700), blur_r=14, gain=0.55)
+        bg.alpha_composite(speed_lines(bg.size, -35, count=90, seed=5, color=(210, 230, 255)))
+        fig = P.load(P.ART + 'characters/tidus/attack.png')
+        fig = P.rim_light(fig, color=(255, 236, 170), width=6, strength=0.6, direction=(1, -0.5))
+        ghost = P.place(fig, 0.74, (408, 560), (470, 745))
+        for k, (dx, dy, a) in enumerate(((-90, 70, 0.16), (-50, 40, 0.28))):
+            g = ghost.copy(); g = ImageChops.offset(g, dx, dy)
+            g.putalpha(g.split()[3].point(lambda v, a=a: int(v * a)))
+            bg.alpha_composite(g)
+        bg.alpha_composite(ghost)
+        e2 = bg
+        # 3: the impact on Seymour (hurt painting) with a burst behind the hit point
+        bg3 = PA.backdrop('gagazet.png', 1.0, (1900, 520), (1450, 700), blur_r=12, gain=0.5)
+        hit = (1250, 610)
+        bg3.alpha_composite(focus_lines(bg3.size, hit, 170, 150, count=80, seed=9, color=(255, 246, 220), alpha=(60, 160)))
+        bg3.alpha_composite(burst(bg3.size, hit, 130, 330, spikes=16, seed=7, fill=(255, 250, 238)))
+        bg3.alpha_composite(burst(bg3.size, hit, 70, 200, spikes=14, seed=8, fill=acc, outline=acc, ow=1))
+        boss = P.load(P.ART + 'characters/seymour-flux-body/hurt.png')
+        boss = P.rim_light(boss, color=(255, 240, 200), width=7, strength=0.8, direction=(-1, -0.2))
+        bg3.alpha_composite(P.place(boss, 0.66, (420, 600), (1520, 720)))
+        bg3.alpha_composite(slash_arc(bg3.size, (1500, 520), 330, 150, -24, acc))
+        bg3.alpha_composite(P.splatter(bg3.size, [(1160, 560), (1560, 760)], count=90, spread=60, seed=4, color=P.INK, rmax=7))
+        e3 = bg3
+        label, name = 'OVERDRIVE', 'Spiral Cut'
+    else:
+        base = P.load(P.SCR + 'stage-clean-ch4.png', 'RGB')
+        src = P.load(P.ART + 'portraits/rikku-ffx2-a.2.png')
+        srcb = Image.new('RGBA', src.size, (40, 30, 30, 255)); srcb.alpha_composite(src)
+        e = P.place(srcb.convert('RGB'), 3.3, (490, 445), (960, 215))
+        e = e.convert('RGB').filter(ImageFilter.UnsharpMask(radius=3, percent=80, threshold=2)).convert('RGBA')
+        e1 = e.copy()
+        e1.alpha_composite(focus_lines(e1.size, (960, 215), 760, 150, count=110, seed=3, color=P.INK))
+        bg = PA.backdrop('bevelle-underground.png', 1.0, (900, 800), (520, 720), blur_r=14, gain=0.5)
+        bg.alpha_composite(speed_lines(bg.size, 35, count=90, seed=5, color=(230, 200, 255)))
+        fig = P.load(P.ART + 'characters/rikku-dark-knight/attack.1.png')
+        fig = P.rim_light(fig, color=(214, 170, 255), width=6, strength=0.6, direction=(1, -0.5))
+        # the Dark Knight pays in HP: a dark aura round her (the engine's vfx can draw this)
+        ghost = P.place(fig, 0.66, (410, 590), (470, 735))
+        aura = ghost.split()[3].filter(ImageFilter.GaussianBlur(26))
+        bg.alpha_composite(P.glow(aura, (60, 20, 90), 20, 1.0))
+        bg.alpha_composite(P.glow(aura, (150, 80, 220), 36, 0.6))
+        bg.alpha_composite(ghost)
+        e2 = bg
+        bg3 = PA.backdrop('bevelle-underground.png', 1.0, (1900, 640), (1450, 700), blur_r=12, gain=0.5)
+        hit = (1250, 700)
+        bg3.alpha_composite(focus_lines(bg3.size, hit, 170, 150, count=80, seed=9, color=(236, 220, 255), alpha=(60, 160)))
+        bg3.alpha_composite(burst(bg3.size, hit, 130, 330, spikes=16, seed=7, fill=(28, 14, 40), outline=(210, 170, 255), ow=5))
+        bg3.alpha_composite(burst(bg3.size, hit, 60, 180, spikes=14, seed=8, fill=acc, outline=acc, ow=1))
+        boss = P.bahamut_clean('hurt')
+        boss = P.rim_light(boss, color=(236, 210, 255), width=6, strength=0.75, direction=(-1, -0.2))
+        bg3.alpha_composite(P.place(boss, 0.74, (512, 470), (1560, 690)))
+        # Darkness: dark energy welling up round him (a vfx the engine can draw), over the figure's feet
+        well = Image.new('L', bg3.size, 0)
+        ImageDraw.Draw(well).ellipse([1150, 860, 1900, 1080], fill=255)
+        bg3.alpha_composite(P.glow(well, (40, 12, 60), 40, 1.0))
+        bg3.alpha_composite(P.glow(well, (140, 70, 210), 70, 0.55))
+        bg3.alpha_composite(P.splatter(bg3.size, [(1200, 560), (1580, 780)], count=90, spread=60, seed=4, color=(30, 10, 44), rmax=7))
+        e3 = bg3
+        label, name = 'RIKKU · DARK KNIGHT', 'Darkness'
+    return base, (e1, e2, e3), (top, p2, p3), label, name
+
+
+def splash(label, name, acc, slant):
+    tf = P.serif(196); lf = P.chakra(28)
+    tw = P.text_width(name, tf)
+    w = tw + 220; h = 262
+    lay = Image.new('RGBA', (int(w + h * T + 60), int(h + 60)), (0, 0, 0, 0))
+    pts = P.slab_pts(20, 20, w, h, slant)
+    lay.alpha_composite(P.shadow_from_mask(P.poly_mask(pts, lay.size), (0, 14), 18, 0.7))
+    P.fill_poly(lay, pts, P.INK, 245)
+    # accent border 6 px (all round) and a paper hairline inside
+    ImageDraw.Draw(lay).line(pts + [pts[0]], fill=tuple(acc) + (255,), width=6)
+    P.draw_text(lay, (110, 20 + 60), label, lf, acc, 0.34)
+    P.draw_text(lay, (86, 20 + 228), name, tf, P.PAPER, -0.01)
+    return lay
+
+
+def beat_frames(ch):
+    C = P.CH[ch]
+    acc = C['accent']
+    base, (e1, e2, e3), (top, p2, p3), label, name = contents(ch)
+    dim = P.grade(base.filter(ImageFilter.GaussianBlur(7)), gain=0.5).convert('RGBA')
+    frames = []
+    # beat 1: the eyes panel alone over the dimmed battle
+    f1 = dim.copy(); panel_from(f1, e1, top, key=acc)
+    frames.append(f1)
+    f2 = f1.copy(); panel_from(f2, e2, p2)
+    frames.append(f2)
+    f3 = f2.copy(); panel_from(f3, e3, p3, key=P.BLOOD)
+    # the impact's one-frame flash on the boss panel
+    fl = P.solid((255, 255, 255), alpha=70); fl.putalpha(P.poly_mask(p3).point(lambda v: v * 70 // 255))
+    f3.alpha_composite(fl)
+    frames.append(f3)
+    f4 = f2.copy(); panel_from(f4, e3, p3, key=P.BLOOD)
+    sp = splash(label, name, acc, C['slant'])
+    P.paste_rgba(f4, sp, (int(960 - sp.size[0] / 2), int(880 - sp.size[1] / 2)))
+    frames.append(f4)
+    return [P.grain(f.convert('RGB'), 0.09, seed=3 + i) for i, f in enumerate(frames)]
+
+
+def storyboard(ch, frames, path):
+    C = P.CH[ch]
+    acc = C['accent']
+    tw, th = 936, 526
+    pad = 16; head = 104; cap = 52
+    Wd = pad * 3 + tw * 2
+    Hd = head + (th + cap) * 2 + pad
+    s = Image.new('RGB', (Wd, Hd), P.INK)
+    d = ImageDraw.Draw(s)
+    move = 'Spiral Cut (Tidus’s Overdrive)' if ch == 'ffx-ch1' else 'Darkness (Rikku, Dark Knight)'
+    P.draw_text(s, (pad + 4, 52), 'PF · %s as a comic strip · %s' % (move, C['label']), P.chakra(32), P.PAPER, 0.03)
+    sub = ('COMPOSITE: today\'s stage (HUD painted out, dimmed .5, blurred 7 px); panels from the shipped paintings: '
+           + ('pause/tidus (eyes), tidus/attack, seymour-flux-body/hurt; Gagazet plate'
+              if ch == 'ffx-ch1' else
+              'portraits/rikku-ffx2-a.2 (eyes), rikku-dark-knight/attack.1, ffx2-bahamut/hurt; Bevelle plate'))
+    P.draw_text(s, (pad + 4, 86), sub, P.exo(19), (170, 170, 185), 0.0)
+    d.rectangle([0, head - 6, Wd, head - 4], fill=acc)
+    caps = [('1', 'wind-up: the eyes', '0.00–0.35 s'), ('2', 'the move', '0.35–0.80 s'),
+            ('3', 'the impact on the boss', '0.80–1.20 s'), ('4', 'the name splash', '1.20–2.00 s, then wipe')]
+    for i, (f, (n, c, t)) in enumerate(zip(frames, caps)):
+        x = pad + (i % 2) * (tw + pad)
+        y = head + (i // 2) * (th + cap)
+        s.paste(f.resize((tw, th), Image.LANCZOS), (x, y + 4))
+        P.draw_text(s, (x + 2, y + th + 38), '%s  %s' % (n, c), P.chakra(24), P.PAPER, 0.02)
+        P.draw_text(s, (x + tw - 4, y + th + 38), t, P.rajdhani(24), (170, 170, 185), 0.0, anchor='rs')
+    P.save_jpg(s, path)
+
+
+if __name__ == '__main__':
+    for ch in ('ffx-ch1', 'ffx2-ch4'):
+        fr = beat_frames(ch)
+        for i, f in enumerate(fr):
+            f.save(P.SCR + 'pf-%s-%d.png' % (ch, i + 1))
+        storyboard(ch, fr, P.OUT + 'strips/PF-%s.jpg' % ch)
+        print('done', ch)

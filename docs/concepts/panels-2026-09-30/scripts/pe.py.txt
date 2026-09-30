@@ -1,0 +1,109 @@
+# pe.py - PE "Turn panel": when a member's turn starts, a tall panel with the actor's portrait slides in at the
+# screen edge and holds the command list; the rest of the battle view stays as it is (not dimmed, not blurred).
+#   FFX Ch I : from the LEFT edge (FFX chrome is anchored left), leaning '/', gold; Tidus's HUD portrait.
+#   FFX-2 Ch IV: from the RIGHT edge (the FFX-2 skin anchors chrome right), leaning '\\', pink, stopping above the
+#              party rows so the ATB gauges stay in view (a fiend can act under an open menu in Active mode).
+# The label is the approved turn cut-in's own ('YOUR TURN · CTB 1 OF 3', src/engine/TurnCutIn.ts).
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
+import numpy as np
+import plib as P
+import geo as G
+import hud as U
+import clean_stage as CS
+
+T = P.T12
+
+
+def partial_clean(ch):
+    """Today's dressed frame with only the command menu (and what hangs off it) painted out."""
+    if ch == 'ffx-ch1':
+        fr = P.frame('ffx-ch1/P01-today-dressed.jpg')
+        clean = P.load(P.SCR + 'stage-clean-ch1.png', 'RGB')
+        m = CS.grown_mask(list(G.CH1_CMD.values()) + [G.CH1_DESC, G.CH1_GUIDE, G.CH1_BEST, G.CH1_ARROW, G.CH1_PAUSE],
+                          grow=6, down=12)
+    else:
+        fr = P.frame('ffx2-ch4/P01-today-dressed.jpg')
+        clean = P.load(P.SCR + 'stage-clean-ch4.png', 'RGB')
+        m = CS.grown_mask([G.CH4_CMD_BLOCK, G.CH4_PAUSE, G.CH4_BEST], grow=6, down=10)
+    m = m.filter(ImageFilter.GaussianBlur(1.5))
+    return Image.composite(clean, fr, m)
+
+
+def two_tone(size, pts, split_y0, split_y1, top_col=P.PAPER, bot_col=P.INK):
+    w, h = size
+    t = np.clip((np.arange(h, dtype=np.float32) - split_y0) / float(split_y1 - split_y0), 0, 1)[:, None, None]
+    a = np.array(top_col, np.float32) / 255 * (1 - t) + np.array(bot_col, np.float32) / 255 * t
+    img = np.broadcast_to(a, (h, w, 3)).copy()
+    lay = P.from_np(img).convert('RGBA')
+    lay.putalpha(P.poly_mask(pts, size))
+    return lay
+
+
+def pe(ch):
+    C = P.CH[ch]
+    acc = C['accent']
+    base = partial_clean(ch).convert('RGBA')
+    can = base.copy()
+    if ch == 'ffx-ch1':
+        pts = [(0, 0), (700, 0), (470, 1080), (0, 1080)]
+        stripe = [(700 - 9, 0), (700, 0), (470, 1080), (470 - 9, 1080)]
+        panel = two_tone(can.size, pts, 520, 650)
+        # the portrait on the paper, faded into the ink foot (the approved cut-in's ivory fade, inverted)
+        por = P.load(P.ART + 'portraits/tidus.png')
+        por = P.rim_light(por, color=(255, 236, 190), width=5, strength=0.35, direction=(1, -0.3))
+        lay = P.place(por, 0.66, (430, 470), (318, 318))
+        fade = P.ramp(can.size, 470, 640, (0, 0, 0), 1.0, 0.0)
+        lay.putalpha(ImageChops.multiply(lay.split()[3], fade.split()[3]))
+        lay.putalpha(ImageChops.multiply(lay.split()[3], P.poly_mask(pts)))
+        # ghost name at 16 % gold behind the menu
+        ghost = Image.new('RGBA', can.size, (0, 0, 0, 0))
+        P.draw_text(ghost, (-20, 1060), 'Tidus', P.serif(360), acc + (41,))
+        ghost.putalpha(ImageChops.multiply(ghost.split()[3], P.poly_mask(pts)))
+        can.alpha_composite(P.shadow_from_mask(P.poly_mask(pts), (10, 0), 22, 0.55))
+        can.alpha_composite(panel)
+        can.alpha_composite(lay)
+        can.alpha_composite(ghost)
+        P.fill_poly(can, stripe, acc)
+        # label + name
+        P.draw_text(can, (48, 612), 'YOUR TURN · CTB 1 OF 3', P.chakra(20), acc, 0.34)
+        P.draw_text(can, (40, 700), 'Tidus', P.serif(118), P.PAPER)
+        # the real command rows, scaled into the panel's ink foot
+        rows = [p for p in U.ch1_cmd() if p.name != 'arrow']
+        can.alpha_composite(U.moved(rows, 0.70, (83, 535), (34, 734)))
+        arrow = [p for p in U.ch1_cmd() if p.name == 'arrow']
+        can.alpha_composite(U.moved(arrow, 0.70, (358, 1013), (230, 1062), shadow=False))
+    else:
+        y0, y1 = 52, 766
+        xl0 = 1352
+        xl1 = xl0 + (y1 - y0) * T
+        pts = [(xl0, y0), (1920, y0), (1920, y1), (xl1, y1)]
+        stripe = [(xl0, y0), (xl0 + 9, y0), (xl1 + 9, y1), (xl1, y1)]
+        panel = two_tone(can.size, pts, 318, 410)
+        yw = P.load(P.ART + 'characters/yuna-white-mage/idle.png')
+        yw = P.channel_grade(yw, mul=(0.98, 0.95, 1.0))
+        yw = P.rim_light(yw, color=(255, 200, 230), width=5, strength=0.35, direction=(-1, -0.3))
+        lay = P.place(yw, 1.10, (349, 150), (1700, 190))
+        a = lay.split()[3]
+        lay = lay.convert('RGB').filter(ImageFilter.UnsharpMask(radius=2.0, percent=60, threshold=2)).convert('RGBA')
+        lay.putalpha(a)
+        fade = P.ramp(can.size, 290, 392, (0, 0, 0), 1.0, 0.0)
+        lay.putalpha(ImageChops.multiply(lay.split()[3], fade.split()[3]))
+        lay.putalpha(ImageChops.multiply(lay.split()[3], P.poly_mask(pts)))
+        ghost = Image.new('RGBA', can.size, (0, 0, 0, 0))
+        P.draw_text(ghost, (1470, 790), 'Yuna', P.serif(300), acc + (41,))
+        ghost.putalpha(ImageChops.multiply(ghost.split()[3], P.poly_mask(pts)))
+        can.alpha_composite(P.shadow_from_mask(P.poly_mask(pts), (-10, 0), 22, 0.55))
+        can.alpha_composite(panel)
+        can.alpha_composite(lay)
+        can.alpha_composite(ghost)
+        P.fill_poly(can, stripe, acc)
+        P.draw_text(can, (1884, 440), 'YOUR TURN · ATB 1 OF 3', P.chakra(20), acc, 0.34, anchor='rs')
+        P.draw_text(can, (1884, 526), 'Yuna', P.serif(100), P.PAPER, anchor='rs')
+        can.alpha_composite(U.moved(U.ch4_cmd(), 0.80, (1486, 496), (1560, 560)))
+    return P.grain(can.convert('RGB'), 0.09)
+
+
+if __name__ == '__main__':
+    for ch in ('ffx-ch1', 'ffx2-ch4'):
+        P.save_jpg(pe(ch), P.OUT + 'frames/%s/PE.jpg' % ch)
+        print('done', ch)

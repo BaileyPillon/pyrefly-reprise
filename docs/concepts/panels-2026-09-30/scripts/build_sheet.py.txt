@@ -1,0 +1,117 @@
+# build_sheet.py - sheet-all.jpg: every concept, both chapters, labelled, each tile tagged COMPOSITE with what it is
+# composited from (the captions come from meta.py, the same record as frames.json).
+from PIL import Image, ImageDraw
+import plib as P
+import meta as M
+
+TW, TH = 960, 540
+PAD = 24
+W = PAD * 3 + TW * 2
+COLS = ['ffx-ch1', 'ffx2-ch4']
+
+
+def wrap(text, font, width):
+    words = text.split(' ')
+    lines, cur = [], ''
+    for w in words:
+        t = (cur + ' ' + w).strip()
+        if P.text_width(t, font) <= width:
+            cur = t
+        else:
+            lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def by(concept_id, ch, pool):
+    for f in pool:
+        if f['id'] == concept_id and f['chapter'] == ch:
+            return f
+    return None
+
+
+ROWS = [
+    ('PA-a', 'PA-a · Comic page master, three slashes', 'the resting command screen (P14 redone)', M.FRAMES, 'frame'),
+    ('PA-b', 'PA-b · Comic page master, one stage and two insets', 'the resting command screen', M.FRAMES, 'frame'),
+    ('PB', 'PB · Cut-in (hold frame of the clip)', 'FFX: Tidus\'s Overdrive · FFX-2: a chain reaching 5', M.FRAMES, 'frame'),
+    ('PB-motion', 'PB · Cut-in in motion: 2.5 s, 30 fps (motion/PB-*.mp4)', 'five frames of each clip', M.MOTION, 'strip'),
+    ('PC', 'PC · Reaction panels on the enemy\'s big attack', 'FFX: Lance of Atrophy on Tidus · FFX-2: Mega Flare', M.FRAMES, 'frame'),
+    ('PD', 'PD · Victory card', 'FFX: poses · FFX-2 Chapter IV: canon withholds the pose, so the quiet card', M.FRAMES, 'frame'),
+    ('PE', 'PE · Turn panel', 'slides in at the edge when a turn starts and holds the command list', M.FRAMES, 'frame'),
+    ('PF', 'PF · The move as a comic strip (storyboard, 4 beats)', 'FFX: Spiral Cut · FFX-2: Darkness', M.STRIPS, 'board'),
+]
+
+
+def tile_image(rec, kind):
+    if kind == 'strip':
+        im = Image.open(P.OUT + rec['strip']).convert('RGB')
+    else:
+        im = Image.open(P.OUT + rec['file']).convert('RGB')
+    w = TW
+    h = int(round(im.size[1] * w / im.size[0]))
+    return im.resize((w, h), Image.LANCZOS)
+
+
+def main():
+    head_h = 190
+    capf = P.exo(17)
+    tagf = P.chakra(15)
+    rowf = P.chakra(28)
+    subf = P.exo(19)
+    # measure
+    blocks = []
+    for rid, title, sub, pool, kind in ROWS:
+        tiles = []
+        for ch in COLS:
+            rec = by(rid if rid != 'PB-motion' else 'PB-motion', ch, pool)
+            im = tile_image(rec, kind)
+            src = rec.get('sheet') or ('clip ' + rec['file'] + ' · ' + rec['beats'])
+            if kind == 'strip':
+                src = 'clip: ' + rec['file'] + ' (' + rec['size'] + ', ' + rec['codec'] + ') · ' + rec['beats']
+            lines = wrap(src, capf, TW - 130)
+            tiles.append((rec, im, lines))
+        img_h = max(t[1].size[1] for t in tiles)
+        cap_h = 16 + 24 * max(len(t[2]) for t in tiles)
+        blocks.append((rid, title, sub, tiles, img_h, cap_h))
+    H = head_h + sum(66 + b[4] + b[5] + 22 for b in blocks) + PAD
+    s = Image.new('RGB', (W, H), P.INK)
+    d = ImageDraw.Draw(s)
+    # header
+    P.draw_text(s, (PAD, 62), 'Panels · options round · 2026-09-30', P.serif(58), P.PAPER)
+    P.draw_text(s, (PAD, 104), 'Nothing is built; options for Bailey. Every image here is a COMPOSITE: assembled in 2D from '
+                'real-engine frames on disk and the shipped paintings; no new art.', subf, (200, 198, 210))
+    P.draw_text(s, (PAD, 132), 'Words come from our own data and UI (src/). FFX chapters: Yevon gold, slabs lean /. '
+                'FFX-2 chapters: pyre pink, slabs lean \\. Blood red marks the enemy.', subf, (200, 198, 210))
+    for i, ch in enumerate(COLS):
+        x = PAD + i * (TW + PAD)
+        acc = P.CH[ch]['accent']
+        d.rectangle([x, 158, x + TW, 162], fill=acc)
+        P.draw_text(s, (x, 186), P.CH[ch]['label'].upper(), tagf, acc, 0.24)
+    y = head_h + 10
+    for rid, title, sub, tiles, img_h, cap_h in blocks:
+        y += 8
+        P.draw_text(s, (PAD, y + 34), title, rowf, P.PAPER, 0.02)
+        tw_ = P.text_width(title, rowf, 0.02)
+        P.draw_text(s, (PAD + tw_ + 24, y + 33), sub, subf, (170, 168, 185))
+        y += 58
+        for i, (rec, im, lines) in enumerate(tiles):
+            x = PAD + i * (TW + PAD)
+            s.paste(im, (x, y))
+            d.rectangle([x, y, x + TW - 1, y + im.size[1] - 1], outline=(40, 38, 52))
+            cy = y + img_h + 30
+            # provenance tag
+            tag = 'COMPOSITE'
+            tw = P.text_width(tag, tagf, 0.2)
+            d.rectangle([x, cy - 19, x + tw + 16, cy + 6], fill=P.CH[rec['chapter']]['accent'])
+            P.draw_text(s, (x + 8, cy), tag, tagf, P.INK, 0.2)
+            for k, ln in enumerate(lines):
+                P.draw_text(s, (x + tw + 30, cy + k * 24), ln, capf, (196, 194, 206))
+        y += img_h + cap_h + 22
+    P.save_jpg(s, P.OUT + 'sheet-all.jpg', q=86)
+    print('sheet', s.size)
+
+
+if __name__ == '__main__':
+    main()

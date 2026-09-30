@@ -1,0 +1,34 @@
+# run_all.py - rebuilds the whole panels round from the repo, the art backup and the perspectives round's frames.
+# Order matters: the clean stages and the M4 frames are intermediates the concepts read.
+# Scratch (intermediates) goes to D:/Tools/pyrefly-scratch/panels/ (plib.SCR); outputs to docs/concepts/panels-2026-09-30/.
+import os, subprocess, sys
+import plib as P
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def run(script, *args):
+    print('==', script, ' '.join(args))
+    subprocess.run([sys.executable, os.path.join(HERE, script)] + list(args), check=True, cwd=HERE)
+
+
+if __name__ == '__main__':
+    os.makedirs(P.SCR, exist_ok=True)
+    # 1. today's stage with the HUD painted out, per chapter (stage-clean-ch1.png / -ch4.png)
+    run('clean_stage.py')
+    # 2. the real-engine hit for PB Chapter IV: frames 54-74 of the M4 motion master, at 1920x1080
+    seq = os.path.join(P.SCR, 'm4seq')
+    os.makedirs(seq, exist_ok=True)
+    subprocess.run([P.FFMPEG, '-loglevel', 'error', '-y', '-ss', '1.80', '-t', '0.70',
+                    '-i', P.MASTERS + 'M4-ffx2-ch4.mp4', '-vf', 'scale=1920:1080:flags=lanczos',
+                    '-start_number', '54', os.path.join(seq, 'ch4-%03d.png')], check=True)
+    # 3. the concepts
+    run('pa.py')
+    run('pb.py', 'still', 'clip')
+    run('pc.py')
+    run('pd.py')
+    run('pe.py')
+    run('pf.py')
+    # 4. the record and the sheet
+    run('meta.py')
+    run('build_sheet.py')

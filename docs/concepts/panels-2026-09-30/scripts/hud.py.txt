@@ -1,0 +1,185 @@
+# hud.py - the real HUD, cut out of the real-engine frames as RGBA pieces (polygon masks, or a colour key
+# where the slab sits on near-black Bevelle). Every piece keeps its position in the source frame, so a
+# layout can put it back in place or move/scale it.
+import numpy as np
+from PIL import Image, ImageFilter, ImageChops, ImageDraw
+import plib as P
+import geo as G
+
+_cache = {}
+
+
+def fr(rel):
+    if rel not in _cache:
+        _cache[rel] = P.frame(rel)
+    return _cache[rel]
+
+
+class Piece:
+    def __init__(self, img, xy, name=''):
+        self.img = img  # RGBA, tight
+        self.xy = xy    # top-left in the source frame
+        self.name = name
+
+    @property
+    def box(self):
+        return (self.xy[0], self.xy[1], self.xy[0] + self.img.size[0], self.xy[1] + self.img.size[1])
+
+
+def cut(rel, pts, name='', feather=0.7):
+    im, xy = P.piece(fr(rel), pts, feather=feather)
+    return Piece(im, xy, name)
+
+
+def keyed_block(rel, pts, name='', thresh=20, dil=2):
+    """Cut a block, then drop the Bevelle background around/between the slabs by a colour key:
+    background = bluish and dark (B - R > thresh and lum < 80)."""
+    src = fr(rel)
+    im, xy = P.piece(src, pts, feather=0.8)
+    a = np.asarray(im.convert('RGB')).astype(np.int32)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    bg = ((b - r) > thresh) & (lum < 80)
+    keep = (~bg).astype(np.uint8) * 255
+    k = Image.fromarray(keep, 'L').filter(ImageFilter.MaxFilter(dil * 2 + 1)).filter(ImageFilter.MinFilter(dil * 2 + 1))
+    k = k.filter(ImageFilter.GaussianBlur(0.7))
+    alpha = ImageChops.multiply(im.split()[3], k)
+    im.putalpha(alpha)
+    return Piece(im, xy, name)
+
+
+def layer(pieces, size=(P.W, P.H), shadow=True):
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    for p in pieces:
+        if shadow:
+            m = Image.new('L', size, 0)
+            m.paste(p.img.split()[3], (int(p.xy[0]), int(p.xy[1])))
+            lay.alpha_composite(P.shadow_from_mask(m, (0, 9), 13, 0.42))
+    for p in pieces:
+        P.paste_rgba(lay, p.img, p.xy)
+    return lay
+
+
+def moved(pieces, scale, src_pt, dst_pt, size=(P.W, P.H), shadow=True):
+    """Place a group of pieces with a uniform scale so src_pt (frame coords) lands at dst_pt."""
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    placed = []
+    for p in pieces:
+        w, h = p.img.size
+        im = p.img.resize((max(1, int(round(w * scale))), max(1, int(round(h * scale)))), Image.LANCZOS)
+        x = dst_pt[0] + (p.xy[0] - src_pt[0]) * scale
+        y = dst_pt[1] + (p.xy[1] - src_pt[1]) * scale
+        placed.append((im, (int(round(x)), int(round(y)))))
+    if shadow:
+        m = Image.new('L', size, 0)
+        for im, xy in placed:
+            tmp = Image.new('L', size, 0)
+            tmp.paste(im.split()[3], xy)
+            m = ImageChops.lighter(m, tmp)
+        lay.alpha_composite(P.shadow_from_mask(m, (0, 9 * scale), 13 * scale, 0.42))
+    for im, xy in placed:
+        P.paste_rgba(lay, im, xy)
+    return lay
+
+
+# ---------------------------------------------------------------- Chapter I (P01 dressed = P00 HUD)
+CH1 = 'ffx-ch1/P01-today-dressed.jpg'
+
+
+def ch1_cmd():
+    ps = [cut(CH1, pts, n) for n, pts in G.CH1_CMD.items()]
+    ps.append(cut(CH1, G.CH1_ARROW, 'arrow'))
+    # the arrow's background is scene: key it to the gold triangle
+    a = ps[-1]
+    arr = np.asarray(a.img.convert('RGB')).astype(np.int32)
+    gold = ((arr[..., 0] - arr[..., 2]) > 40).astype(np.uint8) * 255
+    k = Image.fromarray(gold, 'L').filter(ImageFilter.GaussianBlur(0.6))
+    a.img.putalpha(ImageChops.multiply(a.img.split()[3], k))
+    return ps
+
+
+def ch1_desc():
+    return cut(CH1, G.CH1_DESC, 'desc')
+
+
+def ch1_chips():
+    return [cut(CH1, G.CH1_GUIDE, 'guide'), cut(CH1, G.CH1_BEST, 'best')]
+
+
+def ch1_party():
+    ps = [cut(CH1, pts, n) for n, pts in G.CH1_PARTY.items()]
+    # Kimahri's OVERDRIVE label + gauge overhang: keep only the bright gold pixels
+    x0, y0, x1, y1 = G.CH1_KIM_OVERHANG
+    src = fr(CH1).crop((x0, y0, x1, y1))
+    arr = np.asarray(src).astype(np.int32)
+    lum = 0.2126 * arr[..., 0] + 0.7152 * arr[..., 1] + 0.0722 * arr[..., 2]
+    keep = (((arr[..., 0] - arr[..., 2]) > 10) & (lum > 38)).astype(np.uint8) * 255
+    k = Image.fromarray(keep, 'L').filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.GaussianBlur(0.6))
+    ov = src.convert('RGBA'); ov.putalpha(k)
+    ps.append(Piece(ov, (x0, y0), 'kim-overhang'))
+    return ps
+
+
+def ch1_enemy_move():
+    return cut(CH1, G.CH1_ENEMY_MOVE, 'enemy-move')
+
+
+# ---------------------------------------------------------------- Chapter IV
+CH4 = 'ffx2-ch4/P01-today-dressed.jpg'
+
+
+def ch4_cmd():
+    return [keyed_block(CH4, G.CH4_CMD_BLOCK, 'cmd')]
+
+
+def ch4_party():
+    return [keyed_block(CH4, G.CH4_PARTY_BLOCK, 'party', thresh=18)]
+
+
+def ch4_party_rows():
+    return [cut(CH4, pts, n, feather=0.8) for n, pts in G.CH4_PARTY_ROWS.items()]
+
+
+def ch4_plate():
+    return cut(CH4, G.CH4_PLATE, 'plate')
+
+
+def ch4_help():
+    return cut(CH4, [(70, 1), (1920, 1), (1920, 51), (70, 51)], 'help')
+
+
+def ch4_guide():
+    return cut(CH4, G.CH4_GUIDE, 'guide')
+
+
+# ---------------------------------------------------------------- P21 bands (the judges' most readable HUD layout)
+def p21_top(ch):
+    rel = '%s/P21-cinematic-shoulder.jpg' % ch
+    im = fr(rel).crop(G.P21_TOP).convert('RGBA')
+    # hide the capture rig's PAUSE chip
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, 0, 66, 26], fill=(3, 2, 6, 255))
+    return Piece(im, (G.P21_TOP[0], G.P21_TOP[1]), 'p21-top')
+
+
+def p21_bottom(ch):
+    rel = '%s/P21-cinematic-shoulder.jpg' % ch
+    im = fr(rel).crop(G.P21_BOT).convert('RGBA')
+    return Piece(im, (G.P21_BOT[0], G.P21_BOT[1]), 'p21-bottom')
+
+
+def p21_ch1_cmd():
+    rel = 'ffx-ch1/P21-cinematic-shoulder.jpg'
+    return [cut(rel, pts, n) for n, pts in G.P21_CH1_CMD.items()]
+
+
+def p21_ch4_cmd():
+    rel = 'ffx2-ch4/P21-cinematic-shoulder.jpg'
+    return [keyed_block(rel, [(1512, 180), (1840, 180), (1848, 372), (1520, 372)], 'cmd', thresh=16)]
+
+
+def p21_ctb_strip():
+    """Chapter I's turn order laid out horizontally in P21's top band (on the band's black)."""
+    rel = 'ffx-ch1/P21-cinematic-shoulder.jpg'
+    im = fr(rel).crop((1286, 2, 1884, 128)).convert('RGBA')
+    return Piece(im, (1286, 2), 'ctb-strip')

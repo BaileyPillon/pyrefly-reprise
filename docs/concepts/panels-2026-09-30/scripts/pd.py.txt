@@ -1,0 +1,235 @@
+# pd.py - PD "Victory card": the approved Ink & Gold results page, with its ink block split into three angled
+# panels, one per member.
+#   FFX Ch I : the painted victory poses, gold, pyreflies (Seymour Flux dissolves into pyreflies, canon), the
+#              shipped ledger values (src/data) and Chapter I's first victory quip (src/story/scripts/seymour-flux.ts).
+#   FFX-2 Ch IV: canon withholds the celebration after Bahamut (research/ffx-vs-ffx2-presentation.md 2.2): the
+#              girls keep their battle stance (idle paintings), the page is the shipped *silent* page (drained
+#              portrait filter, grey stripe, 'Results' at 140 not 'Victory' at 200, no quip, no fanfare).
+import math, random
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
+import numpy as np
+import plib as P
+import pa as PA
+
+S = 1920 / 1440.0  # the spec's sizes are quoted at 1440
+
+
+def px(v):
+    return int(round(v * S))
+
+
+def paper_bg():
+    base = P.solid(P.PAPER).convert('RGB')
+    n = P.value_noise((P.W, P.H), 90, seed=31, octaves=4)
+    a = P.to_np(base)
+    a = a * (0.985 + 0.03 * n[..., None])
+    return P.from_np(np.clip(a, 0, 1))
+
+
+def panel_polys(slant, x_mid_left=900, g=16, y0=0, y1=1080):
+    """Three panels from x_mid_left (at mid height) to the right edge, leaning with `slant`."""
+    ym = (y0 + y1) / 2.0
+    total = 1920 - 58 - x_mid_left
+    w = (total - 2 * g) / 3.0
+    polys = []
+    for i in range(3):
+        xl = x_mid_left + i * (w + g)
+        xr = xl + w
+        def ex(xm, y):
+            return xm + (ym - y) * P.T12 * slant
+        if i < 2:
+            pts = [(ex(xl, y0), y0), (ex(xr, y0), y0), (ex(xr, y1), y1), (ex(xl, y1), y1)]
+        else:
+            pts = [(ex(xl, y0), y0), (1920 - 58, y0), (1920 - 58, y1), (ex(xl, y1), y1)]
+        polys.append(pts)
+    return polys
+
+
+def pyreflies(size, region, count=60, seed=1):
+    rng = random.Random(seed)
+    lay = Image.new('RGBA', size, (0, 0, 0, 0))
+    cols = [(200, 240, 255), (255, 244, 214), (190, 220, 255), (236, 214, 255)]
+    for _ in range(count):
+        x = rng.uniform(0, size[0]); y = rng.uniform(0, size[1] * 0.9)
+        r = rng.uniform(2.5, 8.0)
+        c = rng.choice(cols)
+        dot = Image.new('RGBA', size, (0, 0, 0, 0))
+        d = ImageDraw.Draw(dot)
+        d.ellipse([x - r * 3.2, y - r * 3.2, x + r * 3.2, y + r * 3.2], fill=c + (int(rng.uniform(26, 60)),))
+        lay.alpha_composite(dot.filter(ImageFilter.GaussianBlur(r * 1.6)))
+        d2 = ImageDraw.Draw(lay)
+        d2.ellipse([x - r * 0.55, y - r * 0.55, x + r * 0.55, y + r * 0.55], fill=(255, 255, 255, int(rng.uniform(170, 240))))
+    lay = lay.filter(ImageFilter.GaussianBlur(0.6))
+    return P.with_mask(lay, region)
+
+
+def figure_layer(path, height, feet_x, feet_y, rim=None, grade=None):
+    im = P.load(path)
+    a = np.asarray(im.split()[3])
+    ys = np.where(a.max(axis=1) > 40)[0]; xs = np.where(a.max(axis=0) > 40)[0]
+    top, bot = ys[0], ys[-1]
+    # feet centre: mean x of opaque pixels in the bottom 4 %
+    band = a[int(bot - (bot - top) * 0.04):bot + 1]
+    cx = float(np.mean(np.where(band > 40)[1]))
+    sc = height / float(bot - top)
+    if grade:
+        im = P.channel_grade(im, **grade)
+    if rim:
+        im = P.rim_light(im, **rim)
+    return P.place(im, sc, (cx, bot), (feet_x, feet_y))
+
+
+def name_plate(name, accent, silent=False):
+    f = P.serif(px(26))
+    tw = P.text_width(name, f)
+    w, h = tw + 44, px(40)
+    lay = Image.new('RGBA', (int(w + h * P.T12 + 8), int(h + 8)), (0, 0, 0, 0))
+    pts = P.slab_pts(2, 2, w, h, 1)
+    P.fill_poly(lay, pts, P.INK, 225)
+    bar = [(pts[0][0], pts[0][1]), (pts[0][0] + 5, pts[0][1]), (pts[3][0] + 5, pts[3][1]), (pts[3][0], pts[3][1])]
+    P.fill_poly(lay, bar, (58, 53, 71) if silent else accent)
+    P.draw_text(lay, (22 + h * P.T12 * 0.5, 2 + h * 0.72), name, f, (185, 178, 198) if silent else P.PAPER)
+    return lay
+
+
+def vertical_caption(text, color, size=px(15), tracking=0.34):
+    f = P.chakra(size)
+    lay, base = P.text_layer(text, f, color, tracking, pad=6)
+    return lay.rotate(-90, expand=True, resample=Image.BICUBIC)
+
+
+def ledger(canvas, x, y, width, rows, key_col, silent=False):
+    d = ImageDraw.Draw(canvas)
+    kf = P.chakra(px(14)); vf = P.rajdhani(px(54)); itf = P.serif(px(30)); df = P.chakra(px(11))
+    yy = y
+    for key, val, detail, kind in rows:
+        row_h = px(14 + 54 + 12) - px(12)
+        base = yy + px(14) + px(44)
+        P.draw_text(canvas, (x, base - px(8)), key, kf, key_col, 0.3)
+        vx = x + px(150) + px(24)
+        if kind == 'items':
+            P.draw_text(canvas, (vx, base - px(4)), val, itf, P.INK)
+        else:
+            w = P.draw_text(canvas, (vx, base), val, vf, P.INK)
+            if detail:
+                P.draw_text(canvas, (vx + w + px(14), base - px(6)), detail, df, (107, 100, 120), 0.24)
+        yy = base + px(12)
+        d.rectangle([x, yy, x + width, yy + max(2, px(2) - 1)], fill=P.INK)
+        yy += px(2)
+    return yy
+
+
+def pd(ch):
+    C = P.CH[ch]
+    acc = C['accent']; acc_paper = C['accent_paper']
+    silent = ch == 'ffx2-ch4'
+    slant = C['slant']
+    can = paper_bg().convert('RGBA')
+
+    polys = panel_polys(slant, x_mid_left=912)
+    block = [(polys[0][0][0] - 26, 0), (1920, 0), (1920, 1080), (polys[0][3][0] - 26, 1080)]
+    # the stripe on the block's leading edge (gold; the silent page's grey)
+    stripe = [(block[0][0], 0), (block[0][0] + 18, 0), (block[3][0] + 18, 1080), (block[3][0], 1080)]
+    P.fill_poly(can, [(block[0][0] + 12, 0), (1920, 0), (1920, 1080), (block[3][0] + 12, 1080)], P.INK)
+    P.fill_poly(can, stripe, (58, 53, 71) if silent else acc)
+
+    if ch == 'ffx-ch1':
+        members = [('Tidus', 'characters/tidus/victory.png', 0), ('Yuna', 'characters/yuna/victory.png', 1),
+                   ('Kimahri', 'characters/kimahri/victory.png', 2)]
+        plate = 'gagazet.png'
+        plate_pts = [(700, 520), (1500, 560), (2200, 520)]
+    else:
+        members = [('Yuna', 'characters/yuna-white-mage/idle.png', 0),
+                   ('Rikku', 'characters/rikku-dark-knight/idle.png', 1),
+                   ('Paine', 'characters/paine-warrior/idle.png', 2)]
+        plate = 'bevelle-underground.png'
+        plate_pts = [(600, 700), (1350, 650), (2100, 700)]
+
+    for (name, path, i), pp in zip(members, plate_pts):
+        pts = polys[i]
+        xs = [p[0] for p in pts]
+        cx = (min(xs) + max(xs)) / 2.0
+        bg = PA.backdrop(plate, 1.05, pp, (cx, 470), blur_r=9, gain=0.5 if not silent else 0.42, sat=0.95)
+        content = bg.copy()
+        if not silent:
+            # a warm key from above and the pyreflies of Seymour's dissolve
+            content.alpha_composite(P.ramp(content.size, 0, 700, (255, 214, 140), 0.18, 0.0))
+        height = 900 if not silent else 880
+        rim = dict(color=(255, 222, 160) if not silent else (190, 196, 214), width=6,
+                   strength=0.55 if not silent else 0.3, direction=(-0.3 * slant, -1))
+        fig = figure_layer(P.ART + path, height, cx + (10 if i == 1 else 0), 1032,
+                           rim=rim, grade=P.NIGHT_FFX if not silent else None)
+        # contact shadow
+        sh = Image.new('L', (P.W, P.H), 0)
+        ImageDraw.Draw(sh).ellipse([cx - 150, 1016, cx + 150, 1050], fill=170)
+        content.alpha_composite(P.shadow_from_mask(sh, (0, 0), 10, 0.8))
+        content.alpha_composite(fig)
+        content.alpha_composite(P.ramp(content.size, 820, 1080, P.INK, 0.0, 0.55))
+        if not silent:
+            reg = P.poly_mask(pts)
+            content.alpha_composite(pyreflies(content.size, reg, count=44, seed=11 + i))
+        if silent:
+            # the shipped silent page's portrait filter: grayscale(0.7) brightness(0.62)
+            content = P.grade(content, sat=0.3, gain=0.62).convert('RGBA')
+        PA.panel(can, content, pts, shadow=False)
+        # the panel's own keyline
+        lay = Image.new('RGBA', can.size, (0, 0, 0, 0))
+        ImageDraw.Draw(lay).line(pts + [pts[0]], fill=(58, 53, 71, 255) if silent else acc + (150,), width=2)
+        can.alpha_composite(lay)
+        npl = name_plate(name, acc, silent)
+        bx = min(p[0] for p in pts) + (40 if slant > 0 else 70)
+        P.paste_rgba(can, npl, (int(bx), 1080 - 118))
+
+    # ---- the paper side: chip, heading, rule, quip, ledger
+    X = px(76)
+    chip_f = P.chakra(px(12))
+    chip_txt = 'RESULTS'
+    cw = P.text_width(chip_txt, chip_f, 0.26)
+    d = ImageDraw.Draw(can)
+    d.rectangle([X, px(64), X + cw + px(22), px(64) + px(28)], fill=P.INK)
+    P.draw_text(can, (X + px(11), px(64) + px(20)), chip_txt, chip_f, (185, 178, 198) if silent else acc, 0.26)
+    if not silent:
+        hf = P.serif(px(200))
+        P.draw_text(can, (X - px(6), px(64) + px(28) + px(178)), 'Victory', hf, P.INK, -0.03)
+        ry = px(64) + px(28) + px(206)
+        d.rectangle([X + px(8), ry, X + px(8) + px(300), ry + px(6)], fill=acc)
+        qy = ry + px(6) + px(44)
+        P.draw_text(can, (X + px(8), qy), '...Okay. Next one.', P.serif(px(26)), (91, 85, 102))
+        ly = px(342) + 44
+        rows = [('AP', '10,000', '×3 PARTY', 'count'), ('GIL', '6,000', None, 'count'),
+                ('ITEMS', 'Lv. 4 Key Sphere', None, 'items')]
+        ledger(can, X, ly, px(560), rows, acc_paper)
+        cap = 'MT. GAGAZET — THE PROMINENCE · CLEARED'
+        capc = acc
+    else:
+        hf = P.serif(px(140))
+        P.draw_text(can, (X - px(4), px(64) + px(28) + px(130)), 'Results', hf, P.INK, -0.02)
+        ry = px(64) + px(28) + px(152)
+        d.rectangle([X + px(8), ry, X + px(8) + px(150), ry + px(6)], fill=P.INK)
+        ly = px(300)
+        rows = [('EXP', '1,300', '×3 PARTY', 'count'), ('AP', '15', 'PER DRESSPHERE', 'count'),
+                ('GIL', '1,000', None, 'count'), ('ITEMS', 'Gris-Gris Bag', None, 'items')]
+        ledger(can, X, ly, px(560), rows, (91, 85, 102), silent=True)
+        cap = 'BEVELLE UNDERGROUND — LIMBO · CLEARED'
+        capc = (107, 100, 120)
+    vc = vertical_caption(cap, capc if not silent else (160, 152, 176))
+    P.paste_rgba(can, vc, (1920 - 29 - vc.size[0] // 2, 64))
+    # CONFIRM, bottom right, an ivory slab
+    cf = P.chakra(px(16))
+    t = 'CONFIRM'
+    tw = P.text_width(t, cf, 0.2)
+    w, h = tw + px(64), px(46)
+    x0, y0 = 1920 - 58 - w - 40, 1080 - h - 150
+    P.fill_poly(can, P.slab_pts(x0, y0, w, h, slant), P.PAPER if not silent else (200, 196, 208))
+    tx = x0 + px(20) + h * P.T12 * 0.5
+    P.draw_text(can, (tx, y0 + h * 0.7), t, cf, P.INK, 0.2)
+    ax = tx + tw + px(14); ay = y0 + h * 0.5 + 3
+    ImageDraw.Draw(can).polygon([(ax, ay - 9), (ax + 12, ay), (ax, ay + 9)], fill=P.INK)
+    out = P.grain(can.convert('RGB'), 0.11, seed=5)
+    return out
+
+
+if __name__ == '__main__':
+    for ch in ('ffx-ch1', 'ffx2-ch4'):
+        P.save_jpg(pd(ch), P.OUT + 'frames/%s/PD.jpg' % ch)
+        print('done', ch)

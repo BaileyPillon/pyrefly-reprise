@@ -1,0 +1,226 @@
+# pa.py - PA "Comic page master": P14 redone, as the resting command screen.
+#   PA-a: three slanted panels (the actor close | the stage | the boss close) between P21's two HUD bands.
+#   PA-b: one full-bleed stage panel with two inset panels (the actor lower left, the boss upper right).
+import math
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
+import plib as P
+import hud as U
+import geo as G
+
+T = P.T12
+Y0, Y1 = 139, 942
+YM = (Y0 + Y1) / 2.0
+
+
+def gx(xmid, y, slant=1):
+    """x of a slanted gutter through (xmid, YM) at height y: '/' for slant 1 (FFX), '\' for -1 (FFX-2)."""
+    return xmid + (YM - y) * T * slant
+
+
+def backdrop(plate, scale, src_pt, dst_pt, blur_r=10, gain=0.62, sat=0.9):
+    im = P.load(P.ART + 'backdrops/' + plate, 'RGB')
+    lay = P.place(im, scale, src_pt, dst_pt)
+    rgb = P.grade(lay.convert('RGB'), gain=gain, sat=sat).filter(ImageFilter.GaussianBlur(blur_r))
+    return rgb.convert('RGBA')
+
+
+def subject(path, scale, src_pt, dst_pt, rim=None, sharpen=False, night=None):
+    im = P.bahamut_clean('idle') if path == 'BAHAMUT_CLEAN' else P.load(path)
+    if night:
+        im = P.channel_grade(im, **night)
+    if rim:
+        im = P.rim_light(im, **rim)
+    lay = P.place(im, scale, src_pt, dst_pt)
+    if sharpen:
+        a = lay.split()[3]
+        rgb = lay.convert('RGB').filter(ImageFilter.UnsharpMask(radius=2.2, percent=70, threshold=2))
+        lay = rgb.convert('RGBA'); lay.putalpha(a)
+    return lay
+
+
+def panel(canvas, content, pts, shadow=True):
+    m = P.poly_mask(pts)
+    if shadow:
+        canvas.alpha_composite(P.shadow_from_mask(m, (0, 10), 16, 0.5))
+    c = content.copy()
+    c.putalpha(ImageChops.multiply(c.split()[3], m))
+    canvas.alpha_composite(c)
+
+
+def edge_line(canvas, p0, p1, color, width=3):
+    lay = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
+    ImageDraw.Draw(lay).line([p0, p1], fill=tuple(color) + (255,), width=width)
+    canvas.alpha_composite(lay)
+
+
+# ------------------------------------------------------------------ PA-a
+def pa_a(ch):
+    C = P.CH[ch]
+    acc = C['accent']
+    can = P.solid(P.INK).copy()
+    s = C['slant']
+    g1, g2, half = 552, 1398, 9  # gutter centres at mid height
+    actor = [(0, Y0), (gx(g1, Y0, s) - half, Y0), (gx(g1, Y1, s) - half, Y1), (0, Y1)]
+    stage = [(gx(g1, Y0, s) + half, Y0), (gx(g2, Y0, s) - half, Y0), (gx(g2, Y1, s) - half, Y1), (gx(g1, Y1, s) + half, Y1)]
+    boss = [(gx(g2, Y0, s) + half, Y0), (P.W, Y0), (P.W, Y1), (gx(g2, Y1, s) + half, Y1)]
+
+    if ch == 'ffx-ch1':
+        clean = P.load(P.SCR + 'stage-clean-ch1.png')
+        st = P.place(clean, 0.95, (1005, 540), (1000, 548))
+        # the actor close: Tidus's portrait over Gagazet, lit from the boss side
+        bg = backdrop('gagazet.png', 0.75, (700, 500), (300, 520), blur_r=9, gain=0.55)
+        subj = subject(P.ART + 'portraits/tidus.png', 0.74, (430, 470), (300, 372),
+                       rim=dict(color=(190, 215, 255), width=7, strength=0.6, direction=(1, -0.2)),
+                       night=P.NIGHT_FFX)
+        act = bg.copy(); act.alpha_composite(subj)
+        act.alpha_composite(P.ramp(act.size, 560, 900, P.INK, 0.0, 0.72))
+        # the boss close: Seymour's portrait, over the far side of Gagazet
+        bgb = backdrop('gagazet.png', 0.8, (1900, 520), (1660, 520), blur_r=11, gain=0.5)
+        sb = subject(P.ART + 'portraits/seymour.png', 0.86, (360, 470), (1700, 420),
+                     rim=dict(color=(200, 190, 255), width=6, strength=0.5, direction=(-1, -0.3)),
+                     night=dict(mul=(0.9, 0.92, 1.04), sat=0.95))
+        bs = bgb.copy(); bs.alpha_composite(sb)
+        bs.alpha_composite(P.ramp(bs.size, 700, 942, P.INK, 0.0, 0.55))
+        cmd = U.p21_ch1_cmd()
+        cmd_lay = U.moved(cmd, 0.92, (63, 180), (40, 552))
+    else:
+        clean = P.load(P.SCR + 'stage-clean-ch4.png')
+        st = P.place(clean, 0.90, (860, 560), (1040, 566))
+        bg = backdrop('bevelle-underground.png', 0.8, (600, 700), (300, 520), blur_r=9, gain=0.5)
+        subj = subject(P.ART + 'characters/yuna-white-mage/idle.png', 1.55, (349, 150), (262, 368),
+                       rim=dict(color=(255, 190, 225), width=6, strength=0.45, direction=(1, -0.2)), sharpen=True,
+                       night=P.NIGHT_FFX2)
+        act = bg.copy(); act.alpha_composite(subj)
+        act.alpha_composite(P.ramp(act.size, 560, 900, P.INK, 0.0, 0.7))
+        bs = backdrop('bevelle-underground.png', 0.9, (1900, 640), (1650, 560), blur_r=10, gain=0.55)
+        bh = subject('BAHAMUT_CLEAN', 1.45, (465, 129), (1672, 318),
+                     rim=dict(color=(120, 235, 255), width=5, strength=0.75, direction=(-1, -0.4)), sharpen=True)
+        bs.alpha_composite(bh)
+        bs.alpha_composite(P.ramp(bs.size, 720, 942, P.INK, 0.0, 0.5))
+        cmd = U.p21_ch4_cmd()
+        cmd_lay = U.moved(cmd, 1.0, (1512, 180), (24, 648))
+
+    # the three panels, deepest first
+    panel(can, st, stage)
+    panel(can, act, actor)
+    panel(can, bs, boss)
+    # keylines: accent on the stage's two edges, blood on the enemy's panel
+    edge_line(can, (stage[0][0], Y0), (stage[3][0], Y1), acc, 3)
+    edge_line(can, (stage[1][0], Y0), (stage[2][0], Y1), acc, 3)
+    edge_line(can, (boss[0][0] + 1, Y0), (boss[3][0] + 1, Y1), P.BLOOD, 3)
+    # HUD: P21's two bands (turn order, help, boss plate on top; party rows below), the actor's menu in her/his panel
+    top = U.p21_top(ch)
+    P.paste_rgba(can, top.img, top.xy)
+    if ch == 'ffx-ch1':
+        bot = U.p21_bottom(ch)
+        P.paste_rgba(can, bot.img, bot.xy)
+    else:
+        # FFX-2: today's three party rows (the approved skin, leaning '\', ATB gauges) side by side in the band
+        rows = U.ch4_party_rows()
+        for i, r in enumerate(rows):
+            src_pt = (G.CH4_PARTY_ROWS[r.name][3][0], G.CH4_PARTY_ROWS[r.name][0][1])
+            can.alpha_composite(U.moved([r], 1.0, src_pt, (150 + i * 560, 968)))
+    can.alpha_composite(cmd_lay)
+    out = P.grain(can.convert('RGB'), 0.10)
+    return out
+
+
+# ------------------------------------------------------------------ PA-b
+def inset(canvas, content, pts, key=None, key_w=3, shadow=True):
+    m = P.poly_mask(pts)
+    if shadow:
+        canvas.alpha_composite(P.shadow_from_mask(m, (0, 14), 20, 0.6))
+    # ink frame 6 px, then the picture
+    fr = P.solid(P.INK); fr.putalpha(P.poly_mask(pts))
+    canvas.alpha_composite(fr)
+    inner = shrink(pts, 6)
+    c = content.copy()
+    c.putalpha(ImageChops.multiply(c.split()[3], P.poly_mask(inner)))
+    canvas.alpha_composite(c)
+    if key:
+        lay = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
+        ImageDraw.Draw(lay).line(inner + [inner[0]], fill=tuple(key) + (255,), width=key_w)
+        canvas.alpha_composite(lay)
+
+
+def shrink(pts, d):
+    cx = sum(p[0] for p in pts) / 4.0; cy = sum(p[1] for p in pts) / 4.0
+    out = []
+    for x, y in pts:
+        vx, vy = cx - x, cy - y
+        n = math.hypot(vx, vy) or 1
+        out.append((x + vx / n * d * 1.3, y + vy / n * d * 1.3))
+    return out
+
+
+def pa_b(ch):
+    C = P.CH[ch]
+    acc = C['accent']
+    if ch == 'ffx-ch1':
+        clean = P.load(P.SCR + 'stage-clean-ch1.png')
+        can = clean.convert('RGBA')
+        # the actor inset, lower left: Tidus's face
+        a_pts = P.slab_pts(20, 668, 470, 386, 1)
+        bg = backdrop('gagazet.png', 0.7, (700, 520), (300, 840), blur_r=9, gain=0.5)
+        subj = subject(P.ART + 'portraits/tidus.png', 0.62, (430, 470), (330, 842),
+                       rim=dict(color=(190, 215, 255), width=6, strength=0.6, direction=(1, -0.2)),
+                       night=P.NIGHT_FFX)
+        act = bg.copy(); act.alpha_composite(subj)
+        # the boss inset, upper right: Seymour's face (bleeds off the right edge)
+        b_pts = [(1542, 22), (1950, 22), (1950, 402), (1461, 402)]
+        bgb = backdrop('gagazet.png', 0.75, (1900, 500), (1700, 230), blur_r=11, gain=0.45)
+        sb = subject(P.ART + 'portraits/seymour.png', 0.6, (360, 470), (1722, 236),
+                     rim=dict(color=(200, 190, 255), width=6, strength=0.5, direction=(-1, -0.3)),
+                     night=dict(mul=(0.9, 0.92, 1.04), sat=0.95))
+        bs = bgb.copy(); bs.alpha_composite(sb)
+        inset(can, act, a_pts, key=acc)
+        inset(can, bs, b_pts, key=P.BLOOD)
+        # HUD, re-laid: the menu above the actor's inset, the turn order under the boss inset,
+        # the party rows where they are today
+        cmd = [p for p in U.ch1_cmd() if p.name != 'arrow']
+        can.alpha_composite(U.moved(cmd, 0.78, (83, 535), (40, 262)))
+        can.alpha_composite(U.moved([U.ch1_desc()], 0.78, (86, 405), (40, 196)))
+        # the turn order runs along the top edge, left of the boss inset (as in P21's band)
+        strip = U.p21_ctb_strip()
+        s_pts = P.slab_pts(832, 10, 640, 134, 1)
+        fill = P.solid(P.INK); fill.putalpha(P.poly_mask(s_pts).point(lambda v: v * 230 // 255))
+        can.alpha_composite(P.shadow_from_mask(P.poly_mask(s_pts), (0, 8), 12, 0.45))
+        can.alpha_composite(fill)
+        P.paste_rgba(can, strip.img, (866, 14))
+        can.alpha_composite(U.layer(U.ch1_party()))
+    else:
+        clean = P.load(P.SCR + 'stage-clean-ch4.png')
+        # push in 1.15x about the left edge, so the lead (White Mage Yuna) clears the actor inset
+        can = P.place(clean, 1.15, (0, 600), (0, 600))
+        a_pts = P.slab_pts(14, 700, 400, 354, -1)
+        bg = backdrop('bevelle-underground.png', 0.75, (600, 700), (300, 860), blur_r=9, gain=0.48)
+        subj = subject(P.ART + 'characters/yuna-white-mage/idle.png', 1.3, (349, 150), (270, 862),
+                       rim=dict(color=(255, 190, 225), width=6, strength=0.45, direction=(1, -0.2)), sharpen=True,
+                       night=P.NIGHT_FFX2)
+        act = bg.copy(); act.alpha_composite(subj)
+        b_pts = [(1471, 64), (1950, 64), (1950, 464), (1556, 464)]
+        bs = backdrop('bevelle-underground.png', 0.85, (1900, 600), (1700, 300), blur_r=10, gain=0.55)
+        bh = subject('BAHAMUT_CLEAN', 1.05, (465, 129), (1700, 150),
+                     rim=dict(color=(120, 235, 255), width=5, strength=0.75, direction=(-1, -0.4)), sharpen=True)
+        bs.alpha_composite(bh)
+        inset(can, act, a_pts, key=acc)
+        inset(can, bs, b_pts, key=P.BLOOD)
+        # FFX-2 HUD stays where the approved skin puts it: help band on top, boss plate top left,
+        # the menu and the party rows anchored right
+        help_ = U.ch4_help(); P.paste_rgba(can, help_.img, help_.xy)
+        can.alpha_composite(U.layer([U.ch4_plate()]))
+        can.alpha_composite(U.layer(U.ch4_cmd()))
+        can.alpha_composite(U.layer(U.ch4_party_rows()))
+    out = P.grain(can.convert('RGB'), 0.10)
+    return out
+
+
+if __name__ == '__main__':
+    import sys
+    which = sys.argv[1:] or ['a', 'b']
+    for ch in ('ffx-ch1', 'ffx2-ch4'):
+        if 'a' in which:
+            P.save_jpg(pa_a(ch), P.OUT + 'frames/%s/PA-a.jpg' % ch)
+        if 'b' in which:
+            P.save_jpg(pa_b(ch), P.OUT + 'frames/%s/PA-b.jpg' % ch)
+        print('done', ch)

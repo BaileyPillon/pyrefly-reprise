@@ -1,0 +1,80 @@
+# Registers a shipped painting onto a real-engine frame (scale, horizontal squash, offset)
+# so the part of the figure hidden under a HUD slab can be repainted from the painting.
+import sys, json
+import numpy as np
+from PIL import Image, ImageFilter
+
+FR = 'D:/Final Fantasy/docs/concepts/perspectives-2026-09-27/frames/'
+ART = 'D:/Final Fantasy/public/art/characters/'
+
+
+def grad(g):
+    gx = np.zeros_like(g); gy = np.zeros_like(g)
+    gx[:, 1:-1] = g[:, 2:] - g[:, :-2]
+    gy[1:-1, :] = g[2:, :] - g[:-2, :]
+    return np.hypot(gx, gy)
+
+
+def prep_frame(rel, box):
+    im = Image.open(FR + rel).convert('L').crop(box)
+    g = np.asarray(im.filter(ImageFilter.GaussianBlur(1.2))).astype(np.float32) / 255.0
+    return grad(g)
+
+
+def render(paint, b, k, W, H, ox, oy):
+    """paint: RGBA image. returns (gradient of luminance composited over black, alpha) on a WxH canvas,
+    the painting scaled by (b*k, b) and placed with its top-left at (ox, oy)."""
+    w = max(1, int(round(paint.size[0] * b * k))); h = max(1, int(round(paint.size[1] * b)))
+    p = paint.resize((w, h), Image.LANCZOS)
+    can = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    can.alpha_composite(p, (int(round(ox)), int(round(oy))))
+    a = np.asarray(can.split()[3]).astype(np.float32) / 255.0
+    l = np.asarray(can.convert('L').filter(ImageFilter.GaussianBlur(1.2))).astype(np.float32) / 255.0
+    return grad(l) * (a > 0.5), a
+
+
+def search(frame_rel, box, paint_rel, valid_fn, b_range, k_range, feet_xy, steps):
+    fg = prep_frame(frame_rel, box)
+    H, W = fg.shape
+    paint = Image.open(ART + paint_rel).convert('RGBA')
+    # bottom of the painting's alpha = feet line
+    al = np.asarray(paint.split()[3])
+    rows = np.where(al.max(axis=1) > 40)[0]
+    pbot = rows[-1]
+    cols = np.where(al.max(axis=0) > 40)[0]
+    valid = valid_fn(W, H, box)
+    best = None
+    for b in np.linspace(*b_range, steps[0]):
+        for k in np.linspace(*k_range, steps[1]):
+            # anchor: painting's bottom-centre of mass near the feet point
+            for dx in range(-30, 31, 6):
+                for dy in range(-16, 17, 4):
+                    ox = feet_xy[0] - box[0] + dx - paint.size[0] * b * k * 0.5
+                    oy = feet_xy[1] - box[1] + dy - pbot * b
+                    pg, a = render(paint, b, k, W, H, ox, oy)
+                    m = (a > 0.5) & valid
+                    if m.sum() < 500:
+                        continue
+                    x = pg[m]; y = fg[m]
+                    x = x - x.mean(); y = y - y.mean()
+                    s = (x * y).sum() / (np.sqrt((x * x).sum() * (y * y).sum()) + 1e-6)
+                    if best is None or s > best[0]:
+                        best = (float(s), float(b), float(k), float(ox + box[0]), float(oy + box[1]))
+    return best
+
+
+if __name__ == '__main__':
+    box = (520, 520, 820, 980)  # region around Tidus in P01 Ch I
+
+    def valid_ch1(W, H, box):
+        # exclude the command rows (their right ends) from the score: keep x > 665 or the row gaps
+        v = np.ones((H, W), bool)
+        ys = np.arange(H)[:, None] + box[1]; xs = np.arange(W)[None, :] + box[0]
+        rows = [(535, 603, 553), (615, 683, 575), (693, 762, 597), (773, 842, 617), (852, 920, 641), (933, 1001, 661)]
+        for y0, y1, xr in rows:
+            v &= ~((ys >= y0 - 2) & (ys <= y1 + 2) & (xs <= xr + 4))
+        return v
+
+    best = search('ffx-ch1/P01-today-dressed.jpg', box, 'tidus/idle.png', valid_ch1,
+                  (0.31, 0.37), (0.80, 1.02), (690, 942), (7, 6))
+    print('coarse', best)

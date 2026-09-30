@@ -1,0 +1,131 @@
+# pc.py - PC "Reaction panels" on the enemy's big attack: a manga-page split for ~1.2 s.
+#   A (tall, left): the boss winding up.  B (top right): the targeted member's face.  C (bottom right): the stage,
+#   with the shipped banner line for the attack and the party rows (HP about to change).
+#   FFX Ch I : Seymour Flux uses Lance of Atrophy on Tidus (src/data/ffx/enemies/seymour-flux-abilities.ts).
+#   FFX-2 Ch IV: Bahamut casts Mega Flare (src/data/ffx2/enemies/bahamut-abilities.ts), all three girls targeted.
+import math
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
+import numpy as np
+import plib as P
+import hud as U
+import pa as PA
+
+T = P.T12
+
+
+def red_telegraph(img, strength=0.5, cx=0.5, cy=0.4):
+    """The engine's telegraph look: a blood-red vignette pulse over the shot."""
+    w, h = img.size
+    ys, xs = np.mgrid[0:h, 0:w].astype(np.float32)
+    r = np.sqrt(((xs / w - cx) / 0.62) ** 2 + ((ys / h - cy) / 0.55) ** 2)
+    a = np.clip((r - 0.35) / 0.9, 0, 1) ** 1.2 * strength
+    lay = np.zeros((h, w, 4), np.float32)
+    lay[..., :3] = np.array((120, 16, 22), np.float32) / 255
+    lay[..., 3] = a
+    base = img.convert('RGBA'); base.alpha_composite(P.from_np(lay, 'RGBA'))
+    return base
+
+
+def keyline(canvas, pts, color, width=3):
+    lay = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
+    ImageDraw.Draw(lay).line(pts + [pts[0]], fill=tuple(color) + (255,), width=width, joint='curve')
+    canvas.alpha_composite(lay)
+
+
+def layout(slant=1):
+    # gutter A|B,C: a 12-degree lean through x=685 at mid height, '/' in FFX and '\' in FFX-2
+    mid = 685
+    top_x, bot_x = mid + 540 * T * slant, mid - 540 * T * slant
+    g = 10
+    A = [(0, 0), (top_x - g, 0), (bot_x - g, 1080), (0, 1080)]
+    # B / C split: a slight tilt across the right column
+    yl, yr = 452, 404   # y at the left gutter and at the right edge
+    xl_at = lambda y: top_x - y * T * slant  # the A|B gutter's x at height y
+
+    def split_y(x):
+        return yl + (yr - yl) * (x - xl_at(yl)) / (1920 - xl_at(yl))
+    xB0 = xl_at(0) + g
+    Bp = [(xB0, 0), (1920, 0), (1920, yr - g), (xl_at(yl - g) + g, yl - g)]
+    Cp = [(xl_at(yl + g) + g, yl + g), (1920, yr + g), (1920, 1080), (bot_x + g, 1080)]
+    return A, Bp, Cp
+
+
+def pc(ch):
+    C = P.CH[ch]
+    acc = C['accent']
+    A, Bp, Cp = layout(C['slant'])
+    can = P.solid(P.INK).copy()
+
+    if ch == 'ffx-ch1':
+        # A: Seymour Flux winding up - his shipped attack painting, lit by the telegraph red
+        bg = PA.backdrop('gagazet.png', 0.9, (1500, 600), (400, 560), blur_r=10, gain=0.5)
+        s = P.load(P.ART + 'characters/seymour-flux-body/attack.png')
+        s = P.rim_light(s, color=(255, 120, 140), width=6, strength=0.55, direction=(1, -0.3))
+        s = P.channel_grade(s, mul=(1.0, 0.9, 1.0), sat=1.02)
+        lay = P.place(s, 1.22, (330, 330), (360, 330))
+        bossA = bg.copy(); bossA.alpha_composite(lay)
+        bossA = red_telegraph(bossA, 0.62, 0.22, 0.35)
+        # B: Tidus bracing - the chapter's own painting of him facing Seymour (pause art, 'anguished anger')
+        src = P.load(P.ART + 'pause/ch1-seymour-flux.2x.webp', 'RGB')
+        faceB = P.place(src, 0.85, (1060, 700), (1360, 215))
+        faceB = P.grade(faceB, gain=0.96, sat=1.03)
+        # C: the stage (today's view, HUD painted out), the shipped banner and the party rows
+        clean = P.load(P.SCR + 'stage-clean-ch1.png')
+        stageC = P.place(clean, 0.70, (1000, 560), (1330, 770))
+        stageC = red_telegraph(stageC, 0.32, 0.6, 0.55)
+        banner = P.action_banner('Seymour Flux', 'USES LANCE OF ATROPHY ON TIDUS', acc, slant=1, scale=0.9)
+        party = U.moved(U.ch1_party(), 0.60, (1201, 775), (1500, 868))
+    else:
+        # A: Bahamut winding up - the real-engine colossus shot (existing art), telegraph red
+        bg = PA.backdrop('bevelle-underground.png', 1.0, (1400, 500), (420, 520), blur_r=11, gain=0.55)
+        bh = P.bahamut_clean('idle')
+        bh = P.rim_light(bh, color=(255, 120, 150), width=6, strength=0.6, direction=(1, -0.4))
+        lay = P.place(bh, 1.24, (465, 129), (400, 200))
+        a = lay.split()[3]
+        lay = lay.convert('RGB').filter(ImageFilter.UnsharpMask(radius=2.0, percent=60, threshold=2)).convert('RGBA')
+        lay.putalpha(a)
+        bossA = bg.copy(); bossA.alpha_composite(lay)
+        # the charge gathering at the jaw (a plain additive glow; the engine's vfx layer can draw this)
+        cx, cy = 486, 222
+        lines = Image.new('RGBA', (P.W, P.H), (0, 0, 0, 0))
+        dl = ImageDraw.Draw(lines)
+        import random as _r
+        rr = _r.Random(3)
+        for k in range(26):   # energy drawn in toward the jaw: converging strokes
+            ang = rr.uniform(0, 2 * math.pi); r0 = rr.uniform(120, 260); r1 = rr.uniform(40, 70)
+            dl.line([(cx + r0 * math.cos(ang), cy + r0 * math.sin(ang)), (cx + r1 * math.cos(ang), cy + r1 * math.sin(ang))],
+                    fill=(255, 200, 235, int(rr.uniform(90, 200))), width=rr.choice([1, 2, 2, 3]))
+        bossA.alpha_composite(lines.filter(ImageFilter.GaussianBlur(0.6)))
+        gl = Image.new('L', (P.W, P.H), 0)
+        ImageDraw.Draw(gl).ellipse([cx - 26, cy - 26, cx + 26, cy + 26], fill=255)
+        bossA.alpha_composite(P.glow(gl, (240, 120, 210), 34, 1.0))
+        bossA.alpha_composite(P.glow(gl, (255, 235, 250), 9, 1.0))
+        bossA = red_telegraph(bossA, 0.58, 0.3, 0.3)
+        # B: Yuna - the chapter's own painting of her with the aeon (pause art)
+        src = P.load(P.ART + 'pause/ch4-ffx2-bahamut.2x.webp', 'RGB')
+        faceB = P.place(src, 0.74, (1330, 660), (1440, 196))
+        faceB = P.grade(faceB, gain=0.92, sat=1.0)
+        clean = P.load(P.SCR + 'stage-clean-ch4.png')
+        stageC = P.place(clean, 0.72, (900, 560), (1300, 770))
+        stageC = red_telegraph(stageC, 0.36, 0.62, 0.5)
+        banner = P.action_banner('Bahamut', 'CASTS MEGA FLARE', acc, slant=-1, scale=0.9)
+        party = U.moved(U.ch4_party_rows(), 0.60, (1370, 776), (1560, 896))
+
+    # compose the three panels (C first, then B, then A over the gutters' shadows)
+    PA.panel(can, stageC.convert('RGBA'), Cp)
+    PA.panel(can, faceB.convert('RGBA'), Bp)
+    PA.panel(can, bossA.convert('RGBA'), A)
+    keyline(can, [(x + 0.0, y) for x, y in A], P.BLOOD, 4)
+    keyline(can, Bp, acc, 3)
+    keyline(can, Cp, P.PAPER, 2)
+    # the banner hangs across the B/C gutter like a caption box; the party rows sit in the stage panel
+    bx = 860 if ch == 'ffx-ch1' else 900
+    P.paste_rgba(can, banner, (bx, 404))
+    can.alpha_composite(party)
+    return P.grain(can.convert('RGB'), 0.09)
+
+
+if __name__ == '__main__':
+    for ch in ('ffx-ch1', 'ffx2-ch4'):
+        P.save_jpg(pc(ch), P.OUT + 'frames/%s/PC.jpg' % ch)
+        print('done', ch)
