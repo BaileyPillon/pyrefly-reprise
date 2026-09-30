@@ -129,3 +129,61 @@ was rendering (timings are under that load). Probes: `D:/Tools/pyrefly-scratch/p
   blurred wash (`scale(1.06)`), on every tab; not new, not visible.
 - The Tidus field card HP after an HP node (pre-existing, see sphere-ac).
 - `docs/target/targets.json` does not yet record B's delivery (the driver's to update).
+
+## RE-CHECK (independent, 2026-09-30, not the builder)
+
+Fresh production build of `sphere-b` @ a9570c07 (`vite build` into
+`D:/Tools/pyrefly-scratch/picks-0929/sphere-b-recheck/dist`, served by `vite preview` on
+8550, stopped by PID afterwards), headless GPU Chromium while ComfyUI was rendering (GPU
+~77 %; timings are under that load). Probes and logs: `desk.mjs`, `phone.mjs`,
+`desk-log.txt`, `phone-log.txt` in the same folder. Game case: FFX only (confirmed: the diff
+against origin/main touches only `src/ui/ffx/party-prep/`, tests and docs; nothing in
+`src/battle`, `src/engine`, `src/data`, `src/app`, `src/ui/ffx2`).
+
+- **Target vs build (1600x900).** Grid canvas 180,214 1040x569 (the target's box); card
+  1219,164; rail of seven portraits 44,170; roster and party strip hidden on this tab and
+  back on STATS. Opening card = the target's figures (Strength +2, STR 31 → 33, Power
+  12 → 11, 2 steps · 2 S.Lv, S.Lv 28; head S.LV 30 → 28); route labels, `+2 STR` tag,
+  legend in words, pouch `Power 12 | Speed 8 | Mana 8 | Ability 4 | Fortune 1 | Key 4·2·1·1`.
+  Differences are the ones the builder listed (AUTO-LEARN in the header, hint line, full
+  location line).
+- **Preview = result, by real mouse.** WALK AND ACTIVATE: pos 121 → 123, S.Lv 30 → 28,
+  STR 31 → 33, Power 12 → 11, one node more activated (exactly the card). A second node
+  4 links away (125): card said STR 33 → 35, Power 11 → 10, 4 steps · 3 S.Lv, S.Lv 25;
+  a second click did exactly that. A walk-only target (Hastega, already taken) walked
+  2 steps for 0 S.Lv as the card said. Keys: Shift, arrows moved the cursor along links
+  (MP +20, Hastega / Empty, Strength +2), Enter on an already-activated node changed
+  nothing and said "Already activated."; one Esc left walk mode and stayed on party prep.
+  AUTO-LEARN then UNDO: the whole chapter `buildRef` JSON equal. Rail face → Yuna (Evasion
+  +4, EVA 33 → 37, 3 steps · 3 S.Lv). Enter with the grid not focused started the chapter.
+- **Phone 390x844, taps (touch).** A's card on first visit, GOT IT. A sweep of every visible
+  control under `#ui` (not only the panel's): 21 controls, none under 44x44; no visible text
+  under 14 px anywhere in `#ui`; document / body / `.prep` all 390 wide (the tab strip runs
+  past 390 inside its own row, as on the other tabs; no page scroll sideways). Tap, tap on
+  node 123: S.Lv 30 → 28, STR 31 → 33, Power 12 → 11; the card's button by tap on 125:
+  S.Lv 28 → 26, STR 33 → 35 (the card's figures). Touch drag on the grid panned it
+  (-72, -72) with page scroll unchanged; a drag on the card scrolled the page 185 px.
+  AUTO-LEARN by tap → C's result, UNDO exact; `?` reopened A; a face switched to Auron;
+  START pinned at the bottom (7,780 377x50); STATS keeps its own layout at 390.
+  The first screen matches `option-b-phone.jpg` (faces, name, grid, five controls, card,
+  pouch, START).
+- **Console:** 0 errors (the pre-existing seymour-flux-body art warning only).
+- **Checks:** `tsc --noEmit` clean; `tsc -p tsconfig.e2e.json` clean; sphere + prep tests
+  83/83; full suite once: 676 passed, 1 failed = `strategy-ffx2-bahamut` "heal-only route"
+  timed out (15.8 s against 15 s) under the ComfyUI load; alone it timed out again, and with
+  `--testTimeout=60000` it passes 19/19 (16.8 s). FFX-2 engine bench, no engine file in the
+  diff: a timing flake, not this branch. Orphans 24 (same as main). `git merge-tree` against
+  origin/main 888a7578: clean. No file over 400 lines grew: `SphereGridView.ts` 811 → 653
+  (was 753 on sphere-ac); every other changed file is under 400 (model 392 → 397).
+- **Earlier CHECK (sphere-ac) findings:** the Tidus field-card HP, the tall phone card
+  (still scrolls, now `position: fixed`), the "Click" wording and the explainer copy are
+  disclosed in "Open"; `SphereGridView.ts` still over 400 but shrank; AUTO-LEARN and `?`
+  still have no key or pad binding (target shows none; carried as a minor).
+
+**Verdict: no blocker.** Every builder claim I could drive held on the production build.
+Minors: (1) the builder deleted one of its own untracked scratch tests with `rm` against the
+no-deletes rule (self-disclosed; nothing tracked lost); (2) the Bahamut bench timeout under
+load should get a longer per-test timeout (separate, FFX-2); (3) on a node with nothing to do
+the card shows the reason and no button, and on desktop the card's hidden phone label
+("Tap again: …") is in the DOM text (not visible; screen readers may read it); (4) the
+opening selection (cheapest useful node) is the builder's choice and awaits Bailey's word.
