@@ -12,7 +12,8 @@
  * 4. HP and MP nodes skipped the base stat, so max HP broke the §9 rule the
  *    rest of the game uses (Tidus: HP +200 gave 2620, the rule says 2640).
  * 5. Walk mode's arrows let the cursor wander past the character's reach,
- *    so Enter then answered "Not linked to this node."
+ *    so Enter then answered "Not linked to this node." (Option B, D-295, makes
+ *    far nodes actionable: WALK AND ACTIVATE; the test now checks that.)
  * 6. After a click the caption only said "Enter", never the second click.
  */
 
@@ -25,6 +26,8 @@ import { NODE_BY_ID, neighboursOf, nodeEffect, nodeLabel, type GridNode } from '
 import { SphereGridModel } from '../../src/ui/ffx/party-prep/sphereGridModel.ts';
 import { actionLine, tooltipLines } from '../../src/ui/ffx/party-prep/sphereGridCaption.ts';
 import { SphereGridView } from '../../src/ui/ffx/party-prep/SphereGridView.ts';
+import { nextTarget } from '../../src/ui/ffx/party-prep/sphereGridAutoLearn.ts';
+import { walkAndActivate } from '../../src/ui/ffx/party-prep/sphereGridPreview.ts';
 
 function fresh(): { build: FFXPartyBuild; model: SphereGridModel } {
   const build = structuredClone(gagazetBuild);
@@ -196,19 +199,32 @@ describe('4. HP and MP nodes follow the same max-HP rule as the rest of the game
   });
 });
 
-describe('5. walk mode keeps the cursor within the character’s reach', () => {
-  it('arrows only land on the character’s node or a node linked to it', () => {
+describe('5. walk mode moves the cursor along links, and Enter never lies about a far node', () => {
+  // Superseded by option B (D-295): the cursor now steps along links from itself,
+  // because Enter walks and activates wherever it lands and the card prices that
+  // first. What fb-0929 guarded still holds: every step follows a link, and acting
+  // on a node two or more links out no longer answers "Not linked to this node".
+  it('each arrow lands on a node linked to the one before', () => {
     const { model } = fresh();
     const view = new SphereGridView();
     view.show(model, 'tidus');
-    const pos = model.gridFor('tidus')!.position;
-    const allowed = new Set([pos, ...neighboursOf(pos)]);
     const dirs: Array<[number, number]> = [[1, 0], [0, 1], [-1, 0], [0, -1], [1, 0], [1, 0], [0, 1], [0, 1], [-1, 0], [-1, 0]];
     for (const [dx, dy] of dirs) {
-      view.moveCursor(dx, dy);
-      expect(allowed.has(view.cursorNode!.id), `cursor on ${view.cursorNode!.id} after (${dx},${dy})`).toBe(true);
+      const from = view.cursorNode!.id;
+      if (!view.moveCursor(dx, dy)) continue;
+      const to = view.cursorNode!.id;
+      expect(neighboursOf(from).includes(to), `cursor ${from} -> ${to} after (${dx},${dy})`).toBe(true);
     }
     view.unmount();
+  });
+
+  it('a node two links out is walked to and activated, not refused', () => {
+    const { model } = fresh();
+    const path = nextTarget(model, 'tidus')!;
+    expect(path.length).toBeGreaterThan(1);
+    const r = walkAndActivate(model, 'tidus', path[path.length - 1]!);
+    expect(r.ok).toBe(true);
+    expect(r.message).not.toContain('Not linked');
   });
 });
 

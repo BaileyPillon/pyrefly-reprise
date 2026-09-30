@@ -1,0 +1,240 @@
+/*
+ * Sphere Grid option B on the desktop board, part two (split from
+ * sphere-grid-b.css to keep each file under 400 lines): the selected-node card,
+ * the legend in words and the pouch in words, built to
+ * docs/concepts/fb-0929/sphere/option-b-layout.jpg. Lengths are the target's
+ * 1600x900 values / 2.5, with that value in the comment. FFX only.
+ */
+
+@media (min-width: 600px) {
+  /* ------------------------------------------------------------ card */
+  .sgb-card {
+    position: absolute;
+    left: 504.8px; /* 1262 */
+    top: 65.6px; /* 164 */
+    width: 120px; /* 300 */
+    height: 161.6px; /* 404 */
+    box-sizing: border-box;
+    padding: 8.8px 8.8px 7.2px 12px; /* 22 22 18 30 */
+    background: var(--ig-paper);
+    color: var(--ig-ink);
+    border-left: 2.4px solid var(--ig-gold); /* 6 */
+    transform: skewX(var(--ig-skew, -12deg));
+    box-shadow: 0 7.2px 16px rgba(0, 0, 0, 0.55); /* 18 40 */
+    pointer-events: auto;
+  }
+  .sgb-card__in {
+    transform: skewX(var(--ig-skew-inverse, 12deg));
+  }
+  .sgb-kicker {
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 6px; /* 15 */
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ig-gold-on-paper);
+  }
+  .sgb-name {
+    margin-top: 2.4px; /* 6 */
+    font-family: var(--ig-font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 13.6px; /* 34 */
+    line-height: 1.05;
+  }
+  .sgb-big {
+    margin: 3.2px 0 4.8px; /* 8 0 12 */
+    font-family: var(--ig-font-numeral);
+    font-weight: 700;
+    font-size: 18.4px; /* 46 */
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .sgb-big em {
+    font-style: normal;
+    color: var(--ig-gold-on-paper);
+  }
+  .sgb-big-words {
+    font-size: 10px; /* 25 */
+    white-space: normal;
+  }
+  .sgb-sub {
+    display: none;
+  }
+  .sgb-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 2.8px 0; /* 7 */
+    border-top: 0.4px solid rgba(11, 10, 18, 0.14);
+    font-family: var(--ig-font-text);
+    font-size: 6.2px; /* 15.5 */
+  }
+  .sgb-row b {
+    font-family: var(--ig-font-numeral);
+    font-size: 7.2px; /* 18 */
+    white-space: nowrap;
+  }
+  .sgb-go {
+    display: inline-block;
+    margin-top: 5.6px; /* 14 */
+    padding: 4px 5.6px; /* 10 14 */
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 5.6px; /* 14 */
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ig-gold);
+    background: var(--ig-ink);
+    border: 0.8px solid var(--ig-ink);
+    border-radius: 0;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .sgb-go:hover:not(:disabled) {
+    outline: 1.2px solid var(--ig-gold);
+    outline-offset: 0.8px;
+  }
+  .sgb-go:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .sgb-go__tap {
+    display: none;
+  }
+  .sgb-why,
+  .sgb-note {
+    margin: 4px 0 0; /* 10 */
+    font-family: var(--ig-font-text);
+    font-size: 5.4px; /* 13.5 */
+    line-height: 1.35;
+    color: #5a5566;
+  }
+  .sgb-why {
+    color: #9d2730;
+  }
+  /* The slab leans: keep the lower lines clear of its slanted right edge, and a long message to four lines. */
+  .sgb-why,
+  .sgb-note {
+    margin-right: 10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
+  }
+  .sgb-card--said .sgb-note {
+    color: var(--ig-ink);
+    font-weight: 700;
+  }
+
+  /* ---------------------------------------------------------- legend */
+  .sgb-legend {
+    position: absolute;
+    left: 504.8px; /* 1262 */
+    top: 236px; /* 590 */
+    width: 120px; /* 300 */
+    height: 77.2px; /* 193 */
+    box-sizing: border-box;
+    padding: 6.4px 6.4px 4.8px 10.4px; /* 16 16 12 26 */
+    background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
+    color: var(--ig-paper);
+    border-left: 2px solid var(--ig-gold); /* 5 */
+    transform: skewX(var(--ig-skew, -12deg));
+  }
+  .sgb-legend > * {
+    transform: skewX(var(--ig-skew-inverse, 12deg));
+  }
+  .sgb-kicker--gold {
+    color: var(--ig-gold);
+    font-size: 5.2px; /* 13 */
+  }
+  .sgb-legend__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 4.8px; /* 5 12 */
+    margin-top: 3.2px; /* 8 */
+  }
+  .sgb-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.4px; /* 6 */
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 5.4px; /* 13.5 */
+    letter-spacing: 0.04em;
+    color: var(--ig-paper);
+    white-space: nowrap;
+  }
+  .sgb-chip i,
+  .sgb .ffxprep-sg__sphere i {
+    width: 4.8px; /* 12 */
+    height: 4.8px;
+    border-radius: 50%;
+    flex: none;
+  }
+  .sgb-chip i.sgb-dot--ring {
+    box-sizing: border-box;
+    background: #141a28;
+    border: 0.8px solid #f28a6a;
+  }
+  .sgb-legend__gold {
+    margin-top: 3.2px; /* 8 */
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 5.2px; /* 13 */
+    color: #fff0a8;
+  }
+
+  /* ----------------------------------------------------------- pouch */
+  .sgb .ffxprep-sg__pouch {
+    position: absolute;
+    left: 72px; /* 180 */
+    top: 320px; /* 800 */
+    width: 416px; /* 1040 */
+    height: 23.2px; /* 58 */
+    box-sizing: border-box;
+    padding: 0 8.8px; /* 22 */
+    display: flex;
+    align-items: center;
+    gap: 8.8px; /* 22 */
+    background: var(--ig-ink-panel, rgba(11, 10, 18, 0.84));
+    border-left: 2px solid var(--ig-gold); /* 5 */
+    transform: skewX(var(--ig-skew, -12deg));
+  }
+  .sgb .ffxprep-sg__sphere {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.4px;
+    transform: skewX(var(--ig-skew-inverse, 12deg));
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 6px; /* 15 */
+    letter-spacing: 0.04em;
+    color: var(--ig-paper);
+    padding-bottom: 0.8px;
+    border-bottom: 1.2px solid transparent; /* 3 */
+    box-shadow: none;
+  }
+  .sgb .ffxprep-sg__sphere b {
+    font-family: var(--ig-font-numeral);
+    font-size: 8px; /* 20 */
+    color: var(--ig-gold);
+    margin-left: 0.8px;
+  }
+  .sgb .ffxprep-sg__sphere--wanted {
+    border-bottom-color: var(--ig-gold);
+  }
+  .sgb .ffxprep-sg__sphere--out {
+    opacity: 0.4;
+  }
+
+  /* C's result card: over the grid's lower edge instead of under the old strip. */
+  .prep[data-tab='sphere-grid'] .sgx-cover {
+    display: none;
+  }
+  .prep[data-tab='sphere-grid'] .sgx-result-pos {
+    left: 88px; /* 220 */
+    top: 252px; /* 630 */
+  }
+}

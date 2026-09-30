@@ -1,0 +1,227 @@
+/*
+ * Sphere Grid option B on the phone, part two (split from
+ * sphere-grid-b-phone.css to keep each file under 400 lines): the card, the
+ * pouch, AUTO-LEARN, the legend and the pinned START BATTLE, built to
+ * docs/concepts/fb-0929/sphere/option-b-phone.jpg. Nothing a player reads is
+ * under 14 px (CHK-003); every control is at least 44 px. FFX only.
+ */
+
+@media (max-width: 599px) {
+  /* ---------------------------------------------------------- card */
+  .sgb-card {
+    grid-row: 5;
+    margin: 12px 6px 0;
+    padding: 12px 14px 12px 20px;
+    background: var(--ig-paper);
+    color: var(--ig-ink);
+    border-left: 6px solid var(--ig-gold);
+    transform: skewX(var(--ig-skew, -12deg));
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+    pointer-events: auto;
+  }
+  .sgb-card__in {
+    transform: skewX(var(--ig-skew-inverse, 12deg));
+  }
+  .sgb-kicker {
+    display: none;
+  }
+  .sgb-card__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .sgb-name {
+    font-family: var(--ig-font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.1;
+    min-width: 0;
+  }
+  .sgb-big {
+    font-family: var(--ig-font-numeral);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .sgb-big em {
+    font-style: normal;
+    color: var(--ig-gold-on-paper);
+  }
+  .sgb-big-words {
+    font-size: 18px;
+  }
+  .sgb-sub {
+    margin-top: 4px;
+    font-family: var(--ig-font-text);
+    font-size: 14px;
+    color: #2a2733;
+  }
+  .sgb-rows {
+    display: none;
+  }
+  .sgb-go {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 8px;
+    padding: 0 10px;
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ig-gold);
+    background: var(--ig-ink);
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .sgb-go:disabled {
+    opacity: 0.4;
+  }
+  .sgb-why,
+  .sgb-note {
+    margin: 6px 0 0;
+    font-family: var(--ig-font-text);
+    font-size: 14px;
+    line-height: 1.35;
+    color: #5a5566;
+  }
+  .sgb-why {
+    color: #9d2730;
+  }
+  /* The standing "Enter or click again" note is the desktop's; the phone's button says "Tap again". */
+  .sgb-card:not(.sgb-card--said) .sgb-note {
+    display: none;
+  }
+  .sgb-card--said .sgb-note {
+    color: var(--ig-ink);
+    font-weight: 700;
+  }
+
+  /* --------------------------------------------------------- pouch */
+  .sgb .ffxprep-sg__pouch {
+    grid-row: 6;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: 12px;
+  }
+  .sgb .ffxprep-sg__sphere {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    color: var(--ig-paper);
+    border-bottom: 2px solid transparent;
+    box-shadow: none;
+  }
+  .sgb .ffxprep-sg__sphere b {
+    font-family: var(--ig-font-numeral);
+    font-size: 17px;
+    color: var(--ig-gold);
+  }
+  .sgb .ffxprep-sg__sphere i,
+  .sgb-chip i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex: none;
+  }
+  .sgb .ffxprep-sg__sphere--wanted {
+    border-bottom-color: var(--ig-gold);
+  }
+  .sgb .ffxprep-sg__sphere--out {
+    opacity: 0.4;
+  }
+
+  /* -------------------------------------------------------- legend */
+  .sgb-legend {
+    grid-row: 8;
+    margin-top: 18px;
+    padding: 12px 14px;
+    background: rgba(11, 10, 18, 0.84);
+    border-left: 5px solid var(--ig-gold);
+  }
+  .sgb-kicker--gold {
+    display: block;
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ig-gold);
+  }
+  .sgb-legend__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+    margin-top: 8px;
+  }
+  .sgb-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ig-paper);
+  }
+  .sgb-chip i.sgb-dot--ring {
+    box-sizing: border-box;
+    background: #141a28;
+    border: 2px solid #f28a6a;
+  }
+  .sgb-legend__gold {
+    margin-top: 8px;
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff0a8;
+  }
+
+  /* ------------------------------------ START BATTLE, pinned bottom */
+  .prep[data-tab='sphere-grid'] .prep__phone-dock {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 92px;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to top, #04060b 60%, rgba(4, 6, 11, 0));
+  }
+  .prep[data-tab='sphere-grid'] .prep__start {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+    height: 50px;
+    z-index: 3;
+    justify-content: center;
+    padding: 0;
+    font-size: 18px;
+    letter-spacing: 0.3em;
+  }
+  .prep[data-tab='sphere-grid'] .prep__start > span {
+    gap: 12px;
+  }
+  .prep[data-tab='sphere-grid'] .prep__start-tri {
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+    border-left-width: 12px;
+  }
+
+  /* A and C's phone layers stay put while the page scrolls under them. */
+  .prep[data-tab='sphere-grid'] > .sgx-layer--phone {
+    position: fixed;
+  }
+}

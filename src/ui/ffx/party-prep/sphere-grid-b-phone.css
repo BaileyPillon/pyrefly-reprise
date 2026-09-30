@@ -1,0 +1,293 @@
+/*
+ * Sphere Grid option B on the phone (Bailey's pick D-295; FFX only), built to
+ * docs/concepts/fb-0929/sphere/option-b-phone.jpg at 390x844: the tab's own
+ * stacked page instead of the desktop board shrunk to 0.61.
+ *
+ * The page recipe is the CHAPTER tab's (src/ui/common/party-prep-phone.css,
+ * PR-0127 option A): under 600 CSS px the stage stops being a scaled 640x360
+ * board, one CSS px is one CSS px, `.prep` scrolls, and START BATTLE is pinned
+ * to the bottom. Order down the page: the tab strip, a row of faces, the name
+ * and S.Lv, the grid (a drag pans it; the page scrolls everywhere else), the
+ * controls, the selected-node card, the pouch in words, AUTO-LEARN, and the
+ * legend in words. Every control is at least 44 px, nothing a player reads is
+ * under 14 px (CHK-003), and nothing is wider than the page.
+ */
+
+@media (max-width: 599px) {
+  .prep[data-tab='sphere-grid'] {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    pointer-events: auto;
+    scrollbar-width: none;
+    background: #04060b;
+  }
+  .prep[data-tab='sphere-grid']::-webkit-scrollbar {
+    display: none;
+  }
+  .prep[data-tab='sphere-grid'] > .prep__stage {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100%;
+    transform: none !important;
+    --lb-scale: 1 !important;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-content: start;
+    padding-bottom: 92px;
+    box-sizing: border-box;
+    z-index: 0;
+  }
+  .prep[data-tab='sphere-grid'] > .prep__stage > * {
+    grid-column: 1 / -1;
+  }
+  .prep[data-tab='sphere-grid'] .prep__wash,
+  .prep[data-tab='sphere-grid'] .prep__veil {
+    position: fixed;
+    z-index: -1;
+  }
+  .prep[data-tab='sphere-grid'] .prep__wash {
+    filter: blur(6px) brightness(0.2) saturate(0.6);
+  }
+  .prep[data-tab='sphere-grid'] .prep__roster,
+  .prep[data-tab='sphere-grid'] .prep__hint,
+  .prep[data-tab='sphere-grid'] .prep__where,
+  .prep[data-tab='sphere-grid'] .prep__slots,
+  .prep[data-tab='sphere-grid'] > .sgx-dock {
+    display: none;
+  }
+
+  /* ------------------------------------------------ top strip and tabs */
+  .prep[data-tab='sphere-grid'] .prep__eyebrow {
+    position: static;
+    grid-column: 1;
+    grid-row: 1;
+    padding: 18px 0 8px 16px;
+    gap: 8px;
+  }
+  .prep[data-tab='sphere-grid'] .prep__eyebrow-rule {
+    width: 18px;
+    height: 1.5px;
+  }
+  .prep[data-tab='sphere-grid'] .prep__eyebrow-label {
+    font-size: 14px;
+    letter-spacing: 0.3em;
+  }
+  .prep[data-tab='sphere-grid'] .prep__phone-where {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    padding: 18px 16px 8px 8px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    color: rgba(244, 241, 232, 0.72);
+    white-space: nowrap;
+  }
+  .prep[data-tab='sphere-grid'] .prep__tabs {
+    position: static;
+    grid-row: 2;
+    gap: 18px;
+    padding: 0 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    touch-action: pan-x;
+    pointer-events: auto;
+    -webkit-mask-image: linear-gradient(to right, #000 82%, transparent);
+    mask-image: linear-gradient(to right, #000 82%, transparent);
+  }
+  .prep[data-tab='sphere-grid'] .prep__tab {
+    flex: none;
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    /* 44 px tall: a tab is a control too. */
+    box-sizing: border-box;
+    min-height: 44px;
+    padding: 14px 0 9px;
+    border-bottom-width: 3px;
+  }
+  .prep[data-tab='sphere-grid'] .prep__tab:last-child {
+    margin-right: 40px;
+  }
+
+  /* ---------------------------------------- the sheet is a plain column */
+  .prep[data-tab='sphere-grid'] .prep__sheet {
+    position: static;
+    grid-row: 3;
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--ig-paper);
+    transform: none;
+    box-shadow: none;
+  }
+  .prep[data-tab='sphere-grid'] .prep__sheet-inner {
+    transform: none;
+  }
+  /* Five columns so the controls row can sit in the page grid itself (the
+     row of the target's five buttons); every other piece spans them all. */
+  .sgb.ffxprep-sg {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1.5fr 1fr;
+    column-gap: 6px;
+    row-gap: 0;
+    padding: 10px 16px 0;
+  }
+  .sgb.ffxprep-sg > *,
+  .sgb-title {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+  .sgb .ffxprep-sg__head,
+  .sgb-tools {
+    display: contents;
+  }
+
+  /* --------------------------------------------------------- the faces */
+  .sgb-rail {
+    grid-row: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .sgb-face {
+    position: relative;
+    flex: 0 1 46px;
+    width: 46px;
+    min-width: 44px;
+    height: 46px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #3a4456;
+    background: #141222;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .sgb-face--sel {
+    border-color: var(--ig-gold);
+    box-shadow: 0 0 0 3px rgba(227, 185, 74, 0.35);
+  }
+  .sgb-face__img {
+    position: absolute;
+    inset: 0;
+  }
+  .sgb-face__init {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(244, 241, 232, 0.5);
+  }
+  .sgb-face__img img {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 8%;
+  }
+  .sgb-face__lv {
+    display: none;
+  }
+
+  /* -------------------------------------------------- name and S.Lv */
+  .sgb-title {
+    grid-row: 2;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 6px 0 6px;
+  }
+  .sgb .ffxprep-sg__who {
+    font-family: var(--ig-font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 28px;
+    color: var(--ig-paper);
+  }
+  .sgb .ffxprep-sg__slv {
+    font-family: var(--ig-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    color: var(--ig-gold);
+  }
+  .sgb .ffxprep-sg__slv b,
+  .sgb-after i {
+    font-family: var(--ig-font-numeral);
+    font-size: 22px;
+    font-style: normal;
+    letter-spacing: 0;
+    color: var(--ig-paper);
+    margin-left: 4px;
+  }
+  .sgb-after i {
+    color: #f2c21e;
+    margin-left: 0;
+  }
+
+  /* ----------------------------------------------------------- grid */
+  .sgb .ffxprep-sg__slot {
+    grid-row: 3;
+    position: relative;
+    height: 330px;
+    outline: 2px solid rgba(227, 185, 74, 0.55);
+    /* The canvas draws in units this many CSS px wide (see SphereGridView.resize). */
+    --sg-unit: 1.8;
+    --sg-strip: 0;
+  }
+  .sgb .ffxprep-sg__canvas,
+  .sgb .ffxprep-sg__canvas canvas {
+    touch-action: none;
+  }
+
+  /* ------------------------------------------------------ controls */
+  .sgb .ffxprep-sg__btn {
+    grid-row: 4;
+    margin-top: 8px;
+    min-height: 44px;
+    min-width: 44px;
+    box-sizing: border-box;
+    padding: 0 4px;
+    font-family: var(--ig-font-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--ig-paper);
+    background: transparent;
+    border: 2px solid rgba(244, 241, 232, 0.7);
+    border-radius: 0;
+    pointer-events: auto;
+  }
+  .sgb .ffxprep-sg__walk--on {
+    background: var(--ig-gold);
+    border-color: var(--ig-gold);
+    color: var(--ig-ink);
+  }
+  .sgb .ffxprep-sg__help {
+    color: var(--ig-gold);
+    border-color: var(--ig-gold);
+  }
+  /* AUTO-LEARN (option C) gets a whole row of its own under the pouch, so the
+     first screen is the target's: grid, controls, card, pouch. */
+  .sgb .ffxprep-sg__auto {
+    grid-row: 7;
+    grid-column: 1 / -1;
+    margin-top: 14px;
+    color: var(--ig-gold);
+    background: var(--ig-ink);
+    border-color: var(--ig-gold);
+    letter-spacing: 0.22em;
+  }
+}
