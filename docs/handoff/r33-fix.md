@@ -107,3 +107,64 @@ folded, BATTLE HELP OFF, and the main build's link-2 stall frame).
 - The deep report for the new commit before deploy (round 18: save-data class; reuse CHK-024 with
   a dependency argument) and the live review. The fix touches no save code.
 - Round 18's other majors are untouched here (PR-0264 phone tap-commit is the next O3-adjacent one).
+
+## CHECK (independent, 2026-09-30; did not build it)
+
+**Verdict: no blocker.** Branch `r33-fix` at 8588ac7d, checked in place (no pull, no switch).
+My own harnesses, not the builder's: `D:/Tools/pyrefly-scratch/r33-check/` (`seam.mjs`,
+`hint.mjs`, `look.mjs`, `engine.mjs`, `serve.mjs`, outputs in `out/`, `hint/`, `route-fix/`).
+Fresh production builds (`vite build --outDir`, never the shared `dist/`): main 770823bc ->
+`index-DP4ruBbc.js` (the candidate's bundle), branch -> `index-DCYkAkI-.js`; both parked at
+`F:/pyrefly-parked/2026-09-30/r33-check/`. Headless Chromium, PYREFLY_BROWSER=gpu, one browser at a
+time, own static servers on 8910 (main) / 8911 (fix), stopped by PID afterwards.
+
+**PR-0281 (FFX-2 only).** Labelled setup hook: Stop written on Yuna at link 1's first open menu,
+enemies at 1 HP, `autoBattle('attack')`; the engine's own seam carries Stop on.
+
+| Build | Chapter | Seeds | Result |
+|---|---|---|---|
+| main | XV Den of Woe | 1, 2, 3 | **3 of 3 stall** in `moment:battle-start` at link 2 (Shade Gippal), Stop on Yuna |
+| main | XIII Trema | 1 | **1 of 1 stall** at the Trema link |
+| fix | XV Den of Woe | 1-8 | **0 stalls**; 16 Stop-carrying seams (links 2 and 3), each opening handed over in 5.6-6.2 s; all 8 reached results |
+| fix | XIII Trema | 1, 2 | **0 stalls**; opening 6.1 s; results |
+
+Real keys, fix build, 1600x900, round 18's own route (`critic/rounds/round-18/cap/route18d.mjs
+ffx2-den-of-woe win --seed=1`): **victory** in 50 turns. Yuna entered link 2 at 2057 HP and
+STOPPED (frame `route-fix/.../24-seam-2-first-menu.jpg`: Yuna home, STOPPED on her card, the
+menu up). The run went through link 3, the post scene, results, the CONFIRM scene, the board, and
+a reload that kept the clear. 0 console errors, 0 fails.
+
+**Looks unchanged** (`look.mjs`, one status at a time on a figure at an open menu, main vs fix):
+FFX-2 Stop is still a frozen figure on both builds (idle clock and breath moved 0 in 1.5 s).
+FFX-2 curse, pointless, poison, berserk and sleep, and FFX zombie, berserk, curse, poison, stop
+and sleep all have identical tint keys and moving idles on both builds. FFX Stop does not freeze,
+as intended.
+
+**PR-0282 (both games).** Labelled hook: Zombie on Kimahri (Ch I) / Curse on Paine (Ch IV) at the
+first menu; real ArrowDown/ArrowUp to re-sync; `g` folds the guide.
+
+| Case | main | fix |
+|---|---|---|
+| Ch I phone 390x844 touch | covers TALK and ATTACK (8967 px2 each) and the command stack | 0 command rows; nothing under the card |
+| Ch IV phone 390x844 touch | covers WHITE MAGIC and CHANGE (6222 px2 each) | 0 command rows; nothing under the card |
+| Ch I 1600x900 guide folded | 0 rows, 8160 px2 over NEXT BEST MOVE | 0 rows, 0 over the advisor card |
+| Ch I / Ch IV 1600x900 guide open | | inside the guide panel, 0 rows |
+| Ch IV 1600x900 guide folded | 0 rows | 0 rows |
+| BATTLE HELP OFF (the save setting the pause row writes), phone and 1600x900, both games | | no card |
+
+**Engine unchanged.** No file under `src/battle` or `src/engine` changed. Battle logs from
+`gotoChapter(auto 'intended', speed 'skip')` hash identical on main and fix for seeds 1-5 in
+Ch I Seymour Flux (FFX) and Ch IV Bahamut (FFX-2; these logs include Stop and Curse).
+
+**House checks.** `npx tsc --noEmit` is clean. Targeted tests pass: 12 files and 116 tests
+(status-o3-*, the safe zones, coach-avoid, zanmato-avoid, omnis-readout, sin-hud), plus the 64
+tests in ui-ffx-hud-safe-zones. The full `npm test` ran once: 694 files passed, 10486 tests passed,
+0 failed. Orphans: 24, none new. No file over 400 lines grew (`FFXBattleHud.ts` stays at 1668;
+`PaintedActor.ts` is untouched). The files that grew are all under 400 lines (statusHintCard 117,
+statusFigureTint 240, hudAvoidSelectors 113). `git merge-tree --write-tree main r33-fix` is clean.
+
+**Minor, already on main (not caused by this branch):** FFX-2 desktop with the guide folded, on a
+fresh profile. The first-run coach mark (Rikku's line and the GAUGES RUNNING strip) is drawn over
+the lower lines of the cure hint at (53,230). The main build shows the same frame. The coach mark
+is first-time only and fades on its own. Frames: `hint/fix-ffx2-bahamut-1600-folded.jpg`,
+`hint/main-ffx2-bahamut-1600-folded.jpg`.
