@@ -48,6 +48,25 @@ export interface CoachMarkOptions {
   /** Injectable clock, so a test can run the fade without waiting 5 seconds. */
   setTimer?: (fn: () => void, ms: number) => number;
   clearTimer?: (handle: number) => void;
+  /** The guided first run's third step wears this line (`firstRunGuide.ts`, O2, FFX only). */
+  guide?: CoachGuide | null;
+}
+
+/**
+ * fb2-0929 O2 (D-289): the dress the guided first run puts on FFX's first-command
+ * line, so its third step and Auron's approved line are one surface. In guide
+ * mode the guide places the line, and a confirm with the cursor on ATTACK is not
+ * swallowed: the ring is on ATTACK and the line says to pick it, so the press must
+ * reach the menu. With the cursor elsewhere (Kimahri's first menu opens on TALK)
+ * the approved rule stands and a bare confirm only takes the line down (PR-0051).
+ */
+export interface CoachGuide {
+  /** Rebuild the line as the step's slab around `body` (the approved words); `skip` ends the guide. */
+  decorate(el: HTMLElement, body: string, skip: () => void): void;
+  /** Once, as the line comes down; `skipped` for the player's own Esc or the skip words. */
+  ended(outcome: CoachMarkOutcome, skipped: boolean): void;
+  /** True while the menu's cursor rests on the ringed control, so a confirm there must reach it. */
+  confirmReachesTarget(): boolean;
 }
 
 /** Attribute set on `<html>` while any line is up. See `coach.css`. */
@@ -108,12 +127,13 @@ export class CoachMark {
     if (opts.reduceMotion) el.dataset['still'] = '1';
     el.setAttribute('role', 'status');
     el.innerHTML = this.markup();
+    opts.guide?.decorate(el, opts.mark.body, () => this.finish('cancelled', true));
     el.addEventListener('click', this.onClick);
     this.el = el;
 
     this.watcher = new RawInputWatcher((button) => {
       if (button === 'confirm') this.finish('confirmed');
-      else if (button === 'cancel') this.finish('cancelled');
+      else if (button === 'cancel') this.finish('cancelled', true);
       else this.navigated = true;
     });
   }
@@ -218,7 +238,7 @@ export class CoachMark {
     // answers the row they highlighted, so it is not swallowed (PR-0182, a
     // dead press on Kimahri's OVERDRIVE row). A bare confirm still dies with
     // the line, which is all PR-0051 was about.
-    if (!this.navigated) {
+    if (!this.navigated && !this.opts.guide?.confirmReachesTarget()) {
       e.preventDefault();
       e.stopImmediatePropagation();
     }
@@ -295,6 +315,7 @@ export class CoachMark {
    * screen (an FFX-2 host, or a declined advisor zone with nothing to clear).
    */
   private avoidAdvisorCard(): void {
+    if (this.opts.guide) return; // the first-run guide places its own line (`firstRunGuide.ts`)
     const host = this.opts.root.parentElement;
     const card = host?.querySelector<HTMLElement>('.mad__card');
     if (!host) return;
@@ -346,7 +367,7 @@ export class CoachMark {
     return this.done;
   }
 
-  private finish(outcome: CoachMarkOutcome): void {
+  private finish(outcome: CoachMarkOutcome, byPlayer = false): void {
     if (this.done) return;
     this.done = true;
     if (this.timer) this.clearTimer(this.timer);
@@ -363,6 +384,7 @@ export class CoachMark {
     } catch {
       /* see show() */
     }
+    this.opts.guide?.ended(outcome, byPlayer && outcome === 'cancelled');
     const settle = this.settle;
     this.settle = null;
     settle?.(outcome);

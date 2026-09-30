@@ -1,0 +1,175 @@
+/*
+ * The guided first run (fb2-0929 O2, D-289), drawn to the approved mockup's own
+ * vocabulary (docs/concepts/fb2-0929/onboard/_mock.css: .spot, .ring, .chev, .ink,
+ * .eyebrow, .title, .body, .steps, .ghost) in the game's Ink & Gold tokens.
+ *
+ * Nothing here takes a press meant for the game: the layer and everything drawn on
+ * it are pointer-events: none, except the slab (it sits beside the target, never over
+ * it) and its skip words. Game case: both (step 3, which restyles FFX's line, is FFX
+ * only by construction).
+ */
+
+.frg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 70;
+}
+
+.frg > * {
+  position: fixed;
+  box-sizing: border-box;
+}
+
+/* The spot: everything but the target dimmed, a gold outline and an outer ring. */
+.frg__spot {
+  box-shadow: 0 0 0 3000px rgba(11, 10, 18, 0.72);
+  outline: 2px solid var(--ig-gold, #e3b94a);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.frg__spot::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border: 2px solid rgba(227, 185, 74, 0.38);
+  border-radius: 4px;
+}
+
+/* The ring (step 3): no dim, the menu stays readable. */
+.frg__ring {
+  border: 3px solid var(--ig-gold, #e3b94a);
+  border-radius: 3px;
+  box-shadow: 0 0 0 6px rgba(227, 185, 74, 0.18), 0 0 26px rgba(227, 185, 74, 0.45);
+}
+
+/* The chevron leader, pointing at the target. */
+.frg__chev {
+  width: 0;
+  height: 0;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+}
+.frg__chev[data-dir='down'] {
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-top: 22px solid var(--ig-gold, #e3b94a);
+}
+.frg__chev[data-dir='up'] {
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 22px solid var(--ig-gold, #e3b94a);
+}
+.frg__chev[data-dir='left'] {
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-right: 22px solid var(--ig-gold, #e3b94a);
+}
+.frg__chev[data-dir='right'] {
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 22px solid var(--ig-gold, #e3b94a);
+}
+
+/* The ink slab: Auron's line (steps 1 and 2) and FFX's restyled line (step 3). */
+.frg__slab,
+.coach-layer .coach-mark.coach-mark--guide {
+  pointer-events: auto;
+  background: var(--ig-ink-acting, rgba(11, 10, 18, 0.94));
+  color: var(--ig-paper, #f4f1e8);
+  transform: skewX(var(--ig-skew, -12deg));
+  border-left: 4px solid var(--ig-gold, #e3b94a);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+  padding: 16px 24px 16px 22px;
+  box-sizing: content-box; /* desktop: the width is the text column, as the mockup's slabs set */
+}
+.coach-layer .coach-mark.coach-mark--guide {
+  position: absolute;
+  max-width: none;
+  min-width: 0;
+  width: 440px;
+  right: auto;
+  bottom: auto;
+}
+.frg__in {
+  transform: skewX(var(--ig-skew-inverse, 12deg));
+}
+.frg__eyebrow {
+  font-family: var(--ig-font-display, sans-serif);
+  font-weight: 700;
+  font-size: calc(13px * var(--pyr-ts, 1));
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ig-gold, #e3b94a);
+}
+.frg__quote {
+  font-family: var(--ig-font-serif, Georgia, serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: calc(27px * var(--pyr-ts, 1));
+  line-height: 1.02;
+  margin: 8px 0 6px;
+  color: var(--ig-paper, #f4f1e8);
+}
+.frg__line,
+.frg__act {
+  font-family: var(--ig-font-text, sans-serif);
+  font-size: calc(17px * var(--pyr-ts, 1));
+  line-height: 1.4;
+  color: rgba(244, 241, 232, 0.86);
+}
+.frg__act {
+  font-size: calc(16px * var(--pyr-ts, 1));
+  margin-top: 10px;
+  color: var(--ig-gold, #e3b94a);
+}
+.frg__steps {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.frg__steps span {
+  width: 34px;
+  height: 6px;
+  background: rgba(244, 241, 232, 0.25);
+  transform: skewX(var(--ig-skew, -12deg));
+}
+.frg__steps span.on {
+  background: var(--ig-gold, #e3b94a);
+}
+.frg__skip {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--ig-font-display, sans-serif);
+  font-weight: 700;
+  font-size: calc(12px * var(--pyr-ts, 1));
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.72);
+  cursor: pointer;
+}
+.frg__skip b {
+  color: var(--ig-gold, #e3b94a);
+}
+
+/* Pointer or touch wording, the swap the coach line's foot uses (coach-taps.css). */
+.frg__touch {
+  display: none;
+}
+@media (pointer: coarse) {
+  .frg__pointer { display: none; }
+  .frg__touch { display: inline; }
+}
+
+/* Phones: the mockup's 390 px slab type. */
+@media (max-width: 900px) {
+  .frg__slab,
+  .coach-layer .coach-mark.coach-mark--guide {
+    padding: 12px 16px;
+    box-sizing: border-box; /* a phone: the whole slab stays inside 390 px */
+  }
+  .frg__eyebrow { font-size: calc(11px * var(--pyr-ts, 1)); }
+  .frg__quote { font-size: calc(21px * var(--pyr-ts, 1)); margin: 6px 0 4px; }
+  .frg__line { font-size: calc(13.5px * var(--pyr-ts, 1)); }
+  .frg__act { font-size: calc(13px * var(--pyr-ts, 1)); margin-top: 7px; }
+  .frg__skip { font-size: calc(10px * var(--pyr-ts, 1)); }
+}

@@ -28,6 +28,7 @@
 import { activeSave, readSetting } from '../../app/SaveData.ts';
 import { waitSplitInForce } from '../../app/waitSplitSwitch.ts';
 import { ALL_COACH_IDS, type CoachMarkId, type Ffx2CoachClock } from './coachCopy.ts';
+import { FIRST_RUN_IDS } from './firstRunCopy.ts';
 
 /**
  * Ids shown in this browsing session when there is no save file behind us.
@@ -196,9 +197,9 @@ export function shouldShow(id: CoachMarkId | string): boolean {
   return coachingAllowed() && !hasSeen(id);
 }
 
-/** Mark every surface seen — what `__pyrefly.markCoachSeen()` does with no id. */
+/** Mark every surface seen — what `__pyrefly.markCoachSeen()` does with no id — the guided first run's steps included. */
 export function markAllSeen(): void {
-  for (const id of ALL_COACH_IDS) markSeen(id);
+  for (const id of [...ALL_COACH_IDS, ...FIRST_RUN_IDS]) markSeen(id);
 }
 
 /**
