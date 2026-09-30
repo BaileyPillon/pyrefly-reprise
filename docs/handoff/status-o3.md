@@ -252,3 +252,14 @@ purpose (the check asked for the particle marks). If he wants those stilled unde
 it is four selectors in `status-marks-calm.css`. Stale comments naming `statusChips.ts` /
 `statusPips.ts` remain in `PartyRows.ts`, `dressphereIcons.ts`, `resolve-targets.ts`,
 `turnQueue.ts` (comments only, left alone).
+
+## RE-CHECK of the repair (independent, 2026-09-30, did not build it)
+
+Checked `status-o3` at 2540ae13 (no pull, no switch). Verdict: **no blocker; the CHECK major is resolved.**
+
+- **Fresh production build** (`vite build` to a scratch outDir, served by `vite preview` on port 8500, headless Playwright on the GPU, the builder's `calm.mjs` re-run by me) at 1600x900 and 390x844, FFX Chapter I staged Zombie/Poison/Protect and FFX-2 Chapter IV staged. Running / infinite animations inside the mark layer, identical at both sizes: FFX no flag 23/22, REDUCE MOTION 0/0, OS prefers-reduced-motion 0/0, LOW EFFECTS 4/3; FFX-2 no flag 13/12, REDUCE 0/0, OS 0/0, LOW 5/4. Every claim in the builder's table holds. Marks stay at opacity 1 under the stills (I viewed the FFX 1600x900 reduce frame: smoke, bubbles, Z's, halo, stars and orbs all readable). Pointless's flash: 6 distinct values in 2 s normally, 1 under REDUCE/OS. 0 page and console errors in all 16 runs. The GPU was busy with ComfyUI, so no timing is claimed.
+- **Dead CSS:** grep finds no rule left for `.ffx2-status-chip`, `.ffx-stat__statuses i`, `.ffx-ctb-statuses i` (one comment remains); the build and tsc are green.
+- **Gates:** `tsc --noEmit` clean apart from untracked `zz-scratch`. No file over 400 lines grew against origin/main; nothing under `src/battle/**` or `BattlePresenter*` changed. `git merge-tree` against origin/main is clean. Full suite (run once, then by mistake a second time to read the failure name): 676 files passed, 1 failed, the same load-related timeout as before in `strategy-ffx2-bahamut` "heal-only route"; alone it passes (19/19). Engine test this branch does not touch.
+- **Disclosed, not blockers:** LOW EFFECTS leaves stars, halo, cloud and the 0.6 s shield flash moving (deliberate; four selectors to change); stale comments naming `statusChips.ts`/`statusPips.ts`; the phone one-tap-confirms and stand-in-tint minors from CHECK are unchanged and are not this branch's.
+
+Frames and JSON: `D:/Tools/pyrefly-scratch/recheck-o3-calm/`. Server on 8500 stopped by PID; nothing deleted.
