@@ -105,3 +105,15 @@ files, per-cue measurements, qa before/after, the render root, the full-suite lo
 - Bailey's ear on O1; the deploy and its review (this touches shared audio routing and the asset weight, so it
   needs the focused pass `critic-plan` asks for); the D-292 record in `docs/target/decisions.json` (the driver
   owns it); a Safari/iOS decode check.
+
+## CHECK (independent, 2026-09-30, not the builder)
+
+Run on branch music-o1 (6725a612) with a fresh production build, served on port 8520 (stopped by PID).
+
+- Manifest diff against origin/main changes only `bytes`, `lufs`, `truePeakDb` (loop points, duration, score untouched). Every `bytes` equals the file size on disk; 26 files, 78,216,163 bytes.
+- Independent ffmpeg/ffprobe pass over all 26 cues: stereo 44.1 kHz, average bitrate 218 to 283 kbps (V0 range), duration within 0.01 s of the manifest, integrated loudness -16.1 to -15.9 LUFS, true peak -1.6 to -1.3 dBTP. 0 failures.
+- `qa.mjs --strict`: 0 cues with findings, 0 sfx findings, 80.93 MB of 85 MB.
+- Headless Playwright on the production build: all 26 cues HTTP 200, decode to within 0.000045 s of the manifest, stereo, audible, under full scale; no console errors. This proves loading, not sound (rule 13).
+- `tsc --noEmit` clean; 27 audio test files (499 tests) pass; `git merge-tree` against origin/main is clean; no src/ change, so no new orphans.
+- Full suite: run 1 (builder) and two runs by the checker, each red on a different timing-sensitive test under load (`strategy-ffx2-bahamut` heal-only route; `audio-manifest-io` four concurrent writers). Both pass alone (19/19 and 9/9); neither touches this diff. Not blockers.
+- Disclosed, not a blocker: the music is 78.2 MB (x1.94), above the 73 MB the recommendation quoted; Bailey should be told. Not checked: the ear (rule 13), Safari/iOS decode, the second half of recommendation 1 (newer AI music model), D-292 in decisions.json (driver's).
