@@ -2230,6 +2230,139 @@
           "reactionOf": "C1: Pyrefly Reprise, exploded, assembled"
         }
       ]
+    },
+    {
+      "id": "picks-0929",
+      "title": "Picks of 29 Sep 2026",
+      "evidence": "\"I'll go with all of your recommendations please\" Bailey, 29 Sep 2026 ~21:00 EDT, answering the driver's five recommendations (eye candy D, status display O3, guided first run O2, Sphere Grid A + C, calm camera).",
+      "tiles": [
+        {
+          "label": "Eye candy: option D (A + B + C together)",
+          "state": "approved",
+          "approved": "2026-09-29",
+          "build": "Option D as shown on the options page https://claude.ai/artifact/PuxhzBWHazVKpWTYRWpaWz (docs/concepts/eye-candy-2026-09-29/d/ on branch fx-d), after the judge's must-fix list; plus B's figure sway, C's hit-stop, C's splash cut-in and Aerospark's lance (D-233). Frames live on fx-d, not main.",
+          "delivery": "in-progress",
+          "game": "both",
+          "reaction": {
+            "date": "2026-09-29",
+            "words": "I'll go with all of your recommendations please",
+            "how": "Bailey, 2026-09-29 ~21:00 EDT, answering the driver's five recommendations with a single yes to all of them",
+            "liked": [
+              "all three looks together as option D: A Golden-Hour Cinema, B Living Paintings, C Spectacle Combat"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "D's three re-offers (B's figure sway, C's hit-stop, C's Overdrive/Special splash cut-in) and Aerospark's lightning lance D-233 are kept as parts of D: the recommendation listed them, Bailey did not name them one by one",
+              "the judge's must-fix list is fixed before build: Bailey never read that list"
+            ]
+          },
+          "deliveryNote": "Adopted as D-287 in docs/target/decisions.json; not built yet."
+        },
+        {
+          "label": "Status display O3: Originals + guard rails",
+          "src": "docs/concepts/status-display-0929/options/o3-ffx-desktop-plates.jpg",
+          "state": "approved",
+          "approved": "2026-09-29",
+          "build": "The moment the mockup shows, both games: docs/concepts/status-display-0929/options/o3-ffx-desktop.jpg, o3-x2-desktop.jpg and the phone frames; look and rules from research/status-display.md.",
+          "delivery": "in-progress",
+          "game": "both",
+          "reaction": {
+            "date": "2026-09-29",
+            "words": "I'll go with all of your recommendations please",
+            "how": "Bailey, 2026-09-29 ~21:00 EDT, answering the driver's five recommendations with a single yes to all of them",
+            "liked": [
+              "status display option O3 for both games, the originals' own status display plus guard rails"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "O3's warning covers the Zombie item-on-a-Zombie moment; the Zombie guard and word switches were not part of the pick and are not built"
+            ]
+          },
+          "deliveryNote": "Adopted as D-288 in docs/target/decisions.json; not built yet."
+        },
+        {
+          "label": "First run O2: Guided first run (Auron's three steps)",
+          "src": "docs/concepts/fb2-0929/onboard/o2-step1-board-1600x900.jpg",
+          "state": "approved",
+          "approved": "2026-09-29",
+          "build": "Three steps as mocked: o2-step1-board, o2-step2-prep, o2-step3-battle (1600x900 and 390x844) in docs/concepts/fb2-0929/onboard/. Anything the mockup does not show is not built.",
+          "delivery": "in-progress",
+          "game": "both",
+          "reaction": {
+            "date": "2026-09-29",
+            "words": "I'll go with all of your recommendations please",
+            "how": "Bailey, 2026-09-29 ~21:00 EDT, answering the driver's five recommendations with a single yes to all of them",
+            "liked": [
+              "first run option O2, the guided three-step pointer"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "it sits on top of the shipped Auron's briefing (D-008) rather than replacing it"
+            ]
+          },
+          "deliveryNote": "Adopted as D-289 in docs/target/decisions.json; not built yet."
+        },
+        {
+          "label": "Sphere Grid: explainer card + auto-learn with undo",
+          "src": "docs/concepts/fb-0929/sphere/option-a-explainer.jpg",
+          "state": "approved",
+          "approved": "2026-09-29",
+          "build": "Option A (explainer card, option-a-explainer.jpg) and option C (auto-learn with undo, option-c-autolearn.jpg) in docs/concepts/fb-0929/sphere/. Not B.",
+          "delivery": "in-progress",
+          "game": "ffx",
+          "reaction": {
+            "date": "2026-09-29",
+            "words": "I'll go with all of your recommendations please",
+            "how": "Bailey, 2026-09-29 ~21:00 EDT, answering the driver's five recommendations with a single yes to all of them",
+            "liked": [
+              "Sphere Grid A (first-time explainer card) and C (auto-learn with undo) together"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "B, the phone page, is left out because the recommendation did not include it"
+            ]
+          },
+          "deliveryNote": "Adopted as D-290 in docs/target/decisions.json; not built yet."
+        },
+        {
+          "label": "Battle camera: calm preset as the default",
+          "src": "docs/concepts/fb2-0929/camera/ch1-calm-a.jpg",
+          "state": "approved",
+          "approved": "2026-09-29",
+          "build": "The calm preset measured in docs/concepts/fb2-0929/camera/ (ch1-calm-a/b.jpg, ch4-calm-a/b.jpg, ch1-calm.mp4, ch4-calm.mp4) becomes the default camera for everyone.",
+          "delivery": "in-progress",
+          "game": "both",
+          "reaction": {
+            "date": "2026-09-29",
+            "words": "I'll go with all of your recommendations please",
+            "how": "Bailey, 2026-09-29 ~21:00 EDT, answering the driver's five recommendations with a single yes to all of them",
+            "liked": [
+              "the calm camera preset"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "'calm' replaces today's camera as the default for everyone, not a settings row",
+              "the FFX-2 intent-card hold question is not decided beyond what calm already does"
+            ]
+          },
+          "deliveryNote": "Adopted as D-291 in docs/target/decisions.json; not built yet."
+        }
+      ]
     }
   ]
 }
