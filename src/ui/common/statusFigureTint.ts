@@ -8,16 +8,18 @@
  * green body + glow, Berserk red hue, Curse brown hue. FFX-2: Curse darkened, Stop frozen,
  * Pointless flashing slowly. Nothing else changes the painting.
  *
- * Presentation only (rule 1): reads the state; writes only the figures' look. The freeze is a
- * time scale on the figure's own `update`, lifted for the whole of any action that names the
- * figure (`hold`), on KO, removal and the result, so a stopped figure can never stall a beat the
- * presenter is waiting on.
+ * Presentation only (rule 1): reads the state; writes only the figures' look. The freeze holds
+ * the figure's idle/life clock only (breath, sway, posture), lifted for the whole of any action
+ * that names the figure (`hold`), on KO, removal and the result. The figure's `tweens`, the one-shot
+ * moves the presenter awaits (slide-ins, moment phases, the seams between links), always keep their
+ * time, so a stopped figure can never stall a beat the presenter is waiting on (PR-0281).
  */
 
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
 import { figureLookOf, type FigureLook, type StatusGame } from './statusLooks.ts';
 import { wearsLooks } from './statusMarks.ts';
 import { statusMotionStill } from './statusCalm.ts';
+import { paceRate } from '../../engine/pace.ts';
 
 type Cell<T> = { value: T };
 type ColourCell = Cell<{ set(c: number): unknown }>;
@@ -27,6 +29,8 @@ export interface TintFigure {
   setTint(colour: number | string): void;
   update(dt: number): void;
   traverse(fn: (o: unknown) => void): void;
+  /** The one-shot moves (`PaintedActor.tweens`): run at the action pace even while frozen. */
+  readonly tweens?: { update(dt: number): void };
 }
 
 export interface TintField {
@@ -201,9 +205,14 @@ export class StatusFigureTint {
         a = { fig, look: NONE, key: keyOf(NONE), cells: flashCellsOf(fig), update: fig.update.bind(fig), wrapper: null, own, heldFor: 0, phase: 0, wrote: 0 };
         this.applied.set(id, a);
         const entry = a;
-        // The freeze: the figure's own clock stands still while Stop holds it, except inside an
-        // action that names it (or just after an event did), so no presenter beat can wait on it.
-        entry.wrapper = (dt: number): void => entry.update(this.frozen(id, entry) ? 0 : dt);
+        // The freeze: the figure's idle clock stands still while Stop holds it, except inside an
+        // action that names it (or just after an event did); its one-shot moves run on, at the
+        // pace `PaintedActor.update` gives them, so no presenter beat can wait on it (PR-0281).
+        entry.wrapper = (dt: number): void => {
+          if (!this.frozen(id, entry)) return entry.update(dt);
+          fig.tweens?.update(dt * paceRate('action'));
+          entry.update(0);
+        };
         fig.update = entry.wrapper;
       }
       const key = keyOf(look);
