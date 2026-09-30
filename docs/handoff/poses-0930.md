@@ -256,3 +256,13 @@ script stalled in a Seymour fight where Auron fell and the menu never came back:
 not a game defect; the seed-2 and seed-3 runs are clean.)
 
 B1 is closed; the remaining CHECK minors (Wakka critical scale, Lulu sleep floor object) are unchanged.
+
+## RE-CHECK of blocker B1 (independent, 2026-09-30; FFX only, Auron critical)
+
+Checked on 9a4a86e8 and the staged package, not the repair's own report.
+- File vs hashes.json: sha256 of characters/auron/critical.png = e03472b2...2311, matches hashes.json; sidecar critical.json width/height/scale 0.64/baselineY/headTop unchanged.
+- Diff vs the floor-fixed-only candidate (superseded/auron-critical-floorfixed-only-0274319f.png): 7,183 px differ = 7,082 to transparent + 101 edge alpha changes; 0 pixels opaque in both changed colour, so no repaint. Opaque bbox (alpha>16) identical.
+- Near-white (min rgb > 232, alpha > 16) pixels: edge-connected 0 before and after; largest solid near-white blob in the wedge region (x 340-480, y 640-820) 7,082 before, 0 after. One transparent hole remains (4,793 px), unchanged, see-through.
+- install.mjs --dry-run: 42 files, 21 locked under set bailey:2026-09-30-poses, nothing written. public/art and approved-hashes.json in D:/Final Fantasy untouched.
+- Proof frames (ch1 rest, desktop 1600x900 and phone 390x844): Auron crouched in the critical painting, no pale sliver between legs; errors and consoleErrors empty in both JSON files.
+Result: B1 cleared. Not checked: pixel-level diff against the original cand-45/raw candidate (only the prior staged step).
