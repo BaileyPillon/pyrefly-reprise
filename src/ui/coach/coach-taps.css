@@ -22,3 +22,16 @@
 .ffx2hud:has(.ffx-targeting [data-target-id]) ~ .coach-layer .coach-mark {
   pointer-events: none;
 }
+
+/* fb2-0929-onboard (FFX's holding line): a touch screen has no Enter. The foot
+   carries both wordings and a coarse pointer shows the tap one, the same
+   pure-CSS swap the briefing's foot uses (PR-0073, coach.css). A tap on the
+   line, or anywhere else, takes it down (CoachMark.onClick / onPointerCapture). */
+.coach-mark__tap {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .coach-mark__foot .coach-mark__key { display: none; }
+  .coach-mark__foot .coach-mark__tap { display: inline; }
+}

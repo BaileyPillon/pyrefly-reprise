@@ -156,7 +156,7 @@ export class CoachMark {
         ? `<div class="coach-mark__running">${coachRunningBadge(ffx2CoachClock())}</div>`
         : '';
     const foot = mark.holds
-      ? '<span><b>Enter</b> continue</span><span>First time only</span>'
+      ? '<span><b class="coach-mark__key">Enter</b><b class="coach-mark__tap">Tap</b> continue</span><span>First time only</span>'
       : '<span>Fades on its own</span><span>First time only</span>';
     return (
       running +
@@ -167,6 +167,21 @@ export class CoachMark {
   }
 
   private readonly onClick = (): void => {
+    this.finish('confirmed');
+  };
+
+  /**
+   * fb2-0929-onboard (both games): **a pointer press anywhere else is an
+   * answer**, the pointer twin of the navigated confirm below (PR-0182 /
+   * PR-0190). A mouse or touch player never moves a cursor first, so tapping
+   * ATTACK used to open targeting with the line still up, and on a phone the
+   * line then covered the enemy being aimed at. The press takes the line down
+   * and is never swallowed, so the row it landed on still acts. A press on the
+   * line itself is left to {@link onClick}.
+   */
+  private readonly onPointerCapture = (e: Event): void => {
+    if (this.done || !this.el.isConnected) return;
+    if (e.target instanceof Node && this.el.contains(e.target)) return;
     this.finish('confirmed');
   };
 
@@ -242,6 +257,7 @@ export class CoachMark {
     // jsdom test) registration order gives the same answer the capture phase
     // gives in a browser (see `onConfirmCapture`'s own comment).
     window.addEventListener('keydown', this.onConfirmCapture, true);
+    window.addEventListener('pointerdown', this.onPointerCapture, true);
     this.watcher.attach();
 
     if (!this.opts.mark.holds) {
@@ -337,6 +353,7 @@ export class CoachMark {
     this.timer = 0;
     this.watcher.detach();
     window.removeEventListener('keydown', this.onConfirmCapture, true);
+    window.removeEventListener('pointerdown', this.onPointerCapture, true);
     this.el.removeEventListener('click', this.onClick);
     this.el.classList.remove('coach-mark--in');
     this.el.remove();

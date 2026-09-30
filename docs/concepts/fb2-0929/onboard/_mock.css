@@ -1,0 +1,122 @@
+/* fb2-0929 onboarding options: the mockup vocabulary.
+ *
+ * Not product CSS. Every page puts one of OUR OWN captured frames (frames/,
+ * taken from the live build on a fresh profile) under a few overlays drawn
+ * with the game's own Ink & Gold tokens (../../../../src/ui/inkgold/tokens.css,
+ * loaded by each page) and the game's own fonts (_fonts.css).
+ *
+ * A page is 1600x900 (desktop) or 390x844 (phone); `?w=390` picks the phone.
+ */
+
+html, body { margin: 0; padding: 0; background: #000; }
+body { overflow: hidden; }
+.stage {
+  position: relative;
+  width: 1600px; height: 900px;
+  overflow: hidden;
+  background: #0b0a12 center / 100% 100% no-repeat;
+  font-family: var(--ig-font-text);
+  color: var(--ig-paper);
+}
+.phone .stage { width: 390px; height: 844px; }
+
+/* ------------------------------------------------------------- dim + spot */
+.dim { position: absolute; inset: 0; background: rgba(11, 10, 18, 0.74); }
+.spot {
+  position: absolute;
+  box-shadow: 0 0 0 3000px rgba(11, 10, 18, 0.72);
+  outline: 2px solid var(--ig-gold);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.spot--pulse::after {
+  content: ''; position: absolute; inset: -14px;
+  border: 2px solid rgba(227, 185, 74, 0.38);
+  border-radius: 4px;
+}
+
+/* ------------------------------------------------------------------ slabs */
+.paper {
+  position: absolute;
+  background: var(--ig-paper);
+  color: var(--ig-ink);
+  transform: skewX(var(--ig-skew));
+  border-left: 6px solid var(--ig-gold);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+}
+.paper > .in { transform: skewX(var(--ig-skew-inverse)); }
+.ink {
+  position: absolute;
+  background: var(--ig-ink-acting);
+  color: var(--ig-paper);
+  transform: skewX(var(--ig-skew));
+  border-left: 4px solid var(--ig-gold);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+}
+.ink > .in { transform: skewX(var(--ig-skew-inverse)); }
+
+.eyebrow {
+  font-family: var(--ig-font-display); font-weight: 700;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--ig-gold-on-paper); font-size: 15px;
+}
+.ink .eyebrow { color: var(--ig-gold); }
+.title {
+  font-family: var(--ig-font-serif); font-style: italic; font-weight: 600;
+  line-height: 1.02;
+}
+.body { font-family: var(--ig-font-text); line-height: 1.4; }
+
+/* the one-line plan: three steps and two arrows */
+.plan { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px;
+  font-family: var(--ig-font-display); font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; }
+.plan b { color: var(--ig-gold-on-paper); font-weight: 700; }
+.ink .plan b { color: var(--ig-gold); }
+.plan i { font-style: normal; opacity: 0.55; }
+
+/* the big button */
+.go {
+  display: inline-flex; align-items: center; gap: 16px;
+  background: var(--ig-gold); color: var(--ig-ink);
+  font-family: var(--ig-font-display); font-weight: 700;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 10px 26px rgba(227, 185, 74, 0.28);
+}
+.go > span { transform: skewX(var(--ig-skew-inverse)); display: inline-block; }
+.go .tri { width: 0; height: 0; border-left: 14px solid var(--ig-ink);
+  border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
+.ghost {
+  display: inline-block; font-family: var(--ig-font-display); font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase; color: rgba(244, 241, 232, 0.72);
+}
+.ghost b { color: var(--ig-gold); }
+
+/* the pointer: a gold ring on the exact control and a chevron leader */
+.ring {
+  position: absolute; border: 3px solid var(--ig-gold); border-radius: 3px;
+  box-shadow: 0 0 0 6px rgba(227, 185, 74, 0.18), 0 0 26px rgba(227, 185, 74, 0.45);
+}
+.chev {
+  position: absolute; width: 0; height: 0;
+  border-left: 18px solid transparent; border-right: 18px solid transparent;
+  border-top: 22px solid var(--ig-gold);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+}
+.chev--up { border-top: 0; border-bottom: 22px solid var(--ig-gold); }
+.chev--left { border: 0; border-top: 18px solid transparent; border-bottom: 18px solid transparent; border-right: 22px solid var(--ig-gold); }
+.chev--right { border: 0; border-top: 18px solid transparent; border-bottom: 18px solid transparent; border-left: 22px solid var(--ig-gold); }
+
+.steps { display: flex; gap: 8px; }
+.steps span { width: 34px; height: 6px; background: rgba(244, 241, 232, 0.25); transform: skewX(var(--ig-skew)); }
+.steps span.on { background: var(--ig-gold); }
+
+/* the concept slate: marks the frame as a mockup, the way every earlier options round does */
+.slate {
+  position: absolute; left: 0; bottom: 0; z-index: 90;
+  background: var(--ig-gold); color: var(--ig-ink);
+  font-family: var(--ig-font-display); font-weight: 700; font-size: 14px;
+  letter-spacing: 0.24em; text-transform: uppercase; padding: 8px 16px;
+}
+.phone .slate { font-size: 10px; letter-spacing: 0.16em; padding: 5px 9px; }

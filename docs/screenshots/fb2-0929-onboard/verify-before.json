@@ -1,0 +1,169 @@
+[
+  {
+    "tag": "seymour-flux-1600x900",
+    "pressed": "ATTACK",
+    "before": {
+      "line": [
+        597,
+        744,
+        400,
+        146
+      ],
+      "footVisible": [
+        "Enter continue",
+        "Enter",
+        "First time only"
+      ],
+      "footText": "ENTER CONTINUE FIRST TIME ONLY",
+      "hud": "ffxhud ig",
+      "targetName": null,
+      "tplate": null
+    },
+    "after": {
+      "line": [
+        629,
+        744,
+        400,
+        146
+      ],
+      "footVisible": [
+        "Enter continue",
+        "Enter",
+        "First time only"
+      ],
+      "footText": "ENTER CONTINUE FIRST TIME ONLY",
+      "hud": "ffxhud ig ffxhud--targeting-enemy",
+      "targetName": [
+        828,
+        149,
+        83,
+        23
+      ],
+      "tplate": [
+        694,
+        22,
+        213,
+        36
+      ]
+    },
+    "errors": []
+  },
+  {
+    "tag": "seymour-flux-390x844",
+    "pressed": "ATTACK",
+    "before": {
+      "line": [
+        25,
+        148,
+        340,
+        160
+      ],
+      "footVisible": [
+        "Enter continue",
+        "Enter",
+        "First time only"
+      ],
+      "footText": "ENTER CONTINUE FIRST TIME ONLY",
+      "hud": "ffxhud ig",
+      "targetName": null,
+      "tplate": null
+    },
+    "after": {
+      "line": [
+        25,
+        148,
+        340,
+        160
+      ],
+      "footVisible": [
+        "Enter continue",
+        "Enter",
+        "First time only"
+      ],
+      "footText": "ENTER CONTINUE FIRST TIME ONLY",
+      "hud": "ffxhud ig ffxhud--targeting-enemy phud--sensor",
+      "targetName": [
+        167,
+        133,
+        83,
+        23
+      ],
+      "tplate": null
+    },
+    "errors": []
+  },
+  {
+    "tag": "ffx2-bahamut-1600x900",
+    "pressed": "WHITE MAGIC ◂",
+    "before": {
+      "line": [
+        750,
+        549,
+        400,
+        146
+      ],
+      "footVisible": [
+        "Fades on its own",
+        "First time only"
+      ],
+      "footText": "FADES ON ITS OWN FIRST TIME ONLY",
+      "hud": "ig ig--ffx2 ffx2hud",
+      "targetName": null,
+      "tplate": null
+    },
+    "after": {
+      "line": [
+        750,
+        549,
+        400,
+        146
+      ],
+      "footVisible": [
+        "Fades on its own",
+        "First time only"
+      ],
+      "footText": "FADES ON ITS OWN FIRST TIME ONLY",
+      "hud": "ig ig--ffx2 ffx2hud",
+      "targetName": null,
+      "tplate": null
+    },
+    "errors": []
+  },
+  {
+    "tag": "ffx2-bahamut-390x844",
+    "pressed": "WHITE MAGIC",
+    "before": {
+      "line": [
+        25,
+        68,
+        340,
+        160
+      ],
+      "footVisible": [
+        "Fades on its own",
+        "First time only"
+      ],
+      "footText": "FADES ON ITS OWN FIRST TIME ONLY",
+      "hud": "ig ig--ffx2 ffx2hud",
+      "targetName": null,
+      "tplate": null
+    },
+    "after": {
+      "line": [
+        25,
+        68,
+        340,
+        160
+      ],
+      "footVisible": [
+        "Fades on its own",
+        "First time only"
+      ],
+      "footText": "FADES ON ITS OWN FIRST TIME ONLY",
+      "hud": "ig ig--ffx2 ffx2hud",
+      "targetName": null,
+      "tplate": null
+    },
+    "errors": []
+  }
+]
