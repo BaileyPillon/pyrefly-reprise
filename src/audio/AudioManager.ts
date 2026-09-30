@@ -19,6 +19,7 @@ import { TRACK_BLURBS, hasTrack, trackNames } from './tracks/index.ts';
 import { SFX, SFX_GROUPS, renderSfx, resolveSfx, sfxNames } from './sfx/index.ts';
 import { orderSfxForWarmup, warmSfxViaWorker } from './SfxWarmer.ts';
 import { renderHallImpulse } from './dsp/hall.ts';
+import { sfxBusGain, sfxMixFromUrl, type SfxMix } from './sfxMix.ts';
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
 import {
   hasPrerenderedSfx,
@@ -101,6 +102,8 @@ export class AudioManager {
   private masterVolume: number;
   private musicVolume: number;
   private sfxVolume: number;
+  /** `?sfxmix=` comparison trim (fb-0929-sfx); the default `a` is the shipped D-210 mix. */
+  private readonly sfxMix: SfxMix = sfxMixFromUrl();
   private muted = false;
   private warmed = false;
   private queuedMusic: { name: string; options: PlayMusicOptions } | null = null;
@@ -168,7 +171,7 @@ export class AudioManager {
     this.master.gain.value = this.muted ? 0 : this.masterVolume;
     this.musicBus.gain.value = this.musicVolume;
     this.duckBus.gain.value = 1;
-    this.sfxBus.gain.value = this.sfxVolume;
+    this.sfxBus.gain.value = sfxBusGain(this.sfxVolume, this.sfxMix);
     this.musicBus.connect(this.duckBus);
     this.duckBus.connect(this.master);
     this.sfxBus.connect(this.master);
@@ -549,7 +552,7 @@ export class AudioManager {
 
   setSfxVolume(value: number): void {
     this.sfxVolume = Math.max(0, Math.min(1, value));
-    if (this.sfxBus) this.sfxBus.gain.value = this.sfxVolume;
+    if (this.sfxBus) this.sfxBus.gain.value = sfxBusGain(this.sfxVolume, this.sfxMix);
   }
 
   /**
@@ -588,6 +591,8 @@ export class AudioManager {
     playing: string | null;
     muted: boolean;
     volumes: { master: number; music: number; sfx: number };
+    /** The `?sfxmix=` option in force and the SFX bus gain it gives (fb-0929-sfx). */
+    sfxMix: { option: string; trim: number; busGain: number };
     /**
      * The live gain of the current (fading-in) slot and every slot still
      * fading out, read straight off each `GainNode`. Added for PR-0089
@@ -606,6 +611,7 @@ export class AudioManager {
       playing: this.currentMusic,
       muted: this.muted,
       volumes: { master: this.masterVolume, music: this.musicVolume, sfx: this.sfxVolume },
+      sfxMix: { option: this.sfxMix.option, trim: this.sfxMix.trim, busGain: sfxBusGain(this.sfxVolume, this.sfxMix) },
       music: {
         current: this.current ? { name: this.current.name, gain: this.current.gain.gain.value } : null,
         fading: this.fading.map((s) => ({ name: s.name, gain: s.gain.gain.value })),
