@@ -36,6 +36,7 @@ export interface RenderRow {
   obj?: boolean;
   head?: boolean;
   cmd?: boolean;
+  sub?: boolean;
 }
 
 export interface RenderColumn {
@@ -96,6 +97,7 @@ function rowHtml(r: RenderRow): string {
   if (r.obj) cls.push('pause__row--obj');
   if (r.head) cls.push('pause__row--head');
   if (r.cmd) cls.push('pause__row--cmd');
+  if (r.sub) cls.push('pause__row--sub');
   const bar =
     r.fill === null
       ? '<span class="pause__bar"></span>'
@@ -202,6 +204,7 @@ export function fromPanels(columns: readonly PanelColumn[], selectedRowId: strin
         ...(r.obj ? { obj: true } : {}),
         ...(r.head ? { head: true } : {}),
         ...(r.cmd ? { cmd: true } : {}),
+        ...(r.sub ? { sub: true } : {}),
       }),
     ),
   }));

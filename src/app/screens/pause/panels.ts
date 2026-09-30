@@ -47,6 +47,8 @@ export interface PanelRow {
    * a column sized for `MAGIC DEF`, and an ellipsis on a menu row is a defect.
    */
   cmd?: boolean;
+  /** A small heading inside a column (OPTIONS' ABOUT), styled like the column's own. */
+  sub?: boolean;
 }
 
 export interface PanelColumn {
@@ -136,6 +138,9 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
   }
   if (ctx.canChapterSelect) encounter.push(command('chapter-select', 'Chapter select'));
   if (ctx.canQuit) encounter.push(command('quit', 'Quit to title'));
+  // D-305 (Bailey, 2026-09-30, option O1): ABOUT, then CREDITS, which opens the
+  // credits panel (`creditsPanel.ts`). A button, not a setting. Both games.
+  encounter.push(row('about', 'About', '', { sub: true }), command('credits', 'Credits'));
 
   return [
     { id: 'settings', heading: 'Settings', rows: settings, wide: true },
