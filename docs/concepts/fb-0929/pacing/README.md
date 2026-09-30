@@ -4,6 +4,10 @@ Bailey, 2026-09-29, passing on a friend's feedback: "moves and transitions happe
 item, so it is an **option for Bailey**: a switch on branch `fb-0929-pacing`, **default off** (`'current'` = the
 live build). Nothing here ships until Bailey picks. Handoff: `docs/handoff/fb-0929-pacing.md`.
 
+**Update 2026-09-30: Bailey picked `steady` as the default** ("yes, all your recommendations"); see
+[steady-default.md](steady-default.md). No parameter now plays steady; `?pace=current` is the old timing. The text
+below is the options round as it was written.
+
 **How to try it:** add `?pace=steady` or `?pace=relaxed` to the URL, or run `__pyrefly.pace('relaxed')` in the
 console (takes effect from the next beat). `__pyrefly.pace()` reads the current setting.
 

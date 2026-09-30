@@ -12,7 +12,7 @@
  * Usage:
  *   node tools/pace-measure.mjs --url=https://baileypillon.github.io/pyrefly-reprise/ \
  *     --chapter=seymour-flux --turns=3 --out=D:/Tools/pyrefly-scratch/fb-0929/pacing/live-ch1 \
- *     [--pace=relaxed] [--finish] [--video] [--width=1600 --height=900]
+ *     [--pace=relaxed] [--finish] [--video] [--reduce] [--width=1600 --height=900]
  *
  * Writes <out>/log.json (raw marks) and <out>/beats.json (the derived beat table), and with
  * --video a Playwright .webm under <out>/video/ plus <out>/video-t0.json (wall clock of frame 0).
@@ -35,6 +35,7 @@ const OUT = String(arg('out', 'D:/Tools/pyrefly-scratch/fb-0929/pacing/run'));
 const PACE = arg('pace', null);
 const FINISH = arg('finish', false) === true;
 const VIDEO = arg('video', false) === true;
+const REDUCE = arg('reduce', false) === true; // emulate prefers-reduced-motion (pacing must not get faster under it)
 const W = Number(arg('width', 1600));
 const H = Number(arg('height', 900));
 const SEED = Number(arg('seed', 3));
@@ -146,6 +147,7 @@ const screenName = (page) => page.evaluate(() => window.__pyrefly?.app?.current?
 async function main() {
   const browser = await chromium.launch({ headless: true, args: currentChromiumArgs(process.env) });
   const ctxOpts = { viewport: { width: W, height: H } };
+  if (REDUCE) ctxOpts.reducedMotion = 'reduce';
   if (VIDEO) ctxOpts.recordVideo = { dir: join(OUT, 'video'), size: { width: 1280, height: Math.round((1280 * H) / W) } };
   const context = await browser.newContext(ctxOpts);
   await context.addInitScript(INSTRUMENT);

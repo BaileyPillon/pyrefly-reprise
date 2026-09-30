@@ -11,7 +11,7 @@ import { ResultsScreen } from './app/screens/ResultsScreen.ts';
 import { makeChapterSelect } from './app/screens/BattleScreenFlow.ts';
 import { CHAPTERS } from './data/encounters.ts';
 import { installDebugApi, markReady } from './debug/api.ts';
-import { paceFromQuery, setPace } from './engine/pace.ts';
+import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
@@ -134,8 +134,8 @@ async function boot(): Promise<void> {
     }),
   );
 
-  // fb-0929 pacing option: `?pace=steady|relaxed`; default 'current', the live build (`src/engine/pace.ts`).
-  setPace(paceFromQuery(window.location.search) ?? 'current');
+  // fb-0929 pacing: `?pace=current|steady|relaxed`; no parameter = 'steady' (Bailey's pick, 2026-09-29; `src/engine/pace.ts`).
+  setPace(paceFromQuery(window.location.search) ?? DEFAULT_PACE);
   installDebugApi(app);
 
   await app.push(new TitleScreen());

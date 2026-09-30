@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-30 — Pacing default is now `steady`: `PaintedActor.update` / `SpriteActor.update` advance one-shot tweens at 1/1.2 (FFX) or 1/1.1 (FFX-2) with no parameter
+
+Branch `pacing-steady`. Bailey, 2026-09-29, "yes, all your recommendations" (recommendation: `steady` as the default).
+No signature changes. `src/engine/pace.ts` gains `DEFAULT_PACE = 'steady'` and starts there; `main.ts` uses it when
+there is no `?pace=`. While a battle of FFX runs the actors' one-shot tweens, hit sparks and spell effects run at
+x1/1.2 and presenter waits are x1.2 (FFX-2: 1.1); numerals x1.3 / x1.25; entry and wipe x1.2 / x1.1. `?pace=current`
+restores the previous timing exactly; anything outside a battle of FFX or FFX-2 (cutscenes, the board, FF7) is
+still 1. Tests that need the old numbers call `setPace('current')`. Game case: both, separate multipliers.
+
 ## 2026-09-29 — `PaintedActor.update` / `SpriteActor.update`: one-shot tweens follow the pacing option (FFX and FFX-2, separate presets; inert by default)
 
 Branch `fb-0929-pacing` (Bailey's friend: "moves and transitions happen too fast"). An OPTION for Bailey, default

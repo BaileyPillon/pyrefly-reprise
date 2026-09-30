@@ -209,8 +209,9 @@ export interface PyreflyDebugApi {
   coaching(): { allowed: boolean; battleHelp: boolean; seen: readonly string[] };
   /**
    * The battle pacing option (fb-0929; `src/engine/pace.ts`). With no argument, reads it; with
-   * `'current' | 'steady' | 'relaxed'`, picks it (an unknown name changes nothing). `'current'`
-   * is the default and the live build. `?pace=<name>` in the URL does the same at boot.
+   * `'current' | 'steady' | 'relaxed'`, picks it (an unknown name changes nothing). `'steady'`
+   * is the default (Bailey, 2026-09-29); `'current'` is the pre-2026-09-30 timing. `?pace=<name>`
+   * in the URL does the same at boot.
    */
   pace(name?: string): { pace: PaceName; accepted: boolean; game: PaceGame; scales: PaceScales };
 }
