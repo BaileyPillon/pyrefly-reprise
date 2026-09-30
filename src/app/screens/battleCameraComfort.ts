@@ -9,7 +9,8 @@
  *   card jumped 100-140 px mid-move in Chapter I and drifted 7 px a frame in
  *   Chapter IV (`docs/handoff/fb2-0929-camera.md`).
  * - {@link battleCameraPreset}: the comfort preset the stage's camera plays,
- *   `current` (untouched) unless `?cam=` or `window.__pyrefly.cam()` says so.
+ *   `calm` for everyone since Bailey's pick (D-291), unless `?cam=` or
+ *   `window.__pyrefly.cam()` says otherwise (`?cam=current` is the old camera).
  */
 
 import type { BattleCamera } from '../../engine/BattleCamera.ts';

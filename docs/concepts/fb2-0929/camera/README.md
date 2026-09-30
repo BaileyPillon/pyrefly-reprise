@@ -3,6 +3,8 @@
 Bailey, 2026-09-29, passing on a friend's feedback and agreeing with it: *"The camera movement
 between attacks is a bit too fast and made me a bit dizzy ... I think it's cuz the UI shifts with it."*
 
+**Update, 2026-09-30:** Bailey picked `calm` as the default for everyone (D-291); it is built on branch `firstrun-o2`, and `final/` has the default-camera clips and measurements. The text below is the options round as it was shown.
+
 **Nothing in this folder is switched on.** The options are behind `?cam=<name>` (or
 `window.__pyrefly.cam('<name>')`). The default, `current`, is today's camera. Bailey picks
 (hard rules 9 and 10). Branch `fb2-0929-camera`. Handoff: `docs/handoff/fb2-0929-camera.md`.

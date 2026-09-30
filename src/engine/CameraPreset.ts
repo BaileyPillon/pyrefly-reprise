@@ -1,6 +1,7 @@
 /**
- * Camera comfort presets (fb2-0929, OPTIONS behind a default-off switch; hard
- * rules 9 and 10: nothing here changes the shipped camera until Bailey picks).
+ * Camera comfort presets (fb2-0929). **`calm` is the default for everyone** since
+ * Bailey's pick (2026-09-29, "I'll go with all of your recommendations please",
+ * `docs/target/decisions.json` D-291); `?cam=current` gives the camera as it was.
  *
  * Bailey's friend, 2026-09-29, Bailey concurring: "The camera movement between
  * attacks is a bit too fast and made me a bit dizzy". Measured live (release
@@ -10,8 +11,8 @@
  * jumps 10-17 degrees, and every attack adds a 4 degree roll. Full numbers:
  * `docs/concepts/fb2-0929/camera/README.md`.
  *
- * - `current`   today's camera, untouched (the default).
- * - `calm`      half the travel toward a close shot, moves at least 1.8x as
+ * - `current`   the camera before D-291, untouched (`?cam=current`).
+ * - `calm`      THE DEFAULT. Half the travel toward a close shot, moves at least 1.8x as
  *               long on a sine curve (peak 1.57x average, not 3x) and capped at
  *               20 deg/s, no roll, half the push, no shake on a routine hit.
  * - `steady`    the master holds between turns: a close shot becomes a slow
@@ -93,6 +94,9 @@ export const CAMERA_PRESETS: Readonly<Record<CameraPresetName, CameraPresetSpec>
 
 const CLOSE_RIGS = new Set(['party', 'enemy', 'action']);
 
+/** What plays with no `?cam=`: Bailey's pick, D-291 (2026-09-29), both games. */
+export const DEFAULT_CAMERA_PRESET: CameraPresetName = 'calm';
+
 let active: CameraPresetName | null = null;
 
 /** `?cam=<name>`, or null when absent or not a preset. */
@@ -101,7 +105,7 @@ export function cameraPresetFromSearch(search: string): CameraPresetName | null 
   return v && (CAMERA_PRESET_NAMES as readonly string[]).includes(v) ? (v as CameraPresetName) : null;
 }
 
-/** The preset the player (or `?cam=`) chose; `current` by default. */
+/** The preset the player (or `?cam=`) chose; `calm` by default (D-291, both games). */
 export function cameraPreset(): CameraPresetName {
   if (active === null) {
     let search = '';
@@ -110,7 +114,7 @@ export function cameraPreset(): CameraPresetName {
     } catch {
       search = '';
     }
-    active = cameraPresetFromSearch(search) ?? 'current';
+    active = cameraPresetFromSearch(search) ?? DEFAULT_CAMERA_PRESET;
   }
   return active;
 }

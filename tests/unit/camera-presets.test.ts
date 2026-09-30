@@ -1,7 +1,8 @@
 /**
- * fb2-0929 camera comfort OPTIONS (default off; hard rules 9 and 10): `current`
- * must be byte-for-byte today's camera; `calm`, `steady` and `originals` are the
- * switchable alternatives shown to Bailey (`docs/concepts/fb2-0929/camera/`).
+ * fb2-0929 camera comfort presets. Bailey picked `calm` as the default for
+ * everyone (2026-09-29, D-291): no parameter plays `calm`, `?cam=current` must be
+ * byte-for-byte the old camera; `steady` and `originals` stay switchable options
+ * (`docs/concepts/fb2-0929/camera/`). REDUCE MOTION still wins over whatever plays.
  * Game case: `current`/`calm`/`steady` both games; `originals` FFX only.
  */
 import { describe, expect, it } from 'vitest';
@@ -10,7 +11,9 @@ import { BattleCamera } from '../../src/engine/BattleCamera.ts';
 import { StillCamera } from '../../src/engine/ComfortCamera.ts';
 import {
   CAMERA_PRESETS,
+  DEFAULT_CAMERA_PRESET,
   PresetCamera,
+  cameraPreset,
   cameraPresetFor,
   cameraPresetFromSearch,
   rigTurnDeg,
@@ -48,7 +51,7 @@ function run(bc: BattleCamera, cam: PerspectiveCamera, ms: number): number {
   return peak;
 }
 
-describe('camera presets: `current` is today\'s camera (both games)', () => {
+describe('camera presets: `current` is the old camera, behind ?cam=current (both games)', () => {
   it('passes every call straight through', () => {
     const a = rig('current');
     const cam2 = new PerspectiveCamera(35, 16 / 9, 0.1, 100);
@@ -75,11 +78,27 @@ describe('camera presets: `current` is today\'s camera (both games)', () => {
     expect(CAMERA_PRESETS.steady.labelsAtRest).toBe(true);
   });
 
-  it('is the default, and ?cam= picks another', () => {
+  it('calm is the default for everyone (D-291), and ?cam= picks another', () => {
+    expect(DEFAULT_CAMERA_PRESET).toBe('calm');
     expect(cameraPresetFromSearch('')).toBeNull();
+    expect(cameraPreset()).toBe('calm'); // no parameter
+    expect(cameraPresetFromSearch('?cam=current')).toBe('current');
     expect(cameraPresetFromSearch('?cam=calm')).toBe('calm');
     expect(cameraPresetFromSearch('?cam=wobbly')).toBeNull();
-    expect(setCameraPreset('nope')).toBe('current');
+    expect(setCameraPreset('nope')).toBe('calm'); // an unknown name keeps the default
+  });
+
+  it('with no parameter both games play calm, and the FFX-2 intent card rests over the boss', () => {
+    expect(cameraPresetFor('ffx').name).toBe('calm');
+    expect(cameraPresetFor('ffx2').name).toBe('calm');
+    expect(cameraPresetFor('ffx2').labelsAtRest).toBe(true);
+  });
+
+  it('?cam=current (or cam("current")) still gives the old camera, and it can be switched back', () => {
+    expect(setCameraPreset('current')).toBe('current');
+    expect(cameraPresetFor('ffx').name).toBe('current');
+    expect(cameraPresetFor('ffx2').labelsAtRest).toBe(false);
+    expect(setCameraPreset('calm')).toBe('calm');
   });
 });
 
@@ -156,5 +175,18 @@ describe('REDUCE MOTION still wins over a preset', () => {
     void still.moveTo('party', 300);
     bc.update(1 / 60);
     expect(cam.position.x).toBeCloseTo(-1.5, 2);
+  });
+
+  it('at the default (no parameter) a move under REDUCE MOTION is still a cut, in both games', () => {
+    for (const game of ['ffx', 'ffx2'] as const) {
+      const { bc, cam } = rig('calm');
+      const still = new StillCamera(new PresetCamera(bc, () => cameraPresetFor(game)), () => true);
+      void still.moveTo('party', 300);
+      bc.update(1 / 60);
+      expect(cam.position.x).toBeCloseTo(-1.5, 2);
+      void still.roll(-4, 600);
+      bc.update(1 / 60);
+      expect(bc.rollDeg).toBe(0);
+    }
   });
 });

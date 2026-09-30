@@ -225,7 +225,7 @@ export class BattleScreen extends Screen {
       sceneKey: this.scene.key,
       grade: this.app.renderer,
       comfort: battleComfort, // REDUCE MOTION and LOW EFFECTS (D-285)
-      cameraPreset: battleCameraPreset(chapter.game), // fb2-0929 options, `current` unless ?cam= (CameraPreset.ts)
+      cameraPreset: battleCameraPreset(chapter.game), // fb2-0929: `calm` by default (D-291), `?cam=current` for the old camera (CameraPreset.ts)
     });
 
     // --- engine ------------------------------------------------------------
