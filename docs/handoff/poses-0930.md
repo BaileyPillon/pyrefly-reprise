@@ -207,3 +207,52 @@ FFX-2 only.
   larger than the idle's (`out/wakka-tidus.jpg`). A candidate for Question 2's re-scale list.
 - Lulu sleep (cand-62) has a small detached white object on the floor by her feet. It is byte for byte the approved
   candidate, so it is recorded here and not changed.
+
+## REPAIR (2026-09-30, blocker B1 of the CHECK: Auron critical backdrop wedge)
+
+Game case: FFX only (Auron critical is an FFX painting; it is also the shared FFX art id, so every FFX chapter that
+seats Auron shows it). Fixed by clearing the wedge; the approved fallback cand-45 was not needed.
+
+**Fix.** `D:/Tools/pyrefly-art-backup/approved/2026-09-30-poses/characters/auron/critical.png` = the floor-fixed cand-4
+with the wedge made transparent. Method = the floor fix's: transparency only, no repaint
+(`docs/concepts/poses-2026-09-30/final/src/fix_auron_wedge.py`, copy also in the package `work/fix_auron_wedge.py`;
+report `final/src/auron-critical-c4-wedge.report.json`; diff mask `final/auron-critical-c4-wedge.diffmask.png`;
+before/after `final/auron-critical-wedge-before-after.jpg`). The 4-connected near-white region (min(r,g,b) > 232)
+seeded inside the wedge, plus a 1 px alpha halving on the new edge where an opaque neighbour is pale.
+
+**Measured** (832x1116 PNG, before vs after):
+- Cleared: 7,082 px, bbox x 358-463, y 651-803 (the check's estimate: about 7,000 at x 360-470, y 650-820; the top
+  pass had stopped at row 820 of the old seed window, but the region was a single connected wedge, so no row limit
+  was needed).
+- Diff: 7,183 pixels changed = 7,082 cleared to transparent + 101 edge pixels with alpha halved. Figure pixels whose
+  RGB changed: **0**. The opaque bounding box is identical (33, 0, 810, 1116), so the sidecar's scale (0.64),
+  baselineY, headTop and the 0.609 stature are unchanged.
+- Near-white (min rgb > 232) opaque pixels connected to the canvas edge: 0 before, 0 after. Solid 9x9 near-white
+  windows: 5,505 before (5,138 of them in the wedge), 367 after, none in the leg gap (x 300-560, y 600-900 is clean);
+  what is left is the coat's own white trim, the hood trim, the emblem disc and a 3 px rim on the right cloak edge
+  (a thin outline, part of the painting, present on every edge of the approved candidate).
+- Transparent holes not connected to the canvas edge (trapped between limbs): one, 4,793 px, bbox x 559-670,
+  y 901-1026 (between the scabbard and the cloak hem). It is transparent, so the scene shows through; it was there
+  after the floor fix and is not backdrop.
+- Near-white opaque pixels touching a transparent one: 451 (were 554), all on the figure's white trim edges
+  (around that hole and the cloak's right rim), not a filled area.
+
+**Package.** `hashes.json` auron/critical sha -> `e03472b268104a5b59581a3eb9c886c80aac10c8223bd851cd51f21f5d2b2311`
+(was `0274319f...`); the sidecar `critical.json` `edited` field names both fixes; `install.mjs`'s note and
+`work/make_package.py` say so. The superseded floor-fixed-only PNG, sidecar and hashes.json are kept in the package's
+`superseded/` (nothing deleted). `node install.mjs` (dry run): package OK, 21 PNGs + 21 sidecars, 42 files,
+set `bailey:2026-09-30-poses`, nothing written. Nothing under `D:/Final Fantasy/public/art` was written
+(`git status` clean there, Auron's folder still Sep 18/29) and `approved-hashes.json` is unchanged.
+
+**Proof re-shot** (production build of the branch at its code commit, the check's
+`D:/Tools/pyrefly-scratch/check-poses-0930/dist`, vite preview on 8897 stopped by PID, headless Chromium on the GPU,
+`final/src/proof.mjs ch1 desktop|phone` with SEED=3; the package served by route interception):
+`final/shots/ch1-desktop-*.jpg` at 1600x900 and `ch1-phone-*.jpg` at 390x844 (rest, other-attack, attack,
+after-attack), JSON records beside them, sheets `final/ch1-*-target-vs-build.jpg` regenerated; key frames copied to
+`docs/screenshots/poses-0930/`. Auron reads `critical` (`art/characters/auron/critical.png`, world height 1.093),
+and by real keys ready -> attack -> critical within 0.2 to 0.3 s. No pale sliver between his legs at either size
+(the gap shows the scene). 0 page errors, 0 console errors, 0 responses of 400 or more in both runs. (Seed 1 of this
+script stalled in a Seymour fight where Auron fell and the menu never came back: the script's staging, recorded and
+not a game defect; the seed-2 and seed-3 runs are clean.)
+
+B1 is closed; the remaining CHECK minors (Wakka critical scale, Lulu sleep floor object) are unchanged.

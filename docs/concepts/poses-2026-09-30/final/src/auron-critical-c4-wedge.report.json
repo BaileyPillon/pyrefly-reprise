@@ -1,0 +1,260 @@
+{
+ "source": "work/auron-critical-c4-floorfixed-before-wedge.png",
+ "seed": [
+  380,
+  780
+ ],
+ "wedgeCleared": {
+  "px": 7082,
+  "bbox": [
+   358,
+   651,
+   463,
+   803
+  ]
+ },
+ "fringeHalved": 101,
+ "nearWhiteComponents_before (min rgb > 232, opaque)": [
+  {
+   "px": 7082,
+   "bbox": [
+    358,
+    651,
+    463,
+    803
+   ]
+  },
+  {
+   "px": 3395,
+   "bbox": [
+    706,
+    357,
+    776,
+    887
+   ]
+  },
+  {
+   "px": 2676,
+   "bbox": [
+    553,
+    39,
+    676,
+    275
+   ]
+  },
+  {
+   "px": 1294,
+   "bbox": [
+    423,
+    31,
+    469,
+    114
+   ]
+  },
+  {
+   "px": 962,
+   "bbox": [
+    337,
+    319,
+    460,
+    411
+   ]
+  },
+  {
+   "px": 923,
+   "bbox": [
+    669,
+    676,
+    687,
+    829
+   ]
+  },
+  {
+   "px": 684,
+   "bbox": [
+    433,
+    363,
+    508,
+    380
+   ]
+  },
+  {
+   "px": 564,
+   "bbox": [
+    644,
+    700,
+    660,
+    752
+   ]
+  },
+  {
+   "px": 521,
+   "bbox": [
+    518,
+    374,
+    556,
+    418
+   ]
+  },
+  {
+   "px": 388,
+   "bbox": [
+    681,
+    279,
+    751,
+    302
+   ]
+  },
+  {
+   "px": 356,
+   "bbox": [
+    614,
+    899,
+    670,
+    987
+   ]
+  },
+  {
+   "px": 353,
+   "bbox": [
+    633,
+    656,
+    646,
+    712
+   ]
+  }
+ ],
+ "nearWhiteComponents_after": [
+  {
+   "px": 3395,
+   "bbox": [
+    706,
+    357,
+    776,
+    887
+   ]
+  },
+  {
+   "px": 2676,
+   "bbox": [
+    553,
+    39,
+    676,
+    275
+   ]
+  },
+  {
+   "px": 1294,
+   "bbox": [
+    423,
+    31,
+    469,
+    114
+   ]
+  },
+  {
+   "px": 962,
+   "bbox": [
+    337,
+    319,
+    460,
+    411
+   ]
+  },
+  {
+   "px": 923,
+   "bbox": [
+    669,
+    676,
+    687,
+    829
+   ]
+  },
+  {
+   "px": 684,
+   "bbox": [
+    433,
+    363,
+    508,
+    380
+   ]
+  },
+  {
+   "px": 564,
+   "bbox": [
+    644,
+    700,
+    660,
+    752
+   ]
+  },
+  {
+   "px": 521,
+   "bbox": [
+    518,
+    374,
+    556,
+    418
+   ]
+  },
+  {
+   "px": 388,
+   "bbox": [
+    681,
+    279,
+    751,
+    302
+   ]
+  },
+  {
+   "px": 356,
+   "bbox": [
+    614,
+    899,
+    670,
+    987
+   ]
+  },
+  {
+   "px": 353,
+   "bbox": [
+    633,
+    656,
+    646,
+    712
+   ]
+  },
+  {
+   "px": 351,
+   "bbox": [
+    558,
+    958,
+    671,
+    1028
+   ]
+  }
+ ],
+ "nearWhiteOpaqueTouchingTransparent_after": 440,
+ "enclosedTransparentHoles_after": [
+  {
+   "px": 4793,
+   "bbox": [
+    559,
+    901,
+    670,
+    1026
+   ]
+  }
+ ],
+ "diff": {
+  "changedPixels": 7183,
+  "clearedToTransparent": 7082,
+  "fringeAlphaHalved": 101,
+  "figureOwnPixelsWithChangedRGB": 0
+ },
+ "size": [
+  832,
+  1116
+ ],
+ "method": "pixels made transparent only: 4-connected near-white (min(r,g,b) > 232) region from one seed inside the wedge; a 1 px pale fringe (min > 200) halved in alpha; no repaint"
+}

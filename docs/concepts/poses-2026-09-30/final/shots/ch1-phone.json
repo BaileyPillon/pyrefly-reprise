@@ -8,8 +8,8 @@
  "chapter": "seymour-flux",
  "game": "ffx",
  "branch": "poses-0930",
- "sha": "9299b319",
- "url": "http://127.0.0.1:8731/pyrefly-reprise/",
+ "sha": "bedc2556",
+ "url": "http://127.0.0.1:8897/pyrefly-reprise/",
  "viewport": {
   "width": 390,
   "height": 844
@@ -202,7 +202,7 @@
    "paintsCritical": true
   },
   {
-   "t": 200,
+   "t": 300,
    "art": "auron",
    "pose": "critical",
    "url": "art/characters/auron/critical.png",
