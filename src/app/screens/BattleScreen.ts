@@ -53,6 +53,7 @@ import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleSc
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { battleComfort } from './battleComfort.ts';
+import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
 import { presenterGameDeps } from './BattleScreenGameDeps.ts';
@@ -223,6 +224,7 @@ export class BattleScreen extends Screen {
       sceneKey: this.scene.key,
       grade: this.app.renderer,
       comfort: battleComfort, // REDUCE MOTION and LOW EFFECTS (D-285)
+      cameraPreset: battleCameraPreset(chapter.game), // fb2-0929 options, `current` unless ?cam= (CameraPreset.ts)
     });
 
     // --- engine ------------------------------------------------------------
@@ -243,6 +245,7 @@ export class BattleScreen extends Screen {
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
+      this.hud.setLayoutProjector?.(battleLayoutProjector(() => this.stage, scene.battleCamera, battleCameraPreset(chapter.game))); // fb2-0929: panels hold still while the camera moves
       // The targeting surface: silhouette rectangles out to the HUD, the
       // accent pool and the quiet dim back in. This is what makes "which enemy
       // is being selected" answerable — the HUD owns the bracket, the name

@@ -11,7 +11,7 @@ import type {
   MinigameResult,
   TurnPreview,
 } from '../../battle/common/types.ts';
-import type { ActingSignal, HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import type { ActingSignal, HudPort, LayoutProjector, TargetingPort } from '../../engine/HudPort.ts';
 import { letterTagsOf } from '../../battle/ffx/letterTags.ts';
 import { installInkGoldStyles } from '../inkgold/index.ts';
 import { CommandMenu } from './CommandMenu.ts';
@@ -401,7 +401,7 @@ export class FFXBattleHud implements HudPort {
     this.intent.mount(this.overlay, {
       host: this.el,
       scale: () => this.hudScale(),
-      project: (id, anchor) => this.project(id, anchor),
+      project: (id, anchor) => (this.labelsAtRest() && this.layoutProject ? this.layoutProject : this.project)(id, anchor), // fb2-0929 option
       avoid: () => this.intentAvoidRects(),
       chipDock: () => this.intentChipDock(),
       // FFX ships the slab **on** and the fight is what the player came for, so
@@ -738,6 +738,12 @@ export class FFXBattleHud implements HudPort {
   setTargetingPort(port: TargetingPort): void {
     this.targeting = port;
     this.commandMenu.setProjector((id) => port.rect(id));
+  }
+
+  /** fb2-0929 camera comfort: the advisor zone dodges the fighters where the shot rests, not mid-move. */
+  setLayoutProjector(layout: LayoutProjector): void {
+    this.layoutProject = (id, anchor) => layout.point(id, anchor);
+    this.labelsAtRest = () => layout.labelsAtRest?.() === true;
   }
 
   setProjector(project: Projector): void {
@@ -1301,6 +1307,17 @@ export class FFXBattleHud implements HudPort {
    * party can genuinely relocate — a KO, a switch, an Overdrive — is a command
    * that *ends the decision*, and the decision ending is already in the key.
    */
+  /** fb2-0929: the intent slab (hung on its enemy's head) moved to where that head rests, in grid px. */
+  private atRest(rect: Rect | null): Rect | null {
+    const id = this.intent.view()?.enemyId;
+    const live = rect && id && this.layoutProject ? this.project(id, 'head') : null;
+    const rest = live && id ? this.layoutProject?.(id, 'head') : null;
+    if (!rect || !live || !rest) return rect;
+    const k = this.hudScale() || 1;
+    const dx = (rest.x - live.x) / k, dy = (rest.y - live.y) / k;
+    return { ...rect, left: rect.left + dx, right: rect.right + dx, top: rect.top + dy, bottom: rect.bottom + dy };
+  }
+
   private solveAdvisorPlacement(): HeldAdvisorPlacement {
     // **Everything is snapped to whole grid px before it is used**, not merely
     // before it is hashed. A zone solved from raw rects is a continuous
@@ -1330,7 +1347,7 @@ export class FFXBattleHud implements HudPort {
         growToGrid(this.stageRect(this.partyStatus.el), 1) ?? { left: 403, top: 258, right: 617, bottom: 348 },
       guide: growToGrid(this.stageRect(this.el.querySelector<HTMLElement>('.sgd__panel')), 1),
       sensor: growToGrid(this.stageRect(this.sensorPanel.el), 1),
-      intent: growToGrid(this.stageRect(this.intent.el.querySelector<HTMLElement>('.eint__panel')), 4),
+      intent: growToGrid(this.atRest(this.stageRect(this.intent.el.querySelector<HTMLElement>('.eint__panel'))), 4), // hung on the boss: where it rests
       intentChip: growToGrid(this.stageRect(this.intent.el.querySelector<HTMLElement>('.eint__toggle')), 4),
       ctb: growToGrid(this.stageRect(this.ctbList.el), 1),
       // Coarser again: the cast is the one input that moves on *every* frame
@@ -1496,9 +1513,10 @@ export class FFXBattleHud implements HudPort {
     // `PaintedStage.projectRect` reports) into this method's own grid space.
     const toGrid = (x: number, y: number): { x: number; y: number } => ({ x: (x - ox) / scale, y: (y - oy) / scale });
     const out: Rect[] = [];
+    const project = this.layoutProject ?? this.project;
     for (const id of ids) {
-      const head = this.project(id, 'head');
-      const feet = this.project(id, 'feet');
+      const head = project(id, 'head');
+      const feet = project(id, 'feet');
       if (!head || !feet) continue;
       const headY = (head.y - oy) / scale;
       const feetY = (feet.y - oy) / scale;
@@ -1518,6 +1536,9 @@ export class FFXBattleHud implements HudPort {
 
   /** The presenter's projector, installed by `setProjector`. */
   private project: Projector = () => null;
+  /** fb2-0929: fighters where the camera's shot comes to rest, for the advisor zone (`HudPort.setLayoutProjector`). */
+  private layoutProject: Projector | null = null;
+  private labelsAtRest: () => boolean = () => false;
   /** The painted field's targeting surface, when there is a field. */
   private targeting: TargetingPort | null = null;
   /** The turn preview last rendered, for the letter tags. */

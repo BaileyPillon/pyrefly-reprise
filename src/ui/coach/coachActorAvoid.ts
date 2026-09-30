@@ -98,6 +98,8 @@ export function placeOffActors(mark: Rect, actors: readonly Rect[], panels: read
 /** The fighters' silhouettes, from the field's targeting port and the last synced state. */
 export class ActorRects {
   port: TargetingPort | null = null;
+  /** fb2-0929 camera comfort: silhouettes where the camera's shot rests, so the line does not drift with a camera move. */
+  rest: TargetingPort['rect'] | null = null;
   private ids: CombatantId[] = [];
 
   track(state: BattleState): void {
@@ -107,7 +109,7 @@ export class ActorRects {
   rects(): Rect[] {
     const out: Rect[] = [];
     for (const id of this.ids) {
-      const r = this.port?.rect(id);
+      const r = this.rest ? this.rest(id) : this.port?.rect(id);
       if (r && r.w > 1 && r.h > 1) out.push({ left: r.x, top: r.y, right: r.x + r.w, bottom: r.y + r.h });
     }
     return out;

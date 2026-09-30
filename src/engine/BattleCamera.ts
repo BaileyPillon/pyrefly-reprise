@@ -44,13 +44,9 @@ export class BattleCamera {
   readonly camera: PerspectiveCamera;
   readonly tweens = new TweenGroup();
   /**
-   * Punch / push / roll live in their own group.
-   *
-   * `moveTo` and `snapTo` both `killAll()` {@link tweens} so a rig change
-   * cancels the rig change it interrupts — but a *moment* is built out of a
-   * rig change **and** a dolly push at the same time (`BattleMoments`: the
-   * Overdrive rig pushes in while it cuts, the telegraph zoom rides through a
-   * banner). Sharing one group meant the rig move silently ate the push.
+   * Punch / push / roll live in their own group: `moveTo`/`snapTo` `killAll()`
+   * {@link tweens}, and a *moment* is a rig change **and** a push at once
+   * (`BattleMoments`); one shared group let the rig move eat the push.
    */
   private readonly fx = new TweenGroup();
 
@@ -70,14 +66,13 @@ export class BattleCamera {
   private tweening = false;
 
   private currentRig = '';
+  /** The field of view the rig being moved to (or resting on) asks for; see {@link restCamera}. */
+  private restFov: number | undefined;
+  private restCam: PerspectiveCamera | null = null;
   /**
-   * Resolver for the `moveTo` currently in flight.
-   *
-   * `TweenGroup.killAll` kills a tween without firing its `onComplete`, so the
-   * promise `moveTo` handed out would never settle once a second move (or a
-   * `snapTo`) superseded it — and a caller that `await`ed the first one would
-   * wait forever. A superseded move resolves here instead: the camera did stop
-   * doing what it was asked, which is all the caller was waiting to know.
+   * Resolver for the `moveTo` in flight. `TweenGroup.killAll` never fires a
+   * killed tween's `onComplete`, so a superseded move resolves here instead
+   * (a caller awaiting it would otherwise wait forever).
    */
   private moveResolve: (() => void) | null = null;
   private swayClock = Math.random() * 100;
@@ -95,11 +90,7 @@ export class BattleCamera {
    * texel ratio has to stay put (visual-bible §6.3).
    */
   private punchAmount = 0;
-  /**
-   * Dutch roll in radians, applied after `lookAt`. The presentation spec asks
-   * for "-4deg roll on every attack" (`presentation-ink-and-gold.md`, "Motion &
-   * camera"); {@link roll} tweens there and back, {@link setRoll} holds it.
-   */
+  /** Dutch roll in radians, after `lookAt`: the spec's "-4deg roll on every attack" (`presentation-ink-and-gold.md`). */
   private rollRad = 0;
   /** REDUCE MOTION stops the idle sway (D-285, `ComfortCamera.ts`); set by `PaintedStage`. */
   swayOff: () => boolean = () => false;
@@ -150,12 +141,7 @@ export class BattleCamera {
     };
   }
 
-  /**
-   * Settle the promise handed out by a `moveTo` that has just been superseded
-   * by another rig change. See {@link moveResolve}: `TweenGroup.killAll` kills
-   * a tween without firing its `onComplete`, so without this the first move's
-   * promise would never settle and a caller awaiting it would wait forever.
-   */
+  /** Settle the promise of a `moveTo` just superseded by another rig change ({@link moveResolve}). */
   private settleMove(): void {
     const resolve = this.moveResolve;
     this.moveResolve = null;
@@ -175,6 +161,7 @@ export class BattleCamera {
     this.curPos.copy(rig.position);
     this.curLook.copy(rig.lookAt);
     this.swayScale = rig.sway;
+    this.restFov = rig.fov ?? this.camera.fov;
     if (rig.fov !== undefined) {
       this.camera.fov = rig.fov;
       this.camera.updateProjectionMatrix();
@@ -205,6 +192,7 @@ export class BattleCamera {
 
     const fromFov = this.camera.fov;
     const toFov = rig.fov ?? fromFov;
+    this.restFov = toFov;
     const fromSway = this.swayScale;
 
     const ran = this.tweens.toAsync(0, 1, {
@@ -229,6 +217,25 @@ export class BattleCamera {
       this.moveResolve = resolve;
       void ran.then(resolve);
     });
+  }
+
+  /**
+   * The shot the camera is settling on (fb2-0929 camera comfort, both games): a
+   * separate camera at the rig target, without the move in flight, the idle
+   * sway, the push, the punch, the roll or the shake. The HUD lays out the
+   * panels that keep off the fighters against this, so a panel does not drift
+   * or jump while the camera travels (`PaintedStage.projectAtRest`).
+   */
+  restCamera(): PerspectiveCamera {
+    const c = (this.restCam ??= new PerspectiveCamera());
+    c.copy(this.camera, false);
+    c.fov = this.restFov ?? this.camera.fov;
+    c.position.copy(this.targetPos);
+    c.up.copy(this.camera.up);
+    c.lookAt(this.targetLook);
+    c.updateProjectionMatrix();
+    c.updateMatrixWorld(true);
+    return c;
   }
 
   /** Nudge the resting target without changing rig (recoil, focus pulls). */
@@ -267,10 +274,8 @@ export class BattleCamera {
   }
 
   /**
-   * Push in by `fraction` of the camera-to-subject distance and **hold** there
-   * until {@link release}. This is the slow zoom a boss telegraph and an
-   * Overdrive ride on, where `punch` — which eases straight back out — would
-   * bounce the frame in the middle of the wind-up.
+   * Push in by `fraction` of the subject distance and **hold** until {@link release}:
+   * the slow zoom a telegraph and an Overdrive ride on (`punch` would bounce).
    */
   push(fraction = 0.1, ms = 900): Promise<void> {
     return this.fx.toAsync(this.punchAmount, fraction, {
@@ -315,13 +320,9 @@ export class BattleCamera {
   }
 
   /**
-   * Kick the frame over to `deg` and let it fall back to level — the attack
-   * roll. Resolves when it is level again.
-   *
-   * Both halves are scheduled up front (the fall-back rides a `delayMs`, the
-   * way {@link punch} does) rather than chained on an `await`. Chaining them
-   * would leave the frame tilted for a whole extra tick between the two, and
-   * would strand the camera mid-tilt if the caller stopped pumping frames.
+   * Kick the frame over to `deg` and let it fall back to level (the attack roll);
+   * resolves when level. Both halves are scheduled up front (a `delayMs`, as
+   * {@link punch}): chained on an `await` they left the frame tilted a tick.
    */
   roll(deg = -4, ms = 420): Promise<void> {
     const inMs = Math.max(1, ms * 0.3);

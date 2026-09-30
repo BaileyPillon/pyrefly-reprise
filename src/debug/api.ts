@@ -14,6 +14,7 @@ import { sceneReport } from '../scenes/index.ts';
 import { registerSceneScreens } from './sceneScreens.ts';
 // Results agent: fixture-driven results panels, `goto('results-victory')` etc.
 import { registerResultsDemoScreens } from './resultsDemo.ts';
+import { cameraPreset, setCameraPreset } from '../engine/CameraPreset.ts';
 import {
   battleHelpOn,
   coachingAllowed,
@@ -174,6 +175,8 @@ export interface PyreflyDebugApi {
    * worth asking on any frame.
    */
   targeting(): TargetingSnapshot | null;
+  /** fb2-0929 camera comfort preset (`CameraPreset.ts`): read, or set with a name; also `?cam=<name>`. */
+  cam(name?: string): string;
   /**
    * What is wired up right now: engines, HUDs, the cutscene runner, and the
    * **number of ability and item records registered per game**. A zero count
@@ -441,6 +444,7 @@ export function installDebugApi(app: App): PyreflyDebugApi {
       return isInterimYawEnabled();
     },
     targeting: () => readTargeting(app),
+    cam: (name?: string) => (name === undefined ? cameraPreset() : setCameraPreset(name)),
     wiring: () => wiringReport(),
     setCoaching: (on: boolean) => setCoachingEnabled(on),
     markCoachSeen: (id?: string) => {

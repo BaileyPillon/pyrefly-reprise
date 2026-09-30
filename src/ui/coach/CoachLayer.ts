@@ -59,7 +59,7 @@ import type {
   MinigameResult,
   TurnPreview,
 } from '../../battle/common/types.ts';
-import type { ActingSignal, HudPort, TargetingPort } from '../../engine/HudPort.ts';
+import type { ActingSignal, HudPort, LayoutProjector, TargetingPort } from '../../engine/HudPort.ts';
 import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
 import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
@@ -69,18 +69,11 @@ import { ffx2CoachClock, markSeen, shouldShow } from './coachState.ts';
 import type { IntentSource } from '../common/EnemyIntent.ts';
 
 /**
- * `setIntentSource` on purpose is not part of the typed `HudPort` interface
- * (see `EnemyIntent.ts`'s own `IntentAwareHud`: one optional panel is not
- * worth a shape change to the five-file contract set in `docs/CONTRACTS.md`),
- * so `attachEnemyIntent` probes for it with `typeof h.setIntentSource ===
- * 'function'` instead. `BattleScreen` always hands that function `this.hud`,
- * which is always a `CoachedHud` (`withCoach` in `BattleScreenWiring.ts`),
- * never the concrete `FFXBattleHud` / `FFX2BattleHud` directly. Before this,
- * `CoachedHud` had no `setIntentSource` at all, so the duck-type probe failed
- * silently and the real HUD's panel was never wired to an engine — PR-0090,
- * both games, disclosed round 09. Duck-typed on this side too, same shape as
- * `EnemyIntent.ts`, so this file does not have to import a type `HudPort`
- * itself never declares.
+ * `setIntentSource` is not part of the typed `HudPort` (see `EnemyIntent.ts`'s
+ * own `IntentAwareHud`), so `attachEnemyIntent` duck-types it; `BattleScreen`
+ * always hands it this `CoachedHud` (`withCoach`), never the concrete HUD, and
+ * before this wrapper forwarded it the real panel was never wired to an engine
+ * (PR-0090, both games, round 09). Duck-typed on this side too.
  */
 interface IntentAwareHud {
   setIntentSource?(source: IntentSource | null): void;
@@ -251,6 +244,9 @@ class CoachedHud implements HudPort {
   ): void {
     this.inner.setProjector(project);
   }
+
+  /** fb2-0929: the line (and the HUD's panels) keep off the fighters where the shot rests. */
+  setLayoutProjector(layout: LayoutProjector): void { this.actors.rest = (id) => layout.rect(id); this.inner.setLayoutProjector?.(layout); }
 
   setTargetingPort(port: TargetingPort): void {
     this.inner.setTargetingPort?.(port); this.actors.port = port;
