@@ -2363,6 +2363,38 @@
           "deliveryNote": "Adopted as D-291 in docs/target/decisions.json; not built yet."
         }
       ]
+    },
+    {
+      "id": "picks-0930",
+      "title": "Picks of 30 Sep 2026",
+      "evidence": "\"I'll go with all of your recommendations please keep going\" Bailey, 30 Sep 2026 ~18:30 EDT, answering the driver's credits option and audio budget recommendations.",
+      "tiles": [
+        {
+          "label": "Credits: a CREDITS row under ABOUT in the pause OPTIONS tab opens a scrolling panel (option O1)",
+          "src": "docs/concepts/credits-2026-09-30/o1-options-1600x900.jpg",
+          "state": "approved",
+          "approved": "2026-09-30",
+          "build": "Option O1 (o1-options, o1-panel, o1-panel-end frames in docs/concepts/credits-2026-09-30/, 1600x900 and 390x844) with the list in credits.md. Not O2.",
+          "delivery": "in-progress",
+          "game": "both",
+          "reaction": {
+            "date": "2026-09-30",
+            "words": "I'll go with all of your recommendations please keep going",
+            "how": "Bailey, 2026-09-30 ~18:30 EDT, answering the driver's two recommendations (credits option O1, audio budget 90 MB) with: \"I'll go with all of your recommendations please keep going\"",
+            "liked": [
+              "credits option O1"
+            ],
+            "disliked": [],
+            "mustRemain": [],
+            "mustChange": [],
+            "undecided": [],
+            "inferred": [
+              "panel close behaviour and exact copy follow the o1 frames; Bailey named only the option"
+            ]
+          },
+          "deliveryNote": "Adopted as D-305 in docs/target/decisions.json; not built yet."
+        }
+      ]
     }
   ]
 }
