@@ -74,3 +74,55 @@ and camera files; full suite once (result in the commit body); `node tools/orpha
 - A reload between the story scene and the first command leaves step 3 unseen until the next battle
   mount, which then closes the guide (the line it rides was already shown).
 - FF7 (hidden experiment) has no coach layer, so a first battle there would not advance the guide.
+
+## CHECK (independent, 2026-09-30)
+
+Checked by an agent that did not build it, on branch `firstrun-o2` (978251c4) in this worktree. Fresh
+production build (`vite build`, base `/pyrefly-reprise/`) served by `vite preview` on port 8450 (stopped
+by PID afterwards). Headless Chromium on the GPU, fresh profile per walk, real input only past the title
+(the briefing and the 58-59 line story scene were played by Enter or taps, not skipped by debug calls).
+Scripts and frames: `D:/Tools/pyrefly-scratch/picks-0929/firstrun-check/`.
+
+Verdict: **no blocker.** Game case confirmed: steps 1-2 and the camera both games, step 3 FFX only.
+
+Target vs build: `onboard/final/sheet-1600x900.jpg` and `sheet-390x844.jpg` match the approved O2 frames
+(anchors, slab places, chevrons, words, pips, skip line). The only visible departures are the ones
+written above (the concept's corner slate, today's board foot hint, the phone step-3 wrap before "it.").
+
+| walk | result |
+|---|---|
+| desktop, Enter everywhere | step 1 on the picture (64,133 778x407), step 2 on START BATTLE (1233,642), step 3 ring on ATTACK (87,511); the first Enter at step 3 reached the target bar (TARGET Mortiorchis) and Tidus attacked; reload: no briefing, no guide; 0 errors |
+| desktop, mouse | every ringed control acted on the first click (`elementFromPoint` at each ring's centre is the control); Tidus `attack` on Mortiorchis; 0 errors |
+| phone 390x844, taps | step 1 plate 12,34, step 2 START BATTLE 7,782, step 3 ATTACK 199,610; the first tap on ATTACK opened ATTACK -> MORTIORCHIS; touch wording shown; 0 errors |
+| desktop, Esc at step 2 | stays on party prep (no BACK), guide gone, all three ids seen; reload shows neither the briefing nor the guide |
+| desktop, Esc at step 3 | line and ring gone, no pause opened, still in battle |
+| desktop, reduced motion | same flow; the guide CSS has no animation or transition at all, so nothing to still |
+
+Camera, measured independently (the builder's `clip.mjs`/`analyze.mjs`, seed 1, 22 s, real Enter presses):
+
+| | preset in force | peak turn | roll | shakes | median frame |
+|---|---|---|---|---|---|
+| Ch. I default | calm | 42 deg/s | 0 | 0 | 16.7 ms |
+| Ch. I `?cam=current` | current | 96 deg/s | 44 deg/s | 6 | 16.7 ms |
+| Ch. I default + reduced motion | calm, still camera | 24 deg/s, 1 move, 25 cuts | 0 | 0 | 16.7 ms |
+| Ch. IV default | calm | 20 deg/s | 0 | 0 | 16.7 ms |
+| Ch. IV `?cam=current` | current | 112 deg/s | 48 deg/s | 7 | 16.6 ms |
+
+Checks: `tsc --noEmit` clean; the 20 coach/camera/briefing/first-run test files pass (155 tests);
+`tools/orphans.mjs` 24 orphans, the same as main (main's working tree shows 25 only because of another
+agent's untracked `statusMessageLine.ts`); every touched source file under 400 lines (`BattleScreen.ts`,
+already over, changed one comment line in place); `git merge-tree` against origin/main 888a7578 clean.
+Full suite once: 10,280 passed, 1 failed, the same `strategy-ffx2-bahamut` "heal-only route" 15 s
+timeout the builder saw (25 s under the load of a parallel build and browser). Run alone it passes on
+this branch (7.5 s) and on main (8.6 s) with the identical 1/30 result, and it imports nothing changed:
+a load-sensitive timeout, not a regression.
+
+Findings (minor, none blocks):
+- F1. When the first command belongs to Kimahri (his menu opens on TALK: seen on the reduced-motion walk
+  and the phone walk, where Mortiorchis' Full-Life had already KO'd the zombied Tidus), the ring and the
+  words say ATTACK while the keyboard cursor rests on TALK. Enter #1 only takes the line down (PR-0051, as
+  documented) and Enter #2 plays TALK. A tap or click on the ringed ATTACK works. The mockup only drew
+  Tidus' turn; worth a line to Bailey, not a build.
+- F2. The phone step-3 quote wraps before "it." (already written above).
+- F3. The full suite's one red is the known load-sensitive Bahamut timeout (above); give that test more
+  time or run it apart, separately from this track.
