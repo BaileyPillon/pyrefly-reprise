@@ -15,9 +15,9 @@ import { cuePhase } from './BattlePresenterPhase.ts';
 import type { ActingAction } from './BattlePresenterSpellFx.ts';
 import type { BattleEvent, CombatantId, ElementId, MessageKind } from '../battle/common/types.ts';
 import { BattleMoments } from './BattleMoments.ts';
+import { noteSfxEvent, playCue } from './BattlePresenterSfx.ts';
 import {
   ELEMENT_SFX,
-  SFX_FALLBACKS,
   type DamageNumbersPort,
   type PlaybackSpeed,
   type PresenterDeps,
@@ -157,21 +157,9 @@ export function createEventCtx(
 
 // --------------------------------------------------------------------- audio
 
+/** One cue: the chapter's voice (D-302's recorded set) or the presenter's own, with fallbacks (`BattlePresenterSfx.ts`). */
 export function cue(ctx: EventCtx, name: string, opts?: { volume?: number; delay?: number }): void {
-  const audio = ctx.deps.audio;
-  if (!audio) return;
-  // Unknown keys fall back to a generic cue rather than going silent, so a
-  // boss's bespoke `sfxKey` never has to exist before the fight is playable.
-  const key = SFX_FALLBACKS[name] ?? name;
-  try {
-    audio.playSfx(key, opts);
-  } catch {
-    try {
-      audio.playSfx(SFX_FALLBACKS['generic']!, opts);
-    } catch {
-      /* audio is optional; never break playback for a missing cue */
-    }
-  }
+  playCue(ctx, name, opts);
 }
 
 export function elementCue(element: ElementId | undefined, crit: boolean): string {
@@ -203,6 +191,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
   // A held arrival plays before whatever comes after the beat that named it.
   if (ctx.pendingArrivals.length > 0) await flushArrivals(ctx);
   cuePhase(ctx, event); // D-224: a canon phase beat turns the arena's light
+  noteSfxEvent(ctx, event); // which event and action the cues below belong to (`BattlePresenterSfx.ts`)
   switch (event.type) {
     case 'turn-start':
       return turnStart(ctx, event.actorId);
@@ -331,6 +320,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
 
     case 'counter': {
       const a = ctx.stage.actor(event.actorId);
+      cue(ctx, 'counter', { volume: 0.8 }); // voiced chapters only: the parry before the blow
       a?.setPose('attack');
       await settled(ctx, a?.lunge(0.6, 280), 280);
       a?.setPose('idle');

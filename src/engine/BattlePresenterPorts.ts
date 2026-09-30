@@ -397,12 +397,10 @@ export interface PresenterDeps {
   timeScale?: number;
   /** The chapter's game's ability rows, by id (`app/screens/battleAbilityFacts.ts`); without them every enemy ability keeps `cast`. */
   abilityFacts?: ((id: AbilityId) => AbilityFacts | undefined) | null;
-  /**
-   * A-4: `'pose'` (the default) strikes the victory pose; `'hold'` keeps the
-   * battle stance and a quiet cue where the sources withhold the celebration
-   * (`VictoryPose.ts`). Per chapter, passed in by the screen; never read from the DOM.
-   */
+  /** A-4: `'pose'` (default) strikes the victory pose; `'hold'` keeps the stance and a quiet cue where the sources withhold the celebration (`VictoryPose.ts`); per chapter, never read from the DOM. */
   victoryPose?: import('./VictoryPose.ts').VictoryPose;
+  /** D-302: the chapter's voice for the recorded SFX set (`app/screens/battleSfxVoice.ts`); without one every cue is the presenter's own. */
+  sfxVoice?: import('./BattlePresenterSfx.ts').SfxVoice | null;
   /** A game's own motion around each action (FF7's melee run, `BattlePresenterMotion.ts`); none for FFX and FFX-2. */
   actionMotion?: import('./BattlePresenterMotion.ts').ActionMotionPort | null;
 }

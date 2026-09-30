@@ -68,6 +68,8 @@ export async function actionStart(
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
+  } else if (pose === 'item') {
+    cue(ctx, 'item', { volume: 0.7 }); // D-302: the item-use sound (voiced chapters only)
   }
   await ctx.sleep(pose === 'attack' ? TIMING.windUp : TIMING.actionStart);
 }

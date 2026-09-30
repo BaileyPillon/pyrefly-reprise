@@ -1187,5 +1187,816 @@
         "truePeakDb": -13.12
       }
     }
+  },
+  "sfxV2": {
+    "file": "sfx/sprite-v2.mp3",
+    "bytes": 3296589,
+    "duration": 190.323946,
+    "quality": "libmp3lame -q:a 3",
+    "cues": {
+      "cancel": {
+        "offset": 0.05,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx",
+        "lufs": -24.07,
+        "truePeakDb": -14.11
+      },
+      "cancel-x2": {
+        "offset": 0.799977,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx2",
+        "lufs": -24.07,
+        "truePeakDb": -14.26
+      },
+      "confirm": {
+        "offset": 1.549955,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx",
+        "lufs": -24.03,
+        "truePeakDb": -16.19
+      },
+      "confirm-x2": {
+        "offset": 2.299932,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx2",
+        "lufs": -24.05,
+        "truePeakDb": -15.52
+      },
+      "cursor-move": {
+        "offset": 3.049909,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx",
+        "lufs": -24.08,
+        "truePeakDb": -12.91
+      },
+      "cursor-move-x2": {
+        "offset": 3.799887,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx2",
+        "lufs": -24.1,
+        "truePeakDb": -15.72
+      },
+      "error": {
+        "offset": 4.549864,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx",
+        "lufs": -24.16,
+        "truePeakDb": -10.99
+      },
+      "error-x2": {
+        "offset": 5.299841,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx2",
+        "lufs": -24.2,
+        "truePeakDb": -12.56
+      },
+      "menu-close": {
+        "offset": 6.049819,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx",
+        "lufs": -24.06,
+        "truePeakDb": -13.33
+      },
+      "menu-close-x2": {
+        "offset": 6.799796,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx2",
+        "lufs": -24.04,
+        "truePeakDb": -14.9
+      },
+      "menu-open": {
+        "offset": 7.549773,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx",
+        "lufs": -24.07,
+        "truePeakDb": -10.54
+      },
+      "menu-open-x2": {
+        "offset": 8.299751,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx2",
+        "lufs": -24.04,
+        "truePeakDb": -14.97
+      },
+      "menu-page": {
+        "offset": 9.049728,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx",
+        "lufs": -24.0,
+        "truePeakDb": -9.15
+      },
+      "menu-page-x2": {
+        "offset": 9.799705,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx2",
+        "lufs": -24.0,
+        "truePeakDb": -12.16
+      },
+      "status-applied": {
+        "offset": 10.549683,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "both",
+        "lufs": -24.01,
+        "truePeakDb": -16.59
+      },
+      "turn-ready": {
+        "offset": 11.29966,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx",
+        "lufs": -24.02,
+        "truePeakDb": -17.68
+      },
+      "turn-ready-x2": {
+        "offset": 12.049637,
+        "duration": 0.699977,
+        "category": "ui",
+        "game": "ffx2",
+        "lufs": -24.04,
+        "truePeakDb": -17.06
+      },
+      "gun-burst": {
+        "offset": 12.799615,
+        "duration": 0.691701,
+        "category": "weapon",
+        "game": "ffx2",
+        "lufs": -18.0,
+        "truePeakDb": -3.87
+      },
+      "item-use": {
+        "offset": 13.541315,
+        "duration": 0.8,
+        "category": "weapon",
+        "game": "ffx",
+        "lufs": -18.0,
+        "truePeakDb": -10.89
+      },
+      "item-use-x2": {
+        "offset": 14.391315,
+        "duration": 0.8,
+        "category": "weapon",
+        "game": "ffx2",
+        "lufs": -18.0,
+        "truePeakDb": -11.82
+      },
+      "shot-gun": {
+        "offset": 15.241315,
+        "duration": 0.489184,
+        "category": "weapon",
+        "game": "ffx2",
+        "lufs": -18.0,
+        "truePeakDb": -1.17
+      },
+      "swing-blitzball": {
+        "offset": 15.780499,
+        "duration": 0.426712,
+        "category": "weapon",
+        "game": "ffx",
+        "lufs": -18.06,
+        "truePeakDb": -1.12,
+        "trimDb": -0.06
+      },
+      "swing-claw": {
+        "offset": 16.257211,
+        "duration": 0.185374,
+        "category": "weapon",
+        "game": "ffx",
+        "lufs": -18.0,
+        "truePeakDb": -4.14
+      },
+      "swing-dagger": {
+        "offset": 16.492585,
+        "duration": 0.440249,
+        "category": "weapon",
+        "game": "ffx2",
+        "lufs": -18.09,
+        "truePeakDb": -1.15,
+        "trimDb": -0.09
+      },
+      "swing-doll": {
+        "offset": 16.982834,
+        "duration": 0.237937,
+        "category": "weapon",
+        "game": "ffx",
+        "lufs": -18.0,
+        "truePeakDb": -3.09
+      },
+      "swing-greatsword": {
+        "offset": 17.270771,
+        "duration": 0.386916,
+        "category": "weapon",
+        "game": "ffx2",
+        "lufs": -18.0,
+        "truePeakDb": -6.65
+      },
+      "swing-katana": {
+        "offset": 17.707687,
+        "duration": 0.402426,
+        "category": "weapon",
+        "game": "ffx",
+        "lufs": -18.0,
+        "truePeakDb": -5.26
+      },
+      "swing-spear": {
+        "offset": 18.160113,
+        "duration": 0.297166,
+        "category": "weapon",
+        "game": "ffx",
+        "lufs": -18.0,
+        "truePeakDb": -2.13
+      },
+      "swing-staff": {
+        "offset": 18.507279,
+        "duration": 0.460658,
+        "category": "weapon",
+        "game": "ffx",
+        "lufs": -18.0,
+        "truePeakDb": -4.59
+      },
+      "swing-sword": {
+        "offset": 19.017937,
+        "duration": 0.343265,
+        "category": "weapon",
+        "game": "ffx",
+        "lufs": -18.0,
+        "truePeakDb": -1.76
+      },
+      "whiff": {
+        "offset": 19.411202,
+        "duration": 0.273946,
+        "category": "weapon",
+        "game": "both",
+        "lufs": -18.0,
+        "truePeakDb": -3.75
+      },
+      "counter": {
+        "offset": 19.735147,
+        "duration": 0.993855,
+        "category": "impact",
+        "game": "both",
+        "lufs": -14.1,
+        "truePeakDb": -1.14
+      },
+      "explosion": {
+        "offset": 20.779002,
+        "duration": 2.35059,
+        "category": "impact",
+        "game": "both",
+        "lufs": -14.1,
+        "truePeakDb": -4.21
+      },
+      "guard": {
+        "offset": 23.179592,
+        "duration": 0.930272,
+        "category": "impact",
+        "game": "both",
+        "lufs": -14.1,
+        "truePeakDb": -2.87
+      },
+      "hit-1": {
+        "offset": 24.159864,
+        "duration": 0.834195,
+        "category": "impact",
+        "game": "both",
+        "lufs": -14.1,
+        "truePeakDb": -1.09
+      },
+      "hit-2": {
+        "offset": 25.044059,
+        "duration": 0.552245,
+        "category": "impact",
+        "game": "both",
+        "lufs": -14.1,
+        "truePeakDb": -1.37
+      },
+      "hit-blitzball": {
+        "offset": 25.646304,
+        "duration": 0.606848,
+        "category": "impact",
+        "game": "ffx",
+        "lufs": -14.1,
+        "truePeakDb": -1.38
+      },
+      "hit-claw": {
+        "offset": 26.303152,
+        "duration": 0.638707,
+        "category": "impact",
+        "game": "ffx",
+        "lufs": -14.1,
+        "truePeakDb": -2.63
+      },
+      "hit-dagger": {
+        "offset": 26.991859,
+        "duration": 0.82585,
+        "category": "impact",
+        "game": "ffx2",
+        "lufs": -14.1,
+        "truePeakDb": -3.41
+      },
+      "hit-doll": {
+        "offset": 27.86771,
+        "duration": 0.707551,
+        "category": "impact",
+        "game": "ffx",
+        "lufs": -14.1,
+        "truePeakDb": -1.14
+      },
+      "hit-greatsword": {
+        "offset": 28.625261,
+        "duration": 0.94322,
+        "category": "impact",
+        "game": "ffx2",
+        "lufs": -14.1,
+        "truePeakDb": -5.44
+      },
+      "hit-gun": {
+        "offset": 29.618481,
+        "duration": 0.5778,
+        "category": "impact",
+        "game": "ffx2",
+        "lufs": -14.1,
+        "truePeakDb": -1.58
+      },
+      "hit-heavy-enemy": {
+        "offset": 30.246281,
+        "duration": 1.55093,
+        "category": "impact",
+        "game": "both",
+        "lufs": -14.1,
+        "truePeakDb": -4.17
+      },
+      "hit-katana": {
+        "offset": 31.847211,
+        "duration": 1.355488,
+        "category": "impact",
+        "game": "ffx",
+        "lufs": -14.1,
+        "truePeakDb": -5.5
+      },
+      "hit-spear": {
+        "offset": 33.252698,
+        "duration": 0.884331,
+        "category": "impact",
+        "game": "ffx",
+        "lufs": -14.35,
+        "truePeakDb": -1.34,
+        "trimDb": -0.25
+      },
+      "hit-staff": {
+        "offset": 34.187029,
+        "duration": 0.677007,
+        "category": "impact",
+        "game": "ffx",
+        "lufs": -14.1,
+        "truePeakDb": -1.12
+      },
+      "hit-sword": {
+        "offset": 34.914036,
+        "duration": 0.881565,
+        "category": "impact",
+        "game": "ffx",
+        "lufs": -14.1,
+        "truePeakDb": -1.15
+      },
+      "ko-fall": {
+        "offset": 35.845601,
+        "duration": 1.080499,
+        "category": "impact",
+        "game": "both",
+        "lufs": -14.1,
+        "truePeakDb": -1.56
+      },
+      "machina-destroy": {
+        "offset": 36.9761,
+        "duration": 2.342789,
+        "category": "impact",
+        "game": "ffx2",
+        "lufs": -14.1,
+        "truePeakDb": -2.48
+      },
+      "petrify-shatter": {
+        "offset": 39.368889,
+        "duration": 1.073968,
+        "category": "impact",
+        "game": "both",
+        "lufs": -14.1,
+        "truePeakDb": -1.41
+      },
+      "boss-overdrive-warning": {
+        "offset": 40.492857,
+        "duration": 3.253651,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -5.21
+      },
+      "breath-attack": {
+        "offset": 43.796508,
+        "duration": 3.52542,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -6.3
+      },
+      "buff-generic": {
+        "offset": 47.371927,
+        "duration": 2.438435,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -6.45
+      },
+      "buff-generic-x2": {
+        "offset": 49.860363,
+        "duration": 2.195964,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -8.78
+      },
+      "cure": {
+        "offset": 52.106327,
+        "duration": 3.501202,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -6.97
+      },
+      "cure-x2": {
+        "offset": 55.657528,
+        "duration": 3.117868,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -7.71
+      },
+      "debuff-generic": {
+        "offset": 58.825397,
+        "duration": 3.459274,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -4.96
+      },
+      "debuff-generic-x2": {
+        "offset": 62.334671,
+        "duration": 3.452562,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -7.01
+      },
+      "fire": {
+        "offset": 65.837234,
+        "duration": 3.153197,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -7.2
+      },
+      "fire-x2": {
+        "offset": 69.040431,
+        "duration": 2.587846,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -5.42
+      },
+      "flare": {
+        "offset": 71.678277,
+        "duration": 3.6,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -4.92
+      },
+      "flare-x2": {
+        "offset": 75.328277,
+        "duration": 3.6,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -4.55
+      },
+      "haste": {
+        "offset": 78.978277,
+        "duration": 1.461088,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -7.76
+      },
+      "holy": {
+        "offset": 80.489365,
+        "duration": 3.6,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -5.27
+      },
+      "holy-x2": {
+        "offset": 84.139365,
+        "duration": 3.6,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -5.43
+      },
+      "ice": {
+        "offset": 87.789365,
+        "duration": 3.332381,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -5.54
+      },
+      "ice-x2": {
+        "offset": 91.171746,
+        "duration": 2.50737,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -5.27
+      },
+      "laser-charge": {
+        "offset": 93.729116,
+        "duration": 0.932902,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -7.69
+      },
+      "laser-fire": {
+        "offset": 94.712018,
+        "duration": 1.849025,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -3.79
+      },
+      "life": {
+        "offset": 96.611043,
+        "duration": 3.6,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -6.84
+      },
+      "life-x2": {
+        "offset": 100.261043,
+        "duration": 3.6,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -6.47
+      },
+      "magic-charge": {
+        "offset": 103.911043,
+        "duration": 2.046621,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -9.73
+      },
+      "magic-charge-x2": {
+        "offset": 106.007664,
+        "duration": 1.983673,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -5.69
+      },
+      "phoenix-down": {
+        "offset": 108.041338,
+        "duration": 3.6,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -8.1
+      },
+      "poison": {
+        "offset": 111.691338,
+        "duration": 1.54458,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -3.26
+      },
+      "protect": {
+        "offset": 113.285918,
+        "duration": 2.908413,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -6.67
+      },
+      "shell": {
+        "offset": 116.244331,
+        "duration": 2.947211,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -10.47
+      },
+      "silence": {
+        "offset": 119.241542,
+        "duration": 0.996395,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -9.86
+      },
+      "sleep": {
+        "offset": 120.287937,
+        "duration": 3.6,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -9.26
+      },
+      "slow": {
+        "offset": 123.937937,
+        "duration": 1.947551,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -7.04
+      },
+      "stop": {
+        "offset": 125.935488,
+        "duration": 3.008662,
+        "category": "spell",
+        "game": "both",
+        "lufs": -15.0,
+        "truePeakDb": -9.59
+      },
+      "thunder": {
+        "offset": 128.99415,
+        "duration": 3.251519,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -5.81
+      },
+      "thunder-x2": {
+        "offset": 132.295669,
+        "duration": 2.649841,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -4.94
+      },
+      "water": {
+        "offset": 134.99551,
+        "duration": 2.885351,
+        "category": "spell",
+        "game": "ffx",
+        "lufs": -15.0,
+        "truePeakDb": -5.49
+      },
+      "water-x2": {
+        "offset": 137.930862,
+        "duration": 2.345238,
+        "category": "spell",
+        "game": "ffx2",
+        "lufs": -15.0,
+        "truePeakDb": -5.39
+      },
+      "battle-start": {
+        "offset": 140.3261,
+        "duration": 1.955283,
+        "category": "flourish",
+        "game": "both",
+        "lufs": -14.0,
+        "truePeakDb": -2.65
+      },
+      "boss-phase-shift": {
+        "offset": 142.331383,
+        "duration": 4.2,
+        "category": "flourish",
+        "game": "both",
+        "lufs": -14.0,
+        "truePeakDb": -4.63
+      },
+      "boss-roar": {
+        "offset": 146.581383,
+        "duration": 4.041837,
+        "category": "flourish",
+        "game": "ffx",
+        "lufs": -14.0,
+        "truePeakDb": -5.91
+      },
+      "boss-roar-aeon": {
+        "offset": 150.67322,
+        "duration": 4.2,
+        "category": "flourish",
+        "game": "ffx2",
+        "lufs": -14.0,
+        "truePeakDb": -7.05
+      },
+      "critical": {
+        "offset": 154.92322,
+        "duration": 1.445329,
+        "category": "flourish",
+        "game": "both",
+        "lufs": -14.0,
+        "truePeakDb": -5.03
+      },
+      "cure-3": {
+        "offset": 156.418549,
+        "duration": 3.964172,
+        "category": "flourish",
+        "game": "ffx",
+        "lufs": -14.0,
+        "truePeakDb": -5.88
+      },
+      "cure-3-x2": {
+        "offset": 160.432721,
+        "duration": 3.310249,
+        "category": "flourish",
+        "game": "ffx2",
+        "lufs": -14.0,
+        "truePeakDb": -6.21
+      },
+      "machina-roar": {
+        "offset": 163.792971,
+        "duration": 3.24517,
+        "category": "flourish",
+        "game": "ffx2",
+        "lufs": -14.0,
+        "truePeakDb": -4.5
+      },
+      "overdrive-full": {
+        "offset": 167.088141,
+        "duration": 2.706553,
+        "category": "flourish",
+        "game": "ffx",
+        "lufs": -14.0,
+        "truePeakDb": -5.27
+      },
+      "overdrive-full-x2": {
+        "offset": 169.844694,
+        "duration": 1.866916,
+        "category": "flourish",
+        "game": "ffx2",
+        "lufs": -14.0,
+        "truePeakDb": -7.56
+      },
+      "overdrive-stinger": {
+        "offset": 171.76161,
+        "duration": 3.828526,
+        "category": "flourish",
+        "game": "ffx",
+        "lufs": -14.0,
+        "truePeakDb": -5.76
+      },
+      "special-stinger": {
+        "offset": 175.640136,
+        "duration": 4.2,
+        "category": "flourish",
+        "game": "ffx2",
+        "lufs": -14.0,
+        "truePeakDb": -3.84
+      },
+      "spherechange": {
+        "offset": 179.890136,
+        "duration": 2.08381,
+        "category": "flourish",
+        "game": "ffx2",
+        "lufs": -14.0,
+        "truePeakDb": -4.48
+      },
+      "summon": {
+        "offset": 182.023946,
+        "duration": 4.2,
+        "category": "flourish",
+        "game": "ffx",
+        "lufs": -14.0,
+        "truePeakDb": -4.42
+      },
+      "dissolve-pyreflies": {
+        "offset": 186.273946,
+        "duration": 4.0,
+        "category": "ambience",
+        "game": "ffx",
+        "lufs": -22.0,
+        "truePeakDb": -14.26
+      }
+    }
   }
 }

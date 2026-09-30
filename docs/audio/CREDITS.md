@@ -88,8 +88,52 @@ royalty-free use for any purpose, commercial included, and restricts only
 redistributing the IR files themselves, which we never do: only music convolved
 with them is published. Used so far by `tools/audio/modern/render-evrae.mjs`
 (the "Musikvereinsaal" file) for the Chapter VIII modern-sound candidates in
-`public/audio/candidates/modern-*.mp3`; **no shipped cue uses it yet**. If one
-does, credit "Impulse responses: Voxengo (Aleksey Vaneev)".
+`public/audio/candidates/modern-*.mp3`. **Since D-302 (2026-09-30) shipped cues use it**: the
+recorded SFX set's room and hall tails (`public/audio/sfx/sprite-v2.mp3`, below) are convolved with
+these files, so the credit "Impulse responses: Voxengo (Aleksey Vaneev)" is now owed (the IR files
+themselves are still never published).
+
+### The recorded SFX set (`public/audio/sfx/sprite-v2.mp3`, D-302, 2026-09-30)
+
+Bailey, 2026-09-30 ~14:25 EDT: "I'll go with all your recommendations" (the new recorded, layered
+set with the full hookup, `docs/AUDIO-GUIDE.md` "The recorded set"). Built outside the repo in
+`D:/Tools/pyrefly-scratch/audio-0930/sfx` from recordings downloaded for it (40 files, 87.3 MB, every
+one from its official host with a SHA-256 on receipt; `tools/sources.json` there and
+`D:/Tools/downloads.md`) and from libraries already on this disk: VCSL (Versilian Community Sample
+Library, CC0: glockenspiel, hand chimes, tubular bells, bell tree, wine glasses, gongs, cymbals,
+claves, sleigh bells, tambourine, finger cymbals), VSCO 2 Community Edition (CC0: timpani, bass drum,
+snare), the Sonatina choir (CC Sampling Plus 1.0, above) and the Voxengo impulse responses (above).
+Only renders ship; no source file is committed or published. The sources a shipped cue uses:
+
+| Source (author) | Licence | Official page | Archive SHA-256 (first 16) | Used |
+|---|---|---|---|---|
+| kenney_impact-sounds.zip (Kenney) | CC0 1.0 | https://kenney.nl/assets/impact-sounds | `029d734af1582474` | 18 files |
+| kenney_rpg-audio.zip (Kenney) | CC0 1.0 | https://kenney.nl/assets/rpg-audio | `6dbeaf8544da958d` | 11 files |
+| kenney_interface-sounds.zip (Kenney) | CC0 1.0 | https://kenney.nl/assets/interface-sounds | `f2193d072726d675` | 1 files |
+| kenney_sci-fi-sounds.zip (Kenney) | CC0 1.0 | https://kenney.nl/assets/sci-fi-sounds | `119340f351a5098a` | 8 files |
+| 80-CC0-RPG-SFX_0.zip (rubberduck) | CC0 1.0 | https://opengameart.org/content/80-cc0-rpg-sfx | `1c2f06ff4e8563b5` | 2 files |
+| sfx_breaking_and_falling.zip (rubberduck) | CC0 1.0 | https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx | `e6ee04d91c5f4d30` | 12 files |
+| water-splash-slime-sfx.zip (rubberduck) | CC0 1.0 | https://opengameart.org/content/40-cc0-water-splash-slime-sfx | `7cd39abb49d4362a` | 5 files |
+| 100-CC0-SFX_0.zip (rubberduck) | CC0 1.0 | https://opengameart.org/content/100-cc0-sfx | `a5c135878c132f1c` | 1 files |
+| 25-CC0-bang-sfx.zip (rubberduck) | CC0 1.0 | https://opengameart.org/content/25-cc0-bang-firework-sfx | `c0c9ecc11e2dc0d1` | 3 files |
+| 100-CC0-wood-metal-SFX.zip (rubberduck) | CC0 1.0 | https://opengameart.org/content/100-cc0-metal-and-wood-sfx | `be6eba63b03409ac` | 7 files |
+| sfx_100_v2.zip (rubberduck) | CC0 1.0 | https://opengameart.org/content/100-cc0-sfx-2 | `0fc61b4494e2e893` | 3 files |
+| swishes.zip (artisticdude) | CC0 1.0 | https://opengameart.org/content/swishes-sound-pack | `7980215241b739a7` | 11 files |
+| rpg_sound_pack.zip (artisticdude) | CC0 1.0 | https://opengameart.org/content/rpg-sound-pack | `f80754a9c04854e3` | 1 files |
+| sword_clash_-_starninjas_0.zip (StarNinjas) | CC0 1.0 | https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes | `f363c80ea1627548` | 1 files |
+| Nosferatu_thunderclap_-_Richard_Humphries.wav (Richard Humphries) | CC BY 4.0 | https://commons.wikimedia.org/wiki/File:Nosferatu_thunderclap_-_Richard_Humphries.wav | `338c2d76c4457403` | 1 files |
+| 439280_schots_angry-tiger.wav (schots) | CC0 | https://commons.wikimedia.org/wiki/File:439280_schots_angry-tiger.wav | `497b4584308d85e2` | 1 files |
+| Yellowstone_sound_library_-_Grizzly_Bear_vocalizations_-_001.mp3 (NPS & MSU Acoustic Atlas / Jennifer Jerrett) | Public domain | https://commons.wikimedia.org/wiki/File:Yellowstone_sound_library_-_Grizzly_Bear_vocalizations_-_001.mp3 | `23b9fed12b150866` | 1 files |
+| Ocean_Waves_on_a_Tropical_Beach.ogg (Jarrod stanley) | CC0 | https://commons.wikimedia.org/wiki/File:Ocean_Waves_on_a_Tropical_Beach.ogg | `bae2fc0a0c1d36f4` | 1 files |
+| WWS_Bonfireignition.ogg (Work With Sounds / Werstas) | CC BY 4.0 | https://commons.wikimedia.org/wiki/File:WWS_Bonfireignition.ogg | `370b9f33284c9433` | 1 files |
+| Windglockenspiel.Koshi.ogg (Membeth.) | CC0 | https://commons.wikimedia.org/wiki/File:Windglockenspiel.Koshi.ogg | `1f8b33ad604ef9ff` | 1 files |
+| Glass_breaking_(Gravity_Sound).wav (Gravity Sound) | CC BY 4.0 | https://commons.wikimedia.org/wiki/File:Glass_breaking_(Gravity_Sound).wav | `9aaaaea0df692ee6` | 1 files |
+
+Downloaded but unused by any shipped cue (so nothing to credit): Kenney UI Audio and Digital Audio,
+rubberduck's creature and sci-fi packs, StarNinjas' sword pack, the Magic SFX Preview Pack (CC-BY 3.0),
+and eleven Wikimedia Commons files. Not used at all: Sonniss GDC bundles, Freesound and Pixabay (they
+need an account), BBC Sound Effects (its licence excludes this use). No retail game audio was used as
+a source or as a reference.
 
 ### Per cue: `scene-macalania-temple` (Chapter VII, FFX only, 2026-09-29)
 
@@ -147,6 +191,23 @@ Salamander Grand Piano by Alexander Holm — CC-BY 3.0
 Sonatina Symphonic Orchestra by Mattias Westlund — CC Sampling Plus 1.0
 ```
 
+and, since the recorded SFX set (D-302), three CC BY 4.0 recordings and the impulse responses, verbatim:
+
+```
+Thunderclap by Richard Humphries (Wikimedia Commons) — CC BY 4.0
+Bonfire ignition by Work With Sounds / Werstas (Wikimedia Commons) — CC BY 4.0
+Glass breaking by Gravity Sound (Wikimedia Commons) — CC BY 4.0
+Impulse responses: Voxengo (Aleksey Vaneev)
+```
+
+and, as a courtesy for the CC0 and public-domain sources of that set:
+
+```
+Sound effects built from recordings by Kenney, rubberduck, artisticdude, StarNinjas, schots,
+the NPS & MSU Acoustic Atlas (Jennifer Jerrett), Jarrod Stanley and Membeth (CC0 / public domain),
+and the Versilian Community Sample Library and VSCO 2 Community Edition (CC0)
+```
+
 and, as a courtesy rather than an obligation:
 
 ```
@@ -167,6 +228,10 @@ co-author of the designs.
 ---
 
 ## What the sound effects do NOT use
+
+(This section describes the **first** sprite, `sprite.mp3`, and is still true of it. The second
+sprite, `sprite-v2.mp3`, is built from recorded foley under Bailey's 2026-09-30 instruction; its
+sources are listed above under "The recorded SFX set".)
 
 The brief allowed free CC0 foley packs (Kenney, OpenGameArt) as an extra source
 for cloth, footsteps, debris and the like. **Nothing was downloaded.** Every
