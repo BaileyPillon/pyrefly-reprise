@@ -167,3 +167,48 @@ the two games' effect loudness.
   own `tests/unit/save-fx-looks.test.ts` line 89 has the same "only additions" list and will fail after
   the merge until `'sfxBalanceMigrated'` is added to it (its release-30/31a fixtures store SFX 0.45 and
   0.2, player-set, so their levels are kept). `music-o1`, `status-o3` and `music-model-test` merge clean.
+
+## CHECK (independent, 2026-09-30, did not build it)
+
+Verdict: **every claim holds; no blocker.** Branch `sfx-b` at 53f0bb19, worktree untouched except this
+section. Scratch and raw runs: `D:/Tools/pyrefly-scratch/picks-0930/sfx-b-check/`.
+
+- **Gates.** `npx tsc --noEmit` clean; `npm run typecheck:e2e` clean; orphans 24 (the new module is
+  imported, no sfx module among them); `git merge-tree` against origin/main 1a6fd3cc and local main
+  888a7578 clean; against `music-o1`, `status-o3`, `fb2-0929-onboard` clean; against `fx-d` the one
+  conflict the handoff records (`save-comfort-migration.test.ts`). `SaveData.ts` and `AudioManager.ts`
+  +4/-4 each (no growth); new files under 400 lines.
+- **Tests.** Targeted save/pause/audio files: 544 tests pass. Full suite, once: 674 files pass, 1 fails,
+  the same `strategy-ffx2-bahamut` "heal-only route" (a 15 s timeout under load, 24 s); alone it passes
+  19/19 (8.8 s). No save or audio code; not this change.
+- **Every save fixture through `migrate()`, diffed field by field** (own script, not the builder's
+  tests): release-20, 25-main, 28-main, 29, 30-sfx-b keep `sfxVolume` (0.65, 0.9, 0.9, 0.6, 0.45) and
+  every other field; release-31a-sfx-b is the only one that changes a stored value, 0.35 -> 0.70.
+  Every fixture only gains `sfxBalanceMigrated: true` (and `textSize: 1`, main's existing comfort
+  migration); nothing lost; a second `migrate()` is identical. Edges: 0.35 with the marker stays 0.35;
+  0.35000000000000003 is kept (not moved); `{}`, `"0.35"`, null -> 0.9; no settings -> 0.70; the
+  slider's rounding lands 0.45 - 0.1 on exactly 0.35.
+- **Measured, production build of the branch** (`index-wIeQA4-T.js`, same hash as the builder's), port
+  8530, fresh profile, no parameter, real clicks (Attack, Special, a spell, an item, then auto),
+  mixer 0.8 / 0.7 / 0.7, `sfxMix b, trim 1, bus 0.70`, no page errors:
+  | Run | `hit-1` n | RMS vs music | peak vs music peak | target +7.6 / +1.7 |
+  |---|---|---|---|---|
+  | Ch I (FFX, Seymour Flux) | 5 | +7.9 dB | +1.9 dB | within 1 dB |
+  | Ch IV (FFX-2, Bahamut) | 21 | +6.8 dB | +1.1 dB | within 1 dB |
+  Limiter: 0 dB gain reduction in every fight sample (Ch I 2,452, Ch IV 3,109); loudest master peak in
+  the fight -5.7 / -5.1 dBFS. The boot-time reading recurs before the title (-10.5 / -12.0 dB at
+  t ~2 s, decaying), once with the master output at -180 dB (silent), so it reads as a compressor
+  start-up artefact rather than a pump; not introduced here (the builder saw it under `a` too).
+- **OPTIONS by real clicks** (PAUSE chip, OPTIONS tab), and the blob written back: fresh 70 (stored
+  0.7 + marker); release-31a upgrade 70 with master 0.45, music 0.6, text speed 0.75, skip cutscenes,
+  low effects, intent off, FFX-2 Active + fast, clears and best times kept; release-30 upgrade 45 (the
+  player's) with its settings kept; `?sfxmix=a` plays bus 0.35 (the old D-210 level) while the row
+  still reads 70 (a comparison switch, never saved).
+
+Findings (none blocking):
+1. The inferred half (an untouched 0.35 in an existing save moves to 0.70) still needs Bailey's
+   explicit yes; D-293 marks it "ask before building one". Built as the brief asked; one-line revert.
+2. The `fx-d` merge needs the resolution recorded above, plus `'sfxBalanceMigrated'` added to fx-d's
+   `save-fx-looks.test.ts` list, or that test goes red after the merge.
+3. `strategy-ffx2-bahamut` "heal-only route" times out under full-suite load (pre-existing flake).
+4. Not checked here either: the phone (tap) measurement and running the e2e `save-upgrade.spec.ts`.
