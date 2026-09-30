@@ -121,12 +121,8 @@ import {
   statusChances,
 } from './advisor-roll.ts';
 import { type BoardFact, dealtToEnemies, evaluate } from './advisor-eval.ts';
-import {
-  PlanCache,
-  beatsPrior,
-  budgetFor,
-  cacheKeyFor,
-} from './advisor-plan.ts';
+import { PlanCache, beatsPrior, budgetFor, cacheKeyFor } from './advisor-plan.ts';
+import { raceLift } from './advisor-race.ts';
 import { sentenceFor } from './advisor-say.ts';
 import { dropRepeatedStatuses, statusWords } from './advisor-copy.ts';
 import { discTurnOf, discTurnValue } from './advisor-omnis.ts';
@@ -1508,9 +1504,10 @@ export function buildAdvisorView(
   const provedFirst = proved ? [proved, ...ranked3.filter((c) => c !== proved)] : ranked3;
   if (proved && proved !== tactic) override = proved;
   // Advisor v4's pick on top (`AdvisorOptions.lift`); absent from this card, the card stands.
-  const lifted = given.lift ? provedFirst.find((c) => sameCommand(c.suggestion.command, given.lift!)) ?? null : null;
+  // PR-0269: on a race board a stable party's heal gives way to damage (`./advisor-race.ts`).
+  const lifted = given.lift ? provedFirst.find((c) => sameCommand(c.suggestion.command, given.lift!)) ?? null : planner ? raceLift(state, provedFirst, intent) : null;
   const ordered = lifted ? [lifted, ...provedFirst.filter((c) => c !== lifted)] : provedFirst;
-  if (lifted) override = lifted !== tactic ? lifted : null;
+  if (lifted && given.lift) override = lifted !== tactic ? lifted : null; // a race lift keeps its own sentence
 
   const shown: Candidate[] = [ordered[0]!];
   /** A revive this board was offered, priced, and refused. See {@link noteFor}. */

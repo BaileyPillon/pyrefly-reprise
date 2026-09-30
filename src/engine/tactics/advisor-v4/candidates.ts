@@ -35,6 +35,7 @@ import { reviveRisk, type AdvisorIntent } from '../advisor-revive.ts';
 import { alreadyOnItsWay, heldFor } from '../advisor-v3.ts';
 import { inFlight as inFlightOf } from '../advisor-inflight.ts';
 import { duplicate, simulateFor, supportOnly } from './rails.ts';
+import { offRaceLine } from '../advisor-race.ts';
 import type { Input } from './rollout.ts';
 
 export type Origin = 'v3-top' | 'v3-runner-up' | 'line' | 'ranked';
@@ -95,6 +96,8 @@ function passesRails(
   inFlight: InFlightRails | null,
 ): boolean {
   if (!rowFor(state, d, c.command)) return false;
+  // PR-0269: on Overdrive Sin's clock, with nobody in lethal range, only damage (or a raise) may challenge.
+  if (offRaceLine(state, c.outcome, intent)) return false;
   for (const id of c.outcome?.revives ?? []) {
     const delta = c.outcome!.hpDelta[id] ?? 0;
     if (reviveRisk(state, id, intent, delta < 0 ? -delta : undefined)) return false;

@@ -39,6 +39,7 @@
 import type { BattleState, Command } from '../../../battle/common/types.ts';
 import type { AdvisorOptions, AdvisorView } from '../advisor.ts';
 import { forecastFromState } from '../advisor-forecast.ts';
+import { raceHolds } from '../advisor-race.ts';
 import { candidatesFor, type Candidate, type Origin } from './candidates.ts';
 import { linePolicy, rollout, type Chain, type Forkable, type Input } from './rollout.ts';
 import { DEFAULT_WEIGHTS, type ValueWeights } from './value.ts';
@@ -88,7 +89,7 @@ export interface SearchResult {
   /** Every candidate searched, with its futures' values (the audit trail; not shown). */
   table?: Array<{ command: Command; origin: Origin; values: number[] }>;
   /** Why the default stood, when it did without a search. */
-  skipped?: 'no-card' | 'lethal-save' | 'one-candidate' | 'raise';
+  skipped?: 'no-card' | 'lethal-save' | 'one-candidate' | 'raise' | 'race';
 }
 
 /**
@@ -195,6 +196,8 @@ export function* searchSteps(
   if (cfg.rails?.keepRaise !== false && list[0]!.origin === 'v3-top' && (list[0]!.outcome?.revives.length ?? 0) > 0) {
     return { ...base, candidates: list.length, skipped: 'raise' };
   }
+  // PR-0269: on Overdrive Sin's clock a stable party's damage, Break, Overdrive or switch stands (`../advisor-race.ts`).
+  if (raceHolds(state, list[0]!.command, list[0]!.outcome, intent)) return { ...base, candidates: list.length, skipped: 'race' };
   const weights = cfg.weights ?? DEFAULT_WEIGHTS;
   const cost = { n: 0 };
   const seeds = seedsFor(state, Math.max(cfg.samples + (cfg.confirm ?? 0), cfg.stage1?.samples ?? 0), cfg.fixedSeeds === true);
