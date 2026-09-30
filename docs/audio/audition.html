@@ -99,6 +99,15 @@
   <strong>O2 &ldquo;AI body, real top&rdquo;</strong>: keeps the AI sound you picked on 27 September below 4 kHz, and puts the sampled instruments&rsquo; own clean highs and attacks back above it (the same notes; the top is moved onto the AI&rsquo;s timing). Fixes stages 1 to 3 on the top. Risk: where the AI wandered from the notes, a hit can sound doubled; Seymour&rsquo;s AI take follows the notes more loosely than the aeon&rsquo;s.
   <strong>O3 &ldquo;real samples, no AI&rdquo;</strong>: the free orchestral library (VSCO 2) playing the same notes in a hall, no AI at all, so none of the AI&rsquo;s faults. This is the kind of sound you heard as Direction A on 26 September and did not pick (&ldquo;7 is the only one that sounds good to me&rdquo;); it is back only because it has none of the AI&rsquo;s measured faults.
 </p>
+<p class="group-note">
+  <strong>New on 30 September: N1 &ldquo;newer model&rdquo;.</strong> You asked me to try a newer AI music model before choosing O2 or O3. This is ACE-Step 1.5 (January 2026, free to use, MIT licence), the successor of the model that made today&rsquo;s music, doing the same job: it restyles our own sampled score at the same strength as the clip you picked on 27 September, with the same words, then goes through the same R1 remaster and the O1-quality MP3.
+  <em>Its audio decoder, measured the same way as the old one</em> (our score in, straight back out, no restyling):
+  left against right survives (correlation 0.60 in, 0.64 out; the old decoder: 0.04);
+  the top stays like notes on Seymour (4&ndash;10 kHz noisiness &minus;12.5 in, &minus;12.9 out; old &minus;9.6) and is damaged less on the aeon cue (&minus;17.5 in, &minus;14.7 out; old &minus;13.0);
+  the 2.5&ndash;6 kHz presence stays within 0.6 dB (the old one also did);
+  attacks are <em>not</em> better: it slows them by about 5 ms on Seymour and 2 ms on the aeon cue (the old one: 2.5 and 5 ms).
+  It is a different model, so its character will not be identical to the 27 September sound; what the numbers say to listen for is a clearer, less hissy top and a steadier stereo image.
+</p>
 <article class="cue">
   <h4>Chapter I: Seymour Flux (boss-seymour)</h4>
   <p class="blurb">FFX. 132 bpm, C# minor.</p>
@@ -110,6 +119,8 @@
   <audio controls preload="none" src="candidates/fb-0929/boss-seymour-O2-rebuild-v0.mp3"></audio>
   <p class="blurb" style="margin:8px 0 2px">O3 real samples, no AI: top noisiness &minus;9.8 dB, attacks 3 ms, wider stereo (correlation 0.53).</p>
   <audio controls preload="none" src="candidates/fb-0929/boss-seymour-O3-sampled-v0.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">N1 newer model (30 Sep): top noisiness &minus;12.1 dB (the score&rsquo;s own &minus;12.5); 6&ndash;12 kHz about 5 dB brighter than 0; stereo 0.73; attacks 16.5 ms (the model 11.5 ms, the R1 remaster adds 5).</p>
+  <audio controls preload="none" src="candidates/music-model-test/boss-seymour-N1-newer-model-v0.mp3"></audio>
 </article>
 <article class="cue">
   <h4>Chapter IV: Bahamut, FFX-2 (boss-ffx2-aeon)</h4>
@@ -122,6 +133,8 @@
   <audio controls preload="none" src="candidates/fb-0929/boss-ffx2-aeon-O2-rebuild-v0.mp3"></audio>
   <p class="blurb" style="margin:8px 0 2px">O3 real samples, no AI: top noisiness &minus;13.6 dB, attacks 4 ms. The electric bass, electric piano and synths are the old sampled voices (the free library has none).</p>
   <audio controls preload="none" src="candidates/fb-0929/boss-ffx2-aeon-O3-sampled-v0.mp3"></audio>
+  <p class="blurb" style="margin:8px 0 2px">N1 newer model (30 Sep): top noisiness &minus;14.2 dB (0: &minus;7.1); 6&ndash;12 kHz 3.5 dB brighter than 0; stereo 0.68; attacks 20.5 ms (the score itself: 21 ms on this passage).</p>
+  <audio controls preload="none" src="candidates/music-model-test/boss-ffx2-aeon-N1-newer-model-v0.mp3"></audio>
 </article>
 <p class="group-note">
   <strong>What each costs for the whole 26-cue score.</strong>
@@ -129,9 +142,11 @@
   O2: no graphics card needed; about half a day of agent work (the loop points and seams have to be rebuilt the way the shipped chain does them), then an ear check of each cue for doubled hits; same size as O1.
   O3: about a day of agent work (25 instruments still need a seat in the sampled orchestra, and the choir has no free sampled equivalent), about a minute of computer time per cue; same size as O1; and it drops the AI sound you chose.
   O1 can be combined with O2 or O3 (both sketches above already use O1&rsquo;s encode).
+  N1: every cue re-made with the newer model on this PC&rsquo;s graphics card, about 20 seconds per 45 seconds of music, plus the same loop and seam rebuild the 27 September score needed (about half a day of agent work), then an ear check per cue; same size as O1. It keeps the AI sound you chose, and N1 can also be combined with O2.
 </p>
 <div class="check">
-  <p class="score"><label>Which one for the whole score: 0 (keep today), O1, O2 or O3 <input type="text" size="4" data-fb0929="Pick"></label></p>
+  <p class="score"><label>Which one for the whole score: 0 (keep today), O1, O2, O3 or N1 <input type="text" size="4" data-fb0929="Pick"></label></p>
+  <p class="score"><label>N1 against today (0): better, same or worse? <input type="text" size="30" style="width:16em" data-fb0929="N1 vs today"></label></p>
   <p class="score"><label>Does O2 sound doubled or smeared anywhere? <input type="text" size="30" style="width:16em" data-fb0929="O2 doubled hits"></label></p>
   <p class="score"><label>Anything else that still sounds bad? <input type="text" size="30" style="width:16em" data-fb0929="Still bad"></label></p>
   <p><button type="button" id="fb0929-collect" style="font:inherit;padding:8px 16px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Collect my answers</button></p>

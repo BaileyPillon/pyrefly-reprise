@@ -1,0 +1,425 @@
+{
+ "what": "music-model-test (2026-09-30): the N1 \"newer model\" option for the music-quality track. ACE-Step 1.5 codec measured against ACE-Step v1 on the same inputs, then one 45 s sketch per cue at -16 LUFS for Bailey to judge by ear in docs/audio/audition.html, section \"Music quality options\". Nothing here ships.",
+ "game": "both",
+ "model": {
+  "name": "ACE-Step 1.5 turbo",
+  "source": "https://huggingface.co/ACE-Step/Ace-Step1.5 (official ACE-Step organisation; not gated)",
+  "licence": "MIT (model card and GitHub ace-step/ACE-Step-1.5 LICENSE); the model card states generated music may be used commercially",
+  "downloads": "D:/Tools/downloads.md, 2026-09-30 entry"
+ },
+ "measuredWith": "tools/audio/quality-measure.py (as fb-0929) and tools/audio/quality-codec-pair.py (paired, phase-blind: rise at the same input onsets, 1/3-octave magnitude error per band)",
+ "cutWith": "tools/audio/quality-n1-r1.py (remaster R1 focus, lossless) then tools/audio/quality-sketch.py --encode v0 (50 ms fade in, 1 s fade out, -16 LUFS, true peak <= -1 dBTP measured on the MP3)",
+ "handoff": "docs/handoff/music-model-test.md",
+ "codec": [
+  {
+   "input": "seymour",
+   "model": "input",
+   "file": "seymour-render-x45.wav",
+   "hfFlatnessDb": -12.5,
+   "riseMs": 5.0,
+   "corr": 0.603,
+   "band2k5to6kDb": -16.3,
+   "band6to12kDb": -35.7,
+   "bandsDb": [
+    -9.0,
+    -3.1,
+    -6.3,
+    -8.8,
+    -16.3,
+    -35.7,
+    -50.2,
+    -79.4
+   ]
+  },
+  {
+   "input": "seymour",
+   "model": "ace-step-v1",
+   "file": "seymour-roundtrip.flac",
+   "hfFlatnessDb": -9.6,
+   "riseMs": 8.0,
+   "corr": 0.036,
+   "band2k5to6kDb": -17.0,
+   "band6to12kDb": -34.7,
+   "bandsDb": [
+    -7.1,
+    -3.6,
+    -6.5,
+    -8.9,
+    -17.0,
+    -34.7,
+    -47.8,
+    -54.7
+   ],
+   "paired": {
+    "lagSamples": -971,
+    "riseRefMs": 8.0,
+    "riseTestMs": 9.0,
+    "riseDeltaMs": 2.5,
+    "slowerShare": 0.5,
+    "attackDropDb": -0.8,
+    "magErrBands": [
+     "80-250",
+     "250-800",
+     "800-2500",
+     "2500-6000",
+     "6000-12000",
+     "12000-16000"
+    ],
+    "magErrDb": [
+     3.62,
+     2.29,
+     1.81,
+     1.62,
+     1.71,
+     3.47
+    ],
+    "corrRef": 0.62,
+    "corrTest": 0.02
+   }
+  },
+  {
+   "input": "seymour",
+   "model": "ace-step-1.5",
+   "file": "seymour-rt15-mean.wav",
+   "hfFlatnessDb": -12.9,
+   "riseMs": 10.0,
+   "corr": 0.64,
+   "band2k5to6kDb": -16.7,
+   "band6to12kDb": -36.3,
+   "bandsDb": [
+    -9.4,
+    -3.3,
+    -5.9,
+    -8.6,
+    -16.7,
+    -36.3,
+    -51.0,
+    -83.3
+   ],
+   "paired": {
+    "lagSamples": 0,
+    "riseRefMs": 4.5,
+    "riseTestMs": 8.0,
+    "riseDeltaMs": 5.0,
+    "slowerShare": 0.58,
+    "attackDropDb": 0.3,
+    "magErrBands": [
+     "80-250",
+     "250-800",
+     "800-2500",
+     "2500-6000",
+     "6000-12000",
+     "12000-16000"
+    ],
+    "magErrDb": [
+     3.21,
+     1.65,
+     0.96,
+     1.33,
+     1.45,
+     1.86
+    ],
+    "corrRef": 0.62,
+    "corrTest": 0.648
+   }
+  },
+  {
+   "input": "aeon",
+   "model": "input",
+   "file": "aeon-render-x45.wav",
+   "hfFlatnessDb": -17.5,
+   "riseMs": 21.0,
+   "corr": 0.549,
+   "band2k5to6kDb": -20.4,
+   "band6to12kDb": -32.9,
+   "bandsDb": [
+    -6.7,
+    -2.4,
+    -8.8,
+    -11.5,
+    -20.4,
+    -32.9,
+    -46.8,
+    -76.9
+   ]
+  },
+  {
+   "input": "aeon",
+   "model": "ace-step-v1",
+   "file": "aeon-roundtrip.flac",
+   "hfFlatnessDb": -13.0,
+   "riseMs": 28.0,
+   "corr": 0.067,
+   "band2k5to6kDb": -20.7,
+   "band6to12kDb": -33.2,
+   "bandsDb": [
+    -4.6,
+    -3.7,
+    -8.7,
+    -10.9,
+    -20.7,
+    -33.2,
+    -45.8,
+    -54.9
+   ],
+   "paired": {
+    "lagSamples": -1013,
+    "riseRefMs": 15.5,
+    "riseTestMs": 22.0,
+    "riseDeltaMs": 5.0,
+    "slowerShare": 0.55,
+    "attackDropDb": 0.0,
+    "magErrBands": [
+     "80-250",
+     "250-800",
+     "800-2500",
+     "2500-6000",
+     "6000-12000",
+     "12000-16000"
+    ],
+    "magErrDb": [
+     3.71,
+     2.1,
+     1.67,
+     1.43,
+     1.56,
+     3.28
+    ],
+    "corrRef": 0.565,
+    "corrTest": 0.051
+   }
+  },
+  {
+   "input": "aeon",
+   "model": "ace-step-1.5",
+   "file": "aeon-rt15-mean.wav",
+   "hfFlatnessDb": -14.7,
+   "riseMs": 13.5,
+   "corr": 0.616,
+   "band2k5to6kDb": -21.0,
+   "band6to12kDb": -33.4,
+   "bandsDb": [
+    -6.8,
+    -2.4,
+    -8.6,
+    -11.4,
+    -21.0,
+    -33.4,
+    -48.0,
+    -78.8
+   ],
+   "paired": {
+    "lagSamples": 0,
+    "riseRefMs": 19.0,
+    "riseTestMs": 18.0,
+    "riseDeltaMs": 2.0,
+    "slowerShare": 0.45,
+    "attackDropDb": 0.2,
+    "magErrBands": [
+     "80-250",
+     "250-800",
+     "800-2500",
+     "2500-6000",
+     "6000-12000",
+     "12000-16000"
+    ],
+    "magErrDb": [
+     2.56,
+     1.62,
+     1.46,
+     1.52,
+     1.39,
+     1.72
+    ],
+    "corrRef": 0.567,
+    "corrTest": 0.631
+   }
+  }
+ ],
+ "files": [
+  {
+   "file": "boss-seymour-N1-newer-model-v0.mp3",
+   "cue": "boss-seymour",
+   "game": "ffx",
+   "option": "N1",
+   "what": "ACE-Step 1.5 turbo (official ACE-Step files, MIT) cover-restyle of our own sampled render at denoise 0.40 (the strength of the clip Bailey picked on 27 Sep), Direction B words, then remaster R1 (focus), MP3 V0",
+   "take": "boss-seymour-n1-cover-d40-s303.flac",
+   "v1TakeOnSameInput": "seymour-ctl-d40-s202.flac",
+   "source": "D:/Tools/pyrefly-scratch/fb-0929/music/probe/seymour-render-x45.wav (the 45 s loop-start excerpt of the sampled render, the same input as the v1 codec round trip and the v1 45 s takes)",
+   "encode": "v0",
+   "bytes": 1438918,
+   "lufs": -16.0,
+   "truePeakDb": -1.9,
+   "lra": 2.9,
+   "crestDb": 16.6,
+   "bandsDb": [
+    -8.0,
+    -4.4,
+    -5.4,
+    -7.8,
+    -15.8,
+    -30.2,
+    -40.3,
+    -65.1
+   ],
+   "corr": 0.728,
+   "sideMidDb": -7.3,
+   "monoLossDb": -0.7,
+   "hfFlatnessDb": -12.1,
+   "riseMs": 16.5,
+   "topEdge60Hz": 16193,
+   "cliff": {
+    "db": 15.4,
+    "hz": 16807
+   },
+   "codecVsLossless": {
+    "lagSamples": 0,
+    "snrDb": 38.5,
+    "nmrBandsDb": [
+     -47.0,
+     -44.7,
+     -41.0,
+     -35.2,
+     -28.7,
+     -18.3,
+     -16.6,
+     -5.8
+    ],
+    "preEchoDb": -33.7,
+    "lostTopDb": 0.4
+   },
+   "rawTake": {
+    "hfFlatnessDb": -12.1,
+    "riseMs": 11.5,
+    "corr": 0.446,
+    "bands": [
+     -5.7,
+     -3.8,
+     -7.2,
+     -9.7,
+     -18.4,
+     -32.3,
+     -41.7,
+     -67.8
+    ],
+    "lufs": -13.5,
+    "tp": 0.0
+   },
+   "v1TakeSameInput": {
+    "hfFlatnessDb": -6.9,
+    "riseMs": 22.5,
+    "corr": 0.031,
+    "bands": [
+     -6.0,
+     -5.8,
+     -5.0,
+     -7.9,
+     -21.8,
+     -37.7,
+     -49.1,
+     -53.3
+    ]
+   }
+  },
+  {
+   "file": "boss-ffx2-aeon-N1-newer-model-v0.mp3",
+   "cue": "boss-ffx2-aeon",
+   "game": "ffx2",
+   "option": "N1",
+   "what": "ACE-Step 1.5 turbo (official ACE-Step files, MIT) cover-restyle of our own sampled render at denoise 0.40 (the strength of the clip Bailey picked on 27 Sep), Direction B words, then remaster R1 (focus), MP3 V0",
+   "take": "boss-ffx2-aeon-n1-cover-d40-s303.flac",
+   "v1TakeOnSameInput": "aeon-ctl-d40-s303.flac",
+   "source": "D:/Tools/pyrefly-scratch/fb-0929/music/probe/aeon-render-x45.wav (the 45 s loop-start excerpt of the sampled render, the same input as the v1 codec round trip and the v1 45 s takes)",
+   "encode": "v0",
+   "bytes": 1379288,
+   "lufs": -16.0,
+   "truePeakDb": -1.6,
+   "lra": 2.7,
+   "crestDb": 16.5,
+   "bandsDb": [
+    -6.1,
+    -4.1,
+    -6.8,
+    -8.5,
+    -18.2,
+    -28.4,
+    -38.5,
+    -63.7
+   ],
+   "corr": 0.675,
+   "sideMidDb": -6.2,
+   "monoLossDb": -0.9,
+   "hfFlatnessDb": -14.2,
+   "riseMs": 20.5,
+   "topEdge60Hz": 16424,
+   "cliff": {
+    "db": 20.7,
+    "hz": 20704
+   },
+   "codecVsLossless": {
+    "lagSamples": 0,
+    "snrDb": 37.4,
+    "nmrBandsDb": [
+     -44.6,
+     -43.0,
+     -38.5,
+     -33.6,
+     -26.4,
+     -18.3,
+     -15.6,
+     -5.8
+    ],
+    "preEchoDb": -24.9,
+    "lostTopDb": 0.7
+   },
+   "rawTake": {
+    "hfFlatnessDb": -13.5,
+    "riseMs": 19.0,
+    "corr": 0.605,
+    "bands": [
+     -4.4,
+     -3.2,
+     -9.5,
+     -13.3,
+     -23.4,
+     -32.5,
+     -41.9,
+     -66.3
+    ],
+    "lufs": -12.6,
+    "tp": 0.0
+   },
+   "v1TakeSameInput": {
+    "hfFlatnessDb": -4.9,
+    "riseMs": 8.0,
+    "corr": 0.131,
+    "bands": [
+     -2.3,
+     -5.1,
+     -11.3,
+     -16.8,
+     -27.9,
+     -35.3,
+     -44.4,
+     -51.8
+    ]
+   }
+  }
+ ],
+ "takesSweep": [
+  "boss-ffx2-aeon-n1-cover-d100-s101 onsetF 0.369 lag 180.0 win 7/7 chroma 0.808 SF 0.251 tempo 160.0 | flat -8.1 rise 11.5 corr 0.329 2.5-6k -19.7 6-12k -21.7 lufs -10.9 tp -0.3",
+  "boss-ffx2-aeon-n1-cover-d40-s101 onsetF 0.764 lag 0.0 win 7/7 chroma 0.957 SF 0.743 tempo 160.0 | flat -13.8 rise 27.0 corr 0.482 2.5-6k -22.5 6-12k -32.3 lufs -12.2 tp 0.1",
+  "boss-ffx2-aeon-n1-cover-d40-s202 onsetF 0.774 lag 0.0 win 7/7 chroma 0.956 SF 0.75 tempo 160.0 | flat -13.4 rise 27.0 corr 0.505 2.5-6k -22.6 6-12k -31.6 lufs -13.3 tp 0.0",
+  "boss-ffx2-aeon-n1-cover-d40-s303 onsetF 0.767 lag 0.0 win 7/7 chroma 0.954 SF 0.751 tempo 160.0 | flat -13.5 rise 19.0 corr 0.605 2.5-6k -23.4 6-12k -32.5 lufs -12.6 tp 0.0",
+  "boss-ffx2-aeon-n1-cover-d60-s101 onsetF 0.679 lag 0.0 win 7/7 chroma 0.903 SF 0.536 tempo 160.0 | flat -11.2 rise 6.0 corr 0.33 2.5-6k -22.0 6-12k -30.4 lufs -11.9 tp 0.0",
+  "boss-ffx2-aeon-n1-cover-d80-s101 onsetF 0.433 lag 225.0 win 2/7 chroma 0.863 SF 0.227 tempo 150.0 | flat -9.6 rise 12.0 corr 0.337 2.5-6k -21.8 6-12k -25.5 lufs -11.2 tp -1.4",
+  "boss-ffx2-aeon-n1-plain-d60-s101 onsetF 0.699 lag 0.0 win 7/7 chroma 0.881 SF 0.51 tempo 160.0 | flat -11.2 rise 12.5 corr 0.332 2.5-6k -22.7 6-12k -31.5 lufs -11.5 tp 0.0",
+  "boss-seymour-n1-cover-d100-s101 onsetF 0.499 lag 30.0 win 4/6 chroma 0.671 SF 0.287 tempo 133.25 | flat -12.9 rise 10.5 corr 0.274 2.5-6k -24.8 6-12k -38.3 lufs -11.5 tp -0.5",
+  "boss-seymour-n1-cover-d40-s101 onsetF 0.867 lag 0.0 win 6/6 chroma 0.941 SF 0.797 tempo 174.0 | flat -11.2 rise 15.0 corr 0.345 2.5-6k -17.9 6-12k -33.1 lufs -12.1 tp 0.0",
+  "boss-seymour-n1-cover-d40-s202 onsetF 0.87 lag 0.0 win 6/6 chroma 0.947 SF 0.805 tempo 176.5 | flat -8.7 rise 8.0 corr 0.383 2.5-6k -18.5 6-12k -30.8 lufs -13.9 tp -0.1",
+  "boss-seymour-n1-cover-d40-s303 onsetF 0.856 lag 0.0 win 6/6 chroma 0.942 SF 0.789 tempo 130.5 | flat -12.1 rise 11.5 corr 0.446 2.5-6k -18.4 6-12k -32.3 lufs -13.5 tp 0.0",
+  "boss-seymour-n1-cover-d60-s101 onsetF 0.58 lag 15.0 win 6/6 chroma 0.908 SF 0.619 tempo 130.5 | flat -10.1 rise 19.5 corr 0.252 2.5-6k -20.6 6-12k -37.4 lufs -12.0 tp -0.5",
+  "boss-seymour-n1-cover-d80-s101 onsetF 0.381 lag 45.0 win 6/6 chroma 0.802 SF 0.332 tempo 130.5 | flat -12.4 rise 14.5 corr 0.172 2.5-6k -23.3 6-12k -38.5 lufs -12.1 tp -0.9",
+  "boss-seymour-n1-plain-d60-s101 onsetF 0.506 lag 250.0 win 1/6 chroma 0.858 SF 0.35 tempo 125.0 | flat -13.5 rise 9.5 corr 0.047 2.5-6k -21.3 6-12k -37.9 lufs -12.0 tp 0.0"
+ ]
+}
