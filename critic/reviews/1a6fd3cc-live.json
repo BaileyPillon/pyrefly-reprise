@@ -1,0 +1,66 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-09-30T13:30:00Z",
+  "build": {
+    "mainSha": "1a6fd3cc",
+    "bundle": "ChAAAZ-I",
+    "artifactHash": "2011851984efc73c88b12be5f0b6b5f07abe1bf4c2bd3659f7f2f69cb025e591"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/1a6fd3cc.json --url https://baileypillon.github.io/pyrefly-reprise/ --full -> {result: PASS, artifactHash: 2011851984efc73c88b12be5f0b6b5f07abe1bf4c2bd3659f7f2f69cb025e591, liveManifest: match, checked: 1006, mismatched: [], missing: [], wrongType: [], errors: []}. Full compare (deep review owed), not --changed-from."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu, fresh context per stage, cache-busted URL). Screens asserted by assertScreen/waitBattleMenu (throw, never fall through) and the chapter card asserted by its hero text before Enter ('CHAPTER I | Seymour Flux' FFX, 'CHAPTER IV | Bahamut' FFX-2; pause header read back 'CHAPTER I - MT. GAGAZET - THE PROMINENCE' and 'CHAPTER IV - BEVELLE UNDERGROUND - SOMETHING SHE NAMED'; FF7 door snapshot chapter 'ff7-guard-scorpion'). Keys 1600x900: FFX and FFX-2 each reached a player turn; positive path ATTACK (FFX log 16->21, FFX-2 17->23) and cancel path (open SPECIAL/SKILL then Escape, same command rows back, screen still battle). FFX Items list (27 items) by mouse wheel over the list: first page POTION..MEGA PHOENIX, after one wheel EYE DROPS..AL BHED POTION, after two STAR CURTAIN (scrolls). Pause by P: screen 'pause', battle log frozen for 1.5 s, H hides panels (text 694 -> 1117 chars restored), Escape resumes, P resumes; music cur=boss-seymour (FFX) / boss-ffx2-aeon (FFX-2), source 'prerendered', before pause and again after resume; only pause.mp3 'Still Water' during the pause; mp3 files for title, chapter-select, scene, boss and pause fetched from /audio/music/ and /audio/sfx/sprite.mp3, prerendered manifest true, 26 cues, sprite decoded. OPTIONS by keys: P, E x5 reaches OPTIONS (REDUCE MOTION, LOW EFFECTS, TEXT SIZE rows present); ArrowDown x5 + ArrowRight -> textSize 1.15, again 1.3, Left/Right back to 1.3; Enter on REDUCE MOTION -> true; Enter on LOW EFFECTS -> true; html data-text-size=130. FF7 door: typed L I M I T on chapter select then Enter presses -> battle (ff7-guard-scorpion), Attack log 0->4. Touch 390x844 (CDP touchStart/touchEnd with 140 ms hold): title tap, chapter-select card tap + plate tap, party prep START BATTLE, cutscene taps on the dialogue box, battle coach tap, ATTACK tap (FFX log 16->21), pause button tap opens pause, resume; FFX-2 Bahamut same flow (Yuna's WHITE MAGIC/CHANGE/ITEM turn at first, so the log growth there is weak evidence of the tap itself). 0 console errors, 0 responses >=400 across every stage.",
+      "environment": "headless Chromium via Playwright, PYREFLY_BROWSER=gpu, no fallback needed (no black canvas)",
+      "automation": "automated, real key presses and real touch input"
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke only. (a) In OPTIONS changed TEXT SIZE 100->130, REDUCE MOTION on, LOW EFFECTS on, reloaded the page: settings.textSize 1.3, reduceMotion true, lowEffects true, save string byte-identical before and after (575 chars), screen returned to title. (b) Release-31a-shaped save (settings without textSize, reduceMotion, lowEffects, sfxBalanceMigrated, battleHelp; masterVolume 0.42, musicVolume 0.33, sfxVolume 0.61, textSpeed 2, guideVisible false) loaded after reload with those values kept and no console error. Progress beyond settings was not made (no chapter was finished in this pass), so 'progress survives reload' is only covered by the settings and the save round trip.",
+      "reason": "Full upgrade matrix not part of this pass."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact, full compare of 1006 files against the live URL",
+      "FFX Seymour Flux by keys 1600x900: player turn, ATTACK positive path, SPECIAL cancel path, Items list wheel scrolling, pause by P and Escape, H hide/restore, music source and resume, OPTIONS rows by keys (TEXT SIZE three steps, REDUCE MOTION, LOW EFFECTS), reload keeps them",
+      "FFX-2 Bahamut by keys 1600x900: player turn, ATTACK positive path, SKILL cancel path, pause/H/Escape/P, boss-ffx2-aeon prerendered before and after resume",
+      "touch 390x844 for FFX Seymour Flux and FFX-2 Bahamut: title to battle by taps, coach dismissal by tap, ATTACK tap, pause tap and resume",
+      "release-31a-shaped save with settings kept",
+      "FF7 Guard Scorpion door by typing LIMIT",
+      "console errors and 404s for the whole run: 0 and 0"
+    ],
+    "reused": [
+      "changed-area verdicts (SHIP for 1a6fd3cc) reused from critic/rounds/round-17.json; not re-judged here"
+    ],
+    "notTested": [
+      "full upgrade matrix (CHK-024 full), only the lightweight reload smoke ran",
+      "a chapter played to victory or defeat, so no progress write beyond settings",
+      "default-off switches ?zombiewarn=, ?sfxmix=, ?pace=, ?cam= (off by default; not switched on live)",
+      "FFX Zombie pip ordering and the target-plate warning, the six FFX Sphere Grid fixes, the miss sound, HUD layout against the camera rest pose in pixels; the coach line closing on any outside press was exercised (coach dismissed by tap and by Enter) but not measured",
+      "FFX-2 Items list wheel scrolling and scroll marks (FFX list only)",
+      "real hardware touch devices, headless emulation only; audio judged by network log and AudioManager debug surface, not by ear"
+    ]
+  },
+  "observations": [
+    "Harness note, not a defect claim: page.touchscreen.tap (zero hold) did not advance the cutscene dialogue box, a 140 ms held touch did. Two FFX-2 desktop runs out of about five saw the first Enter after dismissing the first-time coach not open the submenu and the following Escape opened the pause instead; not reproduced in the clean runs and suspected to be coach timing in the harness. Reported for the next reviewer, unproven."
+  ],
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 110
+}
