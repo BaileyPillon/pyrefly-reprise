@@ -125,3 +125,61 @@ Code: `src/ui/common/withStatusLooks.ts` (the HUD tap, wired in `BattleScreenWir
 2. `research/ffx2-combat-core.md` §2.8 says FFX-2 Doom is "a red countdown timer over the
    target's head" `[verified: 2 sources]`, while `research/status-display.md` §3 says the
    placement is unsourced. Draw FFX-2's count over the head like FFX's?
+
+## CHECK (independent, 2026-09-30, did not build it)
+
+Checked branch `status-o3` at 3120bff1 in `D:/pyrefly-advisor-v3` (no pull, no branch switch).
+Verdict: **no blocker**; one major to fix or disclose, three minors.
+
+- **Build and real input.** I made a fresh production build of the branch (scratch outDir) and
+  served it on port 8420, then drove it with headless Playwright on the GPU. At 1600x900 in FFX
+  Chapter I, with Zombie, Poison and Protect staged on Kimahri at 840 HP, I used real keys
+  (Items > Hi-Potion > aim Kimahri). The build showed "HI-POTION ON A ZOMBIE -1000 KO", the red
+  help slab, "HURTS" on the item and the ZOMBIE tag. All four cleared when the aim moved to Tidus
+  and when I backed out. At 390x844 I used taps (ITEM, HI-POTION) and a touch swipe to reach
+  Kimahri. That showed the same forecast, warning and tag, and the confirm button had a red inset
+  rim (`stwarn-go`). In FFX-2 Chapter IV I clicked and tapped ATTACK: DOOM 3 on the target tag,
+  STATUS 3 under the boss bar, the Bahamut icon in the top help line, ASLEEP on desktop only,
+  Z's on Yuna, bubbles and the ellipsis bubble on Rikku, and Paine darkened (0x9e9e9e).
+  **0 console errors and 0 page errors** in every run.
+- **Target vs build.** The four sheets in `final/` match the approved O3 frames element for
+  element. My own frames agree. The only differences are the ones listed above (mark offsets,
+  dimmed rows, Paine's gauge timing).
+- **Rule 1.** No file under `src/battle/**` or `BattlePresenter*` changed. A tap that confirmed
+  Hi-Potion on the Zombie Kimahri dealt the engine's 1000 and KO'd him, as the forecast said.
+  `status-o3-hud` pins that a real Chapter I battle is unchanged.
+- **Performance** (on the production build, 1600x900, everything staged): FFX frame mean
+  16.67 ms, p95 16.7 ms, HUD update 0.85 ms. FFX-2 frame mean 16.72 ms, p95 16.8 ms, HUD update
+  0.80 ms. 60 fps held.
+- **Gates.** tsc is clean except the untracked `tests/unit/zz-scratch/advisor-v3-*` files (not
+  this track's). The targeted files pass: status-o3-mapping, status-o3-hud, fb0929-zombie-warning
+  and omnis-readout, 56 tests. I ran the full suite once: 675 files passed and 1 failed. The
+  failure was a timeout under load (`strategy-ffx2-bahamut` "heal-only route", 26.8 s against a
+  15 s limit, while a build and a browser ran). Alone it passes in 11.4 s, and it is an engine
+  test this branch does not touch. Orphans: 24 on the branch against 25 in main's tree, so no
+  growth, and no status module is orphaned. Every new file is under 400 lines. `TargetCursor.ts`
+  (485) shrank by 2. `git merge-tree` is clean against origin/main (1a6fd3cc) and against local
+  main (888a7578).
+- **MAJOR (new feature, not a regression): REDUCE MOTION and LOW EFFECTS do not reach the new
+  marks.** With `prefers-reduced-motion: reduce` plus `html[data-reduce-motion]`, and separately
+  with `html[data-low-effects]`, the looping mark animations kept running: 12 on the FFX Zombie
+  frame, the same count as with both off. These are the smoke drift, rising bubbles, orbiting
+  stars and orbs, the halo pulse and the Z float. `src/ui/common/status-marks.css` has no
+  reduced-motion block, and `src/ui/common/comfort.css` does not mirror it. Release 32's A2
+  switch covers every other battle animation. Fix: hold the marks still, static or at 1 ms, under
+  both the media query and `html[data-reduce-motion]`, and let Pointless's JS pulse read the
+  same flag.
+- **Minor (existing behaviour, not this branch):** on the phone, one tap on a figure selects
+  **and confirms** the target. My tap on Kimahri's figure used the Hi-Potion straight away and
+  KO'd him, so the forecast never showed. The guard rail only protects a player who swipes or
+  uses keys. The fb-0929 switches that would change this are OFF and wait for Bailey.
+- **Minor:** `statusFigureTint` sets the tint to its own colour and resets it to white when it
+  lets go. That overwrites a scene's stand-in tint (farplane and leblanc-last-room, when a
+  subject is a placeholder). This only happens when art is missing.
+- **Minor:** the dead pip and chip CSS and the stale comment in `turnQueue.ts` are already
+  disclosed above.
+- **Not built, each with a written reason** (accepted): FFX-2 Reflect's flash (the engine has no
+  bounce event), FFX-2 Stop's gauge colour (the sources conflict), the Sensor icon row (no
+  mockup shows it), and the paintings (not approved).
+
+Scripts and frames: `D:/Tools/pyrefly-scratch/picks-0929/status-check/` (`check.mjs`, `shots/`, `cap/`).
