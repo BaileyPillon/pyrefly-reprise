@@ -279,6 +279,11 @@ export class SphereGridModel {
     return this.grids.get(memberId)?.quarterSteps ?? 0;
   }
 
+  /** The page-long walk record a later visit re-reads (auto-learn's UNDO puts it back). */
+  walkRecord(memberId: string): { visited: Set<number>; quarterSteps: number } | null {
+    return this.session.walked.get(memberId) ?? null;
+  }
+
   moveTo(memberId: string, nodeId: number): GridActionResult {
     const grid = this.grids.get(memberId);
     const member = this.memberBuild(memberId);

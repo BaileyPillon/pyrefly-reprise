@@ -29,7 +29,6 @@ import { artUrl } from '../../../engine/PaintedArt.ts';
 import {
   BOUNDS,
   GRID_INK,
-  LEGEND,
   LINKS,
   NODES,
   NODE_BY_ID,
@@ -40,6 +39,7 @@ import {
 } from './sphereGridData.ts';
 import type { SphereGridModel } from './sphereGridModel.ts';
 import { tooltipLines } from './sphereGridCaption.ts';
+import { STRIP_H, drawHighlights, drawLockPlate, drawStrip } from './sphereGridDraw.ts';
 
 /** Zoom at which a node's label is worth drawing at all. */
 const LABEL_ZOOM = 0.28;
@@ -52,8 +52,6 @@ const LABEL_ZOOM = 0.28;
 export const DEFAULT_ZOOM = 0.45;
 const MIN_ZOOM = 0.06;
 const MAX_ZOOM = 1.8;
-/** Height of the legend/zoom strip along the canvas's bottom edge. */
-const STRIP_H = 7.4;
 
 /** Portraits, loaded once and shared by every mount of the tab. */
 const portraits = new Map<string, HTMLImageElement>();
@@ -116,6 +114,8 @@ export class SphereGridView {
 
   /** The controls line along the canvas's bottom edge; the panel keeps it in step with its walk mode. */
   hint = 'WHEEL ZOOM  ·  DRAG PAN  ·  CLICK A NODE';
+  /** Nodes AUTO-LEARN just activated: ringed, one tagged NEW (option C). The panel sets and clears it. */
+  highlights: ReadonlySet<number> = new Set();
 
   constructor() {
     this.el = document.createElement('div');
@@ -543,7 +543,7 @@ export class SphereGridView {
         ctx.fill();
       }
 
-      if (node.kind === 'lock' && !open) this.drawLockPlate(ctx, x, y, r, color);
+      if (node.kind === 'lock' && !open) drawLockPlate(ctx, x, y, r, color);
       else {
         ctx.beginPath();
         // An opened lock is an empty node now [ffx-combat-core §10.1], and is drawn as one.
@@ -629,8 +629,13 @@ export class SphereGridView {
       ctx.setLineDash([]);
     }
 
+    const at = (id: number): { x: number; y: number } | null => {
+      const n = NODE_BY_ID.get(id);
+      return n ? { x: sx(n), y: sy(n) } : null;
+    };
+    drawHighlights(ctx, this.highlights, at, w, h, r, this.clock, grid?.position ?? null);
     this.drawTooltip(ctx, w, h, model);
-    this.drawStrip(ctx, w, h);
+    drawStrip(ctx, w, h, this.zoom, this.hint);
   }
 
   private drawGround(ctx: CanvasRenderingContext2D, w: number, h: number): void {
@@ -658,24 +663,6 @@ export class SphereGridView {
     wash.addColorStop(1, 'rgba(8,16,30,0)');
     ctx.fillStyle = wash;
     ctx.fillRect(0, 0, w, h);
-  }
-
-  /** A Lv.N lock: a chunky plate, not another circle, so it reads as a barrier. */
-  private drawLockPlate(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, color: string): void {
-    const s = r * 1.05;
-    ctx.beginPath();
-    ctx.moveTo(x, y - s);
-    ctx.lineTo(x + s, y);
-    ctx.lineTo(x, y + s);
-    ctx.lineTo(x - s, y);
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.globalAlpha = 0.9;
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.lineWidth = Math.max(0.5, r * 0.18);
-    ctx.strokeStyle = '#ffd9d9';
-    ctx.stroke();
   }
 
   /** A character's position marker: portrait chip in a ring [§5.4]. */
@@ -762,50 +749,5 @@ export class SphereGridView {
     ctx.fillText(sub, bx + padX, by + 11.8);
     ctx.fillStyle = short ? '#e0585e' : GRID_INK.reachableB;
     ctx.fillText(costLine, bx + padX, by + 16.6);
-  }
-
-  /**
-   * The node-colour legend and the zoom readout, in one strip along the
-   * canvas's bottom edge.
-   *
-   * The legend lives *on* the canvas rather than on the ivory below it for
-   * two reasons: it explains colours that only exist on the starfield, and
-   * the sheet is 334 authoring px wide — a thirteen-swatch legend laid out in
-   * the ivory row ran straight off the slab and onto the backdrop (the loose
-   * dots at the right edge of the first polish capture).
-   */
-  private drawStrip(ctx: CanvasRenderingContext2D, w: number, h: number): void {
-    const y = h - STRIP_H;
-    ctx.fillStyle = 'rgba(8,16,30,0.82)';
-    ctx.fillRect(0, y, w, STRIP_H);
-    ctx.fillStyle = 'rgba(242,194,30,0.25)';
-    ctx.fillRect(0, y, w, 0.4);
-
-    ctx.font = '700 3.7px "Chakra Petch", sans-serif';
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    const right = `ZOOM ${this.zoom.toFixed(2)}x  ·  ${this.hint}`;
-    ctx.fillStyle = 'rgba(244,241,232,0.6)';
-    ctx.fillText(right, w - 4, y + STRIP_H / 2 + 0.2);
-    const rightW = ctx.measureText(right).width;
-
-    ctx.textAlign = 'left';
-    let x = 4;
-    const limit = w - rightW - 12;
-    for (const key of LEGEND) {
-      const tw = ctx.measureText(key.label).width;
-      if (x + 4 + tw > limit) break;
-      ctx.fillStyle = key.color;
-      ctx.beginPath();
-      ctx.arc(x + 1.5, y + STRIP_H / 2, 1.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = 'rgba(244,241,232,0.72)';
-      ctx.fillText(key.label, x + 4.2, y + STRIP_H / 2 + 0.2);
-      x += 4.2 + tw + 4.2;
-    }
-
-    ctx.strokeStyle = 'rgba(242,194,30,0.35)';
-    ctx.lineWidth = 0.7;
-    ctx.strokeRect(0.35, 0.35, w - 0.7, h - 0.7);
   }
 }

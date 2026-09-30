@@ -32,6 +32,7 @@ import type { FFXPartyBuild } from '../../../battle/common/types.ts';
 import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrepScreen.ts';
 import type { InputSnapshot } from '../../../app/Input.ts';
 import { audio } from '../../../audio/index.ts';
+import { SphereGridHelp } from './sphereGridHelp.ts';
 import { SphereGridView } from './SphereGridView.ts';
 import { SphereGridModel } from './sphereGridModel.ts';
 import { actionLine } from './sphereGridCaption.ts';
@@ -61,6 +62,7 @@ const WALK_HINT_OFF = 'WHEEL ZOOM  ·  DRAG PAN  ·  CLICK A NODE  ·  SHIFT WAL
 export function makeSphereGridPanel(): PrepPanel {
   let view: SphereGridView | null = null;
   let model: SphereGridModel | null = null;
+  let help: SphereGridHelp | null = null;
   let build: FFXPartyBuild | null = null;
   let memberId = '';
   let walking = false;
@@ -180,6 +182,8 @@ export function makeSphereGridPanel(): PrepPanel {
     const grid = model.gridFor(memberId);
     const node = NODE_BY_ID.get(nodeId);
     if (!grid || !node) return;
+    // Any move of the player's own settles an open AUTO-LEARN result as kept.
+    help?.keep(false);
     if (node.kind === 'lock' && !model.unlocked.has(node.id)) {
       const r = model.activate(memberId, nodeId);
       say(r.message, r.ok);
@@ -198,6 +202,7 @@ export function makeSphereGridPanel(): PrepPanel {
   const showMember = (id: string): void => {
     if (!model || !view) return;
     if (!model.memberBuild(id)) return;
+    if (id !== memberId) help?.keep(false);
     memberId = id;
     caption = '';
     view.show(model, id);
@@ -231,6 +236,8 @@ export function makeSphereGridPanel(): PrepPanel {
             <span class="ffxprep-sg__ap"><i class="ffxprep-sg__ap-fill"></i></span>
             <span class="ffxprep-sg__ap-n"></span>
             <span class="ffxprep-sg__spacer"></span>
+            <button type="button" class="ffxprep-sg__btn ffxprep-sg__auto" data-sg="auto">AUTO-LEARN</button>
+            <button type="button" class="ffxprep-sg__btn ffxprep-sg__help" data-sg="help" aria-label="How the Sphere Grid works">?</button>
             <button type="button" class="ffxprep-sg__btn ffxprep-sg__walk" data-sg="walk">WALK</button>
             <button type="button" class="ffxprep-sg__btn" data-sg="out" aria-label="Zoom out">&minus;</button>
             <button type="button" class="ffxprep-sg__btn" data-sg="in" aria-label="Zoom in">+</button>
@@ -266,6 +273,18 @@ export function makeSphereGridPanel(): PrepPanel {
         showMember(ctx.memberId || (build.members[0]?.id ?? ''));
       }
 
+      // D-290: the first-time explainer (A) and AUTO-LEARN with undo (C).
+      help = new SphereGridHelp({
+        container,
+        model: () => model,
+        view: () => view,
+        memberId: () => memberId,
+        memberName: () => model?.memberBuild(memberId)?.name ?? '',
+        refresh: renderAll,
+        say,
+      });
+      if (model) help.maybeShowFirstTime();
+
       container.addEventListener('click', (e) => {
         const btn = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-sg]');
         if (!btn || !view) return;
@@ -274,16 +293,19 @@ export function makeSphereGridPanel(): PrepPanel {
         else if (what === 'out') view.zoomBy(1 / 1.25);
         else if (what === 'home') view.recentre();
         else if (what === 'walk') setWalking(!walking);
+        else if (what === 'auto' || what === 'help') help?.press(what);
         // A focused <button> turns the next Enter into a second click on
         // itself, which would toggle WALK straight back off *and* let the
         // shell see the same Enter and start the battle. Drop focus instead.
         btn.blur();
-        audio.playSfx('cursor-move');
+        if (what !== 'auto' && what !== 'help') audio.playSfx('cursor-move');
         renderAll();
       });
     },
 
     unmount() {
+      help?.destroy();
+      help = null;
       view?.unmount();
       view = null;
       model = null;
@@ -296,6 +318,8 @@ export function makeSphereGridPanel(): PrepPanel {
 
     handleInput(input: InputSnapshot): boolean {
       if (!view) return false;
+      // An open card (A) takes every key; an open result (C) takes the ones it answers to.
+      if (help?.handleInput(input)) return true;
 
       // Zoom is free: the prep shell binds neither shoulder button.
       if (input.consume('r1')) view.zoomBy(1.25);

@@ -1,0 +1,133 @@
+/*
+ * The phone half of sphere-grid-help.css (split to stay under 400 lines):
+ * under 600 CSS px the explainer and the AUTO-LEARN result mount on the
+ * unscaled `.prep` layer (`sgx-layer--phone`) with nothing a player reads under
+ * 14 CSS px (CHK-003) and every button at least 44 px, and a dock under the
+ * letterboxed board carries AUTO-LEARN and `?`. The tab's own phone layout is
+ * unchanged (option B, the phone page, is D-295). FFX only.
+ */
+
+/* ---- the phone */
+
+.sgx-dock {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .prep[data-tab='sphere-grid'] > .sgx-dock {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 30;
+    display: flex;
+    gap: 12px;
+    pointer-events: auto;
+  }
+  .sgx-dock .sgx-btn {
+    min-height: 44px;
+    font-size: 15px;
+    padding: 0 16px;
+  }
+  .sgx-dock__auto {
+    flex: 1 1 auto;
+  }
+  .sgx-dock__help {
+    flex: none;
+    width: 52px;
+    letter-spacing: 0;
+    font-size: 20px;
+  }
+  .prep:not([data-tab='sphere-grid']) > .sgx-layer--result {
+    display: none;
+  }
+
+  .sgx-layer--phone .sgx-card-pos,
+  .sgx-layer--phone .sgx-result-pos {
+    transform: none;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    height: auto;
+  }
+  .sgx-layer--phone .sgx-slab {
+    transform: none;
+    border-left-width: 5px;
+  }
+  .sgx-layer--phone .sgx-slab > .sgx-in {
+    transform: none;
+  }
+  .sgx-layer--card.sgx-layer--phone {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
+  .sgx-layer--phone .sgx-card-pos {
+    top: 16px;
+    bottom: auto;
+    padding-bottom: 16px;
+  }
+  .sgx-layer--phone .sgx-card {
+    position: relative;
+    padding: 20px 18px 20px 20px;
+  }
+  .sgx-layer--phone .sgx-kicker {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+  }
+  .sgx-layer--phone .sgx-title {
+    font-size: 28px;
+  }
+  .sgx-layer--phone .sgx-steps {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .sgx-layer--phone .sgx-step h3 {
+    font-size: 18px;
+  }
+  .sgx-layer--phone .sgx-step p,
+  .sgx-layer--phone .sgx-line {
+    font-size: 16px;
+  }
+  .sgx-layer--phone .sgx-step .sgx-t,
+  .sgx-layer--phone .sgx-note,
+  .sgx-layer--phone .sgx-chip {
+    font-size: 14px;
+  }
+  .sgx-layer--phone .sgx-foot {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .sgx-layer--phone .sgx-btn {
+    min-height: 44px;
+    font-size: 15px;
+    padding: 0 16px;
+  }
+  .sgx-layer--phone .sgx-q {
+    min-height: 0;
+    padding: 2px 9px;
+  }
+  .sgx-layer--phone .sgx-cover {
+    display: none;
+  }
+  .sgx-layer--phone .sgx-result-pos {
+    top: auto;
+    bottom: 76px;
+  }
+  .sgx-layer--phone .sgx-result {
+    position: relative;
+    padding: 14px 16px 14px 18px;
+  }
+  .sgx-layer--phone .sgx-gain {
+    font-size: 19px;
+  }
+  .sgx-layer--phone .sgx-acts {
+    display: flex;
+    margin: 10px 0 0;
+    gap: 12px;
+  }
+  .sgx-layer--phone .sgx-acts .sgx-btn {
+    flex: 1 1 0;
+  }
+}

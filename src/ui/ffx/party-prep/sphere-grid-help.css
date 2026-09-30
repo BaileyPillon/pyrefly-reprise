@@ -1,0 +1,299 @@
+/*
+ * The Sphere Grid's explainer card (A) and AUTO-LEARN result (C), Bailey's
+ * pick D-290, built to docs/concepts/fb-0929/sphere/option-a-explainer.jpg and
+ * option-c-autolearn.jpg. FFX only.
+ *
+ * Desktop: the cards sit on the 640x360 prep stage. Each is laid out at the
+ * target's own 1600x900 sizes inside a box scaled by 0.4 (1600 / 640 = 2.5),
+ * so every number below is the mockup's and the stage's own scale brings it
+ * back to 1:1 at 1600x900.
+ *
+ * Phone (max-width 599px): the cards mount on the unscaled `.prep` layer
+ * (`sgx-layer--phone`), with nothing a player reads under 14 CSS px (CHK-003)
+ * and every button at least 44 px; the dock under the letterboxed board holds
+ * AUTO-LEARN and `?`.
+ *
+ * `#ui` is `pointer-events: none` all the way down, so every surface here
+ * turns them back on for itself.
+ */
+
+.sgx-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+.sgx-layer--card {
+  pointer-events: auto;
+}
+.sgx-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 8, 16, 0.62);
+}
+
+/* ---- the ivory slab both cards share (the mockup's .slab) */
+
+.sgx-slab {
+  position: absolute;
+  background: var(--ig-paper);
+  color: var(--ig-ink);
+  transform: skewX(var(--ig-skew));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  border-left: 6px solid var(--ig-gold);
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+.sgx-slab > .sgx-in {
+  transform: skewX(var(--ig-skew-inverse));
+}
+.sgx-kicker {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  font-size: 15px;
+  color: var(--ig-gold-on-paper);
+  text-transform: uppercase;
+}
+.sgx-title {
+  margin-top: 8px;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 1.05;
+}
+.sgx-btn {
+  display: inline-block;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  font-size: 16px;
+  line-height: normal;
+  padding: 10px 22px;
+  border: 2px solid var(--ig-ink);
+  border-radius: 0;
+  color: var(--ig-ink);
+  background: transparent;
+  text-transform: uppercase;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.sgx-btn--dark {
+  background: var(--ig-ink);
+  color: var(--ig-gold);
+  border-color: var(--ig-ink);
+}
+.sgx-btn--auto {
+  background: var(--ig-ink);
+  color: var(--ig-gold);
+  border-color: var(--ig-gold);
+}
+.sgx-btn--small {
+  font-size: 13px;
+  padding: 6px 14px;
+}
+.sgx-layer--keys .sgx-btn--chosen {
+  outline: 3px solid var(--ig-gold);
+  outline-offset: 2px;
+}
+/* A finger leaves :hover stuck on the last button it tapped; only a real pointer gets the ring. */
+@media (hover: hover) {
+  .sgx-btn:hover {
+    outline: 3px solid var(--ig-gold);
+    outline-offset: 2px;
+  }
+}
+
+/* ---- A: the explainer (target .card at 560,150, 900x560) */
+
+.sgx-card-pos {
+  position: absolute;
+  left: 224px;
+  top: 60px;
+  width: 900px;
+  height: 560px;
+  transform: scale(0.4);
+  transform-origin: 0 0;
+}
+.sgx-card {
+  inset: 0;
+  padding: 34px 44px 30px 54px;
+}
+.sgx-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  margin-top: 22px;
+}
+.sgx-step {
+  border-top: 3px solid var(--ig-gold);
+  padding-top: 12px;
+}
+.sgx-step h3 {
+  margin: 0 0 8px;
+  font-family: var(--ig-font-display);
+  font-size: 20px;
+  letter-spacing: 0.24em;
+  color: var(--ig-ink);
+}
+.sgx-step h3 b {
+  color: var(--ig-gold-on-paper);
+  margin-right: 8px;
+}
+.sgx-step p {
+  margin: 0;
+  font-family: var(--ig-font-text);
+  font-size: 16.5px;
+  line-height: 1.45;
+  color: #2a2733;
+}
+.sgx-viz {
+  height: 74px;
+  margin: 4px 0 10px;
+  background: #08101e;
+  position: relative;
+  border: 1px solid rgba(242, 194, 30, 0.35);
+  overflow: hidden;
+}
+.sgx-n {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid;
+  background: #141a28;
+  top: 26px;
+  box-sizing: border-box;
+}
+.sgx-n--sel {
+  border-color: #fff0a8;
+  box-shadow: 0 0 0 7px rgba(244, 241, 232, 0.25);
+}
+.sgx-l {
+  position: absolute;
+  height: 4px;
+  top: 35px;
+  background: #3a4456;
+}
+.sgx-l--gold {
+  background: #f2c21e;
+}
+.sgx-t {
+  position: absolute;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 12px;
+  color: #f4f1e8;
+  white-space: nowrap;
+}
+.sgx-t--wide {
+  font-size: 14px;
+  white-space: normal;
+  top: 22px !important;
+}
+.sgx-step:nth-child(3) .sgx-t {
+  font-size: 13px;
+}
+.sgx-note {
+  margin-top: 16px;
+  font-family: var(--ig-font-text);
+  font-size: 15px;
+  color: #5a5566;
+}
+.sgx-foot {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.sgx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: #5a5566;
+}
+.sgx-q {
+  padding: 2px 9px;
+  font-size: 14px;
+  cursor: default;
+}
+
+/* ---- C: the result (target .toast at 612,452, 850x138, over a .cover) */
+
+.sgx-cover {
+  position: absolute;
+  left: 240px;
+  top: 180.8px;
+  width: 352px;
+  height: 28px;
+  background: var(--ig-paper);
+  transform: skewX(var(--ig-skew));
+}
+.sgx-result-pos {
+  position: absolute;
+  left: 244.8px;
+  top: 180.8px;
+  width: 850px;
+  height: 138px;
+  transform: scale(0.4);
+  transform-origin: 0 0;
+}
+.sgx-result {
+  inset: 0;
+  padding: 14px 26px 14px 34px;
+}
+.sgx-result .sgx-kicker {
+  font-size: 13px;
+}
+.sgx-gain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 22px;
+  margin: 4px 0 6px;
+  font-family: var(--ig-font-numeral);
+  font-weight: 700;
+  font-size: 22px;
+}
+.sgx-gain em {
+  font-style: normal;
+  color: var(--ig-gold-on-paper);
+}
+.sgx-line {
+  font-family: var(--ig-font-text);
+  font-size: 16.5px;
+  line-height: 1.5;
+  color: #2a2733;
+}
+.sgx-line b {
+  font-family: var(--ig-font-numeral);
+  font-size: 19px;
+  color: var(--ig-ink);
+}
+.sgx-acts {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* ---- the header's two new buttons (desktop) */
+
+.ffxprep-sg__auto {
+  background: var(--ig-ink);
+  color: var(--ig-gold);
+  border-color: var(--ig-gold);
+}
+.ffxprep-sg__auto:hover {
+  background: var(--ig-ink);
+  color: #ffe27a;
+}
+.ffxprep-sg__help {
+  background: var(--ig-ink);
+  color: var(--ig-gold);
+  border-color: var(--ig-gold);
+}
