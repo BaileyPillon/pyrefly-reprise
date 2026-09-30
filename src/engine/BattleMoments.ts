@@ -40,6 +40,7 @@ import type {
   PlaybackSpeed,
 } from './BattlePresenterPorts.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
+import { paceFactor } from './pace.ts';
 import { fittedPush } from './ShotFit.ts';
 import { ShotRules } from './ShotRules.ts';
 
@@ -148,7 +149,7 @@ export class BattleMoments {
   // ------------------------------------------------------------------ timing
 
   private get scale(): number {
-    return this.hurry ? 0 : SPEED_SCALE[this.deps.speed()];
+    return this.hurry ? 0 : SPEED_SCALE[this.deps.speed()] * paceFactor('action'); // the pacing option (`pace.ts`)
   }
 
   /** True when playback is collapsing every wait (e2e, the critic). */

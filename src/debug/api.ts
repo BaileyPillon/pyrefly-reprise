@@ -8,6 +8,7 @@ import { wiringReport } from '../app/screens/BattleScreenWiring.ts';
 import { getStrategy, strategyNames, type StrategyName } from '../engine/BattlePresenterStrategies.ts';
 import type { AutoStrategy } from '../engine/BattlePresenter.ts';
 import type { PlaybackSpeed } from '../engine/BattlePresenterPorts.ts';
+import { pace, paceGame, paceScales, setPace, type PaceGame, type PaceName, type PaceScales } from '../engine/pace.ts';
 import { isInterimYawEnabled, setInterimYawEnabled } from '../engine/PaintedActor.ts';
 import { sceneReport } from '../scenes/index.ts';
 // Scene agents: every `goto('scene-<key>')` debug screen (`./sceneScreens.ts`).
@@ -206,6 +207,12 @@ export interface PyreflyDebugApi {
   markCoachSeen(id?: string): void;
   /** What the onboarding state machine currently believes. */
   coaching(): { allowed: boolean; battleHelp: boolean; seen: readonly string[] };
+  /**
+   * The battle pacing option (fb-0929; `src/engine/pace.ts`). With no argument, reads it; with
+   * `'current' | 'steady' | 'relaxed'`, picks it (an unknown name changes nothing). `'current'`
+   * is the default and the live build. `?pace=<name>` in the URL does the same at boot.
+   */
+  pace(name?: string): { pace: PaceName; accepted: boolean; game: PaceGame; scales: PaceScales };
 }
 
 /** One combatant, as the targeting snapshot reports it. */
@@ -418,6 +425,10 @@ export function installDebugApi(app: App): PyreflyDebugApi {
       return true;
     },
     waitBattleEnd: async () => (await battleScreen()?.finished) ?? null,
+    pace: (name?: string) => {
+      const accepted = name === undefined ? true : setPace(name);
+      return { pace: pace(), accepted, game: paceGame(), scales: paceScales() };
+    },
 
     // ---------------------------------------------------------- cutscenes
 

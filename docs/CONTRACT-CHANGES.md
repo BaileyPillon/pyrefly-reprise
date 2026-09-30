@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-29 — `PaintedActor.update` / `SpriteActor.update`: one-shot tweens follow the pacing option (FFX and FFX-2, separate presets; inert by default)
+
+Branch `fb-0929-pacing` (Bailey's friend: "moves and transitions happen too fast"). An OPTION for Bailey, default
+off. Both actors' `update(dt)` now advance their `TweenGroup` by `dt * paceRate('action')` from the new pure module
+`src/engine/pace.ts`. At the default preset `'current'` the rate is exactly 1, so every existing caller, test and
+capture sees the same numbers; under `?pace=steady|relaxed` (or `__pyrefly.pace(name)`) the one-shot moves (lunge,
+flash, squash, fade, dissolve) stretch with the presenter's waits, which scale by the same factor, so a guarded
+animation and its guard stay in step. The idle breathing and the actor clock are not scaled. No signature changes.
+Game case: FFX and FFX-2 have their own presets (CTB vs ATB); FF7 and anything else is always 1.
+
 ## 2026-09-29 — Sin listed: `CHAPTERS` and `CHAPTER_IDS` gain `'sin-fins-core'` and `'sin-face'` (FFX only; the listing is shared plumbing)
 
 **FFX only** for the chapters [AGENTS.md hard rule 14; research/ffx-sin.md §0.3]; the listing itself is shared

@@ -57,6 +57,7 @@ import {
   syncHud,
 } from './BattlePresenterUtil.ts';
 import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
+import { paceFactor } from './pace.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
@@ -213,7 +214,8 @@ export class BattlePresenter {
 
   private sleep(ms: number): Promise<void> {
     if (this.aborted) return Promise.resolve();
-    return this.baseSleep(Math.max(0, ms * SPEED_SCALE[this.speed] * this.timeScale));
+    // The pacing switch (`pace.ts`, an option, 1 unless picked) stretches presentation waits only.
+    return this.baseSleep(Math.max(0, ms * SPEED_SCALE[this.speed] * this.timeScale * paceFactor('action')));
   }
 
   // -------------------------------------------------------------------- play

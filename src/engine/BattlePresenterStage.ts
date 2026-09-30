@@ -42,6 +42,7 @@ import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
 import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
 import { heldOffStage } from './SummonStaging.ts';
+import { paceRate } from './pace.ts';
 
 export interface PaintedStageOptions {
   scene: Scene;
@@ -761,8 +762,9 @@ export class PaintedStage implements BattleStage {
       this.opts.battleCamera,
       pinned,
     );
-    this.hits.update(dt, this.opts.camera);
-    this.spellFx.update(dt);
+    const paced = dt * paceRate('action'); // the pacing option (`pace.ts`): sparks and spell effects keep step with the actors
+    this.hits.update(paced, this.opts.camera);
+    this.spellFx.update(paced);
     this.pyreflies.update(dt, (id) => this.lastState?.combatants[id]?.alive !== false);
     // D-224: Evrae's range is a flag only its encounter sets (FFX, Ch VIII).
     const range = phaseForFlags(this.lastState?.flags);

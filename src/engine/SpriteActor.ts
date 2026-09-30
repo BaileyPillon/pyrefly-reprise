@@ -24,6 +24,7 @@ import {
 import { makeBlobShadow } from './BlobShadow.ts';
 import { spriteFragmentShader, spriteVertexShader } from './shaders/SpriteShader.ts';
 import { Easing, TweenGroup, type EasingFn, type EasingName } from './Tween.ts';
+import { paceRate } from './pace.ts';
 
 /** 1 logical sprite pixel = this many world units. */
 export const LOGICAL_PIXEL = 0.03;
@@ -320,7 +321,7 @@ export class SpriteActor extends Group {
 
   /** @param dt seconds */
   update(dt: number): void {
-    this.tweens.update(dt);
+    this.tweens.update(dt * paceRate('action')); // the pacing option (`pace.ts`)
     this.advanceAnimation(dt);
     this.advanceShake(dt);
   }
