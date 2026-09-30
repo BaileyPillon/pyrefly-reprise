@@ -1,0 +1,377 @@
+{
+ "what": "fb-0929 music-quality options: 45 s sketches of one FFX cue and one FFX-2 cue per option, all at -16 LUFS; for Bailey to judge by ear in docs/audio/audition.html, section \"Music quality options (29 Sep)\". Nothing here ships.",
+ "game": "both",
+ "measuredWith": "tools/audio/quality-measure.py (bands = mid share per band 20-80/80-250/250-800/800-2.5k/2.5-6k/6-12k/12-16k/16k+ Hz; hfFlatnessDb = median 4-10 kHz spectral flatness, 0 = white noise; riseMs = median 10-90 % rise of the 2-8 kHz envelope at the 40 strongest onsets; cliff = steepest 500 Hz drop above 10 kHz; codecVsLossless: nmrBandsDb = coding error over music per band, preEchoDb = >3 kHz coding error over music in the 20 ms before the 40 strongest attacks)",
+ "cutWith": "tools/audio/quality-sketch.py (50 ms fade in, 1 s fade out, -16 LUFS under remaster.py limiter, true peak <= -1 dBTP measured on the encoded file)",
+ "handoff": "docs/handoff/fb-0929-music.md",
+ "files": [
+  {
+   "file": "boss-seymour-0-control-shipped-q5.mp3",
+   "cue": "boss-seymour",
+   "game": "ffx",
+   "option": "0",
+   "what": "today: R1 remaster as shipped, libmp3lame -q:a 5 (~120 kbps)",
+   "source": "D:/Tools/pyrefly-scratch/fb-0929/music/r1/boss-seymour-wav.wav = tools/audio/r1-encode.py --encode wav (the shipped chain, lossless; --encode q5 reproduces the shipped MP3 byte for byte)",
+   "windowSec": [
+    7.272721,
+    45.0
+   ],
+   "encode": "q5",
+   "bytes": 711642,
+   "lufs": -16.0,
+   "truePeakDb": -1.5,
+   "lra": 2.4,
+   "crestDb": 16.9,
+   "bandsDb": [
+    -10.0,
+    -4.4,
+    -4.7,
+    -7.5,
+    -17.8,
+    -35.6,
+    -50.5,
+    -82.4
+   ],
+   "corr": 0.76,
+   "sideMidDb": -7.9,
+   "monoLossDb": -0.6,
+   "hfFlatnessDb": -8.8,
+   "riseMs": 15.0,
+   "topEdge60Hz": 12258,
+   "cliff": {
+    "db": 43.7,
+    "hz": 16607
+   },
+   "codecVsLossless": {
+    "lagSamples": 0,
+    "snrDb": 25.1,
+    "nmrBandsDb": [
+     -29.5,
+     -30.2,
+     -28.0,
+     -21.3,
+     -13.8,
+     -7.5,
+     -3.0,
+     0.0
+    ],
+    "preEchoDb": -11.8,
+    "lostTopDb": 26.6
+   }
+  },
+  {
+   "file": "boss-seymour-O1-encode-v0.mp3",
+   "cue": "boss-seymour",
+   "game": "ffx",
+   "option": "O1",
+   "what": "same R1 master, libmp3lame -q:a 0 (V0)",
+   "source": "same lossless R1 twin",
+   "windowSec": [
+    7.272721,
+    45.0
+   ],
+   "encode": "v0",
+   "bytes": 1305866,
+   "lufs": -16.0,
+   "truePeakDb": -1.5,
+   "lra": 2.4,
+   "crestDb": 16.8,
+   "bandsDb": [
+    -10.0,
+    -4.4,
+    -4.7,
+    -7.5,
+    -17.8,
+    -36.0,
+    -50.7,
+    -66.3
+   ],
+   "corr": 0.762,
+   "sideMidDb": -8.0,
+   "monoLossDb": -0.6,
+   "hfFlatnessDb": -8.7,
+   "riseMs": 12.5,
+   "topEdge60Hz": 11827,
+   "cliff": {
+    "db": 18.1,
+    "hz": 21447
+   },
+   "codecVsLossless": {
+    "lagSamples": 0,
+    "snrDb": 35.1,
+    "nmrBandsDb": [
+     -40.1,
+     -40.6,
+     -38.1,
+     -31.3,
+     -23.5,
+     -17.0,
+     -13.0,
+     -0.2
+    ],
+    "preEchoDb": -20.4,
+    "lostTopDb": 11.0
+   }
+  },
+  {
+   "file": "boss-seymour-O2-rebuild-v0.mp3",
+   "cue": "boss-seymour",
+   "game": "ffx",
+   "option": "O2",
+   "what": "tools/audio/quality-rebuild.py: Direction B take below 4 kHz (coherent short-window mid), lossless sampled render above 4 kHz moved onto the take timing, render side 8 dB under; V0",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-seymour.wav + render.mjs --wav lossless re-render",
+   "windowSec": [
+    7.272721,
+    45.0
+   ],
+   "encode": "v0",
+   "bytes": 1556156,
+   "lufs": -16.0,
+   "truePeakDb": -3.9,
+   "lra": 2.1,
+   "crestDb": 14.3,
+   "bandsDb": [
+    -9.6,
+    -4.6,
+    -4.5,
+    -7.5,
+    -18.5,
+    -38.0,
+    -53.6,
+    -60.1
+   ],
+   "corr": 0.733,
+   "sideMidDb": -8.1,
+   "monoLossDb": -0.6,
+   "hfFlatnessDb": -12.7,
+   "riseMs": 9.5,
+   "topEdge60Hz": 11289,
+   "cliff": {
+    "db": 8.2,
+    "hz": 21447
+   }
+  },
+  {
+   "file": "boss-ffx2-aeon-0-control-shipped-q5.mp3",
+   "cue": "boss-ffx2-aeon",
+   "game": "ffx2",
+   "option": "0",
+   "what": "today: R1 remaster as shipped, libmp3lame -q:a 5 (~120 kbps)",
+   "source": "D:/Tools/pyrefly-scratch/fb-0929/music/r1/boss-ffx2-aeon-wav.wav = tools/audio/r1-encode.py --encode wav (the shipped chain, lossless; --encode q5 reproduces the shipped MP3 byte for byte)",
+   "windowSec": [
+    12.0,
+    45.0
+   ],
+   "encode": "q5",
+   "bytes": 722407,
+   "lufs": -16.0,
+   "truePeakDb": -1.7,
+   "lra": 1.9,
+   "crestDb": 16.3,
+   "bandsDb": [
+    -7.0,
+    -3.7,
+    -6.3,
+    -8.7,
+    -20.1,
+    -31.9,
+    -51.0,
+    -85.1
+   ],
+   "corr": 0.727,
+   "sideMidDb": -7.1,
+   "monoLossDb": -0.8,
+   "hfFlatnessDb": -7.1,
+   "riseMs": 22.0,
+   "topEdge60Hz": 12134,
+   "cliff": {
+    "db": 41.2,
+    "hz": 16564
+   },
+   "codecVsLossless": {
+    "lagSamples": 0,
+    "snrDb": 26.9,
+    "nmrBandsDb": [
+     -32.2,
+     -31.3,
+     -28.2,
+     -22.7,
+     -14.1,
+     -8.7,
+     -3.5,
+     -0.0
+    ],
+    "preEchoDb": -10.9,
+    "lostTopDb": 26.9
+   }
+  },
+  {
+   "file": "boss-ffx2-aeon-O1-encode-v0.mp3",
+   "cue": "boss-ffx2-aeon",
+   "game": "ffx2",
+   "option": "O1",
+   "what": "same R1 master, libmp3lame -q:a 0 (V0)",
+   "source": "same lossless R1 twin",
+   "windowSec": [
+    12.0,
+    45.0
+   ],
+   "encode": "v0",
+   "bytes": 1337400,
+   "lufs": -16.0,
+   "truePeakDb": -1.9,
+   "lra": 1.9,
+   "crestDb": 16.1,
+   "bandsDb": [
+    -7.0,
+    -3.7,
+    -6.3,
+    -8.7,
+    -20.1,
+    -32.1,
+    -50.8,
+    -69.3
+   ],
+   "corr": 0.728,
+   "sideMidDb": -7.1,
+   "monoLossDb": -0.8,
+   "hfFlatnessDb": -7.1,
+   "riseMs": 20.0,
+   "topEdge60Hz": 11983,
+   "cliff": {
+    "db": 12.1,
+    "hz": 21447
+   },
+   "codecVsLossless": {
+    "lagSamples": 0,
+    "snrDb": 36.5,
+    "nmrBandsDb": [
+     -42.6,
+     -41.3,
+     -37.8,
+     -32.3,
+     -23.3,
+     -17.6,
+     -13.3,
+     -0.2
+    ],
+    "preEchoDb": -19.5,
+    "lostTopDb": 11.7
+   }
+  },
+  {
+   "file": "boss-ffx2-aeon-O2-rebuild-v0.mp3",
+   "cue": "boss-ffx2-aeon",
+   "game": "ffx2",
+   "option": "O2",
+   "what": "tools/audio/quality-rebuild.py: Direction B take below 4 kHz (coherent short-window mid), lossless sampled render above 4 kHz moved onto the take timing, render side 8 dB under; V0",
+   "source": "D:/Tools/pyrefly-scratch/direction-b-0927-work/master/boss-ffx2-aeon.wav + render.mjs --wav lossless re-render",
+   "windowSec": [
+    12.0,
+    45.0
+   ],
+   "encode": "v0",
+   "bytes": 1433920,
+   "lufs": -16.0,
+   "truePeakDb": -3.1,
+   "lra": 2.0,
+   "crestDb": 15.1,
+   "bandsDb": [
+    -7.0,
+    -3.9,
+    -6.3,
+    -8.6,
+    -19.6,
+    -32.6,
+    -47.7,
+    -54.7
+   ],
+   "corr": 0.603,
+   "sideMidDb": -6.1,
+   "monoLossDb": -1.0,
+   "hfFlatnessDb": -15.8,
+   "riseMs": 12.5,
+   "topEdge60Hz": 13291,
+   "cliff": {
+    "db": 14.2,
+    "hz": 21415
+   }
+  },
+  {
+   "file": "boss-seymour-O3-sampled-v0.mp3",
+   "cue": "boss-seymour",
+   "game": "ffx",
+   "option": "O3",
+   "what": "Direction A: VSCO 2 CE / VCSL via sfizz (tools/audio/modern/render-a.mjs; organ seat added for boss-seymour), no AI; V0",
+   "source": "render-a.mjs float WAV (boss-ffx2-aeon from 2026-09-22, boss-seymour rendered 2026-09-29)",
+   "windowSec": [
+    7.272721,
+    45.0
+   ],
+   "encode": "v0",
+   "bytes": 1403914,
+   "lufs": -16.0,
+   "truePeakDb": -1.6,
+   "lra": 2.7,
+   "crestDb": 16.4,
+   "bandsDb": [
+    -8.6,
+    -2.8,
+    -6.4,
+    -10.3,
+    -21.0,
+    -33.5,
+    -44.6,
+    -52.5
+   ],
+   "corr": 0.526,
+   "sideMidDb": -5.1,
+   "monoLossDb": -1.2,
+   "hfFlatnessDb": -9.8,
+   "riseMs": 3.0,
+   "topEdge60Hz": 14815,
+   "cliff": {
+    "db": 7.7,
+    "hz": 21447
+   }
+  },
+  {
+   "file": "boss-ffx2-aeon-O3-sampled-v0.mp3",
+   "cue": "boss-ffx2-aeon",
+   "game": "ffx2",
+   "option": "O3",
+   "what": "Direction A: VSCO 2 CE / VCSL via sfizz (tools/audio/modern/render-a.mjs; organ seat added for boss-seymour), no AI; V0",
+   "source": "render-a.mjs float WAV (boss-ffx2-aeon from 2026-09-22, boss-seymour rendered 2026-09-29)",
+   "windowSec": [
+    12.0,
+    45.0
+   ],
+   "encode": "v0",
+   "bytes": 1387754,
+   "lufs": -16.0,
+   "truePeakDb": -2.3,
+   "lra": 3.1,
+   "crestDb": 15.8,
+   "bandsDb": [
+    -8.8,
+    -3.5,
+    -5.2,
+    -9.6,
+    -18.6,
+    -34.0,
+    -45.9,
+    -51.8
+   ],
+   "corr": 0.631,
+   "sideMidDb": -6.4,
+   "monoLossDb": -0.9,
+   "hfFlatnessDb": -13.6,
+   "riseMs": 4.0,
+   "topEdge60Hz": 14820,
+   "cliff": {
+    "db": 6.6,
+    "hz": 21447
+   }
+  }
+ ]
+}

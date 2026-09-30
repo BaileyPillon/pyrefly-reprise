@@ -77,6 +77,13 @@ export const MODERN_MAP = {
     about: 'VSCO solo flute, sustain with vibrato',
     layers: [{ sfz: 'FluteSusVib.sfz', seat: 'flute', gain: 1.0, xfade: true, legato: true, lean: SECTION_LEAN_MS.winds }],
   },
+  // Added 2026-09-29 for boss-seymour (FFX only; the fb-0929 music-quality option O3): the
+  // score's five organ channels. VSCO 2 CE's pipe organ, loud registration (CC0).
+  organ: {
+    role: 'sustain',
+    about: 'VSCO pipe organ, loud registration',
+    layers: [{ sfz: 'OrganLoud.sfz', seat: 'organ', gain: 1.0, lean: 0 }],
+  },
   timpani: {
     role: 'drum',
     about: 'VSCO timpani, 2-3 dynamics x 2 takes',
