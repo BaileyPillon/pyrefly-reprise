@@ -50,3 +50,12 @@ the second only to name the failure.)
   entries to get the same staging.
 - The battle screen lays Seymour down (KO) and the plate then shows him kneeling, not lying: a small step back up
   the pose ladder that the narration ("went down on one knee") covers.
+
+## CHECK (independent, 2026-09-30)
+Verdict: PR-0244 fix holds; no blockers.
+- Fresh production build of the branch, `critic/rounds/round-17/cap/gaps/ch7-17.mjs`, seed 1, real keys, 1600x900 (victory) plus a DOM probe run at 1600x900 and 390x844.
+  Seymour's figure carries `is-kneel` (brightness 0.55, sunk, bowed) from the pre-tally plate through the kneel caption, `is-ko` (lying, brightness 0.42) for the fall caption, then leaves. Never upright. Plate: cutscene at 8682 ms, results at 9281 ms (about 0.6 to 0.9 s).
+- The new story test fails against main's script (checked) and passes on the branch; `cutscene-stage` tests pass; `tsc` clean; `git merge-tree` against main is clean.
+- Full `npm test`: 10481 passed, 1 failed, `strategy-ffx2-bahamut` (a load timeout, per the builder).
+- Rules: game case stated (FFX only), the opt-in flag is set only for Seymour at Macalania, no game data or dialogue added, CutsceneScreen.ts unchanged in length (429, already over 400), no engine or presenter code touched.
+- Minor: at 390x844 the rotated kneel bounding box reaches 31 px past the left edge (the painting's transparent margin, not visible content); the kneel then fall is a dimmed standing painting, not new art, as disclosed.
