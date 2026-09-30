@@ -325,8 +325,8 @@ describe('Chapter XVII bench: the link-3 seam and retries (measured, not tuned)'
       push(`| ${what} | ${pct(agg.wins, agg.n)} | ${fmtCauses(agg.causes)} |`);
     }
 
-    // ---- 7. Retries, the link-3 checkpoint OFF (as shipped) and ON (SIN_LINK3_CHECKPOINT, an adaptation) ----
-    push('\n## 7. Retries: wins within 1, 3 and 5 attempts, the link-3 checkpoint off (as shipped) and on');
+    // ---- 7. Retries, the link-3 checkpoint off and ON (SIN_LINK3_CHECKPOINT, an adaptation; ON as shipped since D-284) ----
+    push('\n## 7. Retries: wins within 1, 3 and 5 attempts, the link-3 checkpoint off and on (on as shipped since D-284)');
     push('| Line | Checkpoint | Within 1 | Within 3 | Within 5 | Mean engine turns to a win (winners) | Link 3 retries that won / tried |');
     push('|---|---|---:|---:|---:|---:|---:|');
     for (const [name, make] of LINES.filter(([n]) => n !== 'naive')) {

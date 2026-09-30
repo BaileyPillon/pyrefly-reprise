@@ -1,9 +1,9 @@
 /**
- * **Chapter XVII's link-3 checkpoint, an OFF switch** (`SIN_LINK3_CHECKPOINT`, 2026-09-29). **FFX only.**
+ * **Chapter XVII's link-3 checkpoint switch** (`SIN_LINK3_CHECKPOINT`, 2026-09-29; ON since PR-0268). **FFX only.**
  *
- * An adaptation offered to Bailey, in D-217's shape (Chapter V's Shuyin): on, a loss at link 3 (Genais and the
- * Core) retries at link 3 on the party state captured on entering it. Off (as shipped), the formation carries no
- * checkpoint and a retry starts the chapter over at the Left Fin, as before. The measurement is
+ * An adaptation offered to Bailey in D-217's shape (Chapter V's Shuyin) and adopted by him (D-284): on (as shipped),
+ * a loss at link 3 (Genais and the Core) retries at link 3 on the party state captured on entering it. Off, the
+ * formation carries no checkpoint and a retry starts the chapter over at the Left Fin. The measurement is
  * `docs/plans/sin-fins-core-bench.md` "Link 3, rested against carried".
  */
 
@@ -22,12 +22,14 @@ function carriedEntry(seed: number): BattleSetup {
   return r.link3Entry!;
 }
 
-describe('the link-3 checkpoint switch (an adaptation, OFF as shipped)', () => {
-  it('ships off: link 3 makes no checkpoint, and neither Fin link ever does', () => {
-    expect(SIN_LINK3_CHECKPOINT).toBe(false);
-    expect(sinGenaisCoreGroup.checkpointOnEntry).not.toBe(true);
+describe('the link-3 checkpoint switch (an adaptation, ON as shipped: D-284)', () => {
+  it('ships on: link 3 is a checkpoint, and neither Fin link ever is', () => {
+    expect(SIN_LINK3_CHECKPOINT).toBe(true);
+    expect(sinGenaisCoreGroup.checkpointOnEntry).toBe(true);
     const entry = carriedEntry(1);
-    expect(checkpointAt(3, sinGenaisCoreGroup, entry)).toBeNull();
+    expect(checkpointAt(3, sinGenaisCoreGroup, entry)).toMatchObject({ link: 3 });
+    const { checkpointOnEntry: _on, ...off } = sinGenaisCoreGroup;
+    expect(checkpointAt(3, { ...off, ...sinLink3Checkpoint(false) }, entry)).toBeNull();
     for (const [n, id] of [[1, 'sin-left-fin'], [2, 'sin-right-fin']] as const) {
       expect(ENEMY_GROUPS_BY_ID[id]?.checkpointOnEntry, id).not.toBe(true);
       expect(checkpointAt(n, ENEMY_GROUPS_BY_ID[id]!, entry), id).toBeNull();

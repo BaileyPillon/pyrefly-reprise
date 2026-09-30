@@ -2660,7 +2660,7 @@ export interface EnemyGroupDef {
    * plan B13 = a]. Absent everywhere else.
    */
   victoryBonusAp?: number;
-  /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only behind the OFF switch `SIN_LINK3_CHECKPOINT` (CONTRACT-CHANGES). */
+  /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only, through the switch `SIN_LINK3_CHECKPOINT` (on since D-284; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
   /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema); FFX too, statuses only (Sin links 2 and 3; CONTRACT-CHANGES). */
   carriesPartyState?: boolean;

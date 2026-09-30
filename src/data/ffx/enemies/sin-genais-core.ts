@@ -189,14 +189,15 @@ const core: EnemyDef = {
 };
 
 /**
- * **A link-3 checkpoint, OFF** (an option for Bailey, 2026-09-29; `docs/plans/sin-fins-core-bench.md`
- * "Link 3, rested against carried"). On, a loss at link 3 retries **at link 3**, on the party state captured
+ * **A link-3 checkpoint, ON** (offered 2026-09-29, `docs/plans/sin-fins-core-bench.md` "Link 3, rested against
+ * carried"; adopted by Bailey the same day, `docs/target/decisions.json` D-284, switched on for PR-0268). On, a
+ * loss at link 3 retries **at link 3**, on the party state captured
  * on entering it (HP, MP, statuses, gauges, and the items it had then), through the checkpoint seam Chapter V's
  * Shuyin uses (D-217, `src/app/screens/BattleChainCheckpoint.ts`). **An adaptation, not a sourced rule**
  * (rule 6): research §1.2 has no break between links 1 and 3, and no save before the Core. Kept in memory
  * for the run only, never saved. FFX only. Nothing about the fight changes; only where RETRY lands.
  */
-export const SIN_LINK3_CHECKPOINT = false;
+export const SIN_LINK3_CHECKPOINT = true;
 
 /** The formation's checkpoint field for the switch position `on` (the bench measures both). */
 export function sinLink3Checkpoint(on: boolean): Pick<EnemyGroupDef, 'checkpointOnEntry'> {

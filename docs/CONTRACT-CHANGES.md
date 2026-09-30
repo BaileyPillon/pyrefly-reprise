@@ -6,6 +6,12 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-09-30 — `EnemyGroupDef.checkpointOnEntry` doc comment: Sin's link 3 is a checkpoint as shipped (D-284, PR-0268)
+
+Branch `r17fix-combat`. Comment only, no type change. `SIN_LINK3_CHECKPOINT` (`src/data/ffx/enemies/sin-genais-core.ts`)
+now ships `true`, so `sinGenaisCoreGroup` carries `checkpointOnEntry: true` and a loss at Chapter XVII's link 3
+retries at link 3 on the captured party state. Bailey adopted it on 2026-09-29 (D-284). Game case: FFX only.
+
 ## 2026-09-30 — Pacing default is now `steady`: `PaintedActor.update` / `SpriteActor.update` advance one-shot tweens at 1/1.2 (FFX) or 1/1.1 (FFX-2) with no parameter
 
 Branch `pacing-steady`. Bailey, 2026-09-29, "yes, all your recommendations" (recommendation: `steady` as the default).

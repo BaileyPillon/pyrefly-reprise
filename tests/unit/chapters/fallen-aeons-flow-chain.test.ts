@@ -221,18 +221,19 @@ describe('every other chapter chains exactly as before', () => {
 
   const others = [...CHAPTERS, ...UNLISTED_CHAPTERS].filter((c) => c.id !== CHAPTER.id);
   /**
-   * The checkpoints with no Save Sphere, by name: Chapter XIII's Trema link (TR5 = b) and Chapter V's Shuyin (D-217). A
+   * The checkpoints with no Save Sphere, by name: Chapter XIII's Trema link (TR5 = b), Chapter V's Shuyin (D-217) and
+   * Chapter XVII's link 3, Genais and the Core (D-284, switched on for PR-0268; FFX only). A
    * `checkpointOnEntry` anywhere else fails below, so a stray flag cannot slip past this guard.
    */
   // Chapter V's Shuyin link joined on 2026-09-26: D-217, an adaptation Bailey accepted (iter2-b1).
-  const CHECKPOINT_WITHOUT_SAVE_SPHERE: Readonly<Record<string, number>> = { 'ffx2-trema': 2, 'ffx2-vegnagun-shuyin': 5 };
+  const CHECKPOINT_WITHOUT_SAVE_SPHERE: Readonly<Record<string, number>> = { 'ffx2-trema': 2, 'ffx2-vegnagun-shuyin': 5, 'sin-fins-core': 3 };
 
   it('covers every registered chapter but Chapter XI', () => {
     expect(others.length).toBeGreaterThanOrEqual(10);
   });
 
   for (const chapter of others) {
-    it(`${chapter.number}. ${chapter.id}: no Save Sphere, and no checkpoint but the named links (XIII's Trema, V's Shuyin), win or lose on any link`, async () => {
+    it(`${chapter.number}. ${chapter.id}: no Save Sphere, and no checkpoint but the named links (XIII's Trema, V's Shuyin, XVII's link 3), win or lose on any link`, async () => {
       const groups = await groupsOf(chapter);
       expect(groups.some((g) => g.restoresPartyOnEntry === true)).toBe(false);
       const checkpointLink = CHECKPOINT_WITHOUT_SAVE_SPHERE[chapter.id] ?? 0;

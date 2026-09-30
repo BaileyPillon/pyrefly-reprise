@@ -11,7 +11,8 @@ import './support/pyrefly-window.ts';
  *   pause chip's SKIP SCENE), the fight opening at FAR on the flight plate, the first command by real input (Tidus's
  *   ORDERS, "Close in": the Trigger Command), then a loss (the debug API's `defend` line at skip speed: the chain's
  *   length, 25.5 % first try on the sensible line, is the bench's to measure, not this spec's), RETRY by real input
- *   back to the Left Fin at full HP (the faithful retry: no save between links 1 and 3, plan §1.2), and out to
+ *   back to the Left Fin at full HP (the defend line loses at link 1, which is no checkpoint: only link 3 is, D-284,
+ *   PR-0268; the link-3 retry is pinned by `tests/unit/chapters/sin-checkpoint-flow.test.ts`), and out to
  *   CHAPTER SELECT through the defeat panel.
  * - **Chapter XVIII, "Sin: the Face"**: the board, the XVIII card, prep, the opening scene by confirm presses
  *   (keys) or taps (phone), the fight to a **win on the clock** played by the debug API's `intended` line (seed 3,
