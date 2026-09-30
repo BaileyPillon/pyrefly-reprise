@@ -1,0 +1,698 @@
+[
+ {
+  "file": "clips/ch4-bahamut.mp4",
+  "chapter": "ffx2-bahamut",
+  "moment": "clip",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "eight seconds round the Overdrive or Special in the living, lit room: the splash, the payoff with its flare and room swell, drift and weather carrying on behind",
+  "found": true,
+  "crf": 24,
+  "bytes": 2768106
+ },
+ {
+  "file": "clips/ch16-ixion.mp4",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "clip",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "eight seconds round the Overdrive or Special in the living, lit room: the splash, the payoff with its flare and room swell, drift and weather carrying on behind",
+  "found": true,
+  "crf": 24,
+  "bytes": 2362685
+ },
+ {
+  "file": "clips/ch7-macalania.mp4",
+  "chapter": "seymour-anima-macalania",
+  "moment": "clip",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "eight seconds round the Overdrive or Special in the living, lit room: the splash, the payoff with its flare and room swell, drift and weather carrying on behind",
+  "found": true,
+  "crf": 24,
+  "bytes": 3243675
+ },
+ {
+  "file": "clips/ch1-seymour-flux.mp4",
+  "chapter": "seymour-flux",
+  "moment": "clip",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "eight seconds round the Overdrive or Special in the living, lit room: the splash, the payoff with its flare and room swell, drift and weather carrying on behind",
+  "found": true,
+  "crf": 24,
+  "bytes": 3370019
+ },
+ {
+  "file": "phone/ch4-bahamut.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the D phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): the room look, plates and weather at the phone budget, the fire layer on top. INJECTED: the approved fire effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ },
+ {
+  "file": "phone/ch16-ixion.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the D phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): the room look, plates and weather at the phone budget, the thunder layer on top. INJECTED: the approved thunder effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ },
+ {
+  "file": "phone/ch7-macalania.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the D phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): the room look, plates and weather at the phone budget, the ice layer on top. INJECTED: the approved ice effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ },
+ {
+  "file": "phone/ch1-seymour-flux.jpg",
+  "chapter": "seymour-flux",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the D phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): the room look, plates and weather at the phone budget, the fire layer on top. INJECTED: the approved fire effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Bevelle: the pink-hour grade and four-point lamp stars (A), steam banking between the gantries and the parting depth plates (B); the approved painting stays the star and the HUD is untouched"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-clean-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest-clean",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frame without the HUD: Bevelle: the pink-hour grade and four-point lamp stars (A), steam banking between the gantries and the parting depth plates (B)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-clean-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest-clean",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch4-bahamut-spell-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": true,
+  "whatToLook": "the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)",
+  "note": "INJECTED: fire on the boss at the first menu (the chapter's own fight casts no elemental spell at seed 1)"
+ },
+ {
+  "file": "stills/ch4-bahamut-spell-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": true,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "note": "INJECTED: fire on the boss at the first menu (the chapter's own fight casts no elemental spell at seed 1)"
+ },
+ {
+  "file": "stills/ch4-bahamut-hit-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "pink streaks with four-point glints and a double ring (C) in the pink-hour room (A, B); the pink foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch4-bahamut-hit-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch4-bahamut-splash-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in (C) on the pink slab; the HUD stays above it"
+ },
+ {
+  "file": "stills/ch4-bahamut-splash-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-impact-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame impact frame (C) in plum and pink, taken over the graded room"
+ },
+ {
+  "file": "stills/ch4-bahamut-impact-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-special-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Special payoff (C) plus the pink star flare with hex ghosts (A)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch4-bahamut-special-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch4-bahamut-victory-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Chapter IV holds (no celebration): a slow sombre push in the pink-hour room"
+ },
+ {
+  "file": "stills/ch4-bahamut-victory-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch16-ixion-rest-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Djose: the amber work lamp in dusty air and the cold beam (A), sparks and dust at depth, the party planted on the projected floor (B); the approved painting stays the star and the HUD is untouched"
+ },
+ {
+  "file": "stills/ch16-ixion-rest-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch16-ixion-rest-clean-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "rest-clean",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frame without the HUD: Djose: the amber work lamp in dusty air and the cold beam (A), sparks and dust at depth, the party planted on the projected floor (B)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch16-ixion-rest-clean-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "rest-clean",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch16-ixion-hit-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "pink streaks with four-point glints and a double ring (C) in the pink-hour room (A, B); the pink foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch16-ixion-hit-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch16-ixion-splash-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in (C) on the pink slab; the HUD stays above it"
+ },
+ {
+  "file": "stills/ch16-ixion-splash-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch16-ixion-impact-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame impact frame (C) in plum and pink, taken over the graded room"
+ },
+ {
+  "file": "stills/ch16-ixion-impact-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch16-ixion-special-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Special payoff (C) plus the pink star flare with hex ghosts (A)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch16-ixion-special-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch16-ixion-spell-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)",
+  "kind": "thunder"
+ },
+ {
+  "file": "stills/ch16-ixion-spell-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "thunder"
+ },
+ {
+  "file": "stills/ch16-ixion-victory-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the victory arc round the party (C) with the room lit and moving behind (A, B)"
+ },
+ {
+  "file": "stills/ch16-ixion-victory-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Macalania: gold brazier streaks and skylight beams (A), the ice floor mirroring panes and fighters (B), the teal-and-gold split; the approved painting stays the star and the HUD is untouched"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-clean-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest-clean",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frame without the HUD: Macalania: gold brazier streaks and skylight beams (A), the ice floor mirroring panes and fighters (B), the teal-and-gold split",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-clean-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest-clean",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch7-macalania-spell-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)",
+  "kind": "ice"
+ },
+ {
+  "file": "stills/ch7-macalania-spell-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "ice"
+ },
+ {
+  "file": "stills/ch7-macalania-hit-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "gold streaks and a double shock ring off the blow (C) inside the lit room (A, B); the gold foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch7-macalania-hit-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch7-macalania-impact-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame ink-and-paper impact frame (C), navy and gold, taken over the graded room"
+ },
+ {
+  "file": "stills/ch7-macalania-impact-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-splash-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in (C) on the gold slab; the HUD stays above it and the room keeps breathing behind"
+ },
+ {
+  "file": "stills/ch7-macalania-splash-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-special-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Overdrive payoff: gold ribbons (C) plus the gold anamorphic flare and the room swell (A)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch7-macalania-special-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch7-macalania-victory-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the victory arc round the party (C) with the room lit and moving behind (A, B)"
+ },
+ {
+  "file": "stills/ch7-macalania-victory-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-rest-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Gagazet: moon rays and lit air (A), blizzard veils between the depth plates and three depths of snow (B), long blue moon shadows; the approved painting stays the star and the HUD is untouched"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-rest-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-rest-clean-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "rest-clean",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frame without the HUD: Gagazet: moon rays and lit air (A), blizzard veils between the depth plates and three depths of snow (B), long blue moon shadows",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-rest-clean-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "rest-clean",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-splash-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in (C) on the gold slab; the HUD stays above it and the room keeps breathing behind"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-splash-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-hit-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "gold streaks and a double shock ring off the blow (C) inside the lit room (A, B); the gold foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-hit-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-impact-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame ink-and-paper impact frame (C), navy and gold, taken over the graded room"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-impact-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-special-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Overdrive payoff: gold ribbons (C) plus the gold anamorphic flare and the room swell (A)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-special-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-spell-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)",
+  "kind": "fire"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-spell-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "fire"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-victory-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the victory arc round the party (C) with the room lit and moving behind (A, B)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-victory-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ }
+]

@@ -1,0 +1,12 @@
+[
+ {
+  "file": "phone/ch7-macalania.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the D phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): the room look, plates and weather at the phone budget, the ice layer on top. INJECTED: the approved ice effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ }
+]

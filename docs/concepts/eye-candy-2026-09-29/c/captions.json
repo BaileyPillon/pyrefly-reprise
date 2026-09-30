@@ -1,0 +1,618 @@
+[
+ {
+  "file": "clips/ch4-bahamut.mp4",
+  "chapter": "ffx2-bahamut",
+  "moment": "clip",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "eight seconds round the Overdrive or Special: the splash, the payoff with its hit-stop and trauma shake, the impact frame",
+  "found": true,
+  "crf": 24,
+  "bytes": 2221161
+ },
+ {
+  "file": "clips/ch16-ixion.mp4",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "clip",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "eight seconds round the Overdrive or Special: the splash, the payoff with its hit-stop and trauma shake, the impact frame",
+  "found": true,
+  "crf": 24,
+  "bytes": 2044552
+ },
+ {
+  "file": "clips/ch7-macalania.mp4",
+  "chapter": "seymour-anima-macalania",
+  "moment": "clip",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "eight seconds round the Overdrive or Special: the splash, the payoff with its hit-stop and trauma shake, the impact frame",
+  "found": true,
+  "crf": 24,
+  "bytes": 2799198
+ },
+ {
+  "file": "clips/ch1-seymour-flux.mp4",
+  "chapter": "seymour-flux",
+  "moment": "clip",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "eight seconds round the Overdrive or Special: the splash, the payoff with its hit-stop and trauma shake, the impact frame",
+  "found": true,
+  "crf": 24,
+  "bytes": 2893660
+ },
+ {
+  "file": "phone/ch4-bahamut.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): fire layer with 60 % streaks, fewer spikes or no branches, no heat haze. INJECTED: the approved fire effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ },
+ {
+  "file": "phone/ch16-ixion.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): thunder layer with 60 % streaks, fewer spikes or no branches, no heat haze. INJECTED: the approved thunder effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ },
+ {
+  "file": "phone/ch7-macalania.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): ice layer with 60 % streaks, fewer spikes or no branches, no heat haze. INJECTED: the approved ice effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ },
+ {
+  "file": "phone/ch1-seymour-flux.jpg",
+  "chapter": "seymour-flux",
+  "moment": "spell",
+  "state": "on",
+  "tier": "phone",
+  "injected": true,
+  "whatToLook": "the phone tier at 390x844 (deviceScaleFactor 3, saved at 2x): fire layer with 60 % streaks, fewer spikes or no branches, no heat haze. INJECTED: the approved fire effect plus C's layer on the boss at the first menu",
+  "note": "rendered on the desktop GPU; the CPU throttle applies to the frame-time runs, not this still"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "nothing: C is combat only, so the frame at rest is the approved frame, unchanged"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-spell-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": true,
+  "whatToLook": "the element layer over the approved option-B spell: noise fire column and embers, crystal spikes from the floor, branching lightning, or the nova rings",
+  "note": "INJECTED: fire on the boss at the first menu (the chapter's own fight casts no elemental spell at seed 1)"
+ },
+ {
+  "file": "stills/ch4-bahamut-spell-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": true,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "note": "INJECTED: fire on the boss at the first menu (the chapter's own fight casts no elemental spell at seed 1)"
+ },
+ {
+  "file": "stills/ch4-bahamut-hit-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "pink streaks with four-point glints, a double pink ring; the pink foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch4-bahamut-hit-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch4-bahamut-splash-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in: the approved painting on a pink slab with four-point stars; the HUD stays above it"
+ },
+ {
+  "file": "stills/ch4-bahamut-splash-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-impact-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame impact frame in plum ink and pink paper with a pink edge, speed lines from the blow"
+ },
+ {
+  "file": "stills/ch4-bahamut-impact-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-special-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Special payoff (Mega Flare shell and debris, or the Aerospark lance: a new look that needs your yes)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch4-bahamut-special-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch4-bahamut-victory-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Chapter IV holds (no celebration, research 2.2): only a slow sombre push; the extra pyreflies of the richer send-off"
+ },
+ {
+  "file": "stills/ch4-bahamut-victory-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch16-ixion-rest-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "nothing: C is combat only, so the frame at rest is the approved frame, unchanged"
+ },
+ {
+  "file": "stills/ch16-ixion-rest-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch16-ixion-hit-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "pink streaks with four-point glints, a double pink ring; the pink foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch16-ixion-hit-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch16-ixion-splash-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in: the approved painting on a pink slab with four-point stars; the HUD stays above it"
+ },
+ {
+  "file": "stills/ch16-ixion-splash-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch16-ixion-impact-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame impact frame in plum ink and pink paper with a pink edge, speed lines from the blow"
+ },
+ {
+  "file": "stills/ch16-ixion-impact-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch16-ixion-special-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Special payoff (Mega Flare shell and debris, or the Aerospark lance: a new look that needs your yes)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch16-ixion-special-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch16-ixion-spell-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the element layer over the approved option-B spell: noise fire column and embers, crystal spikes from the floor, branching lightning, or the nova rings",
+  "kind": "thunder"
+ },
+ {
+  "file": "stills/ch16-ixion-spell-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "thunder"
+ },
+ {
+  "file": "stills/ch16-ixion-victory-on.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the victory arc (12 degrees round the party, a rise and a push), the warm floor glow and the rim swell, one pink sparkle sweep"
+ },
+ {
+  "file": "stills/ch16-ixion-victory-off.jpg",
+  "chapter": "ffx2-ixion-djose",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "nothing: C is combat only, so the frame at rest is the approved frame, unchanged"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-spell-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the element layer over the approved option-B spell: noise fire column and embers, crystal spikes from the floor, branching lightning, or the nova rings",
+  "kind": "ice"
+ },
+ {
+  "file": "stills/ch7-macalania-spell-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "ice"
+ },
+ {
+  "file": "stills/ch7-macalania-hit-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "gold streaks thrown off the blow, a double gold shock ring and a four-armed glint; the gold foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch7-macalania-hit-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch7-macalania-impact-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame ink-and-paper impact frame: navy ink, ivory paper, gold edge lines, ink speed lines from the blow"
+ },
+ {
+  "file": "stills/ch7-macalania-impact-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-splash-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in: the approved painting on an ivory -12 degree slab with gold rules over ink speed lines; the HUD stays above it"
+ },
+ {
+  "file": "stills/ch7-macalania-splash-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-special-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Overdrive payoff: gold ribbons wound round the target, the ring and the trauma shake",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch7-macalania-special-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch7-macalania-victory-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the victory arc (12 degrees round the party, a rise and a push), the warm floor glow and the rim swell"
+ },
+ {
+  "file": "stills/ch7-macalania-victory-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-spell-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the element layer over the approved option-B spell: noise fire column and embers, crystal spikes from the floor, branching lightning, or the nova rings",
+  "kind": "fire"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-spell-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "fire"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-rest-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "nothing: C is combat only, so the frame at rest is the approved frame, unchanged"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-rest-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-splash-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in: the approved painting on an ivory -12 degree slab with gold rules over ink speed lines; the HUD stays above it"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-splash-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-hit-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "gold streaks thrown off the blow, a double gold shock ring and a four-armed glint; the gold foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-hit-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-impact-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame ink-and-paper impact frame: navy ink, ivory paper, gold edge lines, ink speed lines from the blow"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-impact-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-special-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Overdrive payoff: gold ribbons wound round the target, the ring and the trauma shake",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-special-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-victory-on.jpg",
+  "chapter": "seymour-flux",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the victory arc (12 degrees round the party, a rise and a push), the warm floor glow and the rim swell"
+ },
+ {
+  "file": "stills/ch1-seymour-flux-victory-off.jpg",
+  "chapter": "seymour-flux",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with option C switched off (today's look)"
+ }
+]

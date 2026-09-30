@@ -1,0 +1,154 @@
+[
+ {
+  "file": "stills/ch4-bahamut-rest-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Bevelle: the pink-hour grade and four-point lamp stars (A), steam banking between the gantries and the parting depth plates (B); the approved painting stays the star and the HUD is untouched"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-clean-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest-clean",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frame without the HUD: Bevelle: the pink-hour grade and four-point lamp stars (A), steam banking between the gantries and the parting depth plates (B)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch4-bahamut-rest-clean-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "rest-clean",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch4-bahamut-spell-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": true,
+  "whatToLook": "the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)",
+  "note": "INJECTED: fire on the boss at the first menu (the chapter's own fight casts no elemental spell at seed 1)"
+ },
+ {
+  "file": "stills/ch4-bahamut-spell-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": true,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "note": "INJECTED: fire on the boss at the first menu (the chapter's own fight casts no elemental spell at seed 1)"
+ },
+ {
+  "file": "stills/ch4-bahamut-hit-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "pink streaks with four-point glints and a double ring (C) in the pink-hour room (A, B); the pink foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch4-bahamut-hit-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch4-bahamut-splash-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in (C) on the pink slab; the HUD stays above it"
+ },
+ {
+  "file": "stills/ch4-bahamut-splash-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-impact-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame impact frame (C) in plum and pink, taken over the graded room"
+ },
+ {
+  "file": "stills/ch4-bahamut-impact-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch4-bahamut-special-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Special payoff (C) plus the pink star flare with hex ghosts (A)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch4-bahamut-special-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch4-bahamut-victory-on.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Chapter IV holds (no celebration): a slow sombre push in the pink-hour room"
+ },
+ {
+  "file": "stills/ch4-bahamut-victory-off.jpg",
+  "chapter": "ffx2-bahamut",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ }
+]

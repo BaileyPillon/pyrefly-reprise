@@ -1,0 +1,46 @@
+{
+ "what": "Eye-candy D derived files (public/fx, gitignored): name, size and sha256 only. tools/fx-assets.mjs verifies, backs up and restores them.",
+ "backup": "D:/Tools/pyrefly-art-backup/fx",
+ "files": [
+  {
+   "path": "bevelle-underground/depth.json",
+   "bytes": 649,
+   "sha256": "0460ecddfeb84089811e3371292a9f271aff1a20bcf1aff9a4daa9f166c63327"
+  },
+  {
+   "path": "bevelle-underground/depth.png",
+   "bytes": 1110036,
+   "sha256": "1d0e9e1f8599a9adaf3c1bdcf5ff61ce3d128a491e182f90ceb3963c150a601f"
+  },
+  {
+   "path": "djose-chamber-provisional/depth.json",
+   "bytes": 655,
+   "sha256": "2cd296374aaeed227db6a70ae8e9e2c4890d7ec67bf01cc8d3e93e0999e5d8de"
+  },
+  {
+   "path": "djose-chamber-provisional/depth.png",
+   "bytes": 932359,
+   "sha256": "010c7ab1a91d885d8586b1a16eb4081d5ce56f37dc4a0f25f5ff396a28424a73"
+  },
+  {
+   "path": "gagazet/depth.json",
+   "bytes": 637,
+   "sha256": "a8b534ad34aee1f93a2e963fbbc77b57c71cdd8a5da38228b0abfedf657a5818"
+  },
+  {
+   "path": "gagazet/depth.png",
+   "bytes": 1058487,
+   "sha256": "333ef05c03b0d859fca9376eaf724382365621ce6e98665929b593b0f7410eca"
+  },
+  {
+   "path": "macalania-temple/depth.json",
+   "bytes": 646,
+   "sha256": "eff9a7d7b56c367271ea77e03df2d434bceec9e0f038b84852dc465f64a67e52"
+  },
+  {
+   "path": "macalania-temple/depth.png",
+   "bytes": 913800,
+   "sha256": "1145f9d052c9daa993d6a3930db42f22df3cb92c57f0eacf3503935d45beeebd"
+  }
+ ]
+}

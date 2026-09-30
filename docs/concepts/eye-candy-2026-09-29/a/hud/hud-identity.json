@@ -1,0 +1,21 @@
+{
+ "method": "canvas hidden (visibility), HUD page shot with option A on and off; the control shoots A off twice, the same number of frames apart, to show the HUD's own animation (gauges filling, pulses)",
+ "results": {
+  "seymour-flux": {
+   "onVsOff": "3835 (28, 96, 1548, 849)",
+   "offVsOffControl": "20256 (28, 96, 1548, 848)"
+  },
+  "seymour-anima-macalania": {
+   "onVsOff": "0 None",
+   "offVsOffControl": "0 None"
+  },
+  "ffx2-bahamut": {
+   "onVsOff": "16219 (1330, 684, 1570, 883)",
+   "offVsOffControl": "16219 (1330, 684, 1570, 883)"
+  },
+  "ffx2-ixion-djose": {
+   "onVsOff": "7885 (1358, 684, 1570, 723)",
+   "offVsOffControl": "7885 (1358, 684, 1570, 723)"
+  }
+ }
+}

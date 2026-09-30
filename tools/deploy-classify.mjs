@@ -48,6 +48,7 @@ const NOISE_RULES = [
     test: (p) => dirOf(p) === 'tools' && /^zz-.*\.tmp\..+$/.test(baseOf(p)),
   },
   { rule: 'public/art/**', test: (p) => underDir(p, 'public/art') },
+  { rule: 'public/fx/**', test: (p) => underDir(p, 'public/fx') }, // eye-candy D's derived maps: local and gitignored like public/art
   {
     rule: 'untracked under docs/ or critic/',
     test: (p, code) => isUntracked(code) && (underDir(p, 'docs') || underDir(p, 'critic')),
@@ -62,7 +63,7 @@ const NOISE_RULES = [
 const BUILD_RULES = [
   { rule: 'src/**', test: (p) => underDir(p, 'src') },
   { rule: 'tests/**', test: (p) => underDir(p, 'tests') },
-  { rule: 'public/** (outside public/art)', test: (p) => underDir(p, 'public') },
+  { rule: 'public/** (outside public/art and public/fx)', test: (p) => underDir(p, 'public') },
   { rule: 'index.html', test: (p) => p === 'index.html' },
   { rule: 'package.json', test: (p) => p === 'package.json' },
   { rule: 'package-lock.json', test: (p) => p === 'package-lock.json' },

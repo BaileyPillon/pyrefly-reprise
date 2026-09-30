@@ -17,6 +17,8 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { maskBloomHighPass, setFigureBloomMask } from './BloomMask.ts';
 import { TiltShiftShader } from './shaders/TiltShiftShader.ts';
 import { GradeShader } from './shaders/GradeShader.ts';
+import { eyeCandy } from './fx/EyeCandy.ts';
+import { GoldenHour } from './fx/a/GoldenHour.ts';
 
 export interface RendererOptions {
   /** Element the <canvas> is appended to. Defaults to #game. */
@@ -187,7 +189,24 @@ export class Renderer {
   }
 
   private pixelRatio(): number {
-    return Math.min(window.devicePixelRatio || 1, this.maxPixelRatio);
+    return Math.min(window.devicePixelRatio || 1, this.maxPixelRatio, this.fxPixelCap ?? Infinity);
+  }
+
+  // ------------------------------------------------ eye-candy options round (prototype)
+  /** Option A's controller, built the first time `?fx=a` (or `__pyrefly.fx`) asks for it. */
+  private fxA: GoldenHour | null = null;
+  /** A lower DPR ceiling for a named fx tier (option A's phone tier: 1.5); null = none. */
+  private fxPixelCap: number | null = null;
+
+  setFxPixelCap(cap: number | null): void {
+    if (cap === this.fxPixelCap) return;
+    this.fxPixelCap = cap;
+    this.resize();
+  }
+
+  /** Debug and captures: option A's per-frame state, or null before it was ever switched on. */
+  get fxAStats(): GoldenHour['stats'] | null {
+    return this.fxA?.stats ?? null;
   }
 
   private measure(): { width: number; height: number } {
@@ -285,6 +304,7 @@ export class Renderer {
     this.renderPass.camera = camera;
     const t = this.gradePass.uniforms['time'];
     if (t) t.value = performance.now() / 1000;
+    if (this.fxA || eyeCandy.on.a) (this.fxA ??= new GoldenHour(this)).update(scene, camera);
     this.composer.render();
     for (const draw of this.overlays) draw(this.renderer);
   }
@@ -302,6 +322,7 @@ export class Renderer {
     if (this.disposed) return;
     this.disposed = true;
     window.removeEventListener('resize', this.onWindowResize);
+    this.fxA?.dispose();
     this.composer.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();

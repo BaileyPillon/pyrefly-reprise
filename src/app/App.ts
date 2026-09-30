@@ -7,6 +7,7 @@ import { FFX2HudMockScreen } from '../ui/ffx2/FFX2HudMockScreen.ts';
 import { GameFlow, flowReport, type RunChapterOptions } from './screens/BattleScreenFlow.ts';
 import type { BattleScreenResult } from './screens/BattleScreen.ts';
 import type { ChapterId } from '../data/encounters.ts';
+import { eyeCandy } from '../engine/fx/EyeCandy.ts';
 
 export interface AppOptions {
   /** Container for the WebGL canvas. Defaults to #game. */
@@ -256,6 +257,7 @@ export class App {
     if (!this.running) return;
     this.rafId = requestAnimationFrame(this.tick);
     const dt = Math.min((now - this.lastTime) / 1000, this.maxDelta);
+    eyeCandy.probe.push(now - this.lastTime); // eye-candy options round: the frame-interval probe (`__pyrefly.fx.stats()`)
     this.lastTime = now;
     this.step(dt, now);
   };
@@ -268,7 +270,7 @@ export class App {
     const screen = this.current;
     if (screen) {
       screen.handleInput(snapshot);
-      screen.update(dt);
+      screen.update(eyeCandy.frozen ? 0 : dt); // `__pyrefly.fx.freeze`: captures take the same frame ON and OFF
     }
     this.input.endFrame();
 

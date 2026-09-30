@@ -12,6 +12,7 @@
  */
 
 import type { Settings } from '../SaveData.ts';
+import { FX_LOOK_ROWS } from '../fxLooks.ts';
 import { TEXT_SIZES, textSizeLabel } from '../saveComfort.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 
@@ -49,6 +50,9 @@ export const TEXT_SPEED_MAX: (typeof TEXT_SPEEDS)[5] = 2;
  * REDUCE MOTION, LOW EFFECTS; D-285, `docs/concepts/r29-options/options.html`
  * frame A2: under TEXT SPEED, TEXT SIZE nudged with Left / Right like it), the
  * FFX-2 Active/Wait toggle, and whether the strategy guide starts visible.
+ * Under LOW EFFECTS, eye-candy D's three look rows (Bailey, 2026-09-29: "in the settings I want to be
+ * able to turn each one off. Default will be on."): CINEMA LIGHT, LIVING PAINTINGS, BATTLE SPECTACLE,
+ * ON/OFF like the two above (`fxLooks.ts`; the pause drops them in FF7, which draws no eye candy).
  * `skipSeenCutscenes` stays off the menu.
  */
 export function optionRows(settings: Readonly<Settings>): OptionRow[] {
@@ -71,6 +75,7 @@ export function optionRows(settings: Readonly<Settings>): OptionRow[] {
     },
     { id: 'reduceMotion', label: 'REDUCE MOTION', value: settings.reduceMotion ? 'ON' : 'OFF', ratio: null },
     { id: 'lowEffects', label: 'LOW EFFECTS', value: settings.lowEffects ? 'ON' : 'OFF', ratio: null },
+    ...FX_LOOK_ROWS.map((r) => ({ id: r.field, label: r.label, value: settings[r.field] === false ? 'OFF' : 'ON', ratio: null })),
     { id: 'ffx2Atb', label: 'X-2 BATTLE', value: settings.ffx2Atb === 'wait' ? 'WAIT' : 'ACTIVE', ratio: null },
     { id: 'guideVisible', label: 'STRATEGY GUIDE', value: settings.guideVisible ? 'ON' : 'OFF', ratio: null },
   ];

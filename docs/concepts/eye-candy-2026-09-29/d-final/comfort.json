@@ -1,0 +1,512 @@
+[
+ {
+  "ch": "seymour-flux",
+  "mode": "normal",
+  "ok": true,
+  "won": false,
+  "rest": {
+   "flags": {
+    "rm": false,
+    "low": false,
+    "tier": "full",
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    }
+   },
+   "b": {
+    "room": "gagazet",
+    "game": "ffx",
+    "tier": "full",
+    "plates": {
+     "count": 4,
+     "coverage": [
+      1,
+      0.648,
+      0.44,
+      0.213
+     ],
+     "buildMs": 1161,
+     "floored": false
+    },
+    "lamps": 4,
+    "fields": [
+     "flake:260",
+     "streak:16",
+     "flake:70"
+    ],
+    "haze": 4,
+    "arcs": false,
+    "reflection": false,
+    "figures": 10,
+    "drift": 1,
+    "strikes": 0,
+    "time": 11.02
+   },
+   "driftValues": 1,
+   "a": {
+    "active": true,
+    "tier": "full",
+    "sources": [
+     [
+      0.108,
+      0.836
+     ]
+    ],
+    "menu": true,
+    "drama": 0
+   }
+  },
+  "fight": {
+   "c": {
+    "hits": 23,
+    "impactFrames": 2,
+    "freezes": 0,
+    "spells": 0,
+    "splashes": 3,
+    "sends": 0,
+    "lastHitAt": 48.098200000000574,
+    "lastKind": "hit",
+    "clock": 48.715,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   },
+   "maxTrauma": 0.75,
+   "maxOrbit": 0,
+   "maxDrama": 0,
+   "maxLitSources": 1
+  },
+  "errors": []
+ },
+ {
+  "ch": "seymour-flux",
+  "mode": "reduceMotion",
+  "ok": true,
+  "won": false,
+  "rest": {
+   "flags": {
+    "rm": true,
+    "low": false,
+    "tier": "full",
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    }
+   },
+   "b": {
+    "room": "gagazet",
+    "game": "ffx",
+    "tier": "full",
+    "plates": {
+     "count": 4,
+     "coverage": [
+      1,
+      0.648,
+      0.44,
+      0.213
+     ],
+     "buildMs": 747,
+     "floored": false
+    },
+    "lamps": 4,
+    "fields": [
+     "flake:260",
+     "streak:16",
+     "flake:70"
+    ],
+    "haze": 4,
+    "arcs": false,
+    "reflection": false,
+    "figures": 10,
+    "drift": 0,
+    "strikes": 0,
+    "time": 10.37
+   },
+   "driftValues": 1,
+   "a": {
+    "active": true,
+    "tier": "full",
+    "sources": [
+     [
+      0.092,
+      0.853
+     ]
+    ],
+    "menu": true,
+    "drama": 0
+   }
+  },
+  "fight": {
+   "c": {
+    "hits": 23,
+    "impactFrames": 0,
+    "freezes": 0,
+    "spells": 0,
+    "splashes": 3,
+    "sends": 0,
+    "lastHitAt": 43.51510000000033,
+    "lastKind": "hit",
+    "clock": 43.882,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   },
+   "maxTrauma": 0,
+   "maxOrbit": 0,
+   "maxDrama": 0,
+   "maxLitSources": 1
+  },
+  "errors": []
+ },
+ {
+  "ch": "seymour-flux",
+  "mode": "lowEffects",
+  "ok": true,
+  "won": false,
+  "rest": {
+   "flags": {
+    "rm": false,
+    "low": true,
+    "tier": "low",
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    }
+   },
+   "b": {
+    "room": "gagazet",
+    "game": "ffx",
+    "tier": "low",
+    "plates": {
+     "count": 2,
+     "coverage": [
+      1,
+      0.44
+     ],
+     "buildMs": 224,
+     "floored": false
+    },
+    "lamps": 2,
+    "fields": [
+     "flake:78",
+     "streak:5",
+     "flake:21"
+    ],
+    "haze": 0,
+    "arcs": false,
+    "reflection": false,
+    "figures": 10,
+    "drift": 0.5,
+    "strikes": 0,
+    "time": 11.13
+   },
+   "driftValues": 1,
+   "a": {
+    "active": true,
+    "tier": "low",
+    "sources": [],
+    "menu": true,
+    "drama": 0
+   }
+  },
+  "fight": {
+   "c": {
+    "hits": 23,
+    "impactFrames": 2,
+    "freezes": 0,
+    "spells": 0,
+    "splashes": 3,
+    "sends": 0,
+    "lastHitAt": 47.115000000000535,
+    "lastKind": "hit",
+    "clock": 47.782,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   },
+   "maxTrauma": 0.697,
+   "maxOrbit": 0,
+   "maxDrama": 0,
+   "maxLitSources": 0
+  },
+  "errors": []
+ },
+ {
+  "ch": "ffx2-ixion-djose",
+  "mode": "normal",
+  "ok": true,
+  "won": true,
+  "rest": {
+   "flags": {
+    "rm": false,
+    "low": false,
+    "tier": "full",
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    }
+   },
+   "b": {
+    "room": "djose-chamber-provisional",
+    "game": "ffx2",
+    "tier": "full",
+    "plates": {
+     "count": 3,
+     "coverage": [
+      1,
+      0.747,
+      0.448
+     ],
+     "buildMs": 566,
+     "floored": true
+    },
+    "lamps": 2,
+    "fields": [
+     "dust:70",
+     "dust:46",
+     "dust:30"
+    ],
+    "haze": 1,
+    "arcs": true,
+    "reflection": false,
+    "figures": 8,
+    "drift": 1,
+    "strikes": 1,
+    "time": 12.51
+   },
+   "driftValues": 72,
+   "a": {
+    "active": true,
+    "tier": "full",
+    "sources": [
+     [
+      1.183,
+      1.861
+     ],
+     [
+      0.842,
+      0.87
+     ],
+     [
+      0.506,
+      1.46
+     ]
+    ],
+    "menu": true,
+    "drama": 0
+   }
+  },
+  "fight": {
+   "c": {
+    "hits": 67,
+    "impactFrames": 6,
+    "freezes": 2,
+    "spells": 15,
+    "splashes": 6,
+    "sends": 1,
+    "lastHitAt": 87.92400000000661,
+    "lastKind": "nova",
+    "clock": 89.241,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   },
+   "maxTrauma": 0.967,
+   "maxOrbit": 0,
+   "maxDrama": 0.42,
+   "maxLitSources": 3
+  },
+  "errors": []
+ },
+ {
+  "ch": "ffx2-ixion-djose",
+  "mode": "reduceMotion",
+  "ok": true,
+  "won": true,
+  "rest": {
+   "flags": {
+    "rm": true,
+    "low": false,
+    "tier": "full",
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    }
+   },
+   "b": {
+    "room": "djose-chamber-provisional",
+    "game": "ffx2",
+    "tier": "full",
+    "plates": {
+     "count": 3,
+     "coverage": [
+      1,
+      0.747,
+      0.448
+     ],
+     "buildMs": 896,
+     "floored": true
+    },
+    "lamps": 2,
+    "fields": [
+     "dust:70",
+     "dust:46",
+     "dust:30"
+    ],
+    "haze": 1,
+    "arcs": true,
+    "reflection": false,
+    "figures": 8,
+    "drift": 0,
+    "strikes": 0,
+    "time": 11.57
+   },
+   "driftValues": 1,
+   "a": {
+    "active": true,
+    "tier": "full",
+    "sources": [
+     [
+      1.227,
+      1.881
+     ],
+     [
+      0.875,
+      0.864
+     ],
+     [
+      0.534,
+      1.448
+     ]
+    ],
+    "menu": true,
+    "drama": 0
+   }
+  },
+  "fight": {
+   "c": {
+    "hits": 67,
+    "impactFrames": 0,
+    "freezes": 0,
+    "spells": 15,
+    "splashes": 6,
+    "sends": 0,
+    "lastHitAt": 76.2969000000043,
+    "lastKind": "nova",
+    "clock": 77.297,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   },
+   "maxTrauma": 0,
+   "maxOrbit": 0,
+   "maxDrama": 0,
+   "maxLitSources": 3
+  },
+  "errors": []
+ },
+ {
+  "ch": "ffx2-ixion-djose",
+  "mode": "lowEffects",
+  "ok": true,
+  "won": true,
+  "rest": {
+   "flags": {
+    "rm": false,
+    "low": true,
+    "tier": "low",
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    }
+   },
+   "b": {
+    "room": "djose-chamber-provisional",
+    "game": "ffx2",
+    "tier": "low",
+    "plates": {
+     "count": 2,
+     "coverage": [
+      1,
+      0.448
+     ],
+     "buildMs": 263,
+     "floored": true
+    },
+    "lamps": 1,
+    "fields": [
+     "dust:21",
+     "dust:14",
+     "dust:9"
+    ],
+    "haze": 0,
+    "arcs": false,
+    "reflection": false,
+    "figures": 8,
+    "drift": 0.5,
+    "strikes": 1,
+    "time": 11.98
+   },
+   "driftValues": 48,
+   "a": {
+    "active": true,
+    "tier": "low",
+    "sources": [],
+    "menu": true,
+    "drama": 0
+   }
+  },
+  "fight": {
+   "c": {
+    "hits": 67,
+    "impactFrames": 6,
+    "freezes": 2,
+    "spells": 0,
+    "splashes": 6,
+    "sends": 0,
+    "lastHitAt": 78.75760000000471,
+    "lastKind": "hit",
+    "clock": 80.024,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   },
+   "maxTrauma": 1,
+   "maxOrbit": 0,
+   "maxDrama": 0,
+   "maxLitSources": 0
+  },
+  "errors": []
+ }
+]

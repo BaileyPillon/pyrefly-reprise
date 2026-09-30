@@ -1,0 +1,352 @@
+{
+ "query": "",
+ "size": "desk",
+ "chapters": 18,
+ "reached": 18,
+ "consoleErrors": 0,
+ "errors": [],
+ "rows": [
+  {
+   "id": "seymour-flux",
+   "ok": true,
+   "frames": 412,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 8859,
+   "errors": 0
+  },
+  {
+   "id": "yunalesca",
+   "ok": true,
+   "frames": 423,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 7670,
+   "errors": 0
+  },
+  {
+   "id": "braskas-final-aeon",
+   "ok": true,
+   "frames": 423,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 7727,
+   "errors": 0
+  },
+  {
+   "id": "ffx2-bahamut",
+   "ok": true,
+   "frames": 450,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "game": "ffx2",
+   "ms": 8861,
+   "errors": 0
+  },
+  {
+   "id": "ffx2-vegnagun-shuyin",
+   "ok": true,
+   "frames": 396,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx2",
+   "ms": 7746,
+   "errors": 0
+  },
+  {
+   "id": "ffx2-leblanc",
+   "ok": true,
+   "frames": 537,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx2",
+   "ms": 9596,
+   "errors": 0
+  },
+  {
+   "id": "seymour-anima-macalania",
+   "ok": true,
+   "frames": 424,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 8288,
+   "errors": 0
+  },
+  {
+   "id": "evrae-airship",
+   "ok": true,
+   "frames": 419,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 7522,
+   "errors": 0
+  },
+  {
+   "id": "yojimbo-cavern",
+   "ok": true,
+   "frames": 571,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 10384,
+   "errors": 0
+  },
+  {
+   "id": "seymour-natus",
+   "ok": true,
+   "frames": 422,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 7453,
+   "errors": 0
+  },
+  {
+   "id": "ffx2-fallen-aeons",
+   "ok": true,
+   "frames": 470,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx2",
+   "ms": 8445,
+   "errors": 0
+  },
+  {
+   "id": "seymour-omnis",
+   "ok": true,
+   "frames": 422,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 7567,
+   "errors": 0
+  },
+  {
+   "id": "ffx2-trema",
+   "ok": true,
+   "frames": 492,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx2",
+   "ms": 8947,
+   "errors": 0
+  },
+  {
+   "id": "isaaru-via-purifico",
+   "ok": true,
+   "frames": 469,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 8202,
+   "errors": 0
+  },
+  {
+   "id": "ffx2-den-of-woe",
+   "ok": true,
+   "frames": 456,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx2",
+   "ms": 7871,
+   "errors": 0
+  },
+  {
+   "id": "ffx2-ixion-djose",
+   "ok": true,
+   "frames": 503,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "game": "ffx2",
+   "ms": 9172,
+   "errors": 0
+  },
+  {
+   "id": "sin-fins-core",
+   "ok": true,
+   "frames": 422,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 7566,
+   "errors": 0
+  },
+  {
+   "id": "sin-face",
+   "ok": true,
+   "frames": 422,
+   "fx": {
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "tier": "full",
+    "a": true,
+    "b": false,
+    "c": true
+   },
+   "game": "ffx",
+   "ms": 7312,
+   "errors": 0
+  }
+ ]
+}

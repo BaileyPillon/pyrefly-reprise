@@ -52,6 +52,10 @@ import { previewTurnOrder } from './pause/turnOrder.ts';
 import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleScreenStageHook.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
+import { StallWatch } from './BattleScreenStall.ts';
+import { bindEyeCandyScene, sceneBackdropPalette } from '../../engine/fx/a/GoldenHour.ts';
+import { bindLivingScene, releaseLivingScene, updateLivingScene } from '../../engine/fx/b/LivingPaintings.ts';
+import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { battleComfort } from './battleComfort.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
@@ -61,16 +65,6 @@ import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { setPaceGame } from '../../engine/pace.ts';
-
-/**
- * How long a decided battle may go without playing a single event before the
- * screen resolves it itself. See {@link BattleScreen.checkForStall}.
- *
- * Comfortably longer than every port budget the presenter already keeps
- * (`HUD_EVENT_BUDGET_MS` 600 ms, `SCRIPT_BUDGET_MS` 30 s), so this only ever
- * fires for something that missed its own deadline.
- */
-const STALL_LIMIT_MS = 45_000;
 
 /**
  * How long after a formation is staged the field may still settle its own
@@ -122,6 +116,7 @@ export class BattleScreen extends Screen {
   private scene: LoadedScene | null = null;
   private stage: PaintedStage | null = null;
   private airship: AirshipBattleHook | null = null;
+  private spectacle: SpectacleHandle | null = null;
   private presenter: BattlePresenter | null = null;
   private engine: BattleEngine | null = null;
   private hud: HudPort | null = null;
@@ -208,6 +203,8 @@ export class BattleScreen extends Screen {
     if (this.exited) return void scene.dispose();
     this.scene = scene;
     this.app.renderer.applyPalette(this.scene.palette);
+    bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
+    bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera }); // eye-candy option B (`?fx=b`)
     this.scene.hideOwnActors();
     this.syncPixelScale();
     void warmShaders(this.app.renderer, scene.scene); // the diorama's programs compile while the figures load
@@ -240,6 +237,7 @@ export class BattleScreen extends Screen {
     if (this.exited) return this.releaseParts();
     this.airship = await attachStageHook(chapter.game, this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8; FF7's rows
     if (this.exited) return this.releaseParts();
+    this.spectacle = attachSpectacle({ game: chapter.game, renderer: this.app.renderer, scene: this.scene.scene, camera: this.app.renderer.camera, stage: this.stage, root: this.root });
 
     // --- HUD + ports -------------------------------------------------------
     this.hud = createHud(chapter.game, () => this.stage, this.engine); // the field (FFX-2 Oversoul look); the engine (FF7's item counts)
@@ -670,62 +668,21 @@ export class BattleScreen extends Screen {
 
   // ------------------------------------------------------------------ frame
 
-  /**
-   * The watchdog for "won, and then never ends".
-   *
-   * `tests/unit/flow-encounter-chain.test.ts` shows the engine, the presenter
-   * and the chain loop always reach an outcome, so nothing *inside* them
-   * explains what the critic measured — Bahamut at 0/8400 with the screen still
-   * on `'battle'` five minutes later (round 02 #01). What can still strand a
-   * fight is a port that never answers: a HUD transient, a mid-battle beat, an
-   * art load. Each of those already has its own budget, and each of those
-   * budgets could in principle be missed.
-   *
-   * So this is the backstop the critic asked for, and it is deliberately dumb:
-   * once the **engine** says the battle has a result, and playback has not
-   * advanced a single event for {@link STALL_LIMIT_MS}, the screen stops
-   * waiting and resolves with the result the engine already has. It is checked
-   * on the frame clock, which the pause overlay stops, so a paused fight is
-   * never mistaken for a stalled one.
-   */
-  private stalledMs = 0;
-  private lastPlayed = -1;
+  /** The watchdog for "won, and then never ends" (`BattleScreenStall.ts`): a decided battle whose playback stalled is resolved from the engine's own result. */
+  private readonly stall = new StallWatch();
 
   private checkForStall(dt: number): void {
-    if (this.preview || !this.presenter || !this.engine || this.finishedResolve === null) {
-      // Nothing running, or already finished.
-      if (this.finishedResolve === null) this.stalledMs = 0;
-      return;
-    }
-    const played = Number(this.presenter.snapshot()['played'] ?? 0);
-    if (played !== this.lastPlayed) {
-      this.lastPlayed = played;
-      this.stalledMs = 0;
-      return;
-    }
-    const result = this.engine.state().result;
-    if (!result) {
-      // Still fighting. A long wait for a human at the command menu is not a
-      // stall, which is why only a *decided* battle is ever force-resolved.
-      this.stalledMs = 0;
-      return;
-    }
-    this.stalledMs += dt * 1000;
-    if (this.stalledMs < STALL_LIMIT_MS) return;
-    console.error(
-      `[battle] ${this.opts.chapter.id}: the engine reported "${result.outcome}" but playback has not ` +
-        `advanced for ${Math.round(this.stalledMs)}ms. Resolving the encounter from the engine's own result.`,
-    );
-    this.stalledMs = 0;
-    this.presenter.abort();
+    const outcome = this.stall.check(dt, {
+      preview: this.preview,
+      presenter: this.presenter,
+      engine: this.engine,
+      running: this.finishedResolve !== null,
+      chapterId: this.opts.chapter.id,
+    });
+    if (!outcome) return;
+    this.presenter?.abort();
     this.setPresenterPaused(false);
-    this.finish(
-      result.outcome === 'defeat'
-        ? { kind: 'defeat', result }
-        : result.outcome === 'escape'
-          ? { kind: 'escape', result }
-          : { kind: 'victory', result },
-    );
+    this.finish(outcome);
   }
 
   override update(dt: number): void {
@@ -739,7 +696,9 @@ export class BattleScreen extends Screen {
     if (!this.preview && this.opts.chapter.experimental) addExperimentPlayTime(this.opts.chapter.id, dt * 1000);
     else if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
 
-    this.scene?.update(dt);
+    const fieldDt = this.spectacle?.stageDt(dt) ?? dt; // option C's hit-stop holds the field, never the engine or the HUD
+    this.scene?.update(fieldDt);
+    updateLivingScene(fieldDt); // eye-candy option B: drift, weather, lamps (after the rig, before the render)
     // Settle the enemy lane against the camera, before the player's first
     // decision and never during one.
     //
@@ -752,7 +711,8 @@ export class BattleScreen extends Screen {
     // nothing can be projected yet, so a slow first frame simply retries.
     this.settleFormation(dt);
     this.airship?.sync(this.engine?.state());
-    this.stage?.update(dt);
+    this.stage?.update(fieldDt);
+    this.spectacle?.update(dt);
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.
     this.hud?.update?.(dt);
@@ -947,8 +907,11 @@ export class BattleScreen extends Screen {
     this.momentOverlay = null;
     this.airship?.dispose();
     this.airship = null;
+    this.spectacle?.dispose();
+    this.spectacle = null;
     this.stage?.dispose();
     this.stage = null;
+    releaseLivingScene();
     this.scene?.dispose();
     this.scene = null;
     this.presenter = null;

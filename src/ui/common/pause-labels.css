@@ -82,3 +82,43 @@
     line-height: 1.3;
   }
 }
+
+/*
+ * Eye-candy D's look rows (Bailey, 2026-09-29): BATTLE SPECTACLE is the settings column's longest label,
+ * 160 px of text at 1600x900 against the 150-152 px key cell (PR-0151's floor), so it read
+ * "BATTLE SPECTAC...". The settings column's key cell grows by the same 6 %, floor and slope, so every
+ * label keeps one size and one letter-spacing. Measured at 1024x768, 1280x720, 1600x900, 1920x1080 and
+ * 390x844 (`docs/concepts/eye-candy-2026-09-29/d-final/README.md`). Game case: both (one pause).
+ */
+@media (min-width: 621px) {
+  /* A phone's settings column already fits every label (390x844), and its values need the room. */
+  .pause__body .pause__col--wide[data-col='settings'] .pause__k {
+    width: clamp(162px, 10.2vw, 204px);
+  }
+
+  /*
+   * The three rows make FFX-2's settings column fourteen rows (X-2 BATTLE and ATB SPEED are FFX-2 only),
+   * which ran BATTLE HELP into the objective's eyebrow at 1600x900. The column now stops one row short
+   * of the objective and scrolls on its own, as the phone's has since PR-0098 (the selected row is
+   * scrolled into view by `PauseView.scrollSelectedRowIntoView`); FFX's twelve rows still fit unscrolled.
+   */
+  .pause__body .pause__col[data-col='settings'] {
+    max-height: calc(var(--pu-top-obj) - var(--pu-top-body) - var(--pu-row));
+    /* The fade below lands on this padding while the column fits, and on the cut row once it scrolls. */
+    padding-bottom: 12px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 12px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 12px), transparent 100%);
+  }
+
+  /* A flex column under a max-height would squash its rows instead of scrolling them. */
+  .pause__body .pause__col[data-col='settings'] > * {
+    flex-shrink: 0;
+  }
+
+  .pause__body .pause__col[data-col='settings']::-webkit-scrollbar {
+    display: none;
+  }
+}

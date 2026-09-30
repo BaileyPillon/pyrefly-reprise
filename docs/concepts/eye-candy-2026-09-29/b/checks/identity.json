@@ -1,0 +1,29 @@
+{
+ "method": "Option B on with drift, weather, lamps, shadows, reflection and sway off, Reduce motion on so the rig holds still: the depth plates shown vs the painting plane and its band layers shown (sub-switch plates), same frozen frame and camera, HUD hidden; whole-frame mean absolute difference in 0..255 (the figures are identical, so this measures the backdrop). Target: below 1/255.",
+ "results": {
+  "seymour-flux": {
+   "meanAbs255": 1.121,
+   "p99": 3.67,
+   "max": 30.666666666666668,
+   "controlOffVsOff": 1.092
+  },
+  "seymour-anima-macalania": {
+   "meanAbs255": 1.469,
+   "p99": 9.33,
+   "max": 72.33333333333333,
+   "controlOffVsOff": 1.014
+  },
+  "ffx2-bahamut": {
+   "meanAbs255": 1.144,
+   "p99": 4,
+   "max": 54,
+   "controlOffVsOff": 1.078
+  },
+  "ffx2-ixion-djose": {
+   "meanAbs255": 1.736,
+   "p99": 10.67,
+   "max": 94,
+   "controlOffVsOff": 1.36
+  }
+ }
+}

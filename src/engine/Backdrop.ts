@@ -373,7 +373,7 @@ export class Backdrop {
     const main = new Mesh(new PlaneGeometry(width, height), mainMat);
     main.position.set(0, centreY, distance);
     main.renderOrder = -90;
-    main.name = 'backdrop-painting';
+    Object.assign(main, { name: 'backdrop-painting', userData: { fxRef: [camRef.x, camRef.y, camRef.z] } }); // fxRef: eye-candy option B registers its plates for this camera
     backdrop.group.add(main);
     backdrop.layerMeshes.push(main);
 

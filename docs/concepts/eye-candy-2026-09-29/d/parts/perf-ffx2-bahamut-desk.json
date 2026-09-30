@@ -1,0 +1,47 @@
+{
+ "chapter": "ffx2-bahamut",
+ "size": "desk",
+ "throttle": 1,
+ "vsync": true,
+ "on": {
+  "rest": {
+   "frames": 359,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 16.8,
+   "mean": 16.71
+  },
+  "combat": {
+   "frames": 600,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "tier": "full",
+  "cWork": {
+   "hits": 13,
+   "spells": 3,
+   "splashes": 0,
+   "impactFrames": 0
+  }
+ },
+ "off": {
+  "rest": {
+   "frames": 361,
+   "p50": 16.7,
+   "p95": 16.7,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "combat": {
+   "frames": 600,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "tier": "full",
+  "cWork": null
+ }
+}

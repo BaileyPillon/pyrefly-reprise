@@ -12,6 +12,7 @@
  *   capture that makes those frames.
  * - `data-reduce-motion` and `data-low-effects`, present while the flag is on: the
  *   CSS mirror of every `prefers-reduced-motion` block (`ui/common/comfort.css`).
+ * - Not on `<html>`: eye-candy D's three look rows switch its options A, B and C (`fxLooks.ts`).
  *
  * Called by `SaveStore` next to `audio.applySettings`, at construction and on
  * every settings write, so a saved 130 % is in force on the first frame without
@@ -23,7 +24,9 @@
 import '../ui/common/comfort.css';
 import '../ui/common/text-size.css';
 import '../ui/common/text-size-wide.css';
+import { eyeCandy } from '../engine/fx/EyeCandy.ts';
 import type { Settings } from './SaveData.ts';
+import { fxLooksOf, type FxLookField } from './fxLooks.ts';
 import { isTextSize } from './saveComfort.ts';
 
 /**
@@ -42,9 +45,12 @@ export function textSizeWideScope(): boolean {
   }
 }
 
-type ComfortFields = Pick<Settings, 'textSize' | 'reduceMotion' | 'lowEffects'>;
+type ComfortFields = Pick<Settings, 'textSize' | 'reduceMotion' | 'lowEffects' | FxLookField>;
 
 export function applyComfort(settings: Readonly<Partial<ComfortFields>>, root: HTMLElement | null = rootEl()): void {
+  // Eye-candy D's three look rows (CINEMA LIGHT, LIVING PAINTINGS, BATTLE SPECTACLE), live and with or
+  // without a DOM; a missing field reads as ON, and a URL `?fx=` wins for that page load (`EyeCandy.ts`).
+  eyeCandy.applyLooks(fxLooksOf(settings));
   if (!root) return;
   const size = isTextSize(settings.textSize) ? settings.textSize : 1;
   const pct = String(Math.round(size * 100));

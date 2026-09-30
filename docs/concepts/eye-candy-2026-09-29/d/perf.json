@@ -1,0 +1,333 @@
+{
+ "method": "rAF interval ring (600 frames = the last ~10 s of each window) from __pyrefly.fx.stats(); rest = 6 s at the first command menu, combat = 24 s of autoBattle(intended) at normal speed; ON = ?fx=d (A + B + C), OFF = ?fx=off; desktop 1600x900 DPR 1; phone 390x844 deviceScaleFactor 3 with CDP CPU throttle x4 (the GPU is still the desktop RTX, so fill rate is exercised but a phone GPU is not); vsync on. Gate: p95 <= 17.0 ms desktop / 33.4 ms phone and ON no worse than OFF by more than 0.3 ms (spec section 8). Uncapped headroom not measured.",
+ "runs": [
+  {
+   "chapter": "ffx2-bahamut",
+   "size": "desk",
+   "throttle": 1,
+   "onRest": {
+    "frames": 359,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.71
+   },
+   "offRest": {
+    "frames": 361,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "onCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "tier": "full",
+   "cWork": {
+    "hits": 13,
+    "spells": 3,
+    "splashes": 0,
+    "impactFrames": 0
+   },
+   "pass": true
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "size": "phone",
+   "throttle": 4,
+   "onRest": {
+    "frames": 355,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.3,
+    "mean": 16.9
+   },
+   "offRest": {
+    "frames": 358,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.81
+   },
+   "onCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "tier": "phone",
+   "cWork": {
+    "hits": 13,
+    "spells": 3,
+    "splashes": 0,
+    "impactFrames": 0
+   },
+   "pass": true
+  },
+  {
+   "chapter": "ffx2-ixion-djose",
+   "size": "desk",
+   "throttle": 1,
+   "onRest": {
+    "frames": 361,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offRest": {
+    "frames": 361,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "onCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "tier": "full",
+   "cWork": {
+    "hits": 15,
+    "spells": 1,
+    "splashes": 1,
+    "impactFrames": 1
+   },
+   "pass": true
+  },
+  {
+   "chapter": "ffx2-ixion-djose",
+   "size": "phone",
+   "throttle": 4,
+   "onRest": {
+    "frames": 360,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.71
+   },
+   "offRest": {
+    "frames": 360,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.71
+   },
+   "onCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "tier": "phone",
+   "cWork": {
+    "hits": 15,
+    "spells": 1,
+    "splashes": 1,
+    "impactFrames": 1
+   },
+   "pass": true
+  },
+  {
+   "chapter": "seymour-anima-macalania",
+   "size": "desk",
+   "throttle": 1,
+   "onRest": {
+    "frames": 360,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offRest": {
+    "frames": 361,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "onCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "tier": "full",
+   "cWork": {
+    "hits": 3,
+    "spells": 3,
+    "splashes": 0,
+    "impactFrames": 0
+   },
+   "pass": true
+  },
+  {
+   "chapter": "seymour-anima-macalania",
+   "size": "phone",
+   "throttle": 4,
+   "onRest": {
+    "frames": 360,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offRest": {
+    "frames": 360,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.71
+   },
+   "onCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.3,
+    "mean": 17.11
+   },
+   "offCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.3,
+    "mean": 16.97
+   },
+   "tier": "phone",
+   "cWork": {
+    "hits": 3,
+    "spells": 3,
+    "splashes": 0,
+    "impactFrames": 0
+   },
+   "pass": true
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "desk",
+   "throttle": 1,
+   "onRest": {
+    "frames": 361,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offRest": {
+    "frames": 360,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "onCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.69
+   },
+   "offCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "tier": "full",
+   "cWork": {
+    "hits": 5,
+    "spells": 0,
+    "splashes": 2,
+    "impactFrames": 1
+   },
+   "pass": true
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "phone",
+   "throttle": 4,
+   "onRest": {
+    "frames": 361,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "offRest": {
+    "frames": 361,
+    "p50": 16.7,
+    "p95": 16.7,
+    "p99": 16.8,
+    "mean": 16.67
+   },
+   "onCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.4,
+    "mean": 17.42
+   },
+   "offCombat": {
+    "frames": 600,
+    "p50": 16.7,
+    "p95": 16.8,
+    "p99": 33.4,
+    "mean": 17.36
+   },
+   "tier": "phone",
+   "cWork": {
+    "hits": 5,
+    "spells": 0,
+    "splashes": 2,
+    "impactFrames": 1
+   },
+   "pass": true
+  }
+ ]
+}

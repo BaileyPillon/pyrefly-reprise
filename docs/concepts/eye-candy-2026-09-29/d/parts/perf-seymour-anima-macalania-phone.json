@@ -1,0 +1,47 @@
+{
+ "chapter": "seymour-anima-macalania",
+ "size": "phone",
+ "throttle": 4,
+ "vsync": true,
+ "on": {
+  "rest": {
+   "frames": 360,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "combat": {
+   "frames": 600,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 33.3,
+   "mean": 17.11
+  },
+  "tier": "phone",
+  "cWork": {
+   "hits": 3,
+   "spells": 3,
+   "splashes": 0,
+   "impactFrames": 0
+  }
+ },
+ "off": {
+  "rest": {
+   "frames": 360,
+   "p50": 16.7,
+   "p95": 16.7,
+   "p99": 16.8,
+   "mean": 16.71
+  },
+  "combat": {
+   "frames": 600,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 33.3,
+   "mean": 16.97
+  },
+  "tier": "phone",
+  "cWork": null
+ }
+}

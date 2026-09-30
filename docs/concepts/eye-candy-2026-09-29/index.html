@@ -1,0 +1,460 @@
+<title>Eye Candy Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600;1,700&family=Rajdhani:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: a battle-log reading column; each option is a slab with an Ink & Gold letter, its wipes in a two-up grid. */
+:root {
+  --paper: #f4f1e8; --paper-2: #ebe6d8; --ink: #14121c; --ink-soft: #4a4658; --rule: #d6cfbd;
+  --gold: #9a6f1c; --gold-bright: #e3b94a; --pink: #b03a78; --sky: #2b7fae; --ok: #2f7d4f; --bad: #b02a2a;
+  --bg: var(--paper); --fg: var(--ink); --muted: var(--ink-soft); --surface: #fffdf7; --shadow: rgba(20, 18, 28, 0.08);
+  --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --font-ui: 'Rajdhani', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0a12; --fg: #f1ede2; --muted: #a8a3b6; --surface: #15131f; --rule: #2c2838; --paper-2: #1c1a27;
+  --gold: #e3b94a; --pink: #f7b6d9; --sky: #7fc6e8; --ok: #7fd49b; --bad: #f08a8a; --shadow: rgba(0, 0, 0, 0.4); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0b0a12; --fg: #f1ede2; --muted: #a8a3b6; --surface: #15131f; --rule: #2c2838; --paper-2: #1c1a27;
+  --gold: #e3b94a; --pink: #f7b6d9; --sky: #7fc6e8; --ok: #7fd49b; --bad: #f08a8a; --shadow: rgba(0, 0, 0, 0.4); color-scheme: dark }
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--font-body); margin: 0 }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; display: grid; gap: 56px }
+h1, h2, h4 { font-family: var(--font-display); font-style: italic; font-weight: 700; text-wrap: balance; margin: 0 }
+h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1 }
+h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.05 }
+h3 { font-family: var(--font-ui); font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; font-size: 0.95rem; margin: 0 }
+h3 span { font-weight: 500; letter-spacing: 0.02em; text-transform: none; color: var(--muted); margin-left: 0.5em; font-size: 0.95rem }
+p { margin: 0 }
+.eyebrow { font-family: var(--font-ui); font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.8rem; color: var(--gold) }
+.intro { display: grid; gap: 14px; max-width: 70ch }
+.intro .lede { font-size: 1.12rem; color: var(--muted) }
+.nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px }
+.nav a { font-family: var(--font-ui); font-weight: 700; text-decoration: none; color: var(--fg); border: 1px solid var(--rule); padding: 6px 12px; transform: skewX(-12deg); background: var(--surface) }
+.nav a > span { display: inline-block; transform: skewX(12deg) }
+.nav a.rec { border-color: var(--gold); box-shadow: inset 0 -3px 0 var(--gold) }
+.nav a:focus-visible, button:focus-visible, video:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px }
+.tag { font-family: var(--font-ui); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em; padding: 1px 6px; border: 1px solid currentColor; margin-left: 6px; vertical-align: 2px; font-style: normal }
+.tag.ffx { color: var(--gold) } .tag.ffx2 { color: var(--pink) }
+.flag { font-family: var(--font-ui); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em; color: var(--bad) }
+
+/* comparison strip */
+.compare { display: grid; gap: 16px }
+.tabs, .chips { display: flex; flex-wrap: wrap; gap: 6px }
+.tab, .chip { font-family: var(--font-ui); font-weight: 600; font-size: 0.92rem; border: 1px solid var(--rule); background: var(--surface); color: var(--fg); padding: 5px 11px; cursor: pointer }
+.tab span { color: var(--muted); font-weight: 500 }
+.tab[aria-pressed="true"], .chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.tab[aria-pressed="true"] span { color: inherit; opacity: 0.8 }
+.striprow { display: grid; gap: 10px }
+.striplabel { font-family: var(--font-ui); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85rem }
+.striplabel span { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--muted); margin-left: 6px }
+.strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px }
+.cell { margin: 0; position: relative }
+.cell img, .cell .none { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; background: var(--paper-2) }
+.cell .none { display: grid; place-items: center; color: var(--muted); font-size: 0.85rem }
+.cell figcaption { position: absolute; left: 0; top: 0; font-family: var(--font-ui); font-weight: 700; background: var(--ink); color: #f4f1e8; padding: 1px 8px }
+.cell.rec figcaption { background: #e3b94a; color: #0b0a12 }
+
+/* recommendation */
+.rec-box { border: 1px solid var(--gold); background: var(--surface); padding: 20px; display: grid; gap: 10px; box-shadow: 0 6px 24px var(--shadow) }
+.rec-box ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 80ch }
+.rec-box .small { color: var(--muted); font-size: 0.92rem; max-width: 80ch }
+
+/* option sections */
+.opt { display: grid; gap: 20px; border-top: 2px solid var(--fg); padding-top: 22px }
+.opthead { display: flex; gap: 16px; align-items: center }
+.letter { font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 3.4rem; line-height: 1; width: 72px; height: 72px; display: grid; place-items: center; background: var(--fg); color: var(--bg); transform: skewX(-12deg); flex: none }
+.opthead > div { min-width: 0 }
+.switch { font-family: ui-monospace, Consolas, monospace; font-size: 0.85rem; color: var(--muted) }
+.recmark { color: var(--gold) }
+.three { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; max-width: 80ch }
+.games { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px }
+.g { padding: 12px 14px; background: var(--surface); border-left: 4px solid var(--gold); display: grid; gap: 4px; min-width: 0 }
+.g.ffx2 { border-left-color: var(--pink) }
+.g h3 { color: var(--gold) } .g.ffx2 h3 { color: var(--pink) }
+.sub { margin-top: 6px }
+.chgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px }
+.chcard { display: grid; gap: 8px; min-width: 0; align-content: start }
+.chhead { display: flex; gap: 10px; align-items: center }
+.chnum { font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 1.6rem; color: var(--gold); min-width: 2.2ch }
+.chhead h4 { font-size: 1.3rem }
+.chhead p { color: var(--muted); font-size: 0.9rem }
+.wipe { position: relative; aspect-ratio: 16 / 9; max-width: 100%; overflow: hidden; background: var(--paper-2); touch-action: pan-y }
+.wipe img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block }
+.wipe img.on { clip-path: inset(0 0 0 var(--x)) }
+.wipe .handle { position: absolute; top: 0; bottom: 0; left: var(--x); width: 2px; margin-left: -1px; background: #e3b94a; box-shadow: 0 0 0 1px rgba(11, 10, 18, 0.5); pointer-events: none }
+.wipe .handle::after { content: ''; position: absolute; top: 50%; left: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; background: #e3b94a; transform: rotate(45deg); box-shadow: 0 0 0 2px rgba(11, 10, 18, 0.6) }
+.wipe input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize }
+.wipe input:focus-visible ~ .handle, .wipe:focus-within .handle { background: #fff }
+.wl { position: absolute; top: 8px; font-family: var(--font-ui); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(11, 10, 18, 0.72); color: #f4f1e8; padding: 2px 8px; pointer-events: none }
+.wl.l { left: 8px } .wl.r { right: 8px; background: #e3b94a; color: #0b0a12 }
+.look { font-size: 0.94rem; color: var(--muted) }
+.miss { font-size: 0.85rem; color: var(--muted); font-style: italic }
+.phonerow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 8px; max-width: 760px }
+.phone { margin: 0; min-width: 0 }
+.phone img { width: 100%; height: auto; display: block; border: 1px solid var(--rule) }
+.phone figcaption, .clip figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 4px }
+.clips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px }
+.clip { margin: 0; min-width: 0 }
+.clip video { width: 100%; height: auto; display: block; background: #0b0a12; aspect-ratio: 16 / 9 }
+.tablewrap { overflow-x: auto }
+table.perf { border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 0.92rem; min-width: 620px }
+.perf th, .perf td { padding: 6px 10px; border-bottom: 1px solid var(--rule); text-align: left; white-space: nowrap }
+.perf thead th { font-family: var(--font-ui); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.78rem; color: var(--muted) }
+.perf .dim { color: var(--muted) }
+.ok { color: var(--ok); font-weight: 600 } .bad { color: var(--bad); font-weight: 600 }
+.faults { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 85ch }
+footer { color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 6px; max-width: 85ch }
+@media (max-width: 760px) {
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .games, .chgrid, .clips { grid-template-columns: 1fr }
+  .phonerow { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .letter { width: 56px; height: 56px; font-size: 2.6rem }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto } }
+</style>
+
+<main class="wrap">
+  <header class="intro">
+    <p class="eyebrow">Pyrefly Reprise &#183; eye-candy options round &#183; 29 Sep 2026</p>
+    <h1>Eye Candy Options</h1>
+    <p class="lede">Four prototype looks over the same approved paintings, in the same four fights. Each is a switch on a prototype branch; nothing ships until you pick one, mix them, or strike parts. The paintings are never repainted, and the HUD is never blurred or bloomed.</p>
+    <nav class="nav" aria-label="Options"><a href="#opt-a"><span>A &#183; Golden-Hour Cinema</span></a><a href="#opt-b"><span>B &#183; Living Paintings</span></a><a href="#opt-c"><span>C &#183; Spectacle Combat</span></a><a href="#opt-d" class="rec"><span>D &#183; All Three Together</span></a></nav>
+  </header>
+
+  <section class="compare" aria-labelledby="h-compare">
+    <div><p class="eyebrow">Side by side</p><h2 id="h-compare">The same fight, four ways</h2></div>
+    <div class="tabs" role="group" aria-label="Chapter"><button type="button" class="tab" aria-pressed="false" data-ch="seymour-flux">I <span>Mt. Gagazet</span></button><button type="button" class="tab" aria-pressed="true" data-ch="seymour-anima-macalania">VII <span>Macalania Temple</span></button><button type="button" class="tab" aria-pressed="false" data-ch="ffx2-bahamut">IV <span>Bevelle Underground</span></button><button type="button" class="tab" aria-pressed="false" data-ch="ffx2-ixion-djose">XVI <span>Djose Temple</span></button></div><div class="striprow" data-ch="seymour-flux" hidden>
+      <p class="striplabel">At rest, HUD hidden <span>C adds nothing at rest, so it matches Today</span></p>
+      <div class="strip"><figure class="cell"><img src="d/web/ch1-seymour-flux-rest-clean-off.jpg" alt="Chapter I, Today" loading="lazy" width="1280" height="720"><figcaption>Today</figcaption></figure><figure class="cell"><img src="a/web/ch1-seymour-flux-rest-clean-on.jpg" alt="Chapter I, A" loading="lazy" width="1280" height="720"><figcaption>A</figcaption></figure><figure class="cell"><img src="b/web/ch1-seymour-flux-rest-clean-on.jpg" alt="Chapter I, B" loading="lazy" width="1280" height="720"><figcaption>B</figcaption></figure><figure class="cell rec"><img src="d/web/ch1-seymour-flux-rest-clean-on.jpg" alt="Chapter I, D" loading="lazy" width="1280" height="720"><figcaption>D</figcaption></figure></div>
+      <p class="striplabel">The big moment <span>each option's own run, so the timing differs a little</span></p>
+      <div class="strip"><figure class="cell"><img src="a/web/ch1-seymour-flux-special-on.jpg" alt="Chapter I, A" loading="lazy" width="1280" height="720"><figcaption>A</figcaption></figure><figure class="cell"><img src="b/web/ch1-seymour-flux-special-on.jpg" alt="Chapter I, B" loading="lazy" width="1280" height="720"><figcaption>B</figcaption></figure><figure class="cell"><img src="c/web/ch1-seymour-flux-special-on.jpg" alt="Chapter I, C" loading="lazy" width="1280" height="720"><figcaption>C</figcaption></figure><figure class="cell rec"><img src="d/web/ch1-seymour-flux-special-on.jpg" alt="Chapter I, D" loading="lazy" width="1280" height="720"><figcaption>D</figcaption></figure></div>
+    </div><div class="striprow" data-ch="seymour-anima-macalania">
+      <p class="striplabel">At rest, HUD hidden <span>C adds nothing at rest, so it matches Today</span></p>
+      <div class="strip"><figure class="cell"><img src="d/web/ch7-macalania-rest-clean-off.jpg" alt="Chapter VII, Today" loading="lazy" width="1280" height="720"><figcaption>Today</figcaption></figure><figure class="cell"><img src="a/web/ch7-macalania-rest-clean-on.jpg" alt="Chapter VII, A" loading="lazy" width="1280" height="720"><figcaption>A</figcaption></figure><figure class="cell"><img src="b/web/ch7-macalania-rest-clean-on.jpg" alt="Chapter VII, B" loading="lazy" width="1280" height="720"><figcaption>B</figcaption></figure><figure class="cell rec"><img src="d/web/ch7-macalania-rest-clean-on.jpg" alt="Chapter VII, D" loading="lazy" width="1280" height="720"><figcaption>D</figcaption></figure></div>
+      <p class="striplabel">The big moment <span>each option's own run, so the timing differs a little</span></p>
+      <div class="strip"><figure class="cell"><img src="a/web/ch7-macalania-special-on.jpg" alt="Chapter VII, A" loading="lazy" width="1280" height="720"><figcaption>A</figcaption></figure><figure class="cell"><img src="b/web/ch7-macalania-special-on.jpg" alt="Chapter VII, B" loading="lazy" width="1280" height="720"><figcaption>B</figcaption></figure><figure class="cell"><img src="c/web/ch7-macalania-special-on.jpg" alt="Chapter VII, C" loading="lazy" width="1280" height="720"><figcaption>C</figcaption></figure><figure class="cell rec"><img src="d/web/ch7-macalania-special-on.jpg" alt="Chapter VII, D" loading="lazy" width="1280" height="720"><figcaption>D</figcaption></figure></div>
+    </div><div class="striprow" data-ch="ffx2-bahamut" hidden>
+      <p class="striplabel">At rest, HUD hidden <span>C adds nothing at rest, so it matches Today</span></p>
+      <div class="strip"><figure class="cell"><img src="d/web/ch4-bahamut-rest-clean-off.jpg" alt="Chapter IV, Today" loading="lazy" width="1280" height="720"><figcaption>Today</figcaption></figure><figure class="cell"><img src="a/web/ch4-bahamut-rest-clean-on.jpg" alt="Chapter IV, A" loading="lazy" width="1280" height="720"><figcaption>A</figcaption></figure><figure class="cell"><img src="b/web/ch4-bahamut-rest-clean-on.jpg" alt="Chapter IV, B" loading="lazy" width="1280" height="720"><figcaption>B</figcaption></figure><figure class="cell rec"><img src="d/web/ch4-bahamut-rest-clean-on.jpg" alt="Chapter IV, D" loading="lazy" width="1280" height="720"><figcaption>D</figcaption></figure></div>
+      <p class="striplabel">The big moment <span>each option's own run, so the timing differs a little</span></p>
+      <div class="strip"><figure class="cell"><img src="a/web/ch4-bahamut-special-on.jpg" alt="Chapter IV, A" loading="lazy" width="1280" height="720"><figcaption>A</figcaption></figure><figure class="cell"><img src="b/web/ch4-bahamut-special-on.jpg" alt="Chapter IV, B" loading="lazy" width="1280" height="720"><figcaption>B</figcaption></figure><figure class="cell"><img src="c/web/ch4-bahamut-special-on.jpg" alt="Chapter IV, C" loading="lazy" width="1280" height="720"><figcaption>C</figcaption></figure><figure class="cell rec"><img src="d/web/ch4-bahamut-special-on.jpg" alt="Chapter IV, D" loading="lazy" width="1280" height="720"><figcaption>D</figcaption></figure></div>
+    </div><div class="striprow" data-ch="ffx2-ixion-djose" hidden>
+      <p class="striplabel">At rest, HUD hidden <span>C adds nothing at rest, so it matches Today</span></p>
+      <div class="strip"><figure class="cell"><img src="d/web/ch16-ixion-rest-clean-off.jpg" alt="Chapter XVI, Today" loading="lazy" width="1280" height="720"><figcaption>Today</figcaption></figure><figure class="cell"><img src="a/web/ch16-ixion-rest-clean-on.jpg" alt="Chapter XVI, A" loading="lazy" width="1280" height="720"><figcaption>A</figcaption></figure><figure class="cell"><img src="b/web/ch16-ixion-rest-clean-on.jpg" alt="Chapter XVI, B" loading="lazy" width="1280" height="720"><figcaption>B</figcaption></figure><figure class="cell rec"><img src="d/web/ch16-ixion-rest-clean-on.jpg" alt="Chapter XVI, D" loading="lazy" width="1280" height="720"><figcaption>D</figcaption></figure></div>
+      <p class="striplabel">The big moment <span>each option's own run, so the timing differs a little</span></p>
+      <div class="strip"><figure class="cell"><div class="none">not captured</div><figcaption>A</figcaption></figure><figure class="cell"><div class="none">not captured</div><figcaption>B</figcaption></figure><figure class="cell"><img src="c/web/ch16-ixion-special-on.jpg" alt="Chapter XVI, C" loading="lazy" width="1280" height="720"><figcaption>C</figcaption></figure><figure class="cell rec"><img src="d/web/ch16-ixion-special-on.jpg" alt="Chapter XVI, D" loading="lazy" width="1280" height="720"><figcaption>D</figcaption></figure></div>
+    </div>
+  </section>
+
+  <section class="rec-box" aria-labelledby="h-rec">
+    <p class="eyebrow">Recommended pick (an agent's look; you pick)</p>
+    <h2 id="h-rec">D, all three together</h2>
+    <ul><li>It is the only option that makes every moment richer: A lights the room, B makes it deep and alive between turns, and C makes the blows and payoffs land. They touch different moments, so they add up instead of competing.</li><li>At thumbnail size the ON frame is unmistakably richer than today in all four chapters, at rest and in combat.</li><li>The paintings stay the star: nothing repaints them, the combination damps the stacked glows, and the HUD is untouched DOM above the canvas.</li><li>It costs nothing measurable here: desktop and phone hold 60 fps with the phone tier, the same as today.</li><li>Every piece stays separately strikeable (?fxsub=-sway, -hitstop, -splash, -streaks), so you can keep D and drop any re-offer you still do not want.</li></ul>
+    <p class="small">If D feels busy in play, the next pick is A and B together (?fx=a,b): the lit, living room without C's combat layer, the calmest of the rich options. C alone changes nothing at rest, so it cannot carry the frame on its own.</p>
+    <p class="small"><strong>Judge's note</strong> (an independent agent that built none of the four; full report in <a href="JUDGE.md">JUDGE.md</a>). Scores out of 10: beauty A 6, B 7, C 6, D 9; mean over all seven criteria A 7.7, B 7.7, C 7.3, D 7.3. D is the right direction and the only one that reads as "maximum eye candy" at a glance, but not as tuned today. Mega Flare still blooms a white disc over Bahamut. Gagazet's painted moon turns into a sun. Steam and haze bury Bevelle's backdrop at rest. Hit rings hide the fighter they hit. Phone spells clip to blobs. All of these are dial fixes to make before you see D in play. The re-offers (sway, hit-stop, splash, Aerospark's lance) each need their own yes. Checked on a production build by real keys: ?fx=d runs in Chapters I and XVI at 1600x900 and 390x844 with no errors and holds the claimed 60 fps. Without ?fx, the build behaves like main. Fallback to show next: B + C, not yet captured.</p>
+  </section>
+
+  <section class="opt" id="opt-a" aria-labelledby="h-a">
+  <header class="opthead">
+    <span class="letter">A</span>
+    <div><p class="eyebrow">Light and lens</p><h2 id="h-a">Golden-Hour Cinema</h2><p class="switch">?fx=a</p></div>
+  </header>
+  <ol class="three"><li>A cinema post chain over the paintings: each room's own lights (moon, braziers, skylights, work lamps) throw slow beams and light the air round them.</li><li>Selective bloom (lights and spells glow, paint and costumes never do), a colour look built from each painting's own palette, grain, vignette, a key-matched rim on the figures.</li><li>Big spells, Overdrives and Specials fire a lens flare and make the room's light swell and settle.</li></ol>
+  <div class="games"><div class="g ffx"><h3>FFX <span>Chapters I and VII</span></h3><p>Golden Hour: shadows lean to the painting's sky, only the brightest tenth leans gold; soft wide bloom; long horizontal anamorphic streaks; slow beams for the calm of CTB; a gold anamorphic flare over 600 ms.</p></div><div class="g ffx2"><h3>FFX-2 <span>Chapters IV and XVI</span></h3><p>Pink Hour: violet shadows and pink highlights; tighter, stronger bloom; four-point star glints on every lamp; beams 1.6x faster for the ATB pace; a pink spark4 star flare with hex ghosts over 450 ms.</p></div></div>
+  <h3 class="sub">Before and after <span>drag the wipe; pick a moment</span></h3>
+  <div class="chgrid"><article class="chcard" data-opt="a" data-ch="seymour-flux">
+  <header class="chhead"><span class="chnum">I</span><div><h4>Seymour Flux</h4><p>Mt. Gagazet <span class="tag ffx">FFX</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="a/web/ch1-seymour-flux-rest-off.jpg" alt="Chapter I, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="a/web/ch1-seymour-flux-rest-on.jpg" alt="Chapter I, At rest, option A on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">A on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-a-ch1-seymour-flux" min="0" max="100" value="50" aria-label="Wipe between today and option A, chapter I">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">Moonbeams fall from the painted moon over the left crags through the blizzard haze; the cold navy grade, the silver rim on the party</p>
+  
+</article><article class="chcard" data-opt="a" data-ch="seymour-anima-macalania">
+  <header class="chhead"><span class="chnum">VII</span><div><h4>Seymour and Anima</h4><p>Macalania Temple <span class="tag ffx">FFX</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="a/web/ch7-macalania-rest-off.jpg" alt="Chapter VII, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="a/web/ch7-macalania-rest-on.jpg" alt="Chapter VII, At rest, option A on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">A on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-a-ch7-macalania" min="0" max="100" value="50" aria-label="Wipe between today and option A, chapter VII">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">The twin braziers burn gold with horizontal lens streaks; cold skylight falls through the ice windows in beams</p>
+  
+</article><article class="chcard" data-opt="a" data-ch="ffx2-bahamut">
+  <header class="chhead"><span class="chnum">IV</span><div><h4>Bahamut</h4><p>Bevelle Underground <span class="tag ffx2">FFX-2</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="a/web/ch4-bahamut-rest-off.jpg" alt="Chapter IV, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="a/web/ch4-bahamut-rest-on.jpg" alt="Chapter IV, At rest, option A on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">A on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-a-ch4-bahamut" min="0" max="100" value="50" aria-label="Wipe between today and option A, chapter IV">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">Pink hour: violet shadows, cyan-white light raining from the grated skylight, four-point stars on the orange lamps</p>
+  <p class="miss">Not captured: Spell (UNVERIFIED, nothing faked).</p>
+</article><article class="chcard" data-opt="a" data-ch="ffx2-ixion-djose">
+  <header class="chhead"><span class="chnum">XVI</span><div><h4>Ixion</h4><p>Djose Temple <span class="tag ffx2">FFX-2</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="a/web/ch16-ixion-rest-off.jpg" alt="Chapter XVI, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="a/web/ch16-ixion-rest-on.jpg" alt="Chapter XVI, At rest, option A on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">A on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-a-ch16-ixion" min="0" max="100" value="50" aria-label="Wipe between today and option A, chapter XVI">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">Pink hour in the round chamber: the amber work lamp glows into dusty air, a cold beam from the high opening, violet shadows</p>
+  <p class="miss">Not captured: Overdrive / Special (UNVERIFIED, nothing faked).</p>
+</article></div>
+  <div class="split">
+    <div class="phones"><h3 class="sub">On a phone <span>390x844, the phone tier</span></h3><div class="phonerow"><figure class="phone"><img src="a/web/ch1-seymour-flux-phone.jpg" alt="Chapter I on a phone, option A" loading="lazy" width="520" height="1125"><figcaption>I Mt. Gagazet</figcaption></figure><figure class="phone"><img src="a/web/ch7-macalania-phone.jpg" alt="Chapter VII on a phone, option A" loading="lazy" width="520" height="1125"><figcaption>VII Macalania Temple</figcaption></figure><figure class="phone"><img src="a/web/ch4-bahamut-phone.jpg" alt="Chapter IV on a phone, option A" loading="lazy" width="520" height="1125"><figcaption>IV Bevelle Underground</figcaption></figure><figure class="phone"><img src="a/web/ch16-ixion-phone.jpg" alt="Chapter XVI on a phone, option A" loading="lazy" width="520" height="1125"><figcaption>XVI Djose Temple</figcaption></figure></div></div>
+  </div>
+  <h3 class="sub">In motion <span>8 seconds round the Overdrive or Special</span></h3>
+  <div class="clips"><figure class="clip"><video controls muted playsinline preload="metadata" poster="a/web/ch1-seymour-flux-poster.jpg" width="1280" height="720"><source src="a/web/ch1-seymour-flux.mp4" type="video/mp4"></video><figcaption>I Mt. Gagazet <span class="tag ffx">FFX</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="a/web/ch7-macalania-poster.jpg" width="1280" height="720"><source src="a/web/ch7-macalania.mp4" type="video/mp4"></video><figcaption>VII Macalania Temple <span class="tag ffx">FFX</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="a/web/ch4-bahamut-poster.jpg" width="1280" height="720"><source src="a/web/ch4-bahamut.mp4" type="video/mp4"></video><figcaption>IV Bevelle Underground <span class="tag ffx2">FFX-2</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="a/web/ch16-ixion-poster.jpg" width="1280" height="720"><source src="a/web/ch16-ixion.mp4" type="video/mp4"></video><figcaption>XVI Djose Temple <span class="tag ffx2">FFX-2</span></figcaption></figure></div>
+  <h3 class="sub">Frame time <span>ms, vsync on, combat window</span></h3>
+  <div class="tablewrap"><table class="perf"><thead><tr><th rowspan="2">Chapter</th><th colspan="3">Desktop 1600x900</th><th colspan="3">Phone 390x844, CPU 4x</th></tr><tr><th>ON p50 / p95</th><th>OFF p95</th><th>Gate</th><th>ON p50 / p95</th><th>OFF p95</th><th>Gate</th></tr></thead><tbody><tr><th scope="row">I Mt. Gagazet</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.7</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">VII Macalania Temple</th><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">IV Bevelle Underground</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.7</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">XVI Djose Temple</th><td>16.7 / 16.7</td><td class="dim">16.8</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr></tbody></table></div>
+  <h3 class="sub">Faults</h3>
+  <ul class="faults"><li>At the peak of Spiral Cut and Mega Flare the centre whites out for about a third of a second (bloom, swell, halo and the approved burst stack up).</li><li>Gagazet's moon reads as a sunburst; bloom 0.7 keeps the painted disc.</li><li>Past all 1.3 it breaks: the look extrapolates (orange blotches in Macalania's windows) and rims turn into outlines.</li><li>FFX anamorphic streaks on lights at rest are an addition beyond the spec; strike them with ?fxsub=-streaks.</li><li>Aerospark (Ch XVI) and a Ch IV spell were never cast in the seeded runs: UNVERIFIED, nothing faked. Spiral Cut is INJECTED by its own debug trigger.</li></ul>
+</section>
+<section class="opt" id="opt-b" aria-labelledby="h-b">
+  <header class="opthead">
+    <span class="letter">B</span>
+    <div><p class="eyebrow">Depth and motion</p><h2 id="h-b">Living Paintings</h2><p class="switch">?fx=b</p></div>
+  </header>
+  <ol class="three"><li>Each approved painting is cut at run time into 3 or 4 depth plates (from depth maps made on the CPU); on the idle rig the camera arcs slowly and the painted world slides behind the fighters at its own depths.</li><li>The room's own air and light come alive: weather between the plates, lamps that glow and flicker, cold light crawling through ice.</li><li>Figures belong to the room: soft cast shadows from the key light, Macalania's ice floor mirrors everyone, and a gentle sway (a re-offer, strikeable).</li></ol>
+  <div class="games"><div class="g ffx"><h3>FFX <span>Chapters I and VII</span></h3><p>Gagazet: blizzard veils between the ridges, snow at three depths, the moon halo breathing, long blue moon shadows. Macalania: the reflecting ice floor, warm brazier halos, crystals twinkling. No pyreflies added (canon).</p></div><div class="g ffx2"><h3>FFX-2 <span>Chapters IV and XVI</span></h3><p>Bevelle: steam rising from the vents and banked between the gantries, rust lamps, cyan shimmer; no motes (&quot;steam, not motes&quot;). Djose: amber work lamp, blue arcs, dust, the floor projected so everyone stays planted. Drift runs 0.8x faster than FFX.</p></div></div>
+  <h3 class="sub">Before and after <span>drag the wipe; pick a moment</span></h3>
+  <div class="chgrid"><article class="chcard" data-opt="b" data-ch="seymour-flux">
+  <header class="chhead"><span class="chnum">I</span><div><h4>Seymour Flux</h4><p>Mt. Gagazet <span class="tag ffx">FFX</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="b/web/ch1-seymour-flux-rest-off.jpg" alt="Chapter I, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="b/web/ch1-seymour-flux-rest-on.jpg" alt="Chapter I, At rest, option B on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">B on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-b-ch1-seymour-flux" min="0" max="100" value="50" aria-label="Wipe between today and option B, chapter I">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button></div>
+  <p class="look">The blizzard: gusts of haze flowing between the painted ridges, heavy snow, big out-of-focus flakes crossing the lens, long moon shadows off the party</p>
+  <p class="miss">Not captured: Victory (UNVERIFIED, nothing faked).</p>
+</article><article class="chcard" data-opt="b" data-ch="seymour-anima-macalania">
+  <header class="chhead"><span class="chnum">VII</span><div><h4>Seymour and Anima</h4><p>Macalania Temple <span class="tag ffx">FFX</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="b/web/ch7-macalania-rest-off.jpg" alt="Chapter VII, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="b/web/ch7-macalania-rest-on.jpg" alt="Chapter VII, At rest, option B on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">B on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-b-ch7-macalania" min="0" max="100" value="50" aria-label="Wipe between today and option B, chapter VII">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">The ice floor mirrors the room: the glowing panes and every fighter reflected under them; the braziers breathe warm halos; ice crystals twinkle in the air</p>
+  
+</article><article class="chcard" data-opt="b" data-ch="ffx2-bahamut">
+  <header class="chhead"><span class="chnum">IV</span><div><h4>Bahamut</h4><p>Bevelle Underground <span class="tag ffx2">FFX-2</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="b/web/ch4-bahamut-rest-off.jpg" alt="Chapter IV, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="b/web/ch4-bahamut-rest-on.jpg" alt="Chapter IV, At rest, option B on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">B on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-b-ch4-bahamut" min="0" max="100" value="50" aria-label="Wipe between today and option B, chapter IV">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">Steam rising from the deck vents and banking between the gantries, the rust lamps glowing and flickering, the cyan hole light shimmering, a faint sheen of the fighters on the deck</p>
+  <p class="miss">Not captured: Spell (UNVERIFIED, nothing faked).</p>
+</article><article class="chcard" data-opt="b" data-ch="ffx2-ixion-djose">
+  <header class="chhead"><span class="chnum">XVI</span><div><h4>Ixion</h4><p>Djose Temple <span class="tag ffx2">FFX-2</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="b/web/ch16-ixion-rest-off.jpg" alt="Chapter XVI, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="b/web/ch16-ixion-rest-on.jpg" alt="Chapter XVI, At rest, option B on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">B on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-b-ch16-ixion" min="0" max="100" value="50" aria-label="Wipe between today and option B, chapter XVI">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">The work lamp glows and flickers amber, blue arcs crackle at the lamps, dust hangs in their light, and every fighter throws a long shadow across the painted stone</p>
+  <p class="miss">Not captured: Overdrive / Special (UNVERIFIED, nothing faked).</p>
+</article></div>
+  <div class="split">
+    <div class="phones"><h3 class="sub">On a phone <span>390x844, the phone tier</span></h3><div class="phonerow"><figure class="phone"><img src="b/web/ch1-seymour-flux-phone.jpg" alt="Chapter I on a phone, option B" loading="lazy" width="520" height="1125"><figcaption>I Mt. Gagazet</figcaption></figure><figure class="phone"><img src="b/web/ch7-macalania-phone.jpg" alt="Chapter VII on a phone, option B" loading="lazy" width="520" height="1125"><figcaption>VII Macalania Temple</figcaption></figure><figure class="phone"><img src="b/web/ch4-bahamut-phone.jpg" alt="Chapter IV on a phone, option B" loading="lazy" width="520" height="1125"><figcaption>IV Bevelle Underground</figcaption></figure><figure class="phone"><img src="b/web/ch16-ixion-phone.jpg" alt="Chapter XVI on a phone, option B" loading="lazy" width="520" height="1125"><figcaption>XVI Djose Temple</figcaption></figure></div></div>
+  </div>
+  <h3 class="sub">In motion <span>8 seconds round the Overdrive or Special</span></h3>
+  <div class="clips"><figure class="clip"><video controls muted playsinline preload="metadata" poster="b/web/ch1-seymour-flux-poster.jpg" width="1280" height="720"><source src="b/web/ch1-seymour-flux.mp4" type="video/mp4"></video><figcaption>I Mt. Gagazet <span class="tag ffx">FFX</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="b/web/ch7-macalania-poster.jpg" width="1280" height="720"><source src="b/web/ch7-macalania.mp4" type="video/mp4"></video><figcaption>VII Macalania Temple <span class="tag ffx">FFX</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="b/web/ch4-bahamut-poster.jpg" width="1280" height="720"><source src="b/web/ch4-bahamut.mp4" type="video/mp4"></video><figcaption>IV Bevelle Underground <span class="tag ffx2">FFX-2</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="b/web/ch16-ixion-poster.jpg" width="1280" height="720"><source src="b/web/ch16-ixion.mp4" type="video/mp4"></video><figcaption>XVI Djose Temple <span class="tag ffx2">FFX-2</span></figcaption></figure></div>
+  <h3 class="sub">Frame time <span>ms, vsync on, combat window</span></h3>
+  <div class="tablewrap"><table class="perf"><thead><tr><th rowspan="2">Chapter</th><th colspan="3">Desktop 1600x900</th><th colspan="3">Phone 390x844, CPU 4x</th></tr><tr><th>ON p50 / p95</th><th>OFF p95</th><th>Gate</th><th>ON p50 / p95</th><th>OFF p95</th><th>Gate</th></tr></thead><tbody><tr><th scope="row">I Mt. Gagazet</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.7</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">VII Macalania Temple</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">IV Bevelle Underground</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">XVI Djose Temple</th><td>16.7 / 16.8</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr></tbody></table></div>
+  <h3 class="sub">Faults</h3>
+  <ul class="faults"><li>The Djose work lamp runs hot: its painted mullions go soft at lamps 1.</li><li>A 1 to 2 px ghost of a near plate's edge can show at the extreme of the arc (pause the clip to see it).</li><li>Stills hold the drift at zero so ON and OFF share one camera; the depth only reads in the clips.</li><li>Figure sway re-offers the goal of cutout-animation, declined on 19 Sep (sub-switch sway).</li><li>Derived depth maps are committed in public/fx/ on the branch only; whether they may go to the public repo is still open.</li></ul>
+</section>
+<section class="opt" id="opt-c" aria-labelledby="h-c">
+  <header class="opthead">
+    <span class="letter">C</span>
+    <div><p class="eyebrow">Impact and payoff</p><h2 id="h-c">Spectacle Combat</h2><p class="switch">?fx=c</p></div>
+  </header>
+  <ol class="three"><li>Blows land hard: velocity-streak sparks, a double shock ring, a real hit-stop that freezes the field (never the engine or the HUD), a trauma-model camera shake.</li><li>A two-frame ink-and-paper impact frame on heavy blows, and 3D spell layers on top of the approved spells: flame columns, ice spikes, crawling lightning, nova rings.</li><li>Overdrives and Specials get a splash cut-in on an Ink &amp; Gold slab, then a payoff: gold ribbons, Mega Flare's shock shell, Ixion's lance. At rest C adds nothing on purpose.</li></ol>
+  <div class="games"><div class="g ffx"><h3>FFX <span>Chapters I and VII</span></h3><p>Gold and ivory with navy ink; 85 ms hit-stop on heavy blows; a calmer shake; an ivory splash slab with gold rules; gold ribbons for Overdrives; a 2.6 s victory arc; warm pyreflies on a send-off.</p></div><div class="g ffx2"><h3>FFX-2 <span>Chapters IV and XVI</span></h3><p>Pink and magenta with plum ink; hit-stop only on crits (ATB pace); a sharper shake; a pink slab with four-point stars; Mega Flare shell and Aerospark lance; Chapter IV holds with no celebration (canon).</p></div></div>
+  <h3 class="sub">Before and after <span>drag the wipe; pick a moment</span></h3>
+  <div class="chgrid"><article class="chcard" data-opt="c" data-ch="seymour-flux">
+  <header class="chhead"><span class="chnum">I</span><div><h4>Seymour Flux</h4><p>Mt. Gagazet <span class="tag ffx">FFX</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="c/web/ch1-seymour-flux-rest-off.jpg" alt="Chapter I, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="c/web/ch1-seymour-flux-rest-on.jpg" alt="Chapter I, At rest, option C on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">C on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-c-ch1-seymour-flux" min="0" max="100" value="50" aria-label="Wipe between today and option C, chapter I">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="impact">Impact frame</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">nothing: C is combat only, so the frame at rest is the approved frame, unchanged</p>
+  
+</article><article class="chcard" data-opt="c" data-ch="seymour-anima-macalania">
+  <header class="chhead"><span class="chnum">VII</span><div><h4>Seymour and Anima</h4><p>Macalania Temple <span class="tag ffx">FFX</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="c/web/ch7-macalania-rest-off.jpg" alt="Chapter VII, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="c/web/ch7-macalania-rest-on.jpg" alt="Chapter VII, At rest, option C on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">C on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-c-ch7-macalania" min="0" max="100" value="50" aria-label="Wipe between today and option C, chapter VII">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="impact">Impact frame</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">nothing: C is combat only, so the frame at rest is the approved frame, unchanged</p>
+  
+</article><article class="chcard" data-opt="c" data-ch="ffx2-bahamut">
+  <header class="chhead"><span class="chnum">IV</span><div><h4>Bahamut</h4><p>Bevelle Underground <span class="tag ffx2">FFX-2</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="c/web/ch4-bahamut-rest-off.jpg" alt="Chapter IV, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="c/web/ch4-bahamut-rest-on.jpg" alt="Chapter IV, At rest, option C on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">C on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-c-ch4-bahamut" min="0" max="100" value="50" aria-label="Wipe between today and option C, chapter IV">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="impact">Impact frame</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">nothing: C is combat only, so the frame at rest is the approved frame, unchanged</p>
+  
+</article><article class="chcard" data-opt="c" data-ch="ffx2-ixion-djose">
+  <header class="chhead"><span class="chnum">XVI</span><div><h4>Ixion</h4><p>Djose Temple <span class="tag ffx2">FFX-2</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="c/web/ch16-ixion-rest-off.jpg" alt="Chapter XVI, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="c/web/ch16-ixion-rest-on.jpg" alt="Chapter XVI, At rest, option C on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">C on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-c-ch16-ixion" min="0" max="100" value="50" aria-label="Wipe between today and option C, chapter XVI">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="impact">Impact frame</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">nothing: C is combat only, so the frame at rest is the approved frame, unchanged</p>
+  
+</article></div>
+  <div class="split">
+    <div class="phones"><h3 class="sub">On a phone <span>390x844, the phone tier</span></h3><div class="phonerow"><figure class="phone"><img src="c/web/ch1-seymour-flux-phone.jpg" alt="Chapter I on a phone, option C" loading="lazy" width="520" height="1125"><figcaption>I Mt. Gagazet</figcaption></figure><figure class="phone"><img src="c/web/ch7-macalania-phone.jpg" alt="Chapter VII on a phone, option C" loading="lazy" width="520" height="1125"><figcaption>VII Macalania Temple</figcaption></figure><figure class="phone"><img src="c/web/ch4-bahamut-phone.jpg" alt="Chapter IV on a phone, option C" loading="lazy" width="520" height="1125"><figcaption>IV Bevelle Underground</figcaption></figure><figure class="phone"><img src="c/web/ch16-ixion-phone.jpg" alt="Chapter XVI on a phone, option C" loading="lazy" width="520" height="1125"><figcaption>XVI Djose Temple</figcaption></figure></div></div>
+  </div>
+  <h3 class="sub">In motion <span>8 seconds round the Overdrive or Special</span></h3>
+  <div class="clips"><figure class="clip"><video controls muted playsinline preload="metadata" poster="c/web/ch1-seymour-flux-poster.jpg" width="1280" height="720"><source src="c/web/ch1-seymour-flux.mp4" type="video/mp4"></video><figcaption>I Mt. Gagazet <span class="tag ffx">FFX</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="c/web/ch7-macalania-poster.jpg" width="1280" height="720"><source src="c/web/ch7-macalania.mp4" type="video/mp4"></video><figcaption>VII Macalania Temple <span class="tag ffx">FFX</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="c/web/ch4-bahamut-poster.jpg" width="1280" height="720"><source src="c/web/ch4-bahamut.mp4" type="video/mp4"></video><figcaption>IV Bevelle Underground <span class="tag ffx2">FFX-2</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="c/web/ch16-ixion-poster.jpg" width="1280" height="720"><source src="c/web/ch16-ixion.mp4" type="video/mp4"></video><figcaption>XVI Djose Temple <span class="tag ffx2">FFX-2</span></figcaption></figure></div>
+  <h3 class="sub">Frame time <span>ms, vsync on, combat window</span></h3>
+  <div class="tablewrap"><table class="perf"><thead><tr><th rowspan="2">Chapter</th><th colspan="3">Desktop 1600x900</th><th colspan="3">Phone 390x844, CPU 4x</th></tr><tr><th>ON p50 / p95</th><th>OFF p95</th><th>Gate</th><th>ON p50 / p95</th><th>OFF p95</th><th>Gate</th></tr></thead><tbody><tr><th scope="row">I Mt. Gagazet</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">VII Macalania Temple</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">IV Bevelle Underground</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">XVI Djose Temple</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.7</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr></tbody></table></div>
+  <h3 class="sub">Faults</h3>
+  <ul class="faults"><li>Aerospark's lightning lance is a new Special look and needs your yes (D-233).</li><li>Bahamut's splash has no painting (slab and name only); the FFX-2 party Specials also get slab and name only.</li><li>Hit-stop and the splash re-offer hit-feel and overdrive-cinematic, declined on 19 Sep; each is its own sub-switch.</li><li>The ink impact frame is a flash risk: capped to one per action and three a second, softened under Reduce flashes.</li><li>The Chapter IV splash title sits partly under the telegraph's CHARGING chip.</li></ul>
+</section>
+<section class="opt" id="opt-d" aria-labelledby="h-d">
+  <header class="opthead">
+    <span class="letter">D</span>
+    <div><p class="eyebrow">A + B + C, balanced &#183; <span class="recmark">recommended</span></p><h2 id="h-d">All Three Together</h2><p class="switch">?fx=d</p></div>
+  </header>
+  <ol class="three"><li>A's light, B's depth and weather and C's combat payoff at once, behind one switch (?fx=d).</li><li>Where two options light the same thing, the combination is damped so they stop stacking: A's bloom 0.75x, haze 0.5x and beams 0.8x over B's lamps (0.4x); A's flare 0.7x over C's payoff. Each option alone is unchanged.</li><li>C's hit-stop now also holds B's drift and weather, so a freeze reads as one held frame.</li></ol>
+  <div class="games"><div class="g ffx"><h3>FFX <span>Chapters I and VII</span></h3><p>Gagazet: moon rays through blizzard veils and three depths of snow, long moon shadows. Macalania: gold brazier streaks and skylight beams mirrored in the ice floor, with ice spikes and gold ribbons reflected under the fighters. No pink, no four-point stars, no added pyreflies.</p></div><div class="g ffx2"><h3>FFX-2 <span>Chapters IV and XVI</span></h3><p>Bevelle: the pink-hour grade and lamp stars through banked steam; Mega Flare's shell with the pink star flare. Djose: the amber lamp in dusty air, arcs and the cold beam, crawling lightning. No gold motes, and Chapter IV still holds at the end.</p></div></div>
+  <h3 class="sub">Before and after <span>drag the wipe; pick a moment</span></h3>
+  <div class="chgrid"><article class="chcard" data-opt="d" data-ch="seymour-flux">
+  <header class="chhead"><span class="chnum">I</span><div><h4>Seymour Flux</h4><p>Mt. Gagazet <span class="tag ffx">FFX</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="d/web/ch1-seymour-flux-rest-off.jpg" alt="Chapter I, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="d/web/ch1-seymour-flux-rest-on.jpg" alt="Chapter I, At rest, option D on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">D on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-d-ch1-seymour-flux" min="0" max="100" value="50" aria-label="Wipe between today and option D, chapter I">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="impact">Impact frame</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">Gagazet: moon rays and lit air (A), blizzard veils between the depth plates and three depths of snow (B), long blue moon shadows; the approved painting stays the star and the HUD is untouched</p>
+  
+</article><article class="chcard" data-opt="d" data-ch="seymour-anima-macalania">
+  <header class="chhead"><span class="chnum">VII</span><div><h4>Seymour and Anima</h4><p>Macalania Temple <span class="tag ffx">FFX</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="d/web/ch7-macalania-rest-off.jpg" alt="Chapter VII, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="d/web/ch7-macalania-rest-on.jpg" alt="Chapter VII, At rest, option D on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">D on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-d-ch7-macalania" min="0" max="100" value="50" aria-label="Wipe between today and option D, chapter VII">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="impact">Impact frame</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">Macalania: gold brazier streaks and skylight beams (A), the ice floor mirroring panes and fighters (B), the teal-and-gold split; the approved painting stays the star and the HUD is untouched</p>
+  
+</article><article class="chcard" data-opt="d" data-ch="ffx2-bahamut">
+  <header class="chhead"><span class="chnum">IV</span><div><h4>Bahamut</h4><p>Bevelle Underground <span class="tag ffx2">FFX-2</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="d/web/ch4-bahamut-rest-off.jpg" alt="Chapter IV, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="d/web/ch4-bahamut-rest-on.jpg" alt="Chapter IV, At rest, option D on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">D on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-d-ch4-bahamut" min="0" max="100" value="50" aria-label="Wipe between today and option D, chapter IV">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="impact">Impact frame</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">Bevelle: the pink-hour grade and four-point lamp stars (A), steam banking between the gantries and the parting depth plates (B); the approved painting stays the star and the HUD is untouched</p>
+  
+</article><article class="chcard" data-opt="d" data-ch="ffx2-ixion-djose">
+  <header class="chhead"><span class="chnum">XVI</span><div><h4>Ixion</h4><p>Djose Temple <span class="tag ffx2">FFX-2</span></p></div></header>
+  <div class="wipe" style="--x:50%">
+    <img class="off" src="d/web/ch16-ixion-rest-off.jpg" alt="Chapter XVI, At rest, today" loading="lazy" width="1280" height="720">
+    <img class="on" src="d/web/ch16-ixion-rest-on.jpg" alt="Chapter XVI, At rest, option D on" loading="lazy" width="1280" height="720">
+    <span class="wl l">Today</span><span class="wl r">D on</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" id="w-d-ch16-ixion" min="0" max="100" value="50" aria-label="Wipe between today and option D, chapter XVI">
+  </div>
+  <div class="chips" role="group" aria-label="Moment"><button type="button" class="chip" aria-pressed="true" data-m="rest">At rest</button><button type="button" class="chip" aria-pressed="false" data-m="hit">Hit</button><button type="button" class="chip" aria-pressed="false" data-m="spell">Spell</button><button type="button" class="chip" aria-pressed="false" data-m="impact">Impact frame</button><button type="button" class="chip" aria-pressed="false" data-m="special">Overdrive / Special</button><button type="button" class="chip" aria-pressed="false" data-m="victory">Victory</button></div>
+  <p class="look">Djose: the amber work lamp in dusty air and the cold beam (A), sparks and dust at depth, the party planted on the projected floor (B); the approved painting stays the star and the HUD is untouched</p>
+  
+</article></div>
+  <div class="split">
+    <div class="phones"><h3 class="sub">On a phone <span>390x844, the phone tier</span></h3><div class="phonerow"><figure class="phone"><img src="d/web/ch1-seymour-flux-phone.jpg" alt="Chapter I on a phone, option D" loading="lazy" width="520" height="1125"><figcaption>I Mt. Gagazet</figcaption></figure><figure class="phone"><img src="d/web/ch7-macalania-phone.jpg" alt="Chapter VII on a phone, option D" loading="lazy" width="520" height="1125"><figcaption>VII Macalania Temple</figcaption></figure><figure class="phone"><img src="d/web/ch4-bahamut-phone.jpg" alt="Chapter IV on a phone, option D" loading="lazy" width="520" height="1125"><figcaption>IV Bevelle Underground</figcaption></figure><figure class="phone"><img src="d/web/ch16-ixion-phone.jpg" alt="Chapter XVI on a phone, option D" loading="lazy" width="520" height="1125"><figcaption>XVI Djose Temple</figcaption></figure></div></div>
+  </div>
+  <h3 class="sub">In motion <span>8 seconds round the Overdrive or Special</span></h3>
+  <div class="clips"><figure class="clip"><video controls muted playsinline preload="metadata" poster="d/web/ch1-seymour-flux-poster.jpg" width="1280" height="720"><source src="d/web/ch1-seymour-flux.mp4" type="video/mp4"></video><figcaption>I Mt. Gagazet <span class="tag ffx">FFX</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="d/web/ch7-macalania-poster.jpg" width="1280" height="720"><source src="d/web/ch7-macalania.mp4" type="video/mp4"></video><figcaption>VII Macalania Temple <span class="tag ffx">FFX</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="d/web/ch4-bahamut-poster.jpg" width="1280" height="720"><source src="d/web/ch4-bahamut.mp4" type="video/mp4"></video><figcaption>IV Bevelle Underground <span class="tag ffx2">FFX-2</span></figcaption></figure><figure class="clip"><video controls muted playsinline preload="metadata" poster="d/web/ch16-ixion-poster.jpg" width="1280" height="720"><source src="d/web/ch16-ixion.mp4" type="video/mp4"></video><figcaption>XVI Djose Temple <span class="tag ffx2">FFX-2</span></figcaption></figure></div>
+  <h3 class="sub">Frame time <span>ms, vsync on, combat window</span></h3>
+  <div class="tablewrap"><table class="perf"><thead><tr><th rowspan="2">Chapter</th><th colspan="3">Desktop 1600x900</th><th colspan="3">Phone 390x844, CPU 4x</th></tr><tr><th>ON p50 / p95</th><th>OFF p95</th><th>Gate</th><th>ON p50 / p95</th><th>OFF p95</th><th>Gate</th></tr></thead><tbody><tr><th scope="row">I Mt. Gagazet</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">VII Macalania Temple</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">IV Bevelle Underground</th><td>16.7 / 16.8</td><td class="dim">16.8</td><td><span class="ok">pass</span></td><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td></tr><tr><th scope="row">XVI Djose Temple</th><td>16.7 / 16.7</td><td class="dim">16.7</td><td><span class="ok">pass</span></td><td>16.7 / 16.8</td><td class="dim">16.7</td><td><span class="ok">pass</span></td></tr></tbody></table></div>
+  <h3 class="sub">Faults</h3>
+  <ul class="faults"><li>The biggest moments are still very bright: Mega Flare and Spiral Cut keep their target readable, but the frame round the blow goes pale for a beat. ?fxdial=bloom:0.8,flare:0.8 calms it.</li><li>Gagazet's moon is a starburst rather than the painted disc (A's streaks on B's halo); ?fxsub=-streaks keeps the disc.</li><li>B's drift frames the room a little differently on every run, so ON and OFF match but two runs do not.</li><li>Carries every re-offer and open question of A, B and C: hit-stop, the splash and figure sway (declined 19 Sep, each strikeable), Aerospark's new look, Bahamut's splash without a painting, the warm Djose lamp.</li><li>Chapter IV's spell is INJECTED (the seeded fight casts none). Every other moment was reached by the real auto-battle in all four chapters.</li></ul>
+</section>
+
+  <footer>
+    <p>Captures: production builds of each prototype branch, headless Chrome on the real GPU. Stills 1600x900 frozen at the moment's peak, shot ON then OFF on the same frame (shown here at 1280 wide). Phone stills at 390x844, device pixel ratio 3. Clips re-encoded at 1280 wide for this page; the 1600x900 originals and captions.json sit beside it in each option's folder.</p>
+    <p>Frame time is the rAF interval under vsync (60 Hz = 16.7 ms); the gate is p95 at most 17.0 ms on desktop and 33.4 ms on the phone, and ON no worse than OFF by more than 0.3 ms. The phone run throttles the CPU 4x but still renders on the desktop GPU.</p>
+    <p>INJECTED marks a moment played by its own debug trigger because the seeded fight never reached it; UNVERIFIED marks a moment that never happened and was not faked.</p>
+  </footer>
+</main>
+
+<script>
+const DATA = {"a":{"seymour-flux":[{"m":"rest","on":"a/web/ch1-seymour-flux-rest-on.jpg","off":"a/web/ch1-seymour-flux-rest-off.jpg","look":"Moonbeams fall from the painted moon over the left crags through the blizzard haze; the cold navy grade, the silver rim on the party","injected":false,"note":""},{"m":"hit","on":"a/web/ch1-seymour-flux-hit-on.jpg","off":"a/web/ch1-seymour-flux-hit-off.jpg","look":"The strike's glow and the anamorphic streak on its brightest spark; the backdrop softer behind the fighters","injected":false,"note":""},{"m":"spell","on":"a/web/ch1-seymour-flux-spell-on.jpg","off":"a/web/ch1-seymour-flux-spell-off.jpg","look":"The spell's halo spilling into the snow and the light swelling as it lands","injected":false,"note":""},{"m":"special","on":"a/web/ch1-seymour-flux-special-on.jpg","off":"a/web/ch1-seymour-flux-special-off.jpg","look":"Spiral Cut: the gold anamorphic lens flare across the frame and the swell of bloom and shafts","injected":true,"note":"INJECTED: Spiral Cut drawn by the debug trigger spellfx:spiral (presentation only, held at 1.5 s, just past its blow at 1.43 s). The real auto-battle won before Tidus's Overdrive gauge filled, and the engine is never faked. HUD hidden."},{"m":"victory","on":"a/web/ch1-seymour-flux-victory-on.jpg","off":"a/web/ch1-seymour-flux-victory-off.jpg","look":"The victory frame under the golden-hour grade; the moonbeams still turning","injected":false,"note":""}],"seymour-anima-macalania":[{"m":"rest","on":"a/web/ch7-macalania-rest-on.jpg","off":"a/web/ch7-macalania-rest-off.jpg","look":"The twin braziers burn gold with horizontal lens streaks; cold skylight falls through the ice windows in beams","injected":false,"note":""},{"m":"hit","on":"a/web/ch7-macalania-hit-on.jpg","off":"a/web/ch7-macalania-hit-off.jpg","look":"The strike's spark glows and streaks; the ice windows keep their painted detail","injected":false,"note":""},{"m":"spell","on":"a/web/ch7-macalania-spell-on.jpg","off":"a/web/ch7-macalania-spell-off.jpg","look":"Seymour's ice: the crystals glow into the floor, the braziers and window beams behind","injected":false,"note":""},{"m":"special","on":"a/web/ch7-macalania-special-on.jpg","off":"a/web/ch7-macalania-special-off.jpg","look":"Spiral Cut: the gold anamorphic flare and the swell","injected":true,"note":"INJECTED: Spiral Cut drawn by the debug trigger spellfx:spiral (presentation only, held at 1.5 s, just past its blow at 1.43 s). The real auto-battle won before Tidus's Overdrive gauge filled, and the engine is never faked. HUD hidden."},{"m":"victory","on":"a/web/ch7-macalania-victory-on.jpg","off":"a/web/ch7-macalania-victory-off.jpg","look":"The victory frame in gold and teal","injected":false,"note":""}],"ffx2-bahamut":[{"m":"rest","on":"a/web/ch4-bahamut-rest-on.jpg","off":"a/web/ch4-bahamut-rest-off.jpg","look":"Pink hour: violet shadows, cyan-white light raining from the grated skylight, four-point stars on the orange lamps","injected":false,"note":""},{"m":"hit","on":"a/web/ch4-bahamut-hit-on.jpg","off":"a/web/ch4-bahamut-hit-off.jpg","look":"The hit spark's star glint and halo","injected":false,"note":""},{"m":"spell","missing":true},{"m":"special","on":"a/web/ch4-bahamut-special-on.jpg","off":"a/web/ch4-bahamut-special-off.jpg","look":"Mega Flare: the pink star flare with hex ghosts and the swell of bloom","injected":false,"note":""},{"m":"victory","on":"a/web/ch4-bahamut-victory-on.jpg","off":"a/web/ch4-bahamut-victory-off.jpg","look":"The held frame (canon: no celebration after Bahamut) under the pink-hour grade","injected":false,"note":""}],"ffx2-ixion-djose":[{"m":"rest","on":"a/web/ch16-ixion-rest-on.jpg","off":"a/web/ch16-ixion-rest-off.jpg","look":"Pink hour in the round chamber: the amber work lamp glows into dusty air, a cold beam from the high opening, violet shadows","injected":false,"note":""},{"m":"hit","on":"a/web/ch16-ixion-hit-on.jpg","off":"a/web/ch16-ixion-hit-off.jpg","look":"The hit spark's star glint and halo","injected":false,"note":""},{"m":"spell","on":"a/web/ch16-ixion-spell-on.jpg","off":"a/web/ch16-ixion-spell-off.jpg","look":"Ixion's Thundara: the bolt's gold halo spilling onto the party","injected":false,"note":""},{"m":"special","missing":true},{"m":"victory","on":"a/web/ch16-ixion-victory-on.jpg","off":"a/web/ch16-ixion-victory-off.jpg","look":"The victory frame under the pink-hour grade","injected":false,"note":""}]},"b":{"seymour-flux":[{"m":"rest","on":"b/web/ch1-seymour-flux-rest-on.jpg","off":"b/web/ch1-seymour-flux-rest-off.jpg","look":"The blizzard: gusts of haze flowing between the painted ridges, heavy snow, big out-of-focus flakes crossing the lens, long moon shadows off the party","injected":false,"note":""},{"m":"hit","on":"b/web/ch1-seymour-flux-hit-on.jpg","off":"b/web/ch1-seymour-flux-hit-off.jpg","look":"The strike lands inside the weather: spindrift over the snow, flakes over the fighters, the cast shadows","injected":false,"note":""},{"m":"spell","on":"b/web/ch1-seymour-flux-spell-on.jpg","off":"b/web/ch1-seymour-flux-spell-off.jpg","look":"The spell in the blizzard: snow and haze keep moving around it","injected":false,"note":""},{"m":"special","on":"b/web/ch1-seymour-flux-special-on.jpg","off":"b/web/ch1-seymour-flux-special-off.jpg","look":"Spiral Cut inside the storm (the effect is the approved one; B adds only the room around it)","injected":true,"note":"INJECTED: spiral drawn by the debug trigger spellfx:spiral (presentation only, held at 1.5 s). The real auto-battle won before the Overdrive gauge filled; the engine is never faked. Stills are taken with the camera drift (B2) held at zero so ON and OFF share one camera; the drift, the flicker and the plates parting show in the clips."},{"m":"victory","missing":true}],"seymour-anima-macalania":[{"m":"rest","on":"b/web/ch7-macalania-rest-on.jpg","off":"b/web/ch7-macalania-rest-off.jpg","look":"The ice floor mirrors the room: the glowing panes and every fighter reflected under them; the braziers breathe warm halos; ice crystals twinkle in the air","injected":false,"note":""},{"m":"hit","on":"b/web/ch7-macalania-hit-on.jpg","off":"b/web/ch7-macalania-hit-off.jpg","look":"The hit reflected in the ice floor","injected":false,"note":""},{"m":"spell","on":"b/web/ch7-macalania-spell-on.jpg","off":"b/web/ch7-macalania-spell-off.jpg","look":"Seymour's spell doubled in the ice floor; crystals and brazier light around it","injected":false,"note":""},{"m":"special","on":"b/web/ch7-macalania-special-on.jpg","off":"b/web/ch7-macalania-special-off.jpg","look":"Spiral Cut reflected in the frozen lake","injected":true,"note":"INJECTED: spiral drawn by the debug trigger spellfx:spiral (presentation only, held at 1.5 s). The real auto-battle won before the Overdrive gauge filled; the engine is never faked. Stills are taken with the camera drift (B2) held at zero so ON and OFF share one camera; the drift, the flicker and the plates parting show in the clips."},{"m":"victory","on":"b/web/ch7-macalania-victory-on.jpg","off":"b/web/ch7-macalania-victory-off.jpg","look":"The victory pose standing on its own reflection","injected":false,"note":""}],"ffx2-bahamut":[{"m":"rest","on":"b/web/ch4-bahamut-rest-on.jpg","off":"b/web/ch4-bahamut-rest-off.jpg","look":"Steam rising from the deck vents and banking between the gantries, the rust lamps glowing and flickering, the cyan hole light shimmering, a faint sheen of the fighters on the deck","injected":false,"note":""},{"m":"hit","on":"b/web/ch4-bahamut-hit-on.jpg","off":"b/web/ch4-bahamut-hit-off.jpg","look":"The hit through rising steam; the deck sheen under the fighters","injected":false,"note":""},{"m":"spell","missing":true},{"m":"special","on":"b/web/ch4-bahamut-special-on.jpg","off":"b/web/ch4-bahamut-special-off.jpg","look":"Mega Flare inside the steam-filled hall (the effect is the approved one; B adds the room)","injected":false,"note":""},{"m":"victory","on":"b/web/ch4-bahamut-victory-on.jpg","off":"b/web/ch4-bahamut-victory-off.jpg","look":"The held frame (canon: no celebration after Bahamut), steam still rising","injected":false,"note":""}],"ffx2-ixion-djose":[{"m":"rest","on":"b/web/ch16-ixion-rest-on.jpg","off":"b/web/ch16-ixion-rest-off.jpg","look":"The work lamp glows and flickers amber, blue arcs crackle at the lamps, dust hangs in their light, and every fighter throws a long shadow across the painted stone","injected":false,"note":""},{"m":"hit","on":"b/web/ch16-ixion-hit-on.jpg","off":"b/web/ch16-ixion-hit-off.jpg","look":"The hit with the lamp light and shadows around it","injected":false,"note":""},{"m":"spell","on":"b/web/ch16-ixion-spell-on.jpg","off":"b/web/ch16-ixion-spell-off.jpg","look":"Ixion's Thundara with the chamber's own arcs and lamp glow around it","injected":false,"note":""},{"m":"special","missing":true},{"m":"victory","on":"b/web/ch16-ixion-victory-on.jpg","off":"b/web/ch16-ixion-victory-off.jpg","look":"The victory frame in lamp light and dust","injected":false,"note":""}]},"c":{"seymour-flux":[{"m":"rest","on":"c/web/ch1-seymour-flux-rest-on.jpg","off":"c/web/ch1-seymour-flux-rest-off.jpg","look":"nothing: C is combat only, so the frame at rest is the approved frame, unchanged","injected":false,"note":""},{"m":"hit","on":"c/web/ch1-seymour-flux-hit-on.jpg","off":"c/web/ch1-seymour-flux-hit-off.jpg","look":"gold streaks thrown off the blow, a double gold shock ring and a four-armed glint; the gold foil numeral","injected":false,"note":""},{"m":"spell","on":"c/web/ch1-seymour-flux-spell-on.jpg","off":"c/web/ch1-seymour-flux-spell-off.jpg","look":"the element layer over the approved option-B spell: noise fire column and embers, crystal spikes from the floor, branching lightning, or the nova rings","injected":false,"note":""},{"m":"impact","on":"c/web/ch1-seymour-flux-impact-on.jpg","off":"c/web/ch1-seymour-flux-impact-off.jpg","look":"the two-frame ink-and-paper impact frame: navy ink, ivory paper, gold edge lines, ink speed lines from the blow","injected":false,"note":""},{"m":"special","on":"c/web/ch1-seymour-flux-special-on.jpg","off":"c/web/ch1-seymour-flux-special-off.jpg","look":"the Overdrive payoff: gold ribbons wound round the target, the ring and the trauma shake","injected":false,"note":""},{"m":"victory","on":"c/web/ch1-seymour-flux-victory-on.jpg","off":"c/web/ch1-seymour-flux-victory-off.jpg","look":"the victory arc (12 degrees round the party, a rise and a push), the warm floor glow and the rim swell","injected":false,"note":""}],"seymour-anima-macalania":[{"m":"rest","on":"c/web/ch7-macalania-rest-on.jpg","off":"c/web/ch7-macalania-rest-off.jpg","look":"nothing: C is combat only, so the frame at rest is the approved frame, unchanged","injected":false,"note":""},{"m":"hit","on":"c/web/ch7-macalania-hit-on.jpg","off":"c/web/ch7-macalania-hit-off.jpg","look":"gold streaks thrown off the blow, a double gold shock ring and a four-armed glint; the gold foil numeral","injected":false,"note":""},{"m":"spell","on":"c/web/ch7-macalania-spell-on.jpg","off":"c/web/ch7-macalania-spell-off.jpg","look":"the element layer over the approved option-B spell: noise fire column and embers, crystal spikes from the floor, branching lightning, or the nova rings","injected":false,"note":""},{"m":"impact","on":"c/web/ch7-macalania-impact-on.jpg","off":"c/web/ch7-macalania-impact-off.jpg","look":"the two-frame ink-and-paper impact frame: navy ink, ivory paper, gold edge lines, ink speed lines from the blow","injected":false,"note":""},{"m":"special","on":"c/web/ch7-macalania-special-on.jpg","off":"c/web/ch7-macalania-special-off.jpg","look":"the Overdrive payoff: gold ribbons wound round the target, the ring and the trauma shake","injected":false,"note":""},{"m":"victory","on":"c/web/ch7-macalania-victory-on.jpg","off":"c/web/ch7-macalania-victory-off.jpg","look":"the victory arc (12 degrees round the party, a rise and a push), the warm floor glow and the rim swell","injected":false,"note":""}],"ffx2-bahamut":[{"m":"rest","on":"c/web/ch4-bahamut-rest-on.jpg","off":"c/web/ch4-bahamut-rest-off.jpg","look":"nothing: C is combat only, so the frame at rest is the approved frame, unchanged","injected":false,"note":""},{"m":"hit","on":"c/web/ch4-bahamut-hit-on.jpg","off":"c/web/ch4-bahamut-hit-off.jpg","look":"pink streaks with four-point glints, a double pink ring; the pink foil numeral","injected":false,"note":""},{"m":"spell","on":"c/web/ch4-bahamut-spell-on.jpg","off":"c/web/ch4-bahamut-spell-off.jpg","look":"the element layer over the approved option-B spell: noise fire column and embers, crystal spikes from the floor, branching lightning, or the nova rings","injected":true,"note":"INJECTED: fire on the boss at the first menu (the chapter's own fight casts no elemental spell at seed 1)"},{"m":"impact","on":"c/web/ch4-bahamut-impact-on.jpg","off":"c/web/ch4-bahamut-impact-off.jpg","look":"the two-frame impact frame in plum ink and pink paper with a pink edge, speed lines from the blow","injected":false,"note":""},{"m":"special","on":"c/web/ch4-bahamut-special-on.jpg","off":"c/web/ch4-bahamut-special-off.jpg","look":"the Special payoff (Mega Flare shell and debris, or the Aerospark lance: a new look that needs your yes)","injected":false,"note":""},{"m":"victory","on":"c/web/ch4-bahamut-victory-on.jpg","off":"c/web/ch4-bahamut-victory-off.jpg","look":"Chapter IV holds (no celebration, research 2.2): only a slow sombre push; the extra pyreflies of the richer send-off","injected":false,"note":""}],"ffx2-ixion-djose":[{"m":"rest","on":"c/web/ch16-ixion-rest-on.jpg","off":"c/web/ch16-ixion-rest-off.jpg","look":"nothing: C is combat only, so the frame at rest is the approved frame, unchanged","injected":false,"note":""},{"m":"hit","on":"c/web/ch16-ixion-hit-on.jpg","off":"c/web/ch16-ixion-hit-off.jpg","look":"pink streaks with four-point glints, a double pink ring; the pink foil numeral","injected":false,"note":""},{"m":"spell","on":"c/web/ch16-ixion-spell-on.jpg","off":"c/web/ch16-ixion-spell-off.jpg","look":"the element layer over the approved option-B spell: noise fire column and embers, crystal spikes from the floor, branching lightning, or the nova rings","injected":false,"note":""},{"m":"impact","on":"c/web/ch16-ixion-impact-on.jpg","off":"c/web/ch16-ixion-impact-off.jpg","look":"the two-frame impact frame in plum ink and pink paper with a pink edge, speed lines from the blow","injected":false,"note":""},{"m":"special","on":"c/web/ch16-ixion-special-on.jpg","off":"c/web/ch16-ixion-special-off.jpg","look":"the Special payoff (Mega Flare shell and debris, or the Aerospark lance: a new look that needs your yes)","injected":false,"note":""},{"m":"victory","on":"c/web/ch16-ixion-victory-on.jpg","off":"c/web/ch16-ixion-victory-off.jpg","look":"the victory arc (12 degrees round the party, a rise and a push), the warm floor glow and the rim swell, one pink sparkle sweep","injected":false,"note":""}]},"d":{"seymour-flux":[{"m":"rest","on":"d/web/ch1-seymour-flux-rest-on.jpg","off":"d/web/ch1-seymour-flux-rest-off.jpg","look":"Gagazet: moon rays and lit air (A), blizzard veils between the depth plates and three depths of snow (B), long blue moon shadows; the approved painting stays the star and the HUD is untouched","injected":false,"note":""},{"m":"hit","on":"d/web/ch1-seymour-flux-hit-on.jpg","off":"d/web/ch1-seymour-flux-hit-off.jpg","look":"gold streaks and a double shock ring off the blow (C) inside the lit room (A, B); the gold foil numeral","injected":false,"note":""},{"m":"spell","on":"d/web/ch1-seymour-flux-spell-on.jpg","off":"d/web/ch1-seymour-flux-spell-off.jpg","look":"the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)","injected":false,"note":""},{"m":"impact","on":"d/web/ch1-seymour-flux-impact-on.jpg","off":"d/web/ch1-seymour-flux-impact-off.jpg","look":"the two-frame ink-and-paper impact frame (C), navy and gold, taken over the graded room","injected":false,"note":""},{"m":"special","on":"d/web/ch1-seymour-flux-special-on.jpg","off":"d/web/ch1-seymour-flux-special-off.jpg","look":"the Overdrive payoff: gold ribbons (C) plus the gold anamorphic flare and the room swell (A)","injected":false,"note":""},{"m":"victory","on":"d/web/ch1-seymour-flux-victory-on.jpg","off":"d/web/ch1-seymour-flux-victory-off.jpg","look":"the victory arc round the party (C) with the room lit and moving behind (A, B)","injected":false,"note":""}],"seymour-anima-macalania":[{"m":"rest","on":"d/web/ch7-macalania-rest-on.jpg","off":"d/web/ch7-macalania-rest-off.jpg","look":"Macalania: gold brazier streaks and skylight beams (A), the ice floor mirroring panes and fighters (B), the teal-and-gold split; the approved painting stays the star and the HUD is untouched","injected":false,"note":""},{"m":"hit","on":"d/web/ch7-macalania-hit-on.jpg","off":"d/web/ch7-macalania-hit-off.jpg","look":"gold streaks and a double shock ring off the blow (C) inside the lit room (A, B); the gold foil numeral","injected":false,"note":""},{"m":"spell","on":"d/web/ch7-macalania-spell-on.jpg","off":"d/web/ch7-macalania-spell-off.jpg","look":"the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)","injected":false,"note":""},{"m":"impact","on":"d/web/ch7-macalania-impact-on.jpg","off":"d/web/ch7-macalania-impact-off.jpg","look":"the two-frame ink-and-paper impact frame (C), navy and gold, taken over the graded room","injected":false,"note":""},{"m":"special","on":"d/web/ch7-macalania-special-on.jpg","off":"d/web/ch7-macalania-special-off.jpg","look":"the Overdrive payoff: gold ribbons (C) plus the gold anamorphic flare and the room swell (A)","injected":false,"note":""},{"m":"victory","on":"d/web/ch7-macalania-victory-on.jpg","off":"d/web/ch7-macalania-victory-off.jpg","look":"the victory arc round the party (C) with the room lit and moving behind (A, B)","injected":false,"note":""}],"ffx2-bahamut":[{"m":"rest","on":"d/web/ch4-bahamut-rest-on.jpg","off":"d/web/ch4-bahamut-rest-off.jpg","look":"Bevelle: the pink-hour grade and four-point lamp stars (A), steam banking between the gantries and the parting depth plates (B); the approved painting stays the star and the HUD is untouched","injected":false,"note":""},{"m":"hit","on":"d/web/ch4-bahamut-hit-on.jpg","off":"d/web/ch4-bahamut-hit-off.jpg","look":"pink streaks with four-point glints and a double ring (C) in the pink-hour room (A, B); the pink foil numeral","injected":false,"note":""},{"m":"spell","on":"d/web/ch4-bahamut-spell-on.jpg","off":"d/web/ch4-bahamut-spell-off.jpg","look":"the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)","injected":true,"note":"INJECTED: fire on the boss at the first menu (the chapter's own fight casts no elemental spell at seed 1)"},{"m":"impact","on":"d/web/ch4-bahamut-impact-on.jpg","off":"d/web/ch4-bahamut-impact-off.jpg","look":"the two-frame impact frame (C) in plum and pink, taken over the graded room","injected":false,"note":""},{"m":"special","on":"d/web/ch4-bahamut-special-on.jpg","off":"d/web/ch4-bahamut-special-off.jpg","look":"the Special payoff (C) plus the pink star flare with hex ghosts (A)","injected":false,"note":""},{"m":"victory","on":"d/web/ch4-bahamut-victory-on.jpg","off":"d/web/ch4-bahamut-victory-off.jpg","look":"Chapter IV holds (no celebration): a slow sombre push in the pink-hour room","injected":false,"note":""}],"ffx2-ixion-djose":[{"m":"rest","on":"d/web/ch16-ixion-rest-on.jpg","off":"d/web/ch16-ixion-rest-off.jpg","look":"Djose: the amber work lamp in dusty air and the cold beam (A), sparks and dust at depth, the party planted on the projected floor (B); the approved painting stays the star and the HUD is untouched","injected":false,"note":""},{"m":"hit","on":"d/web/ch16-ixion-hit-on.jpg","off":"d/web/ch16-ixion-hit-off.jpg","look":"pink streaks with four-point glints and a double ring (C) in the pink-hour room (A, B); the pink foil numeral","injected":false,"note":""},{"m":"spell","on":"d/web/ch16-ixion-spell-on.jpg","off":"d/web/ch16-ixion-spell-off.jpg","look":"the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)","injected":false,"note":""},{"m":"impact","on":"d/web/ch16-ixion-impact-on.jpg","off":"d/web/ch16-ixion-impact-off.jpg","look":"the two-frame impact frame (C) in plum and pink, taken over the graded room","injected":false,"note":""},{"m":"special","on":"d/web/ch16-ixion-special-on.jpg","off":"d/web/ch16-ixion-special-off.jpg","look":"the Special payoff (C) plus the pink star flare with hex ghosts (A)","injected":false,"note":""},{"m":"victory","on":"d/web/ch16-ixion-victory-on.jpg","off":"d/web/ch16-ixion-victory-off.jpg","look":"the victory arc round the party (C) with the room lit and moving behind (A, B)","injected":false,"note":""}]}};
+const LABEL = {"rest":"At rest","hit":"Hit","spell":"Spell","impact":"Impact frame","special":"Overdrive / Special","victory":"Victory"};
+document.querySelectorAll('.wipe input').forEach((r) => {
+  r.addEventListener('input', () => r.parentElement.style.setProperty('--x', r.value + '%'));
+});
+document.querySelectorAll('.chcard').forEach((card) => {
+  const o = card.dataset.opt, ch = card.dataset.ch;
+  card.querySelectorAll('.chip').forEach((b) => b.addEventListener('click', () => {
+    const m = DATA[o][ch].find((x) => x.m === b.dataset.m);
+    if (!m) return;
+    card.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+    const off = card.querySelector('img.off'), on = card.querySelector('img.on');
+    off.src = m.off; on.src = m.on;
+    off.alt = off.alt.replace(/, [^,]+, today$/, ', ' + LABEL[m.m] + ', today');
+    card.querySelector('.look').innerHTML = '';
+    card.querySelector('.look').append(document.createTextNode(m.look));
+    if (m.injected) { const s = document.createElement('span'); s.className = 'flag'; s.textContent = ' INJECTED'; card.querySelector('.look').append(s); }
+  }));
+});
+document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach((x) => x.setAttribute('aria-pressed', String(x === t)));
+  document.querySelectorAll('.striprow').forEach((r) => { r.hidden = r.dataset.ch !== t.dataset.ch; });
+}));
+</script>

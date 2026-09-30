@@ -11,6 +11,7 @@
  * coercion: a stored value that is not one of the three sizes, or a flag that is
  * not a boolean, reads as the default instead of reaching the layout (CHK-024).
  * It coerces, it never decides: there is no one-time rule and no veteran rule.
+ * Eye-candy D's three look rows (`fxLooks.ts`, default ON) are coerced here too.
  *
  * Its own module only because `SaveData.ts` is over the house line cap.
  *
@@ -18,6 +19,9 @@
  */
 
 import type { Settings } from './SaveData.ts';
+import { migrateFxLooks } from './fxLooks.ts';
+
+export { defaultFxLooks, type FxLookSettings } from './fxLooks.ts';
 
 /** TEXT SIZE's three steps, smallest first: 100, 115 and 130 %. */
 export const TEXT_SIZES = [1, 1.15, 1.3] as const;
@@ -50,4 +54,5 @@ export function migrateComfort(settings: Settings, defaults: Readonly<Settings>)
   if (!isTextSize(settings.textSize)) settings.textSize = 1;
   if (typeof settings.reduceMotion !== 'boolean') settings.reduceMotion = defaults.reduceMotion;
   if (typeof settings.lowEffects !== 'boolean') settings.lowEffects = false;
+  migrateFxLooks(settings); // eye-candy D's three look rows: anything but a boolean reads as ON
 }

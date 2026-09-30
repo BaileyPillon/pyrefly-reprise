@@ -37,6 +37,12 @@ docs/concepts/pause-until-dawn/prototype-v2/art/patches/_cand/
 # the real backup is robocopy snapshots under D:\Tools\pyrefly-art-backup\.
 public/art/
 #
+# Eye-candy D's derived files (option B's depth maps of the approved paintings). Local like
+# public/art; tools/fx/fx-assets.json holds their names and hashes, tools/fx-assets.mjs
+# verifies, backs up (D:/Tools/pyrefly-art-backup/fx) and restores them, and the deploy
+# refuses a build without them.
+public/fx/
+#
 # Audio previews from tools/render-track.mjs (~10 MB each). Nothing ships as an
 # audio file — the game synthesises everything at runtime — so these are
 # previews only and regenerate with `node tools/render-track.mjs all`.

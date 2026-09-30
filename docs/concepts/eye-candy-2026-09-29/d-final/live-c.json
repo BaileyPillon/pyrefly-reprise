@@ -1,0 +1,111 @@
+{
+ "steps": [
+  {
+   "step": "battle started with BATTLE SPECTACLE OFF",
+   "on": {
+    "a": true,
+    "b": true,
+    "c": false
+   },
+   "c": {
+    "hits": 0,
+    "impactFrames": 0,
+    "freezes": 0,
+    "spells": 0,
+    "splashes": 0,
+    "sends": 0,
+    "lastHitAt": -1,
+    "lastKind": "",
+    "clock": 0,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   }
+  },
+  {
+   "step": "12 s of fight with C OFF",
+   "on": {
+    "a": true,
+    "b": true,
+    "c": false
+   },
+   "c": {
+    "hits": 0,
+    "impactFrames": 0,
+    "freezes": 0,
+    "spells": 0,
+    "splashes": 0,
+    "sends": 0,
+    "lastHitAt": -1,
+    "lastKind": "",
+    "clock": 0,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   }
+  },
+  {
+   "step": "row ON mid-fight, 12 s later",
+   "on": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "c": {
+    "hits": 6,
+    "impactFrames": 1,
+    "freezes": 6,
+    "spells": 0,
+    "splashes": 0,
+    "sends": 0,
+    "lastHitAt": 11.1991,
+    "lastKind": "hit",
+    "clock": 12.388,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   },
+   "newHits": 5
+  },
+  {
+   "step": "row OFF again, 10 s later",
+   "on": {
+    "a": true,
+    "b": true,
+    "c": false
+   },
+   "c": {
+    "hits": 6,
+    "impactFrames": 1,
+    "freezes": 6,
+    "spells": 0,
+    "splashes": 0,
+    "sends": 0,
+    "lastHitAt": 11.1991,
+    "lastKind": "hit",
+    "clock": 12.404,
+    "frozen": false,
+    "trauma": 0,
+    "impact": 0,
+    "fire": 0,
+    "ice": 0,
+    "orbit": null,
+    "pass": false
+   },
+   "newHits": 0
+  }
+ ],
+ "errors": []
+}

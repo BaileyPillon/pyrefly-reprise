@@ -9,7 +9,7 @@
 import { audio } from '../audio/index.ts';
 import { ALL_COACH_IDS } from '../ui/coach/coachCopy.ts';
 import { migrateFfx2Atb } from './saveFfx2Atb.ts';
-import { migrateComfort, type TextSize } from './saveComfort.ts';
+import { defaultFxLooks, migrateComfort, type FxLookSettings, type TextSize } from './saveComfort.ts';
 import { applyComfort } from './applyComfort.ts';
 import { writeMerged } from './saveMerge.ts';
 
@@ -55,7 +55,7 @@ export interface ChapterRecord {
   playTimeMs: number;
 }
 
-export interface Settings {
+export interface Settings extends FxLookSettings {
   masterVolume: number;
   musicVolume: number;
   sfxVolume: number;
@@ -190,7 +190,7 @@ export function defaultSettings(): Settings {
     sfxVolume: 0.35,
     textSpeed: 1,
     skipSeenCutscenes: false,
-    lowEffects: false,
+    lowEffects: false, ...defaultFxLooks(), // eye-candy D's three look rows, all ON (`fxLooks.ts`)
     textSize: 1,
     guideVisible: true,
     advisorVisible: true,

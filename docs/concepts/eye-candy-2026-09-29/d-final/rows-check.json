@@ -1,0 +1,1158 @@
+[
+ {
+  "size": "desk 1600x900",
+  "chapter": "seymour-flux",
+  "steps": [
+   {
+    "step": "ArrowDown to CINEMA LIGHT",
+    "selected": "fxLight"
+   },
+   {
+    "step": "Enter on CINEMA LIGHT",
+    "on": {
+     "a": false,
+     "b": true,
+     "c": true
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": true,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "ArrowRight on CINEMA LIGHT",
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "saved": {
+     "fxLight": true,
+     "fxLiving": true,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "ArrowDown, ArrowLeft on LIVING PAINTINGS",
+    "selected": "fxLiving",
+    "on": {
+     "a": true,
+     "b": false,
+     "c": true
+    },
+    "saved": {
+     "fxLight": true,
+     "fxLiving": false,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "ArrowRight on LIVING PAINTINGS",
+    "on": {
+     "a": true,
+     "b": true,
+     "c": true
+    },
+    "saved": {
+     "fxLight": true,
+     "fxLiving": true,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "click fxLight",
+    "on": {
+     "a": false,
+     "b": true,
+     "c": true
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": true,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "click fxLiving",
+    "on": {
+     "a": false,
+     "b": false,
+     "c": true
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": false,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "click fxSpectacle",
+    "on": {
+     "a": false,
+     "b": false,
+     "c": false
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": false,
+     "fxSpectacle": false,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   }
+  ],
+  "before": {
+   "on": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "saved": {
+    "fxLight": true,
+    "fxLiving": true,
+    "fxSpectacle": true,
+    "lowEffects": false,
+    "reduceMotion": false
+   }
+  },
+  "rows": [
+   {
+    "id": "masterVolume",
+    "label": "MASTER VOLUME",
+    "value": "80",
+    "top": 330,
+    "bottom": 357,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "musicVolume",
+    "label": "MUSIC",
+    "value": "70",
+    "top": 357,
+    "bottom": 384,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "sfxVolume",
+    "label": "SOUND EFFECTS",
+    "value": "35",
+    "top": 384,
+    "bottom": 411,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "textSpeed",
+    "label": "TEXT SPEED",
+    "value": "1x",
+    "top": 411,
+    "bottom": 438,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "textSize",
+    "label": "TEXT SIZE",
+    "value": "100%",
+    "top": 438,
+    "bottom": 465,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "reduceMotion",
+    "label": "REDUCE MOTION",
+    "value": "OFF",
+    "top": 465,
+    "bottom": 492,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "lowEffects",
+    "label": "LOW EFFECTS",
+    "value": "OFF",
+    "top": 492,
+    "bottom": 519,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "fxLight",
+    "label": "CINEMA LIGHT",
+    "value": "ON",
+    "top": 519,
+    "bottom": 546,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "fxLiving",
+    "label": "LIVING PAINTINGS",
+    "value": "ON",
+    "top": 546,
+    "bottom": 573,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "fxSpectacle",
+    "label": "BATTLE SPECTACLE",
+    "value": "ON",
+    "top": 573,
+    "bottom": 600,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "guideVisible",
+    "label": "STRATEGY GUIDE",
+    "value": "ON",
+    "top": 600,
+    "bottom": 627,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "battleHelp",
+    "label": "BATTLE HELP",
+    "value": "ON",
+    "top": 627,
+    "bottom": 654,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   }
+  ],
+  "rowsAllOff": [
+   {
+    "id": "masterVolume",
+    "label": "MASTER VOLUME",
+    "value": "80",
+    "top": 330,
+    "bottom": 357,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "musicVolume",
+    "label": "MUSIC",
+    "value": "70",
+    "top": 357,
+    "bottom": 384,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "sfxVolume",
+    "label": "SOUND EFFECTS",
+    "value": "35",
+    "top": 384,
+    "bottom": 411,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "textSpeed",
+    "label": "TEXT SPEED",
+    "value": "1x",
+    "top": 411,
+    "bottom": 438,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "textSize",
+    "label": "TEXT SIZE",
+    "value": "100%",
+    "top": 438,
+    "bottom": 465,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "reduceMotion",
+    "label": "REDUCE MOTION",
+    "value": "OFF",
+    "top": 465,
+    "bottom": 492,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "lowEffects",
+    "label": "LOW EFFECTS",
+    "value": "OFF",
+    "top": 492,
+    "bottom": 519,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "fxLight",
+    "label": "CINEMA LIGHT",
+    "value": "OFF",
+    "top": 519,
+    "bottom": 546,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "fxLiving",
+    "label": "LIVING PAINTINGS",
+    "value": "OFF",
+    "top": 546,
+    "bottom": 573,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "fxSpectacle",
+    "label": "BATTLE SPECTACLE",
+    "value": "OFF",
+    "top": 573,
+    "bottom": 600,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "guideVisible",
+    "label": "STRATEGY GUIDE",
+    "value": "ON",
+    "top": 600,
+    "bottom": 627,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   },
+   {
+    "id": "battleHelp",
+    "label": "BATTLE HELP",
+    "value": "ON",
+    "top": 627,
+    "bottom": 654,
+    "left": 64,
+    "right": 410,
+    "inView": true
+   }
+  ],
+  "resumedOff": "battle",
+  "afterReload": {
+   "on": {
+    "a": false,
+    "b": false,
+    "c": false
+   },
+   "saved": {
+    "fxLight": false,
+    "fxLiving": false,
+    "fxSpectacle": false,
+    "lowEffects": false,
+    "reduceMotion": false
+   }
+  },
+  "backOn": {
+   "on": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "saved": {
+    "fxLight": true,
+    "fxLiving": true,
+    "fxSpectacle": true,
+    "lowEffects": false,
+    "reduceMotion": false
+   }
+  },
+  "resumedOn": "battle",
+  "errors": []
+ },
+ {
+  "size": "desk 1600x900",
+  "chapter": "ffx2-bahamut",
+  "steps": [
+   {
+    "step": "ArrowDown to BATTLE HELP (the column scrolls)",
+    "selected": "battleHelp",
+    "row": {
+     "id": "battleHelp",
+     "label": "BATTLE HELP",
+     "value": "ON",
+     "top": 648,
+     "bottom": 675,
+     "left": 64,
+     "right": 441,
+     "inView": true
+    },
+    "col": {
+     "top": 297,
+     "bottom": 675,
+     "objTop": 702,
+     "scrollTop": 33
+    },
+    "visible": true
+   },
+   {
+    "step": "click fxLight",
+    "on": {
+     "a": false,
+     "b": true,
+     "c": true
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": true,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "click fxLiving",
+    "on": {
+     "a": false,
+     "b": false,
+     "c": true
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": false,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "click fxSpectacle",
+    "on": {
+     "a": false,
+     "b": false,
+     "c": false
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": false,
+     "fxSpectacle": false,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   }
+  ],
+  "before": {
+   "on": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "saved": {
+    "fxLight": true,
+    "fxLiving": true,
+    "fxSpectacle": true,
+    "lowEffects": false,
+    "reduceMotion": false
+   }
+  },
+  "rows": [
+   {
+    "id": "masterVolume",
+    "label": "MASTER VOLUME",
+    "value": "80",
+    "top": 330,
+    "bottom": 357,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "musicVolume",
+    "label": "MUSIC",
+    "value": "70",
+    "top": 357,
+    "bottom": 384,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "sfxVolume",
+    "label": "SOUND EFFECTS",
+    "value": "35",
+    "top": 384,
+    "bottom": 411,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "textSpeed",
+    "label": "TEXT SPEED",
+    "value": "1x",
+    "top": 411,
+    "bottom": 438,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "textSize",
+    "label": "TEXT SIZE",
+    "value": "100%",
+    "top": 438,
+    "bottom": 465,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "reduceMotion",
+    "label": "REDUCE MOTION",
+    "value": "OFF",
+    "top": 465,
+    "bottom": 492,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "lowEffects",
+    "label": "LOW EFFECTS",
+    "value": "OFF",
+    "top": 492,
+    "bottom": 519,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "fxLight",
+    "label": "CINEMA LIGHT",
+    "value": "ON",
+    "top": 519,
+    "bottom": 546,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "fxLiving",
+    "label": "LIVING PAINTINGS",
+    "value": "ON",
+    "top": 546,
+    "bottom": 573,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "fxSpectacle",
+    "label": "BATTLE SPECTACLE",
+    "value": "ON",
+    "top": 573,
+    "bottom": 600,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "ffx2Atb",
+    "label": "X-2 BATTLE",
+    "value": "WAIT",
+    "top": 600,
+    "bottom": 627,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "ffx2AtbSpeed",
+    "label": "ATB SPEED",
+    "value": "NORMAL",
+    "top": 627,
+    "bottom": 654,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "guideVisible",
+    "label": "STRATEGY GUIDE",
+    "value": "ON",
+    "top": 654,
+    "bottom": 681,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "battleHelp",
+    "label": "BATTLE HELP",
+    "value": "ON",
+    "top": 681,
+    "bottom": 708,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   }
+  ],
+  "rowsAllOff": [
+   {
+    "id": "masterVolume",
+    "label": "MASTER VOLUME",
+    "value": "80",
+    "top": 330,
+    "bottom": 357,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "musicVolume",
+    "label": "MUSIC",
+    "value": "70",
+    "top": 357,
+    "bottom": 384,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "sfxVolume",
+    "label": "SOUND EFFECTS",
+    "value": "35",
+    "top": 384,
+    "bottom": 411,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "textSpeed",
+    "label": "TEXT SPEED",
+    "value": "1x",
+    "top": 411,
+    "bottom": 438,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "textSize",
+    "label": "TEXT SIZE",
+    "value": "100%",
+    "top": 438,
+    "bottom": 465,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "reduceMotion",
+    "label": "REDUCE MOTION",
+    "value": "OFF",
+    "top": 465,
+    "bottom": 492,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "lowEffects",
+    "label": "LOW EFFECTS",
+    "value": "OFF",
+    "top": 492,
+    "bottom": 519,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "fxLight",
+    "label": "CINEMA LIGHT",
+    "value": "OFF",
+    "top": 519,
+    "bottom": 546,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "fxLiving",
+    "label": "LIVING PAINTINGS",
+    "value": "OFF",
+    "top": 546,
+    "bottom": 573,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "fxSpectacle",
+    "label": "BATTLE SPECTACLE",
+    "value": "OFF",
+    "top": 573,
+    "bottom": 600,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "ffx2Atb",
+    "label": "X-2 BATTLE",
+    "value": "WAIT",
+    "top": 600,
+    "bottom": 627,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "ffx2AtbSpeed",
+    "label": "ATB SPEED",
+    "value": "NORMAL",
+    "top": 627,
+    "bottom": 654,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "guideVisible",
+    "label": "STRATEGY GUIDE",
+    "value": "ON",
+    "top": 654,
+    "bottom": 681,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   },
+   {
+    "id": "battleHelp",
+    "label": "BATTLE HELP",
+    "value": "ON",
+    "top": 681,
+    "bottom": 708,
+    "left": 64,
+    "right": 441,
+    "inView": true
+   }
+  ],
+  "resumedOff": "battle",
+  "afterReload": {
+   "on": {
+    "a": false,
+    "b": false,
+    "c": false
+   },
+   "saved": {
+    "fxLight": false,
+    "fxLiving": false,
+    "fxSpectacle": false,
+    "lowEffects": false,
+    "reduceMotion": false
+   }
+  },
+  "backOn": {
+   "on": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "saved": {
+    "fxLight": true,
+    "fxLiving": true,
+    "fxSpectacle": true,
+    "lowEffects": false,
+    "reduceMotion": false
+   }
+  },
+  "resumedOn": "battle",
+  "errors": []
+ },
+ {
+  "size": "phone 390x844",
+  "chapter": "ffx2-bahamut",
+  "steps": [
+   {
+    "step": "tap fxLight",
+    "on": {
+     "a": false,
+     "b": true,
+     "c": true
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": true,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "tap fxLiving",
+    "on": {
+     "a": false,
+     "b": false,
+     "c": true
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": false,
+     "fxSpectacle": true,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   },
+   {
+    "step": "tap fxSpectacle",
+    "on": {
+     "a": false,
+     "b": false,
+     "c": false
+    },
+    "saved": {
+     "fxLight": false,
+     "fxLiving": false,
+     "fxSpectacle": false,
+     "lowEffects": false,
+     "reduceMotion": false
+    }
+   }
+  ],
+  "rows": [
+   {
+    "id": "masterVolume",
+    "label": "MASTER VOLUME",
+    "value": "80",
+    "top": 469,
+    "bottom": 485,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "musicVolume",
+    "label": "MUSIC",
+    "value": "70",
+    "top": 485,
+    "bottom": 501,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "sfxVolume",
+    "label": "SOUND EFFECTS",
+    "value": "35",
+    "top": 501,
+    "bottom": 517,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "textSpeed",
+    "label": "TEXT SPEED",
+    "value": "1x",
+    "top": 517,
+    "bottom": 533,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "textSize",
+    "label": "TEXT SIZE",
+    "value": "100%",
+    "top": 533,
+    "bottom": 549,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "reduceMotion",
+    "label": "REDUCE MOTION",
+    "value": "OFF",
+    "top": 549,
+    "bottom": 565,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "lowEffects",
+    "label": "LOW EFFECTS",
+    "value": "OFF",
+    "top": 565,
+    "bottom": 581,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "fxLight",
+    "label": "CINEMA LIGHT",
+    "value": "ON",
+    "top": 581,
+    "bottom": 597,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "fxLiving",
+    "label": "LIVING PAINTINGS",
+    "value": "ON",
+    "top": 597,
+    "bottom": 613,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "fxSpectacle",
+    "label": "BATTLE SPECTACLE",
+    "value": "ON",
+    "top": 613,
+    "bottom": 629,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "ffx2Atb",
+    "label": "X-2 BATTLE",
+    "value": "WAIT",
+    "top": 629,
+    "bottom": 645,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "ffx2AtbSpeed",
+    "label": "ATB SPEED",
+    "value": "NORMAL",
+    "top": 645,
+    "bottom": 661,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "guideVisible",
+    "label": "STRATEGY GUIDE",
+    "value": "ON",
+    "top": 661,
+    "bottom": 677,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "battleHelp",
+    "label": "BATTLE HELP",
+    "value": "ON",
+    "top": 677,
+    "bottom": 693,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   }
+  ],
+  "rowsAllOff": [
+   {
+    "id": "masterVolume",
+    "label": "MASTER VOLUME",
+    "value": "80",
+    "top": 379,
+    "bottom": 395,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "musicVolume",
+    "label": "MUSIC",
+    "value": "70",
+    "top": 395,
+    "bottom": 411,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "sfxVolume",
+    "label": "SOUND EFFECTS",
+    "value": "35",
+    "top": 411,
+    "bottom": 427,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "textSpeed",
+    "label": "TEXT SPEED",
+    "value": "1x",
+    "top": 427,
+    "bottom": 443,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "textSize",
+    "label": "TEXT SIZE",
+    "value": "100%",
+    "top": 443,
+    "bottom": 459,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "reduceMotion",
+    "label": "REDUCE MOTION",
+    "value": "OFF",
+    "top": 459,
+    "bottom": 475,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "lowEffects",
+    "label": "LOW EFFECTS",
+    "value": "OFF",
+    "top": 475,
+    "bottom": 491,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "fxLight",
+    "label": "CINEMA LIGHT",
+    "value": "OFF",
+    "top": 491,
+    "bottom": 507,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "fxLiving",
+    "label": "LIVING PAINTINGS",
+    "value": "OFF",
+    "top": 507,
+    "bottom": 523,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "fxSpectacle",
+    "label": "BATTLE SPECTACLE",
+    "value": "OFF",
+    "top": 523,
+    "bottom": 539,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "ffx2Atb",
+    "label": "X-2 BATTLE",
+    "value": "WAIT",
+    "top": 539,
+    "bottom": 555,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "ffx2AtbSpeed",
+    "label": "ATB SPEED",
+    "value": "NORMAL",
+    "top": 555,
+    "bottom": 571,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "guideVisible",
+    "label": "STRATEGY GUIDE",
+    "value": "ON",
+    "top": 571,
+    "bottom": 587,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   },
+   {
+    "id": "battleHelp",
+    "label": "BATTLE HELP",
+    "value": "ON",
+    "top": 587,
+    "bottom": 603,
+    "left": 20,
+    "right": 370,
+    "inView": true
+   }
+  ],
+  "backOn": {
+   "on": {
+    "a": true,
+    "b": true,
+    "c": true
+   },
+   "saved": {
+    "fxLight": true,
+    "fxLiving": true,
+    "fxSpectacle": true,
+    "lowEffects": false,
+    "reduceMotion": false
+   }
+  },
+  "errors": []
+ }
+]

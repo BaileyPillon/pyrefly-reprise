@@ -565,8 +565,8 @@ describe('every function of the old pause screen is still reachable', () => {
     try {
       const h = mount('ffx2-bahamut');
       h.screen.trigger('pause:tab:options');
-      // D-285 (A2): TEXT SIZE, REDUCE MOTION and LOW EFFECTS sit under TEXT SPEED.
-      expect(rowIds(h).slice(0, 10)).toEqual([
+      // D-285 (A2): TEXT SIZE, REDUCE MOTION and LOW EFFECTS sit under TEXT SPEED (eye-candy D's fx* rows: pause-fx-looks-rows.test.ts).
+      expect(rowIds(h).filter((id) => !id.startsWith('fx')).slice(0, 10)).toEqual([
         'masterVolume',
         'musicVolume',
         'sfxVolume',

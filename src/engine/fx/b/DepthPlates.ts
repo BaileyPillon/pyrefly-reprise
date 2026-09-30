@@ -1,0 +1,295 @@
+import {
+  DataTexture,
+  LinearFilter,
+  LinearMipmapLinearFilter,
+  Mesh,
+  MeshBasicMaterial,
+  PlaneGeometry,
+  RGBAFormat,
+  SRGBColorSpace,
+  ShaderMaterial,
+  UnsignedByteType,
+  Vector3,
+  type Group,
+  type Object3D,
+} from 'three';
+import { cutPlates } from './plateMaths.ts';
+
+/**
+ * Option B "Living Paintings" (B1): the approved backdrop cut into depth plates at runtime.
+ *
+ * The painting's own pixels, split by a derived depth map (`public/fx/<scene>/depth.png`, Depth
+ * Anything V2 Small, `tools/fx/depth.py`), each plate pushed toward the camera and scaled back up
+ * toward the backdrop's reference camera (Backdrop's own `cameraRef` trick), so at rest the stack
+ * lands on the painting pixel for pixel and any camera motion parts it at true depth. Colour never
+ * becomes a file: the plates are built in memory from the loaded painting, and the painting file
+ * is never touched.
+ *
+ * While the plates show, the painting plane and its band layers are hidden; switching option B
+ * off puts them back exactly as they were.
+ *
+ * Game case: both (plumbing); the cut is each room's own.
+ */
+
+export interface PlateLayout {
+  /** Ascending depth thresholds (0 far .. 1 near), one per plate above the first. */
+  thresholds: number[];
+  /** World z of each plate above the first (plate 0 stays on the painting plane). */
+  z: number[];
+  soft: number;
+  /** Feather radius, pixels at `width`. */
+  blur: number;
+  /** Texture width of each plate. */
+  width: number;
+  /**
+   * The top plate is the room's **painted floor, projected onto the ground (y = 0)** from the
+   * reference camera instead of standing upright: the figures stand on it, so it has to move
+   * like ground, or they would skate across it when the camera drifts. `far` is the world z the
+   * floor reaches back to; painting rows beyond it stay on the upright plates.
+   */
+  floor?: { far: number };
+}
+
+const FLOOR_VERT = /* glsl */ `
+  varying vec3 vWorld;
+  void main() {
+    vWorld = (modelMatrix * vec4(position, 1.0)).xyz;
+    gl_Position = projectionMatrix * viewMatrix * vec4(vWorld, 1.0);
+  }
+`;
+
+// The painting pixel the reference camera sees through this ground point.
+const FLOOR_FRAG = /* glsl */ `
+  uniform sampler2D map;
+  uniform vec3 uRef;
+  uniform vec4 uPlane;
+  uniform vec3 uGroup;
+  uniform vec3 uColor;
+  varying vec3 vWorld;
+  void main() {
+    vec3 l = vWorld - uGroup;
+    float t = (uPlane.w - uRef.z) / (l.z - uRef.z);
+    if (t <= 0.0) discard;
+    vec3 p = uRef + (l - uRef) * t;
+    vec2 uv = vec2(p.x / uPlane.x + 0.5, (p.y - uPlane.z) / uPlane.y + 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) discard;
+    vec4 c = texture2D(map, uv);
+    gl_FragColor = vec4(c.rgb * uColor, c.a);
+    #include <colorspace_fragment>
+  }
+`;
+
+/** Per painting row (top to bottom), 0..1: is that row's ray onto the ground nearer than `far`? */
+export function floorRows(g: PlateGeometry, h: number, far: number): Float32Array {
+  const rows = new Float32Array(h);
+  for (let y = 0; y < h; y++) {
+    const py = g.centreY + (0.5 - (y + 0.5) / h) * g.height;
+    if (py >= g.camRef.y - 1e-3) continue;
+    const t = g.camRef.y / (g.camRef.y - py);
+    const z = g.camRef.z + t * (g.distance - g.camRef.z);
+    const k = Math.min(1, Math.max(0, (z - far) / 6));
+    rows[y] = k * k * (3 - 2 * k);
+  }
+  return rows;
+}
+
+export interface PlateGeometry {
+  width: number;
+  height: number;
+  centreY: number;
+  distance: number;
+  /** The reference camera in the backdrop group's own space. */
+  camRef: Vector3;
+}
+
+async function loadImage(url: string): Promise<HTMLImageElement> {
+  const img = new Image();
+  img.decoding = 'async';
+  img.src = url;
+  await img.decode();
+  return img;
+}
+
+function pixels(src: CanvasImageSource, w: number, h: number): Uint8ClampedArray {
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  const ctx = c.getContext('2d', { willReadFrequently: true })!;
+  ctx.drawImage(src, 0, 0, w, h);
+  return ctx.getImageData(0, 0, w, h).data;
+}
+
+/** The painting plane's placement, read back off the backdrop group (`Backdrop.create`). */
+export function plateGeometry(group: Group): PlateGeometry | null {
+  const main = group.getObjectByName('backdrop-painting') as Mesh | undefined;
+  const ref = main?.userData['fxRef'] as [number, number, number] | undefined;
+  if (!main || !ref) return null;
+  const p = (main.geometry as PlaneGeometry).parameters;
+  return {
+    width: p.width,
+    height: p.height,
+    centreY: main.position.y,
+    distance: main.position.z,
+    camRef: new Vector3(ref[0] - group.position.x, ref[1] - group.position.y, ref[2] - group.position.z),
+  };
+}
+
+/** A painting pixel (u right, v down, 0..1) on the plane at world `z`, in the group's space. */
+export function paintPoint(g: PlateGeometry, u: number, v: number, z = g.distance): Vector3 {
+  const k = (g.camRef.z - z) / (g.camRef.z - g.distance);
+  const p = new Vector3((u - 0.5) * g.width, g.centreY + (0.5 - v) * g.height, g.distance);
+  return p.sub(g.camRef).multiplyScalar(k).add(g.camRef);
+}
+
+export class DepthPlates {
+  readonly meshes: Mesh[] = [];
+  readonly textures: DataTexture[] = [];
+  readonly coverage: number[] = [];
+  readonly geometry: PlateGeometry;
+  readonly zs: number[];
+  /** The top plate lies on the ground (see {@link PlateLayout.floor}). */
+  readonly floored: boolean;
+  private readonly group: Group;
+  private depth: Float32Array | null = null;
+  private dw = 0;
+  private dh = 0;
+  private thresholds: number[] = [];
+  private readonly hidden: Array<{ o: Object3D; was: boolean }> = [];
+  private shown = false;
+
+  private constructor(group: Group, geometry: PlateGeometry, zs: number[], floored: boolean) {
+    this.group = group;
+    this.geometry = geometry;
+    this.zs = zs;
+    this.floored = floored;
+  }
+
+  /** Which plate a painting pixel (u right, v down) belongs to, by its depth. */
+  plateAt(u: number, v: number): number {
+    if (!this.depth) return 0;
+    const x = Math.min(this.dw - 1, Math.max(0, Math.floor(u * this.dw)));
+    const y = Math.min(this.dh - 1, Math.max(0, Math.floor(v * this.dh)));
+    const d = this.depth[y * this.dw + x]!;
+    let k = 0;
+    while (k < this.thresholds.length && d >= this.thresholds[k]!) k++;
+    return k;
+  }
+
+  static async build(group: Group, depthUrl: string, layout: PlateLayout): Promise<DepthPlates | null> {
+    const g = plateGeometry(group);
+    const main = group.getObjectByName('backdrop-painting') as Mesh | undefined;
+    const map = (main?.material as MeshBasicMaterial | undefined)?.map;
+    const image = map?.image as CanvasImageSource | undefined;
+    if (!g || !image) return null;
+    const depthImg = await loadImage(depthUrl);
+    const w = layout.width;
+    const h = Math.round((w * g.height) / g.width);
+    const paint = pixels(image, w, h);
+    const dBytes = pixels(depthImg, w, h);
+    const depth = new Float32Array(w * h);
+    for (let i = 0; i < depth.length; i++) depth[i] = dBytes[i * 4]! / 255;
+    const rows = layout.floor ? floorRows(g, h, layout.floor.far) : undefined;
+    const plates = cutPlates(paint, depth, w, h, { thresholds: layout.thresholds, soft: layout.soft, blur: layout.blur }, 0.999, rows);
+    const zs = [g.distance, ...layout.z];
+    const dp = new DepthPlates(group, g, zs, !!layout.floor);
+    dp.depth = depth;
+    dp.dw = w;
+    dp.dh = h;
+    dp.thresholds = layout.thresholds;
+    plates.forEach((plate, i) => {
+      // Rows bottom-up for the GL upload (a data texture is never flipped by the driver).
+      const flipped = new Uint8Array(w * h * 4);
+      for (let y = 0; y < h; y++) flipped.set(plate.rgba.subarray(y * w * 4, (y + 1) * w * 4), (h - 1 - y) * w * 4);
+      const tex = new DataTexture(flipped, w, h, RGBAFormat, UnsignedByteType);
+      tex.colorSpace = SRGBColorSpace;
+      tex.generateMipmaps = true;
+      tex.minFilter = LinearMipmapLinearFilter;
+      tex.magFilter = LinearFilter;
+      tex.anisotropy = 8;
+      tex.needsUpdate = true;
+      const onFloor = !!layout.floor && i === plates.length - 1;
+      const mesh = onFloor ? DepthPlates.floorMesh(g, tex, layout.floor!.far, group) : DepthPlates.uprightMesh(g, tex, zs[i]!, i > 0);
+      mesh.renderOrder = -90 + i * 3;
+      mesh.name = `fx-b-plate-${i}`;
+      mesh.visible = false;
+      group.add(mesh);
+      dp.meshes.push(mesh);
+      dp.textures.push(tex);
+      dp.coverage.push(Math.round(plate.coverage * 1000) / 1000);
+    });
+    return dp;
+  }
+
+  private static uprightMesh(g: PlateGeometry, tex: DataTexture, z: number, transparent: boolean): Mesh {
+    const mat = new MeshBasicMaterial({ map: tex, transparent, depthWrite: false, fog: false, toneMapped: false });
+    const mesh = new Mesh(new PlaneGeometry(g.width, g.height), mat);
+    const k = (g.camRef.z - z) / (g.camRef.z - g.distance);
+    mesh.scale.setScalar(k);
+    mesh.position.set(g.camRef.x * (1 - k), g.camRef.y + (g.centreY - g.camRef.y) * k, z);
+    return mesh;
+  }
+
+  private static floorMesh(g: PlateGeometry, tex: DataTexture, far: number, group: Group): Mesh {
+    const near = g.camRef.z;
+    const mat = new ShaderMaterial({
+      uniforms: {
+        map: { value: tex },
+        uRef: { value: g.camRef.clone() },
+        uPlane: { value: [g.width, g.height, g.centreY, g.distance] },
+        uGroup: { value: group.position.clone() },
+        uColor: { value: new Vector3(1, 1, 1) },
+      },
+      vertexShader: FLOOR_VERT,
+      fragmentShader: FLOOR_FRAG,
+      transparent: true,
+      depthWrite: false,
+      fog: false,
+    });
+    const mesh = new Mesh(new PlaneGeometry(g.width, near - far + 2), mat);
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.set(g.camRef.x, 0, (near + far) / 2);
+    return mesh;
+  }
+
+  /** Plates on (the painting plane and band layers hidden) or off (restored). */
+  show(on: boolean): void {
+    if (on === this.shown) return;
+    this.shown = on;
+    if (on) {
+      this.hidden.length = 0;
+      for (const o of this.group.children) {
+        if (o.name === 'backdrop-painting' || o.name.startsWith('backdrop-layer-')) {
+          this.hidden.push({ o, was: o.visible });
+          o.visible = false;
+        }
+      }
+    } else {
+      for (const { o, was } of this.hidden) o.visible = was;
+      this.hidden.length = 0;
+    }
+    for (const m of this.meshes) m.visible = on;
+  }
+
+  get visible(): boolean {
+    return this.shown;
+  }
+
+  /** Multiply plate `i`'s colour (a distant lightning flash lifts the far plate; 1 = as painted). */
+  lift(i: number, r: number, g: number, b: number): void {
+    const m = this.meshes[i]?.material as (MeshBasicMaterial & ShaderMaterial) | undefined;
+    if (!m) return;
+    if (m.color) m.color.setRGB(r, g, b);
+    else (m.uniforms['uColor']!.value as Vector3).set(r, g, b);
+  }
+
+  dispose(): void {
+    this.show(false);
+    for (const m of this.meshes) {
+      m.geometry.dispose();
+      (m.material as MeshBasicMaterial | ShaderMaterial).dispose();
+      m.removeFromParent();
+    }
+    for (const t of this.textures) t.dispose();
+    this.meshes.length = 0;
+  }
+}

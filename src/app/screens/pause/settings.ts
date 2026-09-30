@@ -15,6 +15,7 @@
 
 import { audio } from '../../../audio/index.ts';
 import type { SaveStore } from '../../SaveData.ts';
+import { isFxLookField } from '../../fxLooks.ts';
 import { stepTextSize, wrapTextSize } from '../../saveComfort.ts';
 import { TEXT_SPEEDS, VOLUME_STEP } from '../PauseScreenPanels.ts';
 
@@ -26,6 +27,11 @@ const clamp01 =(v: number): number => Math.round(Math.min(1, Math.max(0, v)) * 1
 /** True when the id named a setting and it was written. */
 export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = false): boolean {
   const settings = save.settings;
+  if (isFxLookField(id)) {
+    // Eye-candy D's look rows flip like REDUCE MOTION; `applyComfort` switches the look live on the write.
+    save.setSettings({ [id]: settings[id] === false });
+    return true;
+  }
   switch (id) {
     case 'masterVolume': {
       const value = clamp01(settings.masterVolume + dir * VOLUME_STEP);

@@ -11,6 +11,8 @@ import { ResultsScreen } from './app/screens/ResultsScreen.ts';
 import { makeChapterSelect } from './app/screens/BattleScreenFlow.ts';
 import { CHAPTERS } from './data/encounters.ts';
 import { installDebugApi, markReady } from './debug/api.ts';
+import { installFxEnv } from './app/fxEnv.ts';
+import { installFxDebug } from './debug/fxApi.ts';
 import { paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
@@ -136,7 +138,8 @@ async function boot(): Promise<void> {
 
   // fb-0929 pacing option: `?pace=steady|relaxed`; default 'current', the live build (`src/engine/pace.ts`).
   setPace(paceFromQuery(window.location.search) ?? 'current');
-  installDebugApi(app);
+  installFxEnv(); // eye-candy D reads REDUCE MOTION, LOW EFFECTS and the viewport every frame
+  installFxDebug(installDebugApi(app) as unknown as Record<string, unknown>, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
 
   await app.push(new TitleScreen());
   app.start();

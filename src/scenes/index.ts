@@ -325,6 +325,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
   const scene = new Scene();
   scene.name = key;
   mountScene(build, scene);
+  scene.userData['backdropPalette'] = build.backdrop.palette; // eye-candy options round (option A's look LUT and rim)
   // The stage reads a scene's mid-battle entrances off this object.
   if (build.arrivals) attachArrivals(scene, build.arrivals);
 

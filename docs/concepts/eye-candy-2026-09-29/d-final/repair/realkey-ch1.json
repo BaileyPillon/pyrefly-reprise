@@ -1,0 +1,26 @@
+[
+  {
+    "label": "default",
+    "query": "",
+    "fx": "{\"on\":{\"a\":true,\"b\":true,\"c\":true},\"subOff\":[],\"tier\":\"full\",\"forcedTier\":null,\"dials\":{},\"reduceMotion\":false,\"reduceFlashes\":false,\"lowEffects\":false,\"frozen\":false,\"a\":{\"active\":true,\"tier\":\"full\",\"sources\":[[0.1,0.844]],\"menu\":true,\"drama\":0},\"b\":{\"room\":\"gagazet\",\"game\":\"ffx\",\"tier\":\"full\",\"plates\":{\"count\":4,\"coverage\":[1,0.648,0.44,0.213],\"buildMs\":1038,\"floored\":false},\"lamps\":4,\"fields\":[\"flake:260\",\"streak:16\",\"flake:70\"],\"haze\":4,\"arcs\":false,\"reflection\":false,\"figures\":10,\"drift\":0.35,\"strikes\":0,\"time\":10.08},\"shared\":{\"cEnergy\":0.005311665089662328},\"c\":{\"hits\":1,\"impactFrames\":",
+    "outcome": "defeat",
+    "turn": 11,
+    "played": 58,
+    "presses": 21,
+    "pageErrors": 0,
+    "consoleErrors": 0,
+    "errorTexts": []
+  },
+  {
+    "label": "fx-off",
+    "query": "?fx=off",
+    "fx": "{\"on\":{\"a\":false,\"b\":false,\"c\":false},\"subOff\":[],\"tier\":\"full\",\"forcedTier\":null,\"dials\":{},\"reduceMotion\":false,\"reduceFlashes\":false,\"lowEffects\":false,\"frozen\":false,\"a\":null,\"b\":null,\"shared\":{\"cEnergy\":0}}",
+    "outcome": "defeat",
+    "turn": 11,
+    "played": 58,
+    "presses": 21,
+    "pageErrors": 0,
+    "consoleErrors": 0,
+    "errorTexts": []
+  }
+]

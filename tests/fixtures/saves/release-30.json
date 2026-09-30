@@ -1,0 +1,33 @@
+{
+  "_note": "Eye-candy D look rows (fxLight / fxLiving / fxSpectacle) save-compatibility fixture. Written by the release-30 build itself (main 1475ff6b, bundle index-B0cfXTil.js), served locally from its parked production dist (F:/pyrefly-parked/2026-09-29/rel30-dist-gate, the gate build of that release) on 2026-09-30: a fresh headless profile, then that build's own SaveStore methods (recordAttempt, recordClear, addPlayTime, flushPlayTime, markCoachSeen, setSettings, save), then localStorage read back verbatim. Non-default values on purpose. It has no fxLight, fxLiving or fxSpectacle (and no textSize): release 30 never wrote them.",
+  "release": "30",
+  "mainSha": "1475ff6b",
+  "bundle": "index-B0cfXTil.js",
+  "expect": {
+    "cleared": [
+      "seymour-flux",
+      "ffx2-ixion-djose"
+    ],
+    "notCleared": [
+      "seymour-anima-macalania"
+    ],
+    "bestTimeMs": {
+      "seymour-flux": 498210,
+      "ffx2-ixion-djose": 655400
+    },
+    "settings": {
+      "masterVolume": 0.65,
+      "musicVolume": 0.3,
+      "sfxVolume": 0.45,
+      "textSpeed": 0.75,
+      "ffx2Atb": "wait",
+      "ffx2AtbSpeed": "slow",
+      "guideVisible": true,
+      "reduceMotion": false,
+      "lowEffects": true
+    }
+  },
+  "localStorage": {
+    "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1790742330810,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":true,\"bestTimeMs\":498210,\"bestTurns\":29,\"attempts\":2,\"playTimeMs\":0},\"ffx2-ixion-djose\":{\"id\":\"ffx2-ixion-djose\",\"cleared\":true,\"bestTimeMs\":655400,\"bestTurns\":44,\"attempts\":1,\"playTimeMs\":0},\"seymour-anima-macalania\":{\"id\":\"seymour-anima-macalania\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":1000}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.65,\"musicVolume\":0.3,\"sfxVolume\":0.45,\"textSpeed\":0.75,\"skipSeenCutscenes\":false,\"lowEffects\":true,\"guideVisible\":true,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"wait\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":false,\"ffx2AtbSpeed\":\"slow\"},\"seenCoach\":[\"briefing\"],\"flags\":{}}"
+  }
+}

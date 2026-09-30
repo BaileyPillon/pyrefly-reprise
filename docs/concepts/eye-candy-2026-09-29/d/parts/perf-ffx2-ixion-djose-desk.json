@@ -1,0 +1,47 @@
+{
+ "chapter": "ffx2-ixion-djose",
+ "size": "desk",
+ "throttle": 1,
+ "vsync": true,
+ "on": {
+  "rest": {
+   "frames": 361,
+   "p50": 16.7,
+   "p95": 16.7,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "combat": {
+   "frames": 600,
+   "p50": 16.7,
+   "p95": 16.7,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "tier": "full",
+  "cWork": {
+   "hits": 15,
+   "spells": 1,
+   "splashes": 1,
+   "impactFrames": 1
+  }
+ },
+ "off": {
+  "rest": {
+   "frames": 361,
+   "p50": 16.7,
+   "p95": 16.7,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "combat": {
+   "frames": 600,
+   "p50": 16.7,
+   "p95": 16.7,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "tier": "full",
+  "cWork": null
+ }
+}

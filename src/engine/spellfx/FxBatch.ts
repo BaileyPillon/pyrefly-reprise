@@ -225,6 +225,22 @@ export class FxBatch {
     renderer.autoClear = auto;
   }
 
+  /**
+   * Eye-candy option A1b: draw only the additive layer (the light of the spell) into whatever
+   * target the caller has bound, for the halo it blurs and lays under the crisp quads.
+   */
+  renderAdditive(renderer: WebGLRenderer): void {
+    if (!this.live) return;
+    const vis = this.layers.map((l) => l.mesh.visible);
+    this.layers[0].mesh.visible = false;
+    this.layers[2].mesh.visible = false;
+    const auto = renderer.autoClear;
+    renderer.autoClear = false;
+    renderer.render(this.scene, this.camera);
+    renderer.autoClear = auto;
+    this.layers.forEach((l, i) => (l.mesh.visible = vis[i]!));
+  }
+
   dispose(): void {
     for (const l of this.layers) l.dispose();
   }

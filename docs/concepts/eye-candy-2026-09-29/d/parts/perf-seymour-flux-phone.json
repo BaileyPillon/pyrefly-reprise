@@ -1,0 +1,47 @@
+{
+ "chapter": "seymour-flux",
+ "size": "phone",
+ "throttle": 4,
+ "vsync": true,
+ "on": {
+  "rest": {
+   "frames": 361,
+   "p50": 16.7,
+   "p95": 16.7,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "combat": {
+   "frames": 600,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 33.4,
+   "mean": 17.42
+  },
+  "tier": "phone",
+  "cWork": {
+   "hits": 5,
+   "spells": 0,
+   "splashes": 2,
+   "impactFrames": 1
+  }
+ },
+ "off": {
+  "rest": {
+   "frames": 361,
+   "p50": 16.7,
+   "p95": 16.7,
+   "p99": 16.8,
+   "mean": 16.67
+  },
+  "combat": {
+   "frames": 600,
+   "p50": 16.7,
+   "p95": 16.8,
+   "p99": 33.4,
+   "mean": 17.36
+  },
+  "tier": "phone",
+  "cWork": null
+ }
+}

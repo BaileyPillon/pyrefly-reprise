@@ -493,10 +493,9 @@ async function main() {
   // The art index has to be regenerated from whatever the fleet finished since
   // the last release, *before* vite copies public/ — otherwise the shipped
   // manifest is stale and the site hides art that is sitting right there.
-  log('building: node tools/gen/manifest.mjs');
-  if (run(process.execPath, [join(ROOT, 'tools', 'gen', 'manifest.mjs')]).status !== 0) {
-    fail('art manifest generation failed — see output above');
-  }
+  log('building: node tools/gen/manifest.mjs, then node tools/fx-assets.mjs ensure (eye-candy D: public/fx is gitignored)');
+  if (run(process.execPath, [join(ROOT, 'tools', 'gen', 'manifest.mjs')]).status !== 0) fail('art manifest generation failed — see output above');
+  if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'ensure']).status !== 0) fail('public/fx is missing or differs from tools/fx/fx-assets.json, and the backup could not restore it — see output above');
   log('building: npx vite build --outDir dist-release --emptyOutDir');
   if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir']).status !== 0) {
     fail('vite build failed — see output above');
@@ -513,6 +512,7 @@ async function main() {
   }
   const artFileCount = countFiles(artCharactersDir);
   log(`build ok: index.html present, ${artFileCount} files under art/characters`);
+  if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'verify', '--dir', join(DIST, 'fx')]).status !== 0) fail('the build did not ship public/fx intact — see output above');
 
   const indexHtml = readFileSync(indexPath, 'utf8');
   const bundleMatch = indexHtml.match(/assets\/index-([\w-]+)\.js/);

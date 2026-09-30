@@ -14,6 +14,7 @@ import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePre
 import { poseForAction } from './EnemyActionPose.ts';
 import { victoryPoseOf } from './VictoryPose.ts';
 import { partyOffStage } from './SummonStaging.ts';
+import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
   banner,
   cue,
@@ -59,6 +60,7 @@ export async function actionStart(
   } else {
     await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? []);
   }
+  await fxActionOpen(ctx, event);
 
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
@@ -137,10 +139,11 @@ export async function damage(
 
   // Hit-stop: the whole frame holds for a beat on a crit or a finishing blow.
   // (The punch that goes with it is part of the impact cut, above.)
+  const fxc = fxHit(ctx, event, heavy); // option C: null = today's shake and hit-stop sleep
   if (heavy) {
-    ctx.stage.camera.shake(0.16, 340);
-    await ctx.sleep(TIMING.hitStop);
-  } else if (event.hitIndex === 0) {
+    if (!fxc?.shook) ctx.stage.camera.shake(0.16, 340);
+    await ctx.sleep(Math.max(TIMING.hitStop, fxc?.waitMs ?? 0));
+  } else if (event.hitIndex === 0 && !fxc?.shook) {
     ctx.stage.camera.shake(0.08, 220);
   }
 
@@ -170,7 +173,10 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
     // ended. See `ACTOR_ANIM_GRACE_MS`.
     const off = ctx.deps.actionMotion?.sendOff; // FF7: the boss's own death (flash, sparks, debris, a 1 s fade)
     if (off) await settled(ctx, off.call(ctx.deps.actionMotion, id, motionCtx(ctx)), MOMENT_GUARD_MS);
-    else await settled(ctx, actor?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko);
+    else {
+      fxDissolve(ctx, id);
+      await settled(ctx, actor?.dissolveTo(1, TIMING.ko, 0x9dffc4), TIMING.ko);
+    }
     ctx.stage.removeCombatant(id);
     return;
   }
@@ -247,7 +253,7 @@ export async function victory(ctx: EventCtx): Promise<void> {
   // their battle stance and the fanfare stays quiet; the rig still settles.
   if (victoryPoseOf(ctx.deps) === 'hold') {
     void ctx.moments.victory();
-    await ctx.sleep(TIMING.victory);
+    await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'hold')));
     return;
   }
   cue(ctx, 'victory');
@@ -256,7 +262,7 @@ export async function victory(ctx: EventCtx): Promise<void> {
     if (side === 'party' || side === 'aeon') ctx.stage.actor(id)?.setPose('victory');
   }
   void ctx.moments.victory();
-  await ctx.sleep(TIMING.victory);
+  await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'pose')));
 }
 
 export async function defeat(ctx: EventCtx): Promise<void> {

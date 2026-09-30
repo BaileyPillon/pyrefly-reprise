@@ -17,6 +17,7 @@ import { DEFAULT_FLASH_PARAMS, PEAK_BUDGET, QUALITY_DENSITY, type FlashParams, t
 import { resolveAbilityFx } from './SpellFxLookup.ts';
 import type { FxGame, SpellFxId } from './SpellFxRegistry.ts';
 import { FX_SPECS, RunningFx, type DrawnFxId } from './SpellFxTimeline.ts';
+import { spellTaps } from '../fx/spellTaps.ts';
 
 export interface SpellFxLayerOptions {
   game: FxGame;
@@ -114,6 +115,7 @@ export class SpellFxLayer {
     if (o.crit) run.bloom = CRIT_BLOOM;
     this.covered.set(target, action);
     const ms = run.msToMark(o.hitIndex ?? 0);
+    if (spellTaps.land) spellTaps.land({ fx, game: this.opts.game, abilityId: o.abilityId, ms, rect: this.opts.rectOf(target), view: this.opts.view() }); // eye-candy A8
     // FF7: the landing is announced when the effect's own clock reaches the mark (`update`), so the hit flash and
     // the numeral land with the drawn strike even when frames run slow (repair item 6). Elsewhere, at once.
     if (this.opts.game === 'ff7' && ms > 0) this.lands.push({ run, k: o.hitIndex ?? 0, fx, target, o });
@@ -193,6 +195,8 @@ export class SpellFxLayer {
       r.held = true;
     }
     this.running.push(r);
+    // eye-candy A8: a previewed big effect flares like a landed one (debug trigger only)
+    if (spellTaps.land) spellTaps.land({ fx: id as SpellFxId, game: this.opts.game, abilityId: undefined, ms: r.msToMark(0), rect: this.opts.rectOf(target), view: this.opts.view() });
     return true;
   }
 
@@ -276,6 +280,7 @@ export class SpellFxLayer {
       renderer.setScissor(clip.x, view.h - clip.y - clip.h, clip.w, clip.h);
       renderer.setScissorTest(true);
     }
+    if (list && spellTaps.beforeDraw) spellTaps.beforeDraw(renderer, this.batch, view); // eye-candy A1b: the halo under the quads
     this.batch.render(renderer);
     if (clip) renderer.setScissorTest(false);
     if (list) {

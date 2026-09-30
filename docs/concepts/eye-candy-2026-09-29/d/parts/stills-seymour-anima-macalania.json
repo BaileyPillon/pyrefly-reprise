@@ -1,0 +1,154 @@
+[
+ {
+  "file": "stills/ch7-macalania-rest-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "Macalania: gold brazier streaks and skylight beams (A), the ice floor mirroring panes and fighters (B), the teal-and-gold split; the approved painting stays the star and the HUD is untouched"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-clean-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest-clean",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frame without the HUD: Macalania: gold brazier streaks and skylight beams (A), the ice floor mirroring panes and fighters (B), the teal-and-gold split",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch7-macalania-rest-clean-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "rest-clean",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "note": "HUD hidden with the debug trigger hud:off"
+ },
+ {
+  "file": "stills/ch7-macalania-spell-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the element layer (C) over the approved spell, with its halo and the room bloom swelling (A) and, at Macalania, the ice floor mirroring it (B)",
+  "kind": "ice"
+ },
+ {
+  "file": "stills/ch7-macalania-spell-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "spell",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "ice"
+ },
+ {
+  "file": "stills/ch7-macalania-hit-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "hit",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "gold streaks and a double shock ring off the blow (C) inside the lit room (A, B); the gold foil numeral",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch7-macalania-hit-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "hit",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "hit"
+ },
+ {
+  "file": "stills/ch7-macalania-impact-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "impact",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the two-frame ink-and-paper impact frame (C), navy and gold, taken over the graded room"
+ },
+ {
+  "file": "stills/ch7-macalania-impact-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "impact",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-splash-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "splash",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the splash cut-in (C) on the gold slab; the HUD stays above it and the room keeps breathing behind"
+ },
+ {
+  "file": "stills/ch7-macalania-splash-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "splash",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ },
+ {
+  "file": "stills/ch7-macalania-special-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "special",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the Overdrive payoff: gold ribbons (C) plus the gold anamorphic flare and the room swell (A)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch7-macalania-special-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "special",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)",
+  "kind": "big"
+ },
+ {
+  "file": "stills/ch7-macalania-victory-on.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "victory",
+  "state": "on",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the victory arc round the party (C) with the room lit and moving behind (A, B)"
+ },
+ {
+  "file": "stills/ch7-macalania-victory-off.jpg",
+  "chapter": "seymour-anima-macalania",
+  "moment": "victory",
+  "state": "off",
+  "tier": "full",
+  "injected": false,
+  "whatToLook": "the same frozen frame with A, B and C switched off (today's look)"
+ }
+]
